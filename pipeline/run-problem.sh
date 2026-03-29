@@ -63,7 +63,21 @@ if [ ! -f "$LEAN_FILE" ]; then
   echo "[$(date -Iseconds)] Generating Lean proof (${LEAN_TIMEOUT}s budget)..."
   LEAN_PROMPT_FILE=$(mktemp)
   cat > "$LEAN_PROMPT_FILE" <<LEAN_PROMPT_EOF
-Write a Lean 4 proof for this UT Austin prelim problem using Mathlib. Import Mathlib at the top. Use sorry ONLY where Mathlib genuinely lacks coverage — mark each sorry with a comment explaining what's missing. Keep it concise.
+Write a Lean 4 proof for this UT Austin prelim problem using Mathlib.
+
+Structure the output as SEPARATE SECTIONS delimited by:
+  -- §IMPORTS
+  -- §STATEMENT
+  -- §LEMMA1 (helper lemma if needed)
+  -- §LEMMA2 (helper lemma if needed)
+  -- §MAIN
+
+Each section should compile independently (repeat any needed imports/opens).
+Use sorry ONLY where Mathlib genuinely lacks coverage — mark each sorry
+with a comment explaining what's missing.
+
+Start with imports and the theorem statement. Then build up lemmas.
+Put the main theorem last. This way, even partial output is useful.
 
 Problem (${PROBLEM_ID}):
 $(cat "$TEX_PATH")
@@ -73,15 +87,20 @@ $(head -100 "$SOLUTION_FILE" 2>/dev/null || echo 'none')
 
 Output ONLY the Lean code, no markdown fences.
 LEAN_PROMPT_EOF
-  timeout "${LEAN_TIMEOUT}" claude -p "$(cat "$LEAN_PROMPT_FILE")" --output-format text > "$LEAN_FILE" 2>&1
-  rm -f "$LEAN_PROMPT_FILE"
+  # Stream to file via unbuffered write; partial output survives timeout.
+  # The section-delimiter prompt means even truncated output has complete
+  # early sections (imports, statement, initial lemmas).
+  timeout "${LEAN_TIMEOUT}" stdbuf -oL \
+    claude -p "$(cat "$LEAN_PROMPT_FILE")" --output-format text \
+    > "$LEAN_FILE" 2>/dev/null
   LEAN_EXIT=$?
+  rm -f "$LEAN_PROMPT_FILE"
   if [ $LEAN_EXIT -eq 124 ]; then
     LEAN_STATUS="timed-out"
-    echo "[$(date -Iseconds)] Lean generation timed out"
-  elif [ $LEAN_EXIT -ne 0 ]; then
+    echo "[$(date -Iseconds)] Lean generation timed out (partial file: $(wc -l < "$LEAN_FILE") lines)"
+  elif [ ! -s "$LEAN_FILE" ]; then
     LEAN_STATUS="generation-failed"
-    echo "[$(date -Iseconds)] Lean generation failed (exit $LEAN_EXIT)"
+    echo "[$(date -Iseconds)] Lean generation produced empty file"
   else
     echo "[$(date -Iseconds)] Lean file written ($(wc -l < "$LEAN_FILE") lines)"
     # 4. Try to build
