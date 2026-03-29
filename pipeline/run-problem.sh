@@ -32,7 +32,9 @@ echo "[$(date -Iseconds)] Problem loaded ($(wc -c < "$TEX_PATH") bytes)"
 SOLUTION_FILE="$SOLUTIONS_DIR/${PROBLEM_ID}.md"
 if [ ! -f "$SOLUTION_FILE" ]; then
   echo "[$(date -Iseconds)] Generating informal proof + lesson..."
-  claude -p "You are a mathematics tutor working through UT Austin preliminary exam problems. Use the futonic proof discipline:
+  PROMPT_FILE=$(mktemp)
+  cat > "$PROMPT_FILE" <<PROMPT_EOF
+You are a mathematics tutor working through UT Austin preliminary exam problems. Use the futonic proof discipline:
 
 PHASE 1 — OBSERVE: What is this problem really asking? What tools do you need? Explain any required background (Fatou, Closed Graph Theorem, etc.) from scratch for a strong-undergrad reader.
 
@@ -45,9 +47,10 @@ PHASE 4 — VALIDATE: Where would a student get stuck? What dead ends teach some
 Format as markdown with sections: ## Setup, ## Key Insight, ## Proof, ## Where You'd Get Stuck
 
 Problem (${PROBLEM_ID}):
-\`\`\`latex
-${PROBLEM_TEXT}
-\`\`\`" --output-format text > "$SOLUTION_FILE" 2>/dev/null || true
+$(cat "$TEX_PATH")
+PROMPT_EOF
+  claude -p "$(cat "$PROMPT_FILE")" --output-format text > "$SOLUTION_FILE" 2>&1 || true
+  rm -f "$PROMPT_FILE"
   echo "[$(date -Iseconds)] Solution written ($(wc -w < "$SOLUTION_FILE") words)"
 else
   echo "[$(date -Iseconds)] Solution already exists, skipping"
@@ -58,17 +61,20 @@ LEAN_FILE="$LEAN_DIR/${PROBLEM_ID}.lean"
 LEAN_STATUS="skipped"
 if [ ! -f "$LEAN_FILE" ]; then
   echo "[$(date -Iseconds)] Generating Lean proof (${LEAN_TIMEOUT}s budget)..."
-  timeout "${LEAN_TIMEOUT}" claude -p "Write a Lean 4 proof for this UT Austin prelim problem using Mathlib. Import Mathlib at the top. Use sorry ONLY where Mathlib genuinely lacks coverage — mark each sorry with a comment explaining what's missing. Keep it concise.
+  LEAN_PROMPT_FILE=$(mktemp)
+  cat > "$LEAN_PROMPT_FILE" <<LEAN_PROMPT_EOF
+Write a Lean 4 proof for this UT Austin prelim problem using Mathlib. Import Mathlib at the top. Use sorry ONLY where Mathlib genuinely lacks coverage — mark each sorry with a comment explaining what's missing. Keep it concise.
 
 Problem (${PROBLEM_ID}):
-\`\`\`latex
-${PROBLEM_TEXT}
-\`\`\`
+$(cat "$TEX_PATH")
 
 Informal proof for reference:
 $(head -100 "$SOLUTION_FILE" 2>/dev/null || echo 'none')
 
-Output ONLY the Lean code, no markdown fences." --output-format text > "$LEAN_FILE" 2>/dev/null
+Output ONLY the Lean code, no markdown fences.
+LEAN_PROMPT_EOF
+  timeout "${LEAN_TIMEOUT}" claude -p "$(cat "$LEAN_PROMPT_FILE")" --output-format text > "$LEAN_FILE" 2>&1
+  rm -f "$LEAN_PROMPT_FILE"
   LEAN_EXIT=$?
   if [ $LEAN_EXIT -eq 124 ]; then
     LEAN_STATUS="timed-out"
