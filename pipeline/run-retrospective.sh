@@ -55,7 +55,9 @@ $(head -30 "$SOLUTIONS_DIR/${eid}.md")"
 done
 
 # Generate retrospective via Claude
-claude -p "You are conducting a Lakatos + Wittgenstein style seminar debrief for batch ${BATCH} of the APM prelim problem pipeline. ${PROBLEM_COUNT} problems were attempted.
+RETRO_PROMPT_FILE=$(mktemp)
+cat > "$RETRO_PROMPT_FILE" <<RETRO_PROMPT_EOF
+You are conducting a Lakatos + Wittgenstein style seminar debrief for batch ${BATCH} of the APM prelim problem pipeline. ${PROBLEM_COUNT} problems were attempted.
 
 Evidence summary:
 ${EVIDENCE_SUMMARY}
@@ -79,6 +81,9 @@ Generate a structured retrospective addressing:
 
 6. **Cumulative observations.** What's the pipeline learning about itself across batches?
 
-Format as markdown. Be specific — name problems, name patterns, give examples." --output-format text > "$RETRO_FILE" 2>/dev/null
+Format as markdown. Be specific — name problems, name patterns, give examples.
+RETRO_PROMPT_EOF
+cat "$RETRO_PROMPT_FILE" | claude -p - --output-format text > "$RETRO_FILE" 2>/dev/null
+rm -f "$RETRO_PROMPT_FILE"
 
 echo "[$(date -Iseconds)] Retrospective written to $RETRO_FILE ($(wc -w < "$RETRO_FILE") words)"

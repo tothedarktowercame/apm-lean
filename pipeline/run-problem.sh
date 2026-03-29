@@ -50,7 +50,7 @@ Format as markdown with sections: ## Setup, ## Key Insight, ## Proof, ## Where Y
 Problem (${PROBLEM_ID}):
 $(cat "$TEX_PATH")
 PROMPT_EOF
-  claude -p "$(cat "$PROMPT_FILE")" --output-format text > "$SOLUTION_FILE" 2>&1 &
+  cat "$PROMPT_FILE" | claude -p - --output-format text > "$SOLUTION_FILE" 2>&1 &
   SOL_PID=$!
   SOL_START=$(date +%s)
   while kill -0 "$SOL_PID" 2>/dev/null; do
@@ -101,7 +101,7 @@ LEAN_PROMPT_EOF
   # Background: run claude, write to file.
   # Foreground: poll file size every 10s so the operator sees growth.
   timeout "${LEAN_TIMEOUT}" stdbuf -oL \
-    claude -p "$(cat "$LEAN_PROMPT_FILE")" --output-format text \
+    /usr/bin/bash -c "cat '$LEAN_PROMPT_FILE' | claude -p - --output-format text" \
     > "$LEAN_FILE" 2>/dev/null &
   CLAUDE_PID=$!
   # Progress monitor — heartbeat every 30s so operator knows it's alive.
