@@ -5,6 +5,7 @@
 # Usage: run-retrospective.sh <batch-number>
 
 set -euo pipefail
+export PATH="/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.elan/bin:$PATH"
 
 BATCH="${1:?Usage: run-retrospective.sh <batch-number>}"
 PIPELINE_DIR="$(cd "$(dirname "$0")" && pwd)"

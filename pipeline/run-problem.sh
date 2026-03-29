@@ -9,6 +9,7 @@
 # Usage: run-problem.sh <problem-id> <tex-path> <batch-number>
 
 set -euo pipefail
+export PATH="/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.elan/bin:$PATH"
 
 PROBLEM_ID="${1:?Usage: run-problem.sh <problem-id> <tex-path> <batch-number>}"
 TEX_PATH="${2:?}"

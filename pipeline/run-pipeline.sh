@@ -13,6 +13,7 @@
 #   ./run-pipeline.sh --batch 3    # run only batch 3 (problems 21-30)
 
 set -euo pipefail
+export PATH="/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.elan/bin:$PATH"
 
 PIPELINE_DIR="$(cd "$(dirname "$0")" && pwd)"
 MANIFEST="$PIPELINE_DIR/manifest/tasks.tsv"

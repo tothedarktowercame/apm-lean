@@ -3,6 +3,7 @@
 # Output: manifest/tasks.tsv (id, subject, year, session, number, path)
 
 set -euo pipefail
+export PATH="/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.elan/bin:$PATH"
 
 SRC="${1:-$HOME/code/storage/apm}"
 OUT="$(dirname "$0")/manifest/tasks.tsv"
