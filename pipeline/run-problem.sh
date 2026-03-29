@@ -60,7 +60,8 @@ fi
 # 3. Lean formalisation via Claude CLI (15-minute budget)
 LEAN_FILE="$LEAN_DIR/${PROBLEM_ID}.lean"
 LEAN_STATUS="skipped"
-if [ ! -f "$LEAN_FILE" ]; then
+if [ ! -s "$LEAN_FILE" ]; then
+  rm -f "$LEAN_FILE"  # remove empty files from prior failed runs
   echo "[$(date -Iseconds)] Generating Lean proof (${LEAN_TIMEOUT}s budget)..."
   LEAN_PROMPT_FILE=$(mktemp)
   cat > "$LEAN_PROMPT_FILE" <<LEAN_PROMPT_EOF
