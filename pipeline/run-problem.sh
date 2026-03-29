@@ -50,15 +50,8 @@ Format as markdown with sections: ## Setup, ## Key Insight, ## Proof, ## Where Y
 Problem (${PROBLEM_ID}):
 $(cat "$TEX_PATH")
 PROMPT_EOF
-  cat "$PROMPT_FILE" | claude -p - --output-format text > "$SOLUTION_FILE" 2>&1 &
-  SOL_PID=$!
-  SOL_START=$(date +%s)
-  while kill -0 "$SOL_PID" 2>/dev/null; do
-    sleep 15
-    SOL_ELAPSED=$(( $(date +%s) - SOL_START ))
-    echo "[$(date -Iseconds)]   ... solution: ${SOL_ELAPSED}s"
-  done
-  wait "$SOL_PID" 2>/dev/null || true
+  cat "$PROMPT_FILE" | claude -p - --output-format stream-json --verbose 2>/dev/null \
+    | python3 "$PIPELINE_DIR/stream-extract.py" "$SOLUTION_FILE"
   rm -f "$PROMPT_FILE"
   echo "[$(date -Iseconds)] Solution written ($(wc -w < "$SOLUTION_FILE") words)"
 else
@@ -97,29 +90,11 @@ $(head -100 "$SOLUTION_FILE" 2>/dev/null || echo 'none')
 
 Output ONLY the Lean code, no markdown fences.
 LEAN_PROMPT_EOF
-  # Generate Lean with progress monitoring.
-  # Background: run claude, write to file.
-  # Foreground: poll file size every 10s so the operator sees growth.
-  timeout "${LEAN_TIMEOUT}" stdbuf -oL \
-    /usr/bin/bash -c "cat '$LEAN_PROMPT_FILE' | claude -p - --output-format text" \
-    > "$LEAN_FILE" 2>/dev/null &
-  CLAUDE_PID=$!
-  # Progress monitor — heartbeat every 30s so operator knows it's alive.
-  # claude -p buffers output fully, so file stays 0 bytes until done.
-  LEAN_START=$(date +%s)
-  while kill -0 "$CLAUDE_PID" 2>/dev/null; do
-    sleep 30
-    LEAN_ELAPSED=$(( $(date +%s) - LEAN_START ))
-    BYTES=$(wc -c < "$LEAN_FILE" 2>/dev/null || echo 0)
-    if [ "$BYTES" -gt 0 ]; then
-      LINES=$(wc -l < "$LEAN_FILE" 2>/dev/null || echo 0)
-      SECTIONS=$(grep -o '§[A-Z]*[0-9]*' "$LEAN_FILE" 2>/dev/null | tr '\n' ' ')
-      echo "[$(date -Iseconds)]   ... ${LEAN_ELAPSED}s — ${LINES} lines${SECTIONS:+ — sections: $SECTIONS}"
-    else
-      echo "[$(date -Iseconds)]   ... ${LEAN_ELAPSED}s — generating (claude -p still running)"
-    fi
-  done
-  wait "$CLAUDE_PID" 2>/dev/null
+  # Stream Lean generation — tokens written to file as they arrive.
+  # timeout wraps the whole pipeline; partial output survives kill.
+  timeout "${LEAN_TIMEOUT}" /usr/bin/bash -c \
+    "cat '$LEAN_PROMPT_FILE' | claude -p - --output-format stream-json --verbose 2>/dev/null \
+     | python3 '$PIPELINE_DIR/stream-extract.py' '$LEAN_FILE'"
   LEAN_EXIT=$?
   rm -f "$LEAN_PROMPT_FILE"
   if [ $LEAN_EXIT -eq 124 ]; then
