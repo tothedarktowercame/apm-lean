@@ -1,0 +1,9 @@
+/.lake
+/.cpcache
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.fls
+report/*.fdb_latexmk
+report/*.synctex.gz

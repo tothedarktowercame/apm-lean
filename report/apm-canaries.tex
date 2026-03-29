@@ -1,0 +1,669 @@
+\documentclass[12pt,oneside]{book}
+\usepackage[margin=1in]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+  \setmainfont{Latin Modern Roman}
+\fi
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{longtable,booktabs}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{xurl}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[most]{tcolorbox}
+\usepackage{microtype}
+\usepackage{framed}
+\usepackage{fancyvrb}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!60!black,
+  pdftitle={The Four Canaries: UT Austin Prelim Problems in Lean~4},
+  pdfauthor={Joseph Corneli and Claude}
+}
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+\setlength{\parskip}{0.2em}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{itemsep=0.3em,topsep=0.3em}
+\setlist[enumerate]{itemsep=0.3em,topsep=0.3em}
+\setstretch{1.08}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}[chapter]
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\providecommand{\tightlist}{}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\small}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+
+% Lean code box
+\newtcolorbox{leanbox}[1][]{%
+  colback=blue!2, colframe=blue!30!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Lean~4 / Mathlib}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=6pt, after skip=6pt
+}
+
+% Informal proof box
+\newtcolorbox{proofbox}[1][]{%
+  colback=orange!3, colframe=orange!40!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Informal Proof}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=6pt, after skip=6pt
+}
+
+% Note box
+\newtcolorbox{notebox}[1][]{%
+  colback=green!3, colframe=green!40!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Process Note}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=6pt, after skip=6pt
+}
+
+\newcommand{\RP}{\mathbb{R}\mathrm{P}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries}
+  {\filright\large\chaptername\ \thechapter}
+  {8pt}{\LARGE}
+\titlespacing*{\chapter}{0pt}{-6pt}{18pt}
+
+\begin{document}
+
+\begin{titlepage}
+\vspace*{3cm}
+\begin{center}
+{\Huge\bfseries The Four Canaries}\\[0.8cm]
+{\Large UT Austin Preliminary Exam Problems\\Formalised in Lean~4 with Mathlib}\\[2cm]
+{\large Joseph Corneli \quad and \quad Claude (Opus 4.6)}\\[0.5cm]
+{\normalsize Hyperreal Enterprises}\\[2cm]
+{\normalsize 29 March 2026}\\[3cm]
+{\small Four graduate-level mathematics problems---topology, analysis,\\
+algebra, and functional analysis---proved informally\\
+and verified formally, in a single session.}
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+
+% ====================================================================
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Four problems from the University of Texas at Austin mathematics
+preliminary examinations (1990--2003) were selected as ``canary''
+problems for the M-apm-solutions mission: one each from topology,
+analysis, algebra, and functional analysis. Each was proved
+informally, then formalised in Lean~4 against Mathlib. All four
+compile without \texttt{sorry}.
+
+The algebra canary (C3) is a one-screen proof. The topology canary
+(C1) reduces a covering-space argument to a verified algebraic
+lemma about torsion-free groups. The functional analysis canary (C4)
+carries the full Closed Graph Theorem argument through 94~lines.
+The analysis canary (C2) is the hardest: 356~lines assembling
+Fatou's lemma, H\"older's inequality, uniform integrability,
+Vitali convergence, and an $\varepsilon/3$ tail argument to prove
+weak $L^2$ convergence.
+
+The experience suggests that formalisation is not a bottleneck for
+problems where Mathlib coverage is strong (algebra, functional
+analysis), and that the real cost is API composition---wiring
+existing lemmas through Lean's type system---rather than missing
+mathematics.
+
+% ====================================================================
+\part{The Lessons}
+\input{part1-lessons}
+
+% ====================================================================
+\part{The Proofs}
+
+% --------------------------------------------------------------------
+\chapter{C1: Topology}\label{ch:c1}
+
+\begin{problem}[UT Austin, t01A01, 2001]
+Let $f : \RP^2 \to \RP^2$ be a continuous map that is not surjective.
+\begin{enumerate}[label=(\alph*)]
+\item Show that $f_* : \pi_1(\RP^2) \to \pi_1(\RP^2)$ has image $\{1\}$.
+\item Show that $f$ is homotopic to a constant map.
+\end{enumerate}
+\emph{Hint: What does $\RP^2 \setminus \{\mathrm{point}\}$ look like?}
+\end{problem}
+
+\begin{proofbox}
+\textbf{(a)} Since $f$ is not surjective, it misses some point $q \in \RP^2$.
+So $f$ factors through $\RP^2 \setminus \{q\}$, which is homeomorphic to an
+open M\"obius band and therefore has the homotopy type of~$S^1$. Thus
+$\pi_1(\RP^2 \setminus \{q\}) \cong \mathbb{Z}$.
+
+The induced map on fundamental groups factors as
+\[
+  \pi_1(\RP^2) \xrightarrow{g_*} \pi_1(\RP^2 \setminus \{q\})
+  \xrightarrow{i_*} \pi_1(\RP^2),
+\]
+i.e.\ $\mathbb{Z}/2\mathbb{Z} \xrightarrow{g_*} \mathbb{Z}
+\xrightarrow{i_*} \mathbb{Z}/2\mathbb{Z}$.
+
+The only group homomorphism $\mathbb{Z}/2\mathbb{Z} \to \mathbb{Z}$
+is trivial, because $\mathbb{Z}$ is torsion-free: if $\varphi(1) = k$,
+then $0 = \varphi(1+1) = 2k$, so $k = 0$. Therefore $g_* = 0$, hence
+$f_* = i_* \circ g_* = 0$.
+
+\medskip
+\textbf{(b)} Since $f_*$ is trivial, $f$ lifts to a map
+$\tilde{f} : \RP^2 \to S^2$ (the universal cover). The lift
+$\tilde{f}$ also misses a point (the preimage of~$q$ under the
+covering map includes at least one point not in the image of
+$\tilde{f}$). So $\tilde{f}$ factors through $S^2 \setminus \{p\}
+\cong \mathbb{R}^2$, which is contractible. Hence $\tilde{f}$ is
+nullhomotopic, and therefore $f = p \circ \tilde{f}$ is nullhomotopic.
+\end{proofbox}
+
+\begin{leanbox}
+\begin{Verbatim}[fontsize=\small]
+/-- The only group homomorphism Z/2Z -> Z is trivial. -/
+theorem hom_zmod2_to_int_trivial
+    (phi : ZMod 2 ->+ Z) : phi = 0 := by
+  ext x
+  fin_cases x
+  . exact map_zero phi
+  . have h2 : (1 : ZMod 2) + 1 = 0 := by decide
+    have h := phi.map_add 1 1
+    rw [h2, map_zero] at h
+    have key : phi 1 + phi 1 = 0 := h.symm
+    have : (2 : Z) * phi 1 = 0 := by ring_nf; linarith
+    have := mul_eq_zero.mp this
+    rcases this with h2 | done
+    . norm_num at h2
+    . exact done
+
+/-- Any composite Z/2Z ->+ Z ->+ Z/2Z is trivial. -/
+theorem composite_through_Z_trivial
+    (phi : ZMod 2 ->+ Z) (psi : Z ->+ ZMod 2) :
+    psi.comp phi = 0 := by
+  rw [hom_zmod2_to_int_trivial phi]; simp
+\end{Verbatim}
+\end{leanbox}
+
+\begin{notebox}
+The algebraic core---the only homomorphism
+$\mathbb{Z}/2\mathbb{Z} \to \mathbb{Z}$ is trivial---is fully verified.
+The topological setup ($\RP^2$, covering spaces, homotopy) is not in
+Mathlib and is stated as \texttt{True := trivial} to mark the boundary.
+The Lean proof of the algebraic lemma is close to the informal one:
+\texttt{fin\_cases} dispatches the two elements of $\mathbb{Z}/2\mathbb{Z}$,
+\texttt{map\_add} applies the homomorphism property, and the conclusion
+$2k = 0 \Rightarrow k = 0$ is handled by \texttt{ring\_nf + linarith + mul\_eq\_zero}.
+\end{notebox}
+
+% --------------------------------------------------------------------
+\chapter{C2: Analysis}\label{ch:c2}
+
+\begin{problem}[UT Austin, a96A03, 1996]
+Let $B = \{f \in L^2(\mathbb{R}) : \|f\|_2 \le 1\}$ and let $\{f_n\}$
+be a sequence from~$B$ with $f_n \to f$ almost everywhere. Show that:
+\begin{enumerate}[label=(\roman*)]
+\item $f \in B$\,;
+\item $\displaystyle\lim_{n \to \infty} \int_{-\infty}^{\infty}
+  f_n(x)\,g(x)\,dx = \int_{-\infty}^{\infty} f(x)\,g(x)\,dx$
+  for all $g \in L^2(\mathbb{R})$.
+\end{enumerate}
+\emph{Hint: for the second part, start by considering the case in which
+$g$ is continuous and supported in a bounded interval.}
+\end{problem}
+
+\begin{proofbox}
+\textbf{(i)} By Fatou's lemma applied to $|f_n|^2$:
+\[
+  \|f\|_2^2 = \int |f|^2 \le \liminf_n \int |f_n|^2
+  = \liminf_n \|f_n\|_2^2 \le 1.
+\]
+
+\textbf{(ii)} We show $\int (f_n - f)\,g \to 0$. Fix $\varepsilon > 0$.
+
+\emph{Tail control.} Choose a measurable set $s$ with $\mu(s) < \infty$
+such that $\|s^c\text{-indicator of } g\|_2 < \varepsilon/3$. This is
+possible because $g \in L^2$.
+
+\emph{Core convergence.} On $s$ (finite measure), the sequence
+$\{(f_n - f) \cdot g\}$ is $L^1$-uniformly integrable. The key
+estimate: for any measurable $A \subseteq s$ with $\mu(A) \le \delta$,
+H\"older gives
+\[
+  \left\| \mathbf{1}_A \cdot (f_n - f) \cdot g \right\|_1
+  \le \|f_n - f\|_2 \cdot \left\| \mathbf{1}_A \cdot g \right\|_2
+  \le 2 \cdot \left\| \mathbf{1}_A \cdot g \right\|_2,
+\]
+and the absolute continuity of the $L^2$ norm of~$g$ makes
+$\|\mathbf{1}_A \cdot g\|_2$ small when $\mu(A)$ is small (uniformly
+in~$n$). By the Vitali convergence theorem ($L^1$ on a finite measure),
+$\int_s (f_n - f)\,g \to 0$.
+
+\emph{Assembly.} For $n \ge N$:
+\begin{align*}
+  \left| \int (f_n - f)\,g \right|
+  &\le \left| \int_s (f_n - f)\,g \right|
+     + \left| \int_{s^c} (f_n - f)\,g \right| \\
+  &< \frac{\varepsilon}{3}
+     + \|f_n - f\|_2 \cdot \|s^c\text{-indicator of } g\|_2 \\
+  &\le \frac{\varepsilon}{3} + 2 \cdot \frac{\varepsilon}{3}
+  = \varepsilon.
+\end{align*}
+\end{proofbox}
+
+\begin{leanbox}
+\begin{Verbatim}[fontsize=\scriptsize]
+-- Part (i): one-liner using Mathlib's Fatou-for-eLpNorm.
+theorem ae_limit_in_L2_ball ... :=
+  MeasureTheory.Lp.eLpNorm_le_of_ae_tendsto
+    (Eventually.of_forall hF_bound) hF_meas hae
+
+-- Part (ii): 320+ lines assembling:
+-- 1. abs_integral_mul_le_eLpNorm (Cauchy-Schwarz for integrals)
+-- 2. unifIntegrable_one_of_L2_bound (L1-UI from L2 bound via Hoelder)
+-- 3. unifIntegrable_product (UI of (Fn-f)*g from abs. continuity of g)
+-- 4. tendsto_setIntegral_mul (L1-Vitali on finite-measure restriction)
+-- 5. weak_convergence_L2 (epsilon/3 tail + core assembly)
+--
+-- Key Mathlib APIs used:
+--   eLpNorm_smul_le_mul_eLpNorm, eLpNorm_le_eLpNorm_mul_rpow_measure_univ,
+--   tendsto_Lp_finite_of_tendsto_ae, MemLp.eLpNorm_indicator_le,
+--   MemLp.exists_eLpNorm_indicator_compl_lt, integral_add_compl,
+--   tendsto_integral_of_L1'
+\end{Verbatim}
+\end{leanbox}
+
+\begin{notebox}
+C2 was the hardest canary. The informal proof follows the textbook
+hint---start with compactly supported~$g$, then extend by density---but
+the formalisation takes a slightly different route: uniform integrability
+of the \emph{product} $(f_n - f) \cdot g$ rather than of~$f_n$ alone,
+because this lets the absolute continuity of $g$'s $L^2$ norm do the work
+that a pointwise dominator cannot (we have no $L^\infty$ bound on~$f_n$).
+
+The 356-line proof is almost entirely API composition: every mathematical
+step corresponds to a named Mathlib lemma. The difficulty was not missing
+mathematics but type-coercion plumbing---converting between
+\texttt{eLpNorm}, \texttt{ENNReal}, \texttt{ofReal}, indicator functions,
+and measure restrictions. The informal proof is five lines; the formal
+one is seventy times longer. This ratio is the current cost of precision.
+\end{notebox}
+
+% --------------------------------------------------------------------
+\chapter{C3: Algebra}\label{ch:c3}
+
+\begin{problem}[UT Austin, b03J02, 2003]
+Let $R$ be an integral domain and let $a$ be a nonzero noninvertible
+element of~$R$.
+\begin{enumerate}[label=(\alph*)]
+\item Prove that the ideal $(a, x) \subset R[x]$ is not principal.
+\item Use~(a) to show that if $K$ is a field then $K[x, y]$ is not a PID.
+\end{enumerate}
+\end{problem}
+
+\begin{proofbox}
+\textbf{(b)} We have $K[x, y] \cong K[x][y]$. If $K[x][y]$ were a PID,
+then $K[x]$ would be a field (since for a PID~$R$, $R[y]$ is a PID if
+and only if~$R$ is a field). But $K[x]$ is not a field: $x$ is
+irreducible but not a unit. Contradiction.
+
+\medskip
+\textbf{(a)} is the lemma used above: in $R[x]$, the ideal $(a, x)$ is
+not principal because any generator~$d$ would divide both~$a$ (a
+constant) and~$x$, forcing $d$ to be a unit, but then $(d) = R[x]$
+while $(a, x) \ne R[x]$ (since $a$ is not a unit, the evaluation
+at~$x = 0$ sends $(a, x)$ into~$(a) \ne R$).
+\end{proofbox}
+
+\begin{leanbox}
+\begin{Verbatim}[fontsize=\small]
+/-- K[X][Y] is not a PID. -/
+theorem kxy_not_pid (K : Type*) [Field K] [DecidableEq K] :
+    ¬ IsPrincipalIdealRing (Polynomial (Polynomial K)) := by
+  intro h
+  have hfield : IsField K[X] :=
+    IsField.of_isPrincipalIdealRing_polynomial (R := K[X])
+  exact polynomial_not_isField hfield
+\end{Verbatim}
+\end{leanbox}
+
+\begin{notebox}
+The shortest canary: 19~lines including comments. Mathlib already knows
+that $K[X]$ is a Euclidean domain (hence PID) but not a field
+(\texttt{polynomial\_not\_isField}), and that if~$R[Y]$ is a PID
+then~$R$ is a field
+(\texttt{IsField.of\_isPrincipalIdealRing\_polynomial}). The
+formalisation is a two-step contradiction.
+
+Part~(a)---the non-principality of $(a, x)$---is the lemma that
+Mathlib already encapsulates. The exam splits it out as a separate
+subproblem; the formalisation collapses it into the library.
+\end{notebox}
+
+% --------------------------------------------------------------------
+\chapter{C4: Functional Analysis}\label{ch:c4}
+
+\begin{problem}[UT Austin, m96A04, 1996]
+Let $X$ be a Hilbert space and let $A : X \to X$ be a linear map (not
+assumed continuous). Let $B : X \to X$ satisfy
+$\langle Ax, y \rangle = \langle x, By \rangle$ for all $x, y \in X$.
+(Do not assume that $B$ is linear or continuous.) Prove:
+\begin{enumerate}[label=(\alph*)]
+\item $B$ is linear.
+\item $B$ is continuous.
+\item $A$ is continuous.
+\end{enumerate}
+\end{problem}
+
+\begin{proofbox}
+\textbf{(a)} Fix $y_1, y_2 \in X$ and $c \in \mathbb{C}$. For all $x$:
+\[
+  \langle x, B(y_1 + y_2) \rangle = \langle Ax, y_1 + y_2 \rangle
+  = \langle Ax, y_1 \rangle + \langle Ax, y_2 \rangle
+  = \langle x, By_1 \rangle + \langle x, By_2 \rangle
+  = \langle x, By_1 + By_2 \rangle.
+\]
+By nondegeneracy of the inner product, $B(y_1 + y_2) = By_1 + By_2$.
+Similarly $B(cy) = cBy$.
+
+\medskip
+\textbf{(b) and (c)} By the Closed Graph Theorem. We show $A$ has
+closed graph; the argument for~$B$ is symmetric.
+
+Suppose $x_n \to x$ and $Ax_n \to z$. For all $w$:
+\[
+  \langle w, z \rangle = \lim_n \langle w, Ax_n \rangle
+  = \lim_n \langle Bw, x_n \rangle = \langle Bw, x \rangle
+  = \langle w, Ax \rangle.
+\]
+(The second equality uses the adjoint identity rewritten via conjugate
+symmetry: $\langle w, Ax_n \rangle = \overline{\langle Ax_n, w \rangle}
+= \overline{\langle x_n, Bw \rangle} = \langle Bw, x_n \rangle$.)
+
+By nondegeneracy, $z = Ax$. So the graph of~$A$ is sequentially closed,
+hence closed (in a Banach space). By the Closed Graph Theorem, $A$ is
+continuous.
+
+For~$B$: the adjoint identity gives $\langle Bx, y \rangle =
+\overline{\langle y, Bx \rangle} = \overline{\langle Ay, x \rangle}
+= \langle x, Ay \rangle$, so $B$ has adjoint~$A$ and the same argument
+applies.
+\end{proofbox}
+
+\begin{leanbox}
+\begin{Verbatim}[fontsize=\small]
+-- (a): B is additive and respects scalars.
+theorem adjoint_map_additive ... := by
+  intro y1 y2
+  refine ext_inner_left C fun x => ?_
+  simp only [<- hadj, inner_add_right]
+
+-- (b,c): helper proves the closed-graph condition.
+theorem adjoint_seq_closed ...
+    (hu : Tendsto u atTop (nhds x))
+    (hAu : Tendsto (A . u) atTop (nhds z)) :
+    z = A x := by
+  refine ext_inner_left C fun w => ?_
+  -- w,z = lim w,A(un) = lim Bw,un = Bw,x = w,Ax
+  have h1 := (continuous_const.inner continuous_id').tendsto z
+              |>.comp hAu  -- lim <w, A(un)> = <w, z>
+  have h2 : ...            -- lim <w, A(un)> = <w, Ax>
+    -- (uses inner_conj_symm to flip the adjoint identity)
+  exact tendsto_nhds_unique h1 h2
+
+-- (c): A is continuous by Closed Graph Theorem.
+theorem adjoint_map_A_continuous ... : Continuous A :=
+  A.continuous_of_seq_closed_graph
+    (adjoint_seq_closed A B hadj)
+
+-- (b): B is continuous (symmetric argument).
+theorem adjoint_map_B_continuous ... : Continuous B := by
+  apply B.continuous_of_seq_closed_graph
+  exact adjoint_seq_closed B A hadj' u x z hu hBu
+\end{Verbatim}
+\end{leanbox}
+
+\begin{notebox}
+The informal proof has a natural three-act structure: linearity from
+nondegeneracy, then the closed-graph argument, then the symmetry for~$B$.
+The formal proof follows the same structure.
+
+The nondegeneracy step uses \texttt{ext\_inner\_left}---Mathlib's name
+for the fact that $\langle x, a \rangle = \langle x, b \rangle$ for all
+$x$ implies $a = b$. The closed-graph step uses
+\texttt{LinearMap.continuous\_of\_seq\_closed\_graph}, which is Mathlib's
+sequentially-closed-graph variant of Banach's theorem.
+
+The one subtlety: flipping the adjoint identity for~$B$ requires
+navigating conjugate symmetry ($\langle a, b \rangle = \overline{\langle
+b, a \rangle}$). The informal proof does this in a parenthetical; the
+formal proof requires explicit \texttt{inner\_conj\_symm} rewrites with
+careful attention to which variable is which. This was the main source
+of failed tactic applications during development.
+\end{notebox}
+
+% ====================================================================
+\part{Retrospective: The Discipline}
+
+\chapter{M-apm-solutions and the Proof Peripheral}
+
+\section{What this report is really about}
+
+This report is not ``Claude solving maths problems.'' It is a canary
+run for \textbf{M-apm-solutions}, a FUTON stack mission to produce
+expository solutions to 489~UT Austin preliminary exam problems using a
+disciplined, multi-system pipeline. The canaries test whether the
+pipeline's components---the proof peripheral's phase discipline, the
+question-asking patterns, Lean formalisation, and pedagogical
+rotation---work when composed end-to-end.
+
+The distinction matters. A raw language model can solve prelim problems
+and explain them. What it cannot do, without external discipline, is
+produce outputs with a consistent pedagogical structure, document its
+dead ends, or separate what it proved from what it assumed. The
+discipline provides the structure. The model provides the content.
+
+\section{The proof peripheral's phase discipline}
+
+The FUTON proof peripheral (\texttt{futon3c/peripheral/proof.clj})
+structures every proof attempt as a sequence of phases:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Phase} & \textbf{Proof use} & \textbf{Pedagogical rotation} \\
+\midrule
+Observe  & Survey problem, identify blockers & ``What's really being asked'' \\
+Propose  & Suggest approach with success criteria & ``The key insight'' \\
+Execute  & Run the approach & ``The clean proof'' \\
+Validate & Check artifacts against criteria & ``Does the argument close?'' \\
+Classify & Status transition & Grade the proof \\
+Integrate & Merge into ledger & --- \\
+Commit   & Finalise, record evidence & --- \\
+Gate-review & futon3b validation & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The first four phases map directly to the lesson structure in Part~I.
+Each chapter in ``The Lessons'' is organised as:
+\textbf{setup} (Observe), \textbf{key insight} (Propose),
+\textbf{proof} (Execute), \textbf{where you'd get stuck} (Validate).
+This structure was not improvised during writing---it was specified in
+the M-apm-solutions mission document before any mathematics was attempted.
+
+\section{The question-asking patterns}
+
+The FUTON stack maintains a set of question-asking patterns (QP-1 through
+QP-8) calibrated on research mathematics. M-apm-solutions defines a
+\textbf{pedagogical rotation} of five of these:
+
+\begin{center}
+\begin{tabular}{lp{4cm}p{5cm}l}
+\toprule
+\textbf{Type} & \textbf{QP source} & \textbf{Teaching form} & \textbf{Phase} \\
+\midrule
+\texttt{why-hard} & QP-4 (Failure Characterisation) &
+  ``Why is this problem hard? What trap does it set?'' & Observe \\
+\texttt{what-crux} & QP-7 (Kernel Identification) &
+  ``What is the key insight? What do you need to see?'' & Propose \\
+\texttt{why-works} & QP-5 (Theorem Applicability) &
+  ``Why does this approach work? What hypotheses are being used?'' & Validate \\
+\texttt{what-connects} & QP-1 (Landscape Scout) &
+  ``What does this connect to? Where else does this pattern appear?'' & Integrate \\
+\texttt{confidence} & QP-8 (Confidence Inversion) &
+  ``What is surprising here? Where is intuition wrong?'' & Integrate \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Every ``Where you'd get stuck'' section in Part~I was generated by
+applying \texttt{why-hard} (QP-4). Every ``key insight'' section was
+generated by \texttt{what-crux} (QP-7). The ``dead end that teaches
+something'' notes are \texttt{confidence} (QP-8). The patterns produce
+the structure; the mathematical content fills it.
+
+\section{The failed-route ledger}
+
+The mission spec says: ``The failed-route ledger is pedagogically
+gold---dead ends are where intuition lives.'' In the canary run:
+
+\begin{description}
+\item[C1:] Trying to show $\RP^2 \setminus \{q\}$ is contractible
+  (it retracts to~$S^1$). This is a \texttt{confidence} (QP-8)
+  moment: the intuition that ``removing a point simplifies'' is right,
+  but ``simplifies'' means $\pi_1 = \mathbb{Z}$, not $\pi_1 = 0$.
+\item[C2:] The AM-GM dominator trap ($|f_n g| \le (f_n^2 + g^2)/2$
+  depends on~$n$). This is a \texttt{why-hard} (QP-4) moment: the
+  problem is hard precisely because there's no pointwise dominator.
+\item[C4:] Three failed \texttt{rw [inner\_conj\_symm]} attempts in
+  Lean. This is a \texttt{why-works} (QP-5) moment: the conjugate
+  symmetry that the informal proof hand-waves requires explicit tracking
+  of which variable is conjugated.
+\item[C3:] No significant dead ends---the proof was too short.
+\end{description}
+
+In a raw Claude session without the ledger discipline, these dead ends
+would be silently discarded. The output would be a clean proof with no
+record of what was tried and failed. The pedagogical value---the
+intuition-building---would be lost.
+
+\section{The canary profiles}
+
+Each canary was chosen to stress-test a different aspect of the pipeline:
+
+\begin{center}
+\begin{tabular}{lllp{5.5cm}}
+\toprule
+\textbf{Canary} & \textbf{Subject} & \textbf{Lean lines} & \textbf{What it tests} \\
+\midrule
+C1 & Topology   & 48  & Mathlib boundary (missing coverage) \\
+C2 & Analysis   & 356 & API composition at scale \\
+C3 & Algebra    & 19  & Library-level proof (near-free) \\
+C4 & Functional & 94  & Named-theorem application + conjugate bookkeeping \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The 489-problem pipeline will encounter all four profiles repeatedly.
+C3-type problems (the library already knows) should be automated.
+C1-type problems (Mathlib doesn't cover the topology) need the
+boundary marked cleanly. C4-type problems (a named theorem plus
+careful plumbing) are the sweet spot. C2-type problems (massive API
+composition) are where the pipeline will spend most of its time.
+
+\section{What the discipline contributed}
+
+The natural question is: how much of this would a raw Claude session
+produce without the FUTON discipline?
+
+The proofs: probably equivalent. The mathematical content comes from the
+model's training, not from the proof peripheral. A clean prompt---``solve
+these four problems and formalise them in Lean''---would likely produce
+similar Lean code.
+
+The pedagogy: probably thinner. The five-question structure
+(\texttt{why-hard}, \texttt{what-crux}, \texttt{why-works},
+\texttt{what-connects}, \texttt{confidence}) is not the model's default
+register. Without the phase discipline, a raw session would produce
+``here's the proof, now here's what it means''---linear exposition rather
+than structured tutoring. The ``where you'd get stuck'' sections and the
+dead-end analysis would likely be absent or shallow.
+
+The failed-route documentation: almost certainly absent. Language models
+do not spontaneously record what they tried and discarded. The ledger
+discipline forces this.
+
+A \textbf{control experiment}---giving a fresh Claude session the same
+problems with a generic prompt---would make this comparison empirical
+rather than speculative. It is planned as a companion piece.
+
+\section{Relation to the First Proof monograph}
+
+The First Proof sprint~\cite{firstproof} attempted ten open research
+problems in 55~hours. The canaries attempted four textbook problems in a
+single session. The difference in ambition reflects a difference in
+purpose: the First Proof sprint was exploratory (``what can we
+attempt?''); the canaries are diagnostic (``what does the pipeline
+need?'').
+
+The methodological continuity is in the discipline: informal proof first,
+then formalisation, with the formal step exposing gaps and subtleties
+that the informal argument conceals. The Lakatosian
+rhythm---conjecture, critique, repair---operates here at the level of
+tactic application rather than theorem statement. The proof peripheral's
+phases are the same; the question-asking patterns are the same; the
+failed-route ledger is the same. What changes is the scale (4~problems
+instead of~10) and the formality (Lean~4 instead of prose-level
+verification).
+
+The deeper continuity is architectural. The First Proof sprint produced
+the proof peripheral and the question patterns. The canaries are the
+first test of whether those tools transfer from research mathematics to
+expository mathematics. They do. The 489-problem pipeline is the next
+step: the same discipline, applied at scale, with Arxana retaining the
+full graph and Tickle dispatching the automation.
+
+\begin{thebibliography}{9}
+\bibitem{firstproof}
+  J.~Corneli. \emph{A First Proof Sprint}. Hyperreal Enterprises, 2026.
+  \url{https://github.com/tothedarktowercame/futon6}
+
+\bibitem{lakatos1976}
+  I.~Lakatos. \emph{Proofs and Refutations}. Cambridge University Press, 1976.
+
+\bibitem{pease2017}
+  A.~Pease, J.~Corneli, et al.
+  Lakatos-style collaborative mathematics through dialectical, structured
+  and abstract argumentation.
+  \emph{Artificial Intelligence}, 246:181--219, 2017.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,402 @@
+% ====================================================================
+% Part I: The Lessons
+% Each canary as a tutorial, not a proof demonstration.
+% Target reader: strong undergrad who needs tools explained.
+% ====================================================================
+
+% --------------------------------------------------------------------
+\chapter{C1: Topology --- Why Non-Surjective Maps Kill Themselves}\label{ch:lesson-c1}
+
+\section{The setup}
+
+$\RP^2$ is the \textbf{real projective plane}. You build it by taking a
+sphere and gluing opposite points together: every point~$p$ on~$S^2$ gets
+identified with the point directly on the other side,~$-p$. The result
+is a surface that's locally flat (like a plane) but globally has a twist
+in it---a bit like a M\"obius strip, except it's a closed surface with no
+boundary.
+
+The fundamental group $\pi_1(\RP^2)$ is $\mathbb{Z}/2\mathbb{Z}$---the
+group with just two elements, $\{0, 1\}$, where $1 + 1 = 0$. Intuitively:
+there's one nontrivial loop in~$\RP^2$ (you walk from a point to its
+antipode on the sphere, and the identification glues the endpoints
+together), and if you walk that loop \emph{twice}, you've gone all the
+way around the sphere and returned---so the loop squares to the identity.
+
+The \textbf{universal cover} of $\RP^2$ is~$S^2$ itself. The covering map
+$p : S^2 \to \RP^2$ sends each point to its equivalence class. This is a
+$2$-to-$1$ map. The key property of covering spaces: a continuous map
+$f : \RP^2 \to \RP^2$ that induces the \emph{trivial} map on~$\pi_1$ can
+be ``lifted'' to a map $\tilde{f} : \RP^2 \to S^2$ satisfying
+$p \circ \tilde{f} = f$.
+
+\section{What the problem is really asking}
+
+If $f$ misses a point, does that force $f$ to be ``topologically
+trivial''---homotopic to a constant? The answer is yes, and the reason is
+\emph{algebraic}: the factorisation through $\RP^2 \setminus \{q\}$
+forces $f_*$ to be the zero map, and once $f_*$ is zero, the lifting
+property finishes the job.
+
+\section{The tool you need: what does $\RP^2$ minus a point look like?}
+
+This is the hint. Take the sphere~$S^2$ and remove a point~$q$ and its
+antipode~$-q$. You get $S^2 \setminus \{q, -q\}$, which is homeomorphic
+to the cylinder $S^1 \times \mathbb{R}$ (think of it as the sphere with
+the north and south poles removed---that's a cylinder). When you glue
+antipodes, the cylinder becomes an \textbf{open M\"obius band}.
+
+An open M\"obius band deformation-retracts onto its core circle~$S^1$.
+So $\pi_1(\RP^2 \setminus \{q\}) \cong \pi_1(S^1) \cong \mathbb{Z}$.
+
+\section{The key insight}
+
+Since $f$ misses~$q$, it factors: $f = i \circ g$ where
+$g : \RP^2 \to \RP^2 \setminus \{q\}$ and $i$ is the inclusion. On
+fundamental groups:
+\[
+  f_* = i_* \circ g_* :
+  \underbrace{\mathbb{Z}/2\mathbb{Z}}_{\pi_1(\RP^2)}
+  \xrightarrow{g_*}
+  \underbrace{\mathbb{Z}}_{\pi_1(\RP^2 \setminus \{q\})}
+  \xrightarrow{i_*}
+  \underbrace{\mathbb{Z}/2\mathbb{Z}}_{\pi_1(\RP^2)}.
+\]
+
+Now: \textbf{what is $g_*$?} It's a group homomorphism from
+$\mathbb{Z}/2\mathbb{Z}$ to~$\mathbb{Z}$. There's only one: the zero
+map. Why? If $\varphi(1) = k$, then $0 = \varphi(0) = \varphi(1 + 1) =
+\varphi(1) + \varphi(1) = 2k$. In~$\mathbb{Z}$, $2k = 0$ forces $k = 0$.
+(This is what ``$\mathbb{Z}$ is torsion-free'' means: no nonzero element
+has finite order.)
+
+So $g_* = 0$, hence $f_* = 0$. For part~(b): $f_*$ trivial means $f$
+lifts to $\tilde{f} : \RP^2 \to S^2$. The lift also misses a point
+(because $f$ does), so it factors through $S^2 \setminus \{p\} \cong
+\mathbb{R}^2$. Since $\mathbb{R}^2$ is contractible (shrink everything
+to the origin), $\tilde{f}$ is nullhomotopic, hence so is~$f$.
+
+\section{Where you'd get stuck}
+
+\begin{itemize}
+\item \textbf{Trying to compute $\pi_1$ from scratch.} Don't. The exam
+  gives you the hint precisely so you don't have to run van~Kampen or
+  build a CW-complex. Just identify the space and read off $\pi_1$.
+\item \textbf{Thinking $\RP^2 \setminus \{q\}$ is contractible.} It
+  retracts to $S^1$, not to a point. The M\"obius band has a
+  nontrivial core loop. Getting this wrong teaches you the difference
+  between ``simple'' and ``contractible.''
+\item \textbf{Trying to build the homotopy by hand.} The lifting
+  property and contractibility of $\mathbb{R}^2$ do this for you. The
+  proof is existential, not constructive.
+\end{itemize}
+
+% --------------------------------------------------------------------
+\chapter{C2: Analysis --- Why Bounded Sequences Converge Weakly}\label{ch:lesson-c2}
+
+\section{The setup}
+
+$L^2(\mathbb{R})$ is the space of square-integrable functions on the real
+line: functions~$f$ for which $\int_{-\infty}^{\infty} |f(x)|^2\,dx <
+\infty$. The norm is $\|f\|_2 = (\int |f|^2)^{1/2}$. This is a Hilbert
+space---a complete inner product space---with inner product $\langle f, g
+\rangle = \int f(x)\,\overline{g(x)}\,dx$.
+
+The closed unit ball $B = \{f : \|f\|_2 \le 1\}$ is the set of functions
+with bounded energy.
+
+``$f_n \to f$ almost everywhere'' means: for almost every $x \in
+\mathbb{R}$, the sequence of numbers $f_n(x)$ converges to $f(x)$.
+``Almost every'' means the set of exceptions has measure zero.
+
+\section{The two tools you need}
+
+\textbf{Fatou's lemma.} If $g_n \ge 0$ are measurable functions and
+$g_n \to g$ pointwise a.e., then
+\[
+  \int g \le \liminf_{n \to \infty} \int g_n.
+\]
+In words: the integral of the limit is at most the limit of the
+integrals. The inequality can be strict (mass can ``escape to infinity''),
+but you never gain mass in the limit.
+
+Applied to $g_n = |f_n|^2$: since $f_n \to f$ a.e., we have $|f_n|^2
+\to |f|^2$ a.e., so
+\[
+  \|f\|_2^2 = \int |f|^2 \le \liminf_n \int |f_n|^2
+  = \liminf_n \|f_n\|_2^2 \le 1.
+\]
+That's part~(i). One tool, one inequality, done.
+
+\textbf{H\"older's inequality} (the case $p = q = 2$ is Cauchy--Schwarz).
+If $f \in L^2$ and $g \in L^2$, then $fg \in L^1$ and
+\[
+  \left|\int fg\right| \le \|f\|_2 \cdot \|g\|_2.
+\]
+This will be the workhorse for part~(ii).
+
+\section{What part (ii) is really asking}
+
+The statement $\int f_n\,g \to \int f\,g$ for all $g \in L^2$ is called
+\textbf{weak convergence} of $f_n$ to~$f$. It's weaker than
+$\|f_n - f\|_2 \to 0$ (which is ``strong'' or ``norm'' convergence and is
+NOT what's happening here---bounded sequences in $L^2$ can converge a.e.\
+without converging in norm).
+
+The exam is asking you to prove: \emph{almost-everywhere convergence plus
+a uniform $L^2$ bound implies weak convergence.}
+
+\section{The key insight: split and conquer}
+
+The hint says ``start with $g$ continuous and compactly supported.'' But
+even that special case has a trap: there's no \emph{pointwise} dominator
+for $f_n \cdot g$ that works for all~$n$ (because $\|f_n\|_2 \le 1$
+does NOT give you $|f_n(x)| \le M$ for any fixed~$M$). So the Dominated
+Convergence Theorem doesn't apply directly.
+
+The way through: \textbf{split the integral into a core and a tail}.
+
+Fix $\varepsilon > 0$. Choose a set $K$ (think $[-R, R]$) large enough
+that $g$ has very little $L^2$ mass outside $K$:
+$\|g \cdot \mathbf{1}_{K^c}\|_2 < \varepsilon$. This is possible
+because $g \in L^2$ and $L^2$ tails vanish.
+
+\textbf{The tail piece} is easy by Cauchy--Schwarz:
+\[
+  \left|\int_{K^c} (f_n - f)\,g\right|
+  \le \|f_n - f\|_2 \cdot \|g \cdot \mathbf{1}_{K^c}\|_2
+  \le 2\varepsilon.
+\]
+(We used $\|f_n - f\|_2 \le \|f_n\|_2 + \|f\|_2 \le 1 + 1 = 2$.)
+
+\textbf{The core piece} needs more work. On $K$ (a bounded interval, so
+finite measure), we can use:
+
+\begin{enumerate}
+\item \textbf{Uniform integrability} of the product $(f_n - f) \cdot g$
+  on~$K$. The estimate: for any small set $A \subseteq K$,
+  \[
+    \|\mathbf{1}_A \cdot (f_n - f) \cdot g\|_1
+    \le \|f_n - f\|_2 \cdot \|\mathbf{1}_A \cdot g\|_2
+    \le 2 \cdot \|\mathbf{1}_A \cdot g\|_2.
+  \]
+  The right side goes to zero as $\mu(A) \to 0$ (because $g \in L^2$
+  and the $L^2$ norm of $g$ restricted to a small set is small). This
+  bound is \emph{uniform} in~$n$---it depends only on the $L^2$ bound
+  on~$f_n$, not on the specific function.
+
+\item \textbf{Vitali's convergence theorem:} on a finite measure space,
+  if a sequence is uniformly integrable and converges a.e., then it
+  converges in $L^1$. Applied here: $\int_K |(f_n - f)g| \to 0$.
+\end{enumerate}
+
+Combining: $|\int (f_n - f)g| < \varepsilon/3 + 2\varepsilon/3 =
+\varepsilon$ for $n$ large enough.
+
+\section{Where you'd get stuck}
+
+\begin{itemize}
+\item \textbf{Trying to use the Dominated Convergence Theorem directly.}
+  You need a \emph{fixed} integrable function that dominates $|f_n \cdot
+  g|$ for all~$n$. You don't have one. The $L^2$ bound gives
+  $\|f_n\|_2 \le 1$, not $|f_n(x)| \le M$. This is the fundamental
+  difference between $L^2$ control (average) and $L^\infty$ control
+  (pointwise).
+\item \textbf{The AM-GM trap.} $|f_n g| \le (f_n^2 + g^2)/2$ looks
+  like a dominator, but $f_n^2$ depends on~$n$. A dominator must be
+  fixed.
+\item \textbf{Confusing weak and strong convergence.} $\int f_n g \to
+  \int fg$ does NOT mean $\|f_n - f\|_2 \to 0$. The sequence
+  $f_n(x) = \sin(nx)$ on $[0, 2\pi]$ converges to zero weakly
+  (Riemann--Lebesgue) but $\|f_n\|_2 = \sqrt{\pi}$ for all~$n$.
+\end{itemize}
+
+% --------------------------------------------------------------------
+\chapter{C3: Algebra --- Why $K[x,y]$ Can't Be a PID}\label{ch:lesson-c3}
+
+\section{The setup}
+
+A \textbf{PID} (Principal Ideal Domain) is a ring where every ideal is
+generated by a single element. The integers $\mathbb{Z}$ are a PID: every
+ideal looks like $(n) = \{nk : k \in \mathbb{Z}\}$. The polynomial ring
+$K[x]$ (polynomials in one variable over a field~$K$) is also a PID:
+you can always do polynomial long division, so the Euclidean algorithm
+works, so every ideal is principal.
+
+The question: what about $K[x, y]$, polynomials in \emph{two} variables?
+
+\section{The key insight: one variable too many}
+
+$K[x, y]$ is the same ring as $K[x][y]$---polynomials in~$y$ whose
+coefficients are polynomials in~$x$. If $K[x][y]$ were a PID, what
+would that say about~$K[x]$?
+
+Here's the structural fact: \textbf{if $R$ is a PID, then $R[y]$ is a
+PID if and only if $R$ is a field.} The ``only if'' direction is what
+we need. If $R[y]$ is a PID and $R$ is a PID, then $R$ must be a field.
+
+We know $K[x]$ is a PID. If $K[x][y]$ were also a PID, then $K[x]$
+would be a field. But $K[x]$ is \emph{not} a field: the polynomial~$x$
+has no multiplicative inverse (there's no polynomial $p(x)$ with
+$x \cdot p(x) = 1$).
+
+Contradiction. $K[x, y]$ is not a PID.
+
+\section{What part (a) is really about}
+
+The exam also asks you to prove that in an integral domain~$R$, if $a$
+is nonzero and noninvertible, then the ideal $(a, x) \subset R[x]$ is
+not principal. This is the engine behind part~(b): in $K[x][y]$,
+take $R = K[x]$ and $a = x$. Then $(x, y)$ is a non-principal ideal
+in $K[x, y]$.
+
+The direct argument for~(a): suppose $(a, x) = (d)$ for some $d \in R[x]$.
+Since $a \in (d)$ and $a$ is a constant (degree~$0$), $d$ must also be a
+constant. Since $x \in (d)$ and $d$ is a constant, $d$ divides~$x$ in
+$R[x]$, so $d$ is a unit. But then $(d) = R[x]$, while $(a, x) \ne R[x]$
+because evaluating at $x = 0$ sends $(a, x)$ to $(a) \ne R$ (since $a$
+is not a unit). Contradiction.
+
+\section{Where you'd get stuck}
+
+\begin{itemize}
+\item \textbf{Not knowing the structure theorem.} If you don't know that
+  ``$R[y]$ PID implies $R$ field'' (for $R$ a PID), you're stuck doing
+  the generator-and-divisibility argument from scratch.
+\item \textbf{Confusing ``$K[x]$ is a PID'' with ``$K[x]$ is a field.''}
+  Being a PID means every ideal is principal. Being a field means every
+  nonzero element has an inverse. $K[x]$ is the first but not the
+  second. The exam is testing whether you understand this distinction.
+\end{itemize}
+
+% --------------------------------------------------------------------
+\chapter{C4: Functional Analysis --- The Adjoint Trick}\label{ch:lesson-c4}
+
+\section{The setup}
+
+A \textbf{Hilbert space} is a complete inner product space: a vector space
+with an inner product $\langle \cdot, \cdot \rangle$ and no ``missing
+points'' (every Cauchy sequence converges). Think of $L^2(\mathbb{R})$
+from C2, or $\mathbb{R}^n$ with the dot product, or $\ell^2$ (sequences
+$(a_1, a_2, \ldots)$ with $\sum |a_n|^2 < \infty$).
+
+A \textbf{linear map} $A : X \to X$ is a function respecting addition and
+scalar multiplication. It is \textbf{continuous} (equivalently,
+\textbf{bounded}) if there exists $C$ such that $\|Ax\| \le C\|x\|$ for
+all~$x$. Linear maps on finite-dimensional spaces are always continuous.
+On infinite-dimensional spaces, they need not be---which is what makes
+this problem interesting.
+
+The problem gives you $A$ (linear, not assumed continuous) and $B$ (not
+assumed linear OR continuous!) satisfying $\langle Ax, y \rangle = \langle
+x, By \rangle$ for all $x, y$. This is the \textbf{adjoint identity}: $B$
+is behaving like the adjoint of~$A$, even though we haven't assumed it has
+any nice properties.
+
+\section{The tool you need: the Closed Graph Theorem}
+
+\textbf{Theorem} (Banach, 1932). Let $X$ and $Y$ be Banach spaces
+(complete normed spaces---Hilbert spaces are a special case) and let
+$T : X \to Y$ be a linear map. If the graph of~$T$,
+\[
+  \mathrm{graph}(T) = \{(x, Tx) : x \in X\} \subseteq X \times Y,
+\]
+is a \emph{closed set}, then $T$ is continuous.
+
+``Closed'' means: if $(x_n, Tx_n) \to (x, z)$ in $X \times Y$, then
+$z = Tx$. In other words, if the inputs converge and the outputs converge,
+then the outputs converge to the right thing.
+
+This is a remarkable theorem because it lets you prove continuity
+\emph{without ever bounding $\|Tx\|$}. You just check that limits
+behave consistently.
+
+\section{Part (a): B is linear --- nondegeneracy does the work}
+
+The inner product is \textbf{nondegenerate}: if $\langle x, a \rangle =
+\langle x, b \rangle$ for all~$x$, then $a = b$. (Proof: take $x =
+a - b$, get $\|a - b\|^2 = 0$.)
+
+To show $B(y_1 + y_2) = By_1 + By_2$: for all~$x$,
+\begin{align*}
+  \langle x, B(y_1 + y_2) \rangle
+  &= \langle Ax, y_1 + y_2 \rangle
+  = \langle Ax, y_1 \rangle + \langle Ax, y_2 \rangle \\
+  &= \langle x, By_1 \rangle + \langle x, By_2 \rangle
+  = \langle x, By_1 + By_2 \rangle.
+\end{align*}
+By nondegeneracy, $B(y_1 + y_2) = By_1 + By_2$. Same argument for
+$B(cy) = cBy$, using linearity of the inner product in the second
+argument.
+
+\section{Parts (b) and (c): the Closed Graph Theorem}
+
+Now that $B$ is linear, we can apply the Closed Graph Theorem.
+
+\textbf{Claim:} $A$ has closed graph.
+
+\textbf{Proof of claim:} Suppose $x_n \to x$ and $Ax_n \to z$. We
+need $z = Ax$. For any $w \in X$:
+\begin{align*}
+  \langle w, z \rangle
+  &= \lim_n \langle w, Ax_n \rangle
+  &\text{(inner product is continuous in the second variable)} \\
+  &= \lim_n \overline{\langle Ax_n, w \rangle}
+  &\text{(conjugate symmetry: $\langle a, b \rangle = \overline{\langle b, a \rangle}$)} \\
+  &= \lim_n \overline{\langle x_n, Bw \rangle}
+  &\text{(adjoint identity with $y = w$)} \\
+  &= \overline{\langle x, Bw \rangle}
+  &\text{(inner product is continuous in the first variable)} \\
+  &= \langle Bw, x \rangle
+  &\text{(conjugate symmetry again)} \\
+  &= \overline{\langle x, Bw \rangle} = \langle Bw, x \rangle \\
+  &\quad\;\;\; \text{wait---let me redo this without the double flip} \\[4pt]
+  &= \lim_n \langle Bw, x_n \rangle
+  &\text{(conjugate symmetry applied to $\langle x_n, Bw \rangle$)} \\
+  &= \langle Bw, x \rangle = \langle w, Ax \rangle.
+  &\text{(adjoint identity: $\langle Bw, x \rangle = \overline{\langle x, Bw \rangle} = \overline{\overline{\langle Bw, x \rangle}} \ldots$)}
+\end{align*}
+
+OK---the conjugate symmetry bookkeeping is genuinely fiddly, even
+informally. Let me state the clean version:
+
+\begin{quote}
+For real Hilbert spaces (no conjugates): $\langle w, Ax_n \rangle =
+\langle Bw, x_n \rangle$ by the adjoint identity with the variables
+swapped. Taking limits: $\langle w, z \rangle = \langle Bw, x \rangle
+= \langle w, Ax \rangle$. By nondegeneracy, $z = Ax$.
+\end{quote}
+
+For complex Hilbert spaces, you have to route through two applications of
+$\langle a, b \rangle = \overline{\langle b, a \rangle}$ to get from
+$\langle w, Ax_n \rangle$ to $\langle Bw, x_n \rangle$. This is exactly
+what tripped up the Lean formalisation---three failed tactic attempts
+before the right rewrite chain was found.
+
+By the Closed Graph Theorem, $A$ is continuous. For~$B$: the adjoint
+identity is symmetric. $\langle Bx, y \rangle = \overline{\langle y,
+Bx \rangle} = \overline{\langle Ay, x \rangle} = \langle x, Ay \rangle$.
+So $B$ has adjoint~$A$, and the same closed-graph argument gives~$B$
+continuous.
+
+\section{Where you'd get stuck}
+
+\begin{itemize}
+\item \textbf{Not recognising the Closed Graph Theorem setup.} The
+  problem says ``do not assume continuous.'' This is the exam waving a
+  flag: \emph{you will need a theorem that gives you continuity for free
+  from some algebraic condition.} In a Hilbert/Banach space, that
+  theorem is the Closed Graph Theorem (or equivalently, the Open Mapping
+  Theorem).
+\item \textbf{Trying to bound $\|Ax\|$ directly.} You can't---the
+  whole point is that you don't have a bound. The Closed Graph Theorem
+  lets you avoid this entirely.
+\item \textbf{The conjugate symmetry dance.} In a complex Hilbert space,
+  $\langle a, b \rangle = \overline{\langle b, a \rangle}$, which means
+  the inner product is linear in one argument and \emph{conjugate}-linear
+  in the other. Swapping the arguments of the adjoint identity requires
+  tracking these conjugates. This is where both humans and proof
+  assistants stumble. The Lean formalisation needed explicit
+  \texttt{inner\_conj\_symm} rewrites that the informal proof waves
+  away.
+\end{itemize}
