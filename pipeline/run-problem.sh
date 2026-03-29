@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+# Run one APM problem through the full pipeline:
+#   1. Parse LaTeX → problem statement
+#   2. Claude: informal proof + lesson (Observe/Propose/Execute/Validate)
+#   3. Claude: Lean formalisation (15-minute budget)
+#   4. Lean build with timeout
+#   5. Record evidence
+#
+# Usage: run-problem.sh <problem-id> <tex-path> <batch-number>
+
+set -euo pipefail
+
+PROBLEM_ID="${1:?Usage: run-problem.sh <problem-id> <tex-path> <batch-number>}"
+TEX_PATH="${2:?}"
+BATCH="${3:?}"
+PIPELINE_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_DIR="$(dirname "$PIPELINE_DIR")"
+SOLUTIONS_DIR="$PIPELINE_DIR/solutions"
+LEAN_DIR="$PIPELINE_DIR/lean-proofs"
+EVIDENCE_DIR="$PIPELINE_DIR/evidence"
+
+LEAN_TIMEOUT=900  # 15 minutes in seconds
+START_TIME=$(date +%s)
+
+echo "[$(date -Iseconds)] === $PROBLEM_ID (batch $BATCH) ==="
+
+# 1. Read problem
+PROBLEM_TEXT=$(cat "$TEX_PATH")
+echo "[$(date -Iseconds)] Problem loaded ($(wc -c < "$TEX_PATH") bytes)"
+
+# 2. Informal proof + lesson via Claude CLI
+SOLUTION_FILE="$SOLUTIONS_DIR/${PROBLEM_ID}.md"
+if [ ! -f "$SOLUTION_FILE" ]; then
+  echo "[$(date -Iseconds)] Generating informal proof + lesson..."
+  claude -p "You are a mathematics tutor working through UT Austin preliminary exam problems. Use the futonic proof discipline:
+
+PHASE 1 — OBSERVE: What is this problem really asking? What tools do you need? Explain any required background (Fatou, Closed Graph Theorem, etc.) from scratch for a strong-undergrad reader.
+
+PHASE 2 — PROPOSE: What is the key insight that unlocks the problem? State it clearly before giving the proof.
+
+PHASE 3 — EXECUTE: Give a clean, complete informal proof.
+
+PHASE 4 — VALIDATE: Where would a student get stuck? What dead ends teach something? What traps does the problem set?
+
+Format as markdown with sections: ## Setup, ## Key Insight, ## Proof, ## Where You'd Get Stuck
+
+Problem (${PROBLEM_ID}):
+\`\`\`latex
+${PROBLEM_TEXT}
+\`\`\`" --output-format text > "$SOLUTION_FILE" 2>/dev/null || true
+  echo "[$(date -Iseconds)] Solution written ($(wc -w < "$SOLUTION_FILE") words)"
+else
+  echo "[$(date -Iseconds)] Solution already exists, skipping"
+fi
+
+# 3. Lean formalisation via Claude CLI (15-minute budget)
+LEAN_FILE="$LEAN_DIR/${PROBLEM_ID}.lean"
+LEAN_STATUS="skipped"
+if [ ! -f "$LEAN_FILE" ]; then
+  echo "[$(date -Iseconds)] Generating Lean proof (${LEAN_TIMEOUT}s budget)..."
+  timeout "${LEAN_TIMEOUT}" claude -p "Write a Lean 4 proof for this UT Austin prelim problem using Mathlib. Import Mathlib at the top. Use sorry ONLY where Mathlib genuinely lacks coverage — mark each sorry with a comment explaining what's missing. Keep it concise.
+
+Problem (${PROBLEM_ID}):
+\`\`\`latex
+${PROBLEM_TEXT}
+\`\`\`
+
+Informal proof for reference:
+$(head -100 "$SOLUTION_FILE" 2>/dev/null || echo 'none')
+
+Output ONLY the Lean code, no markdown fences." --output-format text > "$LEAN_FILE" 2>/dev/null
+  LEAN_EXIT=$?
+  if [ $LEAN_EXIT -eq 124 ]; then
+    LEAN_STATUS="timed-out"
+    echo "[$(date -Iseconds)] Lean generation timed out"
+  elif [ $LEAN_EXIT -ne 0 ]; then
+    LEAN_STATUS="generation-failed"
+    echo "[$(date -Iseconds)] Lean generation failed (exit $LEAN_EXIT)"
+  else
+    echo "[$(date -Iseconds)] Lean file written ($(wc -l < "$LEAN_FILE") lines)"
+    # 4. Try to build
+    echo "[$(date -Iseconds)] Building Lean proof..."
+    LEAN_BUILD_LOG="$EVIDENCE_DIR/${PROBLEM_ID}-lean-build.log"
+    export PATH="$HOME/.elan/bin:$PATH"
+    # Copy to project and build
+    cp "$LEAN_FILE" "$PROJECT_DIR/ApmCanaries/Current.lean"
+    timeout "${LEAN_TIMEOUT}" lake build ApmCanaries.Current \
+      > "$LEAN_BUILD_LOG" 2>&1
+    BUILD_EXIT=$?
+    if [ $BUILD_EXIT -eq 0 ]; then
+      if grep -q "sorry" "$LEAN_FILE"; then
+        LEAN_STATUS="partial"
+        SORRY_COUNT=$(grep -c "sorry" "$LEAN_FILE")
+        echo "[$(date -Iseconds)] Lean: partial ($SORRY_COUNT sorry)"
+      else
+        LEAN_STATUS="closed"
+        echo "[$(date -Iseconds)] Lean: CLOSED (zero sorry)"
+      fi
+    elif [ $BUILD_EXIT -eq 124 ]; then
+      LEAN_STATUS="build-timed-out"
+      echo "[$(date -Iseconds)] Lean build timed out"
+    else
+      LEAN_STATUS="build-failed"
+      echo "[$(date -Iseconds)] Lean build failed"
+    fi
+    rm -f "$PROJECT_DIR/ApmCanaries/Current.lean"
+  fi
+else
+  echo "[$(date -Iseconds)] Lean file already exists, skipping"
+  if grep -q "sorry" "$LEAN_FILE"; then
+    LEAN_STATUS="partial"
+  else
+    LEAN_STATUS="closed"
+  fi
+fi
+
+# 5. Record evidence
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
+
+cat > "$EVIDENCE_DIR/${PROBLEM_ID}.json" <<EVIDENCE
+{
+  "problem_id": "${PROBLEM_ID}",
+  "batch": ${BATCH},
+  "timestamp": "$(date -Iseconds)",
+  "elapsed_seconds": ${ELAPSED},
+  "solution_exists": $([ -f "$SOLUTION_FILE" ] && echo true || echo false),
+  "solution_words": $(wc -w < "$SOLUTION_FILE" 2>/dev/null || echo 0),
+  "lean_status": "${LEAN_STATUS}",
+  "lean_lines": $(wc -l < "$LEAN_FILE" 2>/dev/null || echo 0),
+  "sorry_count": $(grep -c "sorry" "$LEAN_FILE" 2>/dev/null || echo 0)
+}
+EVIDENCE
+
+echo "[$(date -Iseconds)] Done: ${PROBLEM_ID} — ${LEAN_STATUS} (${ELAPSED}s)"
