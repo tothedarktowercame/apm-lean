@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # Generate a retrospective after a batch of 10 problems.
 # Reads evidence files, summarises patterns, generates debrief.
 #

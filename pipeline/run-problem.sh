@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # Run one APM problem through the full pipeline:
 #   1. Parse LaTeX → problem statement
 #   2. Claude: informal proof + lesson (Observe/Propose/Execute/Validate)

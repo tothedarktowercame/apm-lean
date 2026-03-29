@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # APM Canaries Pipeline — run all 490 problems with retrospectives.
 #
 # Structure:
@@ -33,7 +33,7 @@ done
 # Generate manifest if missing
 if [ ! -f "$MANIFEST" ]; then
   echo "Generating manifest..."
-  bash "$PIPELINE_DIR/generate-manifest.sh"
+  /usr/bin/bash "$PIPELINE_DIR/generate-manifest.sh"
 fi
 
 TOTAL=$(tail -n+2 "$MANIFEST" | wc -l)
@@ -68,7 +68,7 @@ for line in "${LINES[@]}"; do
   # Run problem
   echo ""
   echo "[$PROBLEM_NUM/$TOTAL] Problem: $ID (batch $BATCH_NUM)"
-  bash "$PIPELINE_DIR/run-problem.sh" "$ID" "$PATH" "$BATCH_NUM" || {
+  /usr/bin/bash "$PIPELINE_DIR/run-problem.sh" "$ID" "$PATH" "$BATCH_NUM" || {
     echo "WARNING: $ID failed, continuing..."
   }
 
@@ -80,7 +80,7 @@ for line in "${LINES[@]}"; do
     echo "=========================================="
     echo "  RETROSPECTIVE: Batch $BATCH_NUM"
     echo "=========================================="
-    bash "$PIPELINE_DIR/run-retrospective.sh" "$BATCH_NUM" || {
+    /usr/bin/bash "$PIPELINE_DIR/run-retrospective.sh" "$BATCH_NUM" || {
       echo "WARNING: Retrospective $BATCH_NUM failed, continuing..."
     }
     BATCH_COUNT=0
@@ -100,7 +100,7 @@ if [ "$BATCH_COUNT" -gt 0 ] && [ -z "$SINGLE_BATCH" ]; then
   echo "=========================================="
   echo "  RETROSPECTIVE: Final batch $FINAL_BATCH"
   echo "=========================================="
-  bash "$PIPELINE_DIR/run-retrospective.sh" "$FINAL_BATCH" || true
+  /usr/bin/bash "$PIPELINE_DIR/run-retrospective.sh" "$FINAL_BATCH" || true
 fi
 
 # Summary

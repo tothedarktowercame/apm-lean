@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # Generate the task manifest from the APM LaTeX files.
 # Output: manifest/tasks.tsv (id, subject, year, session, number, path)
 
