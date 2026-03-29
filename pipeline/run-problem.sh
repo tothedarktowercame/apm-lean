@@ -50,7 +50,15 @@ Format as markdown with sections: ## Setup, ## Key Insight, ## Proof, ## Where Y
 Problem (${PROBLEM_ID}):
 $(cat "$TEX_PATH")
 PROMPT_EOF
-  claude -p "$(cat "$PROMPT_FILE")" --output-format text > "$SOLUTION_FILE" 2>&1 || true
+  claude -p "$(cat "$PROMPT_FILE")" --output-format text > "$SOLUTION_FILE" 2>&1 &
+  SOL_PID=$!
+  SOL_START=$(date +%s)
+  while kill -0 "$SOL_PID" 2>/dev/null; do
+    sleep 15
+    SOL_ELAPSED=$(( $(date +%s) - SOL_START ))
+    echo "[$(date -Iseconds)]   ... solution: ${SOL_ELAPSED}s"
+  done
+  wait "$SOL_PID" 2>/dev/null || true
   rm -f "$PROMPT_FILE"
   echo "[$(date -Iseconds)] Solution written ($(wc -w < "$SOLUTION_FILE") words)"
 else
@@ -96,17 +104,19 @@ LEAN_PROMPT_EOF
     claude -p "$(cat "$LEAN_PROMPT_FILE")" --output-format text \
     > "$LEAN_FILE" 2>/dev/null &
   CLAUDE_PID=$!
-  # Progress monitor
+  # Progress monitor — heartbeat every 30s so operator knows it's alive.
+  # claude -p buffers output fully, so file stays 0 bytes until done.
+  LEAN_START=$(date +%s)
   while kill -0 "$CLAUDE_PID" 2>/dev/null; do
-    sleep 10
-    if [ -f "$LEAN_FILE" ]; then
+    sleep 30
+    LEAN_ELAPSED=$(( $(date +%s) - LEAN_START ))
+    BYTES=$(wc -c < "$LEAN_FILE" 2>/dev/null || echo 0)
+    if [ "$BYTES" -gt 0 ]; then
       LINES=$(wc -l < "$LEAN_FILE" 2>/dev/null || echo 0)
-      BYTES=$(wc -c < "$LEAN_FILE" 2>/dev/null || echo 0)
-      if [ "$BYTES" -gt 0 ]; then
-        # Show which §SECTIONs have been written
-        SECTIONS=$(grep -o '§[A-Z]*[0-9]*' "$LEAN_FILE" 2>/dev/null | tr '\n' ' ')
-        echo "[$(date -Iseconds)]   ... ${LINES} lines, ${BYTES} bytes${SECTIONS:+ — sections: $SECTIONS}"
-      fi
+      SECTIONS=$(grep -o '§[A-Z]*[0-9]*' "$LEAN_FILE" 2>/dev/null | tr '\n' ' ')
+      echo "[$(date -Iseconds)]   ... ${LEAN_ELAPSED}s — ${LINES} lines${SECTIONS:+ — sections: $SECTIONS}"
+    else
+      echo "[$(date -Iseconds)]   ... ${LEAN_ELAPSED}s — generating (claude -p still running)"
     fi
   done
   wait "$CLAUDE_PID" 2>/dev/null
