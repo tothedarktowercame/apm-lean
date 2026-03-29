@@ -89,12 +89,27 @@ $(head -100 "$SOLUTION_FILE" 2>/dev/null || echo 'none')
 
 Output ONLY the Lean code, no markdown fences.
 LEAN_PROMPT_EOF
-  # Stream to file via unbuffered write; partial output survives timeout.
-  # The section-delimiter prompt means even truncated output has complete
-  # early sections (imports, statement, initial lemmas).
+  # Generate Lean with progress monitoring.
+  # Background: run claude, write to file.
+  # Foreground: poll file size every 10s so the operator sees growth.
   timeout "${LEAN_TIMEOUT}" stdbuf -oL \
     claude -p "$(cat "$LEAN_PROMPT_FILE")" --output-format text \
-    > "$LEAN_FILE" 2>/dev/null
+    > "$LEAN_FILE" 2>/dev/null &
+  CLAUDE_PID=$!
+  # Progress monitor
+  while kill -0 "$CLAUDE_PID" 2>/dev/null; do
+    sleep 10
+    if [ -f "$LEAN_FILE" ]; then
+      LINES=$(wc -l < "$LEAN_FILE" 2>/dev/null || echo 0)
+      BYTES=$(wc -c < "$LEAN_FILE" 2>/dev/null || echo 0)
+      if [ "$BYTES" -gt 0 ]; then
+        # Show which §SECTIONs have been written
+        SECTIONS=$(grep -o '§[A-Z]*[0-9]*' "$LEAN_FILE" 2>/dev/null | tr '\n' ' ')
+        echo "[$(date -Iseconds)]   ... ${LINES} lines, ${BYTES} bytes${SECTIONS:+ — sections: $SECTIONS}"
+      fi
+    fi
+  done
+  wait "$CLAUDE_PID" 2>/dev/null
   LEAN_EXIT=$?
   rm -f "$LEAN_PROMPT_FILE"
   if [ $LEAN_EXIT -eq 124 ]; then
@@ -106,14 +121,17 @@ LEAN_PROMPT_EOF
   else
     echo "[$(date -Iseconds)] Lean file written ($(wc -l < "$LEAN_FILE") lines)"
     # 4. Try to build
-    echo "[$(date -Iseconds)] Building Lean proof..."
+    SORRY_IN_FILE=$(grep -c "sorry" "$LEAN_FILE" 2>/dev/null || echo 0)
+    echo "[$(date -Iseconds)] Building Lean proof (${SORRY_IN_FILE} sorry in source)..."
     LEAN_BUILD_LOG="$EVIDENCE_DIR/${PROBLEM_ID}-lean-build.log"
     export PATH="$HOME/.elan/bin:$PATH"
     # Copy to project and build
     cp "$LEAN_FILE" "$PROJECT_DIR/ApmCanaries/Current.lean"
+    cd "$PROJECT_DIR"
     timeout "${LEAN_TIMEOUT}" lake build ApmCanaries.Current \
       > "$LEAN_BUILD_LOG" 2>&1
     BUILD_EXIT=$?
+    cd "$PIPELINE_DIR"
     if [ $BUILD_EXIT -eq 0 ]; then
       if grep -q "sorry" "$LEAN_FILE"; then
         LEAN_STATUS="partial"
