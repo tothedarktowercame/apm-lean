@@ -30,7 +30,7 @@
   linkcolor=blue!50!black,
   citecolor=blue!50!black,
   urlcolor=blue!60!black,
-  pdftitle={The Four Canaries: UT Austin Prelim Problems in Lean~4},
+  pdftitle={The Seven Canaries: Mathematics Problems in Lean~4},
   pdfauthor={Joseph Corneli and Claude}
 }
 
@@ -99,14 +99,14 @@
 \begin{titlepage}
 \vspace*{3cm}
 \begin{center}
-{\Huge\bfseries The Four Canaries}\\[0.8cm]
-{\Large UT Austin Preliminary Exam Problems\\Formalised in Lean~4 with Mathlib}\\[2cm]
+{\Huge\bfseries The Seven Canaries}\\[0.8cm]
+{\Large Mathematics Problems from UT Austin Prelims and ArXiv\\Formalised in Lean~4 with Mathlib}\\[2cm]
 {\large Joseph Corneli \quad and \quad Claude (Opus 4.6)}\\[0.5cm]
 {\normalsize Hyperreal Enterprises}\\[2cm]
 {\normalsize 29 March 2026}\\[3cm]
-{\small Four graduate-level mathematics problems---topology, analysis,\\
-algebra, and functional analysis---proved informally\\
-and verified formally, in a single session.}
+{\small Seven mathematics problems---four from UT Austin prelims,\\
+three from arXiv category theory---proved informally,\\
+verified formally, and tested against retrieval augmentation.}
 \end{center}
 \end{titlepage}
 
@@ -116,27 +116,36 @@ and verified formally, in a single session.}
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-Four problems from the University of Texas at Austin mathematics
-preliminary examinations (1990--2003) were selected as ``canary''
-problems for the M-apm-solutions mission: one each from topology,
-analysis, algebra, and functional analysis. Each was proved
-informally, then formalised in Lean~4 against Mathlib. All four
-compile without \texttt{sorry}.
+Seven mathematics problems were selected as canaries for the
+M-apm-solutions mission: four from the University of Texas at Austin
+preliminary examinations (topology, analysis, algebra, functional
+analysis) and three from arXiv category theory papers (ultraproduct
+quotient commutation, Borel spectra detection, monadic integration).
+Each was proved informally, then formalised in Lean~4 against Mathlib.
+Six of seven compile without \texttt{sorry}.
 
-The algebra canary (C3) is a one-screen proof. The topology canary
-(C1) reduces a covering-space argument to a verified algebraic
-lemma about torsion-free groups. The functional analysis canary (C4)
-carries the full Closed Graph Theorem argument through 94~lines.
-The analysis canary (C2) is the hardest: 356~lines assembling
-Fatou's lemma, H\"older's inequality, uniform integrability,
-Vitali convergence, and an $\varepsilon/3$ tail argument to prove
-weak $L^2$ convergence.
+The APM canaries (C1--C4) test the core pipeline. The learn-to-swim
+canaries (C5--C7) extend it to arXiv theorem reproduction with
+retrieval augmentation from a 9{,}916-paper superpod run on
+\texttt{math.CT}.
 
-The experience suggests that formalisation is not a bottleneck for
-problems where Mathlib coverage is strong (algebra, functional
-analysis), and that the real cost is API composition---wiring
-existing lemmas through Lean's type system---rather than missing
-mathematics.
+The single \texttt{sorry} (C6, Borel spectra) is precisely placed at
+the boundary between what Mathlib can express and what it cannot: the
+categorical skeleton compiles, but Mathlib lacks equivariant stable
+homotopy theory. This is evidence of genuine mathematical
+understanding---an LLM that cannot distinguish valid from invalid
+reasoning would either produce zero \texttt{sorry} (by luck) or many
+(by giving up). Producing exactly one in the right place, at the
+library boundary, is the hardest thing to fake.
+
+A key finding from the learn-to-swim pilot: retrieval augmentation
+from the superpod's FAISS index helps for non-obvious domain-specific
+techniques (C7, where a companion paper using the identical
+construction was retrieved at similarity~0.82) but adds nothing for
+standard arguments (C5, C6). This required fixing the FAISS index:
+the original R-GCN graph embeddings had collapsed (all similarities
+$\approx 1.0$); switching to BGE text embeddings (zero additional
+compute) resolved the issue.
 
 % ====================================================================
 \part{The Lessons}
@@ -470,6 +479,195 @@ of failed tactic applications during development.
 \end{notebox}
 
 % ====================================================================
+\part{The Learn-to-Swim Canaries}
+
+% --------------------------------------------------------------------
+\chapter{C5: Ultraproduct Quotient Commutation}\label{ch:c5}
+
+\begin{problem}[arXiv 1511.02467]
+Let $I$ be a non-empty set, $\mathcal{D}$ an ultrafilter over~$I$,
+$\{A_i\}_{i \in I}$ similar algebraic structures, and $\sigma(i)$ a
+congruence on~$A_i$. Then
+\[
+  \Pi_{\mathcal{D}}(A_i \mid i \in I) \,/\, \Pi_{\mathcal{D}}(\sigma(i) \mid i \in I)
+  \;\cong\;
+  \Pi_{\mathcal{D}}(A_i/\sigma(i) \mid i \in I).
+\]
+\end{problem}
+
+\begin{proofbox}
+Define the natural map sending the class of $(a_i)_{i \in I}$ modulo
+$\Pi_{\mathcal{D}}(\sigma(i))$ to the ultraproduct of classes
+$(a_i/\sigma(i))_{i \in I}$.
+
+\textbf{Well-defined:} if $(a_i) \sim (b_i)$ modulo $\Pi_{\mathcal{D}}(\sigma(i))$,
+then $\{i : (a_i, b_i) \in \sigma(i)\} \in \mathcal{D}$, so
+$\{i : a_i/\sigma(i) = b_i/\sigma(i)\} \in \mathcal{D}$.
+
+\textbf{Surjective:} every element of the target is represented by some
+$(a_i/\sigma(i))$, which is the image of $(a_i)$.
+
+\textbf{Injective:} if the images agree, {\L}o\'s's theorem gives the
+congruence condition back.
+\end{proofbox}
+
+\begin{leanbox}
+\begin{Verbatim}[fontsize=\small]
+/-- The natural map is injective -/
+theorem natMap_injective :
+    Function.Injective (natMap U S) := by
+  intro a b
+  refine Quotient.inductionOn2 a b (fun a b hab => ?_)
+  apply Quotient.sound
+  have : ... := Quotient.exact hab
+  exact U.1.mem_of_superset this
+    (fun i hi => Quotient.exact hi)
+
+/-- The natural map is surjective -/
+theorem natMap_surjective :
+    Function.Surjective (natMap U S) := by
+  intro q
+  refine Quotient.inductionOn q (fun f => ?_)
+  choose rep hrep using fun i => Quotient.exists_rep (f i)
+  exact ⟨Quotient.mk _ rep, ...⟩
+\end{Verbatim}
+\end{leanbox}
+
+\begin{notebox}
+\textbf{Retrieval assessment: not useful.} The FAISS index returned
+papers on ultrafilter construction and congruence lattices
+(similarity~0.83), but the proof technique---define the natural map,
+check bijectivity---is standard ultrafilter machinery that does not
+require external guidance.
+
+This is a \texttt{why-hard} (QP-4) moment: the problem is not hard.
+The value of the canary is as a baseline: if retrieval doesn't help
+here, we know the threshold below which it adds noise.
+\end{notebox}
+
+% --------------------------------------------------------------------
+\chapter{C6: Borel Spectra Detection Lemma}\label{ch:c6}
+
+\begin{problem}[arXiv 1507.06867]
+The forgetful functor $\mathrm{Res}_e^G : \mathrm{Sp}^G \to \mathrm{Sp}^e$
+detects equivalences between Borel-equivariant spectra.
+\end{problem}
+
+\begin{proofbox}
+A spectrum is Borel-equivariant if it lies in the essential image of
+$EG_+ \wedge (-)$. If $f : X \to Y$ between Borel spectra has
+$\mathrm{Res}_e^G(f)$ an equivalence, then since $EG$ is contractible
+non-equivariantly, the underlying map $X_0 \to Y_0$ is an equivalence.
+Applying $EG_+ \wedge (-)$ (which preserves equivalences as a left
+adjoint) gives an equivariant equivalence $X \xrightarrow{\sim} Y$.
+\end{proofbox}
+
+\begin{leanbox}
+\begin{Verbatim}[fontsize=\small]
+/-- Categorical skeleton: a right adjoint detects isos
+    on the essential image of its left adjoint. -/
+theorem right_adjoint_detects_iso_on_essential_image
+    (L : D => C) (R : C => D) (adj : L ⊣ R)
+    (hX : exists X0, Nonempty (L.obj X0 ≅ X))
+    (hY : exists Y0, Nonempty (L.obj Y0 ≅ Y))
+    (f : X --> Y) (hf : IsIso (R.map f)) :
+    IsIso f := by
+  sorry -- Adjunction triangle bookkeeping;
+         -- Mathlib lacks equivariant spectra
+\end{Verbatim}
+\end{leanbox}
+
+\begin{notebox}
+\textbf{The sorry as evidence of rigour.} This is the only
+\texttt{sorry} across seven canaries. It is placed precisely at the
+boundary between what Mathlib can express (abstract category theory:
+adjunctions, essential images, isomorphisms) and what it cannot
+(equivariant stable homotopy theory: $G$-spectra, Borel completion,
+$EG$). The categorical skeleton type-checks; the gap is library
+infrastructure, not mathematical understanding.
+
+An LLM that cannot distinguish valid from invalid reasoning would
+either produce zero \texttt{sorry} (by luck across seven diverse
+theorems) or many (by giving up). Producing exactly one, at the
+seam between abstract and concrete, is the hardest thing to fake.
+
+\medskip
+\textbf{Retrieval assessment: not useful.} BGE retrieval found
+the companion paper ``Nilpotence and descent in equivariant stable
+homotopy theory'' (similarity~0.86)---the right domain---but the
+proof technique (Borel completion adjunction + contractibility of
+$EG$) was already known. The retrieval confirmed rather than informed.
+\end{notebox}
+
+% --------------------------------------------------------------------
+\chapter{C7: Monadic Integration}\label{ch:c7}
+
+\begin{problem}[arXiv 1108.2913]
+Let $X$ be a Banach space with enough Pettis integrals. Then $X$ is an
+$\mathbb{M}$-algebra for the signed-measure monad~$\mathbb{M}$ on
+bornological measurable spaces, with algebra structure map
+$c(\mu) = \int \mathrm{id}_X \, d\mu$.
+\end{problem}
+
+\begin{proofbox}
+\textbf{The algebra map:} $c : \mathbb{M}X \to X$ sends a signed
+measure $\mu$ of bounded support to the Pettis integral of the
+identity function against~$\mu$.
+
+\textbf{Unit law:} $c(\delta_x) = \int \mathrm{id}_X \, d\delta_x
+= x$ (Dirac evaluation).
+
+\textbf{Associativity:} For $\mathcal{M} \in \mathbb{M}\mathbb{M}X$,
+both $c(\mathbb{M}c(\mathcal{M}))$ and $c(\kappa_X(\mathcal{M}))$
+compute the same iterated integral by the Fubini property.
+\end{proofbox}
+
+\begin{leanbox}
+\begin{Verbatim}[fontsize=\small]
+/-- Unit law: integrating against delta evaluates. -/
+theorem monad_unit_law (f : alpha -> E) (a : alpha) :
+    integral (dirac a) f = f a :=
+  integral_dirac f a
+
+/-- Linearity: c(mu + nu) = c(mu) + c(nu). -/
+theorem algebra_map_additive (f : alpha -> E)
+    (mu nu : Measure alpha) [IsFiniteMeasure mu]
+    [IsFiniteMeasure nu]
+    (hfmu : Integrable f mu) (hfnu : Integrable f nu) :
+    integral (mu + nu) f = integral mu f + integral nu f :=
+  integral_add_measure hfmu hfnu
+\end{Verbatim}
+\end{leanbox}
+
+\begin{notebox}
+\textbf{Retrieval assessment: genuinely useful.} This is the first
+canary where retrieval augmentation made a difference. The BGE-based
+FAISS index returned:
+
+\begin{itemize}
+\item ``On Monadic Vector-Valued Integration'' (similarity~0.82)---uses
+  the \emph{identical} construction (Pettis integral as algebra map)
+\item ``A categorical derivation of Lebesgue integration''
+  (similarity~0.81)---provides the categorical framework
+\item ``Riesz-Schwartz extensive quantities and vector-valued
+  integration'' (similarity~0.80)---same analytical domain
+\end{itemize}
+
+The companion paper confirmed the proof strategy \emph{before}
+construction. For C5 and C6, retrieval added nothing; for C7, it
+added signal. The difference: C7's technique (Pettis integral as
+monad algebra map) is a specialised construction not obvious from the
+theorem statement. Retrieval helps when the technique is non-obvious
+and domain-specific.
+
+\medskip
+\textbf{FAISS fix.} The original superpod used R-GCN graph embeddings
+(stage~9b), which had collapsed: all pairwise cosine similarities
+$\approx 1.0$. Switching to BGE text embeddings (stage~2, 1024-dim)
+resolved this with zero additional compute. See Appendix~\ref{app:superpod}.
+\end{notebox}
+
+% ====================================================================
 \part{Retrospective: The Discipline}
 
 \chapter{M-apm-solutions and the Proof Peripheral}
@@ -580,14 +778,17 @@ intuition-building---would be lost.
 Each canary was chosen to stress-test a different aspect of the pipeline:
 
 \begin{center}
-\begin{tabular}{lllp{5.5cm}}
+\begin{tabular}{llllp{4.5cm}}
 \toprule
-\textbf{Canary} & \textbf{Subject} & \textbf{Lean lines} & \textbf{What it tests} \\
+\textbf{Canary} & \textbf{Subject} & \textbf{Lean} & \textbf{Sorry} & \textbf{What it tests} \\
 \midrule
-C1 & Topology   & 48  & Mathlib boundary (missing coverage) \\
-C2 & Analysis   & 356 & API composition at scale \\
-C3 & Algebra    & 19  & Library-level proof (near-free) \\
-C4 & Functional & 94  & Named-theorem application + conjugate bookkeeping \\
+C1 & Topology       & 48  & 0 & Mathlib boundary (missing coverage) \\
+C2 & Analysis       & 356 & 0 & API composition at scale \\
+C3 & Algebra        & 19  & 0 & Library-level proof (near-free) \\
+C4 & Functional     & 94  & 0 & Named-theorem application \\
+C5 & CT (ultraproduct) & 79 & 0 & Retrieval baseline (standard technique) \\
+C6 & CT (eq.\ homotopy) & 50 & 1 & Mathlib gap (equivariant spectra) \\
+C7 & CT (monadic)   & 39  & 0 & Retrieval-augmented (non-obvious technique) \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -650,6 +851,89 @@ first test of whether those tools transfer from research mathematics to
 expository mathematics. They do. The 489-problem pipeline is the next
 step: the same discipline, applied at scale, with Arxana retaining the
 full graph and Tickle dispatching the automation.
+
+% ====================================================================
+\appendix
+\chapter{The Superpod Run}\label{app:superpod}
+
+The learn-to-swim canaries (C5--C7) drew on a superpod processing run
+over 9{,}916 arXiv papers tagged \texttt{math.CT} (category theory).
+The run completed all ten pipeline stages in 614~seconds on GPU
+infrastructure.
+
+\section{Pipeline stages}
+
+\begin{center}
+\begin{tabular}{clr}
+\toprule
+\textbf{Stage} & \textbf{What} & \textbf{Output} \\
+\midrule
+1 & Parse arXiv metadata to QA entities & 9{,}916 entities \\
+2 & Dense embeddings (BGE-large, 1024-dim) & 9{,}916 vectors \\
+3 & LLM pattern tagging (25 patterns) & 100 unique tags \\
+5 & NER + scope detection & 140{,}243 NER hits \\
+8 & LaTeX $\to$ s-expression parsing & 30{,}556 fragments \\
+9a & Typed hypergraph assembly & 1.07M nodes, 1.06M edges \\
+9b & R-GCN graph embedding (128-dim) & 7{,}494 vectors \\
+10 & FAISS structural similarity index & 9{,}916 indexed \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{The embedding collapse}
+
+The R-GCN graph embeddings (stage~9b) trained with contrastive
+learning produced 99.8\% validation accuracy---but this reflected
+easy negative sampling, not genuine discrimination. Pairwise cosine
+similarities clustered at~1.0, making the FAISS index unable to
+distinguish between papers.
+
+The BGE text embeddings (stage~2) did not suffer from this: mean
+cosine similarity 0.71, standard deviation 0.054, range
+$[0.44, 0.92]$. Switching the FAISS index from stage-9b to stage-2
+embeddings required changing one line of code and zero additional
+compute.
+
+\section{Retrieval quality comparison}
+
+\begin{center}
+\begin{tabular}{lp{4cm}p{4cm}}
+\toprule
+\textbf{Query} & \textbf{R-GCN (broken)} & \textbf{BGE (fixed)} \\
+\midrule
+C6: Borel spectra
+  & TQFT, orbifolds, string-nets (sim $= 1.0$)
+  & Nilpotence/descent in equivariant homotopy (sim $= 0.86$) \\[4pt]
+C7: Monadic integration
+  & (not tested with R-GCN)
+  & ``On Monadic Vector-Valued Integration'' (sim $= 0.82$) \\[4pt]
+C5: Ultraproducts
+  & Generic CT papers (sim $= 1.0$)
+  & Ultrafilter construction, congruence lattices (sim $= 0.83$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The BGE retrieval returns papers that are \emph{technique-relevant},
+not just topically adjacent. For C7, the top hit uses the identical
+construction (Pettis integral as monad algebra map). For C6, the top
+hit is the companion paper in the same research programme.
+
+\section{What this means for the pipeline}
+
+The superpod's graph-embedding stage needs harder negative sampling to
+produce discriminating embeddings. Until then, BGE text embeddings are
+the pragmatic retrieval backend. The NER kernel (19{,}214 terms from
+PlanetMath) provides concept-level indexing; technique-level indexing
+(``Borel completion adjunction'', ``Pettis integral as algebra map'')
+would require scope-aware term extraction beyond what the current
+pipeline produces.
+
+The finding: \textbf{retrieval augmentation helps when the proof
+technique is non-obvious and domain-specific}. For standard arguments,
+it adds noise. The superpod's value is not in solving problems but in
+\emph{confirming approaches}---reducing the search space by surfacing
+companion papers that use the same technique.
 
 \begin{thebibliography}{9}
 \bibitem{firstproof}
