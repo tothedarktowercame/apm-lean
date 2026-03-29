@@ -61,50 +61,83 @@ fi
 # 3. Lean formalisation via Claude CLI (15-minute budget)
 LEAN_FILE="$LEAN_DIR/${PROBLEM_ID}.lean"
 LEAN_STATUS="skipped"
+LEAN_DIR_PROB="$LEAN_DIR/${PROBLEM_ID}"
+LEAN_FILE="$LEAN_DIR_PROB/Main.lean"
 if [ ! -s "$LEAN_FILE" ]; then
-  rm -f "$LEAN_FILE"  # remove empty files from prior failed runs
-  echo "[$(date -Iseconds)] Generating Lean proof (${LEAN_TIMEOUT}s budget)..."
-  LEAN_PROMPT_FILE=$(mktemp)
-  cat > "$LEAN_PROMPT_FILE" <<LEAN_PROMPT_EOF
-Write a Lean 4 proof for this UT Austin prelim problem using Mathlib.
+  rm -rf "$LEAN_DIR_PROB"
+  mkdir -p "$LEAN_DIR_PROB"
+  echo "[$(date -Iseconds)] Generating Lean proof file-by-file (${LEAN_TIMEOUT}s total budget)..."
 
-Structure the output as SEPARATE SECTIONS delimited by:
-  -- §IMPORTS
-  -- §STATEMENT
-  -- §LEMMA1 (helper lemma if needed)
-  -- §LEMMA2 (helper lemma if needed)
-  -- §MAIN
+  PROBLEM_TEXT="$(cat "$TEX_PATH")"
+  SOLUTION_EXCERPT="$(head -100 "$SOLUTION_FILE" 2>/dev/null || echo 'none')"
+  LEAN_BUDGET_START=$(date +%s)
 
-Each section should compile independently (repeat any needed imports/opens).
-Use sorry ONLY where Mathlib genuinely lacks coverage — mark each sorry
-with a comment explaining what's missing.
-
-Start with imports and the theorem statement. Then build up lemmas.
-Put the main theorem last. This way, even partial output is useful.
+  # Step 1: Imports + Statement
+  STEP1_PROMPT=$(mktemp)
+  cat > "$STEP1_PROMPT" <<STEP1_EOF
+Write ONLY the Lean 4 imports and theorem statement for this problem. Use Mathlib. Do NOT write the proof body — just end with := by sorry
 
 Problem (${PROBLEM_ID}):
-$(cat "$TEX_PATH")
+${PROBLEM_TEXT}
+
+Output ONLY Lean code, no markdown fences.
+STEP1_EOF
+  echo "[$(date -Iseconds)]   Step 1: imports + statement..."
+  cat "$STEP1_PROMPT" | timeout 180 claude -p - --output-format text > "$LEAN_DIR_PROB/Statement.lean" 2>/dev/null || true
+  rm -f "$STEP1_PROMPT"
+  echo "[$(date -Iseconds)]   Step 1 done: $(wc -l < "$LEAN_DIR_PROB/Statement.lean") lines"
+
+  # Step 2: Helper lemmas (if needed)
+  STEP2_PROMPT=$(mktemp)
+  cat > "$STEP2_PROMPT" <<STEP2_EOF
+Given this Lean 4 theorem statement:
+$(cat "$LEAN_DIR_PROB/Statement.lean")
+
+And this informal proof:
+${SOLUTION_EXCERPT}
+
+Write any helper lemmas needed for the proof. Import Mathlib at the top. Use sorry where Mathlib lacks coverage. If no helpers are needed, just write a comment saying so.
+
+Output ONLY Lean code, no markdown fences.
+STEP2_EOF
+  echo "[$(date -Iseconds)]   Step 2: helper lemmas..."
+  cat "$STEP2_PROMPT" | timeout 300 claude -p - --output-format text > "$LEAN_DIR_PROB/Lemmas.lean" 2>/dev/null || true
+  rm -f "$STEP2_PROMPT"
+  echo "[$(date -Iseconds)]   Step 2 done: $(wc -l < "$LEAN_DIR_PROB/Lemmas.lean") lines"
+
+  # Step 3: Main proof
+  ELAPSED=$(( $(date +%s) - LEAN_BUDGET_START ))
+  REMAINING=$(( LEAN_TIMEOUT - ELAPSED ))
+  if [ "$REMAINING" -gt 30 ]; then
+    STEP3_PROMPT=$(mktemp)
+    cat > "$STEP3_PROMPT" <<STEP3_EOF
+Complete the main Lean 4 proof. Here is the statement:
+$(cat "$LEAN_DIR_PROB/Statement.lean")
+
+Here are the helper lemmas:
+$(cat "$LEAN_DIR_PROB/Lemmas.lean")
 
 Informal proof for reference:
-$(head -100 "$SOLUTION_FILE" 2>/dev/null || echo 'none')
+${SOLUTION_EXCERPT}
 
-Output ONLY the Lean code, no markdown fences.
-LEAN_PROMPT_EOF
-  # Stream Lean generation — tokens written to file as they arrive.
-  # timeout wraps the whole pipeline; partial output survives kill.
-  timeout "${LEAN_TIMEOUT}" /usr/bin/bash -c \
-    "cat '$LEAN_PROMPT_FILE' | claude -p - --output-format stream-json --verbose 2>/dev/null \
-     | python3 '$PIPELINE_DIR/stream-extract.py' '$LEAN_FILE'"
-  LEAN_EXIT=$?
-  rm -f "$LEAN_PROMPT_FILE"
-  if [ $LEAN_EXIT -eq 124 ]; then
-    LEAN_STATUS="timed-out"
-    echo "[$(date -Iseconds)] Lean generation timed out (partial file: $(wc -l < "$LEAN_FILE") lines)"
-  elif [ ! -s "$LEAN_FILE" ]; then
+Write the COMPLETE proof, incorporating the helpers. Import Mathlib. Use sorry ONLY where Mathlib genuinely lacks coverage. Output ONLY Lean code.
+STEP3_EOF
+    echo "[$(date -Iseconds)]   Step 3: main proof (${REMAINING}s remaining)..."
+    cat "$STEP3_PROMPT" | timeout "$REMAINING" claude -p - --output-format text > "$LEAN_DIR_PROB/Main.lean" 2>/dev/null || true
+    rm -f "$STEP3_PROMPT"
+    echo "[$(date -Iseconds)]   Step 3 done: $(wc -l < "$LEAN_DIR_PROB/Main.lean") lines"
+  else
+    echo "[$(date -Iseconds)]   Step 3: skipped (only ${REMAINING}s remaining)"
+    echo "-- Budget exhausted before main proof" > "$LEAN_DIR_PROB/Main.lean"
+  fi
+
+  # Assess result
+  LEAN_FILE="$LEAN_DIR_PROB/Main.lean"
+  if [ ! -s "$LEAN_FILE" ]; then
     LEAN_STATUS="generation-failed"
     echo "[$(date -Iseconds)] Lean generation produced empty file"
   else
-    echo "[$(date -Iseconds)] Lean file written ($(wc -l < "$LEAN_FILE") lines)"
+    echo "[$(date -Iseconds)] Lean files written: $(wc -l "$LEAN_DIR_PROB"/*.lean | tail -1)"
     # 4. Try to build
     SORRY_IN_FILE=$(grep -c "sorry" "$LEAN_FILE" 2>/dev/null || echo 0)
     echo "[$(date -Iseconds)] Building Lean proof (${SORRY_IN_FILE} sorry in source)..."
