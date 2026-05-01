@@ -1,0 +1,23 @@
+{:goal "Show that the set of points where (f_n(x)) converges is measurable."
+ :terms [{:name "Cauchy characterization"
+          :meaning "Sequence converges iff (∃N)∀n,m≥N, |f_n-f_m|<ε. Limit to ε=1/k."
+          :needed-because "It rewrites convergence as a countable intersection/union of inequalities between measurable functions."}
+         {:name "stability of measurability"
+          :meaning "If f_n are measurable, so are |f_n-f_m| and their sublevel sets."
+          :needed-because "Ensures each set {x:|f_n(x)-f_m(x)|<1/k} is in Σ."}
+         {:name "countable unions/intersections"
+          :meaning "σ-algebras are closed under countable unions/intersections."
+          :needed-because "The definition of E will involve ⋂_k ⋃_N ⋂_{n,m≥N}."}]
+ :strategy [{:id :s1
+             :formal-dependency "Cauchy criterion for convergence in ℝ"
+             :informal-dependency "Stage 1 rewrite using ε=1/k"
+             :why-this-now "Express E as ⋂_k ⋃_N ⋂_{n,m≥N} {x: |f_n-f_m|<1/k}."
+             :lean-target "setOf_pointwise_converges"
+             :mathlib-status "Relies on existing completeness of ℝ (Cauchy ⇔ convergent)."}
+            {:id :s2
+             :formal-dependency "measurability of algebraic combinations"
+             :informal-dependency "Stage 1 measurability argument"
+             :why-this-now "Show each {x:|f_n-f_m|<1/k} is measurable, hence the whole countable expression is measurable."
+             :lean-target "setOf_limit_is_measurable"
+             :mathlib-status "Sublevel sets of measurable functions are measurable."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

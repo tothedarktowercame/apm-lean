@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a98J04'
+  :frame-id 'apm-v2-a98J04-1775004924027'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Completed the reader-facing proof using Cauchy–Riemann equations to pin down the Jacobian form and rule out g,h."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Documented the lemma chain (split into u,v → CR equations → matrix comparison) for both the write-up and Lean plan."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Outlined the Lean approach; blocked on the missing lemma translating ℂ-linearity of fderiv into the explicit 2×2 CR matrix."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

@@ -1,0 +1,35 @@
+{:problem-id 'a96J01
+ :frame-id 'apm-v2-a96J01-1774994639526
+ :goal "Exhibit nonnegative continuous functions on [0,1] whose partial sums converge uniformly but whose sup norms form a divergent series."
+ :terms [{:name "tent function"
+          :meaning "x ↦ max(0, 1 - |x-c|/r)"
+          :needed-because "gives continuous bumps with prescribed height and support"
+         }
+         {:name "disjoint support"
+          :meaning "dyadic intervals I_n share at most endpoints"
+          :needed-because "ensures at most one term contributes at each x"
+         }
+         {:name "harmonic divergence"
+          :meaning "∑ 1/n diverges"
+          :needed-because "establishes the failure of the M-test"}]
+ :strategy [{:id :s1
+             :formal-dependency "Continuity of max/abs and linear operations"
+             :informal-dependency "Stage 1 definition of f_n"
+             :why-this-now "Certify each f_n is continuous and nonnegative"
+             :lean-target "continuous_tent_on_interval"
+             :mathlib-status "missing; needs manual definition"}
+            {:id :s2
+             :formal-dependency "Order properties of dyadic intervals"
+             :informal-dependency "Disjoint support argument"
+             :why-this-now "Prove at most one tent is active at any point"
+             :lean-target "tent_supportS_disjoint"
+             :mathlib-status "missing"}
+            {:id :s3
+             :formal-dependency "Tail estimate / harmonic divergence"
+             :informal-dependency "Uniform tail bound and divergent ∑‖f_n‖∞"
+             :why-this-now "Translate combinatorics to uniform convergence and divergence statements"
+             :lean-target "tent_sequence_exists"
+             :mathlib-status "blocked by s1/s2"}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.A96J01.Apm_v2_a96J01_1774994639526
+        :shared-extension-root "ApmCanaries.Local"}}

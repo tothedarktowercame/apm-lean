@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't94J01'
+  :frame-id 'apm-v2-t94J01-1775010781379'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-2-completed
+ :summary "Wrote the full ladder-vs-connected proof, mapped dependencies, defined `LadderChain`/`LadderConnectedSpace` in Lean, and identified the remaining append-ladder lemmas needed to close the formal proof."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Started formalizing `ladderConnected_of_connected` by sketching a `LadderChain.extend` lemma to append opens; blocked by missing `Fin.castSucc` overlap lemmas, so both directions remain `sorry`."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

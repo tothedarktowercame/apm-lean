@@ -1,0 +1,23 @@
+{:goal "Show that an analytic f on C\\{0} whose weighted modulus |f(z)||z|^{1/2} stays bounded near 0 extends holomorphically across 0."
+ :terms [{:name "bounded product"
+          :meaning "From |f(z)||z|^{1/2} <= C on a punctured disc we get |z f(z)| <= C r^{1/2} for |z|<r."
+          :needed-because "Producing a bounded holomorphic function on the punctured disc lets us invoke Riemann's removable theorem."}
+         {:name "Riemann removable singularity theorem"
+          :meaning "Any holomorphic function on a punctured disc that is bounded extends holomorphically over the centre."
+          :needed-because "Apply it to g(z)=z f(z) to build an analytic extension G with G(0)=0."}
+         {:name "zero factoring / analytic division"
+          :meaning "If G is analytic and G(0)=0 then G(z)=z*H(z) with H analytic."
+          :needed-because "Defining H(0)=G'(0) yields the desired extension of f."}]
+ :strategy [{:id :s1
+             :formal-dependency "riemannRemovable"
+             :informal-dependency "Bound g(z)=z f(z) on a small punctured neighbourhood"
+             :why-this-now "Once g is bounded, the removable-singularity theorem gives an analytic G with G=z f on punctured disc."
+             :lean-target "extend_z_mul_f"
+             :mathlib-status "Available in Mathlib as `IsHolomorphic.bounded_implies_removable`. "}
+            {:id :s2
+             :formal-dependency "analytic_division_by_z"
+             :informal-dependency "Output of :s1 (extension for zf with zero at 0)"
+             :why-this-now "Factor the zero to define H so that H=z^{-1}G agrees with f away from 0, showing f extends analytically."
+             :lean-target "extend_f_via_factor"
+             :mathlib-status "Mathlib supports factoring zeros through `HasFPowerSeriesAt`. "}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

@@ -1,0 +1,12 @@
+[{:kind :workspace-initialized
+  :problem-id 't94A02'
+  :frame-id 'apm-v2-t94A02-1775009748581'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stages-1-4-completed
+  :summary "Wrote the distance-normalization proof, recorded the dependency plan, formalized `separate_closed_sets` in Lean (no sorrys, lake build clean), and synced the Stage 4 reflection."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}]

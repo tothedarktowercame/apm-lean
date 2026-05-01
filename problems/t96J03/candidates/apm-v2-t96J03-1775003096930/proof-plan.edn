@@ -1,0 +1,25 @@
+{:goal
+ "Show nonempty closed X ⊂ ℝⁿ has a closest point to any y₀: ∃ x₀ ∈ X, ‖x₀-y₀‖ ≤ ‖x-y₀‖ ∀ x ∈ X."
+ :terms
+ [{:name "closed set"
+   :meaning "X closed in ℝⁿ"
+   :needed-because "closedness + bounded = compact (Heine-Borel) ensures minimizer exists"}
+  {:name "infDist"
+   :meaning "inf{dist(y₀, x) : x ∈ X}"
+   :needed-because "the infimum that must be attained"}
+  {:name "proper space"
+   :meaning "closed bounded = compact"
+   :needed-because "ℝⁿ is proper, making IsClosed.exists_infDist_eq_dist apply"}]
+ :strategy
+ [{:id :mathlib-closest-point
+   :formal-dependency "IsClosed.exists_infDist_eq_dist + infDist_le_dist_of_mem"
+   :informal-dependency "closest point theorem for proper metric spaces"
+   :why-this-now "two-line Mathlib proof"
+   :lean-target "∃ x₀ ∈ X, ∀ x ∈ X, dist y₀ x₀ ≤ dist y₀ x"
+   :mathlib-status "available and CLOSED"
+   :critical-path true}]
+ :stage-status
+ {:stage1 :done
+  :stage2 :done
+  :stage3 :done
+  :stage4 :done}}

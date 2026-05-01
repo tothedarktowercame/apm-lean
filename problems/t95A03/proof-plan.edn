@@ -1,0 +1,17 @@
+{:goal "Use total boundedness + completeness to deduce compactness."
+ :terms [{:name "totally bounded"
+          :meaning "Every ε>0 admits a finite ε-net."
+          :needed-because "This is the source of Cauchy subsequences in arbitrary sequences."}
+         {:name "completeness"
+          :meaning "Every Cauchy sequence converges."
+          :needed-because "Once the totally bounded subsequence is Cauchy, completeness gives a limit in X."}
+         {:name "sequential compactness"
+          :meaning "Every sequence has a convergent subsequence." 
+          :needed-because "In metric spaces, sequential compactness ⇔ compactness, so proving sequential compactness suffices."}]
+ :strategy [{:id :s1
+             :formal-dependency "totally_bounded_complete_compact"
+             :informal-dependency "Stage 1 builds a nested sequence of ε-nets to extract a Cauchy subsequence"
+             :why-this-now "The standard proof uses the finite ε-nets to choose a subsequence shrinking the diameter; completeness then yields a convergent subsequence."
+             :lean-target "totallyBoundedSpace.compact_of_complete"
+             :mathlib-status "Mathlib already has lemmas about totally bounded sets/metric spaces and sequential compactness, so the formal proof should track the textbook argument."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :done :stage4 :done}}

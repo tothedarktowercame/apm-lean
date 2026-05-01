@@ -1,0 +1,23 @@
+{:goal "Use dominated convergence on the power series of 1/(1+x) over [0,1] to justify rigorously that the alternating harmonic series sums to log 2."
+ :terms [{:name "dominated convergence theorem"
+          :meaning "Allows swapping limit/sum with integral when all summands are dominated by an integrable function."
+          :needed-because "We must justify integrating the power series term-by-term."}
+         {:name "geometric-series expansion"
+          :meaning "For |x| < 1, 1/(1+x) = Σ (-1)^n x^n."
+          :needed-because "It produces the summands whose integrals are (-1)^n/(n+1)."}
+         {:name "uniform dominator"
+          :meaning "An integrable g(x) ≥ |(-1)^n x^n| on [0,1] (take g≡1)."
+          :needed-because "DCT requires a single integrable bound independent of n."}]
+ :strategy [{:id :s1
+             :formal-dependency "Geometric-series identity for |x| < 1"
+             :informal-dependency "Stage 1 rewrite of f(x) as Σ (-1)^n x^n"
+             :why-this-now "Turning the integral of 1/(1+x) into Σ ∫ x^n allows us to identify the alternating harmonic terms."
+             :lean-target "one_plus_geom_series_integral"
+             :mathlib-status "Mathlib has `summable_geometric_of_abs_lt_1`; we only need to specialize to real x ∈ [0,1)."}
+            {:id :s2
+             :formal-dependency "Dominated convergence theorem"
+             :informal-dependency "Stage 1 choice of g(x)=1 as dominator"
+             :why-this-now "DCT justifies swapping sum and integral, after which the integral equals log 2."
+             :lean-target "alternating_harmonic_tsum_log_two"
+             :mathlib-status "`tendsto_integral_of_dominated_convergence` exists; measurability and domination are straightforward on [0,1]."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

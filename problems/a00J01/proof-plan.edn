@@ -1,0 +1,42 @@
+{:goal
+ "State the definition of ‖f‖_∞ (essential supremum) and prove lim_{p→∞} ‖f‖_p = ‖f‖_∞ for f ∈ L^∞([0,1])."
+ :terms
+ [{:name "essential supremum"
+   :meaning "inf{M ≥ 0 : m({|f| > M}) = 0} — the smallest M bounding |f| a.e."
+   :needed-because "this is the definition the problem asks us to state"}
+  {:name "upper bound direction"
+   :meaning "|f| ≤ ‖f‖_∞ a.e. implies ‖f‖_p ≤ ‖f‖_∞ on a finite measure space"
+   :needed-because "gives lim sup ‖f‖_p ≤ ‖f‖_∞"}
+  {:name "lower bound via level sets"
+   :meaning "for α < ‖f‖_∞, the set {|f| > α} has positive measure, giving ‖f‖_p ≥ α · m(E_α)^{1/p}"
+   :needed-because "gives lim inf ‖f‖_p ≥ ‖f‖_∞ after sending α ↑ ‖f‖_∞"}
+  {:name "t^{1/p} → 1"
+   :meaning "for t > 0, t^{1/p} → 1 as p → ∞"
+   :needed-because "the factor m(E_α)^{1/p} must converge to 1 in the lower bound"}]
+ :strategy
+ [{:id :upper-bound
+   :formal-dependency "eLpNorm_le_eLpNorm_mul_rpow_measure_univ with q=⊤"
+   :informal-dependency "|f| ≤ ‖f‖_∞ a.e. + Hölder on finite measure space"
+   :why-this-now "one direction of the sandwich, and it's a single Mathlib lemma"
+   :lean-target "eLpNorm f p μ ≤ eLpNorm f ⊤ μ when μ is probability"
+   :mathlib-status "available: eLpNorm_le_eLpNorm_mul_rpow_measure_univ"
+   :critical-path true}
+  {:id :lower-bound
+   :formal-dependency "essSup definition + level set measure + rpow limit"
+   :informal-dependency "ess sup definition guarantees E_α has positive measure for α < ‖f‖_∞"
+   :why-this-now "the other direction of the sandwich, conceptually the hard part"
+   :lean-target "∀ α < eLpNormEssSup f μ, liminf ‖f‖_p ≥ α"
+   :mathlib-status "custom: needs essSup contrapositive + rpow_tendsto lemmas"
+   :critical-path true}
+  {:id :squeeze
+   :formal-dependency "tendsto_of_tendsto_of_tendsto_of_le_of_le"
+   :informal-dependency "both bounds give the limit by squeeze"
+   :why-this-now "combines the two directions"
+   :lean-target "Tendsto (eLpNorm f · μ) atTop (nhds (eLpNormEssSup f μ))"
+   :mathlib-status "available: squeeze theorem in Mathlib"
+   :critical-path true}]
+ :stage-status
+ {:stage1 :done
+  :stage2 :done
+  :stage3 :in-progress
+  :stage4 :done}}

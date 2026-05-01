@@ -1,0 +1,17 @@
+{:goal "Show that an entire function doubly-periodic with respect to the square lattice Z + iZ must be constant."
+ :terms [{:name "Lattice periodicity"
+          :meaning "f(z + n + im) = f(z) for all integers n,m."
+          :needed-because "This lets us reduce the analysis of f to any fundamental parallelogram."}
+         {:name "Fundamental domain compactness"
+          :meaning "The closed unit square in C modulo the lattice is compact."
+          :needed-because "Continuous functions on a compact set are bounded; periodicity extends that bound to all of C."}
+         {:name "Liouville's theorem"
+          :meaning "A bounded entire function is constant."
+          :needed-because "Once we prove the global bound, Liouville immediately gives constancy."}]
+ :strategy [{:id :s1
+             :formal-dependency "Liouville"
+             :informal-dependency "Use lattice periodicity to bound f on a fundamental domain, hence everywhere, then apply Liouville."
+             :why-this-now "The heart of the problem is reducing the entire function to a bounded one via periodicity; once bounded, the conclusion is automatic."
+             :lean-target "lattice_periodic_entire_const"
+             :mathlib-status "Liouville and basic complex-analytic facts are available."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :done :stage4 :pending}}

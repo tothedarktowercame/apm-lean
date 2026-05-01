@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't96A03'
+  :frame-id 'apm-v2-t96A03-1775012050983'
+  :summary "Opened workspace, sketched Mayer–Vietoris plan."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1+2-completed
+  :summary "Wrote the Mayer–Vietoris solution plus dependency graph in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Implemented the coordinate-sum linear map and proved `sumLinearMap_surjective` (build succeeds), noting this models the boundary map needed for H₁(X)=0."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

@@ -1,0 +1,17 @@
+{:goal "Compute the singular homology of the space X obtained by gluing the equators of two 2-spheres."
+ :terms [{:name "Mayer–Vietoris sequence"
+          :meaning "The long exact sequence relating the homology of X=A∪B to that of A, B, and A∩B."
+          :needed-because "Decomposing X into the two spheres gives intersection S¹, where homology is known, so Mayer–Vietoris is the natural engine for H₂ and H₁."}
+         {:name "Equator inclusion"
+          :meaning "The common equator S¹ embeds into both spheres and yields the diagonal maps in Mayer–Vietoris."
+          :needed-because "Understanding the inclusion-induced maps determines kernels/images inside the exact sequence and tells us whether the equator contributes to H₁."}
+         {:name "Euler characteristic check"
+          :meaning "χ(X)=χ(S²)+χ(S²)-χ(S¹)=4 constrains the ranks of H₀ and H₂ once H₁ vanishes."
+          :needed-because "This final consistency check identifies the rank of H₂ from the short exact sequence delivered by Mayer–Vietoris."}]
+ :strategy [{:id :s1
+             :formal-dependency "mayerVietoris_glued_spheres"
+             :informal-dependency "Cover X by the two spheres, write the Mayer–Vietoris fragment ... →H₂(A)⊕H₂(B)→H₂(X)→H₁(S¹)→…, use exactness to kill H₁ and read off H₂"
+             :why-this-now "The cover by the two spheres has contractible intersection data except for S¹, so the MV exact sequence collapses to short exact pieces that give the desired homology."
+             :lean-target "homology_glued_two_spheres_equator"
+             :mathlib-status "Mathlib already contains Mayer–Vietoris for homology of a pushout; the implementation reduces to plugging in the known homology of S¹ and S²."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

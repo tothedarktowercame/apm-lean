@@ -1,0 +1,23 @@
+{:goal "Bound |p(w)| in terms of the sup norm on the unit disk via the maximum modulus principle."
+ :terms [{:name "unit-disk sup norm"
+          :meaning "‖p‖_∞ = sup{|p(z)| : |z| ≤ 1}."
+          :needed-because "Controls the values inside the unit disk directly."}
+         {:name "reciprocal polynomial"
+          :meaning "Define q(z)=z^N p(1/z), which is analytic on {|z|≤1}."
+          :needed-because "Transfers information from the unit circle to the exterior region |w|>1."}
+         {:name "maximum modulus principle"
+          :meaning "The maximum of |q| on {|z|≤1} occurs on the boundary."
+          :needed-because "Gives |q(z)| ≤ ‖p‖_∞ for |z|≤1, yielding the desired bound for |w|>1."}]
+ :strategy [{:id :s1
+             :formal-dependency "basic_sup_bound"
+             :informal-dependency "Case |w| ≤ 1"
+             :why-this-now "On the unit disk the inequality is immediate from the definition of ‖p‖_∞."
+             :lean-target "abs_le_sup_on_unit_disk"
+             :mathlib-status "Lemma exists for polynomials on compact sets."}
+            {:id :s2
+             :formal-dependency "reciprocal_polynomial_bound"
+             :informal-dependency "Case |w|>1"
+             :why-this-now "Consider q(z)=z^N p(1/z) and apply the maximum modulus principle on |z|≤1."
+             :lean-target "polynomial_bound_outside_unit_disk"
+             :mathlib-status "Requires setting up q and using `Complex.polynomial_maxmod`."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

@@ -1,0 +1,14 @@
+{:problem-id 'a01A01'
+ :frame-id 'apm-v2-a01A01-1774989942636'
+ :goal "Construct nonnegative spikes (on [0,1] and on R^n) whose integrals vanish but whose pointwise limsup is +∞ everywhere."
+ :terms ['dyadic-partition 'spike-functions 'limsup 'vanishing-integral 'Rn-tiling]
+ :strategy ["Partition the domain into finer and finer dyadic intervals (or cubes) and assign to each cell a spike whose height grows like 2^{level/2} and whose support is the full cell."
+            "Enumerate all spikes stage by stage so that every point is hit by exactly one spike at each level, forcing the limsup to diverge."
+            "Compute the integral of each spike (height × measure) and note it equals 2^{-level/2} (or 2^{-level·n/2}), hence converges to 0."
+            "Extend the construction from [0,1] to R^n by tiling R^n with dyadic cubes and repeating the same amplitude/volume tradeoff."]
+ :checkpoints [{:stage 1 :status :completed :notes "Explicit dyadic spike construction and verification for [0,1] and R^n recorded in execute.md."}
+               {:stage 2 :status :completed :notes "Dependency table (dyadic coverage, indicator integrals, geometric decay, countable ordering) written."}
+               {:stage 3 :status :completed :notes "Lean lemma `tendsto_inv_sqrt_two_pow` added and build succeeds."}
+               {:stage 4 :status :completed :notes "No additional prose changes needed beyond Stage 1."}]
+ :lean {:module-root 'ApmCanaries.Frames.A01A01.Apm_v2_a01A01_1774989942636'
+        :shared-extension-root "ApmCanaries.Local"}}

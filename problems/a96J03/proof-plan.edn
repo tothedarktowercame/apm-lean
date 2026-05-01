@@ -1,0 +1,23 @@
+{:goal "Prove translation continuity in L¹: ‖f(·-t)-f‖₁ → 0 as t→0."
+ :terms [{:name "density of nice functions"
+          :meaning "Smooth compactly-supported or simple functions are dense in L¹(ℝ)."
+          :needed-because "Approximate f by a function whose translates are easily controlled."}
+         {:name "uniform continuity on compact support"
+          :meaning "A continuous compactly-supported g satisfies sup_{|t|<η}|g(x-t)-g(x)|→0."
+          :needed-because "Gives the L¹ control for the approximant g."}
+         {:name "triangle inequality split"
+          :meaning "‖f(·-t)-f‖₁ ≤ ‖f-g‖₁ + ‖g(·-t)-g‖₁ + ‖g-f‖₁."
+          :needed-because "Combines approximation and uniform continuity."}]
+ :strategy [{:id :s1
+             :formal-dependency "Density of C_c(ℝ) in L¹"
+             :informal-dependency "Stage 1 approximation"
+             :why-this-now "Choose g with ‖f-g‖₁ < ε/3 so that the error term is small."
+             :lean-target "l1_dense_in_compacts"
+             :mathlib-status "Mathlib has density of simple/SW functions; likely already available."}
+            {:id :s2
+             :formal-dependency "Uniform continuity of compactly-supported g"
+             :informal-dependency "Stage 1 triangle inequality"
+             :why-this-now "Show ‖g(·-t)-g‖₁ < ε/3 for |t| small by bounding integration over compact support."
+             :lean-target "translation_continuity_compact"
+             :mathlib-status "Need lemma about L¹ norm continuity for C_c functions; should follow from dominated convergence."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

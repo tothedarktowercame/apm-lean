@@ -1,0 +1,13 @@
+{:problem-id 'a00J02'
+ :frame-id 'apm-v2-a00J02-1774989750574'
+ :goal "Show that the renormalized limit lim_{x->0+} x^{-1/2} f(x) exists for any absolutely continuous f with f(0)=0 and f' in L^2([0,1]), and compute that limit."
+ :terms ['absolute-continuity 'Cauchy-Schwarz 'L2-shrinking-integral]
+ :strategy ["Use absolute continuity to represent f(x) as \\int_0^x f'(t) dt."
+            "Apply Cauchy-Schwarz to bound |f(x)| by x^{1/2}(\\int_0^x |f'|^2)^{1/2}."
+            "Exploit that \\int_0^x |f'|^2 -> 0 as x -> 0 because f' \\in L^2, concluding the limit is 0."]
+ :checkpoints [{:stage 1 :status :completed :notes "Clean argument recorded in execute.md."}
+               {:stage 2 :status :completed :notes "Dependency table (FTC + Cauchy–Schwarz + shrinking integral) documented."}
+               {:stage 3 :status :completed :notes "Added Lean lemma `sqrt_mul_tendsto_zero` capturing the final limit step and built the project."}
+               {:stage 4 :status :completed :notes "Noted that no additional prose changes were needed."}]
+ :lean {:module-root 'ApmCanaries.Frames.A00J02.Apm_v2_a00J02_1774989750574'
+        :shared-extension-root "ApmCanaries.Local"}}

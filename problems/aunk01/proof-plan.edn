@@ -1,0 +1,29 @@
+{:goal "Prove that translations preserve Borel structure, Lebesgue measure, and L¹ integrals on ℝ."
+ :terms [{:name "translation map"
+          :meaning "τ_y(x)=x+y is a homeomorphism of ℝ"
+          :needed-because "Homeomorphisms send Borel sets to Borel sets and preserve measurability of integrands."}
+         {:name "translation invariance of Lebesgue measure"
+          :meaning "m(A+y)=m(A) for every measurable A and y"
+          :needed-because "This yields the measure identity and underlies the change-of-variables step."}
+         {:name "change of variables"
+          :meaning "∫ f(x+y) dm(x) = ∫ f(u) dm(u) via u=x+y"
+          :needed-because "Converts the integrand back to f itself, proving invariance."}]
+ :strategy [{:id :s1
+             :formal-dependency "translation_map_measurable"
+             :informal-dependency "Use that τ_y is continuous and invertible"
+             :why-this-now "Establish that A+y remains Borel because τ_y^{-1}(A+y)=A."
+             :lean-target "borel_map_translation"
+             :mathlib-status "Continuous additive maps are measurable; translation homeomorphisms already live in Mathlib."}
+            {:id :s2
+             :formal-dependency "measure_preserving_translation"
+             :informal-dependency "Known theorem: Lebesgue measure is invariant under translations"
+             :why-this-now "Directly gives m(A+y)=m(A)."
+             :lean-target "Real.volume_preimage_add_eq"
+             :mathlib-status "Translation invariance for Haar measure on ℝ is in Mathlib."}
+            {:id :s3
+             :formal-dependency "integral_comp_translation"
+             :informal-dependency "Apply change of variables using the measure-preserving map"
+             :why-this-now "Shows the L¹ integral is unchanged."
+             :lean-target "integral_comp_add_right"
+             :mathlib-status "Exists as `MeasureTheory.integral_add_right_eq_self`."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

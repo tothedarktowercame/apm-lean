@@ -1,0 +1,31 @@
+{:goal "Show that the orthogonal projection F : H -> V onto a closed subspace V of a Hilbert space H is linear, norm 1, self-adjoint, and idempotent."
+ :terms [{:name "orthogonal decomposition"
+          :meaning "Every x in H can be written uniquely as v+w with v in V and w in V_perp"
+          :needed-because "This defines F(x) and underlies linearity and idempotence proofs."}
+         {:name "Pythagorean identity"
+          :meaning "If v in V and w in V_perp then ||v+w||^2 = ||v||^2 + ||w||^2"
+          :needed-because "Provides the norm control showing that the operator norm of F is 1."}
+         {:name "Hilbert-space adjoint"
+          :meaning "A bounded operator T satisfies <Tx,y> = <x,T*y>; self-adjoint means T = T*."
+          :needed-because "To prove F is self-adjoint, we identify its adjoint via orthogonality."}]
+ :strategy [{:id :s1
+             :formal-dependency "Hilbert projection theorem guaranteeing existence/uniqueness"
+             :informal-dependency "Stage 1 description of closest points"
+             :why-this-now "Establish F using the decomposition x = v + w with w orthogonal to V, recording the orthogonality identities."
+             :lean-target "def F := orthogonalProjection (k := Real) V"
+             :mathlib-status "`orthogonalProjection` already exists for complete inner-product spaces in mathlib."}
+            {:id :s2
+             :formal-dependency "Direct-sum splitting H = V plus V_perp"
+             :informal-dependency ":s1"
+             :why-this-now "Use the splitting to show linearity of F and the contraction property ||F|| <= 1, plus the lower bound to get ||F|| = 1."
+             :lean-target "lemma orthogonalProjection_linear_norm : IsLinearMap Real (orthogonalProjection V) /\\ ||orthogonalProjection V|| = 1"
+             :mathlib-status "Linearity is built in; the norm fact is recorded but easy to reprove."}
+            {:id :s3
+             :formal-dependency "Properties of adjoints and orthogonal complements"
+             :informal-dependency ":s1 :s2"
+             :why-this-now "Show that F equals its adjoint and that F composed with itself equals F by analyzing inner products with vectors in V and V_perp."
+             :lean-target "theorem orthogonalProjection_properties :
+  IsSelfAdjoint (orthogonalProjection V) /\\
+  (orthogonalProjection V).comp (orthogonalProjection V) = orthogonalProjection V"
+             :mathlib-status "Self-adjoint/idempotent statements appear in mathlib; we can cite or reproduce them."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :done :stage4 :pending}}

@@ -1,0 +1,17 @@
+{
+  "schema": "apm-problem-candidate-set.v1",
+  "problem_id": "t96J03",
+  "bundle_root": "problems/t96J03",
+  "layout": "candidate-set",
+  "candidate_count": 5,
+  "frame_ids": [
+    "apm-v2-t96J03-1774992389652",
+    "apm-v2-t96J03-1774994444690",
+    "apm-v2-t96J03-1774999579956",
+    "apm-v2-t96J03-1775001511591",
+    "apm-v2-t96J03-1775003096930"
+  ],
+  "recommended_latest_frame_id": "apm-v2-t96J03-1775003096930",
+  "selected_frame_id": null,
+  "imported_at": "2026-05-01T19:38:18.597382Z"
+}

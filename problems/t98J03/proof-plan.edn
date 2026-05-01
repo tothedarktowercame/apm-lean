@@ -1,0 +1,17 @@
+{:goal "Show that for every n ≥ 0 the homology of the n-sphere is ℤ in degrees 0 and n and vanishes otherwise."
+ :terms [{:name "two-cell CW structure"
+          :meaning "Sⁿ admits a CW decomposition with one 0-cell and one n-cell."
+          :needed-because "This gives a cellular chain complex with only two nontrivial groups, so the boundary map controls all homology."}
+         {:name "reduced homology shift"
+          :meaning "For path-connected spaces H₀ comes from reduced homology plus ℤ."
+          :needed-because "Ensures H₀(Sⁿ) ≅ ℤ once we know the space is path connected."}
+         {:name "cellular boundary computation"
+          :meaning "The attaching map of the n-cell has degree 0 for n > 1 and ±2 for n = 1."
+          :needed-because "Determines the differential so that Hₙ ≅ ℤ and all intermediate groups vanish."}]
+ :strategy [{:id :s1
+             :formal-dependency "IsSphere.homology"
+             :informal-dependency "Use the 2-cell CW structure to compute the cellular chain complex; deduce H₀ and Hₙ are ℤ and other groups vanish."
+             :why-this-now "Cellular homology is the standard efficient route to sphere homology and aligns with available Mathlib lemmas."
+             :lean-target "Lean declaration proving `∀ n i, homology ℤ i (Sphere n)` equals ℤ for i=0,n and 0 otherwise."
+             :mathlib-status "Mathlib already has `Sphere.homology` describing these groups; the Lean task is to restate/route it for this frame."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

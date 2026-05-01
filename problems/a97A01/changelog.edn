@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a97A01'
+  :frame-id 'apm-v2-a97A01-1775003392734'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full informal solution (difficulty analysis, key insight, and detailed proof) plus contextual discussion in execute.md Stage 1."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Captured the lemma dependency narrative, Lean targets, and strategy links in Stage 2 of execute.md and proof-plan.edn."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Began Lean planning but blocked pending a reusable Rademacher/dyadic infrastructure in Mathlib; documented the missing components in Stage 3."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

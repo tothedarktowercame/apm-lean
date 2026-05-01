@@ -1,0 +1,12 @@
+[{:kind :workspace-initialized
+  :problem-id 't94A04'
+  :frame-id 'apm-v2-t94A04-1775010166561'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stages-work-in-progress
+  :summary "Finished the cover-based informal proof and dependency graph, implemented the Lean skeleton of `union_two_simply_connected`, and recorded the precise blockers (loop subdivision + open-set gluing) that currently prevent closing the theorem."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id "a00J03"
+  :frame-id "apm-v2-a00J03-1774991806132"
+  :summary "Created isolated proof frame workspace."
+  :full-record? false
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Clean proof: isometry via change of variables (one step), linearity trivial, surjectivity via T_{φ⁻¹} as inverse. The measure-preservation hypothesis μ(φ⁻¹A) = μ(A) is the entire content."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Dependency graph: 4 items. Mathlib has eLpNorm_comp_measurePreserving and isometry_compMeasurePreserving. Surjectivity needs φ⁻¹ measure-preserving + double composition ae-equality."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :lean-delta
+  :summary "composition_isometry CLOSED (one-liner: isometry_compMeasurePreserving). norm_comp_eq CLOSED (one-liner: eLpNorm_comp_measurePreserving). Surjectivity sorry: double composition ae-equality via coeFn_compMeasurePreserving + MeasurableEquiv.apply_symm_apply."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}
+ {:kind :final-status
+  :summary "Classification: partial. 2 lemmas fully closed (isometry + norm equality — the mathematical content). 1 sorry (surjectivity — ae-equality bookkeeping for double Lp composition). Informal proof complete."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

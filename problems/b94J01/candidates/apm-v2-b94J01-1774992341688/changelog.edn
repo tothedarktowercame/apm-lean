@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'b94J01'
+  :frame-id 'apm-v2-b94J01-1774992341688'
+  :summary "Created the isolated frame with plan/changelog and Lean stubs."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full three-part solution: stated the structure theorem, proved the gcd criterion, and showed finite subgroups of K× are cyclic."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage2-completed
+  :summary "Recorded the dependency plan (structure theorem → coprime criterion → maximal-order generator)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage3-progress
+  :summary "Noted that Main.lean still needs to import Mathlib’s classification/cyclicity lemmas; no Lean code has been written yet."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

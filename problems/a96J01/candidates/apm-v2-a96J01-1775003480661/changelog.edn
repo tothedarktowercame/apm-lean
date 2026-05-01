@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id "a96J01"
+  :frame-id "apm-v2-a96J01-1775003480661"
+  :summary "Created isolated proof frame workspace."
+  :full-record? false
+  :sorry? false
+  :fully-closed? false}
+ {:kind :target-check
+  :summary "Existence problem: construct disjoint-support tent functions with height 1/n. Sanity check passed: mentions f_n, continuity, nonnegativity, uniform convergence, divergent sups."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Construction: tent functions on I_n = [1-2^{-(n-1)}, 1-2^{-n}] with height 1/(n+1). Three verifications: continuity+nonneg (by construction), Σ sup = Σ 1/n = ∞ (harmonic), uniform convergence (disjoint supports ⟹ tail ≤ 1/(N+1))."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :lean-delta
+  :summary "intervalLeft_lt_intervalRight CLOSED (helper for interval structure). Main theorem type-checks with 1 sorry. The construction verification (~50 lines of interval arithmetic + harmonic divergence) is the remaining work."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}
+ {:kind :final-status
+  :summary "Classification: partial. Informal proof complete (explicit construction + 3 verifications). Lean: helper closed, main theorem 1 sorry. The sorry is the full construction+verification, which is computationally heavy but mathematically straightforward."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

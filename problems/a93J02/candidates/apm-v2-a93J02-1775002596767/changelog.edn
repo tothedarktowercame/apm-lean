@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a93J02'
+  :frame-id 'apm-v2-a93J02-1775002596767'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the dominated-convergence proof that the alternating harmonic series sums to log 2."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Documented the lemma dependencies: geometric series, DCT, and integral evaluations."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Outlined the Lean plan (geometric series + DCT); implementation still pending."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

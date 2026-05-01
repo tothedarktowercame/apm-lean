@@ -1,0 +1,29 @@
+{:goal "From <Ax,y>=<x,By> in a Hilbert space, prove B is linear and bounded, then deduce A is bounded."
+ :terms [{:name "Riesz representation"
+          :meaning "Functionals of the form x ↦ <x,z> are exactly bounded linear functionals."
+          :needed-because "It identifies the given relation with the action of B on y."}
+         {:name "Uniform boundedness principle"
+          :meaning "Pointwise-bounded families of bounded operators are norm-bounded."
+          :needed-because "Applied to T_y(x)=<Ax,y> to conclude B is bounded."}
+         {:name "Adjoint norm identity"
+          :meaning "||Ax|| = sup_{||y||=1} |<Ax,y>| = sup |<x,By>|."
+          :needed-because "Once B is bounded, this gives a bound for A."}]
+ :strategy [{:id :s1
+             :formal-dependency "bilinear_identity_forces_linear"
+             :informal-dependency "Use the inner-product identity with sums/scalars in the second slot to show B is linear."
+             :why-this-now "Linearity is needed before applying functional analysis theorems."
+             :lean-target "bilinear_identity_forces_linear"
+             :mathlib-status "Follows from inner product linearity."}
+            {:id :s2
+             :formal-dependency "uniform_bound_from_pointwise_bounds"
+             :informal-dependency "Treat T_y(x)=<Ax,y>; pointwise boundedness (by ||Ax||) plus Banach–Steinhaus shows B is bounded."
+             :why-this-now "Supplies part (b)."
+             :lean-target "B_is_bounded"
+             :mathlib-status "Needs Banach–Steinhaus in Mathlib."}
+            {:id :s3
+             :formal-dependency "adjoint_bound_implies_A_bounded"
+             :informal-dependency "With B bounded, estimate ||Ax|| via sup_{||y||=1} |<x,By>|."
+             :why-this-now "Concludes part (c)."
+             :lean-target "A_is_bounded"
+             :mathlib-status "Straightforward once s2 is done."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

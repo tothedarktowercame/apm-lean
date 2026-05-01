@@ -1,0 +1,17 @@
+{:goal "Determine the closed/exact status of ω=x dy∧dz + y dx∧dz + z dx∧dy and evaluate its integral over the given hemisphere."
+ :terms [{:name "Exterior derivative"
+          :meaning "Compute dω to test closedness."
+          :needed-because "dω = dx∧dy∧dz, so ω is neither closed nor exact."}
+         {:name "Interior product"
+          :meaning "ω = ι_V (dx∧dy∧dz) for V=(x,-y,z)."
+          :needed-because "Integrating ω over a surface equals the flux of V, which can be evaluated via divergence."}
+         {:name "Divergence theorem"
+          :meaning "∮_{∂E} V·n dS = ∭_E div V dV."
+          :needed-because "Closes the surface for computation: hemisphere + base disk."}]
+ :strategy [{:id :s1
+             :formal-dependency "hemisphere_flux_vector_field"
+             :informal-dependency "Show dω = dx∧dy∧dz, note ω is the flux form of V, then use divergence theorem to integrate over the hemisphere."
+             :why-this-now "Flux methods handle the given orientation and avoid parametrizing the hemisphere."
+             :lean-target "hemisphere_integral_of_sum_form"
+             :mathlib-status "Mathlib lacks the divergence theorem for manifolds and the surface integral API, so only partial formalization is currently feasible."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

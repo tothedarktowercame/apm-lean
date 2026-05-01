@@ -1,0 +1,22 @@
+{:problem-id 't91J04
+ :frame-id 'apm-v2-t91J04-1775008373965
+ :goal "Use the completeness of ℝ to prove the intersection of a nested sequence of closed intervals is nonempty."
+ :terms [{:name "monotone endpoint sequences"
+          :meaning "Write each I_n = [a_n,b_n] with (a_n) increasing and (b_n) decreasing."
+          :needed-because "Tracking the endpoints converts the geometric picture into numerical sequences amenable to completeness arguments."}
+         {:name "bounded monotone convergence"
+          :meaning "Increasing (resp. decreasing) bounded sequences in ℝ converge."
+          :needed-because "Allows us to take limits a = lim a_n and b = lim b_n and keep them inside every interval."}
+         {:name "closedness of intervals"
+          :meaning "Closed intervals contain their limit points."
+          :needed-because "Ensures the limit of the endpoints (or any point between them) belongs to all I_n."}]
+ :strategy [{:id :s1
+             :formal-dependency "monotone convergence + closedness of intervals"
+             :informal-dependency "Stage 1 plan: extract endpoints, show (a_n) ↑ and bounded, (b_n) ↓ and bounded, use completeness to define a = sup a_n, show a ≤ b_n for all n, and conclude a ∈ ⋂ I_n."
+             :why-this-now "This is the standard nested-interval argument directly tied to the completeness axiom of ℝ."
+             :lean-target "ApmCanaries.Frames.T91J04.Apm_v2_t91J04_1775008373965.nonempty_nested_inter"
+             :mathlib-status "mathlib has `IsClosed.nhds_limit` facts plus a `nested_inter_nonempty` lemma for compact sets; we’ll restate it in this concrete ℝ setting."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

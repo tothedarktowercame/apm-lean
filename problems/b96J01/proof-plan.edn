@@ -1,0 +1,29 @@
+{:goal "Show that any subgroup of S₅ containing a 5-cycle and a transposition must contain all adjacent transpositions and hence equals the whole symmetric group."
+ :terms [{:name "5-cycle"
+          :meaning "A permutation whose cycle decomposition is a single cycle of length 5."
+          :needed-because "Conjugating by this element lets us move indices around and forces transitivity."}
+         {:name "transposition"
+          :meaning "A 2-cycle (i j) that swaps two letters and fixes the rest."
+          :needed-because "Once we have one transposition we can conjugate it to obtain many others."}
+         {:name "adjacent transpositions generate S₅"
+          :meaning "The set {(1 2),(2 3),(3 4),(4 5)} generates the full symmetric group."
+          :needed-because "Our goal is to show these particular transpositions lie in G, forcing G=S₅."}]
+ :strategy [{:id :s1
+             :formal-dependency "cycle_action.transitive"
+             :informal-dependency "A 5-cycle acts transitively on {1,…,5}, so any subgroup containing it is transitive."
+             :why-this-now "Transitivity lets us relocate the given transposition via conjugation."
+             :lean-target "∃ (σ : S_5), IsCycle σ ∧ orderOf σ = 5 ∧ σ ∈ G → ActingTransitively G"
+             :mathlib-status "Mathlib already shows cycles act transitively."}
+            {:id :s2
+             :formal-dependency "conjh_transposition"
+             :informal-dependency "Use powers of the 5-cycle to conjugate the given transposition and obtain all translates (i i+1)."
+             :why-this-now "Generates the needed adjacent transpositions from a single 2-cycle."
+             :lean-target "∀ i, (τ : S_5) transposition → σ^i τ σ^{-i} ∈ G"
+             :mathlib-status "Conjugation lemmas for permutations exist; will need a short calculation."}
+            {:id :s3
+             :formal-dependency "adjacent_transpositions_generate"
+             :informal-dependency "Since the four adjacent transpositions lie in G, they generate S₅, hence G=S₅."
+             :why-this-now "Closes the argument by appealing to the standard generating set."
+             :lean-target "Subgroup.closure {adjacent transpositions} = ⊤"
+             :mathlib-status "Mathlib contains the fact that simple transpositions generate S_n."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

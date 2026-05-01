@@ -1,0 +1,20 @@
+{:goal "From an a.e.-convergent sequence inside the L2(R) unit ball, prove the limit lies in the ball and the sequence converges weakly to that limit."
+ :terms [{:name "L2 unit ball"
+          :meaning "B = {f in L2(R) : ||f||_2 <= 1}."
+          :needed-because "This uniform bound drives Fatou's lemma and all Cauchy-Schwarz tail estimates."}
+         {:name "Fatou lemma"
+          :meaning "Integral |f|^2 <= liminf Integral |f_n|^2."
+          :needed-because "Puts the a.e. limit back inside B."}
+         {:name "Density of C_c"
+          :meaning "Compactly supported continuous functions are dense in L2(R)."
+          :needed-because "Reduces weak convergence to test functions where dominated convergence is accessible."}
+         {:name "Truncation of g"
+          :meaning "Split g into a bounded-support bounded part plus an L2-small tail."
+          :needed-because "Allows Cauchy-Schwarz control of the tail while the bounded part falls to dominated convergence."}]
+ :strategy [{:id :s1
+             :formal-dependency "weak_limit_from_ae_conv_in_L2_ball"
+             :informal-dependency "Apply Fatou to |f|^2, then prove <f_n,g> -> <f,g> by approximating g with bounded-support functions and combining dominated convergence with L2 tail bounds."
+             :why-this-now "Mirrors the intended paper proof and aligns with Mathlib's measure-theory lemmas."
+             :lean-target "weak_limit_from_ae_conv_in_L2_ball"
+             :mathlib-status "Fatou, dominated convergence, density of C_c, and Cauchy-Schwarz are already in Mathlib; only bookkeeping is needed."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

@@ -1,0 +1,18 @@
+{
+  "schema": "apm-problem-candidate-set.v1",
+  "problem_id": "b94J01",
+  "bundle_root": "problems/b94J01",
+  "layout": "candidate-set",
+  "candidate_count": 6,
+  "frame_ids": [
+    "apm-v2-b94J01-1774992341688",
+    "apm-v2-b94J01-1774994174583",
+    "apm-v2-b94J01-1774995021497",
+    "apm-v2-b94J01-1774999220593",
+    "apm-v2-b94J01-1775001319272",
+    "apm-v2-b94J01-1775002552157"
+  ],
+  "recommended_latest_frame_id": "apm-v2-b94J01-1775002552157",
+  "selected_frame_id": null,
+  "imported_at": "2026-05-01T19:38:17.637008Z"
+}

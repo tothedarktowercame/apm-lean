@@ -1,0 +1,19 @@
+{:goal "With X connected and Hausdorff and p : X → Y a finite covering map, prove that Y is Hausdorff."
+ :terms [{:name "covering map"
+          :meaning "every y∈Y has an evenly covered neighborhood whose preimage is a disjoint union of open sets mapped homeomorphically onto it"
+          :needed-because "We can push well-chosen disjoint neighborhoods in X down to Y."}
+         {:name "finite fiber"
+          :meaning "each p^{-1}(y) has finitely many points"
+          :needed-because "We only need to separate finitely many lifts simultaneously; intersections of finitely many open sets remain open."}
+         {:name "Hausdorff upstairs"
+          :meaning "distinct points in X admit disjoint open neighborhoods"
+          :needed-because "We use disjoint neighborhoods around the lifts of y₁ and y₂ in X."}]
+ :strategy [{:id :s1
+             :formal-dependency "definitions of coverings, Hausdorff spaces, finite fibers"
+             :informal-dependency "Pick evenly covered neighborhoods around the finitely many lifts of y₁ and y₂, shrink them to be disjoint upstairs, and project to disjoint open sets downstairs"
+             :why-this-now "Finite covers make the separation problem manageable because only finitely many sheets meet each fiber."
+             :lean-target "theorem `finite_covering_space_Hausdorff`"
+             :mathlib-status "Mathlib has covering spaces but not this specific lemma; it would need to be added."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.T97J01.Apm_v2_t97J01_1774994005204'
+        :shared-extension-root "ApmCanaries.Local"}}

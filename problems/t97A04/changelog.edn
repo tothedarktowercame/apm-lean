@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't97A04'
+  :frame-id 'apm-v2-t97A04-1775012771698'
+  :summary "Set up the torus-linear-map plan and filled the target artifacts."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1+2-completed
+  :summary "Recorded the full solution (degree 3, H₁ matrix, Lefschetz number 1) and lemma dependencies in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Explained that Mathlib lacks Lefschetz-number and torus homology automation; Main.lean currently contains only a TODO comment."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

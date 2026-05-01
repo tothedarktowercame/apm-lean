@@ -1,0 +1,24 @@
+{
+  "schema": "apm-problem-legacy-archive.v1",
+  "problem_id": "a03J01",
+  "archive_root": "problems/a03J01/historical/legacy-lean-proofs",
+  "source": {
+    "kind": "legacy-lean-proofs",
+    "legacy_lean_root": "/home/joe/code/apm-lean/lean-proofs/a03J01",
+    "problem_tex": "/home/joe/code/apm-lean/apm/a03J01.tex"
+  },
+  "lean": {
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_readme": true
+  },
+  "imported_at": "2026-05-01T19:52:19.174385Z"
+}

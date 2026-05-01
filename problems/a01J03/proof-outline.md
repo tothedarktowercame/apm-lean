@@ -1,0 +1,16 @@
+# Proof Outline: a01J03
+
+This proof outline was synthesized from legacy Lean files without a paired
+proof-frame workspace.
+
+Imported source: `lean-proofs/a01J03`
+
+## Imported Lean Files
+
+- `lean/Main.lean`
+
+## Follow-up Needed
+
+- add a worked informal solution
+- extract a formalization plan from the Lean skeleton
+- decide whether this legacy attempt should remain canonical

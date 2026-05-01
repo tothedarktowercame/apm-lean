@@ -1,0 +1,29 @@
+{:goal "Given a nonempty closed subset of ℝⁿ and an exterior point y₀, find a point in the set realizing the minimal distance to y₀."
+ :terms [{:name "properness of ℝⁿ"
+          :meaning "closed and bounded subsets of ℝⁿ are compact"
+          :needed-because "We intersect X with a large closed ball about y₀ to get a compact minimization domain."}
+         {:name "continuous distance function"
+          :meaning "x ↦ ‖x - y₀‖ is continuous on ℝⁿ"
+          :needed-because "A continuous function attains its extrema on a compact set."}
+         {:name "metric projection"
+          :meaning "A point where the distance function attains its minimum"
+          :needed-because "Any minimizer on the compact subset works for all of X."}]
+ :strategy [{:id :s1
+             :formal-dependency "Heine–Borel for ℝⁿ"
+             :informal-dependency "Stage 1 step: restrict to X ∩ closed ball of radius R"
+             :why-this-now "Show X ∩ closedBall y₀ R is compact because it is closed and bounded."
+             :lean-target "subset_closedBall_isCompact"
+             :mathlib-status "Available (Euclidean space is proper)."}
+            {:id :s2
+             :formal-dependency "Extreme value theorem on compact sets"
+             :informal-dependency "Stage 1 minimization step"
+             :why-this-now "A continuous map on a compact set achieves its infimum."
+             :lean-target "Continuous.compact_min''"
+             :mathlib-status "Available for continuous functions on compact sets."}
+            {:id :s3
+             :formal-dependency "Order properties of ℝ"
+             :informal-dependency "Final comparison showing minimizer works for every x ∈ X"
+             :why-this-now "If the minimizer beats everyone inside X ∩ B̄(y₀,R) and every other x lies outside, then its distance is still minimum."
+             :lean-target "exists_dist_le_dist"
+             :mathlib-status "Target theorem to prove."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

@@ -1,0 +1,39 @@
+{:goal
+ "Show T_φ(f) = f∘φ is an isometric isomorphism on Lp(X,μ) for 1≤p<∞, where φ is a measure-preserving measurable bijection with measurable inverse."
+ :terms
+ [{:name "measure-preserving"
+   :meaning "μ(φ⁻¹A) = μ(A) for all measurable A — the pullback measure equals the original"
+   :needed-because "this is the hypothesis that makes the change of variables work"}
+  {:name "isometric"
+   :meaning "‖f∘φ‖_p = ‖f‖_p — the Lp norm is preserved under composition"
+   :needed-because "isometry is the main content; surjectivity + linearity are formal"}
+  {:name "isomorphism"
+   :meaning "T_φ is linear, bijective, and continuous (hence an isomorphism of Banach spaces)"
+   :needed-because "bijectivity comes from T_{φ⁻¹} being the two-sided inverse"}]
+ :strategy
+ [{:id :change-of-variables
+   :formal-dependency "eLpNorm_comp_measurePreserving in Mathlib"
+   :informal-dependency "the change of variables formula for measure-preserving maps"
+   :why-this-now "this is the entire isometry proof in one step"
+   :lean-target "eLpNorm (f ∘ φ) p μ = eLpNorm f p μ"
+   :mathlib-status "available: eLpNorm_comp_measurePreserving"
+   :critical-path true}
+  {:id :isometry-on-Lp
+   :formal-dependency "isometry_compMeasurePreserving in Mathlib"
+   :informal-dependency "the composition operator is an isometry on the Lp space"
+   :why-this-now "wraps the seminorm equality into an Isometry statement"
+   :lean-target "Isometry (compMeasurePreserving φ hφ)"
+   :mathlib-status "available: isometry_compMeasurePreserving"
+   :critical-path true}
+  {:id :inverse-is-measure-preserving
+   :formal-dependency "MeasurePreserving φ⁻¹ from bijectivity + μ(φ⁻¹A)=μ(A)"
+   :informal-dependency "φ⁻¹ preserves measure because φ(A) = (φ⁻¹)⁻¹(A) and bijectivity"
+   :why-this-now "needed for surjectivity: T_{φ⁻¹} is the inverse and must also be on Lp"
+   :lean-target "MeasurePreserving (MeasurableEquiv.symm e) μ μ"
+   :mathlib-status "likely available via MeasurableEquiv.measurePreserving"
+   :critical-path true}]
+ :stage-status
+ {:stage1 :done
+  :stage2 :done
+  :stage3 :in-progress
+  :stage4 :done}}

@@ -1,0 +1,17 @@
+{:goal "Show that a non-surjective map f : RP^2 -> RP^2 kills pi_1 and is homotopic to a constant."
+ :terms [{:name "Punctured projective plane"
+          :meaning "RP^2 minus a point deformation retracts onto a Mobius band and further onto a circle."
+          :needed-because "Avoiding a point lets us replace the codomain by a space whose pi_1 is Z."}
+         {:name "Group map Z/2 -> Z"
+          :meaning "The only homomorphism from pi_1(RP^2)=Z/2 to pi_1(S^1)=Z is the zero map."
+          :needed-because "This immediately forces the induced map on pi_1 to be trivial once the image lies in S^1."}
+         {:name "Maps into K(Z,1)"
+          :meaning "S^1 is a K(Z,1), so maps into it are classified by their induced map on pi_1."
+          :needed-because "A trivial pi_1 map implies the entire map is homotopic to a constant."}]
+ :strategy [{:id :s1
+             :formal-dependency "pi1_trivial_and_nullhomotopic_of_non_surjective"
+             :informal-dependency "Factor f through RP^2 without a point, retract to S^1, use the zero map Z/2->Z to conclude both statements."
+             :why-this-now "Once the codomain retracts to S^1 the rest of the argument is algebraic and homotopy-class classification."
+             :lean-target "pi1_map_trivial_and_nullhomotopic_of_non_surjective_RP2"
+             :mathlib-status "Mathlib already knows pi_1(RP^2)=Z/2, pi_1(S^1)=Z, and that S^1 is a K(Z,1)."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

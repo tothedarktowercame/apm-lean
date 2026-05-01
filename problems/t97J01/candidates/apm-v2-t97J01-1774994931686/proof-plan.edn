@@ -1,0 +1,33 @@
+{:problem-id 't97J01
+ :frame-id 'apm-v2-t97J01-1774994931686
+ :goal "Show that finite covering maps force the base to be Hausdorff."
+ :terms [{:name "evenly covered neighborhood"
+          :meaning "open set whose preimage is disjoint union of sheets mapping homeomorphically"
+          :needed-because "lets us control the entire fiber simultaneously"}
+         {:name "finite fiber"
+          :meaning "only finitely many sheets lie over each point"
+          :needed-because "allows intersections over finitely many lifts"}
+         {:name "Hausdorff separation upstairs"
+          :meaning "distinct lifts can be separated in X"
+          :needed-because "feeds the push-down separation argument"}]
+ :strategy [{:id :s1
+             :formal-dependency "covering map definition"
+             :informal-dependency "Stage 1 neighborhoods"
+             :why-this-now "Need evenly covered neighborhoods for each lift"
+             :lean-target "exists_evenlyCovered_subsets"
+             :mathlib-status "missing (no covering-map API)"}
+            {:id :s2
+             :formal-dependency "finite fibers"
+             :informal-dependency "intersection trick"
+             :why-this-now "Shrink simultaneously around all lifts"
+             :lean-target "finite_intersection_evenlyCovered"
+             :mathlib-status "blocked by s1"}
+            {:id :s3
+             :formal-dependency "Hausdorff property transfers"
+             :informal-dependency "final separation argument"
+             :why-this-now "Push disjoint preimage data down to Y"
+             :lean-target "finiteCover_hausdorff"
+             :mathlib-status "blocked by s1/s2"}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.T97J01.Apm_v2_t97J01_1774994931686
+        :shared-extension-root "ApmCanaries.Local"}}

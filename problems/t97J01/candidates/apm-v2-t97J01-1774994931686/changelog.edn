@@ -1,0 +1,20 @@
+[{:kind :workspace-initialized
+  :summary "Opened t97J01 frame and noted finite-cover strategy."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Recorded the classical proof separating fibers and pushing neighborhoods down."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Listed the evenly-covered, finite-fiber, and push-down lemmas in the plan."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-blocked
+  :summary "Lean work blocked: mathlib currently lacks an `IsCoveringMap` API; need that infrastructure before stating `finiteCover_hausdorff`."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

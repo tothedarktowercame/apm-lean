@@ -1,0 +1,11 @@
+[{:kind :workspace-initialized
+  :problem-id 'a96A03'
+  :frame-id 'apm-v2-a96A03-1775070631660'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true :sorry? false :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Used Fatou + uniform integrability on compact sets + Cauchy–Schwarz tails to prove weak convergence from a.e. limits in the L2 unit ball."
+  :full-record? true :sorry? false :fully-closed? false}
+ {:kind :stage3-attempted
+  :summary "Searches `rg -n \"weak_limit_from_ae\"` and `rg -n \"weak convergence\"` over /home/joe/code/apm-lean found no Mathlib lemma, so added placeholder theorem `searched_for_weak_limit_api` to flag the missing Vitali/uniform-integrability API."
+  :full-record? true :sorry? true :fully-closed? false}]

@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't94J08'
+  :frame-id 'apm-v2-t94J08-1775011677105'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-2-completed
+  :summary "Explained the determinant-based computation of the antipodal degree and the resulting sign rule for local indices; execute.md now contains the full write-up and dependency graph."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Attempted to start the Lean proof, but Mathlib lacks both a general sphere-degree API and the definition of vector-field local index; Main.lean therefore remains a stub."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

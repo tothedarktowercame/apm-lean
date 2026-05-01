@@ -1,0 +1,29 @@
+{:goal "Prove that if a connected Hausdorff space X covers Y by a finite-sheeted covering map, then Y is Hausdorff."
+ :terms [{:name "covering map"
+          :meaning "A surjective local homeomorphism with discrete fibres"
+          :needed-because "Evenly covered neighbourhoods let us lift separation data from X to Y."}
+         {:name "finite fibre"
+          :meaning "Each point of Y has finitely many lifts"
+          :needed-because "We can separate finitely many points in a Hausdorff space simultaneously."}
+         {:name "evenly covered neighbourhood"
+          :meaning "An open set whose preimage splits into disjoint opens mapped homeomorphically onto it"
+          :needed-because "Provides the separating neighbourhoods downstairs once the components upstairs are disjoint."}]
+ :strategy [{:id :s1
+             :formal-dependency "Definition/lemmas about evenly covered neighbourhoods"
+             :informal-dependency "Stage 1 step: for each y pick an evenly covered U"
+             :why-this-now "Gives control of fibres via disjoint open slices over U."
+             :lean-target "exists_evenly_covered_neighbourhood"
+             :mathlib-status "To be provided once the covering-space API lands."}
+            {:id :s2
+             :formal-dependency "Finite set separation in Hausdorff spaces"
+             :informal-dependency "Stage 1: separate all fibre points of y1 and y2"
+             :why-this-now "Need pairwise disjoint opens above each fibre to descend to disjoint opens below."
+             :lean-target "separate_finite_subset"
+             :mathlib-status "Follows from T₂ + finiteness."}
+            {:id :s3
+             :formal-dependency "Push separation along local homeomorphisms"
+             :informal-dependency "Stage 1: project disjoint opens to Y"
+             :why-this-now "Maps each chosen slice homeomorphically onto the base neighbourhood, so disjointness survives."
+             :lean-target "finite_cover_descends_Hausdorff"
+             :mathlib-status "Main theorem."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id 'a00J02'
+  :frame-id 'apm-v2-a00J02-1774990402922'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full reader-facing solution: Cauchy–Schwarz turns the absolute continuity formula into |f(x)| ≤ √x ⋅ (∫₀ˣ|f′|²)^{1/2}, and the integral factor tends to 0, so the limit exists and equals 0."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage2-completed
+  :summary "Documented the exact lemma dependencies (FTC for absolutely continuous maps, interval Cauchy–Schwarz, and continuity of the L¹ integral) and recorded the intended Lean target `lim_sqrt_zero_of_integral`."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage3-progress
+  :summary "Declared the Lean theorem `lim_sqrt_zero_of_integral`, ran `lake build`, but left a `sorry` that stands in for a missing library lemma giving the Cauchy–Schwarz bound for a variable-endpoint interval integral."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}
+ {:kind :stage4-progress
+  :summary "Explained in execute.md that Stage 4 is blocked by the absent lemma; once that inequality exists, the informal-to-formal backport will mirror the finished prose proof."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

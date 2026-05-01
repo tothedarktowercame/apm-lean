@@ -1,0 +1,19 @@
+{:goal "Show that the derivative-style bounded slope condition is equivalent to uniform continuity on (0,1)."
+ :terms [{:name "uniform continuity"
+          :meaning "∀ε>0 ∃δ>0 so that |x-y|<δ ⇒ |f(x)-f(y)|<ε."
+          :needed-because "One direction uses uniform continuity directly; the other uses its negation."
+         }
+         {:name "slope threshold N"
+          :meaning "Choose N so large that if |(f(x)-f(y))/(x-y)| exceeds N then |x-y| must be smaller than the δ supplied by uniform continuity."
+          :needed-because "Translating uniform continuity constants into the given (b) statement is the crux of (a) ⇒ (b)."
+         }
+         {:name "contrapositive via sequences"
+          :meaning "If uniform continuity fails, pick sequences with |x_n - y_n|→0 but |f(x_n)-f(y_n)|≥ε₀; their slopes diverge."
+          :needed-because "This shows (b) ⇒ (a) by contradiction."}]
+ :strategy [{:id :s1
+             :formal-dependency "Analysis.uniformContinuous_iff_slope_condition"
+             :informal-dependency "Use uniform continuity to produce δ given ε, set N = ε/δ; conversely assume (b) and show any violation of uniform continuity gives slopes contradicting the bound."
+             :why-this-now "Both directions rely on translating ε–δ data to statements about difference quotients."
+             :lean-target "A Lean theorem equating uniform continuity with the slope-threshold condition."
+             :mathlib-status "Mathlib has the definition of uniform continuity; the slope condition likely needs to be proved manually."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

@@ -1,0 +1,29 @@
+{:goal "Solve parts (a)–(c) of apm-b94J01: state the finite-Abelian classification, decide when ZMod m ⊕ ZMod n is cyclic, and prove every finite subgroup of Kˣ is cyclic."
+ :terms [{:name "finite Abelian classification"
+          :meaning "Every finite Abelian group decomposes either into p-power cyclic factors or into invariant factors d₁ | d₂ | …"
+          :needed-because "Part (a) is the statement itself and feeds the intuition for parts (b) and (c)."}
+         {:name "IsCyclic.prod_iff"
+          :meaning "A product of two finite groups is cyclic iff each factor is cyclic and their orders are coprime."
+          :needed-because "Part (b) reduces to checking gcd(m,n)=1 and noting that ZMod m, ZMod n are cyclic."}
+         {:name "finite subgroup of units is cyclic"
+          :meaning "Any finite subgroup of the units of a domain (hence of a field) is cyclic."
+          :needed-because "This gives part (c) once we view G as a finite subgroup of Kˣ."}]
+ :strategy [{:id :s1
+             :formal-dependency "GroupTheory/SpecificGroups/Cyclic for statements about cyclic groups"
+             :informal-dependency "Stage 1 summary of the classification theorem"
+             :why-this-now "Sets the global structure that the later parts exploit."
+             :lean-target "Document only (Mathlib has no full finite-Abelian classification)."
+             :mathlib-status "Covered informally; no Mathlib analogue yet."}
+            {:id :s2
+             :formal-dependency "AddGroup.isAddCyclic_prod_iff and the fact that ZMod n is cyclic"
+             :informal-dependency "Stage 1 step describing gcd criterion for Z/m ⊕ Z/n"
+             :why-this-now "Provides the necessary-and-sufficient condition in part (b)."
+             :lean-target "theorem zmod_prod_cyclic_iff"
+             :mathlib-status "Follows from `AddGroup.isAddCyclic_prod_iff`; available in Mathlib."}
+            {:id :s3
+             :formal-dependency "Mathlib/RingTheory/IntegralDomain: `Subgroup.isCyclic_subgroup_units`"
+             :informal-dependency "Stage 1 argument that finite subgroups of Kˣ are cyclic"
+             :why-this-now "Delivers part (c) verbatim."
+             :lean-target "theorem finite_mul_subgroup_cyclic"
+             :mathlib-status "Already in Mathlib as an instance on finite subgroups of units."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :done :stage4 :done}}

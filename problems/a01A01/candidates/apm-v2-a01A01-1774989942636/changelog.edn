@@ -1,0 +1,20 @@
+[{:kind :workspace-initialized
+  :problem-id 'a01A01'
+  :frame-id 'apm-v2-a01A01-1774989942636'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."}
+ {:kind :stage1-completed
+  :problem-id 'a01A01'
+  :frame-id 'apm-v2-a01A01-1774989942636'
+  :summary "Wrote the dyadic spike construction on [0,1] and R^n, verifying limsup = +∞ and integrals -> 0."}
+ {:kind :stage2-completed
+  :problem-id 'a01A01'
+  :frame-id 'apm-v2-a01A01-1774989942636'
+  :summary "Cataloged the supporting facts (dyadic coverage, indicator integrals, geometric decay, countability)."}
+ {:kind :stage3-completed
+  :problem-id 'a01A01'
+  :frame-id 'apm-v2-a01A01-1774989942636'
+  :summary "Implemented the Lean lemma `tendsto_inv_sqrt_two_pow` and confirmed `lake build`."}
+ {:kind :stage4-completed
+  :problem-id 'a01A01'
+  :frame-id 'apm-v2-a01A01-1774989942636'
+  :summary "Reviewed the formal insight and found the prose already captured the necessary decay argument."}]

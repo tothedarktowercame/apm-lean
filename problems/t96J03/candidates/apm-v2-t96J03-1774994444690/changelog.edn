@@ -1,0 +1,20 @@
+[{:kind :workspace-initialized
+  :summary "Initialized frame and pointed execute/proof-plan/formal-alignment placeholders."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the compactness-based nearest-point argument in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Documented dependency graph and Lean targets in execute.md and proof-plan.edn."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-completed
+  :summary "Formalized `closest_point_exists` in Lean and aligned all artifacts."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

@@ -1,0 +1,24 @@
+{:problem-id 't92J09
+ :frame-id 'apm-v2-t92J09-1775009066645
+ :goal "Compute ∫_{S^2} i^*(x dy∧dz) using Stokes’ theorem and the standard orientation."
+ :terms [{:name "2-form ω = x dy∧dz"
+          :meaning "The differential 2-form whose value on vectors is x times the oriented area element in the y–z plane."
+          :needed-because "We must understand its exterior derivative when applying Stokes."
+         }
+         {:name "exterior derivative"
+          :meaning "Operator d sending k-forms to (k+1)-forms (here dω = dx∧dy∧dz)."
+          :needed-because "Stokes equates ∫_{∂B^3} ω with ∫_{B^3} dω."
+         }
+         {:name "orientation and Stokes’ theorem"
+          :meaning "Oriented boundary of the unit ball matches the given orientation on S^2."
+          :needed-because "Determines the sign of the integral when transferring from the sphere to the ball."}]
+ :strategy [{:id :s1
+             :formal-dependency "Stokes’ theorem, computation of dω, volume of unit ball"
+             :informal-dependency "Apply Stokes: ∫_{S^2} i^*ω = ∫_{B^3} dω.  Compute dω = dx∧dy∧dz, the standard volume form.  Integrate over the unit ball to get its volume 4π/3."
+             :why-this-now "Direct evaluation is painful; Stokes gives the result immediately via volume."
+             :lean-target "ApmCanaries.Frames.T92J09.Apm_v2_t92J09_1775009066645.integral_form_on_sphere"
+             :mathlib-status "Mathlib has Stokes’ theorem and the known volume of the unit ball in ℝ^3; we will assemble them."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

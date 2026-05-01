@@ -1,0 +1,25 @@
+{:goal "Show that the Rademacher-like sequence f_n is weak-* null in L^∞: ∫ f f_n → 0 for every bounded measurable f."
+ :terms [{:name "dyadic cancellation"
+          :meaning "On each dyadic interval of length 2^{-n}, f_n alternates between ±1."
+          :needed-because "Lets us pair subintervals to cancel the integral."
+         }
+         {:name "Lebesgue differentiation"
+          :meaning "Average oscillation of f over small intervals tends to 0 for a.e. point."
+          :needed-because "Controls the difference between f and its average on dyadic blocks."
+         }
+         {:name "L^∞ bound"
+          :meaning "|∫_E f| ≤ ‖f‖_∞ m(E)."
+          :needed-because "Bounds the part where differentiation fails or near the boundary."}]
+ :strategy [{:id :s1
+             :formal-dependency "Lebesgue differentiation theorem"
+             :informal-dependency "Stage 1 small intervals"
+             :why-this-now "Approximate f by its block averages on dyadic intervals."
+             :lean-target "dyadic_average_convergence"
+             :mathlib-status "LD theorem exists in Mathlib for a.e. points."}
+            {:id :s2
+             :formal-dependency "Pairing of adjacent dyadic intervals"
+             :informal-dependency "Stage 1 dyadic cancellation"
+             :why-this-now "Show that averages times f_n integrate to 0 on each block."
+             :lean-target "paired_interval_cancellation"
+             :mathlib-status "Simple algebraic identity; should be easy."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

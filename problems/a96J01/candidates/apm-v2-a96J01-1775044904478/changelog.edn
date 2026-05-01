@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id "a96J01"
+  :frame-id "apm-v2-a96J01-1775044904478"
+  :summary "Created isolated proof frame workspace."
+  :full-record? false
+  :sorry? false
+  :fully-closed? false}
+ {:kind :target-check
+  :summary "Existence problem: construct disjoint-support tent functions with height 1/n. Construction is the entire proof."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Clean construction: tent functions on I_n = [1-2^{-(n-1)}, 1-2^{-n}] with height 1/(n+1). Three verifications: continuous+nonneg, Σ sup = harmonic = ∞, uniform convergence via disjoint supports (tail ≤ 1/(N+1))."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :lean-delta
+  :summary "iLeft_lt_iRight CLOSED (interval nonemptiness). Main theorem type-checks with 1 sorry. The construction verification is interval arithmetic + harmonic divergence."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}
+ {:kind :final-status
+  :summary "Classification: partial. Informal proof complete. Lean: 1 helper closed, 1 sorry (full construction). Counterexample to converse of Weierstrass M-test."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

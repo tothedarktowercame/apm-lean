@@ -1,0 +1,22 @@
+{:problem-id 't92J03
+ :frame-id 'apm-v2-t92J03-1775008978201
+ :goal "Show that in a complete metric space every countable intersection of open dense sets is dense (Baire’s theorem in this special case)."
+ :terms [{:name "dense open set"
+          :meaning "A subset whose closure is the whole space and that is open."
+          :needed-because "We repeatedly intersect a fixed open neighbourhood with each dense open set to build the desired point."}
+         {:name "nested balls with shrinking radii"
+          :meaning "Choose closed balls B₀ ⊇ B₁ ⊇ … with diameters → 0."
+          :needed-because "These ensure the resulting centres form a Cauchy sequence contained in every chosen open dense set."}
+         {:name "completeness ⇒ every Cauchy sequence converges"
+          :meaning "In a complete metric space, Cauchy sequences converge to a limit inside the space."
+          :needed-because "The constructed Cauchy sequence must converge to a point that lies in the intersection of all the dense sets."}]
+ :strategy [{:id :s1
+             :formal-dependency "metric completeness, Cauchy sequences, basic topology"
+             :informal-dependency "Start with an arbitrary nonempty open set V. Use density to pick x₀ ∈ V ∩ U₀ and a ball whose closure sits inside that intersection. Iterate: choose x_{n+1} inside the previous ball and U_{n+1} with radius shrinking like 2^{-(n+1)}. The centres form a Cauchy sequence; completeness gives a limit x in all closures, hence in each U_n and in V. Therefore ⋂ₙ Uₙ meets every open V, i.e. it’s dense."
+             :why-this-now "This is the constructive proof of the Baire category theorem specialized to complete metric spaces and countable families of open dense sets."
+             :lean-target "ApmCanaries.Frames.T92J03.Apm_v2_t92J03_1775008978201.dense_iInter_of_open_dense"
+             :mathlib-status "Mathlib already contains `dense_iInter_of_open_dense` as a corollary of the Baire theorem; we will restate it in this frame using the metric-space hypotheses."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

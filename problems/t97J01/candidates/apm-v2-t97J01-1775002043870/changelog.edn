@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id "t97J01"
+  :frame-id "apm-v2-t97J01-1775002043870"
+  :summary "Created isolated proof frame workspace."
+  :full-record? false
+  :sorry? false
+  :fully-closed? false}
+ {:kind :target-check
+  :summary "Identified that the literal problem statement is likely false without X Hausdorff. Formalized the standard version with [T2Space X] as hypothesis. Sanity check passed: mentions problem objects, avoids assuming conclusion, meaningful without prose."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Clean proof: separate fiber points in Hausdorff X, push down via open map (local homeomorphism), finite intersections preserve openness, surjectivity gives the contradiction for disjointness."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :lean-delta
+  :summary "Main theorem statement type-checks in Lean: hausdorff_of_finite_cover with IsLocalHomeomorph + T2Space + Surjective + finite fibers → T2Space Y. 1 sorry. The proof construction (~50 lines) needs explicit fiber separation + open map push-down + 'evenly covered' shrinking, which is not wired in Mathlib."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}
+ {:kind :final-status
+  :summary "Classification: partial. Informal proof complete. Lean statement type-checks (1 sorry). The main theorem is absent from Mathlib. The proof construction requires the 'evenly covered' property for finite-fiber local homeomorphisms, which is the primary API gap."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

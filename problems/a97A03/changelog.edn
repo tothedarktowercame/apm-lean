@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a97A03'
+  :frame-id 'apm-v2-a97A03-1775003886693'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the informal solution (difficulties, key insight, complete proof, field kit) in Stage 1 of execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Populated the lemma dependency discussion (Stage 2) and synchronized proof-plan/formal-alignment artifacts."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-blocked
+  :summary "Lean proof blocked: Mathlib lacks a bridge from Lipschitz constants to essentially bounded one-sided derivatives on intervals; documented the gap in Stage 3."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

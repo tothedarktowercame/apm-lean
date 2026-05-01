@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't94J07'
+  :frame-id 'apm-v2-t94J07-1775011599250'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-2-completed
+  :summary "Wrote the Stokes-on-the-homotopy-cylinder proof, mapped the pullback/exterior-derivative dependencies, and updated execute.md accordingly."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Attempted to set up the Lean proof but blocked because Mathlib lacks integration of top-degree forms and a Stokes theorem for compact manifolds-with-boundary; Main.lean is still a stub."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id 't92J09'
+  :frame-id 'apm-v2-t92J09-1775009066645'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full reader-facing solution (why hard, key insight, proof, connections) using Stokes’ theorem."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Documented the Stokes → dω → volume dependency chain in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-completed
+  :summary "Added the Lean lemma `integral_form_on_sphere` (volume of the unit ball) and ran `lake build`."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage4-completed
+  :summary "Explained how the Lean computation isolates the analytic heart of the Stokes argument."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

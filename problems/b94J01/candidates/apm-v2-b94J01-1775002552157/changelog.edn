@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id "b94J01"
+  :frame-id "apm-v2-b94J01-1775002552157"
+  :summary "Created isolated proof frame workspace."
+  :full-record? false
+  :sorry? false
+  :fully-closed? false}
+ {:kind :target-check
+  :summary "Identified Mathlib has both (b) and (c): AddGroup.isAddCyclic_prod_iff for part (b), isCyclic_of_subgroup_isDomain for part (c). Both sanity-checked: mentions problem objects, avoids assuming conclusion, meaningful without prose."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Clean proofs for all three parts: (a) FTFAG statement, (b) CRT-based iff for cyclic products, (c) polynomial root bound forces single FTFAG factor."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :lean-delta
+  :summary "Part (c) FULLY CLOSED via inferInstance — zero sorry. Mathlib's typeclass resolution synthesizes IsCyclic for finite subgroups of field units automatically. Part (b) cited via #check."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :final-status
+  :summary "Classification: PROVED. Zero sorry. Both instances (units_cyclic_of_field, subgroup_cyclic_of_field) build clean. This is the second fully-closed problem in the batch (after a02J04). Informal proofs for all three parts complete."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}]

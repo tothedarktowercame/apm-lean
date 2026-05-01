@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a92J02'
+  :frame-id 'apm-v2-a92J02-1775002223303'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the diagonal/Borel–Cantelli argument showing convergence in measure ⇒ a.e. convergence along a subsequence."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Captured the diagonal subsequence, summable-measure, and Borel–Cantelli dependencies in proof-plan.edn."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Lean proof blocked: Mathlib has no `ConvergenceInMeasure` predicate (see `rg -n \"ConvergenceInMeasure\"`)."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

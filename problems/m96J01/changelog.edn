@@ -1,0 +1,12 @@
+[{:kind :workspace-initialized
+  :problem-id 'm96J01'
+  :frame-id 'apm-v2-m96J01-1775007086632'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? false
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-3-progress
+  :summary "Wrote the full orthogonal-projection proof, recorded the lemma graph, and formalized everything in Lean (`projection_properties`)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

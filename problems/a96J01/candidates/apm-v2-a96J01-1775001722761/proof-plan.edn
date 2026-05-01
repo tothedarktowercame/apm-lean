@@ -1,0 +1,29 @@
+{:goal "Construct nonnegative continuous functions fₙ on [0,1] whose partial sums converge uniformly while ∑ ‖fₙ‖∞ diverges."
+ :terms [{:name "dyadic partition"
+          :meaning "Break [0,1] into shrinking disjoint intervals (e.g., [1-2^{-n}, 1-2^{-(n+1)}])"
+          :needed-because "Gives disjoint supports so tails affect at most one point, enabling uniform control."}
+         {:name "tent functions"
+          :meaning "Continuous bumps supported on each interval, peaking at height 1/(n+1)"
+          :needed-because "Ensures each fₙ ≥ 0, continuous, with prescribed sup norm."}
+         {:name "harmonic divergence vs uniform convergence"
+          :meaning "Sup norms add like ∑ 1/(n+1) (divergent) while tails are bounded by the largest remaining peak"
+          :needed-because "Shows the required contrast between divergent sup norms and uniform convergence."}]
+ :strategy [{:id :s1
+             :formal-dependency "Definition of a continuous tent on an interval; continuity lemmas for piecewise linear maps"
+             :informal-dependency "Stage 1 construction of fₙ supported on nested dyadic subintervals"
+             :why-this-now "Forms the explicit sequence meeting the pointwise nonnegativity/continuity hypotheses."
+             :lean-target "define_tent_function"
+             :mathlib-status "Requires custom code; Mathlib does not yet ship a ready-made tent constructor."}
+            {:id :s2
+             :formal-dependency "Sup norm estimates on functions with small support"
+             :informal-dependency "Stage 1 argument that tails are uniformly ≤ 1/(N+1)"
+             :why-this-now "Turns the disjoint-support property into uniform convergence."
+             :lean-target "uniform_tail_bound"
+             :mathlib-status "Provable from basic inequalities; no external gap expected."}
+            {:id :s3
+             :formal-dependency "Comparison with the harmonic series"
+             :informal-dependency "Stage 1 statement that ∑ sup fₙ diverges"
+             :why-this-now "Certifies the divergent sup-norm sum."
+             :lean-target "sup_norm_series_diverges"
+             :mathlib-status "Follows from existing results on the harmonic series."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

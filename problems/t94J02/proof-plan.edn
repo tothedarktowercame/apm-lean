@@ -1,0 +1,23 @@
+{:goal "Given a compact Hausdorff topology \u03c3 on X, prove that any strictly finer topology \u03c4 loses compactness and any strictly coarser topology loses the Hausdorff property."
+ :terms [{:name "finer vs. coarser topologies"
+          :meaning "\u03c4 is finer than \u03c3 when every \u03c3-open set is \u03c4-open; coarser is the reverse ordering."
+          :needed-because "It lets us view the identity map between (X,\u03c3) and (X,\u03c4) as continuous in the right direction, which is the mechanism for transferring compactness/Hausdorffness."}
+         {:name "identity map continuity"
+          :meaning "If \u03c4 is finer than \u03c3 the identity id_X : (X,\u03c4) \u2192 (X,\u03c3) is continuous, and if \u03c4 is coarser the opposite direction is continuous."
+          :needed-because "Continuous bijections from compact spaces into Hausdorff spaces are embeddings; pushing compactness/Hausdorffness across identity maps exposes contradictions with strictness."}
+         {:name "compact-to-Hausdorff surjections"
+          :meaning "A continuous map from a compact space to a Hausdorff space is closed, hence a homeomorphism if bijective."
+          :needed-because "This fact shows that a strictly finer topology cannot remain compact (id would be a homeomorphism otherwise) and a strictly coarser topology cannot remain Hausdorff."}]
+ :strategy [{:id :s1
+             :formal-dependency "Lean lemma that a continuous bijection from a compact space onto a Hausdorff space is a homeomorphism"
+             :informal-dependency "Stage 1 (\u21d2) argument for stricter topology losing compactness"
+             :why-this-now "By assuming \u03c4 finer and compact we would force id_X to be a homeomorphism, contradicting strictness."
+             :lean-target "strictly_finer_not_compact"
+             :mathlib-status "Lemma exists (e.g. `homeomorph_of_continuous_open` / `CompactSpace.inducing_of_surjective`)."}
+            {:id :s2
+             :formal-dependency "Lean lemma that a continuous bijection from a compact space is closed"
+             :informal-dependency "Stage 1 (\u21d0) argument for coarser topology losing Hausdorff"
+             :why-this-now "Assuming a strictly coarser topology remained Hausdorff would force the identity to be a homeomorphism again, contradicting strictness."
+             :lean-target "strictly_coarser_not_hausdorff"
+             :mathlib-status "Standard result; should already be in Mathlib as `T2Space.of_injective` variants."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

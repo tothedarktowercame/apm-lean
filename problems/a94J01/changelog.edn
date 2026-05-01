@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a94J01'
+  :frame-id 'apm-v2-a94J01-1775002964674'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the tail-splitting argument proving absolute continuity of the integral."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Recorded lemma dependencies (tail control + bounded-part estimate)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Outlined Lean plan (tail lemma + integral bounds); coding not yet done."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

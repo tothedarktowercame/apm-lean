@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a96J03'
+  :frame-id 'apm-v2-a96J03-1775003261538'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the translation-continuity proof (approximation + triangle inequality)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Captured lemma dependencies: density, compact-support translation, triangle split."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Outlined Lean strategy; waiting to implement lemmas in Main.lean."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

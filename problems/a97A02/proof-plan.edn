@@ -1,0 +1,23 @@
+{:goal "Prove that the local average f_h(t) = (2h)^{-1} ∫_{t-h}^{t+h} f(x) dx of any f ∈ L^p([0,1]) (1 ≤ p < ∞) is continuous in t and obeys the bound |f_h(t)| ≤ (2h)^{-1/p}‖f‖_p."
+ :terms [{:name "averaging kernel"
+          :meaning "g_{t,h} = (2h)^{-1} · 1_{[t-h,t+h]} viewed as an L^q function (q the Hölder conjugate)."
+          :needed-because "Expresses f_h(t) as the L^p–L^q dual pairing ⟨f, g_{t,h}⟩ so we can apply Hölder and continuity of kernels."}
+         {:name "Hölder inequality"
+          :meaning "|∫ fg| ≤ ‖f‖_p ‖g‖_q for conjugate exponents."
+          :needed-because "Gives both the claimed bound on f_h(t) and the Lipschitz control once g_{t,h} varies with t."}
+         {:name "symmetric-difference estimate"
+          :meaning "m([t-h,t+h] △ [s-h,s+h]) → 0 as t→s."
+          :needed-because "Shows ‖g_{t,h} - g_{s,h}‖_q → 0, hence |f_h(t)-f_h(s)| → 0 via Hölder."}]
+ :strategy [{:id :s1
+             :formal-dependency "Hölder inequality and continuity of indicator kernels in L^q"
+             :informal-dependency "Stage 1 symmetric-difference argument"
+             :why-this-now "Bounding |f_h(t)-f_h(s)| by ‖f‖_p · ‖g_{t,h}-g_{s,h}‖_q gives continuity once the kernel difference shrinks."
+             :lean-target "avg_kernel_continuous"
+             :mathlib-status "Needs lemmas about measure of symmetric differences and Hölder, both in Mathlib."}
+            {:id :s2
+             :formal-dependency "Hölder inequality"
+             :informal-dependency "Stage 1 computation of the norm bound"
+             :why-this-now "Computing ‖g_{t,h}‖_q = (2h)^{(1/q)-1} yields |f_h(t)| ≤ (2h)^{-1/p}‖f‖_p."
+             :lean-target "avg_kernel_bound"
+             :mathlib-status "Direct algebra once g_{t,h} is in L^q."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

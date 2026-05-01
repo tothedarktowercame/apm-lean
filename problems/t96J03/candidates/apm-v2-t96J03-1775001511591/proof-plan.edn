@@ -1,0 +1,29 @@
+{:goal "Given a nonempty closed subset X ⊆ ℝⁿ and y₀ ∉ X, show there is x₀ ∈ X minimizing ‖x−y₀‖."
+ :terms [{:name "compact truncation"
+          :meaning "Intersect X with a closed ball centered at y₀ with radius larger than some point’s distance"
+          :needed-because "Restricts attention to a compact subset where the continuous distance function attains its minimum."}
+         {:name "extreme-value theorem"
+          :meaning "A continuous function on a compact set attains its minimum and maximum"
+          :needed-because "Ensures the distance function has a minimizer on the truncated set."}
+         {:name "IsClosed.exists_infDist_eq_dist"
+          :meaning "Mathlib lemma asserting closed sets realize their infimum distance to any point for proper metric spaces"
+          :needed-because "Direct Lean route to produce the minimizing point without re-proving compactness arguments."}]
+ :strategy [{:id :s1
+             :formal-dependency "Heine–Borel for ℝⁿ → closed & bounded ⇒ compact"
+             :informal-dependency "Stage 1 step: restrict to closed ball intersect X"
+             :why-this-now "Converts the minimization problem into one on a compact domain."
+             :lean-target "compact_intersection"
+             :mathlib-status "Standard; reuses `Metric` lemmas already in Mathlib."}
+            {:id :s2
+             :formal-dependency "Continuity of x ↦ ‖x − y₀‖"
+             :informal-dependency "Stage 1 invocation of the extreme-value theorem"
+             :why-this-now "Produces the minimizing point x₀ on the compact set."
+             :lean-target "exists_minOn_norm_sub"
+             :mathlib-status "Follows from `IsClosed.exists_infDist_eq_dist`."}
+            {:id :s3
+             :formal-dependency "`IsClosed.exists_infDist_eq_dist` in `Mathlib/Topology/MetricSpace/InfDist`"
+             :informal-dependency "Stage 1 conclusion that the minimizer works for all of X"
+             :why-this-now "Supplies the Lean certificate for the main theorem."
+             :lean-target "closest_point_exists"
+             :mathlib-status "Available in Mathlib; needs instantiation for Euclidean spaces."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

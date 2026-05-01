@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't95A02'
+  :frame-id 'apm-v2-t95A02-1775011739446'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-2-completed
+  :summary "Wrote the open-cover proof that perfect maps pull back compactness and logged the dependency graph."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Attempted to formalize the theorem but Mathlib lacks a bundled `PerfectMap` definition, so `Main.lean` remains a stub until that API exists."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

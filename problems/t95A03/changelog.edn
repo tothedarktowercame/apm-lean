@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't95A03'
+  :frame-id 'apm-v2-t95A03-1775011813898'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1+2-completed
+  :summary "Wrote the full sequential-compactness proof plus dependency map inside execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3+4-completed
+  :summary "Added the Lean theorem `totally_bounded_complete_compact`, updated the frame artifacts, and recorded the formal/informal reconciliation."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}]

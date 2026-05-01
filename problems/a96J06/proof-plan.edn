@@ -1,0 +1,23 @@
+{:goal "Show any polynomial of the form p(z)=z+Σ_{n≥2} c_n z^n expands some point in every disk."
+ :terms [{:name "normalization"
+          :meaning "Scale the disk of radius r to the unit disk via q(z)=p(rz)/r."
+          :needed-because "Lets us apply Schwarz’s lemma on the unit disk."}
+         {:name "Schwarz lemma"
+          :meaning "Maps of the unit disk fixing 0 with |q(z)|≤|z| must be rotations; higher coefficients vanish."
+          :needed-because "Gives the contradiction when a higher coefficient is nonzero."}
+         {:name "contradiction setup"
+          :meaning "Assume |p(z)|≤r on the disk |z|≤r and derive properties of q."
+          :needed-because "Allows us to negate the desired conclusion."}]
+ :strategy [{:id :s1
+             :formal-dependency "Normalization of the disk"
+             :informal-dependency "Stage 1 normalization"
+             :why-this-now "Reduce the general r>0 case to a self-map of the unit disk."
+             :lean-target "normalize_polynomial_unit_disk"
+             :mathlib-status "Scaling polynomials is straightforward in Mathlib."}
+            {:id :s2
+             :formal-dependency "Schwarz lemma"
+             :informal-dependency "Stage 1 contradiction setup"
+             :why-this-now "Conclude that the normalized map must be a rotation, forcing coefficients to vanish."
+             :lean-target "schwarz_contradiction"
+             :mathlib-status "Schwarz lemma already exists for holomorphic functions."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

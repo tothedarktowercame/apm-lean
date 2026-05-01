@@ -1,0 +1,35 @@
+{:goal
+ "Three parts: (a) State FTFAG. (b) ℤ/mℤ ⊕ ℤ/nℤ cyclic iff gcd(m,n)=1. (c) Finite subgroup of K* is cyclic."
+ :terms
+ [{:name "FTFAG"
+   :meaning "Every finite abelian group is a direct sum of cyclic groups of prime-power order"
+   :needed-because "part (a) asks to state this theorem"}
+  {:name "cyclic product criterion"
+   :meaning "ℤ/mℤ × ℤ/nℤ is cyclic iff gcd(m,n)=1"
+   :needed-because "content of part (b)"}
+  {:name "finite subgroup of field units"
+   :meaning "any finite multiplicative subgroup of a field's unit group is cyclic"
+   :needed-because "content of part (c), the main proof"}
+  {:name "polynomial root bound"
+   :meaning "x^d - 1 has at most d roots in a field"
+   :needed-because "the hint for part (c); the key step forcing the FTFAG decomposition to have one factor"}]
+ :strategy
+ [{:id :part-c-from-mathlib
+   :formal-dependency "isCyclic_of_subgroup_isDomain via instance resolution"
+   :informal-dependency "Field → IsDomain → finite subgroup of units cyclic"
+   :why-this-now "part (c) is the main theorem and Mathlib has it as an instance"
+   :lean-target "instance : IsCyclic G for G : Subgroup Kˣ with [Finite G]"
+   :mathlib-status "available and CLOSED via inferInstance"
+   :critical-path true}
+  {:id :part-b-from-mathlib
+   :formal-dependency "AddGroup.isAddCyclic_prod_iff + ZMod.chineseRemainder"
+   :informal-dependency "product of finite cyclic groups is cyclic iff orders coprime"
+   :why-this-now "part (b) is a criterion; Mathlib has the iff characterization"
+   :lean-target "AddGroup.isAddCyclic_prod_iff for ZMod"
+   :mathlib-status "available; cited via #check"
+   :critical-path false}]
+ :stage-status
+ {:stage1 :done
+  :stage2 :done
+  :stage3 :done
+  :stage4 :done}}

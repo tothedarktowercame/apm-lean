@@ -1,0 +1,19 @@
+{:goal "Given a closed nonempty subset X of ℝⁿ and a point y₀∉X, show there is x₀∈X minimizing the Euclidean distance to y₀."
+ :terms [{:name "distance function"
+          :meaning "f(x)=‖x−y₀‖ on X is continuous"
+          :needed-because "We want to minimize a continuous function on a compact set."}
+         {:name "bounded minimizing sequence"
+          :meaning "A sequence in X whose distances converge to the infimum lives inside a closed ball"
+          :needed-because "Closed balls intersected with X are compact in ℝⁿ."}
+         {:name "compactness of closed bounded sets"
+          :meaning "Heine–Borel for ℝⁿ"
+          :needed-because "It ensures the minimizing sequence has a convergent subsequence with limit in X."}]
+ :strategy [{:id :s1
+             :formal-dependency "Heine–Borel, completeness of ℝⁿ, continuity of the norm"
+             :informal-dependency "Take an infimizing sequence, restrict to a compact subset, extract a convergent subsequence, and use lower semicontinuity"
+             :why-this-now "The distance function is coercive, so compactness arguments immediately give a minimizer."
+             :lean-target "Lemma `exists_norm_eq_infi` stating closed nonempty sets in Euclidean space have nearest points"
+             :mathlib-status "Mathlib already has `isClosed.exists_isMinOn_norm` (nearest point lemma), so the formal proof can reuse that API."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :pending :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.T96J03.Apm_v2_t96J03_1774992389652'
+        :shared-extension-root "ApmCanaries.Local"}}

@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a96J01'
+  :frame-id 'apm-v2-a96J01-1774992421755'
+  :summary "Created the isolated frame and Lean stubs."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Constructed the disjoint tent functions with heights 1/n, proved uniform convergence, and checked the harmonic sup-series diverges."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage2-completed
+  :summary "Captured the dependency chain (disjoint supports + continuity + harmonic heights)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage3-progress
+  :summary "Noted that Lean still needs the explicit piecewise definition of the bumps; no code yet."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

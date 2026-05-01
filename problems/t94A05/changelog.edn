@@ -1,0 +1,12 @@
+[{:kind :workspace-initialized
+  :problem-id 't94A05'
+  :frame-id 'apm-v2-t94A05-1775010453161'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stages-1-4-completed
+  :summary "Recorded the open-path-component proof, mapped dependencies, implemented `connected_manifold_path_connected` in Lean (no sorrys), and synced the formal/informal narratives."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}]

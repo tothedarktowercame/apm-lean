@@ -1,0 +1,22 @@
+{:problem-id 't91A03
+ :frame-id 'apm-v2-t91A03-1775008066441
+ :goal "Show that if X and Y are compact topological spaces, then the product space X×Y is compact."
+ :terms [{:name "tube lemma"
+          :meaning "Given compact K⊆X and y₀∈Y, every open set containing K×{y₀} contains a product U×V with K⊆U and y₀∈V."
+          :needed-because "It lets an open cover of X×Y be refined into finitely many rectangles, reducing the cover of the product to two separate compactness arguments."}
+         {:name "finite subcover of a fiber"
+          :meaning "Fix x∈X; the slice {x}×Y inherits compactness from Y."
+          :needed-because "Covering each slice by finitely many rectangles allows us to cover all of Y for finitely many x's."}
+         {:name "compactness by open covers"
+          :meaning "Characterization: a space is compact iff every open cover has a finite subcover."
+          :needed-because "The entire argument is an open-cover proof, matching both the informal exposition and the Lean statement."}]
+ :strategy [{:id :s1
+             :formal-dependency "tube lemma and open-cover characterization of compactness"
+             :informal-dependency "Stage 1 plan: start with an open cover of X×Y, extract neighborhood tubes around each point of X to obtain an open cover of Y, use compactness of Y to get a finite set of tubes, then use compactness of X to select finitely many of their bases."
+             :why-this-now "This is the classical finite-subcover proof and mirrors mathlib’s `IsCompact.prod` lemma, ensuring the Lean and prose arguments stay aligned."
+             :lean-target "ApmCanaries.Frames.T91A03.Apm_v2_t91A03_1775008066441.isCompact_prod"
+             :mathlib-status "mathlib already has `IsCompact.prod` in `Topology/Basic`."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

@@ -1,0 +1,23 @@
+{:goal "Show that a doubly periodic entire function with lattice periods 1 and i must be constant."
+ :terms [{:name "doubly periodic function"
+          :meaning "f(z+n+im)=f(z) for all integers n,m."
+          :needed-because "Allows us to reduce the study of f to one fundamental parallelogram."}
+         {:name "fundamental parallelogram"
+          :meaning "The compact set P={x+iy : 0≤x≤1, 0≤y≤1}."
+          :needed-because "f’s values on all of ℂ are determined by its restriction to P."}
+         {:name "Liouville’s theorem"
+          :meaning "A bounded entire function is constant."
+          :needed-because "Once we show periodicity forces boundedness, Liouville finishes the proof."}]
+ :strategy [{:id :s1
+             :formal-dependency "Periodicity implies boundedness via compact fundamental domain"
+             :informal-dependency "Stage 1 decomposition of ℂ into translates of [0,1]×[0,1]"
+             :why-this-now "Map any z back into the fundamental parallelogram and use continuity on a compact set to bound f globally."
+             :lean-target "periodic_entire_bounded"
+             :mathlib-status "Need lemmas about periodic functions and compactness of rectangles; standard in mathlib."}
+            {:id :s2
+             :formal-dependency "Liouville’s theorem"
+             :informal-dependency "Stage 1 recognition that bounded entire ⇒ constant"
+             :why-this-now "Apply Liouville once boundedness is obtained."
+             :lean-target "doubly_periodic_entire_constant"
+             :mathlib-status "Liouville is in mathlib; we only need to invoke it."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

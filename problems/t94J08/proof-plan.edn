@@ -1,0 +1,17 @@
+{:goal "Relate orientation parity to degrees and local indices for the antipodal map and vector fields." 
+ :terms [{:name "degree parity"
+          :meaning "For maps S^n → S^n, the degree detects whether the map preserves or reverses orientation; antipodal map has degree (-1)^{n+1}."
+          :needed-because "Once the degree is known, the local index statements follow from how vector fields transform under orientation reversal."}
+         {:name "local index"
+          :meaning "Degree of the normalized vector field map S^{n-1} → S^{n-1} surrounding an isolated zero."
+          :needed-because "This definition lets us compare the indices of v and -v by understanding the effect of negating the vector field on that sphere map."}
+         {:name "orientation reversal"
+          :meaning "The antipodal map acts by −Id on tangent spaces, reversing orientation iff n is even."
+          :needed-because "Determining whether −Id preserves orientation is the key step in computing both the map degree and the sign change of the local index."}]
+ :strategy [{:id :s1
+             :formal-dependency "degree_of_linear_orientation_map"
+             :informal-dependency "Stage 1 part (a) uses the determinant of −Id"
+             :why-this-now "The degree equals the determinant sign of the linear approximation, which for −Id is (−1)^{n+1}."
+             :lean-target "degree_antipodal_and_index_negation"
+             :mathlib-status "Mathlib has linear-algebra facts about determinants, but sphere-degree and local-index APIs are still sparse."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

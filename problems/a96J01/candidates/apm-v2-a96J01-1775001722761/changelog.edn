@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a96J01'
+  :frame-id 'apm-v2-a96J01-1775001722761'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the tent-function construction, highlighted the uniform tail bound, and explained the harmonic divergence."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Recorded the dyadic-interval, tent-continuity, and uniform-tail dependencies in proof-plan.edn."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Formal target `tent_sequence_exists` stated; coding blocked by the lack of ready-made tent constructors in Mathlib."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

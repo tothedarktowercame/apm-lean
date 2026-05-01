@@ -1,0 +1,11 @@
+[{:kind :workspace-initialized
+  :problem-id 't01A01'
+  :frame-id 'apm-v2-t01A01-1775052441576'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true :sorry? false :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the reader-facing argument: remove a missed point, retract to S^1, deduce f_* = 0 and null-homotopy via the K(Z,1) property."
+  :full-record? true :sorry? false :fully-closed? false}
+ {:kind :stage3-attempted
+  :summary "Searched the Apm/Mathlib tree (`rg -n \"RealProjective\" /home/joe/code/apm-lean`) and found no RP^2 topology API, so the Lean proof is blocked by missing definitions."
+  :full-record? true :sorry? true :fully-closed? false}]

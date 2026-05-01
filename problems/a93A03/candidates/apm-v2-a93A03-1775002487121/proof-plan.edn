@@ -1,0 +1,23 @@
+{:goal "Show that weak convergence plus norm convergence forces strong convergence, and deduce the liminf inequality for norms in a Hilbert space."
+ :terms [{:name "weak convergence"
+          :meaning "⟪h_n, k⟫ → ⟪h, k⟫ for every k ∈ H."
+          :needed-because "Gives control of inner products needed to expand ‖h_n - h‖²."}
+         {:name "polarization / parallelogram identity"
+          :meaning "Express ‖u-v‖² in terms of norms and inner products."
+          :needed-because "Allows turning weak convergence of inner products plus norm limits into norm differences."}
+         {:name "liminf inequality"
+          :meaning "Take liminf on both sides of nonnegative expressions to relate ‖h‖² to liminf ‖h_n‖²."
+          :needed-because "Part (b) follows from the inequality derived in (a) without assuming norm convergence."}]
+ :strategy [{:id :s1
+             :formal-dependency "`InnerProductSpace` identities for norms"
+             :informal-dependency "Stage 1 expression of ‖h_n - h‖²"
+             :why-this-now "Prove (a) by expanding ‖h_n - h‖² = ‖h_n‖² + ‖h‖² - 2 Re⟪h_n,h⟫ and taking limits."
+             :lean-target "weakConvergence_norm_eq_strong"
+             :mathlib-status "All ingredients exist: `norm_sq_eq_inner`, weak convergence definition, limit lemmas."}
+            {:id :s2
+             :formal-dependency "Fatou-type inequality for liminf with nonnegative sequences"
+             :informal-dependency "Stage 1 bound 0 ≤ ‖h_n‖² - 2 Re⟪h_n,h⟫ + ‖h‖²"
+             :why-this-now "Derive (b) by taking liminf on inequality from (a) without norm convergence hypothesis."
+             :lean-target "weakConvergence_norm_le_liminf"
+             :mathlib-status "Need existing lemmas about liminf ≥ limit of infima; standard in Mathlib for real sequences."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

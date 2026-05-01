@@ -1,0 +1,23 @@
+{:goal "Derive the estimate |f(z)| ≤ |z|^2/2 from the hypotheses f(0)=f'(0)=0 and |f'(z)|≤1 on the unit disk."
+ :terms [{:name "radial integral formula"
+          :meaning "For analytic f with f(0)=0, f(z)=∫_0^1 z f'(tz) dt."
+          :needed-because "Provides an exact expression whose integrand involves f'."}
+         {:name "derivative bound"
+          :meaning "|f'(tz)| ≤ 1 for all t since |tz|<1."
+          :needed-because "After inserting into the integral, the absolute value is controlled."}
+         {:name "elementary integral"
+          :meaning "∫_0^1 t dt = 1/2."
+          :needed-because "Finishes the estimate once |f'(tz)| ≤ 1 is in place."}]
+ :strategy [{:id :s1
+             :formal-dependency "Fundamental theorem for line integrals of analytic functions"
+             :informal-dependency "Stage 1 expression f(z)=∫ z f'(tz) dt"
+             :why-this-now "Reduces the estimate to bounding an integral of f'."
+             :lean-target "analytic_radial_integral"
+             :mathlib-status "Mathlib has `Complex.integral_cexp` etc; may need a short lemma for the radial path formula."}
+            {:id :s2
+             :formal-dependency "Bounding the integral with |f'| ≤ 1"
+             :informal-dependency "Stage 1 inequality"
+             :why-this-now "Apply the triangle inequality and compute the elementary integral."
+             :lean-target "schwarz_like_bound"
+             :mathlib-status "Only basic calculus/algebra; should be routine."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

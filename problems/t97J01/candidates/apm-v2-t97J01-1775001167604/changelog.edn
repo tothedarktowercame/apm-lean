@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 't97J01'
+  :frame-id 'apm-v2-t97J01-1775001167604'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full reader-facing solution: why-hard analysis, evenly covered strategy, complete proof, and connections."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Populated proof-plan.edn with goal, key terms, and strategy steps tied to covering-map lemmas."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Documented intended Lean theorem and blockers (Mathlib lacks any IsCoveringMap/evenly covered API; see rg search in Stage 3)."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

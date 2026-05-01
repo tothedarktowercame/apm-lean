@@ -1,0 +1,14 @@
+{
+  "schema": "apm-problem-candidate-set.v1",
+  "problem_id": "a93J02",
+  "bundle_root": "problems/a93J02",
+  "layout": "candidate-set",
+  "candidate_count": 2,
+  "frame_ids": [
+    "apm-v2-a93J02-1775002596767",
+    "apm-v2-a93J02-1775049742668"
+  ],
+  "recommended_latest_frame_id": "apm-v2-a93J02-1775049742668",
+  "selected_frame_id": null,
+  "imported_at": "2026-05-01T19:38:16.421272Z"
+}

@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 't97J01'
+  :frame-id 'apm-v2-t97J01-1774994005204'
+  :summary "Created the isolated frame, alignment stub, and Lean skeleton."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Separated the finitely many lifts of y₁ and y₂ upstairs and pushed the disjoint neighborhoods down to Y, proving the Hausdorff property."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage2-completed
+ :summary "Logged the dependency graph (evenly covered neighborhoods + finite fibers + T₂ upstairs)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage3-progress
+  :summary "Added the placeholder Lean declaration `finiteCover_isHausdorff`; a genuine covering-space proof still awaits Mathlib support."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

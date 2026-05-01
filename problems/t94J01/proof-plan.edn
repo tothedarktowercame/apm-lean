@@ -1,0 +1,20 @@
+{:goal "Show that ladder connectedness (any open cover admits a finite chain linking two points) is equivalent to connectedness."
+ :terms [{:name "ladder chain"
+          :meaning "A finite sequence of open sets with consecutive overlaps joining p to q."
+          :needed-because "This is the object we must relate to connected components."}
+         {:name "open cover by components"
+          :meaning "Use the connected components themselves as the open cover."
+          :needed-because "If ladder connectedness holds, applying it to this cover shows the whole space sits inside one component."}
+         {:name "Lebesgue-number style compactness argument"
+          :meaning "Given disconnect, exploit separation to build cover with no ladder between points in different components."
+          :needed-because "Provides the converse: if the space is disconnected, some cover forbids a ladder."}]
+ :strategy [{:id :s1
+             :formal-dependency "Definitions of connectedness/components; properties of open covers; finite chain arguments."
+             :informal-dependency "Prove (⇒) by contradiction: if X were disconnected, take the open cover by the two clopen pieces; no ladder can cross the gap. Prove (⇐) by taking the component cover and showing any ladder forces the two points to lie in the same component, so there is only one component."
+             :why-this-now "Directly mirrors the informal combinatorial notion and avoids heavier tools."
+             :lean-target "ApmCanaries.Frames.T94J01.Apm_v2_t94J01_1775010781379.connected_iff_ladderConnected"
+             :mathlib-status "Mathlib has connectedness/component notions; ladder connectedness will likely need a custom definition."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

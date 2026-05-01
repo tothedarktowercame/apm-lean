@@ -1,0 +1,29 @@
+{:goal "Produce an L^1 sequence with vanishing norms but no a.e. convergence, and prove that the stronger decay ∥f_n∥_1 ≤ 2^{-n} forces f_n(x)→0 a.e."
+ :terms [{:name "moving indicator example"
+          :meaning "Take f_n=χ_{I_n} for shrinking dyadic intervals that visit every point infinitely often."
+          :needed-because "Gives the requested counterexample for part (a)."}
+         {:name "Markov/Chebyshev inequality"
+          :meaning "μ(|f_n|>ε) ≤ ε^{-1}∥f_n∥_1."
+          :needed-because "Turns the L^1 decay into an estimate for the exceptional sets in part (b)."}
+         {:name "Borel-Cantelli"
+          :meaning "If ∑ μ(E_n)<∞ then almost every point belongs to only finitely many E_n."
+          :needed-because "Shows that |f_n(x)|>ε happens only finitely many n, hence f_n(x)→0."}]
+ :strategy [{:id :s1
+             :formal-dependency "dyadic_interval_construction"
+             :informal-dependency "Stage 1 example description"
+             :why-this-now "Create the sequence with ∥f_n∥_1→0 but no a.e. convergence by cycling through dyadic intervals."
+             :lean-target "example_sequence_no_ae_limit"
+             :mathlib-status "Needs a concrete construction plus measure computations."}
+            {:id :s2
+             :formal-dependency "Chebyshev"
+             :informal-dependency "Part (b) hypotheses"
+             :why-this-now "Bound μ(|f_n|>ε) by 2^{-n}/ε using the L^1 control."
+             :lean-target "measure_tail_bound"
+             :mathlib-status "Chebyshev already in Mathlib."}
+            {:id :s3
+             :formal-dependency "Borel-Cantelli"
+             :informal-dependency "Bound from :s2"
+             :why-this-now "Apply Borel-Cantelli to deduce |f_n(x)|>ε only finitely often, hence f_n(x)→0."
+             :lean-target "tendsto_zero_ae_from_summable"
+             :mathlib-status "Borel-Cantelli exists for Lebesgue measure."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

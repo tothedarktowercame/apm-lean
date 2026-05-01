@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a99J05'
+  :frame-id 'apm-v2-a99J05-1775005037257'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the counterexample and Borel–Cantelli argument in the reader-facing proof."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Recorded the dyadic-example → Chebyshev → Borel–Cantelli dependency chain in proof-plan.edn."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Outlined Lean approach; blocked on formalizing the dyadic enumeration lemma and an `ae` convergence lemma combining Chebyshev with Borel–Cantelli."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

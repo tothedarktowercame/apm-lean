@@ -1,0 +1,32 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a96J06",
+  "bundle_root": "problems/a96J06",
+  "layout": "single-bundle",
+  "source": {
+    "workspace_metadata": "/home/joe/code/futon6/.state/proof-frames/a96J06/apm-v2-a96J06-1775003321530/workspace.json",
+    "receipt": "/home/joe/code/futon6/.state/proof-frames/a96J06/apm-v2-a96J06-1775003321530.json",
+    "problem_tex": "/home/joe/code/apm-lean/apm/a96J06.tex",
+    "frame_id": "apm-v2-a96J06-1775003321530",
+    "module_root": "ApmCanaries.Frames.A96J06.Apm_v2_a96J06_1775003321530"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": "lean/Scratch.lean",
+    "sorry_count_main": 0,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 0
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": true,
+    "has_changelog": true,
+    "has_workspace_metadata": true,
+    "has_receipt": true
+  },
+  "classification": "complete",
+  "imported_at": "2026-05-01T19:38:16.951065Z"
+}

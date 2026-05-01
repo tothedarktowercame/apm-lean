@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't94J02'
+  :frame-id 'apm-v2-t94J02-1775011263361'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-2-completed
+  :summary "Wrote the reader-facing argument spelling out why strict refinement kills compactness/Hausdorffness and mapped the Lean dependencies (`continuous_id_of_le`, `Continuous.isClosedEmbedding`)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Started encoding both topologies simultaneously via a wrapper type so the identity map can be treated as a morphism; blocked because Mathlib lacks a ready-made lemma turning a closed embedding of that identity back into equality of topologies."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

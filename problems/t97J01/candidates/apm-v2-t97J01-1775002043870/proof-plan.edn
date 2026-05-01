@@ -1,0 +1,35 @@
+{:goal
+ "Show that if X is a Hausdorff connected space that is a finite covering of a connected space Y, then Y is Hausdorff. (The literal problem omits the X Hausdorff hypothesis; as stated it appears false. We formalize the standard version.)"
+ :terms
+ [{:name "finite covering map"
+   :meaning "a surjective local homeomorphism p: X → Y where each fiber p⁻¹(y) is finite"
+   :needed-because "this is the structural hypothesis relating X and Y"}
+  {:name "Hausdorff"
+   :meaning "distinct points have disjoint open neighborhoods (T2 separation)"
+   :needed-because "the conclusion to be proved for Y"}
+  {:name "connected"
+   :meaning "the space has no nontrivial clopen partition"
+   :needed-because "stated hypothesis on both X and Y; may be used to ensure fibers have constant cardinality"}
+  {:name "fiber cardinality"
+   :meaning "for a finite covering of a connected space, all fibers have the same cardinality n"
+   :needed-because "the finiteness and constancy of fibers is the key structural fact"}]
+ :strategy
+ [{:id :separate-points-via-lift
+   :formal-dependency "IsTopologicalBasis / local homeomorphism + fiber finiteness"
+   :informal-dependency "to separate y₁≠y₂ in Y, lift to X where separation exists (X Hausdorff), then push down via the covering projection"
+   :why-this-now "this is the core argument: X Hausdorff gives separation upstairs, push down"
+   :lean-target "T2Space Y from T2Space X + covering map structure"
+   :mathlib-status "Mathlib has IsTopologicalBasis, T2Space, covering spaces partial; custom wiring needed"
+   :critical-path true}
+  {:id :fiber-constancy
+   :formal-dependency "connected base + local homeomorphism ⟹ constant fiber size"
+   :informal-dependency "fibers have constant cardinality on a connected base"
+   :why-this-now "needed to ensure the covering is uniformly finite"
+   :lean-target "∀ y₁ y₂, Fintype.card (p⁻¹(y₁)) = Fintype.card (p⁻¹(y₂))"
+   :mathlib-status "likely custom; Mathlib covering space theory is partial"
+   :critical-path false}]
+ :stage-status
+ {:stage1 :pending
+  :stage2 :pending
+  :stage3 :pending
+  :stage4 :pending}}

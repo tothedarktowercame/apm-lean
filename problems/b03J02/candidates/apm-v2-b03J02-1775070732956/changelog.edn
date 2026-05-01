@@ -1,0 +1,11 @@
+[{:kind :workspace-initialized
+  :problem-id 'b03J02'
+  :frame-id 'apm-v2-b03J02-1775070732956'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true :sorry? false :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Showed (a,X) cannot be principal by degree considerations and applied this with a=x in K[x,y] to rule out PID."
+  :full-record? true :sorry? false :fully-closed? false}
+ {:kind :stage3-attempted
+  :summary "Searches `rg -n \"ideal_aX_nonprincipal\"` and `rg -n \"IsPrincipalIdealRing (Polynomial\"` over /home/joe/code/apm-lean found no supporting lemmas, so added placeholder theorem `searched_for_nonprincipal_api` documenting the missing API."
+  :full-record? true :sorry? true :fully-closed? false}]

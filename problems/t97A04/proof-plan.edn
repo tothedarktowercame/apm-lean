@@ -1,0 +1,17 @@
+{:goal "Determine the degree, induced map on H₁, and Lefschetz number of the torus endomorphism induced by L(x,y)=(2x+y,y-x)."
+ :terms [{:name "Degree/determinant"
+          :meaning "Degree of the induced map on T² equals det of the integer matrix."
+          :needed-because "This answers part (a) and controls H₂ action for Lefschetz."}
+         {:name "Homology basis"
+          :meaning "Use the standard generators [circle in x],[circle in y]."
+          :needed-because "The induced H₁ map is just the matrix of L in that basis."}
+         {:name "Lefschetz formula"
+          :meaning "L(f)=∑(-1)^i tr(f_*|H_i)."
+          :needed-because "Combines traces on H₀,H₁,H₂ to get the final number."}]
+ :strategy [{:id :s1
+             :formal-dependency "lefschetz_number_linear_torus"
+             :informal-dependency "Take the 2×2 integer matrix, read off det and action on H₁, then plug traces into the Lefschetz formula."
+             :why-this-now "Linear algebra directly answers all three parts without geometry."
+             :lean-target "torus_linear_map_lefschetz"
+             :mathlib-status "Mathlib can express group endomorphisms on homology for tori via linear algebra, but a packaged Lefschetz-number API for general torus maps is not yet available."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

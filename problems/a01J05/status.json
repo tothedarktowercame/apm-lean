@@ -1,0 +1,36 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a01J05",
+  "bundle_root": "problems/a01J05",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "legacy-lean-proofs",
+    "legacy_lean_root": "/home/joe/code/apm-lean/lean-proofs/a01J05",
+    "problem_tex": "/home/joe/code/apm-lean/apm/a01J05.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 5,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 5,
+    "sorry_count_by_file": {
+      "Main.lean": 5
+    }
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-05-01T19:52:19.166992Z"
+}

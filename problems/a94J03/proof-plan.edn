@@ -1,0 +1,23 @@
+{:goal "Show that a continuous open map f:R→R must be strictly monotone."
+ :terms [{:name "local extremum"
+          :meaning "If f is not monotone there exist x<y<z with f(y) ≥ max(f(x),f(z)) or ≤ min."
+          :needed-because "Such a point witnesses failure of openness."}
+         {:name "open map property"
+          :meaning "Images of open intervals must be open intervals."
+          :needed-because "If f has a local extremum, the image of a symmetric interval is not open."}
+         {:name "connectedness of intervals"
+          :meaning "Continuous images of intervals are intervals."
+          :needed-because "Helps describe f((a,b)) as an interval with endpoints given by limits."}]
+ :strategy [{:id :s1
+             :formal-dependency "Non-monotone ⇒ existence of local extremum"
+             :informal-dependency "Stage 1 local extremum description"
+             :why-this-now "Produce a point y where f takes a local maximum or minimum."
+             :lean-target "nonmonotone_has_local_extremum"
+             :mathlib-status "Need lemma for continuous real functions."}
+            {:id :s2
+             :formal-dependency "Open image of intervals"
+             :informal-dependency "Stage 1 open map property"
+             :why-this-now "Show that a local extremum contradicts openness."
+             :lean-target "continuous_open_imp_monotone"
+             :mathlib-status "Lean already knows continuous images of intervals are intervals; need to prove boundary point contradiction."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

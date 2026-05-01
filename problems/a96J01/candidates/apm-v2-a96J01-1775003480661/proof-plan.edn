@@ -1,0 +1,39 @@
+{:goal
+ "Exhibit a sequence f_n : [0,1] → ℝ of nonneg continuous functions such that Σ f_n converges uniformly on [0,1] but Σ sup f_n diverges."
+ :terms
+ [{:name "disjoint-support bumps"
+   :meaning "f_n has support on [(1-2^{-n+1}), (1-2^{-n})], disjoint from all other f_m"
+   :needed-because "disjoint supports make the partial sum equal to the pointwise limit except on one interval"}
+  {:name "height 1/n"
+   :meaning "sup f_n = 1/n, so Σ sup f_n = Σ 1/n = ∞ (harmonic series)"
+   :needed-because "this gives the divergence of the sup-sum"}
+  {:name "uniform convergence"
+   :meaning "for N large, |Σ_{n>N} f_n(x)| ≤ 1/(N+1) for all x, since at most one f_n is nonzero at each x"
+   :needed-because "the disjoint support structure makes the tail bounded by max height = 1/(N+1)"}]
+ :strategy
+ [{:id :construct-bumps
+   :formal-dependency "piecewise linear functions on disjoint intervals"
+   :informal-dependency "triangle/tent functions with support on [(1-2^{-(n-1)}), (1-2^{-n})] and height 1/n"
+   :why-this-now "the construction is the entire proof — once built, all three properties are immediate"
+   :lean-target "def f (n : ℕ) : ℝ → ℝ with the bump on the n-th interval"
+   :mathlib-status "custom construction; Mathlib has ContinuousMap but not this specific family"
+   :critical-path true}
+  {:id :verify-uniform-convergence
+   :formal-dependency "UniformCauchyCriterion or direct ε-δ"
+   :informal-dependency "disjoint supports ⟹ tail sum bounded by max_{n>N} (1/n) = 1/(N+1)"
+   :why-this-now "this is the key verification after construction"
+   :lean-target "TendstoUniformly (partial sums) f atTop"
+   :mathlib-status "Mathlib has TendstoUniformly; wiring the bound is custom"
+   :critical-path true}
+  {:id :verify-divergence
+   :formal-dependency "harmonic series diverges"
+   :informal-dependency "Σ 1/n = ∞ — standard"
+   :why-this-now "immediate from height = 1/n"
+   :lean-target "¬ Summable (fun n => (1 : ℝ) / n) or ∑' = ⊤"
+   :mathlib-status "available: Real.not_summable_one_div_nat_cast or similar"
+   :critical-path false}]
+ :stage-status
+ {:stage1 :done
+  :stage2 :done
+  :stage3 :in-progress
+  :stage4 :done}}

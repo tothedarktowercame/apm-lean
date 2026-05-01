@@ -1,0 +1,23 @@
+{:goal "Show that f:(0,1)→ℝ is uniformly continuous iff large finite differences force small increments."
+ :terms [{:name "uniform continuity"
+          :meaning "∀ε>0 ∃δ>0, |x-y|<δ ⇒ |f x - f y|<ε"
+          :needed-because "One side of the equivalence."}
+         {:name "difference quotient control"
+          :meaning "Whenever |(f x - f y)/(x-y)| is huge, the increment itself must be tiny"
+          :needed-because "Encodes the other side of the equivalence."}
+         {:name "contrapositive sequences"
+          :meaning "If f is not uniformly continuous, there are sequences with |xₖ-yₖ|→0 but |f xₖ - f yₖ| ≥ ε₀"
+          :needed-because "Used to contradict (b) when (a) fails."}]
+ :strategy [{:id :s1
+             :formal-dependency "Uniform continuity definition"
+             :informal-dependency "Stage 1 step (a)⇒(b)"
+             :why-this-now "Given ε pick δ, then any quotient exceeding N := ε/δ forces |x-y|<δ hence |f x - f y|<ε."
+             :lean-target "uniformContinuous_implies_diffQuot_condition"
+             :mathlib-status "Direct δ–ε argument; relies on arithmetic with ℝ."}
+            {:id :s2
+             :formal-dependency "Sequential criterion for failure of uniform continuity"
+             :informal-dependency "Stage 1 step (b)⇒(a) via contrapositive"
+             :why-this-now "Construct sequences violating (b) if uniform continuity fails."
+             :lean-target "diffQuot_condition_implies_uniformContinuous"
+             :mathlib-status "Uses `UniformContinuous`, sequence extraction, and algebra of difference quotients."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 't97J01'
+  :frame-id 'apm-v2-t97J01-1774992240183'
+  :summary "Created the isolated frame with the standard plan/changelog structure."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the covering-space proof: separate each lift of y₁ from each lift of y₂ inside the Hausdorff space X, then push those disjoint neighborhoods down using evenly covered charts."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage2-completed
+  :summary "Logged the dependency plan: finite fibers + evenly covered neighborhoods + Hausdorff separation in X ⇒ Hausdorff base."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage3-progress
+  :summary "Noted that Main.lean is still empty; the future Lean task is to formalize `hausdorff_of_finite_cover` using Mathlib's covering-space API."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

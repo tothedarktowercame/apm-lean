@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't96A08'
+  :frame-id 'apm-v2-t96A08-1775012559877'
+  :summary "Created frame, sketched Mayer–Vietoris-style plan for ω."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1+2-completed
+  :summary "Wrote the full path-independence solution plus lemma dependencies in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Explained the missing Mathlib infrastructure (manifold line integrals) blocking the Lean formalization; Main.lean currently holds only the module skeleton."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

@@ -1,0 +1,32 @@
+{:goal "Analyze an orthogonal projection P:H->H onto a closed subspace V: locate its spectrum, characterize when it is compact, identify and study V_perp, prove V_perp is closed, show commuting operators preserve V and V_perp, and describe P*."
+ :terms [{:name "orthogonal decomposition"
+          :meaning "H splits as V plus V_perp and P acts as identity on V and zero on V_perp"
+          :needed-because "All spectral statements, compactness, and invariance arguments use this block structure."}
+         {:name "spectrum of a projection"
+          :meaning "Self-adjoint idempotents have spectrum contained in {0,1} determined by whether V or V_perp vanish"
+          :needed-because "Part (a) asks for sigma(P) and the single-point cases."}
+         {:name "compactness vs finite dimension"
+          :meaning "P is compact iff the unit ball of V is relatively compact, which happens iff V is finite dimensional"
+          :needed-because "Part (b) links compactness to finite dimensionality."}
+         {:name "commutant of P"
+          :meaning "Operators commuting with P are block-diagonal with respect to V and V_perp"
+          :needed-because "Part (e) uses the commuting relation to deduce invariance of both pieces."}]
+ :strategy [{:id :s1
+             :formal-dependency "Hilbert projection theorem and definition of orthogonal complement"
+             :informal-dependency "Stage 1 description of P as identity/zero block"
+             :why-this-now "Record H = V plus V_perp, define V_perp, prove it is closed, and note P^2 = P = P*."
+             :lean-target "lemma hilbert_decomp (V : ClosedSubmodule Real H) : H ≃ V × V_perp"
+             :mathlib-status "Mathlib already contains orthogonal decomposition lemmas."}
+            {:id :s2
+             :formal-dependency "Spectral theory for self-adjoint projections"
+             :informal-dependency ":s1"
+             :why-this-now "Use the block form of P to show sigma(P) is contained in {0,1}, identify the single-point cases, and deduce the compactness criterion."
+             :lean-target "lemma spectrum_starProjection (V : ClosedSubmodule Real H) : spectrum Real V.starProjection subset/eq {0,1}"
+             :mathlib-status "Spectral results for projections exist; otherwise reduce to eigenvalue computations."}
+            {:id :s3
+             :formal-dependency "Block form of commuting operators"
+             :informal-dependency ":s1"
+             :why-this-now "Show a commuting operator preserves V and V_perp and use the symmetry to identify P*."
+             :lean-target "lemma commute_projection_preserves (A : H ->L[Real] H) (comm : A ∘L P = P ∘L A) : A '' V subset/eq V ∧ A '' V_perp subset/eq V_perp"
+             :mathlib-status "Mathlib includes lemmas about invariant subspaces for commuting projections."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

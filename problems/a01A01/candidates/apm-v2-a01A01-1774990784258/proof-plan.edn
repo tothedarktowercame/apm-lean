@@ -1,0 +1,19 @@
+{:goal "Construct nonnegative functions f_k on [0,1] with ∫ f_k → 0 but limsup_k f_k(x) = ∞ for every x, and extend the construction to ℝⁿ."
+ :terms [{:name "dyadic tiling"
+          :meaning "partition [0,1] into 2^m equal half-open intervals at stage m"
+          :needed-because "gives a canonical interval containing each x at every scale."}
+         {:name "height-vs-width tradeoff"
+          :meaning "choose spike height h_m and support width 2^{-m} so that h_m 2^{-m} → 0"
+          :needed-because "forces ∫ f_k → 0 while the pointwise spikes still diverge."}
+         {:name "enumeration by stage"
+          :meaning "list the 2^m intervals of stage m consecutively so stage index → ∞"
+          :needed-because "guarantees the integrals shrink along the actual sequence index."}]
+ :strategy [{:id :s1
+             :formal-dependency "Lebesgue integral of indicators of dyadic intervals on [0,1]"
+             :informal-dependency "Assign height m+1 to each stage-m spike and order the spikes level-by-level"
+             :why-this-now "Once the enumeration is fixed, every x sees the spike from each stage, so limsup diverges and the integral computation becomes routine."
+             :lean-target "Define helper functions level/offset giving the stage and interval of the k-th function, then prove the integral formula and the limsup statement."
+             :mathlib-status "Requires elementary lemmas about dyadic intervals and volumes; no external Mathlib gaps expected, though the helper combinatorics must be coded."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.A01A01.Apm_v2_a01A01_1774990784258'
+        :shared-extension-root "ApmCanaries.Local"}}

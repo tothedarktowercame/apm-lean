@@ -1,0 +1,23 @@
+{:problem-id 't91A04
+ :frame-id 'apm-v2-t91A04-1775008241824
+ :goal "Prove the Banach fixed point theorem for a λ-contraction T on a complete metric space M."
+ :terms [{:name "λ-contraction"
+          :meaning "A map satisfying d(Tx,Ty) ≤ λ d(x,y) with λ∈[0,1)."
+          :needed-because "This inequality is the engine that makes the iterates Cauchy and yields uniqueness."}
+         {:name "Cauchy estimate for iterates"
+          :meaning "Bounds of the form d(T^m x, T^n x) ≤ λ^n/(1-λ)·d(Tx,x)."
+          :needed-because "Gives a concrete tail control showing {T^n x} is Cauchy."
+         }
+         {:name "completeness of M"
+          :meaning "Every Cauchy sequence converges in M."
+          :needed-because "Supplies the candidate limit y and allows passing the contraction inequality to the limit to show T y = y."}]
+ :strategy [{:id :s1
+             :formal-dependency "contraction estimates → completeness → uniqueness"
+             :informal-dependency "Stage 1 plan: iterate T, prove the sequence is Cauchy via geometric decay, extract its limit y using completeness, then verify T y = y and uniqueness."
+             :why-this-now "This is the standard Banach fixed-point argument and matches mathlib’s `ContractingWith.exists_unique_fixedPoint`."
+             :lean-target "ApmCanaries.Frames.T91A04.Apm_v2_t91A04_1775008241824.contraction_fixedPoint"
+             :mathlib-status "mathlib has `ContractingWith.exists_unique_fixedPoint` in `Topology/Bornology`. We'll wrap it for this metric-space setting."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

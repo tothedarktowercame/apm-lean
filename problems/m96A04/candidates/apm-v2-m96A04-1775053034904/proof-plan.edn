@@ -1,0 +1,29 @@
+{:goal "From the bilinear identity <Ax,y>=<x,By> on a Hilbert space, prove that B is linear and bounded, and consequently that A is bounded."
+ :terms [{:name "Riesz representation"
+          :meaning "Every continuous functional x ↦ <x,z> corresponds uniquely to z ∈ X."
+          :needed-because "The hypothesis already expresses the functionals x ↦ <Ax,y> via vectors By, giving additivity of B."}
+         {:name "Uniform boundedness principle"
+          :meaning "If a family of bounded operators is pointwise bounded, their norms are uniformly bounded."
+          :needed-because "Applied to T_y(x)=<Ax,y> to prove B is bounded (hence continuous)."}
+         {:name "Adjoint norm identity"
+          :meaning "Once B is bounded, ||Ax|| = sup_{||y||=1} |<Ax,y>| = sup |<x,By>| <= ||B||·||x||."
+          :needed-because "Shows A is bounded (hence continuous) after B is established."}]
+ :strategy [{:id :s1
+             :formal-dependency "bilinear_identity_forces_linear"
+             :informal-dependency "Use the relation with sums and scalars in the second slot to show B respects addition and homogeneous scaling."
+             :why-this-now "Linearity of B is the foundation for the later functional-analytic arguments."
+             :lean-target "B_is_linear"
+             :mathlib-status "Follows from properties of the inner product (linearity in the first slot)."}
+            {:id :s2
+             :formal-dependency "uniform_bound_from_pointwise_bounds"
+             :informal-dependency "Consider T_y(x)=<Ax,y>; for each x the family {T_y} is pointwise bounded because x ↦ Ax is a vector. Uniform boundedness yields sup_{||y||=1}||T_y||<∞, i.e. B bounded."
+             :why-this-now "Establishes continuity of B."
+             :lean-target "B_is_bounded"
+             :mathlib-status "Requires invoking Banach-Steinhaus for dual functionals."}
+            {:id :s3
+             :formal-dependency "adjoint_bound_implies_A_bounded"
+             :informal-dependency "With B bounded, compute ||Ax|| via sup_{||y||=1}|<Ax,y>| = sup |<x,By>| <= ||B||·||x||."
+             :why-this-now "Completes the argument by giving continuity of A."
+             :lean-target "A_is_bounded"
+             :mathlib-status "Straight use of the adjoint identity once B is known bounded."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

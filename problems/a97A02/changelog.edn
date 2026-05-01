@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a97A02'
+  :frame-id 'apm-v2-a97A02-1775003733088'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full informal solution (why it’s hard, key insight, detailed proof, and context) inside execute.md Stage 1."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Documented the lemma dependency narrative and Lean targets in Stage 2 and updated proof-plan.edn/formal-alignment.edn."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-blocked
+  :summary "Could not finish the Lean proof because Mathlib currently lacks an L^q-continuity lemma for sliding indicator kernels; recorded the blocker in Stage 3."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

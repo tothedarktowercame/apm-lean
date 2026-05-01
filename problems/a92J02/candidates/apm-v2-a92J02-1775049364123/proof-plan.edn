@@ -1,0 +1,19 @@
+{:goal "Convert convergence in measure into almost-everywhere convergence along a subsequence by shrinking exceptional sets fast enough."
+ :terms [{:name "convergence in measure"
+          :meaning "For every ε>0 there is N so that n>N implies m{|fₙ-f|>ε} < ε."
+          :needed-because "This provides the quantitative estimate we will use with ε = 1/k."
+         }
+         {:name "summable exceptional sets"
+          :meaning "Choose a subsequence so that ∑ m{|f_{n_k}-f|>2^{-k}} < ∞."
+          :needed-because "Summability allows Borel–Cantelli/Fatou arguments to conclude that almost every x falls out of all but finitely many sets."
+         }
+         {:name "diagonal subsequence"
+          :meaning "Pick n_k increasing so that the k-th tail estimate holds with ε = 2^{-k}."
+          :needed-because "Constructing the subsequence is the bridge from convergence in measure to almost-everywhere convergence."}]
+ :strategy [{:id :s1
+             :formal-dependency "MeasureTheory.convergenceInMeasure_subseq"
+             :informal-dependency "Use convergence in measure with ε = 2^{-k} to pick n_k and apply Borel–Cantelli to the sets where |f_{n_k}-f| > 2^{-k}."
+             :why-this-now "This is the standard proof: extract a fast-converging subsequence and rule out infinitely many bad deviations."
+             :lean-target "A Lean lemma stating that convergence in measure implies existence of an a.e.-convergent subsequence."
+             :mathlib-status "Mathlib has Borel–Cantelli and convergence notions, but the exact lemma may need to be assembled."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

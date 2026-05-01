@@ -1,0 +1,19 @@
+{:goal "Show that for absolutely continuous f with f(0)=0 and f' in L^2([0,1]) the limit lim_{x->0+} x^{-1/2} f(x) exists and equals 0."
+ :terms [{:name "absolute continuity"
+          :meaning "f(x)=f(0)+∫_0^x f'(t) dt for every x"
+          :needed-because "We need an integral representation of f(x) to apply inequalities."}
+         {:name "Cauchy-Schwarz"
+          :meaning "|∫ gh| ≤ (∫|g|^2)^{1/2}(∫|h|^2)^{1/2}"
+          :needed-because "Bounds |f(x)| via L^2 norms on [0,x]."}
+         {:name "shrinking L2 integral"
+          :meaning "If g ∈ L^2 then the map x ↦ ∫_0^x |g|^2 tends to 0 as x→0+"
+          :needed-because "This turns the inequality into the desired limit."}]
+ :strategy [{:id :s1
+             :formal-dependency "Fundamental theorem of calculus for absolutely continuous functions"
+             :informal-dependency "Cauchy-Schwarz on [0,x]; continuity of the L^2 integral"
+             :why-this-now "Express f(x) as an integral, bound it by sqrt(x) times an L^2 norm, and observe that the norm tends to 0."
+             :lean-target "Use measure-theoretic Cauchy-Schwarz plus a lemma that ∫_0^x |f'|^2 → 0."
+             :mathlib-status "All ingredients are in Mathlib (FTC for abs. continuous, cauchySchwarz, tendsto integral over shrinking intervals)."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :in-progress}
+ :lean {:module-root 'ApmCanaries.Frames.A00J02.Apm_v2_a00J02_1774990402922'
+        :shared-extension-root "ApmCanaries.Local"}}

@@ -1,0 +1,22 @@
+{:problem-id 't92J01
+ :frame-id 'apm-v2-t92J01-1775008525795
+ :goal "Prove that the union of connected subsets of X sharing a common point is connected."
+ :terms [{:name "connectedness via separation"
+          :meaning "A space is connected iff it cannot be written as the disjoint union of two nonempty separated open sets."
+          :needed-because "The proof will argue by contradiction using a hypothetical separation of the union."}
+         {:name "persistence of connected subsets"
+          :meaning "If a connected set intersects both closed pieces of a separation, it must be contained in their intersection."
+          :needed-because "Ensures each $C_α$ lies entirely in one side of a separation, so the common point forces all of them onto the same side."}
+         {:name "common point propagation"
+          :meaning "Each $C_α$ contains x."
+          :needed-because "The point x prevents different $C_α$’s from falling into different separated pieces."}]
+ :strategy [{:id :s1
+             :formal-dependency "connected-set separation lemmas"
+             :informal-dependency "Stage 1 plan: suppose ⋃ C_α is disconnected, obtain disjoint nonempty open sets U,V covering it; connectedness of each C_α plus the fact they contain x shows every C_α lies entirely in, say, U, contradicting the nonemptiness of V."
+             :why-this-now "This reduction mirrors the standard mathlib proof via the 'union of connected sets with a point in common is connected' lemma."
+             :lean-target "ApmCanaries.Frames.T92J01.Apm_v2_t92J01_1775008525795.connected_union"
+             :mathlib-status "mathlib already has `IsPreconnected.sUnion`/`IsConnected.sUnion`; we can specialize those."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

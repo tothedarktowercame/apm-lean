@@ -1,0 +1,21 @@
+{
+  "workspace/schema": "proof-frame-workspace.v1",
+  "workspace/generated-at": "2026-04-01T00:29:52.759179Z",
+  "workspace/owner-repo": "futon6",
+  "proof/problem-id": "a97A01",
+  "frame/id": "apm-v2-a97A01-1775003392734",
+  "frame/workspace-root": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734",
+  "frame/module-root": "ApmCanaries.Frames.A97A01.Apm_v2_a97A01_1775003392734",
+  "frame/lean-root": "/home/joe/code/apm-lean/ApmCanaries/Frames/A97A01/Apm_v2_a97A01_1775003392734",
+  "frame/shared-extension-root": "/home/joe/code/apm-lean/ApmCanaries/Local",
+  "artifacts": {
+    "proof-plan": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/proof-plan.edn",
+    "formal-alignment": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/formal-alignment.edn",
+    "changelog": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/changelog.edn",
+    "execute-notes": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/execute.md",
+    "workspace-readme": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/README.md",
+    "workspace-metadata": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/workspace.json",
+    "lean-main": "/home/joe/code/apm-lean/ApmCanaries/Frames/A97A01/Apm_v2_a97A01_1775003392734/Main.lean",
+    "lean-scratch": "/home/joe/code/apm-lean/ApmCanaries/Frames/A97A01/Apm_v2_a97A01_1775003392734/Scratch.lean"
+  }
+}

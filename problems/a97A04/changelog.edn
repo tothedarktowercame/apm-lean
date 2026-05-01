@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a97A04'
+  :frame-id 'apm-v2-a97A04-1775003958890'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full informal solution (difficulty analysis, key insight, proof, connections) in execute.md Stage 1."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Documented the Cauchy-measurability plan in Stage 2 and synced proof-plan/formal-alignment artifacts."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-completed
+  :summary "Implemented the Lean proof (`measurableSet_convergenceSet`) via the Cauchy expansion and ran lake build."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

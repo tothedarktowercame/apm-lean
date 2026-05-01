@@ -1,0 +1,22 @@
+{:problem-id 't92J02
+ :frame-id 'apm-v2-t92J02-1775008678104
+ :goal "Prove (a) continuous images of compact spaces are compact, and (b) a continuous bijection from a compact space onto a Hausdorff space is a homeomorphism."
+ :terms [{:name "compactness via open covers"
+          :meaning "Every open cover of a compact space admits a finite subcover."
+          :needed-because "Part (a) is proved by pulling back an open cover of f(X) to one of X and applying compactness."}
+         {:name "compact sets are closed in Hausdorff spaces"
+          :meaning "In Hausdorff spaces, compact subsets are closed."
+          :needed-because "In (b) we show f is a closed map by sending compact subsets (which stay compact) to closed subsets of Y."}
+         {:name "bijective closed map = homeomorphism"
+          :meaning "A continuous bijection that is either open or closed has a continuous inverse."
+          :needed-because "Once f is proven closed, we can conclude it is a homeomorphism."}]
+ :strategy [{:id :s1
+             :formal-dependency "compactness lemmas, closed-image property in Hausdorff spaces"
+             :informal-dependency "Stage 1 (a): take an open cover of f(X), pull back to X, use compactness to extract finite subcover, push forward again. Stage 1 (b): any compact subset K⊆X maps to compact f(K), hence closed in Y; thus f is a closed bijection between compact and Hausdorff spaces, so its inverse is continuous."
+             :why-this-now "Follows the standard proofs and matches mathlib’s `IsCompact.image` and `IsClosedMap.of_compact` lemmas."
+             :lean-target "ApmCanaries.Frames.T92J02.Apm_v2_t92J02_1775008678104.image_compact_and_homeo"
+             :mathlib-status "mathlib already has `IsCompact.image` and `IsClosed.compact` and the homeomorphism criteria; we’ll restate them in this frame."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

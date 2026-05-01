@@ -1,0 +1,52 @@
+{:goal "Give counterexamples to each false statement and record precise corrected theorems."
+ :terms [{:name "simplicity of A_n"
+          :meaning "A_n is simple exactly when n is at least five."
+          :needed-because "Statement (a) fails at n=3,4; we must know the correct range."
+         }
+         {:name "classification of order-eight groups"
+          :meaning "The five types are Zmod8, Z4 x Z2, Z2 x Z2 x Z2, D4, and Q8."
+          :needed-because "Statement (b) omits the elementary abelian and quaternion cases."
+         }
+         {:name "Sylow and Cauchy"
+          :meaning "Guarantee subgroups only for prime divisors or prime powers."
+          :needed-because "Statement (c) overreaches; S3 and A4 give counterexamples."
+         }
+         {:name "structure theorem"
+          :meaning "Only finitely generated abelian groups split as direct sums of cyclic groups."
+          :needed-because "Statement (d) ignores groups like Q or Prüfer p-groups."
+         }
+         {:name "groups of order pq"
+          :meaning "For primes p<q, a group of order pq is cyclic exactly when p does not divide q-1."
+          :needed-because "Statement (e) ignores the semidirect-product cases."
+         }]
+ :strategy [{:id :s1
+             :formal-dependency "simplicity_of_An_for_large_n"
+             :informal-dependency "Show A3 and A4 have normal subgroups; cite the n>=5 simplicity theorem."
+             :why-this-now "Fixes part (a)."
+             :lean-target "GroupTheory.Alt.simplicity"
+             :mathlib-status "Mathlib already proves simplicity for n>=5."}
+            {:id :s2
+             :formal-dependency "order_8_classification"
+             :informal-dependency "List the missing isomorphism types (Z2 x Z2 x Z2 and Q8)."
+             :why-this-now "Fixes part (b)."
+             :lean-target "Group.orderEight_classification"
+             :mathlib-status "Finite order-eight classification is standard."}
+            {:id :s3
+             :formal-dependency "Sylow_theory"
+             :informal-dependency "Use S3 or A4 to show no subgroup exists for every divisor; restate Sylow."
+             :why-this-now "Fixes part (c)."
+             :lean-target "GroupTheory.sylow"
+             :mathlib-status "Sylow theorems formalized."}
+            {:id :s4
+             :formal-dependency "fg_abelian_structure"
+             :informal-dependency "Give Q or a Prüfer group as counterexample; corrected version restricts to finitely generated groups."
+             :why-this-now "Fixes part (d)."
+             :lean-target "FinitelyGeneratedAbelian.structure"
+             :mathlib-status "Structure theorem already proven."}
+            {:id :s5
+             :formal-dependency "order_pq_classification"
+             :informal-dependency "Explain the p divides (q-1) criterion and exhibit the semidirect-product counterexample."
+             :why-this-now "Fixes part (e)."
+             :lean-target "Group.order_pq_classification"
+             :mathlib-status "Available in Mathlib finite-group library."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

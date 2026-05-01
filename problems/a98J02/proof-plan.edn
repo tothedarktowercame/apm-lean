@@ -1,0 +1,29 @@
+{:goal "Show that an absolutely continuous f with square-integrable derivative has small quadratic difference quotients on short intervals."
+ :terms [{:name "FTC for AC functions"
+          :meaning "Absolute continuity gives f(x)-f(y)=int_y^x f'(t) dt."
+          :needed-because "Turns pointwise differences into integrals of f'."}
+         {:name "localized Cauchy-Schwarz"
+          :meaning "|int_y^x f'|^2 <= (x-y) int_y^x |f'|^2."
+          :needed-because "Connects the desired quotient with int |f'|^2 on the same interval."}
+         {:name "absolute continuity of the |f'|^2 integral"
+          :meaning "Because |f'|^2 lies in L^1([0,1]), integrating it over sets of small measure gives a small result."
+          :needed-because "Provides the δ(ε) after the Cauchy-Schwarz reduction."}]
+ :strategy [{:id :s1
+             :formal-dependency "FTC for AC"
+             :informal-dependency "Stage 1 relation f(x)-f(y)=integral of f'"
+             :why-this-now "Reduces the statement to estimates on f'."
+             :lean-target "ac_increment_as_integral"
+             :mathlib-status "Use `intervalIntegral.deriv_eq_sub`."}
+            {:id :s2
+             :formal-dependency "Cauchy-Schwarz"
+             :informal-dependency "Output of :s1"
+             :why-this-now "Bounds |f(x)-f(y)|^2/(x-y) by int_y^x |f'|^2."
+             :lean-target "cauchy_schwarz_local"
+             :mathlib-status "Standard inequality already available."}
+            {:id :s3
+             :formal-dependency "integral_small_on_short_interval"
+             :informal-dependency "Bound from :s2"
+             :why-this-now "Use integrability of |f'|^2 to choose δ so that every interval of length < δ has integral < ε."
+             :lean-target "L2_integral_small_on_short_interval"
+             :mathlib-status "Follows from absolute continuity of Lebesgue measure on [0,1]."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

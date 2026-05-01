@@ -1,0 +1,35 @@
+{:goal "Construct nonnegative continuous functions on [0,1] whose partial sums converge uniformly while the sum of sup norms diverges."
+ :terms [{:name "disjoint supports"
+          :meaning "Each fₙ is supported on a small interval disjoint from the others"
+          :needed-because "Then every x lies in at most one support beyond a given index, letting the tail error be controlled by a single bump."}
+         {:name "triangular bump"
+          :meaning "Continuous tent function with prescribed height"
+          :needed-because "Gives a simple formula with known sup norm and compact support."}
+         {:name "uniform convergence via tail sup"
+          :meaning "If only one term from the tail can be nonzero at each x, the tail supremum equals the maximal remaining height"
+          :needed-because "This proves uniform convergence even though the series of sup norms diverges."}]
+ :strategy [{:id :s1
+             :formal-dependency "Definition of the partition of [0,1] into shrinking intervals"
+             :informal-dependency "Stage 1: choose intervals near 1 whose lengths form a geometric progression"
+             :why-this-now "Ensures the supports are disjoint and shrink to 1 so the series converges pointwise."
+             :lean-target "interval_partition"
+             :mathlib-status "Available (interval arithmetic on ℝ)."}
+            {:id :s2
+             :formal-dependency "Construction of continuous tent functions"
+             :informal-dependency "Stage 1: define the explicit fₙ"
+             :why-this-now "We need concrete bumps whose sup norm is exactly 1/n and that vanish outside their interval."
+             :lean-target "bump_fn_construction"
+             :mathlib-status "Continuous piecewise-linear maps already available."}
+            {:id :s3
+             :formal-dependency "Uniform convergence criterion"
+             :informal-dependency "Stage 1: show the partial sums converge uniformly"
+             :why-this-now "Bounding the tail by sup_{k>N} sup f_k proves the first requirement."
+             :lean-target "uniform_convergence_tail_sup"
+             :mathlib-status "Follows from basic real analysis lemmas."}
+            {:id :s4
+             :formal-dependency "Computation of the divergent series of sup norms"
+             :informal-dependency "Stage 1: sum of heights equals harmonic series"
+             :why-this-now "Checks the final hypothesis."
+             :lean-target "harmonic_series_diverges"
+             :mathlib-status "Standard lemma already in Mathlib."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

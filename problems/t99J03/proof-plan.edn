@@ -1,0 +1,23 @@
+{:goal "Describe the connected-sum and Euler-characteristic classifications of compact connected triangulated surfaces and outline how the polygon-cutting proof produces them."
+ :terms [{:name "connected sum model"
+          :meaning "Every closed surface is built by connected sums of tori or of projective planes."
+          :needed-because "Part (a) asks for this precise statement and the later parts rely on it."}
+         {:name "orientability dichotomy"
+          :meaning "Each surface is either orientable (handlebody) or nonorientable (crosscap sum)."
+          :needed-because "The outline in part (b) splits into these two cases and the Euler characteristic formula depends on which case we are in."}
+         {:name "Euler characteristic bookkeeping"
+          :meaning "χ detects the number of handles or crosscaps via χ = 2 − 2g or χ = 2 − k."
+          :needed-because "Part (c) phrases the classification numerically, so we must track how χ behaves under connected sum."}]
+ :strategy [{:id :s1
+             :formal-dependency "Surface.classification_connected_sum"
+             :informal-dependency "Start from a triangulation, cut to obtain a polygon, and use edge pairings to read off handles or crosscaps."
+             :why-this-now "This is the classical route to the classification and simultaneously answers parts (a) and (b)."
+             :lean-target "A Lean theorem stating that any compact connected triangulated 2-manifold is homeomorphic to a connected sum of g tori or k projective planes."
+             :mathlib-status "No such theorem is currently exposed in Mathlib; implementing it would require the full surface classification project."}
+            {:id :s2
+             :formal-dependency "Surface.euler_characteristic_classification"
+             :informal-dependency "Combine χ(S#T) = χ(S)+χ(T)−2 with the connected-sum list to derive χ = 2−2g (orientable) and χ = 2−k (nonorientable)."
+             :why-this-now "This converts the structural classification into the Euler-characteristic statement demanded in part (c)."
+             :lean-target "A Lean corollary equating the Euler characteristic with the handle/crosscap count."
+             :mathlib-status "Same blocker: Mathlib lacks the foundational classification, so this corollary is also unavailable."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

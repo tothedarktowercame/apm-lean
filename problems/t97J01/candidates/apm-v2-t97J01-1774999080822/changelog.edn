@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 't97J01'
+  :frame-id 'apm-v2-t97J01-1774999080822'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full reader-facing solution (why hard, key insight, proof, Lean obstacles, connections) into execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Recorded the target theorem, key terms, and dependency strategy in proof-plan.edn and aligned it with formal-alignment.edn including the HtDP sanity check."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Formal work blocked: Mathlib lacks any covering-map API (`IsCoveringMap`, finite-fiber helpers), so the Lean theorem `finite_cover_isHausdorff` cannot yet be stated."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

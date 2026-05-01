@@ -1,0 +1,26 @@
+{:goal "Show that (a,X) in R[X] is non-principal when a is a nonzero nonunit, and deduce that K[x,y] is not a PID."
+ :terms [{:name "Integral domain"
+          :meaning "R has no zero divisors; a is nonzero and noninvertible."
+          :needed-because "Guarantees degree arguments work and a constant cannot lie in (X)."}
+         {:name "Degree comparison"
+          :meaning "If f divides X, then deg f <= 1, so f is a unit or associate to X."
+          :needed-because "Any generator of (a,X) must divide both a and X."}
+         {:name "Evaluation at X=0"
+          :meaning "The map R[X] -> R sending X↦0 detects whether a lies in (X)."
+          :needed-because "Rules out the possibility that (a,X)=(X)."}
+         {:name "Polynomial ring over a field"
+          :meaning "K[x,y] ≅ (K[x])[y], so part (a) applies with R=K[x], a=x."
+          :needed-because "Transfers the non-principal ideal to K[x,y], proving it is not a PID."}]
+ :strategy [{:id :s1
+             :formal-dependency "ideal_aX_nonprincipal"
+             :informal-dependency "Assume (a,X)=(f); since f divides X, f has degree ≤1, hence is a unit or associate to X, contradictions with a constant."
+             :why-this-now "Part (a) is the main hurdle; degree considerations close the door immediately."
+             :lean-target "ideal_aX_nonprincipal"
+             :mathlib-status "Needs polynomial-degree/divisibility infrastructure."}
+            {:id :s2
+             :formal-dependency "poly_two_var_not_PID"
+             :informal-dependency "View K[x,y] as (K[x])[y] and take a=x; s1 supplies the non-principal ideal (x,y)."
+             :why-this-now "Part (b) is a direct corollary once s1 is known."
+             :lean-target "poly_two_var_not_PID"
+             :mathlib-status "Follows from s1 once RP formulas exist."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

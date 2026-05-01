@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a93A01'
+  :frame-id 'apm-v2-a93A01-1775002343921'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Explained both directions (uniform continuity ⇔ large-quotiens force tiny increments) in prose."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Captured the boundedness, contrapositive, and sequential tools needed for the equivalence."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Lean proof blocked: Mathlib lacks a sequential characterization of ¬UniformContinuous (see `rg -n \"not_uniformContinuous\"`)."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

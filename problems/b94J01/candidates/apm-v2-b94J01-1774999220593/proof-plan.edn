@@ -1,0 +1,32 @@
+{:goal "Package the three exam statements: recall the finite Abelian classification, deduce the gcd criterion for ZMod products, and prove every finite subgroup of Kˣ is cyclic."
+ :terms [{:name "Invariant factor / p-primary factors"
+          :meaning "Every finite Abelian group decomposes uniquely as a direct product of cyclic p-power pieces or invariant factors"
+          :needed-because "Part (a) is precisely the classification statement later reused to reason about ZMod products."}
+         {:name "IsCyclic structure on ZMod"
+          :meaning "ZMod n is cyclic for every positive n, with generator 1"
+          :needed-because "To analyze ZMod m ⊕ ZMod n we pass to the product of two cyclic groups of known orders."}
+         {:name "Orders, gcds, and cyclic products"
+          :meaning "The product of two finite cyclic groups is cyclic iff their orders are coprime"
+          :needed-because "Part (b) boils down to this numerical condition."}
+         {:name "Finite subgroup of field units"
+          :meaning "Any finite subgroup of a field’s multiplicative group consists of roots of unity"
+          :needed-because "Part (c) wants the standard result that such a subgroup is cyclic."}]
+ :strategy [{:id :s1
+             :formal-dependency "Finset/Group theory (classification lemmas or restatement)"
+             :informal-dependency "Stage 1 description of the Fundamental Theorem"
+             :why-this-now "Lay out the canonical decomposition either in invariant-factor or elementary-divisor form before using it downstream."
+             :lean-target "finite_abelian_group_structure"
+             :mathlib-status "Exists but heavy; will cite/describe without re-proving."}
+            {:id :s2
+             :formal-dependency "IsCyclic ZMod, gcd lemmas, structure of finite abelian groups"
+             :informal-dependency "Stage 1 reasoning for (b)"
+             :why-this-now "Show (ZMod m × ZMod n) is cyclic iff gcd(m,n)=1 via order computations."
+             :lean-target "zmod_prod_isCyclic_iff"
+             :mathlib-status "Expected provable with current IsCyclic API; may need short helper lemmas."}
+            {:id :s3
+             :formal-dependency "Polynomial roots, Subgroup cardinals, Units.pow_card"
+             :informal-dependency "Stage 1 argument for (c)"
+             :why-this-now "Use that every element of a finite subgroup satisfies x^{|G|}-1 = 0 and appeal to degree bounds to force cyclicity."
+             :lean-target "finite_subgroup_units_isCyclic"
+             :mathlib-status "Should follow from existing `IsCyclic.subgroup_of_fintype` machinery; verify availability."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

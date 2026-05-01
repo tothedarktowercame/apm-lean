@@ -1,0 +1,34 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a97A02",
+  "bundle_root": "problems/a97A02/candidates/daily-batch-20260501-claude-1-codex-1",
+  "layout": "candidate",
+  "source": {
+    "kind": "claude-batch-daily",
+    "raw_trace": "/home/joe/code/futon3c/data/apm-informal-proofs/apm-a97A02.md",
+    "problem_tex": "/home/joe/code/apm-lean/apm/a97A02.tex",
+    "batch_date": "2026-05-01",
+    "agents": [
+      "claude-1",
+      "codex-1"
+    ],
+    "candidate_id": "daily-batch-20260501-claude-1-codex-1"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "sorry_count_main": 4,
+    "sorry_count_total": 4,
+    "sorry_closed_by_codex": 1,
+    "claude_initial_sorry": 5
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_lean_main": true
+  },
+  "classification": "partial",
+  "imported_at": "2026-05-01T20:34:46Z",
+  "codex_pass_at": "2026-05-01T21:40:44Z"
+}

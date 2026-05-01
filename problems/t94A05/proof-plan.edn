@@ -1,0 +1,20 @@
+{:goal "Show that any connected topological manifold (second countable, Hausdorff, locally Euclidean) is path connected."
+ :terms [{:name "local Euclidean charts"
+          :meaning "Each point has a neighborhood homeomorphic to an open ball in ℝⁿ."
+          :needed-because "Open balls are path connected, so these charts witness local path connectedness."}
+         {:name "path components are open in locally path connected spaces"
+          :meaning "If every point has arbitrarily small path connected neighborhoods, then its path component is a union of open sets."
+          :needed-because "Shows that the path component through any point is both open and closed, hence equal to the entire connected manifold."}
+         {:name "connected + open-and-closed component"
+          :meaning "Connectedness forces subsets that are simultaneously open and closed to be trivial."
+          :needed-because "Concludes that only one path component exists."}]
+ :strategy [{:id :s1
+             :formal-dependency "manifold ⇒ locally path connected; open-and-closed nature of path components in locally path connected spaces; connectedness eliminates multiple components."
+             :informal-dependency "Pick x in M. Its path component is a union of chart neighborhoods, hence open. Its complement is a union of other components, also open. Connectedness forces the complement to be empty, so every point joins to x via a path."
+             :why-this-now "This is the standard elementary route that avoids heavier algebraic-topology tools."
+             :lean-target "ApmCanaries.Frames.T94A05.Apm_v2_t94A05_1775010453161.connected_manifold_path_connected"
+             :mathlib-status "Mathlib already proves that manifolds are locally path connected (`Manifold.locPathConnected`) and that connected + locally path connected ⇒ path connected, so the formal goal should follow from existing lemmas."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

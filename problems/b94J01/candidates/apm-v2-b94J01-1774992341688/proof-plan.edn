@@ -1,0 +1,19 @@
+{:goal "Explain the structure theorem for finite abelian groups, characterize when ℤ/m ⊕ ℤ/n is cyclic, and use those facts to prove every finite subgroup of a field’s multiplicative group is cyclic."
+ :terms [{:name "Fundamental Theorem of Finite Abelian Groups"
+          :meaning "Every finite abelian group decomposes uniquely (up to order) into a direct product of cyclic p-power groups"
+          :needed-because "It supplies the template for parts (b) and (c)."}
+         {:name "coprime decomposition"
+          :meaning "ℤ/m ⊕ ℤ/n is cyclic iff gcd(m,n)=1"
+          :needed-because "Part (b) isolates when the direct sum collapses to a single cyclic group."}
+         {:name "maximal-order element"
+          :meaning "In a finite abelian group, an element of maximum order generates the whole group"
+          :needed-because "Part (c) finds such an element inside a finite subgroup of K×."}]
+ :strategy [{:id :s1
+             :formal-dependency "Structure theorem; lemmas on orders of elements; basic facts about polynomials x^k − 1."
+             :informal-dependency "Describe the decomposition, show the coprime condition forces a single cyclic factor, then observe that the product of all distinct prime-power generators has order equal to |G|."
+             :why-this-now "Part (c) is almost immediate once (a) and (b) clarify how cyclic factors behave."
+             :lean-target "Lemma: finite abelian groups over a field’s units are cyclic; reuse Mathlib’s classification of finite abelian groups."
+             :mathlib-status "Mathlib knows that finite subgroups of a field’s units are cyclic, so the formal part reduces to restating the existing theorem."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :pending :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.B94J01.Apm_v2_b94J01_1774992341688'
+        :shared-extension-root "ApmCanaries.Local"}}

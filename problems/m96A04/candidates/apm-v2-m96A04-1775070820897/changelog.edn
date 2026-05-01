@@ -1,0 +1,11 @@
+[{:kind :workspace-initialized
+  :problem-id 'm96A04'
+  :frame-id 'apm-v2-m96A04-1775070820897'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true :sorry? false :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Derived B’s linearity via Riesz, bounded B via Banach–Steinhaus, then bounded A via the adjoint norm formula."
+  :full-record? true :sorry? false :fully-closed? false}
+ {:kind :stage3-attempted
+  :summary "Searches `rg -n \"BanachSteinhaus\"` and `rg -n \"UniformBoundedness\"` over /home/joe/code/apm-lean found no API; added placeholder `searched_for_hilbert_adjoint_api` documenting the missing theorem."
+  :full-record? true :sorry? true :fully-closed? false}]

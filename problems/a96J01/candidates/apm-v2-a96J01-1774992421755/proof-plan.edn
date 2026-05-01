@@ -1,0 +1,19 @@
+{:goal "Construct a sequence of nonnegative continuous bumps on [0,1] whose sup-norm series diverges but whose partial sums converge uniformly."
+ :terms [{:name "disjoint supports"
+          :meaning "each fₙ is supported on an interval disjoint from all previous ones"
+          :needed-because "Uniform convergence becomes trivial: at each point only finitely many terms contribute."}
+         {:name "height control"
+          :meaning "choose max fₙ = 1/n"
+          :needed-because "The sup-series becomes the harmonic series, ensuring divergence."}
+         {:name "tent functions"
+          :meaning "piecewise-linear bumps with compact support"
+          :needed-because "They give continuous nonnegative examples whose sums are easy to analyze."}]
+ :strategy [{:id :s1
+             :formal-dependency "Definition of uniform convergence; facts about piecewise-linear functions"
+             :informal-dependency "Place smaller and smaller tents near 1, so the limit function equals each tent on its interval and 0 elsewhere"
+             :why-this-now "Disjoint supports guarantee the uniform limit while keeping the sup-series large."
+             :lean-target "Explicit function sequence in Lean built from simple affine pieces"
+             :mathlib-status "Mathlib has continuous functions built from affine pieces; no fundamental gap, just routine encoding."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :pending :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.A96J01.Apm_v2_a96J01_1774992421755'
+        :shared-extension-root "ApmCanaries.Local"}}

@@ -1,0 +1,29 @@
+{:goal "Show that the base space of a finite covering map is Hausdorff."
+ :terms [{:name "covering map"
+          :meaning "surjective local homeomorphism with discrete fibers"
+          :needed-because "gives evenly covered neighborhoods used to push separation downstairs"}
+         {:name "finite fiber"
+          :meaning "the preimage of each point contains finitely many sheets"
+          :needed-because "allows us to intersect finitely many evenly covered neighborhoods"}
+         {:name "Hausdorff separation upstairs"
+          :meaning "distinct lifts in X admit disjoint neighborhoods"
+          :needed-because "their images define disjoint neighborhoods in Y"}]
+ :strategy [{:id :s1
+             :formal-dependency "definition of covering map"
+             :informal-dependency "Stage 1 selection of evenly covered neighborhoods"
+             :why-this-now "Need to shrink around each lift before intersecting"
+             :lean-target "exists_evenly_covered_subset"
+             :mathlib-status "missing (no covering map API)"}
+            {:id :s2
+             :formal-dependency "finite intersections"
+             :informal-dependency "Stage 1 finite fiber argument"
+             :why-this-now "Intersect the finitely many neighborhoods"
+             :lean-target "finite_cover_preimage_subset"
+             :mathlib-status "blocked by s1"}
+            {:id :s3
+             :formal-dependency "Hausdorff transfer lemma"
+             :informal-dependency "Stage 1 final separation"
+             :why-this-now "Push the disjoint preimages down to Y"
+             :lean-target "finite_cover_isHausdorff"
+             :mathlib-status "blocked by s1"}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

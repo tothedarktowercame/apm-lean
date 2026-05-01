@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id 'm98J03'
+  :frame-id 'apm-v2-m98J03-1775007499607'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote full reader-facing solution explaining all six projection properties and documented the key insight in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Recorded the lemma dependency graph tying the decomposition-based lemmas (:s1–:s3) to the six problem parts."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Implemented Lean lemmas for closedness, invariance, and adjoint properties of the orthogonal projection; spectral/compactness still pending due to missing mathlib support."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage4-started
+  :summary "Bridged the formal lemmas back to the prose proof, noting how the equations Px=x and Px=0 streamline the informal argument."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

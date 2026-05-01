@@ -1,0 +1,36 @@
+{:problem-id 'b94J01
+ :frame-id 'apm-v2-b94J01-1774994174583
+ :goal "Classify finite abelian groups, characterize when Z/m × Z/n is cyclic, and prove every finite multiplicative subgroup of a field is cyclic."
+ :terms [{:name "primary decomposition"
+          :meaning "finite abelian groups split as direct sums of their p-primary parts"
+          :needed-because "part (a) reduces structure to p-power blocks"}
+         {:name "gcd/lcm interplay"
+          :meaning "lcm(m,n)=mn iff gcd(m,n)=1"
+          :needed-because "determines cyclicity in part (b)"}
+         {:name "root bound"
+          :meaning "a degree-e polynomial over a field has at most e roots"
+          :needed-because "controls counting in part (c)"}]
+ :strategy [{:id :s1
+             :formal-dependency "Primary decomposition theorems for finite abelian groups"
+             :informal-dependency "Stage 1(a) classification argument"
+             :why-this-now "Need invariant factors before addressing the other parts"
+             :lean-target "finiteAbelian_invariantFactors"
+             :mathlib-status "Likely exists; must locate or add"}
+            {:id :s2
+             :formal-dependency "Order of elements in direct products and gcd/lcm lemmas"
+             :informal-dependency "Stage 1(b)"
+             :why-this-now "Self-contained and a good starting point for Lean"
+             :lean-target "zmod_prod_isCyclic_iff"
+             :mathlib-status "Should be provable with current algebra API"}
+            {:id :s3
+             :formal-dependency "Polynomial.root_count and Euler totient identities"
+             :informal-dependency "Stage 1(c)"
+             :why-this-now "Finishes the problem once counting lemmas are wired"
+             :lean-target "finiteMulSubgroup_cyclic"
+             :mathlib-status "Requires combining existing lemmas; no known blocker"}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.B94J01.Apm_v2_b94J01_1774994174583
+        :shared-extension-root "ApmCanaries.Local"}}

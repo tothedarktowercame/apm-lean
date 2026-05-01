@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a98A06'
+  :frame-id 'apm-v2-a98A06-1775004274108'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the reader-facing proof with the weighted-bound trick and clarified why the bound on z f(z) forces the limit zero."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Captured the dependency chain (bounded product → removable theorem → dslope division) and mapped it to Lean targets."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Implemented the bounding and extension lemmas in Scratch; final Lean glue (dslope EqOn and lake build) still pending."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

@@ -1,0 +1,32 @@
+[{:kind :workspace-initialized
+  :problem-id "a00J01"
+  :frame-id "apm-v2-a00J01-1774990935426"
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? false
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Clean proof: sandwich argument. Upper: |f|≤‖f‖_∞ a.e. gives ‖f‖_p ≤ ‖f‖_∞ on finite measure. Lower: for α<‖f‖_∞, E_α has positive measure, ‖f‖_p ≥ α·m(E_α)^{1/p} → α. Squeeze gives the limit."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Dependency graph: 4 lemmas. Upper bound via eLpNorm_le_eLpNorm_mul_rpow_measure_univ (Mathlib). Lower bound needs essSup definition + level set measure + rpow limit. Squeeze via tendsto_of_le_of_ge."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :lean-delta
+  :summary "Lean skeleton type-checks: upper_bound, lower_bound, eLpNorm_tendsto_top. 3 sorry. Upper bound blocked on volume(Icc 0 1) = 1 simplification after Mathlib comparison. Lower bound needs level set + rpow limit. Main theorem is composition."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}
+ {:kind :stage4-completed
+  :summary "Formal-to-informal revision: upper bound is genuinely easy (one Mathlib lemma on probability spaces). Lower bound is conceptually simple but Lean-hard (rpow limit lemmas fragmented). The theorem itself (lim ‖f‖_p = ‖f‖_∞) is not in Mathlib."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :final-status
+  :summary "Classification: partial. Informal proof complete (both directions + squeeze). Lean skeleton type-checks with 3 sorry. The theorem lim ‖f‖_p = ‖f‖_∞ is genuinely absent from Mathlib. Upper bound closeable from comparison lemma; lower bound needs custom ε-argument."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

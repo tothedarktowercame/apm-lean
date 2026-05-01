@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a01A01'
+  :frame-id 'apm-v2-a01A01-1774990784258'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full reader-facing solution using dyadic spikes whose heights grow like m+1 but whose supports have length 2^{-m}, so ∫ f_k→0 while every point sees arbitrarily large spikes."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage2-completed
+  :summary "Recorded the dependency graph: dyadic tilings, 'height×volume' integrals, and the level-by-level enumeration that drives the sequence of integrals to zero."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage3-progress
+  :summary "Outlined the Lean plan (stageData recursion → dyadic indicator functions → integral/limsup lemmas); implementation still pending while those helper lemmas are coded."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

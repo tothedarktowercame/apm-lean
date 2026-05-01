@@ -1,0 +1,18 @@
+{:goal "Show compactness pulls back along perfect maps."
+ :terms [{:name "perfect map"
+          :meaning "Continuous, closed, surjective map with compact fibres."
+          :needed-because "Combining continuity with compact fibres and a closed image lets us transplant compactness from Y to X."
+         }
+         {:name "compactness via open covers"
+          :meaning "Every open cover of X admits a finite subcover."
+          :needed-because "The proof will push an open cover down to Y using closedness and compact fibres, then pull back a finite subcover."}
+         {:name "closedness"
+          :meaning "Images of closed sets are closed."
+          :needed-because "We use it to show that finitely many open sets already cover the entire preimage, because any leftover point would give a closed fibre outside the chosen open sets."}]
+ :strategy [{:id :s1
+             :formal-dependency "perfect_map_compact_preimage"
+             :informal-dependency "Stage 1 converts an open cover of X into a cover of Y using closedness + compact fibres"
+             :why-this-now "Compactness of Y provides the finite subcover downstairs; the fibre-compactness ensures it still covers each point upstairs."
+             :lean-target "perfect_map.compact_source"
+             :mathlib-status "Mathlib has `TopologicalSpace.PerfectMap` and compactness lemmas, so the statement should be provable once the API is wired."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

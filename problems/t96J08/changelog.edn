@@ -1,0 +1,17 @@
+[{:kind :workspace-initialized
+  :problem-id 't96J08'
+  :frame-id 'apm-v2-t96J08-1775012649049'
+  :summary "Started the hemisphere-flux problem and laid out the plan."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1+2-completed
+  :summary "Wrote the complete solution (ω not closed/exact, integral = 5π/3) and dependency graph in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-attempt
+  :summary "Explained the lack of surface-integral/divergence-theorem support in Mathlib; Lean file contains only a TODO comment."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

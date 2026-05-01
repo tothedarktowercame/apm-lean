@@ -1,0 +1,17 @@
+{:goal "Show that a path-independent smooth 1-form has a smooth potential and is exact."
+ :terms [{:name "Path independence"
+          :meaning "Line integrals of ω depend only on endpoints."
+          :needed-because "It ensures f(p)=∫_γ ω is well defined and allows differentiation under the integral sign."}
+         {:name "Local coordinates"
+          :meaning "Choose charts so ω = Σ a_i dx^i with smooth a_i."
+          :needed-because "Smoothness of f follows by differentiating coordinate expressions."}
+         {:name "Exterior derivative"
+          :meaning "df is the 1-form determined by directional derivatives of f."
+          :needed-because "Once df=ω, exactness is immediate."}]
+ :strategy [{:id :s1
+             :formal-dependency "omega_path_independent_exact"
+             :informal-dependency "Define f by integrating ω from the base point, check smoothness in charts, then show df=ω."
+             :why-this-now "This mirrors the textbook proof: well-defined potential + calculus ⇒ exactness."
+             :lean-target "exact_of_path_independent_form"
+             :mathlib-status "Needs basic facts about smooth line integrals and exterior derivatives; Mathlib has smooth manifolds and differential forms but will require assembling existing lemmas."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

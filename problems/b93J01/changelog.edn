@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'b93J01'
+  :frame-id 'apm-v2-b93J01-1775006040768'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full reader-facing solution: counterexamples for (a)–(e), the corrected theorems, and the study-notes sections (Why it’s hard, Key insight, What connects)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Expanded the lemma dependency graph text plus the machine-readable plan to spell out the counterexample strategy for each bullet."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Added Lean lemmas `Examples.card_sym3`, `Examples.sym3_not_isCyclic`, and `Examples.card_zmod2_cubed`; ran `lake build` (clean). Remaining gaps: formal non-simplicity of A4 and the Sylow/structure-theorem statements."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

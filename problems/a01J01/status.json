@@ -1,0 +1,38 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a01J01",
+  "bundle_root": "problems/a01J01",
+  "layout": "single-bundle",
+  "source": {
+    "workspace_metadata": "/home/joe/code/futon6/.state/proof-frames/a01J01/apm-v2-a01J01-1774988573118/workspace.json",
+    "receipt": "/home/joe/code/futon6/.state/proof-frames/a01J01/apm-v2-a01J01-1774988573118.json",
+    "problem_tex": "/home/joe/code/apm-lean/apm/a01J01.tex",
+    "frame_id": "apm-v2-a01J01-1774988573118",
+    "module_root": "ApmCanaries.Frames.A01J01.Apm_v2_a01J01_1774988573118"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": "lean/Scratch.lean",
+    "sorry_count_main": 3,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 3
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": true,
+    "has_changelog": true,
+    "has_workspace_metadata": true,
+    "has_receipt": true
+  },
+  "classification": "partial",
+  "imported_at": "2026-05-01T19:38:15.972374Z",
+  "historical_sources": [
+    {
+      "kind": "legacy-lean-proofs",
+      "path": "problems/a01J01/historical/legacy-lean-proofs"
+    }
+  ]
+}

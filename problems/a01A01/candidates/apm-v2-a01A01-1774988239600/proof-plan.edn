@@ -1,0 +1,11 @@
+{:problem-id 'a01A01'
+ :frame-id 'apm-v2-a01A01-1774988239600'
+ :goal ""
+ :terms []
+ :strategy []
+ :checkpoints [{:stage 1 :status :pending}
+               {:stage 2 :status :pending}
+               {:stage 3 :status :pending}
+               {:stage 4 :status :pending}]
+ :lean {:module-root 'ApmCanaries.Frames.A01A01.Apm_v2_a01A01_1774988239600'
+        :shared-extension-root "ApmCanaries.Local"}}

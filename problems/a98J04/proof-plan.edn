@@ -1,0 +1,29 @@
+{:goal "Explain why the real Jacobian of a complex-differentiable map must be of the Cauchy-Riemann form, and why the matrices for g(x,y)=(x,-y) and h(x,y)=(x,2y) violate this."
+ :terms [{:name "real and imaginary parts"
+          :meaning "Write f = u + i v with u,v : Real^2 -> Real and express the Jacobian via their partial derivatives."
+          :needed-because "Complex differentiability can be translated into conditions on the real Jacobian."}
+         {:name "Cauchy-Riemann equations"
+          :meaning "u_x = v_y and u_y = -v_x for complex differentiable maps."
+          :needed-because "They force the Jacobian to have the special form [[a,-b],[b,a]]."}
+         {:name "Jacobian matrices of g and h"
+          :meaning "Compute Dg = diag(1,-1) and Dh = diag(1,2)."
+          :needed-because "These matrices clearly fail the CR symmetry, so g,h cannot arise from a complex differentiable function."}]
+ :strategy [{:id :s1
+             :formal-dependency "Complex.differentiable_iff_CauchyRiemann"
+             :informal-dependency "Stage 1 rewriting f=u+iv"
+             :why-this-now "Translate complex differentiability into CR equations for u and v."
+             :lean-target "jacobian_has_CR_form"
+             :mathlib-status "Mathlib already provides Cauchy-Riemann expressed via real derivatives."}
+            {:id :s2
+             :formal-dependency "matrix_form_from_CR"
+             :informal-dependency "Output of :s1"
+             :why-this-now "Show the Jacobian equals [[u_x,-u_y],[u_y,u_x]] with u_x=v_y, etc."
+             :lean-target "cr_matrix_block"
+             :mathlib-status "Follows algebraically once CR equations hold."}
+            {:id :s3
+             :formal-dependency "matrix_comparison"
+             :informal-dependency "Structure from :s2"
+             :why-this-now "Compute Dg,Dh and note they do not equal [[a,-b],[b,a]]."
+             :lean-target "g_h_fail_CR"
+             :mathlib-status "Direct matrix arithmetic."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

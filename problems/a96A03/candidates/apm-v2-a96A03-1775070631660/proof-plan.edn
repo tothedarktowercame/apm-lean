@@ -1,0 +1,20 @@
+{:goal "Show that almost-everywhere limits of an L2-bounded sequence stay in the unit ball and converge weakly against every g in L2(R)."
+ :terms [{:name "Fatou lemma"
+          :meaning "Integral |f|^2 <= liminf integral |f_n|^2."
+          :needed-because "This immediately puts the limit back inside B."}
+         {:name "Density of C_c"
+          :meaning "Compactly supported continuous functions are dense in L2(R)."
+          :needed-because "Reduces weak convergence to bounded, finite-measure test functions."}
+         {:name "Uniform integrability on finite measure sets"
+          :meaning "L2 bounds give L1 control on compact sets (∫_K |f_n| <= meas(K)^{1/2})."
+          :needed-because "Combines with a.e. convergence to apply dominated/Vitali arguments for C_c test functions."}
+         {:name "Cauchy-Schwarz tail bound"
+          :meaning "|∫ (f_n-f)(g-h)| <= (||f_n||_2+||f||_2)||g-h||_2."
+          :needed-because "Allows extension from C_c to arbitrary L2 functions."}]
+ :strategy [{:id :s1
+             :formal-dependency "weak_limit_from_ae_convergence"
+             :informal-dependency "Use Fatou to show f ∈ B, handle C_c test functions via a.e. convergence on compact support, then approximate arbitrary g by C_c and bound the tails with Cauchy-Schwarz."
+             :why-this-now "One pipeline addresses the norm bound and weak convergence simultaneously."
+             :lean-target "weak_limit_from_ae_convergence"
+             :mathlib-status "Needs measure-theoretic lemmas (Fatou, density of C_c, dominated/Vitali convergence) that mostly exist but require bookkeeping."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

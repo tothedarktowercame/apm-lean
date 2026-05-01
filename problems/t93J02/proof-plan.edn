@@ -1,0 +1,24 @@
+{:problem-id 't93J02
+ :frame-id 'apm-v2-t93J02-1775009331315
+ :goal "Given a nested sequence of nonempty compact connected subsets of a Hausdorff space, prove their intersection is compact and connected."
+ :terms [{:name "Hausdorff ⇒ compact sets are closed"
+          :meaning "In a Hausdorff space, every compact subset is closed."
+          :needed-because "Allows us to treat each C_n as a closed subset of C_1 and take intersections safely."
+         }
+         {:name "Cantor intersection / finite intersection property"
+          :meaning "Nested nonempty compact sets have nonempty compact intersection."
+          :needed-because "Shows ∩C_n is nonempty and compact (as a closed subset of C_1)."
+         }
+         {:name "Connectedness inheritance"
+          :meaning "If every C_n is connected and nested, then the intersection cannot be separated by disjoint open sets."
+          :needed-because "Ensures the limit set remains connected by contradiction with a supposed separation."}]
+ :strategy [{:id :s1
+             :formal-dependency "Hausdorff_closed_of_compact, IsCompact.inter, Connected.subset"
+             :informal-dependency "Use Hausdorffness to see each C_n is closed.  Being a closed subset of compact C_1, the intersection is compact.  For connectedness, assume the intersection splits into two disjoint relatively open sets; extend them to disjoint open sets of Y.  Because the C_n shrink, one of them would separate some C_n, contradicting its connectedness."
+             :why-this-now "This mirrors the classical proof and matches Mathlib lemmas about nested compact connected sets."
+             :lean-target "ApmCanaries.Frames.T93J02.Apm_v2_t93J02_1775009331315.connected_iInter_nested_compact"
+             :mathlib-status "Mathlib supplies `IsClosed_of_compact`, `isCompact_iInter`, and `Connected.iInter` for directed families; we adapt these."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a94A01'
+  :frame-id 'apm-v2-a94A01-1775002871618'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full measure-theoretic argument and L^p criterion using symmetric differences."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Logged lemma dependencies (indicator limits, DCT, symmetric difference)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Outlined Lean tasks (ae-limit lemma, DCT application, L^p distance); code still pending."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

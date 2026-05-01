@@ -1,0 +1,22 @@
+{:problem-id 'm99A04
+ :frame-id 'apm-v2-m99A04-1775007855572
+ :goal "Extend a uniformly continuous map f : A → Y, where A is dense in the complete metric space X and Y is complete, to a unique continuous F : X → Y."
+ :terms [{:name "dense-approximation sequence"
+          :meaning "For every x ∈ X choose (a_n) ⊆ A with a_n → x."
+          :needed-because "This lets us define the candidate extension by limits of points already in the domain."}
+         {:name "uniformly-continuous ⇒ Cauchy control"
+          :meaning "Uniform continuity sends Cauchy sequences in A to Cauchy sequences in Y."
+          :needed-because "Ensures the limit lim f(a_n) exists in Y (which is complete) and is independent of the approximating sequence."}
+         {:name "unique extension via density"
+          :meaning "If two continuous maps on X agree on the dense subset A, they agree everywhere."
+          :needed-because "Delivers uniqueness once the continuous extension has been defined."}]
+ :strategy [{:id :s1
+             :formal-dependency "metric completion lemmas for dense subsets and uniform continuity"
+             :informal-dependency "Stage 1 discussion: define F(x)=lim f(a_n) and check well-definedness + continuity"
+             :why-this-now "One construction handles existence, continuity, and uniqueness simultaneously, so structuring the Lean target around it avoids duplicated limit arguments."
+             :lean-target "ApmCanaries.Frames.M99A04.Apm_v2_m99A04_1775007855572.extend_uniformContinuous_dense"
+             :mathlib-status "Mathlib already contains `UniformContinuous.extend` for dense embeddings; reuse that API if possible."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :done
+                :stage4 :done}}

@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a93A03'
+  :frame-id 'apm-v2-a93A03-1775002487121'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the reader-facing solution, highlighting polarization identity and weak lower semicontinuity."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Captured lemma dependencies and Lean targets for parts (a) and (b)."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Outlined Lean strategy; still need to mechanize polarization identity and liminf argument."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

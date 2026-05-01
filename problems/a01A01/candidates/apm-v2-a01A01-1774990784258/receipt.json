@@ -1,0 +1,72 @@
+{
+  "receipt/schema": "proof-frame-receipt.v1",
+  "receipt/generated-at": "2026-03-31T20:59:44.307710Z",
+  "receipt/owner-repo": "futon6",
+  "proof/problem-id": "a01A01",
+  "proof/cycle-id": null,
+  "proof/blocker-id": "root",
+  "proof/graph-role": "frame-trace-for-obligation-node",
+  "frame/id": "apm-v2-a01A01-1774990784258",
+  "frame/label": "APM v2 frame for a01A01",
+  "frame/upstream-boundaries": [],
+  "frame-boundary": {
+    "boundary/id": "apm-v2-a01A01-1774990784258",
+    "boundary/kind": "frame",
+    "boundary/owner": "futon6",
+    "boundary/algorithm-ref": {
+      "ref/type": "algorithm",
+      "ref/id": "futon3:eal/algorithms/create-container.md"
+    },
+    "boundary/entrypoint": null,
+    "boundary/workdir": "/home/joe/code/futon3c",
+    "boundary/trace-id": "apm-v2-a01A01-1774990784258",
+    "boundary/artifacts": [
+      "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/proof-plan.edn",
+      "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/changelog.edn",
+      "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/execute.md",
+      "/home/joe/code/apm-lean/ApmCanaries/Frames/A01A01/Apm_v2_a01A01_1774990784258/Main.lean",
+      "/home/joe/code/apm-lean/ApmCanaries/Frames/A01A01/Apm_v2_a01A01_1774990784258/Scratch.lean",
+      "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/workspace.json"
+    ],
+    "boundary/graph-refs": [
+      {
+        "ref/type": "proof-problem",
+        "ref/id": "a01A01"
+      },
+      {
+        "ref/type": "proof-frame",
+        "ref/id": "apm-v2-a01A01-1774990784258"
+      },
+      {
+        "ref/type": "proof-blocker",
+        "ref/id": "root"
+      }
+    ]
+  },
+  "inputs": [],
+  "state": {
+    "readonly": [],
+    "writable": []
+  },
+  "frame/artifacts": [
+    "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/proof-plan.edn",
+    "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/changelog.edn",
+    "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/execute.md",
+    "/home/joe/code/apm-lean/ApmCanaries/Frames/A01A01/Apm_v2_a01A01_1774990784258/Main.lean",
+    "/home/joe/code/apm-lean/ApmCanaries/Frames/A01A01/Apm_v2_a01A01_1774990784258/Scratch.lean",
+    "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/workspace.json"
+  ],
+  "case-anchor": null,
+  "frame/workspace": {
+    "workspace/root": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258",
+    "workspace/module-root": "ApmCanaries.Frames.A01A01.Apm_v2_a01A01_1774990784258",
+    "workspace/lean-root": "/home/joe/code/apm-lean/ApmCanaries/Frames/A01A01/Apm_v2_a01A01_1774990784258",
+    "workspace/shared-extension-root": "/home/joe/code/apm-lean/ApmCanaries/Local",
+    "workspace/proof-plan": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/proof-plan.edn",
+    "workspace/changelog": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/changelog.edn",
+    "workspace/execute-notes": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/execute.md",
+    "workspace/lean-main": "/home/joe/code/apm-lean/ApmCanaries/Frames/A01A01/Apm_v2_a01A01_1774990784258/Main.lean",
+    "workspace/lean-scratch": "/home/joe/code/apm-lean/ApmCanaries/Frames/A01A01/Apm_v2_a01A01_1774990784258/Scratch.lean",
+    "workspace/metadata": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/workspace.json"
+  }
+}

@@ -1,0 +1,17 @@
+{:goal "Given a non-surjective map f : RP^2 -> RP^2, prove that f_* on pi_1 is trivial and that f is null-homotopic."
+ :terms [{:name "Punctured RP^2"
+          :meaning "Removing one point leaves a Mobius band that deformation retracts onto S^1."
+          :needed-because "Once f misses a point, we can replace the codomain by S^1 where pi_1 is easy."}
+         {:name "Homomorphisms Z/2 -> Z"
+          :meaning "The only group map from pi_1(RP^2)=Z/2 to pi_1(S^1)=Z is trivial."
+          :needed-because "Forces f_* to kill all loops when the image lands in the retract."}
+         {:name "S^1 as K(Z,1)"
+          :meaning "Maps RP^2 -> S^1 are classified by induced maps on pi_1."
+          :needed-because "A trivial pi_1 map implies the entire map is homotopic to a constant; composing with the inclusion back into RP^2 keeps it constant."}]
+ :strategy [{:id :s1
+             :formal-dependency "RP2_non_surjective_trivial_pi1"
+             :informal-dependency "Pick y outside the image, retract RP^2 minus {y} onto S^1, show f_* factors through Z/2 -> Z -> Z/2 as zero, and use K(Z,1) classification for the null-homotopy."
+             :why-this-now "This single pipeline addresses both claims simultaneously."
+             :lean-target "RP2_non_surjective_trivial_pi1"
+             :mathlib-status "Requires RP^2 and Möbius-band infrastructure that Mathlib does not yet provide."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

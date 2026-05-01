@@ -1,0 +1,27 @@
+{:problem-id 't96J03
+ :frame-id 'apm-v2-t96J03-1774994444690
+ :goal "Given a non-empty closed subset of ℝⁿ and an exterior point, produce a point in the set with minimal Euclidean distance to the exterior point."
+ :terms [{:name "proper metric space"
+          :meaning "every closed ball is compact"
+          :needed-because "ensures the distance function attains its infimum on closed sets"}
+         {:name "infDist"
+          :meaning "Mathlib’s infimum of distances from a point to a set"
+          :needed-because "`IsClosed.exists_infDist_eq_dist` supplies the minimizing point"}
+         {:name "le_infDist"
+          :meaning "characterizes when a real number lies below the infimum distance"
+          :needed-because "converts the inf-distance equality into pointwise inequalities"}]
+ :strategy [{:id :s1
+             :formal-dependency "Heine–Borel / properness of Euclidean space"
+             :informal-dependency "Stage 1 compactness argument"
+             :why-this-now "Shows the distance function achieves a minimum"
+             :lean-target "Metric.isClosed.exists_infDist_eq_dist"
+             :mathlib-status "Available"}
+            {:id :s2
+             :formal-dependency "le_infDist"
+             :informal-dependency "Conclude scope-wide inequality"
+             :why-this-now "Turns the inf-distance equality into the comparison needed for all x ∈ X"
+             :lean-target "Metric.le_infDist"
+             :mathlib-status "Available"}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.T96J03.Apm_v2_t96J03_1774994444690
+        :shared-extension-root "ApmCanaries.Local"}}

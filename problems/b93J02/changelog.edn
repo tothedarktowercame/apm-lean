@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'b93J02'
+  :frame-id 'apm-v2-b93J02-1775006390328'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full reader-facing solution (why hard, key insight, all three parts, and the stock counterexamples) in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Populated proof-plan.edn with the implication/counterexample strategy and refreshed formal-alignment.edn to target `pid_isIntegrallyClosed` plus the helper lemmas."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Implemented `pid_isIntegrallyClosed` in Main.lean and ran `lake build`. Counterexample lemmas remain to be formalized."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

@@ -1,0 +1,27 @@
+[{:kind :workspace-initialized
+  :problem-id 't91A03'
+  :frame-id 'apm-v2-t91A03-1775008066441'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the open-cover proof with the tube lemma together with the Why/Key insight commentary."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Explained in execute.md how the tube lemma, compact slices, and compactness of X interlock."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-completed
+  :summary "Formalized `isCompact_prod` in Main.lean, ran `lake build`, and documented the existing external warnings."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage4-completed
+  :summary "Described how the Lean proof (automatic use of `IsCompact.prod`) streamlines the informal argument."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

@@ -1,0 +1,20 @@
+[{:kind :workspace-initialized
+  :summary "Initialized frame and noted tent-function approach."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Documented the dyadic-tent construction and analytic proof in execute.md."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Recorded the supporting lemmas, uniform-tail estimate, and harmonic divergence dependencies."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-blocked
+  :summary "Lean work pending: Mathlib lacks a ready-made tent bump; need custom continuity/support lemmas before encoding `tent_sequence_exists`."
+  :full-record? true
+  :sorry? true
+  :fully-closed? false}]

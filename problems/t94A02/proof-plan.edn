@@ -1,0 +1,25 @@
+{:problem-id 't94A02
+ :frame-id 'apm-v2-t94A02-1775009748581
+ :goal "Construct a continuous function f : ℝ → [0,1] that separates two disjoint closed subsets A and B by sending A to 0 and B to 1."
+ :terms [{:name "disjoint closed subsets"
+          :meaning "Closed sets A,B ⊆ ℝ with A ∩ B = ∅"
+          :needed-because "Their closedness lets us use distances; disjointness keeps the denominator positive."
+         }
+         {:name "distance to a set"
+          :meaning "d(x,A) = inf_{a∈A} |x−a|"
+          :needed-because "This function is continuous and vanishes exactly on A (similarly for B)."
+         }
+         {:name "normalization"
+          :meaning "h(x)=d(x,A)/(d(x,A)+d(x,B)) maps into [0,1] and hits the desired fibers."
+          :needed-because "Ensures f^{-1}(0)=A and f^{-1}(1)=B by algebraic manipulation."
+         }]
+ :strategy [{:id :s1
+             :formal-dependency "metric.distance_set, continuous_iinf, normalization algebra"
+             :informal-dependency "Define d_A(x)=dist(x,A) and d_B(x)=dist(x,B). They are continuous, nonnegative, and vanish exactly on A resp. B. Since A and B are disjoint closed, d_A+d_B>0 everywhere. Set f=d_A/(d_A+d_B). Then f(A)=0, f(B)=1, and f takes values in [0,1]."
+             :why-this-now "This is the classical Urysohn-style construction specialized to ℝ with its metric; explicit distance formulas are available."
+             :lean-target "ApmCanaries.Frames.T94A02.Apm_v2_t94A02_1775009748581.separate_closed_sets"
+             :mathlib-status "Mathlib has continuity of distance-to-set and related lemmas; the normalization step should already exist."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :done
+                :stage4 :done}}

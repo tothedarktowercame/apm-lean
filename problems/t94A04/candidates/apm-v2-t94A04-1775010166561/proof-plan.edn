@@ -1,0 +1,20 @@
+{:goal "Show that if X = U ∪ V with U, V open, path connected, simply connected, and U ∩ V nonempty and path connected, then X is simply connected."
+ :terms [{:name "loop subdivision"
+          :meaning "Use compactness of I to cover a loop by finitely many subintervals each mapping entirely into U or V."
+          :needed-because "Lets us rewrite any loop in X as a finite concatenation of paths living wholly in one chart."}
+         {:name "transition paths through U ∩ V"
+          :meaning "Choose paths from the basepoint to each subdivision break lying wholly in the set (U or V) that contains the break."
+          :needed-because "Ensures every concatenated piece becomes a based loop contained in U or V, so we can contract it there."}
+         {:name "null-homotopies inside charts"
+          :meaning "Loops contained in U (resp. V) are null-homotopic because U (resp. V) is simply connected."
+          :needed-because "Once the original loop is a product of such loops, each piece contracts, showing the whole loop is null-homotopic."}]
+ :strategy [{:id :s1
+             :formal-dependency "Lebesgue number lemma on [0,1]; path concatenation homotopies; simple connectivity implies null-homotopy of loops."
+             :informal-dependency "Given a based loop α in X, subdivide I so each subpath lies entirely in U or V. Insert connecting paths inside U ∩ V to keep the basepoint fixed, yielding a finite concatenation of loops each lying in U or V. Contract each factor using simple connectivity, concatenating the homotopies."
+             :why-this-now "This is the classical no-van-Kampen proof and requires only compactness plus basic path-homotopy manipulations."
+             :lean-target "ApmCanaries.Frames.T94A04.Apm_v2_t94A04_1775010166561.union_two_simply_connected"
+             :mathlib-status "Lebesgue number lemma and path concatenation lemmas exist in Mathlib; the targeted fact is not yet present but should follow from those primitives."}]
+ :stage-status {:stage1 :done
+                :stage2 :done
+                :stage3 :in-progress
+                :stage4 :pending}}

@@ -1,0 +1,20 @@
+[{:kind :workspace-initialized
+  :problem-id 'a00J02'
+  :frame-id 'apm-v2-a00J02-1774989750574'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."}
+ {:kind :stage1-completed
+  :problem-id 'a00J02'
+  :frame-id 'apm-v2-a00J02-1774989750574'
+  :summary "Wrote the full Cauchy–Schwarz argument showing |f(x)| ≤ √x ||f'||_{L²(0,x)} and deduced the zero limit."}
+ {:kind :stage2-completed
+  :problem-id 'a00J02'
+  :frame-id 'apm-v2-a00J02-1774989750574'
+  :summary "Recorded dependencies (FTC, Cauchy–Schwarz, shrinking L² integrals) and Lean targets in execute.md."}
+ {:kind :stage3-completed
+  :problem-id 'a00J02'
+  :frame-id 'apm-v2-a00J02-1774989750574'
+  :summary "Formalized the auxiliary lemma `sqrt_mul_tendsto_zero` and checked the Lean build."}
+ {:kind :stage4-completed
+  :problem-id 'a00J02'
+  :frame-id 'apm-v2-a00J02-1774989750574'
+  :summary "Confirmed the formal work matches the prose; no extra adjustments needed."}]

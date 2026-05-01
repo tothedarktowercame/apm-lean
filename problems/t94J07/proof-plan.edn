@@ -1,0 +1,17 @@
+{:goal "Use Stokes' theorem on the homotopy cylinder to show that homotopic pullbacks of a closed form have equal integrals."
+ :terms [{:name "closed form"
+          :meaning "A differential form ω with dω = 0."
+          :needed-because "It makes the Stokes integral over the cylinder vanish (the exterior derivative of the pulled-back form is zero)."}
+         {:name "homotopy cylinder"
+          :meaning "The manifold X × [0,1] with boundary components X × {0}, X × {1}."
+          :needed-because "The maps f and g appear as the restrictions of a smooth homotopy at the two boundary faces."}
+         {:name "Stokes' theorem"
+          :meaning "For a compact manifold with boundary M and a form η, ∫_{∂M} η = ∫_{M} dη."
+          :needed-because "Applying it to the pullback of ω along the homotopy converts the vanishing interior integral into the equality of the two boundary integrals."}]
+ :strategy [{:id :s1
+             :formal-dependency "Stokes' theorem on cylinders"
+             :informal-dependency "Stage 1 proof uses the trivial homotopy cylinder argument"
+             :why-this-now "Pulling ω back along the homotopy H:X×I→Y and applying Stokes immediately relates the two boundary integrals."
+             :lean-target "homotopy_invariance_closed_form_integral"
+             :mathlib-status "Stokes' theorem and basic homotopy/pullback APIs exist in mathlib's manifold library, but wrapping them for forms is unfinished."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

@@ -1,0 +1,18 @@
+{:goal "Use the weak-limit identities ⟨h_n,h⟩ → ⟨h,h⟩ to derive norm convergence and the liminf inequality in a Hilbert space."
+ :terms [{:name "weak convergence"
+          :meaning "For every k ∈ H, ⟨h_n, k⟩ → ⟨h, k⟩."
+          :needed-because "Plugging k = h (or k = h_n − h) provides the key inner-product limits."
+         }
+         {:name "norm identity"
+          :meaning "‖u − v‖² = ‖u‖² + ‖v‖² − 2 Re⟨u, v⟩ in a real or complex Hilbert space."
+          :needed-because "This expands ‖h_n − h‖² in terms of quantities whose limits we control."}
+         {:name "liminf control"
+          :meaning "The inequality in (b) follows from taking liminf on both sides of the norm identity without assuming norm convergence."
+          :needed-because "Part (b) generalizes part (a) and supplies the foundation for the contradiction argument."}]
+ :strategy [{:id :s1
+             :formal-dependency "HilbertSpace.norm_sq_sub_eq"
+             :informal-dependency "Use weak convergence with k = h to show ⟨h_n,h⟩ → ‖h‖²; combine with the norm identity to prove (a) and (b)."
+             :why-this-now "Both parts reduce to algebraic manipulations of the same identity once the inner-product limits are known."
+             :lean-target "A Lean lemma showing that weak convergence plus norm convergence implies strong convergence, together with the liminf inequality."
+             :mathlib-status "Mathlib already has inner-product expansions; the weak-limit facts may need modest glue code."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

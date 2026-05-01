@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a93J03'
+  :frame-id 'apm-v2-a93J03-1774992011929'
+  :summary "Created isolated proof frame workspace with the standard plan/changelog/Lean roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the full Borel–Cantelli based solution: the sets Aₙ satisfy ∑μ(Aₙ)<∞, so outside their limsup we have |fₙ(x)|≤n^{-2} eventually, and comparison with the p-series forces absolute convergence."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage2-completed
+  :summary "Documented the dependency plan: Borel–Cantelli (`ae_eventually_notMem`), the `Real.summable_one_div_nat_sq` lemma, and the eventual-bound comparison."
+  :full-record? true
+  :sorry? false
+  :fully-closed? true}
+ {:kind :stage3-progress
+  :summary "Noted explicitly that no Lean code exists yet; the upcoming todo is to introduce the theorem and apply the `BorelCantelli` API."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

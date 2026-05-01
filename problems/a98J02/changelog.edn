@@ -1,0 +1,22 @@
+[{:kind :workspace-initialized
+  :problem-id 'a98J02'
+  :frame-id 'apm-v2-a98J02-1775004665812'
+  :summary "Created isolated proof frame workspace with plan/changelog/Lean scratch roots."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage1-completed
+  :summary "Wrote the reader-facing solution using FTC + Cauchy–Schwarz + absolute continuity of ∫|f'|^2."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage2-completed
+  :summary "Mapped the FTC, Cauchy–Schwarz, and integral absolute-continuity lemmas to Lean targets."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}
+ {:kind :stage3-in-progress
+  :summary "Outlined the Lean approach; blocked by the missing `L2_integral_small_on_short_interval` lemma that turns integrability into an ε–δ statement."
+  :full-record? true
+  :sorry? false
+  :fully-closed? false}]

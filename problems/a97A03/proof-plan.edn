@@ -1,0 +1,23 @@
+{:goal "Show that an absolutely continuous f : [a,b] → ℝ is Lipschitz iff its a.e. derivative is essentially bounded."
+ :terms [{:name "absolute continuity"
+          :meaning "f(x)-f(y) = ∫_y^x f'(t) dt for every x,y in [a,b]."
+          :needed-because "This lets us convert bounds on f' into bounds on f(x)-f(y)."}
+         {:name "difference quotient a.e. derivative control"
+          :meaning "For Lipschitz f the limit of difference quotients exists a.e. and stays within the Lipschitz constant."
+          :needed-because "Lipschitz ⇒ bounded derivative requires bounding |(f(x+h)-f(x))/h| by B."}
+         {:name "essential supremum"
+          :meaning "|f'| ≤ C almost everywhere gives a uniform bound outside a null set."
+          :needed-because "We need the L^∞-style control to integrate as |f(x)-f(y)| ≤ ∫ C = C|x-y|."}]
+ :strategy [{:id :s1
+             :formal-dependency "measure-theoretic differentiability of Lipschitz maps"
+             :informal-dependency "Stage 1 proof of Lipschitz ⇒ bounded derivative"
+             :why-this-now "Show B-Lipschitz implies |f'| ≤ B a.e. by looking at difference quotients as h→0."
+             :lean-target "lipschitz_has_deriv_bound"
+             :mathlib-status "Mathlib has Rademacher’s theorem in this simple 1D setting via a.e. differentiability of AC functions."}
+            {:id :s2
+             :formal-dependency "fundamental theorem of calculus for absolutely continuous functions"
+             :informal-dependency "Stage 1 proof of bounded derivative ⇒ Lipschitz"
+             :why-this-now "Use f(x)-f(y)=∫ f' to bound by C|x-y| once |f'| ≤ C a.e."
+             :lean-target "ac_of_ae_deriv_bound_is_lipschitz"
+             :mathlib-status "Needs existing FTC statement for AC functions."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

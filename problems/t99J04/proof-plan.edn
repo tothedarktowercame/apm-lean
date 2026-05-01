@@ -1,0 +1,23 @@
+{:goal "Show that linearly independent differentials give a local coordinate chart and use that to prove a compact-source local diffeomorphism onto a connected target is surjective."
+ :terms [{:name "inverse function theorem"
+          :meaning "If the Jacobian of F = (f¹,…,fⁿ) at x is invertible, F restricts to a diffeomorphism from a neighborhood of x onto an open set of ℝⁿ."
+          :needed-because "This produces the local coordinate system demanded in part (a)."}
+         {:name "local diffeomorphism"
+          :meaning "A map with everywhere-invertible derivative is locally a diffeomorphism, hence an open map with discrete fibers."
+          :needed-because "Part (b) reduces to understanding the image of such a map."}
+         {:name "open-and-closed image argument"
+          :meaning "The image of a compact space under a continuous map is compact (so closed) and, when the map is open, also open."
+          :needed-because "In a connected target, an open-and-closed subset must be all of Y, giving surjectivity."}]
+ :strategy [{:id :s1
+             :formal-dependency "Manifold.inverse_function_theorem"
+             :informal-dependency "Apply the inverse function theorem to F = (f¹,…,fⁿ) to exhibit coordinates."
+             :why-this-now "This resolves part (a) outright and supplies the local diffeomorphism input for part (b)."
+             :lean-target "In Lean: from `LinearIndependent (dfᵢ x)` deduce that `(fun y ↦ (f¹ y,…,fⁿ y))` is a chart map at x."
+             :mathlib-status "Mathlib already proves the inverse function theorem for smooth maps between finite-dimensional manifolds."}
+            {:id :s2
+             :formal-dependency "Manifold.compact_local_diffeomorphism_surjective"
+             :informal-dependency "Use that f is open and proper (compact source) to show its image is nonempty, open, and closed, hence all of Y."
+             :why-this-now "This solves part (b), leveraging the conclusion of part (a)."
+             :lean-target "A Lean theorem stating that a smooth map between connected manifolds with compact source and invertible differentials is surjective."
+             :mathlib-status "Mathlib does not currently bundle this exact corollary, but it has the ingredients (inverse function theorem plus topological facts)."}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}}

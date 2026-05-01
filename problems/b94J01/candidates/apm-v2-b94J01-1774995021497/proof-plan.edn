@@ -1,0 +1,35 @@
+{:problem-id 'b94J01
+ :frame-id 'apm-v2-b94J01-1774995021497
+ :goal "Classify finite abelian groups, detect when ZMod m × ZMod n is cyclic, and show finite multiplicative subgroups of a field are cyclic."
+ :terms [{:name "primary decomposition"
+          :meaning "finite abelian group ≃ ⊕ cyclic p-power"
+          :needed-because "solves part (a)"
+         }
+         {:name "order/lcm arithmetic"
+          :meaning "order((a,b)) = lcm(order a, order b)"
+          :needed-because "proves gcd(m,n)=1 iff cyclic"
+         }
+         {:name "root counting"
+          :meaning "x^d−1 has ≤ d roots in a field"
+          :needed-because "bounds the number of low-order elements in (c)"}]
+ :strategy [{:id :s1
+             :formal-dependency "Mathlib’s finite abelian classification"
+             :informal-dependency "Stage 1(a)"
+             :why-this-now "Part (a) is already in Mathlib"
+             :lean-target "finiteAbelian_invariantFactors"
+             :mathlib-status "available"}
+            {:id :s2
+             :formal-dependency "CRT + cyclic-order computations"
+             :informal-dependency "Stage 1(b)"
+             :why-this-now "Need to formalize gcd(m,n)=1 ↔ cyclic"
+             :lean-target "zmod_prod_isCyclic_iff"
+             :mathlib-status "missing"}
+            {:id :s3
+             :formal-dependency "roots-of-unity counting"
+             :informal-dependency "Stage 1(c)"
+             :why-this-now "Show finite multiplicative subgroups are cyclic"
+             :lean-target "finite_mul_subgroup_cyclic"
+             :mathlib-status "missing"}]
+ :stage-status {:stage1 :done :stage2 :done :stage3 :in-progress :stage4 :pending}
+ :lean {:module-root 'ApmCanaries.Frames.B94J01.Apm_v2_b94J01_1774995021497
+        :shared-extension-root "ApmCanaries.Local"}}
