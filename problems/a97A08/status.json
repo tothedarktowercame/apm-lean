@@ -1,0 +1,28 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a97A08",
+  "bundle_root": "problems/a97A08",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "daily-batch",
+    "batch_date": "20260502",
+    "batch_algorithm": "/home/joe/code/algorithms/apm-daily-batch.md",
+    "claude_agent": "claude-1",
+    "raw_trace": "/home/joe/code/futon3c/data/apm-informal-proofs/apm-a97A08.md",
+    "problem_tex": "/home/joe/code/apm-lean/apm/a97A08.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "sorry_count_main": 3,
+    "sorry_count_total": 3
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_status": true
+  },
+  "classification": "partial",
+  "imported_at": "2026-05-02T19:07:38Z"
+}
