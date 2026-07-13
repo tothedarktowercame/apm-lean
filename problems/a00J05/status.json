@@ -1,0 +1,51 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a00J05",
+  "bundle_root": "problems/a00J05",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a00J05.md",
+    "problem_tex": "apm/a00J05.tex",
+    "harvest_mismatch_note": "The harvested informal proof (apm-a00J05.md) contains the proof for a00J04 (polynomial lemniscate), not a00J05 (Cauchy transform). The Lean formalization implements the correct problem from a00J05.tex."
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 4,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 4
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.629719Z",
+  "checked_at": "2026-07-13T18:55:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a00J05/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 4 sorry declarations (the four main theorems); helper lemma hasDerivAt_integrand is proved",
+  "sorry_details": {
+    "sorry_count": 4,
+    "sorry_locations": [
+      "cauchyTransform_differentiableAt (part a, pointwise)",
+      "cauchyTransform_differentiableOn (part a, global)",
+      "cauchyTransform_mul_z_tendsto (part c)",
+      "cauchyTransform_not_extendable_to_entire (part b)"
+    ],
+    "sorry_reason": "Differentiation under the integral sign and dominated convergence require extensive glue to thread through Mathlib's parametric integral theorems. Part (b) depends on parts (a) and (c).",
+    "proved_lemmas": [
+      "hasDerivAt_integrand (core derivative: d/dz[1/(t-z)] = 1/(t-z)^2)"
+    ]
+  },
+  "harvest_mismatch": true,
+  "harvest_mismatch_detail": "informal-solution.md and apm-a00J05.md contain the a00J04 lemniscate proof, not the a00J05 Cauchy transform problem. The Lean file implements the correct problem from a00J05.tex."
+}
