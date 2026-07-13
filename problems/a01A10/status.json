@@ -1,0 +1,47 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a01A10",
+  "bundle_root": "problems/a01A10",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a01A10.md",
+    "problem_tex": "apm/a01A10.tex",
+    "harvest_mismatch_note": "The harvested informal proof (apm-a01A10.md) contains the proof for a01A09 (Laplace transform), not a01A10 (contour integral)."
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 3,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 3
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.670783Z",
+  "checked_at": "2026-07-13T22:15:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a01A10/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 3 sorries",
+  "sorry_details": {
+    "sorry_count": 3,
+    "sorry_locations": [
+      "gaussian_fourier_transform (part b)",
+      "complete_square (helper lemma)",
+      "fresnel_integral (part a)"
+    ],
+    "sorry_reason": "Part (b) requires contour-shift argument not in Mathlib. Part (a) requires sector contour + decay estimates. Helper lemma has I^2=-1 ring identity issue with linear_combination."
+  },
+  "harvest_mismatch": true,
+  "harvest_mismatch_detail": "informal-solution.md and apm-a01A10.md contain the a01A09 Laplace transform proof, not the a01A10 contour integral problem."
+}
