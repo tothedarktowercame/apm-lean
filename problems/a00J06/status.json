@@ -1,0 +1,46 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a00J06",
+  "bundle_root": "problems/a00J06",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a00J06.md",
+    "problem_tex": "apm/a00J06.tex",
+    "harvest_mismatch_note": "The harvested informal proof (apm-a00J06.md) contains the proof for a00J05 (Cauchy transform), not a00J06 (power series singularity). The Lean formalization implements the correct problem from a00J06.tex."
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.636309Z",
+  "checked_at": "2026-07-13T19:05:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a00J06/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 1 sorry (main theorem only); helper lemma radius_gt_one_of_summable is proved",
+  "sorry_details": {
+    "sorry_count": 1,
+    "sorry_location": "singular_at_one (main theorem)",
+    "sorry_reason": "The proof requires change-of-origin for FormalMultilinearSeries (computing Taylor coefficients of f at x in terms of original a(n)), showing nonneg of re-centered coefficients, Tonelli interchange for nonneg double sums, and deriving the contradiction. Mathlib has changeOrigin but the specific ofScalars computation is not pre-built.",
+    "proved_lemmas": [
+      "radius_gt_one_of_summable (summability at 1+ε implies radius > 1)"
+    ]
+  },
+  "harvest_mismatch": true,
+  "harvest_mismatch_detail": "informal-solution.md and apm-a00J06.md contain the a00J05 Cauchy transform proof, not the a00J06 power series singularity problem. The Lean file implements the correct problem from a00J06.tex."
+}
