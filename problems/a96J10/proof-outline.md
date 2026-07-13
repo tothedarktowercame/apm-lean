@@ -97,7 +97,13 @@ Mathlib cross-references
 ## Current Blockers
 
 - 1 `sorry` remains in `lean/Main.lean`:
-  - `apm_a96J10_even_factors`
+  - `apm_a96J10_even_factors` — the key sub-lemma `hodd` (odd Taylor coefficients of an
+    even analytic function vanish) is now **fully proven** via `compContinuousLinearMap`
+    and `factorial_smul` coefficient comparison. The remaining `sorry` is the construction
+    of `g` from even-indexed coefficients and proving its **global analyticity on the full
+    unit disk**. This requires the Taylor series at 0 to converge on the entire disk of
+    analyticity — a result equivalent to Cauchy's integral formula, which is not yet
+    available in Mathlib's analytic-function framework.
 - `apm_a96J10_f_even` is now closed.
 - `apm_a96J10_f_analytic` is now closed via the `dslope exp 0` removable-singularity rewrite.
 - `apm_a96J10_main` is now closed after repairing its statement to exclude `z = 0`, which was

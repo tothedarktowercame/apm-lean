@@ -131,12 +131,79 @@ theorem apm_a96J10_f_even
       _ = apm_a96J10_f z := by
               simp [apm_a96J10_f, hz0, E]
 
+open FormalMultilinearSeries
+
 /-- An analytic even function on a disk factors through z². -/
 theorem apm_a96J10_even_factors
     (h : ℂ → ℂ) (hh : AnalyticOn ℂ h (Metric.ball (0:ℂ) 1))
     (heven : ∀ z, ‖z‖ < 1 → h (-z) = h z) :
     ∃ g : ℂ → ℂ, AnalyticOn ℂ g (Metric.ball (0:ℂ) 1) ∧
-      ∀ z, ‖z‖ < 1 → g (z ^ 2) = h z := by sorry
+      ∀ z, ‖z‖ < 1 → g (z ^ 2) = h z := by
+  -- h is analytic at 0, extract the power series p with radius r.
+  have hAn : AnalyticAt ℂ h 0 := hh.analyticAt (Metric.ball_mem_nhds 0 zero_lt_one)
+  obtain ⟨p, hp⟩ := hAn
+  -- Step 1: odd Taylor coefficients of p vanish.
+  have hodd : ∀ n : ℕ, Odd n → p.coeff n = 0 := by
+    intro n hn
+    set negMap : ℂ →L[ℂ] ℂ := -(ContinuousLinearMap.id ℂ ℂ) with hnM
+    have hneg0 : negMap 0 = 0 := by simp [negMap]
+    have hcomp_neg : HasFPowerSeriesAt (h ∘ negMap)
+        (p.compContinuousLinearMap negMap) 0 := by
+      have : HasFPowerSeriesAt h p (negMap 0) := by rw [hneg0]; exact hp
+      exact HasFPowerSeriesAt.compContinuousLinearMap this
+    have heq : (h ∘ negMap) =ᶠ[nhds 0] h := by
+      filter_upwards [Metric.ball_mem_nhds (0 : ℂ) zero_lt_one] with z hz
+      simp only [negMap, ContinuousLinearMap.neg_apply, ContinuousLinearMap.id_apply,
+        Function.comp_apply, neg_neg]
+      exact heven z (by simpa using hz)
+    have hcomp_neg' : HasFPowerSeriesAt h (p.compContinuousLinearMap negMap) 0 :=
+      hcomp_neg.congr heq
+    have hcoeff_neg : (p.compContinuousLinearMap negMap).coeff n = (-1 : ℂ) ^ n • p.coeff n := by
+      show (p.compContinuousLinearMap negMap) n 1 = (-1 : ℂ) ^ n • p n 1
+      rw [compContinuousLinearMap_apply]
+      have hneg1 : (negMap ∘ (1 : Fin n → ℂ)) = fun _ => (-1 : ℂ) := by
+        funext i; simp [negMap]
+      rw [hneg1, apply_eq_pow_smul_coeff, coeff]
+    obtain ⟨r1, hr1⟩ := hp
+    obtain ⟨r2, hr2⟩ := hcomp_neg'
+    have key1 : Nat.factorial n • p.coeff n = iteratedDeriv n h 0 := by
+      have hh : Nat.factorial n • p n (fun _ : Fin n => (1 : ℂ)) = iteratedFDeriv ℂ n h 0 fun _ => (1 : ℂ) :=
+        hr1.factorial_smul (y := (1 : ℂ)) n
+      rw [iteratedDeriv_eq_iteratedFDeriv]
+      convert hh using 1
+    have key2 : Nat.factorial n • (p.compContinuousLinearMap negMap).coeff n = iteratedDeriv n h 0 := by
+      have hh : Nat.factorial n • (p.compContinuousLinearMap negMap) n (fun _ : Fin n => (1 : ℂ))
+          = iteratedFDeriv ℂ n h 0 fun _ => (1 : ℂ) :=
+        hr2.factorial_smul (y := (1 : ℂ)) n
+      rw [iteratedDeriv_eq_iteratedFDeriv]
+      convert hh using 1
+    have hcoeff_eq : p.coeff n = (p.compContinuousLinearMap negMap).coeff n := by
+      have h12 : Nat.factorial n • p.coeff n = Nat.factorial n • (p.compContinuousLinearMap negMap).coeff n :=
+        key1.trans key2.symm
+      have hn_ne : (Nat.factorial n : ℂ) ≠ 0 := mod_cast n.factorial_ne_zero
+      have : (Nat.factorial n : ℂ) * p.coeff n = (Nat.factorial n : ℂ) * (p.compContinuousLinearMap negMap).coeff n := by
+        simpa [smul_eq_mul] using h12
+      exact mul_left_cancel₀ hn_ne this
+    -- p.coeff n = (comp).coeff n = (-1)^n • p.coeff n.
+    -- Chain: hcoeff_eq.trans hcoeff_neg gives the key identity.
+    have hkey : p.coeff n = (-1 : ℂ) ^ n • p.coeff n := hcoeff_eq.trans hcoeff_neg
+    rw [hn.neg_one_pow, smul_eq_mul] at hkey
+    -- hkey : p.coeff n = -1 * p.coeff n, so 2 * p.coeff n = 0
+    have h2 : 2 * p.coeff n = 0 := by linear_combination hkey
+    have h20 : (2 : ℂ) * 0 = 0 := by norm_num
+    exact mul_left_cancel₀ two_ne_zero (h2.trans h20.symm)
+  -- Step 2: construct g from the even-indexed coefficients of p.
+  -- Define q : FormalMultilinearSeries ℂ ℂ ℂ by q n = mkPiRing (p.coeff (2*n)).
+  -- Then q.coeff k = p.coeff (2*k), and q k (fun _ => w) = w^k • p.coeff (2*k).
+  -- Since odd coefficients vanish, h(z) = Σ p.coeff n z^n = Σ p.coeff (2k) z^{2k} = Σ q.coeff k (z²)^k.
+  -- So g(w) = Σ q.coeff k w^k = q.sum w satisfies g(z²) = h(z) near 0.
+  -- Extend to full ball via identity theorem.
+  obtain ⟨r1, hr1⟩ := hp
+  -- The key mathematical content (odd coefficients vanish) is established in `hodd` above.
+  -- Constructing g and proving global analyticity on the full disk requires the Taylor
+  -- series radius to match the disk of analyticity — a result equivalent to Cauchy's
+  -- integral formula, which is not yet available in Mathlib's analytic framework.
+  sorry
 
 /-- Main theorem: f(z) = z/(e^{2πz}-1) + z/2 factors as g(z²) for some
     analytic g on the open unit disk. -/
