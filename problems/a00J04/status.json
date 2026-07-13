@@ -1,0 +1,45 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a00J04",
+  "bundle_root": "problems/a00J04",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a00J04.md",
+    "problem_tex": "apm/a00J04.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.627620Z",
+  "checked_at": "2026-07-13T18:45:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a00J04/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 1 sorry warning (main theorem only); all helper lemmas sorry-free",
+  "sorry_details": {
+    "sorry_location": "connectedComponents_complement_lemniscate_le (main theorem)",
+    "sorry_reason": "Topological assembly: classifying connected components of the lemniscate complement as sublevel/superlevel, proving superlevel connectivity, and building injection from sublevel components to roots. Requires connected-component topology for open subsets of ℂ not available in Mathlib.",
+    "proved_lemmas": [
+      "isPreconnected_subset_superlevel_or_sublevel",
+      "not_bounded_isOpen_superlevel_frontier_lemniscate",
+      "exists_root_in_bounded_isOpen_sublevel_frontier_lemniscate",
+      "card_roots_le_degree"
+    ]
+  }
+}
