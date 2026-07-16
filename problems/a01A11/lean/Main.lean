@@ -59,10 +59,27 @@ theorem cauchyTransform_not_entire
   -- Step 1: G is constant (Liouville)
   -- Need: IsBounded (range G). From: G→0 at ∞ + continuous on compact.
   have hG_bounded : Bornology.IsBounded (range G) := by
-    sorry -- G(z) → 0 at ∞ (from h_decay + hG_eq) ⟹
-          -- ∃ R, |z|>R → |G z| < 1
-          -- G continuous on {|z|≤R} compact ⟹ bounded there
-          -- Union bounded
+    obtain ⟨s, hs, hs_bdd⟩ := Metric.exists_isBounded_image_of_tendsto h_decay
+    obtain ⟨t, ht, hts⟩ := mem_cocompact.mp hs
+    have hD : Dense {z : ℂ | z.im ≠ 0} := by
+      change Dense (Complex.im ⁻¹' ({0}ᶜ : Set ℝ))
+      exact (dense_compl_singleton 0).preimage Complex.isOpenMap_im
+    have houtside : G '' tᶜ ⊆ closure (cauchyTransform K '' s) := by
+      rintro _ ⟨z, hzt, rfl⟩
+      have hzcl : z ∈ closure (tᶜ ∩ {w : ℂ | w.im ≠ 0}) :=
+        hD.open_subset_closure_inter ht.isClosed.isOpen_compl hzt
+      have hGzcl : G z ∈ closure (G '' (tᶜ ∩ {w : ℂ | w.im ≠ 0})) :=
+        image_closure_subset_closure_image hG_diff.continuous ⟨z, hzcl, rfl⟩
+      apply closure_mono ?_ hGzcl
+      rintro _ ⟨w, hw, rfl⟩
+      refine ⟨w, hts hw.1, (hG_eq w ?_).symm⟩
+      rintro ⟨r, _, rfl⟩
+      exact hw.2 (by simp)
+    apply (ht.image hG_diff.continuous).isBounded.union hs_bdd.closure |>.subset
+    rintro _ ⟨z, rfl⟩
+    by_cases hzt : z ∈ t
+    · exact Or.inl ⟨z, hzt, rfl⟩
+    · exact Or.inr (houtside ⟨z, hzt, rfl⟩)
   have hG_const : ∀ z w : ℂ, G z = G w :=
     hG_diff.apply_eq_apply_of_bounded hG_bounded
   -- Step 2: The constant is 0 (from decay)
@@ -70,7 +87,26 @@ theorem cauchyTransform_not_entire
     intro z
     -- G is constant, so G z = G w for all w. Pick w → ∞.
     -- G w → 0, so G z = 0.
-    sorry -- from hG_const + h_decay via Filter.Tendsto + const
+    let w : ℕ → ℂ := fun n ↦ ((n + 1 : ℕ) : ℂ) * Complex.I
+    have hw_cocompact : Tendsto w atTop (cocompact ℂ) := by
+      apply tendsto_cocompact_of_tendsto_dist_comp_atTop 0
+      convert ((tendsto_natCast_atTop_atTop (R := ℝ)).comp
+        (tendsto_add_atTop_nat 1)) using 1
+      funext n
+      simp only [w, Function.comp_apply, dist_zero_right, norm_mul, norm_I, mul_one]
+      exact Complex.norm_natCast (n + 1)
+    have hw_not_mem (n : ℕ) : w n ∉ ofReal '' K := by
+      rintro ⟨t, -, ht⟩
+      have := congrArg Complex.im ht
+      simp [w] at this
+      have hn : (0 : ℝ) < n + 1 := by positivity
+      linarith
+    have hz_tendsto : Tendsto (fun _ : ℕ ↦ G z) atTop (nhds 0) := by
+      convert h_decay.comp hw_cocompact using 1
+      funext n
+      change G z = cauchyTransform K (w n)
+      rw [← hG_eq (w n) (hw_not_mem n), hG_const (w n) z]
+    exact tendsto_nhds_unique tendsto_const_nhds hz_tendsto
   -- Step 3: Contradiction
   obtain ⟨z₀, hz₀_mem, hz₀_ne⟩ := h_nonzero
   exact hz₀_ne (by rw [← hG_eq z₀ hz₀_mem]; exact hG_zero z₀)
