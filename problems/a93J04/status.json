@@ -1,0 +1,45 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a93J04",
+  "bundle_root": "problems/a93J04",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a93J04.md",
+    "problem_tex": "apm/a93J04.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.087587Z",
+  "checked_at": "2026-07-14T23:35:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a93J04/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 1 sorry",
+  "sorry_details": {
+    "sorry_count": 1,
+    "sorry_locations": [
+      "tendsto_eLpNorm_atTop: main theorem ‖f‖ₚ → ‖f‖∞"
+    ],
+    "sorry_reason": "Upper bound: eLpNorm_le_eLpNorm_mul_rpow_measure_univ with q=∞ gives ‖f‖ₚ ≤ ‖f‖∞·μ(univ)^{1/p} → ‖f‖∞. Lower bound: for c < ‖f‖∞, E_c = {|f|>c} has positive measure, ‖f‖ₚ ≥ c·m(E_c)^{1/p} → c. Squeeze: lim inf ≥ ‖f‖∞ ≥ lim sup. The lower bound requires connecting essSup definition to positive measure of superlevel sets, restricting the integral to E_c, and the limit m(E_c)^{1/p} → 1."
+  },
+  "proven_lemmas": [
+    "eLpNorm_top_eq_essSup (zero-sorry): ‖f‖∞ = essSup ‖f‖₊"
+  ]
+}
