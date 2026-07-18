@@ -1,0 +1,47 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a94A03",
+  "bundle_root": "problems/a94A03",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a94A03.md",
+    "problem_tex": "apm/a94A03.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 3,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 3
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.137156Z",
+  "checked_at": "2026-07-14T23:45:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94A03/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 3 sorries",
+  "sorry_details": {
+    "sorry_count": 3,
+    "sorry_locations": [
+      "gaussKernel_integral_eq_one: Gaussian kernel integrates to 1",
+      "gaussConv_Lp_contraction: Part (a) Young's inequality",
+      "gaussConv_tendsto_Lp: Part (b) Lp convergence"
+    ],
+    "sorry_reason": "Three sorry boundaries: (1) Gaussian integral verification requires substitution and Mathlib's gaussian_integral lemma. (2) Part (a) needs Young's convolution inequality (not in Mathlib): eLpNorm(g*f) <= eLpNorm(g,1)*eLpNorm(f,p). (3) Part (b) needs Lp translation continuity (not in Mathlib) and Minkowski's integral inequality for general p."
+  },
+  "proven_lemmas": [
+    "gaussKernel_nonneg (zero-sorry): kernel is nonneg via positivity"
+  ]
+}
