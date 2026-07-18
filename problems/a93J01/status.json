@@ -1,0 +1,42 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a93J01",
+  "bundle_root": "problems/a93J01",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a93J01.md",
+    "problem_tex": "apm/a93J01.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.067704Z",
+  "checked_at": "2026-07-14T23:25:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a93J01/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 1 sorry",
+  "sorry_details": {
+    "sorry_count": 1,
+    "sorry_locations": [
+      "ac_on_01_of_continuous_bv_ac_from_a: main theorem"
+    ],
+    "sorry_reason": "The proof combines three ingredients: (1) BoundedVariationOn.tendsto_eVariationOn_Icc_zero_left gives V(f,[0,a])→0 as a→0 using continuity+BV, (2) AC on [a₀,1] gives δ for ε/2, (3) splitting disjoint intervals into those near 0 (bounded by variation) and those in [a₀,1] (bounded by AC). The main difficulty is the combinatorial bookkeeping of the interval partition and connecting eVariationOn to the AbsolutelyContinuousOnInterval ε-δ definition."
+  }
+}
