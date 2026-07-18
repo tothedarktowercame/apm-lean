@@ -1,0 +1,41 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a03J02",
+  "bundle_root": "problems/a03J02",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a03J02.md",
+    "problem_tex": "apm/a03J02.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 0,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 0
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "complete",
+  "imported_at": "2026-07-13T17:26:51.740428Z",
+  "checked_at": "2026-07-14T21:10:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a03J02/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 0 sorries",
+  "sorry_details": {
+    "sorry_count": 0,
+    "sorry_locations": [],
+    "sorry_reason": "Complete zero-sorry proof."
+  },
+  "statement_repair": "The informal proof proposed encoding the domain as Fin n → ℝ and building IsPolynomialMap using MvPolynomial. Mathlib lacks calculus infrastructure for MvPolynomial.eval, so the informal proof's approach of proving polynomial ⟹ C¹ ⟹ Lipschitz was impractical. Instead, the structural repair uses Mathlib's addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero (Gouëzel's Jacobian/change-of-variables theory), which directly proves that Differentiable maps on finite-dimensional spaces send null sets to null sets. The polynomial ⟹ Differentiable step is bridged by MvPolynomial.eval_differentiable, proven using eval_eq' (expressing eval as a finite sum of monomial products) and fun_prop."
+}
