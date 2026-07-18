@@ -1,0 +1,48 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a92J05",
+  "bundle_root": "problems/a92J05",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a92J05.md",
+    "problem_tex": "apm/a92J05.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.881015Z",
+  "checked_at": "2026-07-14T22:20:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a92J05/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 1 sorry",
+  "sorry_details": {
+    "sorry_count": 1,
+    "sorry_locations": [
+      "roots_outside_unit_disk (Rouché application to count roots inside/outside disk)"
+    ],
+    "sorry_reason": "Mathlib does not have Rouché's theorem. The proven lemmas establish: (1) the Rouché condition |h(z)| ≤ 4 < 5 = |g(z)| on |z| = 1, and (2) p has no roots on |z| = 1. The missing step is Rouché's theorem itself: since |g| > |h| on |z| = 1, p = g + h has the same number of zeros inside {|z| < 1} as g = 5z³ (which has 3). Then 10 − 3 = 7 roots outside."
+  },
+  "proven_lemmas": [
+    "norm_pow_of_norm_one: ‖z‖=1 ⟹ ‖z^n‖=1",
+    "norm_smul_pow_of_norm_one: ‖z‖=1 ⟹ ‖c*z^n‖=‖c‖",
+    "rouche_condition (zero-sorry): |h(z)| ≤ 4 < 5 = |g(z)| on |z|=1",
+    "p_no_roots_on_circle (zero-sorry): no roots on |z|=1 via reverse triangle inequality"
+  ]
+}
