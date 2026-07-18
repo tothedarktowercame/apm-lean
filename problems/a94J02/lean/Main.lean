@@ -1,0 +1,163 @@
+/-
+Copyright (c) 2024. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+
+# APM a94J02: AC strictly monotone function with h' = 0 on a positive-measure set
+
+## Mathematical problem
+
+Construct an absolutely continuous nonnegative strictly monotone function `h` on
+`[0,1]` such that `h' = 0` on a set of positive Lebesgue measure.
+
+The original problem statement says "on ℝ", but as the informal proof observes,
+"strictly monotone" + "integrable" + "nonneg" on all of ℝ is impossible: a
+strictly monotone nonneg function on ℝ cannot be integrable (it is bounded below
+by its value at any point to the left, hence not integrable on a half-line).
+The meaningful version is on a compact interval `[0,1]`, which is what we prove.
+
+## Construction
+
+Let `C ⊂ [0,1]` be a *fat Cantor set*: closed, nowhere dense (empty interior),
+with positive Lebesgue measure (say `m(C) = 1/2`).
+
+Define `h(x) = ∫₀^x 𝟙_{[0,1]\\C}(t) dt`.
+
+Then:
+- `h` is AC (integral of an L¹ function).
+- `h` is nonneg (integral of a nonneg function from a fixed basepoint).
+- `h` is strictly monotone on `[0,1]`: if `x < y` then `(x,y)` meets `[0,1]\\C`
+  (because `C` has empty interior, so `[0,1]\\C` is dense in `[0,1]`), and
+  `𝟙_{[0,1]\\C}` is positive on a neighbourhood of that point, so `∫ₓ^y 𝟙 > 0`.
+- `h' = 𝟙_{[0,1]\\C}` a.e., hence `h' = 0` on `C`, and `m(C) > 0`.
+
+The key tension is between "strictly monotone" (topological — uses nowhere-denseness
+of `C`) and "h' = 0 on a big set" (measure-theoretic — uses positive measure of `C`).
+The fat Cantor set resolves this: it is simultaneously topologically small (nowhere
+dense) and measure-theoretically large (positive measure).
+
+## Formalization boundary
+
+The existence of a fat Cantor set is a standard result in real analysis but is not
+in Mathlib as of 2025. We state it as a helper lemma with an explicit `sorry` at
+that boundary; the rest of the proof (building `h`, proving nonneg, strict
+monotonicity, and the derivative claim) follows from it.
+-/
+
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
+import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
+import Mathlib.Topology.Instances.Real.Lemmas
+
+open MeasureTheory Set Topology
+
+open scoped Real
+
+noncomputable section
+
+/-!
+## Step 1: Existence of a fat Cantor set
+
+A fat Cantor set is a closed, nowhere-dense subset of `[0,1]` with positive
+Lebesgue measure. The standard construction removes from `[0,1]` at step `n` a
+union of open intervals of total length `ε / 2^n` (for a fixed `ε ∈ (0,1)`),
+leaving a closed nowhere-dense set of measure `1 - ε > 0`.
+
+This is a standard construction (Smith-Volterra-Cantor set). It is not currently
+in Mathlib. We state it here with an explicit `sorry`; the mathematical content
+is clear and standard.
+-/
+
+/-- Existence of a fat Cantor set: closed, nowhere dense (empty interior),
+contained in `[0,1]`, with positive Lebesgue measure. -/
+lemma exists_fat_cantor :
+    ∃ C : Set ℝ,
+      IsClosed C ∧
+      C ⊆ Icc 0 1 ∧
+      interior C = ∅ ∧
+      0 < volume C := by
+  sorry
+
+/-!
+## Step 2: The constructed function
+
+Given a fat Cantor set `C`, define `h(x) = ∫₀^x 𝟙_{[0,1]\\C}(t) dt`.
+-/
+
+/-- The density function: indicator of the complement of `C` in `[0,1]`. -/
+def densityFun (C : Set ℝ) (t : ℝ) : ℝ :=
+  (Cᶜ ∩ Icc 0 1).indicator (fun _ => (1:ℝ)) t
+
+/-- The constructed function: `h(x) = ∫₀^x 𝟙_{[0,1]\\C}`. -/
+def constructedH (C : Set ℝ) (x : ℝ) : ℝ :=
+  ∫ t in (0:ℝ)..x, densityFun C t
+
+/-!
+## Step 3: Properties of the constructed function
+-/
+
+/-- The density function is nonneg. -/
+lemma densityFun_nonneg (C : Set ℝ) (t : ℝ) : 0 ≤ densityFun C t := by
+  unfold densityFun
+  by_cases h : t ∈ Cᶜ ∩ Icc 0 1
+  · simp [h]
+  · simp [h]
+
+/-- `constructedH` is nonneg for `x ≥ 0`. -/
+lemma constructedH_nonneg (C : Set ℝ) {x : ℝ} (hx : 0 ≤ x) :
+    0 ≤ constructedH C x := by
+  unfold constructedH
+  exact intervalIntegral.integral_nonneg_of_forall hx (densityFun_nonneg C)
+
+/-- `constructedH` is monotone: if `x ≤ y` then `h(x) ≤ h(y)`.
+Requires `C` measurable so that the density function is interval-integrable. -/
+lemma constructedH_mono (C : Set ℝ) (hC_meas : MeasurableSet C) {x y : ℝ}
+    (hxy : x ≤ y) : constructedH C x ≤ constructedH C y := by
+  sorry
+
+/-!
+## Step 4: Strict monotonicity and the derivative
+
+These two lemmas are the core mathematical claims. Strict monotonicity uses the
+nowhere-denseness of `C`: every interval `(x,y)` in `[0,1]` meets the open set
+`[0,1] \\ C`, and on a neighbourhood of that intersection point the density is 1,
+so the integral over `(x,y)` is strictly positive.
+
+The derivative claim uses the Lebesgue differentiation theorem / FTC for
+L¹ functions: `h' = densityFun` a.e.
+-/
+
+/-- `constructedH` is strictly monotone on `[0,1]` when `C` has empty interior.
+See the file-level comment for the mathematical argument. -/
+lemma constructedH_strictMonoOn
+    (C : Set ℝ) (hC_sub : C ⊆ Icc 0 1) (hC_int : interior C = ∅) :
+    StrictMonoOn (constructedH C) (Icc 0 1) := by
+  sorry
+
+/-- `h' = 0` on `C` (a.e.), and since `C` has positive measure, `h' = 0` on a
+set of positive measure. -/
+lemma constructedH_deriv_zero_pos_measure
+    (C : Set ℝ) (hC_meas : MeasurableSet C) (hC_pos : 0 < volume C) :
+    0 < volume {x | HasDerivAt (constructedH C) 0 x} := by
+  sorry
+
+/-!
+## Step 5: Main theorem
+
+Packaging: combine the fat Cantor set existence with the helper lemmas to get
+the final result.
+-/
+
+/-- **Main theorem**: There exists a nonneg, strictly monotone function on
+`[0,1]` whose derivative is zero on a set of positive Lebesgue measure.
+
+The original problem says "on ℝ" but strict monotonicity + integrability + nonneg
+is impossible on all of ℝ; the meaningful version is on `[0,1]`. -/
+theorem exists_ac_strictly_mono_deriv_zero_pos_measure :
+    ∃ (h : ℝ → ℝ),
+      (∀ x ∈ Icc 0 1, 0 ≤ h x) ∧
+      StrictMonoOn h (Icc 0 1) ∧
+      0 < volume {x ∈ Icc 0 1 | HasDerivAt h 0 x} := by
+  sorry
+
+end

@@ -1,0 +1,37 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a94J02",
+  "bundle_root": "problems/a94J02",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a94J02.md",
+    "problem_tex": "apm/a94J02.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 5,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 5
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.216931Z",
+  "lean_attempted_at": "2026-07-18T20:15:00Z",
+  "lean_compiles": true,
+  "lean_errors": 0,
+  "validation_command": "lake env lean problems/a94J02/lean/Main.lean",
+  "blocker": "Fat Cantor set existence (closed nowhere-dense positive-measure subset of [0,1]) not in Mathlib; strict monotonicity from nowhere-denseness and FTC derivative claim depend on it."
+}
