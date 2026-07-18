@@ -1,0 +1,50 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a92J06",
+  "bundle_root": "problems/a92J06",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a92J06.md",
+    "problem_tex": "apm/a92J06.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 2
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.886803Z",
+  "checked_at": "2026-07-14T22:35:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a92J06/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 2 sorries",
+  "sorry_details": {
+    "sorry_count": 2,
+    "sorry_locations": [
+      "contour_integral_eval (residue computation via circle integral API)",
+      "integral_inv_two_plus_cos (z=e^{iθ} substitution)"
+    ],
+    "sorry_reason": "Two sorry boundaries: (1) The contour integral evaluation requires partial fraction decomposition combined with integral_sub_inv_of_mem_ball (root inside disk) and integral_sub_zpow_of_ne (root outside). (2) The z=e^{iθ} substitution converting the real trig integral to a contour integral requires change-of-variables for complex-valued interval integrals on the circle."
+  },
+  "proven_lemmas": [
+    "sqrt_three_gt_one: √3 > 1",
+    "sq_sqrt_three_complex: (√3 : ℂ)² = 3",
+    "quadratic_factor: z²+4z+1 = (z-z₁)(z-z₂) via linear_combination",
+    "z1_norm_lt_one: |z₁| = 2-√3 < 1",
+    "z2_norm_gt_one: |z₂| = 2+√3 > 1"
+  ]
+}
