@@ -1,0 +1,47 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a92J03",
+  "bundle_root": "problems/a92J03",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a92J03.md",
+    "problem_tex": "apm/a92J03.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.870828Z",
+  "checked_at": "2026-07-14T21:50:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a92J03/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 1 sorry",
+  "sorry_details": {
+    "sorry_count": 1,
+    "sorry_locations": [
+      "fourierTransform_tendsto_zero (part c: Riemann-Lebesgue lemma)"
+    ],
+    "sorry_reason": "Mathlib's Real.tendsto_integral_exp_smul_cocompact proves Riemann-Lebesgue for the 2π-convention (𝐞(-(v*w)) = exp(-2πivw)). The problem uses exp(ixξ) without 2π. Connecting the two conventions requires: (1) showing exp(ixξ) = 𝐞(x*ξ/(2π)) by unfolding fourierChar and Circle.smul, and (2) composing the Tendsto with the cocompact-preserving homeomorphism ξ ↦ -ξ/(2π). Both steps are mathematically straightforward but require navigating Mathlib's AddChar/Circle/fourierChar API."
+  },
+  "proven_lemmas": [
+    "fourierTransform_norm_le (part b): ‖f̂(ξ)‖ ≤ ∫ ‖f(x)‖ dx",
+    "fourierTransform_continuous (part a): f̂ is continuous via continuous_of_dominated (DCT)",
+    "fourier_maps_L1_to_C0: combines (a), (b), and (c)"
+  ]
+}
