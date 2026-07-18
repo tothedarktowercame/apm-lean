@@ -1,0 +1,53 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a94A05",
+  "bundle_root": "problems/a94A05",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a94A05.md",
+    "problem_tex": "apm/a94A05.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 0,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 0
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "complete",
+  "imported_at": "2026-07-13T17:26:52.169109Z",
+  "checked_at": "2026-07-18T20:30:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94A05/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 0 warnings; 0 sorries",
+  "sorry_details": {
+    "sorry_count": 0,
+    "sorry_location": null,
+    "sorry_reason": null,
+    "proved_lemmas": [
+      "vitali_covering_lemma_5 (part a: Vitali covering lemma with factor 5)",
+      "measure_image_critical_set_eq_zero (part b: image of critical set has measure zero)"
+    ]
+  },
+  "proof_notes": {
+    "part_a": "Applied Vitali.exists_disjoint_subfamily_covering_enlargement_closedBall with τ=5>3.",
+    "part_b": "Applied MeasureTheory.addHaar_image_eq_zero_of_det_fderivWithin_eq_zero (Sard's lemma for E=ℝ). deriv=0 → fderiv 1=0 → zero map → det=0.",
+    "statement_repairs": [
+      "inflate5 definition in informal proof was 5/2× instead of 5×",
+      "Proposed part (a) return type ℕ → Set ℝ replaced with subfamily u ⊆ t (PairwiseDisjoint)",
+      "Proposed direct Vitali argument for part (b) replaced with Mathlib Sard lemma"
+    ]
+  }
+}
