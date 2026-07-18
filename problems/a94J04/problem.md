@@ -1,0 +1,35 @@
+# a94J04
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-a94J04.md`
+- imported-at: `2026-07-13T17:26:52.219619Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+For $y>0$, define the operator $P_y$ on continuous functions by
+$P_y(f)=\frac{1}{\pi}\int_{-\infty}^{\infty}y/(y^2+(x-t)^2)f(t)dt$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Show that $P_y$ extends to a bounded linear operator
+$P_y:L^2(\R)\rightarrow L^2(\R)$ with operator norm less than or equal
+to one.
+%------------------------------------------------------------------*
+\item Show that $\lim_{y\rightarrow 0}P_yf=f$ in $L^2(\R)$.
+%------------------------------------------------------------------*
+\item What can you say about almost everywhere convergence for the limit
+in part (b). Explain.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

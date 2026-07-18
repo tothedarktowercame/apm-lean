@@ -1,0 +1,64 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a94J04",
+  "bundle_root": "problems/a94J04",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a94J04.md",
+    "problem_tex": "apm/a94J04.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 6,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 6
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.169109Z",
+  "checked_at": "2026-07-18T22:00:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94J04/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 6 sorries",
+  "sorry_details": {
+    "sorry_count": 6,
+    "sorry_locations": [
+      "poissonKernel_integral_one: measure-theoretic integral ∫ y/(y²+x²) dx = π",
+      "poissonKernel_integrable: P_y ∈ L¹",
+      "poissonKernel_tail_tendsto: tail decay ∫_{|t|>δ} P_y → 0",
+      "poissonConv_L2_contraction (part a): needs Young's convolution inequality",
+      "poissonConv_tendsto_L2 (part b): needs approximate identity + L² translation continuity",
+      "poissonConv_tendsto_ae (part c): needs Hardy-Littlewood maximal inequality"
+    ],
+    "sorry_reason": "Three major Mathlib gaps: (1) Young's convolution inequality, (2) L² translation continuity, (3) Hardy-Littlewood maximal inequality. Additionally, measure-theoretic integral computation for the Poisson kernel requires conversion from interval integral formulas.",
+    "proved_lemmas": [
+      "poissonKernel_nonneg: P_y(x) >= 0 for y > 0",
+      "poissonKernel_inner_nonneg: y/(y²+x²) >= 0 for y > 0"
+    ]
+  },
+  "proof_notes": {
+    "strategy": "Part (a) via Young's convolution inequality (||g*f||_2 <= ||g||_1 ||f||_2). Part (b) via approximate identity theory. Part (c) via Hardy-Littlewood maximal inequality.",
+    "statement_repairs": [
+      "Used MemLp instead of Memℒp (Mathlib API name)",
+      "Used nhdsWithin 0 (Ioi 0) instead of 𝓝[>] 0 (filter syntax)",
+      "Marked poissonKernel as noncomputable (depends on π)"
+    ],
+    "key_mathlib_gaps": [
+      "Young's convolution inequality for Lp spaces",
+      "L² translation continuity (||τ_t f - f||₂ → 0 as t → 0)",
+      "Hardy-Littlewood maximal inequality"
+    ]
+  }
+}
