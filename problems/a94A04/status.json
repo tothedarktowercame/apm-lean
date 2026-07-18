@@ -1,0 +1,44 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a94A04",
+  "bundle_root": "problems/a94A04",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a94A04.md",
+    "problem_tex": "apm/a94A04.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 3,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 3
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.137156Z",
+  "checked_at": "2026-07-14T23:55:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94A04/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 3 sorries",
+  "sorry_details": {
+    "sorry_count": 3,
+    "sorry_locations": [
+      "orthogonal_to_polynomials: monomial case (a*x^n integral = 0)",
+      "orthogonal_to_polynomials: add case (splitting integral of sum)",
+      "zero_of_orthogonal_to_monomials: main theorem"
+    ],
+    "sorry_reason": "Three sorries: (1-2) The polynomial linearity step needs integral_add for interval integrals (MeasureSpace ℝ vs Measure ℝ issue) plus connecting a*x^n to x^n. (3) The main theorem requires Stone-Weierstrass density (polynomials dense in C([0,1])) + continuous functions dense in L^2 + Cauchy-Schwarz to conclude ||f||^2 = 0."
+  }
+}
