@@ -1,0 +1,44 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a02J07",
+  "bundle_root": "problems/a02J07",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a02J07.md",
+    "problem_tex": "apm/a02J07.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 2
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.678071Z",
+  "checked_at": "2026-07-14T20:45:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a02J07/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 2 sorries",
+  "sorry_details": {
+    "sorry_count": 2,
+    "sorry_locations": [
+      "logIntegral_im_eq_argStar_diff (FTC for interval integrals with one-sided limit at singular endpoint)",
+      "logIntegral_im_bounds (main theorem: combines FTC result with case split on exit direction)"
+    ],
+    "sorry_reason": "The fundamental theorem of calculus for interval integrals with a one-sided limit at an endpoint where the integrand may be singular (logStar is not defined at t=0 since γ(0)=π is on the slit) requires careful MeasureTheory/integration machinery in Mathlib. The proven infrastructure includes: posSlitPlane domain, logStar (branch of log on ℂ\\\\[0,∞)), argStar ∈ (0,2π) bounds, and hasDerivAt_logStar (antiderivative of 1/z on the slit domain)."
+  },
+  "statement_repair": "The generated informal proof proposed arg_star with range (0,2π) branched along [0,∞). Mathlib's Complex.arg has range (-π,π] and Complex.log is on slitPlane {z : 0 < z.re ∨ z.im ≠ 0} (complement of (-∞,0]). Our domain Ω = ℂ\\\\[0,∞) is the mirror image. We define logStar z = log(-z) + iπ using the biholomorphism z↦-z from Ω to slitPlane, deriving all properties from Mathlib's existing Complex.log."
+}
