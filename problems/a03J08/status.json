@@ -1,0 +1,52 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a03J08",
+  "bundle_root": "problems/a03J08",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a03J08.md",
+    "problem_tex": "apm/a03J08.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.843729Z",
+  "checked_at": "2026-07-14T21:30:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a03J08/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 1 sorry",
+  "sorry_details": {
+    "sorry_count": 1,
+    "sorry_locations": [
+      "hg_entire: extending g across the finite set F via Riemann removable singularities"
+    ],
+    "sorry_reason": "The proof requires showing g_ext (defined as if z∈F then 0 else (f-w₀)⁻¹) is Differentiable ℂ. At z∉F, g_ext equals (f-w₀)⁻¹ near z since F is closed. At z∈F, the Riemann removable singularity theorem (Complex.analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt) applies: g_ext is differentiable on a punctured neighborhood (from hg_diff) and continuous at z (from hg_poles). The sorry is at the interface between the if-then-else definition, the finite set structure, and Mathlib's analytic API — all mathematically routine but requiring careful filter/set bookkeeping."
+  },
+  "proven_lemmas": [
+    "tendsto_norm_sub_atTop: ‖f‖ → ∞ implies ‖f - w₀‖ → ∞",
+    "tendsto_norm_reciprocal_zero: ‖f‖ → ∞ implies ‖(f-w₀)⁻¹‖ → 0",
+    "hg_diff: g = (f-w₀)⁻¹ is differentiable on Fᶜ",
+    "hg_poles: ‖g‖ → 0 near each point of F",
+    "hg_infty: ‖g‖ → 0 at cocompact",
+    "hg_ext_infty: g_ext → 0 at cocompact",
+    "Liouville step: g_ext ≡ 0 by eq_const_of_tendsto_cocompact",
+    "Contradiction: g_ext ≠ 0 on D"
+  ]
+}
