@@ -1,0 +1,49 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a92J07",
+  "bundle_root": "problems/a92J07",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a92J07.md",
+    "problem_tex": "apm/a92J07.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 2
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:51.908347Z",
+  "checked_at": "2026-07-14T22:50:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a92J07/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 2 sorries",
+  "sorry_details": {
+    "sorry_count": 2,
+    "sorry_locations": [
+      "entire_avoids_ray_const: concluding f constant from h constant (chain rule step)",
+      "cauchy_riemann_ray_implies_const: CR-to-complex reduction"
+    ],
+    "sorry_reason": "Two sorry boundaries: (1) From 'h = exp(I*log f) constant' to 'f constant' requires showing deriv(log f) = 0 via chain rule and exp_ne_zero, then that zero-derivative implies constant. (2) The CR-to-complex reduction (building f = u+iv from Cauchy-Riemann equations and showing f is entire). The proven infrastructure includes: log∘f is entire (Differentiable.clog), |Im(log f)| ≤ π (arg bounds), h = exp(I*log f) is bounded entire, and Liouville application (exists_const_forall_eq_of_bounded)."
+  },
+  "proven_lemmas": [
+    "Differentiable.clog composition (log∘f entire)",
+    "|Im(log f)| ≤ π (argument bound)",
+    "h = exp(I·log f) is bounded (closedBall membership via norm_exp + Im bound)",
+    "Liouville application (exists_const_forall_eq_of_bounded)"
+  ]
+}
