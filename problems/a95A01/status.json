@@ -1,0 +1,55 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a95A01",
+  "bundle_root": "problems/a95A01",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a95A01.md",
+    "problem_tex": "apm/a95A01.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 2
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.169109Z",
+  "checked_at": "2026-07-18T23:30:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a95A01/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 2 sorries",
+  "sorry_details": {
+    "sorry_count": 2,
+    "sorry_locations": [
+      "riemann_lebesgue_sandwich (part a): Riemann-Lebesgue comparison needs Riemann sum machinery",
+      "indicator_not_riemann_integrable (part b): upper Riemann integral bound from positive measure"
+    ],
+    "sorry_reason": "Mathlib has no Riemann integral theory. The Riemann sum definitions and comparison with Lebesgue integrals require substantial machinery not currently available.",
+    "proved_lemmas": [
+      "dense_compl_of_interior_empty: Kᶜ dense when interior K = ∅",
+      "exists_not_mem_of_dense_compl: every interval meets Kᶜ",
+      "inf_indicator_eq_zero: inf χ_K = 0 on every interval"
+    ]
+  },
+  "proof_notes": {
+    "strategy": "Part (a) via step functions and monotonicity of Lebesgue integral. Part (b) via density of Kᶜ giving lower integral = 0, positive measure giving upper integral > 0.",
+    "key_mathlib_lemmas": [
+      "interior_eq_empty_iff_dense_compl: interior s = ∅ ↔ Dense sᶜ",
+      "Dense.inter_open_nonempty: dense set meets every nonempty open set"
+    ]
+  }
+}
