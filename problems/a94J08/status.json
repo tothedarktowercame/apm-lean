@@ -1,0 +1,57 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a94J08",
+  "bundle_root": "problems/a94J08",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a94J08.md",
+    "problem_tex": "apm/a94J08.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 2
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.169109Z",
+  "checked_at": "2026-07-18T23:00:00Z",
+  "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94J08/lean/Main.lean",
+  "validation_result": "exit 0; 0 errors; 2 sorries",
+  "sorry_details": {
+    "sorry_count": 2,
+    "sorry_locations": [
+      "Case B (f(0)=0): factorization f(z)=z^n h(z) needs analytic order theory",
+      "Case A (f(0)≠0): boundedness of 1/f on compact disk via compactness+continuity"
+    ],
+    "sorry_reason": "Case A needs combining the |z|>=1 bound (proved) with a compactness argument on closedBall 0 1. Case B needs Mathlib's analytic order theory (analyticOrderAt) for the factorization f(z)=z^n h(z).",
+    "proved_lemmas": [
+      "inv_le_one_of_le_one: a^-1 <= 1 when 1 <= a",
+      "nonzero_of_lower_bound: f(z) != 0 for z != 0",
+      "norm_inv_le_one_of_lower_bound: |1/f(z)| <= 1 for |z| >= 1"
+    ]
+  },
+  "proof_notes": {
+    "strategy": "Case split on f(0)=0. Case A: 1/f entire + bounded (Liouville) => constant => contradiction. Case B: factor z^n h(z), derive contradictions.",
+    "key_mathlib_lemmas": [
+      "Differentiable.exists_const_forall_eq_of_bounded: Liouville's theorem",
+      "Differentiable.inv: 1/f differentiable when f nonvanishing",
+      "Real.one_le_rpow: 1 <= |z|^(3/2) when 1 <= |z|",
+      "Real.rpow_pos_of_pos: |z|^(3/2) > 0 for |z| > 0"
+    ]
+  }
+}
