@@ -1,0 +1,26 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a94J06",
+  "bundle_root": "problems/a94J06",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-a94J06.md",
+    "problem_tex": "apm/a94J06.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "sorry_count_main": 0,
+    "sorry_count_total": 0
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_status": true
+  },
+  "classification": "complete",
+  "imported_at": "2026-07-13T17:26:52.228889Z"
+}
