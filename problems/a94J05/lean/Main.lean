@@ -1,5 +1,4 @@
 import Mathlib.Analysis.Complex.Liouville
-import Mathlib.Analysis.SpecialFunctions.Complex.Log
 
 /-!
 # APM a94J05: Liouville's theorem and bounded real part
@@ -22,9 +21,9 @@ a point as a contour integral. Let `f` be entire. Prove:
 
 3. For part (b), the exponential trick `g = exp(-f)` converts a half-plane bound
    into a disk bound. Mathlib's `Differentiable.exists_const_forall_eq_of_bounded`
-   then gives `g` constant. The final step (from `exp(-f)` constant to `f`
-   constant) uses the fact that `f` is continuous and `f - f(0) ∈ 2πiℤ`, combined
-   with the IVT to derive a contradiction.
+   then gives `g` constant. Differentiating this identity shows
+   `exp(-f(z)) * (-f'(z)) = 0`; since the complex exponential never vanishes,
+   `f'` is zero everywhere, so `f` is constant.
 
 ## Proof
 
@@ -35,13 +34,10 @@ a point as a contour integral. Let `f` be entire. Prove:
 - `g` is entire (composition of `exp` with `-f`).
 - `|g(z)| = exp(-Re f(z)) ≤ exp(C)` since `Re f(z) ≥ -C`.
 - By Liouville (part a), `g` is constant: `g(z) = g(0)`.
-- So `exp(-f(z)) = exp(-f(0))`, giving `f(z) - f(0) ∈ 2πiℤ`.
-- The function `h(s) = f(s·z)` is continuous on `[0,1]`, `h(0) = f(0)`,
-  and `‖h(s) - f(0)‖ ∈ {0, 2π, 4π, ...}`.
-- If `f(z) ≠ f(0)`, then `‖h(1) - f(0)‖ ≥ 2π`.
-- By IVT, `‖h(s₀) - f(0)‖ = π` for some `s₀ ∈ (0,1)`.
-- But `π ∉ {0, 2π, 4π, ...}` — contradiction.
-- So `f(z) = f(0)` for all `z`. ∎
+- Differentiating the constant function `g` gives
+  `exp(-f(z)) * (-f'(z)) = 0` for every `z`.
+- Since `exp(-f(z)) ≠ 0`, it follows that `f'(z) = 0` everywhere.
+- A differentiable function with zero derivative on `ℂ` is constant. ∎
 -/
 
 set_option linter.unusedVariables false in
@@ -69,15 +65,9 @@ theorem liouville_bounded
 /-- **Part (b): Re f bounded below ⟹ f constant.**
 
     Uses the exponential trick: `g = exp(-f)` is bounded entire, hence constant
-    by Liouville. Then `f(z) - f(0) ∈ 2πiℤ`, and continuity + IVT forces `f` constant.
-
-    **SORRY BOUNDARY:** The final IVT argument requires showing that
-    `‖f(s·z) - f(0)‖` is continuous in `s` (which follows from `f` continuous)
-    and takes values in the discrete set `{0, 2π, 4π, ...}`, leading to a
-    contradiction via IVT. The IVT is available in Mathlib
-    (`ContinuousOn.exists_Ioc` or `exists_hasDerivAt_eq_slope`), but connecting
-    it to the norm computation requires careful management of the complex
-    arithmetic. -/
+    by Liouville. Differentiating the resulting constant identity and using that
+    the complex exponential never vanishes shows that `f' = 0`, hence `f` is
+    constant. -/
 theorem liouville_re_bounded_below
     (f : ℂ → ℂ) (hf : Differentiable ℂ f)
     (C : ℝ) (hC : ∀ z, -C ≤ (f z).re) :
@@ -97,38 +87,21 @@ theorem liouville_re_bounded_below
         refine ⟨Real.exp C, ?_⟩
         rintro y ⟨z, rfl⟩
         exact hg_bdd z)
-  -- So exp(-f(z)) = exp(-f(0)) for all z
-  have hgf : ∀ z, cexp (-f z) = cexp (-f 0) := fun z => by rw [hc z, hc 0]
-  -- Claim: f is constant, equal to f(0)
-  refine ⟨f 0, fun z => ?_⟩
-  -- For any z, consider the path s ↦ f(s · z) for s ∈ [0,1]
-  -- This is continuous (composition of f with continuous path)
-  -- exp(-f(s·z)) = exp(-f(0)) for all s ∈ [0,1]
-  -- So f(s·z) - f(0) ∈ {n · (2πI) : n ∈ ℤ} for all s
-  -- ‖f(s·z) - f(0)‖ ∈ {0, 2π, 4π, ...}
-  -- At s = 0: f(0·z) - f(0) = 0, so ‖...‖ = 0
-  -- By continuity: ‖f(s·z) - f(0)‖ → 0 as s → 0
-  -- So for small s, ‖f(s·z) - f(0)‖ < 2π, hence = 0
-  -- The set {s ∈ [0,1] : f(s·z) = f(0)} is nonempty, open, and closed
-  -- → = [0,1] by connectedness → f(z) = f(0)
-
-  by_contra hne
-  -- f(z) ≠ f(0). Get the integer n such that f(z) - f(0) = -n · (2πI)
-  obtain ⟨n, hn⟩ := exp_eq_exp_iff_exists_int.mp (hgf z)
-  -- hn : -f(z) = -f(0) + n · (2πI)
-  -- So f(z) - f(0) = -n · (2πI)
-  -- Since f(z) ≠ f(0), n ≠ 0
-  have hn_ne : n ≠ 0 := by
-    intro hzero
-    rw [hzero] at hn
-    simp at hn
-    exact hne hn
-  -- ‖f(z) - f(0)‖ = |n| · 2π ≥ 2π (since n ≠ 0)
-  -- Consider ψ(s) = ‖f(s·z) - f(0)‖ for s ∈ [0,1]
-  -- ψ is continuous, ψ(0) = 0, ψ(1) = ‖f(z) - f(0)‖ ≥ 2π
-  -- By IVT: ∃ s₀ ∈ (0,1), ψ(s₀) = π
-  -- But ψ(s) ∈ {0, 2π, 4π, ...} for all s (from the exp equality)
-  -- And π ∉ {0, 2π, 4π, ...} — contradiction
-  sorry
+  -- A constant function has zero derivative.
+  have hg_deriv : ∀ z, deriv (fun w => cexp (-f w)) z = 0 := by
+    intro z
+    have hfun : (fun w => cexp (-f w)) = fun _ => c := funext hc
+    rw [hfun]
+    simp
+  -- The chain rule and nonvanishing of exp force the derivative of f to vanish.
+  have hf_deriv : ∀ z, deriv f z = 0 := by
+    intro z
+    have hchain := (hf z).hasDerivAt.neg.cexp.deriv
+    have hzero : cexp (-f z) * -deriv f z = 0 := by
+      change cexp ((-f) z) * -deriv f z = 0
+      rw [← hchain]
+      simpa only [Pi.neg_apply] using hg_deriv z
+    exact neg_eq_zero.mp (mul_eq_zero.mp hzero |>.resolve_left (Complex.exp_ne_zero _))
+  exact ⟨f 0, fun z => is_const_of_deriv_eq_zero hf hf_deriv z 0⟩
 
 end ApmCanaries.A94J05

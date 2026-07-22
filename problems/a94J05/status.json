@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,28 +27,29 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.169109Z",
-  "checked_at": "2026-07-18T22:15:00Z",
+  "checked_at": "2026-07-22T10:34:49Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94J05/lean/Main.lean",
-  "validation_result": "exit 0; 0 errors; 1 sorry (IVT step in part b)",
+  "validation_result": "exit 0; 0 errors; 0 sorries",
   "sorry_details": {
-    "sorry_count": 1,
-    "sorry_location": "liouville_re_bounded_below (part b) — IVT argument",
-    "sorry_reason": "Final step: showing ‖f(s·z) - f(0)‖ is continuous in s, takes values in {0, 2π, 4π, ...}, and IVT gives a contradiction when f(z) ≠ f(0). The IVT is in Mathlib but the norm computation and continuity plumbing needs work.",
+    "sorry_count": 0,
+    "sorry_location": null,
+    "sorry_reason": null,
     "proved_lemmas": [
       "liouville_bounded (part a): complete, zero sorry — uses Differentiable.exists_const_forall_eq_of_bounded",
-      "liouville_re_bounded_below (part b): exponential trick proved, Liouville application proved, exp_eq_exp_iff_exists_int applied, n ≠ 0 derived — IVT step is the sorry"
+      "liouville_re_bounded_below (part b): complete, zero sorry — differentiates the constant exponential, uses Complex.exp_ne_zero, then is_const_of_deriv_eq_zero"
     ]
   },
   "proof_notes": {
     "part_a": "Direct application of Mathlib Liouville: Differentiable.exists_const_forall_eq_of_bounded",
-    "part_b": "Exponential trick g = exp(-f) is bounded entire, hence constant. Then exp_eq_exp_iff_exists_int gives f(z)-f(0) ∈ 2πiℤ. IVT argument needed for final step.",
+    "part_b": "Exponential trick g = exp(-f) is bounded entire, hence constant. Differentiating gives exp(-f(z)) * (-f'(z)) = 0; exp is nonzero, so f' = 0 and f is constant.",
     "key_mathlib_lemmas": [
       "Differentiable.exists_const_forall_eq_of_bounded: Liouville's theorem",
       "Complex.norm_exp: ‖exp(z)‖ = exp(Re z)",
-      "exp_eq_exp_iff_exists_int: exp(x) = exp(y) ↔ ∃ n, x = y + n*(2πI)",
-      "re_eq_re_of_cexp_eq_cexp: Re(x) = Re(y) from exp(x) = exp(y)"
+      "HasDerivAt.cexp: chain rule for the complex exponential",
+      "Complex.exp_ne_zero: the complex exponential never vanishes",
+      "is_const_of_deriv_eq_zero: a differentiable function with zero derivative is constant"
     ]
   }
 }
