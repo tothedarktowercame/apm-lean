@@ -1,0 +1,55 @@
+# t03J01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-t03J01.md`
+- imported-at: `2026-07-13T17:26:57.034041Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X$ be a double torus. Let $J_1$ be a curve that cuts $X$ into a
+twice-punctured sphere and let $J_2$ be a curve that cuts $X$ into two
+once-punctured tori.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Does $X$ retract to $J_1$? Prove your answer.
+%------------------------------------------------------------------*
+\item Does $X$ retract to $J_2$? Prove your answer.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\soln{
+(retract: fact: homomorphism induced by inclusion of a retract is injective)  \defn{
+\item $(X,t)$ topological space
+\item $Y\subset X$ subspace
+\item $r:X\rightarrow Y$ retraction
+\item $j_*:\pi_1(Y)\rightarrow \pi_1(X)$ homomorphism induced by inclusion
+\item $j_*$ injective}
+\proof{
+\item $r|_Y\circ j$ identity map & retraction:4
+\item $y\in Y$ & let
+\item $(r|_Y)_*\circ j_*$ identity map of $\pi_1((Y,y))$ & homomorphism induced by identity map is identity map
+\item $j_*$ injective & if the identity map factors into two maps, both must be injective}
+I don't know if that fact is particularly useful in this case, however, because it seems like each homotopy class in $\pi_1(\Son)$
+is going to be mapped to some distinct homotopy class in $\Ttw\#\Ttw$. Well this should be at least true for the curve that cuts $\Ttw\#\Ttw$ into a twice-punctured sphere, since that curve has got to be a generator for the fundamental group of $\Ttw\#\Ttw$. I guess I should work out what exactly the fundamental group of $\Ttw\#\Ttw$ is, that could make things go a bit more easily
+(induced homomorphism of fundamental groups) \defn{ % this can be trivially rephrased in terms of pointed topological spaces; they are used anyway.  We can sum up what the induced homomorphism of fundamental groups does as follows: take a representative of the homology class in the first fundamental group, and look at the homology class of the image under the given map of that representative in the second fundamental group.
+\item $X$ topological manifold
+\item $Y$ topological manifold
+\item $h:X\rightarrow Y$ continuous
+\item $x_0\in X$
+\item $h(x_0)=y_0$
+\item $h_*:\pi_1((X,x_0))\rightarrow \pi_1((Y,y_0))$
+\item $\forall [f]\in\pi_1((X,x_0)): h_*([f])=[h\circ f]$}
+}
+```

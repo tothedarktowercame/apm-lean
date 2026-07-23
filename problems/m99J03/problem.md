@@ -1,0 +1,36 @@
+# m99J03
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-m99J03.md`
+- imported-at: `2026-07-13T17:26:56.237938Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Each of the given functions $g_n(x)$ below is identified with the
+linear functional $\ell_{g_n}\in \mathcal{D}'(\R)$ where
+$\ell_{g_n}(\varphi)=\int_{-\infty}^{\infty}g_n(x)\varphi(x)dx$.
+Determine which sequences $\ell_{g_n}$ have limits in
+$\mathcal{D}'(\R)$ and compute the limit when the sequence converges.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item $g_n(x)=0$ for $|x|>1/n$ and $g_n(x)=n(1-n|x|)$ for $x\leq 1/n$.
+%------------------------------------------------------------------*
+\item $g_n(x)=n^2$ for $-1/n<x<0$,  $g_n(x)=-n^2$ for $0\leq x\leq 1/n$,
+and $g_n(x)=0$ elsewhere.
+%------------------------------------------------------------------*
+\item $g_n(x)=\psi(x/n)$ where $\psi\in C^{\infty}(\R)$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

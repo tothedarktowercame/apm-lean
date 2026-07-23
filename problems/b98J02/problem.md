@@ -1,0 +1,48 @@
+# b98J02
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-b98J02.md`
+- imported-at: `2026-07-13T17:26:54.174720Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $A\subset B$ be an extension of integral domains. Let $L\subset M$
+be the corresponding extension of quotient fields. Assume $M/L$ is a
+finite Galois extension with Galois group $G$. Assume that $B$ is the
+integral closure of $A$ in $M$, \ie\ $B$ is the collection of elements
+in $L$ that are roots of a monic polynomial with coefficients in
+$A$. Also assume that $B\cap L=A$ or equivalently that $A$ is
+integrally closed. Recall that a prime ideal $P\subset B$ is said to
+\emph{lie over} the prime ideal $P\cap A$ of $A$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Let $I\subset B$ be an ideal. Suppose that $I$ is contained in
+the union of a finite collection of prime ideals. Show that $I$ is
+contained in one of the prime ideals. Hint: assuming the contrary,
+show that for each given prime there is (possibly after dropping some
+of the primes) an element of $I$ which is not in the given prime but
+is in all the others -- use this to get a contradiction.
+%------------------------------------------------------------------*
+\item Let $P$ be a prime ideal of $B$. Let $x\in P$. Show that the
+product of elements $g(x)$ as $g$ runs over elements of $G$ is in
+$P\cap A$.
+%------------------------------------------------------------------*
+\item For a fixed prime ideal $q$ of $A$, $G$ permutes the primes of
+$B$ lying over $q$ (you don't need to prove this!). Show that $G$ acts
+transitively on this set of primes. Hint: use (a) with one orbit as
+the set of primes.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

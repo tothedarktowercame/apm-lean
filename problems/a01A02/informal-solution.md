@@ -1,170 +1,174 @@
 
 
-# APM a01A01: Typewriter sequence — limsup infinite but integrals vanish
+# APM a01A02: Weak-L² implies local L¹ with the right bound
 
 ## Why It's Hard
 
-This asks for a sequence that is "large everywhere eventually" (limsup = ∞ at every point) yet "small in total" (integrals → 0). These two requirements pull in opposite directions. If you try to make functions that are big everywhere, the integrals stay large. If you make the integrals small, the functions seem to vanish. The resolution requires the functions to be big on *different* small sets at different times, cycling through the interval so that every point is hit infinitely often, but each individual function has small support.
+The hypothesis is a *distributional* (weak-type) bound on f — it controls how much measure lives above each height λ — and the conclusion is an *integral* bound on arbitrary Borel sets. The difficulty is converting a tail-decay condition into an integral estimate, with the correct dependence on m(E). The exponent 1/2 in √m(E) is not obvious and emerges from optimizing a free parameter in a truncation argument. This is the same circle of ideas as a03J04 (b)/(c) — weak-Lp implies local Lq for q < p — specialized to p = 2, q = 1.
 
 ## The Key Insight
 
-Use a "typewriter" or "sliding bump" construction. Tile [0,1] with intervals of length 1/n, and cycle a bump of height n across these intervals. The k-th function is an indicator of a small interval, scaled to be tall. Each point is covered infinitely often (the bumps sweep past every point repeatedly), but each function's integral is height × width = n × (1/n²) or similar, which → 0.
-
-Concretely: enumerate the intervals [j/n, (j+1)/n] for n = 1, 2, 3, ... and j = 0, ..., n-1 in sequence, and set f\_k = n · 1\_{[j/n, (j+1)/n]} for the k-th such pair. The integral is n · (1/n) = 1 — too big. Instead use f\_k = 1\_{[j/n, (j+1)/n]} (height 1, width 1/n, integral 1/n). Then the integral → 0 but limsup = 1, not ∞. To get limsup = ∞, use height n: f\_k = n · 1\_{[j/n, (j+1)/n]}, integral = 1. Still too big.
-
-The fix: decouple the height growth from the sweep rate. Use intervals of length 1/n², with height n, so integral = n/n² = 1/n → 0. But then you need n² intervals to cover [0,1], so each "sweep" takes n² functions. This still works: every point is hit during each complete sweep, and the heights grow.
-
-Actually, the simplest clean construction is: let n(k) and j(k) be defined by enumerating all pairs (n, j) with n ≥ 1 and 0 ≤ j < n. Set f\_k = n · 1\_{[j/n, (j+1)/n]}. The integral is n · (1/n) = 1 — constant, doesn't → 0. Let me use a better indexing.
-
-**Clean construction:** For each k, write k in the form k = n(n-1)/2 + j where 0 ≤ j < n (triangular enumeration). Set:
-
-$$f_k = \mathbf{1}_{[j/n,\, (j+1)/n]}$$
-
-Then ∫ f\_k = 1/n → 0 as k → ∞ (since n ~ √(2k)). And for every x ∈ [0,1], during the n-th sweep (the n functions with this value of n), exactly one of them has f\_k(x) = 1. This happens for infinitely many n, so limsup f\_k(x) ≥ 1 for all x — but we want limsup = ∞, not just ≥ 1.
-
-**Final construction (correct):** Use height that grows. For the same indexing:
-
-$$f_k = n \cdot \mathbf{1}_{[j/n^2,\, (j+1)/n^2]}, \quad k = \frac{n(n-1)}{2}\cdot n + j, \quad 0 \leq j < n^2.$$
-
-Wait, this over-complicates things. Let me just give the clean standard answer.
+Split |f| at a height λ₀ (to be optimized): the part below λ₀ is bounded, so its integral over E is at most λ₀ · m(E). The part above λ₀ is handled by the layer cake formula + the weak-L² bound, giving an integral of order C/λ₀. Choose λ₀ = √(C/m(E)) to balance the two terms, yielding ∫_E |f| ≤ const · √(C · m(E)).
 
 ## Complete Proof
 
-**Construction on [0,1].**
+**Theorem.** Let f : ℝⁿ → ℝ be measurable with m({|f| > λ}) ≤ C λ⁻² for all λ > 0 (weak-L² condition). Then for any Borel set E with 0 < m(E) < ∞:
 
-For each integer n ≥ 1, partition [0,1] into n equal subintervals:
+$$\int_E |f|\,dx \leq C_1\sqrt{m(E)},$$
 
-$$I_{n,j} = \left[\frac{j}{n}, \frac{j+1}{n}\right), \quad j = 0, 1, \ldots, n-1.$$
+where C₁ = 2√C.
 
-There are n intervals for each n, giving a total sequence of intervals enumerated as:
+**Proof.**
 
-$$I_{1,0},\; I_{2,0}, I_{2,1},\; I_{3,0}, I_{3,1}, I_{3,2},\; I_{4,0}, \ldots$$
+Fix a Borel set E with 0 < m(E) < ∞, and fix a parameter λ₀ > 0 (to be chosen later). Write:
 
-The k-th interval corresponds to the unique pair (n,j) where k = n(n-1)/2 + j + 1 (triangular numbering), with 0 ≤ j < n.
+$$|f(x)| = |f(x)|\mathbf{1}_{|f(x)| \leq \lambda_0} + |f(x)|\mathbf{1}_{|f(x)| > \lambda_0} =: g(x) + h(x).$$
 
-Define:
+**Low part.** On E, g(x) ≤ λ₀ pointwise, so:
 
-$$f_k = n^{1/2} \cdot \mathbf{1}_{I_{n,j}}$$
+$$\int_E g\,dx \leq \lambda_0 \cdot m(E).$$
 
-where (n,j) is the pair corresponding to index k.
+**High part.** Use the layer cake (Cavalieri) formula:
 
-**Claim 1: ∫₀¹ f\_k dx → 0.**
+$$\int_E h\,dx = \int_E |f|\mathbf{1}_{|f| > \lambda_0}\,dx.$$
 
-$$\int_0^1 f_k\,dx = n^{1/2} \cdot m(I_{n,j}) = n^{1/2} \cdot \frac{1}{n} = \frac{1}{n^{1/2}} = \frac{1}{\sqrt{n}}.$$
+We bound this by integrating over all of ℝⁿ (since h ≥ 0):
 
-Since n → ∞ as k → ∞ (specifically n ~ √(2k)), we have ∫ f\_k → 0. ✓
+$$\int_E h\,dx \leq \int_{\mathbb{R}^n} h\,dx = \int_0^\infty m(\{x : h(x) > \lambda\})\,d\lambda.$$
 
-**Claim 2: limsup\_{k→∞} f\_k(x) = ∞ for every x ∈ [0,1].**
+Now {h(x) > λ} = {|f(x)| · 1\_{|f|>λ₀} > λ}. For λ ≥ 0:
 
-Fix x ∈ [0,1]. For each n, there exists exactly one j = j(n) ∈ {0, ..., n-1} such that x ∈ I\_{n,j(n)} (with at most endpoint ambiguity, irrelevant for a.e. statement — but in fact we can handle endpoints by using half-open intervals, ensuring every x ∈ [0,1) is in exactly one interval per n; x = 1 is in I\_{n,n-1} by convention).
+- If λ ≥ λ₀: {h > λ} = {|f| > λ}, so m({h > λ}) ≤ C λ⁻².
+- If 0 ≤ λ < λ₀: {h > λ} ⊆ {|f| > λ₀}, so m({h > λ}) ≤ C λ₀⁻².
 
-For the index k(n) corresponding to the pair (n, j(n)):
+But we can be tighter. Actually:
 
-$$f_{k(n)}(x) = n^{1/2}.$$
+$$\int_{\mathbb{R}^n} h\,dx = \int_{\lambda_0}^{\infty} m(\{|f| > \lambda\})\,d\lambda$$
 
-Since n^{1/2} → ∞, we have
+This follows because h(x) = (|f(x)| - λ₀)⁺ ... no, h(x) = |f(x)| · 1\_{|f| > λ₀}, which is not the same as (|f| - λ₀)⁺. Let me use a cleaner calculation.
 
-$$\limsup_{k \to \infty} f_k(x) \geq \lim_{n \to \infty} f_{k(n)}(x) = \lim_{n \to \infty} n^{1/2} = \infty. \qquad \checkmark$$
+Apply the layer cake directly to ∫\_E |f|:
 
-**(Both claims together complete the proof for [0,1].)** ∎
+$$\int_E |f|\,dx = \int_0^{\infty} m(E \cap \{|f| > \lambda\})\,d\lambda.$$
 
-**Adaptation to ℝⁿ.**
+Split at λ₀:
 
-The same idea works with cubes instead of intervals. For each m ≥ 1, tile the cube [-m, m]ⁿ with sub-cubes of side length 1/m, giving (2m²)ⁿ sub-cubes. Let Q\_{m,j} enumerate these sub-cubes. Define:
+$$= \int_0^{\lambda_0} m(E \cap \{|f| > \lambda\})\,d\lambda + \int_{\lambda_0}^{\infty} m(E \cap \{|f| > \lambda\})\,d\lambda.$$
 
-$$g_k = m^{n/2} \cdot \mathbf{1}_{Q_{m,j}}$$
+**First integral:** m(E ∩ {|f| > λ}) ≤ m(E) for all λ, so:
 
-where (m,j) is the pair corresponding to index k under a suitable enumeration.
+$$\int_0^{\lambda_0} m(E \cap \{|f| > \lambda\})\,d\lambda \leq \lambda_0 \cdot m(E).$$
 
-Then:
+**Second integral:** m(E ∩ {|f| > λ}) ≤ m({|f| > λ}) ≤ C λ⁻² for all λ > 0, so:
 
-$$\int_{\mathbb{R}^n} g_k\,dx = m^{n/2} \cdot m(Q_{m,j}) = m^{n/2} \cdot \frac{1}{m^n} = \frac{1}{m^{n/2}} \to 0.$$
+$$\int_{\lambda_0}^{\infty} m(E \cap \{|f| > \lambda\})\,d\lambda \leq \int_{\lambda_0}^{\infty} C\lambda^{-2}\,d\lambda = C\left[-\lambda^{-1}\right]_{\lambda_0}^{\infty} = \frac{C}{\lambda_0}.$$
 
-And for any x ∈ ℝⁿ, x ∈ [-m,m]ⁿ for all sufficiently large m, and for each such m, x belongs to some sub-cube Q\_{m,j(m)}, so g\_{k(m)}(x) = m^{n/2} → ∞. Hence limsup g\_k(x) = ∞ for all x ∈ ℝⁿ. ∎
+**Combining:**
+
+$$\int_E |f|\,dx \leq \lambda_0 \cdot m(E) + \frac{C}{\lambda_0}.$$
+
+**Optimize over λ₀.** Set the derivative to zero: m(E) - C/λ₀² = 0, giving λ₀ = √(C/m(E)). Substituting:
+
+$$\int_E |f|\,dx \leq \sqrt{\frac{C}{m(E)}} \cdot m(E) + \frac{C}{\sqrt{C/m(E)}} = \sqrt{C \cdot m(E)} + \sqrt{C \cdot m(E)} = 2\sqrt{C \cdot m(E)}.$$
+
+So C₁ = 2√C, and:
+
+$$\boxed{\int_E |f|\,dx \leq 2\sqrt{C}\,\sqrt{m(E)}.} \qquad \blacksquare$$
 
 ## What Connects
 
-**To the typewriter sequence.** The construction f\_k = 1\_{I\_{n,j}} (without the height factor) is the standard "typewriter sequence" showing that a.e. convergence does not follow from L^1 convergence. Adding height makes the limsup infinite rather than just nonzero.
+**To weak-Lp spaces and interpolation.** This is a special case of the general principle: weak-Lp on a σ-finite measure space implies Lq on sets of finite measure for any q < p. The exponent in √m(E) = m(E)^{1/1 - 1/2 + 1/1}... more precisely, for weak-Lp, the bound is ∫_E |f|^q ≤ C(p,q) · m(E)^{1 - q/p} for 0 < q < p. Here p = 2, q = 1: exponent = 1 - 1/2 = 1/2. This was problem a03J04(b)/(c) in general form.
 
-**To convergence in measure.** The typewriter sequence converges to 0 in measure (m({f\_k > ε}) = 1/n → 0) but not a.e. (limsup > 0 everywhere). This problem strengthens the pathology: not only does a.e. convergence fail, but the limsup is *infinite* everywhere, and the integrals still vanish.
+**To the Marcinkiewicz interpolation theorem.** The splitting trick (truncate at a height, bound each piece differently) is the core of the Marcinkiewicz interpolation argument. The optimization over the truncation level is what produces the sharp constant and the correct exponent.
 
-**To the Borel-Cantelli lemma.** Borel-Cantelli says: if Σ m(A\_k) < ∞, then a.e. x is in only finitely many A\_k. Here Σ m(I\_{n,j}) = Σ\_n (n · 1/n) = Σ 1 = ∞, so Borel-Cantelli does *not* apply, and indeed every x is in infinitely many of the sets — which is exactly what we need.
+**To Chebyshev's inequality and its converse.** The weak-L² condition m({|f| > λ}) ≤ C/λ² is Chebyshev's inequality applied to |f|² if f ∈ L². But the hypothesis here is weaker: f need not be in L². The conclusion shows that despite not being globally L¹, f is locally L¹ with a specific rate.
 
-**To the Banach-Saks theorem.** The fact that L^1 convergence does not imply a.e. convergence (demonstrated by the typewriter sequence) is one motivation for the Banach-Saks theorem, which recovers a.e. convergence by passing to Cesàro means of a subsequence.
+**To real-variable harmonic analysis.** The Calderón-Zygmund decomposition and the good-λ inequality both rely on exactly this kind of distributional → integral conversion, with optimization over a free parameter.
 
 ---
 
 ## Lean 4 Theorem Statements
 
 ```lean
+import Mathlib.MeasureTheory.Integral.Layercake
 import Mathlib.MeasureTheory.Integral.IntegrableOn
-import Mathlib.MeasureTheory.Integral.Bochner
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.Order.LiminfLimsup
-import Mathlib.Order.Filter.Basic
+import Mathlib.MeasureTheory.Measure.MeasureSpace
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
-open MeasureTheory Set Filter
+open MeasureTheory Set ENNReal Filter
 
 noncomputable section
 
-/-- The triangular enumeration: given k, return (n, j) with
-    k = n(n-1)/2 + j, 0 ≤ j < n. This cycles through all pairs. -/
-def triangularIndex (k : ℕ) : ℕ × ℕ :=
-  let n := (Nat.sqrt (2 * k + 1) + 1) / 2 + 1
-  let j := k - n * (n - 1) / 2
-  (n, j)
+variable {n : ℕ}
 
-/-- The typewriter sequence with growing height:
-    f_k = √n · 𝟙_{[j/n, (j+1)/n)} where (n,j) = triangularIndex(k). -/
-def typewriterSeq (k : ℕ) : ℝ → ℝ :=
-  let (n, j) := triangularIndex k
-  fun x => if x ∈ Ico (j / n : ℝ) ((j + 1) / n) then Real.sqrt n else 0
+/-- The weak-L² condition: m({|f| > λ}) ≤ C/λ² for all λ > 0. -/
+def WeakL2 (f : (Fin n → ℝ) → ℝ) (μ : Measure (Fin n → ℝ)) (C : ℝ≥0) : Prop :=
+  ∀ λ : ℝ, 0 < λ → μ {x | λ < ‖f x‖} ≤ ENNReal.ofReal (C / λ ^ 2)
 
-/-- Each f_k is nonneg. -/
-lemma typewriterSeq_nonneg (k : ℕ) (x : ℝ) :
-    0 ≤ typewriterSeq k x := by
+/-- Layer cake for the low part: ∫₀^{λ₀} m(E ∩ {|f|>λ}) dλ ≤ λ₀ · m(E). -/
+lemma layer_cake_low_bound
+    {μ : Measure (Fin n → ℝ)} {f : (Fin n → ℝ) → ℝ}
+    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E)
+    {λ₀ : ℝ} (hλ₀ : 0 < λ₀) :
+    ∫⁻ λ in Ioc 0 λ₀,
+      μ (E ∩ {x | (λ : ℝ) < ‖f x‖}) ≤
+    ENNReal.ofReal λ₀ * μ E := by
   sorry
 
-/-- Each f_k is measurable. -/
-lemma typewriterSeq_measurable (k : ℕ) :
-    Measurable (typewriterSeq k) := by
+/-- Layer cake for the high part: ∫_{λ₀}^∞ m(E ∩ {|f|>λ}) dλ ≤ C/λ₀
+    under the weak-L² hypothesis. -/
+lemma layer_cake_high_bound
+    {μ : Measure (Fin n → ℝ)} {f : (Fin n → ℝ) → ℝ}
+    {C : ℝ≥0} (hf : WeakL2 f μ C)
+    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E)
+    {λ₀ : ℝ} (hλ₀ : 0 < λ₀) :
+    ∫⁻ λ in Ioi λ₀,
+      μ (E ∩ {x | (λ : ℝ) < ‖f x‖}) ≤
+    ENNReal.ofReal (C / λ₀) := by
   sorry
 
-/-- The integral of f_k is 1/√n, which tends to 0. -/
-lemma typewriterSeq_integral (k : ℕ) :
-    ∫ x in Icc (0 : ℝ) 1, typewriterSeq k x ∂volume =
-      1 / Real.sqrt (triangularIndex k).1 := by
+/-- Combined bound before optimization:
+    ∫_E |f| ≤ λ₀ · m(E) + C/λ₀ for any λ₀ > 0. -/
+lemma integral_le_split
+    {μ : Measure (Fin n → ℝ)} {f : (Fin n → ℝ) → ℝ}
+    (hf_meas : Measurable f)
+    {C : ℝ≥0} (hf_weak : WeakL2 f μ C)
+    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E) (hEfin : μ E ≠ ⊤)
+    {λ₀ : ℝ} (hλ₀ : 0 < λ₀) :
+    ∫⁻ x in E, ENNReal.ofReal ‖f x‖ ∂μ ≤
+      ENNReal.ofReal λ₀ * μ E + ENNReal.ofReal (C / λ₀) := by
   sorry
 
-/-- The integrals tend to 0. -/
-theorem typewriterSeq_integral_tendsto :
-    Tendsto (fun k => ∫ x in Icc (0 : ℝ) 1, typewriterSeq k x ∂volume)
-      atTop (𝓝 0) := by
+/-- Optimized bound: choosing λ₀ = √(C/m(E)) gives ∫_E |f| ≤ 2√C · √m(E). -/
+lemma integral_le_optimized
+    {μ : Measure (Fin n → ℝ)} {f : (Fin n → ℝ) → ℝ}
+    (hf_meas : Measurable f)
+    {C : ℝ≥0} (hf_weak : WeakL2 f μ C)
+    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E)
+    (hEfin : μ E ≠ ⊤) (hEpos : 0 < μ E) :
+    ∫⁻ x in E, ENNReal.ofReal ‖f x‖ ∂μ ≤
+      ENNReal.ofReal (2 * Real.sqrt C) *
+        ENNReal.ofReal (Real.sqrt (μ E).toReal) := by
   sorry
 
-/-- At every x ∈ [0,1], the limsup of f_k(x) is +∞. -/
-theorem typewriterSeq_limsup_eq_top (x : ℝ) (hx : x ∈ Icc (0 : ℝ) 1) :
-    limsup (fun k => (typewriterSeq k x : EReal)) atTop = ⊤ := by
+/-- Main theorem: weak-L² implies ∫_E |f| ≤ C₁ √m(E)
+    for all Borel sets E of finite positive measure. -/
+theorem weakL2_integral_bound
+    {μ : Measure (Fin n → ℝ)} [SigmaFinite μ]
+    {f : (Fin n → ℝ) → ℝ} (hf_meas : Measurable f)
+    {C : ℝ≥0} (hf_weak : WeakL2 f μ C)
+    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E)
+    (hEfin : μ E ≠ ⊤) (hEpos : 0 < μ E) :
+    (∫ x in E, ‖f x‖ ∂μ) ≤ 2 * Real.sqrt C * Real.sqrt (μ E).toReal := by
   sorry
 
-/-- Key lemma: for each n, there exists j < n such that x ∈ [j/n, (j+1)/n). -/
-lemma exists_interval_mem (x : ℝ) (hx : x ∈ Ico (0 : ℝ) 1) (n : ℕ) (hn : 0 < n) :
-    ∃ j : ℕ, j < n ∧ x ∈ Ico (j / (n : ℝ)) ((j + 1) / n) := by
-  sorry
-
-/-- The ℝⁿ version: typewriter sequence on cubes in ℝⁿ. -/
-def typewriterSeqRn (d : ℕ) (k : ℕ) : (Fin d → ℝ) → ℝ :=
-  sorry -- cube tiling of [-m,m]^d with sub-cubes of side 1/m
-
-/-- The ℝⁿ integrals tend to 0. -/
-theorem typewriterSeqRn_integral_tendsto (d : ℕ) :
-    Tendsto (fun k => ∫ x, typewriterSeqRn d k x ∂volume)
-      atTop (𝓝 0) := by
-  sorry
-
-/-- At every x ∈ ℝⁿ, the limsup is +∞. -/
-theorem typewriterSeqRn_limsup_eq_top (d : ℕ) (x : Fin d → ℝ) :
-    limsup (fun k => (typewriterSeqRn d k x : EReal)) atTop = ⊤ := by
+/-- Integrability on E follows from the bound. -/
+theorem weakL2_integrableOn
+    {μ : Measure (Fin n → ℝ)} [SigmaFinite μ]
+    {f : (Fin n → ℝ) → ℝ} (hf_meas : Measurable f)
+    {C : ℝ≥0} (hf_weak : WeakL2 f μ C)
+    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E) (hEfin : μ E ≠ ⊤) :
+    IntegrableOn f E μ := by
   sorry
 
 end
@@ -172,8 +176,8 @@ end
 
 **Mathlib notes:**
 
-- `limsup` with values in `EReal` (extended reals) allows the value `⊤ = +∞`. The statement `limsup (fun k => (f k x : EReal)) atTop = ⊤` is the natural Lean encoding of "limsup f\_k(x) = +∞."
-- The integral `∫ x in Icc 0 1, f x ∂volume` is the Bochner integral restricted to [0,1].
-- `Tendsto ... atTop (𝓝 0)` expresses convergence of a real-valued sequence to 0.
-- The triangular enumeration is the concrete combinatorial engine: it ensures every sub-interval of every partition level is visited exactly once, so every point is hit infinitely often.
-- The ℝⁿ version uses `Fin d → ℝ` as the standard Mathlib type for ℝᵈ, with `volume` being the product Lebesgue measure.
+- `WeakL2` encodes the distributional bound m({|f| > λ}) ≤ C/λ² using `ENNReal.ofReal` for the real-to-ennreal coercion. The level set uses `‖f x‖` (which equals `|f x|` for real-valued functions).
+- The layer cake decomposition `∫_E |f| = ∫₀^∞ m(E ∩ {|f|>λ}) dλ` is available via `MeasureTheory.lintegral_norm_eq_lintegral_meas_lt` or the Layercake file.
+- The main theorem `weakL2_integral_bound` uses the Bochner integral `∫ x in E, ‖f x‖ ∂μ` (real-valued) rather than the lintegral, since the conclusion is a real inequality. The lintegral version `integral_le_optimized` is the intermediate step.
+- `(μ E).toReal` coerces the measure from `ℝ≥0∞` to `ℝ`, which is valid since `hEfin : μ E ≠ ⊤`.
+- The constant `C₁ = 2√C` is explicit. The proof chain is: layer cake split → bound each piece → optimize λ₀ = √(C/m(E)) → simplify.

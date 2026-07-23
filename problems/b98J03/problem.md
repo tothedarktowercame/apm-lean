@@ -1,0 +1,45 @@
+# b98J03
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-b98J03.md`
+- imported-at: `2026-07-13T17:26:54.185736Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $K/k$ be a finite field extension.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Suppose $k$ is finite. What kind of group is the Galois group 
+$\text{Aut}_kK$? (No proof is needed!). Show that $K/k$ is a primative
+extension, \ie\ that $K=k(x)$ for some $x\in K$.
+%------------------------------------------------------------------*
+\item Now suppose that $k$ is infinite and $K$ has only finitely many
+subfields containing $k$. Show that $K$ is a primative extension.
+Hint: Choose $x\in K$ such that $[k(x):k]$ is maximal and let $y$ be
+an element outside of $k(x)$ and consider the subfields $k(x+ty)$ as
+$t$ ranges over $k$.
+%------------------------------------------------------------------*
+\item Assume $K=k(x)$ is a primative extension. Let $E\subset K$ be 
+a subfield and let $k\subset E$. Let $g(x)\in E[x]$ be the minimal
+polynomial of $x$ over $E$. Show that $E$ is generated over $k$ by the
+coefficients of $g(x)$.
+%------------------------------------------------------------------*
+\item Still assuming that $K$ is a primative extension, show that 
+$K$ has only finitely many subfields containing $k$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\soln{}
+```

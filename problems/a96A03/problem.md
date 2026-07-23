@@ -1,0 +1,27 @@
+# a96A03
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-a96A03.md`
+- imported-at: `2026-07-13T17:26:52.506801Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $B=\{f\in L^2(\R)\pipe \|f\|_2\leq 1\}$, where the measure in
+question is Lebesgue measure and let $\{f_n\}$ be a sequence from $B$
+with the property that $f_n\rightarrow f$ almost everywhere in
+$\R$. Show that the limit function $f$ belongs to $B$ and that
+$\lim_{n\rightarrow \infty}\int_{-\infty}^{\infty}f_n(x)g(x)dx
+=\int_{-\infty}^{\infty}f(x)g(x)dx$ for all $g\in L^2(\R)$. Hint: for
+the second part, start by considering the case in which $g$ is a
+continuous function supported in a bounded interval.
+```

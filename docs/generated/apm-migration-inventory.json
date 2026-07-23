@@ -1,0 +1,1620 @@
+{
+  "generated_at": "2026-05-01T19:52:19.170754Z",
+  "schema": "apm-migration-inventory.v1",
+  "counts": {
+    "frame_records": 109,
+    "frame_backed_problems": 75,
+    "duplicate_frame_problems": 17,
+    "imported_problem_bundles": 87,
+    "legacy_lean_proof_dirs": 17,
+    "legacy_reconciled_problems": 17
+  },
+  "duplicate_problems": [
+    {
+      "problem_id": "t97J01",
+      "frame_count": 6,
+      "frame_ids": [
+        "apm-v2-t97J01-1774992240183",
+        "apm-v2-t97J01-1774994005204",
+        "apm-v2-t97J01-1774994931686",
+        "apm-v2-t97J01-1774999080822",
+        "apm-v2-t97J01-1775001167604",
+        "apm-v2-t97J01-1775002043870"
+      ],
+      "receipt_count": 6,
+      "latest_frame_id": "apm-v2-t97J01-1775002043870",
+      "latest_generated_at": "2026-04-01T00:07:23.901774Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t97J01/apm-v2-t97J01-1775002043870/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t97J01/apm-v2-t97J01-1775002043870.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "b94J01",
+      "frame_count": 6,
+      "frame_ids": [
+        "apm-v2-b94J01-1774992341688",
+        "apm-v2-b94J01-1774994174583",
+        "apm-v2-b94J01-1774995021497",
+        "apm-v2-b94J01-1774999220593",
+        "apm-v2-b94J01-1775001319272",
+        "apm-v2-b94J01-1775002552157"
+      ],
+      "receipt_count": 6,
+      "latest_frame_id": "apm-v2-b94J01-1775002552157",
+      "latest_generated_at": "2026-04-01T00:15:52.181971Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/b94J01/apm-v2-b94J01-1775002552157/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/b94J01/apm-v2-b94J01-1775002552157.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a96J01",
+      "frame_count": 6,
+      "frame_ids": [
+        "apm-v2-a96J01-1774992421755",
+        "apm-v2-a96J01-1774994639526",
+        "apm-v2-a96J01-1774999742972",
+        "apm-v2-a96J01-1775001722761",
+        "apm-v2-a96J01-1775003480661",
+        "apm-v2-a96J01-1775044904478"
+      ],
+      "receipt_count": 6,
+      "latest_frame_id": "apm-v2-a96J01-1775044904478",
+      "latest_generated_at": "2026-04-01T12:01:44.540545Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a96J01/apm-v2-a96J01-1775044904478/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a96J01/apm-v2-a96J01-1775044904478.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t96J03",
+      "frame_count": 5,
+      "frame_ids": [
+        "apm-v2-t96J03-1774992389652",
+        "apm-v2-t96J03-1774994444690",
+        "apm-v2-t96J03-1774999579956",
+        "apm-v2-t96J03-1775001511591",
+        "apm-v2-t96J03-1775003096930"
+      ],
+      "receipt_count": 5,
+      "latest_frame_id": "apm-v2-t96J03-1775003096930",
+      "latest_generated_at": "2026-04-01T00:24:56.952898Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t96J03/apm-v2-t96J03-1775003096930/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t96J03/apm-v2-t96J03-1775003096930.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a01A01",
+      "frame_count": 3,
+      "frame_ids": [
+        "apm-v2-a01A01-1774988239600",
+        "apm-v2-a01A01-1774989942636",
+        "apm-v2-a01A01-1774990784258"
+      ],
+      "receipt_count": 3,
+      "latest_frame_id": "apm-v2-a01A01-1774990784258",
+      "latest_generated_at": "2026-03-31T20:59:44.280747Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a00J02",
+      "frame_count": 3,
+      "frame_ids": [
+        "apm-v2-a00J02-1774988069474",
+        "apm-v2-a00J02-1774989750574",
+        "apm-v2-a00J02-1774990402922"
+      ],
+      "receipt_count": 3,
+      "latest_frame_id": "apm-v2-a00J02-1774990402922",
+      "latest_generated_at": "2026-03-31T20:53:22.952897Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a00J02/apm-v2-a00J02-1774990402922/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a00J02/apm-v2-a00J02-1774990402922.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "t94A04",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-t94A04-1775010166561",
+        "apm-v2-t94A04-1775045150581"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-t94A04-1775045150581",
+      "latest_generated_at": "2026-04-01T12:05:50.608105Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t94A04/apm-v2-t94A04-1775045150581/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t94A04/apm-v2-t94A04-1775045150581.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t01A01",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-t01A01-1775052441576",
+        "apm-v2-t01A01-1775070410894"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-t01A01-1775070410894",
+      "latest_generated_at": "2026-04-01T19:06:50.938823Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t01A01/apm-v2-t01A01-1775070410894/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t01A01/apm-v2-t01A01-1775070410894.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "m96A04",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-m96A04-1775053034904",
+        "apm-v2-m96A04-1775070820897"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-m96A04-1775070820897",
+      "latest_generated_at": "2026-04-01T19:13:40.919862Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/m96A04/apm-v2-m96A04-1775070820897/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/m96A04/apm-v2-m96A04-1775070820897.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "b03J02",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-b03J02-1775052929959",
+        "apm-v2-b03J02-1775070732956"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-b03J02-1775070732956",
+      "latest_generated_at": "2026-04-01T19:12:12.980779Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/b03J02/apm-v2-b03J02-1775070732956/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/b03J02/apm-v2-b03J02-1775070732956.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a96A03",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a96A03-1775052721277",
+        "apm-v2-a96A03-1775070631660"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a96A03-1775070631660",
+      "latest_generated_at": "2026-04-01T19:10:31.682325Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a96A03/apm-v2-a96A03-1775070631660/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a96A03/apm-v2-a96A03-1775070631660.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93J05",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a93J05-1775002708409",
+        "apm-v2-a93J05-1775050465617"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a93J05-1775050465617",
+      "latest_generated_at": "2026-04-01T13:34:25.641641Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93J05/apm-v2-a93J05-1775050465617/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93J05/apm-v2-a93J05-1775050465617.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93J02",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a93J02-1775002596767",
+        "apm-v2-a93J02-1775049742668"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a93J02-1775049742668",
+      "latest_generated_at": "2026-04-01T13:22:22.696101Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93J02/apm-v2-a93J02-1775049742668/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93J02/apm-v2-a93J02-1775049742668.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93A03",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a93A03-1775002487121",
+        "apm-v2-a93A03-1775049613401"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a93A03-1775049613401",
+      "latest_generated_at": "2026-04-01T13:20:13.425128Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93A03/apm-v2-a93A03-1775049613401/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93A03/apm-v2-a93A03-1775049613401.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93A01",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a93A01-1775002343921",
+        "apm-v2-a93A01-1775049526689"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a93A01-1775049526689",
+      "latest_generated_at": "2026-04-01T13:18:46.713986Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93A01/apm-v2-a93A01-1775049526689/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93A01/apm-v2-a93A01-1775049526689.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a92J02",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a92J02-1775002223303",
+        "apm-v2-a92J02-1775049364123"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a92J02-1775049364123",
+      "latest_generated_at": "2026-04-01T13:16:04.148565Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a92J02/apm-v2-a92J02-1775049364123/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a92J02/apm-v2-a92J02-1775049364123.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a03J01",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a03J01-1774987774340",
+        "apm-v2-a03J01-1774988783157"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a03J01-1774988783157",
+      "latest_generated_at": "2026-03-31T20:26:23.180906Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a03J01/apm-v2-a03J01-1774988783157/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a03J01/apm-v2-a03J01-1774988783157.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    }
+  ],
+  "problems": [
+    {
+      "problem_id": "a00J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a00J01-1774990935426"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a00J01-1774990935426",
+      "latest_generated_at": "2026-03-31T21:02:15.449393Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a00J01/apm-v2-a00J01-1774990935426/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a00J01/apm-v2-a00J01-1774990935426.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a00J02",
+      "frame_count": 3,
+      "frame_ids": [
+        "apm-v2-a00J02-1774988069474",
+        "apm-v2-a00J02-1774989750574",
+        "apm-v2-a00J02-1774990402922"
+      ],
+      "receipt_count": 3,
+      "latest_frame_id": "apm-v2-a00J02-1774990402922",
+      "latest_generated_at": "2026-03-31T20:53:22.952897Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a00J02/apm-v2-a00J02-1774990402922/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a00J02/apm-v2-a00J02-1774990402922.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a00J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a00J03-1774991806132"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a00J03-1774991806132",
+      "latest_generated_at": "2026-03-31T21:16:46.155095Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a00J03/apm-v2-a00J03-1774991806132/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a00J03/apm-v2-a00J03-1774991806132.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a01A01",
+      "frame_count": 3,
+      "frame_ids": [
+        "apm-v2-a01A01-1774988239600",
+        "apm-v2-a01A01-1774989942636",
+        "apm-v2-a01A01-1774990784258"
+      ],
+      "receipt_count": 3,
+      "latest_frame_id": "apm-v2-a01A01-1774990784258",
+      "latest_generated_at": "2026-03-31T20:59:44.280747Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a01A01/apm-v2-a01A01-1774990784258.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a01A09",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a01A09-1774988409275"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a01A09-1774988409275",
+      "latest_generated_at": "2026-03-31T20:20:09.300186Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a01A09/apm-v2-a01A09-1774988409275/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a01A09/apm-v2-a01A09-1774988409275.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a01A11",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a01A12",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a01J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a01J01-1774988573118"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a01J01-1774988573118",
+      "latest_generated_at": "2026-03-31T20:22:53.144033Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a01J01/apm-v2-a01J01-1774988573118/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a01J01/apm-v2-a01J01-1774988573118.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a01J02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a01J02-1774988681233"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a01J02-1774988681233",
+      "latest_generated_at": "2026-03-31T20:24:41.255526Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a01J02/apm-v2-a01J02-1774988681233/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a01J02/apm-v2-a01J02-1774988681233.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a01J03",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a01J04",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a01J05",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a01J06",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a02J01",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a02J02",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a02J03",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a02J04",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a02J05",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a02J06",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a02J06-1774988737606"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a02J06-1774988737606",
+      "latest_generated_at": "2026-03-31T20:25:37.629632Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a02J06/apm-v2-a02J06-1774988737606/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a02J06/apm-v2-a02J06-1774988737606.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a03J01",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a03J01-1774987774340",
+        "apm-v2-a03J01-1774988783157"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a03J01-1774988783157",
+      "latest_generated_at": "2026-03-31T20:26:23.180906Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a03J01/apm-v2-a03J01-1774988783157/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a03J01/apm-v2-a03J01-1774988783157.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a03J03",
+      "frame_count": 0,
+      "frame_ids": [],
+      "receipt_count": 0,
+      "latest_frame_id": null,
+      "latest_generated_at": null,
+      "latest_workspace_json": null,
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": true,
+      "legacy_reconciled": true
+    },
+    {
+      "problem_id": "a03J06",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a03J06-1774988835460"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a03J06-1774988835460",
+      "latest_generated_at": "2026-03-31T20:27:15.483620Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a03J06/apm-v2-a03J06-1774988835460/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a03J06/apm-v2-a03J06-1774988835460.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a03J07",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a03J07-1774988886868"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a03J07-1774988886868",
+      "latest_generated_at": "2026-03-31T20:28:06.892440Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a03J07/apm-v2-a03J07-1774988886868/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a03J07/apm-v2-a03J07-1774988886868.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a92J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a92J01-1774989024995"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a92J01-1774989024995",
+      "latest_generated_at": "2026-03-31T20:30:25.021044Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a92J01/apm-v2-a92J01-1774989024995/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a92J01/apm-v2-a92J01-1774989024995.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a92J02",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a92J02-1775002223303",
+        "apm-v2-a92J02-1775049364123"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a92J02-1775049364123",
+      "latest_generated_at": "2026-04-01T13:16:04.148565Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a92J02/apm-v2-a92J02-1775049364123/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a92J02/apm-v2-a92J02-1775049364123.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93A01",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a93A01-1775002343921",
+        "apm-v2-a93A01-1775049526689"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a93A01-1775049526689",
+      "latest_generated_at": "2026-04-01T13:18:46.713986Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93A01/apm-v2-a93A01-1775049526689/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93A01/apm-v2-a93A01-1775049526689.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93A03",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a93A03-1775002487121",
+        "apm-v2-a93A03-1775049613401"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a93A03-1775049613401",
+      "latest_generated_at": "2026-04-01T13:20:13.425128Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93A03/apm-v2-a93A03-1775049613401/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93A03/apm-v2-a93A03-1775049613401.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93J02",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a93J02-1775002596767",
+        "apm-v2-a93J02-1775049742668"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a93J02-1775049742668",
+      "latest_generated_at": "2026-04-01T13:22:22.696101Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93J02/apm-v2-a93J02-1775049742668/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93J02/apm-v2-a93J02-1775049742668.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a93J03-1774992011929"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a93J03-1774992011929",
+      "latest_generated_at": "2026-03-31T21:20:11.955278Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93J03/apm-v2-a93J03-1774992011929/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93J03/apm-v2-a93J03-1774992011929.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93J05",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a93J05-1775002708409",
+        "apm-v2-a93J05-1775050465617"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a93J05-1775050465617",
+      "latest_generated_at": "2026-04-01T13:34:25.641641Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93J05/apm-v2-a93J05-1775050465617/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93J05/apm-v2-a93J05-1775050465617.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93J06",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a93J06-1775002790071"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a93J06-1775002790071",
+      "latest_generated_at": "2026-04-01T00:19:50.096830Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93J06/apm-v2-a93J06-1775002790071/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a93J06/apm-v2-a93J06-1775002790071.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a93J07",
+      "frame_count": 1,
+      "frame_ids": [
+        "Apm_v2_a93J07_1775570229422"
+      ],
+      "receipt_count": 0,
+      "latest_frame_id": "Apm_v2_a93J07_1775570229422",
+      "latest_generated_at": "2026-04-07T13:57:09.452997Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a93J07/Apm_v2_a93J07_1775570229422/workspace.json",
+      "latest_receipt_path": null,
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a94A01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a94A01-1775002871618"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a94A01-1775002871618",
+      "latest_generated_at": "2026-04-01T00:21:11.641463Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a94A01/apm-v2-a94A01-1775002871618/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a94A01/apm-v2-a94A01-1775002871618.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a94J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a94J01-1775002964674"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a94J01-1775002964674",
+      "latest_generated_at": "2026-04-01T00:22:44.696747Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a94J01/apm-v2-a94J01-1775002964674/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a94J01/apm-v2-a94J01-1775002964674.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a94J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a94J03-1775003038480"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a94J03-1775003038480",
+      "latest_generated_at": "2026-04-01T00:23:58.504406Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a94J03/apm-v2-a94J03-1775003038480/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a94J03/apm-v2-a94J03-1775003038480.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a96A03",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-a96A03-1775052721277",
+        "apm-v2-a96A03-1775070631660"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-a96A03-1775070631660",
+      "latest_generated_at": "2026-04-01T19:10:31.682325Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a96A03/apm-v2-a96A03-1775070631660/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a96A03/apm-v2-a96A03-1775070631660.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a96J01",
+      "frame_count": 6,
+      "frame_ids": [
+        "apm-v2-a96J01-1774992421755",
+        "apm-v2-a96J01-1774994639526",
+        "apm-v2-a96J01-1774999742972",
+        "apm-v2-a96J01-1775001722761",
+        "apm-v2-a96J01-1775003480661",
+        "apm-v2-a96J01-1775044904478"
+      ],
+      "receipt_count": 6,
+      "latest_frame_id": "apm-v2-a96J01-1775044904478",
+      "latest_generated_at": "2026-04-01T12:01:44.540545Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a96J01/apm-v2-a96J01-1775044904478/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a96J01/apm-v2-a96J01-1775044904478.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a96J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a96J03-1775003261538"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a96J03-1775003261538",
+      "latest_generated_at": "2026-04-01T00:27:41.568013Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a96J03/apm-v2-a96J03-1775003261538/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a96J03/apm-v2-a96J03-1775003261538.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a96J06",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a96J06-1775003321530"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a96J06-1775003321530",
+      "latest_generated_at": "2026-04-01T00:28:41.552555Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a96J06/apm-v2-a96J06-1775003321530/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a96J06/apm-v2-a96J06-1775003321530.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a97A01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a97A01-1775003392734"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a97A01-1775003392734",
+      "latest_generated_at": "2026-04-01T00:29:52.759179Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a97A02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a97A02-1775003733088"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a97A02-1775003733088",
+      "latest_generated_at": "2026-04-01T00:35:33.111996Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a97A02/apm-v2-a97A02-1775003733088/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a97A02/apm-v2-a97A02-1775003733088.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a97A03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a97A03-1775003886693"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a97A03-1775003886693",
+      "latest_generated_at": "2026-04-01T00:38:06.719777Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a97A03/apm-v2-a97A03-1775003886693/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a97A03/apm-v2-a97A03-1775003886693.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a97A04",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a97A04-1775003958890"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a97A04-1775003958890",
+      "latest_generated_at": "2026-04-01T00:39:18.920086Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a97A04/apm-v2-a97A04-1775003958890/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a97A04/apm-v2-a97A04-1775003958890.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a98A06",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a98A06-1775004274108"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a98A06-1775004274108",
+      "latest_generated_at": "2026-04-01T00:44:34.136453Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a98A06/apm-v2-a98A06-1775004274108/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a98A06/apm-v2-a98A06-1775004274108.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a98J02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a98J02-1775004665812"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a98J02-1775004665812",
+      "latest_generated_at": "2026-04-01T00:51:05.836883Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a98J02/apm-v2-a98J02-1775004665812/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a98J02/apm-v2-a98J02-1775004665812.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a98J04",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a98J04-1775004924027"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a98J04-1775004924027",
+      "latest_generated_at": "2026-04-01T00:55:24.053584Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a98J04/apm-v2-a98J04-1775004924027/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a98J04/apm-v2-a98J04-1775004924027.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a99J05",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a99J05-1775005037257"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a99J05-1775005037257",
+      "latest_generated_at": "2026-04-01T00:57:17.282995Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a99J05/apm-v2-a99J05-1775005037257/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a99J05/apm-v2-a99J05-1775005037257.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "a99J07",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-a99J07-1775005157308"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-a99J07-1775005157308",
+      "latest_generated_at": "2026-04-01T00:59:17.333216Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/a99J07/apm-v2-a99J07-1775005157308/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/a99J07/apm-v2-a99J07-1775005157308.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "aunk01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-aunk01-1775005703226"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-aunk01-1775005703226",
+      "latest_generated_at": "2026-04-01T01:08:23.269362Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/aunk01/apm-v2-aunk01-1775005703226/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/aunk01/apm-v2-aunk01-1775005703226.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "aunk02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-aunk02-1775005869003"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-aunk02-1775005869003",
+      "latest_generated_at": "2026-04-01T01:11:09.025052Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/aunk02/apm-v2-aunk02-1775005869003/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/aunk02/apm-v2-aunk02-1775005869003.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "b03J02",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-b03J02-1775052929959",
+        "apm-v2-b03J02-1775070732956"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-b03J02-1775070732956",
+      "latest_generated_at": "2026-04-01T19:12:12.980779Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/b03J02/apm-v2-b03J02-1775070732956/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/b03J02/apm-v2-b03J02-1775070732956.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "b93J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-b93J01-1775006040768"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-b93J01-1775006040768",
+      "latest_generated_at": "2026-04-01T01:14:00.792325Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/b93J01/apm-v2-b93J01-1775006040768/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/b93J01/apm-v2-b93J01-1775006040768.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "b93J02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-b93J02-1775006390328"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-b93J02-1775006390328",
+      "latest_generated_at": "2026-04-01T01:19:50.351707Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/b93J02/apm-v2-b93J02-1775006390328/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/b93J02/apm-v2-b93J02-1775006390328.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "b94J01",
+      "frame_count": 6,
+      "frame_ids": [
+        "apm-v2-b94J01-1774992341688",
+        "apm-v2-b94J01-1774994174583",
+        "apm-v2-b94J01-1774995021497",
+        "apm-v2-b94J01-1774999220593",
+        "apm-v2-b94J01-1775001319272",
+        "apm-v2-b94J01-1775002552157"
+      ],
+      "receipt_count": 6,
+      "latest_frame_id": "apm-v2-b94J01-1775002552157",
+      "latest_generated_at": "2026-04-01T00:15:52.181971Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/b94J01/apm-v2-b94J01-1775002552157/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/b94J01/apm-v2-b94J01-1775002552157.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "b96J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-b96J01-1775006550462"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-b96J01-1775006550462",
+      "latest_generated_at": "2026-04-01T01:22:30.484774Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/b96J01/apm-v2-b96J01-1775006550462/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/b96J01/apm-v2-b96J01-1775006550462.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "b96J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-b96J03-1775006849349"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-b96J03-1775006849349",
+      "latest_generated_at": "2026-04-01T01:27:29.371529Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/b96J03/apm-v2-b96J03-1775006849349/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/b96J03/apm-v2-b96J03-1775006849349.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "m96A04",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-m96A04-1775053034904",
+        "apm-v2-m96A04-1775070820897"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-m96A04-1775070820897",
+      "latest_generated_at": "2026-04-01T19:13:40.919862Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/m96A04/apm-v2-m96A04-1775070820897/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/m96A04/apm-v2-m96A04-1775070820897.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "m96J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-m96J01-1775007086632"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-m96J01-1775007086632",
+      "latest_generated_at": "2026-04-01T01:31:26.654702Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/m96J01/apm-v2-m96J01-1775007086632/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/m96J01/apm-v2-m96J01-1775007086632.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "m98J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-m98J03-1775007499607"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-m98J03-1775007499607",
+      "latest_generated_at": "2026-04-01T01:38:19.628849Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/m98J03/apm-v2-m98J03-1775007499607/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/m98J03/apm-v2-m98J03-1775007499607.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "m99A04",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-m99A04-1775007855572"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-m99A04-1775007855572",
+      "latest_generated_at": "2026-04-01T01:44:15.593677Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/m99A04/apm-v2-m99A04-1775007855572/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/m99A04/apm-v2-m99A04-1775007855572.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t01A01",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-t01A01-1775052441576",
+        "apm-v2-t01A01-1775070410894"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-t01A01-1775070410894",
+      "latest_generated_at": "2026-04-01T19:06:50.938823Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t01A01/apm-v2-t01A01-1775070410894/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t01A01/apm-v2-t01A01-1775070410894.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t91A03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t91A03-1775008066441"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t91A03-1775008066441",
+      "latest_generated_at": "2026-04-01T01:47:46.468701Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t91A03/apm-v2-t91A03-1775008066441/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t91A03/apm-v2-t91A03-1775008066441.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t91A04",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t91A04-1775008241824"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t91A04-1775008241824",
+      "latest_generated_at": "2026-04-01T01:50:41.847109Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t91A04/apm-v2-t91A04-1775008241824/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t91A04/apm-v2-t91A04-1775008241824.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t91J04",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t91J04-1775008373965"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t91J04-1775008373965",
+      "latest_generated_at": "2026-04-01T01:52:53.991812Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t91J04/apm-v2-t91J04-1775008373965/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t91J04/apm-v2-t91J04-1775008373965.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t92J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t92J01-1775008525795"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t92J01-1775008525795",
+      "latest_generated_at": "2026-04-01T01:55:25.817121Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t92J01/apm-v2-t92J01-1775008525795/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t92J01/apm-v2-t92J01-1775008525795.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t92J02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t92J02-1775008678104"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t92J02-1775008678104",
+      "latest_generated_at": "2026-04-01T01:57:58.126308Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t92J02/apm-v2-t92J02-1775008678104/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t92J02/apm-v2-t92J02-1775008678104.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t92J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t92J03-1775008978201"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t92J03-1775008978201",
+      "latest_generated_at": "2026-04-01T02:02:58.224079Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t92J03/apm-v2-t92J03-1775008978201/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t92J03/apm-v2-t92J03-1775008978201.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t92J09",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t92J09-1775009066645"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t92J09-1775009066645",
+      "latest_generated_at": "2026-04-01T02:04:26.670801Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t92J09/apm-v2-t92J09-1775009066645/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t92J09/apm-v2-t92J09-1775009066645.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t93J02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t93J02-1775009331315"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t93J02-1775009331315",
+      "latest_generated_at": "2026-04-01T02:08:51.338967Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t93J02/apm-v2-t93J02-1775009331315/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t93J02/apm-v2-t93J02-1775009331315.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t94A02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t94A02-1775009748581"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t94A02-1775009748581",
+      "latest_generated_at": "2026-04-01T02:15:48.603349Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t94A02/apm-v2-t94A02-1775009748581/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t94A02/apm-v2-t94A02-1775009748581.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t94A04",
+      "frame_count": 2,
+      "frame_ids": [
+        "apm-v2-t94A04-1775010166561",
+        "apm-v2-t94A04-1775045150581"
+      ],
+      "receipt_count": 2,
+      "latest_frame_id": "apm-v2-t94A04-1775045150581",
+      "latest_generated_at": "2026-04-01T12:05:50.608105Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t94A04/apm-v2-t94A04-1775045150581/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t94A04/apm-v2-t94A04-1775045150581.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t94A05",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t94A05-1775010453161"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t94A05-1775010453161",
+      "latest_generated_at": "2026-04-01T02:27:33.185946Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t94A05/apm-v2-t94A05-1775010453161/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t94A05/apm-v2-t94A05-1775010453161.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t94J01",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t94J01-1775010781379"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t94J01-1775010781379",
+      "latest_generated_at": "2026-04-01T02:33:01.405237Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t94J01/apm-v2-t94J01-1775010781379/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t94J01/apm-v2-t94J01-1775010781379.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t94J02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t94J02-1775011263361"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t94J02-1775011263361",
+      "latest_generated_at": "2026-04-01T02:41:03.383163Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t94J02/apm-v2-t94J02-1775011263361/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t94J02/apm-v2-t94J02-1775011263361.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t94J07",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t94J07-1775011599250"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t94J07-1775011599250",
+      "latest_generated_at": "2026-04-01T02:46:39.273276Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t94J07/apm-v2-t94J07-1775011599250/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t94J07/apm-v2-t94J07-1775011599250.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t94J08",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t94J08-1775011677105"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t94J08-1775011677105",
+      "latest_generated_at": "2026-04-01T02:47:57.128508Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t94J08/apm-v2-t94J08-1775011677105/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t94J08/apm-v2-t94J08-1775011677105.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t95A02",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t95A02-1775011739446"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t95A02-1775011739446",
+      "latest_generated_at": "2026-04-01T02:48:59.468750Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t95A02/apm-v2-t95A02-1775011739446/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t95A02/apm-v2-t95A02-1775011739446.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t95A03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t95A03-1775011813898"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t95A03-1775011813898",
+      "latest_generated_at": "2026-04-01T02:50:13.920952Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t95A03/apm-v2-t95A03-1775011813898/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t95A03/apm-v2-t95A03-1775011813898.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t96A03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t96A03-1775012050983"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t96A03-1775012050983",
+      "latest_generated_at": "2026-04-01T02:54:11.006661Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t96A03/apm-v2-t96A03-1775012050983/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t96A03/apm-v2-t96A03-1775012050983.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t96A08",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t96A08-1775012559877"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t96A08-1775012559877",
+      "latest_generated_at": "2026-04-01T03:02:39.901187Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t96A08/apm-v2-t96A08-1775012559877/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t96A08/apm-v2-t96A08-1775012559877.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t96J03",
+      "frame_count": 5,
+      "frame_ids": [
+        "apm-v2-t96J03-1774992389652",
+        "apm-v2-t96J03-1774994444690",
+        "apm-v2-t96J03-1774999579956",
+        "apm-v2-t96J03-1775001511591",
+        "apm-v2-t96J03-1775003096930"
+      ],
+      "receipt_count": 5,
+      "latest_frame_id": "apm-v2-t96J03-1775003096930",
+      "latest_generated_at": "2026-04-01T00:24:56.952898Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t96J03/apm-v2-t96J03-1775003096930/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t96J03/apm-v2-t96J03-1775003096930.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t96J08",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t96J08-1775012649049"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t96J08-1775012649049",
+      "latest_generated_at": "2026-04-01T03:04:09.071290Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t96J08/apm-v2-t96J08-1775012649049/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t96J08/apm-v2-t96J08-1775012649049.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t97A04",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t97A04-1775012771698"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t97A04-1775012771698",
+      "latest_generated_at": "2026-04-01T03:06:11.724487Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t97A04/apm-v2-t97A04-1775012771698/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t97A04/apm-v2-t97A04-1775012771698.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t97J01",
+      "frame_count": 6,
+      "frame_ids": [
+        "apm-v2-t97J01-1774992240183",
+        "apm-v2-t97J01-1774994005204",
+        "apm-v2-t97J01-1774994931686",
+        "apm-v2-t97J01-1774999080822",
+        "apm-v2-t97J01-1775001167604",
+        "apm-v2-t97J01-1775002043870"
+      ],
+      "receipt_count": 6,
+      "latest_frame_id": "apm-v2-t97J01-1775002043870",
+      "latest_generated_at": "2026-04-01T00:07:23.901774Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t97J01/apm-v2-t97J01-1775002043870/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t97J01/apm-v2-t97J01-1775002043870.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t98J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t98J03-1775012941316"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t98J03-1775012941316",
+      "latest_generated_at": "2026-04-01T03:09:01.337550Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t98J03/apm-v2-t98J03-1775012941316/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t98J03/apm-v2-t98J03-1775012941316.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t99J03",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t99J03-1775013445880"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t99J03-1775013445880",
+      "latest_generated_at": "2026-04-01T03:17:25.906971Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t99J03/apm-v2-t99J03-1775013445880/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t99J03/apm-v2-t99J03-1775013445880.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    },
+    {
+      "problem_id": "t99J04",
+      "frame_count": 1,
+      "frame_ids": [
+        "apm-v2-t99J04-1775013570926"
+      ],
+      "receipt_count": 1,
+      "latest_frame_id": "apm-v2-t99J04-1775013570926",
+      "latest_generated_at": "2026-04-01T03:19:30.949188Z",
+      "latest_workspace_json": "/home/joe/code/futon6/.state/proof-frames/t99J04/apm-v2-t99J04-1775013570926/workspace.json",
+      "latest_receipt_path": "/home/joe/code/futon6/.state/proof-frames/t99J04/apm-v2-t99J04-1775013570926.json",
+      "imported_bundle_exists": true,
+      "legacy_lean_proof_exists": false,
+      "legacy_reconciled": false
+    }
+  ]
+}

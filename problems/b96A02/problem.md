@@ -1,0 +1,48 @@
+# b96A02
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-b96A02.md`
+- imported-at: `2026-07-13T17:26:54.067540Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $G$ be a group.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Suppose $G$ has order $30$. Show that $G$ has a normal subgroup
+of order $15$. Show that every subgroup of $G$ of order $3,5,$ or $15$
+is normal.
+%------------------------------------------------------------------*
+\item Suppose $H\subset G$ is a subgroup of the group $G$. Define
+$\mathrm{core}_G(H)\subset G$ to be the normal subgroup of $G$ such
+that $N\subset H$ is a normal subgroup of $G$ then $N\subset
+\mathrm{core}_G(H)$. You may assume that $\mathrm{core}_G(H)$
+exists. Suppose that $L/F$ is a Galois extension of fields with Galois
+group $G$. Let $\alpha\in L$ have a minimal polynomial $f(x)\in F[x]$
+over $F$. Let $K=F(\alpha)$ and let $H\subset G$ be the subgroup of
+$G$ associated to $K$. 
+
+Show that $L$ is the splitting field of $f(x)$ if and only if
+$\mathrm{core}_G(H)=\{1\}$.
+%------------------------------------------------------------------*
+\item Suppose $G$ has order $30$ and that $L$ is the splitting field
+of $f(x)$. Show that $f(x)$ has degree $15$ or $30$.
+%------------------------------------------------------------------*
+\item Now suppose $G$ has order $18$. Show that if $L$ is the
+splitting field of a polynomial of degree $6$ it is a splitting field
+of a polynomial of degree $9$. 
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

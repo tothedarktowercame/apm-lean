@@ -1,0 +1,50 @@
+# b95J04
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-b95J04.md`
+- imported-at: `2026-07-13T17:26:54.043011Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $p$ be a prime. Let $F$ be a field such that the polynomial
+$x^p-1$ has a root $z\neq 1$ in $F$. Let $\alpha$ be an element of
+the extension field of $F$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Prove that the characteristic of $F$ is not $p$.
+%------------------------------------------------------------------*
+\item Prove that $x^p-1=\prod_{i=1}^p(x-z^i)$.
+%------------------------------------------------------------------*
+\item Now (and in the next two following parts) suppose that 
+$\alpha\notin F$ but $\alpha^p=\omega\in F$.
+Show that $F(\alpha)$ is a Galois extension of $F$.
+%------------------------------------------------------------------*
+\item Now (and in the next part) let
+$G=\mathrm{Gal}(F(\alpha)/F)$ be the Galois group.  Show that for each
+$\sigma\in G$ there is a unique integer $i(\sigma)\in [1,p]$ such that
+$\sigma(\alpha)=z^{i(\sigma)}\alpha$.
+%------------------------------------------------------------------*
+\item Show that the map $\sigma\mapsto i(\sigma) \pmod p$ is an
+isomorphism of $G$ onto $\Z/p\Z$.
+%------------------------------------------------------------------*
+\item Suppose now (and for the last part) that $E/F$ is 
+Galois with Galois group $G$ cyclic of order $p$. Let $\sigma\in
+G,\sigma\neq 1$. Show that there is an element $\alpha\in E,\alpha\neq
+0$ such that $\sigma(\alpha)=z\alpha$.
+%------------------------------------------------------------------*
+\item Show that $\alpha\notin F$ but $\alpha^p\in F$ and $E=F(\alpha)$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

@@ -1,0 +1,25 @@
+# t97A05
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-t97A05.md`
+- imported-at: `2026-07-13T17:26:58.429637Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X^{n+k}$ be an oriented smooth manifold with compact oriented
+smooth submanifolds $Y^{n+1}$ and $Z^k$. Let $W^n$ be a compact
+oriented smooth submanifold of $Y^{n+1}$. Assume that all these
+manifolds have no boundary and that $Y^{n+1}$ and $W^n$ are
+connected. If the intersection number $I(W^n,Z^k)$ is non-zero, show
+that $Y^{n+1}\setminus W^n$ is connected.
+```

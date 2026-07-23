@@ -1,0 +1,36 @@
+# m95J05
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-m95J05.md`
+- imported-at: `2026-07-13T17:26:55.193876Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Define what is meant by saying that a distribution $T$ is a
+fundamental solution of a differential operator
+$A=\sum_{\alpha}c_{\alpha} D^{\alpha}$.
+%------------------------------------------------------------------*
+\item Find a fundamental solution of the operator $A$ given by
+$Au=u'+\lambda u$. Here $u$ is a function of one real variable, and
+$\lambda$ is a constant.
+%------------------------------------------------------------------*
+\item Use the fundamental solution found in part (b) to give a solution
+of the equation $v'+\lambda v=\varphi$, where $\varphi$ is any test
+function. Define exactly what a ``test function'' is in this context.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

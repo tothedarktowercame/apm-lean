@@ -1,188 +1,190 @@
 
 
-# APM a01A09: Laplace transform analyticity
+# APM a01A10: Fresnel integral and Fourier transform of the Gaussian
+
+I'll compute both.
 
 ## Why It's Hard
 
-The integral G(z) = ∫₀^∞ f(t) e^{tz} dt involves an exponential kernel e^{tz} that grows or decays depending on the signs of Re(z) and t. Since t ≥ 0, you need Re(z) < 0 for the exponential to decay — wait, that's wrong. Let me re-read: G(z) = ∫ f(t) e^{tz} dt. For t ≥ 0 and Re(z) > 0, |e^{tz}| = e^{t·Re(z)} *grows* exponentially. So convergence depends entirely on the decay of f. The problem says f ∈ Lp for 1 < p < ∞, so f has polynomial-type integrability but not exponential decay. The integral converges on {Re z < 0}, not Re z > 0.
+**(a)** The integrand e^{ix²} has modulus 1 everywhere — it doesn't decay. The integral converges only by cancellation (oscillation), not by absolute integrability. You can't just apply the residue theorem to a closed contour; you need a contour that deforms the oscillatory integral into a Gaussian one.
 
-Wait — let me re-read the problem statement more carefully. It says "Prove that G(z) is analytic for z with Re z > 0." But with f ∈ Lp([0,∞)) and e^{tz} growing for Re z > 0, the integral would diverge for generic f ∈ Lp. Unless there's a sign convention issue.
-
-**Corrected reading:** The problem almost certainly means G(z) = ∫₀^∞ f(t) e^{-tz} dt (the standard Laplace transform, with a minus sign), or the half-plane should be {Re z < 0}. With G(z) = ∫₀^∞ f(t) e^{-tz} dt, for Re z > 0, |e^{-tz}| = e^{-t·Re z} → 0 as t → ∞, and f ∈ Lp makes the integral converge by Hölder.
-
-I'll proceed with the standard Laplace transform G(z) = ∫₀^∞ f(t) e^{-tz} dt, which is analytic on {Re z > 0}. (If the problem literally means e^{+tz}, then the answer is: G is analytic on {Re z < 0}, by the same argument with Re z replaced by -Re z.)
+**(b)** The integrand e^{ixy} e^{-x²} does decay, but computing the integral requires "completing the square" in the exponent, which shifts the contour of integration into the complex plane. Justifying this shift is the nontrivial step.
 
 ## The Key Insight
 
-**Convergence:** For Re z > 0, the function t ↦ e^{-tz} decays exponentially, so e^{-t·Re z} ∈ Lq([0,∞)) where 1/p + 1/q = 1. By Hölder's inequality, the integral ∫ |f(t) e^{-tz}| dt ≤ ||f||\_p · ||e^{-t·Re z}||\_q < ∞.
+**(a)** Use the contour that is a *pie slice* of angle π/4 in the first quadrant. Along the real axis you get ∫₀^R e^{ix²} dx. Along the ray at angle π/4, parametrize z = te^{iπ/4} and get a Gaussian integral. The circular arc contributes nothing as R → ∞. Equating gives the Fresnel integral in terms of the known Gaussian ∫₀^∞ e^{-t²} dt = √π/2.
 
-**Analyticity:** The integrand is entire in z for each fixed t, and we can differentiate under the integral sign because the derivative ∂/∂z [f(t) e^{-tz}] = -t f(t) e^{-tz} is dominated by an integrable function on compact subsets of {Re z > 0}. Alternatively, use Morera + Fubini.
-
-**Entirety:** G extends to an entire function if f ∈ Lp *and* f(t) e^{-εt} ∈ L¹ for every ε > 0 — equivalently, if f has sub-exponential decay: f(t) e^{ct} ∈ Lp for every c > 0. The most natural sufficient condition is that f is compactly supported (f ∈ Lp ∩ L^∞\_c), since then e^{-tz} is bounded on the support for any z.
+**(b)** The exponent is -x² + ixy = -(x - iy/2)² - y²/4. Substitute w = x - iy/2 (shift the contour vertically by -y/2 in the complex plane). The shifted integral is e^{-y²/4} ∫ e^{-w²} dw = √π e^{-y²/4}. Justify the contour shift by showing the contributions on vertical segments vanish.
 
 ## Complete Proof
 
-**Theorem.** Let f ∈ Lp([0,∞)) with 1 < p < ∞. Define G(z) = ∫₀^∞ f(t) e^{-tz} dt. Then G is analytic on {Re z > 0}.
+### Part (a): ∫₀^∞ e^{ix²} dx = (1+i)√π / (2√2)
 
-### Step 1: G(z) is well-defined for Re z > 0
+**Contour.** Let γ\_R be the boundary of the sector {z : 0 < arg z < π/4, |z| < R}, traversed counterclockwise. This consists of three pieces:
 
-Let q = p/(p-1) be the conjugate exponent. For Re z = σ > 0:
+- γ₁: the real segment [0, R]
+- γ₂: the circular arc from R to Re^{iπ/4}
+- γ₃: the ray segment from Re^{iπ/4} back to 0
 
-$$\int_0^{\infty} |f(t) e^{-tz}|\,dt = \int_0^{\infty} |f(t)| e^{-\sigma t}\,dt.$$
+The function f(z) = e^{iz²} is entire, so ∮\_{γ\_R} e^{iz²} dz = 0 by Cauchy's theorem:
 
-By Hölder's inequality:
+$$\int_{\gamma_1} + \int_{\gamma_2} + \int_{\gamma_3} = 0.$$
 
-$$\int_0^{\infty} |f(t)| e^{-\sigma t}\,dt \leq \|f\|_p \cdot \left(\int_0^{\infty} e^{-q\sigma t}\,dt\right)^{1/q} = \|f\|_p \cdot (q\sigma)^{-1/q} < \infty.$$
+**γ₁ (real axis):**
 
-So G(z) converges absolutely for Re z > 0. ∎
+$$\int_{\gamma_1} e^{iz^2}\,dz = \int_0^R e^{ix^2}\,dx.$$
 
-### Step 2: G is analytic (Morera + Fubini)
+**γ₃ (ray at angle π/4, traversed inward):** Parametrize z = te^{iπ/4} with t from R to 0, dz = e^{iπ/4} dt:
 
-Let Δ be any triangle in {Re z > 0}. We show ∮\_Δ G(z) dz = 0.
+$$\int_{\gamma_3} e^{iz^2}\,dz = \int_R^0 e^{i(te^{i\pi/4})^2} e^{i\pi/4}\,dt = -e^{i\pi/4}\int_0^R e^{it^2 e^{i\pi/2}}\,dt.$$
 
-Since Δ is compact and contained in {Re z > 0}, there exists σ₀ > 0 such that Re z ≥ σ₀ for all z ∈ Δ. Then:
+Now e^{iπ/2} = i, so it² · i = it² · i = -t² (wait: i · t² · e^{iπ/2} — let me recompute). We have z² = t² e^{iπ/2} = it², so iz² = i · it² = -t². Therefore:
 
-$$\oint_\Delta G(z)\,dz = \oint_\Delta \left(\int_0^{\infty} f(t) e^{-tz}\,dt\right) dz.$$
+$$\int_{\gamma_3} = -e^{i\pi/4}\int_0^R e^{-t^2}\,dt.$$
 
-The integrand satisfies |f(t) e^{-tz}| ≤ |f(t)| e^{-σ₀ t}, and:
+**γ₂ (circular arc):** Parametrize z = Re^{iθ}, θ from 0 to π/4:
 
-$$\int_0^{\infty} |f(t)| e^{-\sigma_0 t}\,dt < \infty \quad \text{(by Step 1)},$$
+$$\left|\int_{\gamma_2} e^{iz^2}\,dz\right| \leq \int_0^{\pi/4} |e^{iR^2 e^{2i\theta}}| \cdot R\,d\theta = \int_0^{\pi/4} e^{-R^2\sin 2\theta} \cdot R\,d\theta.$$
 
-$$\oint_\Delta 1\,|dz| = \text{length}(\Delta) < \infty.$$
+By Jordan's inequality, sin 2θ ≥ 4θ/π for θ ∈ [0, π/4]:
 
-So the product |f(t) e^{-tz}| is integrable on [0,∞) × Δ. By Fubini's theorem:
+$$\leq \int_0^{\pi/4} R e^{-R^2 \cdot 4\theta/\pi}\,d\theta = R \cdot \frac{\pi}{4R^2}(1 - e^{-R^2}) \leq \frac{\pi}{4R} \to 0.$$
 
-$$\oint_\Delta G(z)\,dz = \int_0^{\infty} f(t) \left(\oint_\Delta e^{-tz}\,dz\right) dt.$$
+**Combining:** As R → ∞:
 
-For each fixed t, z ↦ e^{-tz} is entire, so ∮\_Δ e^{-tz} dz = 0 by Cauchy's theorem.
+$$\int_0^{\infty} e^{ix^2}\,dx - e^{i\pi/4}\int_0^{\infty} e^{-t^2}\,dt = 0.$$
 
-Therefore ∮\_Δ G(z) dz = 0. By Morera's theorem, G is analytic on {Re z > 0}. ∎
+Since ∫₀^∞ e^{-t²} dt = √π/2:
 
-### Step 2' (Alternative: direct differentiation)
+$$\int_0^{\infty} e^{ix^2}\,dx = e^{i\pi/4} \cdot \frac{\sqrt{\pi}}{2} = \frac{1+i}{\sqrt{2}} \cdot \frac{\sqrt{\pi}}{2} = \frac{(1+i)\sqrt{\pi}}{2\sqrt{2}}.$$
 
-For z₀ with Re z₀ = σ₀ > 0, the difference quotient:
+$$\boxed{\int_0^{\infty} e^{ix^2}\,dx = \frac{\sqrt{\pi}}{2}\,e^{i\pi/4} = \frac{(1+i)\sqrt{\pi}}{2\sqrt{2}} = \frac{\sqrt{2\pi}}{4}(1+i).} \qquad \blacksquare$$
 
-$$\frac{G(z) - G(z_0)}{z - z_0} = \int_0^{\infty} f(t) \frac{e^{-tz} - e^{-tz_0}}{z - z_0}\,dt \to \int_0^{\infty} f(t)(-t) e^{-tz_0}\,dt$$
+### Part (b): ∫\_{-∞}^{∞} e^{ixy} e^{-x²} dx = √π e^{-y²/4}
 
-as z → z₀. The convergence of the integral is justified by dominated convergence: the difference quotient of e^{-tz} is bounded by t e^{-t(σ₀/2)} for z close to z₀ (with Re z ≥ σ₀/2), and t ↦ |f(t)| · t · e^{-tσ₀/2} is integrable (by Hölder, since t e^{-tσ₀/2} ∈ Lq).
+**Completing the square.** The exponent is:
 
-So G'(z₀) = ∫₀^∞ f(t)(-t) e^{-tz₀} dt exists, confirming analyticity. ∎
+$$-x^2 + ixy = -\left(x - \frac{iy}{2}\right)^2 - \frac{y^2}{4}.$$
 
-### Condition for entirety
+So the integral becomes:
 
-G(z) = ∫₀^∞ f(t) e^{-tz} dt extends to an entire function if and only if the integral converges absolutely for all z ∈ ℂ, i.e., for every σ ∈ ℝ:
+$$e^{-y^2/4}\int_{-\infty}^{\infty} e^{-(x - iy/2)^2}\,dx.$$
 
-$$\int_0^{\infty} |f(t)| e^{-\sigma t}\,dt < \infty.$$
+**Contour shift.** We claim ∫\_{-∞}^{∞} e^{-(x-iy/2)²} dx = ∫\_{-∞}^{∞} e^{-w²} dw = √π.
 
-For σ < 0, this requires f(t) to decay faster than e^{σt} for every σ < 0 — meaning f(t) e^{ct} ∈ L¹ for every c > 0.
+To justify, consider the rectangular contour with vertices -R, R, R - iy/2, -R - iy/2, traversed counterclockwise. The function g(z) = e^{-z²} is entire, so ∮ g = 0.
 
-**Sufficient condition:** f has compact support, i.e., f ∈ Lp([0,∞)) and there exists T > 0 such that f(t) = 0 for t > T. Then for any z ∈ ℂ:
+The four sides:
+- **Bottom** (from -R to R along ℝ): ∫\_{-R}^{R} e^{-x²} dx → √π.
+- **Top** (from R - iy/2 to -R - iy/2, i.e., rightward): -∫\_{-R}^{R} e^{-(x-iy/2)²} dx.
+- **Right side** (from R to R - iy/2): ∫₀^{y/2} e^{-(R-is)²} · (-i) ds. The modulus is bounded by (y/2) · e^{-R² + y²/4} → 0 as R → ∞.
+- **Left side** (from -R - iy/2 to -R): similarly → 0.
 
-$$|G(z)| \leq \int_0^T |f(t)| e^{|\text{Re}\,z| \cdot t}\,dt \leq e^{|\text{Re}\,z| \cdot T}\|f\|_1 < \infty$$
+So as R → ∞:
 
-and the same Morera/Fubini argument applies on all of ℂ.
+$$\int_{-\infty}^{\infty} e^{-x^2}\,dx - \int_{-\infty}^{\infty} e^{-(x-iy/2)^2}\,dx = 0.$$
 
-**More general sufficient condition:** f(t) e^{ct} ∈ Lp([0,∞)) for every c > 0. Equivalently, f has *sub-exponential growth*: for every ε > 0, ∫ |f(t)|^p e^{εt} dt < ∞. ∎
+Therefore:
+
+$$\int_{-\infty}^{\infty} e^{ixy} e^{-x^2}\,dx = e^{-y^2/4}\int_{-\infty}^{\infty} e^{-w^2}\,dw = \sqrt{\pi}\,e^{-y^2/4}.$$
+
+$$\boxed{\int_{-\infty}^{\infty} e^{ixy-x^2}\,dx = \sqrt{\pi}\,e^{-y^2/4}.} \qquad \blacksquare$$
 
 ## What Connects
 
-**To the Laplace transform.** G is the two-sided Laplace transform restricted to t ≥ 0. The abscissa of convergence is Re z = 0 (the largest σ such that e^{-σt} f(t) ∈ L¹), and analyticity holds strictly to the right of it.
+**The Gaussian is its own Fourier transform.** Part (b) proves f̂(y) = √π e^{-y²/4} where f(x) = e^{-x²}. With proper normalisation, the Gaussian is an eigenfunction of the Fourier transform — the only L² function (up to scaling) that is invariant under Fourier transform.
 
-**To the Paley-Wiener theorem.** The Paley-Wiener theorem characterizes which analytic functions on a half-plane arise as Laplace transforms of Lp functions. For f ∈ L² with compact support [0,T], G extends to an entire function of exponential type T — this is the "compact support ⟹ entire" direction.
+**Fresnel integrals and diffraction.** Part (a) gives the Fresnel integral, fundamental in wave optics. The spiral traced by ∫₀^R e^{ix²} dx as R grows is the Cornu spiral, used to compute diffraction patterns at edges.
 
-**To the Fourier transform.** Setting z = iξ gives G(iξ) = ∫ f(t) e^{-iξt} dt = f̂(ξ), the Fourier transform. The analyticity of G on a half-plane is the analytic continuation of the Fourier transform off the imaginary axis.
+**Contour rotation vs contour shift.** Part (a) uses a rotation (the pie-slice at angle π/4 maps the oscillatory e^{ix²} to the decaying e^{-t²}). Part (b) uses a translation (shifting the contour by iy/2 completes the square). Both exploit the fact that e^{-z²} is entire, so contours can be deformed freely.
 
-**To the Hölder-based convergence.** The same Hölder argument shows that if f ∈ Lp, then the Laplace transform G is not just analytic but continuous up to the boundary {Re z = 0} in the Lp sense — though pointwise boundary values require more work (Hardy space theory).
+**Stationary phase.** The Fresnel integral is the simplest example of the stationary phase principle: the main contribution to ∫ e^{iλφ(x)} dx comes from the neighbourhood of critical points of φ. Here φ(x) = x², with a single critical point at x = 0.
 
 ---
 
 ## Lean 4 Theorem Statements
 
 ```lean
+import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+import Mathlib.Analysis.SpecialFunctions.Complex.CircleAddChar
+import Mathlib.Analysis.Fourier.FourierTransformDeriv
 import Mathlib.MeasureTheory.Integral.IntegrableOn
-import Mathlib.MeasureTheory.Integral.Bochner
-import Mathlib.Analysis.Complex.Basic
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.Analysis.NormedSpace.HolomorphicFunction
-import Mathlib.Order.Filter.Basic
 
-open MeasureTheory Complex Set Filter
+open MeasureTheory Complex Real Set Filter
 
 noncomputable section
 
-/-- The Laplace transform of f: G(z) = ∫₀^∞ f(t) e^{-tz} dt. -/
-def laplaceTransform (f : ℝ → ℂ) (z : ℂ) : ℂ :=
-  ∫ t in Ioi (0 : ℝ), f t * exp (-(t : ℂ) * z) ∂volume
-
-/-- Hölder conjugate. -/
-def conjExp (p : ℝ) : ℝ := p / (p - 1)
-
-/-- The integrand is absolutely integrable for Re z > 0 when f ∈ Lp. -/
-lemma laplaceTransform_integrable
-    {f : ℝ → ℂ} {p : ℝ} (hp : 1 < p)
-    (hf : Memℒp f (ENNReal.ofReal p) (volume.restrict (Ioi 0)))
-    {z : ℂ} (hz : 0 < z.re) :
-    IntegrableOn (fun t => f t * exp (-(t : ℂ) * z)) (Ioi 0) volume := by
+/-- Part (a): The Fresnel integral.
+    ∫₀^∞ e^{ix²} dx = √π/2 · e^{iπ/4}. -/
+theorem fresnel_integral :
+    Tendsto (fun R : ℝ => ∫ x in Icc 0 R,
+      Complex.exp (I * (x : ℂ) ^ 2))
+      atTop (𝓝 (Real.sqrt π / 2 * Complex.exp (I * π / 4))) := by
   sorry
 
-/-- The exponential kernel e^{-σt} is in Lq([0,∞)) for σ > 0. -/
-lemma exp_neg_memLq {σ : ℝ} (hσ : 0 < σ) {q : ℝ} (hq : 1 ≤ q) :
-    Memℒp (fun t : ℝ => exp (-(σ * t))) (ENNReal.ofReal q)
-      (volume.restrict (Ioi 0)) := by
+/-- Real and imaginary parts of the Fresnel integral:
+    ∫₀^∞ cos(x²) dx = ∫₀^∞ sin(x²) dx = √(2π)/4. -/
+theorem fresnel_cos :
+    Tendsto (fun R : ℝ => ∫ x in Icc 0 R, Real.cos (x ^ 2))
+      atTop (𝓝 (Real.sqrt (2 * π) / 4)) := by
   sorry
 
-/-- Main theorem: G is holomorphic on the right half-plane. -/
-theorem laplaceTransform_differentiableOn
-    {f : ℝ → ℂ} {p : ℝ} (hp : 1 < p)
-    (hf : Memℒp f (ENNReal.ofReal p) (volume.restrict (Ioi 0))) :
-    DifferentiableOn ℂ (laplaceTransform f) {z : ℂ | 0 < z.re} := by
+theorem fresnel_sin :
+    Tendsto (fun R : ℝ => ∫ x in Icc 0 R, Real.sin (x ^ 2))
+      atTop (𝓝 (Real.sqrt (2 * π) / 4)) := by
   sorry
 
-/-- The derivative of the Laplace transform:
-    G'(z) = ∫₀^∞ f(t)·(-t)·e^{-tz} dt. -/
-theorem hasDerivAt_laplaceTransform
-    {f : ℝ → ℂ} {p : ℝ} (hp : 1 < p)
-    (hf : Memℒp f (ENNReal.ofReal p) (volume.restrict (Ioi 0)))
-    {z : ℂ} (hz : 0 < z.re) :
-    HasDerivAt (laplaceTransform f)
-      (∫ t in Ioi (0 : ℝ), f t * (-(t : ℂ)) * exp (-(t : ℂ) * z) ∂volume)
-      z := by
+/-- The arc integral vanishes: the contribution from the circular
+    arc of radius R at angle π/4 tends to 0. -/
+lemma fresnel_arc_vanishes :
+    Tendsto (fun R : ℝ =>
+      ‖∫ θ in Icc 0 (π / 4),
+        Complex.exp (I * (R * Complex.exp (I * θ)) ^ 2) *
+          (I * R * Complex.exp (I * θ))‖)
+      atTop (𝓝 0) := by
   sorry
 
-/-- Morera ingredient: contour integrals of G vanish on triangles
-    in the right half-plane. -/
-lemma laplaceTransform_triangle_integral_zero
-    {f : ℝ → ℂ} {p : ℝ} (hp : 1 < p)
-    (hf : Memℒp f (ENNReal.ofReal p) (volume.restrict (Ioi 0)))
-    {a b c : ℂ} (ha : 0 < a.re) (hb : 0 < b.re) (hc : 0 < c.re) :
-    (∮ z in a, b, c, laplaceTransform f z) = 0 := by
+/-- The ray integral at angle π/4 gives the Gaussian:
+    ∫₀^R e^{-t²} dt along z = te^{iπ/4}. -/
+lemma fresnel_ray_eq_gaussian (R : ℝ) (hR : 0 < R) :
+    ∫ t in Icc 0 R,
+      Complex.exp (I * (t * Complex.exp (I * π / 4)) ^ 2) *
+        Complex.exp (I * π / 4) =
+    Complex.exp (I * π / 4) * ∫ t in Icc 0 R,
+      Complex.exp (-(t : ℂ) ^ 2) := by
   sorry
 
-/-- G(z) → 0 as Re z → +∞: the Laplace transform decays. -/
-lemma laplaceTransform_tendsto_zero
-    {f : ℝ → ℂ} {p : ℝ} (hp : 1 < p)
-    (hf : Memℒp f (ENNReal.ofReal p) (volume.restrict (Ioi 0))) :
-    Tendsto (fun σ : ℝ => laplaceTransform f σ) atTop (𝓝 0) := by
+/-- Part (b): Fourier transform of the Gaussian.
+    ∫_{-∞}^{∞} e^{ixy} e^{-x²} dx = √π · e^{-y²/4}. -/
+theorem fourier_gaussian (y : ℝ) :
+    ∫ x : ℝ, Complex.exp (I * x * y) * Complex.exp (-(x : ℂ) ^ 2) =
+      Real.sqrt π * Complex.exp (-(y : ℂ) ^ 2 / 4) := by
   sorry
 
-/-- Sufficient condition for entirety: f has compact support.
-    If f vanishes outside [0, T], then G is entire. -/
-theorem laplaceTransform_entire_of_compactSupport
-    {f : ℝ → ℂ} {p : ℝ} (hp : 1 < p)
-    (hf : Memℒp f (ENNReal.ofReal p) (volume.restrict (Ioi 0)))
-    {T : ℝ} (hT : 0 < T)
-    (hsupp : ∀ t, T < t → f t = 0) :
-    Differentiable ℂ (laplaceTransform f) := by
+/-- Completing the square: -x² + ixy = -(x - iy/2)² - y²/4. -/
+lemma complete_square (x y : ℂ) :
+    -x ^ 2 + I * x * y = -(x - I * y / 2) ^ 2 - y ^ 2 / 4 := by
   sorry
 
-/-- More general sufficient condition for entirety:
-    f(t) e^{ct} ∈ Lp for every c > 0. -/
-theorem laplaceTransform_entire_of_subexponential
-    {f : ℝ → ℂ} {p : ℝ} (hp : 1 < p)
-    (hf : ∀ c : ℝ, 0 < c →
-      Memℒp (fun t => f t * exp (c * t))
-        (ENNReal.ofReal p) (volume.restrict (Ioi 0))) :
-    Differentiable ℂ (laplaceTransform f) := by
+/-- Contour shift: ∫_{-∞}^∞ e^{-(x-ic)²} dx = ∫_{-∞}^∞ e^{-x²} dx
+    for any real c, justified by a rectangular contour. -/
+lemma integral_gaussian_shift (c : ℝ) :
+    ∫ x : ℝ, Complex.exp (-((x : ℂ) - I * c) ^ 2) =
+      ∫ x : ℝ, Complex.exp (-(x : ℂ) ^ 2) := by
+  sorry
+
+/-- The vertical sides of the rectangular contour vanish. -/
+lemma rectangular_sides_vanish (c : ℝ) :
+    Tendsto (fun R : ℝ =>
+      ‖∫ s in Icc 0 c,
+        Complex.exp (-((R : ℂ) - I * s) ^ 2) * (-I)‖)
+      atTop (𝓝 0) := by
+  sorry
+
+/-- The standard Gaussian integral: ∫_{-∞}^∞ e^{-x²} dx = √π.
+    This is in Mathlib as `integral_gaussian`. -/
+lemma gaussian_integral_eq :
+    ∫ x : ℝ, Real.exp (-(x ^ 2)) = Real.sqrt π := by
   sorry
 
 end
@@ -190,10 +192,9 @@ end
 
 **Mathlib notes:**
 
-- `laplaceTransform` is defined directly as a Bochner integral over `Ioi 0` with the kernel `exp(-(t:ℂ) * z)`. The coercion `(t : ℂ)` embeds `ℝ` into `ℂ` via `Complex.ofReal`.
-- `Memℒp f p μ` is Mathlib's predicate for f ∈ Lp(μ). We use `ENNReal.ofReal p` since the Lp index in Mathlib is `ℝ≥0∞`.
-- `DifferentiableOn ℂ f S` encodes holomorphicity on S. The right half-plane is `{z : ℂ | 0 < z.re}`.
-- `HasDerivAt` gives the complex derivative at a point, establishing the derivative formula by differentiation under the integral.
-- `Differentiable ℂ f` (without `On`) encodes entirety.
-- The triangle contour integral notation `∮ z in a, b, c, ...` is schematic — in Mathlib one would compose `intervalIntegral` or use `circleIntegral`-adjacent machinery.
-- The compact support condition `∀ t, T < t → f t = 0` combined with `Memℒp` on `Ioi 0` gives finite support, making the integral converge for all z ∈ ℂ.
+- `integral_gaussian` in Mathlib (`Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral`) already proves ∫ e^{-bx²} = √(π/b). Part (b) reduces to this via the contour shift.
+- The Fresnel integral is stated as a limit of integrals over [0,R] rather than an improper integral, since the integrand is not absolutely integrable — `Tendsto ... atTop (𝓝 value)` is the natural Lean encoding.
+- `Complex.exp (I * (x:ℂ)^2)` is e^{ix²}. The coercion `(x : ℂ)` embeds ℝ into ℂ.
+- `complete_square` is pure algebra (ring computation). In Lean this could be closed by `ring` once the types align.
+- The contour shift `integral_gaussian_shift` is the core analytic step. The vertical sides lemma `rectangular_sides_vanish` provides the justification — `e^{-(R-is)²}` decays as e^{-R²} for fixed s.
+- Part (b)'s result is essentially `MeasureTheory.integral_comp_mul_right` composed with `integral_gaussian` after the contour shift, plus the `complete_square` algebraic identity.

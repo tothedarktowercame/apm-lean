@@ -1,0 +1,1 @@
+The context has been restored. The UKRN working paper draft is in good shape at `/home/joe/vsat.wiki/ukrn-demo/UKRN_WP_draft_v2.md`, and the APM problem batch processing was the last active stream. Ready for whatever you'd like to work on next.

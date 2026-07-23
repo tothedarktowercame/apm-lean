@@ -1,0 +1,55 @@
+# t97A01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-t97A01.md`
+- imported-at: `2026-07-13T17:26:58.417593Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X$ be the connected sum of three real projective planes.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Describe a CW decomposition of $X$.
+%------------------------------------------------------------------*
+\item Use that CW decomposition to compute the homology groups in all
+dimensions.
+%------------------------------------------------------------------*
+\item Now consider $X$ to be the connected sum of the torus and the
+projective plane.  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{rlist}
+%------------------------------------------------------------------*
+\item Using this decomposition, compute all the homology groups of $X$
+using the Mayer-Vietoris theorem.
+%------------------------------------------------------------------*
+\item Using this decomposition, give a presentation of the fundamental
+group of $X$ using Van Kampen's theorem.
+%------------------------------------------------------------------*
+\end{rlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\soln{jac -- Mon Aug 4 15:36:43 2003 -- A CW decomposition: look at
+two projective planes $P_1$, $P_2$, each with one hole in them, and
+one projective plane $P_3$ with two holes in it. The single-holed
+planes are decomposed into two faces with four sides each. The
+two-holed plane has two faces with six sides each.  These sides have
+some identifications, described as follows: if $P_{11}$, $P_{12}$,
+$P_{21}$, $P_{22}$, $P_{31}$, and $P_{32}$ are the distinct faces,
+then $P_{11a}$, $P_{11b}$, $P_{11c}$, $P_{11d}$ are the edges of the
+first face, then $P_{12a}$, $P_{12b}$, $P_{11c}$, $P_{11e}$ are the
+edges of the second face.}
+```

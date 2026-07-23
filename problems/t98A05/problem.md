@@ -1,0 +1,41 @@
+# t98A05
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-t98A05.md`
+- imported-at: `2026-07-13T17:26:58.538619Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Consider $\Rth$ with the standard rectangular coordinates
+$x,y,z$. Define differential forms $\alpha= x dy-ydx$,
+$\beta=xdy\wedge dz+y dz\wedge dx + z dx \wedge dy$ and
+$\gamma=dx\wedge dy\wedge dz$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Compute $d\alpha$, $d\beta$ and $d\gamma$.
+%------------------------------------------------------------------*
+\item Compute $\alpha\wedge \beta$.
+%------------------------------------------------------------------*
+\item Compute $\int_{\Gamma}d\alpha$ where $\Gamma$ is region that
+lies between the $xy$, $xz$, and $yz$ planes and the standard
+$2$-simplex. Specify any needed orientations.
+%------------------------------------------------------------------*
+\item Let $S$ be the unit circle in the $xy$-plane and $\alpha'$ the
+restriction of $\alpha$ to $S$. Compute $d\alpha'$. Does there exist a
+function $f:S\rightarrow \R$ with $df=\alpha'$? Construct or prove the
+nonexistence.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

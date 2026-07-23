@@ -1,0 +1,43 @@
+# m93J01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-m93J01.md`
+- imported-at: `2026-07-13T17:26:54.591748Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+The differential operator $Ly=-\dbydk{x}{2}y+V(x)y$ is called the
+Schr\"odinger operator and plays an important role in physics. We are
+going to study some distrete methods to solve it numerically.
+
+Pick any $h>0$ -- we will assume it is small. Let $y_n$ denote $y(nh)$
+and similarly for any other function.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Find a number $\kappa$ such that
+$y_{n+1}+y_{n-1}-2y_n=h^2y''_n+\kappa h^4 y_n^{(\mathrm{iv})}+o(h^6)$.
+%------------------------------------------------------------------*
+\item Show that then we have
+$(Ly)_n=-y_{n+1}-y_{n-1}+y_n(2+h^2v_n)-\kappa h^4
+y_n^{(\mathrm{iv})}+o(h^6)$.
+%------------------------------------------------------------------*
+\item Prove that $y''_{n+1}+y''_{n-1}-2y''_n=h^2
+y_n^{(\mathrm{iv})}+o(h^4)$.
+%------------------------------------------------------------------*
+\item Use the result in (c) to devise a scheme of order $6$ to solve
+the equation $Ly=0$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

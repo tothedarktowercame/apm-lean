@@ -1,0 +1,53 @@
+# b98A03
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-b98A03.md`
+- imported-at: `2026-07-13T17:26:54.146868Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $T$ and $R\subset T$ be commutative integral domains both
+containing (the same) muliplicative identity $1$. Let $I=\{r\in R\pipe
+\forall t\in T: rt\in R\}$. ($I$ is called the \emph{conductor} of $T$
+to $R$.)
+
+Let $P$ be a prime ideal of $R$; $Q_1$ and $Q_2$ both prime ideals of
+$T$ such that $Q_1\cap R=P=Q_2\cap R$. Possibly $Q_1=Q_2$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Show that $I$ is the largest subset of $R$ which is an ideal in
+$T$. That is, $I$ is an ideal in $T$ and $I$ contains any subset of
+$R$ which is an ideal of $T$.
+%------------------------------------------------------------------*
+\item Show that if $I\nsubseteq P$ then $Q_1=Q_2$.
+%------------------------------------------------------------------*
+\item Let $Q$ be any prime ideal of $T$ with $Q\cap R=P$ and let $u\in
+Q$. Consider an arbitrary element in the ring $R[u]$. Of course, such
+an element has the form $a_nu^n+a_{n-1}u^{n-1}+\ldots +a_1u+a_0$,
+where the coefficients $a_i$ come from $R$. 
+
+Show that this element is in $Q\cap R[u]$ if and only if $a_0\in P$.
+%------------------------------------------------------------------*
+\item Returning to $Q_1$ and $Q_2$, pick $u\in Q_1\cap Q_2$ and show
+that $Q_1\cap R[u]=Q_2\cap R[u]$.
+%------------------------------------------------------------------*
+\item Now suppose that $Q_1\neq Q_2$. Also suppose that for any ring
+$S$ with $R\subset S\subset T$ that $Q_1\cap S\neq Q_2\cap S$
+\emph{except} when $S=R$. Obviously when $S=R$ the two intersections
+are equal as they both equal $P$. Show under these hypotheses that
+$P=Q_1\cap Q_2=I$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

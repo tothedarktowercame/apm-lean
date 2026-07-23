@@ -1,0 +1,46 @@
+# b96A04
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-b96A04.md`
+- imported-at: `2026-07-13T17:26:54.077534Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $R\subset K$ be such that $R$ is a commutative domain and $K$ is
+its field of fractions.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Suppose $y\in R$ and $dy$ divides $y$. Then $d$ is a unit.
+%------------------------------------------------------------------*
+\item Suppose $F$ is a free module over $R$. Show that if $0\neq m\in
+F$ and $rm=0$ then $r=0$. 
+
+If $0\neq d\in R$ is a nonunit, show that there is a nonzero $x\in R$
+such that the equation $(dx)y=m$ has no solution for $y\in F$.
+%------------------------------------------------------------------*
+\item Consider $K$ to be an $R$ module. Show that if $K$ is the submodule
+of a free $R$ module then $R=K$. Show that if $K$ is projective as an
+$R$ module, then $R=K$.
+%------------------------------------------------------------------*
+\item Suppose that $I \subset R $ is a proper ideal and $R/I$ is
+projective as an $R$ module. Show that $I=0$.
+%------------------------------------------------------------------*
+\item Suppose that $R\subset M\subset K$ is such that $M$ is finitely 
+generated as an $R$ module. Show that there is a nonzero $r\in R$ such
+that $rM\subset R$. Suppose that $K$ is finitely generated as an $R$
+module. Show that $R=K$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

@@ -1,0 +1,3 @@
+The UKRN working paper draft is complete at `~/vsat.wiki/ukrn-demo/UKRN_WP_draft_v2.md` with all figures generated. On the qualifying exam side, analysis/complex analysis problems through approximately a96 received full STATEMENT-ONLY treatment. Large batches of algebra, topology, and applied math problems from the 1990s-2003 remain unprocessed.
+
+Ready to pick up whichever thread you'd like — more exam problems, revisions to the paper, or something else entirely.

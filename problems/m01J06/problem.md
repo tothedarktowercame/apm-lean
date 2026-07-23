@@ -1,0 +1,46 @@
+# m01J06
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-m01J06.md`
+- imported-at: `2026-07-13T17:26:54.353872Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Consider the functional $E:S\rightarrow \R$ where $S$ is a subset of
+$C^2([0,1],\R)$ and
+$$E(\varphi)=\int_{0}^1\mathcal{E}(\varphi(s),\varphi'(s))\ ds,$$
+where $\mathcal{E}(q,p)=\lambda\cos q + \frac{1}{2}K p^2$ where
+$\lambda>0$ and $K>0$ are constants. This functional represents the
+potential energy of a thin planar rod of bending stiffness $K$ that is
+subject to an external load $\lambda$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Let $S$ be the subset of functions that satisfy the essential
+boundary condition $\varphi(0)=0$. Develop the first-order necessary
+conditions for $\varphi(s)$ to be an extremal of $E$. Hint: What
+boundary condition on $\varphi$ arises at $s=1$?
+%------------------------------------------------------------------*
+\item Verify that $\varphi_0(s)\equiv 0$ is an extremal for any
+$\lambda>0$. For the nonlinear system of part (a), consider a
+perturbation expansion of the form
+$\varphi_{\epsilon}=\epsilon\varphi_1+\epsilon^2\varphi_2+\ldots $ ,
+where $|\epsilon|<<1$. Develop a linear boundary value problem for
+$\varphi_1$ and find values of $\lambda$ for which this problem admits
+nontrivial solutions (if any such values exist). Based no these
+results, do you expect the system of part (a) to admit nontrivial
+solutions?
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

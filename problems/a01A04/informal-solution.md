@@ -1,153 +1,196 @@
 
 
-# APM a01A03: Identifying a convolution kernel from a functional identity
+# APM a01A04: Volume of the unit ball and superexponential decay
 
 ## Why It's Hard
 
-The hypothesis says a *single* function g ∈ L¹(ℝ) satisfies g * f' = f(x+h) - f(x-h) for *all* f ∈ C¹(ℝ). This is a strong universal quantifier — g must work for every smooth function simultaneously. The difficulty is extracting the pointwise identity g = χ\_{[-h,h]} from this integral equation. You can't just "read off" g because the convolution mixes g with f' nonlocally. The key is to use the Fourier transform, where convolution becomes multiplication and the universal quantifier pins down ĝ uniquely.
+The volume of the unit ball in ℝⁿ has a non-obvious recursive structure and decays to zero superexponentially fast in the dimension. The problem guides you through this in three steps, but each requires a different technique: (a) is a Fubini/slicing argument that produces a specific integral recurrence, (b) is an asymptotic analysis of that integral, and (c) combines (b) with the recurrence to get the superexponential decay. The conceptual difficulty is that the unit ball in ℝⁿ⁺¹ is "thinner" relative to ℝⁿ in a way that compounds multiplicatively — each added dimension contributes a shrinking factor.
 
 ## The Key Insight
 
-Take Fourier transforms of both sides. On the left, convolution becomes multiplication: ĝ · (2πiξ f̂(ξ)) (since f' has transform 2πiξ f̂). On the right, f(x+h) - f(x-h) has transform (e^{2πiξh} - e^{-2πiξh}) f̂(ξ) = 2i sin(2πξh) f̂(ξ). Since this holds for all f, we can cancel f̂ and get ĝ(ξ) · 2πiξ = 2i sin(2πξh), i.e., ĝ(ξ) = sin(2πξh)/(πξ). This is exactly the Fourier transform of χ\_{[-h,h]}. Injectivity of the Fourier transform on L¹ gives g = χ\_{[-h,h]} a.e.
+**Slicing.** The (n+1)-dimensional ball is a stack of n-dimensional balls. At height t ∈ [-1,1], the cross-section of B\_{n+1,1} is an n-ball of radius √(1-t²). Its n-volume is (√(1-t²))ⁿ times the volume of the unit n-ball. Integrating over t gives the recurrence with f(t) = √(1-t²).
 
-But there's a subtlety: we need f and f' to both be nice enough for the Fourier argument. The cleaner approach avoids the Fourier transform entirely and uses specific test functions.
+**Decay of the integral.** ∫\_{-1}^{1} (1-t²)^{n/2} dt → 0 because (1-t²) < 1 for t ≠ 0, and the set {t = 0} has measure zero — so the integrand converges pointwise to 0 on a full-measure set, and dominated convergence applies.
+
+**Superexponential decay.** The recurrence Vol\_{n+1} = Vol\_n · c\_n with c\_n → 0 means the product telescopes: Vol\_n = Vol\_1 · ∏ c\_k, and since c\_k → 0 the product decays faster than any geometric series, killing Aⁿ · Vol\_n for any fixed A.
 
 ## Complete Proof
 
-**Theorem.** Let g ∈ L¹(ℝ) and h > 0. Suppose that for every f ∈ C¹(ℝ):
+### Part (a): The slicing recurrence
 
-$$(g * f')(x) = f(x+h) - f(x-h) \quad \text{for all } x \in \mathbb{R}.$$
+**Claim.** There exists f : ℝ → [0,1] such that m(B\_{n+1,1}) = m(B\_{n,1}) · ∫\_{-∞}^{∞} [f(t)]ⁿ dt.
 
-Then g = χ\_{[-h,h]} almost everywhere.
+**Proof.** Write a point in ℝⁿ⁺¹ as (x, t) where x ∈ ℝⁿ and t ∈ ℝ. Then:
 
-**Proof.**
+$$(x, t) \in B_{n+1,1} \iff |x|^2 + t^2 \leq 1 \iff |x|^2 \leq 1 - t^2.$$
 
-**Step 1: Rewrite the identity.** By definition of convolution:
+For |t| ≤ 1, this is a ball in ℝⁿ of radius r(t) = √(1-t²). For |t| > 1, the cross-section is empty.
 
-$$(g * f')(x) = \int_{-\infty}^{\infty} g(t) f'(x - t)\,dt.$$
+By Fubini's theorem:
 
-The right side can also be written as a convolution. Note that:
+$$m(B_{n+1,1}) = \int_{-1}^{1} m_n\left(\{x \in \mathbb{R}^n : |x| \leq \sqrt{1 - t^2}\}\right) dt = \int_{-1}^{1} m(B_{n,\sqrt{1-t^2}})\,dt.$$
 
-$$f(x+h) - f(x-h) = \int_{x-h}^{x+h} f'(s)\,ds = \int_{-h}^{h} f'(x - (-u))\,du = \int_{-h}^{h} f'(x + u)\,du$$
+By scaling, the volume of a ball of radius r in ℝⁿ is rⁿ · m(B\_{n,1}). So:
 
-Wait — let me be more careful with the substitution. Setting s = x + u:
+$$m(B_{n+1,1}) = \int_{-1}^{1} (\sqrt{1 - t^2})^n \cdot m(B_{n,1})\,dt = m(B_{n,1}) \int_{-1}^{1} (1 - t^2)^{n/2}\,dt.$$
 
-$$f(x+h) - f(x-h) = \int_{x-h}^{x+h} f'(s)\,ds = \int_{-h}^{h} f'(x+u)\,du.$$
+Define **f(t) = √(1-t²)** for |t| ≤ 1 and f(t) = 0 for |t| > 1. Then f : ℝ → [0,1] and [f(t)]ⁿ = (1-t²)^{n/2} for |t| ≤ 1, so:
 
-Now substitute u = -t:
+$$m(B_{n+1,1}) = m(B_{n,1}) \int_{-\infty}^{\infty} [f(t)]^n\,dt. \qquad \blacksquare$$
 
-$$= \int_{-h}^{h} f'(x - (-u))\,du = \int_{-h}^{h} f'(x+u)\,du.$$
+### Part (b): ∫ [f(t)]ⁿ dt → 0
 
-Hmm, let me write it as a convolution directly. We have:
+**Claim.** $\int_{-\infty}^{\infty} [f(t)]^n\,dt \to 0$ as $n \to \infty$.
 
-$$\int_{-h}^{h} f'(x+u)\,du = \int_{-\infty}^{\infty} \chi_{[-h,h]}(u) f'(x+u)\,du.$$
+**Proof.** We have:
 
-But convolution is (g * f')(x) = ∫ g(t) f'(x-t) dt. To match, substitute u = -t:
+$$I_n := \int_{-1}^{1} (1 - t^2)^{n/2}\,dt.$$
 
-$$\int_{-\infty}^{\infty} \chi_{[-h,h]}(-t) f'(x-t)\,dt = \int_{-\infty}^{\infty} \chi_{[-h,h]}(t) f'(x-t)\,dt$$
+The integrand satisfies:
 
-since χ\_{[-h,h]} is symmetric. So:
+- For t = 0: (1 - 0)^{n/2} = 1 for all n.
+- For 0 < |t| < 1: 0 < 1-t² < 1, so (1-t²)^{n/2} → 0 as n → ∞.
+- For |t| = 1: (1-t²)^{n/2} = 0 for all n ≥ 1.
 
-$$f(x+h) - f(x-h) = (\chi_{[-h,h]} * f')(x).$$
+So (1-t²)^{n/2} → 0 pointwise for all t ∈ [-1,1] except t = 0 (a set of measure zero).
 
-Therefore the hypothesis says:
+The integrand is bounded: (1-t²)^{n/2} ≤ 1 for all t ∈ [-1,1] and all n ≥ 0, and the constant function 1 is integrable on [-1,1].
 
-$$(g * f')(x) = (\chi_{[-h,h]} * f')(x) \quad \text{for all } x \in \mathbb{R}, \text{ for all } f \in C^1(\mathbb{R}).$$
+By the dominated convergence theorem:
 
-Equivalently:
+$$I_n = \int_{-1}^{1} (1-t^2)^{n/2}\,dt \to \int_{-1}^{1} 0\,dt = 0. \qquad \blacksquare$$
 
-$$((g - \chi_{[-h,h]}) * f')(x) = 0 \quad \text{for all } x, \text{ for all } f \in C^1(\mathbb{R}).$$
+**Explicit bound (optional).** For |t| ≥ δ (with 0 < δ < 1), (1-t²)^{n/2} ≤ (1-δ²)^{n/2}. So:
 
-**Step 2: Show g - χ\_{[-h,h]} = 0 a.e.**
+$$I_n \leq 2\delta + 2(1-\delta^2)^{n/2}.$$
 
-Set φ = g - χ\_{[-h,h]} ∈ L¹(ℝ). We have φ * f' = 0 for all f ∈ C¹(ℝ).
+Choosing δ = n^{-1/3}, say, both terms → 0, giving an effective rate.
 
-Since f ranges over all C¹ functions, f' ranges over all continuous functions (every continuous function is the derivative of some C¹ function). So:
+### Part (c): Aⁿ · m(B\_{n,1}) → 0 for any fixed A > 0
 
-$$\phi * \psi = 0 \quad \text{for all } \psi \in C(\mathbb{R}).$$
+**Claim.** For any A > 0, Aⁿ · m(B\_{n,1}) → 0 as n → ∞.
 
-In particular, choose ψ to be a smooth approximate identity: let ψ\_ε be a standard mollifier (nonneg, supported on [-ε, ε], integral 1). Then:
+**Proof.** From part (a), define c\_n = I\_n = ∫\_{-1}^{1} (1-t²)^{n/2} dt, so that:
 
-$$0 = (\phi * \psi_\varepsilon)(x) \quad \text{for all } x, \varepsilon > 0.$$
+$$m(B_{n+1,1}) = m(B_{n,1}) \cdot c_n.$$
 
-But φ * ψ\_ε → φ in L¹ as ε → 0 (standard approximation-to-the-identity theorem for L¹ functions). Since φ * ψ\_ε = 0 for all ε, we get φ = 0 in L¹, meaning g = χ\_{[-h,h]} almost everywhere. ∎
+Telescoping:
 
-**Remark.** The step "f' ranges over all continuous functions" needs a small justification. Given any continuous ψ : ℝ → ℝ, define f(x) = ∫₀ˣ ψ(t) dt. Then f ∈ C¹(ℝ) and f' = ψ. (We don't need f to have any decay or integrability — the hypothesis holds for *all* f ∈ C¹.) Actually we need to be slightly careful: we need φ * ψ to make sense, which requires some growth control. Since φ ∈ L¹ (so it is integrable) and ψ is continuous, (φ * ψ)(x) = ∫ φ(t)ψ(x-t)dt is well-defined for each x as long as ψ is locally bounded, which all continuous functions are. The convolution is well-defined pointwise. So the argument goes through for ψ = ψ\_ε (compactly supported, smooth), which is more than sufficient.
+$$m(B_{n,1}) = m(B_{1,1}) \cdot \prod_{k=1}^{n-1} c_k = 2 \prod_{k=1}^{n-1} c_k$$
+
+(since B\_{1,1} = [-1,1] has measure 2).
+
+Therefore:
+
+$$A^n \cdot m(B_{n,1}) = 2 \cdot A^n \cdot \prod_{k=1}^{n-1} c_k = 2 \cdot \prod_{k=1}^{n-1} (A \cdot c_k) \cdot A.$$
+
+Wait, more carefully: Aⁿ = A · A^{n-1} = A · ∏\_{k=1}^{n-1} A. So:
+
+$$A^n \cdot m(B_{n,1}) = 2A \cdot \prod_{k=1}^{n-1} (A \cdot c_k).$$
+
+Since c\_k → 0 by part (b), there exists K such that c\_k < 1/(2A) for all k ≥ K. Then A · c\_k < 1/2 for k ≥ K. So for n > K:
+
+$$\prod_{k=1}^{n-1} (A \cdot c_k) = \underbrace{\prod_{k=1}^{K} (A \cdot c_k)}_{= C_K, \text{ fixed}} \cdot \prod_{k=K+1}^{n-1} (A \cdot c_k) \leq C_K \cdot \left(\frac{1}{2}\right)^{n-1-K}.$$
+
+Since (1/2)^{n-1-K} → 0 as n → ∞:
+
+$$A^n \cdot m(B_{n,1}) \leq 2A \cdot C_K \cdot 2^{K} \cdot 2^{-(n-1)} \to 0. \qquad \blacksquare$$
+
+**Interpretation.** The volume of the unit ball decays faster than any exponential r⁻ⁿ. Equivalently, for the ball of radius R in ℝⁿ, Rⁿ · Vol(B\_{n,1}) → 0 for any fixed R: even a ball whose radius grows proportionally to the dimension has volume tending to zero. This is the "curse of dimensionality" — high-dimensional volume concentrates near the equator, and the ball becomes an ever-thinner object.
 
 ## What Connects
 
-**To the fundamental theorem of calculus.** The identity f(x+h) - f(x-h) = ∫\_{-h}^{h} f'(x+t) dt is the fundamental theorem applied to f' over the interval [x-h, x+h]. The problem asks: if some other kernel g reproduces this identity, must it be the obvious one?
+**To the Gamma function.** The exact volume is m(B\_{n,1}) = πⁿ/² / Γ(n/2 + 1). Stirling's approximation gives Γ(n/2+1) ~ √(πn)(n/(2e))^{n/2}, so m(B\_{n,1}) ~ (2πe/n)^{n/2} / √(πn) — superexponential decay in n, confirming part (c).
 
-**To approximate identities and uniqueness.** The proof uses the fact that L¹ convolution with approximate identities is faithful: if φ * ψ\_ε = 0 for all ε, then φ = 0. This is the L¹ analogue of "if a distribution annihilates all test functions, it is zero."
+**To concentration of measure.** The fact that the integral I\_n = ∫(1-t²)^{n/2} dt → 0 is a manifestation of measure concentration: the mass of the unit ball in ℝⁿ⁺¹ concentrates near the equatorial slice t = 0, with the projections onto the t-axis becoming ever more peaked.
 
-**To the Titchmarsh convolution theorem.** A deeper result says that if f * g = 0 and both are supported on half-lines, then one of them is zero. Our problem is simpler (we get zero convolution with *all* continuous functions, not just one) but lives in the same neighborhood.
+**To the Wallis integral.** I\_n = ∫\_{-1}^{1}(1-t²)^{n/2}dt = B(1/2, n/2+1) = √π · Γ(n/2+1)/Γ(n/2+3/2), which is a beta function. For integer n, this reduces to the Wallis integrals.
 
-**To uniqueness of the Fourier transform.** The Fourier-based proof (Step 0 in "Key Insight") uses the fact that ĝ is uniquely determined by the identity ĝ(ξ) · 2πiξ = 2i sin(2πξh) for all ξ ≠ 0. This gives ĝ = sin(2πξh)/(πξ), which is the sinc function — the Fourier transform of χ\_{[-h,h]}.
+**To high-dimensional probability.** In machine learning and statistics, the superexponential volume decay means that in high dimensions, almost all the volume of a cube [-1,1]ⁿ lies outside the inscribed ball — data points are overwhelmingly in the "corners."
 
 ---
 
 ## Lean 4 Theorem Statements
 
 ```lean
+import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.MeasureTheory.Integral.IntegrableOn
-import Mathlib.MeasureTheory.Function.LocallyIntegrable
-import Mathlib.MeasureTheory.Group.Convolution
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Integrals
-import Mathlib.Topology.ContinuousFunction.Basic
+import Mathlib.Order.Filter.Basic
 
-open MeasureTheory Set Filter
+open MeasureTheory Set Filter ENNReal Metric
 
 noncomputable section
 
-/-- The convolution of g with f' equals the symmetric difference of f. -/
-def ConvolutionShiftProperty (g : ℝ → ℝ) (h : ℝ) : Prop :=
-  ∀ (f : ℝ → ℝ), ContDiff ℝ 1 f →
-    ∀ x : ℝ, ∫ t, g t * deriv f (x - t) = f (x + h) - f (x - h)
+/-- Volume of the closed unit ball in ℝⁿ, as a function of dimension. -/
+def unitBallVolume (n : ℕ) : ℝ≥0∞ :=
+  volume (Metric.closedBall (0 : EuclideanSpace ℝ (Fin n)) 1)
 
-/-- Step 1: The right-hand side f(x+h) - f(x-h) is itself a convolution
-    of f' with χ_{[-h,h]}, via the fundamental theorem of calculus. -/
-lemma shift_eq_indicator_conv_deriv
-    {f : ℝ → ℝ} (hf : ContDiff ℝ 1 f) {h : ℝ} (hh : 0 < h) (x : ℝ) :
-    f (x + h) - f (x - h) =
-      ∫ t, (Icc (-h) h).indicator (fun _ => (1 : ℝ)) t * deriv f (x - t) := by
+/-- The cross-section function f(t) = √(1-t²) for |t| ≤ 1, else 0. -/
+def crossSectionFn (t : ℝ) : ℝ :=
+  if |t| ≤ 1 then Real.sqrt (1 - t ^ 2) else 0
+
+/-- f maps into [0,1]. -/
+lemma crossSectionFn_mem_Icc (t : ℝ) :
+    crossSectionFn t ∈ Icc (0 : ℝ) 1 := by
   sorry
 
-/-- Step 2: The difference φ = g - χ_{[-h,h]} satisfies φ * ψ = 0
-    for every continuous function ψ. -/
-lemma conv_eq_zero_of_shift_property
-    {g : ℝ → ℝ} {h : ℝ} (hh : 0 < h)
-    (hg : Integrable g volume)
-    (hprop : ConvolutionShiftProperty g h)
-    (ψ : ℝ → ℝ) (hψ : Continuous ψ) (hψ_supp : HasCompactSupport ψ) :
-    ∀ x, ∫ t, (g t - (Icc (-h) h).indicator (fun _ => (1 : ℝ)) t) *
-      ψ (x - t) = 0 := by
+/-- Part (a): The slicing recurrence.
+    Vol(B_{n+1}) = Vol(B_n) · ∫ [f(t)]^n dt. -/
+theorem unitBallVolume_succ (n : ℕ) :
+    unitBallVolume (n + 1) =
+      unitBallVolume n *
+        ENNReal.ofReal (∫ t, (crossSectionFn t) ^ n) := by
   sorry
 
-/-- Step 3: Convolution with approximate identities is faithful.
-    If φ ∈ L¹ and φ * ψ_ε = 0 for all smooth mollifiers ψ_ε,
-    then φ = 0 a.e. -/
-lemma eq_zero_of_conv_mollifier_eq_zero
-    {φ : ℝ → ℝ} (hφ : Integrable φ volume)
-    (h_conv : ∀ (ψ : ℝ → ℝ), Continuous ψ → HasCompactSupport ψ →
-      ∀ x, ∫ t, φ t * ψ (x - t) = 0) :
-    φ =ᵐ[volume] 0 := by
+/-- The key integral I_n = ∫_{-1}^{1} (1-t²)^{n/2} dt. -/
+def wallis_integral (n : ℕ) : ℝ :=
+  ∫ t in Icc (-1 : ℝ) 1, (1 - t ^ 2) ^ (n / 2 : ℝ)
+
+/-- I_n equals ∫ [f(t)]^n dt. -/
+lemma wallis_integral_eq (n : ℕ) :
+    wallis_integral n = ∫ t, (crossSectionFn t) ^ n := by
   sorry
 
-/-- Main theorem: g must equal χ_{[-h,h]} almost everywhere. -/
-theorem convolution_shift_determines_kernel
-    {g : ℝ → ℝ} {h : ℝ} (hh : 0 < h)
-    (hg : Integrable g volume)
-    (hprop : ConvolutionShiftProperty g h) :
-    g =ᵐ[volume] (Icc (-h) h).indicator (fun _ => (1 : ℝ)) := by
+/-- Part (b): ∫ [f(t)]^n dt → 0 as n → ∞.
+    By dominated convergence: the integrand → 0 pointwise a.e.
+    on [-1,1] and is bounded by 1. -/
+theorem wallis_integral_tendsto_zero :
+    Tendsto (fun n => ∫ t, (crossSectionFn t) ^ n) atTop (𝓝 0) := by
   sorry
 
-/-- Corollary: g equals the indicator on the open interval (-h,h)
-    (which agrees a.e. with the closed-interval indicator). -/
-theorem convolution_shift_determines_kernel'
-    {g : ℝ → ℝ} {h : ℝ} (hh : 0 < h)
-    (hg : Integrable g volume)
-    (hprop : ConvolutionShiftProperty g h) :
-    g =ᵐ[volume] (Ioo (-h) h).indicator (fun _ => (1 : ℝ)) := by
+/-- Pointwise convergence: for t ≠ 0 with |t| ≤ 1,
+    (1-t²)^{n/2} → 0 as n → ∞. -/
+lemma pointwise_pow_tendsto_zero {t : ℝ} (ht : |t| < 1) (ht0 : t ≠ 0) :
+    Tendsto (fun n : ℕ => (1 - t ^ 2) ^ (n / 2 : ℝ)) atTop (𝓝 0) := by
+  sorry
+
+/-- Dominated convergence bound: [f(t)]^n ≤ 1 on [-1,1]. -/
+lemma crossSectionFn_pow_le_one (t : ℝ) (n : ℕ) :
+    (crossSectionFn t) ^ n ≤ 1 := by
+  sorry
+
+/-- Part (c): For any A > 0, A^n · Vol(B_n) → 0 as n → ∞.
+    Telescoping: Vol(B_n) = Vol(B_1) · ∏_{k=1}^{n-1} c_k where c_k → 0.
+    So A^n · Vol(B_n) = const · ∏ (A · c_k), and A · c_k < 1/2 eventually. -/
+theorem superexponential_volume_decay (A : ℝ) (hA : 0 < A) :
+    Tendsto (fun n => ENNReal.ofReal (A ^ n) * unitBallVolume n)
+      atTop (𝓝 0) := by
+  sorry
+
+/-- The telescoping product representation. -/
+lemma unitBallVolume_product (n : ℕ) (hn : 1 ≤ n) :
+    unitBallVolume n =
+      unitBallVolume 1 * ∏ k in Finset.range (n - 1),
+        ENNReal.ofReal (∫ t, (crossSectionFn t) ^ (k + 1)) := by
+  sorry
+
+/-- Eventually, A · c_k < 1/2 for any fixed A. -/
+lemma eventually_lt_half (A : ℝ) (hA : 0 < A) :
+    ∀ᶠ k in atTop,
+      A * (∫ t, (crossSectionFn t) ^ k) < 1 / 2 := by
   sorry
 
 end
@@ -155,9 +198,8 @@ end
 
 **Mathlib notes:**
 
-- `=ᵐ[volume]` is `Filter.EventuallyEq` with respect to the `ae volume` filter — the standard way to express "equal almost everywhere" in Mathlib.
-- `(Icc (-h) h).indicator (fun _ => (1 : ℝ))` is the characteristic function χ\_{[-h,h]}, written using `Set.indicator`.
-- `ContDiff ℝ 1 f` says f is C¹. `deriv f` is its derivative.
-- `Integrable g volume` encodes g ∈ L¹(ℝ).
-- `HasCompactSupport ψ` restricts the test functions to compactly supported ones, which is sufficient for the approximate identity argument and avoids integrability issues with the convolution.
-- The convolution `∫ t, g t * ψ (x - t)` is written as a Bochner integral rather than using Mathlib's `convolution` function, to keep the types simpler. Mathlib's `MeasureTheory.convolution` uses `fun x => ∫ t, f t • g (x - t) ∂μ` with the same meaning.
+- `EuclideanSpace ℝ (Fin n)` is the standard Mathlib type for ℝⁿ with the Euclidean norm. `Metric.closedBall 0 1` is the closed unit ball, and `volume` gives its Lebesgue measure.
+- The slicing/Fubini argument in part (a) uses the fact that `EuclideanSpace ℝ (Fin (n+1)) ≃ EuclideanSpace ℝ (Fin n) × ℝ` and the product measure structure. Mathlib has `MeasureTheory.Measure.pi_eq` and related for product measures.
+- `Tendsto ... atTop (𝓝 0)` for `ℝ≥0∞`-valued sequences uses the topology on `ℝ≥0∞`; the neighbourhood filter at 0 includes `[0, ε)` for each ε > 0.
+- The finite product `∏ k in Finset.range m, ...` is `Finset.prod`, the standard Mathlib finite product.
+- `∀ᶠ k in atTop, P k` means "P holds for all sufficiently large k" — the standard eventually-filter idiom.

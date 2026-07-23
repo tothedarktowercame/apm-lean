@@ -1,0 +1,38 @@
+# m95J01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-m95J01.md`
+- imported-at: `2026-07-13T17:26:55.090935Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Fix a positive integer $n$. Let $H$ be the set of all functions $f$
+having the form $$f(x)=e^{-x}\sum_{k=0}^na_kx^k \quad (0\leq
+x<\infty).$$ Define $\langle f, g\rangle=\int_0^{\infty}f(x)g(x)dx$
+($f,g\in H$).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Prove that $H$ is a Hilbert space. What is its dimension?
+%------------------------------------------------------------------*
+\item Let $T=(d/dx)^2$. Prove that $T$ is a linear operator that maps
+$H$ into $H$. Choose a basis for $H$ and describe $T$ in this basis.
+%------------------------------------------------------------------*
+\item Find a necessary and sufficient condition on $g$ for the
+equation $(T-I)f=g$ to have a solution $f$ in $H$.
+%------------------------------------------------------------------*
+\item Describe a method for constructing an orthonormal basis for $H$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

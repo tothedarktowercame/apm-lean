@@ -1,0 +1,31 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "a94A02",
+  "bundle_root": "problems/a94A02",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "problem_tex": "apm/a94A02.tex",
+    "harvest_mismatch_note": "The harvested file contained a proof for a93J05 and was removed. No worked informal solution for a94A02 is currently available."
+  },
+  "lean": {
+    "main": null,
+    "scratch": null,
+    "files": [],
+    "sorry_count_main": 0,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 0
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": false,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "problem-only",
+  "imported_at": "2026-07-13T17:26:52.118628Z"
+}

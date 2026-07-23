@@ -1,0 +1,38 @@
+# b95J02
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-b95J02.md`
+- imported-at: `2026-07-13T17:26:54.020775Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Quoting any general theorems you wish about modules over pricipal
+ideal domains, or otherwise, prove the following two theorems:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Let $G$ be a finite abelian group. Then $G$ is cyclic if and
+only if its orde is the smallest positive integer $m$ such that
+$\forall g\in G:g^m=1$.
+%------------------------------------------------------------------*
+\item Let $V$ be a finite dimensional vector space over a field $F$
+and let $T:V\rightarrow V$ be a linear transformation. We say that
+\emph{ $T$ acts cyclically on $V$} if and only if there is an element 
+$v_0\in V$ such that the elements $T^iv_0$ ($i=0,1,2,3,\ldots $) span
+$V$. Then $T$ acts cyclically on $V$ if and only if $\dim V$ is the
+degree of the monic polynomial $f(x)\in F[x]$ of least degree such
+that $\forall v\in V:f(T)v=0$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

@@ -1,0 +1,38 @@
+# m97A01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-m97A01.md`
+- imported-at: `2026-07-13T17:26:55.597954Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $A$ be a compact linear operator on a Hilbert space $X$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Show that there is a unique positive definite linear operator
+$|A|$ on $X$ with the property that $|A|^2=A^*A$. Prove that $\forall
+x\in X:\| |A|x\|=\|Ax\|$. Note: a linear operator $B$ on $X$ is said
+to be positive definite if $B$ is Hermitian and satisfies $\langle
+Bx,x \rangle\geq 0$ for all $x\in X$.
+%------------------------------------------------------------------*
+\item Let $Y$ be the closure of the range of $|A|$. Show that there
+exists a unique bounded linear operator $U:Y\rightarrow X$ such that
+$A=U|A|$. Prove that $\|Uy\|=\|y\|$ for all $y\in Y$. Hint: if
+$y=|A|x$ for some $x\in X$, define $Uy=Ax$.
+%------------------------------------------------------------------*
+\item Use the above to show that $A^*$ is compact.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

@@ -1,0 +1,26 @@
+# m94J05
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-m94J05.md`
+- imported-at: `2026-07-13T17:26:54.902955Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $f$ be a continuous real-valued function on the interval
+$[1,2]$. Show thatif the maximum of $|f(t)|$ is sufficiently small,
+then there is a unique real-valued function $x$ on $[1,2]$ that is
+twice continuously differentiable and satisfies
+$t^2x''(t)+2tx'(t)=f(t)+x(t)^2$ ($t\in [1,2]$) together with the
+boundary conditions $x(1)=x(2)=0$. Hint: consider rewriting the
+equation for $x$ (which is of the form $Lx=F(x)$) as $x=L^{-1}F(x)$.
+```

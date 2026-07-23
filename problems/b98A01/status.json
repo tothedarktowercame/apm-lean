@@ -1,0 +1,32 @@
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "b98A01",
+  "bundle_root": "problems/b98A01",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-b98A01.md",
+    "problem_tex": "apm/b98A01.tex"
+  },
+  "lean": {
+    "main": null,
+    "scratch": null,
+    "files": [],
+    "sorry_count_main": 0,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 0
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "informal-only",
+  "imported_at": "2026-07-13T17:26:54.138359Z"
+}

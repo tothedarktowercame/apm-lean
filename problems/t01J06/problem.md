@@ -1,0 +1,38 @@
+# t01J06
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-t01J06.md`
+- imported-at: `2026-07-13T17:26:56.831884Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $\omega=(z+3)dx\wedge dy$ on $\Rth$ and let $\Stw$ be the sphere
+given by $x^2+y^2+z^2=1$ in $\Rth$ with inclusion map
+$i:\Stw\rightarrow \Rth$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Compute $\int_{\Stw}\omega$.
+%------------------------------------------------------------------*
+\item Why is the restriction $i^*\omega$ a closed form on $\Stw$?
+Construct a closed form $\eta$ on $\Rth$ with $i^*\eta=i^*\omega$ or
+prove that such a form cannot exist.
+%------------------------------------------------------------------*
+\item For a preassigned $p\in \Son$, define $j:\Stw\rightarrow
+\Stw\times \Son$ by $j(q)=(q,p)$. Construct a closed form $\zeta$ on
+$\Stw\times \Son$ with $j^*\zeta=i^*\omega$ or prove that such a form
+cannot exist.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

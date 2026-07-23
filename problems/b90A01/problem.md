@@ -1,0 +1,39 @@
+# b90A01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-b90A01.md`
+- imported-at: `2026-07-13T17:26:53.628413Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Recall that a group $G$ is simple if it has no normal subgroups except
+itself and $\{e\}$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Let $G$ be a finite simple group and let $p$ be a prime number. 
+Suppose $G$ has precisely $k$ Sylow $p$-subgroups with $k>1$. Show
+that $G$ is isomorphic to a subgroup of the symmetric group $S_k$.
+%------------------------------------------------------------------*
+\item With the same hypothesis, show that $G$ is isomorphic to a
+subgroup of the alternating group $A_k$.
+%------------------------------------------------------------------*
+\item Suppose $G$ is a simple group that is a proper subgroup
+of $A_k$ and $k\geq 5$. Show that the index $[A_k:G]\geq k$.
+%------------------------------------------------------------------*
+\item Prove that if $G$ is a group of order $120$ then $G$ isnot
+a simple group. (Parts (b) and (c) may be helpful.)
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

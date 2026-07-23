@@ -1,0 +1,34 @@
+# t97A07
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-t97A07.md`
+- imported-at: `2026-07-13T17:26:58.447732Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X$ be a nonempty compact connected smooth manifold and let
+$f:X\rightarrow \Rn$ be a smooth map. Let $I=\{y\in \Rn \pipe y
+\text{\ is not a regular value for\ } f\}$. \Ie\ $I$ is the set of
+critical values.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Show that $I$ is a non-empty compact set.
+%------------------------------------------------------------------*
+\item Show that if $n>1$ and $f$ is not constant, then $I$ is an
+infinite set. Hint: If the image of $f$ contains regular values then
+$\Rn\setminus I$ is not connected.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

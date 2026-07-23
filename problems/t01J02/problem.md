@@ -1,0 +1,31 @@
+# t01J02
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-t01J02.md`
+- imported-at: `2026-07-13T17:26:56.781956Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X$ be a space with basepoint $x_0\in X$. For $n\geq 2$, let
+$s_0\in Sn$ and define $\pi_n(X,x_0)$ to be the set of homotopy
+classes $[\alpha]$ of maps $\alpha:(\Sn,s_0)\rightarrow (X,x_0)$. It
+can be shown that $\pi_n(X,x_0)$ is an abelian group, the zero element
+being the class of the constant map sending $\Sn$ to $x_0$. Any map
+$f:(X,x_0)\rightarrow (Y,y_0)$ induces a homomorphism
+$f_*:\pi_n(X,x_0)\rightarrow \pi_n(Y,y_0)$ defined by
+$f_*([\alpha])=[f\circ \alpha]$.
+
+Let $p:(\tilde{X},\tilde{x}_0)\rightarrow (X,x_0)$ be a covering
+projection. Show that $p_*:\pi_n(\tilde{X},\tilde{x}_0)\rightarrow
+\pi_n(X,x_n)$ is an isomorphism for $n\geq 2$.
+```

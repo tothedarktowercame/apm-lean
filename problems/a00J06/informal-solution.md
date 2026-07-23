@@ -1,176 +1,159 @@
 
 
-# APM a00J05: Cauchy-type integral over a compact real set
+# APM a00J06: Pringsheim's theorem — a power series with nonneg coefficients is singular at its radius
 
 ## Why It's Hard
 
-This problem sits at the intersection of complex analysis and real measure theory. The function f is defined by a real integral but must be shown to be complex-analytic — so you need to move derivatives inside an integral sign, which requires uniform convergence arguments. Part (b) is the subtlest: you must show an analytic function defined on ℂ \ K *cannot* extend to all of ℂ, which means extracting a concrete obstruction from the integral representation. Part (c) is the payoff: the behaviour at infinity reveals what f "looks like from far away."
+The statement seems intuitive — nonneg coefficients mean the function "blows up most" along the positive real axis — but making this rigorous requires a careful indirect argument. You can't just say "f(r) → ∞ as r → 1⁻" because that need not be true (e.g., Σ xⁿ/n² converges at x = 1). The function might converge at z = 1 and still be singular there (singularity means non-extendability, not divergence). The challenge is to show that even if f(1) is finite, no analytic continuation past z = 1 is possible.
 
 ## The Key Insight
 
-**(a)** Differentiate under the integral sign. The integrand 1/(t - z) is holomorphic in z for each fixed t ∈ K, and the derivative ∂/∂z [1/(t-z)] = 1/(t-z)² is uniformly bounded on compact subsets of ℂ \ K, so Leibniz's rule (or Morera's theorem + Fubini) gives holomorphicity.
-
-**(b)** If f extended to an entire function, it would be bounded (since f(z) → 0 as |z| → ∞ by part (c)), hence constant by Liouville, hence zero. But the imaginary part of f jumps across K: for t₀ in the interior of K, the Sokhotski-Plemelj formula shows Im f has a nonzero limit from above vs below. Alternatively: if f ≡ 0 on ℂ \ K, then for x ∈ ℝ \ K, ∫_K 1/(t-x) dm(t) = 0 for all such x, which by the Stieltjes inversion formula forces m(K) = 0, contradicting the hypothesis.
-
-**(c)** Factor out 1/z: zf(z) = z ∫_K 1/(t-z) dm(t) = ∫_K z/(t-z) dm(t) = ∫_K 1/((t/z) - 1) dm(t) → ∫_K (-1) dm(t) = -m(K) as |z| → ∞ (since t/z → 0 for bounded t). So the limit of zf(z) is **-m(K)**, the negative of the Lebesgue measure of K.
+Argue by contradiction. If f were analytic at z = 1, it would have a Taylor expansion at z = 1 with some positive radius of convergence, which would extend f to a disk centered at 1 that overlaps past the unit circle. By rewriting the Taylor expansion at z = 1 using the known Taylor expansion at z = 0, the Taylor coefficients at z = 1 involve f⁽ⁿ⁾(1)/n! = Σ\_k a(k) · C(k,n) · 1^{k-n}, which are *nonneg* (since a(k) ≥ 0). This nonnegativity forces the original power series at z = 0 to converge in a disk strictly larger than the unit disk — contradicting radius of convergence 1.
 
 ## Complete Proof
 
-### Part (a): f is holomorphic on ℂ \ K
+**Theorem (Pringsheim, 1893).** Let f(z) = Σ a(n)zⁿ have radius of convergence R = 1 with a(n) ≥ 0 for all n. Then z = 1 is a singular point of f.
 
-**Proof via Morera's theorem.** Let Δ be any triangle contained in ℂ \ K. We need to show ∮_Δ f(z) dz = 0. By Fubini's theorem:
+**Proof.** Suppose for contradiction that f admits an analytic continuation to a disk D(1, ε) = {z : |z - 1| < ε} for some ε > 0. Then f is analytic on D(0,1) ∪ D(1,ε), and in particular there exists r > 1 such that f is analytic on D(0, r) (since D(0,1) ∪ D(1,ε) contains D(0, 1 + δ) for some small δ, because the two disks overlap in a connected region containing the real interval (1-ε, 1+ε)).
 
-$$\oint_\Delta f(z)\,dz = \oint_\Delta \left(\int_K \frac{1}{t-z}\,dm(t)\right) dz = \int_K \left(\oint_\Delta \frac{1}{t-z}\,dz\right) dm(t).$$
+Wait — this isn't quite right, since D(0,1) ∪ D(1,ε) need not contain a full disk centered at 0. Let me use the standard argument.
 
-Fubini applies because for z ∈ Δ and t ∈ K, since Δ and K are disjoint compact sets, dist(Δ, K) > 0, so |1/(t-z)| ≤ 1/dist(Δ,K) is uniformly bounded, making the integrand in L^1 of the product measure.
+Since f is analytic on D(1,ε), the Taylor series of f at z = 1 converges on D(1,ε):
 
-For each fixed t ∈ K, the function z ↦ 1/(t-z) is holomorphic on ℂ \ {t} ⊇ ℂ \ K ⊇ Δ. By Cauchy's theorem, ∮_Δ 1/(t-z) dz = 0.
+$$f(z) = \sum_{n=0}^{\infty} \frac{f^{(n)}(1)}{n!}(z - 1)^n, \quad |z-1| < \varepsilon.$$
 
-Therefore ∮_Δ f(z) dz = ∫_K 0 \, dm(t) = 0. By Morera's theorem, f is holomorphic on ℂ \ K. ∎
+Now compute f⁽ⁿ⁾(1). Since f(z) = Σ\_{k≥0} a(k) zᵏ converges on D(0,1), the derivatives converge on D(0,1) and, by Abel's theorem (or direct argument), the n-th derivative at real values r < 1 is:
 
-**Alternative (direct).** For z₀ ∈ ℂ \ K, the difference quotient satisfies:
+$$f^{(n)}(r) = \sum_{k=n}^{\infty} a(k) \cdot k(k-1)\cdots(k-n+1) \cdot r^{k-n}.$$
 
-$$\frac{f(z) - f(z_0)}{z - z_0} = \int_K \frac{1}{(t-z)(t-z_0)}\,dm(t) \to \int_K \frac{1}{(t-z_0)^2}\,dm(t) \quad \text{as } z \to z_0$$
+Each term is nonneg (since a(k) ≥ 0, the falling factorial is positive for k ≥ n, and r > 0). So f⁽ⁿ⁾(r) ≥ 0 for all 0 < r < 1. Since f is analytic at z = 1, f⁽ⁿ⁾ is continuous at 1, so:
 
-by dominated convergence (the integrand is bounded by 1/dist(z₀,K)² for z close enough to z₀). So f'(z₀) = ∫_K 1/(t-z₀)² dm(t).
+$$f^{(n)}(1) = \lim_{r \to 1^-} f^{(n)}(r) = \lim_{r \to 1^-} \sum_{k=n}^{\infty} a(k) \frac{k!}{(k-n)!} r^{k-n} \geq 0.$$
 
-### Part (b): f does not extend to an entire function
+(The limit exists because f⁽ⁿ⁾ is continuous at 1, and each partial sum is nonneg, so the limit is nonneg — possibly +∞, but the assumption of analyticity at 1 guarantees it is finite.)
 
-**Proof.** Suppose for contradiction that f extends to an entire function F : ℂ → ℂ with F(z) = f(z) for all z ∈ ℂ \ K.
+So the Taylor coefficients at z = 1 satisfy c\_n := f⁽ⁿ⁾(1)/n! ≥ 0.
 
-From the definition, for |z| large:
+**Now we reach the contradiction.** The Taylor series at z = 1 has radius of convergence at least ε. So for any ρ < ε:
 
-$$|f(z)| = \left|\int_K \frac{1}{t-z}\,dm(t)\right| \leq \int_K \frac{1}{|t-z|}\,dm(t) \leq \frac{m(K)}{|z| - \max_{t \in K}|t|} \to 0 \text{ as } |z| \to \infty.$$
+$$\sum_{n=0}^{\infty} c_n \rho^n < \infty.$$
 
-So F is a bounded entire function (it is continuous on ℂ, hence bounded on the compact set {|z| ≤ R} for any R, and |F(z)| → 0 for |z| → ∞). By Liouville's theorem, F is constant. Since F(z) → 0 as |z| → ∞, the constant is 0, so F ≡ 0.
+In particular, the series Σ c\_n (z-1)ⁿ converges absolutely for |z - 1| < ε. Since c\_n ≥ 0, it converges for real z - 1 = ρ with 0 < ρ < ε, i.e., for z = 1 + ρ, a real number greater than 1.
 
-But then f(z) = 0 for all z ∈ ℂ \ K. In particular, for real x ∉ K:
+But the Taylor series at z = 1 represents f in D(1,ε), and for real z = 1 + ρ ∈ (1, 1+ε):
 
-$$\int_K \frac{1}{t - x}\,dm(t) = 0 \quad \text{for all } x \in \mathbb{R} \setminus K.$$
+$$f(1 + \rho) = \sum_{n=0}^{\infty} c_n \rho^n.$$
 
-This integral is the Stieltjes transform of the measure m|_K (Lebesgue measure restricted to K). The Stieltjes transform uniquely determines a compactly supported measure: if ∫_K 1/(t-z) dm(t) = 0 for all z ∈ ℂ \ K, then by the Stieltjes inversion formula (or by taking z = x + iy and considering the limit as y → 0⁺ of the imaginary part), the measure m|_K must be the zero measure. This means m(K) = 0, contradicting the hypothesis that K has positive Lebesgue measure.
+Now return to the original series at z = 0. For 0 < r < 1:
 
-**More elementary argument for the contradiction.** For x ∈ ℝ \ K and y > 0, consider z = x + iy ∈ ℂ \ ℝ ⊂ ℂ \ K. If f ≡ 0:
+$$f(r) = \sum_{k=0}^{\infty} a(k) r^k.$$
 
-$$0 = \operatorname{Im} f(x+iy) = \int_K \frac{y}{(t-x)^2 + y^2}\,dm(t).$$
+Since a(k) ≥ 0, this is a monotone increasing function of r on (0,1). The Taylor expansion at z = 1 shows f is continuous (and finite) at z = 1, so f(r) ↑ f(1) < ∞, meaning Σ a(k) converges.
 
-The integrand is the Poisson kernel, which is strictly positive for t ∈ K. Since m(K) > 0, the integral is strictly positive — contradiction. ∎
+More importantly, f is real-analytic at z = 1, so for real z near 1, f(z) = Σ c\_n (z-1)ⁿ. For z = r ∈ (0,1), we can also write f(r) = Σ a(k) rᵏ. Since both expressions represent f on (1-ε, 1), and f is analytic at 1, the power series at 0 must also represent f at z = 1 + ρ for small ρ > 0. But more directly:
 
-### Part (c): lim_{|z|→∞} z f(z) = -m(K)
+Since c\_n ≥ 0 and the Taylor series at 1 converges for |z-1| < ε, the original function f is analytic at 1 + ρ for all 0 < ρ < ε. At z = 1 + ρ (real), we can expand:
 
-**Proof.** For |z| large and t ∈ K (so t is bounded):
+$$f(1 + \rho) = \sum_{n=0}^{\infty} c_n \rho^n = \sum_{n=0}^{\infty} \frac{f^{(n)}(1)}{n!} \rho^n.$$
 
-$$z \cdot f(z) = \int_K \frac{z}{t - z}\,dm(t) = \int_K \frac{1}{t/z - 1}\,dm(t).$$
+Each c\_n ≥ 0, so |c\_n| = c\_n, meaning the power series at z = 1 converges absolutely at z = 1 + ρ. Now for any z with |z - 1| ≤ ρ:
 
-For each fixed t ∈ K, as |z| → ∞, t/z → 0, so 1/(t/z - 1) → 1/(0 - 1) = -1.
+$$|c_n (z-1)^n| \leq c_n \rho^n$$
 
-The convergence is dominated: since K ⊂ [-M, M] for some M and |z| > 2M, we have |t/z| ≤ 1/2, so |t/z - 1| ≥ 1/2, giving |1/(t/z - 1)| ≤ 2. This bound is integrable (2 · m(K) < ∞).
+so the Taylor series at z = 1 converges absolutely on {|z-1| ≤ ρ} for any ρ < ε. In particular, it converges on the closed disk of radius ρ centered at 1.
 
-By the dominated convergence theorem:
+This means f is analytic on D(1, ε). But D(0,1) ∪ D(1,ε) contains the real interval (0, 1+ε). For r ∈ (0, 1+ε), the original power series Σ a(k) rᵏ (with nonneg terms) must agree with f(r). Since f(r) is finite for r ∈ (1, 1+ε), the series Σ a(k) rᵏ converges for some r > 1.
 
-$$\lim_{|z| \to \infty} z f(z) = \int_K (-1)\,dm(t) = -m(K). \qquad \blacksquare$$
+**But the radius of convergence of Σ a(k) zᵏ is 1.** If Σ a(k) rᵏ converges for some r > 1, then by the root test the radius of convergence is at least r > 1 — contradiction.
+
+(Technical detail: for nonneg terms, convergence at a real point r > 0 implies absolute convergence, which implies the radius of convergence is at least r.) ∎
 
 ## What Connects
 
-**To the Cauchy transform.** f is the *Cauchy transform* of the measure m|_K. This is a fundamental object in complex analysis, potential theory, and approximation theory. It is always holomorphic off the support of the measure, always vanishes at infinity, and its boundary values encode the measure via the Sokhotski-Plemelj formula.
+**Pringsheim's theorem** is a foundational result in the theory of singularities of power series. It says that for power series with nonneg coefficients, the positive real boundary point of the disk of convergence is always a singularity — you can never "slip past" it by analytic continuation.
 
-**To potential theory.** log|f| is related to the logarithmic potential of K. The fact that zf(z) → -m(K) means f behaves like -m(K)/z at infinity — the "monopole" term in a multipole expansion. The higher terms in the Laurent expansion at ∞ give f(z) = -m(K)/z - (∫_K t dm(t))/z² - ..., recovering the moments of the measure.
+**To Hadamard's gap theorem.** Both results identify structural features of the coefficients that force singularities. Hadamard's gap theorem handles lacunary series (big gaps between nonzero coefficients); Pringsheim handles nonnegativity. In both cases, the singularity structure is constrained by the coefficient structure.
 
-**To rational approximation.** Vitushkin's theorem on rational approximation uses the Cauchy transform as its principal tool. Part (b) — the non-extendability — is what makes K "visible" to complex analysis: the analytic capacity of K is positive precisely because m(K) > 0.
+**To Tauberian theory.** The nonnegativity condition makes Abel's theorem and its converses (Hardy-Littlewood Tauberian theorem) especially powerful. Pringsheim's theorem is why the point z = 1 is always the relevant boundary point for Tauberian arguments about series with nonneg coefficients.
 
-**To the Stieltjes transform.** On the real line, f restricted to ℝ \ K is the Stieltjes transform of m|_K. The injectivity of the Stieltjes transform (used in part (b)) is the analytic backbone of the moment problem.
+**To probability.** The generating function of a probability distribution on ℕ is Σ p(n) zⁿ with p(n) ≥ 0 and Σ p(n) = 1. Pringsheim guarantees z = 1 is always a singularity of the generating function (unless the radius is > 1, which happens only for distributions with exponential tails). This controls the asymptotic behaviour of p(n) via singularity analysis.
+
+**To analytic combinatorics.** The Flajolet-Sedgewick framework for counting combinatorial structures relies heavily on Pringsheim: generating functions with nonneg integer coefficients (counting sequences) always have their dominant singularity on the positive real axis, which is why the transfer theorems work.
 
 ---
 
 ## Lean 4 Theorem Statements
 
 ```lean
-import Mathlib.MeasureTheory.Integral.IntegrableOn
-import Mathlib.MeasureTheory.Integral.Bochner
-import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.Analytic.Basic
-import Mathlib.Analysis.Complex.Liouville
-import Mathlib.Topology.MetricSpace.Basic
+import Mathlib.Analysis.SpecificLimits.Normed
+import Mathlib.Analysis.PSeries
+import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Order.Filter.Basic
 
-open MeasureTheory Complex Set Filter Topology
+open Filter Topology
 
 noncomputable section
 
-variable {K : Set ℝ} (hK_compact : IsCompact K) (hK_pos : 0 < volume K)
+/-- Radius of convergence of a formal power series with complex coefficients. -/
+def radiusOfConvergence (a : ℕ → ℝ) : ℝ≥0∞ :=
+  FormalMultilinearSeries.radius
+    (fun n => ContinuousMultilinearMap.mkPiRing ℂ (Fin n) (a n : ℂ))
 
-/-- The Cauchy-type integral f(z) = ∫_K 1/(t - z) dm(t),
-    where we embed t ∈ ℝ into ℂ via ofReal. -/
-def cauchyIntegral (K : Set ℝ) (z : ℂ) : ℂ :=
-  ∫ t in K, (1 : ℂ) / (↑t - z) ∂volume
+/-- A power series with nonneg real coefficients, viewed as a function ℂ → ℂ. -/
+def powerSeries (a : ℕ → ℝ) (z : ℂ) : ℂ :=
+  ∑' n, (a n : ℂ) * z ^ n
 
-/-- The integrand is integrable for z ∉ K (as a subset of ℂ via ofReal). -/
-lemma cauchyIntegral_integrable
-    (hK_compact : IsCompact K)
-    {z : ℂ} (hz : z ∉ ofReal '' K) :
-    IntegrableOn (fun t : ℝ => (1 : ℂ) / (↑t - z)) K volume := by
+/-- For nonneg coefficients, convergence at a positive real r implies
+    the radius of convergence is at least r. -/
+lemma radius_ge_of_summable_nonneg
+    {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n)
+    {r : ℝ} (hr : 0 < r) (hs : Summable (fun n => a n * r ^ n)) :
+    FormalMultilinearSeries.radius
+      (fun n => ContinuousMultilinearMap.mkPiRing ℂ (Fin n) (a n : ℂ)) ≥
+      ENNReal.ofReal r := by
   sorry
 
-/-- Part (a): The Cauchy integral is holomorphic on ℂ \ K.
-    Stated as: f is differentiable at every z not in the image of K. -/
-theorem cauchyIntegral_differentiableOn
-    (hK_compact : IsCompact K) :
-    DifferentiableOn ℂ (cauchyIntegral K) (ofReal '' K)ᶜ := by
+/-- If f is analytic at z = 1 (i.e., has a convergent Taylor expansion there),
+    then all Taylor coefficients at z = 1 are nonneg when the original
+    coefficients are nonneg. -/
+lemma taylor_at_one_nonneg
+    {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n)
+    {f : ℂ → ℂ} (hf_eq : ∀ z, ‖z‖ < 1 → f z = powerSeries a z)
+    (hf_an : AnalyticAt ℂ f 1) :
+    ∀ n, 0 ≤ (hf_an.choose n).re := by
   sorry
 
-/-- The derivative of the Cauchy integral is given by
-    f'(z) = ∫_K 1/(t - z)² dm(t). -/
-theorem hasDeriv_cauchyIntegral
-    (hK_compact : IsCompact K)
-    {z : ℂ} (hz : z ∉ ofReal '' K) :
-    HasDerivAt (cauchyIntegral K)
-      (∫ t in K, (1 : ℂ) / (↑t - z) ^ 2 ∂volume) z := by
+/-- Nonneg Taylor coefficients at z = 1 with radius ε > 0 imply
+    the function is finite (and equals the original series) at some
+    real r > 1. -/
+lemma summable_beyond_one_of_analytic_at_one
+    {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n)
+    {f : ℂ → ℂ} (hf_eq : ∀ z, ‖z‖ < 1 → f z = powerSeries a z)
+    (hf_an : AnalyticAt ℂ f 1) :
+    ∃ r : ℝ, 1 < r ∧ Summable (fun n => a n * r ^ n) := by
   sorry
 
-/-- f(z) → 0 as |z| → ∞. -/
-theorem cauchyIntegral_tendsto_zero
-    (hK_compact : IsCompact K) (hK_pos : 0 < volume K) :
-    Tendsto (cauchyIntegral K) (cocompact ℂ) (𝓝 0) := by
+/-- Main theorem (Pringsheim): a power series with nonneg real coefficients
+    and radius of convergence 1 is singular at z = 1.
+    Stated as: there is no analytic continuation to a neighbourhood of 1. -/
+theorem pringsheim_singular_at_one
+    {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n)
+    (h_radius : FormalMultilinearSeries.radius
+      (fun n => ContinuousMultilinearMap.mkPiRing ℂ (Fin n) (a n : ℂ)) = 1) :
+    ¬ ∃ (f : ℂ → ℂ), AnalyticAt ℂ f 1 ∧
+      ∀ z, ‖z‖ < 1 → f z = powerSeries a z := by
   sorry
 
-/-- Part (b), key ingredient: the imaginary part of f(x+iy) is
-    strictly positive for y > 0 and m(K) > 0 (Poisson kernel argument). -/
-lemma cauchyIntegral_im_pos
-    (hK_compact : IsCompact K) (hK_pos : 0 < volume K)
-    {x : ℝ} {y : ℝ} (hy : 0 < y) :
-    0 < (cauchyIntegral K (↑x + ↑y * I)).im := by
-  sorry
-
-/-- Part (b): f does not extend to an entire function.
-    Stated as: there is no entire function agreeing with f on ℂ \ K. -/
-theorem cauchyIntegral_no_entire_extension
-    (hK_compact : IsCompact K) (hK_pos : 0 < volume K) :
-    ¬ ∃ (F : ℂ → ℂ), Differentiable ℂ F ∧
-      ∀ z ∉ ofReal '' K, F z = cauchyIntegral K z := by
-  sorry
-
-/-- Part (c): z · f(z) → -m(K) as |z| → ∞. -/
-theorem cauchyIntegral_residue_at_infinity
-    (hK_compact : IsCompact K) (hK_pos : 0 < volume K) :
-    Tendsto (fun z => z * cauchyIntegral K z)
-      (cocompact ℂ) (𝓝 (-(volume K : ℝ≥0∞).toReal)) := by
-  sorry
-
-/-- Dominated convergence input: the integrand of z·f(z) is
-    uniformly bounded for |z| large. -/
-lemma cauchyIntegral_residue_dominated
-    (hK_compact : IsCompact K)
-    {R : ℝ} (hR : R > 2 * sSup (abs '' K)) :
-    ∀ t ∈ K, ∀ z : ℂ, R < ‖z‖ →
-      ‖(1 : ℂ) / ((↑t : ℂ) / z - 1)‖ ≤ 2 := by
-  sorry
-
-/-- Alternative statement of (c) with explicit real-valued limit. -/
-theorem cauchyIntegral_residue_at_infinity'
-    (hK_compact : IsCompact K) (hK_pos : 0 < volume K) :
-    Tendsto (fun z => z * cauchyIntegral K z)
-      (cocompact ℂ)
-      (𝓝 (-↑(volume.restrict K Set.univ).toReal : ℂ)) := by
+/-- Equivalent contrapositive formulation:
+    if all a(n) ≥ 0 and the series extends analytically past z = 1,
+    then the radius of convergence is strictly greater than 1. -/
+theorem radius_gt_one_of_analytic_at_one_nonneg
+    {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n)
+    {f : ℂ → ℂ} (hf_eq : ∀ z, ‖z‖ < 1 → f z = powerSeries a z)
+    (hf_an : AnalyticAt ℂ f 1) :
+    1 < FormalMultilinearSeries.radius
+      (fun n => ContinuousMultilinearMap.mkPiRing ℂ (Fin n) (a n : ℂ)) := by
   sorry
 
 end
@@ -178,9 +161,7 @@ end
 
 **Mathlib notes:**
 
-- `cauchyIntegral` is defined using the Bochner integral `∫ t in K, ... ∂volume` with the coercion `(↑t : ℂ)` embedding ℝ into ℂ via `Complex.ofReal`.
-- `DifferentiableOn ℂ f S` is the standard Mathlib predicate for holomorphicity on S. For part (a), S = (ofReal '' K)ᶜ.
-- `cocompact ℂ` is the filter for |z| → ∞ (complements of compact sets). `Tendsto f (cocompact ℂ) (𝓝 c)` says f(z) → c as |z| → ∞.
-- `volume K` returns `ℝ≥0∞`; `.toReal` coerces to ℝ for the limit value. Since K is compact with positive measure, `volume K ≠ ⊤` and `.toReal` is well-behaved.
-- The Liouville theorem in Mathlib is `Complex.Polynomial.liouville` or `Differentiable.apply_eq_apply_of_bounded`; part (b) chains this with the Poisson kernel positivity.
-- `cauchyIntegral_im_pos` is the core of part (b): Im f(x+iy) = ∫_K y/((t-x)²+y²) dm(t) > 0, since the Poisson kernel is strictly positive and m(K) > 0.
+- `FormalMultilinearSeries.radius` computes the radius of convergence. The encoding `ContinuousMultilinearMap.mkPiRing ℂ (Fin n) c` wraps a scalar `c : ℂ` as a continuous n-multilinear map, which is how Mathlib represents power series coefficients in its analytic function API.
+- `AnalyticAt ℂ f z` means f has a convergent power series in a neighbourhood of z. Its `choose` gives the coefficients (via `AnalyticAt` being a `∃ p, HasFPowerSeriesAt f p z`).
+- The proof flows: `pringsheim_singular_at_one` assumes analyticity at 1 for contradiction, uses `taylor_at_one_nonneg` to establish nonneg Taylor coefficients, then `summable_beyond_one_of_analytic_at_one` to get convergence past r = 1, then `radius_ge_of_summable_nonneg` to contradict radius = 1.
+- `Summable (fun n => a n * r ^ n)` for real `r > 1` directly contradicts radius of convergence = 1 for a nonneg series.

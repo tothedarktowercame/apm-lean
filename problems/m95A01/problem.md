@@ -1,0 +1,38 @@
+# m95A01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-m95A01.md`
+- imported-at: `2026-07-13T17:26:54.962876Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X$ be a Banach space and assume that $A,B_0$ are two bounded
+linear operators on $X$ such that $\|AB_0-I\|<1$ and $\|B_0A-I\|<1$.
+Define $B_{n+1}=2B_n-B_n AB_n$, ($n=0,1,2,3,\ldots $).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Show that the sequences $\{A B_n\}$ and $\{B_nA\}$ converge in
+norm to $I$.
+%------------------------------------------------------------------*
+\item Assuming that the range of $A$ is all of $X$, use the principle
+of uniform boundedness to show that there is a constant $K$ such that
+$\|B_n\|<K$ for all $n$.
+%------------------------------------------------------------------*
+\item Still assuming that the range of $A$ is all of $X$, show that
+$A$ has a bounded inverse and that $\forall x\in X:B_nx\rightarrow
+A^{-1}x$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

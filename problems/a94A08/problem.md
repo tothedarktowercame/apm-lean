@@ -1,0 +1,27 @@
+# a94A08
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-a94A08.md`
+- imported-at: `2026-07-13T17:26:52.201045Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+A function $f$ is analytic in the disk $\Delta=\{z\pipe |z|<1\}$ and
+satisfies the conditions $f(\Delta)\subset \Delta$, $f(0)=0$ and
+$|f'(0)|<1$. Define a sequence of functions $f_n:\Delta\rightarrow
+\Delta$ recursively as follows: $f_1=f$, $f_n=f\circ f_{n-1}$ for
+$n=2,3,\ldots $. Prove that $f_n\rightarrow 0$ uniformly on each
+compact subset of $\Delta$. Hint: show that for each fixed $r$ in
+$(0,1)$ there is a positive number $\lambda<1$ such that $|f(z)|\leq
+\lambda|z|$ holds whenever $|z|\leq r$.
+```

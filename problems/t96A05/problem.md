@@ -1,0 +1,42 @@
+# t96A05
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+The informal solution was imported from the harvested APM informal-proof
+corpus.
+
+- informal-solution: `informal-solution.md`
+- harvested-filename: `apm-t96A05.md`
+- imported-at: `2026-07-13T17:26:58.382633Z`
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X$ and $X\times [0,1]$ be normal. Let $A$ be a closed subset of
+$X$. Assume that $f:A\rightarrow \Rtw\setminus \{0\}$ is a continuous
+map which is homotopic to a constant map. 
+
+The goal in what follows is to show that $f$ can be extended to all of
+$X$. Let $h$ be the map of the subspace $Y=(A\times I)\cup (X\times
+\{1\})$ of $X\times [0,1]$ into $\Rtw\setminus \{0\}$ obtained from
+the homotopy between $f$ and the constant map. (In particular,
+$h|_{X\times \{1\}}$ is constant.)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Extend $h$ to a neighborhood $U$ of $Y$ in $X\times [0,1]$.
+%------------------------------------------------------------------*
+\item True or false: there must be an open set $W$ in $X$ containing
+$A$ such that $W\times [0,1]\subset U$.
+%------------------------------------------------------------------*
+\item Define a map from $X\times \{0\}$ into $U$ and use this to
+define a map $\bar{f}:X\rightarrow \Rtw\setminus \{0\}$ for which
+$\bar{f}|_{A}=f$. Hint: Urysohn's lemma.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

@@ -5,8 +5,6 @@
   "layout": "single-bundle",
   "source": {
     "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-a01A05.md",
     "problem_tex": "apm/a01A05.tex",
     "harvest_mismatch_note": "The harvested informal proof (apm-a01A05.md) contains the proof for a01A04 (unit ball volumes), not a01A05 (Gram-Schmidt). The Lean formalization implements the correct problem from a01A05.tex."
   },
@@ -21,7 +19,7 @@
   "artifacts": {
     "has_problem_tex": true,
     "has_problem_md": true,
-    "has_informal_solution": true,
+    "has_informal_solution": false,
     "has_proof_outline": true,
     "has_proof_plan": false,
     "has_changelog": false,
@@ -42,5 +40,5 @@
     "sorry_reason": "Part (a) requires bounding Gram-Schmidt projection using near-orthogonality. Part (b) requires Bessel's inequality + transfer via part (a)."
   },
   "harvest_mismatch": true,
-  "harvest_mismatch_detail": "informal-solution.md and apm-a01A05.md contain the a01A04 unit ball volume proof, not the a01A05 Gram-Schmidt problem. The Lean file implements the correct problem from a01A05.tex."
+  "harvest_mismatch_detail": "The mislabeled a01A04 proof was removed from this bundle and the harvest corpus. No worked informal solution for a01A05 is currently available."
 }

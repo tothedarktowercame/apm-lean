@@ -1,174 +1,153 @@
 
 
-# APM a01A02: Weak-L² implies local L¹ with the right bound
+# APM a01A03: Identifying a convolution kernel from a functional identity
 
 ## Why It's Hard
 
-The hypothesis is a *distributional* (weak-type) bound on f — it controls how much measure lives above each height λ — and the conclusion is an *integral* bound on arbitrary Borel sets. The difficulty is converting a tail-decay condition into an integral estimate, with the correct dependence on m(E). The exponent 1/2 in √m(E) is not obvious and emerges from optimizing a free parameter in a truncation argument. This is the same circle of ideas as a03J04 (b)/(c) — weak-Lp implies local Lq for q < p — specialized to p = 2, q = 1.
+The hypothesis says a *single* function g ∈ L¹(ℝ) satisfies g * f' = f(x+h) - f(x-h) for *all* f ∈ C¹(ℝ). This is a strong universal quantifier — g must work for every smooth function simultaneously. The difficulty is extracting the pointwise identity g = χ\_{[-h,h]} from this integral equation. You can't just "read off" g because the convolution mixes g with f' nonlocally. The key is to use the Fourier transform, where convolution becomes multiplication and the universal quantifier pins down ĝ uniquely.
 
 ## The Key Insight
 
-Split |f| at a height λ₀ (to be optimized): the part below λ₀ is bounded, so its integral over E is at most λ₀ · m(E). The part above λ₀ is handled by the layer cake formula + the weak-L² bound, giving an integral of order C/λ₀. Choose λ₀ = √(C/m(E)) to balance the two terms, yielding ∫_E |f| ≤ const · √(C · m(E)).
+Take Fourier transforms of both sides. On the left, convolution becomes multiplication: ĝ · (2πiξ f̂(ξ)) (since f' has transform 2πiξ f̂). On the right, f(x+h) - f(x-h) has transform (e^{2πiξh} - e^{-2πiξh}) f̂(ξ) = 2i sin(2πξh) f̂(ξ). Since this holds for all f, we can cancel f̂ and get ĝ(ξ) · 2πiξ = 2i sin(2πξh), i.e., ĝ(ξ) = sin(2πξh)/(πξ). This is exactly the Fourier transform of χ\_{[-h,h]}. Injectivity of the Fourier transform on L¹ gives g = χ\_{[-h,h]} a.e.
+
+But there's a subtlety: we need f and f' to both be nice enough for the Fourier argument. The cleaner approach avoids the Fourier transform entirely and uses specific test functions.
 
 ## Complete Proof
 
-**Theorem.** Let f : ℝⁿ → ℝ be measurable with m({|f| > λ}) ≤ C λ⁻² for all λ > 0 (weak-L² condition). Then for any Borel set E with 0 < m(E) < ∞:
+**Theorem.** Let g ∈ L¹(ℝ) and h > 0. Suppose that for every f ∈ C¹(ℝ):
 
-$$\int_E |f|\,dx \leq C_1\sqrt{m(E)},$$
+$$(g * f')(x) = f(x+h) - f(x-h) \quad \text{for all } x \in \mathbb{R}.$$
 
-where C₁ = 2√C.
+Then g = χ\_{[-h,h]} almost everywhere.
 
 **Proof.**
 
-Fix a Borel set E with 0 < m(E) < ∞, and fix a parameter λ₀ > 0 (to be chosen later). Write:
+**Step 1: Rewrite the identity.** By definition of convolution:
 
-$$|f(x)| = |f(x)|\mathbf{1}_{|f(x)| \leq \lambda_0} + |f(x)|\mathbf{1}_{|f(x)| > \lambda_0} =: g(x) + h(x).$$
+$$(g * f')(x) = \int_{-\infty}^{\infty} g(t) f'(x - t)\,dt.$$
 
-**Low part.** On E, g(x) ≤ λ₀ pointwise, so:
+The right side can also be written as a convolution. Note that:
 
-$$\int_E g\,dx \leq \lambda_0 \cdot m(E).$$
+$$f(x+h) - f(x-h) = \int_{x-h}^{x+h} f'(s)\,ds = \int_{-h}^{h} f'(x - (-u))\,du = \int_{-h}^{h} f'(x + u)\,du$$
 
-**High part.** Use the layer cake (Cavalieri) formula:
+Wait — let me be more careful with the substitution. Setting s = x + u:
 
-$$\int_E h\,dx = \int_E |f|\mathbf{1}_{|f| > \lambda_0}\,dx.$$
+$$f(x+h) - f(x-h) = \int_{x-h}^{x+h} f'(s)\,ds = \int_{-h}^{h} f'(x+u)\,du.$$
 
-We bound this by integrating over all of ℝⁿ (since h ≥ 0):
+Now substitute u = -t:
 
-$$\int_E h\,dx \leq \int_{\mathbb{R}^n} h\,dx = \int_0^\infty m(\{x : h(x) > \lambda\})\,d\lambda.$$
+$$= \int_{-h}^{h} f'(x - (-u))\,du = \int_{-h}^{h} f'(x+u)\,du.$$
 
-Now {h(x) > λ} = {|f(x)| · 1\_{|f|>λ₀} > λ}. For λ ≥ 0:
+Hmm, let me write it as a convolution directly. We have:
 
-- If λ ≥ λ₀: {h > λ} = {|f| > λ}, so m({h > λ}) ≤ C λ⁻².
-- If 0 ≤ λ < λ₀: {h > λ} ⊆ {|f| > λ₀}, so m({h > λ}) ≤ C λ₀⁻².
+$$\int_{-h}^{h} f'(x+u)\,du = \int_{-\infty}^{\infty} \chi_{[-h,h]}(u) f'(x+u)\,du.$$
 
-But we can be tighter. Actually:
+But convolution is (g * f')(x) = ∫ g(t) f'(x-t) dt. To match, substitute u = -t:
 
-$$\int_{\mathbb{R}^n} h\,dx = \int_{\lambda_0}^{\infty} m(\{|f| > \lambda\})\,d\lambda$$
+$$\int_{-\infty}^{\infty} \chi_{[-h,h]}(-t) f'(x-t)\,dt = \int_{-\infty}^{\infty} \chi_{[-h,h]}(t) f'(x-t)\,dt$$
 
-This follows because h(x) = (|f(x)| - λ₀)⁺ ... no, h(x) = |f(x)| · 1\_{|f| > λ₀}, which is not the same as (|f| - λ₀)⁺. Let me use a cleaner calculation.
+since χ\_{[-h,h]} is symmetric. So:
 
-Apply the layer cake directly to ∫\_E |f|:
+$$f(x+h) - f(x-h) = (\chi_{[-h,h]} * f')(x).$$
 
-$$\int_E |f|\,dx = \int_0^{\infty} m(E \cap \{|f| > \lambda\})\,d\lambda.$$
+Therefore the hypothesis says:
 
-Split at λ₀:
+$$(g * f')(x) = (\chi_{[-h,h]} * f')(x) \quad \text{for all } x \in \mathbb{R}, \text{ for all } f \in C^1(\mathbb{R}).$$
 
-$$= \int_0^{\lambda_0} m(E \cap \{|f| > \lambda\})\,d\lambda + \int_{\lambda_0}^{\infty} m(E \cap \{|f| > \lambda\})\,d\lambda.$$
+Equivalently:
 
-**First integral:** m(E ∩ {|f| > λ}) ≤ m(E) for all λ, so:
+$$((g - \chi_{[-h,h]}) * f')(x) = 0 \quad \text{for all } x, \text{ for all } f \in C^1(\mathbb{R}).$$
 
-$$\int_0^{\lambda_0} m(E \cap \{|f| > \lambda\})\,d\lambda \leq \lambda_0 \cdot m(E).$$
+**Step 2: Show g - χ\_{[-h,h]} = 0 a.e.**
 
-**Second integral:** m(E ∩ {|f| > λ}) ≤ m({|f| > λ}) ≤ C λ⁻² for all λ > 0, so:
+Set φ = g - χ\_{[-h,h]} ∈ L¹(ℝ). We have φ * f' = 0 for all f ∈ C¹(ℝ).
 
-$$\int_{\lambda_0}^{\infty} m(E \cap \{|f| > \lambda\})\,d\lambda \leq \int_{\lambda_0}^{\infty} C\lambda^{-2}\,d\lambda = C\left[-\lambda^{-1}\right]_{\lambda_0}^{\infty} = \frac{C}{\lambda_0}.$$
+Since f ranges over all C¹ functions, f' ranges over all continuous functions (every continuous function is the derivative of some C¹ function). So:
 
-**Combining:**
+$$\phi * \psi = 0 \quad \text{for all } \psi \in C(\mathbb{R}).$$
 
-$$\int_E |f|\,dx \leq \lambda_0 \cdot m(E) + \frac{C}{\lambda_0}.$$
+In particular, choose ψ to be a smooth approximate identity: let ψ\_ε be a standard mollifier (nonneg, supported on [-ε, ε], integral 1). Then:
 
-**Optimize over λ₀.** Set the derivative to zero: m(E) - C/λ₀² = 0, giving λ₀ = √(C/m(E)). Substituting:
+$$0 = (\phi * \psi_\varepsilon)(x) \quad \text{for all } x, \varepsilon > 0.$$
 
-$$\int_E |f|\,dx \leq \sqrt{\frac{C}{m(E)}} \cdot m(E) + \frac{C}{\sqrt{C/m(E)}} = \sqrt{C \cdot m(E)} + \sqrt{C \cdot m(E)} = 2\sqrt{C \cdot m(E)}.$$
+But φ * ψ\_ε → φ in L¹ as ε → 0 (standard approximation-to-the-identity theorem for L¹ functions). Since φ * ψ\_ε = 0 for all ε, we get φ = 0 in L¹, meaning g = χ\_{[-h,h]} almost everywhere. ∎
 
-So C₁ = 2√C, and:
-
-$$\boxed{\int_E |f|\,dx \leq 2\sqrt{C}\,\sqrt{m(E)}.} \qquad \blacksquare$$
+**Remark.** The step "f' ranges over all continuous functions" needs a small justification. Given any continuous ψ : ℝ → ℝ, define f(x) = ∫₀ˣ ψ(t) dt. Then f ∈ C¹(ℝ) and f' = ψ. (We don't need f to have any decay or integrability — the hypothesis holds for *all* f ∈ C¹.) Actually we need to be slightly careful: we need φ * ψ to make sense, which requires some growth control. Since φ ∈ L¹ (so it is integrable) and ψ is continuous, (φ * ψ)(x) = ∫ φ(t)ψ(x-t)dt is well-defined for each x as long as ψ is locally bounded, which all continuous functions are. The convolution is well-defined pointwise. So the argument goes through for ψ = ψ\_ε (compactly supported, smooth), which is more than sufficient.
 
 ## What Connects
 
-**To weak-Lp spaces and interpolation.** This is a special case of the general principle: weak-Lp on a σ-finite measure space implies Lq on sets of finite measure for any q < p. The exponent in √m(E) = m(E)^{1/1 - 1/2 + 1/1}... more precisely, for weak-Lp, the bound is ∫_E |f|^q ≤ C(p,q) · m(E)^{1 - q/p} for 0 < q < p. Here p = 2, q = 1: exponent = 1 - 1/2 = 1/2. This was problem a03J04(b)/(c) in general form.
+**To the fundamental theorem of calculus.** The identity f(x+h) - f(x-h) = ∫\_{-h}^{h} f'(x+t) dt is the fundamental theorem applied to f' over the interval [x-h, x+h]. The problem asks: if some other kernel g reproduces this identity, must it be the obvious one?
 
-**To the Marcinkiewicz interpolation theorem.** The splitting trick (truncate at a height, bound each piece differently) is the core of the Marcinkiewicz interpolation argument. The optimization over the truncation level is what produces the sharp constant and the correct exponent.
+**To approximate identities and uniqueness.** The proof uses the fact that L¹ convolution with approximate identities is faithful: if φ * ψ\_ε = 0 for all ε, then φ = 0. This is the L¹ analogue of "if a distribution annihilates all test functions, it is zero."
 
-**To Chebyshev's inequality and its converse.** The weak-L² condition m({|f| > λ}) ≤ C/λ² is Chebyshev's inequality applied to |f|² if f ∈ L². But the hypothesis here is weaker: f need not be in L². The conclusion shows that despite not being globally L¹, f is locally L¹ with a specific rate.
+**To the Titchmarsh convolution theorem.** A deeper result says that if f * g = 0 and both are supported on half-lines, then one of them is zero. Our problem is simpler (we get zero convolution with *all* continuous functions, not just one) but lives in the same neighborhood.
 
-**To real-variable harmonic analysis.** The Calderón-Zygmund decomposition and the good-λ inequality both rely on exactly this kind of distributional → integral conversion, with optimization over a free parameter.
+**To uniqueness of the Fourier transform.** The Fourier-based proof (Step 0 in "Key Insight") uses the fact that ĝ is uniquely determined by the identity ĝ(ξ) · 2πiξ = 2i sin(2πξh) for all ξ ≠ 0. This gives ĝ = sin(2πξh)/(πξ), which is the sinc function — the Fourier transform of χ\_{[-h,h]}.
 
 ---
 
 ## Lean 4 Theorem Statements
 
 ```lean
-import Mathlib.MeasureTheory.Integral.Layercake
 import Mathlib.MeasureTheory.Integral.IntegrableOn
-import Mathlib.MeasureTheory.Measure.MeasureSpace
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.MeasureTheory.Function.LocallyIntegrable
+import Mathlib.MeasureTheory.Group.Convolution
+import Mathlib.Analysis.SpecialFunctions.Integrals
+import Mathlib.Topology.ContinuousFunction.Basic
 
-open MeasureTheory Set ENNReal Filter
+open MeasureTheory Set Filter
 
 noncomputable section
 
-variable {n : ℕ}
+/-- The convolution of g with f' equals the symmetric difference of f. -/
+def ConvolutionShiftProperty (g : ℝ → ℝ) (h : ℝ) : Prop :=
+  ∀ (f : ℝ → ℝ), ContDiff ℝ 1 f →
+    ∀ x : ℝ, ∫ t, g t * deriv f (x - t) = f (x + h) - f (x - h)
 
-/-- The weak-L² condition: m({|f| > λ}) ≤ C/λ² for all λ > 0. -/
-def WeakL2 (f : (Fin n → ℝ) → ℝ) (μ : Measure (Fin n → ℝ)) (C : ℝ≥0) : Prop :=
-  ∀ λ : ℝ, 0 < λ → μ {x | λ < ‖f x‖} ≤ ENNReal.ofReal (C / λ ^ 2)
-
-/-- Layer cake for the low part: ∫₀^{λ₀} m(E ∩ {|f|>λ}) dλ ≤ λ₀ · m(E). -/
-lemma layer_cake_low_bound
-    {μ : Measure (Fin n → ℝ)} {f : (Fin n → ℝ) → ℝ}
-    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E)
-    {λ₀ : ℝ} (hλ₀ : 0 < λ₀) :
-    ∫⁻ λ in Ioc 0 λ₀,
-      μ (E ∩ {x | (λ : ℝ) < ‖f x‖}) ≤
-    ENNReal.ofReal λ₀ * μ E := by
+/-- Step 1: The right-hand side f(x+h) - f(x-h) is itself a convolution
+    of f' with χ_{[-h,h]}, via the fundamental theorem of calculus. -/
+lemma shift_eq_indicator_conv_deriv
+    {f : ℝ → ℝ} (hf : ContDiff ℝ 1 f) {h : ℝ} (hh : 0 < h) (x : ℝ) :
+    f (x + h) - f (x - h) =
+      ∫ t, (Icc (-h) h).indicator (fun _ => (1 : ℝ)) t * deriv f (x - t) := by
   sorry
 
-/-- Layer cake for the high part: ∫_{λ₀}^∞ m(E ∩ {|f|>λ}) dλ ≤ C/λ₀
-    under the weak-L² hypothesis. -/
-lemma layer_cake_high_bound
-    {μ : Measure (Fin n → ℝ)} {f : (Fin n → ℝ) → ℝ}
-    {C : ℝ≥0} (hf : WeakL2 f μ C)
-    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E)
-    {λ₀ : ℝ} (hλ₀ : 0 < λ₀) :
-    ∫⁻ λ in Ioi λ₀,
-      μ (E ∩ {x | (λ : ℝ) < ‖f x‖}) ≤
-    ENNReal.ofReal (C / λ₀) := by
+/-- Step 2: The difference φ = g - χ_{[-h,h]} satisfies φ * ψ = 0
+    for every continuous function ψ. -/
+lemma conv_eq_zero_of_shift_property
+    {g : ℝ → ℝ} {h : ℝ} (hh : 0 < h)
+    (hg : Integrable g volume)
+    (hprop : ConvolutionShiftProperty g h)
+    (ψ : ℝ → ℝ) (hψ : Continuous ψ) (hψ_supp : HasCompactSupport ψ) :
+    ∀ x, ∫ t, (g t - (Icc (-h) h).indicator (fun _ => (1 : ℝ)) t) *
+      ψ (x - t) = 0 := by
   sorry
 
-/-- Combined bound before optimization:
-    ∫_E |f| ≤ λ₀ · m(E) + C/λ₀ for any λ₀ > 0. -/
-lemma integral_le_split
-    {μ : Measure (Fin n → ℝ)} {f : (Fin n → ℝ) → ℝ}
-    (hf_meas : Measurable f)
-    {C : ℝ≥0} (hf_weak : WeakL2 f μ C)
-    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E) (hEfin : μ E ≠ ⊤)
-    {λ₀ : ℝ} (hλ₀ : 0 < λ₀) :
-    ∫⁻ x in E, ENNReal.ofReal ‖f x‖ ∂μ ≤
-      ENNReal.ofReal λ₀ * μ E + ENNReal.ofReal (C / λ₀) := by
+/-- Step 3: Convolution with approximate identities is faithful.
+    If φ ∈ L¹ and φ * ψ_ε = 0 for all smooth mollifiers ψ_ε,
+    then φ = 0 a.e. -/
+lemma eq_zero_of_conv_mollifier_eq_zero
+    {φ : ℝ → ℝ} (hφ : Integrable φ volume)
+    (h_conv : ∀ (ψ : ℝ → ℝ), Continuous ψ → HasCompactSupport ψ →
+      ∀ x, ∫ t, φ t * ψ (x - t) = 0) :
+    φ =ᵐ[volume] 0 := by
   sorry
 
-/-- Optimized bound: choosing λ₀ = √(C/m(E)) gives ∫_E |f| ≤ 2√C · √m(E). -/
-lemma integral_le_optimized
-    {μ : Measure (Fin n → ℝ)} {f : (Fin n → ℝ) → ℝ}
-    (hf_meas : Measurable f)
-    {C : ℝ≥0} (hf_weak : WeakL2 f μ C)
-    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E)
-    (hEfin : μ E ≠ ⊤) (hEpos : 0 < μ E) :
-    ∫⁻ x in E, ENNReal.ofReal ‖f x‖ ∂μ ≤
-      ENNReal.ofReal (2 * Real.sqrt C) *
-        ENNReal.ofReal (Real.sqrt (μ E).toReal) := by
+/-- Main theorem: g must equal χ_{[-h,h]} almost everywhere. -/
+theorem convolution_shift_determines_kernel
+    {g : ℝ → ℝ} {h : ℝ} (hh : 0 < h)
+    (hg : Integrable g volume)
+    (hprop : ConvolutionShiftProperty g h) :
+    g =ᵐ[volume] (Icc (-h) h).indicator (fun _ => (1 : ℝ)) := by
   sorry
 
-/-- Main theorem: weak-L² implies ∫_E |f| ≤ C₁ √m(E)
-    for all Borel sets E of finite positive measure. -/
-theorem weakL2_integral_bound
-    {μ : Measure (Fin n → ℝ)} [SigmaFinite μ]
-    {f : (Fin n → ℝ) → ℝ} (hf_meas : Measurable f)
-    {C : ℝ≥0} (hf_weak : WeakL2 f μ C)
-    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E)
-    (hEfin : μ E ≠ ⊤) (hEpos : 0 < μ E) :
-    (∫ x in E, ‖f x‖ ∂μ) ≤ 2 * Real.sqrt C * Real.sqrt (μ E).toReal := by
-  sorry
-
-/-- Integrability on E follows from the bound. -/
-theorem weakL2_integrableOn
-    {μ : Measure (Fin n → ℝ)} [SigmaFinite μ]
-    {f : (Fin n → ℝ) → ℝ} (hf_meas : Measurable f)
-    {C : ℝ≥0} (hf_weak : WeakL2 f μ C)
-    {E : Set (Fin n → ℝ)} (hE : MeasurableSet E) (hEfin : μ E ≠ ⊤) :
-    IntegrableOn f E μ := by
+/-- Corollary: g equals the indicator on the open interval (-h,h)
+    (which agrees a.e. with the closed-interval indicator). -/
+theorem convolution_shift_determines_kernel'
+    {g : ℝ → ℝ} {h : ℝ} (hh : 0 < h)
+    (hg : Integrable g volume)
+    (hprop : ConvolutionShiftProperty g h) :
+    g =ᵐ[volume] (Ioo (-h) h).indicator (fun _ => (1 : ℝ)) := by
   sorry
 
 end
@@ -176,8 +155,9 @@ end
 
 **Mathlib notes:**
 
-- `WeakL2` encodes the distributional bound m({|f| > λ}) ≤ C/λ² using `ENNReal.ofReal` for the real-to-ennreal coercion. The level set uses `‖f x‖` (which equals `|f x|` for real-valued functions).
-- The layer cake decomposition `∫_E |f| = ∫₀^∞ m(E ∩ {|f|>λ}) dλ` is available via `MeasureTheory.lintegral_norm_eq_lintegral_meas_lt` or the Layercake file.
-- The main theorem `weakL2_integral_bound` uses the Bochner integral `∫ x in E, ‖f x‖ ∂μ` (real-valued) rather than the lintegral, since the conclusion is a real inequality. The lintegral version `integral_le_optimized` is the intermediate step.
-- `(μ E).toReal` coerces the measure from `ℝ≥0∞` to `ℝ`, which is valid since `hEfin : μ E ≠ ⊤`.
-- The constant `C₁ = 2√C` is explicit. The proof chain is: layer cake split → bound each piece → optimize λ₀ = √(C/m(E)) → simplify.
+- `=ᵐ[volume]` is `Filter.EventuallyEq` with respect to the `ae volume` filter — the standard way to express "equal almost everywhere" in Mathlib.
+- `(Icc (-h) h).indicator (fun _ => (1 : ℝ))` is the characteristic function χ\_{[-h,h]}, written using `Set.indicator`.
+- `ContDiff ℝ 1 f` says f is C¹. `deriv f` is its derivative.
+- `Integrable g volume` encodes g ∈ L¹(ℝ).
+- `HasCompactSupport ψ` restricts the test functions to compactly supported ones, which is sufficient for the approximate identity argument and avoids integrability issues with the convolution.
+- The convolution `∫ t, g t * ψ (x - t)` is written as a Bochner integral rather than using Mathlib's `convolution` function, to keep the types simpler. Mathlib's `MeasureTheory.convolution` uses `fun x => ∫ t, f t • g (x - t) ∂μ` with the same meaning.
