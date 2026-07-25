@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95A03.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 7,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 7
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,32 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.261601Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-24T23:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95A03/lean/Main.lean",
+    "sorry_count": 7,
+    "sorry_locations": [
+      "f_radial_integral (part b)",
+      "f_radial_memLp_iff (part a)",
+      "f_radial_not_memLp_top (part a, L-infinity)",
+      "f_radial_conv_L2_bound (part c)",
+      "f_radial_integrable (part a corollary)",
+      "young_inequality_L1_L2 (part c helper)",
+      "radial_integral_R3 (spherical coordinates)"
+    ],
+    "blockers": [
+      "Spherical coordinate reduction formula for R^3: integral_{R^3} g(|x|) dx = 4*pi * integral_0^inf g(r) r^2 dr. Not in Mathlib.",
+      "Young's convolution inequality ||f*g||_2 <= ||f||_1 * ||g||_2. Not in Mathlib.",
+      "Power-law integrability at singularities combined with radial reduction. The Japanese bracket integrability is available, but the |x|^{-2} singularity needs the radial structure."
+    ],
+    "proved_lemmas": [
+      "integral_inv_one_plus_sq",
+      "integral_univ_inv_one_plus_sq_eq",
+      "finrank_E_eq_three",
+      "f_radial_eq_of_ne_zero"
+    ]
+  }
 }
