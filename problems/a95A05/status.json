@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95A05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,24 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.284226Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T00:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95A05/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": [
+      "eq_zero_of_vanishing_on_upper_arc (main theorem: f·f(-z)≡0 on disk implies f≡0)"
+    ],
+    "blocker": "From g(z)=f(z)·f(-z)≡0 on the disk, conclude f≡0. This requires the identity theorem: the zero set of a nonzero analytic function on a connected domain is discrete, so f·(f∘(-id))≡0 forces either f≡0 or f∘(-id)≡0, both giving f≡0. The identity theorem for analytic functions is available in Mathlib (IsolatedZeros) but connecting it to the product-zero implication needs care.",
+    "proved_lemmas": [
+      "auxProd_differentiableOn",
+      "auxProd_continuousOn",
+      "auxProd_diffContOnCl",
+      "auxProd_vanish_on_frontier",
+      "ball_bounded",
+      "eq_zero_on_closure_of_frontier_zero (maximum modulus principle application)"
+    ]
+  }
 }
