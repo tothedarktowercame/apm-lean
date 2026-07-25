@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95J03.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,21 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.363605Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T03:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95J03/lean/Main.lean",
+    "sorry_count": 2,
+    "sorry_locations": [
+      "algPoly_degree_le (degree bound for polynomial; timeout with natDegree_sum_le_of_forall_le)",
+      "winding_number_bounded (main theorem: requires argument principle)"
+    ],
+    "blockers": [
+      "Winding number is NOT defined in Mathlib.",
+      "Argument principle (winding = zeros - poles) is NOT in Mathlib.",
+      "Polynomial degree sum lemma causes timeout when applied to finset sum."
+    ]
+  }
 }
