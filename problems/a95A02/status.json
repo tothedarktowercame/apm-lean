@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95A02.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,25 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.245274Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.245274Z",
+  "checked_at": "2026-07-24T22:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95A02/lean/Main.lean",
+    "sorry_count": 3,
+    "sorry_locations": [
+      "ac_lusin_condition_N (part b)",
+      "ac_maps_null_to_null (part b special case)",
+      "ac_maps_measurable_to_measurable (part c, inherits from b)"
+    ],
+    "blocker": "FTC for AC functions (AC ⟹ f = f(0) + ∫f') is not available in Mathlib in the needed direction. Mathlib has the converse (interval integrals are AC) but not the forward implication.",
+    "proved_lemmas": [
+      "acOnUnitInterval_iff",
+      "ac_continuousOn",
+      "ac_image_compact_is_compact",
+      "compact_is_measurable",
+      "measurable_subset_Icc_eq_sigmaCompact_union_null"
+    ]
+  }
 }
