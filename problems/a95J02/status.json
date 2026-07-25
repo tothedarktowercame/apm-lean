@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95J02.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,23 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.351143Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T03:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95J02/lean/Main.lean",
+    "sorry_count": 2,
+    "sorry_locations": [
+      "f_zero_eq_zero (f(0) = 0 via Liouville on 1/f)",
+      "entire_lower_bound_is_monomial (main theorem: f = z^n)"
+    ],
+    "blockers": [
+      "f_zero_eq_zero requires constructing 1/f as differentiable and bounded, then applying Liouville. The boundedness (1/|z|^lam → 0 at infinity) needs the rpow → 0 limit which requires setting up the tendsto at infinity.",
+      "Main theorem inherits from f_zero_eq_zero plus zero factoring and Liouville on g."
+    ],
+    "proved_lemmas": [
+      "zero_only_at_origin (f has no zeros for z ≠ 0)"
+    ]
+  }
 }
