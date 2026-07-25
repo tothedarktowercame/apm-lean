@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95A08.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,23 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.316515Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T02:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95A08/lean/Main.lean",
+    "sorry_count": 4,
+    "sorry_locations": [
+      "curve_length_ge_two_pi (part a: ℓ(C) ≥ 2π)",
+      "disk_not_subset_image_of_length_gt (part b: ℓ(C) > 2π ⟹ Δ ⊄ f(Δ))",
+      "rotation_of_disk_subset_image (Schwarz equality case)",
+      "jensen_exp_circle (Jensen's inequality for exp on circle)"
+    ],
+    "blockers": [
+      "Jensen's inequality for integrals (ConvexOn.le_integral) requires measure-theoretic setup not assembled for this application.",
+      "Mean value property for log|f'| (harmonic function on disk) — the specific circle-mean formula for log|holomorphic nonvanishing function| is not in Mathlib.",
+      "Schwarz lemma equality case (|f'(0)| = 1 + disk self-map ⟹ rotation) is not in Mathlib — only the inequality norm_le_norm_of_mapsTo_ball is proved."
+    ]
+  }
 }
