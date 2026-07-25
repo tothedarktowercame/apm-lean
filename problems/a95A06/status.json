@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95A06.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,25 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.298329Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T01:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95A06/lean/Main.lean",
+    "sorry_count": 2,
+    "sorry_locations": [
+      "lacunarySeries_differentiableOn (part a: analyticity on open disk)",
+      "lacunarySeries_natural_boundary (part b: natural boundary theorem)"
+    ],
+    "blocker": "Part (a) analyticity requires termwise differentiability of the power series on the open disk (uniform convergence on compact subsets). Part (b) requires the Hadamard gap theorem or equivalent divergence of lacunary series at boundary points — not in Mathlib.",
+    "proved_lemmas": [
+      "lacunary_term_bound (M-test bound: ‖z^{n!}/n!‖ ≤ 1/n!)",
+      "lacunary_majorant_summable (Σ 1/n! converges)",
+      "lacunaryTerm_continuousOn (each term continuous on closed disk)",
+      "lacunarySeries_continuousOn (part a: f continuous on Δ̄ via Weierstrass M-test)",
+      "lacunaryTerm_differentiableOn (each term analytic on open disk)",
+      "factorial_dvd_of_le (q ∣ n! when q ≤ n)"
+    ]
+  }
 }
