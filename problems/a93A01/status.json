@@ -1,14 +1,32 @@
 {
-  "schema": "apm-problem-candidate-set.v1",
+  "schema": "apm-problem-bundle.v1",
   "problem_id": "a93A01",
   "bundle_root": "problems/a93A01",
-  "layout": "candidate-set",
-  "candidate_count": 2,
-  "frame_ids": [
-    "apm-v2-a93A01-1775002343921",
-    "apm-v2-a93A01-1775049526689"
+  "layout": "problem",
+  "source": {
+    "problem_tex": "problems/a93A01/problem.tex",
+    "problem_md": "problems/a93A01/problem.md",
+    "informal_solution": "problems/a93A01/informal-solution.md",
+    "proof_outline": "problems/a93A01/proof-outline.md"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "sorry_count_main": 0,
+    "sorry_count_total": 0
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true
+  },
+  "classification": "complete",
+  "classification_detail": "Fully proved. Both directions of the equivalence (uniform continuity on (0,1) iff difference quotient condition) are proven zero-sorry. Direction (b)=>(a) is a clean direct proof via delta=epsilon/N. Direction (a)=>(b) requires showing UC on (0,1) implies boundedness (since (0,1) is totally bounded), using TotallyBounded.image and isUniformEmbedding_subtype_val to transfer total boundedness to the subtype.",
+  "key_lemmas": [
+    "unifContOn01_imp: UnifContOn01 => UniformContinuousOn (bridge to Mathlib)",
+    "unifContOn01_bounded: UC on (0,1) implies f is bounded (via TotallyBounded.image)",
+    "diffQuot_implies_unifCont: (b) => (a) direct proof, delta = epsilon/N",
+    "unifCont_implies_diffQuot: (a) => (b) via boundedness, N = 2B/delta"
   ],
-  "recommended_latest_frame_id": "apm-v2-a93A01-1775049526689",
-  "selected_frame_id": null,
-  "imported_at": "2026-05-01T19:38:16.309403Z"
+  "imported_at": "2026-07-26T19:50:00Z"
 }
