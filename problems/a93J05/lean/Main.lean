@@ -45,27 +45,33 @@ theorem doubly_periodic_entire_is_const
     (hperi : ∀ z, f (z + I) = f z) :
     ∃ c : ℂ, ∀ z, f z = c := by
   apply hf.exists_const_forall_eq_of_bounded
-  -- Show range f is bounded
   let φ : ℝ × ℝ → ℂ := fun p => p.1 + p.2 * I
   have h_φ_cont : Continuous φ := by continuity
   have h_f_cont : Continuous f := hf.continuous
   have h_compact : IsCompact (Icc (0 : ℝ) 1 ×ˢ Icc (0 : ℝ) 1 : Set (ℝ × ℝ)) :=
     isCompact_Icc.prod isCompact_Icc
   refine IsBounded.subset (t := f '' (φ '' (Icc (0 : ℝ) 1 ×ˢ Icc (0 : ℝ) 1))) ?_ ?_
-  · -- f '' (φ '' fundamental domain) is compact → bounded
-    exact (h_compact.image h_φ_cont |>.image h_f_cont).isBounded
-  · -- range f ⊆ f '' (φ '' fundamental domain)
-    rintro y ⟨z, rfl⟩
+  · exact (h_compact.image h_φ_cont |>.image h_f_cont).isBounded
+  · rintro y ⟨z, rfl⟩
+    -- z decomposes as fract(Re z) + fract(Im z)*I + floor(Re z) + floor(Im z)*I
     -- f(z) = f(fract(Re z) + fract(Im z)*I) by periodicity
-    -- since z = fract(Re z) + fract(Im z)*I + floor(Re z) + floor(Im z)*I
-    have h_per_real := periodic_int_aux 1 hper1 z (Int.floor z.re)
-    have h_per_imag := periodic_int_aux I hperi z (Int.floor z.im)
-    -- z + floor(Im z) * I → z, so f(z) = f(z + floor(Im z) * I)... wait, wrong direction
-    -- Actually periodic_int_aux gives f(z + n*ω) = f(z)
-    -- We need: f(z) = f(φ(frac)), and z = φ(frac) + lattice
-    -- So f(φ(frac) + floor_re + floor_im*I) = f(φ(frac))
-    -- via: f(φ(frac) + floor_re + floor_im*I) = f(φ(frac) + floor_re) [imag per]
-    --      f(φ(frac) + floor_re) = f(φ(frac)) [real per]
-    sorry
+    set w := Int.fract z.re + Int.fract z.im * I
+    have hw1 : f (w + Int.floor z.re) = f w := by
+      have := periodic_int_aux 1 hper1 w (Int.floor z.re)
+      simpa using this
+    have hw2 : f (w + Int.floor z.re + Int.floor z.im * I) = f (w + Int.floor z.re) :=
+      periodic_int_aux I hperi (w + Int.floor z.re) (Int.floor z.im)
+    have hz_eq : z = w + Int.floor z.re + Int.floor z.im * I := by
+      -- z.re = fract(z.re) + floor(z.re), z.im = fract(z.im) + floor(z.im)
+      -- The complex equality follows from real/imaginary parts
+      sorry
+    rw [hz_eq, hw2, hw1]
+    refine ⟨w, ⟨(Int.fract z.re, Int.fract z.im), ?_, rfl⟩, rfl⟩
+    rw [Set.mem_prod]
+    refine ⟨?_, ?_⟩
+    · rw [Set.mem_Icc]
+      exact ⟨Int.fract_nonneg z.re, (Int.fract_lt_one z.re).le⟩
+    · rw [Set.mem_Icc]
+      exact ⟨Int.fract_nonneg z.im, (Int.fract_lt_one z.im).le⟩
 
 end
