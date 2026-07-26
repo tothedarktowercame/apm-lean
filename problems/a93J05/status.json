@@ -1,14 +1,26 @@
 {
-  "schema": "apm-problem-candidate-set.v1",
+  "schema": "apm-problem-bundle.v1",
   "problem_id": "a93J05",
   "bundle_root": "problems/a93J05",
-  "layout": "candidate-set",
-  "candidate_count": 2,
-  "frame_ids": [
-    "apm-v2-a93J05-1775002708409",
-    "apm-v2-a93J05-1775050465617"
-  ],
-  "recommended_latest_frame_id": "apm-v2-a93J05-1775050465617",
-  "selected_frame_id": null,
-  "imported_at": "2026-05-01T19:38:16.506709Z"
+  "layout": "problem",
+  "source": {
+    "problem_tex": "problems/a93J05/problem.tex",
+    "problem_md": "problems/a93J05/problem.md",
+    "informal_solution": "problems/a93J05/informal-solution.md",
+    "proof_outline": "problems/a93J05/proof-outline.md"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "sorry_count_main": 1,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true
+  },
+  "classification": "partial",
+  "classification_detail": "periodic_int_aux (integer periodicity from base period) fully proven. Liouville application (exists_const_forall_eq_of_bounded) set up. Compact fundamental domain boundedness proven. 1 sorry: the final step showing range f is bounded — need to show f(z) = f(φ(fract(Re z), fract(Im z))) by applying periodicity with the lattice translation, then show the fractional part lies in the fundamental domain.",
+  "imported_at": "2026-07-26T21:00:00Z"
 }
