@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95J08.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,23 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.434049Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T06:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95J08/lean/Main.lean",
+    "sorry_count": 4,
+    "sorry_locations": [
+      "integral_translate_norm (translation invariance of integral)",
+      "convolution_integrand_integrableAE (part a: integrand in L1 a.e.)",
+      "young_convolution_inequality (part b: Young's inequality)",
+      "convolution_memLp (convolution in Lp)"
+    ],
+    "blockers": [
+      "Young's convolution inequality is NOT in Mathlib.",
+      "Translation invariance: volume.measurePreserving_sub_left exists but needs integral composition setup.",
+      "Tonelli/Fubini for the product measure argument requires product integral API."
+    ]
+  }
 }
