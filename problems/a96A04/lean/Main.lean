@@ -24,6 +24,7 @@ import Mathlib.MeasureTheory.Function.LpSeminorm.Defs
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Basic
+import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 
 open MeasureTheory Set Filter Real
 
@@ -46,7 +47,21 @@ def heatConv (t : ℝ) (f : ℝ → ℝ) (x : ℝ) : ℝ :=
 **Blocker:** Requires the 1D Gaussian integral ∫₀^∞ e^{-ax²} dx = √(π)/(2√a). -/
 lemma heatKernel_integral {t : ℝ} (ht : 0 < t) :
     ∫ x : ℝ, heatKernel t x ∂volume = 1 := by
-  sorry
+  have h_pos : 0 < 4 * π * t := by positivity
+  have h_gauss : ∫ x : ℝ, Real.exp (-(1 / (4 * t)) * x ^ 2) = Real.sqrt (4 * π * t) := by
+    have := integral_gaussian (1 / (4 * t))
+    rwa [show π / (1 / (4 * t)) = 4 * π * t from by field_simp] at this
+  -- ∫ heatKernel t x dx = ∫ prefactor · exp(...) dx = prefactor · ∫ exp(...) dx
+  rw [show heatKernel t = fun x => (4 * π * t) ^ (-(1:ℝ) / 2) * Real.exp (-(1 / (4 * t)) * x ^ 2) from
+    funext fun x => by unfold heatKernel; field_simp]
+  rw [integral_const_mul, h_gauss]
+  -- (4πt)^{-1/2} · √(4πt) = 1
+  have h_key : (4 * π * t) ^ (-(1:ℝ) / 2) * (4 * π * t) ^ ((1:ℝ) / 2) = 1 := by
+    rw [← Real.rpow_add h_pos]
+    show (4 * π * t) ^ (-(1:ℝ) / 2 + (1:ℝ) / 2) = 1
+    rw [show -(1:ℝ) / 2 + 1 / 2 = 0 by ring, Real.rpow_zero]
+  convert h_key using 2
+  · exact Real.sqrt_eq_rpow (4 * π * t)
 
 /-- (a) u(·,t) is smooth in x for t > 0.
 

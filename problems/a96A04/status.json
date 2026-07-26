@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,21 +28,20 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "classification_detail": "heatKernel_integral now PROVEN (was 4 sorries, now 3). Uses Mathlib's integral_gaussian to compute the 1D Gaussian integral, then Real.rpow_add and Real.sqrt_eq_rpow to simplify. Remaining sorries: (a) smoothness via DCT, (b) L2 contraction via Young's inequality (not in Mathlib), (c) L2 convergence via approximate identity.",
   "imported_at": "2026-07-13T17:26:52.261601Z",
-  "checked_at": "2026-07-25T07:30:00Z",
+  "checked_at": "2026-07-26T21:30:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a96A04/lean/Main.lean",
-    "sorry_count": 4,
+    "sorry_count": 3,
     "sorry_locations": [
-      "heatKernel_integral (Gaussian integral normalization)",
       "heatConv_contDiff (part a: smoothness via DCT)",
       "heatConv_L2_le (part b: L2 contraction via Young)",
       "heatConv_tendsto_L2 (part c: L2 convergence via approximate identity)"
     ],
     "blockers": [
       "Young's convolution inequality: NOT in Mathlib (blocks part b).",
-      "Gaussian integral ∫e^{-ax²} = √(π/a): not assembled for heat kernel normalization.",
       "Differentiation under integral: DCT machinery not assembled for part a.",
       "Fourier transform of Gaussian: not available for alternative proof of b, c."
     ]
