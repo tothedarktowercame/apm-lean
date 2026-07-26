@@ -11,8 +11,8 @@
   },
   "lean": {
     "main": "lean/Main.lean",
-    "sorry_count_main": 2,
-    "sorry_count_total": 2
+    "sorry_count_main": 1,
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -21,6 +21,6 @@
     "has_proof_outline": true
   },
   "classification": "partial",
-  "classification_detail": "integral_inv_one_plus_x proven (0 sorry). Main theorem has 2 sorries: (1) hf_zero proving 1/(n+1) -> 0 (trivial but blocked on Tendsto API), (2) Abel's theorem application to identify the limit with log 2. Key insight: HasSum does NOT apply for conditionally convergent series — must use Tendsto of partial sums. Strategy follows Mathlib's Leibniz formula proof.",
-  "imported_at": "2026-07-26T20:40:00Z"
+  "classification_detail": "integral_inv_one_plus_x proven (0 sorry). Main theorem has 1 sorry in the Abel's theorem application. The strategy follows Mathlib's Leibniz formula proof: alternating series test gives convergence, Abel's theorem extends to boundary, power series identity log(1+x)/x identifies the limit. The sorry covers the algebraic manipulation converting hasSum_pow_div_log_of_abs_lt_one to the desired form and combining with tendsto_nhds_unique. Key insight: HasSum does NOT apply for conditionally convergent series; must use Tendsto of partial sums.",
+  "imported_at": "2026-07-26T20:45:00Z"
 }
