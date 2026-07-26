@@ -10,12 +10,12 @@
     "problem_tex": "apm/a96A04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,24 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.510679Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T07:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96A04/lean/Main.lean",
+    "sorry_count": 4,
+    "sorry_locations": [
+      "heatKernel_integral (Gaussian integral normalization)",
+      "heatConv_contDiff (part a: smoothness via DCT)",
+      "heatConv_L2_le (part b: L2 contraction via Young)",
+      "heatConv_tendsto_L2 (part c: L2 convergence via approximate identity)"
+    ],
+    "blockers": [
+      "Young's convolution inequality: NOT in Mathlib (blocks part b).",
+      "Gaussian integral ∫e^{-ax²} = √(π/a): not assembled for heat kernel normalization.",
+      "Differentiation under integral: DCT machinery not assembled for part a.",
+      "Fourier transform of Gaussian: not available for alternative proof of b, c."
+    ]
+  }
 }
