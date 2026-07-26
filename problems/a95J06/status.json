@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95J06.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,27 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.411558Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T05:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95J06/lean/Main.lean",
+    "sorry_count": 4,
+    "sorry_locations": [
+      "cantorSet_measure_zero (Cantor set has measure zero)",
+      "monotone_of_homeomorphism (continuous bijection on interval is monotone)",
+      "ac_of_bv_continuous_conditionN (Banach-Zarecki theorem)",
+      "ac_on_01_of_homeo_fixing_cantor (main theorem)"
+    ],
+    "blockers": [
+      "Cantor set measure zero: Mathlib defines cantorSet but does not prove its measure is zero.",
+      "Monotone of homeomorphism: standard result needs adaptation from BijOn formulation.",
+      "Banach-Zarecki theorem (BV + continuous + condition N ⟹ AC): NOT in Mathlib.",
+      "Main theorem inherits from all above."
+    ],
+    "proved_lemmas": [
+      "conditionN_on_cantor_of_fix (f=id on C implies condition N on C)"
+    ]
+  }
 }
