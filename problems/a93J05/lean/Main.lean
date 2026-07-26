@@ -62,9 +62,19 @@ theorem doubly_periodic_entire_is_const
     have hw2 : f (w + Int.floor z.re + Int.floor z.im * I) = f (w + Int.floor z.re) :=
       periodic_int_aux I hperi (w + Int.floor z.re) (Int.floor z.im)
     have hz_eq : z = w + Int.floor z.re + Int.floor z.im * I := by
-      -- z.re = fract(z.re) + floor(z.re), z.im = fract(z.im) + floor(z.im)
-      -- The complex equality follows from real/imaginary parts
-      sorry
+      have hre : Int.fract z.re + Int.floor z.re = z.re := Int.fract_add_floor z.re
+      have him : Int.fract z.im + Int.floor z.im = z.im := Int.fract_add_floor z.im
+      apply Complex.ext
+      · simp only [Complex.add_re, Complex.I_re, Complex.I_im,
+                   Complex.mul_re, Complex.mul_im, w,
+                   Complex.ofReal_re, Complex.ofReal_im,
+                   ← Complex.ofReal_intCast]
+        linarith [hre, him]
+      · simp only [Complex.add_im, Complex.I_im, Complex.I_re,
+                   Complex.mul_im, Complex.mul_re, w,
+                   Complex.ofReal_re, Complex.ofReal_im,
+                   ← Complex.ofReal_intCast]
+        linarith [hre, him]
     rw [hz_eq, hw2, hw1]
     refine ⟨w, ⟨(Int.fract z.re, Int.fract z.im), ?_, rfl⟩, rfl⟩
     rw [Set.mem_prod]

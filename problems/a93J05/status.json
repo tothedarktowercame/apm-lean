@@ -11,8 +11,8 @@
   },
   "lean": {
     "main": "lean/Main.lean",
-    "sorry_count_main": 1,
-    "sorry_count_total": 1
+    "sorry_count_main": 0,
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -20,7 +20,7 @@
     "has_informal_solution": true,
     "has_proof_outline": true
   },
-  "classification": "partial",
-  "classification_detail": "periodic_int_aux (integer periodicity from base period) fully proven. Liouville application (exists_const_forall_eq_of_bounded) set up. Compact fundamental domain boundedness proven. 1 sorry: the final step showing range f is bounded — need to show f(z) = f(φ(fract(Re z), fract(Im z))) by applying periodicity with the lattice translation, then show the fractional part lies in the fundamental domain.",
-  "imported_at": "2026-07-26T21:00:00Z"
+  "classification": "complete",
+  "classification_detail": "Fully proven. A doubly periodic entire function is constant via Liouville's theorem. Key steps: (1) periodic_int_aux extends base periodicity to integer multiples via Int.induction_on, (2) range f is bounded because it equals f's image on the compact fundamental parallelogram {s + ti : s,t in [0,1]}, (3) Liouville's theorem (exists_const_forall_eq_of_bounded) concludes. The lattice decomposition z = fract(Re z) + fract(Im z)*I + floor(Re z) + floor(Im z)*I was the trickiest part, requiring Complex.ofReal_intCast to simplify Int-to-Complex casts.",
+  "imported_at": "2026-07-26T21:15:00Z"
 }
