@@ -1,14 +1,26 @@
 {
-  "schema": "apm-problem-candidate-set.v1",
+  "schema": "apm-problem-bundle.v1",
   "problem_id": "a93A03",
   "bundle_root": "problems/a93A03",
-  "layout": "candidate-set",
-  "candidate_count": 2,
-  "frame_ids": [
-    "apm-v2-a93A03-1775002487121",
-    "apm-v2-a93A03-1775049613401"
-  ],
-  "recommended_latest_frame_id": "apm-v2-a93A03-1775049613401",
-  "selected_frame_id": null,
-  "imported_at": "2026-05-01T19:38:16.366700Z"
+  "layout": "problem",
+  "source": {
+    "problem_tex": "problems/a93A03/problem.tex",
+    "problem_md": "problems/a93A03/problem.md",
+    "informal_solution": "problems/a93A03/informal-solution.md",
+    "proof_outline": "problems/a93A03/proof-outline.md"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "sorry_count_main": 1,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true
+  },
+  "classification": "partial",
+  "classification_detail": "Part (a) fully proven: weak convergence + norm convergence implies strong convergence, using norm_sub_sq_real identity and Real.sqrt continuity. Part (b) has 1 sorry: the weak lower semicontinuity of the norm is proven informally (for any a < ||h||, eventually a <= ||h_n|| via the norm identity and weak convergence), but the Lean proof is blocked on constructing IsCoboundedUnder for le_liminf_of_le and on the liminf_eq + le_csSup approach requiring BddAbove.",
+  "imported_at": "2026-07-26T20:10:00Z"
 }
