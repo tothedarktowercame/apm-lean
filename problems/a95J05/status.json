@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,26 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.393223Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T04:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95J05/lean/Main.lean",
+    "sorry_count": 2,
+    "sorry_locations": [
+      "tendstoInMeasure_of_integral_arctan_tendsto (⟸ direction: Markov bound)",
+      "integral_arctan_tendsto_of_tendstoInMeasure (⟹ direction: splitting bound)"
+    ],
+    "blockers": [
+      "Markov bound μ({|f|>ε}) ≤ ∫|arctan f| / arctan(ε) requires set integral decomposition.",
+      "Splitting bound ∫|arctan fₙ| ≤ arctan(δ)·μ(Ω) + (π/2)·μ({|fₙ|>δ}) requires integral_add_compl."
+    ],
+    "proved_lemmas": [
+      "arctan_zero' (arctan(0) = 0)",
+      "arctan_pos' (arctan(t) > 0 for t > 0)",
+      "abs_arctan_lt (|arctan(t)| < π/2)",
+      "tendstoInMeasure_iff_integral_arctan (iff assembled from two directions)"
+    ]
+  }
 }
