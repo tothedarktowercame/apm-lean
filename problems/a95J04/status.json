@@ -10,12 +10,12 @@
     "problem_tex": "apm/a95J04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,26 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.377389Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.261601Z",
+  "checked_at": "2026-07-25T04:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a95J04/lean/Main.lean",
+    "sorry_count": 3,
+    "sorry_locations": [
+      "holo_on_larger_ball_implies_bounded (bounded image of compact set)",
+      "exists_pole_on_boundary (part a)",
+      "coefficients_bounded_of_simple_poles (part b)"
+    ],
+    "blockers": [
+      "Meromorphic function theory not in Mathlib (no MeromorphicAt typeclass with needed API).",
+      "Power series radius of convergence characterization not connected to this setup.",
+      "Pole subtraction and Cauchy estimate argument not assembled."
+    ],
+    "proved_lemmas": [
+      "isCompact_unit_sphere",
+      "coefficients_bounded_simple_pole"
+    ]
+  }
 }

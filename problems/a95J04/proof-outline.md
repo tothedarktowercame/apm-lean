@@ -1,12 +1,25 @@
 # Proof Outline: a95J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+## Problem
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-a95J04.md`
+f analytic on Δ, power series radius = 1, extends meromorphically to D ⊃ Δ̄.
+(a) f has at least one pole on ∂Δ.
+(b) Simple boundary poles ⟹ bounded coefficients.
 
-## Follow-up Needed
+## Proved lemmas
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `isCompact_unit_sphere`: ∂Δ is compact.
+- `coefficients_bounded_simple_pole`: Taylor coefficients of c/(z-ζ),
+  |ζ|=1, are bounded by |c|. Key: |ζ^n| = 1.
+
+## Theory boundaries (3 sorries)
+
+1. `holo_on_larger_ball_implies_bounded`: bounded image of compact (API).
+2. `exists_pole_on_boundary` (part a): meromorphic theory + radius of convergence.
+3. `coefficients_bounded_of_simple_poles` (part b): pole subtraction + Cauchy.
+
+## Checked Lean state
+
+- `lake env lean problems/a95J04/lean/Main.lean`: exit 0
+- Sorry count: 3
+- Classification: partial
