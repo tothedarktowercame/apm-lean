@@ -46,7 +46,12 @@ theorem tendsto_sum_alternating_harmonic :
     exact one_div_le_one_div (by linarith : (0 : ℝ) < ↑j + 1) (by linarith : (0 : ℝ) < ↑i + 1)
       |>.mpr hle
   have hf_zero : Tendsto (fun i : ℕ => (1 : ℝ) / (↑i + 1)) atTop (𝓝 0) := by
-    sorry
+    have h_cast : Tendsto (fun i : ℕ => (↑i : ℝ)) atTop atTop := tendsto_natCast_atTop_atTop
+    have h_shift : Tendsto (fun i : ℕ => (↑(i + 1) : ℝ)) atTop atTop := by
+      exact tendsto_atTop_mono
+        (fun i => (show (↑i : ℝ) ≤ ↑(i + 1) from Nat.cast_le.mpr (Nat.le_succ i))) h_cast
+    exact (tendsto_inv_atTop_zero.comp h_shift).congr
+      fun i => by simp [one_div, Nat.cast_add_one]
   obtain ⟨l, hl⟩ :=
     Antitone.tendsto_alternating_series_of_tendsto_zero hf_antitone hf_zero
   -- Convert to the right form
