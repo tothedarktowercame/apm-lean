@@ -1,14 +1,26 @@
 {
-  "schema": "apm-problem-candidate-set.v1",
+  "schema": "apm-problem-bundle.v1",
   "problem_id": "a96A03",
   "bundle_root": "problems/a96A03",
-  "layout": "candidate-set",
-  "candidate_count": 2,
-  "frame_ids": [
-    "apm-v2-a96A03-1775052721277",
-    "apm-v2-a96A03-1775070631660"
-  ],
-  "recommended_latest_frame_id": "apm-v2-a96A03-1775070631660",
-  "selected_frame_id": null,
-  "imported_at": "2026-05-01T19:38:16.696576Z"
+  "layout": "problem",
+  "source": {
+    "problem_tex": "problems/a96A03/problem.tex",
+    "problem_md": "problems/a96A03/problem.md",
+    "informal_solution": "problems/a96A03/informal-solution.md",
+    "proof_outline": "problems/a96A03/proof-outline.md"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "sorry_count_main": 1,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true
+  },
+  "classification": "partial",
+  "classification_detail": "Part (1) FULLY PROVEN: a.e. limit of L²-bounded sequence is in L² unit ball, via Fatou's lemma (MeasureTheory.Lp.eLpNorm'_lim_le_liminf_eLpNorm'). Key technical: constructing IsBoundedUnder for liminf_le_of_le, and eLpNorm_eq_eLpNorm' to convert between primed/unprimed norms. Part (2) has 1 sorry: weak convergence via density + DCT.",
+  "imported_at": "2026-07-26T22:00:00Z"
 }
