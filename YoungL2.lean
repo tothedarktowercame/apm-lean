@@ -58,7 +58,6 @@ theorem convolution_L2_contraction_of_probability_kernel
     (hf_lp : MemLp f 2 volume) :
     eLpNorm (fun x => ∫ y, g (x - y) * f y ∂volume) 2 volume ≤
       eLpNorm f 2 volume := by
-  -- From young_convolution_inequality_L2 with ‖g‖₁ = ∫ |g| = ∫ g = 1
   sorry
 
 end
