@@ -21,6 +21,6 @@
     "has_proof_outline": true
   },
   "classification": "partial",
-  "classification_detail": "Part (a) fully proven: weak convergence + norm convergence implies strong convergence, using norm_sub_sq_real identity and Real.sqrt continuity. Part (b) has 1 sorry: the weak lower semicontinuity of the norm is proven informally (for any a < ||h||, eventually a <= ||h_n|| via the norm identity and weak convergence), but the Lean proof is blocked on constructing IsCoboundedUnder for le_liminf_of_le and on the liminf_eq + le_csSup approach requiring BddAbove.",
-  "imported_at": "2026-07-26T20:10:00Z"
+  "classification_detail": "Part (a) complete (Kadec-Klee). Part (b): helper eventually_le_norm_of_weak fully proven (for any a < ||x||, eventually a <= ||h n||). The final liminf step is blocked: le_liminf_of_le requires IsCoboundedUnder which quantifies ∃ b, ∀ a, (eventually a ≤ u n) → b ≥ a. This b must bound ALL eventual lower bounds uniformly, which is impossible for unbounded sequences. The ConditionallyCompleteLattice of ℝ returns csSup = 0 for unbounded sets, making le_csSup require BddAbove which is circular.",
+  "imported_at": "2026-07-26T22:30:00Z"
 }

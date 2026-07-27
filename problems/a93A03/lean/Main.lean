@@ -92,36 +92,41 @@ theorem norm_le_liminf_of_weak
     {h : ℕ → H} {x : H}
     (hweak : WeakTendsto h x) :
     ‖x‖ ≤ liminf (fun n => (‖h n‖ : ℝ)) atTop := by
-  -- The key fact: for any a < ‖x‖, eventually a ≤ ‖h n‖.
   have h_ev := eventually_le_norm_of_weak hweak
-  -- Proof by contradiction: assume liminf < ‖x‖.
+  -- For every a < ‖x‖, eventually a ≤ ‖h n‖. This means a ≤ liminf.
+  -- Use le_of_forall_sub_lt to avoid liminf API: show for all ε > 0,
+  -- ‖x‖ - ε ≤ liminf, hence ‖x‖ ≤ liminf.
+  -- For each ε > 0: ‖x‖ - ε < ‖x‖, so eventually ‖x‖ - ε ≤ ‖h n‖.
+  -- This means ‖x‖ - ε is an eventual lower bound, so ‖x‖ - ε ≤ liminf.
+  -- The liminf_eq route is blocked by BddAbove. Let me try le_liminf_of_le.
+  -- le_liminf_of_le needs IsCoboundedUnder (· ≥ ·) atTop (fun n => ‖h n‖).
+  -- IsCoboundedUnder = IsCobounded (· ≥ ·) (map u atTop)
+  -- = ∃ b, ∀ a, (∀ᶠ y in map u atTop, y ≥ a) → b ≥ a
+  -- For ‖h n‖ ≥ 0: any a ≤ 0 satisfies eventually a ≤ ‖h n‖, so a is a lower bound.
+  -- We need b ≥ all such a. b = 0 works for a ≤ 0.
+  -- For a > 0 with eventually a ≤ ‖h n‖: from h_ev, a < ‖x‖ is sufficient.
+  -- But the IsCobounded condition quantifies over ALL a, not just a < ‖x‖.
+  -- For a > ‖x‖: is a an eventual lower bound? Not from h_ev.
+  -- But a could be if ‖h n‖ is large. In that case b ≥ a for all such a.
+  -- This is impossible if ‖h n‖ → ∞.
+  -- So IsCoboundedUnder genuinely fails for unbounded sequences.
+  -- BUT: le_liminf_of_le uses csSup, and for unbounded S, csSup returns 0.
+  -- In that case, the result (a ≤ liminf) would be a ≤ 0, which fails for a > 0.
+  -- The issue is fundamental to the ConditionallyCompleteLattice of ℝ.
+  -- Workaround: prove the result in EReal or use a different formulation.
   by_contra hcontra
   push_neg at hcontra
-  obtain ⟨c, hc1, hc2⟩ : ∃ c, liminf (fun n => (‖h n‖ : ℝ)) atTop < c ∧ c < ‖x‖ :=
-    exists_between hcontra
+  -- hcontra : liminf (fun n => ‖h n‖) atTop < ‖x‖
+  -- Pick c with liminf < c < ‖x‖
+  obtain ⟨c, hc_lt_x, hc_gt_liminf⟩ : ∃ c, c < ‖x‖ ∧ liminf (fun n => (‖h n‖ : ℝ)) atTop < c := by
+    exact ⟨(liminf (fun n => (‖h n‖ : ℝ)) atTop + ‖x‖) / 2,
+           by linarith, by linarith⟩
   -- c < ‖x‖ → eventually c ≤ ‖h n‖
-  have hc_ev := h_ev c hc2
-  -- From liminf < c: the sSup of eventual lower bounds is < c.
-  -- But c is an eventual lower bound, so c ≤ sSup. Contradiction.
-  -- Need BddAbove for le_csSup, which holds since sSup < c implies bounded.
-  -- Formalize: c ∈ S → c ≤ sSup S, contradicting sSup S < c.
-  rw [liminf_eq] at hc1
-  -- S = {a | eventually a ≤ ‖h n‖}
-  -- c ∈ S:
-  have h_c_in_S : c ∈ {a : ℝ | ∀ᶠ n in atTop, a ≤ ‖h n‖} := hc_ev
-  -- S is BddAbove by c (any a ∈ S with a > c would contradict sSup S < c,
-  -- but we need this to hold a priori).
-  -- Actually: sSup S exists and equals liminf. From the definition of csSup,
-  -- S must be BddAbove for csSup to be meaningful. So extract BddAbove from hc1.
-  have h_S_nonempty : ({a : ℝ | ∀ᶠ n in atTop, a ≤ ‖h n‖}).Nonempty :=
-    ⟨c, h_c_in_S⟩
-  -- Use csSup_le_iff: sSup S ≤ c iff all elements ≤ c
-  -- But sSup S < c from hc1, so sSup S ≤ c.
-  -- Then every element of S is ≤ sSup S ≤ c... no, that's csSup_le.
-  have : c ≤ sSup {a : ℝ | ∀ᶠ n in atTop, a ≤ ‖h n‖} := by
-    rw [← liminf_eq]
-    -- Need: c ≤ liminf. But this is exactly what we're trying to prove!
-    -- This IS the circular issue. Let me just sorry and move on.
+  have hc_ev : ∀ᶠ n in atTop, c ≤ ‖h n‖ := h_ev c hc_lt_x
+  -- c ≤ ‖h n‖ eventually → c ≤ liminf (by definition of liminf as sup of eventual lower bounds)
+  -- Try le_liminf_of_le with isBoundedDefault
+  have hc_le_liminf : c ≤ liminf (fun n => (‖h n‖ : ℝ)) atTop := by
+    refine le_liminf_of_le ?_ hc_ev
     sorry
   linarith
 
