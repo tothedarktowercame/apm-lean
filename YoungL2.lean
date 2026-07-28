@@ -16,6 +16,7 @@ This file provides the formal statement and partial proof.
 -/
 
 import Mathlib.MeasureTheory.Function.LpSeminorm.Defs
+import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.Convolution
@@ -25,6 +26,20 @@ open MeasureTheory Set Filter
 open scoped ENNReal
 
 noncomputable section
+
+/-- Translation by a fixed real number preserves the `ℒ²` seminorm.
+
+This is one of the two concrete invariance inputs needed by the integral
+Minkowski route to Young's inequality. -/
+lemma eLpNorm_two_sub_right {E : Type*} [NormedAddCommGroup E]
+    (f : ℝ → E) (y : ℝ) :
+    eLpNorm (fun x => f (x - y)) 2 volume = eLpNorm f 2 volume := by
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num)]
+  congr 1
+  simpa [sub_eq_add_neg] using
+    lintegral_add_right_eq_self (μ := volume)
+      (fun x => ‖f x‖ₑ ^ (2 : ℝ≥0∞).toReal) (-y)
 
 /-- **Young's convolution inequality (L² case)**:
 
@@ -58,6 +73,14 @@ theorem convolution_L2_contraction_of_probability_kernel
     (hf_lp : MemLp f 2 volume) :
     eLpNorm (fun x => ∫ y, g (x - y) * f y ∂volume) 2 volume ≤
       eLpNorm f 2 volume := by
-  sorry
+  have hg_integrable : Integrable g volume := by
+    by_contra h
+    have hg_zero : ∫ x, g x ∂volume = 0 := integral_undef h
+    linarith [hg_int, hg_zero]
+  have hg_abs : ∫ x, |g x| ∂volume = 1 := by
+    simpa [abs_of_nonneg (hg_nonneg _)] using hg_int
+  have hyoung := young_convolution_inequality_L2
+    (E := ℝ) (g := g) (f := f) hg_integrable hf_lp
+  simpa [smul_eq_mul, hg_abs] using hyoung
 
 end
