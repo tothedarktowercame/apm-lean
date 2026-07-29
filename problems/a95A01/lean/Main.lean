@@ -1,4 +1,5 @@
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
 /-!
@@ -116,18 +117,171 @@ noncomputable def upperRiemannIntegral (f : ℝ → ℝ) : ℝ :=
       (sSup (f '' Icc (t i.castSucc) (t i.succ))) *
       (t i.succ - t i.castSucc)}
 
+private lemma sum_setIntegral_partition
+    (f : ℝ → ℝ) (n : ℕ) (t : Fin (n + 2) → ℝ)
+    (ht : ∀ i : Fin (n + 1), t i.castSucc < t i.succ)
+    (hf : IntegrableOn f (Icc (t 0) (t (Fin.last (n + 1)))) volume) :
+    ∑ i : Fin (n + 1), ∫ x in Icc (t i.castSucc) (t i.succ), f x ∂volume =
+      ∫ x in Icc (t 0) (t (Fin.last (n + 1))), f x ∂volume := by
+  let a : ℕ → ℝ := fun k =>
+    if hk : k < n + 2 then t ⟨k, hk⟩ else t (Fin.last (n + 1))
+  have ht_strict : StrictMono t := Fin.strictMono_iff_lt_succ.mpr ht
+  have ha (k : ℕ) (hk : k < n + 2) : a k = t ⟨k, hk⟩ := by
+    simp [a, hk]
+  have hint : ∀ k < n + 1, IntervalIntegrable f volume (a k) (a (k + 1)) := by
+    intro k hk
+    have hk₀ : k < n + 2 := lt_trans hk (Nat.lt_succ_self _)
+    have hk₁ : k + 1 < n + 2 := Nat.succ_lt_succ hk
+    rw [ha k hk₀, ha (k + 1) hk₁]
+    apply IntegrableOn.intervalIntegrable
+    apply hf.mono_set
+    have hk_cast : (⟨k, hk₀⟩ : Fin (n + 2)) = (⟨k, hk⟩ : Fin (n + 1)).castSucc := rfl
+    have hk_succ : (⟨k + 1, hk₁⟩ : Fin (n + 2)) = (⟨k, hk⟩ : Fin (n + 1)).succ := rfl
+    rw [hk_cast, hk_succ, uIcc_of_le (ht ⟨k, hk⟩).le]
+    intro x hx
+    constructor
+    · exact (ht_strict.monotone (Fin.zero_le _)).trans hx.1
+    · exact hx.2.trans (ht_strict.monotone (Fin.le_last _))
+  have ha₀ : a 0 = t 0 := ha 0 (by omega)
+  have ha_last : a (n + 1) = t (Fin.last (n + 1)) := by
+    rw [ha (n + 1) (by omega)]
+    congr
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le
+    (ht_strict.monotone (Fin.zero_le _))]
+  rw [← ha₀, ← ha_last]
+  rw [← intervalIntegral.sum_integral_adjacent_intervals hint]
+  rw [← Fin.sum_univ_eq_sum_range]
+  apply Finset.sum_congr rfl
+  intro i _
+  have hi₀ : (i : ℕ) < n + 2 := lt_trans i.isLt (Nat.lt_succ_self _)
+  have hi₁ : (i : ℕ) + 1 < n + 2 := Nat.succ_lt_succ i.isLt
+  rw [ha i hi₀, ha (i + 1) hi₁]
+  have hi_cast : (⟨i, hi₀⟩ : Fin (n + 2)) = i.castSucc := by ext; rfl
+  have hi_succ : (⟨(i : ℕ) + 1, hi₁⟩ : Fin (n + 2)) = i.succ := by ext; rfl
+  rw [hi_cast, hi_succ]
+  rw [intervalIntegral.integral_of_le (ht i).le, ← integral_Icc_eq_integral_Ioc]
+
 /-- **Part (a):** Lower Riemann ≤ Lebesgue ≤ Upper Riemann.
 
-    **SORRY BOUNDARY:** Requires comparing step-function-based Riemann sums
-    with Lebesgue simple function integrals. The machinery for converting
-    between Riemann sums and Lebesgue integrals is not in Mathlib. -/
+    Each lower/upper Darboux cell bounds the corresponding Lebesgue set integral.
+    The cell integrals telescope over a finite partition of `[0,1]`. -/
 theorem riemann_lebesgue_sandwich
     (f : ℝ → ℝ)
     (hf_meas : Measurable f)
     (hf_bdd : ∃ M, ∀ x ∈ Icc (0:ℝ) 1, |f x| ≤ M) :
     (lowerRiemannIntegral f ≤ ∫ x in Icc (0:ℝ) 1, f x ∂volume) ∧
     (∫ x in Icc (0:ℝ) 1, f x ∂volume ≤ upperRiemannIntegral f) := by
-  sorry
+  obtain ⟨M, hM⟩ := hf_bdd
+  have hf_int : IntegrableOn f (Icc (0 : ℝ) 1) volume := by
+    unfold IntegrableOn
+    apply (integrableOn_const (s := Icc (0 : ℝ) 1) (C := M)
+      measure_Icc_lt_top.ne).mono'
+    · exact hf_meas.aestronglyMeasurable.restrict
+    · exact ae_restrict_of_forall_mem measurableSet_Icc fun x hx => by
+        simpa only [Real.norm_eq_abs] using hM x hx
+  have partition_nonempty :
+      {s : ℝ | ∃ (n : ℕ) (t : Fin (n+2) → ℝ),
+        t 0 = 0 ∧ t (Fin.last _) = 1 ∧
+        (∀ i : Fin (n+1), t i.castSucc < t i.succ) ∧
+        s = ∑ i : Fin (n+1),
+          (sInf (f '' Icc (t i.castSucc) (t i.succ))) *
+          (t i.succ - t i.castSucc)}.Nonempty := by
+    let t : Fin 2 → ℝ := fun i => (i : ℕ)
+    refine ⟨sInf (f '' Icc 0 1), 0, t, ?_, ?_, ?_, ?_⟩
+    · norm_num [t]
+    · norm_num [t]
+    · intro i
+      fin_cases i
+      norm_num [t]
+    · simp [t]
+  have upper_partition_nonempty :
+      {s : ℝ | ∃ (n : ℕ) (t : Fin (n+2) → ℝ),
+        t 0 = 0 ∧ t (Fin.last _) = 1 ∧
+        (∀ i : Fin (n+1), t i.castSucc < t i.succ) ∧
+        s = ∑ i : Fin (n+1),
+          (sSup (f '' Icc (t i.castSucc) (t i.succ))) *
+          (t i.succ - t i.castSucc)}.Nonempty := by
+    let t : Fin 2 → ℝ := fun i => (i : ℕ)
+    refine ⟨sSup (f '' Icc 0 1), 0, t, ?_, ?_, ?_, ?_⟩
+    · norm_num [t]
+    · norm_num [t]
+    · intro i
+      fin_cases i
+      norm_num [t]
+    · simp [t]
+  constructor
+  · unfold lowerRiemannIntegral
+    apply csSup_le partition_nonempty
+    intro s hs
+    rcases hs with ⟨n, t, ht₀, ht₁, ht, rfl⟩
+    have ht_strict : StrictMono t := Fin.strictMono_iff_lt_succ.mpr ht
+    have hf_part : IntegrableOn f (Icc (t 0) (t (Fin.last (n + 1)))) volume := by
+      simpa [ht₀, ht₁] using hf_int
+    rw [← ht₀, ← ht₁, ← sum_setIntegral_partition f n t ht hf_part]
+    apply Finset.sum_le_sum
+    intro i _
+    have hcell : Icc (t i.castSucc) (t i.succ) ⊆ Icc (0 : ℝ) 1 := by
+      intro x hx
+      constructor
+      · rw [← ht₀]
+        exact (ht_strict.monotone (Fin.zero_le _)).trans hx.1
+      · rw [← ht₁]
+        exact hx.2.trans (ht_strict.monotone (Fin.le_last _))
+    have hf_cell := hf_int.mono_set hcell
+    have himage_below : BddBelow (f '' Icc (t i.castSucc) (t i.succ)) := by
+      refine ⟨-M, ?_⟩
+      rintro y ⟨x, hx, rfl⟩
+      exact neg_le_of_abs_le (hM x (hcell hx))
+    have hinf_le : ∀ x ∈ Icc (t i.castSucc) (t i.succ),
+        sInf (f '' Icc (t i.castSucc) (t i.succ)) ≤ f x := by
+      intro x hx
+      exact csInf_le himage_below ⟨x, hx, rfl⟩
+    calc
+      sInf (f '' Icc (t i.castSucc) (t i.succ)) *
+          (t i.succ - t i.castSucc) =
+          ∫ _x in Icc (t i.castSucc) (t i.succ),
+            sInf (f '' Icc (t i.castSucc) (t i.succ)) ∂volume := by
+              simp [sub_nonneg.mpr (ht i).le, mul_comm]
+      _ ≤ ∫ x in Icc (t i.castSucc) (t i.succ), f x ∂volume := by
+        apply setIntegral_mono_on
+          (integrableOn_const measure_Icc_lt_top.ne) hf_cell measurableSet_Icc
+        exact hinf_le
+  · unfold upperRiemannIntegral
+    apply le_csInf upper_partition_nonempty
+    intro s hs
+    rcases hs with ⟨n, t, ht₀, ht₁, ht, rfl⟩
+    have ht_strict : StrictMono t := Fin.strictMono_iff_lt_succ.mpr ht
+    have hf_part : IntegrableOn f (Icc (t 0) (t (Fin.last (n + 1)))) volume := by
+      simpa [ht₀, ht₁] using hf_int
+    rw [← ht₀, ← ht₁, ← sum_setIntegral_partition f n t ht hf_part]
+    apply Finset.sum_le_sum
+    intro i _
+    have hcell : Icc (t i.castSucc) (t i.succ) ⊆ Icc (0 : ℝ) 1 := by
+      intro x hx
+      constructor
+      · rw [← ht₀]
+        exact (ht_strict.monotone (Fin.zero_le _)).trans hx.1
+      · rw [← ht₁]
+        exact hx.2.trans (ht_strict.monotone (Fin.le_last _))
+    have hf_cell := hf_int.mono_set hcell
+    have himage_above : BddAbove (f '' Icc (t i.castSucc) (t i.succ)) := by
+      refine ⟨M, ?_⟩
+      rintro y ⟨x, hx, rfl⟩
+      exact (le_abs_self (f x)).trans (hM x (hcell hx))
+    have hle_sup : ∀ x ∈ Icc (t i.castSucc) (t i.succ),
+        f x ≤ sSup (f '' Icc (t i.castSucc) (t i.succ)) := by
+      intro x hx
+      exact le_csSup himage_above ⟨x, hx, rfl⟩
+    calc
+      (∫ x in Icc (t i.castSucc) (t i.succ), f x ∂volume) ≤
+          ∫ _x in Icc (t i.castSucc) (t i.succ),
+            sSup (f '' Icc (t i.castSucc) (t i.succ)) ∂volume := by
+        apply setIntegral_mono_on hf_cell
+          (integrableOn_const measure_Icc_lt_top.ne) measurableSet_Icc
+        exact hle_sup
+      _ = sSup (f '' Icc (t i.castSucc) (t i.succ)) *
+          (t i.succ - t i.castSucc) := by
+              simp [sub_nonneg.mpr (ht i).le, mul_comm]
 
 /-- **Part (b):** `χ_K` is not Riemann integrable when `K` is compact,
     has positive measure, and empty interior.
