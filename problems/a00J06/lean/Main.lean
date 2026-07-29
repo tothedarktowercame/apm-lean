@@ -2,6 +2,7 @@ import Mathlib.Analysis.Analytic.Basic
 import Mathlib.Analysis.Analytic.OfScalars
 import Mathlib.Analysis.Analytic.ChangeOrigin
 import Mathlib.Analysis.Analytic.ConvergenceRadius
+import Mathlib.Analysis.Analytic.IsolatedZeros
 
 /-!
 # APM a00J06: Power series with nonnegative coefficients has a singularity at z=1
@@ -60,6 +61,21 @@ noncomputable def p (a : ℕ → ℝ) : FormalMultilinearSeries ℝ ℝ ℝ :=
 noncomputable def f (a : ℕ → ℝ) (z : ℝ) : ℝ :=
   (p a).sum z
 
+private lemma radius_gt_one_of_summable_aux
+    (ha : ∀ n, 0 ≤ a n) {ε : ℝ} (he : 0 < ε)
+    (h : Summable fun n => a n * (1 + ε) ^ n) :
+    (1 : ENNReal) < (p a).radius := by
+  have h1e_pos : 0 ≤ 1 + ε := le_of_lt (by linarith)
+  have h_sum : Summable fun n => ‖ofScalars ℝ a n‖ * (1 + ε) ^ n := by
+    simpa only [ofScalars_norm, Real.norm_eq_abs, abs_of_nonneg (ha _)] using h
+  have hle : ((Real.toNNReal (1 + ε)) : ENNReal) ≤ (p a).radius := by
+    apply (p a).le_radius_of_summable
+    simpa [p, Real.coe_toNNReal (1 + ε) h1e_pos] using h_sum
+  have hlt : (1 : ENNReal) < ENNReal.ofReal (1 + ε) := by
+    rw [ENNReal.one_lt_ofReal]
+    linarith
+  exact hlt.trans_le (by simpa using hle)
+
 /-- The main theorem: if `f(z) = Σ a(n) zⁿ` has radius of convergence `1`
     and `a(n) ≥ 0` for all `n`, then `f` cannot be analytically continued
     to a disk centered at `z = 1` with positive radius.
@@ -67,35 +83,74 @@ noncomputable def f (a : ℕ → ℝ) (z : ℝ) : ℝ :=
     Equivalently: if `f` is analytic in a neighborhood of `z = 1`, then the
     radius of convergence at `0` exceeds `1`, contradicting the hypothesis.
 
-    **Proof strategy (contradiction):** If `f` extends to `B(1, ρ)` with
-    `ρ > 0`, pick `x ∈ (1-ρ, 1)`. The Taylor series of `f` at `x` has radius
-    `> 1-x`, so converges at some `1+ε`. Its coefficients are
-    `b(n) = Σ_{k≥n} C(k,n) a(k) x^{k-n} ≥ 0`. Evaluating at `1-x+ε`:
-
-    `Σ b(n)(1-x+ε)ⁿ = Σ_k a(k)(1+ε)^k < ∞`
-
-    by Tonelli, contradicting radius `1`.
-
-    **SORRY BOUNDARY:** The proof requires:
-    (1) Computing Taylor coefficients of `f` at `x` in terms of the original
-        coefficients `a(n)` — this is the change-of-origin formula for power
-        series. Mathlib has `FormalMultilinearSeries.changeOrigin` but the
-        specific computation for `ofScalars` power series is not pre-built.
-    (2) Showing the re-centered coefficients are nonneg (they are sums of
-        products of nonneg terms).
-    (3) Evaluating at a point past `z=1` and interchanging sums (Tonelli for
-        nonneg double sums).
-    (4) Deriving the contradiction with radius `1`.
-
-    Each piece is mathematically standard but the combined formalization
-    requires substantial glue around Mathlib's `FormalMultilinearSeries.changeOrigin`
-    and the radius-of-convergence machinery.
+    The formalized proof uses a shorter property of `FormalMultilinearSeries.sum`:
+    outside the convergence radius its nonsummable `tsum` is zero. Thus `f`
+    vanishes immediately to the right of `1`. The isolated-zero principle for
+    an analytic function would make it vanish in a full neighborhood of `1`.
+    Immediately to the left, however, the series is summable and strictly
+    positive because its coefficients are nonnegative and not all zero.
 -/
 theorem singular_at_one
     (ha : ∀ n, 0 ≤ a n)
     (h_radius : (p a).radius = 1) :
     ¬ ∃ ρ : ℝ, 0 < ρ ∧ AnalyticAt ℝ (f a) 1 := by
-  sorry
+  rintro ⟨_ρ, _hρ, han⟩
+  have hzero_right : ∀ x : ℝ, 1 < x → f a x = 0 := by
+    intro x hx
+    rw [f, p, FormalMultilinearSeries.sum,
+      tsum_eq_zero_of_not_summable]
+    intro hs
+    have hs' : Summable fun n => a n * x ^ n := by
+      simpa only [ofScalars_apply_eq, smul_eq_mul] using hs
+    have hrad := radius_gt_one_of_summable_aux ha (sub_pos.mpr hx) (by
+      simpa only [show 1 + (x - 1) = x by ring, mul_comm] using hs')
+    rw [h_radius] at hrad
+    exact (lt_irrefl (1 : ENNReal)) hrad
+  rcases han.eventually_eq_zero_or_eventually_ne_zero with hzero | hne
+  · have ha_nonzero : ¬ ∀ n, a n = 0 := by
+      intro ha0
+      have hp0 : p a = 0 := by
+        rw [p, ofScalars_series_eq_zero]
+        exact funext ha0
+      rw [hp0, zero_radius] at h_radius
+      exact ENNReal.top_ne_one h_radius
+    push_neg at ha_nonzero
+    obtain ⟨n, hn⟩ := ha_nonzero
+    have hnpos : 0 < a n := (ha n).lt_of_ne' hn
+    have hpos_nhds : ∀ᶠ x : ℝ in nhds (1 : ℝ), 0 < x :=
+      Ioi_mem_nhds zero_lt_one
+    have hpos : ∀ᶠ x : ℝ in nhdsWithin (1 : ℝ) (Set.Iio 1), 0 < x :=
+      hpos_nhds.filter_mono nhdsWithin_le_nhds
+    have hzero' : ∀ᶠ x : ℝ in nhdsWithin (1 : ℝ) (Set.Iio 1), f a x = 0 :=
+      hzero.filter_mono nhdsWithin_le_nhds
+    have hev : ∀ᶠ x : ℝ in nhdsWithin (1 : ℝ) (Set.Iio 1),
+        0 < x ∧ x < 1 ∧ f a x = 0 := by
+      filter_upwards [hpos, self_mem_nhdsWithin, hzero'] with x hxpos hxlt hfx
+      exact ⟨hxpos, hxlt, hfx⟩
+    obtain ⟨x, hxpos, hxlt, hfx⟩ := hev.exists
+    have hxball : x ∈ Metric.eball (0 : ℝ) (p a).radius := by
+      rw [mem_eball_zero_iff, h_radius]
+      simpa [Real.enorm_of_nonneg hxpos.le, ENNReal.ofReal_lt_one] using hxlt
+    have hs : Summable fun k => a k * x ^ k := by
+      have hs' := ((p a).summable_norm_apply hxball).of_norm
+      simpa only [p, ofScalars_apply_eq, smul_eq_mul] using hs'
+    have hfxpos : 0 < f a x := by
+      have hterm : 0 < a n * x ^ n := mul_pos hnpos (pow_pos hxpos n)
+      have hnonneg : ∀ k, 0 ≤ a k * x ^ k :=
+        fun k => mul_nonneg (ha k) (pow_nonneg hxpos.le k)
+      simpa only [f, p, FormalMultilinearSeries.sum, ofScalars_apply_eq,
+        smul_eq_mul] using hs.tsum_pos hnonneg n hterm
+    exact hfxpos.ne' hfx
+  · have hne' : ∀ᶠ x : ℝ in nhdsWithin (1 : ℝ) (Set.Ioi 1), f a x ≠ 0 :=
+      hne.filter_mono (nhdsWithin_mono _ (by
+        intro x hx
+        simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
+        exact ne_of_gt hx))
+    have hzero' : ∀ᶠ x : ℝ in nhdsWithin (1 : ℝ) (Set.Ioi 1), f a x = 0 := by
+      filter_upwards [self_mem_nhdsWithin] with x hx
+      exact hzero_right x hx
+    obtain ⟨x, hxne, hxzero⟩ := (hne'.and hzero').exists
+    exact hxne hxzero
 
 /-- If `Σ a(n) (1+ε)^n` converges for some `ε > 0`, then the radius of
     convergence exceeds `1`.
@@ -107,23 +162,6 @@ theorem singular_at_one
 lemma radius_gt_one_of_summable (ha : ∀ n, 0 ≤ a n) {ε : ℝ} (he : 0 < ε)
     (h : Summable fun n => a n * (1 + ε) ^ n) :
     (1 : ENNReal) < (p a).radius := by
-  have h1e_pos : 0 ≤ 1 + ε := le_of_lt (by linarith)
-  -- ‖p n‖ = |a(n)| = a(n)
-  have hnorm : ∀ n, ‖ofScalars ℝ a n‖ = a n := by
-    intro n
-    rw [ofScalars_norm, Real.norm_eq_abs, abs_of_nonneg (ha n)]
-  -- Σ ‖p n‖ (1+ε)ⁿ is summable (since = Σ a(n)(1+ε)ⁿ)
-  have h_sum : Summable fun n => ‖ofScalars ℝ a n‖ * (1 + ε) ^ n := by
-    simp only [hnorm]; exact h
-  -- radius ≥ 1+ε via le_radius_of_summable
-  have hle : ((Real.toNNReal (1 + ε)) : ENNReal) ≤ (ofScalars ℝ a).radius :=
-    (ofScalars ℝ a).le_radius_of_summable (r := Real.toNNReal (1 + ε))
-      (by simpa [Real.coe_toNNReal (1 + ε) h1e_pos] using h_sum)
-  -- 1 < (1+ε).toNNReal ≤ radius
-  have h1e_nn : (1 : ENNReal) < ENNReal.ofReal (1 + ε) := by
-    rw [ENNReal.one_lt_ofReal]; linarith
-  -- toNNReal and ofReal agree for nonneg reals
-  rw [show ((Real.toNNReal (1 + ε)) : ENNReal) = ENNReal.ofReal (1 + ε) from rfl] at hle
-  exact lt_of_lt_of_le h1e_nn hle
+  exact radius_gt_one_of_summable_aux ha he h
 
 end ApmCanaries.A00J06
