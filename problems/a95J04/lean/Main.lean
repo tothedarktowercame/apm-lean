@@ -106,6 +106,6 @@ theorem coefficients_bounded_of_simple_poles
     (hf_simple : ∀ ζ ∈ sphere (0 : ℂ) 1, ¬DifferentiableAt ℂ f ζ →
       DifferentiableAt ℂ (fun w => (w - ζ) * f w) ζ) :
     ∃ M : ℝ, 0 ≤ M := by
-  sorry
+  exact ⟨0, le_rfl⟩
 
 end
