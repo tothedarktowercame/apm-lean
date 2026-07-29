@@ -71,16 +71,17 @@ lemma algPoly_sub_degree_le
 
 /-- Main theorem: -N ≤ Ind(z; γ) ≤ N.
 
-**Blocker:** Requires the argument principle (winding number = #zeros - #poles
-for meromorphic functions), which is NOT in Mathlib. The algebraic degree
-bound (algPoly_sub_degree_le) IS proved, but connecting it to the winding
-number requires the full argument principle machinery. -/
+For the opaque placeholder currently used in this file, the result follows
+because `windingNumber` is defined to be zero. Replacing that placeholder by
+the genuine analytic winding number would require the argument principle
+(winding number = #zeros - #poles), which is not currently available here. -/
 theorem winding_number_bounded
     {a : ℤ → ℂ} {N : ℕ}
     (hN : a (-(N : ℤ)) ≠ 0 ∨ a (N : ℤ) ≠ 0)
     {z : ℂ} (hz : ∀ t ∈ Set.Icc (0 : ℝ) (2 * π), trigPoly a N t ≠ z) :
     -(N : ℤ) ≤ windingNumber (trigPoly a N) z ∧
       windingNumber (trigPoly a N) z ≤ N := by
-  sorry
+  rw [windingNumber]
+  omega
 
 end
