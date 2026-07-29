@@ -15,7 +15,8 @@
 
 - Mathlib has `VitaliFamily` with `exists_disjoint_covering_ae` (abstract
   Vitali covering theorem), but the specific 5× interval formulation is not.
-- The 1D Sard theorem (image of critical set has measure zero) is NOT in Mathlib.
+- Mathlib's fixed-dimensional Jacobian API includes the Sard lemma
+  `MeasureTheory.addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`.
 - The disjoint total length ≤ 1 bound IS provable from measure theory basics.
 
 ## Statement repair
@@ -26,6 +27,7 @@ We use the TeX formula directly.
 -/
 
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Mathlib.MeasureTheory.Function.Jacobian
 import Mathlib.Analysis.Calculus.Deriv.Basic
 
 open Set MeasureTheory
@@ -83,12 +85,17 @@ def criticalSet (f : ℝ → ℝ) : Set ℝ :=
 
 /-- (b) The image of the critical set has measure zero.
 
-**Blocker:** Requires the Vitali covering lemma (part a) plus the fact
-that f'(x) = 0 means f maps small intervals to tiny intervals.
-The 1D Sard theorem is NOT in Mathlib. -/
+This is the one-dimensional specialization of Mathlib's fixed-dimensional
+Jacobian Sard lemma. -/
 theorem measure_image_criticalSet_eq_zero
     {f : ℝ → ℝ} :
     volume (f '' criticalSet f) = 0 := by
-  sorry
+  apply MeasureTheory.addHaar_image_eq_zero_of_det_fderivWithin_eq_zero
+    volume (f' := fun _ => 0)
+  · intro x hx
+    simpa [hx.2.2] using
+      hx.2.1.hasDerivAt.hasFDerivAt.hasFDerivWithinAt (s := criticalSet f)
+  · intro x hx
+    simp
 
 end
