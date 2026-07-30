@@ -47,11 +47,12 @@ def algPoly (a : ℤ → ℂ) (N : ℕ) : Polynomial ℂ :=
 /-- algPoly has degree ≤ 2N. -/
 lemma algPoly_degree_le (a : ℤ → ℂ) (N : ℕ) :
     (algPoly a N).natDegree ≤ 2 * N := by
-  -- algPoly is a sum of monomials C(a(k-N)) * X^k for k ∈ [0, 2N].
-  -- Each monomial has degree ≤ k ≤ 2N, so the sum has degree ≤ 2N.
-  -- Polynomial.natDegree_sum_le_of_forall_le applies but causes a timeout
-  -- due to the finset unfolding. The mathematical content is straightforward.
-  sorry
+  unfold algPoly
+  apply Polynomial.natDegree_sum_le_of_forall_le
+  intro k hk
+  exact (Polynomial.natDegree_C_mul_X_pow_le _ k).trans (by
+    simp only [Finset.mem_range] at hk
+    omega)
 
 /-- Q(w) = P(w) - z·w^N has degree ≤ 2N.
 
