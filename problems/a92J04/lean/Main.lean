@@ -1,5 +1,7 @@
 import Mathlib.Analysis.Complex.Schwarz
 import Mathlib.Analysis.Calculus.DSlope
+import Mathlib.Analysis.Analytic.OfScalars
+import Mathlib.Analysis.Analytic.Uniqueness
 
 /-!
 # APM a92J04: A self-map of the disk tangent to the identity must be the identity
@@ -28,8 +30,8 @@ this is a strengthening, so the Mathlib lemma applies directly.
 set_option linter.unusedVariables false in
 noncomputable section
 
-open Complex Set Metric
-open scoped Topology
+open Complex Set Metric Filter
+open scoped Topology ENNReal NNReal
 
 namespace ApmCanaries.A92J04
 
@@ -69,23 +71,109 @@ theorem disk_selfmap_deriv_one_eq_identity
 /-! ## Main theorem -/
 
 /-- Main theorem: if f(z) = z + Σ_{n≥2} aₙzⁿ maps Δ into Δ,
-    then f(z) = z for all z ∈ Δ.
-
-    **SORRY BOUNDARY:** Connecting the power series representation
-    `f(z) = z + Σ a(n+2) z^(n+2)` to `DifferentiableOn ℂ` requires showing the
-    power series defines an analytic function on the disk. Mathlib's
-    `HasFPowerSeriesOnBall` / `AnalyticAt` infrastructure can do this, but
-    connecting `Summable (fun n => a n * z^n)` to `DifferentiableOn` requires
-    building the analytic structure from the summability hypothesis.
-    Once DifferentiableOn is established, the result follows directly from
-    `disk_selfmap_deriv_one_eq_identity` above. -/
+    then f(z) = z for all z ∈ Δ. -/
 theorem disk_selfmap_tangent_identity
     {a : ℕ → ℂ}
     (hconv : ∀ z ∈ ball (0 : ℂ) 1, Summable (fun n => a (n + 2) * z ^ (n + 2)))
     (hf_maps : ∀ z ∈ ball (0 : ℂ) 1,
       ‖z + ∑' n, a (n + 2) * z ^ (n + 2)‖ < 1) :
     ∀ n, 2 ≤ n → a n = 0 := by
-  sorry
+  let c : ℕ → ℂ := fun n => a (n + 2)
+  let p : FormalMultilinearSeries ℂ ℂ ℂ :=
+    FormalMultilinearSeries.ofScalars ℂ c
+  have hp_radius : (1 : ℝ≥0∞) ≤ p.radius := by
+    refine ENNReal.le_of_forall_nnreal_lt fun r hr => ?_
+    have hr_lt_one : (r : ℝ) < 1 := by exact_mod_cast hr
+    by_cases hr0 : r = 0
+    · simp [hr0]
+    have hr_pos : 0 < (r : ℝ) := NNReal.coe_pos.mpr (pos_iff_ne_zero.mpr hr0)
+    have hr_ball : (r : ℂ) ∈ ball (0 : ℂ) 1 := by
+      rw [mem_ball, dist_zero_right, norm_real, Real.norm_of_nonneg (NNReal.zero_le_coe)]
+      exact hr_lt_one
+    have hs := hconv (r : ℂ) hr_ball
+    have hs' : Summable (fun n => c n * (r : ℂ) ^ n) := by
+      have hmul := hs.mul_left (((r : ℂ) ^ 2)⁻¹)
+      apply hmul.congr
+      intro n
+      simp only [c, pow_add]
+      field_simp [NNReal.coe_ne_zero.mpr hr0]
+    apply p.le_radius_of_tendsto
+    have ht := hs'.tendsto_atTop_zero.norm
+    simpa only [p, FormalMultilinearSeries.ofScalars_norm, norm_mul, norm_pow,
+      norm_real, NNReal.norm_eq] using ht
+  have hp_pos : 0 < p.radius := (by norm_num : (0 : ℝ≥0∞) < 1).trans_le hp_radius
+  have hp_series := p.hasFPowerSeriesOnBall hp_pos
+  have hp_diff : DifferentiableOn ℂ p.sum (ball (0 : ℂ) 1) := by
+    apply hp_series.differentiableOn.mono
+    intro z hz
+    rw [mem_eball_zero_iff]
+    have hz' : ‖z‖₊ < (1 : ℝ≥0) := by
+      simpa [mem_ball, dist_zero_right] using hz
+    exact (ENNReal.coe_lt_coe.mpr hz').trans_le hp_radius
+  have htail (z : ℂ) :
+      z ^ 2 * p.sum z = ∑' n, a (n + 2) * z ^ (n + 2) := by
+    change z ^ 2 * FormalMultilinearSeries.ofScalarsSum c z =
+      ∑' n, a (n + 2) * z ^ (n + 2)
+    rw [FormalMultilinearSeries.ofScalars_sum_eq]
+    rw [← tsum_mul_left]
+    apply tsum_congr
+    intro n
+    simp only [c, smul_eq_mul]
+    ring
+  let f : ℂ → ℂ := fun z => z + z ^ 2 * p.sum z
+  have hf_diff : DifferentiableOn ℂ f (ball (0 : ℂ) 1) := by
+    exact differentiableOn_id.add
+      ((differentiableOn_id.pow 2).mul hp_diff)
+  have hf_ball : ∀ z ∈ ball (0 : ℂ) 1, f z ∈ ball (0 : ℂ) 1 := by
+    intro z hz
+    rw [mem_ball, dist_zero_right]
+    simpa only [f, htail z] using hf_maps z hz
+  have hf_zero : f 0 = 0 := by simp [f]
+  have hf_deriv : deriv f 0 = 1 := by
+    have hg : DifferentiableAt ℂ p.sum 0 :=
+      hp_diff.differentiableAt (Metric.isOpen_ball.mem_nhds (by simp))
+    have hd : HasDerivAt f 1 0 := by
+      dsimp only [f]
+      convert (hasDerivAt_id 0).add (((hasDerivAt_id 0).pow 2).mul hg.hasDerivAt) using 1
+      simp
+    exact hd.deriv
+  have hf_id := disk_selfmap_deriv_one_eq_identity hf_diff hf_ball hf_zero hf_deriv
+  have hp_zero_ne : ∀ z ∈ ball (0 : ℂ) 1, z ≠ 0 → p.sum z = 0 := by
+    intro z hz hz0
+    have h := hf_id z hz
+    simp only [f, add_eq_left] at h
+    exact (mul_eq_zero.mp h).resolve_left (pow_ne_zero _ hz0)
+  have hp_sum_zero : ∀ z ∈ ball (0 : ℂ) 1, p.sum z = 0 := by
+    intro z hz
+    by_cases hz0 : z = 0
+    · subst z
+      have heq : p.sum =ᶠ[𝓝[≠] (0 : ℂ)] 0 := by
+        change ∀ᶠ w in 𝓝[≠] (0 : ℂ), p.sum w = 0
+        rw [eventually_nhdsWithin_iff]
+        filter_upwards [Metric.ball_mem_nhds (0 : ℂ) zero_lt_one] with w hw
+        intro hw0
+        exact hp_zero_ne w hw hw0
+      have hlim : Tendsto p.sum (𝓝[≠] (0 : ℂ)) (𝓝 0) :=
+        (tendsto_congr' heq).mpr tendsto_const_nhds
+      have hcont_ne : Tendsto p.sum (𝓝[≠] (0 : ℂ)) (𝓝 (p.sum 0)) :=
+        continuousAt_iff_punctured_nhds.mp
+          (hp_diff.differentiableAt
+            (Metric.isOpen_ball.mem_nhds (by simp))).continuousAt
+      exact tendsto_nhds_unique
+        hcont_ne hlim
+    · exact hp_zero_ne z hz hz0
+  have hball : ∀ᶠ z in 𝓝 (0 : ℂ), z ∈ ball (0 : ℂ) 1 :=
+    Metric.ball_mem_nhds (0 : ℂ) zero_lt_one
+  have hevent : p.sum =ᶠ[𝓝 (0 : ℂ)] 0 :=
+    hball.mono hp_sum_zero
+  have hp_eq_zero : p = 0 :=
+    hp_series.hasFPowerSeriesAt.eq_zero_of_eventually hevent
+  have hc_zero : c = 0 := by
+    exact (FormalMultilinearSeries.ofScalars_series_eq_zero ℂ).mp
+      (by simpa [p] using hp_eq_zero)
+  intro n hn
+  have := congrFun hc_zero (n - 2)
+  simpa [c, Nat.sub_add_cancel hn] using this
 
 /-- Direct version: if f : ℂ → ℂ is differentiable on the disk, maps disk to disk,
     fixes 0, and has deriv f 0 = 1, then f = id. -/
