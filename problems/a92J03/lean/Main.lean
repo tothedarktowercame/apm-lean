@@ -23,7 +23,7 @@ set_option linter.unusedVariables false in
 noncomputable section
 
 open MeasureTheory Complex Set Filter
-open scoped Topology
+open scoped Topology FourierTransform
 
 namespace ApmCanaries.A92J03
 
@@ -80,38 +80,31 @@ theorem fourierTransform_continuous {f : ℝ → ℂ} (hf : Integrable f volume)
 
 /-- **Part (c):** For any `f ∈ L¹(ℝ)`, `f̂(ξ) → 0` as `|ξ| → ∞`.
 
-    **SORRY BOUNDARY:** Mathlib's `Real.tendsto_integral_exp_smul_cocompact`
-    proves Riemann-Lebesgue for `∫ 𝐞(-(v*w)) • f(v) dv` (with `2π` in the
-    exponent). The problem's convention `∫ f(x) exp(ixξ) dx` differs.
-    The identity connecting them is:
-    `exp(ixξ) = 𝐞(x · (-ξ/(2π)))` (since `𝐞(y) = exp(2πiy)`).
-    As `|ξ| → ∞`, `|w| = |ξ|/(2π) → ∞`, preserving cocompact.
-    The change of variables requires `MeasureTheory.integral_comp` or a
-    `ContinuousLinearEquiv` argument, plus showing `cocompact` is preserved
-    under the homeomorphism `ξ ↦ -ξ/(2π)`.
-    Tried: `Real.tendsto_integral_exp_smul_cocompact` gives
-    `Tendsto (fun w => ∫ v, 𝐞(-(v*w)) • f v) (cocompact ℝ) (𝓝 0)`.
-    Substituting `w ↦ -ξ/(2π)` and using `𝐞(-v*(-ξ/(2π))) = exp(ivξ)`
-    requires unfolding `Real.fourierChar`, `Circle.smul`, and the
-    `ContinuousLinearEquiv` for cocompact map. -/
+    This transports `Real.tendsto_integral_exp_smul_cocompact` across the
+    nonzero scaling `ξ ↦ -(2π)⁻¹ ξ`. Unfolding the Fourier character shows
+    that Mathlib's normalized integrand at the scaled frequency is exactly
+    `f x * exp (I * x * ξ)`. -/
 theorem fourierTransform_tendsto_zero {f : ℝ → ℂ} (hf : Integrable f volume) :
     Tendsto (fourierTransform f) (cocompact ℝ) (𝓝 0) := by
-  -- Mathlib proves: Tendsto (fun w => ∫ v, 𝐞(-(v*w)) • f v) (cocompact ℝ) (𝓝 0)
-  -- Our f̂(ξ) = ∫ f(x) exp(ixξ) dx
-  -- Key identity: exp(ixξ) = 𝐞(x * ξ/(2π))  [since 𝐞(y) = exp(2πiy)]
-  -- So f̂(ξ) = ∫ f(x) 𝐞(x * ξ/(2π)) dx
-  -- Mathlib's version at w = -ξ/(2π):
-  --   ∫ f(v) 𝐞(-(v * (-ξ/(2π)))) dv = ∫ f(v) 𝐞(v*ξ/(2π)) dv = f̂(ξ)
-  -- The map ξ ↦ -ξ/(2π) sends cocompact to cocompact (homeomorphism).
-  -- **SORRY BOUNDARY:** Connecting the two Fourier conventions requires:
-  -- (1) Showing 𝐞(-(v * (-ξ/(2π)))) • f v = f v * exp(ivξ) as complex numbers
-  --     [requires unfolding Real.fourierChar, Circle.smul_def, algebraic manipulation]
-  -- (2) Showing the composition Tendsto with the cocompact-preserving map
-  --     ξ ↦ -ξ/(2π) [requires Filter.Tendsto.comp + cocompact_le_cocompact
-  --     under proper maps or homeomorphisms]
-  -- Both are mathematically straightforward but require navigating Mathlib's
-  -- AddChar/Circle/fourierChar API and the cocompact filter composition.
-  sorry
+  have heq : fourierTransform f =
+      fun ξ : ℝ => ∫ x : ℝ, 𝐞 (-(x * ((-(2 * Real.pi)⁻¹) * ξ))) • f x := by
+    funext ξ
+    unfold fourierTransform
+    congr with x
+    rw [Circle.smul_def, Real.fourierChar_apply]
+    ring_nf
+    field_simp [Real.pi_ne_zero]
+    rw [smul_eq_mul]
+    conv_rhs => rw [mul_comm]
+    apply congrArg (fun z : ℂ => f x * Complex.exp z)
+    push_cast
+    ring
+  have hscale :
+      Tendsto (fun ξ : ℝ => (-(2 * Real.pi)⁻¹) * ξ) (cocompact ℝ) (cocompact ℝ) :=
+    Filter.tendsto_cocompact_mul_left₀
+      (neg_ne_zero.mpr (inv_ne_zero (mul_ne_zero (by norm_num) Real.pi_ne_zero)))
+  rw [heq]
+  exact (Real.tendsto_integral_exp_smul_cocompact f).comp hscale
 
 /-- **Full theorem:** `f̂` is continuous, bounded by `‖f‖₁`, and vanishes at ∞. -/
 theorem fourier_maps_L1_to_C0 {f : ℝ → ℂ} (hf : Integrable f volume) :
