@@ -315,6 +315,19 @@ lemma integral_closedBall_eq_area_smul
   rw [integral_closedBall_zero_eq_area_smul hr htranslated]
   simp
 
+/-- The mapped Lebesgue measure used in this file assigns the expected area to
+a complex disk. -/
+lemma volume_closedBall_toReal
+    {z₀ : ℂ} {r : ℝ} (hr : 0 < r) :
+    (volume (closedBall z₀ r)).toReal = Real.pi * r ^ 2 := by
+  have hmean := integral_closedBall_eq_area_smul
+    (g := fun _ : ℂ ↦ (1 : ℂ)) (z₀ := z₀) hr
+      (differentiableOn_const (c := (1 : ℂ)))
+  have hnorm := congrArg norm hmean
+  simpa [MeasureTheory.setIntegral_const, Measure.real, norm_smul,
+    Real.norm_eq_abs, abs_of_nonneg ENNReal.toReal_nonneg,
+    abs_of_pos Real.pi_pos] using hnorm
+
 /-- The requested disk sub-mean inequality follows formally from the
 vector-valued disk mean identity.  Thus the remaining analytic construction is
 exactly that identity, rather than any additional norm estimate. -/
@@ -471,6 +484,120 @@ lemma uniformCauchySeqOn_closedBall_half
               c * (ε / (2 * c)) := mul_lt_mul_of_pos_left hn' hc
           _ = ε / 2 := by field_simp
       rw [mul_add]
+      linarith
+
+/-- The stipulated continuous L¹ limit is the pointwise limit of the
+holomorphic sequence. -/
+lemma tendsto_of_L1ConvergesOnDisks_at
+    {f : ℕ → ℂ → ℂ} {F : ℂ → ℂ} {U : Set ℂ}
+    (hU : IsOpen U)
+    (hf : ∀ n, DifferentiableOn ℂ (f n) U)
+    (hF : ContinuousOn F U)
+    (hconv : L1ConvergesOnDisks f F U)
+    {x : ℂ} (hx : x ∈ U) :
+    Tendsto (fun n ↦ f n x) atTop (𝓝 (F x)) := by
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨R, hR, hRU⟩ := exists_closedBall_subset_of_mem_open hU hx
+  obtain ⟨δ, hδ, hFδ⟩ :=
+    (Metric.continuousOn_iff.mp hF) x hx (ε / 4) (by linarith)
+  let r : ℝ := min R δ / 2
+  have hmin : 0 < min R δ := lt_min hR hδ
+  have hr : 0 < r := half_pos hmin
+  have hrR : r < R := by
+    dsimp only [r]
+    nlinarith [min_le_left R δ]
+  have hrδ : r < δ := by
+    dsimp only [r]
+    nlinarith [min_le_right R δ]
+  have hrU : closedBall x r ⊆ U :=
+    (closedBall_subset_closedBall hrR.le).trans hRU
+  let c : ℝ := 1 / (Real.pi * r ^ 2)
+  have hc : 0 < c := one_div_pos.mpr (mul_pos Real.pi_pos (sq_pos_of_pos hr))
+  have hthreshold : 0 < ε / (2 * c) := div_pos hε (mul_pos two_pos hc)
+  have hsmall :
+      ∀ᶠ n in atTop,
+        (∫ w in closedBall x r, ‖f n w - F w‖) < ε / (2 * c) :=
+    (hconv x r hr hrU).eventually_lt_const hthreshold
+  obtain ⟨N, hN⟩ := eventually_atTop.mp hsmall
+  refine ⟨N, fun n hnN ↦ ?_⟩
+  have hn := hN n hnN
+  have hfn : DifferentiableOn ℂ (f n) (closedBall x r) := (hf n).mono hrU
+  have hFcont : ContinuousOn F (closedBall x r) := hF.mono hrU
+  have hfncont : ContinuousOn (f n) (closedBall x r) := hfn.continuousOn
+  have hIn : IntegrableOn (fun w ↦ ‖f n w - F w‖) (closedBall x r) :=
+    (hfncont.sub hFcont).norm.integrableOn_compact (isCompact_closedBall x r)
+  have hIV : IntegrableOn (fun w ↦ ‖F w - F x‖) (closedBall x r) :=
+    (hFcont.sub continuousOn_const).norm.integrableOn_compact
+      (isCompact_closedBall x r)
+  have hvar : ∀ w ∈ closedBall x r, ‖F w - F x‖ ≤ ε / 4 := by
+    intro w hw
+    have hwU : w ∈ U := hrU hw
+    have hdist : dist w x < δ := by
+      rw [mem_closedBall] at hw
+      exact hw.trans_lt hrδ
+    simpa [dist_eq_norm] using (hFδ w hwU hdist).le
+  have hvarint :
+      (∫ w in closedBall x r, ‖F w - F x‖) ≤
+        ∫ _w in closedBall x r, (ε / 4 : ℝ) := by
+    apply integral_mono_ae hIV
+      (integrableOn_const
+        (hs := (isCompact_closedBall x r).measure_lt_top.ne))
+    filter_upwards [ae_restrict_mem measurableSet_closedBall] with w hw
+    exact hvar w hw
+  have htotal :
+      (∫ w in closedBall x r, ‖f n w - F x‖) ≤
+        (∫ w in closedBall x r, ‖f n w - F w‖) +
+          (Real.pi * r ^ 2) * (ε / 4) := by
+    calc
+      (∫ w in closedBall x r, ‖f n w - F x‖) ≤
+          ∫ w in closedBall x r,
+            (‖f n w - F w‖ + ‖F w - F x‖) := by
+              apply integral_mono
+              · exact (hfncont.sub continuousOn_const).norm.integrableOn_compact
+                  (isCompact_closedBall x r)
+              · exact hIn.add hIV
+              · intro w
+                calc
+                  ‖f n w - F x‖ =
+                      ‖(f n w - F w) + (F w - F x)‖ := by ring_nf
+                  _ ≤ ‖f n w - F w‖ + ‖F w - F x‖ := norm_add_le _ _
+      _ = (∫ w in closedBall x r, ‖f n w - F w‖) +
+          ∫ w in closedBall x r, ‖F w - F x‖ := by
+            rw [integral_add hIn hIV]
+      _ ≤ (∫ w in closedBall x r, ‖f n w - F w‖) +
+          ∫ _w in closedBall x r, (ε / 4 : ℝ) := by
+            exact add_le_add le_rfl hvarint
+      _ = (∫ w in closedBall x r, ‖f n w - F w‖) +
+          (Real.pi * r ^ 2) * (ε / 4) := by
+            rw [MeasureTheory.setIntegral_const, Measure.real,
+              volume_closedBall_toReal hr]
+            simp [smul_eq_mul]
+  have hsubmean :
+      ‖f n x - F x‖ ≤ c * ∫ w in closedBall x r, ‖f n w - F x‖ := by
+    simpa only [c] using
+      norm_sub_le_area_integral_div_area (g := f n) (z₀ := x) (c := F x) hr hfn
+  rw [dist_eq_norm]
+  calc
+    ‖f n x - F x‖ ≤ c * ∫ w in closedBall x r, ‖f n w - F x‖ := hsubmean
+    _ ≤ c * ((∫ w in closedBall x r, ‖f n w - F w‖) +
+        (Real.pi * r ^ 2) * (ε / 4)) :=
+      mul_le_mul_of_nonneg_left htotal hc.le
+    _ < ε := by
+      have hcne : c ≠ 0 := hc.ne'
+      have hn' :
+          c * (∫ w in closedBall x r, ‖f n w - F w‖) < ε / 2 := by
+        calc
+          c * (∫ w in closedBall x r, ‖f n w - F w‖) <
+              c * (ε / (2 * c)) := mul_lt_mul_of_pos_left hn hc
+          _ = ε / 2 := by field_simp
+      have harea : Real.pi * r ^ 2 ≠ 0 :=
+        (mul_pos Real.pi_pos (sq_pos_of_pos hr)).ne'
+      have hcancel :
+          c * ((Real.pi * r ^ 2) * (ε / 4)) = ε / 4 := by
+        dsimp only [c]
+        field_simp
+      rw [mul_add, hcancel]
       linarith
 
 /-- Step 1: L¹ convergence on disks implies uniform convergence on compact subsets.
