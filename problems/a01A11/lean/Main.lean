@@ -12,8 +12,8 @@ noncomputable section
 /-! # APM a01A11: Cauchy transform of compact K ⊂ ℝ
     g(z) = ∫_K 1/(t-z) dt
 
-    Skeleton with localized sorry instances.
-    Dependency: (1)→(2)→(a), (4)→(5)→(c)→(8)→(7)→(b)+(9)
+    The analytic and asymptotic parts are proved from differentiation under
+    the integral sign and a direct compact-support estimate.
 -/
 
 variable (K : Set ℝ) (hK : IsCompact K) (hKne : K.Nonempty) (hKpos : 0 < volume K)
@@ -53,11 +53,7 @@ lemma infDist_pos_of_not_mem_image
 -- explicit primed parameters.
 include hK hKne hKpos
 
--- Part (a): analyticity — blocked on parameter-integral differentiability
--- HtDP: need MeasureTheory.hasDerivAt_integral_of_dominated_convergence
--- or a complex-variable variant. The type signature would be:
---   DifferentiableAt ℂ (cauchyTransform K) z
--- Composition: (infDist > 0) → (uniform bound 2/d²) → (DCT derivative)
+-- Part (a): analyticity by local dominated differentiation under the integral.
 theorem cauchyTransform_differentiableAt (z : ℂ) (hz : z ∉ ofReal '' K) :
     DifferentiableAt ℂ (cauchyTransform K) z := by
   have hKim : IsCompact (ofReal '' K) :=
@@ -134,8 +130,7 @@ theorem cauchyTransform_differentiableAt (z : ℂ) (hz : z ∉ ofReal '' K) :
   rw [heq]
   simpa only [F] using hmain.2.differentiableAt
 
--- Part (c): z * g(z) → -m(K)
--- HtDP: DCT with pointwise -1/(1-t/z) → -1, dominator 2 on K
+-- Part (c): `z * g(z) → -m(K)` by a uniform compact-support estimate.
 theorem cauchyTransform_tendsto_neg_vol :
     Tendsto (fun z : ℂ => z * cauchyTransform K z)
       (cocompact ℂ) (nhds (↑(-(volume K).toReal) : ℂ)) := by
