@@ -139,9 +139,112 @@ theorem cauchyTransform_differentiableAt (z : ℂ) (hz : z ∉ ofReal '' K) :
 theorem cauchyTransform_tendsto_neg_vol :
     Tendsto (fun z : ℂ => z * cauchyTransform K z)
       (cocompact ℂ) (nhds (↑(-(volume K).toReal) : ℂ)) := by
-  sorry -- DCT for cocompact limit. Same blocker as (a):
-        -- tendsto_integral_of_dominated_convergence with
-        -- pointwise limit and uniform bound on compact K.
+  obtain ⟨R, hKR⟩ := hK.isBounded.subset_closedBall (0 : ℝ)
+  let B : ℝ := max R 0 + 1
+  have hB : 0 < B := by
+    dsimp [B]
+    linarith [le_max_right R 0]
+  have hKB : ∀ t ∈ K, ‖t‖ ≤ B := by
+    intro t ht
+    have htR : ‖t‖ ≤ R := by
+      simpa [Real.dist_eq] using hKR ht
+    exact htR.trans (by
+      dsimp [B]
+      linarith [le_max_left R 0])
+  have h_eventually_large : ∀ᶠ z : ℂ in cocompact ℂ, 2 * B < ‖z‖ := by
+    filter_upwards [(isCompact_closedBall (0 : ℂ) (2 * B)).compl_mem_cocompact] with z hz
+    simpa [mem_closedBall, dist_zero_right, not_le] using hz
+  let error : ℂ → ℂ :=
+    fun z ↦ ∫ t in K, (t : ℂ) * ((t : ℂ) - z)⁻¹
+  have h_error_bound :
+      ∀ᶠ z : ℂ in cocompact ℂ,
+        ‖error z‖ ≤ (2 * B / ‖z‖) * (volume K).toReal := by
+    filter_upwards [h_eventually_large] with z hz
+    apply norm_setIntegral_le_of_norm_le_const_ae hK.measure_lt_top
+    filter_upwards [ae_restrict_mem hK.measurableSet] with t ht
+    have htB : ‖(t : ℂ)‖ ≤ B := by simpa using hKB t ht
+    have hzpos : 0 < ‖z‖ := by linarith
+    have hden : ‖z‖ / 2 ≤ ‖(t : ℂ) - z‖ := by
+      have htri : ‖z‖ ≤ ‖(t : ℂ) - z‖ + ‖(t : ℂ)‖ := by
+        calc
+          ‖z‖ = ‖(t : ℂ) - ((t : ℂ) - z)‖ := by ring_nf
+          _ ≤ ‖(t : ℂ)‖ + ‖(t : ℂ) - z‖ := norm_sub_le _ _
+          _ = ‖(t : ℂ) - z‖ + ‖(t : ℂ)‖ := add_comm _ _
+      linarith
+    have hdenpos : 0 < ‖(t : ℂ) - z‖ := (half_pos hzpos).trans_le hden
+    rw [norm_mul, norm_inv]
+    calc
+      ‖(t : ℂ)‖ * ‖(t : ℂ) - z‖⁻¹
+          ≤ B * (‖z‖ / 2)⁻¹ := by
+            gcongr
+      _ = 2 * B / ‖z‖ := by field_simp
+  have h_upper :
+      Tendsto (fun z : ℂ ↦ (2 * B / ‖z‖) * (volume K).toReal)
+        (cocompact ℂ) (𝓝 0) := by
+    have hinv :
+        Tendsto (fun z : ℂ ↦ ‖z‖⁻¹) (cocompact ℂ) (𝓝 0) :=
+      tendsto_norm_cocompact_atTop.inv_tendsto_atTop
+    have hconst :
+        Tendsto (fun _ : ℂ ↦ 2 * B) (cocompact ℂ) (𝓝 (2 * B)) :=
+      tendsto_const_nhds
+    simpa [div_eq_mul_inv, mul_assoc] using
+      (hconst.mul hinv).mul_const ((volume K).toReal)
+  have h_error : Tendsto error (cocompact ℂ) (𝓝 0) :=
+    squeeze_zero_norm' h_error_bound h_upper
+  have hKim : IsCompact (ofReal '' K) :=
+    hK.image_of_continuousOn continuous_ofReal.continuousOn
+  have h_decomp :
+      ∀ᶠ z : ℂ in cocompact ℂ,
+        z * cauchyTransform K z =
+          (-(volume K).toReal : ℂ) + error z := by
+    filter_upwards [hKim.compl_mem_cocompact] with z hz
+    have herr_int :
+        Integrable (fun t : ℝ ↦ (t : ℂ) * ((t : ℂ) - z)⁻¹)
+          (volume.restrict K) := by
+      have hcont :
+          ContinuousOn (fun t : ℝ ↦ (t : ℂ) * ((t : ℂ) - z)⁻¹) K := by
+        intro t ht
+        apply ContinuousAt.continuousWithinAt
+        fun_prop (disch := exact sub_ne_zero.mpr fun h ↦ hz ⟨t, ht, h⟩)
+      exact hcont.integrableOn_compact hK
+    have h_integrand :
+        (fun t : ℝ ↦ z * ((t : ℂ) - z)⁻¹) =ᵐ[volume.restrict K]
+          (fun t : ℝ ↦ (-1 : ℂ) + (t : ℂ) * ((t : ℂ) - z)⁻¹) := by
+      filter_upwards [ae_restrict_mem hK.measurableSet] with t ht
+      have hne : (t : ℂ) - z ≠ 0 :=
+        sub_ne_zero.mpr fun h ↦ hz ⟨t, ht, h⟩
+      field_simp
+      ring
+    have hconst_int :
+        Integrable (fun _t : ℝ ↦ (-1 : ℂ)) (volume.restrict K) :=
+      integrableOn_const hK.measure_ne_top
+    have hcauchy :
+        cauchyTransform K z =
+          ∫ t : ℝ in K, ((t : ℂ) - z)⁻¹ := by
+      simp only [cauchyTransform, div_eq_mul_inv, one_mul]
+    calc
+      z * cauchyTransform K z =
+          ∫ t : ℝ, z * ((t : ℂ) - z)⁻¹ ∂volume.restrict K := by
+            rw [hcauchy]
+            exact
+              (integral_const_mul (μ := volume.restrict K) z
+                (fun t : ℝ ↦ ((t : ℂ) - z)⁻¹)).symm
+      _ = ∫ t : ℝ, ((-1 : ℂ) + (t : ℂ) * ((t : ℂ) - z)⁻¹)
+            ∂volume.restrict K := integral_congr_ae h_integrand
+      _ = (∫ _t : ℝ, (-1 : ℂ) ∂volume.restrict K) + error z := by
+            simpa only [error] using
+              integral_add (μ := volume.restrict K) hconst_int herr_int
+      _ = (-(volume K).toReal : ℂ) + error z := by
+            rw [MeasureTheory.integral_const, measureReal_restrict_apply_univ]
+            change ((volume K).toReal : ℂ) * (-1) + error z =
+              (-(volume K).toReal : ℂ) + error z
+            ring
+  apply Filter.Tendsto.congr' (Filter.EventuallyEq.symm h_decomp)
+  have :
+      Tendsto (fun z : ℂ ↦ (-(volume K).toReal : ℂ) + error z)
+        (cocompact ℂ) (𝓝 ((-(volume K).toReal : ℂ) + 0)) :=
+    tendsto_const_nhds.add h_error
+  simpa using this
 
 -- Part (b): no entire extension
 -- This one we can partially close because Liouville is in Mathlib.
