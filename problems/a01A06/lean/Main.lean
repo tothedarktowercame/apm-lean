@@ -149,15 +149,128 @@ theorem distribution_polynomial_decay
 theorem orlicz_bound_not_implies_L2 :
     ∃ (g : ℝ → ℝ) (A : ℝ), 0 < A ∧ OrliczBound g A ∧
       ¬ IntegrableOn (fun x => g x ^ 2) (Icc (0 : ℝ) 1) volume := by
-  -- Remaining formalization plan: take `g x = x ^ (-3 / 4 : ℝ)`.
-  -- `integrableOn_Ioo_rpow_iff` proves `g ∈ L¹` and `g² ∉ L¹` after
-  -- removing the null endpoints.  Young--Fenchel follows pointwise from
-  -- `Real.add_one_le_exp (f x - Real.log (g x))`; integration then bounds
-  -- `∫ g*f` by `∫ exp f + ∫ (g*log g - g)`.  The unresolved glue is proving
-  -- integrability of `x^(-3/4) * log (x^(-3/4))` on `(0,1)` (dominate it by
-  -- `x^(-7/8)` using `Real.abs_log_mul_self_rpow_lt`) and transporting all
-  -- three integrals across the null endpoints of `Icc`.
-  sorry
+  -- The exponent `-1/2` makes the failure of `L²` the borderline
+  -- nonintegrability of `x⁻¹`, while the entropy is dominated by `4*x^(-3/4)`.
+  let g : ℝ → ℝ :=
+    fun x => if 0 < x then Real.exp (Real.log x * (-1 / 2 : ℝ)) else 0
+  let ent : ℝ → ℝ := fun x => g x * Real.log (g x)
+  let A := (∫ x in Icc (0 : ℝ) 1, ent x ∂volume) + 2
+  have hg_meas : Measurable g := by
+    dsimp [g]
+    exact Measurable.ite measurableSet_Ioi
+      (Real.measurable_exp.comp (Real.measurable_log.mul measurable_const))
+      measurable_const
+  have hg_eq {x : ℝ} (hx : 0 < x) : g x = x ^ (-1 / 2 : ℝ) := by
+    simp only [g, if_pos hx]
+    rw [Real.rpow_def_of_pos hx]
+  have hg_nonneg : ∀ x ∈ Icc (0 : ℝ) 1, 0 ≤ g x := by
+    intro x hx
+    by_cases hx0 : 0 < x
+    · rw [hg_eq hx0]
+      exact Real.rpow_nonneg hx0.le _
+    · simp [g, hx0]
+  have hg_int : IntegrableOn g (Icc (0 : ℝ) 1) volume := by
+    rw [integrableOn_Icc_iff_integrableOn_Ioo]
+    apply (integrableOn_congr_fun (s := Ioo (0 : ℝ) 1)
+      (fun x hx => hg_eq hx.1) measurableSet_Ioo).2
+    exact (intervalIntegral.integrableOn_Ioo_rpow_iff zero_lt_one).2 (by norm_num)
+  have hent_meas : Measurable ent := hg_meas.mul (Real.measurable_log.comp hg_meas)
+  have hent_int : IntegrableOn ent (Icc (0 : ℝ) 1) volume := by
+    have hdom : IntegrableOn (fun x : ℝ => 4 * x ^ (-3 / 4 : ℝ))
+        (Ioo 0 1) volume := by
+      exact ((intervalIntegral.integrableOn_Ioo_rpow_iff zero_lt_one).2
+        (by norm_num)).const_mul 4
+    rw [integrableOn_Icc_iff_integrableOn_Ioo]
+    change Integrable ent (volume.restrict (Ioo 0 1))
+    change Integrable _ (volume.restrict (Ioo 0 1)) at hdom
+    refine hdom.mono hent_meas.aestronglyMeasurable ?_
+    filter_upwards [ae_restrict_mem measurableSet_Ioo] with x hx
+    have hxpos : 0 < x := hx.1
+    have hxle : x ≤ 1 := hx.2.le
+    have hlog : Real.log x ≤ 0 := Real.log_nonpos hxpos.le hxle
+    have habs := Real.abs_log_mul_self_rpow_lt
+      x (1 / 4 : ℝ) hxpos hxle (by norm_num)
+    change ‖g x * Real.log (g x)‖ ≤ ‖4 * x ^ (-3 / 4 : ℝ)‖
+    rw [hg_eq hxpos, Real.log_rpow hxpos]
+    rw [Real.norm_eq_abs, abs_of_nonneg
+      (mul_nonneg (Real.rpow_pos_of_pos hxpos _).le
+        (mul_nonneg_of_nonpos_of_nonpos (by norm_num) hlog))]
+    rw [Real.norm_eq_abs, abs_of_nonneg
+      (mul_nonneg (by norm_num) (Real.rpow_nonneg hxpos.le _))]
+    have hquarter : 0 ≤ x ^ (1 / 4 : ℝ) := Real.rpow_nonneg hxpos.le _
+    have habs' : -(Real.log x * x ^ (1 / 4 : ℝ)) ≤ 4 := by
+      rw [abs_of_nonpos (mul_nonpos_of_nonpos_of_nonneg hlog hquarter)] at habs
+      norm_num at habs ⊢
+      exact habs.le
+    have hpow :
+        x ^ (-1 / 2 : ℝ) = x ^ (-3 / 4 : ℝ) * x ^ (1 / 4 : ℝ) := by
+      rw [← Real.rpow_add hxpos]
+      congr 1
+      norm_num
+    have hbase : 0 ≤ x ^ (-3 / 4 : ℝ) := Real.rpow_nonneg hxpos.le _
+    have hmul := mul_le_mul_of_nonneg_left habs' hbase
+    rw [hpow]
+    nlinarith
+  have hent_nonneg : ∀ x ∈ Icc (0 : ℝ) 1, 0 ≤ ent x := by
+    intro x hx
+    by_cases hx0 : 0 < x
+    · have hxle : x ≤ 1 := hx.2
+      rw [show ent x = x ^ (-1 / 2 : ℝ) * ((-1 / 2 : ℝ) * Real.log x) by
+        dsimp [ent]
+        rw [hg_eq hx0, Real.log_rpow hx0]]
+      exact mul_nonneg (Real.rpow_nonneg hx0.le _)
+        (mul_nonneg_of_nonpos_of_nonpos (by norm_num) (Real.log_nonpos hx0.le hxle))
+    · simp [ent, g, hx0]
+  have hA : 0 < A := by
+    dsimp [A]
+    have hi : 0 ≤ ∫ x in Icc (0 : ℝ) 1, ent x ∂volume := by
+      apply integral_nonneg_of_ae
+      filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+      exact hent_nonneg x hx
+    linarith
+  refine ⟨g, A, hA, ?_, ?_⟩
+  · refine
+      { measurable := hg_meas
+        nonneg := hg_nonneg
+        integrable := hg_int
+        bound := ?_ }
+    intro f hf hfexp hunit hgf
+    have hpoint : ∀ x ∈ Icc (0 : ℝ) 1,
+        g x * f x ≤ Real.exp (f x) + ent x := by
+      intro x hx
+      by_cases hx0 : 0 < x
+      · have hgp : 0 < g x := by
+          rw [hg_eq hx0]
+          exact Real.rpow_pos_of_pos hx0 _
+        have hy := Real.add_one_le_exp (f x - Real.log (g x))
+        rw [Real.exp_sub, Real.exp_log hgp] at hy
+        have hmul := mul_le_mul_of_nonneg_left hy hgp.le
+        dsimp [ent]
+        field_simp [hgp.ne'] at hmul
+        nlinarith
+      · simp [ent, g, hx0]
+        exact (Real.exp_pos _).le
+    have hle :
+        (∫ x in Icc (0 : ℝ) 1, g x * f x ∂volume) ≤
+          ∫ x in Icc (0 : ℝ) 1, Real.exp (f x) + ent x ∂volume := by
+      apply integral_mono_ae hgf (hfexp.add hent_int)
+      filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+      exact hpoint x hx
+    rw [integral_add hfexp hent_int] at hle
+    dsimp [A]
+    linarith
+  · intro hsq
+    have hsq' : IntegrableOn (fun x : ℝ => x ^ (-1 : ℝ))
+        (Ioo 0 1) volume := by
+      have hsmall := hsq.mono_set Ioo_subset_Icc_self
+      apply (integrableOn_congr_fun (s := Ioo (0 : ℝ) 1)
+        (μ := volume) ?_ measurableSet_Ioo).1 hsmall
+      intro x hx
+      change g x ^ 2 = x ^ (-1 : ℝ)
+      rw [hg_eq hx.1, ← Real.rpow_natCast, ← Real.rpow_mul hx.1.le]
+      norm_num
+    rw [intervalIntegral.integrableOn_Ioo_rpow_iff zero_lt_one] at hsq'
+    norm_num at hsq'
 
 /-- The test function `f_c = c·χ_E - log(e^c·m(E) + 1 - m(E))` is admissible.
     This is the key computational lemma: it verifies that `∫ e^{f_c} = 1`. -/
