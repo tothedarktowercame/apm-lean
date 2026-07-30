@@ -628,7 +628,17 @@ theorem tendstoUniformlyOn_of_L1_on_disks
     (hconv : L1ConvergesOnDisks f F Ω)
     {K : Set ℂ} (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
     TendstoUniformlyOn f F atTop K := by
-  sorry
+  have hlocal : TendstoLocallyUniformlyOn f F atTop Ω := by
+    apply tendstoLocallyUniformlyOn_of_forall_exists_nhds
+    intro x hx
+    obtain ⟨R, hR, hRΩ⟩ := exists_closedBall_subset_of_mem_open hΩ hx
+    refine ⟨closedBall x (R / 2), ?_, ?_⟩
+    · exact nhdsWithin_le_nhds (closedBall_mem_nhds x (half_pos hR))
+    · exact
+        (uniformCauchySeqOn_closedBall_half hf hF hconv hR hRΩ).tendstoUniformlyOn_of_tendsto
+          (fun y hy ↦ tendsto_of_L1ConvergesOnDisks_at hΩ hf hF hconv
+            (hRΩ (closedBall_subset_closedBall (half_le_self hR.le) hy)))
+  exact (tendstoLocallyUniformlyOn_iff_forall_isCompact hΩ).mp hlocal K hKΩ hK
 
 /-- Step 2: The L¹ limit `F` is analytic.
 
