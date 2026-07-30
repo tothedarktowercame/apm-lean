@@ -68,7 +68,23 @@ lemma step2_image : MapsTo (· ^ 2 : ℂ → ℂ) {w | 0 < w.re} {ζ : ℂ | (0:
 -- HtDP: arg(η) ∈ (-π,π) ⟹ arg(η^{1/4}) ∈ (-π/4,π/4)
 lemma step4_to_wedge (η : ℂ) (hη : η ≠ 0 ∧ η.arg ≠ Real.pi) :
     |((η : ℂ) ^ (1/4 : ℂ)).arg| < Real.pi / 4 := by
-  sorry -- arg of cpow = arg/4
+  have harg_lt : η.arg < Real.pi :=
+    lt_of_le_of_ne (arg_le_pi η) hη.2
+  have hscaled :
+      |η.arg * (1 / 4 : ℝ)| < Real.pi / 4 := by
+    rw [abs_lt]
+    constructor <;> nlinarith [neg_pi_lt_arg η, Real.pi_pos]
+  have hr : 0 < ‖η‖ ^ (1 / 4 : ℝ) :=
+    Real.rpow_pos_of_pos (norm_pos_iff.mpr hη.1) _
+  have hangle :
+      η.arg * (1 / 4 : ℝ) ∈ Set.Ioc (-Real.pi) Real.pi := by
+    constructor <;> nlinarith [neg_pi_lt_arg η, arg_le_pi η, Real.pi_pos]
+  have hquarter : (1 / 4 : ℂ) = ((1 / 4 : ℝ) : ℂ) := by norm_num
+  rw [hquarter, cpow_ofReal]
+  have harg := arg_mul_cos_add_sin_mul_I hr hangle
+  rw [← ofReal_cos, ← ofReal_sin] at *
+  rw [harg]
+  exact hscaled
 
 -- The composed map sends H into A
 theorem conformalMap_maps_H_to_A (z : ℂ) (hz : 0 < z.im) :
