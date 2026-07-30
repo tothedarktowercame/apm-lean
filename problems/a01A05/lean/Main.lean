@@ -162,8 +162,8 @@ theorem inner_tendsto_zero [CompleteSpace H]
 -- `|⟪fₙ,fₘ⟫| = aₘ (n aₙ + bₙ) ≤ (3/2)aₘ ≤ 2⁻ᵐ`. Since this sequence is
 -- triangular with positive diagonal, Gram--Schmidt returns `eₘ`. But
 -- `‖fₘ-eₘ‖ ≥ √m aₘ = (√m/2)2⁻ᵐ`, so no uniform `C` exists. The statement
--- needs a polynomial loss (for example `C * √m * 2⁻ᵐ`) or a stronger
--- square-summed correlation hypothesis.
+-- must at least allow a `√m` loss, or assume stronger control on the
+-- square-summed correlations.
 theorem gramSchmidt_approximation [CompleteSpace H]
     (seq : NearOrthogonalSeq H) :
     ∃ C : ℝ, 0 < C ∧ ∀ m : ℕ,
