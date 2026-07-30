@@ -26,7 +26,8 @@ modulus principle (`eqOn_closure_of_eqOn_frontier`).
 import Mathlib.Analysis.Complex.AbsMax
 import Mathlib.Analysis.Calculus.DiffContOnCl
 
-open Complex Metric Set
+open Complex Filter Metric Set
+open scoped Topology
 
 noncomputable section
 
@@ -133,6 +134,36 @@ theorem eq_zero_of_vanishing_on_upper_arc
     (hf_cont : ContinuousOn f (closedBall 0 1))
     (hf_vanish : ∀ z ∈ sphere (0 : ℂ) 1, 0 ≤ z.im → f z = 0) :
     ∀ z ∈ ball (0 : ℂ) 1, f z = 0 := by
-  sorry
+  have hprod_closed :
+      ∀ z ∈ closedBall (0 : ℂ) 1, auxProd f z = 0 :=
+    eq_zero_on_closure_of_frontier_zero
+      (auxProd_differentiableOn hf_holo)
+      (auxProd_continuousOn hf_cont)
+      (auxProd_vanish_on_frontier hf_cont hf_vanish)
+  have hprod : ∀ z ∈ ball (0 : ℂ) 1, auxProd f z = 0 :=
+    fun z hz => hprod_closed z (ball_subset_closedBall hz)
+  have hf_analytic : AnalyticOnNhd ℂ f (ball (0 : ℂ) 1) :=
+    hf_holo.analyticOnNhd isOpen_ball
+  intro z hz
+  by_contra hfz
+  have hf_continuousAt : ContinuousAt f z :=
+    (hf_holo z hz).differentiableAt (isOpen_ball.mem_nhds hz) |>.continuousAt
+  have hneg_nonzero : ∀ᶠ w in 𝓝 (-z), f (-w) ≠ 0 := by
+    have hcomp : ContinuousAt (fun w : ℂ => f (-w)) (-z) :=
+      hf_continuousAt.comp_of_eq continuousAt_neg (by simp)
+    exact hcomp.eventually_ne (by simpa using hfz)
+  have hneg_mem : -z ∈ ball (0 : ℂ) 1 := by
+    simpa [mem_ball, norm_neg] using hz
+  have hball : ball (0 : ℂ) 1 ∈ 𝓝 (-z) :=
+    isOpen_ball.mem_nhds hneg_mem
+  have hf_eventually_zero : f =ᶠ[𝓝 (-z)] (fun _ => 0) := by
+    filter_upwards [hneg_nonzero, hball] with w hn hw
+    have hp : f w * f (-w) = 0 := by
+      simpa [auxProd] using hprod w hw
+    exact (mul_eq_zero.mp hp).resolve_right hn
+  have hf_zero : EqOn f (fun _ => 0) (ball (0 : ℂ) 1) :=
+    hf_analytic.eqOn_of_preconnected_of_eventuallyEq
+      analyticOnNhd_const (convex_ball 0 1).isPreconnected hneg_mem hf_eventually_zero
+  exact hfz (hf_zero hz)
 
 end
