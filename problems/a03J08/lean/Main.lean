@@ -94,32 +94,50 @@ theorem analytic_blowup_surjective
     tendsto_norm_reciprocal_zero w₀ hf_infty
   -- Define the extended function: g_ext(z) = 0 if z ∈ F, else (f z - w₀)⁻¹
   set g_ext : ℂ → ℂ := fun z => if z ∈ (F : Set ℂ) then 0 else (f z - w₀)⁻¹ with hg_ext_def
-  -- g_ext is differentiable at every point of ℂ.
-  -- **SORRY BOUNDARY: extending g across the finite set F via Riemann
-  -- removable singularities.**
-  -- The proof requires showing:
-  -- (1) At each z ∈ F: g_ext is analytic via
-  --   `Complex.analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt`.
-  --   This needs (a) g_ext differentiable on a punctured neighborhood of z
-  --   (follows from hg_diff + the fact that near z, g_ext = reciprocal
-  --   since F is discrete), and (b) g_ext continuous at z (follows from
-  --   hg_poles giving ‖g_ext‖ → 0 = g_ext z).
-  -- (2) At each z ∉ F: g_ext equals (f-w₀)⁻¹ near z (open neighborhood
-  --   avoiding F since F is closed/finite), hence differentiable.
-  -- Both cases require non-trivial set/filter bookkeeping connecting the
-  -- if-then-else definition with Mathlib's analytic API. Specifically:
-  -- - Showing g_ext agrees with (f-w₀)⁻¹ on an open neighborhood of z ∉ F
-  --   requires F being closed (hence Fᶜ open), and then using
-  --   DifferentiableAt.eq_on_open or similar.
-  -- - For z ∈ F, the `analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt`
-  --   requires `∀ᶠ w in 𝓝[≠] z, DifferentiableAt ℂ g_ext w`, which needs
-  --   g_ext = (f-w₀)⁻¹ eventually near z (since F is discrete, the punctured
-  --   neighborhood avoids F\{z}), plus hg_diff.
-  -- - The continuity at z ∈ F requires converting the norm-tendsto (hg_poles)
-  --   to a tendsto of the function itself, plus handling the if-then-else.
-  -- These are all mathematically routine but require careful Mathlib API
-  -- navigation through the filter/set/differentiability infrastructure.
-  have hg_entire : Differentiable ℂ g_ext := by sorry
+  -- The complement of the finite exceptional set is open.  At a point of
+  -- `F`, a punctured neighborhood avoids all the other points of `F`; this is
+  -- the finite-set bookkeeping needed by the removable singularity theorem.
+  have hF_open : IsOpen ((F : Set ℂ)ᶜ) := F.isClosed.isOpen_compl
+  have hg_entire : Differentiable ℂ g_ext := by
+    intro z
+    by_cases hz : z ∈ F
+    · have herase_nhds : ((F.erase z : Finset ℂ) : Set ℂ)ᶜ ∈ 𝓝 z := by
+        apply (F.erase z).isClosed.isOpen_compl.mem_nhds
+        simp
+      have havoid : ∀ᶠ w in 𝓝[≠] z, w ∉ F := by
+        rw [eventually_nhdsWithin_iff]
+        filter_upwards [herase_nhds] with w hw
+        intro hwz hwF
+        simp only [Set.mem_compl_iff, Finset.mem_coe] at hw
+        exact hw (Finset.mem_erase.mpr ⟨hwz, hwF⟩)
+      have hgeq_ne : g_ext =ᶠ[𝓝[≠] z] (fun w => (f w - w₀)⁻¹) :=
+        havoid.mono fun w hw => by simp [hg_ext_def, hw]
+      have hgd_ne : ∀ᶠ w in 𝓝[≠] z, DifferentiableAt ℂ g_ext w :=
+        havoid.mono fun w hw => by
+          have hmem : ∀ᶠ u in 𝓝 w, u ∈ (F : Set ℂ)ᶜ :=
+            hF_open.mem_nhds hw
+          have heq : g_ext =ᶠ[𝓝 w] (fun u => (f u - w₀)⁻¹) :=
+            hmem.mono fun u hu => by
+              have hu' : u ∉ F := hu
+              simp [hg_ext_def, hu']
+          exact heq.differentiableAt_iff.mpr
+            (hg_diff.differentiableAt (hF_open.mem_nhds hw))
+      have hgz : g_ext z = 0 := by simp [hg_ext_def, hz]
+      have hcont : ContinuousAt g_ext z := by
+        rw [continuousAt_iff_punctured_nhds, hgz]
+        exact (tendsto_congr' hgeq_ne).mpr
+          (tendsto_zero_iff_norm_tendsto_zero.mpr (hg_poles z hz))
+      exact
+        (Complex.analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
+          hgd_ne hcont).differentiableAt
+    · have hmem : ∀ᶠ w in 𝓝 z, w ∈ (F : Set ℂ)ᶜ :=
+        hF_open.mem_nhds hz
+      have heq : g_ext =ᶠ[𝓝 z] (fun w => (f w - w₀)⁻¹) :=
+        hmem.mono fun w hw => by
+          have hw' : w ∉ F := hw
+          simp [hg_ext_def, hw']
+      exact heq.differentiableAt_iff.mpr
+        (hg_diff.differentiableAt (hF_open.mem_nhds hz))
   -- g_ext tends to 0 at infinity.
   have hg_ext_infty : Tendsto g_ext (cocompact ℂ) (𝓝 0) := by
     have hF_compact : IsCompact (F : Set ℂ) := F.finite_toSet.isCompact
