@@ -7,6 +7,8 @@ Prove:
 -/
 
 import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.LinearMap
+import Mathlib.Analysis.Normed.Operator.BanachSteinhaus
 import Mathlib.Order.LiminfLimsup
 import Mathlib.Topology.Order.LiminfLimsup
 import Mathlib.Data.Real.Sqrt
@@ -106,6 +108,26 @@ theorem norm_le_liminf_of_weak [CompleteSpace H]
     {h : ℕ → H} {x : H}
     (hweak : WeakTendsto h x) :
     ‖x‖ ≤ liminf (fun n => (‖h n‖ : ℝ)) atTop := by
-  sorry
+  have h_uniform : ∃ C : ℝ, ∀ n, ‖innerSL ℝ (h n)‖ ≤ C := by
+    apply banach_steinhaus
+    intro k
+    obtain ⟨C, hC⟩ := isBounded_iff_forall_norm_le.mp
+      (Metric.isBounded_range_of_tendsto
+        (fun n => innerSL ℝ (h n) k)
+        (by simpa only [innerSL_apply_apply] using hweak k))
+    exact ⟨C, Set.forall_mem_range.mp hC⟩
+  obtain ⟨C, hC⟩ := h_uniform
+  have h_norm_le : ∀ n, ‖h n‖ ≤ C := fun n => by
+    simpa only [innerSL_apply_norm] using hC n
+  have h_cobounded :
+      IsCoboundedUnder (· ≥ ·) atTop (fun n => (‖h n‖ : ℝ)) :=
+    isCoboundedUnder_ge_of_eventually_le atTop (Eventually.of_forall h_norm_le)
+  apply le_of_forall_lt
+  intro a ha
+  let b := (a + ‖x‖) / 2
+  have hab : a < b := by dsimp [b]; linarith
+  have hbx : b < ‖x‖ := by dsimp [b]; linarith
+  exact hab.trans_le
+    (le_liminf_of_le h_cobounded (eventually_le_norm_of_weak hweak b hbx))
 
 end
