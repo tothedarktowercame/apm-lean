@@ -4,6 +4,7 @@ import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 -- and ball-volume lemmas for `EuclideanSpace ℝ (Fin n)`. Same import that
 -- ConstructionTargets/RadialIntegrationR3.lean uses for the same purpose.
 import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-!
@@ -78,6 +79,20 @@ lemma ballSlice_le_one (t : ℝ) : ballSlice t ≤ 1 := by
     rw [if_neg h]
     norm_num
 
+lemma measurable_ballSlice : Measurable ballSlice := by
+  unfold ballSlice
+  exact Measurable.ite measurableSet_Icc
+    (Real.continuous_sqrt.comp
+      (continuous_const.sub (continuous_id.pow 2))).measurable
+    measurable_const
+
+lemma ballSlice_lt_one_of_ne_zero {t : ℝ} (ht : t ≠ 0) : ballSlice t < 1 := by
+  by_cases h : t ∈ Set.Icc (-1) 1
+  · rw [ballSlice, if_pos h, Real.sqrt_lt' zero_lt_one]
+    nlinarith [sq_pos_of_ne_zero ht]
+  · rw [ballSlice, if_neg h]
+    norm_num
+
 /-! ## Part (a): The slicing identity -/
 
 /-- Part (a): The volume of the unit ball satisfies the recursive identity
@@ -121,7 +136,36 @@ theorem ball_volume_recursion (n : ℕ) (hn : 0 < n) :
 -/
 theorem ballSlice_integral_tendsto_zero :
     Tendsto (fun n => ∫ t, (ballSlice t) ^ n) atTop (nhds 0) := by
-  sorry
+  let bound : ℝ → ℝ := (Icc (-1) 1).indicator (fun _ => 1)
+  have hbound_int : Integrable bound volume := by
+    have hconst : IntegrableOn (fun _ : ℝ => (1 : ℝ)) (Icc (-1) 1) volume :=
+      integrableOn_const (by simp)
+    apply (hconst.indicator measurableSet_Icc).integrable_of_forall_notMem_eq_zero
+    intro x hx
+    simp [indicator_of_notMem hx]
+  have hmeas (n : ℕ) :
+      AEStronglyMeasurable (fun t => (ballSlice t) ^ n) volume :=
+    (measurable_ballSlice.pow measurable_const).aestronglyMeasurable
+  have hdom (n : ℕ) :
+      ∀ᵐ t ∂volume, ‖(ballSlice t) ^ (n + 1)‖ ≤ bound t := by
+    exact Eventually.of_forall fun t => by
+      by_cases ht : t ∈ Icc (-1) 1
+      · rw [show bound t = 1 by simp [bound, ht]]
+        rw [Real.norm_eq_abs, abs_of_nonneg (pow_nonneg (ballSlice_nonneg t) _)]
+        exact pow_le_one₀ (ballSlice_nonneg t) (ballSlice_le_one t)
+      · rw [show bound t = 0 by simp [bound, ht]]
+        simp [ballSlice, ht]
+  have hlim :
+      ∀ᵐ t ∂volume, Tendsto (fun n => (ballSlice t) ^ (n + 1)) atTop (nhds 0) := by
+    have hne : ∀ᵐ t : ℝ ∂volume, t ≠ (0 : ℝ) := by
+      simp [ae_iff, measure_singleton]
+    filter_upwards [hne] with t ht
+    exact ((tendsto_pow_atTop_nhds_zero_of_lt_one
+      (ballSlice_nonneg t) (ballSlice_lt_one_of_ne_zero ht)).comp
+        (Filter.tendsto_add_atTop_nat 1))
+  apply (Filter.tendsto_add_atTop_iff_nat 1).mp
+  simpa [Nat.add_comm] using tendsto_integral_of_dominated_convergence
+    bound (fun n => hmeas (n + 1)) hbound_int hdom hlim
 
 /-! ## Part (c): Aⁿ · m(B_{n,1}) → 0 -/
 
