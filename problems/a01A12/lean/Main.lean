@@ -50,7 +50,19 @@ lemma step2_inj_RHP : InjOn (· ^ 2 : ℂ → ℂ) {w | 0 < w.re} := by
 -- Step 2: squaring maps RHP onto slit plane
 -- HtDP: w ∈ RHP ⟹ arg(w) ∈ (-π/2,π/2) ⟹ arg(w²) ∈ (-π,π) ⟹ w² ∉ (-∞,0]
 lemma step2_image : MapsTo (· ^ 2 : ℂ → ℂ) {w | 0 < w.re} {ζ : ℂ | (0:ℝ) < ζ.re ∨ ζ.im ≠ 0} := by
-  sorry -- argument doubling
+  intro w hw
+  change 0 < w.re at hw
+  change 0 < (w ^ 2).re ∨ (w ^ 2).im ≠ 0
+  by_cases him : (w ^ 2).im = 0
+  · left
+    have him' : w.re * w.im + w.im * w.re = 0 := by
+      simpa [pow_two, Complex.mul_im] using him
+    have hmul : w.re * w.im = 0 := by
+      nlinarith
+    have hwim : w.im = 0 := (mul_eq_zero.mp hmul).resolve_left hw.ne'
+    simp [pow_two, Complex.mul_re, hwim]
+    exact hw.ne'
+  · exact Or.inr him
 
 -- Step 4: fourth root maps slit plane to wedge
 -- HtDP: arg(η) ∈ (-π,π) ⟹ arg(η^{1/4}) ∈ (-π/4,π/4)
