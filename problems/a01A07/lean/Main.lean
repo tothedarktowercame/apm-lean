@@ -1,4 +1,7 @@
 import Mathlib.Analysis.Complex.CauchyIntegral
+import Mathlib.Analysis.Complex.Liouville
+import Mathlib.Analysis.Complex.LocallyUniformLimit
+import Mathlib.Analysis.Complex.MeanValue
 import Mathlib.Analysis.Normed.Module.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.IntegrableOn
@@ -33,8 +36,10 @@ The generated statement had the right mathematical structure but needed:
 4. `TendstoUniformlyOn` from `Topology.UniformSpace.UniformConvergence` is
    the correct API for uniform convergence on a set.
 
-The key analytic lemmas (mean value property, Morera's theorem, Cauchy
-derivative estimates) are stated correctly but blocked on Mathlib API gaps.
+Mathlib now provides the circle mean-value property, the Weierstrass theorem
+for locally uniform limits, and Cauchy's derivative estimate.  The remaining
+foundational gap in this file is the polar-coordinate/Fubini conversion from
+circle averages at every radius to the stated disk-area integral.
 -/
 
 set_option linter.unusedVariables false in
@@ -66,15 +71,11 @@ def L1ConvergesOnDisks (f : ℕ → ℂ → ℂ) (F : ℂ → ℂ) (Ω : Set ℂ
     For analytic `g`, `g(z₀) = (1/πr²) ∫_{D(z₀,r)} g dA` (the area mean value
     property), and taking absolute values gives the inequality.
 
-    BLOCKER: Mathlib has circle-integral Cauchy formulas
-    (`circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus`)
-    but does not have a direct area-integral mean value property for
-    holomorphic functions. The standard proof uses either:
-    (a) the Cauchy integral formula on a circle of radius r,
-        then `g(z₀) = (1/2π) ∫₀^{2π} g(z₀ + re^{iθ}) dθ`, and
-        integrating in r gives the area formula; or
-    (b) the fact that `g` is harmonic so satisfies the mean value property.
-    Neither path is available as a single Mathlib lemma. -/
+    Mathlib's `DiffContOnCl.circleAverage` supplies the circle identity.
+    The remaining construction is to integrate that identity in the radius
+    with weight `2s`, use `Complex.integral_comp_polarCoord_symm` and Fubini,
+    translate the disk from `0` to `z₀`, and identify its area as `πr²`.
+    There is no direct disk-area mean-value lemma. -/
 lemma norm_le_area_integral_div_area
     {g : ℂ → ℂ} {z₀ : ℂ} {r : ℝ} (hr : 0 < r)
     (hg : DifferentiableOn ℂ g (closedBall z₀ r)) :
@@ -89,7 +90,7 @@ lemma norm_le_area_integral_div_area
     `sup_K ‖fₙ - fₘ‖ ≤ (1/πr²) ∫_{D_K} ‖fₙ - fₘ‖ dA ≤ (1/πr²)(∫‖fₙ-F‖ + ∫‖fₘ-F‖) → 0`.
     So `{fₙ}` is uniformly Cauchy on K.
 
-    BLOCKER: Requires `norm_le_area_integral_div_area` (the mean value property),
+    BLOCKER: Requires `norm_le_area_integral_div_area` (the disk-area property),
     plus:
     - Compact sets in `ℂ` have positive distance to `∂Ω` (needs `IsCompact`
       + `IsOpen` + `Metric.infDist_pos_of_isCompact` or similar)
@@ -121,12 +122,11 @@ theorem tendstoUniformlyOn_of_L1_on_disks
     `∮_Δ F dz = lim ∮_Δ fₙ dz = 0` (Cauchy's theorem + uniform convergence
     passes the limit through the contour integral).
 
-    BLOCKER: Mathlib's Morera theorem
-    (`DifferentiableOn.of_diffContOnCl_triangle` or similar) requires
-    contour integrals over triangles, which need `Complex.integralBoundaryTriangle`
-    or equivalent. Additionally, passing from Step 1's uniform convergence to
-    interchange of limit and integral requires `TendstoUniformlyOn` to imply
-    convergence of contour integrals — available but requires plumbing. -/
+    Once Step 1 is available, no Morera construction is needed:
+    `tendstoLocallyUniformlyOn_iff_forall_isCompact hΩ` packages Step 1 as
+    local uniform convergence, and
+    `TendstoLocallyUniformlyOn.differentiableOn` is precisely Weierstrass'
+    theorem. -/
 theorem differentiableOn_of_L1_limit
     {f : ℕ → ℂ → ℂ} {F : ℂ → ℂ}
     (hΩ : IsOpen Ω)
@@ -139,21 +139,28 @@ theorem differentiableOn_of_L1_limit
 /-- Cauchy estimate for derivatives:
     `‖g'(z₀)‖ ≤ (M/ρ)` when `‖g‖ ≤ M` on `closedBall z₀ ρ`.
 
-    This follows from the Cauchy integral formula for derivatives:
-    `g'(z₀) = (1/2πi) ∮_{|w-z₀|=ρ} g(w)/(w-z₀)² dw`. -/
+    This is `Complex.norm_deriv_le_of_forall_mem_sphere_norm_le`, after
+    packaging differentiability and continuity as `DiffContOnCl`. -/
 lemma deriv_norm_le_sup_div_radius
     {g : ℂ → ℂ} {z₀ : ℂ} {ρ : ℝ} (hρ : 0 < ρ)
     (hg : DifferentiableOn ℂ g (closedBall z₀ ρ))
     {M : ℝ} (hM : ∀ w ∈ closedBall z₀ ρ, ‖g w‖ ≤ M) :
     ‖deriv g z₀‖ ≤ M / ρ := by
-  sorry
+  apply norm_deriv_le_of_forall_mem_sphere_norm_le hρ
+  · constructor
+    · exact hg.mono ball_subset_closedBall
+    · simpa [closure_ball _ hρ.ne'] using hg.continuousOn
+  · exact fun w hw ↦ hM w (sphere_subset_closedBall hw)
 
 /-- Step 3: `fₙ' → F'` uniformly on compact subsets.
 
     By the Cauchy estimate, `‖fₙ'(z) - F'(z)‖ ≤ (1/ρ) sup_{|w-z|=ρ} ‖fₙ(w)-F(w)‖`,
     and Step 1 gives uniform convergence of `fₙ → F` on the `ρ`-neighbourhood of `K`.
 
-    BLOCKER: depends on Steps 1 and 2, plus the Cauchy estimate above. -/
+    Once Step 1 is available,
+    `TendstoLocallyUniformlyOn.deriv` gives this result directly after
+    converting between local uniform convergence and uniform convergence on
+    compact subsets. -/
 theorem tendstoUniformlyOn_deriv_of_L1
     {f : ℕ → ℂ → ℂ} {F : ℂ → ℂ}
     (hΩ : IsOpen Ω)
