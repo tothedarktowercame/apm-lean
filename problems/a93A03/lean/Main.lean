@@ -92,7 +92,17 @@ private lemma eventually_le_norm_of_weak
     With `[CompleteSpace H]`, Banach--Steinhaus gives the missing boundedness
     of `‖h n‖`; `eventually_le_norm_of_weak` and `le_liminf_of_le` then prove
     the result. -/
-theorem norm_le_liminf_of_weak
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised class). FALSE as previously stated:
+-- weak lower semicontinuity of the norm needs `[CompleteSpace H]`, because the
+-- standard proof routes through Banach-Steinhaus, whose Mathlib form requires
+-- completeness. Counterexample found by codex-7 on durée run 12: in the
+-- INCOMPLETE space c00, take h n = x + n * e n. Then h n converges weakly to x
+-- while the norms are unbounded, and Mathlib's real liminf collapses to
+-- sSup (unbounded set) = sSup empty = 0, so the conclusion fails outright.
+-- That collapse is machine-checked: csSup_of_not_bddAbove then Real.sSup_empty.
+-- FOURTH instance of the Lean junk-value family, after ENNReal.toReal top = 0,
+-- integral of a non-integrable function = 0, and ContDiff top meaning analytic.
+theorem norm_le_liminf_of_weak [CompleteSpace H]
     {h : ℕ → H} {x : H}
     (hweak : WeakTendsto h x) :
     ‖x‖ ≤ liminf (fun n => (‖h n‖ : ℝ)) atTop := by
