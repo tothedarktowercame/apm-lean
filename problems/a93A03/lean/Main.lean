@@ -81,53 +81,21 @@ private lemma eventually_le_norm_of_weak
 
     If hₙ ⇀ h, then ‖h‖ ≤ liminf ‖hₙ‖.
 
-    Mathematical proof: for any a < ‖x‖, eventually a ≤ ‖h n‖
-    (see `eventually_le_norm_of_weak`). This means every a < ‖x‖ is an
-    eventual lower bound, so ‖x‖ ≤ liminf ‖h n‖.
+    This statement needs `[CompleteSpace H]`. Without completeness it is false:
+    in the pre-Hilbert space `c₀₀` of finitely supported real sequences, fix a
+    nonzero `x` and put `h n = x + n • e n`. For each finitely supported `k`,
+    `⟪h n, k⟫ = ⟪x, k⟫` eventually, so `h` converges weakly to `x`, while its
+    norms tend to infinity. Mathlib's real-valued `liminf` is defined using
+    `sSup`; for a sequence with unbounded eventual lower bounds this is
+    `sSup ∅ = 0`. Thus the conclusion would assert `‖x‖ ≤ 0`.
 
-    The Lean proof is blocked on the liminf API: `le_liminf_of_le` requires
-    `IsCoboundedUnder (· ≥ ·)` which needs the sequence bounded above,
-    and `liminf_eq` + `le_csSup` needs `BddAbove`. -/
+    With `[CompleteSpace H]`, Banach--Steinhaus gives the missing boundedness
+    of `‖h n‖`; `eventually_le_norm_of_weak` and `le_liminf_of_le` then prove
+    the result. -/
 theorem norm_le_liminf_of_weak
     {h : ℕ → H} {x : H}
     (hweak : WeakTendsto h x) :
     ‖x‖ ≤ liminf (fun n => (‖h n‖ : ℝ)) atTop := by
-  have h_ev := eventually_le_norm_of_weak hweak
-  -- For every a < ‖x‖, eventually a ≤ ‖h n‖. This means a ≤ liminf.
-  -- Use le_of_forall_sub_lt to avoid liminf API: show for all ε > 0,
-  -- ‖x‖ - ε ≤ liminf, hence ‖x‖ ≤ liminf.
-  -- For each ε > 0: ‖x‖ - ε < ‖x‖, so eventually ‖x‖ - ε ≤ ‖h n‖.
-  -- This means ‖x‖ - ε is an eventual lower bound, so ‖x‖ - ε ≤ liminf.
-  -- The liminf_eq route is blocked by BddAbove. Let me try le_liminf_of_le.
-  -- le_liminf_of_le needs IsCoboundedUnder (· ≥ ·) atTop (fun n => ‖h n‖).
-  -- IsCoboundedUnder = IsCobounded (· ≥ ·) (map u atTop)
-  -- = ∃ b, ∀ a, (∀ᶠ y in map u atTop, y ≥ a) → b ≥ a
-  -- For ‖h n‖ ≥ 0: any a ≤ 0 satisfies eventually a ≤ ‖h n‖, so a is a lower bound.
-  -- We need b ≥ all such a. b = 0 works for a ≤ 0.
-  -- For a > 0 with eventually a ≤ ‖h n‖: from h_ev, a < ‖x‖ is sufficient.
-  -- But the IsCobounded condition quantifies over ALL a, not just a < ‖x‖.
-  -- For a > ‖x‖: is a an eventual lower bound? Not from h_ev.
-  -- But a could be if ‖h n‖ is large. In that case b ≥ a for all such a.
-  -- This is impossible if ‖h n‖ → ∞.
-  -- So IsCoboundedUnder genuinely fails for unbounded sequences.
-  -- BUT: le_liminf_of_le uses csSup, and for unbounded S, csSup returns 0.
-  -- In that case, the result (a ≤ liminf) would be a ≤ 0, which fails for a > 0.
-  -- The issue is fundamental to the ConditionallyCompleteLattice of ℝ.
-  -- Workaround: prove the result in EReal or use a different formulation.
-  by_contra hcontra
-  push_neg at hcontra
-  -- hcontra : liminf (fun n => ‖h n‖) atTop < ‖x‖
-  -- Pick c with liminf < c < ‖x‖
-  obtain ⟨c, hc_lt_x, hc_gt_liminf⟩ : ∃ c, c < ‖x‖ ∧ liminf (fun n => (‖h n‖ : ℝ)) atTop < c := by
-    exact ⟨(liminf (fun n => (‖h n‖ : ℝ)) atTop + ‖x‖) / 2,
-           by linarith, by linarith⟩
-  -- c < ‖x‖ → eventually c ≤ ‖h n‖
-  have hc_ev : ∀ᶠ n in atTop, c ≤ ‖h n‖ := h_ev c hc_lt_x
-  -- c ≤ ‖h n‖ eventually → c ≤ liminf (by definition of liminf as sup of eventual lower bounds)
-  -- Try le_liminf_of_le with isBoundedDefault
-  have hc_le_liminf : c ≤ liminf (fun n => (‖h n‖ : ℝ)) atTop := by
-    refine le_liminf_of_le ?_ hc_ev
-    sorry
-  linarith
+  sorry
 
 end
