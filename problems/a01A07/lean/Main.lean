@@ -134,7 +134,11 @@ theorem differentiableOn_of_L1_limit
     (hF : ContinuousOn F Ω)
     (hconv : L1ConvergesOnDisks f F Ω) :
     DifferentiableOn ℂ F Ω := by
-  sorry
+  have hloc : TendstoLocallyUniformlyOn f F atTop Ω := by
+    rw [tendstoLocallyUniformlyOn_iff_forall_isCompact hΩ]
+    intro K hKΩ hK
+    exact tendstoUniformlyOn_of_L1_on_disks hΩ hf hF hconv hK hKΩ
+  exact hloc.differentiableOn (Eventually.of_forall hf) hΩ
 
 /-- Cauchy estimate for derivatives:
     `‖g'(z₀)‖ ≤ (M/ρ)` when `‖g‖ ≤ M` on `closedBall z₀ ρ`.
@@ -169,7 +173,13 @@ theorem tendstoUniformlyOn_deriv_of_L1
     (hconv : L1ConvergesOnDisks f F Ω)
     {K : Set ℂ} (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
     TendstoUniformlyOn (fun n z => deriv (f n) z) (deriv F) atTop K := by
-  sorry
+  have hloc : TendstoLocallyUniformlyOn f F atTop Ω := by
+    rw [tendstoLocallyUniformlyOn_iff_forall_isCompact hΩ]
+    intro L hLΩ hL
+    exact tendstoUniformlyOn_of_L1_on_disks hΩ hf hF hconv hL hLΩ
+  have hderiv := hloc.deriv (Eventually.of_forall hf) hΩ
+  simpa only [Function.comp_apply] using
+    (tendstoLocallyUniformlyOn_iff_forall_isCompact hΩ).mp hderiv K hKΩ hK
 
 /-- Full theorem: L¹(disk) convergence of analytic functions to a continuous
     limit implies the limit is analytic and both function and derivative
