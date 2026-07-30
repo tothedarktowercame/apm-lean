@@ -2,6 +2,8 @@ import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.RemovableSingularity
 import Mathlib.Analysis.Analytic.Basic
 import Mathlib.Analysis.Analytic.Linear
+import Mathlib.Analysis.Analytic.OfScalars
+import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Analytic
 import Mathlib.Analysis.SpecialFunctions.Complex.Analytic
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
 import Mathlib.NumberTheory.Bernoulli
@@ -133,6 +135,103 @@ theorem apm_a96J10_f_even
 
 open FormalMultilinearSeries
 
+private def evenFactorRoot (w : ℂ) : ℂ :=
+  Classical.choose (Complex.isSquare w)
+
+private lemma evenFactorRoot_sq (w : ℂ) : evenFactorRoot w ^ 2 = w := by
+  simpa [pow_two, evenFactorRoot] using
+    (Classical.choose_spec (Complex.isSquare w)).symm
+
+private lemma evenFactorRoot_tendsto :
+    Filter.Tendsto evenFactorRoot (nhds 0) (nhds 0) := by
+  rw [Metric.tendsto_nhds]
+  intro ε hε
+  filter_upwards [Metric.eventually_nhds_iff.mpr
+    ⟨ε ^ 2, sq_pos_of_pos hε, fun y hy => hy⟩] with w hw
+  simp only [dist_zero_right] at hw ⊢
+  have hs := congrArg norm (evenFactorRoot_sq w)
+  rw [norm_pow] at hs
+  nlinarith [sq_nonneg ‖evenFactorRoot w‖]
+
+private lemma evenCoefficients_radius_pos
+    (p : FormalMultilinearSeries ℂ ℂ ℂ) (hp : 0 < p.radius) :
+    0 < (FormalMultilinearSeries.ofScalars ℂ
+      (fun n => p.coeff (2 * n))).radius := by
+  let q := FormalMultilinearSeries.ofScalars ℂ (fun n => p.coeff (2 * n))
+  obtain ⟨C, r, _hC, hr, hbound⟩ := p.le_mul_pow_of_radius_pos hp
+  let s : NNReal := ⟨(r ^ 2)⁻¹, by positivity⟩
+  have hs : 0 < s := by
+    exact_mod_cast (inv_pos.mpr (sq_pos_of_pos hr))
+  have hsq : (s : ENNReal) ≤ q.radius := by
+    apply q.le_radius_of_bound C
+    intro n
+    rw [show ‖q n‖ = ‖p (2 * n)‖ by
+      simp [q, FormalMultilinearSeries.norm_apply_eq_norm_coef]]
+    calc
+      ‖p (2 * n)‖ * (s : ℝ) ^ n
+          ≤ (C * r ^ (2 * n)) * (s : ℝ) ^ n :=
+            mul_le_mul_of_nonneg_right (hbound (2 * n)) (by positivity)
+      _ = C := by
+        simp only [s, NNReal.coe_mk]
+        rw [show r ^ (2 * n) = (r ^ 2) ^ n by rw [← pow_mul]]
+        rw [show ((r ^ 2)⁻¹) ^ n = ((r ^ 2) ^ n)⁻¹ by rw [inv_pow]]
+        field_simp
+  exact lt_of_lt_of_le (by exact_mod_cast hs) hsq
+
+private lemma evenCoefficients_sum
+    (h : ℂ → ℂ) (p : FormalMultilinearSeries ℂ ℂ ℂ)
+    (hp : HasFPowerSeriesAt h p 0)
+    (hodd : ∀ n : ℕ, Odd n → p.coeff n = 0) :
+    ∀ᶠ w in nhds 0,
+      (FormalMultilinearSeries.ofScalars ℂ
+        (fun n => p.coeff (2 * n))).sum w = h (evenFactorRoot w) := by
+  let q := FormalMultilinearSeries.ofScalars ℂ (fun n => p.coeff (2 * n))
+  have hqrad : 0 < q.radius := evenCoefficients_radius_pos p hp.radius_pos
+  have hq : HasFPowerSeriesAt q.sum q 0 :=
+    ⟨q.radius, q.hasFPowerSeriesOnBall hqrad⟩
+  filter_upwards [hq.eventually_hasSum,
+    evenFactorRoot_tendsto hp.eventually_hasSum] with w hqw hpw
+  simp only [zero_add] at hqw hpw
+  let a : ℕ → ℂ := fun n => p n (fun _ => evenFactorRoot w)
+  have ha : Summable a := hpw.summable
+  have hi_even : Function.Injective (fun k : ℕ => 2 * k) := by
+    intro i j hij
+    exact Nat.mul_left_cancel (by decide) hij
+  have hi_odd : Function.Injective (fun k : ℕ => 2 * k + 1) := by
+    intro i j hij
+    exact Nat.mul_left_cancel (by decide) (Nat.add_right_cancel hij)
+  have hae : Summable (fun k => a (2 * k)) := ha.comp_injective hi_even
+  have hao : Summable (fun k => a (2 * k + 1)) := ha.comp_injective hi_odd
+  have heven_term (n : ℕ) : a (2 * n) = q n (fun _ => w) := by
+    rw [show a (2 * n) = evenFactorRoot w ^ (2 * n) • p.coeff (2 * n) by
+      exact apply_eq_pow_smul_coeff]
+    have hpow : evenFactorRoot w ^ (2 * n) = w ^ n := by
+      calc
+        evenFactorRoot w ^ (2 * n) = (evenFactorRoot w ^ 2) ^ n := pow_mul _ 2 n
+        _ = w ^ n := by rw [evenFactorRoot_sq]
+    simp only [q, FormalMultilinearSeries.ofScalars,
+      ContinuousMultilinearMap.smul_apply,
+      ContinuousMultilinearMap.mkPiAlgebraFin_apply, List.ofFn_const,
+      List.prod_replicate, smul_eq_mul]
+    rw [hpow]
+    ring
+  have hodd_term (n : ℕ) : a (2 * n + 1) = 0 := by
+    rw [show a (2 * n + 1) =
+      evenFactorRoot w ^ (2 * n + 1) • p.coeff (2 * n + 1) by
+        exact apply_eq_pow_smul_coeff]
+    rw [hodd (2 * n + 1) ⟨n, by omega⟩, smul_zero]
+  have hsplit := tsum_even_add_odd hae hao
+  rw [show (∑' k, a (2 * k)) = q.sum w by
+        rw [← hqw.tsum_eq]
+        apply tsum_congr
+        exact heven_term,
+      show (∑' k, a (2 * k + 1)) = 0 by
+        simp_rw [hodd_term]
+        exact tsum_zero,
+      add_zero,
+      hpw.tsum_eq] at hsplit
+  simpa [q] using hsplit
+
 /-- An analytic even function on a disk factors through z². -/
 theorem apm_a96J10_even_factors
     (h : ℂ → ℂ) (hh : AnalyticOn ℂ h (Metric.ball (0:ℂ) 1))
@@ -192,18 +291,59 @@ theorem apm_a96J10_even_factors
     have h2 : 2 * p.coeff n = 0 := by linear_combination hkey
     have h20 : (2 : ℂ) * 0 = 0 := by norm_num
     exact mul_left_cancel₀ two_ne_zero (h2.trans h20.symm)
-  -- Step 2: construct g from the even-indexed coefficients of p.
-  -- Define q : FormalMultilinearSeries ℂ ℂ ℂ by q n = mkPiRing (p.coeff (2*n)).
-  -- Then q.coeff k = p.coeff (2*k), and q k (fun _ => w) = w^k • p.coeff (2*k).
-  -- Since odd coefficients vanish, h(z) = Σ p.coeff n z^n = Σ p.coeff (2k) z^{2k} = Σ q.coeff k (z²)^k.
-  -- So g(w) = Σ q.coeff k w^k = q.sum w satisfies g(z²) = h(z) near 0.
-  -- Extend to full ball via identity theorem.
-  obtain ⟨r1, hr1⟩ := hp
-  -- The key mathematical content (odd coefficients vanish) is established in `hodd` above.
-  -- Constructing g and proving global analyticity on the full disk requires the Taylor
-  -- series radius to match the disk of analyticity — a result equivalent to Cauchy's
-  -- integral formula, which is not yet available in Mathlib's analytic framework.
-  sorry
+  -- A square-root selector defines the descended function.  It need not be analytic:
+  -- evenness makes the value independent of the chosen root.
+  let q := FormalMultilinearSeries.ofScalars ℂ (fun n => p.coeff (2 * n))
+  let g : ℂ → ℂ := fun w => h (evenFactorRoot w)
+  have hfactor : ∀ z, ‖z‖ < 1 → g (z ^ 2) = h z := by
+    intro z hz
+    have hsquare : evenFactorRoot (z ^ 2) ^ 2 = z ^ 2 := evenFactorRoot_sq _
+    rcases sq_eq_sq_iff_eq_or_eq_neg.mp hsquare with hr | hr
+    · simp [g, hr]
+    · simpa [g, hr] using heven z hz
+  refine ⟨g, ?_, hfactor⟩
+  intro w hw
+  have hwnorm : ‖w‖ < 1 := by simpa using hw
+  by_cases hw0 : w = 0
+  · subst w
+    -- At the branch point, reindex the local Taylor series using the vanished
+    -- odd coefficients.
+    have hqrad : 0 < q.radius := evenCoefficients_radius_pos p hp.radius_pos
+    have hq : HasFPowerSeriesAt q.sum q 0 :=
+      ⟨q.radius, q.hasFPowerSeriesOnBall hqrad⟩
+    have heq : q.sum =ᶠ[nhds 0] g := by
+      simpa [q, g] using evenCoefficients_sum h p hp hodd
+    exact (hq.congr heq).analyticAt.analyticWithinAt
+  · -- Away from the branch point, the squaring map has nonzero derivative,
+    -- so analyticity descends by the analytic inverse-function theorem.
+    let z := evenFactorRoot w
+    have hzsq : z ^ 2 = w := evenFactorRoot_sq w
+    have hz0 : z ≠ 0 := by
+      intro hz
+      apply hw0
+      rw [← hzsq, hz]
+      norm_num
+    have hznorm : ‖z‖ < 1 := by
+      have hs := congrArg norm hzsq
+      rw [norm_pow] at hs
+      nlinarith [sq_nonneg ‖z‖]
+    have hzmem : z ∈ Metric.ball (0 : ℂ) 1 := by simpa using hznorm
+    have hlocal : (g ∘ fun u : ℂ => u ^ 2) =ᶠ[nhds z] h := by
+      filter_upwards [Metric.isOpen_ball.mem_nhds hzmem] with u hu
+      exact hfactor u (by simpa using hu)
+    have hhAt : AnalyticAt ℂ h z :=
+      hh.analyticAt (Metric.isOpen_ball.mem_nhds hzmem)
+    have hcomp : AnalyticAt ℂ (g ∘ fun u : ℂ => u ^ 2) z :=
+      hhAt.congr hlocal.symm
+    have hsquareAt : AnalyticAt ℂ (fun u : ℂ => u ^ 2) z :=
+      analyticAt_id.pow 2
+    have hderiv : deriv (fun u : ℂ => u ^ 2) z ≠ 0 := by
+      rw [(hasDerivAt_pow 2 z).deriv]
+      simp [hz0]
+    have hgAt : AnalyticAt ℂ g w := by
+      rw [← hzsq]
+      exact (analyticAt_comp_iff_of_deriv_ne_zero hsquareAt hderiv).mp hcomp
+    exact hgAt.analyticWithinAt
 
 /-- Main theorem: f(z) = z/(e^{2πz}-1) + z/2 factors as g(z²) for some
     analytic g on the open unit disk. -/
