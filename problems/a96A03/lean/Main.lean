@@ -7,6 +7,8 @@ Let B = {f ∈ L²(ℝ) : ‖f‖₂ ≤ 1}. If {fₙ} ⊂ B and fₙ → f a.e.
 -/
 
 import Mathlib.MeasureTheory.Function.LpSpace.Complete
+import Mathlib.MeasureTheory.Function.Holder
+import Mathlib.MeasureTheory.Function.UnifTight
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
@@ -57,9 +59,9 @@ theorem memLp_limit_of_ae_tendsto_bounded
 
 /-- (2) Weak convergence: ∫ fₙ h → ∫ f h for all h ∈ L²(ℝ).
 
-    Proof: Approximate h ∈ L² by compactly supported continuous φ.
-    For φ: use DCT on the compact support.
-    For general h: Cauchy-Schwarz error bound ‖∫fₙ(h-φ)‖ ≤ ‖fₙ‖₂ · ‖h-φ‖₂ ≤ ‖h-φ‖₂. -/
+    Proof: Hölder's inequality and the fixed L² test function show that the products
+    `fₙh` are uniformly integrable and uniformly tight in L¹.  Their a.e. convergence
+    to `gh` therefore upgrades to L¹ convergence by Vitali's theorem. -/
 theorem weak_convergence_of_ae_tendsto_L2_bounded
     {f : ℕ → ℝ → ℝ} {g : ℝ → ℝ}
     (hf_meas : ∀ n, AEStronglyMeasurable (f n) volume)
@@ -69,6 +71,67 @@ theorem weak_convergence_of_ae_tendsto_L2_bounded
     {h : ℝ → ℝ} (hh : MemLp h 2 volume) :
     Tendsto (fun n => ∫ x, f n x * h x ∂volume)
       atTop (𝓝 (∫ x, g x * h x ∂volume)) := by
-  sorry
+  let F : ℕ → ℝ → ℝ := fun n x => f n x * h x
+  let G : ℝ → ℝ := fun x => g x * h x
+  have hfLp (n : ℕ) : MemLp (f n) 2 volume :=
+    ⟨hf_meas n, (hf_bdd n).trans_lt (by norm_num)⟩
+  have hg_norm : eLpNorm g 2 volume ≤ 1 :=
+    (memLp_limit_of_ae_tendsto_bounded hf_meas hf_bdd hae).2
+  have hgLp : MemLp g 2 volume :=
+    ⟨hg_meas, hg_norm.trans_lt (by norm_num)⟩
+  have hFLp (n : ℕ) : MemLp (F n) 1 volume := by
+    simpa [F, mul_comm] using (hh.mul' (hfLp n) : MemLp (fun x => f n x * h x) 1 volume)
+  have hGLp : MemLp G 1 volume := by
+    simpa [G, mul_comm] using (hh.mul' hgLp : MemLp (fun x => g x * h x) 1 volume)
+  have hFmeas (n : ℕ) : AEStronglyMeasurable (F n) volume := (hFLp n).1
+  have hUI : UnifIntegrable F 1 volume := by
+    intro ε hε
+    obtain ⟨δ, hδ, hsmall⟩ := hh.eLpNorm_indicator_le (by norm_num) (by norm_num) hε
+    refine ⟨δ, hδ, fun n s hs hμs => ?_⟩
+    have hind :
+        s.indicator (F n) = fun x => f n x * s.indicator h x := by
+      ext x
+      by_cases hx : x ∈ s <;> simp [F, hx]
+    rw [hind]
+    calc
+      eLpNorm (fun x => f n x * s.indicator h x) 1 volume
+          ≤ eLpNorm (f n) 2 volume * eLpNorm (s.indicator h) 2 volume := by
+            simpa [Pi.smul_apply, smul_eq_mul] using
+              (eLpNorm_smul_le_mul_eLpNorm
+                ((hh.1.indicator hs)) (hf_meas n) :
+                eLpNorm ((f n) • s.indicator h) 1 volume ≤
+                  eLpNorm (f n) 2 volume * eLpNorm (s.indicator h) 2 volume)
+      _ ≤ 1 * ENNReal.ofReal ε := mul_le_mul (hf_bdd n) (hsmall s hs hμs) (by simp) (by simp)
+      _ = ENNReal.ofReal ε := one_mul _
+  have hUT : UnifTight F 1 volume := by
+    intro ε hε
+    obtain ⟨s, hs, hμs, htail⟩ :=
+      hh.exists_eLpNorm_indicator_compl_lt (by norm_num) (ENNReal.coe_ne_zero.mpr hε.ne')
+    refine ⟨s, ne_of_lt hμs, fun n => ?_⟩
+    have hind :
+        sᶜ.indicator (F n) = fun x => f n x * sᶜ.indicator h x := by
+      ext x
+      by_cases hx : x ∈ sᶜ <;> simp [F, hx]
+    rw [hind]
+    calc
+      eLpNorm (fun x => f n x * sᶜ.indicator h x) 1 volume
+          ≤ eLpNorm (f n) 2 volume * eLpNorm (sᶜ.indicator h) 2 volume := by
+            simpa [Pi.smul_apply, smul_eq_mul] using
+              (eLpNorm_smul_le_mul_eLpNorm
+                (hh.1.indicator hs.compl) (hf_meas n) :
+                eLpNorm ((f n) • sᶜ.indicator h) 1 volume ≤
+                  eLpNorm (f n) 2 volume * eLpNorm (sᶜ.indicator h) 2 volume)
+      _ ≤ 1 * (ε : ℝ≥0∞) :=
+        mul_le_mul (hf_bdd n) htail.le (by simp) (by simp)
+      _ = (ε : ℝ≥0∞) := one_mul _
+  have hFGae : ∀ᵐ x ∂volume, Tendsto (fun n => F n x) atTop (𝓝 (G x)) := by
+    filter_upwards [hae] with x hx
+    exact hx.mul_const (h x)
+  have hL1 :
+      Tendsto (fun n => eLpNorm (F n - G) 1 volume) atTop (𝓝 0) :=
+    tendsto_Lp_of_tendsto_ae (by norm_num) (by norm_num) hFmeas hGLp hUI hUT hFGae
+  simpa [F, G] using
+    tendsto_integral_of_L1' G (memLp_one_iff_integrable.mp hGLp)
+      (Eventually.of_forall fun n => memLp_one_iff_integrable.mp (hFLp n)) hL1
 
 end
