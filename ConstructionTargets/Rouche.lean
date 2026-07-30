@@ -57,6 +57,31 @@ lemma rouche_homotopy_ne_zero_on_sphere
   · simpa [abs_of_nonneg t.2.1] using t.2.2
   · exact hfg z hz
 
+/-- Every member of the Rouché straight-line homotopy remains analytic on the
+same neighborhood.  Together with `rouche_homotopy_ne_zero_on_sphere`, this
+packages the complete analytic/topological input expected by an argument
+principle homotopy-invariance theorem. -/
+lemma rouche_homotopy_analyticOnNhd
+    {f g : ℂ → ℂ} {s : Set ℂ}
+    (hf : AnalyticOnNhd ℂ f s) (hg : AnalyticOnNhd ℂ g s) (t : ℝ) :
+    AnalyticOnNhd ℂ (fun z ↦ f z + (t : ℂ) * g z) s := by
+  simpa only [Pi.add_apply] using
+    hf.add (analyticOnNhd_const.mul hg)
+
+/-- The straight-line homotopy simultaneously has the required analyticity
+and boundary nonvanishing properties.  This is the exact input left after
+separating Rouché's elementary estimate from the argument principle. -/
+lemma rouche_homotopy_analyticOnNhd_and_ne_zero
+    {f g : ℂ → ℂ} {c : ℂ} {R : ℝ}
+    (hf : AnalyticOnNhd ℂ f (closedBall c R))
+    (hg : AnalyticOnNhd ℂ g (closedBall c R))
+    (hfg : ∀ z ∈ sphere c R, ‖g z‖ < ‖f z‖)
+    (t : Set.Icc (0 : ℝ) 1) :
+    AnalyticOnNhd ℂ (fun z ↦ f z + (t.1 : ℂ) * g z) (closedBall c R) ∧
+      ∀ z ∈ sphere c R, f z + (t.1 : ℂ) * g z ≠ 0 := by
+  exact ⟨rouche_homotopy_analyticOnNhd hf hg t.1,
+    rouche_homotopy_ne_zero_on_sphere hfg t⟩
+
 /-- **Rouché's theorem on a closed disk.** If `f` and `g` are holomorphic on
 a neighborhood of the closed disk and `‖g‖ < ‖f‖` on its boundary, then `f`
 and `f + g` have the same number of zeros in the disk, counted with
@@ -65,8 +90,8 @@ multiplicity.
 The current Mathlib divisor/Jensen API supplies the zero multiplicities and
 their local finiteness.  The missing bridge is invariance of the total divisor
 under a boundary-nonvanishing holomorphic homotopy (equivalently, the argument
-principle). `rouche_homotopy_ne_zero_on_sphere` proves the full boundary
-nonvanishing hypothesis for the standard straight-line homotopy. -/
+principle). `rouche_homotopy_analyticOnNhd_and_ne_zero` proves the complete
+analytic and boundary input for the standard straight-line homotopy. -/
 theorem zeroCountInClosedBall_add_eq
     {f g : ℂ → ℂ} {c : ℂ} {R : ℝ}
     (hR : 0 < R)
