@@ -36,6 +36,9 @@ which correctly captures "analytic in a neighborhood of Δ̄."
 
 import Mathlib.Analysis.Complex.Schwarz
 import Mathlib.Analysis.Complex.AbsMax
+import Mathlib.Analysis.Complex.MeanValue
+import Mathlib.Analysis.Convex.Integral
+import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 open Complex Metric Set Real MeasureTheory
@@ -65,7 +68,50 @@ theorem curve_length_ge_two_pi
     (hf_zero : f 0 = 0)
     (hf_deriv : ‖deriv f 0‖ = 1) :
     2 * π ≤ curveLength f := by
-  sorry
+  rcases hf_holo with ⟨ε, hε, hf⟩
+  have hlarge : 1 < 1 + ε := by linarith
+  have hf_open : DifferentiableOn ℂ f (ball 0 (1 + ε)) :=
+    hf.mono ball_subset_closedBall
+  have hderiv_open : DifferentiableOn ℂ (deriv f) (ball 0 (1 + ε)) :=
+    hf_open.deriv isOpen_ball
+  have hderiv_closed : DifferentiableOn ℂ (deriv f) (closedBall 0 1) :=
+    hderiv_open.mono (closedBall_subset_ball hlarge)
+  have hderiv_cl : DiffContOnCl ℂ (deriv f) (ball 0 1) := by
+    apply DifferentiableOn.diffContOnCl
+    rw [closure_ball 0 one_ne_zero]
+    exact hderiv_closed
+  have hderiv_cl' :
+      DiffContOnCl ℂ (deriv f) (ball 0 |(1 : ℝ)|) := by
+    simpa only [abs_one] using hderiv_cl
+  have hmean :
+      circleAverage (deriv f) 0 1 = deriv f 0 :=
+    hderiv_cl'.circleAverage
+  have hlength : 0 < 2 * π := by positivity
+  have hintegral :
+      ‖∫ θ in (0 : ℝ)..(2 * π), deriv f (circleMap 0 1 θ)‖ ≤
+        ∫ θ in (0 : ℝ)..(2 * π), ‖deriv f (circleMap 0 1 θ)‖ :=
+    intervalIntegral.norm_integral_le_integral_norm hlength.le
+  have hcurve :
+      (∫ θ in (0 : ℝ)..(2 * π), ‖deriv f (circleMap 0 1 θ)‖) =
+        curveLength f := by
+    simp only [curveLength, circleMap, zero_add]
+    congr 1
+    funext θ
+    norm_num
+    rw [mul_comm]
+  have havg :
+      2 * π * ‖circleAverage (deriv f) 0 1‖ ≤ curveLength f := by
+    calc
+      2 * π * ‖circleAverage (deriv f) 0 1‖ =
+          ‖∫ θ in (0 : ℝ)..(2 * π), deriv f (circleMap 0 1 θ)‖ := by
+            rw [circleAverage_def, norm_smul]
+            simp only [Real.norm_eq_abs, abs_inv, abs_of_pos hlength]
+            field_simp
+      _ ≤ ∫ θ in (0 : ℝ)..(2 * π), ‖deriv f (circleMap 0 1 θ)‖ :=
+        hintegral
+      _ = curveLength f := hcurve
+  rw [hmean, hf_deriv, mul_one] at havg
+  exact havg
 
 /-- Part 2: ℓ(C) > 2π ⟹ Δ ⊄ f(Δ).
 
@@ -132,6 +178,45 @@ lemma jensen_exp_circle
     (hg_pos : ∀ θ ∈ Icc (0:ℝ) (2 * π), 0 < g θ) :
     Real.exp ((1 / (2 * π)) * ∫ θ in (0:ℝ)..(2 * π), Real.log (g θ)) ≤
       (1 / (2 * π)) * ∫ θ in (0:ℝ)..(2 * π), g θ := by
-  sorry
+  let s : Set ℝ := Icc 0 (2 * π)
+  have hs : MeasurableSet s := measurableSet_Icc
+  have hlength : 0 < 2 * π := by positivity
+  have hvol : volume s = ENNReal.ofReal (2 * π) := by
+    simp [s, Real.volume_Icc]
+  have hvol_ne : volume s ≠ 0 := by
+    rw [hvol]
+    exact ENNReal.ofReal_ne_zero_iff.mpr hlength
+  have hvol_top : volume s ≠ ⊤ := by
+    rw [hvol]
+    exact ENNReal.ofReal_ne_top
+  have hexp_int :
+      IntegrableOn (Real.exp ∘ fun θ => Real.log (g θ)) s volume := by
+    refine hg_int.congr_fun ?_ hs
+    intro θ hθ
+    exact (Real.exp_log (hg_pos θ hθ)).symm
+  have hjensen :=
+    convexOn_exp.map_set_average_le Real.continuous_exp.continuousOn
+      isClosed_univ hvol_ne hvol_top
+      (Filter.Eventually.of_forall fun _ => mem_univ _)
+      hg_log_int hexp_int
+  have havg_exp :
+      (⨍ θ in s, Real.exp (Real.log (g θ)) ∂volume) =
+        ⨍ θ in s, g θ ∂volume := by
+    exact setAverage_congr_fun hs
+      (Filter.Eventually.of_forall fun θ hθ => Real.exp_log (hg_pos θ hθ))
+  rw [havg_exp] at hjensen
+  have hlog_interval :
+      (∫ θ in (0 : ℝ)..(2 * π), Real.log (g θ)) =
+        ∫ θ in s, Real.log (g θ) ∂volume := by
+    rw [intervalIntegral.integral_of_le hlength.le,
+      ← integral_Icc_eq_integral_Ioc]
+  have hg_interval :
+      (∫ θ in (0 : ℝ)..(2 * π), g θ) =
+        ∫ θ in s, g θ ∂volume := by
+    rw [intervalIntegral.integral_of_le hlength.le,
+      ← integral_Icc_eq_integral_Ioc]
+  rw [hlog_interval, hg_interval]
+  simpa only [setAverage_eq, hvol, measureReal_def,
+    ENNReal.toReal_ofReal hlength.le, inv_eq_one_div, smul_eq_mul] using hjensen
 
 end
