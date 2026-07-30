@@ -55,6 +55,11 @@ noncomputable instance : MeasureSpace ℂ := ⟨volume.map Complex.equivRealProd
 
 namespace ApmCanaries.A01A07
 
+noncomputable local instance : IsFiniteMeasureOnCompacts (volume : Measure ℂ) := by
+  change IsFiniteMeasureOnCompacts (volume.map Complex.equivRealProd.symm)
+  exact Measure.IsFiniteMeasureOnCompacts.map volume
+    Complex.equivRealProdCLM.toHomeomorph.symm
+
 variable {Ω : Set ℂ} (hΩ : IsOpen Ω)
 
 /-- L¹ convergence on disks: `∫_D |fₙ - F| dA → 0` for every closed disk `D ⊂ Ω`.
@@ -370,6 +375,103 @@ lemma exists_closedBall_subset_of_mem_open
   obtain ⟨ε, hε, hεU⟩ := Metric.isOpen_iff.mp hU x hx
   refine ⟨ε / 2, half_pos hε, ?_⟩
   exact (closedBall_subset_ball (half_lt_self hε)).trans hεU
+
+/-- Diskwise L¹ convergence makes a holomorphic sequence uniformly Cauchy on
+the concentric disk of half the radius. -/
+lemma uniformCauchySeqOn_closedBall_half
+    {f : ℕ → ℂ → ℂ} {F : ℂ → ℂ} {U : Set ℂ}
+    (hf : ∀ n, DifferentiableOn ℂ (f n) U)
+    (hF : ContinuousOn F U)
+    (hconv : L1ConvergesOnDisks f F U)
+    {x : ℂ} {R : ℝ} (hR : 0 < R) (hRU : closedBall x R ⊆ U) :
+    UniformCauchySeqOn f atTop (closedBall x (R / 2)) := by
+  rw [Metric.uniformCauchySeqOn_iff]
+  intro ε hε
+  let c : ℝ := 1 / (Real.pi * (R / 2) ^ 2)
+  have hc : 0 < c := one_div_pos.mpr (mul_pos Real.pi_pos (sq_pos_of_pos (half_pos hR)))
+  have hthreshold : 0 < ε / (2 * c) := div_pos hε (mul_pos two_pos hc)
+  have hm_small :
+      ∀ᶠ n in atTop,
+        (∫ w in closedBall x R, ‖f n w - F w‖) < ε / (2 * c) :=
+    (hconv x R hR hRU).eventually_lt_const hthreshold
+  obtain ⟨N, hN⟩ := eventually_atTop.mp hm_small
+  refine ⟨N, fun m hm n hn y hy ↦ ?_⟩
+  have hsmall_subset : closedBall y (R / 2) ⊆ closedBall x R := by
+    intro w hw
+    rw [mem_closedBall] at hw hy ⊢
+    exact (dist_triangle w y x).trans (by linarith)
+  have hsmallU : closedBall y (R / 2) ⊆ U := hsmall_subset.trans hRU
+  have hfm : DifferentiableOn ℂ (f m) (closedBall y (R / 2)) :=
+    (hf m).mono hsmallU
+  have hfn : DifferentiableOn ℂ (f n) (closedBall y (R / 2)) :=
+    (hf n).mono hsmallU
+  have hsubmean :
+      ‖f m y - f n y‖ ≤
+        c * ∫ w in closedBall y (R / 2), ‖f m w - f n w‖ := by
+    simpa only [c] using
+      norm_le_area_integral_div_area (g := fun w ↦ f m w - f n w)
+        (z₀ := y) (half_pos hR) (hfm.sub hfn)
+  have hfm_cont : ContinuousOn (f m) (closedBall x R) :=
+    ((hf m).mono hRU).continuousOn
+  have hfn_cont : ContinuousOn (f n) (closedBall x R) :=
+    ((hf n).mono hRU).continuousOn
+  have hF_cont : ContinuousOn F (closedBall x R) := hF.mono hRU
+  have hIm : IntegrableOn (fun w ↦ ‖f m w - F w‖) (closedBall x R) :=
+    (hfm_cont.sub hF_cont).norm.integrableOn_compact (isCompact_closedBall x R)
+  have hIn : IntegrableOn (fun w ↦ ‖f n w - F w‖) (closedBall x R) :=
+    (hfn_cont.sub hF_cont).norm.integrableOn_compact (isCompact_closedBall x R)
+  have hdiff :
+      (∫ w in closedBall y (R / 2), ‖f m w - f n w‖) ≤
+        (∫ w in closedBall x R, ‖f m w - F w‖) +
+          ∫ w in closedBall x R, ‖f n w - F w‖ := by
+    calc
+      (∫ w in closedBall y (R / 2), ‖f m w - f n w‖) ≤
+          ∫ w in closedBall y (R / 2),
+            (‖f m w - F w‖ + ‖f n w - F w‖) := by
+              apply integral_mono
+              · exact ((hfm_cont.sub hfn_cont).norm.integrableOn_compact
+                  (isCompact_closedBall x R)).mono_set hsmall_subset
+              · exact (hIm.add hIn).mono_set hsmall_subset
+              · intro w
+                calc
+                  ‖f m w - f n w‖ =
+                      ‖(f m w - F w) - (f n w - F w)‖ := by ring_nf
+                  _ ≤ ‖f m w - F w‖ + ‖f n w - F w‖ := norm_sub_le _ _
+      _ = (∫ w in closedBall y (R / 2), ‖f m w - F w‖) +
+          ∫ w in closedBall y (R / 2), ‖f n w - F w‖ := by
+            rw [integral_add (hIm.mono_set hsmall_subset) (hIn.mono_set hsmall_subset)]
+      _ ≤ (∫ w in closedBall x R, ‖f m w - F w‖) +
+          ∫ w in closedBall x R, ‖f n w - F w‖ := by
+            exact add_le_add
+              (setIntegral_mono_set hIm
+                (ae_of_all _ fun _ ↦ norm_nonneg _) hsmall_subset.eventuallyLE)
+              (setIntegral_mono_set hIn
+                (ae_of_all _ fun _ ↦ norm_nonneg _) hsmall_subset.eventuallyLE)
+  rw [dist_eq_norm]
+  calc
+    ‖f m y - f n y‖ ≤
+        c * ∫ w in closedBall y (R / 2), ‖f m w - f n w‖ := hsubmean
+    _ ≤ c * ((∫ w in closedBall x R, ‖f m w - F w‖) +
+        ∫ w in closedBall x R, ‖f n w - F w‖) :=
+      mul_le_mul_of_nonneg_left hdiff hc.le
+    _ < ε := by
+      have hm' := hN m hm
+      have hn' := hN n hn
+      have hcne : c ≠ 0 := hc.ne'
+      have hm'' :
+          c * (∫ w in closedBall x R, ‖f m w - F w‖) < ε / 2 := by
+        calc
+          c * (∫ w in closedBall x R, ‖f m w - F w‖) <
+              c * (ε / (2 * c)) := mul_lt_mul_of_pos_left hm' hc
+          _ = ε / 2 := by field_simp
+      have hn'' :
+          c * (∫ w in closedBall x R, ‖f n w - F w‖) < ε / 2 := by
+        calc
+          c * (∫ w in closedBall x R, ‖f n w - F w‖) <
+              c * (ε / (2 * c)) := mul_lt_mul_of_pos_left hn' hc
+          _ = ε / 2 := by field_simp
+      rw [mul_add]
+      linarith
 
 /-- Step 1: L¹ convergence on disks implies uniform convergence on compact subsets.
 
