@@ -1,4 +1,5 @@
 import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.Tactic.ComputeDegree
 
 /-!
 # APM a92J05: Counting roots outside the unit disk via Rouché
@@ -6,10 +7,13 @@ import Mathlib.Analysis.Complex.Polynomial.Basic
 **Problem.** How many roots (with multiplicity) of z¹⁰ + 5z³ + 2z + 1 = 0
 lie in {|z| > 1}? **Answer: 7.** By Rouché on |z| = 1.
 
-## Statement repair note
+## Formalization status
 
-Mathlib does not have Rouché's theorem. We prove the supporting lemmas
-and leave the Rouché application as a genuine sorry boundary.
+Mathlib does not currently provide Rouché's theorem or the equivalent
+argument-principle invariance of zero count. We prove the elementary boundary
+estimate, exclude boundary roots, establish the total root count, and reduce
+the final theorem to the single assertion that three roots lie in the open
+unit disk.
 -/
 
 set_option linter.unusedVariables false in
@@ -26,6 +30,17 @@ noncomputable def h : ℂ[X] := X ^ 10 + C (2 : ℂ) * X + C (1 : ℂ)
 lemma aeval_g (z : ℂ) : aeval z g = 5 * z ^ 3 := by simp [g]
 lemma aeval_h (z : ℂ) : aeval z h = z ^ 10 + 2 * z + 1 := by simp [h]
 lemma aeval_p (z : ℂ) : aeval z p = z ^ 10 + 5 * z ^ 3 + 2 * z + 1 := by simp [p]
+
+lemma p_natDegree : p.natDegree = 10 := by
+  unfold p
+  compute_degree!
+
+lemma p_monic : p.Monic := by
+  unfold p
+  monicity!
+
+lemma p_card_roots : p.roots.card = 10 := by
+  rw [← (IsAlgClosed.splits p).natDegree_eq_card_roots, p_natDegree]
 
 /-- Auxiliary: if ‖z‖ = 1 then ‖z^n‖ = 1. -/
 lemma norm_pow_of_norm_one (z : ℂ) (hz : ‖z‖ = 1) (n : ℕ) : ‖z ^ n‖ = 1 := by
@@ -110,14 +125,55 @@ lemma p_no_roots_on_circle (z : ℂ) (hz : ‖z‖ = 1) : aeval z p ≠ 0 := by
   rw [hneg, norm_neg] at hge
   linarith
 
+/-- Since `p` has no roots on the unit circle, its roots partition into those
+strictly inside and those strictly outside. -/
+lemma roots_inside_add_outside :
+    p.roots.filter (fun z => ‖z‖ < 1) +
+      p.roots.filter (fun z => 1 < ‖z‖) = p.roots := by
+  have houtside :
+      p.roots.filter (fun z => 1 < ‖z‖) =
+        p.roots.filter (fun z => ¬‖z‖ < 1) := by
+    apply Multiset.filter_congr
+    intro z hz
+    constructor
+    · exact fun hzout hzin => (not_lt_of_ge hzout.le) hzin
+    · intro hznot
+      have hle : 1 ≤ ‖z‖ := le_of_not_gt hznot
+      exact hle.lt_of_ne fun heq => by
+        have hp0 : p ≠ 0 := by
+          intro hpzero
+          have := p_natDegree
+          rw [hpzero, natDegree_zero] at this
+          norm_num at this
+        have hzroot : aeval z p = 0 :=
+          (Polynomial.mem_roots_iff_aeval_eq_zero hp0).mp hz
+        exact p_no_roots_on_circle z heq.symm hzroot
+  calc
+    p.roots.filter (fun z => ‖z‖ < 1) +
+          p.roots.filter (fun z => 1 < ‖z‖) =
+        p.roots.filter (fun z => ‖z‖ < 1) +
+          p.roots.filter (fun z => ¬‖z‖ < 1) := congrArg _ houtside
+    _ = p.roots := Multiset.filter_add_not (fun z : ℂ => ‖z‖ < 1) p.roots
+
+/-- The already-formalized algebraic bookkeeping after Rouché: once the
+inside count is known to be three, the outside count is seven. -/
+lemma roots_outside_card_eq_of_inside_card_eq
+    (hinside : (p.roots.filter (fun z => ‖z‖ < 1)).card = 3) :
+    (p.roots.filter (fun z => 1 < ‖z‖)).card = 7 := by
+  have hcard := congrArg Multiset.card roots_inside_add_outside
+  rw [Multiset.card_add, p_card_roots, hinside] at hcard
+  omega
+
 /-- Main theorem: p has exactly 7 roots in {|z| > 1}.
 
-    **SORRY BOUNDARY:** Uses Rouché's theorem (not in Mathlib). The proven
-    lemmas (Rouché condition, no roots on circle) reduce the gap to the
-    single Rouché application: p has 3 roots inside {|z| < 1} (same as
-    5z³ by Rouché), and 10 − 3 = 7 outside. -/
+    **SORRY BOUNDARY:** the remaining goal is precisely the Rouché conclusion
+    that `p` has three roots in the open unit disk, counted with multiplicity.
+    `ConstructionTargets/Rouche.lean` proves boundary nonvanishing for the
+    straight-line homotopy, but its zero-count homotopy-invariance theorem is
+    still open. Importing that theorem would only relocate `sorryAx`. -/
 theorem roots_outside_unit_disk :
     (p.roots.filter (fun z => 1 < ‖z‖)).card = 7 := by
+  apply roots_outside_card_eq_of_inside_card_eq
   sorry
 
 end ApmCanaries.A92J05
