@@ -6,6 +6,8 @@ import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Topology.Algebra.Order.Floor
+import Mathlib.Algebra.Ring.Parity
 
 /-!
 # APM a01A04: Volumes of unit balls in ℝⁿ
@@ -169,6 +171,77 @@ theorem ballSlice_integral_tendsto_zero :
 
 /-! ## Part (c): Aⁿ · m(B_{n,1}) → 0 -/
 
+private lemma gamma_half_nat_lower (k : ℕ) :
+    (k.factorial : ℝ) * Real.sqrt Real.pi / 2 ≤
+      Real.Gamma ((k : ℝ) + 3 / 2) := by
+  induction k with
+  | zero =>
+      norm_num only [Nat.factorial_zero, Nat.cast_one, Nat.cast_zero, zero_add]
+      rw [show (3 / 2 : ℝ) = 1 / 2 + 1 by ring,
+        Real.Gamma_add_one (by norm_num), Real.Gamma_one_half_eq]
+      ring_nf
+      exact le_rfl
+  | succ k ih =>
+      have hk0 : 0 ≤ (k : ℝ) := Nat.cast_nonneg k
+      have hgam0 : 0 ≤ Real.Gamma ((k : ℝ) + 3 / 2) :=
+        (Real.Gamma_pos_of_pos (by linarith)).le
+      have hcoef : (k : ℝ) + 1 ≤ (k : ℝ) + 3 / 2 := by linarith
+      have hmul :
+          ((k : ℝ) + 1) * ((k.factorial : ℝ) * Real.sqrt Real.pi / 2) ≤
+            ((k : ℝ) + 3 / 2) * Real.Gamma ((k : ℝ) + 3 / 2) :=
+        mul_le_mul hcoef ih (by positivity) (by positivity)
+      rw [Nat.factorial_succ, Nat.cast_mul, Nat.cast_succ]
+      convert hmul using 1
+      · ring
+      · rw [show (k : ℝ) + 1 + 3 / 2 =
+          ((k : ℝ) + 3 / 2) + 1 by ring,
+          Real.Gamma_add_one (by linarith)]
+
+private lemma even_ball_volume (k : ℕ) (hk : 0 < k) :
+    (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2 * k))) 1)).toReal =
+      Real.pi ^ k / k.factorial := by
+  have hn : 0 < 2 * k := Nat.mul_pos (by norm_num) hk
+  letI : Nonempty (Fin (2 * k)) := Fin.pos_iff_nonempty.mp hn
+  rw [EuclideanSpace.volume_ball]
+  simp only [ENNReal.ofReal_one, one_pow, one_mul, Fintype.card_fin]
+  rw [ENNReal.toReal_ofReal]
+  · rw [show ((2 * k : ℕ) : ℝ) / 2 + 1 = (k : ℝ) + 1 by
+          norm_num only [Nat.cast_mul, Nat.cast_ofNat]
+          ring,
+        Real.Gamma_nat_eq_factorial]
+    rw [pow_mul, Real.sq_sqrt Real.pi_nonneg]
+  · exact div_nonneg (pow_nonneg (Real.sqrt_nonneg _) _)
+      (Real.Gamma_pos_of_pos (by positivity)).le
+
+private lemma odd_ball_volume_le (k : ℕ) :
+    (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2 * k + 1))) 1)).toReal ≤
+      2 * Real.pi ^ k / k.factorial := by
+  have hn : 0 < 2 * k + 1 := by omega
+  letI : Nonempty (Fin (2 * k + 1)) := Fin.pos_iff_nonempty.mp hn
+  rw [EuclideanSpace.volume_ball]
+  simp only [ENNReal.ofReal_one, one_pow, one_mul, Fintype.card_fin]
+  rw [ENNReal.toReal_ofReal]
+  · have hden :
+        (k.factorial : ℝ) * Real.sqrt Real.pi / 2 ≤
+          Real.Gamma (((2 * k + 1 : ℕ) : ℝ) / 2 + 1) := by
+      convert gamma_half_nat_lower k using 1
+      norm_num only [Nat.cast_add, Nat.cast_mul, Nat.cast_one, Nat.cast_ofNat]
+      ring
+    apply (div_le_iff₀ (Real.Gamma_pos_of_pos (by positivity))).2
+    calc
+      Real.sqrt Real.pi ^ (2 * k + 1) =
+          Real.pi ^ k * Real.sqrt Real.pi := by
+            rw [pow_succ', pow_mul, Real.sq_sqrt Real.pi_nonneg]
+            ring
+      _ = (2 * Real.pi ^ k / k.factorial) *
+          ((k.factorial : ℝ) * Real.sqrt Real.pi / 2) := by
+            field_simp
+      _ ≤ (2 * Real.pi ^ k / k.factorial) *
+          Real.Gamma (((2 * k + 1 : ℕ) : ℝ) / 2 + 1) :=
+            mul_le_mul_of_nonneg_left hden (by positivity)
+  · exact div_nonneg (pow_nonneg (Real.sqrt_nonneg _) _)
+      (Real.Gamma_pos_of_pos (by positivity)).le
+
 /-- Part (c): For any finite positive `A`, `Aⁿ · m(B_{n,1}) → 0`.
 
     From the recursion (a), `m(B_{n,1})` is a product of factors
@@ -185,6 +258,70 @@ theorem ballSlice_integral_tendsto_zero :
 theorem ball_volume_superexponential_decay (A : ℝ) (hA : 0 < A) :
     Tendsto (fun n =>
       A ^ n * (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin n)) 1)).toReal) atTop (nhds 0) := by
-  sorry
+  let C : ℝ := A ^ 2 * Real.pi
+  let D : ℝ := max 1 (2 * A)
+  have hC : 0 ≤ C := by positivity
+  have hD : 0 ≤ D := le_trans zero_le_one (le_max_left _ _)
+  have hD_one : 1 ≤ D := le_max_left _ _
+  have hD_twoA : 2 * A ≤ D := le_max_right _ _
+  have hfac :
+      Tendsto (fun k : ℕ => C ^ k / (k.factorial : ℝ)) atTop (nhds 0) :=
+    FloorSemiring.tendsto_pow_div_factorial_atTop C
+  have hscaled :
+      Tendsto (fun k : ℕ => D * (C ^ k / (k.factorial : ℝ))) atTop (nhds 0) := by
+    simpa using tendsto_const_nhds.mul hfac
+  rw [Metric.tendsto_atTop] at hscaled ⊢
+  intro ε hε
+  obtain ⟨N, hN⟩ := hscaled ε hε
+  refine ⟨2 * (N + 1), ?_⟩
+  intro n hn
+  rcases Nat.even_or_odd' n with ⟨k, rfl | rfl⟩
+  · have hkN : N ≤ k := by omega
+    have hkpos : 0 < k := by omega
+    have hbase : 0 ≤ C ^ k / (k.factorial : ℝ) := div_nonneg (pow_nonneg hC _) (by positivity)
+    have heq :
+        A ^ (2 * k) *
+            (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2 * k))) 1)).toReal =
+          C ^ k / (k.factorial : ℝ) := by
+      rw [even_ball_volume k hkpos]
+      simp only [C, mul_pow, pow_mul]
+      ring
+    rw [heq, Real.dist_eq, sub_zero, abs_of_nonneg hbase]
+    have hscaled_nonneg : 0 ≤ D * (C ^ k / (k.factorial : ℝ)) :=
+      mul_nonneg hD hbase
+    have hNk := hN k hkN
+    rw [Real.dist_eq, sub_zero, abs_of_nonneg hscaled_nonneg] at hNk
+    exact lt_of_le_of_lt (by nlinarith) hNk
+  · have hkN : N ≤ k := by omega
+    have hbase : 0 ≤ C ^ k / (k.factorial : ℝ) := div_nonneg (pow_nonneg hC _) (by positivity)
+    have hvol_nonneg :
+        0 ≤ (volume (Metric.ball
+          (0 : EuclideanSpace ℝ (Fin (2 * k + 1))) 1)).toReal :=
+      ENNReal.toReal_nonneg
+    have htarget_nonneg :
+        0 ≤ A ^ (2 * k + 1) *
+          (volume (Metric.ball
+            (0 : EuclideanSpace ℝ (Fin (2 * k + 1))) 1)).toReal :=
+      mul_nonneg (pow_nonneg hA.le _) hvol_nonneg
+    rw [Real.dist_eq, sub_zero, abs_of_nonneg htarget_nonneg]
+    have hvol := odd_ball_volume_le k
+    have htarget_le :
+        A ^ (2 * k + 1) *
+            (volume (Metric.ball
+              (0 : EuclideanSpace ℝ (Fin (2 * k + 1))) 1)).toReal ≤
+          D * (C ^ k / (k.factorial : ℝ)) := by
+      calc
+        _ ≤ A ^ (2 * k + 1) * (2 * Real.pi ^ k / (k.factorial : ℝ)) :=
+          mul_le_mul_of_nonneg_left hvol (pow_nonneg hA.le _)
+        _ = (2 * A) * (C ^ k / (k.factorial : ℝ)) := by
+          simp only [C, mul_pow, pow_succ', pow_mul]
+          ring
+        _ ≤ D * (C ^ k / (k.factorial : ℝ)) :=
+          mul_le_mul_of_nonneg_right hD_twoA hbase
+    have hscaled_nonneg : 0 ≤ D * (C ^ k / (k.factorial : ℝ)) :=
+      mul_nonneg hD hbase
+    have hNk := hN k hkN
+    rw [Real.dist_eq, sub_zero, abs_of_nonneg hscaled_nonneg] at hNk
+    exact lt_of_le_of_lt htarget_le hNk
 
 end ApmCanaries.A01A04
