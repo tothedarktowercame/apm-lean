@@ -113,9 +113,22 @@ This follows from the convexity of exp applied to the probability measure
 - The probability measure on [0,2π] with density 1/(2π) needs to be set up.
 - Mathlib's convexity results (`Real.convexOn_exp`) exist but the measure-
   theoretic Jensen inequality needs additional setup. -/
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). FALSE as previously stated: the
+-- statement integrates `Real.log (g θ)` without hypothesising that `log ∘ g` is
+-- integrable, and Lean's Bochner integral of a NON-integrable function is 0.
+-- Counterexample on [0,2π]: g θ = 1 at θ = 0 and e^(-1/θ) otherwise. That g is
+-- measurable, positive everywhere, bounded by 1 and integrable, so it satisfies
+-- every hypothesis — but log (g θ) = -1/θ a.e., which is not integrable near 0,
+-- so the left side collapses to exp 0 = 1 while the right side is strictly below
+-- 1 because 0 < g < 1 a.e. Adding the missing integrability hypothesis.
+--
+-- Same FAMILY as a01A02 (faithfulness-ledger #4): a Lean junk-value convention —
+-- there `ENNReal.toReal ⊤ = 0`, here `∫ (non-integrable) = 0` — silently turning
+-- an unbounded quantity into a harmless one. Both are translation defects.
 lemma jensen_exp_circle
     {g : ℝ → ℝ} (hg_meas : AEStronglyMeasurable g (volume.restrict (Icc 0 (2 * π))))
     (hg_int : IntegrableOn g (Icc 0 (2 * π)) volume)
+    (hg_log_int : IntegrableOn (fun θ => Real.log (g θ)) (Icc 0 (2 * π)) volume)
     (hg_pos : ∀ θ ∈ Icc (0:ℝ) (2 * π), 0 < g θ) :
     Real.exp ((1 / (2 * π)) * ∫ θ in (0:ℝ)..(2 * π), Real.log (g θ)) ≤
       (1 / (2 * π)) * ∫ θ in (0:ℝ)..(2 * π), g θ := by
