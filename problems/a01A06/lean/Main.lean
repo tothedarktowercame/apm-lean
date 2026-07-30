@@ -4,6 +4,8 @@ import Mathlib.MeasureTheory.Integral.IntegrableOn
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+import Mathlib.Analysis.SpecialFunctions.Pow.Integral
 
 /-!
 # APM a01A06: Orlicz-type duality — exponential integrability constraint implies exponential measure decay
@@ -70,8 +72,8 @@ structure OrliczBound (g : ℝ → ℝ) (A : ℝ) : Prop where
     IntegrableOn (fun x => g x * f x) (Icc (0 : ℝ) 1) volume →
     (∫ x in Icc (0 : ℝ) 1, g x * f x) < A
 
-/-- Part (a): exponential decay of the distribution function.
-    `μ({g > λ}) ≤ ENNReal.ofReal (C · e^{-α·λ})` for all `λ ≥ 0`. -/
+/-- Part (a), conservatively repaired: the assumed `L¹` membership gives the
+    polynomial distribution bound `μ({g > λ}) ≤ C / λ` by Markov's inequality. -/
 -- STATEMENT REPAIR 2026-07-30 (Joe-authorised). See faithfulness-ledger #8 and
 -- the ledger's §WHERE THE DEFECTS COME FROM. This is the one CLASS-B row: the
 -- INFORMAL SOLUTION is wrong, and the formaliser faithfully encoded its wrong
@@ -99,23 +101,36 @@ theorem distribution_polynomial_decay
       ∀ (lam : ℝ), 1 ≤ lam →
         μ {x ∈ Icc (0 : ℝ) 1 | lam < g x} ≤
           ENNReal.ofReal (C / lam) := by
-  -- The proof proceeds by choosing the test function
-  -- f = c·χ_{g>λ} - log(e^c·m({g>λ}) + 1 - m({g>λ}))
-  -- with c = λ/2, verifying ∫e^f = 1, applying the Orlicz bound,
-  -- and optimizing to derive m({g>λ}) ≤ C·e^{-αλ}.
-  -- This requires: (1) formalizing the admissibility of f_c,
-  -- (2) computing ∫ g·f_c ≥ (c·λ - ‖g‖₁·norm_const)·m({g>λ}),
-  -- (3) deriving the implicit inequality and solving for m({g>λ}).
-  -- BLOCKER: Mathlib's API for distribution functions, Cavalieri's principle,
-  -- and integration over level sets does not yet provide the building blocks
-  -- needed to chain these steps in a clean way. The key missing pieces are:
-  --   - `MeasureTheory.lintegral_comp_eq_lintegral_meas_lt_mul` (layer cake)
-  --     exists but requires ENNReal-valued functions and careful coercion
-  --   - Integration of `g · χ_E` where E = {g > λ} requires decomposing
-  --     the integral over level sets
-  --   - The optimization step (choosing c = λ/2 and deriving the bound)
-  --     is a real-analysis argument that requires explicit ε-management
-  sorry
+  let C := (∫ x, g x ∂μ) + 1
+  have hg_int : Integrable g μ := hg.integrable
+  have hg_nonneg : 0 ≤ᵐ[μ] g := by
+    filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+    exact hg.nonneg x hx
+  have hC : 0 < C := by
+    dsimp [C]
+    linarith [integral_nonneg_of_ae hg_nonneg]
+  refine ⟨C, hC, fun lam hlam ↦ ?_⟩
+  have hlam_pos : 0 < lam := lt_of_lt_of_le zero_lt_one hlam
+  let S := {x ∈ Icc (0 : ℝ) 1 | lam < g x}
+  have hS_le : μ S ≤ μ {x | lam ≤ g x} :=
+    measure_mono fun _ hx ↦ le_of_lt hx.2
+  have hμS_top : μ S ≠ ⊤ := by
+    exact ne_top_of_le_ne_top (show μ Set.univ ≠ ⊤ by simp [μ])
+      (measure_mono (subset_univ S))
+  have hμge_top : μ {x | lam ≤ g x} ≠ ⊤ := by
+    exact ne_top_of_le_ne_top (show μ Set.univ ≠ ⊤ by simp [μ])
+      (measure_mono (subset_univ _))
+  have hmarkov :
+      lam * (μ S).toReal ≤ ∫ x, g x ∂μ := by
+    refine le_trans ?_ (mul_meas_ge_le_integral_of_nonneg hg_nonneg hg_int lam)
+    exact mul_le_mul_of_nonneg_left
+      ((ENNReal.toReal_le_toReal hμS_top hμge_top).2 hS_le)
+      hlam_pos.le
+  apply (ENNReal.toReal_le_toReal hμS_top ENNReal.ofReal_ne_top).mp
+  rw [ENNReal.toReal_ofReal (div_nonneg hC.le hlam_pos.le)]
+  apply (le_div_iff₀ hlam_pos).2
+  simpa [C, mul_comm] using
+    hmarkov.trans (by show (∫ x, g x ∂μ) ≤ (∫ x, g x ∂μ) + 1; linarith)
 
 /-- Part (b): g ∈ L²([0,1]).
     Exponential decay of the distribution function implies g² is integrable
@@ -134,17 +149,14 @@ theorem distribution_polynomial_decay
 theorem orlicz_bound_not_implies_L2 :
     ∃ (g : ℝ → ℝ) (A : ℝ), 0 < A ∧ OrliczBound g A ∧
       ¬ IntegrableOn (fun x => g x ^ 2) (Icc (0 : ℝ) 1) volume := by
-  -- Strategy:
-  -- 1. From part (a): m({g > λ}) ≤ C·e^{-αλ}
-  -- 2. Layer-cake: ∫ g² = ∫₀^∞ 2λ·m({g>λ}) dλ
-  -- 3. Split: ∫₀^M 2λ dλ + ∫_M^∞ 2λ·C·e^{-αλ} dλ
-  -- 4. Both terms finite → g² ∈ L¹
-  -- BLOCKER: depends on `distribution_exponential_decay` (part a),
-  -- which is itself blocked on the test-function optimization machinery.
-  -- Additionally, the layer-cake identity for g² requires either
-  -- `MeasureTheory.lintegral_norm_eq_lintegral_meas_lt` or a direct
-  -- application of Cavalieri's principle, neither of which is currently
-  -- straightforward to apply for ℝ-valued g² over [0,1].
+  -- Remaining formalization plan: take `g x = x ^ (-3 / 4 : ℝ)`.
+  -- `integrableOn_Ioo_rpow_iff` proves `g ∈ L¹` and `g² ∉ L¹` after
+  -- removing the null endpoints.  Young--Fenchel follows pointwise from
+  -- `Real.add_one_le_exp (f x - Real.log (g x))`; integration then bounds
+  -- `∫ g*f` by `∫ exp f + ∫ (g*log g - g)`.  The unresolved glue is proving
+  -- integrability of `x^(-3/4) * log (x^(-3/4))` on `(0,1)` (dominate it by
+  -- `x^(-7/8)` using `Real.abs_log_mul_self_rpow_lt`) and transporting all
+  -- three integrals across the null endpoints of `Icc`.
   sorry
 
 /-- The test function `f_c = c·χ_E - log(e^c·m(E) + 1 - m(E))` is admissible.
@@ -157,17 +169,52 @@ lemma test_function_admissible
     let norm_const := Real.log ((Real.exp c - 1) * δ + 1)
     ∫ x in Icc (0 : ℝ) 1,
       Real.exp (c * (E.indicator (fun _ => (1:ℝ)) x) - norm_const) ∂volume = 1 := by
-  -- Proof: ∫_{[0,1]} e^{c·χ_E - λ} = e^{-λ} · ∫_{[0,1]} e^{c·χ_E}
-  -- = e^{-λ} · (e^c · m(E) + 1·m(E^c))
-  -- = e^{-λ} · (e^c·δ + 1 - δ)
-  -- With λ = log((e^c-1)·δ + 1), this equals
-  --   1/((e^c-1)·δ + 1) · ((e^c-1)·δ + 1) = 1.
-  -- BLOCKER: requires integration of a constant over a measurable set
-  -- and multiplication by e^{-λ}, which involves `integral_mul_const`,
-  -- `setIntegral_const`, and careful ENNReal/toReal coercion.
-  -- The computation is elementary but the formalization requires
-  -- several Mathlib glue lemmas that are not immediately available.
-  sorry
+  dsimp only
+  let δ := (μ E).toReal
+  let q := (Real.exp c - 1) * δ + 1
+  have hδ : 0 ≤ δ := ENNReal.toReal_nonneg
+  have hec : 1 < Real.exp c := by
+    simpa using (Real.exp_lt_exp.mpr hc)
+  have hq : 0 < q := by
+    dsimp [q]
+    nlinarith
+  have hμE : (volume E).toReal = δ := by
+    dsimp [δ, μ]
+    rw [Measure.restrict_apply hE, inter_eq_left.mpr hEsub]
+  have hIcc_top : volume (Icc (0 : ℝ) 1) ≠ ⊤ := by
+    rw [Real.volume_Icc]
+    finiteness
+  have hdiff :
+      (volume (Icc (0 : ℝ) 1 \ E)).toReal = 1 - δ := by
+    rw [measure_diff hEsub hE.nullMeasurableSet
+        (ne_top_of_le_ne_top hIcc_top (measure_mono hEsub)),
+      ENNReal.toReal_sub_of_le (measure_mono hEsub) hIcc_top,
+      Real.volume_Icc, ENNReal.toReal_ofReal (by norm_num : (0 : ℝ) ≤ 1 - 0), hμE]
+    norm_num
+  have hμE_real : μ.real E = δ := by
+    rfl
+  have hμdiff_real : μ.real (Icc (0 : ℝ) 1 \ E) = 1 - δ := by
+    dsimp [μ, Measure.real]
+    rw [Measure.restrict_apply (measurableSet_Icc.diff hE),
+      inter_eq_left.mpr diff_subset, hdiff]
+  have hfun : ∀ x ∈ Icc (0 : ℝ) 1,
+      Real.exp (c * E.indicator (fun _ => (1 : ℝ)) x - Real.log q) =
+        E.indicator (fun _ => Real.exp (c - Real.log q)) x +
+        (Icc (0 : ℝ) 1 \ E).indicator (fun _ => Real.exp (-Real.log q)) x := by
+    intro x hx
+    by_cases hxE : x ∈ E <;> simp [Set.indicator_of_mem, Set.indicator_of_notMem, hxE, hx]
+  rw [setIntegral_congr_fun measurableSet_Icc hfun, integral_add]
+  · rw [integral_indicator_const _ hE,
+      integral_indicator_const _ (measurableSet_Icc.diff hE),
+      smul_eq_mul, smul_eq_mul, hμE_real, hμdiff_real]
+    rw [Real.exp_sub, Real.exp_neg, Real.exp_log hq]
+    field_simp
+    dsimp [q]
+    ring
+  · exact (integrableOn_const (μ := μ) (s := E) (ne_of_lt hδfin)).integrable_indicator hE
+  · exact (integrableOn_const (μ := μ) (s := Icc (0 : ℝ) 1 \ E)
+      (ne_top_of_le_ne_top (show μ Set.univ ≠ ⊤ by simp [μ])
+        (measure_mono (subset_univ _)))).integrable_indicator (measurableSet_Icc.diff hE)
 
 /-- A weaker but provable result: if the distribution function has exponential
     decay, then `g ∈ L²`. This isolates the measure-theory argument from the
@@ -184,16 +231,47 @@ theorem exponential_decay_implies_L2
       μ {x ∈ Icc (0 : ℝ) 1 | lam < g x} ≤
         ENNReal.ofReal (C * Real.exp (-α * lam))) :
     IntegrableOn (fun x => g x ^ 2) (Icc (0 : ℝ) 1) volume := by
-  -- Proof via layer cake:
-  -- ∫ g² = ∫₀^∞ 2λ · m({g>λ}) dλ
-  --      ≤ ∫₀^∞ 2λ · C·e^{-αλ} dλ
-  -- For α > 0, ∫₀^∞ 2λ·C·e^{-αλ} dλ = 2C/α² < ∞.
-  -- BLOCKER: the layer-cake formula for g² requires either
-  -- `lintegral_norm_eq_lintegral_meas_lt` (Cavalieri) or a direct
-  -- tail-integral identity, both of which need careful setup with
-  -- ENNReal-valued functions. The summability of the resulting integral
-  -- follows from standard analysis results but requires explicit
-  -- coercion through ENNReal arithmetic.
-  sorry
+  have hg_nn_ae : 0 ≤ᵐ[μ] g := by
+    filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+    exact hg_nn x hx
+  have htail (t : ℝ) :
+      μ {x | t < g x} = μ {x ∈ Icc (0 : ℝ) 1 | t < g x} := by
+    apply measure_congr
+    filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+    apply propext
+    change (t < g x) ↔ (x ∈ Icc (0 : ℝ) 1 ∧ t < g x)
+    simp [hx]
+  have hdom_int :
+      IntegrableOn (fun t : ℝ => C * Real.exp (-α * t) * t) (Ioi 0) := by
+    have hbase := integrableOn_rpow_mul_exp_neg_mul_rpow
+      (s := (1 : ℝ)) (p := (1 : ℝ)) (b := α) (by norm_num) (by norm_num) hα
+    simpa [Real.rpow_one, mul_comm, mul_left_comm] using hbase.const_mul C
+  have htail_lintegral :
+      (∫⁻ t in Ioi (0 : ℝ),
+        μ {x | t < g x} * ENNReal.ofReal (t ^ ((2 : ℝ) - 1))) < ⊤ := by
+    refine lt_of_le_of_lt (lintegral_mono_ae ?_) hdom_int.setLIntegral_lt_top
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+    rw [show (2 : ℝ) - 1 = 1 by norm_num, Real.rpow_one]
+    calc
+      μ {x | t < g x} * ENNReal.ofReal t
+          ≤ ENNReal.ofReal (C * Real.exp (-α * t)) * ENNReal.ofReal t :=
+        mul_le_mul_left (htail t ▸ hdecay t ht.le) _
+      _ = ENNReal.ofReal (C * Real.exp (-α * t) * t) := by
+        rw [ENNReal.ofReal_mul (mul_nonneg hC.le (Real.exp_pos _).le)]
+  have hsq_lintegral :
+      (∫⁻ x, ENNReal.ofReal (g x ^ 2) ∂μ) < ⊤ := by
+    have hrpow :
+        (∫⁻ x, ENNReal.ofReal (g x ^ (2 : ℝ)) ∂μ) < ⊤ := by
+      rw [lintegral_rpow_eq_lintegral_meas_lt_mul μ hg_nn_ae
+        hg_meas.aemeasurable (show (0 : ℝ) < 2 by norm_num)]
+      exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top htail_lintegral
+    simpa only [Real.rpow_two] using hrpow
+  change Integrable (fun x => g x ^ 2) μ
+  refine ⟨(hg_meas.pow_const 2).aestronglyMeasurable, ?_⟩
+  rw [hasFiniteIntegral_iff_norm]
+  convert hsq_lintegral using 1
+  apply lintegral_congr
+  intro x
+  simp only [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg (g x))]
 
 end ApmCanaries.A01A06
