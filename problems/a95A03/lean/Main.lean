@@ -32,6 +32,7 @@ import Mathlib.Analysis.SpecialFunctions.JapaneseBracket
 import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 import Mathlib.MeasureTheory.Function.LpSeminorm.Defs
+import ConstructionTargets.RadialIntegrationR3
 
 open MeasureTheory Set Module Real
 open scoped ENNReal NNReal
@@ -123,7 +124,73 @@ The function has a singularity at 0: lim_{x to 0} f(x) = infinity since
 |x|^{-2} tends to infinity. So ess sup |f| = infinity. -/
 theorem f_radial_not_memLp_top :
     ¬ MemLp f_radial ⊤ (volume : Measure E) := by
-  sorry
+  intro hf
+  have hess : eLpNormEssSup f_radial volume < ⊤ := by
+    simpa only [eLpNorm_exponent_top] using hf.eLpNorm_lt_top
+  rcases eLpNormEssSup_lt_top_iff_isBoundedUnder.mp hess with ⟨C, hC⟩
+  let δ : ℝ := (4 * ((C : ℝ) + 1))⁻¹
+  have hδ : 0 < δ := by
+    dsimp [δ]
+    positivity
+  have hδ_lt_one : δ < 1 := by
+    dsimp [δ]
+    apply (inv_lt_one₀ (by positivity)).2
+    have hC0 : 0 ≤ (C : ℝ) := C.coe_nonneg
+    nlinarith
+  have hne : ∀ᵐ x : E ∂volume, x ≠ 0 := by
+    rw [ae_iff]
+    simpa only [not_ne_iff, setOf_eq_eq_singleton] using
+      (measure_singleton (μ := volume) (0 : E))
+  have hout : ∀ᵐ x : E ∂volume, x ∉ Metric.ball 0 δ := by
+    filter_upwards [hC, hne] with x hxC hx0
+    intro hxball
+    have hr0 : 0 < ‖x‖ := norm_pos_iff.mpr hx0
+    have hrδ : ‖x‖ < δ := by
+      simpa only [Metric.mem_ball, dist_zero_right] using hxball
+    have hr1 : ‖x‖ < 1 := hrδ.trans hδ_lt_one
+    have hdenom_pos : 0 < ‖x‖ ^ 2 * (1 + ‖x‖ ^ 2) := by positivity
+    have hdenom_lt : ‖x‖ ^ 2 * (1 + ‖x‖ ^ 2) <
+        1 / ((C : ℝ) + 1) := by
+      have hC0 : 0 ≤ (C : ℝ) := C.coe_nonneg
+      have hC1 : 0 < (C : ℝ) + 1 := by positivity
+      have hr_sq_lt : ‖x‖ ^ 2 < ‖x‖ := by nlinarith [sq_nonneg (‖x‖)]
+      have hdenom_lt_two_r : ‖x‖ ^ 2 * (1 + ‖x‖ ^ 2) < 2 * ‖x‖ := by
+        nlinarith [sq_nonneg (‖x‖), sq_nonneg (‖x‖ ^ 2)]
+      rw [div_eq_mul_inv]
+      calc
+        ‖x‖ ^ 2 * (1 + ‖x‖ ^ 2) < 2 * ‖x‖ := hdenom_lt_two_r
+        _ < 2 * δ := by nlinarith
+        _ = 1 / (2 * ((C : ℝ) + 1)) := by
+          dsimp [δ]
+          (field_simp; ring)
+        _ < 1 / ((C : ℝ) + 1) := by
+          rw [div_lt_div_iff₀ (by positivity) hC1]
+          nlinarith
+    have hC_mul_lt : (C : ℝ) * (‖x‖ ^ 2 * (1 + ‖x‖ ^ 2)) < 1 := by
+      have hC0 : 0 ≤ (C : ℝ) := C.coe_nonneg
+      have hC1 : 0 < (C : ℝ) + 1 := by positivity
+      calc
+        (C : ℝ) * (‖x‖ ^ 2 * (1 + ‖x‖ ^ 2))
+            ≤ (C : ℝ) * (1 / ((C : ℝ) + 1)) :=
+                mul_le_mul_of_nonneg_left hdenom_lt.le hC0
+        _ < 1 := by
+          rw [one_div, ← div_eq_mul_inv]
+          exact (div_lt_one hC1).2 (by linarith)
+    have hlarge : (C : ℝ) < ‖f_radial x‖ := by
+      rw [f_radial, if_neg hx0, Real.norm_eq_abs,
+        abs_of_pos (mul_pos (sq_pos_of_pos (inv_pos.mpr hr0))
+          (inv_pos.mpr (by positivity)))]
+      have hformula :
+          ‖x‖⁻¹ ^ 2 * (1 + ‖x‖ ^ 2)⁻¹ =
+            (‖x‖ ^ 2 * (1 + ‖x‖ ^ 2))⁻¹ := by
+        field_simp
+      rw [hformula, ← one_div]
+      exact (lt_div_iff₀ hdenom_pos).2 hC_mul_lt
+    have hxC' : ‖f_radial x‖ ≤ (C : ℝ) := by exact_mod_cast hxC
+    exact (not_lt_of_ge hxC') hlarge
+  have hball_zero : volume (Metric.ball (0 : E) δ) = 0 := by
+    simpa only [ae_iff, not_not] using hout
+  exact (Metric.measure_ball_pos volume (0 : E) hδ).ne' hball_zero
 
 /-- Part (c): For g in L^2(R^3), f * g in L^2(R^3) with
   ||f * g||_2 <= 2 * pi^2 * ||g||_2.
@@ -148,7 +215,20 @@ theorem f_radial_conv_L2_bound
 Inherits the sorry from part (a). -/
 theorem f_radial_integrable :
     Integrable f_radial volume := by
-  sorry
+  let profile : ℝ → ℝ := fun r =>
+    if r = 0 then 0 else r⁻¹ ^ 2 * (1 + r ^ 2)⁻¹
+  have hradial : f_radial = fun x : E => profile ‖x‖ := by
+    funext x
+    by_cases hx : x = 0
+    · simp [f_radial, profile, hx]
+    · simp [f_radial, profile, hx, norm_ne_zero_iff.mpr hx]
+  rw [hradial,
+    ConstructionTargets.RadialIntegrationR3.integrable_radial_R3_iff]
+  refine integrable_inv_one_add_sq.integrableOn.congr_fun ?_ measurableSet_Ioi
+  intro r hr
+  have hr0 : r ≠ 0 := ne_of_gt hr
+  simp only [profile, if_neg hr0]
+  field_simp
 
 /-- Young's inequality: ||phi * g||_2 <= ||phi||_1 * ||g||_2.
 
@@ -182,7 +262,7 @@ lemma radial_integral_R3 {g : ℝ → ℝ}
     (hg : Integrable (fun x : E => g ‖x‖) volume) :
     ∫ x : E, g ‖x‖ ∂volume =
       4 * π * ∫ r in Ioi (0:ℝ), g r * r ^ 2 ∂volume := by
-  sorry
+  exact ConstructionTargets.RadialIntegrationR3.radial_integral_R3 hg
 
 /-- f_radial equals |x|^{-2}(1+|x|^2)^{-1} away from the origin. -/
 lemma f_radial_eq_of_ne_zero
