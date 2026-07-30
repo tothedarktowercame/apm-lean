@@ -1,5 +1,7 @@
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Integral.IntegrableOn
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.Analysis.Calculus.ParametricIntegral
 import Mathlib.Analysis.Complex.Liouville
 import Mathlib.Topology.MetricSpace.HausdorffDistance
 
@@ -19,6 +21,20 @@ variable (K : Set ℝ) (hK : IsCompact K) (hKne : K.Nonempty) (hKpos : 0 < volum
 -- Definition
 def cauchyTransform (z : ℂ) : ℂ :=
   ∫ t : ℝ in K, (1 : ℂ) / ((↑t : ℂ) - z)
+
+/-- The derivative of the Cauchy kernel `z ↦ 1 / (t - z)`. -/
+private lemma hasDerivAt_cauchyKernel (t : ℝ) (z : ℂ) (hz : (t : ℂ) ≠ z) :
+    HasDerivAt (fun w : ℂ ↦ (1 : ℂ) / ((t : ℂ) - w))
+      (((t : ℂ) - z)⁻¹ ^ 2) z := by
+  have hsub : (t : ℂ) - z ≠ 0 := sub_ne_zero.mpr hz
+  have h_sub : HasDerivAt (fun w : ℂ ↦ (t : ℂ) - w) (0 - 1) z :=
+    (hasDerivAt_const z (t : ℂ)).sub (hasDerivAt_id z)
+  have h_inv :
+      HasDerivAt (fun u : ℂ ↦ u⁻¹) (-(((t : ℂ) - z)⁻¹ ^ 2))
+        ((t : ℂ) - z) := by
+    convert hasDerivAt_inv hsub using 1
+    field_simp
+  simpa only [one_div] using (h_inv.comp z h_sub).congr_deriv (by ring)
 
 -- Lemma 1: dist > 0 for points outside compact K (embedded in ℂ)
 lemma infDist_pos_of_not_mem_image
@@ -44,9 +60,79 @@ include hK hKne hKpos
 -- Composition: (infDist > 0) → (uniform bound 2/d²) → (DCT derivative)
 theorem cauchyTransform_differentiableAt (z : ℂ) (hz : z ∉ ofReal '' K) :
     DifferentiableAt ℂ (cauchyTransform K) z := by
-  sorry -- DCT for complex parameter integral. Blocker: wiring
-        -- hasDerivAt_integral_of_dominated_convergence with complex
-        -- differentiability. The dominator is 2/d² where d = infDist z (ofReal '' K).
+  have hKim : IsCompact (ofReal '' K) :=
+    hK.image_of_continuousOn continuous_ofReal.continuousOn
+  have hopen : IsOpen ((ofReal '' K)ᶜ) := hKim.isClosed.isOpen_compl
+  obtain ⟨δ, hδ, hball⟩ := Metric.mem_nhds_iff.mp (hopen.mem_nhds hz)
+  let s : Set ℂ := ball z (δ / 2)
+  let F : ℂ → ℝ → ℂ := fun w t ↦ ((t : ℂ) - w)⁻¹
+  let F' : ℂ → ℝ → ℂ := fun w t ↦ ((t : ℂ) - w)⁻¹ ^ 2
+  let bound : ℝ → ℝ := fun _ ↦ (2 / δ) ^ 2
+  have hs : s ∈ 𝓝 z := ball_mem_nhds z (half_pos hδ)
+  have hs_sub : s ⊆ ball z δ := ball_subset_ball (by linarith)
+  have hnot_mem {w : ℂ} (hw : w ∈ s) {t : ℝ} (ht : t ∈ K) :
+      (t : ℂ) ≠ w := by
+    intro heq
+    exact (hball (hs_sub hw)) ⟨t, ht, heq⟩
+  have hF_cont {w : ℂ} (hw : w ∈ s) : ContinuousOn (F w) K := by
+    intro t ht
+    apply ContinuousAt.continuousWithinAt
+    dsimp [F]
+    fun_prop (disch := exact sub_ne_zero.mpr (hnot_mem hw ht))
+  have hF'_cont {w : ℂ} (hw : w ∈ s) : ContinuousOn (F' w) K := by
+    intro t ht
+    apply ContinuousAt.continuousWithinAt
+    dsimp [F']
+    fun_prop (disch := exact sub_ne_zero.mpr (hnot_mem hw ht))
+  have hF_meas :
+      ∀ᶠ w in 𝓝 z, AEStronglyMeasurable (F w) (volume.restrict K) := by
+    filter_upwards [hs] with w hw
+    exact (hF_cont hw).aestronglyMeasurable hK.measurableSet
+  have hF_int : Integrable (F z) (volume.restrict K) := by
+    exact (hF_cont (mem_ball_self (half_pos hδ))).integrableOn_compact hK
+  have hF'_meas : AEStronglyMeasurable (F' z) (volume.restrict K) := by
+    exact (hF'_cont (mem_ball_self (half_pos hδ))).aestronglyMeasurable hK.measurableSet
+  have hbound_int : Integrable bound (volume.restrict K) :=
+    integrableOn_const hK.measure_ne_top
+  have h_bound :
+      ∀ᵐ t ∂volume.restrict K, ∀ w ∈ s, ‖F' w t‖ ≤ bound t := by
+    filter_upwards [ae_restrict_mem hK.measurableSet] with t ht w hw
+    have htw : δ / 2 ≤ dist (t : ℂ) w := by
+      have htz : δ ≤ dist (t : ℂ) z := by
+        have : (t : ℂ) ∉ ball z δ := by
+          intro hmem
+          exact (hball hmem) ⟨t, ht, rfl⟩
+        simpa only [mem_ball, dist_comm, not_lt] using this
+      have hwz : dist w z < δ / 2 := by
+        simpa only [s, mem_ball, dist_comm] using hw
+      linarith [dist_triangle (t : ℂ) w z]
+    have hdist : 0 < dist (t : ℂ) w := (half_pos hδ).trans_le htw
+    dsimp [F', bound]
+    have hinv : ‖((t : ℂ) - w)⁻¹‖ ≤ 2 / δ := by
+      rw [norm_inv, ← dist_eq]
+      calc
+        (dist (t : ℂ) w)⁻¹ ≤ (δ / 2)⁻¹ :=
+          (inv_le_inv₀ hdist (half_pos hδ)).2 htw
+        _ = 2 / δ := by field_simp
+    rw [norm_pow]
+    gcongr
+  have h_diff :
+      ∀ᵐ t ∂volume.restrict K, ∀ w ∈ s,
+        HasDerivAt (F · t) (F' w t) w := by
+    filter_upwards [ae_restrict_mem hK.measurableSet] with t ht w hw
+    simpa [F, F', div_eq_mul_inv] using
+      hasDerivAt_cauchyKernel t w (hnot_mem hw ht)
+  have hmain :=
+    hasDerivAt_integral_of_dominated_loc_of_deriv_le
+      (μ := volume.restrict K) (x₀ := z) hs hF_meas hF_int
+      hF'_meas h_bound hbound_int h_diff
+  have heq :
+      cauchyTransform K =
+        fun w : ℂ ↦ ∫ t : ℝ in K, ((t : ℂ) - w)⁻¹ := by
+    funext w
+    simp only [cauchyTransform, div_eq_mul_inv, one_mul]
+  rw [heq]
+  simpa only [F] using hmain.2.differentiableAt
 
 -- Part (c): z * g(z) → -m(K)
 -- HtDP: DCT with pointwise -1/(1-t/z) → -1, dominator 2 on K
