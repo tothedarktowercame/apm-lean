@@ -362,6 +362,15 @@ lemma norm_sub_le_area_integral_div_area
     (norm_le_area_integral_div_area (g := fun w ↦ g w - c)
       (z₀ := z₀) hr (hg.sub (differentiableOn_const c)))
 
+/-- Every point of an open subset of `ℂ` is the center of a positive-radius
+closed disk contained in that subset. -/
+lemma exists_closedBall_subset_of_mem_open
+    {U : Set ℂ} (hU : IsOpen U) {x : ℂ} (hx : x ∈ U) :
+    ∃ r : ℝ, 0 < r ∧ closedBall x r ⊆ U := by
+  obtain ⟨ε, hε, hεU⟩ := Metric.isOpen_iff.mp hU x hx
+  refine ⟨ε / 2, half_pos hε, ?_⟩
+  exact (closedBall_subset_ball (half_lt_self hε)).trans hεU
+
 /-- Step 1: L¹ convergence on disks implies uniform convergence on compact subsets.
 
     The remaining proof can be organized locally at each `x ∈ Ω`.  Choose an
