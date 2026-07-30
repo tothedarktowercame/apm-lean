@@ -41,8 +41,8 @@ The generated statement had the right mathematical structure but needed:
 Mathlib provides the circle mean-value property, the Weierstrass theorem for
 locally uniform limits, and Cauchy's derivative estimate.  This file now also
 builds the disk-area mean-value identity from polar coordinates and Fubini.
-The remaining gap is the compact-local uniform Cauchy argument upgrading the
-diskwise L¹ hypothesis to locally uniform convergence.
+The final compact-local argument upgrades diskwise L¹ convergence to locally
+uniform convergence using the disk sub-mean inequality.
 -/
 
 set_option linter.unusedVariables false in
@@ -602,7 +602,7 @@ lemma tendsto_of_L1ConvergesOnDisks_at
 
 /-- Step 1: L¹ convergence on disks implies uniform convergence on compact subsets.
 
-    The remaining proof can be organized locally at each `x ∈ Ω`.  Choose an
+    The proof is organized locally at each `x ∈ Ω`.  Choose an
     outer closed disk in `Ω`.  The constant-centered disk sub-mean bound above,
     continuity of `F`, and diskwise L¹ convergence give `f n x → F x`.
     On a smaller concentric disk, the ordinary sub-mean bound applied to
