@@ -2,6 +2,7 @@ import Mathlib.Analysis.Fourier.FourierTransform
 import Mathlib.Analysis.Fourier.Convolution
 import Mathlib.Analysis.Convolution
 import Mathlib.Analysis.Fourier.FourierTransformDeriv
+import Mathlib.Analysis.Analytic.Uniqueness
 
 /-!
 # APM a01A03: Convolution identity determines indicator function
@@ -50,7 +51,9 @@ is left as a documented sorry.
 set_option linter.unusedVariables false in
 noncomputable section
 
-open MeasureTheory FourierTransform Filter
+open MeasureTheory FourierTransform Filter Set
+
+open scoped ContDiff
 
 namespace ApmCanaries.A01A03
 
@@ -94,5 +97,50 @@ theorem convolution_identity_implies_indicator
         (∫ t, g t * (deriv f) (x - t) ∂volume) = f (x + h) - f (x - h)) :
     g =ᵐ[volume] fun x => if x ∈ Set.Icc (-h) h then 1 else 0 := by
   sorry
+
+/-- In the current smoothness-index API, `ContDiff ℝ ⊤` means real analytic
+(`ContDiff ℝ ω`), not merely infinitely differentiable (`ContDiff ℝ ∞`).
+Consequently a compactly supported function satisfying the former is zero. -/
+theorem analytic_compactSupport_eq_zero
+    (f : ℝ → ℝ) (hf : ContDiff ℝ ω f) (hfc : HasCompactSupport f) :
+    f = 0 := by
+  have hf_an : AnalyticOnNhd ℝ f univ := hf.analyticOnNhd
+  obtain ⟨z, hz⟩ : ∃ z : ℝ, z ∉ tsupport f := by
+    by_contra hn
+    push_neg at hn
+    exact hfc.ne_univ (eq_univ_of_forall hn)
+  apply hf_an.eq_of_eventuallyEq
+    (analyticOnNhd_const : AnalyticOnNhd ℝ (fun _ : ℝ => (0 : ℝ)) univ)
+  filter_upwards [(isOpen_compl_iff.mpr (isClosed_tsupport f)).mem_nhds hz] with x hx
+  exact image_eq_zero_of_notMem_tsupport hx
+
+/-- The hypotheses of `convolution_identity_implies_indicator` are satisfied by
+`g = 0`, because its analytic compactly supported test class contains only the
+zero function, while its conclusion fails for every `h > 0`. -/
+theorem convolution_identity_counterexample :
+    ∃ (g : ℝ → ℝ) (h : ℝ),
+      Integrable g volume ∧ 0 < h ∧
+      (∀ f : ℝ → ℝ, ContDiff ℝ ⊤ f → HasCompactSupport f →
+        ∀ x : ℝ,
+          (∫ t, g t * (deriv f) (x - t) ∂volume) = f (x + h) - f (x - h)) ∧
+      ¬(g =ᵐ[volume] fun x => if x ∈ Set.Icc (-h) h then 1 else 0) := by
+  refine ⟨(0 : ℝ → ℝ), (1 : ℝ), integrable_zero ℝ ℝ volume, zero_lt_one, ?_, ?_⟩
+  · intro f hf hfc x
+    have hf0 : f = 0 := analytic_compactSupport_eq_zero f hf hfc
+    simp [hf0]
+  · intro hae
+    have hae' :
+        (0 : ℝ → ℝ) =ᵐ[volume]
+          (Icc (-1) 1).indicator (fun _ => (1 : ℝ)) := by
+      filter_upwards [hae] with x hx
+      by_cases hxI : x ∈ Icc (-1) 1
+      · simpa [indicator_of_mem hxI, hxI] using hx
+      · simpa [indicator_of_notMem hxI, hxI] using hx
+    have hint :
+        ∫ x : ℝ, (Icc (-1) 1).indicator (fun _ => (1 : ℝ)) x ∂volume = 0 := by
+      simpa using (integral_congr_ae hae').symm
+    have hz : volume.real (Icc (-1 : ℝ) 1) = 0 := by
+      simpa using hint
+    norm_num [Measure.real, Real.volume_Icc] at hz
 
 end ApmCanaries.A01A03
