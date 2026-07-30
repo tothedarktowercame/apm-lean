@@ -14,3 +14,12 @@ rev = "master"
 
 [[lean_lib]]
 name = "ApmCanaries"
+
+# ConstructionTargets holds reusable lemmas proved to unblock specific problems
+# (Schwarz equality case, radial R3 integration, Rouché transfer, lemniscate
+# components). Until 2026-07-30 there was no lean_lib for it, so the files were
+# NOT on the module path: `import ConstructionTargets.X` failed with "unknown
+# module prefix" and no oleans were ever produced. The proved lemmas were
+# therefore unreachable from the problems they were built for.
+[[lean_lib]]
+name = "ConstructionTargets"
