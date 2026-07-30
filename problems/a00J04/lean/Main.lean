@@ -1,7 +1,9 @@
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.Complex.AbsMax
+import Mathlib.Analysis.Normed.Module.Connected
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Topology.Connected.Clopen
+import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.Polynomial
 import Mathlib.Analysis.Calculus.FDeriv.Mul
 
@@ -42,14 +44,13 @@ argument that connected sets avoiding the lemniscate are purely sublevel or
 superlevel — is fully proved below using Mathlib's
 `Complex.norm_le_of_forall_mem_frontier_norm_le` and related lemmas.
 
-The final topological counting argument (assembling these ingredients into
-a bound on `ConnectedComponents` of the complement) requires a substantial
-theory of connected components of open subsets of `ℂ` that is not available
-in Mathlib at the needed level of generality, so the final theorem carries
-an explicit `sorry` at that boundary.
-
-The sub-lemmas that ARE proved capture genuine mathematical content and are
-not vacuous: each is stated at the strength needed for the final assembly.
+The topological counting argument is also fully proved. Connected components
+of the open complement are represented as open connected subsets of `ℂ`;
+their frontiers lie in the lemniscate. A radial rescaling of the punctured
+plane proves that every strict exterior region `{z | R < ‖z‖}` is path
+connected. This supplies the one-endedness argument identifying all
+superlevel components. Finally, the components inject into the disjoint sum
+of the distinct roots of `p` and one superlevel marker.
 
 **Statement repair note.** The informal-solution-proposed Lean statement used
 `Nat.card (ConnectedComponents (lemniscate p)ᶜ)`. The correct target type is
@@ -79,6 +80,119 @@ def superlevel (p : ℂ[X]) : Set ℂ :=
 /-- The sublevel set `{z | |p(z)| < 1}`. -/
 def sublevel (p : ℂ[X]) : Set ℂ :=
   {z : ℂ | ‖aeval z p‖ < 1}
+
+lemma isClosed_lemniscate : IsClosed (lemniscate p) := by
+  exact isClosed_eq p.differentiable_aeval.continuous.norm
+    (continuous_const : Continuous (fun _ : ℂ => (1 : ℝ)))
+
+private def componentSet (x : ↥((lemniscate p)ᶜ)) : Set ℂ :=
+  Subtype.val '' connectedComponent x
+
+private lemma componentSet_nonempty (x : ↥((lemniscate p)ᶜ)) :
+    (componentSet x).Nonempty :=
+  ⟨x, ⟨x, mem_connectedComponent, rfl⟩⟩
+
+private lemma componentSet_subset_compl (x : ↥((lemniscate p)ᶜ)) :
+    componentSet x ⊆ (lemniscate p)ᶜ := by
+  rintro z ⟨y, _hy, rfl⟩
+  exact y.2
+
+private lemma componentSet_connected (x : ↥((lemniscate p)ᶜ)) :
+    IsConnected (componentSet x) :=
+  isConnected_connectedComponent.image Subtype.val continuous_subtype_val.continuousOn
+
+private lemma componentSet_open (x : ↥((lemniscate p)ᶜ)) :
+    IsOpen (componentSet x) := by
+  have hcompl : IsOpen ((lemniscate p)ᶜ) := (isClosed_lemniscate (p := p)).isOpen_compl
+  letI : LocallyConnectedSpace ↥((lemniscate p)ᶜ) := hcompl.locallyConnectedSpace
+  exact hcompl.isOpenEmbedding_subtypeVal.isOpenMap _ isOpen_connectedComponent
+
+private lemma componentSet_frontier_subset_lemniscate
+    (x : ↥((lemniscate p)ᶜ)) :
+    frontier (componentSet x) ⊆ lemniscate p := by
+  have hcompl : IsOpen ((lemniscate p)ᶜ) := (isClosed_lemniscate (p := p)).isOpen_compl
+  intro z hz
+  by_contra hzL
+  have hzcompl : z ∈ (lemniscate p)ᶜ := hzL
+  let y : ↥((lemniscate p)ᶜ) := ⟨z, hzcompl⟩
+  have hycl : y ∈ closure (connectedComponent x) := by
+    rw [hcompl.isOpenEmbedding_subtypeVal.isEmbedding.closure_eq_preimage_closure_image]
+    exact hz.1
+  have hycomp : y ∈ connectedComponent x :=
+    isClosed_connectedComponent.closure_subset_iff.mpr subset_rfl hycl
+  have hzcomp : z ∈ componentSet x := ⟨y, hycomp, rfl⟩
+  exact hz.2 (mem_interior_iff_mem_nhds.mpr
+    (IsOpen.mem_nhds (componentSet_open (p := p) x) hzcomp))
+
+private lemma componentSet_eq_of_common_point
+    {x y : ↥((lemniscate p)ᶜ)} {z : ℂ}
+    (hzx : z ∈ componentSet x) (hzy : z ∈ componentSet y) :
+    (x : ConnectedComponents ↥((lemniscate p)ᶜ)) = y := by
+  obtain ⟨zx, hzx, hzxval⟩ := hzx
+  obtain ⟨zy, hzy, hzyval⟩ := hzy
+  have hxy : zx = zy := Subtype.ext (hzxval.trans hzyval.symm)
+  subst zy
+  rw [ConnectedComponents.coe_eq_coe]
+  exact (connectedComponent_eq_iff_mem.mpr hzx).symm.trans
+    (connectedComponent_eq_iff_mem.mpr hzy)
+
+private lemma exterior_pathConnected (R : ℝ) (hR : 0 ≤ R) :
+    IsPathConnected {z : ℂ | R < ‖z‖} := by
+  let f : ℂ → ℂ := fun y => (((R + ‖y‖) * ‖y‖⁻¹ : ℝ) : ℂ) * y
+  have hf : ContinuousOn f ({0}ᶜ : Set ℂ) := by
+    intro y hy
+    change ContinuousWithinAt
+      (fun y : ℂ => (((R + ‖y‖) * ‖y‖⁻¹ : ℝ) : ℂ) * y) {0}ᶜ y
+    exact ((Complex.continuous_ofReal.continuousAt.comp
+      (((continuousAt_const.add continuousAt_id.norm).mul
+        (ContinuousAt.inv₀ continuousAt_id.norm (by simpa using hy))))).mul
+          continuousAt_id).continuousWithinAt
+  have hpunctured : IsPathConnected ({0}ᶜ : Set ℂ) :=
+    isPathConnected_compl_singleton_of_one_lt_rank
+      (Complex.rank_real_complex ▸ Nat.one_lt_ofNat) 0
+  have himage : IsPathConnected (f '' ({0}ᶜ : Set ℂ)) :=
+    hpunctured.image' hf
+  have heq : f '' ({0}ᶜ : Set ℂ) = {z : ℂ | R < ‖z‖} := by
+    apply Set.Subset.antisymm
+    · rintro _z ⟨y, hy, rfl⟩
+      have hynorm : ‖y‖ ≠ 0 := by simpa using hy
+      have hynorm_pos : 0 < ‖y‖ := norm_pos_iff.mpr (by simpa using hy)
+      have hcoeff : 0 < (R + ‖y‖) * ‖y‖⁻¹ :=
+        mul_pos (add_pos_of_nonneg_of_pos hR hynorm_pos) (inv_pos.mpr hynorm_pos)
+      change R < ‖f y‖
+      rw [show ‖f y‖ = R + ‖y‖ by
+        simp only [f, norm_mul, Complex.norm_real, Real.norm_eq_abs]
+        rw [abs_of_pos (add_pos_of_nonneg_of_pos hR hynorm_pos),
+          abs_of_pos (inv_pos.mpr hynorm_pos)]
+        field_simp]
+      linarith
+    · intro z hz
+      change R < ‖z‖ at hz
+      have hzpos : 0 < ‖z‖ := lt_of_le_of_lt hR hz
+      let y : ℂ := (((‖z‖ - R) * ‖z‖⁻¹ : ℝ) : ℂ) * z
+      have hycoeff : 0 < (‖z‖ - R) * ‖z‖⁻¹ :=
+        mul_pos (sub_pos.mpr hz) (inv_pos.mpr hzpos)
+      have hynorm : ‖y‖ = ‖z‖ - R := by
+        simp only [y, norm_mul, Complex.norm_real, Real.norm_eq_abs]
+        rw [abs_of_pos (sub_pos.mpr hz), abs_of_pos (inv_pos.mpr hzpos)]
+        field_simp
+      have hy0 : y ≠ 0 := by
+        intro hy
+        have := congrArg norm hy
+        rw [hynorm, norm_zero] at this
+        linarith
+      refine ⟨y, by simpa using hy0, ?_⟩
+      have hzC : (‖z‖ : ℂ) ≠ 0 := by exact_mod_cast hzpos.ne'
+      have hsubC : ((‖z‖ - R : ℝ) : ℂ) ≠ 0 := by
+        exact_mod_cast (sub_ne_zero.mpr hz.ne')
+      have hsubC' : (‖z‖ : ℂ) - (R : ℂ) ≠ 0 := by
+        exact_mod_cast (sub_ne_zero.mpr hz.ne')
+      dsimp only [f, y]
+      rw [hynorm]
+      push_cast
+      field_simp [hzC, hsubC, hsubC']
+      ring
+  rwa [heq] at himage
 
 -- The function `z ↦ aeval z p` is entire (complex differentiable everywhere).
 -- This is needed for all the maximum modulus arguments.
@@ -233,29 +347,120 @@ lemma card_roots_le_degree (hp : 0 < p.natDegree) :
   exact le_trans (Multiset.toFinset_card_le (α := ℂ) _)
     (Polynomial.card_roots' p)
 
+private lemma isBounded_sublevel (hp : 0 < p.natDegree) :
+    IsBounded (sublevel p) := by
+  have hdeg : 0 < p.degree := natDegree_pos_iff_degree_pos.mp hp
+  have hcompact :
+      IsCompact ((fun z : ℂ => p.eval z) ⁻¹' closedBall 0 1) :=
+    (p.isProperMap_eval hdeg).isCompact_preimage (isCompact_closedBall 0 1)
+  apply hcompact.isBounded.subset
+  intro z hz
+  simp only [sublevel, mem_setOf_eq] at hz
+  simp only [mem_preimage, mem_closedBall, dist_zero_right]
+  simpa only [← coe_aeval_eq_eval] using hz.le
+
+private lemma componentSet_subset_superlevel_or_sublevel
+    (x : ↥((lemniscate p)ᶜ)) :
+    componentSet x ⊆ superlevel p ∨ componentSet x ⊆ sublevel p := by
+  apply isPreconnected_subset_superlevel_or_sublevel (p := p)
+    (componentSet_connected (p := p) x).isPreconnected
+  exact Set.disjoint_left.2 fun z hzcomp hzlem =>
+    (componentSet_subset_compl (p := p) x hzcomp) hzlem
+
+private lemma exists_root_in_componentSet_of_subset_sublevel
+    (hp : 0 < p.natDegree) (x : ↥((lemniscate p)ᶜ))
+    (hsub : componentSet x ⊆ sublevel p) :
+    ∃ z ∈ componentSet x, aeval z p = 0 :=
+  exists_root_in_bounded_isOpen_sublevel_frontier_lemniscate (p := p)
+    (componentSet_open (p := p) x)
+    ((isBounded_sublevel (p := p) hp).subset hsub) hsub
+    (componentSet_frontier_subset_lemniscate (p := p) x)
+    (componentSet_nonempty (p := p) x)
+
+private lemma not_isBounded_componentSet_of_subset_superlevel
+    (x : ↥((lemniscate p)ᶜ)) (hsuper : componentSet x ⊆ superlevel p) :
+    ¬ IsBounded (componentSet x) := by
+  intro hbounded
+  exact not_bounded_isOpen_superlevel_frontier_lemniscate (p := p)
+    (componentSet_open (p := p) x) hbounded hsuper
+    (componentSet_frontier_subset_lemniscate (p := p) x)
+    (componentSet_nonempty (p := p) x)
+
+private lemma component_eq_of_subset_superlevel
+    (hp : 0 < p.natDegree) {x y : ↥((lemniscate p)ᶜ)}
+    (hxsuper : componentSet x ⊆ superlevel p)
+    (hysuper : componentSet y ⊆ superlevel p) :
+    (x : ConnectedComponents ↥((lemniscate p)ᶜ)) = y := by
+  have hdeg : 0 < p.degree := natDegree_pos_iff_degree_pos.mp hp
+  have htend :
+      Filter.Tendsto (fun z : ℂ => ‖aeval z p‖) (cobounded ℂ) Filter.atTop := by
+    simpa only [← coe_aeval_eq_eval] using
+      p.tendsto_norm_atTop hdeg tendsto_norm_cobounded_atTop
+  have hcob : IsCobounded (superlevel p) :=
+    htend (Filter.eventually_gt_atTop (1 : ℝ))
+  obtain ⟨r, hr⟩ := hcob.closedBall_compl_subset (0 : ℂ)
+  let R := max r 0
+  have hR : 0 ≤ R := le_max_right _ _
+  have hextsuper : {z : ℂ | R < ‖z‖} ⊆ superlevel p := by
+    intro z hz
+    apply hr
+    simp only [mem_compl_iff, mem_closedBall, dist_zero_right, not_le]
+    exact (le_max_left r 0).trans_lt hz
+  have hextcompl : {z : ℂ | R < ‖z‖} ⊆ (lemniscate p)ᶜ := by
+    intro z hz hzlem
+    have hzsuper := hextsuper hz
+    simp only [superlevel, mem_setOf_eq] at hzsuper
+    simp only [lemniscate, mem_setOf_eq] at hzlem
+    linarith
+  have hmeet (u : ↥((lemniscate p)ᶜ))
+      (husuper : componentSet u ⊆ superlevel p) :
+      ∃ z ∈ componentSet u, R < ‖z‖ := by
+    by_contra h
+    push_neg at h
+    have hubounded : IsBounded (componentSet u) := by
+      apply Metric.isBounded_closedBall.subset
+      intro z hz
+      show z ∈ closedBall (0 : ℂ) R
+      simp only [mem_closedBall, dist_zero_right]
+      exact h z hz
+    exact not_isBounded_componentSet_of_subset_superlevel (p := p) u husuper hubounded
+  obtain ⟨zx, hzxcomp, hzxext⟩ := hmeet x hxsuper
+  obtain ⟨zy, hzycomp, hzyext⟩ := hmeet y hysuper
+  obtain ⟨ax, haxcomp, haxval⟩ := hzxcomp
+  obtain ⟨ay, haycomp, hayval⟩ := hzycomp
+  have hpath :
+      IsPathConnected (Subtype.val ⁻¹' {z : ℂ | R < ‖z‖} :
+        Set ↥((lemniscate p)ᶜ)) :=
+    (exterior_pathConnected R hR).preimage_coe hextcompl
+  have haxext : ax ∈ Subtype.val ⁻¹' {z : ℂ | R < ‖z‖} := by
+    simpa [haxval] using hzxext
+  have hayext : ay ∈ Subtype.val ⁻¹' {z : ℂ | R < ‖z‖} := by
+    simpa [hayval] using hzyext
+  have hay_in_ax : ay ∈ connectedComponent ax :=
+    pathComponent_subset_component ax (hpath.joinedIn ax haxext ay hayext).joined
+  rw [ConnectedComponents.coe_eq_coe]
+  exact (connectedComponent_eq_iff_mem.mpr haxcomp).symm.trans <|
+    (connectedComponent_eq_iff_mem.mpr hay_in_ax).symm.trans <|
+      connectedComponent_eq_iff_mem.mpr haycomp
+
 /-! ## Step 5: The final assembly
 
-This step requires assembling the above ingredients into a bound on
-`ConnectedComponents ↥((lemniscate p)ᶜ)`. The key missing pieces in Mathlib are:
+This step assembles the preceding ingredients into a bound on
+`ConnectedComponents ↥((lemniscate p)ᶜ)`:
 
 (a) **Classification of connected components.** Each connected component of
     `(lemniscate p)ᶜ` is an open connected set whose frontier lies in the
     lemniscate, so by Step 1 it is purely sublevel or superlevel.
 
-(b) **The superlevel is connected.** Using `|p(z)| → ∞` (from
-    `Polynomial.tendsto_norm_atTop`) one shows that the complement of a large
-    ball lies in the superlevel, and the superlevel is connected because its
-    complement (the closed sublevel) is compact.
+(b) **The superlevel has one component.** Using `|p(z)| → ∞` (from
+    `Polynomial.tendsto_norm_atTop`) one shows that a strict exterior region
+    lies in the superlevel. Radial rescaling realizes this exterior as a
+    continuous image of the punctured plane, hence it is path connected.
+    Every unbounded superlevel component meets it.
 
 (c) **Injection from sublevel components to roots.** By Step 3, each bounded
     sublevel component contains a root; distinct components are disjoint, so
     they contain distinct roots; hence at most `N` sublevel components.
-
-Steps (a)-(c) require a detailed theory of the relationship between
-`ConnectedComponents`, `connectedComponent`, frontier inclusion, and
-`IsConnected` for open subsets of `ℂ`. This is not available at the needed
-level of generality in the current Mathlib, so the final theorem is left as
-an explicit `sorry`.
 -/
 
 /-- **Main theorem.** The complement of the lemniscate `{z | |p(z)| = 1}` has
@@ -265,33 +470,105 @@ This is the target theorem. The proof combines:
 - at most one superlevel component (Step 2 kills bounded ones; polynomial
   growth forces a unique unbounded one),
 - at most `natDegree p` sublevel components (Step 3 + root count).
-
-**SORRY BOUNDARY:** The final topological assembly — classifying components
-of the complement as sublevel/superlevel, proving the superlevel is connected,
-and building the injection from sublevel components to roots — is not provable
-with current Mathlib at the required level of generality. The analytic content
-(Steps 1-4 above) is fully proved; only the topological bookkeeping remains.
-
-What was tried for the sorry:
-- `ConnectedComponents ↥((lemniscate p)ᶜ)` as a type: one would need to show
-  each fiber of `ConnectedComponents.mk` is a connected component, classify it
-  via Step 1, and inject into `roots ∪ {superlevel-marker}`. The
-  frontier-inclusion hypothesis (each component's frontier ⊆ lemniscate)
-  requires showing that the frontier of a connected component of an open set
-  lies in the set's complement — this is true but requires connected-component
-  topology not available in Mathlib.
-- An alternative via
-  `IsOpenMap.enatCard_connectedComponents_le_encard_preimage_singleton`
-  from `CardComponents.lean` was considered (using `z ↦ aeval z p` as the open
-  map), but `aeval` is not an open-and-closed map in general for the fiber over
-  a point, and the theorem requires a *connected* codomain.
-- The `Nat.card ≤ ...` formulation needs `Finite (ConnectedComponents ...)`
-  first, which itself requires the component bound.
 -/
 theorem connectedComponents_complement_lemniscate_le :
     Nat.card (ConnectedComponents ↥((lemniscate p)ᶜ)) ≤ p.natDegree + 1 := by
-  sorry
-  -- Boundary: topological assembly not available in Mathlib.
-  -- See the comment block above (Step 5) for what is needed and what was tried.
+  classical
+  by_cases hp : 0 < p.natDegree
+  swap
+  · have hdeg : p.natDegree = 0 := Nat.eq_zero_of_not_pos hp
+    let c := p.coeff 0
+    have peq : p = C c := eq_C_of_natDegree_eq_zero hdeg
+    rw [peq]
+    by_cases hc : ‖c‖ = 1
+    · have hlem : lemniscate (C c) = Set.univ := by
+        ext z
+        simp [lemniscate, hc]
+      rw [hlem]
+      letI : IsEmpty ↥((Set.univ : Set ℂ)ᶜ) :=
+        ⟨fun x => by simpa using x.2⟩
+      letI : IsEmpty (ConnectedComponents ↥((Set.univ : Set ℂ)ᶜ)) :=
+        ConnectedComponents.isEmpty_iff_isEmpty.mpr inferInstance
+      simp [Nat.card_of_isEmpty]
+    · have hlem : lemniscate (C c) = ∅ := by
+        ext z
+        simp [lemniscate, hc]
+      rw [hlem]
+      letI : PreconnectedSpace ↥((∅ : Set ℂ)ᶜ) :=
+        isPreconnected_iff_preconnectedSpace.mp (by simpa using isPreconnected_univ)
+      simpa using (Finite.card_le_one_iff_subsingleton
+        (α := ConnectedComponents ↥((∅ : Set ℂ)ᶜ))).mpr inferInstance
+  have hp0 : p ≠ 0 := by
+    intro hpzero
+    subst p
+    simp at hp
+  let rootOf (x : ↥((lemniscate p)ᶜ))
+      (hxsub : componentSet x ⊆ sublevel p) :
+      {z // z ∈ (Polynomial.roots p).toFinset} :=
+    ⟨Classical.choose
+        (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub),
+      by
+        have hz := Classical.choose_spec
+          (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub)
+        rw [Multiset.mem_toFinset, Polynomial.mem_roots_iff_aeval_eq_zero hp0]
+        exact hz.2⟩
+  let tag :
+      ConnectedComponents ↥((lemniscate p)ᶜ) →
+        {z // z ∈ (Polynomial.roots p).toFinset} ⊕ Unit :=
+    fun c =>
+      let x := Quotient.out c
+      if hxsub : componentSet x ⊆ sublevel p then
+        Sum.inl (rootOf x hxsub)
+      else
+        Sum.inr ()
+  have htag : Function.Injective tag := by
+    intro c d hcd
+    let x : ↥((lemniscate p)ᶜ) := Quotient.out c
+    let y : ↥((lemniscate p)ᶜ) := Quotient.out d
+    have hxc : (x : ConnectedComponents ↥((lemniscate p)ᶜ)) = c :=
+      Quotient.out_eq c
+    have hyd : (y : ConnectedComponents ↥((lemniscate p)ᶜ)) = d :=
+      Quotient.out_eq d
+    by_cases hxsub : componentSet x ⊆ sublevel p
+    · by_cases hysub : componentSet y ⊆ sublevel p
+      · have hroots : rootOf x hxsub = rootOf y hysub := by
+          simpa [tag, x, y, hxsub, hysub] using hcd
+        have hxspec := Classical.choose_spec
+          (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub)
+        have hyspec := Classical.choose_spec
+          (exists_root_in_componentSet_of_subset_sublevel (p := p) hp y hysub)
+        have hcomp :
+            (x : ConnectedComponents ↥((lemniscate p)ᶜ)) = y := by
+          apply componentSet_eq_of_common_point (p := p)
+            (z := Classical.choose
+              (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub))
+          · exact hxspec.1
+          · rw [show Classical.choose
+                (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub) =
+              Classical.choose
+                (exists_root_in_componentSet_of_subset_sublevel (p := p) hp y hysub) by
+                exact congrArg Subtype.val hroots]
+            exact hyspec.1
+        exact hxc ▸ hyd ▸ hcomp
+      · simp [tag, x, y, hxsub, hysub] at hcd
+    · by_cases hysub : componentSet y ⊆ sublevel p
+      · simp [tag, x, y, hxsub, hysub] at hcd
+      · have hxsuper : componentSet x ⊆ superlevel p :=
+          (componentSet_subset_superlevel_or_sublevel (p := p) x).resolve_right hxsub
+        have hysuper : componentSet y ⊆ superlevel p :=
+          (componentSet_subset_superlevel_or_sublevel (p := p) y).resolve_right hysub
+        have hcomp :
+            (x : ConnectedComponents ↥((lemniscate p)ᶜ)) = y :=
+          component_eq_of_subset_superlevel (p := p) hp hxsuper hysuper
+        exact hxc ▸ hyd ▸ hcomp
+  calc
+    Nat.card (ConnectedComponents ↥((lemniscate p)ᶜ))
+        ≤ Nat.card ({z // z ∈ (Polynomial.roots p).toFinset} ⊕ Unit) :=
+          Nat.card_le_card_of_injective tag htag
+    _ = (Polynomial.roots p).toFinset.card + 1 := by
+      rw [Nat.card_sum]
+      simp only [Nat.card_eq_fintype_card, Fintype.card_coe, Fintype.card_unique]
+    _ ≤ p.natDegree + 1 :=
+      Nat.add_le_add_right (card_roots_le_degree (p := p) hp) 1
 
 end ApmCanaries.A00J04
