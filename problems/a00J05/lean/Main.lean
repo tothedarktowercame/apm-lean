@@ -126,12 +126,83 @@ include hK_compact hK_measure
 -/
 theorem cauchyTransform_differentiableAt {z₀ : ℂ} (hz₀ : z₀ ∉ (↑) '' K) :
     DifferentiableAt ℂ (cauchyTransform K) z₀ := by
-  sorry
+  have hKim : IsCompact ((↑) '' K : Set ℂ) :=
+    hK_compact.image_of_continuousOn continuous_ofReal.continuousOn
+  have hopen : IsOpen (((↑) '' K : Set ℂ)ᶜ) := hKim.isClosed.isOpen_compl
+  obtain ⟨δ, hδ, hball⟩ :=
+    Metric.mem_nhds_iff.mp (hopen.mem_nhds hz₀)
+  let s : Set ℂ := ball z₀ (δ / 2)
+  let F : ℂ → ℝ → ℂ := fun z t => ((t : ℂ) - z)⁻¹
+  let F' : ℂ → ℝ → ℂ := fun z t => ((t : ℂ) - z)⁻¹ ^ 2
+  let bound : ℝ → ℝ := fun _ => (2 / δ) ^ 2
+  have hs : s ∈ 𝓝 z₀ := ball_mem_nhds z₀ (half_pos hδ)
+  have hs_sub : s ⊆ ball z₀ δ := by
+    exact ball_subset_ball (by linarith)
+  have hnot_mem {z : ℂ} (hz : z ∈ s) {t : ℝ} (ht : t ∈ K) :
+      (t : ℂ) ≠ z := by
+    intro heq
+    exact (hball (hs_sub hz)) ⟨t, ht, heq⟩
+  have hF_cont {z : ℂ} (hz : z ∈ s) : ContinuousOn (F z) K := by
+    intro t ht
+    apply ContinuousAt.continuousWithinAt
+    dsimp [F]
+    fun_prop (disch := exact sub_ne_zero.mpr (hnot_mem hz ht))
+  have hF'_cont {z : ℂ} (hz : z ∈ s) : ContinuousOn (F' z) K := by
+    intro t ht
+    apply ContinuousAt.continuousWithinAt
+    dsimp [F']
+    fun_prop (disch := exact sub_ne_zero.mpr (hnot_mem hz ht))
+  have hF_meas :
+      ∀ᶠ z in 𝓝 z₀, AEStronglyMeasurable (F z) (volume.restrict K) := by
+    filter_upwards [hs] with z hz
+    exact (hF_cont hz).aestronglyMeasurable hK_compact.measurableSet
+  have hF_int : Integrable (F z₀) (volume.restrict K) := by
+    have hz₀s : z₀ ∈ s := mem_ball_self (half_pos hδ)
+    exact (hF_cont hz₀s).integrableOn_compact hK_compact
+  have hF'_meas :
+      AEStronglyMeasurable (F' z₀) (volume.restrict K) := by
+    have hz₀s : z₀ ∈ s := mem_ball_self (half_pos hδ)
+    exact (hF'_cont hz₀s).aestronglyMeasurable hK_compact.measurableSet
+  have hbound_int : Integrable bound (volume.restrict K) := by
+    exact integrableOn_const hK_compact.measure_ne_top
+  have h_bound :
+      ∀ᵐ t ∂volume.restrict K, ∀ z ∈ s, ‖F' z t‖ ≤ bound t := by
+    filter_upwards [ae_restrict_mem hK_compact.measurableSet] with t ht z hz
+    have hzt : δ / 2 ≤ dist (t : ℂ) z := by
+      have htz₀ : δ ≤ dist (t : ℂ) z₀ := by
+        have : (t : ℂ) ∉ ball z₀ δ := by
+          intro hmem
+          exact (hball hmem) ⟨t, ht, rfl⟩
+        simpa only [mem_ball, dist_comm, not_lt] using this
+      have hzz₀ : dist z z₀ < δ / 2 := by
+        simpa only [s, mem_ball, dist_comm] using hz
+      linarith [dist_triangle (t : ℂ) z z₀]
+    have hdist : 0 < dist (t : ℂ) z := (half_pos hδ).trans_le hzt
+    dsimp [F', bound]
+    have hinv : ‖((t : ℂ) - z)⁻¹‖ ≤ 2 / δ := by
+      rw [norm_inv, ← dist_eq]
+      calc
+        (dist (t : ℂ) z)⁻¹ ≤ (δ / 2)⁻¹ :=
+          (inv_le_inv₀ hdist (half_pos hδ)).2 hzt
+        _ = 2 / δ := by field_simp
+    rw [norm_pow]
+    gcongr
+  have h_diff :
+      ∀ᵐ t ∂volume.restrict K, ∀ z ∈ s,
+        HasDerivAt (F · t) (F' z t) z := by
+    filter_upwards [ae_restrict_mem hK_compact.measurableSet] with t ht z hz
+    exact hasDerivAt_integrand t z (hnot_mem hz ht)
+  exact
+    (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+      (μ := volume.restrict K) (x₀ := z₀) hs hF_meas hF_int
+      hF'_meas h_bound hbound_int h_diff).2.differentiableAt
 
 /-- Part (a), global: the Cauchy transform is differentiable on `ℂ \ K`. -/
 theorem cauchyTransform_differentiableOn :
     DifferentiableOn ℂ (cauchyTransform K) ((↑) '' K)ᶜ := by
-  sorry
+  intro z hz
+  exact
+    (cauchyTransform_differentiableAt K hK_compact hK_measure hz).differentiableWithinAt
 
 /-! ## Part (c): lim_{|z|→∞} z·f(z) = -m(K)
 
