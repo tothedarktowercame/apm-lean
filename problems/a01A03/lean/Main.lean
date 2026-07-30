@@ -82,6 +82,18 @@ namespace ApmCanaries.A01A03
 --     conclusion fails. The informal solution says "g = χ_{[-h,h]} almost
 --     everywhere", twice explicitly (lines 11 and 21). Now an a.e. equality.
 --
+--
+-- (3) CORRECTION 2026-07-30, SAME DAY, TO REPAIR (2) ABOVE — the fault was mine.
+--     Repair (2) was written as `ContDiff ℝ ⊤ f` intending SMOOTH. In the current
+--     smoothness-index API the index is `WithTop ℕ∞` and `⊤ = ω` means REAL
+--     ANALYTIC, strictly above `∞`. Mathlib's own ContDiff/Defs.lean says "For
+--     n = ω, we require the function to be analytic". Since every compactly
+--     supported real-analytic function on ℝ is identically zero, `hidentity` then
+--     quantified over f = 0 ALONE and was vacuous: g = 0, h = 1 satisfies every
+--     hypothesis and refutes the conclusion. So the repair introduced a NEW false
+--     statement while fixing an old one. Found by codex-7 on durée run 2, which
+--     committed the machine-checked refutation below rather than working around it.
+--     Corrected to `ContDiff ℝ ∞`, the smooth test class actually intended.
 -- (2) TEST CLASS was every differentiable `f`, with no requirement that `deriv f`
 --     be integrable. A differentiable function can have a non-integrable
 --     derivative, and Lean's Bochner integral of a non-integrable function is
@@ -92,7 +104,7 @@ namespace ApmCanaries.A01A03
 theorem convolution_identity_implies_indicator
     (g : ℝ → ℝ) (hg1 : Integrable g volume)
     (h : ℝ) (hh : 0 < h)
-    (hidentity : ∀ f : ℝ → ℝ, ContDiff ℝ ⊤ f → HasCompactSupport f →
+    (hidentity : ∀ f : ℝ → ℝ, ContDiff ℝ ∞ f → HasCompactSupport f →
       ∀ x : ℝ,
         (∫ t, g t * (deriv f) (x - t) ∂volume) = f (x + h) - f (x - h)) :
     g =ᵐ[volume] fun x => if x ∈ Set.Icc (-h) h then 1 else 0 := by
