@@ -2,6 +2,7 @@ import ConstructionTargets.SchwarzEquality
 import ConstructionTargets.RadialIntegrationR3
 import ConstructionTargets.Rouche
 import ConstructionTargets.LemniscateComponents
+import ConstructionTargets.UnivalentDeriv
 
 /-!
 # ConstructionTargets — reusable lemmas built to unblock specific APM problems
@@ -23,4 +24,5 @@ needlessly.
 | `RadialIntegrationR3` | sorry-free | a95A03 |
 | `Rouche` | partial (`sorry` remains) | a92J05, a94A10 |
 | `LemniscateComponents` | partial (`sorry` remains) | a00J04, a01A08 |
+| `UnivalentDeriv` | partial (`sorry` remains) | a95J01 |
 -/
