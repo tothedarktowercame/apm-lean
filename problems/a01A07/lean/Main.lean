@@ -38,10 +38,11 @@ The generated statement had the right mathematical structure but needed:
 4. `TendstoUniformlyOn` from `Topology.UniformSpace.UniformConvergence` is
    the correct API for uniform convergence on a set.
 
-Mathlib now provides the circle mean-value property, the Weierstrass theorem
-for locally uniform limits, and Cauchy's derivative estimate.  The remaining
-foundational gap in this file is the polar-coordinate/Fubini conversion from
-circle averages at every radius to the stated disk-area integral.
+Mathlib provides the circle mean-value property, the Weierstrass theorem for
+locally uniform limits, and Cauchy's derivative estimate.  This file now also
+builds the disk-area mean-value identity from polar coordinates and Fubini.
+The remaining gap is the compact-local uniform Cauchy argument upgrading the
+diskwise L¹ hypothesis to locally uniform convergence.
 -/
 
 set_option linter.unusedVariables false in
@@ -67,9 +68,7 @@ def L1ConvergesOnDisks (f : ℕ → ℂ → ℂ) (F : ℂ → ℂ) (Ω : Set ℂ
       atTop (𝓝 0)
 
 /-- The circle-level sub-mean inequality underlying
-`norm_le_area_integral_div_area`.  This separates the complex-analytic input
-from the remaining polar-coordinate conversion from circle averages to disk
-area. -/
+`norm_le_area_integral_div_area`. -/
 lemma norm_le_circleAverage_norm
     {g : ℂ → ℂ} {z₀ : ℂ} {r : ℝ} (hr : 0 < r)
     (hg : DifferentiableOn ℂ g (closedBall z₀ r)) :
@@ -340,11 +339,10 @@ lemma norm_le_area_integral_div_area_of_integral_eq
     For analytic `g`, `g(z₀) = (1/πr²) ∫_{D(z₀,r)} g dA` (the area mean value
     property), and taking absolute values gives the inequality.
 
-    Mathlib's `DiffContOnCl.circleAverage` supplies the circle identity.
-    The remaining construction is to integrate that identity in the radius
-    with weight `2s`, use `Complex.integral_comp_polarCoord_symm` and Fubini,
-    translate the disk from `0` to `z₀`, and identify its area as `πr²`.
-    There is no direct disk-area mean-value lemma. -/
+    Mathlib's `DiffContOnCl.circleAverage` supplies the circle identity.  The
+    lemmas above integrate it in the radius with weight `2s`, use
+    `Complex.integral_comp_polarCoord_symm` and Fubini, translate the disk from
+    `0` to `z₀`, and identify its area as `πr²`. -/
 lemma norm_le_area_integral_div_area
     {g : ℂ → ℂ} {z₀ : ℂ} {r : ℝ} (hr : 0 < r)
     (hg : DifferentiableOn ℂ g (closedBall z₀ r)) :
@@ -366,18 +364,15 @@ lemma norm_sub_le_area_integral_div_area
 
 /-- Step 1: L¹ convergence on disks implies uniform convergence on compact subsets.
 
-    Given compact `K ⊂ Ω`, choose `r = dist(K, ∂Ω)/2 > 0` so that `D(z,r) ⊂ Ω`
-    for all `z ∈ K`. Then for `g = fₙ - fₘ` (analytic):
-    `sup_K ‖fₙ - fₘ‖ ≤ (1/πr²) ∫_{D_K} ‖fₙ - fₘ‖ dA ≤ (1/πr²)(∫‖fₙ-F‖ + ∫‖fₘ-F‖) → 0`.
-    So `{fₙ}` is uniformly Cauchy on K.
-
-    BLOCKER: Requires `norm_le_area_integral_div_area` (the disk-area property),
-    plus:
-    - Compact sets in `ℂ` have positive distance to `∂Ω` (needs `IsCompact`
-      + `IsOpen` + `Metric.infDist_pos_of_isCompact` or similar)
-    - The `r`-neighbourhood of `K` is contained in a finite union of disks
-      whose total area integral bounds the sup on K
-    - `TendstoUniformlyOn` is then obtained from the Cauchy criterion
+    The remaining proof can be organized locally at each `x ∈ Ω`.  Choose an
+    outer closed disk in `Ω`.  The constant-centered disk sub-mean bound above,
+    continuity of `F`, and diskwise L¹ convergence give `f n x → F x`.
+    On a smaller concentric disk, the ordinary sub-mean bound applied to
+    `f n - f m` on fixed-radius disks gives a uniform Cauchy sequence, bounded
+    by the two L¹ errors on the outer disk.  Combine
+    `UniformCauchySeqOn.tendstoUniformlyOn_of_tendsto` with the pointwise limit,
+    then package the local result using
+    `tendstoLocallyUniformlyOn_iff_forall_isCompact hΩ`.
 -/
 -- STATEMENT REPAIR 2026-07-30 (Joe-authorised). `hΩ : IsOpen Ω` is declared on
 -- line 50 as a section variable but this theorem never referenced it, so Lean 4
