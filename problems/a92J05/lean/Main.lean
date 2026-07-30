@@ -70,6 +70,23 @@ lemma rouche_condition (z : ℂ) (hz : ‖z‖ = 1) : ‖aeval z h‖ < ‖aeval
     rw [norm_smul_pow_of_norm_one z hz (5:ℂ) 3]; norm_num
   linarith
 
+/-- The straight-line homotopy from the dominant term `g` to `p = g + h`
+does not vanish on the unit circle. This is the complete elementary
+boundary-homotopy input to Rouché's theorem. -/
+lemma rouche_homotopy_ne_zero_on_circle
+    (t : ℝ) (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) (z : ℂ) (hz : ‖z‖ = 1) :
+    aeval z g + (t : ℂ) * aeval z h ≠ 0 := by
+  intro hzero
+  have heq : aeval z g = -((t : ℂ) * aeval z h) :=
+    eq_neg_of_add_eq_zero_left hzero
+  have ht_norm : ‖(t : ℂ)‖ ≤ 1 := by
+    simpa [abs_of_nonneg ht₀] using ht₁
+  have hle : ‖aeval z g‖ ≤ ‖aeval z h‖ := by
+    rw [heq, norm_neg, norm_mul]
+    simpa only [one_mul] using
+      mul_le_mul_of_nonneg_right ht_norm (norm_nonneg (aeval z h))
+  exact (not_lt_of_ge hle) (rouche_condition z hz)
+
 /-- p has no roots on |z| = 1.
 
     If |z| = 1 and p(z) = 0: z¹⁰+1 = -(5z³+2z), so |z¹⁰+1| = |5z³+2z| ≥ 3,
