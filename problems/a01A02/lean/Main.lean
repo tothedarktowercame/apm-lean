@@ -73,9 +73,19 @@ variable {α : Type*} [MeasureSpace α]
     Each piece is mathematically standard but requires careful formalization
     of the measure-theoretic hypotheses and the integral estimates.
 -/
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). See faithfulness-ledger #4.
+-- The weak-L² hypothesis was written with `.toReal` and no finiteness
+-- side-condition. Mathlib defines `ENNReal.toReal ⊤ = 0`, so a function whose
+-- superlevel sets have INFINITE measure satisfied it VACUOUSLY — machine-checked
+-- refutation at α = ℝ, f ≡ 1, C = 1, applied to Icc 0 (C₁²+1). The informal
+-- solution states the hypothesis as the MEASURE bound `m({|f| > λ}) ≤ C λ⁻²`
+-- (line 15), so this is a translation defect, not a mathematical one. Restated
+-- in `ENNReal`, where `⊤ ≤ ofReal (C/t²)` is false rather than vacuously true,
+-- which is exactly the intended content.
 theorem weakL2_implies_L1_bound
     (f : α → ℝ) (hf_meas : Measurable f) (C : ℝ) (hC : 0 < C)
-    (hweak : ∀ t : ℝ, 0 < t → (volume {x : α | t < |f x|}).toReal ≤ C / t ^ 2) :
+    (hweak : ∀ t : ℝ, 0 < t →
+      volume {x : α | t < |f x|} ≤ ENNReal.ofReal (C / t ^ 2)) :
     ∃ C₁ : ℝ, ∀ (E : Set α), MeasurableSet E →
       0 < (volume E).toReal → (volume E) < ⊤ →
       ∫ x in E, |f x| ≤ C₁ * Real.sqrt (volume E).toReal := by

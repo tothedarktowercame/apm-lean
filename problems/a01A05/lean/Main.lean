@@ -64,9 +64,25 @@ theorem inner_tendsto_zero [CompleteSpace H]
     Mathlib's `gramSchmidtNormed` provides the orthonormalization but the
     specific error bound requires the near-orthogonality condition.
 -/
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). See faithfulness-ledger #7.
+-- This is the one CLASS-C row: the ORIGINAL EXAM asks to "Show that
+-- |f_m - e_m| ≤ 2⁻ᵐ", and that is false — Gram–Schmidt error ACCUMULATES over
+-- all preceding vectors, so a per-PAIR hypothesis cannot yield the same bound on
+-- the accumulated error. Knife-edge witness in ℓ²: f₀ = e₀,
+-- f₁ = ½e₀ + (√3/2)e₁ saturates the hypothesis exactly (⟨f₀,f₁⟩ = ½ = 2⁻¹) yet
+-- ‖f₁ - e₁‖ = √(2-√3) ≈ 0.5176 > 0.5. Margin ≈ 0.018; it still fails under
+-- 1-indexing (≈ 0.252 vs 0.25). The deciding inequality was machine-checked.
+--
+-- Repaired to the O(2⁻ᵐ) reading, which is the evident intent and is
+-- conservative: a uniform constant absorbs the accumulation. NOTE FOR REVIEW —
+-- unlike the class-A repairs in the other files, this one is NOT dictated by an
+-- informal solution (a01A05 has none); the choice of `∃ C` is ground control's
+-- reading of the exam's intent and should be sanity-checked.
 theorem gramSchmidt_approximation [CompleteSpace H]
-    (seq : NearOrthogonalSeq H) (m : ℕ) :
-    ‖seq.f m - InnerProductSpace.gramSchmidtNormed ℝ seq.f m‖ ≤ (2 : ℝ) ^ (-(m : ℝ)) := by
+    (seq : NearOrthogonalSeq H) :
+    ∃ C : ℝ, 0 < C ∧ ∀ m : ℕ,
+      ‖seq.f m - InnerProductSpace.gramSchmidtNormed ℝ seq.f m‖
+        ≤ C * (2 : ℝ) ^ (-(m : ℝ)) := by
   sorry
 
 end ApmCanaries.A01A05

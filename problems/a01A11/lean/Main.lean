@@ -27,6 +27,16 @@ lemma infDist_pos_of_not_mem_image
   ((IsCompact.image hK' Complex.continuous_ofReal).isClosed.notMem_iff_infDist_pos
     (hKne'.image _)).mp hz
 
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). `hK`, `hKne` and `hKpos` were
+-- declared on line 17 but never referenced by the theorems below, so Lean 4
+-- included none of them and every statement quantified over an ARBITRARY
+-- `K : Set ℝ` — the same mechanism as a00J05 (faithfulness-ledger #3), found
+-- by the variable-inclusion sweep. Placed AFTER `def cauchyTransform` so that
+-- definition keeps its `Set ℝ → ℂ → ℂ` signature, and after
+-- `infDist_pos_of_not_mem_image`, which already re-declares what it needs as
+-- explicit primed parameters.
+include hK hKne hKpos
+
 -- Part (a): analyticity — blocked on parameter-integral differentiability
 -- HtDP: need MeasureTheory.hasDerivAt_integral_of_dominated_convergence
 -- or a complex-variable variant. The type signature would be:

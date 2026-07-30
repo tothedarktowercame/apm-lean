@@ -94,6 +94,15 @@ to `K`. On a ball of half that radius, the derivative `1/(t-z)²` is bounded
 by `(2/dist)²` uniformly, and `K` is bounded so this bound is integrable.
 -/
 
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). The section `variable`
+-- hypotheses below were declared but never referenced by the theorems, so
+-- Lean 4 did not include them: every statement quantified over an ARBITRARY
+-- `K : Set ℝ`, which made them false (K = ∅ refutes the non-extension
+-- theorem; non-closed K refutes differentiability). See faithfulness-ledger
+-- entry #3. `include` restores them to the theorems below WITHOUT touching
+-- `cauchyTransform` itself, whose signature must stay `cauchyTransform K`.
+include hK_compact hK_measure
+
 /-- Part (a): The Cauchy transform is complex-differentiable at every
     `z₀ ∈ ℂ \ K`.
 

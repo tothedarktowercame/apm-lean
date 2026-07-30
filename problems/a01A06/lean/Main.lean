@@ -72,12 +72,33 @@ structure OrliczBound (g : ℝ → ℝ) (A : ℝ) : Prop where
 
 /-- Part (a): exponential decay of the distribution function.
     `μ({g > λ}) ≤ ENNReal.ofReal (C · e^{-α·λ})` for all `λ ≥ 0`. -/
-theorem distribution_exponential_decay
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). See faithfulness-ledger #8 and
+-- the ledger's §WHERE THE DEFECTS COME FROM. This is the one CLASS-B row: the
+-- INFORMAL SOLUTION is wrong, and the formaliser faithfully encoded its wrong
+-- answer. That solution derives O(1/λ), then O(1/λ²), states outright that
+-- "O(1/λ²) … is not enough for L²!", and then overrides itself with an invalid
+-- step (it lower-bounds (e^{λ/2}−1)δ and uses that as an UPPER bound on a log)
+-- to assert exponential decay.
+--
+-- `OrliczBound` is L log L / ENTROPY control — Orlicz duality against the class
+-- ∫eᶠ ≤ 1 — and entropy control does NOT give exponential tails.
+-- Counterexample g(x) = x^(-3/4) on (0,1]: ∫g = 4 and ∫ g log g = 12, so
+-- OrliczBound g 10 holds by Young–Fenchel, yet μ{g > λ} = λ^(-4/3), which no
+-- C·e^(-αλ) bounds. (∫g = 4 machine-checked.)
+--
+-- REPAIRED to a polynomial tail bound. NOTE FOR REVIEW — the mathematical
+-- content here is GROUND CONTROL'S, not the corpus's, because the corpus's own
+-- answer is the thing that was wrong. It is deliberately CONSERVATIVE: the sharp
+-- answer is the entropy bound δ·log(1/δ) ≲ A'/λ, and O(1/λ) is a weaker
+-- consequence of it. Understating is the safe direction for the faithfulness
+-- gate, but this choice should be sanity-checked before it is treated as the
+-- intended exam answer.
+theorem distribution_polynomial_decay
     {g : ℝ → ℝ} {A : ℝ} (hg : OrliczBound g A) (hA : 0 < A) :
-    ∃ (C α : ℝ), 0 < C ∧ 0 < α ∧
-      ∀ (lam : ℝ), 0 ≤ lam →
+    ∃ C : ℝ, 0 < C ∧
+      ∀ (lam : ℝ), 1 ≤ lam →
         μ {x ∈ Icc (0 : ℝ) 1 | lam < g x} ≤
-          ENNReal.ofReal (C * Real.exp (-α * lam)) := by
+          ENNReal.ofReal (C / lam) := by
   -- The proof proceeds by choosing the test function
   -- f = c·χ_{g>λ} - log(e^c·m({g>λ}) + 1 - m({g>λ}))
   -- with c = λ/2, verifying ∫e^f = 1, applying the Orlicz bound,
@@ -100,9 +121,19 @@ theorem distribution_exponential_decay
     Exponential decay of the distribution function implies g² is integrable
     via the layer-cake formula: ∫g² = ∫₀^∞ 2λ·m({g>λ}) dλ < ∞
     when m({g>λ}) ≤ C·e^{-αλ}. -/
-theorem orlicz_bound_implies_L2
-    {g : ℝ → ℝ} {A : ℝ} (hg : OrliczBound g A) (hA : 0 < A) :
-    IntegrableOn (fun x => g x ^ 2) (Icc (0 : ℝ) 1) volume := by
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). The exam asks "Can you say that
+-- g ∈ L²? **Why or why not?**" — and the answer is NO. The old statement
+-- asserted the positive, inheriting the informal solution's wrong conclusion;
+-- it is false. Witness: g(x) = x^(-3/4) on (0,1] satisfies OrliczBound g 10
+-- (∫g = 4, ∫ g log g = 12, Young–Fenchel gives ∫gf ≤ 1 + 12 − 4 = 9 < 10) while
+-- g² = x^(-3/2) is NOT integrable. BOTH of those integrability facts are
+-- machine-checked (∫₀¹ x^(-3/4) = 4 via integral_rpow; x^(-3/2) non-integrable
+-- via integrableOn_Ioo_rpow_iff). Restated as the counterexample, which is what
+-- "why or why not" actually asks for. Ground control's formulation — see the
+-- review note on `distribution_polynomial_decay` above.
+theorem orlicz_bound_not_implies_L2 :
+    ∃ (g : ℝ → ℝ) (A : ℝ), 0 < A ∧ OrliczBound g A ∧
+      ¬ IntegrableOn (fun x => g x ^ 2) (Icc (0 : ℝ) 1) volume := by
   -- Strategy:
   -- 1. From part (a): m({g > λ}) ≤ C·e^{-αλ}
   -- 2. Layer-cake: ∫ g² = ∫₀^∞ 2λ·m({g>λ}) dλ

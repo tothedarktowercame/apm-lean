@@ -1,5 +1,9 @@
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+-- Added with the 2026-07-30 statement repair: supplies the MeasureSpace instance
+-- and ball-volume lemmas for `EuclideanSpace ℝ (Fin n)`. Same import that
+-- ConstructionTargets/RadialIntegrationR3.lean uses for the same purpose.
+import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-!
@@ -86,10 +90,19 @@ lemma ballSlice_le_one (t : ℝ) : ballSlice t ≤ 1 := by
     specific application to balls with the scaling relation
     `m(B_{n,r}) = rⁿ · m(B_{n,1})` requires careful setup.
 -/
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). See faithfulness-ledger #6.
+-- `Fin n → ℝ` carries Mathlib's Pi SUP-norm, so `Metric.ball 0 1` was the open
+-- CUBE `(-1,1)ⁿ` of volume `2ⁿ` — not the Euclidean unit ball. `Real.volume_pi_ball`
+-- is Mathlib's own witness to that. It made part (c) FALSE (machine-checked: at
+-- A = 1 the claim reduces to `2ⁿ → 0`) and part (a) false too (at n = 1 it
+-- asserted `4 = π`). Repaired to `EuclideanSpace ℝ (Fin n)`, which carries the
+-- inner-product structure and the ball-volume lemmas — exactly the repair
+-- `problems/a95A03` already documents in its own §Statement repair for the same
+-- auto-generation defect.
 theorem ball_volume_recursion (n : ℕ) (hn : 0 < n) :
     ∃ f : ℝ → ℝ, (∀ t, 0 ≤ f t ∧ f t ≤ 1) ∧
-      (volume (Metric.ball (0 : Fin (n + 1) → ℝ) 1)).toReal =
-        (volume (Metric.ball (0 : Fin n → ℝ) 1)).toReal *
+      (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (n + 1))) 1)).toReal =
+        (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin n)) 1)).toReal *
           ∫ t, (ballSlice t) ^ n := by
   refine ⟨ballSlice, fun t => ⟨ballSlice_nonneg t, ballSlice_le_one t⟩, ?_⟩
   sorry
@@ -121,9 +134,13 @@ theorem ballSlice_integral_tendsto_zero :
     **SORRY BOUNDARY:** The proof combines parts (a) and (b): the product
     representation of ball volumes with the integral decay from (b).
 -/
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised): `Fin n → ℝ` → `EuclideanSpace ℝ
+-- (Fin n)`. See the note on `ball_volume_recursion` above and ledger #6. With the
+-- Pi sup-norm this asserted `Aⁿ · 2ⁿ → 0`, refuted at A = 1; with the Euclidean
+-- ball, `m(Bₙ) = πⁿ'² / Γ(n/2+1) → 0` superexponentially, which is the real claim.
 theorem ball_volume_superexponential_decay (A : ℝ) (hA : 0 < A) :
     Tendsto (fun n =>
-      A ^ n * (volume (Metric.ball (0 : Fin n → ℝ) 1)).toReal) atTop (nhds 0) := by
+      A ^ n * (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin n)) 1)).toReal) atTop (nhds 0) := by
   sorry
 
 end ApmCanaries.A01A04

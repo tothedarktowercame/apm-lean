@@ -68,13 +68,31 @@ namespace ApmCanaries.A01A03
     These are standard but the combined formalization in Mathlib requires
     careful management of integrability and differentiability hypotheses.
 -/
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). Two defects, both introduced in
+-- translation; the informal solution had it right. See faithfulness-ledger #5.
+--
+-- (1) CONCLUSION was POINTWISE (`∀ x, g x = …`) while `hidentity` constrains `g`
+--     only through integrals, i.e. only almost everywhere. Machine-checked
+--     consequence: the old statement was EQUIVALENT to `hidentity` being
+--     unsatisfiable — modify any witness at one point and integrals are
+--     unchanged, so the modified function is another witness whose pointwise
+--     conclusion fails. The informal solution says "g = χ_{[-h,h]} almost
+--     everywhere", twice explicitly (lines 11 and 21). Now an a.e. equality.
+--
+-- (2) TEST CLASS was every differentiable `f`, with no requirement that `deriv f`
+--     be integrable. A differentiable function can have a non-integrable
+--     derivative, and Lean's Bochner integral of a non-integrable function is
+--     0 — so `hidentity` demanded `0 = f (x+h) - f (x-h)` for such `f`, which no
+--     `g` satisfies. Restricted to smooth compactly supported test functions,
+--     the standard class for the Fourier/distributional argument the informal
+--     solution actually uses.
 theorem convolution_identity_implies_indicator
     (g : ℝ → ℝ) (hg1 : Integrable g volume)
     (h : ℝ) (hh : 0 < h)
-    (hidentity : ∀ f : ℝ → ℝ, Differentiable ℝ f →
+    (hidentity : ∀ f : ℝ → ℝ, ContDiff ℝ ⊤ f → HasCompactSupport f →
       ∀ x : ℝ,
         (∫ t, g t * (deriv f) (x - t) ∂volume) = f (x + h) - f (x - h)) :
-    ∀ x : ℝ, g x = if x ∈ Set.Icc (-h) h then 1 else 0 := by
+    g =ᵐ[volume] fun x => if x ∈ Set.Icc (-h) h then 1 else 0 := by
   sorry
 
 end ApmCanaries.A01A03

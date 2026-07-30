@@ -97,8 +97,17 @@ lemma norm_le_area_integral_div_area
       whose total area integral bounds the sup on K
     - `TendstoUniformlyOn` is then obtained from the Cauchy criterion
 -/
+-- STATEMENT REPAIR 2026-07-30 (Joe-authorised). `hΩ : IsOpen Ω` is declared on
+-- line 50 as a section variable but this theorem never referenced it, so Lean 4
+-- did not include it and the statement quantified over an ARBITRARY Ω. That made
+-- it FALSE: at Ω = {0} the L1-on-disks hypothesis holds VACUOUSLY (no
+-- positive-radius closed ball fits inside a singleton) while the conclusion
+-- asserts the constant 1 converges uniformly to 0. Refutation machine-checked;
+-- faithfulness-ledger entry #9. Added as an explicit binder to match the other
+-- three theorems in this file, which all declare `(hΩ : IsOpen Ω)` themselves.
 theorem tendstoUniformlyOn_of_L1_on_disks
     {f : ℕ → ℂ → ℂ} {F : ℂ → ℂ}
+    (hΩ : IsOpen Ω)
     (hf : ∀ n, DifferentiableOn ℂ (f n) Ω)
     (hF : ContinuousOn F Ω)
     (hconv : L1ConvergesOnDisks f F Ω)
@@ -170,7 +179,7 @@ theorem L1_disk_convergence_analytic_upgrade
       TendstoUniformlyOn (fun n z => deriv (f n) z) (deriv F) atTop K) := by
   refine ⟨?_, ?_, ?_⟩
   · exact differentiableOn_of_L1_limit hΩ hf hF hconv
-  · exact fun K hK hKΩ => tendstoUniformlyOn_of_L1_on_disks hf hF hconv hK hKΩ
+  · exact fun K hK hKΩ => tendstoUniformlyOn_of_L1_on_disks hΩ hf hF hconv hK hKΩ
   · exact fun K hK hKΩ => tendstoUniformlyOn_deriv_of_L1 hΩ hf hF hconv hK hKΩ
 
 end ApmCanaries.A01A07
