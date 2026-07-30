@@ -3,6 +3,7 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Sinc
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 open MeasureTheory Set Real
 
@@ -33,6 +34,56 @@ noncomputable section
 -- Re-export for clarity
 #check Real.sinc
 #check Real.continuous_sinc
+
+/-- The integration-by-parts identity underlying Dirichlet's test for `sinc`.
+This is kept separate from the evaluation of the limit: it is also the
+uniform tail estimate needed to remove an Abel or Gaussian regularization. -/
+lemma integral_sinc_eq_cos_div_sub {a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
+    ∫ x in a..b, Real.sinc x =
+      Real.cos a / a - Real.cos b / b - ∫ x in a..b, Real.cos x / x ^ 2 := by
+  have hx0 : ∀ x ∈ Set.uIcc a b, x ≠ 0 := by
+    intro x hx
+    have hx' : a ≤ x := by
+      rw [Set.uIcc_of_le hab] at hx
+      exact hx.1
+    exact ne_of_gt (ha.trans_le hx')
+  have hderiv : ∀ x ∈ Set.uIcc a b,
+      HasDerivAt (fun y : ℝ => Real.cos y / y)
+        (-Real.sin x / x - Real.cos x / x ^ 2) x := by
+    intro x hx
+    convert (Real.hasDerivAt_cos x).div (hasDerivAt_id x) (hx0 x hx) using 1
+    simp only [id_eq]
+    field_simp [hx0 x hx]
+  have hint : IntervalIntegrable
+      (fun x : ℝ => -Real.sin x / x - Real.cos x / x ^ 2) volume a b := by
+    apply ContinuousOn.intervalIntegrable
+    fun_prop (disch := aesop)
+  have hftc := intervalIntegral.integral_eq_sub_of_hasDerivAt hderiv hint
+  have hsin : IntervalIntegrable (fun x : ℝ => Real.sin x / x) volume a b := by
+    apply ContinuousOn.intervalIntegrable
+    fun_prop (disch := aesop)
+  have hcos : IntervalIntegrable (fun x : ℝ => Real.cos x / x ^ 2) volume a b := by
+    apply ContinuousOn.intervalIntegrable
+    fun_prop (disch := aesop)
+  have hfun : (fun x : ℝ => -Real.sin x / x - Real.cos x / x ^ 2) =
+      fun x => -(Real.sin x / x) - Real.cos x / x ^ 2 := by
+    funext x
+    ring
+  rw [hfun] at hftc
+  change (∫ x in a..b,
+    (-(fun y : ℝ => Real.sin y / y)) x - (fun y : ℝ => Real.cos y / y ^ 2) x) =
+      Real.cos b / b - Real.cos a / a at hftc
+  rw [intervalIntegral.integral_sub hsin.neg hcos] at hftc
+  simp only [Pi.neg_apply] at hftc
+  rw [intervalIntegral.integral_neg] at hftc
+  have hsinc : ∀ᵐ x : ℝ, x ∈ Set.uIoc a b →
+      Real.sinc x = Real.sin x / x := by
+    filter_upwards with x
+    intro hx
+    rw [Real.sinc_of_ne_zero]
+    exact hx0 x (Set.uIoc_subset_uIcc hx)
+  rw [intervalIntegral.integral_congr_ae hsinc]
+  linarith
 
 -- The Dirichlet integral: the answer is π
 -- This is the exam answer. The contour proof is outlined above.
