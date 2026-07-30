@@ -55,10 +55,10 @@ lemma chain_rule_at_zero
     (hh : DifferentiableAt ℂ h 0)
     (hfgh : ∀ᶠ z in nhds 0, f z = g (h z)) :
     deriv f 0 = deriv g (h 0) * deriv h 0 := by
-  -- This follows from the standard chain rule: (g ∘ h)'(0) = g'(h(0)) · h'(0).
-  -- Since f = g ∘ h a.e., f'(0) = (g ∘ h)'(0).
-  -- Mathlib's `deriv.comp` gives this for g ∘ h.
-  sorry
+  have hcomp :
+      HasDerivAt (fun z => g (h z)) (deriv g (h 0) * deriv h 0) 0 :=
+    hg.hasDerivAt.comp 0 hh.hasDerivAt
+  exact (hcomp.congr_of_eventuallyEq hfgh).deriv
 
 /-- Part (a): |f'(0)| ≤ |g'(0)| when f(Δ) ⊆ g(Δ) and f(0) = g(0).
 
