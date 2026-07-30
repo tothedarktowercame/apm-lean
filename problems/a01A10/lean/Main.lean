@@ -1,4 +1,5 @@
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Complex
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
@@ -56,7 +57,26 @@ namespace ApmCanaries.A01A10
 -/
 theorem gaussian_fourier_transform (y : ℝ) :
     ∫ x : ℝ, cexp ((Complex.I * ↑y * ↑x) + (-(↑x : ℂ)^2)) = ↑(√π) * cexp (-(↑y : ℂ)^2 / 4) := by
-  sorry
+  have h := fourierIntegral_gaussian (b := (1 : ℂ)) (by norm_num) (y : ℂ)
+  calc
+    (∫ x : ℝ, cexp ((Complex.I * ↑y * ↑x) + (-(↑x : ℂ)^2))) =
+        ∫ x : ℝ, cexp (Complex.I * (y : ℂ) * x) *
+          cexp (-(1 : ℂ) * x ^ 2) := by
+            apply integral_congr_ae
+            filter_upwards with x
+            rw [← Complex.exp_add]
+            congr 1
+            ring
+    _ = ((π : ℂ) / 1) ^ (1 / 2 : ℂ) *
+        cexp (-(y : ℂ) ^ 2 / (4 * 1)) := h
+    _ = (√π : ℂ) * cexp (-(y : ℂ)^2 / 4) := by
+      rw [div_one]
+      have hsqrt : (√π : ℂ) = (π : ℂ) ^ (1 / 2 : ℂ) := by
+        rw [Real.sqrt_eq_rpow, Complex.ofReal_cpow Real.pi_pos.le]
+        norm_num
+      rw [← hsqrt]
+      congr 2
+      ring
 
 /-- Part (b) via completion of the square:
     -x² + ixy = -(x - iy/2)² - y²/4. -/
@@ -65,16 +85,57 @@ lemma complete_square (x y : ℝ) :
       -(((x : ℂ) - Complex.I * (y : ℂ) / 2)^2) - (y : ℂ)^2 / 4 := by
   -- Verified: expand (x - Iy/2)² = x² - Ixy + I²y²/4 = x² - Ixy - y²/4
   -- Then -(x-Iy/2)² - y²/4 = -x² + Ixy + y²/4 - y²/4 = -x² + Ixy ✓
-  sorry
+  ring_nf
+  simp [Complex.I_sq]
 
-/-- Part (a): The Fresnel integral ∫₀^∞ e^{ix²} dx = (1+i)√π / (2√2).
+/-- The displayed Fresnel integrand is not Bochner integrable on the positive
+half-line: its norm is identically one there. -/
+lemma fresnel_integrand_not_integrable :
+    ¬ IntegrableOn (fun x : ℝ => cexp (Complex.I * (x : ℂ)^2)) (Set.Ioi 0) := by
+  intro h
+  have hnorm (x : ℝ) :
+      ‖cexp (Complex.I * (x : ℂ)^2)‖ = (1 : ℝ) := by
+    rw [← Complex.ofReal_pow]
+    exact Complex.norm_exp_I_mul_ofReal _
+  have hone : IntegrableOn (fun _ : ℝ => (1 : ℝ)) (Set.Ioi 0) := by
+    exact h.norm.congr (Filter.Eventually.of_forall hnorm)
+  have hnot : ¬ IntegrableOn (fun _ : ℝ => (1 : ℝ)) (Set.Ioi 0) := by
+    simp [integrableOn_const_iff, volume_Ioi]
+  exact hnot hone
 
-    **SORRY BOUNDARY:** This requires a contour integral over the sector
-    {re^{iθ} : 0 ≤ θ ≤ π/4}, using Cauchy's theorem and the parametrization
-    z = re^{iπ/4} to convert the oscillatory integral into a convergent one.
-    Mathlib's contour integral machinery (`CircleIntegral`, `intervalIntegral`)
-    can in principle handle this, but the specific sector contour and the
-    decay estimates on the arc are not pre-built.
+/-- Consequently Mathlib's Bochner integral assigns zero to the Fresnel
+integrand on the half-line. -/
+lemma fresnel_bochner_integral_eq_zero :
+    (∫ x in Set.Ioi (0 : ℝ), cexp (Complex.I * (x : ℂ)^2)) = 0 :=
+  integral_undef fresnel_integrand_not_integrable
+
+lemma fresnel_claimed_value_ne_zero :
+    (1 + Complex.I) * (√π) / (2 * (√2)) ≠ 0 := by
+  apply div_ne_zero
+  · apply mul_ne_zero
+    · intro h
+      have := congrArg Complex.re h
+      norm_num at this
+    · exact_mod_cast (Real.sqrt_pos.2 Real.pi_pos).ne'
+  · exact_mod_cast mul_ne_zero (by norm_num : (2 : ℝ) ≠ 0)
+      (Real.sqrt_pos.2 (by norm_num : (0 : ℝ) < 2)).ne'
+
+/-- The stated Fresnel equality is false for the Bochner/set-integral notation
+used below; the classical value is instead an improper oscillatory integral. -/
+lemma not_fresnel_integral_statement :
+    ¬ ((∫ x in Set.Ioi (0 : ℝ), cexp (Complex.I * (x : ℂ)^2)) =
+      (1 + Complex.I) * (√π) / (2 * (√2))) := by
+  rw [fresnel_bochner_integral_eq_zero]
+  exact fresnel_claimed_value_ne_zero.symm
+
+/-- Part (a), as originally stated.
+
+    **SORRY BOUNDARY:** The classical Fresnel value is an improper oscillatory
+    integral. The notation below instead denotes Mathlib's Bochner set
+    integral. The preceding lemmas prove that its integrand is not integrable,
+    that this integral is therefore zero, and that the displayed right-hand
+    side is nonzero. Thus this target cannot be discharged without repairing
+    the statement to use an improper-integral limit.
 -/
 theorem fresnel_integral :
     (∫ x in Set.Ioi (0 : ℝ), cexp (Complex.I * (x : ℂ)^2)) =
