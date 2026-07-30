@@ -353,6 +353,17 @@ lemma norm_le_area_integral_div_area
   exact norm_le_area_integral_div_area_of_integral_eq hr
     (integral_closedBall_eq_area_smul hr hg)
 
+/-- Sub-mean inequality centered at an arbitrary constant, the form used to
+compare an analytic function with a merely continuous candidate limit. -/
+lemma norm_sub_le_area_integral_div_area
+    {g : ℂ → ℂ} {z₀ c : ℂ} {r : ℝ} (hr : 0 < r)
+    (hg : DifferentiableOn ℂ g (closedBall z₀ r)) :
+    ‖g z₀ - c‖ ≤ (1 / (Real.pi * r ^ 2)) *
+      ∫ w in closedBall z₀ r, ‖g w - c‖ := by
+  simpa only using
+    (norm_le_area_integral_div_area (g := fun w ↦ g w - c)
+      (z₀ := z₀) hr (hg.sub (differentiableOn_const c)))
+
 /-- Step 1: L¹ convergence on disks implies uniform convergence on compact subsets.
 
     Given compact `K ⊂ Ω`, choose `r = dist(K, ∂Ω)/2 > 0` so that `D(z,r) ⊂ Ω`
