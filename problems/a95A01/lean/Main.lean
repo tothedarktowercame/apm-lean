@@ -287,15 +287,62 @@ theorem riemann_lebesgue_sandwich
     has positive measure, and empty interior.
 
     Lower Riemann integral = 0 (every interval has inf `χ_K` = 0).
-    Upper Riemann integral ≥ measure of K > 0.
-
-    **SORRY BOUNDARY:** Requires the Riemann integral definitions and the
-    upper integral bound from positive measure. -/
+    Upper Riemann integral ≥ measure of K > 0. -/
 theorem indicator_not_riemann_integrable
     (K : Set ℝ) (hK : IsCompact K) (hK_sub : K ⊆ Icc 0 1)
     (hK_meas : 0 < volume K) (hK_int : interior K = ∅) :
     lowerRiemannIntegral (K.indicator (fun _ => (1:ℝ))) <
       upperRiemannIntegral (K.indicator (fun _ => (1:ℝ))) := by
-  sorry
+  let f : ℝ → ℝ := K.indicator fun _ => 1
+  have hpart :
+      {s : ℝ | ∃ (n : ℕ) (t : Fin (n+2) → ℝ),
+        t 0 = 0 ∧ t (Fin.last _) = 1 ∧
+        (∀ i : Fin (n+1), t i.castSucc < t i.succ) ∧
+        s = ∑ i : Fin (n+1),
+          (sInf (f '' Icc (t i.castSucc) (t i.succ))) *
+          (t i.succ - t i.castSucc)} = {0} := by
+    ext s
+    constructor
+    · rintro ⟨n, t, ht₀, ht₁, ht, rfl⟩
+      rw [mem_singleton_iff]
+      apply Finset.sum_eq_zero
+      intro i _
+      rw [show sInf (f '' Icc (t i.castSucc) (t i.succ)) = 0 by
+        simpa [f] using inf_indicator_eq_zero K hK_int (ht i)]
+      simp
+    · intro hs
+      rw [mem_singleton_iff] at hs
+      subst s
+      let t : Fin 2 → ℝ := fun i => (i : ℕ)
+      refine ⟨0, t, ?_, ?_, ?_, ?_⟩
+      · norm_num [t]
+      · norm_num [t]
+      · intro i
+        fin_cases i
+        norm_num [t]
+      · have hinf : sInf (f '' Icc (0 : ℝ) 1) = 0 := by
+          simpa [f] using
+            inf_indicator_eq_zero K hK_int (by norm_num : (0 : ℝ) < 1)
+        simp [t, hinf]
+  have hlower : lowerRiemannIntegral f = 0 := by
+    rw [lowerRiemannIntegral, hpart, csSup_singleton]
+  have hf_meas : Measurable f := by
+    exact measurable_const.indicator hK.measurableSet
+  have hf_bdd : ∃ M, ∀ x ∈ Icc (0 : ℝ) 1, |f x| ≤ M := by
+    refine ⟨1, ?_⟩
+    intro x _
+    classical
+    by_cases hx : x ∈ K <;> simp [f, hx]
+  have hsandwich := riemann_lebesgue_sandwich f hf_meas hf_bdd
+  have hintegral :
+      (∫ x in Icc (0 : ℝ) 1, f x ∂volume) = (volume K).toReal := by
+    rw [setIntegral_indicator hK.measurableSet]
+    rw [inter_eq_right.mpr hK_sub]
+    simp [measureReal_def]
+  have hvolume_real : 0 < (volume K).toReal :=
+    ENNReal.toReal_pos hK_meas.ne' hK.measure_ne_top
+  rw [show K.indicator (fun _ => (1 : ℝ)) = f by rfl]
+  rw [hlower]
+  exact lt_of_lt_of_le (hintegral.symm ▸ hvolume_real) hsandwich.2
 
 end ApmCanaries.A95A01
