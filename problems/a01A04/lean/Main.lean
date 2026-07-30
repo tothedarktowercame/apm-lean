@@ -6,6 +6,9 @@ import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
+import Mathlib.Data.Nat.Factorial.DoubleFactorial
 import Mathlib.Topology.Algebra.Order.Floor
 import Mathlib.Algebra.Ring.Parity
 
@@ -95,17 +98,125 @@ lemma ballSlice_lt_one_of_ne_zero {t : ℝ} (ht : t ≠ 0) : ballSlice t < 1 := 
   · rw [ballSlice, if_neg h]
     norm_num
 
+private lemma ballSlice_integral_eq_sin_pow (n : ℕ) (hn : 0 < n) :
+    (∫ t, (ballSlice t) ^ n) = ∫ x in (0 : ℝ)..Real.pi, Real.sin x ^ (n + 1) := by
+  let g : ℝ → ℝ := fun t => Real.sqrt (1 - t ^ 2) ^ n
+  have hball_indicator :
+      (fun t : ℝ => ballSlice t ^ n) =
+        (Icc (-1) 1).indicator g := by
+    funext t
+    by_cases ht : t ∈ Icc (-1) 1
+    · simp [ballSlice, g, ht]
+    · simp [ballSlice, g, ht, Nat.ne_of_gt hn]
+  have hwhole :
+      (∫ t, (ballSlice t) ^ n) = ∫ t in (-1 : ℝ)..1, g t := by
+    rw [hball_indicator, integral_indicator measurableSet_Icc,
+      integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le (by norm_num)]
+  have hsub :
+      (∫ x in (0 : ℝ)..Real.pi,
+          (g ∘ fun x : ℝ => -Real.cos x) x * Real.sin x) =
+        ∫ t in (-1 : ℝ)..1, g t := by
+    have hg : Continuous g := by
+      dsimp [g]
+      fun_prop
+    convert intervalIntegral.integral_comp_mul_deriv
+      (a := (0 : ℝ)) (b := Real.pi)
+      (f := fun x : ℝ => -Real.cos x) (f' := Real.sin) (g := g)
+      (fun x _ => by simpa using (Real.hasDerivAt_cos x).neg)
+      Real.continuous_sin.continuousOn
+      hg using 1
+    all_goals simp
+  rw [hwhole, ← hsub]
+  apply intervalIntegral.integral_congr
+  intro x hx
+  have hx' : x ∈ Icc (0 : ℝ) Real.pi := by
+    simpa [uIcc_of_le Real.pi_pos.le] using hx
+  have hsin : 0 ≤ Real.sin x := Real.sin_nonneg_of_mem_Icc hx'
+  dsimp [g]
+  rw [show 1 - (-Real.cos x) ^ 2 = Real.sin x ^ 2 by
+        nlinarith [Real.sin_sq_add_cos_sq x],
+      Real.sqrt_sq hsin, pow_succ']
+  ring
+
+private lemma even_ball_volume_exact (k : ℕ) (hk : 0 < k) :
+    (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2 * k))) 1)).toReal =
+      Real.pi ^ k / k.factorial := by
+  have hn : 0 < 2 * k := Nat.mul_pos (by norm_num) hk
+  letI : Nonempty (Fin (2 * k)) := Fin.pos_iff_nonempty.mp hn
+  rw [InnerProductSpace.volume_ball_of_dim_even (k := k) (by simp) 0 1]
+  simp only [ENNReal.ofReal_one, one_pow, one_mul]
+  rw [ENNReal.toReal_ofReal (by positivity)]
+
+private lemma odd_ball_volume_exact (k : ℕ) :
+    (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2 * k + 1))) 1)).toReal =
+      2 ^ (k + 1) * Real.pi ^ k / (Nat.doubleFactorial (2 * k + 1) : ℝ) := by
+  have hn : 0 < 2 * k + 1 := by omega
+  letI : Nonempty (Fin (2 * k + 1)) := Fin.pos_iff_nonempty.mp hn
+  rw [InnerProductSpace.volume_ball_of_dim_odd (k := k) (by simp) 0 1]
+  simp only [ENNReal.ofReal_one, one_pow, one_mul, finrank_euclideanSpace_fin]
+  rw [ENNReal.toReal_ofReal (by positivity)]
+  ring
+
+private lemma integral_sin_pow_odd_doubleFactorial (k : ℕ) :
+    (∫ x in (0 : ℝ)..Real.pi, Real.sin x ^ (2 * k + 1)) =
+      2 * (Nat.doubleFactorial (2 * k) : ℝ) /
+        (Nat.doubleFactorial (2 * k + 1) : ℝ) := by
+  rw [integral_sin_pow_odd, Finset.prod_div_distrib,
+    Nat.doubleFactorial_eq_prod_even, Nat.doubleFactorial_eq_prod_odd]
+  push_cast
+  have hnum :
+      (∏ i ∈ Finset.range k, (2 * (i : ℝ) + 2)) =
+        ∏ i ∈ Finset.range k, 2 * ((i : ℝ) + 1) := by
+    apply Finset.prod_congr rfl
+    intro i hi
+    ring
+  have hden :
+      (∏ i ∈ Finset.range k, (2 * (i : ℝ) + 3)) =
+        ∏ i ∈ Finset.range k, (2 * ((i : ℝ) + 1) + 1) := by
+    apply Finset.prod_congr rfl
+    intro i hi
+    ring
+  rw [hnum, hden]
+  ring
+
+private lemma integral_sin_pow_even_doubleFactorial (k : ℕ) :
+    (∫ x in (0 : ℝ)..Real.pi, Real.sin x ^ (2 * k + 2)) =
+      Real.pi * (Nat.doubleFactorial (2 * k + 1) : ℝ) /
+        (Nat.doubleFactorial (2 * k + 2) : ℝ) := by
+  rw [show 2 * k + 2 = 2 * (k + 1) by omega,
+    integral_sin_pow_even, Finset.prod_div_distrib]
+  have hoddprod :
+      (∏ i ∈ Finset.range (k + 1), (2 * (i : ℝ) + 1)) =
+        (Nat.doubleFactorial (2 * k + 1) : ℝ) := by
+    induction k with
+    | zero => norm_num
+    | succ k ih =>
+      rw [Finset.prod_range_succ, ih]
+      rw [show 2 * (k + 1) + 1 = (2 * k + 1) + 2 by omega,
+        Nat.doubleFactorial_add_two]
+      push_cast
+      ring
+  have hevenprod :
+      (∏ i ∈ Finset.range (k + 1), (2 * (i : ℝ) + 2)) =
+        (Nat.doubleFactorial (2 * k + 2) : ℝ) := by
+    rw [show 2 * k + 2 = 2 * (k + 1) by omega,
+      Nat.doubleFactorial_eq_prod_even]
+    push_cast
+    apply Finset.prod_congr rfl
+    intro i hi
+    ring
+  rw [hoddprod, hevenprod]
+  rw [show 2 * (k + 1) = 2 * k + 2 by omega]
+  ring
+
 /-! ## Part (a): The slicing identity -/
 
 /-- Part (a): The volume of the unit ball satisfies the recursive identity
     `m(B_{n+1,1}) = m(B_{n,1}) · ∫ [f(t)]ⁿ dt`.
 
-    **SORRY BOUNDARY:** The proof requires the Cavalieri/Fubini slicing formula
-    for balls in product spaces `ℝⁿ × ℝ = ℝⁿ⁺¹`, relating the volume of the
-    ball `B_{n+1}` to an integral of volumes of lower-dimensional balls.
-    Mathlib has Fubini's theorem (`MeasureTheory.integral_prod`) but the
-    specific application to balls with the scaling relation
-    `m(B_{n,r}) = rⁿ · m(B_{n,1})` requires careful setup.
+    The formal proof substitutes `t = -cos x`, reducing the slice integral
+    to a sine-power integral. Wallis's formulas and Mathlib's exact even/odd
+    Euclidean ball-volume formulas then prove the identity by parity.
 -/
 -- STATEMENT REPAIR 2026-07-30 (Joe-authorised). See faithfulness-ledger #6.
 -- `Fin n → ℝ` carries Mathlib's Pi SUP-norm, so `Metric.ball 0 1` was the open
@@ -122,7 +233,30 @@ theorem ball_volume_recursion (n : ℕ) (hn : 0 < n) :
         (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin n)) 1)).toReal *
           ∫ t, (ballSlice t) ^ n := by
   refine ⟨ballSlice, fun t => ⟨ballSlice_nonneg t, ballSlice_le_one t⟩, ?_⟩
-  sorry
+  rw [ballSlice_integral_eq_sin_pow n hn]
+  rcases Nat.even_or_odd' n with ⟨k, rfl | rfl⟩
+  · have hk : 0 < k := by omega
+    rw [show 2 * k + 1 = 2 * k + 1 by rfl,
+      odd_ball_volume_exact k, even_ball_volume_exact k hk,
+      integral_sin_pow_odd_doubleFactorial k,
+      Nat.doubleFactorial_two_mul]
+    push_cast
+    have hkfac : (k.factorial : ℝ) ≠ 0 := by positivity
+    have hkdf : (Nat.doubleFactorial (2 * k + 1) : ℝ) ≠ 0 := by positivity
+    field_simp
+    ring
+  · rw [show 2 * k + 1 + 1 = 2 * (k + 1) by omega,
+      even_ball_volume_exact (k + 1) (by omega),
+      odd_ball_volume_exact k,
+      ← show 2 * k + 2 = 2 * (k + 1) by omega,
+      integral_sin_pow_even_doubleFactorial k,
+      show 2 * k + 2 = 2 * (k + 1) by omega,
+      Nat.doubleFactorial_two_mul]
+    push_cast
+    have hkfac : ((k + 1).factorial : ℝ) ≠ 0 := by positivity
+    have hkdf : (Nat.doubleFactorial (2 * k + 1) : ℝ) ≠ 0 := by positivity
+    field_simp
+    ring
 
 /-! ## Part (b): ∫ [f(t)]ⁿ dt → 0 -/
 
