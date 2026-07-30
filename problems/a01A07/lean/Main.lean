@@ -83,6 +83,28 @@ lemma norm_le_circleAverage_norm
   gcongr
   exact intervalIntegral.norm_integral_le_integral_norm Real.two_pi_pos.le
 
+/-- The requested disk sub-mean inequality follows formally from the
+vector-valued disk mean identity.  Thus the remaining analytic construction is
+exactly that identity, rather than any additional norm estimate. -/
+lemma norm_le_area_integral_div_area_of_integral_eq
+    {g : ℂ → ℂ} {z₀ : ℂ} {r : ℝ} (hr : 0 < r)
+    (hmean : ∫ w in closedBall z₀ r, g w =
+      (Real.pi * r ^ 2 : ℝ) • g z₀) :
+    ‖g z₀‖ ≤ (1 / (Real.pi * r ^ 2)) *
+      ∫ w in closedBall z₀ r, ‖g w‖ := by
+  have harea : 0 < Real.pi * r ^ 2 := mul_pos Real.pi_pos (sq_pos_of_pos hr)
+  have hnorm :
+      Real.pi * r ^ 2 * ‖g z₀‖ ≤ ∫ w in closedBall z₀ r, ‖g w‖ := by
+    simpa [hmean, norm_smul, Real.norm_eq_abs, abs_of_pos Real.pi_pos] using
+      (norm_integral_le_integral_norm
+        (μ := volume.restrict (closedBall z₀ r)) g)
+  calc
+    ‖g z₀‖ = (1 / (Real.pi * r ^ 2)) *
+        (Real.pi * r ^ 2 * ‖g z₀‖) := by field_simp
+    _ ≤ (1 / (Real.pi * r ^ 2)) *
+        ∫ w in closedBall z₀ r, ‖g w‖ :=
+      mul_le_mul_of_nonneg_left hnorm (one_div_nonneg.mpr harea.le)
+
 /-- Mean value inequality for analytic functions:
     `‖g(z₀)‖ ≤ (1/πr²) ∫_{D(z₀,r)} ‖g‖ dA`.
 
