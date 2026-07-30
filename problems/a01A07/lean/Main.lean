@@ -64,6 +64,25 @@ def L1ConvergesOnDisks (f : ℕ → ℂ → ℂ) (F : ℂ → ℂ) (Ω : Set ℂ
     Tendsto (fun n => ∫ w in closedBall z r, ‖f n w - F w‖)
       atTop (𝓝 0)
 
+/-- The circle-level sub-mean inequality underlying
+`norm_le_area_integral_div_area`.  This separates the complex-analytic input
+from the remaining polar-coordinate conversion from circle averages to disk
+area. -/
+lemma norm_le_circleAverage_norm
+    {g : ℂ → ℂ} {z₀ : ℂ} {r : ℝ} (hr : 0 < r)
+    (hg : DifferentiableOn ℂ g (closedBall z₀ r)) :
+    ‖g z₀‖ ≤ Real.circleAverage (fun w ↦ ‖g w‖) z₀ r := by
+  have hdc : DiffContOnCl ℂ g (ball z₀ |r|) := by
+    rw [abs_of_pos hr]
+    refine ⟨hg.mono ball_subset_closedBall, ?_⟩
+    simpa [closure_ball _ hr.ne'] using hg.continuousOn
+  have hmean : Real.circleAverage g z₀ r = g z₀ := hdc.circleAverage
+  rw [← hmean]
+  simp only [Real.circleAverage_def, norm_smul, Real.norm_eq_abs, abs_inv,
+    abs_of_pos Real.two_pi_pos, smul_eq_mul]
+  gcongr
+  exact intervalIntegral.norm_integral_le_integral_norm Real.two_pi_pos.le
+
 /-- Mean value inequality for analytic functions:
     `‖g(z₀)‖ ≤ (1/πr²) ∫_{D(z₀,r)} ‖g‖ dA`.
 
