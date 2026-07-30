@@ -6,6 +6,7 @@ import Mathlib.Analysis.Normed.Module.Basic
 import Mathlib.Analysis.SpecialFunctions.PolarCoord
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.IntegrableOn
+import Mathlib.MeasureTheory.Group.Integral
 import Mathlib.MeasureTheory.Measure.Haar.OfBasis
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Prod
@@ -135,6 +136,181 @@ lemma integral_closedBall_zero_eq_polar
       dsimp only
       rw [Set.indicator_of_mem hmem]
 
+/-- The area mean-value identity for a holomorphic function on a disk centered
+at the origin. -/
+lemma integral_closedBall_zero_eq_area_smul
+    {g : ℂ → ℂ} {r : ℝ} (hr : 0 < r)
+    (hg : DifferentiableOn ℂ g (closedBall (0 : ℂ) r)) :
+    ∫ w in closedBall (0 : ℂ) r, g w =
+      (Real.pi * r ^ 2 : ℝ) • g 0 := by
+  rw [integral_closedBall_zero_eq_polar g hr]
+  let Q : ℝ × ℝ → ℂ :=
+    fun p ↦ p.1 • g (Complex.polarCoord.symm p)
+  have hpolar : Continuous (fun p : ℝ × ℝ ↦ Complex.polarCoord.symm p) := by
+    simp only [Complex.polarCoord_symm_apply]
+    fun_prop
+  have hmap :
+      MapsTo (fun p : ℝ × ℝ ↦ Complex.polarCoord.symm p)
+        (Icc (0 : ℝ) r ×ˢ Icc (-Real.pi) Real.pi)
+        (closedBall (0 : ℂ) r) := by
+    intro p hp
+    simp only [mem_closedBall, dist_zero_right, Complex.norm_polarCoord_symm,
+      abs_of_nonneg hp.1.1]
+    exact hp.1.2
+  have hQcont :
+      ContinuousOn Q (Icc (0 : ℝ) r ×ˢ Icc (-Real.pi) Real.pi) := by
+    simpa only [Q, Complex.real_smul] using
+      (Complex.continuous_ofReal.comp continuous_fst).continuousOn.mul
+        (hg.continuousOn.comp hpolar.continuousOn hmap)
+  have hQint :
+      IntegrableOn Q (Ioc (0 : ℝ) r ×ˢ Ioo (-Real.pi) Real.pi) := by
+    apply (hQcont.integrableOn_compact (isCompact_Icc.prod isCompact_Icc)).mono_set
+    exact prod_mono (fun _ h ↦ ⟨h.1.le, h.2⟩)
+      (fun _ h ↦ ⟨h.1.le, h.2.le⟩)
+  change (∫ p in Ioc (0 : ℝ) r ×ˢ Ioo (-Real.pi) Real.pi, Q p) =
+    (Real.pi * r ^ 2 : ℝ) • g 0
+  rw [Measure.volume_eq_prod ℝ ℝ]
+  rw [setIntegral_prod Q (by simpa [Measure.volume_eq_prod ℝ ℝ] using hQint)]
+  have hinner : ∀ s ∈ Ioc (0 : ℝ) r,
+      (∫ θ in Ioo (-Real.pi) Real.pi,
+          s • g (Complex.polarCoord.symm (s, θ))) =
+        (2 * Real.pi * s : ℝ) • g 0 := by
+    intro s hs
+    have hdiff : DiffContOnCl ℂ g (ball 0 |s|) := by
+      have hspos : 0 < s := hs.1
+      rw [abs_of_pos hspos]
+      refine ⟨hg.mono ?_, ?_⟩
+      · exact ball_subset_closedBall.trans
+          (closedBall_subset_closedBall (by simpa using hs.2))
+      · have hsub : closedBall (0 : ℂ) s ⊆ closedBall 0 r :=
+          closedBall_subset_closedBall hs.2
+        simpa [closure_ball _ hspos.ne'] using hg.continuousOn.mono hsub
+    have hcircle : Real.circleAverage g 0 s = g 0 := hdiff.circleAverage
+    have hpolarCircle : ∀ θ : ℝ,
+        (Complex.polarCoord.symm (s, θ) : ℂ) = circleMap 0 s θ := by
+      intro θ
+      simp [Complex.polarCoord_symm_apply, circleMap, Complex.exp_mul_I]
+    have hperiodic :
+        Function.Periodic
+          (fun θ : ℝ ↦ s • g (Complex.polarCoord.symm (s, θ)))
+          (2 * Real.pi) := by
+      intro θ
+      simp [Complex.polarCoord_symm_apply]
+    rw [← integral_Ioc_eq_integral_Ioo,
+      ← intervalIntegral.integral_of_le (by linarith [Real.pi_pos])]
+    have hshift := hperiodic.intervalIntegral_add_eq (-Real.pi) 0
+    have hshift' :
+        (∫ θ in -Real.pi..Real.pi,
+            s • g (Complex.polarCoord.symm (s, θ))) =
+          ∫ θ in 0..2 * Real.pi,
+            s • g (Complex.polarCoord.symm (s, θ)) := by
+      convert hshift using 1 <;> ring_nf
+    rw [hshift']
+    have hangleInt :
+        IntervalIntegrable
+          (fun θ : ℝ ↦ g (Complex.polarCoord.symm (s, θ)))
+          volume 0 (2 * Real.pi) := by
+      have hcontSphere : ContinuousOn g (sphere (0 : ℂ) s) := by
+        apply hdiff.2.mono
+        simpa [abs_of_pos hs.1, closure_ball _ hs.1.ne'] using
+          (sphere_subset_closedBall : sphere (0 : ℂ) s ⊆ closedBall 0 s)
+      simpa only [hpolarCircle] using
+          hcontSphere.circleIntegrable hs.1.le
+    have hangle :
+        (∫ θ in 0..2 * Real.pi,
+            g (Complex.polarCoord.symm (s, θ))) =
+          (2 * Real.pi : ℝ) • g 0 := by
+      have hcircle' :
+          (2 * Real.pi : ℝ)⁻¹ •
+              (∫ θ in 0..2 * Real.pi,
+                g (Complex.polarCoord.symm (s, θ))) = g 0 := by
+        simpa only [Real.circleAverage_def, hpolarCircle] using hcircle
+      calc
+        (∫ θ in 0..2 * Real.pi,
+            g (Complex.polarCoord.symm (s, θ))) =
+            (2 * Real.pi : ℝ) •
+              ((2 * Real.pi : ℝ)⁻¹ •
+                ∫ θ in 0..2 * Real.pi,
+                  g (Complex.polarCoord.symm (s, θ))) := by
+                    have hne : (2 * Real.pi : ℝ) ≠ 0 :=
+                      Real.two_pi_pos.ne'
+                    exact (smul_inv_smul₀ hne _).symm
+        _ = (2 * Real.pi : ℝ) • g 0 := by rw [hcircle']
+    calc
+      (∫ θ in 0..2 * Real.pi,
+          s • g (Complex.polarCoord.symm (s, θ))) =
+          s • ∫ θ in 0..2 * Real.pi,
+            g (Complex.polarCoord.symm (s, θ)) :=
+        hangleInt.integral_smul s
+      _ = (2 * Real.pi * s : ℝ) • g 0 := by
+        rw [hangle]
+        module
+  rw [setIntegral_congr_fun measurableSet_Ioc hinner]
+  have hout :
+      (∫ x in Ioc (0 : ℝ) r, (2 * Real.pi * x) • g 0) =
+        (∫ x in Ioc (0 : ℝ) r, 2 * Real.pi * x) • g 0 :=
+    integral_smul_const (μ := volume.restrict (Ioc (0 : ℝ) r))
+      (fun x : ℝ ↦ 2 * Real.pi * x) (g 0)
+  rw [hout]
+  congr 1
+  rw [← intervalIntegral.integral_of_le hr.le]
+  have hderiv : ∀ x : ℝ,
+      HasDerivAt (fun y : ℝ ↦ Real.pi * y ^ 2) (2 * Real.pi * x) x := by
+    intro x
+    convert ((hasDerivAt_pow 2 x).const_mul Real.pi) using 1
+    all_goals ring
+  rw [intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun x _ ↦ hderiv x)
+    ((continuous_const.mul continuous_id).intervalIntegrable 0 r)]
+  ring
+
+/-- Translation of a disk integral to a disk centered at the origin. -/
+lemma integral_closedBall_eq_translate
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (q : ℂ → E) (z₀ : ℂ) (r : ℝ) :
+    ∫ w in closedBall z₀ r, q w =
+      ∫ w in closedBall (0 : ℂ) r, q (w + z₀) := by
+  rw [← integral_indicator measurableSet_closedBall,
+    ← integral_indicator measurableSet_closedBall]
+  change (∫ w, (closedBall z₀ r).indicator q w
+      ∂volume.map Complex.equivRealProd.symm) =
+    ∫ w, (closedBall (0 : ℂ) r).indicator (fun w ↦ q (w + z₀)) w
+      ∂volume.map Complex.equivRealProd.symm
+  have heq :
+      (Complex.equivRealProd.symm : ℝ × ℝ → ℂ) =
+        Complex.measurableEquivRealProd.symm := by
+    funext p
+    apply Complex.ext <;> simp
+  rw [heq, Complex.volume_preserving_equiv_real_prod.symm.map_eq]
+  rw [← integral_add_right_eq_self
+    ((closedBall z₀ r).indicator q) z₀]
+  apply integral_congr_ae
+  filter_upwards with w
+  have hm :
+      w + z₀ ∈ closedBall z₀ r ↔ w ∈ closedBall (0 : ℂ) r := by
+    simp [mem_closedBall]
+  by_cases hw : w ∈ closedBall (0 : ℂ) r
+  · rw [Set.indicator_of_mem hw, Set.indicator_of_mem (hm.mpr hw)]
+  · rw [Set.indicator_of_notMem hw,
+      Set.indicator_of_notMem (fun h ↦ hw (hm.mp h))]
+
+/-- The vector-valued area mean identity on an arbitrary closed disk. -/
+lemma integral_closedBall_eq_area_smul
+    {g : ℂ → ℂ} {z₀ : ℂ} {r : ℝ} (hr : 0 < r)
+    (hg : DifferentiableOn ℂ g (closedBall z₀ r)) :
+    ∫ w in closedBall z₀ r, g w =
+      (Real.pi * r ^ 2 : ℝ) • g z₀ := by
+  rw [integral_closedBall_eq_translate g z₀ r]
+  have htranslated :
+      DifferentiableOn ℂ (fun w ↦ g (w + z₀))
+        (closedBall (0 : ℂ) r) := by
+    apply hg.comp
+    · exact differentiableOn_id.add (differentiableOn_const z₀)
+    · intro w hw
+      simpa [mem_closedBall, dist_eq] using hw
+  rw [integral_closedBall_zero_eq_area_smul hr htranslated]
+  simp
+
 /-- The requested disk sub-mean inequality follows formally from the
 vector-valued disk mean identity.  Thus the remaining analytic construction is
 exactly that identity, rather than any additional norm estimate. -/
@@ -174,7 +350,8 @@ lemma norm_le_area_integral_div_area
     (hg : DifferentiableOn ℂ g (closedBall z₀ r)) :
     ‖g z₀‖ ≤ (1 / (Real.pi * r ^ 2)) *
       ∫ w in closedBall z₀ r, ‖g w‖ := by
-  sorry
+  exact norm_le_area_integral_div_area_of_integral_eq hr
+    (integral_closedBall_eq_area_smul hr hg)
 
 /-- Step 1: L¹ convergence on disks implies uniform convergence on compact subsets.
 
