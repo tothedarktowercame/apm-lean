@@ -3,6 +3,7 @@ import Mathlib.Analysis.Complex.Liouville
 import Mathlib.Analysis.Complex.LocallyUniformLimit
 import Mathlib.Analysis.Complex.MeanValue
 import Mathlib.Analysis.Normed.Module.Basic
+import Mathlib.Analysis.SpecialFunctions.PolarCoord
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.IntegrableOn
 import Mathlib.MeasureTheory.Measure.Haar.OfBasis
@@ -82,6 +83,57 @@ lemma norm_le_circleAverage_norm
     abs_of_pos Real.two_pi_pos, smul_eq_mul]
   gcongr
   exact intervalIntegral.norm_integral_le_integral_norm Real.two_pi_pos.le
+
+/-- Polar-coordinate reduction of a disk integral centered at the origin. -/
+lemma integral_closedBall_zero_eq_polar
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (q : ℂ → E) {r : ℝ} (hr : 0 < r) :
+    ∫ w in closedBall (0 : ℂ) r, q w =
+      ∫ p in Set.Ioc (0 : ℝ) r ×ˢ Set.Ioo (-Real.pi) Real.pi,
+        p.1 • q (Complex.polarCoord.symm p) := by
+  rw [← integral_indicator measurableSet_closedBall,
+    show (volume : Measure ℂ) =
+      volume.map Complex.equivRealProd.symm from rfl]
+  have heq :
+      (Complex.equivRealProd.symm : ℝ × ℝ → ℂ) =
+        Complex.measurableEquivRealProd.symm := by
+    funext p
+    apply Complex.ext <;> simp
+  rw [heq]
+  rw [Complex.volume_preserving_equiv_real_prod.symm.map_eq]
+  rw [← Complex.integral_comp_polarCoord_symm ((closedBall (0 : ℂ) r).indicator q)]
+  change (∫ p in Ioi (0 : ℝ) ×ˢ Ioo (-Real.pi) Real.pi,
+    p.1 • (closedBall (0 : ℂ) r).indicator q
+      (Complex.polarCoord.symm p)) =
+    ∫ p in Ioc (0 : ℝ) r ×ˢ Ioo (-Real.pi) Real.pi,
+      p.1 • q (Complex.polarCoord.symm p)
+  calc
+    (∫ p in Ioi (0 : ℝ) ×ˢ Ioo (-Real.pi) Real.pi,
+        p.1 • (closedBall (0 : ℂ) r).indicator q
+          (Complex.polarCoord.symm p)) =
+        ∫ p in Ioc (0 : ℝ) r ×ˢ Ioo (-Real.pi) Real.pi,
+          p.1 • (closedBall (0 : ℂ) r).indicator q
+            (Complex.polarCoord.symm p) := by
+      apply setIntegral_eq_of_subset_of_forall_diff_eq_zero
+        (measurableSet_Ioi.prod measurableSet_Ioo)
+      · exact prod_mono (fun _ h ↦ h.1) Subset.rfl
+      · intro p hp
+        have hp₁ : 0 < p.1 := hp.1.1
+        have hnot : Complex.polarCoord.symm p ∉ closedBall (0 : ℂ) r := by
+          simp only [mem_closedBall, dist_zero_right, Complex.norm_polarCoord_symm,
+            abs_of_pos hp₁]
+          exact fun hle ↦ hp.2 ⟨⟨hp₁, hle⟩, hp.1.2⟩
+        rw [Set.indicator_of_notMem hnot, smul_zero]
+    _ = ∫ p in Ioc (0 : ℝ) r ×ˢ Ioo (-Real.pi) Real.pi,
+        p.1 • q (Complex.polarCoord.symm p) := by
+      apply setIntegral_congr_fun (measurableSet_Ioc.prod measurableSet_Ioo)
+      intro p hp
+      have hmem : Complex.polarCoord.symm p ∈ closedBall (0 : ℂ) r := by
+        simp only [mem_closedBall, dist_zero_right, Complex.norm_polarCoord_symm,
+          abs_of_pos hp.1.1]
+        exact hp.1.2
+      dsimp only
+      rw [Set.indicator_of_mem hmem]
 
 /-- The requested disk sub-mean inequality follows formally from the
 vector-valued disk mean identity.  Thus the remaining analytic construction is
