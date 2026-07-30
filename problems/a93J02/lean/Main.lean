@@ -25,11 +25,32 @@ lemma integral_inv_one_plus_x : ∫ x in (0:ℝ)..1, 1 / (1 + x) = log 2 := by
     norm_num
   have key : ∫ x in (0:ℝ)..1, (x + 1)⁻¹ = ∫ x in (1:ℝ)..2, x⁻¹ := by
     have := intervalIntegral.integral_comp_add_right (f := fun y => y⁻¹) (a := 0) (b := 1) 1
-    simpa [show (0:ℝ) + 1 = 1 from by norm_num, show (1:ℝ) + 1 = 2 from by norm_num] using this
+    convert this using 1
+    all_goals norm_num
   rw [show (∫ x in (0:ℝ)..1, 1 / (1 + x)) =
         ∫ x in (0:ℝ)..1, ((x + 1)⁻¹ : ℝ) from by
         congr with x; rw [one_div, add_comm 1 x]]
   rw [key, h]
+
+/-- The power series associated to the alternating harmonic series is
+    `log (1 + x) / x` inside its radius of convergence. -/
+private lemma tsum_alternating_harmonic_mul_pow {x : ℝ} (hx₀ : 0 < x) (hx₁ : x < 1) :
+    ∑' n : ℕ, ((-1 : ℝ) ^ n / (↑n + 1)) * x ^ n = log (1 + x) / x := by
+  have hneg : |(-x : ℝ)| < 1 := by simpa [abs_of_pos hx₀] using hx₁
+  have hs := (hasSum_pow_div_log_of_abs_lt_one hneg).mul_left (-1 / x)
+  have hs' : HasSum (fun n : ℕ => ((-1 : ℝ) ^ n / (↑n + 1)) * x ^ n)
+      (log (1 + x) / x) := by
+    have hterms : HasSum (fun n : ℕ => ((-1 : ℝ) ^ n / (↑n + 1)) * x ^ n)
+        (-1 / x * -log (1 - -x)) :=
+      hs.congr_fun (fun n => by
+        rw [neg_pow]
+        field_simp [hx₀.ne']
+        rw [pow_succ, neg_pow]
+        ring)
+    convert hterms using 1
+    field_simp [hx₀.ne']
+    ring
+  exact hs'.tsum_eq
 
 /-- The alternating harmonic series converges.
 
@@ -61,9 +82,30 @@ theorem tendsto_sum_alternating_harmonic :
       intro n; congr with i; rw [mul_one_div]
     exact hl.congr this
   -- Step 2: Abel's limit theorem
-  have abel := tendsto_tsum_powerSeries_nhdsWithin_lt hl
-  -- Step 3: Identify power series with log(1+x)/x, take limit x → 1⁻
-  sorry
+  have abel := tendsto_tsum_powerSeries_nhdsWithin_lt hl'
+  -- Step 3: identify the power series with `log (1 + x) / x` and let `x → 1⁻`.
+  let F := fun x : ℝ =>
+    ∑' n : ℕ, ((-1 : ℝ) ^ n / (↑n + 1)) * x ^ n
+  have hmul : Tendsto (fun x => x * F x) (𝓝[<] (1 : ℝ)) (𝓝 l) := by
+    have hid : Tendsto (fun x : ℝ => x) (𝓝[<] (1 : ℝ)) (𝓝 1) :=
+      tendsto_nhdsWithin_of_tendsto_nhds continuousAt_id
+    simpa only [F, one_mul] using hid.mul abel
+  have hmul_eq_log : ∀ᶠ x in 𝓝[<] (1 : ℝ), x * F x = log (1 + x) := by
+    filter_upwards [Ioo_mem_nhdsLT (by norm_num : (0 : ℝ) < 1)] with x hx
+    dsimp only [F]
+    rw [tsum_alternating_harmonic_mul_pow hx.1 hx.2]
+    field_simp [hx.1.ne']
+  have hlog_l : Tendsto (fun x : ℝ => log (1 + x)) (𝓝[<] (1 : ℝ)) (𝓝 l) :=
+    hmul.congr' hmul_eq_log
+  have hlog_two :
+      Tendsto (fun x : ℝ => log (1 + x)) (𝓝[<] (1 : ℝ)) (𝓝 (log 2)) := by
+    have hcont : ContinuousAt (fun x : ℝ => log (1 + x)) 1 :=
+      (continuousAt_const.add continuousAt_id).log (by norm_num)
+    have ht := tendsto_nhdsWithin_of_tendsto_nhds (s := Iio (1 : ℝ)) hcont.tendsto
+    convert ht using 1
+    all_goals norm_num
+  have hl_eq : l = log 2 := tendsto_nhds_unique hlog_l hlog_two
+  rwa [hl_eq] at hl'
 
 /-- Main theorem: Σ (-1)ⁿ/(n+1) = log 2 (as limit of partial sums). -/
 theorem alternating_harmonic_eq_log_two :
