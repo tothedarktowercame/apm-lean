@@ -3,6 +3,8 @@ import Mathlib.Analysis.Fourier.Convolution
 import Mathlib.Analysis.Convolution
 import Mathlib.Analysis.Fourier.FourierTransformDeriv
 import Mathlib.Analysis.Analytic.Uniqueness
+import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.ContDiff
 
 /-!
 # APM a01A03: Convolution identity determines indicator function
@@ -34,26 +36,23 @@ for rectangular functions.
 
 Hence `g = χ_{[-h,h]}`.
 
-**Formalization status.**
+**Formalization route.**
 
-The proof requires:
-1. The Fourier transform of L¹ convolutions (`fourier_convolution`).
-2. The Fourier derivative rule for C¹ functions.
-3. The specific Fourier transform of `χ_{[-h,h]}` being `2 sin(hξ)/ξ`.
-4. Injectivity of the Fourier transform on L¹.
-
-Each piece is standard in Fourier analysis but requires substantial
-Mathlib infrastructure for the Fourier transform on L¹ functions with
-the right hypotheses. The main theorem is stated correctly; the proof
-is left as a documented sorry.
+The implemented proof avoids the missing Fourier pair. It subtracts
+`χ_{[-h,h]}`, uses the fundamental theorem of calculus to show that this
+difference annihilates derivatives of smooth compactly supported functions,
+and convolves it with reflected test functions. The resulting convolution has
+zero derivative and is therefore constant; integrability on `ℝ` forces that
+constant to vanish. The fundamental lemma for distributions then gives the
+required almost-everywhere equality.
 -/
 
 set_option linter.unusedVariables false in
 noncomputable section
 
-open MeasureTheory FourierTransform Filter Set
+open MeasureTheory FourierTransform Filter ContinuousLinearMap Set
 
-open scoped ContDiff
+open scoped Convolution ContDiff
 
 namespace ApmCanaries.A01A03
 
@@ -61,15 +60,10 @@ namespace ApmCanaries.A01A03
     for all `f ∈ C¹(ℝ)` and all `x`, then `g = χ_{[-h,h]}` (the indicator
     of the interval `[-h, h]`).
 
-    **SORRY BOUNDARY:** The proof uses the Fourier transform to convert the
-    convolution equation into a pointwise identity `ĝ(ξ) = 2sin(hξ)/ξ`,
-    then applies the inverse Fourier transform. This requires:
-    (1) The convolution theorem for L¹ Fourier transforms.
-    (2) The Fourier derivative rule.
-    (3) The specific Fourier pair χ_{[-h,h]} ↔ 2sin(hξ)/ξ.
-    (4) Injectivity of the L¹ Fourier transform.
-    These are standard but the combined formalization in Mathlib requires
-    careful management of integrability and differentiability hypotheses.
+    The formal proof uses distributional uniqueness: after subtracting the
+    interval indicator, convolution with any reflected test function has zero
+    derivative and is integrable, hence vanishes. The fundamental lemma then
+    identifies the difference with zero almost everywhere.
 -/
 -- STATEMENT REPAIR 2026-07-30 (Joe-authorised). Two defects, both introduced in
 -- translation; the informal solution had it right. See faithfulness-ledger #5.
@@ -108,7 +102,107 @@ theorem convolution_identity_implies_indicator
       ∀ x : ℝ,
         (∫ t, g t * (deriv f) (x - t) ∂volume) = f (x + h) - f (x - h)) :
     g =ᵐ[volume] fun x => if x ∈ Set.Icc (-h) h then 1 else 0 := by
-  sorry
+  let χ : ℝ → ℝ := (Icc (-h) h).indicator (fun _ => 1)
+  let k : ℝ → ℝ := fun x => g x - χ x
+
+  have hχ1 : Integrable χ volume := by
+    have hconst : IntegrableOn (fun _ : ℝ => (1 : ℝ)) (Icc (-h) h) volume :=
+      integrableOn_const (by simp)
+    have hind :
+        Integrable ((Icc (-h) h).indicator (fun _ : ℝ => (1 : ℝ))) volume := by
+      apply (hconst.indicator measurableSet_Icc).integrable_of_forall_notMem_eq_zero
+      intro x hx
+      simp [Set.indicator_of_notMem hx]
+    exact hind
+
+  have hk1 : Integrable k volume := hg1.sub hχ1
+
+  have hχ_identity (f : ℝ → ℝ) (hf : ContDiff ℝ ∞ f) (x : ℝ) :
+      (∫ t, χ t * deriv f (x - t) ∂volume) =
+        f (x + h) - f (x - h) := by
+    have hi :
+        (fun t : ℝ => χ t * deriv f (x - t)) =
+          (Icc (-h) h).indicator (fun t => deriv f (x - t)) := by
+      funext t
+      change
+        (Icc (-h) h).indicator (fun _ => (1 : ℝ)) t * deriv f (x - t) =
+          (Icc (-h) h).indicator (fun t => deriv f (x - t)) t
+      by_cases ht : t ∈ Icc (-h) h
+      · rw [indicator_of_mem ht, indicator_of_mem ht]
+        simp
+      · rw [indicator_of_notMem ht, indicator_of_notMem ht]
+        simp
+    rw [hi, integral_indicator measurableSet_Icc]
+    rw [integral_Icc_eq_integral_Ioc]
+    rw [← intervalIntegral.integral_of_le (by linarith : -h ≤ h)]
+    rw [intervalIntegral.integral_comp_sub_left]
+    convert intervalIntegral.integral_deriv_of_contDiffOn_uIcc
+      (hf.of_le (by norm_num)).contDiffOn using 1 <;> ring_nf
+
+  have hk_deriv_test_zero
+      (f : ℝ → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f)
+      (x : ℝ) :
+      (k ⋆ deriv f) x = 0 := by
+    have hfd_cont : Continuous (deriv f) :=
+      hf.continuous_deriv (by norm_num)
+    have hfd_compact : HasCompactSupport (deriv f) := hfc.deriv
+    have hg_int :
+        Integrable (fun t => g t * deriv f (x - t)) volume :=
+      (hfd_compact.convolutionExists_right (lsmul ℝ ℝ)
+        hg1.locallyIntegrable hfd_cont x).integrable
+    have hχ_int :
+        Integrable (fun t => χ t * deriv f (x - t)) volume :=
+      (hfd_compact.convolutionExists_right (lsmul ℝ ℝ)
+        hχ1.locallyIntegrable hfd_cont x).integrable
+    rw [show
+      (k ⋆ deriv f) x =
+        ∫ t, (g t * deriv f (x - t) - χ t * deriv f (x - t)) ∂volume by
+          apply integral_congr_ae
+          exact Eventually.of_forall fun t => by simp [k]]
+    rw [integral_sub hg_int hχ_int, hidentity f hf hfc x, hχ_identity f hf x]
+    ring
+
+  have htest :
+      ∀ (q : ℝ → ℝ), ContDiff ℝ ∞ q → HasCompactSupport q →
+        ∫ x, q x • k x ∂volume = 0 := by
+    intro q hq hqc
+    let f : ℝ → ℝ := fun x => q (-x)
+    have hf : ContDiff ℝ ∞ f := by
+      simpa only [f, Function.comp_apply, id_eq] using hq.comp contDiff_id.neg
+    have hfc : HasCompactSupport f := by
+      simpa only [f, Function.comp_apply] using
+        hqc.comp_homeomorph (Homeomorph.neg ℝ)
+    have hf1 : Integrable f volume :=
+      hf.continuous.integrable_of_hasCompactSupport hfc
+    have hconv1 : Integrable (k ⋆ f) volume :=
+      hk1.integrable_convolution (lsmul ℝ ℝ) hf1
+    have hconv_deriv : ∀ x : ℝ, HasDerivAt (k ⋆ f) 0 x := by
+      intro x
+      convert hfc.hasDerivAt_convolution_right (lsmul ℝ ℝ)
+        hk1.locallyIntegrable (hf.of_le (by norm_num)) x using 1
+      exact (hk_deriv_test_zero f hf hfc x).symm
+    have hconv_const : k ⋆ f = fun _ => (k ⋆ f) 0 := by
+      funext x
+      exact is_const_of_deriv_eq_zero
+        (fun y => (hconv_deriv y).differentiableAt)
+        (fun y => (hconv_deriv y).deriv) x 0
+    have hconst1 : Integrable (fun _ : ℝ => (k ⋆ f) 0) volume := by
+      rw [← hconv_const]
+      exact hconv1
+    have hconv_zero : (k ⋆ f) 0 = 0 := by
+      rcases integrable_const_iff.mp hconst1 with hzero | hfinite
+      · exact hzero
+      · exact False.elim
+          ((not_isFiniteMeasure_iff.mpr Real.volume_univ) hfinite)
+    simpa only [convolution_def, f, zero_sub, neg_neg, lsmul_apply,
+      smul_eq_mul, mul_comm] using hconv_zero
+
+  have hk_zero : k =ᵐ[volume] (0 : ℝ → ℝ) :=
+    ae_eq_zero_of_integral_contDiff_smul_eq_zero hk1.locallyIntegrable htest
+  filter_upwards [hk_zero] with x hx
+  by_cases hxI : x ∈ Icc (-h) h
+  · simpa [χ, indicator_of_mem hxI, hxI] using sub_eq_zero.mp hx
+  · simpa [χ, indicator_of_notMem hxI, hxI] using sub_eq_zero.mp hx
 
 /-- In the current smoothness-index API, `ContDiff ℝ ⊤` means real analytic
 (`ContDiff ℝ ω`), not merely infinitely differentiable (`ContDiff ℝ ∞`).
