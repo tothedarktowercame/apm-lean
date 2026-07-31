@@ -139,7 +139,15 @@ theorem ac_maps_null_to_null
     {E : Set ℝ} (hE : E ⊆ Icc (0:ℝ) 1)
     (hE_null : volume E = 0) :
     volume (f '' E) = 0 := by
-  sorry
+  apply le_antisymm ?_ (zero_le _)
+  apply ENNReal.le_of_forall_pos_le_add
+  intro ε hε _
+  have hε_real : 0 < (ε : ℝ) := by exact_mod_cast hε
+  obtain ⟨δ, hδ, hbound⟩ := ac_lusin_condition_N hac hε_real
+  have hE_outer : volume.toOuterMeasure E < ENNReal.ofReal δ := by
+    rw [Measure.toOuterMeasure_apply, hE_null]
+    exact ENNReal.ofReal_pos.2 hδ
+  simpa using hbound E hE hE_outer
 
 end PartB
 
@@ -165,26 +173,28 @@ Write E = K ∪ N where K = ⋃ₘ Kₘ (σ-compact) and N is null.
 2. **Continuous image of compact is compact**: `IsCompact.image_of_continuousOn`
    ✓ Available in Mathlib, applied in `ac_image_compact_is_compact`.
 
-3. **Null sets are measurable**: volume on ℝ is complete (Lebesgue completion).
-   ✓ Available in Mathlib.
+3. **Null sets are measurable in the Lebesgue completion.**
+   The ambient `MeasurableSpace ℝ` in this file is the Borel σ-algebra, however,
+   and `volume.IsComplete` is deliberately not an instance.  Thus this step
+   cannot conclude the stated `MeasurableSet` goal from a measure-zero image.
 
 4. **AC ⟹ continuous**: `AbsolutelyContinuousOnInterval.continuousOn`.
    ✓ Applied in `ac_continuousOn`.
 
 5. **Null sets map to null sets** (Lusin condition N).
-   ✗ This is the sorry from part (b). Part (c) inherits this gap.
+   This gives null-measurability, not Borel measurability, of the residual
+   image. A corrected target should use `NullMeasurableSet` (or the completed
+   Lebesgue measurable space), unless additional Borel-image regularity is
+   supplied.
 -/
 
 /-- Part (c): If f is absolutely continuous on [0,1] and E ⊆ [0,1] is
-Lebesgue measurable, then f(E) is Lebesgue measurable.
+Borel measurable, then f(E) is Borel measurable.
 
-The proof combines:
-- The σ-compact + null decomposition of E (proved below).
-- Continuous images of compact sets are compact (hence measurable).
-- Part (b): null sets map to null sets (hence measurable).
-
-The sorry inherits from `ac_maps_null_to_null` (part b): without Lusin's
-condition (N), we cannot conclude that f(N) is null (hence measurable). -/
+The standard σ-compact-plus-null proof only proves Lebesgue measurability:
+Mathlib's ambient `MeasurableSpace ℝ` is Borel and `volume` is not complete.
+The stated Borel conclusion therefore needs a separate image-regularity
+argument (or a corrected completed-measurable-space target). -/
 theorem ac_maps_measurable_to_measurable
     {f : ℝ → ℝ}
     (hac : ACOnUnitInterval f)
