@@ -3,6 +3,7 @@ import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
+import Mathlib.MeasureTheory.Function.ContinuousMapDense
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.LebesgueDifferentiationThm
 
 open MeasureTheory Set Filter Topology
@@ -203,6 +204,70 @@ lemma uniform_bound (φ : ℝ → ℝ) (M : ℝ)
       rw [h]
       field_simp
 
+/-- Once convergence is known for compactly supported continuous functions,
+the uniform `L¹` estimate extends it to every integrable function. -/
+lemma scaled_integral_vanishes_of_compact_continuous
+    (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
+    (hφloc : LocallyIntegrable φ volume)
+    (hφ : ∀ (a b : ℝ), a < b →
+      |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
+    (hcore : ∀ (g : ℝ → ℝ), HasCompactSupport g → Continuous g → Integrable g volume →
+      Tendsto (fun k : ℝ => scaledIntOp φ g k) atTop (nhds 0))
+    (f : ℝ → ℝ) (hf : Integrable f volume) :
+    Tendsto (fun k : ℝ => scaledIntOp φ f k) atTop (nhds 0) := by
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  have hδ : 0 < ε / (2 * M) := div_pos hε (mul_pos two_pos hM)
+  obtain ⟨g, hg_support, hfg, hg_cont, hg_int⟩ :=
+    hf.exists_hasCompactSupport_integral_sub_le hδ
+  have hdiff : Integrable (f - g) volume := hf.sub hg_int
+  have hφae := ae_abs_le_of_interval_integral_bound φ M hφloc hφ
+  have hprod (u : ℝ → ℝ) (hu : Integrable u volume) (k : ℝ) (hk : 0 < k) :
+      Integrable (fun x => φ (k * x) * u x) volume := by
+    have hucomp : Integrable (fun y => u (k⁻¹ * y)) volume :=
+      hu.comp_mul_left' (inv_ne_zero hk.ne')
+    have hdom : ∀ᵐ y ∂volume,
+        ‖φ y * u (k⁻¹ * y)‖ ≤ M * ‖u (k⁻¹ * y)‖ := by
+      filter_upwards [hφae] with y hy
+      rw [norm_mul]
+      exact mul_le_mul_of_nonneg_right hy (norm_nonneg _)
+    have hp : Integrable (fun y => φ y * u (k⁻¹ * y)) volume :=
+      Integrable.mono' (hucomp.norm.const_mul M)
+        (hφloc.aestronglyMeasurable.mul hucomp.aestronglyMeasurable) hdom
+    have hp' := hp.comp_mul_left' hk.ne'
+    convert hp' using 1
+    funext x
+    congr 2
+    field_simp
+  have hg_lim := hcore g hg_support hg_cont hg_int
+  rw [Metric.tendsto_atTop] at hg_lim
+  obtain ⟨K, hK⟩ := hg_lim (ε / 2) (half_pos hε)
+  refine ⟨max K 1, fun k hk => ?_⟩
+  have hkK : K ≤ k := le_trans (le_max_left _ _) hk
+  have hkpos : 0 < k := lt_of_lt_of_le zero_lt_one (le_trans (le_max_right _ _) hk)
+  have hgsmall := hK k hkK
+  rw [Real.dist_eq, sub_zero] at hgsmall ⊢
+  have hadd : scaledIntOp φ f k =
+      scaledIntOp φ g k + scaledIntOp φ (f - g) k := by
+    rw [scaledIntOp, scaledIntOp, scaledIntOp, ← integral_add
+      (hprod g hg_int k hkpos) (hprod (f - g) hdiff k hkpos)]
+    apply integral_congr_ae
+    filter_upwards [] with x
+    simp only [Pi.sub_apply]
+    ring
+  rw [hadd]
+  calc
+    |scaledIntOp φ g k + scaledIntOp φ (f - g) k|
+        ≤ |scaledIntOp φ g k| + |scaledIntOp φ (f - g) k| := abs_add_le _ _
+    _ < ε / 2 + M * ∫ x, ‖f x - g x‖ :=
+      add_lt_add_of_lt_of_le hgsmall (by
+        simpa only [Pi.sub_apply] using
+          uniform_bound φ M hφloc hφ (f - g) hdiff k hkpos)
+    _ ≤ ε / 2 + M * (ε / (2 * M)) := by gcongr
+    _ = ε := by
+      field_simp
+      norm_num
+
 -- Main theorem: ∫ φ(kx) f(x) dx → 0
 -- Density: approximate f by step functions, use indicator_case + uniform_bound
 -- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require local integrability
@@ -213,6 +278,8 @@ theorem scaled_integral_vanishes (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
       |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
     (f : ℝ → ℝ) (hf : Integrable f volume) :
     Tendsto (fun k : ℝ => scaledIntOp φ f k) atTop (nhds 0) := by
+  apply scaled_integral_vanishes_of_compact_continuous φ M hM hφloc hφ _ f hf
+  intro g hg_support hg_cont hg_int
   -- Density argument:
   -- For ε > 0, pick step function s with ‖f - s‖₁ < ε/(2M).
   -- |T_k(f)| ≤ |T_k(s)| + |T_k(f-s)| ≤ |T_k(s)| + M·ε/(2M) = |T_k(s)| + ε/2.
@@ -229,4 +296,6 @@ theorem scaled_integral_vanishes (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
   -- enough here because `indicator_case` only controls interval indicators.
   -- Uniform bound: uniform_bound lemma
   -- Filter arithmetic: Tendsto.add, squeeze_zero_norm
+  -- Remaining core: the bounded-primitive integration-by-parts estimate for
+  -- compactly supported continuous functions (after smooth approximation).
   sorry
