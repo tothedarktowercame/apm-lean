@@ -31,6 +31,8 @@ import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
 import Mathlib.MeasureTheory.Function.LpSeminorm.LpNorm
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 open MeasureTheory Set Filter Real Topology
 
@@ -126,26 +128,137 @@ theorem quasiNorm_tendsto_exists
     MonotoneOn.tendsto_nhdsWithin_Ioo_right
       ⟨(1 / 2 : ℝ), by norm_num, by norm_num⟩ hmono hbdd⟩
 
+/-- As `p → 0⁺`, the integral defining `quasiNorm f p` tends to the
+measure of the essential support of `f`. -/
+lemma integral_norm_rpow_tendsto_measure_support
+    {f : ℝ → ℝ} (hf : IntegrableOn f (Icc 0 1) volume) :
+    Tendsto (fun p : ℝ => ∫ x in Icc (0 : ℝ) 1, ‖f x‖ ^ p ∂volume)
+      (nhdsWithin 0 (Ioi 0))
+      (nhds ((volume.restrict (Icc 0 1)) {x | 0 < ‖f x‖}).toReal) := by
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  let s : Set ℝ := {x | 0 < ‖f x‖}
+  have hfm : AEStronglyMeasurable f μ := by
+    simpa [μ] using hf.aestronglyMeasurable
+  have hsm : NullMeasurableSet s μ := by
+    exact hfm.norm.aemeasurable.nullMeasurableSet_preimage measurableSet_Ioi
+  have hbound : Integrable (fun x => 1 + ‖f x‖) μ := by
+    simpa [μ] using (integrable_const (μ := μ) (1 : ℝ)).add hf.norm
+  have hlim : ∀ᵐ x ∂μ,
+      Tendsto (fun p : ℝ => ‖f x‖ ^ p) (nhdsWithin 0 (Ioi 0))
+        (nhds (s.indicator (fun _ => (1 : ℝ)) x)) := by
+    filter_upwards [] with x
+    by_cases hx : 0 < ‖f x‖
+    · simp only [s, Set.mem_setOf_eq, hx, indicator_of_mem]
+      simpa using
+        (Real.continuousAt_const_rpow (a := ‖f x‖) (b := 0) (ne_of_gt hx)).tendsto.mono_left
+          inf_le_left
+    · have hx0 : ‖f x‖ = 0 := le_antisymm (not_lt.mp hx) (norm_nonneg _)
+      have hev : ∀ᶠ p : ℝ in nhdsWithin 0 (Ioi 0), ‖f x‖ ^ p = 0 := by
+        filter_upwards [self_mem_nhdsWithin] with p hp
+        rw [hx0, Real.zero_rpow (ne_of_gt hp)]
+      have hxmem : x ∉ s := by simpa [s] using hx
+      rw [Set.indicator_of_notMem hxmem]
+      exact (tendsto_const_nhds :
+        Tendsto (fun _ : ℝ => (0 : ℝ)) (nhdsWithin 0 (Ioi 0)) (nhds 0)).congr'
+          (Filter.EventuallyEq.symm hev)
+  have hp_one : ∀ᶠ p : ℝ in nhdsWithin 0 (Ioi 0), p ≤ 1 := by
+    rw [eventually_nhdsWithin_iff]
+    filter_upwards [Iio_mem_nhds (show (0 : ℝ) < 1 by norm_num)] with p hp _
+    exact hp.le
+  have ht := tendsto_integral_filter_of_dominated_convergence
+    (μ := μ) (fun x => 1 + ‖f x‖)
+    (by
+      filter_upwards [self_mem_nhdsWithin] with p hp
+      exact (Real.continuous_rpow_const hp.le).comp_aestronglyMeasurable hfm.norm)
+    (by
+      filter_upwards [self_mem_nhdsWithin, hp_one] with p hp hp1
+      exact ae_of_all μ fun x => by
+        calc
+          ‖‖f x‖ ^ p‖ = ‖f x‖ ^ p :=
+            Real.norm_of_nonneg (Real.rpow_nonneg (norm_nonneg _) p)
+          _ ≤ 1 + ‖f x‖ := rpow_le_one_add (norm_nonneg _) hp hp1)
+    hbound hlim
+  have hsint : ∫ x, s.indicator (fun _ => (1 : ℝ)) x ∂μ = (μ s).toReal := by
+    rw [integral_indicator₀ hsm, setIntegral_one_eq_measureReal]
+    rfl
+  rw [hsint] at ht
+  simpa [μ, s] using ht
+
 /-- (b) L > 0 implies |f| > 0 a.e.
 
-**Remaining construction:** DCT gives
-`∫ |f|^p → volume {x | f x ≠ 0}`.  If the zero set has positive measure,
-the latter is strictly below one, and raising an eventual bound `< 1` to
-`1 / p → ∞` forces `quasiNorm f p → 0`, contradicting `L > 0`. -/
+DCT gives `∫ |f|^p → volume {x | f x ≠ 0}`. If the zero set has positive
+measure, the latter is strictly below one, and raising an eventual bound
+`< 1` to `1 / p → ∞` forces `quasiNorm f p → 0`, contradicting `L > 0`. -/
 theorem ae_pos_of_limit_pos
     {f : ℝ → ℝ}
     (hf : IntegrableOn f (Icc 0 1) volume)
     {L : ℝ} (hL : 0 < L)
     (hLim : Tendsto (quasiNorm f) (nhdsWithin 0 (Set.Ioi 0)) (nhds L)) :
     ∀ᵐ x ∂(volume.restrict (Icc 0 1)), 0 < ‖f x‖ := by
-  sorry
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  let s : Set ℝ := {x | 0 < ‖f x‖}
+  have hfm : AEStronglyMeasurable f μ := by
+    simpa [μ] using hf.aestronglyMeasurable
+  have hsm : NullMeasurableSet s μ :=
+    hfm.norm.aemeasurable.nullMeasurableSet_preimage measurableSet_Ioi
+  by_contra hpos
+  have hμs_ne : μ s ≠ μ univ := by
+    intro hμs
+    apply hpos
+    simpa [μ, s] using (ae_iff_measure_eq hsm).2 hμs
+  have hμuniv : μ univ = 1 := by simp [μ, Real.volume_Icc]
+  have hμs_lt : μ s < 1 := by
+    rw [← hμuniv]
+    exact lt_of_le_of_ne (measure_mono (subset_univ s)) hμs_ne
+  have hc_lt : (μ s).toReal < 1 := by
+    have := (ENNReal.toReal_lt_toReal (measure_ne_top μ s) ENNReal.one_ne_top).2 hμs_lt
+    simpa using this
+  let r : ℝ := ((μ s).toReal + 1) / 2
+  have hcr : (μ s).toReal < r := by dsimp [r]; linarith
+  have hr1 : r < 1 := by dsimp [r]; linarith
+  have hr0 : 0 < r := by
+    dsimp [r]
+    have := (ENNReal.toReal_nonneg : 0 ≤ (μ s).toReal)
+    linarith
+  have hint := integral_norm_rpow_tendsto_measure_support hf
+  have hint' : Tendsto
+      (fun p : ℝ => ∫ x, ‖f x‖ ^ p ∂μ)
+      (nhdsWithin 0 (Ioi 0)) (nhds ((μ s).toReal)) := by
+    simpa [μ, s] using hint
+  have hint_lt : ∀ᶠ p : ℝ in nhdsWithin 0 (Ioi 0),
+      (∫ x, ‖f x‖ ^ p ∂μ) ≤ r :=
+    ((tendsto_order.1 hint').2 r hcr).mono fun _ hp => hp.le
+  have hrpow : Tendsto (fun p : ℝ => r ^ (1 / p))
+      (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+    simpa only [one_div, Function.comp_apply] using
+      (tendsto_rpow_atTop_of_base_lt_one r (by linarith) hr1).comp
+        (tendsto_inv_nhdsGT_zero :
+          Tendsto (fun p : ℝ => p⁻¹) (nhdsWithin 0 (Ioi 0)) atTop)
+  have hq_nonneg : ∀ᶠ p : ℝ in nhdsWithin 0 (Ioi 0), 0 ≤ quasiNorm f p := by
+    filter_upwards [] with p
+    exact Real.rpow_nonneg
+      (integral_nonneg_of_ae (Eventually.of_forall fun x => Real.rpow_nonneg (norm_nonneg _) p)) _
+  have hq_le : ∀ᶠ p : ℝ in nhdsWithin 0 (Ioi 0), quasiNorm f p ≤ r ^ (1 / p) := by
+    filter_upwards [self_mem_nhdsWithin, hint_lt] with p hp hpr
+    rw [quasiNorm]
+    apply Real.rpow_le_rpow
+    · exact integral_nonneg_of_ae
+        (Eventually.of_forall fun x => Real.rpow_nonneg (norm_nonneg _) p)
+    · simpa [μ] using hpr
+    · exact one_div_nonneg.mpr hp.le
+  have hzero : Tendsto (quasiNorm f) (nhdsWithin 0 (Ioi 0)) (nhds 0) :=
+    tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hrpow hq_nonneg hq_le
+  have : L = 0 := tendsto_nhds_unique hLim hzero
+  linarith
 
 /-- (c) L ≥ exp(∫ log|f|).
 
-**Remaining construction:** first derive integrability of `log ‖f‖` from
-`L > 0` (its positive part is controlled by `f`; a nonintegrable negative
-part would force the quasi-norm limit to zero).  Jensen for `exp` then gives
-the inequality at each positive exponent, and `hLim` supplies the limit. -/
+**Remaining construction:** derive integrability of the negative part of
+`log ‖f‖` from `L > 0`. Its positive part is controlled by `f`; for the
+negative part, apply a one-sided Fatou/uniform-integrability argument to
+`p⁻¹ * (‖f‖ ^ p - 1)`, whose pointwise limit is `log ‖f‖`. Once this is
+integrable, Jensen for `exp` gives the inequality at every positive exponent,
+and `hLim` supplies the limit. -/
 theorem limit_ge_geometric_mean
     {f : ℝ → ℝ}
     (hf : IntegrableOn f (Icc 0 1) volume)
