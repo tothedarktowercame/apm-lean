@@ -1,6 +1,6 @@
-import Mathlib/MeasureTheory/Measure/Lebesgue/Basic
-import Mathlib/MeasureTheory/Function/AEEqOfIntegral
-import Mathlib/MeasureTheory/Function/Deriv
+import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Mathlib.MeasureTheory.Function.AEEqOfIntegral
+import Mathlib.Analysis.Calculus.Deriv.Basic
 
 open MeasureTheory Filter
 
