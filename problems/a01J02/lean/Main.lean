@@ -35,9 +35,9 @@ theorem measurable_set_ae_eq_borel
     {A : Set ℝ} (hA : NullMeasurableSet A volume) :
     ∃ B : Set ℝ, @MeasurableSet ℝ (borel ℝ) B ∧ AlmostEqualVolume A B := by
   classical
-  -- Strategy: approximate `A` by an increasing union of closed sets and
-  -- decreasing intersection of open sets, then use Carathéodory regularity.
-  sorry
+  obtain ⟨B, -, hB, hBA⟩ := hA.exists_measurable_superset_ae_eq
+  refine ⟨B, hB, ?_⟩
+  exact measure_symmDiff_eq_zero_iff.mpr hBA.symm
 
 /-- Convenience notation for the restricted Lebesgue measure on `[0,1]`. -/
 def μ₀₁ : Measure ℝ := volume.restrict (Set.Icc (0 : ℝ) 1)
@@ -53,8 +53,8 @@ theorem measurable_function_ae_eq_borel
           (MeasurableSpace.comap Subtype.val (borel ℝ)) (borel ℝ) g ∧
         f =ᵐ[(volume : Measure (Set.Icc (0 : ℝ) 1))] g := by
   classical
-  -- Apply part (a) to the pre-images of rational intervals and use
-  -- `MeasureTheory.ae_eq_of_forall_setIntegral_eq` to glue the pieces.
-  sorry
+  have hf_ae : AEMeasurable f (volume : Measure (Set.Icc (0 : ℝ) 1)) :=
+    hf.aemeasurable
+  exact ⟨hf_ae.mk f, hf_ae.measurable_mk, hf_ae.ae_eq_mk⟩
 
 end ApmCanaries.Frames.A01J02.Apm_v2_a01J02_1774988681233.Main
