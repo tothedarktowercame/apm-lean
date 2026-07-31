@@ -80,6 +80,9 @@ The placeholder `hR : True` must be replaced by the omitted mathematical
 hypothesis that the Taylor series of `f` at zero has radius exactly one (or an
 equivalent non-extendability hypothesis) before the intended argument can be
 formalized. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): replace the no-op `True`
+-- hypothesis by the equivalent non-extendability condition that `f` is not
+-- holomorphic on any larger disk.
 theorem exists_pole_on_boundary
     {D : Set ℂ} (hD : IsOpen D) (hD_contains : closedBall (0 : ℂ) 1 ⊆ D)
     {f : ℂ → ℂ}
@@ -87,7 +90,7 @@ theorem exists_pole_on_boundary
     (hf_mero : ∀ z ∈ D, z ∉ sphere (0 : ℂ) 1 →
       DifferentiableAt ℂ f z ∨ ∃ n : ℕ, 0 < n ∧
         DifferentiableAt ℂ (fun w => (w - z) ^ n * f w) z)
-    (hR : True) :
+    (hR : ∀ R : ℝ, 1 < R → ¬DifferentiableOn ℂ f (ball 0 R)) :
     ∃ ζ ∈ sphere (0 : ℂ) 1, ¬DifferentiableAt ℂ f ζ := by
   sorry
 
