@@ -133,7 +133,7 @@ structure SlitPath (γ : ℝ → ℂ) : Prop where
   differentiable : ∀ t, 0 < t → t ≤ 1 → DifferentiableAt ℝ γ t
   /-- The logarithmic derivative is genuinely integrable along the path. -/
   integrable_logDeriv :
-    IntervalIntegrable (fun t => deriv γ t / γ t) volume 0 1
+    IntervalIntegrable (fun t => deriv γ t / γ t) MeasureTheory.volume 0 1
 
 /-- The contour integral `∫_γ dz/z = ∫₀¹ γ'(t)/γ(t) dt`. -/
 noncomputable def logIntegral (γ : ℝ → ℂ) : ℂ :=
