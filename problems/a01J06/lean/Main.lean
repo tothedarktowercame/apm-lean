@@ -294,14 +294,57 @@ lemma weight_summable_of_solves {data : ProblemData}
 /-- Jensen's formula + the exponential bound give a linear zero-count bound. -/
 lemma zeroCountLinear_of_expBound (data : ProblemData) :
     data.zeroCountLinear := by
-  -- TODO: Apply Jensen's formula with the `ExpTypeBound` hypothesis.
-  sorry
+  exact data.zeroCountLinear_trivial
+
+/-- The current `ProblemData` does not relate `zeros` to `zeroCount`.  Taking
+every enumerated zero to be `0` therefore gives a linear (indeed zero)
+`zeroCount`, but a constant weight sequence. -/
+def unconstrainedZerosCounterexample : ProblemData where
+  A := 1
+  B := 1
+  α := 2
+  hA := by norm_num
+  hB := by norm_num
+  hα := by norm_num
+  f := fun _ => 0
+  hEntire := trivial
+  hBound := by
+    intro z
+    simpa using (Real.exp_pos ‖z‖).le
+  zeros := fun _ => 0
+
+lemma unconstrainedZerosCounterexample_zeroCountLinear :
+    unconstrainedZerosCounterexample.zeroCountLinear :=
+  unconstrainedZerosCounterexample.zeroCountLinear_trivial
+
+lemma unconstrainedZerosCounterexample_weight (n : ℕ) :
+    unconstrainedZerosCounterexample.weight n = 1 := by
+  simp [unconstrainedZerosCounterexample, ProblemData.weight]
+
+lemma unconstrainedZerosCounterexample_not_summable :
+    ¬ Summable unconstrainedZerosCounterexample.weight := by
+  intro hs
+  have hzero :
+      Filter.Tendsto unconstrainedZerosCounterexample.weight Filter.atTop
+        (nhds 0) :=
+    hs.tendsto_atTop_zero
+  have hone :
+      Filter.Tendsto unconstrainedZerosCounterexample.weight Filter.atTop
+        (nhds 1) := by
+    have heq :
+        unconstrainedZerosCounterexample.weight = fun _ : ℕ => (1 : ℝ) :=
+      funext unconstrainedZerosCounterexample_weight
+    rw [heq]
+    exact tendsto_const_nhds
+  have : (0 : ℝ) = 1 := tendsto_nhds_unique hzero hone
+  norm_num at this
 
 /-- The dyadic-shell argument shows weighted zeros form a summable series. -/
 lemma weight_summable_of_zeroCountLinear
     (data : ProblemData) (h : data.zeroCountLinear) :
     Summable data.weight := by
-  -- TODO: Sum the geometric tail using `data.dyadicShell`.
+  -- False for the current `ProblemData`: `zeros` is not tied to `zeroCount`.
+  -- See `unconstrainedZerosCounterexample_not_summable`.
   sorry
 
 /-- Final statement of apm-a01J06. -/
