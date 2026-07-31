@@ -39,6 +39,7 @@ import Mathlib.Analysis.Complex.AbsMax
 import Mathlib.Analysis.Complex.MeanValue
 import Mathlib.Analysis.Convex.Integral
 import Mathlib.Analysis.Convex.SpecificFunctions.Basic
+import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 open Complex Metric Set Real MeasureTheory
@@ -119,8 +120,10 @@ By contrapositive: if Δ ⊆ f(Δ), then f⁻¹ restricted to Δ is a disk self-
 fixing 0 with |(f⁻¹)'(0)| = 1/|f'(0)| = 1. By Schwarz lemma equality case,
 f⁻¹ is a rotation, so f is a rotation, giving |f'| ≡ 1 and ℓ(C) = 2π.
 
-**Blocker:** The Schwarz equality case (|f'(0)| = 1 + disk self-map ⟹ rotation)
-is not in Mathlib. Only the inequality `norm_le_norm_of_mapsTo_ball` is proved. -/
+**Blocker:** `ConstructionTargets.SchwarzEquality` supplies the Schwarz equality
+case.  What is still missing here is the analytic inverse on the whole disk:
+injectivity must first be used to construct a differentiable inverse of `f` on
+the contained disk, with derivative norm one at zero. -/
 theorem disk_not_subset_image_of_length_gt
     {f : ℂ → ℂ}
     (hf_holo : ∃ ε > 0, DifferentiableOn ℂ f (closedBall 0 (1 + ε)))
@@ -131,15 +134,98 @@ theorem disk_not_subset_image_of_length_gt
     ¬(ball (0 : ℂ) 1 ⊆ f '' ball 0 1) := by
   sorry
 
+/-!
+## Counterexample to the proposed rotation lemma
+
+The hypotheses below the next declaration do not say that `f` maps the disk
+into itself, nor that it is injective.  Reverse containment of the image is not
+enough for Schwarz's lemma: `z - 3 * z ^ 2` covers the unit disk but is not a
+rotation.  The following declarations machine-check that obstruction while
+leaving the original target unchanged for owner review.
+-/
+
+private def rotationCounterexample (z : ℂ) : ℂ := z - 3 * z ^ 2
+
+private lemma rotationCounterexample_surj_ball :
+    ball (0 : ℂ) 1 ⊆ rotationCounterexample '' ball 0 1 := by
+  intro w hw
+  have hw' : ‖w‖ < 1 := by simpa [mem_ball, dist_zero_right] using hw
+  obtain ⟨r, hr⟩ : ∃ r : ℂ, (3 : ℂ) * r ^ 2 + (-1 : ℂ) * r + w = 0 := by
+    let p : Polynomial ℂ :=
+      Polynomial.C 3 * Polynomial.X ^ 2 - Polynomial.X + Polynomial.C w
+    have hp : p.degree ≠ 0 := by
+      have hdeg : p.natDegree = 2 := by
+        dsimp [p]
+        compute_degree!
+      exact Polynomial.degree_ne_of_natDegree_ne (by rw [hdeg]; norm_num)
+    obtain ⟨r, hr⟩ := IsAlgClosed.exists_root p hp
+    exact ⟨r, by simpa [p, Polynomial.IsRoot] using hr⟩
+  by_cases hrball : ‖r‖ < 1
+  · refine ⟨r, ?_, ?_⟩
+    · simpa [mem_ball, dist_zero_right]
+    · dsimp [rotationCounterexample]
+      linear_combination -hr
+  · let s : ℂ := (1 / 3 : ℂ) - r
+    have hrnorm : 1 ≤ ‖r‖ := le_of_not_gt hrball
+    have hrs : (3 : ℂ) * r * s = w := by
+      dsimp [s]
+      linear_combination -hr
+    have hsroot : rotationCounterexample s = w := by
+      dsimp [rotationCounterexample, s]
+      linear_combination -hr
+    have hrsnorm := congrArg norm hrs
+    have hs_nonneg : 0 ≤ ‖s‖ := norm_nonneg _
+    have hsball : ‖s‖ < 1 := by
+      rw [norm_mul, norm_mul] at hrsnorm
+      norm_num at hrsnorm
+      nlinarith
+    refine ⟨s, ?_, hsroot⟩
+    simpa [mem_ball, dist_zero_right]
+
+private lemma rotationCounterexample_differentiable :
+    Differentiable ℂ rotationCounterexample := by
+  intro z
+  unfold rotationCounterexample
+  fun_prop
+
+private lemma rotationCounterexample_deriv_zero :
+    deriv rotationCounterexample 0 = 1 := by
+  have h := (hasDerivAt_id (x := (0 : ℂ))).sub
+    ((hasDerivAt_const (x := (0 : ℂ)) (c := (3 : ℂ))).mul
+      (hasDerivAt_pow 2 0))
+  simpa [rotationCounterexample] using h.deriv
+
+private lemma rotationCounterexample_not_rotation :
+    ¬ ∃ α : ℝ, ∀ z ∈ ball (0 : ℂ) 1,
+      rotationCounterexample z = exp (I * ↑α) * z := by
+  rintro ⟨α, hα⟩
+  have hhalf : (1 / 2 : ℂ) ∈ ball (0 : ℂ) 1 := by
+    rw [mem_ball, dist_zero_right]
+    norm_num
+  have h := congrArg norm (hα (1 / 2) hhalf)
+  rw [norm_mul, Complex.norm_exp] at h
+  norm_num [rotationCounterexample] at h
+
+/-- A checked counterexample to `rotation_of_disk_subset_image`. -/
+theorem rotation_of_disk_subset_image_counterexample :
+    ∃ f : ℂ → ℂ,
+      DifferentiableOn ℂ f (ball 0 1) ∧
+      f 0 = 0 ∧
+      ‖deriv f 0‖ = 1 ∧
+      ball (0 : ℂ) 1 ⊆ f '' ball 0 1 ∧
+      ¬ ∃ α : ℝ, ∀ z ∈ ball (0 : ℂ) 1, f z = exp (I * ↑α) * z := by
+  refine ⟨rotationCounterexample,
+    rotationCounterexample_differentiable.differentiableOn, ?_, ?_,
+    rotationCounterexample_surj_ball, rotationCounterexample_not_rotation⟩
+  · norm_num [rotationCounterexample]
+  · rw [rotationCounterexample_deriv_zero]
+    norm_num
+
 /-- If Δ ⊆ D and f(0) = 0, |f'(0)| = 1, then f is a rotation (Schwarz equality).
 
-This is the key step for Part 2's contrapositive. If f maps Δ into a domain
-containing Δ, then f|_Δ is a disk self-map with |f'(0)| = 1. By the Schwarz
-lemma equality case, f(z) = e^{iα}z.
-
-**Blocker:** The Schwarz equality case is not in Mathlib.
-Mathlib has `Complex.norm_le_norm_of_mapsTo_ball` (the inequality) but not
-the equality characterization. -/
+This proposed helper is false: image containment is the opposite direction
+from the `MapsTo` hypothesis of Schwarz's lemma, and no injectivity hypothesis
+is present.  See `rotation_of_disk_subset_image_counterexample` above. -/
 lemma rotation_of_disk_subset_image
     {f : ℂ → ℂ}
     (hf_holo : DifferentiableOn ℂ f (ball 0 1))
