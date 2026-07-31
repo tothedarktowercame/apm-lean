@@ -128,18 +128,19 @@ lemma not_fresnel_integral_statement :
   rw [fresnel_bochner_integral_eq_zero]
   exact fresnel_claimed_value_ne_zero.symm
 
-/-- Part (a), as originally stated.
+/-- Part (a), stated as the classical improper oscillatory integral.
 
-    **SORRY BOUNDARY:** The classical Fresnel value is an improper oscillatory
-    integral. The notation below instead denotes Mathlib's Bochner set
-    integral. The preceding lemmas prove that its integrand is not integrable,
-    that this integral is therefore zero, and that the displayed right-hand
-    side is nonzero. Thus this target cannot be discharged without repairing
-    the statement to use an improper-integral limit.
+    **SORRY BOUNDARY:** Proving this limit requires the contour-rotation
+    argument described in the informal solution. The preceding lemmas explain
+    why it cannot instead be represented by a Bochner integral on `Ioi 0`.
 -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): express the conditionally
+-- convergent Fresnel integral as a limit of integrals over bounded intervals.
 theorem fresnel_integral :
-    (∫ x in Set.Ioi (0 : ℝ), cexp (Complex.I * (x : ℂ)^2)) =
-      (1 + Complex.I) * (√π) / (2 * (√2)) := by
+    Filter.Tendsto
+      (fun R : ℝ => ∫ x in (0 : ℝ)..R, cexp (Complex.I * (x : ℂ)^2))
+      Filter.atTop
+      (nhds ((1 + Complex.I) * (√π) / (2 * (√2)))) := by
   sorry
 
 end ApmCanaries.A01A10
