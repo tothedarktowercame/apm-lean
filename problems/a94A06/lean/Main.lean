@@ -147,22 +147,76 @@ lemma G_zero : G 0 = -(Real.sqrt 3 * π) / 72 := by
 
 /-- Limit of G as x → ∞: lim = π√3/24. -/
 lemma tendsto_G_atTop : Tendsto G atTop (nhds (Real.sqrt 3 * π / 24)) := by
-  -- The function G(x) = -1/12*log(x⁴+1) + 1/24*log(x⁸-x⁴+1) + √3/12*arctan((2x⁴-1)/√3)
-  -- As x → ∞: the log terms combine to 0, arctan → π/2
-  -- So G(x) → √3/12 * π/2 = √3π/24
-  -- We use the key asymptotic: for large x, log(x⁴+1) ≈ 4log(x), log(x⁸-x⁴+1) ≈ 8log(x)
-  -- and -1/12*4 + 1/24*8 = 0
-  -- To formalize: the log terms equal 1/24 * log((x⁸-x⁴+1)/(x⁴+1)²)
-  -- and the ratio → 1 (since leading coefficient of numerator / leading coefficient of denominator = 1)
-  -- So log(ratio) → 0, and the log part → 0.
-  --
-  -- For the arctan part: (2x⁴-1)/√3 → ∞, arctan → π/2.
-  --
-  -- Putting together: G(x) → 0 + √3/12 * π/2 = √3π/24.
-  sorry
+  have hi : Tendsto (fun x : ℝ => x⁻¹) atTop (nhds 0) :=
+    tendsto_inv_atTop_zero
+  have hi4 : Tendsto (fun x : ℝ => (x⁻¹)^4) atTop (nhds 0) := by
+    simpa using hi.pow 4
+  have hi8 : Tendsto (fun x : ℝ => (x⁻¹)^8) atTop (nhds 0) := by
+    simpa using hi.pow 8
+  have hn : Tendsto (fun x : ℝ => 1 - (x⁻¹)^4 + (x⁻¹)^8) atTop (nhds 1) := by
+    convert (tendsto_const_nhds.sub hi4).add hi8 using 1 <;> norm_num
+  have hd : Tendsto (fun x : ℝ => 1 + 2 * (x⁻¹)^4 + (x⁻¹)^8) atTop (nhds 1) := by
+    convert (tendsto_const_nhds.add (tendsto_const_nhds.mul hi4)).add hi8 using 1 <;> norm_num
+  have hratio :
+      Tendsto (fun x : ℝ => (x^8 - x^4 + 1) / (x^4 + 1)^2) atTop (nhds 1) := by
+    have hdiv := hn.div hd (by norm_num : (1 : ℝ) ≠ 0)
+    have heq :
+        (fun x : ℝ => (x^8 - x^4 + 1) / (x^4 + 1)^2) =ᶠ[atTop]
+          (fun x : ℝ => (1 - (x⁻¹)^4 + (x⁻¹)^8) /
+            (1 + 2 * (x⁻¹)^4 + (x⁻¹)^8)) := by
+      filter_upwards [eventually_gt_atTop (0 : ℝ)] with x hx
+      have hx0 : x ≠ 0 := ne_of_gt hx
+      field_simp [hx0]
+      ring
+    simpa using hdiv.congr' heq.symm
+  have hlogratio :
+      Tendsto (fun x : ℝ => Real.log ((x^8 - x^4 + 1) / (x^4 + 1)^2))
+        atTop (nhds 0) := by
+    simpa using (Real.continuousAt_log (by norm_num : (1 : ℝ) ≠ 0)).tendsto.comp hratio
+  have hlogs :
+      Tendsto (fun x : ℝ =>
+        -(1:ℝ)/12 * Real.log (x^4 + 1) +
+          (1:ℝ)/24 * Real.log (x^8 - x^4 + 1)) atTop (nhds 0) := by
+    have hscaled :
+        Tendsto (fun x : ℝ =>
+          (1 / 24 : ℝ) * Real.log ((x^8 - x^4 + 1) / (x^4 + 1)^2))
+          atTop (nhds 0) := by
+      simpa using
+        ((tendsto_const_nhds :
+          Tendsto (fun _ : ℝ => (1/24 : ℝ)) atTop (nhds (1/24))).mul hlogratio)
+    apply hscaled.congr'
+    filter_upwards [eventually_gt_atTop (0 : ℝ)] with x hx
+    have hA : 0 < x^4 + 1 := by positivity
+    have hB : 0 < x^8 - x^4 + 1 := by
+      nlinarith [sq_nonneg (x^4 - 1/2)]
+    rw [Real.log_div hB.ne' (pow_ne_zero 2 hA.ne'), Real.log_pow]
+    ring
+  have hp4 : Tendsto (fun x : ℝ => x^4) atTop atTop :=
+    tendsto_pow_atTop (by norm_num)
+  have hinner : Tendsto (fun x : ℝ => (2*x^4 - 1) / Real.sqrt 3) atTop atTop := by
+    have hmul : Tendsto (fun x : ℝ => 2 * x^4) atTop atTop :=
+      hp4.const_mul_atTop (by norm_num)
+    have hsub : Tendsto (fun x : ℝ => 2 * x^4 - 1) atTop atTop := by
+      simpa only [sub_eq_add_neg] using hmul.atTop_add tendsto_const_nhds
+    exact hsub.atTop_div_const (Real.sqrt_pos.2 (by norm_num))
+  have harctan :
+      Tendsto (fun x : ℝ => Real.arctan ((2*x^4 - 1) / Real.sqrt 3))
+        atTop (nhds (π / 2)) :=
+    tendsto_nhds_of_tendsto_nhdsWithin (Real.tendsto_arctan_atTop.comp hinner)
+  unfold G
+  convert hlogs.add (tendsto_const_nhds.mul harctan) using 1 <;> ring
 
 /-- Main result: ∫₀^∞ x⁷/(1+x¹²) dx = π√3/18. -/
 theorem integral_x7_over_1_plus_x12 :
-    ∫ x in Ioi (0:ℝ), x^7 / (1 + x^12) = Real.sqrt 3 * π / 18 := by sorry
+    ∫ x in Ioi (0:ℝ), x^7 / (1 + x^12) = Real.sqrt 3 * π / 18 := by
+  have h :=
+    integral_Ioi_of_hasDerivAt_of_nonneg'
+      (a := (0 : ℝ)) (g := G) (g' := fun x : ℝ => x^7 / (1 + x^12))
+      (l := Real.sqrt 3 * π / 24)
+      (fun x _ => hasDerivAt_G x)
+      (fun x hx => div_nonneg (pow_nonneg hx.le _) (by positivity))
+      tendsto_G_atTop
+  rw [G_zero] at h
+  convert h using 1 <;> ring
 
 end ApmCanaries.A94A06
