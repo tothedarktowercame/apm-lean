@@ -26,6 +26,7 @@ The generated statements are structurally correct. We keep them as-is.
 
 import Mathlib.Analysis.Complex.Schwarz
 import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Deriv
+import ConstructionTargets.UnivalentDeriv
 
 open Complex Metric Set Filter
 
@@ -143,9 +144,8 @@ theorem subordination_deriv_le
   apply subordination_deriv_le_of_deriv_ne_zero
     hf_holo hg_holo hg_inj hfg_zero hfg_sub
   intro z hz
-  -- This is exactly the missing local-degree theorem.  The existing project
-  -- construction target for it is not axiom-clean yet, so it cannot be used.
-  sorry
+  exact ConstructionTargets.UnivalentDeriv.deriv_ne_zero_of_injOn
+    isOpen_ball hg_holo hg_inj hz
 
 /-- Part (b): Equality iff f(z) = g(e^{iα}z) for some α.
 
