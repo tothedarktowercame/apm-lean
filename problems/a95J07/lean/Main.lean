@@ -13,11 +13,15 @@
 
 ## Theory boundaries
 
-- Mathlib has `VitaliFamily` with `exists_disjoint_covering_ae` (abstract
-  Vitali covering theorem), but the specific 5× interval formulation is not.
+- Mathlib's Zorn-based
+  `Vitali.exists_disjoint_subfamily_covering_enlargement` supplies the
+  selection step.  The interval specialization below additionally proves
+  countability and constructs a duplicate-free enumeration padded by `∅`.
 - Mathlib's fixed-dimensional Jacobian API includes the Sard lemma
   `MeasureTheory.addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`.
-- The disjoint total length ≤ 1 bound IS provable from measure theory basics.
+- The disjoint total length bound needs measurability of the sets.  The
+  generated helper omits that hypothesis, so it is not valid for arbitrary
+  subsets of `(0, 1)`.
 
 ## Statement repair
 
@@ -29,6 +33,7 @@ We use the TeX formula directly.
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Function.Jacobian
 import Mathlib.Analysis.Calculus.Deriv.Basic
+import Mathlib.MeasureTheory.Covering.Vitali
 
 open Set MeasureTheory
 
@@ -43,11 +48,11 @@ def inflate5 (α β : ℝ) : Set ℝ :=
   Ioo (3 * α - 2 * β) (3 * β - 2 * α)
 
 /-- The 5× inflation has the same center as the original interval. -/
-lemma inflate5_center (α β : ℝ) (hab : α < β) :
+lemma inflate5_center (α β : ℝ) (_hab : α < β) :
     (3 * α - 2 * β + (3 * β - 2 * α)) / 2 = (α + β) / 2 := by ring
 
 /-- The 5× inflation has 5× the length of the original interval. -/
-lemma inflate5_length (α β : ℝ) (hab : α < β) :
+lemma inflate5_length (α β : ℝ) (_hab : α < β) :
     (3 * β - 2 * α) - (3 * α - 2 * β) = 5 * (β - α) := by ring
 
 /-- Disjoint open intervals in (0,1) have total measure ≤ 1. -/
@@ -56,9 +61,9 @@ lemma tsum_volume_disjoint_le_one
     (hS_sub : ∀ k, S k ⊆ Ioo 0 1)
     (hS_disj : Pairwise (Function.onFun Disjoint S)) :
     ∑' k, volume (S k) ≤ 1 := by
-  -- Each S_k ⊆ (0,1), so volume(S_k) ≤ 1.
-  -- By countable additivity of disjoint sets: Σ volume(S_k) = volume(∪S_k) ≤ volume((0,1)) = 1.
-  -- This requires measurable S_k and measure_iUnion.
+  -- Statement defect: countable additivity applies only to (null-)measurable
+  -- sets.  Arbitrary disjoint subsets of `(0, 1)` need not satisfy this bound
+  -- for the outer-measure extension `volume (S k)`.
   sorry
 
 /-- (a) Vitali covering lemma with factor 5.
@@ -66,9 +71,9 @@ lemma tsum_volume_disjoint_le_one
 Given a collection A of open intervals in (0,1), there exist pairwise disjoint
 I₁, I₂, ... ∈ A with ∪A ⊆ ∪Iₙ'.
 
-**Blocker:** Mathlib has `VitaliFamily` with abstract covering theorems but
-not the specific 5× formulation for 1D intervals. The greedy selection
-algorithm needs to be formalized from scratch. -/
+The proof specializes Mathlib's abstract Vitali selection theorem to diameter
+and then enumerates its countable disjoint family without duplicating nonempty
+sets. -/
 theorem vitali_covering_5
     {A : Set (Set ℝ)}
     (hA : ∀ I ∈ A, ∃ a b, a < b ∧ I = Ioo a b)
@@ -77,7 +82,96 @@ theorem vitali_covering_5
       (∀ k, S k ∈ A ∨ S k = ∅) ∧
       Pairwise (Function.onFun Disjoint S) ∧
       ⋃₀ A ⊆ ⋃ k, {y : ℝ | ∃ a b, S k = Ioo a b ∧ y ∈ inflate5 a b} := by
-  sorry
+  classical
+  by_cases hA0 : A = ∅
+  · refine ⟨fun _ => ∅, ?_, fun _ _ _ => disjoint_self.2 rfl, ?_⟩
+    · simp [hA0]
+    · simp [hA0]
+  obtain ⟨u, huA, hu_disj, hu_cover⟩ :=
+    Vitali.exists_disjoint_subfamily_covering_enlargement
+      (fun I : Set ℝ => I) A Metric.diam 2 (by norm_num)
+      (fun I hI => Metric.diam_nonneg)
+      1
+      (fun I hI => by
+        obtain ⟨a, b, hab, rfl⟩ := hA I hI
+        rw [Real.diam_Ioo hab.le]
+        have hsub := hA_sub (Ioo a b) hI
+        have ha : 0 ≤ a := le_of_not_gt fun ha => by
+          have ham : a < min b 0 := lt_min hab ha
+          have ht : (a + min b 0) / 2 ∈ Ioo a b := by
+            constructor
+            · linarith
+            · linarith [min_le_left b 0]
+          have hout := hsub ht
+          linarith [hout.1, min_le_right b 0]
+        have hb : b ≤ 1 := le_of_not_gt fun hb => by
+          have hmb : max a 1 < b := max_lt hab hb
+          have ht : (max a 1 + b) / 2 ∈ Ioo a b := by
+            constructor
+            · linarith [le_max_left a 1]
+            · linarith
+          have hout := hsub ht
+          linarith [hout.2, le_max_right a 1]
+        linarith)
+      (fun I hI => by
+        obtain ⟨a, b, hab, rfl⟩ := hA I hI
+        exact nonempty_Ioo.2 hab)
+  have hu_countable : u.Countable :=
+    hu_disj.countable_of_isOpen
+      (fun I hI => by
+        obtain ⟨a, b, hab, rfl⟩ := hA I (huA hI)
+        exact isOpen_Ioo)
+      (fun I hI => by
+        obtain ⟨a, b, hab, rfl⟩ := hA I (huA hI)
+        exact nonempty_Ioo.2 hab)
+  obtain ⟨I, hIA⟩ := nonempty_iff_ne_empty.2 hA0
+  obtain ⟨J, hJu, -, -⟩ := hu_cover I hIA
+  letI : Nonempty u := ⟨⟨J, hJu⟩⟩
+  letI : Countable u := hu_countable.to_subtype
+  let e : u ↪ ℕ := (nonempty_embedding_nat u).some
+  let S : ℕ → Set ℝ := fun n =>
+    if hn : n ∈ Set.range e then (Function.invFun e n).1 else ∅
+  refine ⟨S, ?_, ?_, ?_⟩
+  · intro n
+    simp only [S]
+    split_ifs with hn
+    · left
+      exact huA (Function.invFun e n).2
+    · exact Or.inr rfl
+  · intro m n hmn
+    simp only [Function.onFun, S]
+    split_ifs with hm hn
+    · apply hu_disj (Function.invFun e m).2 (Function.invFun e n).2
+      intro heq
+      apply hmn
+      have hem : e (Function.invFun e m) = m := Function.invFun_eq hm
+      have hen : e (Function.invFun e n) = n := Function.invFun_eq hn
+      have hsubeq : Function.invFun e m = Function.invFun e n := Subtype.ext heq
+      exact hem ▸ hen ▸ congrArg e hsubeq
+    · exact disjoint_empty _
+    · exact empty_disjoint _
+    · exact empty_disjoint _
+  · intro y hy
+    obtain ⟨I, hIA, hyI⟩ := mem_sUnion.1 hy
+    obtain ⟨J, hJu, hIJ, hdiam⟩ := hu_cover I hIA
+    obtain ⟨a, b, hab, hIeq⟩ := hA I hIA
+    obtain ⟨c, d, hcd, hJeq⟩ := hA J (huA hJu)
+    obtain ⟨x, hxI, hxJ⟩ := hIJ
+    rw [hIeq] at hyI hxI hdiam
+    rw [hJeq] at hxJ hdiam
+    rw [Real.diam_Ioo hab.le, Real.diam_Ioo hcd.le] at hdiam
+    have hJrange : J ∈ Set.range S := by
+      refine ⟨e ⟨J, hJu⟩, ?_⟩
+      change (if hn : e ⟨J, hJu⟩ ∈ Set.range e then
+        (Function.invFun e (e ⟨J, hJu⟩)).1 else ∅) = J
+      rw [dif_pos ⟨⟨J, hJu⟩, rfl⟩]
+      exact congrArg Subtype.val (Function.leftInverse_invFun e.injective ⟨J, hJu⟩)
+    obtain ⟨k, hk⟩ := hJrange
+    refine mem_iUnion.2 ⟨k, ?_⟩
+    refine ⟨c, d, ?_, ?_⟩
+    · exact hk.trans hJeq
+    · change 3 * c - 2 * d < y ∧ y < 3 * d - 2 * c
+      constructor <;> linarith [hyI.1, hyI.2, hxI.1, hxI.2, hxJ.1, hxJ.2]
 
 /-- The critical set: points where f is differentiable with f' = 0. -/
 def criticalSet (f : ℝ → ℝ) : Set ℝ :=
