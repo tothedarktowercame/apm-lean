@@ -1,6 +1,7 @@
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
+import Mathlib.Analysis.MeanInequalitiesPow
 
 open MeasureTheory Set ENNReal Filter Topology
 
@@ -38,10 +39,15 @@ lemma abs_sub_pow_le {p : ℕ} (a b : ℝ) :
     _ ≤ 2 ^ p * (|a| ^ p + |b| ^ p) :=
         add_pow_le_two_pow_mul |a| |b| (abs_nonneg a) (abs_nonneg b)
 
--- rpow version still sorry
+-- CLOSED: real-exponent version via the generalized mean inequality
 lemma rpow_sub_le {p : ℝ} (hp : 1 ≤ p) (a b : ℝ) :
     |a - b| ^ p ≤ 2 ^ (p - 1) * (|a| ^ p + |b| ^ p) := by
-  sorry
+  calc
+    |a - b| ^ p ≤ (|a| + |b|) ^ p := by
+      exact Real.rpow_le_rpow (abs_nonneg _) (abs_sub a b) (zero_le_one.trans hp)
+    _ ≤ 2 ^ (p - 1) * (|a| ^ p + |b| ^ p) := by
+      exact_mod_cast NNReal.rpow_add_le_mul_rpow_add_rpow
+        ⟨|a|, abs_nonneg a⟩ ⟨|b|, abs_nonneg b⟩ hp
 
 -- Radon-Riesz theorem statement
 theorem radon_riesz {p : ℝ} (hp1 : 1 < p)
@@ -70,4 +76,12 @@ theorem radon_riesz {p : ℝ} (hp1 : 1 < p)
   -- Brezis-Lieb, tendsto_Lp_of_tendsto_ae_of_tendsto_norm — none found).
   -- The closest: tendsto_Lp_of_tendsto_ae requires UnifIntegrable + UnifTight
   -- as hypotheses, which is a DIFFERENT theorem (Vitali convergence).
+  --
+  -- Precise remaining construction: first prove the Scheffé lemma for
+  -- `u n x = |f n x| ^ p`.  The hypotheses give `u n → |g| ^ p` a.e. and,
+  -- after rewriting with `eLpNorm_eq_lintegral_rpow_enorm_toReal`, convergence
+  -- of their integrals.  Scheffé gives `u n → |g| ^ p` in L¹, hence uniform
+  -- integrability of `u`.  The proved `rpow_sub_le` then transfers uniform
+  -- integrability to `|f n - g| ^ p`; Vitali at exponent one and the same
+  -- eLpNorm/lintegral rewrite finish the target.
   sorry
