@@ -45,8 +45,29 @@ not absolutely continuous function on [0,1].
 
 We define it opaquely since the full piecewise-linear construction
 with infinitely many pieces is technically involved. -/
-@[irreducible]
-def spikeFunction : ℝ → ℝ := 0
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): remove the constant-zero
+-- placeholder; the repaired theorems require the exact triangular-spike
+-- specification below.
+opaque spikeFunction : ℝ → ℝ
+
+/-- The midpoint of the interval `[1/(n+1), 1/n]`. -/
+def spikeMidpoint (n : ℕ) : ℝ :=
+  1 / (2 * (n : ℝ)) + 1 / (2 * ((n : ℝ) + 1))
+
+/-- Exact specification of the triangular spikes from the informal problem.
+
+On spike `n`, the function rises linearly from zero to height `1/n` and then
+falls linearly back to zero.  Keeping this as a hypothesis makes the currently
+opaque construction explicit without pretending that the constant-zero
+placeholder was the intended function. -/
+structure SpikeFunctionSpec (f : ℝ → ℝ) : Prop where
+  at_zero : f 0 = 0
+  on_left (n : ℕ) (hn : 0 < n) (x : ℝ)
+      (hx : x ∈ Icc (1 / ((n : ℝ) + 1)) (spikeMidpoint n)) :
+      f x = 2 * ((n : ℝ) + 1) * (x - 1 / ((n : ℝ) + 1))
+  on_right (n : ℕ) (hn : 0 < n) (x : ℝ)
+      (hx : x ∈ Icc (spikeMidpoint n) (1 / (n : ℝ))) :
+      f x = 2 * ((n : ℝ) + 1) * (1 / (n : ℝ) - x)
 
 /-- Within spike n: height × slope = (1/n) · 2(n+1) ≤ 4 for n ≥ 1.
 
@@ -70,7 +91,11 @@ lemma spike_base_length (n : ℕ) (hn : 0 < n) :
 **Blocker:** Requires the full spike function definition and the
 within-spike bound |f(x)-f(y)|² ≤ 4|x-y|, plus the cross-spike
 argument using f = 0 at junction points. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require the exact
+-- triangular-spike specification so this is no longer a theorem about a
+-- constant-zero placeholder.
 theorem spikeFunction_holderWith :
+    SpikeFunctionSpec spikeFunction →
     ∃ A : ℝ, 0 < A ∧ ∀ x ∈ Icc (0:ℝ) 1, ∀ y ∈ Icc (0:ℝ) 1,
       |spikeFunction x - spikeFunction y| ≤ A * |x - y| ^ ((1:ℝ) / 2) := by
   sorry
@@ -78,7 +103,11 @@ theorem spikeFunction_holderWith :
 /-- Not absolutely continuous on [0,1].
 
 **Blocker:** Requires constructing the AC-violating collection of intervals. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require the exact
+-- triangular-spike specification so the non-AC conclusion concerns the
+-- intended function rather than the false constant-zero model.
 theorem spikeFunction_not_absolutelyContinuous :
+    SpikeFunctionSpec spikeFunction →
     ∃ ε > 0, ∀ δ > 0, ∃ (n : ℕ) (a b : Fin n → ℝ),
       (∀ i, a i ∈ Icc 0 1) ∧ (∀ i, b i ∈ Icc 0 1) ∧
       (∀ i, a i ≤ b i) ∧
