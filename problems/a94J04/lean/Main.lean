@@ -203,6 +203,18 @@ theorem poissonConv_L2_contraction
     convolution_L2_contraction_of_probability_kernel
       (poissonKernel_nonneg y hy) (poissonKernel_integral_one y hy) hf
 
+/-- Rewrite Poisson convolution as an average of translates of `f`.
+
+This is the change-of-variables seam needed by the approximate-identity
+argument: substitute `t = x - u` in the defining convolution. -/
+lemma poissonConv_eq_integral_translation
+    (y : ℝ) (f : ℝ → ℝ) (x : ℝ) :
+    poissonConv y f x = ∫ t, poissonKernel y t * f (x - t) ∂volume := by
+  unfold poissonConv
+  simpa only [sub_sub_cancel] using
+    (integral_sub_left_eq_self
+      (fun t : ℝ ↦ poissonKernel y t * f (x - t)) volume x)
+
 /-- **Part (b):** `P_y f → f` in L² as `y → 0⁺`.
 
     Uses the approximate identity argument:
@@ -221,6 +233,9 @@ theorem poissonConv_tendsto_L2
       (nhdsWithin 0 (Ioi 0)) (𝓝 0) := by
   have htranslation :=
     ConstructionTargets.L2Translation.eLpNorm_translation_tendsto f hf
+  have htranslated (y x : ℝ) :
+      poissonConv y f x = ∫ t, poissonKernel y t * f (x - t) ∂volume :=
+    poissonConv_eq_integral_translation y f x
   sorry
 
 /-- **Part (c):** A.e. convergence.
