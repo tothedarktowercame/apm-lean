@@ -98,9 +98,58 @@ theorem uniform_small_set_of_L3_bound
     (hL3 : ∀ n, eLpNorm (f n) 3 (volume.restrict unitInterval) ≤ 1) :
     uniformSmallSetProperty f := by
   classical
-  -- The repaired hypothesis is a genuine L³ bound; the remaining obligation
-  -- is the standard Hölder estimate, uniformly in `n`.
-  sorry
+  intro ε hε
+  let η := min ε 1
+  have hη : 0 < η := lt_min hε zero_lt_one
+  let δ : ENNReal := ENNReal.ofReal η ^ (3 / 2 : ℝ)
+  have hδ : 0 < δ :=
+    ENNReal.rpow_pos (ENNReal.ofReal_pos.2 hη) ENNReal.ofReal_ne_top
+  refine ⟨δ, hδ, ?_⟩
+  intro E hE hEmeas hEδ n
+  let μE := volume.restrict E
+  have hμE_le : μE ≤ volume.restrict unitInterval :=
+    Measure.restrict_mono hE le_rfl
+  have hmeasE : AEStronglyMeasurable (f n) μE :=
+    (hmeas n).mono_measure hμE_le
+  have hL3E : eLpNorm (f n) 3 μE ≤ 1 :=
+    (eLpNorm_mono_measure (f n) hμE_le).trans (hL3 n)
+  have hL1E :
+      eLpNorm (f n) 1 μE ≤
+        eLpNorm (f n) 3 μE *
+          μE Set.univ ^ (1 / (1 : ENNReal).toReal - 1 / (3 : ENNReal).toReal) :=
+    eLpNorm_le_eLpNorm_mul_rpow_measure_univ (by norm_num) hmeasE
+  have hμE_univ : μE Set.univ = volume E := by
+    simp [μE]
+  have hpow_lt :
+      volume E ^ (1 / (1 : ENNReal).toReal - 1 / (3 : ENNReal).toReal) <
+        ENNReal.ofReal η := by
+    rw [show (1 / (1 : ENNReal).toReal - 1 / (3 : ENNReal).toReal) = (2 / 3 : ℝ) by
+      norm_num]
+    calc
+      volume E ^ (2 / 3 : ℝ) < δ ^ (2 / 3 : ℝ) :=
+        ENNReal.rpow_lt_rpow hEδ (by norm_num)
+      _ = ENNReal.ofReal η := by
+        simp [δ, ← ENNReal.rpow_mul]
+  have hL1_lt : eLpNorm (f n) 1 μE < ENNReal.ofReal η := by
+    calc
+      eLpNorm (f n) 1 μE ≤
+          eLpNorm (f n) 3 μE *
+            μE Set.univ ^ (1 / (1 : ENNReal).toReal - 1 / (3 : ENNReal).toReal) :=
+        hL1E
+      _ ≤ volume E ^
+          (1 / (1 : ENNReal).toReal - 1 / (3 : ENNReal).toReal) := by
+        rw [hμE_univ]
+        simpa using mul_le_mul_left hL3E
+          (volume E ^ (1 / (1 : ENNReal).toReal - 1 / (3 : ENNReal).toReal))
+      _ < ENNReal.ofReal η := hpow_lt
+  have hf_int : Integrable (f n) μE := by
+    rw [← memLp_one_iff_integrable]
+    exact ⟨hmeasE, hL1_lt.trans ENNReal.ofReal_lt_top⟩
+  rw [integral_norm_eq_lintegral_enorm hf_int.aestronglyMeasurable,
+    ← eLpNorm_one_eq_lintegral_enorm]
+  exact ((ENNReal.toReal_lt_toReal
+    (hL1_lt.trans ENNReal.ofReal_lt_top).ne ENNReal.ofReal_ne_top).2 hL1_lt).le.trans
+    ((ENNReal.toReal_ofReal hη.le).le.trans (min_le_left ε 1))
 
 /-- The spike sequence from above witnesses the failure of part (a) if we only
 assume an L¹ bound.  This records the precise negation of the uniform small-set
