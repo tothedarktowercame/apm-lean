@@ -90,18 +90,16 @@ def uniformSmallSetProperty (f : ℕ → ℝ → ℝ) : Prop :=
 /-- **Part (a)**: families that are bounded in L³ are uniformly integrable on
 `[0,1]`.  The formal proof follows the standard Hölder/Markov argument and is
 left as a single localized hole. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): use the ENNReal-valued L³
+-- seminorm bound, which cannot become vacuous through `integral_undef`.
 theorem uniform_small_set_of_L3_bound
     (f : ℕ → ℝ → ℝ)
     (hmeas : ∀ n, AEStronglyMeasurable (f n) (volume.restrict unitInterval))
-    (hL3 : ∀ n, ∫ x in unitInterval, ‖f n x‖ ^ (3 : ℝ) ≤ 1) :
+    (hL3 : ∀ n, eLpNorm (f n) 3 (volume.restrict unitInterval) ≤ 1) :
     uniformSmallSetProperty f := by
   classical
-  -- The stated hypothesis does not assert integrability.  Since the Bochner
-  -- integral is zero for a non-integrable function, Hölder cannot be applied
-  -- here.  A counterexample can combine the shrinking spikes below with a
-  -- fixed non-integrable positive singularity supported away from the spikes:
-  -- every cubic integral is then `0`, while the spike mass still violates
-  -- `uniformSmallSetProperty`.
+  -- The repaired hypothesis is a genuine L³ bound; the remaining obligation
+  -- is the standard Hölder estimate, uniformly in `n`.
   sorry
 
 /-- The spike sequence from above witnesses the failure of part (a) if we only
