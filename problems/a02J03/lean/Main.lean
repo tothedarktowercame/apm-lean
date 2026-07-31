@@ -87,6 +87,54 @@ lemma indicator_bound (φ : ℝ → ℝ) (M : ℝ)
     _ = M * (b - a) / (1 + k * (b - a)) := by
       field_simp
 
+/-- The indicator estimate rewritten as a bound on the scaled interval
+integral.  This is the quantitative primitive estimate used by the
+integration-by-parts proof for smooth compactly supported test functions. -/
+lemma scaled_setIntegral_bound (φ : ℝ → ℝ) (M : ℝ)
+    (hφ : ∀ (a b : ℝ), a < b →
+      |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
+    (a b : ℝ) (hab : a < b) (k : ℝ) (hk : 0 < k) :
+    |∫ x in Set.Icc a b, φ (k * x)| ≤
+      M * (b - a) / (1 + k * (b - a)) := by
+  simpa only [scaledIntOp, Set.indicator_apply, Pi.one_apply, mul_ite,
+    mul_one, mul_zero, ← MeasureTheory.integral_indicator measurableSet_Icc]
+    using indicator_bound φ M hφ a b hab k hk
+
+/-- Oriented-interval form of `scaled_setIntegral_bound`. -/
+lemma scaled_intervalIntegral_bound (φ : ℝ → ℝ) (M : ℝ)
+    (hφ : ∀ (a b : ℝ), a < b →
+      |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
+    (a b : ℝ) (k : ℝ) (hk : 0 < k) :
+    |∫ x in a..b, φ (k * x)| ≤
+      M * |b - a| / (1 + k * |b - a|) := by
+  rcases lt_trichotomy a b with hab | rfl | hba
+  · rw [intervalIntegral.integral_of_le hab.le, ← integral_Icc_eq_integral_Ioc,
+      abs_of_pos (sub_pos.mpr hab)]
+    exact scaled_setIntegral_bound φ M hφ a b hab k hk
+  · simp
+  · rw [intervalIntegral.integral_symm, abs_neg,
+      abs_of_neg (sub_neg.mpr hba), neg_sub,
+      intervalIntegral.integral_of_le hba.le, ← integral_Icc_eq_integral_Ioc]
+    exact scaled_setIntegral_bound φ M hφ b a hba k hk
+
+/-- The primitive of `x ↦ φ (k * x)` has a damping-independent `M / k`
+bound.  This is the small factor in the eventual integration-by-parts
+estimate. -/
+lemma scaled_intervalIntegral_bound_div (φ : ℝ → ℝ) (M : ℝ) (hM : 0 ≤ M)
+    (hφ : ∀ (a b : ℝ), a < b →
+      |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
+    (a b : ℝ) (k : ℝ) (hk : 0 < k) :
+    |∫ x in a..b, φ (k * x)| ≤ M / k := by
+  refine (scaled_intervalIntegral_bound φ M hφ a b k hk).trans ?_
+  have hd : 0 ≤ |b - a| := abs_nonneg _
+  have hden : 0 < 1 + k * |b - a| := by positivity
+  rw [div_le_div_iff₀ hden hk]
+  nlinarith
+
+lemma tendsto_scaled_primitive_bound_zero (M : ℝ) :
+    Tendsto (fun k : ℝ => M / k) atTop (nhds 0) :=
+  tendsto_id.const_div_atTop M
+
 -- CLOSED: convergence from the bound via squeeze
 lemma indicator_case (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
     (hφ : ∀ (a b : ℝ), a < b →
@@ -298,4 +346,10 @@ theorem scaled_integral_vanishes (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
   -- Filter arithmetic: Tendsto.add, squeeze_zero_norm
   -- Remaining core: the bounded-primitive integration-by-parts estimate for
   -- compactly supported continuous functions (after smooth approximation).
+  -- `scaled_intervalIntegral_bound_div` now supplies the exact `M / k`
+  -- primitive bound.  The next construction is to package
+  -- `x ↦ ∫ t in 0..x, φ (k * t)` as absolutely continuous, identify its
+  -- derivative almost everywhere, and apply
+  -- `AbsolutelyContinuousOnInterval.integral_mul_deriv_eq_deriv_mul` to a
+  -- compactly supported smooth approximation of `g`.
   sorry
