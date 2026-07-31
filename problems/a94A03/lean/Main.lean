@@ -62,6 +62,47 @@ lemma gaussKernel_integrable {t : ℝ} (ht : 0 < t) :
   rw [integral_undef h] at hone
   norm_num at hone
 
+/-- A positive-scale Gaussian is the pullback of the unit Gaussian under dilation. -/
+lemma gaussKernel_scale {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    t * gaussKernel t (t * x) = gaussKernel 1 x := by
+  unfold gaussKernel
+  have ht0 : t ≠ 0 := ne_of_gt ht
+  field_simp
+
+/-- The Gaussian kernel is even. -/
+lemma gaussKernel_neg (t x : ℝ) :
+    gaussKernel t (-x) = gaussKernel t x := by
+  unfold gaussKernel
+  congr 2
+  ring
+
+/-- After dilation, convolution by a Gaussian of scale `t` is averaging translates against the
+fixed unit Gaussian. -/
+lemma gaussConv_eq_integral_unitKernel {t : ℝ} (ht : 0 < t) (f : ℝ → ℝ) (x : ℝ) :
+    gaussConv t f x = ∫ z, gaussKernel 1 z * f (x - t * z) ∂volume := by
+  have ht0 : t ≠ 0 := ne_of_gt ht
+  rw [gaussConv]
+  have hsub :
+      (∫ y : ℝ, gaussKernel t (x - y) * f y ∂volume) =
+        ∫ u : ℝ, gaussKernel t u * f (x - u) ∂volume := by
+    simpa only [sub_sub_cancel] using
+      (integral_sub_left_eq_self (fun u : ℝ ↦ gaussKernel t u * f (x - u)) volume x)
+  rw [hsub]
+  have hscale := Measure.integral_comp_mul_left
+    (fun u : ℝ ↦ gaussKernel t u * f (x - u)) t
+  simp only [abs_inv, abs_of_pos ht] at hscale
+  calc
+    (∫ u : ℝ, gaussKernel t u * f (x - u) ∂volume) =
+        t * ∫ z : ℝ, gaussKernel t (t * z) * f (x - t * z) ∂volume := by
+          rw [hscale]
+          simp [ht0]
+    _ = ∫ z : ℝ, t * (gaussKernel t (t * z) * f (x - t * z)) ∂volume := by
+          rw [integral_const_mul]
+    _ = ∫ z : ℝ, gaussKernel 1 z * f (x - t * z) ∂volume := by
+          apply integral_congr_ae
+          filter_upwards with z
+          rw [← mul_assoc, gaussKernel_scale ht]
+
 /-- Part (a): K_t is an Lp contraction: eLpNorm(K_t f) <= eLpNorm(f).
 
     SORRY BOUNDARY: Mathlib does not have Young's convolution inequality
