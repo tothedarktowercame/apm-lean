@@ -208,8 +208,11 @@ lemma constructedH_strictMonoOn_counterexample :
 complement has positive measure in every interval. See
 `constructedH_strictMonoOn_counterexample`. The correct version with
 `IsClosed C` is proved below. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require `C` to be closed, so
+-- its complement is open and every nonempty interval contains positive measure.
 lemma constructedH_strictMonoOn
-    (C : Set ℝ) (hC_sub : C ⊆ Icc 0 1) (hC_int : interior C = ∅) :
+    (C : Set ℝ) (hC_closed : IsClosed C) (hC_sub : C ⊆ Icc 0 1)
+    (hC_int : interior C = ∅) :
     StrictMonoOn (constructedH C) (Icc 0 1) := by
   sorry
 
