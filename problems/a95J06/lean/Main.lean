@@ -172,6 +172,21 @@ lemma conditionN_on_cantor_of_fix
       exact ⟨y, hy, hf_fix y (hE hy)⟩
   rw [h_image, hE_null]
 
+/-- Every point of an open subset of `ℝ` lies in a rational closed interval
+contained in that open set.  This gives a countable family of compact
+intervals for local-to-global null-image arguments. -/
+lemma exists_rat_Icc_subset_of_mem_open
+    {U : Set ℝ} (hU : IsOpen U) {x : ℝ} (hx : x ∈ U) :
+    ∃ a b : ℚ, x ∈ Icc (a : ℝ) (b : ℝ) ∧ Icc (a : ℝ) (b : ℝ) ⊆ U := by
+  rcases Metric.isOpen_iff.mp hU x hx with ⟨ε, hε, hball⟩
+  obtain ⟨a, hxa, hax⟩ := exists_rat_btwn (sub_lt_self x hε)
+  obtain ⟨b, hxb, hbx⟩ := exists_rat_btwn (lt_add_of_pos_right x hε)
+  refine ⟨a, b, ⟨hax.le, hxb.le⟩, ?_⟩
+  intro z hz
+  apply hball
+  rw [Metric.mem_ball, Real.dist_eq, abs_lt]
+  constructor <;> linarith [hxa, hbx, hz.1, hz.2]
+
 /-- A continuous bijection [0,1] → [0,1] is monotone.
 
 This is the standard theorem that a continuous injection on a real interval is strictly
