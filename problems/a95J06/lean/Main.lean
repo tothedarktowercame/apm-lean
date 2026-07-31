@@ -15,7 +15,7 @@ f AC on every closed interval in [0,1] \ C. Prove f is AC on [0,1].
 ## Theory boundaries
 
 - The Cantor set IS in Mathlib (`Mathlib.Topology.Instances.CantorSet`),
-  but its measure being zero is NOT proved.
+  and its self-similarity equation gives a short proof that its measure is zero.
 - The BV + condition N ⟹ AC characterization is NOT in Mathlib.
 - `MonotoneOn` / `AntitoneOn` for continuous bijections on intervals IS available.
 - The standard middle-thirds Cantor set definition (`cantorSet`) IS available.
@@ -43,12 +43,64 @@ def LusinConditionN (f : ℝ → ℝ) (s : Set ℝ) : Prop :=
 
 /-- The Cantor set has Lebesgue measure zero.
 
-**Blocker:** Mathlib defines the Cantor set (`cantorSet` in
-`Topology.Instances.CantorSet`) but does not prove its measure is zero.
-The standard proof: preCantorSet n has measure (2/3)^n, and
-C = ∩ preCantorSet n, so m(C) = lim (2/3)^n = 0. -/
+Use `cantorSet_eq_union_halves`: both pieces have one third the measure of the original set,
+so finiteness and `m(C) ≤ 2m(C)/3` force `m(C) = 0`. -/
 lemma cantorSet_measure_zero : volume cantorSet = 0 := by
-  sorry
+  have hscale :
+      volume ((fun x : ℝ => x / 3) '' cantorSet) =
+        ENNReal.ofReal (1 / 3 : ℝ) * volume cantorSet := by
+    rw [show (fun x : ℝ => x / 3) = fun x => (3 : ℝ)⁻¹ * x by funext x; ring,
+      show (fun x : ℝ => 3⁻¹ * x) '' cantorSet =
+          (fun x : ℝ => 3 * x) ⁻¹' cantorSet by
+        ext x
+        constructor
+        · rintro ⟨y, hy, rfl⟩
+          simpa using hy
+        · intro hx
+          exact ⟨3 * x, hx, by ring⟩,
+      Real.volume_preimage_mul_left (by norm_num : (3 : ℝ) ≠ 0)]
+    norm_num
+  have htranslate :
+      volume ((fun x : ℝ => (2 + x) / 3) '' cantorSet) =
+        ENNReal.ofReal (1 / 3 : ℝ) * volume cantorSet := by
+    have himage :
+        (fun x : ℝ => (2 + x) / 3) '' cantorSet =
+          (fun x : ℝ => 2 / 3 + x) '' ((fun x : ℝ => x / 3) '' cantorSet) := by
+      ext x
+      constructor
+      · rintro ⟨y, hy, rfl⟩
+        exact ⟨y / 3, ⟨y, hy, rfl⟩, by ring⟩
+      · rintro ⟨_, ⟨y, hy, rfl⟩, rfl⟩
+        exact ⟨y, hy, by ring⟩
+    rw [himage, image_add_left, measure_preimage_add, hscale]
+  have hle : volume cantorSet ≤
+      ENNReal.ofReal (1 / 3 : ℝ) * volume cantorSet +
+        ENNReal.ofReal (1 / 3 : ℝ) * volume cantorSet := by
+    calc
+      volume cantorSet = volume ((fun x : ℝ => x / 3) '' cantorSet ∪
+          (fun x : ℝ => (2 + x) / 3) '' cantorSet) :=
+        congrArg volume cantorSet_eq_union_halves
+      _ ≤ volume ((fun x : ℝ => x / 3) '' cantorSet) +
+            volume ((fun x : ℝ => (2 + x) / 3) '' cantorSet) := measure_union_le _ _
+      _ = _ := by rw [hscale, htranslate]
+  have hfin : volume cantorSet ≠ ∞ := by
+    exact ne_of_lt ((measure_mono cantorSet_subset_unitInterval).trans_lt (by simp))
+  have hzreal : (volume cantorSet).toReal = 0 := by
+    have hmul : ENNReal.ofReal (1 / 3 : ℝ) * volume cantorSet ≠ ∞ :=
+      ENNReal.mul_ne_top ENNReal.ofReal_ne_top hfin
+    have hrhs : ENNReal.ofReal (1 / 3 : ℝ) * volume cantorSet +
+        ENNReal.ofReal (1 / 3 : ℝ) * volume cantorSet ≠ ∞ := by
+      exact ENNReal.add_ne_top.mpr ⟨hmul, hmul⟩
+    have hreal := ENNReal.toReal_mono hrhs hle
+    rw [ENNReal.toReal_add hmul hmul] at hreal
+    simp only [ENNReal.toReal_mul] at hreal
+    norm_num at hreal
+    have hnonneg : 0 ≤ (volume cantorSet).toReal := ENNReal.toReal_nonneg
+    apply le_antisymm _ hnonneg
+    linarith
+  rcases (ENNReal.toReal_eq_zero_iff _).mp hzreal with hzero | htop
+  · exact hzero
+  · exact (hfin htop).elim
 
 /-- f = id on C implies condition N on C.
 
@@ -71,15 +123,15 @@ lemma conditionN_on_cantor_of_fix
 
 /-- A continuous bijection [0,1] → [0,1] is monotone.
 
-**Blocker:** This standard result (continuous injection on interval ⟹ strictly
-monotone) is available in Mathlib for the full interval but needs adaptation
-for the `BijOn` formulation. -/
+This is the standard theorem that a continuous injection on a real interval is strictly
+monotone or strictly antitone. -/
 lemma monotone_of_homeomorphism
     {f : ℝ → ℝ}
     (hf_bij : BijOn f (Icc 0 1) (Icc 0 1))
     (hf_cont : ContinuousOn f (Icc 0 1)) :
     MonotoneOn f (Icc 0 1) ∨ AntitoneOn f (Icc 0 1) := by
-  sorry
+  exact (hf_cont.strictMonoOn_of_injOn_Icc' (by norm_num) hf_bij.injOn).imp
+    StrictMonoOn.monotoneOn StrictAntiOn.antitoneOn
 
 /-- BV + continuous + condition N ⟹ AC (the characterization theorem).
 
