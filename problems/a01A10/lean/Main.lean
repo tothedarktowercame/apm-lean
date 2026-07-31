@@ -192,6 +192,42 @@ lemma damped_fresnel_integration_by_parts
   dsimp [q] at hparts ⊢
   exact hparts
 
+/-- The elementary real integral used to bound the remainder in Fresnel
+integration by parts. -/
+lemma integral_inv_sq_half {a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
+    (∫ x in a..b, 1 / (2 * x ^ 2)) = 1 / (2 * a) - 1 / (2 * b) := by
+  have hx (x : ℝ) (hmem : x ∈ Set.uIcc a b) : x ≠ 0 := by
+    rw [Set.uIcc_of_le hab] at hmem
+    exact ne_of_gt (ha.trans_le hmem.1)
+  have hd (x : ℝ) (hmem : x ∈ Set.uIcc a b) :
+      HasDerivAt (fun y : ℝ => -(1 / 2) * y⁻¹) (1 / (2 * x ^ 2)) x := by
+    convert (hasDerivAt_inv (hx x hmem)).const_mul (-(1 / 2 : ℝ)) using 1 <;>
+      field_simp
+  have hi : IntervalIntegrable (fun x : ℝ => 1 / (2 * x ^ 2)) volume a b :=
+    ContinuousOn.intervalIntegrable <| by
+      apply ContinuousOn.div continuousOn_const
+        (continuousOn_const.mul (continuousOn_id.pow 2))
+      intro x hmem
+      exact mul_ne_zero (by norm_num) (pow_ne_zero 2 (hx x hmem))
+  have hb : b ≠ 0 := ne_of_gt (ha.trans_le hab)
+  convert intervalIntegral.integral_eq_sub_of_hasDerivAt hd hi using 1 <;>
+    field_simp <;> ring
+
+/-- At zero damping, the integration-by-parts remainder has the elementary
+`1 / (2x²)` norm used in the uniform Fresnel tail estimate. -/
+lemma fresnel_remainder_norm_eq {x : ℝ} (hx : 0 < x) :
+    ‖(2 * ((0 : ℂ) - I) /
+        (-2 * ((0 : ℂ) - I) * (x : ℂ)) ^ 2) *
+        cexp (-((0 : ℂ) - I) * (x : ℂ) ^ 2)‖ = 1 / (2 * x ^ 2) := by
+  rw [norm_mul, norm_div, norm_pow, Complex.norm_exp]
+  simp only [zero_sub]
+  have hre : (- -I * (x : ℂ) ^ 2).re = 0 := by
+    simp [pow_two, Complex.mul_re, Complex.mul_im]
+  rw [hre, Real.exp_zero, mul_one]
+  simp only [norm_mul, norm_neg, Complex.norm_ofNat, norm_I, norm_real]
+  rw [Real.norm_eq_abs, abs_of_pos hx]
+  field_simp
+
 /-- Part (a), stated as the classical improper oscillatory integral.
 
     **SORRY BOUNDARY:** Proving this limit requires the contour-rotation
