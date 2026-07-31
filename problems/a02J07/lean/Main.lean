@@ -120,6 +120,8 @@ lemma argStar_lt_two_pi {z : ℂ} (hz : z ∈ posSlitPlane) : argStar z < 2 * π
 
 /-- The path `γ : [0,1] → ℂ` is smooth (differentiable with continuous derivative),
 starts at `π`, and only hits `[0,∞)` at `t = 0`. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require interval integrability
+-- of `γ'/γ`, so `logIntegral` cannot collapse to zero via `integral_undef`.
 structure SlitPath (γ : ℝ → ℂ) : Prop where
   /-- γ(0) = π -/
   start : γ 0 = ↑Real.pi
@@ -129,6 +131,9 @@ structure SlitPath (γ : ℝ → ℂ) : Prop where
   continuous : ContinuousOn γ (Icc (0:ℝ) 1)
   /-- γ is differentiable on (0, 1] -/
   differentiable : ∀ t, 0 < t → t ≤ 1 → DifferentiableAt ℝ γ t
+  /-- The logarithmic derivative is genuinely integrable along the path. -/
+  integrable_logDeriv :
+    IntervalIntegrable (fun t => deriv γ t / γ t) volume 0 1
 
 /-- The contour integral `∫_γ dz/z = ∫₀¹ γ'(t)/γ(t) dt`. -/
 noncomputable def logIntegral (γ : ℝ → ℂ) : ℂ :=
