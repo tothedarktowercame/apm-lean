@@ -25,6 +25,7 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+import YoungL2
 
 open MeasureTheory Set Filter Real
 
@@ -39,6 +40,12 @@ def heatKernel (t : ℝ) (x : ℝ) : ℝ :=
 /-- The heat convolution u(x,t) = (G_t * f)(x) = ∫ G_t(x-y) f(y) dy. -/
 def heatConv (t : ℝ) (f : ℝ → ℝ) (x : ℝ) : ℝ :=
   ∫ y, heatKernel t (x - y) * f y ∂volume
+
+/-- A positive-time heat kernel is nonnegative. -/
+lemma heatKernel_nonneg {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    0 ≤ heatKernel t x := by
+  unfold heatKernel
+  positivity
 
 /-- The heat kernel integrates to 1 (1D).
 
@@ -63,9 +70,20 @@ lemma heatKernel_integral {t : ℝ} (ht : 0 < t) :
   convert h_key using 2
   · exact Real.sqrt_eq_rpow (4 * π * t)
 
+/-- A positive-time heat kernel is integrable. -/
+lemma heatKernel_integrable {t : ℝ} (ht : 0 < t) :
+    Integrable (heatKernel t) volume := by
+  by_contra h
+  have hone := heatKernel_integral ht
+  rw [integral_undef h] at hone
+  norm_num at hone
+
 /-- (a) u(·,t) is smooth in x for t > 0.
 
-**Blocker:** Requires differentiation under the integral sign with DCT. -/
+Here `⊤ : WithTop ℕ∞` asks for analytic regularity, not merely `C^∞`
+regularity (`∞`).  The remaining construction is therefore an analytic
+parameter-integral theorem for the non-compactly-supported Gaussian, with
+the Taylor coefficients dominated against the `L²` input. -/
 theorem heatConv_contDiff
     {t : ℝ} (ht : 0 < t)
     {f : ℝ → ℝ}
@@ -75,18 +93,25 @@ theorem heatConv_contDiff
 
 /-- (b) L² contraction: ‖u(·,t)‖₂ ≤ ‖f‖₂.
 
-**Blocker:** Requires Young's inequality (NOT in Mathlib). -/
+The repository's axiom-clean `YoungL2` module supplies the required
+`L¹ * L² → L²` estimate. -/
 theorem heatConv_L2_le
     {t : ℝ} (ht : 0 < t)
     {f : ℝ → ℝ}
     (hf : MemLp f 2 volume) :
     eLpNorm (heatConv t f) 2 volume ≤
       eLpNorm f 2 volume := by
-  sorry
+  apply convolution_L2_contraction_of_probability_kernel
+  · exact heatKernel_nonneg ht
+  · exact heatKernel_integral ht
+  · exact hf
 
 /-- (c) u(·,t) → f in L² as t → 0⁺.
 
-**Blocker:** Requires approximate identity / Fourier argument. -/
+The contraction above supplies the density reduction.  The remaining
+construction is the Gaussian approximate-identity estimate on a dense class,
+or equivalently the integral-Minkowski estimate averaging continuity of
+translations in `L²`; neither bridge is currently packaged in Mathlib. -/
 theorem heatConv_tendsto_L2
     {f : ℝ → ℝ}
     (hf : MemLp f 2 volume) :
