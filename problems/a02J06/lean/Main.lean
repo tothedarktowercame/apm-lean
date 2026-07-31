@@ -3,8 +3,6 @@ import ApmCanaries.Frames.A02J06.Apm_v2_a02J06_1774988737606.Scratch
 
 noncomputable section
 
-open scoped ComplexAnalysis
-
 namespace ApmCanaries.Frames.A02J06.Apm_v2_a02J06_1774988737606.Main
 
 /- Authoritative frame-local Lean development.
@@ -24,8 +22,8 @@ structure SchwarzData where
 
 namespace SchwarzData
 
-lemma abs_sq (z : ℂ) : Complex.abs (z ^ 2) = Complex.abs z ^ 2 := by
-  simp [pow_two, Complex.abs.map_mul]
+lemma abs_sq (z : ℂ) : ‖z ^ 2‖ = ‖z‖ ^ 2 := by
+  simp
 
 /-- First conclusion: quadratic Schwarz bound inside the disk. -/
 theorem quadratic_bound (data : SchwarzData)
