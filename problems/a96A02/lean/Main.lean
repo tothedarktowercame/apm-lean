@@ -11,18 +11,17 @@ f is piecewise linear on [0,1] with f(0)=0, f(1/n)=0, f(midpoint_n)=1/n.
     |f(x)-f(y)|² ≤ height · slope · |x-y| = (1/n)(2(n+1))|x-y| ≤ 4|x-y|.
 (b) Intervals [1/(n+1), m_n] for n=N,...,2N: total length → 0, total oscillation ≥ log(2)/2.
 
-## Theory boundaries
+## Formalization
 
-- The piecewise linear function with infinitely many spikes is hard to define
-  in Lean (requires careful case analysis or an inductive definition).
-- Hölder continuity (`HolderOnWith`) IS in Mathlib but the spike function
-  definition is the main obstacle.
+The infinitely many pieces are selected canonically by `⌊1/x⌋₊`.  At the
+shared endpoint `1/(n+1)` this selects spike `n+1`; its right-ramp value is
+zero, agreeing with spike `n`'s left-ramp value.
 
 ## Statement repair
 
-The generated `spikeFunction` had a sorry in its def. We define it as an
-opaque function for the purpose of stating the theorem, with a precise
-specification of its values. The key arithmetical lemmas are provable.
+The generated `spikeFunction` had a sorry in its definition and was later
+hidden behind `SpikeFunctionSpec`.  The present file closes that gap with
+the reciprocal-floor construction and proves that it satisfies the spec.
 -/
 
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
@@ -34,32 +33,32 @@ open scoped ENNReal
 
 noncomputable section
 
-/-- The piecewise linear spike function.
-
-f(0) = 0, f(1/n) = 0 for n ≥ 1, f(midpoint_n) = 1/n.
-Piecewise linear between these points.
-
-This function has infinitely many triangular spikes of height 1/n
-on intervals [1/(n+1), 1/n], creating a Hölder-1/2 continuous but
-not absolutely continuous function on [0,1].
-
-We define it opaquely since the full piecewise-linear construction
-with infinitely many pieces is technically involved. -/
--- STATEMENT REPAIR 2026-07-31 (Joe-authorised): remove the constant-zero
--- placeholder; the repaired theorems require the exact triangular-spike
--- specification below.
-opaque spikeFunction : ℝ → ℝ
-
 /-- The midpoint of the interval `[1/(n+1), 1/n]`. -/
 def spikeMidpoint (n : ℕ) : ℝ :=
   1 / (2 * (n : ℝ)) + 1 / (2 * ((n : ℝ) + 1))
 
+/-- The index of the reciprocal interval containing a positive `x`. -/
+def spikeIndex (x : ℝ) : ℕ :=
+  ⌊1 / x⌋₊
+
+/-- The triangular spike function.  On `0 < x ≤ 1`, the reciprocal floor
+selects the interval `[1/(n+1), 1/n]`; outside `[0,1]` the function is zero.
+At a shared endpoint `1/(n+1)`, the floor selects spike `n+1`, whose right
+endpoint value is zero, agreeing with spike `n`'s left endpoint. -/
+noncomputable def spikeFunction (x : ℝ) : ℝ :=
+  if 0 < x ∧ x ≤ 1 then
+    let n := spikeIndex x
+    if x < spikeMidpoint n then
+      2 * ((n : ℝ) + 1) * (x - 1 / ((n : ℝ) + 1))
+    else
+      2 * ((n : ℝ) + 1) * (1 / (n : ℝ) - x)
+  else
+    0
+
 /-- Exact specification of the triangular spikes from the informal problem.
 
 On spike `n`, the function rises linearly from zero to height `1/n` and then
-falls linearly back to zero.  Keeping this as a hypothesis makes the currently
-opaque construction explicit without pretending that the constant-zero
-placeholder was the intended function. -/
+falls linearly back to zero. -/
 structure SpikeFunctionSpec (f : ℝ → ℝ) : Prop where
   at_zero : f 0 = 0
   on_left (n : ℕ) (hn : 0 < n) (x : ℝ)
@@ -102,6 +101,101 @@ private lemma spikeMidpoint_mem (n : ℕ) (hn : 0 < n) :
     ring
   rw [hmid]
   constructor <;> linarith
+
+private lemma spikeIndex_eq_of_mem_of_ne_left (n : ℕ) (hn : 0 < n) (x : ℝ)
+    (hx : x ∈ Icc (1 / ((n : ℝ) + 1)) (1 / (n : ℝ)))
+    (hne : x ≠ 1 / ((n : ℝ) + 1)) :
+    spikeIndex x = n := by
+  have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
+  have hx0 : 0 < x := lt_of_lt_of_le (by positivity) hx.1
+  have hleft : 1 / ((n : ℝ) + 1) < x :=
+    lt_of_le_of_ne hx.1 (Ne.symm hne)
+  apply (Nat.floor_eq_iff (by positivity : 0 ≤ 1 / x)).2
+  constructor
+  · apply (le_div_iff₀ hx0).2
+    have h := (le_div_iff₀ hn0).1 hx.2
+    nlinarith
+  · apply (div_lt_iff₀ hx0).2
+    have h := (div_lt_iff₀ (by positivity : (0 : ℝ) < n + 1)).1 hleft
+    nlinarith
+
+private lemma spikeIndex_at_left (n : ℕ) (hn : 0 < n) :
+    spikeIndex (1 / ((n : ℝ) + 1)) = n + 1 := by
+  have hne : (n : ℝ) + 1 ≠ 0 := by positivity
+  have hrecip : 1 / (1 / ((n : ℝ) + 1)) = (n : ℝ) + 1 := by
+    field_simp
+  rw [spikeIndex, hrecip, ← Nat.cast_one, ← Nat.cast_add, Nat.floor_natCast]
+
+private lemma spikeFunction_at_left (n : ℕ) (hn : 0 < n) :
+    spikeFunction (1 / ((n : ℝ) + 1)) = 0 := by
+  have hx0 : (0 : ℝ) < 1 / ((n : ℝ) + 1) := by positivity
+  have hx1 : (1 / ((n : ℝ) + 1) : ℝ) ≤ 1 := by
+    calc
+      1 / ((n : ℝ) + 1) ≤ 1 / 1 :=
+        one_div_le_one_div_of_le (by norm_num) (by
+          have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
+          linarith)
+      _ = 1 := by norm_num
+  have hk : spikeIndex (1 / ((n : ℝ) + 1)) = n + 1 := spikeIndex_at_left n hn
+  have hmid := (spikeMidpoint_mem (n + 1) (by omega)).2
+  rw [spikeFunction, if_pos ⟨hx0, hx1⟩]
+  dsimp only
+  rw [hk]
+  have hcast : (1 / ((n : ℝ) + 1) : ℝ) = 1 / ((n + 1 : ℕ) : ℝ) := by
+    norm_num
+  rw [hcast, if_neg (not_lt_of_ge hmid)]
+  push_cast
+  ring
+
+/-- The concrete reciprocal-floor construction realizes every triangular
+spike in `SpikeFunctionSpec`; in particular, all shared endpoints are
+consistent. -/
+theorem spikeFunction_spec : SpikeFunctionSpec spikeFunction := by
+  constructor
+  · simp [spikeFunction]
+  · intro n hn x hx
+    by_cases hleft : x = 1 / ((n : ℝ) + 1)
+    · subst x
+      rw [spikeFunction_at_left n hn]
+      ring
+    · have hk := spikeIndex_eq_of_mem_of_ne_left n hn x
+        ⟨hx.1, hx.2.trans (spikeMidpoint_mem n hn).2⟩ hleft
+      have hx0 : 0 < x := lt_of_lt_of_le (by positivity) hx.1
+      have hx1 : x ≤ 1 := hx.2.trans (spikeMidpoint_mem n hn).2 |>.trans <| by
+        have hn' : (1 : ℝ) ≤ n := by exact_mod_cast hn
+        simpa using one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 1) hn'
+      by_cases hxm : x < spikeMidpoint n
+      · rw [spikeFunction, if_pos ⟨hx0, hx1⟩]
+        dsimp only
+        rw [hk, if_pos hxm]
+      · rw [spikeFunction, if_pos ⟨hx0, hx1⟩]
+        dsimp only
+        rw [hk, if_neg hxm]
+        have hxeq : x = spikeMidpoint n := le_antisymm hx.2 (le_of_not_gt hxm)
+        rw [hxeq]
+        dsimp [spikeMidpoint]
+        have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
+        field_simp [ne_of_gt hn0]
+        ring
+  · intro n hn x hx
+    by_cases hleft : x = 1 / ((n : ℝ) + 1)
+    · subst x
+      have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
+      have hstrict : 1 / ((n : ℝ) + 1) < spikeMidpoint n := by
+        dsimp [spikeMidpoint]
+        field_simp [ne_of_gt hn0]
+        nlinarith
+      exact (not_lt_of_ge hx.1 hstrict).elim
+    · have hk := spikeIndex_eq_of_mem_of_ne_left n hn x
+        ⟨(spikeMidpoint_mem n hn).1.trans hx.1, hx.2⟩ hleft
+      have hx0 : 0 < x :=
+        lt_of_lt_of_le (by positivity) ((spikeMidpoint_mem n hn).1.trans hx.1)
+      have hn' : (1 : ℝ) ≤ n := by exact_mod_cast hn
+      have hx1 : x ≤ 1 := hx.2.trans <| by
+        simpa using one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 1) hn'
+      rw [spikeFunction, if_pos ⟨hx0, hx1⟩]
+      dsimp only
+      rw [hk, if_neg (not_lt_of_ge hx.1)]
 
 private lemma SpikeFunctionSpec.at_inv_nat {f : ℝ → ℝ}
     (hf : SpikeFunctionSpec f) (n : ℕ) (hn : 0 < n) :
