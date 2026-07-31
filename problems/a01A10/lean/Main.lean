@@ -2,6 +2,8 @@ import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Complex
 import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 
 /-!
 # APM a01A10: Contour integral computation
@@ -128,6 +130,68 @@ lemma not_fresnel_integral_statement :
   rw [fresnel_bochner_integral_eq_zero]
   exact fresnel_claimed_value_ne_zero.symm
 
+/-- Integration by parts for the Abel-regularized Fresnel tail.  This is the
+identity from which one obtains a tail bound uniform in `ε ≥ 0`. -/
+lemma damped_fresnel_integration_by_parts
+    {ε a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
+    (∫ x in a..b, cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)) =
+      (-2 * ((ε : ℂ) - I) * b)⁻¹ * cexp (-((ε : ℂ) - I) * (b : ℂ) ^ 2) -
+        (-2 * ((ε : ℂ) - I) * a)⁻¹ * cexp (-((ε : ℂ) - I) * (a : ℂ) ^ 2) -
+        ∫ x in a..b,
+          (2 * ((ε : ℂ) - I) /
+            (-2 * ((ε : ℂ) - I) * (x : ℂ)) ^ 2) *
+            cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2) := by
+  let q : ℂ := (ε : ℂ) - I
+  have hq : q ≠ 0 := by
+    intro h
+    have him := congrArg Complex.im h
+    simp [q] at him
+  have hx (x : ℝ) (hx : x ∈ Set.uIcc a b) : x ≠ 0 := by
+    rw [Set.uIcc_of_le hab] at hx
+    exact ne_of_gt (ha.trans_le hx.1)
+  have hu (x : ℝ) (hmem : x ∈ Set.uIcc a b) :
+      HasDerivAt (fun y : ℝ => (-2 * q * (y : ℂ))⁻¹)
+        (2 * q / (-2 * q * (x : ℂ)) ^ 2) x := by
+    convert
+      ((hasDerivAt_inv (hx x hmem)).ofReal_comp.const_mul (-2 * q)⁻¹) using 1
+    · ext y
+      simp only [ofReal_inv]
+      ring
+    · simp
+      field_simp
+  have hv (x : ℝ) (_hx : x ∈ Set.uIcc a b) :
+      HasDerivAt (fun y : ℝ => cexp (-q * (y : ℂ) ^ 2))
+        ((-2 * q * (x : ℂ)) * cexp (-q * (x : ℂ) ^ 2)) x := by
+    convert
+      ((Complex.ofRealCLM.hasDerivAt (x := x).pow 2).const_mul (-q)).cexp using 1
+      <;> simp [Complex.ofRealCLM_apply] <;> ring
+  have hiu :
+      IntervalIntegrable
+        (fun x : ℝ => 2 * q / (-2 * q * (x : ℂ)) ^ 2) volume a b :=
+    ContinuousOn.intervalIntegrable <| by
+      apply ContinuousOn.div continuousOn_const (by fun_prop)
+      intro x hmem
+      exact pow_ne_zero 2 (mul_ne_zero (mul_ne_zero (by norm_num) hq)
+        (ofReal_ne_zero.mpr (hx x hmem)))
+  have hiv :
+      IntervalIntegrable
+        (fun x : ℝ => (-2 * q * (x : ℂ)) * cexp (-q * (x : ℂ) ^ 2)) volume a b :=
+    (by fun_prop : Continuous fun x : ℝ =>
+      (-2 * q * (x : ℂ)) * cexp (-q * (x : ℂ) ^ 2)).intervalIntegrable _ _
+  have hparts := intervalIntegral.integral_mul_deriv_eq_deriv_mul hu hv hiu hiv
+  rw [show (∫ x in a..b, cexp (-q * (x : ℂ) ^ 2)) =
+      ∫ x in a..b, (-2 * q * (x : ℂ))⁻¹ *
+        ((-2 * q * (x : ℂ)) * cexp (-q * (x : ℂ) ^ 2)) by
+    apply intervalIntegral.integral_congr
+    intro x hmem
+    change cexp (-q * (x : ℂ) ^ 2) =
+      (-2 * q * (x : ℂ))⁻¹ * ((-2 * q * (x : ℂ)) * cexp (-q * (x : ℂ) ^ 2))
+    have hn : -2 * q * (x : ℂ) ≠ 0 :=
+      mul_ne_zero (mul_ne_zero (by norm_num) hq) (ofReal_ne_zero.mpr (hx x hmem))
+    rw [← mul_assoc, inv_mul_cancel₀ hn, one_mul]]
+  dsimp [q] at hparts ⊢
+  exact hparts
+
 /-- Part (a), stated as the classical improper oscillatory integral.
 
     **SORRY BOUNDARY:** Proving this limit requires the contour-rotation
@@ -141,6 +205,20 @@ theorem fresnel_integral :
       (fun R : ℝ => ∫ x in (0 : ℝ)..R, cexp (Complex.I * (x : ℂ)^2))
       Filter.atTop
       (nhds ((1 + Complex.I) * (√π) / (2 * (√2)))) := by
+  /-
+  Remaining Abel-limit argument:
+
+  1. Take `q = ε - I` in `damped_fresnel_integration_by_parts`.  For
+     `ε ≥ 0`, `‖q‖ ≥ 1` and `‖exp (-q x²)‖ ≤ 1`, so its three terms give a
+     tail estimate `‖∫ x in a..b, exp (-q x²)‖ ≤ 3 / (2*a)`, uniformly in
+     `ε`, whenever `0 < a ≤ b`.
+  2. On each fixed interval `[0,a]`, dominated convergence sends `ε → 0+`
+     in the integrand.
+  3. `integral_gaussian_complex_Ioi (b := (ε : ℂ) - I)` evaluates the
+     regularized half-line integral.  Its right hand side tends to
+     `(1 + I) * √π / (2 * √2)`.  The uniform tail estimate and step 2
+     identify this Abel limit with the required improper integral.
+  -/
   sorry
 
 end ApmCanaries.A01A10
