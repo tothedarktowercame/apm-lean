@@ -11,8 +11,9 @@ K_t(f)(x) = (1/t) integral of e^{-pi(x-y)^2/t^2} f(y) dy.
 
 ## Statement repair note
 
-Mathlib does not have Young's convolution inequality or Lp translation
-continuity. These are genuine theory boundaries.
+Mathlib does not have Young's convolution inequality.  It does have continuity
+of translations in `Lp`, via `Continuous.compMeasurePreservingLp`; the remaining
+gap is the probability-kernel estimate needed to use that continuity here.
 -/
 
 set_option linter.unusedVariables false in
@@ -40,7 +41,26 @@ lemma gaussKernel_nonneg {t : ℝ} (ht : 0 < t) (x : ℝ) :
 /-- The Gaussian kernel integrates to 1. -/
 lemma gaussKernel_integral_eq_one {t : ℝ} (ht : 0 < t) :
     ∫ x, gaussKernel t x ∂volume = 1 := by
-  sorry
+  unfold gaussKernel
+  rw [integral_const_mul]
+  have hcoeff : ∀ x : ℝ, -π * x ^ 2 / t ^ 2 = -(π / t ^ 2) * x ^ 2 := by
+    intro x
+    ring
+  simp_rw [hcoeff]
+  rw [integral_gaussian]
+  have ht0 : t ≠ 0 := ne_of_gt ht
+  have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+  rw [show π / (π / t ^ 2) = t ^ 2 by field_simp]
+  rw [Real.sqrt_sq_eq_abs, abs_of_pos ht]
+  field_simp
+
+/-- The Gaussian kernel is integrable. -/
+lemma gaussKernel_integrable {t : ℝ} (ht : 0 < t) :
+    Integrable (gaussKernel t) volume := by
+  by_contra h
+  have hone := gaussKernel_integral_eq_one ht
+  rw [integral_undef h] at hone
+  norm_num at hone
 
 /-- Part (a): K_t is an Lp contraction: eLpNorm(K_t f) <= eLpNorm(f).
 
