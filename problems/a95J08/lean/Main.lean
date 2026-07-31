@@ -106,11 +106,72 @@ lemma convolution_aestronglyMeasurable
     hprod.congr (Eventually.of_forall fun p => mul_comm _ _)
   exact hprod'.integral_prod_right'
 
+/-- Young's convolution inequality at the endpoint `p = 1`.
+
+This isolates the Tonelli and translation-invariance half of the general
+argument.  The remaining finite-exponent case additionally needs the weighted
+Hölder/Jensen estimate described below. -/
+lemma young_convolution_inequality_one
+    {f g : ℝ → ℝ}
+    (hf : Integrable f volume)
+    (hg : MemLp g 1 volume) :
+    eLpNorm (_root_.convolution f g) 1 volume ≤
+      eLpNorm f 1 volume * eLpNorm g 1 volume := by
+  have hg_int : Integrable g volume := memLp_one_iff_integrable.mp hg
+  have h_joint :
+      AEMeasurable
+        (Function.uncurry fun x y : ℝ => ‖f (x - y)‖ₑ * ‖g y‖ₑ)
+        (volume.prod volume) := by
+    have hf_joint : AEMeasurable
+        (fun z : ℝ × ℝ => ‖f (z.1 - z.2)‖ₑ)
+        (volume.prod volume) := by
+      simpa [Function.comp_def] using
+        (hf.aestronglyMeasurable.enorm.comp_quasiMeasurePreserving
+          (quasiMeasurePreserving_sub (volume : Measure ℝ) volume))
+    exact hf_joint.mul hg.aestronglyMeasurable.enorm.comp_snd
+  rw [eLpNorm_one_eq_lintegral_enorm, eLpNorm_one_eq_lintegral_enorm,
+    eLpNorm_one_eq_lintegral_enorm]
+  calc
+    (∫⁻ x, ‖_root_.convolution f g x‖ₑ ∂volume)
+        ≤ ∫⁻ x, (∫⁻ y, ‖f (x - y)‖ₑ * ‖g y‖ₑ ∂volume) ∂volume := by
+          apply lintegral_mono
+          intro x
+          exact (enorm_integral_le_lintegral_enorm _).trans_eq <| by
+            apply lintegral_congr
+            intro y
+            simp
+    _ = ∫⁻ y, (∫⁻ x, ‖f (x - y)‖ₑ * ‖g y‖ₑ ∂volume) ∂volume := by
+          rw [lintegral_lintegral_swap h_joint]
+    _ = (∫⁻ x, ‖f x‖ₑ ∂volume) * (∫⁻ y, ‖g y‖ₑ ∂volume) := by
+          calc
+            (∫⁻ y, (∫⁻ x, ‖f (x - y)‖ₑ * ‖g y‖ₑ ∂volume) ∂volume)
+                = ∫⁻ y, (∫⁻ x, ‖f (x - y)‖ₑ ∂volume) * ‖g y‖ₑ ∂volume := by
+                    apply lintegral_congr
+                    intro y
+                    rw [lintegral_mul_const' _ _ (by finiteness)]
+            _ = ∫⁻ y, (∫⁻ x, ‖f x‖ₑ ∂volume) * ‖g y‖ₑ ∂volume := by
+                    apply lintegral_congr
+                    intro y
+                    congr 1
+                    simpa [sub_eq_add_neg] using
+                      lintegral_add_right_eq_self (μ := volume)
+                        (fun x => ‖f x‖ₑ) (-y)
+            _ = (∫⁻ x, ‖f x‖ₑ ∂volume) * (∫⁻ y, ‖g y‖ₑ ∂volume) := by
+                    rw [lintegral_const_mul' _ _ (by
+                      exact ne_of_lt hf.hasFiniteIntegral)]
+
 /-- (b) Young's inequality: ‖f * g‖_p ≤ ‖f‖₁ · ‖g‖_p.
 
-**Blocker:** Young's convolution inequality is NOT in Mathlib.
-The proof requires Minkowski's integral inequality or the
-Hölder + Tonelli + Fubini chain described in the informal proof. -/
+The endpoint `p = 1` is discharged above by Tonelli and Haar translation
+invariance.  For `1 < p < ∞`, the remaining construction is the weighted
+Hölder/Jensen estimate
+
+`(∫ w * v) ^ p ≤ (∫ w) ^ (p - 1) * ∫ w * v ^ p`.
+
+Mathlib has scalar Hölder and finite-sum/function Minkowski inequalities, but
+not this parameter-integral form or Young's convolution inequality itself.
+After that estimate, the same Tonelli calculation as in the endpoint proof
+finishes the theorem. -/
 theorem young_convolution_inequality
     {f g : ℝ → ℝ}
     {p : ℝ≥0∞} (hp : 1 ≤ p) (hp' : p ≠ ⊤)
@@ -118,7 +179,10 @@ theorem young_convolution_inequality
     (hg : MemLp g p volume) :
     eLpNorm (convolution f g) p volume ≤
       eLpNorm f 1 volume * eLpNorm g p volume := by
-  sorry
+  by_cases hpeq : p = 1
+  · subst p
+    exact young_convolution_inequality_one hf hg
+  · sorry
 
 /-- The convolution is in Lp.
 
