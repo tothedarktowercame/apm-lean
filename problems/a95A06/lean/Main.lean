@@ -18,12 +18,13 @@ f(z) = Σ_{n=1}^∞ z^{n!}/n! on the closed unit disk.
   converges uniformly on compact subsets of Δ (by comparison with geometric-like
   series). Mathlib's `differentiableOn_tsum` or power series results apply.
 
-### Part (b): Natural boundary — PARTIAL
+### Part (b): Natural boundary — statement defect
 
-The natural boundary proof requires showing |f'(re^{2πiθ})| → ∞ for rational
-θ, using the fact that n!/q is an integer for n ≥ q. This is a deep argument
-involving divergence of lacunary series at boundary points. The Hadamard gap
-theorem is not in Mathlib.
+The intended connected-domain statement follows from the Hadamard gap theorem.
+As formalized below, however, `U` is allowed to have an extra disconnected
+component outside the unit disk.  Extending the series by zero on that component
+is a counterexample; `lacunarySeries_has_disconnected_extension` proves this
+inside Lean.
 
 ## Statement repair
 
@@ -40,6 +41,7 @@ import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.Analysis.Normed.Field.Basic
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Calculus.Deriv.Polynomial
+import Mathlib.Analysis.Complex.LocallyUniformLimit
 
 open Complex Metric Set Filter Topology Nat
 
@@ -130,9 +132,11 @@ uniformly on compact subsets of Δ by the M-test (applied to any closed ball
 of radius r < 1). -/
 theorem lacunarySeries_differentiableOn :
     DifferentiableOn ℂ lacunarySeries (ball (0 : ℂ) 1) := by
-  -- Use HasSumUniformlyOn.of_norm_le_summable to get uniform convergence,
-  -- then tsum of differentiable functions is differentiable.
-  sorry
+  change DifferentiableOn ℂ (fun z => ∑' n, lacunaryTerm n z) (ball (0 : ℂ) 1)
+  apply differentiableOn_tsum_of_summable_norm lacunary_majorant_summable
+    lacunaryTerm_differentiableOn isOpen_ball
+  intro n z hz
+  exact lacunary_term_bound n z (ball_subset_closedBall hz)
 
 /-- For n ≥ q, n! is divisible by q. -/
 lemma factorial_dvd_of_le {n q : ℕ} (hq : 0 < q) (hn : q ≤ n) :
@@ -146,18 +150,68 @@ lemma factorial_dvd_of_le {n q : ℕ} (hq : 0 < q) (hn : q ≤ n) :
     exact ⟨m.factorial, rfl⟩
   exact hq_dvd_qfact.trans h
 
+/-- The stated natural-boundary target admits a disconnected extension.
+
+The extra ball is disjoint from the unit disk, so the extension can be defined
+independently there.  A valid natural-boundary statement must require the
+larger open set (or at least the relevant component) to cross the unit circle. -/
+lemma lacunarySeries_has_disconnected_extension :
+    ∃ (U : Set ℂ) (F : ℂ → ℂ),
+      IsOpen U ∧ ball (0 : ℂ) 1 ⊂ U ∧
+      DifferentiableOn ℂ F U ∧
+      ∀ z ∈ ball (0 : ℂ) 1, F z = lacunarySeries z := by
+  classical
+  let V : Set ℂ := ball (3 : ℂ) 1
+  let U : Set ℂ := ball (0 : ℂ) 1 ∪ V
+  let F : ℂ → ℂ := fun z => if z ∈ ball (0 : ℂ) 1 then lacunarySeries z else 0
+  have hdis : Disjoint (ball (0 : ℂ) 1) V := by
+    apply ball_disjoint_ball
+    norm_num [V, Complex.dist_eq]
+  have hstrict : ball (0 : ℂ) 1 ⊂ U := by
+    apply ssubset_iff_subset_ne.mpr
+    refine ⟨subset_union_left, ?_⟩
+    intro heq
+    have h3U : (3 : ℂ) ∈ U := by
+      exact Or.inr (mem_ball_self (by norm_num))
+    have h3not : (3 : ℂ) ∉ ball (0 : ℂ) 1 := by
+      simp [mem_ball]
+    exact h3not (heq ▸ h3U)
+  refine ⟨U, F, isOpen_ball.union isOpen_ball, hstrict, ?_, ?_⟩
+  · intro z hz
+    rcases hz with hz | hz
+    · have hlocal : F =ᶠ[𝓝 z] lacunarySeries := by
+        filter_upwards [isOpen_ball.mem_nhds hz] with w hw
+        change (if w ∈ ball (0 : ℂ) 1 then lacunarySeries w else 0) =
+          lacunarySeries w
+        rw [if_pos hw]
+      exact ((hlocal.differentiableAt_iff).2
+        ((lacunarySeries_differentiableOn z hz).differentiableAt
+          (isOpen_ball.mem_nhds hz))).differentiableWithinAt
+    · have hlocal : F =ᶠ[𝓝 z] (fun _ : ℂ => 0) := by
+        filter_upwards [isOpen_ball.mem_nhds hz] with w hw
+        have hw_not : w ∉ ball (0 : ℂ) 1 := fun hw0 =>
+          Set.disjoint_left.1 hdis hw0 (by simpa [V] using hw)
+        change (if w ∈ ball (0 : ℂ) 1 then lacunarySeries w else 0) = 0
+        rw [if_neg hw_not]
+      exact ((hlocal.differentiableAt_iff).2
+        (differentiableAt_const (c := (0 : ℂ)))).differentiableWithinAt
+  · intro z hz
+    change (if z ∈ ball (0 : ℂ) 1 then lacunarySeries z else 0) =
+      lacunarySeries z
+    rw [if_pos hz]
+
 /-- Part (b): The unit circle is a natural boundary for f.
 
 No open set U properly containing Δ admits an analytic function F extending f.
 
-**Blocker:** This requires the Hadamard gap theorem or an equivalent
-divergence argument showing |f'(re^{2πiθ})| → ∞ for rational θ.
-The argument uses:
+**Statement defect:** `lacunarySeries_has_disconnected_extension` proves the
+negation of this target's conclusion. A repaired version must require `U` to be
+connected, or require the component containing the unit disk to cross the unit
+circle. Only after that repair does the Hadamard-gap argument apply:
 1. For rational θ = p/q with n ≥ q: n! is divisible by q (factorial_dvd_of_le).
 2. So e^{2πip·n!/q} = 1, making all tail terms real and positive.
 3. The derivative Σ z^{n!-1} diverges at z = e^{2πiθ}.
-
-None of these deep analysis tools are available in Mathlib. -/
+-/
 theorem lacunarySeries_natural_boundary :
     ¬∃ (U : Set ℂ) (F : ℂ → ℂ),
       IsOpen U ∧ ball (0 : ℂ) 1 ⊂ U ∧
