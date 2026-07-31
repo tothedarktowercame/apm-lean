@@ -21,6 +21,7 @@ in 1D. The generated `Memℒp` is corrected to `MemLp`.
 -/
 
 import Mathlib.MeasureTheory.Function.LpSeminorm.Defs
+import Mathlib.MeasureTheory.Function.L2Space
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Basic
@@ -77,6 +78,31 @@ lemma heatKernel_integrable {t : ℝ} (ht : 0 < t) :
   have hone := heatKernel_integral ht
   rw [integral_undef h] at hone
   norm_num at hone
+
+/-- For positive time, the heat kernel itself is smooth.  This isolates the
+regularity input needed by a future non-compact-support convolution theorem. -/
+lemma heatKernel_contDiff {t : ℝ} (_ht : 0 < t) :
+    ContDiff ℝ ∞ (heatKernel t) := by
+  unfold heatKernel
+  fun_prop
+
+/-- A positive-time heat kernel is square-integrable. -/
+lemma heatKernel_memLp_two {t : ℝ} (ht : 0 < t) :
+    MemLp (heatKernel t) 2 volume := by
+  refine (memLp_two_iff_integrable_sq
+    (heatKernel_contDiff ht).continuous.aestronglyMeasurable).2 ?_
+  have hgauss : Integrable (fun x : ℝ => Real.exp (-(1 / (2 * t)) * x ^ 2)) volume :=
+    integrable_exp_neg_mul_sq (by positivity)
+  convert hgauss.const_mul (((4 * π * t) ^ (-(1 : ℝ) / 2)) ^ 2) using 1
+  funext x
+  unfold heatKernel
+  have hexp :
+      Real.exp (-x ^ 2 / (4 * t)) ^ 2 =
+        Real.exp (-(1 / (2 * t)) * x ^ 2) := by
+    rw [pow_two, ← Real.exp_add]
+    congr 1
+    ring
+  rw [mul_pow, hexp]
 
 /-- (a) u(·,t) is smooth in x for t > 0.
 
