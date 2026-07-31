@@ -28,23 +28,27 @@ namespace ApmCanaries.A93A02
     ‖fₙ · 1_S‖ₚ ≤ ‖fₙ‖₂ · μ(S)^{1/p - 1/2}, which is uniform in n.
     Connecting this to the `UnifIntegrable` definition requires
     `MemLp.eLpNorm_indicator_le` applied with the uniform L² bound. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): use a finite NNReal L² bound,
+-- since an ENNReal witness could be `⊤` and make boundedness vacuous.
 lemma unifIntegrable_of_L2_bounded
     {f : ℕ → ℝ → ℝ} {μ : Measure ℝ}
     (hfm : ∀ n, AEStronglyMeasurable (f n) μ)
     (hf2 : ∀ n, MemLp (f n) 2 μ)
-    (hbdd : ∃ M, ∀ n, eLpNorm (f n) 2 μ ≤ M)
+    (hbdd : ∃ C : NNReal, ∀ n, eLpNorm (f n) 2 μ ≤ C)
     {p : ℝ≥0∞} (hp1 : 1 ≤ p) (hp2 : p < 2) :
     UnifIntegrable f p μ := by
   sorry
 
 /-- **Main theorem:** L²-bounded a.e. convergence implies Lp convergence
     for 1 ≤ p < 2 on [0,1]. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): use a finite NNReal L² bound,
+-- since an ENNReal witness could be `⊤` and make boundedness vacuous.
 theorem tendsto_Lp_of_ae_tendsto_of_L2_bounded
     {f : ℕ → ℝ → ℝ} {g : ℝ → ℝ} {μ : Measure ℝ}
     (hfm : ∀ n, AEStronglyMeasurable (f n) μ)
     (hgm : AEStronglyMeasurable g μ)
     (hf2 : ∀ n, MemLp (f n) 2 μ)
-    (hbdd : ∃ M, ∀ n, eLpNorm (f n) 2 μ ≤ M)
+    (hbdd : ∃ C : NNReal, ∀ n, eLpNorm (f n) 2 μ ≤ C)
     (hae : ∀ᵐ x ∂μ, Tendsto (fun n => f n x) atTop (𝓝 (g x)))
     {p : ℝ≥0∞} (hp1 : 1 ≤ p) (hp2 : p < 2)
     [IsFiniteMeasure μ] :
