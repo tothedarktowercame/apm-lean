@@ -30,6 +30,7 @@ form matching the standard ε-δ definition.
 
 import Mathlib.Topology.Instances.CantorSet
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
 
 open Set MeasureTheory
 
@@ -138,24 +139,33 @@ lemma monotone_of_homeomorphism
 **Blocker:** This fundamental theorem of real analysis is NOT in Mathlib.
 A continuous BV function satisfying Lusin's condition (N) is absolutely
 continuous. The proof requires the Banach-Zarecki theorem. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): replace the vacuous
+-- epsilon-delta conclusion ending in `True` by Mathlib's absolute-continuity
+-- predicate on the unit interval.
 lemma ac_of_bv_continuous_conditionN
     {f : ℝ → ℝ}
     (hf_cont : ContinuousOn f (Icc (0:ℝ) 1))
     (hf_mono : MonotoneOn f (Icc (0:ℝ) 1))
     (hf_N : LusinConditionN f (Icc (0:ℝ) 1)) :
-    ∀ ε > 0, ∃ δ > 0, True := by
+    AbsolutelyContinuousOnInterval f 0 1 := by
   sorry
 
 /-- Main theorem: f is AC on [0,1].
 
 **Blocker:** Inherits from cantorSet_measure_zero, monotone_of_homeomorphism,
 and ac_of_bv_continuous_conditionN — all of which are theory boundaries. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): restore the homeomorphism
+-- bijection, local absolute-continuity hypothesis, and global
+-- absolute-continuity conclusion that the informal problem states.
 theorem ac_on_01_of_homeo_fixing_cantor
     {f : ℝ → ℝ}
+    (hf_bij : BijOn f (Icc (0 : ℝ) 1) (Icc (0 : ℝ) 1))
     (hf_cont : ContinuousOn f (Icc (0:ℝ) 1))
     (hf_fix : ∀ x ∈ cantorSet, f x = x)
-    (hf_ac_compl : True) :
-    True := by
+    (hf_ac_compl : ∀ a b : ℝ,
+      Icc a b ⊆ Icc (0 : ℝ) 1 → Icc a b ⊆ cantorSetᶜ →
+      AbsolutelyContinuousOnInterval f a b) :
+    AbsolutelyContinuousOnInterval f 0 1 := by
   sorry
 
 end
