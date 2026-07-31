@@ -134,6 +134,15 @@ lemma lacunaryTerm_differentiableOn (n : ℕ) :
   rw [heq]
   exact hpow.const_smul _
 
+/-- Differentiating cancels the factorial denominator in each lacunary
+summand.  This is the termwise identity used in the boundary-divergence
+argument. -/
+lemma lacunaryTerm_hasDerivAt (n : ℕ) (z : ℂ) :
+    HasDerivAt (lacunaryTerm n) (z ^ (n.factorial - 1)) z := by
+  change HasDerivAt (fun w : ℂ => w ^ n.factorial / (n.factorial : ℂ)) _ z
+  convert (hasDerivAt_pow n.factorial z).div_const (n.factorial : ℂ) using 1
+  field_simp [Nat.factorial_ne_zero]
+
 /-- Part (a): f is analytic (holomorphic) on the open unit disk Δ.
 
 Each term z^{n!}/n! is a polynomial (hence analytic). The series converges
@@ -274,6 +283,23 @@ lemma rational_angle_factorial_pow_eq_one
   simp [circleMap_zero]
   ring_nf
 
+/-- A holomorphic extension across a boundary point has locally bounded
+derivative there.  This is the finite side of the Hadamard-gap contradiction;
+the other side is the radial divergence of the lacunary derivative series. -/
+lemma extension_deriv_eventually_bounded
+    {U : Set ℂ} {F : ℂ → ℂ} (hU : IsOpen U)
+    (hF : DifferentiableOn ℂ F U) {z : ℂ} (hz : z ∈ U) :
+    ∀ᶠ w in 𝓝 z, ‖deriv F w‖ < ‖deriv F z‖ + 1 := by
+  have hderiv_cont : ContinuousAt (deriv F) z := by
+    have hderiv_cont_on : ContinuousOn (deriv F) U :=
+      (hF.contDiffOn hU : ContDiffOn ℂ 1 F U).continuousOn_deriv_of_isOpen
+        hU (by norm_num)
+    exact hderiv_cont_on.continuousAt (hU.mem_nhds hz)
+  have hnorm_cont : ContinuousAt (fun w => ‖deriv F w‖) z :=
+    continuous_norm.continuousAt.comp hderiv_cont
+  exact (hnorm_cont.tendsto.eventually (gt_mem_nhds (by linarith))).mono
+    (fun _ hw => hw)
+
 /-- Part (b): The unit circle is a natural boundary for f.
 
 No connected open set U properly containing Δ admits an analytic function F
@@ -297,16 +323,35 @@ theorem lacunarySeries_natural_boundary :
     connected_superset_meets_unit_sphere hU_connected hU_strict
   obtain ⟨θ, hθU⟩ :=
     open_mem_unit_sphere_contains_rational_angle hU_open hzU hz_norm
-  -- Precise remaining analytic frontier: at the root of unity
-  -- `ζ = circleMap 0 1 (2πθ)`, prove that the radial difference quotients
+  have hfinite_side :
+      ∀ᶠ w in 𝓝 (circleMap 0 1 (2 * Real.pi * (θ : ℝ))),
+        ‖deriv F w‖ <
+          ‖deriv F (circleMap 0 1 (2 * Real.pi * (θ : ℝ)))‖ + 1 :=
+    extension_deriv_eventually_bounded hU_open hF hθU
+  have hradial_tendsto :
+      Tendsto
+        (fun r : ℝ => (r : ℂ) * circleMap 0 1 (2 * Real.pi * (θ : ℝ)))
+        (𝓝[<] (1 : ℝ))
+        (𝓝 (circleMap 0 1 (2 * Real.pi * (θ : ℝ)))) := by
+    apply tendsto_nhdsWithin_of_tendsto_nhds
+    simpa using (continuous_ofReal.mul continuous_const).tendsto (1 : ℝ)
+  have hfinite_radial :
+      ∀ᶠ (r : ℝ) in 𝓝[<] (1 : ℝ),
+        ‖deriv F
+            ((r : ℂ) * circleMap 0 1 (2 * Real.pi * (θ : ℝ)))‖ <
+          ‖deriv F (circleMap 0 1 (2 * Real.pi * (θ : ℝ)))‖ + 1 :=
+    hradial_tendsto.eventually hfinite_side
+  -- Precise remaining analytic frontier: on each fixed smaller disk, apply
+  -- `hasDerivAt_tsum_of_isPreconnected` with `lacunaryTerm_hasDerivAt` to get
   --
-  --   (lacunarySeries ζ - lacunarySeries (r • ζ)) / (1 - r)
+  --   deriv lacunarySeries (r * ζ) = ∑' n, (r * ζ) ^ (n.factorial - 1).
   --
-  -- are unbounded as `r → 1⁻`.  For all sufficiently large `n`,
-  -- `ζ ^ n.factorial = 1`, and each corresponding summand is
-  -- `(1 - r ^ n.factorial) / (n.factorial * (1 - r))`, which tends to one.
-  -- On the other hand `hF`, `hF_eq`, and `hθU` make the same quotients tend
-  -- to the finite derivative of `F` at `ζ`.
+  -- For `n ≥ θ.den`, `rational_angle_factorial_pow_eq_one` makes the angular
+  -- factor constant, while the positive radial tail is unbounded as `r → 1⁻`.
+  -- Via `hF_eq`, the left side is `deriv F (r * ζ)`, contradicting the
+  -- already-proved eventual bound `hfinite_radial`.  What remains is thus the
+  -- radius-dependent summable majorant and the finite-tail lower-bound limit;
+  -- the extension/topology side and the termwise derivative identity are done.
   sorry
 
 end
