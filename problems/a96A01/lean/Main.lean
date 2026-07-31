@@ -28,6 +28,8 @@ on [0,1]. Variable `μ` changed to `volume.restrict (Icc 0 1)` directly.
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.MeanInequalities
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
+import Mathlib.MeasureTheory.Function.LpSeminorm.LpNorm
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 open MeasureTheory Set Filter Real Topology
@@ -58,32 +60,78 @@ lemma rpow_le_one_add {t : ℝ} (ht : 0 ≤ t) {p : ℝ} (hp : 0 < p) (hp1 : p �
     rw [htt] at this
     linarith
 
+/-- On the unit interval, `quasiNorm` is Mathlib's real-valued `Lᵖ`
+seminorm. -/
+lemma quasiNorm_eq_lpNorm
+    {f : ℝ → ℝ} (hf : IntegrableOn f (Icc 0 1) volume)
+    {p : ℝ} (hp : 0 < p) :
+    quasiNorm f p =
+      lpNorm f (ENNReal.ofReal p) (volume.restrict (Icc 0 1)) := by
+  have hmeas : AEStronglyMeasurable f (volume.restrict (Icc 0 1)) :=
+    hf.aestronglyMeasurable
+  rw [quasiNorm,
+    lpNorm_eq_integral_norm_rpow_toReal
+      (by positivity)
+      (by simp) hmeas]
+  simp [ENNReal.toReal_ofReal hp.le]
+
 /-- (a) ‖f‖_p ≤ ‖f‖_q when 0 < p < q ≤ 1.
 
-**Blocker:** Requires Hölder's inequality with exponents q/p > 1 and
-its conjugate, applied to |f|^p · 1 on [0,1]. Mathlib has Hölder
-(`norm_integral_mul_le`) but the specific application to this
-quasi-norm setup needs assembly. -/
+This is the probability-space exponent comparison for `Lᵖ` seminorms,
+transported through `quasiNorm_eq_lpNorm`. -/
 theorem quasiNorm_antitone
     {f : ℝ → ℝ}
     (hf : IntegrableOn f (Icc 0 1) volume)
     {p q : ℝ} (hp : 0 < p) (hpq : p < q) (hq : q ≤ 1) :
     quasiNorm f p ≤ quasiNorm f q := by
-  sorry
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  letI : IsProbabilityMeasure μ := ⟨by
+    simp [μ, Real.volume_Icc]⟩
+  have hmeas : AEStronglyMeasurable f μ := by
+    simpa [μ] using hf.aestronglyMeasurable
+  have hq0 : 0 < q := hp.trans hpq
+  have hpq' : ENNReal.ofReal p ≤ ENNReal.ofReal q :=
+    ENNReal.ofReal_le_ofReal hpq.le
+  have hq_mem : MemLp f (ENNReal.ofReal q) μ := by
+    have hf_one : MemLp f 1 μ := by
+      rw [memLp_one_iff_integrable]
+      simpa [μ] using hf
+    exact hf_one.mono_exponent (by
+      simpa using ENNReal.ofReal_le_ofReal hq)
+  rw [quasiNorm_eq_lpNorm hf hp, quasiNorm_eq_lpNorm hf hq0,
+    ← toReal_eLpNorm hmeas, ← toReal_eLpNorm hmeas]
+  exact ENNReal.toReal_mono hq_mem.eLpNorm_ne_top
+    (eLpNorm_le_eLpNorm_of_exponent_le hpq' hmeas)
 
 /-- The limit L = lim_{p→0⁺} ‖f‖_p exists.
 
-Since p ↦ ‖f‖_p is decreasing (part a) and bounded below by 0,
-the limit exists by the monotone convergence theorem for functions. -/
+Since `p ↦ ‖f‖_p` is monotone on `(0,1)` and bounded below by zero,
+the order-topology right-limit theorem applies. -/
 theorem quasiNorm_tendsto_exists
     {f : ℝ → ℝ}
     (hf : IntegrableOn f (Icc 0 1) volume) :
     ∃ L : ℝ, Tendsto (quasiNorm f) (nhdsWithin 0 (Set.Ioi 0)) (nhds L) := by
-  sorry
+  have hmono : MonotoneOn (quasiNorm f) (Ioo (0 : ℝ) 1) := by
+    intro p hp' q hq' hpq'
+    rcases hpq'.eq_or_lt with rfl | hpq'
+    · exact le_rfl
+    · exact quasiNorm_antitone hf hp'.1 hpq' hq'.2.le
+  have hbdd : BddBelow (quasiNorm f '' Ioo (0 : ℝ) 1) := by
+    refine ⟨0, ?_⟩
+    rintro _ ⟨p, hp', rfl⟩
+    apply Real.rpow_nonneg
+    exact integral_nonneg_of_ae
+      (Eventually.of_forall fun _ => Real.rpow_nonneg (norm_nonneg _) _)
+  exact ⟨sInf (quasiNorm f '' Ioo (0 : ℝ) 1),
+    MonotoneOn.tendsto_nhdsWithin_Ioo_right
+      ⟨(1 / 2 : ℝ), by norm_num, by norm_num⟩ hmono hbdd⟩
 
 /-- (b) L > 0 implies |f| > 0 a.e.
 
-**Blocker:** Requires DCT: |f|^p → 1_{f≠0} as p → 0⁺, dominated by 1+|f|. -/
+**Remaining construction:** DCT gives
+`∫ |f|^p → volume {x | f x ≠ 0}`.  If the zero set has positive measure,
+the latter is strictly below one, and raising an eventual bound `< 1` to
+`1 / p → ∞` forces `quasiNorm f p → 0`, contradicting `L > 0`. -/
 theorem ae_pos_of_limit_pos
     {f : ℝ → ℝ}
     (hf : IntegrableOn f (Icc 0 1) volume)
@@ -94,8 +142,10 @@ theorem ae_pos_of_limit_pos
 
 /-- (c) L ≥ exp(∫ log|f|).
 
-**Blocker:** Requires Jensen for the convex function exp:
-∫e^{p·log|f|} ≥ e^{p·∫log|f|}, then take log and p → 0. -/
+**Remaining construction:** first derive integrability of `log ‖f‖` from
+`L > 0` (its positive part is controlled by `f`; a nonintegrable negative
+part would force the quasi-norm limit to zero).  Jensen for `exp` then gives
+the inequality at each positive exponent, and `hLim` supplies the limit. -/
 theorem limit_ge_geometric_mean
     {f : ℝ → ℝ}
     (hf : IntegrableOn f (Icc 0 1) volume)
