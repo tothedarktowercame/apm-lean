@@ -3,6 +3,7 @@ import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 import Mathlib.MeasureTheory.Function.L2Space
 import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
 import Mathlib.Analysis.Convolution
+import YoungL2
 
 /-!
 # APM a94J04: Poisson kernel on the half-plane — L² contraction and approximate identity
@@ -26,11 +27,10 @@ with operator norm ≤ 1.
    kernel.
 
 3. The proposed statements for parts (a), (b), (c) are mathematically correct.
-   However, the proof of (a) requires Young's convolution inequality
-   (`‖g * f‖₂ ≤ ‖g‖₁ · ‖f‖₂`), which is **not currently in Mathlib**. The
-   repository has a root-level proof in `YoungL2.lean`, but that file is not an
-   importable Lake module. Part (c) requires the Hardy-Littlewood maximal
-   inequality, also **not in Mathlib**.
+   Young's convolution inequality (`‖g * f‖₂ ≤ ‖g‖₁ · ‖f‖₂`) is not currently
+   in Mathlib, but the repository's importable `YoungL2` module supplies the
+   `L²` probability-kernel contraction needed for part (a). Part (c) requires
+   the Hardy-Littlewood maximal inequality, also **not in Mathlib**.
 
 4. We prove the basic properties of the Poisson kernel (nonnegativity, integrability,
    integral equals 1, tail decay) and state the main theorems with sorries at the
@@ -191,20 +191,15 @@ lemma poissonKernel_tail_tendsto (δ : ℝ) (hδ : 0 < δ) :
 
 /-- **Part (a):** `P_y` is an L² contraction.
 
-    `‖P_y * f‖₂ ≤ ‖P_y‖₁ · ‖f‖₂ = ‖f‖₂` by Young's convolution inequality.
-
-    **SORRY BOUNDARY:** Young's convolution inequality
-    (`‖g * f‖_{L²} ≤ ‖g‖_{L¹} · ‖f‖_{L²}`) is not currently in Mathlib.
-    The proof uses Minkowski's integral inequality (which IS available as
-    `norm_integral_le_integral_norm` in the scalar case) combined with the
-    translation invariance of Lebesgue measure. -/
+    `‖P_y * f‖₂ ≤ ‖P_y‖₁ · ‖f‖₂ = ‖f‖₂` by Young's convolution inequality,
+    specialized to the nonnegative probability kernel `P_y`. -/
 theorem poissonConv_L2_contraction
     (y : ℝ) (hy : 0 < y)
     (f : ℝ → ℝ) (hf : MemLp f 2 volume) :
     eLpNorm (poissonConv y f) 2 volume ≤ eLpNorm f 2 volume := by
-  -- P_y * f = convolution of P_y with f
-  -- Young's: ‖P_y * f‖₂ ≤ ‖P_y‖₁ · ‖f‖₂ = 1 · ‖f‖₂
-  sorry
+  simpa [poissonConv] using
+    convolution_L2_contraction_of_probability_kernel
+      (poissonKernel_nonneg y hy) (poissonKernel_integral_one y hy) hf
 
 /-- **Part (b):** `P_y f → f` in L² as `y → 0⁺`.
 
