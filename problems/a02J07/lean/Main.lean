@@ -139,26 +139,152 @@ structure SlitPath (γ : ℝ → ℂ) : Prop where
 noncomputable def logIntegral (γ : ℝ → ℂ) : ℂ :=
   ∫ t in (0:ℝ)..1, deriv γ t / γ t
 
+/-- The path tends to its prescribed initial value from the right. -/
+lemma tendsto_gamma_nhdsGT_zero {γ : ℝ → ℂ} (hγ : SlitPath γ) :
+    Tendsto γ (𝓝[>] (0 : ℝ)) (𝓝 (Real.pi : ℂ)) := by
+  rw [← hγ.start]
+  exact (hγ.continuous.continuousWithinAt
+    (show (0 : ℝ) ∈ Icc 0 1 by norm_num)).mono_left
+      (nhdsWithin_le_iff.mpr (Icc_mem_nhdsGT zero_lt_one))
+
+/-- Near its initial point on the positive real axis, the path stays entirely
+in one of the two half-planes.  Consequently `argStar ∘ γ` tends to the
+corresponding edge value of the branch. -/
+lemma tendsto_argStar_nhdsGT_zero_or_two_pi {γ : ℝ → ℂ} (hγ : SlitPath γ) :
+    Tendsto (fun t => argStar (γ t)) (𝓝[>] (0 : ℝ)) (𝓝 0) ∨
+      Tendsto (fun t => argStar (γ t)) (𝓝[>] (0 : ℝ)) (𝓝 (2 * π)) := by
+  have hγ0 := tendsto_gamma_nhdsGT_zero hγ
+  have hre_event : ∀ᶠ t in 𝓝[>] (0 : ℝ), 0 < (γ t).re := by
+    have hre_lim :
+        Tendsto (fun t => (γ t).re) (𝓝[>] (0 : ℝ)) (𝓝 Real.pi) :=
+      (continuous_re.tendsto _).comp hγ0
+    exact hre_lim.eventually (lt_mem_nhds Real.pi_pos)
+  obtain ⟨d, hd, hre⟩ :=
+    mem_nhdsGT_iff_exists_Ioc_subset.mp hre_event
+  let e : ℝ := min d 1
+  have he_pos : 0 < e := by
+    exact lt_min hd (by norm_num)
+  have he_one : e ≤ 1 := min_le_right _ _
+  have hS_re : ∀ t ∈ Ioc (0 : ℝ) e, 0 < (γ t).re := by
+    intro t ht
+    exact hre ⟨ht.1, ht.2.trans (min_le_left _ _)⟩
+  have hS_ne : ∀ t ∈ Ioc (0 : ℝ) e, (γ t).im ≠ 0 := by
+    intro t ht him
+    rcases hγ.avoids t ht.1 (ht.2.trans he_one) with hleft | hnonreal
+    · linarith [hS_re t ht]
+    · exact hnonreal him
+  have hS_cont : ContinuousOn (fun t => (γ t).im) (Ioc (0 : ℝ) e) :=
+    (continuous_im.comp_continuousOn
+      (hγ.continuous.mono fun t ht => ⟨ht.1.le, ht.2.trans he_one⟩))
+  have hsign :=
+    isPreconnected_Ioc.mapsTo_Ioi_or_Iio hS_cont hS_ne
+  have hnegγ0 :
+      Tendsto (fun t => -γ t) (𝓝[>] (0 : ℝ)) (𝓝 (-(Real.pi : ℂ))) :=
+    hγ0.neg
+  rcases hsign with hupper | hlower
+  · left
+    have him_event : ∀ᶠ t in 𝓝[>] (0 : ℝ), (-γ t).im < 0 := by
+      filter_upwards [Ioc_mem_nhdsGT he_pos] with t ht
+      have hu : 0 < (γ t).im := hupper ht
+      simpa using neg_lt_zero.mpr hu
+    have hneg_within :
+        Tendsto (fun t => -γ t) (𝓝[>] (0 : ℝ))
+          (𝓝[{z : ℂ | z.im < 0}] (-(Real.pi : ℂ))) :=
+      tendsto_nhdsWithin_iff.mpr ⟨hnegγ0, him_event⟩
+    have harg :
+        Tendsto (fun t => arg (-γ t)) (𝓝[>] (0 : ℝ)) (𝓝 (-π)) := by
+      exact (tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero
+        (z := -(Real.pi : ℂ)) (by simp [Real.pi_pos]) (by simp)).comp hneg_within
+    simpa [argStar_eq]
+      using harg.add_const π
+  · right
+    have him_event : ∀ᶠ t in 𝓝[>] (0 : ℝ), 0 ≤ (-γ t).im := by
+      filter_upwards [Ioc_mem_nhdsGT he_pos] with t ht
+      have hl : (γ t).im < 0 := hlower ht
+      exact neg_nonneg.mpr hl.le
+    have hneg_within :
+        Tendsto (fun t => -γ t) (𝓝[>] (0 : ℝ))
+          (𝓝[{z : ℂ | 0 ≤ z.im}] (-(Real.pi : ℂ))) :=
+      tendsto_nhdsWithin_iff.mpr ⟨hnegγ0, him_event⟩
+    have harg :
+        Tendsto (fun t => arg (-γ t)) (𝓝[>] (0 : ℝ)) (𝓝 π) := by
+      exact (tendsto_arg_nhdsWithin_im_nonneg_of_re_neg_of_im_zero
+        (z := -(Real.pi : ℂ)) (by simp [Real.pi_pos]) (by simp)).comp hneg_within
+    simpa [argStar_eq, two_mul] using harg.add_const π
+
+/-- Chain rule for the positive-slit logarithm along the path interior. -/
+lemma hasDerivAt_logStar_comp {γ : ℝ → ℂ} (hγ : SlitPath γ)
+    {t : ℝ} (ht : t ∈ Ioo (0 : ℝ) 1) :
+    HasDerivAt (fun s => logStar (γ s)) (deriv γ t / γ t) t := by
+  have hγt : HasDerivAt γ (deriv γ t) t :=
+    (hγ.differentiable t ht.1 ht.2.le).hasDerivAt
+  have hlog :
+      HasDerivAt (fun s => log (-γ s)) ((-deriv γ t) / (-γ t)) t :=
+    hγt.neg.clog_real
+      (neg_mem_slitPlane_of_posSlitPlane (hγ.avoids t ht.1 ht.2.le))
+  simpa [logStar] using hlog.add_const (π * I)
+
+/-- The argument at the terminal endpoint is the left limit along the path. -/
+lemma tendsto_argStar_nhdsLT_one {γ : ℝ → ℂ} (hγ : SlitPath γ) :
+    Tendsto (fun t => argStar (γ t)) (𝓝[<] (1 : ℝ))
+      (𝓝 (argStar (γ 1))) := by
+  have hγ1 :
+      Tendsto γ (𝓝[<] (1 : ℝ)) (𝓝 (γ 1)) :=
+    (hγ.continuous.continuousWithinAt
+      (show (1 : ℝ) ∈ Icc 0 1 by norm_num)).mono_left
+        (nhdsWithin_le_iff.mpr (Icc_mem_nhdsLT zero_lt_one))
+  have harg_cont : ContinuousAt argStar (γ 1) := by
+    have hlog_cont :
+        ContinuousAt logStar (γ 1) :=
+      (hasDerivAt_logStar (hγ.avoids 1 zero_lt_one le_rfl)).continuousAt
+    exact continuous_im.continuousAt.comp hlog_cont
+  exact harg_cont.tendsto.comp hγ1
+
+/-- The derivative of the argument along the path is the imaginary part of the
+logarithmic derivative. -/
+lemma hasDerivAt_argStar_comp {γ : ℝ → ℂ} (hγ : SlitPath γ)
+    {t : ℝ} (ht : t ∈ Ioo (0 : ℝ) 1) :
+    HasDerivAt (fun s => argStar (γ s)) (deriv γ t / γ t).im t := by
+  have h :=
+    Complex.imCLM.hasFDerivAt.comp_hasDerivAt t
+      (hasDerivAt_logStar_comp hγ ht)
+  simpa [Function.comp_def, logStar_im, Complex.imCLM_apply] using h
+
 /-- The integral of `γ'/γ` from `0` to `1` equals `logStar(γ(1)) - lim_{t→0+} logStar(γ(t))`.
 
-    **SORRY BOUNDARY:** By the fundamental theorem of calculus, since
-    `logStar(γ(t))` has derivative `γ'(t)/γ(t)` on `(0,1]`,
-    `∫_ε^1 γ'/γ dt = logStar(γ(1)) - logStar(γ(ε))`.
-    Taking `ε → 0+` gives the result, where the limit of `logStar(γ(ε))` exists
-    because `logStar ∘ γ` extends continuously to `[0,1]` (using `γ(0) = π` and
-    the branch choice).  The FTC for interval integrals with one-sided limits at
-    an endpoint where the integrand may be singular requires careful
-    MeasureTheory/integration machinery in Mathlib that we could not fully
-    discharge here.
+    The endpoint-limit form of the fundamental theorem of calculus applies to
+    `argStar ∘ γ`: its derivative is the imaginary part of `γ'/γ`, its terminal
+    left limit is ordinary continuity, and its initial right limit is fixed by
+    the side of the slit on which the path starts.
 -/
 lemma logIntegral_im_eq_argStar_diff {γ : ℝ → ℂ} (hγ : SlitPath γ) :
     (logIntegral γ).im =
       argStar (γ 1) - limUnder (𝓝[>] 0) (fun t => argStar (γ t)) := by
-  sorry
+  have him_int :
+      IntervalIntegrable (fun t => (deriv γ t / γ t).im)
+        MeasureTheory.volume 0 1 :=
+    ⟨Complex.imCLM.integrable_comp hγ.integrable_logDeriv.1,
+      Complex.imCLM.integrable_comp hγ.integrable_logDeriv.2⟩
+  have him_integral :
+      (∫ t in (0 : ℝ)..1, (deriv γ t / γ t).im) =
+        (logIntegral γ).im := by
+    simpa [logIntegral, Complex.imCLM_apply] using
+      Complex.imCLM.intervalIntegral_comp_comm hγ.integrable_logDeriv
+  rcases tendsto_argStar_nhdsGT_zero_or_two_pi hγ with hzero | htwo
+  · rw [hzero.limUnder_eq]
+    rw [← him_integral]
+    exact intervalIntegral.integral_eq_sub_of_hasDerivAt_of_tendsto
+      zero_lt_one (fun t ht => hasDerivAt_argStar_comp hγ ht) him_int hzero
+        (tendsto_argStar_nhdsLT_one hγ)
+  · rw [htwo.limUnder_eq]
+    rw [← him_integral]
+    exact intervalIntegral.integral_eq_sub_of_hasDerivAt_of_tendsto
+      zero_lt_one (fun t ht => hasDerivAt_argStar_comp hγ ht) him_int htwo
+        (tendsto_argStar_nhdsLT_one hγ)
 
 /-- Main theorem: `0 < |Im ∫_γ dz/z| < 2π`.
 
-    **SORRY BOUNDARY:** The proof combines:
+    The proof combines:
     (1) `logIntegral_im_eq_argStar_diff` expressing the imaginary part as
         `argStar(γ(1)) - lim_{t→0+} argStar(γ(t))`.
     (2) The limit `lim_{t→0+} argStar(γ(t))` is either `0` or `2π` depending
@@ -170,6 +296,20 @@ lemma logIntegral_im_eq_argStar_diff {γ : ℝ → ℂ} (hγ : SlitPath γ) :
 -/
 theorem logIntegral_im_bounds {γ : ℝ → ℂ} (hγ : SlitPath γ) :
     0 < |(logIntegral γ).im| ∧ |(logIntegral γ).im| < 2 * π := by
-  sorry
+  have hEq := logIntegral_im_eq_argStar_diff hγ
+  have hpos := argStar_pos (hγ.avoids 1 zero_lt_one le_rfl)
+  have hlt := argStar_lt_two_pi (hγ.avoids 1 zero_lt_one le_rfl)
+  rcases tendsto_argStar_nhdsGT_zero_or_two_pi hγ with hzero | htwo
+  · rw [hzero.limUnder_eq] at hEq
+    have him : (logIntegral γ).im = argStar (γ 1) := by
+      simpa using hEq
+    rw [him, abs_of_pos hpos]
+    exact ⟨hpos, hlt⟩
+  · rw [htwo.limUnder_eq] at hEq
+    have him_neg : (logIntegral γ).im < 0 := by
+      rw [hEq]
+      linarith
+    rw [abs_of_neg him_neg, hEq]
+    constructor <;> linarith
 
 end ApmCanaries.A02J07
