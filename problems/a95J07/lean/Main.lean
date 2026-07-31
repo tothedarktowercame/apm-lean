@@ -56,9 +56,12 @@ lemma inflate5_length (α β : ℝ) (_hab : α < β) :
     (3 * β - 2 * α) - (3 * α - 2 * β) = 5 * (β - α) := by ring
 
 /-- Disjoint open intervals in (0,1) have total measure ≤ 1. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require null-measurability;
+-- outer measure is not countably additive on arbitrary disjoint sets.
 lemma tsum_volume_disjoint_le_one
     {S : ℕ → Set ℝ}
     (hS_sub : ∀ k, S k ⊆ Ioo 0 1)
+    (hS_meas : ∀ k, NullMeasurableSet (S k) volume)
     (hS_disj : Pairwise (Function.onFun Disjoint S)) :
     ∑' k, volume (S k) ≤ 1 := by
   -- Statement defect: countable additivity applies only to (null-)measurable
