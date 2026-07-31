@@ -134,11 +134,37 @@ lemma monotone_of_homeomorphism
   exact (hf_cont.strictMonoOn_of_injOn_Icc' (by norm_num) hf_bij.injOn).imp
     StrictMonoOn.monotoneOn StrictAntiOn.antitoneOn
 
+/-- A homeomorphism of the unit interval that fixes the Cantor set has the
+increasing, rather than decreasing, orientation.  It is enough to compare the
+two fixed Cantor points `0` and `1 / 4`. -/
+lemma monotone_of_homeomorphism_fixing_cantor
+    {f : ℝ → ℝ}
+    (hf_bij : BijOn f (Icc 0 1) (Icc 0 1))
+    (hf_cont : ContinuousOn f (Icc 0 1))
+    (hf_fix : ∀ x ∈ cantorSet, f x = x) :
+    MonotoneOn f (Icc 0 1) := by
+  rcases monotone_of_homeomorphism hf_bij hf_cont with hf_mono | hf_anti
+  · exact hf_mono
+  · exfalso
+    have h0 : (0 : ℝ) ∈ Icc 0 1 := by norm_num
+    have hquarter : (1 / 4 : ℝ) ∈ Icc 0 1 :=
+      cantorSet_subset_unitInterval quarter_mem_cantorSet
+    have hle := hf_anti h0 hquarter (by norm_num)
+    rw [hf_fix 0 zero_mem_cantorSet, hf_fix (1 / 4) quarter_mem_cantorSet] at hle
+    norm_num at hle
+
 /-- BV + continuous + condition N ⟹ AC (the characterization theorem).
 
 **Blocker:** This fundamental theorem of real analysis is NOT in Mathlib.
 A continuous BV function satisfying Lusin's condition (N) is absolutely
-continuous. The proof requires the Banach-Zarecki theorem. -/
+continuous. The proof requires the Banach-Zarecki theorem.  A direct
+formalization must construct the Lebesgue--Stieltjes measure of a monotone
+extension of `f`, prove it is absolutely continuous with respect to Lebesgue
+measure from `hf_N`, take its Radon--Nikodym derivative, and identify `f` with
+the resulting interval-integral primitive.  Mathlib supplies Stieltjes
+measures, Radon--Nikodym derivatives, and absolute continuity of interval
+integrals, but not the first two identifications specialized to a function
+given only on `Icc 0 1`. -/
 -- STATEMENT REPAIR 2026-07-31 (Joe-authorised): replace the vacuous
 -- epsilon-delta conclusion ending in `True` by Mathlib's absolute-continuity
 -- predicate on the unit interval.
@@ -166,6 +192,33 @@ theorem ac_on_01_of_homeo_fixing_cantor
       Icc a b ⊆ Icc (0 : ℝ) 1 → Icc a b ⊆ cantorSetᶜ →
       AbsolutelyContinuousOnInterval f a b) :
     AbsolutelyContinuousOnInterval f 0 1 := by
-  sorry
+  have hf_mono : MonotoneOn f (Icc (0 : ℝ) 1) :=
+    monotone_of_homeomorphism_fixing_cantor hf_bij hf_cont hf_fix
+  have hf_N_cantor : LusinConditionN f cantorSet :=
+    conditionN_on_cantor_of_fix hf_fix
+  -- Remaining Cantor-gap seam: an absolutely continuous function maps null
+  -- sets to null sets, and the open complement of the Cantor set is the
+  -- countable union of its component intervals.  Applying `hf_ac_compl` on
+  -- compact exhaustions of those components proves this claim.  Neither that
+  -- image-null theorem nor the component-interval decomposition is currently
+  -- packaged in Mathlib.
+  have hf_N_compl : LusinConditionN f (Icc (0 : ℝ) 1 ∩ cantorSetᶜ) := by
+    sorry
+  apply ac_of_bv_continuous_conditionN hf_cont hf_mono
+  intro E hE hE_null
+  have hE_cantor_null : volume (E ∩ cantorSet) = 0 :=
+    measure_mono_null inter_subset_left hE_null
+  have hE_compl_null : volume (E \ cantorSet) = 0 :=
+    measure_mono_null diff_subset hE_null
+  have hfc : volume (f '' (E ∩ cantorSet)) = 0 :=
+    hf_N_cantor (E ∩ cantorSet) inter_subset_right hE_cantor_null
+  have hfg : volume (f '' (E \ cantorSet)) = 0 := by
+    apply hf_N_compl (E \ cantorSet)
+    · intro x hx
+      exact ⟨hE hx.1, hx.2⟩
+    · exact hE_compl_null
+  rw [show E = (E ∩ cantorSet) ∪ (E \ cantorSet) by ext x; simp,
+    image_union]
+  exact measure_union_null hfc hfg
 
 end
