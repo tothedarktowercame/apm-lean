@@ -26,6 +26,7 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
 import ConstructionTargets.L2Translation
 import YoungL2
 
@@ -117,6 +118,56 @@ lemma heatKernel_deriv_integrable {t : ℝ} (ht : 0 < t) :
         Real.exp (-(1 / (4 * t)) * x ^ 2) by simp [heatKernel, hexp]]
   ring
 
+/-- Every monomial times a decaying Gaussian is integrable.  This is the
+finite-sum building block needed for the Hermite-polynomial description of
+all spatial derivatives of the heat kernel. -/
+lemma integrable_pow_mul_exp_neg_mul_sq (n : ℕ) {b : ℝ} (hb : 0 < b) :
+    Integrable (fun x : ℝ => x ^ n * Real.exp (-b * x ^ 2)) volume := by
+  have hn : (-1 : ℝ) < (n : ℝ) :=
+    lt_of_lt_of_le (by norm_num) (Nat.cast_nonneg n)
+  have h := integrable_rpow_mul_exp_neg_mul_sq hb hn
+  have hm : AEStronglyMeasurable
+      (fun x : ℝ => x ^ n * Real.exp (-b * x ^ 2)) volume := by
+    fun_prop
+  apply (integrable_norm_iff hm).mp
+  apply h.norm.congr
+  filter_upwards with x
+  rw [Real.rpow_natCast]
+
+/-- A polynomial factor does not destroy Gaussian integrability. -/
+lemma integrable_polynomial_mul_exp_neg_mul_sq
+    (p : Polynomial ℝ) {b : ℝ} (hb : 0 < b) :
+    Integrable (fun x : ℝ => p.eval x * Real.exp (-b * x ^ 2)) volume := by
+  rw [show (fun x : ℝ => p.eval x * Real.exp (-b * x ^ 2)) =
+      fun x => ∑ n ∈ Finset.range (p.natDegree + 1),
+        p.coeff n * (x ^ n * Real.exp (-b * x ^ 2)) by
+    funext x
+    rw [Polynomial.eval_eq_sum_range]
+    simp only [Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    intro n hn
+    ring]
+  exact integrable_finset_sum _ fun n _ =>
+    (integrable_pow_mul_exp_neg_mul_sq n hb).const_mul (p.coeff n)
+
+/-- All iterated derivatives of the standard Gaussian are integrable.  The
+Hermite formula supplies the polynomial factor, and the preceding lemma
+supplies the analytic domination. -/
+lemma integrable_iterate_deriv_standardGaussian (n : ℕ) :
+    Integrable (deriv^[n] (fun y : ℝ => Real.exp (-(y ^ 2 / 2)))) volume := by
+  let p : Polynomial ℝ :=
+    (Polynomial.hermite n).map (Int.castRingHom ℝ)
+  have h := integrable_polynomial_mul_exp_neg_mul_sq p
+    (show (0 : ℝ) < 1 / 2 by norm_num)
+  apply (h.const_mul ((-1 : ℝ) ^ n)).congr
+  filter_upwards with x
+  rw [Polynomial.deriv_gaussian_eq_hermite_mul_gaussian]
+  rw [show p.eval x = Polynomial.aeval x (Polynomial.hermite n) by
+    exact Polynomial.eval_map (p := Polynomial.hermite n)
+      (f := Int.castRingHom ℝ) x]
+  rw [show -(1 / 2 : ℝ) * x ^ 2 = -(x ^ 2 / 2) by ring]
+  ring
+
 /-- A positive-time heat kernel is square-integrable. -/
 lemma heatKernel_memLp_two {t : ℝ} (ht : 0 < t) :
     MemLp (heatKernel t) 2 volume := by
@@ -160,9 +211,10 @@ theorem heatConv_contDiff
     ContDiff ℝ ∞ (heatConv t f) := by
   have hfloc : LocallyIntegrable f volume := hf.locallyIntegrable (by norm_num)
   -- `ContDiff.Convolution` only packages this implication when the smooth
-  -- factor has compact support.  For the Gaussian, one must instead prove
-  -- integrable polynomial-times-Gaussian bounds for every derivative and
-  -- apply the parametric-integral differentiation theorem iteratively.
+  -- factor has compact support.  The Hermite lemmas above now provide the
+  -- required integrability for every Gaussian derivative.  It remains to
+  -- transport them through the heat-kernel scaling and iterate the local
+  -- dominated parametric-integral differentiation theorem.
   sorry
 
 /-- (b) L² contraction: ‖u(·,t)‖₂ ≤ ‖f‖₂.
