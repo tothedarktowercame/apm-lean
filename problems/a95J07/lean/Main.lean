@@ -64,10 +64,11 @@ lemma tsum_volume_disjoint_le_one
     (hS_meas : ∀ k, NullMeasurableSet (S k) volume)
     (hS_disj : Pairwise (Function.onFun Disjoint S)) :
     ∑' k, volume (S k) ≤ 1 := by
-  -- Statement defect: countable additivity applies only to (null-)measurable
-  -- sets.  Arbitrary disjoint subsets of `(0, 1)` need not satisfy this bound
-  -- for the outer-measure extension `volume (S k)`.
-  sorry
+  rw [← measure_iUnion₀ hS_disj.aedisjoint hS_meas]
+  calc
+    volume (⋃ k, S k) ≤ volume (Ioo 0 1) :=
+      measure_mono (iUnion_subset hS_sub)
+    _ = 1 := by simp [Real.volume_Ioo]
 
 /-- (a) Vitali covering lemma with factor 5.
 
