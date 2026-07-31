@@ -204,18 +204,6 @@ lemma constructedH_strictMonoOn_counterexample :
   rw [hH_zero, hH_one] at hlt
   exact lt_irrefl 0 hlt
 
-/-- This statement is false: empty interior alone does not ensure that the
-complement has positive measure in every interval. See
-`constructedH_strictMonoOn_counterexample`. The correct version with
-`IsClosed C` is proved below. -/
--- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require `C` to be closed, so
--- its complement is open and every nonempty interval contains positive measure.
-lemma constructedH_strictMonoOn
-    (C : Set ℝ) (hC_closed : IsClosed C) (hC_sub : C ⊆ Icc 0 1)
-    (hC_int : interior C = ∅) :
-    StrictMonoOn (constructedH C) (Icc 0 1) := by
-  sorry
-
 /-- The strict-monotonicity statement with the missing closedness hypothesis.
 Closedness makes the complement open, so every interval contains a subinterval
 on which the density is identically one. -/
@@ -279,6 +267,17 @@ lemma constructedH_strictMonoOn_of_isClosed
       hint.intervalIntegrable hint.intervalIntegrable
   unfold constructedH
   linarith [hadd]
+
+/-- The repaired strict-monotonicity statement.  The original version without
+`hC_closed` is refuted by `constructedH_strictMonoOn_counterexample`; closedness
+makes the complement open.  The containment hypothesis is retained to match
+the problem's fat-Cantor-set interface, although the stronger theorem above
+does not need it. -/
+lemma constructedH_strictMonoOn
+    (C : Set ℝ) (hC_closed : IsClosed C) (_hC_sub : C ⊆ Icc 0 1)
+    (hC_int : interior C = ∅) :
+    StrictMonoOn (constructedH C) (Icc 0 1) :=
+  constructedH_strictMonoOn_of_isClosed C hC_closed hC_int
 
 /-- At almost every point of `C`, the indefinite integral has derivative zero. -/
 lemma ae_hasDerivAt_constructedH_zero_on
