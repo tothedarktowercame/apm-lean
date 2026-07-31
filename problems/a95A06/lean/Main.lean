@@ -200,6 +200,54 @@ lemma lacunarySeries_has_disconnected_extension :
       lacunarySeries z
     rw [if_pos hz]
 
+/-- A connected proper open enlargement of the unit disk crosses its boundary.
+
+This is the topological reduction needed before the analytic gap argument:
+connectedness rules out jumping from the disk to the strict-superset witness
+without attaining norm one. -/
+lemma connected_superset_meets_unit_sphere
+    {U : Set ℂ} (hconn : IsConnected U)
+    (hstrict : ball (0 : ℂ) 1 ⊂ U) :
+    ∃ z ∈ U, ‖z‖ = 1 := by
+  have h0U : (0 : ℂ) ∈ U :=
+    hstrict.le (mem_ball_self zero_lt_one)
+  obtain ⟨w, hwU, hw_not_ball⟩ := Set.exists_of_ssubset hstrict
+  have hw_norm : (1 : ℝ) ≤ ‖w‖ := by
+    simpa [mem_ball, dist_zero_right, not_lt] using hw_not_ball
+  have hone : (1 : ℝ) ∈ Set.Icc ‖(0 : ℂ)‖ ‖w‖ := by
+    simp [hw_norm]
+  obtain ⟨z, hzU, hz⟩ :=
+    hconn.isPreconnected.intermediate_value h0U hwU
+      continuous_norm.continuousOn hone
+  exact ⟨z, hzU, hz⟩
+
+/-- Every open set containing a point of the unit circle contains a root of
+unity.  We parameterize the circle by real angle and use density of rational
+angles. -/
+lemma open_mem_unit_sphere_contains_rational_angle
+    {U : Set ℂ} (hU : IsOpen U) {z : ℂ} (hzU : z ∈ U) (hz_norm : ‖z‖ = 1) :
+    ∃ θ : ℚ, circleMap 0 1 (2 * Real.pi * (θ : ℝ)) ∈ U := by
+  have hz_sphere : z ∈ sphere (0 : ℂ) 1 := by
+    simpa [mem_sphere, dist_zero_right] using hz_norm
+  have hrange : Set.range (circleMap 0 1) = sphere (0 : ℂ) 1 := by
+    simpa only [abs_of_nonneg zero_le_one] using range_circleMap 0 1
+  rw [← hrange] at hz_sphere
+  obtain ⟨t, rfl⟩ := hz_sphere
+  let circleParam : ℝ → ℂ := fun x => circleMap 0 1 (2 * Real.pi * x)
+  have hcircleParam : Continuous circleParam :=
+    (continuous_circleMap 0 1).comp
+      (continuous_const.mul continuous_id)
+  have ht : circleParam (t / (2 * Real.pi)) ∈ U := by
+    have htwo_pi : (2 * Real.pi : ℝ) ≠ 0 :=
+      mul_ne_zero (by norm_num) Real.pi_ne_zero
+    have hang : 2 * Real.pi * (t / (2 * Real.pi)) = t := by
+      exact mul_div_cancel₀ t htwo_pi
+    simpa [circleParam, hang] using hzU
+  obtain ⟨θ, hθ⟩ :=
+    Rat.denseRange_cast.exists_mem_open
+      (hU.preimage hcircleParam) ⟨t / (2 * Real.pi), ht⟩
+  exact ⟨θ, hθ⟩
+
 /-- Part (b): The unit circle is a natural boundary for f.
 
 No connected open set U properly containing Δ admits an analytic function F
@@ -218,6 +266,21 @@ theorem lacunarySeries_natural_boundary :
       IsOpen U ∧ IsConnected U ∧ ball (0 : ℂ) 1 ⊂ U ∧
       DifferentiableOn ℂ F U ∧
       ∀ z ∈ ball (0 : ℂ) 1, F z = lacunarySeries z := by
+  rintro ⟨U, F, hU_open, hU_connected, hU_strict, hF, hF_eq⟩
+  obtain ⟨z, hzU, hz_norm⟩ :=
+    connected_superset_meets_unit_sphere hU_connected hU_strict
+  obtain ⟨θ, hθU⟩ :=
+    open_mem_unit_sphere_contains_rational_angle hU_open hzU hz_norm
+  -- Precise remaining analytic frontier: at the root of unity
+  -- `ζ = circleMap 0 1 (2πθ)`, prove that the radial difference quotients
+  --
+  --   (lacunarySeries ζ - lacunarySeries (r • ζ)) / (1 - r)
+  --
+  -- are unbounded as `r → 1⁻`.  For all sufficiently large `n`,
+  -- `ζ ^ n.factorial = 1`, and each corresponding summand is
+  -- `(1 - r ^ n.factorial) / (n.factorial * (1 - r))`, which tends to one.
+  -- On the other hand `hF`, `hF_eq`, and `hθU` make the same quotients tend
+  -- to the finite derivative of `F` at `ζ`.
   sorry
 
 end
