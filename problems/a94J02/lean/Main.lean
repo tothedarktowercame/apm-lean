@@ -76,7 +76,30 @@ lemma exists_fat_cantor :
       C ⊆ Icc 0 1 ∧
       interior C = ∅ ∧
       0 < volume C := by
-  sorry
+  let Q : Set ℝ := Set.range (fun q : ℚ => (q : ℝ))
+  let A : Set ℝ := Icc 0 1 \ Q
+  have hQ_count : Q.Countable := Set.countable_range _
+  have hQ_null : volume Q = 0 := hQ_count.measure_zero volume
+  have hA_meas : MeasurableSet A :=
+    measurableSet_Icc.diff hQ_count.measurableSet
+  have hA_volume : volume A = 1 := by
+    rw [show A = Icc 0 1 \ Q from rfl, measure_diff_null hQ_null]
+    simp
+  have hA_pos : 0 < volume A := by rw [hA_volume]; norm_num
+  obtain ⟨C, hCA, hC_compact, hC_pos⟩ :=
+    hA_meas.exists_lt_isCompact hA_pos
+  refine ⟨C, hC_compact.isClosed, ?_, ?_, hC_pos⟩
+  · exact hCA.trans diff_subset
+  · apply eq_empty_iff_forall_notMem.2
+    intro x hx
+    have hopen : IsOpen (interior C) := isOpen_interior
+    have hnonempty : (interior C).Nonempty := ⟨x, hx⟩
+    obtain ⟨q, hq⟩ :=
+      Rat.denseRange_cast.inter_open_nonempty (interior C) hopen hnonempty
+    rcases hq with ⟨hq_int, q, rfl⟩
+    have hqC : (q : ℝ) ∈ C := interior_subset hq_int
+    have hqA := hCA hqC
+    exact hqA.2 ⟨q, rfl⟩
 
 /-!
 ## Step 2: The constructed function
@@ -113,7 +136,24 @@ lemma constructedH_nonneg (C : Set ℝ) {x : ℝ} (hx : 0 ≤ x) :
 Requires `C` measurable so that the density function is interval-integrable. -/
 lemma constructedH_mono (C : Set ℝ) (hC_meas : MeasurableSet C) {x y : ℝ}
     (hxy : x ≤ y) : constructedH C x ≤ constructedH C y := by
-  sorry
+  have hS : MeasurableSet (Cᶜ ∩ Icc (0 : ℝ) 1) :=
+    hC_meas.compl.inter measurableSet_Icc
+  have hSfin : volume (Cᶜ ∩ Icc (0 : ℝ) 1) ≠ ⊤ := by
+    apply ne_top_of_le_ne_top (show volume (Icc (0 : ℝ) 1) ≠ ⊤ by simp)
+    exact measure_mono inter_subset_right
+  have hint : Integrable (densityFun C) volume := by
+    exact
+      (integrableOn_const (μ := volume) (s := Cᶜ ∩ Icc (0 : ℝ) 1) hSfin)
+        |>.integrable_indicator hS
+  unfold constructedH
+  calc
+    (∫ t in (0 : ℝ)..x, densityFun C t) ≤
+        (∫ t in (0 : ℝ)..x, densityFun C t) + ∫ t in x..y, densityFun C t := by
+      exact le_add_of_nonneg_right
+        (intervalIntegral.integral_nonneg_of_forall hxy (densityFun_nonneg C))
+    _ = ∫ t in (0 : ℝ)..y, densityFun C t := by
+      rw [intervalIntegral.integral_add_adjacent_intervals hint.intervalIntegrable
+        hint.intervalIntegrable]
 
 /-!
 ## Step 4: Strict monotonicity and the derivative
