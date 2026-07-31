@@ -68,21 +68,18 @@ past the unit circle, then the Taylor series has radius > 1. -/
 lemma holo_on_larger_ball_implies_bounded
     {f : ℂ → ℂ} {R : ℝ} (hR : 1 < R) (hf : DifferentiableOn ℂ f (ball 0 R)) :
     ∃ M : ℝ, ∀ z ∈ closedBall (0 : ℂ) 1, ‖f z‖ ≤ M := by
-  -- f is continuous on closedBall 0 1 (compact), so its image is bounded.
-  -- DifferentiableOn.continuousOn + IsCompact.exists_boundnorm_on.
-  -- The boundnorm_on API has changed; this needs IsCompact.bounded_image.
-  sorry
+  apply (isCompact_closedBall (0 : ℂ) 1).exists_bound_of_continuousOn
+  exact (hf.mono (closedBall_subset_ball hR)).continuousOn
 
 /-- (a) f must have at least one pole on ∂Δ.
 
-**Blocker:** The formalization requires:
-1. A definition of "meromorphic on D" with pole detection.
-2. Connecting the radius of convergence to holomorphic extendability.
-3. A contrapositive argument: no poles on ∂Δ ⟹ holomorphic past ∂Δ
-   ⟹ radius > 1, contradicting R = 1.
-
-The radius of convergence characterization and meromorphic function
-theory are not assembled in Mathlib for this application. -/
+**Statement obstruction:** This is false as stated. Take `D = univ` and
+`f = 0`. Then `f` is differentiable everywhere, so all hypotheses hold, but
+there is no point of the unit sphere where `f` fails to be differentiable.
+The placeholder `hR : True` must be replaced by the omitted mathematical
+hypothesis that the Taylor series of `f` at zero has radius exactly one (or an
+equivalent non-extendability hypothesis) before the intended argument can be
+formalized. -/
 theorem exists_pole_on_boundary
     {D : Set ℂ} (hD : IsOpen D) (hD_contains : closedBall (0 : ℂ) 1 ⊆ D)
     {f : ℂ → ℂ}
