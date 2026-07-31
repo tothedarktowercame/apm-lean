@@ -3,6 +3,7 @@ import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.LebesgueDifferentiationThm
 
 open MeasureTheory Set Filter Topology
 
@@ -100,6 +101,51 @@ lemma indicator_case (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
     exact indicator_bound φ M hφ a b hab k hk
   · exact tendsto_bound_zero M (b - a) hba
 
+/-- The interval-average hypothesis makes `φ` essentially bounded by `M`.
+
+The primitive of `φ` is `M`-Lipschitz by the interval bound, while the
+Lebesgue differentiation theorem identifies its derivative with `φ` almost
+everywhere. -/
+lemma ae_abs_le_of_interval_integral_bound (φ : ℝ → ℝ) (M : ℝ)
+    (hφloc : LocallyIntegrable φ volume)
+    (hφ : ∀ (a b : ℝ), a < b →
+      |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a))) :
+    ∀ᵐ x ∂volume, |φ x| ≤ M := by
+  have hM : 0 ≤ M := by
+    have h := hφ 0 1 zero_lt_one
+    norm_num at h
+    linarith [abs_nonneg (∫ x in Set.Icc (0 : ℝ) 1, φ x)]
+  let F : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, φ t
+  have hint (a b : ℝ) : IntervalIntegrable φ volume a b :=
+    intervalIntegrable_iff.mpr <|
+      (hφloc.integrableOn_isCompact isCompact_uIcc).mono_set uIoc_subset_uIcc
+  have hF_sub (x y : ℝ) (hxy : x ≤ y) :
+      F y - F x = ∫ t in Set.Icc x y, φ t := by
+    rw [show F y - F x = ∫ t in x..y, φ t from
+      intervalIntegral.integral_interval_sub_left (hint 0 y) (hint 0 x)]
+    rw [intervalIntegral.integral_of_le hxy, ← integral_Icc_eq_integral_Ioc]
+  have hF : LipschitzWith (Real.toNNReal M) F := by
+    apply LipschitzWith.of_dist_le'
+    intro x y
+    wlog hxy : x ≤ y generalizing x y
+    · simpa [dist_comm] using this y x (le_of_not_ge hxy)
+    by_cases hEq : x = y
+    · subst y
+      simp
+    have hlt : x < y := lt_of_le_of_ne hxy hEq
+    rw [Real.dist_eq, abs_sub_comm, hF_sub x y hxy, Real.dist_eq]
+    calc
+      |∫ t in Set.Icc x y, φ t|
+          ≤ M * (y - x) / (1 + (y - x)) := hφ x y hlt
+      _ ≤ M * (y - x) :=
+        div_le_self (mul_nonneg hM (sub_nonneg.mpr hxy)) (by linarith)
+      _ = M * |x - y| := by
+        rw [abs_of_nonpos (sub_nonpos.mpr hxy)]
+        ring
+  filter_upwards [_root_.LocallyIntegrable.ae_hasDerivAt_integral hφloc] with x hx
+  have hx' : HasDerivAt F (φ x) x := by simpa [F] using hx 0
+  simpa [Real.norm_eq_abs, Real.coe_toNNReal _ hM] using hx'.le_of_lipschitz hF
+
 -- Step 2: Uniform bound |T_k(f)| ≤ M ‖f‖₁
 -- For step functions on disjoint intervals: each piece bounded by M·m(Qᵢ),
 -- sum ≤ M · Σ|cᵢ|m(Qᵢ) = M · ‖f‖₁.
@@ -113,8 +159,49 @@ lemma uniform_bound (φ : ℝ → ℝ) (M : ℝ)
       |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
     (f : ℝ → ℝ) (hf : Integrable f volume) (k : ℝ) (hk : 0 < k) :
     |scaledIntOp φ f k| ≤ M * ∫ x, ‖f x‖ := by
-  -- Change of variables + triangle inequality + hypothesis
-  sorry
+  have hM : 0 ≤ M := by
+    have h := hφ 0 1 zero_lt_one
+    norm_num at h
+    linarith [abs_nonneg (∫ x in Set.Icc (0 : ℝ) 1, φ x)]
+  have hφae := ae_abs_le_of_interval_integral_bound φ M hφloc hφ
+  have hfcomp : Integrable (fun y => f (k⁻¹ * y)) volume :=
+    hf.comp_mul_left' (inv_ne_zero hk.ne')
+  have hdom :
+      ∀ᵐ y ∂volume, ‖φ y * f (k⁻¹ * y)‖ ≤ M * ‖f (k⁻¹ * y)‖ := by
+    filter_upwards [hφae] with y hy
+    rw [norm_mul]
+    exact mul_le_mul_of_nonneg_right hy (norm_nonneg _)
+  have hprod : Integrable (fun y => φ y * f (k⁻¹ * y)) volume :=
+    Integrable.mono' (hfcomp.norm.const_mul M)
+      (hφloc.aestronglyMeasurable.mul hfcomp.aestronglyMeasurable) hdom
+  have hscale :
+      scaledIntOp φ f k =
+        k⁻¹ * ∫ y, φ y * f (k⁻¹ * y) := by
+    rw [scaledIntOp]
+    have h := Measure.integral_comp_mul_left
+      (fun y => φ y * f (k⁻¹ * y)) k
+    rw [abs_of_pos (inv_pos.mpr hk), smul_eq_mul] at h
+    calc
+      ∫ x, φ (k * x) * f x =
+          ∫ x, φ (k * x) * f (k⁻¹ * (k * x)) := by
+        apply integral_congr_ae
+        filter_upwards [] with x
+        congr 2
+        field_simp
+      _ = k⁻¹ * ∫ y, φ y * f (k⁻¹ * y) := h
+  rw [hscale, abs_mul, abs_of_pos (inv_pos.mpr hk)]
+  calc
+    k⁻¹ * |∫ y, φ y * f (k⁻¹ * y)|
+        ≤ k⁻¹ * ∫ y, M * ‖f (k⁻¹ * y)‖ :=
+      mul_le_mul_of_nonneg_left
+        (norm_integral_le_of_norm_le (hfcomp.norm.const_mul M) hdom)
+        (le_of_lt (inv_pos.mpr hk))
+    _ = M * ∫ x, ‖f x‖ := by
+      rw [integral_const_mul]
+      have h := Measure.integral_comp_mul_left (fun x => ‖f x‖) k⁻¹
+      rw [inv_inv, abs_of_pos hk, smul_eq_mul] at h
+      rw [h]
+      field_simp
 
 -- Main theorem: ∫ φ(kx) f(x) dx → 0
 -- Density: approximate f by step functions, use indicator_case + uniform_bound
@@ -133,8 +220,13 @@ theorem scaled_integral_vanishes (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
   -- So lim sup |T_k(f)| ≤ ε/2 < ε.
   --
   -- Mathlib path:
-  -- Density: MeasureTheory.Lp.simpleFunc_dense or
-  --          MeasureTheory.SimpleFunc.tendsto_approxOn
+  -- The uniform estimate is now closed via Lebesgue differentiation:
+  -- `ae_abs_le_of_interval_integral_bound` proves `|φ| ≤ M` a.e.
+  -- Remaining construction: prove that finite linear combinations of bounded
+  -- interval indicators are dense in real `L¹`, or equivalently prove
+  -- convergence first on compactly supported smooth functions and invoke
+  -- `MemLp.exist_eLpNorm_sub_le`. Generic measurable simple functions are not
+  -- enough here because `indicator_case` only controls interval indicators.
   -- Uniform bound: uniform_bound lemma
   -- Filter arithmetic: Tendsto.add, squeeze_zero_norm
   sorry
