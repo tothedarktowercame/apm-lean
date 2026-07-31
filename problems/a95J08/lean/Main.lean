@@ -120,13 +120,21 @@ theorem young_convolution_inequality
       eLpNorm f 1 volume * eLpNorm g p volume := by
   sorry
 
-/-- The convolution is in Lp. -/
+/-- The convolution is in Lp.
+
+Once the sharp Young estimate is available, strong measurability is supplied
+by `convolution_aestronglyMeasurable`, while finiteness follows because the
+product of the finite `L¹` and `Lᵖ` seminorms is finite. -/
 theorem convolution_memLp
     {f g : ℝ → ℝ}
     {p : ℝ≥0∞} (hp : 1 ≤ p) (hp' : p ≠ ⊤)
     (hf : Integrable f volume)
     (hg : MemLp g p volume) :
     MemLp (convolution f g) p volume := by
-  sorry
+  refine ⟨convolution_aestronglyMeasurable hf.1 hg.1, ?_⟩
+  refine (young_convolution_inequality hp hp' hf hg).trans_lt ?_
+  exact ENNReal.mul_lt_top
+    (memLp_one_iff_integrable.mpr hf).eLpNorm_lt_top
+    hg.eLpNorm_lt_top
 
 end
