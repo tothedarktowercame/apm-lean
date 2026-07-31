@@ -202,19 +202,20 @@ lemma lacunarySeries_has_disconnected_extension :
 
 /-- Part (b): The unit circle is a natural boundary for f.
 
-No open set U properly containing Δ admits an analytic function F extending f.
+No connected open set U properly containing Δ admits an analytic function F
+extending f. Connectedness excludes the disconnected extension exhibited by
+`lacunarySeries_has_disconnected_extension`.
 
-**Statement defect:** `lacunarySeries_has_disconnected_extension` proves the
-negation of this target's conclusion. A repaired version must require `U` to be
-connected, or require the component containing the unit disk to cross the unit
-circle. Only after that repair does the Hadamard-gap argument apply:
+The Hadamard-gap argument applies:
 1. For rational θ = p/q with n ≥ q: n! is divisible by q (factorial_dvd_of_le).
 2. So e^{2πip·n!/q} = 1, making all tail terms real and positive.
 3. The derivative Σ z^{n!-1} diverges at z = e^{2πiθ}.
 -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require U to be connected,
+-- excluding extensions on an unrelated disjoint component.
 theorem lacunarySeries_natural_boundary :
     ¬∃ (U : Set ℂ) (F : ℂ → ℂ),
-      IsOpen U ∧ ball (0 : ℂ) 1 ⊂ U ∧
+      IsOpen U ∧ IsConnected U ∧ ball (0 : ℂ) 1 ⊂ U ∧
       DifferentiableOn ℂ F U ∧
       ∀ z ∈ ball (0 : ℂ) 1, F z = lacunarySeries z := by
   sorry
