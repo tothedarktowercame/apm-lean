@@ -23,3 +23,11 @@ name = "ApmCanaries"
 # therefore unreachable from the problems they were built for.
 [[lean_lib]]
 name = "ConstructionTargets"
+
+# YoungL2 holds an axiom-clean `convolution_L2_contraction_of_probability_kernel`
+# (4 declarations, 0 sorries). It had the SAME defect ConstructionTargets had:
+# no lean_lib, so it was not on the module path and `import YoungL2` failed with
+# "unknown module prefix". a94J04's runner hit this on 2026-07-31 and reported
+# the proved lemma as unreachable. Added by claude-9, same fix as above.
+[[lean_lib]]
+name = "YoungL2"
