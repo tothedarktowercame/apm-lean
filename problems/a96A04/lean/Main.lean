@@ -29,7 +29,7 @@ import YoungL2
 
 open MeasureTheory Set Filter Real
 
-open scoped ENNReal
+open scoped ENNReal ContDiff
 
 noncomputable section
 
@@ -80,15 +80,15 @@ lemma heatKernel_integrable {t : ℝ} (ht : 0 < t) :
 
 /-- (a) u(·,t) is smooth in x for t > 0.
 
-Here `⊤ : WithTop ℕ∞` asks for analytic regularity, not merely `C^∞`
-regularity (`∞`).  The remaining construction is therefore an analytic
-parameter-integral theorem for the non-compactly-supported Gaussian, with
-the Taylor coefficients dominated against the `L²` input. -/
+The regularity index `∞ : WithTop ℕ∞` states `C^∞` smoothness, matching the
+problem, rather than the analytic regularity denoted by `⊤`. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): use `∞` for smoothness;
+-- after Mathlib's index-type migration, `⊤` denotes analytic regularity.
 theorem heatConv_contDiff
     {t : ℝ} (ht : 0 < t)
     {f : ℝ → ℝ}
     (hf : MemLp f 2 volume) :
-    ContDiff ℝ ⊤ (heatConv t f) := by
+    ContDiff ℝ ∞ (heatConv t f) := by
   sorry
 
 /-- (b) L² contraction: ‖u(·,t)‖₂ ≤ ‖f‖₂.
