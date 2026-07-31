@@ -58,26 +58,38 @@ theorem entire_avoids_ray_const
     linarith
   -- By Liouville, h is constant
   obtain ⟨c, hc⟩ := hh.exists_const_forall_eq_of_bounded hh_bdd
-  -- h = exp(I * log f) constant → log f constant → f constant
-  -- Since h is constant, h(z) = c for all z.
-  -- exp(I * log(f z)) = c for all z.
-  -- This means log(f z) is constant (up to 2πi periods).
-  -- But |Im(log f)| < π, so log f takes values in a strip of width 2π,
-  -- and exp is injective there, so log f itself is constant.
-  -- Hence f = exp(log f) is constant.
-  -- **SORRY BOUNDARY:** The chain of reasoning from "exp(I*g) constant"
-  -- to "g constant" requires showing that exp is injective on the range
-  -- of I*g (which lies in a strip of width 2π), or equivalently that
-  -- g' = 0 everywhere (from differentiating the constant and using
-  -- exp_ne_zero). Both require careful chain-rule application.
+  -- Differentiate the constant identity. Since `exp` and `I` are nonzero,
+  -- the derivative of `log ∘ f` vanishes, so it is constant.
+  have hh_deriv : ∀ z, deriv h z = 0 := fun z => by
+    rw [show h = fun _ => c from funext hc]
+    exact congrFun (deriv_const' c) z
+  have hg_deriv : ∀ z, deriv (fun z => log (f z)) z = 0 := fun z => by
+    have hinner :
+        HasDerivAt (fun z => I * log (f z))
+          (I * deriv (fun z => log (f z)) z) z :=
+      (hg z).hasDerivAt.const_mul I
+    have hhexp :
+        HasDerivAt h
+          (exp (I * log (f z)) * (I * deriv (fun z => log (f z)) z)) z := by
+      simpa [h] using (hasDerivAt_exp (I * log (f z))).comp z hinner
+    have hz :
+        exp (I * log (f z)) * (I * deriv (fun z => log (f z)) z) = 0 := by
+      rw [← hhexp.deriv, hh_deriv z]
+    rcases mul_eq_zero.mp hz with hexp | hrest
+    · exact (exp_ne_zero _ hexp).elim
+    · exact (mul_eq_zero.mp hrest).resolve_left I_ne_zero
+  have hg_const : ∀ z, log (f z) = log (f 0) :=
+    fun z => is_const_of_deriv_eq_zero hg hg_deriv z 0
   refine ⟨f 0, fun z => ?_⟩
-  sorry
+  rw [← exp_log (slitPlane_ne_zero (homit z)),
+    ← exp_log (slitPlane_ne_zero (homit 0)), hg_const z]
 
 /-- **Problem statement (CR form).**
 
-    **SORRY BOUNDARY:** The CR-to-complex reduction (building f = u+iv from
-    the CR equations and showing f is entire) requires substantial formalization
-    of the Cauchy-Riemann → holomorphic bridge. -/
+    As written, this lacks hypotheses asserting that the four displayed partial
+    derivatives exist. Lean's `deriv` is zero at nondifferentiability points, so
+    continuity plus equalities between totalized `deriv` values does not provide
+    the real differentiability needed by the Cauchy-Riemann theorem. -/
 theorem cauchy_riemann_ray_implies_const
     {u v : ℝ → ℝ → ℝ}
     (hu : Continuous (Function.uncurry u) ∧ Continuous (Function.uncurry v))
