@@ -1,4 +1,5 @@
 import Mathlib.Analysis.Complex.Liouville
+import Mathlib.Analysis.Complex.Conformal
 import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
 
 /-!
@@ -99,6 +100,109 @@ theorem cauchy_riemann_ray_implies_const
     (hcr2 : ∀ x y, deriv (fun y' => u x y') y = -(deriv (fun x' => v x' y) x))
     (hray : ∀ x y, v x y = 0 → 0 < u x y) :
     ∃ c₁ c₂ : ℝ, ∀ x y, u x y = c₁ ∧ v x y = c₂ := by
-  sorry
+  let f : ℂ → ℂ := fun z =>
+    Complex.equivRealProdCLM.symm
+      (Function.uncurry u (z.re, z.im), Function.uncurry v (z.re, z.im))
+  have hu : Differentiable ℝ (Function.uncurry u) := hC1.1.differentiable_one
+  have hv : Differentiable ℝ (Function.uncurry v) := hC1.2.differentiable_one
+  have hf_real : Differentiable ℝ f := by
+    apply Complex.equivRealProdCLM.symm.differentiable.comp
+    exact
+      (hu.comp Complex.equivRealProdCLM.differentiable).prodMk
+        (hv.comp Complex.equivRealProdCLM.differentiable)
+  have hu_x (x y : ℝ) :
+      deriv (fun x' => u x' y) x =
+        fderiv ℝ (Function.uncurry u) (x, y) (1, 0) := by
+    have h : HasFDerivAt (fun x' => u x' y)
+        ((fderiv ℝ (Function.uncurry u) (x, y)).comp
+          (ContinuousLinearMap.inl ℝ ℝ ℝ)) x := by
+      simpa [Function.uncurry] using
+        (hu (x, y)).hasFDerivAt.comp x
+          (hasFDerivAt_prodMk_left (𝕜 := ℝ) x y)
+    simpa [Function.uncurry] using h.hasDerivAt.deriv
+  have hu_y (x y : ℝ) :
+      deriv (fun y' => u x y') y =
+        fderiv ℝ (Function.uncurry u) (x, y) (0, 1) := by
+    have h : HasFDerivAt (fun y' => u x y')
+        ((fderiv ℝ (Function.uncurry u) (x, y)).comp
+          (ContinuousLinearMap.inr ℝ ℝ ℝ)) y := by
+      simpa [Function.uncurry] using
+        (hu (x, y)).hasFDerivAt.comp y
+          (hasFDerivAt_prodMk_right (𝕜 := ℝ) x y)
+    simpa [Function.uncurry] using h.hasDerivAt.deriv
+  have hv_x (x y : ℝ) :
+      deriv (fun x' => v x' y) x =
+        fderiv ℝ (Function.uncurry v) (x, y) (1, 0) := by
+    have h : HasFDerivAt (fun x' => v x' y)
+        ((fderiv ℝ (Function.uncurry v) (x, y)).comp
+          (ContinuousLinearMap.inl ℝ ℝ ℝ)) x := by
+      simpa [Function.uncurry] using
+        (hv (x, y)).hasFDerivAt.comp x
+          (hasFDerivAt_prodMk_left (𝕜 := ℝ) x y)
+    simpa [Function.uncurry] using h.hasDerivAt.deriv
+  have hv_y (x y : ℝ) :
+      deriv (fun y' => v x y') y =
+        fderiv ℝ (Function.uncurry v) (x, y) (0, 1) := by
+    have h : HasFDerivAt (fun y' => v x y')
+        ((fderiv ℝ (Function.uncurry v) (x, y)).comp
+          (ContinuousLinearMap.inr ℝ ℝ ℝ)) y := by
+      simpa [Function.uncurry] using
+        (hv (x, y)).hasFDerivAt.comp y
+          (hasFDerivAt_prodMk_right (𝕜 := ℝ) x y)
+    simpa [Function.uncurry] using h.hasDerivAt.deriv
+  have hf : Differentiable ℂ f := fun z => by
+    rw [differentiableAt_complex_iff_differentiableAt_real]
+    refine ⟨hf_real z, ?_⟩
+    have hfu := hu (z.re, z.im)
+    have hfv := hv (z.re, z.im)
+    let D : ℂ →L[ℝ] ℂ :=
+      Complex.equivRealProdCLM.symm.toContinuousLinearMap.comp
+        (((fderiv ℝ (Function.uncurry u) (z.re, z.im)).prod
+          (fderiv ℝ (Function.uncurry v) (z.re, z.im))).comp
+            Complex.equivRealProdCLM.toContinuousLinearMap)
+    have hcomp :
+        fderiv ℝ f z = D := by
+      have hpair' :
+          HasFDerivAt
+            (fun z : ℂ =>
+              (Function.uncurry u (z.re, z.im), Function.uncurry v (z.re, z.im)))
+            (((fderiv ℝ (Function.uncurry u) (z.re, z.im)).prod
+              (fderiv ℝ (Function.uncurry v) (z.re, z.im))).comp
+                Complex.equivRealProdCLM.toContinuousLinearMap) z := by
+        simpa using
+          (hfu.hasFDerivAt.prodMk hfv.hasFDerivAt).comp z
+            Complex.equivRealProdCLM.hasFDerivAt
+      have hout :
+          HasFDerivAt f D z := by
+        simpa [f, D] using
+          Complex.equivRealProdCLM.symm.hasFDerivAt.comp z hpair'
+      exact hout.fderiv
+    rw [hcomp]
+    dsimp [D]
+    apply Complex.ext <;>
+      simp only [Complex.equivRealProdCLM_symm_apply, Complex.add_re, Complex.ofReal_re,
+        Complex.mul_re, Complex.ofReal_im, mul_zero, Complex.I_im, mul_one,
+        sub_zero, Complex.add_im, zero_add, Complex.mul_im, Complex.I_re,
+        Complex.I_mul]
+    · rw [← hu_y, ← hv_x, hcr2]
+      ring
+    · rw [← hv_y, ← hu_x, hcr1]
+  have homit : ∀ z, f z ∈ slitPlane := fun z => by
+    rw [mem_slitPlane_iff]
+    simp only [f, Complex.equivRealProdCLM_symm_apply, Function.uncurry_apply_pair,
+      Complex.add_re, Complex.ofReal_re, Complex.mul_re, Complex.ofReal_im, zero_mul,
+      Complex.I_im, sub_zero, Complex.add_im, zero_add, Complex.mul_im,
+      Complex.I_re]
+    by_cases hv0 : v z.re z.im = 0
+    · left
+      simpa using hray z.re z.im hv0
+    · right
+      simpa using hv0
+  obtain ⟨c, hc⟩ := entire_avoids_ray_const hf homit
+  refine ⟨c.re, c.im, fun x y => ?_⟩
+  have hxy := hc (x + y * I)
+  constructor
+  · simpa [f, Complex.equivRealProdCLM_symm_apply] using congrArg Complex.re hxy
+  · simpa [f, Complex.equivRealProdCLM_symm_apply] using congrArg Complex.im hxy
 
 end ApmCanaries.A92J07
