@@ -79,6 +79,61 @@ theorem apm_a97A07_Q_polynomial_in_z
     apply (eq_div_iff (sub_ne_zero.mpr hz.symm)).2
     linear_combination -heval
 
+/-- An explicit polynomial form of the divided difference.  The geometric-sum
+formula makes its dependence on the first variable manifestly continuous. -/
+def apm_a97A07_divDiffPoly (p : Polynomial ℂ) (ζ : ℂ) : Polynomial ℂ :=
+  p.sum fun j a ↦ ∑ i ∈ Finset.range j,
+    Polynomial.C (a * ζ ^ (j - 1 - i)) * Polynomial.X ^ i
+
+@[simp] lemma apm_a97A07_divDiffPoly_eval (p : Polynomial ℂ) (ζ z : ℂ) :
+    (apm_a97A07_divDiffPoly p ζ).eval z =
+      if z = ζ then p.derivative.eval ζ
+      else (p.eval ζ - p.eval z) / (ζ - z) := by
+  classical
+  by_cases hz : z = ζ
+  · subst z
+    simp only [apm_a97A07_divDiffPoly, Polynomial.eval_sum,
+      Polynomial.eval_finset_sum, Polynomial.eval_mul, Polynomial.eval_C,
+      Polynomial.eval_pow, Polynomial.eval_X, if_pos]
+    rw [Polynomial.derivative_eval]
+    simp only [Polynomial.sum_def]
+    apply Finset.sum_congr rfl
+    intro j hj
+    calc
+      ∑ x ∈ Finset.range j, p.coeff j * ζ ^ (j - 1 - x) * ζ ^ x =
+          p.coeff j * ∑ x ∈ Finset.range j, ζ ^ x * ζ ^ (j - 1 - x) := by
+            rw [Finset.mul_sum]
+            apply Finset.sum_congr rfl
+            intro i hi
+            ring
+      _ = p.coeff j * (j : ℂ) * ζ ^ (j - 1) := by
+        rw [geom_sum₂_self]
+        ring
+  · rw [if_neg hz]
+    simp only [apm_a97A07_divDiffPoly, Polynomial.eval_sum,
+      Polynomial.eval_finset_sum, Polynomial.eval_mul, Polynomial.eval_C,
+      Polynomial.eval_pow, Polynomial.eval_X]
+    rw [Polynomial.eval_eq_sum, Polynomial.eval_eq_sum]
+    apply (eq_div_iff (sub_ne_zero.mpr (Ne.symm hz))).2
+    simp only [Polynomial.sum_def]
+    rw [Finset.sum_mul, ← Finset.sum_sub_distrib]
+    apply Finset.sum_congr rfl
+    intro j hj
+    have hgeom := (Commute.all z ζ).geom_sum₂ hz j
+    calc
+      (∑ x ∈ Finset.range j, p.coeff j * ζ ^ (j - 1 - x) * z ^ x) * (ζ - z) =
+          (p.coeff j * ∑ x ∈ Finset.range j, z ^ x * ζ ^ (j - 1 - x)) *
+            (ζ - z) := by
+            congr 2
+            rw [Finset.mul_sum]
+            apply Finset.sum_congr rfl
+            intro i hi
+            ring
+      _ = p.coeff j * ζ ^ j - p.coeff j * z ^ j := by
+        rw [hgeom]
+        field_simp [sub_ne_zero.mpr hz]
+        ring
+
 /-- P is a polynomial of degree at most n - 1. -/
 theorem apm_a97A07_P_polynomial
     (n : ℕ) (hn : 0 < n)
@@ -89,14 +144,130 @@ theorem apm_a97A07_P_polynomial
       P_poly.natDegree ≤ n - 1 ∧
       ∀ z : ℂ, apm_a97A07_P n zs f (fun t => R * Complex.exp (2 * π * I * t)) z =
         P_poly.aeval z := by
-  /-
-  Remaining construction: use the quotient polynomial from
-  `apm_a97A07_Q_polynomial_in_z`, expand it in the monomial basis of degrees
-  `< n`, and integrate its finitely many coefficient functions.  The contour
-  stays away from every root by `hzs_in`, so those coefficient functions are
-  continuous and interval-integrable.
-  -/
-  sorry
+  classical
+  let p := apm_a97A07_p zs
+  let γ : ℝ → ℂ := fun t ↦ R * Complex.exp (2 * π * I * t)
+  let φ : ℝ → ℝ := fun t ↦ 2 * π * t
+  let D : ℝ → ℂ := fun t ↦
+    (2 * π : ℝ) • (circleMap 0 R (2 * π * t) * I)
+  have hγcircle : ∀ t, γ t = circleMap 0 R (φ t) := by
+    intro t
+    simp only [γ, φ, circleMap, zero_add]
+    congr 2
+    norm_num
+    ring
+  have hφ : ∀ t : ℝ, HasDerivAt φ (2 * π) t := by
+    intro t
+    simpa [φ] using (hasDerivAt_id t).const_mul (2 * π)
+  have hderiv : ∀ t, deriv γ t = D t := by
+    intro t
+    have hfun : γ = circleMap 0 R ∘ φ := by
+      funext u
+      exact hγcircle u
+    rw [hfun]
+    exact (((hasDerivAt_circleMap 0 R (φ t)).scomp t (hφ t)).deriv)
+  have hp_ne : ∀ t, p.eval (γ t) ≠ 0 := by
+    intro t
+    simp only [p, apm_a97A07_p, Polynomial.eval_prod, Polynomial.eval_sub,
+      Polynomial.eval_X, Polynomial.eval_C]
+    apply Finset.prod_ne_zero_iff.mpr
+    intro k hk
+    apply sub_ne_zero.mpr
+    intro heq
+    have hnorm : ‖γ t‖ = R := by
+      rw [hγcircle]
+      simpa [φ, abs_of_pos hR] using norm_circleMap_zero R (φ t)
+    rw [heq] at hnorm
+    linarith [hzs_in k]
+  have hfcont : Continuous f := by
+    simpa only [continuousOn_univ] using hf.continuousOn
+  let c : ℕ → ℕ → ℝ → ℂ := fun j i t ↦
+    ((f (γ t) / p.eval (γ t)) *
+      (p.coeff j * (γ t) ^ (j - 1 - i))) * D t
+  have hccont : ∀ j i, Continuous (c j i) := by
+    intro j i
+    dsimp only [c, D]
+    fun_prop (disch := aesop)
+  have hcint : ∀ j i, IntervalIntegrable (c j i) volume 0 1 := by
+    intro j i
+    exact (hccont j i).intervalIntegrable 0 1
+  let scalar : ℂ := 1 / (2 * π * I)
+  let P_poly : Polynomial ℂ :=
+    ∑ j ∈ p.support, ∑ i ∈ Finset.range j,
+      Polynomial.C (scalar * ∫ t in (0 : ℝ)..1, c j i t) * Polynomial.X ^ i
+  have hpdeg : p.natDegree ≤ n := by
+    simp [p, apm_a97A07_p]
+  refine ⟨P_poly, ?_, ?_⟩
+  · dsimp only [P_poly]
+    apply Polynomial.natDegree_sum_le_of_forall_le
+    intro j hj
+    apply Polynomial.natDegree_sum_le_of_forall_le
+    intro i hi
+    exact (Polynomial.natDegree_C_mul_X_pow_le _ _).trans <| by
+      have hij : i < j := Finset.mem_range.mp hi
+      have hjdeg : j ≤ p.natDegree := Polynomial.le_natDegree_of_mem_supp j hj
+      omega
+  · intro z
+    have hQ : ∀ t, apm_a97A07_Q zs (γ t) z =
+        (apm_a97A07_divDiffPoly p (γ t)).eval z := by
+      intro t
+      change (if z = γ t then p.derivative.aeval (γ t)
+        else (p.aeval (γ t) - p.aeval z) / (γ t - z)) = _
+      rw [apm_a97A07_divDiffPoly_eval]
+      simp only [Polynomial.aeval_def, Polynomial.eval₂_eq_eval_map]
+      simp
+    have hintegrand : ∀ t,
+        ((f (γ t) / p.eval (γ t)) * apm_a97A07_Q zs (γ t) z) * deriv γ t =
+          ∑ j ∈ p.support, ∑ i ∈ Finset.range j, c j i t * z ^ i := by
+      intro t
+      rw [hQ t, hderiv t]
+      simp only [apm_a97A07_divDiffPoly, Polynomial.eval_finset_sum,
+        Polynomial.eval_mul, Polynomial.eval_C,
+        Polynomial.eval_pow, Polynomial.eval_X, Polynomial.sum_def]
+      dsimp only [c]
+      simp_rw [Finset.mul_sum]
+      rw [Finset.sum_mul]
+      apply Finset.sum_congr rfl
+      intro j hj
+      rw [Finset.sum_mul]
+      apply Finset.sum_congr rfl
+      intro i hi
+      ring
+    change scalar • (∫ t in (0 : ℝ)..1,
+      ((f (γ t) / p.eval (γ t)) * apm_a97A07_Q zs (γ t) z) * deriv γ t) =
+        P_poly.aeval z
+    rw [intervalIntegral.integral_congr (fun t ht ↦ hintegrand t)]
+    have houter :
+        (∫ t in (0 : ℝ)..1, ∑ j ∈ p.support,
+          ∑ i ∈ Finset.range j, c j i t * z ^ i) =
+        ∑ j ∈ p.support, ∫ t in (0 : ℝ)..1,
+          ∑ i ∈ Finset.range j, c j i t * z ^ i := by
+      apply intervalIntegral.integral_finset_sum
+      intro j hj
+      rw [show (fun t ↦ ∑ i ∈ Finset.range j, c j i t * z ^ i) =
+          ∑ i ∈ Finset.range j, fun t ↦ c j i t * z ^ i by
+        funext t
+        simp]
+      exact IntervalIntegrable.sum (Finset.range j) fun i hi ↦
+        (hcint j i).mul_const (z ^ i)
+    rw [houter]
+    simp_rw [intervalIntegral.integral_finset_sum (fun i hi ↦
+      (hcint _ i).mul_const (z ^ i))]
+    rw [show P_poly.aeval z = P_poly.eval z by
+      simp [Polynomial.aeval_def, Polynomial.eval₂_eq_eval_map]]
+    simp only [P_poly, Polynomial.eval_finset_sum,
+      Polynomial.eval_mul, Polynomial.eval_C, Polynomial.eval_pow, Polynomial.eval_X,
+      smul_eq_mul]
+    simp_rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro j hj
+    apply Finset.sum_congr rfl
+    intro i hi
+    have hmul : (∫ x in (0 : ℝ)..1, c j i x * z ^ i) =
+        (∫ x in (0 : ℝ)..1, c j i x) * z ^ i :=
+      intervalIntegral.integral_mul_const (z ^ i) (c j i)
+    rw [hmul]
+    rw [mul_assoc]
 
 /-- Interpolation property: P(z_k) = f(z_k) for each k.
     Uses Cauchy's integral formula. -/
