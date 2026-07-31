@@ -203,6 +203,26 @@ theorem poissonConv_L2_contraction
     convolution_L2_contraction_of_probability_kernel
       (poissonKernel_nonneg y hy) (poissonKernel_integral_one y hy) hf
 
+/-- Poisson convolution has a strongly measurable representative. -/
+lemma poissonConv_aestronglyMeasurable
+    (y : ℝ) (hy : 0 < y) (f : ℝ → ℝ) (hfm : AEStronglyMeasurable f volume) :
+    AEStronglyMeasurable (poissonConv y f) volume := by
+  unfold poissonConv
+  have hprod := hfm.convolution_integrand (L := ContinuousLinearMap.mul ℝ ℝ)
+    (poissonKernel_integrable y hy).aestronglyMeasurable
+  have hprod' : AEStronglyMeasurable
+      (fun p : ℝ × ℝ => poissonKernel y (p.1 - p.2) * f p.2)
+      (volume.prod volume) :=
+    hprod.congr (Eventually.of_forall fun p => mul_comm _ _)
+  exact hprod'.integral_prod_right'
+
+/-- The contraction estimate and measurability put Poisson convolution in `L²`. -/
+lemma poissonConv_memLp
+    (y : ℝ) (hy : 0 < y) (f : ℝ → ℝ) (hf : MemLp f 2 volume) :
+    MemLp (poissonConv y f) 2 volume := by
+  refine ⟨poissonConv_aestronglyMeasurable y hy f hf.aestronglyMeasurable, ?_⟩
+  exact (poissonConv_L2_contraction y hy f hf).trans_lt hf.eLpNorm_lt_top
+
 /-- Rewrite Poisson convolution as an average of translates of `f`.
 
 This is the change-of-variables seam needed by the approximate-identity
@@ -217,15 +237,18 @@ lemma poissonConv_eq_integral_translation
 
 /-- **Part (b):** `P_y f → f` in L² as `y → 0⁺`.
 
-    Uses the approximate identity argument:
-    `‖P_y * f - f‖₂ ≤ ∫ P_y(t) ‖τ_t f - f‖₂ dt`
-    Split at `|t| = δ`: near part → 0 by L² translation continuity,
-    far part → 0 by tail decay of `P_y`.
+    A route avoiding a new vector-valued Minkowski theorem is polarization.
+    The contraction above reduces the squared-distance estimate to showing
+    `⟨P_y f, f⟩ → ‖f‖²`. After Fubini, this inner product is the scalar
+    Poisson average of the translation correlation
+    `t ↦ ∫ x, f (x - t) * f x`. Cauchy–Schwarz and L² translation
+    continuity make that correlation continuous at zero; splitting the
+    scalar average at `|t| = δ` then uses `poissonKernel_tail_tendsto`.
 
-    **SORRY BOUNDARY:** Requires the integral Young/Minkowski estimate. Mathlib
-    does provide L² translation continuity through
-    `Continuous.compMeasurePreservingLp`; the missing step is packaging the
-    Poisson average of translated differences in L². -/
+    **SORRY BOUNDARY:** formalize the correlation's Cauchy–Schwarz bound, the
+    Fubini interchange, and the scalar near/tail split. The two lemmas above
+    establish the previously missing measurability and `MemLp` facts for
+    `poissonConv y f`. -/
 theorem poissonConv_tendsto_L2
     (f : ℝ → ℝ) (hf : MemLp f 2 volume)
     (hfm : AEStronglyMeasurable f volume) :
