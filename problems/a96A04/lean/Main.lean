@@ -87,6 +87,36 @@ lemma heatKernel_contDiff {t : ℝ} (_ht : 0 < t) :
   unfold heatKernel
   fun_prop
 
+/-- The first derivative of the positive-time heat kernel. -/
+lemma heatKernel_hasDerivAt {t x : ℝ} (_ht : 0 < t) :
+    HasDerivAt (heatKernel t) (-(x / (2 * t)) * heatKernel t x) x := by
+  have harg : HasDerivAt (fun y : ℝ => -y ^ 2 / (4 * t)) (-(2 * x) / (4 * t)) x := by
+    convert (((hasDerivAt_id x).pow 2).neg.div_const (4 * t)) using 1
+    all_goals simp only [id_eq]; ring
+  have h := harg.exp.const_mul ((4 * π * t) ^ (-(1 : ℝ) / 2))
+  convert h using 1
+  all_goals simp only [heatKernel]; ring
+
+/-- Pointwise derivative formula for the positive-time heat kernel. -/
+lemma heatKernel_deriv {t x : ℝ} (ht : 0 < t) :
+    deriv (heatKernel t) x = -(x / (2 * t)) * heatKernel t x :=
+  (heatKernel_hasDerivAt ht).deriv
+
+/-- The first derivative of a positive-time heat kernel is integrable. -/
+lemma heatKernel_deriv_integrable {t : ℝ} (ht : 0 < t) :
+    Integrable (fun x => -(x / (2 * t)) * heatKernel t x) volume := by
+  have hbase : Integrable
+      (fun x : ℝ => x * Real.exp (-(1 / (4 * t)) * x ^ 2)) volume :=
+    integrable_mul_exp_neg_mul_sq (by positivity)
+  apply (hbase.const_mul
+    (-((4 * π * t) ^ (-(1 : ℝ) / 2)) / (2 * t))).congr
+  filter_upwards with x
+  have hexp : -x ^ 2 / (4 * t) = -(1 / (4 * t)) * x ^ 2 := by ring
+  rw [show heatKernel t x =
+      (4 * π * t) ^ (-(1 : ℝ) / 2) *
+        Real.exp (-(1 / (4 * t)) * x ^ 2) by simp [heatKernel, hexp]]
+  ring
+
 /-- A positive-time heat kernel is square-integrable. -/
 lemma heatKernel_memLp_two {t : ℝ} (ht : 0 < t) :
     MemLp (heatKernel t) 2 volume := by
