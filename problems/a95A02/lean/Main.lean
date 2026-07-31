@@ -36,6 +36,9 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Regular
 import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
+import Mathlib.Order.Interval.Set.OrdConnectedComponent
+import Mathlib.Topology.Bases
+import Mathlib.Topology.Order.T5
 
 open MeasureTheory Set Filter
 
@@ -101,8 +104,13 @@ Step 1 is available as
 ### What we can prove
 
 The σ-compact decomposition lemma (inner regularity of volume on ℝ) is fully
-proved below. The remaining Lusin-condition frontier is the countable
-open-interval cover assembly for arbitrary outer-measurable sets.
+proved below.  The open-cover decomposition is now also available below:
+`countable_ordConnectedSection_of_isOpen`,
+`ordConnectedSection_pairwiseDisjoint`, and
+`iUnion_ordConnectedComponents_eq` express an open real set as a countable
+pairwise-disjoint union of open order-connected components.  The remaining
+frontier is the endpoint/integral estimate for each bounded component after
+intersection with `[0,1]`, followed by the countable sum.
 -/
 
 /-- Part (b): For every ε > 0 there exists δ > 0 such that m*(f(E)) ≤ ε
@@ -110,9 +118,11 @@ whenever E ⊆ [0,1] and m*(E) ≤ δ.
 
 This is Lusin's condition (N) for absolutely continuous functions.
 
-The integral representation and its pointwise variation estimate are available
-below. The remaining obligation is to decompose a small open cover into
-disjoint intervals, bound each image interval, and sum those bounds.
+The integral representation, pointwise variation estimate, and countable
+disjoint open-component decomposition are available below. The remaining
+obligation is to identify the endpoints of each component intersected with
+`[0,1]`, bound its image diameter by the derivative integral, and sum those
+bounds.
 -/
 theorem ac_lusin_condition_N
     {f : ℝ → ℝ}
@@ -258,6 +268,54 @@ lemma ac_dist_le_integral_norm_deriv
   simpa only [Real.norm_eq_abs] using
     (intervalIntegral.norm_integral_le_integral_norm
       (f := fun t : ℝ => deriv f t) (μ := volume) hxy)
+
+/-! The following lemmas package the missing topological half of the Lusin-(N)
+covering argument.  The order-connected components of an open real set are
+nonempty, pairwise disjoint open intervals; separability makes their index set
+countable. -/
+
+lemma isOpen_ordConnectedComponent_of_isOpen {U : Set ℝ} (hU : IsOpen U) (x : ℝ) :
+    IsOpen (ordConnectedComponent U x) := by
+  rw [isOpen_iff_mem_nhds]
+  intro y hy
+  have hxy := mem_ordConnectedComponent.mp hy
+  rw [ordConnectedComponent_eq hxy]
+  exact ordConnectedComponent_mem_nhds.2
+    (hU.mem_nhds (ordConnectedComponent_subset hy))
+
+lemma ordConnectedSection_pairwiseDisjoint (U : Set ℝ) :
+    (ordConnectedSection U).PairwiseDisjoint (ordConnectedComponent U) := by
+  intro x hx y hy hxy
+  apply Set.disjoint_left.2
+  intro z hzx hzy
+  have hxz : ordConnectedComponent U x = ordConnectedComponent U z :=
+    ordConnectedComponent_eq (mem_ordConnectedComponent.mp hzx)
+  have hyz : ordConnectedComponent U y = ordConnectedComponent U z :=
+    ordConnectedComponent_eq (mem_ordConnectedComponent.mp hzy)
+  have hyU : y ∈ U := ordConnectedSection_subset hy
+  have hy_in : y ∈ ordConnectedComponent U x := by
+    rw [hxz, ← hyz]
+    exact self_mem_ordConnectedComponent.2 hyU
+  exact hxy (eq_of_mem_ordConnectedSection_of_uIcc_subset hx hy
+    (mem_ordConnectedComponent.mp hy_in))
+
+lemma countable_ordConnectedSection_of_isOpen {U : Set ℝ} (hU : IsOpen U) :
+    (ordConnectedSection U).Countable := by
+  apply (ordConnectedSection_pairwiseDisjoint U).countable_of_isOpen
+  · intro x _
+    exact isOpen_ordConnectedComponent_of_isOpen hU x
+  · intro x hx
+    exact nonempty_ordConnectedComponent.2 (ordConnectedSection_subset hx)
+
+lemma iUnion_ordConnectedComponents_eq {U : Set ℝ} :
+    ⋃ x ∈ ordConnectedSection U, ordConnectedComponent U x = U := by
+  apply Set.Subset.antisymm
+  · exact iUnion₂_subset fun x _ => ordConnectedComponent_subset
+  · intro y hy
+    let x := ordConnectedProj U ⟨y, hy⟩
+    apply mem_iUnion.2
+    refine ⟨x, mem_iUnion.2 ?_⟩
+    exact ⟨⟨⟨y, hy⟩, rfl⟩, mem_ordConnectedComponent_ordConnectedProj U ⟨y, hy⟩⟩
 
 /-- The continuous image of a compact subset of [0,1] under an AC function
 is compact (hence measurable).
