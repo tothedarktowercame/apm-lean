@@ -25,33 +25,31 @@ lemma integral_spike (n : ℕ) : ∫ t, spike n t = 1 := by
   have hmeas : MeasurableSet (Set.Icc (0 : ℝ) (spikeWidth n)) :=
     isClosed_Icc.measurableSet
   have hwidth_nonneg : 0 ≤ spikeWidth n := by
-    have hpos : 0 ≤ ((n.succ : ℝ)⁻¹) :=
-      inv_nonneg.mpr (by exact_mod_cast (Nat.succ_pos n))
     exact sq_nonneg _
-  have hvolume :
-      (volume (Set.Icc (0 : ℝ) (spikeWidth n))).toReal = spikeWidth n := by
-    have : volume (Set.Icc (0 : ℝ) (spikeWidth n))
-        = ENNReal.ofReal (spikeWidth n) := by
-      simpa [spikeWidth, hwidth_nonneg] using
-        (volume_Icc (a := (0 : ℝ)) (b := spikeWidth n))
-    simpa [this, hwidth_nonneg] using this.toReal_eq
-  calc
-    ∫ t, spike n t
-        = ((n.succ : ℝ) ^ 2) *
-            (∫ t, Set.indicator (Set.Icc (0 : ℝ) (spikeWidth n))
-              (fun _ => (1 : ℝ)) t) := by
-                simp [spike, mul_comm, mul_left_comm, mul_assoc]
-    _ = ((n.succ : ℝ) ^ 2) *
-          (∫ t in Set.Icc (0 : ℝ) (spikeWidth n), (1 : ℝ)) := by
-                simp [integral_indicator, hmeas]
-    _ = ((n.succ : ℝ) ^ 2) *
-          (volume (Set.Icc (0 : ℝ) (spikeWidth n))).toReal := by
-                simp [Measure.integral_const, hmeas]
-    _ = ((n.succ : ℝ) ^ 2) * spikeWidth n := by simpa [hvolume]
-    _ = 1 := by
-      have hsucc_ne : (n.succ : ℝ) ≠ 0 := by
-        exact_mod_cast (Nat.succ_ne_zero n)
-      field_simp [spikeWidth, pow_two, hsucc_ne]
+  unfold spike
+  rw [integral_const_mul, integral_indicator_const 1 hmeas]
+  simp only [smul_eq_mul, mul_one, Measure.real, Real.volume_Icc, sub_zero,
+    ENNReal.toReal_ofReal hwidth_nonneg]
+  have hsucc_ne : (n.succ : ℝ) ≠ 0 := by
+    positivity
+  rw [spikeWidth, inv_pow]
+  exact mul_inv_cancel₀ (pow_ne_zero 2 hsucc_ne)
+
+lemma spike_nonneg (n : ℕ) (x : ℝ) : 0 ≤ spike n x := by
+  by_cases hx : x ∈ Set.Icc (0 : ℝ) (spikeWidth n) <;>
+    simp [spike, hx, sq_nonneg]
+
+lemma norm_spike (n : ℕ) (x : ℝ) : ‖spike n x‖ = spike n x := by
+  rw [Real.norm_eq_abs, abs_of_nonneg (spike_nonneg n x)]
+
+lemma spikeWidth_le_one (n : ℕ) : spikeWidth n ≤ 1 := by
+  have hn_one : (1 : ℝ) ≤ n.succ := by
+    exact_mod_cast Nat.one_le_iff_ne_zero.mpr (Nat.succ_ne_zero n)
+  have hinv : (n.succ : ℝ)⁻¹ ≤ 1 := by
+    rw [inv_le_one₀ (by positivity)]
+    exact hn_one
+  dsimp [spikeWidth]
+  exact pow_le_one₀ (by positivity) hinv
 
 lemma exists_spikeWidth_lt {δ : ℝ} (hδ : 0 < δ) :
     ∃ n : ℕ, spikeWidth n < δ := by
@@ -62,15 +60,15 @@ lemma exists_spikeWidth_lt {δ : ℝ} (hδ : 0 < δ) :
   refine ⟨N, ?_⟩
   have hNs : (Real.sqrt δ)⁻¹ < (Nat.succ N : ℝ) := by
     have hN' : (Real.sqrt δ)⁻¹ < (N : ℝ) := hN
-    exact hN'.trans_le (by exact_mod_cast Nat.lt_succ_self N)
+    exact hN'.trans (by exact_mod_cast Nat.lt_succ_self N)
   have hrecip :
       (Nat.succ N : ℝ)⁻¹ < Real.sqrt δ :=
-    inv_lt_of_inv_lt hδ_inv_pos hNs
+    (inv_lt_comm₀ (by positivity) hδpos).2 hNs
   have hsq :
       ((Nat.succ N : ℝ)⁻¹) ^ 2 < (Real.sqrt δ) ^ 2 :=
-    (sq_lt_sq (by exact inv_nonneg.mpr
-        (by exact_mod_cast (Nat.succ_pos N))) hδpos.le).mpr hrecip
-  simpa [spikeWidth, Real.sq_abs, abs_of_pos hδpos] using hsq
+    (sq_lt_sq₀ (by positivity) hδpos.le).2 hrecip
+  rw [Real.sq_sqrt hδ.le] at hsq
+  exact hsq
 
 /-! ## Main statements for the exam problem
 
@@ -98,21 +96,81 @@ theorem uniform_small_set_of_L3_bound
     (hL3 : ∀ n, ∫ x in unitInterval, ‖f n x‖ ^ (3 : ℝ) ≤ 1) :
     uniformSmallSetProperty f := by
   classical
+  -- The stated hypothesis does not assert integrability.  Since the Bochner
+  -- integral is zero for a non-integrable function, Hölder cannot be applied
+  -- here.  A counterexample can combine the shrinking spikes below with a
+  -- fixed non-integrable positive singularity supported away from the spikes:
+  -- every cubic integral is then `0`, while the spike mass still violates
+  -- `uniformSmallSetProperty`.
   sorry
 
 /-- The spike sequence from above witnesses the failure of part (a) if we only
 assume an L¹ bound.  This records the precise negation of the uniform small-set
 property. -/
 theorem counterexample_from_spikes :
-    let f : ℕ → ℝ → ℝ := spike
-    in (∀ n, ∫ x in unitInterval, ‖f n x‖ ≤ 1) ∧ ¬ uniformSmallSetProperty f := by
+    let f : ℕ → ℝ → ℝ := spike;
+    (∀ n, ∫ x in unitInterval, ‖f n x‖ ≤ 1) ∧ ¬ uniformSmallSetProperty f := by
   classical
-  intro f
-  have hf_int : ∀ n, ∫ x in unitInterval, ‖f n x‖ = 1 := by
-    intro n; simpa [unitInterval] using integral_spike n
+  dsimp only
+  have hf_int : ∀ n, ∫ x in unitInterval, ‖spike n x‖ = 1 := by
+    intro n
+    rw [setIntegral_eq_integral_of_forall_compl_eq_zero]
+    · simpa only [norm_spike] using integral_spike n
+    · intro x hx
+      rw [norm_spike]
+      by_cases hx_support : x ∈ Set.Icc (0 : ℝ) (spikeWidth n)
+      · exact (hx ⟨hx_support.1, hx_support.2.trans (spikeWidth_le_one n)⟩).elim
+      · simp [spike, hx_support]
   refine ⟨?_, ?_⟩
-  · intro n; simpa [hf_int n]
-  · sorry
+  · intro n
+    exact (hf_int n).le
+  · intro hsmall
+    obtain ⟨δ, hδ, hδprop⟩ := hsmall (ε := (1 : ℝ) / 2) (by norm_num)
+    by_cases hδtop : δ = ⊤
+    · subst δ
+      obtain ⟨n, hnδ⟩ := exists_spikeWidth_lt (show (0 : ℝ) < 1 by norm_num)
+      let E : Set ℝ := Set.Icc (0 : ℝ) (spikeWidth n)
+      have hEsub : E ⊆ unitInterval := by
+        intro x hx
+        exact ⟨hx.1, hx.2.trans (spikeWidth_le_one n)⟩
+      have hEmeas : MeasurableSet E := isClosed_Icc.measurableSet
+      have hEvol : volume E < ⊤ := by
+        have hvol : volume E = ENNReal.ofReal (spikeWidth n) := by
+          simp [E, Real.volume_Icc]
+        rw [hvol]
+        exact ENNReal.ofReal_lt_top
+      have hbound := hδprop hEsub hEmeas hEvol n
+      have hEint : ∫ x in E, ‖spike n x‖ = 1 := by
+        rw [setIntegral_eq_integral_of_forall_compl_eq_zero]
+        · simpa only [norm_spike] using integral_spike n
+        · intro x hx
+          rw [norm_spike]
+          simp [spike, E, hx]
+      rw [hEint] at hbound
+      norm_num at hbound
+    · have hδreal : 0 < δ.toReal := ENNReal.toReal_pos hδ.ne' hδtop
+      obtain ⟨n, hnδ⟩ := exists_spikeWidth_lt hδreal
+      let E : Set ℝ := Set.Icc (0 : ℝ) (spikeWidth n)
+      have hwidth_nonneg : 0 ≤ spikeWidth n := by
+        exact sq_nonneg _
+      have hEsub : E ⊆ unitInterval := by
+        intro x hx
+        exact ⟨hx.1, hx.2.trans (spikeWidth_le_one n)⟩
+      have hEmeas : MeasurableSet E := isClosed_Icc.measurableSet
+      have hEvol : volume E < δ := by
+        have hvol : volume E = ENNReal.ofReal (spikeWidth n) := by
+          simp [E, Real.volume_Icc]
+        rw [hvol]
+        exact (ENNReal.ofReal_lt_iff_lt_toReal hwidth_nonneg hδtop).2 hnδ
+      have hbound := hδprop hEsub hEmeas hEvol n
+      have hEint : ∫ x in E, ‖spike n x‖ = 1 := by
+        rw [setIntegral_eq_integral_of_forall_compl_eq_zero]
+        · simpa only [norm_spike] using integral_spike n
+        · intro x hx
+          rw [norm_spike]
+          simp [spike, E, hx]
+      rw [hEint] at hbound
+      norm_num at hbound
 
 end ProblemStatements
 
