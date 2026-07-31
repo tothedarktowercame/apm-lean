@@ -86,13 +86,15 @@ theorem entire_avoids_ray_const
 
 /-- **Problem statement (CR form).**
 
-    As written, this lacks hypotheses asserting that the four displayed partial
-    derivatives exist. Lean's `deriv` is zero at nondifferentiability points, so
-    continuity plus equalities between totalized `deriv` values does not provide
-    the real differentiability needed by the Cauchy-Riemann theorem. -/
+    The component maps are continuously real differentiable, as required by the
+    prose problem. Thus the displayed `deriv` values are genuine partial
+    derivatives rather than junk values from totalization. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require C¹ component maps so
+-- totalized `deriv` cannot make the Cauchy-Riemann premises vacuous.
 theorem cauchy_riemann_ray_implies_const
     {u v : ℝ → ℝ → ℝ}
-    (hu : Continuous (Function.uncurry u) ∧ Continuous (Function.uncurry v))
+    (hC1 : ContDiff ℝ 1 (Function.uncurry u) ∧
+      ContDiff ℝ 1 (Function.uncurry v))
     (hcr1 : ∀ x y, deriv (fun x' => u x' y) x = deriv (fun y' => v x y') y)
     (hcr2 : ∀ x y, deriv (fun y' => u x y') y = -(deriv (fun x' => v x' y) x))
     (hray : ∀ x y, v x y = 0 → 0 < u x y) :
