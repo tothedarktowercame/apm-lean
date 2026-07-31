@@ -118,11 +118,11 @@ whenever E ⊆ [0,1] and m*(E) ≤ δ.
 
 This is Lusin's condition (N) for absolutely continuous functions.
 
-The integral representation, pointwise variation estimate, and countable
-disjoint open-component decomposition are available below. The remaining
-obligation is to identify the endpoints of each component intersected with
-`[0,1]`, bound its image diameter by the derivative integral, and sum those
-bounds.
+The integral representation, pointwise variation estimate, image
+outer-measure bound, and countable disjoint open-component decomposition are
+available below. The remaining obligation is to identify interval enclosures
+for the components intersected with `[0,1]` and sum the corresponding
+derivative integrals.
 -/
 theorem ac_lusin_condition_N
     {f : ℝ → ℝ}
@@ -268,6 +268,45 @@ lemma ac_dist_le_integral_norm_deriv
   simpa only [Real.norm_eq_abs] using
     (intervalIntegral.norm_integral_le_integral_norm
       (f := fun t : ℝ => deriv f t) (μ := volume) hxy)
+
+/-- The outer measure of the image of any subset of a subinterval is bounded
+by the total variation estimate coming from the derivative on that interval.
+
+This packages the diameter step in the covering proof of Lusin's condition
+`(N)`: no measurability assumption on `S` or `f '' S` is needed. -/
+lemma ac_volume_image_subset_Icc_le_integral_norm_deriv
+    {f : ℝ → ℝ} (hac : ACOnUnitInterval f)
+    {a b : ℝ} (ha : a ∈ Icc (0 : ℝ) 1) (hb : b ∈ Icc (0 : ℝ) 1)
+    {S : Set ℝ} (hS : S ⊆ Icc a b) :
+    volume (f '' S) ≤
+      ENNReal.ofReal (∫ t in a..b, ‖deriv f t‖) := by
+  refine (Real.volume_le_diam (f '' S)).trans ?_
+  rw [Metric.ediam_le_iff]
+  rintro _ ⟨x, hxS, rfl⟩ _ ⟨y, hyS, rfl⟩
+  have hx := hS hxS
+  have hy := hS hyS
+  have hfi : IntervalIntegrable (fun t => ‖deriv f t‖) volume a b :=
+    hac.intervalIntegrable_deriv.norm.mono
+      (Set.uIcc_subset_uIcc
+        (by simpa [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using ha)
+        (by simpa [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using hb))
+      le_rfl
+  rw [edist_dist]
+  apply ENNReal.ofReal_le_ofReal
+  rcases le_total x y with hxy | hyx
+  · exact (ac_dist_le_integral_norm_deriv hac
+      ⟨ha.1.trans hx.1, hx.2.trans hb.2⟩
+          ⟨ha.1.trans hy.1, hy.2.trans hb.2⟩ hxy).trans
+        (intervalIntegral.integral_mono_interval hx.1 hxy hy.2
+          (Eventually.of_forall fun _ => norm_nonneg _)
+          hfi)
+  · rw [dist_comm]
+    exact (ac_dist_le_integral_norm_deriv hac
+      ⟨ha.1.trans hy.1, hy.2.trans hb.2⟩
+          ⟨ha.1.trans hx.1, hx.2.trans hb.2⟩ hyx).trans
+        (intervalIntegral.integral_mono_interval hy.1 hyx hx.2
+          (Eventually.of_forall fun _ => norm_nonneg _)
+          hfi)
 
 /-! The following lemmas package the missing topological half of the Lusin-(N)
 covering argument.  The order-connected components of an open real set are
