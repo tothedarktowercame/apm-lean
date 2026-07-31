@@ -47,6 +47,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.LebesgueDifferentiationThm
 import Mathlib.Topology.Instances.Real.Lemmas
 
 open MeasureTheory Set Topology
@@ -167,19 +168,140 @@ The derivative claim uses the Lebesgue differentiation theorem / FTC for
 L¹ functions: `h' = densityFun` a.e.
 -/
 
-/-- `constructedH` is strictly monotone on `[0,1]` when `C` has empty interior.
-See the file-level comment for the mathematical argument. -/
+/-- Counterexample to strict monotonicity without a closedness hypothesis:
+take the irrationals in `[0,1]`. Its complement in `[0,1]` is countable, so
+the constructed integral vanishes identically. -/
+lemma constructedH_strictMonoOn_counterexample :
+    ∃ C : Set ℝ, C ⊆ Icc 0 1 ∧ interior C = ∅ ∧
+      ¬StrictMonoOn (constructedH C) (Icc 0 1) := by
+  let Q : Set ℝ := Set.range (fun q : ℚ => (q : ℝ))
+  let C : Set ℝ := Icc 0 1 \ Q
+  have hQ_count : Q.Countable := Set.countable_range _
+  have hC_sub : C ⊆ Icc 0 1 := diff_subset
+  have hC_int : interior C = ∅ := by
+    apply eq_empty_iff_forall_notMem.2
+    intro x hx
+    have hopen : IsOpen (interior C) := isOpen_interior
+    have hnonempty : (interior C).Nonempty := ⟨x, hx⟩
+    obtain ⟨q, hq⟩ :=
+      Rat.denseRange_cast.inter_open_nonempty (interior C) hopen hnonempty
+    rcases hq with ⟨hq_int, q, rfl⟩
+    have hqC : (q : ℝ) ∈ C := interior_subset hq_int
+    exact hqC.2 ⟨q, rfl⟩
+  have hdensity_ae : densityFun C =ᵐ[volume] 0 := by
+    filter_upwards [hQ_count.ae_notMem volume] with x hxQ
+    simp [densityFun, C, Q, hxQ]
+  have hH_one : constructedH C 1 = 0 := by
+    unfold constructedH
+    rw [intervalIntegral.integral_congr_ae]
+    · exact intervalIntegral.integral_zero
+    · filter_upwards [hdensity_ae] with x hx _
+      exact hx
+  refine ⟨C, hC_sub, hC_int, ?_⟩
+  intro hstrict
+  have hlt := hstrict (left_mem_Icc.2 zero_le_one) (right_mem_Icc.2 zero_le_one) zero_lt_one
+  have hH_zero : constructedH C 0 = 0 := by simp [constructedH]
+  rw [hH_zero, hH_one] at hlt
+  exact lt_irrefl 0 hlt
+
+/-- This statement is false: empty interior alone does not ensure that the
+complement has positive measure in every interval. See
+`constructedH_strictMonoOn_counterexample`. The correct version with
+`IsClosed C` is proved below. -/
 lemma constructedH_strictMonoOn
     (C : Set ℝ) (hC_sub : C ⊆ Icc 0 1) (hC_int : interior C = ∅) :
     StrictMonoOn (constructedH C) (Icc 0 1) := by
   sorry
+
+/-- The strict-monotonicity statement with the missing closedness hypothesis.
+Closedness makes the complement open, so every interval contains a subinterval
+on which the density is identically one. -/
+lemma constructedH_strictMonoOn_of_isClosed
+    (C : Set ℝ) (hC_closed : IsClosed C) (hC_int : interior C = ∅) :
+    StrictMonoOn (constructedH C) (Icc 0 1) := by
+  have hC_meas : MeasurableSet C := hC_closed.measurableSet
+  have hS : MeasurableSet (Cᶜ ∩ Icc (0 : ℝ) 1) :=
+    hC_meas.compl.inter measurableSet_Icc
+  have hSfin : volume (Cᶜ ∩ Icc (0 : ℝ) 1) ≠ ⊤ := by
+    apply ne_top_of_le_ne_top (show volume (Icc (0 : ℝ) 1) ≠ ⊤ by simp)
+    exact measure_mono inter_subset_right
+  have hint : Integrable (densityFun C) volume := by
+    exact
+      (integrableOn_const (μ := volume) (s := Cᶜ ∩ Icc (0 : ℝ) 1) hSfin)
+        |>.integrable_indicator hS
+  intro x hx y hy hxy
+  have hU_open : IsOpen (Cᶜ ∩ Ioo x y) :=
+    hC_closed.isOpen_compl.inter isOpen_Ioo
+  have hU_nonempty : (Cᶜ ∩ Ioo x y).Nonempty := by
+    by_contra hU
+    rw [Set.not_nonempty_iff_eq_empty] at hU
+    have hIooC : Ioo x y ⊆ C := by
+      intro t ht
+      by_contra htC
+      have htU : t ∈ Cᶜ ∩ Ioo x y := ⟨htC, ht⟩
+      rw [hU] at htU
+      exact htU
+    have hm : (x + y) / 2 ∈ Ioo x y := by
+      constructor <;> linarith
+    have hmC : (x + y) / 2 ∈ interior C :=
+      interior_maximal hIooC isOpen_Ioo hm
+    rw [hC_int] at hmC
+    exact hmC
+  obtain ⟨a, b, hab, habU⟩ := hU_open.exists_Ioo_subset hU_nonempty
+  have hab_support :
+      Ioo a b ⊆ Function.support (densityFun C) ∩ Ioc x y := by
+    intro t ht
+    have htU := habU ht
+    have htIcc : t ∈ Icc (0 : ℝ) 1 := by
+      constructor
+      · linarith [hx.1, htU.2.1]
+      · linarith [hy.2, htU.2.2]
+    refine ⟨?_, Ioo_subset_Ioc_self htU.2⟩
+    simp [Function.mem_support, densityFun, htU.1, htIcc]
+  have hsupport_pos :
+      0 < volume (Function.support (densityFun C) ∩ Ioc x y) := by
+    have hab_pos : 0 < volume (Ioo a b) := by
+      rw [Real.volume_Ioo, ENNReal.ofReal_pos]
+      linarith
+    exact hab_pos.trans_le (measure_mono hab_support)
+  have hintegral_pos : 0 < ∫ t in x..y, densityFun C t := by
+    exact
+      (intervalIntegral.integral_pos_iff_support_of_nonneg_ae
+        (Filter.Eventually.of_forall (densityFun_nonneg C))
+        hint.intervalIntegrable).2 ⟨hxy, hsupport_pos⟩
+  have hadd :
+      (∫ t in (0 : ℝ)..x, densityFun C t) + ∫ t in x..y, densityFun C t =
+        ∫ t in (0 : ℝ)..y, densityFun C t :=
+    intervalIntegral.integral_add_adjacent_intervals
+      hint.intervalIntegrable hint.intervalIntegrable
+  unfold constructedH
+  linarith [hadd]
+
+/-- At almost every point of `C`, the indefinite integral has derivative zero. -/
+lemma ae_hasDerivAt_constructedH_zero_on
+    (C : Set ℝ) (hC_meas : MeasurableSet C) :
+    ∀ᵐ x ∂volume, x ∈ C → HasDerivAt (constructedH C) 0 x := by
+  have hS : MeasurableSet (Cᶜ ∩ Icc (0 : ℝ) 1) :=
+    hC_meas.compl.inter measurableSet_Icc
+  have hSfin : volume (Cᶜ ∩ Icc (0 : ℝ) 1) ≠ ⊤ := by
+    apply ne_top_of_le_ne_top (show volume (Icc (0 : ℝ) 1) ≠ ⊤ by simp)
+    exact measure_mono inter_subset_right
+  have hint : Integrable (densityFun C) volume := by
+    exact
+      (integrableOn_const (μ := volume) (s := Cᶜ ∩ Icc (0 : ℝ) 1) hSfin)
+        |>.integrable_indicator hS
+  filter_upwards [LocallyIntegrable.ae_hasDerivAt_integral hint.locallyIntegrable] with x hx
+  intro hxC
+  simpa [constructedH, densityFun, hxC] using hx (0 : ℝ)
 
 /-- `h' = 0` on `C` (a.e.), and since `C` has positive measure, `h' = 0` on a
 set of positive measure. -/
 lemma constructedH_deriv_zero_pos_measure
     (C : Set ℝ) (hC_meas : MeasurableSet C) (hC_pos : 0 < volume C) :
     0 < volume {x | HasDerivAt (constructedH C) 0 x} := by
-  sorry
+  apply hC_pos.trans_le
+  exact measure_mono_ae
+    ((ae_hasDerivAt_constructedH_zero_on C hC_meas).mono fun x hx hxC => hx hxC)
 
 /-!
 ## Step 5: Main theorem
@@ -198,6 +320,14 @@ theorem exists_ac_strictly_mono_deriv_zero_pos_measure :
       (∀ x ∈ Icc 0 1, 0 ≤ h x) ∧
       StrictMonoOn h (Icc 0 1) ∧
       0 < volume {x ∈ Icc 0 1 | HasDerivAt h 0 x} := by
-  sorry
+  obtain ⟨C, hC_closed, hC_sub, hC_int, hC_pos⟩ := exists_fat_cantor
+  refine ⟨constructedH C, ?_, ?_, ?_⟩
+  · intro x hx
+    exact constructedH_nonneg C hx.1
+  · exact constructedH_strictMonoOn_of_isClosed C hC_closed hC_int
+  · apply hC_pos.trans_le
+    exact measure_mono_ae
+      ((ae_hasDerivAt_constructedH_zero_on C hC_closed.measurableSet).mono
+        fun x hx hxC => ⟨hC_sub hxC, hx hxC⟩)
 
 end
