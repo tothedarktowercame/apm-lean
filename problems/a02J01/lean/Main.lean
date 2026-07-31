@@ -50,9 +50,14 @@ lemma sq_integral_le {α : Type*} [MeasurableSpace α]
     _ ≤ (∫ x, ‖f x‖ ∂μ) ^ 2 := by
         exact sq_le_sq' (by linarith [abs_nonneg (∫ x, f x ∂μ)]) h
 
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require the kernel row and
+-- weighted-square integrand to be integrable, so neither displayed Bochner
+-- integral can acquire the `integral_undef = 0` junk value.
 lemma schur_pointwise
     (k : (Fin d → ℝ) → (Fin d → ℝ) → ℝ) (u : (Fin d → ℝ) → ℝ)
     (x : Fin d → ℝ)
+    (hrow_int : Integrable (fun y => ‖k x y‖) volume)
+    (hweighted_int : Integrable (fun y => ‖k x y‖ * (u y) ^ 2) volume)
     (hrow : ∫ y, ‖k x y‖ ≤ 1) :
     (integralOp k u x) ^ 2 ≤ ∫ y, ‖k x y‖ * (u y) ^ 2 := by
   -- Step 1: |Tu(x)|² ≤ (∫ ‖k(x,·) * u‖)² via sq_integral_le
@@ -71,10 +76,14 @@ lemma schur_pointwise
 --
 -- Mathlib path: MeasureTheory.lintegral_lintegral_swap for Tonelli,
 -- or MeasureTheory.integral_integral_swap for Bochner integrals.
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require integrable kernel
+-- columns and an L² input, preventing junk-valued column and square integrals.
 lemma schur_fubini
     (k : (Fin d → ℝ) → (Fin d → ℝ) → ℝ) (u : (Fin d → ℝ) → ℝ)
     (hk_meas : Measurable (fun p : (Fin d → ℝ) × (Fin d → ℝ) => k p.1 p.2))
-    (hcol : ∀ᵐ y ∂volume, ∫ x, ‖k x y‖ ≤ 1) :
+    (hcol_int : ∀ᵐ y ∂volume, Integrable (fun x => ‖k x y‖) volume)
+    (hcol : ∀ᵐ y ∂volume, ∫ x, ‖k x y‖ ≤ 1)
+    (hu : MemLp u 2 volume) :
     ∫ x, (∫ y, ‖k x y‖ * (u y) ^ 2) ≤ ∫ y, (u y) ^ 2 := by
   -- API path: integral_integral_swap (Fubini) + integral_mono (column bound)
   -- 1. Swap: ∫_x ∫_y |k(x,y)| u(y)² dy dx = ∫_y ∫_x |k(x,y)| u(y)² dx dy
@@ -88,9 +97,13 @@ lemma schur_fubini
 -- Main theorem: Schur test
 -- Combines pointwise bound + Fubini step
 -- ‖Tu‖₂² = ∫|Tu(x)|²dx ≤ ∫_x ∫_y |k(x,y)||u(y)|²dy dx ≤ ‖u‖₂²
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require a.e. integrability of
+-- both kernel sections so the Schur bounds cannot hold via `integral_undef`.
 theorem schur_test
     (k : (Fin d → ℝ) → (Fin d → ℝ) → ℝ)
     (hk_meas : Measurable (fun p : (Fin d → ℝ) × (Fin d → ℝ) => k p.1 p.2))
+    (hrow_int : ∀ᵐ x ∂volume, Integrable (fun y => ‖k x y‖) volume)
+    (hcol_int : ∀ᵐ y ∂volume, Integrable (fun x => ‖k x y‖) volume)
     (hrow : ∀ᵐ x ∂volume, ∫ y, ‖k x y‖ ≤ 1)
     (hcol : ∀ᵐ y ∂volume, ∫ x, ‖k x y‖ ≤ 1)
     (u : (Fin d → ℝ) → ℝ) (hu : MemLp u 2 volume) :
