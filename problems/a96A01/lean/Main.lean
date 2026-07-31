@@ -33,6 +33,7 @@ import Mathlib.MeasureTheory.Function.LpSeminorm.LpNorm
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
+import Mathlib.Analysis.Convex.Integral
 
 open MeasureTheory Set Filter Real Topology
 
@@ -251,6 +252,59 @@ theorem ae_pos_of_limit_pos
   have : L = 0 := tendsto_nhds_unique hLim hzero
   linarith
 
+/-- Jensen's inequality at a fixed positive exponent, after the logarithm has
+been shown integrable.  This packages the final step independently of the
+one-sided Fatou argument needed to establish logarithmic integrability. -/
+lemma geometric_mean_le_quasiNorm_of_integrable_log
+    {f : ℝ → ℝ}
+    (hf : IntegrableOn f (Icc 0 1) volume)
+    (hf_pos : ∀ᵐ x ∂(volume.restrict (Icc 0 1)), 0 < ‖f x‖)
+    (hlog : IntegrableOn (fun x => log ‖f x‖) (Icc 0 1) volume)
+    {p : ℝ} (hp : 0 < p) (hp1 : p ≤ 1) :
+    exp (∫ x in Icc (0 : ℝ) 1, log ‖f x‖ ∂volume) ≤ quasiNorm f p := by
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  letI : IsProbabilityMeasure μ := ⟨by simp [μ, Real.volume_Icc]⟩
+  have hfm : AEStronglyMeasurable f μ := by
+    simpa [μ] using hf.aestronglyMeasurable
+  have hpow_meas : AEStronglyMeasurable (fun x => ‖f x‖ ^ p) μ :=
+    (Real.continuous_rpow_const hp.le).comp_aestronglyMeasurable hfm.norm
+  have hbound : Integrable (fun x => 1 + ‖f x‖) μ := by
+    simpa [μ] using (integrable_const (μ := μ) (1 : ℝ)).add hf.norm
+  have hpow_int : Integrable (fun x => ‖f x‖ ^ p) μ := by
+    refine hbound.mono' hpow_meas ?_
+    exact ae_of_all μ fun x => by
+      rw [Real.norm_of_nonneg (Real.rpow_nonneg (norm_nonneg _) p)]
+      exact rpow_le_one_add (norm_nonneg _) hp hp1
+  have hplog_int : Integrable (fun x => p * log ‖f x‖) μ := by
+    simpa [μ] using hlog.const_mul p
+  have hexp_int : Integrable (fun x => exp (p * log ‖f x‖)) μ := by
+    refine hpow_int.congr ?_
+    filter_upwards [hf_pos] with x hx
+    rw [Real.rpow_def_of_pos hx]
+    congr 1
+    ring
+  have hjensen :
+      exp (∫ x, p * log ‖f x‖ ∂μ) ≤ ∫ x, exp (p * log ‖f x‖) ∂μ := by
+    exact convexOn_exp.map_integral_le continuous_exp.continuousOn isClosed_univ
+      (ae_of_all μ fun _ => mem_univ _) hplog_int hexp_int
+  have hjensen' :
+      exp (p * ∫ x, log ‖f x‖ ∂μ) ≤ ∫ x, ‖f x‖ ^ p ∂μ := by
+    rw [integral_const_mul] at hjensen
+    refine hjensen.trans_eq (integral_congr_ae ?_)
+    filter_upwards [hf_pos] with x hx
+    rw [Real.rpow_def_of_pos hx]
+    congr 1
+    ring
+  have hrpow := Real.rpow_le_rpow (Real.exp_nonneg _) hjensen' (one_div_nonneg.mpr hp.le)
+  have hleft :
+      exp (p * ∫ x, log ‖f x‖ ∂μ) ^ (1 / p) = exp (∫ x, log ‖f x‖ ∂μ) := by
+    rw [Real.rpow_def_of_pos (Real.exp_pos _), Real.log_exp]
+    congr 1
+    field_simp
+  rw [hleft] at hrpow
+  rw [quasiNorm]
+  simpa [μ] using hrpow
+
 /-- (c) L ≥ exp(∫ log|f|).
 
 **Remaining construction:** derive integrability of the negative part of
@@ -266,6 +320,15 @@ theorem limit_ge_geometric_mean
     {L : ℝ} (hL : 0 < L)
     (hLim : Tendsto (quasiNorm f) (nhdsWithin 0 (Set.Ioi 0)) (nhds L)) :
     exp (∫ x in Set.Icc (0:ℝ) 1, log ‖f x‖ ∂volume) ≤ L := by
-  sorry
+  by_cases hlog : IntegrableOn (fun x => log ‖f x‖) (Icc 0 1) volume
+  · apply ge_of_tendsto hLim
+    filter_upwards [self_mem_nhdsWithin,
+      eventually_nhdsWithin_of_eventually_nhds
+        (Iic_mem_nhds (show (0 : ℝ) < 1 by norm_num))] with p hp hp1
+    exact geometric_mean_le_quasiNorm_of_integrable_log hf hf_pos hlog hp hp1
+  · -- Remaining frontier: `hL > 0` rules out a nonintegrable negative
+    -- logarithmic tail.  A one-sided Fatou argument applied to
+    -- `p⁻¹ * (1 - ‖f‖^p)` supplies this implication.
+    sorry
 
 end
