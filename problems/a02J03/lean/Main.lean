@@ -1,5 +1,7 @@
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
 
 open MeasureTheory Set Filter Topology
@@ -49,7 +51,39 @@ lemma indicator_bound (φ : ℝ → ℝ) (M : ℝ)
     (a b : ℝ) (hab : a < b) (k : ℝ) (hk : 0 < k) :
     |scaledIntOp φ (Set.indicator (Set.Icc a b) (fun _ => 1)) k| ≤
       M * (b - a) / (1 + k * (b - a)) := by
-  sorry -- Change of variables: integral substitution u=kx + hypothesis
+  have hk0 : k ≠ 0 := ne_of_gt hk
+  have hkab : k * a < k * b := mul_lt_mul_of_pos_left hab hk
+  have hmem (x : ℝ) :
+      k * x ∈ Set.Icc (k * a) (k * b) ↔ x ∈ Set.Icc a b := by
+    constructor
+    · intro hx
+      constructor <;> nlinarith [hx.1, hx.2]
+    · intro hx
+      constructor <;> nlinarith [hx.1, hx.2]
+  have hintegrand :
+      (fun x => φ (k * x) * Set.indicator (Set.Icc a b) (fun _ => 1) x) =
+        (fun x => Set.indicator (Set.Icc (k * a) (k * b)) φ (k * x)) := by
+    funext x
+    by_cases hx : x ∈ Set.Icc a b
+    · simp [Set.indicator_of_mem hx, Set.indicator_of_mem ((hmem x).2 hx)]
+    · simp [Set.indicator_of_notMem hx, Set.indicator_of_notMem (mt (hmem x).1 hx)]
+  have hscale :
+      scaledIntOp φ (Set.indicator (Set.Icc a b) (fun _ => 1)) k =
+        k⁻¹ * ∫ y in Set.Icc (k * a) (k * b), φ y := by
+    rw [scaledIntOp, hintegrand]
+    have h := Measure.integral_comp_mul_left
+      (g := Set.indicator (Set.Icc (k * a) (k * b)) φ) k
+    rw [abs_of_pos (inv_pos.mpr hk), smul_eq_mul,
+      integral_indicator measurableSet_Icc] at h
+    exact h
+  rw [hscale, abs_mul, abs_of_pos (inv_pos.mpr hk)]
+  have hbound := hφ (k * a) (k * b) hkab
+  calc
+    k⁻¹ * |∫ y in Set.Icc (k * a) (k * b), φ y|
+        ≤ k⁻¹ * (M * (k * b - k * a) / (1 + (k * b - k * a))) :=
+      mul_le_mul_of_nonneg_left hbound (le_of_lt (inv_pos.mpr hk))
+    _ = M * (b - a) / (1 + k * (b - a)) := by
+      field_simp
 
 -- CLOSED: convergence from the bound via squeeze
 lemma indicator_case (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
