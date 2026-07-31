@@ -23,8 +23,12 @@ open scoped Topology
 namespace ApmCanaries.A94A04
 
 /-- Orthogonality extends to all polynomials by linearity. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require each monomial product
+-- to be integrable, so the zero moments are not values from `integral_undef`.
 lemma orthogonal_to_polynomials
     {f : ℝ → ℝ} {μ : Measure ℝ}
+    (hint : ∀ n : ℕ,
+      Integrable (fun x => x ^ n * f x) (μ.restrict (Icc (0 : ℝ) 1)))
     (horth : ∀ n : ℕ, ∫ x in Icc (0:ℝ) 1, x ^ n * f x ∂μ = 0)
     (p : Polynomial ℝ) :
     ∫ x in Icc (0:ℝ) 1, Polynomial.eval x p * f x ∂μ = 0 := by
@@ -47,8 +51,11 @@ lemma orthogonal_to_polynomials
     (1) Polynomials dense in C([0,1]) via Stone-Weierstrass.
     (2) C([0,1]) dense in L^2([0,1]) via `boundedContinuousFunction_dense`.
     (3) Orthogonality to a dense subspace gives ||f||^2 = 0, hence f = 0 a.e. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require the restricted
+-- measure to be finite, so the L² hypothesis makes all moments integrable.
 theorem zero_of_orthogonal_to_monomials
     {f : ℝ → ℝ} {μ : Measure ℝ}
+    [IsFiniteMeasure (μ.restrict (Icc (0 : ℝ) 1))]
     (hf : MemLp f 2 (μ.restrict (Icc (0:ℝ) 1)))
     (hfm : AEStronglyMeasurable f (μ.restrict (Icc (0:ℝ) 1)))
     (horth : ∀ n : ℕ, ∫ x in Icc (0:ℝ) 1, x ^ n * f x ∂μ = 0) :
