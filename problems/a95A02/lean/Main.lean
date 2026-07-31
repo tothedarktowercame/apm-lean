@@ -12,10 +12,10 @@ This file formalizes the three parts of the problem:
 The informal proof routes (b) through the fundamental theorem of calculus for
 AC functions: an AC function f satisfies f(x) = f(0) + ∫₀ˣ f'(t) dt, and then
 the absolute continuity of the Lebesgue integral (for f' ∈ L¹) provides the δ.
-However, Mathlib's `AbsolutelyContinuousOnInterval` gives us the ε-δ definition
-directly, and the bridge from that definition to "image of a null set is null"
-requires the integral representation — a deep result that is only partially
-available in Mathlib.
+Current Mathlib gives both the ε-δ definition and the integral representation
+via `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`. The remaining
+bridge is the covering argument which bounds the outer measure of an image by
+the integral of `|f'|` over a small open cover.
 
 ## Statement repair
 
@@ -32,6 +32,7 @@ prove the special case with `volume` (Lebesgue measure) for use in part (c).
 -/
 
 import Mathlib.MeasureTheory.Function.AbsolutelyContinuous
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Regular
 import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
@@ -94,17 +95,14 @@ The informal proof proceeds as follows:
 3. By absolute continuity of the Lebesgue integral, for ε > 0 there exists δ > 0
    with ∫_E |f'| < ε whenever m(E) < δ.
 
-Step 1 (FTC for AC) is a deep result. Mathlib provides
-`IntervalIntegrable.absolutelyContinuousOnInterval_intervalIntegral` (the converse
-direction: interval integrals are AC) but does NOT provide the forward direction
-(AC ⟹ integral representation) in full generality.
+Step 1 is available as
+`AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`.
 
 ### What we can prove
 
 The σ-compact decomposition lemma (inner regularity of volume on ℝ) is fully
-proved below. The core Lusin condition remains at the Mathlib theory boundary:
-it requires the FTC for AC functions (AC ⟹ f = f(0) + ∫f'), which is not
-available in Mathlib in the needed direction.
+proved below. The remaining Lusin-condition frontier is the countable
+open-interval cover assembly for arbitrary outer-measurable sets.
 -/
 
 /-- Part (b): For every ε > 0 there exists δ > 0 such that m*(f(E)) ≤ ε
@@ -112,18 +110,9 @@ whenever E ⊆ [0,1] and m*(E) ≤ δ.
 
 This is Lusin's condition (N) for absolutely continuous functions.
 
-The proof requires the fundamental theorem of calculus for AC functions
-(f = f(0) + ∫ f'), which connects the bare ε-δ definition of AC to the
-integral representation. This bridge is not fully available in Mathlib:
-Mathlib has the converse (interval integrals are AC) but not the forward
-direction (AC ⟹ integral representation).
-
-What was tried:
-- Use `absolutelyContinuousOnInterval_iff` to get the ε-δ form.
-- Attempt to control m*(f(E)) via total variation on intervals.
-- The key gap: showing that the ε-δ condition on endpoint differences controls
-  the full oscillation of f on each subinterval (not just |f(b) - f(a)|).
-  This requires the integral representation f(x) = f(0) + ∫₀ˣ f'.
+The integral representation and its pointwise variation estimate are available
+below. The remaining obligation is to decompose a small open cover into
+disjoint intervals, bound each image interval, and sum those bounds.
 -/
 theorem ac_lusin_condition_N
     {f : ℝ → ℝ}
@@ -225,6 +214,40 @@ lemma ac_continuousOn
   have : AbsolutelyContinuousOnInterval f 0 1 := hac
   convert this.continuousOn using 1
   exact (uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)).symm
+
+/-- The derivative of an AC function is interval-integrable on `[0,1]`. -/
+lemma ac_intervalIntegrable_deriv
+    {f : ℝ → ℝ} (hac : ACOnUnitInterval f) :
+    IntervalIntegrable (deriv f) volume 0 1 :=
+  hac.intervalIntegrable_deriv
+
+/-- The current Mathlib FTC for AC functions, specialized to subintervals of
+`[0,1]`. -/
+lemma ac_integral_deriv_eq_sub
+    {f : ℝ → ℝ} (hac : ACOnUnitInterval f)
+    {x y : ℝ} (hx : x ∈ Icc (0 : ℝ) 1) (hy : y ∈ Icc (0 : ℝ) 1) :
+    ∫ t in x..y, deriv f t = f y - f x := by
+  apply AbsolutelyContinuousOnInterval.integral_deriv_eq_sub
+  exact hac.mono (by
+    rw [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)]
+    intro z hz
+    rcases le_total x y with hxy | hyx
+    · rw [uIcc_of_le hxy] at hz
+      exact ⟨hx.1.trans hz.1, hz.2.trans hy.2⟩
+    · rw [uIcc_of_ge hyx] at hz
+      exact ⟨hy.1.trans hz.1, hz.2.trans hx.2⟩)
+
+/-- Variation bound on one ordered subinterval. This is the analytic component
+of the Lusin-(N) covering argument. -/
+lemma ac_dist_le_integral_norm_deriv
+    {f : ℝ → ℝ} (hac : ACOnUnitInterval f)
+    {x y : ℝ} (hx : x ∈ Icc (0 : ℝ) 1) (hy : y ∈ Icc (0 : ℝ) 1)
+    (hxy : x ≤ y) :
+    dist (f x) (f y) ≤ ∫ t in x..y, ‖deriv f t‖ := by
+  rw [Real.dist_eq, abs_sub_comm, ← ac_integral_deriv_eq_sub hac hx hy]
+  simpa only [Real.norm_eq_abs] using
+    (intervalIntegral.norm_integral_le_integral_norm
+      (f := fun t : ℝ => deriv f t) (μ := volume) hxy)
 
 /-- The continuous image of a compact subset of [0,1] under an AC function
 is compact (hence measurable).
