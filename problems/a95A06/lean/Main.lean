@@ -42,6 +42,7 @@ import Mathlib.Analysis.Normed.Field.Basic
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Calculus.Deriv.Polynomial
 import Mathlib.Analysis.Complex.LocallyUniformLimit
+import Mathlib.RingTheory.RootsOfUnity.Complex
 
 open Complex Metric Set Filter Topology Nat
 
@@ -94,6 +95,14 @@ lemma lacunaryTerm_continuousOn (n : ℕ) :
   · exact continuousOn_const
   · intro x _
     exact_mod_cast (by simp [Nat.factorial_ne_zero] : (↑n.factorial : ℂ) ≠ 0)
+
+/-- The defining series is absolutely summable at every point of the closed
+unit disk. -/
+lemma summable_lacunaryTerm_of_mem_closedBall
+    {z : ℂ} (hz : z ∈ closedBall (0 : ℂ) 1) :
+    Summable (fun n => lacunaryTerm n z) :=
+  Summable.of_norm_bounded lacunary_majorant_summable
+    (fun n => lacunary_term_bound n z hz)
 
 /-- Part (a): f is continuous on the closed unit disk Δ̄.
 
@@ -247,6 +256,23 @@ lemma open_mem_unit_sphere_contains_rational_angle
     Rat.denseRange_cast.exists_mem_open
       (hU.preimage hcircleParam) ⟨t / (2 * Real.pi), ht⟩
   exact ⟨θ, hθ⟩
+
+/-- At a rational angle, every sufficiently late factorial exponent kills the
+angular part.  This is the arithmetic input to the Hadamard-gap argument. -/
+lemma rational_angle_factorial_pow_eq_one
+    (θ : ℚ) {n : ℕ} (hn : θ.den ≤ n) :
+    circleMap 0 1 (2 * Real.pi * (θ : ℝ)) ^ n.factorial = 1 := by
+  have hroot :
+      IsPrimitiveRoot
+        (Complex.exp (2 * (Real.pi : ℂ) * Complex.I * (θ : ℂ))) θ.den :=
+    Complex.isPrimitiveRoot_exp_rat θ
+  have hpow :
+      Complex.exp (2 * (Real.pi : ℂ) * Complex.I * (θ : ℂ)) ^ n.factorial = 1 :=
+    (hroot.pow_eq_one_iff_dvd n.factorial).2
+      (factorial_dvd_of_le θ.den_pos hn)
+  convert hpow using 1
+  simp [circleMap_zero]
+  ring_nf
 
 /-- Part (b): The unit circle is a natural boundary for f.
 
