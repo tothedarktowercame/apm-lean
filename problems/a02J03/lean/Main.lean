@@ -104,7 +104,11 @@ lemma indicator_case (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
 -- For step functions on disjoint intervals: each piece bounded by M·m(Qᵢ),
 -- sum ≤ M · Σ|cᵢ|m(Qᵢ) = M · ‖f‖₁.
 -- This extends to L¹ by density.
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require local integrability
+-- of `φ`, so the rectangle integrals cannot all be junk values from
+-- `integral_undef`.
 lemma uniform_bound (φ : ℝ → ℝ) (M : ℝ)
+    (hφloc : LocallyIntegrable φ volume)
     (hφ : ∀ (a b : ℝ), a < b →
       |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
     (f : ℝ → ℝ) (hf : Integrable f volume) (k : ℝ) (hk : 0 < k) :
@@ -114,7 +118,10 @@ lemma uniform_bound (φ : ℝ → ℝ) (M : ℝ)
 
 -- Main theorem: ∫ φ(kx) f(x) dx → 0
 -- Density: approximate f by step functions, use indicator_case + uniform_bound
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require local integrability
+-- of `φ`, matching the semantic domain assumed by its interval integrals.
 theorem scaled_integral_vanishes (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
+    (hφloc : LocallyIntegrable φ volume)
     (hφ : ∀ (a b : ℝ), a < b →
       |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
     (f : ℝ → ℝ) (hf : Integrable f volume) :
