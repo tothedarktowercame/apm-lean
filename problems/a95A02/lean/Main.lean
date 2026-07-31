@@ -84,137 +84,6 @@ theorem acOnUnitInterval_iff (f : ℝ → ℝ) :
 
 end PartA
 
-section PartB
-
-/-! ## Part (b): Lusin's condition (N)
-
-For every ε > 0, there exists δ > 0 such that m*(f(E)) ≤ ε whenever m*(E) ≤ δ.
-
-### Proof strategy
-
-The informal proof proceeds as follows:
-1. An AC function f equals f(0) + ∫₀ˣ f'(t)dt (FTC for AC functions).
-2. For a measurable set E, m*(f(E)) ≤ ∫_E |f'|.
-3. By absolute continuity of the Lebesgue integral, for ε > 0 there exists δ > 0
-   with ∫_E |f'| < ε whenever m(E) < δ.
-
-Step 1 is available as
-`AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`.
-
-### What we can prove
-
-The σ-compact decomposition lemma (inner regularity of volume on ℝ) is fully
-proved below.  The open-cover decomposition is now also available below:
-`countable_ordConnectedSection_of_isOpen`,
-`ordConnectedSection_pairwiseDisjoint`, and
-`iUnion_ordConnectedComponents_eq` express an open real set as a countable
-pairwise-disjoint union of open order-connected components.  The remaining
-frontier is the endpoint/integral estimate for each bounded component after
-intersection with `[0,1]`, followed by the countable sum.
--/
-
-/-- Part (b): For every ε > 0 there exists δ > 0 such that m*(f(E)) ≤ ε
-whenever E ⊆ [0,1] and m*(E) ≤ δ.
-
-This is Lusin's condition (N) for absolutely continuous functions.
-
-The integral representation, pointwise variation estimate, image
-outer-measure bound, and countable disjoint open-component decomposition are
-available below. The remaining obligation is to identify interval enclosures
-for the components intersected with `[0,1]` and sum the corresponding
-derivative integrals.
--/
-theorem ac_lusin_condition_N
-    {f : ℝ → ℝ}
-    (hac : ACOnUnitInterval f)
-    {ε : ℝ} (hε : 0 < ε) :
-    ∃ δ > 0, ∀ E ⊆ Icc (0:ℝ) 1,
-      volume.toOuterMeasure E < ENNReal.ofReal δ →
-      volume.toOuterMeasure (f '' E) ≤ ENNReal.ofReal ε := by
-  sorry
-
-/-- Part (b) special case: AC maps null sets to null sets.
-
-If f is absolutely continuous on [0,1] and E ⊆ [0,1] has measure zero,
-then f(E) has measure zero.
-
-This follows from `ac_lusin_condition_N` by choosing any ε > 0 (e.g. ε = 1):
-since volume(E) = 0 < δ for any δ > 0, we get volume(f(E)) ≤ ε for all ε > 0,
-hence volume(f(E)) = 0.
-
-The sorry here inherits from `ac_lusin_condition_N`. -/
-theorem ac_maps_null_to_null
-    {f : ℝ → ℝ}
-    (hac : ACOnUnitInterval f)
-    {E : Set ℝ} (hE : E ⊆ Icc (0:ℝ) 1)
-    (hE_null : volume E = 0) :
-    volume (f '' E) = 0 := by
-  apply le_antisymm ?_ (zero_le _)
-  apply ENNReal.le_of_forall_pos_le_add
-  intro ε hε _
-  have hε_real : 0 < (ε : ℝ) := by exact_mod_cast hε
-  obtain ⟨δ, hδ, hbound⟩ := ac_lusin_condition_N hac hε_real
-  have hE_outer : volume.toOuterMeasure E < ENNReal.ofReal δ := by
-    rw [Measure.toOuterMeasure_apply, hE_null]
-    exact ENNReal.ofReal_pos.2 hδ
-  simpa using hbound E hE hE_outer
-
-end PartB
-
-section PartC
-
-/-! ## Part (c): AC functions preserve measurability
-
-If E ⊆ [0,1] is Lebesgue measurable, then f(E) is Lebesgue measurable.
-
-### Proof strategy (from informal proof)
-
-Write E = K ∪ N where K = ⋃ₘ Kₘ (σ-compact) and N is null.
-- f(Kₘ) is compact (continuous image of compact), hence measurable.
-  So f(K) = ⋃ f(Kₘ) is Fσ, hence measurable.
-- f(N) is null by part (b), hence measurable.
-- f(E) = f(K) ∪ f(N) is measurable.
-
-### Key ingredients
-
-1. **σ-compact + null decomposition** of measurable subsets of [0,1].
-   ✓ Proved below via inner regularity of `volume` on `ℝ`.
-
-2. **Continuous image of compact is compact**: `IsCompact.image_of_continuousOn`
-   ✓ Available in Mathlib, applied in `ac_image_compact_is_compact`.
-
-3. **Null sets are measurable in the Lebesgue completion.**
-   The ambient `MeasurableSpace ℝ` in this file is the Borel σ-algebra, however,
-   and `volume.IsComplete` is deliberately not an instance.  Thus this step
-   cannot conclude the stated `MeasurableSet` goal from a measure-zero image.
-
-4. **AC ⟹ continuous**: `AbsolutelyContinuousOnInterval.continuousOn`.
-   ✓ Applied in `ac_continuousOn`.
-
-5. **Null sets map to null sets** (Lusin condition N).
-   This gives null-measurability, not Borel measurability, of the residual
-   image. A corrected target should use `NullMeasurableSet` (or the completed
-   Lebesgue measurable space), unless additional Borel-image regularity is
-   supplied.
--/
-
-/-- Part (c): If f is absolutely continuous on [0,1] and E ⊆ [0,1] is
-Borel measurable, then f(E) is Borel measurable.
-
-The standard σ-compact-plus-null proof only proves Lebesgue measurability:
-Mathlib's ambient `MeasurableSpace ℝ` is Borel and `volume` is not complete.
-The stated Borel conclusion therefore needs a separate image-regularity
-argument (or a corrected completed-measurable-space target). -/
-theorem ac_maps_measurable_to_measurable
-    {f : ℝ → ℝ}
-    (hac : ACOnUnitInterval f)
-    {E : Set ℝ} (hE : E ⊆ Icc (0:ℝ) 1)
-    (hE_meas : MeasurableSet E) :
-    MeasurableSet (f '' E) := by
-  sorry
-
-end PartC
-
 section Lemmas
 
 /-! ## Supporting lemmas
@@ -307,6 +176,67 @@ lemma ac_volume_image_subset_Icc_le_integral_norm_deriv
         (intervalIntegral.integral_mono_interval hy.1 hyx hx.2
           (Eventually.of_forall fun _ => norm_nonneg _)
           hfi)
+
+/-- The image of the part of one order-connected component lying in `[0,1]`
+is controlled directly by the `L¹` mass of `f'` on that component.  This
+formulation deliberately avoids choosing endpoints: order-connectedness puts
+the interval between any two points back in the component, which is exactly
+what the diameter estimate needs. -/
+lemma ac_volume_image_component_le_lintegral_enorm_deriv
+    {f : ℝ → ℝ} (hac : ACOnUnitInterval f)
+    {U : Set ℝ} (x : ℝ) :
+    volume (f '' (ordConnectedComponent U x ∩ Icc (0 : ℝ) 1)) ≤
+      ∫⁻ t in ordConnectedComponent U x ∩ Icc (0 : ℝ) 1, ‖deriv f t‖ₑ := by
+  refine (Real.volume_le_diam _).trans ?_
+  rw [Metric.ediam_le_iff]
+  rintro _ ⟨u, ⟨huC, huI⟩, rfl⟩ _ ⟨v, ⟨hvC, hvI⟩, rfl⟩
+  rw [edist_dist]
+  rcases le_total u v with huv | hvu
+  · calc
+      ENNReal.ofReal (dist (f u) (f v)) ≤
+          ENNReal.ofReal (∫ t in u..v, ‖deriv f t‖) :=
+        ENNReal.ofReal_le_ofReal
+          (ac_dist_le_integral_norm_deriv hac huI hvI huv)
+      _ = ∫⁻ t in Ioc u v, ENNReal.ofReal ‖deriv f t‖ := by
+        rw [intervalIntegral.integral_of_le huv,
+          ofReal_integral_eq_lintegral_ofReal]
+        · apply (intervalIntegrable_iff.mp hac.intervalIntegrable_deriv.norm).mono_set
+          intro t ht
+          rw [uIoc_of_le (by norm_num : (0 : ℝ) ≤ 1)]
+          exact ⟨huI.1.trans_lt ht.1, ht.2.trans hvI.2⟩
+        · exact Eventually.of_forall fun _ => norm_nonneg _
+      _ ≤ ∫⁻ t in ordConnectedComponent U x ∩ Icc (0 : ℝ) 1,
+          ENNReal.ofReal ‖deriv f t‖ := lintegral_mono_set (fun t ht =>
+        ⟨Ioc_subset_Icc_self.trans (by
+            simpa [uIcc_of_le huv] using
+              (show OrdConnected (ordConnectedComponent U x) from inferInstance).uIcc_subset
+                huC hvC) ht,
+          ⟨huI.1.trans_lt ht.1 |>.le, ht.2.trans hvI.2⟩⟩)
+      _ = ∫⁻ t in ordConnectedComponent U x ∩ Icc (0 : ℝ) 1, ‖deriv f t‖ₑ := by
+        simp only [ofReal_norm_eq_enorm]
+  · rw [dist_comm]
+    calc
+      ENNReal.ofReal (dist (f v) (f u)) ≤
+          ENNReal.ofReal (∫ t in v..u, ‖deriv f t‖) :=
+        ENNReal.ofReal_le_ofReal
+          (ac_dist_le_integral_norm_deriv hac hvI huI hvu)
+      _ = ∫⁻ t in Ioc v u, ENNReal.ofReal ‖deriv f t‖ := by
+        rw [intervalIntegral.integral_of_le hvu,
+          ofReal_integral_eq_lintegral_ofReal]
+        · apply (intervalIntegrable_iff.mp hac.intervalIntegrable_deriv.norm).mono_set
+          intro t ht
+          rw [uIoc_of_le (by norm_num : (0 : ℝ) ≤ 1)]
+          exact ⟨hvI.1.trans_lt ht.1, ht.2.trans huI.2⟩
+        · exact Eventually.of_forall fun _ => norm_nonneg _
+      _ ≤ ∫⁻ t in ordConnectedComponent U x ∩ Icc (0 : ℝ) 1,
+          ENNReal.ofReal ‖deriv f t‖ := lintegral_mono_set (fun t ht =>
+        ⟨Ioc_subset_Icc_self.trans (by
+            simpa [uIcc_of_le hvu] using
+              (show OrdConnected (ordConnectedComponent U x) from inferInstance).uIcc_subset
+                hvC huC) ht,
+          ⟨hvI.1.trans_lt ht.1 |>.le, ht.2.trans huI.2⟩⟩)
+      _ = ∫⁻ t in ordConnectedComponent U x ∩ Icc (0 : ℝ) 1, ‖deriv f t‖ₑ := by
+        simp only [ofReal_norm_eq_enorm]
 
 /-! The following lemmas package the missing topological half of the Lusin-(N)
 covering argument.  The order-connected components of an open real set are
@@ -491,5 +421,120 @@ lemma measurable_subset_Icc_eq_sigmaCompact_union_null
         hK_union_eq, tsub_self]
 
 end Lemmas
+
+section PartB
+
+/-! ## Part (b): Lusin's condition (N) -/
+
+/-- Part (b): AC functions uniformly control outer measure of images of small
+subsets of `[0,1]`. -/
+theorem ac_lusin_condition_N
+    {f : ℝ → ℝ}
+    (hac : ACOnUnitInterval f)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ δ > 0, ∀ E ⊆ Icc (0:ℝ) 1,
+      volume.toOuterMeasure E < ENNReal.ofReal δ →
+      volume.toOuterMeasure (f '' E) ≤ ENNReal.ofReal ε := by
+  have hnorm_int : IntegrableOn (fun t => ‖deriv f t‖) (Ioc (0 : ℝ) 1) volume := by
+    simpa [uIoc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using
+      (intervalIntegrable_iff.mp hac.intervalIntegrable_deriv.norm)
+  have hfinite_Ioc : (∫⁻ t in Ioc (0 : ℝ) 1, ‖deriv f t‖ₑ) ≠ ∞ := by
+    have h := (hasFiniteIntegral_iff_norm (fun t => ‖deriv f t‖)).mp
+      hnorm_int.hasFiniteIntegral
+    simpa only [Real.norm_eq_abs, Real.enorm_eq_ofReal_abs, abs_abs] using (ne_of_lt h)
+  have hfinite_Icc : (∫⁻ t in Icc (0 : ℝ) 1, ‖deriv f t‖ₑ) ≠ ∞ := by
+    rw [← setLIntegral_congr Ioc_ae_eq_Icc]
+    exact hfinite_Ioc
+  have hfinite_indicator :
+      (∫⁻ t, (Icc (0 : ℝ) 1).indicator (fun t => ‖deriv f t‖ₑ) t) ≠ ∞ := by
+    rw [lintegral_indicator measurableSet_Icc]
+    exact hfinite_Icc
+  obtain ⟨δe, hδe, hsmall⟩ :=
+    exists_pos_setLIntegral_lt_of_measure_lt hfinite_indicator
+      (ENNReal.ofReal_pos.2 hε).ne'
+  let δe' := min δe 1
+  have hδe' : 0 < δe' := lt_min hδe (by simp)
+  have hδe'_top : δe' ≠ ∞ :=
+    ne_top_of_lt (lt_of_le_of_lt (min_le_right δe 1) ENNReal.one_lt_top)
+  let δ := δe'.toReal
+  have hδ : 0 < δ := ENNReal.toReal_pos hδe'.ne' hδe'_top
+  refine ⟨δ, hδ, ?_⟩
+  intro E hE hEsmall
+  have hEvol' : volume E < δe' := by
+    change volume E < ENNReal.ofReal δ at hEsmall
+    simpa [δ, ENNReal.ofReal_toReal hδe'_top] using hEsmall
+  obtain ⟨U, hEU, hUopen, hUvol'⟩ := E.exists_isOpen_lt_of_lt δe' hEvol'
+  have hUvol : volume U < δe := hUvol'.trans_le (min_le_left _ _)
+  have hUintegral :
+      (∫⁻ t in U ∩ Icc (0 : ℝ) 1, ‖deriv f t‖ₑ) < ENNReal.ofReal ε := by
+    have hs := hsmall U hUvol
+    rw [setLIntegral_indicator measurableSet_Icc, inter_comm] at hs
+    exact hs
+  have hcount := countable_ordConnectedSection_of_isOpen hUopen
+  let C := fun x : ℝ => ordConnectedComponent U x ∩ Icc (0 : ℝ) 1
+  have hCU : ⋃ x ∈ ordConnectedSection U, C x = U ∩ Icc (0 : ℝ) 1 := by
+    simp only [C, ← iUnion_inter]
+    rw [iUnion_ordConnectedComponents_eq]
+  have hcover : f '' E ⊆ ⋃ x : (ordConnectedSection U), f '' C x := by
+    intro y hy
+    obtain ⟨z, hzE, rfl⟩ := hy
+    have hzU : z ∈ U := hEU hzE
+    have hzcomp : z ∈ ⋃ x ∈ ordConnectedSection U, ordConnectedComponent U x := by
+      rw [iUnion_ordConnectedComponents_eq]
+      exact hzU
+    obtain ⟨x, hxsec, hzx⟩ := Set.mem_iUnion₂.mp hzcomp
+    exact Set.mem_iUnion.2 ⟨⟨x, hxsec⟩, ⟨z, ⟨hzx, hE hzE⟩, rfl⟩⟩
+  rw [Measure.toOuterMeasure_apply]
+  refine (measure_mono hcover).trans ?_
+  letI := hcount.toEncodable
+  refine (measure_iUnion_le (fun x : (ordConnectedSection U) => f '' C x)).trans ?_
+  refine (ENNReal.tsum_le_tsum fun x => by
+    simpa [C] using
+      (ac_volume_image_component_le_lintegral_enorm_deriv hac (U := U) (x : ℝ))).trans ?_
+  have hmeas : ∀ x ∈ ordConnectedSection U, MeasurableSet (C x) := by
+    intro x hx
+    exact (isOpen_ordConnectedComponent_of_isOpen hUopen x).measurableSet.inter
+      measurableSet_Icc
+  have hdisj : (ordConnectedSection U).PairwiseDisjoint C := by
+    intro a ha b hb hab
+    exact ((ordConnectedSection_pairwiseDisjoint U) ha hb hab).mono
+      inter_subset_left inter_subset_left
+  rw [← lintegral_biUnion hcount hmeas hdisj, hCU]
+  exact hUintegral.le
+
+/-- Part (b), null-set specialization. -/
+theorem ac_maps_null_to_null
+    {f : ℝ → ℝ}
+    (hac : ACOnUnitInterval f)
+    {E : Set ℝ} (hE : E ⊆ Icc (0:ℝ) 1)
+    (hE_null : volume E = 0) :
+    volume (f '' E) = 0 := by
+  apply le_antisymm ?_ (zero_le _)
+  apply ENNReal.le_of_forall_pos_le_add
+  intro ε hε _
+  have hε_real : 0 < (ε : ℝ) := by exact_mod_cast hε
+  obtain ⟨δ, hδ, hbound⟩ := ac_lusin_condition_N hac hε_real
+  have hE_outer : volume.toOuterMeasure E < ENNReal.ofReal δ := by
+    rw [Measure.toOuterMeasure_apply, hE_null]
+    exact ENNReal.ofReal_pos.2 hδ
+  simpa using hbound E hE hE_outer
+
+end PartB
+
+section PartC
+
+/-- Part (c), retained as stated by the source problem.  The standard
+σ-compact-plus-null argument establishes completed Lebesgue measurability, not
+this Borel `MeasurableSet` conclusion; the remaining `sorry` records that
+statement-level mismatch rather than concealing it. -/
+theorem ac_maps_measurable_to_measurable
+    {f : ℝ → ℝ}
+    (hac : ACOnUnitInterval f)
+    {E : Set ℝ} (hE : E ⊆ Icc (0:ℝ) 1)
+    (hE_meas : MeasurableSet E) :
+    MeasurableSet (f '' E) := by
+  sorry
+
+end PartC
 
 end
