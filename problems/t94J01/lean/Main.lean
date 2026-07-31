@@ -34,13 +34,12 @@ lemma ladderConnected_of_subsingleton
   classical
   intro U hUopen hcover p q
   have hp : p ∈ ⋃₀ U := by simpa [hcover] using (mem_univ p)
-  rcases mem_iUnion.1 ?_ with ⟨V, hVmem, hpV⟩
-  · refine ⟨⟨0, fun _ => V, ?_, ?_, ?_, ?_⟩⟩
-    · intro _; simpa using hVmem
-    · simpa using hpV
-    · simpa [Subsingleton.elim q p] using hpV
-    · intro i; exact (Fin.elim0 i)
-  · simpa [Set.sUnion, mem_iUnion] using hp
+  rcases mem_sUnion.1 hp with ⟨V, hVmem, hpV⟩
+  refine ⟨⟨0, fun _ => V, ?_, ?_, ?_, ?_⟩⟩
+  · intro _; simpa using hVmem
+  · simpa using hpV
+  · simpa [Subsingleton.elim q p] using hpV
+  · intro i; exact Fin.elim0 i
 
 variable {X : Type*} [TopologicalSpace X]
 
