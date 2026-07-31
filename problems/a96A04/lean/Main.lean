@@ -26,6 +26,7 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+import ConstructionTargets.L2Translation
 import YoungL2
 
 open MeasureTheory Set Filter Real
@@ -104,6 +105,18 @@ lemma heatKernel_memLp_two {t : ℝ} (ht : 0 < t) :
     ring
   rw [mul_pow, hexp]
 
+/-- Rewrite heat convolution as a heat-kernel average of translates of `f`.
+
+This is the change-of-variables seam used by the `L²` approximate-identity
+argument. -/
+lemma heatConv_eq_integral_translation
+    (t : ℝ) (f : ℝ → ℝ) (x : ℝ) :
+    heatConv t f x = ∫ y, heatKernel t y * f (x - y) ∂volume := by
+  unfold heatConv
+  simpa only [sub_sub_cancel] using
+    (integral_sub_left_eq_self
+      (fun y : ℝ ↦ heatKernel t y * f (x - y)) volume x)
+
 /-- (a) u(·,t) is smooth in x for t > 0.
 
 The regularity index `∞ : WithTop ℕ∞` states `C^∞` smoothness, matching the
@@ -115,6 +128,11 @@ theorem heatConv_contDiff
     {f : ℝ → ℝ}
     (hf : MemLp f 2 volume) :
     ContDiff ℝ ∞ (heatConv t f) := by
+  have hfloc : LocallyIntegrable f volume := hf.locallyIntegrable (by norm_num)
+  -- `ContDiff.Convolution` only packages this implication when the smooth
+  -- factor has compact support.  For the Gaussian, one must instead prove
+  -- integrable polynomial-times-Gaussian bounds for every derivative and
+  -- apply the parametric-integral differentiation theorem iteratively.
   sorry
 
 /-- (b) L² contraction: ‖u(·,t)‖₂ ≤ ‖f‖₂.
@@ -143,6 +161,11 @@ theorem heatConv_tendsto_L2
     (hf : MemLp f 2 volume) :
     Tendsto (fun t => eLpNorm (fun x => heatConv t f x - f x) 2 volume)
       (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+  have htranslation :=
+    ConstructionTargets.L2Translation.eLpNorm_translation_tendsto f hf
+  have htranslated (t x : ℝ) :
+      heatConv t f x = ∫ y, heatKernel t y * f (x - y) ∂volume :=
+    heatConv_eq_integral_translation t f x
   sorry
 
 end
