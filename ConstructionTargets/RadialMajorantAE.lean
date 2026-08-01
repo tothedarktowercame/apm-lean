@@ -1,6 +1,7 @@
 import Mathlib.MeasureTheory.Covering.DensityTheorem
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
+import Mathlib.MeasureTheory.Integral.Lebesgue.DominatedConvergence
 import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
 import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 
@@ -195,5 +196,111 @@ theorem integral_poissonLayerWeight_Ioi {y : ℝ} (hy : 0 < y) (t : ℝ) :
     · rw [abs_of_nonneg ht]
     · rw [abs_of_nonpos ht, poissonKernel_even]
   linarith
+
+/-- `ENNReal` form of the Poisson layer representation, ready for Tonelli. -/
+theorem lintegral_poissonLayerWeight_Ici {y : ℝ} (hy : 0 < y) (t : ℝ) :
+    ∫⁻ s in Ici |t|, ENNReal.ofReal (poissonLayerWeight y s) ∂volume =
+      ENNReal.ofReal (poissonKernel y t) := by
+  have hderiv (s : ℝ) (_hs : s ∈ Ici |t|) :
+      HasDerivAt (poissonKernel y) (-poissonLayerWeight y s) s :=
+    poissonKernel_hasDerivAt hy s
+  have hnonpos (s : ℝ) (hs : s ∈ Ioi |t|) :
+      -poissonLayerWeight y s ≤ 0 := by
+    exact neg_nonpos.mpr (poissonLayerWeight_nonneg hy
+      (le_trans (abs_nonneg t) hs.le))
+  have hnegint := integrableOn_Ioi_deriv_of_nonpos' hderiv hnonpos
+    (poissonKernel_tendsto_atTop hy)
+  have hwIoi : IntegrableOn (poissonLayerWeight y) (Ioi |t|) volume := by
+    simpa using hnegint.neg
+  have hwIci : IntegrableOn (poissonLayerWeight y) (Ici |t|) volume :=
+    (integrableOn_Ici_iff_integrableOn_Ioi
+      (f := poissonLayerWeight y)).2 hwIoi
+  rw [← ofReal_integral_eq_lintegral_ofReal hwIci
+    (by
+      filter_upwards [self_mem_ae_restrict measurableSet_Ici] with s hs
+      exact poissonLayerWeight_nonneg hy (le_trans (abs_nonneg t) hs))]
+  rw [integral_Ici_eq_integral_Ioi, integral_poissonLayerWeight_Ioi hy t]
+
+/-- The fixed density obtained from the Poisson layer measure after the
+substitution `s = y * u`. -/
+def poissonLayerDensity (u : ℝ) : ℝ :=
+  poissonLayerWeight 1 u * (2 * u)
+
+theorem poissonLayerDensity_eq (u : ℝ) :
+    poissonLayerDensity u = 4 * u ^ 2 / (π * (1 + u ^ 2) ^ 2) := by
+  unfold poissonLayerDensity poissonLayerWeight
+  ring
+
+theorem poissonLayerDensity_nonneg (u : ℝ) :
+    0 ≤ poissonLayerDensity u := by
+  rw [poissonLayerDensity_eq]
+  positivity
+
+theorem poissonLayerDensity_integrable :
+    Integrable poissonLayerDensity volume := by
+  have hbase : Integrable (fun u : ℝ => (4 / π) * (1 + u ^ 2)⁻¹) volume :=
+    integrable_inv_one_add_sq.const_mul _
+  have hmeas : AEStronglyMeasurable poissonLayerDensity volume := by
+    apply Measurable.aestronglyMeasurable
+    unfold poissonLayerDensity poissonLayerWeight
+    measurability
+  apply hbase.mono' hmeas
+  filter_upwards with u
+  rw [poissonLayerDensity_eq]
+  rw [Real.norm_of_nonneg (by positivity)]
+  have hden : 0 < 1 + u ^ 2 := by positivity
+  calc
+    4 * u ^ 2 / (π * (1 + u ^ 2) ^ 2) =
+        (4 / π) * (u ^ 2 / (1 + u ^ 2)) * (1 + u ^ 2)⁻¹ := by
+      field_simp
+    _ ≤ (4 / π) * 1 * (1 + u ^ 2)⁻¹ := by
+      gcongr
+      exact (div_le_one hden).2 (by linarith)
+    _ = (4 / π) * (1 + u ^ 2)⁻¹ := by ring
+
+theorem poissonLayerDensity_lintegral_ne_top :
+    (∫⁻ u, ENNReal.ofReal (poissonLayerDensity u) ∂volume) ≠ ∞ := by
+  rw [← ofReal_integral_eq_lintegral_ofReal poissonLayerDensity_integrable
+    (Eventually.of_forall poissonLayerDensity_nonneg)]
+  exact ENNReal.ofReal_ne_top
+
+/-- Dominated convergence for a bounded radial-average profile against the
+fixed Poisson layer density.  This is the analytic core of the a.e. boundary
+limit once the Lebesgue-point and `L²` estimates have supplied `A`. -/
+theorem tendsto_lintegral_poissonLayerDensity_mul
+    {A : ℝ → ℝ≥0∞} (hA : Measurable A) {C : ℝ≥0∞} (hC : C ≠ ∞)
+    (hbound : ∀ s, A s ≤ C)
+    (hzero : ∀ u, Tendsto (fun y : ℝ => A (y * u)) (𝓝[>] 0) (𝓝 0)) :
+    Tendsto
+      (fun y : ℝ => ∫⁻ u,
+        ENNReal.ofReal (poissonLayerDensity u) * A (y * u) ∂volume)
+      (𝓝[>] 0) (𝓝 0) := by
+  let Q : ℝ → ℝ≥0∞ := fun u => ENNReal.ofReal (poissonLayerDensity u)
+  have hQ : Measurable Q := by
+    apply Measurable.ennreal_ofReal
+    rw [show poissonLayerDensity =
+        fun u => 4 * u ^ 2 / (π * (1 + u ^ 2) ^ 2) from
+      funext poissonLayerDensity_eq]
+    measurability
+  have hbound_fin : (∫⁻ u, Q u * C ∂volume) ≠ ∞ := by
+    rw [lintegral_mul_const C hQ]
+    exact ENNReal.mul_ne_top poissonLayerDensity_lintegral_ne_top hC
+  have hdct := tendsto_lintegral_filter_of_dominated_convergence
+    (μ := volume) (l := 𝓝[>] (0 : ℝ))
+    (F := fun y u => Q u * A (y * u)) (f := fun _ => 0)
+    (fun u => Q u * C)
+    (by
+      filter_upwards with y
+      exact hQ.mul (hA.comp (measurable_const.mul measurable_id)))
+    (by
+      filter_upwards with y
+      filter_upwards with u
+      exact mul_le_mul_left' (hbound (y * u)) (Q u))
+    hbound_fin
+    (by
+      filter_upwards with u
+      simpa only [Q, mul_zero] using
+        ENNReal.Tendsto.const_mul (hzero u) (Or.inr ENNReal.ofReal_ne_top))
+  simpa only [Q, lintegral_zero] using hdct
 
 end ConstructionTargets.RadialMajorantAE
