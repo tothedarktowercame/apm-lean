@@ -172,6 +172,73 @@ lemma integrable_iterate_deriv_standardGaussian (n : ℕ) :
   rw [show -(1 / 2 : ℝ) * x ^ 2 = -(x ^ 2 / 2) by ring]
   ring
 
+/-- Every iterated derivative of the standard Gaussian is square-integrable. -/
+lemma memLp_two_iterate_deriv_standardGaussian (n : ℕ) :
+    MemLp (deriv^[n] (fun y : ℝ => Real.exp (-(y ^ 2 / 2)))) 2 volume := by
+  have hmeas : AEStronglyMeasurable
+      (deriv^[n] (fun y : ℝ => Real.exp (-(y ^ 2 / 2)))) volume :=
+    ((show ContDiff ℝ ∞ (fun y : ℝ => Real.exp (-(y ^ 2 / 2))) by
+      fun_prop).iterate_deriv n).continuous.aestronglyMeasurable
+  refine (memLp_two_iff_integrable_sq hmeas).2 ?_
+  let p : Polynomial ℝ :=
+    (Polynomial.hermite n).map (Int.castRingHom ℝ)
+  have h := integrable_polynomial_mul_exp_neg_mul_sq (p * p)
+    (show (0 : ℝ) < 1 by norm_num)
+  apply h.congr
+  filter_upwards with x
+  rw [Polynomial.deriv_gaussian_eq_hermite_mul_gaussian]
+  simp only [Polynomial.eval_mul]
+  rw [show p.eval x = Polynomial.aeval x (Polynomial.hermite n) by
+    exact Polynomial.eval_map (p := Polynomial.hermite n)
+      (f := Int.castRingHom ℝ) x]
+  rw [show -(1 : ℝ) * x ^ 2 = -(x ^ 2 / 2) + -(x ^ 2 / 2) by ring,
+    Real.exp_add]
+  ring_nf
+  rw [show (-1 : ℝ) ^ (n * 2) = 1 by
+    rw [show n * 2 = 2 * n by omega, pow_mul]
+    norm_num]
+  ring
+
+/-- The first derivative of a positive-time heat kernel is square-integrable. -/
+lemma heatKernel_deriv_memLp_two {t : ℝ} (ht : 0 < t) :
+    MemLp (fun x => -(x / (2 * t)) * heatKernel t x) 2 volume := by
+  have hmeas : AEStronglyMeasurable
+      (fun x => -(x / (2 * t)) * heatKernel t x) volume := by
+    unfold heatKernel
+    fun_prop
+  refine (memLp_two_iff_integrable_sq hmeas).2 ?_
+  have hgauss := integrable_pow_mul_exp_neg_mul_sq 2
+    (show (0 : ℝ) < 1 / (2 * t) by positivity)
+  have h := hgauss.const_mul
+    (((4 * π * t) ^ (-(1 : ℝ) / 2)) ^ 2 / (4 * t ^ 2))
+  apply h.congr
+  filter_upwards with x
+  unfold heatKernel
+  have hexp :
+      Real.exp (-x ^ 2 / (4 * t)) ^ 2 =
+        Real.exp (-(1 / (2 * t)) * x ^ 2) := by
+    rw [pow_two, ← Real.exp_add]
+    congr 1
+    ring
+  simp only [mul_pow]
+  rw [hexp]
+  ring
+
+/-- At each spatial point, the first differentiated convolution integrand is
+integrable by Cauchy--Schwarz. -/
+lemma heatKernel_deriv_mul_integrable
+    {t : ℝ} (ht : 0 < t) {f : ℝ → ℝ} (hf : MemLp f 2 volume)
+    (x : ℝ) :
+    Integrable
+      (fun y => (-((x - y) / (2 * t)) * heatKernel t (x - y)) * f y)
+      volume := by
+  have hshift : MemLp
+      (fun y : ℝ => -((x - y) / (2 * t)) * heatKernel t (x - y))
+      2 volume :=
+    (heatKernel_deriv_memLp_two ht).comp_measurePreserving
+      (volume.measurePreserving_sub_left x)
+  exact hshift.integrable_mul hf
+
 /-- A positive-time heat kernel is square-integrable. -/
 lemma heatKernel_memLp_two {t : ℝ} (ht : 0 < t) :
     MemLp (heatKernel t) 2 volume := by
