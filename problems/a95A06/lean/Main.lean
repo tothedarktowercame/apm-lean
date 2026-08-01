@@ -362,6 +362,31 @@ lemma extension_deriv_eq_lacunary_deriv_series
   exact (lacunarySeries_hasDerivAt_of_norm_lt_one
     (by simpa [mem_ball, dist_zero_right] using hw)).deriv
 
+/-- The differentiated lacunary series is summable strictly inside the unit
+disk, provided the evaluation point is nonzero. -/
+lemma summable_lacunary_deriv_terms_of_norm_lt_one
+    {w : ℂ} (hw0 : 0 < ‖w‖) (hw1 : ‖w‖ < 1) :
+    Summable (fun n : ℕ => w ^ (n.factorial - 1)) := by
+  let u : ℕ → ℝ := fun n => ‖w‖⁻¹ * ‖w‖ ^ n
+  have hu : Summable u :=
+    (summable_geometric_of_lt_one hw0.le hw1).mul_left ‖w‖⁻¹
+  apply Summable.of_norm_bounded hu
+  intro n
+  rw [norm_pow]
+  by_cases hn : n = 0
+  · subst n
+    simpa [u] using (one_le_inv₀ hw0).2 hw1.le
+  · have hexp : n - 1 ≤ n.factorial - 1 :=
+      Nat.sub_le_sub_right n.self_le_factorial 1
+    calc
+      ‖w‖ ^ (n.factorial - 1) ≤ ‖w‖ ^ (n - 1) :=
+        pow_le_pow_of_le_one hw0.le hw1.le hexp
+      _ = u n := by
+        change ‖w‖ ^ (n - 1) = ‖w‖⁻¹ * ‖w‖ ^ n
+        have hn1 : 1 ≤ n := Nat.one_le_iff_ne_zero.mpr hn
+        rw [mul_comm, ← div_eq_mul_inv, eq_div_iff hw0.ne']
+        rw [← pow_succ, Nat.sub_add_cancel hn1]
+
 /-- Part (b): The unit circle is a natural boundary for f.
 
 No connected open set U properly containing Δ admits an analytic function F
@@ -426,6 +451,106 @@ theorem lacunarySeries_natural_boundary :
   -- already-proved eventual bound `hfinite_radial`.  What remains is thus the
   -- radius-dependent summable majorant and the finite-tail lower-bound limit;
   -- the extension/topology side and the termwise derivative identity are done.
-  sorry
+  let ζ : ℂ := circleMap 0 1 (2 * Real.pi * (θ : ℝ))
+  let B : ℝ := ‖deriv F ζ‖ + 1
+  obtain ⟨N, hN⟩ := exists_nat_gt (B + (θ.den : ℝ))
+  let P : ℝ → ℝ := fun r =>
+    ∑ m ∈ Finset.range N, r ^ ((m + θ.den).factorial - 1)
+  have hP_tendsto : Tendsto P (𝓝[<] (1 : ℝ)) (𝓝 (N : ℝ)) := by
+    have hterm (m : ℕ) :
+        Tendsto (fun r : ℝ => r ^ ((m + θ.den).factorial - 1))
+          (𝓝[<] (1 : ℝ)) (𝓝 1) := by
+      have hc : Continuous (fun r : ℝ => r ^ ((m + θ.den).factorial - 1)) :=
+        continuous_id.pow _
+      simpa using (hc.tendsto 1).mono_left inf_le_left
+    simpa [P] using
+      (tendsto_finset_sum (Finset.range N) (fun m _ => hterm m))
+  have hP_large : ∀ᶠ r in 𝓝[<] (1 : ℝ), B + (θ.den : ℝ) < P r :=
+    (tendsto_order.1 hP_tendsto).1 _ hN
+  have hpositive : ∀ᶠ r in 𝓝[<] (1 : ℝ), 0 < r :=
+    Filter.Eventually.filter_mono inf_le_left (Ioi_mem_nhds zero_lt_one)
+  have hbelow : ∀ᶠ r in 𝓝[<] (1 : ℝ), r < 1 := self_mem_nhdsWithin
+  obtain ⟨r, hfinite, hPlarge, hr0, hr1⟩ :=
+    (hfinite_radial.and (hP_large.and (hpositive.and hbelow))).exists
+  have hr1' : r < 1 := hr1
+  have hζnorm : ‖ζ‖ = 1 := by
+    simp [ζ, norm_circleMap_zero]
+  have hw_norm : ‖(r : ℂ) * ζ‖ = r := by
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hr0, hζnorm, mul_one]
+  have hsummable :
+      Summable (fun n : ℕ => ((r : ℂ) * ζ) ^ (n.factorial - 1)) := by
+    apply summable_lacunary_deriv_terms_of_norm_lt_one
+    · rw [hw_norm]
+      exact hr0
+    · rw [hw_norm]
+      exact hr1'
+  let a : ℕ → ℂ := fun n => ((r : ℂ) * ζ) ^ (n.factorial - 1)
+  let b : ℕ → ℝ := fun m => r ^ ((m + θ.den).factorial - 1)
+  have htail (m : ℕ) : ζ * a (m + θ.den) = (b m : ℂ) := by
+    have hfac : (m + θ.den).factorial ≠ 0 := Nat.factorial_ne_zero _
+    have hroot : ζ ^ (m + θ.den).factorial = 1 := by
+      exact rational_angle_factorial_pow_eq_one θ (Nat.le_add_left θ.den m)
+    dsimp [a, b]
+    rw [mul_pow]
+    calc
+      ζ * ((r : ℂ) ^ ((m + θ.den).factorial - 1) *
+          ζ ^ ((m + θ.den).factorial - 1)) =
+          (r : ℂ) ^ ((m + θ.den).factorial - 1) *
+            (ζ ^ ((m + θ.den).factorial - 1) * ζ) := by ring
+      _ = (r : ℂ) ^ ((m + θ.den).factorial - 1) *
+            ζ ^ (m + θ.den).factorial := by rw [pow_sub_one_mul hfac]
+      _ = (r : ℂ) ^ ((m + θ.den).factorial - 1) := by rw [hroot, mul_one]
+      _ = (b m : ℂ) := by simp [b]
+  have htail_summable : Summable (fun m => a (m + θ.den)) :=
+    (summable_nat_add_iff θ.den).2 (by simpa [a] using hsummable)
+  have hb_complex : Summable (fun m => (b m : ℂ)) := by
+    simpa only [htail] using htail_summable.mul_left ζ
+  have hb : Summable b := by
+    have := hb_complex.map Complex.reCLM Complex.reCLM.continuous
+    simpa only [Function.comp_apply, Complex.reCLM_apply, ← Complex.ofReal_pow,
+      Complex.ofReal_re, b] using this
+  have hsplit :
+      ζ * (∑' n, a n) =
+        (∑ n ∈ Finset.range θ.den, ζ * a n) + (∑' m, (b m : ℂ)) := by
+    rw [← hsummable.sum_add_tsum_nat_add θ.den]
+    rw [mul_add, Finset.mul_sum]
+    congr 1
+    rw [← htail_summable.tsum_mul_left ζ]
+    exact tsum_congr htail
+  let H : ℂ := ∑ n ∈ Finset.range θ.den, ζ * a n
+  have hHnorm : ‖H‖ ≤ (θ.den : ℝ) := by
+    calc
+      ‖H‖ ≤ ∑ n ∈ Finset.range θ.den, ‖ζ * a n‖ := norm_sum_le _ _
+      _ ≤ ∑ _n ∈ Finset.range θ.den, (1 : ℝ) := by
+        apply Finset.sum_le_sum
+        intro n hn
+        rw [norm_mul, hζnorm, one_mul]
+        dsimp [a]
+        rw [norm_pow, hw_norm]
+        exact pow_le_one₀ hr0.le hr1'.le
+      _ = (θ.den : ℝ) := by simp
+  have hHre : -(θ.den : ℝ) ≤ H.re :=
+    (neg_le_neg hHnorm).trans (neg_le_of_abs_le (Complex.abs_re_le_norm H))
+  have hP_le : P r ≤ ∑' m, b m := by
+    apply hb.sum_le_tsum (Finset.range N)
+    intro m hm
+    exact pow_nonneg hr0.le _
+  have hreal_large : B < (ζ * ∑' n, a n).re := by
+    rw [hsplit]
+    rw [← Complex.ofReal_tsum]
+    simp only [Complex.add_re, Complex.ofReal_re]
+    have hHre' :
+        -(θ.den : ℝ) ≤ (∑ n ∈ Finset.range θ.den, ζ * a n).re := by
+      simpa [H] using hHre
+    linarith
+  have hnorm_large : B < ‖∑' n, a n‖ := by
+    calc
+      B < (ζ * ∑' n, a n).re := hreal_large
+      _ ≤ ‖ζ * ∑' n, a n‖ := Complex.re_le_norm _
+      _ = ‖∑' n, a n‖ := by rw [norm_mul, hζnorm, one_mul]
+  have hderiv := hderiv_radial r hr0 hr1'
+  change ‖deriv F ((r : ℂ) * ζ)‖ < B at hfinite
+  rw [hderiv] at hfinite
+  exact (not_lt_of_ge hnorm_large.le) hfinite
 
 end
