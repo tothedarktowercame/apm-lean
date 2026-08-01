@@ -482,11 +482,51 @@ lemma exists_tendsto_integral_fresnel :
     · exact htail hx hxy
     · simpa [dist_comm] using htail hy hyx
 
+/-- The principal square root in the Abel-regularized Gaussian integral has
+the expected limit as the damping tends to zero from the right. -/
+lemma tendsto_damped_fresnel_closed_form :
+    Filter.Tendsto (fun ε : ℝ => ((π : ℂ) / ((ε : ℂ) - I)) ^ (1 / 2 : ℂ) / 2)
+      (𝓝[>] 0) (𝓝 ((1 + I) * √π / (2 * √2))) := by
+  have hbase : Filter.Tendsto (fun ε : ℝ => (π : ℂ) / ((ε : ℂ) - I))
+      (𝓝[>] 0) (𝓝 ((π : ℂ) * I)) := by
+    have hc : ContinuousAt (fun ε : ℝ => (π : ℂ) / ((ε : ℂ) - I)) 0 := by
+      exact continuousAt_const.div
+        (Complex.continuous_ofReal.continuousAt.sub continuousAt_const) (by simp)
+    convert hc.tendsto.mono_left inf_le_left using 1
+    congr 1
+    simp [div_eq_mul_inv]
+  have hz : (0 : ℝ) ≤ ((π : ℂ) * I).re ∨ ((π : ℂ) * I).im ≠ 0 := by
+    right
+    simp [pi_ne_zero]
+  have hw : 0 < (1 / 2 : ℂ).re := by norm_num
+  have hpow : Filter.Tendsto
+      (fun ε : ℝ => ((π : ℂ) / ((ε : ℂ) - I)) ^ (1 / 2 : ℂ))
+      (𝓝[>] 0) (𝓝 (((π : ℂ) * I) ^ (1 / 2 : ℂ))) :=
+    (Complex.continuousAt_cpow_const_of_re_pos hz hw).tendsto.comp hbase
+  have hs2 : √2 * √2 = (2 : ℝ) := Real.mul_self_sqrt (by norm_num)
+  have hspi : √π * √π = π := Real.mul_self_sqrt pi_pos.le
+  let q : ℂ := (1 + I) * (√π) / √2
+  have hqre : 0 < q.re := by
+    dsimp [q]
+    simp [Complex.div_re]
+    positivity
+  have hqsq : q ^ (2 : ℕ) = (π : ℂ) * I := by
+    dsimp [q]
+    apply Complex.ext <;> norm_num [Complex.div_re, Complex.div_im, pow_two] <;>
+      field_simp <;> nlinarith
+  have hroot : ((π : ℂ) * I) ^ (1 / 2 : ℂ) = q := by
+    rw [← hqsq]
+    simpa using Complex.sq_cpow_two_inv hqre
+  rw [hroot] at hpow
+  dsimp [q] at hpow
+  convert hpow.div_const 2 using 1
+  ring
+
 /-- Part (a), stated as the classical improper oscillatory integral.
 
-    **SORRY BOUNDARY:** Proving this limit requires the contour-rotation
-    argument described in the informal solution. The preceding lemmas explain
-    why it cannot instead be represented by a Bochner integral on `Ioi 0`.
+    Abel regularization evaluates the damped half-line integral by the complex
+    Gaussian formula. Uniform integration-by-parts tail bounds then remove the
+    damping and identify the conditionally convergent improper limit.
 -/
 -- STATEMENT REPAIR 2026-07-31 (Joe-authorised): express the conditionally
 -- convergent Fresnel integral as a limit of integrals over bounded intervals.
@@ -495,20 +535,96 @@ theorem fresnel_integral :
       (fun R : ℝ => ∫ x in (0 : ℝ)..R, cexp (Complex.I * (x : ℂ)^2))
       Filter.atTop
       (nhds ((1 + Complex.I) * (√π) / (2 * (√2)))) := by
-  /-
-  The uniform finite and half-line tail estimates are now proved in
-  `norm_integral_damped_fresnel_le_inv` and
-  `norm_integral_Ioi_damped_fresnel_le_inv`; removal of damping on `[0,a]`
-  is `tendsto_integral_damped_fresnel_interval`.
-
-  What remains is the final three-ε assembly: split both the regularized
-  half-line integral and the improper integral at a common large `a`, use
-  those three lemmas on the two tails and the head, and identify the limit of
-  `(π / ((ε : ℂ) - I)) ^ (1 / 2 : ℂ) / 2` from
-  `integral_gaussian_complex_Ioi`.  The last normalization uses
-  `Complex.log_I`, `Real.cos_pi_div_four`, and `Real.sin_pi_div_four` to show
-  the principal square root of `π * I` is `(1 + I) * √π / √2`.
-  -/
-  sorry
+  let F : ℝ → ℂ := fun R =>
+    ∫ x in (0 : ℝ)..R, cexp (I * (x : ℂ) ^ 2)
+  let V : ℂ := (1 + I) * √π / (2 * √2)
+  obtain ⟨L, hL⟩ := exists_tendsto_integral_fresnel
+  have hLhead {a : ℝ} (ha : 0 < a) : ‖L - F a‖ ≤ 1 / a := by
+    have hclosed : IsClosed {z : ℂ | ‖z - F a‖ ≤ 1 / a} :=
+      isClosed_le (continuous_norm.comp (continuous_id.sub continuous_const)) continuous_const
+    apply hclosed.mem_of_tendsto hL
+    filter_upwards [Filter.eventually_ge_atTop a] with R hR
+    have h0a : IntervalIntegrable
+        (fun x : ℝ => cexp (I * (x : ℂ) ^ 2)) volume 0 a :=
+      (by fun_prop : Continuous fun x : ℝ => cexp (I * (x : ℂ) ^ 2))
+        |>.intervalIntegrable 0 a
+    have haR : IntervalIntegrable
+        (fun x : ℝ => cexp (I * (x : ℂ) ^ 2)) volume a R :=
+      (by fun_prop : Continuous fun x : ℝ => cexp (I * (x : ℂ) ^ 2))
+        |>.intervalIntegrable a R
+    have hadd := intervalIntegral.integral_add_adjacent_intervals h0a haR
+    have hdiff : F R - F a =
+        ∫ x in a..R, cexp (I * (x : ℂ) ^ 2) := by
+      dsimp [F]
+      rw [← hadd]
+      abel
+    change ‖F R - F a‖ ≤ 1 / a
+    rw [hdiff]
+    exact norm_integral_fresnel_le_inv ha hR
+  have hD : Filter.Tendsto
+      (fun ε : ℝ => ∫ x in Set.Ioi (0 : ℝ),
+        cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2))
+      (𝓝[>] 0) (𝓝 V) := by
+    apply tendsto_damped_fresnel_closed_form.congr'
+    filter_upwards [self_mem_nhdsWithin] with ε hε
+    exact (integral_gaussian_complex_Ioi (by simpa using hε)).symm
+  have hVhead {a : ℝ} (ha : 0 < a) : ‖V - F a‖ ≤ 1 / a := by
+    let D : ℝ → ℂ := fun ε => ∫ x in Set.Ioi (0 : ℝ),
+      cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)
+    let H : ℝ → ℂ := fun ε => ∫ x in (0 : ℝ)..a,
+      cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)
+    have hsub : Filter.Tendsto (fun ε => D ε - H ε)
+        (𝓝[>] 0) (𝓝 (V - F a)) := by
+      exact hD.sub (by simpa [H, F] using tendsto_integral_damped_fresnel_interval a)
+    have hclosed : IsClosed {z : ℂ | ‖z‖ ≤ 1 / a} :=
+      isClosed_le continuous_norm continuous_const
+    have hmem : V - F a ∈ {z : ℂ | ‖z‖ ≤ 1 / a} := by
+      apply hclosed.mem_of_tendsto hsub
+      filter_upwards [self_mem_nhdsWithin] with ε hε
+      have hint : IntervalIntegrable
+          (fun x : ℝ => cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)) volume 0 a :=
+        (by fun_prop : Continuous fun x : ℝ =>
+          cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)).intervalIntegrable 0 a
+      have htail : IntegrableOn
+          (fun x : ℝ => cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2))
+          (Set.Ioi a) volume :=
+        (integrable_cexp_neg_mul_sq (by simpa using hε)).integrableOn
+      have hadd := intervalIntegral.integral_interval_add_Ioi' hint htail
+      have heq : D ε - H ε = ∫ x in Set.Ioi a,
+          cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2) := by
+        dsimp [D, H]
+        rw [← hadd]
+        ring
+      rw [heq]
+      exact norm_integral_Ioi_damped_fresnel_le_inv hε ha
+    exact hmem
+  have hLV : L = V := by
+    apply eq_of_dist_eq_zero
+    apply le_antisymm
+    · by_contra hnot
+      have hdpos : 0 < dist L V := lt_of_not_ge hnot
+      let a : ℝ := 4 / dist L V
+      have ha : 0 < a := div_pos (by norm_num) hdpos
+      have h₁ := hLhead ha
+      have h₂ := hVhead ha
+      have htri : dist L V ≤ ‖L - F a‖ + ‖V - F a‖ := by
+        rw [Complex.dist_eq]
+        calc
+          ‖L - V‖ = ‖(L - F a) - (V - F a)‖ := by ring
+          _ ≤ ‖L - F a‖ + ‖V - F a‖ := norm_sub_le _ _
+      have hbound : dist L V ≤ 2 / a :=
+        htri.trans <| (add_le_add h₁ h₂).trans_eq (by ring)
+      have haeq : 2 / a = dist L V / 2 := by
+        dsimp [a]
+        field_simp [hdpos.ne']
+        norm_num
+      rw [haeq] at hbound
+      linarith
+    · exact dist_nonneg
+  change Filter.Tendsto
+    (fun R : ℝ => ∫ x in (0 : ℝ)..R, cexp (I * (x : ℂ) ^ 2))
+    Filter.atTop (nhds V)
+  rw [← hLV]
+  exact hL
 
 end ApmCanaries.A01A10
