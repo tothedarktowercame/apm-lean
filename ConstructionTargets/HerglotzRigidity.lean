@@ -1,6 +1,8 @@
 import Mathlib.Analysis.Calculus.Deriv.Star
 import Mathlib.Analysis.Complex.Liouville
 import Mathlib.Analysis.Analytic.IsolatedZeros
+import Mathlib.Analysis.Complex.Harmonic.Poisson
+import Mathlib.Analysis.InnerProductSpace.Harmonic.Constructions
 
 /-!
 # Entire Pick-function rigidity
@@ -54,6 +56,33 @@ theorem im_neg_of_im_neg
   simp only [star_star] at href
   rw [← href] at hp
   simpa using hp
+
+/-- The imaginary part of an entire function real on the real axis is odd
+under reflection across that axis. -/
+theorem im_apply_star_eq_neg
+    {f : ℂ → ℂ} (hf : Differentiable ℂ f)
+    (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0) (z : ℂ) :
+    (f (star z)).im = -(f z).im := by
+  have href := congrArg im (conj_apply_conj_eq hf hreal z)
+  have hstar : (star (f (star z))).im = -(f (star z)).im := by
+    simpa using Complex.conj_im (f (star z))
+  rw [hstar] at href
+  linarith
+
+/-- Poisson representation of the imaginary part of an entire function on an
+arbitrary disk centered at the origin. This closes the disk-representation
+part of the Herglotz growth route; the remaining work is the positive
+upper-semicircle estimate. -/
+theorem circleAverage_poissonKernel_smul_im_eq
+    {f : ℂ → ℂ} (hf : Differentiable ℂ f)
+    {R : ℝ} {w : ℂ} (hw : w ∈ Metric.ball 0 R) :
+    Real.circleAverage
+      (poissonKernel 0 w • fun z : ℂ => (f z).im) 0 R = (f w).im := by
+  have hu : InnerProductSpace.HarmonicOnNhd
+      (fun z : ℂ => (f z).im) (Metric.closedBall 0 R) := by
+    intro z _
+    exact (hf.analyticAt z).harmonicAt_im
+  exact hu.circleAverage_poissonKernel_smul hw
 
 /-- **Remaining Herglotz/Nevanlinna frontier.** An entire Pick function has at
 most linear growth, uniformly in every direction. -/
