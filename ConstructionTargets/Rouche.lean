@@ -10,6 +10,7 @@ is precisely the missing argument-principle/homotopy-invariance step.
 -/
 
 open Complex Filter MeromorphicOn Metric Set
+open scoped Topology
 
 noncomputable section
 
@@ -166,6 +167,134 @@ lemma exists_zeroFree_factorization_on_closedBall
   exact hfm.extract_zeros_poles hord
     ((divisor f (closedBall c R)).finiteSupport (isCompact_closedBall c R))
 
+/-- Every point of a positive-radius complex sphere is an accumulation point
+of that sphere, hence also of the corresponding closed ball. -/
+lemma accPt_closedBall_of_mem_sphere
+    {c z : ℂ} {R : ℝ} (hR : 0 < R) (hz : z ∈ sphere c R) :
+    AccPt z (𝓟 (closedBall c R)) := by
+  let zp : sphere c R := ⟨c + R, by
+    rw [mem_sphere]
+    simp [abs_of_pos hR]⟩
+  let zm : sphere c R := ⟨c - R, by
+    rw [mem_sphere]
+    simp [abs_of_pos hR]⟩
+  letI : Nontrivial (sphere c R) := ⟨⟨zp, zm, by
+    intro h
+    have h' : c + (R : ℂ) = c - (R : ℂ) := congrArg Subtype.val h
+    have hr := congrArg Complex.re h'
+    norm_num at hr
+    linarith⟩⟩
+  letI : ConnectedSpace (sphere c R) :=
+    isConnected_iff_connectedSpace.mp (isConnected_sphere (by simp) c hR.le)
+  have hsub : AccPt (⟨z, hz⟩ : sphere c R) (𝓟 Set.univ) := by
+    rw [accPt_principal_iff_nhdsWithin]
+    have heq : (Set.univ \ {⟨z, hz⟩} : Set (sphere c R)) = {⟨z, hz⟩}ᶜ := by
+      ext y
+      constructor
+      · exact fun hy => hy.2
+      · exact fun hy => ⟨mem_univ y, hy⟩
+    rw [heq]
+    infer_instance
+  rw [accPt_iff_frequently] at hsub ⊢
+  have hsub' : ∃ᶠ y in 𝓝[sphere c R] z, y ≠ z :=
+    (frequently_nhds_subtype_iff (sphere c R) ⟨z, hz⟩ (fun y : ℂ => y ≠ z)).mp
+      (hsub.mono fun y hy hcoe => hy.1 (Subtype.ext hcoe))
+  have hamb : ∃ᶠ y in 𝓝 z, y ≠ z ∧ y ∈ sphere c R := by
+    rw [nhdsWithin, frequently_inf_principal] at hsub'
+    exact hsub'.mono fun y hy => ⟨hy.2, hy.1⟩
+  exact hamb.mono fun y hy => ⟨hy.1, sphere_subset_closedBall hy.2⟩
+
+/-- The argument-principle boundary identity for an analytic function which
+does not vanish on the boundary circle. -/
+lemma circleIntegral_logDeriv_eq_divisor_sum
+    {f : ℂ → ℂ} {c : ℂ} {R : ℝ} (hR : 0 < R)
+    (hf : AnalyticOnNhd ℂ f (closedBall c R))
+    (hne : ∀ z ∈ sphere c R, f z ≠ 0) :
+    (∮ z in C(c, R), logDeriv f z) =
+      (∑ᶠ z, (divisor f (closedBall c R) z : ℂ)) * (2 * Real.pi * I) := by
+  classical
+  let D := divisor f (closedBall c R)
+  let q : ℂ → ℂ := ∏ᶠ u, (· - u) ^ D u
+  have hD : D.support.Finite :=
+    (divisor f (closedBall c R)).finiteSupport (isCompact_closedBall c R)
+  have hDb : D.support ⊆ ball c R := by
+    intro z hzD
+    have hzcb : z ∈ closedBall c R := D.supportWithinDomain hzD
+    rw [mem_ball]
+    have hzle : dist z c ≤ R := by
+      simpa [dist_comm] using (mem_closedBall.mp hzcb)
+    exact lt_of_le_of_ne hzle fun heq => by
+      have hzs : z ∈ sphere c R := by
+        rw [mem_sphere]
+        exact heq
+      have hDz : D z = 0 := by
+        have hzorder : meromorphicOrderAt f z = 0 :=
+          (hf z hzcb).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.mpr
+            (hne z hzs)
+        simp [D, MeromorphicOn.divisor_apply hf.meromorphicOn hzcb, hzorder]
+      exact (Function.mem_support.mp hzD) hDz
+  obtain ⟨h, hh, hhne, hfac⟩ :=
+    exists_zeroFree_factorization_on_closedBall hR hf hne
+  have hq_analytic : AnalyticOnNhd ℂ q (sphere c R) := by
+    intro z hz
+    have hzcb : z ∈ closedBall c R := sphere_subset_closedBall hz
+    have hzD : D z = 0 := by
+      apply not_ne_iff.mp
+      intro hzD
+      have hzball := hDb (Function.mem_support.mpr hzD)
+      rw [mem_ball] at hzball
+      rw [mem_sphere] at hz
+      linarith
+    apply ((Function.FactorizedRational.meromorphicNFOn D
+      (closedBall c R)) hzcb).meromorphicOrderAt_nonneg_iff_analyticAt.mp
+    rw [Function.FactorizedRational.meromorphicOrderAt_eq D hD, hzD]
+    exact le_rfl
+  have hqne : ∀ z ∈ sphere c R, q z ≠ 0 := by
+    intro z hz
+    apply Function.FactorizedRational.ne_zero
+    apply not_ne_iff.mp
+    intro hzD
+    have hzball := hDb (Function.mem_support.mpr hzD)
+    rw [mem_ball] at hzball
+    rw [mem_sphere] at hz
+    linarith
+  have hpoint : ∀ z ∈ sphere c R,
+      logDeriv f z = logDeriv q z + logDeriv h z := by
+    intro z hz
+    have hzcb : z ∈ closedBall c R := sphere_subset_closedBall hz
+    have hprod : AnalyticAt ℂ (q * h) z :=
+      (hq_analytic z hz).mul (hh z hzcb)
+    have hlocalNE : f =ᶠ[𝓝[≠] z] q * h :=
+      (hf z hzcb).meromorphicAt.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin
+        hprod.meromorphicAt hzcb (accPt_closedBall_of_mem_sphere hR hz) hfac
+    have hvalue : f z = (q * h) z := by
+      letI := NormedField.nhdsNE_neBot (α := ℂ) z
+      exact tendsto_nhds_unique_of_eventuallyEq (l := 𝓝[≠] z)
+        ((hf z hzcb).continuousAt.tendsto.mono_left inf_le_left)
+        (hprod.continuousAt.tendsto.mono_left inf_le_left)
+        hlocalNE
+    have hlocal : f =ᶠ[𝓝 z] q * h :=
+      eventuallyEq_nhds_of_eventuallyEq_nhdsNE hlocalNE hvalue
+    rw [show logDeriv f z = logDeriv (q * h) z by
+      simp only [logDeriv_apply, hlocal.deriv_eq, hlocal.self_of_nhds]]
+    exact logDeriv_mul z (hqne z hz) (hhne ⟨z, hzcb⟩)
+      (hq_analytic z hz).differentiableAt (hh z hzcb).differentiableAt
+  have hqlog : AnalyticOnNhd ℂ (logDeriv q) (sphere c R) := by
+    simpa only [logDeriv_apply, div_eq_mul_inv] using
+      hq_analytic.deriv.mul (hq_analytic.inv hqne)
+  have hhlog : AnalyticOnNhd ℂ (logDeriv h) (closedBall c R) := by
+    simpa only [logDeriv_apply, div_eq_mul_inv] using
+      hh.deriv.mul (hh.inv fun z hz => hhne ⟨z, hz⟩)
+  rw [circleIntegral.integral_congr hR.le hpoint,
+    circleIntegral.integral_add (hqlog.continuousOn.circleIntegrable hR.le)
+      ((hhlog.continuousOn.mono sphere_subset_closedBall).circleIntegrable hR.le),
+    show (∮ z in C(c, R), logDeriv q z) =
+        (∑ᶠ z, (D z : ℂ)) * (2 * Real.pi * I) by
+      exact circleIntegral_logDeriv_factorizedRational D hD hR hDb,
+    circleIntegral_logDeriv_eq_zero_of_analyticOnNhd_of_ne_zero hR.le hh
+      (fun z hz => hhne ⟨z, hz⟩),
+    add_zero]
+
 /-- The strict Rouché inequality keeps the straight-line homotopy away from
 zero on the boundary.  This is the pointwise topological core of the theorem. -/
 lemma add_smul_ne_zero_of_norm_le_one
@@ -233,11 +362,15 @@ a neighborhood of the closed disk and `‖g‖ < ‖f‖` on its boundary, then 
 and `f + g` have the same number of zeros in the disk, counted with
 multiplicity.
 
-The current Mathlib divisor/Jensen API supplies the zero multiplicities and
-their local finiteness.  The missing bridge is invariance of the total divisor
-under a boundary-nonvanishing holomorphic homotopy (equivalently, the argument
-principle). `rouche_homotopy_analyticOnNhd_and_ne_zero` proves the complete
-analytic and boundary input for the standard straight-line homotopy. -/
+`circleIntegral_logDeriv_eq_divisor_sum` above supplies the argument principle
+for each member of the homotopy.  The remaining bridge is invariance of its
+boundary integral under a boundary-nonvanishing holomorphic homotopy.  One
+concrete route is continuity in the homotopy parameter: the preceding identity
+puts every value in the discrete lattice `(2 * π * I) • ℤ`, so connectedness of
+`[0, 1]` makes the value constant.
+
+`rouche_homotopy_analyticOnNhd_and_ne_zero` proves the complete analytic and
+boundary input for the standard straight-line homotopy. -/
 theorem zeroCountInClosedBall_add_eq
     {f g : ℂ → ℂ} {c : ℂ} {R : ℝ}
     (hR : 0 < R)
