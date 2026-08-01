@@ -2,6 +2,7 @@ import Mathlib.Analysis.Convolution
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
 import ConstructionTargets.L2Translation
+import ConstructionTargets.YoungConvolution
 
 /-!
 # APM a94A03: Gaussian convolution is an Lp contraction and approximate identity
@@ -108,22 +109,40 @@ lemma gaussConv_eq_integral_unitKernel {t : ℝ} (ht : 0 < t) (f : ℝ → ℝ) 
 
 /-- Part (a): K_t is an Lp contraction: eLpNorm(K_t f) <= eLpNorm(f).
 
-    SORRY BOUNDARY: the corpus now has a proved general Young inequality in
-    `a95J08`, but problem files are not importable modules.  That result must be
-    promoted to a shared construction module before it can discharge this
-    probability-kernel estimate without duplicating the proof here. -/
+    This is Young's convolution inequality with the normalized positive
+    Gaussian as the `L¹` factor. -/
 theorem gaussConv_Lp_contraction
     {p : ENNReal} (hp : 1 ≤ p) (hp' : p ≠ ⊤)
     {t : ℝ} (ht : 0 < t)
     {f : ℝ → ℝ} (hf : MemLp f p volume) :
     eLpNorm (gaussConv t f) p volume ≤ eLpNorm f p volume := by
-  sorry
+  have hkernel_norm : eLpNorm (gaussKernel t) 1 volume = 1 := by
+    rw [eLpNorm_one_eq_lintegral_enorm,
+      ← ofReal_integral_norm_eq_lintegral_enorm (gaussKernel_integrable ht)]
+    have hint : ∫ x, ‖gaussKernel t x‖ ∂volume = 1 := by
+      calc
+        (∫ x, ‖gaussKernel t x‖ ∂volume) =
+            ∫ x, gaussKernel t x ∂volume := by
+              apply integral_congr_ae
+              filter_upwards with x
+              rw [Real.norm_eq_abs, abs_of_nonneg (gaussKernel_nonneg ht x)]
+        _ = 1 := gaussKernel_integral_eq_one ht
+    rw [hint]
+    norm_num
+  have hyoung :=
+    ConstructionTargets.YoungConvolution.young_convolution_inequality
+      hp hp' (gaussKernel_integrable ht) hf
+  change eLpNorm (ConstructionTargets.YoungConvolution.convolution
+    (gaussKernel t) f) p volume ≤ eLpNorm f p volume
+  simpa [hkernel_norm] using hyoung
 
 /-- Part (b): K_t f converges to f in Lp as t -> 0+.
 
-    SORRY BOUNDARY: translation continuity is proved above.  The remaining
-    reusable gap is the probability-kernel integral estimate (equivalently the
-    shared general Young inequality), followed by Gaussian tail domination. -/
+    SORRY BOUNDARY: translation continuity and Young contraction are now
+    available.  The remaining reusable gap is the Banach-valued Minkowski
+    estimate for the average of translation differences; after it, split the
+    unit Gaussian into a compact head (uniform translation continuity) and an
+    integrable tail (bounded by twice the `Lp` norm). -/
 theorem gaussConv_tendsto_Lp
     {p : ENNReal} (hp : 1 ≤ p) (hp' : p ≠ ⊤)
     {f : ℝ → ℝ} (hf : MemLp f p volume) :
