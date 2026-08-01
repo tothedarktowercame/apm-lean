@@ -41,6 +41,8 @@ import Mathlib.Analysis.Convex.Integral
 import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import ConstructionTargets.SchwarzEquality
+import ConstructionTargets.UnivalentDeriv
 
 open Complex Metric Set Real MeasureTheory
 
@@ -233,7 +235,77 @@ lemma rotation_of_disk_subset_image
     (hf_zero : f 0 = 0) (hf_deriv : ‖deriv f 0‖ = 1)
     (h_subset : ball (0 : ℂ) 1 ⊆ f '' ball 0 1) :
     ∃ α : ℝ, ∀ z ∈ ball (0 : ℂ) 1, f z = exp (I * ↑α) * z := by
-  sorry
+  let U : Set ℂ := ball 0 1
+  let g : ℂ → ℂ := Function.invFunOn f U
+  have hsurj : SurjOn f U U := by
+    intro z hz
+    exact h_subset hz
+  have hg_maps : MapsTo g U U := hsurj.mapsTo_invFunOn
+  have hleft : LeftInvOn g f U := hf_inj.leftInvOn_invFunOn
+  have hright : RightInvOn g f U := hsurj.rightInvOn_invFunOn
+  have hzero_mem : (0 : ℂ) ∈ U := by
+    simp [U]
+  have hg_zero : g 0 = 0 := by
+    simpa [hf_zero] using hleft hzero_mem
+  have hg_holo : DifferentiableOn ℂ g U := by
+    intro w hw
+    have hgw : g w ∈ U := hg_maps hw
+    have hfgw : f (g w) = w := hright hw
+    have hf_at : AnalyticAt ℂ f (g w) :=
+      hf_holo.analyticAt (isOpen_ball.mem_nhds hgw)
+    have hf_deriv_ne : deriv f (g w) ≠ 0 :=
+      ConstructionTargets.UnivalentDeriv.deriv_ne_zero_of_injOn
+        isOpen_ball hf_holo hf_inj hgw
+    have hgf_at : AnalyticAt ℂ (g ∘ f) (g w) := by
+      apply analyticAt_id.congr
+      filter_upwards [isOpen_ball.eventually_mem hgw] with z hz
+      exact (hleft hz).symm
+    rw [← hfgw]
+    exact ((analyticAt_comp_iff_of_deriv_ne_zero hf_at hf_deriv_ne).mp hgf_at).differentiableAt
+      |>.differentiableWithinAt
+  have hg_deriv : ‖deriv g 0‖ = 1 := by
+    have hf_at_zero : DifferentiableAt ℂ f (g 0) := by
+      rw [hg_zero]
+      exact hf_holo.differentiableAt (isOpen_ball.mem_nhds hzero_mem)
+    have hg_at_zero : DifferentiableAt ℂ g 0 :=
+      hg_holo.differentiableAt (isOpen_ball.mem_nhds hzero_mem)
+    have hcomp : deriv (f ∘ g) 0 = deriv f (g 0) * deriv g 0 :=
+      deriv_comp 0 hf_at_zero hg_at_zero
+    have hcomp_id : deriv (f ∘ g) 0 = 1 := by
+      have heq : (f ∘ g) =ᶠ[nhds 0] id := by
+        filter_upwards [isOpen_ball.eventually_mem hzero_mem] with z hz
+        exact hright hz
+      simpa using heq.deriv_eq
+    rw [hg_zero] at hcomp
+    have hnorm := congrArg norm (hcomp.symm.trans hcomp_id)
+    rw [norm_mul, hf_deriv] at hnorm
+    simpa using hnorm
+  obtain ⟨c, hc, hgc⟩ :=
+    ConstructionTargets.SchwarzEquality.exists_unit_mul hg_holo hg_maps hg_zero hg_deriv
+  let d : ℂ := c⁻¹
+  have hc0 : c ≠ 0 := by
+    intro hc0
+    simp [hc0] at hc
+  have hd : ‖d‖ = 1 := by
+    simp [d, hc]
+  refine ⟨d.arg, fun z hz ↦ ?_⟩
+  have hdz : d * z ∈ U := by
+    change d * z ∈ ball (0 : ℂ) 1
+    rw [mem_ball, dist_zero_right]
+    rw [norm_mul, hd, one_mul]
+    simpa [mem_ball, dist_zero_right] using hz
+  have hgdz : g (d * z) = z := by
+    rw [hgc (d * z) hdz]
+    dsimp [d]
+    field_simp
+  have hfdz : f z = d * z := by
+    calc
+      f z = f (g (d * z)) := congrArg f hgdz.symm
+      _ = d * z := hright hdz
+  rw [hfdz]
+  congr 1
+  rw [mul_comm]
+  simpa [hd] using (Complex.norm_mul_exp_arg_mul_I d).symm
 
 /-- Jensen's inequality for the exponential on the circle:
 (1/2π) ∫ g ≥ exp((1/2π) ∫ log g) when g > 0.
