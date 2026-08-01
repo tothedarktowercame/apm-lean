@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Rouche
 
 open Complex Polynomial Set Metric
 
@@ -67,6 +68,92 @@ theorem apm_a97A08_no_zeros_inner
     rw [hz5, norm_neg]
   nlinarith [apm_a97A08_rouche_inner z hz, hnorm]
 
+/-- For a monic complex polynomial, the divisor zero count on a closed ball
+is the cardinality of the roots there, with multiplicity. -/
+lemma zeroCountInClosedBall_aeval_eq_card_filter
+    (q : ℂ[X]) (hq : q.Monic) (c : ℂ) (R : ℝ) :
+    ConstructionTargets.Rouche.zeroCountInClosedBall (fun z ↦ aeval z q) c R =
+      (q.roots.filter (fun z ↦ dist z c ≤ R)).card := by
+  classical
+  let D : Function.locallyFinsupp ℂ ℤ :=
+    { toFun := fun z ↦ q.roots.count z
+      supportWithinDomain' := fun _ _ ↦ Set.mem_univ _
+      supportLocallyFiniteWithinDomain' := by
+        intro z _
+        refine ⟨Set.univ, Filter.univ_mem, ?_⟩
+        apply q.roots.toFinset.finite_toSet.subset
+        intro x hx
+        simp only [Set.mem_inter_iff, mem_univ, true_and, Function.mem_support,
+          ne_eq] at hx
+        apply Multiset.mem_toFinset.mpr
+        apply Multiset.count_pos.mp
+        have : q.roots.count x ≠ 0 := by exact_mod_cast hx
+        omega }
+  have hD : D.support.Finite := by
+    apply q.roots.toFinset.finite_toSet.subset
+    intro x hx
+    apply Multiset.mem_toFinset.mpr
+    apply Multiset.count_pos.mp
+    have : q.roots.count x ≠ 0 := by
+      change (q.roots.count x : ℤ) ≠ 0 at hx
+      have hi : (q.roots.count x : ℤ) ≠ 0 := hx
+      exact_mod_cast hi
+    omega
+  have hfactor : (fun z ↦ aeval z q) = ∏ᶠ u, (· - u) ^ D u := by
+    funext z
+    change q.eval z = _
+    rw [(IsAlgClosed.splits q).eval_eq_prod_roots_of_monic hq]
+    rw [Finset.prod_multiset_map_count]
+    rw [finprod_eq_prod_of_mulSupport_subset (s := q.roots.toFinset)]
+    simp only [Finset.prod_apply]
+    · apply Finset.prod_congr rfl
+      intro u hu
+      change (z - u) ^ q.roots.count u = (z - u) ^ (q.roots.count u : ℤ)
+      simp
+    · intro u hu
+      simp only [Function.FactorizedRational.mulSupport, Function.mem_support] at hu
+      apply Multiset.mem_toFinset.mpr
+      apply Multiset.count_pos.mp
+      have : q.roots.count u ≠ 0 := by
+        change (q.roots.count u : ℤ) ≠ 0 at hu
+        exact_mod_cast hu
+      omega
+  unfold ConstructionTargets.Rouche.zeroCountInClosedBall
+  rw [hfactor]
+  have hmer : MeromorphicOn (∏ᶠ u, (· - u) ^ D u) Set.univ :=
+    (Function.FactorizedRational.meromorphicNFOn D Set.univ).meromorphicOn
+  rw [← hmer.divisor_restrict (show closedBall c R ⊆ Set.univ from subset_univ _),
+    Function.FactorizedRational.divisor hD]
+  rw [finsum_eq_sum_of_support_subset (s := q.roots.toFinset)]
+  · have hcount :
+        (∑ z ∈ q.roots.toFinset, if dist z c ≤ R then q.roots.count z else 0) =
+          (q.roots.filter (fun z ↦ dist z c ≤ R)).card := by
+      calc
+        _ = ∑ z ∈ q.roots.toFinset,
+              q.roots.count z * (if dist z c ≤ R then 1 else 0) := by
+            apply Finset.sum_congr rfl
+            intro z _
+            split <;> simp_all
+        _ = (q.roots.map fun z ↦ if dist z c ≤ R then 1 else 0).sum :=
+          Finset.sum_multiset_map_count q.roots _ |>.symm
+        _ = _ := by
+          induction q.roots using Multiset.induction_on with
+          | empty => simp
+          | cons a s ih =>
+              by_cases ha : dist a c ≤ R <;> simp [ha, ih, Nat.add_comm]
+    simp only [Function.locallyFinsuppWithin.restrict_apply]
+    change (∑ z ∈ q.roots.toFinset,
+      if dist z c ≤ R then (q.roots.count z : ℤ) else 0) = _
+    exact_mod_cast hcount
+  · intro z hz
+    simp only [Function.mem_support] at hz
+    by_contra hzroot
+    have hznot : z ∉ q.roots := fun hm => hzroot (Multiset.mem_toFinset.mpr hm)
+    have hzcount : q.roots.count z = 0 := Multiset.count_eq_zero.mpr hznot
+    simp only [Function.locallyFinsuppWithin.restrict_apply] at hz
+    change (if z ∈ closedBall c R then (q.roots.count z : ℤ) else 0) ≠ 0 at hz
+    simp [hzcount] at hz
+
 /-- f has 5 zeros (with multiplicity) in the open disk |z| < 2. -/
 theorem apm_a97A08_count_outer :
     (apm_a97A08_f.roots.filter (fun z => ‖z‖ < 2)).card = 5 := by
@@ -121,14 +208,93 @@ theorem apm_a97A08_count_outer :
 /-- f has 1 zero in the open disk |z| < 3/2. -/
 theorem apm_a97A08_count_inner :
     (apm_a97A08_f.roots.filter (fun z => ‖z‖ < 3/2)).card = 1 := by
-  /-
-  Remaining construction: apply Rouché on `‖z‖ = 3/2`, with dominant
-  polynomial `15 * X` and perturbation `X^5 + 1`, using
-  `apm_a97A08_rouche_inner`.  `ConstructionTargets.Rouche` packages the
-  boundary-nonvanishing homotopy, but its divisor-count invariance theorem
-  `zeroCountInClosedBall_add_eq` still contains `sorry`.
-  -/
-  sorry
+  let dominant : ℂ → ℂ := fun z => 15 * z
+  let perturbation : ℂ → ℂ := fun z => z ^ 5 + 1
+  have hdominant : AnalyticOnNhd ℂ dominant (closedBall 0 (3 / 2)) := by
+    exact analyticOnNhd_const.mul analyticOnNhd_id
+  have hperturbation :
+      AnalyticOnNhd ℂ perturbation (closedBall 0 (3 / 2)) := by
+    exact (analyticOnNhd_id.pow 5).add analyticOnNhd_const
+  have hboundary : ∀ z ∈ sphere (0 : ℂ) (3 / 2),
+      ‖perturbation z‖ < ‖dominant z‖ := by
+    intro z hz
+    apply apm_a97A08_rouche_inner
+    simpa [mem_sphere, dist_zero_right] using hz
+  have hrouche :=
+    ConstructionTargets.Rouche.zeroCountInClosedBall_add_eq
+      (c := (0 : ℂ)) (R := 3 / 2) (by norm_num : (0 : ℝ) < 3 / 2)
+      hdominant hperturbation hboundary
+  have hsum : dominant + perturbation = fun z => apm_a97A08_f.aeval z := by
+    funext z
+    simp [dominant, perturbation, apm_a97A08_f]
+    ring
+  rw [hsum] at hrouche
+  let correction : ℂ → ℂ := fun z => -14 * z
+  have hcorrection :
+      AnalyticOnNhd ℂ correction (closedBall 0 (3 / 2)) := by
+    exact analyticOnNhd_const.mul analyticOnNhd_id
+  have hcorrection_boundary : ∀ z ∈ sphere (0 : ℂ) (3 / 2),
+      ‖correction z‖ < ‖dominant z‖ := by
+    intro z hz
+    have hznorm : ‖z‖ = 3 / 2 := by
+      simpa [mem_sphere, dist_zero_right] using hz
+    simp [correction, dominant, hznorm]
+    norm_num
+  have hlinear :=
+    ConstructionTargets.Rouche.zeroCountInClosedBall_add_eq
+      (c := (0 : ℂ)) (R := 3 / 2) (by norm_num : (0 : ℝ) < 3 / 2)
+      hdominant hcorrection hcorrection_boundary
+  have hlinear_sum : dominant + correction =
+      fun z => aeval z (Polynomial.X : ℂ[X]) := by
+    funext z
+    simp [dominant, correction]
+    ring
+  rw [hlinear_sum] at hlinear
+  have hmonic : apm_a97A08_f.Monic := by
+    rw [apm_a97A08_f]
+    rw [show (Polynomial.X ^ 5 + 15 * Polynomial.X + 1 : Polynomial ℂ) =
+        Polynomial.X ^ 5 + (15 * Polynomial.X + 1) by ring]
+    apply (Polynomial.monic_X_pow 5).add_of_left
+    compute_degree
+    norm_num [Polynomial.degree_X_pow]
+  have hclosed := zeroCountInClosedBall_aeval_eq_card_filter
+    apm_a97A08_f hmonic 0 (3 / 2)
+  have hxclosed := zeroCountInClosedBall_aeval_eq_card_filter
+    (Polynomial.X : ℂ[X]) Polynomial.monic_X 0 (3 / 2)
+  have hclosed_count :
+      (apm_a97A08_f.roots.filter (fun z => dist z 0 ≤ 3 / 2)).card = 1 := by
+    have hcast :
+        ((apm_a97A08_f.roots.filter (fun z => dist z 0 ≤ 3 / 2)).card : ℤ) = 1 := by
+      rw [← hclosed, hrouche, ← hlinear, hxclosed]
+      have hz0 : ‖(0 : ℂ)‖ ≤ (3 / 2 : ℝ) := by norm_num
+      have hfilter :
+          ({0} : Multiset ℂ).filter (fun z => ‖z‖ ≤ 3 / 2) = {0} := by
+        apply Multiset.filter_eq_self.mpr
+        intro z hz
+        simp at hz
+        subst z
+        exact hz0
+      rw [Polynomial.roots_X]
+      simp only [dist_zero_right]
+      rw [hfilter]
+      simp
+    exact_mod_cast hcast
+  have hfilters :
+      apm_a97A08_f.roots.filter (fun z => dist z 0 ≤ 3 / 2) =
+        apm_a97A08_f.roots.filter (fun z => ‖z‖ < 3 / 2) := by
+    apply Multiset.filter_congr
+    intro z hz
+    rw [dist_zero_right]
+    constructor
+    · intro hle
+      exact lt_of_le_of_ne hle fun heq => by
+        apply apm_a97A08_no_zeros_inner z heq
+        have hzroot := Polynomial.isRoot_of_mem_roots hz
+        simpa [Polynomial.IsRoot, Polynomial.aeval_def,
+          Polynomial.coe_aeval_eq_eval] using hzroot
+    · exact fun hlt => hlt.le
+  rw [← hfilters]
+  exact hclosed_count
 
 /-- Main theorem: the count in disk |z| < 2 is 5, and the count in
     annulus 3/2 < |z| < 2 is 4. -/
