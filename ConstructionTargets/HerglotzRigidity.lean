@@ -8,10 +8,9 @@ import Mathlib.Analysis.Complex.BorelCaratheodory
 /-!
 # Entire Pick-function rigidity
 
-The Schwarz-reflection, Poisson representation, paired-kernel estimate, and
-linear-growth-to-affine steps are formalized here. The remaining frontier is
-folding the circle average to the positive upper semicircle and anchoring its
-weighted boundary integral.
+The Schwarz-reflection, Poisson representation, conjugate-circle folding,
+paired-kernel estimates, and linear-growth-to-affine steps are formalized here.
+The remaining frontier is the anchored weighted-boundary-integral estimate.
 -/
 
 open Complex Set Filter Topology
@@ -85,6 +84,78 @@ theorem circleAverage_poissonKernel_smul_im_eq
     intro z _
     exact (hf.analyticAt z).harmonicAt_im
   exact hu.circleAverage_poissonKernel_smul hw
+
+/-- Reflection of the standard circle parametrization across the real axis. -/
+theorem circleMap_two_pi_sub (R θ : ℝ) :
+    circleMap 0 R (2 * Real.pi - θ) = star (circleMap 0 R θ) := by
+  rw [circleMap_zero, circleMap_zero]
+  have harg : ((2 * Real.pi - θ : ℝ) : ℂ) * I =
+      2 * (Real.pi : ℂ) * I - (θ : ℂ) * I := by
+    push_cast
+    ring
+  rw [harg, Complex.exp_sub]
+  have htwo : Complex.exp (2 * (Real.pi : ℂ) * I) = 1 :=
+    Complex.exp_two_pi_mul_I
+  rw [htwo, one_div, ← Complex.exp_neg]
+  apply Complex.ext <;> simp [Complex.exp_re, Complex.exp_im]
+
+/-- Split a continuous angular integral into conjugate halves. This is the
+mechanical interval-integral layer behind upper-semicircle Poisson formulas. -/
+theorem intervalIntegral_zero_two_pi_eq_add_reflection
+    (q : ℝ → ℝ) (hq : Continuous q) :
+    (∫ θ in (0 : ℝ)..2 * Real.pi, q θ) =
+      ∫ θ in (0 : ℝ)..Real.pi, (q θ + q (2 * Real.pi - θ)) := by
+  have hi₁ := hq.intervalIntegrable (0 : ℝ) Real.pi (μ := MeasureTheory.volume)
+  have hi₂ := hq.intervalIntegrable Real.pi (2 * Real.pi) (μ := MeasureTheory.volume)
+  rw [← intervalIntegral.integral_add_adjacent_intervals hi₁ hi₂]
+  have hs := intervalIntegral.integral_comp_sub_left
+    (a := (0 : ℝ)) (b := Real.pi) q (2 * Real.pi)
+  have hs' :
+      (∫ θ in (0 : ℝ)..Real.pi, q (2 * Real.pi - θ)) =
+        ∫ θ in Real.pi..2 * Real.pi, q θ := by
+    convert hs using 1
+    all_goals ring_nf
+  rw [← hs']
+  exact (intervalIntegral.integral_add hi₁
+    ((hq.comp (continuous_const.sub continuous_id)).intervalIntegrable
+      0 Real.pi (μ := MeasureTheory.volume))).symm
+
+/-- Poisson representation folded over conjugate boundary points. -/
+theorem circleAverage_poissonKernel_smul_im_eq_upper
+    {f : ℂ → ℂ} (hf : Differentiable ℂ f)
+    (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0)
+    {R : ℝ} {w : ℂ} (hw : w ∈ Metric.ball 0 R) :
+    (f w).im = (2 * Real.pi)⁻¹ *
+      ∫ θ in (0 : ℝ)..Real.pi,
+        (poissonKernel 0 w (circleMap 0 R θ) -
+          poissonKernel 0 w (star (circleMap 0 R θ))) *
+            (f (circleMap 0 R θ)).im := by
+  rw [← circleAverage_poissonKernel_smul_im_eq hf hw,
+    Real.circleAverage_def]
+  simp only [smul_eq_mul]
+  let q : ℝ → ℝ := fun θ =>
+    poissonKernel 0 w (circleMap 0 R θ) * (f (circleMap 0 R θ)).im
+  have hq : Continuous q := by
+    dsimp [q, poissonKernel]
+    simp only [sub_zero]
+    apply Continuous.mul
+    · apply Continuous.div₀
+      · fun_prop
+      · fun_prop
+      · intro θ
+        exact pow_ne_zero 2 (norm_ne_zero_iff.mpr (sub_ne_zero.mpr
+          (circleMap_ne_mem_ball hw θ)))
+    · exact Complex.continuous_im.comp
+        (hf.continuous.comp (continuous_circleMap 0 R))
+  change (2 * Real.pi)⁻¹ * (∫ θ in (0 : ℝ)..2 * Real.pi, q θ) = _
+  rw [intervalIntegral_zero_two_pi_eq_add_reflection q hq]
+  congr 1
+  apply intervalIntegral.integral_congr
+  intro θ _
+  dsimp [q]
+  rw [circleMap_two_pi_sub, im_apply_star_eq_neg hf hreal]
+  simp only [starRingEnd_apply]
+  ring_nf
 
 /-- Exact conjugate-pair difference of the Poisson kernel. The factor
 `z.im` is the boundary `sin θ` weight when `z` runs around a circle. -/
@@ -169,6 +240,50 @@ theorem poissonKernel_sub_star_le
       _ ≤ (64 * w.im * z.im) *
           (‖z - w‖ ^ 2 * ‖star z - w‖ ^ 2) := hlarge
 
+/-- Lower bound for the paired kernel at an anchor in the unit disk. The
+assumption `1 < R` is essential: below the anchor radius the numerator changes
+sign and the denominator comparison reverses. -/
+theorem poissonKernel_sub_star_ge
+    {R : ℝ} {w z : ℂ} (hR : 1 < R) (hz : ‖z‖ = R) (
+    hw : ‖w‖ ≤ 1) (hwi : 0 ≤ w.im) (hzi : 0 ≤ z.im) :
+    (R ^ 2 - ‖w‖ ^ 2) * (4 * z.im * w.im) / (R + 1) ^ 4 ≤
+      poissonKernel 0 w z - poissonKernel 0 w (star z) := by
+  have hzw : ‖w‖ < ‖z‖ := by rw [hz]; linarith
+  rw [poissonKernel_sub_star hzw, hz]
+  have hn₁ : 0 < ‖z - w‖ := by
+    rw [norm_pos_iff]
+    intro h
+    have : z = w := sub_eq_zero.mp h
+    subst w
+    exact (lt_irrefl ‖z‖) hzw
+  have hn₂ : 0 < ‖star z - w‖ := by
+    rw [norm_pos_iff]
+    intro h
+    have hwz : star z = w := sub_eq_zero.mp h
+    have : ‖z‖ = ‖w‖ := by rw [← hwz]; simp
+    linarith
+  have hd : 0 < ‖z - w‖ ^ 2 * ‖star z - w‖ ^ 2 :=
+    mul_pos (sq_pos_of_pos hn₁) (sq_pos_of_pos hn₂)
+  have hRp : 0 < R + 1 := by linarith
+  have hn₁le : ‖z - w‖ ≤ R + 1 := by
+    calc
+      ‖z - w‖ ≤ ‖z‖ + ‖w‖ := norm_sub_le _ _
+      _ ≤ R + 1 := by rw [hz]; linarith
+  have hn₂le : ‖star z - w‖ ≤ R + 1 := by
+    calc
+      ‖star z - w‖ ≤ ‖star z‖ + ‖w‖ := norm_sub_le _ _
+      _ ≤ R + 1 := by simp only [norm_star, hz]; linarith
+  have hden : ‖z - w‖ ^ 2 * ‖star z - w‖ ^ 2 ≤ (R + 1) ^ 4 := by
+    have hs₁ : ‖z - w‖ ^ 2 ≤ (R + 1) ^ 2 := by nlinarith
+    have hs₂ : ‖star z - w‖ ^ 2 ≤ (R + 1) ^ 2 := by nlinarith
+    have hm := mul_le_mul hs₁ hs₂ (sq_nonneg _) (sq_nonneg _)
+    nlinarith [hm]
+  have hnum : 0 ≤ (R ^ 2 - ‖w‖ ^ 2) * (4 * z.im * w.im) := by
+    have : 0 ≤ R ^ 2 - ‖w‖ ^ 2 := by
+      nlinarith [mul_self_le_mul_self (norm_nonneg w) (show ‖w‖ ≤ R by linarith)]
+    positivity
+  exact div_le_div_of_nonneg_left hnum hd hden
+
 /-- Borel-Carathéodory upgrades linear growth of the imaginary part to linear
 growth of the entire holomorphic function. -/
 theorem linear_growth_of_entire_of_im_growth
@@ -230,9 +345,10 @@ theorem linear_growth_of_entire_of_im_growth
       nlinarith [norm_nonneg z, norm_nonneg (f 0),
         mul_nonneg hC (norm_nonneg z)]
 
-/-- **Remaining Herglotz/Nevanlinna frontier.** Fold the Poisson circle average
-over conjugate boundary points, anchor the resulting `z.im`-weighted integral,
-and apply `poissonKernel_sub_star_le`. -/
+/-- **Remaining Herglotz/Nevanlinna frontier.** Apply the folded Poisson formula
+at `w = I` with `poissonKernel_sub_star_ge` to bound the `z.im`-weighted upper
+semicircle integral, then apply `poissonKernel_sub_star_le` at a general point.
+-/
 theorem im_linear_growth_of_entire_pick
     {f : ℂ → ℂ} (hf : Differentiable ℂ f)
     (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0)
