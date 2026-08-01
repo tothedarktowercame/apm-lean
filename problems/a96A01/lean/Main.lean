@@ -375,18 +375,142 @@ theorem limit_ge_geometric_mean
     have hpos : Integrable (fun x => (log ‖f x‖)⁺) μ := by
       simpa [μ] using integrable_posPart_log_norm hf
     have hneg : Integrable (fun x => (log ‖f x‖)⁻) μ := by
-      /- Exact remaining frontier.  Put `p n = 1 / (n + 1)` and
-
-           G n x = (p n)⁻¹ * (1 - ‖f x‖ ^ p n) |> max 0.
-
-         `Real.tendsto_rpow_sub_one_log` gives `G n x → (log ‖f x‖)⁻`
-         a.e.  The positive limit `hL` supplies `c = L/2 > 0` and eventually
-         `c ^ (p n) ≤ ∫ ‖f‖ ^ (p n)`.  Decompose the difference quotient into
-         positive and negative parts.  `rpow_sub_one_div_posPart_le` bounds
-         the positive part by `‖f‖`, while
-         `(1 - c ^ p) / p → -log c`; hence the `L¹` norms of `G n` have finite
-         liminf.  Apply `MeasureTheory.integrable_of_tendsto` to finish. -/
-      sorry
+      let p : ℕ → ℝ := fun n => 1 / ((n : ℝ) + 1)
+      let D : ℕ → ℝ → ℝ := fun n x => (‖f x‖ ^ p n - 1) / p n
+      let G : ℕ → ℝ → ℝ := fun n x => (D n x)⁻
+      have hp_pos (n : ℕ) : 0 < p n := by simp [p]; positivity
+      have hp_one (n : ℕ) : p n ≤ 1 := by
+        dsimp [p]
+        rw [one_div, inv_le_one₀]
+        exact_mod_cast Nat.le_add_left 1 n
+        positivity
+      have hp_zero : Tendsto p atTop (𝓝 0) := by
+        simpa [p] using
+          (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+      have hp_zero_pos : Tendsto p atTop (𝓝[>] 0) := by
+        rw [tendsto_nhdsWithin_iff]
+        exact ⟨hp_zero, Eventually.of_forall fun n => hp_pos n⟩
+      have hGlim : ∀ᵐ x ∂μ,
+          Tendsto (fun n => G n x) atTop (𝓝 ((log ‖f x‖)⁻)) := by
+        filter_upwards [hf_pos] with x hx
+        have ht := continuous_negPart.continuousAt.tendsto.comp
+          ((tendsto_rpow_sub_one_log hx).comp hp_zero_pos)
+        convert ht using 1
+        ext n
+        simp only [Function.comp_apply, G, D, div_eq_mul_inv]
+        rw [mul_comm]
+      have hfm : AEStronglyMeasurable f μ := by
+        simpa [μ] using hf.aestronglyMeasurable
+      have hDmeas (n : ℕ) : AEStronglyMeasurable (D n) μ := by
+        simpa [D, div_eq_mul_inv, mul_comm] using
+          (((Real.continuous_rpow_const (hp_pos n).le).comp_aestronglyMeasurable
+            hfm.norm).sub aestronglyMeasurable_const).const_mul (p n)⁻¹
+      have hGmeas (n : ℕ) : AEStronglyMeasurable (G n) μ :=
+        continuous_negPart.comp_aestronglyMeasurable (hDmeas n)
+      have hGint (n : ℕ) : Integrable (G n) μ := by
+        have hc : Integrable (fun _ : ℝ => (p n)⁻¹) μ := integrable_const _
+        refine hc.mono' (hGmeas n) (ae_of_all μ fun x => ?_)
+        rw [Real.norm_of_nonneg (negPart_nonneg _)]
+        change max (-D n x) 0 ≤ (p n)⁻¹
+        apply max_le
+        · dsimp [D]
+          rw [div_eq_mul_inv]
+          calc
+            -((‖f x‖ ^ p n - 1) * (p n)⁻¹) =
+                (1 - ‖f x‖ ^ p n) * (p n)⁻¹ := by ring
+            _ ≤ 1 * (p n)⁻¹ := mul_le_mul_of_nonneg_right
+              (by linarith [Real.rpow_nonneg (norm_nonneg (f x)) (p n)])
+              (inv_nonneg.2 (hp_pos n).le)
+            _ = (p n)⁻¹ := one_mul _
+        · exact inv_nonneg.2 (hp_pos n).le
+      have hpow_int (n : ℕ) : Integrable (fun x => ‖f x‖ ^ p n) μ := by
+        have hb : Integrable (fun x => 1 + ‖f x‖) μ := by
+          simpa [μ] using (integrable_const (μ := μ) (1 : ℝ)).add hf.norm
+        refine hb.mono'
+          ((Real.continuous_rpow_const (hp_pos n).le).comp_aestronglyMeasurable hfm.norm)
+          (ae_of_all μ fun x => ?_)
+        rw [Real.norm_of_nonneg (Real.rpow_nonneg (norm_nonneg _) _)]
+        exact rpow_le_one_add (norm_nonneg _) (hp_pos n) (hp_one n)
+      have hDint (n : ℕ) : Integrable (D n) μ :=
+        ((hpow_int n).sub (integrable_const (μ := μ) (1 : ℝ))).div_const (p n)
+      have hDpos_int (n : ℕ) : Integrable (fun x => (D n x)⁺) μ := by
+        have hfnorm : Integrable (fun x => ‖f x‖) μ := by simpa [μ] using hf.norm
+        refine hfnorm.mono'
+          (continuous_posPart.comp_aestronglyMeasurable (hDmeas n))
+          (ae_of_all μ fun x => ?_)
+        rw [Real.norm_of_nonneg (posPart_nonneg _)]
+        exact rpow_sub_one_div_posPart_le (norm_nonneg _) (hp_pos n) (hp_one n)
+      let c : ℝ := L / 2
+      have hc_pos : 0 < c := by dsimp [c]; linarith
+      have hqseq : Tendsto (fun n => quasiNorm f (p n)) atTop (𝓝 L) :=
+        hLim.comp hp_zero_pos
+      have hc_le_q : ∀ᶠ n in atTop, c ≤ quasiNorm f (p n) :=
+        ((tendsto_order.1 hqseq).1 c (by dsimp [c]; linarith)).mono fun _ h => h.le
+      have hc_pow_le : ∀ᶠ n in atTop,
+          c ^ p n ≤ ∫ x, ‖f x‖ ^ p n ∂μ := by
+        filter_upwards [hc_le_q] with n hn
+        rw [quasiNorm, show (∫ x in Icc (0 : ℝ) 1, ‖f x‖ ^ p n ∂volume) =
+          ∫ x, ‖f x‖ ^ p n ∂μ by rfl] at hn
+        exact (Real.le_rpow_inv_iff_of_pos hc_pos.le
+          (integral_nonneg_of_ae (ae_of_all μ fun x => Real.rpow_nonneg (norm_nonneg _) _))
+          (hp_pos n)).1 (by simpa [one_div] using hn)
+      have hquot_lim : Tendsto (fun n => (1 - c ^ p n) / p n) atTop
+          (𝓝 (-log c)) := by
+        have h := (tendsto_rpow_sub_one_log hc_pos).comp hp_zero_pos
+        have hn : Tendsto
+            (fun n => (0 : ℝ) - ((fun q => q⁻¹ * (c ^ q - 1)) ∘ p) n)
+            atTop (𝓝 ((0 : ℝ) - log c)) := tendsto_const_nhds.sub h
+        convert hn using 1
+        ext n
+        simp only [Function.comp_apply, zero_sub, div_eq_mul_inv]
+        ring
+        simp
+      have hquot_bd : ∀ᶠ n in atTop, (1 - c ^ p n) / p n ≤ -log c + 1 :=
+        ((tendsto_order.1 hquot_lim).2 (-log c + 1) (by linarith)).mono fun _ h => h.le
+      have hG_integral_bd : ∀ᶠ n in atTop,
+          ∫ x, G n x ∂μ ≤ (∫ x, ‖f x‖ ∂μ) + (-log c + 1) := by
+        filter_upwards [hc_pow_le, hquot_bd] with n hcp hqb
+        have hD_integral : ∫ x, D n x ∂μ =
+            ((∫ x, ‖f x‖ ^ p n ∂μ) - 1) / p n := by
+          rw [show D n = fun x => (‖f x‖ ^ p n - 1) / p n by rfl,
+            integral_div, integral_sub]
+          · simp [μ]
+          · exact hpow_int n
+          · exact integrable_const _
+        have hsplit : ∫ x, G n x ∂μ = ∫ x, (D n x)⁺ ∂μ - ∫ x, D n x ∂μ := by
+          have hDsplit : ∫ x, D n x ∂μ = ∫ x, (D n x)⁺ ∂μ - ∫ x, G n x ∂μ := by
+            rw [← integral_sub (hDpos_int n) (hGint n)]
+            apply integral_congr_ae
+            exact ae_of_all μ fun x => by
+              simp [G, posPart_sub_negPart]
+          linarith
+        have hpos_bd : ∫ x, (D n x)⁺ ∂μ ≤ ∫ x, ‖f x‖ ∂μ :=
+          integral_mono_ae (hDpos_int n) (by simpa [μ] using hf.norm)
+            (ae_of_all μ fun x =>
+              rpow_sub_one_div_posPart_le (norm_nonneg _) (hp_pos n) (hp_one n))
+        have hdiv : ((∫ x, ‖f x‖ ^ p n ∂μ) - 1) / p n ≥
+            (c ^ p n - 1) / p n := (div_le_div_iff_of_pos_right (hp_pos n)).2 (by linarith)
+        calc
+          ∫ x, G n x ∂μ = ∫ x, (D n x)⁺ ∂μ -
+              ((∫ x, ‖f x‖ ^ p n ∂μ) - 1) / p n := by rw [hsplit, hD_integral]
+          _ ≤ (∫ x, ‖f x‖ ∂μ) - (c ^ p n - 1) / p n :=
+            sub_le_sub hpos_bd hdiv
+          _ = (∫ x, ‖f x‖ ∂μ) + (1 - c ^ p n) / p n := by ring
+          _ ≤ (∫ x, ‖f x‖ ∂μ) + (-log c + 1) := add_le_add_right hqb _
+      have hliminf : liminf (fun n => ∫⁻ x, ‖G n x‖ₑ ∂μ) atTop ≠ ⊤ := by
+        let C : ℝ := (∫ x, ‖f x‖ ∂μ) + (-log c + 1)
+        have hle : liminf (fun n => ∫⁻ x, ‖G n x‖ₑ ∂μ) atTop ≤ ENNReal.ofReal C := by
+          apply Filter.liminf_le_of_frequently_le'
+          exact hG_integral_bd.frequently.mono fun n hn => by
+            rw [← ofReal_integral_norm_eq_lintegral_enorm (hGint n)]
+            apply ENNReal.ofReal_le_ofReal
+            have hnorm : ∫ x, ‖G n x‖ ∂μ = ∫ x, G n x ∂μ := by
+              apply integral_congr_ae
+              exact ae_of_all μ fun x => Real.norm_of_nonneg (negPart_nonneg _)
+            rw [hnorm]
+            exact hn
+        exact (hle.trans_lt ENNReal.ofReal_lt_top).ne
+      exact integrable_of_tendsto hGlim hGmeas hliminf
     have hsub : Integrable (fun x => (log ‖f x‖)⁺ - (log ‖f x‖)⁻) μ :=
       hpos.sub hneg
     have hfull : Integrable (fun x => log ‖f x‖) μ := by
