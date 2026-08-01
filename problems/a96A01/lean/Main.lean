@@ -34,6 +34,9 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.Analysis.Convex.Integral
+import Mathlib.Analysis.Convex.SpecificFunctions.Basic
+import Mathlib.Analysis.SpecialFunctions.Log.RpowTendsto
+import Mathlib.MeasureTheory.Function.L1Space.Integrable
 
 open MeasureTheory Set Filter Real Topology
 
@@ -62,6 +65,46 @@ lemma rpow_le_one_add {t : ℝ} (ht : 0 ≤ t) {p : ℝ} (hp : 0 < p) (hp1 : p �
     have : t ^ p ≤ t ^ (1 : ℝ) := Real.rpow_le_rpow_of_exponent_le (by linarith) hp1
     rw [htt] at this
     linarith
+
+/-- The positive part of the logarithmic difference quotient is dominated by
+the original nonnegative function, uniformly for exponents in `(0,1]`. -/
+lemma rpow_sub_one_div_posPart_le {t p : ℝ} (ht : 0 ≤ t) (hp : 0 < p) (hp1 : p ≤ 1) :
+    ((t ^ p - 1) / p)⁺ ≤ t := by
+  by_cases ht1 : t ≤ 1
+  · have hpow : t ^ p ≤ 1 := Real.rpow_le_one ht ht1 hp.le
+    rw [posPart_eq_zero.mpr]
+    · exact ht
+    · exact div_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr hpow) hp.le
+  · have hbern := rpow_one_add_le_one_add_mul_self
+      (s := t - 1) (by linarith [ht]) hp.le hp1
+    have hquot : (t ^ p - 1) / p ≤ t - 1 := by
+      rw [show (1 + (t - 1) : ℝ) = t by ring] at hbern
+      apply (div_le_iff₀ hp).2
+      nlinarith
+    change max ((t ^ p - 1) / p) 0 ≤ t
+    exact max_le (hquot.trans (by linarith)) ht
+
+/-- The positive logarithmic tail is harmless under the original `L¹`
+hypothesis; all of the work in the geometric-mean limit is in the negative
+tail. -/
+lemma integrable_posPart_log_norm
+    {f : ℝ → ℝ} (hf : IntegrableOn f (Icc 0 1) volume) :
+    Integrable (fun x => (log ‖f x‖)⁺) (volume.restrict (Icc 0 1)) := by
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  have hfm : AEStronglyMeasurable f μ := by
+    simpa [μ] using hf.aestronglyMeasurable
+  have hmeas : AEStronglyMeasurable (fun x => (log ‖f x‖)⁺) μ := by
+    change AEStronglyMeasurable (fun x => max (log ‖f x‖) 0) μ
+    exact (hfm.norm.aemeasurable.log.max aemeasurable_const).aestronglyMeasurable
+  have hfnorm : Integrable (fun x => ‖f x‖) μ := by
+    simpa [μ] using hf.norm
+  refine hfnorm.mono' hmeas (ae_of_all μ fun x => ?_)
+  rw [Real.norm_of_nonneg (posPart_nonneg _)]
+  by_cases hx : ‖f x‖ = 0
+  · simp [hx]
+  · change max (log ‖f x‖) 0 ≤ ‖f x‖
+    exact max_le ((Real.log_le_sub_one_of_pos (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hx))).trans
+      (by linarith [norm_nonneg (f x)])) (norm_nonneg _)
 
 /-- On the unit interval, `quasiNorm` is Mathlib's real-valued `Lᵖ`
 seminorm. -/
@@ -326,9 +369,29 @@ theorem limit_ge_geometric_mean
       eventually_nhdsWithin_of_eventually_nhds
         (Iic_mem_nhds (show (0 : ℝ) < 1 by norm_num))] with p hp hp1
     exact geometric_mean_le_quasiNorm_of_integrable_log hf hf_pos hlog hp hp1
-  · -- Remaining frontier: `hL > 0` rules out a nonintegrable negative
-    -- logarithmic tail.  A one-sided Fatou argument applied to
-    -- `p⁻¹ * (1 - ‖f‖^p)` supplies this implication.
-    sorry
+  · exfalso
+    apply hlog
+    let μ := volume.restrict (Icc (0 : ℝ) 1)
+    have hpos : Integrable (fun x => (log ‖f x‖)⁺) μ := by
+      simpa [μ] using integrable_posPart_log_norm hf
+    have hneg : Integrable (fun x => (log ‖f x‖)⁻) μ := by
+      /- Exact remaining frontier.  Put `p n = 1 / (n + 1)` and
+
+           G n x = (p n)⁻¹ * (1 - ‖f x‖ ^ p n) |> max 0.
+
+         `Real.tendsto_rpow_sub_one_log` gives `G n x → (log ‖f x‖)⁻`
+         a.e.  The positive limit `hL` supplies `c = L/2 > 0` and eventually
+         `c ^ (p n) ≤ ∫ ‖f‖ ^ (p n)`.  Decompose the difference quotient into
+         positive and negative parts.  `rpow_sub_one_div_posPart_le` bounds
+         the positive part by `‖f‖`, while
+         `(1 - c ^ p) / p → -log c`; hence the `L¹` norms of `G n` have finite
+         liminf.  Apply `MeasureTheory.integrable_of_tendsto` to finish. -/
+      sorry
+    have hsub : Integrable (fun x => (log ‖f x‖)⁺ - (log ‖f x‖)⁻) μ :=
+      hpos.sub hneg
+    have hfull : Integrable (fun x => log ‖f x‖) μ := by
+      refine hsub.congr (ae_of_all μ fun x => ?_)
+      exact posPart_sub_negPart (log ‖f x‖)
+    simpa [μ] using hfull
 
 end
