@@ -228,6 +228,116 @@ lemma fresnel_remainder_norm_eq {x : ℝ} (hx : 0 < x) :
   rw [Real.norm_eq_abs, abs_of_pos hx]
   field_simp
 
+/-- The undamped Fresnel tails are uniformly Cauchy.  This is the quantitative
+Dirichlet estimate used both to construct the improper integral and to remove
+Abel damping. -/
+lemma norm_integral_fresnel_le_inv {a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
+    ‖∫ x in a..b, cexp (Complex.I * (x : ℂ) ^ 2)‖ ≤ 1 / a := by
+  let boundary : ℝ → ℂ := fun x =>
+    (-2 * ((0 : ℂ) - I) * x)⁻¹ * cexp (-((0 : ℂ) - I) * (x : ℂ) ^ 2)
+  let remainder : ℝ → ℂ := fun x =>
+    (2 * ((0 : ℂ) - I) /
+      (-2 * ((0 : ℂ) - I) * (x : ℂ)) ^ 2) *
+      cexp (-((0 : ℂ) - I) * (x : ℂ) ^ 2)
+  have hparts := damped_fresnel_integration_by_parts
+    (ε := 0) (a := a) (b := b) ha hab
+  have hboundary (x : ℝ) (hx : 0 < x) : ‖boundary x‖ = 1 / (2 * x) := by
+    dsimp [boundary]
+    rw [norm_mul, norm_inv, norm_mul, norm_mul, norm_neg,
+      Complex.norm_ofNat]
+    simp only [zero_sub, norm_neg, norm_I, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_pos hx]
+    rw [Complex.norm_exp]
+    have hre : (- -I * (x : ℂ) ^ 2).re = 0 := by
+      simp [pow_two, Complex.mul_re, Complex.mul_im]
+    rw [hre, Real.exp_zero, mul_one]
+    field_simp
+  have hremnorm :
+      ‖∫ x in a..b, remainder x‖ ≤
+        ∫ x in a..b, 1 / (2 * x ^ 2) := by
+    apply intervalIntegral.norm_integral_le_of_norm_le hab
+    · filter_upwards with x
+      intro hx
+      rw [Set.mem_Ioc] at hx
+      dsimp [remainder]
+      exact le_of_eq (fresnel_remainder_norm_eq (ha.trans hx.1))
+    · exact ContinuousOn.intervalIntegrable <| by
+        apply ContinuousOn.div continuousOn_const
+          (continuousOn_const.mul (continuousOn_id.pow 2))
+        intro x hx
+        rw [Set.uIcc_of_le hab] at hx
+        exact mul_ne_zero (by norm_num)
+          (pow_ne_zero 2 (ne_of_gt (ha.trans_le hx.1)))
+  have hb : 0 < b := ha.trans_le hab
+  have hparts' :
+      (∫ x in a..b, cexp (I * (x : ℂ) ^ 2)) =
+        boundary b - boundary a - ∫ x in a..b, remainder x := by
+    simpa [boundary, remainder] using hparts
+  rw [hparts']
+  calc
+    ‖boundary b - boundary a - ∫ x in a..b, remainder x‖
+        ≤ ‖boundary b‖ + ‖boundary a‖ +
+            ‖∫ x in a..b, remainder x‖ := by
+          exact (norm_sub_le _ _).trans
+            (add_le_add (norm_sub_le _ _) le_rfl)
+    _ ≤ 1 / (2 * b) + 1 / (2 * a) +
+          (1 / (2 * a) - 1 / (2 * b)) := by
+      gcongr
+      · exact (hboundary b hb).le
+      · exact (hboundary a ha).le
+      · exact hremnorm.trans_eq (integral_inv_sq_half ha hab)
+    _ = 1 / a := by ring
+
+/-- The positive Fresnel interval integrals have an improper limit, before its
+value is identified by Abel regularization. -/
+lemma exists_tendsto_integral_fresnel :
+    ∃ L : ℂ, Filter.Tendsto
+      (fun R : ℝ => ∫ x in (0 : ℝ)..R, cexp (I * (x : ℂ) ^ 2))
+      Filter.atTop (nhds L) := by
+  let F : ℝ → ℂ := fun R => ∫ x in (0 : ℝ)..R, cexp (I * (x : ℂ) ^ 2)
+  apply cauchy_map_iff_exists_tendsto.mp
+  rw [Metric.cauchy_iff]
+  refine ⟨by infer_instance, ?_⟩
+  intro ε hε
+  let A : ℝ := max 1 (2 / ε)
+  refine ⟨F '' Set.Ici A, ?_, ?_⟩
+  · rw [Filter.mem_map]
+    exact Filter.mem_of_superset (Filter.Ici_mem_atTop A) fun R hR =>
+      ⟨R, hR, rfl⟩
+  · have htail {x y : ℝ} (hx : A ≤ x) (hxy : x ≤ y) :
+        dist (F x) (F y) < ε := by
+      have hA1 : 1 ≤ A := le_max_left _ _
+      have hxpos : 0 < x := zero_lt_one.trans_le (hA1.trans hx)
+      have h0x : IntervalIntegrable
+          (fun z : ℝ => cexp (I * (z : ℂ) ^ 2)) volume 0 x :=
+        (by fun_prop : Continuous fun z : ℝ => cexp (I * (z : ℂ) ^ 2))
+          |>.intervalIntegrable 0 x
+      have hxyint : IntervalIntegrable
+          (fun z : ℝ => cexp (I * (z : ℂ) ^ 2)) volume x y :=
+        (by fun_prop : Continuous fun z : ℝ => cexp (I * (z : ℂ) ^ 2))
+          |>.intervalIntegrable x y
+      have hadd := intervalIntegral.integral_add_adjacent_intervals h0x hxyint
+      have hdiff : F y - F x =
+          ∫ z in x..y, cexp (I * (z : ℂ) ^ 2) := by
+        dsimp [F]
+        rw [← hadd]
+        abel
+      have hxA : 2 / ε ≤ x := (le_max_right 1 (2 / ε)).trans hx
+      have h2 : 0 < 2 / ε := div_pos (by norm_num) hε
+      calc
+        dist (F x) (F y) = ‖F y - F x‖ := by
+          rw [Complex.dist_eq, norm_sub_rev]
+        _ = ‖∫ z in x..y, cexp (I * (z : ℂ) ^ 2)‖ := congrArg norm hdiff
+        _ ≤ 1 / x := norm_integral_fresnel_le_inv hxpos hxy
+        _ ≤ 1 / (2 / ε) :=
+          div_le_div_of_nonneg_left (by norm_num) h2 hxA
+        _ = ε / 2 := by field_simp
+        _ < ε := half_lt_self hε
+    rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩
+    rcases le_total x y with hxy | hyx
+    · exact htail hx hxy
+    · simpa [dist_comm] using htail hy hyx
+
 /-- Part (a), stated as the classical improper oscillatory integral.
 
     **SORRY BOUNDARY:** Proving this limit requires the contour-rotation
