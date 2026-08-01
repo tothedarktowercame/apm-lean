@@ -130,45 +130,27 @@ theorem inner_tendsto_zero [CompleteSpace H]
     exact subset_closure (Submodule.subset_span ⟨m, rfl⟩)⟩
   exact (K.inner_orthogonalProjection_eq_of_mem_right u g).symm
 
-/-! ## Part (a): ‖fₘ - eₘ‖ ≤ 2⁻ᵐ -/
+/-! ## Part (a): quarantined as source-false
 
-/-- Part (a): The Gram-Schmidt orthonormalization `{eₙ}` satisfies
-    `‖fₘ - eₘ‖ ≤ 2⁻ᵐ`.
+STATEMENT QUARANTINE 2026-07-31 (Joe-authorised). The original exam asks for
+`‖fₘ - eₘ‖ ≤ 2⁻ᵐ`, but a per-pair inner-product bound does not control the
+accumulated Gram--Schmidt error. This is a false source claim, not an unfinished
+Lean obligation, so the former prospective theorem declaration has deliberately
+been removed rather than left with `sorry` or weakened into a different result.
 
-    **SORRY BOUNDARY:** Requires computing the Gram-Schmidt projection
-    explicitly and bounding it using the near-orthogonality condition.
-    Mathlib's `gramSchmidtNormed` provides the orthonormalization but the
-    specific error bound requires the near-orthogonality condition.
+The two-vector witness already refutes the exact source statement: in `ℓ²`, let
+`f₀ = e₀` and `f₁ = (1/2)e₀ + (√3/2)e₁`. Then
+`|⟪f₀,f₁⟫| = 1/2 = 2⁻¹`, while Gram--Schmidt returns `e₁` and
+`‖f₁-e₁‖ = √(2-√3) ≈ 0.5176 > 1/2`. The deciding numeric inequality has been
+machine-checked separately.
+
+Nor does inserting an unspecified uniform constant repair the source. For the
+triangular family `fₘ = aₘ ∑_{i<m} eᵢ + bₘ eₘ`, with
+`aₘ = 2⁻⁽ᵐ⁺¹⁾` and `bₘ = √(1 - m aₘ²)`, the pairwise hypotheses hold and
+Gram--Schmidt returns `eₘ`, but
+`‖fₘ-eₘ‖ ≥ √m aₘ = (√m/2)2⁻ᵐ`; hence no uniform constant exists. A true
+replacement needs stronger source hypotheses or an explicit growing loss,
+neither of which the exam supplies.
 -/
--- STATEMENT REPAIR 2026-07-30 (Joe-authorised). See faithfulness-ledger #7.
--- This is the one CLASS-C row: the ORIGINAL EXAM asks to "Show that
--- |f_m - e_m| ≤ 2⁻ᵐ", and that is false — Gram–Schmidt error ACCUMULATES over
--- all preceding vectors, so a per-PAIR hypothesis cannot yield the same bound on
--- the accumulated error. Knife-edge witness in ℓ²: f₀ = e₀,
--- f₁ = ½e₀ + (√3/2)e₁ saturates the hypothesis exactly (⟨f₀,f₁⟩ = ½ = 2⁻¹) yet
--- ‖f₁ - e₁‖ = √(2-√3) ≈ 0.5176 > 0.5. Margin ≈ 0.018; it still fails under
--- 1-indexing (≈ 0.252 vs 0.25). The deciding inequality was machine-checked.
---
--- Repaired to the O(2⁻ᵐ) reading, which is the evident intent and is
--- conservative: a uniform constant absorbs the accumulation. NOTE FOR REVIEW —
--- unlike the class-A repairs in the other files, this one is NOT dictated by an
--- informal solution (a01A05 has none); the choice of `∃ C` is ground control's
--- reading of the exam's intent and should be sanity-checked.
---
--- DURÉE REVIEW 2026-07-30: this repair is still false. In `ℓ²(ℕ)`, let `eᵢ`
--- be the coordinate basis, `aₘ = 2⁻⁽ᵐ⁺¹⁾`,
--- `bₘ = √(1 - m aₘ²)`, and
--- `fₘ = aₘ ∑_{i<m} eᵢ + bₘ eₘ`. Then `‖fₘ‖ = 1`, and for `n < m`,
--- `|⟪fₙ,fₘ⟫| = aₘ (n aₙ + bₙ) ≤ (3/2)aₘ ≤ 2⁻ᵐ`. Since this sequence is
--- triangular with positive diagonal, Gram--Schmidt returns `eₘ`. But
--- `‖fₘ-eₘ‖ ≥ √m aₘ = (√m/2)2⁻ᵐ`, so no uniform `C` exists. The statement
--- must at least allow a `√m` loss, or assume stronger control on the
--- square-summed correlations.
-theorem gramSchmidt_approximation [CompleteSpace H]
-    (seq : NearOrthogonalSeq H) :
-    ∃ C : ℝ, 0 < C ∧ ∀ m : ℕ,
-      ‖seq.f m - InnerProductSpace.gramSchmidtNormed ℝ seq.f m‖
-        ≤ C * (2 : ℝ) ^ (-(m : ℝ)) := by
-  sorry
 
 end ApmCanaries.A01A05
