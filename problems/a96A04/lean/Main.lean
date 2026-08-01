@@ -22,7 +22,9 @@ in 1D. The generated `Memℒp` is corrected to `MemLp`.
 
 import Mathlib.MeasureTheory.Function.LpSeminorm.Defs
 import Mathlib.MeasureTheory.Function.L2Space
+import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
@@ -30,7 +32,7 @@ import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
 import ConstructionTargets.L2Translation
 import YoungL2
 
-open MeasureTheory Set Filter Real
+open MeasureTheory Set Filter Real Topology
 
 open scoped ENNReal ContDiff
 
@@ -186,6 +188,145 @@ lemma heatKernel_memLp_two {t : ℝ} (ht : 0 < t) :
     ring
   rw [mul_pow, hexp]
 
+/-- A positive-time heat kernel is obtained from the time-one kernel by
+dilation.  This is the normalization used in the approximate-identity
+argument below. -/
+lemma heatKernel_scale {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    Real.sqrt t * heatKernel t (Real.sqrt t * x) = heatKernel 1 x := by
+  have hsqrt : Real.sqrt t ≠ 0 := ne_of_gt (Real.sqrt_pos.2 ht)
+  have hsqrt_sq : (Real.sqrt t) ^ 2 = t := Real.sq_sqrt ht.le
+  unfold heatKernel
+  rw [mul_pow, hsqrt_sq]
+  have hcoeff :
+      Real.sqrt t * (4 * π * t) ^ (-(1 : ℝ) / 2) =
+        (4 * π) ^ (-(1 : ℝ) / 2) := by
+    rw [show 4 * π * t = (4 * π) * t by ring,
+      Real.mul_rpow (by positivity : 0 ≤ (4 : ℝ) * π) ht.le,
+      Real.sqrt_eq_rpow]
+    calc
+      t ^ (1 / 2 : ℝ) *
+          ((4 * π) ^ (-(1 : ℝ) / 2) * t ^ (-(1 : ℝ) / 2)) =
+          (4 * π) ^ (-(1 : ℝ) / 2) *
+            (t ^ (1 / 2 : ℝ) * t ^ (-(1 : ℝ) / 2)) := by ring
+      _ = (4 * π) ^ (-(1 : ℝ) / 2) := by
+        rw [← Real.rpow_add ht]
+        norm_num
+  rw [← mul_assoc, hcoeff]
+  simp only [mul_one]
+  congr 1
+  apply congrArg Real.exp
+  field_simp
+
+/-- After dilation, heat convolution is averaging translates against the
+fixed time-one heat kernel. -/
+lemma heatConv_eq_integral_unitKernel {t : ℝ} (ht : 0 < t)
+    (f : ℝ → ℝ) (x : ℝ) :
+    heatConv t f x =
+      ∫ z, heatKernel 1 z * f (x - Real.sqrt t * z) ∂volume := by
+  have hsqrt : Real.sqrt t ≠ 0 := ne_of_gt (Real.sqrt_pos.2 ht)
+  unfold heatConv
+  have hsub :
+      (∫ y : ℝ, heatKernel t (x - y) * f y ∂volume) =
+        ∫ u : ℝ, heatKernel t u * f (x - u) ∂volume := by
+    simpa only [sub_sub_cancel] using
+      (integral_sub_left_eq_self
+        (fun u : ℝ ↦ heatKernel t u * f (x - u)) volume x)
+  rw [hsub]
+  have hscale := Measure.integral_comp_mul_left
+    (fun u : ℝ ↦ heatKernel t u * f (x - u)) (Real.sqrt t)
+  simp only [abs_inv, abs_of_pos (Real.sqrt_pos.2 ht)] at hscale
+  calc
+    (∫ u : ℝ, heatKernel t u * f (x - u) ∂volume) =
+        Real.sqrt t * ∫ z : ℝ,
+          heatKernel t (Real.sqrt t * z) *
+            f (x - Real.sqrt t * z) ∂volume := by
+      rw [hscale]
+      simp [hsqrt]
+    _ = ∫ z : ℝ, Real.sqrt t *
+          (heatKernel t (Real.sqrt t * z) *
+            f (x - Real.sqrt t * z)) ∂volume := by
+      rw [integral_const_mul]
+    _ = ∫ z : ℝ, heatKernel 1 z *
+          f (x - Real.sqrt t * z) ∂volume := by
+      apply integral_congr_ae
+      filter_upwards with z
+      rw [← mul_assoc, heatKernel_scale ht]
+
+/-- The fixed-Gaussian average of translation differences tends to zero in
+the abstract `L²` space.  The remaining pointwise theorem only has to identify
+this Bochner integral with the class represented by `heatConv t f - f`. -/
+lemma heat_translation_average_tendsto_L2
+    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    let τ : ℝ → C(ℝ, ℝ) := fun s =>
+      ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+    let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+      simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+    let F : ℝ → Lp ℝ 2 volume := fun s =>
+      Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+    Tendsto
+      (fun s => ∫ z, heatKernel 1 z • (F (s * z) - F 0) ∂volume)
+      (𝓝 0) (𝓝 0) := by
+  let τ : ℝ → C(ℝ, ℝ) := fun s =>
+    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+  have hτc : Continuous τ := by
+    let G : C(ℝ × ℝ, ℝ) :=
+      ⟨fun z => z.2 - z.1, continuous_snd.sub continuous_fst⟩
+    exact (ContinuousMap.curry G).continuous
+  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+  let F : ℝ → Lp ℝ 2 volume := fun s =>
+    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+  have hFc : Continuous F := by
+    dsimp [F]
+    exact continuous_const.compMeasurePreservingLp hτc hτ (by norm_num)
+  have hkcont : Continuous (heatKernel 1) :=
+    (heatKernel_contDiff (by norm_num)).continuous
+  have hkint : Integrable (heatKernel 1) volume :=
+    heatKernel_integrable (by norm_num)
+  have hbound_int : Integrable
+      (fun z => heatKernel 1 z * (2 * ‖hf.toLp f‖)) volume :=
+    hkint.mul_const _
+  have hdct := tendsto_integral_filter_of_dominated_convergence
+    (l := 𝓝 (0 : ℝ)) (μ := volume)
+    (F := fun s z => heatKernel 1 z • (F (s * z) - F 0))
+    (f := fun _ => (0 : Lp ℝ 2 volume))
+    (fun z => heatKernel 1 z * (2 * ‖hf.toLp f‖))
+  have hmeas : ∀ᶠ s : ℝ in 𝓝 0,
+      AEStronglyMeasurable
+        (fun z => heatKernel 1 z • (F (s * z) - F 0)) volume := by
+    filter_upwards with s
+    exact (hkcont.smul
+      ((hFc.comp (continuous_const.mul continuous_id)).sub
+        continuous_const)).aestronglyMeasurable
+  have hbound : ∀ᶠ s : ℝ in 𝓝 0, ∀ᵐ z : ℝ ∂volume,
+      ‖heatKernel 1 z • (F (s * z) - F 0)‖ ≤
+        heatKernel 1 z * (2 * ‖hf.toLp f‖) := by
+    filter_upwards with s
+    filter_upwards with z
+    rw [norm_smul, Real.norm_eq_abs,
+      abs_of_nonneg (heatKernel_nonneg (by norm_num) z)]
+    apply mul_le_mul_of_nonneg_left _ (heatKernel_nonneg (by norm_num) z)
+    calc
+      ‖F (s * z) - F 0‖ ≤ ‖F (s * z)‖ + ‖F 0‖ := norm_sub_le _ _
+      _ = 2 * ‖hf.toLp f‖ := by
+        simp only [F, Lp.norm_compMeasurePreserving]
+        ring
+  have hlim : ∀ᵐ z : ℝ ∂volume,
+      Tendsto (fun s => heatKernel 1 z • (F (s * z) - F 0))
+        (𝓝 0) (𝓝 0) := by
+    filter_upwards with z
+    have hsz : Tendsto (fun s : ℝ => s * z) (𝓝 0) (𝓝 0) := by
+      simpa using tendsto_id.mul (tendsto_const_nhds :
+        Tendsto (fun _ : ℝ => z) (𝓝 0) (𝓝 z))
+    have hsub : Tendsto (fun s => F (s * z) - F 0) (𝓝 0) (𝓝 0) := by
+      simpa only [Function.comp_apply, sub_self] using
+        ((hFc.tendsto 0).comp hsz).sub
+          (tendsto_const_nhds : Tendsto (fun _ : ℝ => F 0) (𝓝 0) (𝓝 (F 0)))
+    simpa using
+      (tendsto_const_nhds : Tendsto (fun _ : ℝ => heatKernel 1 z)
+        (𝓝 0) (𝓝 (heatKernel 1 z))).smul hsub
+  simpa only [integral_zero] using hdct hmeas hbound hbound_int hlim
+
 /-- Rewrite heat convolution as a heat-kernel average of translates of `f`.
 
 This is the change-of-variables seam used by the `L²` approximate-identity
@@ -243,11 +384,19 @@ theorem heatConv_tendsto_L2
     (hf : MemLp f 2 volume) :
     Tendsto (fun t => eLpNorm (fun x => heatConv t f x - f x) 2 volume)
       (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+  have haverage := heat_translation_average_tendsto_L2 hf
   have htranslation :=
     ConstructionTargets.L2Translation.eLpNorm_translation_tendsto f hf
+  have hunit (t x : ℝ) (ht : 0 < t) :
+      heatConv t f x =
+        ∫ z, heatKernel 1 z * f (x - Real.sqrt t * z) ∂volume :=
+    heatConv_eq_integral_unitKernel ht f x
   have htranslated (t x : ℝ) :
       heatConv t f x = ∫ y, heatKernel t y * f (x - y) ∂volume :=
     heatConv_eq_integral_translation t f x
+  -- `haverage`, composed with `sqrt t → 0`, is the desired convergence in
+  -- abstract `Lp`.  The outstanding bridge is to show that its Bochner
+  -- integral has representative `heatConv t f - f` using `hunit`.
   sorry
 
 end
