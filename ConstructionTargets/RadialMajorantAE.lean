@@ -97,6 +97,111 @@ theorem ae_tendsto_radialLaverage {f : ℝ → ℝ}
   rw [← radialLIntegral_eq_lintegral_closedBall]
   simp only [radialLaverage, volume_closedBall]
 
+@[simp] theorem radialLaverage_of_nonpos (f : ℝ → ℝ) (x : ℝ) {s : ℝ}
+    (hs : s ≤ 0) : radialLaverage f x s = 0 := by
+  unfold radialLaverage radialLIntegral
+  by_cases hs0 : s = 0
+  · subst s
+    simp
+  · have hemp : Icc (-s) s = ∅ := by
+      rw [Icc_eq_empty]
+      have hslt : s < 0 := lt_of_le_of_ne hs hs0
+      linarith
+    simp [hemp]
+
+/-- The large-radius half of the uniform bound for radial averages.  The
+elementary estimate `v ≤ 1 + v²` avoids introducing square roots in the
+formal Cauchy--Schwarz estimate. -/
+theorem radialLaverage_le_of_memLp {f : ℝ → ℝ} (hf : MemLp f 2 volume)
+    (x : ℝ) {δ s : ℝ} (hδ : 0 < δ) (hδs : δ ≤ s) :
+    radialLaverage f x s ≤
+      1 + (∫⁻ z, ‖f z‖ₑ ^ (2 : ℕ) ∂volume) /
+        ENNReal.ofReal (2 * δ) + ENNReal.ofReal |f x| := by
+  have hs : 0 < s := hδ.trans_le hδs
+  let g : ℝ → ℝ≥0∞ := fun t => ‖f (x - t)‖ₑ
+  let c : ℝ≥0∞ := ENNReal.ofReal |f x|
+  have hftrans : MemLp (fun t : ℝ => f (x - t)) 2 volume := by
+    simpa [Function.comp_def] using hf.comp_measurePreserving
+      (Measure.measurePreserving_sub_left (volume : Measure ℝ) x)
+  have hg : AEMeasurable g volume := by
+    simpa [g] using hftrans.aestronglyMeasurable.enorm
+  have hg_restrict : AEMeasurable g (volume.restrict (Icc (-s) s)) :=
+    hg.mono_measure Measure.restrict_le_self
+  have hsq_restrict : AEMeasurable (fun t => g t ^ (2 : ℕ))
+      (volume.restrict (Icc (-s) s)) := hg_restrict.pow_const _
+  have hpoint (t : ℝ) : ‖f (x - t) - f x‖ₑ ≤ 1 + g t ^ (2 : ℕ) + c := by
+    calc
+      ‖f (x - t) - f x‖ₑ ≤ g t + c := by
+        change ‖f (x - t) - f x‖ₑ ≤ ‖f (x - t)‖ₑ + ENNReal.ofReal ‖f x‖
+        rw [ofReal_norm_eq_enorm]
+        exact enorm_sub_le
+      _ ≤ 1 + g t ^ (2 : ℕ) + c := by
+        gcongr
+        rcases le_total (g t) 1 with h | h
+        · exact h.trans (le_add_right le_rfl)
+        · calc
+            g t ≤ g t * g t := le_mul_of_one_le_right' h
+            _ = g t ^ (2 : ℕ) := by rw [pow_two]
+            _ ≤ 1 + g t ^ (2 : ℕ) := le_add_left le_rfl
+  have hnum : radialLIntegral f x s ≤
+      volume (Icc (-s) s) +
+        (∫⁻ t in Icc (-s) s, g t ^ (2 : ℕ) ∂volume) +
+        c * volume (Icc (-s) s) := by
+    unfold radialLIntegral
+    calc
+      (∫⁻ t in Icc (-s) s, ‖f (x - t) - f x‖ₑ ∂volume) ≤
+          ∫⁻ t in Icc (-s) s, (1 + g t ^ (2 : ℕ)) + c ∂volume :=
+        setLIntegral_mono' measurableSet_Icc (fun t _ => hpoint t)
+      _ = volume (Icc (-s) s) +
+          (∫⁻ t in Icc (-s) s, g t ^ (2 : ℕ) ∂volume) +
+          c * volume (Icc (-s) s) := by
+        rw [lintegral_add_right' (fun t => 1 + g t ^ (2 : ℕ))
+              (aemeasurable_const : AEMeasurable (fun _ : ℝ => c)
+                (volume.restrict (Icc (-s) s))),
+          lintegral_add_left'
+            (aemeasurable_const : AEMeasurable (fun _ : ℝ => (1 : ℝ≥0∞))
+              (volume.restrict (Icc (-s) s))) (fun t => g t ^ (2 : ℕ)),
+          setLIntegral_one, setLIntegral_const]
+  let S : ℝ≥0∞ := ∫⁻ z, ‖f z‖ₑ ^ (2 : ℕ) ∂volume
+  have hsq : (∫⁻ t in Icc (-s) s, g t ^ (2 : ℕ) ∂volume) ≤ S := by
+    calc
+      (∫⁻ t in Icc (-s) s, g t ^ (2 : ℕ) ∂volume) ≤
+          ∫⁻ t, g t ^ (2 : ℕ) ∂volume :=
+        setLIntegral_le_lintegral _ _
+      _ = S := by
+        let e : ℝ ≃ᵐ ℝ := MeasurableEquiv.subLeft x
+        simpa [g, S, e] using
+          (Measure.measurePreserving_sub_left (volume : Measure ℝ) x).lintegral_comp_emb
+            e.measurableEmbedding (fun z => ‖f z‖ₑ ^ (2 : ℕ))
+  have hvol : volume (Icc (-s) s) = ENNReal.ofReal (2 * s) := by
+    rw [Real.volume_Icc]
+    congr 1
+    ring
+  have hden0 : ENNReal.ofReal (2 * s) ≠ 0 := (ENNReal.ofReal_pos.mpr (by positivity)).ne'
+  have hden_top : ENNReal.ofReal (2 * s) ≠ ∞ := ENNReal.ofReal_ne_top
+  have hδden : ENNReal.ofReal (2 * δ) ≤ ENNReal.ofReal (2 * s) := by
+    exact ENNReal.ofReal_le_ofReal (by linarith)
+  unfold radialLaverage
+  calc
+    radialLIntegral f x s / ENNReal.ofReal (2 * s) ≤
+        (volume (Icc (-s) s) +
+          (∫⁻ t in Icc (-s) s, g t ^ (2 : ℕ) ∂volume) +
+          c * volume (Icc (-s) s)) / ENNReal.ofReal (2 * s) :=
+      ENNReal.div_le_div_right hnum _
+    _ ≤ (ENNReal.ofReal (2 * s) + S + c * ENNReal.ofReal (2 * s)) /
+          ENNReal.ofReal (2 * s) := by
+      rw [hvol]
+      apply ENNReal.div_le_div_right
+      gcongr
+    _ = 1 + S / ENNReal.ofReal (2 * s) + c := by
+      rw [ENNReal.add_div, ENNReal.add_div, ENNReal.div_self hden0 hden_top,
+        mul_div_assoc, ENNReal.div_self hden0 hden_top]
+      simp
+    _ ≤ 1 + S / ENNReal.ofReal (2 * δ) + c := by
+      gcongr
+    _ = 1 + (∫⁻ z, ‖f z‖ₑ ^ (2 : ℕ) ∂volume) /
+          ENNReal.ofReal (2 * δ) + ENNReal.ofReal |f x| := rfl
+
 /-- Tonelli's theorem in the radial layer-cake form.  No integrability
 hypothesis is required because both sides are nonnegative extended integrals.
 
