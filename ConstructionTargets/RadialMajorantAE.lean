@@ -70,6 +70,9 @@ theorem lintegral_mul_radial_layerCake
 def poissonKernel (y t : ℝ) : ℝ :=
   (1 / π) * y / (y ^ 2 + t ^ 2)
 
+@[simp] theorem poissonKernel_eq_formula (y t : ℝ) :
+    poissonKernel y t = (1 / π) * y / (y ^ 2 + t ^ 2) := rfl
+
 theorem poissonKernel_nonneg {y : ℝ} (hy : 0 < y) (t : ℝ) :
     0 ≤ poissonKernel y t := by
   unfold poissonKernel
