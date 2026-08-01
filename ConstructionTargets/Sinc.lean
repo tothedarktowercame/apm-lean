@@ -12,6 +12,8 @@ open MeasureTheory Set Real
 
 noncomputable section
 
+namespace ConstructionTargets.Sinc
+
 /-! # The Dirichlet sinc integral
 
   The Dirichlet integral, computed by Abel regularization.
@@ -641,3 +643,5 @@ theorem dirichlet_integral_improper :
 -- But this gives ∫ sinc², not ∫ sinc. The direct Fourier approach:
 -- ∫ sinc(x) dx = rect(0) · (normalization) = π (evaluation of FT at 0).
 -- This is the Fourier inversion theorem applied at ξ = 0.
+
+end ConstructionTargets.Sinc

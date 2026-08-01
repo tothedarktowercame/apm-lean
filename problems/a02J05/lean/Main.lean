@@ -11,7 +11,7 @@ problem retains an elaborated use of the promoted headline theorem, so there
 is exactly one implementation of the Dirichlet-integral argument.
 -/
 
-example :
+theorem dirichlet_integral_improper :
     Filter.Tendsto (fun R : ℝ => ∫ x in Set.Icc (-R) R, Real.sinc x ∂volume)
-      Filter.atTop (nhds π) :=
-  dirichlet_integral_improper
+      Filter.atTop (nhds π) := by
+  exact ConstructionTargets.Sinc.dirichlet_integral_improper
