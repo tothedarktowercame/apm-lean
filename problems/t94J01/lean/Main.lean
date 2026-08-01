@@ -43,18 +43,22 @@ lemma ladderConnected_of_subsingleton
 
 variable {X : Type*} [TopologicalSpace X]
 
-/-- Placeholder: ladder connected ⇒ connected. -/
+/-- Ladder connectedness rules out a separation, including for the empty
+space. -/
+-- STATEMENT REPAIR 2026-08-01 (Joe-authorised): use `IsPreconnected`, which
+-- matches the source's separation-based convention without adding a
+-- nonemptiness assumption absent from the printed problem.
 theorem connected_of_ladderConnected
     (h : LadderConnectedSpace X) :
-    IsConnected (Set.univ : Set X) := by
+    IsPreconnected (Set.univ : Set X) := by
   classical
   -- TODO: formalize the argument that the set of points reachable from a basepoint
   -- via ladders is both open and closed, hence everything.
   sorry
 
-/-- Placeholder: connected ⇒ ladder connected. -/
+/-- A space with no separation is ladder connected. -/
 theorem ladderConnected_of_connected
-    (h : IsConnected (Set.univ : Set X)) :
+    (h : IsPreconnected (Set.univ : Set X)) :
     LadderConnectedSpace X := by
   classical
   -- TODO: construct ladders between any two points by working inside the connected component
@@ -62,8 +66,10 @@ theorem ladderConnected_of_connected
   sorry
 
 /-- Main equivalence: a space is connected iff it is ladder connected. -/
+-- STATEMENT REPAIR 2026-08-01 (Joe-authorised): use the empty-space-compatible
+-- Mathlib notion corresponding to the printed problem's separation definition.
 theorem connected_iff_ladderConnected :
-    IsConnected (Set.univ : Set X) ↔ LadderConnectedSpace X := by
+    IsPreconnected (Set.univ : Set X) ↔ LadderConnectedSpace X := by
   constructor
   · intro hconn
     exact ladderConnected_of_connected (X := X) hconn
