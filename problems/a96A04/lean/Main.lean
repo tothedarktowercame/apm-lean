@@ -30,6 +30,8 @@ import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
 import ConstructionTargets.L2Translation
+import ConstructionTargets.LpRepresentative
+import ConstructionTargets.YoungConvolution
 import YoungL2
 
 open MeasureTheory Set Filter Real Topology
@@ -373,6 +375,165 @@ theorem heatConv_L2_le
   · exact heatKernel_integral ht
   · exact hf
 
+/-- Positive-time heat convolution preserves `L²` membership. -/
+lemma heatConv_memLp
+    {t : ℝ} (ht : 0 < t)
+    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    MemLp (heatConv t f) 2 volume := by
+  change MemLp
+    (ConstructionTargets.YoungConvolution.convolution (heatKernel t) f) 2 volume
+  exact ConstructionTargets.YoungConvolution.convolution_memLp
+    (by norm_num) (by norm_num) (heatKernel_integrable ht) hf
+
+/-- The abstract heat-kernel average has pointwise representative
+`heatConv t f - f`. -/
+lemma heat_translation_average_toLp
+    {t : ℝ} (ht : 0 < t)
+    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    let τ : ℝ → C(ℝ, ℝ) := fun s =>
+      ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+    let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+      simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+    let F : ℝ → Lp ℝ 2 volume := fun s =>
+      Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+    let G : ℝ → Lp ℝ 2 volume := fun z =>
+      heatKernel 1 z • (F (Real.sqrt t * z) - F 0)
+    ((heatConv_memLp ht hf).sub hf).toLp
+        (fun x => heatConv t f x - f x) = ∫ z, G z ∂volume := by
+  let τ : ℝ → C(ℝ, ℝ) := fun s =>
+    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+  have hτc : Continuous τ := by
+    let T : C(ℝ × ℝ, ℝ) :=
+      ⟨fun z => z.2 - z.1, continuous_snd.sub continuous_fst⟩
+    exact (ContinuousMap.curry T).continuous
+  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+  let F : ℝ → Lp ℝ 2 volume := fun s =>
+    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+  let G : ℝ → Lp ℝ 2 volume := fun z =>
+    heatKernel 1 z • (F (Real.sqrt t * z) - F 0)
+  let φ : ℝ × ℝ → ℝ := fun z =>
+    heatKernel 1 z.1 * (f (z.2 - Real.sqrt t * z.1) - f z.2)
+  have hFc : Continuous F := by
+    dsimp [F]
+    exact continuous_const.compMeasurePreservingLp hτc hτ (by norm_num)
+  have hkcont : Continuous (heatKernel 1) :=
+    (heatKernel_contDiff (by norm_num)).continuous
+  have hGc : Continuous G := by
+    dsimp [G]
+    exact hkcont.smul
+      ((hFc.comp (continuous_const.mul continuous_id)).sub continuous_const)
+  have hG : Integrable G volume := by
+    have hdom : Integrable
+        (fun z => heatKernel 1 z * (2 * ‖hf.toLp f‖)) volume :=
+      (heatKernel_integrable (by norm_num)).mul_const _
+    refine hdom.mono' hGc.aestronglyMeasurable ?_
+    filter_upwards with z
+    change ‖heatKernel 1 z • (F (Real.sqrt t * z) - F 0)‖ ≤ _
+    rw [norm_smul, Real.norm_eq_abs,
+      abs_of_nonneg (heatKernel_nonneg (by norm_num) z)]
+    apply mul_le_mul_of_nonneg_left _ (heatKernel_nonneg (by norm_num) z)
+    calc
+      ‖F (Real.sqrt t * z) - F 0‖ ≤
+          ‖F (Real.sqrt t * z)‖ + ‖F 0‖ := norm_sub_le _ _
+      _ = 2 * ‖hf.toLp f‖ := by
+        simp only [F, Lp.norm_compMeasurePreserving]
+        ring
+  have hsqrt : Real.sqrt t ≠ 0 := ne_of_gt (Real.sqrt_pos.2 ht)
+  have hqmp : Measure.QuasiMeasurePreserving
+      (fun z : ℝ × ℝ => z.2 - Real.sqrt t * z.1)
+      (volume.prod volume) volume := by
+    refine QuasiMeasurePreserving.prod_of_left (by fun_prop) ?_
+    filter_upwards with x
+    have hscale : Measure.QuasiMeasurePreserving
+        (fun z : ℝ => Real.sqrt t • z) volume volume :=
+      Measure.quasiMeasurePreserving_smul volume hsqrt
+    simpa [smul_eq_mul] using
+      (volume.measurePreserving_sub_left x).quasiMeasurePreserving.comp hscale
+  have hφ : AEStronglyMeasurable φ (volume.prod volume) := by
+    have hshift := hf.aestronglyMeasurable.comp_quasiMeasurePreserving hqmp
+    have hbase := hf.aestronglyMeasurable.comp_quasiMeasurePreserving
+      (Measure.quasiMeasurePreserving_snd
+        (μ := (volume : Measure ℝ)) (ν := (volume : Measure ℝ)))
+    have hk : AEStronglyMeasurable
+        (fun z : ℝ × ℝ => heatKernel 1 z.1) (volume.prod volume) :=
+      (hkcont.comp continuous_fst).aestronglyMeasurable
+    exact hk.mul (hshift.sub hbase)
+  have hGφ : ∀ᵐ z ∂volume,
+      (G z : ℝ → ℝ) =ᵐ[volume] fun x => φ (z, x) := by
+    filter_upwards with z
+    filter_upwards
+      [Lp.coeFn_smul (heatKernel 1 z) (F (Real.sqrt t * z) - F 0),
+       Lp.coeFn_sub (F (Real.sqrt t * z)) (F 0),
+       Lp.coeFn_compMeasurePreserving (hf.toLp f) (hτ (Real.sqrt t * z)),
+       Lp.coeFn_compMeasurePreserving (hf.toLp f) (hτ 0),
+       (hτ (Real.sqrt t * z)).quasiMeasurePreserving.ae hf.coeFn_toLp,
+       (hτ 0).quasiMeasurePreserving.ae hf.coeFn_toLp]
+      with x hsmul hsub htrans hzero hrept hrepzero
+    rw [hsmul]
+    simp only [Pi.smul_apply, smul_eq_mul]
+    rw [hsub]
+    simp only [Pi.sub_apply]
+    rw [htrans, hzero]
+    simp only [Function.comp_apply]
+    rw [hrept, hrepzero]
+    simp [φ, τ]
+  have hlocal : ∀ s : Set ℝ, MeasurableSet s → volume s ≠ ⊤ →
+      HasFiniteIntegral
+        (fun z : ℝ × ℝ => s.indicator (fun x => φ (z.1, x)) z.2)
+        (volume.prod volume) :=
+    ConstructionTargets.LpRepresentative.hasFiniteIntegral_indicator_lift
+      hφ hG hGφ
+  have hslice : ∀ᵐ x ∂volume, Integrable (fun z => φ (z, x)) volume := by
+    have hn : ∀ n : ℕ, ∀ᵐ x ∂volume,
+        Integrable
+          (fun z => (spanningSets volume n).indicator
+            (fun x => φ (z, x)) x) volume := by
+      intro n
+      let s : Set ℝ := spanningSets (volume : Measure ℝ) n
+      have hs : MeasurableSet s := measurableSet_spanningSets (volume : Measure ℝ) n
+      have hprod : Integrable
+          (fun z : ℝ × ℝ => s.indicator (fun x => φ (z.1, x)) z.2)
+          (volume.prod volume) := by
+        exact ⟨(hφ.indicator (MeasurableSet.univ.prod hs)).congr
+          (Eventually.of_forall fun z => by
+            by_cases hz : z.2 ∈ s <;> simp [hz]),
+          hlocal s hs (measure_spanningSets_lt_top volume n).ne⟩
+      exact hprod.prod_left_ae
+    filter_upwards [ae_all_iff.2 hn] with x hx
+    let n := spanningSetsIndex volume x
+    have hxn : x ∈ spanningSets volume n := mem_spanningSetsIndex volume x
+    simpa [hxn] using hx n
+  have hpoint : (fun x => ∫ z, φ (z, x) ∂volume) =ᵐ[volume]
+      fun x => heatConv t f x - f x := by
+    filter_upwards [hslice] with x hφx
+    have hk : Integrable (fun z => heatKernel 1 z * f x) volume :=
+      (heatKernel_integrable (by norm_num)).mul_const _
+    have hfirst : Integrable
+        (fun z => heatKernel 1 z * f (x - Real.sqrt t * z)) volume := by
+      refine (hφx.add hk).congr (Eventually.of_forall fun z => ?_)
+      simp [φ]
+      ring
+    change (∫ z, heatKernel 1 z *
+      (f (x - Real.sqrt t * z) - f x) ∂volume) = heatConv t f x - f x
+    rw [show (fun z => heatKernel 1 z *
+        (f (x - Real.sqrt t * z) - f x)) =
+        fun z => heatKernel 1 z * f (x - Real.sqrt t * z) -
+          heatKernel 1 z * f x by
+      funext z
+      ring]
+    rw [integral_sub hfirst hk, heatConv_eq_integral_unitKernel ht]
+    rw [integral_mul_const, heatKernel_integral (by norm_num)]
+    ring
+  have hdiff : MemLp (fun x => heatConv t f x - f x) 2 volume :=
+    (heatConv_memLp ht hf).sub hf
+  have hψ : MemLp (fun x => ∫ z, φ (z, x) ∂volume) 2 volume :=
+    (memLp_congr_ae hpoint).mpr hdiff
+  have hrepr :=
+    ConstructionTargets.LpRepresentative.toLp_integral_eq_integral
+      (by norm_num : (2 : ENNReal) ≠ ⊤) hφ hG hGφ hlocal hψ
+  exact (MemLp.toLp_congr hdiff hψ hpoint.symm).trans hrepr
+
 /-- (c) u(·,t) → f in L² as t → 0⁺.
 
 The contraction above supplies the density reduction.  The remaining
@@ -384,19 +545,34 @@ theorem heatConv_tendsto_L2
     (hf : MemLp f 2 volume) :
     Tendsto (fun t => eLpNorm (fun x => heatConv t f x - f x) 2 volume)
       (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
-  have haverage := heat_translation_average_tendsto_L2 hf
-  have htranslation :=
-    ConstructionTargets.L2Translation.eLpNorm_translation_tendsto f hf
-  have hunit (t x : ℝ) (ht : 0 < t) :
-      heatConv t f x =
-        ∫ z, heatKernel 1 z * f (x - Real.sqrt t * z) ∂volume :=
-    heatConv_eq_integral_unitKernel ht f x
-  have htranslated (t x : ℝ) :
-      heatConv t f x = ∫ y, heatKernel t y * f (x - y) ∂volume :=
-    heatConv_eq_integral_translation t f x
-  -- `haverage`, composed with `sqrt t → 0`, is the desired convergence in
-  -- abstract `Lp`.  The outstanding bridge is to show that its Bochner
-  -- integral has representative `heatConv t f - f` using `hunit`.
-  sorry
+  let τ : ℝ → C(ℝ, ℝ) := fun s =>
+    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+  let F : ℝ → Lp ℝ 2 volume := fun s =>
+    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+  let G : ℝ → ℝ → Lp ℝ 2 volume := fun t z =>
+    heatKernel 1 z • (F (Real.sqrt t * z) - F 0)
+  have havg0 : Tendsto (fun s => ∫ z, heatKernel 1 z •
+      (F (s * z) - F 0) ∂volume) (nhds 0) (nhds 0) := by
+    simpa [τ, hτ, F] using heat_translation_average_tendsto_L2 hf
+  have hsqrt : Tendsto (fun t : ℝ => Real.sqrt t)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    simpa only [Real.sqrt_zero] using
+      (continuous_sqrt.tendsto 0).mono_left
+        (show nhdsWithin (0 : ℝ) (Set.Ioi 0) ≤ nhds 0 from inf_le_left)
+  have havg : Tendsto (fun t => ∫ z, G t z ∂volume)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    simpa [G] using havg0.comp hsqrt
+  have henorm : Tendsto (fun t => ‖∫ z, G t z ∂volume‖ₑ)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    simpa using (continuous_enorm.tendsto (0 : Lp ℝ 2 volume)).comp havg
+  refine henorm.congr' ?_
+  filter_upwards [self_mem_nhdsWithin] with t ht
+  have hdiff : MemLp (fun x => heatConv t f x - f x) 2 volume :=
+    (heatConv_memLp ht hf).sub hf
+  rw [← Lp.enorm_toLp hdiff]
+  congr 1
+  simpa [τ, hτ, F, G] using (heat_translation_average_toLp ht hf).symm
 
 end
