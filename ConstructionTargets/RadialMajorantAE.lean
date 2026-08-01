@@ -298,7 +298,8 @@ theorem tendsto_lintegral_poissonLayerDensity_mul
     (by
       filter_upwards with y
       filter_upwards with u
-      exact mul_le_mul_left' (hbound (y * u)) (Q u))
+      gcongr
+      exact hbound (y * u))
     hbound_fin
     (by
       filter_upwards with u
