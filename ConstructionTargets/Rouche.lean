@@ -1,5 +1,7 @@
 import Mathlib.Analysis.Complex.JensenFormula
 import Mathlib.Analysis.Calculus.LogDeriv
+import Mathlib.Topology.Connected.TotallyDisconnected
+import Mathlib.Topology.Instances.ZMultiples
 
 /-!
 # Rouché root-count transfer on a disk
@@ -295,6 +297,15 @@ lemma circleIntegral_logDeriv_eq_divisor_sum
       (fun z hz => hhne ⟨z, hz⟩),
     add_zero]
 
+/-- Casting the integer-valued zero count commutes with its finite divisor
+sum. -/
+lemma intCast_zeroCountInClosedBall (f : ℂ → ℂ) (c : ℂ) (R : ℝ) :
+    (zeroCountInClosedBall f c R : ℂ) =
+      ∑ᶠ z, (divisor f (closedBall c R) z : ℂ) := by
+  unfold zeroCountInClosedBall
+  exact (Int.castAddHom ℂ).map_finsum
+    ((divisor f (closedBall c R)).finiteSupport (isCompact_closedBall c R))
+
 /-- The strict Rouché inequality keeps the straight-line homotopy away from
 zero on the boundary.  This is the pointwise topological core of the theorem. -/
 lemma add_smul_ne_zero_of_norm_le_one
@@ -357,6 +368,64 @@ lemma rouche_homotopy_analyticOnNhd_and_ne_zero
   exact ⟨rouche_homotopy_analyticOnNhd hf hg t.1,
     rouche_homotopy_ne_zero_on_sphere hfg t⟩
 
+/-- The logarithmic-derivative boundary integral varies continuously along
+the straight-line Rouché homotopy. -/
+lemma continuous_circleIntegral_logDeriv_roucheHomotopy
+    {f g : ℂ → ℂ} {c : ℂ} {R : ℝ}
+    (hR : 0 < R)
+    (hf : AnalyticOnNhd ℂ f (closedBall c R))
+    (hg : AnalyticOnNhd ℂ g (closedBall c R))
+    (hfg : ∀ z ∈ sphere c R, ‖g z‖ < ‖f z‖) :
+    Continuous (fun t : Set.Icc (0 : ℝ) 1 ↦
+      ∮ z in C(c, R), logDeriv (fun w ↦ f w + (t.1 : ℂ) * g w) z) := by
+  let z : Set.Icc (0 : ℝ) 1 × ℝ → ℂ := fun p ↦ circleMap c R p.2
+  have hzcont : Continuous z := (continuous_circleMap c R).comp continuous_snd
+  have hzsphere : ∀ p, z p ∈ sphere c R := fun p ↦ by
+    exact circleMap_mem_sphere c hR.le p.2
+  have hzcb : ∀ p, z p ∈ closedBall c R :=
+    fun p ↦ sphere_subset_closedBall (hzsphere p)
+  have hfcont : Continuous (fun p ↦ f (z p)) :=
+    hf.continuousOn.comp_continuous hzcont hzcb
+  have hgcont : Continuous (fun p ↦ g (z p)) :=
+    hg.continuousOn.comp_continuous hzcont hzcb
+  have hdfcont : Continuous (fun p ↦ deriv f (z p)) :=
+    hf.deriv.continuousOn.comp_continuous hzcont hzcb
+  have hdgcont : Continuous (fun p ↦ deriv g (z p)) :=
+    hg.deriv.continuousOn.comp_continuous hzcont hzcb
+  have htcont : Continuous (fun p : Set.Icc (0 : ℝ) 1 × ℝ ↦ (p.1.1 : ℂ)) := by
+    fun_prop
+  have hdenom : ∀ p : Set.Icc (0 : ℝ) 1 × ℝ,
+      f (z p) + (p.1.1 : ℂ) * g (z p) ≠ 0 := by
+    intro p
+    apply rouche_homotopy_ne_zero_on_sphere hfg p.1 (z p)
+    exact hzsphere p
+  have hcircder : Continuous (fun p : Set.Icc (0 : ℝ) 1 × ℝ ↦
+      deriv (circleMap c R) p.2) := by
+    simpa only [deriv_circleMap] using
+      (((continuous_circleMap 0 R).comp continuous_snd).mul continuous_const)
+  have hint : Continuous (Function.uncurry (fun t : Set.Icc (0 : ℝ) 1 ↦ fun θ : ℝ ↦
+      deriv (circleMap c R) θ *
+        ((deriv f (circleMap c R θ) + (t.1 : ℂ) * deriv g (circleMap c R θ)) /
+          (f (circleMap c R θ) + (t.1 : ℂ) * g (circleMap c R θ))))) := by
+    exact hcircder.mul
+      ((hdfcont.add (htcont.mul hdgcont)).div (hfcont.add (htcont.mul hgcont)) hdenom)
+  have hcont := intervalIntegral.continuous_parametric_intervalIntegral_of_continuous'
+    (μ := MeasureTheory.volume) hint 0 (2 * Real.pi)
+  convert hcont using 1
+  funext t
+  rw [circleIntegral]
+  apply intervalIntegral.integral_congr
+  intro θ _
+  simp only [logDeriv_apply]
+  have hd : HasDerivAt (fun w ↦ f w + (t.1 : ℂ) * g w)
+      (deriv f (circleMap c R θ) + (t.1 : ℂ) * deriv g (circleMap c R θ))
+      (circleMap c R θ) :=
+    (hf (circleMap c R θ) (hzcb (t, θ))).differentiableAt.hasDerivAt.add
+      ((hg (circleMap c R θ) (hzcb (t, θ))).differentiableAt.hasDerivAt.const_mul
+        (t.1 : ℂ))
+  rw [hd.deriv]
+  rfl
+
 /-- **Rouché's theorem on a closed disk.** If `f` and `g` are holomorphic on
 a neighborhood of the closed disk and `‖g‖ < ‖f‖` on its boundary, then `f`
 and `f + g` have the same number of zeros in the disk, counted with
@@ -378,6 +447,42 @@ theorem zeroCountInClosedBall_add_eq
     (hg : AnalyticOnNhd ℂ g (closedBall c R))
     (hfg : ∀ z ∈ sphere c R, ‖g z‖ < ‖f z‖) :
     zeroCountInClosedBall (f + g) c R = zeroCountInClosedBall f c R := by
-  sorry
+  let C : ℂ := 2 * Real.pi * I
+  let N : Set.Icc (0 : ℝ) 1 → ℤ := fun t ↦
+    zeroCountInClosedBall (fun z ↦ f z + (t.1 : ℂ) * g z) c R
+  let H : Set.Icc (0 : ℝ) 1 → ℂ := fun t ↦
+    ∮ z in C(c, R), logDeriv (fun w ↦ f w + (t.1 : ℂ) * g w) z
+  have hH : Continuous H :=
+    continuous_circleIntegral_logDeriv_roucheHomotopy hR hf hg hfg
+  have hHN : ∀ t, H t = (N t : ℂ) * C := by
+    intro t
+    have ht := rouche_homotopy_analyticOnNhd_and_ne_zero hf hg hfg t
+    change (∮ z in C(c, R), logDeriv (fun w ↦ f w + (t.1 : ℂ) * g w) z) =
+      (zeroCountInClosedBall (fun w ↦ f w + (t.1 : ℂ) * g w) c R : ℂ) *
+        (2 * Real.pi * I)
+    rw [circleIntegral_logDeriv_eq_divisor_sum hR ht.1 ht.2,
+      intCast_zeroCountInClosedBall]
+  let K : Set.Icc (0 : ℝ) 1 → AddSubgroup.zmultiples C := fun t ↦
+    ⟨H t, by
+      rw [hHN t]
+      exact ⟨N t, by dsimp; rw [zsmul_eq_mul]⟩⟩
+  have hK : Continuous K := by
+    apply Continuous.subtype_mk hH
+  have hconst : K (⟨1, by simp⟩ : Set.Icc (0 : ℝ) 1) =
+      K (⟨0, by simp⟩ : Set.Icc (0 : ℝ) 1) :=
+    PreconnectedSpace.constant (by infer_instance) hK
+  have hmul : (N (⟨1, by simp⟩ : Set.Icc (0 : ℝ) 1) : ℂ) * C =
+      (N (⟨0, by simp⟩ : Set.Icc (0 : ℝ) 1) : ℂ) * C := by
+    rw [← hHN, ← hHN]
+    exact congrArg Subtype.val hconst
+  have hC : C ≠ 0 := by
+    simp [C, Complex.I_ne_zero, Real.pi_ne_zero]
+  have hcast : (N (⟨1, by simp⟩ : Set.Icc (0 : ℝ) 1) : ℂ) =
+      (N (⟨0, by simp⟩ : Set.Icc (0 : ℝ) 1) : ℂ) :=
+    mul_right_cancel₀ hC hmul
+  have hN : N (⟨1, by simp⟩ : Set.Icc (0 : ℝ) 1) =
+      N (⟨0, by simp⟩ : Set.Icc (0 : ℝ) 1) := by
+    exact_mod_cast hcast
+  simpa [N, Pi.add_apply] using hN
 
 end ConstructionTargets.Rouche
