@@ -4,6 +4,7 @@ import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
 import Mathlib.MeasureTheory.Integral.Lebesgue.DominatedConvergence
 import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
 import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+import Mathlib.Analysis.Convolution
 
 open MeasureTheory Set Filter Real Topology
 
@@ -40,6 +41,61 @@ theorem radialLaverage_measurable (f : ℝ → ℝ) (x : ℝ) :
   unfold radialLaverage
   exact (radialLIntegral_measurable f x).div
     (ENNReal.measurable_ofReal.comp (measurable_const.mul measurable_id))
+
+theorem radialLIntegral_eq_lintegral_closedBall (f : ℝ → ℝ) (x s : ℝ) :
+    radialLIntegral f x s =
+      ∫⁻ z in Metric.closedBall x s, ‖f z - f x‖ₑ ∂volume := by
+  let e : ℝ ≃ᵐ ℝ := MeasurableEquiv.subLeft x
+  have himage : (fun t : ℝ => x - t) '' Icc (-s) s = Metric.closedBall x s := by
+    ext z
+    rw [Real.closedBall_eq_Icc]
+    constructor
+    · rintro ⟨t, ht, rfl⟩
+      change x - t ∈ Icc (x - s) (x + s)
+      exact ⟨by linarith [ht.2], by linarith [ht.1]⟩
+    · intro hz
+      refine ⟨x - z, ⟨by linarith [hz.2], by linarith [hz.1]⟩, ?_⟩
+      change x - (x - z) = z
+      ring
+  unfold radialLIntegral
+  have h := (Measure.measurePreserving_sub_left (volume : Measure ℝ) x).setLIntegral_comp_emb
+      e.measurableEmbedding
+      (fun z => ‖f z - f x‖ₑ) (Icc (-s) s)
+  rw [himage] at h
+  simpa [e] using h
+
+/-- At almost every point, the radial translation-error average tends to zero.
+This is the concrete one-dimensional Lebesgue differentiation theorem,
+rewritten through the reflection-translation `t ↦ x - t`. -/
+theorem ae_tendsto_radialLaverage {f : ℝ → ℝ}
+    (hf : LocallyIntegrable f volume) :
+    ∀ᵐ x ∂volume, Tendsto (radialLaverage f x) (𝓝[>] 0) (𝓝 0) := by
+  filter_upwards [IsUnifLocDoublingMeasure.ae_tendsto_average_norm_sub volume hf 1]
+    with x hx
+  have havg := hx (fun _ : ℝ => x) id
+    (show Tendsto id (𝓝[>] (0 : ℝ)) (𝓝[>] 0) from tendsto_id)
+    (by
+      filter_upwards [self_mem_nhdsWithin] with s hs
+      have hspos : 0 < s := hs
+      simp [hspos.le])
+  have hofReal : Tendsto
+      (fun s : ℝ => ENNReal.ofReal
+        (⨍ z in Metric.closedBall x s, ‖f z - f x‖ ∂volume))
+      (𝓝[>] 0) (𝓝 0) := by
+    simpa using ENNReal.tendsto_ofReal havg
+  apply hofReal.congr'
+  filter_upwards [self_mem_nhdsWithin] with s hs
+  have hfi : IntegrableOn f (Metric.closedBall x s) volume :=
+    hf.integrableOn_isCompact (isCompact_closedBall x s)
+  have hconst : IntegrableOn (fun _ : ℝ => f x) (Metric.closedBall x s) volume :=
+    integrableOn_const (by rw [volume_closedBall]; exact ENNReal.ofReal_ne_top)
+  have hgint : IntegrableOn (fun z => ‖f z - f x‖)
+      (Metric.closedBall x s) volume :=
+    (hfi.sub hconst).norm
+  rw [ofReal_setAverage hgint (Eventually.of_forall fun _ => norm_nonneg _)]
+  simp_rw [ofReal_norm_eq_enorm]
+  rw [← radialLIntegral_eq_lintegral_closedBall]
+  simp only [radialLaverage, volume_closedBall]
 
 /-- Tonelli's theorem in the radial layer-cake form.  No integrability
 hypothesis is required because both sides are nonnegative extended integrals.
