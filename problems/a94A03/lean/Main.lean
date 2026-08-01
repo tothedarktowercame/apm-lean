@@ -1,6 +1,7 @@
 import Mathlib.Analysis.Convolution
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
+import ConstructionTargets.L2Translation
 
 /-!
 # APM a94A03: Gaussian convolution is an Lp contraction and approximate identity
@@ -104,43 +105,6 @@ lemma gaussConv_eq_integral_unitKernel {t : ℝ} (ht : 0 < t) (f : ℝ → ℝ) 
           filter_upwards with z
           rw [← mul_assoc, gaussKernel_scale ht]
 
-/-- Translations are strongly continuous in every finite `Lᵖ(ℝ)`, `1 ≤ p`.
-This is the Mathlib component needed by the Gaussian approximate-identity
-argument after the probability-kernel estimate is available. -/
-lemma eLpNorm_translation_tendsto
-    {p : ENNReal} (hp : 1 ≤ p) (hp' : p ≠ ⊤)
-    (f : ℝ → ℝ) (hf : MemLp f p volume) :
-    Tendsto (fun t => eLpNorm (fun x => f (x - t) - f x) p volume)
-      (𝓝 0) (𝓝 0) := by
-  letI : Fact (1 ≤ p) := ⟨hp⟩
-  let g : ℝ → C(ℝ, ℝ) := fun t =>
-    ⟨fun x => x - t, continuous_id.sub continuous_const⟩
-  have hg : Continuous g := by
-    let G : C(ℝ × ℝ, ℝ) :=
-      ⟨fun z => z.2 - z.1, continuous_snd.sub continuous_fst⟩
-    exact (ContinuousMap.curry G).continuous
-  have hgm : ∀ t, MeasurePreserving (g t) volume volume := by
-    intro t
-    simpa [g, sub_eq_add_neg] using measurePreserving_add_right volume (-t)
-  let F : ℝ → Lp ℝ p volume := fun t =>
-    Lp.compMeasurePreserving (g t) (hgm t) (hf.toLp f)
-  have hF : Continuous F := by
-    dsimp [F]
-    exact continuous_const.compMeasurePreservingLp hg hgm hp'
-  have hF0 : F 0 = hf.toLp f := by
-    dsimp [F]
-    rw [Lp.toLp_compMeasurePreserving]
-    apply MemLp.toLp_congr
-    exact Filter.Eventually.of_forall fun x => by simp [g]
-  have hed : Tendsto (fun t => edist (F t) (hf.toLp f)) (𝓝 0) (𝓝 0) := by
-    have hc : Continuous (fun _ : ℝ => hf.toLp f) := continuous_const
-    simpa [hF0] using (hF.edist hc).tendsto 0
-  convert hed using 1
-  ext t
-  dsimp [F]
-  rw [Lp.toLp_compMeasurePreserving, Lp.edist_toLp_toLp]
-  apply eLpNorm_congr_ae
-  exact Filter.Eventually.of_forall fun x => by simp [g]
 
 /-- Part (a): K_t is an Lp contraction: eLpNorm(K_t f) <= eLpNorm(f).
 
