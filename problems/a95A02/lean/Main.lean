@@ -428,7 +428,7 @@ section PartB
 
 /-- Part (b): AC functions uniformly control outer measure of images of small
 subsets of `[0,1]`. -/
-theorem ac_lusin_condition_N
+private theorem ac_lusin_condition_N_lt_aux
     {f : ℝ → ℝ}
     (hac : ACOnUnitInterval f)
     {ε : ℝ} (hε : 0 < ε) :
@@ -502,6 +502,19 @@ theorem ac_lusin_condition_N
   rw [← lintegral_biUnion hcount hmeas hdisj, hCU]
   exact hUintegral.le
 
+/-- Part (b): AC functions uniformly control outer measure of images of small
+subsets of `[0,1]`, with the non-strict input bound used in the source. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): replace the strict small-set
+-- hypothesis by the source's non-strict outer-measure bound.
+theorem ac_lusin_condition_N
+    {f : ℝ → ℝ}
+    (hac : ACOnUnitInterval f)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ δ > 0, ∀ E ⊆ Icc (0:ℝ) 1,
+      volume.toOuterMeasure E ≤ ENNReal.ofReal δ →
+      volume.toOuterMeasure (f '' E) ≤ ENNReal.ofReal ε := by
+  sorry
+
 /-- Part (b), null-set specialization. -/
 theorem ac_maps_null_to_null
     {f : ℝ → ℝ}
@@ -517,22 +530,22 @@ theorem ac_maps_null_to_null
   have hE_outer : volume.toOuterMeasure E < ENNReal.ofReal δ := by
     rw [Measure.toOuterMeasure_apply, hE_null]
     exact ENNReal.ofReal_pos.2 hδ
-  simpa using hbound E hE hE_outer
+  simpa using hbound E hE hE_outer.le
 
 end PartB
 
 section PartC
 
-/-- Part (c), retained as stated by the source problem.  The standard
-σ-compact-plus-null argument establishes completed Lebesgue measurability, not
-this Borel `MeasurableSet` conclusion; the remaining `sorry` records that
-statement-level mismatch rather than concealing it. -/
+/-- Part (c): AC functions map Lebesgue-measurable subsets of `[0,1]` to
+Lebesgue-measurable sets. -/
+-- STATEMENT REPAIR 2026-07-31 (Joe-authorised): express both input and output
+-- measurability in the completion of Borel measure, as the source requires.
 theorem ac_maps_measurable_to_measurable
     {f : ℝ → ℝ}
     (hac : ACOnUnitInterval f)
     {E : Set ℝ} (hE : E ⊆ Icc (0:ℝ) 1)
-    (hE_meas : MeasurableSet E) :
-    MeasurableSet (f '' E) := by
+    (hE_meas : NullMeasurableSet E volume) :
+    NullMeasurableSet (f '' E) volume := by
   sorry
 
 end PartC
