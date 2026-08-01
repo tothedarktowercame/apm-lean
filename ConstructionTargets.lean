@@ -3,6 +3,7 @@ import ConstructionTargets.RadialIntegrationR3
 import ConstructionTargets.Rouche
 import ConstructionTargets.LemniscateComponents
 import ConstructionTargets.UnivalentDeriv
+import ConstructionTargets.BanachZarecki
 
 /-!
 # ConstructionTargets — reusable lemmas built to unblock specific APM problems
@@ -25,4 +26,5 @@ needlessly.
 | `Rouche` | partial (`sorry` remains) | a92J05, a94A10 |
 | `LemniscateComponents` | partial (`sorry` remains) | a00J04, a01A08 |
 | `UnivalentDeriv` | partial (`sorry` remains) | a95J01 |
+| `BanachZarecki` | sorry-free infrastructure; Borel-image bridge remains | a95J06 |
 -/
