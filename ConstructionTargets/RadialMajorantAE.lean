@@ -236,6 +236,37 @@ theorem exists_radialLaverage_bound_of_memLp {f : ℝ → ℝ}
         (le_add_right (le_add_right le_rfl))
   · simpa [C, S] using radialLaverage_le_of_memLp hf x hδpos hδs
 
+theorem tendsto_radialLaverage_mul {f : ℝ → ℝ} {x : ℝ}
+    (hx : Tendsto (radialLaverage f x) (𝓝[>] 0) (𝓝 0)) (u : ℝ) :
+    Tendsto (fun y : ℝ => radialLaverage f x (y * u)) (𝓝[>] 0) (𝓝 0) := by
+  rcases lt_or_ge 0 u with hu | hu
+  · apply hx.comp
+    refine tendsto_nhdsWithin_iff.2 ⟨?_, ?_⟩
+    · simpa using
+        ((show Tendsto (fun y : ℝ => y) (𝓝[>] 0) (𝓝 0) from
+          tendsto_id.mono_left inf_le_left).mul_const u)
+    filter_upwards [self_mem_nhdsWithin] with y hy
+    exact mul_pos hy hu
+  · apply tendsto_const_nhds.congr'
+    filter_upwards [self_mem_nhdsWithin] with y hy
+    rw [radialLaverage_of_nonpos f x (mul_nonpos_of_nonneg_of_nonpos hy.le hu)]
+
+/-- Change of variables `s = y * u` for nonnegative Lebesgue integrals. -/
+theorem lintegral_eq_ofReal_mul_lintegral_comp_mul
+    {F : ℝ → ℝ≥0∞} (hF : Measurable F) {y : ℝ} (hy : 0 < y) :
+    (∫⁻ s, F s ∂volume) =
+      ENNReal.ofReal y * ∫⁻ u, F (y * u) ∂volume := by
+  have hy0 : y ≠ 0 := ne_of_gt hy
+  have hmap := MeasureTheory.lintegral_comp (μ := volume) hF (measurable_const_mul y)
+  rw [Real.map_volume_mul_left hy0, lintegral_smul_measure] at hmap
+  have hmap' : (∫⁻ u, F (y * u) ∂volume) =
+      ENNReal.ofReal |y⁻¹| * ∫⁻ s, F s ∂volume := by
+    simpa [Function.comp_def, smul_eq_mul] using hmap
+  rw [hmap']
+  rw [abs_of_pos (inv_pos.mpr hy), ENNReal.ofReal_inv_of_pos hy]
+  rw [← mul_assoc, ENNReal.mul_inv_cancel (ENNReal.ofReal_pos.mpr hy).ne'
+    ENNReal.ofReal_ne_top, one_mul]
+
 /-- Tonelli's theorem in the radial layer-cake form.  No integrability
 hypothesis is required because both sides are nonnegative extended integrals.
 
@@ -452,6 +483,55 @@ substitution `s = y * u`. -/
 def poissonLayerDensity (u : ℝ) : ℝ :=
   poissonLayerWeight 1 u * (2 * u)
 
+theorem poissonLayerWeight_scale {y : ℝ} (hy : 0 < y) (u : ℝ) :
+    y * poissonLayerWeight y (y * u) * (2 * (y * u)) =
+      poissonLayerDensity u := by
+  have hy0 : y ≠ 0 := ne_of_gt hy
+  unfold poissonLayerDensity poissonLayerWeight
+  field_simp
+
+theorem ofReal_poissonLayerWeight_mul_radialLIntegral_scale
+    (f : ℝ → ℝ) (x : ℝ) {y : ℝ} (hy : 0 < y) (u : ℝ) :
+    ENNReal.ofReal y *
+        (ENNReal.ofReal (poissonLayerWeight y (y * u)) *
+          radialLIntegral f x (y * u)) =
+      ENNReal.ofReal (poissonLayerDensity u) * radialLaverage f x (y * u) := by
+  rcases le_or_gt u 0 with hu | hu
+  · have hyu : y * u ≤ 0 := mul_nonpos_of_nonneg_of_nonpos hy.le hu
+    have hri : radialLIntegral f x (y * u) = 0 := by
+      rcases hyu.eq_or_lt with hzero | hneg
+      · rw [hzero]
+        simp [radialLIntegral]
+      · unfold radialLIntegral
+        rw [Icc_eq_empty (by linarith)]
+        simp
+    simp [radialLaverage_of_nonpos f x hyu, hri]
+  · have hyu : 0 < y * u := mul_pos hy hu
+    let d : ℝ≥0∞ := ENNReal.ofReal (2 * (y * u))
+    have hd0 : d ≠ 0 := (ENNReal.ofReal_pos.mpr (by positivity)).ne'
+    have hdtop : d ≠ ∞ := ENNReal.ofReal_ne_top
+    have hcoeff : ENNReal.ofReal y *
+        ENNReal.ofReal (poissonLayerWeight y (y * u)) * d =
+        ENNReal.ofReal (poissonLayerDensity u) := by
+      change ENNReal.ofReal y * ENNReal.ofReal (poissonLayerWeight y (y * u)) *
+        ENNReal.ofReal (2 * (y * u)) = ENNReal.ofReal (poissonLayerDensity u)
+      rw [← ENNReal.ofReal_mul hy.le,
+        ← ENNReal.ofReal_mul
+          (mul_nonneg hy.le (poissonLayerWeight_nonneg hy hyu.le))]
+      exact congrArg ENNReal.ofReal (poissonLayerWeight_scale hy u)
+    unfold radialLaverage
+    rw [← hcoeff]
+    calc
+      ENNReal.ofReal y *
+          (ENNReal.ofReal (poissonLayerWeight y (y * u)) * radialLIntegral f x (y * u)) =
+          (ENNReal.ofReal y * ENNReal.ofReal (poissonLayerWeight y (y * u))) *
+            radialLIntegral f x (y * u) := by rw [mul_assoc]
+      _ = (ENNReal.ofReal y * ENNReal.ofReal (poissonLayerWeight y (y * u))) *
+            (d * (radialLIntegral f x (y * u) / d)) := by
+        rw [ENNReal.mul_div_cancel hd0 hdtop]
+      _ = (ENNReal.ofReal y * ENNReal.ofReal (poissonLayerWeight y (y * u)) * d) *
+            (radialLIntegral f x (y * u) / d) := by ac_rfl
+
 theorem poissonLayerDensity_eq (u : ℝ) :
     poissonLayerDensity u = 4 * u ^ 2 / (π * (1 + u ^ 2) ^ 2) := by
   unfold poissonLayerDensity poissonLayerWeight
@@ -489,6 +569,43 @@ theorem poissonLayerDensity_lintegral_ne_top :
   rw [← ofReal_integral_eq_lintegral_ofReal poissonLayerDensity_integrable
     (Eventually.of_forall poissonLayerDensity_nonneg)]
   exact ENNReal.ofReal_ne_top
+
+theorem lintegral_poissonKernel_mul_enorm_sub_eq_radialLaverage
+    {f : ℝ → ℝ} (hfm : Measurable f) (x : ℝ) {y : ℝ} (hy : 0 < y) :
+    (∫⁻ t, ENNReal.ofReal (poissonKernel y t) * ‖f (x - t) - f x‖ₑ ∂volume) =
+      ∫⁻ u, ENNReal.ofReal (poissonLayerDensity u) *
+        radialLaverage f x (y * u) ∂volume := by
+  let g : ℝ → ℝ≥0∞ := fun t => ‖f (x - t) - f x‖ₑ
+  let w : ℝ → ℝ≥0∞ := fun s => ENNReal.ofReal (poissonLayerWeight y s)
+  have hg : Measurable g := by
+    unfold g
+    fun_prop
+  have hw : Measurable w := by
+    unfold w poissonLayerWeight
+    fun_prop
+  have hlayer := lintegral_mul_radial_layerCake hg hw
+    (fun t => (lintegral_poissonLayerWeight_Ici hy t).symm)
+  have hlayer' :
+      (∫⁻ t, ENNReal.ofReal (poissonKernel y t) * g t ∂volume) =
+        ∫⁻ s, w s * radialLIntegral f x s ∂volume := by
+    simpa [mul_comm, g, w, radialLIntegral] using hlayer
+  rw [hlayer']
+  have hF : Measurable (fun s => w s * radialLIntegral f x s) :=
+    hw.mul (radialLIntegral_measurable f x)
+  rw [lintegral_eq_ofReal_mul_lintegral_comp_mul hF hy]
+  calc
+    ENNReal.ofReal y *
+        (∫⁻ u, w (y * u) * radialLIntegral f x (y * u) ∂volume) =
+        ∫⁻ u, ENNReal.ofReal y *
+          (w (y * u) * radialLIntegral f x (y * u)) ∂volume := by
+      rw [lintegral_const_mul]
+      exact (hF.comp (measurable_const_mul y))
+    _ = ∫⁻ u, ENNReal.ofReal (poissonLayerDensity u) *
+        radialLaverage f x (y * u) ∂volume := by
+      apply lintegral_congr
+      intro u
+      simpa [w] using
+        ofReal_poissonLayerWeight_mul_radialLIntegral_scale f x hy u
 
 /-- Dominated convergence for a bounded radial-average profile against the
 fixed Poisson layer density.  This is the analytic core of the a.e. boundary
@@ -529,5 +646,128 @@ theorem tendsto_lintegral_poissonLayerDensity_mul
       simpa only [Q, mul_zero] using
         ENNReal.Tendsto.const_mul (hzero u) (Or.inr ENNReal.ofReal_ne_top))
   simpa only [Q, lintegral_zero] using hdct
+
+theorem poissonConv_tendsto_at_of_memLp {f : ℝ → ℝ} (hfm : Measurable f)
+    (hf : MemLp f 2 volume) {x : ℝ}
+    (hx : Tendsto (radialLaverage f x) (𝓝[>] 0) (𝓝 0)) :
+    Tendsto (fun y => ∫ t, poissonKernel y t * f (x - t) ∂volume)
+      (𝓝[>] 0) (𝓝 (f x)) := by
+  rcases exists_radialLaverage_bound_of_memLp hf x hx with ⟨C, hC, hbound⟩
+  have hlin := tendsto_lintegral_poissonLayerDensity_mul
+    (radialLaverage_measurable f x) hC hbound
+    (tendsto_radialLaverage_mul hx)
+  have hlin' : Tendsto
+      (fun y => ∫⁻ t, ENNReal.ofReal (poissonKernel y t) *
+        ‖f (x - t) - f x‖ₑ ∂volume) (𝓝[>] 0) (𝓝 0) := by
+    apply hlin.congr'
+    filter_upwards [self_mem_nhdsWithin] with y hy
+    exact (lintegral_poissonKernel_mul_enorm_sub_eq_radialLaverage
+      hfm x hy).symm
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  refine squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _) ?_
+    ((ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp hlin')
+  filter_upwards [self_mem_nhdsWithin] with y hy
+  let err : ℝ → ℝ := fun t => poissonKernel y t * (f (x - t) - f x)
+  have herr_meas : Measurable err := by
+    unfold err poissonKernel
+    fun_prop
+  have hdom : (∫⁻ u, ENNReal.ofReal (poissonLayerDensity u) *
+      radialLaverage f x (y * u) ∂volume) ≤
+      ∫⁻ u, ENNReal.ofReal (poissonLayerDensity u) * C ∂volume := by
+    apply lintegral_mono
+    intro u
+    simpa [mul_comm] using
+      mul_le_mul_right (hbound (y * u))
+        (ENNReal.ofReal (poissonLayerDensity u))
+  have hQ : Measurable (fun u => ENNReal.ofReal (poissonLayerDensity u)) := by
+    apply Measurable.ennreal_ofReal
+    rw [show poissonLayerDensity =
+        fun u => 4 * u ^ 2 / (π * (1 + u ^ 2) ^ 2) from
+      funext poissonLayerDensity_eq]
+    fun_prop
+  have hdom_fin : (∫⁻ u, ENNReal.ofReal (poissonLayerDensity u) * C ∂volume) ≠ ∞ := by
+    rw [lintegral_mul_const C hQ]
+    exact ENNReal.mul_ne_top poissonLayerDensity_lintegral_ne_top hC
+  have herr_lintegral : (∫⁻ t, ‖err t‖ₑ ∂volume) =
+      ∫⁻ t, ENNReal.ofReal (poissonKernel y t) *
+        ‖f (x - t) - f x‖ₑ ∂volume := by
+    apply lintegral_congr
+    intro t
+    rw [enorm_mul, ← ofReal_norm_eq_enorm,
+      Real.norm_of_nonneg (poissonKernel_nonneg hy t)]
+  have herr_fin : (∫⁻ t, ‖err t‖ₑ ∂volume) ≠ ∞ := by
+    rw [herr_lintegral,
+      lintegral_poissonKernel_mul_enorm_sub_eq_radialLaverage hfm x hy]
+    exact ne_top_of_le_ne_top hdom_fin hdom
+  have herr_int : Integrable err volume :=
+    ⟨herr_meas.aestronglyMeasurable, lt_top_iff_ne_top.mpr herr_fin⟩
+  have hconst_int : Integrable (fun t => poissonKernel y t * f x) volume :=
+    (poissonKernel_integrable hy).mul_const _
+  have hshift_int : Integrable (fun t => poissonKernel y t * f (x - t)) volume := by
+    have hsum := herr_int.add hconst_int
+    apply hsum.congr
+    filter_upwards with t
+    simp only [Pi.add_apply, err]
+    ring
+  have hdiff : (∫ t, poissonKernel y t * f (x - t) ∂volume) - f x =
+      ∫ t, err t ∂volume := by
+    calc
+      (∫ t, poissonKernel y t * f (x - t) ∂volume) - f x =
+          (∫ t, poissonKernel y t * f (x - t) ∂volume) -
+            ∫ t, poissonKernel y t * f x ∂volume := by
+        rw [integral_mul_const, poissonKernel_integral hy]
+        ring
+      _ = ∫ t, (poissonKernel y t * f (x - t) -
+            poissonKernel y t * f x) ∂volume := by
+        rw [integral_sub hshift_int hconst_int]
+      _ = ∫ t, err t ∂volume := by
+        apply integral_congr_ae
+        filter_upwards with t
+        simp only [err]
+        ring
+  rw [hdiff]
+  calc
+    ‖∫ t, err t ∂volume‖ ≤ ENNReal.toReal (∫⁻ t, ENNReal.ofReal ‖err t‖ ∂volume) :=
+      norm_integral_le_lintegral_norm err
+    _ = ENNReal.toReal (∫⁻ t, ENNReal.ofReal (poissonKernel y t) *
+          ‖f (x - t) - f x‖ₑ ∂volume) := by
+      congr 1
+      calc
+        (∫⁻ t, ENNReal.ofReal ‖err t‖ ∂volume) =
+            ∫⁻ t, ‖err t‖ₑ ∂volume := by
+          apply lintegral_congr
+          intro t
+          exact ofReal_norm_eq_enorm (a := err t)
+        _ = _ := herr_lintegral
+
+/-- The Poisson approximate identity converges almost everywhere for every
+`L²(ℝ)` function. -/
+theorem poissonConv_tendsto_ae_of_memLp
+    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    ∀ᵐ x ∂volume,
+      Tendsto (fun y => ∫ t, poissonKernel y t * f (x - t) ∂volume)
+        (𝓝[>] 0) (𝓝 (f x)) := by
+  let g : ℝ → ℝ := hf.aestronglyMeasurable.mk f
+  have hgm : Measurable g := hf.aestronglyMeasurable.measurable_mk
+  have hfg : f =ᵐ[volume] g := hf.aestronglyMeasurable.ae_eq_mk
+  have hgLp : MemLp g 2 volume :=
+    hf.congr_norm hgm.aestronglyMeasurable (hfg.fun_comp norm)
+  have hgloc : LocallyIntegrable g volume := hgLp.locallyIntegrable (by norm_num)
+  filter_upwards [hfg, ae_tendsto_radialLaverage hgloc] with x hfx hx
+  have hg_tendsto := poissonConv_tendsto_at_of_memLp hgm hgLp hx
+  have hconv (y : ℝ) :
+      (∫ t, poissonKernel y t * f (x - t) ∂volume) =
+        ∫ t, poissonKernel y t * g (x - t) ∂volume := by
+    have hcomp :=
+      (Measure.measurePreserving_sub_left (volume : Measure ℝ) x).quasiMeasurePreserving.ae_eq_comp
+        hfg
+    apply integral_congr_ae
+    filter_upwards [hcomp] with t ht
+    exact congrArg (fun z => poissonKernel y t * z) ht
+  have heq :
+      (fun y => ∫ t, poissonKernel y t * f (x - t) ∂volume) =ᶠ[𝓝[>] 0]
+        (fun y => ∫ t, poissonKernel y t * g (x - t) ∂volume) :=
+    Eventually.of_forall hconv
+  simpa [hfx] using hg_tendsto.congr' heq.symm
 
 end ConstructionTargets.RadialMajorantAE
