@@ -223,12 +223,13 @@ theorem rotation_of_disk_subset_image_counterexample :
 
 /-- If Δ ⊆ D and f(0) = 0, |f'(0)| = 1, then f is a rotation (Schwarz equality).
 
-This proposed helper is false: image containment is the opposite direction
-from the `MapsTo` hypothesis of Schwarz's lemma, and no injectivity hypothesis
-is present.  See `rotation_of_disk_subset_image_counterexample` above. -/
+The injectivity hypothesis is essential: without it, image containment is the
+opposite direction from the `MapsTo` hypothesis of Schwarz's lemma.  See
+`rotation_of_disk_subset_image_counterexample` above. -/
 lemma rotation_of_disk_subset_image
     {f : ℂ → ℂ}
     (hf_holo : DifferentiableOn ℂ f (ball 0 1))
+    (hf_inj : InjOn f (ball 0 1))
     (hf_zero : f 0 = 0) (hf_deriv : ‖deriv f 0‖ = 1)
     (h_subset : ball (0 : ℂ) 1 ⊆ f '' ball 0 1) :
     ∃ α : ℝ, ∀ z ∈ ball (0 : ℂ) 1, f z = exp (I * ↑α) * z := by
