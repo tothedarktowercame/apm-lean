@@ -202,6 +202,40 @@ theorem radialLaverage_le_of_memLp {f : ℝ → ℝ} (hf : MemLp f 2 volume)
     _ = 1 + (∫⁻ z, ‖f z‖ₑ ^ (2 : ℕ) ∂volume) /
           ENNReal.ofReal (2 * δ) + ENNReal.ofReal |f x| := rfl
 
+/-- At a Lebesgue point of an `L²` function the radial error averages admit
+a finite global bound.  Near zero this is a consequence of the limit; away
+from zero it is `radialLaverage_le_of_memLp`. -/
+theorem exists_radialLaverage_bound_of_memLp {f : ℝ → ℝ}
+    (hf : MemLp f 2 volume) (x : ℝ)
+    (hx : Tendsto (radialLaverage f x) (𝓝[>] 0) (𝓝 0)) :
+    ∃ C : ℝ≥0∞, C ≠ ∞ ∧ ∀ s, radialLaverage f x s ≤ C := by
+  have hsmall_mem : {s : ℝ | radialLaverage f x s < 1} ∈ 𝓝[>] 0 :=
+    (tendsto_order.1 hx).2 1 (by norm_num)
+  rcases (mem_nhdsGT_iff_exists_Ioo_subset.1 hsmall_mem) with
+    ⟨δ, hδ, hsmall⟩
+  have hδpos : 0 < δ := hδ
+  let S : ℝ≥0∞ := ∫⁻ z, ‖f z‖ₑ ^ (2 : ℕ) ∂volume
+  let C : ℝ≥0∞ := 1 + S / ENNReal.ofReal (2 * δ) + ENNReal.ofReal |f x|
+  have hS : S ≠ ∞ := by
+    exact ne_of_lt (by
+      simpa [S, HasFiniteIntegral] using
+        (hf.integrable_enorm_pow (by norm_num : (2 : ℕ) ≠ 0)).hasFiniteIntegral)
+  have hδ0 : ENNReal.ofReal (2 * δ) ≠ 0 :=
+    (ENNReal.ofReal_pos.mpr (by positivity)).ne'
+  have hC : C ≠ ∞ := by
+    apply ENNReal.add_ne_top.mpr
+    refine ⟨ENNReal.add_ne_top.mpr ⟨ENNReal.one_ne_top, ?_⟩,
+      ENNReal.ofReal_ne_top⟩
+    exact ENNReal.div_ne_top hS hδ0
+  refine ⟨C, hC, fun s => ?_⟩
+  rcases lt_or_ge s δ with hsδ | hδs
+  · rcases le_or_gt s 0 with hs | hs
+    · rw [radialLaverage_of_nonpos f x hs]
+      exact bot_le
+    · exact (hsmall ⟨hs, hsδ⟩).le.trans
+        (le_add_right (le_add_right le_rfl))
+  · simpa [C, S] using radialLaverage_le_of_memLp hf x hδpos hδs
+
 /-- Tonelli's theorem in the radial layer-cake form.  No integrability
 hypothesis is required because both sides are nonnegative extended integrals.
 
