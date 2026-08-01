@@ -42,6 +42,7 @@ import Mathlib.Analysis.Normed.Field.Basic
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Calculus.Deriv.Polynomial
 import Mathlib.Analysis.Complex.LocallyUniformLimit
+import Mathlib.Analysis.Calculus.SmoothSeries
 import Mathlib.RingTheory.RootsOfUnity.Complex
 
 open Complex Metric Set Filter Topology Nat
@@ -300,6 +301,67 @@ lemma extension_deriv_eventually_bounded
   exact (hnorm_cont.tendsto.eventually (gt_mem_nhds (by linarith))).mono
     (fun _ hw => hw)
 
+/-- Inside the unit disk, the derivative of the lacunary series is the
+termwise derivative series.  The derivative series is controlled on a
+slightly larger disk by a geometric majorant. -/
+lemma lacunarySeries_hasDerivAt_of_norm_lt_one
+    {z : ℂ} (hz : ‖z‖ < 1) :
+    HasDerivAt lacunarySeries (∑' n : ℕ, z ^ (n.factorial - 1)) z := by
+  let ρ : ℝ := (‖z‖ + 1) / 2
+  have hρ0 : 0 < ρ := by
+    dsimp [ρ]
+    positivity
+  have hρ1 : ρ < 1 := by
+    dsimp [ρ]
+    linarith
+  have hzρ : ‖z‖ < ρ := by
+    dsimp [ρ]
+    linarith
+  let u : ℕ → ℝ := fun n => ρ⁻¹ * ρ ^ n
+  have hu : Summable u := by
+    exact (summable_geometric_of_lt_one hρ0.le hρ1).mul_left ρ⁻¹
+  have hbound : ∀ n (y : ℂ), y ∈ ball (0 : ℂ) ρ →
+      ‖y ^ (n.factorial - 1)‖ ≤ u n := by
+    intro n y hy
+    rw [mem_ball, dist_zero_right] at hy
+    by_cases hn : n = 0
+    · subst n
+      simpa [u] using (one_le_inv₀ hρ0).2 hρ1.le
+    · have hpow_base : ‖y‖ ^ (n.factorial - 1) ≤ ρ ^ (n.factorial - 1) :=
+        pow_le_pow_left₀ (norm_nonneg y) hy.le _
+      have hexp : n - 1 ≤ n.factorial - 1 :=
+        Nat.sub_le_sub_right n.self_le_factorial 1
+      have hpow_exp : ρ ^ (n.factorial - 1) ≤ ρ ^ (n - 1) :=
+        pow_le_pow_of_le_one hρ0.le hρ1.le hexp
+      calc
+        ‖y ^ (n.factorial - 1)‖ = ‖y‖ ^ (n.factorial - 1) := norm_pow _ _
+        _ ≤ ρ ^ (n.factorial - 1) := hpow_base
+        _ ≤ ρ ^ (n - 1) := hpow_exp
+        _ = u n := by
+          change ρ ^ (n - 1) = ρ⁻¹ * ρ ^ n
+          have hn1 : 1 ≤ n := Nat.one_le_iff_ne_zero.mpr hn
+          rw [mul_comm, ← div_eq_mul_inv, eq_div_iff hρ0.ne']
+          rw [← pow_succ, Nat.sub_add_cancel hn1]
+  change HasDerivAt (fun w => ∑' n, lacunaryTerm n w)
+    (∑' n : ℕ, z ^ (n.factorial - 1)) z
+  exact hasDerivAt_tsum_of_isPreconnected hu isOpen_ball (convex_ball 0 ρ).isPreconnected
+    (fun n y _ => lacunaryTerm_hasDerivAt n y) hbound
+    (mem_ball_self hρ0) (summable_lacunaryTerm_of_mem_closedBall (by simp))
+    (by simpa [mem_ball, dist_zero_right] using hzρ)
+
+/-- An extension agreeing with the lacunary series on the unit disk has the
+same derivative there, hence the same termwise derivative series. -/
+lemma extension_deriv_eq_lacunary_deriv_series
+    {F : ℂ → ℂ} {w : ℂ} (hw : w ∈ ball (0 : ℂ) 1)
+    (hF_eq : ∀ z ∈ ball (0 : ℂ) 1, F z = lacunarySeries z) :
+    deriv F w = ∑' n : ℕ, w ^ (n.factorial - 1) := by
+  have heq : F =ᶠ[𝓝 w] lacunarySeries :=
+    Filter.eventually_of_mem (isOpen_ball.mem_nhds hw)
+      (fun v hv => hF_eq v hv)
+  rw [heq.deriv_eq]
+  exact (lacunarySeries_hasDerivAt_of_norm_lt_one
+    (by simpa [mem_ball, dist_zero_right] using hw)).deriv
+
 /-- Part (b): The unit circle is a natural boundary for f.
 
 No connected open set U properly containing Δ admits an analytic function F
@@ -341,6 +403,18 @@ theorem lacunarySeries_natural_boundary :
             ((r : ℂ) * circleMap 0 1 (2 * Real.pi * (θ : ℝ)))‖ <
           ‖deriv F (circleMap 0 1 (2 * Real.pi * (θ : ℝ)))‖ + 1 :=
     hradial_tendsto.eventually hfinite_side
+  have hderiv_radial (r : ℝ) (hr0 : 0 < r) (hr1 : r < 1) :
+      deriv F ((r : ℂ) * circleMap 0 1 (2 * Real.pi * (θ : ℝ))) =
+        ∑' n : ℕ,
+          ((r : ℂ) * circleMap 0 1 (2 * Real.pi * (θ : ℝ))) ^
+            (n.factorial - 1) := by
+    let w : ℂ := (r : ℂ) * circleMap 0 1 (2 * Real.pi * (θ : ℝ))
+    have hw_norm : ‖w‖ = r := by
+      simp [w, abs_of_pos hr0, norm_circleMap_zero]
+    have hw_ball : w ∈ ball (0 : ℂ) 1 := by
+      simpa [mem_ball, dist_zero_right, hw_norm] using hr1
+    rw [show (r : ℂ) * circleMap 0 1 (2 * Real.pi * (θ : ℝ)) = w by rfl]
+    exact extension_deriv_eq_lacunary_deriv_series hw_ball hF_eq
   -- Precise remaining analytic frontier: on each fixed smaller disk, apply
   -- `hasDerivAt_tsum_of_isPreconnected` with `lacunaryTerm_hasDerivAt` to get
   --
