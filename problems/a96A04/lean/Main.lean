@@ -27,6 +27,8 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Basic
+import Mathlib.Analysis.Calculus.ContDiff.Deriv
+import Mathlib.Analysis.Calculus.ParametricIntegral
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
 import ConstructionTargets.L2Translation
@@ -107,6 +109,94 @@ lemma heatKernel_deriv {t x : ℝ} (ht : 0 < t) :
     deriv (heatKernel t) x = -(x / (2 * t)) * heatKernel t x :=
   (heatKernel_hasDerivAt ht).deriv
 
+/-- Polynomial factor in the `n`th spatial derivative of the heat kernel. -/
+def heatKernelDerivPoly (t : ℝ) : ℕ → Polynomial ℝ
+  | 0 => Polynomial.C ((4 * π * t) ^ (-(1 : ℝ) / 2))
+  | n + 1 =>
+      (heatKernelDerivPoly t n).derivative -
+        Polynomial.C (1 / (2 * t)) * Polynomial.X * heatKernelDerivPoly t n
+
+/-- Replace every coefficient of a real polynomial by its absolute value. -/
+def polynomialAbsCoeff (p : Polynomial ℝ) : Polynomial ℝ :=
+  p.sum fun n a => Polynomial.C |a| * Polynomial.X ^ n
+
+lemma polynomialAbsCoeff_coeff_nonneg (p : Polynomial ℝ) (n : ℕ) :
+    0 ≤ (polynomialAbsCoeff p).coeff n := by
+  classical
+  simp only [polynomialAbsCoeff, Polynomial.coeff_sum]
+  rw [Polynomial.sum]
+  exact Finset.sum_nonneg fun i hi => by
+    rw [Polynomial.coeff_C_mul_X_pow]
+    split_ifs <;> positivity
+
+lemma abs_polynomial_eval_le_absCoeff (p : Polynomial ℝ) (x : ℝ) :
+    |p.eval x| ≤ (polynomialAbsCoeff p).eval |x| := by
+  classical
+  rw [Polynomial.eval_eq_sum]
+  calc
+    |∑ n ∈ p.support, p.coeff n * x ^ n| ≤
+        ∑ n ∈ p.support, |p.coeff n * x ^ n| := Finset.abs_sum_le_sum_abs _ _
+    _ = (polynomialAbsCoeff p).eval |x| := by
+      rw [polynomialAbsCoeff, Polynomial.eval_sum, Polynomial.sum]
+      simp [abs_mul, abs_pow]
+
+lemma polynomial_eval_mono_of_coeff_nonneg
+    {p : Polynomial ℝ} (hp : ∀ i, 0 ≤ p.coeff i)
+    {x y : ℝ} (hx : 0 ≤ x) (hxy : x ≤ y) :
+    p.eval x ≤ p.eval y := by
+  classical
+  simp only [Polynomial.eval_eq_sum_range]
+  apply Finset.sum_le_sum
+  intro i hi
+  exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hx hxy i) (hp i)
+
+lemma polynomial_eval_nonneg_of_coeff_nonneg
+    {p : Polynomial ℝ} (hp : ∀ i, 0 ≤ p.coeff i) {x : ℝ} (hx : 0 ≤ x) :
+    0 ≤ p.eval x := by
+  rw [Polynomial.eval_eq_sum_range]
+  exact Finset.sum_nonneg fun i hi => mul_nonneg (hp i) (pow_nonneg hx i)
+
+/-- Every iterated spatial derivative of the heat kernel is exactly a
+polynomial times the original Gaussian exponential. -/
+lemma heatKernel_iterate_deriv_eq_polynomial_gaussian
+    {t : ℝ} (_ht : 0 < t) (n : ℕ) (x : ℝ) :
+    deriv^[n] (heatKernel t) x =
+      (heatKernelDerivPoly t n).eval x * Real.exp (-x ^ 2 / (4 * t)) := by
+  induction n generalizing x with
+  | zero =>
+      simp [heatKernelDerivPoly, heatKernel]
+  | succ n ih =>
+      have ihfun : deriv^[n] (heatKernel t) = fun x =>
+          (heatKernelDerivPoly t n).eval x * Real.exp (-x ^ 2 / (4 * t)) :=
+        funext ih
+      rw [Function.iterate_succ_apply', ihfun]
+      have harg : HasDerivAt (fun y : ℝ => -y ^ 2 / (4 * t))
+          (-(2 * x) / (4 * t)) x := by
+        convert (((hasDerivAt_id x).pow 2).neg.div_const (4 * t)) using 1
+        all_goals norm_num
+      rw [deriv_fun_mul]
+      · rw [Polynomial.deriv, harg.exp.deriv]
+        simp only [heatKernelDerivPoly, Polynomial.eval_sub, Polynomial.eval_mul,
+          Polynomial.eval_C, Polynomial.eval_X]
+        ring
+      · exact (heatKernelDerivPoly t n).differentiableAt
+      · exact harg.exp.differentiableAt
+
+/-- Every heat-kernel derivative admits a coefficientwise-nonnegative
+polynomial majorant. -/
+lemma heatKernel_iterate_deriv_polynomial_bound
+    {t : ℝ} (ht : 0 < t) (n : ℕ) :
+    ∃ P : Polynomial ℝ, (∀ i, 0 ≤ P.coeff i) ∧
+      ∀ u, |deriv^[n] (heatKernel t) u| ≤
+        P.eval |u| * Real.exp (-u ^ 2 / (4 * t)) := by
+  let p := heatKernelDerivPoly t n
+  refine ⟨polynomialAbsCoeff p, polynomialAbsCoeff_coeff_nonneg p, ?_⟩
+  intro u
+  rw [heatKernel_iterate_deriv_eq_polynomial_gaussian ht]
+  rw [abs_mul, abs_of_pos (Real.exp_pos _)]
+  exact mul_le_mul_of_nonneg_right
+    (abs_polynomial_eval_le_absCoeff p u) (Real.exp_pos _).le
+
 /-- The first derivative of a positive-time heat kernel is integrable. -/
 lemma heatKernel_deriv_integrable {t : ℝ} (ht : 0 < t) :
     Integrable (fun x => -(x / (2 * t)) * heatKernel t x) volume := by
@@ -153,6 +243,200 @@ lemma integrable_polynomial_mul_exp_neg_mul_sq
     ring]
   exact integrable_finset_sum _ fun n _ =>
     (integrable_pow_mul_exp_neg_mul_sq n hb).const_mul (p.coeff n)
+
+/-- A polynomial in `|x| + 1`, multiplied by a Gaussian, is in `L²`.
+Splitting at zero turns the absolute value into two ordinary polynomials. -/
+lemma memLp_two_polynomial_abs_add_one_gaussian
+    (p : Polynomial ℝ) {b : ℝ} (hb : 0 < b) :
+    MemLp (fun x : ℝ => p.eval (|x| + 1) * Real.exp (-b * x ^ 2)) 2 volume := by
+  let qpos := (p.comp (Polynomial.X + Polynomial.C 1)) ^ 2
+  let qneg := (p.comp (-Polynomial.X + Polynomial.C 1)) ^ 2
+  have hpos := integrable_polynomial_mul_exp_neg_mul_sq qpos
+    (show 0 < 2 * b by positivity)
+  have hneg := integrable_polynomial_mul_exp_neg_mul_sq qneg
+    (show 0 < 2 * b by positivity)
+  have hpiece : Integrable ((Set.Ici (0 : ℝ)).piecewise
+      (fun x => qpos.eval x * Real.exp (-(2 * b) * x ^ 2))
+      (fun x => qneg.eval x * Real.exp (-(2 * b) * x ^ 2))) volume :=
+    Integrable.piecewise measurableSet_Ici hpos.integrableOn hneg.integrableOn
+  have hmeas : AEStronglyMeasurable
+      (fun x : ℝ => p.eval (|x| + 1) * Real.exp (-b * x ^ 2)) volume := by
+    fun_prop
+  refine (memLp_two_iff_integrable_sq hmeas).2 ?_
+  apply hpiece.congr
+  filter_upwards with x
+  by_cases hx : 0 ≤ x
+  · simp only [Set.piecewise, Set.mem_Ici, hx, ↓reduceIte, abs_of_nonneg hx,
+      qpos, Polynomial.eval_pow, Polynomial.eval_comp, Polynomial.eval_add,
+      Polynomial.eval_X, Polynomial.eval_C]
+    rw [mul_pow]
+    congr 1
+    simp only [pow_two]
+    rw [← Real.exp_add]
+    congr 1
+    ring
+  · have hx' : x < 0 := lt_of_not_ge hx
+    simp only [Set.piecewise, Set.mem_Ici, hx, ↓reduceIte, abs_of_neg hx',
+      qneg, Polynomial.eval_pow, Polynomial.eval_comp, Polynomial.eval_add,
+      Polynomial.eval_neg, Polynomial.eval_X, Polynomial.eval_C]
+    rw [mul_pow]
+    congr 1
+    simp only [pow_two]
+    rw [← Real.exp_add]
+    congr 1
+    ring
+
+/-- Every iterated spatial derivative of a positive-time heat kernel is in
+`L²`; its square is again a polynomial times a decaying Gaussian. -/
+lemma heatKernel_iterate_deriv_memLp_two
+    {t : ℝ} (ht : 0 < t) (n : ℕ) :
+    MemLp (deriv^[n] (heatKernel t)) 2 volume := by
+  have hmeas : AEStronglyMeasurable (deriv^[n] (heatKernel t)) volume :=
+    ((heatKernel_contDiff ht).iterate_deriv n).continuous.aestronglyMeasurable
+  refine (memLp_two_iff_integrable_sq hmeas).2 ?_
+  let p := heatKernelDerivPoly t n
+  have h := integrable_polynomial_mul_exp_neg_mul_sq (p * p)
+    (show 0 < 1 / (2 * t) by positivity)
+  apply h.congr
+  filter_upwards with x
+  rw [heatKernel_iterate_deriv_eq_polynomial_gaussian ht]
+  simp only [Polynomial.eval_mul, mul_pow]
+  rw [show Real.exp (-x ^ 2 / (4 * t)) ^ 2 =
+      Real.exp (-(1 / (2 * t)) * x ^ 2) by
+    rw [pow_two, ← Real.exp_add]
+    congr 1
+    ring]
+  ring
+
+/-- On a unit ball in the convolution parameter, the `n`th differentiated
+integrand has a single integrable polynomial--Gaussian envelope. -/
+lemma heatKernel_iterate_deriv_local_envelope
+    {t : ℝ} (ht : 0 < t) (n : ℕ) (x₀ : ℝ)
+    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    ∃ bound : ℝ → ℝ, Integrable bound volume ∧
+      ∀ y, ∀ x ∈ Metric.ball x₀ 1,
+        ‖(deriv^[n] (heatKernel t)) (x - y) * f y‖ ≤ bound y := by
+  obtain ⟨p, hp, hp_bound⟩ := heatKernel_iterate_deriv_polynomial_bound ht n
+  let a : ℝ → ℝ := fun v =>
+    p.eval (|v| + 1) * Real.exp (-(1 / (8 * t)) * v ^ 2)
+  have ha : MemLp a 2 volume :=
+    memLp_two_polynomial_abs_add_one_gaussian p
+      (show 0 < 1 / (8 * t) by positivity)
+  have hashift : MemLp (fun y => a (x₀ - y)) 2 volume := by
+    simpa only [Function.comp_apply] using
+      ha.comp_measurePreserving (volume.measurePreserving_sub_left x₀)
+  have hfabs : MemLp (fun y => |f y|) 2 volume := by
+    simpa only [Real.norm_eq_abs] using hf.norm
+  let c := Real.exp (1 / (2 * t))
+  refine ⟨fun y => c * (a (x₀ - y) * |f y|),
+    (hashift.integrable_mul hfabs).const_mul c, ?_⟩
+  intro y x hx
+  let u := x - y
+  let v := x₀ - y
+  have hd : |x - x₀| < 1 := by
+    simpa only [Real.dist_eq] using hx
+  have huv : u = v + (x - x₀) := by simp only [u, v]; ring
+  have habs : |u| ≤ |v| + 1 := by
+    rw [huv]
+    exact (abs_add_le _ _).trans (add_le_add_right hd.le |v|)
+  have hpmono : p.eval |u| ≤ p.eval (|v| + 1) :=
+    polynomial_eval_mono_of_coeff_nonneg hp (abs_nonneg u) habs
+  have hpv : 0 ≤ p.eval (|v| + 1) :=
+    polynomial_eval_nonneg_of_coeff_nonneg hp (by positivity)
+  have hd_sq : (x - x₀) ^ 2 < 1 := by
+    nlinarith [sq_abs (x - x₀), abs_nonneg (x - x₀)]
+  have hquad : v ^ 2 / 2 - 2 ≤ u ^ 2 := by
+    rw [huv]
+    nlinarith [sq_nonneg (2 * v + (x - x₀))]
+  have hexp : Real.exp (-u ^ 2 / (4 * t)) ≤
+      c * Real.exp (-(1 / (8 * t)) * v ^ 2) := by
+    rw [show c * Real.exp (-(1 / (8 * t)) * v ^ 2) =
+        Real.exp (1 / (2 * t) + -(1 / (8 * t)) * v ^ 2) by
+      simp only [c, ← Real.exp_add]]
+    apply Real.exp_le_exp.mpr
+    have ht0 : 0 < 8 * t := by positivity
+    field_simp
+    nlinarith
+  rw [Real.norm_eq_abs, abs_mul]
+  calc
+    |(deriv^[n] (heatKernel t)) u| * |f y| ≤
+        (p.eval |u| * Real.exp (-u ^ 2 / (4 * t))) * |f y| :=
+      mul_le_mul_of_nonneg_right (hp_bound u) (abs_nonneg _)
+    _ ≤ (p.eval (|v| + 1) * Real.exp (-u ^ 2 / (4 * t))) * |f y| := by
+      gcongr
+    _ ≤ (p.eval (|v| + 1) *
+          (c * Real.exp (-(1 / (8 * t)) * v ^ 2))) * |f y| := by
+      gcongr
+    _ = c * (a (x₀ - y) * |f y|) := by
+      simp only [a, v]
+      ring
+
+/-- Differentiation under the integral for every iterated heat-kernel
+derivative. -/
+lemma hasDerivAt_integral_iterate_heatKernel
+    {t : ℝ} (ht : 0 < t) (n : ℕ) {f : ℝ → ℝ}
+    (hf : MemLp f 2 volume) (x₀ : ℝ) :
+    HasDerivAt
+      (fun x => ∫ y, (deriv^[n] (heatKernel t)) (x - y) * f y ∂volume)
+      (∫ y, (deriv^[n + 1] (heatKernel t)) (x₀ - y) * f y ∂volume) x₀ := by
+  let F : ℝ → ℝ → ℝ := fun x y =>
+    (deriv^[n] (heatKernel t)) (x - y) * f y
+  let F' : ℝ → ℝ → ℝ := fun x y =>
+    (deriv^[n + 1] (heatKernel t)) (x - y) * f y
+  obtain ⟨bound, hbound_int, hbound⟩ :=
+    heatKernel_iterate_deriv_local_envelope ht (n + 1) x₀ hf
+  have hDn_cont : Continuous (deriv^[n] (heatKernel t)) :=
+    ((heatKernel_contDiff ht).iterate_deriv n).continuous
+  have hDsn_cont : Continuous (deriv^[n + 1] (heatKernel t)) :=
+    ((heatKernel_contDiff ht).iterate_deriv (n + 1)).continuous
+  have hF_meas : ∀ᶠ x in 𝓝 x₀, AEStronglyMeasurable (F x) volume := by
+    filter_upwards with x
+    exact (hDn_cont.comp (continuous_const.sub continuous_id)).aestronglyMeasurable.mul
+      hf.1
+  have hF_int : Integrable (F x₀) volume := by
+    have hs : MemLp (fun y => (deriv^[n] (heatKernel t)) (x₀ - y)) 2 volume := by
+      simpa only [Function.comp_apply] using
+        (heatKernel_iterate_deriv_memLp_two ht n).comp_measurePreserving
+          (volume.measurePreserving_sub_left x₀)
+    exact hs.integrable_mul hf
+  have hF'_meas : AEStronglyMeasurable (F' x₀) volume :=
+    (hDsn_cont.comp (continuous_const.sub continuous_id)).aestronglyMeasurable.mul hf.1
+  have hdiff : ∀ᵐ y ∂volume, ∀ x ∈ Metric.ball x₀ 1,
+      HasDerivAt (F · y) (F' x y) x := by
+    filter_upwards with y
+    intro x hx
+    have hbase : HasDerivAt (deriv^[n] (heatKernel t))
+        ((deriv^[n + 1] (heatKernel t)) (x - y)) (x - y) := by
+      have hd := ((heatKernel_contDiff ht).iterate_deriv n).differentiable
+        (by simp : (∞ : WithTop ℕ∞) ≠ 0)
+      convert (hd.differentiableAt.hasDerivAt (x := x - y)) using 1
+      rw [Function.iterate_succ_apply']
+    convert (hbase.comp x ((hasDerivAt_id x).sub_const y)).mul_const (f y) using 1
+    all_goals simp only [F', mul_one]
+  have hbound' : ∀ᵐ y ∂volume, ∀ x ∈ Metric.ball x₀ 1,
+      ‖F' x y‖ ≤ bound y := by
+    filter_upwards with y
+    exact hbound y
+  exact (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (Metric.ball_mem_nhds x₀ zero_lt_one) hF_meas hF_int hF'_meas
+    hbound' hbound_int hdiff).2
+
+/-- The `n`th derivative of the heat convolution is convolution with the
+`n`th derivative of the heat kernel. -/
+lemma iterate_deriv_heatConv_eq_integral
+    {t : ℝ} (ht : 0 < t) {f : ℝ → ℝ} (hf : MemLp f 2 volume)
+    (n : ℕ) (x : ℝ) :
+    (deriv^[n] (heatConv t f)) x =
+      ∫ y, (deriv^[n] (heatKernel t)) (x - y) * f y ∂volume := by
+  induction n generalizing x with
+  | zero => simp [heatConv]
+  | succ n ih =>
+      have ihfun : deriv^[n] (heatConv t f) = fun x =>
+          ∫ y, (deriv^[n] (heatKernel t)) (x - y) * f y ∂volume :=
+        funext ih
+      rw [Function.iterate_succ_apply', ihfun]
+      simpa only [Nat.add_eq, Nat.succ_eq_add_one] using
+        (hasDerivAt_integral_iterate_heatKernel ht n hf x).deriv
 
 /-- All iterated derivatives of the standard Gaussian are integrable.  The
 Hermite formula supplies the polynomial factor, and the preceding lemma
@@ -419,13 +703,37 @@ theorem heatConv_contDiff
     {f : ℝ → ℝ}
     (hf : MemLp f 2 volume) :
     ContDiff ℝ ∞ (heatConv t f) := by
-  have hfloc : LocallyIntegrable f volume := hf.locallyIntegrable (by norm_num)
-  -- `ContDiff.Convolution` only packages this implication when the smooth
-  -- factor has compact support.  The Hermite lemmas above now provide the
-  -- required integrability for every Gaussian derivative.  It remains to
-  -- transport them through the heat-kernel scaling and iterate the local
-  -- dominated parametric-integral differentiation theorem.
-  sorry
+  let H : ℕ → ℝ → ℝ := fun n x =>
+    ∫ y, (deriv^[n] (heatKernel t)) (x - y) * f y ∂volume
+  have hdiff : ∀ n, Differentiable ℝ (H n) := by
+    intro n x
+    exact (by
+      simpa only [H] using
+        (hasDerivAt_integral_iterate_heatKernel ht n hf x).differentiableAt)
+  have hderiv : ∀ n, deriv (H n) = H (n + 1) := by
+    intro n
+    funext x
+    exact (by
+      simpa only [H] using
+        (hasDerivAt_integral_iterate_heatKernel ht n hf x).deriv)
+  have hcont : ∀ m n : ℕ, ContDiff ℝ m (H n) := by
+    intro m
+    induction m with
+    | zero =>
+        intro n
+        exact contDiff_zero.mpr (hdiff n).continuous
+    | succ m ih =>
+        intro n
+        rw [show (↑(m + 1) : WithTop ℕ∞) = (m : WithTop ℕ∞) + 1 by norm_num,
+          contDiff_succ_iff_deriv]
+        refine ⟨hdiff n, ?_, ?_⟩
+        · simp
+        · rw [hderiv n]
+          exact ih (n + 1)
+  rw [contDiff_iff_forall_nat_le]
+  intro m hm
+  have hmH := hcont m 0
+  simpa only [H, Function.iterate_zero_apply, heatConv] using hmH
 
 /-- (b) L² contraction: ‖u(·,t)‖₂ ≤ ‖f‖₂.
 
