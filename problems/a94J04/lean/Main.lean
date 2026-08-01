@@ -6,6 +6,7 @@ import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
 import Mathlib.Analysis.Convolution
 import YoungL2
 import ConstructionTargets.L2Translation
+import ConstructionTargets.LpRepresentative
 
 /-!
 # APM a94J04: Poisson kernel on the half-plane — L² contraction and approximate identity
@@ -235,31 +236,293 @@ lemma poissonConv_eq_integral_translation
     (integral_sub_left_eq_self
       (fun t : ℝ ↦ poissonKernel y t * f (x - t)) volume x)
 
+/-- Dilation reduces the Poisson kernel at height `y` to the fixed kernel at
+height one. -/
+lemma poissonKernel_scale {y : ℝ} (hy : 0 < y) (z : ℝ) :
+    y * poissonKernel y (y * z) = poissonKernel 1 z := by
+  unfold poissonKernel
+  field_simp
+
+/-- After dilation, Poisson convolution is an average of translations against
+the fixed height-one kernel. -/
+lemma poissonConv_eq_integral_unitKernel {y : ℝ} (hy : 0 < y)
+    (f : ℝ → ℝ) (x : ℝ) :
+    poissonConv y f x =
+      ∫ z, poissonKernel 1 z * f (x - y * z) ∂volume := by
+  have hy0 : y ≠ 0 := ne_of_gt hy
+  rw [poissonConv_eq_integral_translation]
+  have hscale := Measure.integral_comp_mul_left
+    (fun t : ℝ ↦ poissonKernel y t * f (x - t)) y
+  simp only [abs_inv, abs_of_pos hy] at hscale
+  calc
+    (∫ t : ℝ, poissonKernel y t * f (x - t) ∂volume) =
+        y * ∫ z : ℝ, poissonKernel y (y * z) * f (x - y * z) ∂volume := by
+      rw [hscale]
+      simp [hy0]
+    _ = ∫ z : ℝ, y * (poissonKernel y (y * z) * f (x - y * z)) ∂volume := by
+      rw [integral_const_mul]
+    _ = ∫ z : ℝ, poissonKernel 1 z * f (x - y * z) ∂volume := by
+      apply integral_congr_ae
+      filter_upwards with z
+      rw [← mul_assoc, poissonKernel_scale hy]
+
+/-- The fixed Poisson average of translation differences tends to zero in the
+abstract `L²` space. -/
+lemma poisson_translation_average_tendsto_L2
+    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    let τ : ℝ → C(ℝ, ℝ) := fun s =>
+      ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+    let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+      simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+    let F : ℝ → Lp ℝ 2 volume := fun s =>
+      Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+    Tendsto
+      (fun y => ∫ z, poissonKernel 1 z • (F (y * z) - F 0) ∂volume)
+      (𝓝 0) (𝓝 0) := by
+  let τ : ℝ → C(ℝ, ℝ) := fun s =>
+    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+  have hτc : Continuous τ := by
+    let T : C(ℝ × ℝ, ℝ) :=
+      ⟨fun z => z.2 - z.1, continuous_snd.sub continuous_fst⟩
+    exact (ContinuousMap.curry T).continuous
+  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+  let F : ℝ → Lp ℝ 2 volume := fun s =>
+    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+  have hFc : Continuous F := by
+    dsimp [F]
+    exact continuous_const.compMeasurePreservingLp hτc hτ (by norm_num)
+  have hkcont : Continuous (poissonKernel 1) := by
+    unfold poissonKernel
+    apply Continuous.div continuous_const
+      (continuous_const.add (continuous_id.pow 2))
+    intro x hx
+    norm_num at hx
+    nlinarith [sq_nonneg x]
+  have hkint : Integrable (poissonKernel 1) volume :=
+    poissonKernel_integrable 1 (by norm_num)
+  have hbound_int : Integrable
+      (fun z => poissonKernel 1 z * (2 * ‖hf.toLp f‖)) volume :=
+    hkint.mul_const _
+  have hdct := tendsto_integral_filter_of_dominated_convergence
+    (l := 𝓝 (0 : ℝ)) (μ := volume)
+    (F := fun y z => poissonKernel 1 z • (F (y * z) - F 0))
+    (f := fun _ => (0 : Lp ℝ 2 volume))
+    (fun z => poissonKernel 1 z * (2 * ‖hf.toLp f‖))
+  have hmeas : ∀ᶠ y : ℝ in 𝓝 0,
+      AEStronglyMeasurable
+        (fun z => poissonKernel 1 z • (F (y * z) - F 0)) volume := by
+    filter_upwards with y
+    exact (hkcont.smul
+      ((hFc.comp (continuous_const.mul continuous_id)).sub continuous_const)).aestronglyMeasurable
+  have hbound : ∀ᶠ y : ℝ in 𝓝 0, ∀ᵐ z : ℝ ∂volume,
+      ‖poissonKernel 1 z • (F (y * z) - F 0)‖ ≤
+        poissonKernel 1 z * (2 * ‖hf.toLp f‖) := by
+    filter_upwards with y
+    filter_upwards with z
+    rw [norm_smul, Real.norm_eq_abs,
+      abs_of_nonneg (poissonKernel_nonneg 1 (by norm_num) z)]
+    apply mul_le_mul_of_nonneg_left _ (poissonKernel_nonneg 1 (by norm_num) z)
+    calc
+      ‖F (y * z) - F 0‖ ≤ ‖F (y * z)‖ + ‖F 0‖ := norm_sub_le _ _
+      _ = 2 * ‖hf.toLp f‖ := by
+        simp only [F, Lp.norm_compMeasurePreserving]
+        ring
+  have hlim : ∀ᵐ z : ℝ ∂volume,
+      Tendsto (fun y => poissonKernel 1 z • (F (y * z) - F 0))
+        (𝓝 0) (𝓝 0) := by
+    filter_upwards with z
+    have hyz : Tendsto (fun y : ℝ => y * z) (𝓝 0) (𝓝 0) := by
+      simpa using tendsto_id.mul (tendsto_const_nhds :
+        Tendsto (fun _ : ℝ => z) (𝓝 0) (𝓝 z))
+    have hsub : Tendsto (fun y => F (y * z) - F 0) (𝓝 0) (𝓝 0) := by
+      simpa only [Function.comp_apply, sub_self] using
+        ((hFc.tendsto 0).comp hyz).sub
+          (tendsto_const_nhds : Tendsto (fun _ : ℝ => F 0) (𝓝 0) (𝓝 (F 0)))
+    simpa using
+      (tendsto_const_nhds : Tendsto (fun _ : ℝ => poissonKernel 1 z)
+        (𝓝 0) (𝓝 (poissonKernel 1 z))).smul hsub
+  simpa only [integral_zero] using hdct hmeas hbound hbound_int hlim
+
+/-- The abstract `L²` Poisson average has the expected pointwise
+representative. -/
+lemma poisson_translation_average_toLp
+    {y : ℝ} (hy : 0 < y) {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    let τ : ℝ → C(ℝ, ℝ) := fun s =>
+      ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+    let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+      simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+    let F : ℝ → Lp ℝ 2 volume := fun s =>
+      Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+    let G : ℝ → Lp ℝ 2 volume := fun z =>
+      poissonKernel 1 z • (F (y * z) - F 0)
+    ((poissonConv_memLp y hy f hf).sub hf).toLp
+        (fun x => poissonConv y f x - f x) = ∫ z, G z ∂volume := by
+  let τ : ℝ → C(ℝ, ℝ) := fun s =>
+    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+  have hτc : Continuous τ := by
+    let T : C(ℝ × ℝ, ℝ) :=
+      ⟨fun z => z.2 - z.1, continuous_snd.sub continuous_fst⟩
+    exact (ContinuousMap.curry T).continuous
+  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+  let F : ℝ → Lp ℝ 2 volume := fun s =>
+    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+  let G : ℝ → Lp ℝ 2 volume := fun z =>
+    poissonKernel 1 z • (F (y * z) - F 0)
+  let φ : ℝ × ℝ → ℝ := fun z =>
+    poissonKernel 1 z.1 * (f (z.2 - y * z.1) - f z.2)
+  have hFc : Continuous F := by
+    dsimp [F]
+    exact continuous_const.compMeasurePreservingLp hτc hτ (by norm_num)
+  have hkcont : Continuous (poissonKernel 1) := by
+    unfold poissonKernel
+    apply Continuous.div continuous_const
+      (continuous_const.add (continuous_id.pow 2))
+    intro x hx
+    norm_num at hx
+    nlinarith [sq_nonneg x]
+  have hGc : Continuous G := by
+    dsimp [G]
+    exact hkcont.smul
+      ((hFc.comp (continuous_const.mul continuous_id)).sub continuous_const)
+  have hG : Integrable G volume := by
+    have hdom : Integrable
+        (fun z => poissonKernel 1 z * (2 * ‖hf.toLp f‖)) volume :=
+      (poissonKernel_integrable 1 (by norm_num)).mul_const _
+    refine hdom.mono' hGc.aestronglyMeasurable ?_
+    filter_upwards with z
+    change ‖poissonKernel 1 z • (F (y * z) - F 0)‖ ≤ _
+    rw [norm_smul, Real.norm_eq_abs,
+      abs_of_nonneg (poissonKernel_nonneg 1 (by norm_num) z)]
+    apply mul_le_mul_of_nonneg_left _ (poissonKernel_nonneg 1 (by norm_num) z)
+    calc
+      ‖F (y * z) - F 0‖ ≤ ‖F (y * z)‖ + ‖F 0‖ := norm_sub_le _ _
+      _ = 2 * ‖hf.toLp f‖ := by
+        simp only [F, Lp.norm_compMeasurePreserving]
+        ring
+  have hqmp : Measure.QuasiMeasurePreserving
+      (fun z : ℝ × ℝ => z.2 - y * z.1)
+      (volume.prod volume) volume := by
+    refine QuasiMeasurePreserving.prod_of_left (by fun_prop) ?_
+    filter_upwards with x
+    have hscale : Measure.QuasiMeasurePreserving (fun z : ℝ => y • z) volume volume :=
+      Measure.quasiMeasurePreserving_smul volume hy.ne'
+    simpa [smul_eq_mul] using
+      (volume.measurePreserving_sub_left x).quasiMeasurePreserving.comp hscale
+  have hφ : AEStronglyMeasurable φ (volume.prod volume) := by
+    have hshift := hf.aestronglyMeasurable.comp_quasiMeasurePreserving hqmp
+    have hbase := hf.aestronglyMeasurable.comp_quasiMeasurePreserving
+      (Measure.quasiMeasurePreserving_snd
+        (μ := (volume : Measure ℝ)) (ν := (volume : Measure ℝ)))
+    have hk : AEStronglyMeasurable
+        (fun z : ℝ × ℝ => poissonKernel 1 z.1) (volume.prod volume) :=
+      (hkcont.comp continuous_fst).aestronglyMeasurable
+    exact hk.mul (hshift.sub hbase)
+  have hGφ : ∀ᵐ z ∂volume,
+      (G z : ℝ → ℝ) =ᵐ[volume] fun x => φ (z, x) := by
+    filter_upwards with z
+    filter_upwards
+      [Lp.coeFn_smul (poissonKernel 1 z) (F (y * z) - F 0),
+       Lp.coeFn_sub (F (y * z)) (F 0),
+       Lp.coeFn_compMeasurePreserving (hf.toLp f) (hτ (y * z)),
+       Lp.coeFn_compMeasurePreserving (hf.toLp f) (hτ 0),
+       (hτ (y * z)).quasiMeasurePreserving.ae hf.coeFn_toLp,
+       (hτ 0).quasiMeasurePreserving.ae hf.coeFn_toLp]
+      with x hsmul hsub htrans hzero hrept hrepzero
+    rw [hsmul]
+    simp only [Pi.smul_apply, smul_eq_mul]
+    rw [hsub]
+    simp only [Pi.sub_apply]
+    rw [htrans, hzero]
+    simp only [Function.comp_apply]
+    rw [hrept, hrepzero]
+    simp [φ, τ]
+  have hlocal : ∀ s : Set ℝ, MeasurableSet s → volume s ≠ ⊤ →
+      HasFiniteIntegral
+        (fun z : ℝ × ℝ => s.indicator (fun x => φ (z.1, x)) z.2)
+        (volume.prod volume) :=
+    ConstructionTargets.LpRepresentative.hasFiniteIntegral_indicator_lift
+      hφ hG hGφ
+  have hslice : ∀ᵐ x ∂volume, Integrable (fun z => φ (z, x)) volume := by
+    have hn : ∀ n : ℕ, ∀ᵐ x ∂volume,
+        Integrable
+          (fun z => (spanningSets volume n).indicator
+            (fun x => φ (z, x)) x) volume := by
+      intro n
+      let s : Set ℝ := spanningSets (volume : Measure ℝ) n
+      have hs : MeasurableSet s := measurableSet_spanningSets (volume : Measure ℝ) n
+      have hprod : Integrable
+          (fun z : ℝ × ℝ => s.indicator (fun x => φ (z.1, x)) z.2)
+          (volume.prod volume) := by
+        exact ⟨(hφ.indicator (MeasurableSet.univ.prod hs)).congr
+          (Eventually.of_forall fun z => by
+            by_cases hz : z.2 ∈ s <;> simp [hz]),
+          hlocal s hs (measure_spanningSets_lt_top volume n).ne⟩
+      exact hprod.prod_left_ae
+    filter_upwards [ae_all_iff.2 hn] with x hx
+    let n := spanningSetsIndex volume x
+    have hxn : x ∈ spanningSets volume n := mem_spanningSetsIndex volume x
+    simpa [hxn] using hx n
+  have hpoint : (fun x => ∫ z, φ (z, x) ∂volume) =ᵐ[volume]
+      fun x => poissonConv y f x - f x := by
+    filter_upwards [hslice] with x hφx
+    have hk : Integrable (fun z => poissonKernel 1 z * f x) volume :=
+      (poissonKernel_integrable 1 (by norm_num)).mul_const _
+    have hfirst : Integrable
+        (fun z => poissonKernel 1 z * f (x - y * z)) volume := by
+      refine (hφx.add hk).congr (Eventually.of_forall fun z => ?_)
+      simp [φ]
+      ring
+    change (∫ z, poissonKernel 1 z *
+      (f (x - y * z) - f x) ∂volume) = poissonConv y f x - f x
+    rw [show (fun z => poissonKernel 1 z * (f (x - y * z) - f x)) =
+        fun z => poissonKernel 1 z * f (x - y * z) - poissonKernel 1 z * f x by
+      funext z
+      ring]
+    rw [integral_sub hfirst hk, poissonConv_eq_integral_unitKernel hy]
+    rw [integral_mul_const, poissonKernel_integral_one 1 (by norm_num)]
+    ring
+  have hdiff : MemLp (fun x => poissonConv y f x - f x) 2 volume :=
+    (poissonConv_memLp y hy f hf).sub hf
+  have hψ : MemLp (fun x => ∫ z, φ (z, x) ∂volume) 2 volume :=
+    (memLp_congr_ae hpoint).mpr hdiff
+  have hrepr :=
+    ConstructionTargets.LpRepresentative.toLp_integral_eq_integral
+      (by norm_num : (2 : ENNReal) ≠ ⊤) hφ hG hGφ hlocal hψ
+  exact (MemLp.toLp_congr hdiff hψ hpoint.symm).trans hrepr
+
 /-- **Part (b):** `P_y f → f` in L² as `y → 0⁺`.
 
-    A route avoiding a new vector-valued Minkowski theorem is polarization.
-    The contraction above reduces the squared-distance estimate to showing
-    `⟨P_y f, f⟩ → ‖f‖²`. After Fubini, this inner product is the scalar
-    Poisson average of the translation correlation
-    `t ↦ ∫ x, f (x - t) * f x`. Cauchy–Schwarz and L² translation
-    continuity make that correlation continuous at zero; splitting the
-    scalar average at `|t| = δ` then uses `poissonKernel_tail_tendsto`.
-
-    **SORRY BOUNDARY:** formalize the correlation's Cauchy–Schwarz bound, the
-    Fubini interchange, and the scalar near/tail split. The two lemmas above
-    establish the previously missing measurability and `MemLp` facts for
-    `poissonConv y f`. -/
+    Dilation writes the convolution as an average against the fixed kernel
+    `P₁`. Translation continuity and dominated convergence give convergence
+    of that average in the abstract `L²` space. The explicit jointly
+    measurable lift above identifies its representative with
+    `poissonConv y f - f`. -/
 theorem poissonConv_tendsto_L2
     (f : ℝ → ℝ) (hf : MemLp f 2 volume)
     (hfm : AEStronglyMeasurable f volume) :
     Tendsto (fun y => eLpNorm (fun x => poissonConv y f x - f x) 2 volume)
       (nhdsWithin 0 (Ioi 0)) (𝓝 0) := by
-  have htranslation :=
-    ConstructionTargets.L2Translation.eLpNorm_translation_tendsto f hf
-  have htranslated (y x : ℝ) :
-      poissonConv y f x = ∫ t, poissonKernel y t * f (x - t) ∂volume :=
-    poissonConv_eq_integral_translation y f x
-  sorry
+  let τ : ℝ → C(ℝ, ℝ) := fun s =>
+    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+  let F : ℝ → Lp ℝ 2 volume := fun s =>
+    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+  let G : ℝ → ℝ → Lp ℝ 2 volume := fun y z =>
+    poissonKernel 1 z • (F (y * z) - F 0)
+  have havg : Tendsto (fun y => ∫ z, G y z ∂volume) (𝓝 0) (𝓝 0) := by
+    simpa [τ, hτ, F, G] using poisson_translation_average_tendsto_L2 hf
+  have henorm : Tendsto (fun y => ‖∫ z, G y z ∂volume‖ₑ) (𝓝 0) (𝓝 0) := by
+    simpa using (continuous_enorm.tendsto (0 : Lp ℝ 2 volume)).comp havg
+  refine (henorm.mono_left inf_le_left).congr' ?_
+  filter_upwards [self_mem_nhdsWithin] with y hy
+  have hdiff : MemLp (fun x => poissonConv y f x - f x) 2 volume :=
+    (poissonConv_memLp y hy f hf).sub hf
+  rw [← Lp.enorm_toLp hdiff]
+  congr 1
+  simpa [τ, hτ, F, G] using (poisson_translation_average_toLp hy hf).symm
 
 /-- **Part (c):** A.e. convergence.
 
