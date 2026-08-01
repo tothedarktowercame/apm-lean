@@ -513,7 +513,11 @@ theorem ac_lusin_condition_N
     ∃ δ > 0, ∀ E ⊆ Icc (0:ℝ) 1,
       volume.toOuterMeasure E ≤ ENNReal.ofReal δ →
       volume.toOuterMeasure (f '' E) ≤ ENNReal.ofReal ε := by
-  sorry
+  obtain ⟨δ, hδ, hbound⟩ := ac_lusin_condition_N_lt_aux hac hε
+  refine ⟨δ / 2, by positivity, ?_⟩
+  intro E hE hEsmall
+  apply hbound E hE
+  exact hEsmall.trans_lt (ENNReal.ofReal_lt_ofReal_iff hδ |>.2 (by linarith))
 
 /-- Part (b), null-set specialization. -/
 theorem ac_maps_null_to_null
@@ -546,7 +550,40 @@ theorem ac_maps_measurable_to_measurable
     {E : Set ℝ} (hE : E ⊆ Icc (0:ℝ) 1)
     (hE_meas : NullMeasurableSet E volume) :
     NullMeasurableSet (f '' E) volume := by
-  sorry
+  obtain ⟨B, hBE, hB_meas, hB_ae⟩ := hE_meas.exists_measurable_subset_ae_eq
+  have hB : B ⊆ Icc (0 : ℝ) 1 := hBE.trans hE
+  obtain ⟨K, N, hK_compact, hN_null, hB_eq⟩ :=
+    measurable_subset_Icc_eq_sigmaCompact_union_null hB_meas hB
+  have hK_sub : ∀ n, K n ⊆ Icc (0 : ℝ) 1 := by
+    intro n
+    apply (show K n ⊆ B by
+      rw [hB_eq]
+      exact (subset_iUnion K n).trans subset_union_left).trans
+    exact hB
+  have hN_sub : N ⊆ Icc (0 : ℝ) 1 := by
+    apply (show N ⊆ B by rw [hB_eq]; exact subset_union_right).trans
+    exact hB
+  have hB_image : NullMeasurableSet (f '' B) volume := by
+    rw [hB_eq, image_union, image_iUnion]
+    exact (MeasurableSet.iUnion fun n =>
+      (ac_image_compact_is_compact hac (hK_compact n) (hK_sub n)).isClosed.measurableSet
+      ).nullMeasurableSet.union
+        (NullMeasurableSet.of_null (ac_maps_null_to_null hac hN_sub hN_null))
+  have hE_diff_null : volume (E \ B) = 0 := (ae_eq_set.mp hB_ae).2
+  have hE_diff_sub : E \ B ⊆ Icc (0 : ℝ) 1 := diff_subset.trans hE
+  have hE_eq : E = B ∪ (E \ B) := by
+    ext x
+    constructor
+    · intro hx
+      by_cases hxB : x ∈ B
+      · exact Or.inl hxB
+      · exact Or.inr ⟨hx, hxB⟩
+    · rintro (hxB | hxE)
+      · exact hBE hxB
+      · exact hxE.1
+  rw [hE_eq, image_union]
+  exact hB_image.union (NullMeasurableSet.of_null
+    (ac_maps_null_to_null hac hE_diff_sub hE_diff_null))
 
 end PartC
 
