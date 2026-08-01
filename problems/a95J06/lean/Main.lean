@@ -31,6 +31,7 @@ form matching the standard ε-δ definition.
 import Mathlib.Topology.Instances.CantorSet
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
+import ConstructionTargets.LusinN
 
 open Set MeasureTheory
 
@@ -244,8 +245,8 @@ lemma ac_of_bv_continuous_conditionN
 
 /-- Main theorem: f is AC on [0,1].
 
-**Blocker:** Inherits from cantorSet_measure_zero, monotone_of_homeomorphism,
-and ac_of_bv_continuous_conditionN — all of which are theory boundaries. -/
+**Blocker:** Inherits only from `ac_of_bv_continuous_conditionN`, the
+Banach--Zarecki theory boundary described above. -/
 -- STATEMENT REPAIR 2026-07-31 (Joe-authorised): restore the homeomorphism
 -- bijection, local absolute-continuity hypothesis, and global
 -- absolute-continuity conclusion that the informal problem states.
@@ -258,22 +259,86 @@ theorem ac_on_01_of_homeo_fixing_cantor
       Icc a b ⊆ Icc (0 : ℝ) 1 → Icc a b ⊆ cantorSetᶜ →
       AbsolutelyContinuousOnInterval f a b) :
     AbsolutelyContinuousOnInterval f 0 1 := by
+  classical
   have hf_mono : MonotoneOn f (Icc (0 : ℝ) 1) :=
     monotone_of_homeomorphism_fixing_cantor hf_bij hf_cont hf_fix
   have hf_N_cantor : LusinConditionN f cantorSet :=
     conditionN_on_cantor_of_fix hf_fix
-  -- Remaining Cantor-gap seam: an absolutely continuous function maps null
-  -- sets to null sets, and the open complement of the Cantor set is the
-  -- countable union of its component intervals.  Applying `hf_ac_compl` on
-  -- compact exhaustions of those components proves this claim.  Neither that
-  -- image-null theorem nor the component-interval decomposition is currently
-  -- packaged in Mathlib.  The reusable next leaves are: prove AC maps null
-  -- subsets of one interval to null sets from
-  -- `absolutelyContinuousOnInterval_iff`, then cover the open Cantor
-  -- complement by countably many rational closed intervals and combine them
-  -- with `LusinConditionN.iUnion` above.
+  -- Cover the open Cantor complement by countably many rational closed
+  -- intervals.  Absolute continuity on each interval maps its null subsets to
+  -- null sets, and `LusinConditionN.iUnion` combines the resulting claims.
   have hf_N_compl : LusinConditionN f (Icc (0 : ℝ) 1 ∩ cantorSetᶜ) := by
-    sorry
+    have hone_pre : ∀ n : ℕ, (1 : ℝ) ∈ preCantorSet n := by
+      intro n
+      induction n with
+      | zero => simp
+      | succ n ih => exact Or.inr ⟨1, ih, by norm_num⟩
+    have hone : (1 : ℝ) ∈ cantorSet := by
+      exact mem_iInter.2 hone_pre
+    let U : Set ℝ := Ioo (0 : ℝ) 1 ∩ cantorSetᶜ
+    have hUopen : IsOpen U := isOpen_Ioo.inter isClosed_cantorSet.isOpen_compl
+    let S : ℕ → Set ℝ := fun n =>
+      match (Encodable.decode n : Option (ℚ × ℚ)) with
+      | none => ∅
+      | some p =>
+          if Icc (p.1 : ℝ) (p.2 : ℝ) ⊆ U then
+            Icc (p.1 : ℝ) (p.2 : ℝ)
+          else ∅
+    have hSsub : ∀ n, S n ⊆ U := by
+      intro n
+      change (match (Encodable.decode n : Option (ℚ × ℚ)) with
+        | none => ∅
+        | some p => if Icc (p.1 : ℝ) (p.2 : ℝ) ⊆ U then
+            Icc (p.1 : ℝ) (p.2 : ℝ) else ∅) ⊆ U
+      generalize hq : (Encodable.decode n : Option (ℚ × ℚ)) = q
+      cases q with
+      | none => simp
+      | some p =>
+        dsimp only
+        split_ifs with hp
+        · exact hp
+        · simp
+    have hSN : ∀ n, LusinConditionN f (S n) := by
+      intro n
+      change LusinConditionN f (match (Encodable.decode n : Option (ℚ × ℚ)) with
+        | none => ∅
+        | some p => if Icc (p.1 : ℝ) (p.2 : ℝ) ⊆ U then
+            Icc (p.1 : ℝ) (p.2 : ℝ) else ∅)
+      generalize hq : (Encodable.decode n : Option (ℚ × ℚ)) = q
+      cases q with
+      | none => simp [LusinConditionN]
+      | some p =>
+        dsimp only
+        split_ifs with hp
+        · by_cases hab : (p.1 : ℝ) ≤ (p.2 : ℝ)
+          · have haU : (p.1 : ℝ) ∈ U := hp ⟨le_rfl, hab⟩
+            have hbU : (p.2 : ℝ) ∈ U := hp ⟨hab, le_rfl⟩
+            have hac := hf_ac_compl (p.1 : ℝ) (p.2 : ℝ)
+              (fun x hx => ⟨(hp hx).1.1.le, (hp hx).1.2.le⟩)
+              (fun x hx => (hp hx).2)
+            intro E hE hE0
+            exact ConstructionTargets.LusinN.absolutelyContinuousOnInterval_maps_null_to_null
+              ⟨haU.1.1.le, haU.1.2.le⟩ ⟨hbU.1.1.le, hbU.1.2.le⟩ hab
+              hac hE hE0
+          · rw [Icc_eq_empty hab]
+            simp [LusinConditionN]
+        · simp [LusinConditionN]
+    have hcover : ⋃ n, S n = Icc (0 : ℝ) 1 ∩ cantorSetᶜ := by
+      apply Subset.antisymm
+      · rw [iUnion_subset_iff]
+        intro n
+        exact (hSsub n).trans fun _ hx => ⟨⟨hx.1.1.le, hx.1.2.le⟩, hx.2⟩
+      · intro x hx
+        have hx0 : x ≠ 0 := fun h => hx.2 (h ▸ zero_mem_cantorSet)
+        have hx1 : x ≠ 1 := fun h => hx.2 (h ▸ hone)
+        have hxU : x ∈ U := ⟨⟨lt_of_le_of_ne hx.1.1 (Ne.symm hx0),
+          lt_of_le_of_ne hx.1.2 hx1⟩, hx.2⟩
+        obtain ⟨a, b, hxab, habU⟩ := exists_rat_Icc_subset_of_mem_open hUopen hxU
+        apply mem_iUnion.2
+        refine ⟨Encodable.encode (a, b), ?_⟩
+        simp [S, Encodable.encodek, habU, hxab]
+    rw [← hcover]
+    exact LusinConditionN.iUnion hSN
   apply ac_of_bv_continuous_conditionN hf_cont hf_mono
   apply (hf_N_cantor.union hf_N_compl).mono
   intro x hx
