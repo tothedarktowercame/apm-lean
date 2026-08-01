@@ -123,6 +123,49 @@ lemma circleIntegral_logDeriv_factorizedRational
     exact (continuousOn_const.mul
       ((continuousOn_id.sub continuousOn_const).inv₀ husphere)).circleIntegrable hR.le
 
+/-- A zero-free analytic factor contributes zero to the argument-principle
+integral.  This is the analytic remainder term produced by
+`MeromorphicOn.extract_zeros_poles`. -/
+lemma circleIntegral_logDeriv_eq_zero_of_analyticOnNhd_of_ne_zero
+    {h : ℂ → ℂ} {c : ℂ} {R : ℝ} (hR : 0 ≤ R)
+    (hh : AnalyticOnNhd ℂ h (closedBall c R))
+    (hne : ∀ z ∈ closedBall c R, h z ≠ 0) :
+    (∮ z in C(c, R), logDeriv h z) = 0 := by
+  have hlog : AnalyticOnNhd ℂ (logDeriv h) (closedBall c R) := by
+    simpa only [logDeriv_apply, div_eq_mul_inv] using hh.deriv.mul (hh.inv hne)
+  apply circleIntegral_eq_zero_of_differentiable_on_off_countable hR countable_empty
+  · exact hlog.continuousOn
+  · intro z hz
+    exact (hlog z (ball_subset_closedBall hz.1)).differentiableAt
+
+/-- Extract the finite divisor of an analytic function which is nonzero on the
+boundary of a positive-radius disk.  The residual factor is analytic and
+zero-free on the whole closed disk. -/
+lemma exists_zeroFree_factorization_on_closedBall
+    {f : ℂ → ℂ} {c : ℂ} {R : ℝ} (hR : 0 < R)
+    (hf : AnalyticOnNhd ℂ f (closedBall c R))
+    (hne : ∀ z ∈ sphere c R, f z ≠ 0) :
+    ∃ h : ℂ → ℂ,
+      AnalyticOnNhd ℂ h (closedBall c R) ∧
+        (∀ z : closedBall c R, h z ≠ 0) ∧
+        f =ᶠ[codiscreteWithin (closedBall c R)]
+          (∏ᶠ u, (· - u) ^ divisor f (closedBall c R) u) * h := by
+  have hfm : MeromorphicOn f (closedBall c R) := hf.meromorphicOn
+  let z : ℂ := c + R
+  have hz : z ∈ sphere c R := by
+    rw [mem_sphere]
+    simp [z, abs_of_pos hR]
+  have hzcb : z ∈ closedBall c R := sphere_subset_closedBall hz
+  have hzorder : meromorphicOrderAt f z ≠ ⊤ := by
+    have hz0 : meromorphicOrderAt f z = 0 :=
+      (hf z hzcb).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.mpr (hne z hz)
+    simp [hz0]
+  have hord : ∀ u : closedBall c R, meromorphicOrderAt f u ≠ ⊤ :=
+    (hfm.exists_meromorphicOrderAt_ne_top_iff_forall
+      (isConnected_closedBall hR.le)).1 ⟨⟨z, hzcb⟩, hzorder⟩
+  exact hfm.extract_zeros_poles hord
+    ((divisor f (closedBall c R)).finiteSupport (isCompact_closedBall c R))
+
 /-- The strict Rouché inequality keeps the straight-line homotopy away from
 zero on the boundary.  This is the pointwise topological core of the theorem. -/
 lemma add_smul_ne_zero_of_norm_le_one
