@@ -164,6 +164,47 @@ lemma exists_factorization_of_order_ge_two
   rw [smul_eq_mul] at hz
   exact hz
 
+/-- A factorization with order at least two forces the derivative of `f` to
+vanish at the center.  This records the precise local consequence consumed by
+the missing global Pick-function rigidity step below. -/
+lemma deriv_eq_zero_of_factorization
+    (f : ℂ → ℂ)
+    (x₀ : ℂ) (n : ℕ) (hn : 2 ≤ n)
+    (g : ℂ → ℂ) (hg : AnalyticAt ℂ g x₀)
+    (hg_eq : ∀ᶠ z in 𝓝 x₀, f z - f x₀ = (z - x₀)^n * g z) :
+    deriv f x₀ = 0 := by
+  have hright : HasDerivAt (fun z : ℂ => (z - x₀)^n * g z) 0 x₀ := by
+    have hn0 : n ≠ 0 := by omega
+    have hn1 : n - 1 ≠ 0 := by omega
+    convert (((hasDerivAt_id x₀).sub_const x₀).pow n).mul
+      hg.differentiableAt.hasDerivAt using 1 <;> simp [hn0, hn1]
+  have hleft : HasDerivAt (fun z : ℂ => f z - f x₀) 0 x₀ :=
+    hright.congr_of_eventuallyEq hg_eq
+  simpa using hleft.deriv
+
+/-- Once the global Pick-function classification supplies an affine formula,
+the local factorization is immediately contradictory to `RealIffReal`.  Thus
+the only unformalized input below is the classification itself, rather than
+any further local multiplicity calculation. -/
+lemma false_of_affine_factorization
+    (f : ℂ → ℂ) (hreal : RealIffReal f)
+    (x₀ : ℂ) (n : ℕ) (hn : 2 ≤ n)
+    (g : ℂ → ℂ) (hg : AnalyticAt ℂ g x₀)
+    (hg_eq : ∀ᶠ z in 𝓝 x₀, f z - f x₀ = (z - x₀)^n * g z)
+    (haffine : ∃ a b : ℂ, ∀ z, f z = a * z + b) : False := by
+  obtain ⟨a, b, haffine⟩ := haffine
+  have hderiv : deriv f x₀ = 0 :=
+    deriv_eq_zero_of_factorization f x₀ n hn g hg hg_eq
+  have hfa : HasDerivAt f a x₀ := by
+    convert ((hasDerivAt_id x₀).const_mul a).add_const b using 1
+    exact funext haffine
+    simp
+  have ha : a = 0 := by simpa [hfa.deriv] using hderiv
+  have hconst : f I = f 0 := by simp [haffine, ha]
+  have hf0_real : (f 0).im = 0 := (hreal 0).mpr (by simp)
+  have hfI_real : (f I).im = 0 := hconst ▸ hf0_real
+  simpa using (hreal I).mp hfI_real
+
 /-- **Core boundary lemma (SORRY).** Given the factorization
     `f(z) - f(x₀) = (z - x₀)^n · g(z)` with `n ≥ 2`, `g(x₀) ≠ 0`, `f` entire
     with the real-iff-real property, find a non-real `z` near `x₀` with
