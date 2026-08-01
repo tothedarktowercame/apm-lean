@@ -1,6 +1,7 @@
 import Mathlib.Analysis.Convolution
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import ConstructionTargets.L2Translation
 import ConstructionTargets.YoungConvolution
 
@@ -136,13 +137,90 @@ theorem gaussConv_Lp_contraction
     (gaussKernel t) f) p volume ≤ eLpNorm f p volume
   simpa [hkernel_norm] using hyoung
 
+/-- The Gaussian-weighted Bochner average of translation differences tends to
+zero in the abstract `Lp` space.  The only remaining step for the pointwise
+convolution theorem is to identify this Bochner integral with the `toLp` class
+of `gaussConv t f - f`. -/
+lemma gaussian_translation_average_tendsto_Lp
+    {p : ENNReal} [Fact (1 ≤ p)] (hp' : p ≠ ⊤)
+    {f : ℝ → ℝ} (hf : MemLp f p volume) :
+    let τ : ℝ → C(ℝ, ℝ) := fun s =>
+      ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+    let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+      simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+    let F : ℝ → Lp ℝ p volume := fun s =>
+      Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+    Tendsto
+      (fun t => ∫ z, gaussKernel 1 z • (F (t * z) - F 0) ∂volume)
+      (𝓝 0) (𝓝 0) := by
+  let τ : ℝ → C(ℝ, ℝ) := fun s =>
+    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
+  have hτc : Continuous τ := by
+    let G : C(ℝ × ℝ, ℝ) :=
+      ⟨fun z => z.2 - z.1, continuous_snd.sub continuous_fst⟩
+    exact (ContinuousMap.curry G).continuous
+  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
+    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
+  let F : ℝ → Lp ℝ p volume := fun s =>
+    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
+  have hFc : Continuous F := by
+    dsimp [F]
+    exact continuous_const.compMeasurePreservingLp hτc hτ hp'
+  have hkcont : Continuous (gaussKernel 1) := by
+    unfold gaussKernel
+    fun_prop
+  have hkint : Integrable (gaussKernel 1) volume :=
+    gaussKernel_integrable (by norm_num)
+  have hbound_int : Integrable
+      (fun z => gaussKernel 1 z * (2 * ‖hf.toLp f‖)) volume :=
+    hkint.mul_const _
+  have hdct := tendsto_integral_filter_of_dominated_convergence
+    (l := 𝓝 (0 : ℝ)) (μ := volume)
+    (F := fun t z => gaussKernel 1 z • (F (t * z) - F 0))
+    (f := fun _ => (0 : Lp ℝ p volume))
+    (fun z => gaussKernel 1 z * (2 * ‖hf.toLp f‖))
+  have hmeas : ∀ᶠ t : ℝ in 𝓝 0,
+      AEStronglyMeasurable
+        (fun z => gaussKernel 1 z • (F (t * z) - F 0)) volume := by
+    filter_upwards with t
+    exact (hkcont.smul
+      ((hFc.comp (continuous_const.mul continuous_id)).sub continuous_const)).aestronglyMeasurable
+  have hbound : ∀ᶠ t : ℝ in 𝓝 0, ∀ᵐ z : ℝ ∂volume,
+      ‖gaussKernel 1 z • (F (t * z) - F 0)‖ ≤
+        gaussKernel 1 z * (2 * ‖hf.toLp f‖) := by
+    filter_upwards with t
+    filter_upwards with z
+    rw [norm_smul, Real.norm_eq_abs,
+      abs_of_nonneg (gaussKernel_nonneg (by norm_num) z)]
+    apply mul_le_mul_of_nonneg_left _ (gaussKernel_nonneg (by norm_num) z)
+    calc
+      ‖F (t * z) - F 0‖ ≤ ‖F (t * z)‖ + ‖F 0‖ := norm_sub_le _ _
+      _ = 2 * ‖hf.toLp f‖ := by
+        simp only [F, Lp.norm_compMeasurePreserving]
+        ring
+  have hlim : ∀ᵐ z : ℝ ∂volume,
+      Tendsto (fun t => gaussKernel 1 z • (F (t * z) - F 0))
+        (𝓝 0) (𝓝 0) := by
+    filter_upwards with z
+    have htz : Tendsto (fun t : ℝ => t * z) (𝓝 0) (𝓝 0) := by
+      have hid : Tendsto (fun t : ℝ => t) (𝓝 0) (𝓝 0) := tendsto_id
+      have hconst : Tendsto (fun _ : ℝ => z) (𝓝 0) (𝓝 z) := tendsto_const_nhds
+      simpa using hid.mul hconst
+    have hsub : Tendsto (fun t => F (t * z) - F 0) (𝓝 0) (𝓝 0) := by
+      have hconst : Tendsto (fun _ : ℝ => F 0) (𝓝 0) (𝓝 (F 0)) := tendsto_const_nhds
+      simpa only [Function.comp_apply, sub_self] using
+        ((hFc.tendsto 0).comp htz).sub hconst
+    have hk : Tendsto (fun _ : ℝ => gaussKernel 1 z) (𝓝 0) (𝓝 (gaussKernel 1 z)) :=
+      tendsto_const_nhds
+    simpa using hk.smul hsub
+  simpa only [integral_zero] using hdct hmeas hbound hbound_int hlim
+
 /-- Part (b): K_t f converges to f in Lp as t -> 0+.
 
-    SORRY BOUNDARY: translation continuity and Young contraction are now
-    available.  The remaining reusable gap is the Banach-valued Minkowski
-    estimate for the average of translation differences; after it, split the
-    unit Gaussian into a compact head (uniform translation continuity) and an
-    integrable tail (bounded by twice the `Lp` norm). -/
+    SORRY BOUNDARY: translation continuity, Young contraction, and convergence
+    of the abstract `Lp`-valued Gaussian average are now available.  The exact
+    remaining bridge is to identify that Bochner integral in `Lp` with the
+    equivalence class represented pointwise by `gaussConv t f - f`. -/
 theorem gaussConv_tendsto_Lp
     {p : ENNReal} (hp : 1 ≤ p) (hp' : p ≠ ⊤)
     {f : ℝ → ℝ} (hf : MemLp f p volume) :
