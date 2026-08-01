@@ -8,9 +8,10 @@ import Mathlib.Analysis.Complex.BorelCaratheodory
 /-!
 # Entire Pick-function rigidity
 
-The Schwarz-reflection and linear-growth-to-affine steps are formalized here.
-The remaining frontier is the linear-growth estimate for an entire Pick
-function; this is the Herglotz/Nevanlinna input not currently in Mathlib.
+The Schwarz-reflection, Poisson representation, paired-kernel estimate, and
+linear-growth-to-affine steps are formalized here. The remaining frontier is
+folding the circle average to the positive upper semicircle and anchoring its
+weighted boundary integral.
 -/
 
 open Complex Set Filter Topology
@@ -85,6 +86,89 @@ theorem circleAverage_poissonKernel_smul_im_eq
     exact (hf.analyticAt z).harmonicAt_im
   exact hu.circleAverage_poissonKernel_smul hw
 
+/-- Exact conjugate-pair difference of the Poisson kernel. The factor
+`z.im` is the boundary `sin θ` weight when `z` runs around a circle. -/
+theorem poissonKernel_sub_star
+    {w z : ℂ} (hzw : ‖w‖ < ‖z‖) :
+    poissonKernel 0 w z - poissonKernel 0 w (star z) =
+      (‖z‖ ^ 2 - ‖w‖ ^ 2) * (4 * z.im * w.im) /
+        (‖z - w‖ ^ 2 * ‖star z - w‖ ^ 2) := by
+  have hne₁ : z - w ≠ 0 := by
+    intro h
+    have : z = w := sub_eq_zero.mp h
+    subst w
+    exact (lt_irrefl ‖z‖) hzw
+  have hne₂ : star z - w ≠ 0 := by
+    intro h
+    have hw : star z = w := sub_eq_zero.mp h
+    have : ‖z‖ = ‖w‖ := by rw [← hw]; simp
+    linarith
+  rw [poissonKernel_def, poissonKernel_def]
+  simp only [sub_zero, norm_star]
+  have hdiff : ‖star z - w‖ ^ 2 - ‖z - w‖ ^ 2 = 4 * z.im * w.im := by
+    rw [← normSq_eq_norm_sq, ← normSq_eq_norm_sq]
+    simp [Complex.normSq_sub]
+    ring
+  field_simp [hne₁, hne₂]
+  nlinarith
+
+/-- Uniform upper bound for the paired kernel on the half-radius disk. In the
+circle parametrization `z.im = R * sin θ`, the right side is exactly
+`64 * w.im * sin θ / R`. -/
+theorem poissonKernel_sub_star_le
+    {R : ℝ} {w z : ℂ} (hR : 0 < R) (hz : ‖z‖ = R)
+    (hw : ‖w‖ ≤ R / 2) (hwi : 0 ≤ w.im) (hzi : 0 ≤ z.im) :
+    0 ≤ poissonKernel 0 w z - poissonKernel 0 w (star z) ∧
+      poissonKernel 0 w z - poissonKernel 0 w (star z) ≤
+        64 * w.im * z.im / R ^ 2 := by
+  have hzw : ‖w‖ < ‖z‖ := by rw [hz]; linarith
+  rw [poissonKernel_sub_star hzw, hz]
+  have h₁ : R / 2 ≤ ‖z - w‖ := by
+    have ht : ‖z‖ ≤ ‖z - w‖ + ‖w‖ := by
+      calc
+        ‖z‖ = ‖(z - w) + w‖ := by ring_nf
+        _ ≤ ‖z - w‖ + ‖w‖ := norm_add_le _ _
+    rw [hz] at ht
+    linarith
+  have h₂ : R / 2 ≤ ‖star z - w‖ := by
+    have ht : ‖star z‖ ≤ ‖star z - w‖ + ‖w‖ := by
+      calc
+        ‖star z‖ = ‖(star z - w) + w‖ := by ring_nf
+        _ ≤ ‖star z - w‖ + ‖w‖ := norm_add_le _ _
+    simp only [norm_star, hz] at ht
+    linarith
+  have hn₁ : 0 < ‖z - w‖ := (half_pos hR).trans_le h₁
+  have hn₂ : 0 < ‖star z - w‖ := (half_pos hR).trans_le h₂
+  have hd : 0 < ‖z - w‖ ^ 2 * ‖star z - w‖ ^ 2 :=
+    mul_pos (sq_pos_of_pos hn₁) (sq_pos_of_pos hn₂)
+  have hwR : ‖w‖ ≤ R := by linarith
+  have hnum : 0 ≤ R ^ 2 - ‖w‖ ^ 2 := by
+    nlinarith [mul_self_le_mul_self (norm_nonneg w) hwR]
+  constructor
+  · exact div_nonneg (mul_nonneg hnum (by positivity)) hd.le
+  · rw [div_le_iff₀ hd, div_mul_eq_mul_div, le_div_iff₀ (sq_pos_of_pos hR)]
+    have hden : R ^ 4 / 16 ≤ ‖z - w‖ ^ 2 * ‖star z - w‖ ^ 2 := by
+      have hs₁ : R ^ 2 / 4 ≤ ‖z - w‖ ^ 2 := by nlinarith
+      have hs₂ : R ^ 2 / 4 ≤ ‖star z - w‖ ^ 2 := by nlinarith
+      have hm := mul_le_mul hs₁ hs₂ (by positivity) (sq_nonneg _)
+      nlinarith [hm]
+    have hq : 0 ≤ 4 * z.im * w.im := by positivity
+    have hsmall :
+        (R ^ 2 - ‖w‖ ^ 2) * (4 * z.im * w.im) ≤
+          R ^ 2 * (4 * z.im * w.im) :=
+      mul_le_mul_of_nonneg_right (by nlinarith [sq_nonneg ‖w‖]) hq
+    have hlarge :
+        (64 * w.im * z.im) * (R ^ 4 / 16) ≤
+          (64 * w.im * z.im) * (‖z - w‖ ^ 2 * ‖star z - w‖ ^ 2) :=
+      mul_le_mul_of_nonneg_left hden (by positivity)
+    calc
+      (R ^ 2 - ‖w‖ ^ 2) * (4 * z.im * w.im) * R ^ 2 ≤
+          (R ^ 2 * (4 * z.im * w.im)) * R ^ 2 :=
+        mul_le_mul_of_nonneg_right hsmall (sq_nonneg R)
+      _ = (64 * w.im * z.im) * (R ^ 4 / 16) := by ring
+      _ ≤ (64 * w.im * z.im) *
+          (‖z - w‖ ^ 2 * ‖star z - w‖ ^ 2) := hlarge
+
 /-- Borel-Carathéodory upgrades linear growth of the imaginary part to linear
 growth of the entire holomorphic function. -/
 theorem linear_growth_of_entire_of_im_growth
@@ -146,8 +230,9 @@ theorem linear_growth_of_entire_of_im_growth
       nlinarith [norm_nonneg z, norm_nonneg (f 0),
         mul_nonneg hC (norm_nonneg z)]
 
-/-- **Remaining Herglotz/Nevanlinna frontier.** The imaginary part of an
-entire Pick function has at most linear growth. -/
+/-- **Remaining Herglotz/Nevanlinna frontier.** Fold the Poisson circle average
+over conjugate boundary points, anchor the resulting `z.im`-weighted integral,
+and apply `poissonKernel_sub_star_le`. -/
 theorem im_linear_growth_of_entire_pick
     {f : ℂ → ℂ} (hf : Differentiable ℂ f)
     (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0)
