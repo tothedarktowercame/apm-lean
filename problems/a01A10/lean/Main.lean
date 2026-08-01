@@ -42,6 +42,7 @@ set_option linter.unusedVariables false in
 noncomputable section
 
 open Complex Real MeasureTheory
+open scoped Topology
 
 namespace ApmCanaries.A01A10
 
@@ -228,6 +229,149 @@ lemma fresnel_remainder_norm_eq {x : ℝ} (hx : 0 < x) :
   rw [Real.norm_eq_abs, abs_of_pos hx]
   field_simp
 
+/-- The complex damping parameter `ε - i` stays uniformly away from zero for
+nonnegative damping. -/
+lemma one_le_norm_damping {ε : ℝ} (hε : 0 ≤ ε) :
+    (1 : ℝ) ≤ ‖(ε : ℂ) - I‖ := by
+  rw [← (sq_le_sq₀ zero_le_one (norm_nonneg ((ε : ℂ) - I)))]
+  rw [Complex.sq_norm, Complex.normSq_apply]
+  simp
+  nlinarith
+
+/-- Abel damping never increases the modulus of the Fresnel integrand. -/
+lemma norm_damped_fresnel_le_one {ε x : ℝ} (hε : 0 ≤ ε) :
+    ‖cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)‖ ≤ 1 := by
+  rw [Complex.norm_exp]
+  apply Real.exp_le_one_iff.mpr
+  simp [pow_two, Complex.mul_re, Complex.mul_im]
+  nlinarith [sq_nonneg x]
+
+/-- Uniform estimate for the boundary term in damped Fresnel integration by
+parts. -/
+lemma damped_fresnel_boundary_norm_le {ε x : ℝ} (hε : 0 ≤ ε) (hx : 0 < x) :
+    ‖(-2 * ((ε : ℂ) - I) * x)⁻¹ *
+        cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)‖ ≤ 1 / (2 * x) := by
+  have hq := one_le_norm_damping hε
+  have hexp := norm_damped_fresnel_le_one (x := x) hε
+  rw [norm_mul, norm_inv, norm_mul, norm_mul, norm_neg, Complex.norm_ofNat,
+    Complex.norm_real, Real.norm_eq_abs, abs_of_pos hx]
+  calc
+    (2 * ‖(ε : ℂ) - I‖ * x)⁻¹ *
+        ‖cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)‖
+      ≤ (2 * ‖(ε : ℂ) - I‖ * x)⁻¹ * 1 := by gcongr
+    _ ≤ (2 * 1 * x)⁻¹ * 1 := by gcongr
+    _ = 1 / (2 * x) := by ring
+
+/-- Uniform estimate for the remainder term in damped Fresnel integration by
+parts. -/
+lemma damped_fresnel_remainder_norm_le {ε x : ℝ} (hε : 0 ≤ ε) (hx : 0 < x) :
+    ‖(2 * ((ε : ℂ) - I) /
+        (-2 * ((ε : ℂ) - I) * (x : ℂ)) ^ 2) *
+        cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)‖ ≤ 1 / (2 * x ^ 2) := by
+  have hq := one_le_norm_damping hε
+  have hqpos : 0 < ‖(ε : ℂ) - I‖ := zero_lt_one.trans_le hq
+  have hexp := norm_damped_fresnel_le_one (x := x) hε
+  rw [norm_mul, norm_div, norm_pow, norm_mul, norm_mul]
+  have hnormneg : ‖(-2 : ℂ) * ((ε : ℂ) - I)‖ = 2 * ‖(ε : ℂ) - I‖ := by
+    rw [norm_mul]
+    norm_num
+  rw [hnormneg]
+  simp only [Complex.norm_ofNat, Complex.norm_real,
+    Real.norm_eq_abs, abs_of_pos hx]
+  calc
+    2 * ‖(ε : ℂ) - I‖ / (2 * ‖(ε : ℂ) - I‖ * x) ^ 2 *
+        ‖cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)‖
+      ≤ 2 * ‖(ε : ℂ) - I‖ / (2 * ‖(ε : ℂ) - I‖ * x) ^ 2 * 1 := by gcongr
+    _ = 1 / (2 * ‖(ε : ℂ) - I‖ * x ^ 2) := by field_simp
+    _ ≤ 1 / (2 * 1 * x ^ 2) := by gcongr
+    _ = 1 / (2 * x ^ 2) := by ring
+
+/-- The integration-by-parts tail estimate is uniform all the way down to
+zero damping. -/
+lemma norm_integral_damped_fresnel_le_inv
+    {ε a b : ℝ} (hε : 0 ≤ ε) (ha : 0 < a) (hab : a ≤ b) :
+    ‖∫ x in a..b, cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)‖ ≤ 1 / a := by
+  let boundary : ℝ → ℂ := fun x =>
+    (-2 * ((ε : ℂ) - I) * x)⁻¹ *
+      cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)
+  let remainder : ℝ → ℂ := fun x =>
+    (2 * ((ε : ℂ) - I) /
+      (-2 * ((ε : ℂ) - I) * (x : ℂ)) ^ 2) *
+      cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)
+  have hparts := damped_fresnel_integration_by_parts
+    (ε := ε) (a := a) (b := b) ha hab
+  have hremnorm :
+      ‖∫ x in a..b, remainder x‖ ≤ ∫ x in a..b, 1 / (2 * x ^ 2) := by
+    apply intervalIntegral.norm_integral_le_of_norm_le hab
+    · filter_upwards with x
+      intro hx
+      rw [Set.mem_Ioc] at hx
+      exact damped_fresnel_remainder_norm_le hε (ha.trans hx.1)
+    · exact ContinuousOn.intervalIntegrable <| by
+        apply ContinuousOn.div continuousOn_const
+          (continuousOn_const.mul (continuousOn_id.pow 2))
+        intro x hx
+        rw [Set.uIcc_of_le hab] at hx
+        exact mul_ne_zero (by norm_num)
+          (pow_ne_zero 2 (ne_of_gt (ha.trans_le hx.1)))
+  have hb : 0 < b := ha.trans_le hab
+  have hparts' :
+      (∫ x in a..b, cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)) =
+        boundary b - boundary a - ∫ x in a..b, remainder x := by
+    simpa [boundary, remainder] using hparts
+  rw [hparts']
+  calc
+    ‖boundary b - boundary a - ∫ x in a..b, remainder x‖
+        ≤ ‖boundary b‖ + ‖boundary a‖ + ‖∫ x in a..b, remainder x‖ := by
+      exact (norm_sub_le _ _).trans (add_le_add (norm_sub_le _ _) le_rfl)
+    _ ≤ 1 / (2 * b) + 1 / (2 * a) +
+          (1 / (2 * a) - 1 / (2 * b)) := by
+      gcongr
+      · exact damped_fresnel_boundary_norm_le hε hb
+      · exact damped_fresnel_boundary_norm_le hε ha
+      · exact hremnorm.trans_eq (integral_inv_sq_half ha hab)
+    _ = 1 / a := by ring
+
+/-- Uniform Abel-regularized tail estimate on the whole positive half-line. -/
+lemma norm_integral_Ioi_damped_fresnel_le_inv
+    {ε a : ℝ} (hε : 0 < ε) (ha : 0 < a) :
+    ‖∫ x in Set.Ioi a, cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)‖ ≤ 1 / a := by
+  have hb : 0 < (((ε : ℂ) - I).re) := by simpa
+  have htend := intervalIntegral_tendsto_integral_Ioi a
+    (integrable_cexp_neg_mul_sq hb).integrableOn Filter.tendsto_id
+  have hclosed : IsClosed {z : ℂ | ‖z‖ ≤ 1 / a} :=
+    isClosed_le continuous_norm continuous_const
+  apply hclosed.mem_of_tendsto htend
+  filter_upwards [Filter.eventually_ge_atTop a] with b hab
+  exact norm_integral_damped_fresnel_le_inv hε.le ha hab
+
+/-- On every fixed bounded interval, Abel damping can be removed by dominated
+convergence. -/
+lemma tendsto_integral_damped_fresnel_interval (a : ℝ) :
+    Filter.Tendsto
+      (fun ε : ℝ => ∫ x in (0 : ℝ)..a,
+        cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2))
+      (𝓝[>] (0 : ℝ))
+      (nhds (∫ x in (0 : ℝ)..a, cexp (I * (x : ℂ) ^ 2))) := by
+  apply intervalIntegral.tendsto_integral_filter_of_dominated_convergence
+    (fun _ : ℝ => 1)
+  · filter_upwards with ε
+    exact (by fun_prop : Continuous fun x : ℝ =>
+      cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)).aestronglyMeasurable
+  · filter_upwards [self_mem_nhdsWithin] with ε hε
+    filter_upwards with x
+    intro _hx
+    exact norm_damped_fresnel_le_one hε.le
+  · exact intervalIntegrable_const
+  · filter_upwards with x
+    intro _hx
+    have hc : Filter.Tendsto
+        (fun ε : ℝ => cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2))
+        (nhds 0) (nhds (cexp (-((0 : ℂ) - I) * (x : ℂ) ^ 2))) :=
+      (by fun_prop : Continuous fun ε : ℝ =>
+        cexp (-((ε : ℂ) - I) * (x : ℂ) ^ 2)).tendsto 0
+    simpa using hc.mono_left inf_le_left
+
 /-- The undamped Fresnel tails are uniformly Cauchy.  This is the quantitative
 Dirichlet estimate used both to construct the improper integral and to remove
 Abel damping. -/
@@ -352,18 +496,18 @@ theorem fresnel_integral :
       Filter.atTop
       (nhds ((1 + Complex.I) * (√π) / (2 * (√2)))) := by
   /-
-  Remaining Abel-limit argument:
+  The uniform finite and half-line tail estimates are now proved in
+  `norm_integral_damped_fresnel_le_inv` and
+  `norm_integral_Ioi_damped_fresnel_le_inv`; removal of damping on `[0,a]`
+  is `tendsto_integral_damped_fresnel_interval`.
 
-  1. Take `q = ε - I` in `damped_fresnel_integration_by_parts`.  For
-     `ε ≥ 0`, `‖q‖ ≥ 1` and `‖exp (-q x²)‖ ≤ 1`, so its three terms give a
-     tail estimate `‖∫ x in a..b, exp (-q x²)‖ ≤ 3 / (2*a)`, uniformly in
-     `ε`, whenever `0 < a ≤ b`.
-  2. On each fixed interval `[0,a]`, dominated convergence sends `ε → 0+`
-     in the integrand.
-  3. `integral_gaussian_complex_Ioi (b := (ε : ℂ) - I)` evaluates the
-     regularized half-line integral.  Its right hand side tends to
-     `(1 + I) * √π / (2 * √2)`.  The uniform tail estimate and step 2
-     identify this Abel limit with the required improper integral.
+  What remains is the final three-ε assembly: split both the regularized
+  half-line integral and the improper integral at a common large `a`, use
+  those three lemmas on the two tails and the head, and identify the limit of
+  `(π / ((ε : ℂ) - I)) ^ (1 / 2 : ℂ) / 2` from
+  `integral_gaussian_complex_Ioi`.  The last normalization uses
+  `Complex.log_I`, `Real.cos_pi_div_four`, and `Real.sin_pi_div_four` to show
+  the principal square root of `π * I` is `(1 + I) * √π / √2`.
   -/
   sorry
 
