@@ -134,11 +134,66 @@ theorem poissonKernel_integral {y : ℝ} (hy : 0 < y) :
       exact hpoint z
     _ = 1 := poissonKernel_one_integral
 
+theorem poissonKernel_integrable {y : ℝ} (hy : 0 < y) :
+    Integrable (poissonKernel y) volume := by
+  by_contra h
+  have hone := poissonKernel_integral hy
+  rw [integral_undef h] at hone
+  norm_num at hone
+
 /-- The Poisson family is exactly the dilation of its time-one member. -/
 theorem poissonKernel_dilation {y : ℝ} (hy : 0 < y) (t : ℝ) :
     poissonKernel y t = y⁻¹ * poissonKernel 1 (t / y) := by
   have hy0 : y ≠ 0 := ne_of_gt hy
   unfold poissonKernel
   field_simp
+
+/-- The positive layer density whose radial superposition is the Poisson
+kernel. -/
+def poissonLayerWeight (y s : ℝ) : ℝ :=
+  2 * y * s / (π * (y ^ 2 + s ^ 2) ^ 2)
+
+theorem poissonLayerWeight_nonneg {y : ℝ} (hy : 0 < y) {s : ℝ} (hs : 0 ≤ s) :
+    0 ≤ poissonLayerWeight y s := by
+  unfold poissonLayerWeight
+  positivity
+
+theorem poissonKernel_hasDerivAt {y : ℝ} (hy : 0 < y) (s : ℝ) :
+    HasDerivAt (poissonKernel y) (-poissonLayerWeight y s) s := by
+  have hden : y ^ 2 + s ^ 2 ≠ 0 := by positivity
+  have h := (hasDerivAt_const s ((1 / π) * y)).div
+    ((hasDerivAt_const s (y ^ 2)).add ((hasDerivAt_id s).pow 2)) hden
+  convert h using 1
+  simp only [Pi.add_apply, Pi.pow_apply, id_eq, zero_add, zero_mul,
+    Nat.cast_ofNat]
+  unfold poissonLayerWeight
+  field_simp
+  ring
+
+theorem poissonKernel_tendsto_atTop {y : ℝ} (_hy : 0 < y) :
+    Tendsto (poissonKernel y) atTop (𝓝 0) := by
+  unfold poissonKernel
+  have hden : Tendsto (fun s : ℝ => y ^ 2 + s ^ 2) atTop atTop :=
+    tendsto_const_nhds.add_atTop
+      (tendsto_pow_atTop (α := ℝ) (by norm_num : (2 : ℕ) ≠ 0))
+  exact tendsto_const_nhds.div_atTop hden
+
+/-- Radial layer representation of the Poisson kernel. -/
+theorem integral_poissonLayerWeight_Ioi {y : ℝ} (hy : 0 < y) (t : ℝ) :
+    ∫ s in Ioi |t|, poissonLayerWeight y s ∂volume = poissonKernel y t := by
+  have hderiv (s : ℝ) (_hs : s ∈ Ici |t|) :
+      HasDerivAt (poissonKernel y) (-poissonLayerWeight y s) s :=
+    poissonKernel_hasDerivAt hy s
+  have hnonpos (s : ℝ) (hs : s ∈ Ioi |t|) :
+      -poissonLayerWeight y s ≤ 0 := by
+    exact neg_nonpos.mpr (poissonLayerWeight_nonneg hy (le_trans (abs_nonneg t) hs.le))
+  have h := integral_Ioi_of_hasDerivAt_of_nonpos' hderiv hnonpos
+    (poissonKernel_tendsto_atTop hy)
+  rw [integral_neg] at h
+  have habs : poissonKernel y |t| = poissonKernel y t := by
+    rcases le_total 0 t with ht | ht
+    · rw [abs_of_nonneg ht]
+    · rw [abs_of_nonpos ht, poissonKernel_even]
+  linarith
 
 end ConstructionTargets.RadialMajorantAE
