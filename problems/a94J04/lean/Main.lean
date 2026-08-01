@@ -7,6 +7,7 @@ import Mathlib.Analysis.Convolution
 import YoungL2
 import ConstructionTargets.L2Translation
 import ConstructionTargets.LpRepresentative
+import ConstructionTargets.RadialMajorantAE
 
 /-!
 # APM a94J04: Poisson kernel on the half-plane — L² contraction and approximate identity
@@ -526,18 +527,26 @@ theorem poissonConv_tendsto_L2
 
 /-- **Part (c):** A.e. convergence.
 
-    `P_y f(x) → f(x)` for a.e. `x` as `y → 0⁺`. This follows from the
-    Hardy-Littlewood maximal inequality bounding the Poisson maximal function
-    `sup_{y>0} |P_y f(x)|`, combined with the L² convergence from part (b)
-    and the density of continuous compactly supported functions in L².
-
-    **SORRY BOUNDARY:** The Hardy-Littlewood maximal inequality is a deep result
-    not currently in Mathlib. -/
+    `P_y f(x) → f(x)` for a.e. `x` as `y → 0⁺`. The shared radial-majorant
+    theorem derives this from the Lebesgue differentiation theorem and the
+    layer-cake estimate for the Poisson kernel. -/
 theorem poissonConv_tendsto_ae
     (f : ℝ → ℝ) (hf : MemLp f 2 volume)
     (hfm : AEStronglyMeasurable f volume) :
     ∀ᵐ x ∂volume,
       Tendsto (fun y => poissonConv y f x) (nhdsWithin 0 (Ioi 0)) (𝓝 (f x)) := by
-  sorry
+  have hkernel (y t : ℝ) :
+      poissonKernel y t = ConstructionTargets.RadialMajorantAE.poissonKernel y t := by
+    unfold poissonKernel
+    rw [ConstructionTargets.RadialMajorantAE.poissonKernel_eq_formula]
+  filter_upwards
+      [ConstructionTargets.RadialMajorantAE.poissonConv_tendsto_ae_of_memLp hf]
+      with x hx
+  apply hx.congr'
+  filter_upwards with y
+  rw [poissonConv_eq_integral_translation]
+  apply integral_congr_ae
+  filter_upwards with t
+  rw [hkernel]
 
 end ApmCanaries.A94J04
