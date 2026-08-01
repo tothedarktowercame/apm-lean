@@ -13,6 +13,34 @@ noncomputable section
 
 namespace ConstructionTargets.RadialMajorantAE
 
+/-- The radial integral of the translation error around `x`. -/
+def radialLIntegral (f : ℝ → ℝ) (x s : ℝ) : ℝ≥0∞ :=
+  ∫⁻ t in Icc (-s) s, ‖f (x - t) - f x‖ₑ ∂volume
+
+/-- The radial average of the translation error.  The `ENNReal` quotient is
+set to zero automatically at nonpositive radii, where the interval is empty
+up to a null endpoint. -/
+def radialLaverage (f : ℝ → ℝ) (x s : ℝ) : ℝ≥0∞ :=
+  radialLIntegral f x s / ENNReal.ofReal (2 * s)
+
+theorem radialLIntegral_monotone (f : ℝ → ℝ) (x : ℝ) :
+    Monotone (radialLIntegral f x) := by
+  intro s r hsr
+  unfold radialLIntegral
+  apply lintegral_mono_set
+  intro t ht
+  exact ⟨le_trans (by linarith [ht.1]) le_rfl, le_trans ht.2 hsr⟩
+
+theorem radialLIntegral_measurable (f : ℝ → ℝ) (x : ℝ) :
+    Measurable (radialLIntegral f x) :=
+  (radialLIntegral_monotone f x).measurable
+
+theorem radialLaverage_measurable (f : ℝ → ℝ) (x : ℝ) :
+    Measurable (radialLaverage f x) := by
+  unfold radialLaverage
+  exact (radialLIntegral_measurable f x).div
+    (ENNReal.measurable_ofReal.comp (measurable_const.mul measurable_id))
+
 /-- Tonelli's theorem in the radial layer-cake form.  No integrability
 hypothesis is required because both sides are nonnegative extended integrals.
 
