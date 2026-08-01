@@ -82,6 +82,71 @@ theorem stieltjesMeasure_Ioc
     stieltjesFunction_monotoneExtension_eq hf_cont hf_mono,
     monotoneExtension_eq_self f hb, monotoneExtension_eq_self f ha]
 
+/-- A continuous monotone function maps a closed subinterval onto the closed
+interval between its endpoint values.  This uses no form of Lusin `(N)`. -/
+theorem image_Icc_eq_Icc
+    {f : ℝ → ℝ} (hf_cont : ContinuousOn f (Icc (0 : ℝ) 1))
+    (hf_mono : MonotoneOn f (Icc (0 : ℝ) 1))
+    {a b : ℝ} (ha : a ∈ Icc (0 : ℝ) 1) (hb : b ∈ Icc (0 : ℝ) 1)
+    (hab : a ≤ b) :
+    f '' Icc a b = Icc (f a) (f b) := by
+  have hab_sub : Icc a b ⊆ Icc (0 : ℝ) 1 := by
+    intro x hx
+    exact ⟨ha.1.trans hx.1, hx.2.trans hb.2⟩
+  apply Set.Subset.antisymm
+  · rintro _ ⟨x, hx, rfl⟩
+    exact ⟨hf_mono ha (hab_sub hx) hx.1, hf_mono (hab_sub hx) hb hx.2⟩
+  · exact intermediate_value_Icc hab (hf_cont.mono hab_sub)
+
+/-- On interval generators, the Stieltjes mass is exactly the Lebesgue
+measure of the corresponding closed image interval.  This is the
+continuity-and-monotonicity-only input to the remaining Carathéodory step. -/
+theorem stieltjesMeasure_Ioc_eq_volume_image_Icc
+    {f : ℝ → ℝ} (hf_cont : ContinuousOn f (Icc (0 : ℝ) 1))
+    (hf_mono : MonotoneOn f (Icc (0 : ℝ) 1))
+    {a b : ℝ} (ha : a ∈ Icc (0 : ℝ) 1) (hb : b ∈ Icc (0 : ℝ) 1)
+    (hab : a ≤ b) :
+    stieltjesMeasure f hf_mono (Ioc a b) = volume (f '' Icc a b) := by
+  rw [stieltjesMeasure_Ioc hf_cont hf_mono ha hb,
+    image_Icc_eq_Icc hf_cont hf_mono ha hb hab, Real.volume_Icc]
+
+/-- Continuity removes all atoms from the associated Stieltjes measure.  This
+is needed when image intervals overlap at endpoint or flat-fiber values. -/
+theorem stieltjesMeasure_singleton
+    {f : ℝ → ℝ} (hf_cont : ContinuousOn f (Icc (0 : ℝ) 1))
+    (hf_mono : MonotoneOn f (Icc (0 : ℝ) 1)) (x : ℝ) :
+    stieltjesMeasure f hf_mono {x} = 0 := by
+  let S := (monotone_monotoneExtension hf_mono).stieltjesFunction
+  have hS : (S : ℝ → ℝ) = monotoneExtension f := by
+    funext y
+    exact stieltjesFunction_monotoneExtension_eq hf_cont hf_mono y
+  rw [stieltjesMeasure, StieltjesFunction.measure_singleton]
+  change ENNReal.ofReal (S x - Function.leftLim S x) = 0
+  rw [hS]
+  rw [(continuous_monotoneExtension hf_cont).continuousAt.continuousWithinAt.leftLim_eq,
+    sub_self, ENNReal.ofReal_zero]
+
+/-- The clamped extension is bounded, hence its Stieltjes measure is finite.
+This supplies the finiteness input for the eventual Radon--Nikodym step. -/
+theorem stieltjesMeasure_isFinite
+    {f : ℝ → ℝ} (hf_cont : ContinuousOn f (Icc (0 : ℝ) 1))
+    (hf_mono : MonotoneOn f (Icc (0 : ℝ) 1)) :
+    IsFiniteMeasure (stieltjesMeasure f hf_mono) := by
+  let S := (monotone_monotoneExtension hf_mono).stieltjesFunction
+  change IsFiniteMeasure S.measure
+  apply S.isFiniteMeasure_of_forall_abs_le
+  intro x
+  have h0 : (0 : ℝ) ∈ Icc (0 : ℝ) 1 := by norm_num
+  have h1 : (1 : ℝ) ∈ Icc (0 : ℝ) 1 := by norm_num
+  have hx := clamp01_mem x
+  have hlo : f 0 ≤ monotoneExtension f x := by
+    exact hf_mono h0 hx hx.1
+  have hhi : monotoneExtension f x ≤ f 1 := by
+    exact hf_mono hx h1 hx.2
+  change |S x| ≤ max |f 0| |f 1|
+  rw [stieltjesFunction_monotoneExtension_eq hf_cont hf_mono]
+  exact abs_le_max_abs_abs hlo hhi
+
 /-!
 ## Exact remaining frontier
 
@@ -104,7 +169,14 @@ The missing Carathéodory step is an inequality sufficient for that theorem:
 ```
 
 It must use only continuity and monotonicity; Lusin `(N)` is applied after
-this comparison, not during its proof.
+this comparison, not during its proof.  A bare interval outer-cover argument
+does not suffice: it gives `volume (f '' E) ≤ ∑ volume (f '' I n)`, whereas
+the desired estimate needs the reverse comparison with the Stieltjes mass.
+The extension must additionally control overlaps of interval images.  For a
+non-strict monotone map these overlaps are precisely flat-fiber values;
+`stieltjesMeasure_singleton` proves that the source measure has no atoms, so
+those fibers can be discarded once their countability/decomposition is
+formalized.
 -/
 
 end ConstructionTargets.BanachZarecki
