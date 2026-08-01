@@ -28,5 +28,5 @@ needlessly.
 | `LemniscateComponents` | partial (`sorry` remains) | a00J04, a01A08 |
 | `UnivalentDeriv` | partial (`sorry` remains) | a95J01 |
 | `BanachZarecki` | complete, sorry-free monotone Banach--Zarecki theorem | a95J06 |
-| `HerglotzRigidity` | partial (imaginary-part growth remains) | a94A10 |
+| `HerglotzRigidity` | sorry-free | a94A10 |
 -/

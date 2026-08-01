@@ -9,8 +9,8 @@ import Mathlib.Analysis.Complex.BorelCaratheodory
 # Entire Pick-function rigidity
 
 The Schwarz-reflection, Poisson representation, conjugate-circle folding,
-paired-kernel estimates, and linear-growth-to-affine steps are formalized here.
-The remaining frontier is the anchored weighted-boundary-integral estimate.
+paired-kernel estimates, anchored boundary estimate, and
+linear-growth-to-affine steps are formalized here.
 -/
 
 open Complex Set Filter Topology
@@ -157,6 +157,46 @@ theorem circleAverage_poissonKernel_smul_im_eq_upper
   simp only [starRingEnd_apply]
   ring_nf
 
+/-- Continuity of the angular Poisson integrand when the evaluation point is
+strictly inside the circle. -/
+theorem continuous_poissonKernel_mul_im_circle
+    {f : ℂ → ℂ} (hf : Differentiable ℂ f)
+    {R : ℝ} {w : ℂ} (hw : w ∈ Metric.ball 0 R) :
+    Continuous (fun θ : ℝ =>
+      poissonKernel 0 w (circleMap 0 R θ) * (f (circleMap 0 R θ)).im) := by
+  dsimp [poissonKernel]
+  simp only [sub_zero]
+  apply Continuous.mul
+  · apply Continuous.div₀
+    · fun_prop
+    · fun_prop
+    · intro θ
+      exact pow_ne_zero 2 (norm_ne_zero_iff.mpr (sub_ne_zero.mpr
+        (circleMap_ne_mem_ball hw θ)))
+  · exact Complex.continuous_im.comp
+      (hf.continuous.comp (continuous_circleMap 0 R))
+
+/-- Continuity of the folded upper-semicircle Poisson integrand. -/
+theorem continuous_folded_poisson_integrand
+    {f : ℂ → ℂ} (hf : Differentiable ℂ f)
+    (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0)
+    {R : ℝ} {w : ℂ} (hw : w ∈ Metric.ball 0 R) :
+    Continuous (fun θ : ℝ =>
+      (poissonKernel 0 w (circleMap 0 R θ) -
+        poissonKernel 0 w (star (circleMap 0 R θ))) *
+          (f (circleMap 0 R θ)).im) := by
+  let q : ℝ → ℝ := fun θ =>
+    poissonKernel 0 w (circleMap 0 R θ) * (f (circleMap 0 R θ)).im
+  have hq : Continuous q := continuous_poissonKernel_mul_im_circle hf hw
+  have hsum : Continuous (fun θ => q θ + q (2 * Real.pi - θ)) :=
+    hq.add (hq.comp (continuous_const.sub continuous_id))
+  convert hsum using 1
+  funext θ
+  dsimp [q]
+  rw [circleMap_two_pi_sub, im_apply_star_eq_neg hf hreal]
+  simp only [starRingEnd_apply]
+  ring_nf
+
 /-- Exact conjugate-pair difference of the Poisson kernel. The factor
 `z.im` is the boundary `sin θ` weight when `z` runs around a circle. -/
 theorem poissonKernel_sub_star
@@ -284,6 +324,90 @@ theorem poissonKernel_sub_star_ge
     positivity
   exact div_le_div_of_nonneg_left hnum hd hden
 
+/-- The upper-semicircle boundary moment is quadratically bounded in the
+circle radius. This is the anchor estimate in the entire Pick-function proof. -/
+theorem upperSemicircle_weighted_integral_le
+    {f : ℂ → ℂ} (hf : Differentiable ℂ f)
+    (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0)
+    (hpos : ∀ z : ℂ, 0 < z.im → 0 < (f z).im)
+    {R : ℝ} (hR : 2 ≤ R) :
+    (∫ θ in (0 : ℝ)..Real.pi,
+      (circleMap 0 R θ).im * (f (circleMap 0 R θ)).im) ≤
+        4 * Real.pi * (f I).im * R ^ 2 := by
+  let W : ℝ → ℝ := fun θ =>
+    (circleMap 0 R θ).im * (f (circleMap 0 R θ)).im
+  let G : ℝ → ℝ := fun θ =>
+    (poissonKernel 0 I (circleMap 0 R θ) -
+      poissonKernel 0 I (star (circleMap 0 R θ))) *
+        (f (circleMap 0 R θ)).im
+  let A : ℝ := 4 * (R ^ 2 - 1) / (R + 1) ^ 4
+  have hRI : I ∈ Metric.ball 0 R := by
+    rw [mem_ball_zero_iff]
+    simp
+    linarith
+  have hanchor := circleAverage_poissonKernel_smul_im_eq_upper hf hreal hRI
+  change (f I).im = (2 * Real.pi)⁻¹ *
+    (∫ θ in (0 : ℝ)..Real.pi, G θ) at hanchor
+  have hGint : (∫ θ in (0 : ℝ)..Real.pi, G θ) =
+      (2 * Real.pi) * (f I).im := by
+    rw [hanchor]
+    field_simp [Real.pi_ne_zero]
+  have hWcont : Continuous W := by
+    dsimp [W]
+    exact (Complex.continuous_im.comp (continuous_circleMap 0 R)).mul
+      (Complex.continuous_im.comp
+        (hf.continuous.comp (continuous_circleMap 0 R)))
+  have hGcont : Continuous G := by
+    exact continuous_folded_poisson_integrand hf hreal hRI
+  have hpoint : ∀ θ ∈ Ioo (0 : ℝ) Real.pi, A * W θ ≤ G θ := by
+    intro θ hθ
+    let z := circleMap 0 R θ
+    have hz : ‖z‖ = R := by
+      dsimp [z]
+      rw [norm_circleMap_zero, abs_of_nonneg (by linarith)]
+    have hzi : 0 < z.im := by
+      dsimp [z]
+      rw [show (circleMap 0 R θ).im = R * Real.sin θ by
+        simp [circleMap, Complex.exp_im]]
+      exact mul_pos (by linarith) (Real.sin_pos_of_pos_of_lt_pi hθ.1 hθ.2)
+    have hk := poissonKernel_sub_star_ge (R := R) (w := I) (z := z)
+      (by linarith) hz (by simp) (by simp) hzi.le
+    have hfi : 0 ≤ (f z).im := (hpos z hzi).le
+    have hmul := mul_le_mul_of_nonneg_right hk hfi
+    dsimp [A, W, G, z]
+    convert hmul using 1
+    all_goals norm_num
+    all_goals ring
+  have hmono :
+      (∫ θ in (0 : ℝ)..Real.pi, A * W θ) ≤
+        ∫ θ in (0 : ℝ)..Real.pi, G θ :=
+    intervalIntegral.integral_mono_on_of_le_Ioo Real.pi_pos.le
+      (hWcont.const_mul A |>.intervalIntegrable 0 Real.pi (μ := MeasureTheory.volume))
+      (hGcont.intervalIntegrable 0 Real.pi (μ := MeasureTheory.volume)) hpoint
+  rw [intervalIntegral.integral_const_mul, hGint] at hmono
+  have hfi : 0 < (f I).im := hpos I (by simp)
+  have hA : 0 < A := by
+    dsimp [A]
+    exact div_pos (mul_pos (by norm_num) (by nlinarith [sq_nonneg R]))
+      (pow_pos (by linarith) 4)
+  change (∫ θ in (0 : ℝ)..Real.pi, W θ) ≤
+    4 * Real.pi * (f I).im * R ^ 2
+  apply le_of_mul_le_mul_left _ hA
+  calc
+    A * (∫ θ in (0 : ℝ)..Real.pi, W θ) ≤
+        (2 * Real.pi) * (f I).im := hmono
+    _ ≤ A * (4 * Real.pi * (f I).im * R ^ 2) := by
+      have hcoef : 1 ≤ 2 * A * R ^ 2 := by
+        dsimp [A]
+        rw [show 2 * (4 * (R ^ 2 - 1) / (R + 1) ^ 4) * R ^ 2 =
+          (8 * (R ^ 2 - 1) * R ^ 2) / (R + 1) ^ 4 by ring]
+        rw [le_div_iff₀ (pow_pos (by linarith : 0 < R + 1) 4)]
+        ring_nf
+        nlinarith [sq_nonneg (R - 2), sq_nonneg (R ^ 2 - 2 * R)]
+      have hm := mul_le_mul_of_nonneg_left hcoef
+        (mul_nonneg (mul_nonneg (show (0 : ℝ) ≤ 2 by norm_num) Real.pi_pos.le) hfi.le)
+      convert hm using 1 <;> ring
+
 /-- Borel-Carathéodory upgrades linear growth of the imaginary part to linear
 growth of the entire holomorphic function. -/
 theorem linear_growth_of_entire_of_im_growth
@@ -345,16 +469,107 @@ theorem linear_growth_of_entire_of_im_growth
       nlinarith [norm_nonneg z, norm_nonneg (f 0),
         mul_nonneg hC (norm_nonneg z)]
 
-/-- **Remaining Herglotz/Nevanlinna frontier.** Apply the folded Poisson formula
-at `w = I` with `poissonKernel_sub_star_ge` to bound the `z.im`-weighted upper
-semicircle integral, then apply `poissonKernel_sub_star_le` at a general point.
--/
+/-- The imaginary part of an entire Pick function has at most linear growth. -/
 theorem im_linear_growth_of_entire_pick
     {f : ℂ → ℂ} (hf : Differentiable ℂ f)
     (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0)
     (hpos : ∀ z : ℂ, 0 < z.im → 0 < (f z).im) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ z : ℂ, |(f z).im| ≤ C * (1 + ‖z‖) := by
-  sorry
+  let C : ℝ := 128 * (f I).im
+  have hfI : 0 < (f I).im := hpos I (by simp)
+  have hC : 0 ≤ C := by dsimp [C]; positivity
+  have hupper (w : ℂ) (hwi : 0 ≤ w.im) : (f w).im ≤ C * w.im := by
+    let R : ℝ := 2 * (1 + ‖w‖)
+    let W : ℝ → ℝ := fun θ =>
+      (circleMap 0 R θ).im * (f (circleMap 0 R θ)).im
+    let G : ℝ → ℝ := fun θ =>
+      (poissonKernel 0 w (circleMap 0 R θ) -
+        poissonKernel 0 w (star (circleMap 0 R θ))) *
+          (f (circleMap 0 R θ)).im
+    have hR : 0 < R := by dsimp [R]; positivity
+    have hR2 : 2 ≤ R := by dsimp [R]; linarith [norm_nonneg w]
+    have hwR : ‖w‖ ≤ R / 2 := by dsimp [R]; linarith [norm_nonneg w]
+    have hwball : w ∈ Metric.ball 0 R := by
+      rw [mem_ball_zero_iff]
+      dsimp [R]
+      linarith [norm_nonneg w]
+    have hfold := circleAverage_poissonKernel_smul_im_eq_upper hf hreal hwball
+    change (f w).im = (2 * Real.pi)⁻¹ *
+      (∫ θ in (0 : ℝ)..Real.pi, G θ) at hfold
+    have hWcont : Continuous W := by
+      dsimp [W]
+      exact (Complex.continuous_im.comp (continuous_circleMap 0 R)).mul
+        (Complex.continuous_im.comp
+          (hf.continuous.comp (continuous_circleMap 0 R)))
+    have hGcont : Continuous G := by
+      exact continuous_folded_poisson_integrand hf hreal hwball
+    have hpoint : ∀ θ ∈ Ioo (0 : ℝ) Real.pi,
+        G θ ≤ (64 * w.im / R ^ 2) * W θ := by
+      intro θ hθ
+      let z := circleMap 0 R θ
+      have hz : ‖z‖ = R := by
+        dsimp [z]
+        rw [norm_circleMap_zero, abs_of_nonneg hR.le]
+      have hzi : 0 < z.im := by
+        dsimp [z]
+        rw [show (circleMap 0 R θ).im = R * Real.sin θ by
+          simp [circleMap, Complex.exp_im]]
+        exact mul_pos hR (Real.sin_pos_of_pos_of_lt_pi hθ.1 hθ.2)
+      have hk := (poissonKernel_sub_star_le hR hz hwR hwi hzi.le).2
+      have hfi : 0 ≤ (f z).im := (hpos z hzi).le
+      have hmul := mul_le_mul_of_nonneg_right hk hfi
+      dsimp [W, G, z]
+      convert hmul using 1
+      all_goals ring
+    have hmono :
+        (∫ θ in (0 : ℝ)..Real.pi, G θ) ≤
+          ∫ θ in (0 : ℝ)..Real.pi, (64 * w.im / R ^ 2) * W θ :=
+      intervalIntegral.integral_mono_on_of_le_Ioo Real.pi_pos.le
+        (hGcont.intervalIntegrable 0 Real.pi (μ := MeasureTheory.volume))
+        (hWcont.const_mul (64 * w.im / R ^ 2) |>.intervalIntegrable
+          0 Real.pi (μ := MeasureTheory.volume)) hpoint
+    rw [intervalIntegral.integral_const_mul] at hmono
+    have hW := upperSemicircle_weighted_integral_le hf hreal hpos hR2
+    have hfactor : 0 ≤ (2 * Real.pi)⁻¹ := by positivity
+    rw [hfold]
+    calc
+      (2 * Real.pi)⁻¹ * (∫ θ in (0 : ℝ)..Real.pi, G θ) ≤
+          (2 * Real.pi)⁻¹ *
+            ((64 * w.im / R ^ 2) * (∫ θ in (0 : ℝ)..Real.pi, W θ)) :=
+        mul_le_mul_of_nonneg_left hmono hfactor
+      _ ≤ (2 * Real.pi)⁻¹ *
+            ((64 * w.im / R ^ 2) *
+              (4 * Real.pi * (f I).im * R ^ 2)) := by
+        gcongr
+      _ = C * w.im := by
+        dsimp [C]
+        field_simp [hR.ne', Real.pi_ne_zero]
+        ring
+  refine ⟨C, hC, fun z => ?_⟩
+  rcases lt_trichotomy z.im 0 with hzneg | hzzero | hzpos
+  · have hstarpos : 0 < (star z).im := by simpa using hzneg
+    have hu := hupper (star z) hstarpos.le
+    have href := im_apply_star_eq_neg hf hreal z
+    rw [href] at hu
+    rw [abs_of_neg (im_neg_of_im_neg hf hreal hpos hzneg)]
+    calc
+      -(f z).im ≤ C * (star z).im := hu
+      _ ≤ C * (1 + ‖z‖) := by
+        gcongr
+        exact (Complex.im_le_norm (star z)).trans (by
+          simp only [norm_star]
+          linarith [norm_nonneg z])
+  · have hzreal : (z.re : ℂ) = z := by
+      apply Complex.ext <;> simp [hzzero]
+    have hfzero : (f z).im = 0 := by rw [← hzreal]; exact hreal z.re
+    rw [hfzero, abs_zero]
+    exact mul_nonneg hC (by positivity)
+  · rw [abs_of_pos (hpos z hzpos)]
+    calc
+      (f z).im ≤ C * z.im := hupper z hzpos.le
+      _ ≤ C * (1 + ‖z‖) := by
+        gcongr
+        linarith [Complex.im_le_norm z, norm_nonneg z]
 
 theorem linear_growth_of_entire_pick
     {f : ℂ → ℂ} (hf : Differentiable ℂ f)
