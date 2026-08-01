@@ -1,4 +1,5 @@
 import Mathlib.Analysis.Complex.JensenFormula
+import Mathlib.Analysis.Calculus.LogDeriv
 
 /-!
 # Rouché root-count transfer on a disk
@@ -19,6 +20,108 @@ meromorphic divisor.  For a nonzero function analytic on a neighborhood of the
 disk, the divisor has finite support there and all its values are nonnegative. -/
 def zeroCountInClosedBall (f : ℂ → ℂ) (c : ℂ) (R : ℝ) : ℤ :=
   ∑ᶠ z, divisor f (closedBall c R) z
+
+/-- Away from its finite support, the logarithmic derivative of a factorized
+rational function is the finite sum of its elementary logarithmic
+derivatives.  This is the algebraic local-to-global step in the argument
+principle. -/
+lemma logDeriv_factorizedRational_eq_finsum
+    {U : Set ℂ} (D : Function.locallyFinsuppWithin U ℤ)
+    (hD : D.support.Finite) {x : ℂ} (hx : x ∉ D.support) :
+    logDeriv (∏ᶠ u, (· - u) ^ D u) x =
+      ∑ᶠ u, (D u : ℂ) / (x - u) := by
+  classical
+  let s := hD.toFinset
+  have hprod :
+      (∏ᶠ u, (· - u) ^ D u) = fun z ↦ ∏ u ∈ s, (z - u) ^ D u := by
+    rw [finprod_eq_prod_of_mulSupport_subset (s := s)]
+    · ext z
+      simp only [Finset.prod_apply, Pi.pow_apply]
+    · simpa [s, Function.FactorizedRational.mulSupport]
+  have hsum :
+      ∑ᶠ u, (D u : ℂ) / (x - u) = ∑ u ∈ s, (D u : ℂ) / (x - u) := by
+    rw [finsum_eq_sum_of_support_subset]
+    intro u hu
+    simp only [Function.mem_support] at hu
+    have hDu : D u ≠ 0 := by
+      intro h
+      simp [h] at hu
+    simpa [s] using hDu
+  rw [hprod, hsum]
+  rw [logDeriv_prod]
+  · apply Finset.sum_congr rfl
+    intro u hu
+    rw [logDeriv_fun_zpow (f := fun z ↦ z - u)
+      (differentiableAt_id.sub_const u)]
+    simp only [logDeriv_apply]
+    rw [deriv_sub_const]
+    simp [deriv_id'', div_eq_mul_inv]
+  · intro u hu
+    have hux : u ≠ x := by
+      intro h
+      apply hx
+      rw [← h]
+      simpa [s] using hu
+    exact zpow_ne_zero _ (sub_ne_zero.mpr hux.symm)
+  · intro u hu
+    exact DifferentiableAt.zpow (differentiableAt_id.sub_const u)
+      (Or.inl <| sub_ne_zero.mpr <| by
+        intro h
+        apply hx
+        rw [h]
+        simpa [s] using hu)
+
+/-- The argument-principle integral for a finite factorized rational
+function whose divisor is supported strictly inside the circle. -/
+lemma circleIntegral_logDeriv_factorizedRational
+    {U : Set ℂ} (D : Function.locallyFinsuppWithin U ℤ)
+    (hD : D.support.Finite) {c : ℂ} {R : ℝ} (hR : 0 < R)
+    (hDb : D.support ⊆ ball c R) :
+    (∮ z in C(c, R), logDeriv (∏ᶠ u, (· - u) ^ D u) z) =
+      (∑ᶠ u, (D u : ℂ)) * (2 * Real.pi * I) := by
+  classical
+  let s := hD.toFinset
+  have hsphere : ∀ z ∈ sphere c R, z ∉ D.support := by
+    intro z hz hzD
+    have hzball := hDb hzD
+    rw [mem_sphere] at hz
+    rw [mem_ball] at hzball
+    linarith
+  rw [circleIntegral.integral_congr hR.le fun z hz ↦
+    logDeriv_factorizedRational_eq_finsum D hD (hsphere z hz)]
+  have hsumfun :
+      (fun z ↦ ∑ᶠ u, (D u : ℂ) / (z - u)) =
+        fun z ↦ ∑ u ∈ s, (D u : ℂ) / (z - u) := by
+    funext z
+    rw [finsum_eq_sum_of_support_subset]
+    intro u hu
+    simp only [Function.mem_support] at hu
+    have hDu : D u ≠ 0 := by
+      intro h
+      simp [h] at hu
+    simpa [s] using hDu
+  rw [hsumfun, circleIntegral.integral_fun_sum]
+  · have hterm : ∀ u ∈ s,
+        (∮ z in C(c, R), (D u : ℂ) / (z - u)) =
+          (D u : ℂ) * (2 * Real.pi * I) := by
+      intro u hu
+      have huD : u ∈ D.support := by simpa [s] using hu
+      change (∮ z in C(c, R), (D u : ℂ) * (z - u)⁻¹) = _
+      rw [circleIntegral.integral_const_mul,
+        circleIntegral.integral_sub_inv_of_mem_ball (hDb huD)]
+    rw [Finset.sum_congr rfl hterm]
+    rw [finsum_eq_sum_of_support_subset (s := s)]
+    · rw [Finset.sum_mul]
+    · simpa [s]
+  · intro u hu
+    have huD : u ∈ D.support := by simpa [s] using hu
+    have husphere : ∀ z ∈ sphere c R, z - u ≠ 0 := by
+      intro z hz hzu
+      have hzu' : z = u := sub_eq_zero.mp hzu
+      subst z
+      exact hsphere u hz huD
+    exact (continuousOn_const.mul
+      ((continuousOn_id.sub continuousOn_const).inv₀ husphere)).circleIntegrable hR.le
 
 /-- The strict Rouché inequality keeps the straight-line homotopy away from
 zero on the boundary.  This is the pointwise topological core of the theorem. -/
