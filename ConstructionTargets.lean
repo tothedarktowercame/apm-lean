@@ -28,5 +28,5 @@ needlessly.
 | `LemniscateComponents` | partial (`sorry` remains) | a00J04, a01A08 |
 | `UnivalentDeriv` | partial (`sorry` remains) | a95J01 |
 | `BanachZarecki` | sorry-free infrastructure; Borel-image bridge remains | a95J06 |
-| `HerglotzRigidity` | partial (linear-growth theorem remains) | a94A10 |
+| `HerglotzRigidity` | partial (imaginary-part growth remains) | a94A10 |
 -/

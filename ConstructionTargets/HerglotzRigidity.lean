@@ -3,6 +3,7 @@ import Mathlib.Analysis.Complex.Liouville
 import Mathlib.Analysis.Analytic.IsolatedZeros
 import Mathlib.Analysis.Complex.Harmonic.Poisson
 import Mathlib.Analysis.InnerProductSpace.Harmonic.Constructions
+import Mathlib.Analysis.Complex.BorelCaratheodory
 
 /-!
 # Entire Pick-function rigidity
@@ -65,7 +66,7 @@ theorem im_apply_star_eq_neg
     (f (star z)).im = -(f z).im := by
   have href := congrArg im (conj_apply_conj_eq hf hreal z)
   have hstar : (star (f (star z))).im = -(f (star z)).im := by
-    simpa using Complex.conj_im (f (star z))
+    simp [Complex.conj_im]
   rw [hstar] at href
   linarith
 
@@ -84,14 +85,83 @@ theorem circleAverage_poissonKernel_smul_im_eq
     exact (hf.analyticAt z).harmonicAt_im
   exact hu.circleAverage_poissonKernel_smul hw
 
-/-- **Remaining Herglotz/Nevanlinna frontier.** An entire Pick function has at
-most linear growth, uniformly in every direction. -/
+/-- Borel-Carathéodory upgrades linear growth of the imaginary part to linear
+growth of the entire holomorphic function. -/
+theorem linear_growth_of_entire_of_im_growth
+    {f : ℂ → ℂ} (hf : Differentiable ℂ f) {C : ℝ} (hC : 0 ≤ C)
+    (him : ∀ z : ℂ, |(f z).im| ≤ C * (1 + ‖z‖)) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ z : ℂ, ‖f z‖ ≤ K * (1 + ‖z‖) := by
+  let K : ℝ := 10 * C + 2 + 3 * ‖f 0‖
+  have hK : 0 ≤ K := by dsimp [K]; positivity
+  refine ⟨K, hK, fun z => ?_⟩
+  let R : ℝ := 2 * (1 + ‖z‖)
+  let M : ℝ := C * (1 + R) + 1
+  let g : ℂ → ℂ := fun w => -I * f w
+  have hR : 0 < R := by dsimp [R]; positivity
+  have hzR : z ∈ Metric.ball 0 R := by
+    rw [mem_ball_zero_iff]
+    dsimp [R]
+    linarith [norm_nonneg z]
+  have hM : 0 < M := by dsimp [M]; positivity
+  have hmaps : MapsTo g (Metric.ball 0 R) {w : ℂ | w.re ≤ M} := by
+    intro w hw
+    have hwR : ‖w‖ < R := mem_ball_zero_iff.mp hw
+    have hi := (le_abs_self (f w).im).trans (him w)
+    change (-I * f w).re ≤ M
+    rw [neg_mul, neg_re, mul_re]
+    norm_num
+    dsimp [M]
+    nlinarith [mul_le_mul_of_nonneg_left hwR.le hC]
+  have hbc := Complex.borelCaratheodory hM (hf.const_mul (-I)).differentiableOn
+    hmaps hR hzR
+  have hgz : ‖g z‖ = ‖f z‖ := by simp [g]
+  have hg0 : ‖g 0‖ = ‖f 0‖ := by simp [g]
+  rw [hgz, hg0] at hbc
+  have hden : 0 < R - ‖z‖ := by linarith [mem_ball_zero_iff.mp hzR]
+  have hnratio : ‖z‖ / (R - ‖z‖) ≤ 1 := by
+    rw [div_le_one hden]
+    dsimp [R]
+    linarith [norm_nonneg z]
+  have hRratio : (R + ‖z‖) / (R - ‖z‖) ≤ 3 := by
+    rw [div_le_iff₀ hden]
+    dsimp [R]
+    linarith [norm_nonneg z]
+  calc
+    ‖f z‖ ≤ 2 * M * ‖z‖ / (R - ‖z‖) +
+        ‖f 0‖ * (R + ‖z‖) / (R - ‖z‖) := hbc
+    _ ≤ 2 * M + 3 * ‖f 0‖ := by
+      have hM0 : 0 ≤ M := hM.le
+      gcongr
+      · calc
+          2 * M * ‖z‖ / (R - ‖z‖) = 2 * M * (‖z‖ / (R - ‖z‖)) := by ring
+          _ ≤ 2 * M * 1 := by gcongr
+          _ = 2 * M := by ring
+      · calc
+          ‖f 0‖ * (R + ‖z‖) / (R - ‖z‖) =
+              ‖f 0‖ * ((R + ‖z‖) / (R - ‖z‖)) := by ring
+          _ ≤ ‖f 0‖ * 3 := by gcongr
+          _ = 3 * ‖f 0‖ := by ring
+    _ ≤ K * (1 + ‖z‖) := by
+      dsimp [M, R, K]
+      nlinarith [norm_nonneg z, norm_nonneg (f 0),
+        mul_nonneg hC (norm_nonneg z)]
+
+/-- **Remaining Herglotz/Nevanlinna frontier.** The imaginary part of an
+entire Pick function has at most linear growth. -/
+theorem im_linear_growth_of_entire_pick
+    {f : ℂ → ℂ} (hf : Differentiable ℂ f)
+    (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0)
+    (hpos : ∀ z : ℂ, 0 < z.im → 0 < (f z).im) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ z : ℂ, |(f z).im| ≤ C * (1 + ‖z‖) := by
+  sorry
+
 theorem linear_growth_of_entire_pick
     {f : ℂ → ℂ} (hf : Differentiable ℂ f)
     (hreal : ∀ x : ℝ, (f (x : ℂ)).im = 0)
     (hpos : ∀ z : ℂ, 0 < z.im → 0 < (f z).im) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ z : ℂ, ‖f z‖ ≤ C * (1 + ‖z‖) := by
-  sorry
+  obtain ⟨C, hC, him⟩ := im_linear_growth_of_entire_pick hf hreal hpos
+  exact linear_growth_of_entire_of_im_growth hf hC him
 
 /-- An entire function with a global linear-growth bound is affine. -/
 theorem affine_of_entire_of_linear_growth
