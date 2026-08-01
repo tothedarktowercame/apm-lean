@@ -1,6 +1,7 @@
 import Mathlib.MeasureTheory.Function.AEEqOfIntegral
 import Mathlib.MeasureTheory.Function.Holder
 import Mathlib.MeasureTheory.Function.LpSpace.Indicator
+import Mathlib.MeasureTheory.Function.LpOrder
 import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 import Mathlib.MeasureTheory.Integral.Prod
 
@@ -50,6 +51,53 @@ lemma setIntegralCLM_apply
       rw [hx]
       by_cases hxs : x ∈ s <;> simp [hxs]
     _ = ∫ x in s, f x ∂μ := integral_indicator hs
+
+/-- An integrable family of `Lᵖ` classes has an integrable jointly measurable
+lift after restriction to any finite-measure set.  The proof applies the
+continuous set-integral functional to the lattice absolute value of the
+family; this is the local absolute-integrability input needed for Fubini. -/
+theorem hasFiniteIntegral_indicator_lift
+    {Y X : Type*} [MeasurableSpace Y] [MeasurableSpace X]
+    {ν : Measure Y} {μ : Measure X} [SFinite ν] [SFinite μ]
+    {p : ENNReal} [Fact (1 ≤ p)]
+    {φ : Y × X → ℝ} (hφ : AEStronglyMeasurable φ (ν.prod μ))
+    {F : Y → Lp ℝ p μ} (hF : Integrable F ν)
+    (hFφ : ∀ᵐ y ∂ν, (F y : X → ℝ) =ᵐ[μ] fun x => φ (y, x))
+    (s : Set X) (hs : MeasurableSet s) (hμs : μ s ≠ ∞) :
+    HasFiniteIntegral
+      (fun z : Y × X => s.indicator (fun x => φ (z.1, x)) z.2)
+      (ν.prod μ) := by
+  have hmeas : AEStronglyMeasurable
+      (fun z : Y × X => s.indicator (fun x => φ (z.1, x)) z.2)
+      (ν.prod μ) := by
+    refine (hφ.indicator (MeasurableSet.univ.prod hs)).congr ?_
+    filter_upwards with z
+    by_cases hz : z.2 ∈ s <;> simp [hz]
+  have hslices : ∀ᵐ y ∂ν, Integrable
+      (fun x => s.indicator (fun x => φ (y, x)) x) μ := by
+    filter_upwards [hFφ] with y hy
+    have hlocal := integrableOn_Lp_of_measure_ne_top (F y) Fact.out hμs
+    refine (hlocal.integrable_indicator hs).congr ?_
+    filter_upwards [hy] with x hx
+    by_cases hxs : x ∈ s <;> simp [hxs, hx]
+  have hlocalNorm : Integrable
+      (fun y => setIntegralCLM s hs hμs |F y|) ν :=
+    (setIntegralCLM s hs hμs).integrable_comp hF.abs
+  have hnormSlices : Integrable
+      (fun y => ∫ x, ‖s.indicator (fun x => φ (y, x)) x‖ ∂μ) ν := by
+    refine hlocalNorm.congr ?_
+    filter_upwards [hFφ] with y hy
+    have habs := Lp.coeFn_abs (F y)
+    rw [setIntegralCLM_apply]
+    calc
+      (∫ x in s, |F y| x ∂μ) = ∫ x in s, |F y x| ∂μ :=
+        integral_congr_ae (ae_restrict_of_ae habs)
+      _ = ∫ x, ‖s.indicator (fun x => φ (y, x)) x‖ ∂μ := by
+        rw [← integral_indicator hs]
+        apply integral_congr_ae
+        filter_upwards [hy] with x hx
+        by_cases hxs : x ∈ s <;> simp [hxs, hx, Real.norm_eq_abs]
+  exact ((integrable_prod_iff hmeas).2 ⟨hslices, hnormSlices⟩).hasFiniteIntegral
 
 /-- A jointly measurable lift commutes with Bochner integration into `Lᵖ`.
 
