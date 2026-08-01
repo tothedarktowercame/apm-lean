@@ -31,7 +31,7 @@ form matching the standard ε-δ definition.
 import Mathlib.Topology.Instances.CantorSet
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
-import ConstructionTargets.LusinN
+import ConstructionTargets.BanachZarecki
 
 open Set MeasureTheory
 
@@ -219,19 +219,9 @@ lemma monotone_of_homeomorphism_fixing_cantor
     rw [hf_fix 0 zero_mem_cantorSet, hf_fix (1 / 4) quarter_mem_cantorSet] at hle
     norm_num at hle
 
-/-- BV + continuous + condition N ⟹ AC (the characterization theorem).
-
-**Blocker:** This fundamental theorem of real analysis is NOT in Mathlib.
-A continuous BV function satisfying Lusin's condition (N) is absolutely
-continuous. The proof requires the Banach-Zarecki theorem.  A direct
-formalization can now use `BoundedVariationOn.vectorMeasure` for the
-Lebesgue--Stieltjes construction, but still needs to derive absolute
-continuity of that measure from `hf_N`.  Radon--Nikodym and the interval
-formula for the vector measure can then identify `f` with an
-interval-integral primitive.  This is the measure-theoretic proof of
-Mahdipour-Shirayeh--Eshraghi, "A new proof for the Banach-Zarecki theorem"
-(arXiv:1206.2602); the condition-(N)-to-measure-domination bridge is not
-currently packaged in Mathlib. -/
+/-- The monotone Banach--Zarecki theorem, supplied by the shared construction
+target.  Its proof uses a generalized-inverse representation of the
+Lebesgue--Stieltjes measure, followed by Radon--Nikodym. -/
 -- STATEMENT REPAIR 2026-07-31 (Joe-authorised): replace the vacuous
 -- epsilon-delta conclusion ending in `True` by Mathlib's absolute-continuity
 -- predicate on the unit interval.
@@ -241,12 +231,10 @@ lemma ac_of_bv_continuous_conditionN
     (hf_mono : MonotoneOn f (Icc (0:ℝ) 1))
     (hf_N : LusinConditionN f (Icc (0:ℝ) 1)) :
     AbsolutelyContinuousOnInterval f 0 1 := by
-  sorry
+  exact ConstructionTargets.BanachZarecki.banachZarecki_monotone
+    hf_cont hf_mono hf_N
 
-/-- Main theorem: f is AC on [0,1].
-
-**Blocker:** Inherits only from `ac_of_bv_continuous_conditionN`, the
-Banach--Zarecki theory boundary described above. -/
+/-- Main theorem: f is AC on [0,1]. -/
 -- STATEMENT REPAIR 2026-07-31 (Joe-authorised): restore the homeomorphism
 -- bijection, local absolute-continuity hypothesis, and global
 -- absolute-continuity conclusion that the informal problem states.
