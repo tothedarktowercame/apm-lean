@@ -2,6 +2,7 @@ import Mathlib.Analysis.Analytic.Order
 import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.Complex.Schwarz
 import Mathlib.Analysis.Complex.OpenMapping
+import Mathlib.Analysis.Complex.Convex
 
 /-!
 # APM a94A10: f real iff z real implies f' never vanishes on ℝ
@@ -21,10 +22,12 @@ only if `z` is real. Verify that `f'(z) = 0` cannot be true for any real `z`.
    latter, which gives the local factorization
    `f(z) - f(z₀) = (z - z₀)^n · g(z)` with `g(z₀) ≠ 0` directly.
 
-3. The proof requires showing that a critical point of order `n ≥ 2` produces
-   non-real preimages of real values — this needs Rouché's theorem or the
-   argument principle, neither of which is in Mathlib. See the sorry boundary
-   comment on the main theorem.
+3. The local Rouché argument only applies directly when the critical point (and
+   hence its image) is real, whereas the boundary lemma below allows arbitrary
+   `x₀`.  At that generality the appropriate route is global: the nonvanishing
+   of `im ∘ f` makes `f` map the upper half-plane wholly into one open
+   half-plane; the classification of entire Pick functions then makes `f`
+   affine.  The connectedness/sign part of that route is formalized below.
 
 ## Proof strategy
 
@@ -60,6 +63,58 @@ lemma nonconstant_of_realIffReal
   have hI_real : (f I).im = 0 := by rw [hconst]; exact h0_real
   have hI_im : I.im = 0 := (hreal I).mp hI_real
   simp at hI_im
+
+/-- On the upper half-plane, the imaginary parts of any two values of `f`
+have the same strict sign.  This is the connectedness step behind the global
+Pick/Nevanlinna route: `RealIffReal` keeps the continuous function `im ∘ f`
+away from zero there. -/
+lemma im_image_mul_pos_of_im_pos
+    (f : ℂ → ℂ) (hf : Differentiable ℂ f) (hreal : RealIffReal f)
+    {z w : ℂ} (hz : 0 < z.im) (hw : 0 < w.im) :
+    0 < (f z).im * (f w).im := by
+  have hz_ne : (f z).im ≠ 0 := by
+    intro h
+    exact hz.ne' ((hreal z).mp h)
+  have hw_ne : (f w).im ≠ 0 := by
+    intro h
+    exact hw.ne' ((hreal w).mp h)
+  have hpre : IsPreconnected {u : ℂ | 0 < u.im} :=
+    (convex_halfSpace_im_gt 0).isPreconnected
+  have hcont : ContinuousOn (fun u : ℂ => (f u).im) {u : ℂ | 0 < u.im} :=
+    (Complex.continuous_im.comp hf.continuous).continuousOn
+  rcases lt_or_gt_of_ne hz_ne with hz_neg | hz_pos
+  · rcases lt_or_gt_of_ne hw_ne with hw_neg | hw_pos
+    · exact mul_pos_of_neg_of_neg hz_neg hw_neg
+    · have hzero : (0 : ℝ) ∈ Set.Icc ((f z).im) ((f w).im) :=
+        ⟨hz_neg.le, hw_pos.le⟩
+      obtain ⟨u, hu, hu0⟩ := hpre.intermediate_value hz hw hcont hzero
+      exact False.elim ((ne_of_gt hu) ((hreal u).mp hu0))
+  · rcases lt_or_gt_of_ne hw_ne with hw_neg | hw_pos
+    · have hzero : (0 : ℝ) ∈ Set.Icc ((f w).im) ((f z).im) :=
+        ⟨hw_neg.le, hz_pos.le⟩
+      obtain ⟨u, hu, hu0⟩ := hpre.intermediate_value hw hz hcont hzero
+      exact False.elim ((ne_of_gt hu) ((hreal u).mp hu0))
+    · exact mul_pos hz_pos hw_pos
+
+/-- Consequently, `f` maps the whole upper half-plane into one of the two
+open half-planes. -/
+lemma maps_upper_halfPlane_one_side
+    (f : ℂ → ℂ) (hf : Differentiable ℂ f) (hreal : RealIffReal f) :
+    (∀ z : ℂ, 0 < z.im → 0 < (f z).im) ∨
+      (∀ z : ℂ, 0 < z.im → (f z).im < 0) := by
+  have hI : 0 < (I : ℂ).im := by simp
+  have hfI_ne : (f I).im ≠ 0 := by
+    intro h
+    exact hI.ne' ((hreal I).mp h)
+  rcases lt_or_gt_of_ne hfI_ne with hfI_neg | hfI_pos
+  · right
+    intro z hz
+    have hmul := im_image_mul_pos_of_im_pos f hf hreal hz hI
+    nlinarith
+  · left
+    intro z hz
+    have hmul := im_image_mul_pos_of_im_pos f hf hreal hz hI
+    nlinarith
 
 /-- If `f` is entire and `f'(x₀) = 0` for real `x₀`, then `f - f(x₀)` has
     order ≥ 2 at `x₀`. -/
@@ -114,7 +169,8 @@ lemma exists_factorization_of_order_ge_two
     with the real-iff-real property, find a non-real `z` near `x₀` with
     `f(z) ∈ ℝ`.
 
-    **Mathematical proof:** Since `f` maps ℝ to ℝ, `f|_ℝ` is real-analytic with
+    For a real `x₀`, the following local argument applies. Since `f` maps ℝ to
+    ℝ, `f|_ℝ` is real-analytic with
     real Taylor coefficients, so `g(x₀) ∈ ℝ`. For small `r > 0`, consider
     `φ(α) = Im(f(x₀ + r·e^{iα}))`. Then `φ(0) = 0` (since `x₀ + r ∈ ℝ`).
     Locally `f(x₀ + r·e^{iα}) ≈ f(x₀) + g(x₀)·r^n·e^{inα}`, so
@@ -129,7 +185,12 @@ lemma exists_factorization_of_order_ge_two
     (b) Open mapping theorem + one-sided coverage of `f|_ℝ` — requires showing
         `f|_ℝ` covers only one side of `f(x₀)` near a critical point.
     (c) Rouché's theorem — not in Mathlib.
-    All three approaches require infrastructure not currently available. -/
+    For arbitrary `x₀`, however, its local image need not meet the real axis,
+    so these local arguments do not prove the stated lemma.  The valid general
+    route uses `maps_upper_halfPlane_one_side` and the theorem that an entire
+    holomorphic self-map of a half-plane is affine (the entire Pick-function
+    classification).  That classification is not currently packaged in
+    Mathlib. -/
 lemma exists_nonreal_preimage_of_real
     (f : ℂ → ℂ) (hf : Differentiable ℂ f)
     (hreal : RealIffReal f)
@@ -137,7 +198,7 @@ lemma exists_nonreal_preimage_of_real
     (g : ℂ → ℂ) (hg : AnalyticAt ℂ g x₀) (hg_ne : g x₀ ≠ 0)
     (hg_eq : ∀ᶠ z in 𝓝 x₀, f z - f x₀ = (z - x₀)^n * g z) :
     ∃ z : ℂ, z.im ≠ 0 ∧ (f z).im = 0 := by
-  -- SORRY: requires Rouché's theorem or argument principle (not in Mathlib)
+  -- SORRY: requires the classification of entire Pick functions
   sorry
 
 /-- **Main theorem.** If `f` is entire and `f(z)` is real iff `z` is real,
