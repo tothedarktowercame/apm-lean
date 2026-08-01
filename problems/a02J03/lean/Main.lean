@@ -5,8 +5,11 @@ import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
 import Mathlib.MeasureTheory.Function.ContinuousMapDense
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.LebesgueDifferentiationThm
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
+import Mathlib.Analysis.Normed.Lp.SmoothApprox
 
 open MeasureTheory Set Filter Topology
+open scoped ContDiff
 
 noncomputable section
 
@@ -316,6 +319,86 @@ lemma scaled_integral_vanishes_of_compact_continuous
       field_simp
       norm_num
 
+lemma scaled_integral_vanishes_of_compact_smooth
+    (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
+    (hφloc : LocallyIntegrable φ volume)
+    (hφ : ∀ (a b : ℝ), a < b →
+      |∫ x in Set.Icc a b, φ x| ≤ M * (b - a) / (1 + (b - a)))
+    (g : ℝ → ℝ) (hg_support : HasCompactSupport g) (hg_smooth : ContDiff ℝ ∞ g) :
+    Tendsto (fun k : ℝ => scaledIntOp φ g k) atTop (nhds 0) := by
+  obtain ⟨R, hRpos, hR⟩ := hg_support.isBounded.subset_closedBall_lt 0 0
+  let a : ℝ := -R - 1
+  let b : ℝ := R + 1
+  have hab : a < b := by dsimp [a, b]; linarith
+  have hg_support_Ioo : Function.support g ⊆ Set.Ioo a b := by
+    intro x hx
+    have hxt : x ∈ tsupport g := subset_tsupport g hx
+    have hxR := hR hxt
+    have hxabs : |x| ≤ R := by simpa [Real.dist_eq] using hxR
+    dsimp [a, b]
+    constructor <;> linarith [le_abs_self x, neg_le_of_abs_le hxabs]
+  have hg_ac : AbsolutelyContinuousOnInterval g a b := by
+    obtain ⟨C, hC⟩ := hg_smooth.lipschitzWith_of_hasCompactSupport hg_support (by simp)
+    exact hC.lipschitzOnWith.absolutelyContinuousOnInterval
+  have hg_deriv_int : IntervalIntegrable (deriv g) volume a b :=
+    (hg_smooth.continuous_deriv (by simp)).intervalIntegrable a b
+  let C : ℝ := ∫ x in a..b, |deriv g x|
+  have hCnonneg : 0 ≤ C := by
+    dsimp [C]
+    exact intervalIntegral.integral_nonneg hab.le (fun _ _ => abs_nonneg _)
+  have hbound (k : ℝ) (hk : 0 < k) :
+      |scaledIntOp φ g k| ≤ (M / k) * C := by
+    have hφ_int : IntervalIntegrable φ volume (k * a) (k * b) :=
+      intervalIntegrable_iff.mpr <|
+        (hφloc.integrableOn_isCompact isCompact_uIcc).mono_set uIoc_subset_uIcc
+    have hφk_int : IntervalIntegrable (fun x => φ (k * x)) volume a b := by
+      simpa [hk.ne'] using hφ_int.comp_mul_left (c := k)
+    let P : ℝ → ℝ := fun x => ∫ t in a..x, φ (k * t)
+    have hP_ac : AbsolutelyContinuousOnInterval P a b :=
+      hφk_int.absolutelyContinuousOnInterval_intervalIntegral (by simp)
+    have hP_deriv : ∀ᵐ x ∂volume, x ∈ uIoc a b → deriv P x = φ (k * x) := by
+      filter_upwards [hφk_int.ae_hasDerivAt_integral] with x hx hxI
+      exact (hx (uIoc_subset_uIcc hxI) a (by simp)).deriv
+    have hglobal : scaledIntOp φ g k = ∫ x in a..b, φ (k * x) * g x := by
+      rw [scaledIntOp, intervalIntegral.integral_eq_integral_of_support_subset]
+      exact (Function.support_mul_subset_right _ _).trans
+        (hg_support_Ioo.trans Set.Ioo_subset_Ioc_self)
+    have hreplace : (∫ x in a..b, φ (k * x) * g x) =
+        ∫ x in a..b, deriv P x * g x := by
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [hP_deriv] with x hx hxI
+      rw [hx hxI]
+    have hga : g a = 0 := by
+      by_contra hga
+      exact (lt_irrefl a) (hg_support_Ioo hga).1
+    have hgb : g b = 0 := by
+      by_contra hgb
+      exact (lt_irrefl b) (hg_support_Ioo hgb).2
+    have hparts := hP_ac.integral_mul_deriv_eq_deriv_mul hg_ac
+    have hidentity : (∫ x in a..b, deriv P x * g x) =
+        -(∫ x in a..b, P x * deriv g x) := by
+      simp only [hga, hgb, mul_zero, sub_zero, zero_sub] at hparts
+      linarith [hparts]
+    rw [hglobal, hreplace, hidentity, abs_neg]
+    have hdom (x : ℝ) :
+        ‖P x * deriv g x‖ ≤ (M / k) * |deriv g x| := by
+      rw [Real.norm_eq_abs, abs_mul]
+      exact mul_le_mul_of_nonneg_right
+        (scaled_intervalIntegral_bound_div φ M hM.le hφ a x k hk) (abs_nonneg _)
+    calc
+      |∫ x in a..b, P x * deriv g x|
+          ≤ ∫ x in a..b, (M / k) * |deriv g x| := by
+            simpa [Real.norm_eq_abs] using
+              intervalIntegral.norm_integral_le_of_norm_le hab.le
+                (Filter.Eventually.of_forall (fun x _ => hdom x))
+                (hg_deriv_int.abs.const_mul (M / k))
+      _ = (M / k) * C := by simp [C, intervalIntegral.integral_const_mul]
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  apply squeeze_zero' (Filter.Eventually.of_forall (fun _ => norm_nonneg _))
+  · filter_upwards [eventually_gt_atTop (0 : ℝ)] with k hk
+    simpa [Real.norm_eq_abs] using hbound k hk
+  · simpa only [zero_mul] using (tendsto_scaled_primitive_bound_zero M).mul_const C
+
 -- Main theorem: ∫ φ(kx) f(x) dx → 0
 -- Density: approximate f by step functions, use indicator_case + uniform_bound
 -- STATEMENT REPAIR 2026-07-31 (Joe-authorised): require local integrability
@@ -328,28 +411,64 @@ theorem scaled_integral_vanishes (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
     Tendsto (fun k : ℝ => scaledIntOp φ f k) atTop (nhds 0) := by
   apply scaled_integral_vanishes_of_compact_continuous φ M hM hφloc hφ _ f hf
   intro g hg_support hg_cont hg_int
-  -- Density argument:
-  -- For ε > 0, pick step function s with ‖f - s‖₁ < ε/(2M).
-  -- |T_k(f)| ≤ |T_k(s)| + |T_k(f-s)| ≤ |T_k(s)| + M·ε/(2M) = |T_k(s)| + ε/2.
-  -- T_k(s) → 0 (finite sum of indicator cases).
-  -- So lim sup |T_k(f)| ≤ ε/2 < ε.
-  --
-  -- Mathlib path:
-  -- The uniform estimate is now closed via Lebesgue differentiation:
-  -- `ae_abs_le_of_interval_integral_bound` proves `|φ| ≤ M` a.e.
-  -- Remaining construction: prove that finite linear combinations of bounded
-  -- interval indicators are dense in real `L¹`, or equivalently prove
-  -- convergence first on compactly supported smooth functions and invoke
-  -- `MemLp.exist_eLpNorm_sub_le`. Generic measurable simple functions are not
-  -- enough here because `indicator_case` only controls interval indicators.
-  -- Uniform bound: uniform_bound lemma
-  -- Filter arithmetic: Tendsto.add, squeeze_zero_norm
-  -- Remaining core: the bounded-primitive integration-by-parts estimate for
-  -- compactly supported continuous functions (after smooth approximation).
-  -- `scaled_intervalIntegral_bound_div` now supplies the exact `M / k`
-  -- primitive bound.  The next construction is to package
-  -- `x ↦ ∫ t in 0..x, φ (k * t)` as absolutely continuous, identify its
-  -- derivative almost everywhere, and apply
-  -- `AbsolutelyContinuousOnInterval.integral_mul_deriv_eq_deriv_mul` to a
-  -- compactly supported smooth approximation of `g`.
-  sorry
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  have hδ : 0 < ε / (2 * M) := div_pos hε (mul_pos two_pos hM)
+  have hgLp : MemLp g 1 volume := memLp_one_iff_integrable.mpr hg_int
+  obtain ⟨s, hs_support, hs_smooth, hgs⟩ :=
+    hgLp.exist_eLpNorm_sub_le ENNReal.one_ne_top le_rfl hδ
+  have hs_int : Integrable s volume :=
+    hs_smooth.continuous.integrable_of_hasCompactSupport hs_support
+  have hdiff : Integrable (g - s) volume := hg_int.sub hs_int
+  have hgs_real : (∫ x, ‖g x - s x‖) ≤ ε / (2 * M) := by
+    simp only [← Pi.sub_apply]
+    rw [integral_norm_eq_lintegral_enorm hdiff.aestronglyMeasurable,
+      ← eLpNorm_one_eq_lintegral_enorm]
+    exact (ENNReal.toReal_mono (by simp) hgs).trans_eq (ENNReal.toReal_ofReal hδ.le)
+  have hφae := ae_abs_le_of_interval_integral_bound φ M hφloc hφ
+  have hprod (u : ℝ → ℝ) (hu : Integrable u volume) (k : ℝ) (hk : 0 < k) :
+      Integrable (fun x => φ (k * x) * u x) volume := by
+    have hucomp : Integrable (fun y => u (k⁻¹ * y)) volume :=
+      hu.comp_mul_left' (inv_ne_zero hk.ne')
+    have hdom : ∀ᵐ y ∂volume,
+        ‖φ y * u (k⁻¹ * y)‖ ≤ M * ‖u (k⁻¹ * y)‖ := by
+      filter_upwards [hφae] with y hy
+      rw [norm_mul]
+      exact mul_le_mul_of_nonneg_right hy (norm_nonneg _)
+    have hp : Integrable (fun y => φ y * u (k⁻¹ * y)) volume :=
+      Integrable.mono' (hucomp.norm.const_mul M)
+        (hφloc.aestronglyMeasurable.mul hucomp.aestronglyMeasurable) hdom
+    have hp' := hp.comp_mul_left' hk.ne'
+    convert hp' using 1
+    funext x
+    congr 2
+    field_simp
+  have hs_lim :=
+    scaled_integral_vanishes_of_compact_smooth φ M hM hφloc hφ s hs_support hs_smooth
+  rw [Metric.tendsto_atTop] at hs_lim
+  obtain ⟨K, hK⟩ := hs_lim (ε / 2) (half_pos hε)
+  refine ⟨max K 1, fun k hk => ?_⟩
+  have hkK : K ≤ k := le_trans (le_max_left _ _) hk
+  have hkpos : 0 < k := lt_of_lt_of_le zero_lt_one (le_trans (le_max_right _ _) hk)
+  have hssmall := hK k hkK
+  rw [Real.dist_eq, sub_zero] at hssmall ⊢
+  have hadd : scaledIntOp φ g k =
+      scaledIntOp φ s k + scaledIntOp φ (g - s) k := by
+    rw [scaledIntOp, scaledIntOp, scaledIntOp, ← integral_add
+      (hprod s hs_int k hkpos) (hprod (g - s) hdiff k hkpos)]
+    apply integral_congr_ae
+    filter_upwards [] with x
+    simp only [Pi.sub_apply]
+    ring
+  rw [hadd]
+  calc
+    |scaledIntOp φ s k + scaledIntOp φ (g - s) k|
+        ≤ |scaledIntOp φ s k| + |scaledIntOp φ (g - s) k| := abs_add_le _ _
+    _ < ε / 2 + M * ∫ x, ‖g x - s x‖ :=
+      add_lt_add_of_lt_of_le hssmall (by
+        simpa only [Pi.sub_apply] using
+          uniform_bound φ M hφloc hφ (g - s) hdiff k hkpos)
+    _ ≤ ε / 2 + M * (ε / (2 * M)) := by gcongr
+    _ = ε := by
+      field_simp
+      norm_num
