@@ -3,6 +3,7 @@ import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.Complex.Schwarz
 import Mathlib.Analysis.Complex.OpenMapping
 import Mathlib.Analysis.Complex.Convex
+import ConstructionTargets.HerglotzRigidity
 
 /-!
 # APM a94A10: f real iff z real implies f' never vanishes on ℝ
@@ -205,7 +206,7 @@ lemma false_of_affine_factorization
   have hfI_real : (f I).im = 0 := hconst ▸ hf0_real
   simpa using (hreal I).mp hfI_real
 
-/-- **Core boundary lemma (SORRY).** Given the factorization
+/-- Given the factorization
     `f(z) - f(x₀) = (z - x₀)^n · g(z)` with `n ≥ 2`, `g(x₀) ≠ 0`, `f` entire
     with the real-iff-real property, find a non-real `z` near `x₀` with
     `f(z) ∈ ℝ`.
@@ -220,18 +221,10 @@ lemma false_of_affine_factorization
     `φ(α) = 0` exactly. The corresponding `z = x₀ + r·e^{iα}` is non-real
     (since `π/n ∈ (0, π/2]` for `n ≥ 2`), yet `f(z) ∈ ℝ`. Contradiction.
 
-    **What was tried:**
-    (a) Direct IVT argument on `φ(α)` — requires controlling the error between
-        `φ(α)` and its leading-order approximation `g(x₀)·r^n·sin(nα)`.
-    (b) Open mapping theorem + one-sided coverage of `f|_ℝ` — requires showing
-        `f|_ℝ` covers only one side of `f(x₀)` near a critical point.
-    (c) Rouché's theorem — not in Mathlib.
     For arbitrary `x₀`, however, its local image need not meet the real axis,
-    so these local arguments do not prove the stated lemma.  The valid general
-    route uses `maps_upper_halfPlane_one_side` and the theorem that an entire
-    holomorphic self-map of a half-plane is affine (the entire Pick-function
-    classification).  That classification is not currently packaged in
-    Mathlib. -/
+    so the valid general route uses `maps_upper_halfPlane_one_side` and the
+    entire Pick-function classification in
+    `ConstructionTargets.HerglotzRigidity`. -/
 lemma exists_nonreal_preimage_of_real
     (f : ℂ → ℂ) (hf : Differentiable ℂ f)
     (hreal : RealIffReal f)
@@ -239,17 +232,23 @@ lemma exists_nonreal_preimage_of_real
     (g : ℂ → ℂ) (hg : AnalyticAt ℂ g x₀) (hg_ne : g x₀ ≠ 0)
     (hg_eq : ∀ᶠ z in 𝓝 x₀, f z - f x₀ = (z - x₀)^n * g z) :
     ∃ z : ℂ, z.im ≠ 0 ∧ (f z).im = 0 := by
-  -- SORRY: requires the classification of entire Pick functions
-  sorry
+  have hboundary : ∀ x : ℝ, (f (x : ℂ)).im = 0 := fun x =>
+    (hreal (x : ℂ)).mpr (by simp)
+  have haffine : ∃ a b : ℂ, ∀ z : ℂ, f z = a * z + b := by
+    rcases maps_upper_halfPlane_one_side f hf hreal with hpos | hneg
+    · obtain ⟨a, b, _, hab⟩ :=
+        ConstructionTargets.HerglotzRigidity.affine_of_entire_pick hf hboundary hpos
+      exact ⟨(a : ℂ), (b : ℂ), hab⟩
+    · obtain ⟨a, b, _, hab⟩ :=
+        ConstructionTargets.HerglotzRigidity.affine_of_entire_pick_neg hf hboundary hneg
+      exact ⟨(a : ℂ), (b : ℂ), hab⟩
+  exact (false_of_affine_factorization f hreal x₀ n hn g hg hg_eq haffine).elim
 
 /-- **Main theorem.** If `f` is entire and `f(z)` is real iff `z` is real,
     then `f'(x) ≠ 0` for all real `x`.
 
-    **SORRY BOUNDARY:** The proof requires showing that the local `n`-to-1
-    structure at a critical point of order `n ≥ 2` produces non-real preimages
-    of real values. This needs Rouché's theorem or the argument principle,
-    neither of which is in Mathlib as of 2026. We prove all the setup lemmas
-    and identify the exact sorry boundary in `exists_nonreal_preimage_of_real`.
+    The global step uses the classification of entire Pick functions from
+    `ConstructionTargets.HerglotzRigidity`.
 -/
 theorem deriv_ne_zero_on_reals
     (f : ℂ → ℂ) (hf : Differentiable ℂ f) (hreal : RealIffReal f) :
@@ -281,7 +280,7 @@ theorem deriv_ne_zero_on_reals
   -- Get the factorization
   obtain ⟨n, g, hn, hg, hg_ne, hg_eq⟩ :=
     exists_factorization_of_order_ge_two f (↑x₀) hf hord hord_ne_top
-  -- KEY BOUNDARY: find non-real z near x₀ with f(z) ∈ ℝ
+  -- Global Pick rigidity supplies the contradictory affine factorization.
   obtain ⟨z, hz_nonreal, hfz_real⟩ :=
     exists_nonreal_preimage_of_real f hf hreal (↑x₀) n hn g hg hg_ne hg_eq
   -- Contradiction with hreal
