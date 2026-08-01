@@ -2,6 +2,7 @@ import Mathlib.MeasureTheory.Covering.DensityTheorem
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
+import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 
 open MeasureTheory Set Filter Real Topology
 
@@ -63,5 +64,81 @@ theorem lintegral_mul_radial_layerCake
         _ = (∫⁻ t in Icc (-s) s, g t ∂volume) * w s := by
           exact lintegral_mul_const (w s) hg
         _ = w s * (∫⁻ t in Icc (-s) s, g t ∂volume) := mul_comm _ _
+
+/-- The Poisson probability density on the real line. -/
+def poissonKernel (y t : ℝ) : ℝ :=
+  (1 / π) * y / (y ^ 2 + t ^ 2)
+
+theorem poissonKernel_nonneg {y : ℝ} (hy : 0 < y) (t : ℝ) :
+    0 ≤ poissonKernel y t := by
+  unfold poissonKernel
+  positivity
+
+theorem poissonKernel_even (y t : ℝ) :
+    poissonKernel y (-t) = poissonKernel y t := by
+  simp [poissonKernel]
+
+/-- The time-one Poisson density decreases on the nonnegative half-line. -/
+theorem poissonKernel_one_antitoneOn :
+    AntitoneOn (poissonKernel 1) (Ici 0) := by
+  intro a ha b hb hab
+  unfold poissonKernel
+  have hsquares : a ^ 2 ≤ b ^ 2 := (sq_le_sq₀ ha hb).2 hab
+  gcongr
+
+/-- Consequently the time-one density depends decreasingly on the radius. -/
+theorem poissonKernel_one_abs_mono {s t : ℝ} (hst : |s| ≤ |t|) :
+    poissonKernel 1 t ≤ poissonKernel 1 s := by
+  have habs (u : ℝ) : poissonKernel 1 u = poissonKernel 1 |u| := by
+    rcases le_total 0 u with hu | hu
+    · rw [abs_of_nonneg hu]
+    · rw [abs_of_nonpos hu, poissonKernel_even]
+  rw [habs t, habs s]
+  exact poissonKernel_one_antitoneOn
+    (show |s| ∈ Ici 0 by exact abs_nonneg s)
+    (show |t| ∈ Ici 0 by exact abs_nonneg t) hst
+
+theorem poissonKernel_one_integral :
+    ∫ t : ℝ, poissonKernel 1 t ∂volume = 1 := by
+  unfold poissonKernel
+  calc
+    (∫ t : ℝ, 1 / π * 1 / (1 ^ 2 + t ^ 2) ∂volume) =
+        (1 / π) * ∫ t : ℝ, (1 + t ^ 2)⁻¹ ∂volume := by
+      rw [show (fun t : ℝ => 1 / π * 1 / (1 ^ 2 + t ^ 2)) =
+          fun t => (1 / π) * (1 + t ^ 2)⁻¹ by
+        funext t
+        ring]
+      rw [integral_const_mul]
+    _ = 1 := by
+      rw [integral_univ_inv_one_add_sq]
+      field_simp [ne_of_gt pi_pos]
+
+theorem poissonKernel_integral {y : ℝ} (hy : 0 < y) :
+    ∫ t : ℝ, poissonKernel y t ∂volume = 1 := by
+  have hy0 : y ≠ 0 := ne_of_gt hy
+  have hscale := Measure.integral_comp_mul_left (poissonKernel y) y
+  simp only [abs_inv, abs_of_pos hy] at hscale
+  have hpoint (z : ℝ) : y * poissonKernel y (y * z) = poissonKernel 1 z := by
+    unfold poissonKernel
+    field_simp
+  calc
+    (∫ t : ℝ, poissonKernel y t ∂volume) =
+        y * ∫ z : ℝ, poissonKernel y (y * z) ∂volume := by
+      rw [hscale]
+      simp [hy0]
+    _ = ∫ z : ℝ, y * poissonKernel y (y * z) ∂volume := by
+      rw [integral_const_mul]
+    _ = ∫ z : ℝ, poissonKernel 1 z ∂volume := by
+      apply integral_congr_ae
+      filter_upwards with z
+      exact hpoint z
+    _ = 1 := poissonKernel_one_integral
+
+/-- The Poisson family is exactly the dilation of its time-one member. -/
+theorem poissonKernel_dilation {y : ℝ} (hy : 0 < y) (t : ℝ) :
+    poissonKernel y t = y⁻¹ * poissonKernel 1 (t / y) := by
+  have hy0 : y ≠ 0 := ne_of_gt hy
+  unfold poissonKernel
+  field_simp
 
 end ConstructionTargets.RadialMajorantAE
