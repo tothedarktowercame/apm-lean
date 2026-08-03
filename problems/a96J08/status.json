@@ -10,12 +10,12 @@
     "problem_tex": "apm/a96J08.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.733727Z"
+  "classification": "partial",
+  "classification_detail": "1 sorry: apm_a96J08 (main theorem). The integral evaluation requires the residue theorem for rectangular contours (boundary integral = 2πi × sum of interior residues). Mathlib has Cauchy-Goursat for rectangles (zero-residue case only, via integral_boundary_rect_eq_zero_of_differentiableOn) but not the residue theorem version needed for poles inside the contour. The informal proof uses a rectangular contour exploiting the 2πi periodicity of e^z, with poles at z=0 and z=2πi contributing via half-residue indentation.",
+  "imported_at": "2026-08-03T16:10:00Z",
+  "checked_at": "2026-08-03T16:10:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96J08/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": [
+      "apm_a96J08 (main theorem: contour integral evaluation of ∫ e^{ωx}/(1-e^x) dx)"
+    ],
+    "blockers": [
+      "Residue theorem for rectangles: boundary integral = 2πi × sum of interior residues. Mathlib has integral_boundary_rect_eq_zero_of_differentiableOn (Cauchy-Goursat, no-poles case) but NOT the general residue version needed when a pole (at z=2πi) lies inside the rectangular contour. Excising the pole (removing a small disk) would require proving that the small-circle integral converges to 2πi×residue as radius→0, combined with Cauchy-Goursat on the punctured rectangle. This is substantial topological machinery not available in Mathlib."
+    ]
+  }
 }
