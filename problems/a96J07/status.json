@@ -10,9 +10,9 @@
     "problem_tex": "apm/a96J07.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
+    "files": ["lean/Main.lean"],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,6 +27,15 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.696700Z"
+  "classification": "complete",
+  "classification_detail": "Complete: the two-pole contour integral is evaluated by partial fractions and Cauchy's formula; its normalized ML bound at poles a and 0 tends to zero and proves bounded entire functions constant.",
+  "imported_at": "2026-07-13T17:26:52.696700Z",
+  "checked_at": "2026-08-03T15:59:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96J07/lean/Main.lean",
+    "sorry_count": 0,
+    "sorry_locations": [],
+    "blockers": []
+  }
 }
