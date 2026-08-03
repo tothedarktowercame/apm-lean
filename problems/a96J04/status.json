@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,19 +27,15 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "classification_detail": "1 sorry: ac_monotone_maps_null_to_null. Proven helpers: monotone_image_interval, monotone_image_Icc. Blocked by: open subset decomposition into disjoint intervals (not in Mathlib).",
+  "classification": "complete",
+  "classification_detail": "Complete: ac_monotone_maps_null_to_null is proved by decomposing a small open cover into rational-indexed connected components, identifying them as disjoint open intervals, and applying the finite absolute-continuity hypothesis to finite component families.",
   "imported_at": "2026-08-03T08:00:00Z",
-  "checked_at": "2026-08-03T08:00:00Z",
+  "checked_at": "2026-08-03T15:35:51Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a96J04/lean/Main.lean",
-    "sorry_count": 1,
-    "sorry_locations": [
-      "ac_monotone_maps_null_to_null (main theorem: null set image under AC monotone map)"
-    ],
-    "blockers": [
-      "Open subset decomposition: every open subset of ℝ is a countable union of disjoint open intervals. This standard real analysis fact is not available as a packaged lemma in Mathlib, and is the single missing ingredient connecting the outer-regularity null-set cover to the finite AC condition."
-    ]
+    "sorry_count": 0,
+    "sorry_locations": [],
+    "blockers": []
   }
 }
