@@ -10,12 +10,12 @@
     "problem_tex": "apm/a96A06.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,22 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.537103Z"
+  "classification": "partial",
+  "classification_detail": "Proven: cauchy_estimate_taylor (Cauchy estimate for Taylor coefficients), entire_coeffs_tendsto_zero (entire function coefficients → 0 via squeeze). 2 sorries remain: geom_iteratedDeriv (geometric series coefficient computation via derivative chain rule) and taylor_coeffs_tend_to_one (main theorem, requires residue theorem + removable singularity).",
+  "imported_at": "2026-08-03T07:40:00Z",
+  "checked_at": "2026-08-03T07:40:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96A06/lean/Main.lean",
+    "sorry_count": 2,
+    "sorry_locations": [
+      "geom_iteratedDeriv (geometric series Taylor coefficient computation)",
+      "taylor_coeffs_tend_to_one (main theorem: residue theorem + removable singularity)"
+    ],
+    "blockers": [
+      "Residue theorem: deriving Res(f,1) = -1 from ∮f = -2πi requires the residue theorem for simple poles, which is not directly available in Mathlib for this formulation.",
+      "Removable singularity: showing g = f - 1/(1-z) is entire requires the removable singularity theorem with the residue cancellation.",
+      "Geometric series derivative chain rule: the function-level induction for iteratedDeriv requires computing deriv of (1-z)⁻¹^(n+1), which needs the derivative chain rule for powers."
+    ]
+  }
 }
