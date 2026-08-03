@@ -10,9 +10,9 @@
     "problem_tex": "apm/a96A05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
+    "files": ["lean/Main.lean"],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,6 +27,15 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.528666Z"
+  "classification": "complete",
+  "classification_detail": "All parts proven: contour integral of 1/z = 2πi (via integral_sub_inv_of_mem_ball), contour integral of polynomial = 0 (via Cauchy's theorem + differentiable_aeval), ML inequality bounds sup ≥ 1. Uses ciSup_subtype to relate the set-indexed sup to the subtype form for the upper-bound property.",
+  "imported_at": "2026-08-03T07:35:00Z",
+  "checked_at": "2026-08-03T07:35:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96A05/lean/Main.lean",
+    "sorry_count": 0,
+    "sorry_locations": [],
+    "blockers": []
+  }
 }
