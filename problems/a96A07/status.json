@@ -10,12 +10,12 @@
     "problem_tex": "apm/a96A07.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,22 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.557613Z"
+  "classification": "partial",
+  "classification_detail": "2 sorries: injOn_disk_of_injOn_circle (injectivity on disk) and surjOn_domain_of_injOn_circle (surjectivity onto domain). Both require the argument principle (counting preimages via contour integrals of g'/(g-w)), the Jordan curve theorem (injective image of circle bounds a domain), and winding number theory for simple closed curves — none of which are formalized in Mathlib at the required generality.",
+  "imported_at": "2026-08-03T07:45:00Z",
+  "checked_at": "2026-08-03T07:45:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96A07/lean/Main.lean",
+    "sorry_count": 2,
+    "sorry_locations": [
+      "injOn_disk_of_injOn_circle (injectivity on disk from injectivity on boundary)",
+      "surjOn_domain_of_injOn_circle (surjectivity onto bounded domain)"
+    ],
+    "blockers": [
+      "Argument principle: (1/2πi) ∮ g'(z)/(g(z)-w) dz = number of preimages of w — not in Mathlib",
+      "Jordan curve theorem: injective continuous image of circle bounds a simply connected domain — not in Mathlib",
+      "Winding number of simple closed curve around interior point = ±1 — not in Mathlib"
+    ]
+  }
 }
