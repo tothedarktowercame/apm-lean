@@ -1,5 +1,5 @@
 {
-  "schema": "apm-problem-candidate-set.v1",
+  "schema": "apm-problem-bundle.v1",
   "problem_id": "a96J01",
   "bundle_root": "problems/a96J01",
   "layout": "candidate-set",
@@ -14,5 +14,11 @@
   ],
   "recommended_latest_frame_id": "apm-v2-a96J01-1775044904478",
   "selected_frame_id": null,
-  "imported_at": "2026-05-01T19:38:16.890866Z"
+  "imported_at": "2026-05-01T19:38:16.890866Z",
+  "lean": {
+    "main": "lean/Main.lean",
+    "sorry_count_main": 0,
+    "sorry_count_total": 0
+  },
+  "classification": "complete"
 }
