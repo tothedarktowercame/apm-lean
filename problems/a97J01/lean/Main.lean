@@ -28,16 +28,15 @@ this UT-Austin prelim) is that f is Lebesgue **integrable**, with the bound
 ## Phase-A hints dropped
 - #3 (finite interval measure): not needed; we use ENNReal-level arguments.
 
-## Boundary: remaining MCT bridge
+## Completed MCT bridge
 
-The core setup is proved: truncated sets A_n, B_n are defined, the hypothesis
-is applied to each, and per-n integral bounds are established (∫_{A_n} f ≤ c
-and ∫_{B_n} f ≥ -c). The remaining bridge is:
+The truncated sets A_n, B_n are defined, the hypothesis is applied to each,
+and the per-n integral bounds are transported to global bounds as follows:
 
 1. Connecting the Bochner set integral ∫_{A_n} f to the lintegral
    ∫⁻_{A_n} ENNReal.ofReal(f). The API `ofReal_integral_eq_lintegral_ofReal`
-   requires `Integrable f (μ.restrict s)`, which requires proving f has finite
-   integral on each A_n (bounded on bounded set → integrable).
+   requires `Integrable f (μ.restrict s)`. This follows from
+   `Measure.integrableOn_of_bounded`, since each truncation has finite measure.
 
 2. Applying `lintegral_iSup_ae` (MCT) to pass from per-n bounds to the global
    lintegral bound ∫⁻ ENNReal.ofReal(f⁺) ≤ c.
@@ -52,18 +51,9 @@ APIs searched:
 - `lintegral_iSup_ae` — FOUND: MCT in iSup form
 - `lintegral_tendsto_of_tendsto_of_monotone` — FOUND: MCT in limit form
 
-Routes tried:
-- Direct use of `ofReal_integral_eq_lintegral_ofReal` — requires proving
-  Integrable f (volume.restrict (A n)), which requires HasFiniteIntervalIntegral
-  or equivalent integrability on bounded sets. The integrability proof on A_n
-  (f bounded by n, A_n finite measure) requires assembling several Mathlib API
-  pieces that don't compose smoothly.
-
-Routes NOT investigated:
-- Defining the approximating sequence and applying `lintegral_tendsto_of_tendsto_of_monotone`
-  directly (requires building monotone sequence + pointwise convergence)
-- Using `MeasureTheory.SimpleFunc` approximation
-- Working entirely in the L1/AEEqFun framework
+Implemented route: indicator functions on A_n and B_n, conversion via
+`ofReal_integral_eq_lintegral_ofReal`, and MCT via `lintegral_iSup_ae`.
+The simple-function, direct-tendsto, and L1/AEEqFun alternatives were unnecessary.
 -/
 
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
@@ -164,22 +154,167 @@ theorem bounded_integral_implies_integrable
   -- Step 5: Bounded lintegral of positive part via MCT
   -- f⁺ = max(f,0), and on A_n, f⁺ = f. The per-n Bochner integral bound ∫_{A_n} f ≤ c
   -- must be transported to the lintegral level to apply MCT.
-  -- Boundary: see file-level comment for the remaining bridge.
+  -- See the file-level comment for the completed finite-measure + MCT bridge.
   have hlint_pos : ∫⁻ x, ENNReal.ofReal (max (f x) 0) ∂volume ≤ ENNReal.ofReal c := by
-    sorry
+    let g : ℕ → ℝ → ℝ≥0∞ := fun n x => (A n).indicator (fun x => ENNReal.ofReal (max (f x) 0)) x
+    have hg_meas : ∀ n, Measurable (g n) := fun n => by
+      exact ((hf_meas.max measurable_const).ennreal_ofReal).indicator (hA_meas n)
+    have hA_mono : ∀ n, A n ⊆ A n.succ := fun n x hx => by
+      simp only [A, mem_inter_iff, mem_Icc, mem_setOf_eq] at hx ⊢
+      norm_num at hx ⊢
+      rcases hx with ⟨⟨⟨hxl, hxu⟩, hnonneg⟩, hfu⟩
+      exact ⟨⟨⟨by linarith, by linarith⟩, hnonneg⟩,
+        hfu.trans (by exact_mod_cast Nat.le_succ n)⟩
+    have hg_mono : ∀ n, ∀ᵐ x ∂volume, g n x ≤ g n.succ x := fun n =>
+      Filter.Eventually.of_forall fun x => by
+        by_cases hx : x ∈ A n
+        · simp [g, hx, hA_mono n hx]
+        · simp [g, hx]
+    have hA_finite : ∀ n, volume (A n) ≠ ∞ := fun n => by
+      apply ne_of_lt
+      exact (measure_mono (fun x hx => hx.1.1)).trans_lt measure_Icc_lt_top
+    have hf_int : ∀ n, Integrable f (volume.restrict (A n)) := fun n => by
+      apply Measure.integrableOn_of_bounded (hA_finite n) hf_meas.aestronglyMeasurable
+      filter_upwards [ae_restrict_mem (hA_meas n)] with x hx
+      exact hA_fbounded n |>.choose_spec x hx
+    have hg_bound : ∀ n, ∫⁻ x, g n x ∂volume ≤ ENNReal.ofReal c := fun n => by
+      rw [lintegral_indicator (hA_meas n)]
+      calc
+        (∫⁻ x in A n, ENNReal.ofReal (max (f x) 0) ∂volume) =
+            ENNReal.ofReal (∫ x in A n, f x ∂volume) := by
+          rw [ofReal_integral_eq_lintegral_ofReal (hf_int n)]
+          · apply lintegral_congr
+            intro x
+            by_cases hx : x ∈ A n
+            · have hfx : 0 ≤ f x := by simpa only [A] using hx.1.2
+              simp [max_eq_left hfx]
+            · simp [Measure.restrict_apply (hA_meas n), hx]
+          · filter_upwards [ae_restrict_mem (hA_meas n)] with x hx
+            simpa only [A] using hx.1.2
+        _ ≤ ENNReal.ofReal c := ENNReal.ofReal_le_ofReal (hA_int_le n)
+    have hsup : (⨆ n, ∫⁻ x, g n x ∂volume) ≤ ENNReal.ofReal c := iSup_le hg_bound
+    rw [← lintegral_iSup_ae hg_meas hg_mono] at hsup
+    calc
+      (∫⁻ x, ENNReal.ofReal (max (f x) 0) ∂volume) = ∫⁻ x, ⨆ n, g n x ∂volume := by
+        apply lintegral_congr
+        intro x
+        apply le_antisymm
+        · by_cases hx : 0 ≤ f x
+          · let n₁ : ℕ := (exists_nat_ge |x|).choose
+            let n₂ : ℕ := (exists_nat_ge (f x)).choose
+            let n := max n₁ n₂
+            have hn₁ : |x| ≤ (n₁ : ℝ) := (exists_nat_ge |x|).choose_spec
+            have hn₂ : f x ≤ (n₂ : ℝ) := (exists_nat_ge (f x)).choose_spec
+            have hnx : |x| ≤ (n : ℝ) ∧ f x ≤ (n : ℝ) := ⟨
+              hn₁.trans (by exact_mod_cast Nat.le_max_left n₁ n₂),
+              hn₂.trans (by exact_mod_cast Nat.le_max_right n₁ n₂)⟩
+            have hmem : x ∈ A n := by
+              unfold A
+              exact ⟨⟨⟨(neg_le_of_abs_le hnx.1), (le_of_abs_le hnx.1)⟩, hx⟩, hnx.2⟩
+            apply le_trans ?_ (le_iSup (fun k => g k x) n)
+            simp [g, hmem]
+          · simp [max_eq_right (le_of_not_ge hx)]
+        · apply iSup_le
+          intro n
+          show (A n).indicator (fun x => ENNReal.ofReal (max (f x) 0)) x ≤ _
+          exact Set.indicator_le_self (A n) _ x
+      _ ≤ ENNReal.ofReal c := hsup
 
   -- Step 6: Bounded lintegral of negative part via MCT (symmetric)
   have hlint_neg : ∫⁻ x, ENNReal.ofReal (max (-f x) 0) ∂volume ≤ ENNReal.ofReal c := by
-    sorry
+    let g : ℕ → ℝ → ℝ≥0∞ := fun n x => (B n).indicator (fun x => ENNReal.ofReal (max (-f x) 0)) x
+    have hg_meas : ∀ n, Measurable (g n) := fun n => by
+      exact (((hf_meas.neg).max measurable_const).ennreal_ofReal).indicator (hB_meas n)
+    have hB_mono : ∀ n, B n ⊆ B n.succ := fun n x hx => by
+      simp only [B, mem_inter_iff, mem_Icc, mem_setOf_eq] at hx ⊢
+      norm_num at hx ⊢
+      rcases hx with ⟨⟨⟨hxl, hxu⟩, hfl⟩, hnonpos⟩
+      exact ⟨⟨⟨by linarith, by linarith⟩,
+        (by linarith)⟩, hnonpos⟩
+    have hg_mono : ∀ n, ∀ᵐ x ∂volume, g n x ≤ g n.succ x := fun n =>
+      Filter.Eventually.of_forall fun x => by
+        by_cases hx : x ∈ B n
+        · simp [g, hx, hB_mono n hx]
+        · simp [g, hx]
+    have hB_finite : ∀ n, volume (B n) ≠ ∞ := fun n => by
+      apply ne_of_lt
+      exact (measure_mono (fun x hx => hx.1.1)).trans_lt measure_Icc_lt_top
+    have hf_int : ∀ n, Integrable f (volume.restrict (B n)) := fun n => by
+      apply Measure.integrableOn_of_bounded (hB_finite n) hf_meas.aestronglyMeasurable
+      filter_upwards [ae_restrict_mem (hB_meas n)] with x hx
+      exact hB_fbounded n |>.choose_spec x hx
+    have hg_bound : ∀ n, ∫⁻ x, g n x ∂volume ≤ ENNReal.ofReal c := fun n => by
+      rw [lintegral_indicator (hB_meas n)]
+      calc
+        (∫⁻ x in B n, ENNReal.ofReal (max (-f x) 0) ∂volume) =
+            ENNReal.ofReal (∫ x in B n, (-f) x ∂volume) := by
+          symm
+          rw [ofReal_integral_eq_lintegral_ofReal (hf_int n).neg]
+          · apply lintegral_congr
+            intro x
+            by_cases hx : x ∈ B n
+            · have hfx : f x ≤ 0 := hx.2
+              simp [max_eq_left (neg_nonneg.mpr hfx)]
+            · simp [hx]
+          · filter_upwards [ae_restrict_mem (hB_meas n)] with x hx
+            exact neg_nonneg.mpr hx.2
+        _ = ENNReal.ofReal (-(∫ x in B n, f x ∂volume)) := by
+          congr 1
+          change (∫ x in B n, -f x ∂volume) = _
+          rw [integral_neg]
+        _ ≤ ENNReal.ofReal c := ENNReal.ofReal_le_ofReal (by linarith [hB_int_ge_neg_c n])
+    have hsup : (⨆ n, ∫⁻ x, g n x ∂volume) ≤ ENNReal.ofReal c := iSup_le hg_bound
+    rw [← lintegral_iSup_ae hg_meas hg_mono] at hsup
+    calc
+      (∫⁻ x, ENNReal.ofReal (max (-f x) 0) ∂volume) = ∫⁻ x, ⨆ n, g n x ∂volume := by
+        apply lintegral_congr
+        intro x
+        apply le_antisymm
+        · by_cases hx : f x ≤ 0
+          · let n₁ : ℕ := (exists_nat_ge |x|).choose
+            let n₂ : ℕ := (exists_nat_ge (-f x)).choose
+            let n := max n₁ n₂
+            have hn₁ : |x| ≤ (n₁ : ℝ) := (exists_nat_ge |x|).choose_spec
+            have hn₂ : -f x ≤ (n₂ : ℝ) := (exists_nat_ge (-f x)).choose_spec
+            have hnx : |x| ≤ (n : ℝ) ∧ -f x ≤ (n : ℝ) := ⟨
+              hn₁.trans (by exact_mod_cast Nat.le_max_left n₁ n₂),
+              hn₂.trans (by exact_mod_cast Nat.le_max_right n₁ n₂)⟩
+            have hmem : x ∈ B n := by
+              unfold B
+              exact ⟨⟨⟨neg_le_of_abs_le hnx.1, le_of_abs_le hnx.1⟩,
+                by simpa using neg_le_neg hnx.2⟩, hx⟩
+            apply le_trans ?_ (le_iSup (fun k => g k x) n)
+            simp [g, hmem]
+          · have : -f x ≤ 0 := by linarith
+            simp [max_eq_right this]
+        · apply iSup_le
+          intro n
+          show (B n).indicator (fun x => ENNReal.ofReal (max (-f x) 0)) x ≤ _
+          exact Set.indicator_le_self (B n) _ x
+      _ ≤ ENNReal.ofReal c := hsup
 
   -- Step 7: Combine
   -- |f| = f⁺ + f⁻, so ∫⁻ ofReal|f| = ∫⁻ ofReal(f⁺) + ∫⁻ ofReal(f⁻) ≤ 2c
   have hlint_abs : ∫⁻ x, ENNReal.ofReal |f x| ∂volume ≤ ENNReal.ofReal (2 * c) := by
-    sorry
+    have hpoint : ∀ x, |f x| = max (f x) 0 + max (-f x) 0 := fun x => by
+      rcases le_total 0 (f x) with hx | hx <;> simp [max_eq_left, max_eq_right, hx]
+    rw [lintegral_congr (fun x => by rw [hpoint x, ENNReal.ofReal_add] <;> positivity),
+      lintegral_add_left ((hf_meas.max measurable_const).ennreal_ofReal)]
+    calc
+      (∫⁻ x, ENNReal.ofReal (max (f x) 0) ∂volume) +
+          ∫⁻ x, ENNReal.ofReal (max (-f x) 0) ∂volume ≤
+          ENNReal.ofReal c + ENNReal.ofReal c := add_le_add hlint_pos hlint_neg
+      _ = ENNReal.ofReal (2 * c) := by
+        rw [← ENNReal.ofReal_add hc.le hc.le]
+        congr 1
+        ring
 
   -- Step 8: Conclude integrability from finite lintegral
   refine ⟨?_, hlint_abs⟩
-  sorry
+  refine ⟨hf_meas.aestronglyMeasurable, ?_⟩
+  rw [hasFiniteIntegral_iff_norm]
+  have htop : ENNReal.ofReal (2 * c) < ∞ := ENNReal.ofReal_lt_top
+  exact lt_of_le_of_lt (by simpa only [Real.norm_eq_abs] using hlint_abs) htop
 
 #print axioms APMa97J01.bounded_integral_implies_integrable
 

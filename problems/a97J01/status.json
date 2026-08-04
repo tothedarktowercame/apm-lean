@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,16 +27,14 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.749971Z",
   "checked_at": "2026-08-04T18:15:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a97J01/lean/Main.lean",
-    "sorry_count": 1,
-    "sorry_locations": [
-      "bounded_integral_implies_integrable (MCT passage from per-n bounds to global lintegral bound)"
-    ],
+    "sorry_count": 0,
+    "sorry_locations": [],
     "proved": [
       "hA_meas (A_n measurable)",
       "hA_bounded (A_n bounded)",
@@ -49,10 +47,11 @@
       "hB_fbounded (f bounded on B_n)",
       "hB_int_bound (hypothesis applied to B_n)",
       "hB_int_nonpos (∫_{B_n} f ≤ 0 since f ≤ 0 on B_n)",
-      "hB_int_ge_neg_c (-c ≤ ∫_{B_n} f)"
+      "hB_int_ge_neg_c (-c ≤ ∫_{B_n} f)",
+      "hlint_pos and hlint_neg (finite-measure truncations + lintegral_iSup_ae)",
+      "hlint_abs (positive/negative part combination)",
+      "bounded_integral_implies_integrable"
     ],
-    "blockers": [
-      "MCT passage: connecting Bochner set integral ∫_{A_n} f to lintegral ∫⁻ ofReal(f⁺), then applying lintegral_iSup_ae. The API ofReal_integral_eq_lintegral_ofReal requires Integrable f (volume.restrict (A n)), and proving this integrability on bounded sets requires assembling several Mathlib API pieces that don't compose smoothly."
-    ]
+    "blockers": []
   }
 }
