@@ -10,12 +10,12 @@
     "problem_tex": "apm/a96J02.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,15 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.625579Z"
+  "classification": "partial",
+  "classification_detail": "All infrastructure proven: bounded subset reduction (exists_pos_measure_bounded_subset), indicator integrability (integrable_indicator_of_finite_measure), A'+B' ⊆ A+B. One sorry remains at the L1 translation continuity step: proving the overlap function f(x) = μ(A' ∩ (x-B')) is continuous, which is the standard Steinhaus convolution continuity argument. Boundary: Mathlib lacks the L1-translation-continuity lemma for indicator functions.",
+  "checked_at": "2026-08-04T15:15:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96J02/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": ["a96J02 theorem (final sorry)"],
+    "axioms": ["propext", "sorryAx", "Classical.choice", "Quot.sound"],
+    "blockers": ["L1 translation continuity for indicator functions"]
+  }
 }
