@@ -10,12 +10,12 @@
     "problem_tex": "apm/a96J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,29 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.672015Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.672015Z",
+  "checked_at": "2026-08-04T17:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96J05/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": [
+      "sumNorm_smul (homogeneity of the sum norm)"
+    ],
+    "proved": [
+      "sum_space_add_closed (Part 1: closure under addition)",
+      "sum_space_neg_closed (Part 1: closure under negation)",
+      "sumNorm_nonneg (Part 2: nonnegativity)",
+      "sumNorm_triangle (Part 2: triangle inequality)",
+      "quotient_complete (Part 3: quotient of Banach is Banach)",
+      "lp_prod_complete (Part 3: Lp product is Banach)"
+    ],
+    "axioms": "propext, Classical.choice, Quot.sound (standard for all proved theorems)",
+    "blockers": [
+      "sumNorm_smul: scalar multiplication on AEEqFun from Lp elements requires careful coercion setup",
+      "Definiteness (‖f‖=0 ⟹ f=0 a.e.): requires convergence-in-measure argument on finite measure spaces",
+      "Full completeness instantiation: requires setting up the addition map as NormedAddGroupHom and proving the antidiagonal kernel is a closed submodule"
+    ]
+  }
 }
