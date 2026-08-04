@@ -10,9 +10,9 @@
     "problem_tex": "apm/a97J01.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
+    "files": ["lean/Main.lean"],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,6 +27,31 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.749971Z"
+  "classification": "complete",
+  "imported_at": "2026-07-13T17:26:52.749971Z",
+  "checked_at": "2026-08-04T18:15:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a97J01/lean/Main.lean",
+    "sorry_count": 0,
+    "sorry_locations": [],
+    "proved": [
+      "hA_meas (A_n measurable)",
+      "hA_bounded (A_n bounded)",
+      "hA_fbounded (f bounded on A_n)",
+      "hA_int_bound (hypothesis applied: |∫_{A_n} f| ≤ c)",
+      "hA_int_nonneg (∫_{A_n} f ≥ 0 since f ≥ 0 on A_n)",
+      "hA_int_le (∫_{A_n} f ≤ c)",
+      "hB_meas (B_n measurable)",
+      "hB_bounded (B_n bounded)",
+      "hB_fbounded (f bounded on B_n)",
+      "hB_int_bound (hypothesis applied to B_n)",
+      "hB_int_nonpos (∫_{B_n} f ≤ 0 since f ≤ 0 on B_n)",
+      "hB_int_ge_neg_c (-c ≤ ∫_{B_n} f)",
+      "hlint_pos and hlint_neg (finite-measure truncations + lintegral_iSup_ae)",
+      "hlint_abs (positive/negative part combination)",
+      "bounded_integral_implies_integrable"
+    ],
+    "blockers": []
+  }
 }
