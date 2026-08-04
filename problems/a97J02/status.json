@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 5,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 5
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,25 +27,21 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.767715Z",
   "checked_at": "2026-08-04T20:30:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a97J02/lean/Main.lean",
-    "sorry_count": 5,
-    "sorry_locations": [
-      "h_cthick_tendsto (cthickening convergence via continuity from above)",
-      "h_union_measure (measure of grid union = b(N)/N)",
-      "h_A_subset_union (grid covers A)",
-      "h_union_subset_cthick (grid union subset of cthickening)",
-      "Step 5 squeeze (final squeeze argument)"
+    "sorry_count": 0,
+    "sorry_locations": [],
+    "proved": [
+      "h_cthick_tendsto via tendsto_measure_cthickening_of_isClosed",
+      "h_union_measure via finite a.e.-disjoint union",
+      "h_A_subset_union for N ≥ 1 via Nat.ceil",
+      "h_union_subset_cthick via a cell intersection witness",
+      "grid_count_converges_to_measure via squeeze"
     ],
-    "blockers": [
-      "cthickening convergence: needs antitone + iInter = A + tendsto_measure_iInter_atTop",
-      "Grid union measure: needs measure of finite union of intervals with disjoint interiors",
-      "Grid covers A: needs each point of A lies in some grid cell",
-      "Grid in cthickening: needs dist(x,A) ≤ 1/N for x in a cell meeting A"
-    ]
+    "blockers": []
   }
 }

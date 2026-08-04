@@ -12,22 +12,31 @@ Squeeze b(N)/N between m(A) and m(cthickening(1/N, A)):
 - Upper bound: U_N ⊆ cthickening(1/N, A), so b(N)/N ≤ m(cthickening(1/N, A)).
 - cthickenings ↓ A (closed), so m(cthickening(1/N, A)) → m(A).
 
-## Proved (exit 0, 5 sorries)
+## Proved (exit 0, 0 sorries)
 
-Definitions: `gridCell`, `gridIndices`, `b`, `gridUnion` all compile.
-Theorem statement compiles. Proof structure laid out with 5 sorries:
+Definitions and the complete theorem compile:
 
-1. **h_cthick_tendsto** (boundary): cthickening(1/N, A) → volume A.
-   Needs: antitone, iInter = A (closed), tendsto_measure_iInter_atTop.
-2. **h_union_measure** (boundary): volume(gridUnion) = b(N)/N.
-   Needs: measure of finite union of intervals with disjoint interiors.
-3. **h_A_subset_union** (boundary): A ⊆ gridUnion (grid covers [0,1]).
-4. **h_union_subset_cthick** (boundary): gridUnion ⊆ cthickening(1/N, A).
-5. **Step 5** (boundary): squeeze argument.
+1. `tendsto_measure_cthickening_of_isClosed` gives thickening convergence.
+2. `measure_biUnion_finset₀` sums the a.e.-disjoint closed grid cells.
+3. `max 1 ⌈N*x⌉₊` selects a covering cell when `N ≥ 1`.
+4. A point in a counted cell lies within its width `1/N` of a witness in A.
+5. `ENNReal.tendsto_toReal` and the order squeeze close the real-valued limit.
+
+The earlier local claim `∀ N, A ⊆ gridUnion A N` was corrected to the needed
+`N ≥ 1` form: at `N = 0`, the grid union is empty, so the stronger local claim
+is false for nonempty A. This does not change the frozen theorem statement.
 
 ## Phase-A hints used
 - #1 `math-formalization/separation-function-from-distance`: cthickening/infDist API confirmed.
 - #2 `math-informal/monotone-approximation`: decreasing cthickenings is the monotone passage.
 
 ## Mid-solve lookups
-None (all API exploration was in Phase A or direct Mathlib grep).
+
+1. Mathlib `Constructions/BorelSpace/Metric.lean`: found and used
+   `tendsto_measure_cthickening_of_isClosed`.
+2. Mathlib `Measure/MeasureSpace.lean`: found and used
+   `measure_biUnion_finset₀` and the squeeze-related measure APIs.
+3. Mathlib thickening source: found and used
+   `mem_cthickening_of_dist_le` and boundedness of cthickenings.
+4. Repository search for an existing grid-cell proof returned no relevant
+   solved neighbor; discarded.
