@@ -10,12 +10,12 @@
     "problem_tex": "apm/a97J06.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,22 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.853875Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.853875Z",
+  "checked_at": "2026-08-05T13:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a97J06/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": [
+      "cos_integral_eval (contour integral evaluation proof body)"
+    ],
+    "blockers": [
+      "Contour setup: semicircular contour Γ_R = [-R,R] ∪ C_R",
+      "Residue computation: Res(e^{itz}/(z²+4), 2i) = e^{-2t}/(4i)",
+      "Residue theorem application: ∮_Γ f = 2πi · Res",
+      "ML estimate: arc integral → 0 as R → ∞",
+      "Evenness reduction and real part extraction"
+    ]
+  }
 }
