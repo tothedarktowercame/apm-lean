@@ -11,15 +11,15 @@ define h(y) = ∫ f(y-x)g(x)dm(x). Prove h is continuous and vanishes at ±∞.
 2. Continuity: |h(y)-h(y')| ≤ ‖τ_{y-y'}f̌ - f̌‖_p · ‖g‖_q → 0 (L^p translation continuity).
 3. Vanishing: approximate by C_c functions, transfer via Hölder bound.
 
-## Proved (exit 0, 4 sorries)
+## Proved (exit 0, 0 sorries)
 
-Definitions: `conv` (matching problem statement) compiles.
-Theorem statement compiles. Proof structure laid out with 4 sorries:
+The definition and complete theorem compile. The decisive implementation was
+reused from the compiled neighboring bundle `a03J03`:
 
-1. **h_bound** (boundary): Hölder bound |conv f g y| ≤ eLpNorm(f,p) · eLpNorm(g,q).
-2. **h_continuous** (boundary): continuity via L^p translation continuity.
-3. **h_vanish_top** (boundary): vanishing at +∞.
-4. **h_vanish_bot** (boundary): vanishing at -∞.
+1. `Lp.compMeasurePreserving` makes translated Lp representatives continuous.
+2. `ContinuousLinearMap.lpPairing` identifies the pairing with the convolution integral.
+3. Compact-support density and the pairing norm give uniform approximation.
+4. Compact support gives cocompact vanishing, which restricts to ±∞.
 
 ## Phase-A hints used
 - #1 `e-codexpilot-prove-Holder-convolution-vanishes-at-infinity-by-compact-support-density`:
@@ -34,4 +34,13 @@ Theorem statement compiles. Proof structure laid out with 4 sorries:
 - #7 (`e-codexpilot-probe-the-high-risk-integral-assembly`): process hint, noted.
 
 ## Mid-solve lookups
-None beyond Phase A. All Mathlib API exploration was direct source grep.
+
+1. Mathlib `Analysis/Convolution.lean` explicitly lists general Lp/Lq
+   continuity as TODO; no direct theorem was available. Discarded as a direct route.
+2. Prior solved `problems/a03J03/lean/Main.lean` contained axiom-clean compiled
+   continuity and cocompact-vanishing proofs for the identical integral; reused.
+3. Mathlib `Function/Holder.lean` supplied `lpPairing` and its integral identity; used.
+4. Mathlib `Data/Real/ConjExponents.lean` supplied
+   `Real.holderConjugate_iff`; used to convert the frozen hypotheses.
+5. Mathlib order-compactness source supplied `atTop_le_cocompact` and
+   `atBot_le_cocompact`; used.
