@@ -74,6 +74,34 @@ theorem continuous_bv_locally_ac_implies_ac
     (hf_bv : BoundedVariationOn f (Icc 0 1))
     (hf_ac : ∀ δ : ℝ, 0 < δ → δ < 1 → AbsContOn f δ 1) :
     AbsContOn f 0 1 := by
+  /-
+  CLOSER HOP 1 boundary (2026-08-05).
+
+  Consulted `problems/a93J01/lean/Main.lean`: its completed FTC proof is the
+  mathematical predecessor named by the informal solution, but it assumes
+  Mathlib's `AbsolutelyContinuousOnInterval`.  There is no implication from
+  the bespoke list predicate above to that predicate available in this file,
+  so reusing the theorem would require proving essentially the target bridge.
+
+  Consulted Mathlib's
+  `Topology/EMetricSpace/BoundedVariation.lean`.  The analytic ingredient is
+  present as
+  `BoundedVariationOn.tendsto_eVariationOn_Icc_zero_right`; instantiated at
+  zero with `hf_cont.continuousWithinAt`, it gives
+  `eVariationOn f (Icc 0 1 ∩ Icc 0 a) → 0` as `a → 0` within `[0,1]`.
+  `eVariationOn.sum_le` and `eVariationOn.sum_le_of_monotoneOn_Iic` can then
+  bound the oscillations of a sorted finite interval family.
+
+  The still-open formal bridge is list bookkeeping: partition `s` at the
+  first pair whose left endpoint is at least `a`; the prefix lies in
+  `[0,2*a]` when the total length is `< a`, while the suffix satisfies the
+  hypotheses supplied by `hf_ac a`.  One must prove that filtering preserves
+  the dependent `List.get` ordering hypotheses and split both mapped sums.
+  Searches of prior solved bundles found no proof of this custom `AbsContOn`
+  predicate; the nearby completed theorem deliberately uses Mathlib's
+  Finset-based predicate instead.  No claim is made that this bridge is
+  unroutable.
+  -/
   sorry
 
 #print axioms APMa97J04.continuous_bv_locally_ac_implies_ac

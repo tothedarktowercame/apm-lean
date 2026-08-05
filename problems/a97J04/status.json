@@ -38,10 +38,9 @@
       "continuous_bv_locally_ac_implies_ac (main proof body)"
     ],
     "blockers": [
-      "No built-in AbsContOn definition in Mathlib — defined from scratch",
-      "Variation vanishing lemma: V(x) → 0 as x → 0+ (requires eVariationOn additivity + continuity at 0)",
-      "Splitting argument: cutting test intervals at a₀, bounding groups by variation and AC resp.",
-      "FTC route alternative: BV → f' ∈ L¹, FTC on [δ,1], limit δ→0"
+      "Frozen statement uses a bespoke List.get-based AbsContOn, so the compiled a93J01 theorem for Mathlib's AbsolutelyContinuousOnInterval is not directly reusable",
+      "Endpoint variation is available as BoundedVariationOn.tendsto_eVariationOn_Icc_zero_right",
+      "Remaining bridge: partition the sorted list at a₀ and transport dependent List.get bounds/order hypotheses to prefix and suffix"
     ]
   }
 }
