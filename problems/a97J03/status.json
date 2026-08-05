@@ -10,12 +10,12 @@
     "problem_tex": "apm/a97J03.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,24 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.798578Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.798578Z",
+  "checked_at": "2026-08-05T11:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a97J03/lean/Main.lean",
+    "sorry_count": 4,
+    "sorry_locations": [
+      "h_bound (Hölder bound on convolution)",
+      "h_continuous (continuity via L^p translation)",
+      "h_vanish_top (vanishing at +∞)",
+      "h_vanish_bot (vanishing at -∞)"
+    ],
+    "blockers": [
+      "Hölder bound: applying Hölder to shifted f(y-·) requires translation-invariance of eLpNorm",
+      "Translation continuity: L^p norm of τ_t f - f → 0 as t → 0",
+      "C_c density: approximating L^p functions by compactly supported continuous functions",
+      "Vanishing: transferring vanishing-at-infinity across the C_c approximation"
+    ]
+  }
 }
