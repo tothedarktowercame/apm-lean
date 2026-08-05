@@ -45,3 +45,10 @@ Build the scaled geometric power series for `A/(z-1)`, subtract it from
 analytic remainder. This identifies the remainder coefficient as `a n + A`.
 Then reuse the a96J09 Cauchy estimate on the radius-two ball and translate
 `a n + A → 0` into `a n → -A`.
+
+## Closer hop 2
+
+Added and compiled `hasFPowerSeriesAt_div_sub_one`, proving directly that
+`A/(z-1)` has `ofScalars` coefficients `-A`. This closes the geometric-series
+elaboration bridge. Remaining work is subtraction/uniqueness and copying the
+compiled local Cauchy-decay pattern from a96J09.

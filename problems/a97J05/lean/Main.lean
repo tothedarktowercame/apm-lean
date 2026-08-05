@@ -34,6 +34,7 @@ APIs searched:
 -/
 
 import Mathlib.Analysis.Analytic.Basic
+import Mathlib.Analysis.Analytic.Constructions
 import Mathlib.Analysis.Analytic.OfScalars
 import Mathlib.Analysis.Calculus.FormalMultilinearSeries
 import Mathlib.Analysis.Complex.Basic
@@ -44,6 +45,19 @@ open scoped Topology
 noncomputable section
 
 namespace APMa97J05
+
+/-- The polar term has the constant Maclaurin coefficient `-A`.
+    This is the geometric-series API bridge used by the main proof. -/
+lemma hasFPowerSeriesAt_div_sub_one (A : ℂ) :
+    HasFPowerSeriesAt (fun z : ℂ => A / (z - 1))
+      (FormalMultilinearSeries.ofScalars ℂ (fun _ => -A)) 0 := by
+  have h :=
+    (hasFPowerSeriesOnBall_inverse_one_sub ℂ ℂ).hasFPowerSeriesAt.const_smul (c := -A)
+  convert h using 1
+  funext z
+  simp only [div_eq_mul_inv, Pi.smul_apply, smul_eq_mul]
+  rw [show z - 1 = -(1 - z) by ring, inv_neg]
+  simp [Ring.inverse_eq_inv]
 
 /-- Main theorem: if f has Maclaurin series Σa(n)zⁿ on {|z|<1}, and g = f - A/(z-1)
     is analytic on {|z| < 2}, then a(n) → -A.
@@ -94,6 +108,15 @@ theorem coeff_converges_to_neg_residue
   a96A06 found only informal or still-sorry variants, so they were discarded
   as compiled dependencies. No statement defect was found, and no claim is
   made that this bridge is unroutable.
+
+  CLOSER HOP 2 addendum (2026-08-05).
+  The geometric bridge is now proved above, with a compiled witness:
+  `hasFPowerSeriesAt_div_sub_one A` gives the polar coefficients constantly
+  `-A`. The crucial elaboration details are the implicit
+  `.const_smul (c := -A)` argument and rewriting `Ring.inverse` with
+  `Ring.inverse_eq_inv`. The remaining proof no longer needs geometric-series
+  API work; it consists of series subtraction/uniqueness followed by the
+  a96J09 Cauchy-decay argument.
   -/
   sorry
 

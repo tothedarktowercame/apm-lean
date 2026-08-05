@@ -39,8 +39,8 @@
     ],
     "blockers": [
       "Compiled Cauchy-decay pattern found in a96J09 for the analytic remainder",
-      "Mathlib geometric-series and HasFPowerSeriesAt uniqueness APIs found",
-      "Remaining bridge: elaborate the scaled geometric series subtraction, identify coefficients a(n)+A, and apply decay"
+      "Scaled geometric polar series is now proved by hasFPowerSeriesAt_div_sub_one",
+      "Remaining bridge: subtract series, identify coefficients a(n)+A by uniqueness, and apply the a96J09 decay pattern"
     ]
   }
 }
