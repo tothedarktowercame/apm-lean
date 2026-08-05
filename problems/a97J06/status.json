@@ -38,7 +38,8 @@
       "cos_integral_eval (contour integral evaluation proof body)"
     ],
     "blockers": [
-      "Cauchy density normalization exists but its characteristic function is not packaged",
+      "Zero-frequency case is proved by the compiled cos_integral_eval_zero lemma using Cauchy normalization and evenness",
+      "The Cauchy characteristic function for nonzero frequency is not packaged",
       "Compiled a92J06 full-circle rational contour pattern is reusable only for the pole subcalculation",
       "No packaged semicircle/Jordan-lemma API was found; remaining bridge is custom upper-arc contour, decay, and improper-integral limit"
     ]

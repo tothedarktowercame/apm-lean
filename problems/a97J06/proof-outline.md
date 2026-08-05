@@ -45,3 +45,11 @@ single-pole residue identity, bound the arc uniformly, and take the improper
 integral limit. The alternative probability route would close immediately if
 a Cauchy characteristic-function theorem were added, but Mathlib currently
 only supplies normalization of its density.
+
+## Closer hop 2
+
+Added the compiled lemma `cos_integral_eval_zero`. It derives the exact base
+case from Cauchy-density normalization, uses `integral_comp_abs` for evenness,
+and converts `Ioi` to `Ici`. Thus scaling, integrability, and half-line
+symmetry are no longer speculative. The remaining obstacle is specifically
+the oscillatory characteristic-function identity for `t ≠ 0`.

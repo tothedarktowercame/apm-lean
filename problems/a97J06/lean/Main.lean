@@ -45,13 +45,39 @@ import Mathlib.MeasureTheory.Integral.CircleIntegral
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.Analysis.SpecialFunctions.Complex.Circle
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.Probability.Distributions.Cauchy
 
 open MeasureTheory Filter Complex Topology Real Set
-open scoped Topology
+open scoped Topology NNReal
 
 noncomputable section
 
 namespace APMa97J06
+
+/-- The zero-frequency case, obtained from normalization of the Cauchy density. -/
+lemma cos_integral_eval_zero :
+    ∫ x in Ici 0, Real.cos (0 * x) / (x^2 + 4) ∂volume = π / 4 := by
+  let γ : ℝ≥0 := ⟨2, by norm_num⟩
+  have hγ : γ ≠ 0 := by
+    intro h
+    have hv := congrArg Subtype.val h
+    norm_num [γ] at hv
+  have hfull := ProbabilityTheory.integral_cauchyPDFReal_eq_one 0 hγ
+  have hwhole : (∫ x : ℝ, (x ^ 2 + 4)⁻¹) = π / 2 := by
+    simp only [ProbabilityTheory.cauchyPDFReal_def, sub_zero] at hfull
+    norm_num [γ] at hfull
+    rw [MeasureTheory.integral_const_mul] at hfull
+    have hpi : Real.pi ≠ 0 := ne_of_gt Real.pi_pos
+    field_simp [hpi] at hfull ⊢
+    exact hfull
+  have heven := integral_comp_abs (f := fun x : ℝ => (x ^ 2 + 4)⁻¹)
+  have hhalf : (∫ x in Ioi (0 : ℝ), (x ^ 2 + 4)⁻¹) = π / 4 := by
+    rw [show (fun x : ℝ => (|x| ^ 2 + 4)⁻¹) = fun x => (x ^ 2 + 4)⁻¹ by
+      funext x; rw [sq_abs]] at heven
+    rw [hwhole] at heven
+    linarith
+  simpa [MeasureTheory.integral_Ici_eq_integral_Ioi] using hhalf
 
 /-- Main theorem: ∫₀^∞ cos(tx)/(x²+4) dx = π/4 · e^{-2|t|} for all real t.
 
@@ -90,6 +116,15 @@ theorem cos_integral_eval (t : ℝ) :
   and then establish Jordan/ML decay. No prior solved bundle contains that
   complete bridge. No statement defect was found, and no claim is made that
   this bridge is unroutable.
+
+  CLOSER HOP 2 addendum (2026-08-05).
+  The normalization route has now been realized as the compiled zero-sorry
+  lemma `cos_integral_eval_zero` above. It uses
+  `integral_cauchyPDFReal_eq_one`, `integral_comp_abs`, and
+  `integral_Ici_eq_integral_Ioi` to prove the exact `t = 0` value. This also
+  validates the denominator scaling and half-line symmetry APIs. The remaining
+  gap is genuinely the nonzero-frequency characteristic-function identity;
+  none of those normalization lemmas controls the oscillatory factor.
   -/
   sorry
 
