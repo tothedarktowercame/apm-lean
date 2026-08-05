@@ -40,7 +40,8 @@
     "blockers": [
       "Frozen statement uses a bespoke List.get-based AbsContOn, so the compiled a93J01 theorem for Mathlib's AbsolutelyContinuousOnInterval is not directly reusable",
       "Endpoint variation is available as BoundedVariationOn.tendsto_eVariationOn_Icc_zero_right",
-      "Remaining bridge: partition the sorted list at a₀ and transport dependent List.get bounds/order hypotheses to prefix and suffix"
+      "List.Pairwise.filter and forall_mem_iff_forall_getElem handle filtered-list invariants",
+      "Remaining bridge: encode alternating prefix endpoints as a monotone sequence and convert eVariationOn.sum_le's ENNReal edist sum to the real List.sum"
     ]
   }
 }

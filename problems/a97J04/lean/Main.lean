@@ -101,6 +101,19 @@ theorem continuous_bv_locally_ac_implies_ac
   predicate; the nearby completed theorem deliberately uses Mathlib's
   Finset-based predicate instead.  No claim is made that this bridge is
   unroutable.
+
+  CLOSER HOP 2 addendum (2026-08-05).
+  A second API pass found `List.Pairwise.filter`,
+  `List.Pairwise.rel_get_of_lt`, `List.pairwise_iff_get`, and
+  `List.forall_mem_iff_forall_getElem`. Thus filtering itself is not the
+  blocker: translate the adjacent `get` hypothesis to a transitive Pairwise
+  relation on pairs, filter by `p.1 < a`, and translate back for `hf_ac`.
+  The sharper remaining helper is to encode the alternating endpoints of the
+  filtered prefix as a monotone `ℕ → ℝ` (constant after twice the list length)
+  and convert its ENNReal `edist` sum, bounded by `eVariationOn.sum_le`, to
+  the real `List.sum` of absolute differences. No ready-made
+  list-to-variation lemma was found in Mathlib or prior bundles. This records
+  a strictly narrower boundary, not an impossibility claim.
   -/
   sorry
 

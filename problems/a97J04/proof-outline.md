@@ -49,6 +49,13 @@ integral_eq_sub_of_hasDerivAt (FOUND), ae_differentiableAt_of_mem_uIcc (FOUND).
    defines the custom predicate. No reusable list-partition bridge was found.
 4. Git history (`git log -S`): only the initial partial a97J04 commit contains
    this theorem; no later or alternate proof was found.
+5. Mathlib `Data/List/Pairwise.lean` and a repository-wide list API search:
+   found `List.Pairwise.filter`, `rel_get_of_lt`, `pairwise_iff_get`, and
+   `forall_mem_iff_forall_getElem`. These preserve ordering and endpoint
+   bounds under filtering; retained.
+6. Search for a list oscillation sum bounded by `eVariationOn`: no packaged
+   lemma was found. The primitive `eVariationOn.sum_le` requires explicitly
+   encoding alternating endpoints as a monotone sequence.
 
 ## Remaining exact bridge
 
@@ -60,3 +67,8 @@ local AC witness. The remaining Lean work is proving that the dependent
 `List.get` bounds/order predicates survive this partition and splitting the
 two mapped sums. This is an enriched partial boundary, not an assertion that
 the statement or route is defective.
+
+Hop 2 narrowed the bridge: filtered-list invariants have direct API support.
+What remains is conversion from the prefix's real `List.sum` of oscillations
+to the ENNReal sum accepted by `eVariationOn.sum_le`, using an alternating
+endpoint sequence constant beyond twice the list length.
