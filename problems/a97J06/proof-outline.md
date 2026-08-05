@@ -24,4 +24,24 @@ Statement compiles. 1 sorry: contour integral proof body.
 - #6 `math-informal/estimate-by-bounding`: cited (ML estimate).
 
 ## Mid-solve lookups
-None beyond Phase A.
+
+1. Mathlib `Probability/Distributions/Cauchy.lean`: found
+   `integral_cauchyPDFReal_eq_one`, useful only for `t = 0`; no characteristic
+   function theorem was found.
+2. Repository and Mathlib searches for the Fourier transform of the Cauchy
+   density (`exp (-γ|t|)`): no usable theorem found.
+3. `problems/a92J06/lean/Main.lean`: found a compiled full-circle rational
+   contour pattern using partial fractions, the interior-pole circle integral,
+   and exterior-pole vanishing; retained as a residue sub-pattern.
+4. Mathlib searches for semicircle, upper arc, and arc-integral APIs: no
+   packaged semicircular contour theorem or Jordan lemma found.
+
+## Remaining exact bridge
+
+The full-circle rational pattern does not directly represent the Fourier
+integral. The remaining direct route must define the upper semicircle as an
+interval-parametrized path, combine it with the real diameter, prove the
+single-pole residue identity, bound the arc uniformly, and take the improper
+integral limit. The alternative probability route would close immediately if
+a Cauchy characteristic-function theorem were added, but Mathlib currently
+only supplies normalization of its density.

@@ -63,6 +63,34 @@ namespace APMa97J06
 theorem cos_integral_eval (t : ℝ) :
     ∫ x in Ici 0, Real.cos (t * x) / (x^2 + 4) ∂volume =
       (π / 4) * Real.exp (-2 * |t|) := by
+  /-
+  CLOSER HOP 1 boundary (2026-08-05).
+
+  Consulted Mathlib `Probability/Distributions/Cauchy.lean`. It contains
+  `integral_cauchyPDFReal_eq_one`, which can settle the normalization case
+  `t = 0` after scaling and evenness, but it has no theorem for the Cauchy
+  characteristic function/Fourier transform. Repository-wide searches for
+  `characteristicFunction` of the Cauchy measure and for a Fourier transform
+  equal to `exp (-γ * |t|)` returned no usable result. Thus the probability
+  route does not close the parameter-dependent statement.
+
+  Consulted the compiled contour proof in
+  `problems/a92J06/lean/Main.lean`. Its useful reusable pattern is partial
+  fractions plus `circleIntegral.integral_sub_inv_of_mem_ball` for an interior
+  pole and `circleIntegral_eq_zero_of_differentiable_on_off_countable` for an
+  exterior pole. It applies to a full circle with rational integrand; the
+  present exponential integrand and real-axis diameter still require a
+  semicircular contour and a limiting argument.
+
+  A Mathlib source search for semicircle/upper-circle/arc parametrizations and
+  arc-integral estimates found no packaged semicircular contour API. The
+  available `circleIntegral` API parametrizes a complete circle, so the direct
+  contour route must define the upper arc as an interval integral of
+  `R * exp (I*θ)`, prove the residue identity by a custom closed-path argument,
+  and then establish Jordan/ML decay. No prior solved bundle contains that
+  complete bridge. No statement defect was found, and no claim is made that
+  this bridge is unroutable.
+  -/
   sorry
 
 #print axioms APMa97J06.cos_integral_eval

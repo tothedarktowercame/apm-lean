@@ -38,11 +38,9 @@
       "cos_integral_eval (contour integral evaluation proof body)"
     ],
     "blockers": [
-      "Contour setup: semicircular contour Γ_R = [-R,R] ∪ C_R",
-      "Residue computation: Res(e^{itz}/(z²+4), 2i) = e^{-2t}/(4i)",
-      "Residue theorem application: ∮_Γ f = 2πi · Res",
-      "ML estimate: arc integral → 0 as R → ∞",
-      "Evenness reduction and real part extraction"
+      "Cauchy density normalization exists but its characteristic function is not packaged",
+      "Compiled a92J06 full-circle rational contour pattern is reusable only for the pole subcalculation",
+      "No packaged semicircle/Jordan-lemma API was found; remaining bridge is custom upper-arc contour, decay, and improper-integral limit"
     ]
   }
 }
