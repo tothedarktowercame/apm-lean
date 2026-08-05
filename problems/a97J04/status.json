@@ -10,12 +10,12 @@
     "problem_tex": "apm/a97J04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,21 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.809585Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.809585Z",
+  "checked_at": "2026-08-05T13:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a97J04/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": [
+      "continuous_bv_locally_ac_implies_ac (main proof body)"
+    ],
+    "blockers": [
+      "No built-in AbsContOn definition in Mathlib — defined from scratch",
+      "Variation vanishing lemma: V(x) → 0 as x → 0+ (requires eVariationOn additivity + continuity at 0)",
+      "Splitting argument: cutting test intervals at a₀, bounding groups by variation and AC resp.",
+      "FTC route alternative: BV → f' ∈ L¹, FTC on [δ,1], limit δ→0"
+    ]
+  }
 }
