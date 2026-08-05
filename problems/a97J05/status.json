@@ -38,10 +38,9 @@
       "coeff_converges_to_neg_residue (main proof body)"
     ],
     "blockers": [
-      "Pole removal: g = f - A/(z-1) analytic on {|z|<2} implies coefficient decay",
-      "Geometric series: coefficient extraction of 1/(z-1) = -Σzⁿ gives constant -A",
-      "Cauchy estimates: |b(n)| ≤ M(r)/r^n → 0 for r > 1",
-      "Combining: a(n) + A = b(n) → 0"
+      "Compiled Cauchy-decay pattern found in a96J09 for the analytic remainder",
+      "Mathlib geometric-series and HasFPowerSeriesAt uniqueness APIs found",
+      "Remaining bridge: elaborate the scaled geometric series subtraction, identify coefficients a(n)+A, and apply decay"
     ]
   }
 }

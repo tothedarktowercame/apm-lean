@@ -22,4 +22,26 @@ Statement compiles. Proof body is 1 sorry.
 - #3 `e-codexpilot-extend-a-reciprocal-across-finite-punctures-then-apply-Liouville`: cited.
 
 ## Mid-solve lookups
-None beyond Phase A.
+
+1. `problems/a96J09/lean/Main.lean`: found a compiled Cauchy-estimate theorem
+   giving decay of normalized derivatives on an open neighborhood of the
+   closed unit disk; retained for the analytic remainder.
+2. Mathlib `Analysis/Analytic/Constructions.lean`: found the packaged
+   geometric series and its `HasFPowerSeriesOnBall` theorem; retained for the
+   polar coefficients.
+3. Mathlib `Analysis/Calculus/IteratedDeriv/Defs.lean`: found
+   `AnalyticAt.hasFPowerSeriesAt`, which packages normalized derivatives as an
+   `ofScalars` series; retained.
+4. Mathlib `Analysis/Analytic/Uniqueness.lean`: found
+   `HasFPowerSeriesAt.eq_formalMultilinearSeries`; retained for coefficient
+   identification.
+5. `a01J04` and `a96A06`: found related informal arguments, but no completed
+   theorem with the frozen hypotheses; discarded as direct dependencies.
+
+## Remaining exact bridge
+
+Build the scaled geometric power series for `A/(z-1)`, subtract it from
+`hf_series`, and use uniqueness against `AnalyticAt.hasFPowerSeriesAt` for the
+analytic remainder. This identifies the remainder coefficient as `a n + A`.
+Then reuse the a96J09 Cauchy estimate on the radius-two ball and translate
+`a n + A → 0` into `a n → -A`.

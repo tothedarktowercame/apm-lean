@@ -62,6 +62,39 @@ theorem coeff_converges_to_neg_residue
     (hg_analytic : AnalyticOnNhd ℂ (fun z => f z - A / (z - 1))
       (Metric.eball (0 : ℂ) 2)) :
     Tendsto a atTop (𝓝 (-A)) := by
+  /-
+  CLOSER HOP 1 boundary (2026-08-05).
+
+  Consulted `problems/a96J09/lean/Main.lean`: the compiled theorem
+  `apm_a96J09_coeff_tendsto_zero_of_contains_closed_disk` proves precisely
+  that normalized iterated derivatives tend to zero when a function is
+  analytic on an open set containing the closed unit disk.  Its proof uses
+  `DiffContOnCl.diffContOnCl_ball` and
+  `Complex.norm_iteratedDeriv_le_of_forall_mem_sphere_norm_le`; this can be
+  reused locally for `g z = f z - A / (z - 1)` on the radius-two ball.
+
+  Consulted Mathlib `Analysis/Analytic/Constructions.lean`: the geometric
+  series is packaged as `formalMultilinearSeries_geometric`, with
+  `formalMultilinearSeries_geometric_eq_ofScalars` and
+  `hasFPowerSeriesOnBall_inverse_one_sub`. Thus the polar part has the
+  `ofScalars` coefficients constantly `-A` after rewriting
+  `A / (z - 1) = -A * (1 - z)⁻¹`.
+
+  Consulted Mathlib `Analysis/Calculus/IteratedDeriv/Defs.lean` and
+  `Analysis/Analytic/Uniqueness.lean`: `AnalyticAt.hasFPowerSeriesAt`
+  supplies coefficients `iteratedDeriv n g 0 / n!`, while
+  `HasFPowerSeriesAt.eq_formalMultilinearSeries` identifies them with the
+  series obtained by subtracting the geometric polar series from
+  `hf_series`.
+
+  The remaining integration is import/API elaboration: construct the scaled
+  geometric `HasFPowerSeriesAt`, use `.sub` and uniqueness to prove
+  `iteratedDeriv n g 0 / n! = a n + A`, apply the a96J09 Cauchy-decay proof,
+  and finish by subtraction of the constant sequence. Searches of a01J04 and
+  a96A06 found only informal or still-sorry variants, so they were discarded
+  as compiled dependencies. No statement defect was found, and no claim is
+  made that this bridge is unroutable.
+  -/
   sorry
 
 #print axioms APMa97J05.coeff_converges_to_neg_residue
