@@ -56,6 +56,13 @@ integral_eq_sub_of_hasDerivAt (FOUND), ae_differentiableAt_of_mem_uIcc (FOUND).
 6. Search for a list oscillation sum bounded by `eVariationOn`: no packaged
    lemma was found. The primitive `eVariationOn.sum_le` requires explicitly
    encoding alternating endpoints as a monotone sequence.
+7. Broader prior-problem search found
+   `problems/a93A04/lean/Main.lean` and its compiled
+   `sum_edist_le_eVariationOn_of_mem_disjWithin`. Its internal `haux` proves
+   the needed oscillation bound by list induction plus
+   `eVariationOn.add_le_union`; retained as the preferred route. The exported
+   lemma is specialized to Mathlib's `disjWithin 0 1`, so it cannot be applied
+   directly to the small prefix interval.
 
 ## Remaining exact bridge
 
@@ -72,3 +79,7 @@ Hop 2 narrowed the bridge: filtered-list invariants have direct API support.
 What remains is conversion from the prefix's real `List.sum` of oscillations
 to the ENNReal sum accepted by `eVariationOn.sum_le`, using an alternating
 endpoint sequence constant beyond twice the list length.
+
+Hop 3 found a compiled route around that encoding in a93A04. The remaining
+integration is the real-sum filter decomposition and application of the
+a93A04-style local induction to the prefix alongside `hf_ac` on the suffix.

@@ -114,6 +114,23 @@ theorem continuous_bv_locally_ac_implies_ac
   the real `List.sum` of absolute differences. No ready-made
   list-to-variation lemma was found in Mathlib or prior bundles. This records
   a strictly narrower boundary, not an impossibility claim.
+
+  CLOSER HOP 3 addendum (2026-08-05).
+  A broader prior-problem search found the previously missed compiled witness
+  `sum_edist_le_eVariationOn_of_mem_disjWithin` in
+  `problems/a93A04/lean/Main.lean`. Its internal `haux` gives the preferable
+  construction: induct over a left-endpoint-sorted list and combine interval
+  variations with `eVariationOn.add_le_union`. This routes around the
+  alternating-endpoint sequence and ENNReal conversion identified in hop 2.
+  The public lemma itself is specialized to Mathlib's `disjWithin 0 1` and is
+  not imported as a library dependency, but its compiled local induction is
+  reusable almost verbatim for the filtered prefix.
+
+  The terminal remaining work is now only integration of that induction with
+  the custom predicate: derive the sorted prefix and suffix using
+  `List.Pairwise.filter`, apply the a93A04-style bound to the prefix, apply
+  `hf_ac a` to the suffix, and rewrite the original real sum as the sum of
+  the two filters. No theorem-statement defect was found.
   -/
   sorry
 

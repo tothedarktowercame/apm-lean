@@ -41,7 +41,8 @@
       "Frozen statement uses a bespoke List.get-based AbsContOn, so the compiled a93J01 theorem for Mathlib's AbsolutelyContinuousOnInterval is not directly reusable",
       "Endpoint variation is available as BoundedVariationOn.tendsto_eVariationOn_Icc_zero_right",
       "List.Pairwise.filter and forall_mem_iff_forall_getElem handle filtered-list invariants",
-      "Remaining bridge: encode alternating prefix endpoints as a monotone sequence and convert eVariationOn.sum_le's ENNReal edist sum to the real List.sum"
+      "a93A04 supplies a compiled list-induction pattern using eVariationOn.add_le_union, routing around the alternating-sequence helper",
+      "Remaining integration: split the custom list sum into filtered prefix/suffix, use the a93A04 induction on the prefix, and hf_ac on the suffix"
     ]
   }
 }
