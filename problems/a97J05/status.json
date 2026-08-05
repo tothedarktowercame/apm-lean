@@ -10,12 +10,12 @@
     "problem_tex": "apm/a97J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,21 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.822715Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.822715Z",
+  "checked_at": "2026-08-05T13:15:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a97J05/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": [
+      "coeff_converges_to_neg_residue (main proof body)"
+    ],
+    "blockers": [
+      "Pole removal: g = f - A/(z-1) analytic on {|z|<2} implies coefficient decay",
+      "Geometric series: coefficient extraction of 1/(z-1) = -Σzⁿ gives constant -A",
+      "Cauchy estimates: |b(n)| ≤ M(r)/r^n → 0 for r > 1",
+      "Combining: a(n) + A = b(n) → 0"
+    ]
+  }
 }
