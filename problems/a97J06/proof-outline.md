@@ -53,3 +53,10 @@ case from Cauchy-density normalization, uses `integral_comp_abs` for evenness,
 and converts `Ioi` to `Ici`. Thus scaling, integrability, and half-line
 symmetry are no longer speculative. The remaining obstacle is specifically
 the oscillatory characteristic-function identity for `t ≠ 0`.
+
+## Closer hop 3
+
+Added compiled `cos_integral_even`, reducing negative frequencies to positive
+ones. Combined with the proved zero-frequency case, the only remaining lemma
+needed is the transform evaluation under `0 < t`. Repeated searches for a
+Cauchy characteristic-function or Jordan-lemma theorem returned no match.

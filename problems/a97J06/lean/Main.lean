@@ -79,6 +79,15 @@ lemma cos_integral_eval_zero :
     linarith
   simpa [MeasureTheory.integral_Ici_eq_integral_Ioi] using hhalf
 
+/-- The half-line integral is even in its frequency parameter. -/
+lemma cos_integral_even (t : ℝ) :
+    (∫ x in Ici 0, Real.cos ((-t) * x) / (x ^ 2 + 4) ∂volume) =
+      ∫ x in Ici 0, Real.cos (t * x) / (x ^ 2 + 4) ∂volume := by
+  apply MeasureTheory.setIntegral_congr_fun measurableSet_Ici
+  intro x _
+  dsimp only
+  rw [neg_mul, Real.cos_neg]
+
 /-- Main theorem: ∫₀^∞ cos(tx)/(x²+4) dx = π/4 · e^{-2|t|} for all real t.
 
     -- (Memory: e-codexpilot-evaluate-a-rational-circle-integral-by-separating-interior-and-exterior-poles)
@@ -125,6 +134,17 @@ theorem cos_integral_eval (t : ℝ) :
   validates the denominator scaling and half-line symmetry APIs. The remaining
   gap is genuinely the nonzero-frequency characteristic-function identity;
   none of those normalization lemmas controls the oscillatory factor.
+
+  CLOSER HOP 3 addendum (2026-08-05).
+  Parameter symmetry is now compiled as `cos_integral_even`: the left-hand
+  side is invariant under `t ↦ -t`. Together with
+  `cos_integral_eval_zero`, the unresolved analytic core can therefore be
+  stated only for `0 < t`; negative `t` follows by symmetry and the RHS
+  identity `|-t| = |t|`. A final repository/Mathlib search for a theorem on
+  the Fourier transform or characteristic function of `cauchyMeasure`, and
+  for Jordan's lemma, again found none. Thus the terminal open bridge is one
+  positive-frequency transform evaluation, not endpoint, scaling, or sign
+  bookkeeping. No statement defect was found.
   -/
   sorry
 

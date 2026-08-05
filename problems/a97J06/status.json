@@ -39,6 +39,7 @@
     ],
     "blockers": [
       "Zero-frequency case is proved by the compiled cos_integral_eval_zero lemma using Cauchy normalization and evenness",
+      "Frequency sign reduction is proved by the compiled cos_integral_even lemma",
       "The Cauchy characteristic function for nonzero frequency is not packaged",
       "Compiled a92J06 full-circle rational contour pattern is reusable only for the pole subcalculation",
       "No packaged semicircle/Jordan-lemma API was found; remaining bridge is custom upper-arc contour, decay, and improper-integral limit"
