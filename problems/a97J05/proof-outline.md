@@ -52,3 +52,12 @@ Added and compiled `hasFPowerSeriesAt_div_sub_one`, proving directly that
 `A/(z-1)` has `ofScalars` coefficients `-A`. This closes the geometric-series
 elaboration bridge. Remaining work is subtraction/uniqueness and copying the
 compiled local Cauchy-decay pattern from a96J09.
+
+## Closer hop 3
+
+The main proof now compiles through formal-series subtraction and uniqueness.
+Its local `hcoeff` proves
+`a n + A = iteratedDeriv n g 0 / n.factorial`. A direct import of a96J09 was
+tested and discarded because `problems/` is not a Lake module root. The only
+remaining task is therefore to copy/package the already compiled Cauchy-decay
+lemma locally and finish the elementary limit translation.

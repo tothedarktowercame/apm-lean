@@ -36,6 +36,8 @@ APIs searched:
 import Mathlib.Analysis.Analytic.Basic
 import Mathlib.Analysis.Analytic.Constructions
 import Mathlib.Analysis.Analytic.OfScalars
+import Mathlib.Analysis.Analytic.Uniqueness
+import Mathlib.Analysis.Calculus.IteratedDeriv.Defs
 import Mathlib.Analysis.Calculus.FormalMultilinearSeries
 import Mathlib.Analysis.Complex.Basic
 
@@ -117,7 +119,38 @@ theorem coeff_converges_to_neg_residue
   `Ring.inverse_eq_inv`. The remaining proof no longer needs geometric-series
   API work; it consists of series subtraction/uniqueness followed by the
   a96J09 Cauchy-decay argument.
+
+  CLOSER HOP 3 addendum (2026-08-05).
+  Series subtraction and uniqueness now compile in the proof below. The local
+  fact `hcoeff` identifies the remainder coefficient exactly as
+  `a n + A = iteratedDeriv n g 0 / n!`; obtaining it required exposing
+  subtraction under `FormalMultilinearSeries.coeff` and then applying
+  `coeff_ofScalars`.
+
+  An attempted direct import of `problems/a96J09/lean/Main.lean` failed because
+  problem bundles are not on Lake's module search path. Consequently the sole
+  remaining step is to copy/package its zero-sorry Cauchy-decay theorem in
+  this bundle, instantiate it using `hg_analytic`, rewrite by `hcoeff`, and
+  translate by the constant `A`. This is the terminal enriched boundary; the
+  coefficient algebra is closed and only that analytic estimate remains.
   -/
+  let g : ℂ → ℂ := fun z => f z - A / (z - 1)
+  have hg_at : AnalyticAt ℂ g 0 := by
+    exact hg_analytic 0 (by simp [Metric.mem_eball])
+  have hg_series : HasFPowerSeriesAt g
+      (FormalMultilinearSeries.ofScalars ℂ a -
+        FormalMultilinearSeries.ofScalars ℂ (fun _ => -A)) 0 := by
+    simpa only [g] using hf_series.sub (hasFPowerSeriesAt_div_sub_one A)
+  have hseries_eq := hg_series.eq_formalMultilinearSeries hg_at.hasFPowerSeriesAt
+  have hcoeff : ∀ n : ℕ,
+      a n + A = iteratedDeriv n g 0 / (n.factorial : ℂ) := by
+    intro n
+    have hn := congrArg (fun p : FormalMultilinearSeries ℂ ℂ ℂ => p.coeff n) hseries_eq
+    change (FormalMultilinearSeries.ofScalars ℂ a).coeff n -
+      (FormalMultilinearSeries.ofScalars ℂ (fun _ => -A)).coeff n =
+        (FormalMultilinearSeries.ofScalars ℂ
+          (fun n => iteratedDeriv n g 0 / (n.factorial : ℂ))).coeff n at hn
+    simpa [FormalMultilinearSeries.coeff_ofScalars] using hn
   sorry
 
 #print axioms APMa97J05.coeff_converges_to_neg_residue

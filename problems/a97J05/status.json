@@ -40,7 +40,9 @@
     "blockers": [
       "Compiled Cauchy-decay pattern found in a96J09 for the analytic remainder",
       "Scaled geometric polar series is now proved by hasFPowerSeriesAt_div_sub_one",
-      "Remaining bridge: subtract series, identify coefficients a(n)+A by uniqueness, and apply the a96J09 decay pattern"
+      "Series subtraction and uniqueness now compile, yielding hcoeff: a(n)+A equals the normalized derivative coefficient of the remainder",
+      "Direct import of a96J09 is unavailable because problems/ is not a Lake module root",
+      "Remaining bridge: package the a96J09 Cauchy-decay proof locally and perform the final limit translation"
     ]
   }
 }
