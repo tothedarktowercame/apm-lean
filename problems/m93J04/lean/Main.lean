@@ -34,4 +34,21 @@ theorem apm_m93j04 :
         Function.support φ ⊆ Ioo (0 : ℝ) 1 →
         (∫ x in Ioo (0 : ℝ) 1,
             apm_m93J04_kernel x y * apm_m93J04_formalAdjoint φ x) = φ y := by
+  /-
+  Boundary: a direct proof must convert the set integral over `Ioo 0 1`
+  into interval integrals split at `y`, unfold the two branches of the
+  kernel, and integrate by parts twice on each side. It then has to derive
+  vanishing values and derivatives at `0` and `1` from
+  `support φ ⊆ Ioo 0 1`, discharge interval-integrability obligations for
+  `x`, `x * log x`, and the derivatives of `φ`, and simplify the two inner
+  boundary terms to the derivative jump `1 / y ^ 2`, yielding `φ y`.
+
+  I searched the interval-integral APIs
+  `intervalIntegral.integral_mul_deriv_eq_deriv_mul`,
+  `intervalIntegral.integral_deriv_mul_eq_sub`, and
+  `intervalIntegral.integral_eq_sub_of_hasDerivAt`. They support the
+  classical calculation, but I did not complete the set-integral splitting,
+  support-to-boundary lemmas, and repeated integration-by-parts bookkeeping
+  needed for this exact weak identity within this pass.
+  -/
   sorry
