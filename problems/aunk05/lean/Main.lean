@@ -24,4 +24,10 @@ theorem apm_aunk05 :
       TendstoLocallyUniformlyOn fseq f atTop Ω →
       DifferentiableOn ℂ f Ω ∧
         TendstoLocallyUniformlyOn (fun n => deriv (fseq n)) (deriv f) atTop Ω := by
-  sorry
+  intro Ω fseq f hΩ _hΩ_conn hf hconv
+  have hf_eventually : ∀ᶠ n in atTop, DifferentiableOn ℂ (fseq n) Ω :=
+    Filter.Eventually.of_forall hf
+  constructor
+  · exact hconv.differentiableOn hf_eventually hΩ
+  · -- (Sibling: a01A07)
+    simpa only [Function.comp_apply] using hconv.deriv hf_eventually hΩ
