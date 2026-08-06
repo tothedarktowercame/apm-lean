@@ -44,4 +44,31 @@ theorem apm_b98j02
         ∃ g : M ≃ₐ[L] M,
           ∀ b : B, b ∈ Q ↔
             ∃ a : B, a ∈ P ∧ algebraMap B M b = g (algebraMap B M a)) := by
+  have h_prime_avoidance :
+      ∀ (I : Ideal B) (s : Finset (Ideal B)),
+        (∀ P ∈ s, P.IsPrime) →
+        (I : Set B) ⊆ ⋃ P ∈ s, (P : Set B) →
+        ∃ P ∈ s, I ≤ P := by
+    intro I s hs hI
+    exact (Ideal.subset_union_prime (f := id) (⊥ : Ideal B) ⊥
+      (fun P hP _ _ => by simpa using hs P hP)).mp (by simpa using hI)
+  /-
+  Boundary (pass-1 Codex, partial): `h_prime_avoidance` above closes the first
+  conjunct with Mathlib's `Ideal.subset_union_prime`.
+
+  The norm conjunct still requires proving that every `L`-automorphism of `M`
+  preserves the chosen integral-closure model `B`, so that each factor of
+  `∏ g, g (algebraMap B M x)` has a preimage in `B`. The searched API includes
+  `AlgEquiv.mapIntegralClosure` and `Algebra.norm_eq_prod_automorphisms`, but no
+  direct restriction equivalence for the abstract hypothesis
+  `IsIntegralClosure B A M`. After building that restriction, a proof must show
+  Galois invariance puts the product in the image of `L`, use `hinter` to descend
+  it to `A`, and retain membership in `P` via the identity factor.
+
+  The final transitivity clause then needs a finite orbit of transported prime
+  ideals of `B`, application of the proved avoidance lemma, and the
+  incomparability theorem for primes over the same `q` in this abstract
+  integral extension. No proved sibling or searched theorem packages this
+  complete transport. The repaired statement appears mathematically sound.
+  -/
   sorry
