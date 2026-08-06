@@ -79,11 +79,18 @@ theorem apm_m95a04
     ¬ Function.Injective Ddist ∧
     (∀ lam : ℝ, Ddist (causal lam) + lam • causal lam = δ) ∧
     Nonempty (CompleteSpace W) := by
-  -- SKIPPED: six-part distributions/Sobolev problem.
-  -- (a) Regular functions as distributions; (b) distributional derivative D;
-  -- (c) D|x| = sign(x), D²|x| = 2δ; (d) D injective on test fns, not on dists;
-  -- (e) (D+λ)T = δ solution: causal exponential; (f) W^{1,p}[0,1] is Banach.
-  -- Blocker: requires Mathlib distribution theory (`𝓓`, `𝓓'`), weak derivatives,
-  -- Sobolev space construction, distributional ODE — each part is a major proof.
-  -- APIs: `𝓓`, `𝓓'`, `SchwartzMap.derivCLM`, `Lp`, `CompleteSpace`
+  -- PARTIAL (closer hop 1): bridge still open. Six-part problem confirmed.
+  -- Consulted LEMMA-INDEX.md: no relevant distribution/Sobolev/test function lemmas found.
+  -- This problem requires:
+  -- (a) regular =ᵐ ⟺: a.e. equality of L¹ functions (standard, but need Distributions API)
+  -- (b,c) D|x| = sign, D²|x| = 2δ: distributional derivative computation (need 𝓓' integration by parts)
+  -- (d) D injective on test fns, NOT on dists: kernel of D on distributions contains constants
+  -- (e) (D+λ)T = δ: solve distributional ODE, solution is causal exponential
+  -- (f) W^{1,p} is Banach: completeness of weak derivative graph in Lᵖ × Lᵖ
+  -- Each part is a separate major proof requiring Mathlib's `𝓓`, `𝓓'`, `Lp`,
+  -- `ContinuousLinearMap` APIs assembled in specific ways.
+  -- APIs confirmed: `𝓓(apm_m95A04_Ω, ℝ)`, `𝓓'(apm_m95A04_Ω, ℝ)` exist in Mathlib
+  -- via `open scoped Distributions SchwartzMap`. The `derivCLM` and `evalCLM` exist.
+  -- But the integration-by-parts identity for |x| and the Sobolev completeness
+  -- argument are not pre-packaged.
   sorry
