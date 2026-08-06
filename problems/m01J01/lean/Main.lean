@@ -31,4 +31,14 @@ theorem apm_m01j01 :
     apm_m01j01_OpenMappingTheorem ∧
     apm_m01j01_ClosedGraphTheorem ∧
     (apm_m01j01_OpenMappingTheorem → apm_m01j01_ClosedGraphTheorem) := by
-  sorry
+  constructor
+  · intro X Y _ _ _ _ _ _ T hT
+    exact T.isOpenMap hT
+  · constructor
+    · intro X Y _ _ _ _ _ _ T hT
+      apply T.continuous_of_isClosed_graph
+      simpa [LinearMap.graph, eq_comm] using hT
+
+    · intro _ X Y _ _ _ _ _ _ T hT
+      apply T.continuous_of_isClosed_graph
+      simpa [LinearMap.graph, eq_comm] using hT
