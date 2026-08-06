@@ -28,4 +28,32 @@ theorem apm_m94j01 :
         Tendsto
           (fun n : ℕ ↦ (-1 : ℂ) ^ n * iteratedDeriv n φ (n : ℝ))
           atTop (nhds (T φ)) := by
-  sorry
+  constructor
+  · intro φ
+    obtain ⟨b, hb⟩ := bddAbove_def.mp φ.hasCompactSupport.bddAbove
+    have hev : ∀ᶠ n : ℕ in atTop, b < (n : ℝ) :=
+      tendsto_natCast_atTop_atTop.eventually (eventually_gt_atTop b)
+    apply tendsto_const_nhds.congr'
+    filter_upwards [hev] with n hn
+    have hn_support : (n : ℝ) ∉ tsupport φ := by
+      intro hmem
+      exact (not_le_of_gt hn) (hb _ hmem)
+    have heq : (φ : ℝ → ℝ) =ᶠ[nhds (n : ℝ)] 0 :=
+      notMem_tsupport_iff_eventuallyEq.mp hn_support
+    rw [heq.iteratedDeriv_eq n, iteratedDeriv_const_zero, mul_zero]
+  · /-
+    Boundary: nonconvergence in the tempered-distribution dual requires an
+    explicit Schwartz function whose `n`-th derivative at `n` does not
+    converge after multiplication by `(-1)^n`. The standard construction is
+    a locally finite sum of disjoint translated bumps
+    `(x - n)^n / n! * χ (x - n)`, with `χ = 1` near zero.
+
+    I searched the `SchwartzMap` and bump-function APIs. Completing this route
+    requires constructing a smooth compactly supported plateau bump,
+    packaging the infinite locally finite sum as a `SchwartzMap`, proving all
+    weighted derivative seminorm bounds uniformly in the bump index, and
+    calculating its varying-order derivative at each center. No compiled
+    sibling supplied this high-order Schwartz interpolation construction
+    within this pass.
+    -/
+    sorry
