@@ -113,4 +113,16 @@ theorem apm_t01j03 :
       Limits.IsZero (apm_t01J03_H 2 M) ∧
       Nonempty (apm_t01J03_H 3 M ≅ ModuleCat.of ℤ ℤ) ∧
       ∀ k : ℕ, 4 ≤ k → Limits.IsZero (apm_t01J03_H k M)) := by
+  /-
+  Boundary (skipped): the requested computation needs Seifert--van Kampen
+  for the quotient gluing and the singular-homology Mayer--Vietoris long
+  exact sequence, together with concrete computations for `Circle`, disks,
+  and their products. I searched Mathlib's `FundamentalGroupoid` product,
+  `FundamentalGroup`, singular-homology, Künneth, pushout, and
+  Mayer--Vietoris APIs. Product preservation of the fundamental *groupoid*
+  exists, but the fundamental group of `Circle` is not computed as `ℤ`, and
+  there is no van Kampen theorem or singular Mayer--Vietoris sequence that
+  can turn the encoded twice-spiral relation into the `ZMod 2` and homology
+  conclusions. Developing those foundations is beyond this pass.
+  -/
   sorry
