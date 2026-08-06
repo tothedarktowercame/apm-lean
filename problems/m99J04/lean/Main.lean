@@ -51,6 +51,7 @@ theorem apm_m99j04
       ContinuousLinearMap.adjoint (apm_m99j04_conjugate A T) =
         apm_m99j04_conjugate A T ∧
       ∃ (ι : Type) (w : HilbertBasis ι 𝕜 H) (eigenvalue : ι → 𝕜),
+        (∀ i, star (eigenvalue i) = eigenvalue i) ∧
         (∀ i,
           T (A (w i)) =
             eigenvalue i • apm_m99j04_weight A (A (w i))) ∧
