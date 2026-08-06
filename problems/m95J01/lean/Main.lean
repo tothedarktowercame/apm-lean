@@ -45,4 +45,11 @@ theorem apm_m95j01
     ∃ b : OrthonormalBasis (Fin (n + 1)) ℝ H,
       ∀ k : Fin (n + 1),
         b k ∈ Submodule.span ℝ (monomial '' Set.Iic k) := by
+  -- SKIPPED: multi-part problem on e^{-x}·P(x) function space.
+  -- (1) H is complete (finite-dim ⟹ Banach). (2) finrank = n+1.
+  -- (3) T-I surjectivity characterization via constant term of P''-2P'+P.
+  -- (4) Gram-Schmidt orthonormal basis adapted to monomial filtration.
+  -- Blocker: requires inner product integral evaluation, Laguerre polynomial theory,
+  -- Gram-Schmidt construction, and operator surjectivity analysis.
+  -- APIs: `InnerProductSpace`, `Polynomial.derivative`, `Module.finrank`, `OrthonormalBasis`
   sorry
