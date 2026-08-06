@@ -10,9 +10,9 @@
     "problem_tex": "apm/a98A01.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
+    "files": ["lean/Main.lean"],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,6 +27,13 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.917813Z"
+  "classification": "complete",
+  "imported_at": "2026-07-13T17:26:52.913767Z",
+  "checked_at": "2026-08-05T14:30:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a98A01/lean/Main.lean",
+    "sorry_count": 0,
+    "axioms": "propext, Classical.choice, Quot.sound"
+  }
 }

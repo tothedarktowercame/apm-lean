@@ -10,12 +10,12 @@
     "problem_tex": "apm/a97J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,22 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.822715Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.822715Z",
+  "checked_at": "2026-08-05T13:15:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a97J05/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": [
+      "coeff_converges_to_neg_residue (main proof body)"
+    ],
+    "blockers": [
+      "Compiled Cauchy-decay pattern found in a96J09 for the analytic remainder",
+      "Scaled geometric polar series is now proved by hasFPowerSeriesAt_div_sub_one",
+      "Series subtraction and uniqueness now compile, yielding hcoeff: a(n)+A equals the normalized derivative coefficient of the remainder",
+      "Direct import of a96J09 is unavailable because problems/ is not a Lake module root",
+      "Remaining bridge: package the a96J09 Cauchy-decay proof locally and perform the final limit translation"
+    ]
+  }
 }

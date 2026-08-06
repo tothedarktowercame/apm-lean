@@ -1,12 +1,85 @@
 # Proof Outline: a97J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+## Problem
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-a97J04.md`
+Let f: [0,1] → ℝ be continuous, BV, and AC on [δ,1] for every δ > 0.
+Prove f is AC on [0,1].
 
-## Follow-up Needed
+## Strategy
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+Two routes from informal solution:
+1. **Direct**: V(x)→0 as x→0⁺ (Lemma 1), split test intervals at a₀.
+2. **FTC**: BV→f'∈L¹, AC on [δ,1] gives FTC, limit δ→0.
+
+## Current state (closer hop 1; exit 0, 1 sorry)
+
+- `AbsContOn` definition (from scratch; Mathlib has no function-level AC)
+- Statement compiles and is faithful to problem
+- 1 sorry: main proof body
+
+## Boundary
+
+The main proof requires:
+1. Variation vanishing: eVariationOn f (Icc 0 a₀) < ε/2 (using BV + continuity at 0)
+2. AC on [a₀,1]: apply hypothesis for some fixed a₀ > 0
+3. Splitting: cut intervals at a₀, bound each group
+-- (Memory: e-codexpilot-extend-local-absolute-continuity-to-an-endpoint-via-the-derivative-primitive)
+--    confirms FTC route as alternative
+-- (Memory: e-codexpilot-order-a-disjoint-interval-family-into-a-variation-partition)
+--    ordering intervals for oscillation bound
+
+APIs searched: eVariationOn, BoundedVariationOn (FOUND), AbsContOn (NOT in Mathlib, defined),
+integral_eq_sub_of_hasDerivAt (FOUND), ae_differentiableAt_of_mem_uIcc (FOUND).
+
+## Phase-A hints used
+- #1 `e-codexpilot-extend-local-absolute-continuity-to-an-endpoint-via-the-derivative-primitive`: cited.
+- #3 `e-codexpilot-order-a-disjoint-interval-family-into-a-variation-partition`: cited.
+
+## Mid-solve lookups
+
+1. `problems/a93J01/lean/Main.lean`: found a compiled FTC proof for the same
+   mathematics, but it uses `AbsolutelyContinuousOnInterval`; discarded as a
+   direct dependency because this frozen statement uses the custom list
+   predicate.
+2. Mathlib `Topology/EMetricSpace/BoundedVariation.lean`: found
+   `BoundedVariationOn.tendsto_eVariationOn_Icc_zero_right` for the endpoint
+   variation limit and `eVariationOn.sum_le_of_monotoneOn_Iic` for finite
+   oscillation sums; retained for the direct route.
+3. Repository-wide search for `AbsContOn` and this theorem: only this bundle
+   defines the custom predicate. No reusable list-partition bridge was found.
+4. Git history (`git log -S`): only the initial partial a97J04 commit contains
+   this theorem; no later or alternate proof was found.
+5. Mathlib `Data/List/Pairwise.lean` and a repository-wide list API search:
+   found `List.Pairwise.filter`, `rel_get_of_lt`, `pairwise_iff_get`, and
+   `forall_mem_iff_forall_getElem`. These preserve ordering and endpoint
+   bounds under filtering; retained.
+6. Search for a list oscillation sum bounded by `eVariationOn`: no packaged
+   lemma was found. The primitive `eVariationOn.sum_le` requires explicitly
+   encoding alternating endpoints as a monotone sequence.
+7. Broader prior-problem search found
+   `problems/a93A04/lean/Main.lean` and its compiled
+   `sum_edist_le_eVariationOn_of_mem_disjWithin`. Its internal `haux` proves
+   the needed oscillation bound by list induction plus
+   `eVariationOn.add_le_union`; retained as the preferred route. The exported
+   lemma is specialized to Mathlib's `disjWithin 0 1`, so it cannot be applied
+   directly to the small prefix interval.
+
+## Remaining exact bridge
+
+Choose `a` so the variation on `[0,2a]` is below half the requested error and
+use `hf_ac a` for the other half. Partition the sorted input list at left
+endpoint `< a`. Total length `< a` puts every prefix endpoint below `2a`, so
+its oscillation sum is bounded by variation; the suffix is admissible for the
+local AC witness. The remaining Lean work is proving that the dependent
+`List.get` bounds/order predicates survive this partition and splitting the
+two mapped sums. This is an enriched partial boundary, not an assertion that
+the statement or route is defective.
+
+Hop 2 narrowed the bridge: filtered-list invariants have direct API support.
+What remains is conversion from the prefix's real `List.sum` of oscillations
+to the ENNReal sum accepted by `eVariationOn.sum_le`, using an alternating
+endpoint sequence constant beyond twice the list length.
+
+Hop 3 found a compiled route around that encoding in a93A04. The remaining
+integration is the real-sum filter decomposition and application of the
+a93A04-style local induction to the prefix alongside `hf_ac` on the suffix.

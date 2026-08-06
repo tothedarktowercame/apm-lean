@@ -10,12 +10,12 @@
     "problem_tex": "apm/a97J04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,22 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:52.809585Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:52.809585Z",
+  "checked_at": "2026-08-05T13:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a97J04/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": [
+      "continuous_bv_locally_ac_implies_ac (main proof body)"
+    ],
+    "blockers": [
+      "Frozen statement uses a bespoke List.get-based AbsContOn, so the compiled a93J01 theorem for Mathlib's AbsolutelyContinuousOnInterval is not directly reusable",
+      "Endpoint variation is available as BoundedVariationOn.tendsto_eVariationOn_Icc_zero_right",
+      "List.Pairwise.filter and forall_mem_iff_forall_getElem handle filtered-list invariants",
+      "a93A04 supplies a compiled list-induction pattern using eVariationOn.add_le_union, routing around the alternating-sequence helper",
+      "Remaining integration: split the custom list sum into filtered prefix/suffix, use the a93A04 induction on the prefix, and hf_ac on the suffix"
+    ]
+  }
 }
