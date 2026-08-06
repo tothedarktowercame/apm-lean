@@ -47,4 +47,12 @@ theorem apm_m95j02
       ContDiff ℝ ⊤ f → HasCompactSupport f →
         ∀ x : EuclideanSpace ℝ (Fin n),
           Laplacian.laplacian (apm_m95J02_poissonSolution n f) x = f x) := by
+  -- SKIPPED: fundamental solution of Laplacian (three-part PDE problem).
+  -- (a) Laplacian of radial function: Δv(|x|) = v''(r) + (n-1)/r · v'(r).
+  -- (b) ΔΦ = δ in distributions: ∫ Φ·Δφ = φ(0) for test functions φ.
+  -- (c) Poisson solution: Δ(Φ*f) = f for compactly supported smooth f.
+  -- Blocker: requires Laplacian on Euclidean space, distributional PDE theory,
+  -- Green's function computation, convolution with singular kernels — none of
+  -- which have ready-to-use Mathlib infrastructure.
+  -- APIs: `Laplacian.laplacian`, `ContDiff`, `HasCompactSupport`, `EuclideanSpace`
   sorry
