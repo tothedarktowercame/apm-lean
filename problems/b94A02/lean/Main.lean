@@ -30,4 +30,15 @@ theorem apm_b94a02 :
         ¬Function.Injective
           (TensorProduct.map (Ideal.span {b}).subtype
             (LinearMap.id (M := R ⧸ I)))) := by
+  /- PASS-1 boundary: searched the principal-ideal, annihilator, quotient, and
+     tensor APIs, including `Ideal.mem_span_singleton`,
+     `Submodule.mem_annihilator_span_singleton`, `Submodule.liftQ`,
+     `TensorProduct.lid`, `TensorProduct.map_tmul`, and the tensor-product
+     quotient equivalences.  The intended construction chooses `r` from a
+     witness `x = b * r` and sends `(x, s + I)` to `r * s + I`; proving this
+     independent of the chosen witness requires transporting
+     `b * (r-r') = 0` through the annihilator hypothesis into `I`.  I could
+     not package that choice as the required curried linear map and then build
+     its inverse tensor equivalence, needed to certify the nonzero kernel
+     witness in the final clause, within pass 1. -/
   sorry
