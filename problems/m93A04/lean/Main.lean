@@ -39,4 +39,21 @@ theorem apm_m93a04
       D x h t = h t - ∫ s : apm_m93A04_I, K₂ t.1 (x s) * h s) :
     (∀ x : apm_m93A04_C, HasFDerivAt F (D x) x) ∧
     ∀ x : apm_m93A04_C, Function.Bijective (D x) := by
+  /-
+  Boundary: proving the first conjunct requires upgrading `hpartial` to a
+  uniform Frechet remainder estimate in the `ContinuousMap` sup norm and
+  packaging the parameterized Bochner integral over the interval subtype.
+  I searched the parametric-integral APIs
+  `hasFDerivAt_integral_of_dominated_loc_of_lip` and
+  `hasFDerivAt_integral_of_dominated_of_fderiv_le`; they provide the relevant
+  integral differentiation machinery, but applying them here still requires
+  the missing uniformity, measurability, and domination setup.
+
+  For bijectivity one must define the integral operator whose complement is
+  `D x`, prove its operator norm is at most `c` (using that the restricted
+  interval has measure one and the continuous-map sup norm), and construct
+  the inverse by a Neumann series or contraction argument. I did not find a
+  compiled sibling route or a directly applicable Mathlib theorem completing
+  those bridges within this pass.
+  -/
   sorry
