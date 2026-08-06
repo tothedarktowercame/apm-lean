@@ -33,4 +33,18 @@ theorem apm_t91j06
     (hcover : (⋃ n, f n '' (univ : Set apm_t91J06_I)) = (univ : Set X))
     (hweak : ∀ C : Set X, (∀ n, IsClosed (f n ⁻¹' C)) → IsClosed C) :
     Nonempty (X ≃ₜ ℝ) := by
+  /-
+  Boundary (skipped): the informal proof must orient each embedded interval
+  compatibly, construct an inductive family of piecewise homeomorphisms onto
+  `[-n,n]`, glue them to a bijection `X → ℝ`, and use `hweak` plus the
+  compact exhaustion of `ℝ` to prove both directions continuous. I searched
+  Mathlib's `Topology.IsEmbedding`, interval `Homeomorph` and
+  `PartialHomeomorph` APIs, final/weak topologies, direct limits, compact
+  exhaustions, and one-manifold classification results. There is no packaged
+  classification of connected noncompact one-manifolds or theorem identifying
+  a weak direct limit of intervals with `ℝ`; the needed compatible gluing
+  construction would have to be developed from scratch. Since the frozen
+  conclusion is one existential homeomorphism, it exposes no honest
+  intermediate proposition for a partial proof.
+  -/
   sorry
