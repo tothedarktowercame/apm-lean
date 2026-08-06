@@ -53,4 +53,15 @@ theorem apm_m01j05 :
               Function.Bijective
                 (fderiv ℝ F (apm_m01J05_newtonIterate F x₀ k))) ∧
             Tendsto (apm_m01J05_newtonIterate F x₀) atTop (nhds xStar)) := by
+  /-
+  SKIPPED (frozen-statement defect). The contraction-mapping conjunct omits
+  `[Nonempty X]`. Take `X := Empty`: it has `MetricSpace` and `CompleteSpace`
+  instances, and the map and contraction hypotheses are vacuous for any
+  `q ∈ [0,1)`, but the conclusion requires `∃ xStar : Empty, ...`.
+
+  Mathlib's `ContractingWith.fixedPoint`, `fixedPoint_isFixedPt`, and
+  `tendsto_iterate_fixedPoint` likewise require `[Nonempty X]`, confirming
+  that this is a missing mathematical hypothesis rather than an API gap.
+  The statement is frozen, so no repair was made.
+  -/
   sorry
