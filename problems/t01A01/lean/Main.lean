@@ -31,4 +31,25 @@ theorem apm_t01a01 :
         FundamentalGroup.map f x γ = 1) ∧
       ∃ p : apm_t01A01_RP2,
         ContinuousMap.Homotopic f (ContinuousMap.const _ p) := by
+  intro f hnot_surj
+  have hfactor : ∃ q : apm_t01A01_RP2,
+      ∃ g : C(apm_t01A01_RP2, {y : apm_t01A01_RP2 // y ≠ q}),
+        ∀ x, (g x : apm_t01A01_RP2) = f x := by
+    obtain ⟨q, hq⟩ : ∃ q : apm_t01A01_RP2, ∀ x, f x ≠ q := by
+      simpa [Function.Surjective] using hnot_surj
+    refine ⟨q, ⟨fun x ↦ ⟨f x, hq x⟩, ?_⟩, ?_⟩
+    · exact f.continuous.subtype_mk _
+    · intro x
+      rfl
+  /-
+  Boundary: factorization through the complement of a missed point is proved
+  above. Completing the frozen theorem requires the specific topology of real
+  projective space: `RP² \ {q}` deformation retracts to `RP¹ ≃ S¹`,
+  `π₁(RP²) ≃ ZMod 2`, and the circle's universal-cover lifting criterion.
+  I searched Mathlib's `Projectivization`, `FundamentalGroup`, homotopy,
+  covering-map lifting, sphere/circle, and quotient APIs. None of those
+  projective-space computations or the punctured-plane deformation retraction
+  is available, so the factorization cannot presently be converted into the
+  two requested conclusions without a substantial new topology development.
+  -/
   sorry
