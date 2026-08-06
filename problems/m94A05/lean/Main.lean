@@ -24,4 +24,21 @@ theorem apm_m94a05
       ∀ t ∈ Icc (0 : ℝ) Real.pi,
         u t + ∫ s in (0 : ℝ)..Real.pi, Real.sin (t * s) * (u s) ^ 2 =
           ε * Real.sin t := by
+  /-
+  Boundary: the intended route uses the complete Banach space of continuous
+  maps on the interval subtype and the closed sup-norm ball of radius `2 * ε`.
+  One must construct the Picard map
+  `u ↦ ε * sin - ∫ s, sin (t*s) * u(s)^2`, prove continuity in the
+  parameter `t`, and establish the uniform estimates
+  `‖T u‖ ≤ ε + π ‖u‖^2` and
+  `‖T u - T v‖ ≤ π (‖u‖ + ‖v‖) ‖u-v‖`.
+
+  I found the abstract fixed-point API `ContractingWith.fixedPoint` and the
+  interval-integral norm estimates. Applying it here still requires packaging
+  the nonlinear parameterized integral as a continuous map, proving the ball
+  is invariant from `ε < 1 / (4 * π)`, defining the subtype self-map, and
+  converting its fixed point back to the statement's unrestricted function
+  with `ContinuousOn`. No compiled sibling supplied this full integral-
+  operator construction within this pass.
+  -/
   sorry
