@@ -26,4 +26,10 @@ def apm_a99j09_rightHalfPlane : Set ℂ :=
 theorem apm_a99j09 (f : ℝ → ℂ) (p : ℝ) (hp : 1 < p)
     (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Ici (0 : ℝ)))) :
     DifferentiableOn ℂ (apm_a99j09_laplace f) apm_a99j09_rightHalfPlane := by
+  -- SKIPPED: holomorphicity of Laplace transform on right half-plane for f∈Lᵖ.
+  -- Key idea: Hölder gives |∫f(t)e^{-tz}dt| ≤ ‖f‖_p·‖e^{-t·Re(z)}‖_q < ∞ for Re(z)>0.
+  -- Differentiate under integral: ∂/∂z gives -t·e^{-tz}, still Hölder-controlled.
+  -- Blocker: parametric integral differentiation for complex Bochner integrals on
+  -- unbounded domains with Lᵖ/Hölder domination is not readily available in Mathlib.
+  -- APIs: `DifferentiableOn`, `MemLp`, `differentiableUnder_integral` — need to check.
   sorry
