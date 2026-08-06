@@ -40,4 +40,13 @@ theorem apm_b01j01
     apm_b01J01_sylowSubgroupsIn p K =
       apm_b01J01_sylowTraces p K ∧
     Nat.card (Sylow p K) ∣ Nat.card (Sylow p G) := by
+  -- SKIPPED: four-part finite group theory problem.
+  -- (a) p|H|, p∤|H∩K| ⟹ p|G/K|: use |HK/K| = |H|/|H∩K| and p∤|H∩K|.
+  -- (b) p|H|, p∤|H∩G'| ⟹ ∃ subgroup of index p: HK/K surjects onto abelian G/K,
+  --     H∩G' kernel, so p | |H/(H∩G')| gives index-p subgroup.
+  -- (c) Sylow subgroups of K = {P∩K : P ∈ Syl(G)}: standard Sylow restriction.
+  -- (d) |Syl_p(K)| | |Syl_p(G)|: follows from (c) + orbit counting.
+  -- Blocker: requires Sylow theorems (partially in Mathlib), commutator subgroup theory,
+  -- second isomorphism theorem, index arguments. Each part is a separate nontrivial proof.
+  -- APIs: `Sylow`, `Subgroup.Normal`, `commutator`, `Subgroup.index`, `Nat.card`
   sorry
