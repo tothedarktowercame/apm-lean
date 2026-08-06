@@ -19,6 +19,24 @@ Mathlib's tensor-product-based `Module.Flat`, not by a weaker surrogate.
 
 noncomputable section
 
+lemma apm_b90a02_rat_to_int_eq_zero (f : ℚ →ₗ[ℤ] ℤ) (q : ℚ) : f q = 0 := by
+  let n : ℕ := (f q).natAbs + 1
+  have hn : (n : ℤ) ≠ 0 := by
+    exact_mod_cast (Nat.succ_ne_zero (f q).natAbs)
+  have hnQ : (n : ℚ) ≠ 0 := by exact_mod_cast hn
+  have hq : (n : ℤ) • (q / n) = q := by
+    change (n : ℚ) * (q / n) = q
+    field_simp [hnQ]
+  have hdvd : (n : ℤ) ∣ f q := by
+    refine ⟨f (q / n), ?_⟩
+    calc
+      f q = f ((n : ℤ) • (q / n)) := congrArg f hq.symm
+      _ = (n : ℤ) • f (q / n) := f.map_smul _ _
+      _ = (n : ℤ) * f (q / n) := rfl
+  apply Int.eq_zero_of_dvd_of_natAbs_lt_natAbs hdvd
+  change (f q).natAbs < n
+  simp [n]
+
 theorem apm_b90a02
     (R M : Type) [CommRing R] [AddCommGroup M] [Module R M] :
     (Module.Free R M → Module.Flat R M) ∧
@@ -31,11 +49,12 @@ theorem apm_b90a02
   · intro
     infer_instance
   · infer_instance
-  · -- Boundary: searched `Module.Flat.of_free`, `Module.Flat.of_projective`,
-    -- the Dedekind/torsion-free flatness instance, projective-module lifting
-    -- APIs, and PID free-module results.  The first three claims are complete.
-    -- The remaining claim needs the theorem that an arbitrary (not assumed
-    -- finitely generated) projective ℤ-module is free, or an equivalent direct
-    -- lifting obstruction for the divisible module ℚ; the available PID
-    -- submodule-freeness results located were finite-rank variants.
-    sorry
+  · intro hproj
+    letI : Module.Projective ℤ ℚ := hproj
+    obtain ⟨s, hs⟩ := (inferInstance : Module.Projective ℤ ℚ).out
+    have hs0 : s = 0 := by
+      ext q i
+      exact apm_b90a02_rat_to_int_eq_zero ((Finsupp.lapply i).comp s) q
+    have hone := hs (1 : ℚ)
+    rw [hs0] at hone
+    simpa using hone
