@@ -53,4 +53,21 @@ theorem apm_m94j04 :
       apm_m94J04_E ⊤,
       ∫ p, inner ℝ (apm_m94J04_u p) (apm_m94J04_curlTest φ p) ∂volume =
         ∫ p, inner ℝ (apm_m94J04_curlValue p) (φ p) ∂volume := by
+  /-
+  Boundary: after expanding the Euclidean basis and inner products, the
+  identity reduces to integration by parts in the `y` coordinate on the
+  half-space `x > 0`; the `x ≤ 0` contribution is independent of `y` and
+  hence vanishes against the compactly supported derivative.  I searched the
+  repository and Mathlib for a matching weak-curl proof and for the global
+  line-derivative integration-by-parts API, including
+  `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable` and
+  `integral_bilinear_fderiv_right_eq_neg_left_of_integrable`.
+
+  Completing the route requires proving integrability of all coordinate
+  products from `TestFunction.hasCompactSupport`, simplifying `fderiv` along
+  `EuclideanSpace.single`, and applying Fubini or a half-space restriction so
+  that the piecewise coefficient is constant in the differentiated
+  coordinate.  No compiled sibling supplied those coordinate and measure
+  bridges within this pass.
+  -/
   sorry
