@@ -65,4 +65,7 @@ theorem apm_a98a03 :
   --
   -- Blocker: Part 1 is the hard blocker (Cantor function construction).
   -- Part 2 is tractable in principle but combined exceeds the time budget.
+  -- SKIPPED: two-part problem. Part 1 needs Cantor staircase (not in Mathlib).
+  -- Part 2 (FTC with Riemann integrable f') is tractable but combined exceeds budget.
+  -- Full analysis in file comments above.
   sorry
