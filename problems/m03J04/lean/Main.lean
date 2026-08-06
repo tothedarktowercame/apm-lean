@@ -40,4 +40,27 @@ theorem apm_m03j04
       ∃ e : V ≃L[ℝ]
           dualAnnihilator ((dualAdjoint B).ker : Set W),
         ∀ v : V, (e v).1 = B v) := by
-  sorry
+  constructor
+  · rfl
+  constructor
+  · intro U
+    unfold dualAnnihilator
+    convert isClosed_iInter fun w : U ↦
+      ContinuousLinearMap.isClosed_ker ((ContinuousLinearMap.apply ℝ ℝ) w.1)
+    simp
+  · /-
+    Boundary for the closed-range and inf-sup clauses. The definitional
+    double-flip identity and closedness of annihilators as intersections of
+    evaluation kernels are compiled above.
+
+    The remaining closure identity needs the Hahn–Banach annihilator theorem
+    together with the Hilbert reflexivity equivalence identifying continuous
+    functionals on `W →L[ℝ] ℝ` with evaluation at points of `W`. The final
+    clause then requires rewriting the signed `sSup` as `‖B v‖`, deriving a
+    bounded-below estimate, proving `B.range` closed, and packaging the
+    restricted map and its bounded inverse as a `ContinuousLinearEquiv` into
+    the subtype `dualAnnihilator ...`. Searches found no single compiled
+    closed-range theorem with these exact dual/subtype conventions. No sibling
+    code was reused, and the frozen statement was left unchanged.
+    -/
+    sorry
