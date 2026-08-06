@@ -71,6 +71,12 @@ def apm_a03J05_integrand (t x : ℝ) : ℝ :=
 theorem apm_a03j05 (t : ℝ) :
     ∫ x in Ioi (0 : ℝ), apm_a03J05_integrand t x ∂volume =
       (Real.pi / 2) * Real.exp (-|t|) := by
+  -- SKIPPED: contour integral evaluation of ∫₀^∞ cos(xt)/(1+x²) dx = (π/2)e^{-|t|}.
+  -- Requires residue theorem (NOT in Mathlib) or Fourier transform of 1/(1+x²)
+  -- (NOT pre-computed in Mathlib). The file comments document the contour approach
+  -- and the ODE alternative, both blocked by missing infrastructure.
+  -- APIs: `Complex.circleIntegral_sub_inv_smul` — exists but needs full contour setup.
+  -- No residue theorem for this configuration in Mathlib.
   sorry
 
 end
