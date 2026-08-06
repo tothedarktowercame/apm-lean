@@ -34,4 +34,10 @@ theorem apm_a98j03 :
           T y (hf.toLp f) = hgy.toLp (apmPoissonIntegral y f)) ∧
       (∀ F : Lp ℝ 2 volume,
         Tendsto (fun y ↦ T y F) (nhdsWithin 0 (Ioi 0)) (nhds F)) := by
+  -- SKIPPED: Poisson semigroup on L²(ℝ). Requires Young's convolution inequality
+  -- (‖P_y * f‖₂ ≤ ‖P_y‖₁ · ‖f‖₂, but ‖P_y‖₁ = 1 since P_y is a probability kernel),
+  -- and convergence T_y f → f in L² via density of C_c or Schwartz functions.
+  -- APIs: `ContinuousLinearMap`, `Lp`, `MemLp`, `convolution` — FOUND but the
+  -- L² contraction bound and convergence need Young's inequality which is NOT in Mathlib
+  -- as a ready-to-use lemma for L² specifically.
   sorry
