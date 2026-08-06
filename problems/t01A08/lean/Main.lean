@@ -44,4 +44,18 @@ theorem apm_t01a08
           Function.Surjective
             (mfderiv I apm_t01a08_I2
               (fun z => apm_t01a08_projection (f z)) x)) := by
+  /-
+  Boundary (skipped): the intended route is Sard's theorem for
+  `projection ∘ f`, but Mathlib does not currently provide manifold Sard in
+  this generality. More importantly, the frozen statement omits a
+  second-countability (or comparable countability) hypothesis on `X`, so it
+  is false as stated: take an uncountable topological sum of positive-
+  dimensional manifold components indexed by `p : R²`, and map the entire
+  `p`-component constantly to a point of `R³` whose projection is `p`. The map
+  is smooth and its projection is surjective, but its derivative is zero on
+  every fiber, hence no `p` is a regular value. I searched the manifold
+  regular-value, critical-value, Sard, and Whitney-embedding APIs; the only
+  Sard-related code assumes additional countability/local-Lipschitz machinery
+  and does not supply this theorem.
+  -/
   sorry
