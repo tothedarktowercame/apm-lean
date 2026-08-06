@@ -40,4 +40,40 @@ theorem apm_b95j03 :
           (1 : ℂ) ⊗ₜ[ℝ] (1 : ℂ) + Complex.I ⊗ₜ[ℝ] Complex.I ∧
       (b 1).1 =
           (1 : ℂ) ⊗ₜ[ℝ] Complex.I - Complex.I ⊗ₜ[ℝ] (1 : ℂ)) := by
-  sorry
+  constructor
+  · intro F E _ _ _ φ
+    constructor
+    · intro h
+      apply TensorProduct.ext
+      ext a b c
+      simpa [tensorMulRepresentation, tensorMultiplication] using h a b c
+    · rintro rfl
+      intro a b c
+      simp [tensorMulRepresentation, tensorMultiplication]
+  constructor
+  · intro F E _ _ _ _
+    have hmul : Function.Injective (LinearMap.mul F E) := by
+      intro x y hxy
+      have := LinearMap.congr_fun hxy 1
+      simpa using this
+    have htensor : Function.Surjective (tensorMultiplication F E) := by
+      intro x
+      refine ⟨x ⊗ₜ[F] 1, ?_⟩
+      simp [tensorMultiplication]
+    have hrange : (tensorMulRepresentation F E).range = (LinearMap.mul F E).range := by
+      exact LinearMap.range_comp_of_range_eq_top _
+        (LinearMap.range_eq_top.mpr htensor)
+    have hfrange : Module.finrank F (tensorMulRepresentation F E).range =
+        Module.finrank F E := by
+      rw [hrange, ← (LinearEquiv.ofInjective (LinearMap.mul F E) hmul).finrank_eq]
+    refine ⟨hfrange, ?_⟩
+    have hrank := (tensorMulRepresentation F E).finrank_range_add_finrank_ker
+    rw [hfrange, Module.finrank_tensorProduct] at hrank
+    apply Nat.eq_sub_of_add_eq
+    simpa [pow_two, add_comm] using hrank
+  · -- Boundary: searched `Basis.mk`, `TensorProduct.induction_on`, and the
+    -- tensor-product basis APIs.  The image/kernel dimension theorem above is
+    -- complete; constructing the requested `Fin 2` basis with the two fixed
+    -- subtype values still needs a substantial explicit independence/spanning
+    -- proof for the real basis of `ℂ ⊗[ℝ] ℂ`.
+    sorry
