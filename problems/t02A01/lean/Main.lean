@@ -25,4 +25,11 @@ theorem apm_t02a01 :
     ∀ (n : ℕ), 0 < n → ∀ a b : ZMod n,
       apm_t02a01_boundaryMonodromy n a b = 1 ∧
       apm_t02a01_boundaryComponentCount n a b = n := by
-  sorry
+  intro n hn a b
+  have hmon : apm_t02a01_boundaryMonodromy n a b = 1 := by
+    ext x
+    simp [apm_t02a01_boundaryMonodromy, Equiv.Perm.mul_apply]
+    abel
+  constructor
+  · exact hmon
+  · simp [apm_t02a01_boundaryComponentCount, hmon, Nat.card_zmod]
