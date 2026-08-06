@@ -35,4 +35,23 @@ theorem apm_m93j06 :
       (∀ t y, |f t y| ≤ C * |y|) →
       (∀ t a b, |f t a - f t b| ≤ L * |a - b|) →
       ∀ t a b, |φ t a - φ t b| ≤ Real.exp (L * |t|) * |a - b|) := by
+  /-
+  Boundary: Mathlib provides local existence through `IsPicardLindelof` and
+  uniqueness/stability through `ODE_solution_unique_univ` and
+  `dist_le_of_trajectories_ODE`. The first and third conjuncts here require
+  constructing compatible solutions on an exhausting family of compact time
+  intervals and gluing them into a single function on all of `ℝ`; the growth
+  conjunct additionally needs a continuation argument.
+
+  The second conjunct requires differentiable dependence of the resulting
+  flow on initial data (not merely regularity of each trajectory). The fourth
+  requires formalizing a nonunique Hölder vector field such as
+  `y ↦ sqrt |y|` with two global `HasDerivAt` solutions. Finally, the last
+  estimate needs separate forward- and backward-time Gronwall applications
+  translated from norm/dist bounds to the exact absolute-value expression.
+  I found the relevant local APIs in
+  `Mathlib.Analysis.ODE.PicardLindelof` and
+  `Mathlib.Analysis.ODE.Gronwall`, but no compiled sibling assembled these
+  global and parameter-dependence bridges within this pass.
+  -/
   sorry
