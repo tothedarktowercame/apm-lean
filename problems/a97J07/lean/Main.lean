@@ -23,3 +23,11 @@ theorem apm_a97j07 (f : ℂ → ℂ) (a b : ℝ)
     (hb : ∀ z ∈ sphere (0 : ℂ) 1, z.im < 0 → ‖f z‖ ≤ b) :
     ‖f 0‖ ≤ Real.sqrt (a * b) := by
   sorry
+  -- Proof: g(z) = f(z)·f(-z). On the sphere, z↦-z swaps upper/lower arcs,
+  -- so |g(z)| ≤ ab everywhere on the sphere. By max modulus, |g(0)| ≤ ab.
+  -- Since g(0) = f(0)², |f(0)|² ≤ ab, so |f(0)| ≤ √(ab).
+  --
+  -- APIs needed:
+  -- - `Complex.norm_le_of_forall_mem_frontier_norm_le` (max modulus principle)
+  -- - `DiffContOnCl.mk_ball` from DifferentiableOn + ContinuousOn
+  -- - `norm_mul`, `Real.le_sqrt`
