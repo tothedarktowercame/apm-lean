@@ -28,4 +28,27 @@ theorem apm_t91a01 :
       (∑ q ∈ zeros, index q) = 2 - 2 * (genus : ℤ) →
       p ∈ zeros → index p = 3 →
       ∃ q ∈ zeros, q ≠ p := by
-  sorry
+  refine ⟨?_, ?_, ?_⟩
+  · intro z
+    simp [apm_t91a01_vectorField]
+  · intro θ
+    simp only [apm_t91a01_vectorField]
+    rw [← Complex.exp_nat_mul]
+    congr 1
+    push_cast
+    ring
+  · intro α _ zeros index genus p hsum hp hip
+    by_contra hother
+    push_neg at hother
+    have hzeros : zeros = {p} := by
+      ext q
+      constructor
+      · intro hq
+        have hqp := hother q hq
+        simpa [hqp]
+      · intro hq
+        have hqp : q = p := by simpa using hq
+        simpa [hqp] using hp
+    rw [hzeros] at hsum
+    simp [hip] at hsum
+    omega
