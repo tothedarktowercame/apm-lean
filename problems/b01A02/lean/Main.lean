@@ -30,4 +30,17 @@ theorem apm_b01a02 :
         (∃ H : Subgroup G,
           H.Normal ∧ Nat.card H = 85 ∧ IsCyclic H) ∧
         IsCyclic G) := by
+  -- SKIPPED: two-part finite group theory.
+  -- (a) Subgroup of index p (smallest prime divisor of |G|) is normal:
+  --     action of G on G/H gives homomorphism G → S_p; kernel ⊆ H;
+  --     |G/Ker| divides p! and |G|, forcing |G/Ker| | p, hence H=Ker is normal.
+  -- (b) Groups of order 255=3·5·17 are cyclic:
+  --     Sylow theorems: n_17=1 (normal subgroup of order 17),
+  --     n_5|51, n_5≡1(mod 5) → n_5=1 or 51; n_3|85, n_3≡1(mod 3) → n_3=1 or 85;
+  --     counting argument shows at least one of n_3=1 or n_5=1;
+  --     normal subgroup of order 85 is cyclic (gcd(5,17)=1);
+  --     quotient by it has order 3, etc.
+  -- Blocker: requires Sylow theorems (NOT in Mathlib as ready-to-use),
+  -- group actions on cosets, counting arguments.
+  -- APIs: `Subgroup.index`, `Subgroup.Normal`, `Sylow` — Sylow theory absent.
   sorry
