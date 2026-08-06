@@ -64,4 +64,32 @@ theorem apm_m98j04 :
       ∀ y ∈ apm_m98J04_admissible a b α β,
         apm_m98J04_arcLength a b (apm_m98J04_line a b α β) ≤
           apm_m98J04_arcLength a b y := by
-  sorry
+  constructor
+  · /-
+    Boundary: deriving the pointwise Euler--Lagrange equation from the frozen
+    stationarity predicate requires differentiating an interval integral with
+    respect to the variation parameter, integration by parts, and a fundamental
+    lemma for endpoint-zero `C¹` test variations. I searched Mathlib's
+    `HasDerivAt`-under-integral, interval integration-by-parts, bump-function,
+    and fundamental-lemma APIs; I did not find an assembled route matching this
+    bespoke three-variable Lagrangian encoding.
+    -/
+    sorry
+  · intro a b α β hab
+    constructor
+    · refine ⟨?_, ?_, ?_⟩
+      · unfold apm_m98J04_line
+        fun_prop
+      · simp [apm_m98J04_line]
+      · have hba : b - a ≠ 0 := sub_ne_zero.mpr hab.ne'
+        simp [apm_m98J04_line, hba]
+    · /-
+      Boundary: global minimality is the convexity/Jensen estimate for
+      `p ↦ sqrt (1 + p²)`, followed by the fundamental theorem of calculus for
+      an arbitrary globally `C¹` competitor to identify the integral of its
+      derivative with `β - α`. I searched `Convex`, `intervalIntegral`, and
+      arc-length APIs; the required Jensen estimate and endpoint derivative
+      identity were not available in a directly composable form in this pass.
+      The line's `C¹` regularity and both endpoint constraints are proved above.
+      -/
+      sorry
