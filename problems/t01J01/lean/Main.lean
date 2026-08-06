@@ -42,8 +42,8 @@ theorem apm_t01j01
     (S : Type*) [TopologicalSpace S] [T2Space S] [CompactSpace S]
     (hS : apm_t01j01_IsClosedOrientableGenusTwoSurface S)
     (γ₁ γ₂ : C(Circle, S))
-    (hγ₁ : IsEmbedding (γ₁ : Circle → S))
-    (hγ₂ : IsEmbedding (γ₂ : Circle → S))
+    (hγ₁ : Topology.IsEmbedding (γ₁ : Circle → S))
+    (hγ₂ : Topology.IsEmbedding (γ₂ : Circle → S))
     (hdisjoint : Disjoint (Set.range γ₁) (Set.range γ₂))
     (hhom₁ : apm_t01j01_IsNullHomologous γ₁)
     (hhom₂ : apm_t01j01_IsNullHomologous γ₂)
