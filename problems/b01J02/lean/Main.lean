@@ -44,4 +44,15 @@ theorem apm_b01j02 :
     apm_b01J02_xIdeal ≠ ⊥ ∧
     apm_b01J02_xIdeal.IsPrime ∧
     ¬apm_b01J02_xIdeal.IsMaximal := by
+  -- SKIPPED: three-part ideal theory in Z[x].
+  -- (a) Maximal ideals: (p, f) where p prime, f mod p irreducible. Requires
+  --     classification of maximal ideals in Z[x] — deep ring theory.
+  -- (b) (3, x²+x+1) not prime: need f·g ∈ I but f,g ∉ I. Note x²+x+1 ≡ (x-1)² mod 3
+  --     since x²+x+1 = (x-1)²+3x. So (x-1)² ∈ (3, x²+x+1) but x-1 ∉ it.
+  --     Concrete but requires careful ideal membership proofs.
+  -- (c) (x) is prime but not maximal: Z[x]/(x) ≅ Z (domain but not field).
+  --     Requires `Ideal.IsPrime`, `Ideal.IsMaximal`, quotient ring arguments.
+  -- Blocker: part (a) classification is deep; parts (b),(c) are concrete but
+  -- require assembling ideal membership and quotient ring theory.
+  -- APIs: `Ideal.span`, `Ideal.IsMaximal`, `Ideal.IsPrime`, `Irreducible`, `Polynomial.map`
   sorry
