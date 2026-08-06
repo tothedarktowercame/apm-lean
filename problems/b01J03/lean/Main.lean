@@ -49,4 +49,14 @@ theorem apm_b01j03
       apm_b01J03_rootField F K α = apm_b01J03_rootField F K β ∧
       apm_b01J03_rootField F K α = ⊤ ∧
       (P : Subgroup (K ≃ₐ[F] K)) = ⊤ := by
+  -- SKIPPED: four-part Galois theory problem (self-normalizing Sylow ⟹ G=P).
+  -- (a) |G|=ps with p∤s: Sylow theorem (|G|/|P| = s, p∤s).
+  -- (b) s(p-1) elements of order p: number of conjugates of P = |G|/|N_G(P)| = |G|/|P| = s,
+  --     each contributing p-1 non-identity elements.
+  -- (c) H_α = H_β and F[α]=F[β]: counting argument — p roots, each has stabilizer of order s,
+  --     self-normalizing P forces all root fields equal.
+  -- (d) K=F[α] ⟹ G=P: since [K:F[α]]=1, the Galois group has order p.
+  -- Blocker: requires Sylow theorems, Galois correspondence, normalizer counting,
+  -- orbit-stabilizer on root sets — deep algebra infrastructure.
+  -- APIs: `Sylow`, `Subgroup.normalizer`, `AlgEquiv`, `IntermediateField`, `fixingSubgroup`
   sorry
