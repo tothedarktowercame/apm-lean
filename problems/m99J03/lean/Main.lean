@@ -44,4 +44,25 @@ theorem apm_m99j03
       Filter.Tendsto
         (fun n : ℕ => ∫ x : ℝ, ψ (x / (n : ℝ)) * φ x)
         Filter.atTop (nhds (ψ 0 * ∫ x : ℝ, φ x)) := by
+  have hψ_cont : Continuous ψ := hψ.continuous
+  have hdilation_pointwise :
+      ∀ (φ : ℝ → ℝ) (x : ℝ),
+        Filter.Tendsto (fun n : ℕ => ψ (x / (n : ℝ)) * φ x)
+          Filter.atTop (nhds (ψ 0 * φ x)) := by
+    intro φ x
+    have hx : Filter.Tendsto (fun n : ℕ => x / (n : ℝ))
+        Filter.atTop (nhds 0) :=
+      tendsto_const_div_atTop_nhds_zero_nat x
+    exact (hψ_cont.continuousAt.tendsto.comp hx).mul tendsto_const_nhds
+  /-
+  Boundary: pointwise convergence for the dilated profile in part (c) is
+  proved above. Completing (c) requires extracting a compact support bound
+  from `HasCompactSupport φ` and constructing one integrable majorant for
+  `ψ (x / n) * φ x` (including the `n = 0` convention) before applying
+  `MeasureTheory.tendsto_integral_of_dominated_convergence`. Parts (a) and
+  (b) additionally require explicit interval-integral evaluations and a
+  first-order Taylor remainder estimate. I searched those dominated
+  convergence, compact-support integrability, interval-integral, and Taylor
+  APIs but did not assemble all three weak limits in this pass.
+  -/
   sorry
