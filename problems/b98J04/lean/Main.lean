@@ -51,4 +51,37 @@ theorem apm_b98j04
         ∀ residues : Fin k → R, ∃ r : R,
           ∀ i, r - residues i ∈ rightAnnihilator (I i)) ∧
       leftSpanOfRightIdeal M = ⊤ := by
+  haveI : IsSemisimpleRing R :=
+    IsArtinianRing.isSemisimpleRing_iff_jacobson.mpr hwedderburn
+  haveI : IsSemisimpleRing Rᵐᵒᵖ := inferInstance
+  haveI : IsSemisimpleModule Rᵐᵒᵖ M := inferInstance
+  haveI : Module.Finite Rᵐᵒᵖ R := by
+    have hspan : Submodule.span Rᵐᵒᵖ ({1} : Set R) = ⊤ :=
+      (Submodule.span_singleton_eq_top_iff (R := Rᵐᵒᵖ) (1 : R)).2
+        (fun r ↦ ⟨MulOpposite.op r, by simp⟩)
+    exact ⟨⟨({1} : Finset R), by simpa only [Finset.coe_singleton] using hspan⟩⟩
+  haveI : IsNoetherian Rᵐᵒᵖ R := inferInstance
+  haveI : Module.Finite Rᵐᵒᵖ M := inferInstance
+  have hdecomp : ∃ s : Set (Submodule Rᵐᵒᵖ M), s.Finite ∧ sSupIndep s ∧
+      sSup s = ⊤ ∧ ∀ m ∈ s, IsSimpleModule Rᵐᵒᵖ m :=
+    ((IsSemisimpleModule.finite_tfae (R := Rᵐᵒᵖ) (M := M)).out 0 4).mp
+      (show Module.Finite Rᵐᵒᵖ M from inferInstance)
+  obtain ⟨s, hsfin, hsind, hssup, hsimple⟩ := hdecomp
+  /-
+  Boundary after the compiled semisimple reduction above:
+  `IsArtinianRing.isSemisimpleRing_iff_jacobson` turns `hwedderburn`
+  into semisimplicity, and `IsSemisimpleModule.finite_tfae` supplies the
+  finite independent family `s` of simple submodules with supremum `⊤`.
+  The remaining bridge is specific to this statement's set-valued
+  `rightAnnihilator`: lift the members of `s` from submodules of `M` to
+  submodules of `R`, use `hminimal` to prove their annihilators are distinct
+  maximal two-sided ideals, and apply a noncommutative CRT to obtain both the
+  matrix quotient maps and simultaneous residues.  Mathlib's
+  `Ideal.quotientInfRingEquivPiQuotient` is for `Ideal` (left ideals in the
+  noncommutative API), while `rightAnnihilator` here is deliberately only a
+  `Set`; no theorem converting these annihilator sets to the required
+  two-sided quotient/CRT data was found.  The global
+  `IsSemisimpleRing.exists_ringEquiv_pi_matrix_divisionRing` does not retain
+  the required correspondence with the chosen summands of `M`.
+  -/
   sorry
