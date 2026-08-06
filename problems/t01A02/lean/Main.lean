@@ -1,20 +1,25 @@
 import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t01A02
 
 ## Statement repairs
 
-None.
+The former part (a) used an opaque `H₂` type and an axiom to install its group
+structure. It is replaced by Mathlib's integral singular homology functor and
+the actual morphism induced by `f`. No source claim is changed.
 
 ## Encoding questions
 
 The torus and the four-sheeted map are concrete: `Circle × Circle` and
-`(z,w) ↦ (z²,w²)`. Mathlib has covering maps but no usable general integral
-singular-homology group functor in this setting, so only the `H₂` group and
-its functorial map are isolated behind opaque typed helpers. The covering group
-is not opaque: it is characterized by a free, fiber-transitive `(Z/2)²` action.
+`(z,w) ↦ (z²,w²)`. The covering group is characterized by a free,
+fiber-transitive `(Z/2)²` action.
 -/
+
+open CategoryTheory
 
 abbrev apm_t01A02_Torus := Circle × Circle
 abbrev apm_t01A02_Deck := ZMod 2 × ZMod 2
@@ -38,27 +43,20 @@ def apm_t01A02_hasCoveringGroup
     (∀ g x, act g x = x → g = 0) ∧
     (∀ x y, p x = p y ↔ ∃ g, act g x = y)
 
-/-- Integral second singular homology. -/
-opaque apm_t01A02_H2 (X : Type*) [TopologicalSpace X] : Type
-
-axiom apm_t01A02_H2AddCommGroupExists
-    (X : Type*) [TopologicalSpace X] :
-    Nonempty (AddCommGroup (apm_t01A02_H2 X))
-
-noncomputable instance (X : Type*) [TopologicalSpace X] :
-    AddCommGroup (apm_t01A02_H2 X) :=
-  Classical.choice (apm_t01A02_H2AddCommGroupExists X)
+abbrev apm_t01A02_H2 (X : Type) [TopologicalSpace X] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
 /-- The map induced on integral second homology. -/
-opaque apm_t01A02_H2map {X Y : Type*} [TopologicalSpace X]
-    [TopologicalSpace Y] (f : C(X, Y)) :
-    apm_t01A02_H2 X →+ apm_t01A02_H2 Y
+def apm_t01A02_H2map {X Y : Type} [TopologicalSpace X]
+    [TopologicalSpace Y] (f : C(X, Y)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
 
 theorem apm_t01a02 :
     ∀ f : C(apm_t01A02_Torus, apm_t01A02_Torus),
       ¬Function.Surjective f →
-      (∀ a : apm_t01A02_H2 apm_t01A02_Torus,
-        apm_t01A02_H2map f a = 0) ∧
+      apm_t01A02_H2map f = 0 ∧
       apm_t01A02_hasCoveringGroup
         (G := apm_t01A02_Deck) apm_t01A02_cover ∧
       ((∃ g : C(apm_t01A02_Torus, apm_t01A02_Torus),
