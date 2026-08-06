@@ -107,4 +107,16 @@ theorem apm_t00a02 :
     (∀ r₀ : apm_t00A02_RP2,
       Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r₀) 4 true) ∧
       Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r₀) 4 false)) := by
+  /-
+  Boundary (skipped): I searched Mathlib's covering-map, quotient-covering,
+  monodromy, manifold, and singular-homology APIs. The library has general
+  monodromy and properly-discontinuous quotient machinery, but no
+  classification theorem for compact connected surfaces, no theorem that
+  Euler characteristic multiplies under a finite covering, and no packaged
+  construction/classification of covers of a wedge from permutation actions.
+  Moreover, the custom `RP2` quotient is not definitionally the orbit quotient
+  expected by `IsQuotientCoveringMap`, so even the antipodal-cover conjunct
+  requires a substantial bridge between the generated relation and a `ZMod 2`
+  action. These missing developments exceed this pass.
+  -/
   sorry
