@@ -49,4 +49,81 @@ theorem apm_m00a01
       Function.Bijective (apmRestrictedComplement M N P hP) ∧
       ∃ α : ℝ, 0 < α ∧
         ∀ x : M, α * ‖(x : H)‖ ≤ ‖(x : H) - (P x : H)‖ := by
-  sorry
+  have hzero_of_mem_both {x : H} (hxM : x ∈ M) (hxN : x ∈ N) : x = 0 := by
+    have hx : x ∈ M ⊓ N := ⟨hxM, hxN⟩
+    rw [hdisjoint] at hx
+    simpa using hx
+  have hzero_of_mem_N_perp {x : H} (hxN : x ∈ N)
+      (hxperp : x ∈ apmOrthogonalComplement N) : x = 0 := by
+    have hx : x ∈ N ⊓ apmOrthogonalComplement N := ⟨hxN, hxperp⟩
+    rw [apmOrthogonalComplement, Submodule.inf_orthogonal_eq_bot] at hx
+    simpa using hx
+  have hP_eq_of_mem {x : H} (hx : x ∈ N) : (P x : H) = x := by
+    have hdiffN : x - (P x : H) ∈ N := N.sub_mem hx (P x).property
+    have hz := hzero_of_mem_N_perp hdiffN (hP x)
+    exact (sub_eq_zero.mp hz).symm
+  have hP_eq_zero_of_mem_perp {x : H} (hx : x ∈ apmOrthogonalComplement N) :
+      (P x : H) = 0 := by
+    have hPxperp : (P x : H) ∈ apmOrthogonalComplement N := by
+      have := (apmOrthogonalComplement N).sub_mem hx (hP x)
+      simpa [apmOrthogonalComplement] using this
+    exact hzero_of_mem_N_perp (P x).property hPxperp
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro x
+    exact ⟨(P x).property, hP x⟩
+  · intro x
+    constructor
+    · exact hP x
+    · have hPx : (P x : H) ∈
+          apmOrthogonalComplement (apmOrthogonalComplement N) := by
+        exact Submodule.le_orthogonal_orthogonal N (P x).property
+      simpa [apmOrthogonalComplement] using hPx
+  · constructor
+    · intro x y hxy
+      apply Subtype.ext
+      have hval := congrArg Subtype.val hxy
+      change (x : H) - (P x : H) = (y : H) - (P y : H) at hval
+      have hdiffN : (x : H) - (y : H) ∈ N := by
+        have heq : (x : H) - (y : H) = (P x : H) - (P y : H) := by
+          rw [sub_eq_sub_iff_add_eq_add] at hval ⊢
+          simpa [add_comm] using hval
+        rw [heq]
+        exact N.sub_mem (P x).property (P y).property
+      have hdiffM : (x : H) - (y : H) ∈ M := M.sub_mem x.property y.property
+      exact sub_eq_zero.mp (hzero_of_mem_both hdiffM hdiffN)
+    · intro z
+      have hzsum : (z : H) ∈ M ⊔ N := by
+        rw [hsum]
+        exact Submodule.mem_top
+      obtain ⟨m, hm, n, hn, hmn⟩ := Submodule.mem_sup.mp hzsum
+      refine ⟨⟨m, hm⟩, Subtype.ext ?_⟩
+      change m - (P m : H) = (z : H)
+      have hPz : (P (z : H) : H) = 0 := hP_eq_zero_of_mem_perp z.property
+      have hPn : (P n : H) = n := hP_eq_of_mem hn
+      have happ' : P m + P n = P (z : H) := by
+        simpa using congrArg P hmn
+      have happ := congrArg Subtype.val happ'
+      change (P m : H) + (P n : H) = (P (z : H) : H) at happ
+      rw [hPz, hPn] at happ
+      rw [← hmn]
+      rw [show (P m : H) = -n by
+        rw [eq_neg_iff_add_eq_zero]
+        exact happ]
+      abel
+  · /-
+    Boundary: both projection characterizations and the bijectivity of
+    `apmRestrictedComplement M N P hP` are proved above.  The remaining bridge
+    is the quantitative lower bound from the bounded inverse theorem.
+
+    The intended route is to package `apmRestrictedComplement` as a
+    `ContinuousLinearMap M (Nᵆ)`, use the established bijectivity with
+    `ContinuousLinearEquiv.ofBijective`, and extract an antilipschitz/norm lower
+    bound from the resulting equivalence. Searches covered
+    `ContinuousLinearEquiv.ofBijective`,
+    `ContinuousLinearMap.bijective_iff_dense_range_and_antilipschitz`, and
+    `ContinuousLinearEquiv.antilipschitz`. The blocker is constructing the
+    continuous linear map cleanly from the subtype-valued expression
+    `x - P x` and aligning its norm inequality with the theorem's coerced
+    ambient-space norm. No sibling pass-1 proof supplied this bridge.
+    -/
+    sorry
