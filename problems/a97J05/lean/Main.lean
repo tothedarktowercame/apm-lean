@@ -103,15 +103,30 @@ theorem apm_a97j05
   -- Near z = 1: h = g₀ (eventually), g₀ analytic.
   -- Define G piecewise and show AnalyticOnNhd.
 
-  -- PARTIAL: proof structure laid out. Steps 1-2 (f analytic at 0, pole removal)
-  -- are conceptually done. Remaining bridge:
-  -- (a) Gluing: h = f - A/(z-1) extends analytically to ball 0 2 by gluing with g₀ near z=1.
-  --     APIs: `AnalyticOnNhd` gluing/patching lemma — not available in Mathlib.
-  -- (b) Geometric series: A/(z-1) = -A·∑zⁿ on ball 0 1, so h(z) = ∑(aₙ+A)zⁿ.
-  --     APIs: `hasSum_geometric_of_norm_lt_one`, `HasFPowerSeriesOnBall` — available.
-  -- (c) Coefficient decay: analytic on ball 0 2 ⟹ coefficients → 0 by Cauchy estimates.
-  --     APIs: `HasFPowerSeriesOnBall.coeff_tendsto_zero` or similar — need to check.
-  -- -- (Memory: math-informal/estimate-by-bounding) Cauchy estimates bound coefficients.
-  -- -- (Memory: e-codexpilot-extend-a-reciprocal-across-finite-punctures-then-apply-Liouville)
-  -- --    Extending across punctures via local analytic agreement.
+  -- PARTIAL (closer hop 1): Bridge identified but assembly exceeds budget.
+  -- Key finding: Mathlib HAS `Complex.analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt`
+  -- in `Analysis/Complex/RemovableSingularity.lean` — the removable singularity theorem.
+  --
+  -- Route: h(z) = f(z) - A/(z-1) is differentiable on ball 0 2 \\ {1}.
+  -- Near z=1: h(z) = g₀(z) (from heq_pole), g₀ analytic ⟹ continuous at 1.
+  -- Apply removable singularity theorem ⟹ h̃ = update h 1 (g₀ 1) is analytic at 1.
+  -- So h̃ is AnalyticOn ℂ on all of ball 0 2.
+  -- On ball 0 1: h̃(z) = f(z) - A/(z-1) = ∑ aₙzⁿ - (-A)∑zⁿ = ∑(aₙ+A)zⁿ.
+  -- By a96J09's `apm_a96J09_coeff_tendsto_zero_of_contains_closed_disk`: coefficients → 0.
+  -- (a96J09 proves: if f is AnalyticOn on an open set containing closedBall 0 1,
+  --  then ‖iteratedDeriv n f 0‖/n! → 0.)
+  -- Applied to h̃ on ball 0 2 ⊇ closedBall 0 1: coefficients of h̃ at 0 → 0.
+  -- These coefficients are aₙ + A (by power series uniqueness on ball 0 1).
+  -- Hence aₙ + A → 0, i.e., aₙ → -A.
+  --
+  -- Consulted:
+  -- 1. LEMMA-INDEX.md: `apm_a96J09_coeff_tendsto_zero_of_contains_closed_disk` (a96J09)
+  -- 2. Mathlib `Analysis/Complex/RemovableSingularity.lean`:
+  --    `analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt`
+  -- 3. a96J09/lean/Main.lean: proof compiles, exit 0
+  --
+  -- Remaining assembly: (1) construct h̃ via Function.update, (2) prove AnalyticOn
+  -- via removable singularity theorem, (3) prove geometric series for A/(z-1) on ball 0 1,
+  -- (4) apply a96J09's lemma, (5) coefficient extraction.
+  -- Each step is 10-20 lines but total exceeds this hop's budget.
   sorry
