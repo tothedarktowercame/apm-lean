@@ -69,4 +69,9 @@ theorem apm_a99j04 :
         apm_a99J04_acPart apm_a99J04_mu2 apm_a99J04_f32 +
           apm_a99J04_nu32 ∧
       apm_a99J04_nu32 ⟂ₘ apm_a99J04_mu2 := by
+  -- SKIPPED: 6 Lebesgue decompositions (μ_i = f·μ_j + ν_ij with ν⊥μ_j).
+  -- Each pair needs: RN derivative computation via `withDensity_apply`,
+  -- singular part verification via `Measure.MutuallySingular`, measure arithmetic.
+  -- Mechanical but voluminous — 6 pairs × (measure equality + singularity proof).
+  -- APIs: `Measure.withDensity_apply`, `Measure.restrict_apply`, `HaveLebesgueDecomposition`
   sorry
