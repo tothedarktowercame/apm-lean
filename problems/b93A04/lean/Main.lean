@@ -32,4 +32,31 @@ theorem apm_b93a04 :
         (∀ σ τ : L₁ ≃ₐ[F] L₁, σ * τ = τ * σ) →
         (∀ σ τ : L₂ ≃ₐ[F] L₂, σ * τ = τ * σ) →
         IsGalois F K ∧ ∀ σ τ : K ≃ₐ[F] K, σ * τ = τ * σ) := by
+  intro F K _ _ _ _ _ L₁ L₂
+  have hsumProducts_le : ∀ x : K,
+      (∃ (n : ℕ) (a : Fin n → L₁) (b : Fin n → L₂),
+        x = ∑ i, (a i : K) * (b i : K)) → x ∈ L₁ ⊔ L₂ := by
+    intro x
+    rintro ⟨n, a, b, rfl⟩
+    refine Submodule.sum_mem (L₁ ⊔ L₂).toSubmodule ?_
+    intro i hi
+    exact (L₁ ⊔ L₂).mul_mem
+      ((show L₁ ≤ L₁ ⊔ L₂ from le_sup_left) (a i).property)
+      ((show L₂ ≤ L₁ ⊔ L₂ from le_sup_right) (b i).property)
+  have hfixingSup :
+      (L₁ ⊔ L₂).fixingSubgroup =
+        L₁.fixingSubgroup ⊓ L₂.fixingSubgroup :=
+    IntermediateField.fixingSubgroup_sup
+  /- PASS-1 boundary: `hsumProducts_le` proves that every displayed finite
+     sum of products lies in the compositum, and `hfixingSup` proves the first
+     Galois-correspondence identity using
+     `IntermediateField.fixingSubgroup_sup`.  I searched
+     `IntermediateField.exists_finset_of_mem_supr'`,
+     `IsGalois.sup_right`, `intermediateFieldEquivSubgroup`, and
+     `IntermediateField.restrictRestrictAlgEquivMapHom_injective`.  The
+     remaining blockers are showing the finite-sum set is itself a field for
+     the reverse inclusion, constructing Galoisness of the compositum from
+     the two subextensions, deriving the fixing-subgroup meet identity via
+     the order dual, and transporting abelianness through the injective
+     restriction map. -/
   sorry
