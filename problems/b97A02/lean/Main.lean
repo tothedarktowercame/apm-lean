@@ -41,4 +41,20 @@ theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
           ({apm_b97a02_invariant F} : Set (RatFunc F))) ∧
     (∀ K : IntermediateField F (RatFunc F), K ≠ ⊥ →
       Module.Finite K (RatFunc F)) := by
+  /-
+  Boundary (pass-1 Codex, skipped): local Mathlib source search found the
+  low-level constructors `RatFunc.liftRingHom` and `RatFunc.liftAlgHom`, and
+  the general fixed-field API `IntermediateField.fixedField`, but no packaged
+  affine-substitution `AlgEquiv` for `RatFunc`, no theorem that such maps are
+  determined by `RatFunc.X`, and no rational-function degree formula proving
+  `[F(X) : F(t)] = max (degree numerator) (degree denominator)`.
+
+  The available `IntermediateField.finrank_fixedField_eq_card` machinery
+  assumes a finite-dimensional ambient extension and therefore does not apply
+  directly to `F ⊂ F(X)`.  Consequently the fixed-field identification and the
+  final assertion for every proper intermediate field still require a sizable
+  custom development connecting substitution, degrees, and adjoins. Searches
+  of proved sibling artifacts found no implementation of this bridge. The
+  statement appears mathematically sound; this is an API/formalization blocker.
+  -/
   sorry
