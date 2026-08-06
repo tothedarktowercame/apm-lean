@@ -42,4 +42,8 @@ theorem apm_a98a01 (n : ℕ) (hn : 0 < n) (f : ℝ → ℝ)
     (Tendsto
         (fun k => eLpNorm (apm_a98a01_dilation (n := n) f α k) 1 volume)
         atTop (𝓝 0) ↔ n ≤ 3 ∧ α < n) := by
+  -- SKIPPED: bidirectional iff for 3 convergence modes on EuclideanSpace ℝ (Fin n)
+  -- requires: (a) sup-norm scale invariance argument; (b) a.e. asymptotics from t⁴f(t)→1;
+  -- (c) polar coordinate L¹ norm = c_n·k^{α-n}·∫f(s)s^{n-1}ds with finiteness iff n≤3.
+  -- APIs: `TendstoUniformly`, `eLpNorm`, `tendsto_rpow_neg_atTop`, `sphereVolume`
   sorry
