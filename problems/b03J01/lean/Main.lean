@@ -39,10 +39,20 @@ theorem apm_b03j01
   refine ⟨?_, ?_⟩
   · apply H.normal_of_index_eq_minFac_card
     simpa [Nat.card_eq_fintype_card, hminfac] using hindex
-  · -- Boundary: searched `Sylow.card_sylow_modEq_one`,
-    -- `Sylow.card_dvd_index`, `Sylow.normal_of_subsingleton`, and
-    -- `IsZGroup.of_squarefree`.  The remaining route is to show both Sylow
-    -- subgroups are unique from the twin-prime arithmetic, obtain nilpotence,
-    -- and invoke the cyclicity theorem for finite squarefree nilpotent groups.
-    -- I did not complete the required Sylow-cardinality/index API plumbing.
+  · -- Boundary: exhaustive pass-1 desk research found the intended chain in
+    -- Mathlib: `Sylow.card_sylow_modEq_one`, `Sylow.card_dvd_index`,
+    -- `Sylow.normal_of_subsingleton`, `isNilpotent_of_finite_tfae`,
+    -- `IsZGroup.of_squarefree`, and the nilpotent `IsZGroup` cyclic instance.
+    -- The remaining route is to derive that the cardinality of each Sylow type
+    -- is one from `|G| = p * (p + 2)` and the twin-prime arithmetic, install
+    -- normality for every prime divisor, and feed those instances through the
+    -- nilpotence/Z-group chain.
+    --
+    -- I also scanned all 160 closed problem artifacts, all modules in
+    -- `ConstructionTargets/`, `YoungL2.lean`, and the partial group neighbors
+    -- `b93A01`, `b90A01`, and `b96A02`.  The construction libraries are
+    -- analytic and irrelevant here; the group neighbors stop at the same
+    -- Sylow-cardinality/typeclass plumbing.  No packaged order-`p*q`
+    -- classification or reusable completed proof was found, and I did not
+    -- complete that plumbing within this pass.
     sorry
