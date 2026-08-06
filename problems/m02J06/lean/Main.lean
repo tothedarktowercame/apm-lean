@@ -62,4 +62,21 @@ theorem apm_m02j06 :
           apm_m02J06_convolution f (apm_m02J06_mollifier φ ε) y| ≤
             (M / ε) * Real.sqrt |x - y|) ∧
       IsCompact apm_m02J06_KL1 := by
+  /-
+  SKIPPED (Kolmogorov–Riesz/L¹ quotient bridge). Mathlib searches found the
+  general convolution integral API (`integral_convolution`) and abstract
+  Arzelà–Ascoli theorems, but no Kolmogorov–Riesz compactness criterion for
+  `Lp`, nor a compiled theorem transferring a uniformly supported,
+  equicontinuous family of mollified representatives into total boundedness of
+  their `L¹` equivalence classes.
+
+  A local proof must first extend the one-sided translation estimate in
+  `apm_m02J06_K` to every real shift, justify both Tonelli interchanges and the
+  rescaled mollifier's normalization/support bounds, bundle the convolutions as
+  continuous maps on a fixed compact interval for Arzelà–Ascoli, transfer the
+  resulting sup-norm nets to `Lp`, and finally prove `apm_m02J06_KL1` closed
+  while changing representatives modulo a.e. equality. `a96J02` was inspected
+  for convolution identities but contains no compactness route, so its code was
+  not reused. The frozen statement was left unchanged.
+  -/
   sorry
