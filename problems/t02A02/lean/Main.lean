@@ -72,4 +72,19 @@ theorem apm_t02a02 :
     apm_t02a02_nonorientable ∧
     ((Nat.card (Fin 3) : ℤ) - Nat.card apm_t02a02_Edge + 1 = 0) ∧
     apm_t02a02_classify false 0 = .kleinBottle := by
-  sorry
+  refine ⟨?_, ?_, ?_, ?_, rfl⟩
+  · unfold apm_t02a02_validVertexQuotient
+    decide
+  · intro y
+    fin_cases y
+    · exact ⟨0, by decide⟩
+    · exact ⟨3, by decide⟩
+    · exact ⟨4, by decide⟩
+  · unfold apm_t02a02_nonorientable
+    decide
+  · letI : Fintype apm_t02a02_Edge :=
+      { elems := {.a, .b, .c, .d}
+        complete := by intro x; cases x <;> simp }
+    rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
+    change (3 : ℤ) - 4 + 1 = 0
+    norm_num
