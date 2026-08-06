@@ -30,4 +30,11 @@ theorem apm_a98a07 :
       ∃ g : ℂ → ℂ,
         DifferentiableOn ℂ g (ball 0 1) ∧
         TendstoLocallyUniformlyOn f g atTop (ball 0 1) := by
+  -- SKIPPED: Vitali's convergence theorem for holomorphic functions.
+  -- Requires: (1) local boundedness from the boundary estimate (integrability of
+  --   1/(t·(log(t/4π))²)); (2) Cauchy integral formula reconstruction; (3) Vitali/Montel.
+  -- -- (Memory: e-codexpilot-propagate-local-analytic-vanishing-across-a-connected-domain)
+  --    tangentially relevant but about vanishing, not convergence.
+  -- APIs: `DifferentiableOn`, `TendstoLocallyUniformlyOn`, `circleIntegral` — FOUND,
+  --   but Vitali's theorem itself is NOT in Mathlib.
   sorry
