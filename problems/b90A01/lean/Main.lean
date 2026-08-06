@@ -29,4 +29,13 @@ theorem apm_b90a01
       IsSimpleGroup H → H ≠ ⊤ → n ≤ H.index) ∧
     ∀ (G₁ : Type) [Group G₁] [Finite G₁],
       Nat.card G₁ = 120 → ¬IsSimpleGroup G₁ := by
+  -- Boundary: searched the Sylow conjugation action (`Sylow.mulAction`,
+  -- `Sylow.exists_smul_eq`, `MulAction.toPermHom`), simple-group kernel
+  -- classification (`Subgroup.Normal.eq_bot_or_eq_top`), permutation transport
+  -- (`Equiv.permCongrHom`), and alternating-group index/cardinality APIs.
+  -- The missing route is a reusable proof that the nontrivial transitive Sylow
+  -- action has trivial kernel, followed by factoring it through `alternatingGroup`
+  -- and formalizing the coset-action factorial bound.  The final order-120
+  -- contradiction depends on all three pieces, so no conjunct was asserted
+  -- without completing that representation-theoretic plumbing.
   sorry
