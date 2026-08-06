@@ -70,4 +70,21 @@ theorem apm_m03j05 (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) :
         Differentiable ℝ (m03J05Energy F g)) ∧
     (∀ (G : ℝ → ℝ) (L : NNReal), LipschitzWith L G → Monotone G →
       ∃! u : m03J05H1, m03J05NonlinearWeakSolution F G u) := by
+  /-
+  SKIPPED (mixed Sturm–Liouville/Sobolev operator boundary). Searches found
+  Mathlib's abstract Fredholm alternative for compact operators, but no
+  compiled construction identifying the compact mixed-boundary resolvent on
+  this `ℝ × Lp` realization, no classification of its spectrum as
+  `m03J05MixedEigenvalue`, and no Fourier-sine completeness theorem from which
+  the solvability and one-dimensional-kernel assertions follow.
+
+  The nonlinear clauses additionally require proving that
+  `u ↦ m03J05H1Value u` is a bounded Sobolev embedding, differentiating the
+  integral Nemytskii functional from `LipschitzWith L G`, and applying a
+  coercive/strictly monotone existence theorem on the zero-trace subspace.
+  Related artifacts `m96A06`, `m95A03`, and `m01J06` were inspected; each
+  retains an unresolved Sturm–Liouville or variational bridge and therefore
+  supplies no compiled route to reuse. The frozen statement was left
+  unchanged.
+  -/
   sorry
