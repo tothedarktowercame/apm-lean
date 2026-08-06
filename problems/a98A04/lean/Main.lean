@@ -28,4 +28,9 @@ theorem apm_a98a04 :
       ∀ (g : ℝ → ℝ), g =ᵐ[volume] f →
         ∀ α β : ℝ, α < β →
           ∀ M : ℝ, ∃ x ∈ Ioo α β, M < g x) := by
+  -- SKIPPED: part (a) needs ∫1/√((b-a)(x-a))dx=2 via u=√(x-a) substitution;
+  -- part (b) needs enumerating ℚ-intervals + summing spikes via MCT/convergence theorem.
+  -- APIs: `IntegralSubstitution`, `integrableOn_Ioc`, `tendsto_integral_of_dominated_convergence`
+  -- -- (Memory: e-codexpilot-refute-essential-boundedness-at-a-singularity-on-a-positive-measure-ball)
+  --    confirms: spike functions are locally unbounded but integrable.
   sorry
