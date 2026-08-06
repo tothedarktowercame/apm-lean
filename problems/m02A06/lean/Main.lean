@@ -34,4 +34,18 @@ theorem apm_m02a06
     ∃! u : ℝ → ℝ,
       apm_m02a06_IsSolution ε f u ∧
       ∀ x ∈ Ici (0 : ℝ), |u x| ≤ 2 * (1 + C) := by
+  /-
+  SKIPPED (analytic API boundary). The informal contraction argument requires
+  constructing the Dirichlet Green operator for `-deriv (deriv ·) + id` on
+  `Ici 0`, proving that it preserves decay at `atTop`, and establishing its
+  sup-norm maximum-principle estimate. Repository searches found only the
+  abstract fixed-point layer (`ContractingWith.fixedPoint` and
+  `ContractingWith.fixedPoint_unique`, used by `m01J05` and `t91A04`), not a
+  compiled half-line Green operator or the required maximum-principle bound.
+
+  The abstract `ContractingWith` API therefore cannot yet be applied: the
+  missing work is the concrete inverse of the differential operator together
+  with regularity, boundary-value, decay, and norm-control lemmas. No sibling
+  proof was reused, and the frozen statement was left unchanged.
+  -/
   sorry
