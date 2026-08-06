@@ -5,7 +5,10 @@ import Mathlib
 
 ## Statement repairs
 
-None.
+The standard statement implicitly treats the compact metric space as
+nonempty. This is made explicit: for the empty space the empty family is an
+open cover, but the requested conclusion cannot choose a member containing
+the empty subset.
 
 ## Encoding questions
 
@@ -16,7 +19,7 @@ space. Diameter is Mathlib's metric diameter `Metric.diam`.
 open Set
 
 theorem apm_t92j04
-    {X : Type*} [MetricSpace X] [CompactSpace X]
+    {X : Type*} [MetricSpace X] [CompactSpace X] [Nonempty X]
     (U : Set (Set X))
     (hU_open : ∀ V ∈ U, IsOpen V)
     (hU_cover : ⋃₀ U = (univ : Set X)) :
