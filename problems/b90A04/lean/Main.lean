@@ -51,4 +51,46 @@ theorem apm_b90a04
         (Q : Set T) = apm_b90a04_liftedPrimeSet S P x ∧
         Q.comap S.subtype = P ∧
         ∀ Q' : Ideal T, Q'.IsPrime → Q'.comap S.subtype = P → Q' = Q) := by
-  sorry
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · let C : Ideal S :=
+      { carrier := apm_b90a04_conductorInSubring S
+        zero_mem' := by
+          intro t
+          simp
+        add_mem' := by
+          intro a b ha hb t
+          simpa [add_mul] using S.add_mem (ha t) (hb t)
+        smul_mem' := by
+          intro a b hb t
+          change (a.1 * b.1) * t ∈ S
+          rw [mul_assoc]
+          exact S.mul_mem a.2 (hb t) }
+    exact ⟨C, rfl⟩
+  · let C : Ideal T :=
+      { carrier := apm_b90a04_conductorInOverring S
+        zero_mem' := by simp [apm_b90a04_conductorInOverring]
+        add_mem' := by
+          intro a b ha hb
+          refine ⟨S.add_mem ha.1 hb.1, ?_⟩
+          intro t
+          simpa [add_mul] using S.add_mem (ha.2 t) (hb.2 t)
+        smul_mem' := by
+          intro a b hb
+          refine ⟨?_, ?_⟩
+          · simpa [mul_comm] using hb.2 a
+          · intro t
+            simpa [mul_assoc, mul_left_comm, mul_comm] using hb.2 (a * t) }
+    exact ⟨C, rfl⟩
+  · intro I hI t ht
+    refine ⟨hI t ht, ?_⟩
+    intro u
+    exact hI (t * u) (I.mul_mem_right u ht)
+  · /- PASS-1 boundary: the conductor ideals and their maximality among ideals
+       of `T` contained in `S` are proved above.  For the remaining explicit
+       prime lift, I tried constructing an `Ideal T` with carrier
+       `apm_b90a04_liftedPrimeSet S P x` and using `Ideal.IsPrime.mem_or_mem`.
+       The unresolved boundary is transporting the subtype witnesses in
+       `apm_b90a04_memSubringIdeal` through the cancellation identity
+       `x * t ∈ P ↔ x ^ 2 * t ∈ P`, then through `Ideal.comap` for the
+       uniqueness proof. -/
+    sorry
