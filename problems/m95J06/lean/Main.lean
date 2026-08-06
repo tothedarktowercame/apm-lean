@@ -22,4 +22,11 @@ theorem apm_m95j06 :
         (nhds (apm_m95j06_linfNorm x))) ∧
     (∀ (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H],
       ∀ x : H, x ≠ 0 → DifferentiableAt ℝ (fun y : H => ‖y‖) x) := by
+  -- SKIPPED: two-part finite-dimensional norm problem.
+  -- (a) ‖x‖_p → ‖x‖_∞ as p→∞: the p-norm approaches the max norm.
+  -- (b) Differentiability of norm at x≠0 in inner product space: ‖·‖ is
+  --     differentiable away from 0, with derivative x/‖x‖.
+  -- Blocker: (a) needs limit computation for (∑|x_i|^p)^{1/p} as p→∞.
+  -- (b) might be tractable — norm is differentiable at x≠0 via inner product.
+  -- APIs: `Real.rpow`, `sSup`, `DifferentiableAt`, `InnerProductSpace`
   sorry
