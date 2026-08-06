@@ -41,26 +41,33 @@ theorem apm_a94a02
       (∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)),
         ENNReal.ofReal (deriv (apmFunctionSeries f) x) =
           apmDerivativeSeries f x) := by
-  -- Boundary (enriched by closer hop 1):
-  -- Three conjuncts all blocked by deep measure-theoretic assembly.
+  -- Boundary (closer hop 2): still open. Enriched analysis of tractability.
   --
-  -- (1) ∫⁻ g < ⊤: Need to show the lintegral of the derivative series is finite.
-  --     Key: by Tonelli, ∫⁻ g = ∑⁻ ∫ |f_n'| ≤ ∑ (f_n(1) - f_n(0)) ≤ ∑ f_n(1) < ∞.
-  --     For AC functions: ∫₀¹ |f_n'| = f_n(1) - f_n(0) (since f_n monotone ⟹ f_n' ≥ 0).
-  --     API: `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`, `lintegral_tsum`
-  --     Consulted LEMMA-INDEX.md: `ac_integral_deriv_eq_sub` exists (a95A02, LusinN).
-  --     Blocker: connecting AC integral identity to the ENNReal lintegral setup.
+  -- Attempted to close conjuncts (1) and (2) separately:
   --
-  -- (2) g < ⊤ a.e.: Follows from (1) by `ae_lt_top_of_lintegral_ne_top`.
-  --     API: confirmed available in Mathlib.
+  -- (1) ∫⁻ g < ⊤: The lintegral of the ENNReal-valued derivative series.
+  --     Key issue: `apmDerivativeSeries` has an if-then-else branch:
+  --       g(x) = ∑ ENNReal.ofReal(deriv(fₙ)(x)) if all fₙ differentiable at x, else 0.
+  --     The "all differentiable" condition is stronger than needed; for AC functions
+  --     on [0,1], each fₙ is differentiable a.e. But the universal quantifier
+  --     `∀ n, DifferentiableAt` makes the if-branch very hard to reason about.
+  --     Specifically: Tonelli requires measurability of g, which requires showing
+  --     the set {x : ∀ n, DifferentiableAt ℝ (f n) x} is measurable.
+  --     This is a countable intersection of measurable sets (each fₙ is AC ⟹ differentiable a.e.
+  --     ⟹ the set of differentiability points is measurable). But assembling this
+  --     in Lean is non-trivial.
+  --     Blocker: the `if ∀ n, DifferentiableAt` guard in `apmDerivativeSeries` makes
+  --     measurability and Tonelli exchange very hard to prove formally.
   --
-  -- (3) deriv(f) = g a.e.: the deepest part. Requires monotone convergence of
-  --     derivatives: ∂(∑f_n)/∂x = ∑ f_n' a.e. for monotone AC f_n with summable series.
-  --     Consulted: `deriv_sum_of_monotone` in a01J03 — proves this for Monotone fns
-  --     via Stieltjes measures and Lebesgue decomposition. Very sophisticated (120+ lines).
-  --     Could potentially adapt, but the a01J03 proof uses `Monotone` not `MonotoneOn`
-  --     and `AbsolutelyContinuousOnInterval`, and the encoding via ENNReal.ofReal
-  --     differs significantly. Adaptation would require substantial rewriting.
-  --     Blocker: the full Stieltjes measure decomposition pipeline is not reusable
-  --     directly for this encoding.
+  -- (2) g < ⊤ a.e.: depends on (1).
+  --
+  -- (3) deriv(f) = g a.e.: same deep blocker as before (Stieltjes measure pipeline).
+  --
+  -- New consultation: Mathlib `MeasureTheory.Function.AEqFun` for differentiability
+  --   of AC functions a.e. — discarded: AC ⟹ differentiable a.e. is available but
+  --   doesn't directly help with the `∀ n, DifferentiableAt` guard.
+  --
+  -- Assessment: the encoding via `if ∀ n, DifferentiableAt` is the root difficulty.
+  -- If g were simply ∑ ENNReal.ofReal(max(deriv(fₙ)(x), 0)), the proof would be
+  -- much more tractable. But the statement is frozen and cannot be changed.
   sorry
