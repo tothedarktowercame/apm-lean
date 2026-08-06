@@ -63,4 +63,21 @@ theorem apm_m93a01
     ¬ IsCompactOperator ιR ∧
     ¬ IsCompactOperator D1 ∧
     IsCompactOperator D2 := by
+  /-
+  SKIPPED (compact multiplier API boundary). Searches of Mathlib found the
+  abstract characterizations in `Analysis.Normed.Operator.Compact`, but no
+  theorem characterizing compact diagonal multipliers on `lp`, and no theorem
+  showing that a nonzero multiplication operator on nonatomic `Lp` is
+  noncompact.
+
+  A local proof must construct finite-coordinate truncation operators on
+  `lp (fun _ : ℤ ⇒ ℂ) 2`, prove their finite rank and operator-norm
+  convergence for the two decaying symbols, and build normalized coordinate
+  witnesses for noncompactness of `D1`. For `ιR`, the a.e. multiplier identity
+  must be combined with infinitely many disjoint positive-measure sets on
+  which `(1 + ξ²)⁻¹ᐟ²` is bounded below, yielding a separated bounded
+  sequence in the image. None of the solved siblings provides these exact
+  `lp`/`Lp` operator constructions, so no sibling code was reused and the
+  frozen statement was left unchanged.
+  -/
   sorry
