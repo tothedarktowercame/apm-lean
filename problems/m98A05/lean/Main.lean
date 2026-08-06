@@ -72,4 +72,31 @@ theorem apm_m98a05 :
         apm_m98a05_InH2Dirichlet w dw d2w ∧
         ∀ᵐ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)),
           d2w x = w x + ε * (w x) ^ 2) := by
-  sorry
+  constructor
+  · /-
+    Boundary: this clause is the full Banach-space implicit function theorem
+    with parameters and local uniqueness. I searched Mathlib's
+    `implicitFunction`, `HasStrictFDerivAt`, `ContinuousLinearEquiv`, and
+    `ContDiff` APIs. The available packaged IFT is formulated through strict
+    derivatives and local inverse data; I did not complete the conversion from
+    the frozen hypotheses (`ContDiff` plus `HasFDerivAt`) to that interface.
+    -/
+    sorry
+  constructor
+  · /-
+    Boundary: the perturbation clause follows by applying the preceding IFT to
+    `(x, ε) ↦ F x + ε • G x`. Completing it requires the same strict-derivative
+    bridge, together with a bundled product derivative for this map. I searched
+    `HasFDerivAt.add`, scalar-multiplication derivative rules, and the local IFT
+    API, but did not finish that assembly in this pass.
+    -/
+    sorry
+  · refine ⟨1, by norm_num, ?_⟩
+    intro ε _hε
+    refine ⟨fun _ ↦ 0, fun _ ↦ 0, fun _ ↦ 0, ?_, ?_⟩
+    · unfold apm_m98a05_InH2Dirichlet
+      refine ⟨continuous_const.continuousOn,
+        continuous_const.continuousOn, ?_⟩
+      simp [apm_m98a05_IsWeakDerivativeOn]
+    · filter_upwards with x
+      simp
