@@ -325,4 +325,14 @@ theorem apm_a01a01 :
         (∀ k x, 0 ≤ f k x) ∧
         (∀ x, apmLimsupInfinite (fun k ↦ f k x)) ∧
         Tendsto (fun k ↦ ∫ x, f k x ∂volume) atTop (nhds 0)) := by
+  -- PARTIAL: part (a) helpers all proved; main theorem assembly blocked by
+  -- pre-existing forward-reference errors in the file (twStage_sq_gt used before
+  -- definition at line 56, typewriter1d_nonneg used before definition at line 82).
+  -- Part (a): use typewriter1d with proved lemmas (integrable, nonneg, limsup, tendsto).
+  -- Part (b): d-dimensional extension needs Euclidean space typewriter construction.
+  -- PARTIAL: part (a) helpers all proved; main theorem assembly blocked by
+  -- pre-existing forward-reference errors in the file (twStage_sq_gt used before
+  -- definition at line 56, typewriter1d_nonneg used before definition at line 82).
+  -- Part (a): use typewriter1d with proved lemmas (integrable, nonneg, limsup, tendsto).
+  -- Part (b): d-dimensional extension needs Euclidean space typewriter construction.
   sorry
