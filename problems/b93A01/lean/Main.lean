@@ -31,4 +31,24 @@ theorem apm_b93a01
     ((∀ a b : G, a * b = b * a) →
       apm_b93a01_embeds G (Equiv.Perm (Fin (p + q))) ∧
       ¬apm_b93a01_embeds G (Equiv.Perm (Fin (p + q - 1)))) := by
+  have hnoSmallNonabelian :
+      ¬apm_b93a01_embeds G (Equiv.Perm (Fin (q - 1))) := by
+    rintro ⟨f, hf⟩
+    have hdvd : Nat.card G ∣ Nat.card (Equiv.Perm (Fin (q - 1))) :=
+      Subgroup.card_dvd_of_injective f hf
+    rw [Nat.card_eq_fintype_card, hcard, Nat.card_perm, Nat.card_fin] at hdvd
+    have hqmul : q ∣ p * q := by
+      exact ⟨p, by simp [mul_comm]⟩
+    have hqfac : q ∣ (q - 1).factorial := hqmul.trans hdvd
+    have hle : q ≤ q - 1 := (hq.dvd_factorial).mp hqfac
+    omega
+  /- PASS-1 boundary: `hnoSmallNonabelian` proves the sharp obstruction
+     `G ↪ Equiv.Perm (Fin (q - 1))` is impossible, using
+     `card_dvd_of_injective`, `Nat.card_perm`, and
+     `Nat.Prime.dvd_factorial`.  I also searched the `Sylow` API, including
+     `Sylow.card_eq_multiplicity`, `card_sylow_modEq_one`, and
+     `Sylow.normal_of_subsingleton`.  The remaining formalization needs the
+     order-`p*q` Sylow count, faithfulness of the coset action in the
+     nonabelian case, and the exact minimal-degree cycle argument for the
+     abelian case; I could not complete those bridges in pass 1. -/
   sorry
