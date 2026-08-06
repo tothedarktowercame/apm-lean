@@ -30,4 +30,18 @@ def IsM99A06Solution (ε : ℝ) (f : ℝ → ℝ) : Prop :=
 theorem apm_m99a06 :
     ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε : ℝ,
       0 < ε → ε < ε₀ → ∃ f : ℝ → ℝ, IsM99A06Solution ε f := by
+  have hforcing : Integrable (fun x : ℝ ↦ Real.exp (-|x| ^ 2)) := by
+    simpa [sq_abs] using
+      (integrable_exp_neg_mul_sq (b := (1 : ℝ)) (by norm_num))
+  /-
+  Boundary: integrability of the Gaussian forcing, needed to define the
+  fixed-point self-map on `L¹`, is proved above. Completing the theorem requires
+  working in the complete `L¹` quotient space, transporting the raw convolution
+  to representatives, proving Young's inequality and the quadratic Lipschitz
+  estimate, and applying Banach's fixed-point theorem on a closed ball before
+  selecting a representative satisfying the equation almost everywhere. I
+  searched Mathlib's `L1`, convolution/Young, bounded multiplier, closed-ball,
+  and contraction APIs; I did not complete the quotient/representative bridge
+  to the frozen raw-function predicate `IsM99A06Solution` in this pass.
+  -/
   sorry
