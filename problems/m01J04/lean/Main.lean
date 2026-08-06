@@ -137,4 +137,42 @@ theorem apm_m01j04 :
                 inner ℝ (v n x) ((f n).grad x) * φ x) atTop
                 (nhds (∫ x in Ω,
                   inner ℝ (vLim x) (fLim.grad x) * φ x)))) := by
-  sorry
+  constructor
+  · intro X _ _ _ f x g h hf hg
+    have hpoint : ∀ q : X →L[ℝ] ℝ, ∃ C : ℝ, ∀ n : ℕ,
+        ‖(NormedSpace.inclusionInDoubleDual ℝ X) (f n) q‖ ≤ C := by
+      intro q
+      obtain ⟨C, hC⟩ :=
+        (Metric.isBounded_range_of_tendsto (fun n ↦ q (f n)) (hf q)).exists_norm_le
+      refine ⟨C, fun n ↦ ?_⟩
+      simpa [NormedSpace.dual_def] using hC (q (f n)) ⟨n, rfl⟩
+    obtain ⟨C, hC⟩ := banach_steinhaus
+      (g := fun n ↦ (NormedSpace.inclusionInDoubleDual ℝ X) (f n)) hpoint
+    have hf_bounded : ∀ n, ‖f n‖ ≤ C := by
+      intro n
+      rw [← (NormedSpace.inclusionInDoubleDualLi (E := X) ℝ).norm_map]
+      exact hC n
+    /-
+      Boundary after uniform boundedness: `hf_bounded` is the key
+      Banach–Steinhaus consequence. It remains to formalize
+      `g n (f n) - h x = (g n - h) (f n) + (h (f n) - h x)`, bound the
+      first term by `C * ‖g n - h‖`, and combine `hg` with `hf h` using
+      the norm characterization of convergence. Searches found the required
+      `ContinuousLinearMap.le_opNorm` and filter multiplication lemmas, but no
+      packaged weak×strong pairing theorem.
+      -/
+    sorry
+  · /-
+    Boundary for the Sobolev/compensated-compactness clauses: applying the
+    supplied `apm_m01J04_HasRellichProperty` yields a subsequence with weak
+    `H¹` and strong `L²` convergence. Part (b) then needs measurable Hölder
+    estimates showing multiplication by an `L∞` vector field preserves the
+    strong `L²` limit before invoking the weak×strong lemma above. Part (c)
+    additionally needs a fully formal Leibniz rule for the custom weak-gradient
+    structure, preservation of `apm_m01J04_isH1Zero` under multiplication by a
+    test function, and the integration-by-parts identity connecting
+    `apm_m01J04_divStronglyConverges` to the target integral. Repository and
+    Mathlib searches found no sibling or packaged theorem matching these custom
+    predicates.
+    -/
+    sorry
