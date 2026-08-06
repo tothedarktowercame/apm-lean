@@ -46,4 +46,12 @@ theorem apm_m95j04 :
       ∀ y : ℝ → ℝ,
         apm_m95J04_isSolution apm_m95J04_specific y →
           EqOn x y (Icc 0 1)) := by
+  -- SKIPPED: nonlinear BVP via Green's function + contraction mapping.
+  -- (a) Existence & uniqueness for x''=f(t,x), x(0)=x(1)=0, Lipschitz < 1:
+  --     Green's function converts to integral equation, contraction mapping gives unique solution.
+  -- (b) Specific nonlinearity f=sin(x-t)sin(x+t-1): symmetry + existence.
+  -- Blocker: requires Green's function integral equation formulation, contraction
+  -- mapping theorem on C²[0,1], and specific ODE analysis — none available as
+  -- ready-to-use Mathlib lemmas for this setting.
+  -- APIs: `ContDiffOn`, `iteratedDerivWithin`, `ContinuousOn`, `Icc`
   sorry
