@@ -33,4 +33,12 @@ theorem apm_b90a03
           Module.finrank (↥L') F = p ^ n} : Set (IntermediateField K F)) =
           {L} ↔
         IsGalois K (↥L)) := by
+  /- PASS-1 boundary: searched Mathlib for
+     `IntermediateField.finrank_fixedField_eq_card`,
+     `IntermediateField.fixedField_fixingSubgroup`,
+     `IntermediateField.normal_iff_isGalois`, and the `Sylow` API.  The intended
+     route is to transport Sylow existence and uniqueness across the finite
+     Galois correspondence.  I could not complete the required formal bridge
+     identifying fields of relative finrank `p ^ n` with Sylow p-subgroups,
+     including the p-adic valuation calculation from `hdegree`, within pass 1. -/
   sorry
