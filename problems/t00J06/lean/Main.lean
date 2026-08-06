@@ -1,4 +1,7 @@
 import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t00J06
@@ -9,16 +12,18 @@ The source says "any map".  Since lifting through a covering is a topological
 notion and the informal solution invokes the covering-space lifting criterion,
 the map is minimally made continuous.
 
+The former genus-two premise was an opaque predicate. It is replaced by the
+actual integral singular homology groups `H₀ = ℤ`, `H₁ = ℤ⁴`, and `H₂ = ℤ`,
+with vanishing higher homology, following the standard closed orientable
+surface classification.
+
 ## Encoding questions
 
 The torus is the actual product `Circle × Circle`, and the conclusion exhibits
-an actual Mathlib covering map together with a continuous lift.  The only
-isolated notion is the assertion that the compact smooth target surface is
-oriented and has genus two, since Mathlib has no packaged genus invariant for
-smooth surfaces.
+an actual Mathlib covering map together with a continuous lift.
 -/
 
-open Set
+open CategoryTheory Set
 open scoped ContDiff Manifold
 
 noncomputable section
@@ -26,15 +31,22 @@ noncomputable section
 abbrev apm_t00J06_Torus := Circle × Circle
 abbrev apm_t00J06_E := EuclideanSpace ℝ (Fin 2)
 
-/-- The assertion that a compact smooth surface is oriented and has genus two. -/
-opaque apm_t00J06_IsOrientedGenusTwoSurface
-    (S : Type*) [TopologicalSpace S] [ChartedSpace apm_t00J06_E S] : Prop
+abbrev apm_t00J06_H (k : ℕ) (S : Type) [TopologicalSpace S] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of S))
+
+def apm_t00J06_hasGenusTwoHomology (S : Type) [TopologicalSpace S] : Prop :=
+  Nonempty (apm_t00J06_H 0 S ≅ ModuleCat.of ℤ ℤ) ∧
+  Nonempty (apm_t00J06_H 1 S ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
+  Nonempty (apm_t00J06_H 2 S ≅ ModuleCat.of ℤ ℤ) ∧
+  ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t00J06_H k S)
 
 theorem apm_t00j06
-    {S : Type*} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S]
     [ChartedSpace apm_t00J06_E S]
     [IsManifold (𝓘(ℝ, apm_t00J06_E)) ∞ S]
-    (hS : apm_t00J06_IsOrientedGenusTwoSurface S)
+    (hS : apm_t00J06_hasGenusTwoHomology S)
     (f : C(apm_t00J06_Torus, S)) :
     ∃ (X : Type*) (_ : TopologicalSpace X) (p : X → S),
       IsCoveringMap p ∧
