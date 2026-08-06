@@ -64,4 +64,19 @@ theorem apm_m93j05 :
         (∀ f, MemLp f (ENNReal.ofReal p) μ →
           apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f) →
         ∀ h, HasDerivAt (fun t : ℝ => apm_m93j05_J N p g (f₀ + t • h)) 0 0)) := by
+  /-
+  Boundary / statement defect: the final stationarity clause quantifies over
+  every function `h : ℝ → ℝ`, although both the minimization premise and
+  the intended variational argument are restricted to `MemLp` competitors.
+  For a direction outside `L^p`, `f₀ + t • h` need not be admissible for any
+  nonzero `t`, so minimality supplies no derivative information.
+
+  This is especially material in the present encoding: an infinite `eLpNorm`
+  becomes zero after `.toReal` because `ENNReal.top.toReal = 0`. Thus the
+  displayed functional is not an extended-real coercive functional off its
+  `MemLp` domain, and its behavior along non-`L^p` directions cannot be
+  justified by the direct method. The intended conclusion would need at
+  least `MemLp h (ENNReal.ofReal p) μ`. Since the statement is frozen, I did
+  not add that hypothesis or attempt to repair the theorem.
+  -/
   sorry
