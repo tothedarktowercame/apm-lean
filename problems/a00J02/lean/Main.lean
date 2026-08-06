@@ -58,6 +58,17 @@ lemma tendsto_setIntegral_Icc_zero
     (hg : IntegrableOn g (Icc (0 : ℝ) 1) volume) :
     Tendsto (fun x => ∫ t in Icc (0 : ℝ) x, g t ∂volume)
       (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+  -- Since g ≥ 0 and integrable on Icc 0 1, the function x ↦ ∫_{Icc 0 x} g is
+  -- monotone increasing and bounded. Its limit as x→0⁺ is 0 (= ∫_{Icc 0 0} g).
+  -- Use: 0 ≤ ∫_{Icc 0 x} g ≤ ∫_{Icc 0 x} |g|, and by absolute continuity of
+  -- the integral (which follows from integrability), ∫_{Icc 0 x} |g| → 0.
+  -- More directly: by DCT, indicator(Icc 0 x) · g → indicator({0}) · g = 0 a.e.
+  -- (since vol({0}) = 0), bounded by |g| ∈ L¹.
+  -- -- (Memory: e-codexpilot-extend-local-absolute-continuity-to-an-endpoint-via-the-derivative-primitive)
+  -- --    Confirms AC integral approach: ∫ over shrinking sets → 0 for integrable functions.
+  -- Use tendsto_integral_filter_of_dominated_convergence with filter nhdsWithin 0 (Ioi 0).
+  -- Use DCT approach. indicator(Icc 0 x) · g → indicator({0}) · g = 0 a.e.
+  -- bounded by |g| ∈ L¹.
   sorry
 
 /-- Cauchy-Schwarz bound: for x ∈ (0,1],
