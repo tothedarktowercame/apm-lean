@@ -39,4 +39,19 @@ theorem apm_b03j04
       IntermediateField.adjoin k ((K₁ : Set K) ∪ {α}) = ⊤) ∧
     (Irreducible (apm_b03J04_polynomial p β) ∨
       ∃ a : k, (apm_b03J04_polynomial p β).IsRoot a) := by
-  sorry
+  constructor
+  · -- Boundary: found and verified the key APIs
+    -- `splits_X_pow_sub_one_of_X_pow_sub_C`,
+    -- `IntermediateField.adjoin_rootSet_isSplittingField`, and
+    -- `Polynomial.IsSplittingField.isSplittingField_iff_intermediateField`.
+    -- The remaining step is the root-set containment proving every root of
+    -- `X^p - β` is `α` times an element of the adjoined root set of `X^p - 1`;
+    -- elaborating the quotient `γ / α` root calculation uniformly in positive
+    -- characteristic was not completed.
+    sorry
+  · rw [apm_b03J04_polynomial]
+    by_cases hpow : ∀ a : k, a ^ p ≠ β
+    · exact Or.inl ((X_pow_sub_C_irreducible_iff_of_prime hp).2 hpow)
+    · push_neg at hpow
+      obtain ⟨a, ha⟩ := hpow
+      exact Or.inr ⟨a, by simpa [Polynomial.IsRoot, ha]⟩
