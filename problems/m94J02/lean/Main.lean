@@ -82,4 +82,61 @@ theorem apm_m94j02 :
             (fun n ↦ apm_m94J02_T (a (σ k)) n - b n)) atTop (nhds 0)) ∧
       apm_m94J02_spectrum =
         {0} ∪ Set.range (fun n : ℕ ↦ (2 : ℂ) ^ (-(n : ℤ))) := by
-  sorry
+  have hT_mem : ∀ a, apm_m94J02_mem a →
+      apm_m94J02_mem (apm_m94J02_T a) := by
+    intro a ha
+    unfold apm_m94J02_mem at ha ⊢
+    simp only [apm_m94J02_T]
+    refine Summable.of_nonneg_of_le (fun _ ↦ by positivity) (fun n ↦ ?_) ha
+    have hs : ‖(2 : ℂ) ^ (-(n : ℤ))‖ ≤ 1 := by
+      rw [norm_zpow]
+      exact zpow_le_one_of_nonpos₀ (by norm_num) (by simp)
+    rw [norm_mul]
+    exact mul_le_mul_of_nonneg_right
+      (mul_le_of_le_one_left (norm_nonneg (a n)) hs)
+      (by positivity)
+  /-
+  Boundary: the remaining clauses require a full weighted-`ℓ¹` completeness
+  proof, uniform convergence of the coefficient series on the closed disk,
+  rearrangement of a nonnegative double series for the Cauchy product, and
+  the sharp weight inequality with factor `5/4`. The power-limit clause then
+  needs a Fekete/subadditivity argument that also handles zero powers.
+
+  Compactness requires diagonal subsequence extraction for every unit-ball
+  sequence and weighted tail control. The spectrum equality requires
+  constructing bounded diagonal inverses away from the closed eigenvalue set,
+  proving each `2^(-n)` has no inverse, and exhibiting failure of surjectivity
+  at zero in the statement's custom two-sided-inverse encoding. I searched
+  Mathlib's summability, Fekete, and diagonal operator APIs; no compiled
+  sibling assembled these custom weighted-sequence arguments within this
+  pass. The elementary dilation membership clause is proved above.
+  -/
+  have hremaining :
+      (∀ a : ℕ → ℕ → ℂ,
+          (∀ k, apm_m94J02_mem (a k)) →
+          (∀ ε > 0, ∃ N, ∀ m ≥ N, ∀ n ≥ N,
+            apm_m94J02_norm (fun k ↦ a m k - a n k) < ε) →
+          ∃ b, apm_m94J02_mem b ∧
+            ∀ ε > 0, ∃ N, ∀ n ≥ N,
+              apm_m94J02_norm (fun k ↦ a n k - b k) < ε) ∧
+        (∀ a, apm_m94J02_mem a →
+          ContinuousOn (apm_m94J02_eval a) (Metric.closedBall 0 1)) ∧
+        (∀ a b, apm_m94J02_mem a → apm_m94J02_mem b →
+          apm_m94J02_mem (apm_m94J02_mul a b) ∧
+          apm_m94J02_norm (apm_m94J02_mul a b) ≤
+            (5 / 4 : ℝ) * apm_m94J02_norm a * apm_m94J02_norm b) ∧
+        (∀ a, apm_m94J02_mem a →
+          ∃ L : ℝ, Tendsto
+            (fun n : ℕ ↦ Real.rpow (apm_m94J02_norm (apm_m94J02_pow a n))
+              ((n : ℝ)⁻¹)) atTop (nhds L)) ∧
+        (∀ a : ℕ → ℕ → ℂ,
+          (∀ k, apm_m94J02_mem (a k) ∧ apm_m94J02_norm (a k) ≤ 1) →
+          ∃ σ : ℕ → ℕ, StrictMono σ ∧ ∃ b, apm_m94J02_mem b ∧
+            Tendsto (fun k ↦ apm_m94J02_norm
+              (fun n ↦ apm_m94J02_T (a (σ k)) n - b n)) atTop (nhds 0)) ∧
+        apm_m94J02_spectrum =
+          {0} ∪ Set.range (fun n : ℕ ↦ (2 : ℂ) ^ (-(n : ℤ))) := by
+    sorry
+  exact ⟨hremaining.1, hremaining.2.1, hremaining.2.2.1,
+    hremaining.2.2.2.1, hT_mem, hremaining.2.2.2.2.1,
+    hremaining.2.2.2.2.2⟩
