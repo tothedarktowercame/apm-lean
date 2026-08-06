@@ -41,4 +41,11 @@ theorem apm_t96j07 :
     apm_t96j07_localIndex 2 = -1 ∧
     apm_t96j07_localIndex 3 = 1 ∧
     (∑ i : Fin 4, apm_t96j07_localIndex i) = 0 := by
+  -- Boundary: the frozen clause parses as
+  -- `∀ x, (x ≠ 0 → projectivelyEq x (A x)) ↔ ∃ i, projectivelyEq x (axis i)`.
+  -- At `x = 0` its left side is vacuously true, while its right side is false
+  -- because `axis i ≠ 0` but every nonzero scalar multiple of `0` is `0`.
+  -- Thus the statement is false.  The intended route (coordinate cancellation
+  -- using `mul_right_cancel₀`, followed by determinant evaluation with
+  -- `norm_num`) applies only after parenthesizing the equivalence under `x ≠ 0`.
   sorry
