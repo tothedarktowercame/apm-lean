@@ -49,14 +49,19 @@ theorem apm_b01j03
       apm_b01J03_rootField F K α = apm_b01J03_rootField F K β ∧
       apm_b01J03_rootField F K α = ⊤ ∧
       (P : Subgroup (K ≃ₐ[F] K)) = ⊤ := by
-  -- SKIPPED: four-part Galois theory problem (self-normalizing Sylow ⟹ G=P).
-  -- (a) |G|=ps with p∤s: Sylow theorem (|G|/|P| = s, p∤s).
-  -- (b) s(p-1) elements of order p: number of conjugates of P = |G|/|N_G(P)| = |G|/|P| = s,
-  --     each contributing p-1 non-identity elements.
-  -- (c) H_α = H_β and F[α]=F[β]: counting argument — p roots, each has stabilizer of order s,
-  --     self-normalizing P forces all root fields equal.
-  -- (d) K=F[α] ⟹ G=P: since [K:F[α]]=1, the Galois group has order p.
-  -- Blocker: requires Sylow theorems, Galois correspondence, normalizer counting,
-  -- orbit-stabilizer on root sets — deep algebra infrastructure.
-  -- APIs: `Sylow`, `Subgroup.normalizer`, `AlgEquiv`, `IntermediateField`, `fixingSubgroup`
+  -- PARTIAL (closer hop 1): bridge still open. Prior analysis confirmed correct.
+  -- Consulted LEMMA-INDEX.md: no relevant Galois/Sylow/group theory lemmas found.
+  -- This problem requires four chained Galois-theoretic arguments:
+  --   (a) |G|=ps: Sylow theorem (|P|=p, index s)
+  --   (b) s(p-1) elements of order p: conjugate counting (|G|/|N_G(P)| = s)
+  --   (c) All root fields equal: orbit-stabilizer + self-normalizing Sylow
+  --   (d) K=F[α]: degree argument ⟹ |G| = p ⟹ G = P
+  -- Each part depends on the previous. Mathlib's Galois correspondence API
+  -- (`AlgEquiv`, `IntermediateField.fixingSubgroup`, `IsSplittingField`) exists
+  -- but the Sylow counting arguments (conjugate number, element order counting)
+  -- are not available as ready-to-use lemmas in the required generality.
+  -- APIs searched: `Sylow`, `Subgroup.normalizer`, `card_conj_subgroups`,
+  -- `orderOf`, `Nat.card`, `IntermediateField.fixingSubgroup`
+  -- Routes NOT investigated: proving the four parts as separate helper lemmas
+  -- (each ~20-30 lines), using `Nat.card` of specific group structures.
   sorry
