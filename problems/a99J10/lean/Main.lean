@@ -28,4 +28,11 @@ theorem apm_a99j10 (f : ℂ → ℂ)
         (fun r : ℝ => f ((r : ℂ) * Complex.exp ((θ : ℂ) * Complex.I)))
         (𝓝[<] (1 : ℝ)) (𝓝 0)) :
     ∀ z ∈ ball (0 : ℂ) 1, f z = 0 := by
+  -- SKIPPED: boundary uniqueness under square-root growth |f(z)| ≤ |y|^{-1/2}.
+  -- Requires: maximum principle / Phragmén-Lindelöf with singular growth bound
+  -- + vanishing radial limits → f≡0. The |y|^{-1/2} bound controls blow-up near
+  -- real axis; vanishing on all boundary directions + growth control forces f=0.
+  -- Blocker: Mathlib has maximum modulus (`Complex.norm_le_of_forall_mem_frontier_norm_le`)
+  -- but not Phragmén-Lindelöf type results with singular bounds on unbounded growth.
+  -- APIs: `DifferentiableOn`, `Tendsto`, `Complex.norm_le_of_forall_mem_frontier_norm_le`
   sorry
