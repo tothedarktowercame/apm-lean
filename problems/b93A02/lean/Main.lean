@@ -30,4 +30,33 @@ theorem apm_b93a02 :
         sInf (↑s : Set (Ideal R)) ⊔ P = ⊤) ∧
     (∀ (R : Type) [CommRing R] [IsArtinianRing R],
       {P : Ideal R | P.IsPrime}.Finite) := by
-  sorry
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · intro R _ I J hIJ
+    exact ⟨Ideal.quotientInfEquivQuotientProd I J
+      ((Ideal.isCoprime_iff_sup_eq).2 hIJ)⟩
+  · intro R _ _ _
+    exact IsArtinianRing.isField_of_isDomain R
+  · intro R _ _ P hP
+    exact (IsArtinianRing.isPrime_iff_isMaximal P).mp hP
+  · intro R _ _ s P hs hP hPs
+    have hc : IsCoprime P (⨅ Q ∈ s, Q) := by
+      apply Ideal.isCoprime_biInf
+      intro Q hQs
+      letI : P.IsMaximal := (IsArtinianRing.isPrime_iff_isMaximal P).mp hP
+      letI : Q.IsMaximal :=
+        (IsArtinianRing.isPrime_iff_isMaximal Q).mp (hs Q hQs)
+      apply Ideal.isCoprime_of_isMaximal
+      intro h
+      apply hPs
+      simpa [h] using hQs
+    have heq : sInf (↑s : Set (Ideal R)) = ⨅ Q ∈ s, Q := by
+      apply le_antisymm
+      · refine le_iInf fun Q ↦ le_iInf fun hQs ↦ ?_
+        exact sInf_le hQs
+      · refine le_sInf ?_
+        intro Q hQs
+        exact iInf_le_of_le Q (iInf_le_of_le hQs le_rfl)
+    rw [heq]
+    exact hc.symm.sup_eq
+  · intro R _ _
+    exact IsArtinianRing.setOf_isPrime_finite R
