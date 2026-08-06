@@ -46,4 +46,21 @@ theorem apm_b97a03 :
         L = IntermediateField.adjoin ℚ
           {(apm_b97a03_zeta α) ^ 4 * α ^ 2} ∨
         L = apm_b97a03_field α := by
+  /-
+  Boundary (pass-1 Codex, skipped): Mathlib contains Eisenstein machinery
+  (`Polynomial.IsEisensteinAt.irreducible`), splitting-field/adjoin lemmas such
+  as `IsSplittingField.adjoin_rootSet`, and the abstract correspondence
+  `IsGalois.intermediateFieldEquivSubgroup`. Local source and solved-sibling
+  searches found no implementation of the concrete bridges required here:
+  deriving all six complex roots from an arbitrary root `α`, proving the
+  embedded field `adjoin ℚ {α}` is the splitting field, constructing its six
+  automorphisms and the displayed `S₃` equivalence, and identifying the fixed
+  fields of the four proper nontrivial subgroups with the exact listed adjoins.
+
+  The abstract Galois correspondence alone does not establish completeness of
+  this explicit embedded-field list; it additionally needs a classification of
+  subgroups of `Equiv.Perm (Fin 3)` and degree/fixed-point calculations for each
+  generator. The statement appears mathematically sound, but this concrete
+  splitting-field and fixed-field development exceeds the pass-1 bridge found.
+  -/
   sorry
