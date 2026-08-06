@@ -24,4 +24,12 @@ theorem apm_a99j06
     ∃ g : ℂ → ℂ,
       DifferentiableOn ℂ g Ω ∧
       ∀ z ∈ Ω, f z = Complex.exp (g z) := by
+  -- SKIPPED: holomorphic logarithm on simply connected domain.
+  -- Key idea: f'/f holomorphic on Ω ⟹ has primitive G (simply connected ⟹ every
+  -- holomorphic function has an antiderivative). Then f·exp(-G) is constant,
+  -- adjust to get f = exp(g).
+  -- Blocker: Mathlib does not have "every holomorphic function on a simply connected
+  -- domain has a primitive" as a ready-to-use theorem.
+  -- APIs: `DifferentiableOn`, `IsSimplyConnected`, `Complex.exp` — FOUND,
+  --   but the existence of primitives on simply connected domains is NOT in Mathlib.
   sorry
