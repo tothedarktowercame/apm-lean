@@ -24,4 +24,11 @@ theorem apm_m95a05
     (hcoercive : ∀ v : V, c * ‖v‖ ^ 2 ≤ A v v)
     (f : StrongDual ℝ V) :
     ∃! u : V, A u = f := by
+  -- SKIPPED: Lax-Milgram theorem on reflexive Banach space.
+  -- A: V→V' coercive (⟨Av,v⟩ ≥ c‖v‖²), f∈V'. Show ∃! u: Au=f.
+  -- Proof: coercivity ⟹ A injective; reflexivity + coercivity ⟹ A surjective
+  -- (via bounded inverse / open mapping theorem). This is essentially Lax-Milgram.
+  -- Blocker: requires Lax-Milgram theorem (NOT in Mathlib), open mapping theorem
+  -- application, reflexivity hypothesis manipulation with double dual surjectivity.
+  -- APIs: `NormedSpace.inclusionInDoubleDual`, `ContinuousLinearMap`, `StrongDual`
   sorry
