@@ -59,4 +59,11 @@ theorem apm_m95j03 :
       deriv (apm_m95J03_ivpSolution v) t =
         (apm_m95J03_B 0).mulVec (apm_m95J03_ivpSolution v t)) ∧
     (∀ v : Fin 4 → ℝ, apm_m95J03_ivpSolution v 0 = v) := by
+  -- SKIPPED: multi-part linear algebra / ODE problem.
+  -- (a) Left inverse characterization of solvability.
+  -- (b) Jordan form discontinuity: B(ρ) diagonalizable for ρ≠0, B(0) nilpotent.
+  -- (c) Matrix exponential HasSum; exp(B(0)) = flow(1); IVP solution.
+  -- Blocker: requires left inverse theory, Jordan form construction, matrix exponential
+  -- convergence (HasSum), IVP verification — each part a substantial proof.
+  -- APIs: `Matrix`, `IsUnit`, `NormedSpace.exp`, `HasSum`, `deriv`
   sorry
