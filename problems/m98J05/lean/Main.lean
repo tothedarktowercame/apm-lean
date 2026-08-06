@@ -58,4 +58,32 @@ theorem apm_m98j05 :
         HasDerivAt
           (fun s ↦ apm_m98J05_fourier (fun x ↦ u x s) ξ)
           (-((ξ : ℂ) ^ 2) * apm_m98J05_fourier (fun x ↦ u x t) ξ) t) := by
+  have hmultiplier_ode (c : ℂ) (ξ t : ℝ) :
+      HasDerivAt
+        (fun s : ℝ ↦ c * Complex.exp (-(s : ℂ) * (ξ : ℂ) ^ 2))
+        (-((ξ : ℂ) ^ 2) *
+          (c * Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2))) t := by
+    have hc : HasDerivAt
+        (fun s : ℂ ↦ c * Complex.exp (-s * (ξ : ℂ) ^ 2))
+        (-((ξ : ℂ) ^ 2) *
+          (c * Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2))) (t : ℂ) := by
+      have hg : HasDerivAt (fun s : ℂ ↦ -s * (ξ : ℂ) ^ 2)
+          (-((ξ : ℂ) ^ 2)) (t : ℂ) := by
+        convert (hasDerivAt_id (x := (t : ℂ))).neg.mul_const ((ξ : ℂ) ^ 2) using 1 <;>
+          ring
+      convert ((Complex.hasDerivAt_exp _).comp (t : ℂ) hg).const_mul c using 1 <;>
+        ring
+    exact hc.comp_ofReal
+  /-
+  Boundary: the frequency-side scalar ODE for the claimed multiplier is
+  verified above. The remaining theorem requires whole-line complex
+  integration by parts for the custom Fourier convention (which omits
+  Mathlib's standard `2π` scaling), the Gaussian transform/convolution
+  theorem with exact normalization, differentiation under two improper
+  integrals, and pointwise approximate-identity convergence. I searched
+  `fourier_deriv`, `fourierIntegral_deriv`, Gaussian Fourier-transform,
+  convolution, and approximate-identity APIs; adapting their convention and
+  hypotheses to these raw integral definitions was not completed in this
+  pass.
+  -/
   sorry
