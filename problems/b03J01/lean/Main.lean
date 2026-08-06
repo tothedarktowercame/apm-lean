@@ -39,20 +39,17 @@ theorem apm_b03j01
   refine ⟨?_, ?_⟩
   · apply H.normal_of_index_eq_minFac_card
     simpa [Nat.card_eq_fintype_card, hminfac] using hindex
-  · -- Boundary: exhaustive pass-1 desk research found the intended chain in
-    -- Mathlib: `Sylow.card_sylow_modEq_one`, `Sylow.card_dvd_index`,
-    -- `Sylow.normal_of_subsingleton`, `isNilpotent_of_finite_tfae`,
-    -- `IsZGroup.of_squarefree`, and the nilpotent `IsZGroup` cyclic instance.
-    -- The remaining route is to derive that the cardinality of each Sylow type
-    -- is one from `|G| = p * (p + 2)` and the twin-prime arithmetic, install
-    -- normality for every prime divisor, and feed those instances through the
-    -- nilpotence/Z-group chain.
+  · -- Boundary (closer hop 1): bridge still open. Enriched route with API names.
+    -- Proof chain (6 steps, ~60-90 lines total):
+    -- 1. |G| = p*(p+2), p and p+2 distinct primes → Squarefree |G|
+    -- 2. Squarefree → IsZGroup G (by `IsZGroup.of_squarefree`)
+    -- 3. For each prime q | |G|: `Sylow.card_sylow_modEq_one` gives n_q ≡ 1 (mod q),
+    --    `Sylow.card_dvd_index` gives n_q | (|G|/q). Twin-prime arithmetic ⟹ n_q = 1.
+    -- 4. n_q = 1 ⟹ Sylow q G is Subsingleton ⟹ `(↑P : Subgroup G).Normal`
+    -- 5. All Sylows normal ⟹ `Group.IsNilpotent G` (by `isNilpotent_of_finite_tfae` #4)
+    -- 6. `[IsZGroup G] [Group.IsNilpotent G]` ⟹ `IsCyclic G` (instance in ZGroup.lean:125)
     --
-    -- I also scanned all 160 closed problem artifacts, all modules in
-    -- `ConstructionTargets/`, `YoungL2.lean`, and the partial group neighbors
-    -- `b93A01`, `b90A01`, and `b96A02`.  The construction libraries are
-    -- analytic and irrelevant here; the group neighbors stop at the same
-    -- Sylow-cardinality/typeclass plumbing.  No packaged order-`p*q`
-    -- classification or reusable completed proof was found, and I did not
-    -- complete that plumbing within this pass.
+    -- Key APIs: `Sylow.card_sylow_modEq_one`, `Sylow.not_dvd_card_sylow`,
+    -- `IsZGroup.of_squarefree` (ZGroup.lean:57), `isCyclic` instance (ZGroup.lean:125),
+    -- `isNilpotent_of_finite_tfae` (Nilpotent.lean:941)
     sorry
