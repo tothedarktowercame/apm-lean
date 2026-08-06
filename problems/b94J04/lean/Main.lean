@@ -39,4 +39,36 @@ theorem apm_b94j04
      let g : ZMod 2 →ₗ[ℤ] ZMod 1 := 0
      ¬ IsShortExact f g ∧
        IsShortExact (LocalizedModule.map T f) (LocalizedModule.map T g)) := by
-  sorry
+  constructor
+  · intro M _ _
+    change Nonempty (LocalizedModule S M)
+    exact ⟨0⟩
+  constructor
+  · intro M N Q _ _ _ _ _ _ f g h
+    exact ⟨LocalizedModule.map_injective S f h.1,
+      LocalizedModule.map_exact S f g h.2.1,
+      LocalizedModule.map_surjective S g h.2.2⟩
+  dsimp
+  constructor
+  · intro h
+    have hone := (h.2.1 (1 : ZMod 2)).mp (by simp)
+    obtain ⟨x, hx⟩ := hone
+    simpa using hx
+  · have hsub : Subsingleton (LocalizedModule (Submonoid.powers (2 : ℤ)) (ZMod 2)) :=
+      LocalizedModule.subsingleton_iff.mpr (by
+        intro m
+        exact ⟨2, Submonoid.mem_powers 2, by
+          fin_cases m <;> rfl⟩)
+    letI := hsub
+    constructor
+    · intro x y _
+      exact Subsingleton.elim x y
+    constructor
+    · intro y
+      constructor
+      · intro _
+        exact ⟨0, Subsingleton.elim _ _⟩
+      · intro _
+        exact Subsingleton.elim _ _
+    · intro y
+      exact ⟨0, Subsingleton.elim _ _⟩
