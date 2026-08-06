@@ -43,4 +43,21 @@ theorem apm_b97j02 :
           φ a P = Ideal.Quotient.mk P.1 a) ∧
         Function.Injective φ ∧
         (Finite (APMSpectrum R) → Function.Bijective φ)) := by
+  /-
+  Boundary (pass-1 Codex, skipped): Mathlib provides the finite-family Chinese
+  remainder equivalence `Ideal.quotientInfRingEquivPiQuotient`, but local source
+  and proved-sibling searches found no assembled bridge from the custom
+  predicates `APMZeroDimensional` and `APMReduced` to its hypotheses.
+
+  A completion must prove every prime maximal by extending it to a maximal
+  ideal, install `Field (R ⧸ P)` instances dependently, construct the product
+  quotient homomorphism, and identify its kernel with the intersection of all
+  prime ideals. For the finite-spectrum surjectivity clause it must turn the
+  mere `Finite (APMSpectrum R)` hypothesis into a finite CRT index, prove
+  pairwise coprimality of distinct prime/maximal ideals, show their infimum is
+  `⊥` using `APMReduced`, and identify the CRT map definitionally with `φ`.
+  The idempotent-principal-ideal and arbitrary product-of-fields conjuncts also
+  require custom ideal-membership arguments not exposed by a single searched
+  von-Neumann-regularity theorem. The statement appears mathematically sound.
+  -/
   sorry
