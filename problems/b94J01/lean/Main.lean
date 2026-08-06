@@ -30,14 +30,21 @@ theorem apm_b94j01 :
         Nat.Coprime m n)) ∧
     (∀ (K : Type*) [Field K] (G : Subgroup Kˣ) [Finite G], IsCyclic G) := by
   refine ⟨?_, ?_, ?_⟩
-  · /- PASS-1 boundary: searched the finite-abelian-group structure APIs and
-       the classification of finite modules over a PID.  Mathlib provides
-       cyclic and primary decomposition machinery, but I could not find a
-       theorem whose canonical output is the frozen encoding: a *unique list*
-       `d`, with entries at least two, `List.Pairwise (· ∣ ·)`, and a `Fin`
-       indexed product of `Multiplicative (ZMod (d.get i))`.  Transporting the
-       available decomposition into this normalized list and proving list
-       uniqueness remains the pass-1 blocker. -/
+  · intro G _ _
+    obtain ⟨ι, instι, n, hn, hdecomp⟩ :=
+      CommGroup.equiv_prod_multiplicative_zmod_of_finite G
+    /- PASS-1 boundary: `CommGroup.equiv_prod_multiplicative_zmod_of_finite`
+       now supplies an explicit finite index type `ι`, moduli `n : ι → ℕ`
+       satisfying `1 < n i`, and the multiplicative product equivalence
+       `hdecomp`.  I also inspected `AddCommGroup.equiv_directSum_zmod_of_finite`
+       and the PID/Smith-normal-form APIs.
+
+       The remaining gap is not existence of a cyclic-factor decomposition:
+       it is converting these unordered factors into the frozen invariant-factor
+       encoding, a *unique list* `d` with `List.Pairwise (· ∣ ·)`, and proving
+       uniqueness of that normalized list.  Mathlib's finite-abelian-group API
+       provides primary factors but no theorem for this normalization or its
+       uniqueness. -/
     sorry
   · intro m n hm hn
     have hmcard : Nat.card (Multiplicative (ZMod m)) = m := by
