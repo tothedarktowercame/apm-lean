@@ -5,8 +5,10 @@ import Mathlib
 
 ## Statement repairs
 
-None. In part (a), the second branch is read on the complement of the already
-specified region `|x| > 1/n`, hence on `|x| ≤ 1/n`.
+In part (a), the second condition `x ≤ 1/n` is repaired to `|x| ≤ 1/n`.
+As printed, it overlaps the first condition whenever `x < -1/n`; the symmetric
+absolute-value condition is the unique reading consistent with the stated piecewise
+function and the supplied solution.
 
 ## Encoding questions
 
