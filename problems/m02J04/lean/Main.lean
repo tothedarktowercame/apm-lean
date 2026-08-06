@@ -63,4 +63,26 @@ theorem apm_m02j04 :
     (fun x ↦ Real.cosh x) ∈ apm_m02J04_admissible ∧
     ∀ y ∈ apm_m02J04_admissible,
       apm_m02J04_area (fun x ↦ Real.cosh x) ≤ apm_m02J04_area y := by
+  /-
+  SKIPPED (frozen-statement defect in part (b)). That conjunct quantifies over
+  arbitrary `L` and `y`, but its Euler–Lagrange predicate uses the unguarded
+  total function `deriv`; at a nondifferentiability point, `deriv` is zero and
+  therefore does not provide the differentiability needed by the chain rule in
+  the asserted Beltrami identity.
+
+  A concrete counterexample is `a = -1`, `b = 1`, `y t = t`, and
+  `L q p = if q = 0 then 1 else 0`. The partial derivative in `p` is identically
+  zero. The partial `q` derivative is also `0`: away from zero the function is
+  locally constant, while at zero it is nondifferentiable and Lean's `deriv`
+  defaults to zero. Hence `apm_m02J04_eulerLagrange (fun _ ↦ L) a b y`
+  holds. But the claimed Beltrami quantity is the discontinuous spike
+  `if t = 0 then 1 else 0`, which does not have derivative zero at the interior
+  point `0`.
+
+  The statement needs differentiability/`ContDiff` hypotheses on `L` and `y`
+  (and enough regularity for `deriv y`) in part (b). The theorem is frozen, so
+  no repair was made. The related `m01J06` artifact was consulted, but it only
+  confirms that deriving Euler–Lagrange equations needs explicit regularity and
+  supplies no route around this counterexample.
+  -/
   sorry
