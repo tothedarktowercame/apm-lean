@@ -58,4 +58,17 @@ theorem apm_t01j04
       closure V ⊆ U ∧
       apm_t01J04_IsSmoothManifoldWithBoundary n
         {x : X // x ∈ f ⁻¹' closure V} := by
+  /-
+  Boundary (skipped): even the topological shrinking step requires
+  `RegularSpace Y`, which is not implied by the frozen Mathlib manifold
+  hypotheses (instance synthesis confirms this). Thus the statement is false
+  without a separation axiom: a non-Hausdorff locally Euclidean manifold such
+  as the line with doubled origin has a neighborhood `U` of one origin for
+  which every smaller neighborhood has closure containing the other origin.
+  Taking `f` to be the identity already defeats `closure V ⊆ U`. Beyond that,
+  the intended proof also needs manifold Sard and a regular-sublevel theorem
+  constructing half-space charts. I searched the `mfderiv`, critical-value,
+  Sard, submersion, model-with-corners, and subtype-chart APIs; those packaged
+  results are not available in the required generality.
+  -/
   sorry
