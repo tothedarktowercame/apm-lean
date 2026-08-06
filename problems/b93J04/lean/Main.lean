@@ -39,4 +39,15 @@ theorem apm_b93j04 :
           E = IntermediateField.adjoin ℚ ({r₃} : Set K) ∨
           E = IntermediateField.adjoin ℚ ({r₂ * r₃} : Set K) ∨
           E = ⊤) := by
+  /- PASS-1 boundary: searched the splitting-field API, notably
+     `IsSplittingField.adjoin_rootSet`, `IsSplittingField.splits`,
+     `IntermediateField.adjoin_rootSet_isSplittingField`, and the finite
+     Galois correspondence (`intermediateFieldEquivSubgroup`).  The intended
+     route is to identify the four roots as `±√2 ± √3`, prove the abstract
+     splitting field is the biquadratic extension `ℚ(√2, √3)`, and then
+     enumerate the Klein-four automorphisms and its five subgroups.  I could
+     not find a packaged Mathlib realization of this polynomial, and building
+     the square-root witnesses, four-element basis, automorphisms, group
+     equivalence, and exhaustive intermediate-field list from the generic
+     root-set API exceeded pass 1. -/
   sorry
