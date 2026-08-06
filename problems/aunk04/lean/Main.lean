@@ -32,4 +32,12 @@ theorem apm_aunk04 :
         ∃ p : ℂ[X],
           (∀ z : ℂ, Polynomial.eval z p = f z) ∧
           ∀ k : ℕ, m < k → p.coeff k = 0 := by
+  -- SKIPPED: two-part problem.
+  -- (a) Rouché to count zeros of z⁴-3z³+z²+6 in unit disk: 0 zeros (not in Mathlib).
+  -- (b) Entire f with |f(z)|≤A+B|z|^m is polynomial of degree ≤⌊m⌋:
+  --   Cauchy estimates give |a_k| ≤ M(r)/r^k, M(r)≤A+Br^m, so |a_k|≤(A+Br^m)/r^k→0
+  --   for k>m as r→∞. Hence a_k=0 for k>m.
+  -- Blocker: Rouché's theorem NOT in Mathlib (part a); Cauchy estimates for
+  -- entire functions may partially exist but need careful assembly (part b).
+  -- APIs: `Polynomial.roots`, `Complex.norm_le_of_forall_mem_frontier_norm_le`
   sorry
