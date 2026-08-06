@@ -25,4 +25,5 @@ theorem apm_m94j06
     (𝕜 X : Type*) [RCLike 𝕜]
     [NormedAddCommGroup X] [NormedSpace 𝕜 X] [CompleteSpace X] :
     DifferentiableOn 𝕜 (m94J06Inverse 𝕜 X) (m94J06GL 𝕜 X) := by
-  sorry
+  simpa [m94J06Inverse, m94J06GL, Ring.inverse] using
+    (differentiableOn_inverse (𝕜 := 𝕜) (R := X →L[𝕜] X))
