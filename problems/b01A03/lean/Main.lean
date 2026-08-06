@@ -7,8 +7,8 @@ noncomputable section
 
 ## Statement repairs
 
-None. The word "principle" in the source is read as the conventional spelling
-"principal" in "principal ideal domain".
+The typographical phrase "principle ideal domain" is repaired to the standard
+"principal ideal domain"; no mathematical hypothesis is changed.
 
 ## Encoding notes
 
