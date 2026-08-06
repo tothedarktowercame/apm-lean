@@ -29,4 +29,15 @@ theorem apm_b03j03 :
       IsIntegrallyClosedIn D K) ∧
     (Squarefree (5 : ℤ) ∧
       ¬IsIntegrallyClosed (ℤ[X] ⧸ apmQuadraticIdeal)) := by
-  sorry
+  refine ⟨?_, ?_, ?_⟩
+  · intro D K _ _ _ _ _ _
+    exact (isIntegrallyClosed_iff_isIntegrallyClosedIn K).mp inferInstance
+  · norm_num
+  · -- Boundary: searched `isIntegrallyClosed_iff_isIntegrallyClosedIn`,
+    -- `IsIntegral`, quotient-lift APIs, and polynomial quotient/fraction-ring
+    -- equivalences.  The intended witness is `(1 + X) / 2` in the fraction
+    -- field of `ℤ[X] ⧸ (X^2 - 5)`, satisfying `T^2 - T - 1`; completing this
+    -- requires an explicit identification of Mathlib's abstract fraction field
+    -- with `ℚ[X] ⧸ (X^2 - 5)` and a coefficient argument showing the witness is
+    -- not in the image of the integer quotient.
+    sorry
