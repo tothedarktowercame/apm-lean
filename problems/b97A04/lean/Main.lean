@@ -29,4 +29,21 @@ theorem apm_b97a04
     Nonempty (R ≃ₐ[ℂ] Module.End ℂ V) ∧
     (∀ (W : Type) [AddCommGroup W] [Module R W],
       ∃ (ι : Type), Nonempty (W ≃ₗ[R] (ι →₀ V))) := by
+  /-
+  Boundary (pass-1 Codex, skipped): source inspection found substantial but
+  non-compositional support. `LinearMap.bijective_of_ne_zero` gives Schur's
+  lemma, `IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed` identifies
+  scalar endomorphisms once `FiniteDimensional ℂ V` is available, and
+  `Module.Finite.toModuleEnd_moduleEnd_surjective` is the relevant Jacobson
+  density theorem. `IsIsotypicOfType.linearEquiv_finsupp` supplies the final
+  decomposition only after semisimplicity and isotypy have been established.
+
+  The missing compiled bridge must first derive `Module.Finite ℂ V` from a
+  chosen nonzero cyclic vector and `FiniteDimensional ℂ R`, then transport the
+  density surjection and faithfulness into the exact `ℂ`-algebra equivalence
+  `R ≃ₐ[ℂ] Module.End ℂ V`. It must finally transfer semisimplicity and unique
+  simple-module type across that equivalence for every possibly infinite `W`,
+  including the universe level required by the displayed `ι →₀ V`. No proved
+  sibling implements this chain. The statement appears mathematically sound.
+  -/
   sorry
