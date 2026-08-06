@@ -63,4 +63,32 @@ theorem apm_m98a04 :
     (∀ x : ℝ,
       ∫ y in (0 : ℝ)..(2 * Real.pi),
         Real.sin y * Real.cos (x - y) = Real.pi * Real.sin x) := by
-  sorry
+  constructor
+  · /-
+    Boundary: the distributional-convolution clause requires constructing
+    translated/reflected bundled `TestFunction`s and proving smooth dependence
+    on the translation parameter in Mathlib's LF topology. I searched the
+    imported `TestFunction`, `Distribution`, translation, `fderiv`, and
+    continuous-linear-map APIs; I did not find an assembled API bridging the
+    pointwise witness demanded by `apm_m98a04_IsConvolution` to the required
+    bundled smoothness and iterated distributional derivatives. The concrete
+    periodic convolution clause is proved below.
+    -/
+    sorry
+  · intro x
+    have hintegrand :
+        (fun y : ℝ ↦ Real.sin y * Real.cos (x - y)) =
+          fun y ↦ Real.cos x * (Real.sin y * Real.cos y) +
+            Real.sin x * Real.sin y ^ 2 := by
+      funext y
+      rw [Real.cos_sub]
+      ring
+    rw [hintegrand, intervalIntegral.integral_add]
+    · rw [intervalIntegral.integral_const_mul,
+        intervalIntegral.integral_const_mul]
+      simp
+      ring
+    · exact (by fun_prop : Continuous fun y : ℝ ↦
+        Real.cos x * (Real.sin y * Real.cos y)).intervalIntegrable 0 (2 * Real.pi)
+    · exact (by fun_prop : Continuous fun y : ℝ ↦
+        Real.sin x * Real.sin y ^ 2).intervalIntegrable 0 (2 * Real.pi)
