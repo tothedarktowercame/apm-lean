@@ -36,4 +36,27 @@ theorem apm_b93a03 :
     (∀ n : ℕ, 2 ≤ n → ¬apm_b93a03_flat (ZMod n)) ∧
     (∀ (M : Type) [AddCommGroup M] [IsAddCyclic M],
       apm_b93a03_flat M ↔ Nonempty (M ≃+ ℤ) ∨ Subsingleton M) := by
-  sorry
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · intro B C M _ _ _ f hf
+    exact TensorProduct.map_surjective hf Function.surjective_id
+  · intro f
+    refine ⟨f 1, ?_, ?_⟩
+    · intro n
+      simpa [mul_comm] using f.map_zsmul (1 : ℤ) n
+    · intro a ha
+      simpa using (ha 1).symm
+  · exact ⟨TensorProduct.lid ℤ (ZMod 2)⟩
+  · intro a b hab
+    change 2 * a = 2 * b at hab
+    omega
+  · /- PASS-1 boundary: right-exactness, the classification of additive
+       endomorphisms of `ℤ`, the equivalence `ℤ ⊗ ZMod 2 ≃ ZMod 2`, and
+       injectivity of multiplication by two are proved above using
+       `TensorProduct.map_surjective`, `AddMonoidHom.map_zsmul`, and
+       `TensorProduct.lid`.  I searched `TensorProduct.lid_tmul`,
+       `TensorProduct.map_tmul`, and the flat/torsion-free API.  The remaining
+       blocker is proving that `TensorProduct.map (lsmul 2) id` kills the
+       nonzero tensor corresponding to `1 : ZMod 2`, then generalizing this
+       uniformly to `ZMod n` and transporting flatness across the cyclic-group
+       classification. -/
+    sorry
