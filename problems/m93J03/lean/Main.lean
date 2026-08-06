@@ -40,4 +40,22 @@ theorem apm_m93j03 :
             apm_m93J03_isSolution ε y →
             apm_m93J03_isSmall y η →
             EqOn x y (Icc (-Real.pi) Real.pi) := by
+  /-
+  Boundary: the intended proof first separates the sine kernel and proves
+  that every solution on the interval has the exact form
+  `ε + a * sin t + b * cos t`. It must then define the resulting map
+  `H : ℝ × (ℝ × ℝ) → ℝ × ℝ`, establish its strict Frechet
+  derivative by differentiating two parameterized interval integrals, and
+  identify the partial Jacobian at zero with the invertible diagonal map
+  having entries `1 + π` and `1 - π`.
+
+  I found Mathlib's product-domain implicit-function APIs
+  `ContDiffAt.implicitFunction`,
+  `ContDiffAt.eventually_apply_eq_iff_implicitFunction`, and
+  `HasStrictFDerivAt.implicitFunctionOfProdDomain`. Applying them here still
+  requires the missing derivative-under-the-integral construction and the
+  final conversion of their neighborhood uniqueness into the statement's
+  uniform `apm_m93J03_isSmall` radius for arbitrary function-valued
+  solutions. No compiled sibling supplied those bridges in this pass.
+  -/
   sorry
