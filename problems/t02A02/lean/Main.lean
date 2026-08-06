@@ -30,6 +30,27 @@ def apm_t02a02_word : Fin 8 → apm_t02a02_SignedEdge :=
 def apm_t02a02_vertexClass : Fin 8 → Fin 3 :=
   ![0, 0, 0, 1, 2, 1, 0, 1]
 
+def apm_t02a02_pair : Fin 8 → Fin 8 :=
+  ![1, 0, 6, 4, 3, 7, 2, 5]
+
+def apm_t02a02_next (i : Fin 8) : Fin 8 :=
+  ⟨(i.val + 1) % 8, Nat.mod_lt _ (by decide)⟩
+
+def apm_t02a02_orientedStart (i : Fin 8) : Fin 8 :=
+  if (apm_t02a02_word i).forward then i else apm_t02a02_next i
+
+def apm_t02a02_orientedEnd (i : Fin 8) : Fin 8 :=
+  if (apm_t02a02_word i).forward then apm_t02a02_next i else i
+
+def apm_t02a02_validVertexQuotient : Prop :=
+  ∀ i : Fin 8,
+    apm_t02a02_pair (apm_t02a02_pair i) = i ∧
+    (apm_t02a02_word (apm_t02a02_pair i)).edge = (apm_t02a02_word i).edge ∧
+    apm_t02a02_vertexClass (apm_t02a02_orientedStart i) =
+      apm_t02a02_vertexClass (apm_t02a02_orientedStart (apm_t02a02_pair i)) ∧
+    apm_t02a02_vertexClass (apm_t02a02_orientedEnd i) =
+      apm_t02a02_vertexClass (apm_t02a02_orientedEnd (apm_t02a02_pair i))
+
 def apm_t02a02_nonorientable : Prop :=
   ∃ i j : Fin 8, i ≠ j ∧
     (apm_t02a02_word i).edge = (apm_t02a02_word j).edge ∧
@@ -46,6 +67,7 @@ def apm_t02a02_classify (orientable : Bool) (eulerCharacteristic : ℤ) :
   else if eulerCharacteristic = 0 then .kleinBottle else .other
 
 theorem apm_t02a02 :
+    apm_t02a02_validVertexQuotient ∧
     Function.Surjective apm_t02a02_vertexClass ∧
     apm_t02a02_nonorientable ∧
     ((Nat.card (Fin 3) : ℤ) - Nat.card apm_t02a02_Edge + 1 = 0) ∧
