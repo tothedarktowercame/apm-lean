@@ -73,4 +73,18 @@ theorem apm_b97a01 :
     ¬Nonempty (apm_b97A01_SL23 ≃* apm_b97A01_S4) ∧
     ∃ P3 : Sylow 3 apm_b97A01_SL23,
       ¬(P3 : Subgroup apm_b97A01_SL23).Normal := by
+  /-
+  Boundary (pass-1 Codex, skipped): Mathlib's
+  `Equiv.Perm.isConj_iff_cycleType_eq` supplies the abstract conjugacy-class
+  criterion, but searches of the local Mathlib sources and solved sibling
+  artifacts found no packaged bridge for the exhaustive `Fin 4` cycle-type
+  enumeration and class cardinalities, the full normal-subgroup lattice of
+  `Equiv.Perm (Fin 4)`, the universal order-24 action theorem, or the concrete
+  cardinality and Sylow facts for `SpecialLinearGroup (Fin 2) (ZMod 3)`.
+  These latter clauses are not reducible by a single finite computation: the
+  theorem quantifies over arbitrary finite groups of order 24, and its
+  `Nat.card`/subgroup assertions require structural group-theoretic proofs.
+  No relevant proved sibling was found. The statement appears mathematically
+  sound; the blocker is the missing formal API/bridge, not a counterexample.
+  -/
   sorry
