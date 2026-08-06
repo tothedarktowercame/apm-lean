@@ -58,4 +58,19 @@ theorem apm_t02a03 :
       Limits.IsZero
         (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
           (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y))) := by
+  -- (Sibling: t01J03)
+  /-
+  Boundary (skipped): this needs concrete computations of
+  `FundamentalGroup Circle`, the product formula specialized to based
+  fundamental groups, Seifert--van Kampen for the quotient wedge, and the
+  singular-homology wedge/Mayer--Vietoris calculation. I searched Mathlib's
+  `FundamentalGroup`, `FundamentalGroupoidFunctor.prodIso`,
+  `singularHomologyFunctor`, wedge, van Kampen, and Mayer--Vietoris APIs.
+  Mathlib provides product preservation for the fundamental groupoid, but no
+  computation identifying the fundamental group of `Circle` with `ℤ`, no
+  van Kampen theorem for this quotient, and no singular Mayer--Vietoris
+  sequence yielding the stated degreewise module isomorphisms. Consequently
+  even the first conjunct cannot currently be established from the available
+  APIs without developing substantial missing algebraic-topology foundations.
+  -/
   sorry
