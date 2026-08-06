@@ -34,14 +34,32 @@ theorem apm_b93j03 :
       f hcomm
     intro i
     exact Module.End.iSup_maxGenEigenspace_eq_top (f i)
+  have hexistsGeneralized :
+      ∃ χ : A → k, (⨅ i, (f i).maxGenEigenspace (χ i)) ≠ ⊥ := by
+    by_contra h
+    push_neg at h
+    have hz : (⨆ χ : A → k, ⨅ i, (f i).maxGenEigenspace (χ i)) = ⊥ :=
+      iSup_eq_bot.mpr h
+    rw [hsimultaneousGeneralized] at hz
+    exact top_ne_bot hz
   /- PASS-1 boundary: `hsimultaneousGeneralized` establishes the simultaneous
      generalized-eigenspace decomposition for the family indexed by `A`, using
      `Module.End.iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute`
      and `Module.End.iSup_maxGenEigenspace_eq_top`; `hcomm` discharges its
-     compatibility hypothesis from the frozen commutation assumption.  I also
-     searched `Module.End.exists_eigenvalue` and the matrix
-     `BlockTriangular` API.  The remaining blocker is extracting a nonzero
-     vector in a simultaneous *ordinary* eigenspace from the generalized
-     decomposition and converting the resulting invariant flag into a
-     `Fin (finrank k V)` basis whose matrices satisfy `BlockTriangular id`. -/
+     compatibility hypothesis from the frozen commutation assumption.
+     `hexistsGeneralized` now extracts a nonzero simultaneous generalized
+     eigenspace rather than merely leaving the result as a lattice equality.
+
+     I exhaustively searched `Module.End.exists_eigenvalue`, the eigenspace
+     `Pi.lean` API, quotient/restriction linear maps, basis flags, and the
+     matrix `BlockTriangular` API.  Mathlib's
+     `Eigenspace/Triangularizable.lean` explicitly lists defining
+     triangularizability and proving its invariant-flag/basis equivalence as
+     a TODO.  The remaining first bridge is a local lemma that a commuting
+     family of nilpotent restrictions on the selected generalized eigenspace
+     has a nonzero common kernel, yielding an ordinary common eigenvector.
+     The second is a dimension induction through the quotient by that common
+     eigenline, lifting a quotient basis and proving its matrices satisfy
+     `Matrix.BlockTriangular id`.  No closed sibling or construction module
+     packages either bridge. -/
   sorry
