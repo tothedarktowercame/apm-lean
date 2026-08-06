@@ -37,7 +37,8 @@ theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
       Fintype.card F * (Fintype.card F - 1) ∧
     (∀ r : RatFunc F,
       (∀ σ ∈ apm_b97a02_affineAutomorphisms F, σ r = r) ↔
-        r ∈ Algebra.adjoin F {apm_b97a02_invariant F}) ∧
+        r ∈ IntermediateField.adjoin F
+          ({apm_b97a02_invariant F} : Set (RatFunc F))) ∧
     (∀ K : IntermediateField F (RatFunc F), K ≠ ⊥ →
       Module.Finite K (RatFunc F)) := by
   sorry
