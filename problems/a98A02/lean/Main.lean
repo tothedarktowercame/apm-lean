@@ -28,4 +28,10 @@ theorem apm_a98a02 (g : ℕ → ℝ → ℝ) (M : ℝ)
       Tendsto
         (fun n => ∫ x in Icc (0 : ℝ) 1, f x * g n x ∂volume)
         atTop (𝓝 0) := by
+  -- SKIPPED: needs Bessel's inequality (∑|⟨f,g_n⟩|²≤‖f‖₂², NOT in Mathlib)
+  -- and L²-dense-in-L¹ approximation argument with uniform functional bound M.
+  -- -- (Memory: e-codexpilot-extend-weak-convergence-from-a-dense-linear-span-by-uniform-boundedness)
+  --    confirms strategy: Bessel on L² + density + uniform bound propagates to L¹.
+  -- APIs searched: `Bessel`, `bessel` — NOT FOUND. `tendsto_atTop_of_summable` — FOUND but
+  -- need to build the summability from orthonormality first.
   sorry
