@@ -83,4 +83,22 @@ theorem apm_m98a06 :
       IsLeast {C : ℝ | ∀ f df : ℝ → ℝ, apm_m98a06_InH10Pi f df →
         ∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) ≤
           C * ∫ x, (df x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))} 1) := by
+  have hfamily_admissible (B : ℝ) :
+      apm_m98a06_Admissible (2 * Real.pi) 1 1
+        (fun x ↦ Real.cos x + B * Real.sin x) := by
+    refine ⟨?_, by simp, ?_⟩
+    · fun_prop
+    · simp
+  /-
+  Boundary: the resonant family appearing in part (a) has been checked above
+  to satisfy the frozen `C¹` endpoint encoding. Completing the theorem requires
+  an Euler--Lagrange fundamental lemma for `ContDiffOn` variations, exact
+  interval-integral computations for positive and negative second-variation
+  modes, and the sharp one-dimensional Poincaré/Wirtinger theorem for the
+  custom weak-derivative predicate `apm_m98a06_InH10Pi` (including its equality
+  case and optimality). I searched Mathlib's interval integration-by-parts,
+  weak-derivative, Sobolev, and Poincaré APIs; no compiled sibling assembled
+  these results for this bespoke representation. The local fact above verifies
+  the principal explicit family without weakening the frozen statement.
+  -/
   sorry
