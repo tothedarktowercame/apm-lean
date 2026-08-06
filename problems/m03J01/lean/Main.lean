@@ -99,4 +99,22 @@ theorem apm_m03j01 :
           (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
             ∃ H, apm_m03J01_weakHessian u.grad H ∧
               apm_m03J01_H2size u H ≤ C * eLpNorm F 2 volume) := by
+  /-
+  SKIPPED (custom Sobolev-space structure boundary). Mathlib supplies the
+  abstract ingredients `InnerProductSpace.toDual` (Fréchet–Riesz) and
+  `LinearMap.continuous_of_seq_closed_graph`. However, the PDE clauses use the
+  bespoke representative record `apm_m03J01_H01`, which has no additive,
+  normed, inner-product, or complete-space instances and is not quotiented by
+  a.e. equality. Thus the abstract Riesz map cannot be instantiated on it.
+
+  A proof must first construct the Hilbert-space quotient of value/gradient
+  pairs satisfying `approximable`, prove completeness and compatibility of its
+  energy inner product with the displayed integrals, lift `F ↦ ∫ Fv` as a
+  continuous functional, and descend the resulting solution back to the record.
+  The final clause additionally needs a Banach space of weak-Hessian classes,
+  uniqueness modulo a.e. equality, continuity of the embedding to the energy
+  space, and a closed-graph argument producing the ENNReal estimate. Searches
+  found no compiled sibling connecting these APIs to this custom encoding, so
+  no sibling code was reused and the frozen statement was left unchanged.
+  -/
   sorry
