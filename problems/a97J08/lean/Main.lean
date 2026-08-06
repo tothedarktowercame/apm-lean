@@ -38,6 +38,34 @@ part of the divisor. -/
 def apm_a97j08_zeroCount (f : ℂ → ℂ) (U : Set ℂ) : ℤ :=
   ∑ᶠ z : ℂ, max (MeromorphicOn.divisor f U z) 0
 
+/-! ## Blocker analysis
+
+This is the Hurwitz/Rouché theorem: zeros are stable under locally uniform
+convergence. The proof requires:
+
+1. **Weierstrass convergence theorem**: g is analytic (limit of analytic f_n).
+   - Mathlib has `TendstoLocallyUniformlyOn` but no pre-packaged theorem that
+     the locally uniform limit of holomorphic functions is holomorphic.
+
+2. **Jordan curve theorem**: the interior of a Jordan curve is well-defined.
+   - Mathlib has NO Jordan curve theorem. `apm_a97j08_curveInterior` is defined
+     via `connectedComponentIn` and `Bornology.IsBounded`, but there is no
+     theorem that a simple closed curve bounds a unique bounded region.
+
+3. **Rouché's theorem / argument principle**: zero-counting via contour integrals.
+   - Mathlib (v4.29.0-rc8) has NO Rouché's theorem, NO argument principle
+     (`(1/2πi)∮ f'/f dz = number of zeros`), NO winding number.
+   - Available: `Complex.circleIntegral_sub_inv_smul` (Cauchy integral formula),
+     `MeromorphicOn.divisor` (divisor function), `MeromorphicOn.extract_zeros_poles`
+   - But no theorem connecting contour integrals to zero counts.
+
+4. **Homotopy invariance of zero count**: integer-valued continuous function is
+   eventually constant — the key mechanism behind Rouché.
+
+The statement is TRUE as stated. The blocker is a fundamental Mathlib
+infrastructure gap: the entire argument-principle / Rouché / Hurwitz pipeline
+is absent. This is the same gap that blocks a94A09. -/
+
 theorem apm_a97j08 (D : Set ℂ) (γ : ℝ → ℂ) (F : ℕ → ℂ → ℂ) (g : ℂ → ℂ)
     (hD_open : IsOpen D)
     (hD_simplyConnected : IsSimplyConnected D)
