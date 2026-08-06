@@ -38,4 +38,11 @@ def apm_t91a02_HasFiniteCover
 theorem apm_t91a02
     (E : apm_t91a02_Surface 16) (B : apm_t91a02_Surface 8) :
     ¬apm_t91a02_HasFiniteCover E B := by
-  sorry
+  intro hcover
+  dsimp [apm_t91a02_HasFiniteCover] at hcover
+  obtain ⟨p, sheets, hp, hsheets, heuler⟩ := hcover
+  have hE := E.euler_eq
+  have hB := B.euler_eq
+  norm_num at hE hB
+  rw [hE, hB] at heuler
+  omega
