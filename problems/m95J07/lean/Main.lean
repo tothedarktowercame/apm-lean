@@ -26,4 +26,12 @@ theorem apm_m95j07 :
     (∀ (X : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X]
       (T : X →ₗ[ℝ] X) (A : X →L[ℝ] X),
       Function.Injective A → Continuous (fun x => A (T x)) → Continuous T) := by
+  -- SKIPPED: two-part functional analysis problem.
+  -- (a) Nowhere-differentiable functions in C[-1,1] form a non-meagre set (second category).
+  --     Classic Baire category theorem application.
+  -- (b) Automatic continuity: if A∘T is continuous and A injective, then T continuous.
+  --     Requires closed graph theorem or open mapping theorem.
+  -- Blocker: (a) needs Baire category theorem application (meagre/non-meagre argument);
+  -- (b) needs closed graph / open mapping theorem (may partially exist in Mathlib).
+  -- APIs: `IsMeagre`, `ContinuousMap`, `ContinuousLinearMap`, `CompleteSpace`
   sorry
