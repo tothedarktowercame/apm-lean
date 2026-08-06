@@ -49,19 +49,14 @@ theorem apm_b01j03
       apm_b01J03_rootField F K α = apm_b01J03_rootField F K β ∧
       apm_b01J03_rootField F K α = ⊤ ∧
       (P : Subgroup (K ≃ₐ[F] K)) = ⊤ := by
-  -- PARTIAL (closer hop 1): bridge still open. Prior analysis confirmed correct.
-  -- Consulted LEMMA-INDEX.md: no relevant Galois/Sylow/group theory lemmas found.
-  -- This problem requires four chained Galois-theoretic arguments:
-  --   (a) |G|=ps: Sylow theorem (|P|=p, index s)
-  --   (b) s(p-1) elements of order p: conjugate counting (|G|/|N_G(P)| = s)
-  --   (c) All root fields equal: orbit-stabilizer + self-normalizing Sylow
-  --   (d) K=F[α]: degree argument ⟹ |G| = p ⟹ G = P
-  -- Each part depends on the previous. Mathlib's Galois correspondence API
-  -- (`AlgEquiv`, `IntermediateField.fixingSubgroup`, `IsSplittingField`) exists
-  -- but the Sylow counting arguments (conjugate number, element order counting)
-  -- are not available as ready-to-use lemmas in the required generality.
-  -- APIs searched: `Sylow`, `Subgroup.normalizer`, `card_conj_subgroups`,
-  -- `orderOf`, `Nat.card`, `IntermediateField.fixingSubgroup`
-  -- Routes NOT investigated: proving the four parts as separate helper lemmas
-  -- (each ~20-30 lines), using `Nat.card` of specific group structures.
+  -- PARTIAL (closer hop 2): bridge still open. No closer progress.
+  -- Consulted Mathlib GroupTheory/Index.lean: Subgroup.index infrastructure exists but
+  -- the Sylow-specific counting theorems (conjugate count = index of normalizer,
+  -- element order counting) are not available as named lemmas.
+  -- Each of the 4 parts (a-d) requires proving from scratch:
+  --   (a) |G| = p * s: from |P| = p and Lagrange's theorem
+  --   (b) s(p-1) elements of order p: orbit-stabilizer on conjugates
+  --   (c) root field equality: Galois correspondence + counting
+  --   (d) K = F[α]: degree 1 ⟹ |G| = p ⟹ G = P
+  -- This is ~80-120 lines of deep group theory assembly with no reusable template.
   sorry
