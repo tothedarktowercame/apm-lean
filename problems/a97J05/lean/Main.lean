@@ -103,4 +103,15 @@ theorem apm_a97j05
   -- Near z = 1: h = g₀ (eventually), g₀ analytic.
   -- Define G piecewise and show AnalyticOnNhd.
 
+  -- PARTIAL: proof structure laid out. Steps 1-2 (f analytic at 0, pole removal)
+  -- are conceptually done. Remaining bridge:
+  -- (a) Gluing: h = f - A/(z-1) extends analytically to ball 0 2 by gluing with g₀ near z=1.
+  --     APIs: `AnalyticOnNhd` gluing/patching lemma — not available in Mathlib.
+  -- (b) Geometric series: A/(z-1) = -A·∑zⁿ on ball 0 1, so h(z) = ∑(aₙ+A)zⁿ.
+  --     APIs: `hasSum_geometric_of_norm_lt_one`, `HasFPowerSeriesOnBall` — available.
+  -- (c) Coefficient decay: analytic on ball 0 2 ⟹ coefficients → 0 by Cauchy estimates.
+  --     APIs: `HasFPowerSeriesOnBall.coeff_tendsto_zero` or similar — need to check.
+  -- -- (Memory: math-informal/estimate-by-bounding) Cauchy estimates bound coefficients.
+  -- -- (Memory: e-codexpilot-extend-a-reciprocal-across-finite-punctures-then-apply-Liouville)
+  -- --    Extending across punctures via local analytic agreement.
   sorry
