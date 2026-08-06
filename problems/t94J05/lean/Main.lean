@@ -34,4 +34,19 @@ theorem apm_t94j05
     (hf : apm_t94J05_IsSmooth f) :
     ContinuousMap.Homotopic f
       (ContinuousMap.const apm_t94J05_Torus apm_t94J05_northPole) := by
+  /-
+  Boundary (skipped): the intended proof uses the dimension gap and Sard's
+  theorem to show that `f` misses a point, then stereographic projection and
+  contractibility of the punctured sphere. I searched Mathlib's `Sard`,
+  manifold `ContDiff`, sphere connectivity, stereographic projection,
+  contractibility, and `ContinuousMap.Homotopic` APIs. Mathlib only has a
+  special Sard theorem for maps between finite-dimensional vector spaces and
+  an open partial stereographic chart; it does not package the required
+  manifold Sard or null-homotopy result. More decisively, the frozen
+  `apm_t94J05_IsSmooth` is an opaque predicate with no theorem relating `hf`
+  to `ContDiff`, derivatives, critical values, or non-surjectivity, so the
+  stated smoothness assumption cannot feed the informal route. Developing an
+  independent obstruction-theory proof for all continuous maps from the
+  torus to `S³` is also absent from Mathlib and beyond this pass.
+  -/
   sorry
