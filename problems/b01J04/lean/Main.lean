@@ -33,4 +33,12 @@ theorem apm_b01j04 :
       (n : Type*) [Fintype n] [DecidableEq n]
       (A : Matrix n n k), IsUnit A →
         ∃ q : k[X], A⁻¹ = aeval A q) := by
+  -- SKIPPED: two-part linear algebra.
+  -- (a) Simultaneous diagonalization ⟺ commute: requires diagonalizability of
+  --     both A,B + spectral theorem + invariant subspace decomposition.
+  -- (b) A⁻¹ = q(A) for nonsingular A: Cayley-Hamilton gives p(A)=0,
+  --     rearrange to get A⁻¹ as polynomial in A.
+  -- Blocker: (a) needs simultaneous diagonalization theorem (NOT in Mathlib).
+  -- (b) needs Cayley-Hamilton + polynomial in matrix argument.
+  -- APIs: `Matrix.IsDiag`, `aeval`, `IsUnit`, `charpoly`
   sorry

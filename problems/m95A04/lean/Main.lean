@@ -79,4 +79,11 @@ theorem apm_m95a04
     ¬ Function.Injective Ddist ∧
     (∀ lam : ℝ, Ddist (causal lam) + lam • causal lam = δ) ∧
     Nonempty (CompleteSpace W) := by
+  -- SKIPPED: six-part distributions/Sobolev problem.
+  -- (a) Regular functions as distributions; (b) distributional derivative D;
+  -- (c) D|x| = sign(x), D²|x| = 2δ; (d) D injective on test fns, not on dists;
+  -- (e) (D+λ)T = δ solution: causal exponential; (f) W^{1,p}[0,1] is Banach.
+  -- Blocker: requires Mathlib distribution theory (`𝓓`, `𝓓'`), weak derivatives,
+  -- Sobolev space construction, distributional ODE — each part is a major proof.
+  -- APIs: `𝓓`, `𝓓'`, `SchwartzMap.derivCLM`, `Lp`, `CompleteSpace`
   sorry
