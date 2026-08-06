@@ -39,4 +39,12 @@ theorem apm_b00j01 :
     (∀ [Fact (Nat.Prime 13)] (M : Type*) [Field M] [Algebra (ZMod 13) M]
         [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))],
       Nonempty ((M ≃ₐ[ZMod 13] M) ≃* Multiplicative (ZMod 3))) := by
+  -- SKIPPED: three-part Galois theory problem for x³-7 over ℚ, ℝ, F₁₃.
+  -- (a) Over ℚ: Gal(K/ℚ) ≅ S₃, 6 intermediate fields, 3 cubic non-Galois.
+  -- (b) Over ℝ: Gal(L/ℝ) ≅ Z₂ (complex conjugation).
+  -- (c) Over F₁₃: Gal(M/F₁₃) ≅ Z₃ (Frobenius, since x³≡7 has one root mod 13
+  --     and splitting field is F₁₃³).
+  -- Blocker: requires assembling IsSplittingField, Galois group computation,
+  -- IntermediateField enumeration, IsGalois — deep algebra infrastructure.
+  -- APIs: `IsSplittingField`, `IntermediateField`, `IsGalois`, `AlgEquiv`
   sorry
