@@ -80,4 +80,46 @@ theorem apm_m00a04
               (∫ x in U,
                 (∑ i : Fin n, g i x * h i x) + u x * v x) =
               ∫ x in U, F x * v x := by
-  sorry
+  let u : V := (InnerProductSpace.toDual ℝ V).symm f
+  have hu (v : V) : inner ℝ u v = f v := by
+    exact InnerProductSpace.toDual_symm_apply
+  have hphi (v : V) :
+      apm_m00A04_phi f v =
+        (1 / 2 : ℝ) * ‖v - u‖ ^ 2 - (1 / 2 : ℝ) * ‖u‖ ^ 2 := by
+    unfold apm_m00A04_phi
+    rw [← hu v, norm_sub_sq_real, real_inner_comm]
+    ring
+  constructor
+  · refine ⟨-(1 / 2 : ℝ) * ‖u‖ ^ 2, ?_⟩
+    rintro _ ⟨v, rfl⟩
+    rw [hphi]
+    nlinarith [sq_nonneg ‖v - u‖]
+  · constructor
+    · refine ⟨u, ?_, ?_, hu⟩
+      · intro v
+        rw [hphi, hphi]
+        simp only [sub_self, norm_zero, zero_pow, Nat.ofNat_pos, mul_zero]
+        nlinarith [sq_nonneg ‖v - u‖]
+      · intro v hv
+        rw [hphi, hphi]
+        have hnorm : 0 < ‖v - u‖ := norm_pos_iff.mpr (sub_ne_zero.mpr hv)
+        simp only [sub_self, norm_zero, zero_pow, Nat.ofNat_pos, mul_zero]
+        nlinarith [sq_pos_of_pos hnorm]
+    · /-
+      Boundary: the Hilbert-space portion is complete above. It uses Mathlib's
+      compiled Fréchet–Riesz equivalence `InnerProductSpace.toDual`; rewriting
+      `φ` with `norm_sub_sq_real` gives the exact completed-square formula,
+      from which boundedness, the unique strict minimizer, and representation
+      follow.
+
+      The remaining PDE conjunct is not a direct application of a packaged
+      Sobolev/Lax–Milgram theorem because the frozen statement uses the custom
+      representative-level predicate `apm_m00A04_memH10WithGradient`. Mathlib
+      searches found no `H¹₀` completion matching this predicate. A proof must
+      construct the completion of compactly supported smooth test functions in
+      the encoded energy norm, prove that its elements admit representatives
+      `(u,g)` satisfying the distributional identities and approximation clause,
+      then descend the Riesz representative back to those functions. This is a
+      full Sobolev-space construction, not supplied by solved siblings.
+      -/
+      sorry
