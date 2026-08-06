@@ -43,4 +43,22 @@ theorem apm_m94a03 :
     ¬ apm_m94a03_InH1UnitBall 2 ∧
     apm_m94a03_InH1UnitBall 3 ∧
     apm_m94a03_InH1UnitBall 4 := by
+  /-
+  Boundary: the positive cases require proving radial `L²` integrability of
+  `log ‖x‖` and of the candidate gradient `x / ‖x‖ ^ 2` in dimensions three
+  and four, then establishing the custom weak-gradient identity by integrating
+  over a punctured ball and showing the inner-sphere boundary term tends to
+  zero. The negative two-dimensional case additionally requires uniqueness of
+  distributional weak gradients, so that any hypothetical `L²` gradient is
+  identified almost everywhere with the non-square-integrable classical
+  gradient away from zero.
+
+  I searched Mathlib and the repository for radial/polar integration and weak
+  derivative infrastructure. The repository has a specialized three-
+  dimensional radial integral construction in `a95A03`, but no general
+  dimension-two/four formula or compiled route for this custom Euclidean-space
+  weak-gradient predicate. I did not complete the punctured-domain divergence
+  theorem, boundary-limit, and weak-gradient uniqueness machinery required by
+  all three conjuncts within this pass.
+  -/
   sorry
