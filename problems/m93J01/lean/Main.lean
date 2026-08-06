@@ -58,4 +58,22 @@ theorem apm_m93j01
           (2 + 5 * h ^ 2 / 6 * V x) * y x +
           (1 - h ^ 2 / 12 * V (x - h)) * y (x - h))
           =O[nhds 0] (fun h : ℝ ↦ h ^ 6)) := by
+  refine ⟨rfl, ?_⟩
+  /-
+  Boundary: the remaining clauses require a symmetric Taylor estimate with
+  an `IsBigO (h ^ 6)` remainder for `y`, and the analogous `IsBigO (h ^ 4)`
+  estimate for `iteratedDeriv 2 y`. I searched Mathlib's Taylor APIs
+  `taylor_mean_remainder_bound`, `exists_taylor_mean_remainder_bound`, and
+  `taylor_mean_remainder_lagrange_iteratedDeriv`. They give interval-wise
+  remainder bounds, but I did not complete the substantial bridge from those
+  bounds to the neighborhood-filter statements here, including rewriting
+  `taylorWithinEval` coefficients as the stated `iteratedDeriv` expressions.
+
+  Once those two estimates are available, the second clause follows
+  algebraically from the first and the definition of
+  `apm_m93J01_schrodinger`; the final Numerov residual follows by using the
+  ODE to rewrite `iteratedDeriv 2 y = V * y`, applying the fourth-order
+  estimate, and combining Big-O terms. No compiled sibling proof supplied
+  this Taylor-to-filter bridge.
+  -/
   sorry
