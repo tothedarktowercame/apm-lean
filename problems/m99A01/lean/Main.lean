@@ -45,4 +45,37 @@ theorem apm_m99a01 :
       apm_m99A01_functional apm_m99A01_extremal ≤ apm_m99A01_functional y) ∧
     ¬ ∃ y ∈ apm_m99A01_admissible, ∀ z ∈ apm_m99A01_admissible,
       apm_m99A01_functional z ≤ apm_m99A01_functional y := by
-  sorry
+  constructor
+  · /-
+    Boundary: identifying every stationary curve requires differentiating the
+    interval integral in the variation parameter, integration by parts, the
+    fundamental lemma of the calculus of variations, and uniqueness for the
+    resulting inhomogeneous ODE `y'' - y = 1`. I searched Mathlib's
+    `HasDerivAt`-under-integral, interval integration-by-parts, and ODE APIs;
+    I did not complete this bridge for the frozen stationarity predicate.
+    -/
+    sorry
+  constructor
+  · refine ⟨?_, ?_, ?_⟩
+    · unfold apm_m99A01_extremal
+      fun_prop
+    · simp [apm_m99A01_extremal]
+    · unfold apm_m99A01_extremal
+      have hc : Real.cosh (Real.pi / 4) ≠ 0 :=
+        ne_of_gt (Real.cosh_pos (Real.pi / 4))
+      rw [show Real.pi / 2 = 2 * (Real.pi / 4) by ring,
+        Real.cosh_two_mul, Real.sinh_two_mul,
+        Real.tanh_eq_sinh_div_cosh]
+      field_simp [hc]
+      nlinarith [Real.cosh_sq_sub_sinh_sq (Real.pi / 4)]
+  · /-
+    Boundary: global minimality and nonexistence of a maximum require expanding
+    the quadratic functional around the verified admissible candidate, using
+    stationarity to cancel the cross term, and evaluating the functional on
+    the endpoint-zero family `n * sin (2t)` to prove unboundedness above. I
+    searched the interval-integral derivative and hyperbolic/trigonometric
+    integral APIs; the full exact integral calculation was not completed in
+    this pass. The candidate's global `C¹` regularity and both endpoint values
+    are proved above.
+    -/
+    sorry
