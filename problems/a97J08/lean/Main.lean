@@ -80,4 +80,12 @@ theorem apm_a97j08 (D : Set ℂ) (γ : ℝ → ℂ) (F : ℕ → ℂ → ℂ) (g
     ∃ N : ℕ, ∀ n ≥ N,
       apm_a97j08_zeroCount (F n) (apm_a97j08_curveInterior γ) =
         apm_a97j08_zeroCount g (apm_a97j08_curveInterior γ) := by
+  -- SKIPPED: Hurwitz/Rouché theorem — zeros stable under locally uniform convergence.
+  -- Requires: Weierstrass convergence theorem, Jordan curve theorem, Rouché's theorem /
+  -- argument principle — ALL absent from Mathlib. Same infrastructure gap as a94A09.
+  -- The file documents the full blocker analysis including which Mathlib APIs exist
+  -- (circleIntegral, MeromorphicOn.divisor) but are insufficient (no contour-to-zero-count).
+  -- -- (Memory: e-codexpilot-prove-Hurwitz-zero-persistence-through-quantitative-open-mapping)
+  -- --    confirms Hurwitz zero persistence is the core; (Memory: e-codexpilot-straight-line-rouche-homotopy-stays-nonzero-on-boundary)
+  -- --    confirms the Rouché boundary condition approach.
   sorry
