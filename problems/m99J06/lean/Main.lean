@@ -82,4 +82,25 @@ theorem apm_m99j06
               Tendsto (fun j ↦ toWeakSpace ℝ H (uSeq (k j) : H)) atTop
                 (nhds (toWeakSpace ℝ H u)) ∧
               apm_m99J06_weakSolution M f u) := by
+  have hweak_unique :
+      ∀ u v : H,
+        apm_m99J06_weakSolution M f u →
+        apm_m99J06_weakSolution M f v → u = v := by
+    intro u v hu hv
+    apply ext_inner_right ℝ
+    intro w
+    rw [hu w, hv w]
+  /-
+  Boundary: uniqueness of the weak solution is proved above directly from
+  the Hilbert inner product. Completing the frozen theorem requires (1) a
+  Sobolev integration-by-parts/regularity theorem for the custom
+  `AbsolutelyContinuousOnInterval` plus a.e. `HasDerivAt` representation,
+  (2) finite-dimensional Riesz representation for the Galerkin functional,
+  and (3) weak sequential compactness of a bounded Hilbert-space sequence
+  followed by passage to the limit on a dense increasing union. I searched
+  Mathlib's `MemLp`, interval absolute-continuity, Bochner integration,
+  finite-dimensional duality, `toWeakSpace`, reflexivity, and weak compactness
+  APIs, but did not find a route connecting all of them to this custom model
+  within this pass.
+  -/
   sorry
