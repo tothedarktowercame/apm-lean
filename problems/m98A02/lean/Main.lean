@@ -24,4 +24,31 @@ theorem apm_m98a02 :
         B.comp (ContinuousLinearMap.id ℝ X - A) = ContinuousLinearMap.id ℝ X ∧
         (ContinuousLinearMap.id ℝ X - A).comp B = ContinuousLinearMap.id ℝ X ∧
         1 / (1 + ‖A‖) ≤ ‖B‖ ∧ ‖B‖ ≤ 1 / (1 - ‖A‖)) := by
-  sorry
+  refine ⟨?_, ?_, ?_⟩
+  · intro X Y _ _ _ _ A
+    constructor
+    · rintro ⟨C, hC, hbound⟩
+      let Ac : X →L[ℝ] Y := A.mkContinuous C hbound
+      simpa only [LinearMap.mkContinuous_apply] using Ac.continuous
+    · intro hcont
+      let Ac : X →L[ℝ] Y :=
+        { toLinearMap := A
+          cont := hcont }
+      exact ⟨‖Ac‖, norm_nonneg _, fun x ↦ Ac.le_opNorm x⟩
+  · intro X Y _ _ _ _ _
+    exact ⟨inferInstance⟩
+  · /-
+    PASS-1 boundary (codex): this final conjunct is false as frozen because
+    it does not assume `[Nontrivial X]`.  Take a trivial real normed space
+    (for example `X := Fin 0 → ℝ`) and `A = 0`.  Then `‖A‖ < 1`, but
+    every `B : X →L[ℝ] X` is zero and has norm zero.  The required lower
+    estimate specializes to `1 / (1 + 0) ≤ 0`, i.e. `1 ≤ 0`.
+
+    Mathlib's `isUnit_one_sub_of_norm_lt_one`,
+    `NormedRing.inverse_one_sub`, and the geometric-series API do prove the
+    intended Neumann theorem once `[Nontrivial X]` is added.  Sibling
+    `m95A01` demonstrates the same unit construction.  The first two
+    conjuncts above are fully proved; this `sorry` is confined to the false
+    conjunct, and the frozen statement has not been altered.
+    -/
+    sorry
