@@ -50,4 +50,11 @@ theorem apm_b96a01 :
       ∀ p : ℕ, p.Prime →
         ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
           Function.Injective ρ) := by
+  -- Boundary: the first frozen conjunct is false.  Take `V = ℚ`,
+  -- `s = {1, 2}`, and `A = AddSubgroup.closure (s : Set ℚ)`.  Its
+  -- hypothesis is reflexive, but the conclusion requires one ℚ-basis of the
+  -- one-dimensional space ℚ to contain both distinct dependent vectors `1`
+  -- and `2`.  No Mathlib API search can repair this statement-level issue;
+  -- the intended claim would need a basis subset generating `A`, rather than
+  -- requiring every element of the supplied generating set to occur in it.
   sorry
