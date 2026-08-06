@@ -33,20 +33,18 @@ theorem apm_b03j03 :
   · intro D K _ _ _ _ _ _
     exact (isIntegrallyClosed_iff_isIntegrallyClosedIn K).mp inferInstance
   · norm_num
-  · -- Boundary (pass-1 Codex, sustained attempt): searched
-    -- `AdjoinRoot.isDomain_of_prime`, `AdjoinRoot.modByMonicHom`,
-    -- `isIntegrallyClosed_iff`, Eisenstein, quotient, and fraction-ring APIs;
-    -- also all closed sibling artifacts, `ConstructionTargets/`, and
-    -- `YoungL2.lean`. The first two conjuncts are complete.
-    -- Earlier searches included `isIntegrallyClosed_iff_isIntegrallyClosedIn`,
-    -- `IsIntegral`, quotient-lift APIs, and polynomial quotient/fraction-ring
-    -- equivalences.  The intended witness is `(1 + X) / 2` in the fraction
-    -- field of `ℤ[X] ⧸ (X^2 - 5)`, satisfying `T^2 - T - 1`; completing this
-    -- requires an explicit identification of Mathlib's abstract fraction field
-    -- with `ℚ[X] ⧸ (X^2 - 5)` and a coefficient argument showing the witness is
-    -- not in the image of the integer quotient. The audit found the latter
-    -- coordinate tool, but the remaining blocker is constructing the
-    -- fraction-field presentation, transporting the monic relation, and
-    -- clearing `2` to obtain the impossible equations `2*a = 1`, `2*b = 1`.
-    -- No searched library or closed artifact packages this bridge.
+  · -- Boundary (closer hop 1): bridge still open. Enriched analysis.
+    -- Mathlib has `isIntegrallyClosed_iff` (IntegrallyClosed.lean:125):
+    --   IsIntegrallyClosed R ↔ ∀ x : K, IsIntegral R x → ∃ y, algebraMap R K y = x
+    -- To show ¬IsIntegrallyClosed (ℤ[X] ⧸ (X²-5)):
+    --   Need: ∃ x in Frac(ℤ[X]/(X²-5)), IsIntegral over R, but x ∉ image of algebraMap.
+    -- Witness: (1+√5)/2, satisfying T²-T-1=0 (integral), but not in ℤ[X]/(X²-5)
+    -- (which has elements a+b√5 with a,b ∈ ℤ; (1+√5)/2 requires 2|1 contradiction).
+    --
+    -- Blocker: constructing the fraction field of ℤ[X]/(X²-5), placing the witness
+    -- in it, proving the integral equation, and the non-membership, all through
+    -- Mathlib's abstract FractionField and quotient ring APIs.
+    -- Each sub-step is 15-30 lines; total ~60-100 lines.
+    -- APIs: `FractionField`, `Ideal.Quotient`, `IsIntegral`, `algebraMap`,
+    --   `Polynomial.Quotient` (if exists), `RingHom.map_quotient`
     sorry
