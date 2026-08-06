@@ -26,4 +26,10 @@ theorem apm_b00j04
       (algebraMap R F b)⁻¹ ∈ S) ∧
     IsPrincipalIdealRing S ∧
     (Module.Finite R S → S = ⊥) := by
+  -- SKIPPED: three-part commutative algebra for intermediate rings R⊂S⊂Frac(R).
+  -- (a) Every α∈S is a/b with 1/b∈S: use that α=a/b in F, and S is a ring containing R.
+  -- (b) S is a PID: every ideal of S contracts to an ideal of R (a PID), use localization.
+  -- (c) If S finite R-module then S=R: integrality argument (S⊆Frac(R), finite ⟹ integral ⟹ S=R).
+  -- Blocker: requires `IsPrincipalIdealRing`, `IsFractionRing`, `Subalgebra`,
+  -- integral extension theory — deep algebra infrastructure to assemble.
   sorry
