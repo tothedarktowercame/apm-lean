@@ -1,87 +1,85 @@
 import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t00J07
 
 ## Statement repairs
 
-None.
-
-## Encoding questions
-
-`RP²` is the actual real projectivization of `ℝ³`, with its quotient
-topology, and the attaching map has the actual circle as domain. Mathlib does
-not yet expose a topological disk-adjunction construction or general integral
-singular-homology groups in a form usable here. Those two constructions are
-therefore isolated as opaque, typed helpers; no geometric object is replaced
-by a numerical surrogate.
+The former conclusion used opaque adjunction and homology types, together with
+axioms merely to inhabit them.  The disk adjunction is now the actual quotient
+of `RP² ⊕ D²` by its attaching relation, and all homology groups are Mathlib's
+integral singular homology.  No source claim is changed.
 -/
 
-open Set
+open CategoryTheory Set
 open scoped LinearAlgebra.Projectivization
 
-abbrev apm_t00J07_RP2 := Projectivization ℝ (Fin 3 → ℝ)
+noncomputable section
 
-noncomputable instance : TopologicalSpace apm_t00J07_RP2 :=
+abbrev apm_t00j07_RP2 := Projectivization ℝ (Fin 3 → ℝ)
+
+noncomputable instance : TopologicalSpace apm_t00j07_RP2 :=
   inferInstanceAs
     (TopologicalSpace
       (Quotient (projectivizationSetoid ℝ (Fin 3 → ℝ))))
 
-abbrev apm_t00J07_S1 := Metric.sphere (0 : ℂ) 1
+abbrev apm_t00j07_Disk := Metric.closedBall (0 : ℂ) 1
 
-/-- The adjunction space `RP² ∪_f D²`. -/
-opaque apm_t00J07_attachDisk (f : C(apm_t00J07_S1, apm_t00J07_RP2)) : Type
+def apm_t00j07_circleToDisk (z : Circle) : apm_t00j07_Disk :=
+  ⟨(z : ℂ), by simpa [mem_closedBall_zero_iff] using (Circle.norm_coe z).le⟩
 
-axiom apm_t00J07_attachDiskNonempty
-    (f : C(apm_t00J07_S1, apm_t00J07_RP2)) :
-    Nonempty (apm_t00J07_attachDisk f)
+inductive apm_t00j07_attachRel (f : C(Circle, apm_t00j07_RP2)) :
+    Sum apm_t00j07_RP2 apm_t00j07_Disk →
+      Sum apm_t00j07_RP2 apm_t00j07_Disk → Prop
+  | glue (z : Circle) :
+      apm_t00j07_attachRel f (.inl (f z)) (.inr (apm_t00j07_circleToDisk z))
 
-opaque apm_t00J07_attachDiskTopology
-    (f : C(apm_t00J07_S1, apm_t00J07_RP2)) :
-    TopologicalSpace (apm_t00J07_attachDisk f)
+def apm_t00j07_attachDisk (f : C(Circle, apm_t00j07_RP2)) :=
+  Quotient (Relation.EqvGen.setoid (apm_t00j07_attachRel f))
 
-noncomputable instance (f : C(apm_t00J07_S1, apm_t00J07_RP2)) :
-    TopologicalSpace (apm_t00J07_attachDisk f) :=
-  apm_t00J07_attachDiskTopology f
+noncomputable instance (f : C(Circle, apm_t00j07_RP2)) :
+    TopologicalSpace (apm_t00j07_attachDisk f) :=
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t00j07_RP2 apm_t00j07_Disk =>
+      Quotient.mk (Relation.EqvGen.setoid (apm_t00j07_attachRel f)) x)
+    inferInstance
 
-noncomputable def apm_t00J07_basepoint
-    (f : C(apm_t00J07_S1, apm_t00J07_RP2)) : apm_t00J07_attachDisk f :=
-  Classical.choice (apm_t00J07_attachDiskNonempty f)
+def apm_t00j07_diskCenter : apm_t00j07_Disk :=
+  ⟨0, by simp⟩
 
-/-- Integral singular homology of a topological space. -/
-opaque apm_t00J07_homology (X : Type*) [TopologicalSpace X] (ℕdegree : ℕ) : Type
+def apm_t00j07_basepoint (f : C(Circle, apm_t00j07_RP2)) :
+    apm_t00j07_attachDisk f :=
+  Quotient.mk _ (.inr apm_t00j07_diskCenter)
 
-axiom apm_t00J07_homologyAddCommGroupExists
-    (X : Type*) [TopologicalSpace X] (degree : ℕ) :
-    Nonempty (AddCommGroup (apm_t00J07_homology X degree))
+abbrev apm_t00j07_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
-noncomputable instance (X : Type*) [TopologicalSpace X] (degree : ℕ) :
-    AddCommGroup (apm_t00J07_homology X degree) :=
-  Classical.choice (apm_t00J07_homologyAddCommGroupExists X degree)
-
-/-- The requested fundamental-group and integral-homology values. -/
-def apm_t00J07_invariants
-    (f : C(apm_t00J07_S1, apm_t00J07_RP2))
-    (piOne : Type*) [Group piOne] : Prop :=
+def apm_t00j07_invariants
+    (f : C(Circle, apm_t00j07_RP2))
+    (piOne : Type) [Group piOne] (hOne : ModuleCat ℤ) : Prop :=
   Nonempty
-      (FundamentalGroup (apm_t00J07_attachDisk f)
-        (apm_t00J07_basepoint f) ≃* piOne) ∧
-    Nonempty (apm_t00J07_homology (apm_t00J07_attachDisk f) 0 ≃+ ℤ) ∧
-    Nonempty (apm_t00J07_homology (apm_t00J07_attachDisk f) 2 ≃+ ℤ) ∧
-    (∀ k, 3 ≤ k →
-      Nonempty (apm_t00J07_homology (apm_t00J07_attachDisk f) k ≃+ ZMod 1))
+      (FundamentalGroup (apm_t00j07_attachDisk f)
+        (apm_t00j07_basepoint f) ≃* piOne) ∧
+    Nonempty
+      (apm_t00j07_H 0 (apm_t00j07_attachDisk f) ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t00j07_H 1 (apm_t00j07_attachDisk f) ≅ hOne) ∧
+    Nonempty
+      (apm_t00j07_H 2 (apm_t00j07_attachDisk f) ≅ ModuleCat.of ℤ ℤ) ∧
+    ∀ k, 3 ≤ k → Limits.IsZero (apm_t00j07_H k (apm_t00j07_attachDisk f))
 
 theorem apm_t00j07 :
-    ∀ f : C(apm_t00J07_S1, apm_t00J07_RP2),
-      Topology.IsEmbedding (f : apm_t00J07_S1 → apm_t00J07_RP2) →
-      ((∃ p : apm_t00J07_RP2,
+    ∀ f : C(Circle, apm_t00j07_RP2),
+      Topology.IsEmbedding (f : Circle → apm_t00j07_RP2) →
+      ((∃ p : apm_t00j07_RP2,
           ContinuousMap.Homotopic f (ContinuousMap.const _ p)) →
-        apm_t00J07_invariants f (Multiplicative (ZMod 2)) ∧
-        Nonempty
-          (apm_t00J07_homology (apm_t00J07_attachDisk f) 1 ≃+ ZMod 2)) ∧
-      ((¬∃ p : apm_t00J07_RP2,
+        apm_t00j07_invariants f (Multiplicative (ZMod 2))
+          (ModuleCat.of ℤ (ZMod 2))) ∧
+      ((¬∃ p : apm_t00j07_RP2,
           ContinuousMap.Homotopic f (ContinuousMap.const _ p)) →
-        apm_t00J07_invariants f (Multiplicative (ZMod 1)) ∧
-        Nonempty
-          (apm_t00J07_homology (apm_t00J07_attachDisk f) 1 ≃+ ZMod 1)) := by
+        apm_t00j07_invariants f (Multiplicative (ZMod 1))
+          (ModuleCat.of ℤ (ZMod 1))) := by
   sorry
