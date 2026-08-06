@@ -42,6 +42,19 @@ def apm_m01J04_H1norm {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
   (eLpNorm u.val 2 (volume.restrict Ω)).toReal +
     (eLpNorm u.grad 2 (volume.restrict Ω)).toReal
 
+def apm_m01J04_H1dist {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (u w : apm_m01J04_H1 d Ω) : ℝ :=
+  (eLpNorm (fun x ↦ u.val x - w.val x) 2 (volume.restrict Ω)).toReal +
+    (eLpNorm (fun x ↦ u.grad x - w.grad x) 2 (volume.restrict Ω)).toReal
+
+def apm_m01J04_isH1Zero {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (h : apm_m01J04_H1 d Ω) : Prop :=
+  ∃ approximant : ℕ → apm_m01J04_H1 d Ω,
+    (∀ n, ContDiff ℝ ⊤ (approximant n).val ∧
+      HasCompactSupport (approximant n).val ∧
+      Function.support (approximant n).val ⊆ Ω) ∧
+    Tendsto (fun n ↦ apm_m01J04_H1dist (approximant n) h) atTop (nhds 0)
+
 def apm_m01J04_H1WeaklyConverges {d : ℕ}
     {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (u : ℕ → apm_m01J04_H1 d Ω) (w : apm_m01J04_H1 d Ω) : Prop :=
@@ -84,7 +97,8 @@ def apm_m01J04_divStronglyConverges {d : ℕ}
     (v : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d))
     (w : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ N : ℕ, ∀ n, N ≤ n →
-    ∀ h : apm_m01J04_H1 d Ω, apm_m01J04_H1norm h ≤ 1 →
+    ∀ h : apm_m01J04_H1 d Ω,
+      apm_m01J04_isH1Zero h → apm_m01J04_H1norm h ≤ 1 →
       |∫ x in Ω, inner ℝ (v n x - w x) (h.grad x)| ≤ ε
 
 def apm_m01J04_isTestFunction {d : ℕ}
