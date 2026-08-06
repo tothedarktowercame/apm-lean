@@ -57,4 +57,24 @@ theorem apm_t00a05 :
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
     (∀ γ, apm_t00a05_IsC2 γ →
       apm_t00a05_lineIntegral γ 0 (2 * Real.pi) = -2 * Real.pi) := by
+  have hC1 : apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) =
+      -2 * Real.pi := by
+    simp [apm_t00a05_lineIntegral, apm_t00a05_C1, apm_t00a05_omega]
+    rw [show (fun t : ℝ ↦ -(Real.sin t * Real.sin t) +
+        -(Real.cos t * Real.cos t)) = fun _ ↦ -1 by
+      funext t
+      nlinarith [Real.sin_sq_add_cos_sq t]]
+    simp [Real.pi_pos.le]
+  /-
+  Boundary: the unit-circle period is proved above by direct evaluation.
+  The remaining universal `C2` claim is not derivable from the stated
+  orientation predicate: positivity of the signed-area integral fixes the
+  sign but not the winding multiplicity. A positive multiple traversal of
+  the same counterclockwise component still satisfies every field of
+  `apm_t00a05_IsC2`, while the angle-form period is multiplied by that
+  traversal count. I also searched Mathlib's winding-number, convex-level-set,
+  differential-form, and line-integral APIs; no theorem could bridge these
+  raw `deriv` integrals, and such a bridge would not repair the missing
+  single-traversal hypothesis.
+  -/
   sorry
