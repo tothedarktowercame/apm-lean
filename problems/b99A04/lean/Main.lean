@@ -41,4 +41,43 @@ theorem apm_b99a04
         ∀ (W : Type*) [AddCommGroup W] [Module R W]
           [Module F W] [IsScalarTower F R W] [FiniteDimensional F W],
           ∃ m : ℕ, Nonempty (W ≃ₗ[R] (Fin m → V)) := by
-  sorry
+  letI : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+  dsimp only
+  constructor
+  · rw [isSimpleModule_iff_toSpanSingleton_surjective]
+    constructor
+    · infer_instance
+    · intro v hv w
+      have hj : ∃ j : Fin n, v j ≠ 0 := by
+        by_contra h
+        push_neg at h
+        apply hv
+        funext j
+        exact h j
+      obtain ⟨j, hj⟩ := hj
+      let A : Matrix (Fin n) (Fin n) F := fun i k =>
+        if k = j then w i / v j else 0
+      refine ⟨A, ?_⟩
+      ext i
+      change ∑ k : Fin n, A i k * v k = w i
+      simp [A, hj]
+  · /-
+    Boundary after proving part (a): the rank-one matrix construction above
+    establishes `IsSimpleModule (Matrix (Fin n) (Fin n) F) (Fin n → F)`.
+    Mathlib consultation found the matrix-ring semisimplicity instance
+    `IsSemisimpleRing.matrix` in
+    `RingTheory/SimpleModule/WedderburnArtin.lean`, together with
+    `IsSimpleRing.isIsotypic`, `IsIsotypicOfType.linearEquiv_fun`, and
+    `IsSimpleModule.injective_of_ne_zero`. These package the abstract routes
+    for parts (c) and (d).
+
+    The remaining formal bridge is part (b): construct the requested *specific*
+    `Fin n` family of column left ideals, prove `iSupIndep` and supremum `⊤`,
+    and give each column an `R`-linear equivalence with `Fin n → F`.
+    Searches for `Matrix` column `LinearEquiv`, `iSupIndep.*Matrix`, and
+    `stdBasisMatrix.*Submodule` found no packaged column-ideal decomposition.
+    A direct proof must define the column-support submodules and verify the
+    dependent lattice bookkeeping before the abstract semisimplicity APIs can
+    discharge the last two conjuncts.
+    -/
+    sorry
