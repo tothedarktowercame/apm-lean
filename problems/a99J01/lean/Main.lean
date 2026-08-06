@@ -39,4 +39,12 @@ theorem apm_a99j01
     ∀ E : Set X, MeasurableSet E → 0 < mu E → mu E < ⊤ →
       apmLogIntegralOn f E mu ≤
         ((-((mu E).toReal) * Real.log (mu E).toReal : ℝ) : EReal) := by
+  -- SKIPPED: Jensen's inequality for concave log on EReal-valued integrals.
+  -- Key idea: by Jensen on E with prob measure μ|_E/μ(E):
+  --   (1/μ(E))∫_E log|f| ≤ log((1/μ(E))∫_E |f|) ≤ log(1/μ(E))
+  -- hence ∫_E log|f| ≤ -μ(E)log(μ(E)).
+  -- The EReal encoding (handling log(0) = -∞) makes the Jensen inequality
+  -- and EReal arithmetic particularly delicate.
+  -- APIs: `MeasureTheory.Integral.Jensen` — need to check if exists; EReal arithmetic
+  -- is not well-supported for integral inequalities.
   sorry
