@@ -42,4 +42,37 @@ theorem apm_m95a02 :
       Tendsto (fun n => toWeakSpace ℂ m95A02H (f n)) atTop
         (nhds (toWeakSpace ℂ m95A02H g)) →
       Tendsto (fun n => m95A02MaxDist (f n) g) atTop (nhds 0)) := by
-  sorry
+  refine ⟨?_, ?_⟩
+  · let b : HilbertBasis ℤ ℂ m95A02H :=
+      HilbertBasis.ofRepr (LinearIsometryEquiv.refl ℂ m95A02H)
+    refine ⟨b, ?_⟩
+    intro n
+    have hbn : b n = lp.single 2 n 1 := by
+      simpa [b] using (b.repr_symm_single n).symm
+    constructor
+    · exact hbn
+    · intro x
+      rw [hbn]
+      unfold m95A02Value
+      rw [tsum_eq_single n]
+      · simp
+      · intro j hj
+        simp [hj]
+  · /-
+    Boundary: the remaining Hölder estimate reduces by Cauchy–Schwarz to
+    the sharp Fourier-kernel bound
+    `∑ n : ℤ, |exp (n*I*x) - exp (n*I*y)|² /
+      (2π (n²+1)) ≤ |x-y|`.
+    I searched Mathlib and the repository for this periodic Sobolev kernel
+    estimate, `ArzelaAscoli.isCompact_of_equicontinuous`, weak-topology
+    evaluation criteria, and `HilbertBasis`/`lp.single` infrastructure.  The
+    canonical Hilbert basis clause is proved above, but no compiled artifact
+    supplies the sharp kernel inequality.
+
+    After that inequality, the final clause still requires boundedness of a
+    weakly convergent sequence, continuity of every evaluation functional,
+    Arzelà–Ascoli on `[0,2π]`, and conversion of uniform convergence to the
+    custom `sSup` expression `m95A02MaxDist`.  Those analytic and order-theory
+    bridges were not completed within this pass.
+    -/
+    sorry
