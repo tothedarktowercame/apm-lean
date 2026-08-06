@@ -65,4 +65,32 @@ theorem apm_m95a03
       ContDiff ℝ 2 u ∧
       IsMinOn (apm_m95A03_energy a b p q f)
         (apm_m95A03_admissible a b 0 0) u := by
+  /-
+  SKIPPED (frozen-statement defect).  The final `∃!` asserts literal equality
+  of globally defined functions, but both `apm_m95A03_energy` and
+  `apm_m95A03_admissible` inspect a candidate only on `[a,b]` (apart from the
+  global regularity predicate).  Consequently, if `u` is any `C²` minimizer,
+  adding a nonzero smooth bump supported in an interval strictly to the right
+  of `b` gives a different global `C²` function with the same endpoint data,
+  the same derivatives on `[a,b]`, and exactly the same energy.  Hence global
+  uniqueness is impossible.  The conclusion must instead use `Set.EqOn` on
+  `Icc a b`, functions on the interval subtype, or a canonical extension.
+
+  This is the same defect documented in sibling `m02A05`, whose frozen ODE
+  statement also incorrectly upgrades interval agreement to global function
+  equality.  Mathlib's smooth bump-function library confirms that the needed
+  off-interval perturbations exist.  The fully closed artifact scan supplied
+  no quotient/extension convention that changes the meaning of equality here.
+
+  Even after repairing uniqueness, the intended analytic proof would require
+  an interval integration-by-parts theorem, the fundamental lemma of the
+  calculus of variations for the chosen global `ContDiff` representation,
+  coercive minimization/Lax--Milgram, and one-dimensional regularity.  Searches
+  of `LEMMA-INDEX.md`, Mathlib, `ConstructionTargets/`, and `YoungL2.lean`
+  found no assembled theorem bridging those layers.  Partial siblings
+  `m98A06`, `m01J06`, and `m99A01` stop at the fundamental-lemma/integration-
+  by-parts boundary, while `m95A05` records the absence of a packaged
+  Lax--Milgram route for its custom encoding.  Since the theorem is already
+  false before those analytic issues arise, no local replacement was made.
+  -/
   sorry
