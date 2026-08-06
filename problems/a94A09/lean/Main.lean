@@ -58,6 +58,11 @@ theorem apm_a94a09
     (hf_boundary : ∀ z ∈ sphere (0 : ℂ) 1, ‖f z‖ ≤ 1)
     (hf_no_boundary_fixed_point : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ z) :
     ∃! z : ℂ, z ∈ ball 0 1 ∧ f z = z := by
+  -- SKIPPED: unique fixed point for holomorphic self-map of disk via Rouché.
+  -- Proof: zeros of z-f(z) via homotopy z-t·f(z); argument principle gives
+  -- constant zero count = 1 (from t=0 where h₀=z).
+  -- Blocker: Rouché's theorem and argument principle NOT in Mathlib.
+  -- File comments document the full proof and the infrastructure gap.
   sorry
 
 end
