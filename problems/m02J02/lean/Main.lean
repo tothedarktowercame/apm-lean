@@ -66,4 +66,19 @@ theorem apm_m02j02 :
         (fun n ↦ apm_m02j02_hermiteFunctionDeriv (2 * n + 1)) ∧
     apm_m02j02_IsH10Basis (Set.univ : Set ℝ)
         apm_m02j02_hermiteFunction apm_m02j02_hermiteFunctionDeriv := by
+  /-
+  SKIPPED (Sobolev spectral-completeness boundary). The definition expands
+  `H¹₀` into weak-derivative and graph-norm approximation clauses, so proving
+  the three basis assertions requires, in particular, graph-norm density of
+  sine series and of the full/odd Hermite families, plus compactly supported
+  smooth approximation of every displayed Hermite function.
+
+  Searches of Mathlib and compiled problem artifacts found polynomial identities
+  for `Polynomial.hermite` (and local uses in `a96A04`) and general eLp/Sobolev
+  inequalities, but no Hermite completeness theorem, Fourier-sine density
+  theorem, or packaged Sobolev space whose basis result could discharge these
+  exact `eLpNorm` approximation goals. Establishing those spectral theorems from
+  the available polynomial API is substantially beyond a pass-1 proof. No
+  sibling proof was reused, and the frozen statement was left unchanged.
+  -/
   sorry
