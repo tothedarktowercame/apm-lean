@@ -43,4 +43,49 @@ theorem apm_m01j02
         N.starProjection.comp M.starProjection →
       apm_m01j02_IsOrthogonalProjection
         (M.starProjection.comp N.starProjection) (M ⊓ N)) := by
-  sorry
+  constructor
+  · refine ⟨?_, ?_, ?_⟩
+    · exact M.isIdempotentElem_starProjection
+    · exact isSelfAdjoint_starProjection M
+    · exact M.range_starProjection
+  · constructor
+    · /-
+      Boundary for the sum criterion: Mathlib provides
+      `IsOrtho.starProjection_comp_starProjection` and
+      `starProjection_comp_starProjection_eq_zero_iff`, which settle the
+      orthogonal-to-sum direction after identifying the projection on `M ⊔ N`.
+      The reverse direction requires extracting vanishing cross terms from the
+      idempotence of the asserted sum and then using positivity of an
+      orthogonal projection to show each cross term is zero. No packaged lemma
+      for the full equality with `(M ⊔ N).starProjection` was found.
+      -/
+      sorry
+    · constructor
+      · /-
+        Boundary for the product criterion: algebraically, adjoint reversal
+        via `ContinuousLinearMap.adjoint_comp` and self-adjointness of each
+        `starProjection` turn self-adjointness of the product into commutation;
+        conversely commutation gives both idempotence and self-adjointness.
+        The attempted direct rewrite exposed a representation mismatch between
+        `star` and `ContinuousLinearMap.adjoint`, and the nested `.comp`
+        associativity normalization remains to be packaged into helper lemmas.
+        -/
+        sorry
+      · intro hcomm
+        refine ⟨?_, ?_, ?_⟩
+        · /- Same composition-normalization boundary as above. -/
+          sorry
+        · /- Same adjoint-representation boundary as above. -/
+          sorry
+        · ext x
+          constructor
+          · rintro ⟨y, rfl⟩
+            constructor
+            · exact M.starProjection_apply_mem _
+            · rw [hcomm]
+              exact N.starProjection_apply_mem _
+          · intro hx
+            refine ⟨x, ?_⟩
+            change M.starProjection (N.starProjection x) = x
+            rw [N.starProjection_eq_self_iff.mpr hx.2,
+              M.starProjection_eq_self_iff.mpr hx.1]
