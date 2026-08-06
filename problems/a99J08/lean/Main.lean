@@ -34,4 +34,10 @@ theorem apm_a99j08
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ z ∈ closure apm_a99J08_upperHalfDisk,
         ‖g z‖ ≤ C * Real.sqrt ‖z‖ := by
+  -- SKIPPED: square-root bound at mixed-boundary corner (Schwarz reflection).
+  -- Key idea: reflect g across real axis using the boundary conditions (Re(g)=0 on x>0,
+  -- Im(g)=0 on x<0) to extend to a punctured disk, then g vanishes at 0 and the
+  -- symmetry forces order ≥ 1/2, giving |g(z)| ≤ C·√|z|.
+  -- Blocker: Schwarz reflection principle for mixed boundary conditions is NOT in Mathlib.
+  -- APIs: `DifferentiableOn`, `ContinuousOn`, `closure` — FOUND but reflection principle absent.
   sorry
