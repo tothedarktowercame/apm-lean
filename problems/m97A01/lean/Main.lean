@@ -52,4 +52,23 @@ theorem apm_m97a01
       apm_m97A01_isModulus A absA ∧
       apm_m97A01_hasPolarFactor A absA) ∧
     IsCompactOperator (ContinuousLinearMap.adjoint A) := by
+  /-
+  PASS-1 boundary (codex): the modulus can be defined as
+  `CFC.sqrt ((ContinuousLinearMap.adjoint A).comp A)`.  Mathlib supplies
+  `CFC.sqrt_nonneg`, `CFC.sqrt_mul_sqrt_self`, and `CFC.sqrt_unique` for the
+  positivity, square, and uniqueness clauses.  Searches of
+  `Mathlib/Analysis/Normed/Operator/Compact.lean`, the CFC rpow files, the
+  closed sibling artifacts, `ConstructionTargets/`, and `YoungL2.lean` did
+  not locate either of the two remaining packaged Hilbert-space results:
+
+  * extension of the densely defined isometry `absA x ↦ A x` from the
+    closure of `range absA` with exactly the stated codomain and uniqueness;
+  * compactness of `ContinuousLinearMap.adjoint A` from `IsCompactOperator A`.
+
+  `LinearEquiv.extendOfIsometry` was also checked, but requires dense range in
+  the target and therefore does not apply to the polar factor here.  Proving
+  both results locally would require a substantial Hilbert-space approximation
+  development beyond this pass's budget.  The statement is mathematically
+  sound; this `sorry` covers precisely those assembly/dependency gaps.
+  -/
   sorry
