@@ -33,28 +33,29 @@ theorem apm_a97j03
     Continuous (apm_a97J03_convolution f g) ∧
       Tendsto (apm_a97J03_convolution f g) atTop (𝓝 0) ∧
       Tendsto (apm_a97J03_convolution f g) atBot (𝓝 0) := by
-  -- Boundary (enriched by closer hop 1):
-  -- Strategy: decompose f,g into real/imaginary parts and reuse a03J03's
-  -- `convolution_continuous` and `convolution_tendsto_zero` for real-valued functions.
+  -- Boundary (closer hop 2): bridge still open. Enriched with Mathlib API findings.
   --
-  -- Key finding: a03J03 (problems/a03J03/lean/Main.lean) has FULLY PROVED:
-  --   `convolution_continuous : ∀ {p q : ℝ}, p.HolderConjugate q →
-  --      MemLp f (ENNReal.ofReal p) volume → MemLp g (ENNReal.ofReal q) volume →
-  --      Continuous (fun x => ∫ y, f (x - y) * g y)`  [for ℝ-valued f,g]
-  --   `convolution_tendsto_zero : ... Tendsto (fun x => ∫ y, f (x - y) * g y) atTop (𝓝 0)`
+  -- Key finding: `Real.HolderConjugate p q` is defined as `HolderTriple p q 1`
+  -- in `Mathlib/Data/Real/ConjExponents.lean`. The `holderConjugate_iff` lemma gives
+  -- `p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1`.
+  -- Our hypothesis `hpq : 1/p + 1/q = 1` with `hp : 1 < p` matches exactly.
   --
-  -- Adaptation plan for ℂ-valued f,g:
-  -- 1. Show MemLp for Re(f), Im(f), Re(g), Im(g) (each ≤ ‖f‖ in Lp, so MemLp).
-  -- 2. f*g = (Re f + i·Im f)*(Re g + i·Im g) expands into 4 real convolutions.
-  -- 3. Each real convolution is continuous + vanishes at ±∞ by a03J03.
-  -- 4. The complex convolution (ℂ-linear combination) inherits both properties.
+  -- The a03J03 proof uses `MemLp.integrable_mul` (from Holder.lean) to show the
+  -- convolution integrand is integrable, and Lp translation continuity for continuity.
+  -- For ℂ-valued functions, the same lemmas should apply since ℂ is a NormedSpace.
   --
-  -- Blocker: requires importing a03J03 or inlining its lemmas (which use
-  -- `p.HolderConjugate q` not `1/p + 1/q = 1`); the conversion between these
-  -- is standard but needs assembly. Also need MemLp for Re/Im parts of
-  -- complex-valued Lp functions, which requires ‖Re(f)‖ ≤ ‖f‖ type bounds.
+  -- Remaining blockers for inlining a03J03's approach for ℂ:
+  -- 1. Need `p.HolderConjugate q` from `hpq` (trivial: 1/p = p⁻¹ in ℝ).
+  -- 2. Need `ENNReal.HolderTriple (ofReal p) (ofReal q) 1` for MemLp Hölder —
+  --    a03J03 uses `hpq.ennrealOfReal` to bridge this.
+  -- 3. Need `Fact (1 ≤ ofReal p)` and `Fact (1 ≤ ofReal q)` instances.
+  -- 4. Need translation continuity for ℂ-valued Lp functions.
+  --    Mathlib has `MemLp.comp_measurePreserving` which handles f(y-x) via
+  --    the measure-preserving map x ↦ y-x.
+  -- 5. The vanishing at infinity part needs C_c density for ℂ-valued functions.
   --
-  -- Consulted: LEMMA-INDEX.md entries `convolution_continuous` (a03J03),
-  --   `convolution_tendsto_zero` (a03J03), `eLpNorm_translation_tendsto` (L2Translation).
-  --   a03J03 compiles with exit 0, no sorries — its proofs are reusable.
+  -- Assessment: the proof is ~80-120 lines of assembly even with the a03J03
+  -- template. Each step is conceptually straightforward but requires careful
+  -- Mathlib typeclass instance management (ENNReal.ofReal, Fact, HolderTriple).
+  -- The statement is mathematically correct; the blocker is assembly time.
   sorry
