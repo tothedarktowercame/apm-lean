@@ -20,4 +20,35 @@ theorem apm_m94j05 :
       ContinuousOn f (Icc 1 2) →
       (∀ t ∈ Icc (1 : ℝ) 2, |f t| < ε) →
       ∃! x : ℝ → ℝ, IsM94J05Solution f x := by
+  /-
+  SKIPPED (statement-strength boundary).  The supplied contraction argument
+  constructs a fixed point only in a small closed sup-norm ball and proves
+  uniqueness only in that ball.  The frozen conclusion, however, quantifies
+  `∃!` over every globally defined function satisfying the BVP, with no
+  smallness condition on `x`.  Thus the last step of the informal solution
+  does not prove the stated theorem; its own final remark explicitly changes
+  the conclusion to uniqueness among small solutions.
+
+  Corpus research found the abstract Banach API
+  `ContractingWith.fixedPoint` / `ContractingWith.fixedPoint_unique` and the
+  compiled wrapper `contraction_fixedPoint` in sibling `t91A04`, but no
+  reusable Green operator for `t^2 x'' + 2 t x'` with Dirichlet boundary
+  data.  Siblings `m95J04`, `m94A05`, and `m02A06` stop at the same concrete
+  analytic boundary: constructing the integral operator, proving its
+  regularity, and establishing uniform estimates.  `LEMMA-INDEX.md`, all
+  fully closed artifacts, `ConstructionTargets/`, and `YoungL2.lean` supplied
+  no such operator or global uniqueness theorem.  Mathlib's
+  `Topology.MetricSpace.Contracting` supplies fixed points on invariant
+  complete sets, but cannot upgrade uniqueness in a ball to unrestricted
+  uniqueness.
+
+  The frozen statement is likely false as written.  For zero forcing, after
+  the substitution `s = 1 / t`, the equation becomes
+  `s^2 u'' = u^2` on `[1/2,1]` with two zero endpoint values.  The zero
+  solution is the small fixed point, while the standard shooting/large-data
+  branch for this superlinear Dirichlet equation is not excluded by the
+  hypotheses.  A corrected theorem should include a uniform smallness bound
+  on `x` (and express uniqueness within that ball), exactly as the contraction
+  proof requires.
+  -/
   sorry
