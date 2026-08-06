@@ -36,4 +36,38 @@ theorem apm_b96a02 :
       Nat.card (L ≃ₐ[F] L) = 18 →
       (∃ f : F[X], f.natDegree = 6 ∧ f.IsSplittingField F L) →
         ∃ g : F[X], g.natDegree = 9 ∧ g.IsSplittingField F L) := by
-  sorry
+  constructor
+  · -- Boundary: searched the Sylow counting APIs (`Sylow.card_eq_multiplicity`,
+    -- `Sylow.normalizer_eq_top_iff`, and index-two normality).  Mathlib has no
+    -- packaged classification theorem for groups of order 30; formalizing the
+    -- element-count argument and characteristic subgroups exceeded pass-1.
+    sorry
+  constructor
+  · -- Boundary: searched `IntermediateField.fixingSubgroup`,
+    -- `Subgroup.normalCore`, and the Galois correspondence.  The exact theorem
+    -- identifying the fixed field of the core with the normal closure/splitting
+    -- field of a minimal polynomial is not packaged in Mathlib.
+    sorry
+  constructor
+  · -- Boundary: this depends on both preceding missing developments plus
+    -- index/degree bookkeeping for the fixing subgroup; APIs searched include
+    -- `IntermediateField.finrank_eq_card_fixingSubgroup` and `normalCore`.
+    sorry
+  · intro F L _ _ _ _ _ hcard hex
+    obtain ⟨f, hfdeg, hf⟩ := hex
+    have hf0 : f ≠ 0 := by
+      intro h
+      subst f
+      simp at hfdeg
+    letI : f.IsSplittingField F L := hf
+    letI : (X ^ 3 : L[X]).IsSplittingField L L := by
+      constructor
+      · simp
+      · simp [Polynomial.rootSet]
+    letI : ((X ^ 3 : F[X]).map (algebraMap F L)).IsSplittingField L L := by
+      simpa using (inferInstance : (X ^ 3 : L[X]).IsSplittingField L L)
+    refine ⟨f * X ^ 3, ?_, ?_⟩
+    · rw [natDegree_mul hf0 (pow_ne_zero 3 X_ne_zero), natDegree_pow]
+      simp [hfdeg]
+    · exact Polynomial.IsSplittingField.mul (F := F) (K := L) L f (X ^ 3) hf0
+        (pow_ne_zero 3 X_ne_zero)
