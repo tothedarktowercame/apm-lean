@@ -22,4 +22,13 @@ theorem apm_t00a04 :
       Continuous ι → Continuous r → (∀ x, r (ι x) = x) →
       (¬ apm_t00a04_NullHomotopic (fun x : X => x)) →
       ¬ apm_t00a04_NullHomotopic ι := by
-  sorry
+  intro X Y _ _ ι r hι hr hret hid hnull
+  rcases hnull with ⟨y, H, hH, hH0, hH1⟩
+  apply hid
+  refine ⟨r y, fun z ↦ r (H z), hr.comp hH, ?_, ?_⟩
+  · intro x
+    change r (H (x, 0)) = x
+    rw [hH0 x, hret x]
+  · intro x
+    change r (H (x, 1)) = r y
+    rw [hH1 x]
