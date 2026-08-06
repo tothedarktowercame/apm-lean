@@ -61,4 +61,26 @@ theorem apm_m99j04
         (Orthonormal 𝕜 (fun i => A (w i)) ↔
           (ContinuousLinearMap.adjoint A.toContinuousLinearMap).comp
               A.toContinuousLinearMap = ContinuousLinearMap.id 𝕜 H) := by
+  have hconjugate_compact : IsCompactOperator (apm_m99j04_conjugate A T) := by
+    simpa [apm_m99j04_conjugate, Function.comp_def] using
+      (hTcompact.comp_clm A.toContinuousLinearMap).clm_comp
+        (ContinuousLinearMap.adjoint A.toContinuousLinearMap)
+  have hconjugate_self :
+      ContinuousLinearMap.adjoint (apm_m99j04_conjugate A T) =
+        apm_m99j04_conjugate A T := by
+    rw [apm_m99j04_conjugate, ContinuousLinearMap.adjoint_comp,
+      ContinuousLinearMap.adjoint_comp, hTself,
+      ContinuousLinearMap.adjoint_adjoint]
+    exact ContinuousLinearMap.comp_assoc _ _ _
+  /-
+  Boundary: compactness and self-adjointness of the congruence `A† T A` are
+  proved above. Completing the frozen theorem requires turning Mathlib's
+  compact spectral theorem
+  `ContinuousLinearMap.orthogonalComplement_iSup_eigenspaces_eq_bot` into a
+  single `HilbertBasis` indexed across all eigenspaces, then transporting that
+  basis through `A` and normalizing the weighted inner products. I searched
+  the `OrthogonalFamily`, eigenspace direct-sum, `HilbertBasis`, adjoint of
+  continuous-linear equivalences, and isometry/unitarity APIs, but did not
+  find the required infinite-dimensional basis constructor in this pass.
+  -/
   sorry
