@@ -50,4 +50,24 @@ theorem apm_b96a03 :
             π ∣ α → apmOrbitProduct G π ∣ α) ∧
           ∃ hfix : ∀ g : G, g.1 (apmOrbitProduct G π) = apmOrbitProduct G π,
             Prime (⟨apmOrbitProduct G π, hfix⟩ : apmFixedRing G)))) := by
-  sorry
+  constructor
+  · intro G _ _ hodd H chi h
+    have hh : h ^ Fintype.card G = 1 := by
+      ext
+      exact pow_card_eq_one (x := (h : G))
+    have hchi := congrArg chi hh
+    apply Units.ext
+    apply hodd.pow_injective
+    simpa using congrArg Units.val hchi
+  · intro F _ n _ G _
+    constructor
+    · intro g α
+      rw [← irreducible_iff_prime, ← irreducible_iff_prime]
+      exact MulEquiv.irreducible_iff g.1
+    · -- Boundary: searched `MulEquiv.irreducible_iff`, the
+      -- `MvPolynomial` unit classification, `Finset.prod_bij`, and prime-product
+      -- divisibility APIs.  The remaining implication requires constructing
+      -- the stabilizer-of-associate subgroup and its coefficient character
+      -- into `Fˣ`, then a substantial orbit-product invariance/divisibility
+      -- argument and transfer of primality to the custom fixed subring.
+      sorry
