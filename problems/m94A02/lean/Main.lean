@@ -39,4 +39,22 @@ theorem apm_m94a02
       σ (Fin.last n) ≤ lam.re ∧ lam.re ≤ σ 0) ∧
     (A.transpose = -A →
       ∀ lam : ℂ, apm_m94a02_IsEigenvalue A lam → lam.re = 0) := by
+  /-
+  Boundary: the intended proof tests the complex eigenvalue equation against
+  its eigenvector, rewrites `lam.re` as the Hermitian Rayleigh quotient of
+  `(A + Aᵀ) / 2`, and bounds that quotient by the extreme eigenvalues.
+
+  I found Mathlib's Hermitian spectrum and Rayleigh infrastructure in
+  `Mathlib.Analysis.Matrix.Spectrum` and
+  `Mathlib.Analysis.InnerProductSpace.Rayleigh`, including canonical ordered
+  eigenvalues and quadratic-form formulas. The statement, however, supplies
+  an arbitrary ordered family `σ` characterized only by
+  `Matrix.charpoly B = ∏ i, (X - C (σ i))`. I did not complete the
+  polynomial-root multiplicity argument identifying this family with
+  Mathlib's canonical Hermitian eigenvalue ordering, nor the conversion of
+  the explicit `Matrix.mulVec` complex eigenvector equation to the library's
+  continuous-linear-map Rayleigh quotient. The skew-symmetric conclusion can
+  then follow either from the same calculation or by showing the symmetric
+  part is zero, but depends on those bridges in this encoding.
+  -/
   sorry
