@@ -35,4 +35,12 @@ theorem apm_b01a03
     (S : Submodule R M) :
     (apmComplemented S ↔ Module.Free R (M ⧸ S)) ∧
       (Module.Free R (M ⧸ S) ↔ apmSaturated S) := by
+  -- SKIPPED: equivalence of complemented, free quotient, and saturated for submodules
+  -- of finitely generated free modules over a PID.
+  -- (a)⟺(b): S complemented ⟹ M/S ≅ T is free; M/S free ⟹ exact 0→S→M→M/S→0 splits (free ⟹ projective).
+  -- (b)⟺(c): M/S free ⟹ saturated (torsion-free over PID); saturated ⟹ M/S torsion-free ⟹ free.
+  -- Blocker: requires structure theorem for modules over PIDs, projective module theory,
+  -- splitting of exact sequences, torsion-free ⟹ free for f.g. modules over PID.
+  -- APIs: `Submodule`, `Module.Free`, `Module.Finite`, `IsPrincipalIdealRing` — basic structures
+  --   found but the equivalence chain needs substantial module theory assembly.
   sorry
