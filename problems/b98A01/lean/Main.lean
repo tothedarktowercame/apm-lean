@@ -38,4 +38,24 @@ theorem apm_b98a01 :
           ¬∃ L : Subgroup G, Nat.card L = 10)) ∧
       ((∃ M : Subgroup G, Nat.card M = 35) ↔
         ∃ N : Subgroup G, N.Normal ∧ Nat.card N = 7)) := by
+  /-
+  Boundary (pass-1 Codex, skipped): Mathlib packages the conceptual engine of
+  part (a): `Subgroup.normalCore_eq_ker` identifies the kernel of the coset
+  action, and `Subgroup.normal_le_normalCore` expresses its universal property
+  for normal subgroups. A proof still has to choose an equivalence from
+  the quotient `G ⧸ H` to `Fin n` from the index equality and conjugate the
+  permutation representation along it.
+
+  For part (b), source search found general Sylow tools including
+  `Sylow.card_eq_index_normalizer` and `Sylow.card_sylow_modEq_one`, but no
+  order-210 specialization or proved sibling. Closing the frozen conjunction
+  requires showing the arbitrary order-5 subgroup `B` is Sylow, enumerating the
+  divisors of 42 congruent to 1 modulo 5, converting the resulting normalizer
+  indices to the exact cardinal alternatives 10 and 35, and transporting those
+  sizes across conjugate Sylow subgroups. The final equivalence additionally
+  needs the index-six core action, divisibility of its quotient order into
+  `6!`, elimination of kernel sizes 1, 5, and 35, and construction of the
+  converse order-35 subgroup from a normal order-7 subgroup. These bridges are
+  not available as packaged lemmas. The repaired statement appears sound.
+  -/
   sorry
