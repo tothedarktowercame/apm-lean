@@ -1,0 +1,95 @@
+import Mathlib
+import Mathlib.Analysis.Calculus.DifferentialForm.Basic
+
+/-!
+# APM t01J06: a two-form on the sphere and closed extensions
+
+## Statement repairs
+
+None.
+
+## Encoding questions
+
+Mathlib does not yet bundle smooth differential forms on manifolds or define
+their integration.  Accordingly, closedness of the genuine dependent
+alternating forms and the outward-oriented sphere integral are documented
+`sorry`-typed placeholders.  The spaces, tangent spaces, ambient form,
+pullbacks along the inclusion and along `q ↦ (q,p)`, and both extension
+claims are encoded explicitly; no cohomological or scalar surrogate replaces
+them.
+-/
+
+open scoped Manifold
+
+noncomputable section
+
+abbrev apm_t01J06_E2 := EuclideanSpace ℝ (Fin 2)
+abbrev apm_t01J06_E3 := EuclideanSpace ℝ (Fin 3)
+abbrev apm_t01J06_S1 := Metric.sphere (0 : apm_t01J06_E2) 1
+abbrev apm_t01J06_S2 := Metric.sphere (0 : apm_t01J06_E3) 1
+
+def apm_t01J06_sphereTangent (q : apm_t01J06_S2) : Submodule ℝ apm_t01J06_E3 :=
+  (Submodule.span ℝ ({(q : apm_t01J06_E3)} : Set apm_t01J06_E3)).orthogonal
+
+def apm_t01J06_circleTangent (p : apm_t01J06_S1) : Submodule ℝ apm_t01J06_E2 :=
+  (Submodule.span ℝ ({(p : apm_t01J06_E2)} : Set apm_t01J06_E2)).orthogonal
+
+abbrev apm_t01J06_AmbientForm2 :=
+  apm_t01J06_E3 → apm_t01J06_E3 [⋀^Fin 2]→L[ℝ] ℝ
+
+abbrev apm_t01J06_SphereForm2 :=
+  ∀ q : apm_t01J06_S2,
+    apm_t01J06_sphereTangent q [⋀^Fin 2]→L[ℝ] ℝ
+
+abbrev apm_t01J06_ProductForm2 :=
+  ∀ qp : apm_t01J06_S2 × apm_t01J06_S1,
+    (apm_t01J06_sphereTangent qp.1 × apm_t01J06_circleTangent qp.2)
+      [⋀^Fin 2]→L[ℝ] ℝ
+
+def apm_t01J06_isOmega (omega : apm_t01J06_AmbientForm2) : Prop :=
+  ∀ (x : apm_t01J06_E3) (v : Fin 2 → apm_t01J06_E3),
+    omega x v = (x 2 + 3) * (v 0 0 * v 1 1 - v 0 1 * v 1 0)
+
+def apm_t01J06_isInclusionPullback
+    (omega : apm_t01J06_AmbientForm2)
+    (alpha : apm_t01J06_SphereForm2) : Prop :=
+  ∀ (q : apm_t01J06_S2)
+      (v : Fin 2 → apm_t01J06_sphereTangent q),
+    alpha q v = omega q (fun k ↦ (v k : apm_t01J06_E3))
+
+def apm_t01J06_isJPullback
+    (p : apm_t01J06_S1)
+    (zeta : apm_t01J06_ProductForm2)
+    (alpha : apm_t01J06_SphereForm2) : Prop :=
+  ∀ (q : apm_t01J06_S2)
+      (v : Fin 2 → apm_t01J06_sphereTangent q),
+    zeta (q, p) (fun k ↦ (v k, 0)) = alpha q v
+
+def apm_t01J06_IsClosedSphereForm
+    (_alpha : apm_t01J06_SphereForm2) : Prop := by
+  sorry
+
+def apm_t01J06_IsClosedProductForm
+    (_zeta : apm_t01J06_ProductForm2) : Prop := by
+  sorry
+
+def apm_t01J06_sphereIntegral
+    (_alpha : apm_t01J06_SphereForm2) : ℝ := by
+  sorry
+
+theorem apm_t01j06
+    (omega : apm_t01J06_AmbientForm2)
+    (homega : apm_t01J06_isOmega omega)
+    (alpha : apm_t01J06_SphereForm2)
+    (halpha : apm_t01J06_isInclusionPullback omega alpha) :
+    apm_t01J06_sphereIntegral alpha = 4 * Real.pi / 3 ∧
+    apm_t01J06_IsClosedSphereForm alpha ∧
+    ¬ (∃ eta : apm_t01J06_AmbientForm2,
+        ContDiff ℝ (⊤ : ℕ∞) eta ∧
+        extDeriv eta = 0 ∧
+        apm_t01J06_isInclusionPullback eta alpha) ∧
+    ∀ p : apm_t01J06_S1,
+      ∃ zeta : apm_t01J06_ProductForm2,
+        apm_t01J06_IsClosedProductForm zeta ∧
+        apm_t01J06_isJPullback p zeta alpha := by
+  sorry
