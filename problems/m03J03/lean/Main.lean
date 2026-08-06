@@ -40,4 +40,22 @@ theorem apm_m03j03 :
         D2T φ = φ 0 - T φ) ∧
     (¬ ∃ T : Distribution (⊤ : Opens ℝ) ℝ ⊤,
       ∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤, T φ = |φ 0|) := by
+  /-
+  SKIPPED (distribution-constructor/LF-continuity boundary). Mathlib searches
+  found useful constructors and Fourier operations for `TemperedDistribution`
+  (including `TemperedDistribution.delta` and regular tempered
+  distributions), but no compiled locally finite Dirac-sum constructor or
+  polynomial-growth Fourier-series convergence theorem producing the
+  `Distribution (⊤ : Opens ℝ) ℂ ⊤` required here.
+
+  A direct proof must separately build continuous linear maps on the LF
+  test-function space: local finiteness and compact-dependent seminorm bounds
+  for the Dirac comb; `N + 2` integrations by parts and summability for the
+  Fourier series; regular distributions plus two half-line integration-by-parts
+  identities for `H * sin`; and a bundled test function nonzero at zero to
+  refute linearity of `φ ↦ |φ 0|`. Pointwise formulas alone do not discharge
+  the continuity fields of `Distribution`. No solved sibling contains this
+  combined construction, so no sibling code was reused and the frozen
+  statement was left unchanged.
+  -/
   sorry
