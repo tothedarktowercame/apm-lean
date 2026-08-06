@@ -54,4 +54,26 @@ theorem apm_b98a02 :
           apm_b98A02_IsMaximalAbelian F Ω
             (E ⊓ L : IntermediateField F Ω) A_EL →
           A_EL = (A_E ⊓ A_L : IntermediateField F Ω)) := by
+  /-
+  Boundary (pass-1 Codex, skipped): Mathlib supplies the finite Galois
+  correspondence `IsGalois.intermediateFieldEquivSubgroup`, fixed fields, and
+  `IntermediateField.normalAutEquivQuotient`. These are the abstract ingredients
+  for taking the fixed field of the commutator subgroup.
+
+  The searched API does not package the construction required by this encoding:
+  the correspondence produces an intermediate field inside the extension type
+  `E`, while `apm_b98A02_IsMaximalAbelian` requires an
+  `IntermediateField F Ω` lying below the embedded field `E`. A proof must lift
+  that fixed field through `E.subtype`, transport Galoisness and the quotient
+  automorphism equivalence across the lift, and prove the universal property
+  for arbitrary embedded `K ≤ E`. No commutator-fixed-field theorem or proved
+  sibling performs this chain.
+
+  Parts (c) and (d) additionally require showing that the lattice infimum of two
+  finite Galois intermediate fields in a common algebraic closure is Galois.
+  Local search found no direct `IsGalois`-under-`inf` instance, so this needs the
+  normality-via-extension-of-embeddings argument plus separability and finite
+  dimensionality transport. Only after that can maximality prove the two field
+  inclusions in (d). The statement appears mathematically sound.
+  -/
   sorry
