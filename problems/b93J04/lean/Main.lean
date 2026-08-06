@@ -20,6 +20,30 @@ open Polynomial
 noncomputable def apm_b93j04_poly : Polynomial ℚ :=
   X ^ 4 - C 10 * X ^ 2 + C 1
 
+/-- The radical description used by the informal solution really gives roots
+of the quartic, over any characteristic-zero target field. -/
+lemma apm_b93j04_radical_root
+    (K : Type*) [Field K] [Algebra ℚ K]
+    (r₂ r₃ : K)
+    (h₂ : r₂ ^ 2 = algebraMap ℚ K 2)
+    (h₃ : r₃ ^ 2 = algebraMap ℚ K 3) :
+    Polynomial.eval₂ (algebraMap ℚ K) (r₂ + r₃) apm_b93j04_poly = 0 := by
+  have hs : (r₂ + r₃) ^ 2 - algebraMap ℚ K 5 = 2 * r₂ * r₃ := by
+    rw [show algebraMap ℚ K 5 = algebraMap ℚ K 2 + algebraMap ℚ K 3 by norm_num]
+    rw [← h₂, ← h₃]
+    ring
+  calc
+    Polynomial.eval₂ (algebraMap ℚ K) (r₂ + r₃) apm_b93j04_poly =
+        ((r₂ + r₃) ^ 2 - algebraMap ℚ K 5) ^ 2 - algebraMap ℚ K 24 := by
+          simp [apm_b93j04_poly]
+          ring
+    _ = (2 * r₂ * r₃) ^ 2 - algebraMap ℚ K 24 := by rw [hs]
+    _ = 0 := by
+      rw [show (2 * r₂ * r₃) ^ 2 =
+          (algebraMap ℚ K 4) * (r₂ ^ 2) * (r₃ ^ 2) by norm_num; ring]
+      rw [h₂, h₃]
+      norm_num
+
 theorem apm_b93j04 :
     ∀ (K : Type*) [Field K] [Algebra ℚ K]
         [IsSplittingField ℚ K apm_b93j04_poly],
@@ -39,15 +63,23 @@ theorem apm_b93j04 :
           E = IntermediateField.adjoin ℚ ({r₃} : Set K) ∨
           E = IntermediateField.adjoin ℚ ({r₂ * r₃} : Set K) ∨
           E = ⊤) := by
-  /- PASS-1 boundary: searched the splitting-field API, notably
+  /- PASS-1 boundary: `apm_b93j04_radical_root` now formally verifies the
+     core radical identity: whenever `r₂² = 2` and `r₃² = 3`, `r₂ + r₃` is
+     a root of the frozen quartic (and sign variants follow identically).
+
+     I exhaustively searched the splitting-field API, notably
      `IsSplittingField.adjoin_rootSet`, `IsSplittingField.splits`,
      `IntermediateField.adjoin_rootSet_isSplittingField`, and the finite
-     Galois correspondence (`intermediateFieldEquivSubgroup`).  The intended
-     route is to identify the four roots as `±√2 ± √3`, prove the abstract
-     splitting field is the biquadratic extension `ℚ(√2, √3)`, and then
-     enumerate the Klein-four automorphisms and its five subgroups.  I could
-     not find a packaged Mathlib realization of this polynomial, and building
-     the square-root witnesses, four-element basis, automorphisms, group
-     equivalence, and exhaustive intermediate-field list from the generic
-     root-set API exceeded pass 1. -/
+     Galois correspondence (`IsGalois.intermediateFieldEquivSubgroup`).
+     `IsKleinFour.nonempty_mulEquiv` would close the requested group
+     equivalence once cardinality four and exponent two are established.
+
+     The remaining blocker is the abstraction bridge from an arbitrary
+     `IsSplittingField` instance: construct square-root witnesses from its
+     root set, prove the root set is exactly the four sign combinations,
+     establish their linear independence and hence the displayed basis,
+     then bundle the two independent sign-change automorphisms.  Only after
+     that can the Galois correspondence and the five-subgroup classification
+     identify every intermediate field.  No Mathlib theorem or closed sibling
+     packages this polynomial-specific realization. -/
   sorry
