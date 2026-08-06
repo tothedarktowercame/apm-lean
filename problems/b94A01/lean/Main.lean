@@ -39,14 +39,43 @@ theorem apm_b94a01 :
           (y : G) * (x : G) = ((x ^ 4 : P) : G) * (y : G) ∧
           (((x ^ 2 : P) : G) * (y : G)) * (((x ^ 3 : P) : G) * (y : G)) =
             ((x ^ 4 : P) : G)) := by
-  /- PASS-1 boundary: searched the Sylow and cyclic-group APIs, including
+  intro G _ _ P Q x y hcard hx hy
+  letI : Fact (Nat.Prime 5) := ⟨by norm_num⟩
+  letI : Fact (Nat.Prime 2) := ⟨by norm_num⟩
+  -- (Sibling: b93A01)
+  have hPcard : Nat.card (P : Subgroup G) = 5 := by
+    rw [Sylow.card_eq_multiplicity, Nat.card_eq_fintype_card, hcard]
+    have hv : (Nat.factorization 10) 5 = 1 := by native_decide
+    rw [hv]
+    norm_num
+  have hQcard : Nat.card (Q : Subgroup G) = 2 := by
+    rw [Sylow.card_eq_multiplicity, Nat.card_eq_fintype_card, hcard]
+    have hv : (Nat.factorization 10) 2 = 1 := by native_decide
+    rw [hv]
+    norm_num
+  have hPindex : (P : Subgroup G).index = 2 := by
+    have hm := Subgroup.card_mul_index (P : Subgroup G)
+    rw [hPcard, Nat.card_eq_fintype_card, hcard] at hm
+    omega
+  have hSylow5card : Nat.card (Sylow 5 G) = 1 := by
+    have hdvd : Nat.card (Sylow 5 G) ∣ 2 := hPindex ▸ Sylow.card_dvd_index P
+    have hmod := card_sylow_modEq_one 5 G
+    rcases (Nat.dvd_prime (by norm_num : Nat.Prime 2)).mp hdvd with h | h
+    · exact h
+    · rw [h] at hmod
+      norm_num [Nat.ModEq] at hmod
+  haveI : Subsingleton (Sylow 5 G) := (Nat.card_eq_one_iff_unique.mp hSylow5card).1
+  have hPnormal : (P : Subgroup G).Normal := Sylow.normal_of_subsingleton P
+  /- PASS-1 boundary: the Sylow sizes and normality of `P` are now proved
+     locally (`hPcard`, `hQcard`, `hPnormal`) using the route validated in
+     sibling `b93A01`.  I searched the Sylow and cyclic-group APIs, including
      `Sylow.card_eq_multiplicity`, `card_sylow_modEq_one`,
      `Sylow.normal_of_subsingleton`, `IsCyclic.mulAutMulEquiv`, and
      `IsCyclic.card_mulAut`, together with the semidirect-product recognition
-     results.  The intended route is to derive `Nat.card P = 5` and
-     `Nat.card Q = 2`, enumerate `MulAut P` via the units of `ZMod 5`, classify
-     the two homomorphisms `Q →* MulAut P`, and then identify the conjugation
-     action.  I could not complete the required explicit `Fin 4` enumeration
-     and connect it to Mathlib's internal semidirect-product equivalence and
-     the final concrete multiplication identities within pass 1. -/
+     results.  The remaining route is to enumerate `MulAut P` via the units
+     of `ZMod 5`, classify the two homomorphisms `Q →* MulAut P`, prove the
+     Sylow intersection/join complement conditions, and identify conjugation
+     with the semidirect action.  The explicit `Fin 4` enumeration and the
+     bridge from Mathlib's internal semidirect-product equivalence to the final
+     concrete multiplication identities remain unresolved. -/
   sorry
