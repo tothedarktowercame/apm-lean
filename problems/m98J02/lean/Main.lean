@@ -13,6 +13,11 @@ the hypothesis under which the stated `C²` convolution regularity is standard.
 The garbled operator typography is read, as in the supplied solution, as
 `T = 2 ∂²/∂x² - ∂/∂y + 3 ∂²/(∂x∂y)`.
 
+The former first conjunct merely unfolded `apm_m98J02_hasCompactSupport`.
+Since the definition above already supplies part (a), that tautology is
+replaced by the substantive closure of compactly supported distributions
+under addition.
+
 ## Encoding questions
 
 Mathlib currently provides `Distribution` but not the general convolution of
@@ -87,11 +92,10 @@ def apm_m98J02_representsFunction
   ∀ φ : apm_m98J02_Test, u φ = ∫ x, f x * φ x
 
 theorem apm_m98j02 :
-    (∀ u : apm_m98J02_Dist,
-      apm_m98J02_hasCompactSupport u ↔
-        ∃ K : Set apm_m98J02_E, IsCompact K ∧
-          ∀ φ : apm_m98J02_Test,
-            Disjoint (tsupport (φ : apm_m98J02_E → ℝ)) K → u φ = 0) ∧
+    (∀ u v : apm_m98J02_Dist,
+      apm_m98J02_hasCompactSupport u →
+      apm_m98J02_hasCompactSupport v →
+      apm_m98J02_hasCompactSupport (u + v)) ∧
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
         ∃ w : apm_m98J02_Dist, apm_m98J02_isConvolution u v w) ∧
