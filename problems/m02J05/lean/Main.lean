@@ -61,4 +61,21 @@ theorem apm_m02j05 :
       (∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L β,
         ∫ x in Icc (0 : ℝ) 1, u x * v x ∂volume ≤
           2 * apm_m02J05_lux α u * apm_m02J05_lux β v) := by
+  /-
+  SKIPPED (Orlicz/Luxemburg library boundary). Searches of Mathlib and compiled
+  siblings found no packaged Young-function, complementary-function, Orlicz
+  space, or Luxemburg-norm API. The available theorems named
+  `young_inequality` concern Hölder-conjugate powers, not the general inverse
+  pair `α`, `β` used here.
+
+  A proof must therefore build the complete theory in this file: convexity and
+  monotonicity of the interval-integral primitive from `StrictMonoOn α`,
+  stability and common rescaling of `AEEqFun`s, nonemptiness and attainment of
+  the `sInf` modular sublevel set (dominated convergence plus Fatou),
+  definiteness modulo a.e. equality, homogeneity and the triangle inequality,
+  and finally the complementary-integral Young identity followed by the
+  normalized integral estimate. No solved sibling supplies that combined
+  bridge, so no sibling code was reused and the frozen statement was left
+  unchanged.
+  -/
   sorry
