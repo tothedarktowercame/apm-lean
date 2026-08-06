@@ -70,4 +70,42 @@ theorem apm_m96a06
         HasFDerivAt (apm_m96a06_energy value weakDeriv a b) L u ∧ L = 0) ↔
       apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u) ∧
     ∃! u : H, apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u := by
+  /-
+  SKIPPED (concrete `Lp` bilinear-form boundary).  Current Mathlib does contain
+  the abstract real Hilbert-space Lax--Milgram theorem in
+  `Analysis.InnerProductSpace.LaxMilgram`: for a bounded bilinear map
+  `B : H →L[ℝ] H →L[ℝ] ℝ`, `IsCoercive.continuousLinearEquivOfBilin`
+  provides the unique solution.  Thus the blocker is not the abstract theorem
+  itself, but constructing its input from this frozen representative-level
+  encoding.
+
+  In detail, one must bundle
+  `∫ (weakDeriv u * weakDeriv h + a * value u * value h)` as a continuous
+  bilinear map on `H`.  This requires connecting the displayed pointwise
+  integrals of Mathlib's chosen `Lp` representatives to
+  `ContinuousLinearMap.lpPairing`, proving the
+  `L∞ × L² × L² → L¹` weighted estimate from `ha`, and transporting the two
+  `L²` bounds through `value` and `weakDeriv`.  Coercivity then needs the a.e.
+  lower bound `ha_lower`, monotonicity of the integral, and `hnorm` to prove
+  `min 1 ε * ‖u‖² ≤ B u u`.  The forcing term similarly needs to be bundled
+  from `hb` by the `L²` pairing.
+
+  The Fréchet-derivative conjunct additionally requires expanding the three
+  representative-level integrals under `u + h`, identifying the linear part
+  with the bundled functional, and bounding the exact quadratic remainder by
+  `O(‖h‖²)` before applying `HasFDerivAt`.  Once that is done, the middle
+  equivalence is algebraic and Lax--Milgram closes existence and uniqueness.
+
+  `LEMMA-INDEX.md` exposed `ConstructionTargets.LpRepresentative` helpers,
+  and completed sibling `a03J03` demonstrates `lpPairing_eq_integral`; neither
+  provides multiplication by an arbitrary `L∞` coefficient as the needed
+  bilinear operator.  `ConstructionTargets.LpRepresentative` concerns
+  commuting representatives with Bochner integration, not this weighted
+  form.  Partial siblings `m95A05`, `m03J05`, and `m00A04` do not supply the
+  construction: the first predates Mathlib's packaged Lax--Milgram API, while
+  the latter two stop at custom Sobolev/operator assembly boundaries.  The
+  fully closed artifact scan, the remaining `ConstructionTargets/` modules,
+  and `YoungL2.lean` yielded no closer reusable theorem.  The frozen statement
+  appears sound, but this analytic interface was not completed in the pass.
+  -/
   sorry
