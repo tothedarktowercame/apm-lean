@@ -44,4 +44,25 @@ theorem apm_b98a03 :
         (∀ S : Subalgebra R T,
           Ideal.comap S.val Q₁ = Ideal.comap S.val Q₂ → S = ⊥) →
         Ideal.map (algebraMap R T) P = Q₁ ⊓ Q₂ ∧ Q₁ ⊓ Q₂ = I) := by
+  /-
+  Boundary (pass-1 Codex, skipped): the informal solution cites sibling
+  `b90A04`, but inspection showed that artifact is not proved and still ends in
+  a placeholder proof, so it was discarded as a compiled dependency. Mathlib
+  does provide `Ideal.coeff_zero_mem_comap_of_root_mem_of_eval_mem`, which gives
+  the forward direction of the polynomial constant-term criterion when `u ∈ Q`.
+
+  The first two conjuncts still require proving that the `sSup` of all ideals
+  contained in `Set.range (algebraMap R T)` remains contained in that range.
+  This is not an immediate `sSup_le`, because the range is a subring/set rather
+  than an ideal of `T`; one must unpack membership in the ideal supremum and
+  combine finitely many preimages in `R`. The reverse constant-term implication
+  then needs a custom `eval₂` decomposition into the constant term plus terms
+  divisible by `u`.
+
+  Finally, the last conjunct must convert `S = ⊥` for every agreeing subalgebra
+  into elementwise membership in the algebra-map range, identify the ideal
+  intersection with `Ideal.map (algebraMap R T) P`, and use the conductor
+  uniqueness lemma contrapositive to obtain the reverse inclusion. No searched
+  theorem or proved sibling packages this chain. The statement appears sound.
+  -/
   sorry
