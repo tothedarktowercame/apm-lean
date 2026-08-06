@@ -31,4 +31,20 @@ theorem apm_b95j02 :
       [FiniteDimensional F V] (T : Module.End F V),
       ActsCyclically T ↔
         Module.finrank F V = (minpoly F T).natDegree) := by
-  sorry
+  constructor
+  · intro G _ _
+    have hexp : groupExponent G = Monoid.exponent G := by
+      exact (Monoid.exponent_eq_sInf (G := G)).symm
+    rw [hexp]
+    refine ⟨Monoid.ExponentExists.of_finite.exponent_pos,
+      Monoid.pow_exponent_eq_one, ?_, ?_⟩
+    · intro m hm hpow
+      exact Monoid.exponent_min' m hm hpow
+    · simpa [eq_comm] using (IsCyclic.iff_exponent_eq_card (α := G))
+  · -- Boundary: searched `linearIndependent_powers_iff_aeval`,
+    -- `minpoly_dvd_charpoly`, and `span_minpoly_eq_annihilator`.  These prove
+    -- the degree bound and the cyclic => equality direction, but Mathlib has
+    -- no packaged cyclic-vector iff minpoly-degree-equals-finrank theorem;
+    -- the reverse route requires formalizing rational canonical form/PID
+    -- invariant factors, which did not fit the pass-1 budget.
+    sorry
