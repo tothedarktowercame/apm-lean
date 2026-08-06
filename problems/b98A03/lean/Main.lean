@@ -33,7 +33,7 @@ theorem apm_b98a03 :
           {x | ∃ r : R, (∀ t : T, algebraMap R T r * t ∈ Set.range (algebraMap R T)) ∧
             algebraMap R T r = x} ∧
       (∀ J : Ideal T, (J : Set T) ⊆ Set.range (algebraMap R T) → J ≤ I) ∧
-      (¬I ≤ Ideal.map (algebraMap R T) P → Q₁ = Q₂) ∧
+      ((∃ r : R, algebraMap R T r ∈ I ∧ r ∉ P) → Q₁ = Q₂) ∧
       (∀ (Q : Ideal T), Q.IsPrime → Ideal.comap (algebraMap R T) Q = P →
         ∀ u ∈ Q, ∀ p : Polynomial R,
           Polynomial.eval₂ (algebraMap R T) u p ∈ Q ↔ p.coeff 0 ∈ P) ∧
