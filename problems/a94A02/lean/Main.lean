@@ -41,4 +41,7 @@ theorem apm_a94a02
       (∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)),
         ENNReal.ofReal (deriv (apmFunctionSeries f) x) =
           apmDerivativeSeries f x) := by
+  -- Boundary: requires (1) Tonelli/MCT: ∫⁻g ≤ ∑f_n(1)<∞ (AC: ∫f_n'=f_n(1)-f_n(0));
+  -- (2) g<∞ a.e. from integrability; (3) f'=g a.e. via monotone conv of derivatives.
+  -- APIs: `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`, `lintegral_tsum`
   sorry
