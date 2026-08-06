@@ -61,4 +61,8 @@ theorem apm_a98j01
   --
   -- APIs searched: `InnerRegularCompactLTTop`, `OuterRegular`, `tendstoUniformlyOn_of_ae_tendsto`,
   -- `SimpleFunc.approxOn`, `tendsto_approxOn`, `MeasurableSet.exists_lt_isCompact_of_ne_top`
+  -- SKIPPED: Lusin's theorem. File already documents the full strategy and blockers.
+  -- Requires: simple function approximation (Egorov), compact inner regularity,
+  -- continuity of uniform limit of continuous functions on compact set.
+  -- APIs: `InnerRegularCompactLTTop`, `tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist`
   sorry
