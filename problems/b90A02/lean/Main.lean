@@ -25,4 +25,17 @@ theorem apm_b90a02
     (Module.Projective R M → Module.Flat R M) ∧
     Module.Flat ℤ ℚ ∧
     ¬Module.Projective ℤ ℚ := by
-  sorry
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro
+    infer_instance
+  · intro
+    infer_instance
+  · infer_instance
+  · -- Boundary: searched `Module.Flat.of_free`, `Module.Flat.of_projective`,
+    -- the Dedekind/torsion-free flatness instance, projective-module lifting
+    -- APIs, and PID free-module results.  The first three claims are complete.
+    -- The remaining claim needs the theorem that an arbitrary (not assumed
+    -- finitely generated) projective ℤ-module is free, or an equivalent direct
+    -- lifting obstruction for the divisible module ℚ; the available PID
+    -- submodule-freeness results located were finite-rank variants.
+    sorry
