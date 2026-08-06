@@ -37,4 +37,18 @@ theorem apm_b96j04
         Module.finrank ℚ E = 4 ∧ IsGalois ℚ E} = 3 ∧
     Nonempty
       ((L ≃ₐ[ZMod 41] L) ≃* Multiplicative (ZMod 2)) := by
+  /-
+  Boundary (pass-1 Codex, skipped): the informal proof identifies `X^8 + 1`
+  with the 16th cyclotomic polynomial, then uses the cyclotomic Galois-group
+  isomorphism over `ℚ` and the Frobenius-order description over `ZMod 41`.
+  Searches covered `Polynomial.IsSplittingField`,
+  `FieldTheory.Galois.IsGaloisGroup`, `IntermediateField.finrank_fixedField_eq_card`,
+  and Mathlib's cyclotomic files. The general Galois correspondence is present,
+  but no compiled bridge was found that identifies `(K ≃ₐ[ℚ] K)` for this
+  arbitrary splitting-field instance with `(ZMod 16)ˣ`, or identifies the
+  finite-field splitting degree with `orderOf (41 : ZMod 16)`. Without those
+  identifications, neither the automorphism-group conclusions nor the exact
+  count of degree-four intermediate fields can be reached. No proof step
+  compiled within the skip budget.
+  -/
   sorry
