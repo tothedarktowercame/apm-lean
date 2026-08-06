@@ -23,13 +23,8 @@ theorem apm_b94j02 :
       (D ^ 2 = D → Matrix.trace D = (D.rank : K)) := by
   intro n K _ A C D hn
   refine ⟨?_, ?_, ?_⟩
-  · /- PASS-1 boundary: searched `Matrix.charpoly`, the trace coefficient
-       lemmas, minimal-polynomial divisibility, and nilpotent-matrix APIs.  The
-       intended route is to show a matrix annihilated by `X ^ m` has
-       characteristic polynomial `X ^ n`, then read off its trace.  I could
-       not complete the required minimal/characteristic-polynomial bridge over
-       an arbitrary field in pass 1. -/
-    sorry
+  · intro m hm hAm
+    exact (Matrix.isNilpotent_trace_of_isNilpotent ⟨m, hAm⟩).eq_zero
   · intro h
     ext i j
     let B : Matrix (Fin n) (Fin n) K :=
@@ -37,10 +32,18 @@ theorem apm_b94j02 :
     have hij := h B
     simp [B, Matrix.trace, Matrix.mul_apply] at hij
     exact hij
-  · /- PASS-1 boundary: searched the matrix-rank, range/kernel decomposition,
-       basis change, and trace-similarity APIs.  The intended proof decomposes
-       `K^n` as `range D ⊕ ker D`, where an idempotent acts by identity and
-       zero, then computes trace in an adapted basis.  I could not connect
-       `Matrix.rank` to the cardinality of that identity block and transport
-       the trace back through `LinearMap.toMatrix` within pass 1. -/
-    sorry
+  · intro hD
+    let f : Module.End K (Fin n → K) := Matrix.toLin' D
+    have hf : IsIdempotentElem f := by
+      change f * f = f
+      dsimp [f]
+      rw [Module.End.mul_eq_comp]
+      rw [← Matrix.toLin'_mul]
+      simpa [pow_two] using congrArg Matrix.toLin' hD
+    have hp : LinearMap.IsProj (LinearMap.range f) f :=
+      (LinearMap.isProj_range_iff_isIdempotentElem f).2 hf
+    have ht := hp.trace
+    rw [Matrix.trace_toLin'_eq] at ht
+    rw [D.rank_eq_finrank_range_toLin (Pi.basisFun K (Fin n))
+      (Pi.basisFun K (Fin n)), Matrix.toLin_eq_toLin']
+    exact ht
