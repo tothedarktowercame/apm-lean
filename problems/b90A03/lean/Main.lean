@@ -29,8 +29,8 @@ theorem apm_b90a03
       L ≠ ⊥ ∧ L ≠ ⊤ ∧ Module.finrank (↥L) F = p ^ n) ∧
     ∀ L : IntermediateField K F,
       L ≠ ⊥ → L ≠ ⊤ → Module.finrank (↥L) F = p ^ n →
-      ({L' : IntermediateField K F |
+      (({L' : IntermediateField K F |
           Module.finrank (↥L') F = p ^ n} : Set (IntermediateField K F)) =
           {L} ↔
-        IsGalois K (↥L) := by
+        IsGalois K (↥L)) := by
   sorry
