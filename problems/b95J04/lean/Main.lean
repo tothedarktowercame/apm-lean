@@ -45,4 +45,25 @@ theorem apm_b95j04
           α ∉ (algebraMap F E).range ∧
           α ^ p ∈ (algebraMap F E).range ∧
           IntermediateField.adjoin F {α} = ⊤) := by
-  sorry
+  constructor
+  · intro hchar
+    letI : Fact p.Prime := ⟨hp⟩
+    haveI : CharP F p := hchar ▸ ringChar.charP F
+    have hzero : (z - 1) ^ p = 0 := by
+      rw [sub_pow_char, hz]
+      simp
+    exact hz1 (sub_eq_zero.mp (eq_zero_of_pow_eq_zero hzero))
+  constructor
+  · -- Boundary: searched `Polynomial.X_pow_sub_one_eq_prod`,
+    -- `IsPrimitiveRoot.eq_pow_of_pow_eq_one`, and
+    -- `Polynomial.mem_nthRootsFinset`.  Mathlib factors over
+    -- `nthRootsFinset`; matching that unordered root finset to the frozen
+    -- shifted enumeration `z^(i+1)` requires a nontrivial explicit cyclic
+    -- reindexing proof not completed in the pass-1 budget.
+    sorry
+  · -- Boundary: searched the splitting-field/Galois APIs and the
+    -- independence-of-characters/Hilbert-90 route.  The remaining two
+    -- conjuncts amount to the forward and converse degree-p Kummer theorem;
+    -- no packaged Mathlib theorem with this explicit automorphism equivalence
+    -- and eigenvector formula was found.
+    sorry
