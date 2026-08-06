@@ -29,13 +29,27 @@ theorem apm_b90a01
       IsSimpleGroup H → H ≠ ⊤ → n ≤ H.index) ∧
     ∀ (G₁ : Type) [Group G₁] [Finite G₁],
       Nat.card G₁ = 120 → ¬IsSimpleGroup G₁ := by
-  -- Boundary: searched the Sylow conjugation action (`Sylow.mulAction`,
-  -- `Sylow.exists_smul_eq`, `MulAction.toPermHom`), simple-group kernel
+  -- Boundary (pass-1 Codex, sustained desk research): searched the Sylow
+  -- conjugation action (`Sylow.mulAction`, `Sylow.isPretransitive_of_finite`,
+  -- `Sylow.card_sylow_modEq_one`, `Sylow.card_dvd_index`), action kernels
+  -- (`MulAction.toPermHom`, `MonoidHom.ker_eq_bot_iff`), simple-group kernel
   -- classification (`Subgroup.Normal.eq_bot_or_eq_top`), permutation transport
-  -- (`Equiv.permCongrHom`), and alternating-group index/cardinality APIs.
-  -- The missing route is a reusable proof that the nontrivial transitive Sylow
-  -- action has trivial kernel, followed by factoring it through `alternatingGroup`
-  -- and formalizing the coset-action factorial bound.  The final order-120
-  -- contradiction depends on all three pieces, so no conjunct was asserted
-  -- without completing that representation-theoretic plumbing.
+  -- (`Equiv.permCongrHom`), coset kernels (`Subgroup.normalCore_eq_ker`), and
+  -- alternating-group index/cardinality APIs (`nat_card_alternatingGroup`).
+  -- I also inspected all closed artifacts, `LEMMA-INDEX.md`, all of
+  -- `ConstructionTargets/`, `YoungL2.lean`, and the partial group-theory
+  -- neighbors `b03J01`, `b93A01`, `b96A02`, and `b98A01`; none supplies the
+  -- representation-theoretic bridge.
+  --
+  -- A deeper blocker is that this Mathlib snapshot proves only
+  -- `alternatingGroup.isSimpleGroup_five`; its own module header still lists
+  -- general simplicity of `alternatingGroup α` as future work.  Thus the third
+  -- frozen conjunct for every `n ≥ 5` requires locally developing simplicity of
+  -- all `A_n`, in addition to proving faithfulness of the nontrivial Sylow
+  -- action, factoring its image through `alternatingGroup`, constructing and
+  -- transporting the coset action to `Fin H.index`, proving the factorial
+  -- bound, and carrying out the exact Sylow-5 enumeration for order 120.
+  -- These are mathematically standard but constitute a major group-theory
+  -- development beyond a 15--25 minute pass; no conjunct is asserted via an
+  -- unproved shortcut.
   sorry
