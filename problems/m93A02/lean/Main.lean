@@ -34,4 +34,26 @@ theorem apm_m93a02
     (∀ ε : ℝ, 0 < ε →
       ∃ k : ℝ × ℝ, ‖k‖ < ε ∧
         ¬ ∃ h : ℝ, (h, 0) + (0, h * h) = k) := by
-  sorry
+  constructor
+  · /-
+    Boundary for the quantitative contraction argument. One must upgrade the
+    plain linear map `L` to a bounded linear equivalence using surjectivity and
+    `hL_lower`, define its inverse, and apply `ContractingWith` on a closed ball
+    of radius `2 * ‖k‖ / δ`. The self-map and contraction estimates must handle
+    the separate case `M = 0` (the informal constant `δ² / (4M)` is undefined
+    there) and package completeness of the ball subtype. Mathlib supplies the
+    abstract fixed-point theorem, but no compiled sibling combines it with an
+    inverse constructed from a bounded-below plain `LinearMap` in these exact
+    conventions.
+    -/
+    sorry
+  · intro ε hε
+    refine ⟨(0, ε / 2), ?_, ?_⟩
+    · simp [Real.norm_eq_abs, abs_of_pos hε, hε]
+    · rintro ⟨h, hh⟩
+      have hfirst : h = 0 := by
+        simpa using congrArg Prod.fst hh
+      have hsecond : h * h = ε / 2 := by
+        simpa using congrArg Prod.snd hh
+      rw [hfirst] at hsecond
+      linarith
