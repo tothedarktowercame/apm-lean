@@ -105,4 +105,48 @@ theorem apm_m93j02
       (apm_m93J02_globalNorm U α) ∧
     apm_m93J02_isCompleteOn (apm_m93J02_holderFunctions U α)
       (apm_m93J02_globalNorm U α) := by
-  sorry
+  have hle : ∀ f : U → ℝ,
+      apm_m93J02_localSeminorm U α f ≤
+        apm_m93J02_globalSeminorm U α f := by
+    intro f
+    unfold apm_m93J02_localSeminorm apm_m93J02_globalSeminorm
+    refine iSup_le fun x ↦ Filter.limsup_le_of_le (by isBoundedDefault) ?_
+    filter_upwards [] with ε
+    refine iSup_le fun y ↦ iSup_le fun z ↦ ?_
+    split_ifs with hyz
+    · exact le_iSup_of_le y (le_iSup_of_le z (by simp [hyz.2.2]))
+    · exact bot_le
+  have hglobal_local : ∀ f : U → ℝ,
+      apm_m93J02_globalSeminorm U α f ≠ ⊤ →
+        apm_m93J02_localSeminorm U α f ≠ ⊤ := by
+    intro f hf htop
+    exact hf (top_unique (htop ▸ hle f))
+  /-
+  Boundary: the remaining clauses require a compactness/cluster-point proof
+  that finite local limsup forces a finite global seminorm, an explicit
+  nonconstant Lipschitz function on an arbitrary compact connected nontrivial
+  subtype (and proof that its local ENNReal limsup is zero), the ENNReal
+  algebra needed for both norm predicates, and complete/incomplete sequence
+  constructions for the two induced metrics. I searched and used
+  `Filter.limsup_le_of_le` for the easy inequality above; no compiled sibling
+  supplied the required local-limsup compactness or completeness machinery.
+  -/
+  have hremaining :
+      (∀ f : U → ℝ,
+        apm_m93J02_localSeminorm U α f ≠ ⊤ →
+          apm_m93J02_globalSeminorm U α f ≠ ⊤) ∧
+      ¬(∃ K : ℝ≥0∞, K ≠ ⊤ ∧ ∀ f : U → ℝ,
+        apm_m93J02_globalSeminorm U α f ≤
+          K * apm_m93J02_localSeminorm U α f) ∧
+      apm_m93J02_isNormOn (apm_m93J02_holderFunctions U α)
+        (apm_m93J02_localNorm U α) ∧
+      ¬apm_m93J02_isCompleteOn (apm_m93J02_holderFunctions U α)
+        (apm_m93J02_localNorm U α) ∧
+      apm_m93J02_isNormOn (apm_m93J02_holderFunctions U α)
+        (apm_m93J02_globalNorm U α) ∧
+      apm_m93J02_isCompleteOn (apm_m93J02_holderFunctions U α)
+        (apm_m93J02_globalNorm U α) := by
+    sorry
+  exact ⟨hremaining.1, hglobal_local, hle,
+    hremaining.2.1, hremaining.2.2.1, hremaining.2.2.2.1,
+    hremaining.2.2.2.2.1, hremaining.2.2.2.2.2⟩
