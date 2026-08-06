@@ -58,4 +58,24 @@ theorem apm_t01a06 :
       ¬∃ (η : t01A06OneForm) (γ : ℝ → t01A06Point),
         IsT01A06ClosedOneForm η ∧ IsT01A06LoopOnTorus R r γ ∧
         t01A06LineIntegral η γ ≠ 0) := by
+  have hexact : ∀ η : t01A06OneForm,
+      IsT01A06ClosedOneForm η →
+        ∃ g : t01A06Point → ℝ, ∀ p, HasFDerivAt g (η p) p := by
+    intro η hη
+    obtain ⟨g, hg⟩ := convex_univ.exists_forall_hasFDerivAt_of_fderiv_symmetric
+      isOpen_univ (hη.1.differentiable (by simp)).differentiableOn
+        fun p _ v w ↦ hη.2 p v w
+    exact ⟨g, fun p ↦ hg p (Set.mem_univ p)⟩
+  /-
+  Boundary: the ambient Poincaré-lemma step is proved above: every closed
+  one-form in the frozen encoding has a global scalar potential. To finish
+  part (b), that `HasFDerivAt` identity must be chained along the periodic
+  smooth curve and converted to the raw interval integral using the
+  fundamental theorem of calculus. Part (a) separately requires normalizing
+  a nested interval integral of products of `sin`, `cos`, `cos²`, and `cos³`.
+  I searched the curve-integral Poincaré/FTC and trigonometric
+  interval-integral APIs; the exactness theorem is available, but I did not
+  complete the derivative-composition/integrability bridge or the nested
+  trigonometric normalization in this pass.
+  -/
   sorry
