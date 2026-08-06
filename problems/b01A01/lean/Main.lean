@@ -29,4 +29,10 @@ theorem apm_b01a01
         Irreducible (apmFrobeniusPolynomial p a)) ∧
     (Function.Surjective (fun α : k ↦ α ^ p) →
       ∀ q : k[X], Irreducible q → q.Separable) := by
+  -- SKIPPED: two-part field theory in characteristic p.
+  -- (a) x^p - a splits or is irreducible: Frobenius is x↦x^p; if a=b^p then x^p-a=(x-b)^p (splits);
+  --     otherwise x^p-a has no root, and since gcd(p,p)=p the only factorization is trivial.
+  -- (b) Surjective Frobenius ⟹ perfect field ⟹ every irreducible is separable.
+  -- Blocker: requires `Polynomial.Splits`, `Irreducible`, `Polynomial.Separable`,
+  -- `IsPerfect`, Frobenius theory — deep algebra infrastructure to assemble.
   sorry
