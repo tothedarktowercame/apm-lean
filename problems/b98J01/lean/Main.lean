@@ -30,4 +30,28 @@ theorem apm_b98j01 :
           N.Normal ∧ Nat.card N = 12 ∧ K ≤ N ∧
           ((∀ x y : N, x * y = y * x) ∨ Nat.card (Subgroup.center N) = 2) ∧
           (∀ k ∈ K, ∀ n ∈ N, k * n = n * k)) := by
+  intro G _ _ hGcard
+  have h_klein_four :
+      ∃ V : Subgroup (alternatingGroup (Fin 4)), V.Normal ∧ Nat.card V = 4 := by
+    have h4 : Nat.card (Fin 4) = 4 := by simp
+    exact ⟨alternatingGroup.kleinFour (Fin 4),
+      alternatingGroup.normal_kleinFour h4,
+      alternatingGroup.kleinFour_card_of_card_eq_four h4⟩
+  /-
+  Boundary (pass-1 Codex, partial): `h_klein_four` above closes the second
+  conjunct using the packaged Klein four subgroup; `hGcard` remains available
+  for the order-36 argument. Inspection of cited sibling `b93J01` found only
+  unrelated elementary examples, not the `A₄` subgroup facts used here.
+
+  The remaining first conjunct needs a conjugation action on the four Sylow
+  3-subgroups, conversion of its permutation type to `Fin 4`, kernel-cardinality
+  arithmetic, and identification of its order-12 image with `alternatingGroup
+  (Fin 4)`. For the last conjunct one must pull back `kleinFour` along an
+  arbitrary surjective `φ`, prove the preimage has cardinality 12, classify its
+  semidirect action on the order-3 kernel to obtain the center dichotomy, and
+  exclude the noncentral action by showing `A₄` has no subgroup of order 6.
+  Local Mathlib searches found the general Sylow/action APIs and the packaged
+  Klein four facts, but no order-36 or no-order-6 assembly. The repaired
+  statement appears mathematically sound.
+  -/
   sorry
