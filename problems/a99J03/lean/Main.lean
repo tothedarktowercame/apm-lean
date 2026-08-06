@@ -36,4 +36,10 @@ theorem apm_a99j03
     ¬IntegrableOn
       (deriv (apm_a99J03_transform apm_a99J03_counterexample))
       (Ioi 0) := by
+  -- SKIPPED: Stieltjes transform h(x)=∫₀^∞ f(y)/(x+y)dy.
+  -- (1) C^∞ on (0,∞): differentiate under integral sign (parametric integral theorem)
+  -- (2) h'∈L¹([a,∞)): h'(x)=-∫₀^∞ f(y)/(x+y)² dy, need integrability on [a,∞)
+  -- (3) Counterexample f=1_(0,1): h'(x)=-∫₀¹1/(x+y)²dy = -1/x + 1/(x+1) ∉ L¹(0,∞)
+  -- APIs: `contDiffOn_of_parametric_integral`, `integrableOn_deriv` — the parametric
+  -- integral differentiation theorems in Mathlib need careful dominated convergence setup.
   sorry
