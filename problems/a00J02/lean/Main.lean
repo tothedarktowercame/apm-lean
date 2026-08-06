@@ -91,8 +91,10 @@ theorem apm_a00j02
   --    ∫₀ˣ |deriv f|² → 0 as x → 0⁺
   -- 4. Squeeze: f x / √x → 0
   --
-  -- The theorem is TRUE as stated. Both blockers are Lean API assembly
-  -- (DCT application, Hölder inequality), not mathematical difficulty.
+  -- PARTIAL: FTC proved (`ftc_a00j02`), two helper lemmas blocked.
+  -- `tendsto_setIntegral_Icc_zero`: needs DCT for dominated convergence of integrals
+  -- `cauchy_schwarz_bound`: needs Hölder/Cauchy-Schwarz for set integrals
+  -- Main theorem needs both + squeeze argument. All three sorries documented above.
   sorry
 
 end
