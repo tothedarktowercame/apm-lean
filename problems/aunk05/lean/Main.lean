@@ -31,3 +31,5 @@ theorem apm_aunk05 :
   · exact hconv.differentiableOn hf_eventually hΩ
   · -- (Sibling: a01A07)
     simpa only [Function.comp_apply] using hconv.deriv hf_eventually hΩ
+
+#print axioms apm_aunk05
