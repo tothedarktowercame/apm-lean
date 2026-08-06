@@ -50,7 +50,19 @@ theorem apm_b96j02 :
       (apm_b96J02_mixedType ≃ₗ[apm_b96J02_R] apm_b96J02_trivialType) ∧
     ∀ (M : Type) [AddCommGroup M] [Module apm_b96J02_R M] [Finite M],
       Nat.card M = 16 →
-        Nonempty (M ≃ₗ[apm_b96J02_R] apm_b96J02_freeType) ∨
+      Nonempty (M ≃ₗ[apm_b96J02_R] apm_b96J02_freeType) ∨
         Nonempty (M ≃ₗ[apm_b96J02_R] apm_b96J02_mixedType) ∨
         Nonempty (M ≃ₗ[apm_b96J02_R] apm_b96J02_trivialType) := by
+  /-
+  Boundary (pass-1 Codex, skipped): the pairwise nonisomorphism and universal
+  classification require turning an arbitrary finite `apm_b96J02_R`-module
+  into a finite-dimensional `ZMod 2` vector space with the square-zero operator
+  `apm_b96J02_x • ·`, then applying a square-zero Jordan decomposition.
+  Searches covered Mathlib's `LinearAlgebra.Matrix.JordanForm`,
+  `Module.Free`, and sibling pass-1 proofs; no theorem was found that provides
+  the needed decomposition for an arbitrary `Finite` module over this quotient
+  ring. `native_decide` was also tried on each of the three concrete cardinality
+  goals, but fails because `Nat.card` is noncomputable before quotient-ring
+  normalization. No proof step compiled within the skip budget.
+  -/
   sorry
