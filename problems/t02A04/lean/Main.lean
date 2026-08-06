@@ -38,4 +38,16 @@ noncomputable instance : TopologicalSpace apm_t02a04_X :=
 theorem apm_t02a04 :
     ∀ f : apm_t02a04_X → apm_t02a04_X,
       Continuous f → ∃ x, f x = x := by
+  /-
+  Boundary (skipped): the informal route needs a homotopy equivalence from
+  this explicit quotient to the degree-two cell attachment model of `ℝP²`,
+  its rational singular-homology computation, and the Lefschetz fixed-point
+  theorem. I searched Mathlib for `Lefschetz`, fixed-point theorems,
+  `singularHomologyFunctor`, quotient/cell attachments, and degree-two circle
+  attachments. Mathlib has metric contraction fixed-point theorems, but no
+  Lefschetz number or Lefschetz fixed-point theorem, and no packaged result
+  identifying this quotient with `ℝP²`. Establishing these foundations is
+  beyond this pass, and no conjunct or intermediate conclusion is exposed in
+  the frozen statement for an honest partial proof.
+  -/
   sorry
