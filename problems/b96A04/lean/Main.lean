@@ -49,30 +49,51 @@ theorem apm_b96a04
     constructor
     · intro m r hm hr
       exact (smul_eq_zero.mp hr).resolve_right hm
-    · -- Boundary: searched `Module.Free.exists_basis`, coordinate maps, and
-      -- `smul_eq_zero`.  Completing the quantified witness requires choosing a
-      -- nonzero basis coordinate of `m` and transporting unsolvability back
-      -- through the basis representation.
-      sorry
+    · intro m hm d hd hdu
+      let b := Module.Free.chooseBasis R F
+      have hrepr : b.repr m ≠ 0 := by
+        simpa using b.repr.injective.ne hm
+      obtain ⟨j, hj⟩ : ∃ j, b.repr m j ≠ 0 := by
+        by_contra h
+        push_neg at h
+        apply hrepr
+        ext i
+        exact h i
+      refine ⟨b.repr m j, hj, ?_⟩
+      rintro ⟨y, hy⟩
+      apply hdu
+      rw [isUnit_iff_exists_inv]
+      refine ⟨b.repr y j, ?_⟩
+      apply mul_left_cancel₀ hj
+      have hcoord := congrArg (fun q => b.repr q j) hy
+      simpa [mul_assoc, mul_left_comm] using hcoord
   constructor
-  · -- Boundary: searched `IsFractionRing.div_surjective` and projective/free
-    -- embedding APIs.  This clause depends on the preceding missing free-module
-    -- nonsurjectivity witness plus denominator division inside `K`.
+  · -- Boundary: the free-module nonsurjectivity witness above is now complete.
+    -- Searches found `IsFractionRing.div_surjective`; this clause still needs
+    -- to apply that witness to the image of `1 : K`, explicitly construct in
+    -- `K` a solution to every nonzero scalar equation, and then turn “every
+    -- nonzero denominator is a unit” into surjectivity of `algebraMap R K`.
     sorry
   constructor
-  · -- Boundary: searched `Module.Projective` realization-as-a-summand/free
-    -- module APIs; no direct embedding theorem into a free module was found.
+  · -- Boundary: `Module.Projective.iff_split` does realize a projective module
+    -- as a direct summand of a free module and supplies the required injective
+    -- linear inclusion.  This will reduce to the preceding embedding clause
+    -- once that fraction-field divisibility bridge is completed.
     sorry
   constructor
-  · -- Boundary: searched projective quotient splitting and idempotent-ideal
-    -- APIs.  The required result is the indecomposability of a domain applied
-    -- to a split exact sequence `I → R → R/I`.
+  · -- Boundary: searched `Module.Projective.iff_split_of_projective`, quotient
+    -- splitting, and idempotent APIs.  The required result is still the
+    -- indecomposability of a domain applied to the split exact sequence
+    -- `I → R → R/I`, including conversion of the section to a complementary
+    -- ideal/idempotent.
     sorry
   constructor
-  · -- Boundary: searched `IsLocalization.commonDenomOfFinset`,
-    -- `finsetIntegerMultiple_image`, and `Submodule.FG`.  The missing bridge is
-    -- extracting a finite generating set and clearing its denominators in the
-    -- abstract `IsFractionRing R K` presentation.
+  · -- Boundary: searched `Submodule.fg_def`,
+    -- `IsLocalization.commonDenomOfFinset`, and
+    -- `IsLocalization.finsetIntegerMultiple_image`.  These provide the finite
+    -- generating set and common denominator, but the remaining bridge is
+    -- transporting the image equality through the span representation to all
+    -- `m ∈ M` in the abstract `IsFractionRing R K` presentation.
     sorry
   · -- Boundary: this follows from the preceding common-denominator lemma by
     -- taking `M = ⊤`, then using divisibility of the fraction field; that lemma
