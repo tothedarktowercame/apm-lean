@@ -113,6 +113,46 @@ lemma apm_t01a03_fundamentalGroupMap_injective_of_retraction
   rw [hfun] at hpq'
   exact hpq'
 
+/-- Any retraction makes the induced map on first singular homology
+injective. -/
+lemma apm_t01a03_H1map_injective_of_retraction
+    {A X : Type} [TopologicalSpace A] [TopologicalSpace X]
+    (i : C(A, X)) (h : apm_t01a03_HasRetraction i) :
+    Function.Injective (apm_t01a03_H1map i) := by
+  rcases h with ⟨r, hr⟩
+  have hcomp : r.comp i = ContinuousMap.id A := by
+    ext x
+    exact hr x
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  have hfun : apm_t01a03_H1map i ≫ apm_t01a03_H1map r = 𝟙 (apm_t01a03_H1 A) := by
+    change F.map (TopCat.ofHom i) ≫ F.map (TopCat.ofHom r) = 𝟙 _
+    rw [← F.map_comp]
+    change F.map (TopCat.ofHom (r.comp i)) = 𝟙 _
+    rw [hcomp]
+    exact F.map_id (TopCat.of A)
+  intro x y hxy
+  have hxy' := congrArg (fun z ↦ apm_t01a03_H1map r z) hxy
+  have hx := congrArg (fun q : apm_t01a03_H1 A ⟶ apm_t01a03_H1 A ↦ q x) hfun
+  have hy := congrArg (fun q : apm_t01a03_H1 A ⟶ apm_t01a03_H1 A ↦ q y) hfun
+  simpa only [CategoryTheory.comp_apply, CategoryTheory.id_apply] using
+    hx.symm.trans (hxy'.trans hy)
+
+/-- A zero induced `H₁` map from a space with nonzero first homology cannot
+come from a retract inclusion. -/
+lemma apm_t01a03_noRetraction_of_H1map_zero
+    {A X : Type} [TopologicalSpace A] [TopologicalSpace X]
+    (i : C(A, X)) (hi : apm_t01a03_H1map i = 0)
+    (hnonzero : ∃ x : apm_t01a03_H1 A, x ≠ 0) :
+    ¬apm_t01a03_HasRetraction i := by
+  intro hret
+  obtain ⟨x, hx⟩ := hnonzero
+  have hinj := apm_t01a03_H1map_injective_of_retraction i hret
+  apply hx
+  apply hinj
+  rw [hi]
+  simp
+
 theorem apm_t01a03 :
     ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
       [PathConnectedSpace S] [ChartedSpace apm_t01a03_E2 S]
@@ -133,13 +173,17 @@ theorem apm_t01a03 :
     _ hmiddleH1 _ hwedgePi _
   refine ⟨?_, ?_, apm_t01a03_noRetraction_twoCircles twoCircles⟩
   · /-
-    Boundary (closer hop 1): the wedge and disconnected-target branches are
+    Boundary (closer hop 2): the wedge and disconnected-target branches are
     closed below by functoriality of the fundamental group and connectedness.
-    The remaining middle-circle branch should similarly apply singular
-    homology to a retraction and contradict `apm_t01a03_H1map middle = 0`.
+    This hop proves `apm_t01a03_H1map_injective_of_retraction`, carrying the
+    split-monomorphism argument out categorically for Mathlib's exact singular
+    `H₁` functor. It also proves `apm_t01a03_noRetraction_of_H1map_zero`, so
+    the middle-circle branch now reduces solely to exhibiting one nonzero
+    element of the exact integral `H₁ Circle` object.
+
     Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, solved topology
     artifacts, and Mathlib's singular-homology and circle APIs found no
-    compiled computation proving that the exact integral `H₁` object of
+    compiled computation or nonzero class for the exact integral `H₁` object of
     `Circle` is nonzero (or isomorphic to `ℤ`).  Mathlib supplies functoriality
     and homotopy invariance, but without this circle computation the zero-map
     contradiction cannot be completed locally.
