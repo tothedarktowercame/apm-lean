@@ -27,29 +27,40 @@ theorem apm_m96a03
       ((∃ x : X, A x = b) ↔ ∀ y : X, A.adjoint y = 0 → inner ℂ b y = 0)) := by
   constructor
   · intro a b hab u t ht
-    /-
-    PARTIAL boundary (Parseval/measure bridge).  Mathlib supplies the two
-    central ingredients: `HilbertBasis.tsum_inner_mul_inner` in
-    `Analysis.InnerProductSpace.l2Space`, and
-    `MeasureTheory.L2.inner_indicatorConstLp_one` in
-    `MeasureTheory.Function.L2Space`.  Taking the `L²` vector
-    `indicatorConstLp 2 (measurableSet_Icc) (by finiteness) 1` for `Icc a t`
-    turns its coefficient against `u n` into a set integral; Parseval then
-    reduces the sum to its squared norm, computed by
-    `norm_indicatorConstLp` and `Real.volume_real_Icc_of_le`.
-
-    The remaining formal boundary is converting, uniformly in `n`,
-      `∫ s in a..t, u n s`
-    (an interval integral for `volume`) to the inner product/set integral in
-    `Lp ℂ 2 (volume.restrict (Icc a b))`.  Searches found
-    `intervalIntegral_eq_integral_uIoc`, `Measure.restrict_restrict`,
-    `integral_restrict`, `integral_congr_ae`, and
-    `integrableOn_Lp_of_measure_ne_top`, but assembling these requires the
-    endpoint-null and nested-restriction bookkeeping (`a ≤ t ≤ b`) before
-    the two Parseval simplifications can be applied.  No closed sibling or
-    reusable construction library contains that bridge.
-    -/
-    sorry
+    let μ := volume.restrict (Icc a b)
+    let v : Lp ℂ 2 μ :=
+      indicatorConstLp 2 (s := Icc a t) measurableSet_Icc (by finiteness) 1
+    have hsub : Icc a t ⊆ Icc a b := Icc_subset_Icc le_rfl ht.2
+    have hcoeff (n : ℕ) : (∫ s in a..t, u n s) = inner ℂ v (u n) := by
+      rw [L2.inner_indicatorConstLp_one]
+      change (∫ s in a..t, u n s ∂volume) =
+        ∫ s in Icc a t, u n s ∂(volume.restrict (Icc a b))
+      rw [Measure.restrict_restrict_of_subset hsub]
+      rw [intervalIntegral.integral_of_le ht.1, ← integral_Icc_eq_integral_Ioc]
+    have hsum := u.summable_inner_mul_inner v v
+    calc
+      ∑' n : ℕ, ‖∫ s in a..t, u n s‖ ^ 2 =
+          ∑' n : ℕ, ((inner ℂ v (u n) * inner ℂ (u n) v).re) := by
+            apply tsum_congr
+            intro n
+            rw [hcoeff]
+            have hsymm : inner ℂ (u n) v = star (inner ℂ v (u n)) :=
+              (inner_conj_symm (u n) v).symm
+            rw [hsymm]
+            exact_mod_cast
+              (congrArg Complex.re (RCLike.mul_conj (inner ℂ v (u n)))).symm
+      _ = (∑' n : ℕ, inner ℂ v (u n) * inner ℂ (u n) v).re :=
+        (Complex.re_tsum hsum).symm
+      _ = (inner ℂ v v).re := by rw [u.tsum_inner_mul_inner]
+      _ = ‖v‖ ^ 2 := @inner_self_eq_norm_sq ℂ _ _ _ _ v
+      _ = t - a := by
+        rw [norm_indicatorConstLp (by norm_num) (by norm_num)]
+        simp only [norm_one, one_mul, ENNReal.toReal_ofNat]
+        rw [Measure.real, Measure.restrict_apply measurableSet_Icc,
+          inter_eq_left.mpr hsub, Real.volume_Icc,
+          ENNReal.toReal_ofReal (sub_nonneg.mpr ht.1)]
+        norm_num
+        rw [← Real.sqrt_eq_rpow, Real.sq_sqrt (sub_nonneg.mpr ht.1)]
   · intro A b hclosed
     constructor
     · rintro ⟨x, rfl⟩ y hy
