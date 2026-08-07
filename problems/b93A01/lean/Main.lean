@@ -19,6 +19,48 @@ faithfulness, rather than merely asserting that no particular action works.
 def apm_b93a01_embeds (G H : Type) [Group G] [Group H] : Prop :=
   ∃ f : G →* H, Function.Injective f
 
+lemma apm_b93a01_abelian_of_normal_prime_factors
+    (G : Type) [Group G] [Fintype G] (p q : ℕ)
+    (hp : p.Prime) (hq : q.Prime) (hpq : p < q)
+    (hcard : Fintype.card G = p * q)
+    (P Q : Subgroup G) (hPn : P.Normal) (hQn : Q.Normal)
+    (hPcard : Nat.card P = p) (hQcard : Nat.card Q = q) :
+    ∀ a b : G, a * b = b * a := by
+  letI : Fact p.Prime := ⟨hp⟩
+  letI : Fact q.Prime := ⟨hq⟩
+  letI : IsCyclic P := isCyclic_of_prime_card hPcard
+  letI : IsCyclic Q := isCyclic_of_prime_card hQcard
+  have hpne : p ≠ q := ne_of_lt hpq
+  have hcop : (Nat.card P).Coprime (Nat.card Q) := by
+    rw [hPcard, hQcard]
+    exact (Nat.coprime_primes hp hq).2 hpne
+  have hmul : Nat.card P * Nat.card Q = Nat.card G := by
+    rw [hPcard, hQcard, Nat.card_eq_fintype_card, hcard]
+  have hcomp : P.IsComplement' Q :=
+    Subgroup.isComplement'_of_coprime hmul hcop
+  intro a b
+  obtain ⟨⟨aP, aQ⟩, rfl⟩ := hcomp.2 a
+  obtain ⟨⟨bP, bQ⟩, rfl⟩ := hcomp.2 b
+  have haQbP : Commute (aQ : G) (bP : G) :=
+    Subgroup.commute_of_normal_of_disjoint Q P hQn hPn hcomp.disjoint.symm
+      aQ bP aQ.property bP.property
+  have haPbP : (aP : G) * bP = bP * aP :=
+    congrArg Subtype.val (IsCyclic.commutative.comm aP bP)
+  have haQbQ : (aQ : G) * bQ = bQ * aQ :=
+    congrArg Subtype.val (IsCyclic.commutative.comm aQ bQ)
+  have hbQaP : Commute (bQ : G) (aP : G) :=
+    Subgroup.commute_of_normal_of_disjoint Q P hQn hPn hcomp.disjoint.symm
+      bQ aP bQ.property aP.property
+  calc
+    ((aP : G) * aQ) * ((bP : G) * bQ) =
+        (aP : G) * ((aQ : G) * bP) * bQ := by simp only [mul_assoc]
+    _ = (aP : G) * ((bP : G) * aQ) * bQ := by rw [haQbP.eq]
+    _ = ((aP : G) * bP) * ((aQ : G) * bQ) := by simp only [mul_assoc]
+    _ = ((bP : G) * aP) * ((bQ : G) * aQ) := by rw [haPbP, haQbQ]
+    _ = (bP : G) * ((aP : G) * bQ) * aQ := by simp only [mul_assoc]
+    _ = (bP : G) * ((bQ : G) * aP) * aQ := by rw [hbQaP.eq]
+    _ = ((bP : G) * bQ) * ((aP : G) * aQ) := by simp only [mul_assoc]
+
 theorem apm_b93a01
     (G : Type) [Group G] [Fintype G] (p q : ℕ)
     (hp : p.Prime) (hq : q.Prime) (hpq : p < q)
@@ -72,21 +114,24 @@ theorem apm_b93a01
       exact hp.ne_one hpone
   haveI : Subsingleton (Sylow q G) := (Nat.card_eq_one_iff_unique.mp hSylowCard).1
   have hQnormal : (Qs : Subgroup G).Normal := Sylow.normal_of_subsingleton Qs
-  refine ⟨⟨(Qs : Subgroup G), hQnormal, hQcard⟩, ?_⟩
-  /- PASS-1 boundary: the first conjunct is now proved: the `q`-Sylow has
-     cardinality `q`; `Sylow.card_dvd_index`, `card_sylow_modEq_one`, and
-     `Sylow.normal_of_subsingleton` show it is the unique, hence normal,
-     `q`-Sylow.  `hnoSmallNonabelian` also proves the sharp obstruction
-     `G ↪ Equiv.Perm (Fin (q - 1))` is impossible.
+  refine ⟨⟨(Qs : Subgroup G), hQnormal, hQcard⟩, ?_, ?_⟩
+  · rintro ⟨P, hPnormal, hPcard⟩
+    exact apm_b93a01_abelian_of_normal_prime_factors G p q hp hq hpq hcard
+      P (Qs : Subgroup G) hPnormal hQnormal hPcard hQcard
+  ·
+    /- CLOSER HOP 2 boundary: the structural second conjunct is now closed.
+       `Subgroup.isComplement'_of_coprime` decomposes every element through
+       the normal prime-order subgroups; `isCyclic_of_prime_card` makes each
+       factor commutative, and `Subgroup.commute_of_normal_of_disjoint`
+       commutes cross terms.
 
-     For the remaining three conjuncts I searched `Subgroup.normalCore_eq_ker`
-     and `MulAction.toPermHom` for the coset action, `Equiv.Perm.lcm_cycleType`,
-     `Equiv.Perm.sum_cycleType_le`, and `Equiv.Perm.finRotate` for the exact
-     permutation bounds, plus `IsZGroup.of_squarefree` and the cyclic-group
-     APIs.  The unresolved boundary is first proving that two normal Sylow
-     subgroups of coprime prime orders generate `G` and commute, then deriving
-     injectivity of the `q`-coset action from non-normality of a `p`-Sylow.
-     The abelian branch additionally needs an explicit cyclic generator and a
-     disjoint `p`/`q` cycle embedding, followed by the cycle-type lower bound.
-     No closed artifact or construction library packaged these bridges. -/
-  sorry
+       The sole remaining sorry contains the two permutation-degree branches.
+       In the nonabelian branch, `Subgroup.normalCore_eq_ker` identifies the
+       coset-action kernel, but one must still build an equivalence between
+       the q-element coset type and `Fin q`, and prove the normal core of a
+       non-normal p-Sylow is bottom. In the abelian branch, one must obtain a
+       cyclic generator, construct disjoint p/q cycles in `Fin (p+q)`, and
+       formalize the cycle-type support lower bound excluding `Fin (p+q-1)`.
+       Searches of `LEMMA-INDEX.md`, the 173 closed artifacts,
+       `ConstructionTargets/`, and `YoungL2.lean` found no packaged bridge. -/
+    sorry
