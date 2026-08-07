@@ -80,10 +80,24 @@ theorem apm_m96j02
   alternative needs the same box bound plus the supremum estimate with factor
   `L*T^2/2`.
 
-  Searches of 166 closed artifacts, all `ConstructionTargets/`,
-  `YoungL2.lean`, `LEMMA-INDEX.md`, and partial boundary comments found no
-  preproved Taylor-kernel identity or adapter from this scalar encoding to
-  `IsPicardLindelof`.  The statement appears sound, but that adapter and the
-  endpoint FTC bookkeeping remain open.
+  PASS-1 statement-review blocker (codex).  The frozen statement is false
+  because `ContDiffOn` supplies only one-sided smoothness relative to `Icc 0 T`,
+  while the initial data and ODE use Mathlib's global `deriv` at the endpoint
+  `0`.  Take `g := fun _ _ => 0`, `α = β = 0`, `x := fun t => |t|`, and
+  `y := fun _ => 0`.  On every `Icc 0 T`, `x` agrees with the identity and is
+  therefore `ContDiffOn ℝ 2`; nevertheless `deriv x 0 = 0` because `abs` is
+  not two-sided differentiable there.  Mathlib's `deriv_abs` identifies
+  `deriv x` with the sign function, whose derivative is again `0` at the
+  nondifferentiability point by the definition of `deriv`; away from zero its
+  derivative is also zero.  Hence all encoded IVP hypotheses hold.  The zero
+  function satisfies the Volterra equation, but `x t = t ≠ 0 = y t` for every
+  positive `t`, so no positive `T` can satisfy the conclusion.
+
+  Searches of 172 closed artifacts, all `ConstructionTargets/`,
+  `YoungL2.lean`, `LEMMA-INDEX.md`, partial boundary comments, Mathlib's
+  Taylor/FTC sources, and `Analysis.ODE.Gronwall` found no way around this
+  semantic endpoint mismatch.  A valid encoding would need neighborhood
+  `ContDiff`/two-sided differentiability, or consistently use within-derivatives
+  at the endpoint; the frozen statement cannot be repaired in this pass.
   -/
   sorry
