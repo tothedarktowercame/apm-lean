@@ -12,6 +12,15 @@ None.
 None.
 -/
 
+/-- The structural pullback step in the Sylow cascade: a normal subgroup of a
+quotient pulls back to a normal subgroup containing the quotient kernel. -/
+lemma apm_b99A02_normal_comap_mk_and_le
+    {G : Type*} [Group G] (N : Subgroup G) [N.Normal]
+    (S : Subgroup (G ⧸ N)) (hS : S.Normal) :
+    (S.comap (QuotientGroup.mk' N)).Normal ∧
+      N ≤ S.comap (QuotientGroup.mk' N) := by
+  exact ⟨hS.comap (QuotientGroup.mk' N), QuotientGroup.le_comap_mk' N S⟩
+
 theorem apm_b99a02
     (G : Type*) [Group G] [Fintype G]
     (hG : Fintype.card G = 5075)
@@ -56,7 +65,7 @@ theorem apm_b99a02
   constructor
   · exact Sylow.normal_of_subsingleton P
   /-
-  Boundary after the compiled first Sylow count:
+  Boundary after closer hop 1 and the compiled first Sylow count:
   `Sylow.card_eq_multiplicity`, `Sylow.card_dvd_index`, and
   `card_sylow_modEq_one` prove that there is exactly one Sylow
   `5`-subgroup, so `Sylow.normal_of_subsingleton` closes `P.Normal`.
@@ -68,5 +77,14 @@ theorem apm_b99a02
   combining those transports.  The final subgroup `K = P R` additionally
   needs product-cardinality bookkeeping and the reverse implication from
   `K.Normal` to commutativity via all three normal Sylows.
+
+  New progress: `apm_b99A02_normal_comap_mk_and_le` packages the exact
+  correspondence-theorem step needed after finding the quotient Sylow:
+  for normal `S ≤ G ⩸ P`, its comap is normal in `G` and contains `P`.
+  This uses `Subgroup.Normal.comap` and `QuotientGroup.le_comap_mk'`.
+  The remaining bridge for `H` is therefore confined to proving uniqueness of
+  the Sylow `29`-subgroup in the quotient and establishing the comap cardinal
+  `25 * 29`; the latter can be approached through
+  `QuotientGroup.comapMk'OrderIso` plus `Subgroup.card_mul_index`.
   -/
   sorry
