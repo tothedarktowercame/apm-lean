@@ -16,6 +16,28 @@ def rightAnnihilator {R : Type*} [Ring R]
     (I : Submodule Rᵐᵒᵖ R) : Set R :=
   {r | ∀ x ∈ I, x * r = 0}
 
+/-- The set-valued right annihilator bundles as a Mathlib `Ideal`: closure
+under left multiplication uses that `I` is closed under right multiplication. -/
+def rightAnnihilatorIdeal {R : Type*} [Ring R]
+    (I : Submodule Rᵐᵒᵖ R) : Ideal R where
+  carrier := rightAnnihilator I
+  zero_mem' := by simp [rightAnnihilator]
+  add_mem' := by
+    intro a b ha hb x hx
+    simp only [rightAnnihilator, Set.mem_setOf_eq] at ha hb ⊢
+    rw [mul_add, ha x hx, hb x hx, zero_add]
+  smul_mem' := by
+    intro a b hb
+    simp only [rightAnnihilator, Set.mem_setOf_eq] at hb ⊢
+    intro x hx
+    change x * (a * b) = 0
+    rw [← mul_assoc]
+    exact hb (x * a) (by simpa using I.smul_mem (MulOpposite.op a) hx)
+
+@[simp] lemma mem_rightAnnihilatorIdeal {R : Type*} [Ring R]
+    (I : Submodule Rᵐᵒᵖ R) (r : R) :
+    r ∈ rightAnnihilatorIdeal I ↔ r ∈ rightAnnihilator I := Iff.rfl
+
 /-- Faithfulness of a right ideal. -/
 def IsFaithfulRightIdeal {R : Type*} [Ring R]
     (I : Submodule Rᵐᵒᵖ R) : Prop :=
@@ -68,7 +90,7 @@ theorem apm_b98j04
       (show Module.Finite Rᵐᵒᵖ M from inferInstance)
   obtain ⟨s, hsfin, hsind, hssup, hsimple⟩ := hdecomp
   /-
-  Boundary after the compiled semisimple reduction above:
+  Boundary after closer hop 1 and the compiled semisimple reduction above:
   `IsArtinianRing.isSemisimpleRing_iff_jacobson` turns `hwedderburn`
   into semisimplicity, and `IsSemisimpleModule.finite_tfae` supplies the
   finite independent family `s` of simple submodules with supremum `⊤`.
@@ -76,11 +98,19 @@ theorem apm_b98j04
   `rightAnnihilator`: lift the members of `s` from submodules of `M` to
   submodules of `R`, use `hminimal` to prove their annihilators are distinct
   maximal two-sided ideals, and apply a noncommutative CRT to obtain both the
-  matrix quotient maps and simultaneous residues.  Mathlib's
-  `Ideal.quotientInfRingEquivPiQuotient` is for `Ideal` (left ideals in the
-  noncommutative API), while `rightAnnihilator` here is deliberately only a
-  `Set`; no theorem converting these annihilator sets to the required
-  two-sided quotient/CRT data was found.  The global
+  matrix quotient maps and simultaneous residues.
+
+  New progress: `rightAnnihilatorIdeal` now performs the previously missing
+  conversion from the frozen set-valued annihilator to Mathlib's `Ideal R`.
+  Its `smul_mem'` proof uses the right-ideal closure of `I`, and
+  `mem_rightAnnihilatorIdeal` identifies membership definitionally. This
+  removes the set-to-left-ideal representation gap and exposes the next exact
+  boundary: source inspection shows `Ideal.quotientInfRingEquivPiQuotient`
+  itself assumes `[CommRing R]`, so it still cannot be applied to the frozen
+  noncommutative statement. The remaining work is a local two-sided CRT (the
+  annihilator is also right-multiplication closed), together with maximality
+  and distinctness from simplicity and `hminimal`, and then relating each
+  quotient to its chosen simple summand. The global
   `IsSemisimpleRing.exists_ringEquiv_pi_matrix_divisionRing` does not retain
   the required correspondence with the chosen summands of `M`.
   -/
