@@ -15,8 +15,8 @@
     "classification": "partial",
     "main": "lean/Main.lean",
     "sorry_count": 1,
-    "closer_hop": 2,
+    "closer_hop": 3,
     "proved_bridge": "apm_t01A01_factor_through_complement; apm_t01A01_nullhomotopic_of_factor",
-    "blocker": "Mathlib lacks the punctured-RP2 deformation retraction and fundamental-group computation. Null-homotopy descent through the inclusion is now compiled."
+    "blocker": "Mathlib lacks the punctured-RP2 deformation retraction and fundamental-group computation. Homotopy invariance of induced fundamental-groupoid maps can handle the first conjunct after contraction, but no contraction is available."
   }
 }

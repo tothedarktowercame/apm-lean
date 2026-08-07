@@ -97,5 +97,19 @@ theorem apm_t01a01 :
   inclusion to give exactly the frozen null-homotopy conclusion for `f`.
   Thus no further continuous-map composition or endpoint transport remains
   after the punctured-RP² factor has been contracted.
+
+  Closer hop 3 inspected Mathlib's lower-level homotopy-invariance machinery.
+  `FundamentalGroupoidFunctor.homotopicMapsNatIso` does give a natural
+  isomorphism between the functors induced by homotopic maps, and hence offers
+  a route from the eventual null-homotopy to the first (fundamental-group)
+  conjunct.  Its components change basepoints by conjugation, so this is not a
+  direct rewriting lemma for the frozen `FundamentalGroup.map`; nevertheless a
+  constant map has trivial image and conjugation preserves the identity.  This
+  sharpens the dependency graph but does not produce the missing null-homotopy.
+  Renewed searches of `FundamentalGroupoid/InducedMaps.lean`, the projective-
+  space sources, `LEMMA-INDEX.md`, the closed corpus, and git history still
+  found no contraction of `RP² \ {q}`, no `RP²` fundamental-group computation,
+  and no covering-space lifting theorem specialized enough to construct it.
+  The frozen theorem therefore remains honestly open at that topology bridge.
   -/
   sorry

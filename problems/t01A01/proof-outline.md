@@ -8,6 +8,13 @@ Closer hop 2 proves `apm_t01A01_nullhomotopic_of_factor`: any null-homotopy of
 that complement-valued factor descends through the subtype inclusion to the
 required null-homotopy of the original self-map.
 
+Closer hop 3 found
+`FundamentalGroupoidFunctor.homotopicMapsNatIso`, which can transport the
+eventual null-homotopy to triviality of the induced fundamental-group map
+(up to the basepoint conjugation encoded by its natural-isomorphism
+component). This reduces both frozen conclusions to constructing the
+complement-valued null-homotopy, but does not supply that construction.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t01A01.md`
 
