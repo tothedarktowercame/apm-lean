@@ -1,7 +1,6 @@
 # Proof Outline: b00J03
 
-The frozen theorem is elaborated in `lean/Main.lean`. Closer hop 1 added two
-compiled reductions for the final derived-subgroup argument:
+The frozen theorem is fully proved in `lean/Main.lean`.
 
 1. `apm_b00j03_commutator_ne_bot` proves that an explicit noncommuting pair
    forces `commutator G ≠ ⊥`, using
@@ -10,9 +9,9 @@ compiled reductions for the final derived-subgroup argument:
    commutator subgroup contained in a center of prime cardinality equals the
    center, using `Subgroup.eq_bot_or_eq_top_of_prime_card`.
 
-The remaining bridge is the order-`p^3` cardinality argument. Mathlib's
-`IsPGroup.card_center_eq_prime_pow` gives `|Z(G)| = p^k` with `0 < k`.
-Lagrange bounds `k ≤ 3`; one must formally exclude `k = 3` (the group is
+The order-`p^3` cardinality argument uses Mathlib's
+`IsPGroup.card_center_eq_prime_pow`, which gives `|Z(G)| = p^k` with `0 < k`.
+Lagrange bounds `k ≤ 3`; the proof excludes `k = 3` (the group is
 abelian) and `k = 2` (the center quotient has prime cardinality, hence is
 cyclic, again making the group abelian). Once `k = 1`, quotient cardinality
 is `p^2`, `IsPGroup.commutative_of_card_eq_prime_sq` makes the quotient
@@ -23,8 +22,6 @@ containment needed by helper 2.
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b00J03.md`
 
-## Follow-up Needed
-
-- formalize the prime-power exponent arithmetic and the two abelian
-  contradictions described above
-- derive the quotient cardinality and apply the quotient-commutative API
+The explicit noncommuting pair rules out both abelian cases and also proves
+the commutator subgroup is nontrivial. Prime cardinality of the center then
+forces the commutator subgroup to equal it.

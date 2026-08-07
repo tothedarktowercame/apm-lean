@@ -56,22 +56,64 @@ theorem apm_b00j03 :
       (∃ x y : G, x * y ≠ y * x) →
       Nat.card (Subgroup.center G) = p ∧
         Subgroup.center G = commutator G := by
-  /-
-  Boundary (closer hop 1): Mathlib's `IsPGroup.card_center_eq_prime_pow`
-  packages the class-equation step: the center has cardinality `p^k` for
-  some positive `k`.  Lagrange then gives `k ≤ 3`.  The cases `k = 3`
-  and `k = 2` must be excluded: the former makes the center all of `G`;
-  the latter makes `G/Z(G)` prime-order and hence cyclic, so
-  `commGroupOfCyclicCenterQuotient` makes `G` abelian.
-
-  This hop formally closes the two steps after that arithmetic exclusion.
-  `apm_b00j03_commutator_ne_bot` converts the supplied noncommuting pair
-  into `[G,G] ≠ ⊥`.  Once the quotient `G/Z(G)` is shown commutative,
-  `Subgroup.Normal.quotient_commutative_iff_commutator_le` gives
-  `[G,G] ≤ Z(G)`; `apm_b00j03_eq_of_le_center_of_prime_card` then proves
-  equality from `|Z(G)| = p`.  Searches of `LEMMA-INDEX.md`, all problem
-  artifacts, `ConstructionTargets/`, and Mathlib found no theorem
-  specializing the remaining prime-power cardinality exclusion to order
-  `p^3`; it remains the sole open bridge.
-  -/
-  sorry
+  intro p G _ _ hp hcard hnoncomm
+  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  have hp1 : 1 < p := hp.one_lt
+  have hp0 : 0 < p := hp.pos
+  have hGcard : Nat.card G = p ^ 3 := by
+    simpa [Nat.card_eq_fintype_card] using hcard
+  obtain ⟨k, hkpos, hkcard⟩ :=
+    IsPGroup.card_center_eq_prime_pow hGcard (by norm_num)
+  have hk_le : k ≤ 3 := by
+    apply (Nat.pow_le_pow_iff_right hp1).mp
+    rw [← hkcard, ← hGcard]
+    exact Nat.le_of_dvd (by rw [hGcard]; positivity)
+      (Subgroup.card_subgroup_dvd_card (Subgroup.center G))
+  have hk_ne_three : k ≠ 3 := by
+    intro hk3
+    have hcenter_card : Nat.card (Subgroup.center G) = Nat.card G := by
+      rw [hkcard, hk3, hGcard]
+    have hcenter_top : Subgroup.center G = ⊤ :=
+      (Subgroup.card_eq_iff_eq_top (Subgroup.center G)).mp hcenter_card
+    have hcomm_bot : commutator G = ⊥ :=
+      (commutator_eq_bot_iff_center_eq_top G).2 hcenter_top
+    exact (apm_b00j03_commutator_ne_bot hnoncomm) hcomm_bot
+  have hk_ne_two : k ≠ 2 := by
+    intro hk2
+    have hprod := Subgroup.card_eq_card_quotient_mul_card_subgroup
+      (Subgroup.center G)
+    have hqcard : Nat.card (G ⧸ Subgroup.center G) = p := by
+      apply Nat.eq_of_mul_eq_mul_right (by positivity : 0 < p ^ 2)
+      calc
+        Nat.card (G ⧸ Subgroup.center G) * p ^ 2
+            = Nat.card (G ⧸ Subgroup.center G) *
+                Nat.card (Subgroup.center G) := by rw [hkcard, hk2]
+        _ = Nat.card G := hprod.symm
+        _ = p * p ^ 2 := by rw [hGcard]; ring
+    letI : IsCyclic (G ⧸ Subgroup.center G) := isCyclic_of_prime_card hqcard
+    letI : CommGroup G := commGroupOfCyclicCenterQuotient
+      (QuotientGroup.mk' (Subgroup.center G)) (by
+        rw [QuotientGroup.ker_mk'])
+    obtain ⟨x, y, hxy⟩ := hnoncomm
+    exact hxy (mul_comm x y)
+  have hk : k = 1 := by omega
+  have hcenter_card : Nat.card (Subgroup.center G) = p := by
+    simpa [hk] using hkcard
+  have hprod := Subgroup.card_eq_card_quotient_mul_card_subgroup
+    (Subgroup.center G)
+  have hqcard : Nat.card (G ⧸ Subgroup.center G) = p ^ 2 := by
+    apply Nat.eq_of_mul_eq_mul_right hp0
+    calc
+      Nat.card (G ⧸ Subgroup.center G) * p
+          = Nat.card (G ⧸ Subgroup.center G) *
+              Nat.card (Subgroup.center G) := by rw [hcenter_card]
+      _ = Nat.card G := hprod.symm
+      _ = p ^ 2 * p := by rw [hGcard]; ring
+  have hquot_comm : Std.Commutative
+      (fun x y : G ⧸ Subgroup.center G => x * y) :=
+    ⟨IsPGroup.commutative_of_card_eq_prime_sq hqcard⟩
+  have hle : commutator G ≤ Subgroup.center G :=
+    Subgroup.Normal.quotient_commutative_iff_commutator_le.mp hquot_comm
+  exact ⟨hcenter_card,
+    apm_b00j03_eq_of_le_center_of_prime_card hp hcenter_card hle
+      (apm_b00j03_commutator_ne_bot hnoncomm)⟩
