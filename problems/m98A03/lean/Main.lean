@@ -67,5 +67,18 @@ theorem apm_m98a03
   partial mixed-exponent sibling `m94A04`), `ConstructionTargets`, and
   `YoungL2.lean` found no compiled theorem packaging this compact-domain
   differentiability argument.
+
+  A further search found Mathlib's general Banach-valued theorem
+  `hasFDerivAt_integral_of_dominated_of_fderiv_le` in
+  `Mathlib.Analysis.Calculus.ParametricIntegral`.  This gives a viable route
+  after rewriting the integrand as a `ContinuousMap` in `x`, and
+  `ContinuousMap.integral_apply` then recovers the frozen pointwise formula.
+  I also checked `contDiff_one_iff_hasFDerivAt`, which can supply the scalar
+  derivative and its continuity.  Applying the parametric theorem still
+  requires proving, uniformly for `u` in a sup-norm ball, an integrable bound
+  on the `ContinuousMap`-valued derivative, its strong measurability as a map
+  into continuous linear operators, and finally continuity of the resulting
+  integral in operator norm.  Neither the closed corpus nor the construction
+  libraries contain those missing compact-domain Nemytskii packaging lemmas.
   -/
   sorry
