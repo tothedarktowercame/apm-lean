@@ -94,6 +94,26 @@ lemma apm_t01J06_projectionPullback_isJPullback
   intro q v
   rfl
 
+lemma apm_t01J06_exists_projectionPullback
+    (alpha : apm_t01J06_SphereForm2) (p : apm_t01J06_S1) :
+    ∃ zeta : apm_t01J06_ProductForm2,
+      zeta = apm_t01J06_projectionPullback alpha ∧
+      apm_t01J06_isJPullback p zeta alpha := by
+  exact ⟨apm_t01J06_projectionPullback alpha, rfl,
+    apm_t01J06_projectionPullback_isJPullback alpha p⟩
+
+/-- Restriction along the sphere inclusion determines the sphere form
+pointwise. This isolates the remaining integral computation from any choice
+of `alpha`. -/
+lemma apm_t01J06_inclusionPullback_unique
+    (omega : apm_t01J06_AmbientForm2)
+    (alpha beta : apm_t01J06_SphereForm2)
+    (halpha : apm_t01J06_isInclusionPullback omega alpha)
+    (hbeta : apm_t01J06_isInclusionPullback omega beta) : alpha = beta := by
+  funext q
+  ext v
+  exact (halpha q v).trans (hbeta q v).symm
+
 theorem apm_t01j06
     (omega : apm_t01J06_AmbientForm2)
     (homega : apm_t01J06_isOmega omega)
@@ -109,10 +129,13 @@ theorem apm_t01j06
         zeta = apm_t01J06_projectionPullback alpha ∧
         apm_t01J06_isJPullback p zeta alpha := by
   /-
-  CLOSER HOP 1 boundary. The product-extension clause is now completely
-  discharged at the definition level by
-  `apm_t01J06_projectionPullback_isJPullback`: composing the alternating form
-  with the first projection sends `(v, 0)` back to `v`.
+  CLOSER HOP 2 boundary. The product-extension clause is now completely
+  packaged, including its existential quantifier, by
+  `apm_t01J06_exists_projectionPullback`: composing the alternating form with
+  the first projection sends `(v, 0)` back to `v`. The new lemma
+  `apm_t01J06_inclusionPullback_unique` also proves that restriction of a fixed
+  ambient form determines `alpha` pointwise, so no freedom in the supplied
+  sphere form can simplify or invalidate the period claim.
 
   The first clause requires identifying the custom
   `apm_t01J06_orientedCoefficient` of the restricted ambient form and
@@ -129,11 +152,15 @@ theorem apm_t01j06
   `extDeriv_pullback`, but not the global integral theorem required to turn
   closedness into vanishing of this frozen integral.
 
-  Searches covered `LEMMA-INDEX.md`, every `ConstructionTargets/` module,
-  closed form/integration siblings (`t92J09`, `t94J07`, `t94A10`, `t02A05`),
-  Mathlib's differential-form, Hausdorff-measure, sphere-integral, divergence,
-  and Stokes-related sources, and git history. The siblings independently
-  record the same missing manifold-form integration interface. Thus the
-  product pullback is closed, while the period and obstruction remain open.
+  Going beyond the prior Stokes-only route, I inspected Mathlib's box-integral
+  divergence theorem and sphere path/measure APIs, plus the hop-2 direct-flux
+  investigation in sibling `t02A05`. The divergence theorem is formulated for
+  box integrals and does not identify this subtype Hausdorff integral; the
+  sibling likewise stops at the missing radial-coordinate and sphere-moment
+  formulas. Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, the other
+  closed-form siblings (`t92J09`, `t94J07`, `t94A10`), differential forms,
+  Hausdorff measure, sphere integration, and git history still yield no
+  bridge. Thus restriction uniqueness and the full product existential are
+  closed, while the numerical period and Stokes obstruction remain open.
   -/
   sorry

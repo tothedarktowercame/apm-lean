@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The product projection pullback clause is proved. Remaining work is evaluating the custom Hausdorff sphere integral and supplying the absent Stokes bridge from closed ambient forms to vanishing sphere period.",
+  "closer_hop": 2,
+  "boundary": "The complete product-pullback existential and uniqueness of the sphere restriction are proved. Remaining work is evaluating the custom Hausdorff sphere integral and supplying either the absent Stokes bridge or direct sphere-moment formulas to exclude a closed ambient extension.",
   "imported_at": "2026-07-13T17:26:56.832807Z"
 }
