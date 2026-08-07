@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "boundary": "one strict compact-spectral gap estimate; all subsequent power convergence is formalized",
   "imported_at": "2026-07-13T17:26:54.318605Z"
 }

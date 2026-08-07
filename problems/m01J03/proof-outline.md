@@ -13,11 +13,17 @@ gap/operator-norm convergence boundary remains.
 - The frozen kernel is its eigenvalue-one eigenspace.
 - That eigenspace is finite-dimensional and has its canonical orthogonal
   projection, with the requested range and adjoint identities.
+- The square fixes that projection on both sides: `S.comp P = P` and
+  `P.comp S = P`.
+- A local normed-ring lemma proves that these identities, idempotence, and the
+  single estimate `‖S - P‖ < 1` imply `S ^ n → P` in norm.
 
 ## Remaining Boundary
 
-Restrict `T†T` to the orthogonal complement of the eigenvalue-one space, prove
-its norm is strictly below one using compactness/Fredholm isolation, and deduce
-geometric operator-norm convergence of its powers. Mathlib supplies the compact
-self-adjoint eigenspace decomposition and Fredholm alternative, but no packaged
-nonzero spectral isolation or power-to-projection theorem.
+Prove the now-isolated estimate `‖T†T - P‖ < 1`. This is the nonzero spectral
+isolation theorem for a compact operator, specialized to the positive
+self-adjoint contraction and its eigenvalue-one projection. Mathlib supplies
+the compact self-adjoint eigenspace decomposition, finite nonzero eigenspaces,
+and Fredholm alternative, but no packaged discreteness/isolation theorem for
+the nonzero spectrum. The geometric operator-norm convergence after this
+estimate is complete.
