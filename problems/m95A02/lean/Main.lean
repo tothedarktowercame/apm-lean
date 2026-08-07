@@ -41,6 +41,17 @@ lemma m95A02Value_zero (x : ℝ) : m95A02Value (0 : m95A02H) x = 0 := by
       (fun _ : ℤ => 0) by funext n; rw [show (0 : m95A02H) n = 0 from congrFun hz n]; simp]
   exact tsum_zero
 
+/-- Evaluation of a coordinate vector is the corresponding normalized Fourier
+mode.  This is the finite-coordinate core needed by the weak-convergence
+route. -/
+lemma m95A02Value_single (n : ℤ) (x : ℝ) :
+    m95A02Value (lp.single 2 n 1 : m95A02H) x = m95A02BasisFunction n x := by
+  unfold m95A02Value
+  rw [tsum_eq_single n]
+  · simp
+  · intro j hj
+    simp [hj]
+
 /-- The custom maximum-distance encoding vanishes on the diagonal. -/
 lemma m95A02MaxDist_self (f : m95A02H) : m95A02MaxDist f f = 0 := by
   have hset :
@@ -79,11 +90,7 @@ theorem apm_m95a02 :
     · exact hbn
     · intro x
       rw [hbn]
-      unfold m95A02Value
-      rw [tsum_eq_single n]
-      · simp
-      · intro j hj
-        simp [hj]
+      exact m95A02Value_single n x
   · /-
     PASS-1 boundary (Codex): the canonical Hilbert basis clause is proved,
     and `m95A02Value_zero` plus `m95A02MaxDist_self` now formally verify the
@@ -119,5 +126,16 @@ theorem apm_m95a02 :
     artifacts, `ConstructionTargets/`, `YoungL2.lean`, boundary comments, and
     git history found no stronger route. Those analytic and order-theory
     bridges were not completed within this pass.
+
+    Closer hop 1 extracted `m95A02Value_single`, so evaluation of every basis
+    coordinate is now available independently of the bundled basis proof. A
+    renewed Mathlib source search also found `lp.inner_single_right`, which
+    supplies the previously missing algebraic Riesz-coordinate identity
+    `⟪f, single j 1⟫ = ⟪f j, 1⟫`. Thus weak convergence can in principle be
+    specialized to coordinate convergence without constructing a new Riesz
+    theorem. The still-open bridge is applying the weak-space filter criterion
+    with these inner-product functionals and then proving a uniform bilateral
+    tail estimate strong enough for `m95A02MaxDist`; no corpus artifact
+    packages that analytic sum.
     -/
     sorry
