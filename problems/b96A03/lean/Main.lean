@@ -64,15 +64,26 @@ theorem apm_b96a03 :
     · intro g α
       rw [← irreducible_iff_prime, ← irreducible_iff_prime]
       exact MulEquiv.irreducible_iff g.1
-    · -- Boundary: searched `MulEquiv.irreducible_iff`,
+    · -- CLOSER HOP 1 boundary: searched `MulEquiv.irreducible_iff`,
       -- `MvPolynomial.isUnit_iff_eq_C_of_isReduced`, `MulAction.stabilizer`,
       -- `Finset.prod_bij`, `Prime.dvd_finset_prod_iff`, and
       -- `Finset.prod_primes_dvd`.  The last theorem assumes
       -- `Subsingleton Rˣ`, so it does not apply to `MvPolynomial n F`, whose
       -- units are the nonzero constants classified by the MvPolynomial lemma.
+      -- New progress: the immediately preceding theorem
+      -- `Multiset.prod_primes_dvd` does *not* assume `Subsingleton Rˣ`.
+      -- Instead it accepts exactly the orbit fact needed here:
+      -- `∀ a, s.countP (Associated a) ≤ 1`.  Thus the product-divisibility
+      -- step can be routed around the unusable finset theorem once purity has
+      -- shown that associated orbit elements are equal; no custom UFD
+      -- factorization argument is required.
+      --
       -- The remaining implication therefore requires a custom subgroup of
       -- automorphisms sending `π` to an associate, extraction and uniqueness
-      -- of its coefficient character into `Fˣ`, and a pairwise-nonassociated
-      -- prime-product divisibility proof.  Orbit reindexing and cancellation
-      -- must then transfer primality to the custom fixed subring.
+      -- of its coefficient character into `Fˣ`.  After purity trivializes
+      -- that character, orbit reindexing supplies invariance and the
+      -- `countP` hypothesis for `Multiset.prod_primes_dvd`; cancellation then
+      -- transfers primality to the custom fixed subring.  The open technical
+      -- bridge is now confined to constructing that subgroup/character and
+      -- proving the orbit's `countP` uniqueness condition.
       sorry
