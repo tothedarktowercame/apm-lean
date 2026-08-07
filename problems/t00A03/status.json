@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Hop 1 proves that the finite embedded-circle complement and each of its connected components are open. Surface classification under cutting and the Euler-characteristic incidence count remain.",
+  "closer_progress": "Hop 1 proves that the finite embedded-circle complement and each component are open. Hop 2 proves that maximality forces every essential embedded circle contained in the cut, or in one component, to be parallel to a selected curve. The classification of such components as pants and the Euler-characteristic incidence count remain unavailable.",
   "imported_at": "2026-07-13T17:26:56.391573Z"
 }

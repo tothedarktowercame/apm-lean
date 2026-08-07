@@ -84,6 +84,42 @@ lemma apm_t00a03_component_isOpen
     ChartedSpace.locallyConnectedSpace apm_t00a03_E2 F
   exact (apm_t00a03_cut_isOpen curves hemb).connectedComponentIn
 
+/-- The maximality hypothesis can be used directly for any essential embedded
+circle lying in the cut-open complement.  This isolates the precise input that
+a future surface-classification argument must apply inside each component. -/
+lemma apm_t00a03_parallel_of_range_subset_cut
+    {F : Type} [TopologicalSpace F] {n : ℕ}
+    (curves : Fin n → apm_t00a03_Curve F)
+    (hmax : ∀ c : apm_t00a03_Curve F,
+      Topology.IsEmbedding c → ¬apm_t00a03_nullHomotopic c →
+      (∀ i, apm_t00a03_disjoint c (curves i)) →
+      ∃ i, apm_t00a03_parallel c (curves i))
+    (c : apm_t00a03_Curve F) (hc : Topology.IsEmbedding c)
+    (hessential : ¬apm_t00a03_nullHomotopic c)
+    (hcut : range c ⊆ apm_t00a03_cut curves) :
+    ∃ i, apm_t00a03_parallel c (curves i) := by
+  apply hmax c hc hessential
+  intro i
+  rw [apm_t00a03_disjoint, Set.disjoint_left]
+  intro x hxc hxi
+  have hxcut := hcut hxc
+  exact hxcut (mem_iUnion_of_mem i hxi)
+
+/-- Component-local form of `apm_t00a03_parallel_of_range_subset_cut`. -/
+lemma apm_t00a03_parallel_of_range_subset_component
+    {F : Type} [TopologicalSpace F] {n : ℕ}
+    (curves : Fin n → apm_t00a03_Curve F)
+    (hmax : ∀ c : apm_t00a03_Curve F,
+      Topology.IsEmbedding c → ¬apm_t00a03_nullHomotopic c →
+      (∀ i, apm_t00a03_disjoint c (curves i)) →
+      ∃ i, apm_t00a03_parallel c (curves i))
+    (x : F) (c : apm_t00a03_Curve F) (hc : Topology.IsEmbedding c)
+    (hessential : ¬apm_t00a03_nullHomotopic c)
+    (hcomponent : range c ⊆ connectedComponentIn (apm_t00a03_cut curves) x) :
+    ∃ i, apm_t00a03_parallel c (curves i) := by
+  exact apm_t00a03_parallel_of_range_subset_cut curves hmax c hc hessential
+    (hcomponent.trans (connectedComponentIn_subset _ _))
+
 theorem apm_t00a03 :
     ∀ (g n : ℕ) (F : Type)
       [TopologicalSpace F] [T2Space F] [CompactSpace F]
@@ -125,5 +161,17 @@ theorem apm_t00a03 :
   `HomologicalComplex.eulerChar` API does not connect the frozen singular
   homology data to topological cutting.  This full surface-topology development
   remains open.
+
+  CLOSER HOP 2: `apm_t00a03_parallel_of_range_subset_cut` and its component-
+  local corollary now extract the exact consequence of maximality needed by a
+  classification proof: every essential embedded circle contained in a
+  complementary component is parallel to one of the selected curves.  Further
+  searches included Jordan/Schoenflies separation, embedded-circle complement,
+  locally connected component, and surface-classification APIs.  They returned
+  only general connected-component containment/image lemmas; no theorem turns
+  this no-new-essential-curve property into a homeomorphism with
+  `apm_t00a03_Pants`, nor connects the singular-homology genus hypothesis to
+  Euler characteristic under cutting.  Consequently neither frozen conjunct
+  can yet be completed without the same missing surface-topology development.
   -/
   sorry
