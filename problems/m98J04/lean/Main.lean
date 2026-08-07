@@ -69,6 +69,17 @@ lemma apm_m98J04_arcLength_line (a b α β : ℝ) (hab : a < b) :
   simp_rw [apm_m98J04_deriv_line a b α β]
   simp [intervalIntegral.integral_const]
 
+/-- The computed graph length of the line is the Euclidean endpoint distance. -/
+lemma apm_m98J04_arcLength_line_eq_sqrt (a b α β : ℝ) (hab : a < b) :
+    apm_m98J04_arcLength a b (apm_m98J04_line a b α β) =
+      Real.sqrt ((b - a) ^ 2 + (β - α) ^ 2) := by
+  rw [apm_m98J04_arcLength_line a b α β hab]
+  have hba : 0 < b - a := sub_pos.mpr hab
+  rw [← sq_eq_sq₀ (mul_nonneg hba.le (Real.sqrt_nonneg _))
+    (Real.sqrt_nonneg _)]
+  rw [mul_pow, Real.sq_sqrt (by positivity), Real.sq_sqrt (by positivity)]
+  field_simp
+
 theorem apm_m98j04 :
     (∀ (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ),
       a < b →
@@ -103,7 +114,10 @@ theorem apm_m98j04 :
     · /-
       PARTIAL boundary: the line's derivative and its exact arc length are now
       proved above as `apm_m98J04_deriv_line` and
-      `apm_m98J04_arcLength_line`. Global minimality is the convexity/Jensen
+      `apm_m98J04_arcLength_line`; closer hop 1 further normalizes this length
+      to the Euclidean endpoint distance in
+      `apm_m98J04_arcLength_line_eq_sqrt`. Global minimality is the
+      convexity/Jensen
       estimate for
       `p ↦ sqrt (1 + p²)`, followed by the fundamental theorem of calculus for
       an arbitrary globally `C¹` competitor to identify the integral of its

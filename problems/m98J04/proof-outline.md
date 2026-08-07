@@ -1,12 +1,18 @@
 # Proof Outline: m98J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt is `lean/Main.lean`. It proves admissibility and
+the complete endpoint-length calculation for the straight line.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-m98J04.md`
+- `apm_m98J04_deriv_line` computes the constant slope.
+- `apm_m98J04_arcLength_line` evaluates the custom interval integral.
+- `apm_m98J04_arcLength_line_eq_sqrt` proves that value equals the Euclidean
+  endpoint distance `sqrt ((b-a)² + (β-α)²)`.
+- The theorem proves the line is globally `C¹` and has the required endpoints.
 
-## Follow-up Needed
+## Remaining Boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Derive Euler–Lagrange from the first variation using differentiation under
+  the integral, integration by parts, and the fundamental lemma.
+- Prove every admissible graph has length at least its endpoint distance by
+  rewriting the integrand as the norm of `(1, deriv y)` and applying the
+  integral triangle inequality plus the fundamental theorem of calculus.
