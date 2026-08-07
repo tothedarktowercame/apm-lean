@@ -58,25 +58,74 @@ theorem apm_m01j02
       idempotence of the asserted sum and then using positivity of an
       orthogonal projection to show each cross term is zero. No packaged lemma
       for the full equality with `(M ⊔ N).starProjection` was found.
+
+      Closer hop 1 additionally searched `IsStarProjection.add`,
+      `isStarProjection_iff_eq_starProjection_range`, and the idempotent-ring
+      API.  `IsStarProjection.add` proves only the forward construction from a
+      zero product.  Expanding idempotence yields `P_M P_N + P_N P_M = 0`, but
+      the library has no converse lemma extracting `P_M P_N = 0`; formalizing
+      that extraction still requires the inner-product positivity calculation
+      from the informal proof.  The other three former holes are now closed
+      below using `ContinuousLinearMap.adjoint_comp` and pointwise composition
+      algebra.
       -/
       sorry
     · constructor
-      · /-
-        Boundary for the product criterion: algebraically, adjoint reversal
-        via `ContinuousLinearMap.adjoint_comp` and self-adjointness of each
-        `starProjection` turn self-adjointness of the product into commutation;
-        conversely commutation gives both idempotence and self-adjointness.
-        The attempted direct rewrite exposed a representation mismatch between
-        `star` and `ContinuousLinearMap.adjoint`, and the nested `.comp`
-        associativity normalization remains to be packaged into helper lemmas.
-        -/
-        sorry
+      · -- Mathlib: `ContinuousLinearMap.adjoint_comp` and self-adjoint projections.
+        constructor
+        · rintro ⟨A, _, hself, _⟩
+          have hM : ContinuousLinearMap.adjoint M.starProjection = M.starProjection :=
+            isSelfAdjoint_starProjection M
+          have hN : ContinuousLinearMap.adjoint N.starProjection = N.starProjection :=
+            isSelfAdjoint_starProjection N
+          rw [ContinuousLinearMap.adjoint_comp, hN, hM] at hself
+          exact hself.symm
+        · intro hcomm
+          refine ⟨M ⊓ N, ?_, ?_, ?_⟩
+          · ext x
+            simp only [ContinuousLinearMap.comp_apply]
+            have hc : M.starProjection (N.starProjection (N.starProjection x)) =
+                N.starProjection (M.starProjection (N.starProjection x)) := by
+              exact DFunLike.congr_fun hcomm (N.starProjection x)
+            rw [← hc]
+            rw [M.starProjection_eq_self_iff.mpr (M.starProjection_apply_mem _)]
+            rw [N.starProjection_eq_self_iff.mpr (N.starProjection_apply_mem _)]
+          · have hM : ContinuousLinearMap.adjoint M.starProjection = M.starProjection :=
+              isSelfAdjoint_starProjection M
+            have hN : ContinuousLinearMap.adjoint N.starProjection = N.starProjection :=
+              isSelfAdjoint_starProjection N
+            rw [ContinuousLinearMap.adjoint_comp, hN, hM]
+            exact hcomm.symm
+          · ext x
+            constructor
+            · rintro ⟨y, rfl⟩
+              constructor
+              · exact M.starProjection_apply_mem _
+              · rw [hcomm]
+                exact N.starProjection_apply_mem _
+            · intro hx
+              refine ⟨x, ?_⟩
+              change M.starProjection (N.starProjection x) = x
+              rw [N.starProjection_eq_self_iff.mpr hx.2,
+                M.starProjection_eq_self_iff.mpr hx.1]
       · intro hcomm
         refine ⟨?_, ?_, ?_⟩
-        · /- Same composition-normalization boundary as above. -/
-          sorry
-        · /- Same adjoint-representation boundary as above. -/
-          sorry
+        ·
+          ext x
+          simp only [ContinuousLinearMap.comp_apply]
+          have hc : M.starProjection (N.starProjection (N.starProjection x)) =
+              N.starProjection (M.starProjection (N.starProjection x)) := by
+            exact DFunLike.congr_fun hcomm (N.starProjection x)
+          rw [← hc]
+          rw [M.starProjection_eq_self_iff.mpr (M.starProjection_apply_mem _)]
+          rw [N.starProjection_eq_self_iff.mpr (N.starProjection_apply_mem _)]
+        ·
+          have hM : ContinuousLinearMap.adjoint M.starProjection = M.starProjection :=
+            isSelfAdjoint_starProjection M
+          have hN : ContinuousLinearMap.adjoint N.starProjection = N.starProjection :=
+            isSelfAdjoint_starProjection N
+          rw [ContinuousLinearMap.adjoint_comp, hN, hM]
+          exact hcomm.symm
         · ext x
           constructor
           · rintro ⟨y, rfl⟩
