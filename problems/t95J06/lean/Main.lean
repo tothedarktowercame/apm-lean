@@ -1,4 +1,7 @@
 import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t95J06
@@ -9,12 +12,16 @@ None.
 
 ## Encoding questions
 
-Mathlib has no packaged predicate for an embedded subset of `S⁵` to be a
-compact orientable smooth surface, nor for every connected component of such
-a surface to be diffeomorphic to a torus. Those classification predicates are
-opaque and fully typed. The sphere in `ℂ³`, the Hopf flow, the displayed
-torus, and invariance under the flow remain explicit.
+The embedded surface is the actual subtype of `S⁵`. Compactness and its
+two-dimensional manifold charts are native Mathlib structure. Orientability
+is encoded concretely by integral top homology `H₂ = ℤ` on each connected
+component, following `t00A02`. The conclusion identifies each actual
+component with the genuine torus `Circle × Circle`; for smooth surfaces this
+is the corresponding diffeomorphism type.
 -/
+
+open CategoryTheory
+open scoped Manifold
 
 noncomputable section
 
@@ -37,11 +44,28 @@ def apm_t95j06_IsInvariant
     (F : Set apm_t95j06_S5) : Prop :=
   ∀ z ∈ F, ∀ t : ℝ, H (z, t) ∈ F
 
-opaque apm_t95j06_IsCompactOrientableSurface
-    (F : Set apm_t95j06_S5) : Prop
+abbrev apm_t95j06_E2 := EuclideanSpace ℝ (Fin 2)
+abbrev apm_t95j06_I2 := 𝓘(ℝ, apm_t95j06_E2)
 
-opaque apm_t95j06_EveryComponentDiffeomorphicToTorus
-    (F : Set apm_t95j06_S5) : Prop
+abbrev apm_t95j06_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
+
+def apm_t95j06_IsCompactOrientableSurface
+    (F : Set apm_t95j06_S5) : Prop :=
+  IsCompact F ∧
+  ∃ charts : ChartedSpace apm_t95j06_E2 F,
+    let _ := charts
+    IsManifold apm_t95j06_I2 ⊤ F ∧
+    ∀ x : F,
+      Nonempty
+        (apm_t95j06_H 2 {y : F // y ∈ connectedComponent x} ≅
+          ModuleCat.of ℤ ℤ)
+
+def apm_t95j06_EveryComponentDiffeomorphicToTorus
+    (F : Set apm_t95j06_S5) : Prop :=
+  ∀ x : F,
+    Nonempty ({y : F // y ∈ connectedComponent x} ≃ₜ Circle × Circle)
 
 theorem apm_t95j06
     (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
