@@ -62,6 +62,15 @@ def apm_m01J06_isBifurcationLoad (K lamStar : ℝ) : Prop :=
       apm_m01J06_nontrivial φ ∧
       ∀ s ∈ Icc (0 : ℝ) 1, |φ s| < δ
 
+/-- Scalar variations commute with the frozen within-derivative.  The
+field-specific Mathlib lemma avoids carrying a differentiability hypothesis
+at the endpoints. -/
+private lemma apm_m01J06_derivWithin_smul_variation
+    (ε : ℝ) (η : ℝ → ℝ) (s : ℝ) :
+    derivWithin (fun t ↦ ε * η t) (Icc 0 1) s =
+      ε * derivWithin η (Icc 0 1) s := by
+  exact derivWithin_const_mul_field ε
+
 private lemma apm_m01J06_mode_hasDerivAt (w s : ℝ) :
     HasDerivAt (fun t : ℝ ↦ Real.sin (w * t))
       (w * Real.cos (w * s)) s := by
@@ -145,6 +154,17 @@ theorem apm_m01j06
     but no searched theorem derives that first variation for this `Icc`
     set-integral from only `ContDiffOn`; uniform domination in `ε` and the
     conversion between the resulting derivatives and `derivWithin` remain.
+
+    Closer hop 3 proves the scalar variation identity above as
+    `apm_m01J06_derivWithin_smul_variation`, using
+    `derivWithin_const_mul_field`; it remains valid at the endpoints without
+    an extra differentiability hypothesis. Inspection of
+    `ParametricIntegral.lean` found
+    `hasDerivAt_integral_of_dominated_loc_of_deriv_le`, the most direct route
+    for the first variation. Applying it still requires deriving a uniform
+    integrable majorant from `ContDiffOn` on the compact interval and then
+    converting the set integral to the integration-by-parts interface. No
+    fundamental-lemma declaration for endpoint-zero test functions was found.
     -/
     sorry
   · constructor
@@ -163,6 +183,12 @@ theorem apm_m01j06
       that any existing derivative is zero; the frozen predicate separately
       requires `DifferentiableAt`, so evenness does not route around the
       missing differentiation-under-the-set-integral proof.
+
+      Closer hop 3 closes the bending-term rewrite with
+      `apm_m01J06_derivWithin_smul_variation`. Consequently this clause can be
+      reduced to differentiability at zero of the cosine parameter integral
+      plus the elementary derivative of an `ε²` multiple; the former still
+      needs the same dominated-parametric-integral assembly.
       -/
       sorry
     · constructor
@@ -183,6 +209,12 @@ theorem apm_m01j06
           route requires proving constancy of the Wronskian/energy on `Icc`,
           obtaining the sine normal form, then applying `Real.cos_eq_zero_iff`
           and positivity to extract the natural-number frequency index.
+
+          Closer hop 3 searched the ODE and trigonometric corpus again. No
+          uniqueness theorem accepts `iteratedDerivWithin` on a closed
+          interval directly, and no mixed Dirichlet--Neumann harmonic-mode
+          classifier is packaged. The Wronskian/energy-constancy route remains
+          the smallest local development.
           -/
           sorry
         · rintro ⟨m, rfl⟩
@@ -204,5 +236,10 @@ theorem apm_m01j06
         reusable for this custom BVP.  The now-compiled exact linear critical
         modes establish the kernel direction but do not supply the nonlinear
         solution branch required by the quantified frozen predicate.
+
+        Closer hop 3 additionally searched the complete Mathlib tree and the
+        closed corpus for Crandall--Rabinowitz, Lyapunov--Schmidt, shooting,
+        and pendulum-period results; none were found. This remains an
+        independent, genuine bifurcation-theory boundary.
         -/
         sorry

@@ -17,6 +17,8 @@ the explicit critical sine modes are compiled.
 - For every `m`, the sine at frequency `(2m+1)π/2` is a nontrivial linear mode
   at the stated critical load. Thus the reverse implication from a listed
   critical load to existence of a mode is complete.
+- `apm_m01J06_derivWithin_smul_variation` proves that scalar variations commute
+  with `derivWithin` on the frozen interval, including its endpoints.
 
 ## Remaining Boundaries
 
@@ -26,3 +28,9 @@ the explicit critical sine modes are compiled.
   mode has one of the listed frequencies.
 - Establish the genuine local nonlinear bifurcation theorem near every
   critical load.
+
+Closer hop 3 identifies
+`hasDerivAt_integral_of_dominated_loc_of_deriv_le` as the direct first-
+variation API. The remaining prerequisite is a uniform integrable majorant
+deduced from compact-interval `ContDiffOn`; after that, set/interval-integral
+conversion and a locally developed fundamental lemma are still needed.
