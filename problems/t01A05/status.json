@@ -30,6 +30,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 1 proves the encoded integral and intersection-number equalities and proves compactness of lifted submanifolds under a T2 base. The frozen theorem remains blocked on positive-degree compact cover construction with computed H2, and lacks the T2/finite-fiber hypotheses needed by the compact-preimage route.",
+  "closer_progress": "Closer hop 2 additionally isolates closedness of the downstairs carrier as the exact local input for compactness of a lifted submanifold. The frozen predicate supplies only compactness, which does not imply closedness without T2; the theorem also remains blocked on positive-degree compact cover construction with computed H2 and on the k = 0 Nat.card ambiguity.",
   "imported_at": "2026-07-13T17:26:56.731998Z"
 }

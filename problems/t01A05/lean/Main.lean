@@ -94,6 +94,18 @@ lemma t01A05_preimageSubmanifold_compact_of_t2
   letI : CompactSpace Xtilde := isCompact_univ_iff.mp hXtilde
   exact hZ.preimage_continuous pi.hom.continuous
 
+/-- The exact topological input needed for compactness of a lifted carrier is
+closedness downstairs; no separation axiom on the whole base is otherwise
+used. -/
+lemma t01A05_preimageSubmanifold_compact_of_isClosed
+    {d : ℕ} {X Xtilde : TopCat}
+    (hXtilde : IsCompact (Set.univ : Set Xtilde)) (pi : Xtilde ⟶ X)
+    (Z : T01A05OrientedSubmanifold d X)
+    (hZ : IsClosed Z.carrier) :
+    IsT01A05CompactSubmanifold (t01A05PreimageSubmanifold pi Z) := by
+  letI : CompactSpace Xtilde := isCompact_univ_iff.mp hXtilde
+  exact (hZ.preimage pi.hom.continuous).isCompact
+
 theorem apm_t01a05 :
     (∀ k : ℕ, 0 < k → ∃ (X Xtilde : TopCat) (π : Xtilde ⟶ X),
       IsT01A05CompactOrientedManifold 2 X ∧
@@ -120,14 +132,19 @@ theorem apm_t01a05 :
             (t01A05PreimageSubmanifold π Z₂) =
           k * t01A05IntersectionNumber (n := n) Z₁ Z₂) := by
   /-
-  Boundary (closer hop 1): the encoded pullback-integral formula and the
+  Boundary (closer hop 2): the encoded pullback-integral formula and the
   numerical intersection formula are now proved above as
   `t01A05_pullback_integral_eq` and
   `t01A05_preimage_intersectionNumber_eq`; both reduce to zero because the
   current encodings evaluate a homology morphism at zero and define the
   intersection number as zero.  The compact-preimage step also compiles as
   `t01A05_preimageSubmanifold_compact_of_t2` under the standard Hausdorff
-  hypothesis on the base.
+  hypothesis on the base.  This hop further isolates the exact missing input:
+  `t01A05_preimageSubmanifold_compact_of_isClosed` proves the lifted carrier
+  compact from `IsClosed Z.carrier`, without any separation axiom on all of
+  `X`.  The frozen `IsT01A05CompactSubmanifold` supplies only compactness of
+  the carrier, however, and compact subsets need not be closed in a non-T2
+  space, so this sharper lemma still cannot be applied.
 
   The frozen theorem does not assume `T2Space X`, and its `k`-sheeted
   predicate permits `k = 0` in parts (b) and (c), where `Nat.card = 0` does
