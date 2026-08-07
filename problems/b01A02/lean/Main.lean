@@ -19,6 +19,29 @@ rather than merely asserting numerical consequences of them.
 def apmSmallestPrimeDivisor (p n : ℕ) : Prop :=
   p.Prime ∧ p ∣ n ∧ ∀ q : ℕ, q.Prime → q ∣ n → p ≤ q
 
+/-- The custom smallest-prime predicate agrees with Mathlib's `Nat.minFac`. -/
+lemma apmSmallestPrimeDivisor_eq_minFac {p n : ℕ}
+    (h : apmSmallestPrimeDivisor p n) : p = n.minFac := by
+  rcases h with ⟨hp, hpdvd, hleast⟩
+  have hn1 : n ≠ 1 := by
+    intro hn
+    subst n
+    exact hp.not_dvd_one hpdvd
+  apply le_antisymm
+  · exact hleast n.minFac (Nat.minFac_prime hn1) (Nat.minFac_dvd n)
+  · exact Nat.minFac_le_of_dvd hp.two_le hpdvd
+
+/-- A subgroup whose index is the smallest prime divisor of the group order is
+normal. Mathlib now packages the coset-action argument directly. -/
+lemma apm_b01A02_normal_of_smallest_prime_index
+    (G : Type*) [Group G] [Fintype G]
+    (p : ℕ) (H : Subgroup G)
+    (hp : apmSmallestPrimeDivisor p (Fintype.card G))
+    (hindex : H.index = p) : H.Normal := by
+  apply Subgroup.normal_of_index_eq_minFac_card
+  rw [hindex]
+  simpa using apmSmallestPrimeDivisor_eq_minFac hp
+
 theorem apm_b01a02 :
     (∀ (G : Type*) [Group G] [Fintype G]
       (p : ℕ) (H : Subgroup G),
@@ -30,17 +53,21 @@ theorem apm_b01a02 :
         (∃ H : Subgroup G,
           H.Normal ∧ Nat.card H = 85 ∧ IsCyclic H) ∧
         IsCyclic G) := by
-  -- SKIPPED: two-part finite group theory.
-  -- (a) Subgroup of index p (smallest prime divisor of |G|) is normal:
-  --     action of G on G/H gives homomorphism G → S_p; kernel ⊆ H;
-  --     |G/Ker| divides p! and |G|, forcing |G/Ker| | p, hence H=Ker is normal.
-  -- (b) Groups of order 255=3·5·17 are cyclic:
-  --     Sylow theorems: n_17=1 (normal subgroup of order 17),
-  --     n_5|51, n_5≡1(mod 5) → n_5=1 or 51; n_3|85, n_3≡1(mod 3) → n_3=1 or 85;
-  --     counting argument shows at least one of n_3=1 or n_5=1;
-  --     normal subgroup of order 85 is cyclic (gcd(5,17)=1);
-  --     quotient by it has order 3, etc.
-  -- Blocker: requires Sylow theorems (NOT in Mathlib as ready-to-use),
-  -- group actions on cosets, counting arguments.
-  -- APIs: `Subgroup.index`, `Subgroup.Normal`, `Sylow` — Sylow theory absent.
+  /-
+  PARTIAL boundary (closer hop 1): the complete first conjunct is now proved
+  above as `apm_b01A02_normal_of_smallest_prime_index`. The original skip was
+  stale: Mathlib now contains both the Sylow theorems and
+  `Subgroup.normal_of_index_eq_minFac_card`, which packages exactly the
+  coset-action/kernel argument. The helper
+  `apmSmallestPrimeDivisor_eq_minFac` bridges the frozen custom predicate to
+  that API.
+
+  The order-255 conjunct remains. Source and corpus inspection identified the
+  usable ingredients `Sylow.card_dvd_index`, `card_sylow_modEq_one`, and
+  `Sylow.normal_of_subsingleton`; sibling `b93A01` demonstrates the uniqueness
+  arithmetic. The remaining assembly is constructing the normal Sylow-17
+  subgroup, adjoining a Sylow-5 subgroup to obtain order 85, applying the
+  newly closed index-three theorem, then proving cyclicity of the order-85
+  subgroup and triviality of the final order-three conjugation action.
+  -/
   sorry
