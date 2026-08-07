@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "notes": "One sorry remains. The full range of diagonal eigenvalues is now proved to be contained in the custom spectrum; zero spectrality, reverse inclusion, completeness, multiplication, power limit, and compactness remain.",
   "imported_at": "2026-07-13T17:26:54.840619Z"
 }

@@ -92,6 +92,13 @@ lemma apm_m94J02_eigenvalue_mem_spectrum (j : ℕ) :
   have := congrFun this j
   simp [hej] at this
 
+/-- The complete range of diagonal entries lies in the custom spectrum. -/
+lemma apm_m94J02_diagonal_range_subset_spectrum :
+    Set.range (fun n : ℕ ↦ (2 : ℂ) ^ (-(n : ℤ))) ⊆
+      apm_m94J02_spectrum := by
+  rintro z ⟨n, rfl⟩
+  exact apm_m94J02_eigenvalue_mem_spectrum n
+
 /-- The dilation is a contraction for the displayed weighted norm. -/
 lemma apm_m94J02_norm_T_le (a : ℕ → ℂ) (ha : apm_m94J02_mem a) :
     apm_m94J02_norm (apm_m94J02_T a) ≤ apm_m94J02_norm a := by
@@ -182,6 +189,15 @@ theorem apm_m94j02 :
   spectrum theorem.  The remaining bridge therefore still requires the
   diagonal subsequence/tail construction and explicit reciprocal multiplier
   bounds away from `{0} ∪ range (2⁻ⁿ)`.
+
+  Closer hop 3 packages the pointwise eigenvalue result into the set-level
+  theorem `apm_m94J02_diagonal_range_subset_spectrum`. Consequently the
+  diagonal-range half of the forward spectrum inclusion is complete. The
+  point `0` still needs the bounded-inverse contradiction (coordinate vectors
+  force inverse norms growing like `2^n`), while the reverse inclusion still
+  needs uniform reciprocal bounds away from the closed diagonal set. Searches
+  of Mathlib's zpow growth, diagonal multiplier, and spectrum APIs found no
+  theorem matching this custom unbundled inverse encoding.
   -/
   have hremaining :
       (∀ a : ℕ → ℕ → ℂ,

@@ -15,6 +15,16 @@ inclusion in the statement's custom spectrum.
   pointwise estimate `‖2⁻ⁿ‖ ≤ 1`. This is reusable in the compactness tail
   estimate and in the spectrum's bounded-inverse arguments.
 
+## Closer hop 3 progress
+
+- `apm_m94J02_diagonal_range_subset_spectrum` packages the individual
+  coordinate-eigenvector contradictions into the set inclusion
+  `range (n ↦ 2⁻ⁿ) ⊆ spectrum`.
+- For the remaining forward inclusion at zero, a hypothetical bounded inverse
+  must send the `n`th coordinate vector to `2ⁿ` times that vector, contradicting
+  its fixed operator bound as `n → ∞`. This quantitative argument is not
+  packaged for the file's custom unbundled inverse encoding.
+
 ## Remaining Boundary
 
 - Weighted-`ℓ¹` completeness and closed-disk continuity.
