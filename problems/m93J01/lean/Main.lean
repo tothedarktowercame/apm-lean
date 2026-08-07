@@ -64,6 +64,38 @@ lemma apm_m93J01_taylor6_isLittleO
   · funext z
     simp
 
+/-- Adding the Taylor expansions at `h` and `-h` cancels all odd terms. -/
+lemma apm_m93J01_centered6_isBigO
+    (y : ℝ → ℝ) (hy : ContDiff ℝ 6 y) (x : ℝ) :
+    (fun h : ℝ ↦
+      y (x + h) + y (x - h) - 2 * y x -
+        (h ^ 2 * iteratedDeriv 2 y x +
+          apm_m93J01_kappa * h ^ 4 * iteratedDeriv 4 y x))
+      =O[nhds 0] (fun h : ℝ ↦ h ^ 6) := by
+  have hp := apm_m93J01_taylor6_isLittleO y hy x
+  have ht : Tendsto (fun h : ℝ ↦ -h) (nhds 0) (nhds 0) :=
+    by simpa using (tendsto_id.neg : Tendsto (fun h : ℝ ↦ -h) (nhds 0) (nhds (-0)))
+  have hm0 := (apm_m93J01_taylor6_isLittleO y hy x).comp_tendsto ht
+  have hm :
+      (fun h : ℝ ↦ y (x - h) -
+        (y x + (-h) * iteratedDeriv 1 y x + (-h) ^ 2 / 2 * iteratedDeriv 2 y x +
+         (-h) ^ 3 / 6 * iteratedDeriv 3 y x + (-h) ^ 4 / 24 * iteratedDeriv 4 y x +
+         (-h) ^ 5 / 120 * iteratedDeriv 5 y x + (-h) ^ 6 / 720 * iteratedDeriv 6 y x))
+        =o[nhds 0] (fun h : ℝ ↦ h ^ 6) := by
+    convert hm0 using 1 <;> funext h <;> simp <;> ring
+  have hs := (hp.add hm).isBigO
+  have hterm :
+      (fun h : ℝ ↦ h ^ 6 / 360 * iteratedDeriv 6 y x)
+        =O[nhds 0] (fun h : ℝ ↦ h ^ 6) := by
+    convert (isBigO_refl (fun h : ℝ ↦ h ^ 6) (nhds 0)).const_mul_left
+      (iteratedDeriv 6 y x / 360) using 1
+    funext h
+    ring
+  convert hs.add hterm using 1
+  funext h
+  simp only [apm_m93J01_kappa]
+  ring
+
 theorem apm_m93j01
     (y V : ℝ → ℝ) (hy : ContDiff ℝ 8 y) :
     apm_m93J01_kappa = (1 / 12 : ℝ) ∧
@@ -131,5 +163,15 @@ theorem apm_m93j01
   weaken the two little-o remainders to `O(h^6)`, and repeat at order four
   for `iteratedDeriv 2 y`; the final Numerov algebra then uses the existing
   residual identity.
+
+  Closer hop 3 proves `apm_m93J01_centered6_isBigO`, completing the symmetric
+  sixth-order estimate in part (a). It composes the Taylor remainder with
+  negation, cancels the odd coefficients, and treats the surviving sixth-order
+  coefficient as an explicit `O(h^6)` term. Part (b) can consequently reuse
+  the existing residual identity. The remaining bridge is the order-four
+  centered estimate for `iteratedDeriv 2 y`: it requires deriving the needed
+  `ContDiff ℝ 4` fact from `hy : ContDiff ℝ 8 y` and normalizing iterated
+  derivatives of that derivative function back to orders four and six of `y`.
+  The final ODE substitution then remains algebraic.
   -/
   sorry

@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "notes": "One sorry remains. The full symmetric sixth-order centered Taylor estimate is now compiled; the remaining work is the order-four specialization to iteratedDeriv 2 y and final Numerov algebra.",
   "imported_at": "2026-07-13T17:26:54.592523Z"
 }

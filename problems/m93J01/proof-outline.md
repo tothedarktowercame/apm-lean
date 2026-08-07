@@ -28,3 +28,14 @@ The canonical Lean attempt is `lean/Main.lean`.
 - The remaining closure is symmetric cancellation (including composition by
   negation), weakening little-o to big-O, the order-four specialization for
   `iteratedDeriv 2 y`, and the final already-reduced Numerov algebra.
+
+## Closer hop 3 progress
+
+- `apm_m93J01_centered6_isBigO` now proves the exact centered sixth-order
+  estimate required by part (a). It combines the Taylor expansions at `h` and
+  `-h`, cancels odd terms, and bounds the remaining sixth-order coefficient.
+- Part (b) is therefore analytically discharged by the existing pointwise
+  residual identity. The remaining formal bridge is the fourth-order centered
+  estimate for `iteratedDeriv 2 y`, including normalization of its iterated
+  derivatives to orders four and six of `y`, followed by the final ODE
+  substitution.
