@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "boundary": "one strict compact-spectral gap estimate; all subsequent power convergence is formalized",
+  "boundary": "one strict compact-spectral gap estimate; hop 3 routes around full discreteness via the extremal real spectrum of S-P, with spectrum transport found and only the local plus-or-minus-one eigenvector contradiction still open",
   "imported_at": "2026-07-13T17:26:54.318605Z"
 }

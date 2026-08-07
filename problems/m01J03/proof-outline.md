@@ -27,3 +27,14 @@ the compact self-adjoint eigenspace decomposition, finite nonzero eigenspaces,
 and Fredholm alternative, but no packaged discreteness/isolation theorem for
 the nonzero spectrum. The geometric operator-norm convergence after this
 estimate is complete.
+
+Closer hop 3 identifies a shorter route that avoids proving general spectral
+discreteness. `CStarAlgebra.norm_or_neg_norm_mem_spectrum` supplies an extremal
+real spectral value for the self-adjoint compact operator `S-P`. If its norm
+were one, compact Fredholm alternative should turn the resulting `±1`
+spectral point into an eigenvector. The projection identities put that vector
+in `ker P`; positivity excludes `-1`, while `+1` belongs to the top eigenspace
+and is therefore fixed by `P`, contradicting membership in its kernel.
+`spectrum.algebraMap_mem 𝕜` closes transport of the real spectral witness to
+the `RCLike` spectrum. The remaining formal bridge is the local `±1`
+eigenvector/positivity contradiction.

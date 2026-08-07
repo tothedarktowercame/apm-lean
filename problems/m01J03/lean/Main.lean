@@ -149,6 +149,23 @@ theorem apm_m01j03
       `LEMMA-INDEX.md`, all closed artifacts (185 at this checkout), sibling
       `m99J04`, `ConstructionTargets/`, `YoungL2.lean`, and git history contain
       no such isolation lemma or operator-power convergence result.
+
+      Closer hop 3 found a route around the full discreteness theorem.
+      `CStarAlgebra.norm_or_neg_norm_mem_spectrum` puts one of `‖S-P‖` and
+      `-‖S-P‖` in the real spectrum of the self-adjoint operator `S-P`.
+      Under the contradictory assumption `‖S-P‖ = 1`, real-to-`𝕜` spectrum
+      transport followed by compact Fredholm alternative should therefore
+      produce a nonzero eigenvector with eigenvalue `1` or `-1`.  The
+      identities `SP=P`, `PS=P`, and `P²=P` put every such nonzero-eigenvalue
+      vector in `ker P`; positivity and `‖S‖=1` then exclude `-1`, while the
+      `+1` case lies in the top eigenspace and hence is fixed by `P`, a
+      contradiction.  A further source check found that
+      `spectrum.algebraMap_mem 𝕜` performs the required real-to-`𝕜` spectrum
+      transport directly; `ContinuousLinearMap.spectralRadius_eq_nnnorm`
+      independently uses the same `RCLike` mechanism.  Thus the remaining
+      boundary is only the `±1` eigenvector contradiction (including the
+      positivity exclusion), not spectrum isolation, and does not require
+      annular spectral finiteness.
       -/
       sorry
     exact apm_m01j03_tendsto_powers_of_gap S P
