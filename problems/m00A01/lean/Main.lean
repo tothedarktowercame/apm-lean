@@ -35,6 +35,21 @@ def apmRestrictedComplement
     M → apmOrthogonalComplement N :=
   fun x => ⟨(x : H) - (P x : H), hP x⟩
 
+/-- The continuous-linear packaging of `apmRestrictedComplement`. -/
+def apmRestrictedComplementCLM
+    {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    (M N : Submodule 𝕜 H) (P : H →L[𝕜] N)
+    (hP : ∀ x, x - (P x : H) ∈ apmOrthogonalComplement N) :
+    M →L[𝕜] Nᗮ :=
+  (M.subtypeL - N.subtypeL.comp (P.comp M.subtypeL)).codRestrict
+    (apmOrthogonalComplement N) (fun x => hP x)
+
+@[simp] lemma apmRestrictedComplementCLM_apply
+    {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    (M N : Submodule 𝕜 H) (P : H →L[𝕜] N)
+    (hP : ∀ x, x - (P x : H) ∈ apmOrthogonalComplement N) (x : M) :
+    apmRestrictedComplementCLM M N P hP x = apmRestrictedComplement M N P hP x := rfl
+
 theorem apm_m00a01
     (𝕜 H : Type*) [RCLike 𝕜]
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -111,19 +126,25 @@ theorem apm_m00a01
         exact happ]
       abel
   · /-
-    Boundary: both projection characterizations and the bijectivity of
+    Boundary after closer hop 1: both projection characterizations and the bijectivity of
     `apmRestrictedComplement M N P hP` are proved above.  The remaining bridge
     is the quantitative lower bound from the bounded inverse theorem.
 
-    The intended route is to package `apmRestrictedComplement` as a
-    `ContinuousLinearMap M (Nᵆ)`, use the established bijectivity with
+    New progress: `apmRestrictedComplementCLM` now packages the subtype-valued
+    expression as a `ContinuousLinearMap M (Nᵆ)`, and
+    `apmRestrictedComplementCLM_apply` identifies it definitionally with the
+    frozen function. The remaining route is to use the established bijectivity with
     `ContinuousLinearEquiv.ofBijective`, and extract an antilipschitz/norm lower
-    bound from the resulting equivalence. Searches covered
+    bound from the resulting equivalence. Source inspection additionally found
+    `antilipschitzWith_iff_exists_mul_le_norm`, which returns exactly a positive
+    real constant and the desired multiplicative norm inequality, avoiding
+    inverse-norm positivity edge cases. Searches covered
     `ContinuousLinearEquiv.ofBijective`,
     `ContinuousLinearMap.bijective_iff_dense_range_and_antilipschitz`, and
-    `ContinuousLinearEquiv.antilipschitz`. The blocker is constructing the
-    continuous linear map cleanly from the subtype-valued expression
-    `x - P x` and aligning its norm inequality with the theorem's coerced
-    ambient-space norm. No sibling pass-1 proof supplied this bridge.
+    `ContinuousLinearEquiv.antilipschitz`. The remaining elaboration blocker is
+    installing/aligning the `CompleteSpace` instance for the orthogonal-complement
+    subtype while building `ContinuousLinearEquiv.ofBijective`, then feeding its
+    antilipschitz result through the positive-constant equivalence. The ambient
+    and subtype norms reduce definitionally once that equivalence is constructed.
     -/
     sorry
