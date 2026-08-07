@@ -65,6 +65,52 @@ def apm_t00j03_circleVelocity (θ : ℝ) : apm_t00j03_Plane :=
 def apm_t00j03_tangentClass (θ : ℝ) : apm_t00j03_ProjectiveTangent :=
   Quotient.mk _ (apm_t00j03_circlePoint θ, apm_t00j03_circleVelocity θ)
 
+lemma apm_t00j03_projectivize_surjective :
+    Function.Surjective apm_t00j03_projectivize := by
+  intro p
+  refine ⟨⟨p.rep, p.rep_nonzero⟩, ?_⟩
+  exact p.mk_rep
+
+/-- The angle form evaluates to one on the unit half-circle and its velocity. -/
+lemma apm_t00j03_angleFormValue_circle (θ : ℝ) :
+    apm_t00j03_angleFormValue (apm_t00j03_circlePoint θ)
+      (apm_t00j03_circleVelocity θ) = 1 := by
+  simp [apm_t00j03_angleFormValue, apm_t00j03_circlePoint,
+    apm_t00j03_circleVelocity]
+  nlinarith [Real.sin_sq_add_cos_sq θ]
+
+lemma apm_t00j03_integral_angleFormValue_circle :
+    (∫ θ in (0 : ℝ)..Real.pi,
+      apm_t00j03_angleFormValue (apm_t00j03_circlePoint θ)
+        (apm_t00j03_circleVelocity θ)) = Real.pi := by
+  simp [apm_t00j03_angleFormValue_circle]
+
+lemma apm_t00j03_integral_angleFormValue_circle_reverse :
+    (∫ θ in Real.pi..(0 : ℝ),
+      apm_t00j03_angleFormValue (apm_t00j03_circlePoint θ)
+        (apm_t00j03_circleVelocity θ)) = -Real.pi := by
+  simp [apm_t00j03_angleFormValue_circle]
+
+/-- The angle form is unchanged by each generating change of projective
+tangent representative. -/
+lemma apm_t00j03_angleFormValue_change
+    (x : apm_t00j03_PuncturedPlane) (v : apm_t00j03_Plane)
+    (lam a : ℝ) (hlam : lam ≠ 0) :
+    apm_t00j03_angleFormValue
+      ⟨lam • x.1, smul_ne_zero hlam x.2⟩ (lam • v + a • x.1) =
+      apm_t00j03_angleFormValue x v := by
+  have hden : x.1 0 ^ 2 + x.1 1 ^ 2 ≠ 0 := by
+    intro h
+    have hx0 : x.1 0 = 0 := by nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1)]
+    have hx1 : x.1 1 = 0 := by nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1)]
+    apply x.2
+    funext i
+    fin_cases i <;> simp [hx0, hx1]
+  simp only [apm_t00j03_angleFormValue, Pi.smul_apply, smul_eq_mul,
+    Pi.add_apply]
+  field_simp
+  ring
+
 theorem apm_t00j03 :
     Function.Surjective apm_t00j03_projectivize ∧
     ∃ eta : apm_t00j03_ProjectiveTangent → ℝ,
@@ -72,4 +118,28 @@ theorem apm_t00j03 :
         eta (Quotient.mk _ (x, v)) = apm_t00j03_angleFormValue x v) ∧
       (∫ θ in (0 : ℝ)..Real.pi, eta (apm_t00j03_tangentClass θ)) = Real.pi ∧
       (∫ θ in Real.pi..(0 : ℝ), eta (apm_t00j03_tangentClass θ)) = -Real.pi := by
-  sorry
+  -- Desk research: `Projectivization.mk_rep` supplies surjectivity, while
+  -- `Relation.EqvGen.rec` (the same recursor used by `Quot.eqvGen_sound` in
+  -- Mathlib) transports generator invariance through the quotient relation.
+  refine ⟨apm_t00j03_projectivize_surjective, ?_⟩
+  let F : apm_t00j03_PuncturedPlane × apm_t00j03_Plane → ℝ :=
+    fun p ↦ apm_t00j03_angleFormValue p.1 p.2
+  have hinv : ∀ p q,
+      Relation.EqvGen apm_t00j03_tangentRel p q → F p = F q := by
+    intro p q h
+    exact Relation.EqvGen.rec
+      (fun _ _ hrel ↦ by
+        rcases hrel with ⟨x, v, lam, a, hlam⟩
+        exact (apm_t00j03_angleFormValue_change x v lam a hlam).symm)
+      (fun _ ↦ rfl)
+      (fun _ _ _ ih ↦ ih.symm)
+      (fun _ _ _ _ _ ih₁ ih₂ ↦ ih₁.trans ih₂) h
+  let eta : apm_t00j03_ProjectiveTangent → ℝ :=
+    Quotient.lift F (fun p q h ↦ hinv p q h)
+  refine ⟨eta, ?_, ?_, ?_⟩
+  · intro x v
+    rfl
+  · simpa [eta, apm_t00j03_tangentClass, F] using
+      apm_t00j03_integral_angleFormValue_circle
+  · simpa [eta, apm_t00j03_tangentClass, F] using
+      apm_t00j03_integral_angleFormValue_circle_reverse
