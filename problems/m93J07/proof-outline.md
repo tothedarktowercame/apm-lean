@@ -22,10 +22,19 @@ the explicit power-function counterexamples.
   tail witnesses. The dominant remaining work is still the Banach-space
   example bundle and the dense-proper operator on the frozen `Lp` type.
 
+## Closer hop 3 progress
+
+- The theorem now uses `apm_m93J07_localWitness` directly to discharge the
+  global `L²(volume) \ L⁴(volume)` conjunct. That conjunct has been removed
+  from the aggregate proposition guarded by the sole `sorry`.
+- The remaining aggregate contains the six Banach-space assertions, the two
+  dense-proper endomorphisms of the restricted `Lp` space, the tail
+  `L⁴ \ L²` witness, and the restricted-measure `L² \ L⁴` witness.
+
 ## Remaining Boundary
 
-- Package the power functions with indicators and bridge the scalar
-  integrability results to the exact `MemLp` goals.
+- Package the tail and restricted power functions with indicators and bridge
+  their scalar integrability results to the exact `MemLp` goals.
 - Formalize the Banach-space examples and the implication that a separable
   strong dual forces separability of the original space.
 - Construct dense, nonsurjective linear and continuous-linear endomorphisms

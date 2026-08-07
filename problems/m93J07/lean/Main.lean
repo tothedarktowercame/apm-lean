@@ -160,6 +160,16 @@ theorem apm_m93j07 :
   endomorphism of the exact restricted `Lp` type.  Those Banach-space and
   operator clauses remain the principal open bridge; the tail and restricted
   `MemLp` witnesses can now follow the same compiled indicator pattern.
+
+  Closer hop 3 removes the already-proved global `L² \ L⁴` clause from the
+  aggregate assumption: the final theorem now supplies it directly with
+  `apm_m93J07_localWitness_memLp_two` and
+  `apm_m93J07_localWitness_not_memLp_four`. The sole `sorry` is correspondingly
+  narrowed to the six Banach-space assertions, the dense proper operator pair,
+  the tail `L⁴ \ L²` witness, and the restricted-measure `L² \ L⁴` witness.
+  Further searches of `MemLp` restriction/indicator lemmas and the separability
+  and operator APIs found no packaged closure of the dominant Banach-space
+  bridge.
   -/
   have hremaining :
       (∃ X : apm_m93j07_Banach, ¬ apm_m93j07_Separable X) ∧
@@ -176,14 +186,13 @@ theorem apm_m93j07 :
       (let H := Lp ℝ 2 (volume.restrict (Set.Icc (0 : ℝ) 1));
         (∃ Φ : H →ₗ[ℝ] H, DenseRange Φ ∧ ¬ Function.Surjective Φ) ∧
         (∃ Φ : H →L[ℝ] H, DenseRange Φ ∧ ¬ Function.Surjective Φ)) ∧
-      (∃ f : ℝ → ℝ, MemLp f 2 volume ∧ ¬ MemLp f 4 volume) ∧
       (∃ f : ℝ → ℝ, MemLp f 4 volume ∧ ¬ MemLp f 2 volume) ∧
       (∃ f : ℝ → ℝ,
         MemLp f 2 (volume.restrict (Set.Icc 0 1)) ∧
         ¬ MemLp f 4 (volume.restrict (Set.Icc 0 1))) := by
     sorry
-  exact ⟨hremaining.1, hremaining.2.1, hremaining.2.2.1,
-    hremaining.2.2.2.1, hremaining.2.2.2.2.1,
-    hremaining.2.2.2.2.2.1, hremaining.2.2.2.2.2.2.1,
-    hremaining.2.2.2.2.2.2.2.1, hremaining.2.2.2.2.2.2.2.2.1,
-    hremaining.2.2.2.2.2.2.2.2.2, hfiniteLp⟩
+  rcases hremaining with ⟨h1, h2, h3, h4, h5, h6, h7, h9, h10⟩
+  exact ⟨h1, h2, h3, h4, h5, h6, h7,
+    ⟨apm_m93J07_localWitness, apm_m93J07_localWitness_memLp_two,
+      apm_m93J07_localWitness_not_memLp_four⟩,
+    h9, h10, hfiniteLp⟩

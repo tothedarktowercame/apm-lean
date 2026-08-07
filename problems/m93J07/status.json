@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "notes": "One sorry remains. The global L2-but-not-L4 clause is now supplied directly by the compiled local witness and removed from the aggregate assumption; Banach examples, dense proper operators, tail, and restricted witnesses remain.",
   "imported_at": "2026-07-13T17:26:54.683980Z"
 }
