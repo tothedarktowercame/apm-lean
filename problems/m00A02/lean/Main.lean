@@ -37,6 +37,18 @@ def apm_m00A02_derivativeCoefficients (a : ℕ → ℝ) : ℕ → ℝ
 def apm_m00A02_counterexample (x : ℝ) : ℝ :=
   Real.exp (-x) * Real.sin (Real.exp x)
 
+private lemma apm_m00A02_counterexample_hasDerivAt (x : ℝ) :
+    HasDerivAt apm_m00A02_counterexample
+      (Real.cos (Real.exp x) - Real.exp (-x) * Real.sin (Real.exp x)) x := by
+  unfold apm_m00A02_counterexample
+  convert
+    ((Real.hasDerivAt_exp (-x)).comp x (hasDerivAt_neg x)).mul
+      ((Real.hasDerivAt_sin (Real.exp x)).comp x (Real.hasDerivAt_exp x)) using 1 <;>
+    simp only [Function.comp_apply]
+  rw [Real.exp_neg]
+  field_simp [Real.exp_ne_zero x]
+  <;> ring
+
 theorem apm_m00a02 :
     apm_m00A02_hasExpansion (fun x : ℝ ↦ Real.exp (-x)) 0 ∧
     ContDiff ℝ ∞ apm_m00A02_counterexample ∧
@@ -70,16 +82,18 @@ theorem apm_m00a02 :
     · simpa using (Real.tendsto_pow_mul_exp_neg_atTop_nhds_zero N).abs
   refine ⟨hexp, hsmooth, hcounter, ?_, ?_⟩
   · /-
-    Boundary for the counterexample derivative: the exponential-null expansion,
-    smoothness, and null expansion of `apm_m00A02_counterexample` are compiled
-    above. The remaining negation requires proving the explicit derivative
-    `cos (exp x) - exp (-x) * sin (exp x)` does not tend to zero, most naturally
-    along sequences with `exp x = 2πk` and `exp x = (2k+1)π`. Searches covered
-    `deriv_mul`, `Real.hasDerivAt_exp`, `Real.hasDerivAt_sin`, and sequential
-    characterizations of `Tendsto`; no sibling pass-1 artifact packages this
-    oscillatory subsequence argument.
+    Boundary (closer hop 1): `apm_m00A02_counterexample_hasDerivAt` now proves
+    the exact derivative formula
+    `cos (exp x) - exp (-x) * sin (exp x)`.  Mathlib source also provides
+    `Real.cos_nat_mul_two_pi`, `Real.sin_nat_mul_pi`,
+    `Real.tendsto_log_atTop`, and `tendsto_natCast_atTop_atTop`, which support
+    the intended sequence `x k = log ((k+1) * (2π))`; on it the derivative is
+    identically one.  The remaining assembly is the filter composition showing
+    this logarithmic sequence tends to `atTop`, followed by uniqueness of the
+    two purported limits. No solved sibling packages that oscillation lemma.
     -/
     sorry
+
   · /-
     Boundary for coefficient rigidity: the final implication requires a formal
     theorem that two integral-power Poincaré expansions have identical
