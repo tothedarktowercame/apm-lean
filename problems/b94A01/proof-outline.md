@@ -13,10 +13,14 @@ decomposition.
 - `apm_b94a01_complement` obtains disjointness, generation, and the concrete
   Mathlib semidirect-product equivalence from cardinality and normality.
 - The main proof computes `Nat.card (MulAut P) = 4` from cyclicity of `P`.
+- `apm_b94a01_enumerate_mulAut` converts that cardinality into an actual
+  injective exhaustive map `Fin 4 → MulAut P` using
+  `Fintype.equivFinOfCardEq`. The main proof discharges the corresponding
+  first two obligations on `Ψ` with this helper.
 
 ## Remaining bridge
 
-Enumerate the four automorphisms with the exact requested power formula,
-classify maps from `Q`, and show that noncommutativity forces conjugation by
-`y` to be inversion. The final two multiplication identities then reduce to
-cyclic exponent arithmetic.
+Reindex/identify the enumeration with the exact requested power formula via
+`IsCyclic.mulAutMulEquiv`, classify maps from `Q`, and show that
+noncommutativity forces conjugation by `y` to be inversion. The final two
+multiplication identities then reduce to cyclic exponent arithmetic.

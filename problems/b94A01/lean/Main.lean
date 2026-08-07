@@ -36,6 +36,21 @@ lemma apm_b94a01_complement
   refine ⟨hc.disjoint, hc.sup_eq_top, φ, ?_⟩
   exact ⟨(SemidirectProduct.mulEquivSubgroup hc).symm⟩
 
+/-- Cardinality four gives an actual exhaustive injective enumeration of the
+automorphism group. -/
+lemma apm_b94a01_enumerate_mulAut
+    (P : Type*) [Group P] [Finite P]
+    (hcard : Nat.card (MulAut P) = 4) :
+    ∃ Ψ : Fin 4 → MulAut P,
+      Function.Injective Ψ ∧ ∀ φ : MulAut P, ∃ n : Fin 4, φ = Ψ n := by
+  letI : Fintype (MulAut P) := Fintype.ofFinite (MulAut P)
+  have hcard' : Fintype.card (MulAut P) = 4 := by
+    simpa [Nat.card_eq_fintype_card] using hcard
+  let e : MulAut P ≃ Fin 4 := Fintype.equivFinOfCardEq hcard'
+  refine ⟨e.symm, e.symm.injective, ?_⟩
+  intro φ
+  exact ⟨e φ, by simp [e]⟩
+
 theorem apm_b94a01 :
     ∀ (G : Type*) [Group G] [Fintype G]
         (P : Sylow 5 G) (Q : Sylow 2 G) (x : P) (y : Q),
@@ -94,6 +109,8 @@ theorem apm_b94a01 :
   have hcomplement :=
     apm_b94a01_complement G (P : Subgroup G) (Q : Subgroup G)
       hPcard hQcard hcard
+  obtain ⟨Ψ, hΨinj, hΨsurj⟩ := apm_b94a01_enumerate_mulAut P hAutCard
+  refine ⟨Ψ, hΨinj, hΨsurj, ?_⟩
   /- PASS-1 boundary: the Sylow sizes and normality of `P` are now proved
      locally (`hPcard`, `hQcard`, `hPnormal`) using the route validated in
      sibling `b93A01`.  I searched the Sylow and cyclic-group APIs, including
@@ -115,5 +132,14 @@ theorem apm_b94a01 :
      `Q →* MulAut P`, and identify the nontrivial conjugation action with
      inversion to prove the final concrete multiplication identities.  No
      closed artifact or Mathlib theorem found by the searches packages those
-     generator-level identifications. -/
+     generator-level identifications.
+
+     Closer hop 2 closes the first two frozen obligations on `Ψ` in
+     `apm_b94a01_enumerate_mulAut`: `Fintype.equivFinOfCardEq` turns the
+     already-proved automorphism cardinality four into an explicit injective
+     exhaustive enumeration.  The remaining issue is not enumeration but
+     choosing/reindexing it so index `n` acts by the specific exponent `n+1`.
+     A targeted inspection of `IsCyclic.mulAutMulEquiv` confirms an
+     equivalence with units of `ZMod 5`, but transporting its evaluation
+     theorem back to the arbitrary generator `x` is not packaged. -/
   sorry
