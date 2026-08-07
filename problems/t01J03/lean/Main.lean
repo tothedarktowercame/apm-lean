@@ -33,6 +33,13 @@ def apm_t01J03_boundaryInclusion :
     apm_t01J03_BoundaryTorus → apm_t01J03_SolidTorus :=
   fun z ↦ (z.1, ⟨z.2.1, le_of_eq z.2.2⟩)
 
+/-- The boundary torus embeds continuously into the solid torus. This is the
+map used in both fundamental-group homomorphisms below. -/
+lemma apm_t01J03_continuous_boundaryInclusion :
+    Continuous apm_t01J03_boundaryInclusion := by
+  exact continuous_fst.prodMk
+    ((continuous_subtype_val.comp continuous_snd).subtype_mk _)
+
 inductive apm_t01J03_glueRel (h : apm_t01J03_BoundaryTorus ≃ₜ
     apm_t01J03_BoundaryTorus) :
     Sum apm_t01J03_SolidTorus apm_t01J03_SolidTorus →
@@ -128,5 +135,14 @@ theorem apm_t01j03 :
   concerns analytic contour integrals rather than fundamental groups, and no
   relevant result occurs elsewhere in `ConstructionTargets/` or
   `YoungL2.lean`. Developing those foundations is beyond this pass.
+
+  Closer hop 1 factors the repeated local topology obligation into the compiled
+  lemma `apm_t01J03_continuous_boundaryInclusion`. Inspection of
+  `AlgebraicTopology.FundamentalGroupoid.Product` confirms preservation of
+  categorical products, but specializing automorphism groups still requires a
+  computed `FundamentalGroup Circle 1 ≃* Multiplicative ℤ`, which is absent.
+  The available Mayer--Vietoris results are specifically for sheaf cohomology,
+  not the singular-homology functor used here. Thus neither route reaches the
+  quotient gluing computation; the frozen statement is unchanged.
   -/
   sorry
