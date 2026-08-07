@@ -41,10 +41,24 @@ theorem apm_b95j02 :
     · intro m hm hpow
       exact Monoid.exponent_min' m hm hpow
     · simpa [eq_comm] using (IsCyclic.iff_exponent_eq_card (α := G))
-  · -- Boundary: searched `linearIndependent_powers_iff_aeval`,
-    -- `minpoly_dvd_charpoly`, and `span_minpoly_eq_annihilator`.  These prove
-    -- the degree bound and the cyclic => equality direction, but Mathlib has
-    -- no packaged cyclic-vector iff minpoly-degree-equals-finrank theorem;
-    -- the reverse route requires formalizing rational canonical form/PID
-    -- invariant factors, which did not fit the pass-1 budget.
+  · intro F V _ _ _ _ T
+    have hdegree : (minpoly F T).natDegree ≤ Module.finrank F V := by
+      calc
+        (minpoly F T).natDegree ≤ T.charpoly.natDegree :=
+          Polynomial.natDegree_le_of_dvd (LinearMap.minpoly_dvd_charpoly T)
+            T.charpoly_monic.ne_zero
+        _ = Module.finrank F V := LinearMap.charpoly_natDegree T
+    /- PASS-1 boundary: `hdegree` now formally establishes the universal
+       minimal-polynomial degree bound.  I searched
+       `linearIndependent_powers_iff_aeval`, `minpoly_dvd_charpoly`,
+       `span_minpoly_eq_annihilator`, `Module.equiv_directSum_of_isTorsion`,
+       and the Smith-normal-form/PID APIs.  These support the cyclic-to-equality
+       direction by showing that a relation on one cyclic vector annihilates
+       the whole space.
+
+       Mathlib still has no packaged cyclic-vector iff
+       minpoly-degree-equals-finrank theorem.  The reverse direction must
+       construct a vector whose Krylov span is top from equality in `hdegree`;
+       that is precisely the rational-canonical/invariant-factor step, and no
+       closed artifact or construction library packages it. -/
     sorry
