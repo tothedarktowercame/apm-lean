@@ -10,12 +10,14 @@
     "problem_tex": "apm/t01A05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_progress": "Closer hop 1 proves the encoded integral and intersection-number equalities and proves compactness of lifted submanifolds under a T2 base. The frozen theorem remains blocked on positive-degree compact cover construction with computed H2, and lacks the T2/finite-fiber hypotheses needed by the compact-preimage route.",
   "imported_at": "2026-07-13T17:26:56.731998Z"
 }
