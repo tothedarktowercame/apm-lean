@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "boundary": "positive-M closed-ball contraction assembly; M=0 and the quadratic Lipschitz estimate are proved",
+  "boundary": "positive-M closed-ball restricted-map packaging; M=0, the quadratic Lipschitz estimate, and both invariant-ball/contraction parameter inequalities are proved",
   "imported_at": "2026-07-13T17:26:54.575886Z"
 }

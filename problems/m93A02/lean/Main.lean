@@ -36,6 +36,31 @@ private lemma apm_m93a02_quadratic_sub_bound
       add_le_add (hQ _ _) (hQ _ _)
     _ = M * (‖x‖ + ‖y‖) * ‖x - y‖ := by ring
 
+/-- The numerical estimates behind the invariant ball and its contraction
+constant.  Here `q` will be `‖k‖` and `2*q/δ` the ball radius. -/
+private lemma apm_m93a02_contraction_constants
+    {δ M q : ℝ} (hδ : 0 < δ) (hM : 0 < M) (hq : 0 ≤ q)
+    (hqsmall : q < δ ^ 2 / (8 * M)) :
+    δ⁻¹ * (q + M * (2 * q / δ) ^ 2) ≤ 2 * q / δ ∧
+      δ⁻¹ * M * (2 * (2 * q / δ)) < 1 / 2 := by
+  constructor
+  · rw [inv_mul_le_iff₀ hδ]
+    have hMq : 8 * M * q < δ ^ 2 := by
+      rw [lt_div_iff₀ (by positivity : 0 < 8 * M)] at hqsmall
+      nlinarith
+    have hδ0 : δ ≠ 0 := ne_of_gt hδ
+    field_simp [hδ0]
+    nlinarith
+  · rw [show δ⁻¹ * M * (2 * (2 * q / δ)) =
+        δ⁻¹ * (M * (2 * (2 * q / δ))) by ring]
+    rw [inv_mul_lt_iff₀ hδ]
+    have hMq : 8 * M * q < δ ^ 2 := by
+      rw [lt_div_iff₀ (by positivity : 0 < 8 * M)] at hqsmall
+      nlinarith
+    have hδ0 : δ ≠ 0 := ne_of_gt hδ
+    field_simp [hδ0]
+    nlinarith
+
 theorem apm_m93a02
     (H K : Type*)
     [NormedAddCommGroup H] [NormedSpace ℝ H] [CompleteSpace H]
@@ -95,6 +120,18 @@ theorem apm_m93a02
       `ContractingWith.exists_fixedPoint'`; siblings `t91A04` and `m96J06`
       demonstrate the abstract API, but neither packages these parameterized
       ball inequalities or the plain-`LinearEquiv` inverse bound.
+
+      Closer hop 3 closes all parameter arithmetic in
+      `apm_m93a02_contraction_constants`.  From
+      `‖k‖ < δ²/(8M)` it proves both
+      `δ⁻¹(‖k‖ + M(2‖k‖/δ)²) ≤ 2‖k‖/δ`, the invariant-ball estimate, and
+      `δ⁻¹ M (2(2‖k‖/δ)) < 1/2`, the contraction estimate.  Further source
+      inspection confirms that `ContractingWith.exists_fixedPoint'` accepts a
+      complete closed subset and a restricted `MapsTo` map.  The remaining
+      elaboration is therefore only packaging `F x = e.symm (k-Q x x)` as
+      that restricted self-map, translating norm inequalities to `dist`, and
+      extracting its fixed-point equation; the analytic and scalar estimates
+      are now compiled.
       -/
       sorry
   · intro ε hε
