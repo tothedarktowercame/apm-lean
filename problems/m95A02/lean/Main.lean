@@ -68,6 +68,19 @@ lemma m95A02MaxDist_self (f : m95A02H) : m95A02MaxDist f f = 0 := by
   rw [m95A02MaxDist, hset]
   simp
 
+/-- A uniform pointwise evaluation bound passes directly through the custom
+set-valued supremum encoding. -/
+lemma m95A02MaxDist_le_of_forall
+    (f g : m95A02H) (C : ℝ) (hC : 0 ≤ C)
+    (h : ∀ x ∈ Icc (0 : ℝ) (2 * Real.pi),
+      dist (m95A02Value f x) (m95A02Value g x) ≤ C) :
+    m95A02MaxDist f g ≤ C := by
+  unfold m95A02MaxDist
+  apply Real.sSup_le _ hC
+  intro r hr
+  obtain ⟨x, hx, rfl⟩ := hr
+  exact h x hx
+
 /-- Weak convergence in the Fourier realization implies convergence of every
 individual coefficient. -/
 lemma m95A02_tendsto_coord_of_weak
@@ -174,5 +187,17 @@ theorem apm_m95a02 :
     convergence with weak boundedness and the summable weights
     `1 / (n²+1)`, then transport the resulting uniform evaluation bound through
     the set-valued `sSup` in `m95A02MaxDist`.
+
+    Closer hop 3 closes that final order-theory transport as
+    `m95A02MaxDist_le_of_forall`: any nonnegative constant bounding all
+    pointwise evaluation distances on `[0,2π]` also bounds the custom real
+    `sSup`.  It uses `Real.sSup_le`, so no boundedness or nonemptiness
+    bookkeeping remains at the call site.  The remaining boundary is now
+    purely analytic: obtain a uniform pointwise bound tending to zero from
+    finite-coordinate convergence and bounded ℓ² norms.  Source searches
+    found generic `Summable` cofinite-tail and Cauchy--Schwarz APIs, but no
+    theorem assembling the bilateral integer weights or the normalized
+    exponential evaluation map; this weighted tail estimate still must be
+    developed locally.
     -/
     sorry

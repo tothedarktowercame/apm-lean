@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_progress": "Hop 3 compiles uniform-pointwise-bound transport through m95A02MaxDist; only the bilateral weighted Fourier tail estimate remains.",
   "imported_at": "2026-07-13T17:26:54.990470Z"
 }

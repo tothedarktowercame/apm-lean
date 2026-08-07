@@ -15,9 +15,12 @@ encoding.
 - Closer hop 2 compiles that bridge completely as
   `m95A02_tendsto_coord_of_weak`, using the weak-space evaluation criterion,
   the Riesz functional of `lp.single`, and `lp.inner_single_left`.
+- `m95A02MaxDist_le_of_forall` transports a nonnegative uniform pointwise
+  distance bound through the custom real `sSup` encoding.
 
 ## Remaining Boundary
 
 - Formalize the sharp Fourier-kernel estimate needed for the Hölder bound.
 - Prove uniform control of the bilateral Fourier tail from the summable
-  weights and translate it through the custom `sSup` distance.
+  weights. The `sSup` translation is now complete, so only the analytic
+  pointwise bound remains.
