@@ -64,6 +64,27 @@ def apm_t01j01_IsAnnulusBetween
   Nonempty (A ≃ₜ Circle × apm_t01j01_I) ∧
     frontier A = Set.range γ₁ ∪ Set.range γ₂
 
+/-- An embedded circle in a Hausdorff space has closed image. -/
+lemma apm_t01j01_range_isClosed
+    {S : Type*} [TopologicalSpace S] [T2Space S]
+    (γ : C(Circle, S)) : IsClosed (Set.range γ) := by
+  exact (isCompact_range γ.continuous).isClosed
+
+/-- The two prescribed boundary curves form a closed subset of the surface. -/
+lemma apm_t01j01_boundary_union_isClosed
+    {S : Type*} [TopologicalSpace S] [T2Space S]
+    (γ₁ γ₂ : C(Circle, S)) :
+    IsClosed (Set.range γ₁ ∪ Set.range γ₂) := by
+  exact (apm_t01j01_range_isClosed γ₁).union
+    (apm_t01j01_range_isClosed γ₂)
+
+/-- An embedding identifies the abstract circle with its image. -/
+noncomputable def apm_t01j01_circleHomeomorphRange
+    {S : Type*} [TopologicalSpace S] (γ : C(Circle, S))
+    (hγ : Topology.IsEmbedding (γ : Circle → S)) :
+    Circle ≃ₜ Set.range γ :=
+  hγ.toHomeomorph
+
 theorem apm_t01j01
     (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
@@ -78,4 +99,22 @@ theorem apm_t01j01
     (hπ₁ : ¬apm_t01j01_IsNullHomotopic γ₁)
     (hπ₂ : ¬apm_t01j01_IsNullHomotopic γ₂) :
     ∃ A : Set S, apm_t01j01_IsAnnulusBetween A γ₁ γ₂ := by
+  /-
+  Boundary (closer hop 1): the elementary embedded-boundary topology is now
+  compiled above. `apm_t01j01_range_isClosed` proves each curve image closed,
+  `apm_t01j01_boundary_union_isClosed` handles their union, and
+  `apm_t01j01_circleHomeomorphRange` identifies each image with `Circle`.
+
+  The remaining bridge is the surface-specific classification argument from
+  the informal proof: null-homology of an embedded circle must imply that it
+  separates the orientable surface; cutting the genus-two surface along the
+  first curve must produce two once-punctured tori; cutting the appropriate
+  piece along the second curve and excluding a disk via non-null-homotopy must
+  then produce the required annulus, with its subset frontier equal to the two
+  images. Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, all topology
+  siblings, git history, and Mathlib's manifold, embedded-circle, separation,
+  Euler-characteristic, cobordism, and surface-classification APIs found no
+  packaged cutting theorem, surface classification, or annulus/isotopy theorem
+  connecting the frozen homology hypotheses to this geometric subset.
+  -/
   sorry
