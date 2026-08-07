@@ -11,5 +11,11 @@
   ],
   "recommended_latest_frame_id": "apm-v2-a01A01-1774990784258",
   "selected_frame_id": null,
-  "imported_at": "2026-05-01T19:38:15.913044Z"
+  "imported_at": "2026-05-01T19:38:15.913044Z",
+  "lean_closure": {
+    "classification": "partial",
+    "main": "lean/Main.lean",
+    "sorry_count": 1,
+    "blocker": "Explicit cofinal enumeration and volume bookkeeping for expanding Euclidean cube cells; the historical 1D attempt is ungated and still theorem-level partial."
+  }
 }
