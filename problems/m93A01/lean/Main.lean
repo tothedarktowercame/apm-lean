@@ -47,6 +47,29 @@ def apm_m93A01_circleDerivH2Coeff (n : ℤ) : ℂ :=
 def apm_m93A01_realInclCoeff (ξ : ℝ) : ℂ :=
   ((Real.sqrt (1 + ξ ^ 2))⁻¹ : ℝ)
 
+/-- A compact operator cannot send a sequence in the closed unit ball to a
+uniformly separated sequence. This is the common final step for the two
+noncompactness clauses below. -/
+lemma apm_m93A01_not_compact_of_separated_unit
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    (A : E →L[ℂ] E) (u : ℕ → E)
+    (hu : ∀ n, ‖u n‖ ≤ 1)
+    (hsep : ∀ n m, n ≠ m → 1 ≤ dist (A (u n)) (A (u m))) :
+    ¬ IsCompactOperator A := by
+  intro hcompact
+  obtain ⟨K, hK, hAK⟩ := hcompact.image_closedBall_subset_compact 1
+  have hmem : ∀ n, A (u n) ∈ K := by
+    intro n
+    apply hAK
+    exact ⟨u n, by simpa [Metric.mem_closedBall, dist_eq_norm] using hu n, rfl⟩
+  obtain ⟨x, hx, φ, hφ, htend⟩ := hK.tendsto_subseq hmem
+  have hcauchy : CauchySeq (A ∘ u ∘ φ) := htend.cauchySeq
+  obtain ⟨N, hN⟩ := (Metric.cauchySeq_iff.mp hcauchy) 1 zero_lt_one
+  have hlt := hN N le_rfl (N + 1) (Nat.le_succ N)
+  have hne : φ N ≠ φ (N + 1) := ne_of_lt (hφ (Nat.lt_succ_self N))
+  have hge := hsep (φ N) (φ (N + 1)) hne
+  exact (not_lt_of_ge hge) (by simpa [Function.comp_apply] using hlt)
+
 theorem apm_m93a01
     (ιS1 D1 D2 : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z)
     (ιR : apm_m93A01_l2R →L[ℂ] apm_m93A01_l2R)
@@ -64,13 +87,21 @@ theorem apm_m93a01
     ¬ IsCompactOperator D1 ∧
     IsCompactOperator D2 := by
   /-
-  SKIPPED (compact multiplier API boundary). Searches of Mathlib found the
+  CLOSER HOP 1 (partial). The common sequential obstruction for both
+  noncompactness clauses is now compiled as
+  `apm_m93A01_not_compact_of_separated_unit`, adapted from solved sibling
+  `m99A03`. It reduces each negative clause to the explicit bounded separated
+  witnesses described below.
+
+  Searches of Mathlib found the
   abstract characterizations in `Analysis.Normed.Operator.Compact`, but no
   theorem characterizing compact diagonal multipliers on `lp`, and no theorem
   showing that a nonzero multiplication operator on nonatomic `Lp` is
   noncompact.
 
-  A local proof must construct finite-coordinate truncation operators on
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, solved
+  Fourier/operator artifacts, Mathlib source, and git history found no
+  diagonal-multiplier theorem. A local proof must construct finite-coordinate truncation operators on
   `lp (fun _ : ℤ ⇒ ℂ) 2`, prove their finite rank and operator-norm
   convergence for the two decaying symbols, and build normalized coordinate
   witnesses for noncompactness of `D1`. For `ιR`, the a.e. multiplier identity
