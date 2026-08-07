@@ -54,6 +54,23 @@ lemma apm_b96J02_xLinearMap_sq
   ext v
   exact apm_b96J02_x_smul_x_smul M v
 
+/-- A module of cardinality sixteen has underlying dimension four over
+`ZMod 2`.  This isolates the finite-dimensional input for the remaining
+square-zero Jordan decomposition. -/
+lemma apm_b96J02_finrank_eq_four
+    (M : Type*) [AddCommGroup M] [Module apm_b96J02_R M] [Finite M]
+    (hcard : Nat.card M = 16) :
+    let _ := Module.compHom M (algebraMap (ZMod 2) apm_b96J02_R)
+    Module.finrank (ZMod 2) M = 4 := by
+  letI : Module (ZMod 2) M :=
+    Module.compHom M (algebraMap (ZMod 2) apm_b96J02_R)
+  letI : Module.Finite (ZMod 2) M := Module.Finite.of_finite
+  have hpow := Module.natCard_eq_pow_finrank (K := ZMod 2) (V := M)
+  rw [hcard, Nat.card_zmod] at hpow
+  have hfour : (16 : ℕ) = 2 ^ 4 := by norm_num
+  apply (Nat.pow_right_injective (by norm_num : 2 ≤ 2))
+  exact hpow.symm.trans hfour
+
 def apm_b96J02_xIdeal : Ideal apm_b96J02_R :=
   Ideal.span {apm_b96J02_x}
 
@@ -107,5 +124,15 @@ theorem apm_b96j02 :
   of cardinality sixteen and decompose this now-compiled square-zero operator;
   concrete quotient cardinalities and the three nonisomorphism invariants also
   remain open.
+
+  Closer hop 2 closes the next reduction with
+  `apm_b96J02_finrank_eq_four`: `Module.natCard_eq_pow_finrank` and
+  `Module.Finite.of_finite` show that every cardinality-sixteen module has
+  underlying `ZMod 2` finrank four. Searches beyond hop 1 through Mathlib's
+  finite-dimensional linear-map and Jordan-form APIs found no theorem
+  decomposing an arbitrary square-zero endomorphism into size-one and size-two
+  blocks. Thus the remaining work is now the explicit rank/block decomposition,
+  together with cardinalities of the two quotient rings and separation of the
+  resulting three module types by the rank of multiplication by `x`.
   -/
   sorry
