@@ -69,6 +69,69 @@ lemma apm_t02a06_signedIntersection_eq_zero_of_opposite
   rw [apm_t02a06_signedIntersection, Fin.sum_univ_two, h]
   omega
 
+/-- Antipodal negation preserves the common intersection of two great
+circles. -/
+def apm_t02a06_intersectionAntipodal
+    {normal₁ normal₂ : apm_t02a06_S2}
+    (x : apm_t02a06_intersection normal₁ normal₂) :
+    apm_t02a06_intersection normal₁ normal₂ := by
+  refine ⟨⟨-(x.1 : EuclideanSpace ℝ (Fin 3)), ?_⟩, ?_⟩
+  · simpa [mem_sphere_zero_iff_norm] using x.1.property
+  · rcases x.2 with ⟨hx₁, hx₂⟩
+    constructor <;> simp only [apm_t02a06_greatCircle, Set.mem_setOf_eq] at hx₁ hx₂ ⊢
+    · simpa using congrArg Neg.neg hx₁
+    · simpa using congrArg Neg.neg hx₂
+
+@[simp] lemma apm_t02a06_intersectionAntipodal_coe
+    {normal₁ normal₂ : apm_t02a06_S2}
+    (x : apm_t02a06_intersection normal₁ normal₂) :
+    ((apm_t02a06_intersectionAntipodal x).1 : EuclideanSpace ℝ (Fin 3)) =
+      -(x.1 : EuclideanSpace ℝ (Fin 3)) := rfl
+
+/-- Antipodal negation is an involutive permutation of the common
+intersection. -/
+def apm_t02a06_intersectionAntipodalEquiv
+    (normal₁ normal₂ : apm_t02a06_S2) :
+    apm_t02a06_intersection normal₁ normal₂ ≃
+      apm_t02a06_intersection normal₁ normal₂ where
+  toFun := apm_t02a06_intersectionAntipodal
+  invFun := apm_t02a06_intersectionAntipodal
+  left_inv x := by
+    apply Subtype.ext
+    apply Subtype.ext
+    simp
+  right_inv x := by
+    apply Subtype.ext
+    apply Subtype.ext
+    simp
+
+/-- At a transverse common point, antipodal negation reverses the local
+intersection sign. -/
+lemma apm_t02a06_localSign_antipodal
+    {normal₁ normal₂ : apm_t02a06_S2}
+    (x : apm_t02a06_intersection normal₁ normal₂)
+    (hne : dotProduct
+      (crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ))
+      (x.1 : Fin 3 → ℝ) ≠ 0) :
+    apm_t02a06_localSign (apm_t02a06_intersectionAntipodal x) =
+      -apm_t02a06_localSign x := by
+  let d := dotProduct
+    (crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ))
+    (x.1 : Fin 3 → ℝ)
+  have hdot : dotProduct
+      (crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ))
+      ((apm_t02a06_intersectionAntipodal x).1 : Fin 3 → ℝ) = -d := by
+    simp [d, dotProduct]
+  have hdne : d ≠ 0 := hne
+  unfold apm_t02a06_localSign
+  rw [hdot]
+  change (if 0 < -d then 1 else -1) = -(if 0 < d then 1 else -1)
+  by_cases hd : 0 < d
+  · simp [hd, not_lt.mpr hd.le]
+  · have hdneg : d < 0 := lt_of_le_of_ne (not_lt.mp hd) hdne
+    have hnegpos : 0 < -d := neg_pos.mpr hdneg
+    simp [hd, hnegpos]
+
 abbrev apm_t02a06_H3 (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 3).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -113,5 +176,25 @@ theorem apm_t02a06 :
   Mathlib's cross-product, orthogonal-complement, singular-homology, Künneth,
   and sphere sources, and git history. Only the elementary signed-sum pattern
   was reusable; the geometric classification and homology bridges remain.
+
+  CLOSER HOP 2 progress. Antipodal negation is now bundled directly on the
+  common-intersection subtype as `apm_t02a06_intersectionAntipodal` and the
+  involutive equivalence `apm_t02a06_intersectionAntipodalEquiv`. The lemma
+  `apm_t02a06_localSign_antipodal` proves, by an explicit dot-product
+  calculation, that the two antipodal points have opposite local signs
+  whenever the cross-product pairing at one point is nonzero. Thus the sign
+  and cancellation portion no longer depends on choosing normalized cross-
+  product coordinates.
+
+  The remaining first-conjunct boundary is narrower: from inequality of the
+  two great-circle zero sets, prove that the normals are not proportional;
+  deduce their cross product is nonzero; and prove every unit vector
+  orthogonal to both normals is one of the two antipodal normalized cross-
+  product vectors. Renewed searches of the cross-product determinant lemmas,
+  `Submodule.finrank_orthogonal_span`, one-dimensional submodule APIs, and
+  `LinearIndependent`/Gram determinant sources found ingredients but no
+  packaged subtype-cardinality or normalization theorem. The two homology
+  conjuncts remain unchanged: no sphere computation or Künneth bridge was
+  found in the newly consulted sphere-product and torus artifacts.
   -/
   sorry

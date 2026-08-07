@@ -10,11 +10,17 @@ cancellation are compiled using the pattern from sibling `t01A07`.
 
 - Every local sign is proved to be `±1`.
 - Opposite signs are proved to make the `Fin 2` signed sum vanish.
+- Antipodal negation is proved to preserve the common great-circle
+  intersection and is bundled as an involutive equivalence.
+- At every transverse intersection point, antipodal negation is proved to
+  reverse the local sign.
 
 ## Remaining boundary
 
-- Classify the intersection of distinct great circles as the two normalized
-  antipodal cross-product points and prove their signs are opposite.
+- Convert inequality of great-circle zero sets to non-proportional normals,
+  then classify the intersection as the two normalized antipodal
+  cross-product points. Sign opposition is already compiled once
+  transversality is established.
 - Compute `H₂(S² × S²)` and `H₂(S⁴)` to exclude a homeomorphism.
 - Compute `H₃(T³) = 0` and use functoriality to show every displayed map is
   zero.

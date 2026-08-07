@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The local-sign dichotomy and two-term cancellation are proved. Remaining work is the antipodal cross-product classification of great-circle intersections and unavailable integral homology/Kunneth computations for metric spheres and the 3-torus.",
+  "closer_hop": 2,
+  "boundary": "Antipodal negation is now an involutive equivalence of the great-circle intersection, and it reverses local sign under nonzero cross-product pairing. Remaining work is exhaustiveness of the two normalized cross-product points and unavailable integral homology/Kunneth computations for metric spheres and the 3-torus.",
   "imported_at": "2026-07-13T17:26:56.995704Z"
 }
