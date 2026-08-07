@@ -53,6 +53,50 @@ def m99A03SecondTest (n : ℕ) : m99A03ExampleSpace :=
 @[simp] lemma norm_m99A03SecondTest (n : ℕ) : ‖m99A03SecondTest n‖ = 1 := by
   simp [m99A03SecondTest, lp.norm_single]
 
+/-- Distinct coordinate vectors in the first block stay uniformly apart. -/
+lemma m99A03_firstBlock_separated (n m : ℕ) (hnm : n ≠ m) :
+    1 ≤ dist ((lp.single 2 n 1, 0, 0) : m99A03ExampleSpace)
+      (lp.single 2 m 1, 0, 0) := by
+  have hcoord := lp.norm_apply_le_norm (by norm_num)
+    ((lp.single 2 n (1 : ℂ) : m99A03L2) -
+      (lp.single 2 m (1 : ℂ) : m99A03L2)) n
+  have hval : (((lp.single 2 n (1 : ℂ) : m99A03L2) -
+      (lp.single 2 m (1 : ℂ) : m99A03L2)) n) = 1 := by
+    change (lp.single 2 n (1 : ℂ) : m99A03L2) n -
+      (lp.single 2 m (1 : ℂ) : m99A03L2) n = 1
+    rw [lp.single_apply_self,
+      lp.single_apply_ne (E := fun _ : ℕ => ℂ) 2 m (1 : ℂ) hnm]
+    norm_num
+  rw [dist_eq_norm]
+  simp only [Prod.fst_sub, Prod.snd_sub, sub_zero, Prod.norm_def,
+    norm_zero]
+  rw [hval] at hcoord
+  norm_num at hcoord
+  simpa [max_eq_left (norm_nonneg _)] using hcoord
+
+/-- A continuous linear map with a uniformly separated image of a unit-ball
+sequence cannot be compact. -/
+lemma m99A03_not_isCompactOperator_of_separated_unit
+    (A : m99A03ExampleSpace →L[ℂ] m99A03ExampleSpace)
+    (u : ℕ → m99A03ExampleSpace)
+    (hu : ∀ n, ‖u n‖ ≤ 1)
+    (hsep : ∀ n m, n ≠ m → 1 ≤ dist (A (u n)) (A (u m))) :
+    ¬ IsCompactOperator A := by
+  intro hcompact
+  obtain ⟨K, hK, hAK⟩ := hcompact.image_closedBall_subset_compact 1
+  have hmem : ∀ n, A (u n) ∈ K := by
+    intro n
+    apply hAK
+    exact ⟨u n, by simpa [Metric.mem_closedBall, dist_eq_norm] using hu n, rfl⟩
+  obtain ⟨x, hx, φ, hφ, htend⟩ := hK.tendsto_subseq hmem
+  have hcauchy : CauchySeq (A ∘ u ∘ φ) := htend.cauchySeq
+  obtain ⟨N, hN⟩ := (Metric.cauchySeq_iff.mp hcauchy) 1 zero_lt_one
+  have hlt := hN N le_rfl (N + 1) (Nat.le_succ N)
+  have hne : φ N ≠ φ (N + 1) :=
+    ne_of_lt (hφ (Nat.lt_succ_self N))
+  have hge := hsep (φ N) (φ (N + 1)) hne
+  exact (not_lt_of_ge hge) (by simpa [Function.comp_apply] using hlt)
+
 theorem apm_m99a03 :
     (∀ (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
       [CompleteSpace H] (A : H →L[ℂ] H),
@@ -83,25 +127,18 @@ theorem apm_m99a03 :
       simpa using hs.symm
     exact nnnorm_eq_zero.mp hnorm
   · refine ⟨m99A03Shift, ?_, ?_, ?_⟩
-    · /-
-      Boundary: proving `m99A03Shift` noncompact requires feeding the bounded
-      sequence `(0, lp.single 2 n 1, 0)` into a sequential or totally-bounded
-      characterization of `IsCompactOperator` and proving its image is
-      pairwise separated. I searched `lp.norm_single`, `lp.single_apply`,
-      `IsCompactOperator.isCompact_closure_image_ball`, and compact sequential
-      criteria; the separated-sequence bridge was not completed. Closer hop 1
-      packages this bounded sequence as `m99A03FirstTest`, proves its norm is
-      one, and computes its image exactly in `m99A03Shift_firstTest`.
-      -/
-      sorry
-    · /-
-      Boundary: the analogous argument for `m99A03Shift ^ 2` uses the bounded
-      sequence `(0, 0, lp.single 2 n 1)`. The power formula is proved by
-      `m99A03Shift_sq_apply`; closer hop 1 packages the sequence as
-      `m99A03SecondTest`, proves its norm is one, and computes its image exactly
-      in `m99A03Shift_sq_secondTest`. The same
-      compactness-to-convergent-subsequence interface remains to be assembled.
-      -/
-      sorry
+    · apply m99A03_not_isCompactOperator_of_separated_unit
+        m99A03Shift m99A03FirstTest
+      · intro n
+        simp
+      · intro n m hnm
+        simpa [m99A03FirstTest] using m99A03_firstBlock_separated n m hnm
+    · apply m99A03_not_isCompactOperator_of_separated_unit
+        (m99A03Shift ^ 2) m99A03SecondTest
+      · intro n
+        simp
+      · intro n m hnm
+        simpa [m99A03SecondTest, m99A03Shift_sq_apply] using
+          m99A03_firstBlock_separated n m hnm
     · rw [m99A03Shift_cube]
       exact isCompactOperator_zero
