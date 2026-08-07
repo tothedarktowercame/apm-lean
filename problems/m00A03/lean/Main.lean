@@ -19,6 +19,16 @@ open Set Metric
 
 noncomputable section
 
+/-- Finiteness above every strict positive cutoff also gives finiteness on the
+closed annulus used in the usual Riesz--Schauder contradiction. -/
+lemma apm_m00A03_finite_norm_ge_of_finite_norm_gt
+    (s : Set ℂ)
+    (h : ∀ ε : ℝ, 0 < ε → {z ∈ s | ε < ‖z‖}.Finite)
+    (ε : ℝ) (hε : 0 < ε) : {z ∈ s | ε ≤ ‖z‖}.Finite := by
+  apply (h (ε / 2) (by positivity)).subset
+  intro z hz
+  exact ⟨hz.1, (half_lt_self hε).trans_le hz.2⟩
+
 theorem apm_m00a03
     (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X]
     [CompleteSpace X] :
@@ -50,7 +60,7 @@ theorem apm_m00a03
     simpa [dist_eq_norm] using this
   · intro A hA
     /-
-    Boundary: Riesz's lemma is closed above using Mathlib's compiled
+    Boundary after closer hop 1: Riesz's lemma is closed above using Mathlib's compiled
     `riesz_lemma_of_lt_one`, applied to the comap of `Y` inside the subtype
     `Z`, and converted to the requested `Metric.infDist` statement via
     `Metric.le_infDist`.
@@ -66,5 +76,14 @@ theorem apm_m00a03
     informal proof, including extraction of infinitely many distinct spectral
     points and compactness contradiction. No solved sibling contains that
     complete formal chain.
+
+    New progress: `apm_m00A03_finite_norm_ge_of_finite_norm_gt` closes the
+    strict-vs-closed cutoff mismatch: the statement's finiteness for
+    `ε < ‖z‖`, applied at `ε / 2`, yields finiteness of the standard annulus
+    `ε ≤ ‖z‖`. Searches also inspected `Topology/DerivedSet.lean` and found
+    `accPt_iff_nhds`; once annular finiteness is proved, the derived-set clause
+    can be discharged topologically by choosing a positive-norm neighborhood
+    and excluding the finitely many remaining points. Thus the genuinely open
+    analytic bridge is the first finiteness clause itself.
     -/
     sorry
