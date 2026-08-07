@@ -1,12 +1,16 @@
 # Proof Outline: a98J01
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt now avoids the long simple-function/Egorov proof.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-a98J01.md`
+- `apm_a98j01_polish_refinement` applies `Measurable.exists_continuous` to
+  make the measurable function continuous in a finer Polish topology.
+- `MeasureTheory.borel_eq_borel_of_le` proves that this refinement has the
+  same Borel sets, allowing Lebesgue inner regularity to be reused.
 
 ## Follow-up Needed
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Choose a compact subset of `Icc a b` in the refined topology with complement
+  of measure less than `ε`.
+- Transport compactness to the ordinary topology via the continuous identity.
+- Use compact-to-Hausdorff homeomorphism machinery on the subtype to transport
+  refined continuity of `f` back to ordinary `ContinuousOn f K`.
