@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "boundary": "The continuous-function Banach space and bounded linear involution with norm bound three are formalized. Remaining work is bundling the quadratic map, proving its sup-norm ball estimates, and applying the contraction theorem.",
+  "closer_hop": 2,
+  "boundary": "The bounded linear involution, bundled quadratic map, and its sup-norm size estimate are formalized. Remaining work is the sup-norm difference estimate and closed-ball contraction assembly.",
   "imported_at": "2026-07-13T17:26:55.570715Z"
 }

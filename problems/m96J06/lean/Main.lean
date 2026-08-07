@@ -92,6 +92,40 @@ abbrev apm_m96J06_interval := Icc (-2 : ℝ) 2
 private def apm_m96J06_zeroPoint : apm_m96J06_interval :=
   ⟨0, by constructor <;> norm_num⟩
 
+private def apm_m96J06_plusShift :
+    C(apm_m96J06_interval, apm_m96J06_interval) where
+  toFun t := ⟨t.1 / 2 + 1, (apm_m96J06_half_shift_mem t.2).1⟩
+  continuous_toFun := by fun_prop
+
+private def apm_m96J06_minusShift :
+    C(apm_m96J06_interval, apm_m96J06_interval) where
+  toFun t := ⟨t.1 / 2 - 1, (apm_m96J06_half_shift_mem t.2).2⟩
+  continuous_toFun := by fun_prop
+
+/-- The quadratic term bundled on `C([-2,2], ℝ)`. -/
+def apm_m96J06_quadraticC
+    (x : C(apm_m96J06_interval, ℝ)) : C(apm_m96J06_interval, ℝ) :=
+  x.comp apm_m96J06_plusShift * x.comp apm_m96J06_minusShift
+
+lemma apm_m96J06_quadraticC_norm_le
+    (x : C(apm_m96J06_interval, ℝ)) {r : ℝ} (hr : 0 ≤ r)
+    (hx : ‖x‖ ≤ r) : ‖apm_m96J06_quadraticC x‖ ≤ r ^ 2 := by
+  refine (ContinuousMap.norm_le _ (sq_nonneg r)).2 ?_
+  intro t
+  rw [Real.norm_eq_abs, apm_m96J06_quadraticC, ContinuousMap.mul_apply,
+    abs_mul]
+  have hp : |x (apm_m96J06_plusShift t)| ≤ r := by
+    exact (by simpa [Real.norm_eq_abs] using
+      (x.norm_coe_le_norm (apm_m96J06_plusShift t)).trans hx)
+  have hm : |x (apm_m96J06_minusShift t)| ≤ r := by
+    exact (by simpa [Real.norm_eq_abs] using
+      (x.norm_coe_le_norm (apm_m96J06_minusShift t)).trans hx)
+  change |x (apm_m96J06_plusShift t)| *
+      |x (apm_m96J06_minusShift t)| ≤ r ^ 2
+  calc
+    _ ≤ r * r := mul_le_mul hp hm (abs_nonneg _) hr
+    _ = r ^ 2 := by ring
+
 /-- The linear involution bundled on the actual Banach space `C([-2,2], ℝ)`. -/
 def apm_m96J06_linearPartC
     (x : C(apm_m96J06_interval, ℝ)) : C(apm_m96J06_interval, ℝ) where
@@ -175,5 +209,14 @@ theorem apm_m96j06 :
   closed artifacts, `ConstructionTargets/`, `YoungL2.lean`, and Mathlib's
   `ContinuousMap`/closed-ball fixed-point APIs found no helper assembling this
   custom nonlinear self-map and all of its ball estimates.
+
+  Closer hop 2 bundles both half-shifts as continuous self-maps of the compact
+  interval and defines `apm_m96J06_quadraticC` directly in the continuous-map
+  algebra. The new estimate `apm_m96J06_quadraticC_norm_le` proves
+  `‖Q(x)‖ ≤ r²` whenever `‖x‖ ≤ r`. Thus preservation of the Banach space and
+  the self-map size estimate are closed. The remaining work is the difference
+  estimate in the continuous-map norm, composing it with the norm-three linear
+  involution, and applying the closed-ball contraction theorem with the given
+  constants.
   -/
   sorry

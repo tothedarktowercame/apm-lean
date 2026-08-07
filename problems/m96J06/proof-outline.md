@@ -14,9 +14,20 @@ fixed-point assembly remains.
   pointwise two-radius Lipschitz estimate.
 - The linear part is bundled on `C(Icc (-2) 2, ℝ)` as a continuous linear map,
   has norm bound three, and is its own inverse.
+- Both half-shifts are bundled as continuous interval self-maps. Their product
+  defines `apm_m96J06_quadraticC`, with the compiled bound
+  `‖apm_m96J06_quadraticC x‖ ≤ r²` on the radius-`r` ball.
+
+## Closer hop 2 progress
+
+- The nonlinear term now lives in the actual continuous-function Banach
+  algebra, rather than only as an unbundled restricted function.
+- The quadratic size estimate needed for self-mapping is complete. The
+  remaining quantitative lemma is its sup-norm Lipschitz estimate on a ball,
+  followed by composition with the norm-three involution.
 
 ## Remaining Boundary
 
-Bundle the quadratic map on the continuous-map space, lift the pointwise bound
-to the sup norm, restrict the fixed-point map to the closed ball of radius
-`1/12`, and apply `ContractingWith.exists_fixedPoint'`.
+Lift the pointwise quadratic difference bound to the continuous-map sup norm,
+restrict the fixed-point map to the closed ball of radius `1/12`, and apply
+`ContractingWith.exists_fixedPoint'`.
