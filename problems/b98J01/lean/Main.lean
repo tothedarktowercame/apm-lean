@@ -17,6 +17,16 @@ The assertion `G/K ≅ A₄` is encoded without installing a local normal-subgro
 instance: it is a surjective homomorphism `G → A₄` whose kernel is exactly `K`.
 -/
 
+/-- The structural part of pulling the Klein four subgroup back along a
+surjection: the preimage is normal and contains the kernel. -/
+lemma apm_b98J01_kleinFour_comap_normal_and_ker_le
+    {G : Type*} [Group G] (φ : G →* alternatingGroup (Fin 4)) :
+    ((alternatingGroup.kleinFour (Fin 4)).comap φ).Normal ∧
+      φ.ker ≤ (alternatingGroup.kleinFour (Fin 4)).comap φ := by
+  have h4 : Nat.card (Fin 4) = 4 := by simp
+  exact ⟨(alternatingGroup.normal_kleinFour h4).comap φ,
+    Subgroup.ker_le_comap φ (alternatingGroup.kleinFour (Fin 4))⟩
+
 theorem apm_b98j01 :
     ∀ (G : Type*) [Group G] [Fintype G],
       Fintype.card G = 36 →
@@ -38,7 +48,7 @@ theorem apm_b98j01 :
       alternatingGroup.normal_kleinFour h4,
       alternatingGroup.kleinFour_card_of_card_eq_four h4⟩
   /-
-  Boundary (pass-1 Codex, partial): `h_klein_four` above closes the second
+  Boundary (closer hop 1 Codex, partial): `h_klein_four` above closes the second
   conjunct using the packaged Klein four subgroup; `hGcard` remains available
   for the order-36 argument. Inspection of cited sibling `b93J01` found only
   unrelated elementary examples, not the `A₄` subgroup facts used here.
@@ -51,7 +61,17 @@ theorem apm_b98j01 :
   semidirect action on the order-3 kernel to obtain the center dichotomy, and
   exclude the noncentral action by showing `A₄` has no subgroup of order 6.
   Local Mathlib searches found the general Sylow/action APIs and the packaged
-  Klein four facts, but no order-36 or no-order-6 assembly. The repaired
-  statement appears mathematically sound.
+  Klein four facts, but no order-36 or no-order-6 assembly.
+
+  New progress: `apm_b98J01_kleinFour_comap_normal_and_ker_le` packages the
+  canonical candidate for the last conjunct,
+  `N = (alternatingGroup.kleinFour (Fin 4)).comap φ`, and proves both its
+  normality and `φ.ker ≤ N` using `Subgroup.Normal.comap` and
+  `Subgroup.ker_le_comap`. Thus, after rewriting `φ.ker = K`, the containment
+  `K ≤ N` is immediate. The remaining pullback work is the cardinality formula
+  `|N| = |ker φ| * |kleinFour| = 12`; searches of `Coset.Card` found only
+  `card_comap_dvd_of_injective`, not the surjective preimage-card equality.
+  The center dichotomy and the no-order-six argument also remain open. The
+  repaired statement appears mathematically sound.
   -/
   sorry
