@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
+  "classification_detail": "Closer hop 2 proved apm_a98a03_sum_adjacent_sub, the generic Fin-indexed telescoping identity needed after choosing mean-value tags. The FTC assembly still needs a fine uniform partition and dependent choice of tags; the first conjunct independently requires construction of a continuous singular function such as the Cantor staircase.",
   "imported_at": "2026-07-13T17:26:52.958660Z"
 }

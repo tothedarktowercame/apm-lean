@@ -11,12 +11,14 @@ a.e.-derivative counterexample. One `sorry` remains.
 - `apm_a98a03_exists_mvt_tag` applies Mathlib's Lagrange mean-value theorem on
   every subinterval and returns
   `f b - f a = f' t * (b - a)` for an interior tag `t`.
+- `apm_a98a03_sum_adjacent_sub` proves that the resulting `Fin`-indexed
+  adjacent increments telescope exactly to the endpoint difference.
 
 ## Remaining FTC step
 
 - Choose a sufficiently fine uniform `Fin (n+1)` partition.
 - Choose the compiled MVT tag on each cell.
-- Rewrite the tagged sum and telescope with `Finset.sum_range_sub`.
+- Rewrite the tagged sum and apply the compiled telescoping lemma.
 - Apply the defining estimate of `HasRiemannIntegralOnUnitInterval` and let
   `ε → 0`.
 

@@ -49,6 +49,23 @@ lemma apm_a98a03_exists_mvt_tag
   rw [hslope]
   exact (div_mul_cancel₀ _ (sub_ne_zero.mpr hab.ne')).symm
 
+/-- Adjacent increments along a `Fin`-indexed partition telescope to the
+endpoint increment.  This is the finite algebraic step needed after choosing
+the mean-value tags above. -/
+lemma apm_a98a03_sum_adjacent_sub
+    {G : Type*} [AddCommGroup G] (n : ℕ) (f : ℝ → G)
+    (x : Fin (n + 1) → ℝ) :
+    (∑ i : Fin n, (f (x i.succ) - f (x i.castSucc))) =
+      f (x (Fin.last n)) - f (x 0) := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [Fin.sum_univ_castSucc]
+      simp_rw [← Fin.castSucc_succ]
+      rw [ih (fun i ↦ x i.castSucc)]
+      simp only [Fin.castSucc_zero, Fin.succ_last]
+      abel
+
 theorem apm_a98a03 :
     (∃ (f f' : ℝ → ℝ),
       ContinuousOn f (Icc 0 1) ∧
@@ -61,13 +78,15 @@ theorem apm_a98a03 :
       HasRiemannIntegralOnUnitInterval f' I →
       f 1 - f 0 = I) := by
   /-
-  Boundary (closer hop 1): the strengthened FTC half is narrowed by the new
+  Boundary (closer hops 1--2): the strengthened FTC half is narrowed by the
   compiled helper `apm_a98a03_exists_mvt_tag`.  It applies Mathlib's exact
   `exists_hasDerivAt_eq_slope` theorem on every partition cell and returns
   `f b - f a = f' t * (b-a)`, precisely the summand needed by
-  `HasRiemannIntegralOnUnitInterval`.  The remaining finite step is to choose a
-  sufficiently fine uniform `Fin (n+1)` partition, choose these tags, rewrite
-  the tagged sum, and use `Finset.sum_range_sub` to telescope.
+  `HasRiemannIntegralOnUnitInterval`.  Hop 2 additionally proves
+  `apm_a98a03_sum_adjacent_sub`, which telescopes all adjacent increments of
+  any `Fin`-indexed partition to its endpoint increment.  The remaining FTC
+  assembly is to choose a sufficiently fine uniform `Fin (n+1)` partition and
+  its dependent family of MVT tags, then apply the defining estimate.
 
   The counterexample half remains the hard boundary.  Searches of
   `LEMMA-INDEX.md`, all `ConstructionTargets/` (including `LusinN` and
