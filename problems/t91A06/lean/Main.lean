@@ -13,4 +13,5 @@ theorem apm_t91a06
     (U : ℕ → Set X) (hopen : ∀ i, IsOpen (U i))
     (hdense : ∀ i, Dense (U i)) :
     Dense (⋂ i, U i) := by
-  sorry
+  haveI : BaireSpace X := inferInstance
+  exact dense_iInter_of_isOpen_nat hopen hdense
