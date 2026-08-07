@@ -14,11 +14,17 @@ matrix reductions, with the finite supported-sum assembly still open.
   unique solution for every right-hand side.
 - `apm_m97a04_diagonal_norm_gt_two` proves the diagonal norm is strictly
   greater than two whenever `b < 0` on `[0,1]`.
+- `apm_m97a04_extend_center`, `apm_m97a04_extend_zero`, and
+  `apm_m97a04_extend_succ_boundary` compile the center-grid and homogeneous
+  endpoint evaluations needed by the stencil.
+- `apm_m97a04_neighbor_norm_sum` proves the two possible off-diagonal norms
+  sum to exactly two under the eventual mesh-smallness inequality.
 
 ## Remaining boundary
 
-- Collapse each `Matrix.mulVec` row sum to its at-most-three supported entries
-  and identify the endpoint values of `apm_m97a04_extend`.
+- Collapse each `Matrix.mulVec` row sum to its at-most-three supported entries;
+  the center and outer endpoint evaluations are now available as simp lemmas.
 - Bound `a` on `[0,1]`, choose an eventual mesh threshold making both neighbor
-  coefficients nonnegative, prove the erased-row norm sum is at most two, and
+  coefficients satisfy the compiled neighbor-sum lemma, prove the erased-row
+  norm sum is at most two, and
   apply `Matrix.det_ne_zero_of_sum_row_lt_diag`.

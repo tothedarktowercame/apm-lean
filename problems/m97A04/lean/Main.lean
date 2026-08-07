@@ -32,6 +32,34 @@ noncomputable def apm_m97a04_rhs (n : ℕ) (c : ℝ → ℝ) : Fin n → ℝ :=
 noncomputable def apm_m97a04_extend (n : ℕ) (u : Fin n → ℝ) (k : ℕ) : ℝ :=
   if hk : 0 < k ∧ k ≤ n then u ⟨k - 1, by omega⟩ else 0
 
+/-- At an interior grid index, the zero-boundary extension recovers the
+corresponding unknown. -/
+@[simp] lemma apm_m97a04_extend_center
+    {n : ℕ} (u : Fin n → ℝ) (i : Fin n) :
+    apm_m97a04_extend n u (i.val + 1) = u i := by
+  rw [apm_m97a04_extend, dif_pos (by omega)]
+  congr
+
+@[simp] lemma apm_m97a04_extend_zero
+    (n : ℕ) (u : Fin n → ℝ) : apm_m97a04_extend n u 0 = 0 := by
+  simp [apm_m97a04_extend]
+
+@[simp] lemma apm_m97a04_extend_succ_boundary
+    (n : ℕ) (u : Fin n → ℝ) : apm_m97a04_extend n u (n + 1) = 0 := by
+  simp [apm_m97a04_extend]
+
+/-- Once the convection coefficient is small enough, the two potential
+off-diagonal coefficients have total norm exactly two. -/
+lemma apm_m97a04_neighbor_norm_sum
+    {h x : ℝ} (hh : 0 ≤ h) (hsmall : h / 2 * |x| < 1) :
+    ‖1 - h / 2 * x‖ + ‖1 + h / 2 * x‖ = 2 := by
+  rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_of_pos, abs_of_pos]
+  · ring
+  · have hx : -|x| ≤ x := neg_abs_le x
+    nlinarith [mul_nonneg hh (abs_nonneg x)]
+  · have hx : x ≤ |x| := le_abs_self x
+    nlinarith [mul_nonneg hh (abs_nonneg x)]
+
 /-- A matrix row vanishes away from its diagonal and two neighbors. -/
 lemma apm_m97a04_matrix_eq_zero_of_not_neighbor
     {n : ℕ} (a b : ℝ → ℝ) (i j : Fin n)
@@ -111,7 +139,7 @@ theorem apm_m97a04 :
             ∃! u : Fin n → ℝ,
               Matrix.mulVec (apm_m97a04_matrix n a b) u = rhs) := by
   /-
-  CLOSER HOP 1 boundary. The neighboring artifact `m96A05` uses the same
+  CLOSER HOP 2 boundary. The neighboring artifact `m96A05` uses the same
   tridiagonal matrix, but importing a problem theorem containing `sorry` would
   be an invalid closure route. Its reusable proof pattern was therefore
   replayed locally and cited here. This hop proves:
@@ -123,14 +151,22 @@ theorem apm_m97a04 :
   * `apm_m97a04_diagonal_norm_gt_two`, the strict diagonal half of the
     Gershgorin estimate under `b < 0`.
 
+  This hop goes beyond that boundary by proving the three exact extension
+  identities `apm_m97a04_extend_center`, `apm_m97a04_extend_zero`, and
+  `apm_m97a04_extend_succ_boundary`, eliminating the center and the two
+  homogeneous-boundary cases from the stencil bookkeeping.  It also proves
+  `apm_m97a04_neighbor_norm_sum`: under the precise smallness condition
+  `(h / 2) * |a t| < 1`, the norms of the two possible off-diagonal
+  coefficients sum exactly to `2`.
+
   Searches of `LEMMA-INDEX.md`, all 16 `ConstructionTargets/` modules, closed
   finite-difference artifacts, Mathlib's `Finset` and Gershgorin sources, and
   git history found no packaged tridiagonal-row sum theorem. The stencil
   clause still requires expanding `Matrix.mulVec` and collapsing `Finset.univ`
-  to the predecessor/diagonal/successor, with first/last-row evaluation of
-  `apm_m97a04_extend`. The determinant clause requires compact boundedness of
-  `a`, choosing `h₀` so both off-diagonal coefficients are nonnegative, and
-  proving the erased-row norm sum is at most two before applying
+  to the predecessor/diagonal/successor; the center and outer boundary values
+  are now compiled. The determinant clause requires compact boundedness of
+  `a`, choosing `h₀` to imply the new helper's smallness premise, and proving
+  the erased-row norm sum is at most the full two-neighbor sum before applying
   `Matrix.det_ne_zero_of_sum_row_lt_diag`. These finite dependent-index
   assemblies remain open.
   -/

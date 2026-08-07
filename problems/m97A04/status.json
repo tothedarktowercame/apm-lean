@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "Three-point row support, determinant-to-unique-solvability, and the strict diagonal norm bound are proved. Remaining work is the supported Fin row-sum expansion, endpoint bookkeeping, and eventual two-neighbor Gershgorin estimate.",
+  "closer_hop": 2,
+  "boundary": "Three-point support, determinant reduction, strict diagonal norm, center/boundary extension identities, and the exact small-mesh two-neighbor norm sum are proved. Remaining work is the dependent Fin row-sum collapse, compact boundedness threshold for a, and the erased-row Gershgorin estimate.",
   "imported_at": "2026-07-13T17:26:55.677967Z"
 }
