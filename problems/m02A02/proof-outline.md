@@ -13,6 +13,8 @@ periodic Sobolev structure and has one remaining compactness/variational core.
 - `apm_m02a02_weak_iff_strong` derives the full weak/strong equivalence from
   Green's identity, the forcing and Laplacian mean conditions, and density of
   the embedded mean-zero tests.
+- `apm_m02a02_grad_jointKernel_meanZero` proves that the two gradient
+  components have trivial joint kernel on the mean-zero carrier.
 
 ## Remaining boundary
 
@@ -21,3 +23,6 @@ periodic Sobolev structure and has one remaining compactness/variational core.
 - Bundle the gradient form on the mean-zero subtype, prove coercivity from
   Poincaré, apply Mathlib's `IsCoercive.continuousLinearEquivOfBilin`, and
   transport the result to the affine mean constraint determined by `u₀`.
+- The inspected Fredholm bounded-below theorem is not directly reusable: it
+  concerns compact endomorphisms, while the embedding and gradient pair here
+  have different codomains.

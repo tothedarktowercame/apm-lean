@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "Completeness of the mean-zero kernel and the weak/strong equivalence are proved. Remaining work is compactness-to-Poincare and Lax-Milgram existence on the mean-zero subtype.",
+  "closer_hop": 2,
+  "boundary": "Completeness, weak/strong equivalence, and triviality of the gradient joint kernel on the mean-zero subtype are proved. Remaining work is compactness-to-Poincare and Lax-Milgram existence; the inspected Fredholm shortcut only applies to compact endomorphisms and does not directly fit the differing codomains.",
   "imported_at": "2026-07-13T17:26:54.383609Z"
 }

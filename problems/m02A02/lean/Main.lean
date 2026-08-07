@@ -88,6 +88,34 @@ lemma apm_m02a02_weak_iff_strong
     rw [hgreen u v, ← hstrong]
     simp
 
+/-- On the mean-zero carrier, the two gradient components have trivial joint
+kernel.  This is the nondegeneracy input for both the compactness proof of
+Poincaré and the eventual Lax--Milgram form. -/
+lemma apm_m02a02_grad_jointKernel_meanZero
+    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (embed : H →L[ℝ] Lp ℝ 2 (volume.restrict apm_m02a02_domain))
+    (gradX gradY : H →L[ℝ] Lp ℝ 2 (volume.restrict apm_m02a02_domain))
+    (one : Lp ℝ 2 (volume.restrict apm_m02a02_domain))
+    (hone : ‖one‖ = 1)
+    (hembed_inj : Function.Injective embed)
+    (hgrad_kernel : ∀ u : H,
+      gradX u = 0 ∧ gradY u = 0 ↔ ∃ c : ℝ, embed u = c • one)
+    (u : H) (hu : @inner ℝ _ _ (embed u) one = 0)
+    (hgrad : gradX u = 0 ∧ gradY u = 0) : u = 0 := by
+  obtain ⟨c, hc⟩ := (hgrad_kernel u).mp hgrad
+  have hc0 : c = 0 := by
+    have : c * ‖one‖ ^ 2 = 0 := by
+      calc
+        c * ‖one‖ ^ 2 = @inner ℝ _ _ (c • one) one := by
+          simp [inner_smul_left]
+        _ = @inner ℝ _ _ (embed u) one := by rw [hc]
+        _ = 0 := hu
+    rw [hone] at this
+    simpa using this
+  apply hembed_inj
+  rw [hc, hc0]
+  simp
+
 theorem apm_m02a02
     (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [CompleteSpace H]
@@ -141,14 +169,28 @@ theorem apm_m02a02
             @inner ℝ _ _ (gradY u) (gradY v) =
               @inner ℝ _ _ rhs (embed v)) := by
     /-
-    CLOSER HOP 1 boundary. `LEMMA-INDEX.md`, all construction modules, the
+    CLOSER HOP 2 boundary. `LEMMA-INDEX.md`, all construction modules, the
     closed corpus, and git history contain no periodic-Sobolev compactness
     lemma reusable for these abstract operators. Mathlib does now contain
     `Analysis.InnerProductSpace.LaxMilgram`: after Poincaré supplies coercivity
     on the mean-zero subtype,
     `IsCoercive.continuousLinearEquivOfBilin` is the correct existence API.
 
-    The remaining first step is the contradiction proof of Poincaré from
+    This hop additionally proved `apm_m02a02_grad_jointKernel_meanZero`: the
+    gradient pair has trivial joint kernel after imposing the mean-zero
+    constraint.  This discharges the nondegeneracy input needed by both the
+    compactness contradiction and Lax--Milgram uniqueness.
+
+    I also investigated Mathlib's Fredholm shortcut
+    `IsCompactOperator.antilipschitz_of_not_hasEigenvalue`.  Its source
+    contains essentially the desired compactness/subsequence argument, but
+    the theorem applies to a compact endomorphism `X → X` and bounds
+    `T - μ • 1`.  Here `embed : H → L²` and the gradient pair have different
+    codomains, so applying it requires first building a product-space
+    endomorphism and transporting its lower bound; no existing helper does
+    that reduction.
+
+    The remaining first step is therefore still the contradiction proof of Poincaré from
     `hembed_compact`: normalize a sequence whose gradient energy tends to
     zero, extract a convergent embedded subsequence, use `hh1_norm` and
     `hgrad_kernel` to identify its limit with a constant mode, and use the
