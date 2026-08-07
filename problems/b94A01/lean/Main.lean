@@ -16,6 +16,26 @@ None. `P` and `Q` are Mathlib Sylow subgroups, their generators live in the
 subgroup types, and part (c) uses Mathlib's actual semidirect product.
 -/
 
+/-- Subgroups of orders five and two in a group of order ten form an internal
+semidirect product when the subgroup of order five is normal. -/
+lemma apm_b94a01_complement
+    (G : Type*) [Group G] [Fintype G]
+    (P Q : Subgroup G) [P.Normal]
+    (hP : Nat.card P = 5) (hQ : Nat.card Q = 2)
+    (hG : Fintype.card G = 10) :
+    Disjoint P Q ∧ P ⊔ Q = ⊤ ∧
+      ∃ φ : Q →* MulAut P, Nonempty (G ≃* (P ⋊[φ] Q)) := by
+  have hmul : Nat.card P * Nat.card Q = Nat.card G := by
+    rw [hP, hQ, Nat.card_eq_fintype_card, hG]
+  have hc : P.IsComplement' Q :=
+    Subgroup.isComplement'_of_coprime hmul
+      (by simpa [hP, hQ] using (show Nat.Coprime 5 2 by decide))
+  let φ : Q →* MulAut P :=
+    P.normalizerMonoidHom.comp
+      (Subgroup.inclusion (P.normalizer_eq_top ▸ le_top))
+  refine ⟨hc.disjoint, hc.sup_eq_top, φ, ?_⟩
+  exact ⟨(SemidirectProduct.mulEquivSubgroup hc).symm⟩
+
 theorem apm_b94a01 :
     ∀ (G : Type*) [Group G] [Fintype G]
         (P : Sylow 5 G) (Q : Sylow 2 G) (x : P) (y : Q),
@@ -66,16 +86,34 @@ theorem apm_b94a01 :
       norm_num [Nat.ModEq] at hmod
   haveI : Subsingleton (Sylow 5 G) := (Nat.card_eq_one_iff_unique.mp hSylow5card).1
   have hPnormal : (P : Subgroup G).Normal := Sylow.normal_of_subsingleton P
+  letI : (P : Subgroup G).Normal := hPnormal
+  haveI : IsCyclic P := isCyclic_iff_exists_zpowers_eq_top.mpr ⟨x, hx⟩
+  have hAutCard : Nat.card (MulAut P) = 4 := by
+    rw [IsCyclic.card_mulAut, hPcard]
+    native_decide
+  have hcomplement :=
+    apm_b94a01_complement G (P : Subgroup G) (Q : Subgroup G)
+      hPcard hQcard hcard
   /- PASS-1 boundary: the Sylow sizes and normality of `P` are now proved
      locally (`hPcard`, `hQcard`, `hPnormal`) using the route validated in
      sibling `b93A01`.  I searched the Sylow and cyclic-group APIs, including
      `Sylow.card_eq_multiplicity`, `card_sylow_modEq_one`,
      `Sylow.normal_of_subsingleton`, `IsCyclic.mulAutMulEquiv`, and
      `IsCyclic.card_mulAut`, together with the semidirect-product recognition
-     results.  The remaining route is to enumerate `MulAut P` via the units
-     of `ZMod 5`, classify the two homomorphisms `Q →* MulAut P`, prove the
-     Sylow intersection/join complement conditions, and identify conjugation
-     with the semidirect action.  The explicit `Fin 4` enumeration and the
-     bridge from Mathlib's internal semidirect-product equivalence to the final
-     concrete multiplication identities remain unresolved. -/
+     results.
+
+     Closer hop 1 proves the complement and semidirect-product portion in
+     `apm_b94a01_complement`.  It uses
+     `Subgroup.isComplement'_of_coprime` to obtain disjointness and generation,
+     then instantiates `SemidirectProduct.mulEquivSubgroup` with the normalizer
+     conjugation action.  The main context also now compiles `IsCyclic P` from
+     `hx` and computes `Nat.card (MulAut P) = 4` via
+     `IsCyclic.card_mulAut`.
+
+     The remaining route is to turn that cardinality into the specified
+     power-action enumeration `Ψ`, classify the two homomorphisms
+     `Q →* MulAut P`, and identify the nontrivial conjugation action with
+     inversion to prove the final concrete multiplication identities.  No
+     closed artifact or Mathlib theorem found by the searches packages those
+     generator-level identifications. -/
   sorry

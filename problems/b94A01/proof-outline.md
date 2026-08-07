@@ -1,12 +1,22 @@
 # Proof Outline: b94A01
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen theorem has a compiling partial formalization in `lean/Main.lean`.
+It proves the Sylow cardinalities, normality of the subgroup of order five,
+the internal complement conditions, and the resulting semidirect-product
+decomposition.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b94A01.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_b94a01_complement` obtains disjointness, generation, and the concrete
+  Mathlib semidirect-product equivalence from cardinality and normality.
+- The main proof computes `Nat.card (MulAut P) = 4` from cyclicity of `P`.
+
+## Remaining bridge
+
+Enumerate the four automorphisms with the exact requested power formula,
+classify maps from `Q`, and show that noncommutativity forces conjugation by
+`y` to be inversion. The final two multiplication identities then reduce to
+cyclic exponent arithmetic.
