@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
+  "classification_detail": "Closer hop 2 proved apm_a99J03_hasDerivAt_kernel and apm_a99J03_kernel_deriv_bound, supplying the exact pointwise derivative and uniform local L1 domination required by Mathlib's parametric-integral theorem. Remaining work is measurability/integrability packaging, iteration to ContDiffOn, Tonelli for the derivative L1 bound, and the endpoint nonintegrability calculation.",
   "imported_at": "2026-07-13T17:26:53.061682Z"
 }
