@@ -15,7 +15,8 @@
     "files": ["lean/Main.lean"],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 1,
+    "closer_progress": "The normal quotient pullback and its exact cardinality Nat.card N * Nat.card S are now proved helpers. Remaining: quotient Sylow-29 uniqueness, transport to Q.Normal, and the final K = P R normality/commutativity equivalence."
   },
   "artifacts": {
     "has_problem_tex": true,

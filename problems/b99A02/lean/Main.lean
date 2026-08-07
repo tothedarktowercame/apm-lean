@@ -21,6 +21,13 @@ lemma apm_b99A02_normal_comap_mk_and_le
       N ≤ S.comap (QuotientGroup.mk' N) := by
   exact ⟨hS.comap (QuotientGroup.mk' N), QuotientGroup.le_comap_mk' N S⟩
 
+lemma apm_b99A02_card_comap_mk
+    {G : Type*} [Group G] (N : Subgroup G) [N.Normal]
+    (S : Subgroup (G ⧸ N)) :
+    Nat.card (S.comap (QuotientGroup.mk' N)) = Nat.card N * Nat.card S := by
+  simpa only [Set.mem_preimage, SetLike.mem_coe] using
+    (QuotientGroup.card_preimage_mk N (S : Set (G ⧸ N)))
+
 theorem apm_b99a02
     (G : Type*) [Group G] [Fintype G]
     (hG : Fintype.card G = 5075)
@@ -86,5 +93,14 @@ theorem apm_b99a02
   the Sylow `29`-subgroup in the quotient and establishing the comap cardinal
   `25 * 29`; the latter can be approached through
   `QuotientGroup.comapMk'OrderIso` plus `Subgroup.card_mul_index`.
+
+  Closer hop 2 closes that cardinality bridge outright as
+  `apm_b99A02_card_comap_mk`, using the more direct
+  `QuotientGroup.card_preimage_mk`: for every `S ≤ G ⧸ N`, the comap has
+  cardinality `Nat.card N * Nat.card S`. Thus once the quotient Sylow-29
+  subgroup is constructed with cardinality 29, its normal pullback has the
+  required cardinality `25 * 29` immediately. The remaining cascade is the
+  quotient Sylow uniqueness count, transport of normality to the specified
+  `Q`, and the final `K = P R` normality/commutativity equivalence.
   -/
   sorry
