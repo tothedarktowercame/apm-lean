@@ -44,6 +44,23 @@ def apm_t94a09_SmoothTorusField
       Complex.re (V p).2 * Complex.re p.2 +
           Complex.im (V p).2 * Complex.im p.2 = 0
 
+lemma apm_t94a09_smoothSphereField_restrict
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (Vext : E → E) (hV : ContDiff ℝ ∞ Vext)
+    (horth : ∀ p : Metric.sphere (0 : E) 1, ⟪Vext p, (p : E)⟫_ℝ = 0) :
+    apm_t94a09_SmoothSphereField (fun p ↦ Vext p) := by
+  exact ⟨Vext, hV, fun p ↦ ⟨rfl, horth p⟩⟩
+
+lemma apm_t94a09_smoothTorusField_restrict
+    (Vext : (ℂ × ℂ) → (ℂ × ℂ)) (hV : ContDiff ℝ ∞ Vext)
+    (horth : ∀ p : apm_t94a09_Torus,
+      Complex.re (Vext (p.1, p.2)).1 * Complex.re p.1 +
+          Complex.im (Vext (p.1, p.2)).1 * Complex.im p.1 = 0 ∧
+      Complex.re (Vext (p.1, p.2)).2 * Complex.re p.2 +
+          Complex.im (Vext (p.1, p.2)).2 * Complex.im p.2 = 0) :
+    apm_t94a09_SmoothTorusField (fun p ↦ Vext (p.1, p.2)) := by
+  exact ⟨Vext, hV, fun p ↦ ⟨rfl, horth p⟩⟩
+
 theorem apm_t94a09 :
     (¬∃ V : apm_t94a09_S2 → apm_t94a09_E3,
       apm_t94a09_SmoothSphereField V ∧ ∀ p, V p ≠ 0) ∧
@@ -51,4 +68,20 @@ theorem apm_t94a09 :
       apm_t94a09_SmoothSphereField V ∧ ∀ p, V p ≠ 0) ∧
     (∃ V : apm_t94a09_Torus → ℂ × ℂ,
       apm_t94a09_SmoothTorusField V ∧ ∃! p, V p = 0) := by
+  /-
+  Boundary (closer hop 1): the two restriction lemmas above remove the
+  ambient-extension packaging for explicit fields.  The `S³` conjunct can use
+  the linear complex-structure field `x ↦ (-x₁,x₀,-x₃,x₂)`, whose norm
+  equals `‖x‖` and whose inner product with `x` vanishes.  The torus conjunct
+  can use a fixed tangent direction multiplied by the nonnegative polynomial
+  `‖z-1‖²+‖w-1‖²`, which vanishes at exactly `(1,1)`.
+
+  Searches of `ConstructionTargets/`, `LEMMA-INDEX.md`, all closed sphere and
+  vector-field artifacts, git history, and Mathlib's sphere, tangent-bundle,
+  Euler-characteristic, degree, Poincaré--Hopf, and homotopy APIs found no
+  hairy-ball theorem or equivalent obstruction for `S²`.  Thus the two
+  existence clauses reduce to explicit finite-dimensional algebra and
+  smoothness, while the first conjunct still requires a new hairy-ball proof
+  (e.g. via degree or Poincaré--Hopf), which is the principal open bridge.
+  -/
   sorry
