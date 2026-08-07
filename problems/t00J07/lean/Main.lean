@@ -54,6 +54,14 @@ def apm_t00j07_basepoint (f : C(Circle, apm_t00j07_RP2)) :
     apm_t00j07_attachDisk f :=
   Quotient.mk _ (.inr apm_t00j07_diskCenter)
 
+/-- The quotient construction identifies every attaching-circle point with
+its prescribed image in `RP²`. -/
+lemma apm_t00j07_attach_glue (f : C(Circle, apm_t00j07_RP2)) (z : Circle) :
+    (Quotient.mk _ (.inl (f z)) : apm_t00j07_attachDisk f) =
+      Quotient.mk _ (.inr (apm_t00j07_circleToDisk z)) := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _ (apm_t00j07_attachRel.glue z))
+
 abbrev apm_t00j07_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -82,4 +90,18 @@ theorem apm_t00j07 :
           ContinuousMap.Homotopic f (ContinuousMap.const _ p)) →
         apm_t00j07_invariants f (Multiplicative (ZMod 1))
           (ModuleCat.of ℤ (ZMod 1))) := by
+  /-
+  Boundary (closer hop 1): `apm_t00j07_attach_glue` above now certifies the
+  defining boundary identification in the concrete quotient.  Searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, solved topology siblings, git
+  history, and Mathlib's projectivization, fundamental-group, singular-
+  homology, relative-cell-complex, and CW-complex APIs found no van Kampen,
+  cellular-homology, or attaching-cell theorem that computes the invariants of
+  this quotient.  In particular, the nearby partial artifacts `t01A01`,
+  `t01J03`, `t02A03`, and `t00A01` encounter the same absent quotient-space
+  bridge.  Closure therefore still requires developing the topology of real
+  projective two-space and the effect of attaching a 2-disk along the two
+  embedding homotopy classes, then transporting those computations to the
+  exact quotient and basepoint used here.
+  -/
   sorry

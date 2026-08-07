@@ -10,12 +10,14 @@
     "problem_tex": "apm/t00J07.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_progress": "Closer hop 1 proved the concrete quotient's attaching-circle identification. The main theorem remains blocked on van Kampen/cellular homology computations for RP2 with an attached 2-disk; no packaged Mathlib bridge was found.",
   "imported_at": "2026-07-13T17:26:56.642829Z"
 }
