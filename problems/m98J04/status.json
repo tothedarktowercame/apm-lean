@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_progress": "Hop 3 finds Mathlib's distributional fundamental lemma and compiles the upgrade from almost-everywhere to pointwise vanishing on the open interval; first-variation and integration-by-parts assembly remain.",
   "imported_at": "2026-07-13T17:26:55.985855Z"
 }

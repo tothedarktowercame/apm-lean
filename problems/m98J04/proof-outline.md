@@ -12,12 +12,16 @@ the complete endpoint-length calculation for the straight line.
   `1 + y' * I`; the complex norm is the arc-length integrand, so the integral
   triangle inequality proves global minimality of the line.
 - The theorem proves the line is globally `C¹` and has the required endpoints.
+- `apm_m98J04_eq_zero_on_Ioo_of_ae` upgrades an almost-everywhere zero
+  continuous Euler residual to pointwise zero on the open interval.
 
 ## Remaining Boundary
 
-- Derive Euler–Lagrange from the first variation using differentiation under
-  the integral, integration by parts, and the fundamental lemma.
+- Derive the integral Euler residual from the first variation using
+  differentiation under the integral and integration by parts.
+- Convert the interval identity to the compactly-supported whole-space test
+  hypothesis of `ae_eq_zero_of_integral_contDiff_smul_eq_zero`.
 The arc-length half is closed. The only remaining boundary is the
-Euler–Lagrange implication: dominated differentiation and integration by parts
-are available separately in Mathlib, but the fundamental lemma for the frozen
-endpoint-zero `C¹` test-function class is not packaged.
+Euler–Lagrange implication. The distributional fundamental lemma and its
+continuous pointwise upgrade are now identified; the first-variation and
+integration-by-parts assembly remains.

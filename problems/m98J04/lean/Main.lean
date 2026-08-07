@@ -120,6 +120,20 @@ lemma apm_m98J04_integral_complex_tangent (a b : ℝ) (y : ℝ → ℝ)
   rw [apm_m98J04_integral_deriv_eq_sub a b y hy]
   simp
 
+/-- The final topological stage of the fundamental lemma: a continuous
+function which vanishes almost everywhere on an open interval vanishes at
+every point of that interval. -/
+lemma apm_m98J04_eq_zero_on_Ioo_of_ae
+    (a b : ℝ) (f : ℝ → ℝ) (hf : ContinuousOn f (Ioo a b))
+    (hae : ∀ᵐ x ∂MeasureTheory.volume, x ∈ Ioo a b → f x = 0) :
+    ∀ x ∈ Ioo a b, f x = 0 := by
+  have hae' : f =ᵐ[MeasureTheory.volume.restrict (Ioo a b)] (0 : ℝ → ℝ) := by
+    change ∀ᵐ x ∂MeasureTheory.volume.restrict (Ioo a b), f x = 0
+    rw [MeasureTheory.ae_restrict_iff' measurableSet_Ioo]
+    exact hae
+  exact MeasureTheory.Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo hf
+    continuous_zero.continuousOn
+
 theorem apm_m98j04 :
     (∀ (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ),
       a < b →
@@ -154,6 +168,18 @@ theorem apm_m98j04 :
     remaining fundamental lemma: from vanishing integrals against every
     endpoint-zero `C¹` test function, infer pointwise vanishing on `Ioo a b`.
     Consequently this first conjunct remains the precise open bridge.
+
+    Closer hop 3 found a stronger distributional route that earlier searches
+    missed: `ae_eq_zero_of_integral_contDiff_smul_eq_zero` gives almost-
+    everywhere vanishing from compactly supported smooth tests.  The compiled
+    lemma `apm_m98J04_eq_zero_on_Ioo_of_ae` then upgrades that conclusion to
+    pointwise vanishing on the open interval using
+    `Measure.eqOn_open_of_ae_eq` and continuity.  Thus the fundamental-lemma
+    endpoint itself is available.  What remains is the substantial preceding
+    assembly: differentiate the frozen first variation, integrate by parts,
+    and convert its interval-integral identity for endpoint-zero `C¹`
+    variations into the whole-space compactly-supported-test hypothesis of
+    the distribution theorem.
     -/
     sorry
   · intro a b α β hab
