@@ -1,18 +1,32 @@
 {
-  "schema": "apm-problem-candidate-set.v1",
+  "schema": "apm-problem-bundle.v1",
   "problem_id": "t97J01",
   "bundle_root": "problems/t97J01",
-  "layout": "candidate-set",
-  "candidate_count": 6,
-  "frame_ids": [
-    "apm-v2-t97J01-1774992240183",
-    "apm-v2-t97J01-1774994005204",
-    "apm-v2-t97J01-1774994931686",
-    "apm-v2-t97J01-1774999080822",
-    "apm-v2-t97J01-1775001167604",
-    "apm-v2-t97J01-1775002043870"
-  ],
-  "recommended_latest_frame_id": "apm-v2-t97J01-1775002043870",
-  "selected_frame_id": null,
+  "layout": "single-bundle",
+  "source": {
+    "kind": "harvested-informal-proof",
+    "informal_solution": "informal-solution.md",
+    "harvested_filename": "apm-t97J01.md",
+    "problem_tex": "apm/t97J01.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial-lean-proof",
   "imported_at": "2026-05-01T19:38:18.864237Z"
 }
