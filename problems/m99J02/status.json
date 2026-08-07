@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "notes": "Kernel continuity, both one-sided derivative formulas, and the exact Wronskian jump compile. The compact-support half-line integration-by-parts assembly remains.",
+  "closer_hop": 3,
+  "notes": "Kernel continuity, one-sided derivatives, the Wronskian jump, and compact-support product integrability compile. The piecewise double integration-by-parts assembly remains.",
   "imported_at": "2026-07-13T17:26:56.220641Z"
 }

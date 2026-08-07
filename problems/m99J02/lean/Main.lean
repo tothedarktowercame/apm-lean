@@ -75,6 +75,16 @@ lemma apm_m99j02_g_derivative_jump (u₁ u₂ : ℝ → ℝ) (y : ℝ) :
   unfold apm_m99j02_Wronskian
   ring
 
+/-- Multiplying a continuous coefficient by a test function gives an
+integrable whole-line function.  This permits use of
+`MeasureTheory.integral_mul_deriv_eq_deriv_mul_of_integrable`, avoiding
+explicit limits at `±∞`. -/
+lemma apm_m99j02_integrable_mul_test
+    (u φ : ℝ → ℝ) (hu : Continuous u) (hφ : apm_m99j02_IsTestFunction φ) :
+    MeasureTheory.Integrable (fun x : ℝ ↦ u x * φ x) MeasureTheory.volume := by
+  apply (hu.mul hφ.1.continuous).integrable_of_hasCompactSupport
+  simpa only [Pi.mul_apply] using hφ.2.mul_left (f := u)
+
 lemma apm_m99j02_wronskian_eq_zero
     (u₁ u₂ q : ℝ → ℝ) (hu₁ : ContDiff ℝ 2 u₁) (hu₂ : ContDiff ℝ 2 u₂)
     (hq₁ : ∀ x : ℝ, deriv (deriv u₁) x + q x * u₁ x = 0)
@@ -148,5 +158,18 @@ theorem apm_m99j02
   compact-support, and piecewise differentiability APIs, but did not find a
   route that packages the compact-support boundary limits and applies the two
   half-line integrations by parts using these local derivative facts.
+
+  Closer hop 3 finds a route around those boundary limits.  Mathlib's
+  `MeasureTheory.integral_mul_deriv_eq_deriv_mul_of_integrable` proves
+  whole-line integration by parts once the three products are integrable.
+  The new helper `apm_m99j02_integrable_mul_test` compiles the recurring
+  integrability argument: a continuous coefficient times a smooth compactly
+  supported test function is continuous, compactly supported, and integrable.
+  Searches of `LEMMA-INDEX.md`, closed artifacts, half-line improper-integral
+  APIs, construction libraries, and git history found no packaged theorem for
+  applying the whole-line result to a coefficient with exactly one derivative
+  jump.  The remaining assembly is therefore splitting or encoding the two
+  smooth branches so the whole-line integration-by-parts theorem can be
+  applied twice, then inserting the already compiled jump coefficient.
   -/
   sorry
