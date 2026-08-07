@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
+  "closer_hop": 2,
+  "closer_note": "Compiled the maximum-modulus reduction showing that f maps the closed unit disk to itself. Endpoint fixed-point existence still needs zero-count invariance or Hurwitz/compactness; Schwarz uniqueness also needs disk-automorphism conjugation.",
   "imported_at": "2026-07-13T17:26:52.206839Z"
 }

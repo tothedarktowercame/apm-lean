@@ -76,6 +76,22 @@ lemma apm_a94a09_homotopy_ne_zero
     have heq : z = (t : ℂ) * f z := sub_eq_zero.mp hzero
     exact (ne_of_lt hstrict) (congrArg norm heq).symm
 
+/-- The boundary estimate propagates to the whole closed disk by the maximum
+modulus principle.  This is the disk-self-map input needed by any Schwarz
+lemma treatment of uniqueness. -/
+lemma apm_a94a09_mapsTo_closedBall
+    {f : ℂ → ℂ}
+    (hf_continuous : ContinuousOn f (closedBall 0 1))
+    (hf_analytic : DifferentiableOn ℂ f (ball 0 1))
+    (hf_boundary : ∀ z ∈ sphere (0 : ℂ) 1, ‖f z‖ ≤ 1) :
+    MapsTo f (closedBall (0 : ℂ) 1) (closedBall (0 : ℂ) 1) := by
+  intro z hz
+  rw [mem_closedBall_zero_iff]
+  apply Complex.norm_le_of_forall_mem_frontier_norm_le isBounded_ball
+      ⟨hf_analytic, by simpa [closure_ball] using hf_continuous⟩
+  · simpa [frontier_ball] using hf_boundary
+  · simpa [closure_ball] using hz
+
 theorem apm_a94a09
     {f : ℂ → ℂ}
     (hf_continuous : ContinuousOn f (closedBall 0 1))
@@ -98,6 +114,13 @@ theorem apm_a94a09
   `id + (-t f)` for `t < 1` still fails its closed-neighborhood analyticity
   hypothesis, and passing `t → 1` would additionally require zero persistence
   and multiplicity control.
+
+  Closer hop 2 packages the maximum-modulus reduction as the compiled lemma
+  `apm_a94a09_mapsTo_closedBall`: the frozen boundary estimate really does
+  make `f` a self-map of the closed disk.  Mathlib's Schwarz file then gives
+  metric contraction estimates and an affine equality case, but only after a
+  fixed point has already been moved to the origin; it does not supply the
+  disk automorphism conjugation or the endpoint existence theorem.
 
   Searches of `LEMMA-INDEX.md`, Mathlib's maximum-modulus, Schwarz, Hurwitz,
   divisor, and compactness APIs, prior artifacts `a92J05`, `a97A08`, and
