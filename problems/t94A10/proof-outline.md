@@ -1,12 +1,25 @@
 # Proof Outline: t94A10
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t94A10.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_t94a10_radial_sq_pos` proves the squared radius is positive away from
+  the origin.
+- `apm_t94a10_radial_sqrt_ne_zero` discharges the denominator's nonvanishing.
+- `apm_t94a10_ambientExtension_apply_of_isOmega` rewrites the arbitrary
+  ambient extension to the frozen solid-angle formula at punctured points.
+
+## Remaining bridge
+
+1. Use `extDeriv_apply` and the explicit quotient derivative to prove the
+   divergence cancellation, hence closedness.
+2. Construct the pullback/integral of the form over the unit sphere and prove
+   its value is `4 * Real.pi`.
+3. Apply a Stokes theorem for an exact form on the closed sphere. Mathlib
+   currently has local exterior-derivative operations but no suitable global
+   differential-form integration/Stokes interface; the same gap is recorded
+   by siblings `t01J06`, `t02A05`, and `t94J07`.
