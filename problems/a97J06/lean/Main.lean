@@ -14,12 +14,46 @@ integral over `Set.Ioi 0`; the omitted endpoint is a null set.
 -/
 
 open MeasureTheory Set
+open scoped NNReal
 
 noncomputable section
 
 /-- The integrand `cos(tx) / (x² + 4)`. -/
 def apm_a97J06_integrand (t x : ℝ) : ℝ :=
   Real.cos (t * x) / (x ^ 2 + 4)
+
+/-- The exact zero-frequency normalization. -/
+lemma apm_a97J06_integral_zero :
+    ∫ x in Ioi (0 : ℝ), apm_a97J06_integrand 0 x ∂volume = Real.pi / 4 := by
+  let γ : ℝ≥0 := ⟨2, by norm_num⟩
+  have hγ : γ ≠ 0 := by
+    intro h
+    have hv := congrArg Subtype.val h
+    norm_num [γ] at hv
+  have hfull := ProbabilityTheory.integral_cauchyPDFReal_eq_one 0 hγ
+  have hwhole : (∫ x : ℝ, (x ^ 2 + 4)⁻¹) = Real.pi / 2 := by
+    simp only [ProbabilityTheory.cauchyPDFReal_def, sub_zero] at hfull
+    norm_num [γ] at hfull
+    rw [MeasureTheory.integral_const_mul] at hfull
+    have hpi : Real.pi ≠ 0 := ne_of_gt Real.pi_pos
+    field_simp [hpi] at hfull ⊢
+    exact hfull
+  have heven := integral_comp_abs (f := fun x : ℝ => (x ^ 2 + 4)⁻¹)
+  have hhalf : (∫ x in Ioi (0 : ℝ), (x ^ 2 + 4)⁻¹) = Real.pi / 4 := by
+    rw [show (fun x : ℝ => (|x| ^ 2 + 4)⁻¹) = fun x => (x ^ 2 + 4)⁻¹ by
+      funext x
+      rw [sq_abs]] at heven
+    rw [hwhole] at heven
+    linarith
+  simpa [apm_a97J06_integrand] using hhalf
+
+/-- The half-line transform is even in its frequency parameter. -/
+lemma apm_a97J06_integral_neg (t : ℝ) :
+    (∫ x in Ioi (0 : ℝ), apm_a97J06_integrand (-t) x ∂volume) =
+      ∫ x in Ioi (0 : ℝ), apm_a97J06_integrand t x ∂volume := by
+  apply MeasureTheory.setIntegral_congr_fun measurableSet_Ioi
+  intro x _
+  simp [apm_a97J06_integrand]
 
 theorem apm_a97j06 (t : ℝ) :
     ∫ x in Ioi (0 : ℝ), apm_a97J06_integrand t x ∂volume =
@@ -61,4 +95,16 @@ theorem apm_a97j06 (t : ℝ) :
   -- distributional delta (∫cos(tx) dx) that has no Bochner integral representation.
   -- This problem requires either new Mathlib infrastructure or an ad hoc proof
   -- spanning 100+ lines of careful complex analysis formalization.
+  --
+  -- CLOSER HOP 1: Git history contained compiled normalization and symmetry
+  -- lemmas from an earlier branch that were absent at the frozen target commit.
+  -- They are restored above, adapted to the present `Ioi` statement, as
+  -- `apm_a97J06_integral_zero` and `apm_a97J06_integral_neg`. Consequently the
+  -- live bridge is now only the evaluation for `0 < t`. A renewed search of
+  -- `LEMMA-INDEX.md`, `ConstructionTargets.Sinc`, Mathlib's Cauchy-distribution,
+  -- Fourier, Laplace, Cauchy-integral, and parametric-integral sources, plus
+  -- closed artifacts, found no Cauchy characteristic-function theorem, justified
+  -- Laplace inversion for this oscillatory kernel, residue theorem, or packaged
+  -- semicircle/Jordan-lemma limit. `a03J05` has the same remaining transform at
+  -- scale one; its new zero-frequency lemma does not close positive frequency.
   sorry

@@ -18,6 +18,10 @@ Contour integration:
 
 Statement compiles. 1 sorry: contour integral proof body.
 
+The current bundle now contains compiled `Ioi`-form lemmas
+`apm_a97J06_integral_zero` and `apm_a97J06_integral_neg`, recovered from prior
+git history and adapted to the frozen encoding. Only `0 < t` remains.
+
 ## Phase-A hints used
 - #1 `e-codexpilot-evaluate-a-rational-circle-integral-by-separating-interior-and-exterior-poles`: cited.
 - #2 `e-j07-reuse-two-pole-partial-fraction-contour-pattern`: cited.
