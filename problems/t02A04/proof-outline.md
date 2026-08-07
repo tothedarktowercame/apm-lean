@@ -1,12 +1,22 @@
 # Proof Outline: t02A04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The space is encoded as the quotient of a solid torus and a disk by the
+`(1,2)` attaching curve.  The compiled lemma
+`apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve` verifies that every
+boundary point of the disk is identified with its prescribed image.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t02A04.md`
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+The standard argument retracts the solid torus to its circle factor, observes
+that the attaching map has degree two, identifies the result up to homotopy
+with `ℝP²`, computes its rational homology, and applies the Lefschetz
+fixed-point theorem.  Mathlib currently has no packaged chain connecting this
+explicit quotient to a cell attachment, no rational homology computation for
+that attachment, and no topological Lefschetz fixed-point theorem.
+
+Searches of Mathlib, `LEMMA-INDEX.md`, solved and partial sibling artifacts,
+`ConstructionTargets/`, and git history found no reusable replacement.  The
+statement is unchanged and appears mathematically non-trivial and sound.
