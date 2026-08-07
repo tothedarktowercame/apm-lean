@@ -68,6 +68,30 @@ lemma m95A02MaxDist_self (f : m95A02H) : m95A02MaxDist f f = 0 := by
   rw [m95A02MaxDist, hset]
   simp
 
+/-- Weak convergence in the Fourier realization implies convergence of every
+individual coefficient. -/
+lemma m95A02_tendsto_coord_of_weak
+    (f : ℕ → m95A02H) (g : m95A02H)
+    (h : Tendsto (fun n ↦ toWeakSpace ℂ m95A02H (f n)) atTop
+      (nhds (toWeakSpace ℂ m95A02H g))) (j : ℤ) :
+    Tendsto (fun n ↦ f n j) atTop (nhds (g j)) := by
+  have hall := (WeakBilin.tendsto_iff_forall_eval_tendsto
+    (B := (topDualPairing ℂ m95A02H).flip)
+    (separatingDual_iff_injective.mp inferInstance)).1 h
+  have hj := hall ((InnerProductSpace.toDual ℂ m95A02H)
+    (lp.single 2 j 1 : m95A02H))
+  convert hj using 1
+  · funext n
+    change f n j = (InnerProductSpace.toDual ℂ m95A02H)
+      (lp.single 2 j 1 : m95A02H) (f n)
+    rw [InnerProductSpace.toDual_apply_apply, lp.inner_single_left]
+    simp
+  · congr 1
+    change g j = (InnerProductSpace.toDual ℂ m95A02H)
+      (lp.single 2 j 1 : m95A02H) g
+    rw [InnerProductSpace.toDual_apply_apply, lp.inner_single_left]
+    simp
+
 theorem apm_m95a02 :
     (∃ b : HilbertBasis ℤ ℂ m95A02H,
       ∀ n : ℤ, b n = lp.single 2 n 1 ∧
@@ -137,5 +161,18 @@ theorem apm_m95a02 :
     with these inner-product functionals and then proving a uniform bilateral
     tail estimate strong enough for `m95A02MaxDist`; no corpus artifact
     packages that analytic sum.
+
+    Closer hop 2 closes the weak-to-coordinate bridge as
+    `m95A02_tendsto_coord_of_weak`.  It applies
+    `WeakBilin.tendsto_iff_forall_eval_tendsto` to the Riesz functional of
+    `lp.single 2 j 1`, then uses `InnerProductSpace.toDual_apply_apply` and
+    `lp.inner_single_left` to identify the pairing with the `j`th coefficient.
+    Searches of Mathlib's bilateral `ℤ` summability, Cauchy--Schwarz, tsum-tail,
+    and integer-rpow sources, along with the closed corpus and construction
+    libraries, still found no uniform estimate for the normalized Fourier
+    tail.  Thus the remaining bridge is now exactly: combine finite-coordinate
+    convergence with weak boundedness and the summable weights
+    `1 / (n²+1)`, then transport the resulting uniform evaluation bound through
+    the set-valued `sSup` in `m95A02MaxDist`.
     -/
     sorry

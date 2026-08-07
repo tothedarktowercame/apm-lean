@@ -12,10 +12,12 @@ encoding.
 - Mathlib's `lp.inner_single_right` identifies Fourier coordinates with inner
   products, supplying the algebraic bridge from weak convergence to individual
   coordinate convergence.
+- Closer hop 2 compiles that bridge completely as
+  `m95A02_tendsto_coord_of_weak`, using the weak-space evaluation criterion,
+  the Riesz functional of `lp.single`, and `lp.inner_single_left`.
 
 ## Remaining Boundary
 
 - Formalize the sharp Fourier-kernel estimate needed for the Hölder bound.
-- Apply the weak-space filter criterion to `lp.inner_single_right`.
 - Prove uniform control of the bilateral Fourier tail from the summable
   weights and translate it through the custom `sSup` distance.
