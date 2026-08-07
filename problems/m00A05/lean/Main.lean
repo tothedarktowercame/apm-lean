@@ -85,6 +85,18 @@ theorem apm_m00a05 :
     positive time. Thus global uniqueness can now use Gronwall after extending
     or translating the half-line solutions, while existence still requires a
     compatible countable gluing of local Picard solutions.
+
+    Closer hop 3 inspected the exact hypotheses of
+    `ODE_solution_unique_univ` and `ODE_solution_unique`.  The former requires
+    `HasDerivAt` at every real time, while the latter requires a right
+    derivative at the left endpoint.  Neither can start at zero because the
+    frozen predicate deliberately assumes only continuity there.  The viable
+    endpoint route is now explicit: apply
+    `dist_le_of_trajectories_ODE` on every `[δ,t]` with `0 < δ`, obtaining
+    `dist (u t) (v t) ≤ dist (u δ) (v δ) * exp (2 * (t-δ))`, and send
+    `δ ↓ 0` using continuity and the common initial value.  This would close
+    uniqueness without changing the predicate, but does not supply the still
+    missing global Picard gluing needed for the existential witness.
     -/
     sorry
   · let G : ℝ → ℝ := fun x => Real.cos x - x
@@ -124,5 +136,13 @@ theorem apm_m00a05 :
       ODE convergence theorem. The remaining attraction boundary is therefore
       the time-translation/no-crossing argument and the monotone-limit
       contradiction, rather than derivative-format conversion.
+
+      Closer hop 3 also checked whether the global Gronwall declaration could
+      directly provide no-crossing.  Its all-time derivative hypothesis again
+      fails at the frozen endpoint.  After the preceding `[δ,t]` limiting
+      uniqueness lemma is formalized, no-crossing can be recovered by applying
+      it to time translates at a hypothetical first contact; the subsequent
+      monotone trapping and limit identification remain a separate scalar
+      phase-line development.
       -/
       sorry

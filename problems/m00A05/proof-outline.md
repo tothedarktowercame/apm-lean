@@ -29,3 +29,11 @@ Source inspection confirms that Mathlib's Picard constructors remain local;
 global existence requires gluing compatible interval solutions. The reverse
 conversion from a frozen solution to `HasDerivAt` is complete, so it is no
 longer part of the remaining attraction bridge.
+
+Closer hop 3 isolates the endpoint issue in uniqueness. Apply
+`dist_le_of_trajectories_ODE` on `[δ,t]` for every `δ > 0`; its estimate is
+`dist (u t) (v t) ≤ dist (u δ) (v δ) * exp (2 * (t-δ))`. Continuity at zero
+and the common initial value make the right side tend to zero as `δ ↓ 0`.
+This avoids demanding a derivative at zero, unlike the packaged global and
+closed-interval uniqueness theorems. It still does not construct the global
+solution required by the first conjunct.
