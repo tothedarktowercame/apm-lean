@@ -30,6 +30,14 @@ noncomputable def apm_m94J04_basis (i : Fin 3) : apm_m94J04_E :=
 noncomputable def apm_m94J04_f (p : apm_m94J04_E) : ℝ :=
   if 0 < p 0 then p 1 else p 0
 
+lemma apm_m94J04_f_of_pos {p : apm_m94J04_E} (hp : 0 < p 0) :
+    apm_m94J04_f p = p 1 := by
+  simp [apm_m94J04_f, hp]
+
+lemma apm_m94J04_f_of_nonpos {p : apm_m94J04_E} (hp : p 0 ≤ 0) :
+    apm_m94J04_f p = p 0 := by
+  simp [apm_m94J04_f, not_lt.mpr hp]
+
 /-- The vector field `u=f e₁`. -/
 noncomputable def apm_m94J04_u (p : apm_m94J04_E) : apm_m94J04_E :=
   apm_m94J04_f p • apm_m94J04_basis 0
@@ -104,5 +112,22 @@ theorem apm_m94j04 :
   `volume_pi`, split `Fin 3` around coordinate 1 (and coordinate 2), transport
   compact support and `fderiv` to each real slice, apply one-dimensional
   integration by parts, and reassemble with `MeasureTheory.integral_prod`.
+
+  Closer hop 1 proves the coefficient branch normal forms
+  `apm_m94J04_f_of_pos` and `apm_m94J04_f_of_nonpos`. A renewed source search
+  finds `EuclideanSpace.volume_preserving_measurableEquiv_toLp` (used in
+  solved artifact `a01A01`) as the missing first transport from the `WithLp`
+  Euclidean representation to the raw coordinate function space. After that,
+  `MeasurePreserving.piFinSuccAbove` and `volume_pi` can isolate a coordinate.
+  The general `MeasureTheory.Integral.DivergenceTheorem` was inspected but is
+  not directly applicable because the scalar coefficient is discontinuous at
+  `x = 0`; the line-derivative integration-by-parts theorem has the same
+  ambient differentiability obstruction.
+
+  No `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling, or git-history result
+  packages the composite `WithLp → Pi → coordinate × complement` measure
+  equivalence together with the sliced `fderiv` identity. That transport and
+  its compact-support/integrability consequences remain the precise live
+  bridge. The frozen statement was left unchanged.
   -/
   sorry
