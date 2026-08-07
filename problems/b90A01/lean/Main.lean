@@ -29,6 +29,43 @@ lemma apm_b90A01_perm_fin_of_card
   refine ⟨e.permCongrHom.toMonoidHom.comp φ, ?_⟩
   exact e.permCongrHom.injective.comp hφ
 
+/-- In a finite simple group, conjugation on a non-singleton type of Sylow
+subgroups is faithful.  The kernel is normal; if it were the whole group, the
+pretransitive Sylow action would be trivial on a nontrivial type. -/
+lemma apm_b90A01_sylow_action_faithful
+    {G : Type*} [Group G] [Finite G] [IsSimpleGroup G]
+    (p : ℕ) (hp : p.Prime) (hk1 : 1 < Nat.card (Sylow p G)) :
+    Function.Injective (MulAction.toPermHom G (Sylow p G)) := by
+  letI : Fact p.Prime := ⟨hp⟩
+  rw [← MonoidHom.ker_eq_bot_iff]
+  rcases (inferInstance : (MulAction.toPermHom G (Sylow p G)).ker.Normal).eq_bot_or_eq_top with
+    hker | hker
+  · exact hker
+  · haveI : Nontrivial (Sylow p G) :=
+      Finite.one_lt_card_iff_nontrivial.mp hk1
+    obtain ⟨P, Q, hPQ⟩ := exists_pair_ne (Sylow p G)
+    obtain ⟨g, hg⟩ := MulAction.exists_smul_eq G P Q
+    have hgker : g ∈ (MulAction.toPermHom G (Sylow p G)).ker := by
+      rw [hker]
+      exact Subgroup.mem_top g
+    have hgfix : g • P = P := by
+      have hgone : MulAction.toPermHom G (Sylow p G) g = 1 :=
+        (MonoidHom.mem_ker.mp hgker)
+      have := congrArg (fun σ : Equiv.Perm (Sylow p G) => σ P) hgone
+      simpa only [MulAction.toPermHom_apply, MulAction.toPerm_apply, coe_one,
+        id_eq] using this
+    exact False.elim (hPQ (hg ▸ hgfix.symm))
+
+/-- The faithful Sylow conjugation action, transported to the exact `Fin k`
+permutation model used in the theorem. -/
+lemma apm_b90A01_exists_faithful_sylow_perm
+    {G : Type*} [Group G] [Finite G] [IsSimpleGroup G]
+    (p k : ℕ) (hp : p.Prime)
+    (hk : Nat.card (Sylow p G) = k) (hk1 : 1 < k) :
+    ∃ φ : G →* Equiv.Perm (Fin k), Function.Injective φ := by
+  apply apm_b90A01_perm_fin_of_card hk
+  exact apm_b90A01_sylow_action_faithful p hp (hk ▸ hk1)
+
 theorem apm_b90a01
     (G : Type) [Group G] [Finite G] [IsSimpleGroup G]
     (p k : ℕ) (hp : p.Prime)
@@ -40,18 +77,24 @@ theorem apm_b90a01
       IsSimpleGroup H → H ≠ ⊤ → n ≤ H.index) ∧
     ∀ (G₁ : Type) [Group G₁] [Finite G₁],
       Nat.card G₁ = 120 → ¬IsSimpleGroup G₁ := by
+  refine ⟨apm_b90A01_exists_faithful_sylow_perm p k hp hk hk1, ?_⟩
   /-
-  PARTIAL boundary (closer hop 1): the finite-type transport stage is now
+  PARTIAL boundary (closer hop 2): the finite-type transport stage is now
   compiled as `apm_b90A01_perm_fin_of_card`. Once the Sylow conjugation action
   is proved faithful, this lemma turns it directly into the first frozen
   `Fin k` representation using `Finite.equivFinOfCardEq` and
   `Equiv.permCongrHom`.
 
+  Closer hop 2 closes the entire first conjunct in the reusable lemma
+  `apm_b90A01_exists_faithful_sylow_perm`. Its new kernel argument uses
+  `MonoidHom.normal_ker`, simple-group normal-subgroup classification, and
+  Sylow pretransitivity; a top kernel would make the action trivial and
+  contradict `1 < Nat.card (Sylow p G)`.
+
   Renewed source inspection confirms that Mathlib still proves simplicity only
   for `alternatingGroup (Fin 5)`, not all `n ≥ 5`. The remaining first-stage
-  bridge is proving the Sylow action kernel is not top (pretransitivity plus
-  `1 < k`) and invoking simplicity to make it bottom. Factoring that faithful
-  action through the alternating group requires a parity argument. The third
+  bridge is factoring the now-faithful action through the alternating group,
+  which requires a parity argument. The third
   conjunct still needs a local general simplicity development for `A_n`, and
   the order-120 conjunct needs the exact Sylow-5 enumeration.
 

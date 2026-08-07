@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "note": "Faithful finite permutation representations can now be transported to the frozen Fin k model; faithfulness of the Sylow action, parity factorization, general alternating-group simplicity, and order-120 enumeration remain.",
+  "closer_hop": 2,
+  "note": "The Sylow conjugation action is proved faithful for a finite simple group with more than one Sylow subgroup, and the theorem's first conjunct is closed after transport to Fin k. Parity factorization, general alternating-group simplicity, and the order-120 enumeration remain.",
   "imported_at": "2026-07-13T17:26:53.629292Z"
 }
