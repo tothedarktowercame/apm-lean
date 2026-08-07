@@ -11,12 +11,19 @@ remain open.
 
 - `apm_t01a04_sheetPoint_zero` and `apm_t01a04_sheetPoint_one` identify the
   two gluing points used in both total spaces.
+- `apm_t01a04_sheetPoint_sq` proves both gluing points square to `1`, the
+  compatibility needed by the quotient projections.
+- `apm_t01a04_circleCoverMap` and `apm_t01a04_torusCoverMap` are the actual
+  continuous maps from the two concrete quotient total spaces to the wedge.
+  Their representative maps respect `Relation.EqvGen`, and both basepoint
+  equations are proved.
 
 ## Remaining boundary
 
 - Prove a Seifert--van Kampen theorem for the concrete quotient wedge and
   obtain the presentation `ℤ² * ℤ`.
-- Construct the two quotient maps and certify them as covering maps.
+- Certify the two now-constructed quotient maps as covering maps by an
+  evenly-covered-neighborhood gluing argument.
 - Identify their induced fundamental-group ranges with the parity kernels.
 - Compute enough singular homology of the quotient total spaces to rule out a
   homeomorphism (`H₂ ≅ ℤ²` versus `H₂ ≅ ℤ`).

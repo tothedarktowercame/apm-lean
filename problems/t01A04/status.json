@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The sheet attachment points are normalized. Remaining work is the quotient-wedge fundamental-group presentation, covering-map gluing, induced-range identification, and singular-homology distinction of the total spaces.",
+  "closer_hop": 2,
+  "boundary": "The sheet-point square identities and both actual continuous quotient projection maps, including their basepoint equations, are compiled. Remaining work is covering-map certification by quotient gluing, the quotient-wedge fundamental-group presentation, induced-range identification, and singular-homology distinction of the total spaces.",
   "imported_at": "2026-07-13T17:26:56.718249Z"
 }
