@@ -65,6 +65,17 @@ def apm_m93J02_globalNorm {n : ℕ} (U : Set (Fin n → ℝ))
     (α : ℝ) (f : U → ℝ) : ℝ :=
   (apm_m93J02_globalSeminorm U α f + apm_m93J02_supNorm f).toReal
 
+private lemma apm_m93J02_eq_zero_of_supNorm_eq_zero
+    {n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ}
+    (hf : apm_m93J02_supNorm f = 0) : f = 0 := by
+  funext x
+  have hx : ENNReal.ofReal |f x| ≤ apm_m93J02_supNorm f := by
+    exact le_iSup (fun y : U ↦ ENNReal.ofReal |f y|) x
+  rw [hf] at hx
+  have hz : ENNReal.ofReal |f x| = 0 := bot_unique hx
+  rw [ENNReal.ofReal_eq_zero] at hz
+  exact abs_eq_zero.mp (le_antisymm hz (abs_nonneg _))
+
 /-- The norm axioms restricted to a specified vector subspace carrier. -/
 def apm_m93J02_isNormOn {V : Type} [AddCommGroup V] [Module ℝ V]
     (S : Set V) (q : V → ℝ) : Prop :=
@@ -139,18 +150,28 @@ theorem apm_m93j02
       apm_m93J02_globalNorm U α (0 : U → ℝ) = 0 := by
     simp [apm_m93J02_globalNorm, hglobal_zero, hsup_zero]
   /-
-  Boundary (closer hop 1): the zero-function quotient, global seminorm,
+  Boundary (closer hop 2): the zero-function quotient, global seminorm,
   supremum norm, and both norms are now compiled (`hquotient_zero`,
   `hglobal_zero`, `hlocal_zero`, `hsup_zero`, `hglobalNorm_zero`,
   `hlocalNorm_zero`), discharging the first axiom needed by both norm
-  predicates. The remaining clauses require a compactness/cluster-point proof
+  predicates.  The new helper `apm_m93J02_eq_zero_of_supNorm_eq_zero` also
+  proves the definiteness core shared by both norms. The remaining clauses
+  require a compactness/cluster-point proof
   that finite local limsup forces a finite global seminorm, an explicit
   nonconstant Lipschitz function on an arbitrary compact connected nontrivial
   subtype (and proof that its local ENNReal limsup is zero), the ENNReal
   algebra needed for both norm predicates, and complete/incomplete sequence
-  constructions for the two induced metrics. I searched and used
-  `Filter.limsup_le_of_le` for the easy inequality above; no compiled sibling
-  supplied the required local-limsup compactness or completeness machinery.
+  constructions for the two induced metrics.
+
+  This hop searched Mathlib's `HolderOnWith`, `ContDiffPointwiseHolderAt`,
+  compact-image/connected-image, ENNReal `iSup`/`toReal`, and filter `limsup`
+  APIs.  The packaged Hölder predicates use a fixed global constant and do not
+  convert to or from this nested infinitesimal ENNReal `limsup`.  For arbitrary
+  compact connected `U`, the informal interval constructions can be routed
+  through `x ↦ dist x x₀`, whose compact connected image contains an interval;
+  however, transporting the Lipschitz-zero local seminorm and the incomplete
+  sequence through that map still needs a substantial new limsup development.
+  No closed sibling, construction module, or indexed helper supplies it.
   -/
   have hremaining :
       (∀ f : U → ℝ,
