@@ -9,30 +9,49 @@ None. Compactness is encoded by Mathlib's `IsCompactOperator`: bounded sets
 have relatively compact image.
 -/
 
+/-- The statement's kernel encoding is the standard eigenspace. -/
+lemma m96A01_eigenspace_eq_ker {X : Type*} [NormedAddCommGroup X]
+    [NormedSpace ℂ X] (L : X →L[ℂ] X) (eigenvalue : ℂ) :
+    Module.End.eigenspace L.toLinearMap eigenvalue =
+      LinearMap.ker (L.toLinearMap - eigenvalue • LinearMap.id) := by
+  ext x
+  rw [Module.End.mem_eigenspace_iff, LinearMap.mem_ker]
+  simp [sub_eq_zero]
+
 theorem apm_m96a01 :
     ∀ (X : Type*) [NormedAddCommGroup X] [NormedSpace ℂ X]
       (L : X →L[ℂ] X),
       IsCompactOperator L → ∀ (eigenvalue : ℂ), eigenvalue ≠ 0 →
         FiniteDimensional ℂ
           (LinearMap.ker (L.toLinearMap - eigenvalue • LinearMap.id)) := by
-  /-
-  Boundary: Mathlib's `ContinuousLinearMap.finite_dimensional_eigenspace`
-  proves exactly this result under an additional ambient `CompleteSpace`
-  hypothesis. Following its proof, I restricted `L` to the closed eigenspace
-  using `IsCompactOperator.restrict`, rewrote the restriction as scalar
-  multiplication with `Module.End.restrict_eigenspace`, and used
-  `IsCompactOperator.smul_iff₀` to obtain compactness of the identity.
-
-  The final generic Riesz step is blocked by the frozen omission of
-  `CompleteSpace X`: `FiniteDimensional.of_isCompactOperator_id` and the
-  packaged spectral theorem require completeness, while the lower-level
-  `FiniteDimensional.of_isCompact_closedBall₀` requires assembling a
-  `ContinuousSMul` instance on the eigenspace subtype compatible with the
-  plain `LinearMap.ker` encoding. I also tried deriving compactness of the
-  closed unit ball directly from
-  `isCompactOperator_iff_isCompact_closure_image_closedBall`; the remaining
-  subtype scalar-action/type-transport bridge did not close. Sibling
-  `m01J03` uses the packaged theorem but has `CompleteSpace` and an inner
-  product, so it does not discharge this frozen statement.
-  -/
-  sorry
+  intro X _ _ L hL eigenvalue heigenvalue
+  let V : Submodule ℂ X := Module.End.eigenspace L.toLinearMap eigenvalue
+  have hV_closed : IsClosed (V : Set X) := by dsimp [V]; infer_instance
+  have hV_invariant : ∀ v ∈ V, L.toLinearMap v ∈ V := by
+    intro v hv
+    exact Module.End.eigenspace_mem_invtSubmodule L.toLinearMap eigenvalue hv
+  have hrestrict : IsCompactOperator (L.toLinearMap.restrict hV_invariant) :=
+    hL.restrict hV_invariant hV_closed
+  have hid : IsCompactOperator (id : V → V) := by
+    dsimp [V] at hrestrict ⊢
+    rw [Module.End.restrict_eigenspace, LinearMap.coe_smul,
+      IsCompactOperator.smul_iff₀ heigenvalue] at hrestrict
+    simpa using hrestrict
+  letI : ContinuousSMul ℂ
+      (Module.End.eigenspace L.toLinearMap eigenvalue) :=
+    Topology.IsInducing.subtypeVal.continuousSMul continuous_id rfl
+  have hcompact : IsCompact (Metric.closedBall (0 : V) 1) := by
+    have hid' : IsCompactOperator ((LinearMap.id : V →ₗ[ℂ] V)) := by
+      simpa using hid
+    have h := hid'.isCompact_closure_image_closedBall 1
+    have h' : IsCompact (closure (Metric.closedBall (0 : V) 1)) := by
+      simpa only [LinearMap.id_coe, id_eq, Set.image_id'] using h
+    exact IsCompact.of_isClosed_subset h' Metric.isClosed_closedBall subset_closure
+  have hfinite : FiniteDimensional ℂ V := by
+    change FiniteDimensional ℂ
+      (Module.End.eigenspace L.toLinearMap eigenvalue)
+    exact @FiniteDimensional.of_isCompact_closedBall₀ ℂ inferInstance inferInstance
+      (Module.End.eigenspace L.toLinearMap eigenvalue) inferInstance inferInstance this
+      1 zero_lt_one hcompact
+  rw [← m96A01_eigenspace_eq_ker L eigenvalue]
+  exact hfinite
