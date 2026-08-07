@@ -121,8 +121,29 @@ theorem apm_m93j02
         apm_m93J02_localSeminorm U α f ≠ ⊤ := by
     intro f hf htop
     exact hf (top_unique (htop ▸ hle f))
+  have hquotient_zero (y z : U) :
+      apm_m93J02_quotient α (0 : U → ℝ) y z = 0 := by
+    simp [apm_m93J02_quotient]
+  have hglobal_zero :
+      apm_m93J02_globalSeminorm U α (0 : U → ℝ) = 0 := by
+    simp [apm_m93J02_globalSeminorm, hquotient_zero]
+  have hsup_zero : apm_m93J02_supNorm (0 : U → ℝ) = 0 := by
+    simp [apm_m93J02_supNorm]
+  have hlocal_zero :
+      apm_m93J02_localSeminorm U α (0 : U → ℝ) = 0 := by
+    simp [apm_m93J02_localSeminorm, hquotient_zero]
+  have hlocalNorm_zero :
+      apm_m93J02_localNorm U α (0 : U → ℝ) = 0 := by
+    simp [apm_m93J02_localNorm, hlocal_zero, hsup_zero]
+  have hglobalNorm_zero :
+      apm_m93J02_globalNorm U α (0 : U → ℝ) = 0 := by
+    simp [apm_m93J02_globalNorm, hglobal_zero, hsup_zero]
   /-
-  Boundary: the remaining clauses require a compactness/cluster-point proof
+  Boundary (closer hop 1): the zero-function quotient, global seminorm,
+  supremum norm, and both norms are now compiled (`hquotient_zero`,
+  `hglobal_zero`, `hlocal_zero`, `hsup_zero`, `hglobalNorm_zero`,
+  `hlocalNorm_zero`), discharging the first axiom needed by both norm
+  predicates. The remaining clauses require a compactness/cluster-point proof
   that finite local limsup forces a finite global seminorm, an explicit
   nonconstant Lipschitz function on an arbitrary compact connected nontrivial
   subtype (and proof that its local ENNReal limsup is zero), the ENNReal
