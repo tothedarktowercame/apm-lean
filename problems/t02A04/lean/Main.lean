@@ -50,11 +50,38 @@ lemma apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve (z : Circle) :
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ (apm_t02a04_Glue.boundary z)
 
+/-- The canonical map of the solid torus into the attached quotient. -/
+def apm_t02a04_solidInclusion (x : apm_t02a04_SolidTorus) : apm_t02a04_X :=
+  Quotient.mk _ (Sum.inl x)
+
+/-- The canonical map of the attached disk into the quotient. -/
+def apm_t02a04_diskInclusion (x : apm_t02a04_Disk) : apm_t02a04_X :=
+  Quotient.mk _ (Sum.inr x)
+
+/-- The solid-torus canonical map is continuous for the coinduced topology. -/
+lemma apm_t02a04_continuous_solidInclusion :
+    Continuous apm_t02a04_solidInclusion := by
+  exact continuous_coinduced_rng.comp continuous_inl
+
+/-- The disk canonical map is continuous for the coinduced topology. -/
+lemma apm_t02a04_continuous_diskInclusion :
+    Continuous apm_t02a04_diskInclusion := by
+  exact continuous_coinduced_rng.comp continuous_inr
+
+/-- The two continuous canonical maps agree along the `(1,2)` attaching map. -/
+lemma apm_t02a04_diskInclusion_boundary_eq_solidInclusion_attachingCurve :
+    (fun z : Circle => apm_t02a04_diskInclusion
+      (⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk)) =
+    (fun z : Circle => apm_t02a04_solidInclusion
+      ((⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk), z ^ 2)) := by
+  funext z
+  exact apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve z
+
 theorem apm_t02a04 :
     ∀ f : apm_t02a04_X → apm_t02a04_X,
       Continuous f → ∃ x, f x = x := by
   /-
-  Boundary (closer hop 1, still open): the informal route needs a homotopy
+  Boundary (closer hop 2, still open): the informal route needs a homotopy
   equivalence from
   this explicit quotient to the degree-two cell attachment model of `ℝP²`,
   its rational singular-homology computation, and the Lefschetz fixed-point
@@ -70,7 +97,13 @@ theorem apm_t02a04 :
   equivalence, the required rational homology computation, or topological
   Lefschetz theorem. The local lemma
   `apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve` now verifies the encoded
-  attaching identification itself, but this point-set fact does not supply
+  attaching identification itself. This hop strengthens it to the continuous
+  gluing cocone needed by a future cell-attachment API:
+  `apm_t02a04_continuous_solidInclusion` and
+  `apm_t02a04_continuous_diskInclusion` prove continuity of the canonical
+  piece maps, and
+  `apm_t02a04_diskInclusion_boundary_eq_solidInclusion_attachingCurve`
+  packages their attaching compatibility as a function equality. These facts do not supply
   those three theorem-level bridges. No conjunct or intermediate conclusion
   is exposed in the frozen statement for a larger partial proof.
   -/

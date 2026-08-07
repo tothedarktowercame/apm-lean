@@ -5,6 +5,10 @@ The space is encoded as the quotient of a solid torus and a disk by the
 `apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve` verifies that every
 boundary point of the disk is identified with its prescribed image.
 
+Closer hop 2 packages this attachment as a continuous gluing cocone: the
+canonical solid-torus and disk maps are continuous and their restrictions to
+the attaching circle agree.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t02A04.md`
 
