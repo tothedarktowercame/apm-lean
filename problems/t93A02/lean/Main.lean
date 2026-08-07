@@ -19,6 +19,24 @@ def IsT93A02HausdorffCauchy {X : Type*} [PseudoMetricSpace X]
   ∀ ε : ℝ, 0 < ε → ∃ N : ℕ, ∀ m ≥ N, ∀ n ≥ N,
     Metric.hausdorffDist (A m).1 (A n).1 < ε
 
+/-- Forget nonemptiness and boundedness, retaining the closed set on which
+Mathlib's complete extended Hausdorff metric is defined. -/
+def t93A02H.toCloseds {X : Type*} [PseudoMetricSpace X] (A : t93A02H X) :
+    TopologicalSpace.Closeds X :=
+  ⟨A.1, A.2.2.1⟩
+
+/-- Any two members of the intended hyperspace are at finite extended
+Hausdorff distance.  This is the finiteness bridge needed to compare the
+real-valued and extended-valued Cauchy formulations. -/
+lemma t93A02H.hausdorffEDist_ne_top {X : Type*} [PseudoMetricSpace X]
+    (A B : t93A02H X) : Metric.hausdorffEDist A.1 B.1 ≠ ⊤ :=
+  Metric.hausdorffEDist_ne_top_of_nonempty_of_bounded
+    A.2.1 B.2.1 A.2.2.2 B.2.2.2
+
+@[simp] lemma t93A02H.edist_toCloseds {X : Type*} [MetricSpace X]
+    (A B : t93A02H X) :
+    edist A.toCloseds B.toCloseds = Metric.hausdorffEDist A.1 B.1 := rfl
+
 theorem apm_t93a02
     (X : Type*) [MetricSpace X] [CompleteSpace X] :
     ∀ A : ℕ → t93A02H X, IsT93A02HausdorffCauchy A →
@@ -26,7 +44,7 @@ theorem apm_t93a02
         Tendsto (fun n => Metric.hausdorffDist (A n).1 L.1)
           atTop (nhds 0) := by
   /-
-  Boundary (skipped): Mathlib has
+  Boundary (closer hop 1, still open): Mathlib has
   `TopologicalSpace.Closeds.instCompleteSpace`, proving completeness of all
   closed subsets for the extended Hausdorff distance. The frozen statement,
   however, uses a custom subtype of nonempty closed bounded sets, a
@@ -38,7 +56,16 @@ theorem apm_t93a02
   hypothesis to extended-metric Cauchy convergence, prove that its closed-set
   limit is nonempty and bounded (excluding escape to infinity and the empty
   limit), and translate convergence back to `hausdorffDist`. That substantial
-  bridge is exactly the main theorem requested and is beyond this pass; the
-  existential conclusion exposes no smaller honest partial result.
+  bridge is exactly the main theorem requested. The closer search additionally
+  checked `LEMMA-INDEX.md`, all fully closed artifacts, `ConstructionTargets/`,
+  `NonemptyCompacts`, Gromov--Hausdorff sources, and git history. The
+  `NonemptyCompacts` complete instance cannot be used because closed bounded
+  subsets of an arbitrary complete metric space need not be compact. The local
+  definitions and lemmas `t93A02H.toCloseds`,
+  `t93A02H.hausdorffEDist_ne_top`, and `t93A02H.edist_toCloseds` now compile
+  the embedding and pairwise-finiteness part of the route. Still missing is a
+  proof that the complete `Closeds` limit is nonempty and bounded, plus the
+  final real/extended convergence conversion. The existential conclusion
+  exposes no further smaller result without developing that core argument.
   -/
   sorry
