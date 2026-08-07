@@ -55,6 +55,30 @@ def apmAssociateStabilizer {F n : Type*} [Field F] [Fintype n]
     (π : MvPolynomial n F) (g : G) :
     g ∈ apmAssociateStabilizer G π ↔ Associated (g.1 π) π := Iff.rfl
 
+lemma apmAssociated_eq_C_mul_unique {F n : Type*} [Field F]
+    {x y : MvPolynomial n F} (hy : y ≠ 0) (hxy : Associated x y) :
+    ∃! c : Fˣ, x = MvPolynomial.C (c : F) * y := by
+  obtain ⟨u, hu⟩ := hxy
+  have hui : IsUnit ((u⁻¹ : (MvPolynomial n F)ˣ) : MvPolynomial n F) := Units.isUnit _
+  obtain ⟨r, hr, hur⟩ :=
+    (MvPolynomial.isUnit_iff_eq_C_of_isReduced (P :=
+      ((u⁻¹ : (MvPolynomial n F)ˣ) : MvPolynomial n F))).mp hui
+  let c : Fˣ := hr.unit
+  have hc : x = MvPolynomial.C (c : F) * y := by
+    calc
+      x = (x * (u : MvPolynomial n F)) *
+          ((u⁻¹ : (MvPolynomial n F)ˣ) : MvPolynomial n F) := by simp
+      _ = y * ((u⁻¹ : (MvPolynomial n F)ˣ) : MvPolynomial n F) := by rw [hu]
+      _ = MvPolynomial.C (c : F) * y := by
+        rw [hur, ← IsUnit.unit_spec hr]
+        simp [c, mul_comm]
+  refine ⟨c, hc, ?_⟩
+  · intro d hd
+    apply Units.ext
+    apply MvPolynomial.C_injective n F
+    apply mul_right_cancel₀ hy
+    exact hd.symm.trans hc
+
 theorem apm_b96a03 :
     (∀ (G : Type*) [Group G] [Fintype G], Odd (Fintype.card G) →
       apmFPure ℚ G) ∧
@@ -118,4 +142,16 @@ theorem apm_b96a03 :
       -- `π`. No packaged `Associates` action or coefficient-character
       -- constructor was found, so that coherent-choice proof and the
       -- downstream `countP` assembly remain open.
+      --
+      -- Closer hop 3 proves `apmAssociated_eq_C_mul_unique`: for every
+      -- associate relation `Associated x y` with `y ≠ 0`, there is a unique
+      -- `c : Fˣ` such that `x = C c * y`. This uses
+      -- `MvPolynomial.isUnit_iff_eq_C_of_isReduced`, inversion of the unit
+      -- witnessing `Associated`, `MvPolynomial.C_injective`, and cancellation
+      -- by `y`. Thus scalar extraction and uniqueness are now closed. The
+      -- remaining coherent-choice step is to define these scalars on
+      -- `apmAssociateStabilizer G π` and prove multiplicativity from
+      -- uniqueness; after purity trivializes that homomorphism, orbit
+      -- reindexing, `Multiset.prod_primes_dvd` count uniqueness, and the
+      -- fixed-subring primality argument remain.
       sorry

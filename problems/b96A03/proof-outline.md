@@ -17,11 +17,15 @@ the invariant-ring descent implication.
 - Closer hop 2 defines and proves `apmAssociateStabilizer G π`, the subgroup
   whose elements carry `π` to an associate. Closure is obtained directly from
   `Associated.map`, transitivity, and inverse transport.
+- Closer hop 3 proves `apmAssociated_eq_C_mul_unique`: an associate relation
+  to a nonzero multivariate polynomial determines a unique scalar unit
+  `c : Fˣ`. It uses Mathlib's classification of multivariate-polynomial units
+  as constants and cancellation by the nonzero polynomial.
 
 ## Remaining bridge
 
-Extract the unique constant unit for each member of `apmAssociateStabilizer`
-as a character into `Fˣ`, and use
+Package the now-available unique constant unit for each member of
+`apmAssociateStabilizer` as a character into `Fˣ`, and use
 `apmFPure` to trivialize it. This yields equality of associated orbit elements
 and hence the `countP` uniqueness premise for `Multiset.prod_primes_dvd`.
 Orbit reindexing and domain cancellation then prove invariance, universal

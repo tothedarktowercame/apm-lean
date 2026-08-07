@@ -16,7 +16,7 @@
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1,
-    "closer_progress": "The subgroup of automorphisms sending π to an associate is now the compiled apmAssociateStabilizer. Remaining: extract its unique constant-unit character, trivialize it by purity, and finish orbit countP/invariant-ring descent."
+    "closer_progress": "The associate stabilizer and unique scalar-unit extraction are compiled. Remaining: package the unique scalars as a multiplicative character, trivialize it by purity, and finish orbit countP/invariant-ring descent."
   },
   "artifacts": {
     "has_problem_tex": true,
