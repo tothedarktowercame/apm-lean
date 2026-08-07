@@ -64,10 +64,15 @@ theorem apm_b96a03 :
     · intro g α
       rw [← irreducible_iff_prime, ← irreducible_iff_prime]
       exact MulEquiv.irreducible_iff g.1
-    · -- Boundary: searched `MulEquiv.irreducible_iff`, the
-      -- `MvPolynomial` unit classification, `Finset.prod_bij`, and prime-product
-      -- divisibility APIs.  The remaining implication requires constructing
-      -- the stabilizer-of-associate subgroup and its coefficient character
-      -- into `Fˣ`, then a substantial orbit-product invariance/divisibility
-      -- argument and transfer of primality to the custom fixed subring.
+    · -- Boundary: searched `MulEquiv.irreducible_iff`,
+      -- `MvPolynomial.isUnit_iff_eq_C_of_isReduced`, `MulAction.stabilizer`,
+      -- `Finset.prod_bij`, `Prime.dvd_finset_prod_iff`, and
+      -- `Finset.prod_primes_dvd`.  The last theorem assumes
+      -- `Subsingleton Rˣ`, so it does not apply to `MvPolynomial n F`, whose
+      -- units are the nonzero constants classified by the MvPolynomial lemma.
+      -- The remaining implication therefore requires a custom subgroup of
+      -- automorphisms sending `π` to an associate, extraction and uniqueness
+      -- of its coefficient character into `Fˣ`, and a pairwise-nonassociated
+      -- prime-product divisibility proof.  Orbit reindexing and cancellation
+      -- must then transfer primality to the custom fixed subring.
       sorry
