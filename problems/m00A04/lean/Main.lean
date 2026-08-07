@@ -105,7 +105,38 @@ theorem apm_m00a04
         have hnorm : 0 < ‖v - u‖ := norm_pos_iff.mpr (sub_ne_zero.mpr hv)
         simp only [sub_self, norm_zero, zero_pow, Nat.ofNat_pos, mul_zero]
         nlinarith [sq_pos_of_pos hnorm]
-    · /-
+    · intro n U hUne hUopen hUbounded F hF
+      by_cases hn : n = 0
+      · subst n
+        let z : Fin 0 → ℝ := fun i ↦ Fin.elim0 i
+        have hsub (x : Fin 0 → ℝ) : x = z := Subsingleton.elim _ _
+        have hUtop : U = Set.univ := by
+          apply eq_univ_of_forall
+          intro x
+          obtain ⟨y, hy⟩ := hUne
+          simpa [hsub x, hsub y] using hy
+        let φ : (Fin 0 → ℝ) → ℝ := fun _ ↦ F z
+        have hFφ : F = φ := by
+          funext x
+          simp only [φ]
+          rw [hsub x]
+        let g : Fin 0 → (Fin 0 → ℝ) → ℝ := fun i ↦ Fin.elim0 i
+        refine ⟨F, g, ?_, ?_⟩
+        · refine ⟨hF, ?_, ?_, ?_⟩
+          · intro i
+            exact Fin.elim0 i
+          · intro i
+            exact Fin.elim0 i
+          · intro ε hε
+            refine ⟨φ, ?_, ?_⟩
+            · refine ⟨contDiff_const, ?_, ?_⟩
+              · exact (Set.toFinite (support φ)).isCompact
+              · rw [hUtop]
+                exact subset_univ _
+            · simpa [hFφ] using hε
+        · intro v h hv
+          simp [hFφ]
+      · /-
       Boundary: the Hilbert-space portion is complete above. It uses Mathlib's
       compiled Fréchet–Riesz equivalence `InnerProductSpace.toDual`; rewriting
       `φ` with `norm_sub_sq_real` gives the exact completed-square formula,
@@ -121,5 +152,10 @@ theorem apm_m00a04
       `(u,g)` satisfying the distributional identities and approximation clause,
       then descend the Riesz representative back to those functions. This is a
       full Sobolev-space construction, not supplied by solved siblings.
+      Closer hop 1 additionally separates and proves the degenerate case
+      `n = 0`: the Euclidean domain is a singleton, the gradient family is
+      empty, and a constant test function gives exact energy approximation.
+      Thus the sole remaining case has `0 < n` and requires the genuine
+      Sobolev completion/representative construction described above.
       -/
-      sorry
+        sorry

@@ -1,12 +1,21 @@
 # Proof Outline: m00A04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean artifact proves the Hilbert-space minimization theorem and the
+zero-dimensional PDE case. One positive-dimensional Sobolev boundary remains.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m00A04.md`
 
-## Follow-up Needed
+## Formalized
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Complete the square using `InnerProductSpace.toDual` to obtain boundedness,
+  the unique strict minimizer, and its Riesz representation identity.
+- For `n = 0`, identify the Euclidean domain with a singleton, take `u = F`,
+  use the empty gradient, and approximate exactly by a constant test function.
+
+## Remaining Boundary
+
+For `0 < n`, construct the energy completion of compactly supported smooth
+tests and prove its completion elements have function/weak-gradient
+representatives satisfying the custom approximation predicate. Then apply
+Riesz representation and descend the resulting vector to those representatives.
