@@ -123,25 +123,20 @@ theorem apm_b99a04
       have hinj : Function.Injective (apmLeftIdealAction (L i) x) :=
         LinearMap.injective_of_ne_zero hne
       exact ⟨(LinearEquiv.ofInjective (apmLeftIdealAction (L i) x) hinj).symm.trans eLi⟩
-    · /-
-      Boundary (closer hop 1): parts (a)--(c), including the requested
-      *specific* `Fin n` family of column left ideals, now compile.  The family
-      is obtained by transporting `Finsupp.lsingle` through
-      `matrixColumnsLinearEquiv`; `LinearMap.iSupIndep_map` proves independence,
-      and `Finsupp.sum_single` proves that its supremum is `⊤`.
-
-      The sole remaining clause is the finite-module classification. Searches
-      checked `IsSimpleRing.isIsotypic`, `IsIsotypic.linearEquiv_fun`,
-      `IsIsotypicOfType.linearEquiv_fun`,
-      `Module.Finite.of_restrictScalars_finite`, and the Wedderburn--Artin
-      matrix-ring instances.  `Module.Finite.of_restrictScalars_finite` bridges
-      finite-dimensionality over `F` to module-finiteness over `R`, and the
-      isotypic API decomposes `W` into copies of an abstract simple submodule.
-      What remains is identifying that abstract simple type with the concrete
-      standard module `V`.  A direct route is to choose a nonzero vector in the
-      abstract simple submodule, use `(iSup L) = ⊤` to find a column whose
-      action is nonzero, and then apply the range equivalence proved immediately
-      above.  Mathlib has no packaged theorem performing this final concrete
-      simple-type identification.
-      -/
-      sorry
+    · intro W _ _ _ _ _
+      letI : Module.Finite R W := Module.Finite.of_restrictScalars_finite F R W
+      let i : Fin n := Classical.choice (inferInstance : Nonempty (Fin n))
+      let eLi : L i ≃ₗ[R] V := (LinearEquiv.ofInjective (c i)
+        (q.injective.comp (Finsupp.single_injective i))).symm
+      have hisotypic : IsIsotypicOfType R W V := by
+        intro S hS
+        -- Transport an abstract simple constituent to the regular module, use
+        -- isotypy of the simple matrix ring there, then return through a column.
+        obtain ⟨J, ⟨eSJ⟩⟩ :=
+          IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule R S
+        letI : IsSimpleModule R J := IsSimpleModule.congr eSJ.symm
+        have hLsimple : IsSimpleModule R (L i) := IsSimpleModule.congr eLi
+        have eLJ : Nonempty (L i ≃ₗ[R] J) :=
+          IsSimpleRing.isIsotypic R R J (L i)
+        exact ⟨eSJ.trans eLJ.some.symm |>.trans eLi⟩
+      exact hisotypic.linearEquiv_fun

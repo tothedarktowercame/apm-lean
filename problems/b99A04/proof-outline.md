@@ -1,7 +1,7 @@
 # Proof Outline: b99A04
 
-The Lean proof now closes parts (a)--(c) and leaves one boundary in the final
-finite-module classification.
+The Lean proof closes all four parts, including the finite-module
+classification.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b99A04.md`
@@ -15,11 +15,12 @@ finite-module classification.
   standard module.
 - Every nonzero column-action range is a copy of the standard module, using
   injectivity of a nonzero linear map from a simple module.
+- Every finite-dimensional module is finite over the matrix ring. Each of its
+  abstract simple constituents is transported to a simple ideal of the regular
+  module, identified with a concrete column by matrix-ring isotypy, and hence
+  identified with the standard module. `IsIsotypicOfType.linearEquiv_fun` then
+  supplies the requested finite power.
 
 ## Remaining Boundary
 
-Use the matrix ring's isotypic decomposition for a finite module `W`, then
-identify its abstract simple constituent with the concrete standard module.
-The intended direct bridge chooses a nonzero vector in the constituent and
-uses the proved column supremum to obtain a column acting nontrivially; the
-preceding action-range equivalence then identifies the constituent with `V`.
+None.
