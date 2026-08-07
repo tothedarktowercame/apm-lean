@@ -40,6 +40,65 @@ def apm_m95A04_weakDeriv {p : ENNReal}
       -(∫ x : apm_m95A04_I,
           w x * SchwartzMap.derivCLM ℝ ℝ φ x.1)
 
+/-- Differentiation is injective on test functions: the only compactly
+supported constant smooth function on `ℝ` is zero. -/
+lemma apm_m95A04_Dtest_injective
+    (Dtest : apm_m95A04_Test →ₗ[ℝ] apm_m95A04_Test)
+    (hDtest : ∀ (φ : apm_m95A04_Test) (x : ℝ),
+      Dtest φ x = deriv φ x) :
+    Function.Injective Dtest := by
+  intro φ ψ hφψ
+  apply TestFunction.toTestFunctionClass.coe_injective'
+  funext x
+  let h : apm_m95A04_Test := φ - ψ
+  have hderiv : ∀ y : ℝ, deriv h y = 0 := by
+    intro y
+    rw [← hDtest]
+    change Dtest (φ - ψ) y = 0
+    rw [map_sub, hφψ, sub_self]
+    rfl
+  have hconst : ∀ y : ℝ, h x = h y :=
+    is_const_of_deriv_eq_zero
+      (h.contDiff.differentiable (by simp)) hderiv x
+  have hbdd : BddAbove (tsupport (h : ℝ → ℝ)) :=
+    h.hasCompactSupport.isBounded.bddAbove
+  obtain ⟨b, hb⟩ := hbdd
+  have hnot : b + 1 ∉ tsupport (h : ℝ → ℝ) := by
+    intro hmem
+    have := hb hmem
+    linarith
+  have hz : h (b + 1) = 0 := by
+    rw [← Function.notMem_support]
+    exact fun hm => hnot (subset_closure hm)
+  have hxzero : h x = 0 := (hconst (b + 1)).trans hz
+  exact sub_eq_zero.mp hxzero
+
+/-- Regular distributions remember locally integrable functions up to almost
+everywhere equality.  The forward direction is the fundamental lemma for
+smooth compactly supported test functions. -/
+lemma apm_m95A04_regular_iff_ae
+    (regular : (ℝ → ℝ) → apm_m95A04_Dist)
+    (hregular : ∀ (f : ℝ → ℝ), LocallyIntegrable f volume →
+      ∀ φ : apm_m95A04_Test,
+        regular f φ = ∫ x : ℝ, f x * φ x)
+    (f g : ℝ → ℝ) (hf : LocallyIntegrable f volume)
+    (hg : LocallyIntegrable g volume) :
+    regular f = regular g ↔ f =ᵐ[volume] g := by
+  constructor
+  · intro hfg
+    apply ae_eq_of_integral_contDiff_smul_eq hf hg
+    intro q hqdiff hqcompact
+    let φ : apm_m95A04_Test := TestFunction.mk q hqdiff hqcompact (by simp)
+    have heval := DFunLike.congr_fun hfg φ
+    rw [hregular f hf, hregular g hg] at heval
+    simpa [φ, mul_comm] using heval
+  · intro hfg
+    ext φ
+    rw [hregular f hf, hregular g hg]
+    apply integral_congr_ae
+    filter_upwards [hfg] with x hx
+    rw [hx]
+
 theorem apm_m95a04
     (regular : (ℝ → ℝ) → apm_m95A04_Dist)
     (hregular : ∀ (f : ℝ → ℝ), LocallyIntegrable f volume →
@@ -79,18 +138,25 @@ theorem apm_m95a04
     ¬ Function.Injective Ddist ∧
     (∀ lam : ℝ, Ddist (causal lam) + lam • causal lam = δ) ∧
     Nonempty (CompleteSpace W) := by
-  -- PARTIAL (closer hop 1): bridge still open. Six-part problem confirmed.
-  -- Consulted LEMMA-INDEX.md: no relevant distribution/Sobolev/test function lemmas found.
-  -- This problem requires:
-  -- (a) regular =ᵐ ⟺: a.e. equality of L¹ functions (standard, but need Distributions API)
-  -- (b,c) D|x| = sign, D²|x| = 2δ: distributional derivative computation (need 𝓓' integration by parts)
-  -- (d) D injective on test fns, NOT on dists: kernel of D on distributions contains constants
-  -- (e) (D+λ)T = δ: solve distributional ODE, solution is causal exponential
-  -- (f) W^{1,p} is Banach: completeness of weak derivative graph in Lᵖ × Lᵖ
-  -- Each part is a separate major proof requiring Mathlib's `𝓓`, `𝓓'`, `Lp`,
-  -- `ContinuousLinearMap` APIs assembled in specific ways.
-  -- APIs confirmed: `𝓓(apm_m95A04_Ω, ℝ)`, `𝓓'(apm_m95A04_Ω, ℝ)` exist in Mathlib
-  -- via `open scoped Distributions SchwartzMap`. The `derivCLM` and `evalCLM` exist.
-  -- But the integration-by-parts identity for |x| and the Sobolev completeness
-  -- argument are not pre-packaged.
+  refine ⟨fun f g hf hg => apm_m95A04_regular_iff_ae regular hregular f g hf hg, ?_⟩
+  /-
+  Boundary (closer hop 3): two of the six bridges are now proved locally.
+  `apm_m95A04_regular_iff_ae` uses Mathlib's
+  `ae_eq_of_integral_contDiff_smul_eq` and constructs arbitrary test functions
+  with `TestFunction.mk`; `apm_m95A04_Dtest_injective` proves the fourth
+  conjunct using `is_const_of_deriv_eq_zero` and compact support.
+
+  The remaining conjunction still requires the explicit integration-by-parts
+  calculations `D |x| = sign`, `D sign = 2 δ`, and
+  `(D + λ) causal = δ`.  Searches of `Analysis/Distribution` found the
+  fundamental lemma and test-function derivative CLMs, but no general
+  distribution theorem packaging these nonsmooth boundary-term calculations.
+  Noninjectivity of the abstract `Ddist` can then use the regular distribution
+  of the constant function, but depends on the same integral-of-a-derivative
+  boundary lemma.  Finally, `Lp.instCompleteSpace` and `CompleteSpace.prod`
+  give completeness of the ambient product (as illustrated by sibling
+  `a96J05`), but transferring it to `W` requires proving that the custom
+  weak-derivative graph is closed and building a norm-compatible equivalence;
+  no searched sibling or construction target supplies that bridge.
+  -/
   sorry
