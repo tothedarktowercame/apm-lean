@@ -17,8 +17,12 @@ through its span.
 ## Remaining boundary
 
 One sorry remains for the cyclic-vector equivalence. The reverse direction is
-now precisely the classical theorem that a nonderogatory operator admits a
-cyclic vector. Mathlib has no packaged Krylov/rational-canonical-form theorem
-providing this implication; the forward direction likewise needs the cyclic
-The annihilator-identification part of that forward direction is now proved;
-only its finite-dimensional degree calculation remains.
+now narrowed by `Module.exists_ker_toSpanSingleton_eq_annihilator`: applied to
+the finite torsion polynomial module `Module.AEval' T`, it supplies a vector
+whose annihilator equals the whole module annihilator. Together with
+`Polynomial.span_minpoly_eq_annihilator`, this gives the correct candidate
+without rational canonical form. It remains to prove that a relation among
+the first `finrank F V` orbit vectors yields a polynomial of degree strictly
+below the minimal polynomial in its principal ideal, hence zero; finite
+cardinality then promotes those vectors to a basis. The forward direction's
+annihilator identification is already supplied by the closer-hop-2 helper.

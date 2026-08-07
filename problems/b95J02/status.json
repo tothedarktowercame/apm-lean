@@ -16,7 +16,7 @@
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1,
-    "closer_progress": "A polynomial killing a cyclic vector is now proved to annihilate the whole space; the reverse nonderogatory-to-cyclic construction remains."
+    "closer_progress": "A polynomial killing a cyclic vector is proved to annihilate the whole space. Hop 3 found Module.exists_ker_toSpanSingleton_eq_annihilator, which supplies the reverse direction's candidate vector in Module.AEval' T; the remaining bridge is the bounded-degree principal-ideal argument proving its first finrank orbit vectors form a basis."
   },
   "artifacts": {
     "has_problem_tex": true,

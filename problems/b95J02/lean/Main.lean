@@ -112,5 +112,21 @@ theorem apm_b95j02 :
        Mathlib's module APIs found no general `Module.Cyclic` structure or
        invariant-factor theorem that can turn `charpoly = minpoly` into a
        witness vector. Thus the reverse nonderogatory-to-cyclic implication
-       remains the precise blocker. -/
+       remains the precise blocker.
+
+       Closer hop 3 found a substantially closer PID bridge:
+       `Module.exists_ker_toSpanSingleton_eq_annihilator` constructs, in any
+       finite torsion PID module, an element whose scalar annihilator is the
+       annihilator of the entire module. Applied to `Module.AEval' T`, this is
+       exactly the desired candidate cyclic vector. The accompanying APIs
+       `Module.AEval.of_symm_smul` and
+       `Polynomial.span_minpoly_eq_annihilator` identify its annihilator with
+       `span {minpoly F T}`. The final missing assembly is to show that, when
+       `natDegree (minpoly F T) = finrank F V`, the first `finrank F V`
+       orbit vectors are linearly independent: a relation gives a polynomial
+       of degree below the minpoly lying in its principal ideal. Cardinality
+       then turns that independent family into a basis and closes the span.
+       I tested the `Module.AEval'` specialization, but its type-synonym/module
+       instance alignment and the bounded-degree principal-ideal argument did
+       not compile within this final hop. -/
     sorry
