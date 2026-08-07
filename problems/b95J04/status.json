@@ -16,7 +16,7 @@
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1,
-    "closer_progress": "The prime-cardinality generator lemma and the specified nonidentity automorphism's nonzero z-eigenvector are proved. Remaining: fixed-field/adjoin assembly for that eigenvector and the forward radical-to-splitting-field construction."
+    "closer_progress": "Hop 3 closes the entire converse: the specified eigenvector is outside the base-field range, its p-th power is fixed and hence in the range, and its adjoin is top by Galois correspondence. Only the forward radical-to-splitting-field/autEquivZmod construction remains."
   },
   "artifacts": {
     "has_problem_tex": true,

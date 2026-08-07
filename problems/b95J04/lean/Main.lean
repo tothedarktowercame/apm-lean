@@ -30,6 +30,48 @@ lemma apm_b95J04_exists_eigenvector_of_nonidentity_prime_card
   refine ⟨α, hα.2, ?_⟩
   simpa [Algebra.smul_def] using hα.1
 
+lemma apm_b95J04_eigenvector_is_radical_generator
+    (p : ℕ) [Fact p.Prime]
+    (F E : Type*) [Field F] [Field E] [Algebra F E]
+    [FiniteDimensional F E] [IsGalois F E]
+    (z : F) (hz : IsPrimitiveRoot z p) (hz1 : z ≠ 1)
+    (hcard : Nat.card (E ≃ₐ[F] E) = p)
+    (σ : E ≃ₐ[F] E) (hσ : σ ≠ 1)
+    (α : E) (hα : α ≠ 0) (heigen : σ α = algebraMap F E z * α) :
+    α ∉ (algebraMap F E).range ∧
+      α ^ p ∈ (algebraMap F E).range ∧
+      IntermediateField.adjoin F {α} = ⊤ := by
+  have hgen : ∀ τ : E ≃ₐ[F] E, τ ∈ Subgroup.zpowers σ :=
+    apm_b95J04_mem_zpowers_of_nonidentity_prime_card p (E ≃ₐ[F] E) hcard σ hσ
+  have hv : Module.End.HasEigenvector σ.toLinearMap z α := by
+    refine ⟨?_, hα⟩
+    simpa [Algebra.smul_def] using heigen
+  have hv' := hv.pow_apply
+  simp_rw [← AlgEquiv.pow_toLinearMap, AlgEquiv.toLinearMap_apply] at hv'
+  refine ⟨?_, ?_, ?_⟩
+  · rintro ⟨a, rfl⟩
+    have hfix : σ (algebraMap F E a) = algebraMap F E a := σ.commutes a
+    rw [heigen] at hfix
+    have hzmap : algebraMap F E z = 1 := by
+      apply mul_right_cancel₀ hα
+      simpa using hfix
+    exact hz1 ((algebraMap F E).injective (by simpa using hzmap))
+  · apply (IsGalois.mem_range_algebraMap_iff_fixed (F := F) (E := E) (α ^ p)).2
+    intro τ
+    obtain ⟨n, rfl : σ ^ n = τ⟩ := mem_powers_iff_mem_zpowers.mpr (hgen τ)
+    rw [map_pow, hv', _root_.smul_pow, ← pow_mul, mul_comm, pow_mul, hz.pow_eq_one,
+      one_pow, one_smul]
+  · apply IsGalois.intermediateFieldEquivSubgroup.injective
+    rw [map_top, eq_top_iff]
+    intro τ hτ
+    obtain ⟨n, rfl : σ ^ n = τ⟩ := mem_powers_iff_mem_zpowers.mpr (hgen τ)
+    have hfix := hτ ⟨α, IntermediateField.mem_adjoin_simple_self F α⟩
+    simp only [AlgEquiv.smul_def, hv'] at hfix
+    conv_rhs at hfix => rw [← one_smul F α]
+    obtain ⟨k, rfl⟩ := hz.dvd_of_pow_eq_one n (smul_left_injective F hα hfix)
+    rw [pow_mul, ← hcard, pow_card_eq_one', one_pow]
+    exact one_mem _
+
 /-!
 # APM b95J04
 
@@ -119,4 +161,28 @@ theorem apm_b95j04
     -- narrowed to fixed-field transport for `α ^ p`, exclusion from the
     -- algebra-map range, and the Galois-correspondence proof that `F⟮α⟯ = ⊤`.
     -- The forward splitting-field/irreducibility assembly remains open.
-    sorry
+    constructor
+    · /- CLOSER HOP 3 remaining boundary: the converse is fully closed below.
+         For the forward direction, searches of
+         `X_pow_sub_C_irreducible_iff_of_prime`, splitting-field restriction,
+         and `autEquivZmod` still leave the same bridge: from
+         `α ∉ (algebraMap F E).range` and `α ^ p` in that range, prove the
+         corresponding `X ^ p - C a` irreducible over `F`, install its
+         splitting-field structure on `F⟮α⟯`, and orient the resulting
+         `autEquivZmod` to match the frozen pointwise formula. -/
+      sorry
+    · intro hfd hgal hcard _ σ hσ
+      letI : FiniteDimensional F E := hfd
+      letI : IsGalois F E := hgal
+      letI : Fact p.Prime := ⟨hp⟩
+      have hzprim : IsPrimitiveRoot z p := by
+        refine ⟨hz, fun n hn => ?_⟩
+        rw [← orderOf_eq_prime hz hz1]
+        exact orderOf_dvd_of_pow_eq_one hn
+      obtain ⟨α, hα, heigen⟩ :=
+        apm_b95J04_exists_eigenvector_of_nonidentity_prime_card
+          p F E z hzprim hcard σ hσ
+      obtain ⟨hbase, hpow, hadjoin⟩ :=
+        apm_b95J04_eigenvector_is_radical_generator
+          p F E z hzprim hz1 hcard σ hσ α hα heigen
+      exact ⟨α, hα, heigen, hbase, hpow, hadjoin⟩

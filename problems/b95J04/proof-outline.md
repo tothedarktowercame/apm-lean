@@ -13,11 +13,16 @@ Closer hop 2 adds
 Mathlib's minpoly argument and produces a nonzero eigenvector for the exact
 specified automorphism with eigenvalue `z`.
 
+Closer hop 3 adds `apm_b95J04_eigenvector_is_radical_generator`. It proves
+that eigenvector is outside the algebra-map range, its `p`-th power belongs to
+the range by the finite Galois fixed-field theorem, and its adjoin is top by
+injectivity of the Galois correspondence. The complete converse is now wired
+into the main theorem without sorry.
+
 ## Remaining boundary
 
-One sorry remains. The forward direction must convert `α ∉ F` into the
+One sorry remains, confined to the forward direction. It must convert `α ∉ F` into the
 nonexistence of a p-th root in `F`, apply binomial irreducibility, and transport
-the splitting-field equivalence to `F⟮α⟯`. The converse must replay Mathlib's
-fixed-field and Galois-correspondence arguments for the proved specified
-eigenvector, establishing its p-th power lies in the base-field range, that it
-is not itself in that range, and that its adjoin is top.
+the splitting-field equivalence to `F⟮α⟯`, including the separate quadratic
+case because Mathlib's prime-power irreducibility criterion assumes an odd
+prime.
