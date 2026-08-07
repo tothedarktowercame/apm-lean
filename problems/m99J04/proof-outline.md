@@ -1,12 +1,19 @@
 # Proof Outline: m99J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt is `lean/Main.lean`. It proves compactness and
+self-adjointness of the congruence and all algebraic transport identities
+needed after selecting an eigenbasis.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-m99J04.md`
+- Compact operators are stable under bounded composition, so `A†TA` is compact.
+- Adjoint composition identities prove `A†TA` is self-adjoint.
+- `apm_m99j04_weight_inner` proves weighted normalization and orthogonality
+  transport through `A`.
+- `apm_m99j04_generalized_eigenvector` converts an eigenvector of `A†TA` into
+  a generalized eigenvector of `(T,P)`.
 
-## Follow-up Needed
+## Remaining Boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Turn the spectral theorem's dense orthogonal sum of eigenspaces into one
+  `HilbertBasis` whose vectors retain their eigenspace labels.
+- Apply the existing transport lemmas pointwise to that basis.
+- Finish the standard orthonormality equivalence with `A†A = id`.

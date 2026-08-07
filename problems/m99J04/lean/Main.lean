@@ -46,6 +46,32 @@ lemma apm_m99j04_weight_inner
     inner 𝕜 (apm_m99j04_weight A (A x)) (A y) = inner 𝕜 x y := by
   simp [apm_m99j04_weight, ContinuousLinearMap.adjoint_inner_left]
 
+/-- An eigenvector of the congruence transports to a generalized eigenvector
+for the original operator and the induced weight. -/
+lemma apm_m99j04_generalized_eigenvector
+    {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H]
+    [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (A : H ≃L[𝕜] H) (T : H →L[𝕜] H) (w : H) (eigenvalue : 𝕜)
+    (hw : apm_m99j04_conjugate A T w = eigenvalue • w) :
+    T (A w) = eigenvalue • apm_m99j04_weight A (A w) := by
+  have h := congrArg
+    (fun z => ContinuousLinearMap.adjoint A.symm.toContinuousLinearMap z) hw
+  have hinv :
+      (ContinuousLinearMap.adjoint A.symm.toContinuousLinearMap).comp
+          (ContinuousLinearMap.adjoint A.toContinuousLinearMap) =
+        ContinuousLinearMap.id 𝕜 H := by
+    rw [← ContinuousLinearMap.adjoint_comp]
+    congr 1
+    ext x
+    simp
+  simp only [apm_m99j04_conjugate, ContinuousLinearMap.comp_apply,
+    map_smul] at h
+  change ((ContinuousLinearMap.adjoint A.symm.toContinuousLinearMap).comp
+    (ContinuousLinearMap.adjoint A.toContinuousLinearMap)) (T (A w)) =
+      eigenvalue • ContinuousLinearMap.adjoint A.symm.toContinuousLinearMap w at h
+  rw [hinv] at h
+  simpa [apm_m99j04_weight] using h
+
 theorem apm_m99j04
     (𝕜 H : Type*) [RCLike 𝕜] [NormedAddCommGroup H]
     [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -86,7 +112,10 @@ theorem apm_m99j04
   `ContinuousLinearMap.orthogonalComplement_iSup_eigenspaces_eq_bot` into a
   single `HilbertBasis` indexed across all eigenspaces, then transporting that
   basis through `A`; the weighted inner-product transport identity needed for
-  its normalization and orthogonality is proved above. I searched
+  its normalization and orthogonality is proved above. Closer hop 1 also proves
+  `apm_m99j04_generalized_eigenvector`, which transports each ordinary
+  eigenvector equation for `A† T A` to the frozen generalized equation for
+  `T` and the weight. I searched
   the `OrthogonalFamily`, eigenspace direct-sum, `HilbertBasis`, adjoint of
   continuous-linear equivalences, and isometry/unitarity APIs, but did not
   find the required infinite-dimensional basis constructor in this pass.
