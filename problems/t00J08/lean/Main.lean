@@ -61,6 +61,18 @@ lemma apm_t00j08_rank_one_impossible :
     decide
   exact hnoncomm hcomm
 
+/-- Any ambient rank admitting the required subgroup is at least two. This
+packages the direct triviality and commutativity obstructions above. -/
+lemma apm_t00j08_two_le_of_realizable {n : ℕ}
+    (h : ∃ G : Subgroup (FreeGroup (Fin n)),
+      G.FiniteIndex ∧ Nonempty (G ≃* FreeGroup (Fin 7))) :
+    2 ≤ n := by
+  by_contra hn
+  have hn' : n = 0 ∨ n = 1 := by omega
+  rcases hn' with rfl | rfl
+  · exact apm_t00j08_rank_zero_impossible h
+  · exact apm_t00j08_rank_one_impossible h
+
 theorem apm_t00j08 :
     ∀ n : ℕ,
       (∃ G : Subgroup (FreeGroup (Fin n)),
@@ -97,5 +109,15 @@ theorem apm_t00j08 :
   basis. Constructing the other three examples and excluding `n ≥ 1` outside
   `{2,3,4,7}` therefore still requires a new quantitative Nielsen--Schreier
   development.
+
+  Closer hop 3 adds `apm_t00j08_two_le_of_realizable`, packaging the direct
+  rank-zero and rank-one obstructions into the uniform necessary condition
+  `2 ≤ n` for every realizable ambient rank. This removes the low-rank cases
+  from all subsequent case analyses but does not replace the missing sharp
+  Nielsen--Schreier equality. Renewed inspection of `FreeGroupBasis`,
+  `IsFreeGroup.Generators`, and the groupoid spanning-tree construction found
+  no finiteness/cardinality theorem for the noncomputably selected basis.
+  Hence construction of ranks `2,3,4` and exclusion of all other ranks at
+  least two remain open.
   -/
   sorry

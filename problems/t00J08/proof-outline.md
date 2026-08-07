@@ -17,6 +17,9 @@ The canonical Lean attempt is `lean/Main.lean`, with one documented boundary.
   hence every subgroup is commutative. An explicit decidable reduced-word
   calculation proves that the first two generators of the rank-seven free
   group do not commute, excluding an isomorphism.
+- `apm_t00j08_two_le_of_realizable`: every ambient rank admitting the required
+  finite-index subgroup is at least two, uniformly packaging the preceding
+  two obstructions.
 
 ## Follow-up needed
 

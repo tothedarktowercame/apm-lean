@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "notes": "Ranks zero and one are now excluded and rank seven is realized. Mathlib's Schreier rank bound is not the quantitative rank-minus-one equality needed to construct and classify ranks 2, 3, and 4.",
+  "closer_hop": 3,
+  "notes": "Rank seven is realized, ranks zero and one are excluded, and these obstructions are packaged as the uniform necessary bound 2 ≤ n. Mathlib's Schreier rank bound is not the quantitative rank-minus-one equality needed to construct and classify ranks 2, 3, and 4.",
   "imported_at": "2026-07-13T17:26:56.660844Z"
 }
