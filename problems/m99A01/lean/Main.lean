@@ -65,6 +65,15 @@ lemma apm_m99A01_sine_family_admissible (n : ℝ) :
   rw [show 2 * (Real.pi / 2) = Real.pi by ring]
   simp
 
+/-- Derivative of the endpoint-fixing family used in the unboundedness
+argument. -/
+lemma apm_m99A01_deriv_sine_family (n t : ℝ) :
+    deriv (fun x : ℝ => n * Real.sin (2 * x)) t =
+      2 * n * Real.cos (2 * t) := by
+  have h := ((Real.hasDerivAt_sin (2 * t)).comp t
+    ((hasDerivAt_id t).const_mul 2)).const_mul n
+  convert h.deriv using 1 <;> ring
+
 theorem apm_m99a01 :
     (∀ y : ℝ → ℝ,
       (ContDiff ℝ 2 y ∧ y ∈ apm_m99A01_admissible ∧ apm_m99A01_stationary y) ↔
@@ -108,5 +117,10 @@ theorem apm_m99a01 :
     this pass. The candidate's global `C¹` regularity and both endpoint values
     are proved above, and `apm_m99A01_sine_family_admissible` proves that the
     entire proposed unbounded family meets the frozen admissibility predicate.
+    Closer hop 1 additionally proves its exact derivative in
+    `apm_m99A01_deriv_sine_family`. Mathlib source contains
+    `integral_sin`, `integral_sin_sq`, and `integral_cos_sq`; the remaining
+    calculation is their affine change-of-variables specialization at `2*t`,
+    followed by showing the resulting positive quadratic in `n` is unbounded.
     -/
     sorry
