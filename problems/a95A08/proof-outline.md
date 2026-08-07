@@ -14,18 +14,17 @@ f analytic near Δ̄, injective on Δ̄, f(0) = 0, |f'(0)| = 1.
 4. Equality → |f'| ≡ 1 → f is rotation → Δ ⊆ D
 5. Contrapositive: Δ ⊆ D → Schwarz lemma → f = rotation → ℓ = 2π
 
-## Theory boundaries (4 sorries)
+## Lean closure
 
-1. **jensen_exp_circle**: Jensen's inequality for exp on probability measure on [0,2π].
-   Mathlib has ConvexOn.le_integral but the measure setup is not assembled.
-2. **Harmonic mean value**: (1/2π)∫log|f'(e^{iθ})| = log|f'(0)|.
-   Requires log|holomorphic| harmonic, not directly in Mathlib.
-3. **Schwarz equality case**: |f'(0)| = 1 + disk self-map ⟹ rotation.
-   Not in Mathlib (only the inequality is proved).
-4. All four theorems inherit from these three gaps.
+All declarations are sorry-free. For part (b), `rotation_of_disk_subset_image`
+constructs the analytic inverse with `Function.invFunOn` and applies
+`ConstructionTargets.SchwarzEquality`. The identity principle then extends
+the resulting rotation formula from the unit disk to the slightly larger disk
+provided by `hf_holo`. Consequently the derivative norm is one on the unit
+circle, so `curveLength f = 2π`, contradicting the strict length hypothesis.
 
 ## Checked Lean state
 
 - `lake env lean problems/a95A08/lean/Main.lean`: exit 0
-- Sorry count: 4
-- Classification: partial
+- Sorry count: 0
+- Classification: complete

@@ -116,26 +116,6 @@ theorem curve_length_ge_two_pi
   rw [hmean, hf_deriv, mul_one] at havg
   exact havg
 
-/-- Part 2: ℓ(C) > 2π ⟹ Δ ⊄ f(Δ).
-
-By contrapositive: if Δ ⊆ f(Δ), then f⁻¹ restricted to Δ is a disk self-map
-fixing 0 with |(f⁻¹)'(0)| = 1/|f'(0)| = 1. By Schwarz lemma equality case,
-f⁻¹ is a rotation, so f is a rotation, giving |f'| ≡ 1 and ℓ(C) = 2π.
-
-**Blocker:** `ConstructionTargets.SchwarzEquality` supplies the Schwarz equality
-case.  What is still missing here is the analytic inverse on the whole disk:
-injectivity must first be used to construct a differentiable inverse of `f` on
-the contained disk, with derivative norm one at zero. -/
-theorem disk_not_subset_image_of_length_gt
-    {f : ℂ → ℂ}
-    (hf_holo : ∃ ε > 0, DifferentiableOn ℂ f (closedBall 0 (1 + ε)))
-    (hf_inj : InjOn f (closedBall 0 1))
-    (hf_zero : f 0 = 0)
-    (hf_deriv : ‖deriv f 0‖ = 1)
-    (hlen : 2 * π < curveLength f) :
-    ¬(ball (0 : ℂ) 1 ⊆ f '' ball 0 1) := by
-  sorry
-
 /-!
 ## Counterexample to the proposed rotation lemma
 
@@ -306,6 +286,57 @@ lemma rotation_of_disk_subset_image
   congr 1
   rw [mul_comm]
   simpa [hd] using (Complex.norm_mul_exp_arg_mul_I d).symm
+
+/-- Part 2: ℓ(C) > 2π ⟹ Δ ⊄ f(Δ).
+
+The analytic inverse is supplied by `rotation_of_disk_subset_image`. The
+identity theorem extends its rotation formula from the unit disk to the
+slightly larger holomorphy disk, so the derivative has unit norm all along the
+unit circle and the curve length is exactly `2π`. -/
+theorem disk_not_subset_image_of_length_gt
+    {f : ℂ → ℂ}
+    (hf_holo : ∃ ε > 0, DifferentiableOn ℂ f (closedBall 0 (1 + ε)))
+    (hf_inj : InjOn f (closedBall 0 1))
+    (hf_zero : f 0 = 0)
+    (hf_deriv : ‖deriv f 0‖ = 1)
+    (hlen : 2 * π < curveLength f) :
+    ¬(ball (0 : ℂ) 1 ⊆ f '' ball 0 1) := by
+  intro hsubset
+  rcases hf_holo with ⟨ε, hε, hf⟩
+  have hlarge : 1 < 1 + ε := by linarith
+  have hf_open : DifferentiableOn ℂ f (ball 0 (1 + ε)) :=
+    hf.mono ball_subset_closedBall
+  obtain ⟨α, hrotation⟩ := rotation_of_disk_subset_image
+    (hf_open.mono (ball_subset_ball hlarge.le))
+    (hf_inj.mono ball_subset_closedBall) hf_zero hf_deriv hsubset
+  let c : ℂ := exp (I * (α : ℂ))
+  let r : ℂ → ℂ := fun z => c * z
+  have hr_analytic : AnalyticOnNhd ℂ r (ball 0 (1 + ε)) := by
+    exact analyticOnNhd_const.mul analyticOnNhd_id
+  have hevent : f =ᶠ[nhds (0 : ℂ)] r := by
+    filter_upwards [ball_mem_nhds (0 : ℂ) zero_lt_one] with z hz
+    exact hrotation z hz
+  have heq : EqOn f r (ball 0 (1 + ε)) :=
+    (hf_open.analyticOnNhd isOpen_ball).eqOn_of_preconnected_of_eventuallyEq
+      hr_analytic (convex_ball 0 (1 + ε)).isPreconnected
+      (mem_ball_self (by linarith)) hevent
+  have hc : ‖c‖ = 1 := by
+    simp [c]
+  have hderiv (θ : ℝ) : ‖deriv f (exp (I * (θ : ℂ)))‖ = 1 := by
+    let z : ℂ := exp (I * (θ : ℂ))
+    have hz_norm : ‖z‖ = 1 := by simp [z]
+    have hz : z ∈ ball (0 : ℂ) (1 + ε) := by
+      rw [mem_ball, dist_zero_right, hz_norm]
+      exact hlarge
+    have hlocal : f =ᶠ[nhds z] r := by
+      filter_upwards [isOpen_ball.mem_nhds hz] with w hw
+      exact heq hw
+    rw [hlocal.deriv_eq]
+    have hr_deriv : deriv r z = c := (hasDerivAt_const_mul c).deriv
+    rw [hr_deriv, hc]
+  have hlength : curveLength f = 2 * π := by
+    simp [curveLength, hderiv]
+  linarith
 
 /-- Jensen's inequality for the exponential on the circle:
 (1/2π) ∫ g ≥ exp((1/2π) ∫ log g) when g > 0.
