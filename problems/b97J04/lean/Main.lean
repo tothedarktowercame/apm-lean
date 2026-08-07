@@ -63,6 +63,37 @@ lemma apm_b97j04_additive_unique
     (by rw [add_comm, ← hT, hT', add_comm])
   exact ⟨hu.2, hu.1⟩
 
+/-- The easy inclusion in the intrinsic generalized-eigenspace description:
+on an `S`-eigenvector, `T - λ` acts as the commuting nilpotent part. -/
+lemma apm_b97j04_eigenspace_subset_generalized
+    (F V : Type*) [Field F] [AddCommGroup V] [Module F V]
+    (T S N : Module.End F V) (h : APMAdditiveJC T S N) (lam : F) :
+    APMEigenspace S lam ⊆ APMGeneralizedEigenspace T lam := by
+  rintro v hv
+  obtain ⟨hS, ⟨k, hk⟩, hcomm, hT⟩ := h
+  let A := T - lam • (LinearMap.id : Module.End F V)
+  have hstep : ∀ w, S w = lam • w → A w = N w := by
+    intro w hw
+    simp [A, hT, hw]
+  have hpow : ∀ n : ℕ,
+      (A ^ n) v = (N ^ n) v ∧ S ((N ^ n) v) = lam • ((N ^ n) v) := by
+    intro n
+    induction n with
+    | zero => simpa using hv
+    | succ n ih =>
+        constructor
+        · rw [pow_succ', pow_succ', Module.End.mul_apply, Module.End.mul_apply,
+            ih.1, hstep _ ih.2]
+        · rw [pow_succ', Module.End.mul_apply]
+          calc
+            S (N ((N ^ n) v)) = N (S ((N ^ n) v)) := by
+              exact congrFun (congrArg DFunLike.coe hcomm) ((N ^ n) v)
+            _ = lam • N ((N ^ n) v) := by rw [ih.2, map_smul]
+  refine ⟨k + 1, Nat.succ_pos k, ?_⟩
+  change (A ^ (k + 1)) v = 0
+  rw [(hpow (k + 1)).1, pow_succ, hk, zero_mul]
+  rfl
+
 theorem apm_b97j04 :
     ∀ (F V : Type*) [Field F] [IsAlgClosed F] [AddCommGroup V]
         [Module F V] [FiniteDimensional F V] (T : Module.End F V),
@@ -79,24 +110,33 @@ theorem apm_b97j04 :
         ∃! p : (V ≃ₗ[F] V) × (V ≃ₗ[F] V),
           Module.End.IsSemisimple p.1.toLinearMap ∧
           APMUnipotent p.2 ∧ p.1 * p.2 = p.2 * p.1 ∧ T' = p.1 * p.2) := by
+  intro F V _ _ _ _ _ T
+  refine ⟨apm_b97j04_additive_exists F V T, ?_, ?_,
+    (fun S N S' N' h h' => apm_b97j04_additive_unique F V T S N S' N' h h'), ?_⟩
   /-
-  Boundary (closer hop 1): the first and fourth frozen conjuncts are now
-  isolated as compiled helpers. `apm_b97j04_additive_exists` uses
-  `Module.End.exists_isNilpotent_isSemisimple`, reorders its summands, and
-  obtains commutation from both summands' membership in `Algebra.adjoin F {T}`.
-  `apm_b97j04_additive_unique` translates `APMAdditiveJC` directly into
-  `Module.End.isNilpotent_isSemisimple_unique` and restores the frozen order.
+  Boundary (closer hop 2): the main proof now explicitly closes additive
+  existence and uniqueness. The new compiled lemma
+  `apm_b97j04_eigenspace_subset_generalized` also proves one complete direction
+  of the frozen generalized-eigenspace equality. It inductively shows that
+  `T - λ` and `N` have identical powers on an `S`-eigenvector, then raises the
+  nilpotence exponent once to meet the frozen strict positivity requirement.
 
-  The remaining conjuncts are equality of `charpoly S` and `charpoly T`,
-  equality of the custom eigenspace with the existential-power generalized
-  eigenspace, and the unique multiplicative decomposition in `V ≃ₗ[F] V`.
-  Searches of `LEMMA-INDEX.md`, all solved artifacts, `ConstructionTargets/`,
-  Mathlib's Jordan--Chevalley, primary-decomposition, eigenspace, charpoly, and
-  linear-equivalence sources, plus git history, found no packaged theorem
-  connecting these exact predicates. Closing them still requires generalized
-  eigenspace primary decomposition (and a uniform exponent), preservation of
-  characteristic polynomial under commuting nilpotent perturbation, and the
-  invertibility/transport argument from additive to multiplicative parts. The
-  statement appears mathematically sound.
+  Deeper inspection found more usable infrastructure than hop 1 recorded:
+  `Module.End.mem_maxGenEigenspace` exactly matches the existential-power
+  predicate after handling exponent zero;
+  `IsFinitelySemisimple.maxGenEigenspace_eq_eigenspace` identifies generalized
+  and ordinary eigenspaces for `S`; and `IsSemisimple.restrict` plus
+  `Module.End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap` suggest a
+  route to the reverse inclusion. That route must restrict the two commuting
+  decompositions to `T.maxGenEigenspace λ` and apply Jordan--Chevalley
+  uniqueness there, with considerable `MapsTo` and restriction bookkeeping.
+
+  Characteristic-polynomial equality can then be obtained by comparing root
+  multiplicities via `finrank_maxGenEigenspace_eq`, monicity, and splitting.
+  The multiplicative clause still requires proving the semisimple additive
+  part invertible for invertible `T`, bundling `S⁻¹T` as a linear equivalence,
+  proving its unipotence, and translating multiplicative uniqueness back to
+  additive uniqueness. No closed artifact or construction module packages
+  those remaining assemblies. The statement is unchanged and appears sound.
   -/
-  sorry
+  all_goals sorry
