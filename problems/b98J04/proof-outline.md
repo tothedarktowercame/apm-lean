@@ -14,11 +14,15 @@ data.
 - `IsSemisimpleModule.finite_tfae` produces the finite simple decomposition.
 - `rightAnnihilatorIdeal` bundles the frozen set-valued annihilator as an
   `Ideal R`; its membership predicate is definitionally the original set.
+- `rightAnnihilatorIdeal_isTwoSided` proves the bundled annihilator is a
+  two-sided ideal, enabling noncommutative quotient rings and the injective
+  simultaneous quotient map.
 
 ## Remaining bridge
 
 Lift the simple summands from submodules of `M` to submodules of `R`. Prove
 their annihilator ideals maximal and pairwise distinct using simplicity and
 minimal faithfulness. Since `Ideal.quotientInfRingEquivPiQuotient` assumes a
-commutative ring, establish the analogous finite two-sided CRT locally, relate
+commutative ring for its surjectivity half, establish that half of the finite
+two-sided CRT locally, relate
 each quotient to the appropriate matrix ring, and prove the left-span claim.

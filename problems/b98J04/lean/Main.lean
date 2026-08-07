@@ -38,6 +38,14 @@ def rightAnnihilatorIdeal {R : Type*} [Ring R]
     (I : Submodule Rᵐᵒᵖ R) (r : R) :
     r ∈ rightAnnihilatorIdeal I ↔ r ∈ rightAnnihilator I := Iff.rfl
 
+/-- A right annihilator is closed under multiplication on both sides. -/
+instance rightAnnihilatorIdeal_isTwoSided {R : Type*} [Ring R]
+    (I : Submodule Rᵐᵒᵖ R) : (rightAnnihilatorIdeal I).IsTwoSided where
+  mul_mem_of_left b ha := by
+    intro x hx
+    simp only [mem_rightAnnihilatorIdeal, rightAnnihilator, Set.mem_setOf_eq] at ha ⊢
+    rw [← mul_assoc, ha x hx, zero_mul]
+
 /-- Faithfulness of a right ideal. -/
 def IsFaithfulRightIdeal {R : Type*} [Ring R]
     (I : Submodule Rᵐᵒᵖ R) : Prop :=
@@ -113,5 +121,15 @@ theorem apm_b98j04
   quotient to its chosen simple summand. The global
   `IsSemisimpleRing.exists_ringEquiv_pi_matrix_divisionRing` does not retain
   the required correspondence with the chosen summands of `M`.
+
+  Closer hop 2 bundles the missing right-multiplication closure as the compiled
+  instance `rightAnnihilatorIdeal_isTwoSided`; hence every annihilator quotient
+  now has Mathlib's noncommutative ring structure and the injective map
+  `Ideal.quotientInfToPiQuotient` is available. Inspection of
+  `Ideal/Quotient/Operations.lean` confirms that only the surjectivity theorem
+  specializes to `[CommRing R]`. The remaining local CRT must reproduce that
+  surjectivity construction from pairwise comaximal two-sided ideals; obtaining
+  those ideals as distinct maximal annihilators remains coupled to the
+  simple-summand transport described above.
   -/
   sorry
