@@ -54,7 +54,12 @@ theorem apm_b96a01 :
   -- `s = {1, 2}`, and `A = AddSubgroup.closure (s : Set ℚ)`.  Its
   -- hypothesis is reflexive, but the conclusion requires one ℚ-basis of the
   -- one-dimensional space ℚ to contain both distinct dependent vectors `1`
-  -- and `2`.  No Mathlib API search can repair this statement-level issue;
-  -- the intended claim would need a basis subset generating `A`, rather than
-  -- requiring every element of the supplied generating set to occur in it.
+  -- and `2`.  Searches of `Basis.extend`, `Basis.linearIndependent`,
+  -- `Basis.repr_self`, and the finitely generated lattice APIs confirm that
+  -- basis extension starts from a linearly independent family; it cannot
+  -- retain this arbitrary dependent generating set.  The later integral
+  -- conjugacy and congruence-kernel conjuncts cannot repair a false first
+  -- conjunct.  The intended claim would need a basis subset generating `A`,
+  -- rather than requiring every element of the supplied generating set to
+  -- occur in it.
   sorry
