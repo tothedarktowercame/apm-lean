@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "classification_detail": "The order-five Sylow bridge and normalizer cardinality 10-or-35 alternative compile; coset/core action, exclusivity, and order-35/normal-7 equivalence remain.",
   "imported_at": "2026-07-13T17:26:54.138359Z"
 }
