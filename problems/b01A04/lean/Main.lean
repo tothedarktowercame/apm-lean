@@ -27,16 +27,35 @@ def apm_b01A04_isGaloisGroup (G : Type) [Group G] : Prop :=
         letI := hA
         IsGalois ℚ K ∧ Nonempty ((K ≃ₐ[ℚ] K) ≃* G)
 
+/-- Realizability is invariant under group isomorphism. This allows later
+constructions to use whichever concrete model of the order-three groups is
+most convenient. -/
+lemma apm_b01A04_isGaloisGroup_of_mulEquiv
+    {G H : Type} [Group G] [Group H]
+    (hG : apm_b01A04_isGaloisGroup G) (e : G ≃* H) :
+    apm_b01A04_isGaloisGroup H := by
+  rcases hG with ⟨K, hK, hA, hGal, ⟨g⟩⟩
+  exact ⟨K, hK, hA, hGal, ⟨g.trans e⟩⟩
+
 theorem apm_b01a04 :
     apm_b01A04_isGaloisGroup (Multiplicative (ZMod 3)) ∧
       apm_b01A04_isGaloisGroup
         (Multiplicative (ZMod 3 × ZMod 3)) := by
-  -- SKIPPED: construct Galois extensions of ℚ with Galois groups Z/3Z and Z/3Z × Z/3Z.
-  -- (a) Z/3Z: splitting field of an irreducible cubic with discriminant a perfect square,
-  --     e.g. x³-3x+1 (discriminant = 81 = 9²). Gal ≅ A₃ ≅ Z/3Z.
-  -- (b) Z/3Z × Z/3Z: compositum of two linearly disjoint Z/3Z extensions.
-  -- Blocker: requires constructing specific splitting fields, proving irreducibility,
-  -- computing discriminants, proving Galois property, computing Galois group structure.
-  -- APIs: `IsGalois`, `AlgEquiv`, `Polynomial`, `IsSplittingField` — exist but
-  --   assembling the full construction with explicit polynomials is very involved.
+  /-
+  PARTIAL boundary (closer hop 1): realizability transport across an arbitrary
+  group isomorphism is now compiled as
+  `apm_b01A04_isGaloisGroup_of_mulEquiv`. This removes a recurring model
+  mismatch between additive `ZMod`, alternating groups, cyclotomic unit
+  groups, and automorphism groups.
+
+  I searched Mathlib's cyclotomic and Galois-correspondence sources. They
+  provide cyclotomic Galois extensions and automorphism embeddings, but no
+  ready theorem identifying the maximal real cubic subfield of `ℚ(ζ₇)` or
+  constructing the linearly disjoint compositum of the `7`- and `9`-cyclotomic
+  cubic subfields. The explicit-polynomial route likewise still requires the
+  assembled theorem “irreducible cubic with square discriminant has cyclic
+  order-three Galois group.” Thus construction of the first witness remains
+  open; the product witness additionally requires compositum Galois-group
+  transport and linear disjointness.
+  -/
   sorry
