@@ -46,6 +46,29 @@ def apm_m96a06_IsWeakNeumannSturmLiouville
         ∂(volume.restrict (Icc (0 : ℝ) 1)) =
       ∫ t, b t * value h t ∂(volume.restrict (Icc (0 : ℝ) 1))
 
+/-- Products of two concrete `L²` representatives are integrable. -/
+lemma apm_m96a06_integrable_pair
+    {α : Type*} [MeasurableSpace α] {μ : Measure α} (f g : Lp ℝ 2 μ) :
+    Integrable (fun t => f t * g t) μ := by
+  exact MemLp.integrable_mul (Lp.memLp f) (Lp.memLp g)
+
+/-- The forcing term is integrable by the `L²` Hölder pairing. -/
+lemma apm_m96a06_integrable_force
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (b : α → ℝ) (hb : MemLp b 2 μ) (g : Lp ℝ 2 μ) :
+    Integrable (fun t => b t * g t) μ := by
+  exact MemLp.integrable_mul hb (Lp.memLp g)
+
+/-- An `L∞` coefficient times two concrete `L²` representatives is
+integrable; this is the Hölder estimate underlying the weighted form. -/
+lemma apm_m96a06_integrable_weighted_pair
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (a : α → ℝ) (ha : MemLp a ⊤ μ) (f g : Lp ℝ 2 μ) :
+    Integrable (fun t => a t * f t * g t) μ := by
+  have haf : MemLp (fun t => a t * f t) 2 μ := by
+    simpa only using (Lp.memLp f).mul' ha
+  exact MemLp.integrable_mul haf (Lp.memLp g)
+
 theorem apm_m96a06
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
     (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
@@ -71,7 +94,7 @@ theorem apm_m96a06
       apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u) ∧
     ∃! u : H, apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u := by
   /-
-  SKIPPED (concrete `Lp` bilinear-form boundary).  Current Mathlib does contain
+  PARTIAL (concrete `Lp` bilinear-form boundary).  Current Mathlib does contain
   the abstract real Hilbert-space Lax--Milgram theorem in
   `Analysis.InnerProductSpace.LaxMilgram`: for a bounded bilinear map
   `B : H →L[ℝ] H →L[ℝ] ℝ`, `IsCoercive.continuousLinearEquivOfBilin`
@@ -85,7 +108,12 @@ theorem apm_m96a06
   integrals of Mathlib's chosen `Lp` representatives to
   `ContinuousLinearMap.lpPairing`, proving the
   `L∞ × L² × L² → L¹` weighted estimate from `ha`, and transporting the two
-  `L²` bounds through `value` and `weakDeriv`.  Coercivity then needs the a.e.
+  `L²` bounds through `value` and `weakDeriv`.  The three local lemmas above
+  now prove integrability of the derivative pairing, forcing pairing, and
+  weighted value pairing using `MemLp.integrable_mul` and `MemLp.mul'`; this
+  closes the prerequisites for `integral_add`/`integral_sub`.  Bundling their
+  quantitative norm estimates as continuous bilinear maps remains open.
+  Coercivity then needs the a.e.
   lower bound `ha_lower`, monotonicity of the integral, and `hnorm` to prove
   `min 1 ε * ‖u‖² ≤ B u u`.  The forcing term similarly needs to be bundled
   from `hb` by the `L²` pairing.
