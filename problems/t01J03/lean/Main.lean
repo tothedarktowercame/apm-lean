@@ -60,6 +60,36 @@ noncomputable instance (h : apm_t01J03_BoundaryTorus ≃ₜ
       Quotient.mk (Relation.EqvGen.setoid (apm_t01J03_glueRel h)) z)
     inferInstance
 
+def apm_t01J03_gluedInl (h : apm_t01J03_BoundaryTorus ≃ₜ
+    apm_t01J03_BoundaryTorus) :
+    apm_t01J03_SolidTorus → apm_t01J03_gluedSpace h :=
+  fun x ↦ Quotient.mk _ (Sum.inl x)
+
+def apm_t01J03_gluedInr (h : apm_t01J03_BoundaryTorus ≃ₜ
+    apm_t01J03_BoundaryTorus) :
+    apm_t01J03_SolidTorus → apm_t01J03_gluedSpace h :=
+  fun x ↦ Quotient.mk _ (Sum.inr x)
+
+lemma apm_t01J03_continuous_gluedInl
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus) :
+    Continuous (apm_t01J03_gluedInl h) := by
+  exact continuous_coinduced_rng.comp continuous_inl
+
+lemma apm_t01J03_continuous_gluedInr
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus) :
+    Continuous (apm_t01J03_gluedInr h) := by
+  exact continuous_coinduced_rng.comp continuous_inr
+
+/-- The two canonical maps into the quotient agree on precisely the boundary
+points prescribed by the gluing homeomorphism. -/
+lemma apm_t01J03_gluedInl_boundary_eq_gluedInr
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus)
+    (z : apm_t01J03_BoundaryTorus) :
+    apm_t01J03_gluedInl h (apm_t01J03_boundaryInclusion z) =
+      apm_t01J03_gluedInr h (apm_t01J03_boundaryInclusion (h z)) := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _ (apm_t01J03_glueRel.glue z))
+
 def apm_t01J03_gluedBasepoint (h : apm_t01J03_BoundaryTorus ≃ₜ
     apm_t01J03_BoundaryTorus) (z₀ : apm_t01J03_BoundaryTorus) :
     apm_t01J03_gluedSpace h :=
@@ -136,13 +166,25 @@ theorem apm_t01j03 :
   relevant result occurs elsewhere in `ConstructionTargets/` or
   `YoungL2.lean`. Developing those foundations is beyond this pass.
 
-  Closer hop 1 factors the repeated local topology obligation into the compiled
+  Closer hop 1 factored the repeated local topology obligation into the compiled
   lemma `apm_t01J03_continuous_boundaryInclusion`. Inspection of
   `AlgebraicTopology.FundamentalGroupoid.Product` confirms preservation of
   categorical products, but specializing automorphism groups still requires a
   computed `FundamentalGroup Circle 1 ≃* Multiplicative ℤ`, which is absent.
   The available Mayer--Vietoris results are specifically for sheaf cohomology,
   not the singular-homology functor used here. Thus neither route reaches the
-  quotient gluing computation; the frozen statement is unchanged.
+  quotient gluing computation.
+
+  Closer hop 2 goes beyond the library search by exposing the quotient's
+  canonical cocone explicitly. `apm_t01J03_gluedInl` and `.gluedInr` are the
+  two maps from the solid tori; `apm_t01J03_continuous_gluedInl` and `.gluedInr`
+  prove continuity directly from the coinduced topology; and
+  `apm_t01J03_gluedInl_boundary_eq_gluedInr` proves their composites with the
+  two boundary maps agree using the generating relation. These are precisely
+  the local inputs a future van Kampen or singular Mayer--Vietoris theorem
+  would consume. A renewed search of quotient/pushout and colimit APIs found
+  no theorem promoting this cocone to the required fundamental-group or
+  singular-homology computation, so all numerical invariants in the frozen
+  conclusion remain open. The statement is unchanged.
   -/
   sorry

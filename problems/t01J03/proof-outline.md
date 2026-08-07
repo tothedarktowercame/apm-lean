@@ -7,6 +7,15 @@ lemma rather than duplicated inline topology reasoning.
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t01J03.md`
 
+## Compiled progress
+
+- `apm_t01J03_continuous_boundaryInclusion` proves continuity of the boundary
+  embedding.
+- `apm_t01J03_gluedInl` and `apm_t01J03_gluedInr` expose the two canonical
+  maps into the quotient, with compiled continuity lemmas.
+- `apm_t01J03_gluedInl_boundary_eq_gluedInr` proves the cocone compatibility
+  equation imposed by the gluing homeomorphism.
+
 ## Remaining boundary
 
 - compute the based fundamental group of `Circle` and specialize product
@@ -15,6 +24,8 @@ lemma rather than duplicated inline topology reasoning.
 - establish singular Mayer--Vietoris or a cellular-to-singular comparison for
   the same gluing;
 - transport the twice-spiral relation through those computations.
+- connect the now-explicit continuous quotient cocone to whichever van Kampen
+  or singular Mayer--Vietoris interface becomes available.
 
 Mathlib's existing Mayer--Vietoris sequence concerns sheaf cohomology and does
 not apply to the singular-homology functor in this statement.
