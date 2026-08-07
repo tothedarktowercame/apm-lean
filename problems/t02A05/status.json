@@ -30,6 +30,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 1 proves the full quadratic optimization and exact minimizer characterization once the flux formula is available. The remaining boundary is the Stokes/divergence or direct Hausdorff-sphere integral computation for the custom tangent-projection encoding.",
+  "closer_hop": 2,
+  "closer_progress": "Closer hop 2 adds the unit-ball volume computation from t92J09 and investigates the direct moment route. Remaining work is the projected-flux identity, transport of the frozen Hausdorff subtype sphere integral, and the unit-ball coordinate second moment.",
   "imported_at": "2026-07-13T17:26:56.975700Z"
 }

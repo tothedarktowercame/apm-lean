@@ -83,6 +83,22 @@ lemma apm_t02a05_quadratic_minimum (a b : ℝ) :
     · rintro ⟨rfl, rfl⟩
       ring
 
+/-- Reused from closed artifact `t92J09`: the unit three-ball volume. -/
+lemma apm_t02a05_volume_unit_ball :
+    (volume (Metric.ball (0 : apm_t02a05_E3) 1)).toReal =
+      (4 / 3 : ℝ) * Real.pi := by
+  have hvol :=
+    EuclideanSpace.volume_ball_fin_three (0 : apm_t02a05_E3) (1 : ℝ)
+  have hone : (ENNReal.ofReal (1 : ℝ)) ^ (3 : ℕ) = (1 : ENNReal) := by norm_num
+  have hπ : Real.pi * 4 / 3 = (4 / 3 : ℝ) * Real.pi := by ring
+  have hvol' : volume (Metric.ball (0 : apm_t02a05_E3) 1) =
+      ENNReal.ofReal ((4 / 3 : ℝ) * Real.pi) := by
+    simpa [hone, hπ] using hvol
+  have hpos : 0 ≤ (4 / 3 : ℝ) * Real.pi :=
+    mul_nonneg (by norm_num) Real.pi_nonneg
+  have := congrArg ENNReal.toReal hvol'
+  simpa [ENNReal.toReal_ofReal, hpos] using this
+
 theorem apm_t02a05
     (omega : apm_t02a05_Form2) (homega : apm_t02a05_isOmega omega) :
     (∀ c : apm_t02a05_E3,
@@ -113,5 +129,18 @@ theorem apm_t02a05
   `t92J09` and `t01J06`, git history, and Mathlib's Stokes, divergence,
   Hausdorff-measure, sphere-integral, and Euclidean moment APIs found no
   packaged route; both related artifacts retain the same unresolved bridge.
+
+  Closer hop 2 goes beyond the Stokes-only route by investigating direct
+  moments. The closed `t92J09` unit-ball volume result is now compiled locally
+  as `apm_t02a05_volume_unit_ball`, and Mathlib provides translation invariance
+  of ambient Hausdorff measure through `IsometryEquiv.vaddConst`. However, the
+  frozen integral is over a sphere subtype and evaluates orthogonal projections
+  into point-dependent tangent submodules. No theorem identifies that subtype
+  measure/integrand with `Measure.toSphere` or a translated ambient surface
+  measure. The remaining expansion also needs the coordinate moment
+  `∫ x in ball 0 1, (x i)^2 = 4*pi/15`; renewed searches of `HaarToSphere`,
+  rotational invariance, Euclidean volume, and polynomial moment APIs found no
+  packaged result. The direct route is thus narrowed to the projected-flux
+  identity, surface-measure transport, and this second-moment calculation.
   -/
   sorry
