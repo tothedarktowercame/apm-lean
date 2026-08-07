@@ -16,3 +16,13 @@ The canonical Lean attempt is `lean/Main.lean`.
   of `apm_m01J04_isH1Zero`, and the corresponding integration-by-parts identity.
 - Searches of the lemma index, fully closed artifacts, construction libraries,
   and Mathlib found no packaged bridge for this custom record.
+
+## Closer hop 2 research
+
+- Mathlib supplies the raw Hölder tools `MemLp.mul'`,
+  `eLpNorm_smul_le_mul_eLpNorm`, and `L2.integrable_inner`; the integrability
+  and bounded-multiplier estimates are therefore available.
+- The remaining work is specific to the frozen encoding: construct the product
+  `H1` record, prove its weak-gradient Leibniz identity, preserve `isH1Zero` by
+  multiplying approximants, and connect the divergence pairing to the target
+  integral. No packaged record-level bridge was found.

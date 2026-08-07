@@ -195,5 +195,22 @@ theorem apm_m01j04 :
     by test functions. Thus the remaining sorry is specifically the measurable
     Hölder/Leibniz/integration-by-parts assembly for these frozen predicates,
     rather than the functional-analytic pairing step.
+
+    Closer hop 2 inspected the nearby closed Hölder argument in sibling
+    `a96A03` and Mathlib's `MeasureTheory.Function.L2Space`.  The raw analytic
+    components do exist: `MemLp.mul'` proves an `L²×L²` product is in `L¹`,
+    `eLpNorm_smul_le_mul_eLpNorm` gives the required multiplier estimate, and
+    `L2.integrable_inner` handles vector-valued `L²` pairings.  These can close
+    the integrability and strong-multiplier portions of part (b), but they do
+    not connect raw functions to the custom weak-gradient record.
+
+    For part (c), source searches for weak-gradient multiplication,
+    distributional Leibniz rules, and compactly-supported multiplier closure
+    returned no declaration.  The precise remaining local development is to
+    construct the `apm_m01J04_H1` record for `f * φ`, prove the gradient
+    formula, preserve `apm_m01J04_isH1Zero` by multiplying its approximants,
+    establish a uniform `H1norm` bound, and rewrite the divergence test into
+    the target integral. No closed artifact or construction library packages
+    these record-level steps.
     -/
     sorry
