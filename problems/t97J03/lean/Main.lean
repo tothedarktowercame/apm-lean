@@ -36,4 +36,32 @@ theorem apm_t97j03 :
       Continuous F ∧
       ∀ q : apm_t97J03_Torus,
         F (apm_t97J03_boundaryInclusion q) = apm_t97J03_boundaryMap q := by
+  rintro ⟨F, hF, hboundary⟩
+  let w₀ : apm_t97J03_Circle := ⟨1, by simp⟩
+  let g : apm_t97J03_Disk → apm_t97J03_Circle := fun z => (F (z, w₀)).1
+  have hg : Continuous g := by
+    exact continuous_fst.comp (hF.comp (continuous_id.prodMk continuous_const))
+  have hg_boundary : ∀ z : apm_t97J03_Circle,
+      g ⟨z.1, le_of_eq z.2⟩ = z := by
+    intro z
+    have h := congrArg Prod.fst (hboundary (z, w₀))
+    exact h
+  /-
+  Boundary (closer hop 1, still open): the solid-torus extension has now been
+  reduced by compiled code to a continuous disk retraction `g`: fixing the
+  second input coordinate and projecting the first output coordinate gives
+  `hg`, while `hg_boundary` proves that it is the identity on the boundary.
+
+  Closing the contradiction is precisely the no-retraction theorem for the
+  complex unit disk. Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`,
+  Mathlib's Brouwer, retract, `FundamentalGroupoid`, singular-homology, circle,
+  and contractibility APIs, fully closed artifacts, staging directories, and
+  git history found no packaged theorem. Partial sibling `t91A05` is the exact
+  no-retraction statement and now compiles the induced-fundamental-group
+  injectivity step, but remains open because Mathlib does not compute
+  `FundamentalGroup Circle 1 ≃* Multiplicative ℤ`. Siblings `t01J03`,
+  `t93A03`, and `t02A03` record the same missing circle computation.
+  No unproved intermediate assertion beyond the original theorem remains, and
+  the frozen statement is unchanged.
+  -/
   sorry
