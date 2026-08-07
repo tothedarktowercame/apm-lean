@@ -23,6 +23,22 @@ open MeasureTheory Set
 abbrev apm_m93A04_I := Set.Icc (0 : ℝ) 1
 abbrev apm_m93A04_C := C(apm_m93A04_I, ℝ)
 
+/-- The abstract Neumann-series step needed for the derivative: once the
+integral part has operator norm below one, its complement is bijective. -/
+lemma apm_m93A04_bijective_one_sub_of_norm_lt_one
+    (T : apm_m93A04_C →L[ℝ] apm_m93A04_C) (hT : ‖T‖ < 1) :
+    Function.Bijective ((1 : apm_m93A04_C →L[ℝ] apm_m93A04_C) - T) := by
+  have hu : IsUnit ((1 : apm_m93A04_C →L[ℝ] apm_m93A04_C) - T) :=
+    isUnit_one_sub_of_norm_lt_one (x := T) hT
+  rcases hu with ⟨u, hu⟩
+  constructor
+  · intro x y hxy
+    have hxy' := congrArg (fun z ↦ (↑(u⁻¹) : apm_m93A04_C →L[ℝ] apm_m93A04_C) z) hxy
+    simpa [← hu, ← ContinuousLinearMap.mul_apply] using hxy'
+  · intro y
+    refine ⟨(↑(u⁻¹) : apm_m93A04_C →L[ℝ] apm_m93A04_C) y, ?_⟩
+    simp [← hu, ← ContinuousLinearMap.mul_apply]
+
 theorem apm_m93a04
     (K K₂ : ℝ → ℝ → ℝ)
     (hK : Continuous (Function.uncurry K))
@@ -49,11 +65,18 @@ theorem apm_m93a04
   integral differentiation machinery, but applying them here still requires
   the missing uniformity, measurability, and domination setup.
 
-  For bijectivity one must define the integral operator whose complement is
-  `D x`, prove its operator norm is at most `c` (using that the restricted
-  interval has measure one and the continuous-map sup norm), and construct
-  the inverse by a Neumann series or contraction argument. I did not find a
-  compiled sibling route or a directly applicable Mathlib theorem completing
-  those bridges within this pass.
+  Closer hop 1 finds and proves the abstract inverse stage:
+  `apm_m93A04_bijective_one_sub_of_norm_lt_one` applies Mathlib's
+  `isUnit_one_sub_of_norm_lt_one` and explicitly transports the resulting unit
+  inverse to `Function.Bijective`. Thus no local Neumann-series development is
+  needed. `m94J06` confirms the same Banach-algebra inverse infrastructure.
+
+  For bijectivity it remains to define the integral operator whose complement
+  is `D x`, prove its operator norm is at most `c` (using
+  `Measure.Subtype.volume_univ`/the unit-interval volume computation and the
+  continuous-map sup norm), and rewrite `D x` as `1 - Tₓ`. Searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, prior operator artifacts, and git
+  history found no packaged parameterized continuous-kernel operator with
+  exactly these bounds. The frozen statement was left unchanged.
   -/
   sorry
