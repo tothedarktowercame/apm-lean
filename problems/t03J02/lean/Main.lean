@@ -43,6 +43,28 @@ noncomputable instance (j₁ j₂ : C(Circle, apm_t03J02_Torus)) :
       Quotient.mk (Relation.EqvGen.setoid (apm_t03J02_glueRel j₁ j₂)) z)
     inferInstance
 
+def apm_t03J02_quotientMap
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) :
+    Sum apm_t03J02_Torus apm_t03J02_Torus → apm_t03J02_space j₁ j₂ :=
+  fun z => Quotient.mk _ z
+
+lemma apm_t03J02_continuous_quotientMap
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) :
+    Continuous (apm_t03J02_quotientMap j₁ j₂) := by
+  exact continuous_coinduced_rng
+
+lemma apm_t03J02_surjective_quotientMap
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) :
+    Function.Surjective (apm_t03J02_quotientMap j₁ j₂) := by
+  exact Quotient.mk_surjective
+
+lemma apm_t03J02_glue_eq
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) (z : Circle) :
+    apm_t03J02_quotientMap j₁ j₂ (Sum.inl (j₁ z)) =
+      apm_t03J02_quotientMap j₁ j₂ (Sum.inr (j₂ z)) := by
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _ (apm_t03J02_glueRel.glue z)
+
 def apm_t03J02_basepoint
     (j₁ j₂ : C(Circle, apm_t03J02_Torus)) (z₀ : Circle) :
     apm_t03J02_space j₁ j₂ :=
@@ -76,4 +98,20 @@ theorem apm_t03j02
     Nonempty (apm_t03J02_H 1 X ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
     Nonempty (apm_t03J02_H 2 X ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
     ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t03J02_H k X) := by
+  /-
+  Closer hop 1 packages the quotient data explicitly:
+  `apm_t03J02_quotientMap` is proved continuous and surjective, and
+  `apm_t03J02_glue_eq` proves the two circle parameterizations have identical
+  images pointwise in the quotient. This follows the useful quotient-map layer
+  extracted in siblings `t02A03` and `t00A01`.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, all topology siblings,
+  Mathlib's `FundamentalGroupoid`, `TopCat` limits, singular homology, pushout,
+  and Mayer--Vietoris sources, plus git history, found no theorem promoting
+  this `EqvGen` quotient to a topological pushout with a van Kampen computation,
+  and no singular Mayer--Vietoris sequence. Mathlib also lacks the required
+  concrete computations of the torus fundamental group and homology in this
+  encoding. Thus the remaining bridge is substantial algebraic-topology
+  infrastructure, not quotient bookkeeping; the frozen statement is unchanged.
+  -/
   sorry
