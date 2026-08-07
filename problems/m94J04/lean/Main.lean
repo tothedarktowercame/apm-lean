@@ -55,19 +55,23 @@ theorem apm_m94j04 :
         ∫ p, inner ℝ (apm_m94J04_curlValue p) (φ p) ∂volume := by
   /-
   Boundary: after expanding the Euclidean basis and inner products, the
-  identity reduces to integration by parts in the `y` coordinate on the
-  half-space `x > 0`; the `x ≤ 0` contribution is independent of `y` and
-  hence vanishes against the compactly supported derivative.  I searched the
-  repository and Mathlib for a matching weak-curl proof and for the global
+  identity reduces fiberwise to `∫ y * ∂y φ₂ = -∫ φ₂` on `x > 0` and
+  `∫ x * ∂y φ₂ = 0` on `x ≤ 0`. I searched Mathlib for the global
   line-derivative integration-by-parts API, including
   `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable` and
-  `integral_bilinear_fderiv_right_eq_neg_left_of_integrable`.
+  `integral_bilinear_fderiv_right_eq_neg_left_of_integrable`. Their
+  differentiability hypotheses apply on `tsupport` in the whole ambient
+  space, so they cannot be applied directly to the coefficient
+  `if 0 < x then y else x`, which is not differentiable on `x = 0`.
 
-  Completing the route requires proving integrability of all coordinate
-  products from `TestFunction.hasCompactSupport`, simplifying `fderiv` along
-  `EuclideanSpace.single`, and applying Fubini or a half-space restriction so
-  that the piecewise coefficient is constant in the differentiated
-  coordinate.  No compiled sibling supplied those coordinate and measure
-  bridges within this pass.
+  `TestFunction.contDiff`, `TestFunction.hasCompactSupport`, and
+  `Continuous.integrable_of_hasCompactSupport` provide the local smoothness
+  and integrability ingredients. The remaining blocker is the measure bridge:
+  decompose Euclidean `volume` into `(x,z)` and `y` fibers, transport the
+  compact support and `fderiv` to each slice, apply one-dimensional integration
+  by parts, and reassemble with `MeasureTheory.integral_prod`. Searches of all
+  closed problem artifacts, `ConstructionTargets`, `YoungL2.lean`, boundary
+  comments, and git history found Fubini patterns but no proved lemma packaging
+  this Euclidean-coordinate slicing step.
   -/
   sorry
