@@ -32,3 +32,5 @@ theorem apm_t00a04 :
   · intro x
     change r (H (x, 1)) = r y
     rw [hH1 x]
+
+#print axioms apm_t00a04
