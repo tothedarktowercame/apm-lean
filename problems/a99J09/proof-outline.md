@@ -1,12 +1,16 @@
 # Proof Outline: a99J09
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The exact proof has been located in closed sibling `a01A09`; the canonical
+attempt records its first shared kernel lemma and the adaptation route.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-a99J09.md`
+- `apm_a99j09_norm_kernel` proves the exact exponential-kernel norm identity.
+- Sibling `a01A09` supplies compiled Hölder and dominated-derivative proofs,
+  but is outside the configured Lean module path.
 
 ## Follow-up Needed
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Adapt `a01A09.laplace_deriv_bound_integrable` to the frozen restricted
+  Lebesgue measure and `MemLp` hypothesis.
+- Adapt `a01A09.laplace_integrand_integrable` using the conjugate exponent.
+- Apply `hasDerivAt_integral_of_dominated_loc_of_deriv_le` exactly as in the
+  sibling and unfold `apm_a99j09_laplace`.
