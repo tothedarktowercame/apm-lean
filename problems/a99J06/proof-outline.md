@@ -1,12 +1,16 @@
 # Proof Outline: a99J06
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt now completes the analytic reduction to the
+simply-connected primitive theorem.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-a99J06.md`
+- `apm_a99j06_logDeriv_differentiableOn` proves that `f'/f` is holomorphic on
+  the nonvanishing domain.
 
 ## Follow-up Needed
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Extend Mathlib's `DifferentiableOn.isExactOn_ball` to arbitrary open simply
+  connected subsets of `ℂ`; this extension is explicitly listed as a TODO in
+  `Analysis.Complex.HasPrimitives`.
+- Apply that theorem to `f'/f` and choose a primitive `G`.
+- Prove `f * exp (-G)` has zero derivative and is constant on `Ω`.
+- Take a complex logarithm of the resulting nonzero constant and add it to `G`.
