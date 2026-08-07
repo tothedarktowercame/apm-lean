@@ -30,13 +30,14 @@ infimum norm in the problem statement.
 -/
 
 import Mathlib.Analysis.Normed.Group.Quotient
+import Mathlib.Data.Real.Pointwise
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 import Mathlib.MeasureTheory.Function.LpSpace.Complete
 
 noncomputable section
 
 open MeasureTheory Set
-open scoped ENNReal
+open scoped ENNReal Pointwise
 
 namespace APMa96J05
 
@@ -201,7 +202,40 @@ theorem sumNorm_smul
     (hdecomp : ∃ g : Lp E p μ, ∃ h : Lp E q μ,
       (g : AEEqFun α E μ) + (h : AEEqFun α E μ) = f) :
     sumNorm p q (c • f) = |c| * sumNorm p q f := by
-  sorry
+  by_cases hc : c = 0
+  · subst c
+    simp only [zero_smul, abs_zero, zero_mul]
+    apply le_antisymm
+    · rw [sumNorm]
+      apply csInf_le
+      · exact ⟨0, fun r ⟨g, h, _, hr⟩ => by
+          rw [← hr]
+          exact add_nonneg (norm_nonneg g) (norm_nonneg h)⟩
+      · exact ⟨0, 0, by simp, by simp⟩
+    · exact sumNorm_nonneg 0
+  · let S : Set ℝ := {r | ∃ g : Lp E p μ, ∃ h : Lp E q μ,
+        (g : AEEqFun α E μ) + (h : AEEqFun α E μ) = f ∧ ‖g‖ + ‖h‖ = r}
+    let Sc : Set ℝ := {r | ∃ g : Lp E p μ, ∃ h : Lp E q μ,
+        (g : AEEqFun α E μ) + (h : AEEqFun α E μ) = c • f ∧ ‖g‖ + ‖h‖ = r}
+    have habs : |c| ≠ 0 := abs_ne_zero.mpr hc
+    have hsets : Sc = |c| • S := by
+      ext r
+      constructor
+      · rintro ⟨g, h, hgh, rfl⟩
+        refine ⟨‖c⁻¹ • g‖ + ‖c⁻¹ • h‖, ?_, ?_⟩
+        · refine ⟨c⁻¹ • g, c⁻¹ • h, ?_, rfl⟩
+          have hscaled := congrArg (fun u : AEEqFun α E μ => c⁻¹ • u) hgh
+          simpa [smul_add, hc] using hscaled
+        · change |c| * (‖c⁻¹ • g‖ + ‖c⁻¹ • h‖) = ‖g‖ + ‖h‖
+          rw [norm_smul, norm_smul, Real.norm_eq_abs, abs_inv, mul_add]
+          field_simp
+      · rintro ⟨s, ⟨g, h, hgh, rfl⟩, rfl⟩
+        refine ⟨c • g, c • h, ?_, ?_⟩
+        · simpa [smul_add] using congrArg (fun u : AEEqFun α E μ => c • u) hgh
+        · simp [norm_smul, mul_add]
+    change sInf Sc = |c| * sInf S
+    rw [hsets, Real.sInf_smul_of_nonneg (abs_nonneg c)]
+    rfl
 
 /-! ## Part 3: Completeness via the quotient argument
 
@@ -236,6 +270,7 @@ theorem lp_prod_complete
 #print axioms APMa96J05.sum_space_neg_closed
 #print axioms APMa96J05.sumNorm_nonneg
 #print axioms APMa96J05.sumNorm_triangle
+#print axioms APMa96J05.sumNorm_smul
 #print axioms APMa96J05.quotient_complete
 #print axioms APMa96J05.lp_prod_complete
 

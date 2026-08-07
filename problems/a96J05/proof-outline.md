@@ -12,7 +12,7 @@ Quotient of Banach spaces: X ≅ (L^p × L^q) / K where K = ker(addition map).
 The quotient of a complete normed space by any submodule is complete
 (`Submodule.Quotient.completeSpace`).
 
-## Proved (exit 0, 1 sorry)
+## Proved (exit 0, no sorries)
 
 1. **Part 1 (vector space):** `sum_space_add_closed`, `sum_space_neg_closed`
    — closure under addition and negation, using AddSubgroup coercion to AEEqFun
@@ -22,7 +22,10 @@ The quotient of a complete normed space by any submodule is complete
    - `sumNorm_nonneg` — infimum of nonneg values is nonneg
    - `sumNorm_triangle` — choose near-optimal decompositions via `Real.lt_sInf_add_pos`,
      combine with `norm_add_le`, close by `linarith`
-   - `sumNorm_smul` — **SORRY** (homogeneity; scalar action on AEEqFun needs coercion work)
+   - `sumNorm_smul` — homogeneity, by identifying the decomposition-cost set
+     for `c • f` with the pointwise scalar multiple `|c| • S`; the reverse
+     inclusion rescales by `c⁻¹`, and `Real.sInf_smul_of_nonneg` transports the
+     infimum. The case `c = 0` uses the zero decomposition.
 
 3. **Part 3 (completeness):**
    - `quotient_complete` — quotient of Banach by submodule is Banach (inferInstance)
@@ -32,12 +35,7 @@ The quotient of a complete normed space by any submodule is complete
 
 All proved theorems: `propext, Classical.choice, Quot.sound` (standard).
 
-## Boundary
-
-- **sumNorm_smul:** The scalar multiplication `c • (g + h)` on AEEqFun doesn't
-  directly factor through Lp scalar multiplication. Need to show `c • ↑g = ↑(c • g)`
-  in AEEqFun, which requires the `NormedSpace ℝ E` instance on Lp and the coercion
-  compatibility. APIs searched: `AEEqFun.smul_mk`, `Lp.coe_smul`.
+## Unencoded source-level follow-up
 
 - **Definiteness (not yet stated):** ‖f‖_X = 0 ⟹ f = 0 a.e. requires:
   if ‖gₙ‖_p → 0 and ‖hₙ‖_q → 0 with gₙ + hₙ = f, then f = 0 a.e.
