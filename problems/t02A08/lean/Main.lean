@@ -1,4 +1,7 @@
 import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t02A08
@@ -16,12 +19,14 @@ The notation `I_X` is corrected to `I_Y`, since the ambient manifold is `Y`.
 
 ## Encoding questions
 
-Mathlib does not package mapping degree and oriented map-submanifold
-intersection number for these sphere subtypes. Both integer-valued operations
-are opaque and fully typed below. The spheres, product manifold, repaired
-submanifold, continuous maps, fiber construction, and degree/intersection
-equalities remain explicit.
+Degree is encoded through the actual map induced on integral second singular
+homology, after choosing the sphere's orientation isomorphism with `ℤ`.
+Intersection with the repaired cycle `S¹ × {q}` is the degree of the second
+projection, with the cycle pinned by an equality rather than hidden behind an
+opaque integer-valued operation.
 -/
+
+open CategoryTheory
 
 noncomputable section
 
@@ -37,16 +42,35 @@ def apm_t02a08_fiberMap
     C(apm_t02a08_S2, apm_t02a08_Y) :=
   (ContinuousMap.const apm_t02a08_S2 p).prodMk g
 
-opaque apm_t02a08_degree (g : C(apm_t02a08_S2, apm_t02a08_S2)) : ℤ
+abbrev apm_t02a08_H2 :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a08_S2))
 
-opaque apm_t02a08_orientedIntersection
-    (f : C(apm_t02a08_S2, apm_t02a08_Y)) (Z : Set apm_t02a08_Y) : ℤ
+def apm_t02a08_H2Map (g : C(apm_t02a08_S2, apm_t02a08_S2)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom g)
+
+def apm_t02a08_HasDegree
+    (g : C(apm_t02a08_S2, apm_t02a08_S2)) (n : ℤ) : Prop :=
+  ∃ orientation : apm_t02a08_H2 ≅ ModuleCat.of ℤ ℤ,
+    ∀ a : apm_t02a08_H2,
+      orientation.hom (apm_t02a08_H2Map g a) = n * orientation.hom a
+
+def apm_t02a08_secondProjection : C(apm_t02a08_Y, apm_t02a08_S2) :=
+  ⟨Prod.snd, continuous_snd⟩
+
+def apm_t02a08_HasOrientedIntersection
+    (f : C(apm_t02a08_S2, apm_t02a08_Y))
+    (Z : Set apm_t02a08_Y) (n : ℤ) : Prop :=
+  ∃ q : apm_t02a08_S2,
+    Z = apm_t02a08_Z q ∧
+    apm_t02a08_HasDegree (apm_t02a08_secondProjection.comp f) n
 
 theorem apm_t02a08
     (p : Circle) (q : apm_t02a08_S2) :
     ∀ n : ℤ,
       ∃ g : C(apm_t02a08_S2, apm_t02a08_S2),
-        apm_t02a08_degree g = n ∧
-        apm_t02a08_orientedIntersection
-          (apm_t02a08_fiberMap p g) (apm_t02a08_Z q) = n := by
+        apm_t02a08_HasDegree g n ∧
+        apm_t02a08_HasOrientedIntersection
+          (apm_t02a08_fiberMap p g) (apm_t02a08_Z q) n := by
   sorry
