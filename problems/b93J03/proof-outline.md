@@ -10,7 +10,8 @@ The Lean proof is partial in `lean/Main.lean`.
 - The commuting family is converted to an indexed family of endomorphisms.
 - Mathlib's simultaneous generalized-eigenspace decomposition proves that the
   supremum of common generalized eigenspaces is top.
-- A nonzero common generalized eigenspace is extracted.
+- A nonzero common generalized eigenspace is extracted by the standalone
+  proved helper `apm_b93J03_exists_nonzero_simultaneous_maxGenEigenspace`.
 
 ## Remaining bridge
 
@@ -20,3 +21,7 @@ assemble a `Fin (finrank k V)` basis whose matrices satisfy
 `Matrix.BlockTriangular id`. `Eigenspace/Pi.lean` does not package this basis
 construction, and the available Lie-theorem API presupposes a triangularizable
 Lie-module instance.
+
+Closer hop 2 also checked `Basis.flag`: it constructs a maximal submodule
+chain from a basis, but Mathlib has no converse constructor producing a basis
+from an invariant chain. Thus it does not shorten the quotient-basis bridge.
