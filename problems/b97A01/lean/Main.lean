@@ -49,6 +49,52 @@ lemma apm_b97A01_representative_cycleTypes :
     apm_b97A01_fourCycle.cycleType = {4} := by
   native_decide
 
+/-- Each displayed representative characterizes its conjugacy class by its
+cycle type. -/
+lemma apm_b97A01_conjugacy_classification :
+    ∀ σ : apm_b97A01_S4,
+      (IsConj 1 σ ↔ σ.cycleType = {}) ∧
+      (IsConj apm_b97A01_transposition σ ↔ σ.cycleType = {2}) ∧
+      (IsConj apm_b97A01_doubleTransposition σ ↔
+        σ.cycleType = {2, 2}) ∧
+      (IsConj apm_b97A01_threeCycle σ ↔ σ.cycleType = {3}) ∧
+      (IsConj apm_b97A01_fourCycle σ ↔ σ.cycleType = {4}) := by
+  intro σ
+  rw [Equiv.Perm.isConj_iff_cycleType_eq,
+    Equiv.Perm.isConj_iff_cycleType_eq,
+    Equiv.Perm.isConj_iff_cycleType_eq,
+    Equiv.Perm.isConj_iff_cycleType_eq,
+    Equiv.Perm.isConj_iff_cycleType_eq]
+  rcases apm_b97A01_representative_cycleTypes with ⟨htrans, hdouble, hthree, hfour⟩
+  simp [htrans, hdouble, hthree, hfour, eq_comm]
+
+/-- The five conjugacy classes have the advertised cardinalities.  This uses
+Mathlib's centralizer formula `Equiv.Perm.card_isConj_eq`. -/
+lemma apm_b97A01_conjugacy_class_cards :
+    Nat.card {σ : apm_b97A01_S4 // IsConj 1 σ} = 1 ∧
+    Nat.card
+      {σ : apm_b97A01_S4 // IsConj apm_b97A01_transposition σ} = 6 ∧
+    Nat.card
+      {σ : apm_b97A01_S4 // IsConj apm_b97A01_doubleTransposition σ} = 3 ∧
+    Nat.card
+      {σ : apm_b97A01_S4 // IsConj apm_b97A01_threeCycle σ} = 8 ∧
+    Nat.card
+      {σ : apm_b97A01_S4 // IsConj apm_b97A01_fourCycle σ} = 6 := by
+  rcases apm_b97A01_representative_cycleTypes with ⟨htrans, hdouble, hthree, hfour⟩
+  constructor
+  · simpa using (Equiv.Perm.card_isConj_eq (g := (1 : apm_b97A01_S4)))
+  constructor
+  · simpa [htrans] using
+      (Equiv.Perm.card_isConj_eq (g := apm_b97A01_transposition))
+  constructor
+  · simpa [hdouble] using
+      (Equiv.Perm.card_isConj_eq (g := apm_b97A01_doubleTransposition))
+  constructor
+  · simpa [hthree] using
+      (Equiv.Perm.card_isConj_eq (g := apm_b97A01_threeCycle))
+  · simpa [hfour] using
+      (Equiv.Perm.card_isConj_eq (g := apm_b97A01_fourCycle))
+
 theorem apm_b97a01 :
     (∀ σ : apm_b97A01_S4,
       (IsConj 1 σ ↔ σ.cycleType = {}) ∧
@@ -113,5 +159,16 @@ theorem apm_b97a01 :
   `ConstructionTargets/`, and the special-linear-group source found no
   structural replacement. The statement appears mathematically
   sound; the blocker is the missing formal API/bridge, not a counterexample.
+
+  Closer hop 2 goes beyond the finite-decision attempt by using Mathlib's
+  structural permutation API. `apm_b97A01_conjugacy_classification` applies
+  `Equiv.Perm.isConj_iff_cycleType_eq` to the compiled representative cycle
+  types, proving the first five class-characterization equivalences.
+  `apm_b97A01_conjugacy_class_cards` applies the centralizer formula
+  `Equiv.Perm.card_isConj_eq` and closes all five advertised class
+  cardinalities. The exhaustive cycle-type disjunction, normal-subgroup
+  lattice, solvability, universal order-24 action theorem, and the two
+  structural `SL₂(F₃)` clauses remain open; searches of the solvable-group,
+  Sylow, and special-linear APIs found no packaged result closing them.
   -/
   sorry
