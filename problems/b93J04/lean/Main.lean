@@ -44,6 +44,17 @@ lemma apm_b93j04_radical_root
       rw [h₂, h₃]
       norm_num
 
+/-- Once the abstract automorphism group has the two numerical Klein-four
+invariants, Mathlib supplies exactly the group equivalence frozen below. -/
+lemma apm_b93J04_mulEquiv_kleinFour_of_card_exponent
+    (G : Type*) [Group G]
+    (hcard : Nat.card G = 4) (hexp : Monoid.exponent G = 2) :
+    Nonempty (G ≃* (Multiplicative (ZMod 2) × Multiplicative (ZMod 2))) := by
+  letI : IsKleinFour G := ⟨hcard, hexp⟩
+  rcases (IsKleinFour.nonempty_mulEquiv :
+    Nonempty (G ≃* Multiplicative (ZMod 2 × ZMod 2))) with ⟨e⟩
+  exact ⟨e.trans (MulEquiv.prodMultiplicative (ZMod 2) (ZMod 2))⟩
+
 theorem apm_b93j04 :
     ∀ (K : Type*) [Field K] [Algebra ℚ K]
         [IsSplittingField ℚ K apm_b93j04_poly],
@@ -63,7 +74,13 @@ theorem apm_b93j04 :
           E = IntermediateField.adjoin ℚ ({r₃} : Set K) ∨
           E = IntermediateField.adjoin ℚ ({r₂ * r₃} : Set K) ∨
           E = ⊤) := by
-  /- PASS-1 boundary: `apm_b93j04_radical_root` now formally verifies the
+  /- PARTIAL boundary (closer hop 1):
+     `apm_b93J04_mulEquiv_kleinFour_of_card_exponent` now closes the abstract
+     group-classification tail: once the automorphism group is shown to have
+     cardinality four and exponent two, the exact frozen product equivalence
+     follows from `IsKleinFour.nonempty_mulEquiv`.
+
+     The earlier pass's `apm_b93j04_radical_root` formally verifies the
      core radical identity: whenever `r₂² = 2` and `r₃² = 3`, `r₂ + r₃` is
      a root of the frozen quartic (and sign variants follow identically).
 
@@ -71,8 +88,8 @@ theorem apm_b93j04 :
      `IsSplittingField.adjoin_rootSet`, `IsSplittingField.splits`,
      `IntermediateField.adjoin_rootSet_isSplittingField`, and the finite
      Galois correspondence (`IsGalois.intermediateFieldEquivSubgroup`).
-     `IsKleinFour.nonempty_mulEquiv` would close the requested group
-     equivalence once cardinality four and exponent two are established.
+     The new helper confirms that no additional explicit equivalence
+     construction is needed after cardinality four and exponent two.
 
      The remaining blocker is the abstraction bridge from an arbitrary
      `IsSplittingField` instance: construct square-root witnesses from its
