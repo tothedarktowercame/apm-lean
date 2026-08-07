@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "note": "Canonical reduced numerator/denominator representation is proved; Bézout transport into the intermediate subalgebra, PID ideal contraction, and the finite-module conclusion remain.",
+  "closer_hop": 2,
+  "note": "Closed the full first conjunct by extracting Bézout coefficients from reduced fractions and transporting 1/b = u(a/b)+v into S. PID ideal contraction and the finite-module conclusion remain.",
   "imported_at": "2026-07-13T17:26:53.266603Z"
 }
