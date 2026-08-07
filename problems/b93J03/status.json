@@ -16,7 +16,7 @@
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1,
-    "closer_progress": "The nonzero simultaneous maximal-generalized-eigenspace argument is now a standalone proved helper; common nilpotent kernel and quotient-basis induction remain."
+    "closer_progress": "The nonzero simultaneous maximal-generalized-eigenspace argument is a standalone proved helper. Hop 3 confirmed the algebraically-closed Lie triangularizability instance, but the solvable theorem is characteristic-zero and the characteristic-free nilpotent theorem assumes a nilpotent action; the positive-characteristic common-kernel and quotient-basis induction remain."
   },
   "artifacts": {
     "has_problem_tex": true,

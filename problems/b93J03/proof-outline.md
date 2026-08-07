@@ -25,3 +25,13 @@ Lie-module instance.
 Closer hop 2 also checked `Basis.flag`: it constructs a maximal submodule
 chain from a basis, but Mathlib has no converse constructor producing a basis
 from an invariant chain. Thus it does not shorten the quotient-basis bridge.
+
+Closer hop 3 checked the Lie-span route more precisely. Algebraic closure does
+give `LieModule.instIsTriangularizableOfIsAlgClosed`, and the span of the
+commuting family can be shown abelian with
+`LieSubalgebra.isLieAbelian_lieSpan_iff`. The available solvable Lie theorem,
+however, assumes characteristic zero. Its characteristic-free nilpotent
+variant assumes the entire module action is nilpotent, which is false for
+families containing nonzero scalar maps. Consequently the frozen theorem in
+positive characteristic still requires the direct common-kernel and quotient
+induction.

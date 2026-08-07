@@ -90,4 +90,19 @@ theorem apm_b93j03 :
   -- eigenspace decomposition into `Matrix.BlockTriangular id`. The remaining
   -- boundary is therefore precisely the common-kernel lemma for commuting
   -- nilpotent parts and the subsequent quotient-basis induction.
+  --
+  -- Closer hop 3 correction and final boundary: `Weights/Basic.lean` does
+  -- provide `LieModule.instIsTriangularizableOfIsAlgClosed`, so constructing
+  -- a triangularizability instance is not itself an obstacle.  I tested the
+  -- Lie-span route using `LieSubalgebra.isLieAbelian_lieSpan_iff` and the
+  -- associative-ring Lie-module action.  The solvable Lie theorem
+  -- `LieModule.exists_nontrivial_weightSpace_of_isSolvable` nevertheless
+  -- requires characteristic zero, which the frozen statement does not assume.
+  -- Its characteristic-free alternative
+  -- `exists_nontrivial_weightSpace_of_isNilpotent` requires the *module
+  -- action* to be nilpotent; this fails already when `A` contains a nonzero
+  -- scalar endomorphism.  Thus the Lie API cannot route around the remaining
+  -- positive-characteristic common-eigenvector induction.  Searches of basis
+  -- lifting and quotient APIs likewise returned no constructor that packages
+  -- the subsequent invariant-flag-to-`BlockTriangular` assembly.
   sorry
