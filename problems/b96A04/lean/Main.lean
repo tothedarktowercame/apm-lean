@@ -65,6 +65,39 @@ private theorem fraction_surjective_of_free_embedding
     simpa [map_mul] using congrArg (algebraMap R K) hc
   rw [map_mul, div_eq_mul_inv, (inv_eq_of_mul_eq_one_right hcK).symm]
 
+private theorem common_denom_of_fg_submodule
+    (R K : Type) [CommRing R] [IsDomain R] [Field K]
+    [Algebra R K] [IsFractionRing R K]
+    (M : Submodule R K) (hfg : M.FG) :
+    ∃ r : R, r ≠ 0 ∧
+      ∀ m ∈ M, r • m ∈ Set.range (algebraMap R K) := by
+  rw [Submodule.fg_def] at hfg
+  obtain ⟨s, hsfin, hs⟩ := hfg
+  let t : Finset K := hsfin.toFinset
+  let r0 : nonZeroDivisors R :=
+    IsLocalization.commonDenomOfFinset (nonZeroDivisors R) t
+  refine ⟨r0, nonZeroDivisors.coe_ne_zero r0, ?_⟩
+  intro m hm
+  have hmspan : m ∈ Submodule.span R (t : Set K) := by
+    simpa [t, hs] using hm
+  have hclear : r0 • m ∈ LinearMap.range (Algebra.linearMap R K) := by
+    refine Submodule.span_induction (p := fun z _ =>
+      r0 • z ∈ LinearMap.range (Algebra.linearMap R K)) ?_ ?_ ?_ ?_ hmspan
+    · intro x hx
+      let ix : t := ⟨x, hx⟩
+      refine ⟨IsLocalization.integerMultiple (nonZeroDivisors R) t id ix, ?_⟩
+      change algebraMap R K _ = _
+      rw [IsLocalization.map_integerMultiple]
+      rfl
+    · simp
+    · intro x y _ _ hx hy
+      simpa [smul_add] using
+        (LinearMap.range (Algebra.linearMap R K)).add_mem hx hy
+    · intro a x _ hx
+      rw [smul_comm]
+      exact (LinearMap.range (Algebra.linearMap R K)).smul_mem a hx
+  simpa [LinearMap.mem_range] using hclear
+
 theorem apm_b96a04
     (R K : Type) [CommRing R] [IsDomain R] [Field K]
     [Algebra R K] [IsFractionRing R K] :
@@ -134,24 +167,22 @@ theorem apm_b96a04
     -- not apply.  The remaining local route is to extract a section with
     -- `Projective.iff_split`, set `e = s 1`, prove `e² = e` and `I = span {1-e}`,
     -- then use that a domain has only trivial idempotents.
+    -- Closer hop 2 additionally searched quotient-map linearizations
+    -- (`Ideal.Quotient.mk`, `Submodule.mkQ`) and domain idempotent lemmas.  The
+    -- projective API gives an abstract free-module splitting rather than a
+    -- section of the canonical quotient map, so transporting that splitting
+    -- to the specific quotient projection remains the sole open bridge.
     sorry
   constructor
-  · -- Boundary (closer hop 1): searched `Submodule.fg_def`,
-    -- `IsLocalization.commonDenomOfFinset`, and
-    -- `IsLocalization.finsetIntegerMultiple_image`.  These provide the finite
-    -- generating set and common denominator, but the remaining bridge is
-    -- transporting the image equality through the span representation to all
-    -- `m ∈ M` in the abstract `IsFractionRing R K` presentation.
-    -- This hop found the closely related proved theorem
-    -- `IsLocalization.smul_mem_finsetIntegerMultiple_span` in
-    -- `RingTheory/Localization/Finiteness.lean`; it clears denominators for an
-    -- element already known to lie in a finite span.  Applying it uniformly to
-    -- the finite generating set of `M` still requires unpacking `M.FG` and
-    -- reconciling the `nonZeroDivisors R` scalar with the required `r : R`.
-    sorry
-  · -- Boundary (closer hop 1): this follows from the preceding common-denominator lemma by
-    -- taking `M = ⊤`, then using divisibility of the fraction field; that lemma
-    -- remains the blocker.  A search for a packaged theorem that a fraction
-    -- field finite as a module forces `IsField R` returned none;
-    -- `IsFractionRing.surjective_iff_isField` only converts the final result.
-    sorry
+  · intro M _ hfg
+    exact common_denom_of_fg_submodule R K M hfg
+  · intro hfinite
+    letI : Module.Finite R K := hfinite
+    obtain ⟨r, hr, hclear⟩ :=
+      common_denom_of_fg_submodule R K (⊤ : Submodule R K) Module.Finite.fg_top
+    intro z
+    obtain ⟨a, ha⟩ := hclear ((algebraMap R K r)⁻¹ * z) (by simp)
+    refine ⟨a, ?_⟩
+    have hrK : algebraMap R K r ≠ 0 := by
+      simpa using (IsFractionRing.injective R K).ne hr
+    simpa [Algebra.smul_def, hrK] using ha
