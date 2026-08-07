@@ -12,6 +12,8 @@ zero-dimensional PDE case. One positive-dimensional Sobolev boundary remains.
   the unique strict minimizer, and its Riesz representation identity.
 - For `n = 0`, identify the Euclidean domain with a singleton, take `u = F`,
   use the empty gradient, and approximate exactly by a constant test function.
+- In every dimension, the zero function with zero gradient satisfies the custom
+  `H¹₀` predicate, including its weak-gradient and approximation clauses.
 
 ## Remaining Boundary
 

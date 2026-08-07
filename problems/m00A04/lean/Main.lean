@@ -60,6 +60,22 @@ def apm_m00A04_memH10WithGradient {n : ℕ} (U : Set (Fin n → ℝ))
         |u x - φ x| ^ 2 +
           ∑ i : Fin n, |g i x - apm_m00A04_partial φ i x| ^ 2) < ε
 
+private lemma apm_m00A04_zero_memH10WithGradient {n : ℕ}
+    (U : Set (Fin n → ℝ)) :
+    apm_m00A04_memH10WithGradient U 0 0 := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · simp [apm_m00A04_L2On]
+  · intro i
+    simp [apm_m00A04_L2On]
+  · intro i φ hφ
+    simp
+  · intro ε hε
+    refine ⟨0, ?_, ?_⟩
+    · refine ⟨contDiff_const, ?_, ?_⟩
+      · simp
+      · simp
+    · simpa [apm_m00A04_partial] using hε
+
 theorem apm_m00a04
     (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] (f : V →L[ℝ] ℝ) :
@@ -157,5 +173,13 @@ theorem apm_m00a04
       empty, and a constant test function gives exact energy approximation.
       Thus the sole remaining case has `0 < n` and requires the genuine
       Sobolev completion/representative construction described above.
+      Closer hop 2 proves `apm_m00A04_zero_memH10WithGradient`, verifying from
+      the frozen definitions that the zero function and zero gradient belong to
+      the custom space in every dimension. Searches of
+      `Analysis/FunctionalSpaces`, distribution APIs, all closed artifacts,
+      `ConstructionTargets`, and `YoungL2.lean` found inequalities and abstract
+      Lax--Milgram machinery, but still no completeness/representative theorem
+      for this graph closure. Extending the compiled zero base case to arbitrary
+      `F` therefore remains exactly the positive-dimensional completion bridge.
       -/
         sorry
