@@ -57,6 +57,31 @@ def leftSpanOfRightIdeal {R : Type*} [Ring R]
     (I : Submodule Rᵐᵒᵖ R) : AddSubgroup R :=
   AddSubgroup.closure {z | ∃ r m : R, m ∈ I ∧ z = r * m}
 
+/-- Binary Chinese remainder construction for two-sided ideals, without a
+commutativity assumption on the ambient ring. -/
+lemma exists_simultaneous_residue_of_twoSided
+    {R : Type*} [Ring R] (I J : Ideal R)
+    [I.IsTwoSided] [J.IsTwoSided] (h : I ⊔ J = ⊤) (a b : R) :
+    ∃ r : R, r - a ∈ I ∧ r - b ∈ J := by
+  have h1 : (1 : R) ∈ I ⊔ J := by simp [h]
+  rw [Submodule.mem_sup] at h1
+  obtain ⟨i, hi, j, hj, hij⟩ := h1
+  refine ⟨b * i + a * j, ?_, ?_⟩
+  · have hbi : b * i ∈ I := I.mul_mem_left b hi
+    have hj1 : j - 1 ∈ I := by
+      have hii : i = 1 - j := eq_sub_of_add_eq hij
+      have : 1 - j ∈ I := hii ▸ hi
+      simpa only [neg_sub] using I.neg_mem this
+    have haj : a * (j - 1) ∈ I := I.mul_mem_left a hj1
+    convert I.add_mem hbi haj using 1 <;> noncomm_ring
+  · have haj : a * j ∈ J := J.mul_mem_left a hj
+    have hi1 : i - 1 ∈ J := by
+      have hjj : j = 1 - i := eq_sub_of_add_eq' hij
+      have : 1 - i ∈ J := hjj ▸ hj
+      simpa only [neg_sub] using J.neg_mem this
+    have hbi : b * (i - 1) ∈ J := J.mul_mem_left b hi1
+    convert J.add_mem hbi haj using 1 <;> noncomm_ring
+
 /-- All four requested conclusions.  The quotient description in part (b) is
 expressed by a surjective homomorphism onto a full matrix ring whose kernel is
 exactly the annihilator.  Part (c) is the injectivity/surjectivity statement of
@@ -131,5 +156,15 @@ theorem apm_b98j04
   surjectivity construction from pairwise comaximal two-sided ideals; obtaining
   those ideals as distinct maximal annihilators remains coupled to the
   simple-summand transport described above.
+
+  Closer hop 3 proves `exists_simultaneous_residue_of_twoSided`, the binary
+  noncommutative CRT step for comaximal two-sided ideals. It explicitly writes
+  `1 = i + j` and uses `b*i + a*j` as the simultaneous representative. Thus
+  the CRT boundary is reduced to proving that finite intersections retain
+  comaximality with the next two-sided ideal and inducting over `Fin k`.
+  Searches of the simple-module API found
+  `IsSimpleModule.annihilator_isMaximal` only under `[CommRing R]`; there is no
+  noncommutative primitive-annihilator maximality theorem to supply the still
+  missing maximality and distinctness of the chosen summands.
   -/
   sorry
