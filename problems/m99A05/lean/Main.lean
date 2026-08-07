@@ -36,27 +36,64 @@ theorem apm_m99a05
       M99A05WeaklyConverges (𝕜 := 𝕜) u x →
       M99A05WeaklyConverges (𝕜 := 𝕜) u y → x = y) := by
   constructor
-  · /-
-    Boundary: the `lp.single` basis counterexample requires identifying every
-    continuous functional on complex `ℓ²` with an inner-product vector (or an
-    equivalent coordinate-decay theorem), then proving the basis norms remain
-    one. I searched the `lp` Riesz-representation, `lp.single`, orthonormal
-    basis, and weak-convergence APIs; I did not complete that bridge in this
-    pass.
-    -/
-    sorry
+  · constructor
+    · intro ℓ
+      let y : m99A05L2 := (InnerProductSpace.toDual ℂ m99A05L2).symm ℓ
+      have hsummable : Summable (fun n : ℕ ↦ ‖y n‖ ^ (2 : ℝ)) := by
+        simpa using (lp.hasSum_norm (by norm_num) y).summable
+      have hsq : Tendsto (fun n : ℕ ↦ ‖y n‖ ^ (2 : ℝ)) atTop (nhds 0) :=
+        hsummable.tendsto_atTop_zero
+      have hnorm : Tendsto (fun n : ℕ ↦ ‖y n‖) atTop (nhds 0) := by
+        have hsqrt := Real.continuous_sqrt.continuousAt.tendsto.comp hsq
+        change Tendsto (fun n : ℕ ↦ Real.sqrt (‖y n‖ ^ 2)) atTop (nhds (Real.sqrt 0)) at hsqrt
+        convert hsqrt using 1
+        · funext n
+          rw [Real.rpow_two, Real.sqrt_sq (norm_nonneg (y n))]
+        · simp
+      have hy : Tendsto (fun n : ℕ ↦ y n) atTop (nhds 0) :=
+        tendsto_zero_iff_norm_tendsto_zero.mpr hnorm
+      have hinner : Tendsto (fun n : ℕ ↦ inner ℂ (y n) (1 : ℂ)) atTop (nhds 0) := by
+        have hc : Continuous (fun z : ℂ ↦ inner ℂ z (1 : ℂ)) := by fun_prop
+        simpa using hc.continuousAt.tendsto.comp hy
+      convert hinner using 1
+      · funext n
+        change ℓ (lp.single 2 n 1) = inner ℂ (y n) 1
+        rw [← InnerProductSpace.toDual_symm_apply]
+        exact lp.inner_single_right n 1 y
+      · simp
+    · -- (Sibling: m02A01)
+      intro hstrong
+      have hnorm : Tendsto (fun n ↦ ‖m99A05BasisSequence n‖) atTop
+          (nhds ‖(0 : m99A05L2)‖) :=
+        continuous_norm.continuousAt.tendsto.comp hstrong
+      have hone : Tendsto (fun _ : ℕ ↦ (1 : ℝ)) atTop (nhds 0) := by
+        simpa [m99A05BasisSequence, lp.norm_single] using hnorm
+      have : (1 : ℝ) = 0 := tendsto_nhds_unique tendsto_const_nhds hone
+      norm_num at this
   constructor
   · intro u x hu ℓ
     exact ℓ.continuous.continuousAt.tendsto.comp hu
-  · /-
-    Boundary: the remaining clauses require (i) finite-dimensional coordinate
-    reconstruction from continuous dual coordinates, (ii) Banach--Steinhaus on
-    the canonical embedding into the bidual to obtain norm boundedness, and
-    (iii) Hahn--Banach separation for uniqueness. I searched
-    `FiniteDimensional`, `UniformBoundedness`, `NormedSpace.inclusionInDoubleDual`,
-    and geometric Hahn--Banach APIs. Their ingredients exist, but I did not
-    complete the coercions and typeclass assembly for the statement's arbitrary
-    `RCLike` scalar in this pass. The general strong-to-weak implication is
-    proved above directly by continuity of each functional.
-    -/
-    sorry
+  · constructor
+    · /-
+      Boundary: finite-dimensional weak-to-strong convergence requires
+      reconstructing vectors from finitely many continuous basis-coordinate
+      maps. I searched `FiniteDimensional`, `Basis.coord`, weak-topology, and
+      finite-product convergence APIs; the arbitrary-`RCLike` assembly was not
+      completed.
+      -/
+      sorry
+    · constructor
+      · /-
+        Boundary: norm boundedness requires Banach--Steinhaus on the family
+        `NormedSpace.inclusionInDoubleDual 𝕜 X (u n)`. Mathlib provides the
+        isometric double-dual embedding, but searches for `UniformBoundedness`
+        and pointwise-bounded families did not locate an assembled theorem with
+        the required interface.
+        -/
+        sorry
+      · intro u x y hx hy
+        apply sub_eq_zero.mp
+        apply SeparatingDual.eq_zero_of_forall_dual_eq_zero (R := 𝕜)
+        intro ℓ
+        have hxy : ℓ x = ℓ y := tendsto_nhds_unique (hx ℓ) (hy ℓ)
+        simpa using sub_eq_zero.mpr hxy
