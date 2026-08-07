@@ -1,12 +1,22 @@
 # Proof Outline: m02J05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen theorem has a partial Lean development with one remaining `sorry`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m02J05.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- the Young primitive vanishes at zero;
+- the zero `AEEqFun` belongs to both `apm_m02J05_K α` and
+  `apm_m02J05_L α`.
+
+## Remaining boundary
+
+- prove convexity and monotonicity of the Young primitive from the hypotheses
+  on `α`;
+- build the submodule structure on the rescalable modular class;
+- develop the `sInf` theory needed for positivity, definiteness, homogeneity,
+  and the triangle inequality of the Luxemburg functional;
+- formalize complementary Young's inequality for the inverse pair `α`, `β`,
+  then derive the normalized integral estimate.

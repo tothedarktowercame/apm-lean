@@ -36,6 +36,19 @@ noncomputable def apm_m02J05_lux (α : ℝ → ℝ) (u : ℝ →ₘ[volume] ℝ)
   sInf {c : ℝ | 0 < c ∧
     ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / c) ∂volume ≤ 1}
 
+lemma apm_m02J05_young_zero (α : ℝ → ℝ) :
+    apm_m02J05_young α 0 = 0 := by
+  simp [apm_m02J05_young]
+
+lemma apm_m02J05_zero_mem_K (α : ℝ → ℝ) :
+    (0 : ℝ →ₘ[volume] ℝ) ∈ apm_m02J05_K α := by
+  simp [apm_m02J05_K, apm_m02J05_young_zero]
+
+lemma apm_m02J05_zero_mem_L (α : ℝ → ℝ) :
+    (0 : ℝ →ₘ[volume] ℝ) ∈ apm_m02J05_L α := by
+  refine ⟨1, one_ne_zero, ?_⟩
+  simpa using apm_m02J05_zero_mem_K α
+
 theorem apm_m02j05 :
     ∀ (α β : ℝ → ℝ),
       ContinuousOn α (Ici 0) →
@@ -62,13 +75,20 @@ theorem apm_m02j05 :
         ∫ x in Icc (0 : ℝ) 1, u x * v x ∂volume ≤
           2 * apm_m02J05_lux α u * apm_m02J05_lux β v) := by
   /-
-  SKIPPED (Orlicz/Luxemburg library boundary). Searches of Mathlib and compiled
+  CLOSER HOP 1 (partial). The zero-value infrastructure is now compiled:
+  `apm_m02J05_young_zero`, `apm_m02J05_zero_mem_K`, and
+  `apm_m02J05_zero_mem_L` establish the base cases required by convexity and
+  the proposed submodule structure.
+
+  Searches of Mathlib and compiled
   siblings found no packaged Young-function, complementary-function, Orlicz
   space, or Luxemburg-norm API. The available theorems named
   `young_inequality` concern Hölder-conjugate powers, not the general inverse
   pair `α`, `β` used here.
 
-  A proof must therefore build the complete theory in this file: convexity and
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib, prior
+  solved problems, and git history found no stronger general-purpose bridge.
+  A proof must therefore build the remaining theory in this file: convexity and
   monotonicity of the interval-integral primitive from `StrictMonoOn α`,
   stability and common rescaling of `AEEqFun`s, nonemptiness and attainment of
   the `sInf` modular sublevel set (dominated convergence plus Fatou),
