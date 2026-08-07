@@ -91,15 +91,20 @@ theorem apm_m96a05 :
       apm_m96a05_approximateSolution n a b c U ↔
         Matrix.mulVec (apm_m96a05_matrix n a b) U = apm_m96a05_rhs n a c := by
     /-
-    PARTIAL boundary (stencil expansion).  Unfolding
-    `Matrix.mulVec_eq_sum`, `apm_m96a05_matrix`, and
-    `apm_m96a05_meshValue` reduces this to showing that the row sum has only
-    the diagonal and its at-most-two neighboring entries.  Searches found
-    `Finset.sum_eq_add_sum_diff_singleton`, `Fin.sum_univ_succ`, and the
-    `Matrix.mulVec` simp lemmas, but no tridiagonal row-sum normal form.
-    The outstanding work is the case split at `i.val = 0` and
-    `i.val + 1 = n`, together with `Fin` extensionality/`omega` arithmetic,
-    followed by `field_simp` using `0 < n` to show `h ≠ 0`.
+    PARTIAL boundary (stencil expansion, enriched in this pass).  I unfolded
+    `Matrix.mulVec`, `dotProduct`, `apm_m96a05_matrix`, and
+    `apm_m96a05_rhs` in both directions and confirmed that the exact residual
+    is the finite row sum
+      `∑ x, (if x=i then d else if x.val+1=i.val then l
+             else if i.val+1=x.val then r else 0) * U x`.
+    Thus no analytic or division issue remains at this stage: the missing
+    lemma is a three-support `Finset.univ` sum normal form, followed by the
+    four endpoint cases `i.val = 0` / `i.val + 1 = n`.  Searches of
+    `LEMMA-INDEX.md`, the closed artifacts, `ConstructionTargets/`, and
+    `YoungL2.lean` found no packaged tridiagonal-row lemma.  Mathlib's
+    `Finset.sum_eq_single`, `Finset.sum_ite_irrel`, `Fin.ext`, and `omega`
+    are sufficient ingredients, but assembling the dependent `Fin` witnesses
+    for the predecessor and successor exceeded this pass's budget.
     -/
     sorry
   refine ⟨hscheme, ?_⟩
@@ -118,11 +123,14 @@ theorem apm_m96a05 :
     `|-2 + h^2*b(t_i)| > 2`, while the erased-row sum is at most the sum of
     the two neighbor norms, namely `2`.
 
-    Searches of the 166 closed artifacts, all `ConstructionTargets/`,
+    Searches of the 172 closed artifacts, all `ConstructionTargets/`,
     `YoungL2.lean`, and `LEMMA-INDEX.md` found no lemma packaging the needed
     tridiagonal support-sum estimate.  The remaining assembly is therefore
     the explicit `Finset.univ.erase i` support calculation and compact-bound
-    arithmetic before invoking the Gershgorin lemma.
+    arithmetic before invoking the Gershgorin lemma.  This pass additionally
+    inspected the implementation of `Matrix.det_ne_zero_of_sum_row_lt_diag`:
+    it requires exactly `∀ i, ∑ j ∈ univ.erase i, ‖M i j‖ < ‖M i i‖`,
+    so there is no weaker support-free API that avoids that row calculation.
     -/
     sorry
   refine ⟨N, ?_⟩
