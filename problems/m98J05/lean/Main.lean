@@ -21,7 +21,7 @@ real derivative in space. The initial condition is the right-hand limit as
 -/
 
 open Set Filter MeasureTheory intervalIntegral
-open scoped Topology
+open scoped Topology FourierTransform
 
 /-- Fourier transform with the convention used in the source solution. -/
 noncomputable def apm_m98J05_fourier (f : ℝ → ℂ) (ξ : ℝ) : ℂ :=
@@ -35,6 +35,30 @@ lemma apm_m98J05_fourier_integrable (f : ℝ → ℂ) (hf : Integrable f) (ξ : 
   refine hf.norm.mono' (hf.aestronglyMeasurable.mul hg.aestronglyMeasurable) ?_
   filter_upwards with x
   simp [Complex.norm_exp]
+
+/-- The custom unscaled convention is Mathlib's Fourier transform evaluated at
+frequency `ξ / (2π)`. -/
+lemma apm_m98J05_fourier_eq_mathlib (f : ℝ → ℂ) (ξ : ℝ) :
+    apm_m98J05_fourier f ξ = 𝓕 f (ξ / (2 * Real.pi)) := by
+  rw [apm_m98J05_fourier, Real.fourier_eq']
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with x
+  simp only [smul_eq_mul]
+  rw [mul_comm]
+  apply congrArg (fun z : ℂ => z * f x)
+  apply congrArg Complex.exp
+  have hi : inner ℝ x (ξ / (2 * Real.pi)) = x * (ξ / (2 * Real.pi)) := by
+    rw [show ξ / (2 * Real.pi) = (ξ / (2 * Real.pi)) • (1 : ℝ) by simp,
+      real_inner_smul_right]
+    have hix : inner ℝ x (1 : ℝ) = x := by
+      rw [real_inner_eq_re_inner, RCLike.inner_apply', conj_trivial, mul_one]
+      rfl
+    rw [hix]
+    simp only [smul_eq_mul, mul_one]
+    ring
+  rw [hi]
+  push_cast
+  field_simp [Real.pi_ne_zero]
 
 /-- The one-dimensional Gaussian heat kernel. -/
 noncomputable def apm_m98J05_heatKernel (t x : ℝ) : ℝ :=
@@ -67,38 +91,63 @@ theorem apm_m98j05 :
         HasDerivAt
           (fun s ↦ apm_m98J05_fourier (fun x ↦ u x s) ξ)
           (-((ξ : ℂ) ^ 2) * apm_m98J05_fourier (fun x ↦ u x t) ξ) t) := by
-  have hmultiplier_ode (c : ℂ) (ξ t : ℝ) :
+  constructor
+  · intro f f' hder hf hf' _ _ ξ
+    have hdiff : Differentiable ℝ f := fun x => (hder x).differentiableAt
+    have heq : deriv f = f' := by
+      funext x
+      exact (hder x).deriv
+    have hdint : Integrable (deriv f) := by simpa [heq] using hf'
+    have hm := congrFun (Real.fourier_deriv hf hdiff hdint) (ξ / (2 * Real.pi))
+    rw [apm_m98J05_fourier_eq_mathlib, apm_m98J05_fourier_eq_mathlib]
+    rw [heq] at hm
+    simp only [smul_eq_mul] at hm
+    have hfac : (2 * (Real.pi : ℂ) * Complex.I * (ξ / (2 * Real.pi) : ℝ)) =
+        Complex.I * (ξ : ℂ) := by
+      push_cast
+      field_simp [Real.pi_ne_zero]
+    calc
+      𝓕 f' (ξ / (2 * Real.pi)) =
+          (2 * (Real.pi : ℂ) * Complex.I * (ξ / (2 * Real.pi) : ℝ)) *
+            𝓕 f (ξ / (2 * Real.pi)) := hm
+      _ = Complex.I * (ξ : ℂ) * 𝓕 f (ξ / (2 * Real.pi)) := by rw [hfac]
+  · intro f hf2 hf hf' hf''
+    have hmultiplier_ode (c : ℂ) (ξ t : ℝ) :
       HasDerivAt
         (fun s : ℝ ↦ c * Complex.exp (-(s : ℂ) * (ξ : ℂ) ^ 2))
         (-((ξ : ℂ) ^ 2) *
           (c * Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2))) t := by
-    have hc : HasDerivAt
-        (fun s : ℂ ↦ c * Complex.exp (-s * (ξ : ℂ) ^ 2))
-        (-((ξ : ℂ) ^ 2) *
-          (c * Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2))) (t : ℂ) := by
-      have hg : HasDerivAt (fun s : ℂ ↦ -s * (ξ : ℂ) ^ 2)
-          (-((ξ : ℂ) ^ 2)) (t : ℂ) := by
-        convert (hasDerivAt_id (x := (t : ℂ))).neg.mul_const ((ξ : ℂ) ^ 2) using 1 <;>
+      have hc : HasDerivAt
+          (fun s : ℂ ↦ c * Complex.exp (-s * (ξ : ℂ) ^ 2))
+          (-((ξ : ℂ) ^ 2) *
+            (c * Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2))) (t : ℂ) := by
+        have hg : HasDerivAt (fun s : ℂ ↦ -s * (ξ : ℂ) ^ 2)
+            (-((ξ : ℂ) ^ 2)) (t : ℂ) := by
+          convert (hasDerivAt_id (x := (t : ℂ))).neg.mul_const ((ξ : ℂ) ^ 2) using 1 <;>
+            ring
+        convert ((Complex.hasDerivAt_exp _).comp (t : ℂ) hg).const_mul c using 1 <;>
           ring
-      convert ((Complex.hasDerivAt_exp _).comp (t : ℂ) hg).const_mul c using 1 <;>
-        ring
-    exact hc.comp_ofReal
-  /-
-  PARTIAL boundary: the frequency-side scalar ODE for the claimed multiplier
-  is verified above, and `apm_m98J05_fourier_integrable` now proves absolute
-  integrability of every custom Fourier integrand. The remaining theorem
-  requires whole-line complex
-  integration by parts for the custom Fourier convention (which omits
-  Mathlib's standard `2π` scaling), the Gaussian transform/convolution
-  theorem with exact normalization, differentiation under two improper
-  integrals, and pointwise approximate-identity convergence.
+      exact hc.comp_ofReal
+    /-
+  PARTIAL boundary (closer hop 1): the first frozen conjunct is now fully
+  compiled. `apm_m98J05_fourier_eq_mathlib` identifies the raw convention with
+  Mathlib's transform at `ξ/(2π)`; `Real.fourier_deriv` then proves the desired
+  derivative multiplier after exact cancellation of the scale. Thus the
+  whole-line complex integration-by-parts bridge has been routed around.
+
+  The frequency-side scalar ODE for the claimed multiplier is also verified
+  above, and `apm_m98J05_fourier_integrable` proves absolute integrability of
+  every custom Fourier integrand. The remaining heat-solution theorem requires
+  the Gaussian transform/convolution theorem with exact normalization,
+  differentiation under the spatial and time improper integrals, and
+  pointwise approximate-identity convergence.
 
   Mathlib provides `fourier_deriv` for its `2π` convention. Sibling `a01A10`
   proves the exact complex Gaussian transform from `fourierIntegral_gaussian`;
   sibling `a96A04` proves heat-kernel normalization, spatial differentiation,
   and an `L²` approximate-identity theorem. `ConstructionTargets.KernelAverage`
   and `ConstructionTargets.L2Translation` were also inspected. Adapting these
-  results to the raw unscaled transform, complex `L¹` datum, time derivative,
-  and pointwise (rather than `L²`) initial convergence was not completed.
-  -/
-  sorry
+  results to a complex `L¹` datum, time derivative, and pointwise (rather than
+  `L²`) initial convergence was not completed.
+    -/
+    sorry
