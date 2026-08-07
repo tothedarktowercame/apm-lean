@@ -1,21 +1,30 @@
 import Mathlib
-import ApmCanaries.Frames.A03J07.Apm_v2_a03J07_1774988886868.Scratch
+
+/-!
+# APM a03J07 — Phragmén–Lindelöf on the upper half-plane
+
+## Statement repairs
+
+The source's boundary hypothesis quantifies `x ∈ ℝ` but writes `|f(z)|`;
+the free `z` is corrected to `x`, as required by the intended real-axis
+boundary bound.
+
+## Encoding questions
+
+None. The open upper half-plane, its closure, boundedness, continuity, and
+complex differentiability are represented directly.
+-/
+
+open Set
 
 noncomputable section
 
-namespace ApmCanaries.Frames.A03J07.Apm_v2_a03J07_1774988886868.Main
+def apm_a03J07_H : Set ℂ := {z : ℂ | 0 < z.im}
 
-/- Authoritative frame-local Lean development.
-   Keep exploratory detours in Scratch.lean.
-   Promote reusable lemmas explicitly into ApmCanaries.Local. -/
-
-lemma abs_cexp_I_mul (ε : ℝ) (z : ℂ) :
-    Complex.abs (Complex.exp (Complex.I * ε * z)) =
-      Real.exp (-ε * z.im) := by
-  have := Complex.abs_exp (Complex.I * ε * z)
-  simp [Complex.mul_re, Complex.mul_im, Complex.abs_exp,
-    Complex.ofReal_im, Complex.ofReal_re, mul_comm, mul_left_comm,
-    mul_assoc] at this
-  simpa using this
-
-end ApmCanaries.Frames.A03J07.Apm_v2_a03J07_1774988886868.Main
+theorem apm_a03j07 (f : ℂ → ℂ) (M C0 : ℝ)
+    (hcont : ContinuousOn f (closure apm_a03J07_H))
+    (hanal : DifferentiableOn ℂ f apm_a03J07_H)
+    (hbdd : ∀ z ∈ closure apm_a03J07_H, ‖f z‖ ≤ C0)
+    (hreal : ∀ x : ℝ, ‖f (x : ℂ)‖ ≤ M) :
+    ∀ z ∈ apm_a03J07_H, ‖f z‖ ≤ M := by
+  sorry
