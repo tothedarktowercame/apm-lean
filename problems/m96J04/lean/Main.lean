@@ -53,25 +53,39 @@ theorem apm_m96j04 :
       IsCompactOperator V ∧
       ∀ eigenvalue : ℝ, eigenvalue ≠ 0 →
         ∀ f : apm_m96j04_C, V f = eigenvalue • f → f = 0 := by
-  /-
-  PARTIAL.  `apm_m96j04_block_exists` constructs the required block map,
-  proves its displayed action, proves `A ^ 2 = 0`, and hence proves compactness
-  of every `A ^ n` for `2 ≤ n` using `isCompactOperator_zero`.
+  constructor
+  · obtain ⟨A, hA, hpow⟩ := apm_m96j04_block_exists
+    refine ⟨A, hA, ?_, hpow⟩
+    intro hcompact
+    have hid : IsCompactOperator (id : ℓ²(ℕ, ℝ) → ℓ²(ℕ, ℝ)) := by
+      have hcomp := (hcompact.comp_clm
+        (ContinuousLinearMap.inr ℝ ℓ²(ℕ, ℝ) ℓ²(ℕ, ℝ))).clm_comp
+          (ContinuousLinearMap.fst ℝ ℓ²(ℕ, ℝ) ℓ²(ℕ, ℝ))
+      convert hcomp using 1
+      funext x
+      simp [hA]
+    -- (Sibling: m95A02)
+    let b : HilbertBasis ℕ ℝ ℓ²(ℕ, ℝ) :=
+      HilbertBasis.ofRepr (LinearIsometryEquiv.refl ℝ ℓ²(ℕ, ℝ))
+    letI : FiniteDimensional ℝ ℓ²(ℕ, ℝ) :=
+      FiniteDimensional.of_isCompactOperator_id hid
+    letI : Finite ℕ := b.orthonormal.linearIndependent.finite
+    exact not_finite ℕ
+  · /-
+    PARTIAL boundary (Volterra operator).  The Hilbert-space clause is now
+    closed, including noncompactness, by factoring a hypothetical compact block
+    map into the identity and contradicting finiteness of the canonical
+    `HilbertBasis ℕ ℝ ℓ²`.
 
-  For noncompactness, composing a hypothetical compact `A` with
-  `ContinuousLinearMap.inr` and `ContinuousLinearMap.fst` makes the identity
-  on `ℓ²(ℕ,ℝ)` compact; `FiniteDimensional.of_isCompactOperator_id`
-  then gives finite dimensionality.  Searches of Mathlib's `lp`, Hilbert-basis,
-  and finite-dimensional APIs did not expose the final packaged contradiction
-  that `ℓ²(ℕ,ℝ)` is infinite-dimensional.
-
-  The Volterra clause requires first bundling the parameter-dependent interval
-  integral as a continuous linear map into `C(Icc 0 1,ℝ)`.  Compactness then
-  needs converting its uniformly bounded Lipschitz image of the unit ball into
-  the pointwise-compact hypothesis of
-  `ArzelaAscoli.isCompact_of_equicontinuous`.  The eigenvalue clause requires
-  an interval FTC/ODE uniqueness bridge.  Mathlib contains the generic Ascoli
-  and FTC ingredients, but neither the closed corpus nor `ConstructionTargets/`
-  contains this Volterra assembly.
-  -/
-  sorry
+    The remaining clause requires bundling the parameter-dependent interval
+    integral as a continuous linear map into `C(Icc 0 1,ℝ)`.  Compactness then
+    needs converting the uniformly bounded Lipschitz image of the unit ball
+    into the pointwise-compact hypothesis of
+    `ArzelaAscoli.isCompact_of_equicontinuous`.  The eigenvalue clause requires
+    an interval FTC/ODE uniqueness bridge.  Searches of `LEMMA-INDEX.md`, 172
+    closed artifacts, `ConstructionTargets/`, `YoungL2.lean`, Mathlib's
+    continuous-map integral APIs, Ascoli implementation, and interval FTC found
+    no packaged Volterra continuous-linear-map construction or compactness
+    theorem.  This assembly remains open.
+    -/
+    sorry
