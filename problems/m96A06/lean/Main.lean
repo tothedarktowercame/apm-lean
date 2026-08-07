@@ -69,6 +69,18 @@ lemma apm_m96a06_integrable_weighted_pair
     simpa only using (Lp.memLp f).mul' ha
   exact MemLp.integrable_mul haf (Lp.memLp g)
 
+/-- Quantitative `L∞ × L² → L²` control for the representative-level
+multiplier occurring in the weighted bilinear form. -/
+lemma apm_m96a06_eLpNorm_weighted_le
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (a : α → ℝ) (f : Lp ℝ 2 μ) :
+    eLpNorm (fun t ↦ a t * f t) 2 μ ≤
+      eLpNorm a ⊤ μ * eLpNorm (fun t ↦ f t) 2 μ := by
+  have h := eLpNorm_le_eLpNorm_top_mul_eLpNorm
+    (p := (2 : ENNReal)) a (Lp.memLp f).1 (fun x y : ℝ ↦ x * y) 1
+    (Filter.Eventually.of_forall fun t ↦ by simp [nnnorm_mul])
+  simpa using h
+
 theorem apm_m96a06
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
     (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
@@ -94,7 +106,17 @@ theorem apm_m96a06
       apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u) ∧
     ∃! u : H, apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u := by
   /-
-  PARTIAL (concrete `Lp` bilinear-form boundary).  Current Mathlib does contain
+  PARTIAL (closer hop 1, concrete `Lp` bilinear-form boundary).
+  `apm_m96a06_eLpNorm_weighted_le` now compiles the quantitative multiplier
+  estimate `‖a * f‖₂ ≤ ‖a‖∞ * ‖f‖₂` directly from Mathlib's
+  `eLpNorm_le_eLpNorm_top_mul_eLpNorm`.  Together with the three integrability
+  lemmas from the original pass, this closes both membership and norm control
+  for the raw `L∞ × L² → L²` multiplication step.  The remaining interface is
+  to turn it into a continuous linear multiplier on quotient `Lp`, compose it
+  with `ContinuousLinearMap.lpPairing`, and identify evaluation with the
+  frozen triple integral.
+
+  Current Mathlib does contain
   the abstract real Hilbert-space Lax--Milgram theorem in
   `Analysis.InnerProductSpace.LaxMilgram`: for a bounded bilinear map
   `B : H →L[ℝ] H →L[ℝ] ℝ`, `IsCoercive.continuousLinearEquivOfBilin`
