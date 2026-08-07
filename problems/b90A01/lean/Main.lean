@@ -18,6 +18,17 @@ open Equiv Subgroup
 
 noncomputable section
 
+/-- Transport a faithful permutation representation on an arbitrary finite
+type to the frozen `Fin k` model. -/
+lemma apm_b90A01_perm_fin_of_card
+    {G α : Type*} [Group G] [Finite α]
+    {k : ℕ} (hk : Nat.card α = k)
+    (φ : G →* Equiv.Perm α) (hφ : Function.Injective φ) :
+    ∃ ψ : G →* Equiv.Perm (Fin k), Function.Injective ψ := by
+  let e : α ≃ Fin k := Finite.equivFinOfCardEq hk
+  refine ⟨e.permCongrHom.toMonoidHom.comp φ, ?_⟩
+  exact e.permCongrHom.injective.comp hφ
+
 theorem apm_b90a01
     (G : Type) [Group G] [Finite G] [IsSimpleGroup G]
     (p k : ℕ) (hp : p.Prime)
@@ -29,7 +40,22 @@ theorem apm_b90a01
       IsSimpleGroup H → H ≠ ⊤ → n ≤ H.index) ∧
     ∀ (G₁ : Type) [Group G₁] [Finite G₁],
       Nat.card G₁ = 120 → ¬IsSimpleGroup G₁ := by
-  -- Boundary (pass-1 Codex, sustained desk research): searched the Sylow
+  /-
+  PARTIAL boundary (closer hop 1): the finite-type transport stage is now
+  compiled as `apm_b90A01_perm_fin_of_card`. Once the Sylow conjugation action
+  is proved faithful, this lemma turns it directly into the first frozen
+  `Fin k` representation using `Finite.equivFinOfCardEq` and
+  `Equiv.permCongrHom`.
+
+  Renewed source inspection confirms that Mathlib still proves simplicity only
+  for `alternatingGroup (Fin 5)`, not all `n ≥ 5`. The remaining first-stage
+  bridge is proving the Sylow action kernel is not top (pretransitivity plus
+  `1 < k`) and invoking simplicity to make it bottom. Factoring that faithful
+  action through the alternating group requires a parity argument. The third
+  conjunct still needs a local general simplicity development for `A_n`, and
+  the order-120 conjunct needs the exact Sylow-5 enumeration.
+
+  Earlier pass research: searched the Sylow
   -- conjugation action (`Sylow.mulAction`, `Sylow.isPretransitive_of_finite`,
   -- `Sylow.card_sylow_modEq_one`, `Sylow.card_dvd_index`), action kernels
   -- (`MulAction.toPermHom`, `MonoidHom.ker_eq_bot_iff`), simple-group kernel
@@ -50,6 +76,6 @@ theorem apm_b90a01
   -- transporting the coset action to `Fin H.index`, proving the factorial
   -- bound, and carrying out the exact Sylow-5 enumeration for order 120.
   -- These are mathematically standard but constitute a major group-theory
-  -- development beyond a 15--25 minute pass; no conjunct is asserted via an
-  -- unproved shortcut.
+  -- development; no conjunct is asserted via an unproved shortcut.
+  -/
   sorry
