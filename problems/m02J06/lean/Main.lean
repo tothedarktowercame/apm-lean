@@ -46,6 +46,30 @@ def apm_m02J06_KL1 : Set (Lp ℝ 1 (volume : Measure ℝ)) :=
   {u | ∃ (f : ℝ → ℝ) (hf : Integrable f volume),
     f ∈ apm_m02J06_K ∧ u = apm_m02J06_toL1 f hf}
 
+/-- The defining one-sided translation estimate for `apm_m02J06_K` extends
+to arbitrary shifts.  The negative case uses Mathlib's
+`integral_add_right_eq_self`; compare the translated-integral helper
+`integral_translate_norm` in the solved artifact `a95J08`. -/
+lemma apm_m02J06_translation_estimate
+    {f : ℝ → ℝ} (hf : f ∈ apm_m02J06_K) (h : ℝ) :
+    ∫ x, |f (x + h) - f x| ∂volume ≤ Real.sqrt |h| := by
+  rcases hf with ⟨_, _, htrans, _⟩
+  rcases lt_trichotomy h 0 with hh | rfl | hh
+  · have hk : 0 < -h := neg_pos.mpr hh
+    have heq :
+        (∫ x, |f (x + h) - f x| ∂volume) =
+          ∫ x, |f (x + (-h)) - f x| ∂volume := by
+      rw [← integral_add_right_eq_self
+        (fun x : ℝ ↦ |f (x + h) - f x|) (-h)]
+      congr 1
+      funext x
+      rw [add_assoc, neg_add_cancel, add_zero, abs_sub_comm]
+    rw [heq, abs_of_neg hh]
+    exact htrans (-h) hk
+  · simp
+  · rw [abs_of_pos hh]
+    exact htrans h hh
+
 theorem apm_m02j06 :
     ∀ (φ : ℝ → ℝ) (M : ℝ),
       ContDiff ℝ ⊤ φ →
@@ -70,13 +94,23 @@ theorem apm_m02j06 :
   equicontinuous family of mollified representatives into total boundedness of
   their `L¹` equivalence classes.
 
-  A local proof must first extend the one-sided translation estimate in
-  `apm_m02J06_K` to every real shift, justify both Tonelli interchanges and the
-  rescaled mollifier's normalization/support bounds, bundle the convolutions as
-  continuous maps on a fixed compact interval for Arzelà–Ascoli, transfer the
-  resulting sup-norm nets to `Lp`, and finally prove `apm_m02J06_KL1` closed
-  while changing representatives modulo a.e. equality. `a96J02` was inspected
-  for convolution identities but contains no compactness route, so its code was
-  not reused. The frozen statement was left unchanged.
+  Closer hop 1 closes the first item in that list:
+  `apm_m02J06_translation_estimate` extends the one-sided estimate to every
+  real shift, using `integral_add_right_eq_self` (and the same translation
+  principle as `integral_translate_norm` from solved artifact `a95J08`).
+  `ConstructionTargets.YoungConvolution` supplies `convolution_memLp` and
+  Young's inequality, but neither gives compactness.  A renewed search found
+  `BoundedContinuousFunction.arzela_ascoli` and
+  `isCompact_iff_totallyBounded_isComplete`; these can provide the abstract
+  compactness step only after the mollified functions have been bundled with
+  a common compact domain/range and their sup-norm nets transported to `Lp`.
+
+  The remaining bridge is therefore to justify the Tonelli interchanges and
+  rescaled-mollifier normalization/support bounds, build those bounded
+  continuous maps, transfer their finite sup-norm nets to `L¹`, and prove
+  `apm_m02J06_KL1` closed under changes of representatives modulo a.e.
+  equality. `a96J02` contains convolution identities but no compactness route;
+  `a96J03` only records an unfinished translation-continuity plan. The frozen
+  statement was left unchanged.
   -/
   sorry
