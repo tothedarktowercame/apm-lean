@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "boundary": "nested ENNReal local-limsup compactness and completeness development; basic norm definiteness is compiled",
+  "boundary": "nested ENNReal local-limsup compactness and completeness development; hop 3 compiles the full generic toReal definiteness step, leaving finiteness and norm algebra",
   "imported_at": "2026-07-13T17:26:54.602608Z"
 }

@@ -15,6 +15,8 @@ candidate norms. One large analytic/completeness boundary remains.
   and local/global norm.
 - Vanishing of the encoded supremum norm forces the function itself to vanish,
   isolating the definiteness core needed by both norm predicates.
+- `apm_m93J02_eq_zero_of_toReal_add_eq_zero` closes the shared `toReal`
+  definiteness step for every finite seminorm-plus-supremum sum.
 
 ## Remaining Boundary
 
@@ -25,3 +27,8 @@ sequence arguments. The arbitrary connected compact set requires using the
 continuous distance image rather than assuming it contains a line segment.
 Mathlib's `HolderOnWith` and pointwise Hölder APIs do not bridge to the frozen
 nested ENNReal `limsup` definition.
+
+Closer hop 3 reduces definiteness of both candidate norms to proving that
+their ENNReal sums are finite on the Hölder carrier. The remaining work is
+therefore finiteness, homogeneity/triangle algebra, and the analytic
+complete/incomplete sequence constructions—not the `toReal = 0` argument.

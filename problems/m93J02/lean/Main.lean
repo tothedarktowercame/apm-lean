@@ -76,6 +76,16 @@ private lemma apm_m93J02_eq_zero_of_supNorm_eq_zero
   rw [ENNReal.ofReal_eq_zero] at hz
   exact abs_eq_zero.mp (le_antisymm hz (abs_nonneg _))
 
+/-- Definiteness is independent of the seminorm algebra once the encoded
+ENNReal norm sum is known to be finite. -/
+private lemma apm_m93J02_eq_zero_of_toReal_add_eq_zero
+    {n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ} {s : ℝ≥0∞}
+    (hfinite : s + apm_m93J02_supNorm f ≠ ⊤)
+    (hzero : (s + apm_m93J02_supNorm f).toReal = 0) : f = 0 := by
+  have hsum : s + apm_m93J02_supNorm f = 0 :=
+    (ENNReal.toReal_eq_zero_iff _).mp hzero |>.resolve_right hfinite
+  exact apm_m93J02_eq_zero_of_supNorm_eq_zero (add_eq_zero.mp hsum).2
+
 /-- The norm axioms restricted to a specified vector subspace carrier. -/
 def apm_m93J02_isNormOn {V : Type} [AddCommGroup V] [Module ℝ V]
     (S : Set V) (q : V → ℝ) : Prop :=
@@ -172,6 +182,18 @@ theorem apm_m93j02
   however, transporting the Lipschitz-zero local seminorm and the incomplete
   sequence through that map still needs a substantial new limsup development.
   No closed sibling, construction module, or indexed helper supplies it.
+
+  Closer hop 3 compiles the remaining generic definiteness step as
+  `apm_m93J02_eq_zero_of_toReal_add_eq_zero`: whenever the ENNReal sum of an
+  arbitrary seminorm and `apm_m93J02_supNorm f` is finite, vanishing of its
+  `toReal` forces the sum, then the supremum norm, and finally `f` itself to
+  vanish.  This uses `ENNReal.toReal_eq_zero_iff` and the previous supremum
+  helper.  Hence definiteness for both proposed norms is now reduced solely
+  to finiteness of their encoded sums on the Hölder carrier.  Searches of
+  compact-domain boundedness and `HolderOnWith` still found no theorem proving
+  boundedness of this completely unbundled function from the frozen nested
+  `iSup` definition; the compact-chain/local-to-global and completeness
+  developments remain open.
   -/
   have hremaining :
       (∀ f : U → ℝ,
