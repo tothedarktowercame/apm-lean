@@ -92,6 +92,21 @@ structure apm_t00A02_coverWitness (B : Type) [TopologicalSpace B]
     @apm_t00A02_isRegularCover E B topology _ p
   else ¬@apm_t00A02_isRegularCover E B topology _ p
 
+/-- The Boolean tag on a regular cover witness exposes the promised deck
+transitivity without further unfolding by clients. -/
+lemma apm_t00A02_coverWitness.regular
+    {B : Type} [TopologicalSpace B] {n : ℕ}
+    (w : apm_t00A02_coverWitness B n true) :
+    @apm_t00A02_isRegularCover w.E B w.topology _ w.p := by
+  simpa using w.regularity
+
+/-- Likewise, the `false` tag exposes failure of deck transitivity. -/
+lemma apm_t00A02_coverWitness.not_regular
+    {B : Type} [TopologicalSpace B] {n : ℕ}
+    (w : apm_t00A02_coverWitness B n false) :
+    ¬@apm_t00A02_isRegularCover w.E B w.topology _ w.p := by
+  simpa using w.regularity
+
 theorem apm_t00a02 :
     (∀ (F E₁ E₂ : Type)
         [TopologicalSpace F] [T2Space F] [CompactSpace F]
@@ -123,5 +138,15 @@ theorem apm_t00a02 :
   multiplicativity is included explicitly as witness data. No relevant lemma
   occurs in `ConstructionTargets/` or `YoungL2.lean`. These missing
   developments exceed this pass.
+
+  Closer hop 1 adds compiled eliminators
+  `apm_t00A02_coverWitness.regular` and `.not_regular`, confirming that the
+  Boolean witness encoding itself preserves exactly the requested distinction.
+  Further inspection of `Topology.Covering.Quotient` found
+  `IsQuotientCoveringMap.isCoveringMap`, but applying it still requires an
+  equality/homeomorphism between this `Relation.EqvGen` quotient and the orbit
+  quotient of the antipodal `ZMod 2` action. No such quotient-comparison API or
+  sibling construction was found, so the three geometric existence/classification
+  bridges remain open. The frozen statement is unchanged.
   -/
   sorry
