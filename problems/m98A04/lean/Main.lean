@@ -45,6 +45,34 @@ def apm_m98a04_IsDistributionalPartial {n : ℕ}
     (∀ x, dψ x = apm_m98a04_partialList indices (ψ : _ → ℝ) x) →
       DT ψ = (-1 : ℝ) ^ indices.length * T dψ
 
+/-- The translated reflection `y ↦ φ (x - y)` as an actual bundled test
+function.  This removes the pointwise-existence part of the convolution
+definition from the remaining analytic problem. -/
+noncomputable def apm_m98a04_translateReflect {n : ℕ}
+    (φ : TestFunction (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (x : EuclideanSpace ℝ (Fin n)) :
+    TestFunction (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤ :=
+  TestFunction.mk (fun y => φ (x - y))
+    (φ.contDiff.comp (contDiff_const.sub contDiff_id))
+    (φ.hasCompactSupport.comp_homeomorph (Homeomorph.subLeft x))
+    (by simp)
+
+@[simp] lemma apm_m98a04_translateReflect_apply {n : ℕ}
+    (φ : TestFunction (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (x y : EuclideanSpace ℝ (Fin n)) :
+    apm_m98a04_translateReflect φ x y = φ (x - y) := rfl
+
+lemma apm_m98a04_canonical_isConvolution {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (φ : TestFunction (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤) :
+    apm_m98a04_IsConvolution T φ
+      (fun x => T (apm_m98a04_translateReflect φ x)) := by
+  intro x ψ hψ
+  apply congrArg T
+  apply TestFunction.toTestFunctionClass.coe_injective'
+  funext y
+  exact (hψ y).symm
+
 theorem apm_m98a04 :
     (∀ (n : ℕ)
       (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
@@ -64,15 +92,27 @@ theorem apm_m98a04 :
       ∫ y in (0 : ℝ)..(2 * Real.pi),
         Real.sin y * Real.cos (x - y) = Real.pi * Real.sin x) := by
   constructor
-  · /-
-    Boundary: the distributional-convolution clause requires constructing
-    translated/reflected bundled `TestFunction`s and proving smooth dependence
-    on the translation parameter in Mathlib's LF topology. I searched the
-    imported `TestFunction`, `Distribution`, translation, `fderiv`, and
-    continuous-linear-map APIs; I did not find an assembled API bridging the
-    pointwise witness demanded by `apm_m98a04_IsConvolution` to the required
-    bundled smoothness and iterated distributional derivatives. The concrete
-    periodic convolution clause is proved below.
+  · intro n T φ
+    let h := fun x => T (apm_m98a04_translateReflect φ x)
+    refine ⟨h, apm_m98a04_canonical_isConvolution T φ, ?_⟩
+    /-
+    Boundary (closer hop 1): the translated/reflected function has now been
+    constructed as the bundled test function `apm_m98a04_translateReflect`,
+    using `HasCompactSupport.comp_homeomorph (Homeomorph.subLeft x)`.  The
+    canonical pairing `h x = T (translateReflect φ x)` is also proved to meet
+    `apm_m98a04_IsConvolution`, so pointwise test-function existence is closed.
+
+    The remaining goal begins precisely at LF-topological smoothness:
+    `ContDiff ℝ ∞ h`, followed by constructing iterated directional derivative
+    test functions and distributional derivatives. Searches of Mathlib's
+    `Analysis/Distribution/TestFunction.lean` found `fderivCLM` and
+    `postcompCLM`, but no theorem that the parameter map
+    `x ↦ translateReflect φ x` is differentiable into the inductive-limit test
+    function space. Function-level convolution lemmas in siblings `a01A03`,
+    `a03J03`, and `a96J02`, and `ConstructionTargets.YoungConvolution`, concern
+    integrable functions and do not apply to an arbitrary distribution `T`.
+    A future closure needs a local fixed-compact reduction for this parameter
+    map and induction using `TestFunction.fderivCLM`.
     -/
     sorry
   · intro x

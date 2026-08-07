@@ -1,12 +1,12 @@
 # Proof Outline: m98A04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The concrete periodic convolution identity is compiled.  Closer hop 1 also
+constructs the translated reflection `y ↦ φ (x-y)` as a genuine bundled test
+function.  Compact support is transported through `Homeomorph.subLeft x`, and
+the resulting canonical pairing with a distribution satisfies the custom
+`IsConvolution` predicate.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-m98A04.md`
-
-## Follow-up Needed
-
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+The remaining analytic bridge is to prove that the parameterized translated
+test function is smooth into Mathlib's LF test-function topology.  That yields
+smoothness after composition with the distribution and permits induction with
+`TestFunction.fderivCLM` for the derivative identities.
