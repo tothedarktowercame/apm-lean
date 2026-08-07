@@ -1,12 +1,20 @@
 # Proof Outline: m95A05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen theorem has a compiling partial Lean development.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m95A05.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_m95a05_norm_le_apply` derives `c * ‖v‖ ≤ ‖A v‖` from coercivity and
+  the continuous-dual operator-norm estimate.
+- `apm_m95a05_injective` proves that `A` is injective, closing uniqueness.
+
+## Remaining boundary
+
+- prove that the bounded-below map has closed range;
+- obtain a nonzero continuous functional annihilating any hypothetical proper
+  closed range via Hahn--Banach;
+- transport that double-dual functional through `hrefl` and contradict
+  coercivity, proving surjectivity.
