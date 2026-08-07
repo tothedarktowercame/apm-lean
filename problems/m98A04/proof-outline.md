@@ -10,8 +10,13 @@ Closer hop 2 also bundles every iterated coordinate derivative of a test
 function using `TestFunction.fderivCLM` and `postcompCLM`, with a compiled
 pointwise equality to the statement's custom `partialList` recursion.
 
+Closer hop 3 proves `apm_m98a04_isDistributionalPartial_nil`, closing the
+empty-multiindex base case with `DT = T`. Inspection of Mathlib's general
+distribution source found no directional derivative operator; the available
+derivative construction is specialized to tempered distributions.
+
 The remaining analytic bridge is to prove that the parameterized translated
 test function is smooth into Mathlib's LF test-function topology.  That yields
 smoothness after composition with the distribution.  The resulting identities
 must then be combined with the now-bundled iterated test derivatives and a
-bundled iterated distributional derivative.
+locally constructed iterated distributional derivative for nonempty indices.

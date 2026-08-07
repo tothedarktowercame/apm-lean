@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "notes": "Translated-reflected test functions, the canonical IsConvolution witness, and every iterated directional derivative as a bundled test function compile. LF-topological smoothness of parameterized translation and distributional derivative transport remain."
+  "closer_hop": 3,
+  "notes": "Translated-reflected test functions, the canonical convolution witness, bundled test derivatives, and the empty-multiindex distributional derivative compile. LF-topological translation smoothness and nonempty distributional derivative transport remain."
 }

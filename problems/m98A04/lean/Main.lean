@@ -104,6 +104,18 @@ noncomputable def apm_m98a04_partialListTF {n : ℕ} :
       exact congrArg (fun f : (EuclideanSpace ℝ (Fin n) → ℝ) ↦
         fderiv ℝ f x (EuclideanSpace.single i 1)) (funext ih)
 
+/-- The empty multiindex gives the original distribution. -/
+lemma apm_m98a04_isDistributionalPartial_nil {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤) :
+    apm_m98a04_IsDistributionalPartial [] T T := by
+  intro ψ dψ hdψ
+  have hψ : dψ = ψ := by
+    apply TestFunction.toTestFunctionClass.coe_injective'
+    funext x
+    simpa [apm_m98a04_partialList] using hdψ x
+  subst dψ
+  simp
+
 theorem apm_m98a04 :
     (∀ (n : ℕ)
       (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
@@ -153,6 +165,14 @@ theorem apm_m98a04 :
     A future closure needs a local fixed-compact reduction for this parameter
     map.  It must then compose the resulting derivative identities with `T`
     and bundle the corresponding iterated distributional derivative `DT`.
+
+    Closer hop 3 proves the base case
+    `apm_m98a04_isDistributionalPartial_nil`: the empty multiindex has `T`
+    itself as its distributional partial. Source inspection also confirms that
+    Mathlib's general `Distribution.lean` exposes `mapCLM` but no directional
+    derivative operator; the derivative instances found are for tempered
+    distributions. Thus the nonempty-index construction must be developed
+    locally together with the LF-topological translation smoothness theorem.
     -/
     sorry
   · intro x
