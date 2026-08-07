@@ -28,6 +28,21 @@ def apm_b01J03_rootStabilizer (F K : Type) [Field F] [Field K]
     [Algebra F K] (α : K) : Subgroup (K ≃ₐ[F] K) :=
   (apm_b01J03_rootField F K α).fixingSubgroup
 
+/-- A self-normalizing Sylow subgroup has as many conjugates as its index,
+and that index is prime to `p`. -/
+lemma apm_b01J03_selfNormalizer_count
+    (G : Type*) [Group G] [Finite G]
+    (p : ℕ) (hp : p.Prime) (P : Sylow p G)
+    (hself : normalizer (P : Subgroup G) = (P : Subgroup G)) :
+    Nat.card (Sylow p G) = P.index ∧ ¬p ∣ P.index := by
+  letI : Fact p.Prime := ⟨hp⟩
+  letI : Finite (Sylow p G) := inferInstance
+  have hcount : Nat.card (Sylow p G) = P.index := by
+    rw [P.card_eq_index_normalizer, hself]
+  haveI : (P : Subgroup G).FiniteIndex :=
+    ⟨by rw [← hcount]; exact (Nat.card_pos (α := Sylow p G)).ne'⟩
+  exact ⟨hcount, P.not_dvd_index⟩
+
 theorem apm_b01j03
     (F K : Type) [Field F] [Field K] [Algebra F K]
     (f : F[X]) [f.IsSplittingField F K]
@@ -49,14 +64,32 @@ theorem apm_b01j03
       apm_b01J03_rootField F K α = apm_b01J03_rootField F K β ∧
       apm_b01J03_rootField F K α = ⊤ ∧
       (P : Subgroup (K ≃ₐ[F] K)) = ⊤ := by
-  -- PARTIAL (closer hop 2): bridge still open. No closer progress.
-  -- Consulted Mathlib GroupTheory/Index.lean: Subgroup.index infrastructure exists but
-  -- the Sylow-specific counting theorems (conjugate count = index of normalizer,
-  -- element order counting) are not available as named lemmas.
+  -- PARTIAL (closer hop 3): bridge still open, with one group-counting
+  -- component now proved above.
+  -- Contrary to the preceding boundary assessment, Mathlib does provide
+  -- `Sylow.card_eq_index_normalizer`.  Together with `Sylow.not_dvd_index`,
+  -- it yields `apm_b01J03_selfNormalizer_count`: the number of Sylow
+  -- subgroups is `P.index`, and `p ∤ P.index`.
   -- Each of the 4 parts (a-d) requires proving from scratch:
   --   (a) |G| = p * s: from |P| = p and Lagrange's theorem
   --   (b) s(p-1) elements of order p: orbit-stabilizer on conjugates
   --   (c) root field equality: Galois correspondence + counting
   --   (d) K = F[α]: degree 1 ⟹ |G| = p ⟹ G = P
   -- This is ~80-120 lines of deep group theory assembly with no reusable template.
+  --
+  -- Further APIs found in this hop:
+  -- * `IsGalois.card_fixingSubgroup_eq_finrank` and
+  --   `IntermediateField.finrank_eq_fixingSubgroup_index` cover the field/
+  --   subgroup cardinality conversion;
+  -- * `IntermediateField.adjoin.finrank` identifies `[F(α):F]` with the
+  --   minimal-polynomial degree;
+  -- * the closed sibling `b99A03` proves the useful membership equivalence
+  --   `φ ∈ (adjoin F {α}).fixingSubgroup ↔ φ α = α` and coset/root
+  --   correspondence.
+  -- The remaining first major bridge is the faithful action of the Galois
+  -- group on the `p` roots, needed to show `Nat.card G ∣ p.factorial` and
+  -- hence that the p-adic multiplicity of `Nat.card G` is exactly one.
+  -- After that, an explicit finite partition of order-p elements among
+  -- distinct Sylow subgroups is still required; no packaged cardinality
+  -- theorem for that union was found.
   sorry
