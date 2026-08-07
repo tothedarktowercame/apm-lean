@@ -38,6 +38,41 @@ lemma apm_b90a03_sylow_card
   rw [Sylow.card_eq_multiplicity, IsGalois.card_aut_eq_finrank K F, hdegree,
     apm_b90a03_factorization p q n m hp hq hpq]
 
+/-- A Sylow `p`-subgroup supplies the required proper intermediate field. -/
+lemma apm_b90a03_exists_intermediateField
+    (K F : Type) [Field K] [Field F] [Algebra K F]
+    [FiniteDimensional K F] [IsGalois K F]
+    (p q n m : ℕ) (hp : p.Prime) (hq : q.Prime) (hpq : p ≠ q)
+    (hn : 1 < n) (hm : 1 < m)
+    (hdegree : Module.finrank K F = p ^ n * q ^ m) :
+    ∃ L : IntermediateField K F,
+      L ≠ ⊥ ∧ L ≠ ⊤ ∧ Module.finrank (↥L) F = p ^ n := by
+  letI : Fact p.Prime := ⟨hp⟩
+  let P : Sylow p Gal(F/K) := default
+  let L : IntermediateField K F := IntermediateField.fixedField (P : Subgroup Gal(F/K))
+  have hfin : Module.finrank (↥L) F = p ^ n := by
+    rw [IntermediateField.finrank_fixedField_eq_card]
+    exact apm_b90a03_sylow_card K F p q n m hp hq hpq hdegree P
+  refine ⟨L, ?_, ?_, hfin⟩
+  · intro hbot
+    have htotal : Module.finrank K F = p ^ n := by
+      rw [← hfin]
+      have htower := Module.finrank_mul_finrank K (↥L) F
+      rw [hbot, IntermediateField.finrank_bot, one_mul] at htower
+      exact htower.symm.trans
+        (congrArg (fun T : IntermediateField K F => Module.finrank (↥T) F)
+          hbot).symm
+    rw [hdegree] at htotal
+    have hpn_pos : 0 < p ^ n := pow_pos hp.pos n
+    have hqm_one : 1 < q ^ m := by
+      exact one_lt_pow₀ hq.one_lt (by omega)
+    nlinarith
+  · intro htop
+    have hone := hfin
+    rw [htop, IntermediateField.finrank_top] at hone
+    have hpn_one : 1 < p ^ n := one_lt_pow₀ hp.one_lt (by omega)
+    omega
+
 theorem apm_b90a03
     (K F : Type) [Field K] [Field F] [Algebra K F]
     [FiniteDimensional K F] [IsGalois K F]
@@ -52,6 +87,7 @@ theorem apm_b90a03
           Module.finrank (↥L') F = p ^ n} : Set (IntermediateField K F)) =
           {L} ↔
         IsGalois K (↥L)) := by
+  refine ⟨apm_b90a03_exists_intermediateField K F p q n m hp hq hpq hn hm hdegree, ?_⟩
   /- PASS-1 boundary (Codex, sustained desk research): Mathlib contains the
      conceptual correspondence, notably
      `IntermediateField.finrank_fixedField_eq_card`,
@@ -82,5 +118,15 @@ theorem apm_b90a03
      `InfiniteGalois.normal_iff_isGalois`.  The individual APIs exist, but this
      subtype/set-extensionality development remains open; no unproved
      intermediate assertion was introduced.  The repaired frozen statement
-     appears mathematically sound. -/
+     appears mathematically sound.
+
+     Closer hop 2 closes the entire existential half in
+     `apm_b90a03_exists_intermediateField`.  Taking the fixed field of any
+     Sylow subgroup gives relative finrank `p^n` immediately from
+     `IntermediateField.finrank_fixedField_eq_card`; the two strictness claims
+     reduce to `p^n > 1`, `q^m > 1`, and the tower degree formula already
+     present as `hdegree`.
+
+     The remaining universal equivalence still needs transporting literal
+     singleton equality through `intermediateFieldEquivSubgroup`. -/
   sorry

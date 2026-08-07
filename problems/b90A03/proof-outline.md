@@ -12,10 +12,13 @@ deduces that every Sylow `p`-subgroup of `Gal(F/K)` has cardinality `p ^ n`.
 - `apm_b90a03_factorization` computes the `p`-factorization exponent.
 - `apm_b90a03_sylow_card` combines it with the finite Galois cardinality
   theorem and `Sylow.card_eq_multiplicity`.
+- `apm_b90a03_exists_intermediateField` takes the fixed field of a Sylow
+  subgroup. `IntermediateField.finrank_fixedField_eq_card` gives relative
+  degree `p ^ n`; tower finrank arithmetic and `n,m>1` prove it is neither
+  bottom nor top. This closes the complete existential conjunct.
 
 ## Remaining bridge
 
-Construct the fixed field of a Sylow subgroup, prove it is proper, and transport
-the restricted Galois correspondence to identify literal singleton uniqueness
-of degree-`p ^ n` fields with normality of the corresponding Sylow subgroup;
-then apply `InfiniteGalois.normal_iff_isGalois`.
+Transport the restricted Galois correspondence to identify literal singleton
+uniqueness of degree-`p ^ n` fields with normality of the corresponding Sylow
+subgroup; then apply `InfiniteGalois.normal_iff_isGalois`.
