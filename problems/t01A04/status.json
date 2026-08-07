@@ -10,12 +10,12 @@
     "problem_tex": "apm/t01A04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_hop": 1,
+  "boundary": "The sheet attachment points are normalized. Remaining work is the quotient-wedge fundamental-group presentation, covering-map gluing, induced-range identification, and singular-homology distinction of the total spaces.",
   "imported_at": "2026-07-13T17:26:56.718249Z"
 }
