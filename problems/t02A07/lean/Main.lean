@@ -11,11 +11,11 @@ repaired to the standard unit-sphere equation
 
 ## Encoding questions
 
-Mathlib has no general predicates for a subset being a smooth submanifold of a
-specified dimension or for smooth transversality to such a subset. Those two
-predicates are therefore opaque and fully typed. The actual Euclidean spheres,
-the subset `Z`, the parameter circle, the displayed family of maps, its landing
-in `X`, and density in the parameter circle remain explicit.
+The submanifold claim is encoded by the regular-value criterion for the two
+actual constraint functions in `ℝ⁴`, giving dimension `4 - 2 = 2`.
+Transversality is the concrete tangent-space condition: at every intersection,
+the image of the derivative of the displayed family plus the kernel of the
+constraint derivative is the full ambient space.
 -/
 
 noncomputable section
@@ -40,19 +40,38 @@ def apm_t02a07_family
     ![y.1 0 * parameter.1 0, parameter.1 1, y.1 1 * parameter.1 0,
       y.1 2 * parameter.1 0]
 
-opaque apm_t02a07_IsSmoothSubmanifoldOfDimension
-    (Z X : Set apm_t02a07_E4) (dimension : ℕ) : Prop
+def apm_t02a07_constraints (x : apm_t02a07_E4) : apm_t02a07_E2 :=
+  WithLp.toLp 2
+    ![‖x‖ ^ 2 - 1, x 2 * x 3 - (1 : ℝ) / 4]
 
-opaque apm_t02a07_IsTransverseTo
-    (f : apm_t02a07_S2 → apm_t02a07_E4) (Z : Set apm_t02a07_E4) : Prop
+def apm_t02a07_IsRegularDimensionTwo : Prop :=
+  ∀ x ∈ apm_t02a07_Z,
+    Function.Surjective (fderiv ℝ apm_t02a07_constraints x)
+
+def apm_t02a07_sphereTangent (y : apm_t02a07_S2) : Submodule ℝ apm_t02a07_E3 :=
+  (Submodule.span ℝ ({(y : apm_t02a07_E3)} : Set apm_t02a07_E3)).orthogonal
+
+def apm_t02a07_familyAmbient
+    (parameter : apm_t02a07_parameterCircle) (y : apm_t02a07_E3) :
+    apm_t02a07_E4 :=
+  WithLp.toLp 2
+    ![y 0 * parameter.1 0, parameter.1 1, y 1 * parameter.1 0,
+      y 2 * parameter.1 0]
+
+def apm_t02a07_tangentZ (x : apm_t02a07_E4) : Submodule ℝ apm_t02a07_E4 :=
+  LinearMap.ker (fderiv ℝ apm_t02a07_constraints x).toLinearMap
+
+def apm_t02a07_IsTransverse (parameter : apm_t02a07_parameterCircle) : Prop :=
+  ∀ y : apm_t02a07_S2, apm_t02a07_family parameter y ∈ apm_t02a07_Z →
+    Submodule.map
+        (fderiv ℝ (apm_t02a07_familyAmbient parameter) y).toLinearMap
+        (apm_t02a07_sphereTangent y) ⊔
+      apm_t02a07_tangentZ (apm_t02a07_family parameter y) = ⊤
 
 theorem apm_t02a07 :
-    apm_t02a07_IsSmoothSubmanifoldOfDimension
-      apm_t02a07_Z apm_t02a07_X 2 ∧
-    ∃ D : Set apm_t02a07_parameterCircle,
-      Dense D ∧
-      ∀ parameter ∈ D,
-        Set.range (apm_t02a07_family parameter) ⊆ apm_t02a07_X ∧
-        apm_t02a07_IsTransverseTo
-          (apm_t02a07_family parameter) apm_t02a07_Z := by
+    apm_t02a07_IsRegularDimensionTwo ∧
+    (∀ parameter : apm_t02a07_parameterCircle,
+      Set.range (apm_t02a07_family parameter) ⊆ apm_t02a07_X) ∧
+    Dense {parameter : apm_t02a07_parameterCircle |
+      apm_t02a07_IsTransverse parameter} := by
   sorry
