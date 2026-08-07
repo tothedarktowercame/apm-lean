@@ -16,3 +16,10 @@ Sylow subgroup is normal. The intended completion uses
 uniqueness for the `p`- and `(p+2)`-Sylows, then
 `isNilpotent_of_finite_tfae`. The existing `IsZGroup` and resulting
 nilpotence give `IsCyclic G` through Mathlib's instance.
+
+Closer hop 3 proves the absent-prime branch as
+`apm_b03J01_sylow_normal_of_not_dvd_card`: if `q ∤ |G|`, then
+`Sylow.card_eq_multiplicity` makes every Sylow `q`-subgroup have cardinality
+one, hence it is bottom and normal. The remaining work is now confined to
+`q = p` and `q = p + 2`, where the congruence/divisibility arithmetic must
+produce `Subsingleton (Sylow q G)`.

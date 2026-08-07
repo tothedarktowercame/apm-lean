@@ -31,6 +31,20 @@ lemma apm_b03J01_isZGroup_of_twinPrime_card
   rw [Nat.card_eq_fintype_card, hcard]
   exact apm_b03J01_twinPrime_squarefree p hp hp2
 
+lemma apm_b03J01_sylow_normal_of_not_dvd_card
+    (G : Type*) [Group G] [Fintype G] (q : ℕ) (hq : q.Prime)
+    (hqdvd : ¬q ∣ Fintype.card G) (Q : Sylow q G) :
+    (↑Q : Subgroup G).Normal := by
+  letI : Fact q.Prime := ⟨hq⟩
+  have hcardQ : Nat.card Q = 1 := by
+    rw [Sylow.card_eq_multiplicity, Nat.factorization_eq_zero_of_not_dvd]
+    · exact pow_zero q
+    · simpa [Nat.card_eq_fintype_card] using hqdvd
+  have hbot : (↑Q : Subgroup G) = ⊥ :=
+    (Q : Subgroup G).eq_bot_of_card_eq hcardQ
+  rw [hbot]
+  infer_instance
+
 theorem apm_b03j01
     (G : Type*) [Group G] [Fintype G]
     (p : ℕ) (H : Subgroup G)
@@ -73,4 +87,14 @@ theorem apm_b03j01
     -- `IsZGroup`-to-`IsNilpotent` bridge; neither exists. The remaining quantified
     -- Sylow argument must split q | p*(p+2) into q=p or q=p+2, prove uniqueness
     -- from the two cardinality lemmas, and transport it to `Subgroup.Normal`.
+    -- Closer hop 3 closes the previously omitted branch for primes not dividing
+    -- `|G|`: `apm_b03J01_sylow_normal_of_not_dvd_card` uses
+    -- `Sylow.card_eq_multiplicity` and
+    -- `Nat.factorization_eq_zero_of_not_dvd` to identify the Sylow subgroup
+    -- with `⊥`. For the two dividing primes, no direct order-`pq`
+    -- classification theorem was found. The remaining branch still needs the
+    -- explicit arithmetic on `Nat.card (Sylow q G)` from
+    -- `card_sylow_modEq_one` and `card_dvd_index`, followed by construction of
+    -- the `Subsingleton (Sylow q G)` instance required by
+    -- `Sylow.normal_of_subsingleton`.
     sorry
