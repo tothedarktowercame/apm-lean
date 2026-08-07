@@ -1,12 +1,14 @@
 # Proof Outline: t91A05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+Regard the boundary inclusion and a hypothetical retraction as continuous
+maps. Functoriality of `FundamentalGroupoid.map` shows that the induced map on
+fundamental groups is injective; this step is compiled locally.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-t91A05.md`
+Mathlib proves the closed disk contractible via
+`Metric.contractibleSpace_closedBall`, hence its fundamental group is trivial.
+It remains to prove that the fundamental group of the unit circle is
+nontrivial. The standard identification with `Multiplicative ℤ`, or an
+integral first-homology computation followed by functoriality, would finish.
+Neither computation is currently packaged in Mathlib or a closed sibling.
 
-## Follow-up Needed
-
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+Checked Lean state: exit 0; one `sorry` remains.
