@@ -49,6 +49,15 @@ theorem apm_m01j03
         Filter.atTop (nhds P) := by
   have hcompact : IsCompactOperator (apm_m01j03_selfAdjointSquare T) := by
     exact hT.clm_comp (ContinuousLinearMap.adjoint T)
+  have hself : ContinuousLinearMap.adjoint
+      (apm_m01j03_selfAdjointSquare T) = apm_m01j03_selfAdjointSquare T := by
+    simp [apm_m01j03_selfAdjointSquare, ContinuousLinearMap.adjoint_comp]
+  have hpositive : (apm_m01j03_selfAdjointSquare T).IsPositive := by
+    exact T.isPositive_adjoint_comp_self
+  have hnormSquare : ‖apm_m01j03_selfAdjointSquare T‖ = 1 := by
+    rw [apm_m01j03_selfAdjointSquare,
+      ContinuousLinearMap.norm_adjoint_comp_self, hnorm]
+    norm_num
   have heigenspace :
       apm_m01j03_topEigenspace T =
         Module.End.eigenspace
@@ -68,7 +77,9 @@ theorem apm_m01j03
     · exact isSelfAdjoint_starProjection (apm_m01j03_topEigenspace T)
     · exact (apm_m01j03_topEigenspace T).range_starProjection
   · /-
-    Boundary for operator-norm convergence: the compiled reduction above proves
+    Boundary (closer hop 1) for operator-norm convergence: the compiled
+    reduction above now also records self-adjointness (`hself`), positivity
+    (`hpositive`), and the exact norm identity `‖T†T‖ = 1` (`hnormSquare`). It proves
     compactness of `T†T`, identifies the frozen kernel with its eigenvalue-one
     eigenspace, proves that eigenspace finite-dimensional using
     `ContinuousLinearMap.finite_dimensional_eigenspace`, and constructs its
