@@ -50,6 +50,17 @@ def apm_t00A01_basepoint {A B : Type}
     (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) (a : A) :
     apm_t00A01_connectedSum iA iB := Quotient.mk _ (Sum.inl a)
 
+/-- The quotient construction really identifies the two boundary copies.
+This records the geometric gluing fact independently of the unavailable
+van Kampen and Mayer--Vietoris interfaces used by the main theorem. -/
+lemma apm_t00A01_mk_inl_eq_mk_inr {A B : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (s : apm_t00A01_Sphere2) :
+    (Quotient.mk _ (Sum.inl (iA s)) : apm_t00A01_connectedSum iA iB) =
+      Quotient.mk _ (Sum.inr (iB s)) := by
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _ (apm_t00A01_glueRel.glue s)
+
 abbrev apm_t00A01_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -95,16 +106,24 @@ theorem apm_t00a01
         Monoid.Coprod (FundamentalGroup M₁ m₁) (FundamentalGroup M₂ m₂)) ∧
     apm_t00A01_isHomology3Sphere X := by
   /-
-  Boundary (skipped): I searched Mathlib for a Seifert--van Kampen theorem
+  Boundary (closer hop 1, still open): I searched Mathlib for a
+  Seifert--van Kampen theorem
   computing `FundamentalGroup` of an open union and for the singular-homology
   Mayer--Vietoris long exact sequence. Neither API is present: the available
   `MayerVietoris` results concern sheaf cohomology, and the available
   `VanKampen` results concern categorical colimits rather than fundamental
   groups. Searches of all fully closed artifacts, `ConstructionTargets/`, and
-  `YoungL2.lean` found no substitute; partial siblings `t01J03` and `t02A03`
-  record the same missing APIs. The hypotheses deliberately expose exactly the
+  `YoungL2.lean` found no substitute; partial siblings `t01J03`, `t02A03`,
+  `t97J04`, and `t97A01` record the same missing APIs. I additionally checked
+  the categorical `VanKampen` files (they characterize colimit preservation),
+  the sheaf-cohomology `MayerVietoris` files, `TopCat` colimit/extensivity
+  results, the homotopy-invariance API for singular homology, repository git
+  history, and the manual loop-subdivision work in `t94A04`. These do not
+  provide the required pushout computation or exact sequence. The local lemma
+  `apm_t00A01_mk_inl_eq_mk_inr` above verifies that the encoded quotient does
+  identify the boundary copies, but that point-set fact cannot replace either
+  theorem-level bridge. The hypotheses deliberately expose exactly the
   geometric inputs, but proving either requested conclusion would require
-  developing those two missing algebraic-topology theorems, well beyond this
-  pass.
+  developing those two missing algebraic-topology theorems.
   -/
   sorry
