@@ -30,6 +30,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 1 proved the concrete quotient's attaching-circle identification. The main theorem remains blocked on van Kampen/cellular homology computations for RP2 with an attached 2-disk; no packaged Mathlib bridge was found.",
+  "closer_hop": 2,
+  "boundary": "The quotient gluing equality, injectivity and norm-one characterization of the concrete boundary inclusion, and separation of the disk center from the boundary are proved. The main theorem remains blocked on van Kampen/cellular homology computations for RP2 with an attached 2-disk; no packaged Mathlib bridge was found.",
   "imported_at": "2026-07-13T17:26:56.642829Z"
 }

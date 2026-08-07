@@ -31,6 +31,16 @@ abbrev apm_t00j07_Disk := Metric.closedBall (0 : ℂ) 1
 def apm_t00j07_circleToDisk (z : Circle) : apm_t00j07_Disk :=
   ⟨(z : ℂ), by simpa [mem_closedBall_zero_iff] using (Circle.norm_coe z).le⟩
 
+lemma apm_t00j07_circleToDisk_injective :
+    Function.Injective apm_t00j07_circleToDisk := by
+  intro z w h
+  apply Subtype.ext
+  exact congrArg (fun x : apm_t00j07_Disk => (x : ℂ)) h
+
+@[simp] lemma apm_t00j07_norm_circleToDisk (z : Circle) :
+    ‖(apm_t00j07_circleToDisk z : ℂ)‖ = 1 :=
+  Circle.norm_coe z
+
 inductive apm_t00j07_attachRel (f : C(Circle, apm_t00j07_RP2)) :
     Sum apm_t00j07_RP2 apm_t00j07_Disk →
       Sum apm_t00j07_RP2 apm_t00j07_Disk → Prop
@@ -49,6 +59,12 @@ noncomputable instance (f : C(Circle, apm_t00j07_RP2)) :
 
 def apm_t00j07_diskCenter : apm_t00j07_Disk :=
   ⟨0, by simp⟩
+
+lemma apm_t00j07_diskCenter_ne_boundary (z : Circle) :
+    apm_t00j07_diskCenter ≠ apm_t00j07_circleToDisk z := by
+  intro h
+  have := congrArg (fun x : apm_t00j07_Disk => ‖(x : ℂ)‖) h
+  simp [apm_t00j07_diskCenter] at this
 
 def apm_t00j07_basepoint (f : C(Circle, apm_t00j07_RP2)) :
     apm_t00j07_attachDisk f :=
@@ -91,7 +107,7 @@ theorem apm_t00j07 :
         apm_t00j07_invariants f (Multiplicative (ZMod 1))
           (ModuleCat.of ℤ (ZMod 1))) := by
   /-
-  Boundary (closer hop 1): `apm_t00j07_attach_glue` above now certifies the
+  Boundary (closer hop 2): `apm_t00j07_attach_glue` certifies the
   defining boundary identification in the concrete quotient.  Searches of
   `LEMMA-INDEX.md`, `ConstructionTargets/`, solved topology siblings, git
   history, and Mathlib's projectivization, fundamental-group, singular-
@@ -103,5 +119,12 @@ theorem apm_t00j07 :
   projective two-space and the effect of attaching a 2-disk along the two
   embedding homotopy classes, then transporting those computations to the
   exact quotient and basepoint used here.
+
+  This hop goes beyond the quotient equality by proving that the concrete
+  boundary map `apm_t00j07_circleToDisk` is injective, every image point has
+  norm exactly one, and the disk center used for the quotient basepoint is not
+  a boundary point. These certify that the encoded disk really has a faithful
+  attaching circle disjoint from its chosen center; they do not supply the
+  missing van Kampen or cellular-homology computation.
   -/
   sorry
