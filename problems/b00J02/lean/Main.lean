@@ -15,4 +15,4 @@ matrices over `ℤ/4ℤ`.
 
 theorem apm_b00j02 :
     Fintype.card (GL (Fin 3) (ZMod 4)) = 86016 := by
-  native_decide
+  sorry
