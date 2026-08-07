@@ -1,6 +1,7 @@
 import Mathlib
 
-open MeasureTheory Set
+open Filter MeasureTheory Set
+open scoped Pointwise Topology
 
 noncomputable section
 
@@ -27,6 +28,22 @@ noncomputable def apmIndicatorConvolution (E : Set ℝ) (x : ℝ) : ℝ :=
 def apmTranslate (E : Set ℝ) (t : ℝ) : Set ℝ :=
   (fun x ↦ x + t) '' E
 
+lemma apmIndicator_memLp_two
+    {E : Set ℝ} (hE : MeasurableSet E) (hEfin : volume E ≠ ⊤) :
+    MemLp (apmIndicator E) 2 volume := by
+  simpa [apmIndicator] using
+    memLp_indicator_const (2 : ENNReal) hE (1 : ℝ) (Or.inr hEfin)
+
+lemma apm_exists_ball_subset_sub
+    {E : Set ℝ} (hE : MeasurableSet E) (hEpos : 0 < volume E) :
+    ∃ ε : ℝ, 0 < ε ∧ ∀ t : ℝ, |t| < ε → t ∈ E - E := by
+  have hnhds : E - E ∈ 𝓝 (0 : ℝ) :=
+    MeasureTheory.Measure.sub_mem_nhds_zero_of_addHaar_pos volume E hE hEpos
+  rcases Metric.mem_nhds_iff.1 hnhds with ⟨ε, hε, hball⟩
+  refine ⟨ε, hε, ?_⟩
+  intro t ht
+  exact hball (by simpa [Real.dist_eq] using ht)
+
 theorem apm_a99j02
     {E : Set ℝ}
     (hE_measurable : MeasurableSet E)
@@ -35,14 +52,32 @@ theorem apm_a99j02
     Continuous (apmIndicatorConvolution E) ∧
       ∃ ε : ℝ, 0 < ε ∧
         ∀ t : ℝ, |t| < ε → 0 < volume (E ∩ apmTranslate E t) := by
-  -- SKIPPED: two-part problem.
-  -- (a) χ_E * χ_E is continuous: follows from L¹ translation continuity
-  --   (χ_E ∈ L¹ on [0,1], convolution with L¹ kernel is continuous).
-  --   Key API: `integral_translate_norm` or `Continuous.convolution` type lemmas.
-  -- (b) ∃ε>0: m(E∩(E+t))>0 for |t|<ε. Since χ_E*χ_E(t) = m(E∩(E+t)) (up to sign),
-  --   continuity from (a) + (χ_E*χ_E)(0) = m(E) > 0 ⟹ positive near 0.
-  -- Blocker: Mathlib's convolution continuity needs the right form for
-  -- indicator functions; the identity χ_E*χ_E(t) = m(E∩(E+t)) requires careful setup.
-  -- APIs: `Continuous.convolution_integrand`, `MeasureTheory.Measure.inter_measure`,
-  --   `MeasureTheory.Function.UniformIntegrable`, `tendsto_measure_inter`
+  /-
+  PARTIAL boundary (closer hop 1).
+
+  Two dependencies missed by the original pass are now isolated. First,
+  `apmIndicator_memLp_two` packages the finite-measure indicator in L².
+  Second, Mathlib already contains Steinhaus's theorem as
+  `MeasureTheory.Measure.sub_mem_nhds_zero_of_addHaar_pos`; the compiled lemma
+  `apm_exists_ball_subset_sub` extracts an explicit ε-ball contained in
+  `E-E`. This proves nearby translates have nonempty overlap, though the
+  frozen conclusion needs positive-measure overlap.
+
+  Closed sibling `a96J02` supplies the exact analytic machinery:
+  `continuous_convolution_indicator` proves indicator convolution continuity,
+  while its `continuous_overlapMeasure` uses continuity in symmetric-difference
+  measure. The sibling also proves the convolution/overlap identity. These
+  declarations live only in its problem file and are not importable modules;
+  closing here requires promoting/copying that measured-set development and
+  adapting the orientation from the preimage `{y | t-y ∈ E}` to the frozen
+  image translate `E+t`. The first frozen convolution uses `E*E`, whereas the
+  overlap uses the reflected indicator, so they are related applications of
+  the same L² convolution-continuity theorem rather than literally one
+  function.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib Haar/Steinhaus,
+  convolution, translation/symmetric-difference APIs, closed artifacts, and
+  git history found no importable theorem completing that orientation and
+  positive-measure transport. No statement defect was found.
+  -/
   sorry
