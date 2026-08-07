@@ -29,6 +29,20 @@ noncomputable def apmDerivativeSeries (f : ℕ → ℝ → ℝ) (x : ℝ) : ENNR
     ∑' n, ENNReal.ofReal (deriv (f n) x)
   else 0
 
+/-- The countable differentiability guard in `apmDerivativeSeries` holds almost
+everywhere on the interval.  Thus the guard itself does not lose any mass. -/
+lemma apm_a94a02_ae_all_differentiable
+    (f : ℕ → ℝ → ℝ)
+    (hf_ac : ∀ n, AbsolutelyContinuousOnInterval (f n) 0 1) :
+    ∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)),
+      ∀ n, DifferentiableAt ℝ (f n) x := by
+  rw [ae_restrict_iff' measurableSet_Icc]
+  have h_all : ∀ᵐ x ∂volume, ∀ n,
+      x ∈ uIcc (0 : ℝ) 1 → DifferentiableAt ℝ (f n) x := by
+    exact ae_all_iff.2 fun n => (hf_ac n).ae_differentiableAt
+  filter_upwards [h_all] with x hx hxi
+  exact fun n => hx n (by simpa [uIcc_of_le (show (0 : ℝ) ≤ 1 by norm_num)] using hxi)
+
 theorem apm_a94a02
     (f : ℕ → ℝ → ℝ)
     (hf_monotone : ∀ n, MonotoneOn (f n) (Icc (0 : ℝ) 1))
@@ -41,33 +55,35 @@ theorem apm_a94a02
       (∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)),
         ENNReal.ofReal (deriv (apmFunctionSeries f) x) =
           apmDerivativeSeries f x) := by
-  -- Boundary (closer hop 2): still open. Enriched analysis of tractability.
+  -- Boundary (closer hop 3): still open, but the guarded branch is now resolved a.e.
   --
   -- Attempted to close conjuncts (1) and (2) separately:
   --
   -- (1) ∫⁻ g < ⊤: The lintegral of the ENNReal-valued derivative series.
   --     Key issue: `apmDerivativeSeries` has an if-then-else branch:
   --       g(x) = ∑ ENNReal.ofReal(deriv(fₙ)(x)) if all fₙ differentiable at x, else 0.
-  --     The "all differentiable" condition is stronger than needed; for AC functions
-  --     on [0,1], each fₙ is differentiable a.e. But the universal quantifier
-  --     `∀ n, DifferentiableAt` makes the if-branch very hard to reason about.
-  --     Specifically: Tonelli requires measurability of g, which requires showing
-  --     the set {x : ∀ n, DifferentiableAt ℝ (f n) x} is measurable.
-  --     This is a countable intersection of measurable sets (each fₙ is AC ⟹ differentiable a.e.
-  --     ⟹ the set of differentiability points is measurable). But assembling this
-  --     in Lean is non-trivial.
-  --     Blocker: the `if ∀ n, DifferentiableAt` guard in `apmDerivativeSeries` makes
-  --     measurability and Tonelli exchange very hard to prove formally.
+  --     The new proved helper `apm_a94a02_ae_all_differentiable` closes this issue:
+  --     `AbsolutelyContinuousOnInterval.ae_differentiableAt` and `ae_all_iff`
+  --     assemble the countable intersection directly on the restricted measure.
   --
   -- (2) g < ⊤ a.e.: depends on (1).
   --
-  -- (3) deriv(f) = g a.e.: same deep blocker as before (Stieltjes measure pipeline).
+  -- (3) deriv(f) = g a.e.: `LEMMA-INDEX.md` exposed the fully proved sibling
+  --     `APM.deriv_sum_of_monotone_ae` in `a01J03`.  Its Stieltjes/Radon--Nikodym
+  --     argument proves exactly derivative-of-series interchange for globally
+  --     monotone functions with pointwise summability.  Here monotonicity is only
+  --     on `Icc 0 1`.  A viable route is to replace each term by
+  --     `x ↦ f n (max 0 (min 1 x))`, apply the sibling globally, and transfer the
+  --     derivative equality back on `Ioo 0 1`; the endpoints are null.  Completing
+  --     this requires the clamp map's monotonicity, pointwise summability (using
+  --     `0 ≤ f n x ≤ f n 1`), and local derivative congruence for both each term
+  --     and the tsum.  Those localization lemmas remain unproved in this hop.
   --
-  -- New consultation: Mathlib `MeasureTheory.Function.AEqFun` for differentiability
-  --   of AC functions a.e. — discarded: AC ⟹ differentiable a.e. is available but
-  --   doesn't directly help with the `∀ n, DifferentiableAt` guard.
-  --
-  -- Assessment: the encoding via `if ∀ n, DifferentiableAt` is the root difficulty.
-  -- If g were simply ∑ ENNReal.ofReal(max(deriv(fₙ)(x), 0)), the proof would be
-  -- much more tractable. But the statement is frozen and cannot be changed.
+  -- Mathlib source additionally checked:
+  -- `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub` supplies the exact
+  -- per-term integral identity, and
+  -- `lintegral_deriv_eq_volume_image_of_monotoneOn` supplies a set-local
+  -- monotone derivative formula, but the latter requires differentiability at
+  -- every point and therefore does not directly replace the sibling's a.e.
+  -- Stieltjes argument.
   sorry

@@ -9,12 +9,12 @@
     "harvest_mismatch_note": "The harvested file contained a proof for a93J05 and was removed. No worked informal solution for a94A02 is currently available."
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -26,6 +26,6 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "problem-only",
+  "classification": "formalization-partial",
   "imported_at": "2026-07-13T17:26:52.118628Z"
 }
