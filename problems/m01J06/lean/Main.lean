@@ -62,6 +62,19 @@ def apm_m01J06_isBifurcationLoad (K lamStar : ℝ) : Prop :=
       apm_m01J06_nontrivial φ ∧
       ∀ s ∈ Icc (0 : ℝ) 1, |φ s| < δ
 
+private lemma apm_m01J06_mode_hasDerivAt (w s : ℝ) :
+    HasDerivAt (fun t : ℝ ↦ Real.sin (w * t))
+      (w * Real.cos (w * s)) s := by
+  convert (Real.hasDerivAt_sin (w * s)).comp s
+    (hasDerivAt_const s w |>.mul (hasDerivAt_id s)) using 1 <;> ring
+
+private lemma apm_m01J06_mode_hasSecondDerivAt (w s : ℝ) :
+    HasDerivAt (fun t : ℝ ↦ w * Real.cos (w * t))
+      (-(w ^ 2) * Real.sin (w * s)) s := by
+  convert (hasDerivAt_const s w).mul
+    ((Real.hasDerivAt_cos (w * s)).comp s
+      (hasDerivAt_const s w |>.mul (hasDerivAt_id s))) using 1 <;> ring
+
 theorem apm_m01j06
     (lam K : ℝ) (hlam : 0 < lam) (hK : 0 < K) :
     (∀ φ : ℝ → ℝ,
@@ -102,7 +115,13 @@ theorem apm_m01j06
       sorry
     · constructor
       · /-
-        Boundary for the linear spectrum: solve the custom twice-within-
+        Boundary (closer hop 1) for the linear spectrum: the local lemmas
+        `apm_m01J06_mode_hasDerivAt` and
+        `apm_m01J06_mode_hasSecondDerivAt` now compile the first and second
+        derivative formulas for the intended sine modes.  It remains to use
+        `iteratedDerivWithin_eq_iteratedDeriv` with `uniqueDiffOn_Icc`, verify
+        the endpoint cosine zero identity, and, in the reverse direction,
+        solve the custom twice-within-
         differentiable ODE with mixed boundary conditions. The intended modes
         are `sin (((2*m+1)*π/2) * s)`. Mathlib supplies trigonometric
         derivatives and `Real.cos_eq_zero_iff`, but searches found no
@@ -111,6 +130,7 @@ theorem apm_m01j06
         ODE uniqueness argument not packaged for `iteratedDerivWithin`.
         -/
         sorry
+
       · intro m
         have hfrequency :
             0 < ((2 * (m : ℝ) + 1) * Real.pi / 2) := by positivity
