@@ -35,10 +35,26 @@ theorem apm_m93a02
       ∃ k : ℝ × ℝ, ‖k‖ < ε ∧
         ¬ ∃ h : ℝ, (h, 0) + (0, h * h) = k) := by
   constructor
-  · /-
-    Boundary for the quantitative contraction argument. One must upgrade the
-    plain linear map `L` to a bounded linear equivalence using surjectivity and
-    `hL_lower`, define its inverse, and apply `ContractingWith` on a closed ball
+  · have hL_inj : Function.Injective L := by
+      intro x y hxy
+      have hz : L (x - y) = 0 := by simpa using sub_eq_zero.mpr hxy
+      have hb := hL_lower (x - y)
+      rw [hz, norm_zero] at hb
+      have : ‖x - y‖ = 0 := by nlinarith [norm_nonneg (x - y)]
+      exact sub_eq_zero.mp (norm_eq_zero.mp this)
+    let e : H ≃ₗ[ℝ] K := LinearEquiv.ofBijective L ⟨hL_inj, hL_surj⟩
+    have he_apply (x : H) : e x = L x := rfl
+    have he_symm_bound (k : K) : ‖e.symm k‖ ≤ δ⁻¹ * ‖k‖ := by
+      have hb := hL_lower (e.symm k)
+      rw [← he_apply, e.apply_symm_apply] at hb
+      calc
+        ‖e.symm k‖ ≤ ‖k‖ / δ := (le_div_iff₀ hδ).2 (by simpa [mul_comm] using hb)
+        _ = δ⁻¹ * ‖k‖ := by field_simp
+    /-
+    Boundary (closer hop 1) for the quantitative contraction argument. The
+    plain map `L` is now upgraded to the explicit linear equivalence `e`, and
+    `he_symm_bound` compiles the sharp inverse estimate
+    `‖e.symm k‖ ≤ δ⁻¹ ‖k‖`. It remains to apply `ContractingWith` on a closed ball
     of radius `2 * ‖k‖ / δ`. The self-map and contraction estimates must handle
     the separate case `M = 0` (the informal constant `δ² / (4M)` is undefined
     there) and package completeness of the ball subtype. Mathlib supplies the
