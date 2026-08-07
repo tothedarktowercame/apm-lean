@@ -1,12 +1,20 @@
 # Proof Outline: b97J01
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen theorem has a compiling partial formalization in `lean/Main.lean`.
+Three of the five conjuncts are now packaged as complete helper lemmas.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97J01.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `S₅` is not solvable, translated to the custom derived-series definition.
+- Every nontrivial finite prime-power group has nontrivial center.
+- Every finite prime-power group is nilpotent, translated to the custom lower
+  central-series definition.
+
+## Remaining bridge
+
+Prove concretely that `S₃` has terminating derived series but nonterminating
+lower central series. This requires explicit commutator/series calculations or
+a structural self-normalizing-subgroup argument.
