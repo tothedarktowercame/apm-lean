@@ -1,12 +1,22 @@
 # Proof Outline: a98J03
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-a98J03.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apmPoissonKernel_eq_radial` identifies the frozen kernel with the reusable
+  construction-library Poisson kernel.
+- `apmPoissonKernel_integrable` transports its L¹ integrability.
+- `apmPoissonIntegral_memLp` applies the construction library's Young theorem
+  to prove the displayed convolution belongs to L².
+
+## Remaining bridges
+
+1. Descend convolution to the `Lp` a.e. quotient and prove linearity.
+2. Use sharp Young plus kernel normalization to bundle a norm-one continuous
+   linear operator.
+3. Transport the strong approximate-identity convergence proved in sibling
+   `a94J04` into this bundle's definitions.

@@ -1,6 +1,9 @@
 import Mathlib
+import ConstructionTargets.YoungConvolution
+import ConstructionTargets.RadialMajorantAE
 
 open Filter MeasureTheory Set
+open scoped NNReal
 
 noncomputable section
 
@@ -26,6 +29,27 @@ noncomputable def apmPoissonKernel (y x : ℝ) : ℝ :=
 noncomputable def apmPoissonIntegral (y : ℝ) (f : ℝ → ℝ) (x : ℝ) : ℝ :=
   ∫ t, apmPoissonKernel y (x - t) * f t ∂volume
 
+lemma apmPoissonKernel_eq_radial (y x : ℝ) :
+    apmPoissonKernel y x =
+      ConstructionTargets.RadialMajorantAE.poissonKernel y x := by
+  rw [ConstructionTargets.RadialMajorantAE.poissonKernel_eq_formula]
+  unfold apmPoissonKernel
+  ring
+
+lemma apmPoissonKernel_integrable {y : ℝ} (hy : 0 < y) :
+    Integrable (apmPoissonKernel y) volume := by
+  refine (ConstructionTargets.RadialMajorantAE.poissonKernel_integrable hy).congr ?_
+  filter_upwards with x
+  exact (apmPoissonKernel_eq_radial y x).symm
+
+lemma apmPoissonIntegral_memLp
+    {y : ℝ} (hy : 0 < y) {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    MemLp (apmPoissonIntegral y f) 2 volume := by
+  simpa [apmPoissonIntegral, ConstructionTargets.YoungConvolution.convolution]
+    using ConstructionTargets.YoungConvolution.convolution_memLp
+      (p := (2 : ENNReal)) (by norm_num) (by norm_num)
+      (apmPoissonKernel_integrable hy) hf
+
 theorem apm_a98j03 :
     ∃ T : ℝ → (Lp ℝ 2 volume →L[ℝ] Lp ℝ 2 volume),
       (∀ y : ℝ, 0 < y → ‖T y‖ ≤ 1) ∧
@@ -34,10 +58,30 @@ theorem apm_a98j03 :
           T y (hf.toLp f) = hgy.toLp (apmPoissonIntegral y f)) ∧
       (∀ F : Lp ℝ 2 volume,
         Tendsto (fun y ↦ T y F) (nhdsWithin 0 (Ioi 0)) (nhds F)) := by
-  -- SKIPPED: Poisson semigroup on L²(ℝ). Requires Young's convolution inequality
-  -- (‖P_y * f‖₂ ≤ ‖P_y‖₁ · ‖f‖₂, but ‖P_y‖₁ = 1 since P_y is a probability kernel),
-  -- and convergence T_y f → f in L² via density of C_c or Schwartz functions.
-  -- APIs: `ContinuousLinearMap`, `Lp`, `MemLp`, `convolution` — FOUND but the
-  -- L² contraction bound and convergence need Young's inequality which is NOT in Mathlib
-  -- as a ready-to-use lemma for L² specifically.
+  /-
+  PARTIAL boundary (closer hop 1).
+
+  The original missing-dependency diagnosis is resolved. The frozen kernel is
+  identified with `ConstructionTargets.RadialMajorantAE.poissonKernel` by
+  `apmPoissonKernel_eq_radial`; its L¹ integrability is transported in
+  `apmPoissonKernel_integrable`; and
+  `apmPoissonIntegral_memLp` applies the sorry-free
+  `ConstructionTargets.YoungConvolution.convolution_memLp` theorem. Thus the
+  representative's membership in L² is now compiled for every `y > 0`.
+
+  The remaining packaging is to descend convolution through the a.e. quotient
+  as a linear map, use the sharp Young estimate plus kernel integral one to
+  prove boundedness/norm at most one, bundle it as a continuous linear map,
+  and connect the resulting quotient-valued operator to the frozen raw
+  representative. Strong convergence can reuse the complete translated-Lp
+  argument in closed sibling `a94J04` (`poissonConv_tendsto_L2`), whose kernel
+  and convolution are algebraically the same, but that theorem is local to the
+  sibling namespace/file rather than an importable construction module.
+
+  Searches of `LEMMA-INDEX.md`, all closed artifacts, Mathlib's `Lp` quotient
+  and convolution APIs, `ConstructionTargets/`, and git history found no
+  already-bundled convolution continuous linear map. Hence the remaining
+  bridge is quotient/operator construction and transport, not Young's
+  inequality or approximate-identity analysis. No statement defect was found.
+  -/
   sorry
