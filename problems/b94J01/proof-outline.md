@@ -8,6 +8,10 @@ prime-power cyclic factors. A local helper now additionally proves that every
 list satisfying the frozen invariant-factor predicate has product equal to
 `Nat.card G`.
 
+`apm_b94J01_invariantFactors_eq_nil_of_card_eq_one` also proves that an
+admissible list for a group of cardinality one must be empty: any nonempty list
+would contain a factor at least two dividing a product equal to one.
+
 ## Remaining boundary
 
 One sorry remains: normalize the primary factors into a divisibility chain and

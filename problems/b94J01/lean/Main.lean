@@ -39,6 +39,24 @@ lemma apm_b94J01_card_eq_prod_of_invariantFactors
         _ = d.get i := Nat.card_zmod _
     _ = d.prod := by rw [← List.prod_ofFn, List.ofFn_get]
 
+/-- The normalized invariant-factor list of a group of cardinality one can
+only be the empty list. -/
+lemma apm_b94J01_invariantFactors_eq_nil_of_card_eq_one
+    (G : Type*) [Group G] (d : List ℕ)
+    (hd : apm_b94J01_invariantFactors G d) (hcard : Nat.card G = 1) :
+    d = [] := by
+  have hprod : d.prod = 1 := by
+    rw [← apm_b94J01_card_eq_prod_of_invariantFactors G d hd, hcard]
+  cases d with
+  | nil => rfl
+  | cons a t =>
+      have ha2 : 2 ≤ a := hd.1 a (by simp)
+      have hadvd : a ∣ (a :: t).prod := by
+        simp only [List.prod_cons]
+        exact dvd_mul_right a t.prod
+      have ha1 : a = 1 := Nat.eq_one_of_dvd_one (hprod ▸ hadvd)
+      omega
+
 theorem apm_b94j01 :
     (∀ (G : Type*) [CommGroup G] [Fintype G],
       ∃! d : List ℕ, apm_b94J01_invariantFactors G d) ∧
@@ -50,7 +68,7 @@ theorem apm_b94j01 :
   · intro G _ _
     obtain ⟨ι, instι, n, hn, hdecomp⟩ :=
       CommGroup.equiv_prod_multiplicative_zmod_of_finite G
-    /- CLOSER HOP 1 boundary: `CommGroup.equiv_prod_multiplicative_zmod_of_finite`
+    /- CLOSER HOP 2 boundary: `CommGroup.equiv_prod_multiplicative_zmod_of_finite`
        now supplies an explicit finite index type `ι`, moduli `n : ι → ℕ`
        satisfying `1 < n i`, and the multiplicative product equivalence
        `hdecomp`.  I also inspected `AddCommGroup.equiv_directSum_zmod_of_finite`
@@ -69,7 +87,15 @@ theorem apm_b94j01 :
        of p-power torsion subgroups) and a theorem recovering each list entry from
        those ranks. Searches for `invariantFactors`, `elementaryDivisors`, and the
        Smith-normal-form quotient APIs found no bridge from an arbitrary finite
-       commutative group to that normalized data. -/
+       commutative group to that normalized data.
+
+       New closer-hop progress:
+       `apm_b94J01_invariantFactors_eq_nil_of_card_eq_one` proves the normalized
+       edge case: any admissible list for a group of cardinality one is empty.
+       It combines the compiled product formula with the frozen lower bound
+       `2 ≤ n` on every factor. Thus existence and uniqueness for the trivial
+       group are reduced to constructing the evident empty-product equivalence;
+       the nontrivial-group normalization and p-primary uniqueness remain. -/
     sorry
   · intro m n hm hn
     have hmcard : Nat.card (Multiplicative (ZMod m)) = m := by
