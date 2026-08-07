@@ -17,11 +17,15 @@ The canonical Lean attempt is `lean/Main.lean`.
   continuity and integrability facts for the zero extension.
 - `apm_m96j04_integral_hasDerivAt` proves the interior FTC derivative of the
   Volterra primitive.
+- `apm_m96j04_eigenvector_hasDerivAt` transports the pointwise continuous-map
+  eigenvector equation through that FTC result and proves the exact interior
+  ODE `f' = f / eigenvalue` for every nonzero eigenvalue.
 
 ## Remaining boundary
 
 - Bundle the parameter-dependent interval integral as a continuous linear map
   on `C(Icc 0 1, ℝ)` and prove compactness via Arzelà–Ascoli.
-- Convert the eigenvector integral equation to its derivative equation and
-  apply interval ODE/Gronwall uniqueness using the compiled zero initial value.
-  The integral derivative itself is now complete.
+- Supply the one-sided derivative at zero required by
+  `ODE_solution_unique_of_mem_Icc_right`, then apply interval ODE/Gronwall
+  uniqueness using the compiled zero initial value.  The interior derivative
+  equation is now complete.

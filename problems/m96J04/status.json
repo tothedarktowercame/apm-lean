@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Hop 2 compiles restricted continuity, interval integrability, and the interior FTC derivative for the Volterra primitive; ODE uniqueness and Ascoli packaging remain.",
+  "closer_progress": "Hop 3 compiles transport of the Volterra eigenvector equation to the exact interior ODE f' = f/lambda. Endpoint ODE uniqueness and construction/Ascoli compactness of the operator remain.",
   "imported_at": "2026-07-13T17:26:55.533793Z"
 }

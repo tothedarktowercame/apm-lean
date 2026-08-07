@@ -90,6 +90,30 @@ lemma apm_m96j04_eigenvector_zero_at_zero
   have ht0 : f t0 = 0 := (mul_eq_zero.mp h'.symm).resolve_left heigen
   simpa [t0] using ht0
 
+/-- On the interior, the Volterra eigenvector equation is the scalar ODE
+`f' = f / eigenvalue`. -/
+lemma apm_m96j04_eigenvector_hasDerivAt
+    (V : apm_m96j04_C →L[ℝ] apm_m96j04_C)
+    (hV : ∀ (f : apm_m96j04_C) (t : Set.Icc (0 : ℝ) 1),
+      V f t = ∫ s in (0 : ℝ)..(t : ℝ), apm_m96j04_extend f s)
+    (eigenvalue : ℝ) (heigen : eigenvalue ≠ 0) (f : apm_m96j04_C)
+    (hf : V f = eigenvalue • f) {t : ℝ} (ht : t ∈ Set.Ioo (0 : ℝ) 1) :
+    HasDerivAt (apm_m96j04_extend f)
+      (apm_m96j04_extend f t / eigenvalue) t := by
+  let F : ℝ → ℝ := fun u ↦ ∫ s in (0 : ℝ)..u, apm_m96j04_extend f s
+  have heq : (fun u ↦ eigenvalue * apm_m96j04_extend f u) =ᶠ[nhds t] F := by
+    filter_upwards [Icc_mem_nhds ht.1 ht.2] with u hu
+    let tu : Set.Icc (0 : ℝ) 1 := ⟨u, hu⟩
+    have h := congrArg (fun g : apm_m96j04_C ↦ g tu) hf
+    change V f tu = eigenvalue * f tu at h
+    rw [hV] at h
+    simpa [F, apm_m96j04_extend, hu, tu] using h.symm
+  have hscaled : HasDerivAt (fun u ↦ eigenvalue * apm_m96j04_extend f u)
+      (apm_m96j04_extend f t) t :=
+    (apm_m96j04_integral_hasDerivAt f ht).congr_of_eventuallyEq heq
+  have hinv := hscaled.const_mul eigenvalue⁻¹
+  convert hinv using 1 <;> field_simp
+
 theorem apm_m96j04 :
     (∃ A : apm_m96j04_H →L[ℝ] apm_m96j04_H,
       (∀ x y : ℓ²(ℕ, ℝ), A (x, y) = (y, 0)) ∧
@@ -160,5 +184,20 @@ theorem apm_m96j04 :
     map equality through this derivative theorem and applying zero-initial-value
     uniqueness for `f' = f/eigenvalue`.  Construction and Ascoli compactness of
     the bundled Volterra operator remain the independent larger boundary.
+
+    Closer hop 3 completes that transport as
+    `apm_m96j04_eigenvector_hasDerivAt`: on every interior point, the frozen
+    continuous-map eigenvector equality is evaluated pointwise, made into a
+    neighborhood equality using `Icc_mem_nhds`, transferred through the FTC
+    lemma by `HasDerivAt.congr_of_eventuallyEq`, and divided by the nonzero
+    eigenvalue.  Inspection of `ODE_solution_unique_of_mem_Icc_right` shows the
+    final uniqueness application additionally needs a one-sided derivative at
+    the initial endpoint; the compiled derivative lemma deliberately states
+    only the mathematically justified open-interval result.  The principal
+    unresolved bridge is still construction and boundedness of the Volterra
+    continuous linear map and its Arzela--Ascoli compactness proof.  Renewed
+    searches of `LEMMA-INDEX.md`, solved siblings, `ConstructionTargets/`,
+    `YoungL2.lean`, Mathlib's derivative-congruence, Gronwall, and Ascoli source
+    found no packaged construction closing that bridge.
     -/
     sorry
