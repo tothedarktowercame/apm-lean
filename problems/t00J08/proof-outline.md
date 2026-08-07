@@ -13,10 +13,16 @@ The canonical Lean attempt is `lean/Main.lean`, with one documented boundary.
   free group on the empty type is trivial by `FreeGroup.induction_on`, while
   the rank-seven free group has distinct canonical generators by
   `FreeGroup.of_injective`.
+- `apm_t00j08_rank_one_impossible`: the one-generator free group is cyclic,
+  hence every subgroup is commutative. An explicit decidable reduced-word
+  calculation proves that the first two generators of the rank-seven free
+  group do not commute, excluding an isomorphism.
 
 ## Follow-up needed
 
 - Develop the quantitative finite-index Nielsen--Schreier equation
   `rank G - 1 = [F : G] * (rank F - 1)` from the groupoid spanning-tree proof.
+  Mathlib's existing `Subgroup.rank_le_index_mul_rank` is only an upper bound
+  and does not imply this equation.
 - Use the equation to exclude all remaining ranks and construct the index
   `6`, `3`, and `2` examples for ambient ranks `2`, `3`, and `4`.
