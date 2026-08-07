@@ -18,6 +18,10 @@ boundary remaining.
   vector representing any continuous real-linear functional on a complete
   real Hilbert space. Applied to a finite-dimensional Galerkin subspace (after
   installing its completeness), this closes the abstract duality step.
+- `apm_m99J06_model_ext`: equality of both the value representative and weak
+  derivative representative implies equality of the ambient Hilbert-space
+  elements. This supplies the descent step after representative-level linear
+  combinations have been constructed.
 
 ## Follow-up needed
 
@@ -25,6 +29,9 @@ boundary remaining.
   continuous linear functional. The model does not expose `M.val` as a linear
   map, so this requires an `L²` equality argument before the compiled Riesz
   helper applies.
+- Prove closure of `apm_m99J06_isH01Pair` under linear combinations and the
+  product-integrability identities needed to distribute `M.inner_eq`; then use
+  `apm_m99J06_model_ext` to transport those identities back to `H`.
 - Establish the custom one-dimensional Sobolev integration-by-parts and
   regularity bridge needed for weak/strong equivalence.
 - Obtain a weakly convergent subsequence from the bounded sequence and pass

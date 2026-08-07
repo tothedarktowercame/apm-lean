@@ -108,6 +108,17 @@ lemma apm_m99J06_exists_unique_inner_eq
       simpa [u] using
         (InnerProductSpace.toDual_symm_apply (𝕜 := ℝ) (E := E) (x := v) (y := L))).symm)
 
+/-- The function/weak-derivative pair carried by the frozen model determines
+the Hilbert-space element uniquely. -/
+lemma apm_m99J06_model_ext
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) {u v : H}
+    (hu : M.val u = M.val v) (hdu : M.weakDeriv u = M.weakDeriv v) :
+    u = v := by
+  apply ext_inner_right ℝ
+  intro w
+  rw [M.inner_eq, M.inner_eq, hu, hdu]
+
 theorem apm_m99j06
     (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [CompleteSpace H] (M : apm_m99J06_H01Model H)
@@ -167,5 +178,15 @@ theorem apm_m99j06
   itself sequential compactness without an additional metrizability bridge.
   `ConstructionTargets.LusinN` supplies interval absolute-continuity
   identities, but not the Sobolev regularity theorem required here.
+
+  Closer hop 3 proves `apm_m99J06_model_ext`: equality of both concrete
+  representatives `M.val` and `M.weakDeriv` implies equality of the ambient
+  Hilbert-space elements. The proof rewrites all inner products with
+  `M.inner_eq` and applies `ext_inner_right`. This closes the descent/uniqueness
+  step once representative-level addition and scalar multiplication have been
+  constructed. It does not by itself supply those operations: the remaining
+  forcing-functional bridge still needs closure of `apm_m99J06_isH01Pair`
+  under linear combinations and product-integrability identities. The Sobolev
+  regularity and weak sequential compactness/dense-limit boundaries remain.
   -/
   sorry
