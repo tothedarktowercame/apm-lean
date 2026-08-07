@@ -10,12 +10,14 @@ None.
 
 ## Encoding questions
 
-Mathlib represents alternating differential forms but does not yet provide the
-outward-oriented integral of such a form over a sphere. That integral is the
-single opaque typed operation below. The ambient space, the given two-form,
-every unit sphere, the full minimizing locus, and the claimed value remain
-explicit.
+The outward-oriented integral is encoded concretely: coordinate basis vectors
+are orthogonally projected to each tangent plane, the form's coefficient
+relative to the outward unit normal is extracted, and that coefficient is
+integrated against two-dimensional Hausdorff measure on the actual sphere.
 -/
+
+open MeasureTheory
+open scoped ENNReal
 
 noncomputable section
 
@@ -33,16 +35,34 @@ def apm_t02a05_isOmega (omega : apm_t02a05_Form2) : Prop :=
 def apm_t02a05_unitSphere (c : apm_t02a05_E3) : Set apm_t02a05_E3 :=
   Metric.sphere c 1
 
-opaque apm_t02a05_outwardSphereIntegral
-    (omega : apm_t02a05_Form2) (S : Set apm_t02a05_E3) : ℝ
+def apm_t02a05_sphereTangent (c : apm_t02a05_E3)
+    (q : Metric.sphere c 1) : Submodule ℝ apm_t02a05_E3 :=
+  (Submodule.span ℝ ({(q : apm_t02a05_E3) - c} : Set apm_t02a05_E3)).orthogonal
+
+def apm_t02a05_tangentProjection (c : apm_t02a05_E3)
+    (q : Metric.sphere c 1) (i : Fin 3) : apm_t02a05_sphereTangent c q :=
+  (apm_t02a05_sphereTangent c q).orthogonalProjection
+    (EuclideanSpace.single i 1)
+
+def apm_t02a05_orientedCoefficient (omega : apm_t02a05_Form2)
+    (c : apm_t02a05_E3) (q : Metric.sphere c 1) : ℝ :=
+  ((q : apm_t02a05_E3) - c) 0 * omega q
+      ![apm_t02a05_tangentProjection c q 1, apm_t02a05_tangentProjection c q 2] -
+  ((q : apm_t02a05_E3) - c) 1 * omega q
+      ![apm_t02a05_tangentProjection c q 0, apm_t02a05_tangentProjection c q 2] +
+  ((q : apm_t02a05_E3) - c) 2 * omega q
+      ![apm_t02a05_tangentProjection c q 0, apm_t02a05_tangentProjection c q 1]
+
+def apm_t02a05_outwardSphereIntegral
+    (omega : apm_t02a05_Form2) (c : apm_t02a05_E3) : ℝ :=
+  ∫ q : Metric.sphere c 1, apm_t02a05_orientedCoefficient omega c q ∂μH[2]
 
 theorem apm_t02a05
     (omega : apm_t02a05_Form2) (homega : apm_t02a05_isOmega omega) :
     (∀ c : apm_t02a05_E3,
       44 * Real.pi / 15 ≤
-        apm_t02a05_outwardSphereIntegral omega (apm_t02a05_unitSphere c)) ∧
+        apm_t02a05_outwardSphereIntegral omega c) ∧
     (∀ c : apm_t02a05_E3,
-      apm_t02a05_outwardSphereIntegral omega (apm_t02a05_unitSphere c) =
-          44 * Real.pi / 15 ↔
+      apm_t02a05_outwardSphereIntegral omega c = 44 * Real.pi / 15 ↔
         c 0 = 1 ∧ c 1 = 2) := by
   sorry
