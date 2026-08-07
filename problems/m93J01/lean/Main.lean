@@ -44,6 +44,26 @@ lemma apm_m93J01_schrodinger_residual_eq
   simp only [apm_m93J01_schrodinger]
   ring
 
+/-- A translated sixth-order Taylor estimate in the exact neighborhood-filter
+form needed by the centered Numerov calculation. -/
+lemma apm_m93J01_taylor6_isLittleO
+    (y : ℝ → ℝ) (hy : ContDiff ℝ 6 y) (x : ℝ) :
+    (fun h : ℝ ↦ y (x + h) -
+      (y x + h * iteratedDeriv 1 y x + h ^ 2 / 2 * iteratedDeriv 2 y x +
+       h ^ 3 / 6 * iteratedDeriv 3 y x + h ^ 4 / 24 * iteratedDeriv 4 y x +
+       h ^ 5 / 120 * iteratedDeriv 5 y x + h ^ 6 / 720 * iteratedDeriv 6 y x))
+      =o[nhds 0] (fun h : ℝ ↦ h ^ 6) := by
+  have ht : Tendsto (fun h : ℝ ↦ x + h) (nhds 0) (nhds x) := by
+    simpa using (tendsto_const_nhds.add tendsto_id :
+      Tendsto (fun h : ℝ ↦ x + h) (nhds 0) (nhds (x + 0)))
+  have h := (taylor_isLittleO_univ hy (x₀ := x)).comp_tendsto ht
+  convert h using 1
+  · funext z
+    simp [taylor_within_apply, iteratedDerivWithin_univ]
+    ring
+  · funext z
+    simp
+
 theorem apm_m93j01
     (y V : ℝ → ℝ) (hy : ContDiff ℝ 8 y) :
     apm_m93J01_kappa = (1 / 12 : ℝ) ∧
@@ -101,5 +121,15 @@ theorem apm_m93j01
   neighborhood estimate (and its fourth-order specialization for
   `iteratedDeriv 2 y`); the remaining Numerov algebra can then reuse those
   estimates.
+
+  Closer hop 2 found and compiled the direct finite-order API that the earlier
+  searches missed: `taylor_isLittleO_univ`.  The helper
+  `apm_m93J01_taylor6_isLittleO` above composes it with `h ↦ x + h` and
+  normalizes `taylorWithinEval` to the exact `iteratedDeriv` coefficients.
+  Thus the Taylor-to-neighborhood-filter bridge is closed.  The remaining
+  work is to compose the helper with negation, cancel the odd coefficients,
+  weaken the two little-o remainders to `O(h^6)`, and repeat at order four
+  for `iteratedDeriv 2 y`; the final Numerov algebra then uses the existing
+  residual identity.
   -/
   sorry

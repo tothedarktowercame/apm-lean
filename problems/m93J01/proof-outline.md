@@ -17,3 +17,14 @@ The canonical Lean attempt is `lean/Main.lean`.
 - Once symmetric sixth- and fourth-order estimates are available, part (b)
   reuses the helper, while the Numerov clause follows by the ODE substitution
   and standard Big-O algebra.
+
+## Closer hop 2 progress
+
+- Mathlib's `taylor_isLittleO_univ` is in fact finite-order and applies
+  directly to `ContDiff`; this supersedes the interval remainder route.
+- `apm_m93J01_taylor6_isLittleO` transports that theorem along `h ↦ x + h`
+  and proves the exact sixth-order expansion with `iteratedDeriv`
+  coefficients.
+- The remaining closure is symmetric cancellation (including composition by
+  negation), weakening little-o to big-O, the order-four specialization for
+  `iteratedDeriv 2 y`, and the final already-reduced Numerov algebra.
