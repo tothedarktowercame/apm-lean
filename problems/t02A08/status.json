@@ -10,12 +10,14 @@
     "problem_tex": "apm/t02A08.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_progress": "Closer hop 1 proves that projection of the fiber map is the original sphere map and completely discharges the encoded oriented-intersection clause from any degree witness. The sole remaining sorry is existence of metric-sphere self-maps of every integer degree, requiring H2(S2)=Z and induced-map computations.",
   "imported_at": "2026-07-13T17:26:57.022816Z"
 }

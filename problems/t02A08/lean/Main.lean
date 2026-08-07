@@ -66,6 +66,26 @@ def apm_t02a08_HasOrientedIntersection
     Z = apm_t02a08_Z q ∧
     apm_t02a08_HasDegree (apm_t02a08_secondProjection.comp f) n
 
+/-- Projecting the fiber map to its sphere factor recovers the original
+sphere map. -/
+lemma apm_t02a08_secondProjection_comp_fiberMap
+    (p : Circle) (g : C(apm_t02a08_S2, apm_t02a08_S2)) :
+    apm_t02a08_secondProjection.comp (apm_t02a08_fiberMap p g) = g := by
+  ext x
+  rfl
+
+/-- Once a sphere map of degree `n` is available, the encoded oriented
+intersection assertion for its fiber map follows definitionally. -/
+lemma apm_t02a08_fiberMap_hasOrientedIntersection
+    (p : Circle) (q : apm_t02a08_S2)
+    (g : C(apm_t02a08_S2, apm_t02a08_S2)) (n : ℤ)
+    (hg : apm_t02a08_HasDegree g n) :
+    apm_t02a08_HasOrientedIntersection
+      (apm_t02a08_fiberMap p g) (apm_t02a08_Z q) n := by
+  refine ⟨q, rfl, ?_⟩
+  rw [apm_t02a08_secondProjection_comp_fiberMap]
+  exact hg
+
 theorem apm_t02a08
     (p : Circle) (q : apm_t02a08_S2) :
     ∀ n : ℤ,
@@ -73,4 +93,28 @@ theorem apm_t02a08
         apm_t02a08_HasDegree g n ∧
         apm_t02a08_HasOrientedIntersection
           (apm_t02a08_fiberMap p g) (apm_t02a08_Z q) n := by
-  sorry
+  intro n
+  obtain ⟨g, hg⟩ : ∃ g : C(apm_t02a08_S2, apm_t02a08_S2),
+      apm_t02a08_HasDegree g n := by
+    /-
+    Boundary (closer hop 1): the intersection clause is completely discharged
+    by `apm_t02a08_secondProjection_comp_fiberMap` and
+    `apm_t02a08_fiberMap_hasOrientedIntersection`. The sole remaining task is
+    construction, for each `n : ℤ`, of a continuous self-map of the concrete
+    metric 2-sphere whose induced map on integral `H₂` is multiplication by
+    `n` relative to some orientation isomorphism.
+
+    The standard route suspends the degree-`n` circle power map (using complex
+    conjugation for negative degree), or uses stereographic coordinates and
+    the map `z ↦ z^n`. Mathlib has circle power maps, one-point
+    compactification/sphere homeomorphisms, and the raw singular-homology
+    functor, but searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, solved
+    sphere and degree artifacts, git history, and Mathlib's suspension,
+    projectivization, one-point compactification, sphere, winding-number, and
+    homology APIs found no theorem computing either `H₂` of this metric sphere
+    as `ℤ` or the induced degree of those maps. Without the orientation
+    isomorphism itself, even the identity and constant base cases cannot inhabit
+    the frozen `HasDegree` predicate.
+    -/
+    sorry
+  exact ⟨g, hg, apm_t02a08_fiberMap_hasOrientedIntersection p q g n hg⟩
