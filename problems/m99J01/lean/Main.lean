@@ -18,6 +18,23 @@ def apm_m99j01_IsSolution (u₀ : ℝ) (u : ℝ → ℝ) : Prop :=
   ContDiff ℝ 1 u ∧ u 0 = u₀ ∧
     ∀ t : ℝ, 0 ≤ t → deriv u t + u t = Real.cos (u t)
 
+noncomputable def apm_m99j01_vectorField (x : ℝ) : ℝ := Real.cos x - x
+
+/-- The autonomous vector field has the global Lipschitz bound needed by
+Picard--Lindelöf and Grönwall uniqueness. -/
+lemma apm_m99j01_vectorField_lipschitz :
+    LipschitzWith 2 apm_m99j01_vectorField := by
+  change LipschitzWith 2 (fun x : ℝ => Real.cos x - x)
+  convert Real.lipschitzWith_cos.sub LipschitzWith.id using 1 <;> norm_num
+
+/-- Every cosine fixed point gives the constant equilibrium solution in the
+raw global-`C¹` encoding. -/
+lemma apm_m99j01_fixed_isSolution {ξ : ℝ} (hξ : Real.cos ξ = ξ) :
+    apm_m99j01_IsSolution ξ (fun _ => ξ) := by
+  refine ⟨contDiff_const, rfl, ?_⟩
+  intro t ht
+  simpa [hξ]
+
 lemma apm_m99j01_cos_fixed_unique {x y : ℝ}
     (hx : Real.cos x = x) (hy : Real.cos y = y) : x = y := by
   have fixed_mem (z : ℝ) (hz : Real.cos z = z) : z ∈ Set.Icc (0 : ℝ) Real.pi := by
@@ -62,8 +79,14 @@ theorem apm_m99j01 :
     obtain ⟨ξ, hξ⟩ := hexists_fixed
     exact ⟨ξ, hξ, fun y hy => apm_m99j01_cos_fixed_unique hy hξ⟩
   /-
-  Boundary: existence and uniqueness of the real cosine fixed point are proved
+  Boundary (closer hop 1): existence and uniqueness of the real cosine fixed point are proved
   above by the intermediate value theorem and `Real.strictAntiOn_cos`.
+  This hop adds `apm_m99j01_vectorField_lipschitz`, proving the exact global
+  Lipschitz constant `2` by combining `Real.lipschitzWith_cos` with
+  `LipschitzWith.id`, and `apm_m99j01_fixed_isSolution`, which bundles every
+  fixed point as the constant equilibrium in the frozen solution predicate.
+  (Sibling: m00A05)
+
   Completing the frozen theorem requires global
   Picard--Lindelöf existence for the vector field `cos u - u`, half-line
   uniqueness for arbitrary global `C¹` extensions and the monotone-trapping
@@ -71,6 +94,11 @@ theorem apm_m99j01 :
   Mathlib's ODE flow/Picard--Lindelöf, global Lipschitz continuation, Grönwall,
   strict monotonicity, and autonomous-flow APIs; I did not find an assembled
   route from those APIs to this raw `deriv`-based solution predicate in this
-  pass.
+  pass. Sibling `m00A05` reaches the same remaining globalization boundary;
+  `m93J06`, `m96A02`, and `m96J02` likewise do not provide a closed global
+  representative construction. Mathlib's `ODE_solution_unique_univ` can close
+  uniqueness once a global `HasDerivAt` solution exists, but local Picard output
+  is still interval-based and does not directly construct the required global
+  `ContDiff ℝ 1` extension.
   -/
   sorry
