@@ -15,7 +15,7 @@ spurious finite value on the real diameter.
 The radial limit is expressed as `r → 1⁻` for every angle in `[0, 2π]`.
 -/
 
-open Set Filter
+open Set Filter MeasureTheory
 open scoped Topology
 open Metric
 
@@ -46,6 +46,21 @@ lemma apm_a99J10_polar_bound
     (by rw [apm_a99J10_polar_im]; exact mul_ne_zero hr0.ne' hsin)
   simpa [apm_a99J10_polar_im] using hb
 
+lemma apm_a99J10_integrable_rpow_neg_half :
+    IntegrableOn (fun x : ℝ => x ^ (-(1 : ℝ) / 2))
+      (Ioo 0 (Real.pi / 2)) := by
+  rw [intervalIntegral.integrableOn_Ioo_rpow_iff (by positivity)]
+  norm_num
+
+lemma apm_a99J10_sin_rpow_le_first_quadrant
+    {x : ℝ} (hx0 : 0 < x) (hxpi : x ≤ Real.pi / 2) :
+    Real.rpow |Real.sin x| (-(1 : ℝ) / 2) ≤
+      Real.rpow (2 / Real.pi * x) (-(1 : ℝ) / 2) := by
+  have hlin : 0 < 2 / Real.pi * x := mul_pos (div_pos zero_lt_two Real.pi_pos) hx0
+  have hsin : 2 / Real.pi * x ≤ |Real.sin x| :=
+    (Real.mul_le_sin hx0.le hxpi).trans (le_abs_self _)
+  exact Real.rpow_le_rpow_of_nonpos hlin hsin (by norm_num)
+
 theorem apm_a99j10 (f : ℂ → ℂ)
     (hf : DifferentiableOn ℂ f (ball (0 : ℂ) 1))
     (hbound : ∀ z ∈ ball (0 : ℂ) 1, z.im ≠ 0 →
@@ -56,7 +71,18 @@ theorem apm_a99j10 (f : ℂ → ℂ)
         (𝓝[<] (1 : ℝ)) (𝓝 0)) :
     ∀ z ∈ ball (0 : ℂ) 1, f z = 0 := by
   /-
-  PARTIAL boundary (closer hop 1): the geometry of the radial parametrization
+  PARTIAL boundary (closer hop 2). Two additional analytic inputs now compile:
+  `apm_a99J10_integrable_rpow_neg_half` proves integrability of the model
+  inverse-square-root kernel on `(0, π/2)`, and
+  `apm_a99J10_sin_rpow_le_first_quadrant` combines Jordan's inequality with
+  antitonicity of negative real powers to dominate the sine singularity by
+  that kernel on the first quadrant. Remaining work is to transport this
+  comparison through sine symmetries over `[0, 2π]`, obtain a uniform
+  dominator for `r ≥ 1/2`, and combine DCT with the circle Cauchy formula.
+  Searches of circle-integral, Hardy-space, and boundary-uniqueness APIs found
+  no packaged theorem consuming the frozen pointwise radial limits.
+
+  Prior hop 1: the geometry of the radial parametrization
   and the exact circlewise majorant are now compiled above. In particular,
   `apm_a99J10_polar_bound` rewrites the frozen hypothesis as
   `‖f (r e^{iθ})‖ ≤ |r sin θ|⁻¹ᐟ²` away from the two real-axis angles.
