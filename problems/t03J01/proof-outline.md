@@ -1,12 +1,20 @@
 # Proof Outline: t03J01
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt is `lean/Main.lean`. The defining split identity of
+a retraction is now bundled as a continuous-map equality.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t03J01.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_t03j01_retraction_comp_inclusion_eq_id` proves that a retraction splits
+  the subtype inclusion exactly.
+
+## Remaining boundary
+
+- Compute `H₁(Circle;ℤ) ≅ ℤ` and apply singular-homology functoriality to rule
+  out a retraction when the inclusion map is zero.
+- Turn the primitive homology class for `J₁` into a circle-valued map whose
+  restriction has degree one, then adjust it relatively to obtain an actual
+  retraction onto the embedded curve.

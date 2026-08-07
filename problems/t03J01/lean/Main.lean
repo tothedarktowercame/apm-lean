@@ -82,6 +82,13 @@ def apm_t03j01_RetractsOnto
     {X : Type*} [TopologicalSpace X] (J : Set X) : Prop :=
   ∃ r : C(X, J), ∀ y : J, r y = y
 
+lemma apm_t03j01_retraction_comp_inclusion_eq_id
+    {X : Type} [TopologicalSpace X] {J : Set X}
+    (h : apm_t03j01_RetractsOnto J) :
+    (h.choose.comp (apm_t03j01_inclusion J)) = ContinuousMap.id J := by
+  ext y
+  exact congr_arg Subtype.val (h.choose_spec y)
+
 theorem apm_t03j01
     (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
     [PathConnectedSpace X] [ChartedSpace apm_t03j01_E2 X]
@@ -94,4 +101,31 @@ theorem apm_t03j01
     (hcut₂ : apm_t03j01_CutsIntoTwoOncePuncturedTori J₂) :
     apm_t03j01_RetractsOnto J₁ ∧
       ¬apm_t03j01_RetractsOnto J₂ := by
+  /-
+  CLOSER HOP 1 boundary. The categorical starting point for the obstruction is
+  now compiled as `apm_t03j01_retraction_comp_inclusion_eq_id`: any proposed
+  retraction makes inclusion split on the nose.
+
+  For `J₂`, applying the singular-homology functor to this equality would make
+  `H₁(inclusion)` split injective. The cutting hypothesis says that map is
+  zero, while `hcurve₂ : Nonempty (Circle ≃ₜ J₂)` should identify `H₁(J₂)`
+  with `ℤ`, contradicting that its identity morphism is zero. Mathlib supplies
+  functoriality, but no integral `H₁(Circle) ≅ ℤ` computation, so the needed
+  nonzero-domain bridge is absent.
+
+  The positive `J₁` direction is substantially stronger than the encoded
+  primitive homology witness. Informally, a primitive class determines a map
+  from the surface to `S¹`, and it can be adjusted near the embedded curve so
+  its restriction is the chosen orientation homeomorphism; composing with the
+  inverse produces the retraction. Formalizing this needs representability
+  `H¹(X;ℤ) ≅ [X,S¹]` plus a relative extension/homotopy adjustment. Mathlib has
+  neither that representability theorem nor a surface tubular-neighborhood
+  construction applicable to a bare subset homeomorphism `Circle ≃ₜ J₁`.
+
+  Searches covered `LEMMA-INDEX.md`, all `ConstructionTargets/`, related
+  surface/retraction artifacts (`t01A03`, `t01A02`, `t01J01`, `t92J05`),
+  Mathlib's singular homology, circle, retract, cohomology, Eilenberg--MacLane,
+  and manifold neighborhood APIs, and git history. No closed artifact supplies
+  the circle homology computation or primitive-class-to-retraction bridge.
+  -/
   sorry
