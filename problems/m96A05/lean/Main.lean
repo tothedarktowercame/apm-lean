@@ -77,6 +77,34 @@ lemma apm_m96a05_unique_of_det
   apply hinj
   rw [hU, (hscheme V).mp hV]
 
+lemma apm_m96a05_diagonal_norm_gt_two
+    {n : ℕ} (hn : 0 < n) (a b : ℝ → ℝ)
+    (hbneg : ∀ t ∈ Icc (0 : ℝ) 1, b t < 0) (i : Fin n) :
+    2 < ‖apm_m96a05_matrix n a b i i‖ := by
+  let t : ℝ := (i.val + 1 : ℝ) * apm_m96a05_h n
+  have hn1 : (0 : ℝ) < n + 1 := by positivity
+  have ht : t ∈ Icc (0 : ℝ) 1 := by
+    constructor
+    · dsimp [t, apm_m96a05_h]
+      positivity
+    · dsimp [t, apm_m96a05_h]
+      rw [mul_one_div]
+      apply (div_le_one hn1).2
+      exact_mod_cast Nat.succ_le_succ i.isLt.le
+  have hb := hbneg t ht
+  have hh : 0 < apm_m96a05_h n ^ 2 := by
+    apply sq_pos_of_pos
+    dsimp [apm_m96a05_h]
+    positivity
+  rw [apm_m96a05_matrix]
+  rw [if_pos rfl]
+  change 2 < ‖-2 + apm_m96a05_h n ^ 2 * b t‖
+  rw [Real.norm_eq_abs, abs_of_neg]
+  · dsimp [t] at hb ⊢
+    nlinarith
+  · dsimp [t] at hb ⊢
+    nlinarith
+
 theorem apm_m96a05 :
     (∀ (n : ℕ) (hn : 0 < n) (a b c : ℝ → ℝ) (U : Fin n → ℝ),
       apm_m96a05_approximateSolution n a b c U ↔
@@ -112,7 +140,13 @@ theorem apm_m96a05 :
   obtain ⟨N, hN⟩ : ∃ N : ℕ, ∀ n : ℕ, N ≤ n → 0 < n →
       (apm_m96a05_matrix n a b).det ≠ 0 := by
     /-
-    PARTIAL boundary (eventual strict row diagonal dominance).  Mathlib's
+    PARTIAL boundary (closer hop 1, eventual strict row diagonal dominance).
+    The new lemma `apm_m96a05_diagonal_norm_gt_two` compiles the entire
+    diagonal half for every positive `n`: it proves the mesh point lies in
+    `[0,1]`, applies `hbneg`, and derives
+    `2 < ‖apm_m96a05_matrix n a b i i‖`.
+
+    Mathlib's
     `Matrix.det_ne_zero_of_sum_row_lt_diag` in
     `LinearAlgebra.Matrix.Gershgorin` is exactly the required final API.
     `IsCompact.bddAbove_image` applied to `isCompact_Icc` / compact-image
@@ -126,11 +160,12 @@ theorem apm_m96a05 :
     Searches of the 172 closed artifacts, all `ConstructionTargets/`,
     `YoungL2.lean`, and `LEMMA-INDEX.md` found no lemma packaging the needed
     tridiagonal support-sum estimate.  The remaining assembly is therefore
-    the explicit `Finset.univ.erase i` support calculation and compact-bound
-    arithmetic before invoking the Gershgorin lemma.  This pass additionally
-    inspected the implementation of `Matrix.det_ne_zero_of_sum_row_lt_diag`:
-    it requires exactly `∀ i, ∑ j ∈ univ.erase i, ‖M i j‖ < ‖M i i‖`,
-    so there is no weaker support-free API that avoids that row calculation.
+    (1) compact boundedness of `a` and an eventual proof that both neighbor
+    coefficients are nonnegative, and (2) the explicit
+    `Finset.univ.erase i` calculation showing the off-diagonal norm sum is at
+    most `2`.  Source inspection confirms the Gershgorin theorem requires
+    exactly `∀ i, ∑ j ∈ univ.erase i, ‖M i j‖ < ‖M i i‖`, so there is no
+    weaker support-free API avoiding that calculation.
     -/
     sorry
   refine ⟨N, ?_⟩

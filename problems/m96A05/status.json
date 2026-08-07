@@ -10,12 +10,12 @@
     "problem_tex": "apm/m96A05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "boundary": "The strict diagonal norm bound is proved. Remaining work is the three-support Fin row-sum normalization, endpoint bookkeeping, and the eventual off-diagonal bound from compact boundedness of a.",
   "imported_at": "2026-07-13T17:26:55.419020Z"
 }

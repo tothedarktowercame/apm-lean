@@ -1,12 +1,23 @@
 # Proof Outline: m96A05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean artifact proves the linear-algebra uniqueness reduction and the
+strict lower bound on every diagonal entry. Two finite-row assembly boundaries
+remain.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m96A05.md`
 
-## Follow-up Needed
+## Formalized
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- A nonzero determinant gives a unique discrete solution.
+- Every mesh point belongs to `[0,1]`.
+- If `b < 0` on `[0,1]`, every diagonal entry has norm strictly greater than
+  two, for every positive mesh size.
+
+## Remaining Boundary
+
+- Expand the three-supported tridiagonal row sum to identify the stencil and
+  matrix equations, including endpoint rows.
+- Bound `a` on the compact interval, choose an eventual mesh threshold making
+  both neighbor coefficients nonnegative, and prove the erased off-diagonal
+  row sum is at most two before applying Gershgorin.
