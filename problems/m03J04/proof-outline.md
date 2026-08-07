@@ -27,3 +27,15 @@ The canonical Lean attempt is `lean/Main.lean`.
   range identity in Hilbert-space form. The remaining blocker is transporting
   it through `InnerProductSpace.toDual` and identifying its orthogonal with the
   custom evaluation-kernel annihilator.
+
+## Closer hop 3 progress
+
+- `apm_m03J04_closure_range_subset_dualAnnihilator` upgrades the algebraic
+  range inclusion to a closure inclusion, using closedness of the intersection
+  of evaluation kernels.
+- Consequently, the unresolved closure equality is narrowed to the reverse
+  density inclusion. It still requires transporting
+  `ContinuousLinearMap.orthogonal_ker` through the real Riesz equivalence and
+  identifying the resulting orthogonal with the custom annihilator.
+- Once density is available, the already located sphere-supremum and Banach
+  closed-range APIs can address the final inf-sup implication.

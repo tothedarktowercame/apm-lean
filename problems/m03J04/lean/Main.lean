@@ -40,6 +40,25 @@ lemma apm_m03J04_range_subset_dualAnnihilator
   have hw : dualAdjoint B w.1 = 0 := w.2
   exact DFunLike.congr_fun hw v
 
+/-- The range inclusion persists after closure because the annihilator is an
+intersection of closed evaluation kernels. -/
+lemma apm_m03J04_closure_range_subset_dualAnnihilator
+    {V W : Type*}
+    [NormedAddCommGroup V] [NormedSpace ℝ V]
+    [NormedAddCommGroup W] [NormedSpace ℝ W]
+    (B : V →L[ℝ] W →L[ℝ] ℝ) :
+    closure (B.range : Set (W →L[ℝ] ℝ)) ⊆
+      (dualAnnihilator ((dualAdjoint B).ker : Set W) : Set (W →L[ℝ] ℝ)) := by
+  have hclosed :
+      IsClosed (dualAnnihilator ((dualAdjoint B).ker : Set W) :
+        Set (W →L[ℝ] ℝ)) := by
+    unfold dualAnnihilator
+    convert isClosed_iInter fun w : (dualAdjoint B).ker ↦
+      ContinuousLinearMap.isClosed_ker ((ContinuousLinearMap.apply ℝ ℝ) w.1)
+    simp
+  exact hclosed.closure_subset_iff.2
+    (apm_m03J04_range_subset_dualAnnihilator B)
+
 /-- All four parts: continuity and involutivity of the adjoint, closedness of
 annihilators, the closure-of-range identity, and the inf-sup isomorphism. -/
 theorem apm_m03j04
@@ -108,5 +127,15 @@ theorem apm_m03j04
     of all closed artifacts and construction libraries found no such transport
     lemma. Once that identity is available, the sphere-supremum theorem and
     Banach closed-range APIs provide the remaining inf-sup equivalence route.
+
+    Closer hop 3 extracts
+    `apm_m03J04_closure_range_subset_dualAnnihilator`: closedness of the
+    intersection of evaluation kernels upgrades the earlier algebraic range
+    inclusion to the full closure inclusion. Thus only the reverse (density)
+    inclusion needs the Riesz/orthogonal transport. Additional searches of the
+    Riesz, adjoint, dual-annihilator, and closed-range APIs found no theorem
+    identifying this custom evaluation-kernel intersection with the relevant
+    Hilbert orthogonal, so that density bridge and the subsequent inf-sup
+    equivalence remain open.
     -/
     sorry
