@@ -59,4 +59,52 @@ theorem apm_t95j03 (k : ℕ) (hk : 1 < k) :
     t95J03S k =
       if Even k then {t95J03Torus, t95J03KleinBottle}
       else {t95J03KleinBottle} := by
-  sorry
+  by_cases he : Even k
+  · rw [if_pos he]
+    ext F
+    cases F with
+    | orientable g =>
+        simp [t95J03S, T95J03ShareKFoldCover,
+          T95J03AdmitsKFoldCoverProfile, T95J03ClosedSurface.euler,
+          t95J03Torus, t95J03KleinBottle, he]
+        constructor
+        · rintro ⟨P, ⟨hP, -⟩, h0⟩
+          have hk0 : (k : ℤ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt (lt_trans Nat.zero_lt_one hk))
+          have hm : (k : ℤ) * (2 - 2 * (g : ℤ)) = 0 := hP.symm.trans h0
+          have : 2 - 2 * (g : ℤ) = 0 := (mul_eq_zero.mp hm).resolve_left hk0
+          omega
+        · rintro rfl
+          exact ⟨⟨true, 0⟩, by norm_num⟩
+    | nonorientable g =>
+        simp [t95J03S, T95J03ShareKFoldCover,
+          T95J03AdmitsKFoldCoverProfile, T95J03ClosedSurface.euler,
+          t95J03Torus, t95J03KleinBottle, he]
+        constructor
+        · rintro ⟨P, hP, h0⟩
+          have hk0 : (k : ℤ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt (lt_trans Nat.zero_lt_one hk))
+          have hm : (k : ℤ) * (2 - (g : ℤ)) = 0 := hP.symm.trans h0
+          have : 2 - (g : ℤ) = 0 := (mul_eq_zero.mp hm).resolve_left hk0
+          omega
+        · rintro rfl
+          exact ⟨⟨false, 0⟩, by norm_num⟩
+
+  · rw [if_neg he]
+    ext F
+    cases F with
+    | orientable g =>
+        simp [t95J03S, T95J03ShareKFoldCover,
+          T95J03AdmitsKFoldCoverProfile, T95J03ClosedSurface.euler,
+          t95J03Torus, t95J03KleinBottle, he]
+        aesop
+    | nonorientable g =>
+        simp [t95J03S, T95J03ShareKFoldCover,
+          T95J03AdmitsKFoldCoverProfile, T95J03ClosedSurface.euler,
+          t95J03Torus, t95J03KleinBottle, he]
+        constructor
+        · rintro ⟨P, ⟨hP, -⟩, h0, -⟩
+          have hk0 : (k : ℤ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt (lt_trans Nat.zero_lt_one hk))
+          have hm : (k : ℤ) * (2 - (g : ℤ)) = 0 := hP.symm.trans h0
+          have : 2 - (g : ℤ) = 0 := (mul_eq_zero.mp hm).resolve_left hk0
+          omega
+        · rintro rfl
+          exact ⟨⟨false, 0⟩, by norm_num⟩
