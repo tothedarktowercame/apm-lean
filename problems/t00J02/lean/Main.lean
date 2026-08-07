@@ -66,6 +66,22 @@ def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     ∀ x : apm_t00j02_H 2 S,
       e.hom (apm_t00j02_homologyMap 2 f x) = degree * e.hom x
 
+/-- Once the induced map on top homology vanishes, the integer pinned by the
+degree predicate must vanish as well. -/
+lemma apm_t00j02_degree_eq_zero_of_homologyMap_eq_zero
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (degree : ℤ)
+    (hdegree : apm_t00j02_hasDegree f degree)
+    (hzero : apm_t00j02_homologyMap 2 f = 0) :
+    degree = 0 := by
+  rcases hdegree with ⟨e, he⟩
+  let x : apm_t00j02_H 2 S := e.inv (1 : ℤ)
+  have hx : e.hom x = (1 : ℤ) := by simp [x]
+  have h := he x
+  rw [hzero] at h
+  change e.hom (0 : apm_t00j02_H 2 S) = degree * e.hom x at h
+  simp only [map_zero, hx, mul_one] at h
+  exact h.symm
+
 theorem apm_t00j02
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
@@ -80,4 +96,25 @@ theorem apm_t00j02
     (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c))
     (degree : ℤ) (hdegree : apm_t00j02_hasDegree f degree) :
     degree = 0 := by
+  apply apm_t00j02_degree_eq_zero_of_homologyMap_eq_zero f degree hdegree
+  /-
+  PARTIAL boundary (closer hop 1).  The algebraic degree step is now closed by
+  `apm_t00j02_degree_eq_zero_of_homologyMap_eq_zero`: evaluating the frozen
+  degree equation on the inverse image of `1 ∈ ℤ` under the chosen top-homology
+  equivalence proves `degree = 0` as soon as the induced `H₂` map vanishes.
+  Thus the sole remaining goal is the concrete categorical equality
+  `apm_t00j02_homologyMap 2 f = 0`.
+
+  Mathematically, the disk-bounding components of the transverse inverse image
+  give a null-homologous inverse image of the essential handle circle; the
+  intersection pairing/naturality formula then forces the top-dimensional
+  degree to vanish.  Searches of `ConstructionTargets/`, `LEMMA-INDEX.md`, all
+  closed topology artifacts, Mathlib's singular-chain, singular-homology,
+  contractibility, excision, Mayer--Vietoris, manifold transversality, degree,
+  and intersection APIs, and git history found no packaged Poincare-duality or
+  transverse-preimage formula relating this geometric hypothesis to the
+  induced `H₂` morphism.  Mathlib also has no surface intersection pairing or
+  fundamental-class API at this level.  Building that chain-level bridge
+  remains open.
+  -/
   sorry
