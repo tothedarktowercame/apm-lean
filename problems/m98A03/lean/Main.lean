@@ -39,6 +39,20 @@ lemma apm_m98a03_integrable_kernel_section
     ⟨fun y => K (x, y) * f (u y), by fun_prop⟩
   simpa [q] using (BoundedContinuousFunction.mkOfCompact q).integrable volume
 
+/-- Every section of the proposed derivative kernel is integrable on the
+compact parameter interval. -/
+lemma apm_m98a03_integrable_derivative_kernel_section
+    (K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ)
+    (f : ℝ → ℝ) (hf : ContDiff ℝ 1 f)
+    (u h : apm_m98a03_C01) (x : Icc (0 : ℝ) 1) :
+    Integrable (fun y : Icc (0 : ℝ) 1 ↦
+      K (x, y) * deriv f (u y) * h y) := by
+  let q : ContinuousMap (Icc (0 : ℝ) 1) ℝ :=
+    ⟨fun y ↦ K (x, y) * deriv f (u y) * h y, by
+      exact ((K.continuous.comp (continuous_const.prodMk continuous_id)).mul
+        (hf.continuous_deriv_one.comp u.continuous)).mul h.continuous⟩
+  simpa [q] using (BoundedContinuousFunction.mkOfCompact q).integrable volume
+
 theorem apm_m98a03
     (K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ)
     (f : ℝ → ℝ) (hf : ContDiff ℝ 1 f) :
@@ -80,5 +94,18 @@ theorem apm_m98a03
   into continuous linear operators, and finally continuity of the resulting
   integral in operator norm.  Neither the closed corpus nor the construction
   libraries contain those missing compact-domain Nemytskii packaging lemmas.
+
+  Closer hop 1 proves the corresponding integrability prerequisite for the
+  derivative formula as
+  `apm_m98a03_integrable_derivative_kernel_section`.  The proof uses
+  `ContDiff.continuous_deriv_one` to make
+  `y ↦ K(x,y) * deriv f (u y) * h y` a continuous map on the compact interval,
+  then applies `BoundedContinuousFunction.mkOfCompact.integrable`.  Further
+  searches of `ParametricIntegral`, continuous-map Bochner integration,
+  operator-valued measurability, the closed corpus, and construction libraries
+  found no theorem discharging the required uniform sup-ball domination or
+  continuity of the resulting operator-valued integral.  Thus both frozen
+  pointwise integrands are now certified integrable; uniform Fréchet control
+  and operator-norm continuity remain open.
   -/
   sorry
