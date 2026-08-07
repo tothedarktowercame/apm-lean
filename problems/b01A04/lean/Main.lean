@@ -37,16 +37,41 @@ lemma apm_b01A04_isGaloisGroup_of_mulEquiv
   rcases hG with ⟨K, hK, hA, hGal, ⟨g⟩⟩
   exact ⟨K, hK, hA, hGal, ⟨g.trans e⟩⟩
 
+/-- The additive product convention in the statement is interchangeable with
+the product of the two multiplicative group models.  This is the codomain
+needed by the standard restriction map from a compositum's automorphism group. -/
+lemma apm_b01A04_isGaloisGroup_multiplicative_prod_iff
+    (A B : Type) [AddGroup A] [AddGroup B] :
+    apm_b01A04_isGaloisGroup (Multiplicative (A × B)) ↔
+      apm_b01A04_isGaloisGroup (Multiplicative A × Multiplicative B) := by
+  constructor
+  · intro h
+    exact apm_b01A04_isGaloisGroup_of_mulEquiv h (MulEquiv.prodMultiplicative A B)
+  · intro h
+    exact apm_b01A04_isGaloisGroup_of_mulEquiv h (MulEquiv.prodMultiplicative A B).symm
+
 theorem apm_b01a04 :
     apm_b01A04_isGaloisGroup (Multiplicative (ZMod 3)) ∧
       apm_b01A04_isGaloisGroup
         (Multiplicative (ZMod 3 × ZMod 3)) := by
   /-
-  PARTIAL boundary (closer hop 1): realizability transport across an arbitrary
+  PARTIAL boundary (closer hop 2): realizability transport across an arbitrary
   group isomorphism is now compiled as
   `apm_b01A04_isGaloisGroup_of_mulEquiv`. This removes a recurring model
   mismatch between additive `ZMod`, alternating groups, cyclotomic unit
   groups, and automorphism groups.
+
+  Closer hop 2 additionally compiles
+  `apm_b01A04_isGaloisGroup_multiplicative_prod_iff`, removing the precise
+  codomain mismatch between the frozen `Multiplicative (ZMod 3 × ZMod 3)` and
+  the product of automorphism groups delivered by a compositum restriction
+  map. Inspection of `FieldTheory/Galois/Basic.lean` found the usable maps
+  `IntermediateField.restrictRestrictAlgEquivMapHom` together with injectivity
+  from `K ⊔ L = ⊤` and surjectivity from `K ⊓ L = ⊥`; and
+  `FieldTheory/LinearDisjoint.lean` uses exactly these two results to obtain
+  the corresponding automorphism-cardinality equivalence. They do not,
+  however, construct the required pair of rational cyclic cubic subfields or
+  package the simultaneous product restriction isomorphism.
 
   I searched Mathlib's cyclotomic and Galois-correspondence sources. They
   provide cyclotomic Galois extensions and automorphism embeddings, but no
