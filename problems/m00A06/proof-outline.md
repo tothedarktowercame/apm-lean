@@ -14,10 +14,11 @@ integrability when the test function vanishes at zero.
 - The divided difference has compact support; multiplication by the measurable
   sign factor preserves integrability, and a.e. equality transfers this to the
   original singular integrand.
+- A `ContDiffBump` with inner radius one is a compactly supported test function
+  equal to one on `[0,1]`. Restricting hypothetical integrability of its
+  singular product to this interval contradicts `intervalIntegrable_inv_iff`.
 
 ## Remaining Boundaries
 
-- Construct a bump plateau and reduce its product to nonintegrability of
-  `|x|⁻¹` near zero.
 - Assemble the finite-part linear functional and its uniform order-one
   seminorm estimate on each compact support.

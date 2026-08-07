@@ -62,15 +62,28 @@ theorem apm_m00a06 :
         apm_m00a06_IsTestFunction φ → φ 0 = 0 →
         T φ = ∫ x : ℝ, apm_m00a06_singularKernel x * φ x) := by
   constructor
-  · /-
-    Boundary for the divergent witness: the intended witness is a smooth bump
-    equal to one near zero. Mathlib's `ContDiffBump` API supplies such
-    functions, while non-integrability reduces to that of `|x|⁻¹` on a
-    punctured neighborhood. Searches found `integrableOn_Ioc_iff_integral_norm_lt_top`
-    and the power-integrability API, but no compiled bridge from the bump's
-    plateau equations to `¬Integrable` for the product on all of `ℝ`.
-    -/
-    sorry
+  · let b : ContDiffBump (0 : ℝ) := ⟨1, 2, by norm_num, by norm_num⟩
+    refine ⟨b, ⟨b.contDiff, b.hasCompactSupport⟩, ?_⟩
+    intro hint
+    have hi : IntervalIntegrable
+        (fun x => apm_m00a06_singularKernel x * b x) volume 0 1 :=
+      hint.intervalIntegrable
+    have heq : Set.EqOn
+        (fun x => apm_m00a06_singularKernel x * b x)
+        (fun x : ℝ => x⁻¹) (uIoc 0 1) := by
+      intro x hx
+      have hxi : x ∈ Icc (0 : ℝ) 1 := by
+        rw [uIoc_of_le (by norm_num)] at hx
+        exact ⟨hx.1.le, hx.2⟩
+      have hb : b x = 1 := b.one_of_mem_closedBall (by
+        change dist x 0 ≤ 1
+        rw [Real.dist_eq, sub_zero, abs_of_nonneg hxi.1]
+        exact hxi.2)
+      simp [apm_m00a06_singularKernel, hb, abs_of_nonneg hxi.1]
+    have hinv : IntervalIntegrable (fun x : ℝ => x⁻¹) volume 0 1 :=
+      hi.congr heq
+    rw [intervalIntegrable_inv_iff] at hinv
+    simp at hinv
   · constructor
     · intro φ hφ hφ0
       have hφdiff : Differentiable ℝ φ := hφ.1.differentiable (by simp)
@@ -120,5 +133,10 @@ theorem apm_m00a06 :
       and applying a.e. congruence off `{0}`. The remaining construction can
       reuse that result, but its uniform estimate and linear-map assembly are
       still open.
+      Closer hop 3 closes the divergent-witness conjunct using a
+      `ContDiffBump` equal to one on `[0,1]` and Mathlib's exact
+      `intervalIntegrable_inv_iff`. The finite-part distribution remains open:
+      it requires bundling the two regularized integrals as a linear map and
+      proving the frozen compact-support seminorm estimate uniformly in `K`.
       -/
       sorry
