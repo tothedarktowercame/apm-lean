@@ -37,15 +37,23 @@ theorem apm_b96a02 :
       (∃ f : F[X], f.natDegree = 6 ∧ f.IsSplittingField F L) →
         ∃ g : F[X], g.natDegree = 9 ∧ g.IsSplittingField F L) := by
   constructor
-  · -- Boundary: searched the Sylow counting APIs (`Sylow.card_eq_multiplicity`,
+  · -- Boundary (closer hop 1): searched the Sylow counting APIs (`Sylow.card_eq_multiplicity`,
     -- `Sylow.card_dvd_index`, `card_sylow_modEq_one`,
     -- `Sylow.normal_of_subsingleton`, and `Subgroup.normal_of_index_eq_two`).
     -- Mathlib has no packaged order-30 theorem; formalizing the incompatible
     -- simultaneous Sylow counts and then the characteristic order-3/order-5
     -- subgroups inside the normal order-15 subgroup exceeded pass-1.
+    -- This hop additionally checked `GroupTheory/SpecificGroups/ZGroup.lean`.
+    -- Since 30 is squarefree, `IsZGroup.of_squarefree` supplies cyclic Sylow
+    -- subgroups, and `IsZGroup.isZGroup_iff_exists_mulEquiv` supplies an abstract
+    -- semidirect-product classification.  However, extracting from that
+    -- classification a normal subgroup of the *specific* cardinality 15 still
+    -- requires arithmetic classification of the two coprime factors (or the
+    -- original Sylow count).  No theorem specialized to cardinality 30 was
+    -- found in Mathlib, `LEMMA-INDEX.md`, or closed sibling artifacts.
     sorry
   constructor
-  · -- Boundary: searched `IntermediateField.fixingSubgroup`,
+  · -- Boundary (closer hop 1): searched `IntermediateField.fixingSubgroup`,
     -- `Subgroup.normalCore_eq_iInf_conjAct`, `Subgroup.normal_le_normalCore`,
     -- `IntermediateField.normalClosure_def''`, and the Galois correspondence.
     -- These expose the dual intersection-of-conjugates/supremum-of-conjugate-
@@ -53,15 +61,30 @@ theorem apm_b96a02 :
     -- core with the normal closure, followed by the simple-extension root-set
     -- characterization of a minimal-polynomial splitting field, is not
     -- packaged in Mathlib.
+    -- This hop narrowed the group/field bridge: `normalClosure_def''` expresses
+    -- the normal closure as the supremum of all conjugate fields, while
+    -- `IntermediateField.fixingSubgroup_sup` turns binary suprema into infima;
+    -- `IntermediateField.le_iff_le` and `Subgroup.normal_le_normalCore` can also
+    -- prove directly that the fixing subgroup of the normal closure is the
+    -- normal core.  The remaining unproved bridge is specifically
+    -- `normalClosure F (adjoin F {alpha}) L = adjoin F ((minpoly F alpha).rootSet L)`.
+    -- `Normal/Closure.lean` has only the iSup-over-all-elements formula and even
+    -- records a TODO for a general `isNormalClosure_iff`; no simple-extension
+    -- specialization was found.  Establishing it locally requires extending
+    -- embeddings and identifying all conjugates of `alpha` with the root set.
     sorry
   constructor
-  · -- Boundary: this depends on both preceding missing developments plus
+  · -- Boundary (closer hop 1): this depends on both preceding missing developments plus
     -- index/degree bookkeeping for the fixing subgroup; APIs searched include
     -- `IntermediateField.finrank_eq_card_fixingSubgroup`,
     -- `Subgroup.normalCore_le`, Cauchy's theorem, and subgroup-cardinality
     -- divisibility.  Without the order-30 normal-subgroup theorem and the
     -- core/splitting-field bridge, the exclusion of subgroup orders 3 and 5
     -- cannot yet be transported to the asserted minimal-polynomial degrees.
+    -- The new `IsZGroup` route does not bypass those dependencies: its
+    -- semidirect factors are existential and do not directly classify every
+    -- core-free subgroup.  No closed sibling packages the required order-30
+    -- core-free-subgroup index classification.
     sorry
   · intro F L _ _ _ _ _ hcard hex
     obtain ⟨f, hfdeg, hf⟩ := hex
