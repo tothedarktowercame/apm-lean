@@ -1,12 +1,15 @@
 # Proof Outline: b00J02
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt is `lean/Main.lean`, with one documented boundary.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b00J02.md`
 
-## Follow-up Needed
+## Verified route and current blocker
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Historical commit `30f7282` closed the exact theorem with `native_decide`.
+  Re-running it on Lean 4.29-rc8 caused sustained host contention and did not
+  finish within this closer hop, so it was not committed as a fresh proof.
+- A resource-efficient proof should reduce matrices modulo two, prove that
+  invertibility is detected by this reduction, count each fiber as `2^9`, and
+  use `Matrix.card_GL_field` to compute `|GL₃(F₂)| = 168`.
