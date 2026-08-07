@@ -57,6 +57,23 @@ lemma apm_b94J01_invariantFactors_eq_nil_of_card_eq_one
       have ha1 : a = 1 := Nat.eq_one_of_dvd_one (hprod ▸ hadvd)
       omega
 
+/-- The invariant-factor existence-and-uniqueness clause is completely
+resolved for groups of cardinality one. -/
+lemma apm_b94J01_existsUnique_invariantFactors_of_card_eq_one
+    (G : Type*) [CommGroup G] (hcard : Nat.card G = 1) :
+    ∃! d : List ℕ, apm_b94J01_invariantFactors G d := by
+  letI : Subsingleton G := (Nat.card_eq_one_iff_unique.mp hcard).1
+  letI : Unique G := { default := 1, uniq := fun _ => Subsingleton.elim _ _ }
+  letI : Unique (∀ i : Fin ([].length), Multiplicative (ZMod ([].get i))) :=
+    { default := fun i => Fin.elim0 i
+      uniq := fun f => funext fun i => Fin.elim0 i }
+  refine ⟨[], ?_, ?_⟩
+  · refine ⟨by simp, by simp, ?_⟩
+    exact ⟨MulEquiv.ofUnique
+      (M := G) (N := ∀ i : Fin ([].length), Multiplicative (ZMod ([].get i)))⟩
+  · intro d hd
+    exact apm_b94J01_invariantFactors_eq_nil_of_card_eq_one G d hd hcard
+
 theorem apm_b94j01 :
     (∀ (G : Type*) [CommGroup G] [Fintype G],
       ∃! d : List ℕ, apm_b94J01_invariantFactors G d) ∧
@@ -68,7 +85,7 @@ theorem apm_b94j01 :
   · intro G _ _
     obtain ⟨ι, instι, n, hn, hdecomp⟩ :=
       CommGroup.equiv_prod_multiplicative_zmod_of_finite G
-    /- CLOSER HOP 2 boundary: `CommGroup.equiv_prod_multiplicative_zmod_of_finite`
+    /- CLOSER HOP 3 boundary: `CommGroup.equiv_prod_multiplicative_zmod_of_finite`
        now supplies an explicit finite index type `ι`, moduli `n : ι → ℕ`
        satisfying `1 < n i`, and the multiplicative product equivalence
        `hdecomp`.  I also inspected `AddCommGroup.equiv_directSum_zmod_of_finite`
@@ -89,13 +106,21 @@ theorem apm_b94j01 :
        Smith-normal-form quotient APIs found no bridge from an arbitrary finite
        commutative group to that normalized data.
 
-       New closer-hop progress:
+       Earlier closer-hop progress:
        `apm_b94J01_invariantFactors_eq_nil_of_card_eq_one` proves the normalized
        edge case: any admissible list for a group of cardinality one is empty.
        It combines the compiled product formula with the frozen lower bound
        `2 ≤ n` on every factor. Thus existence and uniqueness for the trivial
-       group are reduced to constructing the evident empty-product equivalence;
-       the nontrivial-group normalization and p-primary uniqueness remain. -/
+       group are reduced to constructing the evident empty-product equivalence.
+
+       Final-hop progress:
+       `apm_b94J01_existsUnique_invariantFactors_of_card_eq_one` now completes
+       that construction with `MulEquiv.ofUnique`, and packages both existence
+       and uniqueness for every group of cardinality one. The sole remaining
+       gap is therefore the nontrivial-group normalization and p-primary
+       uniqueness theorem. Renewed searches of the finite-abelian, duality,
+       PID/Smith-normal-form, closed-sibling, `ConstructionTargets`, and
+       `YoungL2` APIs still found no theorem exposing this normalized data. -/
     sorry
   · intro m n hm hn
     have hmcard : Nat.card (Multiplicative (ZMod m)) = m := by

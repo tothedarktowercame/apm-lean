@@ -12,9 +12,13 @@ list satisfying the frozen invariant-factor predicate has product equal to
 admissible list for a group of cardinality one must be empty: any nonempty list
 would contain a factor at least two dividing a product equal to one.
 
+`apm_b94J01_existsUnique_invariantFactors_of_card_eq_one` completes this edge
+case, constructing the empty-product equivalence with `MulEquiv.ofUnique` and
+packaging the required `∃!` statement.
+
 ## Remaining boundary
 
-One sorry remains: normalize the primary factors into a divisibility chain and
-prove uniqueness of that chain. The missing uniqueness argument requires
+One sorry remains, now only for nontrivial groups: normalize the primary factors
+into a divisibility chain and prove uniqueness of that chain. The argument requires
 recovering the entries from p-primary torsion ranks; Mathlib currently has no
 packaged invariant-factor theorem at this level.
