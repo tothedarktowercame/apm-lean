@@ -78,6 +78,31 @@ def t95J04SphereThreeProduct : T95J04CompactSmoothManifold 6 where
   t2 := inferInstance
   compact := inferInstance
 
+/-- The Sard consequence stored in `T95J04SmoothMap` supplies an actual point
+missed by every map in the dimension-gap clause. -/
+lemma t95J04_exists_missed_point {k n : ℕ} (hn : k < n)
+    (M : T95J04CompactSmoothManifold k)
+    (f : T95J04SmoothMap M (t95J04Sphere n)) :
+    ∃ y : (t95J04Sphere n).Carrier, ∀ x, f.toFun x ≠ y := by
+  have h := f.missesPoint_of_dim_lt hn
+  simp only [Function.Surjective] at h
+  push_neg at h
+  exact h
+
+lemma t95J04_sphere_nonempty (n : ℕ) : Nonempty (t95J04SphereType n) := by
+  exact ⟨⟨EuclideanSpace.single 0 1, by simp⟩⟩
+
+lemma t95J04_sphereSix_nonempty : Nonempty t95J04SphereSix.Carrier :=
+  t95J04_sphere_nonempty 6
+
+lemma t95J04_sphereTwoFourProduct_nonempty :
+    Nonempty t95J04SphereTwoFourProduct.Carrier :=
+  Nonempty.map2 (·, ·) (t95J04_sphere_nonempty 2) (t95J04_sphere_nonempty 4)
+
+lemma t95J04_sphereThreeProduct_nonempty :
+    Nonempty t95J04SphereThreeProduct.Carrier :=
+  Nonempty.map2 (·, ·) (t95J04_sphere_nonempty 3) (t95J04_sphere_nonempty 3)
+
 theorem apm_t95j04 :
     (∀ (k n : ℕ), k < n →
       ∀ (M : T95J04CompactSmoothManifold k)
@@ -90,4 +115,32 @@ theorem apm_t95j04 :
     ¬T95J04Diffeomorphic t95J04SphereSix t95J04SphereThreeProduct ∧
     ¬T95J04Diffeomorphic t95J04SphereTwoFourProduct
       t95J04SphereThreeProduct := by
+  /-
+  PARTIAL boundary (closer hop 1).
+
+  New progress: `t95J04_exists_missed_point` extracts the exact point omitted
+  by a dimension-gap smooth map from the Sard consequence already stored in
+  `T95J04SmoothMap`.  Thus the first conjunct no longer needs any Sard theorem;
+  it is reduced to contracting a metric sphere with one point removed.  The
+  helpers `t95J04_sphere_nonempty`, `t95J04_sphereSix_nonempty`,
+  `t95J04_sphereTwoFourProduct_nonempty`, and
+  `t95J04_sphereThreeProduct_nonempty` close the nonemptiness halves of all
+  three frozen simple-connectivity predicates using explicit coordinate
+  points.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, all closed artifacts,
+  Mathlib's sphere-manifold, stereographic, fundamental-groupoid product, and
+  singular-homology sources, and git history found no packaged theorem that a
+  punctured metric sphere is contractible, no computation proving
+  `FundamentalGroup (Metric.sphere 0 1) x` is subsingleton in dimension at
+  least two, and no integral homology computation for metric spheres or their
+  products.  Mathlib's `stereographic` open partial homeomorphism supplies the
+  chart needed for a local construction, but a homotopy must still be built by
+  scaling in its orthogonal-complement target and transported back while using
+  the omitted-point proof.  The three non-homeomorphism claims then require
+  new homology/Künneth calculations (degrees 2 and 3 suffice).  Siblings
+  `t94J05`, `t98J03`, `t02A06`, and `t02A03` record the same missing sphere
+  contractibility, homology, and fundamental-group bridges rather than closed
+  reusable declarations.
+  -/
   sorry

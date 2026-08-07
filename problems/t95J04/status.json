@@ -10,12 +10,12 @@
     "problem_tex": "apm/t95J04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_hop": 1,
+  "closer_note": "Extracted an omitted sphere point directly from the encoded Sard consequence and proved explicit nonemptiness of S6, S2×S4, and S3×S3. Remaining work needs a punctured-sphere contraction, sphere π1, and sphere/product homology computations absent from the corpus.",
   "imported_at": "2026-07-13T17:26:58.361777Z"
 }
