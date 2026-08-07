@@ -30,6 +30,17 @@ def apm_m93J03_isSolution (ε : ℝ) (x : ℝ → ℝ) : Prop :=
 def apm_m93J03_isSmall (x : ℝ → ℝ) (η : ℝ) : Prop :=
   ∀ t ∈ Icc (-Real.pi) Real.pi, |x t| < η
 
+lemma apm_m93J03_isSmall_mono {x : ℝ → ℝ} {η η' : ℝ}
+    (hx : apm_m93J03_isSmall x η) (hη : η ≤ η') :
+    apm_m93J03_isSmall x η' := by
+  intro t ht
+  exact (hx t ht).trans_le hη
+
+lemma apm_m93J03_zero_isSmall {η : ℝ} (hη : 0 < η) :
+    apm_m93J03_isSmall (fun _ ↦ 0) η := by
+  intro t ht
+  simpa using hη
+
 theorem apm_m93j03 :
     ∃ δ η : ℝ, 0 < δ ∧ 0 < η ∧
       ∀ ε : ℝ, |ε| < δ →
@@ -41,7 +52,11 @@ theorem apm_m93j03 :
             apm_m93J03_isSmall y η →
             EqOn x y (Icc (-Real.pi) Real.pi) := by
   /-
-  Boundary: the intended proof first separates the sine kernel and proves
+  CLOSER HOP 1 (partial). The uniform-radius bookkeeping is now compiled:
+  `apm_m93J03_isSmall_mono` permits enlarging a valid solution radius and
+  `apm_m93J03_zero_isSmall` supplies the trivial-branch base case.
+
+  The remaining boundary: the intended proof first separates the sine kernel and proves
   that every solution on the interval has the exact form
   `ε + a * sin t + b * cos t`. It must then define the resulting map
   `H : ℝ × (ℝ × ℝ) → ℝ × ℝ`, establish its strict Frechet
@@ -49,7 +64,9 @@ theorem apm_m93j03 :
   identify the partial Jacobian at zero with the invertible diagonal map
   having entries `1 + π` and `1 - π`.
 
-  I found Mathlib's product-domain implicit-function APIs
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, solved
+  implicit-function artifacts, the parametric-integral sources, and git
+  history found no complete reduction. Mathlib's product-domain implicit-function APIs
   `ContDiffAt.implicitFunction`,
   `ContDiffAt.eventually_apply_eq_iff_implicitFunction`, and
   `HasStrictFDerivAt.implicitFunctionOfProdDomain`. Applying them here still
