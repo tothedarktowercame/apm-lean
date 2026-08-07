@@ -88,4 +88,22 @@ theorem apm_t97a01 :
     Nonempty
       (FundamentalGroup apm_t97a01_TorusRP2 apm_t97a01_baseTorusRP2 ≃*
         PresentedGroup ({apm_t97a01_relator} : Set (FreeGroup (Fin 3)))) := by
+  /-
+  Boundary (closer hop 1): the intended finite cellular calculation has one
+  vertex, three one-cells, and one two-cell.  For `X` its cellular boundary is
+  `1 ↦ (2,2,2)`, while the torus-crosscap word gives the same Smith normal
+  form; Van Kampen gives the displayed one-relator group.  The frozen goals,
+  however, concern *singular homology of the actual `EqvGen` polygon
+  quotients* and their actual `FundamentalGroup`.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's singular
+  homology and presented-group sources, and closed siblings `t01J03`,
+  `t02A03`, `t92J05`, and `t97J04` found no cellular-to-singular comparison
+  for polygon quotients, singular Mayer--Vietoris sequence, or topological
+  Seifert--van Kampen theorem.  Abstractly calculating the chain complex or
+  the presented group locally therefore does not bridge to any conjunct of
+  this frozen theorem.  Closure requires developing one of those missing
+  topology bridges, including continuity/quotient identifications for these
+  concrete edge relations.
+  -/
   sorry
