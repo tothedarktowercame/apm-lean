@@ -67,6 +67,22 @@ def apm_t95j06_EveryComponentDiffeomorphicToTorus
   ∀ x : F,
     Nonempty ({y : F // y ∈ connectedComponent x} ≃ₜ Circle × Circle)
 
+lemma apm_t95j06_T_invariant
+    (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
+    (hH : apm_t95j06_isHopfFlow H) :
+    apm_t95j06_IsInvariant H apm_t95j06_T := by
+  intro z hz t
+  rcases hz with ⟨θ, φ, hz⟩
+  refine ⟨θ, φ + t, ?_⟩
+  rw [hH]
+  rw [hz]
+  ext i
+  fin_cases i <;> simp [PiLp.smul_apply]
+  · rw [mul_add, Complex.exp_add]
+    ring
+  · rw [mul_add, Complex.exp_add]
+    ring
+
 theorem apm_t95j06
     (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
     (hH : apm_t95j06_isHopfFlow H) :
@@ -75,4 +91,31 @@ theorem apm_t95j06
       apm_t95j06_IsCompactOrientableSurface F →
       apm_t95j06_IsInvariant H F →
       apm_t95j06_EveryComponentDiffeomorphicToTorus F := by
-  sorry
+  constructor
+  · exact apm_t95j06_T_invariant H hH
+  · /-
+    PARTIAL boundary (closer hop 1).
+
+    New progress: `apm_t95j06_T_invariant` closes the entire explicit-torus
+    conjunct.  It substitutes the frozen Hopf-flow formula, reuses the torus
+    witnesses `θ, φ`, chooses `φ + t`, and proves the three coordinate
+    identities with `Complex.exp_add`.  Thus no ODE or flow-existence API is
+    needed for the first half.
+
+    The remaining universal classification clause requires turning invariance
+    under the real-parameter flow into a free circle action on each connected
+    component, constructing its orbit space as a compact one-manifold, and
+    deriving Euler characteristic zero before applying orientable surface
+    classification.  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, all
+    closed artifacts, Mathlib's circle-action, quotient, principal-bundle,
+    Euler-characteristic, and manifold sources, and git history found no
+    principal-circle-bundle theorem for a free smooth action and no
+    classification theorem for compact connected surfaces.  Related artifacts
+    `t99J03`, `t00A02`, `t00A03`, `t95J03`, and `t98A01` either encode surface
+    classification abstractly or leave the genuine topological theorem open;
+    none applies to this actual subtype of `S⁵`.  The frozen orientability
+    hypothesis supplies only `H₂ ≅ ℤ`; completing the bridge still needs the
+    free-action quotient/Euler-characteristic development and then an actual
+    homeomorphism of each component with `Circle × Circle`.
+    -/
+    sorry
