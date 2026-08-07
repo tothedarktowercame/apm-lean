@@ -6,7 +6,12 @@ Closer hop 1 additionally proves that `x ↦ cos x - x` is globally Lipschitz
 with constant two and that every fixed point defines the constant equilibrium
 in the exact frozen solution predicate.
 
+Closer hop 2 proves `apm_m99j01_solution_unique`: any two global `C¹`
+representatives satisfying the frozen equation agree at every nonnegative
+time. It applies Mathlib's `ODE_solution_unique` on each compact interval
+`[0,t]`, so no negative-time ODE hypothesis is introduced.
+
 The remaining bridge is global Picard–Lindelöf existence as a single global
-`C¹` representative.  Once available, `ODE_solution_unique_univ` gives
-uniqueness; no crossing of the compiled constant equilibrium then yields the
-monotone trapping and convergence argument.
+`C¹` representative and the subsequent attraction proof. Uniqueness is now
+closed; comparison with the compiled constant equilibrium can then support
+the monotone trapping and convergence argument.

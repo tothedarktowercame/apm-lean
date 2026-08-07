@@ -54,6 +54,34 @@ lemma apm_m99j01_cos_fixed_unique {x y : ℝ}
     rw [hx, hy] at this
     exact (not_lt_of_ge hxy.le this).elim
 
+/-- Global representatives satisfying the frozen half-line predicate are
+unique on the half-line. -/
+lemma apm_m99j01_solution_unique {u₀ : ℝ} {u v : ℝ → ℝ}
+    (hu : apm_m99j01_IsSolution u₀ u)
+    (hv : apm_m99j01_IsSolution u₀ v) :
+    ∀ t : ℝ, 0 ≤ t → v t = u t := by
+  intro t ht
+  have huniq := ODE_solution_unique (K := 2)
+    (v := fun _ : ℝ => apm_m99j01_vectorField)
+    (f := v) (g := u) (a := (0 : ℝ)) (b := t)
+    (fun _ => apm_m99j01_vectorField_lipschitz)
+    hv.1.continuous.continuousOn
+    (fun s hs => by
+      have hd := (hv.1.differentiable one_ne_zero s).hasDerivAt
+      apply HasDerivAt.hasDerivWithinAt
+      convert hd using 1
+      unfold apm_m99j01_vectorField
+      linarith [hv.2.2 s hs.1])
+    hu.1.continuous.continuousOn
+    (fun s hs => by
+      have hd := (hu.1.differentiable one_ne_zero s).hasDerivAt
+      apply HasDerivAt.hasDerivWithinAt
+      convert hd using 1
+      unfold apm_m99j01_vectorField
+      linarith [hu.2.2 s hs.1])
+    (by rw [hu.2.1, hv.2.1])
+  exact huniq ⟨ht, le_rfl⟩
+
 theorem apm_m99j01 :
     (∀ u₀ : ℝ,
       ∃ u : ℝ → ℝ,
@@ -100,5 +128,16 @@ theorem apm_m99j01 :
   uniqueness once a global `HasDerivAt` solution exists, but local Picard output
   is still interval-based and does not directly construct the required global
   `ContDiff ℝ 1` extension.
+
+  Closer hop 2 closes half-line uniqueness outright in
+  `apm_m99j01_solution_unique`. Rather than requiring an ODE on negative
+  times, it applies `ODE_solution_unique` separately on every interval `[0,t]`
+  and converts the frozen raw-`deriv` equation to `HasDerivWithinAt` there.
+  Renewed inspection of `PicardLindelof.lean` found only local `Icc`/`Ioo`
+  existence declarations (`exists_eq_forall_mem_Icc_hasDerivWithinAt` and its
+  closed-ball variants), not a global continuation theorem. The remaining
+  bridge is global construction of one compatible `C¹` representative,
+  followed by monotone trapping and attraction to the fixed point; uniqueness
+  is no longer part of the open boundary.
   -/
   sorry

@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "notes": "Fixed-point existence/uniqueness, global Lipschitz bound, and constant equilibrium compile; global solution construction and attraction remain."
+  "closer_hop": 2,
+  "notes": "Fixed-point existence/uniqueness, global Lipschitz bound, constant equilibrium, and half-line uniqueness compile; global solution construction and attraction remain."
 }
