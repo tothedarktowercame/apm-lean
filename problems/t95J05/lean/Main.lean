@@ -54,11 +54,26 @@ def t95J05InclusionPullback (x : t95J05SphereThree) : ℝ :=
   t95J05Omega x.1 * x.1 0
 
 /-- Pullback along the antipodal quotient projection. -/
+lemma t95J05InclusionPullback_antipodal (x : t95J05SphereThree) :
+    t95J05InclusionPullback (t95J05Antipode x) = t95J05InclusionPullback x := by
+  simp [t95J05InclusionPullback, t95J05Omega, t95J05Antipode]
+  ring
+
 def t95J05ProjectionPullback (η : T95J05ProjectiveThreeForm) :
     t95J05SphereThree → ℝ := η.1
 
 def t95J05Integral (η : T95J05ProjectiveThreeForm) : ℝ :=
   (1 / 2 : ℝ) * ∫ x, η.1 x ∂Measure.hausdorffMeasure 3
+
+lemma t95J05_existsUnique_projectiveThreeForm :
+    ∃! η : T95J05ProjectiveThreeForm,
+      t95J05ProjectionPullback η = t95J05InclusionPullback := by
+  let η : T95J05ProjectiveThreeForm :=
+    ⟨t95J05InclusionPullback, t95J05InclusionPullback_antipodal⟩
+  refine ⟨η, rfl, ?_⟩
+  intro z hz
+  apply Subtype.ext
+  exact hz
 
 theorem apm_t95j05 :
     (∃! η : T95J05ProjectiveThreeForm,
@@ -66,4 +81,23 @@ theorem apm_t95j05 :
     (∀ η : T95J05ProjectiveThreeForm,
       t95J05ProjectionPullback η = t95J05InclusionPullback →
       t95J05Integral η = -Real.pi ^ 2) := by
+  refine ⟨t95J05_existsUnique_projectiveThreeForm, ?_⟩
+  intro η hη
+  /-
+  Boundary (closer hop 1): antipodal invariance is now proved directly in
+  `t95J05InclusionPullback_antipodal`, and
+  `t95J05_existsUnique_projectiveThreeForm` closes the entire descent and
+  uniqueness conjunct using the concrete subtype representation.
+
+  The remaining integral rewrites by `hη` to half the Hausdorff-measure
+  integral on the unit `S³` of `(x₁³ - 4x₀) x₀`.  Odd symmetry makes the
+  mixed `x₁³ x₀` term vanish, and rotational symmetry gives
+  `∫ x₀² = area(S³)/4 = π²/2`, yielding `-π²` after the factor
+  `1/2`.  Searches of `ConstructionTargets/`, `LEMMA-INDEX.md`, closed radial
+  integration artifacts, git history, and Mathlib's Hausdorff sphere measure,
+  orthogonal-invariance, sphere-volume, Gaussian, and coordinate-moment APIs
+  found no compiled formula for this sphere coordinate moment or a Stokes
+  theorem for the encoded density.  Establishing the Hausdorff normalization
+  and the coordinate-square moment remains the sole open bridge.
+  -/
   sorry

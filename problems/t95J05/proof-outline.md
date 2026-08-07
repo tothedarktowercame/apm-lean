@@ -1,12 +1,20 @@
 # Proof Outline: t95J05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+`t95J05InclusionPullback_antipodal` proves directly that the encoded density
+is invariant under the antipodal map. The subtype therefore contains the
+desired projective form, and extensionality proves uniqueness; this is packaged
+as `t95J05_existsUnique_projectiveThreeForm`.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-t95J05.md`
+After rewriting with pullback equality, the quotient integral is half the
+Hausdorff-measure integral over the unit `S³` of `(x₁³ - 4x₀)x₀`.
+Antipodal/coordinate reflection symmetry kills the mixed term. Rotational
+symmetry makes every coordinate-square moment equal, and their sum is one, so
+each equals one quarter of the sphere area. Since `area(S³)=2π²`, the result
+is `-π²`.
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+Mathlib has no ready formula for the Hausdorff-measure coordinate moment on a
+Euclidean sphere, nor a Stokes theorem directly matching this scalar-density
+encoding. The sphere-area normalization and symmetry argument must be assembled
+locally.

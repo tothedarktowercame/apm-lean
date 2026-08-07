@@ -10,12 +10,12 @@
     "problem_tex": "apm/t95J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_progress": "Antipodal invariance of the encoded sphere density is proved, and the existence/uniqueness of the projective three-form is fully closed. The sole remaining bridge is evaluation of the normalized Hausdorff-measure sphere integral via coordinate moments or Stokes.",
   "imported_at": "2026-07-13T17:26:58.366454Z"
 }
