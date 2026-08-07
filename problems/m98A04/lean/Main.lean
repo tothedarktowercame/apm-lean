@@ -73,6 +73,37 @@ lemma apm_m98a04_canonical_isConvolution {n : ℕ}
   funext y
   exact (hψ y).symm
 
+/-- Bundle the iterated directional derivative encoded by
+`apm_m98a04_partialList` as an actual test function.  This uses Mathlib's
+`TestFunction.fderivCLM` and `TestFunction.postcompCLM`. -/
+noncomputable def apm_m98a04_partialListTF {n : ℕ} :
+    List (Fin n) →
+      TestFunction (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤ →
+      TestFunction (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤
+  | [], φ => φ
+  | i :: is, φ =>
+      TestFunction.postcompCLM
+        (ContinuousLinearMap.apply ℝ ℝ (EuclideanSpace.single i 1))
+        (TestFunction.fderivCLM ℝ (⊤ : ℕ∞) (⊤ : ℕ∞)
+          (apm_m98a04_partialListTF is φ))
+
+@[simp] lemma apm_m98a04_partialListTF_apply {n : ℕ}
+    (indices : List (Fin n))
+    (φ : TestFunction (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (x : EuclideanSpace ℝ (Fin n)) :
+    apm_m98a04_partialListTF indices φ x =
+      apm_m98a04_partialList indices (φ : _ → ℝ) x := by
+  induction indices generalizing x with
+  | nil => simp [apm_m98a04_partialListTF, apm_m98a04_partialList]
+  | cons i is ih =>
+      change ((TestFunction.fderivCLM ℝ (⊤ : ℕ∞) (⊤ : ℕ∞)
+        (apm_m98a04_partialListTF is φ)) x) (EuclideanSpace.single i 1) = _
+      rw [TestFunction.fderivCLM_apply_of_le _ (by simp)]
+      change fderiv ℝ (apm_m98a04_partialListTF is φ : _ → ℝ) x
+        (EuclideanSpace.single i 1) = _
+      exact congrArg (fun f : (EuclideanSpace ℝ (Fin n) → ℝ) ↦
+        fderiv ℝ f x (EuclideanSpace.single i 1)) (funext ih)
+
 theorem apm_m98a04 :
     (∀ (n : ℕ)
       (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
@@ -102,6 +133,14 @@ theorem apm_m98a04 :
     canonical pairing `h x = T (translateReflect φ x)` is also proved to meet
     `apm_m98a04_IsConvolution`, so pointwise test-function existence is closed.
 
+    Closer hop 2 additionally constructs
+    `apm_m98a04_partialListTF indices φ`, a genuine bundled test function for
+    every iterated directional derivative requested by the frozen statement.
+    Its pointwise specification is proved by induction using
+    `TestFunction.fderivCLM` and `TestFunction.postcompCLM`.  Thus the `dφ`
+    existence and compact-support bookkeeping are no longer part of the
+    boundary.
+
     The remaining goal begins precisely at LF-topological smoothness:
     `ContDiff ℝ ∞ h`, followed by constructing iterated directional derivative
     test functions and distributional derivatives. Searches of Mathlib's
@@ -112,7 +151,8 @@ theorem apm_m98a04 :
     `a03J03`, and `a96J02`, and `ConstructionTargets.YoungConvolution`, concern
     integrable functions and do not apply to an arbitrary distribution `T`.
     A future closure needs a local fixed-compact reduction for this parameter
-    map and induction using `TestFunction.fderivCLM`.
+    map.  It must then compose the resulting derivative identities with `T`
+    and bundle the corresponding iterated distributional derivative `DT`.
     -/
     sorry
   · intro x
