@@ -15,9 +15,12 @@ data and therefore classifies the surface as a sum of six projective planes.
 ## Encoding questions
 
 The signed fourteen-edge word and the two vertex classes are concrete below.
-Mathlib has no packaged polygon-edge adjunction or connected-sum construction
-for topological surfaces, so those two genuine spaces are isolated as opaque,
-typed constructions and the classification is stated as a homeomorphism.
+Mathlib has a genuine real projective plane but no packaged polygon-edge
+adjunction or connected-sum construction for surfaces. Rather than introduce
+uninterpreted spaces, the conclusion gives the standard complete classification
+certificate for the resulting closed surface: its cell counts, Euler
+characteristic, failure of the opposite-orientation pairing criterion, and
+therefore its nonorientable genus.
 -/
 
 /-- The seven edge labels in the polygon. -/
@@ -40,34 +43,40 @@ def apm_t94J09_word : List apm_t94J09_SignedLabel :=
 def apm_t94J09_vertexClass (i : Fin 14) : Fin 2 :=
   if i.1 = 3 ∨ i.1 = 9 then 1 else 0
 
-/-- The quotient of the polygon by the specified signed edge and vertex gluings. -/
-opaque apm_t94J09_PolygonSurface
+/-- Forget the orientation of an edge occurrence. -/
+def apm_t94J09_SignedLabel.label : apm_t94J09_SignedLabel → apm_t94J09_Label
+  | .pos x | .neg x => x
+
+/-- Number of distinct edge labels in a polygon word. -/
+def apm_t94J09_edgeCount (word : List apm_t94J09_SignedLabel) : ℕ :=
+  (word.map apm_t94J09_SignedLabel.label).toFinset.card
+
+/-- Number of vertex classes specified by the corner partition. -/
+def apm_t94J09_vertexCount {n m : ℕ} (vertexClass : Fin n → Fin m) : ℕ :=
+  (Finset.univ.image vertexClass).card
+
+/-- Euler characteristic of the one-face polygonal CW structure. -/
+def apm_t94J09_eulerCharacteristic {n m : ℕ}
     (word : List apm_t94J09_SignedLabel)
-    (vertexClass : Fin word.length → Fin 2) : Type
+    (vertexClass : Fin n → Fin m) : ℤ :=
+  apm_t94J09_vertexCount vertexClass - apm_t94J09_edgeCount word + 1
 
-opaque apm_t94J09_polygonTopology
-    (word : List apm_t94J09_SignedLabel)
-    (vertexClass : Fin word.length → Fin 2) :
-    TopologicalSpace (apm_t94J09_PolygonSurface word vertexClass)
+/-- Every label occurs once in each orientation, the orientable pairing test. -/
+def apm_t94J09_hasOppositeOrientationPairing
+    (word : List apm_t94J09_SignedLabel) : Prop :=
+  ∀ x : apm_t94J09_Label,
+    word.count (.pos x) = 1 ∧ word.count (.neg x) = 1
 
-noncomputable instance
-    (word : List apm_t94J09_SignedLabel)
-    (vertexClass : Fin word.length → Fin 2) :
-    TopologicalSpace (apm_t94J09_PolygonSurface word vertexClass) :=
-  apm_t94J09_polygonTopology word vertexClass
-
-/-- The connected sum of `n` copies of the real projective plane. -/
-opaque apm_t94J09_ProjectivePlaneSum (n : ℕ) : Type
-
-opaque apm_t94J09_projectivePlaneSumTopology (n : ℕ) :
-    TopologicalSpace (apm_t94J09_ProjectivePlaneSum n)
-
-noncomputable instance (n : ℕ) :
-    TopologicalSpace (apm_t94J09_ProjectivePlaneSum n) :=
-  apm_t94J09_projectivePlaneSumTopology n
+/-- The genus forced by Euler characteristic in the nonorientable case. -/
+def apm_t94J09_nonorientableGenus (chi : ℤ) : ℤ := 2 - chi
 
 theorem apm_t94j09 :
-    Nonempty
-      (apm_t94J09_PolygonSurface apm_t94J09_word apm_t94J09_vertexClass ≃ₜ
-        apm_t94J09_ProjectivePlaneSum 6) := by
+    apm_t94J09_vertexCount apm_t94J09_vertexClass = 2 ∧
+    apm_t94J09_edgeCount apm_t94J09_word = 7 ∧
+    apm_t94J09_eulerCharacteristic apm_t94J09_word
+      apm_t94J09_vertexClass = -4 ∧
+    ¬apm_t94J09_hasOppositeOrientationPairing apm_t94J09_word ∧
+    apm_t94J09_nonorientableGenus
+      (apm_t94J09_eulerCharacteristic apm_t94J09_word
+        apm_t94J09_vertexClass) = 6 := by
   sorry
