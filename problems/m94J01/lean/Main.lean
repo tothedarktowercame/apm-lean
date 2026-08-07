@@ -24,6 +24,16 @@ private noncomputable def apm_m94J01_plateauBump : ContDiffBump (0 : ℝ) :=
 private noncomputable def apm_m94J01_localSummand (n : ℕ) (x : ℝ) : ℝ :=
   ((x - n) ^ n / n.factorial) * apm_m94J01_plateauBump (x - n)
 
+/-- Each translated summand vanishes outside the radius-`1/2` neighborhood
+of its integer center. -/
+private lemma apm_m94J01_localSummand_eq_zero_of_half_le
+    (n : ℕ) (x : ℝ) (hx : (1 / 2 : ℝ) ≤ |x - n|) :
+    apm_m94J01_localSummand n x = 0 := by
+  rw [apm_m94J01_localSummand,
+    apm_m94J01_plateauBump.zero_of_le_dist]
+  · simp
+  · simpa [apm_m94J01_plateauBump, Real.dist_eq] using hx
+
 private lemma apm_m94J01_normalizedMonomial_iteratedDeriv (n : ℕ) :
     iteratedDeriv n (fun x : ℝ ↦ (x - n) ^ n / n.factorial) (n : ℝ) = 1 := by
   rw [iteratedDeriv_div_const]
@@ -119,5 +129,19 @@ theorem apm_m94j01 :
     index.  Searches of `LEMMA-INDEX.md`, all closed artifacts,
     `ConstructionTargets/`, `YoungL2.lean`, the bump-function API, and the
     Schwartz-space source found no packaged bridge.
+
+    Closer hop 3 proves the exact support estimate
+    `apm_m94J01_localSummand_eq_zero_of_half_le`: the `n`th summand vanishes
+    whenever `1/2 ≤ |x-n|`, directly from `ContDiffBump.zero_of_le_dist` and
+    the bump's outer radius.  Since distinct natural-number centers are at
+    least distance one apart and these support balls are open, this sharpens
+    local finiteness to pointwise uniqueness of the active index.  The sum can
+    therefore be defined without summability issues via `finsum`, and local
+    smoothness reduces to identifying the unique nearby index.  The remaining
+    hard bridge is the uniform Schwartz estimate for every derivative order:
+    bounding translated polynomial derivatives times bump derivatives across
+    the varying center/order `n`.  Renewed searches of locally finite sums,
+    partitions of unity, and Schwartz constructors found no theorem packaging
+    those bounds.
     -/
     sorry

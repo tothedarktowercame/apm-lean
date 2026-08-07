@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "boundary": "The plateau-bump summands and their exact diagonal derivatives are formalized. The remaining bridge is packaging their locally finite sum as a Schwartz map by proving smoothness and uniform weighted derivative seminorm bounds.",
+  "boundary": "The plateau-bump summands, exact diagonal derivatives, and radius-one-half support bounds are formalized. The remaining bridge is packaging the pointwise-finite sum as a Schwartz map and proving uniform weighted derivative seminorm bounds.",
   "imported_at": "2026-07-13T17:26:54.811595Z"
 }
