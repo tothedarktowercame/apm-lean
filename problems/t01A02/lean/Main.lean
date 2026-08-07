@@ -53,6 +53,13 @@ def apm_t01A02_H2map {X Y : Type} [TopologicalSpace X]
   ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
     (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
 
+lemma apm_t01A02_cover_continuous : Continuous apm_t01A02_cover := by
+  unfold apm_t01A02_cover
+  fun_prop
+
+lemma apm_t01A02_cover_eq_prod_pow_two (x : apm_t01A02_Torus) :
+    apm_t01A02_cover x = (x.1 ^ 2, x.2 ^ 2) := rfl
+
 theorem apm_t01a02 :
     ∀ f : C(apm_t01A02_Torus, apm_t01A02_Torus),
       ¬Function.Surjective f →
@@ -62,4 +69,30 @@ theorem apm_t01a02 :
       ((∃ g : C(apm_t01A02_Torus, apm_t01A02_Torus),
           ∀ x, f x = apm_t01A02_cover (g x)) →
         ∃ x, f x = x) := by
+  /-
+  CLOSER HOP 1 boundary. The concrete map's continuity is now compiled as
+  `apm_t01A02_cover_continuous`. Desk research found the nearby Mathlib theorem
+  `isCoveringMap_npow 2` in `Analysis.Complex.CoveringMap`, proving squaring is
+  a covering of the punctured complex plane. To obtain the frozen torus cover
+  one must restrict this map to `Circle`, prove the preimage of `Circle` is
+  exactly `Circle`, transport across the subtype homeomorphism, and construct
+  the product of the two resulting covering maps. No product theorem for
+  `IsCoveringMap` or packaged circle-power covering was found.
+
+  The deck action can then be defined by coordinatewise multiplication by
+  `±1`, indexed by `(ZMod 2)²`; freeness and fiber transitivity require the
+  classification `z² = w² ↔ z = w ∨ z = -w` inside `Circle`. Searches of
+  `LEMMA-INDEX.md`, all construction modules, closed circle/covering artifacts,
+  and git history found no assembled declaration for that action.
+
+  The first and last conjuncts are deeper: Mathlib does not compute integral
+  `H₂` of `Circle × Circle`, does not expose degree/nonsurjectivity for this
+  singular-homology morphism, and has no torus Lefschetz fixed-point theorem.
+  The intended fixed-point route uses that a lift through the four-sheeted
+  cover makes the induced degree divisible by four, while nonsurjectivity
+  forces degree zero, giving nonzero Lefschetz number. Neither bridge is
+  packaged in the closed corpus. Thus continuity is closed, while the
+  restriction/product covering, deck action, homology degree, and fixed-point
+  assemblies remain open.
+  -/
   sorry
