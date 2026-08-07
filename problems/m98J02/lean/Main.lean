@@ -105,6 +105,54 @@ lemma apm_m98J02_hasCompactSupport_add
   have hd := disjoint_union_right.mp hdis
   simp [hKu φ hd.1, hKv φ hd.2]
 
+@[simp] lemma apm_m98J02_hasCompactSupport_zero :
+    apm_m98J02_hasCompactSupport (0 : apm_m98J02_Dist) := by
+  refine ⟨∅, isCompact_empty, ?_⟩
+  simp
+
+lemma apm_m98J02_hasCompactSupport_neg
+    (u : apm_m98J02_Dist) (hu : apm_m98J02_hasCompactSupport u) :
+    apm_m98J02_hasCompactSupport (-u) := by
+  obtain ⟨K, hKc, hK⟩ := hu
+  refine ⟨K, hKc, ?_⟩
+  intro φ hdis
+  simp [hK φ hdis]
+
+lemma apm_m98J02_hasCompactSupport_sub
+    (u v : apm_m98J02_Dist)
+    (hu : apm_m98J02_hasCompactSupport u)
+    (hv : apm_m98J02_hasCompactSupport v) :
+    apm_m98J02_hasCompactSupport (u - v) := by
+  rw [sub_eq_add_neg]
+  exact apm_m98J02_hasCompactSupport_add u (-v) hu
+    (apm_m98J02_hasCompactSupport_neg v hv)
+
+lemma apm_m98J02_hasCompactSupport_smul
+    (c : ℝ) (u : apm_m98J02_Dist)
+    (hu : apm_m98J02_hasCompactSupport u) :
+    apm_m98J02_hasCompactSupport (c • u) := by
+  obtain ⟨K, hKc, hK⟩ := hu
+  refine ⟨K, hKc, ?_⟩
+  intro φ hdis
+  simp [hK φ hdis]
+
+/-- Adding a homogeneous solution preserves the encoded inhomogeneous
+distributional equation. -/
+lemma apm_m98J02_solvesT_add_homogeneous
+    (w z : apm_m98J02_Dist) (r : apm_m98J02_Test → ℝ)
+    (hw : apm_m98J02_solvesT w r)
+    (hz : apm_m98J02_solvesT z (fun _ ↦ 0)) :
+    apm_m98J02_solvesT (w + z) r := by
+  intro φ
+  obtain ⟨ψ, hψ, hwψ⟩ := hw φ
+  obtain ⟨η, hη, hzη⟩ := hz φ
+  have hηψ : η = ψ := by
+    ext x
+    rw [hη x, hψ x]
+  subst η
+  refine ⟨ψ, hψ, ?_⟩
+  simp [hwψ, hzη]
+
 theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
@@ -129,9 +177,15 @@ theorem apm_m98j02 :
   · intro u v hu hv
     exact apm_m98J02_hasCompactSupport_add u v hu hv
   · /-
-    CLOSER HOP 1 boundary. The first conjunct is now fully proved above as
+    CLOSER HOP 2 boundary. The first conjunct is fully proved above as
     `apm_m98J02_hasCompactSupport_add`, using the union of two compact support
     witnesses and `disjoint_union_right`.
+
+    This hop extends the compiled support calculus with closure under zero,
+    negation, subtraction, and real scalar multiplication. It also proves
+    `apm_m98J02_solvesT_add_homogeneous`: adding a homogeneous solution to an
+    inhomogeneous one preserves the encoded equation. Thus the algebraic part
+    of nonuniqueness is complete; only a nonzero homogeneous witness is absent.
 
     I searched `LEMMA-INDEX.md`, all 16 `ConstructionTargets/` modules, the
     closed distribution artifacts, Mathlib's `Distribution`, `TestFunction`,
@@ -148,7 +202,8 @@ theorem apm_m98j02 :
     `Ψ`. No packaged general convolution of a compactly supported distribution
     with an arbitrary distribution was found. The final conjunct then needs
     differentiation-through-convolution and a nonzero homogeneous solution;
-    the intended latter witness is a regular constant distribution, but it is
+    once the latter exists, the new addition lemma supplies the second
+    solution. The intended witness is a regular constant distribution, but it is
     blocked by the same absent regular-distribution constructor. These are
     genuine topological-distribution assemblies, not merely algebraic
     rewriting, so the remaining conjunction stays honestly open.
