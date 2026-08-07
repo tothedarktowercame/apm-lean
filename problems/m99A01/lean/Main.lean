@@ -36,6 +36,35 @@ def apm_m99A01_stationary (y : ℝ → ℝ) : Prop :=
 noncomputable def apm_m99A01_extremal (t : ℝ) : ℝ :=
   Real.cosh t - Real.tanh (Real.pi / 4) * Real.sinh t - 1
 
+/-- The displayed candidate solves the inhomogeneous Euler--Lagrange ODE. -/
+lemma apm_m99A01_extremal_ode (t : ℝ) :
+    deriv (deriv apm_m99A01_extremal) t - apm_m99A01_extremal t = 1 := by
+  have h₁ : deriv apm_m99A01_extremal =
+      fun x ↦ Real.sinh x - Real.tanh (Real.pi / 4) * Real.cosh x := by
+    funext x
+    change deriv (fun z ↦ Real.cosh z - Real.tanh (Real.pi / 4) * Real.sinh z - 1) x = _
+    simpa using ((Real.hasDerivAt_cosh x).sub
+      ((hasDerivAt_const x (Real.tanh (Real.pi / 4))).mul
+        (Real.hasDerivAt_sinh x))).sub_const 1 |>.deriv
+  have h₂ : deriv (fun x ↦
+      Real.sinh x - Real.tanh (Real.pi / 4) * Real.cosh x) =
+      fun x ↦ Real.cosh x - Real.tanh (Real.pi / 4) * Real.sinh x := by
+    funext x
+    simpa using ((Real.hasDerivAt_sinh x).sub
+      ((hasDerivAt_const x (Real.tanh (Real.pi / 4))).mul
+        (Real.hasDerivAt_cosh x))) |>.deriv
+  rw [h₁, h₂]
+  unfold apm_m99A01_extremal
+  ring
+
+/-- A concrete endpoint-fixing family used to witness unboundedness above. -/
+lemma apm_m99A01_sine_family_admissible (n : ℝ) :
+    (fun t : ℝ ↦ n * Real.sin (2 * t)) ∈ apm_m99A01_admissible := by
+  refine ⟨by fun_prop, by simp, ?_⟩
+  dsimp
+  rw [show 2 * (Real.pi / 2) = Real.pi by ring]
+  simp
+
 theorem apm_m99a01 :
     (∀ y : ℝ → ℝ,
       (ContDiff ℝ 2 y ∧ y ∈ apm_m99A01_admissible ∧ apm_m99A01_stationary y) ↔
@@ -52,7 +81,8 @@ theorem apm_m99a01 :
     fundamental lemma of the calculus of variations, and uniqueness for the
     resulting inhomogeneous ODE `y'' - y = 1`. I searched Mathlib's
     `HasDerivAt`-under-integral, interval integration-by-parts, and ODE APIs;
-    I did not complete this bridge for the frozen stationarity predicate.
+    I did not complete this bridge for the frozen stationarity predicate. The
+    candidate side of the ODE is proved above as `apm_m99A01_extremal_ode`.
     -/
     sorry
   constructor
@@ -76,6 +106,7 @@ theorem apm_m99a01 :
     searched the interval-integral derivative and hyperbolic/trigonometric
     integral APIs; the full exact integral calculation was not completed in
     this pass. The candidate's global `C¹` regularity and both endpoint values
-    are proved above.
+    are proved above, and `apm_m99A01_sine_family_admissible` proves that the
+    entire proposed unbounded family meets the frozen admissibility predicate.
     -/
     sorry
