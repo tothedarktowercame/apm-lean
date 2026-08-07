@@ -43,6 +43,19 @@ lemma apm_b97A02_algebraMap_pow_card
       algebraMap F (RatFunc F) a := by
   rw [← map_pow, FiniteField.pow_card]
 
+/-- Lüroth's degree development implies that the rational function field is
+finite over every nonconstant intermediate field. -/
+lemma apm_b97A02_finite_over_nontrivial_intermediate
+    (F : Type*) [Field F]
+    (K : IntermediateField F (RatFunc F)) (hK : K ≠ ⊥) :
+    Module.Finite K (RatFunc F) := by
+  have hX : IsAlgebraic K (RatFunc.X : RatFunc F) :=
+    RatFunc.IntermediateField.isAlgebraic_X hK
+  letI : FiniteDimensional K
+      (IntermediateField.adjoin K ({RatFunc.X} : Set (RatFunc F))) :=
+    IntermediateField.adjoin.finiteDimensional hX.isIntegral
+  exact (RatFunc.IntermediateField.adjoinXEquiv K).toLinearEquiv.finiteDimensional
+
 theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
     (∀ a b : F, a ≠ 0 →
       ∃! σ : RatFunc F ≃ₐ[F] RatFunc F,
@@ -56,12 +69,28 @@ theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
           ({apm_b97a02_invariant F} : Set (RatFunc F))) ∧
     (∀ K : IntermediateField F (RatFunc F), K ≠ ⊥ →
       Module.Finite K (RatFunc F)) := by
+  refine ⟨?_, ?_, ?_, apm_b97A02_finite_over_nontrivial_intermediate F⟩
   /-
-  PARTIAL boundary (closer hop 1): the finite-field coefficient arithmetic
+  PARTIAL boundary (closer hop 2): the finite-field coefficient arithmetic
   needed by the invariant calculation is now compiled above.
   `apm_b97A02_algebraMap_pow_card` handles Frobenius-fixed coefficients, and
   `apm_b97A02_algebraMap_pow_card_sub_one` proves that the nonzero affine
   scaling factor disappears at exponent `q-1`.
+
+  Closer hop 2 found that `FieldTheory/RatFunc/Luroth.lean` is present in this
+  snapshot despite the earlier bounded search missing it. The new compiled
+  lemma `apm_b97A02_finite_over_nontrivial_intermediate` uses
+  `RatFunc.IntermediateField.isAlgebraic_X`, finite dimensionality of a simple
+  algebraic adjoin, and `RatFunc.IntermediateField.adjoinXEquiv` to close the
+  theorem's entire last conjunct. The main proof now supplies that conjunct
+  outside the remaining goals.
+
+  The same source also provides `RatFunc.algEquivOfTranscendental` and
+  `RatFunc.finrank_eq_max_natDegree`, correcting two earlier API-negative
+  findings. For affine `aX+b`, closure can use the former after proving
+  transcendence and `F⟮aX+b⟯ = ⊤`; the latter supplies the degree calculation
+  needed after the automorphism action has been assembled. That construction,
+  uniqueness, finite action count, and fixed-field equality remain open.
 
   Earlier local Mathlib source search found the
   low-level constructors `RatFunc.liftRingHom` and `RatFunc.liftAlgHom`, and
@@ -72,10 +101,9 @@ theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
 
   The available `IntermediateField.finrank_fixedField_eq_card` machinery
   assumes a finite-dimensional ambient extension and therefore does not apply
-  directly to `F ⊂ F(X)`.  Consequently the fixed-field identification and the
-  final assertion for every proper intermediate field still require a sizable
-  custom development connecting substitution, degrees, and adjoins. Searches
-  of proved sibling artifacts found no implementation of this bridge. The
+  directly to `F ⊂ F(X)`. Consequently the fixed-field identification still
+  requires connecting the finite affine action to the newly found degree
+  theorem. Searches of proved sibling artifacts found no implementation. The
   statement appears mathematically sound; this is an API/formalization blocker.
   -/
-  sorry
+  all_goals sorry

@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "note": "Finite-field Frobenius and nonzero scaling arithmetic for the proposed invariant compile; affine RatFunc automorphisms, invariant fixed-field identification, and Lüroth finiteness remain.",
+  "closer_hop": 2,
+  "note": "The full final conjunct is closed using Mathlib's previously missed RatFunc Lüroth development. That source also supplies affine-substitution and rational-function degree infrastructure, but constructing/counting the affine automorphisms and proving the fixed-field equality remain.",
   "imported_at": "2026-07-13T17:26:54.104408Z"
 }
