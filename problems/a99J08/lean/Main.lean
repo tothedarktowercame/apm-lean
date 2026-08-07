@@ -25,6 +25,28 @@ noncomputable section
 def apm_a99J08_upperHalfDisk : Set ℂ :=
   Metric.ball 0 1 ∩ {z | 0 < z.im}
 
+/-- Squaring converts a purely imaginary boundary value into a real one. -/
+lemma apm_a99J08_sq_im_eq_zero_of_re_eq_zero (z : ℂ) (hz : z.re = 0) :
+    (z ^ 2).im = 0 := by
+  simp [pow_two, Complex.mul_im, hz]
+
+/-- Squaring preserves reality of a boundary value. -/
+lemma apm_a99J08_sq_im_eq_zero_of_im_eq_zero (z : ℂ) (hz : z.im = 0) :
+    (z ^ 2).im = 0 := by
+  simp [pow_two, Complex.mul_im, hz]
+
+/-- The mixed boundary conditions become one real-boundary condition after
+squaring, away from the corner. -/
+lemma apm_a99J08_sq_real_on_punctured_diameter
+    (g : ℂ → ℂ)
+    (hpos : ∀ x : ℝ, 0 < x → x < 1 → (g x).re = 0)
+    (hneg : ∀ x : ℝ, -1 < x → x < 0 → (g x).im = 0)
+    {x : ℝ} (hx₁ : -1 < x) (hx₂ : x < 1) (hx₀ : x ≠ 0) :
+    ((g x) ^ 2).im = 0 := by
+  rcases lt_or_gt_of_ne hx₀ with hx | hx
+  · exact apm_a99J08_sq_im_eq_zero_of_im_eq_zero _ (hneg x hx₁ hx)
+  · exact apm_a99J08_sq_im_eq_zero_of_re_eq_zero _ (hpos x hx hx₂)
+
 theorem apm_a99j08
     (g : ℂ → ℂ)
     (hgcont : ContinuousOn g (closure apm_a99J08_upperHalfDisk))
@@ -34,10 +56,19 @@ theorem apm_a99j08
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ z ∈ closure apm_a99J08_upperHalfDisk,
         ‖g z‖ ≤ C * Real.sqrt ‖z‖ := by
-  -- SKIPPED: square-root bound at mixed-boundary corner (Schwarz reflection).
-  -- Key idea: reflect g across real axis using the boundary conditions (Re(g)=0 on x>0,
-  -- Im(g)=0 on x<0) to extend to a punctured disk, then g vanishes at 0 and the
-  -- symmetry forces order ≥ 1/2, giving |g(z)| ≤ C·√|z|.
-  -- Blocker: Schwarz reflection principle for mixed boundary conditions is NOT in Mathlib.
-  -- APIs: `DifferentiableOn`, `ContinuousOn`, `closure` — FOUND but reflection principle absent.
+  /-
+  PARTIAL boundary (closer hop 1): the key algebraic reduction is now compiled
+  above. `apm_a99J08_sq_real_on_punctured_diameter` proves that `g²` has zero
+  imaginary part on the punctured diameter, turning the two mixed boundary
+  conditions into the single boundary condition needed for Schwarz reflection.
+
+  I inspected `ConstructionTargets.HerglotzRigidity`: its
+  `conj_apply_conj_eq` proves the symmetry of an already entire function, but
+  does not construct a holomorphic extension from one half-disk. Mathlib's
+  removable-singularity API likewise starts only after such an extension is
+  available. The remaining bridge is therefore a local Schwarz-reflection
+  construction for `g²` across `(-1,1)`, including continuity at zero; after
+  that, factor the reflected function by `z`, bound the quotient on a smaller
+  closed disk, and combine this with compactness away from zero.
+  -/
   sorry
