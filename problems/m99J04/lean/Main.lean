@@ -72,6 +72,35 @@ lemma apm_m99j04_generalized_eigenvector
   rw [hinv] at h
   simpa [apm_m99j04_weight] using h
 
+/-- A continuous linear equivalence satisfying `A†A = 1` carries every
+Hilbert basis to an orthonormal family. -/
+lemma apm_m99j04_orthonormal_map_of_adjoint_comp
+    {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H]
+    [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (A : H ≃L[𝕜] H) {ι : Type} (w : HilbertBasis ι 𝕜 H)
+    (hunit : (ContinuousLinearMap.adjoint A.toContinuousLinearMap).comp
+        A.toContinuousLinearMap = ContinuousLinearMap.id 𝕜 H) :
+    Orthonormal 𝕜 (fun i ↦ A (w i)) := by
+  classical
+  rw [orthonormal_iff_ite]
+  intro i j
+  calc
+    inner 𝕜 (A (w i)) (A (w j)) =
+        inner 𝕜
+          (ContinuousLinearMap.adjoint A.toContinuousLinearMap (A (w i)))
+          (w j) := by
+            simpa using
+              (ContinuousLinearMap.adjoint_inner_left A.toContinuousLinearMap
+                (w j) (A (w i))).symm
+    _ = inner 𝕜
+          (((ContinuousLinearMap.adjoint A.toContinuousLinearMap).comp
+            A.toContinuousLinearMap) (w i)) (w j) := rfl
+    _ = inner 𝕜 (w i) (w j) := by rw [hunit]; rfl
+    _ = if i = j then 1 else 0 := by
+      have hw := w.orthonormal
+      rw [orthonormal_iff_ite] at hw
+      exact hw i j
+
 theorem apm_m99j04
     (𝕜 H : Type*) [RCLike 𝕜] [NormedAddCommGroup H]
     [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -106,7 +135,7 @@ theorem apm_m99j04
       ContinuousLinearMap.adjoint_adjoint]
     exact ContinuousLinearMap.comp_assoc _ _ _
   /-
-  Boundary: compactness and self-adjointness of the congruence `A† T A` are
+  Boundary (closer hop 2): compactness and self-adjointness of the congruence `A† T A` are
   proved above. Completing the frozen theorem requires turning Mathlib's
   compact spectral theorem
   `ContinuousLinearMap.orthogonalComplement_iSup_eigenspaces_eq_bot` into a
@@ -115,9 +144,14 @@ theorem apm_m99j04
   its normalization and orthogonality is proved above. Closer hop 1 also proves
   `apm_m99j04_generalized_eigenvector`, which transports each ordinary
   eigenvector equation for `A† T A` to the frozen generalized equation for
-  `T` and the weight. I searched
+  `T` and the weight. This hop proves
+  `apm_m99j04_orthonormal_map_of_adjoint_comp`: for every Hilbert basis `w`,
+  `A†A = id` implies that `i ↦ A (w i)` is orthonormal. It uses the adjoint
+  inner-product identity and `HilbertBasis.orthonormal`, closing the reverse
+  direction of the frozen final equivalence. I searched
   the `OrthogonalFamily`, eigenspace direct-sum, `HilbertBasis`, adjoint of
   continuous-linear equivalences, and isometry/unitarity APIs, but did not
-  find the required infinite-dimensional basis constructor in this pass.
+  find the required infinite-dimensional eigenbasis constructor or the
+  converse dense-basis isometry bridge in this pass.
   -/
   sorry

@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "notes": "Compact/self-adjoint conjugation, eigenvector transport, weighted inner products, and A†A=id implying orthonormality of the transported Hilbert basis compile. The spectral eigenbasis constructor and converse remain.",
   "imported_at": "2026-07-13T17:26:56.267775Z"
 }
