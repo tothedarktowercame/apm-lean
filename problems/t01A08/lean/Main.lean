@@ -56,6 +56,11 @@ theorem apm_t01a08
   every fiber, hence no `p` is a regular value. I searched the manifold
   regular-value, critical-value, Sard, and Whitney-embedding APIs; the only
   Sard-related code assumes additional countability/local-Lipschitz machinery
-  and does not supply this theorem.
+  and does not supply this theorem. Mathlib's own `IsManifold` documentation
+  explicitly says that neither Hausdorffness nor second countability is part
+  of the class. The partial sibling `t92J07` adds both hypotheses for the
+  corresponding countable-family Sard claim, while `t01J04` records another
+  failure caused by the deliberately weak manifold axioms. No relevant bridge
+  occurs in `ConstructionTargets/` or `YoungL2.lean`.
   -/
   sorry
