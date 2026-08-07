@@ -39,6 +39,22 @@ lemma apm_a98j01_polish_refinement {f : ℝ → ℝ} (hf : Measurable f) :
     (t' := (PseudoMetricSpace.toUniformSpace.toTopologicalSpace : TopologicalSpace ℝ))
     hpolish hreal ht'
 
+/-- A continuous bijection from a compact space to a Hausdorff space is a
+homeomorphism.  This local copy follows the compiled proof in solved sibling
+`t92J02`; problem bundles themselves are not importable Lean modules. -/
+lemma apm_a98j01_homeomorph_of_compact_to_T2
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    [T2Space Y] {g : X → Y}
+    (hcompact : IsCompact (Set.univ : Set X)) (hg : Continuous g)
+    (hbij : Function.Bijective g) :
+    ∃ h : X ≃ₜ Y, (h : X → Y) = g := by
+  classical
+  letI : CompactSpace X := ⟨by simpa using hcompact⟩
+  let e : X ≃ Y := Equiv.ofBijective g hbij
+  have hecont : Continuous e := by simpa [e] using hg
+  let h : X ≃ₜ Y := e.toHomeomorphOfContinuousClosed hecont hecont.isClosedMap
+  exact ⟨h, by rfl⟩
+
 theorem apm_a98j01
     {a b : ℝ} (hab : a ≤ b)
     {f : ℝ → ℝ} (hf : Measurable f) :
@@ -64,11 +80,11 @@ theorem apm_a98j01
   line is a homeomorphism; composing its inverse with refined continuity of
   `f` gives `ContinuousOn f K` in the ordinary topology.
 
-  Searches of `LEMMA-INDEX.md`, every `ConstructionTargets/` module (including
-  the unrelated Lusin-condition-(N) module), closed siblings, and git history
-  found no already packaged lemma performing this last subtype-topology
-  transport.  The open bridge is therefore now only the Lean bookkeeping for
-  the two topology instances on the subtype `K`, not the measure-theoretic
-  Lusin construction described by the original boundary.
+  Closer hop 2 found the required compact-to-Hausdorff construction in solved
+  sibling `t92J02`.  Since problem bundles are not importable modules, the
+  proof is localized above as `apm_a98j01_homeomorph_of_compact_to_T2`, using
+  `Equiv.toHomeomorphOfContinuousClosed`.  The open bridge is now only the
+  bookkeeping needed to instantiate this lemma for the two induced topologies
+  on subtype `K` while performing refined-topology inner regularity.
   -/
   sorry

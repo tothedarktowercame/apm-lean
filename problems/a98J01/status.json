@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
+  "classification_detail": "Closer hop 2 localized the compact-to-Hausdorff continuous-bijection theorem from solved sibling t92J02 as apm_a98j01_homeomorph_of_compact_to_T2. Remaining work is refined-topology inner regularity and instantiating this helper for the two induced subtype topologies on K.",
   "imported_at": "2026-07-13T17:26:53.000594Z"
 }
