@@ -88,6 +88,26 @@ lemma apm_m99J06_galerkin_unique
   apply Subtype.ext
   exact sub_eq_zero.mp hzero
 
+/-- The finite-dimensional Riesz step in the Galerkin argument, isolated
+from the representative-level construction of the forcing functional. -/
+lemma apm_m99J06_exists_unique_inner_eq
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [CompleteSpace E] (L : E →L[ℝ] ℝ) :
+    ∃! u : E, ∀ v : E, inner ℝ u v = L v := by
+  let u : E := (InnerProductSpace.toDual ℝ E).symm L
+  refine ⟨u, ?_, ?_⟩
+  · intro v
+    change inner ℝ u v = L v
+    simpa [u] using
+      (InnerProductSpace.toDual_symm_apply (𝕜 := ℝ) (E := E) (x := v) (y := L))
+  · intro y hy
+    apply ext_inner_right ℝ
+    intro v
+    change inner ℝ y v = inner ℝ u v
+    exact (hy v).trans ((show inner ℝ u v = L v by
+      simpa [u] using
+        (InnerProductSpace.toDual_symm_apply (𝕜 := ℝ) (E := E) (x := v) (y := L))).symm)
+
 theorem apm_m99j06
     (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [CompleteSpace H] (M : apm_m99J06_H01Model H)
@@ -118,19 +138,27 @@ theorem apm_m99j06
     intro w
     rw [hu w, hv w]
   /-
-  Boundary (closer hop 1): uniqueness of the weak solution, the Galerkin
+  Boundary (closer hop 2): uniqueness of the weak solution, the Galerkin
   energy identity, and now uniqueness of every Galerkin solution
   (`apm_m99J06_galerkin_unique`) are proved above. The latter closes the
   coercivity half of finite-dimensional solvability by testing the difference
   of two solutions against itself.
 
-  Completing the frozen theorem still requires (1) a
+  `apm_m99J06_exists_unique_inner_eq` now closes the abstract
+  finite-dimensional Riesz-representation stage using
+  `InnerProductSpace.toDual`; once the forcing term has been bundled as a
+  continuous linear functional on `V n`, existence and uniqueness follow
+  immediately. The remaining obstruction in this stage is earlier and
+  specific to the frozen model: `M.val` is merely a function field, with its
+  linearity encoded only indirectly by `M.inner_eq`. Converting that identity
+  into a continuous linear map
+  `v ↦ ∫ x in Icc 0 1, f x * M.val v x` requires proving equality of
+  representatives in `L²` from the norm induced by `inner_eq`.
+
+  Completing the frozen theorem still also requires (1) a
   Sobolev integration-by-parts/regularity theorem for the custom
   `AbsolutelyContinuousOnInterval` plus a.e. `HasDerivAt` representation,
-  (2) construction of a genuinely linear Galerkin functional from the
-  representative-level `M.val`, followed by finite-dimensional Riesz
-  representation (Mathlib has `LinearMap.surjective_of_injective`, but the
-  linear map must first be constructed),
+  (2) the representative-level functional construction just described,
   and (3) weak sequential compactness of a bounded Hilbert-space sequence
   followed by passage to the limit on a dense increasing union. I searched
   `integral_mul_le_Lp_mul_Lq_of_nonneg`, finite-dimensional duality,

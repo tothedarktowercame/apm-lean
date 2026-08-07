@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "notes": "Galerkin uniqueness and the abstract complete-Hilbert-space Riesz representation step compile. The representative-level forcing functional, Sobolev regularity/integration by parts, and weak sequential compactness/dense-limit passage remain.",
   "imported_at": "2026-07-13T17:26:56.310042Z"
 }
