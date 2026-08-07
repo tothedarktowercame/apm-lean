@@ -93,6 +93,36 @@ lemma apm_m97A02_cos_remainder_mul_sub
         (mul_le_mul_of_nonneg_right
           (Real.abs_cos_sub_cos_le x y) (abs_nonneg _))
 
+/-- Exact derivative formula for the nonlinear remainder used in the
+contraction argument. -/
+lemma apm_m97A02_derivWithin_sin_sub_self
+    {x : ℝ → ℝ} (hx : ContDiffOn ℝ 1 x (Icc 0 1))
+    {t : ℝ} (ht : t ∈ Icc (0 : ℝ) 1) :
+    derivWithin (fun s ↦ Real.sin (x s) - x s) (Icc 0 1) t =
+      (Real.cos (x t) - 1) * derivWithin x (Icc 0 1) t := by
+  have hxd : DifferentiableWithinAt ℝ x (Icc 0 1) t :=
+    hx.differentiableOn_one t ht
+  rw [show (fun s ↦ Real.sin (x s) - x s) = (fun s ↦ Real.sin (x s)) - x by rfl,
+    derivWithin_sub (hxd.sin) hxd,
+    derivWithin_sin hxd ((uniqueDiffOn_Icc (by norm_num : (0 : ℝ) < 1)) t ht)]
+  ring
+
+/-- Pointwise derivative estimate for the difference of two nonlinear
+remainders.  This is the calculus-level estimate used by the eventual
+derivative-sup-norm contraction. -/
+lemma apm_m97A02_derivWithin_remainder_sub_le
+    {x y : ℝ → ℝ}
+    (hx : ContDiffOn ℝ 1 x (Icc 0 1))
+    (hy : ContDiffOn ℝ 1 y (Icc 0 1))
+    {t : ℝ} (ht : t ∈ Icc (0 : ℝ) 1) :
+    |derivWithin (fun s ↦ Real.sin (x s) - x s) (Icc 0 1) t -
+        derivWithin (fun s ↦ Real.sin (y s) - y s) (Icc 0 1) t| ≤
+      |x t| * |derivWithin x (Icc 0 1) t - derivWithin y (Icc 0 1) t| +
+        |x t - y t| * |derivWithin y (Icc 0 1) t| := by
+  rw [apm_m97A02_derivWithin_sin_sub_self hx ht,
+    apm_m97A02_derivWithin_sin_sub_self hy ht]
+  exact apm_m97A02_cos_remainder_mul_sub _ _ _ _
+
 theorem apm_m97a02 :
     ∀ α : ℝ, α ∈ Icc (0 : ℝ) 1 → Real.cos α = α →
       ∃ δ : ℝ, 0 < δ ∧
@@ -141,5 +171,20 @@ theorem apm_m97a02 :
   model for anchored `ContDiffOn` functions.  The remaining boundary is to
   combine this scalar estimate with `derivWithin` chain/product rules and to
   construct the complete derivative-norm space on which contraction applies.
+
+  Closer hop 3 closes the calculus half of that boundary.  The helper
+  `apm_m97A02_derivWithin_sin_sub_self` proves the exact endpoint-valid formula
+  for the derivative of `sin ∘ x - x`, using `derivWithin_sin` and the
+  `UniqueDiffWithinAt` instance supplied by the nondegenerate interval.
+  `apm_m97A02_derivWithin_remainder_sub_le` then combines this formula with
+  the hop-2 scalar inequality, yielding the pointwise derivative estimate for
+  two nonlinear remainders in precisely the form needed by the sup norm.
+  Renewed searches of `LEMMA-INDEX.md`, Mathlib's `ContDiffOn`, continuous-map
+  integration, normed-function-space and contraction APIs, the closed corpus,
+  `ConstructionTargets/`, and `YoungL2.lean` found no packaged complete space
+  whose elements are anchored `C¹` functions and whose norm is only the
+  derivative supremum.  Constructing that Banach model, the bounded inverse of
+  the linearized composition operator, and the final contraction therefore
+  remains open.
   -/
   sorry
