@@ -14,6 +14,9 @@ homology, embedded circle maps, and a concrete annular subset predicate.
   is closed.
 - `apm_t01j01_circleHomeomorphRange` identifies each embedded image with the
   abstract circle.
+- `apm_t01j01_isCompact_of_isAnnulusBetween` and
+  `apm_t01j01_isClosed_of_isAnnulusBetween` show that every requested witness
+  is necessarily a compact closed subset of the Hausdorff surface.
 
 ## Remaining boundary
 

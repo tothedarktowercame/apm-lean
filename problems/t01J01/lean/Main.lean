@@ -85,6 +85,22 @@ noncomputable def apm_t01j01_circleHomeomorphRange
     Circle ≃ₜ Set.range γ :=
   hγ.toHomeomorph
 
+/-- Any subset carrying the requested annulus homeomorphism is compact. -/
+lemma apm_t01j01_isCompact_of_isAnnulusBetween
+    {S : Type*} [TopologicalSpace S] {A : Set S}
+    {γ₁ γ₂ : C(Circle, S)}
+    (hA : apm_t01j01_IsAnnulusBetween A γ₁ γ₂) : IsCompact A := by
+  rcases hA.1 with ⟨e⟩
+  haveI : CompactSpace A := e.symm.compactSpace
+  exact isCompact_iff_compactSpace.mpr inferInstance
+
+/-- In the Hausdorff ambient surface, any requested annular subset is closed. -/
+lemma apm_t01j01_isClosed_of_isAnnulusBetween
+    {S : Type*} [TopologicalSpace S] [T2Space S] {A : Set S}
+    {γ₁ γ₂ : C(Circle, S)}
+    (hA : apm_t01j01_IsAnnulusBetween A γ₁ γ₂) : IsClosed A :=
+  (apm_t01j01_isCompact_of_isAnnulusBetween hA).isClosed
+
 theorem apm_t01j01
     (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
@@ -100,10 +116,16 @@ theorem apm_t01j01
     (hπ₂ : ¬apm_t01j01_IsNullHomotopic γ₂) :
     ∃ A : Set S, apm_t01j01_IsAnnulusBetween A γ₁ γ₂ := by
   /-
-  Boundary (closer hop 1): the elementary embedded-boundary topology is now
+  Boundary (closer hop 2): the elementary embedded-boundary topology is now
   compiled above. `apm_t01j01_range_isClosed` proves each curve image closed,
   `apm_t01j01_boundary_union_isClosed` handles their union, and
   `apm_t01j01_circleHomeomorphRange` identifies each image with `Circle`.
+  This hop also proves the exact compactness consequence of a putative
+  witness: `apm_t01j01_isCompact_of_isAnnulusBetween` transports compactness
+  across the annulus homeomorphism, and
+  `apm_t01j01_isClosed_of_isAnnulusBetween` makes the resulting subset closed
+  in the Hausdorff surface.  Thus the target is genuinely asking for a closed
+  compact subsurface, rather than an arbitrary set with a convenient frontier.
 
   The remaining bridge is the surface-specific classification argument from
   the informal proof: null-homology of an embedded circle must imply that it

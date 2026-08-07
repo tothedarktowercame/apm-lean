@@ -30,6 +30,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 1 proves that each embedded circle has closed image homeomorphic to Circle and that the two boundary images have closed union. The theorem remains blocked on the surface-classification/cutting argument producing an annulus from the homology and homotopy hypotheses.",
+  "closer_progress": "Closer hop 2 additionally proves that any subset satisfying the requested annulus predicate is compact and therefore closed in the Hausdorff surface. The theorem remains blocked on the surface-classification/cutting argument producing such a compact subsurface from the homology and homotopy hypotheses.",
   "imported_at": "2026-07-13T17:26:56.777282Z"
 }
