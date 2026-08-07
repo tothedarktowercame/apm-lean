@@ -10,9 +10,9 @@
     "problem_tex": "apm/b99A01.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
+    "files": ["lean/Main.lean"],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,6 +27,6 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "proved",
   "imported_at": "2026-07-13T17:26:54.199339Z"
 }

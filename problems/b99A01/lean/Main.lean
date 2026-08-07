@@ -14,7 +14,7 @@ single statement-bank theorem below.
   `0 < n` explicit, excluding the syntactically meaningless degree-zero case.
 -/
 
-open Complex Set
+open Complex Set Polynomial
 
 noncomputable section
 
@@ -104,19 +104,106 @@ theorem apm_b99a01 :
     · exact IsLocalRing.maximal_ideal_unique V
     constructor
     · exact fun I hI ↦ IsBezout.isPrincipal_of_FG I hI
-    /-
-    Boundary after the compiled analytic half and valuation reductions:
-    `PhragmenLindelof.right_half_plane_of_bounded_on_real`, applied after
-    rotation by `I`, proves the complete upper-half-plane maximum principle.
-    For the independent algebra half, Mathlib's
-    `ValuationRing.iff_isInteger_or_isInteger`,
-    `ValuationRing.iff_ideal_total`, and the `IsBezout` instance package the
-    first three valuation-domain conclusions, proved above.  The remaining
-    bundled conclusion includes the explicit monic-equation calculation and,
-    especially, the final equality describing every intermediate subring `W`
-    as fractions with denominators outside its unique maximal ideal, requires
-    transporting the given range-based axiom to a `ValuationRing W` instance
-    without an `IsFractionRing W F` hypothesis and then constructing the exact
-    localization equality.  No theorem matching that overring bridge was found.
-    -/
-    sorry
+    constructor
+    · -- Mathlib's valuation-ring instances provide `IsIntegrallyClosed V`.
+      -- Package the displayed finite sum as a monic polynomial.
+      haveI : IsIntegrallyClosed V := inferInstance
+      intro α hα n hn a hβ
+      obtain ⟨b, hb⟩ := hβ
+      let p : V[X] := X ^ n + ∑ i : Fin n, C (a i) * X ^ (i : ℕ) - C b
+      have hdeg : degree (∑ i : Fin n, C (a i) * X ^ (i : ℕ) - C b) < n := by
+        apply (degree_sub_le _ _).trans_lt
+        rw [max_lt_iff]
+        constructor
+        · exact degree_sum_fin_lt a
+        · exact (degree_C_le : degree (C b : V[X]) ≤ 0).trans_lt
+            (WithBot.coe_lt_coe.mpr hn)
+      have hp : p.Monic := by
+        simpa only [p, sub_eq_add_neg, add_assoc] using monic_X_pow_add hdeg
+      have hroot : Polynomial.eval₂ (algebraMap V F) α p = 0 := by
+        dsimp only [p]
+        rw [eval₂_sub, eval₂_add, eval₂_pow, eval₂_X, eval₂_C]
+        rw [eval₂_finset_sum]
+        simp_rw [eval₂_mul, eval₂_C, eval₂_pow, eval₂_X]
+        rw [hb]
+        ring
+      have hint : IsIntegral V α := ⟨p, hp, hroot⟩
+      exact IsIntegrallyClosed.algebraMap_eq_of_integral hint
+    · -- (Mathlib: RingTheory.Valuation.ValuationSubring)
+      intro W hVW
+      have hWval : ∀ α : F, α ≠ 0 → α ∈ W ∨ α⁻¹ ∈ W := by
+        intro α hα
+        exact (hvaluation α hα).imp (fun ⟨a, ha⟩ => hVW ⟨a, ha⟩)
+          (fun ⟨a, ha⟩ => hVW ⟨a, ha⟩)
+      refine ⟨hWval, ?_⟩
+      let VW : ValuationSubring F :=
+        ValuationSubring.ofSubring W fun x => by
+          by_cases hx : x = 0
+          · left
+            simpa [hx] using W.zero_mem
+          · exact hWval x hx
+      letI : IsLocalRing W := VW.isLocalRing
+      let m : Ideal W := IsLocalRing.maximalIdeal W
+      refine ⟨m, IsLocalRing.maximalIdeal.isMaximal W,
+        fun n hn => by simpa [m] using IsLocalRing.eq_maximalIdeal hn, ?_⟩
+      ext x
+      constructor
+      · intro hx
+        by_cases hx0 : x = 0
+        · refine ⟨0, 1, ?_, by simp [hx0]⟩
+          rintro ⟨w, hw, heq⟩
+          have : IsUnit w := by
+            have : w = 1 := Subtype.ext (by simpa using heq)
+            simpa [this]
+          change w ∈ IsLocalRing.maximalIdeal W at hw
+          rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff] at hw
+          exact hw this
+        · rcases hvaluation x hx0 with ⟨a, ha⟩ | ⟨s, hs⟩
+          · refine ⟨a, 1, ?_, ?_⟩
+            · rintro ⟨w, hw, heq⟩
+              have : IsUnit w := by
+                have : w = 1 := Subtype.ext (by simpa using heq)
+                simpa [this]
+              change w ∈ IsLocalRing.maximalIdeal W at hw
+              rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff] at hw
+              exact hw this
+            · simpa [ha]
+          · refine ⟨1, s, ?_, ?_⟩
+            · rintro ⟨w, hw, heq⟩
+              change w ∈ IsLocalRing.maximalIdeal W at hw
+              rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff] at hw
+              apply hw
+              refine ⟨⟨w, ⟨x, hx⟩, ?_, ?_⟩, rfl⟩
+              · apply Subtype.ext
+                change (w : F) * x = 1
+                rw [heq, hs]
+                exact inv_mul_cancel₀ hx0
+              · apply Subtype.ext
+                change x * (w : F) = 1
+                rw [heq, hs]
+                exact mul_inv_cancel₀ hx0
+            · rw [map_one, one_div, hs, inv_inv]
+      · rintro ⟨a, s, hs, rfl⟩
+        have hsW : algebraMap V F s ∈ W := hVW ⟨s, rfl⟩
+        let sw : W := ⟨algebraMap V F s, hsW⟩
+        have hsw : sw ∉ m := by
+          intro h
+          exact hs ⟨sw, h, rfl⟩
+        have hunit : IsUnit sw := by
+          change sw ∉ IsLocalRing.maximalIdeal W at hsw
+          rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff] at hsw
+          exact Classical.not_not.mp hsw
+        rw [div_eq_mul_inv]
+        change algebraMap V F a * (algebraMap V F s)⁻¹ ∈ W
+        apply W.mul_mem (hVW ⟨a, rfl⟩)
+        have hinv_mem : (((↑(hunit.unit⁻¹) : W) : F)) ∈ W := Subtype.property _
+        convert hinv_mem using 1
+        symm
+        calc
+          ((↑(hunit.unit⁻¹) : W) : F) =
+              ((↑hunit.unit : W) : F)⁻¹ :=
+            by
+              apply eq_inv_of_mul_eq_one_right
+              exact congrArg ((↑) : W → F) hunit.unit.mul_inv
+          _ = (sw : F)⁻¹ := congrArg Inv.inv (congrArg ((↑) : W → F) hunit.unit_spec)
+          _ = (algebraMap V F s)⁻¹ := rfl
