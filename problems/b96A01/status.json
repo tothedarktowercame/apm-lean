@@ -10,12 +10,12 @@
     "problem_tex": "apm/b96A01.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "statement-defective",
+  "closer_hop": 1,
+  "note": "Frozen first conjunct is false: V=Q, s={1,2}, A=closure(s) satisfies the premise but no Q-basis can contain both dependent distinct vectors 1 and 2. Proof work stopped per frozen-statement protocol.",
   "imported_at": "2026-07-13T17:26:54.066528Z"
 }
