@@ -8,14 +8,16 @@ bridges for the two implicit-function clauses are compiled locally.
   of a globally `C¹` map into the strict derivative required by Mathlib's IFT.
 - `apm_m98a05_contDiff_perturbation` proves that
   `(x, ε) ↦ F x + ε • G x` is `C¹`.
+- `apm_m98a05_hasFDerivAt_swapped_partial` proves that swapping `X × P` to
+  `P × X` preserves the supplied derivative as the second-coordinate partial.
+- `apm_m98a05_hasFDerivAt_perturbation_zero` identifies the perturbation's
+  unknown-direction derivative at parameter zero with `A`.
 - The final BVP clause uses `w = dw = d2w = 0`, which satisfies every weak
   derivative, trace, integrability, and equation requirement for all `ε`.
 
 ## Remaining Boundary
 
-- Reorient the product domain for `ContDiffAt.implicitFunction` and identify
-  the supplied partial derivative equivalence.
 - Extract open neighborhoods and a `ContDiffOn` solution from the eventual
   equality and uniqueness statements.
-- For the perturbation clause, prove the partial derivative at `(x₀,0)` is
-  exactly `A`, then extract a symmetric real interval.
+- For the perturbation clause, reuse the first clause and extract a symmetric
+  real interval from the resulting parameter neighborhood.

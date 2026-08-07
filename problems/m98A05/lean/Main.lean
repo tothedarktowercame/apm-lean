@@ -66,6 +66,28 @@ lemma apm_m98a05_contDiff_perturbation
   exact (hF.comp contDiff_fst).add
     (contDiff_snd.smul (hG.comp contDiff_fst))
 
+/-- Swapping the product puts the unknown in the second coordinate expected by
+Mathlib's product-domain implicit function theorem without changing the
+specified partial derivative. -/
+lemma apm_m98a05_hasFDerivAt_swapped_partial
+    {X P Z : Type*} [NormedAddCommGroup X] [NormedSpace ℝ X]
+    [NormedAddCommGroup P] [NormedSpace ℝ P]
+    [NormedAddCommGroup Z] [NormedSpace ℝ Z]
+    (H : X × P → Z) (x₀ : X) (p₀ : P) (A : X →L[ℝ] Z)
+    (hA : HasFDerivAt (fun x ↦ H (x, p₀)) A x₀) :
+    HasFDerivAt (fun x ↦ (fun q : P × X ↦ H (q.2, q.1)) (p₀, x)) A x₀ := by
+  simpa using hA
+
+/-- At parameter zero the perturbation has exactly the derivative of `F` in
+the unknown direction. -/
+lemma apm_m98a05_hasFDerivAt_perturbation_zero
+    {X Y : Type*} [NormedAddCommGroup X] [NormedSpace ℝ X]
+    [NormedAddCommGroup Y] [NormedSpace ℝ Y]
+    (F G : X → Y) (x₀ : X) (A : X →L[ℝ] Y)
+    (hA : HasFDerivAt F A x₀) :
+    HasFDerivAt (fun x ↦ F x + (0 : ℝ) • G x) A x₀ := by
+  simpa using hA
+
 theorem apm_m98a05 :
     (∀ (X P Z : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
       [CompleteSpace X] [NormedAddCommGroup P] [NormedSpace ℝ P]
@@ -105,6 +127,17 @@ theorem apm_m98a05 :
     `ContDiffAt.implicitFunction` while retaining `ContDiffOn` on all of `V`.
     Sibling `m93J03` reaches the same product-domain IFT API but does not close
     this neighborhood-extraction bridge.
+
+    Closer hop 2 proves the orientation step as
+    `apm_m98a05_hasFDerivAt_swapped_partial`: after replacing `H (x,p)` by
+    `H (q.2,q.1)` on `P × X`, the derivative in the second coordinate is
+    definitionally the supplied `A`.  Source inspection confirms that
+    `ContDiffAt.eventually_apply_implicitFunction` and
+    `eventually_apply_eq_iff_implicitFunction` contain the needed local
+    equation and uniqueness.  The remaining work is now extracting common
+    open product neighborhoods from those eventual statements and upgrading
+    pointwise `ContDiffAt` of the implicit function to `ContDiffOn` on the
+    selected parameter neighborhood.
     -/
     sorry
   constructor
@@ -118,6 +151,13 @@ theorem apm_m98a05 :
     `HasFDerivAt.add`, scalar-multiplication
     derivative rules, all closed artifacts, `ConstructionTargets`, and
     `YoungL2.lean` found no compiled helper performing that assembly.
+
+    Closer hop 2 also proves
+    `apm_m98a05_hasFDerivAt_perturbation_zero`, closing identification of the
+    unknown-direction derivative at `(x₀,0)`.  Consequently this clause now
+    depends only on the preceding neighborhood-extraction bridge and the
+    elementary choice of a symmetric interval inside the resulting real
+    neighborhood.
     -/
     sorry
   · refine ⟨1, by norm_num, ?_⟩
