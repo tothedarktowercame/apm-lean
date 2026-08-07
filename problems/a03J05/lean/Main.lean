@@ -34,6 +34,20 @@ lemma apm_a03J05_integral_zero :
   simpa [apm_a03J05_integrand] using
     (integral_Ioi_inv_one_add_sq (i := (0 : ℝ)))
 
+/-- The cosine kernel is even in its frequency parameter. -/
+lemma apm_a03J05_integrand_neg (t x : ℝ) :
+    apm_a03J05_integrand (-t) x = apm_a03J05_integrand t x := by
+  simp only [apm_a03J05_integrand, mul_neg]
+  rw [Real.cos_neg]
+
+/-- Consequently the entire improper cosine integral is even in frequency. -/
+lemma apm_a03J05_integral_neg (t : ℝ) :
+    (∫ x in Ioi (0 : ℝ), apm_a03J05_integrand (-t) x ∂volume) =
+      ∫ x in Ioi (0 : ℝ), apm_a03J05_integrand t x ∂volume := by
+  apply integral_congr_ae
+  filter_upwards with x
+  exact apm_a03J05_integrand_neg t x
+
 /-! ## Base case: t = 0 gives ∫₀^∞ 1/(1+x²) dx = π/2
 
    This uses `integral_Ioi_of_hasDerivAt_of_tendsto'` with f = arctan,
@@ -78,7 +92,7 @@ theorem apm_a03j05 (t : ℝ) :
     ∫ x in Ioi (0 : ℝ), apm_a03J05_integrand t x ∂volume =
       (Real.pi / 2) * Real.exp (-|t|) := by
   /-
-  PARTIAL boundary (closer hop 1).
+  PARTIAL boundary (closer hop 2).
 
   `apm_a03J05_integral_zero` now closes the complete `t = 0` case using
   Mathlib's packaged `integral_Ioi_inv_one_add_sq` theorem.
@@ -94,7 +108,10 @@ theorem apm_a03j05 (t : ℝ) :
   of `1/(1+x²)`, a semicircle-contour limit, or residue calculus.  Sibling
   `a97J06` independently reaches the same boundary for `1/(x²+4)`.
 
-  Thus the nonzero-frequency evaluation remains open; the ODE route still
+  This hop proves `apm_a03J05_integrand_neg` and
+  `apm_a03J05_integral_neg`, completing the evenness reduction that matches
+  the right side's `|t|`; only nonnegative frequencies need a transform
+  evaluation. Thus the nonzero-frequency evaluation remains open; the ODE route still
   introduces the non-Bochner-integrable term `∫ cos (t*x)`, while the contour
   route requires an ad hoc arc construction and vanishing estimate.
   -/

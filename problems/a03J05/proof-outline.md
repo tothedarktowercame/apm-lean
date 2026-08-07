@@ -9,6 +9,8 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - `apm_a03J05_integral_zero` proves the full identity at `t = 0` from
   `integral_Ioi_inv_one_add_sq`.
+- `apm_a03J05_integrand_neg` and `apm_a03J05_integral_neg` prove evenness in
+  the frequency parameter, reducing the missing evaluation to `t > 0`.
 
 ## Remaining bridge
 

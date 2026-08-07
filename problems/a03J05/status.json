@@ -27,7 +27,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "closer_note": "Closed the frequency-zero case using Mathlib's improper integral of 1/(1+x²). Nonzero frequencies still require an unavailable Fourier-transform, Laplace-inversion/Fubini, or residue-contour bridge.",
+  "closer_hop": 2,
+  "closer_note": "Closed the frequency-zero case and proved pointwise and integral evenness in frequency, reducing the remaining evaluation to positive frequencies. Those still require an unavailable Fourier-transform, Laplace-inversion/Fubini, or residue-contour bridge.",
   "imported_at": "2026-07-13T17:26:51.819921Z"
 }
