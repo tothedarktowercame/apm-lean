@@ -1,12 +1,20 @@
 # Proof Outline: m03J03
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen theorem has a partial Lean development with one remaining `sorry`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m03J03.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `m03J03_abs_eval_not_distribution` proves the complete fourth conjunct by
+  evaluating a hypothetical linear distribution on a smooth bump and its
+  negation.
+
+## Remaining boundary
+
+- construct the locally finite one-sided Dirac comb as an LF-continuous map;
+- construct polynomial-growth Fourier series as distributions using repeated
+  integration by parts and summability;
+- bundle the regular distribution for `H sin` and prove both half-line
+  integration-by-parts identities identifying its first two derivatives.

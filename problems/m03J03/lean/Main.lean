@@ -16,6 +16,21 @@ noncomputable section
 /-- The Heaviside function with the irrelevant value at zero chosen to be zero. -/
 def m03J03Heaviside (x : ℝ) : ℝ := if 0 < x then 1 else 0
 
+lemma m03J03_abs_eval_not_distribution :
+    ¬ ∃ T : Distribution (⊤ : Opens ℝ) ℝ ⊤,
+      ∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤, T φ = |φ 0| := by
+  rintro ⟨T, hT⟩
+  let b : ContDiffBump (0 : ℝ) := default
+  let φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤ :=
+    ⟨b, b.contDiff, b.hasCompactSupport, subset_univ _⟩
+  have hφ : φ 0 = 1 := by
+    exact b.one_of_mem_closedBall (Metric.mem_closedBall_self b.rIn_pos.le)
+  have hpos := hT φ
+  have hneg := hT (-φ)
+  rw [map_neg, hpos] at hneg
+  simp [hφ] at hneg
+  norm_num at hneg
+
 /-- The one-sided Dirac comb, polynomial-growth Fourier series, the two
 distributional derivatives of `H sin`, and the absolute-value non-example. -/
 theorem apm_m03j03 :
@@ -41,14 +56,21 @@ theorem apm_m03j03 :
     (¬ ∃ T : Distribution (⊤ : Opens ℝ) ℝ ⊤,
       ∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤, T φ = |φ 0|) := by
   /-
-  SKIPPED (distribution-constructor/LF-continuity boundary). Mathlib searches
+  CLOSER HOP 1 (partial). The fourth conjunct is now closed independently by
+  `m03J03_abs_eval_not_distribution`: a compactly supported smooth bump equals
+  one at zero, while distribution linearity sends its negation to the negative
+  value, contradicting absolute evaluation.
+
+  The first three distribution-construction clauses remain. Mathlib searches
   found useful constructors and Fourier operations for `TemperedDistribution`
   (including `TemperedDistribution.delta` and regular tempered
   distributions), but no compiled locally finite Dirac-sum constructor or
   polynomial-growth Fourier-series convergence theorem producing the
   `Distribution (⊤ : Opens ℝ) ℂ ⊤` required here.
 
-  A direct proof must separately build continuous linear maps on the LF
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, the solved
+  distribution corpus, Mathlib source, and git history found no constructor
+  that resolves them. A direct proof must separately build continuous linear maps on the LF
   test-function space: local finiteness and compact-dependent seminorm bounds
   for the Dirac comb; `N + 2` integrations by parts and summability for the
   Fourier series; regular distributions plus two half-line integration-by-parts
