@@ -25,6 +25,24 @@ lemma apm_b96a02_normal_of_card_fifteen
   apply H.normal_of_index_eq_two
   omega
 
+/-- The normal core of a prime-order subgroup is either trivial or the entire
+subgroup. -/
+lemma apm_b96a02_normalCore_eq_bot_or_eq_self_of_prime_card
+    (G : Type*) [Group G] (H : Subgroup G)
+    (hprime : (Nat.card H).Prime) :
+    H.normalCore = ⊥ ∨ H.normalCore = H := by
+  letI : Fact (Nat.card H).Prime := ⟨hprime⟩
+  rcases (H.normalCore.subgroupOf H).eq_bot_or_eq_top_of_prime_card with hk | hk
+  · left
+    rw [Subgroup.subgroupOf_eq_bot] at hk
+    apply le_antisymm
+    · intro x hx
+      exact Disjoint.le_bot hk ⟨hx, H.normalCore_le hx⟩
+    · exact bot_le
+  · right
+    apply le_antisymm H.normalCore_le
+    exact Subgroup.subgroupOf_eq_top.mp hk
+
 theorem apm_b96a02 :
     (∀ (G : Type*) [Group G] [Fintype G], Fintype.card G = 30 →
       (∃ N : Subgroup G, N.Normal ∧ Nat.card N = 15) ∧
@@ -64,6 +82,15 @@ theorem apm_b96a02 :
     -- index as two and `Subgroup.normal_of_index_eq_two` proves it normal.
     -- Thus the remaining group-theoretic boundary is construction of such a
     -- subgroup and normality of the order-3 and order-5 subgroups.
+    -- Closer hop 3 proves
+    -- `apm_b96a02_normalCore_eq_bot_or_eq_self_of_prime_card`: for any
+    -- prime-order subgroup its normal core is either bottom or the subgroup
+    -- itself.  This uses the prime-cardinality subgroup dichotomy on
+    -- `H.normalCore.subgroupOf H`.  It reduces the order-3/order-5 normality
+    -- and the later core-free analysis to excluding the bottom-core branch,
+    -- but it does not construct the required order-15 subgroup.  Further
+    -- searches of Hall-subgroup and finite-solvable-group APIs found no
+    -- existence theorem applicable to arbitrary groups of order 30.
     sorry
   constructor
   · -- Boundary (closer hop 1): searched `IntermediateField.fixingSubgroup`,
@@ -97,7 +124,11 @@ theorem apm_b96a02 :
     -- The new `IsZGroup` route does not bypass those dependencies: its
     -- semidirect factors are existential and do not directly classify every
     -- core-free subgroup.  No closed sibling packages the required order-30
-    -- core-free-subgroup index classification.
+    -- core-free-subgroup index classification.  The closer-hop-3 prime-order
+    -- normal-core dichotomy now isolates the needed contradiction for subgroup
+    -- orders 3 and 5: one must prove those subgroups normal in the order-30
+    -- group, after which their core cannot be bottom.  That final normality
+    -- input is exactly the still-open first conjunct.
     sorry
   · intro F L _ _ _ _ _ hcard hex
     obtain ⟨f, hfdeg, hf⟩ := hex
