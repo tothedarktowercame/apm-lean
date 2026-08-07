@@ -29,6 +29,42 @@ noncomputable def apm_t94J05_northPole : apm_t94J05_S3 :=
 /-- Smoothness of a map between the embedded torus and three-sphere. -/
 opaque apm_t94J05_IsSmooth (f : C(apm_t94J05_Torus, apm_t94J05_S3)) : Prop
 
+/-- A nonsurjective map to the sphere factors through the complement of a
+missed point. This is the sphere-specialized form of the bridge proved in
+problem `t01A01`. -/
+lemma apm_t94J05_factor_through_complement
+    (f : C(apm_t94J05_Torus, apm_t94J05_S3))
+    (hnot_surj : ¬Function.Surjective f) :
+    ∃ q : apm_t94J05_S3,
+      ∃ g : C(apm_t94J05_Torus, {y : apm_t94J05_S3 // y ≠ q}),
+        ∀ x, (g x : apm_t94J05_S3) = f x := by
+  obtain ⟨q, hq⟩ : ∃ q : apm_t94J05_S3, ∀ x, f x ≠ q := by
+    simpa [Function.Surjective] using hnot_surj
+  refine ⟨q, ⟨fun x ↦ ⟨f x, hq x⟩, f.continuous.subtype_mk _⟩, ?_⟩
+  intro x
+  rfl
+
+/-- A null-homotopy of the complement-valued factor descends along the
+subtype inclusion. -/
+lemma apm_t94J05_nullhomotopic_of_factor
+    (f : C(apm_t94J05_Torus, apm_t94J05_S3))
+    (q : apm_t94J05_S3)
+    (g : C(apm_t94J05_Torus, {y : apm_t94J05_S3 // y ≠ q}))
+    (hfg : ∀ x, (g x : apm_t94J05_S3) = f x)
+    (p : {y : apm_t94J05_S3 // y ≠ q})
+    (hg : ContinuousMap.Homotopic g (ContinuousMap.const _ p)) :
+    ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t94J05_Torus (p : apm_t94J05_S3)) := by
+  let inclusion : C({y : apm_t94J05_S3 // y ≠ q}, apm_t94J05_S3) :=
+    ⟨Subtype.val, continuous_subtype_val⟩
+  have hcomp := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl inclusion) hg
+  have hleft : inclusion.comp g = f := by
+    apply ContinuousMap.ext
+    intro x
+    exact hfg x
+  simpa [hleft, inclusion] using hcomp
+
 theorem apm_t94j05
     (f : C(apm_t94J05_Torus, apm_t94J05_S3))
     (hf : apm_t94J05_IsSmooth f) :
@@ -48,5 +84,17 @@ theorem apm_t94j05
   stated smoothness assumption cannot feed the informal route. Developing an
   independent obstruction-theory proof for all continuous maps from the
   torus to `S³` is also absent from Mathlib and beyond this pass.
+
+  Closer hop 1 reuses the elementary factorization pattern from sibling
+  `t01A01`: `apm_t94J05_factor_through_complement` now factors any
+  nonsurjective `f` through the complement of a missed sphere point, and
+  `apm_t94J05_nullhomotopic_of_factor` transports a null-homotopy of that
+  factor back through the subtype inclusion. Mathlib's `stereographic` has
+  source exactly the complement of one point and target `univ`, but no
+  packaged contraction of that source was found; constructing it requires
+  scaling in the orthogonal-complement target and transporting the homotopy
+  through the partial homeomorphism. Before that, the opaque
+  `apm_t94J05_IsSmooth` still supplies no nonsurjectivity consequence. Thus
+  both substantive bridges remain open, and the frozen statement is unchanged.
   -/
   sorry
