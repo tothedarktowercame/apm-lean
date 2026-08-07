@@ -10,12 +10,12 @@
     "problem_tex": "apm/t92J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_hop": 1,
+  "boundary": "Product preservation of the fundamental groupoid is available, but the concrete metric-sphere circle and sphere fundamental groups are not computed. RP2 needs an antipodal-cover bridge, while the genus-two clause needs surface classification and Seifert-van Kampen beyond the homology record.",
   "imported_at": "2026-07-13T17:26:57.479654Z"
 }

@@ -1,12 +1,22 @@
 # Proof Outline: t92J05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt is `lean/Main.lean`. The genus-two relator is a
+genuine presented-group word, with its elementary commutator normalization
+compiled.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t92J05.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_t92J05_commutator_self` sanity-checks the commutator encoding.
+- Mathlib's fundamental-groupoid product theorem has been identified for the
+  `S² × S¹` clause.
+
+## Remaining boundary
+
+- Compute `π₁(S²)=1` and `π₁(S¹)=ℤ` for the concrete metric spheres, then
+  transport the product-groupoid result to based fundamental groups.
+- Construct the antipodal cover of projectivization and compute `π₁(RP²)`.
+- Formalize compact oriented surface classification and Seifert--van Kampen,
+  yielding the standard genus-two presentation.

@@ -52,6 +52,10 @@ def apm_t92J05_HasGenusTwoHomology
 def apm_t92J05_commutator (a b : Fin 4) : FreeGroup (Fin 4) :=
   FreeGroup.of a * FreeGroup.of b * (FreeGroup.of a)⁻¹ * (FreeGroup.of b)⁻¹
 
+@[simp] lemma apm_t92J05_commutator_self (a : Fin 4) :
+    apm_t92J05_commutator a a = 1 := by
+  simp [apm_t92J05_commutator]
+
 /-- The genus-two surface relator `[a₁,b₁][a₂,b₂]`. -/
 def apm_t92J05_genusTwoRelator : FreeGroup (Fin 4) :=
   apm_t92J05_commutator 0 1 * apm_t92J05_commutator 2 3
@@ -73,4 +77,36 @@ theorem apm_t92j05 :
         (hS : apm_t92J05_HasGenusTwoHomology S) (x : S),
       Nonempty
         (FundamentalGroup S x ≃* apm_t92J05_genusTwoGroup) := by
+  /-
+  CLOSER HOP 1 boundary. The elementary presentation normalization
+  `apm_t92J05_commutator_self` is compiled above as a sanity check on the
+  frozen relator encoding.
+
+  Mathlib's `AlgebraicTopology.FundamentalGroupoid.Product` proves that the
+  fundamental groupoid functor preserves products. Thus the middle clause can
+  in principle be reduced to the fundamental groups of the metric two-sphere
+  and complex unit circle. Searches found no packaged theorem that the former
+  is trivial or that the latter is `ℤ`; the available `Circle`/`AddCircle`
+  topology does not include the required fundamental-group computation.
+
+  The first clause needs the antipodal universal cover of the projectivization
+  and its deck group, or an independent CW computation of `π₁(RP²)`. Mathlib's
+  projectivization is algebraic/topological, but no covering-map theorem links
+  the unit sphere quotient to it and no projective-space fundamental-group
+  theorem is present.
+
+  The final clause is not determined by homology alone for arbitrary spaces;
+  the manifold hypotheses invoke the classification of compact oriented
+  surfaces, after which a cell decomposition and Seifert--van Kampen yield the
+  displayed presentation. Mathlib provides neither surface classification nor
+  a topological Seifert--van Kampen theorem. The homology record does not by
+  itself construct an equivalence or presentation of `FundamentalGroup S x`.
+
+  Searches covered `LEMMA-INDEX.md`, all `ConstructionTargets/`, related
+  artifacts (`t01A01`, `t01A04`, `t01J03`, `t03J01`, `t98J03`), Mathlib's
+  fundamental-groupoid product, sphere, circle/AddCircle, projectivization,
+  covering-map, presented-group, manifold, and singular-homology sources, and
+  git history. Product preservation was found, but none of the factor/group or
+  classification computations needed to apply it.
+  -/
   sorry
