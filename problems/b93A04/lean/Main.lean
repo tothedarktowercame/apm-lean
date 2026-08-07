@@ -52,15 +52,20 @@ theorem apm_b93a04 :
   refine ⟨?_, ?_, ?_, ?_⟩
   · intro x
     constructor
-    · /- PASS-1 boundary: the reverse finite-sum description requires showing
-         the span of products from `L₁` and `L₂` is inverse-closed.  I searched
-         `IntermediateField.exists_finset_of_mem_supr'`, subalgebra product
-         APIs, and finite-dimensional-domain-to-field instances.  The intended
-         local route is to construct this span as a finite-dimensional
-         subalgebra/domain, then obtain inverses by injective-implies-surjective
-         multiplication.  No packaged lemma returned the displayed `Fin n`
-         normal form directly. -/
-      sorry
+    · intro hx
+      -- Mathlib's tensor-product range theorem supplies the finite-sum normal form.
+      let g := Algebra.TensorProduct.productMap L₁.val L₂.val
+      have hrange : g.range = (L₁ ⊔ L₂).toSubalgebra := by
+        rw [Algebra.TensorProduct.productMap_range, L₁.range_val, L₂.range_val,
+          IntermediateField.sup_toSubalgebra_of_left]
+      have hxrange : x ∈ g.range := by rwa [hrange]
+      obtain ⟨t, rfl⟩ := hxrange
+      obtain ⟨n, a, b, ht⟩ := TensorProduct.exists_sum_tmul_eq t
+      refine ⟨n, a, b, ?_⟩
+      rw [ht, map_sum]
+      apply Finset.sum_congr rfl
+      intro i hi
+      rfl
     · exact hsumProducts_le x
   · intro h1 h2
     letI : IsGalois F L₁ := h1
@@ -71,12 +76,25 @@ theorem apm_b93a04 :
     refine ⟨hfixingSup, ?_⟩
     have hdual := (IsGalois.intermediateFieldEquivSubgroup (F := F) (E := K)).map_inf L₁ L₂
     exact congrArg OrderDual.ofDual hdual
-  · /- PASS-1 boundary: `IsGalois.sup_right`/instances now close Galoisness
-       of the compositum, and the order-dual Galois correspondence closes both
-       fixing-subgroup lattice identities.  For the last abelianity claim I
-       searched `IntermediateField.restrictRestrictAlgEquivMapHom_injective`,
-       restriction homomorphisms, and commutative-range lemmas.  The remaining
-       bridge is to combine the two restriction maps into an injective map
-       `Gal(K/F) → Gal(L₁/F) × Gal(L₂/F)` under `L₁ ⊔ L₂ = ⊤`, then pull
-       commutativity back from the product. -/
-    sorry
+  · intro htop h1 h2 hab1 hab2
+    letI : IsGalois F L₁ := h1
+    letI : IsGalois F L₂ := h2
+    have hgalK : IsGalois F K := by
+      rw [← isGalois_iff_isGalois_top, ← htop]
+      infer_instance
+    letI : IsGalois F K := hgalK
+    let r₁ := AlgEquiv.restrictNormalHom (F := F) (K₁ := K) L₁
+    let r₂ := AlgEquiv.restrictNormalHom (F := F) (K₁ := K) L₂
+    -- The product restriction map has kernel equal to the fixing subgroup of the sup.
+    have hinj : Function.Injective (r₁.prod r₂) := by
+      rw [← MonoidHom.ker_eq_bot_iff, MonoidHom.ker_prod,
+        IntermediateField.restrictNormalHom_ker,
+        IntermediateField.restrictNormalHom_ker, ← hfixingSup, htop,
+        IntermediateField.fixingSubgroup_top]
+    refine ⟨hgalK, ?_⟩
+    intro σ τ
+    apply hinj
+    simp only [map_mul]
+    apply Prod.ext
+    · exact hab1 (r₁ σ) (r₁ τ)
+    · exact hab2 (r₂ σ) (r₂ τ)

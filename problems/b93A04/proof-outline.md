@@ -1,12 +1,17 @@
 # Proof Outline: b93A04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean proof is complete.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-b93A04.md`
+- The finite-sum description is obtained from the range of
+  `Algebra.TensorProduct.productMap`; `TensorProduct.exists_sum_tmul_eq`
+  converts an arbitrary preimage into the required `Fin n` sum.
+- Galoisness of the compositum follows from the existing instances.
+- Both fixing-subgroup identities follow from `fixingSubgroup_sup` and the
+  order-dual Galois correspondence.
+- When the compositum is top, the product of the two restriction maps is
+  injective because its kernel is the fixing subgroup of top. Commutativity
+  of both target Galois groups therefore pulls back to `Gal(K/F)`.
 
-## Follow-up Needed
+## Verification
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+`lake env lean problems/b93A04/lean/Main.lean` succeeds with no sorries.
