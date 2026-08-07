@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "notes": "Nonresonance-to-sine conversion and candidate admissibility compile; Euler-Lagrange and sharp weak Poincare bridges remain."
+  "closer_hop": 2,
+  "notes": "The admissible mode sin(x/2) on [0,2pi] now has compiled energy -3pi/4. Euler-Lagrange cross-term cancellation, positive directions, and the sharp weak Poincare bridge remain."
 }

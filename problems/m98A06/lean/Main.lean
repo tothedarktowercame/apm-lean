@@ -60,6 +60,37 @@ lemma apm_m98a06_sin_ne_zero_of_nonresonant {a : ℝ}
   intro k hk
   exact ha k hk.symm
 
+private lemma apm_m98a06_deriv_sin_half (x : ℝ) :
+    deriv (fun t : ℝ ↦ Real.sin (t / 2)) x = Real.cos (x / 2) / 2 := by
+  have hinner : HasDerivAt (fun t : ℝ ↦ t / 2) (1 / 2) x :=
+    (hasDerivAt_id x).div_const 2
+  convert ((Real.hasDerivAt_sin (x / 2)).comp x hinner).deriv using 1 <;> ring
+
+lemma apm_m98a06_negativeMode_admissible :
+    apm_m98a06_Admissible (2 * Real.pi) 0 0
+      (fun x : ℝ ↦ Real.sin (x / 2)) := by
+  refine ⟨by fun_prop, by simp, ?_⟩
+  convert Real.sin_pi using 1 <;> ring
+
+lemma apm_m98a06_negativeMode_energy :
+    apm_m98a06_I (2 * Real.pi) (fun x : ℝ ↦ Real.sin (x / 2)) =
+      -(3 * Real.pi / 4) := by
+  simp_rw [apm_m98a06_I, apm_m98a06_deriv_sin_half]
+  rw [intervalIntegral.integral_sub]
+  · rw [show (fun x : ℝ ↦ (Real.cos (x / 2) / 2) ^ 2) =
+        fun x ↦ (1 / 4 : ℝ) * (Real.cos (x / 2)) ^ 2 by funext x; ring]
+    rw [intervalIntegral.integral_const_mul]
+    rw [intervalIntegral.integral_comp_div (fun x : ℝ ↦ Real.cos x ^ 2)
+      (by norm_num : (2 : ℝ) ≠ 0)]
+    rw [intervalIntegral.integral_comp_div (fun x : ℝ ↦ Real.sin x ^ 2)
+      (by norm_num : (2 : ℝ) ≠ 0)]
+    simp
+    ring
+  · exact (by fun_prop : Continuous fun x : ℝ ↦
+      (Real.cos (x / 2) / 2) ^ 2).intervalIntegrable _ _
+  · exact (by fun_prop : Continuous fun x : ℝ ↦
+      Real.sin (x / 2) ^ 2).intervalIntegrable _ _
+
 theorem apm_m98a06 :
     ((∀ y : ℝ → ℝ,
         apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
@@ -106,7 +137,7 @@ theorem apm_m98a06 :
     · fun_prop
     · simp
   /-
-  PARTIAL boundary (closer hop 1): the resonant family appearing in part (a) has been checked
+  PARTIAL boundary (closer hop 2): the resonant family appearing in part (a) has been checked
   above to satisfy the frozen `C¹` endpoint encoding. The nonresonant candidate
   from part (b) is now also certified by
   `apm_m98a06_nonresonant_candidate_admissible` whenever `sin a ≠ 0`.
@@ -115,9 +146,17 @@ theorem apm_m98a06 :
   `apm_m98a06_sin_ne_zero_of_nonresonant`, using Mathlib's
   `Real.sin_ne_zero_iff`.
 
+  This hop also formalizes the explicit negative mode `sin (x/2)` on
+  `[0, 2π]`: `apm_m98a06_negativeMode_admissible` proves its endpoint and
+  regularity conditions, while `apm_m98a06_negativeMode_energy` evaluates its
+  energy exactly as `-3π/4`, using Mathlib's change-of-variables and squared
+  trigonometric integral formulas. Thus the negative direction itself is no
+  longer part of the boundary.
+
   Completing the theorem requires an Euler--Lagrange fundamental lemma for
-  `ContDiffOn` variations, exact interval-integral computations for positive
-  and negative second-variation modes, and the sharp one-dimensional
+  `ContDiffOn` variations, the corresponding cross-term cancellation for
+  arbitrary stationary/admissible functions, positive-direction constructions,
+  and the sharp one-dimensional
   Poincaré/Wirtinger theorem for the custom weak-derivative predicate
   `apm_m98a06_InH10Pi` (including its equality case and optimality). I searched
   Mathlib's interval integration-by-parts, weak-derivative, Sobolev, and
@@ -125,9 +164,10 @@ theorem apm_m98a06 :
   `m97A06`), `ConstructionTargets`, and `YoungL2.lean`; no compiled sibling or
   library assembled these results for this bespoke representation. A further
   Mathlib search did find the exact classical integral formulas
-  `intervalIntegral.integral_sin_sq`, `integral_cos_sq`, and
-  `integral_sin_mul_cos₁`; these can discharge individual mode calculations,
-  but do not provide the cross-term cancellation for an arbitrary merely
+  `intervalIntegral.integral_sin_sq`, `integral_cos_sq`,
+  `integral_sin_mul_cos₁`, and `integral_comp_div`; the first, second, and
+  fourth are used above for the negative-mode calculation, but they do not
+  provide the cross-term cancellation for an arbitrary merely
   `ContDiffOn ℝ 1` admissible function. The blocker remains the fundamental
   lemma/integration-by-parts bridge and the sharp weak Poincaré theorem.
   -/
