@@ -27,6 +27,34 @@ lemma apm_b98J01_kleinFour_comap_normal_and_ker_le
   exact ⟨(alternatingGroup.normal_kleinFour h4).comap φ,
     Subgroup.ker_le_comap φ (alternatingGroup.kleinFour (Fin 4))⟩
 
+lemma apm_b98J01_card_comap_of_surjective
+    {G Q : Type*} [Group G] [Group Q]
+    (φ : G →* Q) (hφ : Function.Surjective φ) (V : Subgroup Q) :
+    Nat.card (V.comap φ) = Nat.card φ.ker * Nat.card V := by
+  let N : Subgroup G := V.comap φ
+  let ψ := φ.subgroupMap N
+  have hψ : Function.Surjective ψ := φ.subgroupMap_surjective N
+  have hmap : N.map φ = V := by
+    dsimp [N]
+    exact Subgroup.map_comap_eq_self_of_surjective hφ V
+  have hker : Nat.card ψ.ker = Nat.card φ.ker := by
+    rw [Subgroup.ker_subgroupMap]
+    exact Nat.card_congr (Subgroup.subgroupOfEquivOfLe
+      (Subgroup.ker_le_comap φ V)).toEquiv
+  have hrange : Nat.card ψ.range = Nat.card V := by
+    rw [MonoidHom.range_eq_top.mpr hψ]
+    simpa [hmap]
+  have hcard := ψ.ker.card_mul_index
+  rw [Subgroup.index_ker, hker, hrange] at hcard
+  exact hcard.symm
+
+lemma apm_b98J01_kleinFour_comap_card
+    {G : Type*} [Group G] (φ : G →* alternatingGroup (Fin 4))
+    (hφ : Function.Surjective φ) (hker : Nat.card φ.ker = 3) :
+    Nat.card ((alternatingGroup.kleinFour (Fin 4)).comap φ) = 12 := by
+  rw [apm_b98J01_card_comap_of_surjective φ hφ,
+    alternatingGroup.kleinFour_card_of_card_eq_four (by simp), hker]
+
 theorem apm_b98j01 :
     ∀ (G : Type*) [Group G] [Fintype G],
       Fintype.card G = 36 →
@@ -85,5 +113,16 @@ theorem apm_b98j01 :
   hop. Thus the order-12 calculation is now an explicit finite-fiber assembly
   rather than a missing mathematical lemma. The center dichotomy and
   no-order-six arguments remain untouched.
+
+  Closer hop 3 routes around those dependent equalities completely.
+  `apm_b98J01_card_comap_of_surjective` proves the general formula
+  `|V.comap φ| = |ker φ| * |V|` via the restricted `subgroupMap`,
+  `Subgroup.ker_subgroupMap`, `Subgroup.subgroupOfEquivOfLe`,
+  `Subgroup.card_mul_index`, and `Subgroup.index_ker`.
+  `apm_b98J01_kleinFour_comap_card` specializes it to close the exact
+  order-12 calculation. Thus the pullback candidate now has compiled
+  normality, kernel containment, and cardinality. The open parts are the
+  first order-36 Sylow-action quotient construction and, for the final
+  conjunct, the center dichotomy and centrality/no-order-six argument.
   -/
   sorry

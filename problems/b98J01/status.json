@@ -16,7 +16,7 @@
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1,
-    "closer_progress": "The pullback subgroup is normal and contains the kernel. Hop 2 found the exact cardinality route via MonoidHom.fiberEquivKerOfSurjective plus sigmaFiberEquiv, or subgroupMap/card_mul_index; dependent-subtype equivalence equalities remain, followed by the center and order-36 classification arguments."
+    "closer_progress": "Hop 3 proves the general surjective-comap cardinality formula and specializes it to show the Klein-four pullback has order 12. Its normality and kernel containment were already compiled. The Sylow-action quotient, center dichotomy, and centrality/no-order-six arguments remain."
   },
   "artifacts": {
     "has_problem_tex": true,
