@@ -56,6 +56,42 @@ def apm_m94J02_spectrum : Set ℂ :=
     (∀ a, apm_m94J02_mem a →
       (fun n ↦ apm_m94J02_T (S a) n - z * (S a) n) = a)}
 
+/-- Every displayed diagonal entry is in the custom spectrum. -/
+lemma apm_m94J02_eigenvalue_mem_spectrum (j : ℕ) :
+    (2 : ℂ) ^ (-(j : ℤ)) ∈ apm_m94J02_spectrum := by
+  intro hS
+  rcases hS with ⟨S, _, _, hleft, _⟩
+  let e : ℕ → ℂ := fun n => if n = j then 1 else 0
+  have he_mem : apm_m94J02_mem e := by
+    unfold apm_m94J02_mem e
+    apply summable_of_hasFiniteSupport
+    exact (Set.finite_singleton j).subset (by
+      intro n hn
+      by_contra hnj
+      apply hn
+      dsimp
+      rw [if_neg (by simpa using hnj)]
+      simp)
+  have hz_mem : apm_m94J02_mem (fun _ : ℕ => (0 : ℂ)) := by
+    unfold apm_m94J02_mem
+    simp
+  have hzero : (fun n => apm_m94J02_T e n - (2 : ℂ) ^ (-(j : ℤ)) * e n) =
+      (fun _ => 0) := by
+    funext n
+    by_cases hnj : n = j
+    · subst n
+      simp [apm_m94J02_T, e]
+    · simp [apm_m94J02_T, e, hnj]
+  have hSe : S (fun _ : ℕ => (0 : ℂ)) = e := by
+    rw [← hzero]
+    exact hleft e he_mem
+  have hSz : S (fun _ : ℕ => (0 : ℂ)) = (fun _ => 0) := by
+    simpa [apm_m94J02_T] using hleft (fun _ : ℕ => (0 : ℂ)) hz_mem
+  have hej : e j = 1 := by simp [e]
+  have : e = (fun _ => 0) := hSe.symm.trans hSz
+  have := congrFun this j
+  simp [hej] at this
+
 theorem apm_m94j02 :
     (∀ a : ℕ → ℕ → ℂ,
         (∀ k, apm_m94J02_mem (a k)) →
@@ -105,8 +141,10 @@ theorem apm_m94j02 :
   Compactness requires diagonal subsequence extraction for every unit-ball
   sequence and weighted tail control. The spectrum equality requires
   constructing bounded diagonal inverses away from the closed eigenvalue set,
-  proving each `2^(-n)` has no inverse, and exhibiting failure of surjectivity
-  at zero in the statement's custom two-sided-inverse encoding. I searched
+  and exhibiting failure of surjectivity at zero in the statement's custom
+  two-sided-inverse encoding. The local lemma
+  `apm_m94J02_eigenvalue_mem_spectrum` now proves that every `2^(-n)` has no
+  inverse, directly from the coordinate vector and the zero vector. I searched
   Mathlib's summability, Fekete, and diagonal operator APIs; no compiled
   sibling assembled these custom weighted-sequence arguments within this
   pass. The elementary dilation membership clause is proved above.
