@@ -55,6 +55,30 @@ lemma apm_a97J06_integral_neg (t : ℝ) :
   intro x _
   simp [apm_a97J06_integrand]
 
+/-- Scaling `x = 2u` reduces this problem exactly to the standard Cauchy
+kernel `1 / (1 + u²)` at frequency `2t`. -/
+lemma apm_a97J06_integral_eq_half_standard (t : ℝ) :
+    (∫ x in Ioi (0 : ℝ), apm_a97J06_integrand t x ∂volume) =
+      (1 / 2 : ℝ) *
+        ∫ u in Ioi (0 : ℝ), Real.cos (u * (2 * t)) / (1 + u ^ 2) ∂volume := by
+  have hscale := integral_comp_mul_left_Ioi (apm_a97J06_integrand t) 0
+    (by norm_num : (0 : ℝ) < 2)
+  simp only [mul_zero] at hscale
+  have hpoint : (fun u : ℝ => apm_a97J06_integrand t (2 * u)) =
+      fun u => (1 / 4 : ℝ) * (Real.cos (u * (2 * t)) / (1 + u ^ 2)) := by
+    funext u
+    rw [apm_a97J06_integrand]
+    have hu : 1 + u ^ 2 ≠ 0 := by positivity
+    field_simp [hu]
+    ring
+  rw [hpoint, integral_const_mul] at hscale
+  change (1 / 4 : ℝ) *
+      (∫ u in Ioi (0 : ℝ), Real.cos (u * (2 * t)) / (1 + u ^ 2) ∂volume) =
+      (2 : ℝ)⁻¹ * (∫ x in Ioi (0 : ℝ), apm_a97J06_integrand t x ∂volume)
+    at hscale
+  norm_num at hscale ⊢
+  linarith
+
 theorem apm_a97j06 (t : ℝ) :
     ∫ x in Ioi (0 : ℝ), apm_a97J06_integrand t x ∂volume =
       (Real.pi / 4) * Real.exp (-2 * |t|) := by
@@ -107,4 +131,12 @@ theorem apm_a97j06 (t : ℝ) :
   -- Laplace inversion for this oscillatory kernel, residue theorem, or packaged
   -- semicircle/Jordan-lemma limit. `a03J05` has the same remaining transform at
   -- scale one; its new zero-frequency lemma does not close positive frequency.
+  --
+  -- CLOSER HOP 2: `apm_a97J06_integral_eq_half_standard` now compiles the
+  -- exact change of variables `x = 2u`. It proves that this theorem is exactly
+  -- one half of the scale-one Cauchy cosine transform at frequency `2t`,
+  -- eliminating every denominator- and normalization-specific obligation.
+  -- Sibling `a03J05` still has one sorry at that positive-frequency identity,
+  -- so it cannot be reused to close this frozen theorem. The remaining bridge
+  -- is now shared verbatim by the two artifacts.
   sorry

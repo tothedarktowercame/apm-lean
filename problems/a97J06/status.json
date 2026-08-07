@@ -28,8 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "closer_note": "Recovered and adapted compiled git-history proofs of the zero-frequency normalization and frequency evenness. The remaining bridge is the transform evaluation for positive frequency.",
+  "closer_hop": 2,
+  "closer_note": "Compiled the exact x = 2u scaling reduction: this integral is one half of the a03J05 scale-one Cauchy cosine transform at frequency 2t. That sibling retains the same positive-frequency transform sorry, so the shared characteristic-function bridge remains open.",
   "imported_at": "2026-07-13T17:26:52.853875Z",
   "checked_at": "2026-08-05T13:30:00Z",
   "checked_lean_state": {

@@ -64,3 +64,15 @@ Added compiled `cos_integral_even`, reducing negative frequencies to positive
 ones. Combined with the proved zero-frequency case, the only remaining lemma
 needed is the transform evaluation under `0 < t`. Repeated searches for a
 Cauchy characteristic-function or Jordan-lemma theorem returned no match.
+
+## Relay closer hop 2
+
+The compiled lemma `apm_a97J06_integral_eq_half_standard` performs the exact
+change of variables `x = 2u` and proves
+
+`I(t) = (1/2) ∫₀∞ cos(u · 2t)/(1 + u²) du`.
+
+Thus all scale and denominator bookkeeping is closed. The remaining theorem is
+literally the positive-frequency assertion still open in sibling `a03J05`, not
+a separate analytic obligation. Reusing that sibling is not possible while its
+main transform theorem itself remains sorry-backed.
