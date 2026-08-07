@@ -19,6 +19,31 @@ def ActsCyclically {F V : Type*} [Field F] [AddCommGroup V] [Module F V]
     (T : Module.End F V) : Prop :=
   ∃ v₀ : V, Submodule.span F (Set.range fun i : ℕ => (T ^ i) v₀) = ⊤
 
+lemma apm_b95J02_aeval_eq_zero_of_cyclic_vector
+    {F V : Type*} [Field F] [AddCommGroup V] [Module F V]
+    (T : Module.End F V) (v : V)
+    (hv : Submodule.span F (Set.range fun i : ℕ => (T ^ i) v) = ⊤)
+    (p : Polynomial F)
+    (hp : (Polynomial.aeval (R := F) T p : Module.End F V) v = 0) :
+    (Polynomial.aeval (R := F) T p : Module.End F V) = 0 := by
+  rw [← LinearMap.ker_eq_top]
+  apply top_unique
+  rw [← hv]
+  apply Submodule.span_le.mpr
+  rintro x ⟨i, rfl⟩
+  change (Polynomial.aeval (R := F) T p : Module.End F V) ((T ^ i) v) = 0
+  calc
+    (Polynomial.aeval (R := F) T p : Module.End F V) ((T ^ i) v) =
+        (Polynomial.aeval (R := F) T (p * Polynomial.X ^ i) : Module.End F V) v := by
+          rw [Polynomial.aeval_mul, Module.End.mul_apply, Polynomial.aeval_X_pow]
+    _ = (Polynomial.aeval (R := F) T (Polynomial.X ^ i * p) : Module.End F V) v := by
+          rw [mul_comm]
+    _ =
+        (Polynomial.aeval (R := F) T (Polynomial.X ^ i) : Module.End F V)
+          ((Polynomial.aeval (R := F) T p : Module.End F V) v) := by
+          rw [Polynomial.aeval_mul, Module.End.mul_apply]
+    _ = 0 := by rw [hp, map_zero]
+
 lemma apm_b95J02_charpoly_eq_minpoly_of_finrank_eq
     (F V : Type*) [Field F] [AddCommGroup V] [Module F V]
     [FiniteDimensional F V] (T : Module.End F V)
@@ -78,5 +103,14 @@ theorem apm_b95j02 :
        implication is narrowed to the classical missing API
        "nonderogatory (charpoly = minpoly) implies existence of a cyclic
        vector". Searches for `cyclicVector`, `krylov`, `nonderogatory`, and
-       companion/similarity theorems found no implementation. -/
+       companion/similarity theorems found no implementation.
+
+       Closer hop 2 proves the key forward-direction annihilator bridge as
+       `apm_b95J02_aeval_eq_zero_of_cyclic_vector`: if the orbit of `v` spans
+       and `p(T)v = 0`, commutativity of polynomial evaluations shows `p(T)`
+       vanishes on every orbit vector, hence on all of `V`. Searches of
+       Mathlib's module APIs found no general `Module.Cyclic` structure or
+       invariant-factor theorem that can turn `charpoly = minpoly` into a
+       witness vector. Thus the reverse nonderogatory-to-cyclic implication
+       remains the precise blocker. -/
     sorry
