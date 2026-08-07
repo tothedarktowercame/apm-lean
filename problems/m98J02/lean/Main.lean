@@ -91,6 +91,20 @@ def apm_m98J02_representsFunction
     (u : apm_m98J02_Dist) (f : apm_m98J02_E → ℝ) : Prop :=
   ∀ φ : apm_m98J02_Test, u φ = ∫ x, f x * φ x
 
+/-- Compactly supported distributions are closed under addition directly from
+the support definition. -/
+lemma apm_m98J02_hasCompactSupport_add
+    (u v : apm_m98J02_Dist)
+    (hu : apm_m98J02_hasCompactSupport u)
+    (hv : apm_m98J02_hasCompactSupport v) :
+    apm_m98J02_hasCompactSupport (u + v) := by
+  obtain ⟨Ku, hKuc, hKu⟩ := hu
+  obtain ⟨Kv, hKvc, hKv⟩ := hv
+  refine ⟨Ku ∪ Kv, hKuc.union hKvc, ?_⟩
+  intro φ hdis
+  have hd := disjoint_union_right.mp hdis
+  simp [hKu φ hd.1, hKv φ hd.2]
+
 theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
@@ -111,4 +125,32 @@ theorem apm_m98j02 :
         apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) ∧
         w' ≠ w ∧
         apm_m98J02_solvesT w' (fun φ ↦ ∫ x, f x * φ x) := by
-  sorry
+  refine ⟨?_, ?_⟩
+  · intro u v hu hv
+    exact apm_m98J02_hasCompactSupport_add u v hu hv
+  · /-
+    CLOSER HOP 1 boundary. The first conjunct is now fully proved above as
+    `apm_m98J02_hasCompactSupport_add`, using the union of two compact support
+    witnesses and `disjoint_union_right`.
+
+    I searched `LEMMA-INDEX.md`, all 16 `ConstructionTargets/` modules, the
+    closed distribution artifacts, Mathlib's `Distribution`, `TestFunction`,
+    `SchwartzMap`, bump-function, and tempered-distribution sources, and git
+    history. Mathlib has `SchwartzMap.integralCLM` and constructors of regular
+    tempered distributions, but no continuous-linear constructor into this
+    `Distribution (⊤ : Opens E) ℝ ⊤` type for
+    `φ ↦ ∫ x, f x * φ x`. Thus even the canonical regular distribution `u`
+    requires a new continuity proof for the test-function LF topology.
+
+    The second conjunct additionally requires a cutoff test function equal to
+    one on the compact support and, for every `x`, a translated test function
+    `y ↦ φ (x+y)`, followed by continuity of the iterated pairing defining
+    `Ψ`. No packaged general convolution of a compactly supported distribution
+    with an arbitrary distribution was found. The final conjunct then needs
+    differentiation-through-convolution and a nonzero homogeneous solution;
+    the intended latter witness is a regular constant distribution, but it is
+    blocked by the same absent regular-distribution constructor. These are
+    genuine topological-distribution assemblies, not merely algebraic
+    rewriting, so the remaining conjunction stays honestly open.
+    -/
+    sorry
