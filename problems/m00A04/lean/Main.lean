@@ -76,6 +76,20 @@ private lemma apm_m00A04_zero_memH10WithGradient {n : ℕ}
       · simp
     · simpa [apm_m00A04_partial] using hε
 
+private lemma apm_m00A04_zero_weak_solution {n : ℕ}
+    (U : Set (Fin n → ℝ)) :
+    ∃ (u : (Fin n → ℝ) → ℝ)
+      (g : Fin n → (Fin n → ℝ) → ℝ),
+      apm_m00A04_memH10WithGradient U u g ∧
+      ∀ (v : (Fin n → ℝ) → ℝ)
+        (h : Fin n → (Fin n → ℝ) → ℝ),
+        apm_m00A04_memH10WithGradient U v h →
+          (∫ x in U, (∑ i : Fin n, g i x * h i x) + u x * v x) =
+            ∫ x in U, (0 : ℝ) * v x := by
+  refine ⟨0, 0, apm_m00A04_zero_memH10WithGradient U, ?_⟩
+  intro v h hv
+  simp
+
 theorem apm_m00a04
     (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] (f : V →L[ℝ] ℝ) :
@@ -181,5 +195,19 @@ theorem apm_m00a04
       Lax--Milgram machinery, but still no completeness/representative theorem
       for this graph closure. Extending the compiled zero base case to arbitrary
       `F` therefore remains exactly the positive-dimensional completion bridge.
+      Closer hop 3 proves `apm_m00A04_zero_weak_solution`, closing the full
+      variational identity for zero forcing in every dimension. The remaining
+      branch is restricted to `0 < n` and `F ≠ 0`. Inspection of
+      `Analysis/InnerProductSpace/LaxMilgram.lean` confirms that its theorem
+      acts on an already constructed complete Hilbert space; it does not build
+      the raw-function/weak-gradient representative space required here.
       -/
-        sorry
+        by_cases hF0 : F = 0
+        · subst F
+          exact apm_m00A04_zero_weak_solution U
+        · /-
+          Remaining boundary: construct the energy completion of compactly
+          supported smooth tests and prove its elements admit representatives
+          satisfying `apm_m00A04_memH10WithGradient`.
+          -/
+          sorry

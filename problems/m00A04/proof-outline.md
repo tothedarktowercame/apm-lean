@@ -14,10 +14,12 @@ zero-dimensional PDE case. One positive-dimensional Sobolev boundary remains.
   use the empty gradient, and approximate exactly by a constant test function.
 - In every dimension, the zero function with zero gradient satisfies the custom
   `H¹₀` predicate, including its weak-gradient and approximation clauses.
+- For zero forcing in every dimension, this zero representative satisfies the
+  complete variational identity against every admissible test pair.
 
 ## Remaining Boundary
 
-For `0 < n`, construct the energy completion of compactly supported smooth
-tests and prove its completion elements have function/weak-gradient
+For `0 < n` and nonzero forcing, construct the energy completion of compactly
+supported smooth tests and prove its completion elements have function/weak-gradient
 representatives satisfying the custom approximation predicate. Then apply
 Riesz representation and descend the resulting vector to those representatives.
