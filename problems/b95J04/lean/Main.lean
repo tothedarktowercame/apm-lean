@@ -11,6 +11,25 @@ lemma apm_b95J04_mem_zpowers_of_nonidentity_prime_card
   intro x
   exact mem_zpowers_of_prime_card hcard hg
 
+lemma apm_b95J04_exists_eigenvector_of_nonidentity_prime_card
+    (p : ℕ) [Fact p.Prime]
+    (F E : Type*) [Field F] [Field E] [Algebra F E]
+    [FiniteDimensional F E] [IsGalois F E]
+    (z : F) (hz : IsPrimitiveRoot z p)
+    (hcard : Nat.card (E ≃ₐ[F] E) = p)
+    (σ : E ≃ₐ[F] E) (hσ : σ ≠ 1) :
+    ∃ α : E, α ≠ 0 ∧ σ α = algebraMap F E z * α := by
+  have hgen : ∀ τ : E ≃ₐ[F] E, τ ∈ Subgroup.zpowers σ :=
+    apm_b95J04_mem_zpowers_of_nonidentity_prime_card p (E ≃ₐ[F] E) hcard σ hσ
+  have hord : orderOf σ = Nat.card (E ≃ₐ[F] E) :=
+    orderOf_eq_card_of_forall_mem_zpowers hgen
+  have hroot : IsRoot (minpoly F σ.toLinearMap) z := by
+    rw [minpoly_algEquiv_toLinearMap σ (isOfFinOrder_of_finite σ), hord, hcard]
+    simpa [Polynomial.IsRoot] using sub_eq_zero.mpr hz.pow_eq_one
+  obtain ⟨α, hα⟩ := (Module.End.hasEigenvalue_of_isRoot hroot).exists_hasEigenvector
+  refine ⟨α, hα.2, ?_⟩
+  simpa [Algebra.smul_def] using hα.1
+
 /-!
 # APM b95J04
 
@@ -90,4 +109,14 @@ theorem apm_b95j04
     -- irreducibility of `X^p-C a` from `α ∉ F`; Mathlib's
     -- `X_pow_sub_C_irreducible_iff_of_prime` requires reformulating that fact
     -- as nonexistence of a p-th root of `a` in `F`.
+    --
+    -- Closer hop 2 now closes the specified eigenvector construction itself:
+    -- `apm_b95J04_exists_eigenvector_of_nonidentity_prime_card` proves that
+    -- every nonidentity `σ` has a nonzero eigenvector with eigenvalue exactly
+    -- `z`. It replays the minpoly/root argument from
+    -- `exists_root_adjoin_eq_top_of_isCyclic`, using the preceding zpowers
+    -- helper to identify `orderOf σ` with `p`. The converse is therefore
+    -- narrowed to fixed-field transport for `α ^ p`, exclusion from the
+    -- algebra-map range, and the Galois-correspondence proof that `F⟮α⟯ = ⊤`.
+    -- The forward splitting-field/irreducibility assembly remains open.
     sorry
