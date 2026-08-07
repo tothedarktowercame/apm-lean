@@ -59,9 +59,8 @@ lemma apm_m97A01_modulus_core
   let P : X →L[ℂ] X := (ContinuousLinearMap.adjoint A).comp A
   let B : X →L[ℂ] X := CFC.sqrt P
   have hP : 0 ≤ P := by
-    rw [show P = star A * A by
-      simp [P, ContinuousLinearMap.star_eq_adjoint]]
-    exact star_mul_self_nonneg A
+    apply (ContinuousLinearMap.nonneg_iff_isPositive P).mpr
+    simpa [P] using ContinuousLinearMap.isPositive_adjoint_comp_self A
   refine ⟨B, (ContinuousLinearMap.nonneg_iff_isPositive B).mp
     (CFC.sqrt_nonneg P), ?_, ?_⟩
   · simpa [B, P] using CFC.sqrt_mul_sqrt_self P hP
@@ -70,6 +69,19 @@ lemma apm_m97A01_modulus_core
       (ContinuousLinearMap.nonneg_iff_isPositive C).mpr hC
     exact (CFC.sqrt_unique (a := P) (b := C)
       (by simpa [P] using hC2) hCn).symm
+
+/-- Positivity and the square identity determine the pointwise norm of the
+modulus. -/
+lemma apm_m97A01_modulus_norm
+    {X : Type*} [NormedAddCommGroup X]
+    [InnerProductSpace ℂ X] [CompleteSpace X]
+    (A B : X →L[ℂ] X) (hB : B.IsPositive)
+    (hB2 : B.comp B = (ContinuousLinearMap.adjoint A).comp A)
+    (x : X) : ‖B x‖ = ‖A x‖ := by
+  rw [← sq_eq_sq₀ (norm_nonneg (B x)) (norm_nonneg (A x))]
+  rw [B.apply_norm_sq_eq_inner_adjoint_left,
+    A.apply_norm_sq_eq_inner_adjoint_left]
+  rw [hB.isSelfAdjoint.adjoint_eq, hB2]
 
 theorem apm_m97a01
     (X : Type*) [NormedAddCommGroup X]
@@ -80,7 +92,14 @@ theorem apm_m97a01
       apm_m97A01_hasPolarFactor A absA) ∧
     IsCompactOperator (ContinuousLinearMap.adjoint A) := by
   /-
-  PASS-1 PARTIAL boundary (codex): `apm_m97A01_modulus_core` now constructs
+  Closer hop 1 adds `apm_m97A01_modulus_norm`, proving the remaining norm
+  clause `‖B x‖ = ‖A x‖` from positivity, self-adjointness, and `B² = A†A`.
+  It uses Mathlib's `apply_norm_sq_eq_inner_adjoint_left` and
+  `IsPositive.isSelfAdjoint`.  Consequently `apm_m97A01_modulus_core` plus
+  this lemma now supplies every field of `apm_m97A01_isModulus`; only the
+  polar-factor extension remains in the first conjunct.
+
+  PASS-1 PARTIAL boundary (codex): `apm_m97A01_modulus_core` constructs
   the modulus as `CFC.sqrt ((ContinuousLinearMap.adjoint A).comp A)` and
   proves its positivity, square identity, and uniqueness using
   `CFC.sqrt_nonneg`, `CFC.sqrt_mul_sqrt_self`, and `CFC.sqrt_unique`.
@@ -96,7 +115,11 @@ theorem apm_m97a01
   `LinearEquiv.extendOfIsometry` was also checked, but requires dense range in
   the target and therefore does not apply to the polar factor here.  Proving
   both results locally would require a substantial Hilbert-space approximation
-  development beyond this pass's budget.  The statement is mathematically
-  sound; this `sorry` covers precisely those assembly/dependency gaps.
+  development beyond this pass's budget.  Renewed searches covered
+  `LEMMA-INDEX.md`, Mathlib's compact-operator, adjoint, extension, projection,
+  and compact spectral-theorem sources, `ConstructionTargets`, solved siblings,
+  and git history.  No compact-adjoint theorem or codomain-nonsurjective
+  isometry extension was found.  The statement is mathematically sound; this
+  `sorry` covers precisely those assembly/dependency gaps.
   -/
   sorry
