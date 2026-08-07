@@ -30,6 +30,15 @@ def apm_m98a03_IsHammersteinOperator
   ∀ (u : apm_m98a03_C01) (x : Icc (0 : ℝ) 1),
     F u x = ∫ y : Icc (0 : ℝ) 1, K (x, y) * f (u y)
 
+lemma apm_m98a03_integrable_kernel_section
+    (K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ)
+    (f : ℝ → ℝ) (hf : Continuous f) (u : apm_m98a03_C01)
+    (x : Icc (0 : ℝ) 1) :
+    Integrable (fun y : Icc (0 : ℝ) 1 => K (x, y) * f (u y)) := by
+  let q : ContinuousMap (Icc (0 : ℝ) 1) ℝ :=
+    ⟨fun y => K (x, y) * f (u y), by fun_prop⟩
+  simpa [q] using (BoundedContinuousFunction.mkOfCompact q).integrable volume
+
 theorem apm_m98a03
     (K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ)
     (f : ℝ → ℝ) (hf : ContDiff ℝ 1 f) :
@@ -42,4 +51,21 @@ theorem apm_m98a03
           DF u h x = ∫ y : Icc (0 : ℝ) 1,
             K (x, y) * deriv f (u y) * h y) ∧
       Continuous DF := by
+  /-
+  PARTIAL boundary (codex). The scalar integral in the frozen Hammerstein
+  formula is now certified as integrable by
+  `apm_m98a03_integrable_kernel_section` (using `hf.continuous`). Mathlib's
+  `ContinuousMap.integral_apply` gives the correct evaluation theorem if the
+  operator is built as a `ContinuousMap`-valued Bochner integral.
+
+  The remaining construction is substantial: package
+  `u ↦ (x ↦ ∫ y, K (x,y) * f (u y))` as a continuous-map-valued operator,
+  build its derivative as a bounded integral operator, prove the uniform
+  Fréchet remainder estimate for the Nemytskii map from only `ContDiff ℝ 1 f`,
+  and prove continuity in operator norm of `u ↦ DF u`. Searches for
+  Hammerstein/Nemytskii APIs in Mathlib, all closed artifacts (including the
+  partial mixed-exponent sibling `m94A04`), `ConstructionTargets`, and
+  `YoungL2.lean` found no compiled theorem packaging this compact-domain
+  differentiability argument.
+  -/
   sorry
