@@ -17,6 +17,22 @@ def apm_m93j06_Solves (f : ℝ → ℝ → ℝ) (y₀ : ℝ) (y : ℝ → ℝ) :
 def apm_m93j06_IsFlow (f : ℝ → ℝ → ℝ) (φ : ℝ → ℝ → ℝ) : Prop :=
   ∀ y₀, apm_m93j06_Solves f y₀ (fun t => φ t y₀)
 
+lemma apm_m93j06_flow_zero {f φ : ℝ → ℝ → ℝ}
+    (hφ : apm_m93j06_IsFlow f φ) (y₀ : ℝ) : φ 0 y₀ = y₀ :=
+  (hφ y₀).1
+
+lemma apm_m93j06_flow_hasDerivAt {f φ : ℝ → ℝ → ℝ}
+    (hφ : apm_m93j06_IsFlow f φ) (y₀ t : ℝ) :
+    HasDerivAt (fun s ↦ φ s y₀) (f t (φ t y₀)) t :=
+  (hφ y₀).2 t
+
+/-- The stability estimate is exact at the initial time. -/
+lemma apm_m93j06_flow_distance_zero {f φ : ℝ → ℝ → ℝ}
+    (hφ : apm_m93j06_IsFlow f φ) (L a b : ℝ) :
+    |φ 0 a - φ 0 b| = Real.exp (L * |(0 : ℝ)|) * |a - b| := by
+  rw [apm_m93j06_flow_zero hφ, apm_m93j06_flow_zero hφ]
+  simp
+
 theorem apm_m93j06 :
     (∀ f : ℝ → ℝ → ℝ, Continuous (Function.uncurry f) →
       (∃ L > 0, ∀ t a b, |f t a - f t b| ≤ L * |a - b|) →
@@ -53,5 +69,21 @@ theorem apm_m93j06 :
   `Mathlib.Analysis.ODE.PicardLindelof` and
   `Mathlib.Analysis.ODE.Gronwall`, but no compiled sibling assembled these
   global and parameter-dependence bridges within this pass.
+
+  Closer hop 1 extracts the structural consequences of the custom flow
+  predicate as `apm_m93j06_flow_zero` and
+  `apm_m93j06_flow_hasDerivAt`; the helper
+  `apm_m93j06_flow_distance_zero` closes the base-time case of the final
+  stability estimate. Source inspection additionally identifies
+  `IsPicardLindelof.exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith`,
+  which already builds a local flow Lipschitz in initial data, but only on one
+  closed time interval and one initial-data ball. It does not supply the `C¹`
+  dependence required by the second frozen conjunct.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, closed ODE artifacts,
+  and git history found no globalization theorem or formalized square-root
+  nonuniqueness example. The live bridges remain compatible exhaustion/gluing,
+  differentiable parameter dependence, the Hölder counterexample, and the two
+  time orientations of Gronwall. The frozen statement was left unchanged.
   -/
   sorry
