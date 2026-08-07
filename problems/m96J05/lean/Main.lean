@@ -29,6 +29,21 @@ def apm_m96j05_differenceSymbol (ε ξ : ℝ) : ℂ :=
 def apm_m96j05_shiftSymbol (ξ : ℝ) : ℂ :=
   Complex.exp (Complex.I * ξ)
 
+/-- Both Fourier multipliers occurring in the dominated-convergence argument
+have modulus one. -/
+lemma apm_m96j05_symbol_norms (ε ξ : ℝ) :
+    ‖Complex.exp (apm_m96j05_differenceSymbol ε ξ)‖ = 1 ∧
+      ‖apm_m96j05_shiftSymbol ξ‖ = 1 := by
+  constructor
+  · rw [Complex.norm_exp]
+    have hre : (apm_m96j05_differenceSymbol ε ξ).re = 0 := by
+      simp only [apm_m96j05_differenceSymbol, Complex.mul_re, Complex.I_re,
+        zero_mul, Complex.I_im, one_mul, zero_sub, neg_eq_zero]
+      rw [← Complex.ofReal_div]
+      exact Complex.ofReal_im _
+    rw [hre, Real.exp_zero]
+  · simp [apm_m96j05_shiftSymbol, Complex.norm_exp]
+
 theorem apm_m96j05
     (D : ℝ → apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
     (T : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
@@ -42,7 +57,9 @@ theorem apm_m96j05
       Tendsto (fun ε : ℝ => NormedSpace.exp (D ε) f)
         (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds (T f)) := by
   /-
-  SKIPPED (operator exponential versus a.e. `Lp` multipliers).  The scalar
+  PARTIAL (operator exponential versus a.e. `Lp` multipliers).  The helper
+  `apm_m96j05_symbol_norms` proves the uniform modulus-one estimate for both
+  scalar exponentials, which supplies the domination bound.  The scalar
   analytic part is available: for each `ξ`,
   `sin (ε * ξ) / ε → ξ` on the punctured neighborhood of zero,
   `Complex.exp (I * sin (ε * ξ) / ε) → Complex.exp (I * ξ)`, and both
