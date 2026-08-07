@@ -1,8 +1,8 @@
 # Proof Outline: m94J03
 
-The Lean artifact reduces the theorem to one continuous-functional-calculus
-identity. Spectral distance positivity and the full scalar inverse estimate are
-compiled.
+The Lean artifact proves the resolvent estimate through the isometric
+continuous functional calculus. Spectral distance positivity, the scalar
+inverse estimate, and the resolvent/CFC identity are all compiled.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m94J03.md`
@@ -14,10 +14,10 @@ compiled.
 - Closed nonempty spectrum gives strictly positive spectral distance.
 - For every spectral value `lam`,
   `‖(z-lam)⁻¹‖ ≤ infDist(z, spectrum A)⁻¹`.
+- `cfc_inv`, `cfc_sub`, `cfc_const`, and `cfc_id'` identify `resolvent A z`
+  with the CFC of `lam ↦ (z-lam)⁻¹`; `norm_cfc_le` then proves the result.
 
 ## Remaining Boundary
 
-Identify `resolvent A z` with the continuous functional calculus of
-`lam ↦ (z-lam)⁻¹`, using `cfc_inv`/`cfc_ringInverse_id`, then apply
-`norm_cfc_le` to the compiled pointwise estimate. Compactness is not needed
-after self-adjointness supplies the normal CFC instance.
+None. Compactness is not needed after self-adjointness supplies the normal CFC
+instance.

@@ -42,17 +42,25 @@ theorem apm_m94j03 :
       simpa [dist_eq_norm] using Metric.infDist_le_dist_of_mem (x := z) hlam
     rw [norm_inv]
     exact inv_le_inv₀ (norm_pos_iff.mpr (sub_ne_zero.mpr hzl)) hdist |>.2 hdle
-  /-
-  Boundary (closer hop 1): `hpointwise` now compiles the complete scalar
-  estimate `‖(z-λ)⁻¹‖ ≤ infDist(z, spectrum A)⁻¹` on the spectrum. It remains to identify the norm of the resolvent of the
-  self-adjoint operator with the supremum of `|(z - λ)⁻¹|` over its
-  spectrum. I searched the imported spectral/resolvent and continuous
-  functional-calculus APIs (`resolvent`, `spectrum.isClosed`,
-  `IsSelfAdjoint.spectrumRestricts`, and the CFC isometry lemmas). The
-  library exposes the needed ingredients, but I did not complete the bridge
-  showing that this particular resolvent is the CFC of `λ ↦ (z - λ)⁻¹`.
-  The resolvent-set hypothesis has been reduced above to the essential
-  strict positivity of the spectral distance; compactness is mathematically
-  unnecessary once self-adjointness is used.
-  -/
-  sorry
+  let g : ℂ → ℂ := fun lam ↦ z - lam
+  have hg : ContinuousOn g (spectrum ℂ A) :=
+    continuous_const.sub continuous_id |>.continuousOn
+  have hg_ne : ∀ lam ∈ spectrum ℂ A, g lam ≠ 0 := by
+    intro lam hlam
+    exact sub_ne_zero.mpr fun h ↦ hnot (h ▸ hlam)
+  -- Mathlib CFC: `cfc_inv`, `cfc_sub`, `cfc_const`, and `cfc_id'`.
+  have hres : resolvent A z = cfc (fun lam ↦ (z - lam)⁻¹) A := by
+    have hcg : cfc g A = algebraMap ℂ (H →L[ℂ] H) z - A := by
+      change cfc (fun lam : ℂ ↦ (fun _ : ℂ ↦ z) lam - (fun w : ℂ ↦ w) lam) A = _
+      rw [cfc_sub (fun _ : ℂ ↦ z) (fun w : ℂ ↦ w) A
+          continuousOn_const continuous_id.continuousOn,
+        cfc_const z A hself.isStarNormal, cfc_id' ℂ A hself.isStarNormal]
+    unfold resolvent
+    calc
+      Ring.inverse (algebraMap ℂ (H →L[ℂ] H) z - A) =
+          Ring.inverse (cfc g A) := congrArg Ring.inverse hcg.symm
+      _ = cfc (fun lam ↦ (g lam)⁻¹) A :=
+        (cfc_inv g A hg_ne hg hself.isStarNormal).symm
+      _ = cfc (fun lam ↦ (z - lam)⁻¹) A := rfl
+  rw [hres]
+  exact norm_cfc_le (le_of_lt (inv_pos.mpr hdist)) hpointwise
