@@ -57,6 +57,15 @@ lemma apm_m98a05_hasStrictFDerivAt_of_contDiff
     HasStrictFDerivAt f A x := by
   exact hf.contDiffAt.hasStrictFDerivAt' hA (by norm_num)
 
+/-- The product-domain perturbation used in part (b) is `C¹`. -/
+lemma apm_m98a05_contDiff_perturbation
+    {X Y : Type*} [NormedAddCommGroup X] [NormedSpace ℝ X]
+    [NormedAddCommGroup Y] [NormedSpace ℝ Y]
+    (F G : X → Y) (hF : ContDiff ℝ 1 F) (hG : ContDiff ℝ 1 G) :
+    ContDiff ℝ 1 (fun q : X × ℝ => F q.1 + q.2 • G q.1) := by
+  exact (hF.comp contDiff_fst).add
+    (contDiff_snd.smul (hG.comp contDiff_fst))
+
 theorem apm_m98a05 :
     (∀ (X P Z : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
       [CompleteSpace X] [NormedAddCommGroup P] [NormedSpace ℝ P]
@@ -102,9 +111,11 @@ theorem apm_m98a05 :
   · /-
     PARTIAL boundary: the perturbation clause follows by applying the preceding
     IFT to `(x, ε) ↦ F x + ε • G x`. The strict-derivative bridge is now proved
-    above. What remains is the bundled product derivative for this map and the
-    same conversion of Mathlib's eventual local solution into the stated
-    `δ`-interval witness. Searches of `HasFDerivAt.add`, scalar-multiplication
+    above, and closer hop 1 proves that this product-domain perturbation is `C¹`
+    in `apm_m98a05_contDiff_perturbation`. What remains is identifying its
+    partial derivative at `(x₀, 0)` with `A` and converting Mathlib's eventual
+    local solution into the stated `δ`-interval witness. Searches of
+    `HasFDerivAt.add`, scalar-multiplication
     derivative rules, all closed artifacts, `ConstructionTargets`, and
     `YoungL2.lean` found no compiled helper performing that assembly.
     -/
