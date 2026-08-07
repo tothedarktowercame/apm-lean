@@ -72,6 +72,27 @@ lemma apm_m97A02_sin_one_lt_one : Real.sin 1 < 1 := by
     (by linarith [Real.pi_gt_three])
   simpa only [Real.sin_pi_div_two] using h
 
+/-- Scalar estimate behind the local Lipschitz bound for the nonlinear
+remainder `x ↦ sin x - x`.  Using the global Lipschitz estimate for cosine
+avoids needing a separate second-order Taylor bound. -/
+lemma apm_m97A02_cos_remainder_mul_sub
+    (x y u v : ℝ) :
+    |(Real.cos x - 1) * u - (Real.cos y - 1) * v| ≤
+      |x| * |u - v| + |x - y| * |v| := by
+  rw [show (Real.cos x - 1) * u - (Real.cos y - 1) * v =
+      (Real.cos x - 1) * (u - v) + (Real.cos x - Real.cos y) * v by ring]
+  calc
+    _ ≤ |Real.cos x - 1| * |u - v| +
+        |Real.cos x - Real.cos y| * |v| := by
+      simpa only [abs_mul] using abs_add_le
+        ((Real.cos x - 1) * (u - v)) ((Real.cos x - Real.cos y) * v)
+    _ ≤ |x| * |u - v| + |x - y| * |v| := by
+      exact add_le_add
+        (mul_le_mul_of_nonneg_right
+          (by simpa using Real.abs_cos_sub_cos_le x 0) (abs_nonneg _))
+        (mul_le_mul_of_nonneg_right
+          (Real.abs_cos_sub_cos_le x y) (abs_nonneg _))
+
 theorem apm_m97a02 :
     ∀ α : ℝ, α ∈ Icc (0 : ℝ) 1 → Real.cos α = α →
       ∃ δ : ℝ, 0 < δ ∧
@@ -109,5 +130,16 @@ theorem apm_m97a02 :
   `sin 1 < 1` and the anchored Poincaré bound are both compiled; the remaining
   bridge is still the Banach-space model and the nonlinear local Lipschitz
   estimate inside that model.
+
+  Closer hop 2 proves `apm_m97A02_cos_remainder_mul_sub`, the scalar product
+  estimate needed after differentiating the nonlinear remainder.  It routes
+  around the informal proof's quadratic Taylor estimate by using Mathlib's
+  global `Real.abs_cos_sub_cos_le`; on a derivative ball, the resulting bound
+  is linear in the radius and therefore still tends to zero.  Searches of
+  `LEMMA-INDEX.md`, the closed corpus, Mathlib's `C¹` function spaces,
+  continuous-map integration, and git history again found no complete normed
+  model for anchored `ContDiffOn` functions.  The remaining boundary is to
+  combine this scalar estimate with `derivWithin` chain/product rules and to
+  construct the complete derivative-norm space on which contraction applies.
   -/
   sorry

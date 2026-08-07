@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_progress": "Hop 2 compiles the scalar product estimate underlying the nonlinear sine-remainder Lipschitz bound; the anchored derivative-norm Banach model remains open.",
   "imported_at": "2026-07-13T17:26:55.620819Z"
 }
