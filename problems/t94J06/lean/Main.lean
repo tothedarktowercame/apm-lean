@@ -18,6 +18,11 @@ term `cos ‖z‖` is explicitly coerced into `ℂ`.
 noncomputable def apm_t94J06_function (z : ℂ) : ℂ :=
   z ^ 4 + 5 * z ^ 3 + Complex.I * z ^ 3 + ((Real.cos ‖z‖ : ℝ) : ℂ)
 
+/-- The map is continuous despite its explicitly non-holomorphic radial term. -/
+lemma apm_t94J06_continuous : Continuous apm_t94J06_function := by
+  unfold apm_t94J06_function
+  fun_prop
+
 /-- On the circle of radius seven, the lower-order (including
 non-holomorphic) part is strictly dominated by `z ^ 4`. -/
 lemma apm_t94J06_boundary_domination {z : ℂ} (hz : ‖z‖ = 7) :
@@ -51,10 +56,19 @@ lemma apm_t94J06_boundary_homotopy_ne_zero :
   apply apm_t94J06_boundary_domination
   simpa [Metric.mem_sphere, dist_zero_right] using hz
 
+/-- In particular, the given function itself has no zero on the radius-seven
+boundary; this is the `t = 1` endpoint of the compiled homotopy. -/
+lemma apm_t94J06_boundary_ne_zero :
+    ∀ z ∈ Metric.sphere (0 : ℂ) 7, apm_t94J06_function z ≠ 0 := by
+  intro z hz
+  have h := apm_t94J06_boundary_homotopy_ne_zero
+    ⟨1, by constructor <;> norm_num⟩ z hz
+  simpa using h
+
 theorem apm_t94j06 :
     ∃ z : ℂ, apm_t94J06_function z = 0 := by
   /-
-  Boundary (closer hop 1, still open): the function is not holomorphic because of
+  Boundary (closer hop 2, still open): the function is not holomorphic because of
   `Real.cos ‖z‖`, so Rouché's theorem and the argument principle cannot be
   applied. The intended route proves domination by `z ^ 4` on a large circle,
   constructs a nonvanishing straight-line boundary homotopy, computes winding
@@ -71,7 +85,10 @@ theorem apm_t94j06 :
   and therefore cannot apply here. The local lemma
   `apm_t94J06_boundary_domination` now proves the strict estimate on the
   radius-seven circle, and `apm_t94J06_boundary_homotopy_ne_zero` packages the
-  resulting zero-free straight-line homotopy. What remains is exactly the topological degree theorem
+  resulting zero-free straight-line homotopy. This hop additionally proves
+  `apm_t94J06_continuous` for the full non-holomorphic map and extracts
+  `apm_t94J06_boundary_ne_zero` as the `t = 1` endpoint of that homotopy.
+  What remains is exactly the topological degree theorem
   turning that boundary homotopy into an interior zero; the frozen existential
   conclusion exposes no further smaller proposition.
   -/

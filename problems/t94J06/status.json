@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_progress": "Closer hop 2 proves continuity of the full non-holomorphic map and derives its nonvanishing on the radius-seven boundary from the t=1 endpoint of the compiled straight-line homotopy. The remaining bridge is the topological degree/no-retraction theorem forcing an interior zero.",
   "imported_at": "2026-07-13T17:26:58.124722Z"
 }

@@ -6,6 +6,8 @@ than `‖z⁴‖` (using the explicit bound `2059 < 2401`).
 The lemma `apm_t94J06_boundary_homotopy_ne_zero` then reuses
 `ConstructionTargets.Rouche.rouche_homotopy_ne_zero_on_sphere` to package a
 zero-free straight-line boundary homotopy.
+Closer hop 2 proves continuity of the full radial/non-holomorphic map and
+extracts its boundary nonvanishing as the endpoint of that homotopy.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t94J06.md`
