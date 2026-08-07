@@ -147,4 +147,47 @@ theorem apm_m00a01
     antilipschitz result through the positive-constant equivalence. The ambient
     and subtype norms reduce definitionally once that equivalence is constructed.
     -/
-    sorry
+    -- Closer hop 2 closes that bridge by supplying both subtype completeness
+    -- instances explicitly to `ContinuousLinearEquiv.ofBijective`.
+    haveI hMcomplete : CompleteSpace M := hMclosed.completeSpace_coe
+    haveI hNperp : CompleteSpace (Nᗮ) := Submodule.instOrthogonalCompleteSpace N
+    let Q : M →L[𝕜] Nᗮ :=
+      apmRestrictedComplementCLM M N P hP
+    have hQbij : Function.Bijective Q := by
+      constructor
+      · intro x y hxy
+        apply Subtype.ext
+        have hval := congrArg Subtype.val hxy
+        change (x : H) - (P x : H) = (y : H) - (P y : H) at hval
+        have hdiffN : (x : H) - (y : H) ∈ N := by
+          have heq : (x : H) - (y : H) = (P x : H) - (P y : H) := by
+            rw [sub_eq_sub_iff_add_eq_add] at hval ⊢
+            simpa [add_comm] using hval
+          rw [heq]
+          exact N.sub_mem (P x).property (P y).property
+        exact sub_eq_zero.mp
+          (hzero_of_mem_both (M.sub_mem x.property y.property) hdiffN)
+      · intro z
+        have hzsum : (z : H) ∈ M ⊔ N := by rw [hsum]; exact Submodule.mem_top
+        obtain ⟨m, hm, n, hn, hmn⟩ := Submodule.mem_sup.mp hzsum
+        refine ⟨⟨m, hm⟩, Subtype.ext ?_⟩
+        change m - (P m : H) = (z : H)
+        have hPz : (P (z : H) : H) = 0 := hP_eq_zero_of_mem_perp z.property
+        have hPn : (P n : H) = n := hP_eq_of_mem hn
+        have happ' : P m + P n = P (z : H) := by simpa using congrArg P hmn
+        have happ := congrArg Subtype.val happ'
+        change (P m : H) + (P n : H) = (P (z : H) : H) at happ
+        rw [hPz, hPn] at happ
+        rw [← hmn, show (P m : H) = -n by
+          rw [eq_neg_iff_add_eq_zero]
+          exact happ]
+        abel
+    have hker : Q.ker = ⊥ := LinearMap.ker_eq_bot.mpr hQbij.1
+    have hrange : Q.range = ⊤ := LinearMap.range_eq_top.mpr hQbij.2
+    let e : M ≃L[𝕜] Nᗮ :=
+      @ContinuousLinearEquiv.ofBijective 𝕜 𝕜 _ _ _ M _ _ (Nᗮ) _ _ _ _ _ _
+        hNperp hMcomplete _ Q hker hrange
+    obtain ⟨α, hα, hbound⟩ :=
+      antilipschitzWith_iff_exists_mul_le_norm.mp ⟨_, e.antilipschitz⟩
+    refine ⟨α, hα, fun x => ?_⟩
+    simpa [Q, apmRestrictedComplementCLM_apply] using hbound x
