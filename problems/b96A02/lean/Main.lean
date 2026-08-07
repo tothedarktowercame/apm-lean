@@ -38,20 +38,30 @@ theorem apm_b96a02 :
         ∃ g : F[X], g.natDegree = 9 ∧ g.IsSplittingField F L) := by
   constructor
   · -- Boundary: searched the Sylow counting APIs (`Sylow.card_eq_multiplicity`,
-    -- `Sylow.normalizer_eq_top_iff`, and index-two normality).  Mathlib has no
-    -- packaged classification theorem for groups of order 30; formalizing the
-    -- element-count argument and characteristic subgroups exceeded pass-1.
+    -- `Sylow.card_dvd_index`, `card_sylow_modEq_one`,
+    -- `Sylow.normal_of_subsingleton`, and `Subgroup.normal_of_index_eq_two`).
+    -- Mathlib has no packaged order-30 theorem; formalizing the incompatible
+    -- simultaneous Sylow counts and then the characteristic order-3/order-5
+    -- subgroups inside the normal order-15 subgroup exceeded pass-1.
     sorry
   constructor
   · -- Boundary: searched `IntermediateField.fixingSubgroup`,
-    -- `Subgroup.normalCore`, and the Galois correspondence.  The exact theorem
-    -- identifying the fixed field of the core with the normal closure/splitting
-    -- field of a minimal polynomial is not packaged in Mathlib.
+    -- `Subgroup.normalCore_eq_iInf_conjAct`, `Subgroup.normal_le_normalCore`,
+    -- `IntermediateField.normalClosure_def''`, and the Galois correspondence.
+    -- These expose the dual intersection-of-conjugates/supremum-of-conjugate-
+    -- fields route, but the exact theorem identifying the fixed field of the
+    -- core with the normal closure, followed by the simple-extension root-set
+    -- characterization of a minimal-polynomial splitting field, is not
+    -- packaged in Mathlib.
     sorry
   constructor
   · -- Boundary: this depends on both preceding missing developments plus
     -- index/degree bookkeeping for the fixing subgroup; APIs searched include
-    -- `IntermediateField.finrank_eq_card_fixingSubgroup` and `normalCore`.
+    -- `IntermediateField.finrank_eq_card_fixingSubgroup`,
+    -- `Subgroup.normalCore_le`, Cauchy's theorem, and subgroup-cardinality
+    -- divisibility.  Without the order-30 normal-subgroup theorem and the
+    -- core/splitting-field bridge, the exclusion of subgroup orders 3 and 5
+    -- cannot yet be transported to the asserted minimal-polynomial degrees.
     sorry
   · intro F L _ _ _ _ _ hcard hex
     obtain ⟨f, hfdeg, hf⟩ := hex
