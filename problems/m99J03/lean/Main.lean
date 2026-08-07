@@ -30,6 +30,14 @@ def apm_m99j03_dipole (n : ℕ) (x : ℝ) : ℝ :=
   else if 0 ≤ x ∧ x ≤ 1 / (n : ℝ) then -((n : ℝ) ^ 2)
   else 0
 
+lemma apm_m99j03_dilation_integrable
+    (ψ φ : ℝ → ℝ) (hψ : Continuous ψ) (hφ : Continuous φ)
+    (hφc : HasCompactSupport φ) (n : ℕ) :
+    MeasureTheory.Integrable (fun x : ℝ => ψ (x / (n : ℝ)) * φ x) := by
+  apply Continuous.integrable_of_hasCompactSupport
+  · exact (hψ.comp (continuous_id.div_const (n : ℝ))).mul hφ
+  · exact hφc.mul_left
+
 theorem apm_m99j03
     (ψ : ℝ → ℝ) (hψ : ContDiff ℝ (⊤ : ℕ∞) ψ) :
     (∀ φ : ℝ → ℝ, apm_m99j03_IsTestFunction φ →
@@ -55,8 +63,9 @@ theorem apm_m99j03
       tendsto_const_div_atTop_nhds_zero_nat x
     exact (hψ_cont.continuousAt.tendsto.comp hx).mul tendsto_const_nhds
   /-
-  Boundary: pointwise convergence for the dilated profile in part (c) is
-  proved above. Completing (c) requires extracting a compact support bound
+  Boundary: pointwise convergence and integrability of every member of the
+  dilated profile in part (c) are proved above. Completing (c) requires
+  extracting a compact support bound
   from `HasCompactSupport φ` and constructing one integrable majorant for
   `ψ (x / n) * φ x` (including the `n = 0` convention) before applying
   `MeasureTheory.tendsto_integral_of_dominated_convergence`. Parts (a) and
