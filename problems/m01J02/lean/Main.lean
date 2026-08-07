@@ -68,8 +68,56 @@ theorem apm_m01j02
       from the informal proof.  The other three former holes are now closed
       below using `ContinuousLinearMap.adjoint_comp` and pointwise composition
       algebra.
+
+      Closer hop 2 routes around positivity.  In the reverse direction, apply
+      the asserted equality to `N.starProjection x`: both the `N`-projection
+      and the projection onto `M ⊔ N` fix this vector, so cancellation gives
+      `M.starProjection (N.starProjection x) = 0`.  The library's zero-product
+      characterization then yields orthogonality.  Forward, the sum lies in
+      `M ⊔ N`, and its residual is orthogonal to each summand; uniqueness of
+      orthogonal projection identifies it with `(M ⊔ N).starProjection`.
       -/
-      sorry
+      constructor
+      · intro heq
+        rw [← Submodule.starProjection_comp_starProjection_eq_zero_iff]
+        ext x
+        simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.zero_apply]
+        let y := N.starProjection x
+        have hyN : y ∈ N := N.starProjection_apply_mem x
+        have hySup : y ∈ M ⊔ N :=
+          (show N ≤ M ⊔ N from le_sup_right) hyN
+        have hfixN : N.starProjection y = y :=
+          N.starProjection_eq_self_iff.mpr hyN
+        have hfixSup : (M ⊔ N).starProjection y = y :=
+          (M ⊔ N).starProjection_eq_self_iff.mpr hySup
+        have happ := DFunLike.congr_fun heq y
+        simp only [ContinuousLinearMap.add_apply] at happ
+        rw [hfixN, hfixSup] at happ
+        exact add_eq_right.mp happ
+      · intro hMN
+        ext x
+        simp only [ContinuousLinearMap.add_apply]
+        symm
+        apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+        · exact Submodule.add_mem _
+            ((show M ≤ M ⊔ N from le_sup_left) (M.starProjection_apply_mem x))
+            ((show N ≤ M ⊔ N from le_sup_right) (N.starProjection_apply_mem x))
+        · intro w hw
+          obtain ⟨m, hm, n, hn, rfl⟩ := Submodule.mem_sup.mp hw
+          have hmzero : inner 𝕜 (x - (M.starProjection x + N.starProjection x)) m = 0 := by
+            rw [show x - (M.starProjection x + N.starProjection x) =
+                (x - M.starProjection x) - N.starProjection x by abel,
+              inner_sub_left, M.starProjection_inner_eq_zero x m hm]
+            simp only [zero_sub, neg_eq_zero]
+            exact hMN hm _ (N.starProjection_apply_mem x)
+          have hnzero : inner 𝕜 (x - (M.starProjection x + N.starProjection x)) n = 0 := by
+            rw [show x - (M.starProjection x + N.starProjection x) =
+                (x - N.starProjection x) - M.starProjection x by abel,
+              inner_sub_left, N.starProjection_inner_eq_zero x n hn]
+            simp only [zero_sub, neg_eq_zero]
+            rw [inner_eq_zero_symm]
+            exact hMN (M.starProjection_apply_mem x) n hn
+          rw [inner_add_right, hmzero, hnzero, add_zero]
     · constructor
       · -- Mathlib: `ContinuousLinearMap.adjoint_comp` and self-adjoint projections.
         constructor
