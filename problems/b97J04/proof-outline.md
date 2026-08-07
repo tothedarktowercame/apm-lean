@@ -1,12 +1,19 @@
 # Proof Outline: b97J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt compiles with one remaining `sorry`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97J04.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_b97j04_additive_exists` constructs the commuting additive
+  Jordan--Chevalley decomposition using Mathlib's polynomial-in-`T` theorem.
+- `apm_b97j04_additive_unique` proves uniqueness by translating the frozen
+  predicate to Mathlib's uniqueness theorem.
+
+## Remaining bridge
+
+Prove preservation of characteristic polynomial, identify the custom
+existential-power generalized eigenspace with the semisimple-part eigenspace,
+and derive the unique multiplicative decomposition of a linear equivalence.
