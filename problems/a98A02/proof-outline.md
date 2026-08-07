@@ -9,12 +9,16 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - `apm_a98A02_inner_products_summable` records Mathlib's packaged Bessel
   consequence for an abstract orthonormal sequence.
+- `apm_a98A02_memLp_two` proves every bounded measurable `g n` belongs to
+  `L²` for the restricted interval measure.
+- `apm_a98A02_orthonormal_toLp` transports the raw integral identities through
+  `MemLp.toLp` and establishes Mathlib's `Orthonormal ℝ` predicate.
 
 ## Remaining bridge
 
-1. Bundle the bounded measurable `g n` as elements of `L²[0,1]`.
-2. Transport the frozen integral identities to `Orthonormal ℝ` in the `Lp`
-   quotient.
-3. Apply Bessel to bounded/L² approximants of an arbitrary `L¹` function.
-4. Extend the limit using the uniform estimate
+1. Identify the abstract `L²` inner products with the frozen raw integral
+   coefficients for bounded/L² approximants.
+2. Apply Bessel to those approximants.
+3. Produce bounded/L² approximants of an arbitrary `L¹` function and extend
+   the limit using the uniform estimate
    `|∫ (f-h)g_n| ≤ M ∫|f-h|`.
