@@ -13,11 +13,16 @@ remains for the order-36 quotient construction and the pullback/center claims.
 - `apm_b98J01_kleinFour_comap_normal_and_ker_le` constructs the canonical
   pullback subgroup for the last conjunct, proves it normal, and proves that it
   contains the kernel.
+- Closer hop 2 found that `MonoidHom.fiberEquivKerOfSurjective` identifies each
+  fiber with the kernel, and `Equiv.sigmaFiberEquiv` can assemble these fibers
+  over the Klein-four subgroup. An equivalent route uses the restricted
+  `subgroupMap`, `Subgroup.card_mul_index`, and `Subgroup.index_ker`.
 
 ## Remaining bridge
 
 For the first conjunct, formalize the conjugation action on the four Sylow
 3-subgroups and identify its order-12 image with `alternatingGroup (Fin 4)`.
 For the last conjunct, prove the surjective preimage-card formula giving the
-Klein-four pullback cardinality 12, classify its center, and exclude the
+Klein-four pullback cardinality 12 by finishing the dependent-subtype
+equivalence (or restricted-hom cardinal arithmetic), classify its center, and exclude the
 noncentral action using the fact that `A₄` has no subgroup of order 6.

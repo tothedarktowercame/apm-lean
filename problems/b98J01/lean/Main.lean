@@ -73,5 +73,17 @@ theorem apm_b98j01 :
   `card_comap_dvd_of_injective`, not the surjective preimage-card equality.
   The center dichotomy and the no-order-six argument also remain open. The
   repaired statement appears mathematically sound.
+
+  Closer hop 2 found the missing cardinality ingredients despite there being
+  no named comap-card theorem. `MonoidHom.fiberEquivKerOfSurjective` identifies
+  every fiber of `φ` with `φ.ker`, while `Equiv.sigmaFiberEquiv` assembles the
+  fibers over the Klein-four subtype; equivalently, the restricted homomorphism
+  `φ.subgroupMap N` can use `Subgroup.card_mul_index` and
+  `Subgroup.index_ker`. I tested the explicit equivalence
+  `N ≃ kleinFour × φ.ker`; its forward and inverse maps elaborate, but the
+  dependent-subtype `left_inv`/`right_inv` equalities did not close in this
+  hop. Thus the order-12 calculation is now an explicit finite-fiber assembly
+  rather than a missing mathematical lemma. The center dichotomy and
+  no-order-six arguments remain untouched.
   -/
   sorry
