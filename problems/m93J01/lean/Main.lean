@@ -30,6 +30,20 @@ def apm_m93J01_kappa : ℝ := 1 / 12
 def apm_m93J01_schrodinger (V y : ℝ → ℝ) (x : ℝ) : ℝ :=
   -iteratedDeriv 2 y x + V x * y x
 
+/-- The residual in the discrete Schrödinger identity is exactly the centered
+Taylor residual; no additional analytic estimate is needed for part (b). -/
+lemma apm_m93J01_schrodinger_residual_eq
+    (y V : ℝ → ℝ) (x h : ℝ) :
+    h ^ 2 * apm_m93J01_schrodinger V y x -
+        (-y (x + h) - y (x - h) +
+          (2 + h ^ 2 * V x) * y x +
+          apm_m93J01_kappa * h ^ 4 * iteratedDeriv 4 y x) =
+      y (x + h) + y (x - h) - 2 * y x -
+        (h ^ 2 * iteratedDeriv 2 y x +
+          apm_m93J01_kappa * h ^ 4 * iteratedDeriv 4 y x) := by
+  simp only [apm_m93J01_schrodinger]
+  ring
+
 theorem apm_m93j01
     (y V : ℝ → ℝ) (hy : ContDiff ℝ 8 y) :
     apm_m93J01_kappa = (1 / 12 : ℝ) ∧
@@ -75,5 +89,17 @@ theorem apm_m93j01
   ODE to rewrite `iteratedDeriv 2 y = V * y`, applying the fourth-order
   estimate, and combining Big-O terms. No compiled sibling proof supplied
   this Taylor-to-filter bridge.
+
+  Closer hop 1 proves `apm_m93J01_schrodinger_residual_eq` above, so the
+  second clause is now reduced definitionally and algebraically to the first.
+  Further searches covered the generic `WeakBilin`-style asymptotic corpus,
+  `Analysis/Analytic/Basic.lean` (whose Taylor `IsBigO` theorem requires
+  analyticity), ContDiff/Faa-di-Bruno, all fully closed artifacts, and the
+  construction libraries. None returned a finite-order `ContDiff` Taylor
+  `IsBigO` theorem. The live boundary is therefore precisely a reusable local
+  lemma converting `hy : ContDiff ℝ 8 y` into the symmetric sixth-order
+  neighborhood estimate (and its fourth-order specialization for
+  `iteratedDeriv 2 y`); the remaining Numerov algebra can then reuse those
+  estimates.
   -/
   sorry
