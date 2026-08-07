@@ -21,6 +21,20 @@ open Polynomial
 noncomputable def apm_b94J03_poly (F : Type*) [Field F] : Polynomial F :=
   X ^ 3 - C 3
 
+lemma apm_b94J03_noncube_mod7 : ∀ a : ZMod 7, a ^ 3 ≠ 3 := by native_decide
+
+lemma apm_b94J03_primitiveRoot_two_mod7 :
+    IsPrimitiveRoot (2 : ZMod 7) 3 := by
+  have horder : orderOf (2 : ZMod 7) = 3 := by
+    apply (orderOf_eq_iff (by norm_num)).2
+    constructor
+    · decide
+    · intro m hm hm0
+      interval_cases m <;> decide
+  refine ⟨by decide, fun l hl => ?_⟩
+  rw [← horder]
+  exact orderOf_dvd_of_pow_eq_one hl
+
 /-- A degree-three extension of `ZMod 7` has the expected cardinality. -/
 lemma apm_b94J03_card_of_finrank_three
     [Fact (Nat.Prime 7)] (K : Type*) [Field K] [Algebra (ZMod 7) K]
@@ -37,6 +51,33 @@ lemma apm_b94J03_aut_card_of_finrank_three
     (hfin : Module.finrank (ZMod 7) K = 3) :
     Nat.card (K ≃ₐ[ZMod 7] K) = 3 := by
   rw [IsGalois.card_aut_eq_finrank, hfin]
+
+/-- The finite-field splitting-field conclusion follows from the Kummer
+splitting-field theorem because `ZMod 7` contains a primitive cube root. -/
+lemma apm_b94J03_finiteField_conclusion
+    [Fact (Nat.Prime 7)] (K : Type*) [Field K] [Algebra (ZMod 7) K]
+    [IsSplittingField (ZMod 7) K (apm_b94J03_poly (ZMod 7))] :
+    Module.finrank (ZMod 7) K = 3 ∧
+      Nat.card K = 343 ∧
+      Nonempty ((K ≃ₐ[ZMod 7] K) ≃* Multiplicative (ZMod 3)) := by
+  letI : IsSplittingField (ZMod 7) K (X ^ 3 - C 3) := by
+    simpa [apm_b94J03_poly] using
+      (inferInstance : IsSplittingField (ZMod 7) K (apm_b94J03_poly (ZMod 7)))
+  have hnoncube := apm_b94J03_noncube_mod7
+  have hirr : Irreducible (apm_b94J03_poly (ZMod 7)) := by
+    rw [apm_b94J03_poly]
+    exact (X_pow_sub_C_irreducible_iff_of_prime (by norm_num : Nat.Prime 3)).2
+      hnoncube
+  have hζ := apm_b94J03_primitiveRoot_two_mod7
+  have hfin : Module.finrank (ZMod 7) K = 3 := by
+    apply finrank_of_isSplittingField_X_pow_sub_C
+      (hζ := ⟨2, (mem_primitiveRoots (by norm_num : 0 < 3)).2 hζ⟩)
+      hirr
+  letI : FiniteDimensional (ZMod 7) K :=
+    IsSplittingField.finiteDimensional K (X ^ 3 - C 3)
+  haveI : Finite K := Module.finite_of_finite (ZMod 7)
+  refine ⟨hfin, apm_b94J03_card_of_finrank_three K hfin, ?_⟩
+  exact ⟨autEquivZmod hirr K hζ⟩
 
 theorem apm_b94j03 :
     (∀ (K : Type*) [Field K] [Algebra ℚ K]
@@ -86,5 +127,13 @@ theorem apm_b94j03 :
      the degree-three extension of `ZMod 7`, including the explicit
      root-of-unity computations.  The remaining bridges are those degree
      computations and the bundled cyclic/permutation `MulEquiv`
-     identifications. -/
+     identifications.
+
+     Closer hop 2 finds and applies the previously missed Kummer dependency.
+     `finrank_of_isSplittingField_X_pow_sub_C` and `autEquivZmod` apply because
+     `2 : ZMod 7` is a primitive cube root of unity.  The compiled helper
+     `apm_b94J03_finiteField_conclusion` therefore closes the complete third
+     conjunct: degree three, cardinality 343, and the requested bundled cyclic
+     Galois-group equivalence.  Only the rational and real splitting-field
+     identifications remain. -/
   sorry
