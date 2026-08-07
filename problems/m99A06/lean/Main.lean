@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.YoungConvolution
 
 /-! # APM m99A06: a small convolution-quadratic equation in `L¹`
 
@@ -27,6 +28,24 @@ def IsM99A06Solution (ε : ℝ) (f : ℝ → ℝ) : Prop :=
     f x + Real.sin x * m99A06SelfConvolution f x =
       ε * Real.exp (-|x| ^ 2)
 
+-- (Lib: ConstructionTargets.YoungConvolution)
+lemma m99A06_selfConvolution_integrable {f : ℝ → ℝ}
+    (hf : Integrable f volume) :
+    Integrable (m99A06SelfConvolution f) volume := by
+  rw [← memLp_one_iff_integrable]
+  simpa [m99A06SelfConvolution,
+    ConstructionTargets.YoungConvolution.convolution] using
+    (ConstructionTargets.YoungConvolution.convolution_memLp
+      (p := (1 : ENNReal)) (by norm_num) (by norm_num) hf
+      (memLp_one_iff_integrable.mpr hf))
+
+lemma m99A06_sin_mul_selfConvolution_integrable {f : ℝ → ℝ}
+    (hf : Integrable f volume) :
+    Integrable (fun x : ℝ => Real.sin x * m99A06SelfConvolution f x) volume := by
+  exact (m99A06_selfConvolution_integrable hf).bdd_mul
+    Real.continuous_sin.aestronglyMeasurable
+    (Filter.Eventually.of_forall fun x => by simpa using Real.abs_sin_le_one x)
+
 theorem apm_m99a06 :
     ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε : ℝ,
       0 < ε → ε < ε₀ → ∃ f : ℝ → ℝ, IsM99A06Solution ε f := by
@@ -34,14 +53,16 @@ theorem apm_m99a06 :
     simpa [sq_abs] using
       (integrable_exp_neg_mul_sq (b := (1 : ℝ)) (by norm_num))
   /-
-  Boundary: integrability of the Gaussian forcing, needed to define the
-  fixed-point self-map on `L¹`, is proved above. Completing the theorem requires
+  Boundary: integrability of the Gaussian forcing and of the sine-multiplied
+  quadratic convolution term, needed to define the fixed-point self-map on
+  `L¹`, is proved above. Completing the theorem requires
   working in the complete `L¹` quotient space, transporting the raw convolution
   to representatives, proving Young's inequality and the quadratic Lipschitz
   estimate, and applying Banach's fixed-point theorem on a closed ball before
   selecting a representative satisfying the equation almost everywhere. I
-  searched Mathlib's `L1`, convolution/Young, bounded multiplier, closed-ball,
-  and contraction APIs; I did not complete the quotient/representative bridge
+  searched Mathlib's `L1`, convolution, bounded multiplier, closed-ball, and
+  contraction APIs and used `ConstructionTargets.YoungConvolution.convolution_memLp`;
+  I did not complete the quotient/representative bridge
   to the frozen raw-function predicate `IsM99A06Solution` in this pass.
   -/
   sorry
