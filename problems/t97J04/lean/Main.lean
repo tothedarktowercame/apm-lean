@@ -44,6 +44,13 @@ noncomputable instance : TopologicalSpace apm_t97J04_X :=
 def apm_t97J04_basepoint : apm_t97J04_X :=
   Quotient.mk _ (.inl (1, 1))
 
+/-- The two chosen basepoints are identified in the concrete wedge quotient. -/
+lemma apm_t97J04_inl_base_eq_inr_base :
+    (Quotient.mk _ (.inl (1, 1)) : apm_t97J04_X) =
+      Quotient.mk _ (.inr 1) := by
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _ apm_t97J04_WedgeRel.base
+
 /-- The relation `[a,b]` in the requested three-generator presentation. -/
 def apm_t97J04_relator : FreeGroup (Fin 3) :=
   FreeGroup.of 0 * FreeGroup.of 1 *
@@ -65,4 +72,22 @@ theorem apm_t97j04 :
     Nonempty (apm_t97J04_H 1 ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
     Nonempty (apm_t97J04_H 2 ≅ ModuleCat.of ℤ ℤ) ∧
     ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t97J04_H k) := by
+  /-
+  PARTIAL boundary (closer hop 1).
+
+  The concrete quotient bookkeeping now has a compiled basepoint bridge:
+  `apm_t97J04_inl_base_eq_inr_base` proves that the torus and circle
+  basepoints agree in `apm_t97J04_X` directly from the generating relation.
+
+  The remaining proof needs Seifert--van Kampen for this EqvGen quotient to
+  identify its fundamental group with the frozen presentation, and singular
+  Mayer--Vietoris (or a cellular-to-singular comparison) to compute all four
+  homology claims.  `t02A03` uses the identical `T² ∨ S¹` quotient and records
+  the same boundary.  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`,
+  closed topology artifacts, Mathlib's fundamental-groupoid product/pushout
+  sources, singular homology, exact-sequence and CW-complex sources, and git
+  history found product preservation but no circle fundamental-group
+  computation, van Kampen theorem, singular Mayer--Vietoris sequence, or
+  cellular comparison theorem capable of closing these frozen conjuncts.
+  -/
   sorry
