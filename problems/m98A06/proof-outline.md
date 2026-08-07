@@ -1,12 +1,12 @@
 # Proof Outline: m98A06
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+Compiled preliminary reductions now include admissibility of the resonant
+family, admissibility of the nonresonant sine candidate, and conversion of the
+frozen hypothesis `∀ k : ℤ, a ≠ k * π` into `sin a ≠ 0` via
+`Real.sin_ne_zero_iff`.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-m98A06.md`
-
-## Follow-up Needed
-
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+Mathlib supplies exact interval integrals for squared sine/cosine modes.  The
+remaining proof requires integration by parts and a fundamental lemma under
+the statement's `ContDiffOn ℝ 1` encoding, followed by the sharp Poincaré
+inequality (including equality and optimality) for the custom weak-derivative
+predicate.

@@ -52,6 +52,14 @@ lemma apm_m98a06_nonresonant_candidate_admissible
   · fun_prop
   · exact div_self ha
 
+/-- The frozen nonresonance hypothesis is exactly the standard characterization
+of the nonzero set of the real sine function. -/
+lemma apm_m98a06_sin_ne_zero_of_nonresonant {a : ℝ}
+    (ha : ∀ k : ℤ, a ≠ k * Real.pi) : Real.sin a ≠ 0 := by
+  rw [Real.sin_ne_zero_iff]
+  intro k hk
+  exact ha k hk.symm
+
 theorem apm_m98a06 :
     ((∀ y : ℝ → ℝ,
         apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
@@ -98,10 +106,14 @@ theorem apm_m98a06 :
     · fun_prop
     · simp
   /-
-  PARTIAL boundary: the resonant family appearing in part (a) has been checked
+  PARTIAL boundary (closer hop 1): the resonant family appearing in part (a) has been checked
   above to satisfy the frozen `C¹` endpoint encoding. The nonresonant candidate
   from part (b) is now also certified by
   `apm_m98a06_nonresonant_candidate_admissible` whenever `sin a ≠ 0`.
+  This hop closes the exact conversion from the theorem's quantified
+  nonresonance assumption to that side condition in
+  `apm_m98a06_sin_ne_zero_of_nonresonant`, using Mathlib's
+  `Real.sin_ne_zero_iff`.
 
   Completing the theorem requires an Euler--Lagrange fundamental lemma for
   `ContDiffOn` variations, exact interval-integral computations for positive
@@ -111,6 +123,12 @@ theorem apm_m98a06 :
   Mathlib's interval integration-by-parts, weak-derivative, Sobolev, and
   Poincaré APIs, all closed artifacts (including `m02J02`, `m01J06`, and
   `m97A06`), `ConstructionTargets`, and `YoungL2.lean`; no compiled sibling or
-  library assembled these results for this bespoke representation.
+  library assembled these results for this bespoke representation. A further
+  Mathlib search did find the exact classical integral formulas
+  `intervalIntegral.integral_sin_sq`, `integral_cos_sq`, and
+  `integral_sin_mul_cos₁`; these can discharge individual mode calculations,
+  but do not provide the cross-term cancellation for an arbitrary merely
+  `ContDiffOn ℝ 1` admissible function. The blocker remains the fundamental
+  lemma/integration-by-parts bridge and the sharp weak Poincaré theorem.
   -/
   sorry
