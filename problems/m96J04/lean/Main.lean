@@ -22,6 +22,37 @@ abbrev apm_m96j04_C := C(Set.Icc (0 : ℝ) 1, ℝ)
 def apm_m96j04_extend (f : apm_m96j04_C) (x : ℝ) : ℝ :=
   if hx : x ∈ Set.Icc (0 : ℝ) 1 then f ⟨x, hx⟩ else 0
 
+/-- Although the chosen zero extension need not be continuous across the
+endpoints, its restriction to the integration interval is continuous. -/
+lemma apm_m96j04_extend_continuousOn (f : apm_m96j04_C) :
+    ContinuousOn (apm_m96j04_extend f) (Set.Icc (0 : ℝ) 1) := by
+  rw [continuousOn_iff_continuous_restrict]
+  convert f.continuous using 1
+  funext x
+  simp [apm_m96j04_extend, x.property]
+
+lemma apm_m96j04_extend_intervalIntegrable (f : apm_m96j04_C)
+    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
+    IntervalIntegrable (apm_m96j04_extend f) MeasureTheory.volume 0 t := by
+  exact ((apm_m96j04_extend_continuousOn f).mono
+    (Set.uIcc_subset_Icc (by norm_num) ht)).intervalIntegrable
+
+lemma apm_m96j04_integral_hasDerivAt (f : apm_m96j04_C)
+    {t : ℝ} (ht : t ∈ Set.Ioo (0 : ℝ) 1) :
+    HasDerivAt (fun u ↦ ∫ s in (0 : ℝ)..u, apm_m96j04_extend f s)
+      (apm_m96j04_extend f t) t := by
+  have hcont : ContinuousAt (apm_m96j04_extend f) t :=
+    (apm_m96j04_extend_continuousOn f t ⟨ht.1.le, ht.2.le⟩).continuousAt
+      (Icc_mem_nhds ht.1 ht.2)
+  have hmeas : StronglyMeasurableAtFilter (apm_m96j04_extend f)
+      (nhds t) MeasureTheory.volume :=
+    ContinuousOn.stronglyMeasurableAtFilter isOpen_Ioo
+      ((apm_m96j04_extend_continuousOn f).mono
+        (fun _ hx ↦ ⟨hx.1.le, hx.2.le⟩)) t ht
+  exact intervalIntegral.integral_hasDerivAt_right
+    (apm_m96j04_extend_intervalIntegrable f ⟨ht.1.le, ht.2.le⟩)
+    hmeas hcont
+
 /-- The block operator from the Hilbert-space example, together with its
 pointwise formula and compactness of all powers from the second onward. -/
 lemma apm_m96j04_block_exists :
@@ -115,5 +146,19 @@ theorem apm_m96j04 :
     `HasDerivAt f (f/eigenvalue)` on the subtype interval and apply uniqueness;
     compactness still requires constructing the continuous linear map and the
     equicontinuous compact image.
+
+    Closer hop 2 now compiles all FTC prerequisites.  The zero extension is
+    continuous on the closed integration interval as
+    `apm_m96j04_extend_continuousOn`, is interval-integrable on every
+    `[0,t]` by `apm_m96j04_extend_intervalIntegrable`, and
+    `apm_m96j04_integral_hasDerivAt` proves that its Volterra primitive has
+    derivative equal to the integrand at every `t ∈ (0,1)`.  These lemmas use
+    `continuousOn_iff_continuous_restrict`, compact-interval integrability, and
+    `intervalIntegral.integral_hasDerivAt_right`; they avoid incorrectly
+    claiming that the zero extension is globally continuous at the endpoints.
+    The eigenvalue clause is therefore narrowed to transporting the continuous-
+    map equality through this derivative theorem and applying zero-initial-value
+    uniqueness for `f' = f/eigenvalue`.  Construction and Ascoli compactness of
+    the bundled Volterra operator remain the independent larger boundary.
     -/
     sorry

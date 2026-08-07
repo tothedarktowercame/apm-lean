@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_progress": "Hop 2 compiles restricted continuity, interval integrability, and the interior FTC derivative for the Volterra primitive; ODE uniqueness and Ascoli packaging remain.",
   "imported_at": "2026-07-13T17:26:55.533793Z"
 }
