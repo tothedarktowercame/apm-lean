@@ -35,6 +35,26 @@ def apmFixedRing {F n : Type*} [Field F] [Fintype n]
   neg_mem' ha g := by rw [map_neg, ha g]
   mul_mem' ha hb g := by rw [map_mul, ha g, hb g]
 
+set_option synthInstance.maxHeartbeats 100000 in
+def apmAssociateStabilizer {F n : Type*} [Field F] [Fintype n]
+    (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F))
+    (π : MvPolynomial n F) : Subgroup G where
+  carrier := {g | Associated (g.1 π) π}
+  one_mem' := by simp
+  mul_mem' := by
+    intro g h hg hh
+    exact (Associated.map g.1 hh).trans hg
+  inv_mem' := by
+    intro g hg
+    have hmap := Associated.map
+      (↑(g⁻¹) : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) hg
+    simpa using hmap.symm
+
+@[simp] lemma apmAssociateStabilizer_mem {F n : Type*} [Field F] [Fintype n]
+    (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F))
+    (π : MvPolynomial n F) (g : G) :
+    g ∈ apmAssociateStabilizer G π ↔ Associated (g.1 π) π := Iff.rfl
+
 theorem apm_b96a03 :
     (∀ (G : Type*) [Group G] [Fintype G], Odd (Fintype.card G) →
       apmFPure ℚ G) ∧
@@ -86,4 +106,16 @@ theorem apm_b96a03 :
       -- transfers primality to the custom fixed subring.  The open technical
       -- bridge is now confined to constructing that subgroup/character and
       -- proving the orbit's `countP` uniqueness condition.
+      --
+      -- Closer hop 2 extracts and proves the subgroup half as
+      -- `apmAssociateStabilizer G π`: its carrier is precisely the
+      -- automorphisms whose image of `π` is associated to `π`, and closure
+      -- follows from `Associated.map`, transitivity, and inverse transport.
+      -- The remaining character half must choose, for each subgroup element,
+      -- the unit relating `g π` and `π`, use
+      -- `MvPolynomial.isUnit_iff_eq_C_of_isReduced` to express it as a unique
+      -- nonzero constant, and prove multiplicativity by canceling the prime
+      -- `π`. No packaged `Associates` action or coefficient-character
+      -- constructor was found, so that coherent-choice proof and the
+      -- downstream `countP` assembly remain open.
       sorry
