@@ -62,6 +62,28 @@ abbrev apm_t00a03_Pants :=
     ‖p‖ < 3 ∧ (1 / 2 : ℝ) < ‖p - (-1, 0)‖ ∧
       (1 / 2 : ℝ) < ‖p - (1, 0)‖}
 
+/-- The complement obtained by cutting along finitely many embedded circles
+is open. -/
+lemma apm_t00a03_cut_isOpen {F : Type} [TopologicalSpace F] [T2Space F]
+    {n : ℕ} (curves : Fin n → apm_t00a03_Curve F)
+    (hemb : ∀ i, Topology.IsEmbedding (curves i)) :
+    IsOpen (apm_t00a03_cut curves) := by
+  rw [apm_t00a03_cut, isOpen_compl_iff]
+  exact isClosed_iUnion_of_finite fun i ↦
+    by simpa only [image_univ] using
+      (isCompact_univ.image (hemb i).continuous).isClosed
+
+/-- On a surface, every component of the cut-open complement is itself open. -/
+lemma apm_t00a03_component_isOpen
+    {F : Type} [TopologicalSpace F] [T2Space F]
+    [ChartedSpace apm_t00a03_E2 F] [IsManifold apm_t00a03_I2 ⊤ F]
+    {n : ℕ} (curves : Fin n → apm_t00a03_Curve F)
+    (hemb : ∀ i, Topology.IsEmbedding (curves i)) (x : F) :
+    IsOpen (connectedComponentIn (apm_t00a03_cut curves) x) := by
+  letI : LocallyConnectedSpace F :=
+    ChartedSpace.locallyConnectedSpace apm_t00a03_E2 F
+  exact (apm_t00a03_cut_isOpen curves hemb).connectedComponentIn
+
 theorem apm_t00a03 :
     ∀ (g n : ℕ) (F : Type)
       [TopologicalSpace F] [T2Space F] [CompactSpace F]
@@ -82,4 +104,26 @@ theorem apm_t00a03 :
             (connectedComponentIn (apm_t00a03_cut curves) x ≃ₜ
               apm_t00a03_Pants)) ∧
         n = 3 * g - 3 := by
+  /-
+  PARTIAL boundary (closer hop 1).  The helpers `apm_t00a03_cut_isOpen` and
+  `apm_t00a03_component_isOpen` establish the first structural facts about the
+  actual cut surface: compactness of `Circle` and Hausdorffness make each
+  embedded image closed, finiteness makes their union closed, and the manifold
+  chart supplies local connectedness so every component of the open complement
+  is open.
+
+  Completing the theorem requires the classification of compact surfaces with
+  boundary (in particular, that a maximal family of pairwise disjoint,
+  nonparallel essential circles has three-holed-sphere complementary pieces),
+  followed by additivity of Euler characteristic under cutting and the boundary
+  incidence count `3P = 2n`.  Searches of `ConstructionTargets/`,
+  `LEMMA-INDEX.md`, all closed topology artifacts, Mathlib's manifold,
+  connected-component, singular-homology, Euler-characteristic, excision, and
+  Mayer--Vietoris APIs, and git history found no surface classification theorem,
+  no cutting-along-an-embedded-circle construction, and no bridge computing the
+  Euler characteristic of these concrete complements.  The algebraic
+  `HomologicalComplex.eulerChar` API does not connect the frozen singular
+  homology data to topological cutting.  This full surface-topology development
+  remains open.
+  -/
   sorry
