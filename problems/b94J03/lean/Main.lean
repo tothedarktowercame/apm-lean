@@ -21,6 +21,23 @@ open Polynomial
 noncomputable def apm_b94J03_poly (F : Type*) [Field F] : Polynomial F :=
   X ^ 3 - C 3
 
+/-- A degree-three extension of `ZMod 7` has the expected cardinality. -/
+lemma apm_b94J03_card_of_finrank_three
+    [Fact (Nat.Prime 7)] (K : Type*) [Field K] [Algebra (ZMod 7) K]
+    [Finite K] [FiniteDimensional (ZMod 7) K]
+    (hfin : Module.finrank (ZMod 7) K = 3) : Nat.card K = 343 := by
+  rw [← FiniteField.pow_finrank_eq_natCard 7 K, hfin]
+  norm_num
+
+/-- Over the finite base field, degree three also determines the cardinality
+of the Galois automorphism group. -/
+lemma apm_b94J03_aut_card_of_finrank_three
+    [Fact (Nat.Prime 7)] (K : Type*) [Field K] [Algebra (ZMod 7) K]
+    [Finite K] [FiniteDimensional (ZMod 7) K]
+    (hfin : Module.finrank (ZMod 7) K = 3) :
+    Nat.card (K ≃ₐ[ZMod 7] K) = 3 := by
+  rw [IsGalois.card_aut_eq_finrank, hfin]
+
 theorem apm_b94j03 :
     (∀ (K : Type*) [Field K] [Algebra ℚ K]
       [IsSplittingField ℚ K (apm_b94J03_poly ℚ)],
@@ -52,10 +69,22 @@ theorem apm_b94j03 :
      `b03J04` supplies general root-set/adjoin splitting-field machinery, but
      not the concrete degree or automorphism computations required here.
      I also inspected analogous artifact `b00J01`, but it is skipped rather
-     than a solved sibling and is therefore not cited.  The intended proof must separately
+     than a solved sibling and is therefore not cited.
+
+     Closer hop 1 compiles the downstream finite-field consequences.
+     `apm_b94J03_card_of_finrank_three` derives cardinality `343` from degree
+     three via `FiniteField.pow_finrank_eq_natCard`, while
+     `apm_b94J03_aut_card_of_finrank_three` derives automorphism-group
+     cardinality three via the finite-field `IsGalois` instance and
+     `IsGalois.card_aut_eq_finrank`.  Searches of the finite-field
+     splitting-field and Kummer APIs found no direct theorem deriving the
+     splitting-field degree from `hirr7`: irreducibility controls a root field,
+     while splitting still requires the cube-root-of-unity calculation.
+
+     The intended proof must separately
      realize the abstract splitting fields as `ℚ(∛3, ζ₃)`, `ℂ` over `ℝ`, and
      the degree-three extension of `ZMod 7`, including the explicit
-     root-of-unity computations.  I could not connect
-     those realizations to the exact finrank, cardinality, and bundled
-     `MulEquiv` conclusions within pass 1. -/
+     root-of-unity computations.  The remaining bridges are those degree
+     computations and the bundled cyclic/permutation `MulEquiv`
+     identifications. -/
   sorry
