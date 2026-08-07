@@ -10,12 +10,12 @@
     "problem_tex": "apm/t92J08.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_progress": "Located Mathlib's exact uniform-time globalization theorem. The remaining general bridge is extracting a uniform local existence radius from compactness. The explicit real blow-up calculation reduces to converting ordinary derivatives to the tangent-space module instances of the real self-model, followed by a continuity/divergence contradiction.",
   "imported_at": "2026-07-13T17:26:57.546783Z"
 }

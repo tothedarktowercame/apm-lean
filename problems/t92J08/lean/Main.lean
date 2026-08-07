@@ -47,4 +47,23 @@ theorem apm_t92j08 :
     ¬∃ δ : ℝ → ℝ,
       IsMIntegralCurve δ apm_t92J08_quadraticField ∧
       EqOn apm_t92J08_blowupCurve δ (Iio 1) := by
+  /-
+  Boundary (closer hop 1): Mathlib's imported `UniformTime.lean` contains
+  `exists_isMIntegralCurve_of_isMIntegralCurveOn`, which globalizes curves
+  once one uniform positive local-existence radius works at every point.
+  The remaining compact-manifold step is to extract that uniform radius from
+  `exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless` using a finite
+  subcover; searches of `LEMMA-INDEX.md`, closed siblings,
+  `ConstructionTargets/`, git history, and the manifold integral-curve APIs
+  found no packaged compactness-to-uniform-time theorem.
+
+  For the explicit counterexample, ordinary calculus proves
+  `(1/(1-t))' = (1/(1-t))^2` on `Iio 1`.  Attempts using
+  `hasMFDerivWithinAt_iff_hasFDerivWithinAt`, `HasDerivAt.inv`, and
+  `hasDerivWithinAt_iff_hasFDerivWithinAt` reach an instance mismatch between
+  the tangent-space module structures of the self-model on `ℝ` and the
+  ordinary real normed-space derivative.  After that conversion, exclusion of
+  a global extension can use continuity at `1` against the divergence of the
+  frozen curve (or ODE uniqueness plus the same limit contradiction).
+  -/
   sorry
