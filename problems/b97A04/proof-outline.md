@@ -1,6 +1,6 @@
 # Proof Outline: b97A04
 
-The canonical Lean attempt now compiles with one remaining `sorry`.
+The canonical Lean proof compiles without `sorry`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97A04.md`
@@ -13,9 +13,14 @@ The canonical Lean attempt now compiles with one remaining `sorry`.
   nonzero endomorphisms are units, the endomorphism space is finite over
   `ℂ`, and every `R`-endomorphism is scalar.
 
-## Remaining bridge
+## Completed bridge
 
-Identify the Jacobson-density double centralizer with `Module.End ℂ V` and
-bundle faithfulness and surjectivity as `R ≃ₐ[ℂ] Module.End ℂ V`. Then
-transport semisimplicity and isotypy across this equivalence for arbitrary
-`R`-modules and apply `IsIsotypicOfType.linearEquiv_finsupp`.
+- `apm_b97a04_burnside` makes `V` finite over its `R`-endomorphism division
+  ring, applies Jacobson density, and uses Schur scalarity to show that every
+  complex-linear endomorphism lies in the image of `R`.
+- `apm_b97a04_modules_are_copies` identifies the complex endomorphism algebra
+  with a full matrix algebra, transports simple-ring structure back to `R`,
+  combines it with finite-dimensional Artinianness, and proves every simple
+  constituent is equivalent to `V`.
+- `IsIsotypicOfType.linearEquiv_finsupp` then gives the requested decomposition
+  for arbitrary, possibly infinite, modules.
