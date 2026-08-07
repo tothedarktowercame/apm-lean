@@ -9,11 +9,16 @@ integrability prerequisites for the fixed-point construction.
 - `m99A06_gaussian_integrable` proves forcing integrability.
 - `m99A06_fixedPointMap_integrable` proves that the full nonlinear self-map
   sends every raw integrable representative to another integrable function.
+- `m99A06_selfConvolution_eLpNorm_le` specializes the proved endpoint Young
+  inequality to obtain `‖f*f‖₁ ≤ ‖f‖₁²`.
+- `m99A06_sin_mul_eLpNorm_le` proves that the sine multiplier is nonexpansive,
+  and `m99A06_quadraticTerm_eLpNorm_le` gives the resulting sharp quadratic
+  self-map bound.
 
 ## Remaining Boundary
 
 - Transport convolution and the self-map to the complete `L¹` quotient.
-- Establish Young's norm inequality and the quadratic Lipschitz estimate.
+- Establish the two-input quadratic Lipschitz estimate on representatives.
 - Apply `ContractingWith.exists_fixedPoint'` on a complete closed ball.
 - Select a raw representative and translate its fixed-point equality to the
   almost-everywhere `IsM99A06Solution` predicate.
