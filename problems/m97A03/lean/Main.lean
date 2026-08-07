@@ -34,6 +34,15 @@ lemma apm_m97A03_t_sqrt_bound {t : ℝ} (ht : t ∈ Icc (0 : ℝ) 1) :
   · exact mul_nonneg ht.1 hs0
   · nlinarith [mul_nonneg (sub_nonneg.mpr ht.2) hs0]
 
+/-- The endpoint singularity used to dominate the Hammerstein kernel is
+integrable, with its sharp elementary integral. -/
+lemma apm_m97A03_integral_rpow_neg_half :
+    (∫ s in Icc (0 : ℝ) 1, s ^ (-1 / 2 : ℝ)) = 2 := by
+  rw [integral_Icc_eq_integral_Ioc]
+  rw [← intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)]
+  rw [integral_rpow (Or.inl (by norm_num))]
+  norm_num
+
 theorem apm_m97a03
     (lam : ℝ) (hlam : |lam| < (1 / 4 : ℝ)) :
     ∃ u : ℝ → ℝ, apm_m97A03_isSolution lam u := by
@@ -64,5 +73,13 @@ theorem apm_m97a03
   helper combining these singular-kernel steps.  The abstract fixed-point
   theorem alone therefore does not close the goal within this pass's budget.
   The mathematical statement appears sound.
+
+  Closer hop 1 proves `apm_m97A03_integral_rpow_neg_half`, closing the sharp
+  majorant calculation `∫_[0,1] s⁻¹ᐟ² = 2` by converting the set integral to an
+  interval integral and applying Mathlib's `integral_rpow`. Together with
+  `apm_m97A03_t_sqrt_bound`, the numerical constant `4` is therefore fully
+  accounted for. The remaining bridge is dominated parameter continuity for
+  the singular kernel and its packaging as a contracting self-map of
+  `ContinuousMap (Icc 0 1) ℝ`; the frozen statement is unchanged.
   -/
   sorry
