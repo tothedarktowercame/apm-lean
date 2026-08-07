@@ -56,13 +56,34 @@ lemma m99A02Function_pos {x : m99A02Point}
   rw [m99A02Function, if_neg hx0]
   exact Real.rpow_pos_of_pos (m99A02_neg_log_norm_pos hx hx0) _
 
+/-- The singular representative is measurable; the exceptional value at the
+origin is handled by a measurable singleton split. -/
+lemma m99A02Function_measurable : Measurable m99A02Function := by
+  unfold m99A02Function
+  have hs : MeasurableSet {x : m99A02Point | x = 0} := by
+    simpa only [setOf_eq_eq_singleton] using
+      (measurableSet_singleton (0 : m99A02Point))
+  apply Measurable.ite hs measurable_const
+  exact (Real.continuous_rpow_const (by norm_num)).measurable.comp
+    (Real.measurable_log.comp continuous_norm.measurable).neg
+
+/-- Each displayed classical derivative is measurable as well. -/
+lemma m99A02Derivative_measurable (i : Fin 2) :
+    Measurable (m99A02Derivative i) := by
+  unfold m99A02Derivative
+  have hs : MeasurableSet {x : m99A02Point | x = 0} := by
+    simpa only [setOf_eq_eq_singleton] using
+      (measurableSet_singleton (0 : m99A02Point))
+  apply Measurable.ite hs measurable_const
+  fun_prop
+
 theorem apm_m99a02 :
     MemLp m99A02Function 2 (volume.restrict m99A02Omega) ∧
     ∀ i : Fin 2,
       MemLp (m99A02Derivative i) 2 (volume.restrict m99A02Omega) ∧
       IsM99A02WeakDerivative m99A02Function (m99A02Derivative i) i := by
   /-
-  Boundary: `m99A02_neg_log_norm_pos` verifies that every real power in the
+  Boundary (closer hop 1): `m99A02_neg_log_norm_pos` verifies that every real power in the
   displayed function and derivative is evaluated on a positive logarithmic
   base throughout the punctured disk; `m99A02Function_pos` records the
   corresponding pointwise fact about the chosen representative. Completing
@@ -70,8 +91,18 @@ theorem apm_m99a02 :
   integration formula for the two-dimensional Euclidean ball, convergence of
   the Bertrand integral `∫ dr / (r * (-log r)^(4/3))`, and integration by
   parts on punctured disks with a vanishing inner-boundary flux. I searched
-  Mathlib's polar-coordinate, `MemLp`, real-`rpow`, weak-derivative, and
-  divergence/integration-by-parts APIs; no compiled sibling assembled those
-  ingredients for this raw custom encoding in this pass.
+  This hop also proves `m99A02Function_measurable` and
+  `m99A02Derivative_measurable`, so the measurable half of each `MemLp` goal is
+  closed.
+
+  Mathlib searches confirmed `Complex.integral_comp_polarCoord_symm`, and the
+  closed sibling `a01A07` packages it as
+  `integral_closedBall_zero_eq_polar`. That lemma is promising, but it is stated
+  on `ℂ`; this problem uses `EuclideanSpace ℝ (Fin 2)`, so one must transport
+  volume, norms, coordinates, and the open ball through the standard real
+  linear isometry before reducing to the radial Bertrand integrals. No sibling
+  supplies that transport or the required improper-log integrability proof.
+  The weak-derivative clause additionally still needs integration by parts on
+  punctured disks and the vanishing inner-boundary flux.
   -/
   sorry
