@@ -1,12 +1,26 @@
 # Proof Outline: t91J02
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean artifact now isolates the elementary half of the standard
+fundamental-group obstruction.  The maps
+`apm_t91J02_circleInclusion : C(Circle, Circle × Circle)` and
+`apm_t91J02_circleProjection : C(Circle × Circle, Circle)` are defined, and
+their composite is proved to be the identity.  Hence `Circle` is a retract of
+the concrete torus.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t91J02.md`
 
-## Follow-up Needed
+## Remaining bridge
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+A homeomorphism from the torus to the concrete metric two-sphere would
+transport this retraction to a circle retraction of that sphere.  It remains
+to prove that no such retraction exists.  Standard routes use either:
+
+- fundamental groups: a retraction makes `π₁(Circle)` a retract of `π₁(S²)`,
+  but these groups are `ℤ` and trivial; or
+- first singular homology: a retraction splits the induced map on `H₁`, while
+  `H₁(Circle) = ℤ` and `H₁(S²) = 0`.
+
+This Mathlib snapshot has the relevant functorial frameworks but does not
+package the required computations for `Circle` and the displayed metric
+sphere.  Nearby partial artifacts record the same missing bridge.
