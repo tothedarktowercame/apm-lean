@@ -43,12 +43,15 @@ theorem apm_m94j05 :
   uniqueness.
 
   The frozen statement is likely false as written.  For zero forcing, after
-  the substitution `s = 1 / t`, the equation becomes
-  `s^2 u'' = u^2` on `[1/2,1]` with two zero endpoint values.  The zero
-  solution is the small fixed point, while the standard shooting/large-data
-  branch for this superlinear Dirichlet equation is not excluded by the
-  hypotheses.  A corrected theorem should include a uniform smallness bound
-  on `x` (and express uniqueness within that ball), exactly as the contraction
-  proof requires.
+  the substitution `s = 1 / t` and `v(s) = -x(1/s)`, the equation becomes
+  `-v'' = v^2 / s^2` on `[1/2,1]` with two zero endpoint values.  The zero
+  solution is the small fixed point, while this positive-weight superlinear
+  Dirichlet equation has the standard nonzero large branch obtained by
+  shooting/variational methods; nothing in the hypotheses excludes it.
+  Mathlib's `Analysis.ODE.PicardLindelof` and `Analysis.ODE.Gronwall` provide
+  initial-value existence/uniqueness, not the required two-point shooting or
+  global uniqueness theorem.  A corrected theorem should include a uniform
+  smallness bound on `x` (and express uniqueness within that ball), exactly as
+  the contraction proof requires.
   -/
   sorry
