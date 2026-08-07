@@ -87,6 +87,63 @@ lemma apm_m96J06_quadratic_sub_bound
         |x (t / 2 - 1) - z (t / 2 - 1)|
       nlinarith
 
+abbrev apm_m96J06_interval := Icc (-2 : ℝ) 2
+
+private def apm_m96J06_zeroPoint : apm_m96J06_interval :=
+  ⟨0, by constructor <;> norm_num⟩
+
+/-- The linear involution bundled on the actual Banach space `C([-2,2], ℝ)`. -/
+def apm_m96J06_linearPartC
+    (x : C(apm_m96J06_interval, ℝ)) : C(apm_m96J06_interval, ℝ) where
+  toFun t := x t - 2 * x apm_m96J06_zeroPoint
+  continuous_toFun := x.continuous.sub continuous_const
+
+lemma apm_m96J06_linearPartC_norm_le
+    (x : C(apm_m96J06_interval, ℝ)) :
+    ‖apm_m96J06_linearPartC x‖ ≤ 3 * ‖x‖ := by
+  refine (ContinuousMap.norm_le _ (mul_nonneg (by norm_num) (norm_nonneg x))).2 ?_
+  intro t
+  rw [Real.norm_eq_abs]
+  calc
+    |x t - 2 * x apm_m96J06_zeroPoint| ≤
+        |x t| + 2 * |x apm_m96J06_zeroPoint| := by
+      simpa [abs_mul] using abs_sub (x t) (2 * x apm_m96J06_zeroPoint)
+    _ ≤ ‖x‖ + 2 * ‖x‖ := by
+      gcongr <;> simpa [Real.norm_eq_abs] using x.norm_coe_le_norm _
+    _ = 3 * ‖x‖ := by ring
+
+lemma apm_m96J06_linearPartC_involutive
+    (x : C(apm_m96J06_interval, ℝ)) :
+    apm_m96J06_linearPartC (apm_m96J06_linearPartC x) = x := by
+  ext t
+  simp [apm_m96J06_linearPartC, apm_m96J06_zeroPoint]
+  ring
+
+/-- The same involution as a bounded linear operator, with the explicit bound
+used by the contraction estimate. -/
+def apm_m96J06_linearPartCLM :
+    C(apm_m96J06_interval, ℝ) →L[ℝ] C(apm_m96J06_interval, ℝ) :=
+  LinearMap.mkContinuous
+    { toFun := apm_m96J06_linearPartC
+      map_add' := by
+        intro x z
+        ext t
+        simp [apm_m96J06_linearPartC]
+        ring
+      map_smul' := by
+        intro c x
+        ext t
+        simp [apm_m96J06_linearPartC]
+        ring }
+    3 (by
+      intro x
+      exact apm_m96J06_linearPartC_norm_le x)
+
+lemma apm_m96J06_linearPartCLM_involutive
+    (x : C(apm_m96J06_interval, ℝ)) :
+    apm_m96J06_linearPartCLM (apm_m96J06_linearPartCLM x) = x :=
+  apm_m96J06_linearPartC_involutive x
+
 theorem apm_m96j06 :
     ∀ y : ℝ → ℝ,
       apm_m96J06_inNeighborhood y →
@@ -103,15 +160,20 @@ theorem apm_m96j06 :
   pointwise two-radius Lipschitz estimate from which the sup-norm contraction
   bound follows.
 
-  The remaining construction must bundle continuous functions on `Icc (-2) 2`
-  with their sup norm, define the quadratic self-map and prove the estimates
-  the supplied pointwise estimate to the subtype sup norm, prove
-  `‖L⁻¹‖ ≤ 3`, then apply
+  Closer hop 1 now bundles the actual Banach space as
+  `C(Icc (-2) 2, ℝ)` and defines `apm_m96J06_linearPartCLM`.  The lemmas
+  `apm_m96J06_linearPartC_norm_le` and
+  `apm_m96J06_linearPartCLM_involutive` prove respectively the explicit
+  operator estimate and that this bounded linear map is its own inverse.
+
+  The remaining construction is to bundle the quadratic self-map on this
+  `ContinuousMap` space, lift the supplied pointwise estimate to its sup norm,
+  prove self-mapping and contraction on the closed ball, then apply
   `ContractingWith.exists_fixedPoint'` to the closed ball of radius `1/12`.
   Mathlib supplies that abstract fixed-point theorem (and sibling `t91A04`
   demonstrates its global wrapper), but searches of `LEMMA-INDEX.md`, 172
   closed artifacts, `ConstructionTargets/`, `YoungL2.lean`, and Mathlib's
   `ContinuousMap`/closed-ball fixed-point APIs found no helper assembling this
-  custom restricted continuous-function space and its nonlinear self-map.
+  custom nonlinear self-map and all of its ball estimates.
   -/
   sorry
