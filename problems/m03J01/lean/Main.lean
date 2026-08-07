@@ -70,6 +70,59 @@ noncomputable def apm_m03J01_H2size {n : ℕ} {Ω : Set (apm_m03J01_E n)}
     (H : apm_m03J01_E n → Fin n → Fin n → ℝ) : ENNReal :=
   eLpNorm u.val 2 volume + eLpNorm u.grad 2 volume + eLpNorm H 2 volume
 
+/-- The continuous Fréchet--Riesz solution operator used in the theorem's
+abstract Hilbert-space clause. -/
+noncomputable def apm_m03J01_riesz
+    (V : Type*) [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+    [CompleteSpace V] : (V →L[ℝ] ℝ) →L[ℝ] V :=
+  (InnerProductSpace.toDual ℝ V).symm.toContinuousLinearEquiv.toContinuousLinearMap
+
+lemma apm_m03J01_inner_riesz
+    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+    [CompleteSpace V] (f : V →L[ℝ] ℝ) (v : V) :
+    inner ℝ (apm_m03J01_riesz V f) v = f v := by
+  exact InnerProductSpace.toDual_symm_apply
+
+lemma apm_m03J01_abstract_variational :
+    ∀ (V : Type*) [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+      [CompleteSpace V],
+      ∃ T : (V →L[ℝ] ℝ) →L[ℝ] V, ∀ f : V →L[ℝ] ℝ,
+        (∃ C : ℝ, ∀ v : V, C ≤ (2 : ℝ)⁻¹ * ‖v‖ ^ 2 - f v) ∧
+        (∀ v : V,
+          (2 : ℝ)⁻¹ * ‖T f‖ ^ 2 - f (T f) ≤
+            (2 : ℝ)⁻¹ * ‖v‖ ^ 2 - f v) ∧
+        (∀ u : V,
+          (∀ v : V, (2 : ℝ)⁻¹ * ‖u‖ ^ 2 - f u ≤
+            (2 : ℝ)⁻¹ * ‖v‖ ^ 2 - f v) → u = T f) ∧
+        (∀ v : V, inner ℝ (T f) v = f v) := by
+  intro V _ _ _
+  let T := apm_m03J01_riesz V
+  refine ⟨T, ?_⟩
+  intro f
+  have hinner (v : V) : inner ℝ (T f) v = f v :=
+    apm_m03J01_inner_riesz f v
+  have henergy (v : V) :
+      (2 : ℝ)⁻¹ * ‖v‖ ^ 2 - f v =
+        (2 : ℝ)⁻¹ * ‖v - T f‖ ^ 2 - (2 : ℝ)⁻¹ * ‖T f‖ ^ 2 := by
+    rw [← hinner v, norm_sub_sq_real, real_inner_comm]
+    ring
+  refine ⟨?_, ?_, ?_, hinner⟩
+  · refine ⟨-(2 : ℝ)⁻¹ * ‖T f‖ ^ 2, ?_⟩
+    intro v
+    rw [henergy]
+    nlinarith [sq_nonneg ‖v - T f‖]
+  · intro v
+    rw [henergy, henergy]
+    simp
+  · intro u hu
+    have hle := hu (T f)
+    rw [henergy, henergy] at hle
+    have hs : 0 ≤ ‖u - T f‖ ^ 2 := sq_nonneg _
+    have hz : ‖u - T f‖ = 0 := by
+      simp only [sub_self, norm_zero] at hle
+      nlinarith [norm_nonneg (u - T f)]
+    exact sub_eq_zero.mp (norm_eq_zero.mp hz)
+
 theorem apm_m03j01 :
     (∀ (V : Type*) [NormedAddCommGroup V] [InnerProductSpace ℝ V]
       [CompleteSpace V],
@@ -100,14 +153,24 @@ theorem apm_m03j01 :
             ∃ H, apm_m03J01_weakHessian u.grad H ∧
               apm_m03J01_H2size u H ≤ C * eLpNorm F 2 volume) := by
   /-
-  SKIPPED (custom Sobolev-space structure boundary). Mathlib supplies the
-  abstract ingredients `InnerProductSpace.toDual` (Fréchet–Riesz) and
+  CLOSER HOP 1 (partial). The continuous Fréchet--Riesz solution operator is
+  now constructed as `apm_m03J01_riesz`, and
+  `apm_m03J01_inner_riesz` proves its exact defining identity. The helper
+  `apm_m03J01_abstract_variational` then completes the theorem's entire first
+  conjunct by the Hilbert norm-square identity, including boundedness below,
+  minimization, and uniqueness.
+
+  The custom Sobolev-space boundary remains. Mathlib supplies the abstract
+  ingredients `InnerProductSpace.toDual` (Fréchet–Riesz) and
   `LinearMap.continuous_of_seq_closed_graph`. However, the PDE clauses use the
   bespoke representative record `apm_m03J01_H01`, which has no additive,
   normed, inner-product, or complete-space instances and is not quotiented by
   a.e. equality. Thus the abstract Riesz map cannot be instantiated on it.
 
-  A proof must first construct the Hilbert-space quotient of value/gradient
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, solved PDE
+  artifacts, Mathlib's Lax--Milgram and Sobolev sources, and git history found
+  no implementation of the required custom quotient. A proof must first
+  construct the Hilbert-space quotient of value/gradient
   pairs satisfying `approximable`, prove completeness and compatibility of its
   energy inner product with the displayed integrals, lift `F ↦ ∫ Fv` as a
   continuous functional, and descend the resulting solution back to the record.
