@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The quotient representative computation and applicable covering-lift theorem are identified. Remaining work is cube-boundary path connectivity for n at least two, relative-boundary lift uniqueness, and descent to inverse quotient maps.",
+  "closer_hop": 2,
+  "boundary": "Functorial laws and injectivity of the covering-induced quotient map are compiled using homotopicRel_iff_comp, avoiding boundary connectivity for injectivity. Remaining work is surjectivity: prove the lifted cube is constant on the boundary, package it as a GenLoop, descend to the quotient, and perform the basepoint cast.",
   "imported_at": "2026-07-13T17:26:56.782852Z"
 }

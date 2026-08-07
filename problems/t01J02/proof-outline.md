@@ -11,12 +11,19 @@ has been identified.
 
 - `apm_t01j02_homotopyMap_mk` rewrites the quotient map on every generalized
   loop representative.
+- `apm_t01j02_homotopyMap_id` and `apm_t01j02_homotopyMap_comp` establish the
+  expected functorial laws directly by quotient induction.
+- `apm_t01j02_homotopyMap_injective_of_boundary_nonempty` proves injectivity
+  for a covering map using `IsCoveringMap.homotopicRel_iff_comp`; this removes
+  cube-boundary connectivity from the injective half.
 - `IsCoveringMap.existsUnique_continuousMap_lifts` provides the required lift
   of maps from the simply connected cube.
 
 ## Remaining boundary
 
-- Prove path connectedness of `Cube.boundary (Fin n)` for `2 ≤ n` and use lift
-  uniqueness to show the lifted cube map is constant on the boundary.
-- Apply the analogous relative-boundary argument to lifted homotopies.
-- Descend lift and projection to inverse functions on the homotopy quotients.
+- For surjectivity, prove connectedness of `Cube.boundary (Fin n)` for `2 ≤ n`
+  and use lift uniqueness to show the lifted cube map is constant there.
+- Package that lift as a `GenLoop`, project it back, and descend the resulting
+  equality to the homotopy quotient.
+- Transport the compiled injectivity result across the basepoint equality
+  `hbase` in `apm_t01j02_inducedMap`.
