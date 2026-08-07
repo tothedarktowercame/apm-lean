@@ -1,12 +1,22 @@
 # Proof Outline: m95J07
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen theorem has a compiling partial Lean development.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m95J07.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_m95j07_automatic_continuity` proves the complete second conjunct via
+  Mathlib's sequential closed graph theorem.
+- The proof needs only continuity and injectivity of `A`; it does not require
+  the range of `A` to be closed.
+
+## Remaining boundary
+
+- encode differentiability at zero as a countable union of closed
+  slope-bounded subsets of `C([-1,1])`;
+- prove those subsets have empty interior using small cusp or zigzag
+  perturbations near zero;
+- invoke the Baire theorem to prove the complement is nonmeagre, while
+  reconciling the slope encoding with the ambient-extension predicate.
