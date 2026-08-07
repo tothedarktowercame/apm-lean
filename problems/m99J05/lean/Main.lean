@@ -74,3 +74,5 @@ theorem apm_m99j05
     intro v
     rw [hw' v, hu v]
   · exact hchar
+
+#print axioms apm_m99j05
