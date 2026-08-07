@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "notes": "Fourier differentiation is proved through exact rescaling to Mathlib; heat-kernel analytic assembly remains."
+  "closer_hop": 2,
+  "notes": "Fourier differentiation and the multiplier ODE compile; the frozen heat kernel is now proved nonnegative, integrable, and of unit mass. Complex convolution, differentiation, and pointwise convergence remain."
 }

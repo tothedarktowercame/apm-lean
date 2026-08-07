@@ -64,6 +64,41 @@ lemma apm_m98J05_fourier_eq_mathlib (f : ℝ → ℂ) (ξ : ℝ) :
 noncomputable def apm_m98J05_heatKernel (t x : ℝ) : ℝ :=
   (1 / (2 * Real.sqrt (Real.pi * t))) * Real.exp (-(x ^ 2) / (4 * t))
 
+lemma apm_m98J05_heatKernel_nonneg {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    0 ≤ apm_m98J05_heatKernel t x := by
+  unfold apm_m98J05_heatKernel
+  positivity
+
+/-- The custom heat kernel has unit mass. -/
+lemma apm_m98J05_heatKernel_integral {t : ℝ} (ht : 0 < t) :
+    ∫ x : ℝ, apm_m98J05_heatKernel t x ∂volume = 1 := by
+  -- (Sibling: a96A04)
+  have hpt : 0 < Real.pi * t := mul_pos Real.pi_pos ht
+  have hgauss :
+      ∫ x : ℝ, Real.exp (-(1 / (4 * t)) * x ^ 2) =
+        Real.sqrt (4 * Real.pi * t) := by
+    have h := integral_gaussian (1 / (4 * t))
+    rwa [show Real.pi / (1 / (4 * t)) = 4 * Real.pi * t by field_simp] at h
+  rw [show apm_m98J05_heatKernel t = fun x ↦
+      (1 / (2 * Real.sqrt (Real.pi * t))) *
+        Real.exp (-(1 / (4 * t)) * x ^ 2) by
+    funext x
+    unfold apm_m98J05_heatKernel
+    congr 2
+    field_simp]
+  rw [MeasureTheory.integral_const_mul, hgauss]
+  rw [show Real.sqrt (4 * Real.pi * t) = 2 * Real.sqrt (Real.pi * t) by
+    rw [show 4 * Real.pi * t = 4 * (Real.pi * t) by ring, Real.sqrt_mul (by norm_num : 0 ≤ (4 : ℝ))]
+    norm_num]
+  field_simp [ne_of_gt (Real.sqrt_pos.2 hpt)]
+
+lemma apm_m98J05_heatKernel_integrable {t : ℝ} (ht : 0 < t) :
+    Integrable (apm_m98J05_heatKernel t) volume := by
+  by_contra h
+  have hone := apm_m98J05_heatKernel_integral ht
+  rw [integral_undef h] at hone
+  norm_num at hone
+
 /-- Convolution of the initial datum with the heat kernel. -/
 noncomputable def apm_m98J05_heatSolution (f : ℝ → ℂ) (x t : ℝ) : ℂ :=
   ∫ y, f y * (apm_m98J05_heatKernel t (x - y) : ℂ)
@@ -129,7 +164,7 @@ theorem apm_m98j05 :
           ring
       exact hc.comp_ofReal
     /-
-  PARTIAL boundary (closer hop 1): the first frozen conjunct is now fully
+  PARTIAL boundary (closer hop 2): the first frozen conjunct is now fully
   compiled. `apm_m98J05_fourier_eq_mathlib` identifies the raw convention with
   Mathlib's transform at `ξ/(2π)`; `Real.fourier_deriv` then proves the desired
   derivative multiplier after exact cancellation of the scale. Thus the
@@ -137,14 +172,20 @@ theorem apm_m98j05 :
 
   The frequency-side scalar ODE for the claimed multiplier is also verified
   above, and `apm_m98J05_fourier_integrable` proves absolute integrability of
-  every custom Fourier integrand. The remaining heat-solution theorem requires
+  every custom Fourier integrand. This hop adapts the Gaussian normalization
+  argument from sibling `a96A04` to the frozen kernel's square-root
+  presentation: `apm_m98J05_heatKernel_integral` proves unit mass for every
+  positive time, and `apm_m98J05_heatKernel_integrable` proves integrability.
+
+  The remaining heat-solution theorem requires
   the Gaussian transform/convolution theorem with exact normalization,
   differentiation under the spatial and time improper integrals, and
   pointwise approximate-identity convergence.
 
   Mathlib provides `fourier_deriv` for its `2π` convention. Sibling `a01A10`
   proves the exact complex Gaussian transform from `fourierIntegral_gaussian`;
-  sibling `a96A04` proves heat-kernel normalization, spatial differentiation,
+  sibling `a96A04` supplies the normalization pattern reused above and also
+  proves spatial differentiation,
   and an `L²` approximate-identity theorem. `ConstructionTargets.KernelAverage`
   and `ConstructionTargets.L2Translation` were also inspected. Adapting these
   results to a complex `L¹` datum, time derivative, and pointwise (rather than
