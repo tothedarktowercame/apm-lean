@@ -26,3 +26,9 @@ Closer hop 2 repairs and compiles the diagonal pair decoder, its position
 bound, the quadratic index bound, and the proof that decoded stages tend to
 infinity. It also defines the 1D typewriter cell and proves nonnegativity.
 Thus the global-index cofinality component is no longer part of the blocker.
+
+Closer hop 3 proves the exact restricted-volume integral of every 1D cell,
+`sqrt(stage k) / stage k`, and proves these integrals tend to zero. The open
+bridge is now the pointwise selection of an arbitrarily late cell containing
+each point, followed by the finite-product enumeration and volume bookkeeping
+for expanding Euclidean cubes.

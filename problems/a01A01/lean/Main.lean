@@ -71,6 +71,85 @@ lemma apm_a01A01_typewriter1d_nonneg (k : ℕ) (x : ℝ) :
   · exact mul_nonneg (Real.sqrt_nonneg _) zero_le_one
   · simp
 
+lemma apm_a01A01_integral_typewriter1d (k : ℕ) :
+    ∫ x in Icc (0 : ℝ) 1, apm_a01A01_typewriter1d k x ∂volume =
+      Real.sqrt (apm_a01A01_stage k) / apm_a01A01_stage k := by
+  have hn : 0 < apm_a01A01_stage k := by
+    unfold apm_a01A01_stage
+    omega
+  have hn' : (0 : ℝ) < apm_a01A01_stage k := by exact_mod_cast hn
+  have hj := apm_a01A01_position_lt_stage k
+  have hj0 : (0 : ℝ) ≤ (apm_a01A01_position k : ℝ) / apm_a01A01_stage k :=
+    div_nonneg (by positivity) hn'.le
+  have hj1 : (((apm_a01A01_position k + 1 : ℕ) : ℝ) /
+      apm_a01A01_stage k) ≤ 1 :=
+    (div_le_one hn').mpr (by exact_mod_cast hj)
+  unfold apm_a01A01_typewriter1d
+  rw [show (fun x : ℝ => Real.sqrt (apm_a01A01_stage k) *
+      (Icc ((apm_a01A01_position k : ℝ) / apm_a01A01_stage k)
+        (((apm_a01A01_position k + 1 : ℕ) : ℝ) /
+          apm_a01A01_stage k)).indicator (fun _ => 1) x) =
+      (Icc ((apm_a01A01_position k : ℝ) / apm_a01A01_stage k)
+        (((apm_a01A01_position k + 1 : ℕ) : ℝ) /
+          apm_a01A01_stage k)).indicator
+        (fun _ => Real.sqrt (apm_a01A01_stage k)) by
+      funext x
+      rw [Set.indicator_apply, Set.indicator_apply]
+      split_ifs <;> ring]
+  rw [setIntegral_indicator measurableSet_Icc]
+  have hsub : Icc (0 : ℝ) 1 ∩
+      Icc ((apm_a01A01_position k : ℝ) / apm_a01A01_stage k)
+        (((apm_a01A01_position k + 1 : ℕ) : ℝ) /
+          apm_a01A01_stage k) =
+      Icc ((apm_a01A01_position k : ℝ) / apm_a01A01_stage k)
+        (((apm_a01A01_position k + 1 : ℕ) : ℝ) /
+          apm_a01A01_stage k) := by
+    apply Set.inter_eq_right.mpr
+    rintro x ⟨hx1, hx2⟩
+    exact ⟨hj0.trans hx1, hx2.trans hj1⟩
+  rw [hsub, setIntegral_const, Measure.real, Real.volume_Icc]
+  have hdiff : 0 ≤
+      (((apm_a01A01_position k + 1 : ℕ) : ℝ) / apm_a01A01_stage k) -
+        ((apm_a01A01_position k : ℝ) / apm_a01A01_stage k) := by
+    rw [show ((apm_a01A01_position k + 1 : ℕ) : ℝ) =
+      (apm_a01A01_position k : ℝ) + 1 by exact_mod_cast rfl,
+      div_sub_div_same]
+    exact div_nonneg (by norm_num) hn'.le
+  rw [ENNReal.toReal_ofReal hdiff, smul_eq_mul]
+  rw [show ((apm_a01A01_position k + 1 : ℕ) : ℝ) =
+    (apm_a01A01_position k : ℝ) + 1 by exact_mod_cast rfl]
+  field_simp
+  ring
+
+lemma apm_a01A01_integral_typewriter1d_tendsto :
+    Tendsto (fun k => ∫ x in Icc (0 : ℝ) 1,
+      apm_a01A01_typewriter1d k x ∂volume) atTop (nhds 0) := by
+  have hsqrt : Tendsto (fun k => Real.sqrt (apm_a01A01_stage k)) atTop atTop := by
+    have hcast : Tendsto (fun k => (apm_a01A01_stage k : ℝ)) atTop atTop :=
+      (tendsto_natCast_atTop_atTop : Tendsto Nat.cast atTop atTop).comp
+        apm_a01A01_stage_tendsto_atTop
+    exact Real.tendsto_sqrt_atTop.comp hcast
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
+    (tendsto_inv_atTop_zero.comp hsqrt)
+  · intro k
+    change 0 ≤ ∫ x in Icc (0 : ℝ) 1, apm_a01A01_typewriter1d k x ∂volume
+    rw [apm_a01A01_integral_typewriter1d]
+    positivity
+  · intro k
+    change (∫ x in Icc (0 : ℝ) 1, apm_a01A01_typewriter1d k x ∂volume) ≤
+      (Real.sqrt (apm_a01A01_stage k))⁻¹
+    rw [apm_a01A01_integral_typewriter1d]
+    have hkpos : (0 : ℝ) < apm_a01A01_stage k := by
+      unfold apm_a01A01_stage
+      positivity
+    have hsq : Real.sqrt (apm_a01A01_stage k) *
+        Real.sqrt (apm_a01A01_stage k) = apm_a01A01_stage k :=
+      Real.mul_self_sqrt hkpos.le
+    have hspos : 0 < Real.sqrt (apm_a01A01_stage k) := Real.sqrt_pos.mpr hkpos
+    apply le_of_eq
+    field_simp [hspos.ne', hkpos.ne']
+    simpa [pow_two] using hsq
+
 theorem apm_a01a01 :
     (∃ f : ℕ → ℝ → ℝ,
       (∀ k, IntegrableOn (f k) (Icc (0 : ℝ) 1) volume) ∧
@@ -115,5 +194,10 @@ theorem apm_a01a01 :
   1D cell `apm_a01A01_typewriter1d`. This closes the global-index cofinality
   component. Remaining work is the exact integral computation and pointwise
   cell-selection proof in 1D, followed by the finite-product cube analogue.
+
+  Closer hop 3 now proves the exact 1D integral as
+  `sqrt(stage k) / stage k` and proves these integrals tend to zero. The
+  unresolved work is narrowed further to the cofinal pointwise cell-selection
+  argument and the Euclidean finite-product analogue.
   -/
   sorry

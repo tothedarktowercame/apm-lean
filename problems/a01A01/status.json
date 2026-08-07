@@ -16,12 +16,14 @@
     "classification": "partial",
     "main": "lean/Main.lean",
     "sorry_count": 1,
-    "blocker": "The global pair-enumeration cofinality is now compiled; exact typewriter-cell integrals, pointwise cell selection, and the expanding Euclidean cube analogue remain.",
+    "blocker": "The global pair-enumeration cofinality and exact 1D typewriter-cell integral convergence are now compiled; pointwise cell selection and the expanding Euclidean cube analogue remain.",
     "proved_helpers": [
       "apm_a01A01_position_lt_stage",
       "apm_a01A01_index_lt_stage_sq",
       "apm_a01A01_stage_tendsto_atTop",
-      "apm_a01A01_typewriter1d_nonneg"
+      "apm_a01A01_typewriter1d_nonneg",
+      "apm_a01A01_integral_typewriter1d",
+      "apm_a01A01_integral_typewriter1d_tendsto"
     ]
   }
 }
