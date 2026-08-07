@@ -1,4 +1,7 @@
 import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t94J09
@@ -14,14 +17,16 @@ data and therefore classifies the surface as a sum of six projective planes.
 
 ## Encoding questions
 
-The signed fourteen-edge word and the two vertex classes are concrete below.
-Mathlib has a genuine real projective plane but no packaged polygon-edge
-adjunction or connected-sum construction for surfaces. Rather than introduce
-uninterpreted spaces, the conclusion gives the standard complete classification
-certificate for the resulting closed surface: its cell counts, Euler
-characteristic, failure of the opposite-orientation pairing criterion, and
-therefore its nonorientable genus.
+The signed word determines an actual quotient of the closed disk by its seven
+edge pairings. A second quotient realizes the standard polygon
+`a₁a₁⋯a₆a₆` for the nonorientable genus-six surface. The conclusion identifies
+these spaces by a homeomorphism and computes integral singular homology of the
+source quotient, in addition to retaining the cell-count certificate.
 -/
+
+open CategoryTheory Set
+
+noncomputable section
 
 /-- The seven edge labels in the polygon. -/
 inductive apm_t94J09_Label
@@ -70,6 +75,62 @@ def apm_t94J09_hasOppositeOrientationPairing
 /-- The genus forced by Euler characteristic in the nonorientable case. -/
 def apm_t94J09_nonorientableGenus (chi : ℤ) : ℤ := 2 - chi
 
+abbrev apm_t94J09_Disk := Metric.closedBall (0 : ℂ) 1
+
+/-- Boundary parameter `t` on edge `j` of an `edgeCount`-gon. -/
+def apm_t94J09_edgePoint (edgeCount edge : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    apm_t94J09_Disk :=
+  ⟨Complex.exp
+      (Complex.I * (2 * Real.pi * ((edge : ℝ) + t.1) / edgeCount)), by
+    rw [Metric.mem_closedBall, dist_zero_right, Complex.norm_exp]
+    simp⟩
+
+def apm_t94J09_reverse (t : Set.Icc (0 : ℝ) 1) : Set.Icc (0 : ℝ) 1 :=
+  ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩
+
+/-- The seven edge pairings specified by the signed fourteen-edge word. -/
+inductive apm_t94J09_PolygonRel :
+    apm_t94J09_Disk → apm_t94J09_Disk → Prop
+  | a (t) : apm_t94J09_PolygonRel
+      (apm_t94J09_edgePoint 14 0 t) (apm_t94J09_edgePoint 14 12 t)
+  | b (t) : apm_t94J09_PolygonRel
+      (apm_t94J09_edgePoint 14 6 t) (apm_t94J09_edgePoint 14 13 t)
+  | c (t) : apm_t94J09_PolygonRel
+      (apm_t94J09_edgePoint 14 1 t)
+      (apm_t94J09_edgePoint 14 7 (apm_t94J09_reverse t))
+  | d (t) : apm_t94J09_PolygonRel
+      (apm_t94J09_edgePoint 14 2 t) (apm_t94J09_edgePoint 14 8 t)
+  | e (t) : apm_t94J09_PolygonRel
+      (apm_t94J09_edgePoint 14 5 t) (apm_t94J09_edgePoint 14 10 t)
+  | f (t) : apm_t94J09_PolygonRel
+      (apm_t94J09_edgePoint 14 4 t) (apm_t94J09_edgePoint 14 11 t)
+  | g (t) : apm_t94J09_PolygonRel
+      (apm_t94J09_edgePoint 14 3 t) (apm_t94J09_edgePoint 14 9 t)
+
+def apm_t94J09_PolygonSurface :=
+  Quotient (Relation.EqvGen.setoid apm_t94J09_PolygonRel)
+
+noncomputable instance : TopologicalSpace apm_t94J09_PolygonSurface :=
+  TopologicalSpace.coinduced
+    (fun x : apm_t94J09_Disk ↦ Quotient.mk _ x) inferInstance
+
+/-- Standard polygon pairings `a₁a₁⋯a₆a₆` for `N₆`. -/
+def apm_t94J09_N6Rel (x y : apm_t94J09_Disk) : Prop :=
+  ∃ j : ℕ, j < 6 ∧ ∃ t : Set.Icc (0 : ℝ) 1,
+    x = apm_t94J09_edgePoint 12 (2 * j) t ∧
+    y = apm_t94J09_edgePoint 12 (2 * j + 1) t
+
+def apm_t94J09_N6 :=
+  Quotient (Relation.EqvGen.setoid apm_t94J09_N6Rel)
+
+noncomputable instance : TopologicalSpace apm_t94J09_N6 :=
+  TopologicalSpace.coinduced
+    (fun x : apm_t94J09_Disk ↦ Quotient.mk _ x) inferInstance
+
+abbrev apm_t94J09_H (k : ℕ) :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t94J09_PolygonSurface))
+
 theorem apm_t94j09 :
     apm_t94J09_vertexCount apm_t94J09_vertexClass = 2 ∧
     apm_t94J09_edgeCount apm_t94J09_word = 7 ∧
@@ -78,5 +139,10 @@ theorem apm_t94j09 :
     ¬apm_t94J09_hasOppositeOrientationPairing apm_t94J09_word ∧
     apm_t94J09_nonorientableGenus
       (apm_t94J09_eulerCharacteristic apm_t94J09_word
-        apm_t94J09_vertexClass) = 6 := by
+        apm_t94J09_vertexClass) = 6 ∧
+    Nonempty (apm_t94J09_PolygonSurface ≃ₜ apm_t94J09_N6) ∧
+    Nonempty (apm_t94J09_H 0 ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t94J09_H 1 ≅
+      ModuleCat.of ℤ ((Fin 5 → ℤ) × ZMod 2)) ∧
+    (∀ k : ℕ, 2 ≤ k → Limits.IsZero (apm_t94J09_H k)) := by
   sorry
