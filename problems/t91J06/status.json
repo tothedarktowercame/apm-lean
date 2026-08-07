@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "boundary": "The compact monotone exhaustion, pointwise stage coverage, and coverage by relative interiors of later embedded intervals are compiled. Remaining work is choosing compatible orientations, extending coordinates across successive stages, and gluing them into a global homeomorphism.",
   "imported_at": "2026-07-13T17:26:57.440905Z"
 }
