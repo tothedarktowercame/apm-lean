@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Hop 1 proves that vanishing of the induced top-homology map forces the pinned integer degree to vanish. The geometric disk-preimage to H2-map-zero bridge remains.",
+  "closer_progress": "Hop 1 proves that vanishing of the induced top-homology map forces the pinned degree to vanish. Hop 2 proves every disk-bounding inverse-image component is compact and investigates factoring its H1 class through the contractible disk; Mathlib lacks contractible-space singular-homology vanishing and the transverse-preimage/Poincare-duality bridge to H2.",
   "imported_at": "2026-07-13T17:26:56.526023Z"
 }

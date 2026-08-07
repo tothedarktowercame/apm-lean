@@ -60,6 +60,18 @@ def apm_t00j02_componentsBoundDisks {S : Type} [TopologicalSpace S]
       range (fun z : Circle => d (apm_t00j02_circleToDisk z)) =
         connectedComponentIn A x
 
+/-- A component covered by the disk-bounding hypothesis is compact: it is the
+continuous image of the compact boundary circle. -/
+lemma apm_t00j02_isCompact_connectedComponentIn_of_componentsBoundDisks
+    {S : Type} [TopologicalSpace S] {A : Set S}
+    (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
+    IsCompact (connectedComponentIn A x) := by
+  rcases hdisks x hx with ⟨d, hdcont, _hdemb, hd⟩
+  rw [← hd]
+  have hcircleToDisk : Continuous apm_t00j02_circleToDisk :=
+    continuous_subtype_val.subtype_mk _
+  exact isCompact_range (hdcont.comp hcircleToDisk)
+
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
   ∃ e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ,
@@ -116,5 +128,18 @@ theorem apm_t00j02
   induced `H₂` morphism.  Mathlib also has no surface intersection pairing or
   fundamental-class API at this level.  Building that chain-level bridge
   remains open.
+
+  CLOSER HOP 2: the new lemma
+  `apm_t00j02_isCompact_connectedComponentIn_of_componentsBoundDisks` proves
+  directly from `hdisks` that every transverse inverse-image component is a
+  compact continuous image of the boundary circle.  I also investigated the
+  narrower factorization route through the supplied embedded closed disk.
+  Mathlib proves `ContractibleSpace` for closed balls, but its singular-
+  homology API only packages positive-degree vanishing for totally
+  disconnected spaces; it has no homotopy-invariance/contractible-space
+  theorem that would make the boundary map zero on `H₁`.  Even that local
+  component class therefore cannot yet be killed categorically, and the
+  subsequent transverse-preimage/Poincare-duality bridge to the `H₂` map
+  remains unavailable.
   -/
   sorry
