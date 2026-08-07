@@ -65,6 +65,22 @@ lemma apm_t94J05_nullhomotopic_of_factor
     exact hfg x
   simpa [hleft, inclusion] using hcomp
 
+/-- On the path-connected three-sphere, the endpoint of a null-homotopy can
+always be moved to the fixed north pole used by the theorem statement. -/
+lemma apm_t94J05_nullhomotopic_to_northPole
+    (f : C(apm_t94J05_Torus, apm_t94J05_S3))
+    (p : apm_t94J05_S3)
+    (hf : ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t94J05_Torus p)) :
+    ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t94J05_Torus apm_t94J05_northPole) := by
+  have hs : IsPathConnected (Metric.sphere (0 : apm_t94J05_R4) 1) :=
+    isPathConnected_sphere (by rw [← Module.finrank_eq_rank]; norm_num) 0 (by norm_num)
+  letI : PathConnectedSpace apm_t94J05_S3 :=
+    isPathConnected_iff_pathConnectedSpace.mp hs
+  have hp : Joined p apm_t94J05_northPole := PathConnectedSpace.joined _ _
+  exact hf.trans (ContinuousMap.homotopic_const_iff.mpr hp)
+
 theorem apm_t94j05
     (f : C(apm_t94J05_Torus, apm_t94J05_S3))
     (hf : apm_t94J05_IsSmooth f) :
@@ -85,7 +101,7 @@ theorem apm_t94j05
   independent obstruction-theory proof for all continuous maps from the
   torus to `S³` is also absent from Mathlib and beyond this pass.
 
-  Closer hop 1 reuses the elementary factorization pattern from sibling
+  Closer hop 1 reused the elementary factorization pattern from sibling
   `t01A01`: `apm_t94J05_factor_through_complement` now factors any
   nonsurjective `f` through the complement of a missed sphere point, and
   `apm_t94J05_nullhomotopic_of_factor` transports a null-homotopy of that
@@ -94,7 +110,18 @@ theorem apm_t94j05
   packaged contraction of that source was found; constructing it requires
   scaling in the orthogonal-complement target and transporting the homotopy
   through the partial homeomorphism. Before that, the opaque
-  `apm_t94J05_IsSmooth` still supplies no nonsurjectivity consequence. Thus
-  both substantive bridges remain open, and the frozen statement is unchanged.
+  `apm_t94J05_IsSmooth` still supplies no nonsurjectivity consequence.
+
+  Closer hop 2 closes the endpoint-normalization step omitted above.
+  `apm_t94J05_nullhomotopic_to_northPole` uses `isPathConnected_sphere`, the
+  finite rank of `EuclideanSpace ℝ (Fin 4)`, and
+  `ContinuousMap.homotopic_const_iff` to move any constant endpoint to the
+  theorem's fixed north pole. Thus a contraction of the complement can end at
+  whichever point stereographic scaling naturally chooses. Renewed inspection
+  of the stereographic partial homeomorphism found the inverse and zero-value
+  formulas, but no packaged continuous homotopy on its source; constructing
+  that transported scaling remains open. Independently, the opaque smoothness
+  hypothesis still has no eliminator yielding nonsurjectivity. The frozen
+  statement is unchanged.
   -/
   sorry

@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "boundary": "Factorization through a missed-point complement, descent of its null-homotopy, and transport of any constant endpoint to the fixed north pole are compiled. Remaining work is deriving nonsurjectivity from the opaque smoothness predicate and constructing the stereographic contraction of the punctured sphere.",
   "imported_at": "2026-07-13T17:26:58.083657Z"
 }
