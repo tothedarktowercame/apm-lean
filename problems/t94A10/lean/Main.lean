@@ -10,11 +10,11 @@ None.
 
 ## Encoding questions
 
-Mathlib's exterior derivative is presently formulated for ambient forms, not
-intrinsic forms on the open manifold `ℝ³ \ {0}` together with its de Rham
-exactness relation.  Closedness and exactness on that domain are therefore
-typed placeholders.  The punctured space and the given two-form itself remain
-fully explicit.
+Mathlib's exterior derivative is formulated for ambient forms. A form on the
+punctured space is extended arbitrarily at the omitted origin and `extDeriv`
+is evaluated only at nonzero points; locality makes the value at the origin
+irrelevant. Closedness and exactness are thus concrete derivative statements
+on the actual punctured space.
 -/
 
 noncomputable section
@@ -32,11 +32,24 @@ def apm_t94a10_IsOmega (omega : apm_t94a10_Form 2) : Prop :=
         x.1 2 * (v 0 0 * v 1 1 - v 0 1 * v 1 0)) /
       (Real.sqrt (x.1 0 ^ 2 + x.1 1 ^ 2 + x.1 2 ^ 2)) ^ 3
 
-def apm_t94a10_IsClosed (_omega : apm_t94a10_Form 2) : Prop := by
-  sorry
+def apm_t94a10_ambientExtension {k : ℕ}
+    (omega : apm_t94a10_Form k) :
+    apm_t94a10_E3 → apm_t94a10_E3 [⋀^Fin k]→L[ℝ] ℝ := by
+  classical
+  exact fun x ↦ if h : x ≠ 0 then omega ⟨x, h⟩ else 0
 
-def apm_t94a10_IsExact (_omega : apm_t94a10_Form 2) : Prop := by
-  sorry
+def apm_t94a10_IsClosed (omega : apm_t94a10_Form 2) : Prop :=
+  (∀ x : apm_t94a10_Punctured,
+    DifferentiableAt ℝ (apm_t94a10_ambientExtension omega) x.1) ∧
+  ∀ x : apm_t94a10_Punctured,
+    extDeriv (apm_t94a10_ambientExtension omega) x.1 = 0
+
+def apm_t94a10_IsExact (omega : apm_t94a10_Form 2) : Prop :=
+  ∃ eta : apm_t94a10_Form 1,
+    (∀ x : apm_t94a10_Punctured,
+      DifferentiableAt ℝ (apm_t94a10_ambientExtension eta) x.1) ∧
+    ∀ x : apm_t94a10_Punctured,
+      extDeriv (apm_t94a10_ambientExtension eta) x.1 = omega x
 
 theorem apm_t94a10 (omega : apm_t94a10_Form 2)
     (homega : apm_t94a10_IsOmega omega) :
