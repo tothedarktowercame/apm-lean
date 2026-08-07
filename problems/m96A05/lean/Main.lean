@@ -54,6 +54,14 @@ noncomputable def apm_m96a05_rhs (n : ℕ) (a c : ℝ → ℝ) : Fin n → ℝ :
     let t := (i.val + 1 : ℝ) * h
     h ^ 2 * c t - if i.val + 1 = n then 1 + h / 2 * a t else 0
 
+/-- A tridiagonal row vanishes away from its diagonal and its two neighbors. -/
+lemma apm_m96a05_matrix_eq_zero_of_not_neighbor
+    {n : ℕ} (a b : ℝ → ℝ) (i j : Fin n)
+    (hji : j ≠ i) (hpred : j.val + 1 ≠ i.val)
+    (hsucc : i.val + 1 ≠ j.val) :
+    apm_m96a05_matrix n a b i j = 0 := by
+  simp [apm_m96a05_matrix, hji, hpred, hsucc]
+
 /-- Once the stencil equation is identified with the matrix equation, a
 nonzero determinant gives existence and uniqueness for that stencil. -/
 lemma apm_m96a05_unique_of_det
@@ -133,6 +141,12 @@ theorem apm_m96a05 :
     `Finset.sum_eq_single`, `Finset.sum_ite_irrel`, `Fin.ext`, and `omega`
     are sufficient ingredients, but assembling the dependent `Fin` witnesses
     for the predecessor and successor exceeded this pass's budget.
+
+    Closer hop 2 proves `apm_m96a05_matrix_eq_zero_of_not_neighbor`, isolating
+    the exact three-point support of every matrix row. This removes the
+    repeated matrix-definition reasoning from both remaining proofs. The
+    stencil equivalence still needs the dependent predecessor/successor
+    witnesses and four endpoint cases needed to evaluate the supported sum.
     -/
     sorry
   refine ⟨hscheme, ?_⟩
@@ -166,6 +180,11 @@ theorem apm_m96a05 :
     most `2`.  Source inspection confirms the Gershgorin theorem requires
     exactly `∀ i, ∑ j ∈ univ.erase i, ‖M i j‖ < ‖M i i‖`, so there is no
     weaker support-free API avoiding that calculation.
+
+    Closer hop 2's support lemma now proves every erased-row summand outside
+    the predecessor and successor is zero. The remaining Gershgorin assembly
+    is therefore reduced to summing at most those two entries, plus the
+    compactness-based eventual sign bounds on their coefficients.
     -/
     sorry
   refine ⟨N, ?_⟩

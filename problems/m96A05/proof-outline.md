@@ -13,6 +13,15 @@ remain.
 - Every mesh point belongs to `[0,1]`.
 - If `b < 0` on `[0,1]`, every diagonal entry has norm strictly greater than
   two, for every positive mesh size.
+- Every matrix row vanishes outside its diagonal, predecessor, and successor;
+  this is compiled as `apm_m96a05_matrix_eq_zero_of_not_neighbor`.
+
+## Closer hop 2 progress
+
+- The exact tridiagonal support lemma is shared by the stencil expansion and
+  the Gershgorin erased-row estimate. Both remaining sums can now discard all
+  indices except the two adjacent coordinates (and the diagonal where it has
+  not been erased).
 
 ## Remaining Boundary
 
