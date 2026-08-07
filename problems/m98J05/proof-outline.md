@@ -11,6 +11,11 @@ integrable, and normalized to unit mass for every positive time. Its
 normalization proof adapts sibling `a96A04` via `integral_gaussian`, explicitly
 reconciling the frozen `1 / (2 * sqrt (πt))` presentation.
 
+Closer hop 3 proves absolute integrability of the complex convolution
+integrand defining `heatSolution` at every positive time and spatial point.
+The Gaussian is uniformly bounded by its prefactor, so the integrand is
+dominated by a constant multiple of the given integrable datum.
+
 Remaining work is the heat-kernel transform and convolution identity,
 differentiation under spatial/time integrals, and pointwise
 approximate-identity convergence for complex `L¹` data.

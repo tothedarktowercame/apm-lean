@@ -103,6 +103,29 @@ lemma apm_m98J05_heatKernel_integrable {t : ℝ} (ht : 0 < t) :
 noncomputable def apm_m98J05_heatSolution (f : ℝ → ℂ) (x t : ℝ) : ℂ :=
   ∫ y, f y * (apm_m98J05_heatKernel t (x - y) : ℂ)
 
+lemma apm_m98J05_heatSolution_integrable
+    {f : ℝ → ℂ} (hf : Integrable f) {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    Integrable (fun y => f y * (apm_m98J05_heatKernel t (x - y) : ℂ)) := by
+  let C : ℝ := 1 / (2 * Real.sqrt (Real.pi * t))
+  have hC : 0 ≤ C := by
+    dsimp [C]
+    positivity
+  have hmeas : AEStronglyMeasurable
+      (fun y : ℝ => f y * (apm_m98J05_heatKernel t (x - y) : ℂ)) volume := by
+    exact hf.aestronglyMeasurable.mul
+      ((by unfold apm_m98J05_heatKernel; fun_prop : Continuous fun y : ℝ =>
+        (apm_m98J05_heatKernel t (x - y) : ℂ)).aestronglyMeasurable)
+  refine (hf.norm.const_mul C).mono' hmeas ?_
+  filter_upwards with y
+  rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
+  have hk : |apm_m98J05_heatKernel t (x - y)| ≤ C := by
+    unfold apm_m98J05_heatKernel
+    rw [abs_of_nonneg (mul_nonneg hC (Real.exp_nonneg _))]
+    apply mul_le_of_le_one_right hC
+    rw [Real.exp_le_one_iff]
+    exact div_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr (sq_nonneg _)) (by positivity)
+  simpa [mul_comm] using mul_le_mul_of_nonneg_left hk (norm_nonneg (f y))
+
 theorem apm_m98j05 :
     (∀ (f f' : ℝ → ℂ),
       (∀ x, HasDerivAt f (f' x) x) →
@@ -190,5 +213,14 @@ theorem apm_m98j05 :
   and `ConstructionTargets.L2Translation` were also inspected. Adapting these
   results to a complex `L¹` datum, time derivative, and pointwise (rather than
   `L²`) initial convergence was not completed.
+
+  Closer hop 3 proves `apm_m98J05_heatSolution_integrable`: for every complex
+  integrable datum, positive time, and spatial point, the raw convolution
+  integrand defining `heatSolution` is integrable. The proof uses the uniform
+  Gaussian bound by its prefactor and domination by a constant multiple of
+  `‖f‖`. Thus well-definedness of every displayed heat-solution integral is
+  closed. The remaining work is still the two-variable Fubini/convolution
+  identity, differentiation under the integrals, and pointwise approximate-
+  identity convergence.
     -/
     sorry

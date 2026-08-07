@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "notes": "Fourier differentiation and the multiplier ODE compile; the frozen heat kernel is now proved nonnegative, integrable, and of unit mass. Complex convolution, differentiation, and pointwise convergence remain."
+  "closer_hop": 3,
+  "notes": "Fourier differentiation, multiplier ODE, heat-kernel normalization, and absolute integrability of every heat-solution convolution integrand compile. Fubini/convolution, differentiation, and pointwise convergence remain."
 }
