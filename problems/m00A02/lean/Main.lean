@@ -33,6 +33,41 @@ def apm_m00A02_derivativeCoefficients (a : ℕ → ℝ) : ℕ → ℝ
   | 0 => 0
   | n + 1 => -(n : ℝ) * a n
 
+/-- The coefficients in the frozen integral-power Poincaré encoding are
+uniquely determined by the function. -/
+lemma apm_m00A02_expansion_coefficients_unique
+    {f : ℝ → ℝ} {a c : ℕ → ℝ}
+    (ha : apm_m00A02_hasExpansion f a)
+    (hc : apm_m00A02_hasExpansion f c) : a = c := by
+  funext N
+  induction N using Nat.strong_induction_on with
+  | h N ih =>
+    have ht := (ha N).sub (hc N)
+    have heq : (fun x : ℝ =>
+        x ^ N * (f x - ∑ n ∈ range (N + 1), a n / x ^ n) -
+        x ^ N * (f x - ∑ n ∈ range (N + 1), c n / x ^ n)) =ᶠ[atTop]
+        fun _ => c N - a N := by
+      filter_upwards [eventually_ne_atTop (0 : ℝ)] with x hx
+      have hs : ∑ n ∈ range N, a n / x ^ n =
+          ∑ n ∈ range N, c n / x ^ n := by
+        apply sum_congr rfl
+        intro n hn
+        rw [ih n (mem_range.mp hn)]
+      rw [sum_range_succ, sum_range_succ, hs]
+      field_simp
+      ring
+    have ht0 : Tendsto (fun x : ℝ =>
+        x ^ N * (f x - ∑ n ∈ range (N + 1), a n / x ^ n) -
+        x ^ N * (f x - ∑ n ∈ range (N + 1), c n / x ^ n))
+        atTop (nhds 0) := by
+      simpa using ht
+    have ht' : Tendsto (fun _ : ℝ => c N - a N) atTop (nhds 0) :=
+      ht0.congr' heq
+    have hcst : Tendsto (fun _ : ℝ => c N - a N) atTop
+        (nhds (c N - a N)) := tendsto_const_nhds
+    have hz : (0 : ℝ) = c N - a N := tendsto_nhds_unique ht' hcst
+    linarith
+
 /-- A smooth, asymptotically null function whose derivative is not null. -/
 def apm_m00A02_counterexample (x : ℝ) : ℝ :=
   Real.exp (-x) * Real.sin (Real.exp x)
@@ -122,5 +157,13 @@ theorem apm_m00a02 :
     the logarithmic sequence above. Further searches in the asymptotics and
     improper-integral APIs still found no theorem connecting this custom
     all-orders remainder predicate to the required integrated expansion.
+    Closer hop 3 proves `apm_m00A02_expansion_coefficients_unique`, so the
+    coefficient-rigidity half is no longer open. The remaining task is exactly
+    the integration bridge: derive `b 0 = b 1 = 0` from convergence of `f`,
+    integrate the order-by-order remainder estimate for `deriv f` on
+    `[x, +∞)`, and use the improper FTC to produce the formal derivative
+    expansion. Searches found `intervalIntegral.integral_deriv_eq_sub` and
+    `integral_Ioi_rpow_of_lt`, but assembling their eventual hypotheses from
+    the raw `Tendsto` remainder and merely `Differentiable ℝ f` remains open.
     -/
     sorry

@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Proved uniqueness of coefficients for the custom Poincare expansion. The remaining implication requires integration of the derivative remainder from infinity and the improper FTC.",
   "imported_at": "2026-07-13T17:26:54.243622Z"
 }
