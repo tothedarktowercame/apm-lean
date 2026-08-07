@@ -57,6 +57,32 @@ def apm_t02a05_outwardSphereIntegral
     (omega : apm_t02a05_Form2) (c : apm_t02a05_E3) : ℝ :=
   ∫ q : Metric.sphere c 1, apm_t02a05_orientedCoefficient omega c q ∂μH[2]
 
+/-- The purely algebraic optimization step after the flux has been reduced to
+its explicit quadratic expression in the center. -/
+lemma apm_t02a05_quadratic_minimum (a b : ℝ) :
+    44 * Real.pi / 15 ≤
+        44 * Real.pi / 15 +
+          4 * Real.pi * ((a - 1) ^ 2 + (b - 2) ^ 2) ∧
+    (44 * Real.pi / 15 +
+          4 * Real.pi * ((a - 1) ^ 2 + (b - 2) ^ 2) =
+        44 * Real.pi / 15 ↔ a = 1 ∧ b = 2) := by
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have ha : 0 ≤ (a - 1) ^ 2 := sq_nonneg _
+  have hb : 0 ≤ (b - 2) ^ 2 := sq_nonneg _
+  constructor
+  · nlinarith
+  · constructor
+    · intro h
+      have hmul : 4 * Real.pi * ((a - 1) ^ 2 + (b - 2) ^ 2) = 0 := by
+        linarith
+      have hcoeff : 4 * Real.pi ≠ 0 :=
+        mul_ne_zero (by norm_num) (ne_of_gt hpi)
+      have hsum : (a - 1) ^ 2 + (b - 2) ^ 2 = 0 :=
+        (mul_eq_zero.mp hmul).resolve_left hcoeff
+      constructor <;> nlinarith
+    · rintro ⟨rfl, rfl⟩
+      ring
+
 theorem apm_t02a05
     (omega : apm_t02a05_Form2) (homega : apm_t02a05_isOmega omega) :
     (∀ c : apm_t02a05_E3,
@@ -65,4 +91,27 @@ theorem apm_t02a05
     (∀ c : apm_t02a05_E3,
       apm_t02a05_outwardSphereIntegral omega c = 44 * Real.pi / 15 ↔
         c 0 = 1 ∧ c 1 = 2) := by
+  /-
+  Boundary (closer hop 1): the optimization layer is now completely compiled
+  in `apm_t02a05_quadratic_minimum`. Once the geometric integral is shown to
+  equal
+  `44 * pi / 15 + 4 * pi * ((c 0 - 1)^2 + (c 1 - 2)^2)`, positivity of `pi`
+  and the sum-of-squares equality give both the lower bound and the exact
+  minimizing line, with no condition on `c 2`.
+
+  The remaining bridge is that exact flux formula. The informal proof uses
+  Stokes/divergence to replace the custom Hausdorff-measure boundary integral
+  by the integral of
+  `3*(x₀-1)^2 + 3*(x₁-2)^2 + 1` on the translated unit ball, followed by
+  the ball volume and second-coordinate moments. Mathlib's differential-form
+  API has `extDeriv`, and `ConstructionTargets.RadialIntegrationR3` handles
+  radial volume integrals, but neither connects `extDeriv` to this custom
+  tangent-projection coefficient integral over `μH[2]`. Direct evaluation
+  requires proving the orthogonal-projection coordinate identity, translation
+  invariance of Hausdorff surface measure, and the needed sphere moments.
+  Searches of `LEMMA-INDEX.md`, all construction modules, related artifacts
+  `t92J09` and `t01J06`, git history, and Mathlib's Stokes, divergence,
+  Hausdorff-measure, sphere-integral, and Euclidean moment APIs found no
+  packaged route; both related artifacts retain the same unresolved bridge.
+  -/
   sorry
