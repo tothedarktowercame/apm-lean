@@ -29,20 +29,20 @@
   },
   "classification": "partial",
   "imported_at": "2026-07-13T17:26:52.822715Z",
-  "checked_at": "2026-08-05T13:15:00Z",
+  "checked_at": "2026-08-07T00:00:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a97J05/lean/Main.lean",
     "sorry_count": 1,
     "sorry_locations": [
-      "coeff_converges_to_neg_residue (main proof body)"
+      "apm_a97j05 (main proof body)"
     ],
     "blockers": [
       "Compiled Cauchy-decay pattern found in a96J09 for the analytic remainder",
-      "Scaled geometric polar series is now proved by hasFPowerSeriesAt_div_sub_one",
-      "Series subtraction and uniqueness now compile, yielding hcoeff: a(n)+A equals the normalized derivative coefficient of the remainder",
-      "Direct import of a96J09 is unavailable because problems/ is not a Lake module root",
-      "Remaining bridge: package the a96J09 Cauchy-decay proof locally and perform the final limit translation"
+      "Scaled geometric polar series is proved by apm_a97J05_hasFPowerSeriesAt_div_sub_one",
+      "Continuity of the updated pole-subtracted remainder at the pole is proved by apm_a97J05_remainder_update_continuousAt",
+      "Historical commit 3bc0aea proves coefficient uniqueness only for an older theorem receiving HasFPowerSeriesAt directly",
+      "Remaining bridge: package the frozen pointwise HasSum family as HasFPowerSeriesAt, glue removability globally, and apply the a96J09 Cauchy estimate"
     ]
   }
 }

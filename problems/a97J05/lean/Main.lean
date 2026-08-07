@@ -28,6 +28,32 @@ def apm_a97J05_hasSimplePoleWithResidue
     AnalyticAt ℂ g z₀ ∧
       ∀ᶠ z in 𝓝[≠] z₀, f z = A / (z - z₀) + g z
 
+/-- The principal part has constant Maclaurin coefficient `-A`.
+Recovered from the compiled historical a97J05 branch. -/
+lemma apm_a97J05_hasFPowerSeriesAt_div_sub_one (A : ℂ) :
+    HasFPowerSeriesAt (fun z : ℂ => A / (z - 1))
+      (FormalMultilinearSeries.ofScalars ℂ (fun _ => -A)) 0 := by
+  have h :=
+    (hasFPowerSeriesOnBall_inverse_one_sub ℂ ℂ).hasFPowerSeriesAt.const_smul (c := -A)
+  convert h using 1
+  funext z
+  simp only [div_eq_mul_inv, Pi.smul_apply, smul_eq_mul]
+  rw [show z - 1 = -(1 - z) by ring, inv_neg]
+  simp [Ring.inverse_eq_inv]
+
+/-- Updating the pole-subtracted remainder with the analytic part's value is
+continuous at the formerly singular point. -/
+lemma apm_a97J05_remainder_update_continuousAt
+    (f g : ℂ → ℂ) (z₀ A : ℂ)
+    (hg : AnalyticAt ℂ g z₀)
+    (heq : ∀ᶠ z in 𝓝[≠] z₀, f z = A / (z - z₀) + g z) :
+    ContinuousAt
+      (Function.update (fun z => f z - A / (z - z₀)) z₀ (g z₀)) z₀ := by
+  rw [continuousAt_update_same]
+  have heq' : (fun z => f z - A / (z - z₀)) =ᶠ[𝓝[≠] z₀] g :=
+    heq.mono fun z hz => by dsimp; rw [hz]; ring
+  exact (hg.continuousAt.mono_left inf_le_left).congr' heq'.symm
+
 theorem apm_a97j05
     (f : ℂ → ℂ) (A : ℂ) (a : ℕ → ℂ)
     (hanalytic : AnalyticOn ℂ f (ball 0 2 \ ({1} : Set ℂ)))
@@ -140,4 +166,21 @@ theorem apm_a97j05
   -- (`HasSum.geometric` for 1/(1-z) + coefficient comparison).
   -- Each is individually tractable (~15 lines) but the total is ~60-80 lines
   -- and requires imports from a96J09 + RemovableSingularity.
+  --
+  -- CLOSER HOP 3 addendum. Two advertised bridges are now compiled above.
+  -- `apm_a97J05_hasFPowerSeriesAt_div_sub_one` restores the historical
+  -- geometric-series proof for the constant polar coefficients.  More
+  -- importantly, `apm_a97J05_remainder_update_continuousAt` proves the
+  -- continuity half of Step B directly from the punctured equality via
+  -- `continuousAt_update_same`; the `Function.update` issue is therefore no
+  -- longer a blocker.  Mathlib's
+  -- `analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt` will
+  -- finish removability once punctured differentiability is assembled.
+  --
+  -- Git history at `3bc0aea` also contains a compiled coefficient-uniqueness
+  -- calculation, but for an older auxiliary theorem whose hypotheses already
+  -- supplied `HasFPowerSeriesAt`.  The frozen theorem only supplies pointwise
+  -- `HasSum` on `ball 0 1`; converting that family into the corresponding
+  -- `HasFPowerSeriesAt (ofScalars ℂ a)` (including its radius bound), then
+  -- copying the closed `a96J09` Cauchy-decay estimate, remains the open bridge.
   sorry

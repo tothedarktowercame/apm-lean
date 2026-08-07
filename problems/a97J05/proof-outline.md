@@ -55,9 +55,17 @@ compiled local Cauchy-decay pattern from a96J09.
 
 ## Closer hop 3
 
-The main proof now compiles through formal-series subtraction and uniqueness.
-Its local `hcoeff` proves
-`a n + A = iteratedDeriv n g 0 / n.factorial`. A direct import of a96J09 was
-tested and discarded because `problems/` is not a Lake module root. The only
-remaining task is therefore to copy/package the already compiled Cauchy-decay
-lemma locally and finish the elementary limit translation.
+The current frozen theorem differs from the older auxiliary theorem in commit
+`3bc0aea`: it assumes pointwise `HasSum` throughout the unit ball rather than
+an already packaged `HasFPowerSeriesAt`. This hop restored the historical
+geometric-series lemma as
+`apm_a97J05_hasFPowerSeriesAt_div_sub_one` and proved
+`apm_a97J05_remainder_update_continuousAt`. The latter removes the
+`Function.update` continuity blocker completely: the punctured pole equality
+and `continuousAt_update_same` give the required limit at the pole.
+
+The remaining exact bridge is to convert the frozen family of pointwise
+`HasSum` hypotheses into `HasFPowerSeriesAt (ofScalars ℂ a)`, use the restored
+polar series and uniqueness to identify `a n + A`, assemble punctured
+differentiability for the removable-singularity theorem, and copy the closed
+`a96J09` Cauchy-decay estimate locally.
