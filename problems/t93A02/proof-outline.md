@@ -4,6 +4,11 @@ The custom hyperspace embeds into Mathlib's complete extended-metric space of
 closed sets via `t93A02H.toCloseds`.  Pairwise finite Hausdorff edistance and
 the definitional edistance identity are compiled as
 `t93A02H.hausdorffEDist_ne_top` and `t93A02H.edist_toCloseds`.
+Closer hop 2 proves the sharper conversion
+`t93A02H.edist_toCloseds_eq_ofReal_hausdorffDist`, expressing the extended
+distance exactly as `ENNReal.ofReal` of the frozen real distance.
+It then uses this identity in `t93A02H.cauchySeq_toCloseds`, completing the
+translation to Mathlib's extended-metric `CauchySeq` predicate.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t93A02.md`
