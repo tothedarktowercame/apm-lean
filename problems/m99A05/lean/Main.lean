@@ -75,22 +75,43 @@ theorem apm_m99a05
     exact ℓ.continuous.continuousAt.tendsto.comp hu
   · constructor
     · /-
-      Boundary: finite-dimensional weak-to-strong convergence requires
-      reconstructing vectors from finitely many continuous basis-coordinate
-      maps. I searched `FiniteDimensional`, `Basis.coord`, weak-topology, and
-      finite-product convergence APIs; the arbitrary-`RCLike` assembly was not
-      completed.
+      Finite-dimensional weak-to-strong convergence is reconstructed from the
+      finitely many continuous coordinates of `Module.finBasis`; its
+      `equivFun.toContinuousLinearEquiv` transports coordinatewise convergence
+      back to norm convergence.
       -/
-      sorry
+      intro Y _ _ _ u x
+      constructor
+      · intro hstrong ℓ
+        exact ℓ.continuous.continuousAt.tendsto.comp hstrong
+      · intro hweak
+        let b := Module.finBasis 𝕜 Y
+        let A := b.equivFun.toContinuousLinearEquiv
+        have hcoord : Tendsto (fun n => A (u n)) atTop (nhds (A x)) := by
+          rw [tendsto_pi_nhds]
+          intro i
+          let coord : Y →L[𝕜] 𝕜 :=
+            ⟨b.coord i, (b.coord i).continuous_of_finiteDimensional⟩
+          simpa [A, b, coord] using hweak coord
+        have := A.symm.continuous.continuousAt.tendsto.comp hcoord
+        change Tendsto (fun n => A.symm (A (u n))) atTop (nhds (A.symm (A x))) at this
+        simpa only [ContinuousLinearEquiv.symm_apply_apply] using this
     · constructor
-      · /-
-        Boundary: norm boundedness requires Banach--Steinhaus on the family
-        `NormedSpace.inclusionInDoubleDual 𝕜 X (u n)`. Mathlib provides the
-        isometric double-dual embedding, but searches for `UniformBoundedness`
-        and pointwise-bounded families did not locate an assembled theorem with
-        the required interface.
-        -/
-        sorry
+      · intro u x hu
+        -- Banach--Steinhaus on the canonical isometric bidual embedding.
+        let J := NormedSpace.inclusionInDoubleDual 𝕜 X
+        have hpoint : ∀ ℓ : StrongDual 𝕜 X,
+            ∃ C : ℝ, ∀ n : ℕ, ‖J (u n) ℓ‖ ≤ C := by
+          intro ℓ
+          have ht : Tendsto (fun n => J (u n) ℓ) atTop (nhds (ℓ x)) := by
+            simpa [J, NormedSpace.dual_def] using hu ℓ
+          obtain ⟨C, hC⟩ :=
+            (Metric.isBounded_range_of_tendsto _ ht).exists_norm_le
+          exact ⟨C, fun n => hC _ ⟨n, rfl⟩⟩
+        obtain ⟨C, hC⟩ := banach_steinhaus hpoint
+        refine ⟨C, fun n => ?_⟩
+        rw [← (NormedSpace.inclusionInDoubleDualLi (𝕜 := 𝕜) (E := X)).norm_map (u n)]
+        exact hC n
       · intro u x y hx hy
         apply sub_eq_zero.mp
         apply SeparatingDual.eq_zero_of_forall_dual_eq_zero (R := 𝕜)

@@ -10,9 +10,9 @@
     "problem_tex": "apm/m99A05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
+    "files": ["lean/Main.lean"],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,6 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:56.143762Z"
+  "classification": "proved",
+  "closer_hop": 1,
+  "notes": "All five weak/strong convergence clauses compile without sorry."
 }
