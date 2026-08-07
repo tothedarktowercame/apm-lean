@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "note": "The smallest-prime-index normality theorem is fully proved via Nat.minFac and Mathlib's packaged index-normal theorem; only the order-255 classification remains.",
+  "closer_hop": 2,
+  "note": "The smallest-prime-index theorem and existence of a normal order-17 subgroup in every group of order 255 are fully proved. The remaining sorry is the normal cyclic order-85 subgroup and cyclicity of the whole group.",
   "imported_at": "2026-07-13T17:26:53.336804Z"
 }
