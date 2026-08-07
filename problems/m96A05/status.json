@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The strict diagonal norm bound and exact three-point row support are proved. Remaining work is the supported Fin row-sum normalization, endpoint bookkeeping, and the eventual off-diagonal bound from compact boundedness of a.",
+  "closer_hop": 3,
+  "boundary": "The strict diagonal norm bound, exact three-point row support, and center/predecessor/successor mesh identities are proved. Remaining work is the supported Fin row-sum normalization, endpoint bookkeeping, and the eventual off-diagonal bound from compact boundedness of a.",
   "imported_at": "2026-07-13T17:26:55.419020Z"
 }

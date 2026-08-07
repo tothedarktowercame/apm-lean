@@ -15,6 +15,9 @@ remain.
   two, for every positive mesh size.
 - Every matrix row vanishes outside its diagonal, predecessor, and successor;
   this is compiled as `apm_m96a05_matrix_eq_zero_of_not_neighbor`.
+- The center and both interior-neighbor mesh evaluations are compiled as
+  `apm_m96a05_meshValue_center`, `apm_m96a05_meshValue_pred`, and
+  `apm_m96a05_meshValue_succ`, including their dependent `Fin` witnesses.
 
 ## Closer hop 2 progress
 
@@ -22,6 +25,13 @@ remain.
   the Gershgorin erased-row estimate. Both remaining sums can now discard all
   indices except the two adjacent coordinates (and the diagonal where it has
   not been erased).
+
+## Closer hop 3 progress
+
+- Extracted the three mesh-evaluation identities needed after support
+  reduction. The remaining stencil proof is confined to endpoint substitution
+  and the actual `Finset.univ` sum collapse; dependent predecessor/successor
+  arithmetic is no longer duplicated there.
 
 ## Remaining Boundary
 

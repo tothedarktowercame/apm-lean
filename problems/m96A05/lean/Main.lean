@@ -27,6 +27,28 @@ def apm_m96a05_meshValue (n : ℕ) (U : Fin n → ℝ) (k : ℕ) : ℝ :=
   else if hk : k - 1 < n then U ⟨k - 1, hk⟩
   else 0
 
+lemma apm_m96a05_meshValue_center {n : ℕ} (U : Fin n → ℝ) (i : Fin n) :
+    apm_m96a05_meshValue n U (i.val + 1) = U i := by
+  rw [apm_m96a05_meshValue]
+  simp only [if_neg (by omega : i.val + 1 ≠ 0), if_neg (by omega : i.val + 1 ≠ n + 1)]
+  simp only [dif_pos (by omega : i.val + 1 - 1 < n)]
+  congr
+
+lemma apm_m96a05_meshValue_pred {n : ℕ} (U : Fin n → ℝ) (i : Fin n)
+    (hi : 0 < i.val) :
+    apm_m96a05_meshValue n U i.val = U ⟨i.val - 1, by omega⟩ := by
+  rw [apm_m96a05_meshValue]
+  simp only [if_neg (by omega : i.val ≠ 0), if_neg (by omega : i.val ≠ n + 1)]
+  simp only [dif_pos (by omega : i.val - 1 < n)]
+
+lemma apm_m96a05_meshValue_succ {n : ℕ} (U : Fin n → ℝ) (i : Fin n)
+    (hi : i.val + 1 < n) :
+    apm_m96a05_meshValue n U (i.val + 2) = U ⟨i.val + 1, hi⟩ := by
+  rw [apm_m96a05_meshValue]
+  simp only [if_neg (by omega : i.val + 2 ≠ 0), if_neg (by omega : i.val + 2 ≠ n + 1)]
+  simp only [dif_pos (by omega : i.val + 2 - 1 < n)]
+  congr
+
 def apm_m96a05_approximateSolution
     (n : ℕ) (a b c : ℝ → ℝ) (U : Fin n → ℝ) : Prop :=
   ∀ i : Fin n,
@@ -147,6 +169,17 @@ theorem apm_m96a05 :
     repeated matrix-definition reasoning from both remaining proofs. The
     stencil equivalence still needs the dependent predecessor/successor
     witnesses and four endpoint cases needed to evaluate the supported sum.
+
+    Closer hop 3 proves the reusable dependent-index identities
+    `apm_m96a05_meshValue_center`, `apm_m96a05_meshValue_pred`, and
+    `apm_m96a05_meshValue_succ`.  These discharge all coercion and subtraction
+    arithmetic for the center and the two interior neighbors.  I then retried
+    normalization of `Matrix.mulVec`; the remaining cases are precisely the
+    first/last-row boundary substitutions together with collapsing the
+    `Finset.univ` sum to the supported indices.  No additional theorem was
+    found in `LEMMA-INDEX.md`, Mathlib's matrix/finset sources, the closed
+    corpus, construction libraries, or git history, so the full assembly
+    remains open rather than being hidden behind an unverified rewrite.
     -/
     sorry
   refine ⟨hscheme, ?_⟩
@@ -185,6 +218,13 @@ theorem apm_m96a05 :
     the predecessor and successor is zero. The remaining Gershgorin assembly
     is therefore reduced to summing at most those two entries, plus the
     compactness-based eventual sign bounds on their coefficients.
+
+    Closer hop 3's three mesh-value lemmas are also available to the endpoint
+    bookkeeping, but do not by themselves prove the erased-row norm sum.  A
+    renewed inspection of `Matrix.det_ne_zero_of_sum_row_lt_diag` and
+    `Finset.sum_eq_single` confirmed that an explicit two-neighbor sum proof
+    is still required; no support-cardinality shortcut in Mathlib supplies the
+    needed inequality with these dependent `Fin n` neighbors.
     -/
     sorry
   refine ⟨N, ?_⟩
