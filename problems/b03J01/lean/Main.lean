@@ -18,6 +18,19 @@ Group order and subgroup index are encoded by actual finite cardinality and
 def apmB03SmallestPrimeDivisor (p n : ℕ) : Prop :=
   p.Prime ∧ p ∣ n ∧ ∀ q : ℕ, q.Prime → q ∣ n → p ≤ q
 
+lemma apm_b03J01_twinPrime_squarefree (p : ℕ) (hp : p.Prime)
+    (hp2 : (p + 2).Prime) : Squarefree (p * (p + 2)) := by
+  apply (Nat.squarefree_mul ((Nat.coprime_primes hp hp2).2 (by omega))).2
+  exact ⟨hp.squarefree, hp2.squarefree⟩
+
+lemma apm_b03J01_isZGroup_of_twinPrime_card
+    (G : Type*) [Group G] [Fintype G] (p : ℕ) (hp : p.Prime)
+    (hp2 : (p + 2).Prime) (hcard : Fintype.card G = p * (p + 2)) :
+    IsZGroup G := by
+  apply IsZGroup.of_squarefree
+  rw [Nat.card_eq_fintype_card, hcard]
+  exact apm_b03J01_twinPrime_squarefree p hp hp2
+
 theorem apm_b03j01
     (G : Type*) [Group G] [Fintype G]
     (p : ℕ) (H : Subgroup G)
@@ -39,10 +52,13 @@ theorem apm_b03j01
   refine ⟨?_, ?_⟩
   · apply H.normal_of_index_eq_minFac_card
     simpa [Nat.card_eq_fintype_card, hminfac] using hindex
-  · -- Boundary (closer hop 1): bridge still open. Enriched route with API names.
-    -- Proof chain (6 steps, ~60-90 lines total):
-    -- 1. |G| = p*(p+2), p and p+2 distinct primes → Squarefree |G|
-    -- 2. Squarefree → IsZGroup G (by `IsZGroup.of_squarefree`)
+  · intro hp2 hcard
+    letI : IsZGroup G :=
+      apm_b03J01_isZGroup_of_twinPrime_card G p hpprime hp2 hcard
+    -- Boundary (closer hop 2): bridge still open after closing steps 1--2.
+    -- Proved locally above: |G| = p*(p+2), with both factors prime, is squarefree;
+    -- hence `IsZGroup.of_squarefree` supplies `[IsZGroup G]` here.
+    -- Remaining proof chain:
     -- 3. For each prime q | |G|: `Sylow.card_sylow_modEq_one` gives n_q ≡ 1 (mod q),
     --    `Sylow.card_dvd_index` gives n_q | (|G|/q). Twin-prime arithmetic ⟹ n_q = 1.
     -- 4. n_q = 1 ⟹ Sylow q G is Subsingleton ⟹ `(↑P : Subgroup G).Normal`
@@ -52,4 +68,9 @@ theorem apm_b03j01
     -- Key APIs: `Sylow.card_sylow_modEq_one`, `Sylow.not_dvd_card_sylow`,
     -- `IsZGroup.of_squarefree` (ZGroup.lean:57), `isCyclic` instance (ZGroup.lean:125),
     -- `isNilpotent_of_finite_tfae` (Nilpotent.lean:941)
+    -- New attempts: searched the closed corpus and `LEMMA-INDEX.md` for a theorem
+    -- classifying groups of twin-prime order, and Mathlib for a direct
+    -- `IsZGroup`-to-`IsNilpotent` bridge; neither exists. The remaining quantified
+    -- Sylow argument must split q | p*(p+2) into q=p or q=p+2, prove uniqueness
+    -- from the two cardinality lemmas, and transport it to `Subgroup.Normal`.
     sorry
