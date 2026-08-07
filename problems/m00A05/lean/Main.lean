@@ -26,6 +26,11 @@ def apm_m00A05_isSolution (u₀ : ℝ) (u : ℝ → ℝ) : Prop :=
   u 0 = u₀ ∧
   ∀ t : ℝ, 0 < t → deriv u t + u t = Real.cos (u t)
 
+/-- The autonomous vector field in the equation is globally Lipschitz. -/
+lemma apm_m00A05_lipschitz_vectorField :
+    LipschitzWith 2 (fun x : ℝ => Real.cos x - x) := by
+  convert Real.lipschitzWith_cos.sub LipschitzWith.id using 1 <;> norm_num
+
 theorem apm_m00a05 :
     (∀ u₀ : ℝ,
       ∃ u : ℝ → ℝ,
@@ -38,18 +43,27 @@ theorem apm_m00a05 :
         Tendsto u atTop (nhds ξ) := by
   constructor
   · /-
-    Boundary for global well-posedness: Mathlib's
+    Boundary after closer hop 1 for global well-posedness: Mathlib's
     `Analysis/ODE/PicardLindelof.lean` provides local existence through
     `IsPicardLindelof.exists_eq_forall_mem_Icc_hasDerivWithinAt` and local-flow
     variants. The frozen theorem, however, asks for a single representative on
     `[0,∞)`, continuity at zero, an interior `deriv` equation, and uniqueness
     as `EqOn` on the whole half-line. Searches found no packaged globalization
     theorem for a globally Lipschitz autonomous vector field. Completing this
-    conjunct requires proving the vector field `cos x - x` globally Lipschitz,
-    iterating local solutions with compatible overlap uniqueness, and converting
+    conjunct requires iterating local solutions with compatible overlap uniqueness, and converting
     `HasDerivWithinAt` data into the exact `apm_m00A05_isSolution` predicate.
     The nearby `m96A02` artifact has the same intended Picard route but remains
     unproved, so it was discarded as a dependency.
+
+    New progress: `apm_m00A05_lipschitz_vectorField` proves the formerly open
+    analytic prerequisite globally, with constant `2`, by combining
+    `Real.lipschitzWith_cos` and `LipschitzWith.id` through
+    `LipschitzWith.sub`. `Gronwall.lean` also provides
+    `ODE_solution_unique_univ`, so global uniqueness need not be obtained by
+    manually chaining local overlap uniqueness once the solutions are expressed
+    in its `HasDerivAt` format. The remaining hard bridge is global existence
+    and conversion between Picard's interval solution and the frozen half-line
+    regularity predicate.
     -/
     sorry
   · let G : ℝ → ℝ := fun x => Real.cos x - x
@@ -66,7 +80,7 @@ theorem apm_m00a05 :
     · dsimp [G] at hξ
       linarith
     · /-
-      Boundary for global attraction: existence of an equilibrium `ξ ∈ [0,π/2]`
+      Boundary after closer hop 1 for global attraction: existence of an equilibrium `ξ ∈ [0,π/2]`
       is compiled above by the intermediate value theorem. The remaining proof
       depends on the half-line uniqueness conjunct: show trajectories cannot
       cross the constant solution, derive monotonicity from the sign of
@@ -76,5 +90,11 @@ theorem apm_m00a05 :
       comparison/integration lemmas, but no API packages this phase-line chain
       for the statement's weak regularity (`ContinuousOn` plus
       `DifferentiableOn` only on `Ioi 0`).
+
+      The new global Lipschitz lemma also supplies the uniqueness hypothesis
+      needed for the no-crossing argument. The remaining phase-line proof still
+      requires converting the frozen `deriv` equality to `HasDerivAt` on the
+      interior, applying time-translation uniqueness, and assembling the
+      monotone-limit contradiction.
       -/
       sorry
