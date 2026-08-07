@@ -51,6 +51,60 @@ lemma apm_b97a03_zeta_relation {α : ℂ}
   field_simp
   linear_combination h
 
+/-- The derived element is a sixth root of unity with cube `-1`. -/
+lemma apm_b97a03_zeta_pow_three {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    apm_b97a03_zeta α ^ 3 = -1 := by
+  have h := apm_b97a03_zeta_relation hα
+  apply eq_neg_of_add_eq_zero_left
+  linear_combination (apm_b97a03_zeta α + 1) * h
+
+lemma apm_b97a03_zeta_pow_six {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    apm_b97a03_zeta α ^ 6 = 1 := by
+  rw [show 6 = 3 * 2 by norm_num, pow_mul, apm_b97a03_zeta_pow_three hα]
+  norm_num
+
+/-- The root of unity extracted from `α` belongs to the same generated
+intermediate field. -/
+lemma apm_b97a03_zeta_mem_field {α : ℂ} :
+    apm_b97a03_zeta α ∈ apm_b97a03_field α := by
+  unfold apm_b97a03_zeta apm_b97a03_field
+  apply IntermediateField.div_mem
+  · apply IntermediateField.add_mem
+    · exact IntermediateField.one_mem _
+    · have ha : α ∈ IntermediateField.adjoin ℚ ({α} : Set ℂ) :=
+        IntermediateField.subset_adjoin ℚ {α} (by simp)
+      simpa [pow_succ] using
+        IntermediateField.mul_mem _ (IntermediateField.mul_mem _ ha ha) ha
+  · exact IntermediateField.natCast_mem _ 2
+
+/-- Multiplying a chosen root by any power of the derived sixth root of unity
+again gives a root. -/
+lemma apm_b97a03_zeta_mul_root {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (k : ℕ) :
+    (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot
+      (apm_b97a03_zeta α ^ k * α) := by
+  have hz := apm_b97a03_zeta_pow_six hα
+  have ha := apm_b97a03_root_pow_six hα
+  have hpow : (apm_b97a03_zeta α ^ k * α) ^ 6 = -3 := by
+    rw [mul_pow, ← pow_mul, show k * 6 = 6 * k by omega, pow_mul, hz, one_pow, ha,
+      one_mul]
+  simpa [apm_b97a03_polynomial, Polynomial.IsRoot, hpow]
+
+lemma apm_b97a03_zeta_mul_root_mem_field {α : ℂ} (k : ℕ) :
+    apm_b97a03_zeta α ^ k * α ∈ apm_b97a03_field α := by
+  have hz := apm_b97a03_zeta_mem_field (α := α)
+  have ha : α ∈ apm_b97a03_field α := by
+    exact IntermediateField.subset_adjoin ℚ {α} (by simp)
+  apply IntermediateField.mul_mem
+  · induction k with
+    | zero => simpa using IntermediateField.one_mem (apm_b97a03_field α)
+    | succ k ih =>
+        rw [pow_succ]
+        exact IntermediateField.mul_mem _ ih hz
+  · exact ha
+
 theorem apm_b97a03 :
     Irreducible apm_b97a03_polynomial ∧
     ∀ α : ℂ,
@@ -99,5 +153,15 @@ theorem apm_b97a03 :
   list or the four displayed fixed fields. The statement appears
   mathematically sound, but the remaining concrete splitting-field,
   automorphism, subgroup, and fixed-field development remains open.
+
+  Closer hop 2 pushes the explicit root construction further.
+  `apm_b97a03_zeta_pow_three` and `apm_b97a03_zeta_pow_six` turn the
+  quadratic relation into `ζ³ = -1` and `ζ⁶ = 1`.
+  `apm_b97a03_zeta_mem_field` proves `ζ ∈ ℚ(α)`, while
+  `apm_b97a03_zeta_mul_root` and `apm_b97a03_zeta_mul_root_mem_field` prove
+  that every `ζ^k α` is a root lying in the same adjoin. This supplies the
+  candidate six-root orbit without a Kummer API. Remaining are proving the
+  six candidates exhaust the root set (including distinctness), packaging the
+  splitting field and automorphisms, and computing the exact fixed fields.
   -/
   sorry

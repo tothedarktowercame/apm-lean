@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "classification_detail": "The sixth-root-of-unity powers and full candidate root orbit ζ^kα inside Q(α) compile; exhaustion, splitting-field automorphisms, and fixed fields remain.",
   "imported_at": "2026-07-13T17:26:54.106107Z"
 }

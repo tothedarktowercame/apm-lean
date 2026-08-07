@@ -11,10 +11,12 @@ proved directly from an arbitrary complex root.
 
 - A root satisfies `α⁶ = -3` and `(α³)² = -3`.
 - The defined `ζ = (1 + α³)/2` satisfies `ζ² - ζ + 1 = 0`.
+- The same relation gives `ζ³ = -1` and `ζ⁶ = 1`.
+- `ζ` lies in `ℚ(α)`, and every `ζ^k α` is a root lying in `ℚ(α)`.
 
 ## Remaining bridge
 
-Use the quadratic relation to generate all six roots inside `ℚ(α)`, prove the
-adjoin is the splitting field, construct its six automorphisms and `S₃`
-equivalence, classify subgroups of `S₃`, and identify their fixed fields with
-the four explicit adjoins in the frozen statement.
+Prove that the six compiled candidate roots are distinct and exhaust the root
+set, prove the adjoin is the splitting field, construct its six automorphisms
+and `S₃` equivalence, classify subgroups of `S₃`, and identify their fixed
+fields with the four explicit adjoins in the frozen statement.
