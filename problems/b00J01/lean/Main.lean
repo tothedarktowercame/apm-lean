@@ -41,6 +41,29 @@ lemma apm_b00j01_irreducible_mod13 :
   · norm_num [apm_b00j01_poly]
   · exact apm_b00j01_not_isRoot_mod13
 
+lemma apm_b00j01_separable_mod13 :
+    (apm_b00j01_poly (ZMod 13)).Separable :=
+  PerfectField.separable_of_irreducible apm_b00j01_irreducible_mod13
+
+lemma apm_b00j01_finiteField_isGalois
+    [Fact (Nat.Prime 13)]
+    (M : Type*) [Field M] [Algebra (ZMod 13) M]
+    [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))] :
+    IsGalois (ZMod 13) M := by
+  letI : FiniteDimensional (ZMod 13) M :=
+    IsSplittingField.finiteDimensional M (apm_b00j01_poly (ZMod 13))
+  exact IsGalois.of_separable_splitting_field apm_b00j01_separable_mod13
+
+lemma apm_b00j01_finiteField_card_aut
+    [Fact (Nat.Prime 13)]
+    (M : Type*) [Field M] [Algebra (ZMod 13) M]
+    [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))] :
+    Nat.card (M ≃ₐ[ZMod 13] M) = Module.finrank (ZMod 13) M := by
+  letI : FiniteDimensional (ZMod 13) M :=
+    IsSplittingField.finiteDimensional M (apm_b00j01_poly (ZMod 13))
+  letI : IsGalois (ZMod 13) M := apm_b00j01_finiteField_isGalois M
+  exact IsGalois.card_aut_eq_finrank (ZMod 13) M
+
 theorem apm_b00j01 :
     (∀ (K : Type*) [Field K] [Algebra ℚ K]
         [IsSplittingField ℚ K (apm_b00j01_poly ℚ)],
@@ -60,7 +83,15 @@ theorem apm_b00j01 :
         [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))],
       Nonempty ((M ≃ₐ[ZMod 13] M) ≃* Multiplicative (ZMod 3))) := by
   /-
-  PARTIAL boundary (closer hop 1): the finite-field arithmetic is now compiled.
+  PARTIAL boundary (closer hop 2). Beyond the arithmetic from hop 1,
+  `apm_b00j01_separable_mod13` now uses perfectness of the finite base field,
+  and `apm_b00j01_finiteField_isGalois` upgrades every arbitrary splitting
+  field in the frozen quantifier to a finite-dimensional Galois extension.
+  `apm_b00j01_finiteField_card_aut` then applies
+  `IsGalois.card_aut_eq_finrank`, reducing the desired cyclic order-three
+  result to the exact extension-degree computation and Frobenius generation.
+
+  Prior hop 1: the finite-field arithmetic is compiled.
   `apm_b00j01_seven_not_cube_mod13` exhausts `ZMod 13`, and
   `apm_b00j01_irreducible_mod13` packages the result as irreducibility of
   `X³ - 7`. This also corrects the original skip comment: the polynomial has

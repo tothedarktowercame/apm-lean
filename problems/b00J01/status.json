@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "note": "The finite-field cubic-residue computation, absence of roots, and irreducibility of X^3-7 over ZMod 13 compile; splitting-field/Galois-group transport and the real/rational components remain.",
+  "closer_hop": 2,
+  "note": "Additionally proved separability over ZMod 13, Galoisness of every arbitrary splitting field, and equality of automorphism-group cardinality with extension degree. Exact degree/Frobenius transport and real/rational components remain.",
   "imported_at": "2026-07-13T17:26:53.186900Z"
 }

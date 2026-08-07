@@ -1,11 +1,15 @@
 # Proof Outline: b00J01
 
-The canonical Lean attempt is `lean/Main.lean`. Closer hop 1 proves the
+The canonical Lean attempt is `lean/Main.lean`. Closer hops 1–2 prove the
 concrete finite-field foundation:
 
 - exhaustive computation shows that `7` is not a cube in `ZMod 13`;
 - therefore `X³ - 7` has no root over `ZMod 13`;
 - the degree-three no-root criterion proves that polynomial irreducible.
+- perfectness of `ZMod 13` makes the polynomial separable;
+- every arbitrary splitting field from the frozen quantifier is a
+  finite-dimensional Galois extension;
+- its automorphism-group cardinality equals its extension degree.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b00J01.md`
@@ -13,7 +17,8 @@ concrete finite-field foundation:
 ## Remaining boundary
 
 - identify an arbitrary splitting field of this irreducible cubic with the
-  canonical degree-three finite Galois field and transport Frobenius;
+  canonical degree-three finite Galois field, prove the exact degree, and
+  transport Frobenius;
 - identify the real splitting field with `ℂ` and its automorphism group with
   `ZMod 2`;
 - over `ℚ`, establish the `S₃` automorphism group and formalize the complete
