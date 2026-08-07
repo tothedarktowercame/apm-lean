@@ -1,12 +1,22 @@
 # Proof Outline: b93J03
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean proof is partial in `lean/Main.lean`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b93J03.md`
 
-## Follow-up Needed
+## Completed formal steps
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- The commuting family is converted to an indexed family of endomorphisms.
+- Mathlib's simultaneous generalized-eigenspace decomposition proves that the
+  supremum of common generalized eigenspaces is top.
+- A nonzero common generalized eigenspace is extracted.
+
+## Remaining bridge
+
+Prove a nonzero common ordinary eigenspace for the commuting nilpotent parts,
+then perform dimension induction through the quotient by that eigenline and
+assemble a `Fin (finrank k V)` basis whose matrices satisfy
+`Matrix.BlockTriangular id`. `Eigenspace/Pi.lean` does not package this basis
+construction, and the available Lie-theorem API presupposes a triangularizable
+Lie-module instance.
