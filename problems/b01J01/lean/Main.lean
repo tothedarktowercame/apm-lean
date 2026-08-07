@@ -49,6 +49,19 @@ lemma apm_b01j01_prime_dvd_quotient
   simpa only [Subgroup.index_eq_card] using
     hpRel.trans (K.relIndex_dvd_index_of_normal H)
 
+/-- Every Sylow subgroup of `K`, mapped into `G`, is the intersection with
+`K` of some ambient Sylow subgroup. -/
+lemma apm_b01j01_sylowSubgroupsIn_subset_traces
+    {G : Type} [Group G] (p : ℕ) (K : Subgroup G) :
+    apm_b01J01_sylowSubgroupsIn p K ⊆ apm_b01J01_sylowTraces p K := by
+  intro Q hQ
+  rcases hQ with ⟨R, rfl⟩
+  obtain ⟨P, hP⟩ := R.exists_comap_subtype_eq
+  refine ⟨P, ?_⟩
+  rw [← hP]
+  ext x
+  simp
+
 theorem apm_b01j01
     (G : Type) [Group G] [Finite G]
     (H K : Subgroup G) [K.Normal]
@@ -78,5 +91,16 @@ theorem apm_b01j01
   one must extract an index-`p` subgroup from the resulting nontrivial finite
   abelian quotient.  Searches of the finite-abelian and index APIs found no
   theorem providing such a subgroup directly from prime divisibility.
+  Closer hop 2 extracts the available half of part (c) as the compiled lemma
+  `apm_b01j01_sylowSubgroupsIn_subset_traces`.  It uses
+  `Sylow.exists_comap_subtype_eq` and the elementary map/comap identity to
+  identify the mapped subgroup with `P ⊓ K` exactly in the frozen encoding.
+
+  A targeted inspection of `IsPGroup.inf_normalizer_sylow` and the Sylow
+  fixed-point API showed that these control intersections with normalizers,
+  not directly the intersection with an arbitrary normal subgroup.  The
+  reverse inclusion still needs conjugating an ambient extension of a Sylow
+  of `K` back to the specified ambient `P` and transporting normality of `K`.
+  The divisibility claim then needs the induced constant-fiber orbit count.
   -/
   sorry

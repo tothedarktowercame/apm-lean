@@ -18,12 +18,17 @@ The remaining boundary consists of:
    part (d).
 
 Mathlib's `Sylow.exists_comap_subtype_eq` already gives the reverse
-existence direction needed in part (c), but does not package the full normal
-restriction or the cardinal-divisibility theorem.
+existence direction needed in part (c).  Closer hop 2 packages it as
+`apm_b01j01_sylowSubgroupsIn_subset_traces`, including the exact map/comap
+rewrite required by the frozen set encoding.  Mathlib does not package the
+other inclusion or the cardinal-divisibility theorem.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b01J01.md`
 
 ## Follow-up Needed
 
-- formalize parts (b)--(d) using finite abelian group and Sylow action APIs
+- extract an index-`p` subgroup of the finite abelian quotient for part (b)
+- transport Sylow maximality through conjugation and normality of `K` for the
+  reverse inclusion in part (c)
+- prove the constant-fiber/orbit count for part (d)
