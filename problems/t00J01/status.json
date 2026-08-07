@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "Identity bijectivity, Lefschetz arithmetic, and fold continuity are proved. Remaining work is the Klein quotient manifold/top-homology development, S2 singular homology computation, and exact transcendental fold-fiber classification.",
+  "closer_hop": 2,
+  "boundary": "Identity bijectivity, Lefschetz arithmetic, fold continuity, the exact real-lift identity, and its derivative formula are proved. Remaining work is the Klein quotient manifold/top-homology development, S2 singular homology computation, and root/cardinality classification for the compiled lift modulo 2pi.",
   "imported_at": "2026-07-13T17:26:56.500892Z"
 }
