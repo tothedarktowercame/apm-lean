@@ -29,6 +29,26 @@ def HasRiemannIntegralOnUnitInterval (g : ℝ → ℝ) (I : ℝ) : Prop :=
         (∀ i : Fin n, x i.succ - x i.castSucc < δ) →
         |(∑ i, g (tag i) * (x i.succ - x i.castSucc)) - I| < ε
 
+/-- Mean-value tags in exactly the increment form required by the custom
+tagged Riemann sums. -/
+lemma apm_a98a03_exists_mvt_tag
+    {f f' : ℝ → ℝ} {a b : ℝ}
+    (hf_cont : ContinuousOn f (Icc (0 : ℝ) 1))
+    (hf_deriv : ∀ x ∈ Ioo (0 : ℝ) 1, HasDerivAt f (f' x) x)
+    (ha : a ∈ Icc (0 : ℝ) 1) (hb : b ∈ Icc (0 : ℝ) 1)
+    (hab : a < b) :
+    ∃ t ∈ Ioo a b, f b - f a = f' t * (b - a) := by
+  have hcont : ContinuousOn f (Icc a b) := hf_cont.mono fun x hx ↦
+    ⟨ha.1.trans hx.1, hx.2.trans hb.2⟩
+  have hderiv : ∀ x ∈ Ioo a b, HasDerivAt f (f' x) x := by
+    intro x hx
+    exact hf_deriv x ⟨ha.1.trans_lt hx.1, hx.2.trans_le hb.2⟩
+  obtain ⟨t, ht, hslope⟩ :=
+    exists_hasDerivAt_eq_slope f f' hab hcont hderiv
+  refine ⟨t, ht, ?_⟩
+  rw [hslope]
+  exact (div_mul_cancel₀ _ (sub_ne_zero.mpr hab.ne')).symm
+
 theorem apm_a98a03 :
     (∃ (f f' : ℝ → ℝ),
       ContinuousOn f (Icc 0 1) ∧
@@ -40,32 +60,28 @@ theorem apm_a98a03 :
       (∀ x ∈ Ioo (0 : ℝ) 1, HasDerivAt f (f' x) x) →
       HasRiemannIntegralOnUnitInterval f' I →
       f 1 - f 0 = I) := by
-  -- PART 1 (counterexample): requires constructing the Cantor function
-  -- (or an equivalent singular function) — continuous on [0,1], with
-  -- derivative 0 a.e. (hence ess sup f' = 0 < ∞), yet f(1)-f(0) = 1 ≠ 0 = ∫f'.
-  -- BOUNDARY: Mathlib has NO Cantor staircase function. `cantorFunction` in
-  -- `Mathlib.Analysis.Real.Cardinality` is a cardinality bijection, not the
-  -- devil's staircase. Constructing it requires building the middle-thirds
-  -- Cantor set, proving continuity, and showing derivative = 0 a.e. — a major
-  -- formalization effort (100+ lines).
-  --
-  -- PART 2 (FTC): requires proving f(1)-f(0) = Riemann integral of f' using:
-  -- (a) MVT to produce tags on each partition subinterval,
-  -- (b) telescoping sum,
-  -- (c) tag-independence of Riemann sums (from HasRiemannIntegralOnUnitInterval).
-  -- BOUNDARY: The custom `HasRiemannIntegralOnUnitInterval` definition uses
-  -- Fin-indexed tagged partitions. The MVT produces tags `t_i ∈ (x_{i-1}, x_i)`,
-  -- and the telescoping requires `∑ (f(x_i) - f(x_{i-1})) = f(1) - f(0)`.
-  -- The proof structure is clear but requires:
-  -- - `exists_ratio_deriv_eq_slope` or equivalent MVT (Mathlib has this)
-  -- - Fin-indexed telescoping sums
-  -- - Careful manipulation of the tagged partition structure
-  -- APIs searched: `exists_ratio_deriv_eq_slope`, `StrictMono`,
-  -- `Fin.sum_univ_castSucc`, `intervalIntegral` (not applicable — Riemann, not Lebesgue)
-  --
-  -- Blocker: Part 1 is the hard blocker (Cantor function construction).
-  -- Part 2 is tractable in principle but combined exceeds the time budget.
-  -- SKIPPED: two-part problem. Part 1 needs Cantor staircase (not in Mathlib).
-  -- Part 2 (FTC with Riemann integrable f') is tractable but combined exceeds budget.
-  -- Full analysis in file comments above.
+  /-
+  Boundary (closer hop 1): the strengthened FTC half is narrowed by the new
+  compiled helper `apm_a98a03_exists_mvt_tag`.  It applies Mathlib's exact
+  `exists_hasDerivAt_eq_slope` theorem on every partition cell and returns
+  `f b - f a = f' t * (b-a)`, precisely the summand needed by
+  `HasRiemannIntegralOnUnitInterval`.  The remaining finite step is to choose a
+  sufficiently fine uniform `Fin (n+1)` partition, choose these tags, rewrite
+  the tagged sum, and use `Finset.sum_range_sub` to telescope.
+
+  The counterexample half remains the hard boundary.  Searches of
+  `LEMMA-INDEX.md`, all `ConstructionTargets/` (including `LusinN` and
+  `BanachZarecki`), Mathlib's real/cardinality, singular-function, measure, and
+  bounded-variation sources, prior Riemann-integral artifacts `a95A01` and
+  `a94A02`, and git history found no devil's staircase or equivalent continuous
+  singular function with derivative zero almost everywhere.  Mathlib's
+  `Cardinal.cantorFunction` parametrizes binary sequences and is not the Cantor
+  staircase on `[0,1]`.  `ConstructionTargets.LusinN` proves FTC and null-set
+  preservation for already absolutely continuous functions, so it cannot
+  produce the required non-AC witness.
+
+  Closure requires constructing the middle-thirds Cantor function (continuity,
+  endpoints, local constancy off a null Cantor set), while the independent FTC
+  conjunct can be finished from the compiled MVT tags and Fin telescoping.
+  -/
   sorry
