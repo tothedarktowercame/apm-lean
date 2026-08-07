@@ -1,12 +1,21 @@
 # Proof Outline: b97J02
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt compiles with one remaining `sorry`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97J02.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- A zero-dimensional prime is maximal by extending it to a maximal ideal and
+  applying the custom chain condition.
+- Hence each prime quotient admits a field structure.
+- The canonical map into the dependent product of prime quotients is defined
+  with `Pi.ringHom`, with the requested evaluation equation by reflexivity.
+- Reducedness proves this map injective.
+
+## Remaining bridge
+
+Prove finite-spectrum surjectivity via the finite Chinese remainder theorem.
+Separately prove the idempotent-principal-ideal and arbitrary-product-of-fields
+conjuncts directly from their custom definitions.
