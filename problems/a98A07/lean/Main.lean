@@ -26,6 +26,15 @@ lemma apm_a98A07_log_ratio_neg {t : ℝ}
   · apply (div_lt_one (by positivity : 0 < 4 * Real.pi)).2
     nlinarith [Real.pi_pos]
 
+/-- Mathlib's Weierstrass theorem closes the final regularity step once local
+uniform convergence on the disk has been constructed. -/
+lemma apm_a98A07_differentiableOn_of_locallyUniform
+    {f : ℕ → ℂ → ℂ} {g : ℂ → ℂ}
+    (hf : ∀ n, DifferentiableOn ℂ (f n) (ball 0 1))
+    (hconv : TendstoLocallyUniformlyOn f g atTop (ball 0 1)) :
+    DifferentiableOn ℂ g (ball 0 1) := by
+  exact hconv.differentiableOn (Eventually.of_forall hf) isOpen_ball
+
 theorem apm_a98a07 :
     ∀ f : ℕ → ℂ → ℂ,
       (∃ U : Set ℂ,
@@ -62,5 +71,14 @@ theorem apm_a98a07 :
   Related Hurwitz/Rouché artifacts (`a97J08`, `a94A09`) confirm the absence of
   the final holomorphic-limit pipeline, and git history has no later attempt.
   No statement defect was found.
+
+  CLOSER HOP 2: the prior claim that Mathlib lacked the final holomorphic-limit
+  pipeline is now obsolete. `Analysis.Complex.LocallyUniformLimit` provides
+  `TendstoLocallyUniformlyOn.differentiableOn`, and sibling `a01A07` contains a
+  compiled use of exactly that theorem. The helper
+  `apm_a98A07_differentiableOn_of_locallyUniform` above adapts it to this unit
+  disk, closing step 4 completely. The remaining bridge is now only steps 1--3:
+  majorant integrability, boundary L¹ convergence, and the Cauchy-kernel bound
+  producing local uniform convergence.
   -/
   sorry

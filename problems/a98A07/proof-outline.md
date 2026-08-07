@@ -9,6 +9,9 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - `apm_a98A07_log_ratio_neg` proves the logarithmic factor never vanishes on
   `(0,2π)`; only the integrable singularity at zero remains.
+- `apm_a98A07_differentiableOn_of_locallyUniform` applies Mathlib's packaged
+  Weierstrass theorem, closing holomorphicity of the eventual locally uniform
+  limit.
 
 ## Remaining bridges
 
@@ -17,4 +20,7 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
    in L¹.
 3. Use Cauchy's formula and a compact-subdisk kernel bound to obtain locally
    uniform convergence.
-4. Prove that this locally uniform limit is holomorphic.
+
+The former fourth bridge is closed by
+`TendstoLocallyUniformlyOn.differentiableOn` from
+`Analysis.Complex.LocallyUniformLimit`.
