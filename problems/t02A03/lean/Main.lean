@@ -34,6 +34,19 @@ noncomputable instance : TopologicalSpace apm_t02a03_Y :=
     (fun a => Quotient.mk (Relation.EqvGen.setoid apm_t02a03_WedgeGlue) a)
     inferInstance
 
+def apm_t02a03_wedgeQuotient : Sum apm_t02a03_Torus Circle → apm_t02a03_Y :=
+  fun a => Quotient.mk _ a
+
+/-- The explicit wedge is genuinely the continuous quotient of the disjoint
+union used in its definition. -/
+lemma apm_t02a03_continuous_wedgeQuotient :
+    Continuous apm_t02a03_wedgeQuotient := by
+  exact continuous_coinduced_rng
+
+lemma apm_t02a03_surjective_wedgeQuotient :
+    Function.Surjective apm_t02a03_wedgeQuotient := by
+  exact Quotient.mk_surjective
+
 noncomputable def apm_t02a03_ybase : apm_t02a03_Y :=
   Quotient.mk _ (.inl (1, 1))
 
@@ -72,5 +85,15 @@ theorem apm_t02a03 :
   sequence yielding the stated degreewise module isomorphisms. Consequently
   even the first conjunct cannot currently be established from the available
   APIs without developing substantial missing algebraic-topology foundations.
+
+  Closer hop 1 packages the canonical quotient map and proves it continuous
+  and surjective in `apm_t02a03_continuous_wedgeQuotient` and
+  `apm_t02a03_surjective_wedgeQuotient`. This confirms the raw quotient-space
+  presentation needed by any future gluing theorem. Mathlib's
+  `FundamentalGroupoidFunctor.prodIso` still stops at groupoids, and its
+  Mayer--Vietoris files concern sheaf cohomology rather than the singular
+  homology used here. No API upgrades this generated-relation quotient to a
+  topological pushout carrying the required computations. The frozen statement
+  is unchanged.
   -/
   sorry
