@@ -15,6 +15,8 @@ integral over `Set.Ioi 0`.
 
 open MeasureTheory Set
 
+noncomputable section
+
 /-- The real partial-fraction decomposition, with positivity facts packaged so
 later improper-integration steps have no pole side conditions. -/
 lemma apm_a98a05_partial_fractions {x : ℝ} (hx : 0 ≤ x) :
@@ -36,18 +38,68 @@ lemma apm_a98a05_partial_fractions {x : ℝ} (hx : 0 ≤ x) :
   simp [A, Q]
   ring
 
+/-- The real antiderivative used for the improper-integral evaluation. -/
+def apm_a98a05_primitive (x : ℝ) : ℝ :=
+  (1 / 3 : ℝ) * Real.log (x + 1) -
+    (1 / 6 : ℝ) * Real.log (x ^ 2 - x + 1) +
+      Real.sqrt 3 / 3 * Real.arctan ((2 * x - 1) / Real.sqrt 3)
+
+/-- The displayed primitive differentiates to the integrand on the
+nonnegative half-line.  The arctangent normalization follows the calculation
+in the solved sibling `a94A06`. -/
+lemma apm_a98a05_hasDerivAt_primitive {x : ℝ} (hx : 0 ≤ x) :
+    HasDerivAt apm_a98a05_primitive (1 / (1 + x ^ 3)) x := by
+  have hsqrt : (Real.sqrt 3 : ℝ) ^ 2 = 3 := Real.sq_sqrt (by norm_num)
+  have hq : 0 < x ^ 2 - x + 1 := (apm_a98a05_partial_fractions hx).2.1
+  have h1 : HasDerivAt (fun y : ℝ => (1 / 3 : ℝ) * Real.log (y + 1))
+      ((1 / 3 : ℝ) / (x + 1)) x := by
+    have hd : HasDerivAt (fun y : ℝ => y + 1) 1 x :=
+      (hasDerivAt_id x).add_const 1
+    convert (hd.log (by linarith)).const_mul (1 / 3 : ℝ) using 1 <;> ring
+  have h2 : HasDerivAt
+      (fun y : ℝ => -(1 / 6 : ℝ) * Real.log (y ^ 2 - y + 1))
+      ((2 * x - 1) / (x ^ 2 - x + 1) * (-(1 / 6 : ℝ))) x := by
+    have hp : HasDerivAt (fun y : ℝ => y ^ 2) (2 * x) x := by
+      convert hasDerivAt_pow 2 x using 1 <;> ring
+    have hd : HasDerivAt (fun y : ℝ => y ^ 2 - y + 1) (2 * x - 1) x :=
+      (hp.sub (hasDerivAt_id x)).add_const 1
+    convert (hd.log hq.ne').const_mul (-(1 / 6 : ℝ)) using 1 <;> ring
+  have h3 : HasDerivAt
+      (fun y : ℝ => Real.sqrt 3 / 3 *
+        Real.arctan ((2 * y - 1) / Real.sqrt 3))
+      (1 / (2 * (x ^ 2 - x + 1))) x := by
+    have hd : HasDerivAt (fun y : ℝ => (2 * y - 1) / Real.sqrt 3)
+        (2 / Real.sqrt 3) x := by
+      convert ((hasDerivAt_id x).const_mul 2).sub_const 1 |>.div_const
+        (Real.sqrt 3) using 1 <;> ring
+    convert hd.arctan.const_mul (Real.sqrt 3 / 3) using 1
+    rw [div_pow, hsqrt]
+    rw [show x ^ 2 - x + 1 = 1 - x + x ^ 2 by ring]
+    have hq' : (1 - x + x ^ 2 : ℝ) ≠ 0 := by nlinarith
+    field_simp [hq']
+    ring
+  unfold apm_a98a05_primitive
+  convert h1.add h2 |>.add h3 using 1
+  · funext y
+    simp only [Pi.add_apply]
+    congr 2 <;> ring
+  · rw [(apm_a98a05_partial_fractions hx).2.2]
+    field_simp [hq.ne']
+    ring
+
 theorem apm_a98a05 :
     ∫ x in Ioi (0 : ℝ), 1 / (1 + x ^ 3) ∂volume =
       2 * Real.pi / (3 * Real.sqrt 3) := by
   /-
-  Boundary (closer hop 1): `apm_a98a05_partial_fractions` above now compiles
+  Boundary (closer hops 1--2): `apm_a98a05_partial_fractions` above compiles
   the exact decomposition
 
   `1/(1+x³) = (1/3)/(x+1) + (2-x)/(3(x²-x+1))`
 
   on the nonnegative half-line and simultaneously proves both denominators
-  positive.  Thus the remaining route is purely improper FTC with the
-  antiderivative
+  positive.  Hop 2 packages the following antiderivative as
+  `apm_a98a05_primitive` and proves its exact derivative on the nonnegative
+  half-line in `apm_a98a05_hasDerivAt_primitive`:
 
   `(1/3) log (x+1) - (1/6) log (x²-x+1)
      + (1/√3) arctan ((2*x-1)/√3)`.
@@ -60,8 +112,8 @@ theorem apm_a98a05 :
   `integral_Ioi_of_hasDerivAt_of_tendsto'`, the derivative rules, and the
   Gamma reflection ingredients, but assembling either route still requires
   proving integrability and the cancellation of the two divergent logarithmic
-  terms at infinity.  Closure should package the displayed antiderivative,
-  prove its derivative using the compiled decomposition, and evaluate its
-  limits at zero and infinity.
+  terms at infinity.  The remaining closure work is now the endpoint
+  evaluation, especially that logarithmic cancellation, followed by the
+  improper FTC theorem.
   -/
   sorry

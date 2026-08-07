@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
+  "classification_detail": "Closer hop 2 defined apm_a98a05_primitive and proved apm_a98a05_hasDerivAt_primitive on the nonnegative half-line, reusing the arctangent normalization calculation from solved sibling a94A06. The remaining sorry requires evaluating the primitive at zero and infinity, including logarithmic cancellation, and applying improper FTC.",
   "imported_at": "2026-07-13T17:26:52.980576Z"
 }
