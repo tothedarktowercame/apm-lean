@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "classification_detail": "Four of five conjuncts compile, including S3 nonnilpotence via a proper self-normalizing transposition subgroup; only S3 solvability remains.",
   "imported_at": "2026-07-13T17:26:54.119401Z"
 }
