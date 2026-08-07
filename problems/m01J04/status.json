@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "notes": "The full d = 0 case of both remaining Sobolev clauses is proved. One sorry remains for the positive-dimensional custom H1 multiplier/Leibniz and H1-zero approximation bridge.",
   "imported_at": "2026-07-13T17:26:54.335569Z"
 }

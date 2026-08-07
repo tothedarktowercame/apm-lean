@@ -26,3 +26,15 @@ The canonical Lean attempt is `lean/Main.lean`.
   `H1` record, prove its weak-gradient Leibniz identity, preserve `isH1Zero` by
   multiplying approximants, and connect the divergence pairing to the target
   integral. No packaged record-level bridge was found.
+
+## Closer hop 3 progress
+
+- Both remaining clauses are now proved for `d = 0`. In this case
+  `EuclideanSpace ℝ (Fin 0)` is a subsingleton, so every gradient-valued field
+  and every displayed inner product vanish; the required limits are constant
+  zero limits.
+- One sorry remains, confined to `d ≠ 0`. Closing it requires the custom
+  positive-dimensional `H1` product record, its weak-gradient Leibniz rule,
+  preservation of `apm_m01J04_isH1Zero`, and the resulting divergence-test
+  identity. The raw Mathlib integrability estimates do not supply these
+  record-level constructions.

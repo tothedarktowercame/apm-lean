@@ -213,4 +213,27 @@ theorem apm_m01j04 :
     the target integral. No closed artifact or construction library packages
     these record-level steps.
     -/
-    sorry
+    intro d Ω hrel
+    by_cases hd : d = 0
+    · subst d
+      have hvec_zero (x : EuclideanSpace ℝ (Fin 0)) : x = 0 :=
+        Subsingleton.elim _ _
+      constructor
+      · intro u hu
+        obtain ⟨k, hk, w, hw⟩ := hrel u hu
+        refine ⟨k, hk, w, ?_⟩
+        intro ψ hψ
+        simpa [hvec_zero] using
+          (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ)) atTop (nhds 0))
+      · intro f fLim v vLim hf hv hdiv φ hφ
+        simpa [hvec_zero] using
+          (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ)) atTop (nhds 0))
+    · /-
+      Closer hop 3 closes both Sobolev/compensated-compactness clauses when
+      `d = 0`: all gradient-valued fields lie in a subsingleton Euclidean
+      space, hence every displayed pairing is zero. The remaining branch has
+      `0 < d` and still requires the record-level multiplier/Leibniz
+      construction described above. Mathlib's raw `MemLp.mul'` and
+      `L2.integrable_inner` estimates do not manufacture that custom record.
+      -/
+      sorry
