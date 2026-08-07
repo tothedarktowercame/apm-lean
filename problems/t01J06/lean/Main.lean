@@ -10,16 +10,15 @@ None.
 
 ## Encoding questions
 
-Mathlib does not yet bundle smooth differential forms on manifolds or define
-their integration.  Accordingly, closedness of the genuine dependent
-alternating forms and the outward-oriented sphere integral are documented
-`sorry`-typed placeholders.  The spaces, tangent spaces, ambient form,
-pullbacks along the inclusion and along `q ↦ (q,p)`, and both extension
-claims are encoded explicitly; no cohomological or scalar surrogate replaces
-them.
+The forms use genuine alternating maps on the tangent spaces. The sphere
+integral is the integral of the coefficient relative to the outward area form
+against two-dimensional Hausdorff measure. A 2-form on the 2-sphere is closed
+for dimensional reasons. The closed product extension is given explicitly as
+the pullback along the projection `S² × S¹ → S²`.
 -/
 
-open scoped Manifold
+open MeasureTheory
+open scoped Manifold ENNReal
 
 noncomputable section
 
@@ -65,17 +64,29 @@ def apm_t01J06_isJPullback
       (v : Fin 2 → apm_t01J06_sphereTangent q),
     zeta (q, p) (fun k ↦ (v k, 0)) = alpha q v
 
-def apm_t01J06_IsClosedSphereForm
-    (_alpha : apm_t01J06_SphereForm2) : Prop := by
-  sorry
+def apm_t01J06_tangentProjection (q : apm_t01J06_S2) (i : Fin 3) :
+    apm_t01J06_sphereTangent q :=
+  (apm_t01J06_sphereTangent q).orthogonalProjection
+    (EuclideanSpace.single i 1)
 
-def apm_t01J06_IsClosedProductForm
-    (_zeta : apm_t01J06_ProductForm2) : Prop := by
-  sorry
+def apm_t01J06_orientedCoefficient
+    (alpha : apm_t01J06_SphereForm2) (q : apm_t01J06_S2) : ℝ :=
+  (q : apm_t01J06_E3) 0 * alpha q ![apm_t01J06_tangentProjection q 1,
+      apm_t01J06_tangentProjection q 2] -
+  (q : apm_t01J06_E3) 1 * alpha q ![apm_t01J06_tangentProjection q 0,
+      apm_t01J06_tangentProjection q 2] +
+  (q : apm_t01J06_E3) 2 * alpha q ![apm_t01J06_tangentProjection q 0,
+      apm_t01J06_tangentProjection q 1]
 
 def apm_t01J06_sphereIntegral
-    (_alpha : apm_t01J06_SphereForm2) : ℝ := by
-  sorry
+    (alpha : apm_t01J06_SphereForm2) : ℝ :=
+  ∫ q : apm_t01J06_S2, apm_t01J06_orientedCoefficient alpha q ∂μH[2]
+
+def apm_t01J06_projectionPullback
+    (alpha : apm_t01J06_SphereForm2) : apm_t01J06_ProductForm2 :=
+  fun qp ↦ (alpha qp.1).compContinuousLinearMap
+    (ContinuousLinearMap.fst ℝ (apm_t01J06_sphereTangent qp.1)
+      (apm_t01J06_circleTangent qp.2))
 
 theorem apm_t01j06
     (omega : apm_t01J06_AmbientForm2)
@@ -83,13 +94,12 @@ theorem apm_t01j06
     (alpha : apm_t01J06_SphereForm2)
     (halpha : apm_t01J06_isInclusionPullback omega alpha) :
     apm_t01J06_sphereIntegral alpha = 4 * Real.pi / 3 ∧
-    apm_t01J06_IsClosedSphereForm alpha ∧
     ¬ (∃ eta : apm_t01J06_AmbientForm2,
         ContDiff ℝ (⊤ : ℕ∞) eta ∧
         extDeriv eta = 0 ∧
         apm_t01J06_isInclusionPullback eta alpha) ∧
     ∀ p : apm_t01J06_S1,
       ∃ zeta : apm_t01J06_ProductForm2,
-        apm_t01J06_IsClosedProductForm zeta ∧
+        zeta = apm_t01J06_projectionPullback alpha ∧
         apm_t01J06_isJPullback p zeta alpha := by
   sorry
