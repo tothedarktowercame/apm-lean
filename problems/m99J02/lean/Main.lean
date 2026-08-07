@@ -31,6 +31,19 @@ def apm_m99j02_regularSecondDerivative
   if x < y then deriv (deriv u₁) x * u₂ y
   else deriv (deriv u₂) x * u₁ y
 
+/-- The two branches of the Green kernel glue continuously, so its second
+distributional derivative has no delta-prime contribution. -/
+lemma apm_m99j02_g_continuous (u₁ u₂ : ℝ → ℝ)
+    (hu₁ : Continuous u₁) (hu₂ : Continuous u₂) (y : ℝ) :
+    Continuous (apm_m99j02_g u₁ u₂ y) := by
+  unfold apm_m99j02_g
+  apply (hu₁.mul continuous_const).if_le (hu₂.mul continuous_const)
+    continuous_id continuous_const
+  intro x hx
+  change x = y at hx
+  subst x
+  exact mul_comm _ _
+
 lemma apm_m99j02_wronskian_eq_zero
     (u₁ u₂ q : ℝ → ℝ) (hu₁ : ContDiff ℝ 2 u₁) (hu₂ : ContDiff ℝ 2 u₂)
     (hq₁ : ∀ x : ℝ, deriv (deriv u₁) x + q x * u₁ x = 0)
@@ -91,7 +104,10 @@ theorem apm_m99j02
   Boundary: the regular part of the Green-function equation is proved above
   to vanish away from the gluing point. Completing the frozen statement still
   requires two integrations by parts on the half-lines. Abel's identity for
-  the raw-`deriv` Wronskian is proved above. I searched the whole-line
+  the raw-`deriv` Wronskian is proved above. Closer hop 1 proves
+  `apm_m99j02_g_continuous`, formally certifying that the two branches agree
+  at the gluing point and hence that no delta-prime boundary term occurs. I
+  searched the whole-line
   `MeasureTheory.integral_mul_deriv_eq_deriv_mul`, interval integration-by-parts,
   compact-support, and piecewise differentiability APIs, but did not find a
   route that packages the boundary limits and the derivative jump at `y`.
