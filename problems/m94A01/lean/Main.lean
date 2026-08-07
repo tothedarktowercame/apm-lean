@@ -1,5 +1,8 @@
 import Mathlib
 
+open Filter Asymptotics
+open scoped Topology
+
 /-!
 # APM m94A01 — five-point Laplacian error
 
@@ -15,18 +18,69 @@ noncomputable def apm_m94a01_T (u : ℝ × ℝ → ℝ) (h x y : ℝ) : ℝ :=
 noncomputable def apm_m94a01_laplacian (u : ℝ × ℝ → ℝ) (x y : ℝ) : ℝ :=
   deriv (deriv fun s => u (s,y)) x + deriv (deriv fun s => u (x,s)) y
 
+lemma apm_m94a01_taylor4_isLittleO
+    (f : ℝ → ℝ) (hf : ContDiff ℝ 4 f) (x : ℝ) :
+    (fun h : ℝ ↦ f (x + h) -
+      (f x + h * iteratedDeriv 1 f x + h ^ 2 / 2 * iteratedDeriv 2 f x +
+        h ^ 3 / 6 * iteratedDeriv 3 f x + h ^ 4 / 24 * iteratedDeriv 4 f x))
+      =o[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+  have ht : Tendsto (fun h : ℝ ↦ x + h) (nhds 0) (nhds x) := by
+    simpa using (tendsto_const_nhds.add tendsto_id :
+      Tendsto (fun h : ℝ ↦ x + h) (nhds 0) (nhds (x + 0)))
+  have h := (taylor_isLittleO_univ hf (x₀ := x)).comp_tendsto ht
+  convert h using 1
+  · funext z
+    simp [taylor_within_apply, iteratedDerivWithin_univ]
+    ring
+  · funext z
+    simp
+
+lemma apm_m94a01_centered2_isBigO
+    (f : ℝ → ℝ) (hf : ContDiff ℝ 4 f) (x : ℝ) :
+    (fun h : ℝ ↦ f (x + h) + f (x - h) - 2 * f x -
+      h ^ 2 * iteratedDeriv 2 f x) =O[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+  have hp := apm_m94a01_taylor4_isLittleO f hf x
+  have ht : Tendsto (fun h : ℝ ↦ -h) (nhds 0) (nhds 0) := by
+    simpa using (tendsto_id.neg : Tendsto (fun h : ℝ ↦ -h) (nhds 0) (nhds (-0)))
+  have hm0 := (apm_m94a01_taylor4_isLittleO f hf x).comp_tendsto ht
+  have hm :
+      (fun h : ℝ ↦ f (x - h) -
+        (f x + (-h) * iteratedDeriv 1 f x +
+          (-h) ^ 2 / 2 * iteratedDeriv 2 f x +
+          (-h) ^ 3 / 6 * iteratedDeriv 3 f x +
+          (-h) ^ 4 / 24 * iteratedDeriv 4 f x))
+        =o[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+    convert hm0 using 1 <;> funext h <;> simp <;> ring
+  have hs := (hp.add hm).isBigO
+  have hterm :
+      (fun h : ℝ ↦ h ^ 4 / 12 * iteratedDeriv 4 f x)
+        =O[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+    convert (isBigO_refl (fun h : ℝ ↦ h ^ 4) (nhds 0)).const_mul_left
+      (iteratedDeriv 4 f x / 12) using 1
+    funext h
+    ring
+  convert hs.add hterm using 1
+  funext h
+  ring
+
 theorem apm_m94a01 (u : ℝ × ℝ → ℝ)
     (hu : ContDiff ℝ 4 u) :
     ∀ x y : ℝ, ∃ C δ : ℝ, 0 ≤ C ∧ 0 < δ ∧
       ∀ h : ℝ, 0 < |h| → |h| < δ →
         |apm_m94a01_laplacian u x y - apm_m94a01_T u h x y| ≤ C*h^2 := by
   /-
-  Boundary: the intended proof applies fourth-order Taylor bounds separately
+  CLOSER HOP 1 (partial). The reusable one-dimensional analytic core is now
+  compiled. `apm_m94a01_taylor4_isLittleO` uses
+  `taylor_isLittleO_univ`, and `apm_m94a01_centered2_isBigO` composes with
+  negation, cancels the odd terms, and proves the exact central-difference
+  remainder is `O(h^4)`.
+
+  The remaining boundary applies this estimate separately
   to the coordinate slices `s ↦ u (s, y)` and `s ↦ u (x, s)`, adds the
   `+h` and `-h` formulas to cancel odd terms, and divides the combined
   fourth-order remainder by `h ^ 2`.
 
-  I searched Mathlib's Taylor APIs `taylor_mean_remainder_bound`,
+  The earlier search of Mathlib's Taylor APIs `taylor_mean_remainder_bound`,
   `exists_taylor_mean_remainder_bound`, and
   `taylor_mean_remainder_lagrange_iteratedDeriv`. They provide the needed
   interval-wise estimates, but I did not complete the bridge from
@@ -35,5 +89,10 @@ theorem apm_m94a01 (u : ℝ × ℝ → ℝ)
   `apm_m94a01_laplacian`, or combine the two locally chosen derivative bounds
   into the exact `C, δ` conclusion after division by nonzero `h ^ 2`. No
   compiled sibling supplied this slice-Taylor normalization within this pass.
+  Renewed inspection found the completed `m93J01` helper pattern above; the
+  live bridge is now only the two coordinate-slice `ContDiff` facts, rewriting
+  `iteratedDeriv 2` as the nested `deriv` in the frozen Laplacian, and
+  converting the combined `O(h^4)` estimate after division by `h^2` into the
+  explicit local `C, δ` inequality.
   -/
   sorry
