@@ -54,16 +54,21 @@ theorem apm_b95j04
       simp
     exact hz1 (sub_eq_zero.mp (eq_zero_of_pow_eq_zero hzero))
   constructor
-  · -- Boundary: searched `Polynomial.X_pow_sub_one_eq_prod`,
-    -- `IsPrimitiveRoot.eq_pow_of_pow_eq_one`, and
-    -- `Polynomial.mem_nthRootsFinset`.  Mathlib factors over
-    -- `nthRootsFinset`; matching that unordered root finset to the frozen
-    -- shifted enumeration `z^(i+1)` requires a nontrivial explicit cyclic
-    -- reindexing proof not completed in the pass-1 budget.
-    sorry
-  · -- Boundary: searched the splitting-field/Galois APIs and the
-    -- independence-of-characters/Hilbert-90 route.  The remaining two
-    -- conjuncts amount to the forward and converse degree-p Kummer theorem;
-    -- no packaged Mathlib theorem with this explicit automorphism equivalence
-    -- and eigenvector formula was found.
+  · letI : Fact p.Prime := ⟨hp⟩
+    have hzprim : IsPrimitiveRoot z p := by
+      refine ⟨hz, fun n hn => ?_⟩
+      rw [← orderOf_eq_prime hz hz1]
+      exact orderOf_dvd_of_pow_eq_one hn
+    simpa [pow_succ', mul_comm] using
+      (X_pow_sub_C_eq_prod hzprim hp.pos (α := z) (a := 1) hz)
+  · -- Boundary: searched Mathlib's dedicated `FieldTheory/KummerExtension.lean`.
+    -- It provides `X_pow_sub_C_eq_prod`, `autEquivZmod`,
+    -- `autEquivZmod_symm_apply_natCast`, `isCyclic_tfae`, and
+    -- `exists_root_adjoin_eq_top_of_isCyclic`.  The remaining two conjuncts
+    -- still require bridging an arbitrary radical in `E` to an irreducible
+    -- `X ^ p - C a` splitting-field instance on the subtype `F⟮α⟯`, and in
+    -- the converse selecting the eigenvector for the *specified* nonidentity
+    -- automorphism `σ` (rather than an existential cyclic generator).  Those
+    -- coercion, irreducibility, and automorphism-orientation bridges were not
+    -- completed in the pass-1 budget.
     sorry
