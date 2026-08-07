@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.YoungConvolution
 import ConstructionTargets.RadialMajorantAE
+import YoungL2
 
 open Filter MeasureTheory Set
 open scoped NNReal
@@ -42,6 +43,16 @@ lemma apmPoissonKernel_integrable {y : ℝ} (hy : 0 < y) :
   filter_upwards with x
   exact (apmPoissonKernel_eq_radial y x).symm
 
+lemma apmPoissonKernel_nonneg {y : ℝ} (hy : 0 < y) (x : ℝ) :
+    0 ≤ apmPoissonKernel y x := by
+  rw [apmPoissonKernel_eq_radial]
+  exact ConstructionTargets.RadialMajorantAE.poissonKernel_nonneg hy x
+
+lemma apmPoissonKernel_integral_one {y : ℝ} (hy : 0 < y) :
+    ∫ x, apmPoissonKernel y x ∂volume = 1 := by
+  rw [integral_congr_ae (Eventually.of_forall (apmPoissonKernel_eq_radial y))]
+  exact ConstructionTargets.RadialMajorantAE.poissonKernel_integral hy
+
 lemma apmPoissonIntegral_memLp
     {y : ℝ} (hy : 0 < y) {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
     MemLp (apmPoissonIntegral y f) 2 volume := by
@@ -49,6 +60,15 @@ lemma apmPoissonIntegral_memLp
     using ConstructionTargets.YoungConvolution.convolution_memLp
       (p := (2 : ENNReal)) (by norm_num) (by norm_num)
       (apmPoissonKernel_integrable hy) hf
+
+/-- The displayed raw Poisson convolution satisfies the sharp `L²`
+contraction estimate. -/
+lemma apmPoissonIntegral_L2_contraction
+    {y : ℝ} (hy : 0 < y) {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
+    eLpNorm (apmPoissonIntegral y f) 2 volume ≤ eLpNorm f 2 volume := by
+  simpa [apmPoissonIntegral, ConstructionTargets.YoungConvolution.convolution]
+    using convolution_L2_contraction_of_probability_kernel
+      (apmPoissonKernel_nonneg hy) (apmPoissonKernel_integral_one hy) hf
 
 theorem apm_a98j03 :
     ∃ T : ℝ → (Lp ℝ 2 volume →L[ℝ] Lp ℝ 2 volume),
@@ -83,5 +103,14 @@ theorem apm_a98j03 :
   already-bundled convolution continuous linear map. Hence the remaining
   bridge is quotient/operator construction and transport, not Young's
   inequality or approximate-identity analysis. No statement defect was found.
+
+  CLOSER HOP 2: the repository-root module `YoungL2.lean` is importable and
+  already contains the sharp theorem
+  `convolution_L2_contraction_of_probability_kernel` used by `a94J04`.
+  Transporting reusable-kernel nonnegativity and normalization gives compiled
+  lemmas `apmPoissonKernel_nonneg`, `apmPoissonKernel_integral_one`, and
+  `apmPoissonIntegral_L2_contraction`. Hence the norm-one analytic estimate is
+  closed too. What remains is purely quotient descent/continuous-linear-map
+  construction and transport of strong convergence.
   -/
   sorry

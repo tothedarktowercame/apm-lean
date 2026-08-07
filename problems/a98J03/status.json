@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "closer_note": "Connected the frozen Poisson convolution to the reusable kernel and Young theorem, proving its L² membership. Remaining work is descent through the Lp quotient, continuous-linear-map bundling, and transport of sibling a94J04 strong convergence.",
+  "closer_hop": 2,
+  "closer_note": "Imported the axiom-clean YoungL2 probability-kernel contraction, transported kernel nonnegativity and integral-one, and compiled the sharp raw L2 contraction. Remaining work is quotient descent, continuous-linear-map bundling, and transport of sibling a94J04 strong convergence.",
   "imported_at": "2026-07-13T17:26:53.021359Z"
 }
