@@ -1,12 +1,20 @@
 # Proof Outline: t92J06
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The intended universal cover is the topological realization of the Cayley
+four-regular tree of the free group on two generators.  Its edge labels give
+the covering map to the two-circle wedge; contractibility gives simple
+connectedness.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-t92J06.md`
+The four three-sheeted covers are specified by the permutation pairs
+`(1,1)`, `((12),(12))`, `((123),1)`, and `((123),(123))`.  Their total spaces
+are separated by component counts and, for the connected pair, the presence
+or absence of loop edges.
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+The statement uses actual Mathlib `IsCoveringMap`s over a concrete quotient
+wedge.  Mathlib has circle covers and abstract local trivialization APIs, but
+no construction gluing labeled graph edges over a wedge point, no topological
+realization API for these finite multigraphs, and no ready Cayley-tree
+universal cover.  These constructions, including proofs of exact fiber size
+and pairwise nonhomeomorphism, must be developed locally.

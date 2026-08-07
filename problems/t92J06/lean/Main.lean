@@ -56,4 +56,21 @@ theorem apm_t92j06 :
       Pairwise fun i j ↦
         ¬ Nonempty
           (@Homeomorph (C i).E (C j).E (C i).topology (C j).topology) := by
+  /-
+  Boundary (closer hop 1): the theorem requires constructing actual
+  `IsCoveringMap`s over the quotient wedge, not merely the permutation data
+  classifying them.  Searches of `ConstructionTargets/`, `LEMMA-INDEX.md`,
+  closed sibling artifacts, git history, and Mathlib's covering, quotient,
+  graph, geometric-realization, and fundamental-group APIs found no bridge
+  that realizes a pair of permutations as a covering of this concrete wedge.
+  Mathlib's `Topology.Covering.AddCircle` constructs the individual circle
+  power covers, and `Topology.Covering.Basic` supplies local trivialization
+  constructors, but neither provides the gluing theorem needed at the wedge
+  point.  The universal-cover conjunct independently needs a topological
+  realization of the Cayley four-regular tree, a covering map to this quotient,
+  and its simple-connectedness.  No graph realization or universal-cover
+  existence theorem furnishing those data was found.  Thus both constructions
+  remain open; the frozen statement and its native covering-space content are
+  unchanged.
+  -/
   sorry
