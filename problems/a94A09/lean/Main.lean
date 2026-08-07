@@ -51,6 +51,31 @@ Available but insufficient:
 
 The statement is TRUE as stated. The blocker is a Mathlib infrastructure gap. -/
 
+/-- The non-strict boundary estimate is sufficient to keep the full homotopy
+`z - t f z` nonzero: strictness follows from `t < 1`, while the endpoint
+`t = 1` is exactly the no-boundary-fixed-point hypothesis. -/
+lemma apm_a94a09_homotopy_ne_zero
+    {f : ℂ → ℂ}
+    (hf_boundary : ∀ z ∈ sphere (0 : ℂ) 1, ‖f z‖ ≤ 1)
+    (hf_no_boundary_fixed_point : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ z)
+    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
+    ∀ z ∈ sphere (0 : ℂ) 1, z - (t : ℂ) * f z ≠ 0 := by
+  intro z hz hzero
+  have hznorm : ‖z‖ = 1 := by
+    simpa [mem_sphere, dist_zero_right] using hz
+  rcases ht.2.eq_or_lt with rfl | htlt
+  · apply hf_no_boundary_fixed_point z hz
+    simpa using (sub_eq_zero.mp hzero).symm
+  · have hstrict : ‖(t : ℂ) * f z‖ < ‖z‖ := by
+      simp only [norm_mul]
+      simp [abs_of_nonneg ht.1, hznorm]
+      calc
+        t * ‖f z‖ ≤ t * 1 :=
+          mul_le_mul_of_nonneg_left (hf_boundary z hz) ht.1
+        _ < 1 := by simpa using htlt
+    have heq : z = (t : ℂ) * f z := sub_eq_zero.mp hzero
+    exact (ne_of_lt hstrict) (congrArg norm heq).symm
+
 theorem apm_a94a09
     {f : ℂ → ℂ}
     (hf_continuous : ContinuousOn f (closedBall 0 1))
@@ -58,11 +83,32 @@ theorem apm_a94a09
     (hf_boundary : ∀ z ∈ sphere (0 : ℂ) 1, ‖f z‖ ≤ 1)
     (hf_no_boundary_fixed_point : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ z) :
     ∃! z : ℂ, z ∈ ball 0 1 ∧ f z = z := by
-  -- SKIPPED: unique fixed point for holomorphic self-map of disk via Rouché.
-  -- Proof: zeros of z-f(z) via homotopy z-t·f(z); argument principle gives
-  -- constant zero count = 1 (from t=0 where h₀=z).
-  -- Blocker: Rouché's theorem and argument principle NOT in Mathlib.
-  -- File comments document the full proof and the infrastructure gap.
+  /-
+  Boundary (closer hop 1): the original infrastructure comment is now partly
+  obsolete: the sorry-free module `ConstructionTargets.Rouche` proves an
+  argument principle and strict Rouché zero-count transfer.  The compiled
+  helper `apm_a94a09_homotopy_ne_zero` above closes the elementary non-strict
+  boundary-homotopy step required by this problem.
+
+  Two mismatches remain.  `zeroCountInClosedBall_add_eq` requires both summands
+  to be `AnalyticOnNhd` on the *closed* disk and a strict boundary inequality.
+  The frozen assumptions give only continuity on the closed disk and
+  differentiability on the open disk, and allow `‖f z‖ = 1` on the boundary.
+  Hence it cannot be applied directly to `id + (-f)`.  Applying it to
+  `id + (-t f)` for `t < 1` still fails its closed-neighborhood analyticity
+  hypothesis, and passing `t → 1` would additionally require zero persistence
+  and multiplicity control.
+
+  Searches of `LEMMA-INDEX.md`, Mathlib's maximum-modulus, Schwarz, Hurwitz,
+  divisor, and compactness APIs, prior artifacts `a92J05`, `a97A08`, and
+  `a97J08`, `ConstructionTargets/`, and git history found no theorem extending
+  the reusable zero count to `ContinuousOn closedBall` plus
+  `DifferentiableOn ball`, nor a Hurwitz bridge proving existence and
+  uniqueness at the endpoint.  Closure should generalize the argument
+  principle to this disk-analytic boundary-continuous setting, or develop the
+  shrink-radius/limit argument and then use Schwarz equality for uniqueness.
+  -/
   sorry
+
 
 end
