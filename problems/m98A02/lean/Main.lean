@@ -10,6 +10,13 @@ The initial `A : X → Y` is therefore minimally specialized there to
 `A : X → X`; part (a) remains stated for `X → Y`.
 -/
 
+lemma apm_m98a02_trivial_space_obstruction
+    (A B : (Fin 0 → ℝ) →L[ℝ] (Fin 0 → ℝ)) :
+    ¬ 1 / (1 + ‖A‖) ≤ ‖B‖ := by
+  have hA : A = 0 := Subsingleton.elim _ _
+  have hB : B = 0 := Subsingleton.elim _ _
+  simp [hA, hB]
+
 theorem apm_m98a02 :
     (∀ (X Y : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
       [NormedAddCommGroup Y] [NormedSpace ℝ Y]
@@ -38,11 +45,13 @@ theorem apm_m98a02 :
   · intro X Y _ _ _ _ _
     exact ⟨inferInstance⟩
   · /-
-    PASS-1 boundary (codex): this final conjunct is false as frozen because
+    PARTIAL boundary (codex): this final conjunct is false as frozen because
     it does not assume `[Nontrivial X]`.  Take a trivial real normed space
     (for example `X := Fin 0 → ℝ`) and `A = 0`.  Then `‖A‖ < 1`, but
     every `B : X →L[ℝ] X` is zero and has norm zero.  The required lower
     estimate specializes to `1 / (1 + 0) ≤ 0`, i.e. `1 ≤ 0`.
+    This contradiction is now formally certified by
+    `apm_m98a02_trivial_space_obstruction` above.
 
     Mathlib's `isUnit_one_sub_of_norm_lt_one`,
     `NormedRing.inverse_one_sub`, and the geometric-series API do prove the
