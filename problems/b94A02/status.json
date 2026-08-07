@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "note": "Coefficient-choice independence modulo I is now proved for the quotient-valued multiplication formula; curried linear-map packaging, tensor equivalence, and noninjectivity assembly remain.",
+  "closer_hop": 2,
+  "note": "The canonical coefficient linear map bR → R/I is constructed through R/ann(b), and the theorem's full balanced-map conjunct, including surjectivity and its formula, is closed. The tensor equivalence and final noninjectivity assembly remain.",
   "imported_at": "2026-07-13T17:26:53.928757Z"
 }
