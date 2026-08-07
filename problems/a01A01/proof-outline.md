@@ -21,3 +21,8 @@ The Lean theorem is present but remains partial with one theorem-level
 An ungated historical attempt at commit `2e3057d` contains substantial 1D
 helpers but leaves the theorem unfinished. No closed corpus artifact packages
 the multidimensional enumeration.
+
+Closer hop 2 repairs and compiles the diagonal pair decoder, its position
+bound, the quadratic index bound, and the proof that decoded stages tend to
+infinity. It also defines the 1D typewriter cell and proves nonnegativity.
+Thus the global-index cofinality component is no longer part of the blocker.

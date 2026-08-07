@@ -16,6 +16,12 @@
     "classification": "partial",
     "main": "lean/Main.lean",
     "sorry_count": 1,
-    "blocker": "Explicit cofinal enumeration and volume bookkeeping for expanding Euclidean cube cells; the historical 1D attempt is ungated and still theorem-level partial."
+    "blocker": "The global pair-enumeration cofinality is now compiled; exact typewriter-cell integrals, pointwise cell selection, and the expanding Euclidean cube analogue remain.",
+    "proved_helpers": [
+      "apm_a01A01_position_lt_stage",
+      "apm_a01A01_index_lt_stage_sq",
+      "apm_a01A01_stage_tendsto_atTop",
+      "apm_a01A01_typewriter1d_nonneg"
+    ]
   }
 }
