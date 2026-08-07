@@ -49,6 +49,23 @@ lemma apmLogAbsPositive_setLIntegral_ne_top
       lintegral_mono (fun x ↦ apmLogAbsPositive_le_abs f x)
     _ ≤ ∫⁻ x, ENNReal.ofReal |f x| ∂mu := setLIntegral_le_lintegral _ _
 
+/-- If the negative logarithmic part has infinite mass while the positive part
+is finite, the custom extended integral is exactly `-∞`. -/
+lemma apmLogIntegralOn_eq_bot_of_negative_eq_top
+    {X : Type*} [MeasurableSpace X] {mu : Measure X} {f : X → ℝ} {E : Set X}
+    (hneg : ∫⁻ x in E, apmLogAbsNegative f x ∂mu = ⊤) :
+    apmLogIntegralOn f E mu = ⊥ := by
+  unfold apmLogIntegralOn
+  rw [hneg]
+  simp
+
+lemma apmLogIntegralOn_le_of_negative_eq_top
+    {X : Type*} [MeasurableSpace X] {mu : Measure X} {f : X → ℝ} {E : Set X}
+    (hneg : ∫⁻ x in E, apmLogAbsNegative f x ∂mu = ⊤) (r : EReal) :
+    apmLogIntegralOn f E mu ≤ r := by
+  rw [apmLogIntegralOn_eq_bot_of_negative_eq_top hneg]
+  exact bot_le
+
 theorem apm_a99j01
     {X : Type*} [MeasurableSpace X]
     (mu : Measure X) (f : X → ℝ)
@@ -66,16 +83,18 @@ theorem apm_a99j01
   The two compiled helpers above close the first extended-integral obligation:
   `log⁺ |f| ≤ |f|`, hence the positive logarithmic part has finite lintegral on
   every `E`.  Therefore `apmLogIntegralOn` is always well-defined and never
-  `+∞`; if its negative-part lintegral is `⊤`, the target inequality should
-  follow immediately from `EReal` subtraction.  In the finite-negative-part
-  case one can recover an integrable real logarithm and apply Jensen after
+  `+∞`.  Closer hop 2 now closes the infinite-negative-part branch outright:
+  `apmLogIntegralOn_eq_bot_of_negative_eq_top` simplifies the custom
+  difference to `⊥`, and `apmLogIntegralOn_le_of_negative_eq_top` supplies its
+  inequality against any target.  In the finite-negative-part case one can
+  recover an integrable real logarithm and apply Jensen after
   normalizing `mu.restrict E` by `(mu E).toReal⁻¹`.
 
   Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, closed artifacts,
   Mathlib's Jensen, entropy/KL-divergence, `EReal`, and tilted-measure APIs, and
   git history found no theorem already combining this finite/infinite negative-
-  part split with Jensen.  The remaining bridge is that split, identification
-  of the custom `EReal` difference with the real integral in the finite case,
-  and normalization arithmetic using `hf_norm`.
+  part split with Jensen.  The remaining bridge is now only identification of
+  the custom `EReal` difference with the real integral in the finite case and
+  normalization arithmetic using `hf_norm`.
   -/
   sorry
