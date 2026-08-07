@@ -49,6 +49,17 @@ lemma m99A06_selfConvolution_eLpNorm_le {f : ℝ → ℝ}
     (ConstructionTargets.YoungConvolution.young_convolution_inequality_one
       hf (memLp_one_iff_integrable.mpr hf))
 
+/-- The two-input endpoint Young estimate in the raw integral notation used by
+this problem.  This is the bilinear bound needed after polarizing the
+self-convolution difference. -/
+lemma m99A06_convolution_eLpNorm_le {f g : ℝ → ℝ}
+    (hf : Integrable f volume) (hg : Integrable g volume) :
+    eLpNorm (fun x : ℝ ↦ ∫ y : ℝ, f (x - y) * g y) 1 volume ≤
+      eLpNorm f 1 volume * eLpNorm g 1 volume := by
+  simpa [ConstructionTargets.YoungConvolution.convolution] using
+    (ConstructionTargets.YoungConvolution.young_convolution_inequality_one
+      hf (memLp_one_iff_integrable.mpr hg))
+
 lemma m99A06_sin_mul_selfConvolution_integrable {f : ℝ → ℝ}
     (hf : Integrable f volume) :
     Integrable (fun x : ℝ => Real.sin x * m99A06SelfConvolution f x) volume := by
@@ -114,5 +125,18 @@ theorem apm_m99a06 :
   contraction APIs and used `ConstructionTargets.YoungConvolution.convolution_memLp`;
   I did not complete the quotient/representative bridge
   to the frozen raw-function predicate `IsM99A06Solution` in this pass.
+
+  Closer hop 3 compiles the missing genuinely bilinear estimate as
+  `m99A06_convolution_eLpNorm_le`, specializing
+  `young_convolution_inequality_one` to two distinct raw integrable inputs.
+  Consequently the two-input quadratic Lipschitz estimate is reduced to the
+  pointwise polarization identity
+  `f*f - g*g = (f-g)*f + g*(f-g)`, the `eLpNorm` triangle inequality, and
+  representative bookkeeping.  Searches of `LEMMA-INDEX.md`, the closed
+  corpus, Mathlib's `L1` quotient API, construction libraries, and git history
+  found no bundled convolution operation on `L1` that both respects a.e.
+  representatives and exposes the frozen raw integral.  The quotient
+  construction, contraction on a closed ball, and representative extraction
+  therefore remain open.
   -/
   sorry

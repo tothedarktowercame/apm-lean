@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "notes": "Raw self-map integrability and the sharp quadratic L1 norm bound compile. The two-input Lipschitz estimate and L1 quotient fixed-point/representative bridge remain.",
+  "closer_hop": 3,
+  "notes": "Raw self-map integrability, the sharp quadratic bound, and the two-input endpoint Young estimate compile. Polarization, L1 quotient fixed-point construction, and representative extraction remain.",
   "imported_at": "2026-07-13T17:26:56.155573Z"
 }
