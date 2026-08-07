@@ -11,10 +11,9 @@ None.
 
 The wedge is the actual quotient of two copies of the circle with their
 basepoints identified, and every covering is an actual Mathlib
-`IsCoveringMap`. Mathlib does not currently provide geometric realization of
-labeled multigraphs, so the description of the universal cover as the Cayley
-`4`-regular tree is isolated as a typed predicate on its genuine covering
-space. The four finite covers are required to have three-point fibers and
+`IsCoveringMap`. Its universal cover is characterized intrinsically as a
+simply connected covering space (the topological realization of the Cayley
+`4`-regular tree). The four finite covers have exact three-point fibers and
 pairwise nonhomeomorphic total spaces.
 -/
 
@@ -50,15 +49,9 @@ structure apm_t92J06_Covering (n : ℕ) where
   covering : @IsCoveringMap E apm_t92J06_X topology _ p
   fiberCard : ∀ x : apm_t92J06_X, Nat.card {e : E // p e = x} = n
 
-/-- The covering graph is the Cayley graph of the free group on two generators,
-equivalently the infinite `4`-regular tree with the two edge labels. -/
-opaque apm_t92J06_IsCayleyFourRegularTree
-    (E : Type*) [TopologicalSpace E] (p : E → apm_t92J06_X) : Prop
-
 theorem apm_t92j06 :
     (∃ (E : Type*) (_ : TopologicalSpace E) (p : E → apm_t92J06_X),
-      IsCoveringMap p ∧ SimplyConnectedSpace E ∧
-        apm_t92J06_IsCayleyFourRegularTree E p) ∧
+      IsCoveringMap p ∧ SimplyConnectedSpace E) ∧
     ∃ C : Fin 4 → apm_t92J06_Covering 3,
       Pairwise fun i j ↦
         ¬ Nonempty
