@@ -48,30 +48,61 @@ noncomputable def apm_m94J04_curlTest
 noncomputable def apm_m94J04_curlValue (p : apm_m94J04_E) : apm_m94J04_E :=
   (if 0 < p 0 then (-1 : ℝ) else 0) • apm_m94J04_basis 2
 
+/-- Coordinate reduction of the weak-curl integrand. -/
+lemma apm_m94J04_inner_u_curlTest
+    (φ : apm_m94J04_E → apm_m94J04_E) (p : apm_m94J04_E) :
+    inner ℝ (apm_m94J04_u p) (apm_m94J04_curlTest φ p) =
+      apm_m94J04_f p *
+        (fderiv ℝ (fun q ↦ φ q 2) p (apm_m94J04_basis 1) -
+          fderiv ℝ (fun q ↦ φ q 1) p (apm_m94J04_basis 2)) := by
+  rw [apm_m94J04_u, apm_m94J04_curlTest, inner_smul_left]
+  simp [apm_m94J04_basis, inner_add_right, inner_smul_right,
+    PiLp.inner_apply, Fin.sum_univ_succ]
+
+/-- Coordinate reduction of the claimed regular curl. -/
+lemma apm_m94J04_inner_curlValue
+    (φ : apm_m94J04_E → apm_m94J04_E) (p : apm_m94J04_E) :
+    inner ℝ (apm_m94J04_curlValue p) (φ p) =
+      (if 0 < p 0 then -φ p 2 else 0) := by
+  have hone (x : ℝ) : inner ℝ 1 x = x := by
+    rw [show x = x • (1 : ℝ) by simp, real_inner_smul_right]
+    norm_num
+  rw [apm_m94J04_curlValue]
+  split_ifs <;>
+    simp [apm_m94J04_basis, PiLp.inner_apply, Fin.sum_univ_succ, hone]
+
 theorem apm_m94j04 :
     ∀ φ : TestFunction (⊤ : TopologicalSpace.Opens apm_m94J04_E)
       apm_m94J04_E ⊤,
       ∫ p, inner ℝ (apm_m94J04_u p) (apm_m94J04_curlTest φ p) ∂volume =
         ∫ p, inner ℝ (apm_m94J04_curlValue p) (φ p) ∂volume := by
+  intro φ
+  simp_rw [apm_m94J04_inner_u_curlTest, apm_m94J04_inner_curlValue]
   /-
-  Boundary: after expanding the Euclidean basis and inner products, the
-  identity reduces fiberwise to `∫ y * ∂y φ₂ = -∫ φ₂` on `x > 0` and
-  `∫ x * ∂y φ₂ = 0` on `x ≤ 0`. I searched Mathlib for the global
-  line-derivative integration-by-parts API, including
-  `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable` and
-  `integral_bilinear_fderiv_right_eq_neg_left_of_integrable`. Their
-  differentiability hypotheses apply on `tsupport` in the whole ambient
+  PASS-1 boundary (Codex): the Euclidean basis and inner-product algebra is
+  now completely discharged by the two proved helpers above. The remaining
+  scalar identity is fiberwise `∫ y * ∂y φ₂ = -∫ φ₂` on `x > 0`, together
+  with `∫ x * ∂y φ₂ = 0` and the analogous z-derivative integral on `x ≤ 0`.
+
+  APIs searched: `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable`,
+  `integral_bilinear_fderiv_right_eq_neg_left_of_integrable`, `integral_prod`,
+  `volume_pi`, `MeasurePreserving.piFinSuccAbove`, and the one-dimensional
+  `intervalIntegral.integral_deriv_of_contDiffOn_Icc`. The global
+  line-derivative integration-by-parts lemmas have differentiability
+  hypotheses on `tsupport` in the whole ambient
   space, so they cannot be applied directly to the coefficient
   `if 0 < x then y else x`, which is not differentiable on `x = 0`.
 
   `TestFunction.contDiff`, `TestFunction.hasCompactSupport`, and
   `Continuous.integrable_of_hasCompactSupport` provide the local smoothness
-  and integrability ingredients. The remaining blocker is the measure bridge:
-  decompose Euclidean `volume` into `(x,z)` and `y` fibers, transport the
-  compact support and `fderiv` to each slice, apply one-dimensional integration
-  by parts, and reassemble with `MeasureTheory.integral_prod`. Searches of all
-  closed problem artifacts, `ConstructionTargets`, `YoungL2.lean`, boundary
-  comments, and git history found Fubini patterns but no proved lemma packaging
-  this Euclidean-coordinate slicing step.
+  and integrability ingredients. I additionally searched `LEMMA-INDEX.md`
+  (1037 indexed helpers) and all 170 currently closed artifacts. The nearest
+  Fubini examples (`a94J04`, `a02J01`, and
+  `ConstructionTargets.YoungConvolution`) establish product-integral patterns,
+  but none transports Euclidean `volume` through the coordinate split while
+  identifying the slice derivative. The unresolved bridge is therefore to use
+  `volume_pi`, split `Fin 3` around coordinate 1 (and coordinate 2), transport
+  compact support and `fderiv` to each real slice, apply one-dimensional
+  integration by parts, and reassemble with `MeasureTheory.integral_prod`.
   -/
   sorry
