@@ -36,6 +36,19 @@ def apm_b97A01_V4 : Subgroup apm_b97A01_S4 :=
 
 abbrev apm_b97A01_SL23 := Matrix.SpecialLinearGroup (Fin 2) (ZMod 3)
 
+/-- The concrete special linear group in the example has order `24`. -/
+lemma apm_b97A01_SL23_card : Nat.card apm_b97A01_SL23 = 24 := by
+  rw [Nat.card_eq_fintype_card]
+  native_decide
+
+/-- Cycle types of the four nonidentity class representatives. -/
+lemma apm_b97A01_representative_cycleTypes :
+    apm_b97A01_transposition.cycleType = {2} ∧
+    apm_b97A01_doubleTransposition.cycleType = {2, 2} ∧
+    apm_b97A01_threeCycle.cycleType = {3} ∧
+    apm_b97A01_fourCycle.cycleType = {4} := by
+  native_decide
+
 theorem apm_b97a01 :
     (∀ σ : apm_b97A01_S4,
       (IsConj 1 σ ↔ σ.cycleType = {}) ∧
@@ -81,10 +94,24 @@ theorem apm_b97a01 :
   enumeration and class cardinalities, the full normal-subgroup lattice of
   `Equiv.Perm (Fin 4)`, the universal order-24 action theorem, or the concrete
   cardinality and Sylow facts for `SpecialLinearGroup (Fin 2) (ZMod 3)`.
-  These latter clauses are not reducible by a single finite computation: the
+  Closer hop 1 compiles two concrete bridges that the original search left
+  open. `apm_b97A01_SL23_card` rewrites `Nat.card` to the concrete `Fintype`
+  cardinality and verifies that `SL₂(ZMod 3)` has order 24.
+  `apm_b97A01_representative_cycleTypes` verifies the advertised cycle types
+  of all four nonidentity representatives; together with
+  `Equiv.Perm.isConj_iff_cycleType_eq`, this removes the representative side of
+  the first five equivalences.
+
+  I additionally tested direct finite decision for the existence of a
+  nonnormal Sylow subgroup and center-cardinality separation from `S₄`.
+  `Sylow` existence/normality has no computable `Decidable` instance, while
+  subgroup-center `Fintype.ofFinite` is noncomputable, so neither test yields a
+  kernel-compilable proof. These latter clauses are not reducible by a single finite computation: the
   theorem quantifies over arbitrary finite groups of order 24, and its
   `Nat.card`/subgroup assertions require structural group-theoretic proofs.
-  No relevant proved sibling was found. The statement appears mathematically
+  Renewed searches of `LEMMA-INDEX.md`, the closed corpus,
+  `ConstructionTargets/`, and the special-linear-group source found no
+  structural replacement. The statement appears mathematically
   sound; the blocker is the missing formal API/bridge, not a counterexample.
   -/
   sorry
