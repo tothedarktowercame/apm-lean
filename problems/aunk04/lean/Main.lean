@@ -42,6 +42,50 @@ lemma apm_aunk04_rouche_bound (z : ℂ) (hz : ‖z‖ = 1) :
   simp [apm_aunk04_remainder, hz] at htri ⊢
   exact lt_of_le_of_lt htri (by norm_num)
 
+/-- The polynomial has no roots in the open unit disk.  For this particular
+polynomial the constant comparison in Rouché can be discharged directly. -/
+lemma apm_aunk04_no_roots_in_unitDisk :
+    (apm_aunk04_polynomial.roots.filter (fun z => ‖z‖ < 1)).card = 0 := by
+  classical
+  rw [Multiset.card_eq_zero, Multiset.filter_eq_nil]
+  intro z hzroot
+  have hpoly_ne : apm_aunk04_polynomial ≠ 0 := by
+    intro hzero
+    have := congrArg (fun q : ℂ[X] => q.coeff 0) hzero
+    norm_num [apm_aunk04_polynomial] at this
+  have heval : Polynomial.eval z apm_aunk04_polynomial = 0 :=
+    Polynomial.isRoot_of_mem_roots hzroot
+  have hrem : Polynomial.eval z apm_aunk04_remainder = -(6 : ℂ) := by
+    simp [apm_aunk04_polynomial, apm_aunk04_remainder] at heval ⊢
+    linear_combination heval
+  intro hz
+  have hz0 : 0 ≤ ‖z‖ := norm_nonneg z
+  have hzle : ‖z‖ ≤ 1 := le_of_lt hz
+  have htri : ‖z ^ 4 - 3 * z ^ 3 + z ^ 2‖ ≤
+      ‖z‖ ^ 4 + 3 * ‖z‖ ^ 3 + ‖z‖ ^ 2 := by
+    calc
+      ‖z ^ 4 - 3 * z ^ 3 + z ^ 2‖
+          ≤ ‖z ^ 4 - 3 * z ^ 3‖ + ‖z ^ 2‖ := norm_add_le _ _
+      _ ≤ (‖z ^ 4‖ + ‖3 * z ^ 3‖) + ‖z ^ 2‖ :=
+        add_le_add (norm_sub_le _ _) le_rfl
+      _ = ‖z‖ ^ 4 + 3 * ‖z‖ ^ 3 + ‖z‖ ^ 2 := by simp
+  have h2 : ‖z‖ ^ 2 ≤ 1 := by nlinarith [sq_nonneg (‖z‖ - 1)]
+  have h3 : ‖z‖ ^ 3 ≤ 1 := by
+    calc
+      ‖z‖ ^ 3 = ‖z‖ ^ 2 * ‖z‖ := by ring
+      _ ≤ 1 * 1 := mul_le_mul h2 hzle hz0 zero_le_one
+      _ = 1 := one_mul 1
+  have h4 : ‖z‖ ^ 4 ≤ 1 := by
+    calc
+      ‖z‖ ^ 4 = ‖z‖ ^ 2 * ‖z‖ ^ 2 := by ring
+      _ ≤ 1 * 1 := mul_le_mul h2 h2 (sq_nonneg _) zero_le_one
+      _ = 1 := one_mul 1
+  have hsmall : ‖Polynomial.eval z apm_aunk04_remainder‖ < 6 := by
+    simp [apm_aunk04_remainder]
+    exact lt_of_le_of_lt htri (by nlinarith)
+  rw [hrem, norm_neg] at hsmall
+  norm_num at hsmall
+
 theorem apm_aunk04 :
     (apm_aunk04_polynomial.roots.filter (fun z => ‖z‖ < 1)).card = 0 ∧
       ∀ (f : ℂ → ℂ) (A B m : ℝ),
@@ -51,6 +95,7 @@ theorem apm_aunk04 :
         ∃ p : ℂ[X],
           (∀ z : ℂ, Polynomial.eval z p = f z) ∧
           ∀ k : ℕ, m < k → p.coeff k = 0 := by
+  refine ⟨apm_aunk04_no_roots_in_unitDisk, ?_⟩
   /-
   Boundary (closer hop 1): the original claim that Rouché infrastructure was
   unavailable is obsolete.  `ConstructionTargets.Rouche` is importable and
@@ -71,5 +116,16 @@ theorem apm_aunk04 :
   `k>m`, and reconstruct `f` from the finitely supported Taylor coefficients.
   Thus the Rouché inequality is proved and its transfer API found; the root-
   count rewrite and generalized Liouville coefficient reconstruction remain.
+  Closer hop 2 closes part (a) completely by a shorter direct specialization
+  of the Rouché comparison: an interior root would make the remainder equal
+  `-6`, while elementary norm estimates make its norm strictly less than six.
+  This avoids importing the long divisor-to-polynomial-roots conversion.
+
+  For part (b), targeted searches of the compiled Cauchy-estimate users
+  `a96J09`, `a96A06`, and `a02J06` found estimates only at a fixed radius.
+  None reconstructs an entire function as a polynomial after showing its high
+  iterated derivatives vanish.  The remaining proof must still establish the
+  arbitrary-radius limit for every natural `k > m`, then connect vanishing
+  iterated derivatives at zero to a finite Taylor polynomial globally.
   -/
   sorry

@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
+  "classification_detail": "Closer hop 2 closes the complete polynomial zero-count conjunct by a direct norm contradiction. One sorry remains: generalized Liouville for arbitrary real growth exponent, including the arbitrary-radius Cauchy limit and global finite Taylor reconstruction.",
   "imported_at": "2026-07-13T17:26:53.138765Z"
 }
