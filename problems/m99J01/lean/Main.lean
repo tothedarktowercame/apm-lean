@@ -54,6 +54,54 @@ lemma apm_m99j01_cos_fixed_unique {x y : ℝ}
     rw [hx, hy] at this
     exact (not_lt_of_ge hxy.le this).elim
 
+/-- The autonomous vector field points right below its equilibrium. -/
+lemma apm_m99j01_vectorField_pos_of_lt_fixed {x ξ : ℝ}
+    (hξ : Real.cos ξ = ξ) (hxξ : x < ξ) :
+    0 < apm_m99j01_vectorField x := by
+  unfold apm_m99j01_vectorField
+  have hξ_le_one : ξ ≤ 1 := by rw [← hξ]; exact Real.cos_le_one ξ
+  by_cases hxneg : x < 0
+  · by_cases hxsmall : x < -1
+    · linarith [Real.neg_one_le_cos x]
+    · have hxmem : x ∈ Set.Ioo (-(Real.pi / 2)) (Real.pi / 2) := by
+        constructor <;> nlinarith [Real.pi_gt_three]
+      linarith [Real.cos_pos_of_mem_Ioo hxmem]
+  · have hx0 : 0 ≤ x := le_of_not_gt hxneg
+    have hξ0 : 0 ≤ ξ := le_trans hx0 hxξ.le
+    have hxmem : x ∈ Set.Icc (0 : ℝ) Real.pi :=
+      ⟨hx0, by nlinarith [Real.pi_gt_three]⟩
+    have hξmem : ξ ∈ Set.Icc (0 : ℝ) Real.pi :=
+      ⟨hξ0, by nlinarith [Real.pi_gt_three]⟩
+    have hcos := Real.strictAntiOn_cos hxmem hξmem hxξ
+    rw [hξ] at hcos
+    linarith
+
+/-- The autonomous vector field points left above its equilibrium. -/
+lemma apm_m99j01_vectorField_neg_of_fixed_lt {x ξ : ℝ}
+    (hξ : Real.cos ξ = ξ) (hξx : ξ < x) :
+    apm_m99j01_vectorField x < 0 := by
+  unfold apm_m99j01_vectorField
+  have hξ_ge_neg_one : -(1 : ℝ) ≤ ξ := by
+    rw [← hξ]
+    exact Real.neg_one_le_cos ξ
+  have hξ_le_one : ξ ≤ 1 := by
+    rw [← hξ]
+    exact Real.cos_le_one ξ
+  have hξ_pos : 0 < ξ := by
+    rw [← hξ]
+    apply Real.cos_pos_of_mem_Ioo
+    constructor <;> nlinarith [Real.pi_gt_three]
+  by_cases hxlarge : 1 < x
+  · linarith [Real.cos_le_one x]
+  · have hx1 : x ≤ 1 := le_of_not_gt hxlarge
+    have hξmem : ξ ∈ Set.Icc (0 : ℝ) Real.pi :=
+      ⟨hξ_pos.le, by nlinarith [Real.pi_gt_three]⟩
+    have hxmem : x ∈ Set.Icc (0 : ℝ) Real.pi :=
+      ⟨le_trans hξ_pos.le hξx.le, by nlinarith [Real.pi_gt_three]⟩
+    have hcos := Real.strictAntiOn_cos hξmem hxmem hξx
+    rw [hξ] at hcos
+    linarith
+
 /-- Global representatives satisfying the frozen half-line predicate are
 unique on the half-line. -/
 lemma apm_m99j01_solution_unique {u₀ : ℝ} {u v : ℝ → ℝ}
@@ -139,5 +187,15 @@ theorem apm_m99j01 :
   bridge is global construction of one compatible `C¹` representative,
   followed by monotone trapping and attraction to the fixed point; uniqueness
   is no longer part of the open boundary.
+
+  Closer hop 3 proves the two global sign lemmas
+  `apm_m99j01_vectorField_pos_of_lt_fixed` and
+  `apm_m99j01_vectorField_neg_of_fixed_lt`: below the unique equilibrium the
+  vector field is positive, and above it the vector field is negative.  The
+  proof combines the elementary global cosine bounds with
+  `Real.strictAntiOn_cos` only on `[0, π]`.  This closes the pointwise phase-line
+  calculation needed by the trapping/attraction argument.  What remains open
+  is still the global compatible `C¹` solution construction, followed by the
+  calculus step upgrading these signs to monotonicity/trapping and convergence.
   -/
   sorry

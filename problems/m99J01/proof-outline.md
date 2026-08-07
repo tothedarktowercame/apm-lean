@@ -15,3 +15,10 @@ The remaining bridge is global Picard–Lindelöf existence as a single global
 `C¹` representative and the subsequent attraction proof. Uniqueness is now
 closed; comparison with the compiled constant equilibrium can then support
 the monotone trapping and convergence argument.
+
+Closer hop 3 proves the global phase-line signs: `cos x - x > 0` below the
+fixed point and `cos x - x < 0` above it. The proof handles values outside
+`[-1,1]` by the global cosine bounds and uses strict antitonicity only on
+`[0,π]`. Thus the pointwise direction needed for trapping is compiled; the
+global representative and the calculus-to-monotonicity/convergence bridge
+remain.
