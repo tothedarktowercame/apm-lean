@@ -10,12 +10,12 @@
     "problem_tex": "apm/t94A07.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_progress": "Compiled helpers characterize half-turn fixedness as vanishing of coordinates 1 and 2 and discharge the local-index equality once nondegeneracy is known. Remaining work is the torus-axis equation, tangent-kernel computation, and a homology/Lefschetz obstruction to homotopy.",
   "imported_at": "2026-07-13T17:26:57.854173Z"
 }
