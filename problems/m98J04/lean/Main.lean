@@ -52,6 +52,23 @@ noncomputable def apm_m98J04_line (a b α β : ℝ) (x : ℝ) : ℝ :=
 def apm_m98J04_admissible (a b α β : ℝ) : Set (ℝ → ℝ) :=
   {y | ContDiff ℝ 1 y ∧ y a = α ∧ y b = β}
 
+lemma apm_m98J04_deriv_line (a b α β x : ℝ) :
+    deriv (apm_m98J04_line a b α β) x = (β - α) / (b - a) := by
+  unfold apm_m98J04_line
+  have h : HasDerivAt
+      (fun t : ℝ => α + ((β - α) / (b - a)) * (t - a))
+      ((β - α) / (b - a)) x := by
+    simpa using
+      (((hasDerivAt_id x).sub_const a).const_mul ((β - α) / (b - a))).const_add α
+  exact h.deriv
+
+lemma apm_m98J04_arcLength_line (a b α β : ℝ) (hab : a < b) :
+    apm_m98J04_arcLength a b (apm_m98J04_line a b α β) =
+      (b - a) * Real.sqrt (1 + ((β - α) / (b - a)) ^ 2) := by
+  unfold apm_m98J04_arcLength
+  simp_rw [apm_m98J04_deriv_line a b α β]
+  simp [intervalIntegral.integral_const]
+
 theorem apm_m98j04 :
     (∀ (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ),
       a < b →
@@ -66,7 +83,7 @@ theorem apm_m98j04 :
           apm_m98J04_arcLength a b y := by
   constructor
   · /-
-    Boundary: deriving the pointwise Euler--Lagrange equation from the frozen
+    PARTIAL boundary: deriving the pointwise Euler--Lagrange equation from the frozen
     stationarity predicate requires differentiating an interval integral with
     respect to the variation parameter, integration by parts, and a fundamental
     lemma for endpoint-zero `C¹` test variations. I searched Mathlib's
@@ -84,12 +101,19 @@ theorem apm_m98j04 :
       · have hba : b - a ≠ 0 := sub_ne_zero.mpr hab.ne'
         simp [apm_m98J04_line, hba]
     · /-
-      Boundary: global minimality is the convexity/Jensen estimate for
+      PARTIAL boundary: the line's derivative and its exact arc length are now
+      proved above as `apm_m98J04_deriv_line` and
+      `apm_m98J04_arcLength_line`. Global minimality is the convexity/Jensen
+      estimate for
       `p ↦ sqrt (1 + p²)`, followed by the fundamental theorem of calculus for
       an arbitrary globally `C¹` competitor to identify the integral of its
-      derivative with `β - α`. I searched `Convex`, `intervalIntegral`, and
-      arc-length APIs; the required Jensen estimate and endpoint derivative
-      identity were not available in a directly composable form in this pass.
-      The line's `C¹` regularity and both endpoint constraints are proved above.
+      derivative with `β - α`. Mathlib provides
+      `intervalIntegral.norm_integral_le_integral_norm` and
+      `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`; sibling
+      `a95A02` demonstrates the latter route. However, converting the scalar
+      integrand `sqrt (1 + (deriv y)²)` to the norm of the vector-valued
+      derivative `(1, deriv y)` and assembling the endpoint estimate was not
+      completed. Searches of all closed artifacts, `ConstructionTargets`, and
+      `YoungL2.lean` found no compiled graph-arc-length wrapper.
       -/
       sorry
