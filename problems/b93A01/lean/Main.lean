@@ -19,6 +19,18 @@ faithfulness, rather than merely asserting that no particular action works.
 def apm_b93a01_embeds (G H : Type) [Group G] [Group H] : Prop :=
   ∃ f : G →* H, Function.Injective f
 
+/-- A faithful action on a finite type of cardinality `n` gives the requested
+embedding into the concretely indexed symmetric group `Sₙ`. -/
+lemma apm_b93a01_embeds_fin_of_faithful_action
+    (G α : Type) [Group G] [MulAction G α] [Fintype α] (n : ℕ)
+    (hcard : Fintype.card α = n)
+    (hinj : Function.Injective (MulAction.toPermHom G α)) :
+    apm_b93a01_embeds G (Equiv.Perm (Fin n)) := by
+  classical
+  let e : α ≃ Fin n := Fintype.equivFinOfCardEq hcard
+  refine ⟨e.permCongrHom.toMonoidHom.comp (MulAction.toPermHom G α), ?_⟩
+  exact e.permCongrHom.injective.comp hinj
+
 lemma apm_b93a01_abelian_of_normal_prime_factors
     (G : Type) [Group G] [Fintype G] (p q : ℕ)
     (hp : p.Prime) (hq : q.Prime) (hpq : p < q)
@@ -119,19 +131,28 @@ theorem apm_b93a01
     exact apm_b93a01_abelian_of_normal_prime_factors G p q hp hq hpq hcard
       P (Qs : Subgroup G) hPnormal hQnormal hPcard hQcard
   ·
-    /- CLOSER HOP 2 boundary: the structural second conjunct is now closed.
+    /- CLOSER HOP 3 boundary: the structural second conjunct is closed.
        `Subgroup.isComplement'_of_coprime` decomposes every element through
        the normal prime-order subgroups; `isCyclic_of_prime_card` makes each
        factor commutative, and `Subgroup.commute_of_normal_of_disjoint`
        commutes cross terms.
 
-       The sole remaining sorry contains the two permutation-degree branches.
-       In the nonabelian branch, `Subgroup.normalCore_eq_ker` identifies the
-       coset-action kernel, but one must still build an equivalence between
-       the q-element coset type and `Fin q`, and prove the normal core of a
-       non-normal p-Sylow is bottom. In the abelian branch, one must obtain a
+       The new compiled helper
+       `apm_b93a01_embeds_fin_of_faithful_action` closes the previously open
+       transport from a faithful action on an abstract finite type of
+       cardinality `n` to the required `Equiv.Perm (Fin n)`, using
+       `Fintype.equivFinOfCardEq` and `Equiv.permCongrHom`.
+
+       The sole remaining sorry still contains the two permutation-degree
+       branches. In the nonabelian branch, `Subgroup.normalCore_eq_ker`
+       identifies the coset-action kernel; what remains is to prove the normal
+       core of a non-normal p-Sylow is bottom. A renewed search found
+       `Subgroup.eq_bot_or_eq_top_of_prime_card`; using it requires viewing the
+       core as a subgroup of the p-Sylow, then transporting the top case back
+       to normality in G. In the abelian branch, one must obtain a
        cyclic generator, construct disjoint p/q cycles in `Fin (p+q)`, and
        formalize the cycle-type support lower bound excluding `Fin (p+q-1)`.
-       Searches of `LEMMA-INDEX.md`, the 173 closed artifacts,
+       Searches of `LEMMA-INDEX.md`, the closed artifacts (including partial
+       neighbors `b90A01` and `b98A01`),
        `ConstructionTargets/`, and `YoungL2.lean` found no packaged bridge. -/
     sorry
