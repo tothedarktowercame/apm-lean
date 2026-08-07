@@ -32,7 +32,11 @@ theorem apm_t00j08 :
   cardinality of a free basis:
   `rank G - 1 = [F : G] * (rank F - 1)`. The existing groupoid proof does not
   expose the finite spanning-tree edge count needed to derive this equation.
-  Constructing the other three examples and excluding all remaining `n`
-  therefore requires a new quantitative Nielsen--Schreier development.
+  The closed sibling `b95J01` uses `Subgroup.card_mul_index` successfully for
+  a finite ambient group, but that cardinality argument gives no rank equation
+  for an infinite free group. No relevant result occurs in
+  `ConstructionTargets/` or `YoungL2.lean`. Constructing the other three
+  examples and excluding all remaining `n` therefore requires a new
+  quantitative Nielsen--Schreier development.
   -/
   sorry
