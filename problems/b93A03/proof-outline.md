@@ -1,12 +1,16 @@
 # Proof Outline: b93A03
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean proof is complete in `lean/Main.lean`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b93A03.md`
 
-## Follow-up Needed
+## Formal proof
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Tensor products preserve surjections, while multiplication by `n` supplies
+  the non-injectivity witness after tensoring with `ZMod n`.
+- A local naturality argument proves that the custom flatness predicate is
+  invariant under additive equivalence.
+- Infinite cyclic groups are classified by `intCyclicAddEquiv`; finite cyclic
+  groups by `zmodAddCyclicAddEquiv`. Finite cardinality one is the subsingleton
+  case, while cardinality at least two is ruled out by the `ZMod n` witness.
