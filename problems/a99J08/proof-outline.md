@@ -1,19 +1,20 @@
 # Proof Outline: a99J08
 
-The canonical Lean attempt is `lean/Main.lean`. Closer hop 1 formalizes the
-central algebraic reduction:
+The canonical Lean attempt is `lean/Main.lean`. Closer hops 1–2 formalize:
 
 - squaring a purely imaginary or purely real complex value produces a value
   with zero imaginary part;
 - consequently `g²` is real-valued on the punctured diameter `(-1,1) \ {0}`.
+- every point of the open real diameter belongs to the closure of the upper
+  half-disk, using `Complex.closure_preimage_im` and `IsOpen.closure_inter`;
+- continuity along the explicit sequences `1/(n+1)` and `-1/(n+1)` forces
+  both coordinates of `g 0` to vanish, so `g 0 = 0`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-a99J08.md`
 
 ## Remaining boundary
 
-- use continuity to extend the real-boundary identity through zero and prove
-  `g 0 = 0`;
 - construct the local Schwarz reflection of `g²` from the upper half-disk to
   the full disk (the construction library only proves symmetry for functions
   already entire);

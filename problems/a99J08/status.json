@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "note": "The mixed boundary conditions are formally unified into a real-boundary condition for g squared; local Schwarz reflection from the half-disk remains unavailable.",
+  "closer_hop": 2,
+  "note": "Proved the open diameter lies in the half-disk closure and, via explicit positive/negative sequences plus boundary continuity, proved g(0)=0. Local Schwarz reflection of g² remains unavailable.",
   "imported_at": "2026-07-13T17:26:53.083580Z"
 }

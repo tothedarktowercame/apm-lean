@@ -17,7 +17,7 @@ import Mathlib
 None.
 -/
 
-open Set Complex
+open Set Complex Filter Topology
 
 noncomputable section
 
@@ -47,6 +47,86 @@ lemma apm_a99J08_sq_real_on_punctured_diameter
   · exact apm_a99J08_sq_im_eq_zero_of_im_eq_zero _ (hneg x hx₁ hx)
   · exact apm_a99J08_sq_im_eq_zero_of_re_eq_zero _ (hpos x hx hx₂)
 
+lemma apm_a99J08_real_mem_closure_upperHalfDisk
+    {x : ℝ} (hx : |x| < 1) :
+    (x : ℂ) ∈ closure apm_a99J08_upperHalfDisk := by
+  have him : (x : ℂ) ∈ closure {z : ℂ | 0 < z.im} := by
+    rw [show {z : ℂ | 0 < z.im} = Complex.im ⁻¹' Ioi 0 from rfl,
+      Complex.closure_preimage_im, closure_Ioi]
+    simp
+  have hball : (x : ℂ) ∈ Metric.ball (0 : ℂ) 1 := by
+    simpa [Complex.norm_real, Real.norm_eq_abs] using hx
+  have hmem : (x : ℂ) ∈ closure ({z : ℂ | 0 < z.im} ∩ Metric.ball 0 1) :=
+    Metric.isOpen_ball.closure_inter ⟨him, hball⟩
+  simpa [apm_a99J08_upperHalfDisk, inter_comm] using hmem
+
+lemma apm_a99J08_corner_zero
+    (g : ℂ → ℂ)
+    (hgcont : ContinuousOn g (closure apm_a99J08_upperHalfDisk))
+    (hpos : ∀ x : ℝ, 0 < x → x < 1 → (g x).re = 0)
+    (hneg : ∀ x : ℝ, -1 < x → x < 0 → (g x).im = 0) :
+    g 0 = 0 := by
+  let u : ℕ → ℝ := fun n => 1 / (n + 1 : ℝ)
+  have hu : Tendsto u atTop (nhds 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
+  have hzero : (0 : ℂ) ∈ closure apm_a99J08_upperHalfDisk :=
+    apm_a99J08_real_mem_closure_upperHalfDisk (by norm_num)
+  have hposmem : ∀ᶠ n in atTop,
+      (u n : ℂ) ∈ closure apm_a99J08_upperHalfDisk := by
+    filter_upwards [eventually_ge_atTop 1] with n hn
+    apply apm_a99J08_real_mem_closure_upperHalfDisk
+    dsimp [u]
+    rw [abs_of_pos (by positivity)]
+    rw [div_lt_iff₀ (by positivity)]
+    norm_num
+    exact_mod_cast hn
+  have hnegmem : ∀ᶠ n in atTop,
+      ((-u n : ℝ) : ℂ) ∈ closure apm_a99J08_upperHalfDisk := by
+    filter_upwards [eventually_ge_atTop 1] with n hn
+    apply apm_a99J08_real_mem_closure_upperHalfDisk
+    rw [abs_neg]
+    dsimp [u]
+    rw [abs_of_pos (by positivity)]
+    rw [div_lt_iff₀ (by positivity)]
+    norm_num
+    exact_mod_cast hn
+  have hup : Tendsto (fun n => (u n : ℂ)) atTop (nhds 0) := by
+    exact Complex.continuous_ofReal.continuousAt.tendsto.comp hu
+  have hun : Tendsto (fun n => ((-u n : ℝ) : ℂ)) atTop (nhds 0) := by
+    exact Complex.continuous_ofReal.continuousAt.tendsto.comp (by simpa using hu.neg)
+  have hgpos : Tendsto (fun n => g (u n)) atTop (nhds (g 0)) :=
+    (show Tendsto g (nhdsWithin 0 (closure apm_a99J08_upperHalfDisk)) (nhds (g 0))
+      from hgcont 0 hzero).comp (tendsto_nhdsWithin_iff.2 ⟨hup, hposmem⟩)
+  have hgneg : Tendsto (fun n => g ((-u n : ℝ) : ℂ)) atTop (nhds (g 0)) :=
+    (show Tendsto g (nhdsWithin 0 (closure apm_a99J08_upperHalfDisk)) (nhds (g 0))
+      from hgcont 0 hzero).comp (tendsto_nhdsWithin_iff.2 ⟨hun, hnegmem⟩)
+  apply Complex.ext
+  · have hre := Complex.continuous_re.continuousAt.tendsto.comp hgpos
+    have hre0 : Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (nhds 0) := tendsto_const_nhds
+    have heq : (fun n => (g (u n)).re) =ᶠ[atTop] (fun _ => 0) := by
+      filter_upwards [eventually_ge_atTop 1] with n hn
+      apply hpos
+      · dsimp [u]
+        positivity
+      · dsimp [u]
+        rw [div_lt_iff₀ (by positivity)]
+        norm_num
+        exact_mod_cast hn
+    exact tendsto_nhds_unique hre (hre0.congr' heq.symm)
+  · have him := Complex.continuous_im.continuousAt.tendsto.comp hgneg
+    have him0 : Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (nhds 0) := tendsto_const_nhds
+    have heq : (fun n => (g ((-u n : ℝ) : ℂ)).im) =ᶠ[atTop] (fun _ => 0) := by
+      filter_upwards [eventually_ge_atTop 1] with n hn
+      apply hneg
+      · dsimp [u]
+        rw [neg_lt_neg_iff, div_lt_iff₀ (by positivity)]
+        norm_num
+        exact_mod_cast hn
+      · dsimp [u]
+        rw [neg_lt_zero]
+        positivity
+    exact tendsto_nhds_unique him (him0.congr' heq.symm)
+
 theorem apm_a99j08
     (g : ℂ → ℂ)
     (hgcont : ContinuousOn g (closure apm_a99J08_upperHalfDisk))
@@ -57,18 +137,25 @@ theorem apm_a99j08
       ∀ z ∈ closure apm_a99J08_upperHalfDisk,
         ‖g z‖ ≤ C * Real.sqrt ‖z‖ := by
   /-
-  PARTIAL boundary (closer hop 1): the key algebraic reduction is now compiled
-  above. `apm_a99J08_sq_real_on_punctured_diameter` proves that `g²` has zero
-  imaginary part on the punctured diameter, turning the two mixed boundary
-  conditions into the single boundary condition needed for Schwarz reflection.
+  PARTIAL boundary (closer hop 2).  The geometric and corner-continuity steps
+  are now compiled above. `apm_a99J08_real_mem_closure_upperHalfDisk` uses
+  `Complex.closure_preimage_im` and `IsOpen.closure_inter` to put every point
+  of the open real diameter in the half-disk closure.  Then
+  `apm_a99J08_corner_zero` applies `hgcont` to the explicit sequences
+  `±1/(n+1)`; the two boundary hypotheses force respectively the real and
+  imaginary parts of the common limit to vanish, proving `g 0 = 0`.
 
-  I inspected `ConstructionTargets.HerglotzRigidity`: its
-  `conj_apply_conj_eq` proves the symmetry of an already entire function, but
-  does not construct a holomorphic extension from one half-disk. Mathlib's
-  removable-singularity API likewise starts only after such an extension is
-  available. The remaining bridge is therefore a local Schwarz-reflection
-  construction for `g²` across `(-1,1)`, including continuity at zero; after
-  that, factor the reflected function by `z`, bound the quotient on a smaller
-  closed disk, and combine this with compactness away from zero.
+  A renewed Mathlib search found Morera infrastructure in
+  `Analysis.Complex.HasPrimitives` and conjugation-differentiability lemmas in
+  `Analysis.Calculus.Deriv.Star`, but no theorem gluing the two reflected
+  pieces continuously across a line into a holomorphic function.  The Morera
+  API requires proving vanishing wedge/rectangle integrals for the piecewise
+  function, which is essentially the missing Schwarz-reflection theorem.
+  `ConstructionTargets.HerglotzRigidity.conj_apply_conj_eq` still applies only
+  to an already entire function. Thus the remaining bridge is precisely the
+  local reflection of `g²`; once available, its now-proved zero at the corner
+  permits division by `z`, a local quotient bound, and compactness away from
+  zero. No weaker continuity-only argument suffices to obtain a square-root
+  rate from `g 0 = 0`.
   -/
   sorry
