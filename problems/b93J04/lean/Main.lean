@@ -44,6 +44,25 @@ lemma apm_b93j04_radical_root
       rw [h₂, h₃]
       norm_num
 
+/-- All four sign combinations of the two radicals are roots.  This packages
+the complete explicit candidate root set needed by the splitting-field
+argument, rather than reproving the quartic identity for each sign choice. -/
+lemma apm_b93j04_four_radical_roots
+    (K : Type*) [Field K] [Algebra ℚ K]
+    (r₂ r₃ : K)
+    (h₂ : r₂ ^ 2 = algebraMap ℚ K 2)
+    (h₃ : r₃ ^ 2 = algebraMap ℚ K 3) :
+    Polynomial.eval₂ (algebraMap ℚ K) (r₂ + r₃) apm_b93j04_poly = 0 ∧
+    Polynomial.eval₂ (algebraMap ℚ K) (r₂ - r₃) apm_b93j04_poly = 0 ∧
+    Polynomial.eval₂ (algebraMap ℚ K) (-r₂ + r₃) apm_b93j04_poly = 0 ∧
+    Polynomial.eval₂ (algebraMap ℚ K) (-r₂ - r₃) apm_b93j04_poly = 0 := by
+  have hn₂ : (-r₂) ^ 2 = algebraMap ℚ K 2 := by simpa using h₂
+  have hn₃ : (-r₃) ^ 2 = algebraMap ℚ K 3 := by simpa using h₃
+  exact ⟨apm_b93j04_radical_root K r₂ r₃ h₂ h₃,
+    by simpa [sub_eq_add_neg] using apm_b93j04_radical_root K r₂ (-r₃) h₂ hn₃,
+    apm_b93j04_radical_root K (-r₂) r₃ hn₂ h₃,
+    by simpa [sub_eq_add_neg] using apm_b93j04_radical_root K (-r₂) (-r₃) hn₂ hn₃⟩
+
 /-- Once the abstract automorphism group has the two numerical Klein-four
 invariants, Mathlib supplies exactly the group equivalence frozen below. -/
 lemma apm_b93J04_mulEquiv_kleinFour_of_card_exponent
@@ -74,7 +93,7 @@ theorem apm_b93j04 :
           E = IntermediateField.adjoin ℚ ({r₃} : Set K) ∨
           E = IntermediateField.adjoin ℚ ({r₂ * r₃} : Set K) ∨
           E = ⊤) := by
-  /- PARTIAL boundary (closer hop 1):
+  /- PARTIAL boundary (closer hop 2):
      `apm_b93J04_mulEquiv_kleinFour_of_card_exponent` now closes the abstract
      group-classification tail: once the automorphism group is shown to have
      cardinality four and exponent two, the exact frozen product equivalence
@@ -83,6 +102,16 @@ theorem apm_b93j04 :
      The earlier pass's `apm_b93j04_radical_root` formally verifies the
      core radical identity: whenever `r₂² = 2` and `r₃² = 3`, `r₂ + r₃` is
      a root of the frozen quartic (and sign variants follow identically).
+
+     Closer hop 2 now compiles those sign variants explicitly as
+     `apm_b93j04_four_radical_roots`, giving the complete four-element
+     candidate root list required by the splitting-field argument. A search
+     for multiquadratic/biquadratic extensions, adjoining square roots, and
+     quadratic tower bases found no packaged construction connecting an
+     arbitrary `IsSplittingField` instance to these radical witnesses.
+     `Polynomial.card_rootSet_eq_natDegree` and `ncard_rootSet_le` do provide
+     a viable exhaustion step after distinctness and separability are supplied;
+     they do not produce the radical witnesses in the reverse direction.
 
      I exhaustively searched the splitting-field API, notably
      `IsSplittingField.adjoin_rootSet`, `IsSplittingField.splits`,
@@ -93,8 +122,8 @@ theorem apm_b93j04 :
 
      The remaining blocker is the abstraction bridge from an arbitrary
      `IsSplittingField` instance: construct square-root witnesses from its
-     root set, prove the root set is exactly the four sign combinations,
-     establish their linear independence and hence the displayed basis,
+     root set, prove the four compiled candidate roots are distinct and exhaust
+     the root set, establish their linear independence and hence the displayed basis,
      then bundle the two independent sign-change automorphisms.  Only after
      that can the Galois correspondence and the five-subgroup classification
      identify every intermediate field.  No Mathlib theorem or closed sibling

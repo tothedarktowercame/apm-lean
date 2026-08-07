@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "note": "The Klein-four automorphism-group equivalence is now packaged from cardinality four and exponent two; radical extraction, basis construction, sign automorphisms, and intermediate-field classification remain.",
+  "closer_hop": 2,
+  "note": "All four sign combinations of hypothetical square-root witnesses are now proved roots, in addition to the Klein-four classification helper. Extracting those radicals from an arbitrary splitting field, proving exhaustion/distinctness, constructing the basis and automorphisms, and classifying intermediate fields remain.",
   "imported_at": "2026-07-13T17:26:53.858683Z"
 }
