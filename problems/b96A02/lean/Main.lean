@@ -17,6 +17,14 @@ The core is Mathlib's `Subgroup.normalCore`. Splitting fields, minimal
 polynomials, Galois groups, and polynomial degrees are all represented directly.
 -/
 
+lemma apm_b96a02_normal_of_card_fifteen
+    (G : Type*) [Group G] [Fintype G] (hG : Fintype.card G = 30)
+    (H : Subgroup G) (hH : Nat.card H = 15) : H.Normal := by
+  have hm := H.card_mul_index
+  rw [hH, Nat.card_eq_fintype_card, hG] at hm
+  apply H.normal_of_index_eq_two
+  omega
+
 theorem apm_b96a02 :
     (∀ (G : Type*) [Group G] [Fintype G], Fintype.card G = 30 →
       (∃ N : Subgroup G, N.Normal ∧ Nat.card N = 15) ∧
@@ -51,6 +59,11 @@ theorem apm_b96a02 :
     -- requires arithmetic classification of the two coprime factors (or the
     -- original Sylow count).  No theorem specialized to cardinality 30 was
     -- found in Mathlib, `LEMMA-INDEX.md`, or closed sibling artifacts.
+    -- Closer hop 2 proves `apm_b96a02_normal_of_card_fifteen`: once an
+    -- order-15 subgroup is constructed, `Subgroup.card_mul_index` computes its
+    -- index as two and `Subgroup.normal_of_index_eq_two` proves it normal.
+    -- Thus the remaining group-theoretic boundary is construction of such a
+    -- subgroup and normality of the order-3 and order-5 subgroups.
     sorry
   constructor
   · -- Boundary (closer hop 1): searched `IntermediateField.fixingSubgroup`,
