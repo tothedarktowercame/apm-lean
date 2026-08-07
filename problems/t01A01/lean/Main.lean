@@ -39,6 +39,26 @@ lemma apm_t01A01_factor_through_complement
   · intro x
     rfl
 
+/-- Null-homotopy of the complement-valued factor descends through the
+inclusion to null-homotopy of the original map. -/
+lemma apm_t01A01_nullhomotopic_of_factor
+    (f : C(apm_t01A01_RP2, apm_t01A01_RP2))
+    (q : apm_t01A01_RP2)
+    (g : C(apm_t01A01_RP2, {y : apm_t01A01_RP2 // y ≠ q}))
+    (hfg : ∀ x, (g x : apm_t01A01_RP2) = f x)
+    (p : {y : apm_t01A01_RP2 // y ≠ q})
+    (hg : ContinuousMap.Homotopic g (ContinuousMap.const _ p)) :
+    ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t01A01_RP2 (p : apm_t01A01_RP2)) := by
+  let inclusion : C({y : apm_t01A01_RP2 // y ≠ q}, apm_t01A01_RP2) :=
+    ⟨Subtype.val, continuous_subtype_val⟩
+  have hcomp := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl inclusion) hg
+  have hleft : inclusion.comp g = f := by
+    ext x
+    exact hfg x
+  simpa [hleft, inclusion] using hcomp
+
 theorem apm_t01a01 :
     ∀ f : C(apm_t01A01_RP2, apm_t01A01_RP2),
       ¬Function.Surjective f →
@@ -49,7 +69,7 @@ theorem apm_t01a01 :
   intro f hnot_surj
   have hfactor := apm_t01A01_factor_through_complement f hnot_surj
   /-
-  Boundary: factorization through the complement of a missed point is proved
+  Boundary (closer hop 2): factorization through the complement of a missed point is proved
   above. Completing the frozen theorem requires the specific topology of real
   projective space: `RP² \ {q}` deformation retracts to `RP¹ ≃ S¹`,
   `π₁(RP²) ≃ ZMod 2`, and the circle's universal-cover lifting criterion.
@@ -70,6 +90,12 @@ theorem apm_t01a01 :
   punctured-plane retraction. Git history contains only the statement-bank
   commit and the two earlier partial passes. The proved elementary bridge has
   now been extracted as `apm_t01A01_factor_through_complement`; the remaining
-  `sorry` is confined to the unavailable RP² topology computation.
+  proof hole is confined to the unavailable RP² topology computation.
+
+  This hop additionally proves `apm_t01A01_nullhomotopic_of_factor`: a
+  null-homotopy of the complement-valued factor composes with the subtype
+  inclusion to give exactly the frozen null-homotopy conclusion for `f`.
+  Thus no further continuous-map composition or endpoint transport remains
+  after the punctured-RP² factor has been contracted.
   -/
   sorry

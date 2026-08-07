@@ -15,7 +15,8 @@
     "classification": "partial",
     "main": "lean/Main.lean",
     "sorry_count": 1,
-    "proved_bridge": "apm_t01A01_factor_through_complement",
-    "blocker": "Mathlib lacks the punctured-RP2 deformation retraction and fundamental-group computation needed for the final topology argument."
+    "closer_hop": 2,
+    "proved_bridge": "apm_t01A01_factor_through_complement; apm_t01A01_nullhomotopic_of_factor",
+    "blocker": "Mathlib lacks the punctured-RP2 deformation retraction and fundamental-group computation. Null-homotopy descent through the inclusion is now compiled."
   }
 }
