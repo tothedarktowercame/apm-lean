@@ -17,6 +17,9 @@ fixed-point assembly remains.
 - Both half-shifts are bundled as continuous interval self-maps. Their product
   defines `apm_m96J06_quadraticC`, with the compiled bound
   `‖apm_m96J06_quadraticC x‖ ≤ r²` on the radius-`r` ball.
+- The quadratic difference satisfies
+  `‖Q x - Q z‖ ≤ 2 * r * ‖x-z‖` on the radius-`r` ball, compiled as
+  `apm_m96J06_quadraticC_sub_norm_le`.
 
 ## Closer hop 2 progress
 
@@ -26,8 +29,15 @@ fixed-point assembly remains.
   remaining quantitative lemma is its sup-norm Lipschitz estimate on a ball,
   followed by composition with the norm-three involution.
 
+## Closer hop 3 progress
+
+- The full continuous-map sup-norm Lipschitz estimate is proved. At radius
+  `1/12`, composing with the norm-three linear involution gives contraction
+  constant `1/2`; no further nonlinear estimate is required.
+
 ## Remaining Boundary
 
-Lift the pointwise quadratic difference bound to the continuous-map sup norm,
-restrict the fixed-point map to the closed ball of radius `1/12`, and apply
-`ContractingWith.exists_fixedPoint'`.
+Define the fixed-point map on the closed-ball subtype of radius `1/12`, prove
+its self-map estimate from `‖y‖ < 1/48` and `‖Q x‖ ≤ 1/144`, apply
+`ContractingWith.exists_fixedPoint'`, and extract its continuous map as the
+raw-function witness.

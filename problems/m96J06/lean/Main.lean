@@ -126,6 +126,49 @@ lemma apm_m96J06_quadraticC_norm_le
     _ ≤ r * r := mul_le_mul hp hm (abs_nonneg _) hr
     _ = r ^ 2 := by ring
 
+lemma apm_m96J06_quadraticC_sub_norm_le
+    (x z : C(apm_m96J06_interval, ℝ)) {r : ℝ} (hr : 0 ≤ r)
+    (hx : ‖x‖ ≤ r) (hz : ‖z‖ ≤ r) :
+    ‖apm_m96J06_quadraticC x - apm_m96J06_quadraticC z‖ ≤
+      2 * r * ‖x - z‖ := by
+  refine (ContinuousMap.norm_le _ (mul_nonneg (mul_nonneg (by norm_num) hr)
+    (norm_nonneg _))).2 ?_
+  intro t
+  rw [Real.norm_eq_abs, ContinuousMap.sub_apply]
+  change |x (apm_m96J06_plusShift t) * x (apm_m96J06_minusShift t) -
+    z (apm_m96J06_plusShift t) * z (apm_m96J06_minusShift t)| ≤
+      2 * r * ‖x - z‖
+  have hxp : |x (apm_m96J06_plusShift t)| ≤ r := by
+    exact (by simpa [Real.norm_eq_abs] using
+      (x.norm_coe_le_norm (apm_m96J06_plusShift t)).trans hx)
+  have hzm : |z (apm_m96J06_minusShift t)| ≤ r := by
+    exact (by simpa [Real.norm_eq_abs] using
+      (z.norm_coe_le_norm (apm_m96J06_minusShift t)).trans hz)
+  have hdp : |x (apm_m96J06_plusShift t) - z (apm_m96J06_plusShift t)| ≤
+      ‖x - z‖ := by
+    simpa [Real.norm_eq_abs] using
+      (x - z).norm_coe_le_norm (apm_m96J06_plusShift t)
+  have hdm : |x (apm_m96J06_minusShift t) - z (apm_m96J06_minusShift t)| ≤
+      ‖x - z‖ := by
+    simpa [Real.norm_eq_abs] using
+      (x - z).norm_coe_le_norm (apm_m96J06_minusShift t)
+  calc
+    _ = |x (apm_m96J06_plusShift t) *
+          (x (apm_m96J06_minusShift t) - z (apm_m96J06_minusShift t)) +
+        (x (apm_m96J06_plusShift t) - z (apm_m96J06_plusShift t)) *
+          z (apm_m96J06_minusShift t)| := by ring_nf
+    _ ≤ |x (apm_m96J06_plusShift t)| *
+          |x (apm_m96J06_minusShift t) - z (apm_m96J06_minusShift t)| +
+        |x (apm_m96J06_plusShift t) - z (apm_m96J06_plusShift t)| *
+          |z (apm_m96J06_minusShift t)| := by
+      simpa [abs_mul] using abs_add_le
+        (x (apm_m96J06_plusShift t) *
+          (x (apm_m96J06_minusShift t) - z (apm_m96J06_minusShift t)))
+        ((x (apm_m96J06_plusShift t) - z (apm_m96J06_plusShift t)) *
+          z (apm_m96J06_minusShift t))
+    _ ≤ r * ‖x - z‖ + ‖x - z‖ * r := by gcongr
+    _ = 2 * r * ‖x - z‖ := by ring
+
 /-- The linear involution bundled on the actual Banach space `C([-2,2], ℝ)`. -/
 def apm_m96J06_linearPartC
     (x : C(apm_m96J06_interval, ℝ)) : C(apm_m96J06_interval, ℝ) where
@@ -218,5 +261,18 @@ theorem apm_m96j06 :
   estimate in the continuous-map norm, composing it with the norm-three linear
   involution, and applying the closed-ball contraction theorem with the given
   constants.
+
+  Closer hop 3 proves that missing difference estimate as
+  `apm_m96J06_quadraticC_sub_norm_le`:
+  `‖Q x - Q z‖ ≤ 2*r*‖x-z‖` whenever both inputs have norm at most `r`.
+  The proof works pointwise in the bundled continuous-map algebra and lifts
+  the two shifted differences with `ContinuousMap.norm_coe_le_norm`.  At
+  `r = 1/12`, composition with the norm-three involution therefore has
+  contraction constant `6*r = 1/2`.  Searches of the closed-ball subtype and
+  `ContractingWith` constructors, sibling `t91A04`, `LEMMA-INDEX.md`, the
+  closed corpus, construction libraries, and git history found no wrapper
+  that also performs the remaining self-map coercions and raw-function
+  extraction.  The remaining boundary is confined to that fixed-point
+  packaging; the nonlinear Lipschitz analysis is now complete.
   -/
   sorry
