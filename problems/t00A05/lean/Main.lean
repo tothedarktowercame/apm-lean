@@ -57,6 +57,21 @@ theorem apm_t00a05 :
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
     (∀ γ, apm_t00a05_IsC2 γ →
       apm_t00a05_lineIntegral γ 0 (2 * Real.pi) = -2 * Real.pi) := by
+  have hdOmega : ∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0 := by
+    rintro ⟨⟨x, y, z⟩, hxy⟩
+    have hden : x ^ 2 + y ^ 2 ≠ 0 := by
+      rcases hxy with hx | hy <;> positivity
+    have hQ : deriv (fun u : ℝ => -u / (u ^ 2 + y ^ 2)) x =
+        (x ^ 2 - y ^ 2) / (x ^ 2 + y ^ 2) ^ 2 := by
+      have h := ((hasDerivAt_id x).neg.div
+        (((hasDerivAt_id x).pow 2).add_const (y ^ 2)) hden).deriv
+      convert h using 1 <;> simp [div_eq_mul_inv] <;> field_simp <;> ring <;> simp
+    have hP : deriv (fun v : ℝ => v / (x ^ 2 + v ^ 2)) y =
+        (x ^ 2 - y ^ 2) / (x ^ 2 + y ^ 2) ^ 2 := by
+      have h := ((hasDerivAt_id y).div
+        ((hasDerivAt_const y (x ^ 2)).add ((hasDerivAt_id y).pow 2)) hden).deriv
+      convert h using 1 <;> simp [div_eq_mul_inv] <;> field_simp <;> ring <;> simp
+    simp [apm_t00a05_dOmega, apm_t00a05_omega, hQ, hP]
   have hC1 : apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) =
       -2 * Real.pi := by
     simp [apm_t00a05_lineIntegral, apm_t00a05_C1, apm_t00a05_omega]
@@ -77,4 +92,4 @@ theorem apm_t00a05 :
   raw `deriv` integrals, and such a bridge would not repair the missing
   single-traversal hypothesis.
   -/
-  sorry
+  exact ⟨hdOmega, hC1, sorry⟩
