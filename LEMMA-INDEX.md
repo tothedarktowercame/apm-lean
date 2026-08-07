@@ -1,6 +1,6 @@
 # Helper-lemma index (generated — do not hand-edit)
 
-1037 lemmas already proved in this repo, outside the problems'
+1095 lemmas already proved in this repo, outside the problems'
 own statements. GREP THIS BEFORE RE-DERIVING ANYTHING.
 
 `LIB:` rows are importable today (`import ConstructionTargets.X`).
@@ -93,6 +93,7 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `alg_h3` | a94A06 | `(u : ℝ) :` |
 | `alg_sum` | a94A06 | `(u : ℝ) (hu : 0 ≤ u) :` |
 | `almostEqualVolume_comm` | a01J02 | `{A B : Set ℝ} :` |
+| `alone` | m97A03 | `therefore does not close the goal within this pass's budget.` |
 | `alpha_ge_one` | a01J06 | `(data : ProblemData) : 1 ≤ data.α :=` |
 | `alpha_nonneg` | a01J06 | `(data : ProblemData) : 0 ≤ data.α :=` |
 | `alpha_pos` | a01J06 | `(data : ProblemData) : 0 < data.α :=` |
@@ -103,13 +104,17 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `analyticOrderAt_sub_self_ne_top_of_injOn` | LIB:ConstructionTargets.UnivalentDeriv | `{U : Set ℂ} (hU : IsOpen U) {g : ℂ → ℂ}` |
 | `analytic_blowup_surjective` | a03J08 | `{F : Finset ℂ}` |
 | `analytic_compactSupport_eq_zero` | a01A03 | `(f : ℝ → ℝ) (hf : ContDiff ℝ ω f) (hfc : HasCompactSupport f) :` |
+| `apmB03NotIntegrallyClosed` | b03J03 | `:` |
+| `apmB03RootSq` | b03J03 | `:` |
 | `apmN_eq_apmEc` | a03J01 | `{d : ℕ} (E : ℕ → Set (EuclideanSpace ℝ (Fin d))) :` |
+| `apmTwoGeneratorIdeal_not_principal` | b03J02 | `(R : Type*) [CommRing R] [IsDomain R] (a : R)` |
 | `apm_a01J05_main` | a01J05 | `(f : ℂ → ℂ)` |
 | `apm_a01J06_main` | a01J06 | `(data : ProblemData) :` |
 | `apm_a94J06_at_zero` | a94J06 | `:` |
 | `apm_a94J06_inside` | a94J06 | `{z : ℂ} (hz : ‖z‖ < 1) :` |
 | `apm_a94J06_inside_nonzero` | a94J06 | `{z : ℂ} (hz : ‖z‖ < 1) (hz0 : z ≠ 0) :` |
 | `apm_a94J06_outside` | a94J06 | `{z : ℂ} (hz : 1 < ‖z‖) :` |
+| `apm_a94a02_ae_all_differentiable` | a94A02 | `(f : ℕ → ℝ → ℝ)` |
 | `apm_a96J09_coeff_tendsto_zero_of_contains_closed_disk` | a96J09 | `(D : Set ℂ) (hD_open : IsOpen D)` |
 | `apm_a96J09_main` | a96J09 | `(D : Set ℂ) (hD_open : IsOpen D) (_hD_zero : (0 : ℂ) ∈ D)` |
 | `apm_a96J10_even_factors` | a96J10 | `(h : ℂ → ℂ) (hh : AnalyticOn ℂ h (Metric.ball (0:ℂ) 1))` |
@@ -149,6 +154,54 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `apm_a97A08_no_zeros_outer` | a97A08 | `(z : ℂ) (hz : ‖z‖ = 2) :` |
 | `apm_a97A08_rouche_inner` | a97A08 | `(z : ℂ) (hz : ‖z‖ = 3/2) :` |
 | `apm_a97A08_rouche_outer` | a97A08 | `(z : ℂ) (hz : ‖z‖ = 2) :` |
+| `apm_a97J03_convolution_continuous` | a97J03 | `{p q : ℝ}` |
+| `apm_a97J03_convolution_tendsto_zero` | a97J03 | `{p q : ℝ}` |
+| `apm_a97J05_hasFPowerSeriesAt_div_sub_one` | a97J05 | `(A : ℂ) :` |
+| `apm_a97J05_remainder_update_continuousAt` | a97J05 | `(f g : ℂ → ℂ) (z₀ A : ℂ)` |
+| `apm_b01J03_selfNormalizer_count` | b01J03 | `(G : Type*) [Group G] [Finite G]` |
+| `apm_b01J04_simultaneous_of_commute` | b01J04 | `{n : Type*} [Fintype n] [DecidableEq n]` |
+| `apm_b03J01_isZGroup_of_twinPrime_card` | b03J01 | `(G : Type*) [Group G] [Fintype G] (p : ℕ) (hp : p.Prime)` |
+| `apm_b03J01_twinPrime_squarefree` | b03J01 | `(p : ℕ) (hp : p.Prime)` |
+| `apm_b90a02_rat_to_int_eq_zero` | b90A02 | `(f : ℚ →ₗ[ℤ] ℤ) (q : ℚ) : f q = 0 := by` |
+| `apm_b93a01_abelian_of_normal_prime_factors` | b93A01 | `(G : Type) [Group G] [Fintype G] (p q : ℕ)` |
+| `apm_b93a03_flat_addEquiv` | b93A03 | `{M N : Type}` |
+| `apm_b93a03_flat_int` | b93A03 | `: apm_b93a03_flat ℤ := by` |
+| `apm_b93a03_flat_of_addEquiv` | b93A03 | `{M N : Type}` |
+| `apm_b93j04_radical_root` | b93J04 | `(K : Type*) [Field K] [Algebra ℚ K]` |
+| `apm_m94J04_inner_curlValue` | m94J04 | `(φ : apm_m94J04_E → apm_m94J04_E) (p : apm_m94J04_E) :` |
+| `apm_m94J04_inner_u_curlTest` | m94J04 | `(φ : apm_m94J04_E → apm_m94J04_E) (p : apm_m94J04_E) :` |
+| `apm_m96J06_half_shift_mem` | m96J06 | `{t : ℝ} (ht : t ∈ Icc (-2 : ℝ) 2) :` |
+| `apm_m96J06_linearPart_involutive` | m96J06 | `(x : ℝ → ℝ) :` |
+| `apm_m96J06_quadratic_continuousOn` | m96J06 | `{x : ℝ → ℝ}` |
+| `apm_m96J06_quadratic_sub_bound` | m96J06 | `{x z : ℝ → ℝ} {r : ℝ} (hr : 0 ≤ r)` |
+| `apm_m96a05_unique_of_det` | m96A05 | `{n : ℕ} {a b c : ℝ → ℝ}` |
+| `apm_m96a06_integrable_force` | m96A06 | `{α : Type*} [MeasurableSpace α] {μ : Measure α}` |
+| `apm_m96a06_integrable_pair` | m96A06 | `{α : Type*} [MeasurableSpace α] {μ : Measure α} (f g : Lp ℝ 2 μ) :` |
+| `apm_m96a06_integrable_weighted_pair` | m96A06 | `{α : Type*} [MeasurableSpace α] {μ : Measure α}` |
+| `apm_m96j02_continuousOn_comp_graph` | m96J02 | `(g : ℝ → ℝ → ℝ) (hg : Continuous fun p : ℝ × ℝ => g p.1 p.2)` |
+| `apm_m96j02_intervalIntegrable_comp_graph` | m96J02 | `(g : ℝ → ℝ → ℝ) (hg : Continuous fun p : ℝ × ℝ => g p.1 p.2)` |
+| `apm_m96j03_integral_ballIndicator` | m96J03 | `{n : ℕ}` |
+| `apm_m96j04_block_exists` | m96J04 | `:` |
+| `apm_m96j05_symbol_norms` | m96J05 | `(ε ξ : ℝ) :` |
+| `apm_m97A01_modulus_core` | m97A01 | `(X : Type*) [NormedAddCommGroup X]` |
+| `apm_m97A02_anchor_preserved` | m97A02 | `{α : ℝ} (hα : Real.cos α = α)` |
+| `apm_m97A02_anchored_pointwise_bound` | m97A02 | `{α r t : ℝ} {x : ℝ → ℝ}` |
+| `apm_m97A02_cos_mem_Icc` | m97A02 | `{t : ℝ} (ht : t ∈ Icc (0 : ℝ) 1) :` |
+| `apm_m97A03_t_sqrt_bound` | m97A03 | `{t : ℝ} (ht : t ∈ Icc (0 : ℝ) 1) :` |
+| `apm_m98J04_arcLength_line` | m98J04 | `(a b α β : ℝ) (hab : a < b) :` |
+| `apm_m98J04_deriv_line` | m98J04 | `(a b α β x : ℝ) :` |
+| `apm_m98J05_fourier_integrable` | m98J05 | `(f : ℝ → ℂ) (hf : Integrable f) (ξ : ℝ) :` |
+| `apm_m98a02_trivial_space_obstruction` | m98A02 | `(A B : (Fin 0 → ℝ) →L[ℝ] (Fin 0 → ℝ)) :` |
+| `apm_m98a03_integrable_kernel_section` | m98A03 | `(K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ)` |
+| `apm_m98a05_hasStrictFDerivAt_of_contDiff` | m98A05 | `{E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]` |
+| `apm_m98a06_nonresonant_candidate_admissible` | m98A06 | `{a : ℝ} (ha : Real.sin a ≠ 0) :` |
+| `apm_m99A01_extremal_ode` | m99A01 | `(t : ℝ) :` |
+| `apm_m99A01_sine_family_admissible` | m99A01 | `(n : ℝ) :` |
+| `apm_m99J06_galerkin_energy` | m99J06 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]` |
+| `apm_m99j01_cos_fixed_unique` | m99J01 | `{x y : ℝ}` |
+| `apm_m99j02_wronskian_eq_zero` | m99J02 | `(u₁ u₂ q : ℝ → ℝ) (hu₁ : ContDiff ℝ 2 u₁) (hu₂ : ContDiff ℝ 2 u₂)` |
+| `apm_m99j03_dilation_integrable` | m99J03 | `(ψ φ : ℝ → ℝ) (hψ : Continuous ψ) (hφ : Continuous φ)` |
+| `apm_m99j04_weight_inner` | m99J04 | `{𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H]` |
 | `arctan_pos'` | a95J05 | `{t : ℝ} (ht : 0 < t) : 0 < arctan t :=` |
 | `arctan_zero'` | a95J05 | `: arctan 0 = 0 := arctan_zero` |
 | `argStar_eq` | a02J07 | `(z : ℂ) : argStar z = arg (-z) + π := by` |
@@ -569,7 +622,6 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `integral_sub_inv_eq_zero` | a94J06 | `{w : ℂ} (hw : 1 < ‖w‖) :` |
 | `integral_sub_inv_of_mem` | a94J06 | `{w : ℂ} (hw : ‖w‖ < 1) :` |
 | `integral_translate_norm` | a95J08 | `{f : ℝ → ℝ} (hf : Integrable f volume) (y : ℝ) :` |
-| `integral_typewriter1d` | a01A01 | `(k : ℕ) :` |
 | `integral_univ_inv_one_plus_sq_eq` | a95A03 | `:` |
 | `integral_x7_over_1_plus_x12` | a94A06 | `:` |
 | `integral_zero_to_dyadic_eq` | a95A04 | `{f : ℝ → ℝ}` |
@@ -579,6 +631,7 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `intervalIntegrable_sin_pi_div_sub_one` | a96A08 | `(a b : ℝ) :` |
 | `intervalIntegral_zero_two_pi_eq_add_reflection` | LIB:ConstructionTargets.HerglotzRigidity | `(q : ℝ → ℝ) (hq : Continuous q) :` |
 | `inv_le_one_of_le_one` | a94J08 | `{a : ℝ} (ha : 1 ≤ a) : a⁻¹ ≤ 1 := by` |
+| `is` | m96A05 | `a three-support `Finset.univ` sum normal form, followed by the` |
 | `isBounded_sublevel` | LIB:ConstructionTargets.LemniscateComponents | `(hp : 0 < p.natDegree) :` |
 | `isBounded_sublevel` | a00J04 | `(hp : 0 < p.natDegree) :` |
 | `isBounded_sublevel` | a01A08 | `(hp : 0 < p.natDegree) :` |
@@ -619,7 +672,6 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `le_of_lt_of_interval` | a96J01 | `{n m : ℕ} (hnm : n < m) : b n ≤ a m := by` |
 | `lebesgue_decomposition_answer` | a02J04 | `:` |
 | `limit_ge_geometric_mean` | a96A01 | `{f : ℝ → ℝ}` |
-| `limsup_typewriter1d` | a01A01 | `(x : ℝ) (hx : x ∈ Icc (0 : ℝ) 1) :` |
 | `linearBoundConstant_bound` | a01J06 | `(data : ProblemData)` |
 | `linearBoundConstant_nonneg` | a01J06 | `(data : ProblemData)` |
 | `linear_growth_of_entire_of_im_growth` | LIB:ConstructionTargets.HerglotzRigidity | `{f : ℂ → ℂ} (hf : Differentiable ℂ f) {C : ℝ} (hC : 0 ≤ C)` |
@@ -643,6 +695,17 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `lowerQuantile_mono` | LIB:ConstructionTargets.BanachZarecki | `{f : ℝ → ℝ} {y₁ y₂ : ℝ} (hy : y₁ ≤ y₂) (hy₂ : y₂ ≤ f 1) :` |
 | `lower_bound` | a00J01 | `{f : ℝ → ℝ}` |
 | `lp_prod_complete` | a96J05 | `{α : Type*} {E : Type*} {m : MeasurableSpace α}` |
+| `m95A01_left_residual` | m95A01 | `{𝕜 X : Type*}` |
+| `m95A01_right_residual` | m95A01 | `{𝕜 X : Type*}` |
+| `m95A02MaxDist_self` | m95A02 | `(f : m95A02H) : m95A02MaxDist f f = 0 := by` |
+| `m95A02Value_zero` | m95A02 | `(x : ℝ) : m95A02Value (0 : m95A02H) x = 0 := by` |
+| `m96A01_eigenspace_eq_ker` | m96A01 | `{X : Type*} [NormedAddCommGroup X]` |
+| `m99A02Function_pos` | m99A02 | `{x : m99A02Point}` |
+| `m99A02_neg_log_norm_pos` | m99A02 | `{x : m99A02Point}` |
+| `m99A03Shift_cube` | m99A03 | `: m99A03Shift ^ 3 = 0 := by` |
+| `m99A03Shift_sq_apply` | m99A03 | `(x : m99A03ExampleSpace) :` |
+| `m99A06_selfConvolution_integrable` | m99A06 | `{f : ℝ → ℝ}` |
+| `m99A06_sin_mul_selfConvolution_integrable` | m99A06 | `{f : ℝ → ℝ}` |
 | `maps_upper_halfPlane_one_side` | a94A10 | `(f : ℂ → ℂ) (hf : Differentiable ℂ f) (hreal : RealIffReal f) :` |
 | `measurableSet_cauchySet` | a97A04 | `{f : ℕ → α → ℝ} (hf : ∀ n, Measurable fun x => f n x)` |
 | `measurableSet_convergenceSet` | a97A04 | `{f : ℕ → α → ℝ}` |
@@ -970,12 +1033,12 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `tendsto_radialLaverage_mul` | LIB:ConstructionTargets.RadialMajorantAE | `{f : ℝ → ℝ} {x : ℝ}` |
 | `tendsto_rpow_inv_nat_atTop` | a00J01 | `(t : ℝ) (ht : 0 < t) :` |
 | `tendsto_scaled_primitive_bound_zero` | a02J03 | `(M : ℝ) :` |
+| `tendsto_setIntegral_Icc_zero` | LIB:ConstructionTargets.SetIntegralPrimitive | `(g : ℝ → ℝ)` |
 | `tendsto_setIntegral_Icc_zero` | a00J02 | `(g : ℝ → ℝ)` |
 | `tendsto_setIntegral_of_indicator_limit` | a94A01 | `{Eₙ : ℕ → Set ℝ} {E : Set ℝ}` |
 | `tendsto_sum_alternating_harmonic` | a93J02 | `:` |
 | `tendsto_symm_sin_pi_div` | a96A08 | `:` |
 | `tendsto_symmetric_f` | a96A08 | `:` |
-| `tendsto_typewriter1d` | a01A01 | `:` |
 | `test_function_admissible` | a01A06 | `{E : Set ℝ} (hE : MeasurableSet E) (hEsub : E ⊆ Icc (0 : ℝ) 1)` |
 | `that` | a97J08 | `a simple closed curve bounds a unique bounded region.` |
 | `that` | m00A02 | `two integral-power Poincaré expansions have identical` |
@@ -986,14 +1049,9 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `tsum_alternating_harmonic_mul_pow` | a93J02 | `{x : ℝ} (hx₀ : 0 < x) (hx₁ : x < 1) :` |
 | `tsum_inv_sq` | a95A07 | `:` |
 | `tsum_volume_disjoint_le_one` | a95J07 | `{S : ℕ → Set ℝ}` |
-| `twPos_lt_twStage` | a01A01 | `(k : ℕ) : twPos k < twStage k := by` |
-| `twStage_sq_gt` | a01A01 | `(k : ℕ) (hk : 1 ≤ k) : k < twStage k ^ 2 := by` |
-| `twStage_tendsto_atTop` | a01A01 | `: Tendsto twStage atTop atTop := by` |
 | `two_le_analyticOrderAt_sub_self` | LIB:ConstructionTargets.UnivalentDeriv | `{g : ℂ → ℂ} {z : ℂ} (hg : AnalyticAt ℂ g z)` |
 | `two_pole_contour_eval` | a96J07 | `(f : ℂ → ℂ) (hf : Differentiable ℂ f)` |
 | `two_pole_ml_bound_at_zero` | a96J07 | `(f : ℂ → ℂ) (M : ℝ) (hM : 0 ≤ M)` |
-| `typewriter1d_integrable` | a01A01 | `(k : ℕ) :` |
-| `typewriter1d_nonneg` | a01A01 | `(k : ℕ) (x : ℝ) : 0 ≤ typewriter1d k x := by` |
 | `unconstrainedZerosCounterexample_not_summable` | a01J06 | `:` |
 | `unconstrainedZerosCounterexample_weight` | a01J06 | `(n : ℕ) :` |
 | `unconstrainedZerosCounterexample_zeroCountLinear` | a01J06 | `:` |
@@ -1019,9 +1077,9 @@ argument, or ask for the lemma to be promoted into ConstructionTargets.
 | `weight_nonneg` | a01J06 | `(data : ProblemData) (n : ℕ) :` |
 | `weight_summable_of_solves` | a01J06 | `{data : ProblemData}` |
 | `weight_summable_of_zeroCountLinear` | a01J06 | `(data : ProblemData) (h : data.zeroCountLinear) :` |
-| `whose` | b94J01 | `canonical output is the frozen encoding: a *unique list*` |
 | `width_eq` | a96J01 | `(n : ℕ) : b n - a n = (2 : ℝ)⁻¹ ^ (n + 1) := by` |
 | `winding_number_bounded` | a95J03 | `{a : ℤ → ℂ} {N : ℕ}` |
+| `with` | m98A05 | `parameters and local uniqueness. The conversion from the` |
 | `with` | m98J05 | `exact normalization, differentiation under two improper` |
 | `young_convolution_inequality` | LIB:ConstructionTargets.YoungConvolution | `{f g : ℝ → ℝ}` |
 | `young_convolution_inequality` | a95J08 | `{f g : ℝ → ℝ}` |

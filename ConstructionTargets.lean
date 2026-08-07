@@ -13,6 +13,7 @@ import ConstructionTargets.SchwarzEquality
 import ConstructionTargets.Sinc
 import ConstructionTargets.UnivalentDeriv
 import ConstructionTargets.YoungConvolution
+import ConstructionTargets.SetIntegralPrimitive
 
 /-!
 # ConstructionTargets — reusable lemmas built to unblock specific APM problems
