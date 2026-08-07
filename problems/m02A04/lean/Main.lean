@@ -18,13 +18,25 @@ noncomputable def apm_m02a04_integral (t : ℝ) : ℝ :=
 noncomputable def apm_m02a04_leadingTerm (t : ℝ) : ℝ :=
   Real.sqrt Real.pi * Real.rpow t (-(3 : ℝ) / 2) * Real.exp (t / 4)
 
+private lemma apm_m02a04_sqrt_div_pow_three {t : ℝ} (ht : 0 < t) :
+    Real.sqrt (Real.pi / t ^ 3) =
+      Real.sqrt Real.pi * Real.rpow t (-(3 : ℝ) / 2) := by
+  rw [Real.sqrt_eq_rpow, Real.div_rpow Real.pi_pos.le (pow_nonneg ht.le 3),
+    div_eq_mul_inv, ← Real.sqrt_eq_rpow]
+  congr 1
+  rw [← Real.rpow_natCast t 3, ← Real.rpow_mul ht.le,
+    ← Real.rpow_neg ht.le]
+  congr 1
+  ring
+
 theorem apm_m02a04 :
     (∀ t : ℝ, 0 < t →
       apm_m02a04_integral t = apm_m02a04_leadingTerm t) ∧
     Tendsto (fun t => apm_m02a04_integral t / apm_m02a04_leadingTerm t)
       atTop (nhds 1) := by
-  constructor
-  · intro t ht
+  have hexact : ∀ t : ℝ, 0 < t →
+      apm_m02a04_integral t = apm_m02a04_leadingTerm t := by
+    intro t ht
     have ht0 : t ≠ 0 := ne_of_gt ht
     have hsquare : ∀ x : ℝ,
         -t ^ 3 * x ^ 2 + t ^ 2 * x =
@@ -69,27 +81,18 @@ theorem apm_m02a04 :
               (integral_add_right_eq_self
                 (μ := volume)
                 (fun x : ℝ ↦ Real.exp (-t ^ 3 * x ^ 2))
-                (-(1 / (2 * t)))) using 1 <;>
-              ring
+                (-(1 / (2 * t)))) using 1
       _ = Real.sqrt Real.pi * Real.rpow t (-(3 : ℝ) / 2) *
             Real.exp (t / 4) := by
-            /-
-            Boundary (closer hop 1): translation invariance and extraction of
-            `exp (t/4)` now compile, reducing the exact evaluation solely to
-            `sqrt (pi / t^3) = sqrt pi * t^(-3/2)`. Attempts with
-            `Real.sqrt_eq_rpow`, `Real.div_rpow`, `Real.rpow_natCast_mul`, and
-            `Real.rpow_neg` exposed an elaboration mismatch between ordinary
-            powers and `Real.rpow` in the rewritten denominator.  The next hop
-            should isolate the denominator identity as a separately typed
-            `Real.rpow` lemma before rewriting the square root.
-            -/
-            sorry
-  · /-
-    Boundary for the ratio limit: once the preceding exact identity is
-    available as a local helper, positivity of the leading term for all
-    sufficiently large `t` makes the ratio eventually equal to `1`, after
-    which `tendsto_const_nhds` closes the goal. The frozen conjunction does not
-    expose the first branch as a named lemma, so this step currently requires
-    factoring the exact evaluation into a local helper shared by both branches.
-    -/
-    sorry
+            rw [apm_m02a04_sqrt_div_pow_three ht]
+  refine ⟨hexact, ?_⟩
+  have heq : (fun t => apm_m02a04_integral t / apm_m02a04_leadingTerm t) =ᶠ[atTop]
+      (fun _ : ℝ => 1) := by
+    filter_upwards [eventually_gt_atTop (0 : ℝ)] with t ht
+    rw [hexact t ht]
+    exact div_self (ne_of_gt (by
+      unfold apm_m02a04_leadingTerm
+      exact mul_pos
+        (mul_pos (Real.sqrt_pos.2 Real.pi_pos) (Real.rpow_pos_of_pos ht _))
+        (Real.exp_pos _)))
+  exact tendsto_const_nhds.congr' heq.symm
