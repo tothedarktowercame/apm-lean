@@ -1,12 +1,17 @@
 # Proof Outline: t93A04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The compiled helper
+`apm_t93a04_isSmoothLinePreimage_preimage_iff` reduces the custom conclusion
+for the actual inverse image to the transversality condition alone.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-t93A04.md`
+Fix a nonzero direction in `ℝ³` and project along it to `ℝ²`.  A regular
+value of the composite projection with `f` determines an affine fiber line.
+Surjectivity of the composite derivative is equivalent to the range of
+`mfderiv f` together with the line direction spanning `ℝ³`.
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+Mathlib supplies Sard-type results for finite-dimensional normed vector-space
+domains, but not arbitrary second-countable manifold domains.  Closure needs a
+countable chart cover, chartwise Sard, compatibility of criticality with chart
+derivatives, and countable-union nullity.
