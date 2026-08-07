@@ -1,6 +1,6 @@
 # Proof Outline: b97J02
 
-The canonical Lean attempt compiles with one remaining `sorry`.
+The canonical Lean proof compiles without `sorry`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97J02.md`
@@ -14,8 +14,13 @@ The canonical Lean attempt compiles with one remaining `sorry`.
   with `Pi.ringHom`, with the requested evaluation equation by reflexivity.
 - Reducedness proves this map injective.
 
-## Remaining bridge
+## Completed bridge
 
-Prove finite-spectrum surjectivity via the finite Chinese remainder theorem.
-Separately prove the idempotent-principal-ideal and arbitrary-product-of-fields
-conjuncts directly from their custom definitions.
+- `apm_b97j02_toPiQuotient_bijective_of_finite` applies Mathlib's finite
+  Chinese remainder theorem to the pairwise-coprime maximal prime ideals.
+- `apm_b97j02_zeroDimensional_reduced_of_idempotent_span` proves both custom
+  predicates directly: prime comparability is collapsed using `e(e-1)=0`, and
+  an idempotent in every prime is both nilpotent and therefore zero.
+- `apm_b97j02_pi_idempotent_span` constructs the coordinate-support
+  idempotent of an arbitrary element of a product of fields, reducing the
+  product conjunct to the preceding lemma.
