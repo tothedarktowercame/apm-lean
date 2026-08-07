@@ -39,6 +39,13 @@ def apm_m99j04_HasEigenHilbertBasis
     ∀ i, star (eigenvalue i) = eigenvalue i ∧
       T (b i) = eigenvalue i • b i
 
+lemma apm_m99j04_weight_inner
+    {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H]
+    [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (A : H ≃L[𝕜] H) (x y : H) :
+    inner 𝕜 (apm_m99j04_weight A (A x)) (A y) = inner 𝕜 x y := by
+  simp [apm_m99j04_weight, ContinuousLinearMap.adjoint_inner_left]
+
 theorem apm_m99j04
     (𝕜 H : Type*) [RCLike 𝕜] [NormedAddCommGroup H]
     [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -78,7 +85,8 @@ theorem apm_m99j04
   compact spectral theorem
   `ContinuousLinearMap.orthogonalComplement_iSup_eigenspaces_eq_bot` into a
   single `HilbertBasis` indexed across all eigenspaces, then transporting that
-  basis through `A` and normalizing the weighted inner products. I searched
+  basis through `A`; the weighted inner-product transport identity needed for
+  its normalization and orthogonality is proved above. I searched
   the `OrthogonalFamily`, eigenspace direct-sum, `HilbertBasis`, adjoint of
   continuous-linear equivalences, and isometry/unitarity APIs, but did not
   find the required infinite-dimensional basis constructor in this pass.
