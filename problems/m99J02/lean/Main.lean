@@ -44,6 +44,37 @@ lemma apm_m99j02_g_continuous (u₁ u₂ : ℝ → ℝ)
   subst x
   exact mul_comm _ _
 
+/-- The derivative of the glued kernel from the left. -/
+lemma apm_m99j02_g_hasDerivWithinAt_Iic (u₁ u₂ : ℝ → ℝ)
+    (hu₁ : Differentiable ℝ u₁) (y : ℝ) :
+    HasDerivWithinAt (apm_m99j02_g u₁ u₂ y)
+      (deriv u₁ y * u₂ y) (Set.Iic y) y := by
+  have h := (hu₁ y).hasDerivAt.mul_const (u₂ y)
+  apply h.hasDerivWithinAt.congr
+  · intro x hx
+    change x ≤ y at hx
+    rw [apm_m99j02_g, if_pos hx]
+  · simp [apm_m99j02_g]
+
+/-- The derivative of the glued kernel from the right. -/
+lemma apm_m99j02_g_hasDerivWithinAt_Ioi (u₁ u₂ : ℝ → ℝ)
+    (hu₂ : Differentiable ℝ u₂) (y : ℝ) :
+    HasDerivWithinAt (apm_m99j02_g u₁ u₂ y)
+      (deriv u₂ y * u₁ y) (Set.Ioi y) y := by
+  have h := (hu₂ y).hasDerivAt.mul_const (u₁ y)
+  apply h.hasDerivWithinAt.congr
+  · intro x hx
+    change y < x at hx
+    rw [apm_m99j02_g, if_neg (not_le.mpr hx)]
+  · simp [apm_m99j02_g, mul_comm]
+
+/-- The jump of the first derivative is exactly the Wronskian coefficient. -/
+lemma apm_m99j02_g_derivative_jump (u₁ u₂ : ℝ → ℝ) (y : ℝ) :
+    deriv u₂ y * u₁ y - deriv u₁ y * u₂ y =
+      apm_m99j02_Wronskian u₁ u₂ y := by
+  unfold apm_m99j02_Wronskian
+  ring
+
 lemma apm_m99j02_wronskian_eq_zero
     (u₁ u₂ q : ℝ → ℝ) (hu₁ : ContDiff ℝ 2 u₁) (hu₂ : ContDiff ℝ 2 u₂)
     (hq₁ : ∀ x : ℝ, deriv (deriv u₁) x + q x * u₁ x = 0)
@@ -101,15 +132,21 @@ theorem apm_m99j02
         eq_neg_of_add_eq_zero_left (hq₂ x)]
       ring
   /-
-  Boundary: the regular part of the Green-function equation is proved above
+  Boundary (closer hop 2): the regular part of the Green-function equation is proved above
   to vanish away from the gluing point. Completing the frozen statement still
   requires two integrations by parts on the half-lines. Abel's identity for
   the raw-`deriv` Wronskian is proved above. Closer hop 1 proves
   `apm_m99j02_g_continuous`, formally certifying that the two branches agree
-  at the gluing point and hence that no delta-prime boundary term occurs. I
+  at the gluing point and hence that no delta-prime boundary term occurs.
+  This hop proves the precise one-sided derivative statements
+  `apm_m99j02_g_hasDerivWithinAt_Iic` and
+  `apm_m99j02_g_hasDerivWithinAt_Ioi`, then verifies in
+  `apm_m99j02_g_derivative_jump` that right minus left is exactly the frozen
+  Wronskian. Thus the local jump coefficient is closed. I
   searched the whole-line
   `MeasureTheory.integral_mul_deriv_eq_deriv_mul`, interval integration-by-parts,
   compact-support, and piecewise differentiability APIs, but did not find a
-  route that packages the boundary limits and the derivative jump at `y`.
+  route that packages the compact-support boundary limits and applies the two
+  half-line integrations by parts using these local derivative facts.
   -/
   sorry

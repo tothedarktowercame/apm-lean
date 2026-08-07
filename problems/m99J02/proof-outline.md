@@ -6,6 +6,11 @@ the gluing point, and constancy of the Wronskian.
 
 - `apm_m99j02_g_continuous` proves the two branches agree continuously at `y`,
   excluding a delta-prime contribution.
+- `apm_m99j02_g_hasDerivWithinAt_Iic` and
+  `apm_m99j02_g_hasDerivWithinAt_Ioi` prove the exact left and right
+  derivatives at the gluing point.
+- `apm_m99j02_g_derivative_jump` identifies right minus left with the
+  Wronskian, closing the singular coefficient calculation.
 - `hregular_cancel` proves `g'' + qg = 0` away from `y`.
 - `apm_m99j02_wronskian_eq_zero` proves Abel's identity for the raw derivative
   encoding.
