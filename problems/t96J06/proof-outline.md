@@ -1,12 +1,25 @@
 # Proof Outline: t96J06
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t96J06.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Construct the projective point represented by the first coordinate vector.
+- Use `Submodule.mk_mem_projectivization_iff` to prove it lies in the coordinate
+  projective line.
+- Pair the point with itself to prove `ℝP¹ × ℝP¹` is nonempty.
+
+## Remaining obstruction
+
+The intended contradiction requires a mod-two intersection theory:
+
+1. Construct the ambient mod-two class of `ℝP¹ × ℝP¹`.
+2. Show an embedded intrinsic boundary represents zero in ambient homology.
+3. Compute the class's self-intersection as one, using the projective-line
+   intersection in each factor and a Künneth/product formula.
+
+Mathlib currently lacks the required projective-space homology, Künneth,
+intersection pairing, and completed bordism infrastructure.

@@ -66,6 +66,56 @@ def apm_t96j06_BoundsThreeManifold
       IsManifold (𝓡∂ 3) ⊤ W ∧
       Subtype.val '' ((𝓡∂ 3).boundary W) = T
 
+private lemma apm_t96j06_single_zero_ne :
+    (Pi.single 0 1 : Fin 3 → ℝ) ≠ 0 := by
+  intro h
+  have h0 := congrFun h 0
+  simpa using h0
+
+def apm_t96j06_coordinatePoint : apm_t96j06_RP2 :=
+  Projectivization.mk ℝ (Pi.single 0 1) apm_t96j06_single_zero_ne
+
+lemma apm_t96j06_coordinatePoint_mem :
+    apm_t96j06_coordinatePoint ∈ apm_t96j06_RP1InRP2 := by
+  change Projectivization.mk ℝ (Pi.single 0 1) apm_t96j06_single_zero_ne ∈
+    apm_t96j06_coordinatePlane.projectivization
+  apply (apm_t96j06_coordinatePlane.mk_mem_projectivization_iff
+    apm_t96j06_single_zero_ne).2
+  change (Pi.single 0 1 : Fin 3 → ℝ) 2 = 0
+  simp
+
+/-- The embedded product is an actual nonempty projective torus, so the
+non-bounding statement is not a vacuous boundary-equality obstruction. -/
+lemma apm_t96j06_ProductSubspace_nonempty :
+    apm_t96j06_ProductSubspace.Nonempty := by
+  exact ⟨(apm_t96j06_coordinatePoint, apm_t96j06_coordinatePoint),
+    apm_t96j06_coordinatePoint_mem, apm_t96j06_coordinatePoint_mem⟩
+
 theorem apm_t96j06 :
     ¬apm_t96j06_BoundsThreeManifold apm_t96j06_ProductSubspace := by
+  /-
+  PARTIAL boundary (closer hop 1).
+
+  New progress: `apm_t96j06_coordinatePoint` constructs an explicit point of
+  the coordinate `ℝP¹`, with membership proved through Mathlib's
+  `Submodule.mk_mem_projectivization_iff`.
+  `apm_t96j06_ProductSubspace_nonempty` then certifies that the embedded
+  product is genuinely nonempty.  This removes projectivization
+  representative bookkeeping and rules out any vacuous proof through an empty
+  alleged boundary.
+
+  The remaining proof is the mod-two self-intersection obstruction.  It needs
+  (1) a mod-two fundamental class for the embedded `ℝP¹ × ℝP¹`, (2) the fact
+  that an intrinsic manifold boundary maps to zero in ambient homology, and
+  (3) computation of the product class's self-intersection as one.  Searches
+  of `LEMMA-INDEX.md`, `ConstructionTargets/`, all closed artifacts, Mathlib's
+  projectivization, singular-homology, manifold-boundary, intersection, and
+  bordism sources, and git history found none of these bridges.  Mathlib's
+  `Geometry/Manifold/Bordism.lean` explicitly describes bordisms, bordism
+  groups, and their homology theory as future work; it currently only develops
+  preliminary singular-manifold machinery.  No corpus artifact computes
+  `H*(ℝP²; ZMod 2)`, a Künneth product, or the projective-line intersection
+  pairing.  Consequently the live boundary is a substantial new mod-two
+  homology/intersection-theory development, not a remaining coordinate lemma.
+  -/
   sorry
