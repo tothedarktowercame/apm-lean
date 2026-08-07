@@ -1,31 +1,68 @@
 import Mathlib
-import ApmCanaries.Frames.T92J09.Apm_v2_t92J09_1775009066645.Scratch
+
+/-!
+# APM t92J09 — integrating `x dy ∧ dz` over the oriented unit sphere
+
+## Statement repairs
+
+None.
+
+## Encoding questions
+
+Mathlib does not yet provide integration of manifold differential forms over
+oriented submanifolds. The pullback integral is therefore encoded concretely
+using the standard outward-oriented spherical parametrization. The 2-form
+itself is retained as the alternating map
+`(p,u,v) ↦ p₀ (u₁v₂-u₂v₁)`, and is evaluated on the two parameter tangent
+vectors before integration. Thus the surface form, pullback, orientation, and
+surface integral all occur explicitly rather than being replaced by volume.
+-/
+
+open scoped Interval RealInnerProductSpace
 
 noncomputable section
 
-open scoped RealInnerProductSpace
-open MeasureTheory Metric ENNReal Real
+abbrev apm_t92J09_E3 := EuclideanSpace ℝ (Fin 3)
 
-namespace ApmCanaries.Frames.T92J09.Apm_v2_t92J09_1775009066645.Main
+def apm_t92J09_sphere : Set apm_t92J09_E3 :=
+  Metric.sphere 0 1
 
-/-- The measure of the unit ball in `ℝ^3` equals `4π/3`; this value matches the
-right-hand side of the Stokes computation for the form `ω = x dy ∧ dz`. -/
-theorem integral_form_on_sphere :
-    (volume (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 1)).toReal =
-      (4 / 3 : ℝ) * Real.pi := by
-  have hvol :=
-    EuclideanSpace.volume_ball_fin_three (0 : EuclideanSpace ℝ (Fin 3)) (1 : ℝ)
-  have hone : (ENNReal.ofReal (1 : ℝ)) ^ (3 : ℕ) = (1 : ENNReal) := by
-    simpa using (one_pow (3 : ℕ) : (1 : ENNReal) ^ 3 = 1)
-  have hπ : Real.pi * 4 / 3 = (4 / 3 : ℝ) * Real.pi := by
-    field_simp [div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
-  have hvol' : volume (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 1) =
-      ENNReal.ofReal ((4 / 3 : ℝ) * Real.pi) := by
-    simpa [hone, hπ, one_mul] using hvol
-  have hpos : 0 ≤ (4 / 3 : ℝ) * Real.pi := by
-    have : (0 : ℝ) ≤ 4 / 3 := by norm_num
-    exact mul_nonneg this Real.pi_nonneg
-  have := congrArg ENNReal.toReal hvol'
-  simpa [ENNReal.toReal_ofReal, hpos] using this
+def apm_t92J09_inclusion : apm_t92J09_sphere → apm_t92J09_E3 :=
+  Subtype.val
 
-end ApmCanaries.Frames.T92J09.Apm_v2_t92J09_1775009066645.Main
+def apm_t92J09_omega
+    (p u v : apm_t92J09_E3) : ℝ :=
+  p 0 * (u 1 * v 2 - u 2 * v 1)
+
+def apm_t92J09_param (θ φ : ℝ) : apm_t92J09_E3 :=
+  WithLp.toLp 2 ![
+    Real.sin θ * Real.cos φ,
+    Real.sin θ * Real.sin φ,
+    Real.cos θ]
+
+def apm_t92J09_dTheta (θ φ : ℝ) : apm_t92J09_E3 :=
+  WithLp.toLp 2 ![
+    Real.cos θ * Real.cos φ,
+    Real.cos θ * Real.sin φ,
+    -Real.sin θ]
+
+def apm_t92J09_dPhi (θ φ : ℝ) : apm_t92J09_E3 :=
+  WithLp.toLp 2 ![
+    -Real.sin θ * Real.sin φ,
+    Real.sin θ * Real.cos φ,
+    0]
+
+def apm_t92J09_pullbackOmega (θ φ : ℝ) : ℝ :=
+  apm_t92J09_omega (apm_t92J09_param θ φ)
+    (apm_t92J09_dTheta θ φ) (apm_t92J09_dPhi θ φ)
+
+def apm_t92J09_sphereIntegral : ℝ :=
+  ∫ θ in (0 : ℝ)..Real.pi,
+    ∫ φ in (0 : ℝ)..2 * Real.pi, apm_t92J09_pullbackOmega θ φ
+
+theorem apm_t92j09 :
+    (∀ θ ∈ Set.Icc (0 : ℝ) Real.pi,
+      ∀ φ ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+        apm_t92J09_param θ φ ∈ apm_t92J09_sphere) ∧
+    apm_t92J09_sphereIntegral = (4 / 3 : ℝ) * Real.pi := by
+  sorry
