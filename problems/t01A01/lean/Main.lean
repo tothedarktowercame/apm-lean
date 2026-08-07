@@ -51,5 +51,9 @@ theorem apm_t01a01 :
   projective-space computations or the punctured-plane deformation retraction
   is available, so the factorization cannot presently be converted into the
   two requested conclusions without a substantial new topology development.
+  The partial siblings `t00J07` and `t92J05` confirm that the required `RP²`
+  fundamental-group and cell-attachment computations are not packaged; the
+  wedge-cover sibling `t98A03` is blocked by the same quotient-space gap. No
+  relevant bridge occurs in `ConstructionTargets/` or `YoungL2.lean`.
   -/
   sorry
