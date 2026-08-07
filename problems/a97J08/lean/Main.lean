@@ -70,6 +70,35 @@ lemma apm_a97j08_exists_boundary_margin
   intro w hw
   exact hmin hw
 
+/-- Local uniform convergence gives the eventual strict Rouché inequality on
+the whole compact curve.  This completes the analytic boundary reduction; the
+remaining main-theorem gap is the arbitrary-Jordan-domain zero-count transfer. -/
+lemma apm_a97j08_eventually_boundary_rouche
+    {D : Set ℂ} {γ : ℝ → ℂ} {F : ℕ → ℂ → ℂ} {g : ℂ → ℂ}
+    (hD_open : IsOpen D)
+    (hγ_cont : ContinuousOn γ (Icc (0 : ℝ) 1))
+    (hγD : apm_a97j08_curveImage γ ⊆ D)
+    (hF_analytic : ∀ n, DifferentiableOn ℂ (F n) D)
+    (hF_tendsto : TendstoLocallyUniformlyOn F g atTop D)
+    (hg_ne : ∀ z ∈ apm_a97j08_curveImage γ, g z ≠ 0) :
+    ∃ N : ℕ, ∀ n ≥ N, ∀ z ∈ apm_a97j08_curveImage γ,
+      ‖F n z - g z‖ < ‖g z‖ := by
+  have hg_cont := apm_a97j08_limit_continuousOn_curve hγD hF_analytic hF_tendsto
+  obtain ⟨ε, hε, hεg⟩ :=
+    apm_a97j08_exists_boundary_margin hγ_cont hg_cont hg_ne
+  have hcompact := apm_a97j08_curveImage_compact hγ_cont
+  have huniform : TendstoUniformlyOn F g atTop (apm_a97j08_curveImage γ) :=
+    (tendstoLocallyUniformlyOn_iff_forall_isCompact hD_open).mp hF_tendsto
+      _ hγD hcompact
+  have heventually : ∀ᶠ n in atTop, ∀ z ∈ apm_a97j08_curveImage γ,
+      dist (g z) (F n z) < ε :=
+    (tendstoUniformlyOn_iff.mp huniform) ε hε
+  rw [eventually_atTop] at heventually
+  obtain ⟨N, hN⟩ := heventually
+  refine ⟨N, fun n hn z hz ↦ ?_⟩
+  rw [norm_sub_rev]
+  exact lt_of_lt_of_le (by simpa [dist_eq_norm] using hN n hn z hz) (hεg z hz)
+
 /-! ## Blocker analysis
 
 This is the Hurwitz/Rouché theorem: zeros are stable under locally uniform
@@ -113,14 +142,15 @@ theorem apm_a97j08 (D : Set ℂ) (γ : ℝ → ℂ) (F : ℕ → ℂ → ℂ) (g
       apm_a97j08_zeroCount (F n) (apm_a97j08_curveInterior γ) =
         apm_a97j08_zeroCount g (apm_a97j08_curveInterior γ) := by
   /-
-  Boundary (closer hop 1): three new helpers above now compile the quantitative
+  Boundary (closer hops 1--2): four helpers above now compile the quantitative
   boundary setup.  `apm_a97j08_curveImage_compact` proves compactness of the
   actual image, `apm_a97j08_limit_continuousOn_curve` obtains continuity of
   `g` there directly from locally uniform convergence, and
   `apm_a97j08_exists_boundary_margin` produces `ε > 0` with
   `ε ≤ ‖g z‖` on the whole curve.  Thus the remaining convergence step can use
-  compact-set uniform convergence to obtain eventually
-  `‖F n z - g z‖ < ‖g z‖` on the boundary.
+  `apm_a97j08_eventually_boundary_rouche` now also performs the compact-set
+  uniform-convergence step and obtains one `N` such that
+  `‖F n z - g z‖ < ‖g z‖` on the entire boundary whenever `n ≥ N`.
 
   The reusable `ConstructionTargets.Rouche.zeroCountInClosedBall_add_eq` now
   supplies Rouché zero-count transfer, but only for round disks and a divisor

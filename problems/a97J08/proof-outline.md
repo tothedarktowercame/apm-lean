@@ -21,10 +21,12 @@ counts multiplicity. The following helpers now compile:
 
 - `apm_a97j08_curveImage_compact`;
 - `apm_a97j08_limit_continuousOn_curve`;
-- `apm_a97j08_exists_boundary_margin`.
+- `apm_a97j08_exists_boundary_margin`;
+- `apm_a97j08_eventually_boundary_rouche`.
 
-They establish the compactness, continuity, and positive-minimum steps of the
-informal proof. One `sorry` remains in the main zero-count transfer.
+They establish compactness, continuity, the positive minimum, and the full
+eventual strict Rouché inequality uniformly on the curve. One `sorry` remains
+only in the arbitrary-Jordan-interior zero-count transfer.
 
 ## Boundary
 
