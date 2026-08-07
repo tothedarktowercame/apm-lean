@@ -77,23 +77,58 @@ lemma m99A02Derivative_measurable (i : Fin 2) :
   apply Measurable.ite hs measurable_const
   fun_prop
 
+/-- The sum of the squared displayed derivatives is the expected radial
+Bertrand-integral density away from the origin. -/
+lemma m99A02_sum_derivative_sq {x : m99A02Point}
+    (hx : x ∈ m99A02Omega) (hx0 : x ≠ 0) :
+    ∑ i : Fin 2, (m99A02Derivative i x) ^ 2 =
+      1 / (9 * ‖x‖ ^ 2 * (-Real.log ‖x‖) ^ (4 / 3 : ℝ)) := by
+  have hr : ‖x‖ ≠ 0 := (norm_pos_iff.mpr hx0).ne'
+  have hl : 0 < -Real.log ‖x‖ := m99A02_neg_log_norm_pos hx hx0
+  simp_rw [m99A02Derivative, if_neg hx0]
+  rw [show (∑ i : Fin 2, (-(x i) /
+      (3 * ‖x‖ ^ 2 * (-Real.log ‖x‖) ^ (2 / 3 : ℝ))) ^ 2) =
+      (∑ i : Fin 2, (x i) ^ 2) /
+        (3 * ‖x‖ ^ 2 * (-Real.log ‖x‖) ^ (2 / 3 : ℝ)) ^ 2 by
+    rw [Finset.sum_div]
+    apply Finset.sum_congr rfl
+    intro i _
+    ring]
+  rw [← EuclideanSpace.real_norm_sq_eq]
+  have hlpow : ((-Real.log ‖x‖) ^ (2 / 3 : ℝ)) ^ 2 =
+      (-Real.log ‖x‖) ^ (4 / 3 : ℝ) := by
+    rw [← Real.rpow_natCast]
+    rw [← Real.rpow_mul hl.le]
+    congr 1
+    norm_num
+  rw [mul_pow, mul_pow, hlpow]
+  field_simp [hr, ne_of_gt hl]
+  ring
+
 theorem apm_m99a02 :
     MemLp m99A02Function 2 (volume.restrict m99A02Omega) ∧
     ∀ i : Fin 2,
       MemLp (m99A02Derivative i) 2 (volume.restrict m99A02Omega) ∧
       IsM99A02WeakDerivative m99A02Function (m99A02Derivative i) i := by
   /-
-  Boundary (closer hop 1): `m99A02_neg_log_norm_pos` verifies that every real power in the
+  Boundary (closer hop 2): `m99A02_neg_log_norm_pos` verifies that every real power in the
   displayed function and derivative is evaluated on a positive logarithmic
   base throughout the punctured disk; `m99A02Function_pos` records the
   corresponding pointwise fact about the chosen representative. Completing
   the theorem requires a polar
   integration formula for the two-dimensional Euclidean ball, convergence of
   the Bertrand integral `∫ dr / (r * (-log r)^(4/3))`, and integration by
-  parts on punctured disks with a vanishing inner-boundary flux. I searched
-  This hop also proves `m99A02Function_measurable` and
+  parts on punctured disks with a vanishing inner-boundary flux. The prior hop
+  also proves `m99A02Function_measurable` and
   `m99A02Derivative_measurable`, so the measurable half of each `MemLp` goal is
   closed.
+
+  This hop proves `m99A02_sum_derivative_sq`, the exact punctured-domain
+  identity reducing the sum of the two derivative squares to the radial
+  density `1 / (9 * ‖x‖^2 * (-log ‖x‖)^(4/3))`. It uses
+  `EuclideanSpace.real_norm_sq_eq` and the real-power multiplication laws.
+  Thus the coordinate algebra is closed and the remaining `MemLp` boundary is
+  precisely polar transport plus the scalar Bertrand integral.
 
   Mathlib searches confirmed `Complex.integral_comp_polarCoord_symm`, and the
   closed sibling `a01A07` packages it as

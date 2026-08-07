@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "notes": "Measurability of the singular function and derivatives compiles; polar transport, Bertrand integrals, and weak integration by parts remain."
+  "closer_hop": 2,
+  "notes": "Measurability compiles, and the sum of squared derivatives is now reduced exactly to the radial Bertrand density. Polar transport, scalar improper-log integrability, and weak integration by parts remain."
 }
