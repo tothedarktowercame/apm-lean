@@ -78,9 +78,12 @@ theorem apm_m95a03
 
   This is the same defect documented in sibling `m02A05`, whose frozen ODE
   statement also incorrectly upgrades interval agreement to global function
-  equality.  Mathlib's smooth bump-function library confirms that the needed
-  off-interval perturbations exist.  The fully closed artifact scan supplied
-  no quotient/extension convention that changes the meaning of equality here.
+  equality. Mathlib's `ContDiffBump` library confirms this counterexample
+  directly: `ContDiffBump.support_eq` identifies the support with its chosen
+  ball, while its coercion is smooth by the `ContDiff.contDiffBump` API; a
+  center beyond `b` and sufficiently small outer radius gives the required
+  perturbation. The fully closed artifact scan supplied no quotient/extension
+  convention that changes the meaning of equality here.
 
   Even after repairing uniqueness, the intended analytic proof would require
   an interval integration-by-parts theorem, the fundamental lemma of the
