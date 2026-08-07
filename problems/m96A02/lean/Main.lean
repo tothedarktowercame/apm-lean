@@ -34,7 +34,9 @@ theorem apm_m96a02 :
   SKIPPED (two frozen-statement defects).
 
   First, the first and second conjuncts omit `[Nonempty M]`.  Take
-  `M := Empty`, which has Mathlib `MetricSpace` and `CompleteSpace` instances.
+  `M := Empty`.  Mathlib defines its `MetricSpace Empty` instance in
+  `Topology.MetricSpace.Defs`, and the current toolchain also synthesizes
+  `CompleteSpace Empty`.
   Its unique self-map satisfies `apm_m96a02_IsContraction` vacuously (for
   example with `k = 0`), but neither conjunct's existential fixed-point
   conclusion can be inhabited.  Sibling `m01J05` documents exactly this
@@ -46,9 +48,10 @@ theorem apm_m96a02 :
   Second, `apm_m96a02_Solves` imposes the differential equation only on
   `Ioo 0 1` and fixes only `u 0`, whereas uniqueness is `EqOn` on `Icc 0 1`.
   In particular `u 1` is completely unconstrained.  For `f = 0` and `u₀ = 0`,
-  the zero solution and the function obtained by changing only its value at
-  `1` both satisfy the predicate, since they agree on a neighborhood of every
-  point of `Ioo 0 1`, but they are not equal on `Icc 0 1`.  Adding
+  take the zero solution and `v t := if t = 1 then 1 else 0`.  At every point
+  of `Ioo 0 1`, a neighborhood avoids `1`, so `v` is locally the zero function
+  and has derivative zero there.  Thus both functions satisfy the predicate,
+  but they are not equal on `Icc 0 1`.  Adding
   `ContinuousOn u (Icc 0 1)` or weakening uniqueness to `Ico 0 1` would close
   this endpoint gap.
 
