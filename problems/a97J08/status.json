@@ -27,7 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "partial-lean-proof",
   "imported_at": "2026-07-13T17:26:52.894437Z",
   "checked_at": "2026-08-05T14:15:00Z",
   "checked_lean_state": {
@@ -38,11 +38,9 @@
       "zero_stability_under_convergence (main proof body — requires Rouché/argument principle)"
     ],
     "blockers": [
-      "Rouché's theorem NOT in Mathlib",
-      "Argument principle NOT in Mathlib",
-      "Zero-counting machinery NOT in Mathlib",
-      "Winding number NOT in Mathlib",
-      "Jordan curve theorem NOT in Mathlib"
+      "ConstructionTargets.Rouche handles disks but not arbitrary rectifiable Jordan curves",
+      "Jordan curve theorem and containment of the encoded interior in D are unavailable",
+      "No arbitrary-contour argument principle connects the divisor sum to the curve interior"
     ]
   }
 }

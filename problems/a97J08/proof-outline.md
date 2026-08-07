@@ -16,14 +16,23 @@ Show ∃ N: n ≥ N ⟹ f_n and g have same number of zeros inside Γ.
 
 ## Proved (exit 0, 1 sorry)
 
-Statement compiles. `zeroCount` defined as placeholder (0).
-1 sorry: main proof body — requires Rouché/argument principle infrastructure.
+`zeroCount` is the positive part of Mathlib's meromorphic divisor and therefore
+counts multiplicity. The following helpers now compile:
+
+- `apm_a97j08_curveImage_compact`;
+- `apm_a97j08_limit_continuousOn_curve`;
+- `apm_a97j08_exists_boundary_margin`.
+
+They establish the compactness, continuity, and positive-minimum steps of the
+informal proof. One `sorry` remains in the main zero-count transfer.
 
 ## Boundary
 
-Mathlib LACKS: Rouché's theorem, argument principle, zero-counting, winding number,
-Jordan curve theorem. The mathematical argument is clean (margin + Rouché) but
-requires building fundamental complex analysis infrastructure.
+`ConstructionTargets.Rouche` now provides an argument principle and Rouché
+transfer for round disks. The remaining gap is its extension to the arbitrary
+rectifiable Jordan curve used here. Mathlib lacks the Jordan curve theorem, a
+proof that the encoded bounded-component interior has compact closure in `D`,
+and an arbitrary-contour argument principle for the divisor sum.
 
 ## Phase-A hints used
 - #1 `e-codexpilot-prove-Hurwitz-zero-persistence-through-quantitative-open-mapping`: cited.
@@ -31,4 +40,6 @@ requires building fundamental complex analysis infrastructure.
 - #3 `e-codexpilot-straight-line-rouche-homotopy-stays-nonzero-on-boundary`: cited.
 
 ## Mid-solve lookups
-None beyond Phase A.
+
+- `ConstructionTargets.Rouche` and its closed users `a92J05`, `a97A08`.
+- Mathlib locally uniform convergence and compact extreme-value APIs.

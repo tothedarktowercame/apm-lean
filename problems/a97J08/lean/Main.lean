@@ -38,6 +38,38 @@ part of the divisor. -/
 def apm_a97j08_zeroCount (f : ℂ → ℂ) (U : Set ℂ) : ℤ :=
   ∑ᶠ z : ℂ, max (MeromorphicOn.divisor f U z) 0
 
+lemma apm_a97j08_curveImage_compact {γ : ℝ → ℂ}
+    (hγ_cont : ContinuousOn γ (Icc (0 : ℝ) 1)) :
+    IsCompact (apm_a97j08_curveImage γ) := by
+  exact isCompact_Icc.image_of_continuousOn hγ_cont
+
+lemma apm_a97j08_limit_continuousOn_curve
+    {D : Set ℂ} {γ : ℝ → ℂ} {F : ℕ → ℂ → ℂ} {g : ℂ → ℂ}
+    (hγD : apm_a97j08_curveImage γ ⊆ D)
+    (hF_analytic : ∀ n, DifferentiableOn ℂ (F n) D)
+    (hF_tendsto : TendstoLocallyUniformlyOn F g atTop D) :
+    ContinuousOn g (apm_a97j08_curveImage γ) := by
+  apply (hF_tendsto.continuousOn ?_).mono hγD
+  exact Frequently.of_forall fun n ↦ (hF_analytic n).continuousOn
+
+/-- Nonvanishing of the limit on the compact curve gives the quantitative
+margin needed for the eventual Rouché inequality. -/
+lemma apm_a97j08_exists_boundary_margin
+    {γ : ℝ → ℂ} {g : ℂ → ℂ}
+    (hγ_cont : ContinuousOn γ (Icc (0 : ℝ) 1))
+    (hg_cont : ContinuousOn g (apm_a97j08_curveImage γ))
+    (hg_ne : ∀ z ∈ apm_a97j08_curveImage γ, g z ≠ 0) :
+    ∃ ε : ℝ, 0 < ε ∧
+      ∀ z ∈ apm_a97j08_curveImage γ, ε ≤ ‖g z‖ := by
+  have hK := apm_a97j08_curveImage_compact hγ_cont
+  have hKne : (apm_a97j08_curveImage γ).Nonempty := by
+    refine ⟨γ 0, ?_⟩
+    exact ⟨0, by simp, rfl⟩
+  obtain ⟨z, hz, hmin⟩ := hK.exists_isMinOn hKne hg_cont.norm
+  refine ⟨‖g z‖, norm_pos_iff.mpr (hg_ne z hz), ?_⟩
+  intro w hw
+  exact hmin hw
+
 /-! ## Blocker analysis
 
 This is the Hurwitz/Rouché theorem: zeros are stable under locally uniform
@@ -80,12 +112,30 @@ theorem apm_a97j08 (D : Set ℂ) (γ : ℝ → ℂ) (F : ℕ → ℂ → ℂ) (g
     ∃ N : ℕ, ∀ n ≥ N,
       apm_a97j08_zeroCount (F n) (apm_a97j08_curveInterior γ) =
         apm_a97j08_zeroCount g (apm_a97j08_curveInterior γ) := by
-  -- SKIPPED: Hurwitz/Rouché theorem — zeros stable under locally uniform convergence.
-  -- Requires: Weierstrass convergence theorem, Jordan curve theorem, Rouché's theorem /
-  -- argument principle — ALL absent from Mathlib. Same infrastructure gap as a94A09.
-  -- The file documents the full blocker analysis including which Mathlib APIs exist
-  -- (circleIntegral, MeromorphicOn.divisor) but are insufficient (no contour-to-zero-count).
-  -- -- (Memory: e-codexpilot-prove-Hurwitz-zero-persistence-through-quantitative-open-mapping)
-  -- --    confirms Hurwitz zero persistence is the core; (Memory: e-codexpilot-straight-line-rouche-homotopy-stays-nonzero-on-boundary)
-  -- --    confirms the Rouché boundary condition approach.
+  /-
+  Boundary (closer hop 1): three new helpers above now compile the quantitative
+  boundary setup.  `apm_a97j08_curveImage_compact` proves compactness of the
+  actual image, `apm_a97j08_limit_continuousOn_curve` obtains continuity of
+  `g` there directly from locally uniform convergence, and
+  `apm_a97j08_exists_boundary_margin` produces `ε > 0` with
+  `ε ≤ ‖g z‖` on the whole curve.  Thus the remaining convergence step can use
+  compact-set uniform convergence to obtain eventually
+  `‖F n z - g z‖ < ‖g z‖` on the boundary.
+
+  The reusable `ConstructionTargets.Rouche.zeroCountInClosedBall_add_eq` now
+  supplies Rouché zero-count transfer, but only for round disks and a divisor
+  restricted to their closed balls.  The frozen theorem uses an arbitrary
+  rectifiable Jordan curve and the set
+  `apm_a97j08_curveInterior γ`.  Searches of `LEMMA-INDEX.md`, all
+  `ConstructionTargets/`, Mathlib's connected-component/Jordan, locally
+  uniform convergence, divisor, and contour-integration sources, prior
+  Rouché users `a92J05` and `a97A08`, and git history found no Jordan curve
+  theorem, no proof that this encoded interior has compact closure contained
+  in simply connected `D`, and no arbitrary-contour argument principle that
+  equates its divisor sum with a winding integral.
+
+  Closure therefore still requires the topology bridge for this concrete
+  interior plus a generalization of the disk Rouché theorem to rectifiable
+  Jordan curves (or a homeomorphic/conformal reduction preserving divisors).
+  -/
   sorry
