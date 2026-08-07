@@ -123,6 +123,10 @@ theorem apm_t01j03 :
   exists, but the fundamental group of `Circle` is not computed as `ℤ`, and
   there is no van Kampen theorem or singular Mayer--Vietoris sequence that
   can turn the encoded twice-spiral relation into the `ZMod 2` and homology
-  conclusions. Developing those foundations is beyond this pass.
+  conclusions. The partial siblings `t00A01` and `t02A03` independently
+  record the same missing gluing and wedge APIs. The `CircleParam` target
+  concerns analytic contour integrals rather than fundamental groups, and no
+  relevant result occurs elsewhere in `ConstructionTargets/` or
+  `YoungL2.lean`. Developing those foundations is beyond this pass.
   -/
   sorry
