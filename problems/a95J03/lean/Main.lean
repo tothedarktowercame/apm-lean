@@ -1,88 +1,44 @@
-/-
-! # APM a95J03: Winding number of a trig polynomial is bounded by its degree
+import Mathlib
 
-γ(t) = Σ_{n=-N}^N a(n) e^{int} with a(-N) or a(N) nonzero.
-Show -N ≤ Ind(z; γ) ≤ N for all z ∉ γ([0,2π]).
+/-!
+# APM a95J03 — winding number of a trigonometric polynomial
 
-## Theory boundaries
+## Statement repairs
 
-- The winding number is NOT defined in Mathlib.
-- The argument principle (winding number = zeros - poles) is NOT in Mathlib.
-- The algebraic polynomial reformulation IS stated correctly.
+None.
 
-## Statement repair
+## Encoding questions
 
-The generated `windingNumber` had a sorry in its definition, which is invalid.
-We define it as an opaque placeholder (= 0) for theorem statement purposes.
-The genuine definition would be (1/2πi)∫₀²π γ'(t)/(γ(t)-z) dt.
+Mathlib has no directly usable integer-valued winding-number definition for a
+parametrized path of this form. The index is therefore encoded by its genuine
+normalized contour integral. The theorem asserts that this complex integral
+is an integer and that the integer lies between `-N` and `N`.
 -/
 
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.Algebra.Polynomial.BigOperators
-import Mathlib.Algebra.Polynomial.Degree.Defs
-import Mathlib.Order.Interval.Finset.Basic
-
 open Complex Polynomial
-
-open scoped Real BigOperators
+open scoped Interval Real BigOperators
 
 noncomputable section
 
-/-- A trigonometric polynomial of degree N: γ(t) = Σ_{n=-N}^N a(n) e^{int}. -/
-def trigPoly (a : ℤ → ℂ) (N : ℕ) (t : ℝ) : ℂ :=
-  (Finset.Icc (-(N : ℤ)) N).sum (fun n => a n * Complex.exp (↑I * ↑n * ↑t))
+def apm_a95J03_trigPoly (a : ℤ → ℂ) (N : ℕ) (t : ℝ) : ℂ :=
+  (Finset.Icc (-(N : ℤ)) N).sum
+    (fun n ↦ a n * Complex.exp (Complex.I * (n : ℂ) * (t : ℂ)))
 
-/-- The winding number (index) of a closed curve γ about a point z.
+def apm_a95J03_algPoly (a : ℤ → ℂ) (N : ℕ) : Polynomial ℂ :=
+  (Finset.range (2 * N + 1)).sum
+    (fun k ↦ Polynomial.C (a ((k : ℤ) - N)) * Polynomial.X ^ k)
 
-**Note:** NOT defined in Mathlib. Opaque placeholder for theorem statement.
-The genuine definition: (1/2πi) ∫₀²π γ'(t)/(γ(t) - z) dt. -/
-@[irreducible]
-def windingNumber (_γ : ℝ → ℂ) (_z : ℂ) : ℤ := 0
+def apm_a95J03_windingIntegral (γ : ℝ → ℂ) (z : ℂ) : ℂ :=
+  ((((2 * Real.pi : ℝ) : ℂ) * Complex.I)⁻¹) *
+    ∫ t in (0 : ℝ)..2 * Real.pi,
+      (fderiv ℝ γ t) 1 / (γ t - z)
 
-/-- The algebraic polynomial P(w) = Σ_{k=0}^{2N} a(k-N) w^k. -/
-def algPoly (a : ℤ → ℂ) (N : ℕ) : Polynomial ℂ :=
-  (Finset.range (2 * N + 1)).sum (fun k =>
-    Polynomial.C (a (↑k - ↑N)) * Polynomial.X ^ k)
-
-/-- algPoly has degree ≤ 2N. -/
-lemma algPoly_degree_le (a : ℤ → ℂ) (N : ℕ) :
-    (algPoly a N).natDegree ≤ 2 * N := by
-  unfold algPoly
-  apply Polynomial.natDegree_sum_le_of_forall_le
-  intro k hk
-  exact (Polynomial.natDegree_C_mul_X_pow_le _ k).trans (by
-    simp only [Finset.mem_range] at hk
-    omega)
-
-/-- Q(w) = P(w) - z·w^N has degree ≤ 2N.
-
-Since P has degree ≤ 2N and z·w^N has degree N ≤ 2N, the difference
-has degree ≤ max(2N, N) = 2N. -/
-lemma algPoly_sub_degree_le
-    (a : ℤ → ℂ) (N : ℕ) (z : ℂ) :
-    (algPoly a N - Polynomial.C z * Polynomial.X ^ N).natDegree ≤ 2 * N := by
-  apply le_trans (Polynomial.natDegree_sub_le _ _)
-  apply max_le
-  · exact algPoly_degree_le a N
-  · by_cases hz : z = 0
-    · simp [hz, Polynomial.natDegree_zero]
-    · have : (Polynomial.C z * Polynomial.X ^ N).natDegree = N := by
-        rw [Polynomial.natDegree_C_mul_X_pow N z hz]
-      omega
-
-/-- Main theorem: -N ≤ Ind(z; γ) ≤ N.
-
-For the opaque placeholder currently used in this file, the result follows
-because `windingNumber` is defined to be zero. Replacing that placeholder by
-the genuine analytic winding number would require the argument principle
-(winding number = #zeros - #poles), which is not currently available here. -/
-theorem winding_number_bounded
-    {a : ℤ → ℂ} {N : ℕ}
+theorem apm_a95j03 {a : ℤ → ℂ} {N : ℕ}
     (hN : a (-(N : ℤ)) ≠ 0 ∨ a (N : ℤ) ≠ 0)
-    {z : ℂ} (hz : ∀ t ∈ Set.Icc (0 : ℝ) (2 * π), trigPoly a N t ≠ z) :
-    -(N : ℤ) ≤ windingNumber (trigPoly a N) z ∧
-      windingNumber (trigPoly a N) z ≤ N := by
-  rw [windingNumber]
-  omega
-
-end
+    {z : ℂ}
+    (hz : ∀ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_a95J03_trigPoly a N t ≠ z) :
+    ∃ k : ℤ,
+      apm_a95J03_windingIntegral (apm_a95J03_trigPoly a N) z = (k : ℂ) ∧
+      -(N : ℤ) ≤ k ∧ k ≤ N := by
+  sorry
