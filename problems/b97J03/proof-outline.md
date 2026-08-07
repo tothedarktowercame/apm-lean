@@ -1,12 +1,21 @@
 # Proof Outline: b97J03
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen theorem has a compiling partial formalization in `lean/Main.lean`.
+For the special polynomial, the two evident roots are formally shown distinct
+and contained in every embedded root field.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97J03.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Every root satisfies `α⁶ = 2` and is nonzero.
+- `-α` is also a root, and both `α` and `-α` lie in `ℚ(α)`.
+- Consequently the special root count is at least two for every complex root.
+
+## Remaining bridge
+
+Exclude the other four sixth roots from `ℚ(α)` to obtain the exact count two.
+For the general theorem, formalize the transitive Galois action and identify
+the restricted root count with a normalizer/stabilizer index, yielding
+divisibility and the abelian equality case.
