@@ -58,6 +58,29 @@ theorem apm_t01a06 :
       ¬∃ (η : t01A06OneForm) (γ : ℝ → t01A06Point),
         IsT01A06ClosedOneForm η ∧ IsT01A06LoopOnTorus R r γ ∧
         t01A06LineIntegral η γ ≠ 0) := by
+  have hsurface : ∀ R r : ℝ, R > r → r > 0 →
+      t01A06SurfaceIntegral R r = 2 * Real.pi ^ 2 * R * r ^ 2 := by
+    intro R r _ _
+    unfold t01A06SurfaceIntegral t01A06OmegaPullback
+    have hv (u : ℝ) :
+        (∫ v in (0 : ℝ)..2 * Real.pi,
+          r * (R + r * Real.cos v) ^ 2 * Real.sin u ^ 2 * Real.cos v) =
+          2 * Real.pi * R * r ^ 2 * Real.sin u ^ 2 := by
+      rw [show (fun v : ℝ =>
+          r * (R + r * Real.cos v) ^ 2 * Real.sin u ^ 2 * Real.cos v) =
+          fun v => r * R ^ 2 * Real.sin u ^ 2 * Real.cos v +
+            2 * R * r ^ 2 * Real.sin u ^ 2 * Real.cos v ^ 2 +
+            r ^ 3 * Real.sin u ^ 2 * Real.cos v ^ 3 by
+        funext v
+        ring]
+      rw [intervalIntegral.integral_add, intervalIntegral.integral_add] <;>
+        try apply Continuous.intervalIntegrable <;> try fun_prop
+      simp [integral_cos_sq, integral_cos_pow_three]
+      ring
+    simp_rw [hv]
+    rw [intervalIntegral.integral_const_mul]
+    simp [integral_sin_sq]
+    ring
   have hexact : ∀ η : t01A06OneForm,
       IsT01A06ClosedOneForm η →
         ∃ g : t01A06Point → ℝ, ∀ p, HasFDerivAt g (η p) p := by
@@ -66,16 +89,33 @@ theorem apm_t01a06 :
       isOpen_univ (hη.1.differentiable (by simp)).differentiableOn
         fun p _ v w ↦ hη.2 p v w
     exact ⟨g, fun p ↦ hg p (Set.mem_univ p)⟩
-  /-
-  Boundary: the ambient Poincaré-lemma step is proved above: every closed
-  one-form in the frozen encoding has a global scalar potential. To finish
-  part (b), that `HasFDerivAt` identity must be chained along the periodic
-  smooth curve and converted to the raw interval integral using the
-  fundamental theorem of calculus. Part (a) separately requires normalizing
-  a nested interval integral of products of `sin`, `cos`, `cos²`, and `cos³`.
-  I searched the curve-integral Poincaré/FTC and trigonometric
-  interval-integral APIs; the exactness theorem is available, but I did not
-  complete the derivative-composition/integrability bridge or the nested
-  trigonometric normalization in this pass.
-  -/
-  sorry
+  /- The ambient Poincaré lemma supplies a global potential.  Composing it
+  with a smooth periodic loop identifies the line-integral integrand with the
+  derivative of a periodic scalar function, whose interval integral is zero. -/
+  refine ⟨hsurface, ?_⟩
+  intro R r _ _
+  rintro ⟨η, γ, hη, hγ, hne⟩
+  obtain ⟨g, hg⟩ := hexact η hη
+  apply hne
+  unfold t01A06LineIntegral
+  have hγdiff : Differentiable ℝ γ := hγ.1.differentiable (by simp)
+  have hcomp (t : ℝ) :
+      HasDerivAt (g ∘ γ) (η (γ t) (deriv γ t)) t :=
+    (hg (γ t)).comp_hasDerivAt t hγdiff.differentiableAt.hasDerivAt
+  have heq : (fun t => η (γ t) (deriv γ t)) = deriv (g ∘ γ) := by
+    funext t
+    exact (hcomp t).deriv.symm
+  rw [heq]
+  have hint : IntervalIntegrable (deriv (g ∘ γ)) volume 0 (2 * Real.pi) := by
+    rw [← heq]
+    apply Continuous.intervalIntegrable
+    exact (hη.1.continuous.comp hγ.1.continuous).clm_apply
+      (hγ.1.continuous_deriv (by simp))
+  rw [intervalIntegral.integral_deriv_eq_sub
+    (fun t _ => (hcomp t).differentiableAt) hint]
+  simp only [Function.comp_apply]
+  rw [show γ (2 * Real.pi) = γ 0 by
+    simpa using hγ.2.1 0]
+  simp
+
+#print axioms apm_t01a06
