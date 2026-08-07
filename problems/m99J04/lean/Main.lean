@@ -101,6 +101,40 @@ lemma apm_m99j04_orthonormal_map_of_adjoint_comp
       rw [orthonormal_iff_ite] at hw
       exact hw i j
 
+/-- Conversely, orthonormality of the image of one Hilbert basis forces
+`A†A = 1`.  Equality on basis vectors is read off from Hilbert coordinates,
+then extended using the convergent Hilbert-basis expansion. -/
+lemma apm_m99j04_adjoint_comp_of_orthonormal_map
+    {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H]
+    [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (A : H ≃L[𝕜] H) {ι : Type} (w : HilbertBasis ι 𝕜 H)
+    (horth : Orthonormal 𝕜 (fun i ↦ A (w i))) :
+    (ContinuousLinearMap.adjoint A.toContinuousLinearMap).comp
+        A.toContinuousLinearMap = ContinuousLinearMap.id 𝕜 H := by
+  classical
+  let B := (ContinuousLinearMap.adjoint A.toContinuousLinearMap).comp
+    A.toContinuousLinearMap
+  have hB (i : ι) : B (w i) = w i := by
+    apply w.repr.injective
+    ext j
+    rw [w.repr_apply_apply, w.repr_apply_apply]
+    change inner 𝕜 (w j)
+      (ContinuousLinearMap.adjoint A.toContinuousLinearMap (A (w i))) = _
+    rw [ContinuousLinearMap.adjoint_inner_right]
+    rw [orthonormal_iff_ite] at horth
+    have hw := w.orthonormal
+    rw [orthonormal_iff_ite] at hw
+    exact (horth j i).trans (hw j i).symm
+  ext x
+  have hs := (w.hasSum_repr x).mapL B
+  have hid := (w.hasSum_repr x).mapL (ContinuousLinearMap.id 𝕜 H)
+  apply HasSum.tsum_eq at hs
+  apply HasSum.tsum_eq at hid
+  rw [← hs, ← hid]
+  congr 1
+  funext i
+  simp [B, hB]
+
 theorem apm_m99j04
     (𝕜 H : Type*) [RCLike 𝕜] [NormedAddCommGroup H]
     [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -153,5 +187,17 @@ theorem apm_m99j04
   continuous-linear equivalences, and isometry/unitarity APIs, but did not
   find the required infinite-dimensional eigenbasis constructor or the
   converse dense-basis isometry bridge in this pass.
+
+  Closer hop 3 proves that converse locally as
+  `apm_m99j04_adjoint_comp_of_orthonormal_map`.  Hilbert-basis coordinates and
+  `ContinuousLinearMap.adjoint_inner_right` show that `A†A` fixes every basis
+  vector; mapping `HilbertBasis.hasSum_repr` through the two continuous linear
+  maps extends the equality to every vector.  Hence the frozen final
+  equivalence is completely closed by the two local lemmas.  Searches of the
+  compact spectral theorem source, `OrthogonalFamily`/`IsHilbertSum`, closed
+  artifacts, construction libraries, and git history still found no packaged
+  constructor assembling bases of all nonzero eigenspaces together with the
+  kernel into a single labeled `HilbertBasis`.  That spectral eigenbasis
+  construction is the sole remaining boundary.
   -/
   sorry

@@ -13,11 +13,12 @@ needed after selecting an eigenbasis.
 - `apm_m99j04_orthonormal_map_of_adjoint_comp` proves that `A†A = id` sends
   every Hilbert basis to an orthonormal family, closing one direction of the
   final equivalence.
+- `apm_m99j04_adjoint_comp_of_orthonormal_map` proves the converse using
+  Hilbert coordinates and continuity of the basis expansion; the final
+  orthonormality equivalence is now fully compiled.
 
 ## Remaining Boundary
 
 - Turn the spectral theorem's dense orthogonal sum of eigenspaces into one
   `HilbertBasis` whose vectors retain their eigenspace labels.
 - Apply the existing transport lemmas pointwise to that basis.
-- Prove the converse orthonormality implication using density of the Hilbert
-  basis span.
