@@ -117,6 +117,11 @@ theorem apm_t00a02 :
   Moreover, the custom `RP2` quotient is not definitionally the orbit quotient
   expected by `IsQuotientCoveringMap`, so even the antipodal-cover conjunct
   requires a substantial bridge between the generated relation and a `ZMod 2`
-  action. These missing developments exceed this pass.
+  action. The partial sibling `t01A04` confirms that concrete wedge-cover
+  constructions and their deck/fundamental-group properties lack a packaged
+  route, while the closed sibling `t91A02` succeeds only because Euler
+  multiplicativity is included explicitly as witness data. No relevant lemma
+  occurs in `ConstructionTargets/` or `YoungL2.lean`. These missing
+  developments exceed this pass.
   -/
   sorry
