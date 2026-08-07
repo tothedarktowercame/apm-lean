@@ -32,6 +32,17 @@ noncomputable def apm_t96j07_localDeterminant (i : Fin 4) : ℝ :=
 noncomputable def apm_t96j07_localIndex (i : Fin 4) : ℤ :=
   if 0 < apm_t96j07_localDeterminant i then 1 else -1
 
+/-- The first frozen conjunct is refuted at the zero vector. -/
+lemma apm_t96j07_not_fixed_axis_clause :
+    ¬(∀ x : apm_t96j07_V,
+      (x ≠ 0 → apm_t96j07_projectivelyEq x (apm_t96j07_A x)) ↔
+        ∃ i : Fin 4, apm_t96j07_projectivelyEq x (apm_t96j07_axis i)) := by
+  intro h
+  have hzero := (h 0).mp (by simp)
+  rcases hzero with ⟨i, c, hc, haxis⟩
+  have hi := congrFun haxis i
+  simp [apm_t96j07_axis] at hi
+
 theorem apm_t96j07 :
     (∀ x : apm_t96j07_V, x ≠ 0 →
       apm_t96j07_projectivelyEq x (apm_t96j07_A x) ↔
@@ -48,4 +59,12 @@ theorem apm_t96j07 :
   -- Thus the statement is false.  The intended route (coordinate cancellation
   -- using `mul_right_cancel₀`, followed by determinant evaluation with
   -- `norm_num`) applies only after parenthesizing the equivalence under `x ≠ 0`.
+  -- Closer hop 1 verifies the defect inside Lean:
+  -- `apm_t96j07_not_fixed_axis_clause` proves the negation of the first
+  -- conjunct exactly as parsed, by specializing at the zero vector and
+  -- evaluating the alleged axis equality at its distinguished coordinate.
+  -- `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling artifacts, and git
+  -- history contain no alternate encoding or convention that changes this
+  -- contradiction. The protocol freezes the statement, so it cannot be
+  -- repaired by moving the implication inside the quantified proposition.
   sorry
