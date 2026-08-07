@@ -62,6 +62,25 @@ lemma apm_t01a07_signedIntersection_eq_zero_of_opposite
   rw [apm_t01a07_signedIntersection, Fin.sum_univ_two, h]
   omega
 
+/-- Equality of fourth powers over `ℝ` has exactly the two expected signs. -/
+lemma apm_t01a07_fourth_pow_eq_iff (x y : ℝ) :
+    x ^ 4 = y ^ 4 ↔ x = y ∨ x = -y := by
+  constructor
+  · intro h
+    have hs : x ^ 2 = y ^ 2 := by
+      nlinarith [sq_nonneg (x ^ 2 - y ^ 2)]
+    exact (sq_eq_sq_iff_eq_or_eq_neg).mp hs
+  · rintro (rfl | rfl) <;> ring
+
+/-- The projectivization API turns a scalar relation between the chosen
+representatives into equality of projective points. -/
+lemma apm_t01a07_eq_of_smul_rep_eq
+    (p q : apm_t01a07_RP3) (a : ℝ)
+    (h : a • Projectivization.rep q = Projectivization.rep p) : p = q := by
+  rw [← Projectivization.mk_rep p, ← Projectivization.mk_rep q]
+  exact (Projectivization.mk_eq_mk_iff' ℝ _ _
+    (Projectivization.rep_nonzero p) (Projectivization.rep_nonzero q)).2 ⟨a, h⟩
+
 theorem apm_t01a07 :
     apm_t01a07_IsSmoothProjectiveHypersurface ∧
       ∃ e : Fin 2 ≃ apm_t01a07_intersection,
@@ -79,17 +98,23 @@ theorem apm_t01a07 :
   continuous-linear derivative and extracting its four coordinate values
   remains local work.
 
-  The harder remaining bridge is classifying the projective intersection.
-  From the line equations the quartic equation becomes `x₀⁴ = x₁⁴`, hence
-  `x₀ = x₁` or `x₀ = -x₁`, and nonzeroness excludes both coordinates being
-  zero. One must then turn these two homogeneous alternatives into an actual
-  equivalence `Fin 2 ≃ apm_t01a07_intersection`. Mathlib's projectivization API
-  exposes chosen representatives, but searches found no extensionality lemma
-  directly converting proportional representatives to equality in the form
-  needed here, nor a finite-cardinality theorem for such a projective zero
-  locus. Searches covered `LEMMA-INDEX.md`, every `ConstructionTargets/`
-  module, projective-algebraic siblings (`t02A06`, `t94A08`, `t00J03`), the
-  Projectivization source, polynomial/fderiv APIs, and git history. No closed
-  artifact packages this classification.
+  CLOSER HOP 2 progress. A deeper inspection of Mathlib's
+  `LinearAlgebra/Projectivization/Basic.lean` found the previously missed
+  theorem `Projectivization.mk_eq_mk_iff'`.  The compiled helper
+  `apm_t01a07_eq_of_smul_rep_eq` now turns an explicit scalar relation between
+  chosen representatives into equality of projective points.  The other
+  algebraic step is also compiled as `apm_t01a07_fourth_pow_eq_iff`, proving
+  `x⁴ = y⁴ ↔ x = y ∨ x = -y` over `ℝ`.
+
+  The remaining projective work is consequently narrower but still open:
+  define the two `Projectivization.mk` points represented by `(1,1,0,0)` and
+  `(1,-1,0,0)`, normalize each arbitrary representative using its nonzero
+  first coordinate, build the `Fin 2` equivalence, and transport the sign
+  computation through Mathlib's noncanonical `rep` scaling.  The coordinate
+  `fderiv` regularity proof described above also remains open.  The earlier
+  resource searches (`LEMMA-INDEX.md`, `ConstructionTargets/`, the three
+  projective siblings, polynomial/fderiv APIs, and git history) supplied no
+  packaged completion; the newly found projectivization equality API is the
+  sole reused bridge in this hop.
   -/
   sorry

@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The local-sign dichotomy and final cancellation are proved. Remaining work is the coordinate fderiv regularity proof and classification of the projective intersection as exactly two proportionality classes.",
+  "closer_hop": 2,
+  "boundary": "The local-sign dichotomy, final cancellation, real fourth-power classification, and representative-proportionality equality bridge are proved. Remaining work is the coordinate fderiv regularity proof, construction of the two explicit projective points and Fin 2 equivalence, and sign transport through noncanonical representatives.",
   "imported_at": "2026-07-13T17:26:56.757829Z"
 }
