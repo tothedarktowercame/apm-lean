@@ -58,6 +58,21 @@ noncomputable def apm_m02j02_hermiteFunction (n : ℕ) (x : ℝ) : ℝ :=
 noncomputable def apm_m02j02_hermiteFunctionDeriv (n : ℕ) (x : ℝ) : ℝ :=
   deriv (apm_m02j02_hermiteFunction n) x
 
+lemma apm_m02j02_hasDerivAt_sine (n : ℕ) (x : ℝ) :
+    HasDerivAt (apm_m02j02_sine n) (apm_m02j02_sineDeriv n x) x := by
+  convert (((hasDerivAt_id x).const_mul ((n + 1 : ℝ) * Real.pi)).sin) using 1 <;>
+    simp [apm_m02j02_sineDeriv, id_eq] <;> ring
+
+lemma apm_m02j02_deriv_sine (n : ℕ) (x : ℝ) :
+    deriv (apm_m02j02_sine n) x = apm_m02j02_sineDeriv n x :=
+  (apm_m02j02_hasDerivAt_sine n x).deriv
+
+lemma apm_m02j02_sine_zero (n : ℕ) : apm_m02j02_sine n 0 = 0 := by
+  simp [apm_m02j02_sine]
+
+lemma apm_m02j02_sine_one (n : ℕ) : apm_m02j02_sine n 1 = 0 := by
+  simp [apm_m02j02_sine, add_mul]
+
 theorem apm_m02j02 :
     apm_m02j02_IsH10Basis (Ioo (0 : ℝ) 1)
         apm_m02j02_sine apm_m02j02_sineDeriv ∧
@@ -67,18 +82,27 @@ theorem apm_m02j02 :
     apm_m02j02_IsH10Basis (Set.univ : Set ℝ)
         apm_m02j02_hermiteFunction apm_m02j02_hermiteFunctionDeriv := by
   /-
-  SKIPPED (Sobolev spectral-completeness boundary). The definition expands
+  Boundary (closer hop 1): the definition expands
   `H¹₀` into weak-derivative and graph-norm approximation clauses, so proving
   the three basis assertions requires, in particular, graph-norm density of
   sine series and of the full/odd Hermite families, plus compactly supported
   smooth approximation of every displayed Hermite function.
 
+  This hop closes the elementary differential and boundary-value layer for the
+  interval family: `apm_m02j02_hasDerivAt_sine` and
+  `apm_m02j02_deriv_sine` identify the frozen derivative exactly, while
+  `apm_m02j02_sine_zero` and `apm_m02j02_sine_one` prove the two Dirichlet
+  endpoint values.
+
   Searches of Mathlib and compiled problem artifacts found polynomial identities
   for `Polynomial.hermite` (and local uses in `a96A04`) and general eLp/Sobolev
   inequalities, but no Hermite completeness theorem, Fourier-sine density
   theorem, or packaged Sobolev space whose basis result could discharge these
-  exact `eLpNorm` approximation goals. Establishing those spectral theorems from
-  the available polynomial API is substantially beyond a pass-1 proof. No
-  sibling proof was reused, and the frozen statement was left unchanged.
+  exact `eLpNorm` approximation goals. Searches also covered
+  `LEMMA-INDEX.md`, all solved artifacts, `ConstructionTargets/`, Mathlib's
+  Hermite Gaussian file and Sobolev inequality source, and git history. Sibling
+  `a96A04` uses Hermite polynomials only for finite Gaussian derivative
+  formulas, and `m95A02` provides no reusable Fourier density theorem.
+  Establishing the three spectral completeness theorems remains open.
   -/
   sorry

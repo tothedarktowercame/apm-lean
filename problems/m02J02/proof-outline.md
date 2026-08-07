@@ -1,12 +1,18 @@
 # Proof Outline: m02J02
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt compiles with one remaining `sorry`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m02J02.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Proved the pointwise derivative formula for every sine basis function.
+- Proved that every sine function vanishes at both endpoints `0` and `1`.
+
+## Remaining bridge
+
+Establish `H¹₀` membership, linear independence, and graph-norm density for the
+sine family and the odd/full Hermite families. This requires Fourier-sine and
+Hermite spectral completeness plus compactly supported smooth approximation in
+the exact `eLpNorm` encoding.
