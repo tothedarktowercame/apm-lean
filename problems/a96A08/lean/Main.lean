@@ -256,21 +256,80 @@ theorem tendsto_symmetric_f :
 
 /-- a96A08_f is absolutely integrable on ℝ. -/
 theorem a96A08_integrable : Integrable a96A08_f volume := by
-  /- Boundary (closer hop 1): local integrability on bounded intervals follows
-  a.e. from `f_eq_pf` and the two proved `intervalIntegrable_*` lemmas.  On
-  `|x| ≥ 2`, `|sin (πx)| ≤ 1` and
-  `|x²-x| ≥ x²/2`, so `‖a96A08_f x‖ ≤ 2/x²`; Mathlib's
-  `integrableOn_Ioi_rpow_of_lt` (and reflection for the negative tail) then
-  gives both tails.  What remains is the Lean bookkeeping that splits volume
-  into `Iio (-2)`, `Icc (-2) 2`, and `Ioi 2`, establishes the denominator
-  inequality in both tails, and reassembles the three `IntegrableOn` proofs.
-
-  Searches of `LEMMA-INDEX.md`, Mathlib's improper-integral APIs, prior solved
-  problems, and `ConstructionTargets/` found no ready-made integrability lemma
-  for this removable-two-pole quotient.  The downstream theorem `a96A08` is
-  now closed from this lemma and `tendsto_symmetric_f` via
-  `intervalIntegral_tendsto_integral`. -/
-  sorry
+  have hpow : IntegrableOn (fun x : ℝ => 2 / x ^ 2) (Ioi 2) volume := by
+    have h := (integrableOn_Ioi_rpow_of_lt (a := (-2 : ℝ)) (by norm_num)
+      (by norm_num : (0 : ℝ) < 2)).const_mul 2
+    apply h.congr_fun
+    · intro x hx
+      rw [Real.rpow_neg_ofNat]
+      norm_num [zpow_neg, div_eq_mul_inv]
+    · exact measurableSet_Ioi
+  have hpos : IntegrableOn a96A08_f (Ioi 2) volume := by
+    apply Integrable.mono' hpow
+    · exact aestronglyMeasurable_of_continuousOn_compl
+        (s := ({0, 1} : Set ℝ)) (by
+          intro x hx
+          exact (Real.continuous_sin.comp (continuous_const.mul continuous_id)).div
+            (continuous_id.pow 2 |>.sub continuous_id)
+            (by simp only [mem_compl_iff, mem_insert_iff, mem_singleton_iff] at hx
+                exact mul_ne_zero hx.1 (sub_ne_zero.mpr hx.2)))
+        |>.mono_measure Measure.restrict_le_self
+    · filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
+      rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (by positivity)]
+      have hx2 : 2 ≤ x := le_of_lt hx
+      have hden : x ^ 2 / 2 ≤ x ^ 2 - x := by nlinarith [sq_nonneg (x - 2)]
+      have hdenpos : 0 < x ^ 2 - x := by nlinarith
+      rw [a96A08_f, abs_div, abs_of_pos hdenpos]
+      calc
+        |Real.sin (Real.pi * x)| / (x ^ 2 - x) ≤ 1 / (x ^ 2 - x) :=
+          div_le_div_of_nonneg_right (abs_sin_le_one _) hdenpos.le
+        _ ≤ 2 / x ^ 2 := by
+          apply (div_le_div_iff₀ hdenpos (sq_pos_of_pos (by positivity))).2
+          nlinarith
+  have hneg : IntegrableOn a96A08_f (Iio (-2)) volume := by
+    have href := hpow.comp_neg_Iio
+    apply Integrable.mono' href
+    · exact aestronglyMeasurable_of_continuousOn_compl
+        (s := ({0, 1} : Set ℝ)) (by
+          intro x hx
+          exact (Real.continuous_sin.comp (continuous_const.mul continuous_id)).div
+            (continuous_id.pow 2 |>.sub continuous_id)
+            (by simp only [mem_compl_iff, mem_insert_iff, mem_singleton_iff] at hx
+                exact mul_ne_zero hx.1 (sub_ne_zero.mpr hx.2)))
+        |>.mono_measure Measure.restrict_le_self
+    · filter_upwards [ae_restrict_mem measurableSet_Iio] with x hx
+      rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (by positivity)]
+      have hx2 : x ≤ -2 := le_of_lt hx
+      have hden : x ^ 2 / 2 ≤ x ^ 2 - x := by nlinarith
+      have hdenpos : 0 < x ^ 2 - x := by nlinarith
+      rw [a96A08_f, abs_div, abs_of_pos hdenpos]
+      calc
+        |Real.sin (Real.pi * x)| / (x ^ 2 - x) ≤ 1 / (x ^ 2 - x) :=
+          div_le_div_of_nonneg_right (abs_sin_le_one _) hdenpos.le
+        _ ≤ 2 / (-x) ^ 2 := by
+          rw [neg_sq]
+          apply (div_le_div_iff₀ hdenpos (sq_pos_of_neg (by linarith))).2
+          nlinarith
+  have hmid : IntegrableOn a96A08_f (Icc (-2) 2) volume := by
+    have hpf := (intervalIntegrable_sin_pi_div_sub_one (-2) 2).sub
+      (intervalIntegrable_sin_pi_div (-2) 2)
+    rw [intervalIntegrable_iff] at hpf
+    apply hpf.congr_fun_ae
+    filter_upwards [ae_ne_restrict _ 0, ae_ne_restrict _ 1] with x hx0 hx1
+    exact (f_eq_pf x hx0 hx1).symm
+  rw [← integrableOn_univ]
+  have hall := (hneg.union hmid).union hpos
+  apply hall.congr_set_ae
+  filter_upwards with x
+  simp only [mem_univ, mem_union, mem_Iio, mem_Icc, mem_Ioi]
+  constructor
+  · intro _
+    by_cases h : x < -2
+    · exact Or.inl (Or.inl h)
+    by_cases h' : x ≤ 2
+    · exact Or.inl (Or.inr ⟨le_of_not_gt h, h'⟩)
+    · exact Or.inr (lt_of_not_ge h')
+  · intro _; trivial
 
 /-- **Main result**: ∫ sin(πx)/(x²-x) dvol = -2π. -/
 theorem a96A08 : ∫ x, a96A08_f x ∂volume = -(2 * Real.pi) := by
