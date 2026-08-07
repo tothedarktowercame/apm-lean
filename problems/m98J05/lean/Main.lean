@@ -27,6 +27,15 @@ open scoped Topology
 noncomputable def apm_m98J05_fourier (f : ℝ → ℂ) (ξ : ℝ) : ℂ :=
   ∫ x, f x * Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ))
 
+lemma apm_m98J05_fourier_integrable (f : ℝ → ℂ) (hf : Integrable f) (ξ : ℝ) :
+    Integrable (fun x => f x * Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ))) := by
+  have hg : Continuous
+      (fun x : ℝ => Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ))) := by
+    fun_prop
+  refine hf.norm.mono' (hf.aestronglyMeasurable.mul hg.aestronglyMeasurable) ?_
+  filter_upwards with x
+  simp [Complex.norm_exp]
+
 /-- The one-dimensional Gaussian heat kernel. -/
 noncomputable def apm_m98J05_heatKernel (t x : ℝ) : ℝ :=
   (1 / (2 * Real.sqrt (Real.pi * t))) * Real.exp (-(x ^ 2) / (4 * t))
@@ -75,15 +84,21 @@ theorem apm_m98j05 :
         ring
     exact hc.comp_ofReal
   /-
-  Boundary: the frequency-side scalar ODE for the claimed multiplier is
-  verified above. The remaining theorem requires whole-line complex
+  PARTIAL boundary: the frequency-side scalar ODE for the claimed multiplier
+  is verified above, and `apm_m98J05_fourier_integrable` now proves absolute
+  integrability of every custom Fourier integrand. The remaining theorem
+  requires whole-line complex
   integration by parts for the custom Fourier convention (which omits
   Mathlib's standard `2π` scaling), the Gaussian transform/convolution
   theorem with exact normalization, differentiation under two improper
-  integrals, and pointwise approximate-identity convergence. I searched
-  `fourier_deriv`, `fourierIntegral_deriv`, Gaussian Fourier-transform,
-  convolution, and approximate-identity APIs; adapting their convention and
-  hypotheses to these raw integral definitions was not completed in this
-  pass.
+  integrals, and pointwise approximate-identity convergence.
+
+  Mathlib provides `fourier_deriv` for its `2π` convention. Sibling `a01A10`
+  proves the exact complex Gaussian transform from `fourierIntegral_gaussian`;
+  sibling `a96A04` proves heat-kernel normalization, spatial differentiation,
+  and an `L²` approximate-identity theorem. `ConstructionTargets.KernelAverage`
+  and `ConstructionTargets.L2Translation` were also inspected. Adapting these
+  results to the raw unscaled transform, complex `L¹` datum, time derivative,
+  and pointwise (rather than `L²`) initial convergence was not completed.
   -/
   sorry
