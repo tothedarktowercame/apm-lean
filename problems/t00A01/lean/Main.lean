@@ -100,8 +100,11 @@ theorem apm_t00a01
   Mayer--Vietoris long exact sequence. Neither API is present: the available
   `MayerVietoris` results concern sheaf cohomology, and the available
   `VanKampen` results concern categorical colimits rather than fundamental
-  groups. The hypotheses deliberately expose exactly the geometric inputs,
-  but proving either requested conclusion would require developing those two
-  missing algebraic-topology theorems, well beyond this pass.
+  groups. Searches of all fully closed artifacts, `ConstructionTargets/`, and
+  `YoungL2.lean` found no substitute; partial siblings `t01J03` and `t02A03`
+  record the same missing APIs. The hypotheses deliberately expose exactly the
+  geometric inputs, but proving either requested conclusion would require
+  developing those two missing algebraic-topology theorems, well beyond this
+  pass.
   -/
   sorry
