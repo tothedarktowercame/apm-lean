@@ -61,6 +61,14 @@ def apm_m99J06_galerkinEquation {H : Type*} [NormedAddCommGroup H]
   ∀ v : V, inner ℝ (u : H) (v : H) =
     ∫ x in Icc (0 : ℝ) 1, f x * M.val (v : H) x
 
+lemma apm_m99J06_galerkin_energy
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (f : ℝ → ℝ)
+    (V : Submodule ℝ H) (u : V)
+    (hu : apm_m99J06_galerkinEquation M f V u) :
+    ‖(u : H)‖ ^ 2 = ∫ x in Icc (0 : ℝ) 1, f x * M.val (u : H) x := by
+  simpa [real_inner_self_eq_norm_sq] using hu u
+
 theorem apm_m99j06
     (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [CompleteSpace H] (M : apm_m99J06_H01Model H)
@@ -91,8 +99,9 @@ theorem apm_m99j06
     intro w
     rw [hu w, hv w]
   /-
-  Boundary: uniqueness of the weak solution is proved above directly from
-  the Hilbert inner product. Completing the frozen theorem requires (1) a
+  Boundary: uniqueness of the weak solution and the Galerkin energy identity
+  obtained by testing with the discrete solution are proved above. Completing
+  the frozen theorem requires (1) a
   Sobolev integration-by-parts/regularity theorem for the custom
   `AbsolutelyContinuousOnInterval` plus a.e. `HasDerivAt` representation,
   (2) finite-dimensional Riesz representation for the Galerkin functional,
