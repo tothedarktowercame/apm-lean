@@ -21,6 +21,12 @@ noncomputable def apm_m94a02_symmetricPart {n : ℕ}
     (A : Matrix (Fin n) (Fin n) ℝ) : Matrix (Fin n) (Fin n) ℝ :=
   (2 : ℝ)⁻¹ • (A + A.transpose)
 
+/-- A skew-symmetric matrix has zero symmetric part. -/
+lemma apm_m94a02_symmetricPart_eq_zero_of_transpose_eq_neg
+    {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.transpose = -A) :
+    apm_m94a02_symmetricPart A = 0 := by
+  simp [apm_m94a02_symmetricPart, hA]
+
 def apm_m94a02_IsEigenvalue {n : ℕ}
     (A : Matrix (Fin n) (Fin n) ℝ) (lam : ℂ) : Prop :=
   ∃ v : Fin n → ℂ, v ≠ 0 ∧
@@ -56,5 +62,23 @@ theorem apm_m94a02
   continuous-linear-map Rayleigh quotient. The skew-symmetric conclusion can
   then follow either from the same calculation or by showing the symmetric
   part is zero, but depends on those bridges in this encoding.
+
+  Closer hop 1 proves
+  `apm_m94a02_symmetricPart_eq_zero_of_transpose_eq_neg`, closing the
+  matrix-algebra reduction for the skew-symmetric case. A deeper source pass
+  finds the exact canonical-spectrum comparison API in
+  `Analysis/Matrix/Spectrum.lean`:
+  `Matrix.IsHermitian.sort_roots_charpoly_eq_eigenvalues₀` reconstructs the
+  ordered eigenvalue list from the real parts of the characteristic roots,
+  while `roots_charpoly_eq_eigenvalues` and `charpoly_eq` preserve
+  multiplicity. These results provide a route to identify the arbitrary
+  antitone `σ`, but applying them still requires proving the symmetric part is
+  Hermitian and normalizing the supplied real-factor product into Mathlib's
+  complex-root multiset.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling matrix
+  artifacts, and git history found no already-compiled normalization bridge.
+  The remaining second step is still the dot-product/Rayleigh identity for the
+  explicitly encoded `mulVec` eigenvector. The frozen statement was unchanged.
   -/
   sorry

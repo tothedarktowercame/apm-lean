@@ -1,12 +1,19 @@
 # Proof Outline: m94A02
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen Lean theorem is present in `lean/Main.lean`. It is now proved that
+the symmetric part vanishes whenever `A.transpose = -A`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m94A02.md`
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- prove the symmetric part is Hermitian;
+- convert the supplied real-factor characteristic polynomial into the root
+  multiset used by `Matrix.IsHermitian.sort_roots_charpoly_eq_eigenvalues₀`;
+- use antitonicity to identify `σ` with the canonical ordered eigenvalues;
+- translate the explicit complex `Matrix.mulVec` eigenvector equation into the
+  Rayleigh quotient identity and apply the canonical extremal bounds.
+
+Mathlib already contains the ordered-root reconstruction and Hermitian
+Rayleigh machinery. No searched artifact packages the representation bridges.
