@@ -33,6 +33,23 @@ def m03J05MixedEigenvalue (n : ℕ) : ℝ :=
 def m03J05MixedEigenfunction (n : ℕ) (x : ℝ) : ℝ :=
   Real.sin ((((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2) * x)
 
+/-- The explicit mixed eigenfunctions satisfy the Dirichlet condition at the
+left endpoint. -/
+lemma m03J05MixedEigenfunction_zero (n : ℕ) :
+    m03J05MixedEigenfunction n 0 = 0 := by
+  simp [m03J05MixedEigenfunction]
+
+/-- The frequency in the explicit mixed spectrum is strictly positive. -/
+lemma m03J05MixedFrequency_pos (n : ℕ) :
+    0 < ((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2 := by
+  positivity
+
+/-- Consequently every displayed mixed eigenvalue is strictly positive. -/
+lemma m03J05MixedEigenvalue_pos (n : ℕ) :
+    0 < m03J05MixedEigenvalue n := by
+  unfold m03J05MixedEigenvalue
+  positivity
+
 def m03J05LinearWeakSolution
     (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) (u : m03J05H1) : Prop :=
   u.1 = 0 ∧ ∀ v : m03J05H1, v.1 = 0 →
@@ -78,13 +95,23 @@ theorem apm_m03j05 (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) :
   `m03J05MixedEigenvalue`, and no Fourier-sine completeness theorem from which
   the solvability and one-dimensional-kernel assertions follow.
 
+  Closer hop 1 verifies the elementary spectral endpoint data:
+  `m03J05MixedEigenfunction_zero`, `m03J05MixedFrequency_pos`, and
+  `m03J05MixedEigenvalue_pos` prove the left Dirichlet condition and positivity
+  of every displayed frequency/eigenvalue. A renewed search of Mathlib's
+  Fredholm, compact-operator, Fourier, and interval-integral APIs found no
+  theorem identifying the spectrum of the required mixed-boundary resolvent;
+  `LEMMA-INDEX.md` and `ConstructionTargets/` likewise contain no mixed
+  Fourier-sine completeness result.
+
   The nonlinear clauses additionally require proving that
   `u ↦ m03J05H1Value u` is a bounded Sobolev embedding, differentiating the
   integral Nemytskii functional from `LipschitzWith L G`, and applying a
   coercive/strictly monotone existence theorem on the zero-trace subspace.
   Related artifacts `m96A06`, `m95A03`, and `m01J06` were inspected; each
-  retains an unresolved Sturm–Liouville or variational bridge and therefore
-  supplies no compiled route to reuse. The frozen statement was left
-  unchanged.
+  retains an unresolved Sturm–Liouville or variational bridge. `m94A04` and
+  `m98A03` also stop at Nemytskii differentiability/packaging boundaries.
+  Thus no compiled sibling closes either remaining operator-theoretic chain.
+  The frozen statement was left unchanged.
   -/
   sorry

@@ -1,12 +1,22 @@
 # Proof Outline: m03J05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen Lean theorem is present in `lean/Main.lean`. The explicit mixed
+eigenfunctions have now been checked at the left endpoint, and their
+frequencies and eigenvalues are proved positive.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m03J05.md`
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- construct the compact mixed-boundary resolvent on the `ℝ × Lp` realization;
+- identify its spectrum and one-dimensional eigenspaces using mixed sine
+  completeness, then apply the Fredholm alternative;
+- bundle `m03J05H1Value` as a bounded Sobolev embedding;
+- prove differentiability of the integral Nemytskii energy;
+- establish coercive/strictly monotone existence and uniqueness on the
+  zero-trace subspace.
+
+Mathlib has abstract Fredholm machinery, but searches found no packaged mixed
+Sturm–Liouville resolvent or Fourier-sine completeness theorem. Related partial
+artifacts stop at the same spectral or Nemytskii bridges.
