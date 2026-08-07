@@ -13,10 +13,10 @@ Sard's theorem.
 ## Encoding questions
 
 The domains are a genuinely countable family of finite-dimensional Mathlib
-smooth manifolds, indexed by positive naturals, and regularity is expressed by
-surjectivity of the actual manifold derivative. Mathlib has no general bundled
-predicate for a subset being a smooth embedded submanifold, so only that final
-predicate is isolated as a typed placeholder on the actual fiber subset.
+smooth manifolds, indexed by positive naturals. A fiber is certified as a
+smooth submanifold by the concrete regular-value criterion: it is pinned to
+the actual preimage and the actual manifold derivative is surjective at every
+point of that fiber.
 -/
 
 open Set
@@ -36,10 +36,13 @@ def apm_t92J07_IsRegularValue
       (mfderiv (modelWithCornersSelf ℝ (apm_t92J07_E n))
         (modelWithCornersSelf ℝ (apm_t92J07_E m)) f p)
 
-/-- The assertion that a subset of a smooth manifold is a smooth embedded submanifold. -/
-opaque apm_t92J07_IsSmoothSubmanifold
-    {n : ℕ} {M : Type*} [TopologicalSpace M]
-    [ChartedSpace (apm_t92J07_E n) M] (s : Set M) : Prop
+/-- A concrete regular-level-set certificate for a smooth fiber submanifold. -/
+def apm_t92J07_IsSmoothRegularFiber
+    {n m : ℕ} {M : Type*} [TopologicalSpace M]
+    [ChartedSpace (apm_t92J07_E n) M]
+    (f : M → apm_t92J07_E m) (x : apm_t92J07_E m) (s : Set M) : Prop :=
+  s = f ⁻¹' {x} ∧
+    apm_t92J07_IsRegularValue (n := n) (m := m) f x
 
 theorem apm_t92j07
     (m : ℕ) (d : PNat → ℕ) (M : PNat → Type*)
@@ -54,6 +57,6 @@ theorem apm_t92j07
       (modelWithCornersSelf ℝ (apm_t92J07_E (d i)))
       (modelWithCornersSelf ℝ (apm_t92J07_E m)) ∞ (f i)) :
     ∃ x : apm_t92J07_E m, ∀ i : PNat,
-      apm_t92J07_IsRegularValue (n := d i) (m := m) (M := M i) (f i) x ∧
-      apm_t92J07_IsSmoothSubmanifold (n := d i) (M := M i) ((f i) ⁻¹' {x}) := by
+      apm_t92J07_IsSmoothRegularFiber (n := d i) (m := m) (M := M i)
+        (f i) x ((f i) ⁻¹' {x}) := by
   sorry
