@@ -61,6 +61,40 @@ lemma apm_t00A01_mk_inl_eq_mk_inr {A B : Type}
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ (apm_t00A01_glueRel.glue s)
 
+/-- The canonical map of the left punctured piece into the glued quotient. -/
+def apm_t00A01_inl {A B : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) (a : A) :
+    apm_t00A01_connectedSum iA iB :=
+  Quotient.mk _ (Sum.inl a)
+
+/-- The canonical map of the right punctured piece into the glued quotient. -/
+def apm_t00A01_inr {A B : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) (b : B) :
+    apm_t00A01_connectedSum iA iB :=
+  Quotient.mk _ (Sum.inr b)
+
+/-- The left canonical map is continuous for the coinduced quotient topology. -/
+lemma apm_t00A01_continuous_inl {A B : Type}
+    [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) :
+    Continuous (apm_t00A01_inl iA iB) := by
+  exact continuous_coinduced_rng.comp continuous_inl
+
+/-- The right canonical map is continuous for the coinduced quotient topology. -/
+lemma apm_t00A01_continuous_inr {A B : Type}
+    [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) :
+    Continuous (apm_t00A01_inr iA iB) := by
+  exact continuous_coinduced_rng.comp continuous_inr
+
+/-- The two continuous canonical maps agree after restriction to the glued
+boundary sphere, i.e. they form the expected topological cocone. -/
+lemma apm_t00A01_inl_comp_iA_eq_inr_comp_iB {A B : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) :
+    apm_t00A01_inl iA iB ∘ iA = apm_t00A01_inr iA iB ∘ iB := by
+  funext s
+  exact apm_t00A01_mk_inl_eq_mk_inr iA iB s
+
 abbrev apm_t00A01_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -106,7 +140,7 @@ theorem apm_t00a01
         Monoid.Coprod (FundamentalGroup M₁ m₁) (FundamentalGroup M₂ m₂)) ∧
     apm_t00A01_isHomology3Sphere X := by
   /-
-  Boundary (closer hop 1, still open): I searched Mathlib for a
+  Boundary (closer hop 2, still open): I searched Mathlib for a
   Seifert--van Kampen theorem
   computing `FundamentalGroup` of an open union and for the singular-homology
   Mayer--Vietoris long exact sequence. Neither API is present: the available
@@ -121,8 +155,12 @@ theorem apm_t00a01
   history, and the manual loop-subdivision work in `t94A04`. These do not
   provide the required pushout computation or exact sequence. The local lemma
   `apm_t00A01_mk_inl_eq_mk_inr` above verifies that the encoded quotient does
-  identify the boundary copies, but that point-set fact cannot replace either
-  theorem-level bridge. The hypotheses deliberately expose exactly the
+  identify the boundary copies. This hop packages the stronger reusable
+  cocone data: `apm_t00A01_continuous_inl` and
+  `apm_t00A01_continuous_inr` prove the two canonical piece maps continuous,
+  while `apm_t00A01_inl_comp_iA_eq_inr_comp_iB` proves that their boundary
+  restrictions agree as functions.  These point-set and continuity facts
+  still cannot replace either theorem-level bridge. The hypotheses deliberately expose exactly the
   geometric inputs, but proving either requested conclusion would require
   developing those two missing algebraic-topology theorems.
   -/

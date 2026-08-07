@@ -5,6 +5,11 @@ the boundary-sphere gluing relation.  The helper
 `apm_t00A01_mk_inl_eq_mk_inr` proves that the quotient identifies the two
 copies of every boundary point.
 
+Closer hop 2 additionally packages the quotient as a continuous gluing
+cocone: `apm_t00A01_continuous_inl`, `apm_t00A01_continuous_inr`, and
+`apm_t00A01_inl_comp_iA_eq_inr_comp_iB` provide the two canonical maps and
+their boundary compatibility.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t00A01.md`
 
