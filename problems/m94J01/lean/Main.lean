@@ -18,6 +18,37 @@ problem's formula `(-1)^n f⁽ⁿ⁾(n)`.
 open Filter Set
 open scoped Distributions SchwartzMap
 
+private noncomputable def apm_m94J01_plateauBump : ContDiffBump (0 : ℝ) :=
+  ⟨1 / 4, 1 / 2, by norm_num, by norm_num⟩
+
+private noncomputable def apm_m94J01_localSummand (n : ℕ) (x : ℝ) : ℝ :=
+  ((x - n) ^ n / n.factorial) * apm_m94J01_plateauBump (x - n)
+
+private lemma apm_m94J01_normalizedMonomial_iteratedDeriv (n : ℕ) :
+    iteratedDeriv n (fun x : ℝ ↦ (x - n) ^ n / n.factorial) (n : ℝ) = 1 := by
+  rw [iteratedDeriv_div_const]
+  change iteratedDeriv n (fun x : ℝ ↦ (fun z : ℝ ↦ z ^ n) (x - n)) (n : ℝ) /
+      n.factorial = 1
+  rw [congrFun (iteratedDeriv_comp_sub_const n (fun z : ℝ ↦ z ^ n) n) n]
+  rw [iteratedDeriv_pow]
+  simp [Nat.descFactorial_self, Nat.factorial_ne_zero]
+
+private lemma apm_m94J01_localSummand_eventuallyEq (n : ℕ) :
+    apm_m94J01_localSummand n =ᶠ[nhds (n : ℝ)]
+      (fun x : ℝ ↦ (x - n) ^ n / n.factorial) := by
+  have hshift : Tendsto (fun x : ℝ ↦ x - n) (nhds (n : ℝ)) (nhds 0) := by
+    simpa using (continuousAt_id.sub
+      (continuousAt_const : ContinuousAt (fun _ : ℝ ↦ (n : ℝ)) (n : ℝ))).tendsto
+  have hb := apm_m94J01_plateauBump.eventuallyEq_one.comp_tendsto hshift
+  filter_upwards [hb] with x hx
+  change apm_m94J01_plateauBump (x - n) = 1 at hx
+  rw [apm_m94J01_localSummand, hx, mul_one]
+
+private lemma apm_m94J01_localSummand_iteratedDeriv (n : ℕ) :
+    iteratedDeriv n (apm_m94J01_localSummand n) (n : ℝ) = 1 := by
+  rw [(apm_m94J01_localSummand_eventuallyEq n).iteratedDeriv_eq n]
+  exact apm_m94J01_normalizedMonomial_iteratedDeriv n
+
 private lemma apm_m94J01_negOnePow_not_tendsto (a : ℂ) :
     ¬ Tendsto (fun n : ℕ ↦ (-1 : ℂ) ^ n) atTop (nhds a) := by
   intro h
@@ -69,20 +100,24 @@ theorem apm_m94j01 :
       notMem_tsupport_iff_eventuallyEq.mp hn_support
     rw [heq.iteratedDeriv_eq n, iteratedDeriv_const_zero, mul_zero]
   · /-
-    Boundary (closer hop 1): `apm_m94J01_negOnePow_not_tendsto` now compiles
-    the final oscillation contradiction once a Schwartz witness with
-    `iteratedDeriv n φ n = 1` is available. Thus nonconvergence in the tempered-distribution dual requires an
-    explicit Schwartz function whose `n`-th derivative at `n` does not
-    converge after multiplication by `(-1)^n`. The standard construction is
-    a locally finite sum of disjoint translated bumps
-    `(x - n)^n / n! * χ (x - n)`, with `χ = 1` near zero.
+    Boundary (closer hop 2): the plateau and diagonal-jet parts of the standard
+    construction now compile above.  In particular,
+    `apm_m94J01_localSummand_iteratedDeriv` proves
+    `iteratedDeriv n (((x-n)^n/n!) * χ(x-n)) n = 1`, using
+    `ContDiffBump.eventuallyEq_one`, `Filter.EventuallyEq.iteratedDeriv_eq`,
+    `iteratedDeriv_comp_sub_const`, and `iteratedDeriv_pow`.
 
-    I searched the `SchwartzMap` and bump-function APIs. Completing this route
-    requires constructing a smooth compactly supported plateau bump,
-    packaging the infinite locally finite sum as a `SchwartzMap`, proving all
-    weighted derivative seminorm bounds uniformly in the bump index, and
-    calculating its varying-order derivative at each center. No compiled
-    sibling supplied this high-order Schwartz interpolation construction
-    within this pass.
+    The remaining bridge is to package the pointwise locally finite sum of
+    these summands as one `SchwartzMap`.  Mathlib has
+    `HasCompactSupport.toSchwartzMap` for each individual summand and the
+    topological predicate `LocallyFinite`, but searches found neither a smooth
+    locally-finite-sum theorem producing a `SchwartzMap` nor a Borel/Schwartz
+    interpolation theorem with prescribed varying-order jets.  A local proof
+    must therefore define the sum, prove smoothness by local finiteness, and
+    prove every weighted derivative seminorm is bounded.  The latter requires
+    uniform factorial/translated-polynomial estimates across the summand
+    index.  Searches of `LEMMA-INDEX.md`, all closed artifacts,
+    `ConstructionTargets/`, `YoungL2.lean`, the bump-function API, and the
+    Schwartz-space source found no packaged bridge.
     -/
     sorry

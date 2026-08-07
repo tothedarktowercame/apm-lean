@@ -13,11 +13,13 @@ One high-order Schwartz interpolation boundary remains.
   are eventually zero.
 - The complex sequence `(-1)^n` cannot converge: subtracting the shifted
   sequence produces a sequence whose norm is constantly two but tends to zero.
+- A concrete plateau bump and its normalized translated monomial summands are
+  defined.  Eventual equality with the monomial near the center proves the
+  exact diagonal identity `iteratedDeriv n summand_n n = 1`.
 
 ## Remaining Boundary
 
-Construct a Schwartz function satisfying
-`iteratedDeriv n φ (n : ℝ) = 1` for every `n`. The intended locally finite
-sum of translated plateau bumps requires a smooth plateau, local-finiteness
-packaging, uniform weighted derivative estimates, and the center derivative
-calculation.
+Package the pointwise locally finite sum of the translated plateau-bump
+summands as a Schwartz function.  The plateau and center-derivative calculation
+are complete; what remains is smoothness of the locally finite sum and uniform
+bounds for every weighted derivative seminorm.
