@@ -36,6 +36,20 @@ noncomputable section
 /-- The integrand e^{ωx}/(1 - e^x). -/
 def integrand (ω : ℂ) (x : ℝ) : ℂ := Complex.exp (ω * x) / (1 - Complex.exp x)
 
+/-- Reflection in the singular point exchanges the parameters `ω` and `1 - ω`.
+This is the elementary symmetry behind the oddness of the principal value under
+`ω ↦ 1 - ω`; it also reduces any eventual analytic evaluation to half of the
+critical strip. -/
+lemma integrand_one_sub_neg (ω : ℂ) (x : ℝ) :
+    integrand (1 - ω) (-x) = -integrand ω x := by
+  unfold integrand
+  push_cast
+  rw [show (1 - ω) * (-(x : ℂ)) = ω * x - x by ring,
+    Complex.exp_sub, Complex.exp_neg]
+  field_simp [Complex.exp_ne_zero]
+  rw [show (Complex.exp (x : ℂ) - 1) = -(1 - Complex.exp x) by ring,
+    div_neg]
+
 /-- **Main theorem**: ∫_{-∞}^{∞} e^{ωx}/(1-e^x) dx = -π cot(πω) for 0 < Re(ω) < 1.
 
     The integral is interpreted as a principal value at x = 0 (where 1-e^x has a simple zero).
@@ -65,6 +79,14 @@ theorem apm_a96J08 (ω : ℂ) (hre_pos : 0 < ω.re) (hre_lt : ω.re < 1) :
   -- Mid-solve lookup: psr_search "rectangular contour integral residue theorem
   -- boundary integral poles" returned no relevant patterns. memory_search with
   -- tags ["contour", "integral", "residue"] returned empty.
+  --
+  -- Closer hop 2 proved `integrand_one_sub_neg`, the exact reflection identity
+  -- `f_{1-ω}(-x) = -f_ω(x)`.  Searches of the repository and Mathlib for a
+  -- principal-value change-of-variables theorem, cotangent integral, beta
+  -- integral, or rectangle residue theorem found no result that converts this
+  -- symmetry into the required value.  The remaining bridge is still an
+  -- analytic evaluation (via an indented contour, beta/reflection formula, or
+  -- an equivalent principal-value theorem), rather than algebraic rewriting.
   sorry
 
 end
