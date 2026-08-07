@@ -10,6 +10,11 @@ The explicit negative mode `x ↦ sin (x/2)` is now proved admissible on
 uses `intervalIntegral.integral_comp_div`, `integral_sin_sq`, and
 `integral_cos_sq`.
 
+Closer hop 3 proves that the higher-frequency mode `x ↦ sin (2x)` is also an
+endpoint-zero admissible variation on `[0,2π]`, supplying the explicit positive
+direction candidate. Its use for arbitrary base functions remains coupled to
+the missing cross-term cancellation.
+
 The remaining proof requires integration by parts and a fundamental lemma under
 the statement's `ContDiffOn ℝ 1` encoding, including cancellation of the
 cross term for arbitrary stationary functions.  It also needs positive

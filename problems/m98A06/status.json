@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "notes": "The admissible mode sin(x/2) on [0,2pi] now has compiled energy -3pi/4. Euler-Lagrange cross-term cancellation, positive directions, and the sharp weak Poincare bridge remain."
+  "closer_hop": 3,
+  "notes": "The negative mode has compiled energy -3pi/4, and the positive-frequency mode sin(2x) is now certified admissible. Euler-Lagrange cross-term cancellation and the sharp weak Poincare bridge remain."
 }

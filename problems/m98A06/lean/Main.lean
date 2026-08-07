@@ -91,6 +91,14 @@ lemma apm_m98a06_negativeMode_energy :
   · exact (by fun_prop : Continuous fun x : ℝ ↦
       Real.sin (x / 2) ^ 2).intervalIntegrable _ _
 
+/-- A higher-frequency endpoint-zero mode supplying the positive direction. -/
+lemma apm_m98a06_positiveMode_admissible :
+    apm_m98a06_Admissible (2 * Real.pi) 0 0
+      (fun x : ℝ ↦ Real.sin (2 * x)) := by
+  refine ⟨by fun_prop, by simp, ?_⟩
+  change Real.sin (2 * (2 * Real.pi)) = 0
+  convert Real.sin_nat_mul_pi 4 using 1 <;> ring
+
 theorem apm_m98a06 :
     ((∀ y : ℝ → ℝ,
         apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
@@ -170,5 +178,13 @@ theorem apm_m98a06 :
   provide the cross-term cancellation for an arbitrary merely
   `ContDiffOn ℝ 1` admissible function. The blocker remains the fundamental
   lemma/integration-by-parts bridge and the sharp weak Poincaré theorem.
+
+  Closer hop 3 adds `apm_m98a06_positiveMode_admissible`, certifying the
+  higher-frequency mode `sin (2x)` as an endpoint-zero admissible variation on
+  `[0,2π]`. Together with the compiled negative mode, both explicit variation
+  directions are now available. Turning the positive mode into an energy
+  comparison for an arbitrary admissible `y` still requires cancellation of
+  its cross term, so the same integration-by-parts/fundamental-lemma boundary
+  remains; the weak Poincaré portion is unchanged.
   -/
   sorry
