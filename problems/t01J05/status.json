@@ -30,6 +30,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 1 proves that a nowhere-zero one-form on a zero-dimensional manifold forces the space to be empty. The theorem remains blocked on Poincare-Hopf/Euler-class machinery and comparison with the singular-homology finrank Euler characteristic.",
+  "closer_progress": "Closer hop 2 additionally reduces the zero-dimensional Euler sum to its single H0 finrank and proves the endpoint conditional on the exact empty-space H0 normalization. The theorem remains blocked on that categorical normalization and, in positive dimension, Poincare-Hopf/Euler-class machinery plus comparison with the singular-homology finrank Euler characteristic.",
   "imported_at": "2026-07-13T17:26:56.823028Z"
 }

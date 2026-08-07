@@ -11,6 +11,9 @@ characteristic as the alternating sum of rational singular-homology finranks.
 - `apm_t01J05_isEmpty_of_nowhereZero_zeroDim` closes the geometric part of
   the dimension-zero case: every cotangent fiber is zero, so the nowhere-zero
   hypothesis forces the manifold to be empty.
+- `apm_t01J05_eulerCharacteristic_zero` reduces the frozen sum at `n = 0` to
+  the single rational `H₀` finrank, and `apm_t01J05_zeroDim_of_empty_H0`
+  completes that endpoint once the empty-space `H₀` normalization is supplied.
 
 ## Remaining boundary
 

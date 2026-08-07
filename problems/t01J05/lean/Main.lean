@@ -61,6 +61,28 @@ def apm_t01J05_eulerCharacteristic (n : ℕ) (X : Type)
   ∑ k : Fin (n + 1),
     (-1 : ℤ) ^ (k : ℕ) * (Module.finrank ℚ (apm_t01J05_H k X) : ℤ)
 
+/-- In dimension zero the frozen alternating sum has exactly one term. -/
+lemma apm_t01J05_eulerCharacteristic_zero
+    (X : Type) [TopologicalSpace X] :
+    apm_t01J05_eulerCharacteristic 0 X =
+      (Module.finrank ℚ (apm_t01J05_H 0 X) : ℤ) := by
+  simp [apm_t01J05_eulerCharacteristic]
+  rfl
+
+/-- The zero-dimensional case reduces precisely to normalization of `H₀` for
+the empty underlying space. -/
+lemma apm_t01J05_zeroDim_of_empty_H0
+    (X : Type) [TopologicalSpace X]
+    [ChartedSpace (apm_t01J05_Euclidean 0) X]
+    [IsManifold (apm_t01J05_Model 0) (⊤ : ℕ∞) X]
+    (omega : apm_t01J05_OneForm (n := 0) X)
+    (homega_ne : ∀ x : X, omega x ≠ 0)
+    (hH0 : Module.finrank ℚ (apm_t01J05_H 0 X) = 0) :
+    apm_t01J05_eulerCharacteristic 0 X = 0 := by
+  clear homega_ne omega
+  rw [apm_t01J05_eulerCharacteristic_zero, hH0]
+  exact_mod_cast rfl
+
 /-- In dimension zero, every cotangent vector is zero; hence a nowhere-zero
 one-form forces the manifold to be empty. -/
 lemma apm_t01J05_isEmpty_of_nowhereZero_zeroDim
@@ -89,11 +111,16 @@ theorem apm_t01j05
     (homega_ne : ∀ x : X, omega x ≠ 0) :
     apm_t01J05_eulerCharacteristic n X = 0 := by
   /-
-  Boundary (closer hop 1): the zero-dimensional geometric obstruction is now
+  Boundary (closer hop 2): the zero-dimensional geometric obstruction is now
   compiled as `apm_t01J05_isEmpty_of_nowhereZero_zeroDim`.  It unfolds the
   otherwise irreducible `TangentSpace` definition locally, proves every vector
   in the `Fin 0` Euclidean model is zero, and concludes that a nowhere-zero
-  one-form forces the underlying zero-manifold to be empty.
+  one-form forces the underlying zero-manifold to be empty.  This hop further
+  proves `apm_t01J05_eulerCharacteristic_zero`, showing that the frozen sum
+  has exactly the single `H₀` term in dimension zero, and
+  `apm_t01J05_zeroDim_of_empty_H0`, which closes that endpoint from the exact
+  remaining normalization `finrank H₀ = 0`.  Thus no alternating-sum or cast
+  bookkeeping remains hidden in the endpoint.
 
   In positive dimension, the remaining bridge is precisely the classical
   differential-topology argument: construct a smooth Riemannian metric,
