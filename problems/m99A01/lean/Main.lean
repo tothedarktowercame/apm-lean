@@ -74,6 +74,79 @@ lemma apm_m99A01_deriv_sine_family (n t : ℝ) :
     ((hasDerivAt_id t).const_mul 2)).const_mul n
   convert h.deriv using 1 <;> ring
 
+lemma apm_m99A01_integral_cos_sq_two_mul :
+    ∫ t in (0 : ℝ)..(Real.pi / 2), Real.cos (2 * t) ^ 2 = Real.pi / 4 := by
+  have h := intervalIntegral.mul_integral_comp_mul_left
+    (f := fun x : ℝ => Real.cos x ^ 2) (a := (0 : ℝ))
+    (b := Real.pi / 2) (c := (2 : ℝ))
+  rw [integral_cos_sq] at h
+  norm_num [show 2 * (Real.pi / 2) = Real.pi by ring] at h ⊢
+  linarith
+
+lemma apm_m99A01_integral_sin_sq_two_mul :
+    ∫ t in (0 : ℝ)..(Real.pi / 2), Real.sin (2 * t) ^ 2 = Real.pi / 4 := by
+  have h := intervalIntegral.mul_integral_comp_mul_left
+    (f := fun x : ℝ => Real.sin x ^ 2) (a := (0 : ℝ))
+    (b := Real.pi / 2) (c := (2 : ℝ))
+  rw [integral_sin_sq] at h
+  norm_num [show 2 * (Real.pi / 2) = Real.pi by ring] at h ⊢
+  linarith
+
+lemma apm_m99A01_integral_sin_two_mul :
+    ∫ t in (0 : ℝ)..(Real.pi / 2), Real.sin (2 * t) = 1 := by
+  have h := intervalIntegral.mul_integral_comp_mul_left
+    (f := Real.sin) (a := (0 : ℝ)) (b := Real.pi / 2) (c := (2 : ℝ))
+  rw [integral_sin] at h
+  norm_num [show 2 * (Real.pi / 2) = Real.pi by ring] at h ⊢
+
+/-- Exact value of the functional on the unbounded endpoint-zero family. -/
+lemma apm_m99A01_functional_sine_family (n : ℝ) :
+    apm_m99A01_functional (fun t : ℝ => n * Real.sin (2 * t)) =
+      (5 * Real.pi / 4) * n ^ 2 + 2 * n := by
+  unfold apm_m99A01_functional
+  simp_rw [apm_m99A01_deriv_sine_family n]
+  have hpoint : (fun t : ℝ =>
+      (2 * n * Real.cos (2 * t)) ^ 2 + (n * Real.sin (2 * t)) ^ 2 +
+        2 * (n * Real.sin (2 * t))) =
+      fun t => 4 * n ^ 2 * (Real.cos (2 * t) ^ 2) +
+        n ^ 2 * (Real.sin (2 * t) ^ 2) + 2 * n * Real.sin (2 * t) := by
+    funext t
+    ring
+  rw [hpoint]
+  rw [intervalIntegral.integral_add]
+  · rw [intervalIntegral.integral_add]
+    · simp only [intervalIntegral.integral_const_mul]
+      rw [apm_m99A01_integral_cos_sq_two_mul,
+        apm_m99A01_integral_sin_sq_two_mul,
+        apm_m99A01_integral_sin_two_mul]
+      ring
+    · apply Continuous.intervalIntegrable
+      fun_prop
+    · apply Continuous.intervalIntegrable
+      fun_prop
+  · apply Continuous.intervalIntegrable
+    fun_prop
+  · apply Continuous.intervalIntegrable
+    fun_prop
+
+/-- The functional is unbounded above on the admissible class. -/
+lemma apm_m99A01_no_maximum :
+    ¬ ∃ y ∈ apm_m99A01_admissible, ∀ z ∈ apm_m99A01_admissible,
+      apm_m99A01_functional z ≤ apm_m99A01_functional y := by
+  rintro ⟨y, hy, hmax⟩
+  let n : ℝ := |apm_m99A01_functional y| + 1
+  have hnmem := apm_m99A01_sine_family_admissible n
+  have hle := hmax (fun t : ℝ => n * Real.sin (2 * t)) hnmem
+  rw [apm_m99A01_functional_sine_family] at hle
+  have hquad : 0 ≤ (5 * Real.pi / 4) * n ^ 2 := by positivity
+  have habs : apm_m99A01_functional y ≤ |apm_m99A01_functional y| :=
+    le_abs_self _
+  dsimp [n] at hle hquad
+  have htwo : 2 * (|apm_m99A01_functional y| + 1) ≤
+      apm_m99A01_functional y := by
+    exact le_trans (by linarith only [hquad]) hle
+  linarith [abs_nonneg (apm_m99A01_functional y)]
+
 theorem apm_m99a01 :
     (∀ y : ℝ → ℝ,
       (ContDiff ℝ 2 y ∧ y ∈ apm_m99A01_admissible ∧ apm_m99A01_stationary y) ↔
@@ -92,6 +165,18 @@ theorem apm_m99a01 :
     `HasDerivAt`-under-integral, interval integration-by-parts, and ODE APIs;
     I did not complete this bridge for the frozen stationarity predicate. The
     candidate side of the ODE is proved above as `apm_m99A01_extremal_ode`.
+
+    Closer hop 2 inspected
+    `hasDerivAt_integral_of_dominated_loc_of_deriv_le` and the full
+    `intervalIntegral.integral_mul_deriv_eq_deriv_mul` family.  Those APIs can
+    supply differentiation under the integral and integration by parts after
+    their regularity side conditions are assembled.  The newly closed
+    `m98J04` arc-length half does not help: its remaining first-variation
+    conjunct stops at the same missing fundamental lemma.  Closed artifact
+    `a01A03` uses a distributional fundamental lemma only in prose, not as a
+    reusable declaration.  Thus the precise live bridge is still converting
+    vanishing against all endpoint-zero global `C¹` tests into the pointwise
+    ODE, followed by uniqueness of that two-point boundary-value problem.
     -/
     sorry
   constructor
@@ -108,19 +193,20 @@ theorem apm_m99a01 :
       field_simp [hc]
       nlinarith [Real.cosh_sq_sub_sinh_sq (Real.pi / 4)]
   · /-
-    Boundary: global minimality and nonexistence of a maximum require expanding
-    the quadratic functional around the verified admissible candidate, using
-    stationarity to cancel the cross term, and evaluating the functional on
-    the endpoint-zero family `n * sin (2t)` to prove unboundedness above. I
-    searched the interval-integral derivative and hyperbolic/trigonometric
-    integral APIs; the full exact integral calculation was not completed in
-    this pass. The candidate's global `C¹` regularity and both endpoint values
-    are proved above, and `apm_m99A01_sine_family_admissible` proves that the
-    entire proposed unbounded family meets the frozen admissibility predicate.
-    Closer hop 1 additionally proves its exact derivative in
-    `apm_m99A01_deriv_sine_family`. Mathlib source contains
-    `integral_sin`, `integral_sin_sq`, and `integral_cos_sq`; the remaining
-    calculation is their affine change-of-variables specialization at `2*t`,
-    followed by showing the resulting positive quadratic in `n` is unbounded.
+    Closer hop 2 closes nonexistence of a maximum below.  The three scaled
+    trigonometric integrals are compiled above using
+    `intervalIntegral.mul_integral_comp_mul_left`, `integral_sin`,
+    `integral_sin_sq`, and `integral_cos_sq`; they give the exact identity
+    `J (n sin(2t)) = (5π/4)n² + 2n`.  `apm_m99A01_no_maximum` then proves
+    unboundedness directly.
+
+    The remaining boundary in this conjunct is only global minimality.  It
+    requires expanding `J(y₀+h)-J(y₀)`, applying interval integration by parts
+    to cancel the cross term using `apm_m99A01_extremal_ode` and the endpoint
+    conditions, and retaining the nonnegative integral of `h'²+h²`.  Mathlib's
+    integration-by-parts theorem is available, but assembling it with raw
+    `deriv` after setting `h = y-y₀` was not completed in this hop.
     -/
-    sorry
+    constructor
+    · sorry
+    · exact apm_m99A01_no_maximum
