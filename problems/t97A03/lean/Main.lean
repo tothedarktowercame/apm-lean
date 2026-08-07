@@ -1,4 +1,7 @@
 import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t97A03
@@ -9,78 +12,108 @@ None.
 
 ## Encoding questions
 
-The circle, two-sphere, marked points, covering map, sheet cardinality,
-fundamental group, and claimed invariants are retained explicitly. Mathlib
-does not package the adjunction space formed by the two point-identifications,
-the two pictured cover constructions, or general integral singular homology;
-those genuine spaces and the homology functor are therefore isolated as
-opaque typed constructions.
+The base and both pictured covers are concrete adjunction-space quotients.
+The base glues two marked circle points to the poles of `S²`. The cover
+pictures glue two sphere sheets to either one lifted circle at four points or
+two lifted circles at two points each. Homology is Mathlib integral singular
+homology, and the fundamental group is the actual based fundamental group.
 -/
 
-open Set
+open CategoryTheory Set
+
+noncomputable section
 
 abbrev apm_t97A03_R3 := EuclideanSpace ℝ (Fin 3)
 abbrev apm_t97A03_S2 := Metric.sphere (0 : apm_t97A03_R3) 1
 
-noncomputable def apm_t97A03_north : apm_t97A03_S2 :=
+def apm_t97A03_north : apm_t97A03_S2 :=
   ⟨EuclideanSpace.single (2 : Fin 3) 1, by simp⟩
 
-noncomputable def apm_t97A03_south : apm_t97A03_S2 :=
+def apm_t97A03_south : apm_t97A03_S2 :=
   ⟨EuclideanSpace.single (2 : Fin 3) (-1), by simp⟩
 
-/-- `S¹ ⊔ S²` with `A` glued to the north pole and `B` to the south pole. -/
-opaque apm_t97A03_BaseSpace (A B : Circle) : Type
+/-- The two specified identifications in `S¹ ⊔ S²`. -/
+inductive apm_t97A03_BaseRel (A B : Circle) :
+    Sum Circle apm_t97A03_S2 → Sum Circle apm_t97A03_S2 → Prop
+  | north : apm_t97A03_BaseRel A B (.inl A) (.inr apm_t97A03_north)
+  | south : apm_t97A03_BaseRel A B (.inl B) (.inr apm_t97A03_south)
 
-opaque apm_t97A03_baseTopology (A B : Circle) :
-    TopologicalSpace (apm_t97A03_BaseSpace A B)
+def apm_t97A03_BaseSpace (A B : Circle) :=
+  Quotient (Relation.EqvGen.setoid (apm_t97A03_BaseRel A B))
 
 noncomputable instance (A B : Circle) :
     TopologicalSpace (apm_t97A03_BaseSpace A B) :=
-  apm_t97A03_baseTopology A B
+  TopologicalSpace.coinduced (fun x : Sum Circle apm_t97A03_S2 ↦
+    Quotient.mk _ x) inferInstance
 
-/-- The picture with one lifted circle threading through the two sphere sheets. -/
-opaque apm_t97A03_OneCircleCover : Type
+def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
+def apm_t97A03_circleNegOne : Circle := ⟨-1, by
+  exact mem_sphere_zero_iff_norm.mpr (by norm_num)⟩
+def apm_t97A03_circleI : Circle := ⟨Complex.I, by
+  exact mem_sphere_zero_iff_norm.mpr Complex.norm_I⟩
+def apm_t97A03_circleNegI : Circle := ⟨-Complex.I, by
+  exact mem_sphere_zero_iff_norm.mpr (by rw [norm_neg, Complex.norm_I])⟩
 
-opaque apm_t97A03_oneCircleTopology :
-    TopologicalSpace apm_t97A03_OneCircleCover
+abbrev apm_t97A03_TwoSpheres := Fin 2 × apm_t97A03_S2
+
+/-- One lifted circle, cut by four attachment points, threading through the
+two sphere sheets. -/
+inductive apm_t97A03_OneCircleRel :
+    Sum apm_t97A03_TwoSpheres Circle →
+      Sum apm_t97A03_TwoSpheres Circle → Prop
+  | n0 : apm_t97A03_OneCircleRel
+      (.inr apm_t97A03_circleOne) (.inl (0, apm_t97A03_north))
+  | s0 : apm_t97A03_OneCircleRel
+      (.inr apm_t97A03_circleI) (.inl (0, apm_t97A03_south))
+  | n1 : apm_t97A03_OneCircleRel
+      (.inr apm_t97A03_circleNegOne) (.inl (1, apm_t97A03_north))
+  | s1 : apm_t97A03_OneCircleRel
+      (.inr apm_t97A03_circleNegI) (.inl (1, apm_t97A03_south))
+
+def apm_t97A03_OneCircleCover :=
+  Quotient (Relation.EqvGen.setoid apm_t97A03_OneCircleRel)
 
 noncomputable instance : TopologicalSpace apm_t97A03_OneCircleCover :=
-  apm_t97A03_oneCircleTopology
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t97A03_TwoSpheres Circle ↦ Quotient.mk _ x) inferInstance
 
-/-- The picture with two lifted circles joining the two sphere sheets. -/
-opaque apm_t97A03_TwoCircleCover : Type
+/-- Two lifted circles joining the two sphere sheets. -/
+inductive apm_t97A03_TwoCircleRel :
+    Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) →
+      Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) → Prop
+  | c0n : apm_t97A03_TwoCircleRel
+      (.inr (0, apm_t97A03_circleOne)) (.inl (0, apm_t97A03_north))
+  | c0s : apm_t97A03_TwoCircleRel
+      (.inr (0, apm_t97A03_circleNegOne)) (.inl (1, apm_t97A03_south))
+  | c1n : apm_t97A03_TwoCircleRel
+      (.inr (1, apm_t97A03_circleOne)) (.inl (1, apm_t97A03_north))
+  | c1s : apm_t97A03_TwoCircleRel
+      (.inr (1, apm_t97A03_circleNegOne)) (.inl (0, apm_t97A03_south))
 
-opaque apm_t97A03_twoCircleTopology :
-    TopologicalSpace apm_t97A03_TwoCircleCover
+def apm_t97A03_TwoCircleCover :=
+  Quotient (Relation.EqvGen.setoid apm_t97A03_TwoCircleRel)
 
 noncomputable instance : TopologicalSpace apm_t97A03_TwoCircleCover :=
-  apm_t97A03_twoCircleTopology
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) ↦ Quotient.mk _ x)
+    inferInstance
 
-/-- Integral singular homology in degree `n`. -/
-opaque apm_t97A03_Homology
-    (X : Type*) [TopologicalSpace X] (n : ℕ) : Type
-
-axiom apm_t97A03_homologyAddCommGroupExists
-    (X : Type*) [TopologicalSpace X] (n : ℕ) :
-    Nonempty (AddCommGroup (apm_t97A03_Homology X n))
-
-noncomputable instance
-    (X : Type*) [TopologicalSpace X] (n : ℕ) :
-    AddCommGroup (apm_t97A03_Homology X n) :=
-  Classical.choice (apm_t97A03_homologyAddCommGroupExists X n)
+abbrev apm_t97A03_Homology (X : Type) [TopologicalSpace X] (n : ℕ) :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
 theorem apm_t97a03
     (A B : Circle) (hAB : A ≠ B)
-    (Y : Type*) [TopologicalSpace Y] [ConnectedSpace Y]
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
     (y : Y) (p : Y → apm_t97A03_BaseSpace A B)
     (hp : IsCoveringMap p)
     (hdegree : ∀ x : apm_t97A03_BaseSpace A B,
       Nat.card (p ⁻¹' ({x} : Set _)) = 2) :
     (Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) ∨
       Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover)) ∧
-    Nonempty (apm_t97A03_Homology Y 0 ≃+ ℤ) ∧
-    Nonempty (apm_t97A03_Homology Y 1 ≃+ (Fin 3 → ℤ)) ∧
-    Nonempty (apm_t97A03_Homology Y 2 ≃+ (Fin 2 → ℤ)) ∧
-    (∀ n, 3 ≤ n → Nonempty (apm_t97A03_Homology Y n ≃+ ZMod 1)) ∧
+    Nonempty (apm_t97A03_Homology Y 0 ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t97A03_Homology Y 1 ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
+    Nonempty (apm_t97A03_Homology Y 2 ≅ ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
+    (∀ n, 3 ≤ n → Limits.IsZero (apm_t97A03_Homology Y n)) ∧
     Nonempty (FundamentalGroup Y y ≃* FreeGroup (Fin 3)) := by
   sorry
