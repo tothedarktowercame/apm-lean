@@ -47,8 +47,35 @@ lemma apm_t02a03_surjective_wedgeQuotient :
     Function.Surjective apm_t02a03_wedgeQuotient := by
   exact Quotient.mk_surjective
 
+def apm_t02a03_torusInclusion : apm_t02a03_Torus → apm_t02a03_Y :=
+  fun x ↦ apm_t02a03_wedgeQuotient (.inl x)
+
+def apm_t02a03_circleInclusion : Circle → apm_t02a03_Y :=
+  fun z ↦ apm_t02a03_wedgeQuotient (.inr z)
+
+lemma apm_t02a03_continuous_torusInclusion :
+    Continuous apm_t02a03_torusInclusion := by
+  exact apm_t02a03_continuous_wedgeQuotient.comp continuous_inl
+
+lemma apm_t02a03_continuous_circleInclusion :
+    Continuous apm_t02a03_circleInclusion := by
+  exact apm_t02a03_continuous_wedgeQuotient.comp continuous_inr
+
+/-- The two inclusion maps identify exactly the chosen wedge basepoints. -/
+lemma apm_t02a03_inclusions_basepoint_eq :
+    apm_t02a03_torusInclusion (1, 1) = apm_t02a03_circleInclusion 1 := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _ apm_t02a03_WedgeGlue.base)
+
 noncomputable def apm_t02a03_ybase : apm_t02a03_Y :=
   Quotient.mk _ (.inl (1, 1))
+
+@[simp] lemma apm_t02a03_torusInclusion_basepoint :
+    apm_t02a03_torusInclusion (1, 1) = apm_t02a03_ybase := rfl
+
+@[simp] lemma apm_t02a03_circleInclusion_basepoint :
+    apm_t02a03_circleInclusion 1 = apm_t02a03_ybase := by
+  exact apm_t02a03_inclusions_basepoint_eq.symm
 
 theorem apm_t02a03 :
     Nonempty
@@ -86,14 +113,24 @@ theorem apm_t02a03 :
   even the first conjunct cannot currently be established from the available
   APIs without developing substantial missing algebraic-topology foundations.
 
-  Closer hop 1 packages the canonical quotient map and proves it continuous
+  Closer hop 1 packaged the canonical quotient map and proved it continuous
   and surjective in `apm_t02a03_continuous_wedgeQuotient` and
   `apm_t02a03_surjective_wedgeQuotient`. This confirms the raw quotient-space
   presentation needed by any future gluing theorem. Mathlib's
   `FundamentalGroupoidFunctor.prodIso` still stops at groupoids, and its
   Mayer--Vietoris files concern sheaf cohomology rather than the singular
   homology used here. No API upgrades this generated-relation quotient to a
-  topological pushout carrying the required computations. The frozen statement
-  is unchanged.
+  topological pushout carrying the required computations.
+
+  Closer hop 2 exposes the based cocone that such a theorem would consume.
+  `apm_t02a03_torusInclusion` and `apm_t02a03_circleInclusion` are now explicit
+  continuous maps, `apm_t02a03_inclusions_basepoint_eq` proves the generating
+  identification, and the two `_basepoint` lemmas rewrite both images to
+  `apm_t02a03_ybase`. This removes all local quotient and basepoint bookkeeping
+  from the remaining fundamental-group argument. A renewed search of
+  topological pushout, van Kampen, circle fundamental-group, and singular
+  wedge-homology APIs still found no computation theorem applicable to this
+  cocone, so the displayed algebraic invariants remain open. The frozen
+  statement is unchanged.
   -/
   sorry
