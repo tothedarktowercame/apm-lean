@@ -10,6 +10,10 @@ inclusion in the statement's custom spectrum.
   left inverse would therefore send zero to both `e_j` and zero, a
   contradiction. Thus every displayed eigenvalue belongs to the custom
   spectrum.
+- Closer hop 2 proves `apm_m94J02_norm_T_le`: dilation is a contraction in
+  the frozen weighted norm. The proof uses `Summable.tsum_le_tsum` and the
+  pointwise estimate `‖2⁻ⁿ‖ ≤ 1`. This is reusable in the compactness tail
+  estimate and in the spectrum's bounded-inverse arguments.
 
 ## Remaining Boundary
 

@@ -92,6 +92,29 @@ lemma apm_m94J02_eigenvalue_mem_spectrum (j : ℕ) :
   have := congrFun this j
   simp [hej] at this
 
+/-- The dilation is a contraction for the displayed weighted norm. -/
+lemma apm_m94J02_norm_T_le (a : ℕ → ℂ) (ha : apm_m94J02_mem a) :
+    apm_m94J02_norm (apm_m94J02_T a) ≤ apm_m94J02_norm a := by
+  unfold apm_m94J02_norm
+  unfold apm_m94J02_mem at ha
+  simp only [apm_m94J02_T]
+  have hleft : Summable
+      (fun n : ℕ ↦ ‖(2 : ℂ) ^ (-(n : ℤ)) * a n‖ * ((n : ℝ) ^ 2 + 1)) := by
+    refine Summable.of_nonneg_of_le (fun _ ↦ by positivity) (fun n ↦ ?_) ha
+    rw [norm_mul]
+    have hs : ‖(2 : ℂ) ^ (-(n : ℤ))‖ ≤ 1 := by
+      rw [norm_zpow]
+      exact zpow_le_one_of_nonpos₀ (by norm_num) (by simp)
+    exact mul_le_mul_of_nonneg_right
+      (mul_le_of_le_one_left (norm_nonneg (a n)) hs) (by positivity)
+  exact Summable.tsum_le_tsum (fun n ↦ by
+    rw [norm_mul]
+    have hs : ‖(2 : ℂ) ^ (-(n : ℤ))‖ ≤ 1 := by
+      rw [norm_zpow]
+      exact zpow_le_one_of_nonpos₀ (by norm_num) (by simp)
+    exact mul_le_mul_of_nonneg_right
+      (mul_le_of_le_one_left (norm_nonneg (a n)) hs) (by positivity)) hleft ha
+
 theorem apm_m94j02 :
     (∀ a : ℕ → ℕ → ℂ,
         (∀ k, apm_m94J02_mem (a k)) →
@@ -148,6 +171,17 @@ theorem apm_m94j02 :
   Mathlib's summability, Fekete, and diagonal operator APIs; no compiled
   sibling assembled these custom weighted-sequence arguments within this
   pass. The elementary dilation membership clause is proved above.
+
+  Closer hop 2 additionally proves `apm_m94J02_norm_T_le`: the diagonal
+  dilation is a contraction in the exact weighted norm.  This uses
+  `Summable.tsum_le_tsum` with the coordinate estimate `‖2⁻ⁿ‖ ≤ 1` and
+  supplies the quantitative input for both diagonal tail compactness and the
+  bounded-inverse contradiction at zero.  Searches of `LEMMA-INDEX.md`, all
+  closed artifacts, Mathlib diagonal-operator/summability sources, and the
+  construction libraries found no packaged weighted-ℓ¹ compactness or custom
+  spectrum theorem.  The remaining bridge therefore still requires the
+  diagonal subsequence/tail construction and explicit reciprocal multiplier
+  bounds away from `{0} ∪ range (2⁻ⁿ)`.
   -/
   have hremaining :
       (∀ a : ℕ → ℕ → ℂ,
