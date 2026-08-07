@@ -10,12 +10,12 @@
     "problem_tex": "apm/t91A08.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_progress": "Both encoded form integrals are proved by direct computation. A compiled restriction/projection lemma reduces non-homotopy of the torus map to non-homotopy of the fifth-power map on Circle. The remaining bridge is the absent classification of Circle self-map homotopy classes by integer degree.",
   "imported_at": "2026-07-13T17:26:57.293961Z"
 }

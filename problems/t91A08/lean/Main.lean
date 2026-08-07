@@ -47,6 +47,33 @@ noncomputable def apm_t91A08_integral (beta : apm_t91A08_TwoForm) : ℝ :=
 noncomputable def apm_t91A08_g : C(apm_t91A08_Torus, apm_t91A08_Torus) :=
   ⟨fun z => (z.1 ^ 5 * z.2 ^ 2, z.1 ^ 4 * z.2 ^ 3), by fun_prop⟩
 
+/-- Include the first coordinate circle in the torus. -/
+noncomputable def apm_t91A08_firstCircle : C(Circle, apm_t91A08_Torus) :=
+  ⟨fun z ↦ (z, 1), by fun_prop⟩
+
+/-- Project the torus onto its first coordinate circle. -/
+noncomputable def apm_t91A08_firstProjection : C(apm_t91A08_Torus, Circle) :=
+  ⟨Prod.fst, continuous_fst⟩
+
+/-- Restriction of the first coordinate of `apm_t91A08_g` to the first circle. -/
+noncomputable def apm_t91A08_powFive : C(Circle, Circle) :=
+  ⟨fun z ↦ z ^ 5, by fun_prop⟩
+
+/-- Any homotopy from the torus map to the identity would make the fifth-power
+circle map homotopic to the identity, by restriction and projection. -/
+lemma apm_t91A08_powFive_homotopic_of_g_homotopic
+    (h : ContinuousMap.Homotopic apm_t91A08_g
+      (ContinuousMap.id apm_t91A08_Torus)) :
+    ContinuousMap.Homotopic apm_t91A08_powFive (ContinuousMap.id Circle) := by
+  have hpost := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl apm_t91A08_firstProjection) h
+  have hpre := ContinuousMap.Homotopic.comp hpost
+    (ContinuousMap.Homotopic.refl apm_t91A08_firstCircle)
+  convert hpre using 1 <;>
+    ext z <;>
+    simp [apm_t91A08_firstProjection, apm_t91A08_firstCircle,
+      apm_t91A08_powFive, apm_t91A08_g]
+
 theorem apm_t91a08
     (beta : apm_t91A08_TwoForm)
     (hbeta : apm_t91A08_IsInduced beta apm_t91A08_alpha) :
@@ -54,4 +81,24 @@ theorem apm_t91a08
     apm_t91A08_integral (apm_t91A08_pullback beta) = 21 ∧
     ¬ContinuousMap.Homotopic apm_t91A08_g
       (ContinuousMap.id apm_t91A08_Torus) := by
-  sorry
+  subst beta
+  constructor
+  · norm_num [apm_t91A08_integral, apm_t91A08_alpha,
+      EuclideanSpace.single_apply]
+  constructor
+  · norm_num [apm_t91A08_integral, apm_t91A08_pullback,
+      apm_t91A08_alpha, apm_t91A08_linearMap,
+      EuclideanSpace.single_apply]
+  · /-
+    Boundary (closer hop 1): both form-integral identities are now computed
+    definitionally above.  The helper
+    `apm_t91A08_powFive_homotopic_of_g_homotopic` also reduces the remaining
+    torus obstruction to the concrete assertion that `z ↦ z^5` on `Circle`
+    is not homotopic to the identity.  Searches of Mathlib's homotopy,
+    fundamental-group, circle, covering-space, and winding-number APIs, as
+    well as `LEMMA-INDEX.md`, closed siblings, `ConstructionTargets/`, and git
+    history found no compiled theorem identifying homotopy classes of circle
+    self-maps with their integer degree.  Closing this final goal therefore
+    requires developing that circle-degree/fundamental-group bridge locally.
+    -/
+    sorry
