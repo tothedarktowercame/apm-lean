@@ -24,6 +24,22 @@ def dualAnnihilator {W : Type*}
     Submodule ℝ (W →L[ℝ] ℝ) :=
   ⨅ w : U, ((ContinuousLinearMap.apply ℝ ℝ) w.1).ker
 
+/-- Every element in the range annihilates the kernel of the transposed pairing. -/
+lemma apm_m03J04_range_subset_dualAnnihilator
+    {V W : Type*}
+    [NormedAddCommGroup V] [NormedSpace ℝ V]
+    [NormedAddCommGroup W] [NormedSpace ℝ W]
+    (B : V →L[ℝ] W →L[ℝ] ℝ) :
+    (B.range : Set (W →L[ℝ] ℝ)) ⊆
+      (dualAnnihilator ((dualAdjoint B).ker : Set W) : Set (W →L[ℝ] ℝ)) := by
+  rintro f ⟨v, rfl⟩
+  change B v ∈ dualAnnihilator ((dualAdjoint B).ker : Set W)
+  rw [dualAnnihilator, Submodule.mem_iInf]
+  intro w
+  change B v w.1 = 0
+  have hw : dualAdjoint B w.1 = 0 := w.2
+  exact DFunLike.congr_fun hw v
+
 /-- All four parts: continuity and involutivity of the adjoint, closedness of
 annihilators, the closure-of-range identity, and the inf-sup isomorphism. -/
 theorem apm_m03j04
@@ -62,5 +78,17 @@ theorem apm_m03j04
     the subtype `dualAnnihilator ...`. Searches found no single compiled
     closed-range theorem with these exact dual/subtype conventions. No sibling
     code was reused, and the frozen statement was left unchanged.
+
+    Closer hop 1 proves `apm_m03J04_range_subset_dualAnnihilator` above, closing
+    the algebraic inclusion before taking closure. Searches also found
+    `ContinuousLinearMap.orthogonal_ker`,
+    `Submodule.orthogonal_orthogonal_eq_closure`, the algebraic
+    `Submodule.dualCoannihilator_range_eq_ker_flip`, and the bounded-below
+    closed-range API in `Analysis/Normed/Operator/Banach.lean`. The unresolved
+    bridge is transporting the first two Hilbert-space theorems across
+    `InnerProductSpace.toDual` so that their orthogonal complements coincide
+    with this file's intersection-of-evaluation-kernels `dualAnnihilator`.
+    After that, the signed `sSup` still must be identified with the operator
+    norm to feed the antilipschitz/closed-range machinery.
     -/
     sorry
