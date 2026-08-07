@@ -71,9 +71,35 @@ theorem apm_b95j03 :
     rw [hfrange, Module.finrank_tensorProduct] at hrank
     apply Nat.eq_sub_of_add_eq
     simpa [pow_two, add_comm] using hrank
-  · -- Boundary: searched `Basis.mk`, `TensorProduct.induction_on`, and the
-    -- tensor-product basis APIs.  The image/kernel dimension theorem above is
-    -- complete; constructing the requested `Fin 2` basis with the two fixed
-    -- subtype values still needs a substantial explicit independence/spanning
-    -- proof for the real basis of `ℂ ⊗[ℝ] ℂ`.
+  · let u : Fin 2 → ℂ ⊗[ℝ] ℂ := ![
+      (1 : ℂ) ⊗ₜ[ℝ] (1 : ℂ) + Complex.I ⊗ₜ[ℝ] Complex.I,
+      (1 : ℂ) ⊗ₜ[ℝ] Complex.I - Complex.I ⊗ₜ[ℝ] (1 : ℂ)]
+    have hu (i : Fin 2) : u i ∈ (tensorMulRepresentation ℝ ℂ).ker := by
+      change tensorMulRepresentation ℝ ℂ (u i) = 0
+      have hm : tensorMultiplication ℝ ℂ (u i) = 0 := by
+        fin_cases i
+        · change tensorMultiplication ℝ ℂ
+            ((1 : ℂ) ⊗ₜ[ℝ] (1 : ℂ) + Complex.I ⊗ₜ[ℝ] Complex.I) = 0
+          calc
+            _ = tensorMultiplication ℝ ℂ ((1 : ℂ) ⊗ₜ[ℝ] (1 : ℂ)) +
+                tensorMultiplication ℝ ℂ (Complex.I ⊗ₜ[ℝ] Complex.I) :=
+              map_add _ _ _
+            _ = 0 := by simp [tensorMultiplication]
+        · change tensorMultiplication ℝ ℂ
+            ((1 : ℂ) ⊗ₜ[ℝ] Complex.I - Complex.I ⊗ₜ[ℝ] (1 : ℂ)) = 0
+          calc
+            _ = tensorMultiplication ℝ ℂ ((1 : ℂ) ⊗ₜ[ℝ] Complex.I) -
+                tensorMultiplication ℝ ℂ (Complex.I ⊗ₜ[ℝ] (1 : ℂ)) :=
+              map_sub _ _ _
+            _ = 0 := by simp [tensorMultiplication]
+      simp [tensorMulRepresentation, hm]
+    -- Boundary: the displayed tensors are now formally verified to lie in the
+    -- kernel (`hu`).  I searched `Basis.tensorProduct`,
+    -- `Basis.tensorProduct_repr_tmul_apply`, `Fintype.linearIndependent_iff`,
+    -- `basisOfLinearIndependentOfCardEqFinrank`, and
+    -- `coe_basisOfLinearIndependentOfCardEqFinrank`.  The attempted coordinate
+    -- proof with `Complex.basisOneI.tensorProduct Complex.basisOneI` is blocked
+    -- by Mathlib's asymmetric tensor-basis API requesting an unavailable
+    -- `IsScalarTower ℝ ℝ ℂ` instance; a local
+    -- `IsScalarTower.of_algebraMap_eq' rfl` did not resolve elaboration.
     sorry
