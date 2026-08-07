@@ -13,11 +13,16 @@ define h(y) = ∫ f(y-x)g(x)dm(x). Prove h is continuous and vanishes at ±∞.
 
 ## Proved (exit 0, 0 sorries)
 
-The definition and complete theorem compile. The decisive implementation was
-reused from the compiled neighboring bundle `a03J03`:
+The definition and complete theorem compile. Closer hop 3 recovered the
+previous real-valued implementation from git history, compared it with the
+frozen complex-valued statement, and specialized the scalar-polymorphic
+argument to `ℂ`. The decisive implementation was reused from the compiled
+neighboring bundle `a03J03`:
 
 1. `Lp.compMeasurePreserving` makes translated Lp representatives continuous.
-2. `ContinuousLinearMap.lpPairing` identifies the pairing with the convolution integral.
+2. `ContinuousLinearMap.lpPairing`, instantiated with
+   `ContinuousLinearMap.mul ℂ ℂ`, identifies the complex pairing with the
+   frozen convolution integral.
 3. Compact-support density and the pairing norm give uniform approximation.
 4. Compact support gives cocompact vanishing, which restricts to ±∞.
 
@@ -44,3 +49,6 @@ reused from the compiled neighboring bundle `a03J03`:
    `Real.holderConjugate_iff`; used to convert the frozen hypotheses.
 5. Mathlib order-compactness source supplied `atTop_le_cocompact` and
    `atBot_le_cocompact`; used.
+6. Git commits `1f93f86`, `69e3274`, and `ab95ab5` showed why the earlier
+   completed real proof was restored and isolated the reusable proof body;
+   used without changing the frozen theorem statement.

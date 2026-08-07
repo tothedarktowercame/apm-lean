@@ -29,15 +29,15 @@
   },
   "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.798578Z",
-  "checked_at": "2026-08-05T11:30:00Z",
+    "checked_at": "2026-08-07T00:00:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a97J03/lean/Main.lean",
     "sorry_count": 0,
     "sorry_locations": [],
     "proved": [
-      "convolution_continuous via Lp translations and lpPairing",
-      "convolution_tendsto_zero at cocompact via compact-support density",
+      "complex convolution_continuous via Lp translations and lpPairing",
+      "complex convolution_tendsto_zero at cocompact via compact-support density",
       "convolution_continuous_vanishes at both atTop and atBot"
     ],
     "blockers": []
