@@ -1,7 +1,7 @@
 # Proof Outline: m01J06
 
-The Lean artifact is partial. Positivity facts and the exact first and second
-derivatives of the intended sine modes are compiled.
+The Lean artifact is partial. Positivity facts and the full construction of
+the explicit critical sine modes are compiled.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m01J06.md`
@@ -12,12 +12,17 @@ derivatives of the intended sine modes are compiled.
 - Every critical frequency and critical load is positive.
 - For `s ↦ sin (w s)`, the first derivative is `w cos (w s)` and the
   second derivative is `-w² sin (w s)`.
+- The second derivative formula is transported to
+  `iteratedDerivWithin 2` on `Icc 0 1`.
+- For every `m`, the sine at frequency `(2m+1)π/2` is a nontrivial linear mode
+  at the stated critical load. Thus the reverse implication from a listed
+  critical load to existence of a mode is complete.
 
 ## Remaining Boundaries
 
 - Differentiate the set integral and prove the Euler–Lagrange/natural boundary
   equations; the zero-stationarity clause needs the same integral bridge.
-- Transport the compiled mode derivatives through `derivWithin` and
-  `iteratedDerivWithin`, then prove the converse ODE classification.
+- Prove only the converse ODE classification: every nontrivial custom linear
+  mode has one of the listed frequencies.
 - Establish the genuine local nonlinear bifurcation theorem near every
   critical load.
