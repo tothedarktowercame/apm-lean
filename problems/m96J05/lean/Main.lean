@@ -97,5 +97,17 @@ theorem apm_m96j05
   `ConstructionTargets/` modules, `YoungL2.lean`, and the fully closed artifact
   scan yielded no missing homomorphism.  The frozen statement appears sound;
   the unformalized multiplier-exponential interface is the blocker.
+
+  Closer hop 1 additionally reduced the scalar quotient limit to
+  `Real.hasDerivAt_sin 0 |>.tendsto_slope` and inspected
+  `NormedSpace.exp_continuousMap_eq`, which proves pointwise compatibility of
+  exponential for the Banach algebra of continuous functions.  That theorem
+  cannot be transported here: the symbols are merely bounded measurable
+  functions on an unbounded domain, and their multiplication operators act on
+  `Lp`; neither point evaluation nor a continuous-function coercion is
+  available for `Lp` equivalence classes.  Mathlib's distributional Fourier
+  multiplier API acts on Schwartz maps and tempered distributions, not as the
+  required bounded-multiplier algebra homomorphism into `L² →L L²`.  Thus the
+  original a.e.-power-series bridge remains open; the statement is unchanged.
   -/
   sorry
