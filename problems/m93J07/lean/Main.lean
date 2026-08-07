@@ -57,6 +57,45 @@ lemma apm_m93J07_tail_power_two_not_integrable :
   rw [integrableOn_Ioi_rpow_iff zero_lt_one]
   norm_num
 
+noncomputable def apm_m93J07_localWitness : ℝ → ℝ :=
+  Set.Ioo (0 : ℝ) 1 |>.indicator (fun x ↦ x ^ (-1 / 3 : ℝ))
+
+lemma apm_m93J07_localWitness_aestronglyMeasurable :
+    AEStronglyMeasurable apm_m93J07_localWitness volume := by
+  rw [apm_m93J07_localWitness, aestronglyMeasurable_indicator_iff measurableSet_Ioo]
+  exact (continuousOn_id.rpow_const (fun _ hx ↦ Or.inl hx.1.ne')).aestronglyMeasurable
+    measurableSet_Ioo
+
+lemma apm_m93J07_localWitness_memLp_two :
+    MemLp apm_m93J07_localWitness 2 volume := by
+  rw [memLp_two_iff_integrable_sq apm_m93J07_localWitness_aestronglyMeasurable]
+  have hi := apm_m93J07_local_power_two_integrable.integrable_indicator measurableSet_Ioo
+  convert hi using 1
+  funext x
+  by_cases hx : x ∈ Set.Ioo (0 : ℝ) 1
+  · simp only [apm_m93J07_localWitness, Set.indicator_of_mem hx]
+    rw [← Real.rpow_natCast]
+    rw [← Real.rpow_mul hx.1.le]
+    norm_num
+  · simp [apm_m93J07_localWitness, Set.indicator, hx]
+
+lemma apm_m93J07_localWitness_not_memLp_four :
+    ¬ MemLp apm_m93J07_localWitness 4 volume := by
+  intro hf
+  apply apm_m93J07_local_power_four_not_integrable
+  have hi := hf.integrable_norm_rpow (by norm_num) (by norm_num)
+  apply (integrable_indicator_iff measurableSet_Ioo).1
+  convert hi using 1
+  funext x
+  by_cases hx : x ∈ Set.Ioo (0 : ℝ) 1
+  · simp only [apm_m93J07_localWitness, Set.indicator_of_mem hx,
+      Real.norm_rpow_of_nonneg hx.1.le, Real.norm_eq_abs, abs_of_pos hx.1]
+    norm_num
+    rw [← Real.rpow_natCast]
+    rw [← Real.rpow_mul hx.1.le]
+    norm_num
+  · simp [apm_m93J07_localWitness, Set.indicator, hx]
+
 theorem apm_m93j07 :
     (∃ X : apm_m93j07_Banach, ¬ apm_m93j07_Separable X) ∧
     (∃ X : apm_m93j07_Banach,
@@ -110,6 +149,17 @@ theorem apm_m93j07 :
   primal separability, nor a ready dense-proper multiplication operator on the
   frozen restricted `Lp` type; the Banach-space bundle conjuncts therefore
   remain the dominant blocker.
+
+  Closer hop 2 completes that local conversion.  The explicit indicator
+  `apm_m93J07_localWitness` is strongly measurable, belongs to `L²(volume)`,
+  and does not belong to `L⁴(volume)`, by
+  `memLp_two_iff_integrable_sq`, `MemLp.integrable_norm_rpow`, and the four
+  scalar tests above.  Searches of the strong-dual, weak-dual, separability,
+  dense-range, and `Lp` operator sources still found no packaged proof that a
+  separable strong dual forces primal separability and no ready dense proper
+  endomorphism of the exact restricted `Lp` type.  Those Banach-space and
+  operator clauses remain the principal open bridge; the tail and restricted
+  `MemLp` witnesses can now follow the same compiled indicator pattern.
   -/
   have hremaining :
       (∃ X : apm_m93j07_Banach, ¬ apm_m93j07_Separable X) ∧

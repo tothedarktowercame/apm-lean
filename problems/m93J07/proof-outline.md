@@ -12,6 +12,16 @@ the explicit power-function counterexamples.
   is not, by `integrableOn_Ioi_rpow_iff`.
 - These four scalar integrability facts are proved as local helper lemmas.
 
+## Closer hop 2 progress
+
+- `apm_m93J07_localWitness` is the indicator of `x ^ (-1/3)` on `(0,1)`.
+- Its strong measurability and exact memberships `MemLp ... 2 volume` and
+  `¬ MemLp ... 4 volume` now compile, using the scalar integral helpers,
+  `memLp_two_iff_integrable_sq`, and `MemLp.integrable_norm_rpow`.
+- The same indicator conversion can be reused for the restricted-measure and
+  tail witnesses. The dominant remaining work is still the Banach-space
+  example bundle and the dense-proper operator on the frozen `Lp` type.
+
 ## Remaining Boundary
 
 - Package the power functions with indicators and bridge the scalar
