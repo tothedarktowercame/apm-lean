@@ -22,6 +22,36 @@ def tensorMulRepresentation (F E : Type*) [Field F] [Field E] [Algebra F E] :
     E ⊗[F] E →ₗ[F] Module.End F E :=
   (LinearMap.mul F E).comp (tensorMultiplication F E)
 
+lemma tensorMulRepresentation_finrank_ker
+    (F E : Type*) [Field F] [Field E] [Algebra F E]
+    [FiniteDimensional F E] :
+    Module.finrank F (tensorMulRepresentation F E).ker =
+      (Module.finrank F E) ^ 2 - Module.finrank F E := by
+  have hmul : Function.Injective (LinearMap.mul F E) := by
+    intro x y hxy
+    have := LinearMap.congr_fun hxy 1
+    simpa using this
+  have htensor : Function.Surjective (tensorMultiplication F E) := by
+    intro x
+    refine ⟨x ⊗ₜ[F] 1, by simp [tensorMultiplication]⟩
+  have hrange : (tensorMulRepresentation F E).range =
+      (LinearMap.mul F E).range := by
+    exact LinearMap.range_comp_of_range_eq_top _
+      (LinearMap.range_eq_top.mpr htensor)
+  have hfrange : Module.finrank F (tensorMulRepresentation F E).range =
+      Module.finrank F E := by
+    rw [hrange, ← (LinearEquiv.ofInjective (LinearMap.mul F E) hmul).finrank_eq]
+  have hrank := (tensorMulRepresentation F E).finrank_range_add_finrank_ker
+  rw [hfrange, Module.finrank_tensorProduct] at hrank
+  apply Nat.eq_sub_of_add_eq
+  simpa [pow_two, add_comm] using hrank
+
+lemma tensorMulRepresentation_finrank_ker_of_finrank_eq
+    (F E : Type*) [Field F] [Field E] [Algebra F E]
+    [FiniteDimensional F E] (n : ℕ) (hfin : Module.finrank F E = n) :
+    Module.finrank F (tensorMulRepresentation F E).ker = n ^ 2 - n := by
+  rw [tensorMulRepresentation_finrank_ker, hfin]
+
 /-- Existence and uniqueness of the specified map, its image and kernel
 dimensions in finite degree, and the displayed basis in the `ℂ/ℝ` case. -/
 theorem apm_b95j03 :
@@ -142,22 +172,10 @@ theorem apm_b95j03 :
         Module.finrank ℝ (LinearMap.mul ℝ ℂ).range = Module.finrank ℝ ℂ :=
           (LinearEquiv.ofInjective (LinearMap.mul ℝ ℂ) hmul).finrank_eq.symm
         _ = 2 := Complex.finrank_real_complex
-    have hrank := (tensorMulRepresentation ℝ ℂ).finrank_range_add_finrank_ker
+    have hcfinrank : Module.finrank ℝ ℂ = 2 := by
+      exact Complex.finrank_real_complex
     have hker : Module.finrank ℝ (tensorMulRepresentation ℝ ℂ).ker = 2 := by
-      /- CLOSER HOP 1 boundary: `hlu` now proves independence without the
-         asymmetric tensor-basis API, using the separating functionals
-         `re ⊗ re` and `re ⊗ im`. The basis construction below is complete
-         modulo this dimension equality. Rank-nullity gives `hrank`, but after
-         rewriting `Module.finrank_tensorProduct`, its two printed occurrences
-         of `Module.finrank ℝ ℂ` carry module-instance parameters that do
-         not rewrite with `Complex.finrank_real_complex`; adding a local
-         `Complex.instModule` makes that mismatch worse by preventing the
-         `reLm`/`imLm` simplifications above. Tried `rw`, `simp only`,
-         `norm_num`, an explicit intermediate equality, and `omega` with the
-         finrank equality in context. A next hop should factor the already
-         proved generic dimension conjunct into a named lemma and specialize
-         it here, avoiding this local typeclass diamond. -/
-      sorry
+      norm_num [tensorMulRepresentation_finrank_ker_of_finrank_eq ℝ ℂ 2 hcfinrank]
     let b := basisOfLinearIndependentOfCardEqFinrank hluk (by simp [hker])
     refine ⟨b, ?_, ?_⟩
     · rw [show b 0 = uk 0 by

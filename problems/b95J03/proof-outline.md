@@ -1,6 +1,6 @@
 # Proof Outline: b95J03
 
-The Lean proof is partial in `lean/Main.lean`.
+The theorem is fully proved in `lean/Main.lean` with no sorries.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b95J03.md`
@@ -16,9 +16,18 @@ The Lean proof is partial in `lean/Main.lean`.
   `basisOfLinearIndependentOfCardEqFinrank` constructs the requested basis and
   the two displayed values are verified.
 
-## Remaining bridge
+## Closed dimension bridge
 
-Specialize the already-proved generic kernel dimension formula to `ℂ/ℝ` in a
-way that avoids the competing `Module ℝ ℂ` instance parameters exposed by the
-local rank-nullity calculation. Factoring the generic dimension conjunct into a
-named helper before assembling the theorem should provide the cleanest route.
+- `tensorMulRepresentation_finrank_ker` packages the generic rank-nullity
+  computation.
+- `tensorMulRepresentation_finrank_ker_of_finrank_eq` accepts an explicit
+  numerical finrank equality in the same typeclass context. Specializing it
+  with the locally established `Module.finrank ℝ ℂ = 2` avoids the module
+  instance diamond and proves that the kernel has finrank two.
+- The two independent displayed vectors therefore form a basis via
+  `basisOfLinearIndependentOfCardEqFinrank`.
+
+## Audit
+
+- `lake env lean problems/b95J03/lean/Main.lean`: exit 0.
+- The main theorem has no `sorryAx` dependency.
