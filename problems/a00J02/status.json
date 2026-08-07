@@ -11,6 +11,22 @@
   ],
   "recommended_latest_frame_id": "apm-v2-a00J02-1774990402922",
   "selected_frame_id": null,
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 0,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 0
+  },
+  "classification": "complete",
+  "checked_at": "2026-08-07T03:09:15Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a00J02/lean/Main.lean",
+    "sorry_count": 0,
+    "axioms": "propext, Classical.choice, Quot.sound"
+  },
   "imported_at": "2026-05-01T19:38:15.758547Z",
   "historical_sources": [
     {
