@@ -10,38 +10,60 @@ orientation for which `S³ → ℝP³` is orientation-preserving.
 
 ## Encoding question
 
-Mathlib does not yet bundle differential forms and their integration on
-arbitrary smooth manifolds.  The actual manifolds `ℝ⁴`, `S³`, and `ℝP³`, their
-maps, differential-form types, pullback, and oriented integral are retained as
-explicitly typed placeholders.
+The sphere is the actual unit sphere in `ℝ⁴`, and `ℝP³` is its antipodal
+quotient. A projective three-form is represented by its antipodally invariant
+pullback density on `S³`. The given ambient form restricts to the explicit
+density obtained by contraction with the outward unit normal. Integration on
+the quotient is half the Hausdorff-measure integral over the double cover.
 -/
 
-open CategoryTheory
+open MeasureTheory
 
-def t95J05R4 : TopCat := by sorry
-def t95J05SphereThree : TopCat := by sorry
-def t95J05RealProjectiveThree : TopCat := by sorry
+noncomputable section
 
-def t95J05Inclusion : t95J05SphereThree ⟶ t95J05R4 := by sorry
-def t95J05Projection : t95J05SphereThree ⟶ t95J05RealProjectiveThree := by sorry
+abbrev t95J05R4 := EuclideanSpace ℝ (Fin 4)
+abbrev t95J05SphereThree := Metric.sphere (0 : t95J05R4) 1
 
-def T95J05DifferentialForm (degree : ℕ) (X : TopCat) : Type := by sorry
+def t95J05Antipode (x : t95J05SphereThree) : t95J05SphereThree :=
+  ⟨-x.1, by simpa [Metric.mem_sphere] using x.2⟩
 
-def t95J05Pullback {degree : ℕ} {X Y : TopCat} (f : X ⟶ Y)
-    (ω : T95J05DifferentialForm degree Y) :
-    T95J05DifferentialForm degree X := by sorry
+inductive T95J05AntipodalRel :
+    t95J05SphereThree → t95J05SphereThree → Prop
+  | antipodal (x : t95J05SphereThree) :
+      T95J05AntipodalRel x (t95J05Antipode x)
 
-def t95J05Omega : T95J05DifferentialForm 3 t95J05R4 := by sorry
+def t95J05RealProjectiveThree :=
+  Quotient (Relation.EqvGen.setoid T95J05AntipodalRel)
 
-def t95J05Integral
-    (η : T95J05DifferentialForm 3 t95J05RealProjectiveThree) : ℝ := by sorry
+noncomputable instance : TopologicalSpace t95J05RealProjectiveThree :=
+  TopologicalSpace.coinduced
+    (fun x : t95J05SphereThree ↦
+      Quotient.mk (Relation.EqvGen.setoid T95J05AntipodalRel) x)
+    inferInstance
+
+/-- A three-form on `ℝP³`, represented by its invariant density upstairs. -/
+def T95J05ProjectiveThreeForm :=
+  {ρ : t95J05SphereThree → ℝ //
+    ∀ x, ρ (t95J05Antipode x) = ρ x}
+
+/-- The coefficient `x₂³ - 4x₁` of the ambient three-form. -/
+def t95J05Omega (x : t95J05R4) : ℝ := x 1 ^ 3 - 4 * x 0
+
+/-- Restriction to the oriented sphere, by contraction with its normal. -/
+def t95J05InclusionPullback (x : t95J05SphereThree) : ℝ :=
+  t95J05Omega x.1 * x.1 0
+
+/-- Pullback along the antipodal quotient projection. -/
+def t95J05ProjectionPullback (η : T95J05ProjectiveThreeForm) :
+    t95J05SphereThree → ℝ := η.1
+
+def t95J05Integral (η : T95J05ProjectiveThreeForm) : ℝ :=
+  (1 / 2 : ℝ) * ∫ x, η.1 x ∂Measure.hausdorffMeasure 3
 
 theorem apm_t95j05 :
-    (∃! η : T95J05DifferentialForm 3 t95J05RealProjectiveThree,
-      t95J05Pullback t95J05Projection η =
-        t95J05Pullback t95J05Inclusion t95J05Omega) ∧
-    (∀ η : T95J05DifferentialForm 3 t95J05RealProjectiveThree,
-      t95J05Pullback t95J05Projection η =
-        t95J05Pullback t95J05Inclusion t95J05Omega →
+    (∃! η : T95J05ProjectiveThreeForm,
+      t95J05ProjectionPullback η = t95J05InclusionPullback) ∧
+    (∀ η : T95J05ProjectiveThreeForm,
+      t95J05ProjectionPullback η = t95J05InclusionPullback →
       t95J05Integral η = -Real.pi ^ 2) := by
   sorry
