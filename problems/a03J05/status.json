@@ -9,12 +9,12 @@
     "harvest_mismatch_note": "The harvested file contained the a03J04 proof and was removed. No worked informal solution for a03J05 is currently available."
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -26,6 +26,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "problem-only",
+  "classification": "partial",
+  "closer_hop": 1,
+  "closer_note": "Closed the frequency-zero case using Mathlib's improper integral of 1/(1+x²). Nonzero frequencies still require an unavailable Fourier-transform, Laplace-inversion/Fubini, or residue-contour bridge.",
   "imported_at": "2026-07-13T17:26:51.819921Z"
 }

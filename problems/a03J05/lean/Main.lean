@@ -28,6 +28,12 @@ noncomputable section
 def apm_a03J05_integrand (t x : ℝ) : ℝ :=
   Real.cos (x * t) / (1 + x ^ 2)
 
+/-- The requested identity at frequency zero. -/
+lemma apm_a03J05_integral_zero :
+    ∫ x in Ioi (0 : ℝ), apm_a03J05_integrand 0 x ∂volume = Real.pi / 2 := by
+  simpa [apm_a03J05_integrand] using
+    (integral_Ioi_inv_one_add_sq (i := (0 : ℝ)))
+
 /-! ## Base case: t = 0 gives ∫₀^∞ 1/(1+x²) dx = π/2
 
    This uses `integral_Ioi_of_hasDerivAt_of_tendsto'` with f = arctan,
@@ -71,12 +77,27 @@ def apm_a03J05_integrand (t x : ℝ) : ℝ :=
 theorem apm_a03j05 (t : ℝ) :
     ∫ x in Ioi (0 : ℝ), apm_a03J05_integrand t x ∂volume =
       (Real.pi / 2) * Real.exp (-|t|) := by
-  -- SKIPPED: contour integral evaluation of ∫₀^∞ cos(xt)/(1+x²) dx = (π/2)e^{-|t|}.
-  -- Requires residue theorem (NOT in Mathlib) or Fourier transform of 1/(1+x²)
-  -- (NOT pre-computed in Mathlib). The file comments document the contour approach
-  -- and the ODE alternative, both blocked by missing infrastructure.
-  -- APIs: `Complex.circleIntegral_sub_inv_smul` — exists but needs full contour setup.
-  -- No residue theorem for this configuration in Mathlib.
+  /-
+  PARTIAL boundary (closer hop 1).
+
+  `apm_a03J05_integral_zero` now closes the complete `t = 0` case using
+  Mathlib's packaged `integral_Ioi_inv_one_add_sq` theorem.
+
+  Beyond the original residue search, I inspected Mathlib's Fourier,
+  Laplace, Gaussian, Poisson, Cauchy-integral, improper-integral, and
+  parametric-integral sources, `LEMMA-INDEX.md`, all closed artifacts, and
+  `ConstructionTargets/`.  `ConstructionTargets.Sinc` supplies
+  `integral_exp_neg_mul_cos_Ioi`, which proves the elementary Laplace transform
+  `∫ exp (-a*x) cos (t*x) = a/(a²+t²)`.  Using it here would still require a
+  new Fubini/Laplace-inversion argument with domination for the oscillatory
+  integral.  No corpus theorem packages that inversion, the Fourier transform
+  of `1/(1+x²)`, a semicircle-contour limit, or residue calculus.  Sibling
+  `a97J06` independently reaches the same boundary for `1/(x²+4)`.
+
+  Thus the nonzero-frequency evaluation remains open; the ODE route still
+  introduces the non-Bochner-integrable term `∫ cos (t*x)`, while the contour
+  route requires an ad hoc arc construction and vanishing estimate.
+  -/
   sorry
 
 end

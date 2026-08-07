@@ -1,12 +1,19 @@
 # Proof Outline: a03J05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-a03J05.md`
+- The harvested informal proof was mismatched; the TeX statement is the intent
+  source.
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_a03J05_integral_zero` proves the full identity at `t = 0` from
+  `integral_Ioi_inv_one_add_sq`.
+
+## Remaining bridge
+
+For `t ≠ 0`, evaluate the Fourier cosine transform of `1/(1+x²)`.
+`ConstructionTargets.Sinc.integral_exp_neg_mul_cos_Ioi` gives a related
+Laplace transform, but using it requires a new justified Fubini/inversion
+argument. Mathlib currently packages neither this Fourier transform nor the
+residue/semicircle-contour calculation.
