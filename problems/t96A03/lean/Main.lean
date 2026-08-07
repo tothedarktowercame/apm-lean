@@ -1,40 +1,64 @@
 import Mathlib
-import ApmCanaries.Frames.T96A03.Apm_v2_t96A03_1775012050983.Scratch
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
+
+/-!
+# APM t96A03 — two 2-spheres glued along their equators
+
+## Statement repairs
+
+The review packet suggests `H₂(X) = ℤ²`, but this is not the homology of the
+space in the source. Mayer–Vietoris gives
+`0 → ℤ² → H₂(X) → ℤ → 0`, so `H₂(X) ≅ ℤ³`. Equivalently, the quotient has
+four 2-cells attached to one circle, with a rank-one cellular boundary map.
+The statement below records the corrected value `ℤ³`.
+
+## Encoding questions
+
+None. Both spheres, their equator, the gluing homeomorphism, the quotient
+space, and Mathlib's integral singular homology functor are used directly.
+-/
+
+open CategoryTheory Set
 
 noncomputable section
 
-open scoped BigOperators
+abbrev apm_t96A03_Sphere2 :=
+  Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1
 
-namespace ApmCanaries.Frames.T96A03.Apm_v2_t96A03_1775012050983.Main
+def apm_t96A03_Equator : Set apm_t96A03_Sphere2 :=
+  {x | (x.1 : EuclideanSpace ℝ (Fin 3)) 2 = 0}
 
-/-- The linear map that adds the four coordinates of a vector in `ℤ^4`. -/
-def sumLinearMap : (Fin 4 → ℤ) →ₗ[ℤ] ℤ :=
-{ toFun := fun v => ∑ i, v i
-  map_add' := by
-    intro v w
-    simp [Finset.sum_add_distrib]
-  map_smul' := by
-    intro z v
-    simpa [Finset.mul_sum] using
-      (Finset.mul_sum z fun i => v i).symm }
+abbrev apm_t96A03_EquatorSpace := apm_t96A03_Equator
 
-lemma sumLinearMap_apply (v : Fin 4 → ℤ) :
-    sumLinearMap v = ∑ i, v i := rfl
+inductive apm_t96A03_glueRel
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :
+    Sum apm_t96A03_Sphere2 apm_t96A03_Sphere2 →
+      Sum apm_t96A03_Sphere2 apm_t96A03_Sphere2 → Prop
+  | glue (x : apm_t96A03_EquatorSpace) :
+      apm_t96A03_glueRel h (Sum.inl x.1) (Sum.inr (h x).1)
 
-lemma sumLinearMap_surjective :
-    Function.Surjective sumLinearMap := by
-  classical
-  intro n
-  refine ⟨fun i : Fin 4 => if i = 0 then n else 0, ?_⟩
-  have hsucc :
-      ∑ i : Fin 3, (if (Fin.succ i : Fin 4) = 0 then n else 0) = 0 := by
-    refine Finset.sum_eq_zero ?_
-    intro i _
-    simp [Fin.succ_ne_zero]
-  have hzero :
-      ∑ i : Fin 4, (if i = 0 then n else 0) = n := by
-    simpa [Fin.sum_univ_succ, hsucc]
-      using (Fin.sum_univ_succ fun i : Fin 4 => (if i = 0 then n else 0))
-  simpa [sumLinearMap_apply, hzero]
+def apm_t96A03_X
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :=
+  Quotient (Relation.EqvGen.setoid (apm_t96A03_glueRel h))
 
-end ApmCanaries.Frames.T96A03.Apm_v2_t96A03_1775012050983.Main
+noncomputable instance
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :
+    TopologicalSpace (apm_t96A03_X h) :=
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t96A03_Sphere2 apm_t96A03_Sphere2 ↦ Quotient.mk _ x)
+    inferInstance
+
+abbrev apm_t96A03_H (k : ℕ) (Y : Type) [TopologicalSpace Y] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y))
+
+theorem apm_t96a03
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :
+    Nonempty (apm_t96A03_H 0 (apm_t96A03_X h) ≅ ModuleCat.of ℤ ℤ) ∧
+    Limits.IsZero (apm_t96A03_H 1 (apm_t96A03_X h)) ∧
+    Nonempty
+      (apm_t96A03_H 2 (apm_t96A03_X h) ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
+    ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t96A03_H k (apm_t96A03_X h)) := by
+  sorry
