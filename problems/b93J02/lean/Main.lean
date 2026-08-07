@@ -1,21 +1,39 @@
 import Mathlib
-import ApmCanaries.Frames.B93J02.Apm_v2_b93J02_1775006390328.Scratch
 
-noncomputable section
+/-!
+# APM b93J02 — implications and counterexamples for domain properties
+
+## Statement repairs
+
+None.
+
+## Encoding questions
+
+None. PID, UFD, Noetherian, and integrally closed are represented by their
+Mathlib predicates. The counterexamples are the concrete rings `ℤ[X]`, the
+polynomial ring in countably many variables over `ℤ`, and `ℤ[√-5]`.
+-/
 
 open scoped Polynomial
 
-namespace ApmCanaries.Frames.B93J02.Apm_v2_b93J02_1775006390328.Main
+noncomputable section
 
-/-- In any commutative integral domain, the PID property implies
-unique factorisation and hence integral closure.  This formalises
-part (a) of the problem. -/
-lemma pid_isIntegrallyClosed
-    (R : Type*) [CommRing R] [IsDomain R] [IsPrincipalIdealRing R] :
-    IsIntegrallyClosed R := by
-  classical
-  -- `IsPrincipalIdealRing` gives us a `UniqueFactorizationMonoid` instance
-  -- which in turn supplies integral closedness.
-  simpa using (UniqueFactorizationMonoid.isIntegrallyClosed (R := R))
-
-end ApmCanaries.Frames.B93J02.Apm_v2_b93J02_1775006390328.Main
+theorem apm_b93j02 :
+    -- (a): I implies II, and II implies IV.
+    (∀ (R : Type) [CommRing R] [IsDomain R],
+      IsPrincipalIdealRing R → UniqueFactorizationMonoid R) ∧
+    (∀ (R : Type) [CommRing R] [IsDomain R],
+      UniqueFactorizationMonoid R → IsIntegrallyClosed R) ∧
+    -- (b), II does not imply I: `ℤ[X]` is a UFD but not a PID.
+    (UniqueFactorizationMonoid (Polynomial ℤ) ∧
+      ¬IsPrincipalIdealRing (Polynomial ℤ)) ∧
+    -- (b), II does not imply III: infinitely many polynomial variables.
+    (UniqueFactorizationMonoid (MvPolynomial ℕ ℤ) ∧
+      ¬IsNoetherianRing (MvPolynomial ℕ ℤ)) ∧
+    -- (b), III does not imply I: `ℤ[√-5]`.
+    (IsNoetherianRing (Zsqrtd (-5)) ∧
+      ¬IsPrincipalIdealRing (Zsqrtd (-5))) ∧
+    -- (c): the same domain is not a UFD.
+    IsDomain (Zsqrtd (-5)) ∧
+      ¬UniqueFactorizationMonoid (Zsqrtd (-5)) := by
+  sorry
