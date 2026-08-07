@@ -102,6 +102,22 @@ abbrev apm_t97A03_Homology (X : Type) [TopologicalSpace X] (n : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
+/-- The frozen two-sheet fiber count forces the covering map to be onto. -/
+lemma apm_t97A03_surjective_of_fiber_card_two
+    {A B : Circle} {Y : Type} (p : Y → apm_t97A03_BaseSpace A B)
+    (hdegree : ∀ x : apm_t97A03_BaseSpace A B,
+      Nat.card (p ⁻¹' ({x} : Set _)) = 2) :
+    Function.Surjective p := by
+  intro x
+  by_contra hx
+  push_neg at hx
+  have hempty : p ⁻¹' ({x} : Set _) = ∅ := by
+    ext y
+    simp [hx y]
+  have h := hdegree x
+  rw [hempty] at h
+  simp at h
+
 theorem apm_t97a03
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -116,4 +132,35 @@ theorem apm_t97a03
     Nonempty (apm_t97A03_Homology Y 2 ≅ ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
     (∀ n, 3 ≤ n → Limits.IsZero (apm_t97A03_Homology Y n)) ∧
     Nonempty (FundamentalGroup Y y ≃* FreeGroup (Fin 3)) := by
+  /-
+  PARTIAL boundary (closer hop 1).
+
+  New progress: `apm_t97A03_surjective_of_fiber_card_two` proves that the
+  frozen cardinality condition makes `p` surjective, by showing an omitted
+  base point would have an empty fiber of cardinality zero.  Hence subsequent
+  work may treat `p` as a genuine connected two-sheeted covering without
+  separately recovering surjectivity from `IsCoveringMap`.
+
+  The remaining theorem requires three major bridges.  First, the concrete
+  EqvGen quotient for the base must be identified up to homotopy with
+  `S² ∨ S¹ ∨ S¹`, and connected degree-two coverings must be classified by
+  the three index-two subgroups of its `F₂` fundamental group, then matched to
+  the two frozen quotient models.  Second, the cellular chain complex of each
+  quotient must be connected to Mathlib singular homology to obtain ranks
+  `1,3,2`.  Third, the covering injection on fundamental groups must be
+  combined with a quantitative Nielsen--Schreier rank formula to obtain
+  `FreeGroup (Fin 3)`.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, all closed artifacts,
+  Mathlib's covering/lifting/fundamental-groupoid, singular-homology,
+  free-group, Schreier, and Nielsen--Schreier sources, and git history found no
+  classification of connected coverings by subgroups, no CW/cellular homology
+  comparison for these adjunction quotients, and no finite-index free-rank
+  equality.  Mathlib proves only that subgroups of free groups are free and
+  provides Schreier rank bounds; sibling `t00J08` independently records the
+  missing quantitative equality, while `t94J04`, `t01A04`, and `t93A03`
+  record the unavailable subgroup-cover and wedge fundamental-group bridges.
+  Thus none of the six frozen conjuncts can yet be obtained merely by
+  transporting through an existing classification theorem.
+  -/
   sorry
