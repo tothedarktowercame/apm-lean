@@ -80,6 +80,46 @@ lemma apm_m98J04_arcLength_line_eq_sqrt (a b α β : ℝ) (hab : a < b) :
   rw [mul_pow, Real.sq_sqrt (by positivity), Real.sq_sqrt (by positivity)]
   field_simp
 
+/-- The endpoint identity needed for the graph-length lower bound. -/
+lemma apm_m98J04_integral_deriv_eq_sub (a b : ℝ) (y : ℝ → ℝ)
+    (hy : ContDiff ℝ 1 y) :
+    ∫ x in a..b, deriv y x = y b - y a := by
+  apply intervalIntegral.integral_deriv_eq_sub
+  · intro x hx
+    exact hy.differentiable one_ne_zero x
+  · exact (hy.continuous_deriv le_rfl).intervalIntegrable a b
+
+/-- The scalar graph arc-length integrand is a complex norm. -/
+lemma apm_m98J04_norm_one_add_deriv_mul_I (y : ℝ → ℝ) (x : ℝ) :
+    ‖((1 : ℝ) : ℂ) + ((deriv y x : ℝ) : ℂ) * Complex.I‖ =
+      Real.sqrt (1 + (deriv y x) ^ 2) := by
+  rw [Complex.norm_add_mul_I]
+  norm_num
+
+/-- Integrating the complex graph tangent records the endpoint displacement. -/
+lemma apm_m98J04_integral_complex_tangent (a b : ℝ) (y : ℝ → ℝ)
+    (hy : ContDiff ℝ 1 y) :
+    ∫ x in a..b, (((1 : ℝ) : ℂ) + ((deriv y x : ℝ) : ℂ) * Complex.I) =
+      ((b - a : ℝ) : ℂ) + ((y b - y a : ℝ) : ℂ) * Complex.I := by
+  have hderiv : Continuous (deriv y) := hy.continuous_deriv le_rfl
+  have h1 : IntervalIntegrable (fun _ : ℝ => ((1 : ℝ) : ℂ))
+      MeasureTheory.volume a b := by
+    exact continuous_const.intervalIntegrable a b
+  have h2 : IntervalIntegrable
+      (fun x : ℝ => ((deriv y x : ℝ) : ℂ) * Complex.I)
+      MeasureTheory.volume a b := by
+    apply Continuous.intervalIntegrable
+    fun_prop
+  rw [intervalIntegral.integral_add h1 h2]
+  rw [show (∫ x in a..b, ((deriv y x : ℝ) : ℂ) * Complex.I) =
+      (∫ x in a..b, ((deriv y x : ℝ) : ℂ)) * Complex.I from
+    intervalIntegral.integral_mul_const Complex.I
+      (fun x : ℝ => ((deriv y x : ℝ) : ℂ))]
+  rw [intervalIntegral.integral_ofReal]
+  rw [intervalIntegral.integral_ofReal]
+  rw [apm_m98J04_integral_deriv_eq_sub a b y hy]
+  simp
+
 theorem apm_m98j04 :
     (∀ (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ),
       a < b →
@@ -101,6 +141,19 @@ theorem apm_m98j04 :
     `HasDerivAt`-under-integral, interval integration-by-parts, bump-function,
     and fundamental-lemma APIs; I did not find an assembled route matching this
     bespoke three-variable Lagrangian encoding.
+
+    Closer hop 2 closes the entire arc-length conjunct below by routing the
+    graph tangent through `ℂ`, using `Complex.norm_add_mul_I`,
+    `intervalIntegral.integral_deriv_eq_sub`, and
+    `intervalIntegral.norm_integral_le_integral_norm`.  A renewed source search
+    found the dominated differentiation results in
+    `Analysis/Calculus/ParametricIntervalIntegral.lean` and the interval
+    integration-by-parts family in `IntegrationByParts.lean`.  These supply
+    the first two analytic stages once their domination and integrability
+    hypotheses are assembled.  No Mathlib or corpus declaration supplies the
+    remaining fundamental lemma: from vanishing integrals against every
+    endpoint-zero `C¹` test function, infer pointwise vanishing on `Ioo a b`.
+    Consequently this first conjunct remains the precise open bridge.
     -/
     sorry
   · intro a b α β hab
@@ -112,22 +165,24 @@ theorem apm_m98j04 :
       · have hba : b - a ≠ 0 := sub_ne_zero.mpr hab.ne'
         simp [apm_m98J04_line, hba]
     · /-
-      PARTIAL boundary: the line's derivative and its exact arc length are now
-      proved above as `apm_m98J04_deriv_line` and
-      `apm_m98J04_arcLength_line`; closer hop 1 further normalizes this length
-      to the Euclidean endpoint distance in
-      `apm_m98J04_arcLength_line_eq_sqrt`. Global minimality is the
-      convexity/Jensen
-      estimate for
-      `p ↦ sqrt (1 + p²)`, followed by the fundamental theorem of calculus for
-      an arbitrary globally `C¹` competitor to identify the integral of its
-      derivative with `β - α`. Mathlib provides
-      `intervalIntegral.norm_integral_le_integral_norm` and
-      `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`; sibling
-      `a95A02` demonstrates the latter route. However, converting the scalar
-      integrand `sqrt (1 + (deriv y)²)` to the norm of the vector-valued
-      derivative `(1, deriv y)` and assembling the endpoint estimate was not
-      completed. Searches of all closed artifacts, `ConstructionTargets`, and
-      `YoungL2.lean` found no compiled graph-arc-length wrapper.
+      The complex number `1 + y' * I` packages the graph tangent without
+      needing a custom Euclidean-product norm.  Its norm is the frozen
+      arc-length integrand, while its integral is the endpoint displacement.
       -/
-      sorry
+      intro y hy
+      rw [apm_m98J04_arcLength_line_eq_sqrt a b α β hab]
+      unfold apm_m98J04_arcLength
+      rw [← Complex.norm_add_mul_I (b - a) (β - α)]
+      calc
+        ‖((b - a : ℝ) : ℂ) + ((β - α : ℝ) : ℂ) * Complex.I‖ =
+            ‖∫ x in a..b,
+              (((1 : ℝ) : ℂ) + ((deriv y x : ℝ) : ℂ) * Complex.I)‖ := by
+              rw [apm_m98J04_integral_complex_tangent a b y hy.1]
+              simp [hy.2.1, hy.2.2]
+        _ ≤ ∫ x in a..b,
+              ‖(((1 : ℝ) : ℂ) + ((deriv y x : ℝ) : ℂ) * Complex.I)‖ :=
+            intervalIntegral.norm_integral_le_integral_norm hab.le
+        _ = ∫ x in a..b, Real.sqrt (1 + (deriv y x) ^ 2) := by
+          apply intervalIntegral.integral_congr
+          intro x hx
+          exact apm_m98J04_norm_one_add_deriv_mul_I y x
