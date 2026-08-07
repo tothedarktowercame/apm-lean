@@ -88,6 +88,66 @@ lemma apm_m99j03_triangle_one_hasCompactSupport :
     simp [apm_m99j03_triangle, hgt]
   exact (abs_le.mp hle)
 
+/-- The unit triangular profile has total mass one. -/
+lemma apm_m99j03_integral_triangle_one :
+    (∫ x : ℝ, apm_m99j03_triangle 1 x) = 1 := by
+  have hint : MeasureTheory.Integrable (apm_m99j03_triangle 1) :=
+    apm_m99j03_triangle_one_continuous.integrable_of_hasCompactSupport
+      apm_m99j03_triangle_one_hasCompactSupport
+  have hleft : (∫ x : ℝ in (-1)..0, apm_m99j03_triangle 1 x) = 1 / 2 := by
+    have hc : IntervalIntegrable (fun _ : ℝ => (1 : ℝ)) MeasureTheory.volume (-1) 0 :=
+      continuous_const.intervalIntegrable _ _
+    have hxint : IntervalIntegrable (fun x : ℝ => x) MeasureTheory.volume (-1) 0 :=
+      continuous_id.intervalIntegrable _ _
+    rw [intervalIntegral.integral_congr (g := fun x : ℝ => 1 + x)]
+    · rw [intervalIntegral.integral_add hc hxint,
+        intervalIntegral.integral_const, integral_id]
+      norm_num
+    · intro x hx
+      simp only [Set.mem_uIcc] at hx
+      rcases hx with hx | hx
+      · rw [apm_m99j03_triangle_one_eq_max, abs_of_nonpos hx.2]
+        simp [show 0 ≤ 1 + x by linarith]
+      · exfalso; linarith
+  have hright : (∫ x : ℝ in 0..1, apm_m99j03_triangle 1 x) = 1 / 2 := by
+    have hc : IntervalIntegrable (fun _ : ℝ => (1 : ℝ)) MeasureTheory.volume 0 1 :=
+      continuous_const.intervalIntegrable _ _
+    have hxint : IntervalIntegrable (fun x : ℝ => x) MeasureTheory.volume 0 1 :=
+      continuous_id.intervalIntegrable _ _
+    rw [intervalIntegral.integral_congr (g := fun x : ℝ => 1 - x)]
+    · rw [intervalIntegral.integral_sub hc hxint,
+        intervalIntegral.integral_const, integral_id]
+      norm_num
+    · intro x hx
+      simp only [Set.mem_uIcc] at hx
+      rcases hx with hx | hx
+      · rw [apm_m99j03_triangle_one_eq_max, abs_of_nonneg hx.1]
+        simp [sub_nonneg.mpr hx.2]
+      · exfalso; linarith
+  have hinterval : (∫ x : ℝ in (-1)..1, apm_m99j03_triangle 1 x) = 1 := by
+    rw [← intervalIntegral.integral_add_adjacent_intervals
+      (hint.intervalIntegrable) (hint.intervalIntegrable), hleft, hright]
+    norm_num
+  have hcompl : (∫ x : ℝ in (Set.Icc (-1 : ℝ) 1)ᶜ,
+      apm_m99j03_triangle 1 x) = 0 := by
+    apply MeasureTheory.integral_eq_zero_of_ae
+    filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Icc.compl] with x hx
+    simp only [Set.mem_compl_iff, Set.mem_Icc, not_and_or, not_le] at hx
+    rcases hx with hx | hx
+    · have habs : |x| > 1 := by rw [abs_of_neg (by linarith)]; linarith
+      simp [apm_m99j03_triangle, habs]
+    · have habs : |x| > 1 := by rw [abs_of_pos (by linarith)]; exact hx
+      simp [apm_m99j03_triangle, habs]
+  have hadd := MeasureTheory.integral_add_compl
+    (s := Set.Icc (-1 : ℝ) 1) measurableSet_Icc hint
+  have hset : (∫ x : ℝ in Set.Icc (-1 : ℝ) 1,
+      apm_m99j03_triangle 1 x) = 1 := by
+    rw [MeasureTheory.integral_Icc_eq_integral_Ioc,
+      ← intervalIntegral.integral_of_le (by norm_num : (-1 : ℝ) ≤ 1)]
+    exact hinterval
+  rw [hset, hcompl] at hadd
+  linarith
+
 lemma apm_m99j03_dilation_integrable
     (ψ φ : ℝ → ℝ) (hψ : Continuous ψ) (hφ : Continuous φ)
     (hφc : HasCompactSupport φ) (n : ℕ) :
@@ -201,6 +261,14 @@ theorem apm_m99j03
     `a94A03` and `a94J04`, and `ConstructionTargets.RadialMajorantAE`, operate
     in `Lᵖ`/a.e. convolution settings and do not provide this distributional
     first-moment calculation.
+
+    Closer hop 3 proves `apm_m99j03_integral_triangle_one`, completing the
+    exact unit-mass calculation for the triangular profile.  The proof reduces
+    the whole-line integral to `[-1,1]`, splits at zero, and evaluates the two
+    affine pieces as `1/2` each.  Thus part (a) is narrowed to the final
+    whole-line change-of-variables assembly using the already compiled scaling
+    and dilation lemmas.  Part (b) remains open at the dipole scaling,
+    cancellation, and uniform first-order Taylor-remainder argument.
     -/
     sorry
   refine ⟨hab.1, hab.2, ?_⟩

@@ -19,10 +19,13 @@ documented boundary covering parts (a) and (b); part (c) is fully compiled.
   triangle as the normalized dilation `n * triangle 1 (n*x)`.
 - `apm_m99j03_triangle_one_eq_max` identifies the unit profile with
   `max (1-|x|) 0`; its continuity and compact support in `[-1,1]` are compiled.
+- `apm_m99j03_integral_triangle_one` proves that the unit triangular profile
+  has total mass one by reducing to `[-1,1]`, splitting at zero, and evaluating
+  the two affine pieces.
 
 ## Remaining boundary
 
-- Part (a): apply `Measure.integral_comp_mul_left`, compute the unit profile's
-  mass as one, and reuse the compiled dilation theorem.
+- Part (a): apply `Measure.integral_comp_mul_left` to the compiled scaling
+  identity and reuse the dilation theorem; unit mass is now closed.
 - Part (b): perform the two half-interval calculations and use a uniform
   first-order Taylor remainder to identify the limit as `-deriv φ 0`.
