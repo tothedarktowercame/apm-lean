@@ -1,12 +1,23 @@
 import Mathlib
-import ApmCanaries.Frames.A96J03.Apm_v2_a96J03_1775003261538.Scratch
 
-noncomputable section
+/-!
+# APM a96J03
 
-namespace ApmCanaries.Frames.A96J03.Apm_v2_a96J03_1775003261538.Main
+## Statement repairs
 
-/- Authoritative frame-local Lean development.
-   Keep exploratory detours in Scratch.lean.
-   Promote reusable lemmas explicitly into ApmCanaries.Local. -/
+None.
 
-end ApmCanaries.Frames.A96J03.Apm_v2_a96J03_1775003261538.Main
+## Encoding questions
+
+None. Membership in `L¹(ℝ, μ)` is expressed for the given representative by
+`MeasureTheory.Integrable f volume`, and the displayed limit is encoded
+directly with the neighborhood filter at zero.
+-/
+
+open MeasureTheory Filter
+
+theorem apm_a96j03 (f : ℝ → ℝ) (hf : Integrable f volume) :
+    Tendsto
+      (fun t : ℝ => ∫ x : ℝ, |f (x - t) - f x|)
+      (nhds 0) (nhds 0) := by
+  sorry
