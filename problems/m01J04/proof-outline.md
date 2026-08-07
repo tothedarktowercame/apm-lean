@@ -1,12 +1,18 @@
 # Proof Outline: m01J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt is `lean/Main.lean`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m01J04.md`
 
-## Follow-up Needed
+## Closer hop 1 progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- The abstract weak×strong pairing conjunct is complete. Banach–Steinhaus
+  bounds the weakly convergent sequence, after which a direct epsilon argument
+  controls the varying-functional term by the operator norm.
+- One sorry remains for both custom Sobolev clauses. Rellich supplies the
+  subsequence abstractly, but the frozen predicates still require measurable
+  Hölder estimates, a Leibniz construction inside `apm_m01J04_H1`, preservation
+  of `apm_m01J04_isH1Zero`, and the corresponding integration-by-parts identity.
+- Searches of the lemma index, fully closed artifacts, construction libraries,
+  and Mathlib found no packaged bridge for this custom record.

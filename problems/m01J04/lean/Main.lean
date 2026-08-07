@@ -152,16 +152,28 @@ theorem apm_m01j04 :
       intro n
       rw [← (NormedSpace.inclusionInDoubleDualLi (E := X) ℝ).norm_map]
       exact hC n
-    /-
-      Boundary after uniform boundedness: `hf_bounded` is the key
-      Banach–Steinhaus consequence. It remains to formalize
-      `g n (f n) - h x = (g n - h) (f n) + (h (f n) - h x)`, bound the
-      first term by `C * ‖g n - h‖`, and combine `hg` with `hf h` using
-      the norm characterization of convergence. Searches found the required
-      `ContinuousLinearMap.le_opNorm` and filter multiplication lemmas, but no
-      packaged weak×strong pairing theorem.
-      -/
-    sorry
+    have hC0 : 0 ≤ C := le_trans (norm_nonneg (f 0)) (hf_bounded 0)
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨Ng, hNg⟩ := Metric.tendsto_atTop.mp hg
+      (ε / (2 * (C + 1))) (by positivity)
+    obtain ⟨Nf, hNf⟩ := Metric.tendsto_atTop.mp (hf h) (ε / 2) (by positivity)
+    refine ⟨max Ng Nf, fun n hn => ?_⟩
+    have hng := hNg n (le_trans (le_max_left _ _) hn)
+    have hnf := hNf n (le_trans (le_max_right _ _) hn)
+    have hfirst : dist (g n (f n)) (h (f n)) < ε / 2 := by
+      rw [dist_eq_norm, ← ContinuousLinearMap.sub_apply]
+      calc
+        ‖(g n - h) (f n)‖ ≤ ‖g n - h‖ * ‖f n‖ := (g n - h).le_opNorm _
+        _ ≤ ‖g n - h‖ * C := mul_le_mul_of_nonneg_left (hf_bounded n) (norm_nonneg _)
+        _ ≤ (ε / (2 * (C + 1))) * C := by
+          rw [dist_eq_norm] at hng
+          exact mul_le_mul_of_nonneg_right (le_of_lt hng) hC0
+        _ < (ε / (2 * (C + 1))) * (C + 1) := by
+          exact mul_lt_mul_of_pos_left (lt_add_one C) (by positivity)
+        _ = ε / 2 := by field_simp
+    exact lt_of_le_of_lt (dist_triangle _ (h (f n)) _) (by
+      simpa only [add_halves ε] using add_lt_add hfirst hnf)
   · /-
     Boundary for the Sobolev/compensated-compactness clauses: applying the
     supplied `apm_m01J04_HasRellichProperty` yields a subsequence with weak
@@ -174,5 +186,14 @@ theorem apm_m01j04 :
     `apm_m01J04_divStronglyConverges` to the target integral. Repository and
     Mathlib searches found no sibling or packaged theorem matching these custom
     predicates.
+
+    Closer hop 1 closes the abstract weak×strong pairing conjunct above,
+    including weak boundedness via `banach_steinhaus` and the explicit operator
+    norm estimate. Further searches of `LEMMA-INDEX.md`, all fully closed
+    artifacts, `ConstructionTargets/`, and `YoungL2.lean` returned no theorem
+    connecting the bespoke `apm_m01J04_H1` weak-gradient record to multiplication
+    by test functions. Thus the remaining sorry is specifically the measurable
+    Hölder/Leibniz/integration-by-parts assembly for these frozen predicates,
+    rather than the functional-analytic pairing step.
     -/
     sorry
