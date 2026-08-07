@@ -81,18 +81,34 @@ theorem apm_m00a02 :
         _ = |x ^ N * Real.exp (-x)| := by rw [abs_mul, mul_one]
     · simpa using (Real.tendsto_pow_mul_exp_neg_atTop_nhds_zero N).abs
   refine ⟨hexp, hsmooth, hcounter, ?_, ?_⟩
-  · /-
-    Boundary (closer hop 1): `apm_m00A02_counterexample_hasDerivAt` now proves
-    the exact derivative formula
-    `cos (exp x) - exp (-x) * sin (exp x)`.  Mathlib source also provides
-    `Real.cos_nat_mul_two_pi`, `Real.sin_nat_mul_pi`,
-    `Real.tendsto_log_atTop`, and `tendsto_natCast_atTop_atTop`, which support
-    the intended sequence `x k = log ((k+1) * (2π))`; on it the derivative is
-    identically one.  The remaining assembly is the filter composition showing
-    this logarithmic sequence tends to `atTop`, followed by uniqueness of the
-    two purported limits. No solved sibling packages that oscillation lemma.
-    -/
-    sorry
+  · intro hderiv
+    have hzero : Tendsto (deriv apm_m00A02_counterexample) atTop (nhds 0) := by
+      simpa [apm_m00A02_hasExpansion] using hderiv 0
+    let u : ℕ → ℝ := fun k => ((k + 1 : ℕ) : ℝ) * (2 * Real.pi)
+    have hu : Tendsto u atTop atTop := by
+      apply Tendsto.atTop_mul_const (mul_pos zero_lt_two Real.pi_pos)
+      have hcast :=
+        (tendsto_natCast_atTop_atTop (R := ℝ)).comp (tendsto_add_atTop_nat 1)
+      convert hcast using 1
+    have hlog : Tendsto (fun k => Real.log (u k)) atTop atTop :=
+      Real.tendsto_log_atTop.comp hu
+    have hone : Tendsto
+        (fun k => deriv apm_m00A02_counterexample (Real.log (u k)))
+        atTop (nhds 1) := by
+      apply tendsto_const_nhds.congr'
+      filter_upwards [] with k
+      rw [(apm_m00A02_counterexample_hasDerivAt _).deriv]
+      have huk : 0 < u k := mul_pos (by positivity) (mul_pos zero_lt_two Real.pi_pos)
+      rw [Real.exp_log huk]
+      have hcos : Real.cos (u k) = 1 := by
+        simpa [u] using Real.cos_nat_mul_two_pi (k + 1)
+      have hsin : Real.sin (u k) = 0 := by
+        convert Real.sin_nat_mul_pi (2 * (k + 1)) using 1 <;> push_cast <;> simp [u] <;> ring
+      rw [hcos, hsin]
+      ring
+    have hzero' := hzero.comp hlog
+    have : (0 : ℝ) = 1 := tendsto_nhds_unique hzero' hone
+    norm_num at this
 
   · /-
     Boundary for coefficient rigidity: the final implication requires a formal
@@ -102,5 +118,9 @@ theorem apm_m00a02 :
     expansion uniqueness or termwise integration in this custom encoding. A
     direct proof must first derive `b 0 = b 1 = 0` from convergence of `f`, then
     formalize improper FTC estimates order by order and compare coefficients.
+    Closer hop 2 completed the independent counterexample-negation conjunct via
+    the logarithmic sequence above. Further searches in the asymptotics and
+    improper-integral APIs still found no theorem connecting this custom
+    all-orders remainder predicate to the required integrated expansion.
     -/
     sorry
