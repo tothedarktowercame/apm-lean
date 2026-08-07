@@ -33,6 +33,22 @@ def apm_m00a06_IsDistribution
           (sSup (range fun x : ℝ => |φ x|) +
             sSup (range fun x : ℝ => |deriv φ x|))
 
+private lemma apm_m00a06_continuous_dslope_zero
+    {φ : ℝ → ℝ} (hφ : Differentiable ℝ φ) :
+    Continuous (dslope φ 0) := by
+  rw [← continuousOn_univ]
+  exact (continuousOn_dslope Filter.univ_mem).2
+    ⟨hφ.continuous.continuousOn, hφ.differentiableAt⟩
+
+private lemma apm_m00a06_kernel_mul_eq_sign_mul_dslope
+    {φ : ℝ → ℝ} (hφ0 : φ 0 = 0) {x : ℝ} (hx : x ≠ 0) :
+    apm_m00a06_singularKernel x * φ x =
+      (|x|⁻¹ * x) * dslope φ 0 x := by
+  rw [dslope_of_ne _ hx, slope_def_field, hφ0]
+  simp only [sub_zero]
+  unfold apm_m00a06_singularKernel
+  field_simp
+
 theorem apm_m00a06 :
     (∃ φ : ℝ → ℝ,
       apm_m00a06_IsTestFunction φ ∧
@@ -65,17 +81,17 @@ theorem apm_m00a06 :
       have hat_zero : apm_m00a06_singularKernel 0 * φ 0 = 0 := by
         simp [apm_m00a06_singularKernel]
       /-
-        Boundary for integrability after cancellation: `hφdiff` and `hφ0`
-        let `Convex.norm_image_sub_le_of_norm_deriv_le` bound
-        `|φ x| / |x|` by a derivative supremum. The product has compact
-        support by `hsupport` and its value at the singular point is compiled
-        as `hat_zero`. What remains is an API-level measurable domination
-        proof: obtain a finite derivative bound on the compact convex hull of
-        the support, prove the quotient is a.e. strongly measurable off the
-        null singleton `{0}`, and dominate it by a constant times the indicator
-        of a compact interval. `Continuous.integrable_of_hasCompactSupport`
-        does not apply directly because division by `|x|` can have unequal
-        one-sided limits at zero.
+        Boundary (closer hop 1) for integrability after cancellation: the new
+        lemmas `apm_m00a06_continuous_dslope_zero` and
+        `apm_m00a06_kernel_mul_eq_sign_mul_dslope` route around derivative
+        supremum estimates.  The integrand is a.e. the continuous divided
+        difference `dslope φ 0` multiplied by `|x|⁻¹*x`, whose norm is one
+        off the null singleton `{0}`.  Since `φ 0 = 0`, the divided difference
+        vanishes outside `support φ` (apart from zero), hence has compact
+        support and is integrable by
+        `Continuous.integrable_of_hasCompactSupport`. The remaining short API
+        bridge is packaging that compact-support inclusion and applying
+        `Integrable.bdd_mul` plus a.e. congruence.
         -/
       sorry
     · /-
