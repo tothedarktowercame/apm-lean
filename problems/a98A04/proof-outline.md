@@ -10,6 +10,10 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 - `apm_a98a04_spike_nonneg` proves every spike is nonnegative.
 - `apm_a98a04_spike_eq_zero_of_not_mem` proves its support is contained in
   `(a,b)`.
+- `apm_a98a04_spike_measurable` supplies the measurability input needed by the
+  integral and convergence APIs.
+- `apm_a98a04_spike_pos_iff` strengthens the support result: for `a < b`, the
+  spike is strictly positive exactly on `(a,b)`.
 
 ## Remaining bridges
 

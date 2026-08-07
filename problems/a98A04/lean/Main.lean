@@ -32,6 +32,34 @@ lemma apm_a98a04_spike_eq_zero_of_not_mem
   rw [apm_a98a04_spike, if_neg]
   exact fun h => hx h
 
+/-- The singular spike is measurable as a piecewise combination of elementary
+measurable functions. -/
+lemma apm_a98a04_spike_measurable (a b : ℝ) :
+    Measurable (apm_a98a04_spike a b) := by
+  change Measurable (fun x =>
+    if x ∈ Ioo a b then 1 / Real.sqrt ((b - a) * (x - a)) else 0)
+  apply Measurable.ite measurableSet_Ioo
+  · exact measurable_const.div
+      (Real.continuous_sqrt.measurable.comp
+        (measurable_const.sub measurable_const |>.mul
+          (measurable_id.sub measurable_const)))
+  · exact measurable_const
+
+/-- For a nondegenerate interval, the spike is strictly positive exactly on
+its defining open interval. -/
+lemma apm_a98a04_spike_pos_iff {a b x : ℝ} (hab : a < b) :
+    0 < apm_a98a04_spike a b x ↔ x ∈ Ioo a b := by
+  constructor
+  · intro hpos
+    by_contra hx
+    rw [apm_a98a04_spike_eq_zero_of_not_mem hx] at hpos
+    exact (lt_irrefl 0 hpos)
+  · intro hx
+    unfold apm_a98a04_spike
+    rw [if_pos ⟨hx.1, hx.2⟩]
+    exact one_div_pos.mpr (Real.sqrt_pos.2
+      (mul_pos (sub_pos.mpr hab) (sub_pos.mpr hx.1)))
+
 theorem apm_a98a04 :
     (∀ a b : ℝ, a < b →
       Integrable (apm_a98a04_spike a b) volume ∧
@@ -65,5 +93,13 @@ theorem apm_a98a04 :
   convergence ingredients but no packaged translated spike integral or
   everywhere-essentially-unbounded construction. Git history has no later
   attempt. No statement defect was found.
+
+  CLOSER HOP 2: the local interface is strengthened by the compiled lemmas
+  `apm_a98a04_spike_measurable` and `apm_a98a04_spike_pos_iff`. Thus the spike
+  is now available to integration APIs without a measurability side gap, and
+  its strict support is exactly `(a,b)` for `a < b`, rather than merely being
+  contained there. Searches beyond hop 1 also found sibling `a01J01`'s
+  normalized compact spikes, but those are bounded and concentrated near zero,
+  so they do not replace the required dense family of singular intervals.
   -/
   sorry
