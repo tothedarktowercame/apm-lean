@@ -87,4 +87,27 @@ theorem apm_t97j02 :
       apm_t97J02_IsNfoldCover 6 p →
         Nonempty (E ≃ₜ apm_t97J02_Surface true 7) ∨
         Nonempty (E ≃ₜ apm_t97J02_Surface false 14) := by
+  /-
+  Boundary (closer hop 1): the arithmetic classification is immediate once
+  the standard surface-covering theorems are available.  Since `χ(N₄) = -2`,
+  multiplicativity gives `χ(E) = -2n`; closed-surface classification then
+  leaves `N₁₂` for the odd five-sheeted case, and `Σ₇` or `N₁₄` for six
+  sheets.  The orientation character excludes an orientable odd-degree cover.
+
+  The frozen statement retains actual `EqvGen` polygon quotients and actual
+  `IsCoveringMap`s.  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`,
+  Mathlib's covering/manifold sources, and closed covering artifacts
+  (`t01A02`, `t01A04`, `t03J03`, `t91A02`) found no Euler characteristic for
+  topological manifolds, no multiplicativity theorem for finite covering maps,
+  no orientation double-cover/factorization API, and no classification theorem
+  for compact connected surfaces.  Mathlib also has no polygon-gluing theorem
+  from which to build the three required concrete covering witnesses.
+
+  Thus even locally proving the integer genus equations does not connect to
+  the requested `Homeomorph`s.  Closure requires constructing cyclic covers of
+  these concrete polygon quotients (and the `3 ∘ 2` orientable cover), proving
+  their covering charts/fiber cardinalities, then developing finite-cover
+  Euler multiplicativity, the orientation parity obstruction, and surface
+  classification for the universal clauses.
+  -/
   sorry
