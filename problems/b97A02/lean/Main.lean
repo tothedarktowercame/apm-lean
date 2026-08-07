@@ -28,6 +28,21 @@ noncomputable def apm_b97a02_invariant
     (F : Type*) [Field F] [Fintype F] : RatFunc F :=
   (RatFunc.X ^ Fintype.card F - RatFunc.X) ^ (Fintype.card F - 1)
 
+/-- The scalar factor introduced by an affine change of variable disappears
+after raising to the exponent used in the frozen invariant. -/
+lemma apm_b97A02_algebraMap_pow_card_sub_one
+    (F : Type*) [Field F] [Fintype F] (a : F) (ha : a ≠ 0) :
+    (algebraMap F (RatFunc F) a) ^ (Fintype.card F - 1) = 1 := by
+  rw [← map_pow, FiniteField.pow_card_sub_one_eq_one a ha, map_one]
+
+/-- Coefficients are fixed by the cardinal Frobenius, also after embedding in
+the rational function field. -/
+lemma apm_b97A02_algebraMap_pow_card
+    (F : Type*) [Field F] [Fintype F] (a : F) :
+    (algebraMap F (RatFunc F) a) ^ Fintype.card F =
+      algebraMap F (RatFunc F) a := by
+  rw [← map_pow, FiniteField.pow_card]
+
 theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
     (∀ a b : F, a ≠ 0 →
       ∃! σ : RatFunc F ≃ₐ[F] RatFunc F,
@@ -42,7 +57,13 @@ theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
     (∀ K : IntermediateField F (RatFunc F), K ≠ ⊥ →
       Module.Finite K (RatFunc F)) := by
   /-
-  Boundary (pass-1 Codex, skipped): local Mathlib source search found the
+  PARTIAL boundary (closer hop 1): the finite-field coefficient arithmetic
+  needed by the invariant calculation is now compiled above.
+  `apm_b97A02_algebraMap_pow_card` handles Frobenius-fixed coefficients, and
+  `apm_b97A02_algebraMap_pow_card_sub_one` proves that the nonzero affine
+  scaling factor disappears at exponent `q-1`.
+
+  Earlier local Mathlib source search found the
   low-level constructors `RatFunc.liftRingHom` and `RatFunc.liftAlgHom`, and
   the general fixed-field API `IntermediateField.fixedField`, but no packaged
   affine-substitution `AlgEquiv` for `RatFunc`, no theorem that such maps are
