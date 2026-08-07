@@ -15,6 +15,8 @@ global attraction.
   theorem.
 - `ODE_solution_unique_univ` supplies global uniqueness once solutions are
   presented with its derivative conventions.
+- `apm_m00A05_hasDerivAt_of_isSolution` converts the frozen interior `deriv`
+  equation into exactly that `HasDerivAt` convention.
 
 ## Remaining bridges
 
@@ -22,3 +24,8 @@ Globalize Picard–Lindelöf existence to `[0,∞)` and convert its interval
 `HasDerivWithinAt` output to `apm_m00A05_isSolution`. For attraction, use global
 uniqueness to prevent equilibrium crossing, establish monotonicity, and rule
 out a limiting value different from the equilibrium.
+
+Source inspection confirms that Mathlib's Picard constructors remain local;
+global existence requires gluing compatible interval solutions. The reverse
+conversion from a frozen solution to `HasDerivAt` is complete, so it is no
+longer part of the remaining attraction bridge.
