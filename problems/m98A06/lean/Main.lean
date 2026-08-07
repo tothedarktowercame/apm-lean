@@ -44,6 +44,14 @@ def apm_m98a06_InH10Pi (u du : ℝ → ℝ) : Prop :=
   MemLp du 2 (volume.restrict (Ioo 0 Real.pi)) ∧
   apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) u du
 
+lemma apm_m98a06_nonresonant_candidate_admissible
+    {a : ℝ} (ha : Real.sin a ≠ 0) :
+    apm_m98a06_Admissible a 0 1
+      (fun x ↦ Real.sin x / Real.sin a) := by
+  refine ⟨?_, by simp, ?_⟩
+  · fun_prop
+  · exact div_self ha
+
 theorem apm_m98a06 :
     ((∀ y : ℝ → ℝ,
         apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
@@ -90,15 +98,19 @@ theorem apm_m98a06 :
     · fun_prop
     · simp
   /-
-  Boundary: the resonant family appearing in part (a) has been checked above
-  to satisfy the frozen `C¹` endpoint encoding. Completing the theorem requires
-  an Euler--Lagrange fundamental lemma for `ContDiffOn` variations, exact
-  interval-integral computations for positive and negative second-variation
-  modes, and the sharp one-dimensional Poincaré/Wirtinger theorem for the
-  custom weak-derivative predicate `apm_m98a06_InH10Pi` (including its equality
-  case and optimality). I searched Mathlib's interval integration-by-parts,
-  weak-derivative, Sobolev, and Poincaré APIs; no compiled sibling assembled
-  these results for this bespoke representation. The local fact above verifies
-  the principal explicit family without weakening the frozen statement.
+  PARTIAL boundary: the resonant family appearing in part (a) has been checked
+  above to satisfy the frozen `C¹` endpoint encoding. The nonresonant candidate
+  from part (b) is now also certified by
+  `apm_m98a06_nonresonant_candidate_admissible` whenever `sin a ≠ 0`.
+
+  Completing the theorem requires an Euler--Lagrange fundamental lemma for
+  `ContDiffOn` variations, exact interval-integral computations for positive
+  and negative second-variation modes, and the sharp one-dimensional
+  Poincaré/Wirtinger theorem for the custom weak-derivative predicate
+  `apm_m98a06_InH10Pi` (including its equality case and optimality). I searched
+  Mathlib's interval integration-by-parts, weak-derivative, Sobolev, and
+  Poincaré APIs, all closed artifacts (including `m02J02`, `m01J06`, and
+  `m97A06`), `ConstructionTargets`, and `YoungL2.lean`; no compiled sibling or
+  library assembled these results for this bespoke representation.
   -/
   sorry
