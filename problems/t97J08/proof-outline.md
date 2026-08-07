@@ -1,12 +1,27 @@
 # Proof Outline: t97J08
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean statement uses the concrete angle form, raw derivatives and interval
+integral, and a concrete periodic unit-circle homotopy definition of winding
+number. One `sorry` remains.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t97J08.md`
 
-## Follow-up Needed
+## Formal route
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Prove closedness by explicit `HasFDerivAt` quotient calculations for the two
+  coordinate coefficients.
+- Lift the normalized periodic loop through the exponential covering
+  `ℝ → Circle`.
+- Show the lift changes by a unique integer over one period and use it to
+  construct the required homotopy to `exp (i n t)`.
+- Rewrite the beta integrand as the derivative of the lifted angle and apply
+  interval FTC.
+
+## Open boundary
+
+Mathlib has no packaged classification of periodic circle loops by degree and
+no theorem identifying that degree with this angle-form integral. The local
+closedness calculation also needs explicit real `fderiv` formulas because
+`fun_prop` does not normalize the rational complex-coordinate expressions
+after a denominator nonzero proof is supplied.
