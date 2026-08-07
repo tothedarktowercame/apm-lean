@@ -25,5 +25,7 @@ theorem apm_m94j06
     (𝕜 X : Type*) [RCLike 𝕜]
     [NormedAddCommGroup X] [NormedSpace 𝕜 X] [CompleteSpace X] :
     DifferentiableOn 𝕜 (m94J06Inverse 𝕜 X) (m94J06GL 𝕜 X) := by
+  -- Mathlib's Banach-algebra inverse theorem supplies the full Neumann-series
+  -- differentiability argument, including derivative `H ↦ -T⁻¹ * H * T⁻¹`.
   simpa [m94J06Inverse, m94J06GL, Ring.inverse] using
     (differentiableOn_inverse (𝕜 := 𝕜) (R := X →L[𝕜] X))
