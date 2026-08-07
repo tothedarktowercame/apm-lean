@@ -1,12 +1,17 @@
 # Proof Outline: a99J01
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt now establishes the finiteness prerequisite for
+the extended logarithmic integral.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-a99J01.md`
+- `apmLogAbsPositive_le_abs` proves `log⁺ |f| ≤ |f|` pointwise.
+- `apmLogAbsPositive_setLIntegral_ne_top` uses integrability of `f` to show
+  that the positive logarithmic part has finite lintegral on every set.
 
 ## Follow-up Needed
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Split on whether the negative-part lintegral is infinite.
+- In the infinite case, reduce the custom `EReal` difference to `-∞`.
+- In the finite case, identify the difference with the real integral of
+  `log |f|`, normalize `mu.restrict E`, and apply
+  `ConcaveOn.le_map_set_average`.
+- Bound the normalized average of `|f|` using the global norm equality.
