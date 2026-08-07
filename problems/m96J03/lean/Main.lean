@@ -37,6 +37,19 @@ def apm_m96j03_IsTestFunction {n : ℕ}
     (φ : apm_m96j03_E n → ℝ) : Prop :=
   ContDiff ℝ (⊤ : ℕ∞) φ ∧ HasCompactSupport φ
 
+/-- The volume term in the weak Laplacian identity is exactly the integral
+over the closed unit ball. -/
+lemma apm_m96j03_integral_ballIndicator {n : ℕ}
+    (g : apm_m96j03_E n → ℝ) :
+    (∫ x, apm_m96j03_ballIndicator x * g x) =
+      ∫ x in Metric.closedBall 0 1, g x := by
+  rw [← MeasureTheory.integral_indicator measurableSet_closedBall]
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with x
+  simp only [Set.indicator, apm_m96j03_ballIndicator, Metric.mem_closedBall,
+    dist_zero_right]
+  split_ifs <;> simp
+
 theorem apm_m96j03
     (n : ℕ) (φ : apm_m96j03_E n → ℝ)
     (hφ : apm_m96j03_IsTestFunction φ) :
@@ -44,10 +57,11 @@ theorem apm_m96j03
         apm_m96j03_ballIndicator x * apm_m96j03_laplacian φ x) =
       ∫ x : apm_m96j03_E n in Metric.sphere 0 1,
         fderiv ℝ φ x x ∂μH[(n - 1 : ℕ)] := by
+  rw [apm_m96j03_integral_ballIndicator]
   /-
-  SKIPPED (Gauss--Green theorem for a Euclidean ball).  After rewriting the
-  indicator integral as an integral over `Metric.closedBall 0 1`, the target
-  is exactly
+  PARTIAL (Gauss--Green theorem for a Euclidean ball).  The helper
+  `apm_m96j03_integral_ballIndicator` above proves the initial measurable-set
+  reduction, so the remaining target is exactly
 
   `∫_ball Δφ = ∫_sphere Dφ(x)[x] dμH[n-1]`.
 
