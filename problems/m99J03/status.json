@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "notes": "Dilation limit is closed. Triangle scaling, continuity, and compact support are compiled; unit-mass/change-of-variables completion and dipole first-moment remainder remain.",
   "imported_at": "2026-07-13T17:26:56.238903Z"
 }

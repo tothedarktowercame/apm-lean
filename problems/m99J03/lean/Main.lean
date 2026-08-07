@@ -30,6 +30,64 @@ def apm_m99j03_dipole (n : ℕ) (x : ℝ) : ℝ :=
   else if 0 ≤ x ∧ x ≤ 1 / (n : ℝ) then -((n : ℝ) ^ 2)
   else 0
 
+/-- The triangular kernel is the unit profile transported by the dilation
+`x ↦ n*x`, including its normalizing Jacobian factor. -/
+lemma apm_m99j03_triangle_eq_scaled_profile {n : ℕ} (hn : 0 < n) (x : ℝ) :
+    apm_m99j03_triangle n x =
+      (n : ℝ) * apm_m99j03_triangle 1 ((n : ℝ) * x) := by
+  have hnR : (0 : ℝ) < n := by exact_mod_cast hn
+  have hn0 : (n : ℝ) ≠ 0 := ne_of_gt hnR
+  have habs : |(n : ℝ) * x| = (n : ℝ) * |x| := by
+    rw [abs_mul, abs_of_pos hnR]
+  have hscale : |(n : ℝ) * x| > 1 ↔ |x| > 1 / (n : ℝ) := by
+    have hinv : (1 / (n : ℝ)) * n = 1 := by field_simp
+    constructor
+    · intro h
+      rw [habs] at h
+      nlinarith
+    · intro h
+      rw [habs]
+      nlinarith
+  unfold apm_m99j03_triangle
+  simp only [Nat.cast_one, one_div_one]
+  by_cases hx : |x| > 1 / (n : ℝ)
+  · have hnx := hscale.mpr hx
+    rw [if_pos hx, if_pos hnx]
+    simp
+  · have hnx : ¬|(n : ℝ) * x| > 1 := not_congr hscale |>.mpr hx
+    rw [if_neg hx, if_neg hnx]
+    simp [habs]
+
+/-- A continuous max-form for the unit triangular profile. -/
+lemma apm_m99j03_triangle_one_eq_max (x : ℝ) :
+    apm_m99j03_triangle 1 x = max (1 - |x|) 0 := by
+  unfold apm_m99j03_triangle
+  simp only [Nat.cast_one, one_div_one, one_mul]
+  by_cases hx : |x| > 1
+  · rw [if_pos hx, max_eq_right]
+    linarith
+  · rw [if_neg hx, max_eq_left]
+    linarith
+
+lemma apm_m99j03_triangle_one_continuous :
+    Continuous (apm_m99j03_triangle 1) := by
+  rw [show apm_m99j03_triangle 1 = fun x => max (1 - |x|) 0 by
+    funext x
+    exact apm_m99j03_triangle_one_eq_max x]
+  fun_prop
+
+lemma apm_m99j03_triangle_one_hasCompactSupport :
+    HasCompactSupport (apm_m99j03_triangle 1) := by
+  apply HasCompactSupport.of_support_subset_isCompact isCompact_Icc
+  intro x hx
+  rw [Function.mem_support] at hx
+  have hle : |x| ≤ 1 := by
+    by_contra h
+    have hgt : |x| > 1 := lt_of_not_ge h
+    apply hx
+    simp [apm_m99j03_triangle, hgt]
+  exact (abs_le.mp hle)
+
 lemma apm_m99j03_dilation_integrable
     (ψ φ : ℝ → ℝ) (hψ : Continuous ψ) (hφ : Continuous φ)
     (hφc : HasCompactSupport φ) (n : ℕ) :
@@ -127,6 +185,22 @@ theorem apm_m99j03
     proving a uniform first-order Taylor remainder for the smooth test
     function.  These two calculations are deliberately kept behind this
     single sorry; the dilation limit no longer depends on it.
+
+    Closer hop 2 compiles the normalization infrastructure for part (a).
+    `apm_m99j03_triangle_eq_scaled_profile` proves, for positive `n`,
+    `triangle n x = n * triangle 1 (n*x)`. The unit profile is rewritten as
+    `max (1-|x|) 0` in `apm_m99j03_triangle_one_eq_max`, and is proved
+    continuous and compactly supported in `[-1,1]`. Mathlib source inspection
+    found `Measure.integral_comp_mul_left`, so the remaining triangle route is
+    exactly: apply that whole-line change of variables, compute the unit
+    profile's mass as one, and reuse `apm_m99j03_dilation_tendsto` with the
+    roles of profile and test function exchanged.
+
+    The dipole still needs its analogous scaling/cancellation identity and a
+    first-order remainder estimate. Closed approximate-identity artifacts
+    `a94A03` and `a94J04`, and `ConstructionTargets.RadialMajorantAE`, operate
+    in `Lᵖ`/a.e. convolution settings and do not provide this distributional
+    first-moment calculation.
     -/
     sorry
   refine ⟨hab.1, hab.2, ?_⟩

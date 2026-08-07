@@ -15,10 +15,14 @@ documented boundary covering parts (a) and (b); part (c) is fully compiled.
   support. Every `x / n` lies in that same ball (with `n = 0` handled
   separately), continuity bounds `ψ` there, and `C * ‖φ x‖` is an integrable
   majorant.
+- `apm_m99j03_triangle_eq_scaled_profile` rewrites every positive-index
+  triangle as the normalized dilation `n * triangle 1 (n*x)`.
+- `apm_m99j03_triangle_one_eq_max` identifies the unit profile with
+  `max (1-|x|) 0`; its continuity and compact support in `[-1,1]` are compiled.
 
 ## Remaining boundary
 
-- Part (a): reduce the raw piecewise Lebesgue integral to
-  `[-1/n,1/n]`, normalize it, and control `φ x - φ 0` uniformly.
+- Part (a): apply `Measure.integral_comp_mul_left`, compute the unit profile's
+  mass as one, and reuse the compiled dilation theorem.
 - Part (b): perform the two half-interval calculations and use a uniform
   first-order Taylor remainder to identify the limit as `-deriv φ 0`.
