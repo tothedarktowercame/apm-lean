@@ -133,9 +133,11 @@ theorem tendsto_half_line_sin_pi_div :
   filter_upwards [eventually_ge_atTop (0 : ℝ)] with R hR
   rw [integral_sin_pi_div_subst R]
   apply intervalIntegral.integral_congr_ae
-  filter_upwards [ae_ne_restrict _ 0] with x hx
+  have hae0 : ∀ᵐ x : ℝ ∂volume, x ≠ 0 := by
+    simpa using ae_ne_restrict (Set.univ : Set ℝ) 0
+  filter_upwards [hae0] with x hx
   intro _
-  exact (Real.sinc_of_ne_zero hx).symm
+  exact Real.sinc_of_ne_zero hx
 
 /-- Even-function integral: ∫_{-S₁}^0 f = ∫_0^{S₁} f when f is even. -/
 lemma integral_even_neg_to_pos (S₁ : ℝ) (f : ℝ → ℝ) (heven : ∀ x, f (-x) = f x) :
@@ -174,7 +176,7 @@ theorem tendsto_gen_sin_pi_div
   have hpos : Tendsto (fun R => ∫ x in (0 : ℝ)..(S₂ R),
       Real.sin (Real.pi * x) / x) atTop (nhds (Real.pi / 2)) :=
     hhalf.comp hS₂
-  apply Tendsto.congr' (by filter_upwards with R; exact hsplit R) ?_
+  apply Tendsto.congr' (by filter_upwards with R; exact (hsplit R).symm) ?_
   convert hneg.add hpos using 1 <;> ring
 
 /-- Symmetric integral ∫_{-R}^R sin(πx)/x → π. -/
@@ -191,7 +193,7 @@ def a96A08_f (x : ℝ) : ℝ :=
 lemma f_eq_pf (x : ℝ) (hx0 : x ≠ 0) (hx1 : x ≠ 1) :
     a96A08_f x = Real.sin (Real.pi * x) / (x - 1) - Real.sin (Real.pi * x) / x := by
   rw [a96A08_f]
-  field_simp
+  field_simp [hx0, sub_ne_zero.mpr hx1]
   ring
 
 /-- ∫_{-R}^R sin(πx)/(x-1) dx = -∫_{-R-1}^{R-1} sin(πu)/u du. -/
@@ -199,6 +201,7 @@ lemma integral_sin_pi_div_sub_one (R : ℝ) :
     (∫ x in -R..R, Real.sin (Real.pi * x) / (x - 1)) =
       -(∫ u in (-R - 1)..(R - 1), Real.sin (Real.pi * u) / u) := by
   have hcomp := intervalIntegral.integral_comp_add_right
+    (a := -R) (b := R)
     (f := fun u => Real.sin (Real.pi * (u + 1)) / u) (d := -1)
   have hcongr1 : (∫ x in -R..R,
       (fun u => Real.sin (Real.pi * (u + 1)) / u) (x + (-1))) =
@@ -208,9 +211,12 @@ lemma integral_sin_pi_div_sub_one (R : ℝ) :
     show Real.sin (Real.pi * (x + (-1) + 1)) / (x + (-1)) =
          Real.sin (Real.pi * x) / (x - 1)
     ring_nf
-  rw [hcongr1, ← hcomp]
+  rw [← hcongr1, hcomp]
+  rw [show -R + -1 = -R - 1 by ring, show R + -1 = R - 1 by ring,
+    ← intervalIntegral.integral_neg]
   apply intervalIntegral.integral_congr
   intro u hu
+  change Real.sin (Real.pi * (u + 1)) / u = -(Real.sin (Real.pi * u) / u)
   rw [sin_pi_shift]
   ring
 
@@ -225,31 +231,52 @@ theorem tendsto_symmetric_f :
       -(∫ u in (-R - 1)..(R - 1), Real.sin (Real.pi * u) / u))
       atTop (nhds (-Real.pi)) := by
     have h := tendsto_gen_sin_pi_div (fun R => R + 1) (fun R => R - 1)
-      (by simpa using tendsto_id.add tendsto_const_nhds)
-      (by simpa using tendsto_id.add
-        (tendsto_const_nhds : Tendsto (fun _ => (-1 : ℝ)) id atTop))
-    exact h.neg
-  apply Tendsto.congr' ?_ (hterm1.sub hterm2)
-  filter_upwards [eventually_ge_atTop (2 : ℝ)] with R hR
-  have hf : (∫ x in -R..R, a96A08_f x) =
-      (∫ x in -R..R,
-        Real.sin (Real.pi * x) / (x - 1) - Real.sin (Real.pi * x) / x) := by
-    apply intervalIntegral.integral_congr_ae
-    filter_upwards [ae_ne_restrict _ 0, ae_ne_restrict _ 1] with x hx0 hx1
-    intro _
-    exact f_eq_pf x hx0 hx1
-  rw [hf, intervalIntegral.integral_sub
-      (intervalIntegrable_sin_pi_div_sub_one _ _)
-      (intervalIntegrable_sin_pi_div _ _),
-      integral_sin_pi_div_sub_one]
-  rfl
+      (tendsto_atTop_add_const_right atTop 1 tendsto_id)
+      (by simpa [sub_eq_add_neg] using
+        tendsto_atTop_add_const_right atTop (-1 : ℝ) tendsto_id)
+    convert h.neg using 1 <;> ring
+  convert (hterm1.sub hterm2).congr' ?_ using 1
+  · ring
+  · filter_upwards [eventually_ge_atTop (2 : ℝ)] with R hR
+    have hf : (∫ x in -R..R, a96A08_f x) =
+        (∫ x in -R..R,
+          Real.sin (Real.pi * x) / (x - 1) - Real.sin (Real.pi * x) / x) := by
+      apply intervalIntegral.integral_congr_ae
+      have hae0 : ∀ᵐ x : ℝ ∂volume, x ≠ 0 := by
+        simpa using ae_ne_restrict (Set.univ : Set ℝ) 0
+      have hae1 : ∀ᵐ x : ℝ ∂volume, x ≠ 1 := by
+        simpa using ae_ne_restrict (Set.univ : Set ℝ) 1
+      filter_upwards [hae0, hae1] with x hx0 hx1
+      intro _
+      exact f_eq_pf x hx0 hx1
+    rw [hf, intervalIntegral.integral_sub
+        (intervalIntegrable_sin_pi_div_sub_one _ _)
+        (intervalIntegrable_sin_pi_div _ _),
+        integral_sin_pi_div_sub_one]
 
 /-- a96A08_f is absolutely integrable on ℝ. -/
 theorem a96A08_integrable : Integrable a96A08_f volume := by
+  /- Boundary (closer hop 1): local integrability on bounded intervals follows
+  a.e. from `f_eq_pf` and the two proved `intervalIntegrable_*` lemmas.  On
+  `|x| ≥ 2`, `|sin (πx)| ≤ 1` and
+  `|x²-x| ≥ x²/2`, so `‖a96A08_f x‖ ≤ 2/x²`; Mathlib's
+  `integrableOn_Ioi_rpow_of_lt` (and reflection for the negative tail) then
+  gives both tails.  What remains is the Lean bookkeeping that splits volume
+  into `Iio (-2)`, `Icc (-2) 2`, and `Ioi 2`, establishes the denominator
+  inequality in both tails, and reassembles the three `IntegrableOn` proofs.
+
+  Searches of `LEMMA-INDEX.md`, Mathlib's improper-integral APIs, prior solved
+  problems, and `ConstructionTargets/` found no ready-made integrability lemma
+  for this removable-two-pole quotient.  The downstream theorem `a96A08` is
+  now closed from this lemma and `tendsto_symmetric_f` via
+  `intervalIntegral_tendsto_integral`. -/
   sorry
 
 /-- **Main result**: ∫ sin(πx)/(x²-x) dvol = -2π. -/
 theorem a96A08 : ∫ x, a96A08_f x ∂volume = -(2 * Real.pi) := by
-  sorry
+  exact tendsto_nhds_unique
+    (intervalIntegral_tendsto_integral a96A08_integrable
+      tendsto_neg_atTop_atBot tendsto_id)
+    tendsto_symmetric_f
 
 end
