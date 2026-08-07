@@ -32,6 +32,27 @@ lemma m99A03Shift_sq_apply (x : m99A03ExampleSpace) :
 lemma m99A03Shift_cube : m99A03Shift ^ 3 = 0 := by
   ext x <;> simp [pow_succ]
 
+/-- Unit vectors witnessing that the first shift contains an identity block. -/
+def m99A03FirstTest (n : ℕ) : m99A03ExampleSpace :=
+  (0, lp.single 2 n 1, 0)
+
+/-- Unit vectors witnessing that the squared shift contains an identity block. -/
+def m99A03SecondTest (n : ℕ) : m99A03ExampleSpace :=
+  (0, 0, lp.single 2 n 1)
+
+@[simp] lemma m99A03Shift_firstTest (n : ℕ) :
+    m99A03Shift (m99A03FirstTest n) = (lp.single 2 n 1, 0, 0) := rfl
+
+@[simp] lemma m99A03Shift_sq_secondTest (n : ℕ) :
+    (m99A03Shift ^ 2) (m99A03SecondTest n) = (lp.single 2 n 1, 0, 0) := by
+  simp [m99A03Shift_sq_apply, m99A03SecondTest]
+
+@[simp] lemma norm_m99A03FirstTest (n : ℕ) : ‖m99A03FirstTest n‖ = 1 := by
+  simp [m99A03FirstTest, lp.norm_single]
+
+@[simp] lemma norm_m99A03SecondTest (n : ℕ) : ‖m99A03SecondTest n‖ = 1 := by
+  simp [m99A03SecondTest, lp.norm_single]
+
 theorem apm_m99a03 :
     (∀ (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
       [CompleteSpace H] (A : H →L[ℂ] H),
@@ -68,14 +89,18 @@ theorem apm_m99a03 :
       characterization of `IsCompactOperator` and proving its image is
       pairwise separated. I searched `lp.norm_single`, `lp.single_apply`,
       `IsCompactOperator.isCompact_closure_image_ball`, and compact sequential
-      criteria; the separated-sequence bridge was not completed.
+      criteria; the separated-sequence bridge was not completed. Closer hop 1
+      packages this bounded sequence as `m99A03FirstTest`, proves its norm is
+      one, and computes its image exactly in `m99A03Shift_firstTest`.
       -/
       sorry
     · /-
       Boundary: the analogous argument for `m99A03Shift ^ 2` uses the bounded
       sequence `(0, 0, lp.single 2 n 1)`. The power formula is proved by
-      `m99A03Shift_sq_apply`, but the same compactness-to-convergent-subsequence
-      interface remains to be assembled.
+      `m99A03Shift_sq_apply`; closer hop 1 packages the sequence as
+      `m99A03SecondTest`, proves its norm is one, and computes its image exactly
+      in `m99A03Shift_sq_secondTest`. The same
+      compactness-to-convergent-subsequence interface remains to be assembled.
       -/
       sorry
     · rw [m99A03Shift_cube]
