@@ -4,6 +4,13 @@ open Polynomial
 
 noncomputable section
 
+lemma apm_b95J04_mem_zpowers_of_nonidentity_prime_card
+    (p : ℕ) [Fact p.Prime] (G : Type*) [Group G] [Fintype G]
+    (hcard : Nat.card G = p) (g : G) (hg : g ≠ 1) :
+    ∀ x : G, x ∈ Subgroup.zpowers g := by
+  intro x
+  exact mem_zpowers_of_prime_card hcard hg
+
 /-!
 # APM b95J04
 
@@ -61,14 +68,26 @@ theorem apm_b95j04
       exact orderOf_dvd_of_pow_eq_one hn
     simpa [pow_succ', mul_comm] using
       (X_pow_sub_C_eq_prod hzprim hp.pos (α := z) (a := 1) hz)
-  · -- Boundary: searched Mathlib's dedicated `FieldTheory/KummerExtension.lean`.
+  · -- CLOSER HOP 1 boundary: searched Mathlib's dedicated
+    -- `FieldTheory/KummerExtension.lean`.
     -- It provides `X_pow_sub_C_eq_prod`, `autEquivZmod`,
     -- `autEquivZmod_symm_apply_natCast`, `isCyclic_tfae`, and
     -- `exists_root_adjoin_eq_top_of_isCyclic`.  The remaining two conjuncts
     -- still require bridging an arbitrary radical in `E` to an irreducible
     -- `X ^ p - C a` splitting-field instance on the subtype `F⟮α⟯`, and in
-    -- the converse selecting the eigenvector for the *specified* nonidentity
-    -- automorphism `σ` (rather than an existential cyclic generator).  Those
-    -- coercion, irreducibility, and automorphism-orientation bridges were not
-    -- completed in the pass-1 budget.
+    -- the converse selecting an eigenvector for the specified nonidentity
+    -- automorphism `σ`.
+    --
+    -- New progress: `apm_b95J04_mem_zpowers_of_nonidentity_prime_card` proves
+    -- that the specified `σ` generates the whole Galois group as soon as its
+    -- cardinality is the prime `p`; thus the automorphism-orientation issue is
+    -- closed.  The source proof of
+    -- `exists_root_adjoin_eq_top_of_isCyclic` can consequently be replayed
+    -- with `σ` itself. The remaining work is assembling its eigenvector
+    -- (`Module.End.hasEigenvalue_of_isRoot`) into the frozen witness, including
+    -- nonzeroness, exclusion from the algebra-map range, p-th-power fixedness,
+    -- and `adjoin = ⊤`. On the forward side, the still-missing bridge is
+    -- irreducibility of `X^p-C a` from `α ∉ F`; Mathlib's
+    -- `X_pow_sub_C_irreducible_iff_of_prime` requires reformulating that fact
+    -- as nonexistence of a p-th root of `a` in `F`.
     sorry

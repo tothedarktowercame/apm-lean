@@ -1,12 +1,17 @@
 # Proof Outline: b95J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The characteristic obstruction and factorization of `X^p - 1` are complete.
+Mathlib's Kummer-extension file supplies most of the forward and converse
+machinery needed for the remaining conjunction.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-b95J04.md`
+A local helper now proves that every specified nonidentity automorphism in a
+group of prime cardinality generates the full group, eliminating the earlier
+automorphism-orientation issue.
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+One sorry remains. The forward direction must convert `α ∉ F` into the
+nonexistence of a p-th root in `F`, apply binomial irreducibility, and transport
+the splitting-field equivalence to `F⟮α⟯`. The converse must replay Mathlib's
+eigenvector construction with the specified generator and assemble all five
+properties required by the frozen witness.
