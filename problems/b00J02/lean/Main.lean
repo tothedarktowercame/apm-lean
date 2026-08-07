@@ -16,7 +16,12 @@ matrices over `ℤ/4ℤ`.
 theorem apm_b00j02 :
     Fintype.card (GL (Fin 3) (ZMod 4)) = 86016 := by
   /-
-  Boundary (closer hop 1): git commit `30f7282` contains the exact proof
+  Boundary (closer hop 2): the relay reported zero sorries at baseline commit
+  `9f8ad918`, but direct `git show` confirms that commit contains this sorry.
+  Thus the zero-sorry count was stale; no closed artifact exists at that
+  referenced commit.
+
+  Git commit `30f7282` contains the exact proof
   `native_decide` for this frozen statement, so the proposition is directly
   decidable and was previously closed. I restored that proof and ran
   `lake env lean problems/b00J02/lean/Main.lean` on the current Lean 4.29-rc8
@@ -30,6 +35,9 @@ theorem apm_b00j02 :
   by invertibility over `ZMod 2`, every matrix has `2^9` lifts, and
   `card_GL_field` gives `|GL₃(F₂)| = 168`. No packaged theorem for the local-ring
   reduction/fiber count was found in Mathlib, solved siblings,
-  `ConstructionTargets/`, or `YoungL2.lean`.
+  `ConstructionTargets/`, or `YoungL2.lean`. A renewed search also found no
+  general cardinality theorem for units of a finite matrix ring; the only
+  relevant packaged cardinality result remains the field-only
+  `Matrix.card_GL_field`.
   -/
   sorry
