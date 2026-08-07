@@ -147,6 +147,22 @@ lemma apm_m99A01_no_maximum :
     exact le_trans (by linarith only [hquad]) hle
   linarith [abs_nonneg (apm_m99A01_functional y)]
 
+/-- Continuity upgrades the almost-everywhere conclusion of Mathlib's
+distributional fundamental lemma to the pointwise statement needed for the
+Euler--Lagrange ODE. -/
+lemma apm_m99A01_eq_zero_on_Ioo_of_ae
+    (f : ℝ → ℝ) (hf : ContinuousOn f (Ioo 0 (Real.pi / 2)))
+    (hae : ∀ᵐ x ∂MeasureTheory.volume,
+      x ∈ Ioo 0 (Real.pi / 2) → f x = 0) :
+    ∀ x ∈ Ioo 0 (Real.pi / 2), f x = 0 := by
+  have hae' : f =ᵐ[MeasureTheory.volume.restrict (Ioo 0 (Real.pi / 2))]
+      (0 : ℝ → ℝ) := by
+    change ∀ᵐ x ∂MeasureTheory.volume.restrict (Ioo 0 (Real.pi / 2)), f x = 0
+    rw [MeasureTheory.ae_restrict_iff' measurableSet_Ioo]
+    exact hae
+  exact MeasureTheory.Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo hf
+    continuous_zero.continuousOn
+
 theorem apm_m99a01 :
     (∀ y : ℝ → ℝ,
       (ContDiff ℝ 2 y ∧ y ∈ apm_m99A01_admissible ∧ apm_m99A01_stationary y) ↔
@@ -177,6 +193,16 @@ theorem apm_m99a01 :
     reusable declaration.  Thus the precise live bridge is still converting
     vanishing against all endpoint-zero global `C¹` tests into the pointwise
     ODE, followed by uniqueness of that two-point boundary-value problem.
+
+    Closer hop 3 corrects the earlier resource conclusion: Mathlib does provide
+    the distributional fundamental lemma as
+    `ae_eq_zero_of_integral_contDiff_smul_eq_zero`.  The new compiled helper
+    `apm_m99A01_eq_zero_on_Ioo_of_ae` upgrades its almost-everywhere conclusion
+    to pointwise vanishing of a continuous residual using
+    `Measure.eqOn_open_of_ae_eq`.  The remaining first-conjunct bridge is now
+    upstream: derive the integral residual from the frozen first variation,
+    convert interval integrals to whole-space compactly-supported tests, and
+    prove uniqueness for `y'' - y = 1` with the two boundary values.
     -/
     sorry
   constructor

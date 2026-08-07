@@ -15,11 +15,14 @@ unboundedness above.
 - `apm_m99A01_functional_sine_family` proves
   `J(n sin(2t)) = (5π/4)n² + 2n`, and `apm_m99A01_no_maximum` uses this to
   close the nonexistence-of-a-maximum clause.
+- `apm_m99A01_eq_zero_on_Ioo_of_ae` upgrades the distributional fundamental
+  lemma's almost-everywhere conclusion to pointwise vanishing of a continuous
+  Euler residual.
 
 ## Remaining Boundary
 
-- Convert stationarity to the Euler–Lagrange ODE and prove uniqueness of the
-  inhomogeneous Dirichlet problem.
+- Convert stationarity to the distribution theorem's compactly-supported test
+  hypothesis, then prove uniqueness of the inhomogeneous Dirichlet problem.
 - Expand the quadratic functional around the candidate to prove minimality.
 The unboundedness and no-maximum portion is now closed. Global minimality still
 needs the quadratic expansion and integration-by-parts cancellation of its
