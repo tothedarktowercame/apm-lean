@@ -16,14 +16,18 @@ Show f^(n)(0)/n! → 1.
 ## Lean formalization
 
 - **File**: `lean/Main.lean`
-- **Status**: Partial (2 sorries)
+- **Status**: Partial (1 sorry; frozen main statement is false)
 - **Proven lemmas**:
   - `cauchy_estimate_taylor`: Cauchy estimate |g^(n)(0)/n!| ≤ C/R^n for entire g
+  - `geom_iteratedDeriv`: the nth derivative of `(1-z)⁻¹` at zero is `n!`
+  - `geom_taylor_coeff`: every Taylor coefficient of `(1-z)⁻¹` is one
   - `entire_coeffs_tendsto_zero`: Taylor coefficients of entire function → 0 (via Cauchy estimates + squeeze)
-- **Remaining sorries**:
-  - `geom_iteratedDeriv`: iteratedDeriv n (1-z)⁻¹ 0 = n! (needs function-level induction with chain rule)
-  - `taylor_coeffs_tend_to_one`: main theorem (needs residue theorem + removable singularity)
-- **Blockers**: The residue theorem for computing Res(f,1) = -1 from the contour integral, and the removable singularity theorem for showing g = f - 1/(1-z) is entire, are the Mathlib theory boundary.
+- **Remaining sorry**:
+  - `taylor_coeffs_tend_to_one`: false as stated.  The function
+    `f(z) = (1-z)⁻¹ + (z-1)⁻²` has the required contour integral, but its
+    normalized Taylor coefficients are `n+2`, not a sequence tending to one.
+- **Required repair**: assume the singularity at `1` is at most a simple pole
+  (or otherwise rule out every higher-order/essential principal part).
 
 ## References
 

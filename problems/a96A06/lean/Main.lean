@@ -15,6 +15,7 @@ So f^(n)(0)/n! → 1.
 import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.Complex.RemovableSingularity
 import Mathlib.Analysis.Complex.Liouville
+import Mathlib.Analysis.Calculus.IteratedDeriv.WithinZpow
 
 open Complex Filter Metric Set Topology
 
@@ -36,10 +37,26 @@ lemma cauchy_estimate_taylor (g : ℂ → ℂ) (hg : Differentiable ℂ g) (n : 
     This follows from f^(n)(z) = n!·(1-z)^{-(n+1)} and f^(n)(0) = n!. -/
 lemma geom_iteratedDeriv (n : ℕ) :
     iteratedDeriv n (fun z : ℂ => (1 - z)⁻¹) 0 = (n.factorial : ℂ) := by
-  -- General formula: iteratedDeriv n (1-z)⁻¹ = n!·(1-z)^{-(n+1)}
-  -- At z=0: n!·1^{-(n+1)} = n!
-  -- Prove by induction using the chain rule for (1-z)^{-(n+1)}
-  sorry
+  have hcomp := congrFun
+    (iteratedDeriv_comp_const_sub n (fun w : ℂ => w⁻¹) (1 : ℂ)) 0
+  have hs : IsOpen {z : ℂ | z ≠ 0} := isOpen_ne
+  have hinv :
+      iteratedDeriv n (fun w : ℂ => w⁻¹) 1 =
+        (-1 : ℂ) ^ n * (n.factorial : ℂ) := by
+    have hopen := (iteratedDerivWithin_of_isOpen (n := n)
+      (f := fun w : ℂ => w⁻¹) hs) (show (1 : ℂ) ∈ {z : ℂ | z ≠ 0} by simp)
+    have hformula :=
+      (iteratedDerivWithin_one_div (k := n) (s := {z : ℂ | z ≠ 0}) hs)
+        (show (1 : ℂ) ∈ {z : ℂ | z ≠ 0} by simp)
+    rw [← hopen]
+    simpa using hformula
+  simp only [sub_zero, smul_eq_mul] at hcomp
+  rw [hinv] at hcomp
+  have hpow : (-1 : ℂ) ^ n * (-1 : ℂ) ^ n = 1 := by
+    rw [← mul_pow]
+    norm_num
+  rw [← mul_assoc, hpow, one_mul] at hcomp
+  exact hcomp
 
 /-- Taylor coefficient of (1-z)⁻¹ at 0: always 1. -/
 lemma geom_taylor_coeff (n : ℕ) :
@@ -86,15 +103,22 @@ theorem taylor_coeffs_tend_to_one
     (hf_int : ∮ z in C(0, 2), f z = -(2 * Real.pi * I)) :
     Tendsto (fun n => iteratedDeriv n f 0 / (n.factorial : ℂ))
       atTop (𝓝 1) := by
-  -- The proof requires three nontrivial steps:
-  -- 1. Residue computation: from ∮f = -2πi and the residue theorem, Res(f,1) = -1.
-  --    This means lim_{z→1} (z-1)f(z) = -1.
-  -- 2. The function g(z) = f(z) - (1-z)⁻¹ = f(z) + (z-1)⁻¹ has a removable
-  --    singularity at z=1 (the pole cancels) and is holomorphic elsewhere,
-  --    hence entire.
-  -- 3. f^(n)(0)/n! = 1 + g^(n)(0)/n! → 1 + 0 = 1.
-  -- The formalization of steps 1-2 requires the residue theorem and the
-  -- removable singularity theorem, which are the current Mathlib boundary.
+  /- Boundary (closer hop 1): the frozen main statement is false.  Take
+  `f z = (1-z)⁻¹ + (z-1)⁻²`.  It is holomorphic off `1`; the second-order pole
+  has residue zero, so its integral around `C(0,2)` is zero, while the first
+  term has the required integral `-(2πi)`.  But `(z-1)⁻² = (1-z)⁻²` has
+  Taylor coefficient `n+1`, so the displayed coefficients of `f` are `n+2`
+  and do not tend to `1`.
+
+  Thus knowing only the contour integral fixes the residue, not the full
+  principal part.  The earlier argument incorrectly inferred removability
+  after cancelling the residue; a zero-residue isolated singularity may still
+  have a higher-order pole or be essential.  The intended theorem needs, for
+  example, an assumption that `f` has at most a simple pole at `1`.
+
+  `geom_iteratedDeriv` above was closed using Mathlib's
+  `iteratedDeriv_comp_const_sub` and `iteratedDerivWithin_one_div`, following
+  the inversion calculation in solved sibling `a01J04`. -/
   sorry
 
 end

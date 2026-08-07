@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,22 +27,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "classification_detail": "Proven: cauchy_estimate_taylor (Cauchy estimate for Taylor coefficients), entire_coeffs_tendsto_zero (entire function coefficients → 0 via squeeze). 2 sorries remain: geom_iteratedDeriv (geometric series coefficient computation via derivative chain rule) and taylor_coeffs_tend_to_one (main theorem, requires residue theorem + removable singularity).",
+  "classification": "partial-invalid-statement",
+  "classification_detail": "Proven: cauchy_estimate_taylor, geom_iteratedDeriv, geom_taylor_coeff, and entire_coeffs_tendsto_zero. The remaining frozen main theorem is false: f(z)=(1-z)^-1+(z-1)^-2 satisfies the hypotheses but has Taylor coefficients n+2.",
   "imported_at": "2026-08-03T07:40:00Z",
   "checked_at": "2026-08-03T07:40:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a96A06/lean/Main.lean",
-    "sorry_count": 2,
+    "sorry_count": 1,
     "sorry_locations": [
-      "geom_iteratedDeriv (geometric series Taylor coefficient computation)",
-      "taylor_coeffs_tend_to_one (main theorem: residue theorem + removable singularity)"
+      "taylor_coeffs_tend_to_one (false as stated: higher-order principal parts are uncontrolled)"
     ],
     "blockers": [
-      "Residue theorem: deriving Res(f,1) = -1 from ∮f = -2πi requires the residue theorem for simple poles, which is not directly available in Mathlib for this formulation.",
-      "Removable singularity: showing g = f - 1/(1-z) is entire requires the removable singularity theorem with the residue cancellation.",
-      "Geometric series derivative chain rule: the function-level induction for iteratedDeriv requires computing deriv of (1-z)⁻¹^(n+1), which needs the derivative chain rule for powers."
+      "The contour integral determines only the residue. It does not rule out a higher-order or essential zero-residue principal part; the explicit second-order-pole counterexample refutes the conclusion."
     ]
   }
 }
