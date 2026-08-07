@@ -22,6 +22,23 @@ def apm_b94J01_invariantFactors (G : Type*) [Group G] (d : List ℕ) : Prop :=
     Nonempty
       (G ≃* (∀ i : Fin d.length, Multiplicative (ZMod (d.get i))))
 
+lemma apm_b94J01_card_eq_prod_of_invariantFactors
+    (G : Type*) [Group G] (d : List ℕ)
+    (hd : apm_b94J01_invariantFactors G d) : Nat.card G = d.prod := by
+  obtain ⟨e⟩ := hd.2.2
+  calc
+    Nat.card G = Nat.card (∀ i : Fin d.length, Multiplicative (ZMod (d.get i))) :=
+      Nat.card_congr e.toEquiv
+    _ = ∏ i : Fin d.length, Nat.card (Multiplicative (ZMod (d.get i))) := Nat.card_pi
+    _ = ∏ i : Fin d.length, d.get i := by
+      apply Finset.prod_congr rfl
+      intro i hi
+      calc
+        Nat.card (Multiplicative (ZMod (d.get i))) = Nat.card (ZMod (d.get i)) :=
+          Nat.card_congr Multiplicative.toAdd
+        _ = d.get i := Nat.card_zmod _
+    _ = d.prod := by rw [← List.prod_ofFn, List.ofFn_get]
+
 theorem apm_b94j01 :
     (∀ (G : Type*) [CommGroup G] [Fintype G],
       ∃! d : List ℕ, apm_b94J01_invariantFactors G d) ∧
@@ -33,7 +50,7 @@ theorem apm_b94j01 :
   · intro G _ _
     obtain ⟨ι, instι, n, hn, hdecomp⟩ :=
       CommGroup.equiv_prod_multiplicative_zmod_of_finite G
-    /- PASS-1 boundary: `CommGroup.equiv_prod_multiplicative_zmod_of_finite`
+    /- CLOSER HOP 1 boundary: `CommGroup.equiv_prod_multiplicative_zmod_of_finite`
        now supplies an explicit finite index type `ι`, moduli `n : ι → ℕ`
        satisfying `1 < n i`, and the multiplicative product equivalence
        `hdecomp`.  I also inspected `AddCommGroup.equiv_directSum_zmod_of_finite`
@@ -44,7 +61,15 @@ theorem apm_b94j01 :
        encoding, a *unique list* `d` with `List.Pairwise (· ∣ ·)`, and proving
        uniqueness of that normalized list.  Mathlib's finite-abelian-group API
        provides primary factors but no theorem for this normalization or its
-       uniqueness. -/
+       uniqueness.  New progress: `apm_b94J01_card_eq_prod_of_invariantFactors`
+       proves every admissible list has product `Nat.card G`, using `Nat.card_pi`
+       and `Nat.card_zmod`. This supplies the total-order invariant required by
+       uniqueness, but product plus the divisibility chain is not sufficient:
+       uniqueness still needs the p-primary ranks (equivalently, the cardinalities
+       of p-power torsion subgroups) and a theorem recovering each list entry from
+       those ranks. Searches for `invariantFactors`, `elementaryDivisors`, and the
+       Smith-normal-form quotient APIs found no bridge from an arbitrary finite
+       commutative group to that normalized data. -/
     sorry
   · intro m n hm hn
     have hmcard : Nat.card (Multiplicative (ZMod m)) = m := by

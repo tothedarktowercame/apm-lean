@@ -14,5 +14,14 @@
   ],
   "recommended_latest_frame_id": "apm-v2-b94J01-1775002552157",
   "selected_frame_id": null,
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1
+  },
+  "classification": "partial",
   "imported_at": "2026-05-01T19:38:17.637008Z"
 }
