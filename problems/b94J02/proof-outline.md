@@ -1,12 +1,16 @@
 # Proof Outline: b94J02
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The Lean proof is complete in `lean/Main.lean`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b94J02.md`
 
-## Follow-up Needed
+## Formal proof
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Nilpotence gives zero trace through Mathlib's
+  `Matrix.isNilpotent_trace_of_isNilpotent`.
+- The trace pairing is proved nondegenerate by choosing an elementary matrix
+  that extracts each entry of `C`.
+- An idempotent matrix is converted to an idempotent linear endomorphism;
+  `LinearMap.IsProj.trace` identifies its trace with the dimension of its range,
+  and the matrix rank API supplies the final equality.
