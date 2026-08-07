@@ -26,6 +26,33 @@ noncomputable def apm_b97j03_rootCount (P : Polynomial ℚ) (α : ℂ) : ℕ :=
 noncomputable def apm_b97j03_special : Polynomial ℚ :=
   X ^ 6 - C 2
 
+/-- The restricted root count is bounded by the degree, independently of the
+Galois normalizer argument needed for divisibility. -/
+lemma apm_b97j03_rootCount_le_natDegree (P : Polynomial ℚ) (α : ℂ)
+    (hP : P ≠ 0) :
+    apm_b97j03_rootCount P α ≤ P.natDegree := by
+  let T : Set ℂ := {z : ℂ |
+    (P.map (algebraMap ℚ ℂ)).IsRoot z ∧
+      z ∈ IntermediateField.adjoin ℚ ({α} : Set ℂ)}
+  have hsub : T ⊆ P.rootSet ℂ := by
+    intro z hz
+    exact (Polynomial.mem_rootSet_of_ne hP).2 (by
+      simpa [Polynomial.IsRoot, aeval_def] using hz.1)
+  change Set.ncard T ≤ P.natDegree
+  exact (Set.ncard_le_ncard hsub (Polynomial.rootSet_finite P ℂ)).trans
+    (Polynomial.ncard_rootSet_le P ℂ)
+
+lemma apm_b97j03_special_natDegree : apm_b97j03_special.natDegree = 6 := by
+  norm_num [apm_b97j03_special]
+
+lemma apm_b97j03_special_rootCount_le_six (α : ℂ) :
+    apm_b97j03_rootCount apm_b97j03_special α ≤ 6 := by
+  rw [← apm_b97j03_special_natDegree]
+  apply apm_b97j03_rootCount_le_natDegree
+  intro h
+  have hc := congrArg (fun p : ℚ[X] => p.coeff 6) h
+  norm_num [apm_b97j03_special] at hc
+
 lemma apm_b97j03_special_root_pow_six {α : ℂ}
     (hα : (apm_b97j03_special.map (algebraMap ℚ ℂ)).IsRoot α) :
     α ^ 6 = 2 := by
@@ -130,5 +157,17 @@ theorem apm_b97j03 :
   Kummer API, and root-set/adjoin lemmas still found no packaged upper bound
   excluding the other four roots from `ℚ(α)`. That upper bound and the general
   normalizer/stabilizer correspondence are the remaining bridges.
+
+  Closer hop 2 proves the strongest root-set bound available without that
+  correspondence. `apm_b97j03_rootCount_le_natDegree` embeds the custom set
+  into Mathlib's finite `Polynomial.rootSet` and applies
+  `Polynomial.ncard_rootSet_le`. The special polynomial's degree is computed
+  as six, yielding `apm_b97j03_special_rootCount_le_six`; together with hop
+  1, every special count is now bounded between two and six. This does not
+  exclude the four nonreal-root-of-unity multiples from the particular
+  embedded field `ℚ(α)`. Searches of minimal-polynomial, power-basis, Kummer,
+  and normalizer APIs found no packaged theorem making that exclusion or
+  identifying the general count with a normalizer index, so those bridges
+  remain open.
   -/
   sorry

@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "classification_detail": "The custom count is now proved at most the polynomial degree, trapping the X^6-2 count between 2 and 6; exact exclusion and normalizer-index divisibility remain.",
   "imported_at": "2026-07-13T17:26:54.127299Z"
 }
