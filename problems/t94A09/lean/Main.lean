@@ -16,6 +16,7 @@ circle factors.  Thus the actual vector fields, tangency, smoothness, and zero
 sets are retained explicitly.
 -/
 
+open InnerProductSpace
 open scoped ContDiff
 
 noncomputable section
