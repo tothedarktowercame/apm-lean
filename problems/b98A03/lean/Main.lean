@@ -21,6 +21,25 @@ noncomputable section
 def apm_b98A03_conductor (R T : Type*) [CommRing R] [CommRing T] [Algebra R T] : Ideal T :=
   sSup {J : Ideal T | (J : Set T) ⊆ Set.range (algebraMap R T)}
 
+/-- Evaluation at an element of a prime lying over `P` is in that prime
+exactly when the polynomial's constant coefficient lies in `P`. -/
+lemma apm_b98A03_eval₂_mem_iff_coeff_zero_mem
+    (R T : Type*) [CommRing R] [CommRing T] [Algebra R T]
+    (P : Ideal R) (Q : Ideal T)
+    (hcomap : Ideal.comap (algebraMap R T) Q = P)
+    {u : T} (hu : u ∈ Q) (p : Polynomial R) :
+    Polynomial.eval₂ (algebraMap R T) u p ∈ Q ↔ p.coeff 0 ∈ P := by
+  constructor
+  · intro hp
+    rw [← hcomap]
+    exact Ideal.coeff_zero_mem_comap_of_root_mem_of_eval_mem hu hp
+  · intro hp
+    have hpQ : algebraMap R T (p.coeff 0) ∈ Q := by
+      exact (show p.coeff 0 ∈ Ideal.comap (algebraMap R T) Q from hcomap ▸ hp)
+    rw [← p.divX_mul_X_add, Polynomial.eval₂_add, Polynomial.eval₂_C,
+      Polynomial.eval₂_mul, Polynomial.eval₂_X]
+    exact Q.add_mem (Q.mul_mem_left _ hu) hpQ
+
 theorem apm_b98a03 :
     ∀ (R T : Type*) [CommRing R] [CommRing T] [IsDomain R] [IsDomain T]
       [Algebra R T] [FaithfulSMul R T]
@@ -55,14 +74,25 @@ theorem apm_b98a03 :
   contained in `Set.range (algebraMap R T)` remains contained in that range.
   This is not an immediate `sSup_le`, because the range is a subring/set rather
   than an ideal of `T`; one must unpack membership in the ideal supremum and
-  combine finitely many preimages in `R`. The reverse constant-term implication
-  then needs a custom `eval₂` decomposition into the constant term plus terms
-  divisible by `u`.
+  combine finitely many preimages in `R`.
+
+  Closer hop 1 closes the reverse constant-term implication, and packages both
+  directions as `apm_b98A03_eval₂_mem_iff_coeff_zero_mem`. The forward
+  direction reuses
+  `Ideal.coeff_zero_mem_comap_of_root_mem_of_eval_mem`; the reverse rewrites
+  `p` using `Polynomial.divX_mul_X_add`, observes that the nonconstant term is
+  divisible by `u ∈ Q`, and transports the constant coefficient through the
+  comap equality. This proves exactly the theorem's fourth-conjunct criterion
+  for any ideal lying over `P` (primality is not needed for this step), and is
+  the required input for equality of the two contractions to `R[u]`.
 
   Finally, the last conjunct must convert `S = ⊥` for every agreeing subalgebra
   into elementwise membership in the algebra-map range, identify the ideal
   intersection with `Ideal.map (algebraMap R T) P`, and use the conductor
   uniqueness lemma contrapositive to obtain the reverse inclusion. No searched
-  theorem or proved sibling packages this chain. The statement appears sound.
+  theorem or proved sibling packages this chain. Renewed searches of
+  `LEMMA-INDEX.md`, closed artifacts, `ConstructionTargets/`, conductor,
+  adjoin-singleton, and ideal-supremum APIs found no packaged global bridge.
+  The statement appears sound.
   -/
   sorry
