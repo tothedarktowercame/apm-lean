@@ -23,6 +23,29 @@ def apm_m02j01_IsDistributionalDerivative
   ∀ φ dφ : TestFunction (⊤ : Opens ℝ) ℝ ⊤,
     (∀ x : ℝ, dφ x = deriv (φ : ℝ → ℝ) x) → u φ = -v dφ
 
+/-- The derivative of a test function has total integral zero. This is the
+function-level necessity direction of part (a). -/
+lemma apm_m02j01_integral_deriv_testFunction_eq_zero
+    (ψ : TestFunction (⊤ : Opens ℝ) ℝ ⊤) :
+    ∫ x : ℝ, deriv (ψ : ℝ → ℝ) x = 0 := by
+  have hdiff : ContDiff ℝ 1 (ψ : ℝ → ℝ) := ψ.contDiff.of_le (by simp)
+  have hcompact : HasCompactSupport (ψ : ℝ → ℝ) := ψ.hasCompactSupport
+  have hint : Integrable (deriv (ψ : ℝ → ℝ)) :=
+    hdiff.continuous_deriv le_rfl |>.integrable_of_hasCompactSupport hcompact.deriv
+  rw [← integral_add_compl measurableSet_Iic hint, compl_Iic]
+  rw [hcompact.integral_Iic_deriv_eq hdiff 0,
+    hcompact.integral_Ioi_deriv_eq hdiff 0]
+  ring
+
+lemma apm_m02j01_integral_eq_zero_of_eq_deriv
+    (φ ψ : TestFunction (⊤ : Opens ℝ) ℝ ⊤)
+    (h : ∀ x : ℝ, φ x = deriv (ψ : ℝ → ℝ) x) :
+    ∫ x : ℝ, φ x = 0 := by
+  calc
+    ∫ x : ℝ, φ x = ∫ x : ℝ, deriv (ψ : ℝ → ℝ) x :=
+      integral_congr_ae (Filter.Eventually.of_forall h)
+    _ = 0 := apm_m02j01_integral_deriv_testFunction_eq_zero ψ
+
 theorem apm_m02j01 :
     (∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤,
       (∫ x : ℝ, φ x) = 0 ↔
@@ -46,11 +69,22 @@ theorem apm_m02j01 :
   LF topology, nor a theorem that distributional differentiation on `ℝ` is
   surjective with constants as its kernel.
 
-  The pointwise FTC and compact-support argument can establish only the
-  underlying function identity. Parts (b) and (c) require bundling that
+  Closer hop 1 compiles the necessity direction of part (a).
+  `apm_m02j01_integral_deriv_testFunction_eq_zero` splits the whole-line
+  integral at zero and combines `HasCompactSupport.integral_Iic_deriv_eq` with
+  `HasCompactSupport.integral_Ioi_deriv_eq`; the endpoint values cancel.
+  `apm_m02j01_integral_eq_zero_of_eq_deriv` then transports this result across
+  the pointwise derivative identity. Thus every test-function derivative now
+  formally has total integral zero.
+
+  The reverse pointwise FTC and compact-support argument still requires
+  constructing and bundling the primitive as a `TestFunction`. Parts (b) and
+  (c) further require bundling that
   construction as a continuous linear map before it can be transposed to a
   `Distribution`; this bridge is not supplied by the abstract distribution
-  derivative API. No compiled sibling route was found or reused, and the
+  derivative API. Renewed searches of `LEMMA-INDEX.md`, closed artifacts,
+  `ConstructionTargets/`, `TestFunction`, and `Distribution` sources found no
+  compiled sibling route or reusable LF-continuity theorem, and the
   frozen statement was left unchanged.
   -/
   sorry
