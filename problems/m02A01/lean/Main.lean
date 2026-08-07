@@ -49,16 +49,41 @@ theorem apm_m02a01 :
       exact (toWeakSpaceCLM ℝ X).continuous.continuousAt.tendsto.comp hx
     · constructor
       · constructor
-        · /-
-          Boundary for weak convergence of the `ℓ²` basis: unfold weak-space
-          convergence using `tendsto_iff_forall_eval_tendsto_topDualPairing`,
-          represent each continuous functional by its Riesz vector, and show
-          its coordinates tend to zero. Searches found the weak-topology
-          evaluation criterion and `lp.single`, but no packaged Riesz
-          representation theorem specialized to `lp` or lemma that coordinates
-          of an `ℓ²` vector tend to zero.
-          -/
-          sorry
+        · rw [apm_m02A01_weaklyConverges]
+          apply (WeakBilin.tendsto_iff_forall_eval_tendsto
+            (B := (topDualPairing ℝ apm_m02A01_l2).flip)
+            (separatingDual_iff_injective.mp inferInstance)).2
+          intro q
+          let y : apm_m02A01_l2 :=
+            (InnerProductSpace.toDual ℝ apm_m02A01_l2).symm q
+          have hsumm : Summable (fun n : ℕ => ‖y n‖ ^ (2 : ℝ)) := by
+            exact (lp.memℓp y).summable (by norm_num)
+          have hsquare : Tendsto (fun n : ℕ => ‖y n‖ ^ (2 : ℝ)) atTop (nhds 0) :=
+            hsumm.tendsto_atTop_zero
+          have hcoordnorm : Tendsto (fun n : ℕ => ‖y n‖) atTop (nhds 0) := by
+            have hsqrt := Real.continuous_sqrt.continuousAt.tendsto.comp hsquare
+            convert hsqrt using 1
+            · funext n
+              simpa only [Function.comp_apply] using
+                (show ‖y n‖ = Real.sqrt (‖y n‖ ^ (2 : ℝ)) by
+                  rw [Real.rpow_two, Real.sqrt_sq (norm_nonneg _)])
+            · simp
+          have hcoord : Tendsto (fun n : ℕ => y n) atTop (nhds 0) := by
+            rw [tendsto_zero_iff_norm_tendsto_zero]
+            exact hcoordnorm
+          convert hcoord using 1
+          · funext n
+            change q (apm_m02A01_basisVector n) = y n
+            calc
+              q (apm_m02A01_basisVector n) =
+                  inner ℝ y (apm_m02A01_basisVector n) :=
+                (InnerProductSpace.toDual_symm_apply).symm
+              _ = y n := by
+                rw [apm_m02A01_basisVector]
+                rw [lp.inner_single_right]
+                change (1 : ℝ) * y n = y n
+                simp
+          · exact congrArg nhds q.map_zero
         · intro hstrong
           have hnorm : Tendsto (fun n ↦ ‖apm_m02A01_basisVector n‖) atTop
               (nhds ‖(0 : apm_m02A01_l2)‖) :=
@@ -72,11 +97,15 @@ theorem apm_m02a01 :
         · /-
           Boundary for finite-dimensional weak-to-strong convergence: Mathlib
           records that the weak topology is coarser via `toWeakSpaceCLM`, but
-          `Topology/Algebra/Module/WeakDual.lean` explicitly lists equality of
-          weak and norm topologies in finite dimension as TODO. A local proof
-          requires choosing a finite basis, proving its coordinate functionals
-          continuous, and assembling coordinatewise convergence into norm
-          convergence.
+          does not package equality with the norm topology in finite dimension.
+
+          Closer hop 1 tried to regard `(toWeakSpace ℝ X).symm` as a linear map
+          and apply `LinearMap.continuous_of_finiteDimensional`. This route does
+          not elaborate because `WeakSpace ℝ X` intentionally carries the weak
+          topological-module structure rather than the normed-space structure
+          expected by the `FiniteDimensional` continuity API. Transporting a
+          basis and proving continuity of the inverse coordinate map therefore
+          remains necessary.
           -/
           sorry
         · intro hx
