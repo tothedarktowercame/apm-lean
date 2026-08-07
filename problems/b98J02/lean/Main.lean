@@ -52,23 +52,62 @@ theorem apm_b98j02
     intro I s hs hI
     exact (Ideal.subset_union_prime (f := id) (⊥ : Ideal B) ⊥
       (fun P hP _ _ => by simpa using hs P hP)).mp (by simpa using hI)
-  /-
-  Boundary (pass-1 Codex, partial): `h_prime_avoidance` above closes the first
-  conjunct with Mathlib's `Ideal.subset_union_prime`.
-
-  The norm conjunct still requires proving that every `L`-automorphism of `M`
-  preserves the chosen integral-closure model `B`, so that each factor of
-  `∏ g, g (algebraMap B M x)` has a preimage in `B`. The searched API includes
-  `AlgEquiv.mapIntegralClosure` and `Algebra.norm_eq_prod_automorphisms`, but no
-  direct restriction equivalence for the abstract hypothesis
-  `IsIntegralClosure B A M`. After building that restriction, a proof must show
-  Galois invariance puts the product in the image of `L`, use `hinter` to descend
-  it to `A`, and retain membership in `P` via the identity factor.
-
-  The final transitivity clause then needs a finite orbit of transported prime
-  ideals of `B`, application of the proved avoidance lemma, and the
-  incomparability theorem for primes over the same `q` in this abstract
-  integral extension. No proved sibling or searched theorem packages this
-  complete transport. The repaired statement appears mathematically sound.
-  -/
-  sorry
+  -- (Mathlib: RingTheory.Invariant.Basic)
+  letI : MulSemiringAction (M ≃ₐ[L] M) B :=
+    MulSemiringAction.compHom B (galRestrict A L M B).toMonoidHom
+  letI : SMulCommClass (M ≃ₐ[L] M) A B :=
+    ⟨fun g a x => by
+      simp only [Algebra.smul_def, smul_mul', mul_eq_mul_right_iff]
+      apply Or.inl
+      apply IsIntegralClosure.algebraMap_injective B A M
+      change algebraMap B M (galRestrict A L M B g (algebraMap A B a)) = _
+      rw [algebraMap_galRestrict_apply]
+      rw [← IsScalarTower.algebraMap_apply A B M]
+      rw [IsScalarTower.algebraMap_apply A L M]
+      exact g.commutes (algebraMap A L a)⟩
+  have hinv : Algebra.IsInvariant A B (M ≃ₐ[L] M) := by
+    refine ⟨fun b hb => (hinter b).mp ?_⟩
+    have hfixed : algebraMap B M b ∈
+        IntermediateField.fixedField (⊤ : Subgroup (M ≃ₐ[L] M)) := by
+      rintro ⟨g, -⟩
+      exact (algebraMap_galRestrict_apply A g b).symm.trans
+        (congrArg (algebraMap B M) (hb g))
+    have hbot := ((IsGalois.tfae (F := L) (E := M)).out 0 1).mp
+      (inferInstance : IsGalois L M)
+    rw [hbot, IntermediateField.mem_bot] at hfixed
+    exact hfixed
+  letI : Algebra.IsInvariant A B (M ≃ₐ[L] M) := hinv
+  refine ⟨h_prime_avoidance, ?_, ?_⟩
+  · intro P hP x hx
+    letI : P.IsPrime := hP
+    let y : B := ∏ g : M ≃ₐ[L] M, g • x
+    refine ⟨y, ?_, ?_, ?_⟩
+    · change (∏ g : M ≃ₐ[L] M, g • x) ∈ P
+      rw [hP.prod_mem_iff]
+      exact ⟨1, Finset.mem_univ 1, (one_smul (M ≃ₐ[L] M) x).symm ▸ hx⟩
+    · exact Algebra.IsInvariant.isInvariant (A := A) y
+        (Finset.smul_prod_perm x)
+    · change algebraMap B M (∏ g : M ≃ₐ[L] M,
+          galRestrict A L M B g x) = _
+      simp only [map_prod, algebraMap_galRestrict_apply]
+  · intro q hq P Q hP hQ hPq hQq
+    letI : P.IsPrime := hP
+    letI : Q.IsPrime := hQ
+    obtain ⟨g, hg⟩ := Algebra.IsInvariant.exists_smul_of_under_eq
+      A B (M ≃ₐ[L] M) P Q (hPq.trans hQq.symm)
+    refine ⟨g, fun b => ?_⟩
+    rw [hg, Ideal.mem_pointwise_smul_iff_inv_smul_mem]
+    constructor
+    · intro hb
+      refine ⟨g⁻¹ • b, hb, ?_⟩
+      change algebraMap B M b =
+        g (algebraMap B M (galRestrict A L M B g⁻¹ b))
+      rw [algebraMap_galRestrict_apply]
+      simp
+    · rintro ⟨a, ha, hba⟩
+      have hab : b = g • a := by
+        apply IsIntegralClosure.algebraMap_injective B A M
+        change algebraMap B M b = algebraMap B M (galRestrict A L M B g a)
+        rw [algebraMap_galRestrict_apply]
+        exact hba
+      simpa [hab] using ha
