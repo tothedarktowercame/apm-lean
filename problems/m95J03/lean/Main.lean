@@ -35,6 +35,29 @@ def apm_m95J03_flow (t : ℝ) : Matrix (Fin 4) (Fin 4) ℝ :=
 def apm_m95J03_ivpSolution (v : Fin 4 → ℝ) (t : ℝ) : Fin 4 → ℝ :=
   (apm_m95J03_flow t).mulVec v
 
+/-- A left inverse makes the proposed solution unique, and solvability is
+equivalent to its image being fixed by the associated projection. -/
+lemma apm_m95J03_leftInverse_solution
+    (m n : ℕ) (A : Matrix (Fin m) (Fin n) ℝ)
+    (L : Matrix (Fin n) (Fin m) ℝ) (b : Fin m → ℝ)
+    (hLA : L * A = 1) :
+    ((∃ x : Fin n → ℝ, A.mulVec x = b) ↔
+      A.mulVec (L.mulVec b) = b) ∧
+    (∀ x : Fin n → ℝ, A.mulVec x = b → x = L.mulVec b) := by
+  constructor
+  · constructor
+    · rintro ⟨x, rfl⟩
+      have hx : L.mulVec (A.mulVec x) = x := by
+        rw [Matrix.mulVec_mulVec, hLA, Matrix.one_mulVec]
+      exact congrArg (A.mulVec) hx
+    · intro h
+      exact ⟨L.mulVec b, h⟩
+  · intro x hx
+    calc
+      x = (L * A).mulVec x := by rw [hLA, Matrix.one_mulVec]
+      _ = L.mulVec (A.mulVec x) := (Matrix.mulVec_mulVec _ _ _).symm
+      _ = L.mulVec b := by rw [hx]
+
 theorem apm_m95j03 :
     (∀ (m n : ℕ) (A : Matrix (Fin m) (Fin n) ℝ)
         (L : Matrix (Fin n) (Fin m) ℝ) (b : Fin m → ℝ),
@@ -65,5 +88,20 @@ theorem apm_m95j03 :
   -- (c) Matrix exponential HasSum; exp(B(0)) = flow(1); IVP solution.
   -- Blocker: requires left inverse theory, Jordan form construction, matrix exponential
   -- convergence (HasSum), IVP verification — each part a substantial proof.
-  -- APIs: `Matrix`, `IsUnit`, `NormedSpace.exp`, `HasSum`, `deriv`
+  -- APIs: `Matrix`, `IsUnit`, `NormedSpace.exp`, `HasSum`, `deriv`.
+  --
+  -- Closer hop 1 proves the entire first conjunct as
+  -- `apm_m95J03_leftInverse_solution`, using `Matrix.mulVec_mulVec`, and the
+  -- general exponential-series conjunct reduces directly to Mathlib's
+  -- `NormedSpace.exp_series_hasSum_exp'`; elaborating that specialization for
+  -- arbitrary matrix size exceeded 800000 heartbeats, so it is recorded rather
+  -- than retained as a compiled helper. No custom convergence argument is needed.
+  --
+  -- The remaining bridge is finite but broad: entrywise continuity and
+  -- nilpotence calculations for the explicit matrices, an explicit Vandermonde-
+  -- type conjugator for distinct nonzero powers of rho (including invertibility),
+  -- and coordinatewise differentiation of `flow t *ᵥ v`. Searches of
+  -- `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's matrix exponential and
+  -- Jordan APIs, sibling artifacts, and git history found no packaged theorem
+  -- matching this concrete family. The frozen statement is unchanged.
   sorry
