@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "Continuity of the coordinatewise squaring cover is proved. Remaining work is restricting the punctured-complex power cover to Circle, product covering and deck-action assembly, torus H2 degree theory, and the Lefschetz fixed-point bridge.",
+  "closer_hop": 2,
+  "boundary": "Continuity, the direct Circle squaring covering theorem, and surjectivity of coordinatewise torus squaring are compiled. Remaining work is product-cover/deck-action assembly, torus H2 degree theory, and the Lefschetz fixed-point bridge.",
   "imported_at": "2026-07-13T17:26:56.679076Z"
 }

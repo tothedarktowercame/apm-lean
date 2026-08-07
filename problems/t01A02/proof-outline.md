@@ -9,13 +9,17 @@ cover is compiled; its covering group and the homological claims remain.
 ## Compiled progress
 
 - `apm_t01A02_cover_continuous` proves continuity of coordinatewise squaring.
-- Mathlib's `isCoveringMap_npow 2` has been identified as the lower-level
-  covering theorem from which the circle cover should be restricted.
+- `apm_t01A02_isCoveringMap_circle_pow_two` uses the direct theorem
+  `Circle.isQuotientCoveringMap_npow 2`; no punctured-complex restriction is
+  necessary.
+- `apm_t01A02_cover_surjective` combines surjectivity of the two circle power
+  maps to prove surjectivity of the concrete torus map.
 
 ## Remaining boundary
 
-- Restrict punctured-complex squaring to `Circle` and construct the product
-  covering on `Circle × Circle`.
+- Construct the product covering on `Circle × Circle`.  The underlying open
+  quotient maps combine via `IsOpenQuotientMap.prodMap`, but no packaged
+  product theorem for `IsCoveringMap` was found.
 - Define the `(ZMod 2)²` sign action and prove freeness and fiber transitivity.
 - Compute torus `H₂`, identify the induced map with degree, and prove a
   nonsurjective self-map has zero degree.

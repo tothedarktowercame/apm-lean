@@ -60,6 +60,23 @@ lemma apm_t01A02_cover_continuous : Continuous apm_t01A02_cover := by
 lemma apm_t01A02_cover_eq_prod_pow_two (x : apm_t01A02_Torus) :
     apm_t01A02_cover x = (x.1 ^ 2, x.2 ^ 2) := rfl
 
+/-- Mathlib's quotient-covering theorem for powers on `Circle` directly gives
+the double cover needed in each coordinate. -/
+lemma apm_t01A02_isCoveringMap_circle_pow_two :
+    IsCoveringMap (fun z : Circle ↦ z ^ 2) := by
+  letI : NeZero (2 : ℕ) := ⟨by norm_num⟩
+  exact (Circle.isQuotientCoveringMap_npow 2).isCoveringMap
+
+/-- Coordinatewise squaring is surjective on the torus. -/
+lemma apm_t01A02_cover_surjective : Function.Surjective apm_t01A02_cover := by
+  letI : NeZero (2 : ℕ) := ⟨by norm_num⟩
+  have hsurj : Function.Surjective (fun z : Circle ↦ z ^ 2) :=
+    (Circle.isQuotientCoveringMap_npow 2).surjective
+  rintro ⟨z, w⟩
+  rcases hsurj z with ⟨z', hz'⟩
+  rcases hsurj w with ⟨w', hw'⟩
+  exact ⟨(z', w'), by simp [apm_t01A02_cover, hz', hw']⟩
+
 theorem apm_t01a02 :
     ∀ f : C(apm_t01A02_Torus, apm_t01A02_Torus),
       ¬Function.Surjective f →
@@ -94,5 +111,19 @@ theorem apm_t01a02 :
   packaged in the closed corpus. Thus continuity is closed, while the
   restriction/product covering, deck action, homology degree, and fixed-point
   assemblies remain open.
+
+  CLOSER HOP 2: the prior restriction claim is obsolete in the current
+  Mathlib.  `Circle.isQuotientCoveringMap_npow 2` directly proves the circle
+  squaring quotient cover.  The helpers
+  `apm_t01A02_isCoveringMap_circle_pow_two` and
+  `apm_t01A02_cover_surjective` now compile the coordinate covering and
+  surjectivity of the concrete torus map.  Mathlib's
+  `IsOpenQuotientMap.prodMap` combines the underlying open quotient maps, but
+  no product constructor for `IsCoveringMap` or evenly-covered neighborhoods
+  was found.  Finishing the middle conjunct still requires assembling those
+  product trivializations and identifying the product of the two power-map
+  kernels with `(ZMod 2)²`.  Searches of the newer Circle quotient-cover API
+  did not uncover any torus `H₂` computation or Lefschetz theorem, so the first
+  and last conjuncts retain the deeper hop-1 boundary.
   -/
   sorry
