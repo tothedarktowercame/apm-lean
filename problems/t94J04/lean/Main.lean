@@ -1,4 +1,7 @@
 import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t94J04
@@ -13,26 +16,36 @@ isomorphic.  The informal solution also explicitly assumes `k ≥ 1`.
 ## Encoding questions
 
 The group is the actual Mathlib fundamental group of a compact connected
-smooth surface.  Mathlib has no packaged genus invariant for smooth surfaces,
-so “closed orientable surface of genus two” is isolated as a typed predicate.
-Subgroups, their index, and the resulting group isomorphism are all native.
+smooth surface. Following `t00A02`, genus two and orientability are encoded by
+the surface's characteristic integral homology groups: `H₀ = ℤ`, `H₁ = ℤ⁴`,
+`H₂ = ℤ`, and vanishing higher homology. Subgroups, their index, and the
+resulting group isomorphism are all native.
 -/
 
+open CategoryTheory
 open scoped ContDiff Manifold
 
 noncomputable section
 
 abbrev apm_t94J04_E := EuclideanSpace ℝ (Fin 2)
 
-/-- The assertion that a compact smooth surface is oriented and has genus two. -/
-opaque apm_t94J04_IsOrientedGenusTwoSurface
-    (F : Type*) [TopologicalSpace F] [ChartedSpace apm_t94J04_E F] : Prop
+abbrev apm_t94J04_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
+
+/-- The integral homology of a closed orientable surface of genus two. -/
+def apm_t94J04_hasOrientedGenusTwoHomology
+    (F : Type) [TopologicalSpace F] : Prop :=
+  Nonempty (apm_t94J04_H 0 F ≅ ModuleCat.of ℤ ℤ) ∧
+  Nonempty (apm_t94J04_H 1 F ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
+  Nonempty (apm_t94J04_H 2 F ≅ ModuleCat.of ℤ ℤ) ∧
+  ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t94J04_H k F)
 
 theorem apm_t94j04
-    {F : Type*} [TopologicalSpace F] [T2Space F] [CompactSpace F]
+    {F : Type} [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t94J04_E F]
     [IsManifold (𝓘(ℝ, apm_t94J04_E)) ∞ F]
-    (hF : apm_t94J04_IsOrientedGenusTwoSurface F)
+    (hF : apm_t94J04_hasOrientedGenusTwoHomology F)
     (p : F) (k : ℕ) (hk : 0 < k)
     (H K : Subgroup (FundamentalGroup F p))
     (hH : H.index = k) (hK : K.index = k) :
