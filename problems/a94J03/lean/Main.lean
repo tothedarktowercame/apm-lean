@@ -1,12 +1,18 @@
 import Mathlib
-import ApmCanaries.Frames.A94J03.Apm_v2_a94J03_1775003038480.Scratch
 
-noncomputable section
+/-!
+# APM a94J03
 
-namespace ApmCanaries.Frames.A94J03.Apm_v2_a94J03_1775003038480.Main
+## Statement repairs
 
-/- Authoritative frame-local Lean development.
-   Keep exploratory detours in Scratch.lean.
-   Promote reusable lemmas explicitly into ApmCanaries.Local. -/
+None.
 
-end ApmCanaries.Frames.A94J03.Apm_v2_a94J03_1775003038480.Main
+## Encoding questions
+
+None. “Maps open sets onto open sets” is Mathlib's `IsOpenMap`, and strict
+monotonicity allows either global orientation: `StrictMono f ∨ StrictAnti f`.
+-/
+
+theorem apm_a94j03 (f : ℝ → ℝ) (hf : Continuous f) (hopen : IsOpenMap f) :
+    StrictMono f ∨ StrictAnti f := by
+  sorry
