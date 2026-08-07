@@ -14,32 +14,35 @@ hypothesis or conclusion is changed.
 
 ## Encoding questions
 
-Mathlib has no construction for the specified finite complex obtained by
-gluing the two punctured tori after attaching the meridian disk. That exact
-adjunction space is therefore isolated as a typed opaque object; it is not
-replaced by a homotopy-equivalent numerical surrogate. Its fundamental group
-is stated as the actual presented group
-`<a,b,d | [a,b]>`, and its homology groups are actual integral singular
-homology objects in `ModuleCat ℤ`.
+The given decomposition deformation retracts to a torus wedged with the
+remaining longitude circle. Following `t02A03`, this is retained as an actual
+topological quotient rather than a numerical surrogate. Its fundamental group
+is the actual presented group `<a,b,d | [a,b]>`, and its homology groups are
+integral singular homology objects in `ModuleCat ℤ`.
 -/
 
 open CategoryTheory Set
 
 noncomputable section
 
-/-- The finite complex obtained by gluing the punctured torus `T` to the
-punctured torus with a meridian disk attached, along their common boundary. -/
-opaque apm_t97J04_X : Type
+abbrev apm_t97J04_Torus := Circle × Circle
 
-axiom apm_t97J04_X_nonempty : Nonempty apm_t97J04_X
+/-- Glue the remaining longitude circle to the torus at their basepoints. -/
+inductive apm_t97J04_WedgeRel :
+    Sum apm_t97J04_Torus Circle → Sum apm_t97J04_Torus Circle → Prop
+  | base : apm_t97J04_WedgeRel (.inl (1, 1)) (.inr 1)
 
-opaque apm_t97J04_X_topology : TopologicalSpace apm_t97J04_X
+/-- The concrete deformation-retract model `T² ∨ S¹` of the specified finite
+complex. -/
+def apm_t97J04_X :=
+  Quotient (Relation.EqvGen.setoid apm_t97J04_WedgeRel)
 
 noncomputable instance : TopologicalSpace apm_t97J04_X :=
-  apm_t97J04_X_topology
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t97J04_Torus Circle ↦ Quotient.mk _ x) inferInstance
 
 def apm_t97J04_basepoint : apm_t97J04_X :=
-  Classical.choice apm_t97J04_X_nonempty
+  Quotient.mk _ (.inl (1, 1))
 
 /-- The relation `[a,b]` in the requested three-generator presentation. -/
 def apm_t97J04_relator : FreeGroup (Fin 3) :=
