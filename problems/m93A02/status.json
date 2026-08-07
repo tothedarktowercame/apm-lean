@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "boundary": "positive-M closed-ball contraction assembly; M=0 and the quadratic Lipschitz estimate are proved",
   "imported_at": "2026-07-13T17:26:54.575886Z"
 }

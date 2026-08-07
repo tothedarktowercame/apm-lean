@@ -1,8 +1,8 @@
 # Proof Outline: m93A02
 
-The Lean artifact proves the nonsurjective counterexample and now constructs
-the algebraic inverse required by the contraction argument, including its sharp
-norm bound. One fixed-point assembly boundary remains.
+The Lean artifact proves the nonsurjective counterexample, constructs the
+bounded algebraic inverse, closes the degenerate `M = 0` case, and proves the
+quadratic Lipschitz estimate. One positive-`M` fixed-point assembly remains.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m93A02.md`
@@ -12,10 +12,15 @@ norm bound. One fixed-point assembly boundary remains.
 - The lower bound makes `L` injective; with surjectivity this gives a
   `LinearEquiv H K`.
 - Its inverse satisfies `‖L⁻¹ k‖ ≤ δ⁻¹ ‖k‖`.
+- If `M = 0`, the bilinear term vanishes identically and `h = L⁻¹k` proves the
+  quantitative local-solvability conclusion directly.
+- The estimate
+  `‖Q x x - Q y y‖ ≤ M * (‖x‖ + ‖y‖) * ‖x-y‖` is formalized.
 - The explicit parabola counterexample proves failure without surjectivity.
 
 ## Remaining Boundary
 
-Define `h ↦ L⁻¹(k - Q h h)`, prove it maps the chosen closed ball into
-itself and is contracting, handle `M = 0` separately, and apply
-`ContractingWith.exists_fixedPoint'` to the complete closed ball subtype.
+For `M > 0`, define `h ↦ L⁻¹(k - Q h h)` on the closed ball of radius
+`2‖k‖/δ`, prove self-mapping and contraction for `‖k‖ < δ²/(8M)`, and apply
+`ContractingWith.exists_fixedPoint'`. The `M = 0` case and the required
+quadratic difference bound are complete.
