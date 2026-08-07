@@ -49,6 +49,14 @@ def apm_m98a05_InH2Dirichlet (w dw d2w : ℝ → ℝ) : Prop :=
   apm_m98a05_IsWeakDerivativeOn (Ioo 0 Real.pi) dw d2w ∧
   w 0 = 0 ∧ w Real.pi = 0
 
+lemma apm_m98a05_hasStrictFDerivAt_of_contDiff
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (f : E → F) (x : E) (A : E →L[ℝ] F)
+    (hf : ContDiff ℝ 1 f) (hA : HasFDerivAt f A x) :
+    HasStrictFDerivAt f A x := by
+  exact hf.contDiffAt.hasStrictFDerivAt' hA (by norm_num)
+
 theorem apm_m98a05 :
     (∀ (X P Z : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
       [CompleteSpace X] [NormedAddCommGroup P] [NormedSpace ℝ P]
@@ -74,21 +82,31 @@ theorem apm_m98a05 :
           d2w x = w x + ε * (w x) ^ 2) := by
   constructor
   · /-
-    Boundary: this clause is the full Banach-space implicit function theorem
-    with parameters and local uniqueness. I searched Mathlib's
-    `implicitFunction`, `HasStrictFDerivAt`, `ContinuousLinearEquiv`, and
-    `ContDiff` APIs. The available packaged IFT is formulated through strict
-    derivatives and local inverse data; I did not complete the conversion from
-    the frozen hypotheses (`ContDiff` plus `HasFDerivAt`) to that interface.
+    PARTIAL boundary: this clause is the full Banach-space implicit function
+    theorem with parameters and local uniqueness. The conversion from the
+    frozen hypotheses (`ContDiff` plus the specified `HasFDerivAt`) to the
+    strict-derivative interface is now proved above as
+    `apm_m98a05_hasStrictFDerivAt_of_contDiff`, using Mathlib's
+    `ContDiffAt.hasStrictFDerivAt'`.
+
+    The remaining boundary is reorienting `H : X × P → Z` to Mathlib's
+    product-domain convention, identifying the relevant partial derivative
+    with the supplied continuous linear equivalence, and extracting open sets
+    `W`, `V` from the eventual equality/uniqueness statements of
+    `ContDiffAt.implicitFunction` while retaining `ContDiffOn` on all of `V`.
+    Sibling `m93J03` reaches the same product-domain IFT API but does not close
+    this neighborhood-extraction bridge.
     -/
     sorry
   constructor
   · /-
-    Boundary: the perturbation clause follows by applying the preceding IFT to
-    `(x, ε) ↦ F x + ε • G x`. Completing it requires the same strict-derivative
-    bridge, together with a bundled product derivative for this map. I searched
-    `HasFDerivAt.add`, scalar-multiplication derivative rules, and the local IFT
-    API, but did not finish that assembly in this pass.
+    PARTIAL boundary: the perturbation clause follows by applying the preceding
+    IFT to `(x, ε) ↦ F x + ε • G x`. The strict-derivative bridge is now proved
+    above. What remains is the bundled product derivative for this map and the
+    same conversion of Mathlib's eventual local solution into the stated
+    `δ`-interval witness. Searches of `HasFDerivAt.add`, scalar-multiplication
+    derivative rules, all closed artifacts, `ConstructionTargets`, and
+    `YoungL2.lean` found no compiled helper performing that assembly.
     -/
     sorry
   · refine ⟨1, by norm_num, ?_⟩
