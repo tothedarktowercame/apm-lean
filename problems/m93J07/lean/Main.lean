@@ -35,6 +35,28 @@ def apm_m93j07_Separable (X : apm_m93j07_Banach) : Prop :=
 def apm_m93j07_DualSeparable (X : apm_m93j07_Banach) : Prop :=
   Nonempty (TopologicalSpace.SeparableSpace (StrongDual ℝ X.carrier))
 
+/-- The local power used for the `L² \ L⁴` examples has an integrable square. -/
+lemma apm_m93J07_local_power_two_integrable :
+    IntegrableOn (fun x : ℝ => x ^ (-2 / 3 : ℝ)) (Set.Ioo 0 1) volume := by
+  exact (intervalIntegral.integrableOn_Ioo_rpow_iff zero_lt_one).2 (by norm_num)
+
+/-- The fourth power of the same local singularity is not integrable. -/
+lemma apm_m93J07_local_power_four_not_integrable :
+    ¬ IntegrableOn (fun x : ℝ => x ^ (-4 / 3 : ℝ)) (Set.Ioo 0 1) volume := by
+  rw [intervalIntegral.integrableOn_Ioo_rpow_iff zero_lt_one]
+  norm_num
+
+/-- At infinity the fourth power is integrable. -/
+lemma apm_m93J07_tail_power_four_integrable :
+    IntegrableOn (fun x : ℝ => x ^ (-4 / 3 : ℝ)) (Set.Ioi 1) volume := by
+  exact (integrableOn_Ioi_rpow_iff zero_lt_one).2 (by norm_num)
+
+/-- At infinity the square is not integrable. -/
+lemma apm_m93J07_tail_power_two_not_integrable :
+    ¬ IntegrableOn (fun x : ℝ => x ^ (-2 / 3 : ℝ)) (Set.Ioi 1) volume := by
+  rw [integrableOn_Ioi_rpow_iff zero_lt_one]
+  norm_num
+
 theorem apm_m93j07 :
     (∃ X : apm_m93j07_Banach, ¬ apm_m93j07_Separable X) ∧
     (∃ X : apm_m93j07_Banach,
@@ -77,6 +99,17 @@ theorem apm_m93j07 :
   I did not find compiled sibling constructions covering the bundled
   separability/reflexivity examples or the required `Lp` multiplication
   operator and power-integrability calculations within this pass.
+
+  Closer hop 1 found the relevant improper-integral APIs and compiled the four
+  scalar power tests above: local exponents `-2/3` and `-4/3`, and tail
+  exponents `-4/3` and `-2/3`, have exactly the required integrability behavior.
+  The sibling `a01A06` demonstrates the local `Ioo` conversion but is itself
+  partial, so only its proof pattern—not its theorem—was reused. The remaining
+  `Lᵖ` work is now the measurable-indicator and `MemLp` conversion around these
+  facts. Searches still found no packaged theorem that dual separability forces
+  primal separability, nor a ready dense-proper multiplication operator on the
+  frozen restricted `Lp` type; the Banach-space bundle conjuncts therefore
+  remain the dominant blocker.
   -/
   have hremaining :
       (∃ X : apm_m93j07_Banach, ¬ apm_m93j07_Separable X) ∧
