@@ -1,12 +1,18 @@
 # Proof Outline: t93A03
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt is `lean/Main.lean`. Non-simple-connectivity is now
+proved from the requested free-group equivalence.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t93A03.md`
 
-## Follow-up Needed
+## Compiled progress
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- `apm_t93a03_not_simplyConnected_of_piOne_equiv` proves the second conjunct
+  from the first using the nontrivial generator of `FreeGroup (Fin 2)`.
+
+## Remaining boundary
+
+- Compute the fundamental group of the concrete quotient wedge.
+- This requires `π₁(Circle)=ℤ` and a topological Seifert--van Kampen or
+  wedge/free-product theorem, neither currently packaged in Mathlib.
