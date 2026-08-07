@@ -58,7 +58,7 @@ theorem apm_t00j04
       ContMDiff (apm_t00j04_I n) 𝓘(ℝ, ℝ) ∞ f ∧
       mfderiv (apm_t00j04_I n) 𝓘(ℝ, ℝ) f p = omega_p := by
   /-
-  PARTIAL boundary (closer hop 1).  The local differential problem is closed
+  CLOSER HOP 2 closure. The local differential problem was closed
   by `apm_t00j04_mfderiv_chart_linear`: the germ
   `x ↦ omega_p (extChartAt I p x)` has manifold derivative exactly `omega_p`
   at `p`.  The proof uses `mfderiv_comp`, the ordinary Frechet derivative of a
@@ -67,17 +67,33 @@ theorem apm_t00j04
   Mathlib's `SmoothBumpFunction` API supplies all remaining mathematical
   ingredients: a bump centered at `p`, `eventuallyEq_one`, support contained in
   the chart source, and `SmoothBumpFunction.contMDiff_smul` for globalization.
-  A direct assembly was attempted by multiplying the chart-linear germ by such
-  a bump.  The derivative calculation compiles, but the global smoothness step
-  exposes an instance diamond between the printed
+  The remaining instance diamond between the printed
   `TangentSpace (apm_t00j04_I n) p` module structure carried by `omega_p` and
-  the definitionally equal Euclidean model expected by `ContDiff`/
-  `ContMDiffAt` composition; explicit scalar and model annotations did not
-  resolve it in this pass.  Searches of `ConstructionTargets/`,
-  `LEMMA-INDEX.md`, solved manifold artifacts, Mathlib's partition-of-unity,
-  bump-function, chart, `mfderiv`, cotangent, and jet APIs, and git history
-  found no packaged prescribed-covector realization theorem.  Factoring a
-  canonical continuous-linear equivalence between these two presentations, or
-  proving smoothness directly in written charts, remains the final bridge.
+  the definitionally equal Euclidean model is routed around by `omegaE`: the
+  same underlying function is re-bundled with the explicit Euclidean module
+  structure, reusing `omega_p`'s additivity, scalar compatibility, and
+  continuity. This makes `omegaE.contMDiff` applicable. Multiplication by a
+  chosen `SmoothBumpFunction` globalizes the germ, while
+  `eventuallyEq_one.mfderiv_eq` and `apm_t00j04_mfderiv_chart_linear` recover
+  the prescribed derivative at `p`.
   -/
-  sorry
+  let b : SmoothBumpFunction (apm_t00j04_I n) p := Classical.choice inferInstance
+  -- Re-bundle the tangent covector on the explicit Euclidean model to avoid
+  -- the two definitionally equal but non-definitional module instances.
+  let omegaE : apm_t00j04_E n →L[ℝ] ℝ :=
+    { toFun := omega_p
+      map_add' := omega_p.map_add
+      map_smul' := omega_p.map_smul
+      cont := omega_p.continuous }
+  let g : X → ℝ := fun x ↦ omegaE (extChartAt (apm_t00j04_I n) p x)
+  refine ⟨fun x ↦ b x * g x, ?_, ?_⟩
+  · change ContMDiff (apm_t00j04_I n) 𝓘(ℝ, ℝ) ∞ (fun x ↦ b x • g x)
+    apply b.contMDiff_smul
+    exact omegaE.contMDiff.comp_contMDiffOn contMDiffOn_extChartAt
+  · have heq : (fun x ↦ b x * g x) =ᶠ[nhds p] g := by
+      filter_upwards [b.eventuallyEq_one] with x hx
+      simp [hx]
+    rw [heq.mfderiv_eq]
+    change mfderiv (apm_t00j04_I n) 𝓘(ℝ, ℝ)
+      (fun x ↦ omega_p (extChartAt (apm_t00j04_I n) p x)) p = omega_p
+    exact apm_t00j04_mfderiv_chart_linear p omega_p

@@ -11,13 +11,13 @@ The canonical Lean attempt is `lean/Main.lean`.
   `omega_p ∘ extChartAt I p` has derivative exactly `omega_p` at `p`.
 - The proof uses the chain rule, `mfderiv_extChartAt_self`, and the Frechet
   derivative of a continuous linear map.
+- The main theorem re-bundles the covector's underlying function as an
+  explicitly Euclidean continuous linear map, resolving the tangent/model
+  module-instance diamond.
+- A `SmoothBumpFunction` globalizes the chart-linear germ, and its
+  `eventuallyEq_one` property transfers the local derivative calculation to
+  the global function.
 
-## Remaining boundary
+## Closure
 
-- Choose a `SmoothBumpFunction I p`, multiply it by the chart-linear germ, and
-  apply `SmoothBumpFunction.contMDiff_smul`.
-- Bridge the `TangentSpace I p` module presentation of `omega_p` to the
-  Euclidean model presentation expected by the smoothness API; the attempted
-  direct composition encounters a typeclass-instance diamond.
-- Use `eventuallyEq_one.mfderiv_eq` to transfer the compiled local derivative
-  to the global supported function.
+- All requested clauses are proved without `sorry`.
