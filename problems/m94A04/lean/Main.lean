@@ -16,6 +16,11 @@ so their definitions do not depend on representatives of `Lp` classes.
 
 open MeasureTheory Set
 
+/-- Exact pointwise remainder for the cubic Nemytskii map. -/
+lemma apm_m94a04_cubic_remainder (a b : ℝ) :
+    (a + b) ^ 3 - a ^ 3 - 3 * a ^ 2 * b = 3 * a * b ^ 2 + b ^ 3 := by
+  ring
+
 def apm_m94a04_IsOperator
     (T : Lp ℝ 8 (volume.restrict (Icc (0 : ℝ) 1)) →
       Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1))) : Prop :=
@@ -66,5 +71,23 @@ theorem apm_m94a04 :
   the exact cubic remainder into the statement's epsilon-delta estimate.
   No compiled sibling supplied this mixed-exponent Nemytskii construction
   within this pass.
+
+  Closer hop 1 proves the exact pointwise identity
+  `apm_m94a04_cubic_remainder`, reducing the nonlinear remainder to
+  `3 * f * h² + h³`. More importantly, a deeper Mathlib search finds the
+  quotient-level constructor that the initial pass missed:
+  `MeasureTheory.Function.Holder` installs heterogeneous scalar multiplication
+  `Lp p × Lp q → Lp r` under `ENNReal.HolderTriple p q r`.
+  `Lp.coeFn_lpSMul` supplies representative independence and
+  `Lp.norm_smul_le` supplies Hölder's norm estimate; the raw counterparts are
+  `MemLp.mul'` and `eLpNorm_smul_le_mul_eLpNorm`.
+
+  Thus the live bridge is narrower: instantiate the exponent chain
+  `L⁸·L⁸ → L⁴`, `L⁸·L⁴ → L^(8/3)`, downgrade to `L²` on the finite interval,
+  package multiplication by `3f²` as a `LinearMap`, and turn the two remainder
+  bounds into the frozen ENNReal epsilon-delta inequality. Searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling Nemytskii artifacts, and
+  git history found no completed version of that chain. The statement remains
+  unchanged.
   -/
   sorry
