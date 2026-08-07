@@ -36,15 +36,32 @@ theorem apm_t94j03
     refine ⟨F, ?_⟩
     intro a
     exact DFunLike.congr_fun hF a
-  · /-
-    Boundary: after applying the Euclidean extension above to the composite
-    of a sphere-valued map with `continuous_subtype_val`, the remaining route
-    takes the open nonzero locus and normalizes by the norm. I searched
-    `TietzeExtension`, Euclidean/sphere retractions, normalization,
-    `ContinuousMap`, and norm-division continuity APIs. Mathlib supplies the
-    ambient extension but no packaged continuous radial retraction from the
-    punctured Euclidean space to `Metric.sphere 0 1`; assembling the subtype
-    map, nonvanishing proof, norm-one calculation, and restriction equality
-    is the remaining blocker.
-    -/
-    sorry
+  · intro f
+    let g : C(A, apm_t94J03_Rn (n + 1)) :=
+      ⟨fun a => (f a).1, continuous_subtype_val.comp f.continuous⟩
+    obtain ⟨G, hG⟩ := g.exists_restrict_eq hA
+    let U : Set X := {x | G x ≠ 0}
+    have hUopen : IsOpen U := isOpen_ne_fun G.continuous continuous_const
+    have hAU : A ⊆ U := by
+      intro a ha
+      change G a ≠ 0
+      have hGa : G a = (f ⟨a, ha⟩).1 := DFunLike.congr_fun hG ⟨a, ha⟩
+      rw [hGa]
+      exact fun hzero => by
+        have := (f ⟨a, ha⟩).2
+        simp [hzero] at this
+    refine ⟨U, hUopen, hAU, ?_, ?_⟩
+    · refine ⟨fun x => ⟨NormedSpace.normalize (G x), ?_⟩, ?_⟩
+      · rw [Metric.mem_sphere, dist_zero_right]
+        exact NormedSpace.norm_normalize x.2
+      · apply Continuous.subtype_mk
+        change Continuous fun x : U => ‖G x‖⁻¹ • G x
+        exact ((G.continuous.comp continuous_subtype_val).norm.inv₀
+          (fun x => norm_ne_zero_iff.mpr x.2)).smul
+          (G.continuous.comp continuous_subtype_val)
+    · intro a
+      apply Subtype.ext
+      change NormedSpace.normalize (G a) = (f a).1
+      have hGa : G a = (f a).1 := DFunLike.congr_fun hG a
+      rw [hGa]
+      exact NormedSpace.normalize_eq_self_of_norm_eq_one (by simpa using a.property)
