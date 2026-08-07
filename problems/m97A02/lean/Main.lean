@@ -63,6 +63,15 @@ lemma apm_m97A02_anchored_pointwise_bound
   rw [Real.norm_eq_abs, Real.norm_eq_abs, hxα, sub_zero] at hmv
   exact hmv.trans (mul_le_of_le_one_right hr.le hdist)
 
+/-- The quantitative constant in the derivative norm of composition by cosine
+is strictly contractive on `[0,1]`. -/
+lemma apm_m97A02_sin_one_lt_one : Real.sin 1 < 1 := by
+  have h : Real.sin 1 < Real.sin (Real.pi / 2) := Real.strictMonoOn_sin
+    ⟨by linarith [Real.pi_gt_three], by linarith [Real.pi_gt_three]⟩
+    ⟨by linarith [Real.pi_pos], le_rfl⟩
+    (by linarith [Real.pi_gt_three])
+  simpa only [Real.sin_pi_div_two] using h
+
 theorem apm_m97a02 :
     ∀ α : ℝ, α ∈ Icc (0 : ℝ) 1 → Real.cos α = α →
       ∃ δ : ℝ, 0 < δ ∧
@@ -90,5 +99,15 @@ theorem apm_m97a02 :
   continuous-map/derivative equivalence APIs found no assembly for this custom
   derivative-only normed space.  The remaining boundary is therefore
   functional-analytic packaging rather than the pointwise norm control.
+
+  Closer hop 1 additionally isolates the strict contraction constant as
+  `apm_m97A02_sin_one_lt_one`, using `Real.strictMonoOn_sin` on
+  `[-π/2, π/2]`.  Searches of Mathlib's `C¹`/continuous-map integration,
+  bounded composition, closed-subspace completeness, Neumann-series, and
+  contraction APIs, plus the closed corpus and construction libraries, found
+  no packaged anchored derivative-norm space.  Thus the analytic constant
+  `sin 1 < 1` and the anchored Poincaré bound are both compiled; the remaining
+  bridge is still the Banach-space model and the nonlinear local Lipschitz
+  estimate inside that model.
   -/
   sorry
