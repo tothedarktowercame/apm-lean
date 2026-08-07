@@ -88,6 +88,12 @@ def apm_t01J06_projectionPullback
     (ContinuousLinearMap.fst ℝ (apm_t01J06_sphereTangent qp.1)
       (apm_t01J06_circleTangent qp.2))
 
+lemma apm_t01J06_projectionPullback_isJPullback
+    (alpha : apm_t01J06_SphereForm2) (p : apm_t01J06_S1) :
+    apm_t01J06_isJPullback p (apm_t01J06_projectionPullback alpha) alpha := by
+  intro q v
+  rfl
+
 theorem apm_t01j06
     (omega : apm_t01J06_AmbientForm2)
     (homega : apm_t01J06_isOmega omega)
@@ -102,4 +108,32 @@ theorem apm_t01j06
       ∃ zeta : apm_t01J06_ProductForm2,
         zeta = apm_t01J06_projectionPullback alpha ∧
         apm_t01J06_isJPullback p zeta alpha := by
+  /-
+  CLOSER HOP 1 boundary. The product-extension clause is now completely
+  discharged at the definition level by
+  `apm_t01J06_projectionPullback_isJPullback`: composing the alternating form
+  with the first projection sends `(v, 0)` back to `v`.
+
+  The first clause requires identifying the custom
+  `apm_t01J06_orientedCoefficient` of the restricted ambient form and
+  integrating it against `μH[2]` on the metric sphere. The intended Stokes
+  argument reduces it to the volume of the unit 3-ball, but Mathlib has no
+  integration theory for top-degree manifold differential forms and no
+  manifold Stokes theorem connecting `extDeriv` to this Hausdorff-measure
+  coefficient integral. Direct evaluation instead requires substantial
+  orthogonal-projection coordinate algebra plus sphere moment integrals.
+
+  The nonextension clause depends on the same absent bridge: a closed ambient
+  extension would have zero integral over the sphere by Stokes, contradicting
+  the computed nonzero period. `DifferentialForm.Basic` provides
+  `extDeriv_pullback`, but not the global integral theorem required to turn
+  closedness into vanishing of this frozen integral.
+
+  Searches covered `LEMMA-INDEX.md`, every `ConstructionTargets/` module,
+  closed form/integration siblings (`t92J09`, `t94J07`, `t94A10`, `t02A05`),
+  Mathlib's differential-form, Hausdorff-measure, sphere-integral, divergence,
+  and Stokes-related sources, and git history. The siblings independently
+  record the same missing manifold-form integration interface. Thus the
+  product pullback is closed, while the period and obstruction remain open.
+  -/
   sorry
