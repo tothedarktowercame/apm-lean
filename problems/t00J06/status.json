@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,9 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The trivial countably-sheeted cover S × Nat → S and its infinite fibers are proved, routing around surface topology. Remaining work is ULift transport into the frozen existential universe.",
+  "classification": "complete",
+  "closer_hop": 2,
+  "boundary": null,
+  "closer_progress": "Hop 2 closes the theorem with the universe-lifted trivial cover `ULift (S × Nat)`. `IsCoveringMap.comp_homeomorph Homeomorph.ulift` transports the covering proof, an explicit Nat injection proves every fiber infinite, and the lifted zero section provides the continuous lift.",
   "imported_at": "2026-07-13T17:26:56.631657Z"
 }

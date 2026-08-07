@@ -78,25 +78,15 @@ theorem apm_t00j06
       (∀ s : S, (p ⁻¹' ({s} : Set S)).Infinite) ∧
       ∃ lift : C(apm_t00J06_Torus, X),
         ∀ x, p (lift x) = f x := by
-  /-
-  CLOSER HOP 1 boundary. The mathematical surface-group machinery can be
-  routed around completely: the countably-sheeted trivial cover
-  `S × ℕ → S` lifts every `f` through its zero section. This hop compiles the
-  two nontrivial topological/set-theoretic pieces as
-  `apm_t00J06_isCoveringMap_fst_nat` and
-  `apm_t00J06_fst_nat_fiber_infinite`, using Mathlib's
-  `IsCoveringMap.mk` and an explicit global `Bundle.Trivialization`.
-
-  The frozen conclusion, however, quantifies `X : Type*` at an independent
-  universe level. Direct insertion of the universe-zero witness `S × ℕ`
-  fails elaboration, even though its covering, fiber, and zero-section lift
-  all compile separately. Closing the theorem requires transporting this
-  trivial cover across `ULift` into the existential's universe and proving
-  that covering maps, infinite fibers, and the continuous zero section are
-  preserved by the resulting homeomorphism. Searches of `LEMMA-INDEX.md`, all
-  construction modules, Mathlib's covering/trivial-bundle/ULift APIs, closed
-  artifacts, and git history found no packaged universe-lift transport for
-  `IsCoveringMap`. The homology hypothesis is genuinely unnecessary; the
-  remaining blocker is universe-polymorphic packaging, not surface topology.
-  -/
-  sorry
+  refine ⟨ULift (S × ℕ), inferInstance, (fun x ↦ Prod.fst x.down), ?_, ?_, ?_⟩
+  · exact (apm_t00J06_isCoveringMap_fst_nat S).comp_homeomorph Homeomorph.ulift
+  · intro s
+    let j : ℕ → ULift (S × ℕ) := fun n ↦ ULift.up (s, n)
+    have hj : Function.Injective j := ULift.up_injective.comp fun _ _ h ↦ congrArg Prod.snd h
+    apply (Set.infinite_range_of_injective hj).mono
+    rintro _ ⟨n, rfl⟩
+    simp [j]
+  · let lift : C(apm_t00J06_Torus, ULift (S × ℕ)) :=
+      ⟨fun x ↦ ULift.up (f x, 0), Homeomorph.ulift.continuous_invFun.comp
+        (f.continuous.prodMk continuous_const)⟩
+    exact ⟨lift, fun x ↦ by simp [lift]⟩

@@ -11,11 +11,11 @@ theory using a countably sheeted trivial cover.
 - `apm_t00J06_isCoveringMap_fst_nat` constructs a global trivialization and
   proves `S × ℕ → S` is a covering map.
 - `apm_t00J06_fst_nat_fiber_infinite` injects `ℕ` into every projection fiber.
-- The intended lift is the continuous zero section `x ↦ (f x, 0)`.
+- The theorem uses `ULift (S × ℕ)` as the existential total space.  The map is
+  `x ↦ x.down.1`, and `IsCoveringMap.comp_homeomorph Homeomorph.ulift`
+  transports the compiled trivial-cover proof into the required universe.
+- Each lifted fiber contains the injective image `n ↦ ULift.up (s, n)`.
+- The continuous lift is the universe-lifted zero section
+  `x ↦ ULift.up (f x, 0)`.
 
-## Remaining boundary
-
-The frozen existential quantifies its total-space universe independently.
-Transport the compiled trivial cover through `ULift`, including its topology,
-covering-map proof, infinite fibers, and continuous zero-section lift. No
-packaged `IsCoveringMap` universe-lift theorem was found.
+There is no remaining proof boundary and `lean/Main.lean` contains no `sorry`.
