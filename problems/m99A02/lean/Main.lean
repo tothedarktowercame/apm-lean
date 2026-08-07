@@ -105,13 +105,22 @@ lemma m99A02_sum_derivative_sq {x : m99A02Point}
   field_simp [hr, ne_of_gt hl]
   ring
 
+/-- Each coordinate derivative is dominated by the single radial density. -/
+lemma m99A02_derivative_sq_le_radial (i : Fin 2) {x : m99A02Point}
+    (hx : x ∈ m99A02Omega) (hx0 : x ≠ 0) :
+    (m99A02Derivative i x) ^ 2 ≤
+      1 / (9 * ‖x‖ ^ 2 * (-Real.log ‖x‖) ^ (4 / 3 : ℝ)) := by
+  rw [← m99A02_sum_derivative_sq hx hx0]
+  exact Finset.single_le_sum (fun j _ ↦ sq_nonneg (m99A02Derivative j x))
+    (Finset.mem_univ i)
+
 theorem apm_m99a02 :
     MemLp m99A02Function 2 (volume.restrict m99A02Omega) ∧
     ∀ i : Fin 2,
       MemLp (m99A02Derivative i) 2 (volume.restrict m99A02Omega) ∧
       IsM99A02WeakDerivative m99A02Function (m99A02Derivative i) i := by
   /-
-  Boundary (closer hop 2): `m99A02_neg_log_norm_pos` verifies that every real power in the
+  Boundary (closer hop 3): `m99A02_neg_log_norm_pos` verifies that every real power in the
   displayed function and derivative is evaluated on a positive logarithmic
   base throughout the punctured disk; `m99A02Function_pos` records the
   corresponding pointwise fact about the chosen representative. Completing
@@ -139,5 +148,12 @@ theorem apm_m99a02 :
   supplies that transport or the required improper-log integrability proof.
   The weak-derivative clause additionally still needs integration by parts on
   punctured disks and the vanishing inner-boundary flux.
+
+  Closer hop 3 adds `m99A02_derivative_sq_le_radial`.  It uses the exact sum
+  identity and `Finset.single_le_sum` to dominate either coordinate derivative
+  square by the same radial density.  Consequently a single transported polar
+  integrability theorem will discharge both derivative `MemLp` estimates; no
+  further coordinate calculation is needed.  The polar transport/scalar
+  Bertrand integral and the weak-derivative boundary-flux argument remain open.
   -/
   sorry
