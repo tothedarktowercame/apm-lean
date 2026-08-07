@@ -85,5 +85,21 @@ theorem apm_m00a03
     can be discharged topologically by choosing a positive-norm neighborhood
     and excluding the finitely many remaining points. Thus the genuinely open
     analytic bridge is the first finiteness clause itself.
+
+    Closer hop 2 inspected the complete proof of
+    `IsCompactOperator.hasEigenvalue_or_mem_resolventSet`.  Its final section
+    already supplies the exact compact-image/subsequence contradiction APIs:
+    `IsCompactOperator.image_closedBall_subset_compact`,
+    `IsCompact.tendsto_subseq`, `Metric.cauchySeq_iff'`, and a pairwise norm
+    separation argument.  That proof is parameterized by one fixed `μ`, however,
+    so it cannot directly establish annular finiteness.  The missing new
+    construction is now isolated to: select a sequence of distinct points from
+    an infinite annular subset of the spectrum; turn them into eigenvectors via
+    `hA.hasEigenvalue_iff_mem_spectrum`; prove their finite spans form a strict,
+    closed, invariant flag with the shift property; and apply Riesz's lemma to
+    obtain the separated bounded sequence consumed by those compactness APIs.
+    Sibling `m96A01` proves only finite dimensionality of each individual
+    nonzero eigenspace, which does not construct this flag.  No closed artifact,
+    lemma-index entry, or construction library supplies the missing assembly.
     -/
     sorry
