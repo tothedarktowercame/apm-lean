@@ -15,7 +15,7 @@ space formulation. No central object is omitted: the conclusion concerns
 Mathlib's algebraic spectrum of the continuous linear operator itself.
 -/
 
-open Set Metric
+open Set Metric Filter
 
 noncomputable section
 
@@ -28,6 +28,31 @@ lemma apm_m00A03_finite_norm_ge_of_finite_norm_gt
   apply (h (ε / 2) (by positivity)).subset
   intro z hz
   exact ⟨hz.1, (half_lt_self hε).trans_le hz.2⟩
+
+lemma apm_m00A03_derivedSet_subset_zero_of_annular_finite
+    (s : Set ℂ) (h : ∀ ε : ℝ, 0 < ε → {z ∈ s | ε ≤ ‖z‖}.Finite) :
+    derivedSet s ⊆ {0} := by
+  intro x hx
+  simp only [Set.mem_singleton_iff]
+  by_contra hx0
+  have hr : 0 < ‖x‖ := norm_pos_iff.mpr hx0
+  let T : Set ℂ := {z ∈ s | ‖x‖ / 2 ≤ ‖z‖}
+  have hT : T.Finite := h (‖x‖ / 2) (by positivity)
+  have hTdiff : (T \ {x}).Finite := hT.diff
+  have hopen : IsOpen ((T \ {x})ᶜ) := hTdiff.isClosed.isOpen_compl
+  have hnhds : ball x (‖x‖ / 2) ∩ (T \ {x})ᶜ ∈ nhds x :=
+    inter_mem (ball_mem_nhds x (by positivity)) (hopen.mem_nhds (by simp))
+  obtain ⟨y, hy, hyne⟩ := (accPt_iff_nhds.mp hx)
+    (ball x (‖x‖ / 2) ∩ (T \ {x})ᶜ) hnhds
+  have hydist : dist y x < ‖x‖ / 2 := by
+    simpa [dist_comm] using hy.1.1
+  have hynorm : ‖x‖ / 2 ≤ ‖y‖ := by
+    have htri := norm_sub_norm_le x y
+    rw [← dist_eq_norm] at htri
+    have hydist' : dist x y < ‖x‖ / 2 := by simpa [dist_comm] using hydist
+    nlinarith
+  have hyT : y ∈ T := ⟨hy.2, hynorm⟩
+  exact hy.1.2 ⟨hyT, by simpa [hyne]⟩
 
 theorem apm_m00a03
     (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X]
@@ -59,6 +84,8 @@ theorem apm_m00a03
     have := hzfar ⟨y, hyZ⟩ hyF
     simpa [dist_eq_norm] using this
   · intro A hA
+    have hfinite : ∀ ε : ℝ, 0 < ε →
+        {z ∈ spectrum ℂ A | ε < ‖z‖}.Finite := by
     /-
     Boundary after closer hop 1: Riesz's lemma is closed above using Mathlib's compiled
     `riesz_lemma_of_lt_one`, applied to the comap of `Y` inside the subtype
@@ -101,5 +128,18 @@ theorem apm_m00a03
     Sibling `m96A01` proves only finite dimensionality of each individual
     nonzero eigenspace, which does not construct this flag.  No closed artifact,
     lemma-index entry, or construction library supplies the missing assembly.
+
+    Closer hop 3 proves the full topological consequence as
+    `apm_m00A03_derivedSet_subset_zero_of_annular_finite`: a ball of radius
+    `‖x‖ / 2`, intersected with the complement of the finite closed annulus
+    (apart from `x`), contradicts `accPt_iff_nhds` at every `x ≠ 0`.
+    Consequently this final `sorry` is confined exactly to annular spectral
+    finiteness, i.e. the multi-eigenvalue invariant-flag/Riesz-separation
+    construction described above.
     -/
-    sorry
+      sorry
+    refine ⟨hfinite, ?_⟩
+    exact apm_m00A03_derivedSet_subset_zero_of_annular_finite
+      (spectrum ℂ A) (fun ε hε ↦
+        apm_m00A03_finite_norm_ge_of_finite_norm_gt
+          (spectrum ℂ A) hfinite ε hε)

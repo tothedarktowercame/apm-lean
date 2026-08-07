@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_progress": "Hop 3 proves the derived-set conclusion from annular finiteness; the sole remaining sorry is exactly the compact-operator annular spectral-finiteness argument.",
   "imported_at": "2026-07-13T17:26:54.251473Z"
 }
