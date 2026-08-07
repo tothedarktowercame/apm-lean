@@ -52,7 +52,38 @@ theorem apm_m02a04 :
     `a96A04` supplies the same `integral_gaussian`/rpow normalization pattern,
     but not the translated linear-term calculation.
     -/
-    sorry
+    unfold apm_m02a04_integral apm_m02a04_leadingTerm
+    calc
+      (∫ x : ℝ, Real.exp (-t ^ 3 * x ^ 2 + t ^ 2 * x)) =
+          ∫ x : ℝ, Real.exp (-t ^ 3 * (x - 1 / (2 * t)) ^ 2) *
+            Real.exp (t / 4) := by
+              apply integral_congr_ae
+              filter_upwards with x
+              rw [hsquare, Real.exp_add]
+      _ = (∫ x : ℝ, Real.exp (-t ^ 3 * (x - 1 / (2 * t)) ^ 2)) *
+            Real.exp (t / 4) := integral_mul_const _ _
+      _ = Real.sqrt (Real.pi / t ^ 3) * Real.exp (t / 4) := by
+            rw [← hgaussian]
+            congr 1
+            convert
+              (integral_add_right_eq_self
+                (μ := volume)
+                (fun x : ℝ ↦ Real.exp (-t ^ 3 * x ^ 2))
+                (-(1 / (2 * t)))) using 1 <;>
+              ring
+      _ = Real.sqrt Real.pi * Real.rpow t (-(3 : ℝ) / 2) *
+            Real.exp (t / 4) := by
+            /-
+            Boundary (closer hop 1): translation invariance and extraction of
+            `exp (t/4)` now compile, reducing the exact evaluation solely to
+            `sqrt (pi / t^3) = sqrt pi * t^(-3/2)`. Attempts with
+            `Real.sqrt_eq_rpow`, `Real.div_rpow`, `Real.rpow_natCast_mul`, and
+            `Real.rpow_neg` exposed an elaboration mismatch between ordinary
+            powers and `Real.rpow` in the rewritten denominator.  The next hop
+            should isolate the denominator identity as a separately typed
+            `Real.rpow` lemma before rewriting the square root.
+            -/
+            sorry
   · /-
     Boundary for the ratio limit: once the preceding exact identity is
     available as a local helper, positivity of the leading term for all
