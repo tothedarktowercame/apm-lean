@@ -1,12 +1,21 @@
 # Proof Outline: t91J06
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The frozen theorem is encoded in `lean/Main.lean`. Its embedded interval
+images have been bundled as `apm_t91J06_stage`; they form a compact monotone
+exhaustion of the ambient space.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t91J06.md`
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- orient each stage compatibly with its predecessor;
+- extend a chosen stage coordinate across the two complementary pieces of the
+  next interval;
+- glue the compatible coordinates into a bijection `X → ℝ`;
+- prove continuity of the glued map using `hweak`, and continuity of its
+  inverse using the compact exhaustion of `ℝ`.
+
+Mathlib provides compact-exhaustion and compactly-generated-space APIs, but no
+theorem constructs the compatible interval coordinates or performs this
+direct-limit gluing.
