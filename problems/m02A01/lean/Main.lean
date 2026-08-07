@@ -106,7 +106,30 @@ theorem apm_m02a01 :
           expected by the `FiniteDimensional` continuity API. Transporting a
           basis and proving continuity of the inverse coordinate map therefore
           remains necessary.
+
+          Closer hop 2 found this exact coordinate construction in sibling
+          `m99A05`: use `Module.finBasis`, transport coordinatewise convergence
+          through `equivFun.toContinuousLinearEquiv`, then apply its continuous
+          inverse.  The only adaptation is extracting convergence of each
+          continuous coordinate from the genuine weak-topology hypothesis via
+          `WeakBilin.tendsto_iff_forall_eval_tendsto`.
           -/
-          sorry
+          intro hweak
+          let b := Module.finBasis ℝ X
+          let A := b.equivFun.toContinuousLinearEquiv
+          have hweak' :=
+            (WeakBilin.tendsto_iff_forall_eval_tendsto
+              (B := (topDualPairing ℝ X).flip)
+              (separatingDual_iff_injective.mp inferInstance)).1 hweak
+          have hcoord : Tendsto (fun n => A (x n)) atTop (nhds (A a)) := by
+            rw [tendsto_pi_nhds]
+            intro i
+            let coord : X →L[ℝ] ℝ :=
+              ⟨b.coord i, (b.coord i).continuous_of_finiteDimensional⟩
+            simpa [A, b, coord] using hweak' coord
+          have hback := A.symm.continuous.continuousAt.tendsto.comp hcoord
+          change Tendsto (fun n => A.symm (A (x n))) atTop
+            (nhds (A.symm (A a))) at hback
+          simpa only [ContinuousLinearEquiv.symm_apply_apply] using hback
         · intro hx
           exact (toWeakSpaceCLM ℝ X).continuous.continuousAt.tendsto.comp hx
