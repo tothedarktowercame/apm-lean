@@ -1,12 +1,16 @@
 # Proof Outline: a98A05
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt now formalizes the algebraic reduction of the
+improper integral.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-a98A05.md`
+- `apm_a98a05_partial_fractions` proves the exact decomposition of
+  `1 / (1 + x^3)` on the nonnegative half-line.
+- The helper also proves positivity of both denominators, eliminating all
+  pole side conditions for the subsequent derivative calculation.
 
 ## Follow-up Needed
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- Define the logarithm/arctangent antiderivative recorded in `Main.lean`.
+- Prove its derivative using `apm_a98a05_partial_fractions`.
+- Apply Mathlib's improper FTC theorem and establish the endpoint limits,
+  including cancellation of the logarithmic terms at infinity.
