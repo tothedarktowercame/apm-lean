@@ -50,6 +50,20 @@ lemma apm_m96j03_integral_ballIndicator {n : ℕ}
     dist_zero_right]
   split_ifs <;> simp
 
+/-- The flux identity in dimension zero is degenerate: the coordinate sum is
+empty and the unit sphere in the zero-dimensional Euclidean space is empty. -/
+lemma apm_m96j03_zero_dim (φ : apm_m96j03_E 0 → ℝ) :
+    (∫ x : apm_m96j03_E 0,
+        apm_m96j03_ballIndicator x * apm_m96j03_laplacian φ x) =
+      ∫ x : apm_m96j03_E 0 in Metric.sphere 0 1,
+        fderiv ℝ φ x x ∂μH[(0 - 1 : ℕ)] := by
+  have hsphere : Metric.sphere (0 : apm_m96j03_E 0) 1 = ∅ := by
+    ext x
+    have hx : x = 0 := Subsingleton.elim x 0
+    simp [hx]
+  rw [hsphere]
+  simp [apm_m96j03_laplacian]
+
 theorem apm_m96j03
     (n : ℕ) (φ : apm_m96j03_E n → ℝ)
     (hφ : apm_m96j03_IsTestFunction φ) :
@@ -59,7 +73,13 @@ theorem apm_m96j03
         fderiv ℝ φ x x ∂μH[(n - 1 : ℕ)] := by
   rw [apm_m96j03_integral_ballIndicator]
   /-
-  PARTIAL (Gauss--Green theorem for a Euclidean ball).  The helper
+  PARTIAL (closer hop 1, Gauss--Green theorem for a Euclidean ball).
+  `apm_m96j03_zero_dim` now proves the complete degenerate `n = 0` identity:
+  `Fin 0` makes the Laplacian sum empty, while the radius-one sphere in the
+  subsingleton Euclidean space is empty.  Thus the remaining geometric bridge
+  may be restricted to positive dimension.
+
+  The helper
   `apm_m96j03_integral_ballIndicator` above proves the initial measurable-set
   reduction, so the remaining target is exactly
 
@@ -92,7 +112,12 @@ theorem apm_m96j03
   confirm that general surface/differential-form integration is not packaged
   for their encodings.  The remaining `ConstructionTargets/` modules and
   `YoungL2.lean` contain no relevant Gauss--Green result.  The statement
-  appears mathematically correct, including the degenerate `n = 0` case, but
-  proving it requires this missing geometric-measure interface.
+  appears mathematically correct.  A renewed search also inspected Mathlib's
+  box divergence theorem, `HaarToSphere`, `VolumeOfBalls`, the specialized
+  `ConstructionTargets.RadialIntegrationR3`, partial flux artifact `t02A05`,
+  and git history.  None identifies `volume.toSphere` with the frozen
+  restricted Hausdorff measure or supplies the nonradial sphere-flux identity.
+  For positive dimension, proving the theorem still requires this missing
+  geometric-measure interface.
   -/
   sorry
