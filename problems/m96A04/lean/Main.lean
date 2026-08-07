@@ -37,6 +37,7 @@ theorem apm_m96a04
         simp }
   have hBlin : (Blin : X → X) = B := rfl
   have hBcont : Continuous Blin := by
+    -- Mathlib's Hellinger--Toeplitz proof uses this same closed-graph API.
     apply Blin.continuous_of_seq_closed_graph
     intro u x y hu hBu
     apply ext_inner_left ℂ
@@ -50,6 +51,7 @@ theorem apm_m96a04
       simpa [Blin, ← hAB] using h
     exact tendsto_nhds_unique h₁ h₂
   have hAcont : Continuous A := by
+    -- Repeat the closed-graph argument with the two sides of `hAB` exchanged.
     apply A.continuous_of_seq_closed_graph
     intro u x y hu hAu
     apply ext_inner_right ℂ
