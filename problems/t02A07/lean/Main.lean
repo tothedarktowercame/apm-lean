@@ -58,6 +58,11 @@ def apm_t02a07_familyAmbient
     ![y 0 * parameter.1 0, parameter.1 1, y 1 * parameter.1 0,
       y 2 * parameter.1 0]
 
+@[simp] lemma apm_t02a07_family_eq_familyAmbient
+    (parameter : apm_t02a07_parameterCircle) (y : apm_t02a07_S2) :
+    apm_t02a07_family parameter y =
+      apm_t02a07_familyAmbient parameter y := rfl
+
 def apm_t02a07_tangentZ (x : apm_t02a07_E4) : Submodule ℝ apm_t02a07_E4 :=
   LinearMap.ker (fderiv ℝ apm_t02a07_constraints x).toLinearMap
 
@@ -74,4 +79,32 @@ theorem apm_t02a07 :
       Set.range (apm_t02a07_family parameter) ⊆ apm_t02a07_X) ∧
     Dense {parameter : apm_t02a07_parameterCircle |
       apm_t02a07_IsTransverse parameter} := by
+  /-
+  CLOSER HOP 1 boundary. The restricted family is now explicitly connected to
+  its ambient differentiable extension by
+  `apm_t02a07_family_eq_familyAmbient`, eliminating a later coercion bridge.
+
+  The range-in-sphere conjunct is an explicit norm calculation: using
+  `EuclideanSpace.norm_sq_eq`, the squared norm of the four displayed
+  coordinates factors as
+  `parameter₀² * ‖y‖² + parameter₁² = 1`. Mathlib supplies the norm identity,
+  but the required `Fin 3`/`Fin 4` sum normalization and `WithLp.toLp`
+  coordinate simplification remain to be assembled locally.
+
+  Regularity requires computing the derivative of both constraints. At a
+  point with `x₂*x₃ = 1/4`, the second constraint forces `x₂,x₃ ≠ 0`; the norm
+  gradient and product gradient are then linearly independent, yielding
+  surjectivity onto `ℝ²`. No searched lemma packages this coordinate Jacobian
+  argument for the frozen `fderiv` expression.
+
+  Finally, the density statement is the parametric transversality theorem.
+  Mathlib contains Sard's theorem and elementary tangent/submodule machinery,
+  but searches found no Thom/parametric-transversality theorem. A direct route
+  would have to classify the exceptional parameters by solving the displayed
+  derivative-rank equations and prove their complement dense in the circle.
+  Searches covered `LEMMA-INDEX.md`, all `ConstructionTargets/`, sibling
+  `t94A06`, all closed transversality artifacts, Mathlib's Sard, fderiv,
+  Euclidean norm, submodule, and density APIs, and git history. None supplies
+  the parameter-density assembly, so the statement remains open.
+  -/
   sorry
