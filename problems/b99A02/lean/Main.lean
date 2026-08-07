@@ -28,6 +28,41 @@ lemma apm_b99A02_card_comap_mk
   simpa only [Set.mem_preimage, SetLike.mem_coe] using
     (QuotientGroup.card_preimage_mk N (S : Set (G ⧸ N)))
 
+lemma apm_b99A02_sylow29_unique_of_card_203
+    (X : Type*) [Group X] [Fintype X] (hX : Nat.card X = 203) :
+    Nat.card (Sylow 29 X) = 1 := by
+  letI : Fact (Nat.Prime 29) := ⟨by norm_num⟩
+  let S : Sylow 29 X := default
+  have hScard : Nat.card S = 29 := by
+    rw [Sylow.card_eq_multiplicity, hX]
+    native_decide
+  have hSindex : S.index = 7 := by
+    have h := S.toSubgroup.index_mul_card
+    rw [hScard, hX] at h
+    omega
+  have hdvd : Nat.card (Sylow 29 X) ∣ 7 := by
+    simpa [hSindex] using Sylow.card_dvd_index S
+  have hnmem : Nat.card (Sylow 29 X) ∈ Nat.divisors 7 :=
+    Nat.mem_divisors.mpr ⟨hdvd, by norm_num⟩
+  have hdivs : Nat.divisors 7 = {1, 7} := by native_decide
+  rw [hdivs] at hnmem
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hnmem
+  rcases hnmem with h1 | h7
+  · exact h1
+  · have hmod : Nat.card (Sylow 29 X) ≡ 1 [MOD 29] :=
+      card_sylow_modEq_one 29 X
+    rw [h7] at hmod
+    norm_num [Nat.ModEq] at hmod
+
+lemma apm_b99A02_sylow29_normal_of_card_203
+    (X : Type*) [Group X] [Fintype X] (hX : Nat.card X = 203)
+    (S : Sylow 29 X) : S.toSubgroup.Normal := by
+  letI : Fact (Nat.Prime 29) := ⟨by norm_num⟩
+  haveI : Subsingleton (Sylow 29 X) :=
+    (Nat.card_eq_one_iff_unique.mp
+      (apm_b99A02_sylow29_unique_of_card_203 X hX)).1
+  exact Sylow.normal_of_subsingleton S
+
 theorem apm_b99a02
     (G : Type*) [Group G] [Fintype G]
     (hG : Fintype.card G = 5075)
@@ -69,8 +104,30 @@ theorem apm_b99a02
       norm_num [Nat.ModEq] at hmod
   haveI : Subsingleton (Sylow 5 G) :=
     (Nat.card_eq_one_iff_unique.mp hSylow5card).1
+  have hPnormal : P.toSubgroup.Normal := Sylow.normal_of_subsingleton P
+  letI : P.toSubgroup.Normal := hPnormal
+  have hquotcard : Nat.card (G ⧸ P.toSubgroup) = 203 := by
+    have h := Subgroup.card_eq_card_quotient_mul_card_subgroup P.toSubgroup
+    rw [hGcard, hPcard] at h
+    omega
+  letI : Fintype (G ⧸ P.toSubgroup) := Fintype.ofFinite _
+  let S : Sylow 29 (G ⧸ P.toSubgroup) := default
+  have hSnormal : S.toSubgroup.Normal :=
+    apm_b99A02_sylow29_normal_of_card_203 (G ⧸ P.toSubgroup) hquotcard S
+  have hScard : Nat.card S = 29 := by
+    letI : Fact (Nat.Prime 29) := ⟨by norm_num⟩
+    rw [Sylow.card_eq_multiplicity, hquotcard]
+    native_decide
+  let H : Subgroup G := S.toSubgroup.comap (QuotientGroup.mk' P.toSubgroup)
+  have hHnormal : H.Normal :=
+    (apm_b99A02_normal_comap_mk_and_le P.toSubgroup S.toSubgroup hSnormal).1
+  have hHcard : Nat.card H = 5 ^ 2 * 29 := by
+    dsimp [H]
+    rw [apm_b99A02_card_comap_mk, hPcard, hScard]
   constructor
-  · exact Sylow.normal_of_subsingleton P
+  · exact hPnormal
+  constructor
+  · exact ⟨H, hHnormal, hHcard⟩
   /-
   Boundary after closer hop 1 and the compiled first Sylow count:
   `Sylow.card_eq_multiplicity`, `Sylow.card_dvd_index`, and
@@ -102,5 +159,15 @@ theorem apm_b99a02
   required cardinality `25 * 29` immediately. The remaining cascade is the
   quotient Sylow uniqueness count, transport of normality to the specified
   `Q`, and the final `K = P R` normality/commutativity equivalence.
+
+  Closer hop 3 proves the quotient count as the reusable lemmas
+  `apm_b99A02_sylow29_unique_of_card_203` and
+  `apm_b99A02_sylow29_normal_of_card_203`. The main proof now computes
+  `|G ⩸ P| = 203`, constructs its normal Sylow-29 subgroup, and pulls it back.
+  Together with `apm_b99A02_card_comap_mk`, this closes the entire existence
+  clause for a normal `H` of cardinality `5^2 * 29`. The sole remaining
+  boundary is transporting the resulting Sylow-29 normality to the specified
+  `Q`, then constructing `K = P R` and proving its normality/commutativity
+  equivalence.
   -/
   sorry

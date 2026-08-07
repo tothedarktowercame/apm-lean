@@ -16,7 +16,7 @@
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1,
-    "closer_progress": "The normal quotient pullback and its exact cardinality Nat.card N * Nat.card S are now proved helpers. Remaining: quotient Sylow-29 uniqueness, transport to Q.Normal, and the final K = P R normality/commutativity equivalence."
+    "closer_progress": "Hop 3 proves uniqueness and normality of Sylow-29 subgroups in every group of order 203, computes the quotient order, and closes existence of the normal subgroup H of order 25*29. Remaining: transport normality to the specified Q and prove the final K = P R equivalence."
   },
   "artifacts": {
     "has_problem_tex": true,
