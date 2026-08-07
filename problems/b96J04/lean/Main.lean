@@ -42,6 +42,18 @@ lemma apm_b96J04_f41_eq_cyclotomic :
     apm_b96J04_f41 = cyclotomic 16 (ZMod 41) := by
   exact apm_b96J04_X_pow_eight_add_one_eq_cyclotomic (ZMod 41)
 
+/-- The Frobenius exponent `41` has order two modulo `16`. -/
+lemma apm_b96J04_orderOf_41_mod_16 :
+    orderOf (41 : ZMod 16) = 2 := by
+  apply orderOf_eq_prime
+  · decide
+  · decide
+
+/-- The concrete unit group modulo `16` has eight elements. -/
+lemma apm_b96J04_card_units_mod_16 : Nat.card (ZMod 16)ˣ = 8 := by
+  rw [Nat.card_eq_fintype_card]
+  native_decide
+
 theorem apm_b96j04
     (K L : Type) [Field K] [Algebra ℚ K]
     [Fact (Nat.Prime 41)] [Field L] [Algebra (ZMod 41) L]
@@ -57,11 +69,20 @@ theorem apm_b96j04
     Nonempty
       ((L ≃ₐ[ZMod 41] L) ≃* Multiplicative (ZMod 2)) := by
   /-
-  PARTIAL boundary (closer hop 1): the polynomial identification is now
+  PARTIAL boundary (closer hop 2): the polynomial identification is now
   compiled uniformly over every field as
   `apm_b96J04_X_pow_eight_add_one_eq_cyclotomic`, with specialized rewrite
   lemmas for both frozen base fields. Thus both arbitrary splitting-field
   instances can be rewritten literally as splitting fields of `cyclotomic 16`.
+
+  Closer hop 2 compiles the concrete arithmetic on both sides of the missing
+  transport. `apm_b96J04_orderOf_41_mod_16` proves that the Frobenius exponent
+  has order exactly two, using `orderOf_eq_prime` and decidable arithmetic in
+  `ZMod 16`. `apm_b96J04_card_units_mod_16` proves that `(ZMod 16)ˣ` has eight
+  elements. A direct `native_decide` search cannot synthesize the requested
+  structured group equivalence, and Mathlib's cyclotomic searches expose
+  `IsCyclotomicExtension.finrank` over irreducible cyclotomic polynomials but
+  no finite-field splitting-degree theorem consuming this order computation.
 
   The informal proof then uses the cyclotomic Galois-group
   isomorphism over `ℚ` and the Frobenius-order description over `ZMod 41`.
@@ -70,7 +91,8 @@ theorem apm_b96j04
   and Mathlib's cyclotomic files. The general Galois correspondence is present,
   but no compiled bridge was found that identifies `(K ≃ₐ[ℚ] K)` for this
   arbitrary splitting-field instance with `(ZMod 16)ˣ`, or identifies the
-  finite-field splitting degree with `orderOf (41 : ZMod 16)`. Without those
+  finite-field splitting degree with the now-compiled value of
+  `orderOf (41 : ZMod 16)`. Without those
   identifications, neither the automorphism-group conclusions nor the exact
   count of degree-four intermediate fields can be reached. No proof step
   compiled within the skip budget.
