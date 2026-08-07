@@ -28,5 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_progress": "Hop 2 compiles the derivative-kernel sup-norm domination estimate and integrability of its constant majorant; neighborhood localization and operator-valued packaging remain.",
   "imported_at": "2026-07-13T17:26:55.783197Z"
 }

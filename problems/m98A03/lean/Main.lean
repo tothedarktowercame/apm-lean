@@ -53,6 +53,30 @@ lemma apm_m98a03_integrable_derivative_kernel_section
         (hf.continuous_deriv_one.comp u.continuous)).mul h.continuous⟩
   simpa [q] using (BoundedContinuousFunction.mkOfCompact q).integrable volume
 
+/-- A uniform pointwise majorant for the derivative kernel.  This is the
+estimate required by the dominated parametric-integral theorem once a bound
+for `deriv f` has been chosen on the relevant compact range. -/
+lemma apm_m98a03_derivative_kernel_norm_le
+    (K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ)
+    (f : ℝ → ℝ) (u h : apm_m98a03_C01)
+    (M : ℝ) (hM : ∀ z : ℝ, |deriv f z| ≤ M)
+    (x y : Icc (0 : ℝ) 1) :
+    |K (x, y) * deriv f (u y) * h y| ≤ ‖K‖ * M * ‖h‖ := by
+  rw [abs_mul, abs_mul]
+  exact mul_le_mul
+    (mul_le_mul (K.norm_coe_le_norm (x, y)) (hM (u y))
+      (abs_nonneg _) (norm_nonneg _))
+    (h.norm_coe_le_norm y) (abs_nonneg _) (mul_nonneg (norm_nonneg _) (by
+      exact (abs_nonneg _).trans (hM (u y))))
+
+/-- The constant majorant occurring in
+`apm_m98a03_derivative_kernel_norm_le` is integrable because the parameter
+interval has finite volume. -/
+lemma apm_m98a03_integrable_derivative_majorant
+    (K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ) (M : ℝ) :
+    Integrable (fun _ : Icc (0 : ℝ) 1 ↦ ‖K‖ * M) := by
+  exact integrable_const _
+
 theorem apm_m98a03
     (K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ)
     (f : ℝ → ℝ) (hf : ContDiff ℝ 1 f) :
@@ -107,5 +131,17 @@ theorem apm_m98a03
   continuity of the resulting operator-valued integral.  Thus both frozen
   pointwise integrands are now certified integrable; uniform Fréchet control
   and operator-norm continuity remain open.
+
+  Closer hop 2 compiles the domination arithmetic itself.  The lemma
+  `apm_m98a03_derivative_kernel_norm_le` bounds the derivative integrand by
+  `‖K‖ * M * ‖h‖` whenever `M` bounds `|deriv f|`; it uses the compact-domain
+  sup-norm lemmas `ContinuousMap.norm_coe_le_norm`.  The companion
+  `apm_m98a03_integrable_derivative_majorant` proves that the resulting
+  constant majorant is integrable on the interval.  Searches of the
+  parametric-integral source, closed artifacts, construction libraries, and
+  git history found no packaged way to choose `M` uniformly on a sup-norm
+  neighborhood and bundle the pointwise derivative as an operator-valued
+  measurable map.  That localization/bundling step, followed by continuity in
+  operator norm, is the remaining boundary.
   -/
   sorry
