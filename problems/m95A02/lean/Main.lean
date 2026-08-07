@@ -31,6 +31,32 @@ def m95A02MaxDist (f g : m95A02H) : ℝ :=
   sSup {r : ℝ | ∃ x ∈ Icc (0 : ℝ) (2 * Real.pi),
     r = dist (m95A02Value f x) (m95A02Value g x)}
 
+/-- The Fourier-series realization sends the zero coefficient vector to the
+zero function. -/
+lemma m95A02Value_zero (x : ℝ) : m95A02Value (0 : m95A02H) x = 0 := by
+  unfold m95A02Value
+  have hz : ⇑(0 : m95A02H) = (0 : ℤ → ℂ) := by
+    exact lp.coeFn_zero _ _
+  rw [show (fun n : ℤ => (0 : m95A02H) n * m95A02BasisFunction n x) =
+      (fun _ : ℤ => 0) by funext n; rw [show (0 : m95A02H) n = 0 from congrFun hz n]; simp]
+  exact tsum_zero
+
+/-- The custom maximum-distance encoding vanishes on the diagonal. -/
+lemma m95A02MaxDist_self (f : m95A02H) : m95A02MaxDist f f = 0 := by
+  have hset :
+      {r : ℝ | ∃ x ∈ Icc (0 : ℝ) (2 * Real.pi),
+        r = dist (m95A02Value f x) (m95A02Value f x)} = {0} := by
+    ext r
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      simp
+    · intro hr
+      have hr0 : r = 0 := Set.mem_singleton_iff.mp hr
+      subst r
+      exact ⟨0, ⟨le_rfl, by positivity⟩, by simp⟩
+  rw [m95A02MaxDist, hset]
+  simp
+
 theorem apm_m95a02 :
     (∃ b : HilbertBasis ℤ ℂ m95A02H,
       ∀ n : ℤ, b n = lp.single 2 n 1 ∧
@@ -59,7 +85,11 @@ theorem apm_m95a02 :
       · intro j hj
         simp [hj]
   · /-
-    Boundary: the remaining Hölder estimate reduces by Cauchy–Schwarz to
+    PASS-1 boundary (Codex): the canonical Hilbert basis clause is proved,
+    and `m95A02Value_zero` plus `m95A02MaxDist_self` now formally verify the
+    zero evaluation and diagonal behavior of the custom supremum encoding.
+
+    The remaining Hölder estimate reduces by Cauchy–Schwarz to
     the sharp Fourier-kernel bound
     `∑ n : ℤ, |exp (n*I*x) - exp (n*I*y)|² /
       (2π (n²+1)) ≤ |x-y|`.
@@ -67,9 +97,12 @@ theorem apm_m95a02 :
     estimate, the equivalent bilateral-series identity for
     `∑ n : ℤ, cos (n*d) / (n²+1)`,
     `ArzelaAscoli.isCompact_of_equicontinuous`, weak-topology evaluation
-    criteria, and `HilbertBasis`/`lp.single` infrastructure. The canonical
-    Hilbert basis clause is proved above, but no compiled artifact supplies
-    the sharp kernel inequality.
+    criteria, and `HilbertBasis`/`lp.single` infrastructure. Mathlib supplies
+    `Real.summable_abs_int_rpow` and Poisson summation, but no compiled
+    artifact supplies the sharp kernel inequality. `ConstructionTargets.LusinN`
+    proves an FTC distance estimate for actual absolutely continuous
+    functions, but it cannot apply before constructing an AC representative
+    of this sequence-defined Fourier realization.
 
     After that inequality, the final clause still requires boundedness of a
     weakly convergent sequence, continuity of every evaluation functional,
@@ -80,7 +113,11 @@ theorem apm_m95a02 :
     `1 / (n²+1)` should control the remaining evaluation tail uniformly in
     `x`. Mathlib has `lp.single`, weak-space evaluation criteria, and generic
     `tsum` Cauchy--Schwarz machinery, but no assembled lemma connecting them
-    to this bilateral weighted Fourier series. Those analytic and order-
-    theory bridges were not completed within this pass.
+    to this bilateral weighted Fourier series. Sibling `m02A01` confirms that
+    even weak convergence of the `lp.single` sequence still lacks a packaged
+    coordinate/Riesz bridge in this corpus. Searches of all 170 closed
+    artifacts, `ConstructionTargets/`, `YoungL2.lean`, boundary comments, and
+    git history found no stronger route. Those analytic and order-theory
+    bridges were not completed within this pass.
     -/
     sorry
