@@ -25,6 +25,35 @@ abbrev apm_b96J02_R := (ZMod 2)[X] ⧸ apm_b96J02_squareIdeal
 def apm_b96J02_x : apm_b96J02_R :=
   Ideal.Quotient.mk apm_b96J02_squareIdeal X
 
+/-- The distinguished dual-number element is square-zero. -/
+lemma apm_b96J02_x_sq : apm_b96J02_x ^ 2 = 0 := by
+  apply Ideal.Quotient.eq_zero_iff_mem.mpr
+  exact Ideal.subset_span (by simp)
+
+/-- Multiplication by the distinguished element is a square-zero operator on
+every module over the dual numbers. -/
+lemma apm_b96J02_x_smul_x_smul
+    (M : Type*) [AddCommGroup M] [Module apm_b96J02_R M] (v : M) :
+    apm_b96J02_x • apm_b96J02_x • v = 0 := by
+  calc
+    apm_b96J02_x • apm_b96J02_x • v = (apm_b96J02_x * apm_b96J02_x) • v :=
+      (mul_smul _ _ _).symm
+    _ = 0 := by
+      rw [← pow_two, apm_b96J02_x_sq]
+      exact zero_smul apm_b96J02_R v
+
+/-- The square-zero scalar action, bundled as the linear operator used in the
+classification argument. -/
+noncomputable def apm_b96J02_xLinearMap
+    (M : Type*) [AddCommGroup M] [Module apm_b96J02_R M] :
+    M →ₗ[apm_b96J02_R] M := LinearMap.lsmul apm_b96J02_R M apm_b96J02_x
+
+lemma apm_b96J02_xLinearMap_sq
+    (M : Type*) [AddCommGroup M] [Module apm_b96J02_R M] :
+    (apm_b96J02_xLinearMap M).comp (apm_b96J02_xLinearMap M) = 0 := by
+  ext v
+  exact apm_b96J02_x_smul_x_smul M v
+
 def apm_b96J02_xIdeal : Ideal apm_b96J02_R :=
   Ideal.span {apm_b96J02_x}
 
@@ -63,6 +92,20 @@ theorem apm_b96j02 :
   the needed decomposition for an arbitrary `Finite` module over this quotient
   ring. `native_decide` was also tried on each of the three concrete cardinality
   goals, but fails because `Nat.card` is noncomputable before quotient-ring
-  normalization. No proof step compiled within the skip budget.
+  normalization.
+
+  Closer hop 1 formally closes the square-zero-operator setup that this route
+  previously assumed. `apm_b96J02_x_sq` proves the quotient class of `X`
+  squares to zero directly from membership in the defining ideal;
+  `apm_b96J02_xLinearMap` bundles scalar multiplication by it, and
+  `apm_b96J02_xLinearMap_sq` proves its self-composite is zero on every module.
+  Searches of `TrivSqZeroExt`, quotient-cardinality APIs, `LEMMA-INDEX.md`, the
+  closed corpus, and `ConstructionTargets/` found no equivalence identifying
+  this polynomial quotient with a concrete four-element type, nor a packaged
+  square-zero Jordan decomposition. The remaining bridge is to obtain the
+  underlying four-dimensional `ZMod 2` vector space from an arbitrary module
+  of cardinality sixteen and decompose this now-compiled square-zero operator;
+  concrete quotient cardinalities and the three nonisomorphism invariants also
+  remain open.
   -/
   sorry
