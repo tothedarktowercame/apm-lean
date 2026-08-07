@@ -17,10 +17,16 @@ Show g maps Δ one-to-one onto the bounded domain D whose boundary is C = g(Γ).
 
 - **File**: `lean/Main.lean`
 - **Status**: Partial (2 sorries)
-- **Blockers**: Three deep results not available in Mathlib:
-  - **Argument principle**: `(1/2πi)∮ g'(z)/(g(z)-w) dz = #{preimages of w}` — not formalized
+- **Reusable progress**:
+  - `ConstructionTargets.Rouche` supplies a divisor-based argument principle
+    and zero-count transfer on disks.
+  - `ConstructionTargets.UnivalentDeriv.deriv_ne_zero_of_injOn` proves the
+    nonvanishing derivative conclusion once interior injectivity is known.
+- **Remaining blockers**:
   - **Jordan curve theorem**: injective continuous image of circle bounds a domain — not formalized
   - **Winding number = 1 for simple closed curves** — not formalized
+  - Identification of the bounded complementary component with the image and
+    proof of the exact frontier equality.
 
 ## References
 

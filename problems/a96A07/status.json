@@ -28,9 +28,9 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "classification_detail": "2 sorries: injOn_disk_of_injOn_circle (injectivity on disk) and surjOn_domain_of_injOn_circle (surjectivity onto domain). Both require the argument principle (counting preimages via contour integrals of g'/(g-w)), the Jordan curve theorem (injective image of circle bounds a domain), and winding number theory for simple closed curves — none of which are formalized in Mathlib at the required generality.",
+  "classification_detail": "2 sorries remain. ConstructionTargets.Rouche now supplies zero-count/argument-principle infrastructure, and ConstructionTargets.UnivalentDeriv supplies nonvanishing derivative after injectivity. The remaining shared blocker is the Jordan-curve/winding-number bridge from boundary injectivity to interior degree one and the exact frontier identity.",
   "imported_at": "2026-08-03T07:45:00Z",
-  "checked_at": "2026-08-03T07:45:00Z",
+  "checked_at": "2026-08-07",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a96A07/lean/Main.lean",
@@ -40,9 +40,9 @@
       "surjOn_domain_of_injOn_circle (surjectivity onto bounded domain)"
     ],
     "blockers": [
-      "Argument principle: (1/2πi) ∮ g'(z)/(g(z)-w) dz = number of preimages of w — not in Mathlib",
       "Jordan curve theorem: injective continuous image of circle bounds a simply connected domain — not in Mathlib",
-      "Winding number of simple closed curve around interior point = ±1 — not in Mathlib"
+      "Winding number of simple closed curve around interior point = ±1 — not in Mathlib",
+      "Bridge from the Jordan interior component to the divisor zero count and exact frontier equality"
     ]
   }
 }

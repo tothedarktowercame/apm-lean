@@ -62,6 +62,24 @@ theorem injOn_disk_of_injOn_circle
   --
   -- This is a genuine Mathlib theory boundary: the argument principle and
   -- Jordan curve theorem are not formalized at the required generality.
+  /-
+  CLOSER HOP 1 boundary: `ConstructionTargets.Rouche` was checked first. It
+  now contains a sorry-free argument-principle formula and Rouché zero-count
+  transfer on closed disks, so raw zero-counting is no longer the principal
+  gap. The missing implication is topological: injectivity of the boundary
+  parametrization must identify its image as a Jordan curve and show that the
+  relevant interior winding number is one. Mathlib has no Jordan separation
+  or winding-number theorem at this generality.
+
+  `ConstructionTargets.UnivalentDeriv` was also checked. Its sorry-free
+  `deriv_ne_zero_of_injOn` proves the derivative conclusion once interior
+  injectivity is known, but cannot establish that injectivity from boundary
+  data. Searches of `LEMMA-INDEX.md`, all closed siblings, Mathlib's contour,
+  divisor, open-mapping, connectedness and plane-topology APIs, the remaining
+  `ConstructionTargets/`, staging directories, and git history found no
+  replacement for the Jordan/winding bridge. The frozen statement is
+  unchanged and no unproved intermediate assertion was introduced.
+  -/
   sorry
 
 /-- **Surjectivity**: g maps Δ onto the bounded domain D enclosed by g(∂Δ). -/
@@ -72,6 +90,16 @@ theorem surjOn_domain_of_injOn_circle
     ∃ D : Set ℂ, IsOpen D ∧ IsConnected D ∧ Bornology.IsBounded D ∧
       frontier D = g '' sphere (0 : ℂ) 1 ∧
       g '' ball (0 : ℂ) 1 = D := by
+  /-
+  CLOSER HOP 1 boundary: choosing `D = g '' ball 0 1` makes the last equality
+  immediate; holomorphic open mapping (after excluding the constant case via
+  boundary injectivity) and connected-image lemmas can provide openness and
+  connectedness. The remaining exact frontier identity and boundedness in the
+  required combined form again need the Jordan-curve theorem plus control of
+  which complementary component is the image. Neither Mathlib nor a closed
+  sibling packages that bridge. This second `sorry` is therefore downstream
+  of the same Jordan/winding obstruction documented above.
+  -/
   sorry
 
 end
