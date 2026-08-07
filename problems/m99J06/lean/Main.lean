@@ -69,6 +69,25 @@ lemma apm_m99J06_galerkin_energy
     ‖(u : H)‖ ^ 2 = ∫ x in Icc (0 : ℝ) 1, f x * M.val (u : H) x := by
   simpa [real_inner_self_eq_norm_sq] using hu u
 
+/-- Coercivity of the ambient inner product gives uniqueness of every
+Galerkin solution, independently of finite dimensionality. -/
+lemma apm_m99J06_galerkin_unique
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (f : ℝ → ℝ)
+    (V : Submodule ℝ H) (u v : V)
+    (hu : apm_m99J06_galerkinEquation M f V u)
+    (hv : apm_m99J06_galerkinEquation M f V v) : u = v := by
+  have hinner : inner ℝ ((u - v : V) : H) ((u - v : V) : H) = 0 := by
+    have heq := (hu (u - v)).trans (hv (u - v)).symm
+    rw [Submodule.coe_sub, inner_sub_left]
+    exact sub_eq_zero.mpr heq
+  have hnorm : ‖((u - v : V) : H)‖ ^ 2 = 0 := by
+    simpa [real_inner_self_eq_norm_sq] using hinner
+  have hzero : ((u - v : V) : H) = 0 := by
+    exact norm_eq_zero.mp (sq_eq_zero_iff.mp hnorm)
+  apply Subtype.ext
+  exact sub_eq_zero.mp hzero
+
 theorem apm_m99j06
     (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [CompleteSpace H] (M : apm_m99J06_H01Model H)
@@ -99,17 +118,26 @@ theorem apm_m99j06
     intro w
     rw [hu w, hv w]
   /-
-  Boundary: uniqueness of the weak solution and the Galerkin energy identity
-  obtained by testing with the discrete solution are proved above. Completing
-  the frozen theorem requires (1) a
+  Boundary (closer hop 1): uniqueness of the weak solution, the Galerkin
+  energy identity, and now uniqueness of every Galerkin solution
+  (`apm_m99J06_galerkin_unique`) are proved above. The latter closes the
+  coercivity half of finite-dimensional solvability by testing the difference
+  of two solutions against itself.
+
+  Completing the frozen theorem still requires (1) a
   Sobolev integration-by-parts/regularity theorem for the custom
   `AbsolutelyContinuousOnInterval` plus a.e. `HasDerivAt` representation,
-  (2) finite-dimensional Riesz representation for the Galerkin functional,
+  (2) construction of a genuinely linear Galerkin functional from the
+  representative-level `M.val`, followed by finite-dimensional Riesz
+  representation (Mathlib has `LinearMap.surjective_of_injective`, but the
+  linear map must first be constructed),
   and (3) weak sequential compactness of a bounded Hilbert-space sequence
   followed by passage to the limit on a dense increasing union. I searched
-  Mathlib's `MemLp`, interval absolute-continuity, Bochner integration,
-  finite-dimensional duality, `toWeakSpace`, reflexivity, and weak compactness
-  APIs, but did not find a route connecting all of them to this custom model
-  within this pass.
+  `integral_mul_le_Lp_mul_Lq_of_nonneg`, finite-dimensional duality,
+  `FiniteDimensional.surjective_of_injective`, `toWeakSpace`, and
+  `isCompact_closure_of_isBounded`. The last compactness theorem is not by
+  itself sequential compactness without an additional metrizability bridge.
+  `ConstructionTargets.LusinN` supplies interval absolute-continuity
+  identities, but not the Sobolev regularity theorem required here.
   -/
   sorry
