@@ -1,12 +1,25 @@
 # Proof Outline: b00J01
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The canonical Lean attempt is `lean/Main.lean`. Closer hop 1 proves the
+concrete finite-field foundation:
+
+- exhaustive computation shows that `7` is not a cube in `ZMod 13`;
+- therefore `X³ - 7` has no root over `ZMod 13`;
+- the degree-three no-root criterion proves that polynomial irreducible.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b00J01.md`
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+- identify an arbitrary splitting field of this irreducible cubic with the
+  canonical degree-three finite Galois field and transport Frobenius;
+- identify the real splitting field with `ℂ` and its automorphism group with
+  `ZMod 2`;
+- over `ℚ`, establish the `S₃` automorphism group and formalize the complete
+  subgroup/intermediate-field correspondence, including the three non-Galois
+  cubic fields.
+
+The original skipped comment incorrectly said the cubic has one root modulo
+13; the compiled computation confirms it has no roots, as required by the
+informal solution and the claimed degree-three splitting field.

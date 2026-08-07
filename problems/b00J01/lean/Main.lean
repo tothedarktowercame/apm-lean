@@ -21,6 +21,26 @@ open Polynomial
 noncomputable def apm_b00j01_poly (F : Type*) [Field F] : Polynomial F :=
   X ^ 3 - C 7
 
+local instance apm_b00j01_fact_prime_13 : Fact (Nat.Prime 13) := ⟨by norm_num⟩
+
+/-- The concrete cubic-residue calculation underlying the finite-field part. -/
+lemma apm_b00j01_seven_not_cube_mod13 :
+    ∀ x : ZMod 13, x ^ 3 ≠ 7 := by
+  native_decide
+
+/-- Consequently `X³ - 7` has no root over `𝔽₁₃`. -/
+lemma apm_b00j01_not_isRoot_mod13 (x : ZMod 13) :
+    ¬IsRoot (apm_b00j01_poly (ZMod 13)) x := by
+  simp only [IsRoot, apm_b00j01_poly, eval_sub, eval_pow, eval_X, eval_C]
+  exact sub_ne_zero.mpr (apm_b00j01_seven_not_cube_mod13 x)
+
+/-- The polynomial defining the finite-field splitting field is irreducible. -/
+lemma apm_b00j01_irreducible_mod13 :
+    Irreducible (apm_b00j01_poly (ZMod 13)) := by
+  apply Polynomial.irreducible_of_degree_le_three_of_not_isRoot
+  · norm_num [apm_b00j01_poly]
+  · exact apm_b00j01_not_isRoot_mod13
+
 theorem apm_b00j01 :
     (∀ (K : Type*) [Field K] [Algebra ℚ K]
         [IsSplittingField ℚ K (apm_b00j01_poly ℚ)],
@@ -39,12 +59,19 @@ theorem apm_b00j01 :
     (∀ [Fact (Nat.Prime 13)] (M : Type*) [Field M] [Algebra (ZMod 13) M]
         [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))],
       Nonempty ((M ≃ₐ[ZMod 13] M) ≃* Multiplicative (ZMod 3))) := by
-  -- SKIPPED: three-part Galois theory problem for x³-7 over ℚ, ℝ, F₁₃.
-  -- (a) Over ℚ: Gal(K/ℚ) ≅ S₃, 6 intermediate fields, 3 cubic non-Galois.
-  -- (b) Over ℝ: Gal(L/ℝ) ≅ Z₂ (complex conjugation).
-  -- (c) Over F₁₃: Gal(M/F₁₃) ≅ Z₃ (Frobenius, since x³≡7 has one root mod 13
-  --     and splitting field is F₁₃³).
-  -- Blocker: requires assembling IsSplittingField, Galois group computation,
-  -- IntermediateField enumeration, IsGalois — deep algebra infrastructure.
-  -- APIs: `IsSplittingField`, `IntermediateField`, `IsGalois`, `AlgEquiv`
+  /-
+  PARTIAL boundary (closer hop 1): the finite-field arithmetic is now compiled.
+  `apm_b00j01_seven_not_cube_mod13` exhausts `ZMod 13`, and
+  `apm_b00j01_irreducible_mod13` packages the result as irreducibility of
+  `X³ - 7`. This also corrects the original skip comment: the polynomial has
+  no root over `𝔽₁₃`, rather than one root.
+
+  Mathlib's `FieldTheory/Finite/GaloisField.lean` constructs and computes the
+  canonical fields splitting `X^(p^n)-X`, but the frozen quantifier supplies an
+  arbitrary splitting field of this cubic. The remaining finite-field bridge
+  is transporting its degree-three irreducibility/splitting data to the
+  canonical `GaloisField 13 3`, then transporting the Frobenius automorphism
+  equivalence. The real splitting-field identification and the substantially
+  larger rational `S₃` Galois-correspondence enumeration remain open.
+  -/
   sorry
