@@ -90,5 +90,23 @@ theorem apm_m03j04
     with this file's intersection-of-evaluation-kernels `dualAnnihilator`.
     After that, the signed `sSup` still must be identified with the operator
     norm to feed the antilipschitz/closed-range machinery.
+
+    Closer hop 2 found `ContinuousLinearMap.sSup_sphere_eq_norm` in
+    `Analysis/Normed/Operator/NNNorm.lean`.  It proves exactly that the supremum
+    of `‖f w‖` over the unit sphere is `‖f‖`.  The frozen signed homogeneous
+    quotient reduces to this theorem by normalizing every `w ≠ 0`; in the
+    reverse comparison, replace a unit vector by its negative when `f w < 0`,
+    so the absolute value is attained as a signed value.  Thus the norm bridge
+    no longer needs to be developed from `csSup` bounds from scratch.
+
+    The closure identity remains open. Inspection of
+    `ContinuousLinearMap.orthogonal_ker` confirms its exact output
+    `T.kerᗮ = T†.range.topologicalClosure`, but applying it here still requires
+    constructing the Riesz-conjugated operator whose adjoint is definitionally
+    compatible with `B.flip`, and proving that Riesz transport sends this
+    file's evaluation-kernel intersection to the Hilbert orthogonal. Searches
+    of all closed artifacts and construction libraries found no such transport
+    lemma. Once that identity is available, the sphere-supremum theorem and
+    Banach closed-range APIs provide the remaining inf-sup equivalence route.
     -/
     sorry

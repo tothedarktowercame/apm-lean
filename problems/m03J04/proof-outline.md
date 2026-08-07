@@ -18,3 +18,12 @@ The canonical Lean attempt is `lean/Main.lean`.
 - The inf-sup clause additionally needs the signed `sSup` identified with
   `‖B v‖`; only then can the existing antilipschitz and closed-range APIs build
   the requested subtype-valued `ContinuousLinearEquiv`.
+
+## Closer hop 2 research
+
+- `ContinuousLinearMap.sSup_sphere_eq_norm` supplies the norm supremum directly.
+  The signed quotient differs only by normalization and sign reversal.
+- `ContinuousLinearMap.orthogonal_ker` returns the desired closure-of-adjoint-
+  range identity in Hilbert-space form. The remaining blocker is transporting
+  it through `InnerProductSpace.toDual` and identifying its orthogonal with the
+  custom evaluation-kernel annihilator.
