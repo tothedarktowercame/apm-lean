@@ -1,12 +1,13 @@
 # Proof Outline: t91A07
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+Fix a fixed point `x` and define `F y = f y - y`. Its derivative at `x` is
+`fderiv ℝ f x - id`, which is bijective by nondegeneracy. The bounded inverse
+theorem packages this derivative as a continuous linear equivalence.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-t91A07.md`
+Smoothness of `F` upgrades its derivative to a strict derivative. Mathlib's
+inverse-function theorem then supplies a local inverse and an eventual
+left-inverse identity near `x`. Take the set on which that identity holds as
+the desired neighborhood. If `y` in this neighborhood is fixed, then
+`F y = 0 = F x`; applying the local inverse gives `y = x`.
 
-## Follow-up Needed
-
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+Checked Lean state: exit 0; no `sorry` remains.
