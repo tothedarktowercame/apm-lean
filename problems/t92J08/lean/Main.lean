@@ -1,4 +1,5 @@
 import Mathlib
+import Mathlib.Geometry.Manifold.IntegralCurve.UniformTime
 
 /-! # APM t92J08: complete integral curves of vector fields
 
@@ -6,35 +7,44 @@ import Mathlib
 
 None.
 
-## Encoding question
+## Encoding notes
 
-Mathlib does not yet provide general smooth vector fields, their maximal flows,
-or integral curves on arbitrary manifolds.  Those genuine objects and the
-restriction relation between curves are retained as typed placeholders.  The
-sufficient hypothesis is compactness of the manifold, and the counterexample
-is the field `x² ∂/∂x` on `ℝ` with its finite-time blow-up curve.
+Vector fields and local/global integral curves use Mathlib's genuine tangent
+bundle, `IsMIntegralCurveOn`, and `IsMIntegralCurve`. Compactness of a
+boundaryless smooth manifold is the sufficient hypothesis. The counterexample
+is the actual field `x ↦ x²` on `ℝ`, with solution `t ↦ 1/(1-t)` on `t < 1`.
 -/
 
-def T92J08SmoothManifold : Type := by sorry
-def IsT92J08Compact (M : T92J08SmoothManifold) : Prop := by sorry
-def T92J08SmoothVectorField (M : T92J08SmoothManifold) : Type := by sorry
-def T92J08IntegralCurve {M : T92J08SmoothManifold}
-    (X : T92J08SmoothVectorField M) : Type := by sorry
-def IsT92J08CompleteCurve {M : T92J08SmoothManifold}
-    {X : T92J08SmoothVectorField M} (γ : T92J08IntegralCurve X) : Prop := by sorry
-def IsT92J08ContainedIn {M : T92J08SmoothManifold}
-    {X : T92J08SmoothVectorField M}
-    (γ δ : T92J08IntegralCurve X) : Prop := by sorry
+open Set
+open scoped ContDiff Manifold
 
-def t92J08RealLine : T92J08SmoothManifold := by sorry
-def t92J08QuadraticField : T92J08SmoothVectorField t92J08RealLine := by sorry
-def t92J08BlowupCurve : T92J08IntegralCurve t92J08QuadraticField := by sorry
+noncomputable section
+
+abbrev apm_t92J08_E (n : ℕ) := EuclideanSpace ℝ (Fin n)
+abbrev apm_t92J08_Model (n : ℕ) := 𝓘(ℝ, apm_t92J08_E n)
+
+def apm_t92J08_quadraticField (x : ℝ) : TangentSpace (𝓘(ℝ, ℝ)) x :=
+  x ^ 2
+
+def apm_t92J08_blowupCurve (t : ℝ) : ℝ :=
+  1 / (1 - t)
 
 theorem apm_t92j08 :
-    (∀ (M : T92J08SmoothManifold), IsT92J08Compact M →
-      ∀ (X : T92J08SmoothVectorField M) (γ : T92J08IntegralCurve X),
-        ∃ δ : T92J08IntegralCurve X,
-          IsT92J08CompleteCurve δ ∧ IsT92J08ContainedIn γ δ) ∧
-    ¬∃ δ : T92J08IntegralCurve t92J08QuadraticField,
-      IsT92J08CompleteCurve δ ∧ IsT92J08ContainedIn t92J08BlowupCurve δ := by
+    (∀ (n : ℕ) (M : Type)
+        [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+        [CompactSpace M] [ChartedSpace (apm_t92J08_E n) M]
+        [IsManifold (apm_t92J08_Model n) ∞ M]
+        [BoundarylessManifold (apm_t92J08_Model n) M]
+        (v : (x : M) → TangentSpace (apm_t92J08_Model n) x),
+      ContMDiff (apm_t92J08_Model n) (apm_t92J08_Model n).tangent 1
+        (fun x ↦ (⟨x, v x⟩ : TangentBundle (apm_t92J08_Model n) M)) →
+      ∀ (a b : ℝ) (γ : ℝ → M), a < 0 → 0 < b →
+        IsMIntegralCurveOn γ v (Ioo a b) →
+        ∃ δ : ℝ → M,
+          IsMIntegralCurve δ v ∧ EqOn γ δ (Ioo a b)) ∧
+    IsMIntegralCurveOn apm_t92J08_blowupCurve
+      apm_t92J08_quadraticField (Iio 1) ∧
+    ¬∃ δ : ℝ → ℝ,
+      IsMIntegralCurve δ apm_t92J08_quadraticField ∧
+      EqOn apm_t92J08_blowupCurve δ (Iio 1) := by
   sorry
