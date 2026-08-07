@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Hop 2 compiles the derivative-kernel sup-norm domination estimate and integrability of its constant majorant; neighborhood localization and operator-valued packaging remain.",
+  "closer_progress": "Hop 3 compiles compact boundedness of the scalar derivative and a single bound uniform on the unit sup-norm neighborhood of every input. Operator-valued packaging and operator-norm continuity remain.",
   "imported_at": "2026-07-13T17:26:55.783197Z"
 }

@@ -77,6 +77,43 @@ lemma apm_m98a03_integrable_derivative_majorant
     Integrable (fun _ : Icc (0 : ℝ) 1 ↦ ‖K‖ * M) := by
   exact integrable_const _
 
+/-- Continuity of the scalar derivative supplies a uniform bound on every
+compact interval. -/
+lemma apm_m98a03_exists_deriv_bound_on_Icc
+    (f : ℝ → ℝ) (hf : ContDiff ℝ 1 f) (a b : ℝ) :
+    ∃ M : ℝ, ∀ z ∈ Icc a b, |deriv f z| ≤ M := by
+  have hcont : Continuous (fun z : ℝ ↦ |deriv f z|) :=
+    hf.continuous_deriv_one.abs
+  obtain ⟨M, hM⟩ := bddAbove_def.mp
+    (isCompact_Icc.bddAbove_image hcont.continuousOn)
+  refine ⟨M, ?_⟩
+  intro z hz
+  exact hM _ (mem_image_of_mem _ hz)
+
+/-- The compact derivative bound can be chosen uniformly for every function
+in the open unit sup-norm neighborhood of a fixed input. -/
+lemma apm_m98a03_exists_local_deriv_bound
+    (f : ℝ → ℝ) (hf : ContDiff ℝ 1 f) (u : apm_m98a03_C01) :
+    ∃ M : ℝ, ∀ v : apm_m98a03_C01, dist v u < 1 →
+      ∀ y : Icc (0 : ℝ) 1, |deriv f (v y)| ≤ M := by
+  obtain ⟨M, hM⟩ := apm_m98a03_exists_deriv_bound_on_Icc f hf
+    (-(‖u‖ + 1)) (‖u‖ + 1)
+  refine ⟨M, ?_⟩
+  intro v hv y
+  apply hM
+  have hvu : ‖v - u‖ < 1 := by simpa [dist_eq_norm] using hv
+  have huv : |v y - u y| < 1 := by
+    exact lt_of_le_of_lt (by simpa [Real.norm_eq_abs] using
+      (v - u).norm_coe_le_norm y) hvu
+  have hu : |u y| ≤ ‖u‖ := by
+    simpa [Real.norm_eq_abs] using u.norm_coe_le_norm y
+  have hvabs : |v y| < ‖u‖ + 1 := calc
+    |v y| = |(v y - u y) + u y| := by ring_nf
+    _ ≤ |v y - u y| + |u y| := abs_add_le _ _
+    _ < 1 + ‖u‖ := add_lt_add_of_lt_of_le huv hu
+    _ = ‖u‖ + 1 := by ring
+  exact ⟨by linarith [neg_abs_le (v y)], by linarith [le_abs_self (v y)]⟩
+
 theorem apm_m98a03
     (K : ContinuousMap ((Icc (0 : ℝ) 1) × (Icc (0 : ℝ) 1)) ℝ)
     (f : ℝ → ℝ) (hf : ContDiff ℝ 1 f) :
@@ -143,5 +180,24 @@ theorem apm_m98a03
   neighborhood and bundle the pointwise derivative as an operator-valued
   measurable map.  That localization/bundling step, followed by continuity in
   operator norm, is the remaining boundary.
+
+  Closer hop 3 closes the previously open localization step.  The lemma
+  `apm_m98a03_exists_deriv_bound_on_Icc` obtains a finite bound for
+  `|deriv f|` on any compact interval from
+  `ContDiff.continuous_deriv_one` and `IsCompact.bddAbove_image`.
+  `apm_m98a03_exists_local_deriv_bound` then proves that, for every `u`, one
+  such bound works simultaneously for every `v` in the open unit sup-norm
+  ball around `u` and every parameter point.  Its proof uses
+  `ContinuousMap.norm_coe_le_norm` to place all values of `v` in the fixed
+  compact interval `[-(‖u‖+1), ‖u‖+1]`.
+
+  A renewed inspection of `hasFDerivAt_integral_of_dominated_of_fderiv_le`,
+  continuous-linear-map integration, the closed corpus, `LEMMA-INDEX.md`, the
+  construction libraries, and git history found no wrapper turning the
+  scalar kernel derivative into the required
+  `C([0,1]) →L[ℝ] C([0,1])`-valued measurable integrand or proving continuity
+  of its integral in operator norm.  Thus neighborhood-uniform domination is
+  now complete; operator-valued bundling and operator-norm continuity remain
+  the exact boundary.
   -/
   sorry
