@@ -10,12 +10,12 @@
     "problem_tex": "apm/t94J04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_progress": "The index-one case is fully proved using Subgroup.index_eq_one. General positive index remains blocked on realizing subgroups as finite covers, multiplying Euler characteristic, classifying the covering surfaces, and connecting the frozen homology predicate to genus two.",
   "imported_at": "2026-07-13T17:26:58.044834Z"
 }

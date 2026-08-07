@@ -1,12 +1,17 @@
 # Proof Outline: t94J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+The index-one case is closed by `apm_t94J04_subgroups_equiv_of_index_one`:
+both subgroups are top and hence canonically isomorphic.
 
-- informal-solution: `informal-solution.md`
-- harvested-filename: `apm-t94J04.md`
+For positive general index, realize each subgroup as the fundamental group of
+a connected `k`-sheeted covering surface.  The cover is closed and orientable,
+and its Euler characteristic is `k * (-2)`, so its genus is `k+1`.  Surface
+classification then identifies the two covering spaces and their fundamental
+groups.
 
-## Follow-up Needed
+## Remaining boundary
 
-- extract a formalization-oriented proof outline from the informal solution
-- add or select the canonical Lean attempt for this problem
+Mathlib does not package the subgroup--cover correspondence, finite-cover
+Euler-characteristic multiplicativity, or classification of closed orientable
+surfaces.  The encoded homology signature must also be connected to the
+genus-two surface type before those arguments apply.
