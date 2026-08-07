@@ -12,6 +12,9 @@ bridges for the two implicit-function clauses are compiled locally.
   `P × X` preserves the supplied derivative as the second-coordinate partial.
 - `apm_m98a05_hasFDerivAt_perturbation_zero` identifies the perturbation's
   unknown-direction derivative at parameter zero with `A`.
+- The perturbation clause is now closed by applying `apm_m98a05_ift` and using
+  `Metric.isOpen_iff` to extract a symmetric real interval from its open
+  parameter neighborhood.
 - The final BVP clause uses `w = dw = d2w = 0`, which satisfies every weak
   derivative, trace, integrability, and equation requirement for all `ε`.
 
@@ -19,5 +22,3 @@ bridges for the two implicit-function clauses are compiled locally.
 
 - Extract open neighborhoods and a `ContDiffOn` solution from the eventual
   equality and uniqueness statements.
-- For the perturbation clause, reuse the first clause and extract a symmetric
-  real interval from the resulting parameter neighborhood.

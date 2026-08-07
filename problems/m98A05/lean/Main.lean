@@ -88,6 +88,26 @@ lemma apm_m98a05_hasFDerivAt_perturbation_zero
     HasFDerivAt (fun x ↦ F x + (0 : ℝ) • G x) A x₀ := by
   simpa using hA
 
+/-- The generic parameterized implicit-function bridge. -/
+lemma apm_m98a05_ift
+    (X P Z : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
+    [CompleteSpace X] [NormedAddCommGroup P] [NormedSpace ℝ P]
+    [CompleteSpace P] [NormedAddCommGroup Z] [NormedSpace ℝ Z]
+    [CompleteSpace Z] (H : X × P → Z) (x₀ : X) (p₀ : P)
+    (A : X →L[ℝ] Z) (hH : ContDiff ℝ 1 H) (hzero : H (x₀, p₀) = 0)
+    (hA : HasFDerivAt (fun x ↦ H (x, p₀)) A x₀)
+    (he : ∃ e : X ≃L[ℝ] Z, (e : X →L[ℝ] Z) = A) :
+    apm_m98a05_IFTConclusion H x₀ p₀ := by
+  /-
+  Final boundary: after swapping to `P × X`, Mathlib's implicit-function API
+  supplies the local equation, uniqueness, and pointwise `ContDiffAt` facts.
+  It remains to extract common open product neighborhoods from those eventual
+  statements and upgrade pointwise differentiability to `ContDiffOn` on the
+  chosen parameter neighborhood.  The strict-derivative and orientation
+  prerequisites are compiled above.
+  -/
+  sorry
+
 theorem apm_m98a05 :
     (∀ (X P Z : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
       [CompleteSpace X] [NormedAddCommGroup P] [NormedSpace ℝ P]
@@ -111,36 +131,20 @@ theorem apm_m98a05 :
         apm_m98a05_InH2Dirichlet w dw d2w ∧
         ∀ᵐ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)),
           d2w x = w x + ε * (w x) ^ 2) := by
+  refine ⟨(fun X P Z ↦ apm_m98a05_ift X P Z), ?_⟩
   constructor
-  · /-
-    PARTIAL boundary: this clause is the full Banach-space implicit function
-    theorem with parameters and local uniqueness. The conversion from the
-    frozen hypotheses (`ContDiff` plus the specified `HasFDerivAt`) to the
-    strict-derivative interface is now proved above as
-    `apm_m98a05_hasStrictFDerivAt_of_contDiff`, using Mathlib's
-    `ContDiffAt.hasStrictFDerivAt'`.
-
-    The remaining boundary is reorienting `H : X × P → Z` to Mathlib's
-    product-domain convention, identifying the relevant partial derivative
-    with the supplied continuous linear equivalence, and extracting open sets
-    `W`, `V` from the eventual equality/uniqueness statements of
-    `ContDiffAt.implicitFunction` while retaining `ContDiffOn` on all of `V`.
-    Sibling `m93J03` reaches the same product-domain IFT API but does not close
-    this neighborhood-extraction bridge.
-
-    Closer hop 2 proves the orientation step as
-    `apm_m98a05_hasFDerivAt_swapped_partial`: after replacing `H (x,p)` by
-    `H (q.2,q.1)` on `P × X`, the derivative in the second coordinate is
-    definitionally the supplied `A`.  Source inspection confirms that
-    `ContDiffAt.eventually_apply_implicitFunction` and
-    `eventually_apply_eq_iff_implicitFunction` contain the needed local
-    equation and uniqueness.  The remaining work is now extracting common
-    open product neighborhoods from those eventual statements and upgrading
-    pointwise `ContDiffAt` of the implicit function to `ContDiffOn` on the
-    selected parameter neighborhood.
-    -/
-    sorry
-  constructor
+  · intro X Y _ _ _ _ _ _ F G x₀ A hF hG hFx₀ hA he
+    let H : X × ℝ → Y := fun q ↦ F q.1 + q.2 • G q.1
+    obtain ⟨W, V, g, hWopen, hxW, hVopen, h0V, hgdiff, hg0, hg⟩ :=
+      apm_m98a05_ift X ℝ Y H x₀ 0 A
+        (apm_m98a05_contDiff_perturbation F G hF hG)
+        (by simpa [H] using hFx₀)
+        (apm_m98a05_hasFDerivAt_perturbation_zero F G x₀ A hA) he
+    obtain ⟨δ, hδ, hball⟩ := Metric.isOpen_iff.mp hVopen 0 h0V
+    refine ⟨δ, hδ, g, hg0, ?_⟩
+    intro ε hε
+    have hεV : ε ∈ V := hball (by simpa [Real.dist_eq] using hε)
+    exact (hg ε hεV).2.1
   · /-
     PARTIAL boundary: the perturbation clause follows by applying the preceding
     IFT to `(x, ε) ↦ F x + ε • G x`. The strict-derivative bridge is now proved
@@ -158,9 +162,12 @@ theorem apm_m98a05 :
     depends only on the preceding neighborhood-extraction bridge and the
     elementary choice of a symmetric interval inside the resulting real
     neighborhood.
+    Closer hop 3 routes this clause through the first conjunct.  Applying
+    `hIFT` to the compiled perturbation and derivative helpers produces an
+    open real parameter neighborhood; `Metric.isOpen_iff` extracts a radius,
+    and the local equation gives the required symmetric interval witness.
     -/
-    sorry
-  · refine ⟨1, by norm_num, ?_⟩
+    refine ⟨1, by norm_num, ?_⟩
     intro ε _hε
     refine ⟨fun _ ↦ 0, fun _ ↦ 0, fun _ ↦ 0, ?_, ?_⟩
     · unfold apm_m98a05_InH2Dirichlet
