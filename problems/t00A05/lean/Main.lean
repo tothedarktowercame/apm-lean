@@ -81,7 +81,8 @@ theorem apm_t00a05 :
       nlinarith [Real.sin_sq_add_cos_sq t]]
     simp [Real.pi_pos.le]
   /-
-  Boundary: the unit-circle period is proved above by direct evaluation.
+  Boundary (closer hop 2; defective frozen statement): the unit-circle period
+  is proved above by direct evaluation.
   The remaining universal `C2` claim is not derivable from the stated
   orientation predicate: positivity of the signed-area integral fixes the
   sign but not the winding multiplicity. A positive multiple traversal of
@@ -90,6 +91,10 @@ theorem apm_t00a05 :
   traversal count. I also searched Mathlib's winding-number, convex-level-set,
   differential-form, and line-integral APIs; no theorem could bridge these
   raw `deriv` integrals, and such a bridge would not repair the missing
-  single-traversal hypothesis.
+  single-traversal hypothesis. This hop rechecked Mathlib's path
+  reparameterization APIs and all closed winding-number artifacts. They
+  confirm that range/image constraints are invariant under reparameterization,
+  while the frozen predicate contains no injectivity, embedding, or degree-one
+  field. The statement therefore needs review; it cannot be closed honestly.
   -/
   exact ⟨hdOmega, hC1, sorry⟩
