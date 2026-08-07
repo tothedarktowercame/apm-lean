@@ -39,22 +39,34 @@ def IsM99A02WeakDerivative
       (∫ x in m99A02Omega, f x * fderiv ℝ φ x (EuclideanSpace.single i 1)) =
         -∫ x in m99A02Omega, g x * φ x
 
+/-- On the punctured domain the logarithmic base used by all real powers is positive. -/
+lemma m99A02_neg_log_norm_pos {x : m99A02Point}
+    (hx : x ∈ m99A02Omega) (hx0 : x ≠ 0) :
+    0 < -Real.log ‖x‖ := by
+  have hr : ‖x‖ < (1 / 2 : ℝ) := by
+    simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hx
+  have hr0 : 0 < ‖x‖ := norm_pos_iff.mpr hx0
+  have hr1 : ‖x‖ < 1 := hr.trans (by norm_num)
+  exact neg_pos.mpr (Real.log_neg hr0 hr1)
+
+/-- The chosen representative is strictly positive away from the singular point. -/
+lemma m99A02Function_pos {x : m99A02Point}
+    (hx : x ∈ m99A02Omega) (hx0 : x ≠ 0) :
+    0 < m99A02Function x := by
+  rw [m99A02Function, if_neg hx0]
+  exact Real.rpow_pos_of_pos (m99A02_neg_log_norm_pos hx hx0) _
+
 theorem apm_m99a02 :
     MemLp m99A02Function 2 (volume.restrict m99A02Omega) ∧
     ∀ i : Fin 2,
       MemLp (m99A02Derivative i) 2 (volume.restrict m99A02Omega) ∧
       IsM99A02WeakDerivative m99A02Function (m99A02Derivative i) i := by
-  have hlog_pos {x : m99A02Point} (hx : x ∈ m99A02Omega) (hx0 : x ≠ 0) :
-      0 < -Real.log ‖x‖ := by
-    have hr : ‖x‖ < (1 / 2 : ℝ) := by
-      simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hx
-    have hr0 : 0 < ‖x‖ := norm_pos_iff.mpr hx0
-    have hr1 : ‖x‖ < 1 := hr.trans (by norm_num)
-    exact neg_pos.mpr (Real.log_neg hr0 hr1)
   /-
-  Boundary: the positivity lemma above verifies that every real power in the
+  Boundary: `m99A02_neg_log_norm_pos` verifies that every real power in the
   displayed function and derivative is evaluated on a positive logarithmic
-  base throughout the punctured disk. Completing the theorem requires a polar
+  base throughout the punctured disk; `m99A02Function_pos` records the
+  corresponding pointwise fact about the chosen representative. Completing
+  the theorem requires a polar
   integration formula for the two-dimensional Euclidean ball, convergence of
   the Bertrand integral `∫ dr / (r * (-log r)^(4/3))`, and integration by
   parts on punctured disks with a vanishing inner-boundary flux. I searched
