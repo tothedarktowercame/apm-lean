@@ -161,6 +161,15 @@ lemma apm_t96j08_not_isClosed : ¬apm_t96j08_IsClosed := by
   norm_num [apm_t96j08_domega, Matrix.cons_val_zero, Matrix.cons_val_one,
     Matrix.cons_val_two] at hh
 
+/-- Why this unblocks `apm_t96j08`: after `apm_t96j08_pullback_eq` and
+`apm_t96j08_integral_singularTerm_eq_zero`, this is the only nonconstant
+contribution left in the hemisphere integral.  Together with the standard
+area of the unit disk, it gives `π + 2π/3 = 5π/3`. -/
+theorem apm_t96J08_bridge_radialDiskIntegral :
+    (∫ q : apm_t96j08_DiskPoint in Metric.closedBall 0 1,
+      Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2)) = 2 * Real.pi / 3 := by
+  sorry
+
 theorem apm_t96j08 :
     ¬apm_t96j08_IsClosed ∧
     ¬apm_t96j08_IsExact ∧
