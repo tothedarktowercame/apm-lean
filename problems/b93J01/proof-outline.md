@@ -21,6 +21,18 @@ structure theorem in the custom `iSupIndep` encoding, and the order-`pq`
 cyclicity theorem. The main theorem remains partial with one `sorry`; its
 frozen statement is unchanged.
 
+## Closer hop 2 (2026-08-08)
+
+Git history contained an explicit finite witness omitted from the current
+file. It has been adapted as `apm_b93J01_not_isCyclic_S3`: two adjacent
+transpositions fail to commute, whereas every cyclic group is commutative.
+`apm_b93J01_card_Q8` also closes the quaternion order computation using
+`QuaternionGroup.card`.
+
+The remaining boundary consists of the universal classification results,
+the three quaternion non-isomorphisms, the detailed `A₄` subgroup analysis,
+and the custom direct-sum statement for finite abelian groups and `ℚ`.
+
 ## Imported Proof Plan
 
 ```clojure

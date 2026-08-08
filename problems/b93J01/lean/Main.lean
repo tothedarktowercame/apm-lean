@@ -41,6 +41,21 @@ lemma apm_b93J01_card_S3 :
   rw [Fintype.card_perm]
   norm_num
 
+/-- The two adjacent transpositions in `S₃` do not commute, so `S₃` cannot
+be cyclic.  Adapted from the original candidate artifact's finite witness. -/
+lemma apm_b93J01_not_isCyclic_S3 :
+    ¬IsCyclic (Equiv.Perm (Fin 3)) := by
+  have hneq :
+      ((Equiv.swap (0 : Fin 3) 1 : Equiv.Perm (Fin 3)) * Equiv.swap 1 2) ≠
+        (Equiv.swap 1 2 * (Equiv.swap (0 : Fin 3) 1)) := by
+    decide
+  intro h
+  letI : IsCyclic (Equiv.Perm (Fin 3)) := h
+  exact hneq (IsCyclic.commutative.comm _ _)
+
+lemma apm_b93J01_card_Q8 : Fintype.card (QuaternionGroup 2) = 8 := by
+  rw [QuaternionGroup.card]
+
 theorem apm_b93j01 :
     -- (a): `A₄` is a counterexample; `Aₙ` is simple for `n ≥ 5`.
     ¬IsSimpleGroup (alternatingGroup (Fin 4)) ∧
@@ -71,12 +86,15 @@ theorem apm_b93j01 :
     (∀ (p q : ℕ), Nat.Prime p → Nat.Prime q → p < q → (¬p ∣ (q - 1)) →
       ∀ (G : Type) [Group G] [Fintype G], Fintype.card G = p * q →
         IsCyclic G) := by
-  /- CLOSER HOP 1 BOUNDARY.
+  /- CLOSER HOP 2 BOUNDARY (2026-08-08).
 
-  The three helpers above close the numerical order computations for `A₄` and
-  `S₃` and the full Lagrange conjunct.  They use
+  The helpers above close the numerical order computations for `A₄`, `S₃`,
+  and `Q₈`, the full Lagrange conjunct, and the noncyclicity of `S₃`. They use
   `card_alternatingGroup`, `Fintype.card_perm`, and
-  `Subgroup.card_subgroup_dvd_card` directly.
+  `Subgroup.card_subgroup_dvd_card` directly. Going beyond hop 1, the original
+  candidate artifact's explicit adjacent-transposition witness was recovered
+  from git history and adapted to the current `IsCyclic.commutative` API;
+  `QuaternionGroup.card` closes the first order-eight counterexample clause.
 
   The remaining frozen conjunction is a broad group-classification package.
   In this Mathlib snapshot `GroupTheory.SpecificGroups.Alternating` proves only
@@ -84,9 +102,10 @@ theorem apm_b93j01 :
   general simplicity of alternating groups as future work.  No theorem
   classifies every group of order eight into the five displayed isomorphism
   types, nor packages the finite-abelian direct-sum decomposition in the
-  custom `iSupIndep` encoding.  The assertions that `A₄` has no subgroup of
-  order six, `ℚ` is not such a direct sum, `S₃` is noncyclic, and the corrected
-  order-`pq` cyclicity theorem also require substantial separate developments.
+  custom `iSupIndep` encoding. The assertions that `A₄` has no subgroup of
+  order six, `ℚ` is not such a direct sum, the three `Q₈` non-isomorphisms,
+  and the corrected order-`pq` cyclicity theorem still require substantial
+  separate developments.
   Searches of `LEMMA-INDEX.md`, `ConstructionTargets`, solved group-theory
   siblings, Mathlib sources, and git history found no combined or reusable
   closure.  The frozen statement is unchanged.

@@ -28,5 +28,27 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "imported_at": "2026-05-01T19:38:17.414438Z"
+  "imported_at": "2026-05-01T19:38:17.414438Z",
+  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/b93J01/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": ["apm_b93j01 (remaining finite-group and abelian classification package)"],
+    "proved": [
+      "apm_b93J01_card_A4",
+      "apm_b93J01_lagrange",
+      "apm_b93J01_card_S3",
+      "apm_b93J01_not_isCyclic_S3",
+      "apm_b93J01_card_Q8"
+    ],
+    "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
+    "blockers": [
+      "General simplicity of alternating groups for all n >= 5",
+      "Classification of all groups of order eight and Q8 non-isomorphisms",
+      "A4 subgroup-order-six exclusion",
+      "Finite abelian decomposition in the custom iSupIndep encoding and the rational counterexample",
+      "Corrected order-pq cyclicity theorem"
+    ]
+  }
 }
