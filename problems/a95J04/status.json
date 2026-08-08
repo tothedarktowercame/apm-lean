@@ -39,10 +39,13 @@
     ],
     "blockers": [
       "Uniform holomorphic extension and pointwise HasSum-to-Taylor-coefficient identification are not assembled.",
-      "Finiteness of boundary poles and subtraction of all simple principal parts remain to be assembled."
+      "Subtraction of the finite collection of simple principal parts remains to be assembled."
     ],
     "proved_lemmas": [
-      "apm_a95J04_pole_mem_sphere_of_mem_closedBall"
+      "apm_a95J04_pole_mem_sphere_of_mem_closedBall",
+      "apm_a95J04_boundary_poles_finite"
     ]
-  }
+  },
+  "closer_hop": 3,
+  "closer_note": "Proved finiteness of boundary poles by restricting the locally finite meromorphic divisor to the compact unit sphere. Taylor coefficient identification and principal-part subtraction remain open."
 }

@@ -41,6 +41,28 @@ lemma apm_a95J04_pole_mem_sphere_of_mem_closedBall
   have han : AnalyticAt ℂ f z := hf.analyticAt (isOpen_ball.mem_nhds hzball)
   exact (not_lt_of_ge han.meromorphicOrderAt_nonneg) hpole
 
+/-- Meromorphy makes the boundary-pole set finite.  Restricting the locally
+finite divisor to the compact unit sphere exposes this directly through
+`locallyFinsuppWithin.finiteSupport`. -/
+lemma apm_a95J04_boundary_poles_finite
+    {D : Set ℂ} (hDcontains : closedBall (0 : ℂ) 1 ⊆ D)
+    {f : ℂ → ℂ} (hmero : MeromorphicOn f D) :
+    {z : ℂ | z ∈ sphere (0 : ℂ) 1 ∧ meromorphicOrderAt f z < 0}.Finite := by
+  let div := MeromorphicOn.divisor f D
+  have hsD : sphere (0 : ℂ) 1 ⊆ D :=
+    sphere_subset_closedBall.trans hDcontains
+  let ds := div.restrict hsD
+  apply (ds.finiteSupport (isCompact_sphere (0 : ℂ) 1)).subset
+  intro z hz
+  change ds z ≠ 0
+  rw [Function.locallyFinsuppWithin.restrict_apply]
+  simp only [hz.1, if_true, div, MeromorphicOn.divisor_apply hmero (hsD hz.1)]
+  intro hzero
+  rw [WithTop.untop₀_eq_zero] at hzero
+  rcases hzero with hzero | htop
+  · exact (not_lt_of_ge (by rw [hzero])) hz.2
+  · exact (not_lt_of_ge (by rw [htop]; exact le_top)) hz.2
+
 theorem apm_a95j04
     (D : Set ℂ) (hDopen : IsOpen D) (hDconn : IsConnected D)
     (hDcontains : closedBall (0 : ℂ) 1 ⊆ D)
@@ -79,5 +101,15 @@ theorem apm_a95j04
   itself still open at the pointwise-`HasSum` to power-series conversion, so
   it is not a reusable closed dependency.  No unproved intermediate assertion
   was introduced and the frozen theorem statement is unchanged.
+
+  CLOSER HOP 3 goes beyond that boundary via Mathlib's meromorphic divisor.
+  `apm_a95J04_boundary_poles_finite` restricts its locally finite support to
+  the compact unit sphere, proving the boundary-pole set finite. Searches of
+  `CanonicalDecomposition`, `FactorizedRational`, and
+  `MeromorphicOn.extract_zeros_poles` found divisor factorization, but no
+  additive simple-principal-part decomposition suitable for coefficient
+  bounds. The pointwise `HasSum`-to-Taylor conversion and the larger-disk
+  absolute-convergence argument remain open; the frozen statement is
+  unchanged.
   -/
   sorry
