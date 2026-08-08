@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Closed the full bijectivity conjunct by proving ‖1 - D x‖ ≤ c directly from hD and applying the Neumann inverse helper. Only the uniform ContinuousMap-norm differentiability bridge remains.",
+  "closer_hop": 3,
+  "closer_note": "The full bijectivity conjunct remains closed. Hop 3 additionally proves the uniform bound ‖D x‖ ≤ 1 + c; the uniform ContinuousMap-norm Frechet remainder bridge remains open after renewed repository and Mathlib searches.",
   "imported_at": "2026-07-13T17:26:54.586091Z"
 }

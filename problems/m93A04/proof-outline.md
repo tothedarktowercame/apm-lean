@@ -18,3 +18,8 @@ norm inequality, pointwise control by the continuous-map norm, and the
 probability-volume instance on `[0,1]`. Mathlib's dominated parametric-integral
 lemmas remain relevant to differentiability, but they do not directly package
 the uniform Nemytskii remainder into the continuous-map codomain.
+
+Closer hop 3 also derives the uniform operator bound `‖D x‖ ≤ 1 + c` from
+the already compiled estimate `‖1 - D x‖ ≤ c`.  This verifies boundedness
+of the proposed derivative but does not supply the missing uniform Taylor
+remainder.

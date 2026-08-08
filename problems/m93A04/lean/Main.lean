@@ -91,6 +91,25 @@ lemma apm_m93A04_bijective_D
     apm_m93A04_bijective_one_sub_of_norm_lt_one
       ((1 : apm_m93A04_C →L[ℝ] apm_m93A04_C) - D x) hnorm
 
+/-- The proposed derivative is uniformly bounded in operator norm.  This is
+the bounded-linear part of the remaining differentiability argument. -/
+lemma apm_m93A04_norm_D_le
+    (K₂ : ℝ → ℝ → ℝ) (hK₂ : Continuous (Function.uncurry K₂))
+    (c : ℝ) (hc_nonneg : 0 ≤ c) (hsmall : ∀ t u : ℝ, |K₂ t u| ≤ c)
+    (D : apm_m93A04_C → apm_m93A04_C →L[ℝ] apm_m93A04_C)
+    (hD : ∀ (x h : apm_m93A04_C) (t : apm_m93A04_I),
+      D x h t = h t - ∫ s : apm_m93A04_I, K₂ t.1 (x s) * h s)
+    (x : apm_m93A04_C) : ‖D x‖ ≤ 1 + c := by
+  have hnorm :=
+    apm_m93A04_norm_one_sub_D_le K₂ hK₂ c hc_nonneg hsmall D hD x
+  calc
+    ‖D x‖ = ‖(1 : apm_m93A04_C →L[ℝ] apm_m93A04_C) - (1 - D x)‖ := by
+      congr 1
+      abel
+    _ ≤ ‖(1 : apm_m93A04_C →L[ℝ] apm_m93A04_C)‖ + ‖1 - D x‖ := by
+      exact norm_sub_le (1 : apm_m93A04_C →L[ℝ] apm_m93A04_C) (1 - D x)
+    _ ≤ 1 + c := by simpa using add_le_add_left hnorm 1
+
 theorem apm_m93a04
     (K K₂ : ℝ → ℝ → ℝ)
     (hK : Continuous (Function.uncurry K))
@@ -141,6 +160,14 @@ theorem apm_m93a04
   estimate through the subtype integral. No searched `LEMMA-INDEX.md`,
   `ConstructionTargets/`, sibling, Mathlib, or git-history result packages
   that uniform Nemytskii-to-sup-norm step. The frozen statement is unchanged.
+
+  Closer hop 3 additionally proves `apm_m93A04_norm_D_le`, uniformly bounding
+  the candidate derivative by `1 + c`.  A final search found only the scalar
+  mean-value lemma `lipschitzWith_of_nnnorm_deriv_le` and the same fixed-
+  codomain parametric-integral results; neither promotes the pointwise Taylor
+  estimates to a `ContinuousMap`-valued Frechet remainder.  Thus boundedness
+  of the derivative is now compiled, but the uniform remainder bridge remains
+  open without introducing an unproved assertion.
   -/
   constructor
   · sorry
