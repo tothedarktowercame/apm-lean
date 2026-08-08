@@ -60,6 +60,15 @@ lemma t93A02H.cauchySeq_toCloseds {X : Type*} [MetricSpace X]
   simpa using
     ((ENNReal.ofReal_lt_ofReal_iff (by exact_mod_cast hε)).2 hdist)
 
+/-- Completeness of Mathlib's closed-set hyperspace now produces an actual
+closed-set limit of the frozen sequence. -/
+lemma t93A02H.exists_closeds_limit
+    {X : Type*} [MetricSpace X] [CompleteSpace X]
+    (A : ℕ → t93A02H X) (hA : IsT93A02HausdorffCauchy A) :
+    ∃ L : TopologicalSpace.Closeds X,
+      Tendsto (fun n => (A n).toCloseds) atTop (nhds L) := by
+  exact cauchySeq_tendsto_of_complete (t93A02H.cauchySeq_toCloseds A hA)
+
 theorem apm_t93a02
     (X : Type*) [MetricSpace X] [CompleteSpace X] :
     ∀ A : ℕ → t93A02H X, IsT93A02HausdorffCauchy A →
@@ -94,5 +103,18 @@ theorem apm_t93a02
   proof that the complete `Closeds` limit is nonempty and bounded, plus the
   final real/extended convergence conversion. The existential conclusion
   exposes no further smaller result without developing that core argument.
+
+  Closer hop 3 extracts the complete-space limit itself in
+  `t93A02H.exists_closeds_limit`, applying `cauchySeq_tendsto_of_complete` to
+  the hop-2 Cauchy translation. Thus existence and convergence of a closed-set
+  limit are now compiled, and the previous claim that no smaller existential
+  was exposed is discharged. Targeted inspection of Mathlib's `Closeds`
+  completeness proof found the internal point-tracking construction, but it is
+  not exported as a theorem preserving nonemptiness or boundedness. Searches
+  of `LEMMA-INDEX.md`, `ConstructionTargets/`, Hausdorff-distance finiteness,
+  and Gromov--Hausdorff users likewise found no such wrapper. The remaining
+  bridge is now exactly to show this extracted `L` is at finite Hausdorff
+  edistance from one `A n` (hence nonempty and bounded), then convert its
+  extended convergence to the frozen real `hausdorffDist` statement.
   -/
   sorry

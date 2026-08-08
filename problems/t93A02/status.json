@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 2 proves the exact ENNReal.ofReal conversion between real Hausdorff distance and Closeds edistance, then translates the frozen real Cauchy hypothesis into a CauchySeq in the complete Closeds space. The theorem remains blocked on preserving nonemptiness and boundedness at the limit and converting final convergence.",
+  "closer_hop": 3,
+  "closer_progress": "Closer hop 3 invokes completeness to extract an actual Closeds limit and its convergence. The theorem remains blocked only on proving that this limit is nonempty and bounded and converting extended convergence back to real Hausdorff distance.",
   "imported_at": "2026-07-13T17:26:57.590677Z"
 }

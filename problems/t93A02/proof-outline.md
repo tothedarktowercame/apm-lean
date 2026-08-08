@@ -9,15 +9,16 @@ Closer hop 2 proves the sharper conversion
 distance exactly as `ENNReal.ofReal` of the frozen real distance.
 It then uses this identity in `t93A02H.cauchySeq_toCloseds`, completing the
 translation to Mathlib's extended-metric `CauchySeq` predicate.
+`t93A02H.exists_closeds_limit` applies completeness and produces an actual
+closed-set limit together with convergence in the `Closeds` topology.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t93A02.md`
 
 ## Remaining boundary
 
-Translate `IsT93A02HausdorffCauchy` into the uniform/extended Cauchy predicate
-on `Closeds X`, invoke its complete-space instance, and prove that the limit
-is nonempty and bounded.  Nonemptiness follows by tracking points through a
+Prove that the extracted closed-set limit is nonempty and bounded.
+Nonemptiness follows by tracking points through a
 rapidly Cauchy subsequence; boundedness follows from finite distance to one
 fixed bounded member.  Finally convert extended Hausdorff convergence back to
 the stated real-valued `hausdorffDist` convergence.
