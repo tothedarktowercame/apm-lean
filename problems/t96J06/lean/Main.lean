@@ -91,6 +91,32 @@ lemma apm_t96j06_ProductSubspace_nonempty :
   exact ⟨(apm_t96j06_coordinatePoint, apm_t96j06_coordinatePoint),
     apm_t96j06_coordinatePoint_mem, apm_t96j06_coordinatePoint_mem⟩
 
+private lemma apm_t96j06_single_two_ne :
+    (Pi.single 2 1 : Fin 3 → ℝ) ≠ 0 := by
+  intro h
+  have h2 := congrFun h 2
+  simpa using h2
+
+def apm_t96j06_offLinePoint : apm_t96j06_RP2 :=
+  Projectivization.mk ℝ (Pi.single 2 1) apm_t96j06_single_two_ne
+
+/-- The standard projective line is a proper subset of the projective plane. -/
+lemma apm_t96j06_offLinePoint_not_mem :
+    apm_t96j06_offLinePoint ∉ apm_t96j06_RP1InRP2 := by
+  change Projectivization.mk ℝ (Pi.single 2 1) apm_t96j06_single_two_ne ∉
+    apm_t96j06_coordinatePlane.projectivization
+  rw [apm_t96j06_coordinatePlane.mk_mem_projectivization_iff
+    apm_t96j06_single_two_ne]
+  change (Pi.single 2 1 : Fin 3 → ℝ) 2 ≠ 0
+  simp
+
+lemma apm_t96j06_ProductSubspace_ne_univ :
+    apm_t96j06_ProductSubspace ≠ Set.univ := by
+  intro h
+  have hp : (apm_t96j06_offLinePoint, apm_t96j06_coordinatePoint) ∈
+      apm_t96j06_ProductSubspace := by simpa [h]
+  exact apm_t96j06_offLinePoint_not_mem hp.1
+
 theorem apm_t96j06 :
     ¬apm_t96j06_BoundsThreeManifold apm_t96j06_ProductSubspace := by
   /-
@@ -103,6 +129,11 @@ theorem apm_t96j06 :
   product is genuinely nonempty.  This removes projectivization
   representative bookkeeping and rules out any vacuous proof through an empty
   alleged boundary.
+
+  Closer hop 2 constructs `apm_t96j06_offLinePoint` and proves the coordinate
+  projective line, and consequently `apm_t96j06_ProductSubspace`, is proper.
+  This further certifies the intended embedded geometry but does not provide
+  its mod-two fundamental class or self-intersection pairing.
 
   The remaining proof is the mod-two self-intersection obstruction.  It needs
   (1) a mod-two fundamental class for the embedded `ℝP¹ × ℝP¹`, (2) the fact

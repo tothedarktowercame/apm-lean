@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "closer_note": "Constructed an explicit point of the coordinate RP1 and proved RP1×RP1 is nonempty. The non-bounding result remains blocked on mod-two fundamental classes, boundary null-homology, Künneth, and self-intersection theory absent from Mathlib and the corpus.",
+  "closer_hop": 2,
+  "closer_note": "Constructed an explicit projective point outside the coordinate RP1 and proved RP1×RP1 is both nonempty and a proper ambient subset. The non-bounding result remains blocked on mod-two fundamental classes, boundary null-homology, Künneth, and self-intersection theory absent from Mathlib and the corpus.",
   "imported_at": "2026-07-13T17:26:58.411465Z"
 }

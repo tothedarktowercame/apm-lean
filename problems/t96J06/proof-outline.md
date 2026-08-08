@@ -11,6 +11,8 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 - Use `Submodule.mk_mem_projectivization_iff` to prove it lies in the coordinate
   projective line.
 - Pair the point with itself to prove `ℝP¹ × ℝP¹` is nonempty.
+- Construct the third-coordinate projective point outside `ℝP¹` and prove the
+  embedded product is a proper subset of the ambient product.
 
 ## Remaining obstruction
 
