@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,11 +27,13 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "imported_at": "2026-07-13T17:26:52.216931Z",
   "lean_attempted_at": "2026-07-18T20:15:00Z",
   "lean_compiles": true,
   "lean_errors": 0,
   "validation_command": "lake env lean problems/a94J02/lean/Main.lean",
-  "blocker": "The fat compact set now compiles. Remaining: port the historical indefinite-integral strict-monotonicity and a.e.-derivative lemmas, then package absolute continuity and interval integrability required by the stronger frozen theorem."
+  "blocker": null,
+  "validation_result": "exit 0; 0 errors; 0 sorries",
+  "closer_hop": 2
 }

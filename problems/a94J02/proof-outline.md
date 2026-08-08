@@ -39,7 +39,7 @@ nowhere-dense, positive measure).
 
 The `constructedH_nonneg` lemma (line 106) is **fully proved**.
 
-## Classification: partial
+## Classification: solved
 
 ## Closer Hop 1
 
@@ -56,6 +56,19 @@ two missing analytic packaging results.
 
 The formalization correctly states the mathematical problem, repairs the
 impossible "on ℝ" to the meaningful "on [0,1]" version, and identifies the
-exact boundaries (fat Cantor set existence, strict monotonicity from
-topological nowhere-denseness, FTC for the derivative). All sorries are
-explicitly marked with precise comments.
+exact ingredients (fat compact-set existence, strict monotonicity from
+topological nowhere-denseness, and the FTC for the derivative).
+
+## Closer Hop 2
+
+The frozen theorem is now fully compiled with no sorries. The historical
+indicator-integral argument was ported into local helpers. The density is
+globally integrable and bounded by one, so its indefinite integral is
+`1`-Lipschitz on `[0,1]`; this supplies absolute continuity, while continuity
+supplies interval integrability. Closedness and empty interior give a genuine
+open complement interval between any two domain points, proving strict
+increase. Finally, the a.e. fundamental theorem of calculus makes the
+derivative zero on the positive-measure compact set.
+
+Final validation: `lake env lean problems/a94J02/lean/Main.lean` exits 0 with
+zero sorries.
