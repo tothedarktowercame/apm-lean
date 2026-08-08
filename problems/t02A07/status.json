@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The restricted family is linked to its ambient extension. Remaining work is the finite-coordinate sphere norm calculation, the explicit constraint-Jacobian surjectivity proof, and a missing parametric-transversality theorem or direct exceptional-parameter classification.",
+  "closer_hop": 2,
+  "boundary": "Closer hop 2 proves the full range-in-sphere conjunct by explicit finite-coordinate norm normalization. Remaining work is the constraint-Jacobian surjectivity proof and a parametric-transversality theorem or direct exceptional-parameter classification.",
   "imported_at": "2026-07-13T17:26:57.011844Z"
 }

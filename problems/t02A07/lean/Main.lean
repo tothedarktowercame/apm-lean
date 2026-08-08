@@ -63,6 +63,26 @@ def apm_t02a07_familyAmbient
     apm_t02a07_family parameter y =
       apm_t02a07_familyAmbient parameter y := rfl
 
+/-- The displayed family lands in the unit sphere. This discharges the finite
+coordinate normalization independently of the transversality argument. -/
+lemma apm_t02a07_family_mem_X
+    (parameter : apm_t02a07_parameterCircle) (y : apm_t02a07_S2) :
+    apm_t02a07_family parameter y ∈ apm_t02a07_X := by
+  have hp : ‖(parameter : apm_t02a07_E2)‖ = 1 := by
+    simpa [Metric.mem_sphere, dist_zero_right] using parameter.property
+  have hy : ‖(y : apm_t02a07_E3)‖ = 1 := by
+    simpa [Metric.mem_sphere, dist_zero_right] using y.property
+  have hp2 := congrArg (fun z : ℝ => z ^ 2) hp
+  have hy2 := congrArg (fun z : ℝ => z ^ 2) hy
+  dsimp only at hp2 hy2
+  rw [EuclideanSpace.norm_sq_eq] at hp2 hy2
+  simp [Fin.sum_univ_succ] at hp2 hy2
+  rw [apm_t02a07_X, Metric.mem_sphere, dist_zero_right]
+  apply (sq_eq_sq₀ (norm_nonneg _) (by norm_num : (0 : ℝ) ≤ 1)).mp
+  rw [EuclideanSpace.norm_sq_eq]
+  simp [apm_t02a07_family, Fin.sum_univ_succ]
+  nlinarith
+
 def apm_t02a07_tangentZ (x : apm_t02a07_E4) : Submodule ℝ apm_t02a07_E4 :=
   LinearMap.ker (fderiv ℝ apm_t02a07_constraints x).toLinearMap
 
@@ -106,5 +126,17 @@ theorem apm_t02a07 :
   `t94A06`, all closed transversality artifacts, Mathlib's Sard, fderiv,
   Euclidean norm, submodule, and density APIs, and git history. None supplies
   the parameter-density assembly, so the statement remains open.
+
+  CLOSER HOP 2 goes beyond that search boundary by completing the entire
+  range-in-sphere conjunct as `apm_t02a07_family_mem_X`. The proof extracts
+  the two unit-norm equations from the sphere subtypes, expands them with
+  `EuclideanSpace.norm_sq_eq`, normalizes the `Fin 2`, `Fin 3`, and `Fin 4`
+  sums, and finishes the displayed coordinate identity by `nlinarith`.
+  Thus neither `WithLp.toLp` simplification nor the finite-coordinate norm
+  calculation remains open. Targeted reinspection of `t94A06`, the repository
+  transversality users, `LEMMA-INDEX.md`, `ConstructionTargets/`, and Mathlib's
+  Sard/density APIs still found no parametric-transversality theorem. The live
+  bridge is now only the explicit constraint-Jacobian surjectivity proof and
+  the exceptional-parameter classification/density argument.
   -/
   sorry
