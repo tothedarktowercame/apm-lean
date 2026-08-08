@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,7 +30,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "The quotient gluing equality, faithful norm-one boundary inclusion, singleton generated-equivalence class of the disk center, and separation of the quotient basepoint from the RP2 summand are proved. The main theorem remains blocked on van Kampen/cellular homology computations for RP2 with an attached 2-disk; no packaged Mathlib bridge was found.",
+  "closer_hop": 4,
+  "boundary": "The two missing invariant computations are now precise Lean contracts, separately for null-homotopic and essential embedded attaching circles. Their proofs and the original main proof remain intentionally open.",
   "imported_at": "2026-07-13T17:26:56.642829Z"
 }

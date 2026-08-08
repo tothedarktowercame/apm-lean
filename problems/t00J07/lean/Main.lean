@@ -142,6 +142,32 @@ def apm_t00j07_invariants
       (apm_t00j07_H 2 (apm_t00j07_attachDisk f) ≅ ModuleCat.of ℤ ℤ) ∧
     ∀ k, 3 ≤ k → Limits.IsZero (apm_t00j07_H k (apm_t00j07_attachDisk f))
 
+/-- Why this unblocks `apm_t00j07`: this is the complete van Kampen and
+singular-homology computation for attaching a disk along a null-homotopic
+embedded circle in `RP²`.  It supplies the first implication of the frozen
+theorem without hiding any additional quotient identification. -/
+theorem apm_t00J07_bridge_nullhomotopic_attachment_invariants
+    (f : C(Circle, apm_t00j07_RP2))
+    (hemb : Topology.IsEmbedding (f : Circle → apm_t00j07_RP2))
+    (hnull : ∃ p : apm_t00j07_RP2,
+      ContinuousMap.Homotopic f (ContinuousMap.const _ p)) :
+    apm_t00j07_invariants f (Multiplicative (ZMod 2))
+      (ModuleCat.of ℤ (ZMod 2)) := by
+  sorry
+
+/-- Why this unblocks `apm_t00j07`: this is the complete van Kampen and
+singular-homology computation for attaching a disk along an essential
+embedded circle in `RP²`.  It supplies the second implication of the frozen
+theorem for the exact quotient and basepoint encoded above. -/
+theorem apm_t00J07_bridge_essential_attachment_invariants
+    (f : C(Circle, apm_t00j07_RP2))
+    (hemb : Topology.IsEmbedding (f : Circle → apm_t00j07_RP2))
+    (hessential : ¬∃ p : apm_t00j07_RP2,
+      ContinuousMap.Homotopic f (ContinuousMap.const _ p)) :
+    apm_t00j07_invariants f (Multiplicative (ZMod 1))
+      (ModuleCat.of ℤ (ZMod 1)) := by
+  sorry
+
 theorem apm_t00j07 :
     ∀ f : C(Circle, apm_t00j07_RP2),
       Topology.IsEmbedding (f : Circle → apm_t00j07_RP2) →

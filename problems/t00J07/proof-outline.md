@@ -22,9 +22,10 @@ quotient, its fundamental group, and integral singular homology.
 
 ## Remaining boundary
 
-The main theorem still needs computations of the fundamental group and
-integral singular homology after attaching the disk along either embedding
-homotopy class. Mathlib has abstract relative-cell-complex and CW-complex
-definitions, but the searches in this closer hop found no van Kampen,
-cellular-homology, or attaching-cell theorem connected to this concrete
-quotient. Nearby topology artifacts are blocked at the same API boundary.
+The two missing computations are now stated explicitly as
+`apm_t00J07_bridge_nullhomotopic_attachment_invariants` and
+`apm_t00J07_bridge_essential_attachment_invariants`. They retain the embedding
+hypothesis and compute the complete packaged fundamental-group and integral
+singular-homology invariant for each attaching homotopy class. Proving these
+contracts is exactly the remaining van Kampen/cellular-homology work; once
+proved, the two implications in the frozen theorem follow immediately.
