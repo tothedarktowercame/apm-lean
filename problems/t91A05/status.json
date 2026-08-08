@@ -28,6 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "closer_progress": "The full abstract contradiction is compiled: a retraction cannot induce an injection from a nontrivial source fundamental group into a subsingleton target group. The sole remaining bridge is nontriviality of the unit circle's fundamental group.",
   "stage": "attempted",
   "checked_at": "2026-08-07",
   "checked_lean_state": {

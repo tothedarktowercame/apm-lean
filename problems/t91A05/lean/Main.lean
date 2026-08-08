@@ -40,6 +40,23 @@ lemma apm_t91a05_fundamentalGroupMap_injective_of_retraction
   rw [← FundamentalGroupoid.map_comp, hcomp, FundamentalGroupoid.map_id] at hpq'
   exact hpq'
 
+/-- Once the target fundamental group is trivial and the source fundamental
+group is nontrivial, the functorial injectivity lemma rules out a retraction.
+This isolates the exact topological computation still missing for the circle. -/
+lemma apm_t91a05_no_retraction_of_subsingleton_fundamentalGroup
+    {A X : Type} [TopologicalSpace A] [TopologicalSpace X]
+    (i : C(A, X)) (a : A)
+    [Subsingleton (FundamentalGroup X (i a))]
+    [Nontrivial (FundamentalGroup A a)] :
+    ¬∃ r : C(X, A), ∀ x, r (i x) = x := by
+  rintro ⟨r, hr⟩
+  have hinj :=
+    apm_t91a05_fundamentalGroupMap_injective_of_retraction i a r hr
+  obtain ⟨p, hp⟩ := exists_ne (1 : FundamentalGroup A a)
+  apply hp
+  apply hinj
+  apply Subsingleton.elim
+
 theorem apm_t91a05 :
     ¬∃ g : apm_t91a05_Disk → apm_t91a05_Circle,
       Continuous g ∧
@@ -63,5 +80,16 @@ theorem apm_t91a05 :
   circle computation. Developing winding number or the integral `H₁` of the
   circle is the remaining foundational bridge. No unproved intermediate
   assertion was added, and the frozen statement is unchanged.
+
+  CLOSER HOP 2 compiles the complete abstract contradiction as
+  `apm_t91a05_no_retraction_of_subsingleton_fundamentalGroup`. It combines
+  the hop-1 injectivity theorem with a subsingleton target fundamental group
+  and a nontrivial source fundamental group, eliminating all residual group
+  reasoning from the final step. A renewed search of `LEMMA-INDEX.md`,
+  `ConstructionTargets/`, Mathlib's contractible-space/fundamental-group and
+  circle sources, and the no-retraction siblings found no `Nontrivial` instance
+  for the circle group or alternative Brouwer theorem. The disk side is
+  supplied by `Metric.contractibleSpace_closedBall`; the sole foundational
+  bridge remains nontriviality of the circle fundamental group.
   -/
   sorry
