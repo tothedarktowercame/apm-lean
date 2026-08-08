@@ -76,3 +76,11 @@ Thus all scale and denominator bookkeeping is closed. The remaining theorem is
 literally the positive-frequency assertion still open in sibling `a03J05`, not
 a separate analytic obligation. Reusing that sibling is not possible while its
 main transform theorem itself remains sorry-backed.
+
+## Relay closer hop 3
+
+Added `apm_a97J06_integrable`. It first scales Mathlib's global
+`integrable_inv_one_add_sq` theorem to `(x²+4)⁻¹`, then dominates the cosine
+kernel using `Real.abs_cos_le_one`. Thus absolute integrability and its
+measurability bookkeeping are compiled; only the actual positive-frequency
+transform evaluation remains open.

@@ -28,8 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Compiled the exact x = 2u scaling reduction: this integral is one half of the a03J05 scale-one Cauchy cosine transform at frequency 2t. That sibling retains the same positive-frequency transform sorry, so the shared characteristic-function bridge remains open.",
+  "closer_hop": 3,
+  "closer_note": "Compiled the exact x = 2u scaling reduction and proved global absolute integrability of the oscillatory kernel by scaling integrable_inv_one_add_sq and domination by |cos| <= 1. The shared positive-frequency Cauchy characteristic-function bridge remains open.",
   "imported_at": "2026-07-13T17:26:52.853875Z",
   "checked_at": "2026-08-05T13:30:00Z",
   "checked_lean_state": {

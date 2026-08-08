@@ -55,6 +55,27 @@ lemma apm_a97J06_integral_neg (t : ℝ) :
   intro x _
   simp [apm_a97J06_integrand]
 
+/-- The oscillatory kernel is absolutely integrable for every frequency. -/
+lemma apm_a97J06_integrable (t : ℝ) :
+    Integrable (apm_a97J06_integrand t) volume := by
+  have hbase : Integrable (fun x : ℝ => (x ^ 2 + 4)⁻¹) volume := by
+    have h := (integrable_inv_one_add_sq.const_mul (1 / 4 : ℝ)).comp_mul_left'
+      (by norm_num : (1 / 2 : ℝ) ≠ 0)
+    convert h using 1
+    funext x
+    field_simp
+    ring
+  apply hbase.mono'
+  · apply Continuous.aestronglyMeasurable
+    unfold apm_a97J06_integrand
+    exact (Real.continuous_cos.comp (continuous_const.mul continuous_id)).div
+      ((continuous_id.pow 2).add continuous_const) (fun x => by positivity)
+  · filter_upwards with x
+    unfold apm_a97J06_integrand
+    rw [Real.norm_eq_abs, abs_div, abs_of_pos (by positivity : 0 < x ^ 2 + 4),
+      inv_eq_one_div]
+    exact div_le_div_of_nonneg_right (Real.abs_cos_le_one _) (by positivity)
+
 /-- Scaling `x = 2u` reduces this problem exactly to the standard Cauchy
 kernel `1 / (1 + u²)` at frequency `2t`. -/
 lemma apm_a97J06_integral_eq_half_standard (t : ℝ) :
@@ -139,4 +160,14 @@ theorem apm_a97j06 (t : ℝ) :
   -- Sibling `a03J05` still has one sorry at that positive-frequency identity,
   -- so it cannot be reused to close this frozen theorem. The remaining bridge
   -- is now shared verbatim by the two artifacts.
+  --
+  -- CLOSER HOP 3: `apm_a97J06_integrable` now proves absolute integrability
+  -- of the exact oscillatory kernel for every `t`. It scales Mathlib's
+  -- `integrable_inv_one_add_sq` to `(x²+4)⁻¹` and applies `Real.abs_cos_le_one`
+  -- through `Integrable.mono'`. This goes beyond the prior algebraic scaling
+  -- reduction by discharging the principal domination prerequisite for any
+  -- future Fourier/Fubini argument. The new sorry-free `a03J05` helper proves
+  -- the same fact at scale one, but its positive-frequency evaluation remains
+  -- sorry-backed. Renewed inspection therefore leaves precisely the same
+  -- characteristic-function / contour-limit bridge open.
   sorry
