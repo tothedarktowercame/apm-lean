@@ -121,6 +121,20 @@ lemma apm_t95j06_flow_add
   simp only [smul_smul]
   ring_nf
 
+/-- Why this unblocks `apm_t95j06`: this is the missing classification step
+after the explicit Hopf formula has supplied periodicity and the action laws.
+It packages the required quotient construction, Euler-characteristic
+calculation, and compact orientable surface classification into a statement
+about the actual invariant surface and the genuine torus. -/
+theorem apm_t95J06_bridge_1
+    (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
+    (hH : apm_t95j06_isHopfFlow H)
+    (F : Set apm_t95j06_S5)
+    (hF : apm_t95j06_IsCompactOrientableSurface F)
+    (hF_invariant : apm_t95j06_IsInvariant H F) :
+    apm_t95j06_EveryComponentDiffeomorphicToTorus F := by
+  sorry
+
 theorem apm_t95j06
     (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
     (hH : apm_t95j06_isHopfFlow H) :
