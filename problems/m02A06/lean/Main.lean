@@ -113,6 +113,15 @@ lemma apm_m02a06_greenKernel_le_exp {x y : ℝ} :
   unfold apm_m02a06_greenKernel
   nlinarith
 
+/-- The concrete nonlinear half-line Green transform whose fixed point is the
+desired solution.  Exposing it makes the remaining parameter-integral and
+Banach-contraction bridge precise. -/
+noncomputable def apm_m02a06_greenTransform
+    (ε : ℝ) (f u : ℝ → ℝ) (x : ℝ) : ℝ :=
+  Real.exp (-x) +
+    ∫ y in Ici (0 : ℝ),
+      apm_m02a06_greenKernel x y * (f y + ε * (u y) ^ 2)
+
 theorem apm_m02a06
     (f : ℝ → ℝ) (hf_smooth : ContDiff ℝ ∞ f)
     (hf_compact : HasCompactSupport f) (hf_support : Function.support f ⊆ Ioi 0)
@@ -169,5 +178,34 @@ theorem apm_m02a06
   prove the resulting function tends to zero, then bundle a complete
   sup-norm function space and apply Banach contraction. No packaged theorem
   performs that assembly, and it was not completed in this final hop.
+
+  HOP 4 GAP AUDIT (outcomes A and B both failed). The nonlinear operator is
+  now explicit as `apm_m02a06_greenTransform`. Searches of the complete
+  bounded-continuous-function spaces, improper parameter integrals, moving-
+  endpoint differentiation, and fixed-point APIs found the ingredients but no
+  theorem establishing the required combined regularity and contraction.
+
+  The precise missing lemma is:
+
+      theorem apm_m02a06_greenTransform_fixedPoint
+          (f : ℝ → ℝ) (hf_smooth : ContDiff ℝ ∞ f)
+          (hf_compact : HasCompactSupport f)
+          (hf_support : Function.support f ⊆ Ioi 0)
+          (C : ℝ) (hC : 0 ≤ C)
+          (hf_bound : ∀ x ∈ Ici (0 : ℝ), |f x| ≤ C)
+          (ε : ℝ) (hε : 0 < ε)
+          (hε_small : ε < 1 / (4 * (1 + C))) :
+          ∃! u : ℝ → ℝ,
+            (∀ x ∈ Ici (0 : ℝ),
+              u x = apm_m02a06_greenTransform ε f u x) ∧
+            apm_m02a06_IsSolution ε f u ∧
+            ∀ x ∈ Ici (0 : ℝ), |u x| ≤ 2 * (1 + C)
+
+  This is stronger than the frozen conclusion only by recording the defining
+  fixed-point identity, and is the exact theorem delivered by the intended
+  Green-operator contraction proof. Its proof must establish the moving-
+  domain twice-differentiation, boundary value, decay, kernel-mass bound,
+  completeness of the chosen sup-norm space, and contraction. The statement
+  is unchanged and the existing sorry is retained honestly.
   -/
   sorry

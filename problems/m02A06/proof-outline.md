@@ -1,5 +1,21 @@
 # Proof Outline: m02A06
 
+## Hop 4 gap audit
+
+Outcomes A and B both failed. The nonlinear Green operator has now been made
+explicit as
+
+```lean
+apm_m02a06_greenTransform ε f u x =
+  exp (-x) + ∫ y in Ici 0, G x y * (f y + ε * u y ^ 2)
+```
+
+The boundary comment in `Main.lean` records the precise missing theorem
+`apm_m02a06_greenTransform_fixedPoint`: existence and uniqueness of a fixed
+point in the stated ball, together with the frozen ODE regularity, boundary,
+and decay properties. Proving it requires the moving-domain Green identity
+and the complete sup-norm contraction assembly; no packaged result was found.
+
 The canonical Lean attempt compiles with one remaining `sorry`.
 
 - informal-solution: `informal-solution.md`

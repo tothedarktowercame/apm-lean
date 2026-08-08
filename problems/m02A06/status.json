@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "classification_detail": "Final honest partial: the kernel now has compiled smooth formulas on both sides of y=x and an exponential domination bound. The moving-domain parameter integral, twice-differentiable Green identity, decay, and Banach-space contraction assembly remain.",
+  "closer_hop": 4,
+  "classification_detail": "Honest failed-with-statement outcome. The nonlinear Green transform is now explicit; the precise missing theorem is apm_m02a06_greenTransform_fixedPoint with the hypotheses and fixed-point/solution/bound conclusions recorded in Main.lean. No existing Mathlib or corpus theorem performs the moving-domain regularity plus complete sup-norm contraction assembly.",
   "imported_at": "2026-07-13T17:26:54.456143Z"
 }
