@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "A compiled simp lemma removes the redundant inverse-image equality from the custom predicate. The remaining theorem is precisely existence of a transverse affine line, whose intended proof requires a chartwise manifold Sard theorem absent from Mathlib.",
+  "closer_hop": 2,
+  "closer_progress": "Compiled both the inverse-image packaging reduction and the general linear-algebra bridge from surjectivity after projection to range-plus-direction spanning the target. The sole substantive boundary is manifold Sard for an arbitrary second-countable finite-dimensional manifold domain.",
   "imported_at": "2026-07-13T17:26:57.638742Z"
 }
