@@ -56,6 +56,58 @@ lemma apm_b97A02_finite_over_nontrivial_intermediate
     IntermediateField.adjoin.finiteDimensional hX.isIntegral
   exact (RatFunc.IntermediateField.adjoinXEquiv K).toLinearEquiv.finiteDimensional
 
+/-- Every nondegenerate affine change of variable is realized by an algebra
+automorphism of the rational function field.  Lüroth's
+`algEquivOfTranscendental` supplies the map to the simple adjoin; solving the
+affine equation for `X` shows that this adjoin is the whole field. -/
+lemma apm_b97A02_exists_affineAlgEquiv
+    (F : Type*) [Field F] (a b : F) (ha : a ≠ 0) :
+    ∃ σ : RatFunc F ≃ₐ[F] RatFunc F,
+      σ RatFunc.X = algebraMap F (RatFunc F) a * RatFunc.X +
+        algebraMap F (RatFunc F) b := by
+  let f : RatFunc F := algebraMap F (RatFunc F) a * RatFunc.X +
+    algebraMap F (RatFunc F) b
+  have hX : ¬ ∃ c : F, (RatFunc.X : RatFunc F) = RatFunc.C c := by
+    rw [RatFunc.eq_C_iff]
+    simp
+  have hma : algebraMap F (RatFunc F) a ≠ 0 :=
+    (map_ne_zero (algebraMap F (RatFunc F))).2 ha
+  have hsolve : (RatFunc.X : RatFunc F) =
+      algebraMap F (RatFunc F) a⁻¹ *
+        (f - algebraMap F (RatFunc F) b) := by
+    dsimp [f]
+    rw [map_inv₀]
+    calc
+      RatFunc.X = (algebraMap F (RatFunc F) a)⁻¹ *
+          (algebraMap F (RatFunc F) a * RatFunc.X) := by
+            rw [← mul_assoc, inv_mul_cancel₀ hma, one_mul]
+      _ = (algebraMap F (RatFunc F) a)⁻¹ *
+          (algebraMap F (RatFunc F) a * RatFunc.X +
+            algebraMap F (RatFunc F) b - algebraMap F (RatFunc F) b) := by ring
+  have hf : ¬ ∃ c : F, f = RatFunc.C c := by
+    rintro ⟨c, hc⟩
+    apply hX
+    refine ⟨a⁻¹ * (c - b), ?_⟩
+    rw [hsolve, hc, ← RatFunc.algebraMap_eq_C]
+    simp only [← map_sub, ← map_mul]
+  have hadjoin : IntermediateField.adjoin F ({f} : Set (RatFunc F)) = ⊤ := by
+    apply le_antisymm le_top
+    rw [← RatFunc.adjoin_X]
+    apply IntermediateField.adjoin_le_iff.mpr
+    rw [Set.singleton_subset_iff]
+    rw [hsolve]
+    exact IntermediateField.mul_mem _ (IntermediateField.algebraMap_mem _ _)
+      (IntermediateField.sub_mem _
+        (IntermediateField.subset_adjoin F ({f} : Set (RatFunc F))
+          (Set.mem_singleton f))
+        (IntermediateField.algebraMap_mem _ _))
+  let e : RatFunc F ≃ₐ[F] RatFunc F :=
+    (RatFunc.algEquivOfTranscendental f (f.transcendental_of_ne_C hf)).trans
+      ((IntermediateField.equivOfEq hadjoin).trans IntermediateField.topEquiv)
+  refine ⟨e, ?_⟩
+  change e RatFunc.X = f
+  simp [e, RatFunc.algEquivOfTranscendental_X]
+
 theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
     (∀ a b : F, a ≠ 0 →
       ∃! σ : RatFunc F ≃ₐ[F] RatFunc F,
@@ -105,5 +157,21 @@ theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
   requires connecting the finite affine action to the newly found degree
   theorem. Searches of proved sibling artifacts found no implementation. The
   statement appears mathematically sound; this is an API/formalization blocker.
+
+  CLOSER HOP 3: `apm_b97A02_exists_affineAlgEquiv` now constructs the affine
+  substitution automorphism for every `a ≠ 0`. It explicitly solves
+  `X = a⁻¹ ((aX+b)-b)`, uses this to prove `F⟮aX+b⟯ = ⊤`, rules out the affine
+  expression being constant, and applies `RatFunc.algEquivOfTranscendental`
+  followed by `IntermediateField.equivOfEq` and `topEquiv`. Its application
+  lemma then gives exactly `σ X = aX+b`. Thus existence in the first frozen
+  conjunct is complete; only uniqueness of an `F`-algebra automorphism from
+  its value on `X` remains there.
+
+  Searches beyond hop 2 covered the Lüroth equivalence implementation,
+  `RatFunc.eq_C_iff`, `RatFunc.adjoin_X`, intermediate-field adjoin induction,
+  and low-level `liftAlgHom` extensionality. The first group supplied the
+  construction above. No packaged extensionality theorem for `RatFunc`
+  algebra homomorphisms was found, so uniqueness, action counting, invariant
+  fixedness, and the fixed-field degree comparison remain open.
   -/
   all_goals sorry

@@ -18,13 +18,19 @@ The same source provides the previously missed
 the remaining affine/fixed-field route has substantially more infrastructure
 than hop 1 recorded.
 
+Closer hop 3 proves `apm_b97A02_exists_affineAlgEquiv`. The identity
+`X = a⁻¹((aX+b)-b)` shows that the affine element generates the full rational
+function field. It is nonconstant and hence transcendental, so
+`RatFunc.algEquivOfTranscendental`, followed by the equivalence from its adjoin
+to `⊤`, constructs the required automorphism with the exact image of `X`.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97A02.md`
 
 ## Remaining boundary
 
-- construct and invert the affine substitution `X ↦ aX+b` as an `AlgEquiv` of
-  `RatFunc F`, and prove uniqueness from the image of `X`;
+- prove uniqueness of the compiled affine substitution automorphism from its
+  image of `X`;
 - combine characteristic-power additivity with the compiled coefficient lemmas
   to prove the displayed invariant is fixed;
 - prove the invariant generates the complete fixed field, including the

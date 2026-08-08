@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "The full final conjunct is closed using Mathlib's previously missed RatFunc Lüroth development. That source also supplies affine-substitution and rational-function degree infrastructure, but constructing/counting the affine automorphisms and proving the fixed-field equality remain.",
+  "closer_hop": 3,
+  "note": "The affine substitution automorphism X ↦ aX+b is now constructed for every nonzero a by proving the affine generator is transcendental and generates the whole rational-function field. Uniqueness, action counting, invariant fixedness, and fixed-field equality remain.",
   "imported_at": "2026-07-13T17:26:54.104408Z"
 }
