@@ -18,3 +18,8 @@ no construction gluing labeled graph edges over a wedge point, no topological
 realization API for these finite multigraphs, and no ready Cayley-tree
 universal cover.  These constructions, including proofs of exact fiber size
 and pairwise nonhomeomorphism, must be developed locally.
+
+Closer hop 2 now supplies the concrete quotient cocone data: both circle
+inclusions are continuous and their basepoints are propositionally equal in
+the wedge. This isolates the next missing step as the construction and
+compatibility of evenly covered neighborhoods at that common point.

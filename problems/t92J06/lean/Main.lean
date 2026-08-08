@@ -41,6 +41,28 @@ noncomputable instance : TopologicalSpace apm_t92J06_X :=
       Quotient.mk (Relation.EqvGen.setoid apm_t92J06_wedgeRel) z)
     inferInstance
 
+/-- The first circle's canonical map into the concrete wedge. -/
+def apm_t92J06_inl (z : apm_t92J06_S1) : apm_t92J06_X :=
+  Quotient.mk _ (.inl z)
+
+/-- The second circle's canonical map into the concrete wedge. -/
+def apm_t92J06_inr (z : apm_t92J06_S1) : apm_t92J06_X :=
+  Quotient.mk _ (.inr z)
+
+/-- Both canonical circle maps into the quotient wedge are continuous. -/
+lemma apm_t92J06_continuous_inl : Continuous apm_t92J06_inl := by
+  exact continuous_coinduced_rng.comp continuous_inl
+
+lemma apm_t92J06_continuous_inr : Continuous apm_t92J06_inr := by
+  exact continuous_coinduced_rng.comp continuous_inr
+
+/-- The two circle basepoints are identified by the generating wedge relation. -/
+lemma apm_t92J06_inl_base_eq_inr_base :
+    apm_t92J06_inl apm_t92J06_circleBase =
+      apm_t92J06_inr apm_t92J06_circleBase := by
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _ apm_t92J06_wedgeRel.base
+
 /-- A finite-sheeted covering together with its exact fiber cardinality. -/
 structure apm_t92J06_Covering (n : ℕ) where
   E : Type
@@ -57,7 +79,7 @@ theorem apm_t92j06 :
         ¬ Nonempty
           (@Homeomorph (C i).E (C j).E (C i).topology (C j).topology) := by
   /-
-  Boundary (closer hop 1): the theorem requires constructing actual
+  Boundary (closer hops 1--2): the theorem requires constructing actual
   `IsCoveringMap`s over the quotient wedge, not merely the permutation data
   classifying them.  Searches of `ConstructionTargets/`, `LEMMA-INDEX.md`,
   closed sibling artifacts, git history, and Mathlib's covering, quotient,
@@ -72,5 +94,12 @@ theorem apm_t92j06 :
   existence theorem furnishing those data was found.  Thus both constructions
   remain open; the frozen statement and its native covering-space content are
   unchanged.
+
+  Closer hop 2 additionally compiles the quotient's basic gluing data:
+  `apm_t92J06_continuous_inl` and `apm_t92J06_continuous_inr` are the two
+  continuous circle inclusions, and `apm_t92J06_inl_base_eq_inr_base` proves
+  directly that their basepoints agree. This is the exact cocone data a future
+  labeled-edge gluing construction must respect, but it does not construct
+  local trivializations over the wedge point or the Cayley-tree cover.
   -/
   sorry

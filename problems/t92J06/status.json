@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "The exact construction boundary is documented: Mathlib has local covering theory and circle power covers, but no gluing construction realizing permutation monodromy over the concrete quotient wedge, nor a topological Cayley-tree universal cover with simple-connectedness.",
+  "closer_progress": "Closer hop 2 compiled the two continuous canonical circle maps into the quotient and their basepoint equality, giving the cocone data required by a gluing construction. The actual evenly-covered-neighborhood gluing, exact fibers, pairwise nonhomeomorphism, and Cayley-tree universal cover remain unavailable.",
   "imported_at": "2026-07-13T17:26:57.514637Z"
 }
