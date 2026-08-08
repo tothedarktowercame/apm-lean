@@ -61,6 +61,28 @@ lemma apm_a99J10_sin_rpow_le_first_quadrant
     (Real.mul_le_sin hx0.le hxpi).trans (le_abs_self _)
   exact Real.rpow_le_rpow_of_nonpos hlin hsin (by norm_num)
 
+/-- For radii bounded below by `1/2`, the polar estimate has a single
+radius-independent angular majorant.  This closes the uniform-domination
+bookkeeping needed before applying dominated convergence. -/
+lemma apm_a99J10_polar_bound_uniform
+    (f : ℂ → ℂ)
+    (hbound : ∀ z ∈ ball (0 : ℂ) 1, z.im ≠ 0 →
+      ‖f z‖ ≤ Real.rpow |z.im| (-(1 : ℝ) / 2))
+    {r θ : ℝ} (hr : (1 : ℝ) / 2 ≤ r) (hr1 : r < 1)
+    (hsin : Real.sin θ ≠ 0) :
+    ‖f ((r : ℂ) * Complex.exp ((θ : ℂ) * Complex.I))‖ ≤
+      Real.rpow ((1 : ℝ) / 2) (-(1 : ℝ) / 2) *
+        Real.rpow |Real.sin θ| (-(1 : ℝ) / 2) := by
+  have hr0 : 0 < r := lt_of_lt_of_le (by norm_num) hr
+  refine (apm_a99J10_polar_bound f hbound hr0 hr1 hsin).trans ?_
+  rw [abs_mul, abs_of_pos hr0]
+  change (r * |Real.sin θ|) ^ (-(1 : ℝ) / 2) ≤
+    ((1 : ℝ) / 2) ^ (-(1 : ℝ) / 2) * |Real.sin θ| ^ (-(1 : ℝ) / 2)
+  rw [Real.mul_rpow hr0.le (abs_nonneg _)]
+  exact mul_le_mul_of_nonneg_right
+    (Real.rpow_le_rpow_of_nonpos (by norm_num) hr (by norm_num))
+    (Real.rpow_nonneg (abs_nonneg _) _)
+
 theorem apm_a99j10 (f : ℂ → ℂ)
     (hf : DifferentiableOn ℂ f (ball (0 : ℂ) 1))
     (hbound : ∀ z ∈ ball (0 : ℂ) 1, z.im ≠ 0 →
@@ -71,29 +93,24 @@ theorem apm_a99j10 (f : ℂ → ℂ)
         (𝓝[<] (1 : ℝ)) (𝓝 0)) :
     ∀ z ∈ ball (0 : ℂ) 1, f z = 0 := by
   /-
-  PARTIAL boundary (closer hop 2). Two additional analytic inputs now compile:
-  `apm_a99J10_integrable_rpow_neg_half` proves integrability of the model
-  inverse-square-root kernel on `(0, π/2)`, and
-  `apm_a99J10_sin_rpow_le_first_quadrant` combines Jordan's inequality with
-  antitonicity of negative real powers to dominate the sine singularity by
-  that kernel on the first quadrant. Remaining work is to transport this
-  comparison through sine symmetries over `[0, 2π]`, obtain a uniform
-  dominator for `r ≥ 1/2`, and combine DCT with the circle Cauchy formula.
-  Searches of circle-integral, Hardy-space, and boundary-uniqueness APIs found
-  no packaged theorem consuming the frozen pointwise radial limits.
+  PARTIAL boundary (closer hop 3). This hop closes the radius-uniform
+  domination step: `apm_a99J10_polar_bound_uniform` factors the negative power
+  of `|r sin θ|` and, for `r ≥ 1/2`, bounds it by the fixed multiple
 
-  Prior hop 1: the geometry of the radial parametrization
-  and the exact circlewise majorant are now compiled above. In particular,
-  `apm_a99J10_polar_bound` rewrites the frozen hypothesis as
-  `‖f (r e^{iθ})‖ ≤ |r sin θ|⁻¹ᐟ²` away from the two real-axis angles.
+    `(1/2)⁻¹ᐟ² * |sin θ|⁻¹ᐟ²`.
 
-  I inspected Mathlib's actual `Analysis/Complex/PhragmenLindelof.lean` (the
-  original comment understated the available API), but its strip/sector
-  theorems expect continuous boundary control and do not consume radial limits
-  with this integrable angular singularity. `ConstructionTargets.RadialMajorantAE`
-  concerns one-dimensional Poisson/Lebesgue differentiation and is unrelated.
-  The remaining bridge is to prove integrability of `|sin θ|⁻¹ᐟ²`, use the
-  displayed bound for dominated convergence of circle/Cauchy integrals as
-  `r → 1⁻`, and conclude every interior Cauchy integral is zero.
+  The earlier helpers already prove integrability of the model `x⁻¹ᐟ²` on the
+  first quadrant and its Jordan-inequality domination of the sine singularity
+  there. I searched interval-integral affine substitutions, sine periodicity,
+  circle averages, Cauchy formulas, and dominated convergence again. No
+  packaged lemma assembles the four translated/reflected quadrant estimates
+  into integrability of `θ ↦ |sin θ|⁻¹ᐟ²` on `[0,2π]`, and no boundary-
+  uniqueness theorem consumes the frozen pointwise radial limits directly.
+
+  The remaining proof must therefore formalize those three symmetry
+  transports, apply DCT to the parametrized Cauchy integrals for radii tending
+  to one from below, and identify the same integrals with each interior value
+  using the circle Cauchy formula.  Phragmén--Lindelöf still does not apply
+  because its sector/strip theorems require continuous boundary control.
   -/
   sorry

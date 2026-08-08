@@ -9,6 +9,8 @@ The canonical Lean attempt is `lean/Main.lean`. Closer hops 1–2 prove:
 - integrability of the model inverse-square-root kernel on `(0, pi/2)`;
 - Jordan-inequality domination of the sine singularity by that model kernel
   on the first quadrant.
+- a uniform estimate for all `1/2 ≤ r < 1`, bounding the radial values by
+  `(1/2)⁻¹ᐟ² * |sin θ|⁻¹ᐟ²` independently of `r`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-a99J10.md`
@@ -17,7 +19,6 @@ The canonical Lean attempt is `lean/Main.lean`. Closer hops 1–2 prove:
 
 - prove interval integrability of `θ ↦ |sin θ|⁻¹ᐟ²`, handling its endpoint
   singularities on the other quadrants by symmetry and assemble the pieces;
-- extract a radius-independent dominator for `1/2 ≤ r < 1`;
 - apply dominated convergence to the circle/Cauchy integrals using the radial
   limits;
 - identify the limiting Cauchy integral with each interior value and conclude
