@@ -56,6 +56,45 @@ lemma apm_a92J01_discontinuousCounterexample_memLp (p : ℝ) :
   · right
     exact measure_ne_top _ _
 
+/-- The indicator jumps at the right endpoint of its support. -/
+lemma apm_a92J01_discontinuousCounterexample_not_continuousOn :
+    ¬ContinuousOn apm_a92J01_discontinuousCounterexample (Icc 0 1) := by
+  intro hcont
+  have hhalf := hcont (1 / 2 : ℝ) (by constructor <;> norm_num)
+  rw [Metric.continuousWithinAt_iff] at hhalf
+  obtain ⟨δ, hδ, hclose⟩ := hhalf (1 / 2) (by norm_num)
+  let d : ℝ := min (δ / 2) (1 / 4)
+  let y : ℝ := 1 / 2 + d
+  have hd : 0 < d := by
+    dsimp [d]
+    exact lt_min (half_pos hδ) (by norm_num)
+  have hdδ : d < δ := by
+    dsimp [d]
+    calc
+      min (δ / 2) (1 / 4) ≤ δ / 2 := min_le_left _ _
+      _ < δ := half_lt_self hδ
+  have hy : y ∈ Icc (0 : ℝ) 1 := by
+    constructor
+    · dsimp [y]
+      linarith
+    · dsimp [y, d]
+      have := min_le_right (δ / 2) (1 / 4)
+      linarith
+  have hydist : dist y (1 / 2 : ℝ) < δ := by
+    rw [Real.dist_eq]
+    dsimp [y]
+    ring_nf
+    rw [abs_of_pos hd]
+    exact hdδ
+  have hvalue := hclose hy hydist
+  have hyout : y ∉ Icc (0 : ℝ) (1 / 2) := by
+    intro hy'
+    dsimp [y] at hy'
+    linarith [hy'.2]
+  have hyout' : ¬(0 ≤ y ∧ y ≤ (1 / 2 : ℝ)) := hyout
+  unfold apm_a92J01_discontinuousCounterexample at hvalue
+  norm_num [Set.indicator, hyout'] at hvalue
+
 theorem apm_a92j01 :
     (∀ (p q : ℝ), 1 ≤ q → q < p → ∀ f : ℝ → ℝ,
       MemLp f (ENNReal.ofReal p) apm_a92J01_unitMeasure →
@@ -71,7 +110,7 @@ theorem apm_a92j01 :
         (ENNReal.ofReal p) apm_a92J01_unitMeasure ∧
       ¬ContinuousOn apm_a92J01_discontinuousCounterexample (Icc 0 1)) := by
   /-
-  CLOSER HOP 1: the first conjunct is now closed by the compiled helper
+  CLOSER HOPS 1--2: the first conjunct is now closed by the compiled helper
   `apm_a92J01_memLp_mono_on_unitMeasure`, using Mathlib's
   `MemLp.mono_exponent` and the existing finite-measure instance for
   `volume.restrict (Icc 0 1)`.
@@ -82,9 +121,12 @@ theorem apm_a92j01 :
   real-exponent `MemLp` goals to `Real.summable_nat_rpow` and
   `integrableOn_Ici_rpow_iff`.  Those coercion and measurability conversions
   remain the main bridge.  The compiled helper
-  `apm_a92J01_discontinuousCounterexample_memLp` also closes the membership
-  half of the last conjunct through `memLp_indicator_const`; only the
-  one-sided discontinuity argument at `1/2` remains there. No statement defect
-  was found.
+  `apm_a92J01_discontinuousCounterexample_memLp` closes the membership half
+  of the last conjunct through `memLp_indicator_const`. Hop 2 additionally
+  closes its one-sided discontinuity half in
+  `apm_a92J01_discontinuousCounterexample_not_continuousOn`, directly from
+  the metric epsilon-delta criterion at `1/2`. Thus the final conjunct is
+  fully compiled. No statement defect was found; only the two power-law
+  `MemLp` conversions remain.
   -/
   sorry

@@ -28,5 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "closer_note": "Compiled the one-sided discontinuity proof at 1/2, completing the indicator counterexample conjunct. The sequence and real-line power-law MemLp conversions remain open.",
   "imported_at": "2026-05-01T19:38:16.190845Z"
 }
