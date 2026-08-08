@@ -10,12 +10,12 @@
     "problem_tex": "apm/t91J03.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,15 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_hop": 3,
+  "boundary": "Embedding injectivity is compiled into the exact fiber-collision contradiction, and the main result is reduced to proving that winding absolute value two forces an equal-projection/equal-height pair. The remaining bridge is the universal-strip classification and Jordan separation/order argument for lifted embedded lines; no packaged Mathlib theorem supplies it.",
+  "stage": "attempted",
+  "checked_at": "2026-08-08",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/t91J03/lean/Main.lean",
+    "sorry_count": 1
+  },
   "imported_at": "2026-07-13T17:26:57.382133Z"
 }
