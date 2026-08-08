@@ -38,12 +38,12 @@
     "proved": [
       "apm_a98J02_sub_eq_integral_deriv",
       "apm_a98J02_deriv_eq_derivWithin_ae",
-      "apm_a98J02_integrableOn_deriv_sq"
+      "apm_a98J02_integrableOn_deriv_sq",
+      "apm_a98J02_tendsto_integral_deriv_sq_symmetric"
     ],
     "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
     "blockers": [
-      "Assemble localized real-valued integral Cauchy-Schwarz with the interval measure factor",
-      "Extract a uniform epsilon-delta small-set integral estimate from integrability"
+      "Assemble localized real-valued integral Cauchy-Schwarz, square it, and normalize by the interval measure factor"
     ]
   }
 }

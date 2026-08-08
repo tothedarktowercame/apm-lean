@@ -52,6 +52,23 @@ lemma apm_a98J02_integrableOn_deriv_sq (f : ℝ → ℝ)
   filter_upwards [apm_a98J02_deriv_eq_derivWithin_ae f] with t ht
   rw [ht]
 
+/-- The squared ordinary derivative has uniformly vanishing integral on
+shrinking symmetric intervals, with the ambient measure already restricted
+to the frozen domain.  This is the absolute-continuity-of-integral input for
+the final estimate. -/
+lemma apm_a98J02_tendsto_integral_deriv_sq_symmetric (f : ℝ → ℝ)
+    (hderiv : IntegrableOn
+      (fun x : ℝ => |derivWithin f (Set.Icc 0 1) x| ^ 2)
+      (Set.Icc 0 1)) (b : ℝ) :
+    Filter.Tendsto
+      (fun δ : ℝ => ∫ x in Set.Icc (b - δ) (b + δ),
+        |deriv f x| ^ 2 ∂volume.restrict (Set.Icc (0 : ℝ) 1))
+      (nhds 0) (nhds 0) := by
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hi : Integrable (fun x : ℝ => |deriv f x| ^ 2) μ := by
+    simpa [μ] using apm_a98J02_integrableOn_deriv_sq f hderiv
+  exact hi.tendsto_setIntegral_nhds_zero (tendsto_measure_Icc μ b)
+
 theorem apm_a98j02 (f : ℝ → ℝ)
     (hf : AbsolutelyContinuousOnInterval f 0 1)
     (hderiv : IntegrableOn
@@ -79,5 +96,17 @@ theorem apm_a98j02 (f : ℝ → ℝ)
   integral and normalizes the measure factor, nor a ready epsilon-delta
   uniform-small-set form of the latter sequential/filter theorem. Those two
   assembly steps remain open. The frozen statement is unchanged.
+
+  CLOSER HOP 3 (2026-08-08): the second assembly step is now compiled in
+  `apm_a98J02_tendsto_integral_deriv_sq_symmetric`.  Applying
+  `Integrable.tendsto_setIntegral_nhds_zero` to the restricted measure and
+  Mathlib's atomless `tendsto_measure_Icc` directly gives vanishing integrals
+  on shrinking symmetric intervals, avoiding a hand-built sequential or
+  epsilon--delta argument.  The remaining bridge is therefore the first
+  assembly step only: instantiate integral Cauchy--Schwarz on `[y,x]`, square
+  its nonnegative inequality, normalize by `x-y`, and bound that interval by
+  a symmetric interval controlled by the compiled limit.  No packaged lemma
+  was found that performs these coercions and normalizations.  The frozen
+  statement remains unchanged.
   -/
   sorry

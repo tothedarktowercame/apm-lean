@@ -36,6 +36,16 @@ uniform epsilon-delta extraction from
 and small-set filter limit provide the ingredients, but their real interval
 normalization still must be assembled locally.
 
+## Closer hop 3 (2026-08-08)
+
+`apm_a98J02_tendsto_integral_deriv_sq_symmetric` now closes the small-set
+integral bridge. It combines the transferred integrability with
+`Integrable.tendsto_setIntegral_nhds_zero` and `tendsto_measure_Icc` for the
+atomless restricted measure. The sole remaining bridge is the localized
+Cauchy--Schwarz calculation: square its real-valued bound, divide by the
+positive interval length, and compare `[y,x]` with a controlled symmetric
+interval.
+
 ## Imported Proof Plan
 
 ```clojure
