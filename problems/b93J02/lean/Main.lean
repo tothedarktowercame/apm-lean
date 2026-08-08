@@ -90,6 +90,82 @@ lemma apm_b93j02_zsqrtd_negFive_isNoetherianRing :
     apm_b93j02_zsqrtd_module_finite (-5)
   exact IsNoetherianRing.of_finite ℤ (Zsqrtd (-5))
 
+lemma apm_b93j02_norm_eq_two_impossible (z : Zsqrtd (-5)) : z.norm ≠ 2 := by
+  intro h
+  have hzmod := congrArg (fun n : ℤ => (n : ZMod 5)) h
+  norm_num [Zsqrtd.norm] at hzmod
+  have hfive : (5 : ZMod 5) = 0 := by decide
+  simp [hfive] at hzmod
+  have hno : ∀ x : ZMod 5, x * x ≠ 2 := by decide
+  exact hno z.re hzmod
+
+lemma apm_b93j02_two_irreducible : Irreducible (2 : Zsqrtd (-5)) := by
+  rw [irreducible_iff]
+  constructor
+  · rw [Zsqrtd.isUnit_iff_norm_isUnit]
+    norm_num [Zsqrtd.norm, Int.isUnit_iff]
+  · intro a b hab
+    have hn : a.norm * b.norm = 4 := by
+      rw [← Zsqrtd.norm_mul, ← hab]
+      norm_num [Zsqrtd.norm]
+    have ha0 : 0 ≤ a.norm := Zsqrtd.norm_nonneg (by norm_num) a
+    have hb0 : 0 ≤ b.norm := Zsqrtd.norm_nonneg (by norm_num) b
+    by_contra h
+    push_neg at h
+    have ha1 : a.norm ≠ 1 := by
+      intro ha
+      apply h.1
+      rw [Zsqrtd.isUnit_iff_norm_isUnit, ha]
+      exact isUnit_one
+    have hb1 : b.norm ≠ 1 := by
+      intro hb
+      apply h.2
+      rw [Zsqrtd.isUnit_iff_norm_isUnit, hb]
+      exact isUnit_one
+    have ha_pos : 0 < a.norm := by nlinarith
+    have hb_pos : 0 < b.norm := by nlinarith
+    have ha_le : a.norm ≤ 4 := by nlinarith
+    have hb_le : b.norm ≤ 4 := by nlinarith
+    have ha_cases : a.norm = 1 ∨ a.norm = 2 ∨ a.norm = 3 ∨ a.norm = 4 := by omega
+    rcases ha_cases with ha | ha | ha | ha
+    · exact ha1 ha
+    · exact apm_b93j02_norm_eq_two_impossible a ha
+    · rw [ha] at hn
+      omega
+    · rw [ha] at hn
+      have : b.norm = 1 := by omega
+      exact hb1 this
+
+lemma apm_b93j02_two_not_prime : ¬Prime (2 : Zsqrtd (-5)) := by
+  intro hp
+  have hprod : (2 : Zsqrtd (-5)) ∣
+      (1 + Zsqrtd.sqrtd) * (1 - Zsqrtd.sqrtd) := by
+    use 3
+    ext <;> norm_num [Zsqrtd.sqrtd, Zsqrtd.ext_iff]
+  rcases (hp.dvd_mul.mp hprod) with h | h
+  · rcases h with ⟨z, hz⟩
+    have hi := congrArg Zsqrtd.im hz
+    simp at hi
+    omega
+  · rcases h with ⟨z, hz⟩
+    have hi := congrArg Zsqrtd.im hz
+    simp at hi
+    omega
+
+lemma apm_b93j02_zsqrtd_negFive_not_ufd :
+    ¬UniqueFactorizationMonoid (Zsqrtd (-5)) := by
+  intro h
+  letI := h
+  exact apm_b93j02_two_not_prime
+    (UniqueFactorizationMonoid.irreducible_iff_prime.mp apm_b93j02_two_irreducible)
+
+lemma apm_b93j02_zsqrtd_negFive_not_pid :
+    ¬IsPrincipalIdealRing (Zsqrtd (-5)) := by
+  intro hpid
+  letI : IsDomain (Zsqrtd (-5)) := apm_b93j02_zsqrtd_negFive_isDomain
+  exact apm_b93j02_zsqrtd_negFive_not_ufd
+    (apm_b93j02_pid_implies_ufd (Zsqrtd (-5)) hpid)
+
 theorem apm_b93j02 :
     -- (a): I implies II, and II implies IV.
     (∀ (R : Type) [CommRing R] [IsDomain R],
@@ -132,5 +208,21 @@ theorem apm_b93j02 :
   argument for the ideal of all variables.  The latter two still require the
   norm-6 factorization proof (including irreducibility/nonassociateness of
   `2`, `3`, and `1 ± sqrtd`).  No unproved declaration was introduced.
+
+  CLOSER HOP 3 goes beyond that boundary by closing both negative
+  `Zsqrtd (-5)` assertions. The norm proves that `2` is irreducible: a
+  nontrivial factorization would force norm `2`, excluded modulo `5`. Yet
+  `2 ∣ (1 + sqrtd) * (1 - sqrtd)` and it divides neither factor, by imaginary
+  coordinate parity. Thus `2` is not prime, the ring is not a UFD, and
+  PID-to-UFD also proves it is not principal.
+
+  The sole remaining bridge is now non-Noetherianity of `MvPolynomial ℕ ℤ`.
+  `Ideal.fg_of_isNoetherianRing`, `MvPolynomial.vars`, and
+  `MvPolynomial.exists_finset_rename` reduce it to collecting the finitely
+  many variables in hypothetical generators and specializing a fresh variable
+  to one while all collected variables map to zero. No packaged theorem
+  performs that specialization argument.
   -/
   sorry
+
+#print axioms apm_b93j02
