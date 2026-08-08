@@ -27,6 +27,29 @@ lemma apm_m94a02_symmetricPart_eq_zero_of_transpose_eq_neg
     apm_m94a02_symmetricPart A = 0 := by
   simp [apm_m94a02_symmetricPart, hA]
 
+/-- The explicitly defined symmetric part is fixed by transpose. -/
+lemma apm_m94a02_symmetricPart_transpose {n : ℕ}
+    (A : Matrix (Fin n) (Fin n) ℝ) :
+    (apm_m94a02_symmetricPart A).transpose =
+      apm_m94a02_symmetricPart A := by
+  simp [apm_m94a02_symmetricPart, add_comm]
+
+/-- Over the reals, transpose symmetry is precisely Hermitian symmetry. -/
+lemma apm_m94a02_symmetricPart_isHermitian {n : ℕ}
+    (A : Matrix (Fin n) (Fin n) ℝ) :
+    (apm_m94a02_symmetricPart A).IsHermitian := by
+  rw [Matrix.IsHermitian, Matrix.conjTranspose_eq_transpose_of_trivial,
+    apm_m94a02_symmetricPart_transpose]
+
+/-- Scalar extension of the symmetric part to `ℂ` remains Hermitian, which is
+the exact input expected by Mathlib's canonical spectrum API. -/
+lemma apm_m94a02_symmetricPart_map_isHermitian {n : ℕ}
+    (A : Matrix (Fin n) (Fin n) ℝ) :
+    ((apm_m94a02_symmetricPart A).map (algebraMap ℝ ℂ)).IsHermitian := by
+  apply (apm_m94a02_symmetricPart_isHermitian A).map
+  intro x
+  simp
+
 def apm_m94a02_IsEigenvalue {n : ℕ}
     (A : Matrix (Fin n) (Fin n) ℝ) (lam : ℂ) : Prop :=
   ∃ v : Fin n → ℂ, v ≠ 0 ∧
@@ -80,5 +103,23 @@ theorem apm_m94a02
   artifacts, and git history found no already-compiled normalization bridge.
   The remaining second step is still the dot-product/Rayleigh identity for the
   explicitly encoded `mulVec` eigenvector. The frozen statement was unchanged.
+
+  CLOSER HOP 2 (partial). The Hermitian prerequisite is now fully compiled.
+  `apm_m94a02_symmetricPart_transpose` proves the explicit average is fixed by
+  transpose; `apm_m94a02_symmetricPart_isHermitian` transports this through
+  the trivial real star operation; and
+  `apm_m94a02_symmetricPart_map_isHermitian` proves that its scalar extension
+  along `algebraMap ℝ ℂ` is Hermitian. The last lemma uses
+  `Matrix.IsHermitian.map` and is exactly the input required by the canonical
+  spectrum API identified in hop 1.
+
+  A further inspection of `Analysis/Matrix/Hermitian.lean`,
+  `Analysis/Matrix/Spectrum.lean`, `LinearAlgebra/Matrix/PosDef.lean`, and the
+  dot-product/mulVec lemmas confirms that the quadratic-form representation is
+  available once the explicit eigenvector equation is tested against
+  `star v`. No theorem directly normalizes the frozen real-factor product to
+  the complex root multiset or identifies an arbitrary antitone enumeration
+  with `IsHermitian.eigenvalues`. Those polynomial-multiplicity and Rayleigh
+  assembly steps remain open. The frozen statement is unchanged.
   -/
   sorry
