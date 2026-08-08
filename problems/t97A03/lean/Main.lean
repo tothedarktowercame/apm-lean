@@ -46,6 +46,22 @@ noncomputable instance (A B : Circle) :
   TopologicalSpace.coinduced (fun x : Sum Circle apm_t97A03_S2 ↦
     Quotient.mk _ x) inferInstance
 
+/-- The first marked circle point is attached to the north pole in the base. -/
+lemma apm_t97A03_base_north_eq (A B : Circle) :
+    (Quotient.mk _ (.inl A) : apm_t97A03_BaseSpace A B) =
+      Quotient.mk _ (.inr apm_t97A03_north) := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _
+      (apm_t97A03_BaseRel.north (A := A) (B := B)))
+
+/-- The second marked circle point is attached to the south pole in the base. -/
+lemma apm_t97A03_base_south_eq (A B : Circle) :
+    (Quotient.mk _ (.inl B) : apm_t97A03_BaseSpace A B) =
+      Quotient.mk _ (.inr apm_t97A03_south) := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _
+      (apm_t97A03_BaseRel.south (A := A) (B := B)))
+
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
   exact mem_sphere_zero_iff_norm.mpr (by norm_num)⟩
@@ -162,5 +178,11 @@ theorem apm_t97a03
   record the unavailable subgroup-cover and wedge fundamental-group bridges.
   Thus none of the six frozen conjuncts can yet be obtained merely by
   transporting through an existing classification theorem.
+
+  Closer hop 2 exposes the base adjunction's two generating equalities as
+  `apm_t97A03_base_north_eq` and `apm_t97A03_base_south_eq`. These are the
+  exact point-set attachments needed by a future van Kampen or cellular model,
+  but they do not supply either comparison theorem or the covering/subgroup
+  classification, so the six-conjunct bridge remains open.
   -/
   sorry

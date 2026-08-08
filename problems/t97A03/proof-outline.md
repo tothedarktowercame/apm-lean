@@ -9,6 +9,8 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - `apm_t97A03_surjective_of_fiber_card_two` proves the cover map is onto from
   the frozen assertion that every fiber has cardinality two.
+- The north and south attachment equalities in the concrete base quotient are
+  now compiled directly from the generating relation.
 
 ## Remaining bridges
 
