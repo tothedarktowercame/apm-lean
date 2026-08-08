@@ -60,6 +60,16 @@ integrability; no packaged transport theorem was found.
 
 ## Lean State
 
-- **Sorry count:** 1
-- **Classification:** partial
+- **Sorry count:** 0
+- **Classification:** complete
 - **Validation:** `lake env lean problems/a94J06/lean/Main.lean` — succeeds
+
+## Closer Hop 2
+
+The historical partial-fraction development was ported, completing the inside
+and outside evaluations. The boundary bridge is handled without a local
+asymptotic estimate: after circle parametrization, the conjugate numerator
+has norm one. Consequently, integrability of the original integrand would
+imply integrability of the norm of the bare kernel `(ζ-z)⁻¹`. Its measurable
+complex-valued representative would then be circle-integrable, contradicting
+`circleIntegrable_sub_inv_iff` because `z` lies on the unit circle.
