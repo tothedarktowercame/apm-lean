@@ -118,6 +118,18 @@ lemma apm_t02a05_volume_unit_ball :
   have := congrArg ENNReal.toReal hvol'
   simpa [ENNReal.toReal_ofReal, hpos] using this
 
+/-- Why this unblocks `apm_t02a05`: this is the exact geometric flux formula
+left after the radial and tangency facts. Its proof consists of expanding the
+orthogonal projections, identifying the sphere-subtype Hausdorff measure, and
+evaluating the constant and quadratic coordinate moments. -/
+theorem apm_t02A05_bridge_1
+    (omega : apm_t02a05_Form2) (homega : apm_t02a05_isOmega omega)
+    (c : apm_t02a05_E3) :
+    apm_t02a05_outwardSphereIntegral omega c =
+      44 * Real.pi / 15 +
+        4 * Real.pi * ((c 0 - 1) ^ 2 + (c 1 - 2) ^ 2) := by
+  sorry
+
 theorem apm_t02a05
     (omega : apm_t02a05_Form2) (homega : apm_t02a05_isOmega omega) :
     (∀ c : apm_t02a05_E3,
