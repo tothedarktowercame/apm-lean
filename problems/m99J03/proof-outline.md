@@ -25,7 +25,11 @@ documented boundary covering parts (a) and (b); part (c) is fully compiled.
 
 ## Remaining boundary
 
-- Part (a): apply `Measure.integral_comp_mul_left` to the compiled scaling
-  identity and reuse the dilation theorem; unit mass is now closed.
-- Part (b): perform the two half-interval calculations and use a uniform
-  first-order Taylor remainder to identify the limit as `-deriv φ 0`.
+- Prove `apm_m99J03_bridge_triangle_weak_limit`, the final fixed-profile
+  change-of-variables assembly for part (a).
+- Prove `apm_m99J03_bridge_dipole_integral_eq`, which changes variables on
+  both half intervals and exposes exact cancellation as a symmetric first
+  difference on `[0,1]`.
+- Prove `apm_m99J03_bridge_dipole_scaled_difference_tendsto`, the uniform
+  first-order Taylor-remainder limit. The latter two contracts compose
+  directly to give part (b).

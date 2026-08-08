@@ -206,6 +206,38 @@ lemma apm_m99j03_dilation_tendsto
     (fun n => Filter.Eventually.of_forall (hdom n)) hlim
   simpa [MeasureTheory.integral_const_mul] using hi
 
+/-- Why this unblocks `apm_m99j03`: this is the final change-of-variables
+assembly for the normalized triangular approximate identity.  The profile
+scaling and its unit mass are already proved above. -/
+theorem apm_m99J03_bridge_triangle_weak_limit
+    (φ : ℝ → ℝ) (hφ : apm_m99j03_IsTestFunction φ) :
+    Filter.Tendsto
+      (fun n : ℕ => ∫ x : ℝ, apm_m99j03_triangle n x * φ x)
+      Filter.atTop (nhds (φ 0)) := by
+  sorry
+
+/-- Why this unblocks `apm_m99j03`: this is the exact scaling and cancellation
+identity for the dipole.  It reduces the raw piecewise whole-line integral to
+the symmetric first difference on the fixed interval `[0,1]`. -/
+theorem apm_m99J03_bridge_dipole_integral_eq
+    (φ : ℝ → ℝ) (hφ : apm_m99j03_IsTestFunction φ)
+    (n : ℕ) (hn : 0 < n) :
+    (∫ x : ℝ, apm_m99j03_dipole n x * φ x) =
+      (n : ℝ) * ∫ t in (0 : ℝ)..1,
+        (φ (-(t / (n : ℝ))) - φ (t / (n : ℝ))) := by
+  sorry
+
+/-- Why this unblocks `apm_m99j03`: this is the uniform first-order Taylor
+remainder limit after dipole scaling.  Combined with the preceding exact
+identity, it gives the second frozen convergence clause. -/
+theorem apm_m99J03_bridge_dipole_scaled_difference_tendsto
+    (φ : ℝ → ℝ) (hφ : apm_m99j03_IsTestFunction φ) :
+    Filter.Tendsto
+      (fun n : ℕ => (n : ℝ) * ∫ t in (0 : ℝ)..1,
+        (φ (-(t / (n : ℝ))) - φ (t / (n : ℝ))))
+      Filter.atTop (nhds (-deriv φ 0)) := by
+  sorry
+
 theorem apm_m99j03
     (ψ : ℝ → ℝ) (hψ : ContDiff ℝ (⊤ : ℕ∞) ψ) :
     (∀ φ : ℝ → ℝ, apm_m99j03_IsTestFunction φ →
