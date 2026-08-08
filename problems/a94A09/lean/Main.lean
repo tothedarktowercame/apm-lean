@@ -130,6 +130,27 @@ theorem apm_a94a09
   uniqueness at the endpoint.  Closure should generalize the argument
   principle to this disk-analytic boundary-continuous setting, or develop the
   shrink-radius/limit argument and then use Schwarz equality for uniqueness.
+
+  CLOSER HOP 3: a route around the boundary-analyticity mismatch was checked
+  in detail. For each `0 ≤ t < 1`, choose `r` with `t < r < 1`. The frozen
+  `DifferentiableOn` hypothesis does give `AnalyticOnNhd` on
+  `closedBall 0 r`, and on `sphere 0 r` one has
+  `‖t • f z‖ ≤ t < r = ‖z‖`; hence
+  `ConstructionTargets.Rouche.zeroCountInClosedBall_add_eq` applies to
+  `z - t * f z`. Taking `t → 1` and compactness of the closed disk would then
+  produce an endpoint fixed point. This avoids generalizing the argument
+  principle to boundary-continuous functions.
+
+  The existing Rouché module nevertheless stops at equality of integer-valued
+  divisor sums: it has no exported computation of the identity map's disk
+  zero count and no lemma extracting an actual zero from a nonzero count.
+  Source inspection of `CanonicalDecomposition` found the factorization
+  ingredients but no such bridge. A separate search for disk automorphisms
+  found only upper-half-plane Möbius actions; uniqueness would still require
+  locally proving that `(z-a)/(1-conj(a)z)` preserves the disk and conjugating
+  the two-fixed-point map before applying Schwarz equality. Thus the
+  shrink-radius strategy is now precise, but these divisor-existence and
+  Möbius-packaging prerequisites remain open; the statement is unchanged.
   -/
   sorry
 

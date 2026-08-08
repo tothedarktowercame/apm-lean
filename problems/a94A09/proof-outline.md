@@ -35,3 +35,20 @@ equality case for maps between balls, but do not package the disk-automorphism
 conjugation needed to move an arbitrary fixed point to zero. More importantly,
 they do not establish existence at the non-strict endpoint; zero-count
 invariance or a Hurwitz/compactness argument is still required first.
+
+## Closer hop 3
+
+The boundary analyticity mismatch can be routed around without changing the
+statement. For `0 ≤ t < 1`, choose `t < r < 1`. Then `f` is analytic on a
+neighborhood of `closedBall 0 r`, and `‖t * f z‖ < ‖z‖` on `sphere 0 r`, so
+strict Rouché applies to `z - t * f z`. A sequence `t → 1`, followed by
+compactness and continuity, would yield a fixed point at the endpoint.
+
+Two concrete library interfaces are still absent:
+
+- the Rouché module proves equality of divisor sums but does not export the
+  identity-map count or extraction of a zero from a nonzero count;
+- uniqueness needs the disk automorphism `(z-a)/(1-conj(a)z)` and its inverse,
+  while Mathlib only packages Möbius actions for the upper half-plane.
+
+These are now the exact remaining local developments.

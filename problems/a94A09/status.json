@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "closer_hop": 2,
-  "closer_note": "Compiled the maximum-modulus reduction showing that f maps the closed unit disk to itself. Endpoint fixed-point existence still needs zero-count invariance or Hurwitz/compactness; Schwarz uniqueness also needs disk-automorphism conjugation.",
+  "closer_hop": 3,
+  "closer_note": "The shrink-radius route is now isolated: strict Rouche applies to z - t f on a smaller disk for every t < 1, then compactness can pass to t = 1. The remaining interfaces are identity zero-count/existence extraction from the divisor sum and a disk-Mobius conjugation for Schwarz uniqueness.",
   "imported_at": "2026-07-13T17:26:52.206839Z"
 }
