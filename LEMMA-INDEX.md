@@ -1,6 +1,6 @@
 # Helper-lemma index (generated — do not hand-edit)
 
-1665 lemmas already proved in this repo, outside the problems'
+1722 lemmas already proved in this repo, outside the problems'
 own statements. GREP THIS BEFORE RE-DERIVING ANYTHING.
 
 `LIB:` rows are importable today (182 lemmas across 17 modules,
@@ -90,13 +90,40 @@ still open can still contribute helpers here.
 | `apm_a01A01_position_lt_stage` | a01A01 | `(k : ℕ) : apm_a01A01_position k < apm_a01A01_stage k` |
 | `apm_a01A01_stage_tendsto_atTop` | a01A01 | `: Tendsto apm_a01A01_stage atTop atTop` |
 | `apm_a01A01_typewriter1d_nonneg` | a01A01 | `(k : ℕ) (x : ℝ) : 0 ≤ apm_a01A01_typewriter1d k x` |
+| `apm_a01A05_geometric_decay_tendsto_zero` | a01A05 | `: Tendsto (fun m : ℕ => (2 : ℝ) ^ (-(m : ℝ))) atTop (nhds 0)` |
+| `apm_a01A05_inner_tendsto_zero` | a01A05 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H] (seq : apm_a01A05_NearOrthogonalSeq H) (g : H) : Tendsto (fun m => inner ℝ g (seq.f m)) atTop (nhds 0)` |
+| `apm_a01A05_inner_tendsto_zero_of_mem_closure_span` | a01A05 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] (seq : apm_a01A05_NearOrthogonalSeq H) {v : H} (hv : v ∈ (Submodule.span ℝ (Set.range seq.f)).topologicalClosure) : Tendsto (fun m => inner ℝ v (seq.f m)) atTop (nhds 0)` |
+| `apm_a01A05_inner_tendsto_zero_of_mem_span` | a01A05 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] (seq : apm_a01A05_NearOrthogonalSeq H) {v : H} (hv : v ∈ Submodule.span ℝ (Set.range seq.f)) : Tendsto (fun m => inner ℝ v (seq.f m)) atTop (nhds 0)` |
+| `apm_a01A12_identity_parameters_positive` | a01A12 | `: (0 : ℝ) < 1 * 1 - 0 * 0` |
+| `apm_a01A12_mobius_one_zero_zero_one` | a01A12 | `(z : ℂ) : apm_a01A12_mobius 1 0 0 1 z = z` |
+| `apm_a01A12_one_sub_sq_ne_zero` | a01A12 | `{z : ℂ} (hz : z ∈ apm_a01A12_H) : 1 - z ^ 2 ≠ 0` |
+| `apm_a01A12_sq_mem_slitPlane` | a01A12 | `{w : ℂ} (hw : 0 < w.re) : 0 < (w ^ 2).re ∨ (w ^ 2).im ≠ 0` |
+| `apm_a01J04_entire_coeff_superexp` | a01J04 | `(g : ℂ → ℂ) (hg : Differentiable ℂ g) (T : ℝ) (hT : 0 < T) : Tendsto (fun n : ℕ => T ^ n * ‖iteratedDeriv n g 2 / (n.factorial : ℂ)‖) atTop (nhds 0)` |
+| `apm_a01J04_error_eq_entire` | a01J04 | `(f g : ℂ → ℂ) (lam : ℂ) (hg : Differentiable ℂ g) (hf : ∀ z : ℂ, f z = lam / (z - 1) + g z) (n : ℕ) : (-1 : ℂ) ^ n * iteratedDeriv n f 2 / (Nat.factorial n : ℂ) - lam = (-1 : ℂ) ^ n * (iteratedDeriv n g 2 / (Nat.factorial n : ℂ))` |
+| `apm_a01J04_geom_iteratedDeriv` | a01J04 | `(n : ℕ) : iteratedDeriv n (fun z : ℂ => (1 - z)⁻¹) 0 = (n.factorial : ℂ)` |
+| `apm_a01J04_pole_iteratedDeriv` | a01J04 | `(lam : ℂ) (n : ℕ) : iteratedDeriv n (fun z : ℂ => lam / (z - 1)) 2 = lam * ((-1 : ℂ) ^ n * (n.factorial : ℂ))` |
+| `apm_a01J05_analyticAt_of_closedBall` | a01J05 | `{f : ℂ → ℂ} {ε : ℝ} (hε : 0 < ε) (hf : DifferentiableOn ℂ f (closedBall 0 (1 + ε))) {z : ℂ} (hz : z ∈ apm_a01J05_disk) : AnalyticAt ℂ f z` |
+| `apm_a01J05_deriv_analyticAt_of_closedBall` | a01J05 | `{f : ℂ → ℂ} {ε : ℝ} (hε : 0 < ε) (hf : DifferentiableOn ℂ f (closedBall 0 (1 + ε))) {z : ℂ} (hz : z ∈ apm_a01J05_disk) : AnalyticAt ℂ (deriv f) z` |
+| `apm_a01J05_order_deriv_add_one` | a01J05 | `{f : ℂ → ℂ} {ε : ℝ} (hε : 0 < ε) (hf : DifferentiableOn ℂ f (closedBall 0 (1 + ε))) {z : ℂ} (hz : z ∈ apm_a01J05_disk) : analyticOrderAt (deriv f) z + 1 = analyticOrderAt (fun w => f w - f z) z` |
+| `apm_a01J06_apply_eq_zero_of_enumeratesZeros` | a01J06 | `{f : ℂ → ℂ} {ω : ℕ → ℂ} (hω : apm_a01J06_EnumeratesZeros f ω) (n : ℕ) : f (ω n) = 0` |
+| `apm_a02J04_measurable_g` | a02J04 | `: Measurable apm_a02J04_g` |
+| `apm_a02J04_measurable_tauDensity` | a02J04 | `: Measurable fun x : ℝ ↦ ENNReal.ofReal (apm_a02J04_tauDensity x)` |
+| `apm_a02J04_tauDensity_ne_zero` | a02J04 | `{x : ℝ} (hx : x ∈ Icc (0 : ℝ) 1) (hx0 : x ≠ 0) : ENNReal.ofReal (apm_a02J04_tauDensity x) ≠ 0` |
 | `apm_a03J05_integrable` | a03J05 | `(t : ℝ) : Integrable (apm_a03J05_integrand t) volume` |
 | `apm_a03J05_integral_neg` | a03J05 | `(t : ℝ) : (∫ x in Ioi (0 : ℝ), apm_a03J05_integrand (-t) x ∂volume) = ∫ x in Ioi (0 : ℝ), apm_a03J05_integrand t x ∂volume` |
 | `apm_a03J05_integral_zero` | a03J05 | `: ∫ x in Ioi (0 : ℝ), apm_a03J05_integrand 0 x ∂volume = Real.pi / 2` |
 | `apm_a03J05_integrand_neg` | a03J05 | `(t x : ℝ) : apm_a03J05_integrand (-t) x = apm_a03J05_integrand t x` |
+| `apm_a03J06_growth_cauchy_bound` | a03J06 | `(f : ℂ → ℂ) (hf : Differentiable ℂ f) (A : ℝ) (m k : ℕ) (hbound : ∀ z : ℂ, 1 < ‖z‖ → ‖f z‖ ≤ A * ‖z‖ ^ m) {R : ℝ} (hR : 1 < R) : ‖iteratedDeriv k f 0‖ ≤ k.factorial * (A * R ^ m) / R ^ k` |
+| `apm_a92J01_discontinuousCounterexample_memLp` | a92J01 | `(p : ℝ) : MemLp apm_a92J01_discontinuousCounterexample (ENNReal.ofReal p) apm_a92J01_unitMeasure` |
+| `apm_a92J01_memLp_mono_on_unitMeasure` | a92J01 | `(p q : ℝ) (hpq : q < p) (f : ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) apm_a92J01_unitMeasure) : MemLp f (ENNReal.ofReal q) apm_a92J01_unitMeasure` |
+| `apm_a93A02_tendsto_Lp_of_ae_tendsto_of_L2_bounded` | a93A02 | `{f : ℕ → ℝ → ℝ} {g : ℝ → ℝ} {μ : Measure ℝ} (hfm : ∀ n, AEStronglyMeasurable (f n) μ) (hgm : AEStronglyMeasurable g μ) (hf2 : ∀ n, MemLp (f n) 2 μ) (hbdd : ∃ C : NNReal, ∀ n, eLpNorm (f n) 2 μ ≤ C) (hae : ∀ᵐ x ∂μ, Tendsto (fun n => f n x) atTop (𝓝 (g x))) {p : ℝ≥0∞} (hp1 : 1 ≤ p) (hp2 : p < 2) [IsFiniteMeasure μ] : Tendsto (fun n => eLpNorm (fun x => f n x - g x) p μ) atTop (𝓝 0)` |
+| `apm_a93A02_unifIntegrable_of_L2_bounded` | a93A02 | `{f : ℕ → ℝ → ℝ} {μ : Measure ℝ} (hfm : ∀ n, AEStronglyMeasurable (f n) μ) (hf2 : ∀ n, MemLp (f n) 2 μ) (hbdd : ∃ C : NNReal, ∀ n, eLpNorm (f n) 2 μ ≤ C) {p : ℝ≥0∞} (hp1 : 1 ≤ p) (hp2 : p < 2) : UnifIntegrable f p μ` |
+| `apm_a93J07_eventually_nonvanishing_on_sphere` | a93J07 | `{Ω : Set ℂ} (hΩ : IsOpen Ω) {F : ℕ → ℂ → ℂ} {f : ℂ → ℂ} (hFhol : ∀ n, DifferentiableOn ℂ (F n) Ω) (hconv : TendstoLocallyUniformlyOn F f atTop Ω) {z₀ : ℂ} (hz₀ : z₀ ∈ Ω) {r : ℝ} (hr : 0 < r) (hclosed : Metric.closedBall z₀ r ⊆ Ω) (hboundary : ∀ z ∈ Metric.sphere z₀ r, f z ≠ 0) : ∀ᶠ n in atTop, ∀ z ∈ Metric.sphere z₀ r, F n z ≠ 0` |
+| `apm_a93J07_limit_differentiable` | a93J07 | `{Ω : Set ℂ} (hΩ : IsOpen Ω) {F : ℕ → ℂ → ℂ} {f : ℂ → ℂ} (hFhol : ∀ n, DifferentiableOn ℂ (F n) Ω) (hconv : TendstoLocallyUniformlyOn F f atTop Ω) : DifferentiableOn ℂ f Ω` |
 | `apm_a94a02_ae_all_differentiable` | a94A02 | `(f : ℕ → ℝ → ℝ) (hf_ac : ∀ n, AbsolutelyContinuousOnInterval (f n) 0 1) : ∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)), ∀ n, DifferentiableAt ℝ (f n) x` |
 | `apm_a94a09_homotopy_ne_zero` | a94A09 | `{f : ℂ → ℂ} (hf_boundary : ∀ z ∈ sphere (0 : ℂ) 1, ‖f z‖ ≤ 1) (hf_no_boundary_fixed_point : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ z) {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) : ∀ z ∈ sphere (0 : ℂ) 1, z - (t : ℂ) * f z ≠ 0` |
 | `apm_a94a09_mapsTo_closedBall` | a94A09 | `{f : ℂ → ℂ} (hf_continuous : ContinuousOn f (closedBall 0 1)) (hf_analytic : DifferentiableOn ℂ f (ball 0 1)) (hf_boundary : ∀ z ∈ sphere (0 : ℂ) 1, ‖f z‖ ≤ 1) : MapsTo f (closedBall (0 : ℂ) 1) (closedBall (0 : ℂ) 1)` |
+| `apm_a94J02_exists_fat_compact` | a94J02 | `: ∃ C : Set ℝ, IsClosed C ∧ C ⊆ Icc 0 1 ∧ interior C = ∅ ∧ 0 < volume C` |
 | `apm_a96J09_coeff_tendsto_zero_of_contains_closed_disk` | a96J09 | `(D : Set ℂ) (hD_open : IsOpen D) (f : ℂ → ℂ) (hf : AnalyticOn ℂ f D) (hclosed : Metric.closedBall (0 : ℂ) 1 ⊆ D) : Tendsto (fun n : ℕ => ‖iteratedDeriv n f 0‖ / n.factorial) atTop (𝓝 0)` |
 | `apm_a96J09_main` | a96J09 | `(D : Set ℂ) (hD_open : IsOpen D) (_hD_zero : (0 : ℂ) ∈ D) (f : ℂ → ℂ) (hf : AnalyticOn ℂ f D) (hlimsup : 0 < limsup (fun n : ℕ => ‖iteratedDeriv n f 0‖ / n.factorial) atTop) : ¬ Metric.closedBall (0 : ℂ) 1 ⊆ D` |
 | `apm_a96J10_even_factors` | a96J10 | `(h : ℂ → ℂ) (hh : AnalyticOn ℂ h (Metric.ball (0:ℂ) 1)) (heven : ∀ z, ‖z‖ < 1 → h (-z) = h z) : ∃ g : ℂ → ℂ, AnalyticOn ℂ g (Metric.ball (0:ℂ) 1) ∧ ∀ z, ‖z‖ < 1 → g (z ^ 2) = h z` |
@@ -794,6 +821,18 @@ still open can still contribute helpers here.
 | `apm_t03J02_gluedDesc_respects` | t03J02 | `{Y : Type*} [TopologicalSpace Y] (j₁ j₂ : C(Circle, apm_t03J02_Torus)) (f g : C(apm_t03J02_Torus, Y)) (hfg : ∀ z, f (j₁ z) = g (j₂ z)) {x y} (hxy : Relation.EqvGen (apm_t03J02_glueRel j₁ j₂) x y) : Sum.elim f g x = Sum.elim f g y` |
 | `apm_t03J02_gluedDesc_unique` | t03J02 | `{Y : Type*} [TopologicalSpace Y] (j₁ j₂ : C(Circle, apm_t03J02_Torus)) (f g : C(apm_t03J02_Torus, Y)) (hfg : ∀ z, f (j₁ z) = g (j₂ z)) (u : C(apm_t03J02_space j₁ j₂, Y)) (hul : ∀ x, u (apm_t03J02_quotientMap j₁ j₂ (.inl x)) = f x) (hur : ∀ x, u (apm_t03J02_quotientMap j₁ j₂ (.inr x)) = g x) : u = apm_t03J02_gluedDesc j₁ j₂ f g hfg` |
 | `apm_t03J02_surjective_quotientMap` | t03J02 | `(j₁ j₂ : C(Circle, apm_t03J02_Torus)) : Function.Surjective (apm_t03J02_quotientMap j₁ j₂)` |
+| `apm_t03J03_character_card` | t03J03 | `: Nat.card apm_t03J03_character = 7` |
+| `apm_t03J03_euler_N3` | t03J03 | `: eulerCharacteristic false 3 = -1` |
+| `apm_t03J03_euler_N4` | t03J03 | `: eulerCharacteristic false 4 = -2` |
+| `apm_t03J03_euler_Sigma2` | t03J03 | `: eulerCharacteristic true 2 = -2` |
+| `apm_t03J03_orientationCharacter_ne_zero` | t03J03 | `: apm_t03J03_orientationCharacter ≠ 0` |
+| `apm_t03J04_constantVectorField_ne_zero` | t03J04 | `(n : ℕ) [NeZero n] (q : apm_t03J04_Torus n) : apm_t03J04_constantVectorField n q ≠ 0` |
+| `apm_t03J05_eulerCharacteristic_genusTwo` | t03J05 | `: eulerCharacteristic true 2 = -2` |
+| `apm_t03J05_productTorusMap_isEmbedding` | t03J05 | `{F : Type} [TopologicalSpace F] (a b : C(Circle, F)) (ha : Topology.IsEmbedding a) (hb : Topology.IsEmbedding b) : Topology.IsEmbedding (apm_t03J05_productTorusMap a b)` |
+| `apm_t03J05_unpunctureCurve_isEmbedding` | t03J05 | `{F : Type} [TopologicalSpace F] (x : F) (a : C(Circle, apm_t03J05_punctured F x)) (ha : Topology.IsEmbedding a) : Topology.IsEmbedding (apm_t03J05_unpunctureCurve x a)` |
+| `apm_t03J06_cylinder_integrand` | t03J06 | `(omega : apm_t03J06_Form2) (homega : apm_t03J06_isOmega omega) (theta z : ℝ) : omega (apm_t03J06_cylinderPoint theta z) (apm_t03J06_cylinderTangents theta) = -(z ^ 2 * Real.exp (Real.cos theta * z) * Real.log (Real.cos theta ^ 2 + 1) - Real.sin theta) * Real.sin theta + (Real.cos theta + Real.sin theta ^ 2 * z ^ 3 * Real.cos (Real.sin theta ^ 2 + z ^ 2)) * Real.cos theta` |
+| `apm_t03J06_hemisphere_integrand` | t03J06 | `(omega : apm_t03J06_Form2) (homega : apm_t03J06_isOmega omega) (p : ℝ × ℝ) : let s` |
+| `apm_t03J06_isOmega_unique` | t03J06 | `(omega eta : apm_t03J06_Form2) (homega : apm_t03J06_isOmega omega) (heta : apm_t03J06_isOmega eta) : omega = eta` |
 | `apm_t91a05_fundamentalGroupMap_injective_of_retraction` | t91A05 | `{A X : Type} [TopologicalSpace A] [TopologicalSpace X] (i : C(A, X)) (a : A) (r : C(X, A)) (hr : ∀ x, r (i x) = x) : Function.Injective (FundamentalGroup.map i a)` |
 | `apm_t91a05_no_retraction_of_subsingleton_fundamentalGroup` | t91A05 | `{A X : Type} [TopologicalSpace A] [TopologicalSpace X] (i : C(A, X)) (a : A) [Subsingleton (FundamentalGroup X (i a))] [Nontrivial (FundamentalGroup A a)] : ¬∃ r : C(X, A), ∀ x, r (i x) = x` |
 | `apm_t91J01_cantorSet_measure_zero` | t91J01 | `: volume cantorSet = 0` |
@@ -1602,8 +1641,26 @@ still open can still contribute helpers here.
 | `t95J05InclusionPullback_expand` | t95J05 | `(x : t95J05SphereThree) : t95J05InclusionPullback x = x.1 1 ^ 3 * x.1 0 - 4 * x.1 0 ^ 2` |
 | `t95J05Integral_eq_neg_pi_sq_of_sphereIntegral` | t95J05 | `(η : T95J05ProjectiveThreeForm) (hη : t95J05ProjectionPullback η = t95J05InclusionPullback) (hsphere : (∫ x, t95J05InclusionPullback x ∂Measure.hausdorffMeasure 3) = -2 * Real.pi ^ 2) : t95J05Integral η = -Real.pi ^ 2` |
 | `t95J05Integral_eq_sphereIntegral` | t95J05 | `(η : T95J05ProjectiveThreeForm) (hη : t95J05ProjectionPullback η = t95J05InclusionPullback) : t95J05Integral η = (1 / 2 : ℝ) * ∫ x, t95J05InclusionPullback x ∂Measure.hausdorffMeasure 3` |
+| `t97J06_circle_identity_homotopic_of_map_homotopic_const` | t97J06 | `(q : T97J06Torus) (h : ContinuousMap.Homotopic t97J06Map (ContinuousMap.const T97J06Torus q)) : ContinuousMap.Homotopic (ContinuousMap.id Circle) (ContinuousMap.const Circle q.2)` |
+| `t97J06_determinant_integral_zero` | t97J06 | `: (∫ x in (0 : ℝ)..1, ∫ y in (0 : ℝ)..1, Matrix.det !![2 * Real.pi * Real.cos (2 * Real.pi * x + 4 * Real.pi * y), 4 * Real.pi * Real.cos (2 * Real.pi * x + 4 * Real.pi * y); (1 : ℝ), 1]) = 0` |
+| `t97J06Map_on_cover` | t97J06 | `(x y : ℝ) : t97J06Map (Circle.exp (2 * Real.pi * x), Circle.exp (2 * Real.pi * y)) = (Circle.exp (2 * Real.pi * Real.sin (2 * Real.pi * x + 4 * Real.pi * y)), Circle.exp (2 * Real.pi * (x + y)))` |
+| `t97J07LineContribution_eq` | t97J07 | `: t97J07LineContribution = 2` |
+| `t97J07LineIndex_eq` | t97J07 | `: t97J07IndexFromDet t97J07LineNormalDet = 1` |
+| `t97J07LineLocal_fderiv` | t97J07 | `: fderiv ℂ t97J07LineLocal 0 1 = 3` |
+| `t97J07LineNormalDet_eq` | t97J07 | `: t97J07LineNormalDet = 4` |
 | `t97J08_norm_normalizedLoop` | t97J08 | `{f : ℝ → ℂ} (hf : ∀ t, f t ≠ 0) (t : ℝ) : ‖t97J08NormalizedLoop f t‖ = 1` |
 | `t97J08_normalizedLoop_periodic` | t97J08 | `{f : ℝ → ℂ} (hf : ∀ t, f (t + 2 * Real.pi) = f t) (t : ℝ) : t97J08NormalizedLoop f (t + 2 * Real.pi) = t97J08NormalizedLoop f t` |
+| `t98A01_orientable_genus_arithmetic` | t98A01 | `(g h : ℕ) (hgh : g = h) (hχ : eulerCharacteristic true g = 5 * eulerCharacteristic true h) : g = 1 ∧ h = 1` |
+| `t98A01PrintedSurface_eulerCharacteristic` | t98A01 | `: eulerCharacteristic t98A01PrintedSurfaceData.1 t98A01PrintedSurfaceData.2 = -9` |
+| `t98A01PrintedSurface_homeomorph` | t98A01 | `: Nonempty (T98A01PrintedSurface ≃ₜ Surface false 11)` |
+| `t98A01PrintedSurfaceData_eq` | t98A01 | `: t98A01PrintedSurfaceData = (false, 11)` |
+| `t98A02_boundary_identified` | t98A02 | `{X₁ X₂ : Type} (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) (s : T98A02Sphere) (h₁ : φ₁ (t98A02SphereInDisk s) ∉ φ₁ '' {u : T98A02Disk \| ‖(u : T98A02E4)‖ < 1}) (h₂ : φ₂ (t98A02SphereInDisk s) ∉ φ₂ '' {u : T98A02Disk \| ‖(u : T98A02E4)‖ < 1}) : t98A02_leftInclusion φ₁ φ₂ ⟨φ₁ (t98A02SphereInDisk s), h₁⟩ = t98A02_rightInclusion φ₁ φ₂ ⟨φ₂ (t98A02SphereInDisk s), h₂⟩` |
+| `t98A02_continuous_leftInclusion` | t98A02 | `{X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) : Continuous (t98A02_leftInclusion φ₁ φ₂)` |
+| `t98A02_continuous_quotientMap` | t98A02 | `{X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) : Continuous (t98A02QuotientMap φ₁ φ₂)` |
+| `t98A02_continuous_rightInclusion` | t98A02 | `{X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) : Continuous (t98A02_rightInclusion φ₁ φ₂)` |
+| `t98A02_gluedDesc_respects` | t98A02 | `{X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] [TopologicalSpace Z] (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) (f : C(T98A02Punctured X₁ φ₁, Z)) (g : C(T98A02Punctured X₂ φ₂, Z)) (hfg : ∀ (s : T98A02Sphere) (h₁ : φ₁ (t98A02SphereInDisk s) ∉ φ₁ '' {u : T98A02Disk \| ‖(u : T98A02E4)‖ < 1}) (h₂ : φ₂ (t98A02SphereInDisk s) ∉ φ₂ '' {u : T98A02Disk \| ‖(u : T98A02E4)‖ < 1}), f ⟨φ₁ (t98A02SphereInDisk s), h₁⟩ = g ⟨φ₂ (t98A02SphereInDisk s), h₂⟩) {x y} (hxy : Relation.EqvGen (T98A02GlueRel φ₁ φ₂) x y) : Sum.elim f g x = Sum.elim f g y` |
+| `t98A02_gluedDesc_unique` | t98A02 | `{X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] [TopologicalSpace Z] (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) (f : C(T98A02Punctured X₁ φ₁, Z)) (g : C(T98A02Punctured X₂ φ₂, Z)) (hfg) (u : C(T98A02ConnectedSum φ₁ φ₂, Z)) (hul : ∀ x, u (t98A02_leftInclusion φ₁ φ₂ x) = f x) (hur : ∀ x, u (t98A02_rightInclusion φ₁ φ₂ x) = g x) : u = t98A02_gluedDesc φ₁ φ₂ f g hfg` |
+| `t98A02_surjective_quotientMap` | t98A02 | `{X₁ X₂ : Type} (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) : Function.Surjective (t98A02QuotientMap φ₁ φ₂)` |
 | `tail_integral_tendsto_zero` | a94J01 | `{f : (Fin n → ℝ) → ℝ} (hf : Integrable f volume) : Tendsto (fun M : ℝ => ∫ x in {x \| M < ‖f x‖}, ‖f x‖ ∂volume) atTop (nhds 0)` |
 | `tendsto_arctan_one_div_nhdsWithin` | LIB: ConstructionTargets.Sinc | `: Filter.Tendsto (fun a : ℝ => Real.arctan (1 / a)) (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds (π / 2))` |
 | `tendsto_argStar_nhdsGT_zero_or_two_pi` | a02J07 | `{γ : ℝ → ℂ} (hγ : SlitPath γ) : Tendsto (fun t => argStar (γ t)) (𝓝[>] (0 : ℝ)) (𝓝 0) ∨ Tendsto (fun t => argStar (γ t)) (𝓝[>] (0 : ℝ)) (𝓝 (2 * π))` |
