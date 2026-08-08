@@ -130,6 +130,28 @@ lemma apm_m99j01_solution_unique {u₀ : ℝ} {u v : ℝ → ℝ}
     (by rw [hu.2.1, hv.2.1])
   exact huniq ⟨ht, le_rfl⟩
 
+/-- Why this unblocks `apm_m99j01`: this is the precise global continuation
+statement missing from Mathlib's local Picard--Lindelöf API, expressed in the
+frozen raw-`deriv` half-line solution predicate. -/
+theorem apm_m99J01_bridge_global_solution (u₀ : ℝ) :
+    ∃ u : ℝ → ℝ, apm_m99j01_IsSolution u₀ u := by
+  sorry
+
+/-- Why this unblocks `apm_m99j01`: the phase-line signs already proved above
+imply trapping and the appropriate monotonicity direction; the final clause
+identifies the resulting monotone limit with the equilibrium. -/
+theorem apm_m99J01_bridge_trapping_and_convergence
+    {ξ u₀ : ℝ} {u : ℝ → ℝ}
+    (hξ : Real.cos ξ = ξ) (hu : apm_m99j01_IsSolution u₀ u) :
+    ((u₀ ≤ ξ →
+        MonotoneOn u (Set.Ici 0) ∧
+        ∀ t : ℝ, 0 ≤ t → u t ≤ ξ) ∧
+      (ξ ≤ u₀ →
+        AntitoneOn u (Set.Ici 0) ∧
+        ∀ t : ℝ, 0 ≤ t → ξ ≤ u t)) ∧
+      Filter.Tendsto u Filter.atTop (nhds ξ) := by
+  sorry
+
 theorem apm_m99j01 :
     (∀ u₀ : ℝ,
       ∃ u : ℝ → ℝ,

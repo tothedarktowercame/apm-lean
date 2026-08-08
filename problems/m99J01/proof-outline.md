@@ -22,3 +22,9 @@ fixed point and `cos x - x < 0` above it. The proof handles values outside
 `[0,π]`. Thus the pointwise direction needed for trapping is compiled; the
 global representative and the calculus-to-monotonicity/convergence bridge
 remain.
+
+Closer hop 4 states those boundaries precisely. The global continuation
+interface is `apm_m99J01_bridge_global_solution`. The independent phase-line
+interface `apm_m99J01_bridge_trapping_and_convergence` records trapping below
+or above the equilibrium, monotonicity in the corresponding direction, and
+convergence to the equilibrium.
