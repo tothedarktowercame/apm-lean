@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Exposed the vertical-period and glide-reflection identifications as public lemmas in the concrete quotient, in addition to the completed retraction onto circle A. The no-retraction result for circle B remains blocked on computing H1 or π1 and transporting the glide equality to the torsion generator.",
+  "closer_hop": 3,
+  "closer_note": "Derived the horizontal period-two identity and the concrete glide/vertical-inverse conjugacy endpoint identity. The no-retraction result for circle B remains blocked on transporting these identities to loops and computing H1 or π1 of the custom quotient.",
   "imported_at": "2026-07-13T17:26:58.349035Z"
 }

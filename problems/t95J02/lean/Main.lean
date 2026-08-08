@@ -47,6 +47,28 @@ lemma t95J02QuotientPoint_glide (x y : ℝ) :
   exact Quotient.sound
     (Relation.EqvGen.rel _ _ (t95J02KleinRel.glide x y))
 
+/-- Applying the glide twice produces the horizontal period two in the
+quotient.  This is the point-set shadow of squaring the horizontal generator
+in the usual Klein-bottle presentation. -/
+lemma t95J02QuotientPoint_glide_twice (x y : ℝ) :
+    t95J02QuotientPoint (x, y) = t95J02QuotientPoint (x + 2, y) := by
+  calc
+    t95J02QuotientPoint (x, y) = t95J02QuotientPoint (x + 1, -y) :=
+      t95J02QuotientPoint_glide x y
+    _ = t95J02QuotientPoint (x + 2, y) := by
+      convert t95J02QuotientPoint_glide (x + 1) (-y) using 1
+      all_goals ring_nf
+
+/-- A vertical translate is carried by the glide to the inverse vertical
+translate.  This compiles the concrete endpoint identity underlying the
+presentation relation `b a b⁻¹ = a⁻¹`; only its transport to loops or
+homology remains unavailable. -/
+lemma t95J02QuotientPoint_glide_vertical_inverse (x y : ℝ) :
+    t95J02QuotientPoint (x, y + 1) =
+      t95J02QuotientPoint (x + 1, -y - 1) := by
+  convert t95J02QuotientPoint_glide x (y + 1) using 1
+  all_goals ring_nf
+
 def t95J02KleinBottle : TopCat := TopCat.of t95J02KleinBottleType
 
 /-- The horizontal core circle in the standard quotient picture. -/
@@ -139,5 +161,17 @@ theorem apm_t95j02 :
     point-set identification from which the inversion conjugacy relation must
     eventually be derived. These equalities do not themselves compute the
     induced loop or homology classes, so the invariant bridge remains open.
+
+    Closer hop 3 compiles two derived presentation identities.
+    `t95J02QuotientPoint_glide_twice` proves the horizontal period-two
+    equality obtained by applying the glide twice, while
+    `t95J02QuotientPoint_glide_vertical_inverse` proves directly that the
+    glide carries a positive vertical translate to a negative translate.
+    The latter is the concrete endpoint equality behind the inversion
+    conjugacy relation. Searches of the quotient, mapping-torus,
+    fundamental-group, and singular-homology APIs still found no mechanism
+    transporting these endpoint equalities to the required loop or `H₁`
+    calculation, so the no-retraction invariant remains open and the frozen
+    statement is unchanged.
     -/
     sorry

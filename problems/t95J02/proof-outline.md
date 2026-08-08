@@ -16,6 +16,12 @@ half of the main theorem.
   identity on circle A.
 - Public lemmas now expose both the vertical-period and glide-reflection
   equalities in the concrete quotient.
+- `t95J02QuotientPoint_glide_twice` derives the horizontal period-two
+  equality by applying the glide twice.
+- `t95J02QuotientPoint_glide_vertical_inverse` derives the concrete endpoint
+  identity expressing that the glide reverses vertical translation. This is
+  the point-set precursor of the inversion relation in the usual group
+  presentation.
 
 ## Remaining negative half
 
