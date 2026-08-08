@@ -108,6 +108,72 @@ lemma t97J07LineIndex_eq :
 lemma t97J07LineContribution_eq : t97J07LineContribution = 2 := by
   simp [t97J07LineContribution, t97J07LineIndex_eq]
 
+/-- The isolated-point affine representative has coordinatewise derivative
+`1/3`. -/
+lemma t97J07PointLocal_fderiv (i : Fin 2) :
+    fderiv ℂ t97J07PointLocal 0 (Pi.single i 1) =
+      Pi.single i (1 / 3) := by
+  have hfun : t97J07PointLocal = (1 / 3 : ℂ) •
+      (fun w : Fin 2 → ℂ ↦ w) := by
+    funext w j
+    simp [t97J07PointLocal, Pi.smul_apply, div_eq_mul_inv, mul_comm]
+  rw [hfun]
+  have h := ((hasFDerivAt_id (𝕜 := ℂ) (0 : Fin 2 → ℂ)).const_smul
+    (1 / 3 : ℂ)).fderiv
+  have h' := congrArg
+    (fun L : (Fin 2 → ℂ) →L[ℂ] (Fin 2 → ℂ) ↦ L (Pi.single i 1)) h
+  ext j
+  have h'' := congrArg (fun v : Fin 2 → ℂ ↦ v j) h'
+  simpa [Function.id_def, Pi.single_apply] using h''
+
+lemma t97J07PointDet_eq : t97J07PointDet = (16 : ℝ) / 81 := by
+  rw [t97J07PointDet, t97J07PointLocal_fderiv, t97J07PointLocal_fderiv]
+  norm_num [Complex.normSq_apply, Pi.single_apply]
+
+lemma t97J07PointIndex_eq :
+    t97J07IndexFromDet t97J07PointDet = 1 := by
+  simp [t97J07IndexFromDet, t97J07PointDet_eq]
+
+lemma t97J07TotalContribution_eq :
+    t97J07LineContribution + t97J07IndexFromDet t97J07PointDet = 3 := by
+  simp [t97J07LineContribution_eq, t97J07PointIndex_eq]
+
+lemma t97J07LineChart_map (a u : ℂ) :
+    t97J07Map (t97J07LineChart a u) =
+      t97J07LineChart a (t97J07LineLocal u) := by
+  simp only [t97J07Map, t97J07LineChart, Projectivization.map_mk]
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+  refine ⟨1, ?_⟩
+  funext i
+  fin_cases i <;> simp [t97J07Linear, t97J07LineLocal]
+
+lemma t97J07PointChart_map (w : Fin 2 → ℂ) :
+    t97J07Map (t97J07PointChart w) =
+      t97J07PointChart (t97J07PointLocal w) := by
+  simp only [t97J07Map, t97J07PointChart, Projectivization.map_mk]
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+  refine ⟨3, ?_⟩
+  funext i
+  fin_cases i <;> simp [t97J07Linear, t97J07PointLocal] <;> ring
+
+lemma t97J07IsolatedPoint_not_mem :
+    t97J07IsolatedPoint ∉ t97J07FixedLine := by
+  intro h
+  change (t97J07IsolatedPoint.rep 2) = 0 at h
+  have hv : ((Pi.single (2 : Fin 3) (1 : ℂ)) : Fin 3 → ℂ) ≠ 0 := by
+    intro hz
+    have := congrFun hz 2
+    simp at this
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ
+    ((Pi.single (2 : Fin 3) (1 : ℂ)) : Fin 3 → ℂ) hv
+  have ha2 := congrFun ha 2
+  have hr : (Projectivization.mk ℂ
+      ((Pi.single (2 : Fin 3) (1 : ℂ)) : Fin 3 → ℂ) hv).rep 2 = 0 := by
+    simpa [t97J07IsolatedPoint] using h
+  rw [hr] at ha2
+  apply a.ne_zero
+  simpa [Units.smul_def] using ha2
+
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
         t97J07FixedLine ∪ {t97J07IsolatedPoint} ∧
@@ -129,20 +195,30 @@ theorem apm_t97j07 :
     t97J07LineContribution = 2 ∧
     t97J07LineContribution + t97J07IndexFromDet t97J07PointDet = 3 := by
   /-
-  CLOSER HOP 2 boundary. The checked-in baseline contained only the theorem's
-  `sorry`, despite the dispatch excerpt describing prior boundary work. This
-  hop therefore establishes the computational normal-line chain directly.
-  `t97J07LineLocal_fderiv` proves the derivative of `u ↦ 3u` from
-  `HasFDerivAt.const_mul`; `t97J07LineNormalDet_eq` evaluates its real
-  determinant as four; and `t97J07LineIndex_eq` plus
-  `t97J07LineContribution_eq` close the corresponding index and contribution.
+  CLOSER HOP 3 boundary. Going beyond the preceding normal-line computation,
+  this hop closes every frozen conjunct except the global fixed-set equality.
+  `t97J07PointLocal_fderiv`, `t97J07PointDet_eq`,
+  `t97J07PointIndex_eq`, and `t97J07TotalContribution_eq` compile the entire
+  isolated-point and arithmetic chain. `t97J07LineChart_map` and
+  `t97J07PointChart_map` use `Projectivization.map_mk` and
+  `Projectivization.mk_eq_mk_iff'` to prove both actual projective chart
+  identities. `t97J07IsolatedPoint_not_mem` uses
+  `Projectivization.exists_smul_eq_mk_rep` to exclude the isolated point from
+  the fixed line despite the noncanonical representative.
 
-  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, projectivization map
-  equality APIs, and related projective fixed-point artifacts found no helper
-  classifying fixed projective lines for this diagonal map. The remaining
-  bridge is the quotient/projectivization equality establishing the fixed set
-  and chart identities, together with the coordinatewise derivative of
-  `w ↦ w/3`, its determinant `16/81`, and the final arithmetic chain. The
-  frozen theorem statement is unchanged.
+  Renewed searches consulted `LEMMA-INDEX.md`, all `ConstructionTargets/`,
+  the projectivization equality sources, projective siblings `t01A07`,
+  `t96J07`, and `t98A04`, and git history. They supplied the quotient equality
+  pattern used above but no theorem classifying all fixed points of an
+  induced projective diagonal map. The sole remaining bridge is therefore:
+  convert `p.map t97J07Linear = p` into proportionality of `p.rep`, split on
+  its third coordinate, and transport the resulting alternatives back through
+  the noncanonical `rep` to the set equality. The frozen statement is
+  unchanged.
   -/
+  refine ⟨?_, t97J07IsolatedPoint_not_mem, t97J07LineChart_map,
+    t97J07PointChart_map, t97J07LineLocal_fderiv, t97J07PointLocal_fderiv,
+    t97J07LineNormalDet_eq, t97J07PointDet_eq, t97J07LineIndex_eq,
+    t97J07PointIndex_eq, t97J07LineContribution_eq,
+    t97J07TotalContribution_eq⟩
   sorry

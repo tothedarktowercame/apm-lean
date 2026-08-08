@@ -10,12 +10,12 @@
     "problem_tex": "apm/t97J07.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "closer_hop": 2,
-  "closer_progress": "The normal-line derivative, determinant, index, and Lefschetz contribution are compiled. Remaining work is the projectivization fixed-set/chart equalities and the isolated-point coordinate derivative/determinant chain.",
+  "classification": "partial",
+  "closer_hop": 3,
+  "closer_progress": "All conjuncts except the global fixed-set equality are compiled: both projective chart identities, isolated-point exclusion, both derivative/determinant/index chains, and the final contribution arithmetic. The remaining bridge is classification of every fixed projective point via proportionality of the noncanonical representative.",
   "imported_at": "2026-07-13T17:26:58.509785Z"
 }
