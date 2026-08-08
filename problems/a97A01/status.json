@@ -37,11 +37,14 @@
     "sorry_locations": ["apm_a97a01 (dyadic cancellation and L1 approximation)"],
     "proved": [
       "apm_a97A01_abs_rademacher",
-      "apm_a97A01_rademacher_measurable"
+      "apm_a97A01_rademacher_measurable",
+      "apm_a97A01_integrable_mul_rademacher",
+      "apm_a97A01_norm_integral_mul_rademacher_le"
     ],
     "blockers": [
       "Exact cancellation on coarser dyadic blocks",
       "L1 density/convergence of dyadic step approximations"
-    ]
+    ],
+    "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)"
   }
 }

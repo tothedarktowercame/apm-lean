@@ -70,6 +70,36 @@ lemma apm_a97A01_rademacher_measurable (n : ℕ) :
   exact Measurable.ite (measurableSet_singleton 1) measurable_const
     (Measurable.ite hdyadic measurable_const measurable_const)
 
+/-- Pairing an `L∞` function with any encoded Rademacher function is
+integrable on the restricted interval.  This packages the domination step
+needed after dyadic cancellation. -/
+lemma apm_a97A01_integrable_mul_rademacher
+    (f : ℝ → ℝ) (hf : MemLp f ⊤ apm_a97A01_measure) (n : ℕ) :
+    Integrable (fun t ↦ f t * apm_a97A01_rademacher n t)
+      apm_a97A01_measure := by
+  letI : IsFiniteMeasure apm_a97A01_measure := by
+    unfold apm_a97A01_measure
+    infer_instance
+  apply (hf.integrable (by simp)).mul_bdd
+    (c := 1) (apm_a97A01_rademacher_measurable n).aestronglyMeasurable
+  filter_upwards with t
+  simp [Real.norm_eq_abs, apm_a97A01_abs_rademacher]
+
+/-- The unit pointwise modulus gives the exact uniform `L¹` domination used
+to pass from dyadic step functions to arbitrary test functions. -/
+lemma apm_a97A01_norm_integral_mul_rademacher_le
+    (g : ℝ → ℝ) (n : ℕ) :
+    ‖∫ t, g t * apm_a97A01_rademacher n t ∂apm_a97A01_measure‖ ≤
+      ∫ t, |g t| ∂apm_a97A01_measure := by
+  calc
+    ‖∫ t, g t * apm_a97A01_rademacher n t ∂apm_a97A01_measure‖ ≤
+        ∫ t, ‖g t * apm_a97A01_rademacher n t‖ ∂apm_a97A01_measure :=
+      norm_integral_le_integral_norm _
+    _ = ∫ t, |g t| ∂apm_a97A01_measure := by
+      apply integral_congr_ae
+      filter_upwards with t
+      simp [Real.norm_eq_abs, apm_a97A01_abs_rademacher]
+
 theorem apm_a97a01
     (f : ℝ → ℝ) (hf : MemLp f ⊤ apm_a97A01_measure) :
     Tendsto
@@ -77,22 +107,30 @@ theorem apm_a97a01
         f t * apm_a97A01_rademacher n t ∂apm_a97A01_measure)
       atTop (nhds 0) := by
   /-
-  CLOSER HOP 1 (2026-08-08): the two foundational analytic obligations are
-  now compiled: `apm_a97A01_abs_rademacher` proves the exact pointwise bound
-  `|r_n| = 1`, and `apm_a97A01_rademacher_measurable` proves measurability of
-  the nested dyadic-existential definition.  Thus every pairing is integrable
-  for the supplied `L∞` function on the finite measure space.
+  CLOSER HOP 2 (2026-08-08): two analytic consequences that hop 1 only
+  described now compile. `apm_a97A01_integrable_mul_rademacher` proves every
+  frozen pairing is Bochner-integrable, and
+  `apm_a97A01_norm_integral_mul_rademacher_le` proves the exact uniform error
+  estimate
 
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's
-  conditional-expectation/martingale and simple-function density APIs, prior
-  problems, the candidate artifact, and git history found no packaged weak
-  convergence theorem for this custom dyadic sign encoding.  The remaining
-  bridge is to prove exact cancellation on each coarser dyadic interval and
-  approximate the `L∞` input in `L¹` by dyadic step functions (or equivalently
-  invoke a dyadic martingale convergence theorem after constructing the
-  filtration).  The pointwise unit bound then controls the approximation
-  error.  The special `n = 1` constant branch is harmless for an `atTop`
-  limit but must be excluded in the cancellation lemma.  The frozen statement
-  is unchanged and no unproved helper was introduced.
+      ‖∫ g(t) r_n(t)‖ ≤ ∫ |g(t)|.
+
+  Thus, once cancellation is known on an `L¹`-dense dyadic class, passage to
+  arbitrary `f` is reduced to a standard epsilon argument with no remaining
+  domination or integrability obligations.
+
+  Going beyond hop 1, Mathlib's Hilbert-space orthonormal/Bessel APIs were
+  also inspected as an alternate route. They would imply weak convergence
+  after the encoded functions are bundled as an orthonormal sequence in
+  `Lp ℝ 2`, but proving orthogonality requires the same exact dyadic
+  cancellation. The existing `weak_convergence_of_ae_tendsto_L2_bounded`
+  sibling lemma is inapplicable because Rademacher functions have no a.e.
+  pointwise limit. No searched repository or Mathlib theorem identifies this
+  custom existential interval encoding with a standard Rademacher system.
+
+  The honest remaining bridge is therefore purely the exact cancellation on
+  coarser dyadic intervals plus `L¹` density of their finite step functions.
+  The exceptional `n = 1` branch must be excluded in cancellation. The frozen
+  statement is unchanged and no unproved helper was introduced.
   -/
   sorry

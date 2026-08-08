@@ -2,18 +2,25 @@
 
 ## Lean closure status
 
-The file currently has one `sorry` in the main theorem. Two prerequisites now
+The file currently has one `sorry` in the main theorem. Four prerequisites now
 compile:
 
 - `apm_a97A01_abs_rademacher`: the frozen dyadic sign has absolute value one
   at every point.
 - `apm_a97A01_rademacher_measurable`: the nested existential/interval
   definition is measurable.
+- `apm_a97A01_integrable_mul_rademacher`: every frozen `L∞` pairing is
+  integrable on the finite restricted interval.
+- `apm_a97A01_norm_integral_mul_rademacher_le`: uniformly in `n`, pairing
+  against an error `g` is bounded by `∫ |g|`.
 
 The remaining bridge is exact cancellation against functions constant on a
 coarser dyadic partition, together with `L¹` approximation by such dyadic step
-functions. The exceptional constant definition at `n = 1` is irrelevant to
-the `atTop` limit but must be excluded in cancellation statements.
+functions. Once those are supplied, the compiled uniform `L¹` estimate closes
+the approximation step directly. The exceptional constant definition at
+`n = 1` is irrelevant to the `atTop` limit but must be excluded in
+cancellation statements. An attempted Hilbert-space/Bessel route reaches the
+same cancellation obligation when proving orthogonality.
 
 This file packages the formalization-oriented context that should travel
 with the Lean files.
