@@ -77,6 +77,60 @@ noncomputable def apm_t02a03_ybase : apm_t02a03_Y :=
     apm_t02a03_circleInclusion 1 = apm_t02a03_ybase := by
   exact apm_t02a03_inclusions_basepoint_eq.symm
 
+/-- Compatible maps out of the torus and circle respect the generated wedge
+relation. This follows the quotient eliminator pattern from sibling `t01J03`. -/
+lemma apm_t02a03_wedgeDesc_respects
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t02a03_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) {x y}
+    (hxy : Relation.EqvGen apm_t02a03_WedgeGlue x y) :
+    Sum.elim f g x = Sum.elim f g y := by
+  induction hxy with
+  | rel a b hab =>
+      cases hab with
+      | base => exact hbase
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- Continuous pushout eliminator for the concrete wedge quotient. -/
+noncomputable def apm_t02a03_wedgeDesc
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t02a03_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) : C(apm_t02a03_Y, Z) := by
+  let raw : Sum apm_t02a03_Torus Circle → Z := Sum.elim f g
+  have hraw : Continuous raw := continuous_sum_dom.2 ⟨f.continuous, g.continuous⟩
+  exact ⟨Quotient.lift raw (fun _ _ hxy ↦
+      apm_t02a03_wedgeDesc_respects f g hbase hxy),
+    hraw.quotient_lift (fun _ _ hxy ↦
+      apm_t02a03_wedgeDesc_respects f g hbase hxy)⟩
+
+@[simp] lemma apm_t02a03_wedgeDesc_torusInclusion
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t02a03_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) (x : apm_t02a03_Torus) :
+    apm_t02a03_wedgeDesc f g hbase (apm_t02a03_torusInclusion x) = f x := rfl
+
+@[simp] lemma apm_t02a03_wedgeDesc_circleInclusion
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t02a03_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) (z : Circle) :
+    apm_t02a03_wedgeDesc f g hbase (apm_t02a03_circleInclusion z) = g z := rfl
+
+/-- The descended map is uniquely determined by its two restrictions. -/
+lemma apm_t02a03_wedgeDesc_unique
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t02a03_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) (u : C(apm_t02a03_Y, Z))
+    (huT : ∀ x, u (apm_t02a03_torusInclusion x) = f x)
+    (huC : ∀ z, u (apm_t02a03_circleInclusion z) = g z) :
+    u = apm_t02a03_wedgeDesc f g hbase := by
+  ext y
+  obtain ⟨x, rfl⟩ := apm_t02a03_surjective_wedgeQuotient y
+  cases x with
+  | inl x => exact huT x
+  | inr z => exact huC z
+
 theorem apm_t02a03 :
     Nonempty
       (FundamentalGroup apm_t02a03_Torus (1, 1) ≃*
@@ -132,5 +186,23 @@ theorem apm_t02a03 :
   wedge-homology APIs still found no computation theorem applicable to this
   cocone, so the displayed algebraic invariants remain open. The frozen
   statement is unchanged.
+
+  Closer hop 3 goes beyond the cocone by proving its full continuous universal
+  property, reusing the quotient-eliminator pattern from solved helper layer
+  `t01J03`. `apm_t02a03_wedgeDesc_respects` propagates basepoint compatibility
+  through `Relation.EqvGen`; `apm_t02a03_wedgeDesc` descends compatible maps
+  continuously; the two restriction lemmas compute it on each summand; and
+  `apm_t02a03_wedgeDesc_unique` proves uniqueness using quotient
+  surjectivity. Thus this concrete wedge is no longer missing any point-set
+  pushout bookkeeping.
+
+  A renewed inspection after establishing the universal property still found
+  no topological Seifert--van Kampen theorem, no singular Mayer--Vietoris
+  sequence or colimit-preservation theorem for `singularHomologyFunctor`, and
+  no computation of `FundamentalGroup Circle 1`. Mathlib's categorically named
+  `Limits.VanKampen` concerns universal colimits, not the fundamental-group
+  theorem. Consequently the remaining bridge is now exclusively invariant
+  preservation/computation from this compiled pushout, rather than quotient
+  construction. The frozen statement is unchanged.
   -/
   sorry

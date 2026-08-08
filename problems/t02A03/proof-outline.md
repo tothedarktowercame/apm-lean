@@ -14,18 +14,19 @@ explicit, continuous, and surjective.
   maps of the two summands into the wedge.
 - `apm_t02a03_inclusions_basepoint_eq` proves their attaching-point images
   agree, and both images are identified with `apm_t02a03_ybase`.
+- `apm_t02a03_wedgeDesc` is the continuous pushout eliminator for compatible
+  maps out of the two summands; its restriction equations and uniqueness are
+  compiled.
 
 ## Remaining boundary
 
 - compute `FundamentalGroup Circle 1` and specialize product preservation to
   the torus;
-- identify the generated-relation quotient with a topological pushout suitable
-  for van Kampen;
 - establish singular Mayer--Vietoris or a cellular-to-singular comparison for
   the wedge;
 - derive the displayed fundamental-group and homology isomorphisms.
-- connect the compiled based cocone to future van Kampen and singular
-  Mayer--Vietoris interfaces.
+- apply future van Kampen and singular Mayer--Vietoris interfaces to the now
+  compiled continuous pushout universal property.
 
 Existing Mayer--Vietoris APIs concern sheaf cohomology, not this singular
 homology functor.

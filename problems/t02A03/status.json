@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The quotient projection and both continuous summand inclusions are compiled, including their attaching-point and theorem-basepoint equations. Remaining work is the absent circle fundamental-group computation, topological van Kampen theorem, and singular Mayer--Vietoris or wedge-homology calculation.",
+  "closer_hop": 3,
+  "boundary": "The quotient projection, based summand inclusions, and full continuous pushout eliminator with restriction and uniqueness laws are compiled. Remaining work is exclusively the absent circle fundamental-group computation, topological Seifert--van Kampen theorem, and singular Mayer--Vietoris or wedge-homology calculation.",
   "imported_at": "2026-07-13T17:26:56.924953Z"
 }
