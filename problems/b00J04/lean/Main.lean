@@ -125,6 +125,56 @@ lemma apm_b00J04_common_denom_of_finite_subalgebra
   refine ⟨r, hr, fun s => ?_⟩
   exact hclear (s : F) ⟨s, rfl⟩
 
+def apm_b00J04_denomSubmonoid
+    (R F : Type*) [CommRing R] [Field F] [Algebra R F]
+    (S : Subalgebra R F) : Submonoid R :=
+  (IsUnit.submonoid S).comap (algebraMap R S).toMonoidHom
+
+/-- Every intermediate algebra in a fraction field is the localization at
+the base elements which become units in that intermediate algebra. -/
+lemma apm_b00J04_isLocalization_denomSubmonoid
+    (R F : Type*) [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
+    [Field F] [Algebra R F] [IsFractionRing R F]
+    (S : Subalgebra R F) :
+    IsLocalization (apm_b00J04_denomSubmonoid R F S) S := by
+  rw [isLocalization_iff]
+  refine ⟨?_, ?_, ?_⟩
+  · intro y
+    exact y.property
+  · intro z
+    obtain ⟨a, b, hb, hz, hbinv⟩ := apm_b00J04_first_conjunct R F S z
+    let binv : S := ⟨(algebraMap R F b)⁻¹, hbinv⟩
+    have hbunit : IsUnit (algebraMap R S b) := by
+      rw [isUnit_iff_exists_inv]
+      refine ⟨binv, ?_⟩
+      apply Subtype.ext
+      change algebraMap R F b * (algebraMap R F b)⁻¹ = 1
+      exact mul_inv_cancel₀ ((map_ne_zero_iff _
+        (FaithfulSMul.algebraMap_injective R F)).mpr hb)
+    let bm : apm_b00J04_denomSubmonoid R F S := ⟨b, hbunit⟩
+    refine ⟨(a, bm), ?_⟩
+    apply Subtype.ext
+    change (z : F) * algebraMap R F b = algebraMap R F a
+    rw [hz]
+    exact div_mul_cancel₀ _ ((map_ne_zero_iff _
+      (FaithfulSMul.algebraMap_injective R F)).mpr hb)
+  · intro x y hxy
+    refine ⟨1, ?_⟩
+    simp only [Submonoid.coe_one, one_mul]
+    apply (FaithfulSMul.algebraMap_injective R F)
+    exact congrArg Subtype.val hxy
+
+lemma apm_b00J04_subalgebra_isPrincipalIdealRing
+    (R F : Type*) [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
+    [Field F] [Algebra R F] [IsFractionRing R F]
+    (S : Subalgebra R F) : IsPrincipalIdealRing S := by
+  letI : IsLocalization (apm_b00J04_denomSubmonoid R F S) S :=
+    apm_b00J04_isLocalization_denomSubmonoid R F S
+  constructor
+  intro J
+  rw [← IsLocalization.map_comap (apm_b00J04_denomSubmonoid R F S) S J]
+  infer_instance
+
 theorem apm_b00j04
     (R F : Type*)
     [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
@@ -171,5 +221,25 @@ theorem apm_b00j04
   hence `S = ⊥`. The independent PID conjunct still requires presenting `S`
   as the corresponding localization or proving ideal map-comap directly; no
   packaged intermediate-subalgebra localization instance was found.
+
+  HOP 4 supplies that missing instance locally. The denominator submonoid is
+  the preimage of the units of `S`; the reduced-fraction theorem proves every
+  element of `S` has a numerator and a denominator in this submonoid, while
+  injectivity follows through `F`. `IsLocalization.map_comap` then writes
+  every ideal of `S` as the extension of its contraction, and Mathlib's
+  principal-ideal map instance proves it principal. The finite-module clause
+  is routed through `IsIntegral.of_finite` and `isIntegrallyClosed_iff`, since
+  a PID is integrally closed in its fraction field.
   -/
-  sorry
+  refine ⟨apm_b00J04_subalgebra_isPrincipalIdealRing R F S, ?_⟩
+  intro hfinite
+  letI : Module.Finite R S := hfinite
+  apply le_antisymm
+  · intro s hs
+    change (s : F) ∈ (algebraMap R F).range
+    let ss : S := ⟨s, hs⟩
+    have hsint : IsIntegral R ss := IsIntegral.of_finite R ss
+    have hint : IsIntegral R (s : F) := by
+      simpa [ss] using IsIntegral.map (Subalgebra.val S) hsint
+    exact (isIntegrallyClosed_iff (R := R) (K := F)).mp inferInstance hint
+  · exact bot_le

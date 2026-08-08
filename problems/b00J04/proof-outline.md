@@ -15,12 +15,20 @@ generated submodule of the fraction field, and
 `apm_b00J04_common_denom_of_finite_subalgebra` specializes it to clear every
 element of a module-finite intermediate algebra `S` with one nonzero `r : R`.
 
+Hop 4 defines `apm_b00J04_denomSubmonoid` as the base elements becoming units
+in `S` and proves `apm_b00J04_isLocalization_denomSubmonoid`. The three
+localization axioms follow from the compiled reduced fractions, the inverse-
+denominator membership lemma, and injectivity into `F`.
+
+`apm_b00J04_subalgebra_isPrincipalIdealRing` uses
+`IsLocalization.map_comap`: every ideal of `S` is the extension of its
+contraction to the PID `R`, hence principal. Finally, module finiteness makes
+each element of `S` integral over `R`; mapping to `F` and applying
+`isIntegrallyClosed_iff` puts it in the image of `R`, proving `S = ⊥`.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b00J04.md`
 
 ## Remaining boundary
 
-- contract an arbitrary ideal of `S` to `R`, choose its principal generator,
-  and clear reduced denominators to prove the ideal of `S` principal;
-- under `Module.Finite R S`, use the now-compiled common denominator on inverse
-  powers to show every denominator inverted in `S` is a unit, hence `S = ⊥`.
+None.
