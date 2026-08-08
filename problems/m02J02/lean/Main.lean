@@ -101,6 +101,23 @@ lemma apm_m02j02_hermiteFunction_hasDerivAt (n : ℕ) (x : ℝ) :
     ((apm_m02j02_hermiteFunction_contDiff n).differentiable
       (by simp)).differentiableAt.hasDerivAt
 
+lemma apm_m02j02_deriv_hermiteFunction (n : ℕ) (x : ℝ) :
+    deriv (apm_m02j02_hermiteFunction n) x =
+      apm_m02j02_hermiteFunctionDeriv n x :=
+  (apm_m02j02_hermiteFunction_hasDerivAt n x).deriv
+
+/-- Every odd Hermite–Gaussian has the required zero trace at the finite
+endpoint of the half-line. -/
+lemma apm_m02j02_hermiteFunction_odd_zero (n : ℕ) :
+    apm_m02j02_hermiteFunction (2 * n + 1) 0 = 0 := by
+  have hodd : Odd ((2 * n + 1) + 0) := by simpa using odd_two_mul_add_one n
+  have hc := Polynomial.coeff_hermite_of_odd_add hodd
+  unfold apm_m02j02_hermiteFunction
+  rw [mul_eq_zero]
+  left
+  rw [← Polynomial.coeff_zero_eq_eval_zero, Polynomial.coeff_map, hc]
+  exact map_zero _
+
 theorem apm_m02j02 :
     apm_m02j02_IsH10Basis (Ioo (0 : ℝ) 1)
         apm_m02j02_sine apm_m02j02_sineDeriv ∧
@@ -146,5 +163,17 @@ theorem apm_m02j02 :
   transports to the custom value/derivative-pair graph norm. Membership via
   compactly supported approximation, linear independence, and the three
   density clauses therefore remain open.
+
+  Closer hop 3 proves the remaining elementary identities needed before the
+  half-line membership argument: `apm_m02j02_deriv_hermiteFunction` rewrites
+  the actual derivative to the frozen derivative family, and
+  `apm_m02j02_hermiteFunction_odd_zero` uses
+  `Polynomial.coeff_hermite_of_odd_add` to prove that every selected odd
+  Hermite–Gaussian has zero trace at the half-line endpoint. A further search
+  found Gaussian integrability primitives and polynomial/exponential decay,
+  but no theorem converting those facts into the frozen weak-derivative plus
+  compactly-supported graph-norm approximation predicate. The three spectral
+  density results and linear independence of the function/derivative pairs
+  remain substantial and were not completed in this final hop.
   -/
   sorry
