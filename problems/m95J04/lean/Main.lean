@@ -44,6 +44,23 @@ lemma apm_m95J04_green_le_quarter {t s : ℝ}
     have hsq : 0 ≤ (t - 1 / 2) ^ 2 := sq_nonneg _
     nlinarith
 
+/-- Simultaneous reflection of both variables preserves the Dirichlet Green
+kernel. -/
+lemma apm_m95J04_green_reflection (t s : ℝ) :
+    apm_m95J04_green (1 - t) (1 - s) = apm_m95J04_green t s := by
+  by_cases hts : t ≤ s
+  · by_cases hst : s ≤ t
+    · have heq : t = s := le_antisymm hts hst
+      subst s
+      simp [apm_m95J04_green]
+      ring
+    · have href : ¬1 - t ≤ 1 - s := by linarith
+      simp [apm_m95J04_green, hts, href]
+      ring
+  · have href : 1 - t ≤ 1 - s := by linarith
+    simp [apm_m95J04_green, hts, href]
+    ring
+
 def apm_m95J04_isSolution (f : ℝ → ℝ → ℝ) (x : ℝ → ℝ) : Prop :=
   ContDiffOn ℝ 2 x (Icc 0 1) ∧
   x 0 = 0 ∧ x 1 = 0 ∧
@@ -64,6 +81,37 @@ lemma apm_m95J04_specific_continuous :
     Continuous fun p : ℝ × ℝ ↦ apm_m95J04_specific p.1 p.2 := by
   unfold apm_m95J04_specific
   fun_prop
+
+/-- Product-to-sum exposes that the dependence on the unknown has derivative
+bounded by one. -/
+lemma apm_m95J04_specific_eq_cos (t x : ℝ) :
+    apm_m95J04_specific t x =
+      (Real.cos (1 - 2 * t) - Real.cos (2 * x - 1)) / 2 := by
+  unfold apm_m95J04_specific
+  calc
+    Real.sin (x - t) * Real.sin (x + t - 1) =
+        (Real.cos ((x - t) - (x + t - 1)) -
+          Real.cos ((x - t) + (x + t - 1))) / 2 := by
+            rw [Real.cos_sub, Real.cos_add]
+            ring
+    _ = (Real.cos (1 - 2 * t) - Real.cos (2 * x - 1)) / 2 := by ring
+
+/-- The specific nonlinearity is globally Lipschitz with the sharp constant
+one in its second variable. -/
+lemma apm_m95J04_specific_lipschitz (t u v : ℝ) :
+    |apm_m95J04_specific t u - apm_m95J04_specific t v| ≤ |u - v| := by
+  rw [apm_m95J04_specific_eq_cos, apm_m95J04_specific_eq_cos]
+  have h := Real.abs_cos_sub_cos_le (2 * v - 1) (2 * u - 1)
+  rw [show
+    (Real.cos (1 - 2 * t) - Real.cos (2 * u - 1)) / 2 -
+      (Real.cos (1 - 2 * t) - Real.cos (2 * v - 1)) / 2 =
+        (Real.cos (2 * v - 1) - Real.cos (2 * u - 1)) / 2 by ring]
+  rw [abs_div]
+  norm_num
+  calc
+    |Real.cos (2 * v - 1) - Real.cos (2 * u - 1)| / 2
+        ≤ |(2 * v - 1) - (2 * u - 1)| / 2 := div_le_div_of_nonneg_right h (by norm_num)
+    _ = |u - v| := by rw [show (2 * v - 1) - (2 * u - 1) = -2 * (u - v) by ring]; simp
 
 theorem apm_m95j04 :
     (∀ f : ℝ → ℝ → ℝ,
@@ -90,17 +138,23 @@ theorem apm_m95j04 :
   continuity.  These facts are the scalar inputs to the Green-operator
   contraction and the final symmetry-by-uniqueness argument.
 
-  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets`, the partial
+  Closer hop 2 proves the two scalar facts left explicit by hop 1.
+  `apm_m95J04_specific_eq_cos` rewrites the sine product by product-to-sum,
+  and `apm_m95J04_specific_lipschitz` combines that identity with
+  `Real.abs_cos_sub_cos_le` to obtain the sharp global Lipschitz constant one.
+  `apm_m95J04_green_reflection` also proves simultaneous invariance of the
+  Green kernel under `(t,s) ↦ (1-t,1-s)`. Thus the specific nonlinearity's
+  complete contraction and symmetry input is compiled.
+
+  Searches across both hops of `LEMMA-INDEX.md`, `ConstructionTargets`, the partial
   Green developments `m94J05`, `m02A06`, and `m99J02`, Mathlib's
   `ContractingWith` and interval-integral APIs, and git history found no
   bundled inverse for the second derivative with Dirichlet boundary data.
   The remaining bridge is to package `g ↦ -∫ G(t,s)g(s) ds` as a continuous
   self-map of `C([0,1])`, prove the fixed-point/ODE equivalence using within
   derivatives at the endpoints, lift the kernel estimate to the sup norm,
-  and apply contraction.  For the specific nonlinearity one must additionally
-  compile its sharp Lipschitz-one estimate; the Green operator's norm is below
-  one, so the strict `799/100` hypothesis of the first conjunct is not needed
-  for that clause.
+  and apply contraction. The sharp Lipschitz-one estimate for the specific
+  clause is no longer part of this boundary.
 
   Original boundary:
   SKIPPED: nonlinear BVP via Green's function + contraction mapping.
