@@ -62,6 +62,15 @@ lemma apm_b01j01_sylowSubgroupsIn_subset_traces
   ext x
   simp
 
+/-- The numerical quotient conclusion needed in part (b), before extracting an
+index-`p` subgroup from the finite abelian quotient. -/
+lemma apm_b01j01_prime_dvd_abelianization
+    {G : Type} [Group G] [Finite G] (H : Subgroup G)
+    {p : ℕ} (hp : p.Prime) (hpH : p ∣ Nat.card H)
+    (hpHcomm : ¬ p ∣ Nat.card ↥(H ⊓ commutator G)) :
+    p ∣ Nat.card (G ⧸ commutator G) := by
+  exact apm_b01j01_prime_dvd_quotient H (commutator G) hp hpH hpHcomm
+
 theorem apm_b01j01
     (G : Type) [Group G] [Finite G]
     (H K : Subgroup G) [K.Normal]
@@ -75,32 +84,25 @@ theorem apm_b01j01
     Nat.card (Sylow p K) ∣ Nat.card (Sylow p G) := by
   refine ⟨fun hpH hpHK ↦ apm_b01j01_prime_dvd_quotient H K hp hpH hpHK, ?_⟩
   /-
-  Boundary (closer hop 1): part (a) is now fully proved by the helper
-  `apm_b01j01_prime_dvd_quotient`.  It uses the relative index
-  `[H : H ⊓ K]`, Lagrange's cardinality identity, Euclid's lemma for the
-  prime `p`, and `Subgroup.relIndex_dvd_index_of_normal`.
+  Boundary (closer hop 3): `apm_b01j01_prime_dvd_abelianization` now compiles
+  the full numerical reduction for part (b): the hypotheses force `p` to
+  divide the cardinality of `G ⧸ commutator G`.  The only remaining step in
+  that conjunct is extracting a subgroup of index `p` from this finite abelian
+  quotient and pulling it back. Searches of finite abelian groups, characters,
+  maximal subgroups, and quotient correspondence still found no packaged
+  theorem from prime cardinal divisibility to a quotient of order `p`.
 
-  Mathlib's `Sylow.exists_comap_subtype_eq` proves one direction of part (c):
-  every Sylow subgroup of `K` is the pullback of an ambient Sylow subgroup.
-  The converse still requires proving that `P ⊓ K` is Sylow in `K` when
-  `K` is normal.  No declaration packaging that normal-subgroup restriction,
-  nor the constant-fiber/orbit count needed for part (d), was found in
-  `Sylow.lean`, `LEMMA-INDEX.md`, closed artifacts, or `ConstructionTargets/`.
-
-  Part (b) remains independent: after applying part (a) to `commutator G`,
-  one must extract an index-`p` subgroup from the resulting nontrivial finite
-  abelian quotient.  Searches of the finite-abelian and index APIs found no
-  theorem providing such a subgroup directly from prime divisibility.
-  Closer hop 2 extracts the available half of part (c) as the compiled lemma
-  `apm_b01j01_sylowSubgroupsIn_subset_traces`.  It uses
-  `Sylow.exists_comap_subtype_eq` and the elementary map/comap identity to
-  identify the mapped subgroup with `P ⊓ K` exactly in the frozen encoding.
-
-  A targeted inspection of `IsPGroup.inf_normalizer_sylow` and the Sylow
-  fixed-point API showed that these control intersections with normalizers,
-  not directly the intersection with an arbitrary normal subgroup.  The
-  reverse inclusion still needs conjugating an ambient extension of a Sylow
-  of `K` back to the specified ambient `P` and transporting normality of `K`.
-  The divisibility claim then needs the induced constant-fiber orbit count.
+  For part (c), the forward inclusion remains compiled in
+  `apm_b01j01_sylowSubgroupsIn_subset_traces`. A deeper inspection of
+  `Sylow.isPretransitive_of_finite` confirms the intended reverse route:
+  extend a Sylow of `K` to an ambient Sylow, conjugate that extension to the
+  specified ambient `P`, and use normality to preserve `K`. The missing Lean
+  packaging is restricting the ambient conjugation automorphism to `K` and
+  transporting the resulting Sylow subtype through the exact map/intersection
+  encoding. `IsPGroup.inf_normalizer_sylow` only treats normalizers and does
+  not replace this construction. Part (d) then still needs the constant-fiber
+  orbit count for the trace map. Searches of `LEMMA-INDEX.md`, construction
+  targets, all Sylow siblings, normalizer actions, and subgroup map/comap APIs
+  found no packaged versions of these two bridges.
   -/
   sorry

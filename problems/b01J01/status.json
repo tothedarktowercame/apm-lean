@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "classification_detail": "Part (a) and the inclusion of mapped Sylow subgroups of K into ambient Sylow traces are compiled. One sorry remains for part (b), the reverse trace inclusion under normality, and the Sylow-count divisibility.",
+  "classification_detail": "Part (a), the numerical reduction of part (b) to prime divisibility of the finite abelianization, and the inclusion of mapped Sylow subgroups of K into ambient Sylow traces are compiled. One sorry remains for finite-abelian subgroup extraction, the reverse trace inclusion under normality, and Sylow-count divisibility.",
   "imported_at": "2026-07-13T17:26:53.446822Z"
 }

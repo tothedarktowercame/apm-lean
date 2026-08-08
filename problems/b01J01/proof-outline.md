@@ -8,10 +8,14 @@ Closer hop 1 fully proves part (a) in
 identity, uses primality to deduce `p ∣ K.relIndex H`, and finishes with
 `Subgroup.relIndex_dvd_index_of_normal`.
 
+Closer hop 3 adds `apm_b01j01_prime_dvd_abelianization`, specializing part
+(a) to `commutator G`. This proves the full numerical reduction for part (b):
+the prime divides the cardinality of the finite abelianization.
+
 The remaining boundary consists of:
 
-1. extracting an index-`p` subgroup from the relevant finite abelian
-   quotient for part (b);
+1. extracting an order-`p` quotient of the finite abelianization and pulling
+   its kernel back to an index-`p` subgroup for part (b);
 2. proving the normal-subgroup restriction theorem that `P ⊓ K` is Sylow
    in `K` for ambient Sylow `P`, completing part (c);
 3. formalizing the constant-fiber/orbit count giving the divisibility in
