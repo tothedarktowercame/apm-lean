@@ -24,6 +24,20 @@ work is the unit-circle Laurent-polynomial identity, conversion of the frozen
 real interval integral with `fderiv ℝ` to the complex contour integral, and
 the final divisor-cardinality bounds.
 
+## Closer Hop 2
+
+The real derivative and first unit-circle conversion stages now compile.
+`apm_a95J03_trigPoly_hasDerivAt` differentiates every Fourier term and sums
+the derivatives; `apm_a95J03_fderiv_apply_one` gives the exact value used by
+the frozen integral. `apm_a95J03_trigPoly_eq_laurent` rewrites every
+exponential as the corresponding integer power of `exp (I t)`.
+
+Inspection of `ConstructionTargets.CircleParam`, Mathlib's circle-integral
+definition, and `ConstructionTargets.Rouche` shows that the remaining gap is
+the algebraic middle: reindex the Laurent sum as `X⁻ᴺ * algPoly`, apply the
+logarithmic-derivative product rule including the monomial pole contribution,
+and bound the resulting divisor multiplicity by the compiled degree bound.
+
 ## Statement repair
 
 Generated `windingNumber` had sorry in its def — replaced with opaque
