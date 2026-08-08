@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
+  "closer_hop": 2,
   "imported_at": "2026-07-13T17:26:54.155409Z"
 }
