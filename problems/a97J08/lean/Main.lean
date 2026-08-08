@@ -191,5 +191,42 @@ theorem apm_a97j08 (D : Set ℂ) (γ : ℝ → ℂ) (F : ℕ → ℂ → ℂ) (g
   finiteness, isolation, and additivity of the frozen `finsum` over this finite
   decomposition. No packaged declarations for them were found. The statement
   is unchanged.
+
+  HOP 4 rechecked `ConstructionTargets.Rouche`, Mathlib's locally finite
+  divisor support, connected-component, frontier, and simply-connected APIs.
+  Disk Rouché is available, but there remains no theorem relating the bounded
+  connected components in `apm_a97j08_curveInterior` to the curve image.
+
+  The exact missing topological lemma is:
+
+    `∀ (D : Set ℂ) (γ : ℝ → ℂ),
+      IsOpen D → IsSimplyConnected D →
+      ContinuousOn γ (Icc (0 : ℝ) 1) → γ 0 = γ 1 →
+      Set.InjOn γ (Ico (0 : ℝ) 1) →
+      apm_a97j08_curveImage γ ⊆ D →
+      IsCompact (closure (apm_a97j08_curveInterior γ)) ∧
+      closure (apm_a97j08_curveInterior γ) ⊆ D ∧
+      frontier (apm_a97j08_curveInterior γ) =
+        apm_a97j08_curveImage γ`.
+
+  The exact analytic lemma that then closes the frozen theorem is:
+
+    `∀ (D : Set ℂ) (γ : ℝ → ℂ) (f g : ℂ → ℂ),
+      IsOpen D → IsSimplyConnected D →
+      ContinuousOn γ (Icc (0 : ℝ) 1) → γ 0 = γ 1 →
+      Set.InjOn γ (Ico (0 : ℝ) 1) →
+      BoundedVariationOn γ (Icc (0 : ℝ) 1) →
+      apm_a97j08_curveImage γ ⊆ D →
+      DifferentiableOn ℂ f D → DifferentiableOn ℂ g D →
+      (∀ z ∈ apm_a97j08_curveImage γ, ‖f z - g z‖ < ‖g z‖) →
+      apm_a97j08_zeroCount f (apm_a97j08_curveInterior γ) =
+        apm_a97j08_zeroCount g (apm_a97j08_curveInterior γ)`.
+
+  The second is the arbitrary-Jordan Rouché theorem in precisely the frozen
+  divisor representation. Applying it to the already compiled eventual
+  boundary inequality and limit differentiability is immediate. Neither
+  proposition is available in the searched corpus, and proving them requires
+  the absent Jordan separation/argument-principle infrastructure. The frozen
+  statement remains unchanged.
   -/
   sorry

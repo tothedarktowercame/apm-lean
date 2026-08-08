@@ -50,6 +50,20 @@ interfaces are the Jordan containment theorem and divisor zero-set
 finiteness/isolation plus additivity of the frozen `finsum` over that finite
 decomposition.
 
+## Hop 4
+
+The sorry boundary now records two fully quantified missing propositions:
+
+- compactness of the closure of `apm_a97j08_curveInterior`, its containment
+  in the simply connected ambient domain, and identification of its frontier
+  with the curve image;
+- arbitrary-Jordan Rouché transfer for `apm_a97j08_zeroCount`.
+
+The second applies directly to the compiled eventual boundary inequality and
+the compiled analyticity of the limit. Proving either proposition requires
+Jordan separation or an equivalent disk-decomposition development absent
+from the current corpus.
+
 ## Phase-A hints used
 - #1 `e-codexpilot-prove-Hurwitz-zero-persistence-through-quantitative-open-mapping`: cited.
 - #2 `e-codexpilot-package-every-rouche-homotopy-slice-for-the-argument-principle`: cited.

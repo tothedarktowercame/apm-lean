@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 3 compiled the Weierstrass bridge apm_a97j08_limit_differentiableOn. A finite local-disk Rouche route avoids arbitrary-contour integration, but still needs Jordan compact-closure/containment and divisor finiteness, isolation, and finsum additivity over the disk cover.",
+  "classification_detail": "Hop 4 records exact Lean statements for Jordan compact-closure/containment/frontier and arbitrary-Jordan Rouche transfer in the frozen divisor encoding. Neither is packaged in Mathlib or ConstructionTargets.",
   "imported_at": "2026-07-13T17:26:52.894437Z",
   "checked_at": "2026-08-05T14:15:00Z",
   "checked_lean_state": {
