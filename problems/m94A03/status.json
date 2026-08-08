@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "closer_note": "Globalized the gradient norm identity through the origin, proved measurability of both representatives for arbitrary measures, and reduced vector MemLp exactly to scalar radial MemLp. Radial integration and weak-gradient uniqueness remain.",
   "imported_at": "2026-07-13T17:26:54.732874Z"
 }

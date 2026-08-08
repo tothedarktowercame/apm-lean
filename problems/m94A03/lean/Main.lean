@@ -35,6 +35,45 @@ lemma apm_m94a03_norm_logNormGradient {n : ℕ}
     abs_of_nonneg (sq_nonneg _)]
   field_simp
 
+/-- The norm formula also holds at the totalized origin, where both sides are
+zero. This removes the exceptional point from later `L²` calculations. -/
+lemma apm_m94a03_norm_logNormGradient_all {n : ℕ}
+    (x : EuclideanSpace ℝ (Fin n)) :
+    ‖apm_m94a03_logNormGradient x‖ = ‖x‖⁻¹ := by
+  rcases eq_or_ne x 0 with rfl | hx
+  · simp [apm_m94a03_logNormGradient]
+  · exact apm_m94a03_norm_logNormGradient hx
+
+/-- The totalized logarithmic representative is strongly measurable. -/
+lemma apm_m94a03_logNorm_aestronglyMeasurable {n : ℕ}
+    {μ : Measure (EuclideanSpace ℝ (Fin n))} :
+    AEStronglyMeasurable
+      (apm_m94a03_logNorm : EuclideanSpace ℝ (Fin n) → ℝ) μ := by
+  exact (Real.measurable_log.comp measurable_norm).aestronglyMeasurable
+
+/-- The totalized classical gradient is strongly measurable. -/
+lemma apm_m94a03_logNormGradient_aestronglyMeasurable {n : ℕ}
+    {μ : Measure (EuclideanSpace ℝ (Fin n))} :
+    AEStronglyMeasurable
+      (apm_m94a03_logNormGradient :
+        EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) μ := by
+  apply Measurable.aestronglyMeasurable
+  exact ((measurable_norm.inv.pow_const 2).smul measurable_id)
+
+/-- Square-integrability (indeed `Lᵖ` membership for any exponent) of the
+vector candidate is exactly the scalar radial integrability problem. -/
+lemma apm_m94a03_logNormGradient_memLp_iff {n : ℕ} {p : ℝ≥0∞}
+    {μ : Measure (EuclideanSpace ℝ (Fin n))} :
+    MemLp (apm_m94a03_logNormGradient :
+      EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) p μ ↔
+      MemLp (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖⁻¹) p μ := by
+  apply memLp_congr_norm
+  · exact apm_m94a03_logNormGradient_aestronglyMeasurable
+  · exact measurable_norm.inv.aestronglyMeasurable
+  · filter_upwards with x
+    rw [apm_m94a03_norm_logNormGradient_all, Real.norm_eq_abs,
+      abs_of_nonneg (inv_nonneg.mpr (norm_nonneg x))]
+
 def apm_m94a03_IsWeakGradientOn {n : ℕ}
     (s : Set (EuclideanSpace ℝ (Fin n)))
     (f : EuclideanSpace ℝ (Fin n) → ℝ)
@@ -83,5 +122,22 @@ theorem apm_m94a03 :
   ready-made general Euclidean radial formula or weak-gradient uniqueness
   theorem was found in `LEMMA-INDEX.md`, `ConstructionTargets/`, solved
   siblings, or git history.
+
+  Closer hop 2 removes the measurability and vector-to-scalar interfaces from
+  the remaining radial problem. `apm_m94a03_norm_logNormGradient_all` extends
+  the norm identity through the totalized origin. The two measurable helpers
+  prove strong measurability for arbitrary ambient measures, and
+  `apm_m94a03_logNormGradient_memLp_iff` uses `memLp_congr_norm` to show that
+  the vector candidate belongs to any `Lᵖ(μ)` exactly when the scalar function
+  `x ↦ ‖x‖⁻¹` does. Thus no a.e.-exception or coordinatewise measurability
+  bookkeeping remains in the dimension threshold.
+
+  Further searches covered Mathlib's norm-derivative, Euclidean inner-product,
+  `MemLp`, Hausdorff/radial, and divergence-theorem APIs, plus the radial
+  artifacts `a95A03` and `m95J02`. They provide local derivative and
+  specialized radial ingredients but still no dimension-parametric formula
+  for the restricted unit ball. The remaining bridges are now the scalar
+  radial integrals, punctured-ball integration by parts, and weak-gradient
+  uniqueness in dimension two. The frozen statement is unchanged.
   -/
   sorry
