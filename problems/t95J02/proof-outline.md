@@ -14,6 +14,8 @@ half of the main theorem.
 - Descend the map through the quotient using `Continuous.quotient_lift`.
 - Verify directly on representatives that the resulting map restricts to the
   identity on circle A.
+- Public lemmas now expose both the vertical-period and glide-reflection
+  equalities in the concrete quotient.
 
 ## Remaining negative half
 

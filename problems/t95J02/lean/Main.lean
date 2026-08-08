@@ -35,6 +35,18 @@ noncomputable instance : TopologicalSpace t95J02KleinBottleType :=
 def t95J02QuotientPoint (p : ℝ × ℝ) : t95J02KleinBottleType :=
   Quotient.mk _ p
 
+/-- The vertical period holds as an equality in the concrete quotient. -/
+lemma t95J02QuotientPoint_vertical (x y : ℝ) :
+    t95J02QuotientPoint (x, y) = t95J02QuotientPoint (x, y + 1) := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _ (t95J02KleinRel.vertical x y))
+
+/-- The glide reflection holds as an equality in the concrete quotient. -/
+lemma t95J02QuotientPoint_glide (x y : ℝ) :
+    t95J02QuotientPoint (x, y) = t95J02QuotientPoint (x + 1, -y) := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _ (t95J02KleinRel.glide x y))
+
 def t95J02KleinBottle : TopCat := TopCat.of t95J02KleinBottleType
 
 /-- The horizontal core circle in the standard quotient picture. -/
@@ -120,5 +132,12 @@ theorem apm_t95j02 :
     the formal proof.  The remaining bridge is precisely that invariant
     computation and identification of the B inclusion with its torsion
     generator.
+
+    Closer hop 2 exposes the two defining quotient identities as public
+    compiled lemmas `t95J02QuotientPoint_vertical` and
+    `t95J02QuotientPoint_glide`. In particular the latter is the concrete
+    point-set identification from which the inversion conjugacy relation must
+    eventually be derived. These equalities do not themselves compute the
+    induced loop or homology classes, so the invariant bridge remains open.
     -/
     sorry

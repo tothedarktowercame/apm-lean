@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "closer_note": "Constructed and verified the retraction onto circle A by descending (x,y) ↦ (x,0) through the EqvGen quotient. The no-retraction result for circle B remains blocked on computing H1 or π1 of the custom Klein-bottle quotient and identifying B as the torsion generator.",
+  "closer_hop": 2,
+  "closer_note": "Exposed the vertical-period and glide-reflection identifications as public lemmas in the concrete quotient, in addition to the completed retraction onto circle A. The no-retraction result for circle B remains blocked on computing H1 or π1 and transporting the glide equality to the torsion generator.",
   "imported_at": "2026-07-13T17:26:58.349035Z"
 }
