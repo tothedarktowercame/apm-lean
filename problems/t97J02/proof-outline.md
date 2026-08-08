@@ -10,6 +10,10 @@ maps. One `sorry` remains.
 - `apm_t97J02_eulerCharacteristic` implements both classification formulas.
 - `apm_t97J02_candidate_eulerCharacteristics` verifies all degree-five and
   degree-six candidate genus equations.
+- `apm_t97J02_nonorientable_genus_of_euler_eq` proves the general
+  nonorientable genus formula `2*n+2` from Euler multiplicativity.
+- `apm_t97J02_orientable_genus_of_euler_eq` proves the general orientable
+  genus formula `n+1` from the same equation.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t97J02.md`

@@ -88,6 +88,27 @@ lemma apm_t97J02_candidate_eulerCharacteristics :
       6 * apm_t97J02_eulerCharacteristic false 4 := by
   norm_num
 
+/-- Euler multiplicativity over an `n`-sheeted cover of `N₄`, if supplied by
+future topology infrastructure, forces the nonorientable genus to be
+`2*n+2`. -/
+lemma apm_t97J02_nonorientable_genus_of_euler_eq
+    (n genus : ℕ)
+    (h : apm_t97J02_eulerCharacteristic false genus =
+      (n : ℤ) * apm_t97J02_eulerCharacteristic false 4) :
+    genus = 2 * n + 2 := by
+  simp only [apm_t97J02_eulerCharacteristic_nonorientable] at h
+  omega
+
+/-- The same Euler equation forces genus `n+1` in the orientable case. -/
+lemma apm_t97J02_orientable_genus_of_euler_eq
+    (n genus : ℕ)
+    (h : apm_t97J02_eulerCharacteristic true genus =
+      (n : ℤ) * apm_t97J02_eulerCharacteristic false 4) :
+    genus = n + 1 := by
+  simp only [apm_t97J02_eulerCharacteristic_orientable,
+    apm_t97J02_eulerCharacteristic_nonorientable] at h
+  omega
+
 /-- The connected sum of four real projective planes, `N₄`. -/
 abbrev apm_t97J02_X := apm_t97J02_Surface false 4
 
@@ -161,5 +182,19 @@ theorem apm_t97j02 :
   equations are closed, while explicit covering maps, their charts/fibers,
   multiplicativity, parity, and surface classification remain open. The frozen
   statement is unchanged.
+
+  CLOSER HOP 3: the candidate arithmetic is now generalized rather than merely
+  checked at degrees five and six.
+  `apm_t97J02_nonorientable_genus_of_euler_eq` proves that any
+  nonorientable surface satisfying the required `n`-sheet Euler equation has
+  genus `2*n+2`, and `apm_t97J02_orientable_genus_of_euler_eq` proves that an
+  orientable one has genus `n+1`. These `omega` proofs close uniqueness of the
+  genus calculation for every degree once multiplicativity and classification
+  are available. Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`,
+  covering and surface siblings, Mathlib topology/algebraic-topology sources,
+  and git history still found no finite-cover Euler theorem, orientation
+  parity theorem, polygon-cover construction, or surface classification for
+  these actual quotients. The remaining bridge is wholly topological; the
+  frozen statement is unchanged.
   -/
   sorry

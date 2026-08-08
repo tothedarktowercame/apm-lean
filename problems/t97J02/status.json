@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "closer_hop": 2,
-  "boundary": "Canonical polygon projections are compiled as continuous surjections, and all Euler-characteristic candidate arithmetic is closed. Remaining are explicit cover construction and verification, finite-cover Euler multiplicativity, orientation parity, and compact-surface classification.",
+  "closer_hop": 3,
+  "boundary": "Canonical polygon projections are compiled as continuous surjections, and the Euler equation now uniquely forces genus 2n+2 in the nonorientable case and n+1 in the orientable case for arbitrary degree n. Remaining are explicit cover construction and verification, finite-cover Euler multiplicativity, orientation parity, and compact-surface classification.",
   "imported_at": "2026-07-13T17:26:58.482218Z"
 }
