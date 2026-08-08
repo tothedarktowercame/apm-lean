@@ -62,6 +62,43 @@ lemma apm_b01A04_aut_mulEquiv_zmod_three
     rw [IsGalois.card_aut_eq_finrank, hfin]
   exact ⟨mulEquivOfPrimeCardEq hcard (by simp)⟩
 
+/-- Why this unblocks `apm_b01a04`: this is the missing arithmetic
+construction of two linearly disjoint cyclic cubic extensions inside their
+degree-nine compositum. Either intermediate field supplies the first witness,
+while the pair supplies the input for the product restriction theorem. -/
+theorem apm_b01A04_bridge_cubic_compositum_exists :
+    ∃ E : Type,
+      ∃ hE : Field E,
+        letI := hE
+        ∃ hA : Algebra ℚ E,
+          letI := hA
+          ∃ hfd : FiniteDimensional ℚ E,
+            letI := hfd
+            ∃ K L : IntermediateField ℚ E,
+              IsGalois ℚ E ∧
+              IsGalois ℚ K ∧
+              IsGalois ℚ L ∧
+              Module.finrank ℚ K = 3 ∧
+              Module.finrank ℚ L = 3 ∧
+              K ⊓ L = ⊥ ∧
+              K ⊔ L = ⊤ := by
+  sorry
+
+/-- Why this unblocks `apm_b01a04`: this is the simultaneous restriction
+equivalence for a compositum. The intersection hypothesis gives surjectivity
+onto both compatible factor automorphisms, and the join hypothesis gives
+injectivity; applying the cubic identification to both factors yields the
+requested product of two copies of `ZMod 3`. -/
+theorem apm_b01A04_bridge_compositum_restrict_equiv
+    (F E : Type*) [Field F] [Field E] [Algebra F E]
+    [FiniteDimensional F E] [IsGalois F E]
+    (K L : IntermediateField F E)
+    (hK : IsGalois F K) (hL : IsGalois F L)
+    (hinf : K ⊓ L = ⊥) (hsup : K ⊔ L = ⊤) :
+    Nonempty
+      ((E ≃ₐ[F] E) ≃* ((K ≃ₐ[F] K) × (L ≃ₐ[F] L))) := by
+  sorry
+
 theorem apm_b01a04 :
     apm_b01A04_isGaloisGroup (Multiplicative (ZMod 3)) ∧
       apm_b01A04_isGaloisGroup

@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "note": "Realizability transport, the exact Multiplicative-product model equivalence, and identification of every degree-three Galois automorphism group with Multiplicative (ZMod 3) are compiled. Explicit rational degree-three Galois fields and their linearly disjoint compositum restriction equivalence remain.",
+  "note": "Hop 4 states the exact remaining contracts: existence of two rational cyclic cubic intermediate fields with trivial intersection and full compositum, and the simultaneous restriction equivalence from the compositum Galois group to the product. The frozen main statement is unchanged.",
   "imported_at": "2026-07-13T17:26:53.430709Z"
 }

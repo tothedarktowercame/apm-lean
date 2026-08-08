@@ -38,3 +38,17 @@ restriction equivalence and no construction of the two rational cubic fields.
 - construct two linearly disjoint cyclic cubic extensions and formalize the
   simultaneous restriction isomorphism from their compositum's Galois group
   to the product; the final product-model transport is now compiled.
+
+## Hop 4 bridge statements
+
+- `apm_b01A04_bridge_cubic_compositum_exists` states the arithmetic
+  construction precisely: a finite Galois extension of `ℚ` containing two
+  Galois cubic intermediate fields with meet `⊥` and join `⊤`.
+- `apm_b01A04_bridge_compositum_restrict_equiv` states the missing generic
+  simultaneous restriction equivalence from the compositum automorphism group
+  to the product of the two factor automorphism groups.
+
+The first intermediate field and `apm_b01A04_aut_mulEquiv_zmod_three` give the
+first conjunct. Applying the second bridge to the pair, identifying each
+factor by the same cubic lemma, and using the compiled Multiplicative-product
+transport gives the second conjunct.
