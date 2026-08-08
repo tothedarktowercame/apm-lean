@@ -4,7 +4,8 @@ The frozen Lean theorem is present in `lean/Main.lean`. Basic flow projections
 are now proved: every flow is the identity at time zero, each trajectory has
 the encoded derivative, and the final stability inequality is exact at zero.
 The explicit square-root counterexample now has two compiled, distinct global
-solutions: the zero curve and `t ↦ t|t|`.
+solutions: the zero curve and `t ↦ t|t|`. Its global exponent-`1/2` Hölder
+estimate is also compiled, closing the fourth frozen conjunct completely.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m93J06.md`
@@ -13,10 +14,12 @@ solutions: the zero curve and `t ↦ t|t|`.
 
 - globalize compatible Picard–Lindelöf solutions from compact time intervals;
 - prove `C¹` dependence of the flow on initial data;
-- prove the global exponent-`1/2` Hölder bound for `y ↦ 2√|y|`; the two
-  distinct global solutions themselves are now compiled;
 - apply Gronwall separately for positive and negative time and translate its
   distance estimate to the displayed absolute-value inequality.
+
+`apm_m93j06_abs_sqrt_sub_sqrt_le_sqrt_abs_sub`,
+`apm_m93j06_sqrt_field_holder`, and `apm_m93j06_not_holder_unique` contain the
+completed Hölder counterexample argument.
 
 Mathlib constructs local flows Lipschitz in initial data and provides ODE
 uniqueness/stability. No searched result packages the required globalization

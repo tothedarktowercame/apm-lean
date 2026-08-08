@@ -96,6 +96,54 @@ lemma apm_m93j06_signedSquare_ne_zero :
   have := congrFun h 1
   norm_num at this
 
+/-- The elementary global square-root difference estimate. -/
+lemma apm_m93j06_abs_sqrt_sub_sqrt_le_sqrt_abs_sub
+    {u v : ℝ} (hu : 0 ≤ u) (hv : 0 ≤ v) :
+    |Real.sqrt u - Real.sqrt v| ≤ Real.sqrt |u - v| := by
+  wlog huv : v ≤ u generalizing u v
+  · rw [abs_sub_comm u v, abs_sub_comm (Real.sqrt u) (Real.sqrt v)]
+    exact this hv hu (le_of_not_ge huv)
+  have hsu : 0 ≤ Real.sqrt u := Real.sqrt_nonneg u
+  have hsv : 0 ≤ Real.sqrt v := Real.sqrt_nonneg v
+  have hsvu : Real.sqrt v ≤ Real.sqrt u := Real.sqrt_le_sqrt huv
+  rw [abs_of_nonneg (sub_nonneg.mpr hsvu), abs_of_nonneg (sub_nonneg.mpr huv),
+    ← Real.sqrt_sq (sub_nonneg.mpr hsvu)]
+  apply Real.sqrt_le_sqrt
+  nlinarith [Real.sq_sqrt hu, Real.sq_sqrt hv,
+    mul_nonneg hsv (sub_nonneg.mpr hsvu)]
+
+/-- The square-root vector field used above is globally Hölder with exponent
+`1/2` and constant `2`. -/
+lemma apm_m93j06_sqrt_field_holder (t a b : ℝ) :
+    |2 * Real.sqrt (|a|) - 2 * Real.sqrt (|b|)| ≤
+      2 * Real.rpow (|a - b|) (1 / 2 : ℝ) := by
+  rw [← mul_sub, abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
+  change 2 * |Real.sqrt (|a|) - Real.sqrt (|b|)| ≤
+    2 * (|a - b|) ^ (1 / (2 : ℝ))
+  rw [← Real.sqrt_eq_rpow]
+  apply mul_le_mul_of_nonneg_left _ (by norm_num)
+  calc
+    |Real.sqrt (|a|) - Real.sqrt (|b|)| ≤ Real.sqrt (abs (abs a - abs b)) :=
+      apm_m93j06_abs_sqrt_sub_sqrt_le_sqrt_abs_sub (abs_nonneg a) (abs_nonneg b)
+    _ ≤ Real.sqrt (|a - b|) := Real.sqrt_le_sqrt (abs_abs_sub_abs_le_abs_sub a b)
+
+/-- Hölder continuity below exponent one does not imply uniqueness: the
+square-root field and the two trajectories above refute the universal claim. -/
+lemma apm_m93j06_not_holder_unique :
+    ¬ ∀ α : ℝ, 0 < α → α < 1 → ∀ f : ℝ → ℝ → ℝ,
+      (∃ K > 0, ∀ t a b,
+        |f t a - f t b| ≤ K * Real.rpow |a - b| α) →
+      ∀ y₀, ∃! y : ℝ → ℝ, apm_m93j06_Solves f y₀ y := by
+  intro h
+  obtain ⟨y, hy, hunique⟩ :=
+    h (1 / 2 : ℝ) (by norm_num) (by norm_num)
+      (fun _ y ↦ 2 * Real.sqrt |y|)
+      ⟨2, by norm_num, apm_m93j06_sqrt_field_holder⟩ 0
+  have hz : (fun _ : ℝ ↦ 0) = y := hunique _ apm_m93j06_zero_solves_sqrt
+  have hs : (fun t : ℝ ↦ t * |t|) = y :=
+    hunique _ apm_m93j06_signedSquare_solves_sqrt
+  exact apm_m93j06_signedSquare_ne_zero (hs.trans hz.symm)
+
 theorem apm_m93j06 :
     (∀ f : ℝ → ℝ → ℝ, Continuous (Function.uncurry f) →
       (∃ L > 0, ∀ t a b, |f t a - f t b| ≤ L * |a - b|) →
@@ -168,5 +216,23 @@ theorem apm_m93j06 :
   `rpow`, Picard--Lindelöf, and Gronwall sources and the partial ODE siblings
   `m00A05`, `m96A02`, and `m96J02` found no theorem completing those pieces.
   The frozen statement remains unchanged.
+
+  CLOSER HOP 3 (partial). The fourth frozen conjunct is now fully closed by
+  `apm_m93j06_not_holder_unique`. The new elementary lemma
+  `apm_m93j06_abs_sqrt_sub_sqrt_le_sqrt_abs_sub` proves
+  `|sqrt u - sqrt v| ≤ sqrt |u-v|` for nonnegative reals by ordering the
+  square roots and comparing squares. Combining it with
+  `abs_abs_sub_abs_le_abs_sub` gives the exact global exponent-`1/2` bound
+  with constant `2` in `apm_m93j06_sqrt_field_holder`. The negation proof then
+  instantiates the universal uniqueness claim with this field and contradicts
+  uniqueness using the two compiled global trajectories from hop 2.
+
+  The remaining first, second, third, and fifth conjuncts still require the
+  same global ODE infrastructure: compatible compact-interval exhaustion,
+  differentiable dependence on initial data, continuation under linear
+  growth, and forward/backward Gronwall. Renewed inspection of Mathlib's
+  square-root/rpow, Picard--Lindelöf, and Gronwall APIs and the cited siblings
+  yielded no packaged globalization theorem. The frozen statement remains
+  unchanged.
   -/
   sorry
