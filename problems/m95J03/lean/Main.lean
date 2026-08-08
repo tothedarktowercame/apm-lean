@@ -35,6 +35,34 @@ def apm_m95J03_flow (t : ℝ) : Matrix (Fin 4) (Fin 4) ℝ :=
 def apm_m95J03_ivpSolution (v : Fin 4 → ℝ) (t : ℝ) : Fin 4 → ℝ :=
   (apm_m95J03_flow t).mulVec v
 
+/-- The concrete lower-triangular family is continuous entrywise. -/
+lemma apm_m95J03_B_continuous : Continuous apm_m95J03_B := by
+  apply continuous_pi
+  intro i
+  apply continuous_pi
+  intro j
+  unfold apm_m95J03_B
+  split_ifs <;> fun_prop
+
+/-- The diagonal Jordan representatives converge to zero at the exceptional
+parameter, even along the punctured neighborhood. -/
+lemma apm_m95J03_diagonalJordan_tendsto_zero :
+    Tendsto apm_m95J03_diagonalJordan
+      (nhdsWithin 0 ({0}ᶜ : Set ℝ)) (nhds 0) := by
+  have hcont : Continuous apm_m95J03_diagonalJordan := by
+    apply continuous_pi
+    intro i
+    apply continuous_pi
+    intro j
+    fin_cases i <;> fin_cases j <;>
+      simp [apm_m95J03_diagonalJordan] <;> fun_prop
+  have hzero : apm_m95J03_diagonalJordan 0 = 0 := by
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      norm_num [apm_m95J03_diagonalJordan]
+  rw [← hzero]
+  exact hcont.continuousAt.mono_left inf_le_left
+
 /-- At time zero the explicit flow matrix is the identity. -/
 lemma apm_m95J03_flow_zero : apm_m95J03_flow 0 = 1 := by
   ext i j
@@ -153,4 +181,15 @@ theorem apm_m95j03 :
   -- diagonal-Jordan convergence, nonzero-parameter conjugacy, exponential
   -- identification, and the derivative formula remain open. The frozen
   -- statement is unchanged.
+  --
+  -- Closer hop 3 closes both topological limit conjuncts independently of the
+  -- Vandermonde problem. `apm_m95J03_B_continuous` proves entrywise
+  -- continuity of the concrete triangular family. The helper
+  -- `apm_m95J03_diagonalJordan_tendsto_zero` proves continuity of the
+  -- diagonal power family, computes its value at zero, and restricts the
+  -- resulting convergence to the punctured neighborhood. Renewed searches of
+  -- explicit conjugation, nilpotent exponential, and coordinatewise
+  -- derivative APIs found no theorem closing the remaining algebraic/ODE
+  -- pieces. Those conjuncts remain open without an unproved assertion; the
+  -- frozen statement is unchanged.
   sorry

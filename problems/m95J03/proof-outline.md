@@ -7,6 +7,8 @@ conjunct has been factored into a compiled helper:
 - `B(0)` is nonzero, its fourth power vanishes, and its third power does not;
 - `flow 0` is the identity, so every explicit IVP solution has the prescribed
   initial value;
+- `B` is continuous and the diagonal Jordan representatives tend to zero on
+  the punctured neighborhood of zero;
 
 The exponential-series conjunct matches
 `NormedSpace.exp_series_hasSum_exp'`; its direct arbitrary-matrix
@@ -17,7 +19,6 @@ specialization currently exceeds the elaboration heartbeat budget.
 
 ## Remaining boundary
 
-- prove entrywise continuity of `B` and convergence of `diagonalJordan`;
 - construct and verify an invertible conjugating matrix for nonzero `ρ`;
 - identify the truncated exponential with `flow 1`;
 - prove the remaining derivative formula coordinatewise; the initial-value
