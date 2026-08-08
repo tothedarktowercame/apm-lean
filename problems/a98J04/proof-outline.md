@@ -1,5 +1,16 @@
 # Proof Outline: a98J04
 
+## Closer hop 1 completion
+
+The theorem is closed without changing its statement.  For a
+complex-differentiable function, `DifferentiableAt.fderiv_restrictScalars`
+identifies the real derivative with the scalar restriction of the
+complex-linear derivative; `map_smul` then proves commutation with `I` for
+every input.  Conjugation has derivative `Complex.conjCLE`.  The derivative of
+`h` is assembled explicitly from `Complex.reCLM`, `Complex.imCLM`, and
+`Complex.ofRealCLM`.  Evaluating the claimed symmetry at `1` reduces the two
+counterexamples respectively to `-I = I` and `2 * I = I`.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 

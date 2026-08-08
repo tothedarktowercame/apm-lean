@@ -28,5 +28,7 @@
     "has_receipt": true
   },
   "classification": "complete",
+  "closer_hop": 1,
+  "boundary": "Closed. Complex differentiability identifies the real fderiv with the scalar restriction of the complex-linear fderiv. The derivatives of conjugation and h are computed as explicit real continuous-linear maps, and their failure to commute with multiplication by I follows by evaluation at 1.",
   "imported_at": "2026-05-01T19:38:17.182715Z"
 }

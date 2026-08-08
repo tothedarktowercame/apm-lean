@@ -29,4 +29,32 @@ theorem apm_a98j04 :
       apm_a98J04_HasComplexSymmetry (fderiv ℝ f z)) ∧
     (∀ z : ℂ, ¬apm_a98J04_HasComplexSymmetry (fderiv ℝ apm_a98J04_g z)) ∧
     (∀ z : ℂ, ¬apm_a98J04_HasComplexSymmetry (fderiv ℝ apm_a98J04_h z)) := by
-  sorry
+  set_option backward.isDefEq.respectTransparency false in
+    constructor
+    · intro f z hf
+      rw [hf.fderiv_restrictScalars ℝ]
+      intro w
+      change (fderiv ℂ f z) (Complex.I * w) = Complex.I * (fderiv ℂ f z) w
+      simpa only [smul_eq_mul] using map_smul (fderiv ℂ f z) Complex.I w
+    constructor
+    · intro z hs
+      have hgderiv : fderiv ℝ apm_a98J04_g z = Complex.conjCLE := by
+        exact Complex.conjCLE.fderiv
+      rw [hgderiv] at hs
+      have hi := hs 1
+      simp at hi
+      have him := congrArg Complex.im hi
+      norm_num at him
+    · intro z hs
+      let Lh : ℂ →L[ℝ] ℂ :=
+        Complex.ofRealCLM.comp Complex.reCLM +
+          (2 * Complex.I) • (Complex.ofRealCLM.comp Complex.imCLM)
+      have hhderiv : fderiv ℝ apm_a98J04_h z = Lh := by
+        exact (show HasFDerivAt apm_a98J04_h Lh z by
+          convert Lh.hasFDerivAt using 1
+          ext w
+          simp [apm_a98J04_h, Lh]
+          ring).fderiv
+      rw [hhderiv] at hs
+      have hi := hs 1
+      simp [Lh] at hi
