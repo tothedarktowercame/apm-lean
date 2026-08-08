@@ -33,6 +33,69 @@ lemma apm_m93j06_flow_distance_zero {f φ : ℝ → ℝ → ℝ}
   rw [apm_m93j06_flow_zero hφ, apm_m93j06_flow_zero hφ]
   simp
 
+/-- The signed-square curve is the nontrivial global trajectory for the
+standard square-root nonuniqueness example. -/
+lemma apm_m93j06_hasDerivAt_mul_abs (t : ℝ) :
+    HasDerivAt (fun s : ℝ ↦ s * |s|) (2 * |t|) t := by
+  by_cases ht : t = 0
+  · subst t
+    rw [hasDerivAt_iff_tendsto]
+    have hfun :
+        (fun s : ℝ => ‖s - 0‖⁻¹ *
+          ‖s * |s| - 0 * |(0 : ℝ)| - (s - 0) • (2 * |(0 : ℝ)|)‖) =
+          fun s : ℝ => |s| := by
+      funext s
+      by_cases hs : s = 0
+      · simp [hs]
+      · simp only [sub_zero, zero_mul, abs_zero, mul_zero, smul_zero,
+          Real.norm_eq_abs]
+        rw [abs_mul, abs_abs]
+        rw [← abs_mul_abs_self]
+        field_simp [abs_ne_zero.mpr hs]
+        simp
+    rw [hfun]
+    simpa using continuous_abs.tendsto (0 : ℝ)
+  · convert (hasDerivAt_id t).mul (hasDerivAt_abs ht) using 1
+    rcases lt_or_gt_of_ne ht with htneg | htpos
+    · simp [Real.sign_of_neg htneg, abs_of_neg htneg]
+      ring
+    · simp [Real.sign_of_pos htpos, abs_of_pos htpos]
+      ring
+
+/-- Along the signed-square trajectory, the square-root field evaluates to
+the absolute-time derivative magnitude. -/
+lemma apm_m93j06_sqrt_abs_mul_abs (t : ℝ) :
+    Real.sqrt |t * abs t| = |t| := by
+  rw [abs_mul, abs_abs]
+  simpa [pow_two] using Real.sqrt_sq (abs_nonneg t)
+
+/-- The zero curve solves the square-root vector field. -/
+lemma apm_m93j06_zero_solves_sqrt :
+    apm_m93j06_Solves (fun _ y ↦ 2 * Real.sqrt |y|) 0 (fun _ ↦ 0) := by
+  constructor
+  · rfl
+  · intro t
+    simpa using hasDerivAt_const t (0 : ℝ)
+
+/-- The signed-square curve is a second global solution of the same initial
+value problem. -/
+lemma apm_m93j06_signedSquare_solves_sqrt :
+    apm_m93j06_Solves (fun _ y ↦ 2 * Real.sqrt |y|) 0
+      (fun t ↦ t * |t|) := by
+  constructor
+  · norm_num
+  · intro t
+    convert apm_m93j06_hasDerivAt_mul_abs t using 1
+    change 2 * Real.sqrt |t * abs t| = 2 * |t|
+    rw [apm_m93j06_sqrt_abs_mul_abs]
+
+/-- The two explicit square-root trajectories are genuinely distinct. -/
+lemma apm_m93j06_signedSquare_ne_zero :
+    (fun t : ℝ ↦ t * |t|) ≠ fun _ ↦ 0 := by
+  intro h
+  have := congrFun h 1
+  norm_num at this
+
 theorem apm_m93j06 :
     (∀ f : ℝ → ℝ → ℝ, Continuous (Function.uncurry f) →
       (∃ L > 0, ∀ t a b, |f t a - f t b| ≤ L * |a - b|) →
@@ -85,5 +148,25 @@ theorem apm_m93j06 :
   nonuniqueness example. The live bridges remain compatible exhaustion/gluing,
   differentiable parameter dependence, the Hölder counterexample, and the two
   time orientations of Gronwall. The frozen statement was left unchanged.
+
+  CLOSER HOP 2 (partial). The square-root nonuniqueness example is now
+  compiled through four lemmas. `apm_m93j06_hasDerivAt_mul_abs` proves
+  globally, including at the nonsmooth point of `abs`, that
+  `(t * |t|)' = 2 * |t|`; `apm_m93j06_sqrt_abs_mul_abs` identifies the field
+  value along this curve. Consequently `apm_m93j06_zero_solves_sqrt` and
+  `apm_m93j06_signedSquare_solves_sqrt` give two global solutions of
+  `y' = 2 * sqrt |y|` with initial value zero, and
+  `apm_m93j06_signedSquare_ne_zero` proves they are distinct. This goes beyond
+  the prior hop's proposed example by closing all trajectory and
+  nonuniqueness obligations.
+
+  The fourth conjunct is now reduced solely to the global `1/2`-Hölder bound
+  for `y ↦ 2 * sqrt |y|`; Mathlib's square-root continuity and derivative APIs
+  do not package the required difference inequality. The other live bridges
+  remain compact-interval exhaustion/gluing, differentiable dependence in
+  initial data, and backward/forward Gronwall. Searches of the square-root,
+  `rpow`, Picard--Lindelöf, and Gronwall sources and the partial ODE siblings
+  `m00A05`, `m96A02`, and `m96J02` found no theorem completing those pieces.
+  The frozen statement remains unchanged.
   -/
   sorry
