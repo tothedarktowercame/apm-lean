@@ -22,6 +22,20 @@ integral tools, but the conversion chain is not packaged for this encoding.
 The theorem remains partial with one `sorry`; its frozen statement is
 unchanged.
 
+## Closer hop 2 (2026-08-08)
+
+The ordinary/within derivative conversion is now complete rather than part of
+the boundary. `apm_a98J02_deriv_eq_derivWithin_ae` removes the null endpoints
+and proves equality on the interior using `derivWithin_of_mem_nhds`.
+`apm_a98J02_integrableOn_deriv_sq` consequently transfers the frozen
+square-integrability hypothesis to `deriv f`.
+
+The remaining boundary is the localized Cauchy--Schwarz calculation and the
+uniform epsilon-delta extraction from
+`Integrable.tendsto_setIntegral_nhds_zero`. Mathlib's general Hölder theorem
+and small-set filter limit provide the ingredients, but their real interval
+normalization still must be assembled locally.
+
 ## Imported Proof Plan
 
 ```clojure

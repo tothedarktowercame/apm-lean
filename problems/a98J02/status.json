@@ -28,5 +28,22 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "imported_at": "2026-05-01T19:38:17.147910Z"
+  "imported_at": "2026-05-01T19:38:17.147910Z",
+  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a98J02/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": ["apm_a98j02 (localized Cauchy-Schwarz and uniform small-set integral estimate)"],
+    "proved": [
+      "apm_a98J02_sub_eq_integral_deriv",
+      "apm_a98J02_deriv_eq_derivWithin_ae",
+      "apm_a98J02_integrableOn_deriv_sq"
+    ],
+    "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
+    "blockers": [
+      "Assemble localized real-valued integral Cauchy-Schwarz with the interval measure factor",
+      "Extract a uniform epsilon-delta small-set integral estimate from integrability"
+    ]
+  }
 }

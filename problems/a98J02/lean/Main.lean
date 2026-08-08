@@ -30,6 +30,28 @@ lemma apm_a98J02_sub_eq_integral_deriv (f : ℝ → ℝ)
   rw [Set.uIcc_of_le hyx, Set.uIcc_of_le (show (0 : ℝ) ≤ 1 by norm_num)]
   exact Set.Icc_subset_Icc hy hx
 
+/-- Away from the two null endpoints, the within derivative in the frozen
+hypothesis agrees with the ordinary derivative used by the fundamental
+theorem of calculus. -/
+lemma apm_a98J02_deriv_eq_derivWithin_ae (f : ℝ → ℝ) :
+    ∀ᵐ t ∂volume.restrict (Set.Icc (0 : ℝ) 1),
+      deriv f t = derivWithin f (Set.Icc 0 1) t := by
+  filter_upwards [ae_restrict_mem measurableSet_Icc,
+    (volume.restrict (Set.Icc (0 : ℝ) 1)).ae_ne 0,
+    (volume.restrict (Set.Icc (0 : ℝ) 1)).ae_ne 1] with t ht ht0 ht1
+  rw [derivWithin_of_mem_nhds]
+  exact Icc_mem_nhds (lt_of_le_of_ne ht.1 (Ne.symm ht0))
+    (lt_of_le_of_ne ht.2 ht1)
+
+lemma apm_a98J02_integrableOn_deriv_sq (f : ℝ → ℝ)
+    (hderiv : IntegrableOn
+      (fun x : ℝ => |derivWithin f (Set.Icc 0 1) x| ^ 2)
+      (Set.Icc 0 1)) :
+    IntegrableOn (fun x : ℝ => |deriv f x| ^ 2) (Set.Icc 0 1) := by
+  apply hderiv.congr
+  filter_upwards [apm_a98J02_deriv_eq_derivWithin_ae f] with t ht
+  rw [ht]
+
 theorem apm_a98j02 (f : ℝ → ℝ)
     (hf : AbsolutelyContinuousOnInterval f 0 1)
     (hderiv : IntegrableOn
@@ -38,23 +60,24 @@ theorem apm_a98j02 (f : ℝ → ℝ)
     ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
       ∀ x y : ℝ, 0 ≤ y → y < x → x ≤ 1 → |x - y| < δ →
         |f x - f y| ^ 2 / |x - y| < ε := by
-  /- CLOSER HOP 1 BOUNDARY.
+  /- CLOSER HOP 2 BOUNDARY (2026-08-08).
 
-  `apm_a98J02_sub_eq_integral_deriv` now compiles the fundamental-theorem
-  bridge on every subinterval `[y,x]`, by restricting the supplied absolute
-  continuity hypothesis with `AbsolutelyContinuousOnInterval.mono` and using
-  `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`.
+  The derivative-conversion bridge left by hop 1 is now compiled:
+  `apm_a98J02_deriv_eq_derivWithin_ae` removes the two null endpoints and
+  uses `derivWithin_of_mem_nhds` on the interior, while
+  `apm_a98J02_integrableOn_deriv_sq` transports the supplied integrability
+  hypothesis to the ordinary derivative appearing in the FTC identity.
 
-  The remaining estimate is the analytic core.  One must identify `deriv f`
-  with `derivWithin f (Icc 0 1)` almost everywhere on each interior
-  subinterval, apply integral Cauchy--Schwarz to obtain
+  The remaining estimate is now purely the analytic inequality. One must
+  apply integral Cauchy--Schwarz to obtain
   `|f x-f y|² ≤ (x-y) * ∫_[y,x] |derivWithin f (Icc 0 1)|²`, and use
   absolute continuity of the integral of the integrable squared derivative to
-  choose a uniform `δ`.  Mathlib supplies
+  choose a uniform `δ`. A renewed search found Mathlib's real-valued
+  `integral_mul_norm_le_Lp_mul_Lq` and
   `Integrable.tendsto_setIntegral_nhds_zero` and the ENNReal/NNReal Hölder
-  inequalities, but repository and source searches found no assembled
-  real-valued interval lemma matching this `derivWithin` encoding.  No solved
-  sibling or `ConstructionTargets` module closes those conversions.  The
-  frozen statement is unchanged.
+  inequalities, but no assembled interval lemma that squares the Bochner
+  integral and normalizes the measure factor, nor a ready epsilon-delta
+  uniform-small-set form of the latter sequential/filter theorem. Those two
+  assembly steps remain open. The frozen statement is unchanged.
   -/
   sorry
