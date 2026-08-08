@@ -67,6 +67,29 @@ lemma apm_b93j02_zsqrtd_negFive_isDomain : IsDomain (Zsqrtd (-5)) := by
     apm_b93j02_zsqrtd_noZeroDivisors (-5) (by norm_num)
   exact NoZeroDivisors.to_isDomain _
 
+/-- Every quadratic integer is an integer-linear combination of `1` and
+`sqrtd`, so `Zsqrtd d` is finite as a module over `ℤ`. -/
+lemma apm_b93j02_zsqrtd_module_finite (d : ℤ) :
+    Module.Finite ℤ (Zsqrtd d) := by
+  rw [Module.finite_def, Submodule.fg_def]
+  refine ⟨{(1 : Zsqrtd d), Zsqrtd.sqrtd}, by simp, ?_⟩
+  apply top_unique
+  intro z hz
+  have hzdecomp : z = z.re • (1 : Zsqrtd d) + z.im • Zsqrtd.sqrtd := by
+    ext <;> simp
+  rw [hzdecomp]
+  apply Submodule.add_mem
+  · exact Submodule.smul_mem _ z.re
+      (Submodule.subset_span (by simp))
+  · exact Submodule.smul_mem _ z.im
+      (Submodule.subset_span (by simp))
+
+lemma apm_b93j02_zsqrtd_negFive_isNoetherianRing :
+    IsNoetherianRing (Zsqrtd (-5)) := by
+  letI : Module.Finite ℤ (Zsqrtd (-5)) :=
+    apm_b93j02_zsqrtd_module_finite (-5)
+  exact IsNoetherianRing.of_finite ℤ (Zsqrtd (-5))
+
 theorem apm_b93j02 :
     -- (a): I implies II, and II implies IV.
     (∀ (R : Type) [CommRing R] [IsDomain R],
@@ -85,21 +108,29 @@ theorem apm_b93j02 :
     -- (c): the same domain is not a UFD.
     IsDomain (Zsqrtd (-5)) ∧
       ¬UniqueFactorizationMonoid (Zsqrtd (-5)) := by
+  refine ⟨apm_b93j02_pid_implies_ufd,
+    apm_b93j02_ufd_implies_integrallyClosed,
+    ⟨inferInstance, apm_b93j02_intPolynomial_not_pid⟩, ?_⟩
   /-
-  CLOSER HOP 1 BOUNDARY (statement unchanged).
+  CLOSER HOP 2 BOUNDARY (statement unchanged).
 
-  This hop compiles the two universal implications, the full `ℤ[X]`
-  counterexample (combining the stock UFD instance with
-  `apm_b93j02_intPolynomial_not_pid`), and the previously absent domain proof
-  for `ℤ[√-5]` via its multiplicative norm. Mathlib also directly supplies the
-  UFD instance for `MvPolynomial ℕ ℤ`.
+  The first three conjuncts are now discharged explicitly above.  Going beyond
+  hop 1, `apm_b93j02_zsqrtd_module_finite` proves that every quadratic integer
+  is in the `ℤ`-span of `{1, sqrtd}`.  Applying
+  `IsNoetherianRing.of_finite` yields the complete positive Noetherian claim
+  for `Zsqrtd (-5)` as
+  `apm_b93j02_zsqrtd_negFive_isNoetherianRing`.  Thus the finite-module bridge
+  recorded by hop 1 is fully closed, in addition to its already compiled
+  domain proof.
 
-  Remaining bridges are genuinely constructive: prove that the ideal generated
-  by all variables in `MvPolynomial ℕ ℤ` is not finitely generated; construct
-  the finite `ℤ`-module/Noetherian structure on `Zsqrtd (-5)`; and formalize
-  the classical norm factorization of `6` showing `ℤ[√-5]` is neither a PID
-  nor a UFD. Searches of `LEMMA-INDEX.md`, every `ConstructionTargets` module,
-  prior solved problems, Mathlib's polynomial/Noetherian/Zsqrtd sources, and
-  git history found no packaged versions of those three facts.
+  The remaining goal contains three negative assertions: non-Noetherianity of
+  the countably generated polynomial ring, and non-PID/non-UFD for
+  `Zsqrtd (-5)`.  Renewed searches of `LEMMA-INDEX.md`, all
+  `ConstructionTargets`, solved algebra siblings, Mathlib's MvPolynomial
+  support/evaluation and Zsqrtd factorization APIs, and git history found no
+  packaged result.  The first requires the finite-support specialization
+  argument for the ideal of all variables.  The latter two still require the
+  norm-6 factorization proof (including irreducibility/nonassociateness of
+  `2`, `3`, and `1 ± sqrtd`).  No unproved declaration was introduced.
   -/
   sorry
