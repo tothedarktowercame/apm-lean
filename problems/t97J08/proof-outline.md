@@ -11,6 +11,8 @@ number. One `sorry` remains.
 
 - Prove closedness by explicit `HasFDerivAt` quotient calculations for the two
   coordinate coefficients.
+- `t97J08_norm_normalizedLoop` proves the normalized loop has norm one, while
+  `t97J08_normalizedLoop_periodic` proves it remains `2π`-periodic.
 - Lift the normalized periodic loop through the exponential covering
   `ℝ → Circle`.
 - Show the lift changes by a unique integer over one period and use it to
@@ -24,4 +26,7 @@ Mathlib has no packaged classification of periodic circle loops by degree and
 no theorem identifying that degree with this angle-form integral. The local
 closedness calculation also needs explicit real `fderiv` formulas because
 `fun_prop` does not normalize the rational complex-coordinate expressions
-after a denominator nonzero proof is supplied.
+after a denominator nonzero proof is supplied. The more narrowly inspected
+translation-number API applies to monotone degree-one circle homeomorphisms,
+not arbitrary loops; general covering homotopy lifting does not package the
+required global lift and integer endpoint-displacement classification.

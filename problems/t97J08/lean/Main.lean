@@ -57,6 +57,20 @@ def IsT97J08WindingNumber (f : ℝ → ℂ) (n : ℤ) : Prop :=
 def t97J08BetaIntegral (f : ℝ → ℂ) : ℝ :=
   ∫ t in (0 : ℝ)..2 * Real.pi, t97J08Beta (f t) (deriv f t)
 
+/-- Normalization of a punctured loop lands on the unit circle. -/
+lemma t97J08_norm_normalizedLoop
+    {f : ℝ → ℂ} (hf : ∀ t, f t ≠ 0) (t : ℝ) :
+  ‖t97J08NormalizedLoop f t‖ = 1 := by
+  rw [t97J08NormalizedLoop, norm_div]
+  simp only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (norm_nonneg _)]
+  exact div_self (norm_ne_zero_iff.mpr (hf t))
+
+/-- Normalization preserves the required `2π` periodicity. -/
+lemma t97J08_normalizedLoop_periodic
+    {f : ℝ → ℂ} (hf : ∀ t, f (t + 2 * Real.pi) = f t) (t : ℝ) :
+    t97J08NormalizedLoop f (t + 2 * Real.pi) = t97J08NormalizedLoop f t := by
+  simp only [t97J08NormalizedLoop, hf]
+
 theorem apm_t97j08 :
     IsT97J08ClosedOneFormOnPuncturedPlane t97J08Beta ∧
     ∀ f : ℝ → ℂ, IsT97J08SmoothPuncturedLoop f →
@@ -88,5 +102,22 @@ theorem apm_t97j08 :
   degree-as-angle-integral theorem.  Those artifacts either use an opaque
   winding number, state analytic argument-principle goals, or remain blocked
   on the same topological bridge.
+
+  CLOSER HOP 2: the two elementary normalization obligations are now compiled.
+  `t97J08_norm_normalizedLoop` proves that a nowhere-zero loop normalizes to
+  norm one, and `t97J08_normalizedLoop_periodic` proves normalization preserves
+  the frozen `2π` periodicity. Thus the normalized map is ready to be bundled
+  as a circle-valued periodic loop for a future lifting argument. A narrower
+  search of `AddCircle`, `Circle.periodic_exp`, covering homotopy lifting,
+  rotation/translation-number, and interval-integral periodicity sources found
+  quotient maps and general lifting machinery but no theorem supplying a
+  global real lift of an arbitrary circle loop or classifying its endpoint
+  displacement. The translation-number API concerns monotone degree-one
+  circle homeomorphisms, not arbitrary loops. Explicit experimentation on the
+  first conjunct confirmed that `fun_prop` proves the two differentiability
+  fields after a norm-square nonzero fact, but this snapshot has no automatic
+  Fréchet quotient-derivative normalization for the final directional
+  equality. The degree classification, FTC identification, and that explicit
+  derivative equality remain open.
   -/
   sorry

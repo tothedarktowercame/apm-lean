@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
+  "closer_hop": 2,
+  "boundary": "Normalization is proved unit-valued and 2π-periodic. Remaining work is explicit closedness derivative algebra, a global real lift and integer endpoint displacement for arbitrary periodic circle loops, construction/uniqueness of the frozen homotopy degree, and the beta-integral FTC identity.",
   "imported_at": "2026-07-13T17:26:58.516556Z"
 }
