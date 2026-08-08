@@ -81,6 +81,40 @@ lemma apm_t94J05_nullhomotopic_to_northPole
   have hp : Joined p apm_t94J05_northPole := PathConnectedSpace.joined _ _
   exact hf.trans (ContinuousMap.homotopic_const_iff.mpr hp)
 
+/-- The complement of any point of the unit sphere is contractible, obtained
+by transporting the vector-space contraction through stereographic
+projection. -/
+lemma apm_t94J05_contractibleSpace_complement (q : apm_t94J05_S3) :
+    ContractibleSpace {y : apm_t94J05_S3 // y ≠ q} := by
+  let hs := stereographic (norm_eq_of_mem_sphere q)
+  have hsource : ({y : apm_t94J05_S3 | y ≠ q} : Set apm_t94J05_S3) = hs.source := by
+    ext y
+    simp [hs]
+  have htarget : hs.target = Set.univ := stereographic_target _
+  let eSource : {y : apm_t94J05_S3 // y ≠ q} ≃ₜ hs.source :=
+    Homeomorph.setCongr hsource
+  let eTarget : hs.target ≃ₜ (ℝ ∙ (q : apm_t94J05_R4))ᗮ :=
+    (Homeomorph.setCongr htarget).trans (Homeomorph.Set.univ _)
+  let e : {y : apm_t94J05_S3 // y ≠ q} ≃ₜ
+      (ℝ ∙ (q : apm_t94J05_R4))ᗮ :=
+    eSource.trans (hs.toHomeomorphSourceTarget.trans eTarget)
+  exact e.contractibleSpace
+
+/-- Every nonsurjective torus map is null-homotopic to the fixed north pole. -/
+lemma apm_t94J05_nullhomotopic_of_not_surjective
+    (f : C(apm_t94J05_Torus, apm_t94J05_S3))
+    (hf : ¬ Function.Surjective f) :
+    ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t94J05_Torus apm_t94J05_northPole) := by
+  rcases apm_t94J05_factor_through_complement f hf with ⟨q, g, hfg⟩
+  letI : ContractibleSpace {y : apm_t94J05_S3 // y ≠ q} :=
+    apm_t94J05_contractibleSpace_complement q
+  have hg0 : g.Nullhomotopic := by
+    simpa using (id_nullhomotopic {y : apm_t94J05_S3 // y ≠ q}).comp_left g
+  rcases hg0 with ⟨p, hg⟩
+  exact apm_t94J05_nullhomotopic_to_northPole f p
+    (apm_t94J05_nullhomotopic_of_factor f q g hfg p hg)
+
 theorem apm_t94j05
     (f : C(apm_t94J05_Torus, apm_t94J05_S3))
     (hf : apm_t94J05_IsSmooth f) :
@@ -123,5 +157,18 @@ theorem apm_t94j05
   that transported scaling remains open. Independently, the opaque smoothness
   hypothesis still has no eliminator yielding nonsurjectivity. The frozen
   statement is unchanged.
+
+  CLOSER HOP 3: the stereographic contraction is now complete without an
+  explicit pointwise homotopy. `apm_t94J05_contractibleSpace_complement`
+  transports Mathlib's `ContractibleSpace` instance on the orthogonal
+  complement through `stereographic.toHomeomorphSourceTarget`, and
+  `apm_t94J05_nullhomotopic_of_not_surjective` combines this with the earlier
+  factorization and endpoint-normalization lemmas. Hence every nonsurjective
+  continuous map has exactly the frozen conclusion. Renewed searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's Sard/Jacobian and
+  manifold sources, topology siblings, and git history found only the
+  finite-dimensional vector-space Sard theorem, not an eliminator for the
+  opaque `apm_t94J05_IsSmooth` predicate or a manifold Sard theorem deriving
+  nonsurjectivity. That single implication remains open.
   -/
   sorry

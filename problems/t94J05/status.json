@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Factorization through a missed-point complement, descent of its null-homotopy, and transport of any constant endpoint to the fixed north pole are compiled. Remaining work is deriving nonsurjectivity from the opaque smoothness predicate and constructing the stereographic contraction of the punctured sphere.",
+  "closer_hop": 3,
+  "boundary": "The punctured sphere is contractible via Mathlib's stereographic homeomorphism, so every nonsurjective continuous torus-to-sphere map is now proved homotopic to the fixed north-pole constant. The sole remaining bridge is deriving nonsurjectivity from the opaque smoothness predicate; no eliminator or applicable manifold Sard theorem exists in the consulted corpus.",
   "imported_at": "2026-07-13T17:26:58.083657Z"
 }

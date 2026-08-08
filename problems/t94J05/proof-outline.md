@@ -14,15 +14,18 @@ map.
 - A complement-valued null-homotopy descends through subtype inclusion.
 - `apm_t94J05_nullhomotopic_to_northPole` moves an arbitrary constant endpoint
   to the fixed north pole using path connectedness of `S³`.
+- `apm_t94J05_contractibleSpace_complement` identifies the complement of any
+  sphere point with its orthogonal complement via stereographic projection and
+  transports the vector space's contractibility instance.
+- `apm_t94J05_nullhomotopic_of_not_surjective` assembles factorization,
+  contractibility, descent, and endpoint normalization to prove the full frozen
+  conclusion for every nonsurjective map.
 
 ## Remaining boundary
 
 - connect the opaque `apm_t94J05_IsSmooth` predicate to a concrete smoothness
-  notion and prove the Sard/non-surjectivity consequence;
-- use Mathlib's stereographic partial homeomorphism to contract a punctured
-  three-sphere by scaling in its vector-space target;
-- construct the stereographic scaling homotopy with the available partial
-  homeomorphism source/target membership proofs.
+  notion and prove the Sard/non-surjectivity consequence.
 
-The factorization and homotopy-composition bookkeeping no longer blocks these
-steps.
+All topology after nonsurjectivity is now compiled; the opaque predicate has no
+available eliminator, and the consulted Mathlib snapshot has no applicable
+manifold Sard theorem.
