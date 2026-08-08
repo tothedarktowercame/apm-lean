@@ -64,27 +64,52 @@ theorem apm_a98j01
         IsCompact K ∧
         volume (Icc a b \ K) < ENNReal.ofReal ε ∧
         ContinuousOn f K := by
-  /-
-  Boundary (closer hop 1): the earlier simple-function/Egorov route is no
-  longer necessary.  A renewed Mathlib search found
-  `Measurable.exists_continuous`; the compiled helper
-  `apm_a98j01_polish_refinement` packages its output and proves, using
-  `MeasureTheory.borel_eq_borel_of_le`, that the refined Polish topology has
-  exactly the original Borel sets.
-
-  The remaining short route is to use compact inner regularity for `volume`
-  in that refined topology to choose `K ⊆ Icc a b` with small complement.
-  The identity from the refined topology to the usual topology is continuous,
-  so refined compactness implies ordinary compactness.  Finally, on `K`, that
-  continuous bijection from a compact space to the Hausdorff ordinary real
-  line is a homeomorphism; composing its inverse with refined continuity of
-  `f` gives `ContinuousOn f K` in the ordinary topology.
-
-  Closer hop 2 found the required compact-to-Hausdorff construction in solved
-  sibling `t92J02`.  Since problem bundles are not importable modules, the
-  proof is localized above as `apm_a98j01_homeomorph_of_compact_to_T2`, using
-  `Equiv.toHomeomorphOfContinuousClosed`.  The open bridge is now only the
-  bookkeeping needed to instantiate this lemma for the two induced topologies
-  on subtype `K` while performing refined-topology inner regularity.
-  -/
-  sorry
+  intro ε hε
+  let t0 : TopologicalSpace ℝ :=
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+  have hb0 : (inferInstance : MeasurableSpace ℝ) = @borel ℝ t0 :=
+    BorelSpace.measurable_eq
+  have hIcc_meas : MeasurableSet (Icc a b) := measurableSet_Icc
+  have hfinite0 : volume (Icc a b) ≠ ⊤ := by
+    rw [Real.volume_Icc]
+    exact ENNReal.ofReal_ne_top
+  obtain ⟨t', ht', hf', hp', hborel⟩ := apm_a98j01_polish_refinement hf
+  letI : TopologicalSpace ℝ := t'
+  letI : PolishSpace ℝ := hp'
+  letI : BorelSpace ℝ :=
+    ⟨hb0.trans hborel.symm⟩
+  obtain ⟨K, hKI, hK', hdiff⟩ :=
+    hIcc_meas.exists_isCompact_diff_lt hfinite0
+      (ne_of_gt (ENNReal.ofReal_pos.mpr hε))
+  have hid : @Continuous ℝ ℝ t' t0 id := continuous_id_of_le ht'
+  have hK0 : @IsCompact ℝ t0 K := by
+    simpa only [id_eq, image_id'] using
+      (@IsCompact.image ℝ ℝ t' t0 K id hK' hid)
+  refine ⟨K, hKI, hK0, hdiff, ?_⟩
+  let tK' : TopologicalSpace K := TopologicalSpace.induced ((↑) : K → ℝ) t'
+  let tK0 : TopologicalSpace K := TopologicalSpace.induced ((↑) : K → ℝ) t0
+  have hKle : tK' ≤ tK0 := induced_mono ht'
+  have hKuniv : @IsCompact K tK' Set.univ := by
+    exact isCompact_iff_isCompact_univ.mp hK'
+  have hT2 : @T2Space K tK0 := by
+    letI : TopologicalSpace K := tK0
+    infer_instance
+  obtain ⟨e, he⟩ := @apm_a98j01_homeomorph_of_compact_to_T2
+    K K tK' tK0 hT2 id hKuniv (continuous_id_of_le hKle)
+      Function.bijective_id
+  have hinv : @Continuous K K tK0 tK' id := by
+    let ee : K ≃ K := @Homeomorph.toEquiv K K tK' tK0 e
+    have hee : ee.toFun = id := he
+    have heinv : ee.invFun = id := by
+      funext x
+      apply ee.injective
+      calc
+        ee (ee.invFun x) = x := ee.right_inv x
+        _ = ee (id x) := (congrFun hee x).symm
+    rw [← heinv]
+    exact @Homeomorph.continuous_invFun K K tK' tK0 e
+  have hcoe : @Continuous K ℝ tK' t' ((↑) : K → ℝ) := continuous_induced_dom
+  have hc : @Continuous K ℝ tK0 t0 (fun x => f x) :=
+    @Continuous.comp K ℝ ℝ tK0 t' t0 _ _ hf'
+      (@Continuous.comp K K ℝ tK0 tK' t' _ _ hcoe hinv)
+  exact (@continuousOn_iff_continuous_restrict ℝ ℝ t0 t0 f K).mpr hc

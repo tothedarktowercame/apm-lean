@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 2 localized the compact-to-Hausdorff continuous-bijection theorem from solved sibling t92J02 as apm_a98j01_homeomorph_of_compact_to_T2. Remaining work is refined-topology inner regularity and instantiating this helper for the two induced subtype topologies on K.",
+  "classification": "complete-lean-proof",
+  "classification_detail": "The proof uses inner regularity in the Polish refinement, transports compactness through the continuous identity to the ordinary topology, and uses the localized compact-to-Hausdorff homeomorphism on the compact subtype to transport continuity of f back to the ordinary topology.",
   "imported_at": "2026-07-13T17:26:53.000594Z"
 }

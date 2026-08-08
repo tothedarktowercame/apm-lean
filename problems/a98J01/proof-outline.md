@@ -9,12 +9,12 @@ The canonical Lean attempt now avoids the long simple-function/Egorov proof.
 - `apm_a98j01_homeomorph_of_compact_to_T2` localizes the compact-to-Hausdorff
   continuous-bijection theorem from solved sibling `t92J02`, using
   `Equiv.toHomeomorphOfContinuousClosed`.
-
-## Follow-up Needed
-
-- Choose a compact subset of `Icc a b` in the refined topology with complement
-  of measure less than `ε`.
-- Transport compactness to the ordinary topology via the continuous identity.
-- Instantiate the compiled compact-to-Hausdorff helper for the two induced
-  topologies on subtype `K`, then transport refined continuity of `f` back to
-  ordinary `ContinuousOn f K`.
+- The main theorem installs the refined topology and its matching
+  `BorelSpace` instance, then uses
+  `MeasurableSet.exists_isCompact_diff_lt` to choose the large compact set.
+- Compactness transfers to the ordinary topology through the continuous
+  identity supplied by the topology inequality.
+- On subtype `K`, the two induced topologies are kept explicit. The identity
+  from the refined compact subtype to the ordinary Hausdorff subtype is a
+  homeomorphism, so its continuous inverse transports the refined continuity
+  of `f` to ordinary `ContinuousOn f K`.
