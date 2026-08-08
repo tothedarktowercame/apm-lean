@@ -1,63 +1,68 @@
 import Mathlib
+import Mathlib.Analysis.Fourier.AddCircle
+import ConstructionTargets.Surfaces
 
-/-! # APM t98A01: a five-fold surface cover and a connected sum
+/-!
+# APM t98A01 — a five-fold surface cover and a connected sum
+
+The fivefold example is the genuine map `(x,y) ↦ (5x,y)` on
+`(ℝ/ℤ)²`.  General closed orientable surfaces and the connected-sum
+calculation use the concrete polygon quotients and classification arithmetic
+from `ConstructionTargets.Surfaces`.
 
 ## Statement repairs
 
 None.
 
-## Encoding question
+## Encoding questions
 
-Mathlib does not bundle the classification of closed surfaces, regular finite
-coverings, or connected sum of surfaces.  Those genuine geometric objects and
-relations are retained as typed placeholders.  The first conjunct both gives
-the requested torus example and states that it is the only homeomorphic
-source/target case.  The second identifies the printed connected sum with the
-nonorientable genus-eleven surface and records its Euler characteristic.
+Regularity is transitivity of actual deck homeomorphisms on every fiber.
 -/
 
-def T98A01ClosedSurface : Type := by sorry
-def T98A01SurfaceMap (X Y : T98A01ClosedSurface) : Type := by sorry
+open ConstructionTargets.Surfaces
 
-def IsT98A01ClosedOrientable (X : T98A01ClosedSurface) : Prop := by sorry
-def IsT98A01Homeomorphic
-    (X Y : T98A01ClosedSurface) : Prop := by sorry
-def IsT98A01RegularSheetedCover {X Y : T98A01ClosedSurface}
-    (sheets : ℕ) (π : T98A01SurfaceMap X Y) : Prop := by sorry
+noncomputable section
 
-def t98A01Torus : T98A01ClosedSurface := by sorry
-def t98A01ProjectivePlane : T98A01ClosedSurface := by sorry
-def t98A01KleinBottle : T98A01ClosedSurface := by sorry
+abbrev T98A01Torus := UnitAddCircle × UnitAddCircle
 
-/-- The explicit cover `(z,w) ↦ (z⁵,w)` of the torus. -/
-def t98A01TorusFiveCover : T98A01SurfaceMap t98A01Torus t98A01Torus := by sorry
+def t98A01TorusFiveCover : C(T98A01Torus, T98A01Torus) :=
+  ⟨fun p ↦ (5 • p.1, p.2), by fun_prop⟩
 
-def t98A01ConnectedSum
-    (X Y : T98A01ClosedSurface) : T98A01ClosedSurface := by sorry
+def t98A01IsNfoldCover {E B : Type*}
+    [TopologicalSpace E] [TopologicalSpace B]
+    (n : ℕ) (p : E → B) : Prop :=
+  IsCoveringMap p ∧ ∀ b : B, Nat.card {e : E // p e = b} = n
 
-/-- `K # T # T # P # K # T`, associated to the left. -/
-def t98A01PrintedSurface : T98A01ClosedSurface :=
-  t98A01ConnectedSum
-    (t98A01ConnectedSum
-      (t98A01ConnectedSum
-        (t98A01ConnectedSum
-          (t98A01ConnectedSum t98A01KleinBottle t98A01Torus)
-          t98A01Torus)
-        t98A01ProjectivePlane)
-      t98A01KleinBottle)
-    t98A01Torus
+def t98A01IsRegularNfoldCover {E B : Type*}
+    [TopologicalSpace E] [TopologicalSpace B]
+    (n : ℕ) (p : E → B) : Prop :=
+  t98A01IsNfoldCover n p ∧
+    ∀ x y : E, p x = p y →
+      ∃ h : E ≃ₜ E, (∀ z : E, p (h z) = p z) ∧ h x = y
 
-def t98A01NonorientableGenus (g : ℕ) : T98A01ClosedSurface := by sorry
-def t98A01EulerCharacteristic (X : T98A01ClosedSurface) : ℤ := by sorry
+def t98A01SumKT : Bool × ℕ := connectedSum false 2 true 1
+def t98A01SumKTT : Bool × ℕ :=
+  connectedSum t98A01SumKT.1 t98A01SumKT.2 true 1
+def t98A01SumKTTP : Bool × ℕ :=
+  connectedSum t98A01SumKTT.1 t98A01SumKTT.2 false 1
+def t98A01SumKTTPK : Bool × ℕ :=
+  connectedSum t98A01SumKTTP.1 t98A01SumKTTP.2 false 2
+
+/-- Classification coordinates of `K # T # T # P # K # T`. -/
+def t98A01PrintedSurfaceData : Bool × ℕ :=
+  connectedSum t98A01SumKTTPK.1 t98A01SumKTTPK.2 true 1
+
+abbrev T98A01PrintedSurface :=
+  Surface t98A01PrintedSurfaceData.1 t98A01PrintedSurfaceData.2
 
 theorem apm_t98a01 :
-    IsT98A01RegularSheetedCover 5 t98A01TorusFiveCover ∧
-    (∀ (X Y : T98A01ClosedSurface) (π : T98A01SurfaceMap X Y),
-      IsT98A01ClosedOrientable X → IsT98A01ClosedOrientable Y →
-      IsT98A01RegularSheetedCover 5 π → IsT98A01Homeomorphic X Y →
-      IsT98A01Homeomorphic X t98A01Torus ∧
-        IsT98A01Homeomorphic Y t98A01Torus) ∧
-    IsT98A01Homeomorphic t98A01PrintedSurface
-      (t98A01NonorientableGenus 11) ∧
-    t98A01EulerCharacteristic t98A01PrintedSurface = -9 := by
+    t98A01IsRegularNfoldCover 5 t98A01TorusFiveCover ∧
+    (∀ (g h : ℕ) (p : Surface true g → Surface true h),
+      t98A01IsRegularNfoldCover 5 p →
+      Nonempty (Surface true g ≃ₜ Surface true h) →
+      g = 1 ∧ h = 1) ∧
+    t98A01PrintedSurfaceData = (false, 11) ∧
+    Nonempty (T98A01PrintedSurface ≃ₜ Surface false 11) ∧
+    eulerCharacteristic t98A01PrintedSurfaceData.1
+      t98A01PrintedSurfaceData.2 = -9 := by
   sorry
