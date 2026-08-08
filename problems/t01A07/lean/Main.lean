@@ -39,6 +39,18 @@ def apm_t01a07_IsSmoothProjectiveHypersurface : Prop :=
 abbrev apm_t01a07_intersection :=
   {p : apm_t01a07_RP3 // p ∈ apm_t01a07_surface ∩ apm_t01a07_line}
 
+noncomputable def apm_t01a07_pointPlus : apm_t01a07_RP3 :=
+  Projectivization.mk ℝ ![1, 1, 0, 0] (by
+    intro h
+    have := congrFun h 0
+    simp at this)
+
+noncomputable def apm_t01a07_pointMinus : apm_t01a07_RP3 :=
+  Projectivization.mk ℝ ![1, -1, 0, 0] (by
+    intro h
+    have := congrFun h 0
+    simp at this)
+
 /-- Equality of fourth powers over `ℝ` has exactly the two expected signs. -/
 lemma apm_t01a07_fourth_pow_eq_iff (x y : ℝ) :
     x ^ 4 = y ^ 4 ↔ x = y ∨ x = -y := by
@@ -60,6 +72,9 @@ lemma apm_t01a07_eq_of_smul_rep_eq
 
 theorem apm_t01a07 :
     apm_t01a07_IsSmoothProjectiveHypersurface ∧
+      apm_t01a07_pointPlus ≠ apm_t01a07_pointMinus ∧
+      apm_t01a07_surface ∩ apm_t01a07_line =
+        {apm_t01a07_pointPlus, apm_t01a07_pointMinus} ∧
       Nonempty (Fin 2 ≃ apm_t01a07_intersection) ∧
       Nat.card apm_t01a07_intersection = 2 ∧
       Nat.card apm_t01a07_intersection % 2 = 0 := by
