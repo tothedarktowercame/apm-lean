@@ -1,5 +1,16 @@
 # Proof Outline: t92J09
 
+## Closer hop 1
+
+The repaired concrete statement is proved directly in spherical coordinates.
+Expanding the encoded two-form on the two encoded tangent vectors gives
+`sin θ ^ 3 * cos φ ^ 2`.  The parameter lies on the unit sphere because its
+squared Euclidean norm reduces to the two identities
+`sin² θ + cos² θ = 1` and `sin² φ + cos² φ = 1`.  Finally, Mathlib's
+`integral_cos_sq` and `integral_sin_pow_three` evaluate the iterated interval
+integral as `π * (4 / 3)`.  This closes both conjuncts without requiring a
+manifold-level Stokes theorem.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
