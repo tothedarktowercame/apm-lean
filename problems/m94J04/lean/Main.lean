@@ -79,6 +79,26 @@ lemma apm_m94J04_inner_curlValue
   split_ifs <;>
     simp [apm_m94J04_basis, PiLp.inner_apply, Fin.sum_univ_succ, hone]
 
+/-- Restricting a test-function coordinate to an affine coordinate line turns
+the ambient `fderiv` evaluation into the ordinary one-dimensional derivative.
+This is the analytic identity required after the coordinate measure split. -/
+lemma apm_m94J04_slice_hasDerivAt
+    (φ : TestFunction (⊤ : TopologicalSpace.Opens apm_m94J04_E)
+      apm_m94J04_E ⊤)
+    (p : apm_m94J04_E) (i j : Fin 3) (r : ℝ) :
+    HasDerivAt (fun s : ℝ ↦ φ (p + s • apm_m94J04_basis i) j)
+      (fderiv ℝ (fun q ↦ φ q j) (p + r • apm_m94J04_basis i)
+        (apm_m94J04_basis i)) r := by
+  have hφ : Differentiable ℝ (φ : apm_m94J04_E → apm_m94J04_E) :=
+    φ.contDiff.differentiable (by simp)
+  have hcoord : Differentiable ℝ (fun q : apm_m94J04_E ↦ φ q j) := by
+    fun_prop
+  have hline : HasDerivAt (fun s : ℝ ↦ p + s • apm_m94J04_basis i)
+      (apm_m94J04_basis i) r :=
+    by simpa using
+      ((hasDerivAt_id r).smul_const (apm_m94J04_basis i)).const_add p
+  exact hcoord.differentiableAt.hasFDerivAt.comp_hasDerivAt r hline
+
 theorem apm_m94j04 :
     ∀ φ : TestFunction (⊤ : TopologicalSpace.Opens apm_m94J04_E)
       apm_m94J04_E ⊤,
@@ -129,5 +149,25 @@ theorem apm_m94j04 :
   equivalence together with the sliced `fderiv` identity. That transport and
   its compact-support/integrability consequences remain the precise live
   bridge. The frozen statement was left unchanged.
+
+  CLOSER HOP 2 (partial). The sliced derivative identity is now fully compiled
+  as `apm_m94J04_slice_hasDerivAt`. For every test function, base point,
+  coordinate direction, component, and real line parameter, it proves that
+  the ordinary derivative of
+  `s ↦ φ (p + s • eᵢ) j` is exactly
+  `fderiv ℝ (fun q ↦ φ q j) (p + r • eᵢ) eᵢ`. The proof extracts global
+  differentiability from `TestFunction.contDiff`, composes it with the affine
+  line's explicit derivative, and therefore closes the analytic identification
+  that hop 1 left inside the coordinate transport.
+
+  A renewed inspection of `MeasureTheory.Integral.Pi`, the torus-integral use
+  of `volume_preserving_piFinSuccAbove`, `a01A01`, `a94J04`, `a02J01`, and the
+  divergence-theorem source found no packaged theorem simultaneously
+  transporting the compact support of these affine slices and rewriting the
+  Euclidean integral. The remaining bridge is now measure-theoretic: compose
+  `volume_preserving_measurableEquiv_toLp` with the coordinate split, derive
+  compact support/integrability for almost every slice, apply one-dimensional
+  integration by parts using the compiled derivative identity, and reassemble
+  by Fubini. The frozen statement remains unchanged.
   -/
   sorry
