@@ -5,7 +5,19 @@ with the Lean files.
 
 ## Notes
 
-The content below was imported automatically and may need cleanup.
+Closer hop 1 found no packaged polynomial-growth Liouville theorem. The
+compiled helper `apm_a03J06_growth_cauchy_bound`, adapted from sibling
+`aunk04`, now establishes the arbitrary-radius estimate
+
+```text
+‖iteratedDeriv k f 0‖ ≤ k! * (A * R^m) / R^k       (1 < R).
+```
+
+The remaining proof must let `R → ∞` to make every coefficient above
+degree `m` vanish, then use analytic Taylor-series uniqueness to identify `f`
+globally with the finite polynomial formed from its first `m + 1`
+coefficients. Mathlib's Cauchy estimate and Taylor power-series APIs provide
+the separate ingredients but not this assembled reconstruction theorem.
 
 ## Imported Proof Plan
 
