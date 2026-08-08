@@ -91,3 +91,13 @@ Plan: (1) formalize `nonmonotone_has_local_extremum` using the Extreme Value The
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 Once the Lean proof is wired, mirror the exact lemmas in the write-up (especially the extremum and open-set arguments) so the exposition matches the formal certificate.
+
+## Closer hop 1 — complete
+
+Mathlib's `exists_Ioo_extr_on_Icc` gives the precise injectivity argument:
+if `a < b` and `f a = f b`, continuity produces an interior maximum or
+minimum on `[a,b]`. Openness of `f '' Ioo a b` rules out either extremum,
+because an open neighborhood of the extremal value contains a strictly larger
+or smaller nearby value. Thus `f` is injective, and
+`Continuous.strictMono_of_inj` supplies the global increasing/decreasing
+dichotomy.
