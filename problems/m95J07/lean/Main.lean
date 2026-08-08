@@ -25,6 +25,20 @@ def apm_m95j07_DifferentiableAtZero (f : apm_m95j07_C) : Prop :=
 def apm_m95j07_cusp : apm_m95j07_C :=
   ⟨fun t ↦ |(t : ℝ)|, continuous_abs.comp continuous_subtype_val⟩
 
+/-- The cusp has unit sup norm, so scalar cusp perturbations can be made
+arbitrarily small while remaining nonzero. -/
+lemma apm_m95j07_norm_cusp : ‖apm_m95j07_cusp‖ = 1 := by
+  apply le_antisymm
+  · rw [ContinuousMap.norm_le _ (by norm_num)]
+    intro t
+    change ‖|(t : ℝ)|‖ ≤ 1
+    simpa only [Real.norm_eq_abs, abs_abs] using abs_le.mpr t.property
+  · calc
+      1 = ‖apm_m95j07_cusp ⟨1, by constructor <;> norm_num⟩‖ := by
+        change 1 = ‖|(1 : ℝ)|‖
+        norm_num
+      _ ≤ ‖apm_m95j07_cusp‖ := ContinuousMap.norm_coe_le_norm _ _
+
 /-- The ambient-extension encoding detects the standard cusp at zero. -/
 lemma apm_m95j07_cusp_not_differentiable :
     ¬ apm_m95j07_DifferentiableAtZero apm_m95j07_cusp := by
@@ -35,6 +49,38 @@ lemma apm_m95j07_cusp_not_differentiable :
     with t ht
   symm
   exact hF t ⟨ht.1.le, ht.2.le⟩
+
+/-- Every nonzero scalar multiple of the cusp remains excluded by the exact
+ambient-extension differentiability predicate.  These arbitrarily small
+cusps are the perturbations required in the eventual empty-interior proof. -/
+lemma apm_m95j07_smul_cusp_not_differentiable (c : ℝ) (hc : c ≠ 0) :
+    ¬ apm_m95j07_DifferentiableAtZero (c • apm_m95j07_cusp) := by
+  rintro ⟨F, hF, hdiff⟩
+  apply apm_m95j07_cusp_not_differentiable
+  refine ⟨fun t => c⁻¹ * F t, ?_, hdiff.const_mul c⁻¹⟩
+  intro t ht
+  change c⁻¹ * F t = |t|
+  rw [hF t ht]
+  change c⁻¹ * (c * |t|) = |t|
+  field_simp
+
+/-- Adding a nonzero cusp perturbation to a function differentiable at zero
+destroys differentiability there.  The proof works directly with the frozen
+existential-extension encoding by subtracting the two hypothetical ambient
+extensions. -/
+lemma apm_m95j07_add_smul_cusp_not_differentiable
+    (f : apm_m95j07_C) (hf : apm_m95j07_DifferentiableAtZero f)
+    (c : ℝ) (hc : c ≠ 0) :
+    ¬ apm_m95j07_DifferentiableAtZero (f + c • apm_m95j07_cusp) := by
+  rintro ⟨G, hG, hGdiff⟩
+  rcases hf with ⟨F, hF, hFdiff⟩
+  apply apm_m95j07_smul_cusp_not_differentiable c hc
+  refine ⟨fun t => G t - F t, ?_, hGdiff.sub hFdiff⟩
+  intro t ht
+  change G t - F t = c * |t|
+  rw [hG t ht, hF t ht]
+  change (f ⟨t, ht⟩ + c * |t|) - f ⟨t, ht⟩ = c * |t|
+  ring
 
 /-- The automatic-continuity conjunct, isolated as a reusable closed-graph
 argument. -/
@@ -83,6 +129,24 @@ theorem apm_m95j07 :
   additionally requires showing the countable slope condition equivalent to
   `apm_m95j07_DifferentiableAtZero`; the local-extension obstruction for the
   basic cusp is now closed.
+
+  Closer hop 3 turns that single witness into the perturbation engine required
+  by the category proof. `apm_m95j07_norm_cusp` proves the cusp has unit sup
+  norm. `apm_m95j07_smul_cusp_not_differentiable` proves every nonzero scalar
+  multiple still violates the frozen extension predicate, and
+  `apm_m95j07_add_smul_cusp_not_differentiable` proves that adding such a cusp
+  to any function differentiable at zero destroys differentiability. Hence
+  arbitrarily small nondifferentiable perturbations of every differentiable
+  function are now available in the actual Banach space.
+
+  The final-hop search also inspected Mathlib's residual/meagre and Baire
+  lemmas (`not_isMeagre_of_isGδ_of_dense` and the countable-union
+  characterizations), plus the compact-domain `ContinuousMap` sup-norm API.
+  These supplied the norm calculation above but no theorem making the frozen
+  existential ambient-extension differentiability set an `Fσ` set. The
+  remaining bridge is still to construct closed slope-control sets covering
+  that predicate and prove each nowhere dense; the frozen statement is
+  unchanged.
 
   Original boundary:
   SKIPPED: two-part functional analysis problem.

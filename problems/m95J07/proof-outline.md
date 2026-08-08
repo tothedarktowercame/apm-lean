@@ -14,6 +14,11 @@ The frozen theorem has a compiling partial Lean development.
 - `apm_m95j07_cusp` bundles the absolute-value cusp in `C([-1,1])`.
 - `apm_m95j07_cusp_not_differentiable` proves no ambient extension agreeing
   with that cusp can be differentiable at zero.
+- `apm_m95j07_norm_cusp` proves the cusp has unit sup norm.
+- `apm_m95j07_smul_cusp_not_differentiable` and
+  `apm_m95j07_add_smul_cusp_not_differentiable` provide arbitrarily small cusp
+  perturbations and show they destroy differentiability of every function
+  differentiable at zero.
 
 ## Remaining boundary
 
@@ -23,3 +28,7 @@ The frozen theorem has a compiling partial Lean development.
   perturbations near zero;
 - invoke the Baire theorem to prove the complement is nonmeagre, while
   reconciling the slope encoding with the ambient-extension predicate.
+
+Closer hop 3 leaves an honest partial: the perturbation/density engine is now
+compiled, but the countable closed-set decomposition needed to invoke Baire
+remains open.
