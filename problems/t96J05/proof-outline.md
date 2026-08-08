@@ -10,10 +10,14 @@ The canonical Lean attempt is `lean/Main.lean`.
 - `apm_t96j05_exists_positive_nonempty_radialLevel` proves that a nonzero
   point of `X` supplies a positive radius and an inhabitant of its literal
   radial-level subtype.
+- `apm_t96j05_exists_positive_nonempty_radialLevel_of_nontrivial` proves the
+  same conclusion from `[Nonempty X] [Nontrivial X]`: if every point mapped
+  to the ambient origin, subtype extensionality would make `X` subsingleton.
 
 ## Remaining boundary
 
-- Use positive manifold dimension to prove that `X` contains a nonzero point.
+- Use positive manifold dimension to derive `Nontrivial X`. The remaining
+  nonzero-point and positive-level deductions are compiled.
 - Apply manifold Sard to the restricted norm or squared norm to choose a
   positive regular value.
 - Turn derivative surjectivity into a global `ChartedSpace` and `IsManifold`

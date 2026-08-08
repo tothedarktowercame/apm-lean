@@ -54,6 +54,19 @@ lemma apm_t96j05_exists_positive_nonempty_radialLevel
   obtain ⟨x, hx⟩ := hXnz
   refine ⟨‖x.1‖, norm_pos_iff.mpr hx, ⟨x, rfl⟩⟩
 
+/-- A nontrivial subtype cannot consist solely of the ambient origin. Combined
+with the preceding lemma, this removes all radial-level existence bookkeeping
+once positive manifold dimension is converted into `Nontrivial X`. -/
+lemma apm_t96j05_exists_positive_nonempty_radialLevel_of_nontrivial
+    {n : ℕ} {X : Set (apm_t96j05_E n)} [Nonempty X] [Nontrivial X] :
+    ∃ r : ℝ, 0 < r ∧ Nonempty (apm_t96j05_radialLevel X r) := by
+  apply apm_t96j05_exists_positive_nonempty_radialLevel
+  by_contra h
+  push_neg at h
+  have hsub : Subsingleton X :=
+    ⟨fun x y ↦ Subtype.ext ((h x).trans (h y).symm)⟩
+  exact not_subsingleton X hsub
+
 theorem apm_t96j05
     (m n : ℕ) (hm : 0 < m) (hmn : m ≤ n)
     (X : Set (apm_t96j05_E n))
@@ -91,5 +104,18 @@ theorem apm_t96j05
   manifold dimension; obtain a positive regular value of the radial function;
   and globalize its local regular-level charts. The frozen statement is
   unchanged.
+
+  CLOSER HOP 3: the elementary nonzero-point bridge is now reduced precisely
+  to nontriviality of the manifold subtype.
+  `apm_t96j05_exists_positive_nonempty_radialLevel_of_nontrivial` proves that
+  `[Nonempty X] [Nontrivial X]` supplies a positive inhabited radial level:
+  if every subtype point had ambient value zero, subtype extensionality would
+  make `X` subsingleton. A renewed inspection of manifold chart-source,
+  model-space nontriviality, invariance-of-domain, and local-homeomorphism APIs
+  found no packaged theorem deriving `Nontrivial X` from `0 < m` and
+  `IsManifold (𝒘(ℝ, EuclideanSpace ℝ (Fin m))) ⊤ X`. Proving it locally
+  would require showing a chart source around an existing point contains a
+  second point. The independent manifold-Sard and global regular-level chart
+  assemblies also remain absent. The frozen statement is unchanged.
   -/
   sorry

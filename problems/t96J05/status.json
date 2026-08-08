@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "A nonzero point now yields a positive nonempty radial level. Remaining: exclude the singleton origin using positive manifold dimension, prove manifold Sard for the radial function, and globalize regular-level local charts into the exact subtype manifold instance.",
+  "closer_hop": 3,
+  "boundary": "A nonzero point yields a positive nonempty radial level, and the nonzero-point step is now proved from Nontrivial X. Remaining: derive Nontrivial X from positive manifold dimension, prove manifold Sard for the radial function, and globalize regular-level local charts into the exact subtype manifold instance.",
   "imported_at": "2026-07-13T17:26:58.409665Z"
 }
