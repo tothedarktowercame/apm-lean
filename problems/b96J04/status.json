@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "In addition to identifying X^8+1 with cyclotomic 16, the Frobenius exponent 41 is proved to have order two modulo 16 and the unit group modulo 16 is proved to have cardinality eight. Splitting-field Galois transport, the structured unit-group equivalence, and intermediate-field enumeration remain.",
+  "closer_hop": 3,
+  "note": "After an IsCyclotomicExtension {16} Q K instance, the rational cyclotomic Galois equivalence and automorphism-group cardinality eight are now compiled. Constructing that instance from the arbitrary splitting field, decomposing the unit group, finite-field Frobenius transport, and intermediate-field enumeration remain.",
   "imported_at": "2026-07-13T17:26:54.094504Z"
 }

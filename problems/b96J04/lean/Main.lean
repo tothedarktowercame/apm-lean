@@ -54,6 +54,19 @@ lemma apm_b96J04_card_units_mod_16 : Nat.card (ZMod 16)ˣ = 8 := by
   rw [Nat.card_eq_fintype_card]
   native_decide
 
+/-- Once the abstract splitting field has been recognized as the sixteenth
+cyclotomic extension, Mathlib's rational cyclotomic Galois equivalence applies
+directly.  This packages both the automorphism-group model and its cardinality,
+isolating recognition of the splitting field as the sole upstream bridge. -/
+lemma apm_b96J04_aut_equiv_units_of_isCyclotomic
+    (K : Type*) [Field K] [NumberField K]
+    [IsCyclotomicExtension {16} ℚ K] :
+    Nonempty ((K ≃ₐ[ℚ] K) ≃* (ZMod 16)ˣ) ∧
+      Nat.card (K ≃ₐ[ℚ] K) = 8 := by
+  let e := IsCyclotomicExtension.Rat.galEquivZMod 16 K
+  refine ⟨⟨e⟩, ?_⟩
+  rw [Nat.card_congr e.toEquiv, apm_b96J04_card_units_mod_16]
+
 theorem apm_b96j04
     (K L : Type) [Field K] [Algebra ℚ K]
     [Fact (Nat.Prime 41)] [Field L] [Algebra (ZMod 41) L]
@@ -96,5 +109,23 @@ theorem apm_b96j04
   identifications, neither the automorphism-group conclusions nor the exact
   count of degree-four intermediate fields can be reached. No proof step
   compiled within the skip budget.
+
+  CLOSER HOP 3: `apm_b96J04_aut_equiv_units_of_isCyclotomic` now compiles the
+  rational Galois transport after the precise missing recognition hypothesis.
+  Given `IsCyclotomicExtension {16} ℚ K`, it applies
+  `IsCyclotomicExtension.Rat.galEquivZMod` and obtains both the group
+  equivalence `(K ≃ₐ[ℚ] K) ≃* (ZMod 16)ˣ` and cardinality eight, reusing the
+  hop-2 unit-cardinality computation. Thus no further arbitrary-splitting-
+  field transport is required after constructing that cyclotomic-extension
+  instance.
+
+  Searches beyond hop 2 covered the definition and singleton criteria for
+  `IsCyclotomicExtension`, primitive-root/cyclotomic-root lemmas, rational
+  `galEquivZMod`, and finite abelian group classification. They found no
+  packaged conversion from `IsSplittingField ℚ K (cyclotomic 16 ℚ)` to the
+  required cyclotomic-extension instance, nor a packaged structured
+  equivalence `(ZMod 16)ˣ ≃* Multiplicative (ZMod 2 × ZMod 4)`. The finite-
+  field Frobenius-degree bridge and subsequent subgroup enumeration also
+  remain open.
   -/
   sorry

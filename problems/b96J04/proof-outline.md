@@ -11,14 +11,19 @@ in `ZMod 16`, while `apm_b96J04_card_units_mod_16` establishes that
 `(ZMod 16)ˣ` has eight elements. The former uses `orderOf_eq_prime`; the latter
 reduces `Nat.card` to a computable `Fintype.card` calculation.
 
+Closer hop 3 proves `apm_b96J04_aut_equiv_units_of_isCyclotomic`. Once `K` is
+recognized as an `IsCyclotomicExtension {16} ℚ K`, Mathlib's
+`IsCyclotomicExtension.Rat.galEquivZMod` directly identifies its automorphism
+group with `(ZMod 16)ˣ`; transporting hop 2's calculation also gives
+automorphism-group cardinality eight.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b96J04.md`
 
 ## Remaining boundary
 
-- transport an arbitrary splitting field of `cyclotomic 16` over `ℚ` to the
-  standard cyclotomic-extension automorphism group and identify its unit group
-  with `ZMod 2 × ZMod 4`;
+- construct `IsCyclotomicExtension {16} ℚ K` from the arbitrary splitting-
+  field instance, then identify `(ZMod 16)ˣ` with `ZMod 2 × ZMod 4`;
 - use the finite Galois correspondence to count the three index-four/fixed
   degree-four fields and prove they are Galois;
 - over `ZMod 41`, identify the splitting degree with the order of `41` modulo
