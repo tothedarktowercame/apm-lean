@@ -91,6 +91,56 @@ lemma apm_m93J04_formalAdjoint_eq (φ : ℝ → ℝ) (x : ℝ) :
       _ = deriv (deriv φ) := by rw [iteratedDeriv_one]
   rw [h]
 
+/-- Smooth test functions make the formal-adjoint expression continuous. -/
+lemma apm_m93J04_formalAdjoint_continuous (φ : ℝ → ℝ)
+    (hφ : ContDiff ℝ ⊤ φ) : Continuous (apm_m93J04_formalAdjoint φ) := by
+  have hφ₂ : Continuous (iteratedDeriv 2 φ) :=
+    hφ.continuous_iteratedDeriv 2 (by simp)
+  have hφ₁ : Continuous (deriv φ) := hφ.continuous_deriv (by simp)
+  have hφ₀ : Continuous φ := hφ.continuous
+  unfold apm_m93J04_formalAdjoint
+  fun_prop
+
+/-- On the two sides of the pole, the expanded weak integrand is interval
+integrable.  This supplies the hypotheses needed by the adjacent-interval
+split and by the eventual integrations by parts. -/
+lemma apm_m93J04_branch_intervalIntegrable (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1)
+    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ⊤ φ) :
+    IntervalIntegrable
+        (fun x ↦ apm_m93J04_kernel x y * apm_m93J04_formalAdjoint φ x)
+        volume 0 y ∧
+      IntervalIntegrable
+        (fun x ↦ apm_m93J04_kernel x y * apm_m93J04_formalAdjoint φ x)
+        volume y 1 := by
+  have hadj := apm_m93J04_formalAdjoint_continuous φ hφ
+  constructor
+  · apply ContinuousOn.intervalIntegrable
+    have hb : Continuous
+        (fun x : ℝ ↦ (x * Real.log y / y ^ 2) * apm_m93J04_formalAdjoint φ x) := by
+      fun_prop
+    apply hb.continuousOn.congr
+    intro x hx
+    have hxy : x ≤ y := by
+      rw [uIcc_of_le hy.1.le] at hx
+      exact hx.2
+    simp only
+    rw [apm_m93J04_kernel_of_le hxy]
+  · apply ContinuousOn.intervalIntegrable
+    have hb : Continuous
+        (fun x : ℝ ↦ (x * Real.log x / y ^ 2) * apm_m93J04_formalAdjoint φ x) := by
+      exact (Real.continuous_mul_log.div_const _).mul hadj
+    apply hb.continuousOn.congr
+    intro x hx
+    have hyx : y ≤ x := by
+      rw [uIcc_of_le hy.2.le] at hx
+      exact hx.1
+    by_cases hxy : x = y
+    · subst x
+      simp only
+      rw [apm_m93J04_kernel_of_le le_rfl]
+    · simp only
+      rw [apm_m93J04_kernel_of_lt (lt_of_le_of_ne hyx (Ne.symm hxy))]
+
 theorem apm_m93j04 :
     ∀ y : ℝ, y ∈ Ioo (0 : ℝ) 1 →
       ∀ φ : ℝ → ℝ,
@@ -146,5 +196,15 @@ theorem apm_m93j04 :
   products on `[0,y]` and `[y,1]`, then perform the four integration-by-parts
   applications and combine their inner boundary terms via the compiled jump.
   The frozen statement is unchanged.
+
+  Closer hop 3 compiles the remaining integrability layer:
+  `apm_m93J04_formalAdjoint_continuous` derives continuity from `ContDiff`,
+  and `apm_m93J04_branch_intervalIntegrable` uses the two kernel normal forms,
+  `Real.continuous_mul_log`, and positivity of `y` to prove interval
+  integrability on both `[0,y]` and `[y,1]`.  A final inspection of Mathlib's
+  integration-by-parts variants found no lemma performing the necessary
+  second-order weighted calculation in one step.  The four applications and
+  their boundary-term algebra therefore remain open without an unproved
+  assertion.
   -/
   sorry

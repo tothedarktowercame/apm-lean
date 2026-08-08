@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Compiled value/derivative endpoint vanishing, the Ioo-to-adjacent-interval integral split, and iteratedDeriv-two normalization. Remaining are branch-product integrability and four integrations by parts.",
+  "closer_hop": 3,
+  "closer_note": "Compiled continuity of the formal adjoint and interval integrability of the complete weak integrand on both kernel branches. The four integrations by parts and boundary-term combination remain open.",
   "imported_at": "2026-07-13T17:26:54.629724Z"
 }

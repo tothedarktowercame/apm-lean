@@ -19,3 +19,8 @@ Mathlib provides the derivatives of `x * log x` and the required integration-
 by-parts APIs. The endpoint and integral-conversion bookkeeping has been
 localized, but no searched result packages the remaining second-order branch
 calculation.
+
+Closer hop 3 proves continuity of the formal adjoint and interval
+integrability of the complete branchwise integrand on both `[0,y]` and
+`[y,1]`.  Thus the split lemma can now be applied directly; only the four
+integration-by-parts identities and their boundary simplification remain.
