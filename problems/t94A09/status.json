@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Compiled restriction constructors eliminate ambient-extension packaging for explicit sphere and torus fields. The S3 and torus clauses have concrete linear/polynomial candidates; the principal remaining bridge is a hairy-ball theorem for S2, absent from Mathlib.",
+  "closer_hop": 2,
+  "closer_progress": "The S3 clause is fully compiled using an explicit smooth orthogonal coordinate rotation, including tangency and nowhere-vanishing. The torus polynomial still needs manual coordinate smoothness packaging; the principal boundary remains the absent hairy-ball obstruction for S2.",
   "imported_at": "2026-07-13T17:26:57.921643Z"
 }

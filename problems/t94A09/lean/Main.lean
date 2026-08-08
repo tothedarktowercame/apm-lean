@@ -61,6 +61,56 @@ lemma apm_t94a09_smoothTorusField_restrict
     apm_t94a09_SmoothTorusField (fun p ↦ Vext (p.1, p.2)) := by
   exact ⟨Vext, hV, fun p ↦ ⟨rfl, horth p⟩⟩
 
+/-- The standard complex-structure rotation on `ℝ⁴`, written in coordinates. -/
+def apm_t94a09_J (x : apm_t94a09_E4) : apm_t94a09_E4 :=
+  WithLp.toLp 2 fun i =>
+    match i with
+    | 0 => -x 1
+    | 1 => x 0
+    | 2 => -x 3
+    | 3 => x 2
+
+lemma apm_t94a09_contDiff_J : ContDiff ℝ ∞ apm_t94a09_J := by
+  unfold apm_t94a09_J
+  rw [contDiff_piLp]
+  intro i
+  fin_cases i <;> fun_prop
+
+lemma apm_t94a09_inner_J (x : apm_t94a09_E4) :
+    ⟪apm_t94a09_J x, x⟫_ℝ = 0 := by
+  rw [PiLp.inner_apply]
+  rw [Fin.sum_univ_four]
+  simp [apm_t94a09_J]
+  rw [real_inner_comm (x 1) (x 0), real_inner_comm (x 3) (x 2)]
+  ring
+
+lemma apm_t94a09_J_ne_zero_of_ne_zero {x : apm_t94a09_E4} (hx : x ≠ 0) :
+    apm_t94a09_J x ≠ 0 := by
+  intro hJ
+  apply hx
+  ext i
+  fin_cases i
+  · have h := congrArg (fun y : apm_t94a09_E4 => y 1) hJ
+    simpa [apm_t94a09_J] using h
+  · have h := congrArg (fun y : apm_t94a09_E4 => y 0) hJ
+    simpa [apm_t94a09_J] using h
+  · have h := congrArg (fun y : apm_t94a09_E4 => y 3) hJ
+    simpa [apm_t94a09_J] using h
+  · have h := congrArg (fun y : apm_t94a09_E4 => y 2) hJ
+    simpa [apm_t94a09_J] using h
+
+lemma apm_t94a09_exists_smoothSphereField_S3 :
+    ∃ V : apm_t94a09_S3 → apm_t94a09_E4,
+      apm_t94a09_SmoothSphereField V ∧ ∀ p, V p ≠ 0 := by
+  refine ⟨fun p => apm_t94a09_J p,
+    apm_t94a09_smoothSphereField_restrict apm_t94a09_J
+      apm_t94a09_contDiff_J (fun p => apm_t94a09_inner_J p), ?_⟩
+  intro p
+  apply apm_t94a09_J_ne_zero_of_ne_zero
+  intro hp
+  have := p.property
+  simp [hp] at this
+
 theorem apm_t94a09 :
     (¬∃ V : apm_t94a09_S2 → apm_t94a09_E3,
       apm_t94a09_SmoothSphereField V ∧ ∀ p, V p ≠ 0) ∧
@@ -83,5 +133,22 @@ theorem apm_t94a09 :
   existence clauses reduce to explicit finite-dimensional algebra and
   smoothness, while the first conjunct still requires a new hairy-ball proof
   (e.g. via degree or Poincaré--Hopf), which is the principal open bridge.
+
+  CLOSER HOP 2: the `S³` existence clause is now completely compiled in
+  `apm_t94a09_exists_smoothSphereField_S3`.  The explicit ambient rotation
+  `apm_t94a09_J` is proved `C∞`, orthogonal to every radius, and injective at
+  zero; restriction to the unit sphere is therefore a smooth nowhere-zero
+  tangent field.  This closes all smoothness and coordinate algebra for the
+  middle frozen conjunct rather than merely recording its candidate.
+
+  A direct torus implementation was also investigated. Its tangency and
+  unique-zero algebra reduce as expected to the nonnegative sum of two
+  complex norm-squares, but Mathlib's smoothness automation does not recognize
+  `Complex.normSq` or the real-to-complex inclusion as smooth without manually
+  expanding both into real and imaginary coordinate polynomials. That finite
+  packaging remains open alongside the substantially deeper first conjunct.
+  Renewed inspection of the sphere-degree, antipodal-map, Euler-class, and
+  vector-bundle sources still found no obstruction capable of proving the
+  `S²` nonexistence clause. The frozen statement is unchanged.
   -/
   sorry
