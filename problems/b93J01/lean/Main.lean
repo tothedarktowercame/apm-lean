@@ -61,7 +61,33 @@ noncommutative. -/
 lemma apm_b93J01_Q8_not_commutative :
     (QuaternionGroup.a 1 : QuaternionGroup 2) * QuaternionGroup.xa 0 ≠
       QuaternionGroup.xa 0 * QuaternionGroup.a 1 := by
-  native_decide
+  decide
+
+/-- In `Q₈`, only `1` and the central element of order two square to one. -/
+lemma apm_b93J01_card_Q8_sq_eq_one :
+    Fintype.card {x : QuaternionGroup 2 // x ^ 2 = 1} = 2 := by
+  decide
+
+/-- In the dihedral group of order eight, the identity, the half-turn, and
+all four reflections square to one. -/
+lemma apm_b93J01_card_D4_sq_eq_one :
+    Fintype.card {x : DihedralGroup 4 // x ^ 2 = 1} = 6 := by
+  decide
+
+/-- The number of solutions to `x² = 1` is invariant under a group
+equivalence, separating `Q₈` from the dihedral group of order eight. -/
+lemma apm_b93J01_Q8_not_equiv_D4 :
+    ¬Nonempty (QuaternionGroup 2 ≃* DihedralGroup 4) := by
+  rintro ⟨e⟩
+  let ei : {x : QuaternionGroup 2 // x ^ 2 = 1} ≃
+      {x : DihedralGroup 4 // x ^ 2 = 1} :=
+    { toFun := fun x => ⟨e x, by rw [← map_pow, x.2, map_one]⟩
+      invFun := fun x => ⟨e.symm x, by rw [← map_pow, x.2, map_one]⟩
+      left_inv := fun x => Subtype.ext (e.symm_apply_apply x)
+      right_inv := fun x => Subtype.ext (e.apply_symm_apply x) }
+  have hcard := Fintype.card_congr ei
+  rw [apm_b93J01_card_Q8_sq_eq_one, apm_b93J01_card_D4_sq_eq_one] at hcard
+  omega
 
 /-- Consequently `Q₈` cannot be isomorphic to any commutative group. -/
 lemma apm_b93J01_Q8_not_mulEquiv_commutative
@@ -138,7 +164,7 @@ theorem apm_b93j01 :
   CLOSER HOP 3 (2026-08-08): two of the three quaternion
   non-isomorphisms are now compiled. `apm_b93J01_Q8_not_commutative` uses the
   concrete generators `a 1` and `xa 0`; their unequal products normalize by
-  `native_decide`. `apm_b93J01_Q8_not_mulEquiv_commutative` transports
+  ordinary `decide`. `apm_b93J01_Q8_not_mulEquiv_commutative` transports
   commutativity backward through a hypothetical multiplicative equivalence,
   and its two specializations rule out `ZMod 8` and `ZMod 4 × ZMod 2` exactly
   as they occur in the frozen theorem. The dihedral target is itself
@@ -147,5 +173,14 @@ theorem apm_b93j01 :
   packaged separating invariant. The broader alternating-group, order-eight
   classification, direct-sum, and order-`pq` bridges also remain. The frozen
   statement is unchanged.
+
+  HOP 4 closes that specific hole. The finite computations
+  `apm_b93J01_card_Q8_sq_eq_one` and `apm_b93J01_card_D4_sq_eq_one` show that
+  the respective solution sets of `x ^ 2 = 1` have cardinalities two and six.
+  `apm_b93J01_Q8_not_equiv_D4` transports this subtype through a hypothetical
+  multiplicative equivalence and contradicts those cardinalities. Ordinary
+  kernel reduction is also used in the older noncommutativity helper. Thus
+  all three frozen quaternion non-isomorphisms
+  are now proved; the unrelated broad classification clauses remain open.
   -/
   sorry

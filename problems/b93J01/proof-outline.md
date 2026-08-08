@@ -42,6 +42,15 @@ dihedral comparison needs a different invariant because both groups are
 noncommutative. The universal classification, alternating-group, direct-sum,
 and order-`pq` components remain open.
 
+## Hop 4
+
+The dihedral comparison is closed by counting involutions. Kernel evaluation
+proves that `{x : QuaternionGroup 2 // x ^ 2 = 1}` has cardinality two and
+the corresponding subtype for `DihedralGroup 4` has cardinality six.
+`apm_b93J01_Q8_not_equiv_D4` transports these subtypes across a hypothetical
+group equivalence and obtains the contradiction. The prior prohibited
+evaluation tactic was also replaced with permitted kernel `decide`.
+
 ## Imported Proof Plan
 
 ```clojure
