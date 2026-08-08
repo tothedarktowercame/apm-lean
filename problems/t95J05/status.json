@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Antipodal invariance of the encoded sphere density is proved, and the existence/uniqueness of the projective three-form is fully closed. The sole remaining bridge is evaluation of the normalized Hausdorff-measure sphere integral via coordinate moments or Stokes.",
+  "closer_hop": 2,
+  "closer_progress": "Descent and uniqueness are closed; the main proof now rewrites to the normalized sphere integral, the density polynomial is expanded, and the final factor-of-two arithmetic is compiled. Only the odd mixed moment and the Hausdorff-normalized coordinate-square moment remain.",
   "imported_at": "2026-07-13T17:26:58.366454Z"
 }

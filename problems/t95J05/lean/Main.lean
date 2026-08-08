@@ -75,6 +75,29 @@ lemma t95J05_existsUnique_projectiveThreeForm :
   apply Subtype.ext
   exact hz
 
+lemma t95J05InclusionPullback_expand (x : t95J05SphereThree) :
+    t95J05InclusionPullback x = x.1 1 ^ 3 * x.1 0 - 4 * x.1 0 ^ 2 := by
+  simp [t95J05InclusionPullback, t95J05Omega]
+  ring
+
+lemma t95J05Integral_eq_sphereIntegral
+    (η : T95J05ProjectiveThreeForm)
+    (hη : t95J05ProjectionPullback η = t95J05InclusionPullback) :
+    t95J05Integral η =
+      (1 / 2 : ℝ) * ∫ x, t95J05InclusionPullback x
+        ∂Measure.hausdorffMeasure 3 := by
+  unfold t95J05Integral t95J05ProjectionPullback at *
+  rw [hη]
+
+lemma t95J05Integral_eq_neg_pi_sq_of_sphereIntegral
+    (η : T95J05ProjectiveThreeForm)
+    (hη : t95J05ProjectionPullback η = t95J05InclusionPullback)
+    (hsphere : (∫ x, t95J05InclusionPullback x
+      ∂Measure.hausdorffMeasure 3) = -2 * Real.pi ^ 2) :
+    t95J05Integral η = -Real.pi ^ 2 := by
+  rw [t95J05Integral_eq_sphereIntegral η hη, hsphere]
+  ring
+
 theorem apm_t95j05 :
     (∃! η : T95J05ProjectiveThreeForm,
       t95J05ProjectionPullback η = t95J05InclusionPullback) ∧
@@ -83,6 +106,7 @@ theorem apm_t95j05 :
       t95J05Integral η = -Real.pi ^ 2) := by
   refine ⟨t95J05_existsUnique_projectiveThreeForm, ?_⟩
   intro η hη
+  rw [t95J05Integral_eq_sphereIntegral η hη]
   /-
   Boundary (closer hop 1): antipodal invariance is now proved directly in
   `t95J05InclusionPullback_antipodal`, and
@@ -99,5 +123,22 @@ theorem apm_t95j05 :
   found no compiled formula for this sphere coordinate moment or a Stokes
   theorem for the encoded density.  Establishing the Hausdorff normalization
   and the coordinate-square moment remains the sole open bridge.
+
+  CLOSER HOP 2: `t95J05Integral_eq_sphereIntegral` now compiles the exact use
+  of `hη`, and the main proof rewrites through it before the remaining sorry.
+  `t95J05InclusionPullback_expand` compiles the pointwise separation into the
+  odd mixed term and coordinate square, while
+  `t95J05Integral_eq_neg_pi_sq_of_sphereIntegral` checks the final factor of
+  two and sign from the single sphere-integral value `-2π²`.
+
+  Going beyond the prior sphere-API search, I inspected
+  `ConstructionTargets.RadialIntegrationR3` and Mathlib's general
+  `integral_fun_norm_addHaar`. They compute ambient Lebesgue radial integrals,
+  not `hausdorffMeasure 3` on the sphere subtype; no coarea or polar
+  disintegration theorem identifies the latter boundary measure. Related
+  artifacts `t02A05`, `t01J06`, and `m96J03` independently stop at the same
+  subtype-Hausdorff normalization. Thus the remaining sorry is confined to
+  the odd-moment cancellation and `∫_{S³} x₀² = π²/2`; the frozen statement
+  is unchanged.
   -/
   sorry
