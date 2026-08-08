@@ -7,6 +7,14 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+The theorem is closed by the already compiled authoritative-frame proof
+`contraction_fixedPoint`. The real constant is bundled as an `NNReal`, the
+given distance estimate becomes `LipschitzWith.of_dist_le_mul`, and Mathlib's
+`ContractingWith.fixedPoint_isFixedPt` and `fixedPoint_unique` supply existence
+and uniqueness. The frozen statement is unchanged and the proof is sorry-free.
+
 ## Imported Proof Plan
 
 ```clojure
