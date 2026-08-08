@@ -68,6 +68,38 @@ lemma apm_m97a04_matrix_eq_zero_of_not_neighbor
     apm_m97a04_matrix n a b i j = 0 := by
   simp [apm_m97a04_matrix, hji, hpred, hsucc]
 
+/-- Exact diagonal entry, exposed for row-sum normalization. -/
+@[simp] lemma apm_m97a04_matrix_diag
+    {n : ℕ} (a b : ℝ → ℝ) (i : Fin n) :
+    apm_m97a04_matrix n a b i i =
+      -2 + apm_m97a04_h n ^ 2 * b ((i.val + 1) * apm_m97a04_h n) := by
+  simp [apm_m97a04_matrix]
+
+/-- Exact predecessor entry of an interior row. -/
+lemma apm_m97a04_matrix_pred
+    {n : ℕ} (a b : ℝ → ℝ) (i : Fin n) (hi : 0 < i.val) :
+    apm_m97a04_matrix n a b i ⟨i.val - 1, by omega⟩ =
+      1 - apm_m97a04_h n / 2 * a ((i.val + 1) * apm_m97a04_h n) := by
+  simp only [apm_m97a04_matrix]
+  rw [if_neg (by
+    intro h
+    have hv := congrArg Fin.val h
+    simp only at hv
+    omega), if_pos (by omega)]
+
+/-- Exact successor entry of an interior row. -/
+lemma apm_m97a04_matrix_succ
+    {n : ℕ} (a b : ℝ → ℝ) (i : Fin n) (hi : i.val + 1 < n) :
+    apm_m97a04_matrix n a b i ⟨i.val + 1, hi⟩ =
+      1 + apm_m97a04_h n / 2 * a ((i.val + 1) * apm_m97a04_h n) := by
+  simp only [apm_m97a04_matrix]
+  rw [if_neg (by
+    intro h
+    have hv := congrArg Fin.val h
+    simp only at hv
+    omega), if_neg (by omega)]
+  simp
+
 /-- Invertibility of the matrix gives unique solvability for every right-hand
 side. -/
 lemma apm_m97a04_unique_mulVec_of_det
@@ -159,12 +191,19 @@ theorem apm_m97a04 :
   `(h / 2) * |a t| < 1`, the norms of the two possible off-diagonal
   coefficients sum exactly to `2`.
 
+  CLOSER HOP 3 goes beyond the remaining dependent-index boundary by proving
+  the exact coefficient lemmas `apm_m97a04_matrix_diag`,
+  `apm_m97a04_matrix_pred`, and `apm_m97a04_matrix_succ`. The latter two
+  discharge the nontrivial subtype equalities for `⟨i-1,_⟩` and `⟨i+1,_⟩`
+  explicitly. Consequently every possibly nonzero summand is now identified
+  with its displayed stencil coefficient; only the `Finset.univ` support
+  collapse itself remains.
+
   Searches of `LEMMA-INDEX.md`, all 16 `ConstructionTargets/` modules, closed
   finite-difference artifacts, Mathlib's `Finset` and Gershgorin sources, and
   git history found no packaged tridiagonal-row sum theorem. The stencil
-  clause still requires expanding `Matrix.mulVec` and collapsing `Finset.univ`
-  to the predecessor/diagonal/successor; the center and outer boundary values
-  are now compiled. The determinant clause requires compact boundedness of
+  clause still requires collapsing `Finset.univ` to the now-fully-identified
+  predecessor/diagonal/successor terms. The determinant clause requires compact boundedness of
   `a`, choosing `h₀` to imply the new helper's smallness premise, and proving
   the erased-row norm sum is at most the full two-neighbor sum before applying
   `Matrix.det_ne_zero_of_sum_row_lt_diag`. These finite dependent-index

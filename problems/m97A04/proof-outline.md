@@ -19,6 +19,9 @@ matrix reductions, with the finite supported-sum assembly still open.
   endpoint evaluations needed by the stencil.
 - `apm_m97a04_neighbor_norm_sum` proves the two possible off-diagonal norms
   sum to exactly two under the eventual mesh-smallness inequality.
+- `apm_m97a04_matrix_diag`, `apm_m97a04_matrix_pred`, and
+  `apm_m97a04_matrix_succ` compute all three possible nonzero row entries,
+  including the dependent predecessor/successor indices.
 
 ## Remaining boundary
 

@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Three-point support, determinant reduction, strict diagonal norm, center/boundary extension identities, and the exact small-mesh two-neighbor norm sum are proved. Remaining work is the dependent Fin row-sum collapse, compact boundedness threshold for a, and the erased-row Gershgorin estimate.",
+  "closer_hop": 3,
+  "boundary": "Three-point support, all three exact dependent Fin row entries, determinant reduction, strict diagonal norm, center/boundary extension identities, and the exact small-mesh two-neighbor norm sum are proved. Remaining work is the Finset row-sum collapse, compact boundedness threshold for a, and the erased-row Gershgorin estimate.",
   "imported_at": "2026-07-13T17:26:55.677967Z"
 }
