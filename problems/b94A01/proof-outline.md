@@ -17,10 +17,13 @@ decomposition.
   injective exhaustive map `Fin 4 → MulAut P` using
   `Fintype.equivFinOfCardEq`. The main proof discharges the corresponding
   first two obligations on `Ψ` with this helper.
+- `apm_b94a01_power_mulAut` constructs the generator-adapted four
+  automorphisms from the units of `ZMod 5` and proves their exact action on
+  every power of `x`.
 
 ## Remaining bridge
 
-Reindex/identify the enumeration with the exact requested power formula via
-`IsCyclic.mulAutMulEquiv`, classify maps from `Q`, and show that
+Prove the canonical power-action family injective and exhaustive, use it in
+the main theorem, classify maps from `Q`, and show that
 noncommutativity forces conjugation by `y` to be inversion. The final two
 multiplication identities then reduce to cyclic exponent arithmetic.

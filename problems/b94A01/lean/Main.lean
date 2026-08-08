@@ -51,6 +51,37 @@ lemma apm_b94a01_enumerate_mulAut
   intro φ
   exact ⟨e φ, by simp [e]⟩
 
+/-- The four canonical units modulo five give automorphisms with the exact
+power action required by the chosen generator. -/
+lemma apm_b94a01_power_mulAut
+    (P : Type*) [Group P] [Finite P]
+    (x : P) (hx : Subgroup.zpowers x = ⊤)
+    (hcard : Nat.card P = 5) :
+    ∃ Ψ : Fin 4 → MulAut P,
+      ∀ (n : Fin 4) (i : ℕ), Ψ n (x ^ i) = x ^ (((n : ℕ) + 1) * i) := by
+  let e : Multiplicative (ZMod 5) ≃* P :=
+    zmodMulEquivOfGenerator (g := x) (n := 5) (fun z => by simp [hx]) hcard
+  let u (n : Fin 4) : (ZMod 5)ˣ :=
+    ZMod.unitOfCoprime ((n : ℕ) + 1) (by fin_cases n <;> decide)
+  let a (n : Fin 4) : MulAut (Multiplicative (ZMod 5)) :=
+    (MulAutMultiplicative (ZMod 5)).symm ((ZMod.AddAutEquivUnits 5).symm (u n))
+  let Ψ (n : Fin 4) : MulAut P := MulAut.congr e (a n)
+  refine ⟨Ψ, ?_⟩
+  intro n i
+  change e (a n (e.symm (x ^ i))) = _
+  have he : e.symm (x ^ i) = Multiplicative.ofAdd (i : ZMod 5) := by
+    rw [← zpow_natCast]
+    exact zmodMulEquivOfGenerator_symm_apply_zpow _ _ _
+  rw [he]
+  simp [a, u, Units.smul_def]
+  convert
+    (zmodMulEquivOfGenerator_apply_ofAdd_intCast
+      (g := x) (n := 5) (fun z => by simp [hx]) hcard
+      (i := (((n : ℕ) + 1) * i : ℤ))) using 1 <;>
+    try simp [e]
+  rw [← zpow_natCast]
+  congr 1
+
 theorem apm_b94a01 :
     ∀ (G : Type*) [Group G] [Fintype G]
         (P : Sylow 5 G) (Q : Sylow 2 G) (x : P) (y : Q),
@@ -141,5 +172,12 @@ theorem apm_b94a01 :
      choosing/reindexing it so index `n` acts by the specific exponent `n+1`.
      A targeted inspection of `IsCyclic.mulAutMulEquiv` confirms an
      equivalence with units of `ZMod 5`, but transporting its evaluation
-     theorem back to the arbitrary generator `x` is not packaged. -/
+     theorem back to the arbitrary generator `x` is not packaged.
+
+     Closer hop 3 constructs that generator-adapted family directly in
+     `apm_b94a01_power_mulAut`, conjugating multiplication by the four units
+     of `ZMod 5` through `zmodMulEquivOfGenerator`; its exact power-action
+     formula compiles.  The remaining assembly is to prove this canonical
+     family injective/exhaustive, classify the two maps from `Q`, and derive
+     the final conjugation identities. -/
   sorry

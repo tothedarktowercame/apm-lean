@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "classification_detail": "Closer hop 2 constructs an injective exhaustive Fin 4 enumeration of MulAut P and wires it into the main theorem. One sorry remains from the prescribed power-action formula onward.",
+  "classification_detail": "Closer hop 3 constructs a generator-adapted Fin 4 family from the units of ZMod 5 and proves the prescribed power-action formula. One sorry remains to establish its injectivity/exhaustion and complete the Q-action and multiplication classification.",
   "imported_at": "2026-07-13T17:26:53.876287Z"
 }
