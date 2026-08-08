@@ -72,6 +72,64 @@ lemma apm_m93J03_solution_eq_affine_trig {ε : ℝ} {x : ℝ → ℝ}
     integral_const_mul, integral_const_mul]
   ring
 
+def apm_m93J03_affineTrig (ε a b t : ℝ) : ℝ :=
+  ε + a * Real.sin t + b * Real.cos t
+
+/-- The exact two-dimensional residual to which the implicit-function theorem
+is applied after the affine-trigonometric reduction. -/
+def apm_m93J03_residual (ε : ℝ) (q : ℝ × ℝ) : ℝ × ℝ :=
+  (q.1 - ∫ s in Icc (-Real.pi) Real.pi,
+      Real.cos (s + apm_m93J03_affineTrig ε q.1 q.2 s),
+    q.2 - ∫ s in Icc (-Real.pi) Real.pi,
+      Real.sin (s + apm_m93J03_affineTrig ε q.1 q.2 s))
+
+/-- A zero of the reduced residual reconstructs a genuine solution of the
+original function-valued equation. -/
+lemma apm_m93J03_isSolution_affineTrig_of_residual_eq_zero
+    {ε a b : ℝ} (hres : apm_m93J03_residual ε (a, b) = 0) :
+    apm_m93J03_isSolution ε (apm_m93J03_affineTrig ε a b) := by
+  have ha : a = ∫ s in Icc (-Real.pi) Real.pi,
+      Real.cos (s + apm_m93J03_affineTrig ε a b s) := by
+    have h := congrArg Prod.fst hres
+    simpa [apm_m93J03_residual] using sub_eq_zero.mp h
+  have hb : b = ∫ s in Icc (-Real.pi) Real.pi,
+      Real.sin (s + apm_m93J03_affineTrig ε a b s) := by
+    have h := congrArg Prod.snd hres
+    simpa [apm_m93J03_residual] using sub_eq_zero.mp h
+  have hcont : Continuous (apm_m93J03_affineTrig ε a b) :=
+    (continuous_const.add (continuous_const.mul Real.continuous_sin)).add
+      (continuous_const.mul Real.continuous_cos)
+  constructor
+  · exact hcont.continuousOn
+  · intro t ht
+    have hu : ContinuousOn
+        (fun s ↦ s + apm_m93J03_affineTrig ε a b s)
+        (Icc (-Real.pi) Real.pi) := continuousOn_id.add hcont.continuousOn
+    have hcos : IntegrableOn
+        (fun s ↦ Real.cos (s + apm_m93J03_affineTrig ε a b s))
+        (Icc (-Real.pi) Real.pi) :=
+      (Real.continuous_cos.comp_continuousOn hu).integrableOn_Icc
+    have hsin : IntegrableOn
+        (fun s ↦ Real.sin (s + apm_m93J03_affineTrig ε a b s))
+        (Icc (-Real.pi) Real.pi) :=
+      (Real.continuous_sin.comp_continuousOn hu).integrableOn_Icc
+    have hpoint : ∀ s : ℝ,
+        Real.sin (t + s + apm_m93J03_affineTrig ε a b s) =
+          Real.sin t * Real.cos (s + apm_m93J03_affineTrig ε a b s) +
+          Real.cos t * Real.sin (s + apm_m93J03_affineTrig ε a b s) := by
+      intro s
+      rw [show t + s + apm_m93J03_affineTrig ε a b s =
+        t + (s + apm_m93J03_affineTrig ε a b s) by ring, Real.sin_add]
+    have hint : (∫ s in Icc (-Real.pi) Real.pi,
+        Real.sin (t + s + apm_m93J03_affineTrig ε a b s)) =
+        Real.sin t * a + Real.cos t * b := by
+      rw [setIntegral_congr_fun measurableSet_Icc (fun s _ ↦ hpoint s),
+        integral_add (hcos.const_mul _) (hsin.const_mul _),
+        integral_const_mul, integral_const_mul, ← ha, ← hb]
+    rw [hint]
+    simp only [apm_m93J03_affineTrig]
+    ring
+
 theorem apm_m93j03 :
     ∃ δ η : ℝ, 0 < δ ∧ 0 < η ∧
       ∀ ε : ℝ, |ε| < δ →
@@ -124,5 +182,25 @@ theorem apm_m93j03 :
   establish that derivative and its invertibility at zero, apply the product-
   domain implicit-function theorem, and extract uniform scalar radii. The
   frozen statement remains unchanged.
+
+  CLOSER HOP 3 (partial). The finite-dimensional equation is now explicitly
+  packaged. `apm_m93J03_affineTrig` defines the reconstructed function and
+  `apm_m93J03_residual` defines the exact pair of coefficient residuals.
+  `apm_m93J03_isSolution_affineTrig_of_residual_eq_zero` proves that every
+  zero of this residual gives a genuine solution of the original integral
+  equation, including continuity and the full pointwise identity on the
+  frozen interval. It reuses the sine-addition separation and restricted-
+  integral calculation from hop 2, so the future implicit-function theorem
+  no longer needs to manipulate function-valued solutions on its existence
+  side.
+
+  I additionally inspected `Analysis.Calculus.Implicit`,
+  `ImplicitFunction.ProdDomain`, `ImplicitContDiff`, the parameter-integral
+  differentiation sources, and sibling `m98A05`. They provide the abstract
+  local implicit-function machinery, but still no packaged strict Frechet
+  derivative for these two parameterized set integrals. The remaining bridge
+  is precisely that derivative/Jacobian computation, its invertibility, and
+  extraction of uniform scalar radii plus coefficient uniqueness. The frozen
+  statement remains unchanged.
   -/
   sorry
