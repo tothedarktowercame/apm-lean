@@ -16,6 +16,15 @@ noncomputable section
 /-- The Heaviside function with the irrelevant value at zero chosen to be zero. -/
 def m03J03Heaviside (x : ℝ) : ℝ := if 0 < x then 1 else 0
 
+/-- Multiplication by the chosen Heaviside representative is exactly
+restriction of the integral to the positive half-line. -/
+lemma m03J03_integral_heaviside_mul (g : ℝ → ℝ) :
+    (∫ x : ℝ, m03J03Heaviside x * g x) = ∫ x in Ioi (0 : ℝ), g x := by
+  rw [← integral_indicator measurableSet_Ioi]
+  apply integral_congr_ae
+  filter_upwards with x
+  by_cases hx : 0 < x <;> simp [m03J03Heaviside, hx]
+
 lemma m03J03_abs_eval_not_distribution :
     ¬ ∃ T : Distribution (⊤ : Opens ℝ) ℝ ⊤,
       ∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤, T φ = |φ 0| := by
@@ -79,5 +88,21 @@ theorem apm_m03j03 :
   the continuity fields of `Distribution`. No solved sibling contains this
   combined construction, so no sibling code was reused and the frozen
   statement was left unchanged.
+
+  CLOSER HOP 2: the Heaviside/set-integral conversion needed by both
+  integration-by-parts identities is now compiled as
+  `m03J03_integral_heaviside_mul`. It proves for an arbitrary real function
+  `g` that integrating `m03J03Heaviside x * g x` over `ℝ` is definitionally
+  the set integral over `Ioi 0`, by identifying the product a.e. with the
+  indicator. This removes the discontinuous Heaviside representative from the
+  remaining analytic calculation.
+
+  Searches beyond hop 1 covered the improper-integral integration-by-parts
+  theorems, compact-support multiplication/derivative APIs, and regular and
+  tempered distribution constructors. The first group supplies the intended
+  next route after the new reduction, but completing its endpoint-at-infinity
+  limits and then bundling all three functionals as LF-continuous maps remains
+  open. No packaged Dirac-comb or polynomial-growth Fourier-series constructor
+  was found. The frozen statement remains unchanged.
   -/
   sorry

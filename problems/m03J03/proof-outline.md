@@ -10,6 +10,9 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
 - `m03J03_abs_eval_not_distribution` proves the complete fourth conjunct by
   evaluating a hypothetical linear distribution on a smooth bump and its
   negation.
+- `m03J03_integral_heaviside_mul` converts every Heaviside-weighted whole-line
+  integral exactly to a set integral over `Ioi 0`, preparing both derivative
+  identities for Mathlib's improper integration-by-parts API.
 
 ## Remaining boundary
 
