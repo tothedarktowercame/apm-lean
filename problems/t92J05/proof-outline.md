@@ -10,6 +10,11 @@ compiled.
 ## Compiled progress
 
 - `apm_t92J05_commutator_self` sanity-checks the commutator encoding.
+- `apm_t92J05_genusTwoRelator_eq_one` proves the defining relator vanishes in
+  the quotient, while `apm_t92J05_genusTwo_generators_generate` proves the four
+  canonical elements generate it.
+- `apm_t92J05_genusTwo_surface_relation` records the expanded two-commutator
+  relation on those generators.
 - Mathlib's fundamental-groupoid product theorem has been identified for the
   `S² × S¹` clause.
 

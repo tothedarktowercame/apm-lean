@@ -63,6 +63,32 @@ def apm_t92J05_genusTwoRelator : FreeGroup (Fin 4) :=
 abbrev apm_t92J05_genusTwoGroup :=
   PresentedGroup ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4)))
 
+/-- The displayed genus-two relator is killed by the canonical quotient map. -/
+@[simp] lemma apm_t92J05_genusTwoRelator_eq_one :
+    PresentedGroup.mk ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4)))
+      apm_t92J05_genusTwoRelator = 1 := by
+  apply PresentedGroup.one_of_mem
+  simp
+
+/-- The four canonical elements really generate the encoded presented group. -/
+lemma apm_t92J05_genusTwo_generators_generate :
+    Subgroup.closure
+      (Set.range (PresentedGroup.of : Fin 4 → apm_t92J05_genusTwoGroup)) = ⊤ := by
+  exact PresentedGroup.closure_range_of _
+
+/-- Expanded form of the single surface relation on the four canonical
+generators. -/
+lemma apm_t92J05_genusTwo_surface_relation :
+    (PresentedGroup.of 0 : apm_t92J05_genusTwoGroup) *
+      PresentedGroup.of 1 * (PresentedGroup.of 0)⁻¹ *
+      (PresentedGroup.of 1)⁻¹ *
+      (PresentedGroup.of 2 * PresentedGroup.of 3 *
+        (PresentedGroup.of 2)⁻¹ * (PresentedGroup.of 3)⁻¹) = 1 := by
+  change PresentedGroup.mk
+    ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4)))
+      apm_t92J05_genusTwoRelator = 1
+  exact apm_t92J05_genusTwoRelator_eq_one
+
 theorem apm_t92j05 :
     (∀ x : apm_t92J05_RP2,
       Nonempty
@@ -108,5 +134,20 @@ theorem apm_t92j05 :
   covering-map, presented-group, manifold, and singular-homology sources, and
   git history. Product preservation was found, but none of the factor/group or
   classification computations needed to apply it.
+
+  CLOSER HOP 2: the algebraic target presentation is now certified beyond the
+  earlier self-commutator sanity check. `apm_t92J05_genusTwoRelator_eq_one`
+  proves the canonical quotient kills the displayed relator,
+  `apm_t92J05_genusTwo_generators_generate` proves the four canonical elements
+  generate the quotient, and `apm_t92J05_genusTwo_surface_relation` records
+  the expanded two-commutator equation they satisfy. Thus no further
+  presented-group normalization is hidden in the final clause. Renewed
+  searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, all topology
+  artifacts, Mathlib's projectivization, sphere/circle, fundamental-groupoid,
+  presented-group, manifold, and homology sources, and git history still found
+  no factor fundamental-group computations, antipodal-cover theorem, surface
+  classification, or Seifert--van Kampen theorem. Identifying the actual
+  fundamental groups with the now-verified algebraic targets remains open;
+  the frozen statement is unchanged.
   -/
   sorry

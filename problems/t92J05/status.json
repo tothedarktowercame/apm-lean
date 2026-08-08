@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "Product preservation of the fundamental groupoid is available, but the concrete metric-sphere circle and sphere fundamental groups are not computed. RP2 needs an antipodal-cover bridge, while the genus-two clause needs surface classification and Seifert-van Kampen beyond the homology record.",
+  "closer_hop": 2,
+  "boundary": "The genus-two presented group is internally certified: its relator maps to one, its four canonical elements generate, and the expanded surface relation holds. Product preservation of the fundamental groupoid is available, but the concrete circle and sphere groups are not computed. RP2 needs an antipodal-cover bridge, while the genus-two clause needs surface classification and Seifert-van Kampen.",
   "imported_at": "2026-07-13T17:26:57.479654Z"
 }
