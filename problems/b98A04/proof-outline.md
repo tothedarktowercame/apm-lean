@@ -23,4 +23,10 @@ The canonical Lean attempt compiles with one remaining `sorry`.
 Prove that a simple quotient of a submodule of `Fin s → M` occurs among the
 factors of the supplied composition series of `M`. The embedding and quotient
 reduction are compiled; only the submodule/refinement factor-occurrence
-argument in the frozen quotient representation remains.
+argument in the frozen quotient representation remains. Hop 4 checked
+`JordanHolderModule.instJordanHolderLattice`,
+`CompositionSeries.jordan_holder`, and
+`IsFiniteLength.iff_exists_compositionSeries`; none constructs the required
+finite-power, submodule, and quotient series or normalizes its factor back to
+the displayed quotient of successive `N` terms. The exact fully quantified
+bridge proposition is recorded at the sorry boundary in `lean/Main.lean`.

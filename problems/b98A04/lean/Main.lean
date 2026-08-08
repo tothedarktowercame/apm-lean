@@ -178,5 +178,34 @@ theorem apm_b98a04 :
   composition series of `M`. Searches of Jordan--Hölder, modular-lattice,
   quotient, and finite-direct-product APIs found no packaged theorem deriving
   that occurrence in the frozen quotient representation.
+
+  HOP 4 checked `JordanHolderModule.instJordanHolderLattice`,
+  `CompositionSeries.jordan_holder`, `IsFiniteLength.iff_exists_compositionSeries`,
+  and the quotient equivalences in `SimpleModule.Basic`. The exact missing
+  theorem is the following factor-occurrence statement (with all quotient
+  types matching the frozen conclusion):
+
+    `∀ (R M V : Type*) [Ring R] [AddCommGroup M] [Module R M]
+        [AddCommGroup V] [Module R V] [IsSimpleModule R V]
+        (s t : ℕ) (S : Submodule R (Fin s → M))
+        (g : S →ₗ[R] V), Function.Surjective g →
+        ∀ (N : Fin (t + 1) → Submodule R M),
+          N 0 = ⊥ → N (Fin.last t) = ⊤ → StrictMono N →
+          (∀ i : Fin t,
+            IsSimpleModule R
+              (N i.succ ⧸ Submodule.comap (N i.succ).subtype
+                (N i.castSucc))) →
+          ∃ i : Fin t,
+            Nonempty
+              (V ≃ₗ[R]
+                (N i.succ ⧸ Submodule.comap (N i.succ).subtype
+                  (N i.castSucc)))`.
+
+  Proving it requires constructing composition series for a finite product,
+  its submodule `S`, and the quotient by `LinearMap.ker g`, then transporting
+  factor equivalences through three Jordan--Hölder comparisons. No searched
+  declaration performs those constructions or the final quotient-type
+  normalization. The theorem remains the sole sorry and the frozen statement
+  is unchanged.
   -/
   sorry
