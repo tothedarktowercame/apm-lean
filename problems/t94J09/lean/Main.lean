@@ -131,6 +131,31 @@ abbrev apm_t94J09_H (k : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t94J09_PolygonSurface))
 
+lemma apm_t94J09_vertexCount_eq :
+    apm_t94J09_vertexCount apm_t94J09_vertexClass = 2 := by
+  decide
+
+lemma apm_t94J09_edgeCount_eq :
+    apm_t94J09_edgeCount apm_t94J09_word = 7 := by
+  decide
+
+lemma apm_t94J09_eulerCharacteristic_eq :
+    apm_t94J09_eulerCharacteristic apm_t94J09_word
+      apm_t94J09_vertexClass = -4 := by
+  decide
+
+lemma apm_t94J09_not_oppositeOrientationPairing :
+    ¬apm_t94J09_hasOppositeOrientationPairing apm_t94J09_word := by
+  intro h
+  have ha := h apm_t94J09_Label.a
+  simp [apm_t94J09_word] at ha
+
+lemma apm_t94J09_nonorientableGenus_eq :
+    apm_t94J09_nonorientableGenus
+      (apm_t94J09_eulerCharacteristic apm_t94J09_word
+        apm_t94J09_vertexClass) = 6 := by
+  decide
+
 theorem apm_t94j09 :
     apm_t94J09_vertexCount apm_t94J09_vertexClass = 2 ∧
     apm_t94J09_edgeCount apm_t94J09_word = 7 ∧
@@ -145,4 +170,34 @@ theorem apm_t94j09 :
     Nonempty (apm_t94J09_H 1 ≅
       ModuleCat.of ℤ ((Fin 5 → ℤ) × ZMod 2)) ∧
     (∀ k : ℕ, 2 ≤ k → Limits.IsZero (apm_t94J09_H k)) := by
+  refine ⟨apm_t94J09_vertexCount_eq, apm_t94J09_edgeCount_eq,
+    apm_t94J09_eulerCharacteristic_eq,
+    apm_t94J09_not_oppositeOrientationPairing,
+    apm_t94J09_nonorientableGenus_eq, ?_⟩
+  /-
+  CLOSER HOP 1: all five finite classification certificates are now closed by
+  the compiled lemmas above.  Kernel reduction computes the two vertex classes,
+  seven edge labels, Euler characteristic `-4`, and genus `6`; specializing
+  the orientation predicate to label `a` proves directly that the word fails
+  the opposite-orientation test.
+
+  Desk research covered `LEMMA-INDEX.md`, all `ConstructionTargets/`, every
+  topology sibling mentioning polygon quotients or surface classification,
+  Mathlib's singular-homology, quotient, CW-complex, and Mayer--Vietoris
+  sources, and git history.  `ConstructionTargets.Surfaces` provides the
+  standard nonorientable polygon quotient and Euler arithmetic, but no
+  polygon-move theorem or homeomorphism normalizing this fourteen-edge
+  `EqvGen` relation to its genus-six relation.  The closest siblings
+  (`t97A01`, `t97J02`, `t98A01`, `t99J03`) likewise stop at quotient cocones
+  or classification arithmetic.
+
+  The remaining frozen goal is precisely the homeomorphism of the two actual
+  quotient spaces followed by singular homology of that quotient.  Mathlib
+  has no classification theorem for polygon surfaces, no cellular chain
+  complex attached to these quotients, no cellular-to-singular comparison,
+  and no singular Mayer--Vietoris sequence (the available named development
+  is sheaf cohomology).  Consequently the expected cellular boundary
+  calculation `ℤ → ℤ⁷` cannot yet be transported to `apm_t94J09_H`.  The
+  frozen statement is unchanged; no axiom or opaque placeholder was added.
+  -/
   sorry
