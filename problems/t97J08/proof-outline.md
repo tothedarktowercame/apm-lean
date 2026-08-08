@@ -11,6 +11,11 @@ number. One `sorry` remains.
 
 - Prove closedness by explicit `HasFDerivAt` quotient calculations for the two
   coordinate coefficients.
+- `t97J08_sqRadius_ne_zero` closes the denominator side condition away from
+  zero, and `t97J08Beta_differentiableAt_coordinates` proves both coefficient
+  functions Fréchet-differentiable using the continuous-linear real and
+  imaginary projections. The remaining local step is their evaluated
+  `fderiv` equality.
 - `t97J08_norm_normalizedLoop` proves the normalized loop has norm one, while
   `t97J08_normalizedLoop_periodic` proves it remains `2π`-periodic.
 - Lift the normalized periodic loop through the exponential covering

@@ -71,6 +71,33 @@ lemma t97J08_normalizedLoop_periodic
     t97J08NormalizedLoop f (t + 2 * Real.pi) = t97J08NormalizedLoop f t := by
   simp only [t97J08NormalizedLoop, hf]
 
+/-- Away from the origin, the squared-radius denominator in the angle form is
+nonzero. -/
+lemma t97J08_sqRadius_ne_zero {z : ℂ} (hz : z ≠ 0) :
+    z.re ^ 2 + z.im ^ 2 ≠ 0 := by
+  intro h
+  apply hz
+  apply Complex.normSq_eq_zero.mp
+  simpa [Complex.normSq_apply, pow_two] using h
+
+/-- Both coordinate coefficient functions of the angle form are
+Fréchet-differentiable away from the origin. This closes the two analytic
+fields preceding the remaining directional derivative identity. -/
+lemma t97J08Beta_differentiableAt_coordinates (z : ℂ) (hz : z ≠ 0) :
+    DifferentiableAt ℝ (fun w : ℂ ↦ t97J08Beta w 1) z ∧
+      DifferentiableAt ℝ (fun w : ℂ ↦ t97J08Beta w Complex.I) z := by
+  have hs : z.re ^ 2 + z.im ^ 2 ≠ 0 := t97J08_sqRadius_ne_zero hz
+  have hpi : (2 * Real.pi : ℝ) ≠ 0 := by positivity
+  have hden : 2 * Real.pi * (z.re ^ 2 + z.im ^ 2) ≠ 0 :=
+    mul_ne_zero hpi hs
+  constructor
+  · unfold t97J08Beta
+    simp only [← Complex.reCLM_apply, ← Complex.imCLM_apply]
+    fun_prop (disch := exact hden)
+  · unfold t97J08Beta
+    simp only [← Complex.reCLM_apply, ← Complex.imCLM_apply]
+    fun_prop (disch := exact hden)
+
 theorem apm_t97j08 :
     IsT97J08ClosedOneFormOnPuncturedPlane t97J08Beta ∧
     ∀ f : ℝ → ℂ, IsT97J08SmoothPuncturedLoop f →
@@ -119,5 +146,19 @@ theorem apm_t97j08 :
   Fréchet quotient-derivative normalization for the final directional
   equality. The degree classification, FTC identification, and that explicit
   derivative equality remain open.
+
+  CLOSER HOP 3: the prior differentiability experiment is now compiled.
+  `t97J08_sqRadius_ne_zero` rewrites the frozen coordinate denominator through
+  `Complex.normSq_eq_zero`, and
+  `t97J08Beta_differentiableAt_coordinates` proves both coordinate
+  coefficient functions Fréchet-differentiable at every punctured point. The
+  proof explicitly rewrites real and imaginary projections as Mathlib's
+  continuous linear maps `Complex.reCLM` and `Complex.imCLM`, then supplies the
+  quotient discharger to `fun_prop`. Thus two of the three fields in frozen
+  closedness are ready; only normalization of the two evaluated `fderiv`s is
+  left locally. Renewed corpus, Mathlib, and history searches still found no
+  arbitrary circle-loop lift/degree classification or beta-integral theorem,
+  so the global winding and FTC bridge remains open and the statement is
+  unchanged.
   -/
   sorry
