@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Compiled integrability of the closed-interval singular majorant and integrated the pointwise kernel estimate to the exact uniform bound 4*B. Dominated parameter continuity, ContinuousMap self-map packaging, and the fixed-point application remain open.",
+  "closer_hop": 4,
+  "closer_note": "Found intervalIntegral.continuousWithinAt_of_dominated_interval as the general engine. The precise remaining lemma is ContinuousOn of the frozen singular set integral for every u continuous on Icc 0 1; its a.e. measurability, domination, and set/interval conversion assembly remains open.",
   "imported_at": "2026-07-13T17:26:55.652154Z"
 }

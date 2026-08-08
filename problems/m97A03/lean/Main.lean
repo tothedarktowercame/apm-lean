@@ -192,5 +192,19 @@ theorem apm_m97a03
   construction of the continuous self-map, and the contraction theorem.
   Searches of the parametric-integral APIs still found no packaged
   singular-kernel continuity result; the frozen statement is unchanged.
+
+  HOP 4 found the general engine
+  `intervalIntegral.continuousWithinAt_of_dominated_interval`, so the library
+  gap is narrower than previously recorded.  The exact remaining local lemma
+  is:
+
+    `∀ (u : ℝ → ℝ), ContinuousOn u (Icc 0 1) →
+      ContinuousOn (fun t ↦ ∫ s in Icc 0 1,
+        sqrt ((t + 3) / s) * sin (t * u s)) (Icc 0 1)`.
+
+  Its proof must instantiate that theorem with the integrable
+  `s ^ (-1/2)` majorant and reconcile interval integrals with the frozen set
+  integral. Once available, the continuous self-map is definable and the
+  compiled `4*B` bound supplies its contraction constant `4*|lam|`.
   -/
   sorry

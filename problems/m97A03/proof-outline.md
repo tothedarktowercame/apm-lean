@@ -18,7 +18,11 @@ ingredients are compiled:
 ## Remaining boundary
 
 - establish dominated continuity in the parameter `t` despite the endpoint
-  singularity;
+  singularity. Hop 4 identifies
+  `intervalIntegral.continuousWithinAt_of_dominated_interval` as the engine;
+  the remaining assembly is the exact statement
+  `ContinuousOn (fun t ↦ ∫ s in Icc 0 1,
+  sqrt ((t+3)/s) * sin (t*u s)) (Icc 0 1)` for every `u` continuous there;
 - package the integral operator on `ContinuousMap (Icc 0 1) ℝ`;
 - instantiate the compiled uniform-bound estimate with the `ContinuousMap`
   sup norm and the factor `|lam|`;
