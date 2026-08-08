@@ -168,6 +168,28 @@ lemma apm_t03j01_no_retraction_of_curve_H1Map_zero
   apm_t03j01_no_retraction_of_H1Map_zero hzero
     (apm_t03j01_H1_nonzero_of_curve hcurve hcircle)
 
+/-- Why this unblocks the positive half of `apm_t03j01`: this is the missing
+representability and relative-adjustment theorem for a primitive embedded
+circle in a compact connected genus-two surface. It produces the retraction
+that the primitive homology witness alone does not construct. -/
+theorem apm_t03J01_bridge_1
+    (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
+    [PathConnectedSpace X] [ChartedSpace apm_t03j01_E2 X]
+    [IsManifold apm_t03j01_Model ∞ X]
+    (hX : apm_t03j01_HasGenusTwoHomology X)
+    (J : Set X)
+    (hcurve : apm_t03j01_IsCurve J)
+    (hcut : apm_t03j01_CutsIntoTwicePuncturedTorus J) :
+    apm_t03j01_RetractsOnto J := by
+  sorry
+
+/-- Why this unblocks the negative half of `apm_t03j01`: it is the concrete
+integral circle-homology computation needed by the already compiled
+functorial obstruction to retracting onto a null-homologous curve. -/
+theorem apm_t03J01_bridge_2 :
+    ∃ a : apm_t03j01_H1 Circle, a ≠ 0 := by
+  sorry
+
 theorem apm_t03j01
     (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
     [PathConnectedSpace X] [ChartedSpace apm_t03j01_E2 X]
