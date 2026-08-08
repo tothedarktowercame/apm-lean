@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Compiled that complex scalar extension carries real skew-symmetry to skew-Hermitian symmetry and that multiplication by I makes it Hermitian. The eigenvector-to-imaginary-axis step and arbitrary ordered-spectrum normalization remain open.",
   "imported_at": "2026-07-13T17:26:54.710925Z"
 }

@@ -50,6 +50,28 @@ lemma apm_m94a02_symmetricPart_map_isHermitian {n : ℕ}
   intro x
   simp
 
+/-- A real skew-symmetric matrix becomes skew-Hermitian after scalar
+extension to `ℂ`. -/
+lemma apm_m94a02_map_conjTranspose_eq_neg_of_transpose_eq_neg {n : ℕ}
+    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.transpose = -A) :
+    (A.map (algebraMap ℝ ℂ))ᴴ = -(A.map (algebraMap ℝ ℂ)) := by
+  ext i j
+  have hij := congrArg (fun M : Matrix (Fin n) (Fin n) ℝ ↦ M i j) hA
+  simpa [Matrix.conjTranspose_apply] using congrArg (algebraMap ℝ ℂ) hij
+
+/-- Multiplication by `I` converts the skew-Hermitian scalar extension into a
+Hermitian matrix, allowing use of Mathlib's self-adjoint spectrum API. -/
+lemma apm_m94a02_I_smul_map_isHermitian_of_transpose_eq_neg {n : ℕ}
+    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.transpose = -A) :
+    (Complex.I • A.map (algebraMap ℝ ℂ)).IsHermitian := by
+  rw [Matrix.IsHermitian]
+  ext i j
+  have hij := congrArg (fun M : Matrix (Fin n) (Fin n) ℝ ↦ M i j) hA
+  have hijc : ((A j i : ℝ) : ℂ) = -((A i j : ℝ) : ℂ) := by
+    simpa using congrArg (algebraMap ℝ ℂ) hij
+  simp only [Matrix.conjTranspose_apply]
+  simp [hijc]
+
 def apm_m94a02_IsEigenvalue {n : ℕ}
     (A : Matrix (Fin n) (Fin n) ℝ) (lam : ℂ) : Prop :=
   ∃ v : Fin n → ℂ, v ≠ 0 ∧
@@ -121,5 +143,18 @@ theorem apm_m94a02
   the complex root multiset or identifies an arbitrary antitone enumeration
   with `IsHermitian.eigenvalues`. Those polynomial-multiplicity and Rayleigh
   assembly steps remain open. The frozen statement is unchanged.
+
+  Closer hop 3 routes around the ordered-spectrum obstruction for the second
+  conjunct by compiling
+  `apm_m94a02_map_conjTranspose_eq_neg_of_transpose_eq_neg`: complex scalar
+  extension carries real skew-symmetry to skew-Hermitian symmetry. It also
+  proves `apm_m94a02_I_smul_map_isHermitian_of_transpose_eq_neg`, packaging
+  the corresponding self-adjoint matrix. A renewed
+  search of the skew-adjoint, eigenspace, and inner-product spectrum APIs found
+  the self-adjoint eigenvalue reality theorem, but no packaged corresponding
+  imaginary-axis theorem for skew-adjoint eigenvalues. The remaining local
+  step is to apply that theorem to `I • A` (or test the eigenvector equation
+  against `star v`); the first conjunct still needs the arbitrary-`σ`
+  multiplicity normalization. No unproved assertion was introduced.
   -/
   sorry

@@ -18,3 +18,9 @@ The symmetric part is also proved transpose-symmetric and Hermitian, both over
 
 Mathlib already contains the ordered-root reconstruction and Hermitian
 Rayleigh machinery. No searched artifact packages the representation bridges.
+
+Closer hop 3 proves that the complex scalar extension of a real
+skew-symmetric matrix is skew-Hermitian, and separately compiles that `I • A`
+is Hermitian. This isolates a route to the second conjunct without depending
+on the arbitrary ordered family `σ`; the final eigenvector conversion remains
+open.
