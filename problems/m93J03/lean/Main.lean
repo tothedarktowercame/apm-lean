@@ -41,6 +41,37 @@ lemma apm_m93J03_zero_isSmall {η : ℝ} (hη : 0 < η) :
   intro t ht
   simpa using hη
 
+/-- Separating `sin (t + s + x s)` shows that every solution belongs to the
+three-dimensional affine span of `1`, `sin`, and `cos`.  This is the exact
+function-level reduction needed before applying the finite-dimensional
+implicit-function theorem. -/
+lemma apm_m93J03_solution_eq_affine_trig {ε : ℝ} {x : ℝ → ℝ}
+    (hx : apm_m93J03_isSolution ε x) :
+    ∃ a b : ℝ, ∀ t ∈ Icc (-Real.pi) Real.pi,
+      x t = ε + a * Real.sin t + b * Real.cos t := by
+  let u : ℝ → ℝ := fun s ↦ s + x s
+  have hu : ContinuousOn u (Icc (-Real.pi) Real.pi) :=
+    continuousOn_id.add hx.1
+  have hcos : IntegrableOn (fun s ↦ Real.cos (u s))
+      (Icc (-Real.pi) Real.pi) :=
+    (Real.continuous_cos.comp_continuousOn hu).integrableOn_Icc
+  have hsin : IntegrableOn (fun s ↦ Real.sin (u s))
+      (Icc (-Real.pi) Real.pi) :=
+    (Real.continuous_sin.comp_continuousOn hu).integrableOn_Icc
+  refine ⟨∫ s in Icc (-Real.pi) Real.pi, Real.cos (u s),
+    ∫ s in Icc (-Real.pi) Real.pi, Real.sin (u s), ?_⟩
+  intro t ht
+  rw [hx.2 t ht]
+  have hpoint : ∀ s : ℝ,
+      Real.sin (t + s + x s) =
+        Real.sin t * Real.cos (u s) + Real.cos t * Real.sin (u s) := by
+    intro s
+    rw [show t + s + x s = t + u s by simp [u, add_assoc], Real.sin_add]
+  rw [setIntegral_congr_fun measurableSet_Icc (fun s _ ↦ hpoint s)]
+  rw [integral_add (hcos.const_mul _) (hsin.const_mul _),
+    integral_const_mul, integral_const_mul]
+  ring
+
 theorem apm_m93j03 :
     ∃ δ η : ℝ, 0 < δ ∧ 0 < η ∧
       ∀ ε : ℝ, |ε| < δ →
@@ -74,5 +105,24 @@ theorem apm_m93j03 :
   final conversion of their neighborhood uniqueness into the statement's
   uniform `apm_m93J03_isSmall` radius for arbitrary function-valued
   solutions. No compiled sibling supplied those bridges in this pass.
+
+  CLOSER HOP 2 (partial). The function-level finite-dimensional reduction is
+  now closed by `apm_m93J03_solution_eq_affine_trig`. For every frozen
+  solution it constructs the two coefficients as the integrals of
+  `cos (s + x s)` and `sin (s + x s)` and proves pointwise on the interval
+  that `x t = ε + a * sin t + b * cos t`. Continuity of the solution supplies
+  both restricted integrability obligations, and `Real.sin_add` plus
+  `integral_add` and `integral_const_mul` perform the exact separation. Thus
+  arbitrary function-valued uniqueness can now be reduced to uniqueness of
+  the coefficient pair once the local finite-dimensional theorem is built.
+
+  Searches beyond hop 1 inspected the repository's compiled parameter-
+  differentiation users (`a01A09`, `a99J09`, `m93A04`, and `m98A03`) and
+  Mathlib's dominated derivative-under-integral API. They confirm an available
+  route but do not package the two-variable strict Frechet derivative needed
+  here. The remaining bridge is to define the coefficient residual map,
+  establish that derivative and its invertibility at zero, apply the product-
+  domain implicit-function theorem, and extract uniform scalar radii. The
+  frozen statement remains unchanged.
   -/
   sorry
