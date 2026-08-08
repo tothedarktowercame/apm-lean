@@ -70,6 +70,26 @@ noncomputable def t97J07PointChart (w : Fin 2 → ℂ) : T97J07CP2 :=
 noncomputable def t97J07PointLocal (w : Fin 2 → ℂ) : Fin 2 → ℂ :=
   fun i ↦ w i / 3
 
+/-- Real determinant of `I-Dg` on the complex normal line to the fixed
+projective line. -/
+noncomputable def t97J07LineNormalDet : ℝ :=
+  Complex.normSq (1 - fderiv ℂ t97J07LineLocal 0 1)
+
+/-- Real determinant of `I-Dg` in the two complex affine coordinates at the
+isolated fixed point. -/
+noncomputable def t97J07PointDet : ℝ :=
+  Complex.normSq
+    ((1 - (fderiv ℂ t97J07PointLocal 0 (Pi.single 0 1)) 0) *
+     (1 - (fderiv ℂ t97J07PointLocal 0 (Pi.single 1 1)) 1))
+
+noncomputable def t97J07IndexFromDet (d : ℝ) : ℤ :=
+  if 0 < d then 1 else if d < 0 then -1 else 0
+
+/-- The fixed-line contribution is its Euler characteristic (`2`) times the
+normal Lefschetz index. -/
+noncomputable def t97J07LineContribution : ℤ :=
+  2 * t97J07IndexFromDet t97J07LineNormalDet
+
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
         t97J07FixedLine ∪ {t97J07IsolatedPoint} ∧
@@ -84,10 +104,10 @@ theorem apm_t97j07 :
     (∀ i : Fin 2,
       fderiv ℂ t97J07PointLocal 0 (Pi.single i 1) =
         Pi.single i (1 / 3)) ∧
-    (0 : ℝ) < Complex.normSq (1 - fderiv ℂ t97J07LineLocal 0 1) ∧
-    (0 : ℝ) < Complex.normSq
-      ((1 - (fderiv ℂ t97J07PointLocal 0 (Pi.single 0 1)) 0) *
-       (1 - (fderiv ℂ t97J07PointLocal 0 (Pi.single 1 1)) 1)) ∧
-    ((1 : ℤ) + 1 = 2) ∧
-    ((2 : ℤ) + 1 = 3) := by
+    t97J07LineNormalDet = 4 ∧
+    t97J07PointDet = 16 / 81 ∧
+    t97J07IndexFromDet t97J07LineNormalDet = 1 ∧
+    t97J07IndexFromDet t97J07PointDet = 1 ∧
+    t97J07LineContribution = 2 ∧
+    t97J07LineContribution + t97J07IndexFromDet t97J07PointDet = 3 := by
   sorry
