@@ -7,6 +7,12 @@ The lemmas `apm_t99J03_eulerCharacteristic_orientable` and
 formulas definitionally. The main theorem is reduced by simplification to the
 classification dichotomy and uniqueness alone.
 
+The lemmas `apm_t99J03_orientable_genus_eq_of_eulerCharacteristic_eq` and
+`apm_t99J03_nonorientable_genus_eq_of_eulerCharacteristic_eq` prove that the
+encoded Euler characteristic determines the parameter within either family.
+Consequently no integer arithmetic remains in uniqueness once a genuine
+homeomorphism-invariant Euler characteristic is connected to the encoding.
+
 ## Remaining Lean boundary
 
 Classify every compact connected smooth two-manifold as exactly one of the

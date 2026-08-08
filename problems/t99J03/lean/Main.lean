@@ -67,6 +67,25 @@ def apm_t99J03_eulerCharacteristic (orientable : Bool) (genus : ℕ) : ℤ :=
 @[simp] lemma apm_t99J03_eulerCharacteristic_nonorientable (genus : ℕ) :
     apm_t99J03_eulerCharacteristic false genus = 2 - genus := rfl
 
+/-- Euler characteristic determines the genus inside the orientable family. -/
+lemma apm_t99J03_orientable_genus_eq_of_eulerCharacteristic_eq
+    {g h : ℕ}
+    (heq : apm_t99J03_eulerCharacteristic true g =
+      apm_t99J03_eulerCharacteristic true h) :
+    g = h := by
+  simp only [apm_t99J03_eulerCharacteristic_orientable] at heq
+  omega
+
+/-- Euler characteristic determines the crosscap number inside the
+nonorientable family. -/
+lemma apm_t99J03_nonorientable_genus_eq_of_eulerCharacteristic_eq
+    {g h : ℕ}
+    (heq : apm_t99J03_eulerCharacteristic false g =
+      apm_t99J03_eulerCharacteristic false h) :
+    g = h := by
+  simp only [apm_t99J03_eulerCharacteristic_nonorientable] at heq
+  omega
+
 theorem apm_t99j03 :
     ∀ (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
       [ConnectedSpace X] [ChartedSpace apm_t99J03_E2 X]
@@ -82,11 +101,20 @@ theorem apm_t99j03 :
       (∃! g : ℕ, Nonempty (X ≃ₜ apm_t99J03_Surface true g)) ∨
       (∃! k : ℕ, 0 < k ∧ Nonempty (X ≃ₜ apm_t99J03_Surface false k)) := by
     /-
-    CLOSER HOP 1 boundary. The two Euler-characteristic equations are now
+    CLOSER HOP 2 boundary. The two Euler-characteristic equations are
     compiled definitional lemmas, and the final `simpa` below removes them
     from both existence and uniqueness predicates. Thus the remaining bridge
     is exactly the classification dichotomy with uniqueness of genus/crosscap
     number for the concrete polygon quotients.
+
+    Going beyond hop 1, the two lemmas
+    `apm_t99J03_orientable_genus_eq_of_eulerCharacteristic_eq` and
+    `apm_t99J03_nonorientable_genus_eq_of_eulerCharacteristic_eq` prove that
+    Euler characteristic is injective in the genus parameter within each
+    normal-form family. Thus once homeomorphism invariance of the genuine
+    Euler characteristic is connected to this encoding, the numerical part of
+    uniqueness is complete; only the topological invariance and orientability
+    dichotomy remain.
 
     A proof must triangulate an arbitrary compact connected smooth surface,
     cut it to a fundamental polygon, normalize the paired-edge word into
@@ -99,6 +127,7 @@ theorem apm_t99j03 :
     theorem or polygon-normal-form development. `ConstructionTargets.Surfaces`
     provides another concrete quotient family and the same definitional Euler
     formulas, but no theorem classifying arbitrary manifolds into it.
+    The frozen statement is unchanged.
     -/
     sorry
   simpa using hclassification
