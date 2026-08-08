@@ -13,10 +13,12 @@ The frozen theorem has a compiling partial Lean development.
 - `apm_m94a05_kernel_square_le` proves the pointwise radius-square estimate.
 - `apm_m94a05_kernel_square_sub_le` proves the pointwise Lipschitz estimate
   with factor `2 * R` on a radius-`R` ball.
+- `apm_m94a05_picard_continuous` applies dominated convergence with the
+  integrable majorant `u^2` and proves global continuity in the free parameter.
 
 ## Remaining boundary
 
-- prove parameter continuity and bundle the operator on
+- bundle the now-proved-continuous operator on
   `ContinuousMap (Icc 0 Real.pi) ℝ`;
 - lift the pointwise bounds to the sup norm, establish invariance and strict
   contractivity on the closed radius-`2ε` ball;

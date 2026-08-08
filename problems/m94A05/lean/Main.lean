@@ -60,6 +60,33 @@ lemma apm_m94a05_kernel_square_sub_le
         _ ≤ R + R := add_le_add hu hv
         _ = 2 * R := by ring
 
+/-- The raw Picard output is continuous in its free parameter for every input
+continuous on the integration interval. -/
+lemma apm_m94a05_picard_continuous
+    (ε : ℝ) {u : ℝ → ℝ} (hu : ContinuousOn u (Icc 0 Real.pi)) :
+    Continuous (apm_m94a05_picard ε u) := by
+  have hu2 : IntervalIntegrable (fun s : ℝ => (u s) ^ 2) volume 0 Real.pi := by
+    apply ContinuousOn.intervalIntegrable_of_Icc Real.pi_pos.le
+    exact hu.pow 2
+  have hint : Continuous (fun t : ℝ =>
+      ∫ s in (0 : ℝ)..Real.pi, Real.sin (t * s) * (u s) ^ 2) := by
+    apply intervalIntegral.continuous_of_dominated_interval
+      (bound := fun s : ℝ => (u s) ^ 2)
+    · intro t
+      simpa only [Set.uIoc_of_le Real.pi_pos.le] using
+        (apm_m94a05_picard_integrable hu t).1.aestronglyMeasurable
+    · intro t
+      filter_upwards with s
+      intro _hs
+      rw [Real.norm_eq_abs, abs_mul, abs_pow]
+      simpa [sq_abs] using
+        mul_le_of_le_one_left (sq_nonneg |u s|) (Real.abs_sin_le_one (t * s))
+    · exact hu2
+    · filter_upwards with s
+      intro _hs
+      exact (Real.continuous_sin.comp (continuous_id.mul continuous_const)).mul continuous_const
+  exact ((Real.continuous_sin.const_mul ε).sub hint)
+
 theorem apm_m94a05
     (ε : ℝ) (hε : 0 < ε) (hε_small : ε < 1 / (4 * Real.pi)) :
     ∃ u : ℝ → ℝ, ContinuousOn u (Icc 0 Real.pi) ∧
@@ -75,6 +102,13 @@ theorem apm_m94a05
   `apm_m94a05_kernel_square_sub_le`; the latter uses the polarization identity
   and gives the uniform factor `2 * R` on a radius-`R` ball.
 
+  Closer hop 2 goes beyond that boundary by proving
+  `apm_m94a05_picard_continuous`.  The proof uses Mathlib's
+  `intervalIntegral.continuous_of_dominated_interval`, with `u^2` as the
+  integrable dominator and `|sin| ≤ 1`; consequently the raw Picard output is
+  globally continuous for every input continuous on `[0,π]`.  This closes the
+  parameter-continuity step that was still open after hop 1.
+
   The intended route uses the complete Banach space of continuous
   maps on the interval subtype and the closed sup-norm ball of radius `2 * ε`.
   One must construct the Picard map
@@ -89,13 +123,13 @@ theorem apm_m94a05
   is invariant from `ε < 1 / (4 * π)`, defining the subtype self-map, and
   converting its fixed point back to the statement's unrestricted function
   with `ContinuousOn`. No compiled sibling supplied this full integral-
-  operator construction within the original pass.  Renewed searches of
+  operator construction within the original pass.  Searches across both hops of
   `LEMMA-INDEX.md`, `ConstructionTargets`, the continuous-map Hammerstein
   development in `m98A03`, the related convolution fixed-point development in
   `m99A06`, Mathlib's parametric-integral source, and git history found no
-  packaged theorem completing this construction.  The remaining bridge is to
-  prove continuity in `t`, bundle the Picard map on
-  `ContinuousMap (Icc 0 π) ℝ`, lift the pointwise estimates to its sup norm,
+  packaged theorem completing this construction.  The remaining bridge is now
+  to bundle the proved-continuous Picard map on `ContinuousMap (Icc 0 π) ℝ`,
+  lift the pointwise estimates to its sup norm,
   prove the radius-`2ε` ball invariant and contracting, and extract the fixed
   point as an unrestricted function.
   -/
