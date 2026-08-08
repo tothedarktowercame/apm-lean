@@ -89,6 +89,43 @@ lemma apm_t92J05_genusTwo_surface_relation :
       apm_t92J05_genusTwoRelator = 1
   exact apm_t92J05_genusTwoRelator_eq_one
 
+/-- The group-level specialization of Mathlib's product theorem for the
+fundamental groupoid. This makes the based-point bookkeeping explicit. -/
+def apm_t92J05_fundamentalGroup_prod_equiv
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (a : A) (b : B) :
+    FundamentalGroup (A × B) (a, b) ≃*
+      FundamentalGroup A a × FundamentalGroup B b where
+  toFun p := (Path.Homotopic.projLeft p, Path.Homotopic.projRight p)
+  invFun p := Path.Homotopic.prod p.1 p.2
+  left_inv p := Path.Homotopic.prod_projLeft_projRight p
+  right_inv p := by
+    ext
+    · exact Path.Homotopic.projLeft_prod p.1 p.2
+    · exact Path.Homotopic.projRight_prod p.1 p.2
+  map_mul' p q := by
+    apply Prod.ext
+    · simpa only [CategoryTheory.End.mul_def] using
+        (FundamentalGroupoidFunctor.projLeft
+          (TopCat.of A) (TopCat.of B)).map_comp q p
+    · simpa only [CategoryTheory.End.mul_def] using
+        (FundamentalGroupoidFunctor.projRight
+          (TopCat.of A) (TopCat.of B)).map_comp q p
+
+/-- With a trivial first factor, the product calculation reduces exactly to
+the second factor's fundamental group. -/
+lemma apm_t92J05_product_group_of_subsingleton_left
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (a : A) (b : B) [Subsingleton (FundamentalGroup A a)]
+    (hB : Nonempty (FundamentalGroup B b ≃* Multiplicative ℤ)) :
+    Nonempty
+      (FundamentalGroup (A × B) (a, b) ≃* Multiplicative ℤ) := by
+  letI : Unique (FundamentalGroup A a) := uniqueOfSubsingleton 1
+  exact ⟨(apm_t92J05_fundamentalGroup_prod_equiv a b).trans
+    ((MulEquiv.uniqueProd :
+      FundamentalGroup A a × FundamentalGroup B b ≃*
+        FundamentalGroup B b).trans hB.some)⟩
+
 theorem apm_t92j05 :
     (∀ x : apm_t92J05_RP2,
       Nonempty
@@ -149,5 +186,24 @@ theorem apm_t92j05 :
   classification, or Seifert--van Kampen theorem. Identifying the actual
   fundamental groups with the now-verified algebraic targets remains open;
   the frozen statement is unchanged.
+
+  CLOSER HOP 3 compiles the based product specialization left implicit by the
+  earlier hops. `apm_t92J05_fundamentalGroup_prod_equiv` constructs the
+  multiplicative equivalence directly from `Path.Homotopic.projLeft`,
+  `projRight`, and `prod`, with both inverse laws proved. The wrapper
+  `apm_t92J05_product_group_of_subsingleton_left` then collapses a trivial
+  first factor and transports any circle-group equivalence to the frozen
+  product. Therefore the middle clause has no remaining product, basepoint,
+  or categorical assembly: it needs only subsingleton `π₁(S²)` and the
+  equivalence `π₁(S¹) ≃ Multiplicative ℤ`.
+
+  Final searches of `LEMMA-INDEX.md`, every `ConstructionTargets/` module,
+  Mathlib's product, sphere, circle, projectivization, covering, manifold,
+  surface, Van Kampen, and singular-homology sources, topology siblings, and
+  git history still found none of those factor computations, the antipodal
+  projective cover, surface classification, or Seifert--van Kampen. Thus the
+  three mathematical identification bridges remain open, but the product
+  route is now completely compiled. The frozen statement is unchanged; no
+  placeholder declaration was introduced.
   -/
   sorry

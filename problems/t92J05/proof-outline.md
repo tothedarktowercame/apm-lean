@@ -17,11 +17,15 @@ compiled.
   relation on those generators.
 - Mathlib's fundamental-groupoid product theorem has been identified for the
   `S² × S¹` clause.
+- `apm_t92J05_fundamentalGroup_prod_equiv` specializes product preservation to
+  a based multiplicative-group equivalence using path-class projections.
+- `apm_t92J05_product_group_of_subsingleton_left` collapses a trivial sphere
+  factor and transports a circle-group equivalence to the frozen product.
 
 ## Remaining boundary
 
-- Compute `π₁(S²)=1` and `π₁(S¹)=ℤ` for the concrete metric spheres, then
-  transport the product-groupoid result to based fundamental groups.
+- Compute `π₁(S²)=1` and `π₁(S¹)=ℤ` for the concrete metric spheres;
+  all product and basepoint transport is compiled.
 - Construct the antipodal cover of projectivization and compute `π₁(RP²)`.
 - Formalize compact oriented surface classification and Seifert--van Kampen,
   yielding the standard genus-two presentation.

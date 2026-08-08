@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The genus-two presented group is internally certified: its relator maps to one, its four canonical elements generate, and the expanded surface relation holds. Product preservation of the fundamental groupoid is available, but the concrete circle and sphere groups are not computed. RP2 needs an antipodal-cover bridge, while the genus-two clause needs surface classification and Seifert-van Kampen.",
+  "closer_hop": 3,
+  "boundary": "The based fundamental group of a product is now explicitly equivalent to the product of the factor groups, and a trivial left factor is compiled away. Thus the S2 x S1 clause only lacks the concrete factor computations. RP2 still needs the antipodal-cover computation, while the genus-two clause needs surface classification and Seifert-van Kampen.",
   "imported_at": "2026-07-13T17:26:57.479654Z"
 }
