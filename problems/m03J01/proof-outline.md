@@ -17,6 +17,10 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
   the constant zero test sequence.
 - `apm_m03J01_weakSolution_zero_iff` computes exactly when that representative
   solves the weak equation.
+- `apm_m03J01_zero_weakHessian` proves that the same representative has the
+  zero weak Hessian directly from the distributional definition.
+- `apm_m03J01_zero_H2size` computes its exact `H²` size as zero, providing the
+  origin for a future closed weak-Hessian graph space.
 
 ## Remaining boundary
 

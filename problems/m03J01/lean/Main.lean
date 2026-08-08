@@ -100,6 +100,21 @@ noncomputable def apm_m03J01_H2size {n : ℕ} {Ω : Set (apm_m03J01_E n)}
     (H : apm_m03J01_E n → Fin n → Fin n → ℝ) : ENNReal :=
   eLpNorm u.val 2 volume + eLpNorm u.grad 2 volume + eLpNorm H 2 volume
 
+/-- The zero representative has the zero weak Hessian. This is the origin
+needed by a future closed weak-Hessian graph construction. -/
+lemma apm_m03J01_zero_weakHessian (n : ℕ) (Ω : Set (apm_m03J01_E n)) :
+    apm_m03J01_weakHessian (apm_m03J01_zeroH01 n Ω).grad
+      (0 : apm_m03J01_E n → Fin n → Fin n → ℝ) := by
+  constructor
+  · simp
+  · intro i j φ hφ hφc
+    simp [apm_m03J01_zeroH01]
+
+lemma apm_m03J01_zero_H2size (n : ℕ) (Ω : Set (apm_m03J01_E n)) :
+    apm_m03J01_H2size (apm_m03J01_zeroH01 n Ω)
+      (0 : apm_m03J01_E n → Fin n → Fin n → ℝ) = 0 := by
+  simp [apm_m03J01_H2size, apm_m03J01_zeroH01]
+
 /-- The continuous Fréchet--Riesz solution operator used in the theorem's
 abstract Hilbert-space clause. -/
 noncomputable def apm_m03J01_riesz
@@ -222,5 +237,17 @@ theorem apm_m03j01 :
   `approximable` predicate must still be shown closed under addition/scaling
   and identified with a closed subspace before those structures apply. The
   forcing functional and weak-Hessian closed-graph estimate remain open.
+
+  Closer hop 3 also begins the weak-Hessian graph at its origin:
+  `apm_m03J01_zero_weakHessian` proves directly from the distributional
+  definition that the zero representative has zero weak Hessian, and
+  `apm_m03J01_zero_H2size` computes its exact size as zero. Together with the
+  hop-2 zero `H₀¹` representative, both the energy space and proposed graph
+  space now have compiled origins. Searches were extended to graph subspaces,
+  closed operators, distributional derivatives, `MemLp` addition/scaling,
+  and analogous custom Sobolev records in `m00A04`; none supplies closure of
+  this record's approximation witnesses or the completeness/closed-graph
+  assembly. The nonzero additive/scalar cases and both PDE conclusions remain
+  honestly open.
   -/
   sorry
