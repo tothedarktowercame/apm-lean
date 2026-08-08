@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -33,15 +33,14 @@
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a95J03/lean/Main.lean",
-    "sorry_count": 2,
+    "sorry_count": 1,
     "sorry_locations": [
-      "algPoly_degree_le (degree bound for polynomial; timeout with natDegree_sum_le_of_forall_le)",
-      "winding_number_bounded (main theorem: requires argument principle)"
+      "apm_a95j03 (genuine winding integral to divisor-count bridge)"
     ],
     "blockers": [
-      "Winding number is NOT defined in Mathlib.",
-      "Argument principle (winding = zeros - poles) is NOT in Mathlib.",
-      "Polynomial degree sum lemma causes timeout when applied to finset sum."
+      "Convert the real interval fderiv integral to the circle log-derivative integral.",
+      "Relate the trigonometric polynomial to the cleared algebraic polynomial on the unit circle.",
+      "Transport the resulting divisor sum to the bounded integer witness."
     ]
   }
 }
