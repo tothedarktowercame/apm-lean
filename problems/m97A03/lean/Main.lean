@@ -43,6 +43,49 @@ lemma apm_m97A03_integral_rpow_neg_half :
   rw [integral_rpow (Or.inl (by norm_num))]
   norm_num
 
+/-- Away from the null endpoint, the singular square-root kernel factors into
+its parameter part and the integrable power majorant. -/
+lemma apm_m97A03_sqrt_div_factor {t s : ℝ} (ht : 0 ≤ t + 3) (hs : 0 < s) :
+    Real.sqrt ((t + 3) / s) =
+      Real.sqrt (t + 3) * s ^ (-1 / 2 : ℝ) := by
+  rw [Real.sqrt_div ht]
+  rw [Real.sqrt_eq_rpow, Real.sqrt_eq_rpow]
+  rw [show (-1 / 2 : ℝ) = -(1 / 2) by ring, Real.rpow_neg hs.le]
+  rfl
+
+/-- The factor in the Lipschitz estimate is pointwise dominated by the sharp
+integrable majorant on the punctured interval. -/
+lemma apm_m97A03_kernel_lipschitz_majorant {t s : ℝ}
+    (ht : t ∈ Icc (0 : ℝ) 1) (hs : 0 < s) :
+    t * Real.sqrt ((t + 3) / s) ≤ 2 * s ^ (-1 / 2 : ℝ) := by
+  rw [apm_m97A03_sqrt_div_factor (by linarith [ht.1]) hs]
+  have hpow : 0 ≤ s ^ (-1 / 2 : ℝ) := Real.rpow_nonneg hs.le _
+  calc
+    t * (Real.sqrt (t + 3) * s ^ (-1 / 2 : ℝ)) =
+        (t * Real.sqrt (t + 3)) * s ^ (-1 / 2 : ℝ) := by ring
+    _ ≤ 2 * s ^ (-1 / 2 : ℝ) :=
+      mul_le_mul_of_nonneg_right (apm_m97A03_t_sqrt_bound ht).2 hpow
+
+/-- Pointwise Lipschitz domination for the nonlinear singular integrand. -/
+lemma apm_m97A03_integrand_sub_bound {t s u v : ℝ}
+    (ht : t ∈ Icc (0 : ℝ) 1) (hs : 0 < s) :
+    |Real.sqrt ((t + 3) / s) * (Real.sin (t * u) - Real.sin (t * v))| ≤
+      2 * s ^ (-1 / 2 : ℝ) * |u - v| := by
+  have hk0 : 0 ≤ Real.sqrt ((t + 3) / s) := Real.sqrt_nonneg _
+  have hsin := Real.abs_sin_sub_sin_le (t * u) (t * v)
+  have huv0 : 0 ≤ |u - v| := abs_nonneg _
+  calc
+    |Real.sqrt ((t + 3) / s) * (Real.sin (t * u) - Real.sin (t * v))| =
+        Real.sqrt ((t + 3) / s) * |Real.sin (t * u) - Real.sin (t * v)| := by
+          rw [abs_mul, abs_of_nonneg hk0]
+    _ ≤ Real.sqrt ((t + 3) / s) * |t * u - t * v| :=
+      mul_le_mul_of_nonneg_left hsin hk0
+    _ = (t * Real.sqrt ((t + 3) / s)) * |u - v| := by
+      rw [← mul_sub, abs_mul, abs_of_nonneg ht.1]
+      ring
+    _ ≤ (2 * s ^ (-1 / 2 : ℝ)) * |u - v| :=
+      mul_le_mul_of_nonneg_right (apm_m97A03_kernel_lipschitz_majorant ht hs) huv0
+
 theorem apm_m97a03
     (lam : ℝ) (hlam : |lam| < (1 / 4 : ℝ)) :
     ∃ u : ℝ → ℝ, apm_m97A03_isSolution lam u := by
@@ -81,5 +124,23 @@ theorem apm_m97a03
   accounted for. The remaining bridge is dominated parameter continuity for
   the singular kernel and its packaging as a contracting self-map of
   `ContinuousMap (Icc 0 1) ℝ`; the frozen statement is unchanged.
+
+  CLOSER HOP 2 closes the pointwise singular-kernel reconciliation that hop 1
+  left open. `apm_m97A03_sqrt_div_factor` proves away from the null endpoint
+  that `sqrt ((t+3)/s) = sqrt (t+3) * s^(-1/2)`.
+  `apm_m97A03_kernel_lipschitz_majorant` combines this identity with the
+  existing `t * sqrt (t+3) ≤ 2` estimate, and
+  `apm_m97A03_integrand_sub_bound` applies
+  `Real.abs_sin_sub_sin_le` to obtain the exact pointwise domination
+  `|K(t,s,u)-K(t,s,v)| ≤ 2*s^(-1/2)*|u-v|`. Thus the a.e. majorant required
+  for the contraction estimate is now compiled, including its endpoint-safe
+  formulation via the hypothesis `0 < s`.
+
+  What remains is integrating this pointwise inequality while replacing
+  `|u s-v s|` by the `ContinuousMap` sup norm, then proving dominated
+  continuity in `t` and bundling the self-map. Searches of the parametric
+  Bochner-integral and `ContinuousMap` APIs found no theorem that combines
+  this a.e.-singular majorant with the required packaged continuity, so that
+  final assembly remains honestly open.
   -/
   sorry
