@@ -52,6 +52,7 @@ lemma apm_t98J03_sphereZeroSign_injective :
   rcases apm_t98J03_sphere_zero_coord x with hx | hx <;>
     rcases apm_t98J03_sphere_zero_coord y with hy | hy
   · exact hx.trans hy.symm
+
   · have hx' : apm_t98J03_sphereZeroSign x = true := by
       simp [apm_t98J03_sphereZeroSign, hx]
     have hy' : apm_t98J03_sphereZeroSign y = false := by
@@ -67,6 +68,24 @@ lemma apm_t98J03_sphereZeroSign_injective :
     rw [hx', hy'] at hxy
     contradiction
   · exact hx.trans hy.symm
+
+lemma apm_t98J03_sphereZeroSign_surjective :
+    Function.Surjective apm_t98J03_sphereZeroSign := by
+  intro b
+  let x : EuclideanSpace ℝ (Fin 1) :=
+    EuclideanSpace.single 0 (if b then 1 else -1)
+  have hx : x ∈ Metric.sphere (0 : EuclideanSpace ℝ (Fin 1)) 1 := by
+    rw [EuclideanSpace.sphere_zero_eq 1 zero_le_one]
+    cases b <;> simp [x]
+  refine ⟨⟨x, hx⟩, ?_⟩
+  cases b <;> simp [apm_t98J03_sphereZeroSign, x] <;> norm_num
+
+/-- The concrete metric zero-sphere really is the two-element type. -/
+noncomputable def apm_t98J03_sphereZeroEquivBool :
+    apm_t98J03_Sphere 0 ≃ Bool :=
+  Equiv.ofBijective apm_t98J03_sphereZeroSign
+    ⟨apm_t98J03_sphereZeroSign_injective,
+      apm_t98J03_sphereZeroSign_surjective⟩
 
 noncomputable instance apm_t98J03_sphereZero_finite :
     Finite (apm_t98J03_Sphere 0) :=
@@ -130,5 +149,19 @@ theorem apm_t98j03 :
   normalize the free-module coproduct on these two concrete points to
   `ℤ × ℤ`; the universal `n > 0` branch still needs the absent sphere
   homology machinery described above. The frozen statement is unchanged.
+
+  CLOSER HOP 3 goes beyond that reduction by proving surjectivity of the
+  Boolean sign map with the two explicit Euclidean points and packaging the
+  resulting equivalence as `apm_t98J03_sphereZeroEquivBool`. Inspection of
+  `ModuleCat.coprodIsoDirectSum` and `DFinsupp.linearEquivFunOnFintype` shows
+  the remaining H0 normalization can now be assembled by reindexing that
+  direct sum along this equivalence and identifying `Bool → ℤ` with
+  `ℤ × ℤ`; this categorical coercion chain was not completed here.
+
+  The decisive universal branch remains unchanged: neither the repository nor
+  Mathlib contains singular homology of positive-dimensional metric spheres,
+  a suspension isomorphism, Mayer--Vietoris, or a cellular-to-singular
+  comparison. Therefore the bridge remains honestly open rather than being
+  replaced by an unproved declaration.
   -/
   sorry

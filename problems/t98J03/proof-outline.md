@@ -1,5 +1,18 @@
 # Proof Outline: t98J03
 
+## Closer hop 3 update
+
+The Boolean sign map is now proved surjective as well as injective, using the
+explicit points with unique coordinate `1` and `-1`; hence the concrete metric
+zero-sphere is packaged as an equivalence with `Bool`. Mathlib's
+`ModuleCat.coprodIsoDirectSum` and `DFinsupp.linearEquivFunOnFintype` reduce
+the outstanding zeroth-homology normalization to reindexing and the elementary
+linear equivalence `(Bool → ℤ) ≃ₗ ℤ × ℤ`.
+
+The main theorem remains partial because its universal positive-dimensional
+branch still requires the unavailable singular homology computation for
+metric spheres (or suspension/Mayer--Vietoris/cellular comparison machinery).
+
 ## Closer hop 2 update
 
 The positive-degree zero-sphere calculation now compiles. Every point of the
