@@ -13,6 +13,9 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 - Pair the point with itself to prove `ℝP¹ × ℝP¹` is nonempty.
 - Construct the third-coordinate projective point outside `ℝP¹` and prove the
   embedded product is a proper subset of the ambient product.
+- `apm_t96j06_mk_pair_mem_ProductSubspace_iff` characterizes arbitrary
+  projective representatives in the product by the equations `u 2 = 0` and
+  `v 2 = 0`, making the codimension-two incidence condition explicit.
 
 ## Remaining obstruction
 

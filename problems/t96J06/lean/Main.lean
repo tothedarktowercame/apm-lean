@@ -117,6 +117,23 @@ lemma apm_t96j06_ProductSubspace_ne_univ :
       apm_t96j06_ProductSubspace := by simpa [h]
   exact apm_t96j06_offLinePoint_not_mem hp.1
 
+/-- Membership of a pair of projective representatives in the embedded
+product reduces exactly to the two coordinate-plane equations. This exposes
+the concrete codimension-two incidence condition needed by any future
+intersection calculation. -/
+lemma apm_t96j06_mk_pair_mem_ProductSubspace_iff
+    (u v : Fin 3 → ℝ) (hu : u ≠ 0) (hv : v ≠ 0) :
+    (Projectivization.mk ℝ u hu, Projectivization.mk ℝ v hv) ∈
+        apm_t96j06_ProductSubspace ↔
+      u 2 = 0 ∧ v 2 = 0 := by
+  change
+    Projectivization.mk ℝ u hu ∈ apm_t96j06_coordinatePlane.projectivization ∧
+      Projectivization.mk ℝ v hv ∈ apm_t96j06_coordinatePlane.projectivization ↔
+      u 2 = 0 ∧ v 2 = 0
+  rw [apm_t96j06_coordinatePlane.mk_mem_projectivization_iff hu,
+    apm_t96j06_coordinatePlane.mk_mem_projectivization_iff hv]
+  rfl
+
 theorem apm_t96j06 :
     ¬apm_t96j06_BoundsThreeManifold apm_t96j06_ProductSubspace := by
   /-
@@ -148,5 +165,16 @@ theorem apm_t96j06 :
   `H*(ℝP²; ZMod 2)`, a Künneth product, or the projective-line intersection
   pairing.  Consequently the live boundary is a substantial new mod-two
   homology/intersection-theory development, not a remaining coordinate lemma.
+
+  Closer hop 3 compiles
+  `apm_t96j06_mk_pair_mem_ProductSubspace_iff`, which characterizes an
+  arbitrary pair of nonzero projective representatives as lying in the
+  embedded product exactly when both third coordinates vanish. This exposes
+  the actual codimension-two incidence equations required by a future
+  transverse self-intersection calculation and goes beyond the two special
+  witnesses from earlier hops. Renewed searches found no theorem promoting
+  these incidence equations to a mod-two intersection number, nor any
+  replacement through completed bordism groups. The invariant bridge remains
+  open and the frozen statement is unchanged.
   -/
   sorry
