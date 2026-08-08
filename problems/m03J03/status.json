@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "The nonlinear non-example is closed, and Heaviside-weighted integrals are now reduced exactly to Ioi 0 set integrals. Dirac-comb/Fourier LF-continuity and half-line integration by parts plus regular-distribution packaging remain.",
+  "closer_hop": 3,
+  "note": "The nonlinear non-example, Heaviside-to-Ioi reduction, and first identity -integral H sin phi' = integral H cos phi are compiled. The second identity, regular LF-continuity, and Dirac-comb/Fourier distribution constructors remain.",
   "imported_at": "2026-07-13T17:26:54.554452Z"
 }
