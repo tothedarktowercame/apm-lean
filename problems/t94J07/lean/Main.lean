@@ -118,6 +118,17 @@ lemma t94J07HomotopySliceIntegrand_two_pi
       t94J07PullbackCircleIntegrand alpha (fun x ↦ H (x, t)) 0 :=
   t94J07PullbackCircleIntegrand_two_pi alpha (fun x ↦ H (x, t))
 
+/-- The interval FTC turns periodic endpoint equality into the exact
+vanishing needed for the mixed `θ`-derivative term in the cylinder proof. -/
+lemma t94J07_integral_deriv_eq_zero_of_periodic
+    (q : ℝ → ℝ) (hq : ContDiff ℝ 1 q)
+    (hperiod : q (2 * Real.pi) = q 0) :
+    ∫ θ in (0 : ℝ)..2 * Real.pi, deriv q θ = 0 := by
+  rw [intervalIntegral.integral_deriv_eq_sub
+    (fun x _ => hq.differentiable one_ne_zero x)
+    ((hq.continuous_deriv le_rfl).intervalIntegrable 0 (2 * Real.pi))]
+  linarith
+
 theorem apm_t94j07
     (alpha : T94J07Form1)
     (halpha_smooth : ContDiff ℝ (⊤ : ℕ∞) alpha)
@@ -161,5 +172,19 @@ theorem apm_t94j07
   The remaining local completion still requires the dominated/continuous
   parameter-integral hypotheses and both interval FTC applications.  The
   frozen statement is unchanged; no axiom or opaque placeholder was added.
+
+  CLOSER HOP 3 (2026-08-08): one of those FTC applications is now closed as
+  `t94J07_integral_deriv_eq_zero_of_periodic`.  For any `C¹` scalar primitive,
+  it feeds global differentiability and interval-integrability of the
+  derivative to `intervalIntegral.integral_deriv_eq_sub`, then uses endpoint
+  periodicity to obtain the exact zero integral.  Together with the hop-2
+  endpoint equality, the eventual mixed `θ`-derivative cancellation now has
+  no remaining FTC or boundary arithmetic obligation. Attempts to have
+  `fun_prop` synthesize smoothness of the circle parametrization exposed a
+  missing rule for `PiLp.single`; it must be bundled manually through
+  `lp.singleContinuousLinearMap` before the larger parametric calculation.
+  The remaining bridge is differentiating the homotopy-slice integral,
+  deriving the closed-form/mixed-derivative identity, and supplying its
+  domination/continuity hypotheses. The frozen statement is unchanged.
   -/
   sorry

@@ -24,6 +24,15 @@ The remaining work is tangency of the two homotopy partial derivatives and
 the parametric-integral/exterior-derivative assembly; no endpoint algebra
 remains hidden in that boundary.
 
+## Closer hop 3
+
+`t94J07_integral_deriv_eq_zero_of_periodic` now compiles the complete
+θ-direction FTC step: a `C¹` scalar primitive with equal values at `0` and
+`2π` has zero integral of its derivative. Combined with hop 2, the future
+mixed-term cancellation has no endpoint or FTC work remaining. The open
+bridge is differentiating the homotopy-slice integral and proving the local
+closed-form/mixed-derivative identity with the required regularity bounds.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 

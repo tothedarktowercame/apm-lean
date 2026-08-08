@@ -28,8 +28,8 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Circle norm and tangent velocity are proved, and periodicity is now compiled for the full pullback integrand and every homotopy slice. Tangency of homotopy partial derivatives and the mixed-derivative/parameter-integral cylinder argument remain open.",
+  "closer_hop": 3,
+  "closer_note": "The theta-direction periodic FTC cancellation is compiled. Tangency of homotopy partial derivatives and the mixed-derivative/parameter-integral cylinder argument remain open.",
   "checked_at": "2026-08-08T00:00:00Z",
   "checked_lean_state": {
     "exit_code": 0,
@@ -42,12 +42,13 @@
       "t94J07CirclePoint_two_pi",
       "t94J07CircleVelocity_two_pi",
       "t94J07PullbackCircleIntegrand_two_pi",
-      "t94J07HomotopySliceIntegrand_two_pi"
+      "t94J07HomotopySliceIntegrand_two_pi",
+      "t94J07_integral_deriv_eq_zero_of_periodic"
     ],
     "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
     "blockers": [
       "Differentiate the unit-norm constraint to prove tangency of both homotopy partial derivatives",
-      "Assemble extDeriv_pullback, differentiation under the integral, and both interval FTC steps"
+      "Assemble extDeriv_pullback and differentiation under the integral; the theta FTC step is now compiled"
     ]
   },
   "imported_at": "2026-05-01T19:38:18.305300Z"
