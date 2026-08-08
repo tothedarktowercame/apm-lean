@@ -26,7 +26,8 @@ noncomputable abbrev apm_m94a04_measure : Measure ℝ :=
 
 local instance apm_m94a04_holder_884 : ENNReal.HolderTriple 8 8 4 := by
   rw [ENNReal.holderTriple_iff]
-  apply (ENNReal.toReal_eq_toReal (by finiteness) (by finiteness)).mp
+  apply (ENNReal.toReal_eq_toReal (by finiteness)
+    (by rw [ENNReal.inv_ne_top]; norm_num)).mp
   rw [ENNReal.toReal_add (by finiteness) (by finiteness),
     ENNReal.toReal_inv]
   simp
@@ -53,6 +54,50 @@ lemma apm_m94a04_norm_square_le
     ‖apm_m94a04_square f‖ ≤ ‖f‖ ^ 2 := by
   simpa [apm_m94a04_square, pow_two] using
     (Lp.norm_smul_le (r := 4) f f)
+
+local instance apm_m94a04_holder_84eightThirds :
+    ENNReal.HolderTriple 8 4 (8 / 3) := by
+  rw [ENNReal.holderTriple_iff]
+  apply (ENNReal.toReal_eq_toReal (by finiteness)
+    (by rw [ENNReal.inv_ne_top, ENNReal.div_ne_zero]; norm_num)).mp
+  rw [ENNReal.toReal_add (by finiteness) (by finiteness),
+    ENNReal.toReal_inv]
+  simp
+  norm_num
+
+/-- The second heterogeneous Hölder stage constructs the cubic term in
+`L^(8/3)` directly on quotient classes. -/
+noncomputable def apm_m94a04_cube
+    (f : Lp ℝ 8 apm_m94a04_measure) :
+    Lp ℝ (8 / 3) apm_m94a04_measure :=
+  f • apm_m94a04_square f
+
+/-- The quotient-level cube has the expected representative almost
+everywhere. -/
+lemma apm_m94a04_cube_coeFn (f : Lp ℝ 8 apm_m94a04_measure) :
+    (apm_m94a04_cube f : ℝ → ℝ) =ᵐ[apm_m94a04_measure]
+      fun t ↦ (f t) ^ 3 := by
+  filter_upwards [Lp.coeFn_lpSMul (r := 8 / 3) f (apm_m94a04_square f),
+    apm_m94a04_square_coeFn f] with t hmul hsquare
+  change ((f • apm_m94a04_square f : Lp ℝ (8 / 3) apm_m94a04_measure) :
+    ℝ → ℝ) t = (f t) ^ 3
+  rw [hmul]
+  change f t * apm_m94a04_square f t = (f t) ^ 3
+  rw [hsquare]
+  ring
+
+/-- Hölder and the square estimate give the cubic norm bound. -/
+lemma apm_m94a04_norm_cube_le (f : Lp ℝ 8 apm_m94a04_measure) :
+    ‖apm_m94a04_cube f‖ ≤ ‖f‖ ^ 3 := by
+  have hf0 : 0 ≤ ‖f‖ := by
+    rw [Lp.norm_def]
+    exact ENNReal.toReal_nonneg
+  calc
+    ‖apm_m94a04_cube f‖ ≤ ‖f‖ * ‖apm_m94a04_square f‖ :=
+      Lp.norm_smul_le (r := 8 / 3) f (apm_m94a04_square f)
+    _ ≤ ‖f‖ * ‖f‖ ^ 2 := mul_le_mul_of_nonneg_left
+      (apm_m94a04_norm_square_le f) hf0
+    _ = ‖f‖ ^ 3 := by ring
 
 def apm_m94a04_IsOperator
     (T : Lp ℝ 8 (volume.restrict (Icc (0 : ℝ) 1)) →
@@ -140,5 +185,15 @@ theorem apm_m94a04 :
   to `L²`, construction and boundedness of multiplication by `3f²`, and the
   ENNReal epsilon-delta remainder estimate. The frozen statement remains
   unchanged.
+
+  Closer hop 3 compiles the next exponent link. The concrete instance
+  `apm_m94a04_holder_84eightThirds` verifies `1/8 + 1/4 = 3/8`;
+  `apm_m94a04_cube` constructs `f³ : L^(8/3)` from `f` and the compiled
+  square; and its representative and sharp norm bound are proved by
+  `apm_m94a04_cube_coeFn` and `apm_m94a04_norm_cube_le`. This completes the
+  quotient-level `L⁸·L⁴ → L^(8/3)` stage without representative choices.
+  Renewed inspection found no bundled linear downgrade from `Lp (8/3)` to
+  `Lp 2`; that finite-measure conversion, the derivative `LinearMap`, and the
+  ENNReal remainder estimate remain open without an unproved assertion.
   -/
   sorry

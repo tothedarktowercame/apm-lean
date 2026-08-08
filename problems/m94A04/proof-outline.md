@@ -21,3 +21,8 @@ expected a.e. representative and satisfies `‖f²‖₄ ≤ ‖f‖₈²`.
 Mathlib's `MeasureTheory.Function.Holder` already handles quotient-level
 representative independence and Hölder norm bounds. No searched sibling
 assembles the required exponent chain and derivative package.
+
+Closer hop 3 completes the second heterogeneous Hölder link by constructing
+`f³ : L^(8/3)`, proving its representative is a.e. the pointwise cube, and
+showing `‖f³‖_(8/3) ≤ ‖f‖₈³`. The remaining construction begins with the
+finite-measure downgrade from exponent `8/3` to `2`.

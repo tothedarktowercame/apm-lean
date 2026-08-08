@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Compiled the quotient-level L8 times L4 to L^(8/3) cube, its a.e. representative, and norm bound. The finite-measure downgrade to L2, derivative LinearMap, and remainder estimate remain open.",
   "imported_at": "2026-07-13T17:26:54.762759Z"
 }
