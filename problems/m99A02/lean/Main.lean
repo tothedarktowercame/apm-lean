@@ -114,6 +114,23 @@ lemma m99A02_derivative_sq_le_radial (i : Fin 2) {x : m99A02Point}
   exact Finset.single_le_sum (fun j _ ↦ sq_nonneg (m99A02Derivative j x))
     (Finset.mem_univ i)
 
+/-- Why this unblocks the `MemLp` clauses of `apm_m99a02`: this is the
+missing polar-coordinate transport and scalar Bertrand-integral estimate for
+the function and both displayed derivatives on the Euclidean disk. -/
+theorem apm_m99A02_bridge_1 :
+    MemLp m99A02Function 2 (volume.restrict m99A02Omega) ∧
+      ∀ i : Fin 2,
+        MemLp (m99A02Derivative i) 2 (volume.restrict m99A02Omega) := by
+  sorry
+
+/-- Why this unblocks the weak-derivative clauses of `apm_m99a02`: this is
+the punctured-disk integration-by-parts theorem together with the assertion
+that the inner-circle boundary flux tends to zero at the logarithmic
+singularity. -/
+theorem apm_m99A02_bridge_2 (i : Fin 2) :
+    IsM99A02WeakDerivative m99A02Function (m99A02Derivative i) i := by
+  sorry
+
 theorem apm_m99a02 :
     MemLp m99A02Function 2 (volume.restrict m99A02Omega) ∧
     ∀ i : Fin 2,
