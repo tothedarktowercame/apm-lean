@@ -109,6 +109,28 @@ lemma apm_m02J06_translation_estimate
   · rw [abs_of_pos hh]
     exact htrans h hh
 
+/-- Convolution with the rescaled mollifier has a common compact support:
+the support radius is the sum of the radii of `f` and the mollifier. -/
+lemma apm_m02J06_convolution_eq_zero
+    {φ f : ℝ → ℝ} (hφ : ∀ x, 1 ≤ |x| → φ x = 0)
+    {ε : ℝ} (hε : 0 < ε) (hf : f ∈ apm_m02J06_K)
+    {x : ℝ} (hx : 1 + ε ≤ |x|) :
+    apm_m02J06_convolution f (apm_m02J06_mollifier φ ε) x = 0 := by
+  unfold apm_m02J06_convolution
+  have hz : (fun t : ℝ ↦
+      f (x - t) * apm_m02J06_mollifier φ ε t) = 0 := by
+    funext t
+    by_cases ht : ε ≤ |t|
+    · simp [apm_m02J06_mollifier_eq_zero hφ hε ht]
+    · have ht' : |t| < ε := lt_of_not_ge ht
+      have htri : |x| ≤ |x - t| + |t| := by
+        calc
+          |x| = |(x - t) + t| := by ring_nf
+          _ ≤ |x - t| + |t| := abs_add_le _ _
+      have hxt : 1 ≤ |x - t| := by linarith
+      simp [hf.2.2.2 (x - t) hxt]
+  simp [hz]
+
 theorem apm_m02j06 :
     ∀ (φ : ℝ → ℝ) (M : ℝ),
       ContDiff ℝ ⊤ φ →
@@ -166,5 +188,22 @@ theorem apm_m02j06 :
   `L¹`. The remaining bridge is the Tonelli estimates, bounded-continuous-map
   packaging, finite-net transfer, and final compactness argument. The frozen
   statement remains unchanged.
+
+  CLOSER HOP 3 goes beyond the prior quotient/scaling work by proving
+  `apm_m02J06_convolution_eq_zero`: every mollified representative vanishes
+  outside radius `1 + ε`. The proof splits on whether the convolution variable
+  lies outside the mollifier radius and otherwise uses the triangle inequality
+  to put `x - t` outside the common support of `f`. Thus the common compact
+  domain required by Arzelà--Ascoli is now compiled, rather than merely listed
+  as a packaging obligation.
+
+  Renewed searches covered Mathlib's general and bounded-continuous-function
+  Arzelà--Ascoli theorems, total-boundedness/compactness criteria, convolution
+  decay siblings (`a03J03`, `a97J03`), and the entire reusable module set. No
+  Fréchet--Kolmogorov theorem or finite-net transfer into `Lp` was found. The
+  remaining bridge is narrower: prove the two Tonelli convolution estimates,
+  bundle the now uniformly supported mollifications as an equicontinuous
+  bounded-continuous family, transport its sup-norm nets into `L¹`, and prove
+  closedness of `apm_m02J06_KL1`. The frozen statement remains unchanged.
   -/
   sorry
