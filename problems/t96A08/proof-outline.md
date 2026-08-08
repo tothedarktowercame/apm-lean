@@ -8,6 +8,10 @@ that its value equals the integral along every other admissible path with the
 same endpoints. Thus existence and well-definedness of the potential are fully
 compiled.
 
+Constant paths are now proved admissible and their concrete line integral is
+computed as zero. Consequently every function satisfying the path-integral
+specification is proved to obey the canonical normalization `f base = 0`.
+
 ## Remaining Lean boundary
 
 Local chart calculus must prove the potential smooth and identify its
@@ -15,6 +19,9 @@ manifold derivative with `ω`. This requires concatenating the chosen path with
 a short chart-linear segment, splitting and reparameterizing the integral, and
 differentiating the endpoint-dependent segment. No compatible manifold
 one-form fundamental theorem or piecewise-smooth concatenation API was found.
+The chart-linear derivative helper in `t00J04` only realizes a prescribed
+cotangent vector at one point and does not supply the endpoint-dependent
+integral identity needed here.
 
 This file packages the formalization-oriented context that should travel
 with the Lean files.

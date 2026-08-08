@@ -40,6 +40,38 @@ def apm_t96a08_LineIntegral
   ∫ t : ℝ in (0 : ℝ)..1,
     ω (γ t) ((mfderiv 𝓘(ℝ, ℝ) I γ t) 1)
 
+/-- Constant paths are admissible in the concrete piecewise-smooth encoding. -/
+lemma apm_t96a08_isPiecewiseSmoothPath_const
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (p : M) :
+    apm_t96a08_IsPiecewiseSmoothPath I (fun _ : ℝ ↦ p) := by
+  refine ⟨continuous_const, ∅, ?_⟩
+  intro t ht hnot
+  exact contMDiffAt_const
+
+/-- The concrete line integral of a constant path vanishes. -/
+lemma apm_t96a08_lineIntegral_const
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (p : M) :
+    apm_t96a08_LineIntegral I ω (fun _ : ℝ ↦ p) = 0 := by
+  simp [apm_t96a08_LineIntegral]
+
+/-- Any function satisfying the path-integral specification is normalized to
+zero at the chosen base point. -/
+lemma apm_t96a08_potential_base_eq_zero
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M) (f : M → ℝ)
+    (hf : ∀ p : M, ∀ γ : ℝ → M,
+      apm_t96a08_IsPiecewiseSmoothPath I γ → γ 0 = base → γ 1 = p →
+      f p = apm_t96a08_LineIntegral I ω γ) :
+    f base = 0 := by
+  rw [hf base (fun _ : ℝ ↦ base)
+    (apm_t96a08_isPiecewiseSmoothPath_const I base) rfl rfl]
+  exact apm_t96a08_lineIntegral_const I ω base
+
 theorem apm_t96a08
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -68,20 +100,28 @@ theorem apm_t96a08
     exact hindependent (γ p) δ (hγ p).1 hδ
       (by rw [(hγ p).2.1, hδ0]) (by rw [(hγ p).2.2, hδ1])
   · /-
-    CLOSER HOP 1 boundary. The potential is now constructed by classical
+    CLOSER HOP 2 boundary. The potential is constructed by classical
     choice from `hreachable`, and its defining value for every admissible path
     is proved from `hindependent`; well-definedness and endpoint bookkeeping
     are compiled outside this `sorry`.
+
+    Going beyond hop 1, constant paths are now proved admissible, their
+    concrete line integral is computed as zero, and
+    `apm_t96a08_potential_base_eq_zero` derives the canonical normalization
+    `f base = 0` for any function satisfying the path-integral specification.
+    Inspection of `t00J04` also found its useful chart-linear `mfderiv` lemma,
+    but that lemma only prescribes a differential at one point and does not
+    identify the endpoint-dependent integral used here.
 
     The remaining bridge is local calculus for the concrete line integral.
     One must append a short chart-linear path to the chosen base path, prove
     the concatenation piecewise smooth, split and reparameterize its integral,
     and differentiate the short-segment integral with respect to its endpoint.
     This must yield both `ContMDiff` and the exact `mfderiv = ω` equality.
-    Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, line-integral
+    Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, line-integral
     siblings, Mathlib's manifold derivative, interval-integral, path
     concatenation, tangent-bundle, and differential-form sources, and git
     history found no manifold one-form fundamental theorem or compatible
-    piecewise-smooth concatenation API.
+    piecewise-smooth concatenation API. The frozen statement is unchanged.
     -/
     sorry
