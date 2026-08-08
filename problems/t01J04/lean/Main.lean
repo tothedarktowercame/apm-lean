@@ -1,11 +1,15 @@
 import Mathlib
 
 /-!
-# APM t01J04: regular preimages of closed neighborhoods
+# APM t01J04 — regular preimages of closed neighborhoods
 
 ## Statement repairs
 
-None.
+Mathlib's manifold typeclasses do not include the usual Hausdorff separation
+convention.  `T2Space` is therefore required for both manifolds, and
+`RegularSpace Y` is required explicitly for the neighborhood-shrinking step
+`closure V ⊆ U`.  Without it, the line with doubled origin gives a
+counterexample even for the identity map.
 
 ## Encoding questions
 
@@ -39,6 +43,7 @@ theorem apm_t01j04
     (n m : ℕ)
     (X Y : Type*)
     [TopologicalSpace X] [TopologicalSpace Y]
+    [T2Space X] [T2Space Y] [RegularSpace Y]
     [ChartedSpace (apm_t01J04_Euclidean n) X]
     [ChartedSpace (apm_t01J04_Euclidean m) Y]
     [IsManifold (modelWithCornersSelf ℝ (apm_t01J04_Euclidean n))
@@ -58,17 +63,4 @@ theorem apm_t01j04
       closure V ⊆ U ∧
       apm_t01J04_IsSmoothManifoldWithBoundary n
         {x : X // x ∈ f ⁻¹' closure V} := by
-  /-
-  Boundary (skipped): even the topological shrinking step requires
-  `RegularSpace Y`, which is not implied by the frozen Mathlib manifold
-  hypotheses (instance synthesis confirms this). Thus the statement is false
-  without a separation axiom: a non-Hausdorff locally Euclidean manifold such
-  as the line with doubled origin has a neighborhood `U` of one origin for
-  which every smaller neighborhood has closure containing the other origin.
-  Taking `f` to be the identity already defeats `closure V ⊆ U`. Beyond that,
-  the intended proof also needs manifold Sard and a regular-sublevel theorem
-  constructing half-space charts. I searched the `mfderiv`, critical-value,
-  Sard, submersion, model-with-corners, and subtype-chart APIs; those packaged
-  results are not available in the required generality.
-  -/
   sorry
