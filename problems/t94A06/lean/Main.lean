@@ -40,6 +40,33 @@ lemma apm_t94a06_family_zero {X : Type*} (f : X → apm_t94a06_E3) :
   funext x
   simp [apm_t94a06_family, apm_t94a06_normalTranslation]
 
+/-- Translation in the normal plane preserves smoothness of every slice. -/
+lemma apm_t94a06_family_contMDiff
+    {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup H] [NormedSpace ℝ H] [TopologicalSpace X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    [IsManifold I ∞ X] (f : X → apm_t94a06_E3)
+    (hf : ContMDiff I 𝓘(ℝ, apm_t94a06_E3) ∞ f)
+    (s : apm_t94a06_E2) :
+    ContMDiff I 𝓘(ℝ, apm_t94a06_E3) ∞ (apm_t94a06_family f s) := by
+  simpa [apm_t94a06_family] using hf.add (contMDiff_const (c := apm_t94a06_normalTranslation s))
+
+/-- A constant normal translation does not change the derivative in the
+manifold variable. -/
+lemma apm_t94a06_mfderiv_family
+    {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup H] [NormedSpace ℝ H] [TopologicalSpace X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    [IsManifold I ∞ X] (f : X → apm_t94a06_E3)
+    (hf : ContMDiff I 𝓘(ℝ, apm_t94a06_E3) ∞ f)
+    (s : apm_t94a06_E2) (x : X) :
+    mfderiv I 𝓘(ℝ, apm_t94a06_E3) (apm_t94a06_family f s) x =
+      mfderiv I 𝓘(ℝ, apm_t94a06_E3) f x := by
+  rw [show apm_t94a06_family f s = f + fun _ ↦ apm_t94a06_normalTranslation s by rfl]
+  rw [mfderiv_add ((hf.mdifferentiable (by simp)) x) mdifferentiableAt_const]
+  simp
+  rfl
+
 def apm_t94a06_IsTransverseToZAxis
     {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
@@ -76,5 +103,16 @@ theorem apm_t94a06
   spaces and do not directly accept this arbitrary charted domain. Building
   the incidence manifold chartwise and transporting null critical values is
   therefore the remaining bridge; the frozen statement is unchanged.
+
+  CLOSER HOP 3 compiles the slice-level differential geometry consumed by
+  that incidence argument. `apm_t94a06_family_contMDiff` proves every
+  translated slice remains smooth, and `apm_t94a06_mfderiv_family` proves its
+  manifold derivative in `x` is exactly `mfderiv f x`, since translation is
+  constant. Thus no translation-derivative bookkeeping remains. The unresolved
+  step is global and measure-theoretic: construct the incidence submanifold,
+  identify bad parameters as critical values of its projection, and transport
+  fixed-vector-space Sard null sets through manifold charts. Searches of Sard,
+  regular-value, countable-atlas, and subtype-chart APIs found no packaged
+  theorem performing that assembly. The frozen statement is unchanged.
   -/
   sorry
