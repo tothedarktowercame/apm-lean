@@ -28,6 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "closer_progress": "The full fundamental-group obstruction has been localized: a retraction induces an injection, impossible from a nontrivial circle group into the subsingleton disk group. Only nontriviality of the circle fundamental group remains unavailable.",
   "stage": "attempted",
   "checked_at": "2026-08-07",
   "checked_lean_state": {

@@ -1,5 +1,7 @@
 import Mathlib
 
+open CategoryTheory
+
 /-!
 # APM t97J03
 
@@ -30,6 +32,40 @@ def apm_t97J03_boundaryInclusion : apm_t97J03_Torus → apm_t97J03_Y :=
 def apm_t97J03_boundaryMap : apm_t97J03_Torus → apm_t97J03_Torus :=
   fun q ↦
     (q.1, ⟨q.2.1 ^ 3, by rw [norm_pow, q.2.2, one_pow]⟩)
+
+/-- Localized from sibling `t91A05`: a retraction induces an injective map on
+fundamental groups. -/
+lemma apm_t97J03_fundamentalGroupMap_injective_of_retraction
+    {A X : Type} [TopologicalSpace A] [TopologicalSpace X]
+    (i : C(A, X)) (a : A) (r : C(X, A)) (hr : ∀ x, r (i x) = x) :
+    Function.Injective (FundamentalGroup.map i a) := by
+  intro p q hpq
+  change (FundamentalGroupoid.map i).map p =
+    (FundamentalGroupoid.map i).map q at hpq
+  have hpq' := congrArg (fun z ↦ (FundamentalGroupoid.map r).map z) hpq
+  change ((FundamentalGroupoid.map i ⋙ FundamentalGroupoid.map r).map p) =
+    ((FundamentalGroupoid.map i ⋙ FundamentalGroupoid.map r).map q) at hpq'
+  have hcomp : r.comp i = ContinuousMap.id A := by
+    ext x
+    exact hr x
+  rw [← FundamentalGroupoid.map_comp, hcomp, FundamentalGroupoid.map_id] at hpq'
+  exact hpq'
+
+/-- The full abstract obstruction: a nontrivial source fundamental group
+cannot inject into a subsingleton target fundamental group. -/
+lemma apm_t97J03_no_retraction_of_subsingleton_fundamentalGroup
+    {A X : Type} [TopologicalSpace A] [TopologicalSpace X]
+    (i : C(A, X)) (a : A)
+    [Subsingleton (FundamentalGroup X (i a))]
+    [Nontrivial (FundamentalGroup A a)] :
+    ¬∃ r : C(X, A), ∀ x, r (i x) = x := by
+  rintro ⟨r, hr⟩
+  have hinj :=
+    apm_t97J03_fundamentalGroupMap_injective_of_retraction i a r hr
+  obtain ⟨p, hp⟩ := exists_ne (1 : FundamentalGroup A a)
+  apply hp
+  apply hinj
+  apply Subsingleton.elim
 
 theorem apm_t97j03 :
     ¬ ∃ F : apm_t97J03_Y → apm_t97J03_Torus,
@@ -63,5 +99,16 @@ theorem apm_t97j03 :
   `t93A03`, and `t02A03` record the same missing circle computation.
   No unproved intermediate assertion beyond the original theorem remains, and
   the frozen statement is unchanged.
+
+  CLOSER HOP 2 goes beyond merely pointing to `t91A05` by localizing its
+  now-compiled obstruction. The two new helpers prove the full categorical
+  and group-theoretic contradiction: a retraction would inject a nontrivial
+  boundary fundamental group into the subsingleton disk group. Thus the
+  solid-torus reduction, disk retraction construction, functoriality, and final
+  injectivity contradiction are all compiled in this bundle. Renewed searches
+  of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's circle/fundamental-
+  group and singular-homology sources, and related no-retraction artifacts
+  found no nontriviality instance for the unit-circle fundamental group. That
+  single foundational computation remains open.
   -/
   sorry

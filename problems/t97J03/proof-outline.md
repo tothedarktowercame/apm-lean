@@ -6,11 +6,14 @@ the product projections proves `g` continuous. Applying the boundary identity
 and projecting its first coordinate proves that `g` restricts to the identity
 on the unit circle. These steps are compiled in `Main.lean`.
 
+The full abstract obstruction is now also compiled locally: a retraction
+induces an injective fundamental-group map, and no injection exists from a
+nontrivial group into a subsingleton group.
+
 Thus the desired contradiction is exactly the theorem that the complex unit
-disk does not retract continuously onto its boundary. The remaining standard
-route is to use functoriality of the fundamental group: a retraction makes the
-circle-to-disk map injective, the disk is contractible, and the circle has
-fundamental group `ℤ`. Mathlib currently lacks the last circle computation and
-also has no packaged Brouwer no-retraction theorem.
+disk does not retract continuously onto its boundary. All functorial and group
+bookkeeping for that route is compiled. Mathlib currently lacks only the
+nontriviality computation for the circle fundamental group and also has no
+packaged Brouwer no-retraction theorem.
 
 Checked Lean state: exit 0; one `sorry` remains.
