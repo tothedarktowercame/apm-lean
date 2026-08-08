@@ -71,6 +71,26 @@ def t97A04HasHomologicalData
 lemma apm_t97a04_matrix_trace : Matrix.trace apm_t97a04_matrix = 3 := by
   norm_num [Matrix.trace, apm_t97a04_matrix]
 
+/-- The determinant controlling the top-dimensional action is three. -/
+lemma apm_t97a04_matrix_det : Matrix.det apm_t97a04_matrix = 3 := by
+  norm_num [Matrix.det_fin_two, apm_t97a04_matrix]
+
+/-- Coordinate form of the claimed action on the two standard first-homology
+generators. -/
+lemma apm_t97a04_matrix_mulVec (v : apm_t97a04_IntPlane) :
+    apm_t97a04_matrix.mulVec v = ![2 * v 0 + v 1, v 1 - v 0] := by
+  funext i
+  fin_cases i <;> simp [Matrix.mulVec, dotProduct, apm_t97a04_matrix] <;> ring
+
+/-- The displayed real lift has exactly the same coordinate formula as the
+integer matrix after scalar extension. -/
+lemma apm_t97a04_L_eq_matrix_mulVec (p : apm_t97a04_RealPlane) :
+    apm_t97a04_L p =
+      (apm_t97a04_matrix.map ((Int.castRingHom ℝ))).mulVec p := by
+  funext i
+  fin_cases i <;>
+    simp [apm_t97a04_L, apm_t97a04_matrix, Matrix.mulVec, dotProduct] <;> ring
+
 lemma apm_t97a04_lefschetz_arithmetic :
     (1 : ℤ) = 1 - Matrix.trace apm_t97a04_matrix + 3 := by
   rw [apm_t97a04_matrix_trace]
@@ -104,10 +124,17 @@ theorem apm_t97a04 :
         (∀ a : T97A04Homology 2,
           h2.hom (t97A04HomologyMap 2 apm_t97a04_Lbar a) = 3 * h2.hom a) := by
     /-
-    CLOSER HOP 1 boundary. The concrete matrix trace is now compiled as `3`,
+    CLOSER HOP 2 boundary. The concrete matrix trace is compiled as `3`,
     and `apm_t97a04_lefschetz_arithmetic` proves the final formula
     `1 = 1 - trace A + 3`. The packaging lemma above reduces the main theorem
     exactly to three homology isomorphisms and their induced-map equations.
+
+    Going beyond hop 1, `apm_t97a04_matrix_det` now proves the determinant is
+    three, `apm_t97a04_matrix_mulVec` expands the claimed action on arbitrary
+    integral coordinates, and `apm_t97a04_L_eq_matrix_mulVec` proves that the
+    concrete real lift is literally scalar extension of that same matrix.
+    Hence no determinant or coordinate-identification algebra remains after a
+    future generator-level homology comparison.
 
     The remaining bridge is the integral singular homology of
     `(AddCircle 1) × (AddCircle 1)` with explicit natural generators: construct
@@ -117,6 +144,7 @@ theorem apm_t97a04 :
     torus and circle siblings, Mathlib's singular-homology, AddCircle, product,
     Eilenberg--Zilber/Künneth, and induced-map sources, and git history found no
     compiled circle/torus homology computation or generator-level product map.
+    The frozen statement is unchanged.
     -/
     sorry
   rcases hcore with ⟨h0, h1, h2, H0, H1, H2⟩

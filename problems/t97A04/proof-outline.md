@@ -8,6 +8,12 @@
 reduced exactly to the three homology isomorphisms and their induced-map
 equations.
 
+`apm_t97a04_matrix_det` computes the determinant as `3`.
+`apm_t97a04_matrix_mulVec` expands its action on arbitrary integral
+coordinates, while `apm_t97a04_L_eq_matrix_mulVec` identifies the concrete
+real lift with the scalar extension of this matrix. Thus the remaining
+homology comparison has all determinant and coordinate algebra available.
+
 ## Remaining Lean boundary
 
 Compute integral singular homology of `(AddCircle 1) × (AddCircle 1)` as
