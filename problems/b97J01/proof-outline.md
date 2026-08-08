@@ -1,7 +1,7 @@
 # Proof Outline: b97J01
 
 The frozen theorem has a compiling partial formalization in `lean/Main.lean`.
-Four of the five conjuncts are now packaged as complete helper lemmas.
+All five conjuncts are packaged as complete helper lemmas.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97J01.md`
@@ -14,9 +14,11 @@ Four of the five conjuncts are now packaged as complete helper lemmas.
   central-series definition.
 - `S₃` is not nilpotent: its explicit transposition subgroup is proper and
   self-normalizing, contradicting the normalizer condition for nilpotent groups.
+- `S₃` is solvable: `A₃` is verified commutative, it is the kernel of the sign
+  map, and `solvable_of_ker_le_range` combines it with the commutative sign
+  target.
 
-## Remaining bridge
+## Closure
 
-Prove that `S₃` has terminating derived series. The remaining route is to use
-the abelian normal subgroup `A₃` and the sign quotient, or explicitly show the
-second derived subgroup is trivial.
+Closer hop 3 completed the sign-extension route and the main theorem now
+assembles all helpers without any `sorry`.

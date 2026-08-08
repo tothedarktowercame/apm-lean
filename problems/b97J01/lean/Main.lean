@@ -84,6 +84,22 @@ lemma apm_b97j01_S3_not_nilpotent :
       apm_b97j01_transpositionSubgroup_normalizer
   exact apm_b97j01_transpositionSubgroup_ne_top hfull
 
+/-- `S₃` is solvable via the sign extension: its kernel `A₃` is commutative,
+and the sign target is commutative. -/
+lemma apm_b97j01_S3_solvable :
+    apm_b97j01_solvable (Equiv.Perm (Fin 3)) := by
+  have hcomm : ∀ a b : alternatingGroup (Fin 3), a * b = b * a := by
+    native_decide
+  letI : IsSolvable (alternatingGroup (Fin 3)) := isSolvable_of_comm hcomm
+  have hker : Equiv.Perm.sign.ker ≤
+      (alternatingGroup (Fin 3)).subtype.range := by
+    rw [← alternatingGroup_eq_sign_ker,
+      Subgroup.range_subtype]
+  have hs : IsSolvable (Equiv.Perm (Fin 3)) :=
+    solvable_of_ker_le_range (alternatingGroup (Fin 3)).subtype
+      Equiv.Perm.sign hker
+  exact hs.solvable
+
 theorem apm_b97j01 :
     ¬apm_b97j01_solvable (Equiv.Perm (Fin 5)) ∧
     apm_b97j01_solvable (Equiv.Perm (Fin 3)) ∧
@@ -94,6 +110,10 @@ theorem apm_b97j01 :
     (∀ (G : Type) [Group G] [Fintype G] (p n : ℕ),
       p.Prime → Fintype.card G = p ^ n →
         apm_b97j01_nilpotent G) := by
+  refine ⟨apm_b97j01_S5_not_solvable, apm_b97j01_S3_solvable,
+    apm_b97j01_S3_not_nilpotent, ?_, ?_⟩
+  · exact apm_b97j01_pgroup_center_ne_bot
+  · exact apm_b97j01_pgroup_nilpotent
   /-
   Boundary (pass-1 Codex, skipped): Mathlib directly supplies the large-group
   and p-group ingredients: `Equiv.Perm.fin_5_not_solvable`,
@@ -129,5 +149,12 @@ theorem apm_b97j01 :
   Mathlib's derived-series and alternating-group APIs give the intended route
   through the abelian normal subgroup `A₃`, but no direct small-symmetric-group
   theorem was found and the extension/sign-map assembly remains open.
+
+  Closer hop 3 closes the final solvability conjunct.
+  `apm_b97j01_S3_solvable` verifies the commutativity of the finite group
+  `alternatingGroup (Fin 3)`, equips it with `IsSolvable`, identifies the
+  kernel of `Equiv.Perm.sign` with the range of the alternating-group subtype,
+  and applies `solvable_of_ker_le_range`; the sign target `ℤˣ` is solvable by
+  its commutative-group instance. The main theorem now assembles the five
+  previously compiled helpers directly and contains no `sorry`.
   -/
-  sorry

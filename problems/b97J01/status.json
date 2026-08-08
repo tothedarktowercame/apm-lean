@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 2,
-  "classification_detail": "Four of five conjuncts compile, including S3 nonnilpotence via a proper self-normalizing transposition subgroup; only S3 solvability remains.",
+  "classification": "solved",
+  "closer_hop": 3,
+  "classification_detail": "All five conjuncts compile. S3 solvability is proved through the solvable extension A3 → S3 → sign, and S3 nonnilpotence uses the proper self-normalizing transposition subgroup.",
   "imported_at": "2026-07-13T17:26:54.119401Z"
 }
