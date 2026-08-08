@@ -41,6 +41,19 @@ The `constructedH_nonneg` lemma (line 106) is **fully proved**.
 
 ## Classification: partial
 
+## Closer Hop 1
+
+Repository history through commit `37f2405` contains a sorry-free construction
+of a compact positive-measure subset of `[0,1]` with empty interior, obtained by
+removing the rational points and applying inner regularity. That construction
+has now been extracted and compiled as `apm_a94J02_exists_fat_compact`.
+
+The historical final theorem is weaker than the current frozen statement: it
+does not assert `AbsolutelyContinuousOnInterval` or `IntervalIntegrable`.
+Therefore it cannot be reused wholesale. The next hop should port its
+indicator-integral strict-monotonicity and a.e.-derivative lemmas, then add the
+two missing analytic packaging results.
+
 The formalization correctly states the mathematical problem, repairs the
 impossible "on ℝ" to the meaningful "on [0,1]" version, and identifies the
 exact boundaries (fat Cantor set existence, strict monotonicity from

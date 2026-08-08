@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 5,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 5
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -33,5 +33,5 @@
   "lean_compiles": true,
   "lean_errors": 0,
   "validation_command": "lake env lean problems/a94J02/lean/Main.lean",
-  "blocker": "Fat Cantor set existence (closed nowhere-dense positive-measure subset of [0,1]) not in Mathlib; strict monotonicity from nowhere-denseness and FTC derivative claim depend on it."
+  "blocker": "The fat compact set now compiles. Remaining: port the historical indefinite-integral strict-monotonicity and a.e.-derivative lemmas, then package absolute continuity and interval integrability required by the stronger frozen theorem."
 }
