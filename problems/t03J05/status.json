@@ -10,12 +10,12 @@
     "problem_tex": "apm/t03J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "closer_hop": 2,
-  "closer_progress": "The genus-two Euler computation and generic embedding propagation for punctured curves and product tori are compiled. Remaining work is constructing the four concrete curves on the polygon quotient, proving odd intersection, and establishing ambient nonhomotopy under every open embedding.",
+  "classification": "partial",
+  "closer_hop": 3,
+  "closer_progress": "The product-torus image intersection is proved equal to the Cartesian square of the curve-image intersection; its cardinality is the square of the curve-intersection cardinality, so oddness transfers. Remaining work is constructing the four punctured curves with odd curve intersection and proving ambient nonhomotopy under every open embedding.",
   "imported_at": "2026-07-13T17:26:57.094833Z"
 }

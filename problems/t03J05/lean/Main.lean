@@ -65,6 +65,49 @@ lemma apm_t03J05_unpunctureCurve_isEmbedding
     Topology.IsEmbedding (apm_t03J05_unpunctureCurve x a) := by
   exact Topology.IsEmbedding.subtypeVal.comp ha
 
+/-- The actual intersection of two diagonal product tori is exactly the
+Cartesian square of the corresponding curve-image intersection. -/
+lemma apm_t03J05_imageIntersection_product_self
+    {F : Type} [TopologicalSpace F] (a b : C(Circle, F)) :
+    apm_t03J05_imageIntersection
+        (apm_t03J05_productTorusMap a a)
+        (apm_t03J05_productTorusMap b b) =
+      (Set.range a ∩ Set.range b) ×ˢ (Set.range a ∩ Set.range b) := by
+  ext p
+  constructor
+  · rintro ⟨⟨s, hs⟩, ⟨t, ht⟩⟩
+    exact ⟨⟨⟨s.1, congrArg Prod.fst hs⟩, ⟨t.1, congrArg Prod.fst ht⟩⟩,
+      ⟨⟨s.2, congrArg Prod.snd hs⟩, ⟨t.2, congrArg Prod.snd ht⟩⟩⟩
+  · rintro ⟨⟨⟨s₁, hs₁⟩, ⟨t₁, ht₁⟩⟩,
+      ⟨⟨s₂, hs₂⟩, ⟨t₂, ht₂⟩⟩⟩
+    exact ⟨⟨(s₁, s₂), Prod.ext hs₁ hs₂⟩,
+      ⟨(t₁, t₂), Prod.ext ht₁ ht₂⟩⟩
+
+lemma apm_t03J05_card_imageIntersection_product_self
+    {F : Type} [TopologicalSpace F] (a b : C(Circle, F)) :
+    Nat.card {p // p ∈ apm_t03J05_imageIntersection
+        (apm_t03J05_productTorusMap a a)
+        (apm_t03J05_productTorusMap b b)} =
+      Nat.card {x // x ∈ Set.range a ∩ Set.range b} ^ 2 := by
+  rw [apm_t03J05_imageIntersection_product_self]
+  calc
+    Nat.card {p // p ∈ (Set.range a ∩ Set.range b) ×ˢ
+        (Set.range a ∩ Set.range b)} =
+        Nat.card ({x // x ∈ Set.range a ∩ Set.range b} ×
+          {x // x ∈ Set.range a ∩ Set.range b}) :=
+      Nat.card_congr Equiv.subtypeProdEquivProd
+    _ = Nat.card {x // x ∈ Set.range a ∩ Set.range b} ^ 2 := by
+      rw [Nat.card_prod, pow_two]
+
+lemma apm_t03J05_odd_imageIntersection_product_self
+    {F : Type} [TopologicalSpace F] (a b : C(Circle, F))
+    (hodd : Nat.card {x // x ∈ Set.range a ∩ Set.range b} % 2 = 1) :
+    Nat.card {p // p ∈ apm_t03J05_imageIntersection
+        (apm_t03J05_productTorusMap a a)
+        (apm_t03J05_productTorusMap b b)} % 2 = 1 := by
+  rw [apm_t03J05_card_imageIntersection_product_self, pow_two, Nat.mul_mod,
+    hodd]
+
 theorem apm_t03j05
     :
     eulerCharacteristic true 2 = -2 ∧
@@ -101,24 +144,29 @@ theorem apm_t03j05
           ¬ ContinuousMap.Homotopic
             (incl.comp (g i)) (incl.comp (g j)) := by
   /-
-  CLOSER HOP 2 boundary. The baseline contained only the theorem-level
-  `sorry`. This hop closes the promoted-surface arithmetic in
-  `apm_t03J05_eulerCharacteristic_genusTwo`, computing `2 - 2·2 = -2`.
-  It also compiles all generic embedding propagation needed after the curve
-  witnesses are built: `apm_t03J05_unpunctureCurve_isEmbedding` shows subtype
-  inclusion preserves an embedded curve, and
-  `apm_t03J05_productTorusMap_isEmbedding` applies
-  `Topology.IsEmbedding.prodMap` to produce the embedded product tori.
+  CLOSER HOP 3 boundary. Going beyond the previous generic embedding work,
+  this hop eliminates the four-dimensional intersection-cardinality
+  calculation. `apm_t03J05_imageIntersection_product_self` proves that the
+  actual intersection of the diagonal product-torus images is exactly the
+  Cartesian square of the two curve images' intersection.
+  `apm_t03J05_card_imageIntersection_product_self` transports this equality
+  through `Equiv.subtypeProdEquivProd` and `Nat.card_prod`, and
+  `apm_t03J05_odd_imageIntersection_product_self` proves that an odd curve
+  intersection automatically gives the frozen odd product-torus intersection.
+  The Euler conjunct is also now assembled directly in the main theorem.
 
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, the promoted
-  polygon-surface module, solved surface/intersection artifacts, Mathlib's
-  projectivization-free quotient topology, circle embeddings, mod-two
-  intersection, singular homology, and ambient homotopy APIs found no concrete
-  four-curve system on `Surface true 2`, no computation of the displayed
-  image-intersection cardinality, and no theorem preserving their distinction
-  under every open embedding into a boundaryless four-manifold. The remaining
-  bridge is precisely those geometric curve witnesses, odd intersection, and
-  ambient nonhomotopy invariant; the arithmetic and embedding boilerplate are
-  now closed. The frozen statement is unchanged.
+  Renewed searches consulted `LEMMA-INDEX.md`, all `ConstructionTargets/`,
+  the promoted polygon-surface source, sibling `t03J03`, the RP² intersection
+  artifact `t96J06`, Mathlib's set-product/subtype equivalences, quotient
+  topology, circle embeddings, mod-two intersection, singular homology, and
+  ambient homotopy APIs, plus git history. The set-product machinery was used
+  above; no concrete embedded curve system on `Surface true 2` or invariant
+  proving ambient nonhomotopy under every open embedding was found.
+
+  The remaining geometric bridge is now narrower: construct the four punctured
+  curves with odd two-dimensional image intersection, then supply the ambient
+  homotopy invariant for the three resulting product tori. The frozen
+  statement is unchanged.
   -/
+  refine ⟨apm_t03J05_eulerCharacteristic_genusTwo, ?_⟩
   sorry
