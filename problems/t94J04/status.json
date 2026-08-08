@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_progress": "The main theorem now dispatches index one without sorry, and the genus k+1 Euler-characteristic arithmetic is compiled. Only the k != 1 branch remains, blocked on subgroup-cover realization, finite-cover Euler-characteristic multiplicativity, surface classification, and interpreting the frozen homology signature.",
+  "closer_hop": 3,
+  "closer_progress": "The main theorem dispatches index one, compiles the genus k+1 Euler-characteristic arithmetic, and now proves that positive equal indices make both coset spaces finite and equivalent. Only the k >= 2 branch remains, blocked on upgrading sheet-level equivalence through subgroup-cover realization, finite-cover Euler-characteristic multiplicativity, surface classification, and interpretation of the frozen homology signature.",
   "imported_at": "2026-07-13T17:26:58.044834Z"
 }

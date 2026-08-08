@@ -15,9 +15,17 @@ The numerical step is compiled as
 `apm_t94J04_eulerChar_cover_arithmetic`:
 `2 - 2(k+1) = k(2 - 2·2)` over the integers.
 
+The finite-sheet step is compiled as
+`apm_t94J04_quotient_equiv_of_equal_positive_index`. Positive index makes
+both subgroup quotient types finite, and equality of indices gives an
+equivalence of those quotient types. In the remaining branch the proof also
+records `2 ≤ k`.
+
 ## Remaining boundary
 
 Mathlib does not package the subgroup--cover correspondence, finite-cover
 Euler-characteristic multiplicativity, or classification of closed orientable
 surfaces.  The encoded homology signature must also be connected to the
-genus-two surface type before those arguments apply.
+genus-two surface type before those arguments apply. Equal finite coset-space
+cardinality alone cannot imply an isomorphism of arbitrary equal-index
+subgroups, so the covering/classification bridge is essential.

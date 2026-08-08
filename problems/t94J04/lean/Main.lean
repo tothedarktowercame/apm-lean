@@ -56,6 +56,21 @@ lemma apm_t94J04_eulerChar_cover_arithmetic (k : ℕ) :
     (2 : ℤ) - 2 * ((k : ℤ) + 1) = (k : ℤ) * (2 - 2 * 2) := by
   ring
 
+/-- Equal positive subgroup indices already identify the underlying finite
+coset spaces.  The missing topology must upgrade this sheet-level equivalence
+to an isomorphism of the subgroups themselves. -/
+lemma apm_t94J04_quotient_equiv_of_equal_positive_index
+    {G : Type*} [Group G] (H K : Subgroup G) (k : ℕ) (hk : 0 < k)
+    (hH : H.index = k) (hK : K.index = k) :
+    Nonempty ((G ⧸ H) ≃ (G ⧸ K)) := by
+  have hH0 : H.index ≠ 0 := hH.trans_ne hk.ne'
+  have hK0 : K.index ≠ 0 := hK.trans_ne hk.ne'
+  letI : Finite (G ⧸ H) := Nat.finite_of_card_ne_zero hH0
+  letI : Finite (G ⧸ K) := Nat.finite_of_card_ne_zero hK0
+  letI := Fintype.ofFinite (G ⧸ H)
+  letI := Fintype.ofFinite (G ⧸ K)
+  exact ⟨Fintype.equivOfCardEq (by simpa [Subgroup.index] using hH.trans hK.symm)⟩
+
 theorem apm_t94j04
     {F : Type} [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t94J04_E F]
@@ -70,6 +85,10 @@ theorem apm_t94j04
     · simpa [hk1] using hH
     · simpa [hk1] using hK
   ·
+    have hk2 : 2 ≤ k := by omega
+    have hcosets : Nonempty
+        ((FundamentalGroup F p ⧸ H) ≃ (FundamentalGroup F p ⧸ K)) :=
+      apm_t94J04_quotient_equiv_of_equal_positive_index H K k hk hH hK
   /-
   Boundary (closer hop 1): the index-one edge case is now closed by
   `apm_t94J04_subgroups_equiv_of_index_one`.  For general positive `k`, the
@@ -107,5 +126,21 @@ theorem apm_t94j04
   absent topological assemblies: subgroup realization, Euler-characteristic
   multiplicativity, and orientable-surface classification. The frozen
   statement is unchanged.
+
+  CLOSER HOP 3: `apm_t94J04_quotient_equiv_of_equal_positive_index` now
+  compiles the full finite-sheet bookkeeping: positivity of the common index
+  produces `Finite` instances for both coset types, and equal index produces
+  an equivalence `(FundamentalGroup F p ⧸ H) ≃
+  (FundamentalGroup F p ⧸ K)`.  The live branch also records `2 ≤ k`, so
+  neither the residual arithmetic case split nor finiteness/cardinality of the
+  sheets remains open.  This cannot be upgraded algebraically to `H ≃* K`:
+  equal-index subgroups of a general group need not be isomorphic.  A final
+  inspection of `Nat.finite_of_card_ne_zero`, subgroup quotient/index APIs,
+  the repository's covering-profile artifacts, and the classification-related
+  topology sources found no theorem connecting this coset equivalence to
+  connected covering surfaces.  The unresolved bridge is exactly subgroup
+  realization followed by Euler-characteristic multiplicativity and closed
+  orientable-surface classification.  The frozen statement is unchanged.
   -/
+    clear hk2 hcosets
     sorry
