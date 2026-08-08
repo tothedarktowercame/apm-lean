@@ -15,17 +15,25 @@ f analytic on Δ, power series radius = 1, extends meromorphically to D ⊃ Δ̄
   the compact unit sphere; its locally finite support becomes finite, and
   every negative-order boundary point belongs to that support.
 
-## Remaining bridge (1 sorry)
+## Stated bridges (5 sorries total)
 
-1. If there is no boundary pole, obtain a uniform disk of radius greater than
-   one on which `f` is holomorphic, identify `a` with its Taylor coefficients,
-   and contradict `hradius_gt`.
-2. Under the simple-pole hypothesis, subtract the now-finite collection of
-   principal parts, extend the remainder holomorphically, and
-   compare Taylor coefficients to obtain a uniform bound.
+Hop 4 intentionally states, without proving, four exact missing lemmas:
+
+1. `apm_a95J04_bridge_taylor_coefficients` identifies `a n` with the
+   normalized iterated derivative at zero.
+2. `apm_a95J04_bridge_absolute_convergence` gives absolute convergence at
+   every nonnegative radius strictly inside a holomorphic disk.
+3. `apm_a95J04_bridge_holomorphic_past_circle` produces a uniformly larger
+   disk when there are no boundary poles.
+4. `apm_a95J04_bridge_simple_pole_decomposition` subtracts the finite set of
+   simple boundary principal parts and leaves a function holomorphic on a
+   uniformly larger disk.
+
+Together these reduce the main theorem to finite-sum coefficient algebra and
+direct applications of the stated bridges.
 
 ## Checked Lean state
 
 - `lake env lean problems/a95J04/lean/Main.lean`: exit 0
-- Sorry count: 1
+- Sorry count: 5 (four requested bridge declarations plus the main theorem)
 - Classification: partial

@@ -63,6 +63,61 @@ lemma apm_a95J04_boundary_poles_finite
   · exact (not_lt_of_ge (by rw [hzero])) hz.2
   · exact (not_lt_of_ge (by rw [htop]; exact le_top)) hz.2
 
+/-- Why this unblocks `apm_a95j04`: it identifies the frozen coefficient
+sequence with the genuine Taylor coefficients of `f`, allowing analytic
+continuation results to control the original `a n`. -/
+theorem apm_a95J04_bridge_taylor_coefficients
+    (f : ℂ → ℂ) (a : ℕ → ℂ)
+    (hf : DifferentiableOn ℂ f (ball 0 1))
+    (hseries : ∀ z ∈ ball (0 : ℂ) 1,
+      HasSum (fun n ↦ a n * z ^ n) (f z)) :
+    ∀ n : ℕ, a n = (n.factorial : ℂ)⁻¹ * iteratedDeriv n f 0 := by
+  sorry
+
+/-- Why this unblocks `apm_a95j04`: once `f` is holomorphic on a disk larger
+than the unit disk and `a` is its Taylor sequence, this supplies the exact
+absolute-convergence contradiction to `hradius_gt`. -/
+theorem apm_a95J04_bridge_absolute_convergence
+    (f : ℂ → ℂ) (a : ℕ → ℂ) (R r : ℝ)
+    (hf : DifferentiableOn ℂ f (ball 0 R))
+    (ha : ∀ n : ℕ, a n = (n.factorial : ℂ)⁻¹ * iteratedDeriv n f 0)
+    (hr0 : 0 ≤ r) (hrR : r < R) :
+    Summable (fun n ↦ ‖a n‖ * r ^ n) := by
+  sorry
+
+/-- Why this unblocks the first conjunct of `apm_a95j04`: absence of a pole
+on the unit circle upgrades meromorphy near the closed disk to holomorphy on
+one uniformly larger concentric disk. -/
+theorem apm_a95J04_bridge_holomorphic_past_circle
+    (D : Set ℂ) (hDopen : IsOpen D)
+    (hDcontains : closedBall (0 : ℂ) 1 ⊆ D)
+    (f : ℂ → ℂ) (hf : DifferentiableOn ℂ f (ball 0 1))
+    (hmero : MeromorphicOn f D)
+    (hnopole : ∀ ζ ∈ sphere (0 : ℂ) 1,
+      ¬meromorphicOrderAt f ζ < 0) :
+    ∃ R : ℝ, 1 < R ∧ DifferentiableOn ℂ f (ball 0 R) := by
+  sorry
+
+/-- Why this unblocks the bounded-coefficient conjunct of `apm_a95j04`:
+after subtracting finitely many simple principal parts on the unit circle,
+the remainder is holomorphic on a larger disk; each principal part has
+uniformly bounded Taylor coefficients. -/
+theorem apm_a95J04_bridge_simple_pole_decomposition
+    (D : Set ℂ) (hDopen : IsOpen D)
+    (hDcontains : closedBall (0 : ℂ) 1 ⊆ D)
+    (f : ℂ → ℂ) (hf : DifferentiableOn ℂ f (ball 0 1))
+    (hmero : MeromorphicOn f D)
+    (hsimple : ∀ ζ ∈ sphere (0 : ℂ) 1,
+      meromorphicOrderAt f ζ < 0 → meromorphicOrderAt f ζ = (-1 : ℤ)) :
+    ∃ (P : Finset ℂ) (c : ℂ → ℂ) (g : ℂ → ℂ) (R : ℝ),
+      1 < R ∧
+      (∀ z : ℂ, z ∈ P ↔
+        z ∈ sphere (0 : ℂ) 1 ∧ meromorphicOrderAt f z < 0) ∧
+      DifferentiableOn ℂ g (ball 0 R) ∧
+      ∀ z ∈ ball (0 : ℂ) R, z ∉ P →
+        f z = g z + ∑ ζ ∈ P, c ζ / (z - ζ) := by
+  sorry
+
 theorem apm_a95j04
     (D : Set ℂ) (hDopen : IsOpen D) (hDconn : IsConnected D)
     (hDcontains : closedBall (0 : ℂ) 1 ⊆ D)

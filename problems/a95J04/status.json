@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 5,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 5
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -33,8 +33,12 @@
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a95J04/lean/Main.lean",
-    "sorry_count": 1,
+    "sorry_count": 5,
     "sorry_locations": [
+      "apm_a95J04_bridge_taylor_coefficients",
+      "apm_a95J04_bridge_absolute_convergence",
+      "apm_a95J04_bridge_holomorphic_past_circle",
+      "apm_a95J04_bridge_simple_pole_decomposition",
       "apm_a95j04 (global pole existence and finite principal-part coefficient argument)"
     ],
     "blockers": [
@@ -46,6 +50,6 @@
       "apm_a95J04_boundary_poles_finite"
     ]
   },
-  "closer_hop": 3,
-  "closer_note": "Proved finiteness of boundary poles by restricting the locally finite meromorphic divisor to the compact unit sphere. Taylor coefficient identification and principal-part subtraction remain open."
+  "closer_hop": 4,
+  "closer_note": "Stated four precise, independently handoff-ready bridges for Taylor coefficient identification, larger-disk absolute convergence, pole-free continuation, and finite simple-principal-part decomposition. Proofs were intentionally not attempted."
 }
