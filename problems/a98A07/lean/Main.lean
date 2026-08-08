@@ -16,6 +16,10 @@ None.  “Uniformly on compact subsets” is represented by Mathlib's
 open Filter MeasureTheory Metric Set
 open scoped Topology
 
+/-- The real boundary majorant from the frozen hypothesis. -/
+noncomputable def apm_a98A07_majorant (t : ℝ) : ℝ :=
+  1 / (t * (Real.log (t / (4 * Real.pi))) ^ 2)
+
 /-- The logarithm in the boundary majorant stays strictly negative throughout
 the circle parameter interval. -/
 lemma apm_a98A07_log_ratio_neg {t : ℝ}
@@ -25,6 +29,22 @@ lemma apm_a98A07_log_ratio_neg {t : ℝ}
   · positivity
   · apply (div_lt_one (by positivity : 0 < 4 * Real.pi)).2
     nlinarith [Real.pi_pos]
+
+/-- The majorant is strictly positive throughout the boundary parameter
+interval. -/
+lemma apm_a98A07_majorant_pos {t : ℝ}
+    (ht : 0 < t) (htop : t < 2 * Real.pi) :
+    0 < apm_a98A07_majorant t := by
+  rw [apm_a98A07_majorant]
+  apply one_div_pos.mpr
+  exact mul_pos ht (sq_pos_of_neg (apm_a98A07_log_ratio_neg ht htop))
+
+/-- The boundary majorant is measurable, so once its logarithmic improper
+integral is established it can be used directly by dominated convergence. -/
+lemma apm_a98A07_majorant_measurable :
+    Measurable apm_a98A07_majorant := by
+  unfold apm_a98A07_majorant
+  fun_prop
 
 /-- Mathlib's Weierstrass theorem closes the final regularity step once local
 uniform convergence on the disk has been constructed. -/
@@ -50,7 +70,7 @@ theorem apm_a98a07 :
         DifferentiableOn ℂ g (ball 0 1) ∧
         TendstoLocallyUniformlyOn f g atTop (ball 0 1) := by
   /-
-  PARTIAL boundary (closer hop 1).
+  PARTIAL boundary (closer hop 3).
 
   `apm_a98A07_log_ratio_neg` now proves that
   `log (t/(4π)) < 0` throughout `(0,2π)`. This formally eliminates a second
@@ -80,5 +100,16 @@ theorem apm_a98a07 :
   disk, closing step 4 completely. The remaining bridge is now only steps 1--3:
   majorant integrability, boundary L¹ convergence, and the Cauchy-kernel bound
   producing local uniform convergence.
+
+  CLOSER HOP 3: the displayed bound is now packaged as
+  `apm_a98A07_majorant`. `apm_a98A07_majorant_measurable` proves its global
+  measurability, and `apm_a98A07_majorant_pos` combines the strict logarithm
+  sign from hop 1 with the positive parameter to prove strict positivity on
+  `(0,2π)`. These discharge the measurability and sign obligations needed by
+  dominated convergence. Searches of the improper-log-integral and
+  one-dimensional substitution APIs still found no packaged evaluation of
+  `1/(t*log(t/(4π))²)`; proving its integrability by `u = -log(t/(4π))`, then
+  selecting the measurable a.e. limit and deriving the Cauchy-kernel bound,
+  remains open.
   -/
   sorry

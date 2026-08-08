@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Found Mathlib's packaged Weierstrass theorem and compiled the final implication from local uniform convergence to holomorphicity on the disk. Remaining work is logarithmic-majorant integrability, boundary L1 convergence, and the Cauchy-kernel estimate producing local uniform convergence.",
+  "closer_hop": 3,
+  "closer_note": "Compiled the final Weierstrass implication and packaged the boundary majorant with global measurability and strict positivity on (0,2pi). Remaining work is its logarithmic-substitution integrability, boundary L1 convergence, and the Cauchy-kernel estimate producing local uniform convergence.",
   "imported_at": "2026-07-13T17:26:52.990883Z"
 }

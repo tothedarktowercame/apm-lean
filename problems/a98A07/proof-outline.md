@@ -9,6 +9,9 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - `apm_a98A07_log_ratio_neg` proves the logarithmic factor never vanishes on
   `(0,2π)`; only the integrable singularity at zero remains.
+- `apm_a98A07_majorant` names the frozen boundary bound;
+  `apm_a98A07_majorant_measurable` and `apm_a98A07_majorant_pos` establish its
+  global measurability and strict positivity on `(0,2π)`.
 - `apm_a98A07_differentiableOn_of_locallyUniform` applies Mathlib's packaged
   Weierstrass theorem, closing holomorphicity of the eventual locally uniform
   limit.
