@@ -33,6 +33,23 @@ def apm_m96j03_laplacian {n : ℕ}
       (fun y => fderiv ℝ φ y (EuclideanSpace.single i 1)) x
       (EuclideanSpace.single i 1)
 
+/-- The frozen coordinate Laplacian vanishes on constant functions. -/
+lemma apm_m96j03_laplacian_const {n : ℕ} (c : ℝ) (x : apm_m96j03_E n) :
+    apm_m96j03_laplacian (fun _ ↦ c) x = 0 := by
+  simp [apm_m96j03_laplacian]
+
+/-- The unit-ball indicator is measurable; this is needed before any
+Gauss--Green approximation or dominated-convergence argument. -/
+lemma apm_m96j03_measurable_ballIndicator {n : ℕ} :
+    Measurable (apm_m96j03_ballIndicator : apm_m96j03_E n → ℝ) := by
+  unfold apm_m96j03_ballIndicator
+  have hmeas : Measurable fun x : apm_m96j03_E n ↦
+      Set.indicator (Metric.closedBall 0 1) (fun _ ↦ (1 : ℝ)) x :=
+    measurable_const.indicator measurableSet_closedBall
+  convert hmeas using 1
+  funext x
+  simp [Set.indicator, Metric.mem_closedBall, dist_zero_right]
+
 def apm_m96j03_IsTestFunction {n : ℕ}
     (φ : apm_m96j03_E n → ℝ) : Prop :=
   ContDiff ℝ (⊤ : ℕ∞) φ ∧ HasCompactSupport φ
@@ -79,6 +96,21 @@ theorem apm_m96j03
   subsingleton Euclidean space is empty.  Thus the remaining geometric bridge
   may be restricted to positive dimension.
 
+  Closer hop 2 compiles two prerequisites for an approximation route.
+  `apm_m96j03_measurable_ballIndicator` identifies the frozen piecewise
+  function with the measurable indicator of the closed ball, and
+  `apm_m96j03_laplacian_const` verifies that the frozen coordinate Laplacian
+  vanishes on constants in every dimension.
+
+  I also investigated transporting the frozen coordinate sum directly to
+  `InnerProductSpace.laplacian_eq_iteratedFDeriv_stdOrthonormalBasis`. The two
+  expressions are not definitionally equal: the frozen term differentiates
+  each scalar evaluation `y ↦ fderiv φ y eᵢ`, whereas the intrinsic theorem
+  differentiates the bundled map `fderiv φ`. A transport proof must apply
+  `fderiv_clm_apply` under the `ContDiff` hypothesis before the geometric
+  theorem can even be used. This analytic compatibility is a new, narrower
+  sub-boundary beyond the measure-normalization issue recorded by hop 1.
+
   The helper
   `apm_m96j03_integral_ballIndicator` above proves the initial measurable-set
   reduction, so the remaining target is exactly
@@ -112,7 +144,7 @@ theorem apm_m96j03
   confirm that general surface/differential-form integration is not packaged
   for their encodings.  The remaining `ConstructionTargets/` modules and
   `YoungL2.lean` contain no relevant Gauss--Green result.  The statement
-  appears mathematically correct.  A renewed search also inspected Mathlib's
+  appears mathematically correct. Searches across both hops also inspected Mathlib's
   box divergence theorem, `HaarToSphere`, `VolumeOfBalls`, the specialized
   `ConstructionTargets.RadialIntegrationR3`, partial flux artifact `t02A05`,
   and git history.  None identifies `volume.toSphere` with the frozen
