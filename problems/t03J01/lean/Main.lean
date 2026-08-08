@@ -130,6 +130,44 @@ lemma apm_t03j01_no_retraction_of_H1Map_zero
   rw [hzero]
   simp
 
+/-- A curve homeomorphism transports the frozen singular-homology object.
+This uses `TopCat.isoOfHomeo` and functoriality, isolating the remaining
+external input to the actual computation of `H₁(Circle; ℤ)`. -/
+lemma apm_t03j01_H1_iso_of_curve
+    {X : Type} [TopologicalSpace X] {J : Set X}
+    (hcurve : apm_t03j01_IsCurve J) :
+    Nonempty (apm_t03j01_H1 Circle ≅ apm_t03j01_H1 J) := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  exact ⟨F.mapIso (TopCat.isoOfHomeo hcurve.some)⟩
+
+/-- Consequently, nontriviality of integral circle homology transports to
+every subset satisfying the frozen `IsCurve` predicate. -/
+lemma apm_t03j01_H1_nonzero_of_curve
+    {X : Type} [TopologicalSpace X] {J : Set X}
+    (hcurve : apm_t03j01_IsCurve J)
+    (hcircle : ∃ a : apm_t03j01_H1 Circle, a ≠ 0) :
+    ∃ a : apm_t03j01_H1 J, a ≠ 0 := by
+  let e := (apm_t03j01_H1_iso_of_curve hcurve).some
+  obtain ⟨a, ha⟩ := hcircle
+  refine ⟨e.hom a, ?_⟩
+  intro hz
+  apply ha
+  have := congrArg (fun z ↦ e.inv z) hz
+  simpa using this
+
+/-- The full separating-curve obstruction, now conditional only on the
+missing library theorem that integral first homology of the circle is
+nonzero. -/
+lemma apm_t03j01_no_retraction_of_curve_H1Map_zero
+    {X : Type} [TopologicalSpace X] {J : Set X}
+    (hcurve : apm_t03j01_IsCurve J)
+    (hzero : apm_t03j01_H1Map (apm_t03j01_inclusion J) = 0)
+    (hcircle : ∃ a : apm_t03j01_H1 Circle, a ≠ 0) :
+    ¬apm_t03j01_RetractsOnto J :=
+  apm_t03j01_no_retraction_of_H1Map_zero hzero
+    (apm_t03j01_H1_nonzero_of_curve hcurve hcircle)
+
 theorem apm_t03j01
     (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
     [PathConnectedSpace X] [ChartedSpace apm_t03j01_E2 X]
@@ -181,5 +219,20 @@ theorem apm_t03j01
   singular-homology sources, and the related retraction artifacts found no
   such circle computation. The positive `J₁` direction remains blocked by the
   independent primitive-class-to-circle-map/relative-adjustment bridge.
+
+  CLOSER HOP 3 closes the transport step left by hop 2.
+  `apm_t03j01_H1_iso_of_curve` maps `TopCat.isoOfHomeo hcurve.some` through
+  the singular-homology functor, and `apm_t03j01_H1_nonzero_of_curve`
+  transports any nonzero circle class through that isomorphism. Hence
+  `apm_t03j01_no_retraction_of_curve_H1Map_zero` packages the complete
+  separating-curve contradiction conditional solely on the mathematical
+  computation `H₁(Circle; ℤ) ≠ 0`; no homeomorphism/functor bookkeeping
+  remains. Final targeted searches of `TopCat.isoOfHomeo`, `Functor.mapIso`,
+  Mathlib's circle singular-homology files, `LEMMA-INDEX.md`, and the surface
+  siblings found the transport APIs used here but still no compiled circle
+  homology computation. The positive direction independently still requires
+  representability of primitive integral cohomology classes by circle maps
+  plus a relative adjustment near the curve. The frozen statement is
+  unchanged.
   -/
   sorry

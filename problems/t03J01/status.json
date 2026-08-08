@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Closer hop 2 proves that a retraction makes the exact frozen H1 inclusion injective and derives the no-retraction result from a zero inclusion map plus one nonzero H1 class. The negative direction now needs only the unavailable integral H1 computation of Circle; the positive direction still needs primitive-cohomology representability and a relative adjustment.",
+  "closer_hop": 3,
+  "boundary": "Closer hop 3 maps the curve homeomorphism through the exact singular H1 functor and transports nonzero classes, so the negative direction now depends solely on the unavailable computation H1(Circle; Z) != 0. The positive direction still needs primitive-cohomology representability by a circle map and a relative adjustment producing a retraction.",
   "imported_at": "2026-07-13T17:26:57.035052Z"
 }
