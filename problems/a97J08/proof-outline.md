@@ -21,6 +21,7 @@ counts multiplicity. The following helpers now compile:
 
 - `apm_a97j08_curveImage_compact`;
 - `apm_a97j08_limit_continuousOn_curve`;
+- `apm_a97j08_limit_differentiableOn`;
 - `apm_a97j08_exists_boundary_margin`;
 - `apm_a97j08_eventually_boundary_rouche`.
 
@@ -35,6 +36,19 @@ transfer for round disks. The remaining gap is its extension to the arbitrary
 rectifiable Jordan curve used here. Mathlib lacks the Jordan curve theorem, a
 proof that the encoded bounded-component interior has compact closure in `D`,
 and an arbitrary-contour argument principle for the divisor sum.
+
+## Closer hop 3
+
+Mathlib's `TendstoLocallyUniformlyOn.differentiableOn` closes the formerly
+listed Weierstrass prerequisite, and the corresponding helper now compiles.
+
+An arbitrary-contour argument principle is not strictly necessary. After
+proving compact closure of the interior inside `D`, isolate the finitely many
+zeros of `g` in disjoint closed disks, apply the reusable disk Rouché theorem
+on each, and use uniform nonvanishing on the compact remainder. The remaining
+interfaces are the Jordan containment theorem and divisor zero-set
+finiteness/isolation plus additivity of the frozen `finsum` over that finite
+decomposition.
 
 ## Phase-A hints used
 - #1 `e-codexpilot-prove-Hurwitz-zero-persistence-through-quantitative-open-mapping`: cited.

@@ -52,6 +52,16 @@ lemma apm_a97j08_limit_continuousOn_curve
   apply (hF_tendsto.continuousOn ?_).mono hγD
   exact Frequently.of_forall fun n ↦ (hF_analytic n).continuousOn
 
+/-- Weierstrass' theorem supplies analyticity of the locally uniform limit. -/
+lemma apm_a97j08_limit_differentiableOn
+    {D : Set ℂ} {F : ℕ → ℂ → ℂ} {g : ℂ → ℂ}
+    (hD_open : IsOpen D)
+    (hF_analytic : ∀ n, DifferentiableOn ℂ (F n) D)
+    (hF_tendsto : TendstoLocallyUniformlyOn F g atTop D) :
+    DifferentiableOn ℂ g D := by
+  exact hF_tendsto.differentiableOn
+    (Eventually.of_forall hF_analytic) hD_open
+
 /-- Nonvanishing of the limit on the compact curve gives the quantitative
 margin needed for the eventual Rouché inequality. -/
 lemma apm_a97j08_exists_boundary_margin
@@ -167,5 +177,19 @@ theorem apm_a97j08 (D : Set ℂ) (γ : ℝ → ℂ) (F : ℕ → ℂ → ℂ) (g
   Closure therefore still requires the topology bridge for this concrete
   interior plus a generalization of the disk Rouché theorem to rectifiable
   Jordan curves (or a homeomorphic/conformal reduction preserving divisors).
+
+  CLOSER HOP 3: Mathlib's
+  `TendstoLocallyUniformlyOn.differentiableOn` exactly matches the frozen
+  hypotheses; `apm_a97j08_limit_differentiableOn` above now compiles
+  `DifferentiableOn ℂ g D`, closing the original Weierstrass blocker.
+
+  I also checked a route avoiding arbitrary-contour Rouché. Once the closure
+  of the encoded interior is compact and contained in `D`, isolate the finite
+  zeros of `g` by disjoint closed disks, apply the reusable disk Rouché theorem
+  on each, and use uniform nonvanishing on the compact remainder. The missing
+  interfaces are now Jordan compact-closure/containment and divisor
+  finiteness, isolation, and additivity of the frozen `finsum` over this finite
+  decomposition. No packaged declarations for them were found. The statement
+  is unchanged.
   -/
   sorry

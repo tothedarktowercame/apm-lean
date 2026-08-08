@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 2 proved apm_a97j08_eventually_boundary_rouche: compact local-uniform convergence gives one N with the strict Rouche inequality on every point of the curve for all n ≥ N. The sole remaining sorry is the zero-count transfer for the encoded arbitrary Jordan interior, for which no Jordan curve theorem or arbitrary-contour argument principle is available.",
+  "classification_detail": "Closer hop 3 compiled the Weierstrass bridge apm_a97j08_limit_differentiableOn. A finite local-disk Rouche route avoids arbitrary-contour integration, but still needs Jordan compact-closure/containment and divisor finiteness, isolation, and finsum additivity over the disk cover.",
   "imported_at": "2026-07-13T17:26:52.894437Z",
   "checked_at": "2026-08-05T14:15:00Z",
   "checked_lean_state": {
