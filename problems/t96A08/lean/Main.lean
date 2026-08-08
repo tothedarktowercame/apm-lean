@@ -72,6 +72,27 @@ lemma apm_t96a08_potential_base_eq_zero
     (apm_t96a08_isPiecewiseSmoothPath_const I base) rfl rfl]
   exact apm_t96a08_lineIntegral_const I ω base
 
+/-- Path independence also makes a potential satisfying the line-integral
+specification unique; this isolates all global choice bookkeeping from the
+remaining local regularity argument. -/
+lemma apm_t96a08_potential_unique
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
+    (hreachable : ∀ p : M, ∃ γ : ℝ → M,
+      apm_t96a08_IsPiecewiseSmoothPath I γ ∧ γ 0 = base ∧ γ 1 = p)
+    (f g : M → ℝ)
+    (hf : ∀ p : M, ∀ γ : ℝ → M,
+      apm_t96a08_IsPiecewiseSmoothPath I γ → γ 0 = base → γ 1 = p →
+      f p = apm_t96a08_LineIntegral I ω γ)
+    (hg : ∀ p : M, ∀ γ : ℝ → M,
+      apm_t96a08_IsPiecewiseSmoothPath I γ → γ 0 = base → γ 1 = p →
+      g p = apm_t96a08_LineIntegral I ω γ) :
+    f = g := by
+  funext p
+  obtain ⟨γ, hγ, hγ0, hγ1⟩ := hreachable p
+  exact (hf p γ hγ hγ0 hγ1).trans (hg p γ hγ hγ0 hγ1).symm
+
 theorem apm_t96a08
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -123,5 +144,18 @@ theorem apm_t96a08
     concatenation, tangent-bundle, and differential-form sources, and git
     history found no manifold one-form fundamental theorem or compatible
     piecewise-smooth concatenation API. The frozen statement is unchanged.
+
+    CLOSER HOP 3 (2026-08-08): the remaining global logical obligation is now
+    compiled as `apm_t96a08_potential_unique`. Any two functions satisfying
+    the frozen path-integral specification agree pointwise by choosing one
+    reachable path, so the constructed potential is not merely well-defined
+    and normalized but canonical. Searches then focused on Mathlib's
+    `ContMDiff.piecewise_Iic` path machinery and Riemannian path-energy code.
+    Those APIs splice manifold maps continuously, but their parametrizations
+    and regularity predicates do not match this ambient-real, finite-break
+    encoding, and they supply no line-integral reparametrization theorem.
+    Thus no global choice, endpoint, normalization, or uniqueness work remains;
+    the sole bridge is still the local chart-linear extension calculation
+    proving smoothness and `mfderiv = ω`. The frozen statement is unchanged.
     -/
     sorry

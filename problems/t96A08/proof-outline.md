@@ -11,6 +11,9 @@ compiled.
 Constant paths are now proved admissible and their concrete line integral is
 computed as zero. Consequently every function satisfying the path-integral
 specification is proved to obey the canonical normalization `f base = 0`.
+Moreover `apm_t96a08_potential_unique` proves that any two functions satisfying
+the specification agree, so all global existence, normalization, and
+uniqueness bookkeeping is compiled.
 
 ## Remaining Lean boundary
 
