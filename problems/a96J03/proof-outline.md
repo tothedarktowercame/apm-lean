@@ -20,6 +20,16 @@ metric.
 The remaining formal bridge is translation continuity for a continuous
 compactly supported real function.  The intended dominated-convergence proof
 needs a fixed compact thickening of `tsupport g` for all `t` near zero and an
+## Closer hop 2
+
+`apm_a96J03_compact_core` now proves the complete compact-support translation
+limit. It applies `continuousOn_integral_of_compact_support` to the jointly
+continuous family `(t,x) ↦ |g (x-t)-g x|`. Over `t ∈ closedBall 0 1`, every
+integrand is supported in the compact Minkowski sum
+`tsupport g + closedBall 0 1`. The sole remaining task is the final
+epsilon/triangle combination with the hop-1 approximation and Haar-invariance
+lemmas.
+
 integrable indicator bound on that thickening.  Mathlib's convolution
 continuity results do not directly state continuity of this translation norm.
 Consequently the main theorem remains partial with one `sorry`; its statement
