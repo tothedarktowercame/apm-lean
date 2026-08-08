@@ -72,6 +72,59 @@ lemma apm_b00J04_first_conjunct
   exact ⟨a, b, hb, halpha,
     apm_b00J04_inv_den_mem R F S alpha a b hb halpha hab⟩
 
+/-- A finitely generated submodule of the fraction field admits one common
+nonzero denominator. Adapted from the compiled sibling `b96A04`. -/
+lemma apm_b00J04_common_denom_of_fg_submodule
+    (R F : Type*) [CommRing R] [IsDomain R] [Field F]
+    [Algebra R F] [IsFractionRing R F]
+    (M : Submodule R F) (hfg : M.FG) :
+    ∃ r : R, r ≠ 0 ∧
+      ∀ m ∈ M, r • m ∈ Set.range (algebraMap R F) := by
+  rw [Submodule.fg_def] at hfg
+  obtain ⟨s, hsfin, hs⟩ := hfg
+  let t : Finset F := hsfin.toFinset
+  let r0 : nonZeroDivisors R :=
+    IsLocalization.commonDenomOfFinset (nonZeroDivisors R) t
+  refine ⟨r0, nonZeroDivisors.coe_ne_zero r0, ?_⟩
+  intro m hm
+  have hmspan : m ∈ Submodule.span R (t : Set F) := by
+    simpa [t, hs] using hm
+  have hclear : r0 • m ∈ LinearMap.range (Algebra.linearMap R F) := by
+    refine Submodule.span_induction (p := fun z _ =>
+      r0 • z ∈ LinearMap.range (Algebra.linearMap R F)) ?_ ?_ ?_ ?_ hmspan
+    · intro x hx
+      let ix : t := ⟨x, hx⟩
+      refine ⟨IsLocalization.integerMultiple (nonZeroDivisors R) t id ix, ?_⟩
+      change algebraMap R F _ = _
+      rw [IsLocalization.map_integerMultiple]
+      rfl
+    · simp
+    · intro x y _ _ hx hy
+      simpa [smul_add] using
+        (LinearMap.range (Algebra.linearMap R F)).add_mem hx hy
+    · intro a x _ hx
+      rw [smul_comm]
+      exact (LinearMap.range (Algebra.linearMap R F)).smul_mem a hx
+  simpa [LinearMap.mem_range] using hclear
+
+/-- A module-finite intermediate algebra therefore has one denominator that
+clears every one of its elements after embedding into the fraction field. -/
+lemma apm_b00J04_common_denom_of_finite_subalgebra
+    (R F : Type*) [CommRing R] [IsDomain R] [Field F]
+    [Algebra R F] [IsFractionRing R F]
+    (S : Subalgebra R F) (hfinite : Module.Finite R S) :
+    ∃ r : R, r ≠ 0 ∧
+      ∀ s : S, r • (s : F) ∈ Set.range (algebraMap R F) := by
+  letI : Module.Finite R S := hfinite
+  let ι : S →ₗ[R] F := (Subalgebra.val S).toLinearMap
+  have hfg : (LinearMap.range ι).FG := by
+    rw [← Submodule.map_top]
+    exact Module.Finite.fg_top.map ι
+  obtain ⟨r, hr, hclear⟩ :=
+    apm_b00J04_common_denom_of_fg_submodule R F (LinearMap.range ι) hfg
+  refine ⟨r, hr, fun s => ?_⟩
+  exact hclear (s : F) ⟨s, rfl⟩
+
 theorem apm_b00j04
     (R F : Type*)
     [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
@@ -84,7 +137,7 @@ theorem apm_b00j04
     (Module.Finite R S → S = ⊥) := by
   refine ⟨apm_b00J04_first_conjunct R F S, ?_⟩
   /-
-  PARTIAL boundary (closer hop 2). The Bézout bridge and the entire first
+  PARTIAL boundary (closer hop 3). The Bézout bridge and the entire first
   conjunct are now compiled. `IsRelPrime.isCoprime` exposes coefficients
   `u,v` with `u*a + v*b = 1`; `apm_b00J04_inv_den_mem` maps this identity into
   `F`, rewrites `1/b = u*(a/b)+v`, and closes membership using the subalgebra
@@ -105,5 +158,18 @@ theorem apm_b00j04
   a finite generating set or Mathlib's integrality/integrally-closed route.
   Searches of the lemma index, localization sources, prior artifacts, and
   construction libraries found no packaged theorem combining these stages.
+
+  CLOSER HOP 3: solved sibling `b96A04` contains the missing common-denominator
+  construction. It is adapted here as
+  `apm_b00J04_common_denom_of_fg_submodule`, using
+  `IsLocalization.commonDenomOfFinset` and span induction. The specialization
+  `apm_b00J04_common_denom_of_finite_subalgebra` maps the finite top submodule
+  of `S` into `F` and proves that one nonzero `r : R` clears every element of
+  `S`. Thus the finite-generation/common-denominator stage is compiled. What
+  remains for the third conjunct is to apply this to the inverse powers forced
+  by the first conjunct and deduce that every inverted denominator is a unit,
+  hence `S = ⊥`. The independent PID conjunct still requires presenting `S`
+  as the corresponding localization or proving ideal map-comap directly; no
+  packaged intermediate-subalgebra localization instance was found.
   -/
   sorry

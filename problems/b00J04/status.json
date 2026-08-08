@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "Closed the full first conjunct by extracting Bézout coefficients from reduced fractions and transporting 1/b = u(a/b)+v into S. PID ideal contraction and the finite-module conclusion remain.",
+  "closer_hop": 3,
+  "note": "Closed the full first conjunct and adapted b96A04's finite-submodule common-denominator proof, obtaining one nonzero R-denominator clearing every element of module-finite S. PID ideal contraction and the final unit/triviality deduction remain.",
   "imported_at": "2026-07-13T17:26:53.266603Z"
 }
