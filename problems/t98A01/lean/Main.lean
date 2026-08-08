@@ -60,6 +60,7 @@ theorem apm_t98a01 :
     (∀ (g h : ℕ) (p : Surface true g → Surface true h),
       t98A01IsRegularNfoldCover 5 p →
       Nonempty (Surface true g ≃ₜ Surface true h) →
+      eulerCharacteristic true g = 5 * eulerCharacteristic true h ∧
       g = 1 ∧ h = 1) ∧
     t98A01PrintedSurfaceData = (false, 11) ∧
     Nonempty (T98A01PrintedSurface ≃ₜ Surface false 11) ∧
