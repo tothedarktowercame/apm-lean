@@ -13,12 +13,13 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
   `L²` for the restricted interval measure.
 - `apm_a98A02_orthonormal_toLp` transports the raw integral identities through
   `MemLp.toLp` and establishes Mathlib's `Orthonormal ℝ` predicate.
+- `apm_a98A02_inner_toLp_eq_integral` identifies the packaged inner product
+  with the frozen raw set integral.
+- `apm_a98A02_integral_tendsto_zero_of_memLp_two` applies Bessel summability
+  and proves coefficient convergence for every `L²` approximant.
 
 ## Remaining bridge
 
-1. Identify the abstract `L²` inner products with the frozen raw integral
-   coefficients for bounded/L² approximants.
-2. Apply Bessel to those approximants.
-3. Produce bounded/L² approximants of an arbitrary `L¹` function and extend
+1. Produce bounded/L² approximants of an arbitrary `L¹` function and extend
    the limit using the uniform estimate
    `|∫ (f-h)g_n| ≤ M ∫|f-h|`.

@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Compiled MemLp-two packaging for every bounded measurable g_n and transported the raw integral identities to an actual Orthonormal sequence in L²[0,1]. Remaining work is coefficient identification for approximants plus the uniform L²-dense-in-L¹ extension.",
+  "closer_hop": 3,
+  "closer_note": "Compiled MemLp-two packaging, the actual L² orthonormal family, exact identification of L² inner products with raw integral coefficients, and Bessel convergence for every L² approximant. Only the uniform truncation/density extension from arbitrary L¹ functions remains.",
   "imported_at": "2026-07-13T17:26:52.934944Z"
 }

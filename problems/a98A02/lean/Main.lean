@@ -67,6 +67,61 @@ lemma apm_a98A02_orthonormal_toLp
     show g m x = g m x • (1 : ℝ) by simp, inner_smul_left, inner_smul_right]
   simp
 
+/-- The abstract `L²` coefficient of a packaged approximant is the frozen raw
+set integral. -/
+lemma apm_a98A02_inner_toLp_eq_integral
+    (g : ℕ → ℝ → ℝ) (M : ℝ)
+    (hg_meas : ∀ n, Measurable ((Icc (0 : ℝ) 1).indicator (g n)))
+    (hg_bound : ∀ n x, x ∈ Icc (0 : ℝ) 1 → |g n x| ≤ M)
+    (h : ℝ → ℝ)
+    (hh : MemLp h 2 (volume.restrict (Icc (0 : ℝ) 1))) (n : ℕ) :
+    @inner ℝ
+      (Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1))) _
+      ((apm_a98A02_memLp_two g M hg_meas hg_bound n).toLp (g n))
+      (hh.toLp h) =
+        ∫ x in Icc (0 : ℝ) 1, g n x * h x ∂volume := by
+  rw [MeasureTheory.L2.inner_def]
+  apply integral_congr_ae
+  filter_upwards
+    [(apm_a98A02_memLp_two g M hg_meas hg_bound n).coeFn_toLp,
+      hh.coeFn_toLp] with x hgx hhx
+  rw [hgx, hhx]
+  rw [show g n x = g n x • (1 : ℝ) by simp,
+    show h x = h x • (1 : ℝ) by simp, inner_smul_left, inner_smul_right]
+  simp
+
+/-- Bessel's inequality now gives convergence of every raw coefficient for an
+`L²` approximant. -/
+lemma apm_a98A02_integral_tendsto_zero_of_memLp_two
+    (g : ℕ → ℝ → ℝ) (M : ℝ)
+    (hg_meas : ∀ n, Measurable ((Icc (0 : ℝ) 1).indicator (g n)))
+    (hg_bound : ∀ n x, x ∈ Icc (0 : ℝ) 1 → |g n x| ≤ M)
+    (hg_orthonormal : ∀ n m,
+      (∫ x in Icc (0 : ℝ) 1, g n x * g m x ∂volume) =
+        if n = m then 1 else 0)
+    (h : ℝ → ℝ)
+    (hh : MemLp h 2 (volume.restrict (Icc (0 : ℝ) 1))) :
+    Tendsto (fun n => ∫ x in Icc (0 : ℝ) 1, g n x * h x ∂volume)
+      atTop (𝓝 0) := by
+  let v : ℕ → Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)) := fun n =>
+    (apm_a98A02_memLp_two g M hg_meas hg_bound n).toLp (g n)
+  let H : Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)) := hh.toLp h
+  have hv : Orthonormal ℝ v := apm_a98A02_orthonormal_toLp
+    g M hg_meas hg_bound hg_orthonormal
+  have hs : Summable (fun n => ‖@inner ℝ _ _ (v n) H‖ ^ 2) :=
+    hv.inner_products_summable H
+  have hz : Tendsto (fun n => ‖@inner ℝ _ _ (v n) H‖ ^ 2) atTop (𝓝 0) :=
+    hs.tendsto_atTop_zero
+  have hsqrt := (Real.continuous_sqrt.tendsto 0).comp hz
+  have hnorm : Tendsto (fun n => ‖@inner ℝ _ _ (v n) H‖) atTop (𝓝 0) := by
+    simpa [Function.comp_def, Real.sqrt_sq_eq_abs] using hsqrt
+  have hinner : Tendsto (fun n => @inner ℝ _ _ (v n) H) atTop (𝓝 0) :=
+    tendsto_zero_iff_norm_tendsto_zero.mpr hnorm
+  apply hinner.congr'
+  filter_upwards with n
+  simpa [v, H] using
+    (apm_a98A02_inner_toLp_eq_integral g M hg_meas hg_bound h hh n)
+
 theorem apm_a98a02 (g : ℕ → ℝ → ℝ) (M : ℝ)
     (hg_meas : ∀ n, Measurable ((Icc (0 : ℝ) 1).indicator (g n)))
     (hg_bound : ∀ n x, x ∈ Icc (0 : ℝ) 1 → |g n x| ≤ M)
@@ -78,7 +133,7 @@ theorem apm_a98a02 (g : ℕ → ℝ → ℝ) (M : ℝ)
         (fun n => ∫ x in Icc (0 : ℝ) 1, f x * g n x ∂volume)
         atTop (𝓝 0) := by
   /-
-  PARTIAL boundary (closer hop 1).
+  PARTIAL boundary (closer hop 3).
 
   The original blocker diagnosis was incomplete: Mathlib's
   `Analysis.InnerProductSpace.Orthonormal` packages Bessel's inequality as
@@ -108,5 +163,16 @@ theorem apm_a98a02 (g : ℕ → ℝ → ℝ) (M : ℝ)
   integral identities through the a.e. quotient and proves Mathlib's actual
   `Orthonormal` predicate for the resulting L² sequence. The remaining work
   is the L² coefficient identification and uniform L¹-density extension.
+
+  CLOSER HOP 3: `apm_a98A02_inner_toLp_eq_integral` now identifies the
+  abstract Hilbert-space coefficient with the exact frozen raw set integral.
+  `apm_a98A02_integral_tendsto_zero_of_memLp_two` then applies Bessel
+  summability, takes square roots of the resulting norm-square limit, and
+  proves coefficient convergence for every `MemLp 2` approximant. Thus the
+  Hilbert-space portion is fully compiled. The remaining bridge is solely the
+  uniform passage from an arbitrary `IntegrableOn` (`L¹`) function to bounded
+  `L²` truncations, including the estimate
+  `|∫ (f-h)g_n| ≤ M ∫|f-h|`; no corpus theorem assembles that raw-function
+  truncation and uniform limit in the frozen encoding.
   -/
   sorry
