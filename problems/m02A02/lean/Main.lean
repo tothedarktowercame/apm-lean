@@ -116,6 +116,50 @@ lemma apm_m02a02_grad_jointKernel_meanZero
   rw [hc, hc0]
   simp
 
+/-- The variational equation has at most one solution on a prescribed affine
+mean slice. -/
+lemma apm_m02a02_weak_unique
+    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (embed : H →L[ℝ] Lp ℝ 2 (volume.restrict apm_m02a02_domain))
+    (gradX gradY : H →L[ℝ] Lp ℝ 2 (volume.restrict apm_m02a02_domain))
+    (one rhs : Lp ℝ 2 (volume.restrict apm_m02a02_domain))
+    (u₀ : H) (hone : ‖one‖ = 1) (hembed_inj : Function.Injective embed)
+    (hgrad_kernel : ∀ u : H,
+      gradX u = 0 ∧ gradY u = 0 ↔ ∃ c : ℝ, embed u = c • one)
+    (u w : H)
+    (hu_mean : @inner ℝ _ _ (embed (u - u₀)) one = 0)
+    (hw_mean : @inner ℝ _ _ (embed (w - u₀)) one = 0)
+    (hu : ∀ v : H, @inner ℝ _ _ (embed v) one = 0 →
+      @inner ℝ _ _ (gradX u) (gradX v) + @inner ℝ _ _ (gradY u) (gradY v) =
+        @inner ℝ _ _ rhs (embed v))
+    (hw : ∀ v : H, @inner ℝ _ _ (embed v) one = 0 →
+      @inner ℝ _ _ (gradX w) (gradX v) + @inner ℝ _ _ (gradY w) (gradY v) =
+        @inner ℝ _ _ rhs (embed v)) : u = w := by
+  let z : H := u - w
+  have hzmean : @inner ℝ _ _ (embed z) one = 0 := by
+    calc
+      @inner ℝ _ _ (embed z) one =
+          @inner ℝ _ _ (embed (u - u₀) - embed (w - u₀)) one := by
+            congr 2
+            simp [z]
+      _ = 0 := by rw [inner_sub_left, hu_mean, hw_mean, sub_zero]
+  have henergy :
+      @inner ℝ _ _ (gradX z) (gradX z) +
+        @inner ℝ _ _ (gradY z) (gradY z) = 0 := by
+    calc
+      @inner ℝ _ _ (gradX z) (gradX z) + @inner ℝ _ _ (gradY z) (gradY z) =
+          (@inner ℝ _ _ (gradX u) (gradX z) + @inner ℝ _ _ (gradY u) (gradY z)) -
+          (@inner ℝ _ _ (gradX w) (gradX z) + @inner ℝ _ _ (gradY w) (gradY z)) := by
+            simp only [z, map_sub, inner_sub_left]
+            ring
+      _ = 0 := by rw [hu z hzmean, hw z hzmean, sub_self]
+  rw [real_inner_self_eq_norm_sq, real_inner_self_eq_norm_sq] at henergy
+  have hx : ‖gradX z‖ = 0 := by nlinarith [norm_nonneg (gradX z), norm_nonneg (gradY z)]
+  have hy : ‖gradY z‖ = 0 := by nlinarith [norm_nonneg (gradX z), norm_nonneg (gradY z)]
+  have hz : z = 0 := apm_m02a02_grad_jointKernel_meanZero embed gradX gradY one
+    hone hembed_inj hgrad_kernel z hzmean ⟨norm_eq_zero.mp hx, norm_eq_zero.mp hy⟩
+  exact sub_eq_zero.mp hz
+
 theorem apm_m02a02
     (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [CompleteSpace H]
@@ -162,24 +206,26 @@ theorem apm_m02a02
       (∃ C : ℝ, 0 < C ∧ ∀ u : H,
         @inner ℝ _ _ (embed u) one = 0 →
         ‖embed u‖ ^ 2 ≤ C * (‖gradX u‖ ^ 2 + ‖gradY u‖ ^ 2)) ∧
-      (∃! u : H,
+      (∃ u : H,
         @inner ℝ _ _ (embed (u - u₀)) one = 0 ∧
         ∀ v : H, @inner ℝ _ _ (embed v) one = 0 →
           @inner ℝ _ _ (gradX u) (gradX v) +
             @inner ℝ _ _ (gradY u) (gradY v) =
               @inner ℝ _ _ rhs (embed v)) := by
     /-
-    CLOSER HOP 2 boundary. `LEMMA-INDEX.md`, all construction modules, the
+    CLOSER HOP 3 boundary. `LEMMA-INDEX.md`, all construction modules, the
     closed corpus, and git history contain no periodic-Sobolev compactness
     lemma reusable for these abstract operators. Mathlib does now contain
     `Analysis.InnerProductSpace.LaxMilgram`: after Poincaré supplies coercivity
     on the mean-zero subtype,
     `IsCoercive.continuousLinearEquivOfBilin` is the correct existence API.
 
-    This hop additionally proved `apm_m02a02_grad_jointKernel_meanZero`: the
-    gradient pair has trivial joint kernel after imposing the mean-zero
-    constraint.  This discharges the nondegeneracy input needed by both the
-    compactness contradiction and Lax--Milgram uniqueness.
+    Hop 2 proved `apm_m02a02_grad_jointKernel_meanZero`. This final hop uses it
+    in the compiled lemma `apm_m02a02_weak_unique`: subtract two weak
+    equations, test with their difference, rewrite the two self-inner-products
+    as squared norms, and conclude both gradients and hence the difference
+    vanish. The `sorry` below has accordingly been narrowed from existence and
+    uniqueness to Poincaré plus mere existence.
 
     I also investigated Mathlib's Fredholm shortcut
     `IsCompactOperator.antilipschitz_of_not_hasEigenvalue`.  Its source
@@ -197,7 +243,10 @@ theorem apm_m02a02
     mean-zero condition plus `hone` and `hembed_inj` to contradict unit norm.
     Packaging that sequence/subsequence argument, then defining the bounded
     bilinear form on the mean-zero subtype and transporting the affine mean
-    specified by `u₀`, remains a substantial assembly.
+    specified by `u₀`, remains open. Inspection of `Compact.lean` found only
+    compact-image lemmas, while `LaxMilgram.lean` begins after a bounded
+    coercive bilinear form has already been assembled; neither closes this
+    representation-specific bridge.
 
     This hop nevertheless closes two formerly implicit pieces outside this
     boundary: `apm_m02a02_completeSpace_meanZero` proves the first conjunct as
@@ -205,7 +254,19 @@ theorem apm_m02a02
     equivalence using Green's identity and `htest_dense`.
     -/
     sorry
-  refine ⟨hcomplete, hcore.1, hcore.2, ?_⟩
+  have hex_unique :
+      ∃! u : H,
+        @inner ℝ _ _ (embed (u - u₀)) one = 0 ∧
+        ∀ v : H, @inner ℝ _ _ (embed v) one = 0 →
+          @inner ℝ _ _ (gradX u) (gradX v) +
+            @inner ℝ _ _ (gradY u) (gradY v) =
+              @inner ℝ _ _ rhs (embed v) := by
+    obtain ⟨u, hu⟩ := hcore.2
+    refine ⟨u, hu, ?_⟩
+    intro w hw
+    exact apm_m02a02_weak_unique embed gradX gradY one rhs u₀ hone hembed_inj
+      hgrad_kernel w u hw.1 hu.1 hw.2 hu.2
+  refine ⟨hcomplete, hcore.1, hex_unique, ?_⟩
   intro u hu
   exact apm_m02a02_weak_iff_strong embed gradX gradY laplacian one rhs
     hgreen hrhs_mean hlaplacian_mean htest_dense u
