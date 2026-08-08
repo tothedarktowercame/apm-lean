@@ -48,8 +48,18 @@ the scope of the present contour-integral formalization — Mathlib has no
 principal value for contour integrals — so it is recorded only in the
 informal proof.
 
+## Closer Hop 1
+
+The historical commit `6bbe1d7` proves the inside and outside evaluations but
+predates the frozen boundary nonintegrability conjunct. Its foundational
+rationalization has been ported as three compiled lemmas in the current file.
+The first two conjuncts can be completed by porting its partial-fraction and
+Cauchy-kernel calculations. The new boundary requires proving that multiplying
+the pole by the nonvanishing conjugate numerator does not restore circle
+integrability; no packaged transport theorem was found.
+
 ## Lean State
 
-- **Sorry count:** 0
-- **Classification:** complete
-- **Validation:** `lake env lean problems/a94J06/lean/Main.lean` — clean
+- **Sorry count:** 1
+- **Classification:** partial
+- **Validation:** `lake env lean problems/a94J06/lean/Main.lean` — succeeds
