@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "informal-only",
+  "closer_hop": 2,
+  "closer_progress": "The explicit first-coordinate vector field is proved nowhere zero. Remaining work is the rational singular-homology computation for finite torus powers and Euler-characteristic transport through the compact-source local diffeomorphism.",
   "imported_at": "2026-07-13T17:26:57.084851Z"
 }

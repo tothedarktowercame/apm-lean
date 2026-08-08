@@ -40,6 +40,15 @@ def apm_t03J04_constantVectorField (n : ℕ) [NeZero n] :
     apm_t03J04_Torus n → apm_t03J04_E n :=
   fun _ i ↦ if i = 0 then EuclideanSpace.single 0 (1 : ℝ) else 0
 
+/-- The displayed global first-coordinate field is nowhere zero. -/
+lemma apm_t03J04_constantVectorField_ne_zero
+    (n : ℕ) [NeZero n] (q : apm_t03J04_Torus n) :
+    apm_t03J04_constantVectorField n q ≠ 0 := by
+  intro h
+  have h0 := congrFun h (0 : Fin n)
+  have h00 := congrArg (fun v : EuclideanSpace ℝ (Fin 1) => v 0) h0
+  simp [apm_t03J04_constantVectorField] at h00
+
 abbrev apm_t03J04_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
     (ModuleCat.of ℚ ℚ)).obj (TopCat.of X))
@@ -68,4 +77,23 @@ theorem apm_t03j04
       IsLocalDiffeomorph (apm_t03J04_Model n)
           (modelWithCornersSelf ℝ (apm_t03J04_E n)) (⊤ : ℕ∞) phi →
       apm_t03J04_eulerCharacteristic n X = 0 := by
+  /-
+  CLOSER HOP 2 boundary. The baseline contained only the theorem-level
+  `sorry`. This hop compiles the complete elementary first conjunct in
+  `apm_t03J04_constantVectorField_ne_zero`: evaluation at the first `Fin n`
+  coordinate and then the unique `Fin 1` coordinate gives the contradiction
+  `1 = 0`, using `[NeZero n]` exactly where intended.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, solved torus and
+  covering artifacts, Mathlib's product singular-homology, Künneth, Euler-
+  characteristic, local-diffeomorphism, proper/local-homeomorphism, and finite-
+  cover APIs found no compiled computation of rational homology for arbitrary
+  finite powers of `Circle`, nor a theorem turning this compact-source local
+  diffeomorphism into Euler-characteristic multiplicativity. The remaining
+  bridge is therefore the two concrete homological clauses: compute the
+  torus's alternating rational homology rank, then prove the connected target
+  has zero Euler characteristic via the induced finite cover (or a transported
+  nowhere-zero vector field plus Poincaré--Hopf). The frozen statement is
+  unchanged.
+  -/
   sorry
