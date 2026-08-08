@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Compiled completeness of H by transporting finite dimensionality from degreeLE through P.symm and invoking FiniteDimensional.complete. The reverse triangular recursion and adapted orthonormal basis remain open.",
   "imported_at": "2026-07-13T17:26:55.091781Z"
 }

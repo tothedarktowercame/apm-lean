@@ -32,6 +32,18 @@ lemma apm_m95J01_finrank_of_equiv
     LinearEquiv.finrank_eq (Polynomial.degreeLTEquiv ℝ (n + 1))]
   simp
 
+/-- Completeness transports from the finite-dimensional polynomial model.
+This closes the first frozen conjunct independently of the operator and
+Gram--Schmidt constructions. -/
+lemma apm_m95J01_complete_of_equiv
+    {n : ℕ} {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (P : H ≃ₗ[ℝ] Polynomial.degreeLE ℝ n) : Nonempty (CompleteSpace H) := by
+  letI : FiniteDimensional ℝ (Polynomial.degreeLE ℝ n) := by
+    rw [← Polynomial.degreeLT_succ_eq_degreeLE]
+    infer_instance
+  letI : FiniteDimensional ℝ H := P.symm.finiteDimensional
+  exact ⟨FiniteDimensional.complete ℝ H⟩
+
 /-- The differential part `P'' - 2P'` strictly lowers degree, hence has zero
 coefficient in the top slot of `degreeLE n`. -/
 lemma apm_m95J01_top_coeff_derivative_sub
@@ -142,4 +154,15 @@ theorem apm_m95j01
   -- installation, monomial filtration independence, and the adapted
   -- orthonormal-basis construction remain open. The frozen statement is
   -- unchanged.
+  --
+  -- Closer hop 3 routes around the still-open triangular recursion and closes
+  -- another independent frozen component. `apm_m95J01_complete_of_equiv`
+  -- transports the existing `FiniteDimensional` instance on
+  -- `Polynomial.degreeLE ℝ n` back through `P.symm`, then invokes
+  -- `FiniteDimensional.complete`; hence `Nonempty (CompleteSpace H)` is now
+  -- compiled without using the integral geometry. Renewed searches of the
+  -- derivative, nilpotent, and degree-filtration APIs found no packaged
+  -- inverse for `P'' - 2P'` on the codimension-one top-coefficient kernel.
+  -- That converse and the adapted Gram--Schmidt basis remain open without an
+  -- unproved assertion; the frozen statement is unchanged.
   sorry
