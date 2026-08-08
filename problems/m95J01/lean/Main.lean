@@ -32,6 +32,50 @@ lemma apm_m95J01_finrank_of_equiv
     LinearEquiv.finrank_eq (Polynomial.degreeLTEquiv ℝ (n + 1))]
   simp
 
+/-- The differential part `P'' - 2P'` strictly lowers degree, hence has zero
+coefficient in the top slot of `degreeLE n`. -/
+lemma apm_m95J01_top_coeff_derivative_sub
+    {n : ℕ} (p : Polynomial.degreeLE ℝ n) :
+    (Polynomial.derivative (Polynomial.derivative (p : Polynomial ℝ)) -
+      2 • Polynomial.derivative (p : Polynomial ℝ)).coeff n = 0 := by
+  have hpdeg : (p : Polynomial ℝ).degree ≤ (n : WithBot ℕ) :=
+    Polynomial.mem_degreeLE.mp p.property
+  have hcoeff1 : (p : Polynomial ℝ).coeff (n + 1) = 0 :=
+    Polynomial.coeff_eq_zero_of_degree_lt
+      (hpdeg.trans_lt (by exact_mod_cast Nat.lt_succ_self n))
+  have hcoeff2 : (p : Polynomial ℝ).coeff (n + 2) = 0 :=
+    Polynomial.coeff_eq_zero_of_degree_lt
+      (hpdeg.trans_lt (by exact_mod_cast (by omega : n < n + 2)))
+  simp [Polynomial.coeff_derivative, hcoeff1, hcoeff2]
+
+/-- The top-coefficient condition in the frozen range characterization is
+necessary: it follows directly from the encoded formula for `T`. -/
+lemma apm_m95J01_range_top_coeff_zero
+    {n : ℕ} {H : Type*} [AddCommGroup H] [Module ℝ H]
+    (P : H ≃ₗ[ℝ] Polynomial.degreeLE ℝ n) (T : H →ₗ[ℝ] H)
+    (hT : ∀ f : H,
+      (P (T f) : Polynomial ℝ) =
+        Polynomial.derivative (Polynomial.derivative (P f : Polynomial ℝ)) -
+          2 • Polynomial.derivative (P f : Polynomial ℝ) +
+          (P f : Polynomial ℝ))
+    {f g : H} (hfg : T f - f = g) :
+    (P g : Polynomial ℝ).coeff n = 0 := by
+  have hp : P (T f - f) = P g := congrArg P hfg
+  rw [map_sub] at hp
+  have hpoly := congrArg
+    (fun q : Polynomial.degreeLE ℝ n ↦ (q : Polynomial ℝ)) hp
+  change (P (T f) : Polynomial ℝ) - (P f : Polynomial ℝ) =
+    (P g : Polynomial ℝ) at hpoly
+  rw [hT f] at hpoly
+  have hdiff :
+      (P g : Polynomial ℝ) =
+        Polynomial.derivative (Polynomial.derivative (P f : Polynomial ℝ)) -
+          2 • Polynomial.derivative (P f : Polynomial ℝ) := by
+    rw [← hpoly]
+    abel
+  rw [hdiff]
+  exact apm_m95J01_top_coeff_derivative_sub (P f)
+
 theorem apm_m95j01
     (n : ℕ) (hn : 0 < n)
     (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
@@ -82,4 +126,20 @@ theorem apm_m95j01
   -- this operator. Completeness then follows from the now-known finite
   -- dimension, but the exact instance-installation and the two remaining
   -- operator/basis constructions were not completed. The statement is unchanged.
+  --
+  -- Closer hop 2 compiles the necessary half of the range characterization.
+  -- `apm_m95J01_top_coeff_derivative_sub` uses membership in `degreeLE n`
+  -- and `Polynomial.coeff_derivative` to prove directly that `P'' - 2P'`
+  -- has zero coefficient at `n`. `apm_m95J01_range_top_coeff_zero` then
+  -- transports an equation `T f - f = g` through the supplied linear
+  -- equivalence, rewrites it with `hT`, and concludes `(P g).coeff n = 0`.
+  -- Hence the forward implication of the third frozen conjunct is closed.
+  --
+  -- Searches beyond hop 1 inspected the polynomial derivative and
+  -- `degreeLE` sources, normalized Gram--Schmidt users, `LEMMA-INDEX.md`,
+  -- `ConstructionTargets/`, and polynomial siblings. No theorem packages the
+  -- reverse triangular recursion. That converse, completeness-instance
+  -- installation, monomial filtration independence, and the adapted
+  -- orthonormal-basis construction remain open. The frozen statement is
+  -- unchanged.
   sorry
