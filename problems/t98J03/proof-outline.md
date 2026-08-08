@@ -1,5 +1,18 @@
 # Proof Outline: t98J03
 
+## Closer hop 2 update
+
+The positive-degree zero-sphere calculation now compiles. Every point of the
+concrete unit sphere in `EuclideanSpace ℝ (Fin 1)` has coordinate `1` or
+`-1`; its Boolean sign is injective, making the subtype finite and hence
+discrete. Mathlib's totally-disconnected singular-homology theorem therefore
+proves `Hₖ(S⁰;ℤ)=0` for every `k>0`.
+
+Normalizing `H₀` still requires identifying the categorical coproduct over
+these two concrete points with `ModuleCat.of ℤ (ℤ × ℤ)`. No comparable
+infrastructure was found for positive-dimensional metric spheres, so their
+top generator and off-degree vanishing remain the essential open boundary.
+
 ## Closer hop 1 update
 
 Mathlib does provide a precise zero-sphere route that the imported notes

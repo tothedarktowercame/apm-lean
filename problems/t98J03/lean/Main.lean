@@ -28,6 +28,58 @@ abbrev apm_t98J03_H (n k : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of (apm_t98J03_Sphere n)))
 
+lemma apm_t98J03_sphere_zero_coord (x : apm_t98J03_Sphere 0) :
+    (x.1 0) = 1 ∨ (x.1 0) = -1 := by
+  have hs : (x.1 0) ^ 2 = (1 : ℝ) := by
+    have hx := x.2
+    change x.1 ∈ Metric.sphere
+      (0 : EuclideanSpace ℝ (Fin 1)) 1 at hx
+    rw [EuclideanSpace.sphere_zero_eq 1 zero_le_one] at hx
+    simpa using hx
+  exact sq_eq_one_iff.mp hs
+
+/-- The sign of the unique coordinate identifies the zero-sphere with two
+points at the level needed to obtain finiteness. -/
+def apm_t98J03_sphereZeroSign (x : apm_t98J03_Sphere 0) : Bool :=
+  decide (x.1 0 = 1)
+
+lemma apm_t98J03_sphereZeroSign_injective :
+    Function.Injective apm_t98J03_sphereZeroSign := by
+  intro x y hxy
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  rcases apm_t98J03_sphere_zero_coord x with hx | hx <;>
+    rcases apm_t98J03_sphere_zero_coord y with hy | hy
+  · exact hx.trans hy.symm
+  · have hx' : apm_t98J03_sphereZeroSign x = true := by
+      simp [apm_t98J03_sphereZeroSign, hx]
+    have hy' : apm_t98J03_sphereZeroSign y = false := by
+      simp [apm_t98J03_sphereZeroSign, hy]
+      norm_num
+    rw [hx', hy'] at hxy
+    contradiction
+  · have hx' : apm_t98J03_sphereZeroSign x = false := by
+      simp [apm_t98J03_sphereZeroSign, hx]
+      norm_num
+    have hy' : apm_t98J03_sphereZeroSign y = true := by
+      simp [apm_t98J03_sphereZeroSign, hy]
+    rw [hx', hy'] at hxy
+    contradiction
+  · exact hx.trans hy.symm
+
+noncomputable instance apm_t98J03_sphereZero_finite :
+    Finite (apm_t98J03_Sphere 0) :=
+  Finite.of_injective apm_t98J03_sphereZeroSign
+    apm_t98J03_sphereZeroSign_injective
+
+lemma apm_t98J03_sphereZero_positive_homology_isZero
+    (k : ℕ) (hk : 0 < k) : Limits.IsZero (apm_t98J03_H 0 k) := by
+  exact
+    AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+      (ModuleCat ℤ) k (ModuleCat.of ℤ ℤ)
+      (TopCat.of (apm_t98J03_Sphere 0)) (Nat.ne_of_gt hk)
+
 theorem apm_t98j03 :
     Nonempty (apm_t98J03_H 0 0 ≅ ModuleCat.of ℤ (ℤ × ℤ)) ∧
     (∀ k : ℕ, 0 < k → Limits.IsZero (apm_t98J03_H 0 k)) ∧
@@ -61,5 +113,22 @@ theorem apm_t98j03 :
   the zero-sphere reduction, the frozen universal positive-dimensional claim
   still requires substantial missing algebraic-topology infrastructure. The
   statement is unchanged.
+
+  CLOSER HOP 2: the positive-degree half of the zero-sphere branch now
+  compiles rather than merely being reduced. `apm_t98J03_sphere_zero_coord`
+  uses `EuclideanSpace.sphere_zero_eq` to prove that the unique coordinate is
+  `1` or `-1`; the Boolean sign map is injective, hence the concrete sphere is
+  finite and therefore discrete. The lemma
+  `apm_t98J03_sphereZero_positive_homology_isZero` then applies Mathlib's
+  `isZero_singularHomologyFunctor_of_totallyDisconnectedSpace` verbatim to
+  close every degree `k > 0` for this actual metric-sphere encoding.
+
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, sphere and
+  homology siblings, Mathlib's coproduct normalization, suspension, reduced-
+  homology, and singular-chain sources, and git history found no positive-
+  dimensional computation. The remaining zero-dimensional task is to
+  normalize the free-module coproduct on these two concrete points to
+  `ℤ × ℤ`; the universal `n > 0` branch still needs the absent sphere
+  homology machinery described above. The frozen statement is unchanged.
   -/
   sorry
