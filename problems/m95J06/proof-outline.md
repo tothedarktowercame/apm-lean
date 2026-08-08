@@ -24,3 +24,8 @@ Sibling `a93J04` proves a general finite-measure `eLpNorm` limit, and
 `bpm-1-3-1` proves the finite power-mean squeeze for natural exponents. The
 The remaining work is now the direct `Real.rpow` squeeze for this theorem's
 custom finite sum; the supremum and limiting cardinality sub-bridges are closed.
+
+Closer hop 3 proves the inner upper estimate
+`Σ |xᵢ|^p ≤ n · ‖x‖∞^p` for every nonnegative real exponent. It remains to
+apply the outer `1/p` power, normalize the positive-maximum branch, and combine
+this with the attained-coordinate lower bound.

@@ -56,6 +56,26 @@ lemma apm_m95J06_tendsto_card_rpow_one_div (n : ℕ) (hn : 0 < n) :
     rfl
   · simp
 
+/-- For nonnegative real exponents, the finite power sum is bounded by the
+number of coordinates times the corresponding power of the attained maximum.
+This is the inner inequality needed for the upper half of the squeeze. -/
+lemma apm_m95J06_sum_rpow_le_card_mul_linfNorm_rpow {n : ℕ} (hn : 0 < n)
+    (x : Fin n → ℝ) {p : ℝ} (hp : 0 ≤ p) :
+    (∑ i, Real.rpow |x i| p) ≤
+      (n : ℝ) * Real.rpow (apm_m95j06_linfNorm x) p := by
+  obtain ⟨i₀, hi₀⟩ := apm_m95J06_exists_abs_eq_linfNorm hn x
+  have hmax_nonneg : 0 ≤ apm_m95j06_linfNorm x := by
+    rw [← hi₀]
+    exact abs_nonneg _
+  calc
+    (∑ i, Real.rpow |x i| p) ≤
+        ∑ _i : Fin n, Real.rpow (apm_m95j06_linfNorm x) p := by
+      apply Finset.sum_le_sum
+      intro i _
+      exact Real.rpow_le_rpow (abs_nonneg _)
+        (apm_m95J06_abs_le_linfNorm x i) hp
+    _ = (n : ℝ) * Real.rpow (apm_m95j06_linfNorm x) p := by simp
+
 /-- In a real inner-product space, the norm is differentiable away from the
 origin. This is the identity-map specialization of Mathlib's chain rule for
 the Hilbert norm. -/
@@ -105,6 +125,15 @@ theorem apm_m95j06 :
   -- eventual power-mean inequalities for `Real.rpow`, including the zero-max
   -- branch and the positive-max factorization. No packaged lemma was found
   -- for that final custom-sum squeeze, so the first conjunct remains open.
+  --
+  -- CLOSER HOP 3 compiles the inner upper power-mean inequality as
+  -- `apm_m95J06_sum_rpow_le_card_mul_linfNorm_rpow`. It uses attainment of
+  -- the maximum from hop 2, coordinatewise `Real.rpow_le_rpow`, and a finite
+  -- sum comparison to show `Σ |xᵢ|^p ≤ n · ‖x‖∞^p` for every `p ≥ 0`.
+  -- Passing this inequality through the outer real power still requires the
+  -- separate zero-maximum and positive-maximum normalization branches. The
+  -- lower bound and final squeeze therefore remain open without an unproved
+  -- assertion; the frozen statement is unchanged.
     sorry
   · intro H _ _ x hx
     exact apm_m95J06_differentiableAt_norm H x hx

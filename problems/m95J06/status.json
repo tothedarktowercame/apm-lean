@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Compiled the inner upper power-sum bound sum |x_i|^p <= n times linfNorm(x)^p for every nonnegative real p. Outer rpow normalization, the lower bound, and final squeeze remain open.",
   "imported_at": "2026-07-13T17:26:55.222943Z"
 }
