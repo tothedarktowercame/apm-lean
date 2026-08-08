@@ -7,6 +7,21 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+Two foundational facts now compile locally. First, the restricted
+unit-interval measure is installed as finite and `MemLp.integrable` converts
+the supplied `Lᵖ` representative to an integrable function. Second,
+`apm_a97A02_measure_Icc_le` proves that every moving interval has restricted
+measure at most `ENNReal.ofReal (2*h)`.
+
+The remaining estimate requires specializing the finite-measure `Lᵖ ⊆ L¹`
+bound to the moving restriction and normalizing the resulting ENNReal powers.
+Continuity requires the atomless indefinite-integral theorem for the restricted
+measure at the two moving endpoints. These conversions are not packaged in one
+existing theorem, so the main result remains partial with one `sorry`; its
+statement is unchanged.
+
 ## Imported Proof Plan
 
 ```clojure
