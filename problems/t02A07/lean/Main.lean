@@ -44,6 +44,30 @@ def apm_t02a07_constraints (x : apm_t02a07_E4) : apm_t02a07_E2 :=
   WithLp.toLp 2
     ![‖x‖ ^ 2 - 1, x 2 * x 3 - (1 : ℝ) / 4]
 
+/-- On the constrained set, both coordinates occurring in the product
+constraint are nonzero.  This is the first algebraic input to the explicit
+Jacobian-rank proof. -/
+lemma apm_t02a07_product_coordinates_ne_zero {x : apm_t02a07_E4}
+    (hx : x ∈ apm_t02a07_Z) : x 2 ≠ 0 ∧ x 3 ≠ 0 := by
+  rcases hx with ⟨hxSphere, hxProd⟩
+  constructor
+  · intro hx2
+    rw [hx2, zero_mul] at hxProd
+    norm_num at hxProd
+  · intro hx3
+    rw [hx3, mul_zero] at hxProd
+    norm_num at hxProd
+
+/-- The product constraint's coordinate gradient is therefore nonzero on
+`Z`; this rules out the most immediate Jacobian degeneration. -/
+lemma apm_t02a07_product_gradient_ne_zero {x : apm_t02a07_E4}
+    (hx : x ∈ apm_t02a07_Z) :
+    (WithLp.toLp 2 ![(0 : ℝ), 0, x 3, x 2] : apm_t02a07_E4) ≠ 0 := by
+  intro hzero
+  have hcoord := congrFun (congrArg WithLp.ofLp hzero) (2 : Fin 4)
+  simp at hcoord
+  exact (apm_t02a07_product_coordinates_ne_zero hx).2 hcoord
+
 def apm_t02a07_IsRegularDimensionTwo : Prop :=
   ∀ x ∈ apm_t02a07_Z,
     Function.Surjective (fderiv ℝ apm_t02a07_constraints x)
@@ -138,5 +162,21 @@ theorem apm_t02a07 :
   Sard/density APIs still found no parametric-transversality theorem. The live
   bridge is now only the explicit constraint-Jacobian surjectivity proof and
   the exceptional-parameter classification/density argument.
+
+  CLOSER HOP 3 begins that explicit Jacobian proof rather than repeating the
+  library search. `apm_t02a07_product_coordinates_ne_zero` derives
+  `x₂ ≠ 0` and `x₃ ≠ 0` directly from `x₂*x₃ = 1/4` on `Z`, and
+  `apm_t02a07_product_gradient_ne_zero` packages the consequence that the
+  second constraint's coordinate gradient `(0,0,x₃,x₂)` is nonzero. Thus the
+  product row of the constraint Jacobian is now certified nondegenerate.
+
+  Final-hop searches of Mathlib's norm-square derivative, inner-product
+  calculus, fixed-dimensional Sard, Jacobian, and manifold bordism sources
+  found `fderiv_norm_sq` for the first constraint but still no parametric
+  transversality theorem or ready-made two-row surjectivity lemma. The
+  remaining local regularity bridge is to prove the norm gradient and this
+  nonzero product gradient linearly independent on `Z`; density still requires
+  exceptional-parameter classification or new parametric-transversality
+  infrastructure. The frozen statement is unchanged.
   -/
   sorry
