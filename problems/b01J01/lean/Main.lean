@@ -71,6 +71,23 @@ lemma apm_b01j01_prime_dvd_abelianization
     p ∣ Nat.card (G ⧸ commutator G) := by
   exact apm_b01j01_prime_dvd_quotient H (commutator G) hp hpH hpHcomm
 
+/-- Why this unblocks part (d) of `apm_b01j01`: the fibers of the trace map
+from ambient Sylow subgroups to Sylow subgroups of a normal subgroup all have
+one cardinality, so the ambient Sylow count is the base count times that
+fiber cardinality. -/
+theorem apm_b01J01_bridge_trace_constant_fiber
+    {G : Type} [Group G] [Finite G]
+    (K : Subgroup G) [K.Normal]
+    (p : ℕ) (hp : p.Prime) :
+    ∃ c : ℕ,
+      (∀ Q : Sylow p K,
+        Nat.card
+          {P : Sylow p G //
+            (P : Subgroup G) ⊓ K =
+              (Q : Subgroup K).map K.subtype} = c) ∧
+      Nat.card (Sylow p G) = Nat.card (Sylow p K) * c := by
+  sorry
+
 theorem apm_b01j01
     (G : Type) [Group G] [Finite G]
     (H K : Subgroup G) [K.Normal]

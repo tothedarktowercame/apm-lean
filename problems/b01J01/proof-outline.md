@@ -18,8 +18,9 @@ The remaining boundary consists of:
    its kernel back to an index-`p` subgroup for part (b);
 2. proving the normal-subgroup restriction theorem that `P ⊓ K` is Sylow
    in `K` for ambient Sylow `P`, completing part (c);
-3. formalizing the constant-fiber/orbit count giving the divisibility in
-   part (d).
+3. proving the newly stated `apm_b01J01_bridge_trace_constant_fiber`, which
+   says every trace fiber has one cardinal `c` and gives the exact product
+   formula `Nat.card (Sylow p G) = Nat.card (Sylow p K) * c`.
 
 Mathlib's `Sylow.exists_comap_subtype_eq` already gives the reverse
 existence direction needed in part (c).  Closer hop 2 packages it as
@@ -35,4 +36,5 @@ other inclusion or the cardinal-divisibility theorem.
 - extract an index-`p` subgroup of the finite abelian quotient for part (b)
 - transport Sylow maximality through conjugation and normality of `K` for the
   reverse inclusion in part (c)
-- prove the constant-fiber/orbit count for part (d)
+- prove `apm_b01J01_bridge_trace_constant_fiber`; divisibility in part (d)
+  then follows immediately from its product formula
