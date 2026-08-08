@@ -12,6 +12,8 @@ surface-classification clause.
 - If `z` has torus parameters `θ, φ`, use `θ, φ+t` for its image.
 - `Complex.exp_add` and coordinate algebra prove the resulting vector equality,
   so the explicit torus is invariant.
+- The flow is now proved `2π`-periodic, supplying the elementary descent datum
+  for the intended circle action.
 
 ## Remaining classification bridge
 

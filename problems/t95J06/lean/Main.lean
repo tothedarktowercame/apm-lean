@@ -83,6 +83,20 @@ lemma apm_t95j06_T_invariant
   · rw [mul_add, Complex.exp_add]
     ring
 
+/-- The real-parameter Hopf flow has period `2π`, the first prerequisite for
+factoring it through a circle action. -/
+lemma apm_t95j06_flow_periodic
+    (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
+    (hH : apm_t95j06_isHopfFlow H) (z : apm_t95j06_S5) (t : ℝ) :
+    H (z, t + 2 * Real.pi) = H (z, t) := by
+  apply Subtype.ext
+  rw [hH, hH]
+  congr 1
+  rw [show Complex.I * (↑(t + 2 * Real.pi) : ℂ) =
+      Complex.I * (t : ℂ) + Complex.I * (2 * Real.pi : ℝ) by push_cast; ring,
+    Complex.exp_add]
+  simpa [mul_comm, mul_left_comm, mul_assoc] using Complex.exp_two_pi_mul_I
+
 theorem apm_t95j06
     (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
     (hH : apm_t95j06_isHopfFlow H) :
@@ -117,5 +131,11 @@ theorem apm_t95j06
     hypothesis supplies only `H₂ ≅ ℤ`; completing the bridge still needs the
     free-action quotient/Euler-characteristic development and then an actual
     homeomorphism of each component with `Circle × Circle`.
+
+    Closer hop 2 proves `apm_t95j06_flow_periodic`: the frozen real-parameter
+    formula has period `2π`. Thus the elementary descent datum for a circle
+    action is now explicit. What remains is bundling that descent as a smooth
+    free action, constructing its quotient/principal bundle, deriving Euler
+    characteristic zero, and applying the absent surface classification.
     -/
     sorry
