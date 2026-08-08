@@ -6,20 +6,23 @@ f analytic on Δ, power series radius = 1, extends meromorphically to D ⊃ Δ̄
 (a) f has at least one pole on ∂Δ.
 (b) Simple boundary poles ⟹ bounded coefficients.
 
-## Proved lemmas
+## Compiled reduction
 
-- `isCompact_unit_sphere`: ∂Δ is compact.
-- `coefficients_bounded_simple_pole`: Taylor coefficients of c/(z-ζ),
-  |ζ|=1, are bounded by |c|. Key: |ζ^n| = 1.
+- `apm_a95J04_pole_mem_sphere_of_mem_closedBall`: any pole in the closed
+  unit disk lies on its boundary. Analyticity in the open disk gives
+  `0 ≤ meromorphicOrderAt f z`, contradicting negative order there.
 
-## Theory boundaries (3 sorries)
+## Remaining bridge (1 sorry)
 
-1. `holo_on_larger_ball_implies_bounded`: bounded image of compact (API).
-2. `exists_pole_on_boundary` (part a): meromorphic theory + radius of convergence.
-3. `coefficients_bounded_of_simple_poles` (part b): pole subtraction + Cauchy.
+1. If there is no boundary pole, obtain a uniform disk of radius greater than
+   one on which `f` is holomorphic, identify `a` with its Taylor coefficients,
+   and contradict `hradius_gt`.
+2. Under the simple-pole hypothesis, prove the boundary pole set finite,
+   subtract its principal parts, extend the remainder holomorphically, and
+   compare Taylor coefficients to obtain a uniform bound.
 
 ## Checked Lean state
 
 - `lake env lean problems/a95J04/lean/Main.lean`: exit 0
-- Sorry count: 3
+- Sorry count: 1
 - Classification: partial

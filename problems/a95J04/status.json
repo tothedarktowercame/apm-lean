@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,24 +29,20 @@
   },
   "classification": "partial",
   "imported_at": "2026-07-13T17:26:52.261601Z",
-  "checked_at": "2026-07-25T04:00:00Z",
+  "checked_at": "2026-08-08T00:00:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a95J04/lean/Main.lean",
-    "sorry_count": 3,
+    "sorry_count": 1,
     "sorry_locations": [
-      "holo_on_larger_ball_implies_bounded (bounded image of compact set)",
-      "exists_pole_on_boundary (part a)",
-      "coefficients_bounded_of_simple_poles (part b)"
+      "apm_a95j04 (global pole existence and finite principal-part coefficient argument)"
     ],
     "blockers": [
-      "Meromorphic function theory not in Mathlib (no MeromorphicAt typeclass with needed API).",
-      "Power series radius of convergence characterization not connected to this setup.",
-      "Pole subtraction and Cauchy estimate argument not assembled."
+      "Uniform holomorphic extension and pointwise HasSum-to-Taylor-coefficient identification are not assembled.",
+      "Finiteness of boundary poles and subtraction of all simple principal parts remain to be assembled."
     ],
     "proved_lemmas": [
-      "isCompact_unit_sphere",
-      "coefficients_bounded_simple_pole"
+      "apm_a95J04_pole_mem_sphere_of_mem_closedBall"
     ]
   }
 }
