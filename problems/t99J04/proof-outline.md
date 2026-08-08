@@ -1,5 +1,21 @@
 # Proof Outline: t99J04
 
+## Closer hop 2 update
+
+The finite-dimensional linear-algebra bridge now compiles for `n>0`.
+An independent family of `n` covectors on an `n`-dimensional real space is
+promoted to a dual basis; dual separation proves injectivity of the induced
+coordinate map, and equality of finranks gives surjectivity. Thus the
+mathematical step from independent coordinate differentials to an invertible
+linear coordinate map is no longer open.
+
+To use this in the frozen first conjunct, the manifold derivative of
+`apm_t99J04_coordinateMap` must still be identified coordinatewise with the
+given covectors, including a separate zero-dimensional case. Both conjuncts
+then meet the same absent library bridge: assembling the chart-level Banach
+inverse function theorem into `IsLocalDiffeomorphAt` from a bijective
+`mfderiv`.
+
 ## Closer hop 1 update
 
 The compiled helper `apm_t99J04_surjective_of_isLocalDiffeomorph` completes

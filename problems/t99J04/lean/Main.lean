@@ -1,4 +1,6 @@
 import Mathlib
+import Mathlib.LinearAlgebra.Dual.Lemmas
+import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
 /-!
 # APM t99J04 — inverse function theorem and compact local diffeomorphisms
@@ -26,6 +28,46 @@ abbrev apm_t99J04_Euclidean (n : ℕ) := EuclideanSpace ℝ (Fin n)
 def apm_t99J04_coordinateMap {n : ℕ} {X : Type} (f : Fin n → X → ℝ) :
     X → apm_t99J04_Euclidean n :=
   fun p ↦ WithLp.toLp 2 (fun i ↦ f i p)
+
+/-- The finite-dimensional algebra underlying the coordinate-map derivative:
+`n` independent covectors on an `n`-dimensional space give a bijective
+coordinate map. -/
+lemma apm_t99J04_dualCoordinates_bijective
+    {n : ℕ} (hn : 0 < n) {V : Type} [AddCommGroup V] [Module ℝ V]
+    [FiniteDimensional ℝ V] (hfin : Module.finrank ℝ V = n)
+    (phi : Fin n → Module.Dual ℝ V) (hli : LinearIndependent ℝ phi) :
+    Function.Bijective (fun v : V ↦ fun i ↦ phi i v) := by
+  let L : V →ₗ[ℝ] (Fin n → ℝ) := LinearMap.pi phi
+  haveI : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+  have hcard : Fintype.card (Fin n) =
+      Module.finrank ℝ (Module.Dual ℝ V) := by
+    rw [Fintype.card_fin, Subspace.dual_finrank_eq, hfin]
+  let b : Module.Basis (Fin n) ℝ (Module.Dual ℝ V) :=
+    basisOfLinearIndependentOfCardEqFinrank hli hcard
+  have hb : ∀ i, b i = phi i := by
+    intro i
+    exact congrFun (coe_basisOfLinearIndependentOfCardEqFinrank hli hcard) i
+  have hLinj : Function.Injective L := by
+    rw [← LinearMap.ker_eq_bot]
+    ext v
+    simp only [Submodule.mem_bot, LinearMap.mem_ker, L]
+    constructor
+    · intro hv
+      apply (Module.forall_dual_apply_eq_zero_iff ℝ v).mp
+      intro psi
+      rw [← b.sum_repr psi]
+      rw [LinearMap.sum_apply]
+      apply Finset.sum_eq_zero
+      intro i hi
+      rw [hb i]
+      have hi0 : phi i v = 0 := congrFun hv i
+      simp [hi0]
+    · rintro rfl
+      simp
+  have hdim : Module.finrank ℝ V = Module.finrank ℝ (Fin n → ℝ) := by
+    rw [hfin, Module.finrank_fintype_fun_eq_card, Fintype.card_fin]
+  exact ⟨hLinj,
+    (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).mp hLinj⟩
 
 /-- A local diffeomorphism from a nonempty compact space to a connected
 Hausdorff space is surjective. The range is open by local invertibility and
@@ -98,5 +140,24 @@ theorem apm_t99j04 :
   `MFDeriv`, atlas, finite-dimensional dual-basis, and inverse-function
   sources, and git history found no packaged theorem performing either
   assembly. The statement is unchanged.
+
+  CLOSER HOP 2: the finite-dimensional algebraic core of the first conjunct
+  now compiles as `apm_t99J04_dualCoordinates_bijective`. For `n > 0`, it
+  upgrades `n` independent covectors on an `n`-dimensional real vector space
+  to a basis of the dual, proves the induced coordinate map injective by dual
+  separation, and obtains surjectivity from equal finrank. This uses
+  `basisOfLinearIndependentOfCardEqFinrank`,
+  `Module.forall_dual_apply_eq_zero_iff`, and
+  `LinearMap.injective_iff_surjective_of_finrank_eq_finrank`; it removes the
+  substantive independence-to-bijectivity step identified in hop 1.
+
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, manifold IFT
+  siblings, Mathlib's `MFDeriv`, `LocalDiffeomorph`, chart, and inverse-
+  function sources, and git history still found no manifold theorem promoting
+  `ContMDiffAt` plus bijective `mfderiv` to `IsLocalDiffeomorphAt`. Remaining
+  work is the coordinate-map `mfderiv` formula/coercion into the new lemma
+  (with the zero-dimensional case separated), followed by the chart-local
+  Banach inverse-function assembly common to both conjuncts. The frozen
+  statement is unchanged.
   -/
   sorry
