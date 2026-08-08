@@ -20,6 +20,7 @@ point of that fiber.
 -/
 
 open Set
+open MeasureTheory
 open scoped Manifold ContDiff
 
 noncomputable section
@@ -51,6 +52,47 @@ def apm_t92J07_IsSmoothRegularFiber
     apm_t92J07_IsSmoothRegularFiber (n := n) (m := m) f x (f ⁻¹' {x}) ↔
       apm_t92J07_IsRegularValue (n := n) (m := m) f x := by
   simp [apm_t92J07_IsSmoothRegularFiber]
+
+/-- The critical values of one member of the family.  Keeping this as an
+explicit set isolates the genuinely differential-topological input (Sard)
+from the countable measure argument below. -/
+def apm_t92J07_criticalValues
+    {n m : ℕ} {M : Type*} [TopologicalSpace M]
+    [ChartedSpace (apm_t92J07_E n) M]
+    (f : M → apm_t92J07_E m) : Set (apm_t92J07_E m) :=
+  {x | ¬ apm_t92J07_IsRegularValue (n := n) (m := m) f x}
+
+/-- Countably many null critical-value sets have a common regular value.
+This is the complete measure-theoretic assembly needed after manifold Sard. -/
+lemma apm_t92J07_exists_common_regularValue_of_null
+    (m : ℕ) (d : PNat → ℕ) (M : PNat → Type*)
+    [∀ i, TopologicalSpace (M i)]
+    [∀ i, ChartedSpace (apm_t92J07_E (d i)) (M i)]
+    (f : ∀ i, M i → apm_t92J07_E m)
+    (hnull : ∀ i, volume (apm_t92J07_criticalValues
+      (n := d i) (m := m) (M := M i) (f i)) = 0) :
+    ∃ x : apm_t92J07_E m, ∀ i, apm_t92J07_IsRegularValue
+      (n := d i) (m := m) (M := M i) (f i) x := by
+  let C : Set (apm_t92J07_E m) := ⋃ i, apm_t92J07_criticalValues
+    (n := d i) (m := m) (M := M i) (f i)
+  have hC : volume C = 0 := measure_iUnion_null hnull
+  have hCne : C ≠ Set.univ := by
+    intro hCu
+    have huniv : volume (Set.univ : Set (apm_t92J07_E m)) = 0 := by simpa [hCu] using hC
+    have hball : volume (Metric.ball (0 : apm_t92J07_E m) 1) ≠ 0 :=
+      (Metric.isOpen_ball.measure_pos volume (Metric.nonempty_ball.mpr zero_lt_one)).ne'
+    exact hball (measure_mono_null (Set.subset_univ _) huniv)
+  have hex : ∃ x, x ∉ C := by
+    by_contra h
+    push_neg at h
+    exact hCne (Set.eq_univ_of_forall h)
+  obtain ⟨x, hx⟩ := hex
+  refine ⟨x, fun i => ?_⟩
+  have hxi : x ∉ apm_t92J07_criticalValues
+      (n := d i) (m := m) (M := M i) (f i) := by
+    intro hi
+    exact hx (Set.mem_iUnion.2 ⟨i, hi⟩)
+  simpa [apm_t92J07_criticalValues] using hxi
 
 theorem apm_t92j07
     (m : ℕ) (d : PNat → ℕ) (M : PNat → Type*)
@@ -97,5 +139,28 @@ theorem apm_t92j07
   The fixed-dimensional Sard lemmas were found but discarded as direct
   dependencies because their domain is not a manifold. The chartwise extension
   remains the precise open bridge.
+
+  CLOSER HOP 2: `apm_t92J07_criticalValues` and
+  `apm_t92J07_exists_common_regularValue_of_null` now compile the entire
+  countable-family avoidance argument.  In particular, the latter proves that
+  nullity of each critical-value set produces one point regular for every
+  `i : PNat`; its proof also handles the zero-dimensional target uniformly by
+  using positivity of a Euclidean open ball rather than assuming positive
+  dimension.  This leaves exactly one missing input: for a second-countable
+  finite-dimensional manifold and a `ContMDiff ... ∞` map, prove
+  `volume (apm_t92J07_criticalValues f) = 0`.
+
+  Going beyond the previous source search, I checked whether the manifold
+  derivative can be reduced globally using `writtenInExtChartAt` and the
+  source-chart countability lemmas.  Mathlib supplies local identities between
+  `mfderiv` and derivatives of chart representatives, but no countable family
+  of source charts whose critical images can be fed directly to the
+  vector-space Sard lemmas.  The available Sard statements also require maps
+  on whole vector spaces (or fixed-dimensional same-space Jacobians), whereas
+  a chart representative is defined only on a chart source.  Extending each
+  representative while preserving the required differentiability and
+  critical-image inclusion is therefore still a substantive theorem, not
+  countable-union bookkeeping.  No statement defect or alternate route was
+  found; the frozen statement is unchanged.
   -/
   sorry
