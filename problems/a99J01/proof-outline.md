@@ -10,10 +10,17 @@ the extended logarithmic integral.
   negative part makes the custom extended integral exactly `-∞`.
 - `apmLogIntegralOn_le_of_negative_eq_top` closes the desired inequality in
   that entire branch.
+- `apm_log_abs_le_tangent` proves
+  `log |x| ≤ m * |x| - log m - 1` for `m > 0` and `x ≠ 0`. Integrating this
+  with `m = (mu E).toReal` routes around normalized-measure Jensen and leaves
+  only the extended-integral conversion.
 
 ## Follow-up Needed
 
-- In the finite case, identify the difference with the real integral of
-  `log |f|`, normalize `mu.restrict E`, and apply
-  `ConcaveOn.le_map_set_average`.
-- Bound the normalized average of `|f|` using the global norm equality.
+- Package `apmLogAbsNegative f` as `AEMeasurable` from the measurable
+  representative of the integrable `f`, then use
+  `measure_eq_top_of_setLIntegral_ne_top` to prove `f ≠ 0` almost everywhere
+  on `E` in the finite-negative-part branch.
+- Identify the custom `EReal` difference with the ordinary set integral of
+  `log |f|`, apply `setIntegral_mono_ae` to the tangent bound, and simplify
+  using `hf_norm`.

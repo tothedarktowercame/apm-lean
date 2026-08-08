@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 2 proved apmLogIntegralOn_eq_bot_of_negative_eq_top and apmLogIntegralOn_le_of_negative_eq_top, fully closing the infinite-negative-part branch. The remaining sorry is confined to the finite-negative-part case: identify the EReal difference with a real integral, normalize the restricted measure, and apply Jensen using hf_norm.",
+  "classification_detail": "Closer hop 3 proved the direct tangent inequality log |x| ≤ m|x| - log m - 1, routing around normalized-measure Jensen. The remaining sorry is confined to the finite-negative-part EReal interface: package the custom negative part as AEMeasurable, deduce f ≠ 0 a.e. on E from its finite lintegral, and identify the EReal difference with the ordinary log integral before applying setIntegral_mono_ae.",
   "imported_at": "2026-07-13T17:26:53.040560Z"
 }

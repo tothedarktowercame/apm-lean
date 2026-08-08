@@ -66,6 +66,19 @@ lemma apmLogIntegralOn_le_of_negative_eq_top
   rw [apmLogIntegralOn_eq_bot_of_negative_eq_top hneg]
   exact bot_le
 
+/-- The tangent-line bound needed in the finite-negative-part branch.  This
+avoids measure normalization and Jensen bookkeeping: after integration with
+`m = (mu E).toReal`, the `m * |f|` term is controlled directly by `hf_norm`.
+The nonzero hypothesis is available almost everywhere whenever the custom
+negative logarithmic part has finite lintegral. -/
+lemma apm_log_abs_le_tangent {m x : ℝ} (hm : 0 < m) (hx : x ≠ 0) :
+    Real.log |x| ≤ m * |x| - Real.log m - 1 := by
+  have hax : 0 < |x| := abs_pos.mpr hx
+  have hmx : 0 < m * |x| := mul_pos hm hax
+  have h := Real.log_le_sub_one_of_pos hmx
+  rw [Real.log_mul hm.ne' hax.ne'] at h
+  linarith
+
 theorem apm_a99j01
     {X : Type*} [MeasurableSpace X]
     (mu : Measure X) (f : X → ℝ)
@@ -75,26 +88,25 @@ theorem apm_a99j01
       apmLogIntegralOn f E mu ≤
         ((-((mu E).toReal) * Real.log (mu E).toReal : ℝ) : EReal) := by
   /-
-  Boundary (closer hop 1): renewed Mathlib inspection found the actual Jensen
-  API, `ConcaveOn.le_map_set_average`, in `Analysis.Convex.Integral`.  It is
-  real-valued and assumes integrability of the composed concave function, so
-  it cannot be applied directly when `log |f|` has integral `-∞`.
+  Boundary (closer hop 3): this hop went beyond the normalization/Jensen route.
+  `apm_log_abs_le_tangent` proves the direct pointwise estimate
 
-  The two compiled helpers above close the first extended-integral obligation:
-  `log⁺ |f| ≤ |f|`, hence the positive logarithmic part has finite lintegral on
-  every `E`.  Therefore `apmLogIntegralOn` is always well-defined and never
-  `+∞`.  Closer hop 2 now closes the infinite-negative-part branch outright:
-  `apmLogIntegralOn_eq_bot_of_negative_eq_top` simplifies the custom
-  difference to `⊥`, and `apmLogIntegralOn_le_of_negative_eq_top` supplies its
-  inequality against any target.  In the finite-negative-part case one can
-  recover an integrable real logarithm and apply Jensen after
-  normalizing `mu.restrict E` by `(mu E).toReal⁻¹`.
+    log |x| ≤ m |x| - log m - 1
 
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, closed artifacts,
-  Mathlib's Jensen, entropy/KL-divergence, `EReal`, and tilted-measure APIs, and
-  git history found no theorem already combining this finite/infinite negative-
-  part split with Jensen.  The remaining bridge is now only identification of
-  the custom `EReal` difference with the real integral in the finite case and
-  normalization arithmetic using `hf_norm`.
+  for `m > 0` and `x ≠ 0`.  With `m = (mu E).toReal`, integrating this estimate
+  and using `∫ |f| = 1` gives the target arithmetic immediately, so no
+  normalized measure or closed-domain Jensen invocation is needed.
+
+  The remaining formal bridge is still the custom extended-real interface.
+  In the finite-negative-part branch one must show that finiteness of
+  `∫⁻ apmLogAbsNegative` makes `f ≠ 0` almost everywhere on `E`, identify
+  `apmLogIntegralOn` with the ordinary set integral of `log |f|`, and then
+  apply `setIntegral_mono_ae` to the tangent bound.  Source inspection found
+  `measure_eq_top_of_setLIntegral_ne_top` and
+  `integral_eq_lintegral_pos_part_sub_lintegral_neg_part`, but the former
+  requires packaging the custom `if f x = 0 then ⊤ else ...` function as
+  `AEMeasurable` from only the `AEStronglyMeasurable` representative supplied
+  by `hf`; no repository sibling packages this representative/zero-set step.
+  The infinite-negative-part branch remains fully closed by the helpers above.
   -/
   sorry
