@@ -13,10 +13,10 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
-    "closer_progress": "Absent-prime Sylow subgroups are now proved bottom and normal; the two twin-prime Sylow-count arithmetic branches remain."
+    "sorry_count_total": 2,
+    "closer_progress": "Hop 4 states the precise remaining bridge: every Sylow type of a group of twin-prime order is a subsingleton. Its proof must assemble the Sylow-count congruence/divisibility arithmetic."
   },
   "artifacts": {
     "has_problem_tex": true,

@@ -1,5 +1,18 @@
 # Proof Outline: b03J01
 
+## Hop 4 bridge statement
+
+`apm_b03J01_bridge_sylow_subsingleton_of_twinPrime_card` now states the exact
+missing result: for a finite group of order `p * (p + 2)` with both factors
+prime, `Sylow q G` is a subsingleton for every prime `q`. Its proof is precisely
+the outstanding `Nat.card (Sylow q G)` congruence/divisibility arithmetic plus
+the conversion of cardinality one into a uniqueness instance.
+
+Once proved, `Sylow.normal_of_subsingleton` makes every Sylow subgroup normal;
+the already-identified nilpotence criterion and `IsZGroup` cyclicity instance
+finish the conditional branch. The bridge body intentionally remains `sorry`
+under the statement-only instruction.
+
 The Lean proof closes the normality conclusion: the least-prime-divisor
 hypothesis identifies `p` with `minFac |G|`, and Mathlib's
 `Subgroup.normal_of_index_eq_minFac_card` applies to the index hypothesis.

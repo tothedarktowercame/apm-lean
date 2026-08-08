@@ -45,6 +45,19 @@ lemma apm_b03J01_sylow_normal_of_not_dvd_card
   rw [hbot]
   infer_instance
 
+/-- Why this unblocks `apm_b03j01`: Sylow congruence and divisibility for a
+group of order `p * (p + 2)` force every Sylow count to be one.  Packaging
+that arithmetic as `Subsingleton (Sylow q G)` is exactly the hypothesis of
+`Sylow.normal_of_subsingleton`, after which the standard all-Sylows-normal
+criterion gives nilpotence and the existing `IsZGroup` instance gives
+cyclicity. -/
+theorem apm_b03J01_bridge_sylow_subsingleton_of_twinPrime_card
+    (G : Type*) [Group G] [Fintype G]
+    (p q : ℕ) (hp : p.Prime) (hp2 : (p + 2).Prime) (hq : q.Prime)
+    (hcard : Fintype.card G = p * (p + 2)) :
+    Subsingleton (Sylow q G) := by
+  sorry
+
 theorem apm_b03j01
     (G : Type*) [Group G] [Fintype G]
     (p : ℕ) (H : Subgroup G)
