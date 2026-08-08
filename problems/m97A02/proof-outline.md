@@ -21,7 +21,12 @@ The canonical Lean attempt is `lean/Main.lean`.
 
 ## Remaining boundary
 
-- Construct and prove completeness of the anchored `C¹` derivative-norm space.
+- Prove `apm_m97A02_anchored_derivative_cauchy_complete`, whose exact Lean
+  statement is recorded in the main boundary comment. It expresses
+  completeness directly through derivative-sup Cauchy sequences and avoids
+  presupposing the missing bundled normed type.
+- Transport that theorem into a complete normed model of anchored `C¹`
+  functions.
 - Bundle composition by cosine as a bounded linear contraction.
 - Use the compiled pointwise remainder estimate in that normed model and apply
   the inverse/fixed-point machinery.

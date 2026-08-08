@@ -186,5 +186,31 @@ theorem apm_m97a02 :
   derivative supremum.  Constructing that Banach model, the bounded inverse of
   the linearized composition operator, and the final contraction therefore
   remains open.
+
+  HOP 4 isolates the missing completeness theorem without postulating a new
+  normed-space structure. The exact required contract is:
+
+  ```lean
+  theorem apm_m97A02_anchored_derivative_cauchy_complete
+      (α : ℝ) (hα : α ∈ Icc (0 : ℝ) 1)
+      (x : ℕ → ℝ → ℝ)
+      (hx : ∀ n, apm_m97A02_inSpace α (x n))
+      (hcauchy : ∀ ε > 0, ∃ N, ∀ m ≥ N, ∀ n ≥ N,
+        ∀ t ∈ Icc (0 : ℝ) 1,
+          |derivWithin (x m) (Icc 0 1) t -
+            derivWithin (x n) (Icc 0 1) t| < ε) :
+      ∃ xlim : ℝ → ℝ,
+        apm_m97A02_inSpace α xlim ∧
+        ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ t ∈ Icc (0 : ℝ) 1,
+          |derivWithin (x n) (Icc 0 1) t -
+            derivWithin xlim (Icc 0 1) t| < ε
+  ```
+
+  This is true by taking the uniform limit of the continuous derivatives on
+  `Icc 0 1` and integrating it from the anchor `α`. It is precisely the
+  completeness fact needed to turn the anchored derivative-sup metric into a
+  complete space. No existing Mathlib declaration found in this hop packages
+  this reconstruction; the subsequent bounded-composition and contraction
+  assembly therefore also remains open.
   -/
   sorry
