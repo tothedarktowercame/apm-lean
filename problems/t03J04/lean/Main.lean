@@ -13,14 +13,13 @@ import Mathlib.Algebra.Category.ModuleCat.Abelian
 * We assume `X` is connected.  Otherwise the torus maps onto one component
   while arbitrary additional components make the Euler characteristic of all
   of `X` unconstrained.
+* The orientation-preserving hypothesis is omitted because it is redundant:
+  the Euler-characteristic conclusion holds for every local diffeomorphism
+  from the compact connected torus, whether or not it preserves orientation.
 
-## Encoding questions
-
-Mathlib does not provide orientations of manifolds.  Orientation preservation
-is therefore a documented `sorry`-typed predicate on the actual smooth local
-diffeomorphism.  The torus is the genuine finite product of circles, the
-constant vector field is explicit in its standard global frame, and Euler
-characteristic is the alternating sum of rational singular-homology ranks.
+The torus is the genuine finite product of circles, the constant vector field
+is explicit in its standard global frame, and Euler characteristic is the
+alternating sum of rational singular-homology ranks.
 -/
 
 open CategoryTheory
@@ -50,12 +49,6 @@ def apm_t03J04_eulerCharacteristic (n : ℕ) (X : Type)
   ∑ k : Fin (n + 1),
     (-1 : ℤ) ^ (k : ℕ) * (Module.finrank ℚ (apm_t03J04_H k X) : ℤ)
 
-def apm_t03J04_IsOrientationPreserving
-    {n : ℕ} {X : Type}
-    [TopologicalSpace X] [ChartedSpace (apm_t03J04_E n) X]
-    (_phi : apm_t03J04_Torus n → X) : Prop := by
-  sorry
-
 theorem apm_t03j04
     (n : ℕ) [NeZero n]
     [ChartedSpace (apm_t03J04_HModel n) (apm_t03J04_Torus n)]
@@ -74,6 +67,5 @@ theorem apm_t03j04
         (phi : apm_t03J04_Torus n → X),
       IsLocalDiffeomorph (apm_t03J04_Model n)
           (modelWithCornersSelf ℝ (apm_t03J04_E n)) (⊤ : ℕ∞) phi →
-      apm_t03J04_IsOrientationPreserving phi →
       apm_t03J04_eulerCharacteristic n X = 0 := by
   sorry
