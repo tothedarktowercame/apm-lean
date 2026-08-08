@@ -11,6 +11,9 @@ The frozen theorem has a compiling partial Lean development.
   Mathlib's sequential closed graph theorem.
 - The proof needs only continuity and injectivity of `A`; it does not require
   the range of `A` to be closed.
+- `apm_m95j07_cusp` bundles the absolute-value cusp in `C([-1,1])`.
+- `apm_m95j07_cusp_not_differentiable` proves no ambient extension agreeing
+  with that cusp can be differentiable at zero.
 
 ## Remaining boundary
 

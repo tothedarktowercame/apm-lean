@@ -21,6 +21,21 @@ def apm_m95j07_DifferentiableAtZero (f : apm_m95j07_C) : Prop :=
     (∀ t (ht : t ∈ Set.Icc (-1 : ℝ) 1), F t = f ⟨t, ht⟩) ∧
     DifferentiableAt ℝ F 0
 
+/-- The absolute-value cusp, bundled in the frozen continuous-function space. -/
+def apm_m95j07_cusp : apm_m95j07_C :=
+  ⟨fun t ↦ |(t : ℝ)|, continuous_abs.comp continuous_subtype_val⟩
+
+/-- The ambient-extension encoding detects the standard cusp at zero. -/
+lemma apm_m95j07_cusp_not_differentiable :
+    ¬ apm_m95j07_DifferentiableAtZero apm_m95j07_cusp := by
+  rintro ⟨F, hF, hdiff⟩
+  apply not_differentiableAt_abs_zero
+  apply hdiff.congr_of_eventuallyEq
+  filter_upwards [Ioo_mem_nhds (by norm_num : (-1 : ℝ) < 0) (by norm_num : (0 : ℝ) < 1)]
+    with t ht
+  symm
+  exact hF t ⟨ht.1.le, ht.2.le⟩
+
 /-- The automatic-continuity conjunct, isolated as a reusable closed-graph
 argument. -/
 lemma apm_m95j07_automatic_continuity
@@ -48,16 +63,26 @@ theorem apm_m95j07 :
   closes the graph.  Thus part (b) is solved without needing an inverse for
   `A` or closedness of its range.
 
+  Closer hop 2 addresses the encoding-specific perturbation issue rather than
+  repeating the category search. `apm_m95j07_cusp` bundles `t ↦ |t|` in
+  `C([-1,1])`, and `apm_m95j07_cusp_not_differentiable` proves that it does
+  not satisfy the existential ambient-extension predicate. Indeed, every such
+  extension agrees with `abs` on the neighborhood `(-1,1)` of zero, so local
+  differentiability would contradict `not_differentiableAt_abs_zero`. This
+  supplies a compiled cusp witness compatible with the exact frozen encoding.
+
   The remaining first conjunct is the Baire-category construction.  Searches
   of `LEMMA-INDEX.md`, `ConstructionTargets`, Mathlib's Baire/meagre APIs,
   closed artifacts involving `ContinuousMap`, and git history found no
   packaged theorem that nondifferentiability at one fixed point is nonmeagre.
-  A local proof must express differentiability at zero as a countable union of
+  A local proof must still express differentiability at zero as a countable union of
   closed slope-bounded sets, prove each has empty interior by adding an
-  arbitrarily small continuous cusp/zigzag near zero, and invoke that
+  arbitrarily small scalar multiples/translates of the compiled cusp or a
+  zigzag near zero, and invoke that
   `C([-1,1])` is a Baire space.  The existential ambient-extension encoding
-  additionally requires showing this countable slope condition is equivalent
-  to `apm_m95j07_DifferentiableAtZero`.
+  additionally requires showing the countable slope condition equivalent to
+  `apm_m95j07_DifferentiableAtZero`; the local-extension obstruction for the
+  basic cusp is now closed.
 
   Original boundary:
   SKIPPED: two-part functional analysis problem.
