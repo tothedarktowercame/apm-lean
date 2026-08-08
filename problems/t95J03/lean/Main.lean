@@ -57,4 +57,58 @@ theorem apm_t95j03 (k : ℕ) (hk : 1 < k)
       HasConnectedKFoldCover k t95J03KleinBottle P} =
         if Even k then {t95J03Torus, t95J03KleinBottle}
         else {t95J03KleinBottle} := by
-  sorry
+  have hcover_iff (j : ℕ) (F : T95J03ClosedSurface) (P : T95J03CoverProfile) :
+      HasConnectedKFoldCover j F P ↔ T95J03CoverConstraints j F P :=
+    ⟨hnecessary j F P, hrealize j F P⟩
+  by_cases he : Even k
+  · rw [if_pos he]
+    ext F
+    simp only [mem_setOf_eq]
+    simp_rw [hcover_iff]
+    cases F with
+    | orientable g =>
+        simp [T95J03CoverConstraints, T95J03ClosedSurface.euler,
+          t95J03Torus, t95J03KleinBottle, he]
+        constructor
+        · rintro ⟨P, ⟨hP, -⟩, h0⟩
+          have hk0 : (k : ℤ) ≠ 0 := by
+            exact_mod_cast (Nat.ne_of_gt (lt_trans Nat.zero_lt_one hk))
+          have hm : (k : ℤ) * (2 - 2 * (g : ℤ)) = 0 := hP.symm.trans h0
+          have : 2 - 2 * (g : ℤ) = 0 := (mul_eq_zero.mp hm).resolve_left hk0
+          omega
+        · rintro rfl
+          exact ⟨⟨true, 0⟩, by norm_num⟩
+    | nonorientable g =>
+        simp [T95J03CoverConstraints, T95J03ClosedSurface.euler,
+          t95J03Torus, t95J03KleinBottle, he]
+        constructor
+        · rintro ⟨P, hP, h0⟩
+          have hk0 : (k : ℤ) ≠ 0 := by
+            exact_mod_cast (Nat.ne_of_gt (lt_trans Nat.zero_lt_one hk))
+          have hm : (k : ℤ) * (2 - (g : ℤ)) = 0 := hP.symm.trans h0
+          have : 2 - (g : ℤ) = 0 := (mul_eq_zero.mp hm).resolve_left hk0
+          omega
+        · rintro rfl
+          exact ⟨⟨false, 0⟩, by norm_num⟩
+
+  · rw [if_neg he]
+    ext F
+    simp only [mem_setOf_eq]
+    simp_rw [hcover_iff]
+    cases F with
+    | orientable g =>
+        simp [T95J03CoverConstraints, T95J03ClosedSurface.euler,
+          t95J03KleinBottle, he]
+        aesop
+    | nonorientable g =>
+        simp [T95J03CoverConstraints, T95J03ClosedSurface.euler,
+          t95J03KleinBottle, he]
+        constructor
+        · rintro ⟨P, ⟨hP, -⟩, h0, -⟩
+          have hk0 : (k : ℤ) ≠ 0 := by
+            exact_mod_cast (Nat.ne_of_gt (lt_trans Nat.zero_lt_one hk))
+          have hm : (k : ℤ) * (2 - (g : ℤ)) = 0 := hP.symm.trans h0
+          have : 2 - (g : ℤ) = 0 := (mul_eq_zero.mp hm).resolve_left hk0
+          omega
+        · rintro rfl
+          exact ⟨⟨false, 0⟩, by norm_num⟩
