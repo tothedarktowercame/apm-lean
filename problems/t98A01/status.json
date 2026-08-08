@@ -10,12 +10,12 @@
     "problem_tex": "apm/t98A01.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "closer_hop": 2,
-  "closer_progress": "The complete printed connected-sum tail is compiled: classification data (false,11), identity homeomorphism, and Euler characteristic -9. Arithmetic also shows equal genera plus five-sheet Euler multiplicativity force genus one. Remaining work is the explicit regular torus cover and topological classification/multiplicativity bridges.",
+  "classification": "partial",
+  "closer_hop": 3,
+  "closer_progress": "The circle map x ↦ 5 • x is now compiled as an additive quotient covering by its torsion kernel, hence as a covering map and surjection. The theorem's complete connected-sum tail is wired. Remaining work is the product torus covering/fiber-card/deck packaging plus polygon-surface classification injectivity and Euler multiplicativity.",
   "imported_at": "2026-07-13T17:26:58.523947Z"
 }

@@ -1,5 +1,6 @@
 import Mathlib
 import Mathlib.Analysis.Fourier.AddCircle
+import Mathlib.Topology.Covering.AddCircle
 import ConstructionTargets.Surfaces
 
 /-!
@@ -27,6 +28,21 @@ abbrev T98A01Torus := UnitAddCircle × UnitAddCircle
 
 def t98A01TorusFiveCover : C(T98A01Torus, T98A01Torus) :=
   ⟨fun p ↦ (5 • p.1, p.2), by fun_prop⟩
+
+/-- The first-coordinate factor in the displayed torus map is a genuine
+quotient covering map by its five-torsion kernel. -/
+lemma t98A01_circleFive_isAddQuotientCoveringMap :
+    IsAddQuotientCoveringMap (5 • · : UnitAddCircle → UnitAddCircle)
+      (nsmulAddMonoidHom (α := UnitAddCircle) 5).ker := by
+  exact AddCircle.isAddQuotientCoveringMap_nsmul_of_ne_zero (1 : ℝ) 5
+
+lemma t98A01_circleFive_isCoveringMap :
+    IsCoveringMap (5 • · : UnitAddCircle → UnitAddCircle) :=
+  t98A01_circleFive_isAddQuotientCoveringMap.isCoveringMap
+
+lemma t98A01_circleFive_surjective :
+    Function.Surjective (5 • · : UnitAddCircle → UnitAddCircle) :=
+  t98A01_circleFive_isAddQuotientCoveringMap.surjective
 
 def t98A01IsNfoldCover {E B : Type*}
     [TopologicalSpace E] [TopologicalSpace B]
@@ -97,22 +113,36 @@ theorem apm_t98a01 :
     eulerCharacteristic t98A01PrintedSurfaceData.1
       t98A01PrintedSurfaceData.2 = -9 := by
   /-
-  CLOSER HOP 2 boundary. The promoted `ConstructionTargets.Surfaces` module
-  now makes the connected-sum tail completely computational.
-  `t98A01PrintedSurfaceData_eq` computes the classification pair as
-  `(false, 11)`, `t98A01PrintedSurface_homeomorph` reduces to the identity
-  homeomorphism, and `t98A01PrintedSurface_eulerCharacteristic` computes
-  `2 - 11 = -9`. The helper `t98A01_orientable_genus_arithmetic` also proves
-  that, once classification supplies `g = h` and cover multiplicativity
-  supplies the displayed Euler equation, both genera must equal one.
+  CLOSER HOP 3 boundary. A deeper Mathlib search found the previously missed
+  `Topology.Covering.AddCircle` module. The new compiled lemmas
+  `t98A01_circleFive_isAddQuotientCoveringMap`,
+  `t98A01_circleFive_isCoveringMap`, and
+  `t98A01_circleFive_surjective` prove that `x ↦ 5 • x` is genuinely the
+  quotient covering by its five-torsion kernel. This supplies not merely a
+  local-homeomorphism approximation but the exact orbit-transitivity data
+  needed for future deck transformations. This theorem also now wires the
+  already-compiled connected-sum data, homeomorphism, and Euler arithmetic
+  into the final three frozen conjuncts.
 
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, `UnitAddCircle`
-  multiplication/covering sources, surface-cover siblings, Mathlib's
-  `IsCoveringMap`, deck-transformation, and finite-cover APIs found no theorem
-  packaging `x ↦ 5 • x` as a five-sheeted regular cover, no fiber-cardinality
-  theorem for this map, and no Euler-characteristic multiplicativity or
-  classification injectivity theorem for the polygon quotients. The remaining
-  bridge is therefore the explicit torus cover/deck action and those two
-  surface-topology comparison results; all connected-sum arithmetic is closed.
+  Renewed consultation of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's
+  `Topology.Covering.AddCircle`, quotient-covering, product-homeomorphism,
+  kernel/fiber-equivalence, and covering APIs, surface-cover siblings, and git
+  history found no product constructor promoting this circle quotient cover
+  directly to `IsCoveringMap (x,y ↦ (5x,y))`. The remaining concrete cover
+  work is to build product trivializations, identify every torus fiber with
+  the five-torsion kernel and prove its `Nat.card` is five, then package kernel
+  translations as deck homeomorphisms. Independently, the polygon-surface
+  classification-injectivity and Euler-multiplicativity theorems remain absent.
+  The frozen statement is unchanged.
   -/
-  sorry
+  have hfront :
+      t98A01IsRegularNfoldCover 5 t98A01TorusFiveCover ∧
+      (∀ (g h : ℕ) (p : Surface true g → Surface true h),
+        t98A01IsRegularNfoldCover 5 p →
+        Nonempty (Surface true g ≃ₜ Surface true h) →
+        eulerCharacteristic true g = 5 * eulerCharacteristic true h ∧
+        g = 1 ∧ h = 1) := by
+    sorry
+  exact ⟨hfront.1, hfront.2, t98A01PrintedSurfaceData_eq,
+    t98A01PrintedSurface_homeomorph,
+    t98A01PrintedSurface_eulerCharacteristic⟩
