@@ -43,3 +43,19 @@ The explicit biholomorphism still needs surjectivity onto the exact wedge slit
 and a compiled nonzero derivative. The separate converse classification of
 all upper-half-plane conformal automorphisms as real Möbius maps also remains
 absent from the searched corpus.
+
+## Closer hop 3
+
+The differential side of the explicit biholomorphism is now compiled:
+
+- `apm_a01A12_one_sub_sq_mem_slitPlane` verifies the branch-domain condition
+  for the principal complex power;
+- `apm_a01A12_conformalMap_hasDerivAt` derives the exact derivative from
+  `HasDerivAt.cpow_const`;
+- `apm_a01A12_conformalMap_fderiv_ne_zero` proves the corresponding complex
+  Fréchet derivative is nonzero throughout the upper half-plane.
+
+The explicit-map bridge is therefore reduced to surjectivity onto the frozen
+wedge slit. The separate automorphism-classification theorem remains absent:
+the available upper-half-plane Möbius action constructs the forward family
+but does not classify arbitrary conformal automorphisms.

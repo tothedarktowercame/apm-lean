@@ -32,7 +32,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_progress": "The explicit fourth-root map is now proved nonzero and injective on the upper half-plane via the exact fourth-power identity. Remaining work is surjectivity onto the wedge slit, the nonzero derivative/conformality package, and classification of upper-half-plane automorphisms as real positive-determinant Möbius maps.",
+  "closer_hop": 3,
+  "closer_progress": "The explicit fourth-root map now has a compiled exact derivative and its complex Fréchet derivative is nonzero throughout the upper half-plane. Remaining work is surjectivity onto the exact wedge slit and classification of upper-half-plane automorphisms as real positive-determinant Möbius maps.",
   "imported_at": "2026-05-01T19:52:19.160390Z"
 }

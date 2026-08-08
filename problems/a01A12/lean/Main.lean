@@ -1,4 +1,5 @@
 import Mathlib.Analysis.SpecialFunctions.Complex.Analytic
+import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
 
 /-!
@@ -58,6 +59,21 @@ lemma apm_a01A12_one_sub_sq_ne_zero {z : ℂ} (hz : z ∈ apm_a01A12_H) :
     subst z
     simpa [apm_a01A12_H] using hz
 
+lemma apm_a01A12_one_sub_sq_mem_slitPlane {z : ℂ}
+    (hz : z ∈ apm_a01A12_H) : 1 - z ^ 2 ∈ Complex.slitPlane := by
+  rw [Complex.mem_slitPlane_iff]
+  by_cases him : (1 - z ^ 2).im = 0
+  · left
+    have hzIm : 0 < z.im := hz
+    have hmul : z.re * z.im = 0 := by
+      simp [pow_two, Complex.mul_im] at him
+      linarith
+    have hzRe : z.re = 0 :=
+      (mul_eq_zero.mp hmul).resolve_right hzIm.ne'
+    simp [pow_two, Complex.mul_re, hzRe]
+    positivity
+  · exact Or.inr him
+
 /-- The positive-determinant Möbius family contains the identity map. -/
 lemma apm_a01A12_mobius_one_zero_zero_one (z : ℂ) :
     apm_a01A12_mobius 1 0 0 1 z = z := by
@@ -95,6 +111,39 @@ lemma apm_a01A12_conformalMap_ne_zero {z : ℂ}
   rw [apm_a01A12_conformalMap, Complex.cpow_ne_zero_iff]
   exact Or.inl (apm_a01A12_one_sub_sq_ne_zero hz)
 
+lemma apm_a01A12_conformalMap_hasDerivAt {z : ℂ}
+    (hz : z ∈ apm_a01A12_H) :
+    HasDerivAt apm_a01A12_conformalMap
+      ((1 / 4 : ℂ) * (1 - z ^ 2) ^ ((1 / 4 : ℂ) - 1) * (-2 * z)) z := by
+  have hinner : HasDerivAt (fun w : ℂ ↦ 1 - w ^ 2) (-2 * z) z := by
+    convert (hasDerivAt_const z (1 : ℂ)).sub
+      ((hasDerivAt_id z).pow 2) using 1 <;> simp [id] <;> ring
+  change HasDerivAt (fun w : ℂ ↦ (1 - w ^ 2) ^ (1 / 4 : ℂ)) _ z
+  exact hinner.cpow_const (c := (1 / 4 : ℂ))
+    (apm_a01A12_one_sub_sq_mem_slitPlane hz)
+
+lemma apm_a01A12_conformalMap_fderiv_ne_zero {z : ℂ}
+    (hz : z ∈ apm_a01A12_H) :
+    fderiv ℂ apm_a01A12_conformalMap z ≠ 0 := by
+  let c : ℂ :=
+    (1 / 4 : ℂ) * (1 - z ^ 2) ^ ((1 / 4 : ℂ) - 1) * (-2 * z)
+  have hc : c ≠ 0 := by
+    dsimp [c]
+    apply mul_ne_zero (mul_ne_zero (by norm_num) ?_) ?_
+    · rw [Complex.cpow_ne_zero_iff]
+      exact Or.inl (apm_a01A12_one_sub_sq_ne_zero hz)
+    · apply mul_ne_zero
+      · norm_num
+      · intro hz0
+        subst z
+        simpa [apm_a01A12_H] using hz
+  have hderiv :=
+    (apm_a01A12_conformalMap_hasDerivAt hz).hasFDerivAt.fderiv
+  rw [hderiv]
+  intro hzero
+  have happ := congrArg (fun L : ℂ →L[ℂ] ℂ ↦ L 1) hzero
+  exact hc (by simpa [c] using happ)
+
 /-- Equality of the fourth roots forces equality of the quadratic inputs;
 the alternative `z = -w` is impossible for two upper-half-plane points. -/
 lemma apm_a01A12_conformalMap_injOn :
@@ -129,27 +178,24 @@ theorem apm_a01a12 :
             (apm_a01A12_conformalMap ∘ apm_a01A12_mobius a b c d)
             apm_a01A12_H := by
   /-
-  CLOSER HOP 2 boundary. Going beyond the recovered range-only development,
-  this hop closes injectivity of the explicit fourth-root map on the upper
-  half-plane. `apm_a01A12_conformalMap_pow_four` uses
-  `Complex.cpow_nat_inv_pow` to prove the branch-independent identity
-  `f(z)^4 = 1-z²`. Thus equal images imply `z²=w²`; factoring the difference
-  leaves `z=w` or `z=-w`, and the latter contradicts positive imaginary parts.
-  This is compiled as `apm_a01A12_conformalMap_injOn`.
-  `apm_a01A12_conformalMap_ne_zero` also records nonvanishing of the map from
-  the already-proved nonzero quadratic input.
+  CLOSER HOP 3 boundary. This hop goes beyond injectivity and closes the
+  differential part of the explicit biholomorphism. The new slit-plane lemma
+  proves that `1-z²` lies in the domain of the principal logarithm for every
+  upper-half-plane `z`. Mathlib's `HasDerivAt.cpow_const` then gives the exact
+  derivative of `(1-z²)^(1/4)`, and
+  `apm_a01A12_conformalMap_fderiv_ne_zero` proves the resulting continuous
+  linear map is nonzero.
 
-  Renewed searches consulted `LEMMA-INDEX.md`, every `ConstructionTargets/`
-  module, prior a01A12 commits, complex-analysis siblings, Mathlib's complex
-  power and derivative sources, `UpperHalfPlane` Möbius-action sources, and
-  git history. The complex-power identity was used above. No theorem was found
-  that constructs the required inverse onto the exact wedge slit, packages the
-  derivative of this `cpow` composite with its branch hypotheses, or classifies
-  every conformal upper-half-plane automorphism as a positive-determinant real
+  Consultations covered `LEMMA-INDEX.md`, all `ConstructionTargets/`, prior
+  a01A12 commits, complex-analysis siblings, Mathlib's complex-power
+  derivative and slit-plane sources, the `UpperHalfPlane` Möbius-action
+  sources, and git history. The `cpow` derivative API was found and used. No
+  theorem constructs an inverse onto this exact wedge slit or classifies every
+  conformal upper-half-plane automorphism as a positive-determinant real
   Möbius map.
 
-  The explicit-map bridge is therefore narrowed to surjectivity and the
-  conformal derivative; the independent automorphism-classification bridge
-  remains open. The frozen statement is unchanged.
+  Thus the explicit-map bridge is narrowed to surjectivity onto the frozen
+  wedge slit. The independent automorphism-classification bridge remains
+  open. The frozen statement is unchanged.
   -/
   sorry
