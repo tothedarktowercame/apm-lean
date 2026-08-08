@@ -28,5 +28,7 @@
     "has_receipt": true
   },
   "classification": "complete",
+  "closer_hop": 1,
+  "closure_method": "Cantor intersection and compact Hausdorff separation",
   "imported_at": "2026-05-01T19:38:18.116603Z"
 }

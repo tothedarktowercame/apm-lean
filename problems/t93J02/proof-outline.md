@@ -1,5 +1,17 @@
 # Proof Outline: t93J02
 
+## Closer hop 1
+
+The proof is now fully formalized.  Compactness is inherited from `C 0`
+because the intersection is closed, and nonemptiness follows from Mathlib's
+Cantor intersection theorem (the same API used by solved sibling `t91J04`).
+For connectedness, a hypothetical separation gives two disjoint compact
+pieces of the limiting intersection.  Hausdorff separation supplies disjoint
+open neighborhoods of these pieces.  A second Cantor-intersection argument
+shows that some `C N` lies in their union; since it meets both neighborhoods,
+the connectedness of `C N` forces the neighborhoods to intersect, a
+contradiction.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
