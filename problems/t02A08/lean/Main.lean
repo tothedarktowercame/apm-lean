@@ -86,6 +86,28 @@ lemma apm_t02a08_fiberMap_hasOrientedIntersection
   rw [apm_t02a08_secondProjection_comp_fiberMap]
   exact hg
 
+/-- Once the missing orientation isomorphism is supplied, the identity map
+has degree one. This isolates the base case from the sphere-homology
+computation itself. -/
+lemma apm_t02a08_id_hasDegree
+    (orientation : apm_t02a08_H2 ≅ ModuleCat.of ℤ ℤ) :
+    apm_t02a08_HasDegree
+      (⟨id, continuous_id⟩ : C(apm_t02a08_S2, apm_t02a08_S2)) 1 := by
+  refine ⟨orientation, ?_⟩
+  intro a
+  simp only [one_mul]
+  unfold apm_t02a08_H2Map
+  have hid : TopCat.ofHom
+      (⟨id, continuous_id⟩ : C(apm_t02a08_S2, apm_t02a08_S2)) =
+      𝟙 (TopCat.of apm_t02a08_S2) := by
+    rfl
+  rw [hid]
+  have hmap :=
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+      (ModuleCat.of ℤ ℤ)).map_id (TopCat.of apm_t02a08_S2)
+  rw [hmap]
+  rfl
+
 theorem apm_t02a08
     (p : Circle) (q : apm_t02a08_S2) :
     ∀ n : ℤ,
@@ -115,6 +137,20 @@ theorem apm_t02a08
     as `ℤ` or the induced degree of those maps. Without the orientation
     isomorphism itself, even the identity and constant base cases cannot inhabit
     the frozen `HasDegree` predicate.
+
+    CLOSER HOP 2: the identity base case is now separated from the missing
+    homology computation. `apm_t02a08_id_hasDegree` proves that, given any
+    orientation isomorphism `H₂(S²) ≅ ℤ`, the continuous identity map has
+    degree one. The proof explicitly identifies its `TopCat` morphism with the
+    categorical identity and applies functoriality of singular homology. Thus
+    the earlier claim that even the identity case was wholly inaccessible is
+    refined: only construction of the orientation isomorphism is missing for
+    that case. Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`,
+    sphere-homology and degree siblings, Mathlib's singular-homology, sphere,
+    suspension, and compactification sources, and git history still found no
+    `H₂` computation or induced-degree theorem for nontrivial maps. Arbitrary
+    integer degree therefore remains open and the frozen statement is
+    unchanged.
     -/
     sorry
   exact ⟨g, hg, apm_t02a08_fiberMap_hasOrientedIntersection p q g n hg⟩

@@ -12,6 +12,9 @@ singular homology and pins the repaired complementary-dimensional cycle.
   fiber map recovers its sphere component.
 - `apm_t02a08_fiberMap_hasOrientedIntersection` proves the complete encoded
   intersection clause from the same degree witness.
+- `apm_t02a08_id_hasDegree` proves the identity map has degree one relative
+  to any supplied orientation isomorphism, using functoriality on identity
+  morphisms.
 - The main theorem's single `sorry` is narrowed to existence of a degree-`n`
   sphere self-map.
 

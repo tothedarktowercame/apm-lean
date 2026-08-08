@@ -30,6 +30,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 1 proves that projection of the fiber map is the original sphere map and completely discharges the encoded oriented-intersection clause from any degree witness. The sole remaining sorry is existence of metric-sphere self-maps of every integer degree, requiring H2(S2)=Z and induced-map computations.",
+  "closer_progress": "Closer hop 2 additionally proves that the identity sphere map has degree one relative to any supplied orientation isomorphism, isolating that base case from the missing homology computation. The sole remaining sorry is existence of metric-sphere self-maps of every integer degree, requiring H2(S2)=Z and induced-map computations.",
   "imported_at": "2026-07-13T17:26:57.022816Z"
 }
