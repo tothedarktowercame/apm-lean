@@ -25,9 +25,11 @@ matrix reductions, with the finite supported-sum assembly still open.
 
 ## Remaining boundary
 
-- Collapse each `Matrix.mulVec` row sum to its at-most-three supported entries;
-  the center and outer endpoint evaluations are now available as simp lemmas.
-- Bound `a` on `[0,1]`, choose an eventual mesh threshold making both neighbor
-  coefficients satisfy the compiled neighbor-sum lemma, prove the erased-row
-  norm sum is at most two, and
-  apply `Matrix.det_ne_zero_of_sum_row_lt_diag`.
+- Prove the exact contract `apm_m97a04_mulVec_eq_stencil` recorded in the
+  boundary comment, collapsing each `Matrix.mulVec` row to its at-most-three
+  supported entries.
+- Prove `apm_m97a04_erased_row_norm_sum_le_two`, also recorded there, by the
+  same dependent-index collapse and `apm_m97a04_neighbor_norm_sum`.
+- Bound `a` on `[0,1]`, choose an eventual mesh threshold satisfying the
+  second contract's hypothesis, and apply
+  `Matrix.det_ne_zero_of_sum_row_lt_diag`.

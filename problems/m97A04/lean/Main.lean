@@ -208,5 +208,35 @@ theorem apm_m97a04 :
   the erased-row norm sum is at most the full two-neighbor sum before applying
   `Matrix.det_ne_zero_of_sum_row_lt_diag`. These finite dependent-index
   assemblies remain open.
+
+  HOP 4 isolates the missing `Finset` work as the following two precise
+  contracts (not introduced as declarations, to avoid adding new sorries):
+
+  ```lean
+  theorem apm_m97a04_mulVec_eq_stencil
+      {n : ℕ} (hn : 0 < n) (a b : ℝ → ℝ) (u : Fin n → ℝ) (i : Fin n) :
+      Matrix.mulVec (apm_m97a04_matrix n a b) u i =
+        apm_m97a04_extend n u (i.val + 2) -
+          2 * apm_m97a04_extend n u (i.val + 1) +
+          apm_m97a04_extend n u i.val +
+        apm_m97a04_h n / 2 * a ((i.val + 1) * apm_m97a04_h n) *
+          (apm_m97a04_extend n u (i.val + 2) -
+            apm_m97a04_extend n u i.val) +
+        apm_m97a04_h n ^ 2 * b ((i.val + 1) * apm_m97a04_h n) *
+          apm_m97a04_extend n u (i.val + 1)
+
+  theorem apm_m97a04_erased_row_norm_sum_le_two
+      {n : ℕ} (hn : 0 < n) (a b : ℝ → ℝ)
+      (hsmall : ∀ i : Fin n,
+        apm_m97a04_h n / 2 *
+          |a ((i.val + 1) * apm_m97a04_h n)| < 1) (i : Fin n) :
+      ∑ j ∈ Finset.univ.erase i, ‖apm_m97a04_matrix n a b i j‖ ≤ 2
+  ```
+
+  The first contract immediately rewrites `Matrix.mulVec A u = rhs`
+  pointwise into the frozen stencil. The second, combined with
+  `apm_m97a04_diagonal_norm_gt_two`, gives the strict row dominance required
+  by `Matrix.det_ne_zero_of_sum_row_lt_diag`; continuity of `a` on compact
+  `[0,1]` supplies an eventual mesh threshold satisfying `hsmall`.
   -/
   sorry

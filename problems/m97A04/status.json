@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "Three-point support, all three exact dependent Fin row entries, determinant reduction, strict diagonal norm, center/boundary extension identities, and the exact small-mesh two-neighbor norm sum are proved. Remaining work is the Finset row-sum collapse, compact boundedness threshold for a, and the erased-row Gershgorin estimate.",
+  "closer_hop": 4,
+  "boundary": "The remaining Finset work is now specified by exact Lean contracts: mulVec equals the displayed stencil, and each erased-row norm sum is at most two under the pointwise mesh-smallness condition. These contracts remain unproved; compact boundedness of a then supplies their eventual hypothesis.",
   "imported_at": "2026-07-13T17:26:55.677967Z"
 }
