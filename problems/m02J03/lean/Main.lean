@@ -15,7 +15,7 @@ The source indices start at one.  Lean's sequence starts at zero, so the
 one as required.
 -/
 
-open Filter
+open Filter InnerProductSpace
 open scoped BigOperators Topology
 
 /- Strong convergence gives the easy direction of the Radon--Riesz
@@ -27,6 +27,41 @@ lemma apm_m02j03_norm_tendsto_of_tendsto
     (h : Tendsto x atTop (nhds x₀)) :
     Tendsto (fun n ↦ ‖x n‖) atTop (nhds ‖x₀‖) :=
   (continuous_norm.tendsto x₀).comp h
+
+/-- The Hilbertian reverse Radon--Riesz implication. The weak hypothesis is
+complex-valued; taking real parts gives the norm-square expansion. -/
+lemma apm_m02j03_tendsto_of_weak_and_norm
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    {x : ℕ → H} {x₀ : H}
+    (hweak : ∀ y : H,
+      Tendsto (fun n ↦ inner ℂ (x n) y) atTop (nhds (inner ℂ x₀ y)))
+    (hnorm : Tendsto (fun n ↦ ‖x n‖) atTop (nhds ‖x₀‖)) :
+    Tendsto x atTop (nhds x₀) := by
+  have h_inner : Tendsto (fun n => Complex.re (inner ℂ (x n) x₀)) atTop
+      (𝓝 (‖x₀‖ ^ 2)) := by
+    have hre := Complex.continuous_re.tendsto (inner ℂ x₀ x₀) |>.comp (hweak x₀)
+    have heq : Complex.re (inner ℂ x₀ x₀) = ‖x₀‖ ^ 2 := by
+      exact @inner_self_eq_norm_sq ℂ _ _ _ _ x₀
+    rw [heq] at hre
+    exact hre
+  have h_norm_sq : Tendsto (fun n => ‖x n‖ ^ 2) atTop (𝓝 (‖x₀‖ ^ 2)) :=
+    hnorm.pow 2
+  have h_rhs : Tendsto
+      (fun n => ‖x n‖ ^ 2 - 2 * Complex.re (inner ℂ (x n) x₀) + ‖x₀‖ ^ 2)
+      atTop (𝓝 0) := by
+    have h2 : Tendsto (fun n => 2 * Complex.re (inner ℂ (x n) x₀)) atTop
+        (𝓝 (2 * ‖x₀‖ ^ 2)) := tendsto_const_nhds.mul h_inner
+    have hsub := Tendsto.sub h_norm_sq h2
+    have hzero : ‖x₀‖ ^ 2 - 2 * ‖x₀‖ ^ 2 + ‖x₀‖ ^ 2 = (0 : ℝ) := by ring
+    rw [← hzero]
+    exact Tendsto.add hsub tendsto_const_nhds
+  have hsq : Tendsto (fun n => ‖x n - x₀‖ ^ 2) atTop (𝓝 0) :=
+    Tendsto.congr (fun n => (norm_sub_sq (𝕜 := ℂ) _ _).symm) h_rhs
+  have hsqrt := (Real.continuous_sqrt.tendsto 0).comp hsq
+  rw [Real.sqrt_zero] at hsqrt
+  have hnorm_sub : Tendsto (fun n => ‖x n - x₀‖) atTop (𝓝 0) :=
+    hsqrt.congr (fun n => Real.sqrt_sq (norm_nonneg _))
+  simpa [tendsto_iff_norm_sub_tendsto_zero] using hnorm_sub
 
 theorem apm_m02j03
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
@@ -63,5 +98,20 @@ theorem apm_m02j03
   functionals, the Hilbert norm-square identity for the reverse Radon--Riesz
   implication, and the quantitative padding construction. The frozen
   statement is unchanged.
+
+  CLOSER HOP 3: the reverse Radon--Riesz prerequisite is now closed by
+  `apm_m02j03_tendsto_of_weak_and_norm`. Applying `Complex.continuous_re` to
+  `hweak x₀` gives convergence of the real inner products. Together with the
+  squared norm limit, `norm_sub_sq (𝕜 := ℂ)` shows
+  `‖x n - x₀‖² → 0`; continuity of `Real.sqrt` yields norm convergence of the
+  differences and hence strong convergence. This adapts the solved real
+  Hilbert-space pattern from `a93A03` to the frozen complex-valued hypothesis.
+
+  Searches beyond hop 2 also covered `a93A03`, Banach--Steinhaus operator
+  families, and convex-closure extraction. The solved sibling supplied the
+  polarization architecture used above, but no theorem directly converts the
+  pointwise raw inner-product hypothesis into a uniform norm bound, and no API
+  produces the required strictly-positive triangular coefficients. Those two
+  bridges remain open; the frozen statement is unchanged.
   -/
   sorry

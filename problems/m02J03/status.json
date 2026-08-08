@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "note": "Both directions of the Radon-Riesz equivalence now compile, including the complex weak-to-strong direction via norm_sub_sq. Uniform boundedness and the strictly-positive triangular convex-combination construction remain.",
   "imported_at": "2026-07-13T17:26:54.499346Z"
 }
