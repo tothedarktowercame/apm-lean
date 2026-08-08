@@ -47,12 +47,42 @@ structure apm_m03J01_H01 (n : ℕ) (Ω : Set (apm_m03J01_E n)) where
     Tendsto (fun k ↦ eLpNorm
       (fun x ↦ apm_m03J01_gradient n (φ k) x - grad x) 2 volume) atTop (nhds 0)
 
+/-- The zero value/gradient pair is represented by the constant zero test
+sequence. This is the first closure datum needed for the eventual quotient
+Hilbert space. -/
+noncomputable def apm_m03J01_zeroH01 (n : ℕ) (Ω : Set (apm_m03J01_E n)) :
+    apm_m03J01_H01 n Ω where
+  val := 0
+  grad := 0
+  val_memLp := by simp
+  grad_memLp := by simp
+  approximable := by
+    refine ⟨fun _ _ => 0, ?_, ?_, ?_⟩
+    · intro k
+      refine ⟨contDiff_const, ?_, ?_⟩
+      · exact HasCompactSupport.zero
+      · simp
+    · simp
+    · simp [apm_m03J01_gradient]
+
 /-- Weak formulation of `-Δu + u = F` with zero Dirichlet boundary data. -/
 def apm_m03J01_weakSolution {n : ℕ} {Ω : Set (apm_m03J01_E n)}
     (F : apm_m03J01_E n → ℝ) (u : apm_m03J01_H01 n Ω) : Prop :=
   ∀ v : apm_m03J01_H01 n Ω,
     ∫ x, (inner ℝ (u.grad x) (v.grad x) + u.val x * v.val x) ∂volume =
       ∫ x, F x * v.val x ∂volume
+
+lemma apm_m03J01_weakSolution_zero_iff {n : ℕ} {Ω : Set (apm_m03J01_E n)}
+    (F : apm_m03J01_E n → ℝ) :
+    apm_m03J01_weakSolution F (apm_m03J01_zeroH01 n Ω) ↔
+      ∀ v : apm_m03J01_H01 n Ω, ∫ x, F x * v.val x ∂volume = 0 := by
+  simp only [apm_m03J01_weakSolution, apm_m03J01_zeroH01, Pi.zero_apply,
+    inner_zero_left, zero_mul, zero_add, integral_zero]
+  constructor
+  · intro h v
+    exact (h v).symm
+  · intro h v
+    exact (h v).symm
 
 /-- `H` is the weak Hessian of the weak gradient `g`. -/
 def apm_m03J01_weakHessian {n : ℕ}
@@ -179,5 +209,18 @@ theorem apm_m03j01 :
   space, and a closed-graph argument producing the ENNReal estimate. Searches
   found no compiled sibling connecting these APIs to this custom encoding, so
   no sibling code was reused and the frozen statement was left unchanged.
+
+  Closer hop 2 begins the missing custom-space construction rather than only
+  surveying quotient APIs. `apm_m03J01_zeroH01` builds the zero Sobolev
+  representative with the constant zero test-function approximation, proving
+  the record is inhabited for every `n` and `Ω` and supplying the additive
+  identity needed by a future quotient. `apm_m03J01_weakSolution_zero_iff`
+  also computes its weak equation exactly: zero is a solution precisely when
+  the forcing functional vanishes on every custom test representative.
+  Further inspection of `AEEqFun`, `Lp`, product Hilbert spaces, and closed
+  submodules found reusable ambient structures, but the record's
+  `approximable` predicate must still be shown closed under addition/scaling
+  and identified with a closed subspace before those structures apply. The
+  forcing functional and weak-Hessian closed-graph estimate remain open.
   -/
   sorry

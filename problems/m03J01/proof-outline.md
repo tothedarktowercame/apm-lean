@@ -13,10 +13,15 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
   `inner ℝ (T f) v = f v`.
 - `apm_m03J01_abstract_variational` proves the complete abstract first
   conjunct: boundedness below, attainment, uniqueness, and the Riesz identity.
+- `apm_m03J01_zeroH01` constructs the zero custom Sobolev representative from
+  the constant zero test sequence.
+- `apm_m03J01_weakSolution_zero_iff` computes exactly when that representative
+  solves the weak equation.
 
 ## Remaining boundary
 
-- quotient the custom value/gradient representatives by a.e. equality and
+- prove additive and scalar closure of `approximable`, then quotient the custom
+  value/gradient representatives by a.e. equality and
   establish their complete energy Hilbert structure;
 - lift the forcing integral to the resulting dual space and descend the Riesz
   solution to `apm_m03J01_H01`;

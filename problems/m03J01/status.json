@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "classification_detail": "The custom H01 record is now explicitly inhabited by a zero representative with zero smooth approximation, and its weak-solution equation is computed. Additive/scalar closure, AE quotient completeness, forcing functional, and weak-Hessian closed-graph estimate remain.",
   "imported_at": "2026-07-13T17:26:54.541430Z"
 }
