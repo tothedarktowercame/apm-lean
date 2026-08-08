@@ -14,6 +14,9 @@ surface-classification clause.
   so the explicit torus is invariant.
 - The flow is now proved `2π`-periodic, supplying the elementary descent datum
   for the intended circle action.
+- `apm_t95j06_flow_zero` proves that time zero acts as the identity.
+- `apm_t95j06_flow_add` proves the additive composition law. Together with
+  periodicity, this completes the elementary algebraic action data.
 
 ## Remaining classification bridge
 

@@ -97,6 +97,30 @@ lemma apm_t95j06_flow_periodic
     Complex.exp_add]
   simpa [mul_comm, mul_left_comm, mul_assoc] using Complex.exp_two_pi_mul_I
 
+/-- The explicit Hopf formula acts trivially at real time zero. -/
+lemma apm_t95j06_flow_zero
+    (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
+    (hH : apm_t95j06_isHopfFlow H) (z : apm_t95j06_S5) :
+    H (z, 0) = z := by
+  apply Subtype.ext
+  rw [hH]
+  simp
+
+/-- The explicit Hopf formula satisfies the additive action law. Together
+with periodicity, this is the remaining elementary datum for descending the
+real action through `ℝ / (2πℤ)`. -/
+lemma apm_t95j06_flow_add
+    (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
+    (hH : apm_t95j06_isHopfFlow H) (z : apm_t95j06_S5) (s t : ℝ) :
+    H (H (z, s), t) = H (z, s + t) := by
+  apply Subtype.ext
+  rw [hH, hH, hH]
+  rw [show Complex.I * (↑(s + t) : ℂ) =
+      Complex.I * (s : ℂ) + Complex.I * (t : ℂ) by push_cast; ring,
+    Complex.exp_add]
+  simp only [smul_smul]
+  ring_nf
+
 theorem apm_t95j06
     (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
     (hH : apm_t95j06_isHopfFlow H) :
@@ -137,5 +161,16 @@ theorem apm_t95j06
     action is now explicit. What remains is bundling that descent as a smooth
     free action, constructing its quotient/principal bundle, deriving Euler
     characteristic zero, and applying the absent surface classification.
+
+    Closer hop 3 proves the two remaining elementary action laws directly
+    from the frozen formula: `apm_t95j06_flow_zero` identifies time zero with
+    the identity, and `apm_t95j06_flow_add` identifies successive times `s`
+    and `t` with time `s+t`. Together with hop 2 periodicity, the complete
+    algebraic descent datum for the intended circle action now compiles.
+    Mathlib's quotient-covering machinery applies to properly discontinuous
+    discrete actions, not this continuous circle action, and renewed searches
+    found no principal-circle-bundle or compact-surface-classification bridge.
+    Thus quotient construction, Euler characteristic, and the actual torus
+    homeomorphisms remain open; the frozen statement is unchanged.
     -/
     sorry

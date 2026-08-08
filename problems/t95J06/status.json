@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Proved the frozen real-parameter Hopf flow is 2π-periodic, providing the descent datum for a circle action, in addition to explicit-torus invariance. The universal classification remains blocked on bundling the free smooth action, its quotient/principal bundle, Euler characteristic zero, and compact orientable surface classification.",
+  "closer_hop": 3,
+  "closer_note": "Proved the time-zero identity and additive composition law for the Hopf formula; together with 2π-periodicity, all elementary circle-action descent equations now compile. The universal classification remains blocked on the continuous-action quotient/principal bundle, Euler characteristic zero, and compact orientable surface classification.",
   "imported_at": "2026-07-13T17:26:58.368278Z"
 }
