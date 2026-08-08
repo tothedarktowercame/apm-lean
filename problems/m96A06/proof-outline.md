@@ -16,12 +16,17 @@ The frozen theorem has a compiling partial Lean development.
   identifies it with the exact representative-level integral.
 - `apm_m96a06_forceOnH` composes that functional with `value`, completing the
   right-hand side of the weak problem as a continuous linear map on `H`.
+- `apm_m96a06_multiplier` descends a raw `MemLp a ⊤` coefficient through
+  `ha.toLp a` and heterogeneous `Lp` multiplication; its a.e. representative
+  and quotient norm bound are compiled.
+- `apm_m96a06_multiplierCLM` specializes Mathlib's Hölder continuous bilinear
+  map to package the descended multiplier as a bounded linear operator on
+  quotient `L²`.
 
 ## Remaining boundary
 
-- package multiplication by the raw `L∞` coefficient as an operator on the
-  quotient `Lp` space and identify its representative with `a*f`;
-- combine it with `ContinuousLinearMap.lpPairing` to build the bounded
-  left-hand bilinear form (the forcing functional is now complete);
+- combine the compiled multiplier operator with
+  `ContinuousLinearMap.lpPairing` to build the bounded left-hand bilinear form
+  (the forcing functional is now complete);
 - prove coercivity, apply Mathlib's Lax–Milgram theorem, and establish the
   representative-level Fréchet derivative formula.

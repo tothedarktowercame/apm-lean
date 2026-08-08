@@ -81,6 +81,45 @@ lemma apm_m96a06_eLpNorm_weighted_le
     (Filter.Eventually.of_forall fun t ↦ by simp [nnnorm_mul])
   simpa using h
 
+/-- Multiplication by a raw `L∞` coefficient, descended to quotient `Lp` via
+`MemLp.toLp` and heterogeneous `Lp` scalar multiplication. -/
+noncomputable def apm_m96a06_multiplier
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (a : α → ℝ) (ha : MemLp a ⊤ μ) (f : Lp ℝ 2 μ) : Lp ℝ 2 μ :=
+  ha.toLp a • f
+
+/-- The descended multiplier agrees almost everywhere with pointwise
+multiplication by the original raw coefficient. -/
+lemma apm_m96a06_multiplier_apply
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (a : α → ℝ) (ha : MemLp a ⊤ μ) (f : Lp ℝ 2 μ) :
+    (apm_m96a06_multiplier a ha f : α → ℝ) =ᵐ[μ]
+      fun t ↦ a t * f t := by
+  filter_upwards [Lp.coeFn_lpSMul (r := 2) (ha.toLp a) f,
+    MemLp.coeFn_toLp ha] with t hmul haeq
+  simpa [apm_m96a06_multiplier, haeq] using hmul
+
+/-- Hölder supplies the quotient norm bound for the descended multiplier. -/
+lemma apm_m96a06_norm_multiplier_le
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (a : α → ℝ) (ha : MemLp a ⊤ μ) (f : Lp ℝ 2 μ) :
+    ‖apm_m96a06_multiplier a ha f‖ ≤ ‖ha.toLp a‖ * ‖f‖ := by
+  exact Lp.norm_smul_le (r := 2) (ha.toLp a) f
+
+/-- Multiplication by a fixed raw `L∞` coefficient as a bounded operator on
+quotient `L²`.  This is Mathlib's Hölder bilinear map with its first argument
+fixed after descending the coefficient via `MemLp.toLp`. -/
+noncomputable def apm_m96a06_multiplierCLM
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (a : α → ℝ) (ha : MemLp a ⊤ μ) : Lp ℝ 2 μ →L[ℝ] Lp ℝ 2 μ :=
+  (ContinuousLinearMap.mul ℝ ℝ).holderL μ ⊤ 2 2 (ha.toLp a)
+
+lemma apm_m96a06_multiplierCLM_apply
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (a : α → ℝ) (ha : MemLp a ⊤ μ) (f : Lp ℝ 2 μ) :
+    apm_m96a06_multiplierCLM a ha f = apm_m96a06_multiplier a ha f := by
+  rfl
+
 /-- The right-hand side pairing with an `L²` forcing term, packaged directly
 as a continuous linear functional on quotient `Lp`. -/
 noncomputable def apm_m96a06_forceCLM
@@ -206,5 +245,19 @@ theorem apm_m96a06
   Lax--Milgram, and the quadratic Fréchet remainder remain. Searches of the
   `Lp` multiplier/smul APIs found no constructor accepting a raw `MemLp a ⊤`
   coefficient, so this portion remains honestly open.
+
+  CLOSER HOP 3 finds and compiles the missing quotient descent by composing
+  APIs already present in Mathlib: `ha.toLp a` turns the raw coefficient into
+  `Lp ℝ ⊤ μ`, and heterogeneous `Lp` scalar multiplication realizes
+  `L∞ × L² → L²`. `apm_m96a06_multiplier` packages the result,
+  `apm_m96a06_multiplier_apply` proves its exact a.e. representative using
+  `Lp.coeFn_lpSMul` and `MemLp.coeFn_toLp`, and
+  `apm_m96a06_norm_multiplier_le` supplies the quotient norm estimate.
+  `apm_m96a06_multiplierCLM` further packages this operation as a continuous
+  linear map by specializing Mathlib's `holderL`; thus it also closes the
+  operator-packaging boundary left by hop 2. What remains is to compose this
+  with `lpPairing` into the bilinear form, prove coercivity, and
+  complete Lax--Milgram and the quadratic Frechet remainder. No unproved
+  assertion was introduced; the frozen statement is unchanged.
   -/
   sorry
