@@ -28,7 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The normalized linking map for the negated field is now proved pointwise equal to antipodal composition. Remaining work is the top singular-homology computation for spheres, the antipodal action, and orientation-independent multiplicativity of the encoded degree.",
+  "closer_hop": 3,
+  "boundary": "Degree composition, index negation, and the fixed-point-free involutive point-set antipodal map compile. The sole remaining bridge is top singular homology of metric spheres and the induced antipodal action.",
   "imported_at": "2026-05-01T19:38:18.333845Z"
 }

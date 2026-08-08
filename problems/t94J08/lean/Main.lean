@@ -33,6 +33,26 @@ abbrev T94J08Sphere (k : ℕ) := Metric.sphere (0 : T94J08Euclidean k) 1
 def t94J08Antipodal {k : ℕ} : C(T94J08Sphere k, T94J08Sphere k) :=
   ⟨fun x ↦ ⟨-x.1, by simpa [Metric.mem_sphere] using x.2⟩, by fun_prop⟩
 
+/-- The point-set antipodal map is an involution. This isolates all remaining
+difficulty in its action on singular homology. -/
+lemma t94J08Antipodal_comp_self {k : ℕ} :
+    (t94J08Antipodal : C(T94J08Sphere k, T94J08Sphere k)).comp
+      t94J08Antipodal = ContinuousMap.id _ := by
+  ext x i
+  simp [t94J08Antipodal]
+
+/-- A unit sphere has no fixed point under the antipodal map. -/
+lemma t94J08Antipodal_ne_self {k : ℕ} (x : T94J08Sphere k) :
+    t94J08Antipodal x ≠ x := by
+  intro h
+  have hx : -x.1 = x.1 := congrArg Subtype.val h
+  have hx0 : x.1 = 0 := by
+    have hadd : x.1 + x.1 = 0 := neg_eq_iff_add_eq_zero.mp hx
+    have hsmul : (2 : ℝ) • x.1 = 0 := by simpa [two_smul] using hadd
+    exact (smul_eq_zero.mp hsmul).resolve_left (by norm_num)
+  have := x.2
+  simp [Metric.mem_sphere, hx0] at this
+
 /-- Integral singular homology in the top dimension of `Sⁿ ⊂ ℝⁿ⁺¹`. -/
 abbrev T94J08TopHomology (n : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
@@ -174,6 +194,16 @@ theorem apm_t94j08 :
   singular-homology, sphere, antipodal, ModuleCat, and functoriality sources,
   and git history found no sphere homology generator or compiled antipodal
   computation.  The frozen statement is unchanged.
+
+  CLOSER HOP 3 goes beyond the prior boundary by compiling the antipodal
+  map's full point-set involution identity and its fixed-point-freeness on
+  every unit metric sphere. These facts show that no remaining continuity,
+  inverse, or sphere-membership bookkeeping is hidden in the gap. A further
+  search through the zero-sphere reduction in `t98J03`, categorical homology
+  functor sources, and all sphere-degree siblings still found no orientation
+  isomorphism even for `H₀(S⁰)`, much less the universal top-homology and
+  induced antipodal action. The bridge therefore remains exactly the missing
+  singular-homology computation, not a point-set lemma.
   -/
     sorry
   refine ⟨hantipodal, ?_⟩
@@ -186,3 +216,5 @@ theorem apm_t94j08 :
   change anti (link x) = t94J08NormalizedLink (fun y ↦ -v y) p r hlinkNeg x
   rw [t94J08NormalizedLink_neg v p r hlink hlinkNeg x]
   rw [hlink_eq x]
+
+#print axioms apm_t94j08

@@ -118,3 +118,12 @@ Mathlib currently lacks (i) a general API for the degree of smooth self-maps of 
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 The informal argument uses only three ingredients—determinants, the definition of local index, and multiplicativity of degree. A future Lean proof must introduce the same abstractions: define the degree of the antipodal map via the determinant of \(-\mathrm{Id}\), implement the local-index-as-degree definition, and use degree multiplicativity. Highlighting these dependencies makes it clear what infrastructure Mathlib needs before this exercise can be formalized.
+
+## Closer hop 3
+
+The point-set antipodal map is now proved involutive and fixed-point-free on
+every unit metric sphere. Together with the previously compiled homological
+degree composition and normalized-link identity, this removes all nonhomology
+bookkeeping. The remaining gap is exactly an orientation isomorphism for top
+singular homology of metric spheres and computation of the induced antipodal
+map; even the required `H₀(S⁰)` orientation is not packaged in the corpus.
