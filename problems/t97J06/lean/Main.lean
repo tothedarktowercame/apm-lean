@@ -1,38 +1,46 @@
 import Mathlib
 
-/-! # APM t97J06: a degree-zero, non-null-homotopic torus map
+/-!
+# APM t97J06 — a self-map of the two-torus
+
+The torus is represented concretely as `Circle × Circle`.  Under the usual
+covering map `x ↦ exp (2πix)`, the map below is induced by
+
+`(x,y) ↦ (sin (2πx + 4πy), x+y)`.
+
+The degree is recorded by the standard integral of the determinant of the
+Jacobian of this lift over a fundamental square.  Non-nullhomotopy is stated
+using Mathlib's actual homotopy relation on continuous maps.
 
 ## Statement repairs
 
-The printed assertion
-`hat f (x + n, y + m) = hat f (x, y)` is false as an equality in `ℝ²`:
-the second coordinate changes by the integer `n + m`.  The intended and
-sufficient assertion is equivariance modulo `ℤ²`, so that the displayed lift
-descends to `ℝ² / ℤ²`.  The map below denotes that quotient-induced map.
-
-## Encoding question
-
-Mathlib does not currently package the oriented degree and null-homotopy API
-for this concrete quotient torus in a form suitable for a statement-only
-file.  The quotient torus, the map induced by the printed lift, its degree,
-and null-homotopy predicate are retained as explicitly typed placeholders.
-The theorem states both requested conclusions about that map, rather than
-replacing it by its homology matrix.
+The printed assertion that the lift is literally periodic is false: translating
+`(x,y)` by `(m,n) ∈ ℤ²` changes its second coordinate by `m+n`.  We use the
+intended lattice-equivariance statement, equivalently the descended map on
+`ℝ²/ℤ²`.
 -/
 
-open CategoryTheory
+open scoped Real
 
-def t97J06Torus : TopCat := by sorry
+abbrev T97J06Torus := Circle × Circle
 
-/-- The torus self-map induced modulo `ℤ²` by
-`(x,y) ↦ (sin (2πx + 4πy), x+y)`. -/
-def t97J06Map : t97J06Torus ⟶ t97J06Torus := by sorry
-
-def t97J06Degree (f : t97J06Torus ⟶ t97J06Torus) : ℤ := by sorry
-
-def IsT97J06NullHomotopic (f : t97J06Torus ⟶ t97J06Torus) : Prop := by sorry
+noncomputable def t97J06Map : C(T97J06Torus, T97J06Torus) where
+  toFun p :=
+    (Circle.exp (2 * Real.pi * Complex.im ((p.1 : ℂ) * (p.2 : ℂ) ^ 2)),
+      p.1 * p.2)
+  continuous_toFun := by fun_prop
 
 theorem apm_t97j06 :
-    t97J06Degree t97J06Map = 0 ∧
-    ¬IsT97J06NullHomotopic t97J06Map := by
+    (∀ x y : ℝ,
+      t97J06Map
+          (Circle.exp (2 * Real.pi * x), Circle.exp (2 * Real.pi * y)) =
+        (Circle.exp (2 * Real.pi * Real.sin (2 * Real.pi * x + 4 * Real.pi * y)),
+          Circle.exp (2 * Real.pi * (x + y)))) ∧
+    (∫ x in (0 : ℝ)..1,
+      ∫ y in (0 : ℝ)..1,
+        Matrix.det !![2 * Real.pi * Real.cos (2 * Real.pi * x + 4 * Real.pi * y),
+            4 * Real.pi * Real.cos (2 * Real.pi * x + 4 * Real.pi * y);
+          (1 : ℝ), 1]) = 0 ∧
+    (∀ q : T97J06Torus,
+      ¬ ContinuousMap.Homotopic t97J06Map (ContinuousMap.const T97J06Torus q)) := by
   sorry
