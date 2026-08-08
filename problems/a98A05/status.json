@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 2 defined apm_a98a05_primitive and proved apm_a98a05_hasDerivAt_primitive on the nonnegative half-line, reusing the arctangent normalization calculation from solved sibling a94A06. The remaining sorry requires evaluating the primitive at zero and infinity, including logarithmic cancellation, and applying improper FTC.",
+  "classification": "complete-lean-proof",
+  "classification_detail": "The logarithmic terms are combined into one log of a rational function tending to 1, the arctangent limit is evaluated at infinity, and Mathlib's nonnegative-derivative improper FTC theorem completes the exact integral evaluation.",
   "imported_at": "2026-07-13T17:26:52.980576Z"
 }

@@ -13,7 +13,7 @@ None.  The improper integral over `(0, ∞)` is represented as the Lebesgue
 integral over `Set.Ioi 0`.
 -/
 
-open MeasureTheory Set
+open MeasureTheory Set Filter
 
 noncomputable section
 
@@ -87,33 +87,86 @@ lemma apm_a98a05_hasDerivAt_primitive {x : ℝ} (hx : 0 ≤ x) :
     field_simp [hq.ne']
     ring
 
+/-- The logarithmic terms in the primitive cancel at infinity.  This is the
+same ratio-to-one argument used in the solved exact-integral sibling
+`a94A06`, specialized to the quadratic denominator here. -/
+lemma apm_a98a05_tendsto_primitive :
+    Tendsto apm_a98a05_primitive atTop
+      (nhds (Real.sqrt 3 * Real.pi / 6)) := by
+  have hi : Tendsto (fun x : ℝ => x⁻¹) atTop (nhds 0) := tendsto_inv_atTop_zero
+  have hi2 : Tendsto (fun x : ℝ => (x⁻¹) ^ 2) atTop (nhds 0) := by
+    simpa using hi.pow 2
+  have hn : Tendsto (fun x : ℝ => (1 + x⁻¹) ^ 2) atTop (nhds 1) := by
+    convert (tendsto_const_nhds.add hi).pow 2 using 1 <;> norm_num
+  have hd : Tendsto (fun x : ℝ => 1 - x⁻¹ + (x⁻¹) ^ 2) atTop (nhds 1) := by
+    convert (tendsto_const_nhds.sub hi).add hi2 using 1 <;> norm_num
+  have hratio : Tendsto
+      (fun x : ℝ => (x + 1) ^ 2 / (x ^ 2 - x + 1)) atTop (nhds 1) := by
+    have hdiv := hn.div hd (by norm_num : (1 : ℝ) ≠ 0)
+    have heq :
+        (fun x : ℝ => (x + 1) ^ 2 / (x ^ 2 - x + 1)) =ᶠ[atTop]
+          (fun x : ℝ => (1 + x⁻¹) ^ 2 / (1 - x⁻¹ + (x⁻¹) ^ 2)) := by
+      filter_upwards [eventually_gt_atTop (0 : ℝ)] with x hx
+      have hx0 : x ≠ 0 := ne_of_gt hx
+      field_simp [hx0]
+    convert hdiv.congr' heq.symm using 1 <;> norm_num
+  have hlogratio : Tendsto
+      (fun x : ℝ => Real.log ((x + 1) ^ 2 / (x ^ 2 - x + 1)))
+      atTop (nhds 0) := by
+    simpa using
+      (Real.continuousAt_log (by norm_num : (1 : ℝ) ≠ 0)).tendsto.comp hratio
+  have hlogs : Tendsto (fun x : ℝ =>
+      (1 / 3 : ℝ) * Real.log (x + 1) -
+        (1 / 6 : ℝ) * Real.log (x ^ 2 - x + 1)) atTop (nhds 0) := by
+    have hscaled := (tendsto_const_nhds : Tendsto (fun _ : ℝ => (1 / 6 : ℝ))
+      atTop (nhds (1 / 6))).mul hlogratio
+    have heqlogs : (fun x : ℝ =>
+        (1 / 3 : ℝ) * Real.log (x + 1) -
+          (1 / 6 : ℝ) * Real.log (x ^ 2 - x + 1)) =ᶠ[atTop]
+        (fun x : ℝ => (1 / 6 : ℝ) *
+          Real.log ((x + 1) ^ 2 / (x ^ 2 - x + 1))) := by
+      filter_upwards [eventually_gt_atTop (0 : ℝ)] with x hx
+      have hA : 0 < x + 1 := by linarith
+      have hQ : 0 < x ^ 2 - x + 1 := by
+        nlinarith [sq_nonneg (x - (1 / 2 : ℝ))]
+      rw [Real.log_div (pow_ne_zero 2 hA.ne') hQ.ne', Real.log_pow]
+      ring
+    simpa only [mul_zero] using hscaled.congr' heqlogs.symm
+  have hinner : Tendsto (fun x : ℝ => (2 * x - 1) / Real.sqrt 3)
+      atTop atTop := by
+    have hmul : Tendsto (fun x : ℝ => 2 * x) atTop atTop :=
+      tendsto_id.const_mul_atTop (by norm_num)
+    have hsub : Tendsto (fun x : ℝ => 2 * x - 1) atTop atTop := by
+      simpa only [sub_eq_add_neg] using hmul.atTop_add tendsto_const_nhds
+    exact hsub.atTop_div_const (Real.sqrt_pos.2 (by norm_num))
+  have harctan : Tendsto
+      (fun x : ℝ => Real.arctan ((2 * x - 1) / Real.sqrt 3)) atTop
+      (nhds (Real.pi / 2)) :=
+    tendsto_nhds_of_tendsto_nhdsWithin (Real.tendsto_arctan_atTop.comp hinner)
+  unfold apm_a98a05_primitive
+  convert hlogs.add (tendsto_const_nhds.mul harctan) using 1 <;> ring
+
 theorem apm_a98a05 :
     ∫ x in Ioi (0 : ℝ), 1 / (1 + x ^ 3) ∂volume =
       2 * Real.pi / (3 * Real.sqrt 3) := by
-  /-
-  Boundary (closer hops 1--2): `apm_a98a05_partial_fractions` above compiles
-  the exact decomposition
-
-  `1/(1+x³) = (1/3)/(x+1) + (2-x)/(3(x²-x+1))`
-
-  on the nonnegative half-line and simultaneously proves both denominators
-  positive.  Hop 2 packages the following antiderivative as
-  `apm_a98a05_primitive` and proves its exact derivative on the nonnegative
-  half-line in `apm_a98a05_hasDerivAt_primitive`:
-
-  `(1/3) log (x+1) - (1/6) log (x²-x+1)
-     + (1/√3) arctan ((2*x-1)/√3)`.
-
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's
-  Gamma/Beta, improper-integral, substitution, logarithm, and arctangent
-  sources, prior exact-integral artifacts, and git history found no packaged
-  formula for `∫₀∞ 1/(1+x^n)` and no direct substitution reducing this
-  integral to `betaIntegral (1/3) (2/3)`.  Mathlib does provide
-  `integral_Ioi_of_hasDerivAt_of_tendsto'`, the derivative rules, and the
-  Gamma reflection ingredients, but assembling either route still requires
-  proving integrability and the cancellation of the two divergent logarithmic
-  terms at infinity.  The remaining closure work is now the endpoint
-  evaluation, especially that logarithmic cancellation, followed by the
-  improper FTC theorem.
-  -/
-  sorry
+  have h := integral_Ioi_of_hasDerivAt_of_nonneg'
+    (a := (0 : ℝ)) (g := apm_a98a05_primitive)
+    (g' := fun x : ℝ => 1 / (1 + x ^ 3))
+    (l := Real.sqrt 3 * Real.pi / 6)
+    (fun x hx => apm_a98a05_hasDerivAt_primitive hx)
+    (fun x hx => one_div_nonneg.mpr (by
+      have hx3 : 0 < x ^ 3 := pow_pos hx 3
+      linarith))
+    apm_a98a05_tendsto_primitive
+  have hsqrt : (Real.sqrt 3 : ℝ) ^ 2 = 3 := Real.sq_sqrt (by norm_num)
+  have hzero : apm_a98a05_primitive 0 = -(Real.sqrt 3 * Real.pi / 18) := by
+    unfold apm_a98a05_primitive
+    rw [show ((2 * (0 : ℝ) - 1) / Real.sqrt 3) = -(Real.sqrt 3)⁻¹ by
+      field_simp [Real.sqrt_ne_zero'.2 (by norm_num : (0 : ℝ) < 3)] <;> ring]
+    rw [Real.arctan_neg, Real.arctan_inv_sqrt_three]
+    norm_num
+    ring
+  rw [hzero] at h
+  rw [h]
+  field_simp [Real.sqrt_ne_zero'.2 (by norm_num : (0 : ℝ) < 3)]
+  nlinarith
