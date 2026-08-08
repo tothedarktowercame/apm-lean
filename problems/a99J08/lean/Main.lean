@@ -154,6 +154,21 @@ lemma apm_a99J08_sq_regular
       DifferentiableOn ℂ (fun z => g z ^ 2) apm_a99J08_upperHalfDisk := by
   exact ⟨hgcont.pow 2, hgholo.pow 2⟩
 
+/-- Why this unblocks `apm_a99j08`: Schwarz reflection of `g²`, division
+by its proved zero at the corner, and compact boundedness of the resulting
+quotient give exactly this global linear estimate for `‖g‖²`. Taking square
+roots then yields the frozen square-root bound. -/
+theorem apm_a99J08_bridge_1
+    (g : ℂ → ℂ)
+    (hgcont : ContinuousOn g (closure apm_a99J08_upperHalfDisk))
+    (hgholo : DifferentiableOn ℂ g apm_a99J08_upperHalfDisk)
+    (hpos : ∀ x : ℝ, 0 < x → x < 1 → (g x).re = 0)
+    (hneg : ∀ x : ℝ, -1 < x → x < 0 → (g x).im = 0) :
+    ∃ K : ℝ, 0 ≤ K ∧
+      ∀ z ∈ closure apm_a99J08_upperHalfDisk,
+        ‖g z‖ ^ 2 ≤ K * ‖z‖ := by
+  sorry
+
 theorem apm_a99j08
     (g : ℂ → ℂ)
     (hgcont : ContinuousOn g (closure apm_a99J08_upperHalfDisk))
