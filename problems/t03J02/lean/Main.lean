@@ -65,6 +65,68 @@ lemma apm_t03J02_glue_eq
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ (apm_t03J02_glueRel.glue z)
 
+/-- Compatible maps on the two tori respect the generated gluing relation. -/
+lemma apm_t03J02_gluedDesc_respects
+    {Y : Type*} [TopologicalSpace Y]
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (f g : C(apm_t03J02_Torus, Y))
+    (hfg : ∀ z, f (j₁ z) = g (j₂ z)) {x y}
+    (hxy : Relation.EqvGen (apm_t03J02_glueRel j₁ j₂) x y) :
+    Sum.elim f g x = Sum.elim f g y := by
+  induction hxy with
+  | rel a b hab =>
+    cases hab with
+    | glue z => exact hfg z
+  | refl a => rfl
+  | symm a b _ ih => exact ih.symm
+  | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- Continuous pushout eliminator for the concrete two-torus quotient. -/
+def apm_t03J02_gluedDesc
+    {Y : Type*} [TopologicalSpace Y]
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (f g : C(apm_t03J02_Torus, Y))
+    (hfg : ∀ z, f (j₁ z) = g (j₂ z)) :
+    C(apm_t03J02_space j₁ j₂, Y) := by
+  let raw : Sum apm_t03J02_Torus apm_t03J02_Torus → Y := Sum.elim f g
+  have hraw : Continuous raw := continuous_sum_dom.2 ⟨f.continuous, g.continuous⟩
+  exact ⟨Quotient.lift raw (fun _ _ hxy =>
+      apm_t03J02_gluedDesc_respects j₁ j₂ f g hfg hxy),
+    hraw.quotient_lift (fun _ _ hxy =>
+      apm_t03J02_gluedDesc_respects j₁ j₂ f g hfg hxy)⟩
+
+@[simp] lemma apm_t03J02_gluedDesc_inl
+    {Y : Type*} [TopologicalSpace Y]
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (f g : C(apm_t03J02_Torus, Y))
+    (hfg : ∀ z, f (j₁ z) = g (j₂ z)) (x : apm_t03J02_Torus) :
+    apm_t03J02_gluedDesc j₁ j₂ f g hfg
+      (apm_t03J02_quotientMap j₁ j₂ (.inl x)) = f x := rfl
+
+@[simp] lemma apm_t03J02_gluedDesc_inr
+    {Y : Type*} [TopologicalSpace Y]
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (f g : C(apm_t03J02_Torus, Y))
+    (hfg : ∀ z, f (j₁ z) = g (j₂ z)) (x : apm_t03J02_Torus) :
+    apm_t03J02_gluedDesc j₁ j₂ f g hfg
+      (apm_t03J02_quotientMap j₁ j₂ (.inr x)) = g x := rfl
+
+/-- The descended map is uniquely determined by its two torus restrictions. -/
+lemma apm_t03J02_gluedDesc_unique
+    {Y : Type*} [TopologicalSpace Y]
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (f g : C(apm_t03J02_Torus, Y))
+    (hfg : ∀ z, f (j₁ z) = g (j₂ z))
+    (u : C(apm_t03J02_space j₁ j₂, Y))
+    (hul : ∀ x, u (apm_t03J02_quotientMap j₁ j₂ (.inl x)) = f x)
+    (hur : ∀ x, u (apm_t03J02_quotientMap j₁ j₂ (.inr x)) = g x) :
+    u = apm_t03J02_gluedDesc j₁ j₂ f g hfg := by
+  ext q
+  refine Quotient.inductionOn q ?_
+  rintro (x | x)
+  · exact hul x
+  · exact hur x
+
 def apm_t03J02_basepoint
     (j₁ j₂ : C(Circle, apm_t03J02_Torus)) (z₀ : Circle) :
     apm_t03J02_space j₁ j₂ :=
@@ -113,5 +175,19 @@ theorem apm_t03j02
   concrete computations of the torus fundamental group and homology in this
   encoding. Thus the remaining bridge is substantial algebraic-topology
   infrastructure, not quotient bookkeeping; the frozen statement is unchanged.
+
+  CLOSER HOP 2: the quotient is now promoted from a cocone to its full
+  function-level continuous pushout property. `apm_t03J02_gluedDesc_respects`
+  proves compatible maps on the two tori respect the generated relation;
+  `apm_t03J02_gluedDesc` descends them continuously; its two simp lemmas
+  recover the original restrictions; and `apm_t03J02_gluedDesc_unique` proves
+  uniqueness by quotient induction. Thus the concrete space is no longer
+  missing a topological eliminator. Renewed searches of `LEMMA-INDEX.md`,
+  `ConstructionTargets/`, all topology artifacts, Mathlib's fundamental-group
+  pushout, singular homology, Mayer--Vietoris, and torus sources, and git
+  history still found no Seifert--van Kampen theorem, singular
+  Mayer--Vietoris sequence, or concrete torus invariant computation. The
+  remaining bridge is now entirely functorial algebraic topology; the frozen
+  statement is unchanged.
   -/
   sorry
