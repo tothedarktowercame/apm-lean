@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed",
+  "closer_hop": 2,
+  "closer_note": "Closed by transporting ContDiff to coordinate slices, adding their centered O(h^4) bounds, normalizing iteratedDeriv 2, and extracting/dividing the local asymptotic estimate.",
   "imported_at": "2026-07-13T17:26:54.698992Z"
 }

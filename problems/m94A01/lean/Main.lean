@@ -63,6 +63,23 @@ lemma apm_m94a01_centered2_isBigO
   funext h
   ring
 
+lemma apm_m94a01_contDiff_slice_fst
+    (u : ℝ × ℝ → ℝ) (hu : ContDiff ℝ 4 u) (y : ℝ) :
+    ContDiff ℝ 4 (fun s : ℝ => u (s, y)) := by
+  exact hu.comp (contDiff_id.prodMk contDiff_const)
+
+lemma apm_m94a01_contDiff_slice_snd
+    (u : ℝ × ℝ → ℝ) (hu : ContDiff ℝ 4 u) (x : ℝ) :
+    ContDiff ℝ 4 (fun s : ℝ => u (x, s)) := by
+  exact hu.comp (contDiff_const.prodMk contDiff_id)
+
+lemma apm_m94a01_iteratedDeriv_two (f : ℝ → ℝ) :
+    iteratedDeriv 2 f = deriv (deriv f) := by
+  calc
+    iteratedDeriv 2 f = iteratedDeriv (1 + 1) f := by norm_num
+    _ = deriv (iteratedDeriv 1 f) := iteratedDeriv_succ
+    _ = deriv (deriv f) := by rw [iteratedDeriv_one]
+
 theorem apm_m94a01 (u : ℝ × ℝ → ℝ)
     (hu : ContDiff ℝ 4 u) :
     ∀ x y : ℝ, ∃ C δ : ℝ, 0 ≤ C ∧ 0 < δ ∧
@@ -94,5 +111,44 @@ theorem apm_m94a01 (u : ℝ × ℝ → ℝ)
   `iteratedDeriv 2` as the nested `deriv` in the frozen Laplacian, and
   converting the combined `O(h^4)` estimate after division by `h^2` into the
   explicit local `C, δ` inequality.
+
+  Closer hop 2 closes that bridge. The two slice lemmas compose `hu` with the
+  coordinate embeddings, `apm_m94a01_iteratedDeriv_two` performs the exact
+  Laplacian normalization, and `IsBigO.exists_nonneg` supplies one common
+  constant and neighborhood for the sum of the two centered remainders.
+  `Metric.eventually_nhds_iff` extracts `δ`; division by `h²` is justified by
+  `0 < |h|`, and the remaining expression is polynomial normalization.
   -/
-  sorry
+  intro x y
+  let fx : ℝ → ℝ := fun s => u (s, y)
+  let fy : ℝ → ℝ := fun s => u (x, s)
+  have hfx : ContDiff ℝ 4 fx := apm_m94a01_contDiff_slice_fst u hu y
+  have hfy : ContDiff ℝ 4 fy := apm_m94a01_contDiff_slice_snd u hu x
+  have hO := (apm_m94a01_centered2_isBigO fx hfx x).add
+    (apm_m94a01_centered2_isBigO fy hfy y)
+  rcases hO.exists_nonneg with ⟨C, hC, hOC⟩
+  have hev := hOC.bound
+  rw [Metric.eventually_nhds_iff] at hev
+  rcases hev with ⟨δ, hδ, hbound⟩
+  refine ⟨C, δ, hC, hδ, ?_⟩
+  intro h hhpos hhδ
+  have hh : h ≠ 0 := by
+    intro hz
+    simp [hz] at hhpos
+  have hb := hbound (show dist h (0 : ℝ) < δ by
+    simpa [Real.dist_eq] using hhδ)
+  have hrewrite : apm_m94a01_laplacian u x y - apm_m94a01_T u h x y =
+      -((fx (x + h) + fx (x - h) - 2 * fx x - h ^ 2 * iteratedDeriv 2 fx x) +
+        (fy (y + h) + fy (y - h) - 2 * fy y - h ^ 2 * iteratedDeriv 2 fy y)) /
+        h ^ 2 := by
+    simp only [apm_m94a01_laplacian, apm_m94a01_T, fx, fy,
+      apm_m94a01_iteratedDeriv_two]
+    field_simp
+    ring
+  rw [hrewrite, abs_div, abs_neg, abs_sq]
+  rw [div_le_iff₀ (sq_pos_of_ne_zero hh)]
+  calc
+    _ ≤ C * |h| ^ 4 := by simpa only [Real.norm_eq_abs, abs_pow] using hb
+    _ = C * h ^ 2 * h ^ 2 := by
+      rw [show |h| ^ 4 = (|h| ^ 2) ^ 2 by ring, sq_abs]
+      ring

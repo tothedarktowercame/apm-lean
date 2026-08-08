@@ -1,6 +1,6 @@
 # Proof Outline: m94A01
 
-The frozen theorem has a partial Lean development with one remaining `sorry`.
+The frozen theorem is fully proved with no `sorry`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m94A01.md`
@@ -11,11 +11,14 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
   expansion in neighborhood-filter form.
 - `apm_m94a01_centered2_isBigO` cancels odd terms and proves the centered
   second-difference remainder is `O(h⁴)`.
+- the coordinate-slice lemmas transport the global `ContDiff ℝ 4` hypothesis;
+- `apm_m94a01_iteratedDeriv_two` identifies the iterated derivatives with the
+  nested derivatives in the frozen Laplacian;
+- the main proof adds the two `O(h⁴)` estimates, extracts common local
+  constants, and divides by `h²` to obtain the requested bound.
 
-## Remaining boundary
+## Closure
 
-- derive `ContDiff ℝ 4` for both coordinate slices from `hu`;
-- identify their second iterated derivatives with the nested `deriv`
-  expressions in `apm_m94a01_laplacian`;
-- add the two slice estimates, divide by nonzero `h²`, and extract the explicit
-  local constants `C` and `δ` from the resulting `IsBigO` statement.
+The local formulation is essential: the `IsBigO` neighborhood supplies the
+point-dependent radius and constant without asserting a global fourth-
+derivative bound.
