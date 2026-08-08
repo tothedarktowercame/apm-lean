@@ -116,6 +116,39 @@ lemma apm_b94A02_exists_surjective_tensorLift
   · intro x r s hr
     simpa [Φ] using hφ x r s hr
 
+/-- The descended multiplication map is an equivalence. Its inverse sends a
+quotient class `q` to the pure tensor `b ⊗ q`; tensor induction reduces the
+nontrivial inverse identity to the coefficient formula. -/
+lemma apm_b94A02_exists_tensorEquiv
+    (R : Type*) [CommRing R] (I : Ideal R) (b : R)
+    (hAnn : ∀ c : R, b * c = 0 → c ∈ I) :
+    Nonempty
+      (TensorProduct R (Ideal.span {b}) (R ⧸ I) ≃ₗ[R] (R ⧸ I)) := by
+  obtain ⟨Φ, hΦsurj, hΦ⟩ :=
+    apm_b94A02_exists_surjective_tensorLift R I b hAnn
+  let gen : Ideal.span {b} :=
+    ⟨b, Ideal.subset_span (Set.mem_singleton b)⟩
+  let Ψ : (R ⧸ I) →ₗ[R] TensorProduct R (Ideal.span {b}) (R ⧸ I) :=
+    TensorProduct.mk R (Ideal.span {b}) (R ⧸ I) gen
+  have hleft : Function.LeftInverse Ψ Φ := by
+    intro z
+    induction z using TensorProduct.induction_on with
+    | zero => simp [Ψ]
+    | tmul x q =>
+        obtain ⟨r, hr⟩ := (Ideal.mem_span_singleton.mp x.property)
+        have hr' : (x : R) = b * r := by simpa [mul_comm] using hr
+        obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective q
+        have hx : x = r • gen := by
+          apply Subtype.ext
+          simpa [gen, mul_comm] using hr'
+        rw [hΦ x r s hr']
+        simp only [Ψ, TensorProduct.mk_apply]
+        rw [show Ideal.Quotient.mk I (r * s) =
+            r • Ideal.Quotient.mk I s by rfl]
+        rw [← TensorProduct.smul_tmul, ← hx]
+    | add x y hx hy => simp [map_add, hx, hy]
+  exact ⟨LinearEquiv.ofBijective Φ ⟨hleft.injective, hΦsurj⟩⟩
+
 theorem apm_b94a02 :
     ∀ (R : Type*) [CommRing R] (I : Ideal R) (b : R),
       I ≠ ⊤ →
@@ -148,7 +181,8 @@ theorem apm_b94a02 :
     rw [Ideal.mem_span_singleton] at hx
     obtain ⟨r, hr⟩ := hx
     exact ⟨r, by simpa [mul_comm] using hr⟩
-  refine ⟨apm_b94A02_exists_balancedMap R I b hAnn, ?_⟩
+  refine ⟨apm_b94A02_exists_balancedMap R I b hAnn,
+    apm_b94A02_exists_tensorEquiv R I b hAnn, ?_⟩
   -- (Sibling: b93A03)
   /- PARTIAL boundary (closer hop 2):
      `apm_b94A02_coefficient_mul_mk_eq` now proves the exact independence
@@ -194,6 +228,40 @@ theorem apm_b94a02 :
      quotient induction, `tensorQuotEquivQuotSMul`, and sibling `b93A03`.
      They confirm the inverse should be the generator pure-tensor map, but no
      packaged theorem proves its two inverse identities for this annihilator-
-     controlled cyclic module. That verification and the final mapped-tensor
-     noninjectivity assembly remain open. -/
-  sorry
+     controlled cyclic module.
+
+     HOP 4 closes that identified hole in
+     `apm_b94A02_exists_tensorEquiv`. The inverse is the linear map
+     `q ↦ b ⊗ₜ q`. `TensorProduct.induction_on` reduces its left-inverse law
+     to a pure tensor; `Ideal.mem_span_singleton` writes its first factor as
+     `b*r`, quotient surjectivity writes the second as `mk(s)`, and the
+     compiled tensor-lift formula plus `TensorProduct.smul_tmul` proves the
+     identity. `LinearEquiv.ofBijective` then packages the equivalence, which
+     now supplies the frozen middle conjunct above. The final argument uses
+     `b ⊗ₜ 1` as a kernel witness: the tensor lift sends it to nonzero `1`
+     modulo `I`, while `b ∈ I` makes its image under the frozen tensor map
+     zero. Thus the mapped-tensor noninjectivity conjunct is also closed. -/
+  intro hbI hinj
+  let gen : Ideal.span {b} :=
+    ⟨b, Ideal.subset_span (Set.mem_singleton b)⟩
+  obtain ⟨Φ, -, hΦ⟩ :=
+    apm_b94A02_exists_surjective_tensorLift R I b hAnn
+  have hgen : gen ⊗ₜ[R] (1 : R ⧸ I) ≠ 0 := by
+    intro hz
+    apply hquotient_nontrivial
+    have hformula := hΦ gen 1 1 (by simp [gen])
+    simpa [hz] using hformula.symm
+  have hmapzero :
+      TensorProduct.map (Ideal.span {b}).subtype
+          (LinearMap.id (M := R ⧸ I))
+          (gen ⊗ₜ[R] (1 : R ⧸ I)) = 0 := by
+    rw [TensorProduct.map_tmul]
+    change (b : R) ⊗ₜ[R] (1 : R ⧸ I) = 0
+    rw [show b = b • (1 : R) by simp, TensorProduct.smul_tmul]
+    have hbzero : b • (1 : R ⧸ I) = 0 := by
+      rw [Algebra.smul_def, mul_one]
+      exact Ideal.Quotient.eq_zero_iff_mem.mpr hbI
+    rw [hbzero, TensorProduct.tmul_zero]
+  apply hgen
+  apply hinj
+  rw [hmapzero, map_zero]

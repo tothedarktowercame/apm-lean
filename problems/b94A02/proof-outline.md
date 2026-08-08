@@ -25,9 +25,14 @@ linear equivalence directly, independently of quotient-submodule rewriting.
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b94A02.md`
 
-## Remaining boundary
+## Hop 4 completion
 
-- prove injectivity of the compiled surjective tensor lift, equivalently build
-  and verify the inverse `q ↦ b ⊗ q`;
-- reuse the nonzero pure-tensor/map argument from sibling `b93A03` for the
-  final failure of injectivity.
+`apm_b94A02_exists_tensorEquiv` defines the inverse `q ↦ b ⊗ q` and proves
+its left-inverse identity by `TensorProduct.induction_on`. On a pure tensor,
+the first factor is written as `b*r`, the quotient factor as `mk(s)`, and the
+claim follows from the compiled lift formula and `TensorProduct.smul_tmul`.
+
+For the final conjunct, `b ⊗ 1` is nonzero because the tensor lift maps it to
+the nonzero class of `1`. If `b ∈ I`, its image under the frozen tensor map is
+zero by balancing the scalar `b` into the quotient factor. This supplies an
+explicit kernel witness and completes the theorem without sorries.
