@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 2,
-  "boundary": "The local-sign dichotomy, final cancellation, real fourth-power classification, and representative-proportionality equality bridge are proved. Remaining work is the coordinate fderiv regularity proof, construction of the two explicit projective points and Fin 2 equivalence, and sign transport through noncanonical representatives.",
+  "boundary": "Hop 3 closes the full coordinate fderiv regularity proof. Remaining work is projective representative normalization, the explicit two-point set equality, and construction of the Fin 2 equivalence/cardinality clauses.",
   "imported_at": "2026-07-13T17:26:56.757829Z"
 }

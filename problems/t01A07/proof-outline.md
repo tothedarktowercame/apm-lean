@@ -16,13 +16,17 @@ final two-term cancellation are compiled.
 - `apm_t01a07_eq_of_smul_rep_eq` reuses
   `Projectivization.mk_eq_mk_iff'` to convert proportional chosen
   representatives into equality of projective points.
+- `apm_t01a07_fderiv_apply_zero/one/two/three` compute the quartic derivative
+  on the four coordinate basis vectors.
+- `apm_t01a07_smooth` proves the regular-cone smoothness conjunct: if the
+  derivative vanishes, the four directional formulas force the vector to be
+  zero.
 
 ## Remaining boundary
 
-- Compute the `fderiv` of the quartic in coordinates and prove its zero locus
-  on the cone is regular away from zero.
 - Normalize each projective solution to one of the two explicit classes
   represented by `(1,1,0,0)` and `(1,-1,0,0)` using the compiled scalar
   equality bridge.
-- Build the resulting `Fin 2` equivalence and evaluate the two signs despite
-  the noncanonical scaling of `Projectivization.rep`.
+- Prove the explicit points are distinct and belong to the intersection, then
+  build the resulting `Fin 2` equivalence and derive the two cardinality
+  clauses despite the noncanonical scaling of `Projectivization.rep`.
