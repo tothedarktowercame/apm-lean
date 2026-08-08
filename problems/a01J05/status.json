@@ -14,11 +14,11 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 5,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 5,
+    "sorry_count_total": 1,
     "sorry_count_by_file": {
-      "Main.lean": 5
+      "Main.lean": 1
     }
   },
   "artifacts": {
