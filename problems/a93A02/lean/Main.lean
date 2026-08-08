@@ -30,6 +30,61 @@ def apm_a93A02_counterexample (n : ℕ) (x : ℝ) : ℝ :=
   Real.sqrt (n.succ : ℝ) *
     Set.indicator (Icc (0 : ℝ) ((n.succ : ℝ)⁻¹)) (fun _ ↦ (1 : ℝ)) x
 
+lemma apm_a93A02_measure_Icc_inv_succ (n : ℕ) :
+    apm_a93A02_measure (Icc (0 : ℝ) ((n.succ : ℝ)⁻¹)) =
+      ENNReal.ofReal ((n.succ : ℝ)⁻¹) := by
+  rw [apm_a93A02_measure, Measure.restrict_apply measurableSet_Icc]
+  have hn : (0 : ℝ) ≤ (n.succ : ℝ)⁻¹ := by positivity
+  have hn1 : (n.succ : ℝ)⁻¹ ≤ 1 := by
+    exact (inv_le_one₀ (by positivity)).2 (by exact_mod_cast n.succ_pos)
+  rw [inter_eq_left.2 (Icc_subset_Icc le_rfl hn1)]
+  · simp [Real.volume_Icc]
+
+lemma apm_a93A02_counterexample_eLpNorm_two (n : ℕ) :
+    eLpNorm (apm_a93A02_counterexample n) 2 apm_a93A02_measure = 1 := by
+  let s : Set ℝ := Icc (0 : ℝ) ((n.succ : ℝ)⁻¹)
+  have hs : MeasurableSet s := measurableSet_Icc
+  have hfun : apm_a93A02_counterexample n =
+      s.indicator (fun _ ↦ Real.sqrt (n.succ : ℝ)) := by
+    funext x
+    simp [apm_a93A02_counterexample, s, Set.indicator]
+  rw [hfun, eLpNorm_indicator_const hs (by norm_num) (by norm_num),
+    apm_a93A02_measure_Icc_inv_succ]
+  have hnpos : (0 : ℝ) < (n.succ : ℝ) := by positivity
+  rw [Real.enorm_eq_ofReal_abs]
+  norm_num [ENNReal.toReal_ofNat]
+  have hnp : (0 : ℝ) < (n : ℝ) + 1 := by positivity
+  rw [abs_of_nonneg (Real.sqrt_nonneg _), Real.sqrt_eq_rpow,
+    ← ENNReal.ofReal_rpow_of_pos hnp, ENNReal.ofReal_inv_of_pos hnp]
+  rw [← ENNReal.mul_rpow_of_nonneg]
+  · rw [ENNReal.mul_inv_cancel (ENNReal.ofReal_ne_zero_iff.mpr hnp) ENNReal.ofReal_ne_top]
+    simp
+  · positivity
+
+lemma apm_a93A02_counterexample_tendsto_zero_of_ne_zero {x : ℝ} (hx : x ≠ 0) :
+    Tendsto (fun n : ℕ ↦ apm_a93A02_counterexample n x) atTop (nhds 0) := by
+  rcases lt_or_gt_of_ne hx with hxneg | hxpos
+  · apply (tendsto_congr' (Eventually.of_forall fun n : ℕ ↦ ?_)).2
+    · exact tendsto_const_nhds
+    · simp [apm_a93A02_counterexample, not_le.2 hxneg]
+  · have hinv : Tendsto (fun n : ℕ ↦ ((n.succ : ℝ)⁻¹)) atTop (nhds 0) := by
+      simpa [one_div] using
+        (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+    have hev : ∀ᶠ n : ℕ in atTop, (n.succ : ℝ)⁻¹ < x :=
+      hinv.eventually (Iio_mem_nhds hxpos)
+    apply (tendsto_congr' (hev.mono fun (n : ℕ) hn ↦ ?_)).2
+    · exact tendsto_const_nhds
+    · have hnot : x ∉ (Icc (0 : ℝ) ((n.succ : ℝ)⁻¹)) :=
+        fun h ↦ (not_lt_of_ge h.2) hn
+      simp only [apm_a93A02_counterexample, Set.indicator, hnot, if_false, mul_zero]
+
+lemma apm_a93A02_counterexample_ae_tendsto_zero :
+    ∀ᵐ x ∂apm_a93A02_measure,
+      Tendsto (fun n : ℕ ↦ apm_a93A02_counterexample n x) atTop (nhds 0) := by
+  apply ae_mono Measure.restrict_le_self
+  filter_upwards [(volume : Measure ℝ).ae_ne 0] with x hx
+  exact apm_a93A02_counterexample_tendsto_zero_of_ne_zero hx
+
 /-- Uniform `L²` boundedness implies uniform integrability in every
 `Lᵖ`, `1 ≤ p < 2`. Adapted from the earlier a93A02 development at commit
 `4f07f5f`. -/
@@ -137,17 +192,35 @@ theorem apm_a93a02 :
     `Lᵖ` by the finite-measure exponent comparison, and Mathlib's Vitali
     theorem gives convergence.
 
-    Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's
-    indicator `eLpNorm` API, prior spike artifact `a01J01`, and git history
-    found the necessary primitives but no proof for this exact normalized
-    square-root spike over the restricted measure. The remaining conjunction
-    requires evaluating
+    Closer hop 2 completes the counterexample. The new measure lemma transports
+    the small interval through the outer restriction, and the indicator norm
+    formula evaluates
 
       `eLpNorm (sqrt(n+1) * 1_[0,1/(n+1)]) 2 = 1`,
 
-    transporting the interval volume through the outer restriction, proving
-    pointwise eventual vanishing away from the null singleton `{0}`, and using
-    the constant norm-one computation to refute convergence to zero. These are
-    now independent of the fully compiled Vitali half.
+    exactly. The reciprocal endpoints tend to zero, giving eventual pointwise
+    vanishing off the null singleton `{0}`; the constant norm-one identity then
+    refutes convergence to zero by uniqueness of limits. This uses Mathlib's
+    `eLpNorm_indicator_const`, restricted-measure, no-atoms, and elementary
+    limit APIs; the frozen theorem is now closed.
     -/
-    sorry
+    have hmeas : ∀ n, AEStronglyMeasurable (apm_a93A02_counterexample n)
+        apm_a93A02_measure := by
+      intro n
+      apply Measurable.aestronglyMeasurable
+      exact measurable_const.mul
+        (measurable_const.indicator measurableSet_Icc)
+    have hmem : ∀ n, MemLp (apm_a93A02_counterexample n) 2
+        apm_a93A02_measure := by
+      intro n
+      refine ⟨hmeas n, ?_⟩
+      rw [apm_a93A02_counterexample_eLpNorm_two]
+      exact ENNReal.one_lt_top
+    refine ⟨hmem, ?_, apm_a93A02_counterexample_ae_tendsto_zero, ?_⟩
+    · intro n
+      rw [apm_a93A02_counterexample_eLpNorm_two]
+    · intro ht
+      have hone : Tendsto (fun _ : ℕ ↦ (1 : ℝ≥0∞)) atTop (nhds 0) := by
+        simpa [sub_zero, apm_a93A02_counterexample_eLpNorm_two] using ht
+      have : (1 : ℝ≥0∞) = 0 := tendsto_nhds_unique tendsto_const_nhds hone
+      norm_num at this

@@ -17,22 +17,24 @@ a.e. convergence + uniform integrability ⟹ Lp convergence.
 - a.e. convergence of fₙ - g to 0 (from Tendsto.sub + const).
 - p ≠ ∞ from p < 2.
 
-## Closer hop 1
+## Closer hops
 
 The complete positive result is compiled. The earlier proof at commit
 `4f07f5f` was localized: exponent comparison gives uniform integrability,
 Fatou gives the `L²` bound for the a.e. limit, and Mathlib's finite-measure
 Vitali theorem gives `Lᵖ` convergence.
 
-The sole remaining hole is the explicit counterexample conjunction. It needs
-the calculation that the spike `sqrt(n+1) 1_[0,1/(n+1)]` has `L²` norm one,
-eventual pointwise vanishing away from the null singleton `{0}`, and the
-resulting failure of norm convergence.
+Closer hop 2 closes the explicit counterexample. Restriction of Lebesgue
+measure to `[0,1]` assigns `[0,1/(n+1)]` measure `1/(n+1)`. The indicator
+formula therefore gives the spike `sqrt(n+1) 1_[0,1/(n+1)]` `L²` norm exactly
+one. Its support endpoints tend to zero, so it vanishes eventually at every
+nonzero point and hence converges almost everywhere. Its norms remain one,
+which rules out norm convergence to zero by uniqueness of limits.
 
 ## Lean state
 
-- **Checked:** exit 0, 0 errors, 1 sorry
-- **Classification:** partial
+- **Checked:** exit 0, 0 errors, 0 sorries
+- **Classification:** solved
 - **Validation:** `cd /home/joe/code/apm-lean && lake env lean problems/a93A02/lean/Main.lean`
 
 ## References

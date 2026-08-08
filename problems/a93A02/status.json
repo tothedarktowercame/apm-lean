@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,21 +27,22 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "imported_at": "2026-07-13T17:26:51.975598Z",
-  "checked_at": "2026-07-14T23:00:00Z",
+  "checked_at": "2026-08-08T00:00:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a93A02/lean/Main.lean",
-  "validation_result": "exit 0; 0 errors; 1 sorry",
+  "validation_result": "exit 0; 0 errors; 0 sorries",
   "sorry_details": {
-    "sorry_count": 1,
-    "sorry_locations": [
-      "explicit normalized-spike L² norm, a.e. convergence, and nonconvergence conjunction"
-    ],
-    "sorry_reason": "The complete positive Vitali result is now compiled. The sole remaining hole is the explicit square-root spike calculation over the restricted unit-interval measure."
+    "sorry_count": 0,
+    "sorry_locations": [],
+    "sorry_reason": null
   },
   "proven_lemmas": [
     "Vitali convergence theorem application (tendsto_Lp_finite_of_tendsto_ae) — zero-sorry",
     "a.e. convergence of fₙ-g to 0 — zero-sorry",
-    "p ≠ ∞ from p < 2 — zero-sorry"
+    "p ≠ ∞ from p < 2 — zero-sorry",
+    "normalized square-root spike has restricted L² norm exactly one — zero-sorry",
+    "normalized spike converges almost everywhere to zero — zero-sorry",
+    "constant norm one refutes L² convergence to zero — zero-sorry"
   ]
 }
