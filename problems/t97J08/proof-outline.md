@@ -1,5 +1,21 @@
 # Proof Outline: t97J08
 
+## Hop 4 bridge statements
+
+The open work is now isolated into three declarations above the main theorem:
+
+- `apm_t97J08_bridge_beta_cross_derivatives` supplies the final evaluated
+  `fderiv` equality in the concrete closedness predicate.
+- `apm_t97J08_bridge_unique_windingNumber` classifies every frozen smooth
+  punctured loop by a unique integer under the explicit periodic homotopy
+  relation.
+- `apm_t97J08_bridge_windingNumber_eq_betaIntegral` identifies any such
+  integer with the normalized beta integral.
+
+The last two statements combine immediately into the main theorem's unique
+existence of an integer satisfying both properties. Their bodies intentionally
+remain `sorry` under the statement-only instruction.
+
 The Lean statement uses the concrete angle form, raw derivatives and interval
 integral, and a concrete periodic unit-circle homotopy definition of winding
 number. One `sorry` remains.

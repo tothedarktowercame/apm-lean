@@ -98,6 +98,32 @@ lemma t97J08Beta_differentiableAt_coordinates (z : ℂ) (hz : z ≠ 0) :
     simp only [← Complex.reCLM_apply, ← Complex.imCLM_apply]
     fun_prop (disch := exact hden)
 
+/-- Why this unblocks `apm_t97j08`: together with
+`t97J08Beta_differentiableAt_coordinates`, this is exactly the third field in
+the concrete closedness predicate for the angle form. -/
+theorem apm_t97J08_bridge_beta_cross_derivatives
+    (z : ℂ) (hz : z ≠ 0) :
+    (fderiv ℝ (fun w : ℂ ↦ t97J08Beta w Complex.I) z) 1 =
+      (fderiv ℝ (fun w : ℂ ↦ t97J08Beta w 1) z) Complex.I := by
+  sorry
+
+/-- Why this unblocks `apm_t97j08`: this is the universal-cover/degree
+classification missing from the library, stated directly for the frozen
+periodic unit-loop homotopy encoding. -/
+theorem apm_t97J08_bridge_unique_windingNumber
+    (f : ℝ → ℂ) (hf : IsT97J08SmoothPuncturedLoop f) :
+    ∃! n : ℤ, IsT97J08WindingNumber f n := by
+  sorry
+
+/-- Why this unblocks `apm_t97j08`: after a winding homotopy class has been
+chosen, this is the FTC/period theorem identifying its integer lift
+displacement with the integral of the normalized angle form. -/
+theorem apm_t97J08_bridge_windingNumber_eq_betaIntegral
+    (f : ℝ → ℂ) (hf : IsT97J08SmoothPuncturedLoop f)
+    (n : ℤ) (hn : IsT97J08WindingNumber f n) :
+    (n : ℝ) = t97J08BetaIntegral f := by
+  sorry
+
 theorem apm_t97j08 :
     IsT97J08ClosedOneFormOnPuncturedPlane t97J08Beta ∧
     ∀ f : ℝ → ℂ, IsT97J08SmoothPuncturedLoop f →
