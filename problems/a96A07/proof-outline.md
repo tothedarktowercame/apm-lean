@@ -16,12 +16,16 @@ Show g maps Δ one-to-one onto the bounded domain D whose boundary is C = g(Γ).
 ## Lean formalization
 
 - **File**: `lean/Main.lean`
-- **Status**: Partial (2 sorries)
+- **Status**: Partial (1 sorry)
 - **Reusable progress**:
   - `ConstructionTargets.Rouche` supplies a divisor-based argument principle
     and zero-count transfer on disks.
   - `ConstructionTargets.UnivalentDeriv.deriv_ne_zero_of_injOn` proves the
     nonvanishing derivative conclusion once interior injectivity is known.
+  - `apm_a96A07_isConnected_image_disk` proves the canonical disk image is
+    connected.
+  - `apm_a96A07_isBounded_image_disk` proves it is bounded via the compact
+    closed-disk image.
 - **Remaining blockers**:
   - **Jordan curve theorem**: injective continuous image of circle bounds a domain — not formalized
   - **Winding number = 1 for simple closed curves** — not formalized

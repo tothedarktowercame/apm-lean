@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,16 +28,15 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "classification_detail": "2 sorries remain. ConstructionTargets.Rouche now supplies zero-count/argument-principle infrastructure, and ConstructionTargets.UnivalentDeriv supplies nonvanishing derivative after injectivity. The remaining shared blocker is the Jordan-curve/winding-number bridge from boundary injectivity to interior degree one and the exact frontier identity.",
+  "classification_detail": "1 sorry remains. Connectedness and boundedness of the canonical disk image now compile. The shared blocker is the Jordan-curve/winding-number bridge from boundary injectivity to interior degree one, openness, and the exact frontier identity.",
   "imported_at": "2026-08-03T07:45:00Z",
   "checked_at": "2026-08-07",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a96A07/lean/Main.lean",
-    "sorry_count": 2,
+    "sorry_count": 1,
     "sorry_locations": [
-      "injOn_disk_of_injOn_circle (injectivity on disk from injectivity on boundary)",
-      "surjOn_domain_of_injOn_circle (surjectivity onto bounded domain)"
+      "apm_a96a07 (Jordan separation and interior injectivity/frontier bridge)"
     ],
     "blockers": [
       "Jordan curve theorem: injective continuous image of circle bounds a simply connected domain — not in Mathlib",
