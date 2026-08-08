@@ -26,4 +26,8 @@ theorem apm_t95a02
     [CompactSpace Y] (f : X → Y)
     (hf : apm_t95A02_IsPerfectMap f) :
     IsCompact (Set.univ : Set X) := by
-  sorry
+  have hproper : IsProperMap f :=
+    isProperMap_iff_isClosedMap_and_compact_fibers.mpr
+      ⟨hf.1, hf.2.1, fun y ↦ by
+        simpa [Set.preimage, Set.mem_singleton_iff] using hf.2.2.2 y⟩
+  simpa using hproper.isCompact_preimage (isCompact_univ : IsCompact (Set.univ : Set Y))

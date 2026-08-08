@@ -1,5 +1,13 @@
 # Proof Outline: t95A02
 
+## Completed Lean proof
+
+The expanded perfect-map hypotheses match Mathlib's
+`isProperMap_iff_isClosedMap_and_compact_fibers`; the fibre predicate differs
+only syntactically from the preimage of a singleton. The resulting
+`IsProperMap f` pulls back the compact set `univ : Set Y`, whose preimage is
+`univ : Set X`, via `IsProperMap.isCompact_preimage`.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
