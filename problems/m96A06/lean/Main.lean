@@ -81,6 +81,39 @@ lemma apm_m96a06_eLpNorm_weighted_le
     (Filter.Eventually.of_forall fun t ↦ by simp [nnnorm_mul])
   simpa using h
 
+/-- The right-hand side pairing with an `L²` forcing term, packaged directly
+as a continuous linear functional on quotient `Lp`. -/
+noncomputable def apm_m96a06_forceCLM
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (b : α → ℝ) (hb : MemLp b 2 μ) : Lp ℝ 2 μ →L[ℝ] ℝ :=
+  (ContinuousLinearMap.mul ℝ ℝ).lpPairing μ 2 2 (hb.toLp b)
+
+/-- Evaluation of the packaged forcing functional is the representative-level
+integral appearing in the frozen weak equation. -/
+lemma apm_m96a06_forceCLM_apply
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (b : α → ℝ) (hb : MemLp b 2 μ) (g : Lp ℝ 2 μ) :
+    apm_m96a06_forceCLM b hb g = ∫ t, b t * g t ∂μ := by
+  rw [apm_m96a06_forceCLM, ContinuousLinearMap.lpPairing_eq_integral]
+  apply integral_congr_ae
+  filter_upwards [MemLp.coeFn_toLp hb] with t ht
+  simp [ht]
+
+/-- The weak forcing term transported along the Sobolev value map. -/
+noncomputable def apm_m96a06_forceOnH
+    {α H : Type*} [MeasurableSpace α] {μ : Measure α}
+    [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (value : H →L[ℝ] Lp ℝ 2 μ) (b : α → ℝ) (hb : MemLp b 2 μ) :
+    H →L[ℝ] ℝ :=
+  apm_m96a06_forceCLM b hb ∘L value
+
+lemma apm_m96a06_forceOnH_apply
+    {α H : Type*} [MeasurableSpace α] {μ : Measure α}
+    [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (value : H →L[ℝ] Lp ℝ 2 μ) (b : α → ℝ) (hb : MemLp b 2 μ) (h : H) :
+    apm_m96a06_forceOnH value b hb h = ∫ t, b t * value h t ∂μ := by
+  exact apm_m96a06_forceCLM_apply b hb (value h)
+
 theorem apm_m96a06
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
     (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
@@ -157,5 +190,21 @@ theorem apm_m96a06
   fully closed artifact scan, the remaining `ConstructionTargets/` modules,
   and `YoungL2.lean` yielded no closer reusable theorem.  The frozen statement
   appears sound, but this analytic interface was not completed in the pass.
+
+  CLOSER HOP 2 goes beyond representative-level bounds by constructing the
+  quotient-level forcing functional. `apm_m96a06_forceCLM` specializes
+  Mathlib's `ContinuousLinearMap.lpPairing` to `hb.toLp b`, and
+  `apm_m96a06_forceCLM_apply` transports its value back to the exact frozen
+  integral using `MemLp.coeFn_toLp`. `apm_m96a06_forceOnH` then composes this
+  functional with `value`, so the complete right-hand side of the weak problem
+  is now a continuous linear functional on `H`, with a compiled evaluation
+  theorem. This eliminates the forcing-side quotient descent entirely.
+
+  The live boundary is now the left-hand bilinear form: multiplication by the
+  arbitrary raw `L∞` coefficient must descend to quotient `Lp` (or the
+  weighted triple pairing must be bundled directly), after which coercivity,
+  Lax--Milgram, and the quadratic Fréchet remainder remain. Searches of the
+  `Lp` multiplier/smul APIs found no constructor accepting a raw `MemLp a ⊤`
+  coefficient, so this portion remains honestly open.
   -/
   sorry
