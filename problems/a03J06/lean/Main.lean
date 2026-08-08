@@ -71,19 +71,41 @@ theorem apm_a03j06 (f : ℂ → ℂ) (hf : Differentiable ℂ f)
     (A : ℝ) (m : ℕ)
     (hbound : ∀ z : ℂ, 1 < ‖z‖ → ‖f z‖ ≤ A * ‖z‖ ^ m) :
     ∃ p : Polynomial ℂ, p.natDegree ≤ m ∧ ∀ z : ℂ, f z = p.eval z := by
-  /-
-  CLOSER HOP 2 (partial): `apm_a03J06_iteratedDeriv_eq_zero_of_natDegree_lt`
-  now sends the hop-1 Cauchy bound to zero along radii `R = 2^n`, proving
-
-      m < k → iteratedDeriv k f 0 = 0.
-
-  This closes the asymptotic half without adding a sign assumption on `A`.
-  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's
-  analytic uniqueness and complex-polynomial sources, sibling artifacts, and
-  git history found no compiled theorem reconstructing a global entire
-  function from finitely supported iterated derivatives at one point.  The
-  remaining step is to form the Taylor polynomial through degree `m`, prove
-  local equality from the coefficient formula, and propagate it globally by
-  analytic uniqueness. The frozen statement is unchanged; no defect was found.
-  -/
-  sorry
+  let c : ℕ → ℂ := fun k => iteratedDeriv k f 0 / k.factorial
+  let p : Polynomial ℂ :=
+    ∑ k ∈ Finset.range (m + 1), Polynomial.monomial k (c k)
+  have hc : ∀ k, m + 1 ≤ k → c k = 0 := by
+    intro k hk
+    exact div_eq_zero_iff.mpr (Or.inl
+      (apm_a03J06_iteratedDeriv_eq_zero_of_natDegree_lt
+        f hf A m k hbound (by omega)))
+  have hpdeg : p.natDegree ≤ m := by
+    rw [Polynomial.natDegree_le_iff_coeff_eq_zero]
+    intro N hN
+    simp [p, Polynomial.coeff_monomial]
+    omega
+  refine ⟨p, hpdeg, ?_⟩
+  have hfAnalytic : AnalyticOnNhd ℂ f Set.univ :=
+    hf.differentiableOn.analyticOnNhd isOpen_univ
+  have hseries := (hfAnalytic 0 (Set.mem_univ 0)).hasFPowerSeriesAt
+  have hevent : f =ᶠ[nhds 0] fun z => p.eval z := by
+    filter_upwards [hseries.eventually_hasSum] with z hsum
+    have hzero : ∀ k ∉ Finset.range (m + 1), c k * z ^ k = 0 := by
+      intro k hk
+      have hk' : m + 1 ≤ k := by simpa using hk
+      simpa only [hc k hk', zero_mul]
+    have hsummable : Summable (fun k : ℕ => c k * z ^ k) :=
+      summable_of_ne_finset_zero hzero
+    have hfinite : HasSum (fun k : ℕ => c k * z ^ k)
+        (∑ k ∈ Finset.range (m + 1), c k * z ^ k) := by
+      have heq := tsum_eq_sum (L := SummationFilter.unconditional ℕ) hzero
+      rw [← heq]
+      exact hsummable.hasSum
+    have hsum' : HasSum (fun k : ℕ => c k * z ^ k) (f z) := by
+      simpa [c, FormalMultilinearSeries.ofScalars_apply_eq, mul_comm] using hsum
+    have heq := hsum'.unique hfinite
+    simpa [p, Polynomial.eval_finset_sum] using heq
+  have hpeq : f = fun z => p.eval z :=
+    hfAnalytic.eq_of_eventuallyEq (AnalyticOnNhd.eval_polynomial p) hevent
+  intro z
+  exact congrFun hpeq z

@@ -28,6 +28,20 @@ coefficient formula, and propagate equality globally. The searched analytic
 uniqueness and polynomial APIs provide separate ingredients but no assembled
 reconstruction theorem for this exact bridge.
 
+Closer hop 3 closes that reconstruction locally. Define
+
+```text
+p = ∑ k < m + 1, (iteratedDeriv k f 0 / k!) X^k.
+```
+
+The hop-2 vanishing lemma makes every later Taylor coefficient zero. The
+coefficient criterion for `Polynomial.natDegree` proves `p.natDegree ≤ m`.
+`AnalyticAt.hasFPowerSeriesAt` identifies `f` locally with its Taylor series;
+because the series is finitely supported, `tsum_eq_sum` identifies it with
+`p.eval`. Finally, `AnalyticOnNhd.eq_of_eventuallyEq` propagates this local
+identity across the connected complex plane. The frozen theorem is fully
+closed.
+
 ## Imported Proof Plan
 
 ```clojure
