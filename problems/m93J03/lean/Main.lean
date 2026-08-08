@@ -202,5 +202,31 @@ theorem apm_m93j03 :
   is precisely that derivative/Jacobian computation, its invertibility, and
   extraction of uniform scalar radii plus coefficient uniqueness. The frozen
   statement remains unchanged.
+
+  HOP 4 inspected
+  `hasFDerivAt_integral_of_dominated_of_fderiv_le`, its set/interval
+  variants, and `HasStrictFDerivAt.implicitFunctionOfProdDomain`. The former
+  produces only an ordinary Frechet derivative, while the latter genuinely
+  requires a strict derivative. No theorem in this snapshot upgrades these
+  parameter integrals to a strict derivative or packages their smoothness.
+
+  The exact missing lemma is:
+
+    `∃ L : (ℝ × (ℝ × ℝ)) →L[ℝ] (ℝ × ℝ),
+      HasStrictFDerivAt
+        (fun z : ℝ × (ℝ × ℝ) => apm_m93J03_residual z.1 z.2)
+        L (0, (0, 0)) ∧
+      ∀ h : ℝ × (ℝ × ℝ),
+        L h = ((1 + Real.pi) * h.2.1,
+          (1 - Real.pi) * h.2.2)`.
+
+  The formula follows by differentiating under the two restricted integrals:
+  the mixed and epsilon entries integrate `sin`, `cos`, or `sin*cos` to zero,
+  while `sin^2` and `cos^2` both integrate to `π`. Its partial map in the
+  coefficient variables is therefore diagonal with nonzero entries
+  `1 + π` and `1 - π`, exactly what the product-domain implicit-function
+  theorem needs. Proving this strict estimate (or a `ContDiff` theorem that
+  implies it) remains the identified Mathlib hole; no weaker assertion was
+  introduced and the frozen statement is unchanged.
   -/
   sorry

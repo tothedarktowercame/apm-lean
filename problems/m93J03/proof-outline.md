@@ -20,8 +20,10 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
 
 ## Remaining boundary
 
-- differentiate the resulting two parameterized integrals and compute the
-  partial Jacobian at zero;
+- prove the exact strict derivative statement recorded at the sorry boundary:
+  its action is `h ↦ ((1+π)*h.2.1, (1-π)*h.2.2)`. The available dominated
+  parameter-integral theorem supplies only `HasFDerivAt`, whereas the chosen
+  product-domain theorem requires `HasStrictFDerivAt`;
 - apply the product-domain implicit-function theorem to the now-explicit
   residual;
 - convert its neighborhood existence and uniqueness into fixed scalar radii
