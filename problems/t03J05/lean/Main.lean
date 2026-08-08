@@ -49,6 +49,7 @@ def apm_t03J05_unpunctureCurve {F : Type} [TopologicalSpace F]
 
 theorem apm_t03j05
     :
+    eulerCharacteristic true 2 = -2 ∧
     ∃ (x : apm_t03J05_GenusTwoSurface)
         (a₁ b₁ a₂ b₂ :
           C(Circle, apm_t03J05_punctured apm_t03J05_GenusTwoSurface x)),
