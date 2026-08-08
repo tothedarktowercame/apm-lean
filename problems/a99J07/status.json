@@ -28,5 +28,7 @@
     "has_receipt": true
   },
   "classification": "complete",
+  "closer_hop": 1,
+  "boundary": "Closed. Compactness makes the displayed unit-disk value set bounded above. A local maximum-modulus helper moves every polynomial value in the closed disk to a boundary value, and Polynomial.eval₂_reflect_mul_pow transports the reflected polynomial's boundary and inverse-point values to p.",
   "imported_at": "2026-05-01T19:38:17.258397Z"
 }

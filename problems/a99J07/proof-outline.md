@@ -1,5 +1,18 @@
 # Proof Outline: a99J07
 
+## Closer hop 1 completion
+
+The theorem is closed without changing its statement.  Compactness of the
+closed unit disk supplies `BddAbove`, so `le_csSup` handles values inside the
+disk.  A local maximum-modulus lemma chooses a maximum of a polynomial on the
+closed disk; if the maximizer is interior,
+`Complex.norm_eqOn_closure_of_isPreconnected_of_isMaxOn` transports its norm
+to the boundary point `1`.  For exterior `w`, apply this lemma to
+`p.reflect N` at `⅟w`.  Mathlib's exact identity
+`Polynomial.eval₂_reflect_mul_pow` identifies its boundary values with values
+of `p` on the unit circle and rewrites the value at `⅟w` into
+`p.eval w / w^N`, yielding the required estimate.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
