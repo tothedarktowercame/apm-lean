@@ -30,6 +30,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 2 additionally reduces the zero-dimensional Euler sum to its single H0 finrank and proves the endpoint conditional on the exact empty-space H0 normalization. The theorem remains blocked on that categorical normalization and, in positive dimension, Poincare-Hopf/Euler-class machinery plus comparison with the singular-homology finrank Euler characteristic.",
+  "closer_hop": 3,
+  "closer_progress": "The zero-dimensional endpoint is fully proved using the totally-disconnected-space H0 computation and initiality of the empty categorical coproduct. The remaining positive-dimensional branch requires Poincare-Hopf/Euler-class machinery plus comparison with the singular-homology finrank Euler characteristic.",
   "imported_at": "2026-07-13T17:26:56.823028Z"
 }

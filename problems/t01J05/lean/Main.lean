@@ -18,7 +18,7 @@ orientation data on the actual tangent spaces. Euler characteristic is the
 alternating sum of rational singular-homology dimensions.
 -/
 
-open CategoryTheory
+open CategoryTheory Limits
 open scoped ContDiff Manifold Topology
 
 noncomputable section
@@ -99,6 +99,45 @@ lemma apm_t01J05_isEmpty_of_nowhereZero_zeroDim
   have hv : v = 0 := Subsingleton.elim _ _
   simp [hv]
 
+/-- Rational zeroth singular homology of an empty space has finrank zero. -/
+lemma apm_t01J05_finrank_H0_eq_zero_of_isEmpty
+    (X : Type) [TopologicalSpace X] [IsEmpty X] :
+    Module.finrank ℚ (apm_t01J05_H 0 X) = 0 := by
+  let e := AlgebraicTopology.singularHomologyFunctorZeroOfTotallyDisconnectedSpace
+    (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) (TopCat.of X)
+  let c := Cofan.mk (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ)
+    (Sigma.ι (fun _ : X ↦ ModuleCat.of ℚ ℚ))
+  have hc : IsColimit c := coproductIsCoproduct _
+  have hi : IsInitial (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) :=
+    (isColimitEquivIsInitialOfIsEmpty (ModuleCat ℚ) c).toFun hc
+  have hz : IsZero (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) := hi.isZero
+  have htarget : Subsingleton
+      (↑(∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) : Type) :=
+    ModuleCat.subsingleton_of_isZero hz
+  have hsub : Subsingleton (apm_t01J05_H 0 X) := by
+    constructor
+    intro x y
+    calc
+      x = e.inv (e.hom x) := by simp
+      _ = e.inv (e.hom y) := congrArg e.inv (htarget.elim _ _)
+      _ = y := by simp
+  letI : Subsingleton (apm_t01J05_H 0 X) := hsub
+  exact Module.finrank_zero_of_subsingleton
+
+/-- The complete zero-dimensional theorem, with the empty-space homology
+normalization discharged categorically. -/
+lemma apm_t01J05_zeroDim
+    (X : Type) [TopologicalSpace X]
+    [ChartedSpace (apm_t01J05_Euclidean 0) X]
+    [IsManifold (apm_t01J05_Model 0) (⊤ : ℕ∞) X]
+    (omega : apm_t01J05_OneForm (n := 0) X)
+    (homega_ne : ∀ x : X, omega x ≠ 0) :
+    apm_t01J05_eulerCharacteristic 0 X = 0 := by
+  letI : IsEmpty X :=
+    apm_t01J05_isEmpty_of_nowhereZero_zeroDim X omega homega_ne
+  exact apm_t01J05_zeroDim_of_empty_H0 X omega homega_ne
+    (apm_t01J05_finrank_H0_eq_zero_of_isEmpty X)
+
 theorem apm_t01j05
     (n : ℕ) (X : Type)
     [TopologicalSpace X]
@@ -110,6 +149,10 @@ theorem apm_t01j05
     (omega : apm_t01J05_OneForm (n := n) X)
     (homega_ne : ∀ x : X, omega x ≠ 0) :
     apm_t01J05_eulerCharacteristic n X = 0 := by
+  cases n with
+  | zero =>
+      exact apm_t01J05_zeroDim X omega homega_ne
+  | succ n =>
   /-
   Boundary (closer hop 2): the zero-dimensional geometric obstruction is now
   compiled as `apm_t01J05_isEmpty_of_nowhereZero_zeroDim`.  It unfolds the
@@ -122,6 +165,16 @@ theorem apm_t01j05
   remaining normalization `finrank H₀ = 0`.  Thus no alternating-sum or cast
   bookkeeping remains hidden in the endpoint.
 
+  Closer hop 3 closes the zero-dimensional endpoint completely.
+  `apm_t01J05_finrank_H0_eq_zero_of_isEmpty` applies Mathlib's previously
+  missed `singularHomologyFunctorZeroOfTotallyDisconnectedSpace`: `H₀(X;ℚ)`
+  is the categorical coproduct of copies of `ℚ` indexed by `X`. For empty
+  `X`, its coproduct cocone is initial by
+  `isColimitEquivIsInitialOfIsEmpty`, hence a zero `ModuleCat` object and
+  therefore has finrank zero. `apm_t01J05_zeroDim` combines this with the
+  geometric emptiness lemma, and the main proof now dispatches `n = 0`
+  without `sorry`.
+
   In positive dimension, the remaining bridge is precisely the classical
   differential-topology argument: construct a smooth Riemannian metric,
   convert the nowhere-zero cotangent section to a nowhere-zero tangent vector
@@ -131,8 +184,9 @@ theorem apm_t01j05
   `ConstructionTargets/`, solved manifold artifacts, git history, and
   Mathlib's smooth-section, tangent-bundle, Riemannian-metric, Euler-class,
   characteristic-class, Poincaré--Hopf, and singular-homology APIs found no
-  packaged index theorem or Euler-characteristic comparison. Even the empty
-  zero-dimensional endpoint additionally needs the singular-homology
-  computation of the empty space to normalize the frozen sum.
+  packaged index theorem or Euler-characteristic comparison. Renewed searches
+  of the Riemannian-manifold files found metric structures but no theorem
+  constructing the required global metric from these frozen hypotheses or
+  relating a nowhere-zero section to the singular-homology finrank sum.
   -/
-  sorry
+    sorry
