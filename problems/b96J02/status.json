@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "classification_detail": "Square-zero action and underlying F2 finrank-four reduction compile; explicit block decomposition and concrete quotient cardinalities remain.",
+  "closer_hop": 3,
+  "classification_detail": "Square-zero action, underlying F2 finrank four, and the exact rank trichotomy 0/1/2 now compile. Adapted bases, R-linear block equivalences, and concrete quotient cardinalities remain.",
   "imported_at": "2026-07-13T17:26:54.086905Z"
 }

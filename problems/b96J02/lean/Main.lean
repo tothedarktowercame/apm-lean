@@ -71,6 +71,22 @@ lemma apm_b96J02_finrank_eq_four
   apply (Nat.pow_right_injective (by norm_num : 2 ≤ 2))
   exact hpow.symm.trans hfour
 
+/-- On a four-dimensional vector space, a square-zero endomorphism has rank
+zero, one, or two.  These are exactly the three block-count invariants needed
+by the module classification. -/
+lemma apm_b96J02_squareZero_rank_cases
+    (F V : Type*) [Field F] [AddCommGroup V] [Module F V]
+    [FiniteDimensional F V] (T : V →ₗ[F] V)
+    (hT : T.comp T = 0) (hdim : Module.finrank F V = 4) :
+    Module.finrank F (LinearMap.range T) = 0 ∨
+      Module.finrank F (LinearMap.range T) = 1 ∨
+      Module.finrank F (LinearMap.range T) = 2 := by
+  have hrange_ker : LinearMap.range T ≤ LinearMap.ker T :=
+    LinearMap.range_le_ker_iff.mpr hT
+  have hle := Submodule.finrank_mono hrange_ker
+  have hsum := T.finrank_range_add_finrank_ker
+  omega
+
 def apm_b96J02_xIdeal : Ideal apm_b96J02_R :=
   Ideal.span {apm_b96J02_x}
 
@@ -134,5 +150,13 @@ theorem apm_b96j02 :
   blocks. Thus the remaining work is now the explicit rank/block decomposition,
   together with cardinalities of the two quotient rings and separation of the
   resulting three module types by the rank of multiplication by `x`.
+
+  Closer hop 3 proves the precise rank trichotomy in
+  `apm_b96J02_squareZero_rank_cases`.  The square-zero identity gives
+  `range T ≤ ker T`; rank-nullity and dimension four force rank `0`, `1`, or
+  `2`.  This isolates exactly the three intended Jordan types without invoking
+  a Jordan-form API.  The remaining bridge is to build bases adapted to
+  `range T ≤ ker T`, lift them to `R`-linear equivalences with the three
+  displayed modules, and compute the quotient cardinalities.
   -/
   sorry
