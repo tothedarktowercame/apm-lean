@@ -102,6 +102,30 @@ lemma apm_b98a01_orderFive_normalizer_card
     simpa [s, c, Nat.mul_comm] using hprod0
   exact apm_b98a01_normalizer_card_arithmetic s c hprod hs
 
+/-- The coset action, transported to `Fin n`, realizes the normal core as a
+permutation kernel and has the required universal property. -/
+lemma apm_b98a01_coset_core_action
+    (G : Type*) [Group G] [Fintype G] (H : Subgroup G) (n : ℕ)
+    (hn : H.index = n) :
+    ∃ ψ : G →* Equiv.Perm (Fin n),
+      MonoidHom.ker ψ ≤ H ∧
+      ∀ N : Subgroup G, N.Normal → N ≤ H → N ≤ MonoidHom.ker ψ := by
+  letI : Fintype (G ⧸ H) := Fintype.ofFinite (G ⧸ H)
+  have hc : Fintype.card (G ⧸ H) = n := by
+    rw [← Nat.card_eq_fintype_card, ← H.index_eq_card, hn]
+  let e : (G ⧸ H) ≃ Fin n := Fintype.equivFinOfCardEq hc
+  let ψ : G →* Equiv.Perm (Fin n) :=
+    e.permCongrHom.toMonoidHom.comp (MulAction.toPermHom G (G ⧸ H))
+  have hker : MonoidHom.ker ψ = H.normalCore := by
+    rw [Subgroup.normalCore_eq_ker]
+    ext g
+    simp [ψ]
+  refine ⟨ψ, hker.le.trans H.normalCore_le, ?_⟩
+  intro N hN hNH
+  letI : N.Normal := hN
+  rw [hker]
+  exact Subgroup.normal_le_normalCore.mpr hNH
+
 theorem apm_b98a01 :
     (∀ (G : Type*) [Group G] [Fintype G] (H : Subgroup G) (n : ℕ),
       H.index = n →
@@ -165,5 +189,16 @@ theorem apm_b98a01 :
   normalizer cardinality `10` or `35`. Part (a), the exclusivity/refinement
   clauses, and the order-35/normal-order-7 equivalence still require the
   coset/core action and subgroup constructions described above.
+
+  Closer hop 3 closes part (a) completely in
+  `apm_b98a01_coset_core_action`.  It transports the canonical action on
+  `G ⧸ H` through `Fintype.equivFinOfCardEq`, identifies the transported
+  kernel with `H.normalCore`, and applies `normal_le_normalCore` for the
+  universal property.  The main theorem now wires both this clause and the
+  hop-2 normalizer alternative explicitly; only the refinement/exclusivity
+  clauses and order-35/normal-order-7 equivalence remain.
   -/
+  refine ⟨fun G _ _ H n hn => apm_b98a01_coset_core_action G H n hn, ?_⟩
+  intro G _ _ B hG hB hnormal
+  refine ⟨apm_b98a01_orderFive_normalizer_card G B hG hB hnormal, ?_⟩
   sorry
