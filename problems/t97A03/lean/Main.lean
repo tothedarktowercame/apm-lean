@@ -134,6 +134,21 @@ lemma apm_t97A03_surjective_of_fiber_card_two
   rw [hempty] at h
   simp at h
 
+/-- The cardinality hypothesis gives each fiber an actual equivalence with a
+two-element type, not merely a nonemptiness consequence. -/
+lemma apm_t97A03_fiber_equiv_fin_two
+    {A B : Circle} {Y : Type} (p : Y → apm_t97A03_BaseSpace A B)
+    (hdegree : ∀ x : apm_t97A03_BaseSpace A B,
+      Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (x : apm_t97A03_BaseSpace A B) :
+    Nonempty ((p ⁻¹' ({x} : Set _)) ≃ Fin 2) := by
+  have hcard0 : Nat.card (p ⁻¹' ({x} : Set _)) ≠ 0 := by
+    rw [hdegree x]
+    norm_num
+  letI : Finite (p ⁻¹' ({x} : Set _)) := Nat.finite_of_card_ne_zero hcard0
+  letI := Fintype.ofFinite (p ⁻¹' ({x} : Set _))
+  exact ⟨Fintype.equivOfCardEq (by simpa [Nat.card_eq_fintype_card] using hdegree x)⟩
+
 theorem apm_t97a03
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -184,5 +199,20 @@ theorem apm_t97a03
   exact point-set attachments needed by a future van Kampen or cellular model,
   but they do not supply either comparison theorem or the covering/subgroup
   classification, so the six-conjunct bridge remains open.
+
+  CLOSER HOP 3: `apm_t97A03_fiber_equiv_fin_two` upgrades the frozen numeric
+  fiber equation to an actual equivalence of every fiber subtype with `Fin 2`.
+  It derives finiteness using `Nat.finite_of_card_ne_zero` and then applies
+  `Fintype.equivOfCardEq`; thus explicit two-sheet fiber structure, including
+  finiteness, is no longer hidden behind `Nat.card`. Together with hop 1's
+  surjectivity lemma, the hypotheses now provide a surjective covering with
+  genuinely two-element fibers. Renewed inspection of `IsCoveringMap` fiber
+  trivializations, monodromy, fundamental-groupoid actions, `FreeGroupBasis`,
+  singular homology, and the cover siblings found no theorem classifying such
+  a connected two-sheet cover or computing its frozen invariants. Equal
+  two-element fibers alone do not choose the global monodromy. The remaining
+  bridge is still global covering classification plus van Kampen/cellular-to-
+  singular comparison and quantitative Nielsen--Schreier. The frozen
+  statement is unchanged.
   -/
   sorry

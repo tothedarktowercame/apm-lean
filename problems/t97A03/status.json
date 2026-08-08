@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Compiled the concrete north- and south-pole attachment equalities for the base adjunction quotient, in addition to surjectivity from two-point fibers. Remaining work needs covering classification, van Kampen/cellular-to-singular comparison, and a quantitative Nielsen–Schreier rank formula.",
+  "closer_hop": 3,
+  "closer_note": "Each frozen fiber is now proved finite and equivalent to Fin 2, in addition to surjectivity and the concrete north/south attachment equalities. Remaining work needs global connected-cover classification/monodromy, van Kampen or cellular-to-singular comparison, and a quantitative Nielsen–Schreier rank formula.",
   "imported_at": "2026-07-13T17:26:58.425448Z"
 }

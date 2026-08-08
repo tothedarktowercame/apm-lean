@@ -11,6 +11,8 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
   the frozen assertion that every fiber has cardinality two.
 - The north and south attachment equalities in the concrete base quotient are
   now compiled directly from the generating relation.
+- `apm_t97A03_fiber_equiv_fin_two` converts each numeric fiber-cardinality
+  equation into finiteness and an actual equivalence with `Fin 2`.
 
 ## Remaining bridges
 
@@ -25,3 +27,5 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 Mathlib currently lacks the covering classification, cellular-homology
 comparison, and quantitative free-rank equality required by this chain.
+The local two-sheet structure is now explicit; the missing classification is
+global, since the fiber equivalences do not determine monodromy.
