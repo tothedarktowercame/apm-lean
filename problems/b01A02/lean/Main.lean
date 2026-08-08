@@ -135,5 +135,27 @@ theorem apm_b01a02 :
   coprime automorphism-order argument. Searches of transfer, Z-groups,
   automorphism groups of cyclic groups, nilpotence, all solved siblings,
   `LEMMA-INDEX.md`, and construction targets found no packaged final step.
+
+  HOP 4 isolates the absent cyclic-number theorem into the two exact instances
+  needed here (recorded as contracts rather than additional declarations with
+  `sorry`):
+
+  ```lean
+  theorem apm_b01A02_isCyclic_of_card_85
+      (G : Type*) [Group G] [Fintype G]
+      (hG : Nat.card G = 85) : IsCyclic G
+
+  theorem apm_b01A02_isCyclic_of_card_255
+      (G : Type*) [Group G] [Fintype G]
+      (hG : Nat.card G = 255) : IsCyclic G
+  ```
+
+  Both statements are true instances of the classical cyclic-number
+  criterion: `85 = 5 * 17` and `255 = 3 * 5 * 17` are squarefree, and no prime
+  factor divides one less than another prime factor. The first contract makes
+  the already-constructed normal subgroup of order `85` cyclic; the second
+  supplies the final cyclicity conjunct for `G`. Proving them in this snapshot
+  still requires assembling the coprime semidirect-action argument from
+  `IsZGroup.isZGroup_iff_exists_mulEquiv` and cyclic automorphism cardinalities.
   -/
     sorry

@@ -19,8 +19,13 @@ conjunct:
 
 ## Remaining boundary
 
-- prove the transfer kernel of order 85 cyclic and show the final order-three conjugation
-  action on it is trivial, yielding cyclicity of the full group.
+- Prove `apm_b01A02_isCyclic_of_card_85` and
+  `apm_b01A02_isCyclic_of_card_255`, whose exact Lean statements are recorded
+  in the main boundary comment. They are the two specialized cyclic-number
+  instances needed for the transfer kernel and the whole group.
+- The intended proof uses `IsZGroup.isZGroup_iff_exists_mulEquiv`, computes
+  cyclic automorphism-group cardinalities, and rules out every nontrivial
+  coprime semidirect action arithmetically.
 
 The original source comment claiming Sylow theory was absent is stale in the
 current Mathlib checkout.

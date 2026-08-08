@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "note": "The smallest-prime-index theorem and both required normal subgroup existence claims are fully proved. Burnside transfer constructs a normal complement of order 85 to a cyclic Sylow-3 subgroup. The remaining sorry is cyclicity of that subgroup and of the whole group.",
+  "closer_hop": 4,
+  "note": "The missing cyclic-number input is now recorded as two exact Lean contracts: every finite group of order 85 is cyclic and every finite group of order 255 is cyclic. These specialized instances remain unproved; they would close the cyclicity of the transfer kernel and the whole group respectively.",
   "imported_at": "2026-07-13T17:26:53.336804Z"
 }
