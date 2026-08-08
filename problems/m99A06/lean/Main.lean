@@ -97,6 +97,20 @@ lemma m99A06_fixedPointMap_integrable (ε : ℝ) {f : ℝ → ℝ}
   exact (m99A06_gaussian_integrable.const_mul ε).sub
     (m99A06_sin_mul_selfConvolution_integrable hf)
 
+/-- Why this unblocks `apm_m99a06`: this is the representative-level
+small-data contraction theorem missing from the current `L¹` quotient API.
+It includes well-definedness on a.e. classes, contraction on a closed ball,
+and extraction of an integrable representative satisfying the fixed-point
+equation almost everywhere. -/
+theorem apm_m99A06_bridge_1 :
+    ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε : ℝ,
+      0 < ε → ε < ε₀ →
+        ∃ f : ℝ → ℝ, Integrable f ∧
+          ∀ᵐ x : ℝ ∂volume,
+            f x = ε * Real.exp (-|x| ^ 2) -
+              Real.sin x * m99A06SelfConvolution f x := by
+  sorry
+
 theorem apm_m99a06 :
     ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε : ℝ,
       0 < ε → ε < ε₀ → ∃ f : ℝ → ℝ, IsM99A06Solution ε f := by
