@@ -10,12 +10,12 @@
     "problem_tex": "apm/t97J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_hop": 3,
+  "closer_progress": "The explicit gamma parameterization is now proved to map into the frozen fiber target and to be bijective there. Remaining work includes the derivative and smoothness calculations, the global one-dimensional manifold structure on the fiber, and the exact smooth open-partial-homeomorphism normal form.",
   "imported_at": "2026-07-13T17:26:58.502373Z"
 }

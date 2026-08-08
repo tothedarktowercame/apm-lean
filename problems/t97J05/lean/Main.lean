@@ -64,6 +64,66 @@ def apm_t97J05_IsSmoothSubmanifold
         (⊤ : ℕ∞) (Subtype.val : s → apm_t97J05_R3) ∧
       Topology.IsEmbedding (Subtype.val : s → apm_t97J05_R3)
 
+lemma apm_t97J05_f_gamma_eq_value {t : ℝ}
+    (ht : t ∈ apm_t97J05_parameterDomain) :
+    apm_t97J05_f (apm_t97J05_gamma t) = apm_t97J05_value := by
+  have ht0 : t ≠ 0 := by
+    dsimp [apm_t97J05_parameterDomain] at ht
+    linarith [ht.1]
+  ext i
+  fin_cases i <;>
+    simp [apm_t97J05_f, apm_t97J05_gamma, apm_t97J05_value, ht0,
+      Real.cos_pi_div_two]
+
+lemma apm_t97J05_gamma_mem_parameterTarget {t : ℝ}
+    (ht : t ∈ apm_t97J05_parameterDomain) :
+    apm_t97J05_gamma t ∈ apm_t97J05_parameterTarget := by
+  refine ⟨?_, ht, ?_⟩
+  · exact apm_t97J05_f_gamma_eq_value ht
+  · simp [apm_t97J05_gamma, Real.pi_pos]
+
+lemma apm_t97J05_gamma_injOn :
+    Set.InjOn apm_t97J05_gamma apm_t97J05_parameterDomain := by
+  intro x hx y hy hxy
+  have := congrArg (fun q : apm_t97J05_R3 ↦ q 0) hxy
+  simpa [apm_t97J05_gamma] using this
+
+lemma apm_t97J05_gamma_surjOn :
+    Set.SurjOn apm_t97J05_gamma apm_t97J05_parameterDomain
+      apm_t97J05_parameterTarget := by
+  intro q hq
+  refine ⟨q 0, hq.2.1, ?_⟩
+  have hfq : apm_t97J05_f q = apm_t97J05_value := hq.1
+  have hfirst := congrArg (fun u : apm_t97J05_R2 ↦ u 0) hfq
+  have hsecond := congrArg (fun u : apm_t97J05_R2 ↦ u 1) hfq
+  have hcos : Real.cos (q 1) = 0 := by
+    simpa [apm_t97J05_f, apm_t97J05_value, Real.exp_ne_zero] using hfirst
+  have hy : q 1 = Real.pi / 2 := by
+    apply Real.strictAntiOn_cos.injOn
+    · exact ⟨le_of_lt hq.2.2.1, le_of_lt hq.2.2.2⟩
+    · constructor <;> linarith [Real.pi_pos]
+    · simpa [hcos, Real.cos_pi_div_two]
+  have hx0 : q 0 ≠ 0 := by
+    have hxpos : 0 < q 0 := lt_trans (by norm_num) hq.2.1.1
+    exact ne_of_gt hxpos
+  ext i
+  fin_cases i
+  · simp [apm_t97J05_gamma]
+  · simpa [apm_t97J05_gamma] using hy.symm
+  · simp [apm_t97J05_gamma]
+    have hmul : q 0 * q 2 = 1 := by
+      simpa [apm_t97J05_f, apm_t97J05_value] using hsecond
+    rw [inv_eq_one_div]
+    apply (div_eq_iff hx0).2
+    nlinarith [hmul]
+
+lemma apm_t97J05_gamma_bijOn :
+    Set.BijOn apm_t97J05_gamma apm_t97J05_parameterDomain
+      apm_t97J05_parameterTarget := by
+  refine ⟨?_, apm_t97J05_gamma_injOn, apm_t97J05_gamma_surjOn⟩
+  intro t ht
+  exact apm_t97J05_gamma_mem_parameterTarget ht
+
 theorem apm_t97j05 :
     (∀ h : apm_t97J05_R3,
       fderiv ℝ apm_t97J05_f apm_t97J05_p h =
@@ -84,4 +144,24 @@ theorem apm_t97j05 :
       ∀ q ∈ φ.source,
         apm_t97J05_f (φ q) ∈ ψ.source ∧
         ψ (apm_t97J05_f (φ q)) = WithLp.toLp 2 ![q 0, q 1] := by
+  /-
+  CLOSER HOP 3 boundary: the explicit fiber parameterization is now compiled
+  through its full set-theoretic bijection. `apm_t97J05_f_gamma_eq_value`
+  proves the curve lies in the frozen fiber; the target-membership and
+  injectivity lemmas expose its first coordinate; and
+  `apm_t97J05_gamma_surjOn` proves every target point is on the curve. The
+  latter extracts `cos (q 1) = 0`, uses strict antitonicity of cosine on
+  `[0,π]` to obtain `q 1 = π/2`, and solves `q 0 * q 2 = 1` using the
+  positive parameter interval. Thus `apm_t97J05_gamma_bijOn` closes the fifth
+  frozen conjunct without a generic regular-value theorem.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's constant-
+  rank, inverse-function, `OpenPartialHomeomorph`, regular-level, and subtype-
+  manifold APIs, prior regular-value artifacts, and git history found no
+  theorem assembling the demanded global manifold structure on the entire
+  fiber or the exact pair of smooth open partial homeomorphisms. The remaining
+  bridge consists of the derivative computation/surjectivity, smoothness of
+  `gamma`, the global fiber manifold instance, and especially the explicit
+  local normal-form charts. The frozen statement is unchanged.
+  -/
   sorry
