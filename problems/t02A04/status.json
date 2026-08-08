@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 2 packages the quotient as continuous canonical maps from the solid torus and disk whose attaching-circle restrictions agree. The fixed-point theorem remains blocked on the cell-attachment/RP2 equivalence, rational homology computation, and Lefschetz theorem.",
+  "closer_progress": "Closer hop 3 packages the quotient's full function-level continuous pushout property: compatible maps descend continuously, recover their restrictions, and are unique. The fixed-point theorem remains blocked on the cell-attachment/RP2 equivalence, rational homology computation, and Lefschetz theorem.",
   "imported_at": "2026-07-13T17:26:56.969666Z"
 }

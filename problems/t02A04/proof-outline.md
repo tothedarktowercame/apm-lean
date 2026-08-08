@@ -9,6 +9,10 @@ Closer hop 2 packages this attachment as a continuous gluing cocone: the
 canonical solid-torus and disk maps are continuous and their restrictions to
 the attaching circle agree.
 
+Closer hop 3 adds `apm_t02a04_gluedDesc`, its restriction equations, and
+`apm_t02a04_gluedDesc_unique`, proving the quotient's full function-level
+continuous pushout universal property.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t02A04.md`
 

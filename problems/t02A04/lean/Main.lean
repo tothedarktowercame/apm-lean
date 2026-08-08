@@ -77,6 +77,75 @@ lemma apm_t02a04_diskInclusion_boundary_eq_solidInclusion_attachingCurve :
   funext z
   exact apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve z
 
+/-- A compatible pair of maps on the solid torus and attached disk respects
+the generated gluing equivalence. -/
+lemma apm_t02a04_gluedDesc_respects
+    {Y : Type*} [TopologicalSpace Y]
+    (f : C(apm_t02a04_SolidTorus, Y)) (g : C(apm_t02a04_Disk, Y))
+    (hfg : ∀ z : Circle,
+      g (⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk) =
+      f ((⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk), z ^ 2))
+    {x y} (hxy : Relation.EqvGen apm_t02a04_Glue x y) :
+    Sum.elim f g x = Sum.elim f g y := by
+  induction hxy with
+  | rel a b hab =>
+    cases hab with
+    | boundary z => exact hfg z
+  | refl a => rfl
+  | symm a b _ ih => exact ih.symm
+  | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- Continuous pushout eliminator for the concrete cell attachment. -/
+noncomputable def apm_t02a04_gluedDesc
+    {Y : Type*} [TopologicalSpace Y]
+    (f : C(apm_t02a04_SolidTorus, Y)) (g : C(apm_t02a04_Disk, Y))
+    (hfg : ∀ z : Circle,
+      g (⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk) =
+      f ((⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk), z ^ 2)) :
+    C(apm_t02a04_X, Y) := by
+  let raw : Sum apm_t02a04_SolidTorus apm_t02a04_Disk → Y := Sum.elim f g
+  have hraw : Continuous raw := continuous_sum_dom.2 ⟨f.continuous, g.continuous⟩
+  exact ⟨Quotient.lift raw (fun _ _ hxy =>
+      apm_t02a04_gluedDesc_respects f g hfg hxy),
+    hraw.quotient_lift (fun _ _ hxy =>
+      apm_t02a04_gluedDesc_respects f g hfg hxy)⟩
+
+@[simp] lemma apm_t02a04_gluedDesc_solidInclusion
+    {Y : Type*} [TopologicalSpace Y]
+    (f : C(apm_t02a04_SolidTorus, Y)) (g : C(apm_t02a04_Disk, Y))
+    (hfg : ∀ z : Circle,
+      g (⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk) =
+      f ((⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk), z ^ 2))
+    (x : apm_t02a04_SolidTorus) :
+    apm_t02a04_gluedDesc f g hfg (apm_t02a04_solidInclusion x) = f x := rfl
+
+@[simp] lemma apm_t02a04_gluedDesc_diskInclusion
+    {Y : Type*} [TopologicalSpace Y]
+    (f : C(apm_t02a04_SolidTorus, Y)) (g : C(apm_t02a04_Disk, Y))
+    (hfg : ∀ z : Circle,
+      g (⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk) =
+      f ((⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk), z ^ 2))
+    (x : apm_t02a04_Disk) :
+    apm_t02a04_gluedDesc f g hfg (apm_t02a04_diskInclusion x) = g x := rfl
+
+/-- A continuous map from the attachment is determined by its restrictions to
+the solid torus and disk. -/
+lemma apm_t02a04_gluedDesc_unique
+    {Y : Type*} [TopologicalSpace Y]
+    (f : C(apm_t02a04_SolidTorus, Y)) (g : C(apm_t02a04_Disk, Y))
+    (hfg : ∀ z : Circle,
+      g (⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk) =
+      f ((⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk), z ^ 2))
+    (u : C(apm_t02a04_X, Y))
+    (hus : ∀ x, u (apm_t02a04_solidInclusion x) = f x)
+    (hud : ∀ x, u (apm_t02a04_diskInclusion x) = g x) :
+    u = apm_t02a04_gluedDesc f g hfg := by
+  ext q
+  refine Quotient.inductionOn q ?_
+  rintro (x | x)
+  · exact hus x
+  · exact hud x
+
 theorem apm_t02a04 :
     ∀ f : apm_t02a04_X → apm_t02a04_X,
       Continuous f → ∃ x, f x = x := by
@@ -106,5 +175,21 @@ theorem apm_t02a04 :
   packages their attaching compatibility as a function equality. These facts do not supply
   those three theorem-level bridges. No conjunct or intermediate conclusion
   is exposed in the frozen statement for a larger partial proof.
+
+  CLOSER HOP 3: the continuous cocone is now promoted to the full
+  function-level topological pushout property. `apm_t02a04_gluedDesc_respects`
+  proves compatible maps on the solid torus and disk respect the generated
+  relation; `apm_t02a04_gluedDesc` descends them continuously to `X`; its two
+  restriction lemmas recover the input maps; and
+  `apm_t02a04_gluedDesc_unique` proves uniqueness by quotient induction. Thus
+  a future cell-attachment theorem can consume an actual continuous
+  eliminator, rather than only a compatibility equation. Renewed searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, all problem artifacts, Mathlib's
+  pushout, singular-homology, projective-space, and fixed-point sources, and
+  git history found no theorem transporting this pushout to rational homology
+  or a topological Lefschetz number. The available Mayer--Vietoris sequence is
+  for sheaf cohomology, and Mathlib's other “Lefschetz” results concern the
+  model-theoretic Lefschetz principle. The RP²/homology/Lefschetz bridges remain
+  open and the frozen statement is unchanged.
   -/
   sorry
