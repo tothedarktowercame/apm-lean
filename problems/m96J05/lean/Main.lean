@@ -44,6 +44,40 @@ lemma apm_m96j05_symbol_norms (ε ξ : ℝ) :
     rw [hre, Real.exp_zero]
   · simp [apm_m96j05_shiftSymbol, Complex.norm_exp]
 
+/-- The scalar difference symbol converges pointwise to the infinitesimal
+translation symbol along the punctured neighborhood used in the theorem. -/
+lemma apm_m96j05_differenceSymbol_tendsto (ξ : ℝ) :
+    Tendsto (fun ε : ℝ => apm_m96j05_differenceSymbol ε ξ)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds (Complex.I * ξ)) := by
+  have hinner : HasDerivAt (fun ε : ℝ => ε * ξ) ξ 0 := by
+    simpa using (hasDerivAt_id (x := (0 : ℝ))).mul_const ξ
+  have hsin : HasDerivAt (fun ε : ℝ => Real.sin (ε * ξ)) ξ 0 := by
+    simpa using (Real.hasDerivAt_sin (0 * ξ)).comp 0 hinner
+  have hslope := hsin.tendsto_slope
+  have hquot : Tendsto (fun ε : ℝ => Real.sin (ε * ξ) / ε)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds ξ) := by
+    convert hslope using 1
+    funext ε
+    simp [slope, div_eq_inv_mul]
+  convert tendsto_const_nhds.mul hquot.ofReal using 1 <;>
+    simp [apm_m96j05_differenceSymbol, Complex.ofReal_div]
+
+/-- Exponentiating the preceding scalar limit gives exactly the translation
+symbol. -/
+lemma apm_m96j05_exp_differenceSymbol_tendsto (ξ : ℝ) :
+    Tendsto (fun ε : ℝ => Complex.exp (apm_m96j05_differenceSymbol ε ξ))
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds (apm_m96j05_shiftSymbol ξ)) := by
+  exact Complex.continuous_exp.continuousAt.tendsto.comp
+    (apm_m96j05_differenceSymbol_tendsto ξ)
+
+/-- Pointwise convergence after multiplying by an arbitrary Fourier datum. -/
+lemma apm_m96j05_exp_differenceSymbol_mul_tendsto (ξ : ℝ) (z : ℂ) :
+    Tendsto
+      (fun ε : ℝ => Complex.exp (apm_m96j05_differenceSymbol ε ξ) * z)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ)
+      (nhds (apm_m96j05_shiftSymbol ξ * z)) := by
+  exact (apm_m96j05_exp_differenceSymbol_tendsto ξ).mul_const z
+
 theorem apm_m96j05
     (D : ℝ → apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
     (T : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
@@ -109,5 +143,22 @@ theorem apm_m96j05
   multiplier API acts on Schwartz maps and tempered distributions, not as the
   required bounded-multiplier algebra homomorphism into `L² →L L²`.  Thus the
   original a.e.-power-series bridge remains open; the statement is unchanged.
+
+  CLOSER HOP 2 compiles the complete scalar convergence pipeline rather than
+  merely citing the sine derivative. `apm_m96j05_differenceSymbol_tendsto`
+  derives the punctured-filter quotient limit from
+  `HasDerivAt.tendsto_slope`; `apm_m96j05_exp_differenceSymbol_tendsto`
+  transports it through the complex exponential and identifies the result
+  with `shiftSymbol`; and `apm_m96j05_exp_differenceSymbol_mul_tendsto`
+  proves pointwise convergence after multiplication by arbitrary Fourier data.
+  Together with `apm_m96j05_symbol_norms`, every scalar and domination input
+  for an `Lp` dominated-convergence proof is therefore closed.
+
+  The remaining boundary is now exclusively operator-to-representative
+  identification: prove that `NormedSpace.exp (D ε) f` is a.e. the scalar
+  exponential multiplier. Renewed inspection of the `Lp` holder/smul APIs and
+  the multiplier-related siblings found no bounded-function multiplication
+  algebra homomorphism, so the countable a.e. operator-power-series assembly
+  remains honestly open.
   -/
   sorry
