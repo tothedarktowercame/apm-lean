@@ -30,7 +30,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_progress": "Closer hop 2 adds the unit-ball volume computation from t92J09 and investigates the direct moment route. Remaining work is the projected-flux identity, transport of the frozen Hausdorff subtype sphere integral, and the unit-ball coordinate second moment.",
+    "closer_hop": 3,
+    "closer_progress": "Closer hop 3 proves that the radial normal is unit and every encoded tangent projection is orthogonal to it. The remaining bridge is the explicit singleton-span projection formula, transport of the frozen Hausdorff subtype sphere integral, and the coordinate second moment.",
   "imported_at": "2026-07-13T17:26:56.975700Z"
 }

@@ -44,6 +44,25 @@ def apm_t02a05_tangentProjection (c : apm_t02a05_E3)
   (apm_t02a05_sphereTangent c q).orthogonalProjection
     (EuclideanSpace.single i 1)
 
+/-- A point of the unit sphere has a unit radial normal. -/
+lemma apm_t02a05_sphere_normal_norm (c : apm_t02a05_E3)
+    (q : Metric.sphere c 1) :
+    ‖(q : apm_t02a05_E3) - c‖ = 1 := by
+  simpa [Metric.mem_sphere, dist_eq_norm] using q.property
+
+/-- The projected coordinate vectors are orthogonal to the radial normal.
+This is the pointwise tangent-plane fact needed before expanding the flux
+coefficient into coordinate moments. -/
+lemma apm_t02a05_inner_normal_tangentProjection (c : apm_t02a05_E3)
+    (q : Metric.sphere c 1) (i : Fin 3) :
+    @inner ℝ apm_t02a05_E3 _ ((q : apm_t02a05_E3) - c)
+        (apm_t02a05_tangentProjection c q i) = 0 := by
+  have hn : (q : apm_t02a05_E3) - c ∈
+      Submodule.span ℝ ({(q : apm_t02a05_E3) - c} : Set apm_t02a05_E3) :=
+    Submodule.subset_span (Set.mem_singleton _)
+  exact Submodule.inner_right_of_mem_orthogonal hn
+    (apm_t02a05_tangentProjection c q i).property
+
 def apm_t02a05_orientedCoefficient (omega : apm_t02a05_Form2)
     (c : apm_t02a05_E3) (q : Metric.sphere c 1) : ℝ :=
   ((q : apm_t02a05_E3) - c) 0 * omega q
@@ -142,5 +161,19 @@ theorem apm_t02a05
   rotational invariance, Euclidean volume, and polynomial moment APIs found no
   packaged result. The direct route is thus narrowed to the projected-flux
   identity, surface-measure transport, and this second-moment calculation.
+
+  Closer hop 3 completes the first pointwise layer of that direct route.
+  `apm_t02a05_sphere_normal_norm` proves that the encoded radial normal is
+  unit, and `apm_t02a05_inner_normal_tangentProjection` proves directly from
+  `Submodule.inner_right_of_mem_orthogonal` that every projected coordinate
+  vector is tangent. A targeted inspection of the orthogonal-projection API
+  found membership/self/zero lemmas but no formula for projection onto the
+  orthogonal complement of a singleton span, so deriving
+  `P(eᵢ) = eᵢ - nᵢ n` remains local algebra. Searches of `LEMMA-INDEX.md`,
+  `ConstructionTargets/`, and Mathlib's sphere/Hausdorff sources again found
+  no bridge between the frozen subtype `μH[2]` integral and `Measure.toSphere`,
+  and no coordinate second-moment theorem. The bridge therefore remains open
+  at the explicit projection formula, surface-measure identification, and
+  moment evaluation; the new lemmas discharge the radial/tangency premises.
   -/
   sorry
