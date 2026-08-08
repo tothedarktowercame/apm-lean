@@ -27,3 +27,24 @@ missed Mathlib theorems `Sylow.card_eq_index_normalizer` and
 
 The faithful root action and the finite partition in steps 1 and 3 are the
 largest missing formal bridges.
+
+## Hop 4: exact missing Mathlib-level contract
+
+No packaged finite-union theorem was found after searching the repository
+index, all construction modules, and Mathlib's Sylow, p-group, cyclic-group,
+and order-of-element developments. The exact reusable statement needed for
+step 3 is:
+
+```lean
+theorem apm_b01J03_card_orderOf_eq_prime
+    (G : Type*) [Group G] [Finite G]
+    (p : ℕ) (hp : p.Prime)
+    (hPcard : ∀ P : Sylow p G, Nat.card P = p) :
+    Nat.card {g : G // orderOf g = p} =
+      Nat.card (Sylow p G) * (p - 1)
+```
+
+Every order-`p` element generates a subgroup contained in a Sylow subgroup;
+under `hPcard`, two such Sylow subgroups meeting away from `1` coincide, and
+each contributes exactly `p - 1` nonidentity elements. Existing declarations
+provide these local facts but not their finite disjoint-union assembly.

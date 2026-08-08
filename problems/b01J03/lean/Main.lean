@@ -91,5 +91,27 @@ theorem apm_b01j03
   -- hence that the p-adic multiplicity of `Nat.card G` is exactly one.
   -- After that, an explicit finite partition of order-p elements among
   -- distinct Sylow subgroups is still required; no packaged cardinality
-  -- theorem for that union was found.
+  -- theorem for that union was found.  A full search of `LEMMA-INDEX.md`,
+  -- `ConstructionTargets/`, and Mathlib's Sylow, p-group, cyclic-group, and
+  -- order-of-element sources confirms that the precise missing reusable
+  -- contract is:
+  --
+  --   theorem apm_b01J03_card_orderOf_eq_prime
+  --       (G : Type*) [Group G] [Finite G]
+  --       (p : ℕ) (hp : p.Prime)
+  --       (hPcard : ∀ P : Sylow p G, Nat.card P = p) :
+  --       Nat.card {g : G // orderOf g = p} =
+  --         Nat.card (Sylow p G) * (p - 1)
+  --
+  -- It is true because every order-`p` element generates a subgroup of
+  -- cardinality `p`, hence lies in a Sylow subgroup, while two Sylow
+  -- subgroups of cardinality `p` sharing a nonidentity element coincide.
+  -- `IsPGroup.exists_le_sylow`, `Fintype.card_zpowers`, and
+  -- `IsCyclic.card_orderOf_eq_totient` provide the local ingredients, but
+  -- no API packages the uniqueness and finite disjoint-union cardinality.
+  -- Once the faithful root action supplies `hPcard`, this equality and
+  -- `apm_b01J03_selfNormalizer_count` give exactly the third displayed
+  -- conjunct with `s = P.index`.  The later Galois-field identifications
+  -- remain separate work, so introducing an unproved helper here would not
+  -- honestly close the frozen theorem.
   sorry
