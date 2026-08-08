@@ -15,12 +15,15 @@ The frozen theorem has a compiling partial Lean development.
   with factor `2 * R` on a radius-`R` ball.
 - `apm_m94a05_picard_continuous` applies dominated convergence with the
   integrable majorant `u^2` and proves global continuity in the free parameter.
+- `apm_m94a05_extend` uses `Set.projIcc` to continuously extend interval maps
+  while retaining their sup-norm bound.
+- `apm_m94a05_picardMap` bundles the operator on
+  `ContinuousMap (Icc 0 Real.pi) ℝ`.
+- `apm_m94a05_norm_picardMap_le` proves `‖T u‖ ≤ ε + π ‖u‖²`.
 
 ## Remaining boundary
 
-- bundle the now-proved-continuous operator on
-  `ContinuousMap (Icc 0 Real.pi) ℝ`;
-- lift the pointwise bounds to the sup norm, establish invariance and strict
-  contractivity on the closed radius-`2ε` ball;
+- prove the bundled sup-norm difference estimate, then establish invariance
+  and strict contractivity on the closed radius-`2ε` ball;
 - apply Banach's fixed-point theorem and transport the result to the frozen
   unrestricted-function conclusion.
