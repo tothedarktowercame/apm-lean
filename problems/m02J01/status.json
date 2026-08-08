@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "Necessity, smooth FTC, and compact support of an endpoint-based zero-integral primitive with explicit support bounds are proved. Remaining work is extracting bounds and bundling as a TestFunction, then establishing LF-continuity so the construction can be transposed to distributions.",
+  "closer_hop": 4,
+  "boundary": "The remaining LF-topological gap is now an exact Lean contract: existence of a fixed unit-integral test function and a continuous linear normalized primitive whose derivative is φ minus its integral times that test function. The contract remains unproved.",
   "imported_at": "2026-07-13T17:26:54.480587Z"
 }

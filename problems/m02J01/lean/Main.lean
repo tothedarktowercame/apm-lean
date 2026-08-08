@@ -170,5 +170,28 @@ theorem apm_m02j01 :
   that primitive operator and its transpose; renewed TestFunction and
   Distribution searches found no packaged operator. The statement remains
   unchanged.
+
+  HOP 4 isolates the LF-topological gap as the following precise contract
+  (recorded here rather than introduced as another declaration with `sorry`):
+
+  ```lean
+  theorem apm_m02j01_normalizedPrimitiveCLM_exists :
+      ∃ (ρ : TestFunction (⊤ : Opens ℝ) ℝ ⊤)
+        (P : TestFunction (⊤ : Opens ℝ) ℝ ⊤ →L[ℝ]
+          TestFunction (⊤ : Opens ℝ) ℝ ⊤),
+        (∫ x : ℝ, ρ x) = 1 ∧
+        ∀ (φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤) (x : ℝ),
+          deriv (P φ : ℝ → ℝ) x =
+            φ x - (∫ t : ℝ, φ t) * ρ x
+  ```
+
+  This statement is true by choosing a fixed unit-integral bump `ρ` and
+  applying the endpoint primitive to `φ - (∫ φ) • ρ`; the substantive missing
+  assertion is precisely continuity for Mathlib's LF topology. For a
+  derivative test function the integral term vanishes, so transposing `P`
+  constructs a primitive of every distribution. For uniqueness, the displayed
+  identity decomposes every test function into a derivative plus its integral
+  times `ρ`, forcing any distribution annihilating derivatives to be a scalar
+  multiple of integration.
   -/
   sorry

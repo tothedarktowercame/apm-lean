@@ -20,8 +20,10 @@ The necessity direction of the test-function primitive criterion is complete.
 
 ## Remaining bridge
 
-Extract explicit interval bounds from the test function's compact support and
-bundle the resulting smooth compactly supported primitive as a test function.
-To transpose this construction and prove distributional surjectivity/kernel
-uniqueness, establish continuity of the primitive operator for Mathlib's LF
-test-function topology.
+Prove `apm_m02j01_normalizedPrimitiveCLM_exists` as stated precisely in the
+main boundary comment. It asks for a fixed unit-integral test function `ρ` and
+an LF-continuous linear operator `P` satisfying
+`(P φ)' = φ - (∫ φ)ρ`. For derivative test functions the correction vanishes,
+so transposing `P` proves distributional surjectivity. The same identity
+decomposes arbitrary test functions modulo derivatives and proves that the
+kernel consists exactly of scalar multiples of integration.
