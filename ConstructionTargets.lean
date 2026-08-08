@@ -11,6 +11,7 @@ import ConstructionTargets.RadialMajorantAE
 import ConstructionTargets.Rouche
 import ConstructionTargets.SchwarzEquality
 import ConstructionTargets.Sinc
+import ConstructionTargets.Surfaces
 import ConstructionTargets.UnivalentDeriv
 import ConstructionTargets.YoungConvolution
 import ConstructionTargets.SetIntegralPrimitive
