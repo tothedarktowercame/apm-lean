@@ -60,6 +60,29 @@ lemma apm_a99J03_kernel_deriv_bound
   exact div_le_div_of_nonneg_left (abs_nonneg (f y)) (sq_pos_of_pos hx2)
     ((sq_le_sq₀ hx2.le hzy0.le).2 hzy.le)
 
+/-- The elementary endpoint kernel arising from the indicator datum is not
+integrable near zero. -/
+lemma apm_a99J03_endpoint_kernel_not_integrable :
+    ¬ IntegrableOn (fun x : ℝ => 1 / (x * (x + 1))) (Ioo 0 1) volume := by
+  intro hker
+  have hinv : IntegrableOn (fun x : ℝ => x⁻¹) (Ioo 0 1) volume := by
+    apply (hker.const_mul 2).mono' measurable_inv.aestronglyMeasurable
+    filter_upwards [ae_restrict_mem measurableSet_Ioo] with x hx
+    have hx0 : 0 < x := hx.1
+    have hx1 : x + 1 ≤ 2 := by linarith [hx.2]
+    rw [Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hx0)]
+    have hden : 0 < x * (x + 1) := mul_pos hx0 (by linarith)
+    calc
+      x⁻¹ = (x + 1) / (x * (x + 1)) := by field_simp
+      _ ≤ 2 / (x * (x + 1)) := (div_le_div_iff_of_pos_right hden).2 hx1
+      _ = 2 * (1 / (x * (x + 1))) := by rw [div_eq_mul_inv, one_div]
+  have hrpow : IntegrableOn (fun x : ℝ => x ^ (-1 : ℝ)) (Ioo 0 1) volume := by
+    refine hinv.congr_fun ?_ measurableSet_Ioo
+    intro x hx
+    simpa only using (Real.rpow_neg_one x).symm
+  rw [intervalIntegral.integrableOn_Ioo_rpow_iff zero_lt_one] at hrpow
+  norm_num at hrpow
+
 theorem apm_a99j03
     (f : ℝ → ℝ) (hf : IntegrableOn f (Ioi 0)) :
     ContDiffOn ℝ ∞ (apm_a99J03_transform f) (Ioi 0) ∧
@@ -70,7 +93,7 @@ theorem apm_a99j03
       (deriv (apm_a99J03_transform apm_a99J03_counterexample))
       (Ioi 0) := by
   /-
-  Boundary (closer hop 1): `apm_a99J03_counterexample_integrableOn` above
+  Boundary (closer hop 3): `apm_a99J03_counterexample_integrableOn` above
   closes the third conjunct directly from bounded support.  Searches of
   `LEMMA-INDEX.md`, all `ConstructionTargets/`, closed siblings, and Mathlib's
   parameter-integral APIs found the reusable theorem
@@ -95,5 +118,16 @@ theorem apm_a99j03
   `1/(x*(x+1))`; the final blocker is its nonintegrability at zero via the
   power-integrability API.  Thus the explicit datum's integrability is proved,
   while differentiation under the improper integral remains open.
+
+  Closer hop 3 proves `apm_a99J03_endpoint_kernel_not_integrable`. It compares
+  `x⁻¹` with twice `1/(x*(x+1))` on `(0,1)` and invokes Mathlib's exact
+  `integrableOn_Ioo_rpow_iff` criterion at exponent `-1`. Thus, once the
+  counterexample derivative is rewritten to the displayed elementary kernel,
+  its endpoint failure is completely discharged. Renewed inspection of the
+  parametric-integral examples in `a01A09`, `a01A11`, and `a96A04` did not
+  yield a packaged iteration from the first derivative formula to the frozen
+  `ContDiffOn ∞` statement. The remaining bridge is precisely that dominated
+  differentiation packaging, its iteration, and the Tonelli estimate away
+  from zero.
   -/
   sorry

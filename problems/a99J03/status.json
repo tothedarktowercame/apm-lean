@@ -28,6 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 2 proved apm_a99J03_hasDerivAt_kernel and apm_a99J03_kernel_deriv_bound, supplying the exact pointwise derivative and uniform local L1 domination required by Mathlib's parametric-integral theorem. Remaining work is measurability/integrability packaging, iteration to ContDiffOn, Tonelli for the derivative L1 bound, and the endpoint nonintegrability calculation.",
+  "classification_detail": "Closer hop 3 proves the exact kernel derivative, its uniform local L1 domination, and nonintegrability of the endpoint comparison kernel 1/(x*(x+1)) by reduction to the rpow exponent -1 criterion. Remaining work is measurability/integrability packaging, iteration to ContDiffOn, Tonelli for the derivative L1 bound, and rewriting the explicit derivative to that compiled endpoint kernel.",
+  "closer_hop": 3,
+  "closer_note": "Proved the endpoint kernel 1/(x*(x+1)) is not integrable on (0,1), closing the final power-integrability obstruction for the counterexample. Dominated differentiation, smoothness iteration, Tonelli, and the explicit derivative rewrite remain.",
   "imported_at": "2026-07-13T17:26:53.061682Z"
 }

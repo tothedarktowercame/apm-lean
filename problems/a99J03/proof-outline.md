@@ -9,6 +9,9 @@ counterexample belongs to `L¹(0,∞)`.
   derivative `-f y / (x+y)^2`.
 - `apm_a99J03_kernel_deriv_bound` proves the uniform local domination by
   `|f y| / (x/2)^2` on `x/2 < z < 3x/2`.
+- `apm_a99J03_endpoint_kernel_not_integrable` proves
+  `1/(x*(x+1)) ∉ L¹(0,1)` by comparison with `1/x` and Mathlib's exact rpow
+  integrability criterion.
 
 ## Follow-up Needed
 
@@ -17,5 +20,5 @@ counterexample belongs to `L¹(0,∞)`.
   compiled kernel lemmas.
 - Iterate the dominated differentiation argument to obtain `ContDiffOn`.
 - Use Tonelli and the derivative formula for the `L¹(Ici a)` estimate.
-- Specialize the formula to the indicator datum and reduce endpoint failure to
-  nonintegrability of `1 / (x * (x + 1))` near zero.
+- Specialize the formula to the indicator datum and rewrite its derivative as
+  the now-compiled nonintegrable kernel `1 / (x * (x + 1))` near zero.
