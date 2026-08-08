@@ -2,7 +2,7 @@
 
 The analytic evaluation is formalized through the symmetric truncation limit.
 The absolute-integrability bridge is now closed, so the final theorem follows
-from `a96A08_integrable`, `tendsto_symmetric_f`, and Mathlib's
+from `apm_a96A08_integrable`, `tendsto_symmetric_f`, and Mathlib's
 `intervalIntegral_tendsto_integral`. The complete file is sorry-free.
 
 - informal-solution: `informal-solution.md`

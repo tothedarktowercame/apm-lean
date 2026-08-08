@@ -28,7 +28,15 @@
     "has_receipt": false
   },
   "classification": "complete-lean-proof",
-  "closer_hop": 2,
-  "closer_note": "Closed absolute integrability by a partial-fraction proof on the compact middle interval and comparison with 2/x^2 on both tails.",
-  "imported_at": "2026-07-13T17:26:52.571765Z"
+  "closer_hop": 3,
+  "closer_note": "Recovered the historical symmetric-limit proof and updated the absolute-integrability argument for the current Mathlib API.",
+  "imported_at": "2026-07-13T17:26:52.571765Z",
+  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a96A08/lean/Main.lean",
+    "sorry_count": 0,
+    "sorry_locations": [],
+    "blockers": []
+  }
 }
