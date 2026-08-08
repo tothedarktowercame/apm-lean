@@ -35,6 +35,38 @@ def apm_m95J03_flow (t : ℝ) : Matrix (Fin 4) (Fin 4) ℝ :=
 def apm_m95J03_ivpSolution (v : Fin 4 → ℝ) (t : ℝ) : Fin 4 → ℝ :=
   (apm_m95J03_flow t).mulVec v
 
+/-- At time zero the explicit flow matrix is the identity. -/
+lemma apm_m95J03_flow_zero : apm_m95J03_flow 0 = 1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    norm_num [apm_m95J03_flow, Matrix.one_apply]
+
+/-- Consequently the explicit IVP solution assumes its prescribed initial
+value. -/
+lemma apm_m95J03_ivpSolution_zero (v : Fin 4 → ℝ) :
+    apm_m95J03_ivpSolution v 0 = v := by
+  rw [apm_m95J03_ivpSolution, apm_m95J03_flow_zero, Matrix.one_mulVec]
+
+/-- The limiting matrix retains its first subdiagonal entry. -/
+lemma apm_m95J03_B_zero_ne_zero : apm_m95J03_B 0 ≠ 0 := by
+  intro h
+  have hij := congrFun (congrFun h (1 : Fin 4)) (0 : Fin 4)
+  norm_num [apm_m95J03_B] at hij
+
+/-- The limiting four-by-four shift block is nilpotent of exponent four. -/
+lemma apm_m95J03_B_zero_pow_four : apm_m95J03_B 0 ^ 4 = 0 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    norm_num [apm_m95J03_B, pow_succ, Matrix.mul_apply, Fin.sum_univ_succ]
+
+/-- The third power is still nonzero, so the nilpotence index is exactly
+four. -/
+lemma apm_m95J03_B_zero_pow_three_ne_zero : apm_m95J03_B 0 ^ 3 ≠ 0 := by
+  intro h
+  have hij := congrFun (congrFun h (3 : Fin 4)) (0 : Fin 4)
+  norm_num [apm_m95J03_B, pow_succ, Matrix.mul_apply, Fin.sum_univ_succ] at hij
+  omega
+
 /-- A left inverse makes the proposed solution unique, and solvability is
 equivalent to its image being fixed by the associated projection. -/
 lemma apm_m95J03_leftInverse_solution
@@ -104,4 +136,21 @@ theorem apm_m95j03 :
   -- `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's matrix exponential and
   -- Jordan APIs, sibling artifacts, and git history found no packaged theorem
   -- matching this concrete family. The frozen statement is unchanged.
+  --
+  -- Closer hop 2 closes the limiting nilpotent-block calculations and the IVP
+  -- base case. `apm_m95J03_B_zero_ne_zero`,
+  -- `apm_m95J03_B_zero_pow_four`, and
+  -- `apm_m95J03_B_zero_pow_three_ne_zero` prove that `B(0)` is nonzero and
+  -- has nilpotence index exactly four by finite entrywise computation.
+  -- `apm_m95J03_flow_zero` proves the explicit flow matrix is the identity at
+  -- zero, and `apm_m95J03_ivpSolution_zero` immediately closes the final
+  -- frozen conjunct for every initial vector.
+  --
+  -- Searches beyond hop 1 inspected `MatrixExponential`, finite-matrix
+  -- continuity, `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling matrix
+  -- artifacts, and git history. No packaged Vandermonde conjugator or
+  -- coordinatewise flow-derivative theorem was found. Entrywise continuity,
+  -- diagonal-Jordan convergence, nonzero-parameter conjugacy, exponential
+  -- identification, and the derivative formula remain open. The frozen
+  -- statement is unchanged.
   sorry
