@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Compiled the final Weierstrass implication and packaged the boundary majorant with global measurability and strict positivity on (0,2pi). Remaining work is its logarithmic-substitution integrability, boundary L1 convergence, and the Cauchy-kernel estimate producing local uniform convergence.",
+  "closer_hop": 4,
+  "closer_note": "Failed-with-statement: Jacobian and improper-substitution APIs were found, but both retain the transformed integrability obligation. The exact remaining interfaces are majorant integrability, measurable-limit/DCT boundary L1 convergence, and Cauchy reconstruction from boundary L1 convergence to local uniform convergence.",
   "imported_at": "2026-07-13T17:26:52.990883Z"
 }

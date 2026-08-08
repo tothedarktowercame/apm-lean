@@ -18,11 +18,17 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 ## Remaining bridges
 
-1. Prove the logarithmic majorant integrable by substitution.
+1. Prove the exact Lean statement
+   `Integrable apm_a98A07_majorant
+   ((volume : Measure ℝ).restrict (Ioo 0 (2 * Real.pi)))` by logarithmic
+   substitution.  The general Jacobian and improper-integral substitution
+   theorems were checked, but each leaves this transformed integrability
+   obligation rather than proving it.
 2. Select the measurable a.e. boundary limit and apply dominated convergence
-   in L¹.
+   in L¹, producing a measurable `h` and convergence of
+   `∫ t, ‖F n t - h t‖` to zero for the restricted measure.
 3. Use Cauchy's formula and a compact-subdisk kernel bound to obtain locally
-   uniform convergence.
+   uniform convergence from that boundary L¹ convergence.
 
 The former fourth bridge is closed by
 `TendstoLocallyUniformlyOn.differentiableOn` from

@@ -111,5 +111,38 @@ theorem apm_a98a07 :
   `1/(t*log(t/(4π))²)`; proving its integrability by `u = -log(t/(4π))`, then
   selecting the measurable a.e. limit and deriving the Cauchy-kernel bound,
   remains open.
+
+  HOP 4: renewed inspection found the general one-dimensional Jacobian result
+  `MeasureTheory.integrableOn_image_iff_integrableOn_abs_deriv_smul` and the
+  improper-integral substitution theorem
+  `MeasureTheory.integral_comp_mul_deriv_Ioi`.  Neither closes the logarithmic
+  substitution: the former leaves the transformed integrability obligation,
+  while the latter assumes both integrability obligations.  The precise first
+  missing lemma is
+
+      Integrable apm_a98A07_majorant
+        ((volume : Measure ℝ).restrict (Ioo 0 (2 * Real.pi))).
+
+  After that, the two independent interfaces needed by the existing proof are:
+
+      ∀ {F : ℕ → ℝ → ℂ},
+        (∀ n, AEStronglyMeasurable (F n) μ) →
+        (∀ n, ∀ᵐ t ∂μ, ‖F n t‖ ≤ apm_a98A07_majorant t) →
+        (∀ᵐ t ∂μ, ∃ w, Tendsto (fun n => F n t) atTop (𝓝 w)) →
+        ∃ h, AEStronglyMeasurable h μ ∧
+          Tendsto (fun n => ∫ t, ‖F n t - h t‖ ∂μ) atTop (𝓝 0)
+
+  for `μ = volume.restrict (Ioo 0 (2 * Real.pi))`, and a Cauchy reconstruction
+  lemma saying that this L¹ convergence of the boundary traces of functions
+  holomorphic on a common neighborhood of the closed unit disk implies
+  `∃ g, TendstoLocallyUniformlyOn f g atTop (ball 0 1)`.  The first is a
+  standard measurable-limit plus dominated-convergence assembly; the second
+  is the genuinely complex-analytic kernel estimate.  These statements are
+  true and together feed directly into
+  `apm_a98A07_differentiableOn_of_locallyUniform`.  No packaged declaration
+  for either assembly was found in `LEMMA-INDEX.md`, `ConstructionTargets/`,
+  the solved corpus, or Mathlib's dominated-convergence, Cauchy-integral,
+  Jacobian, and improper-integral sources.  Thus outcomes A and B both remain
+  open, with the frozen statement unchanged.
   -/
   sorry
