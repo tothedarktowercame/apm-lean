@@ -70,6 +70,29 @@ lemma apmPoissonIntegral_L2_contraction
     using convolution_L2_contraction_of_probability_kernel
       (apmPoissonKernel_nonneg hy) (apmPoissonKernel_integral_one hy) hf
 
+/-- Poisson convolution depends only on the almost-everywhere equivalence
+class of its input. This is the key well-definedness seam for descending the
+raw formula to `Lp`. -/
+lemma apmPoissonIntegral_congr_ae
+    (y : ℝ) {f g : ℝ → ℝ} (hfg : f =ᵐ[volume] g) :
+    apmPoissonIntegral y f = apmPoissonIntegral y g := by
+  funext x
+  unfold apmPoissonIntegral
+  apply integral_congr_ae
+  filter_upwards [hfg] with t ht
+  rw [ht]
+
+/-- Consequently the packaged `L²` output is independent of every choice of
+raw representative and membership proof. -/
+lemma apmPoissonIntegral_toLp_congr
+    {y : ℝ} (hy : 0 < y) {f g : ℝ → ℝ}
+    (hf : MemLp f 2 volume) (hg : MemLp g 2 volume)
+    (hfg : f =ᵐ[volume] g) :
+    (apmPoissonIntegral_memLp hy hf).toLp (apmPoissonIntegral y f) =
+      (apmPoissonIntegral_memLp hy hg).toLp (apmPoissonIntegral y g) := by
+  apply MemLp.toLp_congr
+  exact Eventually.of_forall fun x => congrFun (apmPoissonIntegral_congr_ae y hfg) x
+
 theorem apm_a98j03 :
     ∃ T : ℝ → (Lp ℝ 2 volume →L[ℝ] Lp ℝ 2 volume),
       (∀ y : ℝ, 0 < y → ‖T y‖ ≤ 1) ∧
@@ -79,7 +102,7 @@ theorem apm_a98j03 :
       (∀ F : Lp ℝ 2 volume,
         Tendsto (fun y ↦ T y F) (nhdsWithin 0 (Ioi 0)) (nhds F)) := by
   /-
-  PARTIAL boundary (closer hop 1).
+  PARTIAL boundary (closer hop 3).
 
   The original missing-dependency diagnosis is resolved. The frozen kernel is
   identified with `ConstructionTargets.RadialMajorantAE.poissonKernel` by
@@ -112,5 +135,17 @@ theorem apm_a98j03 :
   `apmPoissonIntegral_L2_contraction`. Hence the norm-one analytic estimate is
   closed too. What remains is purely quotient descent/continuous-linear-map
   construction and transport of strong convergence.
+
+  CLOSER HOP 3: `apmPoissonIntegral_congr_ae` now proves that the raw
+  convolution is unchanged by replacement of its input on a null set, and
+  `apmPoissonIntegral_toLp_congr` transports this to literal equality of the
+  packaged `Lp` outputs, independent of both representative and `MemLp` proof.
+  This closes the central well-definedness obligation for quotient descent.
+  Searches of Mathlib's `Lp` quotient-lift and continuous-linear-map
+  constructors found no constructor that simultaneously supplies the remaining
+  convolution additivity/scalar laws and contraction bound. Those laws must
+  still be proved from Bochner integral linearity and bundled, after which the
+  strong approximate-identity theorem from `a94J04` must be promoted or
+  transported.
   -/
   sorry

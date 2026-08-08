@@ -17,10 +17,15 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 - `apmPoissonIntegral_L2_contraction` applies the axiom-clean
   `YoungL2.convolution_L2_contraction_of_probability_kernel`, proving the sharp
   raw estimate `‖P_y * f‖₂ ≤ ‖f‖₂`.
+- `apmPoissonIntegral_congr_ae` proves the raw convolution respects a.e.
+  equality of inputs.
+- `apmPoissonIntegral_toLp_congr` proves the corresponding packaged `Lp`
+  output is independent of representative and membership proof.
 
 ## Remaining bridges
 
-1. Descend convolution to the `Lp` a.e. quotient and prove linearity.
+1. Prove convolution additivity/scalar compatibility and use the compiled
+   a.e.-invariance to descend it to `Lp`.
 2. Bundle the now-proved sharp estimate as a norm-one continuous linear
    operator.
 3. Transport the strong approximate-identity convergence proved in sibling
