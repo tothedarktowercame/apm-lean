@@ -153,6 +153,17 @@ lemma apm_t01a03_noRetraction_of_H1map_zero
   rw [hi]
   simp
 
+/-- The middle-circle obstruction, factored through precisely the missing
+library fact that integral first homology of the circle is nontrivial. -/
+lemma apm_t01a03_noRetraction_circle_of_H1_nontrivial
+    [Nontrivial (apm_t01a03_H1 Circle)]
+    {X : Type} [TopologicalSpace X] (i : C(Circle, X))
+    (hi : apm_t01a03_H1map i = 0) :
+    ¬apm_t01a03_HasRetraction i := by
+  apply apm_t01a03_noRetraction_of_H1map_zero i hi
+  obtain ⟨x, hx⟩ := exists_ne (0 : apm_t01a03_H1 Circle)
+  exact ⟨x, hx⟩
+
 theorem apm_t01a03 :
     ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
       [PathConnectedSpace S] [ChartedSpace apm_t01a03_E2 S]
@@ -187,6 +198,21 @@ theorem apm_t01a03 :
     `Circle` is nonzero (or isomorphic to `ℤ`).  Mathlib supplies functoriality
     and homotopy invariance, but without this circle computation the zero-map
     contradiction cannot be completed locally.
+
+    Closer hop 3 searched below the object-level computation as well: the
+    singular-chain complex, reduced-homology, long-exact-sequence, circle
+    fundamental-group, Hurewicz/abelianization, and `AddCircle` APIs provide
+    neither a certified nonboundary 1-cycle nor an alternate route to a
+    nonzero class. The same missing computation is recorded independently by
+    `t03J01`, `t01J03`, `t02A03`, `t91A05`, and `t97J03`.
+
+    This hop packages the exact reusable interface as
+    `apm_t01a03_noRetraction_circle_of_H1_nontrivial`: a future
+    `Nontrivial (apm_t01a03_H1 Circle)` instance closes this branch directly,
+    with no need to expose a chosen cycle. The remaining `sorry` is therefore
+    still exactly the absent integral circle-homology nontriviality theorem,
+    not retraction or category-theory bookkeeping. The frozen statement is
+    unchanged.
     -/
     sorry
   · intro hret

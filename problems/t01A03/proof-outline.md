@@ -17,6 +17,8 @@ the relevant induced maps.
   retraction makes the induced singular-`H₁` map injective.
 - `apm_t01a03_noRetraction_of_H1map_zero` packages the resulting obstruction
   for any domain whose first homology contains a nonzero element.
+- `apm_t01a03_noRetraction_circle_of_H1_nontrivial` specializes the entire
+  middle-circle argument to the exact missing `Nontrivial H₁(Circle)` instance.
 
 ## Remaining boundary
 
