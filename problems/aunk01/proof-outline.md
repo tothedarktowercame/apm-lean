@@ -7,6 +7,15 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+The proof is closed using additive Haar invariance. The translated image is
+rewritten as the preimage of `A` under `x ↦ x + (-y)`; measurability follows
+by composition and its measure is unchanged by
+`measure_preimage_add_right`. The integral clause is exactly
+`integral_add_right_eq_self`. The frozen statement is unchanged and the Lean
+proof is sorry-free.
+
 ## Imported Proof Plan
 
 ```clojure
