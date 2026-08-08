@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Continuity, the direct Circle squaring covering theorem, and surjectivity of coordinatewise torus squaring are compiled. Remaining work is product-cover/deck-action assembly, torus H2 degree theory, and the Lefschetz fixed-point bridge.",
+    "closer_hop": 3,
+    "boundary": "Continuity, the direct Circle squaring covering theorem, surjectivity, and the exact equal-or-antipodal classification of both coordinates in every torus fiber are compiled. Remaining work is product-cover/deck-action assembly, torus H2 degree theory, and the Lefschetz fixed-point bridge.",
   "imported_at": "2026-07-13T17:26:56.679076Z"
 }

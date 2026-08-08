@@ -77,6 +77,40 @@ lemma apm_t01A02_cover_surjective : Function.Surjective apm_t01A02_cover := by
   rcases hsurj w with ⟨w', hw'⟩
   exact ⟨(z', w'), by simp [apm_t01A02_cover, hz', hw']⟩
 
+/-- The antipodal point on the circle. -/
+def apm_t01A02_antipode (z : Circle) : Circle :=
+  ⟨-(z : ℂ), by
+    simpa [Submonoid.unitSphere, mem_sphere_zero_iff_norm] using z.property⟩
+
+/-- The only points of the circle with the same square are antipodal points.
+This is the algebraic kernel calculation needed for the four deck
+transformations of the product cover. -/
+lemma apm_t01A02_circle_sq_eq_sq_iff (z w : Circle) :
+    z ^ 2 = w ^ 2 ↔ z = w ∨ z = apm_t01A02_antipode w := by
+  constructor
+  · intro h
+    have hc : (z : ℂ) ^ 2 = (w : ℂ) ^ 2 := by
+      exact_mod_cast h
+    rcases sq_eq_sq_iff_eq_or_eq_neg.mp hc with hzw | hzw
+    · exact Or.inl (Subtype.ext hzw)
+    · right
+      apply Subtype.ext
+      exact hzw
+  · rintro (rfl | rfl)
+    · rfl
+    · ext
+      simp [apm_t01A02_antipode]
+
+/-- Equality in a fiber of the torus squaring map is independently equality
+or antipodality in the two circle coordinates. -/
+lemma apm_t01A02_cover_eq_iff (x y : apm_t01A02_Torus) :
+    apm_t01A02_cover x = apm_t01A02_cover y ↔
+      (x.1 = y.1 ∨ x.1 = apm_t01A02_antipode y.1) ∧
+      (x.2 = y.2 ∨ x.2 = apm_t01A02_antipode y.2) := by
+  simp only [apm_t01A02_cover, Prod.mk.injEq]
+  exact and_congr (apm_t01A02_circle_sq_eq_sq_iff x.1 y.1)
+    (apm_t01A02_circle_sq_eq_sq_iff x.2 y.2)
+
 theorem apm_t01a02 :
     ∀ f : C(apm_t01A02_Torus, apm_t01A02_Torus),
       ¬Function.Surjective f →
@@ -125,5 +159,20 @@ theorem apm_t01a02 :
   kernels with `(ZMod 2)²`.  Searches of the newer Circle quotient-cover API
   did not uncover any torus `H₂` computation or Lefschetz theorem, so the first
   and last conjuncts retain the deeper hop-1 boundary.
+
+  CLOSER HOP 3: the kernel classification is now compiled rather than merely
+  proposed. `apm_t01A02_antipode` bundles complex negation on `Circle`,
+  `apm_t01A02_circle_sq_eq_sq_iff` proves that equal squares are exactly equal
+  or antipodal points, and `apm_t01A02_cover_eq_iff` applies this independently
+  to both torus coordinates. This identifies every fiber set-theoretically
+  with its four sign choices and discharges the algebraic ingredient needed
+  for fiber transitivity. A renewed search of the covering sources, lemma
+  index, construction modules, all problem artifacts, and git history still
+  found no product-cover constructor; directly building one requires pairing
+  the two local trivializations and reconciling their fiber index types.
+  Neither the singular-homology corpus nor prior torus artifacts supplies the
+  independent `H₂` degree or Lefschetz bridges. Thus the four-point fiber
+  classification is closed, but the product trivialization/deck action and
+  the two global algebraic-topology conjuncts remain open.
   -/
   sorry
