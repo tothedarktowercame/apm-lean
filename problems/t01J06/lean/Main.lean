@@ -142,6 +142,30 @@ lemma apm_t01J06_inclusionPullback_apply
 result yields an immediate contradiction. -/
 lemma apm_t01J06_target_period_pos : 0 < 4 * Real.pi / 3 := by positivity
 
+/-- Why this unblocks `apm_t01j06`: this is the missing projection-coordinate
+simplification together with the two-dimensional Hausdorff sphere-moment
+calculation. It supplies the theorem's numerical period conjunct directly. -/
+theorem apm_t01J06_bridge_sphereIntegral
+    (omega : apm_t01J06_AmbientForm2)
+    (homega : apm_t01J06_isOmega omega)
+    (alpha : apm_t01J06_SphereForm2)
+    (halpha : apm_t01J06_isInclusionPullback omega alpha) :
+    apm_t01J06_sphereIntegral alpha = 4 * Real.pi / 3 := by
+  sorry
+
+/-- Why this unblocks `apm_t01j06`: this is Stokes' theorem specialized to
+the frozen Hausdorff-measure encoding of the oriented unit-sphere integral.
+A smooth closed ambient extension therefore forces the restricted period to
+vanish, contradicting `apm_t01J06_bridge_sphereIntegral`. -/
+theorem apm_t01J06_bridge_closed_extension_integral_zero
+    (eta : apm_t01J06_AmbientForm2)
+    (alpha : apm_t01J06_SphereForm2)
+    (heta_smooth : ContDiff ℝ (⊤ : ℕ∞) eta)
+    (heta_closed : extDeriv eta = 0)
+    (heta_pullback : apm_t01J06_isInclusionPullback eta alpha) :
+    apm_t01J06_sphereIntegral alpha = 0 := by
+  sorry
+
 theorem apm_t01j06
     (omega : apm_t01J06_AmbientForm2)
     (homega : apm_t01J06_isOmega omega)

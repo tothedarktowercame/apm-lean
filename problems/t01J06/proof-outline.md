@@ -30,3 +30,16 @@ now compiled directly from the alternating-map construction.
 - Alternatively, develop direct orthogonal-projection simplification and the
   required Hausdorff sphere-coordinate moment formulas; Mathlib's box-integral
   divergence theorem does not currently connect to this integral.
+
+## Hop 4 bridge statements
+
+- `apm_t01J06_bridge_sphereIntegral` states the exact projection-coordinate
+  and Hausdorff sphere-moment result: any specified ambient form restricts to
+  a sphere form of integral `4 * Real.pi / 3`.
+- `apm_t01J06_bridge_closed_extension_integral_zero` states the specialized
+  Stokes theorem needed by this encoding: the restriction of a smooth closed
+  ambient two-form has zero sphere integral.
+
+The first bridge proves the numerical conjunct. The second contradicts it for
+any proposed closed extension, and the already compiled projection-pullback
+existential proves the final conjunct.
