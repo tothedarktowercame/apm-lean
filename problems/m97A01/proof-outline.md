@@ -15,10 +15,18 @@ The frozen theorem has a compiling partial Lean development.
   `|A|x ↦ Ax` using `LinearMap.compLeftInverse`.
 - Its application equation and exact norm preservation are proved by
   `apm_m97A01_polarOnRange_apply` and `apm_m97A01_polarOnRange_norm`.
+- `apm_m97A01_modulusInclusion` constructs the exact canonical map into the
+  closure of the modulus range required by the frozen predicate, and its
+  underlying-value equation is proved.
 
 ## Remaining boundary
 
-- bundle `range |A| ↪ closure (range |A|)` as a dense uniform embedding and
-  apply `ContinuousLinearMap.extend`, preserving the isometry and uniqueness;
+- prove dense range for the compiled codomain-restricted inclusion and apply
+  `LinearMap.extendOfNorm` or `ContinuousLinearMap.extend`, preserving the
+  isometry and uniqueness;
 - prove that the adjoint of a compact continuous linear operator on a Hilbert
   space is compact, either directly or through polar decomposition.
+
+Closer hop 3 leaves an honest partial: the exact frozen inclusion now
+compiles, but its dense-range packaging, the extension, and compactness of the
+adjoint remain open.

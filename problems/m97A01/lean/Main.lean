@@ -110,6 +110,20 @@ lemma apm_m97A01_polarOnRange_norm
   rw [apm_m97A01_polarOnRange_apply]
   simpa using (hnorm x).symm
 
+/-- The canonical inclusion appearing in the frozen polar-factor predicate:
+`B` with codomain restricted to the closure of its algebraic range. -/
+def apm_m97A01_modulusInclusion
+    {X : Type*} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
+    (B : X →L[ℂ] X) : X →L[ℂ] apm_m97A01_modulusRange B :=
+  B.codRestrict (apm_m97A01_modulusRange B) fun x =>
+    subset_closure (LinearMap.mem_range_self B.toLinearMap x)
+
+lemma apm_m97A01_modulusInclusion_apply
+    {X : Type*} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
+    (B : X →L[ℂ] X) (x : X) :
+    (apm_m97A01_modulusInclusion B x).1 = B x := by
+  rfl
+
 theorem apm_m97a01
     (X : Type*) [NormedAddCommGroup X]
     [InnerProductSpace ℂ X] [CompleteSpace X]
@@ -158,5 +172,20 @@ theorem apm_m97a01
   and git history.  No compact-adjoint theorem or codomain-nonsurjective
   isometry extension was found.  The statement is mathematically sound; this
   `sorry` covers precisely those assembly/dependency gaps.
+
+  Closer hop 3 closes the codomain-restriction part of that bookkeeping.
+  `apm_m97A01_modulusInclusion` is the canonical continuous linear map from
+  `X` into `topologicalClosure (range B)`, built with `B.codRestrict` and
+  `subset_closure`; `apm_m97A01_modulusInclusion_apply` proves its underlying
+  value is exactly `B x`, matching the frozen existential verbatim.
+
+  The final-hop search additionally inspected `LinearMap.extendOfNorm`, which
+  can extend `A.toLinearMap` directly along this inclusion once its dense range
+  is packaged, avoiding a separate codomain-surjective linear equivalence.
+  Mathlib's `denseRange_inclusion_iff` and subtype-in-closure dense embedding
+  are the relevant topological primitives, but assembling them with the range
+  of this linear codomain restriction remains open. Renewed compact-operator,
+  adjoint, CFC, and spectral searches still found no compact-adjoint theorem.
+  The frozen statement is unchanged.
   -/
   sorry
