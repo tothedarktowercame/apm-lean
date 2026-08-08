@@ -95,6 +95,26 @@ lemma apm_a92J01_discontinuousCounterexample_not_continuousOn :
   unfold apm_a92J01_discontinuousCounterexample at hvalue
   norm_num [Set.indicator, hyout'] at hvalue
 
+/-- The `p`th power of either power-law counterexample has exponent below
+`-1`, the convergence side of both the p-series and tail-integral tests. -/
+lemma apm_a92J01_p_exponent_lt_neg_one
+    {p q : ℝ} (hq : 1 ≤ q) (hpq : q < p) :
+    -((1 / p + 1 / q) / 2) * p < -1 := by
+  have hp : 0 < p := lt_of_lt_of_le (by linarith : 0 < q) hpq.le
+  have hq0 : 0 < q := lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1) hq
+  field_simp
+  nlinarith
+
+/-- The corresponding `q`th-power exponent is not below `-1`, giving the
+divergence side of the same two tests. -/
+lemma apm_a92J01_neg_one_le_q_exponent
+    {p q : ℝ} (hq : 1 ≤ q) (hpq : q < p) :
+    -1 ≤ -((1 / p + 1 / q) / 2) * q := by
+  have hp : 0 < p := lt_of_lt_of_le (by linarith : 0 < q) hpq.le
+  have hq0 : 0 < q := lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1) hq
+  field_simp
+  nlinarith
+
 theorem apm_a92j01 :
     (∀ (p q : ℝ), 1 ≤ q → q < p → ∀ f : ℝ → ℝ,
       MemLp f (ENNReal.ofReal p) apm_a92J01_unitMeasure →
@@ -110,7 +130,7 @@ theorem apm_a92j01 :
         (ENNReal.ofReal p) apm_a92J01_unitMeasure ∧
       ¬ContinuousOn apm_a92J01_discontinuousCounterexample (Icc 0 1)) := by
   /-
-  CLOSER HOPS 1--2: the first conjunct is now closed by the compiled helper
+  CLOSER HOP 3: the first conjunct is closed by the compiled helper
   `apm_a92J01_memLp_mono_on_unitMeasure`, using Mathlib's
   `MemLp.mono_exponent` and the existing finite-measure instance for
   `volume.restrict (Icc 0 1)`.
@@ -128,5 +148,14 @@ theorem apm_a92j01 :
   the metric epsilon-delta criterion at `1/2`. Thus the final conjunct is
   fully compiled. No statement defect was found; only the two power-law
   `MemLp` conversions remain.
+
+  Going beyond hop 2, `apm_a92J01_p_exponent_lt_neg_one` and
+  `apm_a92J01_neg_one_le_q_exponent` now prove the exact scalar thresholds
+  shared by the sequence and real-line examples. Thus all reciprocal
+  arithmetic is discharged: after rewriting the `p`th and `q`th norm powers,
+  `Real.summable_nat_rpow` and `integrableOn_Ici_rpow_iff` receive their final
+  hypotheses directly. The remaining bridge is solely the `MemLp` coercion,
+  measurability, successor-index, and indicator conversions connecting the
+  two concrete functions to those criteria. The frozen statement is unchanged.
   -/
   sorry

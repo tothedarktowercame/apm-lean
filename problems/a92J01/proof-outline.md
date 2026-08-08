@@ -20,6 +20,12 @@ counterexamples to Mathlib's p-series and improper-power-integrability
 criteria, including the `ENNReal.ofReal` exponent conversions. The complete
 indicator conjunct is now available by pairing the two compiled helpers.
 
+Closer hop 3 proves the common scalar threshold arithmetic:
+`apm_a92J01_p_exponent_lt_neg_one` shows the `p`th-power exponent is below
+`-1`, while `apm_a92J01_neg_one_le_q_exponent` shows the `q`th-power exponent
+is at least `-1`. The remaining gap is therefore only the formal conversion
+from the concrete `MemLp` goals to the p-series and tail-integral criteria.
+
 ## Imported Proof Plan
 
 ```clojure

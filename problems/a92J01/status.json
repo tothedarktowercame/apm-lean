@@ -28,7 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Compiled the one-sided discontinuity proof at 1/2, completing the indicator counterexample conjunct. The sequence and real-line power-law MemLp conversions remain open.",
+  "closer_hop": 3,
+  "closer_note": "Compiled both exact exponent-threshold inequalities shared by the sequence and real-line power-law examples. The remaining gap is only converting the concrete MemLp goals to Mathlib's p-series and tail-integral criteria; the finite-measure and discontinuous-indicator conjuncts are closed.",
   "imported_at": "2026-05-01T19:38:16.190845Z"
 }
