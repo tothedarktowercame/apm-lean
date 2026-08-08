@@ -143,6 +143,30 @@ def apm_m94a03_InH1UnitBall (n : ℕ) : Prop :=
   ∃ g : E → E, MemLp g 2 (volume.restrict Ω) ∧
     apm_m94a03_IsWeakGradientOn Ω apm_m94a03_logNorm g
 
+/-- Why this unblocks the three-dimensional positive conjunct of
+`apm_m94a03`: this is the missing radial logarithm-square integrability
+statement. Together with the already proved gradient `L²` bound, it supplies
+the function-membership half of `apm_m94a03_InH1UnitBall 3`. -/
+theorem apm_m94A03_bridge_logNorm_memLp_two_ball_fin_three :
+    MemLp (apm_m94a03_logNorm :
+      EuclideanSpace ℝ (Fin 3) → ℝ) 2
+      (volume.restrict
+        (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 1)) := by
+  sorry
+
+/-- Why this unblocks the three-dimensional positive conjunct of
+`apm_m94a03`: this is the punctured-ball integration-by-parts theorem,
+including disappearance of the inner spherical boundary term. It identifies
+the compiled `L²` vector field with the distributional gradient required by
+the frozen predicate. -/
+theorem apm_m94A03_bridge_logNormGradient_weak_fin_three :
+    apm_m94a03_IsWeakGradientOn
+      (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 1)
+      (apm_m94a03_logNorm : EuclideanSpace ℝ (Fin 3) → ℝ)
+      (apm_m94a03_logNormGradient :
+        EuclideanSpace ℝ (Fin 3) → EuclideanSpace ℝ (Fin 3)) := by
+  sorry
+
 theorem apm_m94a03 :
     ¬ apm_m94a03_InH1UnitBall 2 ∧
     apm_m94a03_InH1UnitBall 3 ∧

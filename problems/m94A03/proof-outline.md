@@ -29,3 +29,16 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
   boundary term;
 - in dimension two, prove uniqueness of weak gradients away from zero and use
   the nonintegrability of `‖x‖⁻¹` to rule out an `L²` weak gradient.
+
+## Hop 4 bridge statements
+
+- `apm_m94A03_bridge_logNorm_memLp_two_ball_fin_three` states logarithm
+  `L²` membership on the three-dimensional unit ball.
+- `apm_m94A03_bridge_logNormGradient_weak_fin_three` states the exact custom
+  weak-gradient identity for `x / ‖x‖²`, incorporating punctured-ball
+  integration by parts and the vanishing inner-boundary term.
+
+These combine with
+`apm_m94a03_logNormGradient_memLp_two_ball_fin_three` to prove
+`apm_m94a03_InH1UnitBall 3`. The dimension-two and dimension-four conjuncts
+remain independent formalization boundaries.

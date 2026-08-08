@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "closer_note": "Used the reusable R3 radial-integration theorem to prove inverse-radius L2 membership on the three-dimensional unit ball and transfer it to the vector gradient. Logarithm integrability, weak-gradient integration by parts, dimension four, and dimension-two uniqueness remain.",
+  "closer_note": "Hop 4 states precise contracts for logarithm L2 membership on the three-dimensional unit ball and the punctured-ball weak-gradient identity. Together with the compiled gradient L2 result they close the logical gap in the dimension-three positive conjunct; dimension four and dimension-two uniqueness remain separate.",
   "imported_at": "2026-07-13T17:26:54.732874Z"
 }
