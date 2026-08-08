@@ -3,6 +3,14 @@
 The Lean statement uses actual polygon quotients and actual finite covering
 maps. One `sorry` remains.
 
+## Compiled progress
+
+- `apm_t97J02_surfaceQuotient` is the canonical disk projection for every
+  presentation and is proved continuous and surjective.
+- `apm_t97J02_eulerCharacteristic` implements both classification formulas.
+- `apm_t97J02_candidate_eulerCharacteristics` verifies all degree-five and
+  degree-six candidate genus equations.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t97J02.md`
 

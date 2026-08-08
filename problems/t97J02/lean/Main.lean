@@ -56,6 +56,38 @@ noncomputable instance (orientable : Bool) (genus : ℕ) :
   TopologicalSpace.coinduced
     (fun x : apm_t97J02_Disk ↦ Quotient.mk _ x) inferInstance
 
+def apm_t97J02_surfaceQuotient (orientable : Bool) (genus : ℕ) :
+    apm_t97J02_Disk → apm_t97J02_Surface orientable genus :=
+  fun x => Quotient.mk _ x
+
+lemma apm_t97J02_continuous_surfaceQuotient (orientable : Bool) (genus : ℕ) :
+    Continuous (apm_t97J02_surfaceQuotient orientable genus) := by
+  exact continuous_coinduced_rng
+
+lemma apm_t97J02_surjective_surfaceQuotient (orientable : Bool) (genus : ℕ) :
+    Function.Surjective (apm_t97J02_surfaceQuotient orientable genus) := by
+  exact Quotient.mk_surjective
+
+/-- The Euler-characteristic formula used by the arithmetic classification. -/
+def apm_t97J02_eulerCharacteristic (orientable : Bool) (genus : ℕ) : ℤ :=
+  if orientable then 2 - 2 * (genus : ℤ) else 2 - (genus : ℤ)
+
+@[simp] lemma apm_t97J02_eulerCharacteristic_orientable (genus : ℕ) :
+    apm_t97J02_eulerCharacteristic true genus = 2 - 2 * (genus : ℤ) := rfl
+
+@[simp] lemma apm_t97J02_eulerCharacteristic_nonorientable (genus : ℕ) :
+    apm_t97J02_eulerCharacteristic false genus = 2 - (genus : ℤ) := rfl
+
+lemma apm_t97J02_candidate_eulerCharacteristics :
+    apm_t97J02_eulerCharacteristic false 4 = -2 ∧
+    apm_t97J02_eulerCharacteristic false 12 =
+      5 * apm_t97J02_eulerCharacteristic false 4 ∧
+    apm_t97J02_eulerCharacteristic true 7 =
+      6 * apm_t97J02_eulerCharacteristic false 4 ∧
+    apm_t97J02_eulerCharacteristic false 14 =
+      6 * apm_t97J02_eulerCharacteristic false 4 := by
+  norm_num
+
 /-- The connected sum of four real projective planes, `N₄`. -/
 abbrev apm_t97J02_X := apm_t97J02_Surface false 4
 
@@ -109,5 +141,25 @@ theorem apm_t97j02 :
   their covering charts/fiber cardinalities, then developing finite-cover
   Euler multiplicativity, the orientation parity obstruction, and surface
   classification for the universal clauses.
+
+  CLOSER HOP 2: `apm_t97J02_surfaceQuotient` now exposes the canonical disk
+  projection for every presentation, and its continuity and surjectivity are
+  compiled from the coinduced topology. The complete numerical classification
+  is also compiled: `apm_t97J02_eulerCharacteristic` implements the orientable
+  and nonorientable formulas, and
+  `apm_t97J02_candidate_eulerCharacteristics` verifies `χ(N₄)=-2`,
+  `χ(N₁₂)=5χ(N₄)`, and both `χ(Σ₇)=6χ(N₄)` and `χ(N₁₄)=6χ(N₄)`.
+
+  Going beyond the prior search, the newly exposed polygon quotient layer in
+  sibling `t97A01` was compared and Mathlib's covering-quotient APIs were
+  inspected. Those APIs construct covers from properly discontinuous group
+  actions, but the present `SurfaceRel` is a boundary-pairing relation with no
+  global action or quotient-comparison theorem. Repository-wide inspection
+  also confirms that the proposed shared `Surfaces` construction target could
+  not supply Euler multiplicativity: its requested theorem is exactly the
+  topological result absent here. Thus quotient bookkeeping and integer genus
+  equations are closed, while explicit covering maps, their charts/fibers,
+  multiplicativity, parity, and surface classification remain open. The frozen
+  statement is unchanged.
   -/
   sorry
