@@ -7,6 +7,17 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+Closer hop 1 compiles nilpotent implies solvable and the converse
+counterexample `S₃`. The latter reuses the closed `b97J01` sign-extension and
+self-normalizing-transposition-subgroup proofs from git commit `f453ba3`.
+The concrete presented group remains open. Contrary to the imported plan,
+there is no relation between `b` and `c`: the presentation describes a central
+`C₂` factor together with the free product `C₃ * C₇`, rather than the claimed
+semidirect product. Closure requires formalizing that presentation conversion
+and the nonsolvability of the free product (or constructing a suitable
+nonsolvable quotient). Nonnilpotence then follows from nilpotent implies
+solvable.
+
 ## Imported Proof Plan
 
 ```clojure
