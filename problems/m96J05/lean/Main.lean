@@ -78,6 +78,28 @@ lemma apm_m96j05_exp_differenceSymbol_mul_tendsto (ξ : ℝ) (z : ℂ) :
       (nhds (apm_m96j05_shiftSymbol ξ * z)) := by
   exact (apm_m96j05_exp_differenceSymbol_tendsto ξ).mul_const z
 
+/-- Iterating an operator which is a.e. multiplication by `m` gives the
+corresponding pointwise powers.  This is the finite-power bridge needed before
+passing from the operator exponential series to the scalar exponential. -/
+lemma apm_m96j05_pow_apply_ae
+    (A : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2) (m : ℝ → ℂ)
+    (hA : ∀ f : apm_m96j05_L2,
+      (fun ξ : ℝ => A f ξ) =ᵐ[volume] fun ξ => m ξ * f ξ) :
+    ∀ (n : ℕ) (f : apm_m96j05_L2),
+      (fun ξ : ℝ => (A ^ n) f ξ) =ᵐ[volume]
+        fun ξ => m ξ ^ n * f ξ := by
+  intro n
+  induction n with
+  | zero =>
+      intro f
+      simp
+  | succ n ih =>
+      intro f
+      filter_upwards [hA ((A ^ n) f), ih f] with ξ hstep hpow
+      simp only [pow_succ', ContinuousLinearMap.mul_apply] at hstep ⊢
+      rw [hstep, hpow]
+      ring
+
 theorem apm_m96j05
     (D : ℝ → apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
     (T : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
@@ -160,5 +182,17 @@ theorem apm_m96j05
   the multiplier-related siblings found no bounded-function multiplication
   algebra homomorphism, so the countable a.e. operator-power-series assembly
   remains honestly open.
+
+  CLOSER HOP 3 goes beyond that search by proving the finite-power part of the
+  assembly directly. `apm_m96j05_pow_apply_ae` shows, by induction and finite
+  intersection of the supplied a.e. identities, that every operator power
+  `(D ε)^n` acts as multiplication by `differenceSymbol ε ξ ^ n`. Thus no
+  multiplier algebra homomorphism is needed for polynomial approximants.
+  The remaining bridge is specifically passage to the infinite series:
+  reconcile the operator-norm `tsum` defining `NormedSpace.exp` with an a.e.
+  representative of the scalar exponential series, then invoke the compiled
+  dominated-convergence data. Searches of the `tsum`/`Lp` representative APIs
+  found no theorem commuting a countable operator series with representatives,
+  so this final bridge remains honestly open; the frozen statement is unchanged.
   -/
   sorry

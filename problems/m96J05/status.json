@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Proved directly that every finite power of an a.e. multiplier operator has the expected pointwise-power representative. The remaining bridge is commuting the operator exponential tsum with Lp representatives, followed by dominated convergence.",
   "imported_at": "2026-07-13T17:26:55.544647Z"
 }
