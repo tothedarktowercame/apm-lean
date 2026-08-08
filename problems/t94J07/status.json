@@ -28,7 +28,27 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "closer_note": "Circle norm, tangent velocity, and periodic endpoint lemmas are proved. The mixed-derivative and parameter-integral cylinder argument remains open.",
+  "closer_hop": 2,
+  "closer_note": "Circle norm and tangent velocity are proved, and periodicity is now compiled for the full pullback integrand and every homotopy slice. Tangency of homotopy partial derivatives and the mixed-derivative/parameter-integral cylinder argument remain open.",
+  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/t94J07/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": ["apm_t94j07 (homotopy-cylinder differential and parameter-integral assembly)"],
+    "proved": [
+      "t94J07CirclePoint_norm",
+      "t94J07CircleVelocity_tangent",
+      "t94J07CirclePoint_two_pi",
+      "t94J07CircleVelocity_two_pi",
+      "t94J07PullbackCircleIntegrand_two_pi",
+      "t94J07HomotopySliceIntegrand_two_pi"
+    ],
+    "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
+    "blockers": [
+      "Differentiate the unit-norm constraint to prove tangency of both homotopy partial derivatives",
+      "Assemble extDeriv_pullback, differentiation under the integral, and both interval FTC steps"
+    ]
+  },
   "imported_at": "2026-05-01T19:38:18.305300Z"
 }

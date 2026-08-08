@@ -63,6 +63,11 @@ lemma t94J07CirclePoint_two_pi :
   ext i
   fin_cases i <;> simp [t94J07CirclePoint]
 
+lemma t94J07CircleVelocity_two_pi :
+    t94J07CircleVelocity (2 * Real.pi) = t94J07CircleVelocity 0 := by
+  ext i
+  fin_cases i <;> simp [t94J07CircleVelocity]
+
 /-- A smooth ambient representative of a smooth self-map of the unit circle. -/
 def t94J07IsSmoothCircleMap (f : T94J07E2 → T94J07E2) : Prop :=
   ContDiff ℝ (⊤ : ℕ∞) f ∧
@@ -93,6 +98,26 @@ def t94J07PullbackCircleIntegral
     alpha (f (t94J07CirclePoint θ))
       (fun _ ↦ fderiv ℝ f (t94J07CirclePoint θ) (t94J07CircleVelocity θ))
 
+def t94J07PullbackCircleIntegrand
+    (alpha : T94J07Form1) (f : T94J07E2 → T94J07E2) (θ : ℝ) : ℝ :=
+  alpha (f (t94J07CirclePoint θ))
+    (fun _ ↦ fderiv ℝ f (t94J07CirclePoint θ) (t94J07CircleVelocity θ))
+
+/-- Periodicity holds for the complete frozen pullback integrand, including
+both the evaluation point and the derivative applied to its velocity. -/
+lemma t94J07PullbackCircleIntegrand_two_pi
+    (alpha : T94J07Form1) (f : T94J07E2 → T94J07E2) :
+    t94J07PullbackCircleIntegrand alpha f (2 * Real.pi) =
+      t94J07PullbackCircleIntegrand alpha f 0 := by
+  simp only [t94J07PullbackCircleIntegrand, t94J07CirclePoint_two_pi,
+    t94J07CircleVelocity_two_pi]
+
+lemma t94J07HomotopySliceIntegrand_two_pi
+    (alpha : T94J07Form1) (H : T94J07E2 × ℝ → T94J07E2) (t : ℝ) :
+    t94J07PullbackCircleIntegrand alpha (fun x ↦ H (x, t)) (2 * Real.pi) =
+      t94J07PullbackCircleIntegrand alpha (fun x ↦ H (x, t)) 0 :=
+  t94J07PullbackCircleIntegrand_two_pi alpha (fun x ↦ H (x, t))
+
 theorem apm_t94j07
     (alpha : T94J07Form1)
     (halpha_smooth : ContDiff ℝ (⊤ : ℕ∞) alpha)
@@ -105,7 +130,7 @@ theorem apm_t94j07
     t94J07PullbackCircleIntegral alpha f =
       t94J07PullbackCircleIntegral alpha g := by
   /-
-  CLOSER HOP 1: the concrete parameter geometry needed by a direct cylinder
+  CLOSER HOP 2 (2026-08-08): the concrete parameter geometry needed by a direct cylinder
   proof is now compiled above. `t94J07CirclePoint_norm` proves the path lies
   on the unit circle, `t94J07CircleVelocity_tangent` proves its velocity is
   tangent, and `t94J07CirclePoint_two_pi` records the periodic endpoint
@@ -126,7 +151,14 @@ theorem apm_t94j07
   `halpha_closed` after proving both partial derivatives of `H` are tangent by
   differentiating the unit-norm constraint, and convert the remaining mixed
   term into a θ-derivative whose integral vanishes by the compiled periodic
-  endpoint equality.  This also requires the dominated/continuous
+  endpoint equality. Going beyond hop 1, `t94J07CircleVelocity_two_pi` and
+  `t94J07PullbackCircleIntegrand_two_pi` now prove periodicity of the complete
+  frozen integrand, including the derivative applied to the velocity;
+  `t94J07HomotopySliceIntegrand_two_pi` specializes it uniformly to every
+  homotopy slice. Thus the eventual θ-FTC boundary cancellation is fully
+  compiled rather than inferred only from point periodicity.
+
+  The remaining local completion still requires the dominated/continuous
   parameter-integral hypotheses and both interval FTC applications.  The
   frozen statement is unchanged; no axiom or opaque placeholder was added.
   -/

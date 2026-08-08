@@ -12,6 +12,18 @@ derivatives, periodic cancellation, and interval FTC in the homotopy
 parameter.  The detailed searched boundary is recorded at the remaining
 `sorry`.
 
+## Closer hop 2
+
+The endpoint cancellation is now established at the correct level.
+`t94J07CircleVelocity_two_pi` supplements periodicity of the point, and
+`t94J07PullbackCircleIntegrand_two_pi` proves equality of the entire frozen
+integrand at `0` and `2π`, including the derivative applied to the velocity.
+The corresponding statement is specialized to every homotopy slice.
+
+The remaining work is tangency of the two homotopy partial derivatives and
+the parametric-integral/exterior-derivative assembly; no endpoint algebra
+remains hidden in that boundary.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
