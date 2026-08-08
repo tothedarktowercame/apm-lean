@@ -7,6 +7,21 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+`ConstructionTargets.SchwarzEquality.eqOn_deriv_mul` provides the required
+equality case of Schwarz's lemma. The new bundled polynomial
+`apm_a96J06_poly` comes with a compiled evaluation identity and a proof that
+its coefficient at `N` is exactly `c N`. This makes the final contradiction
+available once the normalized map is shown to equal the identity on the unit
+disk.
+
+The remaining formal work is assembling the rescaled unit-disk self-map from
+the negated existential, proving its derivative at zero is one, and promoting
+the resulting equality on an open disk to polynomial equality using
+`Polynomial.eq_of_infinite_eval_eq`. The main theorem therefore remains
+partial with one `sorry`; its statement is unchanged.
+
 ## Imported Proof Plan
 
 ```clojure
