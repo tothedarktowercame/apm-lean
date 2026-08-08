@@ -1,5 +1,16 @@
 # Proof Outline: a98A06
 
+## Closer hop 1 completion
+
+The theorem is closed without changing its statement.  Set `g z = z * f z`.
+On the neighborhood supplied by the hypothesis, its norm is bounded by
+`|C| * sqrt ‖z‖`, so `squeeze_zero'` proves that `g` is continuous at zero.
+It is differentiable on the punctured plane, hence
+`Complex.analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt`
+makes it analytic at zero and therefore entire.  Finally `dslope g 0` is
+entire by `Complex.differentiableOn_dslope`, and away from zero its defining
+difference quotient simplifies to `f`.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
