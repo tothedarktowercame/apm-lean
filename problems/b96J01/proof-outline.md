@@ -7,6 +7,15 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+The proof closes with `Equiv.Perm.closure_prime_cycle_swap`. The order-five
+cycle has full support because `IsCycle.orderOf` identifies its support
+cardinality with five, the cardinality of `Fin 5`. The generation theorem then
+says the closure of the cycle and swap is top, and their supplied membership
+places that closure below `G`. The frozen statement is unchanged and the proof
+is sorry-free.
+
 ## Imported Proof Plan
 
 ```clojure

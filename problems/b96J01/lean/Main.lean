@@ -21,4 +21,17 @@ theorem apm_b96j01
     (hσ : ∃ σ ∈ G, Equiv.Perm.IsCycle σ ∧ orderOf σ = 5)
     (hτ : ∃ τ ∈ G, Equiv.Perm.IsSwap τ) :
     G = ⊤ := by
-  sorry
+  obtain ⟨σ, hσG, hσcycle, hσorder⟩ := hσ
+  obtain ⟨τ, hτG, hτswap⟩ := hτ
+  have hprime : Nat.Prime (Fintype.card (Fin 5)) := by norm_num
+  have hsupport : σ.support = Finset.univ := by
+    apply Finset.eq_univ_of_card
+    calc
+      σ.support.card = orderOf σ := hσcycle.orderOf.symm
+      _ = 5 := hσorder
+      _ = Fintype.card (Fin 5) := by simp
+  have hclosure : Subgroup.closure ({σ, τ} : Set (Equiv.Perm (Fin 5))) = ⊤ :=
+    Equiv.Perm.closure_prime_cycle_swap hprime hσcycle hsupport hτswap
+  rw [eq_top_iff, ← hclosure, Subgroup.closure_le, Set.insert_subset_iff,
+    Set.singleton_subset_iff]
+  exact ⟨hσG, hτG⟩
