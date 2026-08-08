@@ -7,6 +7,11 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+Closer hop 1 closes the frozen theorem directly with
+`dense_iInter_of_isOpen_nat hopen hdense`. The complete metric-space
+assumptions provide Mathlib's `BaireSpace` instance, so no local nested-ball
+construction is required.
+
 ## Imported Proof Plan
 
 ```clojure

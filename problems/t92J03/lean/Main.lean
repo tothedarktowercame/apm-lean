@@ -22,4 +22,4 @@ theorem apm_t92j03
     (hopen : ∀ n, IsOpen (U n))
     (hdense : ∀ n, Dense (U n)) :
     Dense (⋂ n, U n) := by
-  sorry
+  exact dense_iInter_of_isOpen_nat hopen hdense

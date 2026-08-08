@@ -28,5 +28,7 @@
     "has_receipt": true
   },
   "classification": "complete",
+  "closer_hop": 1,
+  "classification_detail": "Closed directly with Mathlib's dense_iInter_of_isOpen_nat; no sorry remains.",
   "imported_at": "2026-05-01T19:38:18.056331Z"
 }
