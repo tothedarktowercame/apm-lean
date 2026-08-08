@@ -39,10 +39,11 @@
       "apm_a97A01_abs_rademacher",
       "apm_a97A01_rademacher_measurable",
       "apm_a97A01_integrable_mul_rademacher",
-      "apm_a97A01_norm_integral_mul_rademacher_le"
+      "apm_a97A01_norm_integral_mul_rademacher_le",
+      "apm_a97A01_rademacher_eq_one_of_mem_odd_cell"
     ],
     "blockers": [
-      "Exact cancellation on coarser dyadic blocks",
+      "Dyadic-cell uniqueness/even-cell sign and exact cancellation on coarser blocks",
       "L1 density/convergence of dyadic step approximations"
     ],
     "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)"

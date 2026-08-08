@@ -42,6 +42,18 @@ lemma apm_a97A01_abs_rademacher (n : ℕ) (t : ℝ) :
   unfold apm_a97A01_rademacher
   split_ifs <;> simp
 
+/-- In particular, every point explicitly lying in an admissible odd cell
+has positive sign.  This is the cellwise input to the cancellation proof. -/
+lemma apm_a97A01_rademacher_eq_one_of_mem_odd_cell
+    {n k : ℕ} {t : ℝ} (hn : n ≠ 1) (ht : t ≠ 1)
+    (hk₀ : 1 ≤ k) (hk₁ : k ≤ 2 ^ n) (hkodd : Odd k)
+    (htk : t ∈ Ico (((k - 1 : ℕ) : ℝ) / (2 ^ n : ℕ))
+      ((k : ℝ) / (2 ^ n : ℕ))) :
+    apm_a97A01_rademacher n t = 1 := by
+  unfold apm_a97A01_rademacher
+  simp only [hn, ht, ↓reduceIte]
+  rw [if_pos ⟨k, hk₀, hk₁, hkodd, htk⟩]
+
 /-- The dyadic sign functions in the frozen encoding are measurable. -/
 lemma apm_a97A01_rademacher_measurable (n : ℕ) :
     Measurable (apm_a97A01_rademacher n) := by
@@ -132,5 +144,19 @@ theorem apm_a97a01
   coarser dyadic intervals plus `L¹` density of their finite step functions.
   The exceptional `n = 1` branch must be excluded in cancellation. The frozen
   statement is unchanged and no unproved helper was introduced.
+
+  CLOSER HOP 3 (2026-08-08): the positive half of the cellwise sign
+  calculation now compiles as
+  `apm_a97A01_rademacher_eq_one_of_mem_odd_cell`.  It unfolds the custom
+  existential encoding and explicitly discharges the exceptional `n = 1`
+  and endpoint `t = 1` branches, so future cancellation code can consume an
+  odd-cell membership witness directly.  Attempts to strengthen this to an
+  iff exposed the genuinely missing complementary fact: half-open dyadic
+  cells of the same level are disjoint, hence a point in an even cell cannot
+  satisfy the odd-cell existential.  Mathlib/repository searches supplied
+  interval-disjointness ingredients but no theorem specialized to the
+  casted `Nat` endpoints used here.  The remaining bridge is that uniqueness/
+  even-cell lemma, finite paired-interval integration, and `L¹` density of
+  dyadic step functions.  The frozen statement remains unchanged.
   -/
   sorry
