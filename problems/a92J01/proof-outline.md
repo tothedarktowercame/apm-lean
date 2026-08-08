@@ -5,7 +5,17 @@ with the Lean files.
 
 ## Notes
 
-The content below was imported automatically and may need cleanup.
+Closer hop 1 compiled two parts of the theorem's interface:
+
+- `apm_a92J01_memLp_mono_on_unitMeasure` proves the complete finite-measure
+  inclusion `Lᵖ ⊆ Lʸ` for `q < p` using `MemLp.mono_exponent`.
+- `apm_a92J01_discontinuousCounterexample_memLp` proves that the explicit
+  indicator belongs to every `Lᵖ` over the restricted unit measure.
+
+The remaining work is to reduce the sequence and real-line power-law
+counterexamples to Mathlib's p-series and improper-power-integrability
+criteria, including the `ENNReal.ofReal` exponent conversions. The indicator
+also needs a direct discontinuity proof at `1/2`.
 
 ## Imported Proof Plan
 
