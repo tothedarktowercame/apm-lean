@@ -1,6 +1,22 @@
 # Proof Outline: t94A08
 
-The Lean formalization is complete and sorry-free.
+## Closer hop 2
+
+The earlier derivative proof from git history was restored and now proves the
+first frozen conjunct as `apm_t94a08_regularLevelSet_quadratic1`.  The node
+`[1:0:0]` was also constructed and proved to belong to `sigma2`, carefully
+transporting through the noncanonical representative.
+
+The two manifold conjuncts remain open.  Mathlib provides no local coordinate
+charts for `Projectivization` equipped with this file's custom coinduced
+topology.  Closing the positive conjunct requires constructing the conic's
+local quotient charts (or a topological identification with the complex
+projective line).  Closing the negative conjunct requires proving a local
+topological obstruction for the crossing of its two branches.  The detailed
+search boundary is recorded at the remaining `sorry` in `lean/Main.lean`.
+
+The original regular-cone formalization was complete and sorry-free; the
+repaired statement's separately topological manifold conjuncts remain partial.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t94A08.md`

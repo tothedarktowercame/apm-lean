@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 0,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
-  "closer_hop": 1,
-  "closer_note": "Closed by computing the complex Fréchet derivatives explicitly: the first quadratic has nonzero gradient at every nonzero point, while the second has zero derivative at the nonzero vector (1,0,0).",
+  "classification": "partial",
+  "closer_hop": 2,
+  "closer_note": "The regular-level conjunct and explicit membership of the node are proved. The custom projective quotient lacks local chart infrastructure, and the nodal-cross nonmanifold obstruction remains open.",
   "imported_at": "2026-07-13T17:26:57.883602Z"
 }
