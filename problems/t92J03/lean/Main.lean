@@ -1,20 +1,25 @@
 import Mathlib
-import ApmCanaries.Frames.T92J03.Apm_v2_t92J03_1775008978201.Scratch
 
-noncomputable section
+/-!
+# APM t92J03 — Baire category theorem
 
-open scoped Topology
+The countable family is indexed by `ℕ`; openness and density are stated for
+each member, and the conclusion concerns their actual set-theoretic
+intersection in the given complete metric space.
 
-namespace ApmCanaries.Frames.T92J03.Apm_v2_t92J03_1775008978201.Main
+## Statement repairs
 
-/-- Baire category theorem specialized to complete metric spaces. -/
-theorem dense_iInter_of_open_dense
-    {X : Type*} [MetricSpace X] [CompleteSpace X] {U : ℕ → Set X}
-    (hopen : ∀ n, IsOpen (U n)) (hdense : ∀ n, Dense (U n)) :
+None.
+
+## Encoding questions
+
+None.
+-/
+
+theorem apm_t92j03
+    {X : Type*} [MetricSpace X] [CompleteSpace X]
+    {U : ℕ → Set X}
+    (hopen : ∀ n, IsOpen (U n))
+    (hdense : ∀ n, Dense (U n)) :
     Dense (⋂ n, U n) := by
-  -- Complete metric spaces are Baire spaces.
-  haveI : BaireSpace X := inferInstance
-  simpa using
-    (Topology.dense_iInter_of_open_dense (U := U) hopen hdense)
-
-end ApmCanaries.Frames.T92J03.Apm_v2_t92J03_1775008978201.Main
+  sorry
