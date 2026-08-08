@@ -24,8 +24,11 @@ The canonical Lean attempt is `lean/Main.lean`.
 ## Remaining boundary
 
 - Bundle the parameter-dependent interval integral as a continuous linear map
-  on `C(Icc 0 1, ℝ)` and prove compactness via Arzelà–Ascoli.
+  on `C(Icc 0 1, ℝ)` and prove compactness via Arzelà–Ascoli. Hop 4 records
+  the exact existential statement, including the frozen pointwise formula,
+  at the sorry boundary.
 - Supply the one-sided derivative at zero required by
   `ODE_solution_unique_of_mem_Icc_right`, then apply interval ODE/Gronwall
   uniqueness using the compiled zero initial value.  The interior derivative
-  equation is now complete.
+  equation is now complete; the exact universal eigenvector statement is
+  likewise recorded at the boundary.

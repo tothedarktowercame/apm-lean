@@ -199,5 +199,36 @@ theorem apm_m96j04 :
     searches of `LEMMA-INDEX.md`, solved siblings, `ConstructionTargets/`,
     `YoungL2.lean`, Mathlib's derivative-congruence, Gronwall, and Ascoli source
     found no packaged construction closing that bridge.
+
+    HOP 4 checked the `L1.integralCLM` family, continuous-map constructors,
+    `ArzelaAscoli.isCompact_of_equicontinuous`, and the one-sided ODE
+    uniqueness API. The integral CLM acts on `L1`, not directly on the
+    variable-upper-limit continuous-map codomain, and Ascoli still requires
+    the explicit uniform sup-norm and equicontinuity estimates.
+
+    The exact missing operator lemma is:
+
+      `∃ V : apm_m96j04_C →L[ℝ] apm_m96j04_C,
+        (∀ (f : apm_m96j04_C) (t : Set.Icc (0 : ℝ) 1),
+          V f t = ∫ s in (0 : ℝ)..(t : ℝ), apm_m96j04_extend f s) ∧
+        IsCompactOperator V`.
+
+    Its proof must bundle the pointwise primitive, prove
+    `‖V f‖ ≤ ‖f‖`, and show that the image of the unit ball is uniformly
+    bounded and Lipschitz before applying Arzela--Ascoli.
+
+    The independent endpoint-uniqueness lemma needed after construction is:
+
+      `∀ (V : apm_m96j04_C →L[ℝ] apm_m96j04_C),
+        (∀ (f : apm_m96j04_C) (t : Set.Icc (0 : ℝ) 1),
+          V f t = ∫ s in (0 : ℝ)..(t : ℝ), apm_m96j04_extend f s) →
+        ∀ eigenvalue : ℝ, eigenvalue ≠ 0 →
+          ∀ f : apm_m96j04_C, V f = eigenvalue • f → f = 0`.
+
+    The compiled zero-at-zero and interior derivative lemmas are exactly its
+    hypotheses; closing it requires a one-sided derivative or an integral
+    Gronwall argument valid from `0`. Neither statement is defective, but no
+    searched declaration supplies either assembly. The frozen main statement
+    remains unchanged.
     -/
     sorry

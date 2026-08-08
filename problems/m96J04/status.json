@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Hop 3 compiles transport of the Volterra eigenvector equation to the exact interior ODE f' = f/lambda. Endpoint ODE uniqueness and construction/Ascoli compactness of the operator remain.",
+  "closer_progress": "Hop 4 records exact Lean statements for the Volterra continuous-linear compact operator and the endpoint eigenvector-uniqueness theorem. Searches confirmed L1.integralCLM does not provide the variable-upper-limit continuous-map assembly.",
   "imported_at": "2026-07-13T17:26:55.533793Z"
 }
