@@ -1,5 +1,20 @@
 # Proof Outline: t94J08
 
+## Compiled progress
+
+`t94J08NormalizedLink_neg` proves that the normalized linking map of `-v` is
+exactly the antipodal map composed with the normalized linking map of `v`.
+This includes reconciliation of the two dependent nonvanishing witnesses.
+
+## Remaining Lean boundary
+
+The proof still needs the top integral singular homology of the encoded sphere,
+the antipodal action on its generator, and multiplicativity of
+`t94J08HasDegree`. Because that predicate existentially chooses an orientation
+isomorphism, multiplicativity first needs an orientation-independence lemma.
+No packaged sphere generator or degree API was found in Mathlib or the
+repository.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 

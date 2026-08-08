@@ -80,6 +80,19 @@ def t94J08HasLocalIndex {m : ℕ}
     (∀ x, link x = t94J08NormalizedLink v p r hlink x) ∧
     t94J08HasDegree m link d
 
+/-- Negating the vector field composes its normalized linking map with the
+antipodal map. -/
+lemma t94J08NormalizedLink_neg {m : ℕ}
+    (v : T94J08Euclidean (m + 1) → T94J08Euclidean (m + 1))
+    (p : T94J08Euclidean (m + 1)) (r : ℝ)
+    (hlink : ∀ x : T94J08Sphere (m + 1), v (p + r • x.1) ≠ 0)
+    (hlinkNeg : ∀ x : T94J08Sphere (m + 1), (-v (p + r • x.1)) ≠ 0)
+    (x : T94J08Sphere (m + 1)) :
+    t94J08NormalizedLink (fun y ↦ -v y) p r hlinkNeg x =
+      t94J08Antipodal (t94J08NormalizedLink v p r hlink x) := by
+  apply Subtype.ext
+  simp [t94J08NormalizedLink, t94J08Antipodal, norm_neg, smul_neg]
+
 theorem apm_t94j08 :
     (∀ n : ℕ,
       t94J08HasDegree n
@@ -96,4 +109,21 @@ theorem apm_t94j08 :
       t94J08HasLocalIndex v p r hlink d →
       t94J08HasLocalIndex (fun x ↦ -v x) p r hlinkNeg
         ((-1 : ℤ) ^ (m + 1) * d) := by
+  /-
+  CLOSER HOP 1 boundary. The new compiled lemma
+  `t94J08NormalizedLink_neg` proves the exact pointwise identity needed for
+  the second conjunct: normalization of `-v` is the antipodal map composed
+  with normalization of `v`, including the dependent nonvanishing witnesses.
+
+  Closing the homological step still requires two pieces not packaged by the
+  current imports: the actual top-dimensional singular-homology computation
+  for `T94J08Sphere (n+1)` (to construct the orientation isomorphism and
+  compute the antipodal action), and multiplicativity of the scalar action
+  encoded by `t94J08HasDegree`. The latter also requires proving independence
+  from the existentially chosen orientation isomorphism before applying
+  functoriality of `t94J08TopHomologyMap` to composition. Searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, sphere/degree siblings, Mathlib's
+  singular-homology, sphere, antipodal, ModuleCat, and functoriality sources,
+  and git history found no sphere homology generator or compiled degree API.
+  -/
   sorry

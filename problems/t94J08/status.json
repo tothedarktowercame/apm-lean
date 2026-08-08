@@ -27,6 +27,8 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "complete",
+  "classification": "partial",
+  "closer_hop": 1,
+  "boundary": "The normalized linking map for the negated field is now proved pointwise equal to antipodal composition. Remaining work is the top singular-homology computation for spheres, the antipodal action, and orientation-independent multiplicativity of the encoded degree.",
   "imported_at": "2026-05-01T19:38:18.333845Z"
 }
