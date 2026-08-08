@@ -1,5 +1,22 @@
 # Proof Outline: m94A04
 
+## Hop 4 bridge statements
+
+The remaining implementation is now isolated by three declarations above the
+main theorem:
+
+- `apm_m94A04_bridge_downgrade_eightThirds_to_two` states a linear,
+  representative-preserving, norm-nonincreasing inclusion into `L²` for this
+  measure-one interval.
+- `apm_m94A04_bridge_operator_and_linearization` constructs the quotient
+  operator and the bounded linear map `h ↦ 3f²h` with its a.e. formula.
+- `apm_m94A04_bridge_remainder_estimate` states the exact epsilon–delta
+  estimate obtained from `3fh²+h³` and mixed Hölder bounds.
+
+Together their conclusions assemble the custom Fréchet-derivative predicate
+and every conclusion of the frozen theorem. Their bodies intentionally remain
+`sorry` under the statement-only instruction.
+
 The frozen Lean theorem is present in `lean/Main.lean`. The exact cubic
 remainder identity is now proved.
 The `L⁸·L⁸ → L⁴` stage is also compiled: the quotient-level square has the

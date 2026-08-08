@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Compiled the quotient-level L8 times L4 to L^(8/3) cube, its a.e. representative, and norm bound. The finite-measure downgrade to L2, derivative LinearMap, and remainder estimate remain open.",
+  "closer_hop": 4,
+  "closer_note": "Three precise bridge declarations now isolate the representative-preserving L^(8/3)-to-L2 downgrade, construction of the operator and bounded linearization, and the ENNReal epsilon-delta remainder estimate. Their proofs are intentionally sorry under the statement-only protocol.",
   "imported_at": "2026-07-13T17:26:54.762759Z"
 }

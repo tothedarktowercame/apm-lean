@@ -122,6 +122,55 @@ def apm_m94a04_IsFrechetDerivative
         (volume.restrict (Icc (0 : ℝ) 1)) ≤
       ENNReal.ofReal ε * eLpNorm h 8 (volume.restrict (Icc (0 : ℝ) 1))
 
+/-- Why this unblocks `apm_m94a04`: this is the missing finite-measure
+inclusion from `L^(8/3)` into `L²`, bundled linearly and preserving the same
+representative.  It turns the already-constructed cubic and mixed Hölder
+products into elements of the frozen codomain. -/
+theorem apm_m94A04_bridge_downgrade_eightThirds_to_two :
+    ∃ D : Lp ℝ (8 / 3) apm_m94a04_measure →ₗ[ℝ]
+        Lp ℝ 2 apm_m94a04_measure,
+      (∀ g, (D g : ℝ → ℝ) =ᵐ[apm_m94a04_measure] (g : ℝ → ℝ)) ∧
+      ∀ g, eLpNorm (D g) 2 apm_m94a04_measure ≤
+        eLpNorm g (8 / 3) apm_m94a04_measure := by
+  sorry
+
+/-- Why this unblocks `apm_m94a04`: it packages the quotient-level operator
+and the bounded linear map `h ↦ 3 f² h`, including exactly the a.e. formula
+needed by the theorem.  The first conjunct is the boundedness half of the
+custom Fréchet-derivative predicate. -/
+theorem apm_m94A04_bridge_operator_and_linearization :
+    ∃ T : Lp ℝ 8 apm_m94a04_measure → Lp ℝ 2 apm_m94a04_measure,
+      apm_m94a04_IsOperator T ∧
+      ∀ f : Lp ℝ 8 apm_m94a04_measure,
+        ∃ L : Lp ℝ 8 apm_m94a04_measure →ₗ[ℝ]
+            Lp ℝ 2 apm_m94a04_measure,
+          (∃ C : ℝ, 0 ≤ C ∧ ∀ h : Lp ℝ 8 apm_m94a04_measure,
+            eLpNorm (L h) 2 apm_m94a04_measure ≤
+              ENNReal.ofReal C * eLpNorm h 8 apm_m94a04_measure) ∧
+          ∀ h : Lp ℝ 8 apm_m94a04_measure,
+            ∀ᵐ t ∂apm_m94a04_measure, L h t = 3 * (f t) ^ 2 * h t := by
+  sorry
+
+/-- Why this unblocks `apm_m94a04`: the exact cubic identity and mixed Hölder
+bounds imply this uniform small-increment estimate.  Combined with the first
+conjunct supplied by the preceding bridge, it is precisely
+`apm_m94a04_IsFrechetDerivative T f L`. -/
+theorem apm_m94A04_bridge_remainder_estimate
+    (T : Lp ℝ 8 apm_m94a04_measure → Lp ℝ 2 apm_m94a04_measure)
+    (hT : apm_m94a04_IsOperator T)
+    (f : Lp ℝ 8 apm_m94a04_measure)
+    (L : Lp ℝ 8 apm_m94a04_measure →ₗ[ℝ]
+      Lp ℝ 2 apm_m94a04_measure)
+    (hL : ∀ h : Lp ℝ 8 apm_m94a04_measure,
+      ∀ᵐ t ∂apm_m94a04_measure, L h t = 3 * (f t) ^ 2 * h t) :
+    ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
+      ∀ h : Lp ℝ 8 apm_m94a04_measure,
+      eLpNorm h 8 apm_m94a04_measure < ENNReal.ofReal δ →
+      eLpNorm ((T (f + h) : ℝ → ℝ) - (T f : ℝ → ℝ) -
+        (L h : ℝ → ℝ)) 2 apm_m94a04_measure ≤
+        ENNReal.ofReal ε * eLpNorm h 8 apm_m94a04_measure := by
+  sorry
+
 theorem apm_m94a04 :
     ∃ T : Lp ℝ 8 (volume.restrict (Icc (0 : ℝ) 1)) →
         Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)),
