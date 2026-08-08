@@ -168,3 +168,15 @@ Shared extension root for promoted lemmas:
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 The informal proof already mirrors the desired Lean statement: everything hinges on Hölder and the symmetric-difference estimate.  The Lean blocker (lack of an `Lp`-continuity lemma for indicator kernels) is noted explicitly above, so readers know exactly which analytic fact must be supplied to make the formal argument go through.
+
+## Closer completion
+
+Closer hop 2 avoided the indicator-kernel blocker by expressing the moving
+integral as a difference of atomless `Iic` primitives, proving continuity.
+Closer hop 3 completes the quantitative estimate. For the restricted measure
+on the moving interval, `eLpNorm_le_eLpNorm_mul_rpow_measure_univ` compares
+the `L¹` and `Lᵖ` seminorms. Measure monotonicity and the interval-volume
+bound replace the moving measure by `2h`; the Bochner integral norm is bounded
+by the resulting `L¹` seminorm. Finally the proof transports the ENNReal
+inequality through `toReal` and combines real powers to obtain exactly
+`(2h)^(-1/p.toReal)`. The frozen theorem is fully closed.

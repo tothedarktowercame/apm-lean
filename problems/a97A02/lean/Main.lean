@@ -93,28 +93,68 @@ theorem apm_a97a02
           (eLpNorm f p apm_a97A02_measure).toReal := by
   refine ⟨apm_a97A02_continuousOn_average f
     (apm_a97A02_integrable_of_memLp hp hf) h hh, ?_⟩
-  /- CLOSER HOP 2 BOUNDARY.
-
-  This hop closes the complete continuity conjunct in
-  `apm_a97A02_continuousOn_average`.  The proof equips the restricted measure
-  with its inherited `NoAtoms` instance, writes each moving `Icc` integral as
-  the difference of two `Iic` primitives via
-  `intervalIntegral.integral_Iic_sub_Iic`, and composes Mathlib's
-  `IntegrableOn.continuousOn_Iic_primitive_Iic` with the affine endpoints.
-  Thus the earlier symmetric-difference/kernel-continuity bridge is no longer
-  live.
-
-  The sole remaining bridge is the quantitative estimate.  Source inspection
-  found the precise ENNReal comparison theorem
-  `eLpNorm_le_eLpNorm_mul_rpow_measure_univ`; applied to the moving restricted
-  measure at exponents `1` and `p`, it gives the desired factor before
-  division.  What remains is the Lean normalization from the Bochner integral
-  norm through `eLpNorm f 1`, monotonicity from
-  `apm_a97A02_measure_Icc_le`, and conversion of ENNReal `rpow`/`toReal` into
-  the frozen real power `(2*h)^(-(1/p.toReal))`.  Searches of
-  `LEMMA-INDEX.md`, `ConstructionTargets/`, the solved problem corpus,
-  Mathlib's `CompareExp`, `LpNorm`, set-integral, and interval-integral APIs,
-  and git history found no compiled lemma performing that full conversion.
-  The frozen statement is unchanged.
-  -/
-  sorry
+  intro t ht
+  let E : Set ℝ := Set.Icc (t - h) (t + h)
+  let μE := apm_a97A02_measure.restrict E
+  have hμE_le : μE ≤ apm_a97A02_measure := Measure.restrict_le_self
+  have hmeasE : AEStronglyMeasurable f μE := hf.1.mono_measure hμE_le
+  have hp_real : 1 ≤ p.toReal := by
+    have := ENNReal.toReal_mono hp_top hp
+    norm_num at this ⊢
+    exact this
+  have hexp : 0 ≤ 1 - 1 / p.toReal := by
+    rw [sub_nonneg]
+    simpa using one_div_le_one_div_of_le (a := (1 : ℝ)) zero_lt_one hp_real
+  have hL1 : eLpNorm f 1 μE ≤
+      eLpNorm f p apm_a97A02_measure *
+        ENNReal.ofReal (2 * h) ^ (1 - 1 / p.toReal) := by
+    calc
+      eLpNorm f 1 μE ≤ eLpNorm f p μE *
+          μE Set.univ ^ (1 / (1 : ENNReal).toReal - 1 / p.toReal) :=
+        eLpNorm_le_eLpNorm_mul_rpow_measure_univ hp hmeasE
+      _ ≤ eLpNorm f p apm_a97A02_measure *
+          ENNReal.ofReal (2 * h) ^ (1 - 1 / p.toReal) := by
+        have hμ : μE Set.univ ≤ ENNReal.ofReal (2 * h) := by
+          simpa [μE, E] using apm_a97A02_measure_Icc_le h t hh
+        rw [show 1 / (1 : ENNReal).toReal - 1 / p.toReal =
+          1 - 1 / p.toReal by norm_num]
+        exact mul_le_mul'
+          (eLpNorm_mono_measure f hμE_le)
+          (ENNReal.rpow_le_rpow hμ hexp)
+  have hnormInt : ‖∫ x, f x ∂μE‖ ≤ (eLpNorm f 1 μE).toReal := by
+    simpa [eLpNorm_one_eq_lintegral_enorm] using
+      (MeasureTheory.norm_integral_le_lintegral_norm (μ := μE) f)
+  have hLp_top : eLpNorm f p apm_a97A02_measure ≠ ⊤ := hf.2.ne
+  have hfactor_top : ENNReal.ofReal (2 * h) ^ (1 - 1 / p.toReal) ≠ ⊤ := by
+    exact ENNReal.rpow_ne_top_of_nonneg hexp ENNReal.ofReal_ne_top
+  have hL1real : (eLpNorm f 1 μE).toReal ≤
+      (eLpNorm f p apm_a97A02_measure).toReal *
+        (2 * h) ^ (1 - 1 / p.toReal) := by
+    have hreal := ENNReal.toReal_mono (ENNReal.mul_ne_top hLp_top hfactor_top) hL1
+    rw [ENNReal.toReal_mul, ← ENNReal.toReal_rpow,
+      ENNReal.toReal_ofReal (by positivity)] at hreal
+    exact hreal
+  unfold apm_a97A02_average
+  rw [show (∫ x in E, f x ∂apm_a97A02_measure) = ∫ x, f x ∂μE by rfl,
+    norm_div]
+  norm_num [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hh]
+  calc
+    ‖∫ x, f x ∂μE‖ / (2 * h) ≤ (eLpNorm f 1 μE).toReal / (2 * h) :=
+      div_le_div_of_nonneg_right hnormInt (by positivity)
+    _ ≤ ((eLpNorm f p apm_a97A02_measure).toReal *
+        (2 * h) ^ (1 - 1 / p.toReal)) / (2 * h) :=
+      div_le_div_of_nonneg_right hL1real (by positivity)
+    _ = (2 * h) ^ (-p.toReal⁻¹) *
+        (eLpNorm f p apm_a97A02_measure).toReal := by
+      have hx : 0 < 2 * h := by positivity
+      rw [div_eq_mul_inv,
+        show (2 * h)⁻¹ = (2 * h) ^ (-1 : ℝ) by
+          exact (Real.rpow_neg_one (2 * h)).symm]
+      rw [show (eLpNorm f p apm_a97A02_measure).toReal *
+          (2 * h) ^ (1 - 1 / p.toReal) * (2 * h) ^ (-1 : ℝ) =
+          ((2 * h) ^ (1 - 1 / p.toReal) * (2 * h) ^ (-1 : ℝ)) *
+            (eLpNorm f p apm_a97A02_measure).toReal by ring,
+        ← Real.rpow_add hx]
+      rw [show 1 - 1 / p.toReal + (-1 : ℝ) = -p.toReal⁻¹ by
+        rw [one_div]
+        ring]

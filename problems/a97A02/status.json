@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "partial",
+  "classification": "solved",
+  "closer_hop": 3,
+  "closer_note": "Closed using the finite-measure Lp exponent comparison on the moving restricted measure, measure monotonicity, the Bochner integral norm bound, and explicit ENNReal-to-real rpow normalization.",
   "imported_at": "2026-05-01T19:38:17.014581Z"
 }
