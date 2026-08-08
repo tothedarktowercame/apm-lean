@@ -34,6 +34,12 @@ def apm_t94a06_family {X : Type*} (f : X → apm_t94a06_E3)
     (s : apm_t94a06_E2) (x : X) : apm_t94a06_E3 :=
   f x + apm_t94a06_normalTranslation s
 
+/-- The perturbation family agrees with the original map at parameter zero. -/
+lemma apm_t94a06_family_zero {X : Type*} (f : X → apm_t94a06_E3) :
+    apm_t94a06_family f 0 = f := by
+  funext x
+  simp [apm_t94a06_family, apm_t94a06_normalTranslation]
+
 def apm_t94a06_IsTransverseToZAxis
     {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
@@ -54,4 +60,21 @@ theorem apm_t94a06
     apm_t94a06_family f 0 = f ∧
       ∀ᵐ s : apm_t94a06_E2,
         apm_t94a06_IsTransverseToZAxis I (apm_t94a06_family f s) := by
+  /-
+  Boundary (closer hop 2): `apm_t94a06_family_zero` now closes the first
+  conjunct exactly. The second conjunct is parametric transversality for an
+  arbitrary smooth manifold domain. Its standard proof applies Sard to the
+  projection of the incidence manifold
+  `{(x,s) | f x + normalTranslation s ∈ zAxis}` onto parameter space.
+
+  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, the related
+  artifacts `t02A07`, `t92J07`, `t93A04`, `t01A08`, Mathlib's fixed-vector-
+  space Sard/Jacobian results, manifold `mfderiv`, regular-value, and subtype-
+  chart APIs, and git history found no manifold Sard theorem, parametric
+  transversality theorem, or incidence-submanifold/projection package. The
+  available Sard lemmas concern maps between finite-dimensional normed vector
+  spaces and do not directly accept this arbitrary charted domain. Building
+  the incidence manifold chartwise and transporting null critical values is
+  therefore the remaining bridge; the frozen statement is unchanged.
+  -/
   sorry
