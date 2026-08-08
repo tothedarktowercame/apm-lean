@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The explicit circle retraction of the torus and its transport across any torus-sphere homeomorphism are compiled, together with the reduction from a no-circle-retract theorem to the frozen conclusion. Remaining work is the unavailable fundamental-group or H1 computation ruling out a circle retract of the metric two-sphere.",
+  "closer_hop": 3,
+  "boundary": "The explicit retraction transport and the complete fundamental-group contradiction are compiled. Remaining work is exactly the unavailable Nontrivial instance for FundamentalGroup Circle 1 and subsingleton fundamental groups for the concrete metric two-sphere.",
   "imported_at": "2026-07-13T17:26:57.341721Z"
 }

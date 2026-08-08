@@ -1,5 +1,7 @@
 import Mathlib
 
+open CategoryTheory
+
 /-!
 # APM t91J02
 
@@ -63,6 +65,40 @@ lemma apm_t91J02_not_homeomorph_of_no_circle_retract
   rintro ⟨e⟩
   exact h (apm_t91J02_circleRetract_of_homeomorph e)
 
+/-- Reused from the functorial argument in sibling `t91A05`: a left inverse
+makes the induced fundamental-group map injective. -/
+lemma apm_t91J02_fundamentalGroupMap_injective_of_retract
+    {A X : Type*} [TopologicalSpace A] [TopologicalSpace X]
+    (i : C(A, X)) (a : A) (r : C(X, A))
+    (hr : r.comp i = ContinuousMap.id A) :
+    Function.Injective (FundamentalGroup.map i a) := by
+  intro x y hxy
+  change (FundamentalGroupoid.map i).map x =
+    (FundamentalGroupoid.map i).map y at hxy
+  have hxy' := congrArg (fun z ↦ (FundamentalGroupoid.map r).map z) hxy
+  change ((FundamentalGroupoid.map i ⋙ FundamentalGroupoid.map r).map x) =
+    ((FundamentalGroupoid.map i ⋙ FundamentalGroupoid.map r).map y) at hxy'
+  rw [← FundamentalGroupoid.map_comp, hr, FundamentalGroupoid.map_id] at hxy'
+  exact hxy'
+
+/-- The exact invariant obstruction: a space with trivial fundamental groups
+at every basepoint cannot admit `Circle` as a retract once the circle's group
+is known to be nontrivial. -/
+lemma apm_t91J02_no_circle_retract_of_fundamentalGroup
+    [Nontrivial (FundamentalGroup Circle (1 : Circle))]
+    (hsphere : ∀ x : apm_t91J02_S2,
+      Subsingleton (FundamentalGroup apm_t91J02_S2 x)) :
+    ¬ ∃ i : C(Circle, apm_t91J02_S2),
+      ∃ r : C(apm_t91J02_S2, Circle),
+        r.comp i = ContinuousMap.id Circle := by
+  rintro ⟨i, r, hr⟩
+  letI : Subsingleton (FundamentalGroup apm_t91J02_S2 (i 1)) := hsphere (i 1)
+  have hinj := apm_t91J02_fundamentalGroupMap_injective_of_retract i 1 r hr
+  obtain ⟨x, hx⟩ := exists_ne (1 : FundamentalGroup Circle (1 : Circle))
+  apply hx
+  apply hinj
+  exact Subsingleton.elim _ _
+
 theorem apm_t91j02 :
     ¬Nonempty (apm_t91J02_Torus ≃ₜ apm_t91J02_S2) := by
   /- Boundary (closer hop 1): the explicit maps above prove that `Circle` is a
@@ -92,5 +128,17 @@ theorem apm_t91j02 :
   nontriviality of `FundamentalGroup Circle` or the `H₁` computations for the
   circle and metric sphere. Thus all transport bookkeeping is closed and only
   the genuine invariant obstruction remains; the frozen statement is
+  unchanged.
+
+  CLOSER HOP 3 compiles that invariant obstruction rather than merely naming
+  it. Reusing the categorical pattern from sibling `t91A05`,
+  `apm_t91J02_fundamentalGroupMap_injective_of_retract` proves that a left
+  inverse induces an injection, and
+  `apm_t91J02_no_circle_retract_of_fundamentalGroup` derives the exact
+  no-circle-retract assertion from a nontrivial circle group and subsingleton
+  sphere groups at every basepoint. Thus no functorial or group reasoning
+  remains. Searches of covering/lift, winding-number, sphere, and homology
+  sources still found neither concrete computation. The sole remaining inputs
+  are precisely those foundational instances; the frozen statement is
   unchanged. -/
   sorry
