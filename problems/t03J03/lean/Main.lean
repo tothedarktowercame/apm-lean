@@ -70,6 +70,28 @@ def apm_t03J03_generalCoverEquivalent
   let _ := tF
   ∃ h : E ≃ₜ F, ∀ e : E, q (h e) = p e
 
+lemma apm_t03J03_euler_N3 : eulerCharacteristic false 3 = -1 := by
+  rfl
+
+lemma apm_t03J03_euler_Sigma2 : eulerCharacteristic true 2 = -2 := by
+  rfl
+
+lemma apm_t03J03_euler_N4 : eulerCharacteristic false 4 = -2 := by
+  rfl
+
+lemma apm_t03J03_character_card : Nat.card apm_t03J03_character = 7 := by
+  rw [Nat.card_eq_fintype_card]
+  native_decide
+
+lemma apm_t03J03_orientationCharacter_ne_zero :
+    apm_t03J03_orientationCharacter ≠ 0 := by
+  intro h
+  have h0 := congrFun h 0
+  norm_num [apm_t03J03_orientationCharacter] at h0
+
+def apm_t03J03_orientationCharacterAsCharacter : apm_t03J03_character :=
+  ⟨apm_t03J03_orientationCharacter, apm_t03J03_orientationCharacter_ne_zero⟩
+
 theorem apm_t03j03
     :
     eulerCharacteristic false 3 = -1 ∧
@@ -102,4 +124,33 @@ theorem apm_t03j03
         ∃ lift : apm_t03J03_Cylinder → Y,
           @Continuous apm_t03J03_Cylinder Y inferInstance tY lift ∧
           ∀ z, p (lift z) = f z) := by
+  refine ⟨apm_t03J03_euler_N3, apm_t03J03_euler_Sigma2,
+    apm_t03J03_euler_N4, apm_t03J03_character_card, ?_⟩
+  /-
+  Boundary (closer hop 2): four frozen numerical conjuncts are now closed.
+  The three Euler-characteristic identities reduce directly to
+  `ConstructionTargets.Surfaces.eulerCharacteristic`, and
+  `apm_t03J03_character_card` computes the cardinality of the nonzero
+  functions `Fin 3 → ZMod 2` as seven. The orientation character is also
+  bundled explicitly as `apm_t03J03_orientationCharacterAsCharacter`.
+
+  The remaining existential requires constructing seven actual connected
+  covering spaces of the polygon quotient, proving every connected double
+  cover equivalent to exactly one of them, and identifying their total spaces
+  as `Sigma₂` or `N₄`. `ConstructionTargets.Surfaces` supplies only the
+  quotient presentations and elementary Euler arithmetic; it has no covering
+  maps, connectedness proofs, surface classification, or fundamental-group
+  computation. The disconnected clause likewise requires the theorem that a
+  disconnected two-sheeted cover of this connected base is the trivial cover.
+
+  I additionally investigated Mathlib's covering lifting criterion
+  `IsCoveringMap.existsUnique_continuousMap_lifts_of_range_le`. It can produce
+  the final cylinder lift only after proving the relevant fundamental-group
+  range inclusion (normally from orientation-character classification), which
+  is exactly the missing global input. Searches of `LEMMA-INDEX.md`, all
+  `ConstructionTargets/`, Mathlib's covering, monodromy, fundamental-group,
+  quotient-surface, and surface-classification sources, related covering
+  siblings, and git history found no compiled classification bridge. The
+  frozen statement is unchanged.
+  -/
   sorry
