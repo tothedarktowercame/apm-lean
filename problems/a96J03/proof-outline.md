@@ -30,10 +30,18 @@ integrand is supported in the compact Minkowski sum
 epsilon/triangle combination with the hop-1 approximation and Haar-invariance
 lemmas.
 
+## Closer hop 3
+
+The final assembly is complete. For each `ε > 0`, choose a compactly supported
+continuous `g` within `ε/3` of `f`. Eventually the compact-core translation
+error is below `ε/3`. The pointwise three-term triangle inequality is
+integrated using explicit integrability proofs, both approximation errors are
+identified by translation invariance and symmetry, and the three bounds sum
+to less than `ε`.
+
 integrable indicator bound on that thickening.  Mathlib's convolution
 continuity results do not directly state continuity of this translation norm.
-Consequently the main theorem remains partial with one `sorry`; its statement
-was not changed.
+Consequently the main theorem is now sorry-free; its statement was not changed.
 
 ## Imported Proof Plan
 

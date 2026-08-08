@@ -80,7 +80,7 @@ theorem apm_a96j03 (f : ℝ → ℝ) (hf : Integrable f volume) :
     Tendsto
       (fun t : ℝ => ∫ x : ℝ, |f (x - t) - f x|)
       (nhds 0) (nhds 0) := by
-  /- CLOSER HOP 1 BOUNDARY.
+  /- CLOSER HOPS 1--3.
 
   Repository and Mathlib searches found no packaged strong-continuity theorem
   for translations on `L¹`.  The two reusable reduction lemmas above now
@@ -97,11 +97,64 @@ theorem apm_a96j03 (f : ℝ → ℝ) (hf : Integrable f volume) :
   support is `tsupport g + closedBall 0 1`. This avoids all manual dominated-
   convergence bookkeeping.
 
-  The remaining bridge is now only the final epsilon/triangle assembly:
-  choose the compiled compactly supported approximant, use Haar invariance for
-  both approximation-error translates, and combine those two errors with the
-  compact-core bound. No packaged integral-metric triangle lemma was found in
-  the renewed `L1`, Haar, and Bochner-integral searches. The frozen statement
-  is unchanged.
+  Hop 3 closes the final epsilon/triangle assembly directly. It chooses an
+  `ε/3` compactly supported approximant, takes the eventual compact-core
+  bound, proves the pointwise three-term absolute-value inequality, supplies
+  integrability for every term, splits the integral, and uses Haar invariance
+  for the translated approximation error. The frozen statement is unchanged.
   -/
-  sorry
+  rw [Metric.tendsto_nhds]
+  intro ε hε
+  obtain ⟨g, hg, hgc, hgi, hfg⟩ :=
+    apm_a96J03_exists_compact_continuous_approx f hf (show 0 < ε / 3 by positivity)
+  have hcore := apm_a96J03_compact_core g hg hgc
+  rw [Metric.tendsto_nhds] at hcore
+  filter_upwards [hcore (ε / 3) (by positivity)] with t ht
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg]
+  · have hft : Integrable (fun x : ℝ ↦ f (x - t)) volume := hf.comp_sub_right t
+    have hgt : Integrable (fun x : ℝ ↦ g (x - t)) volume := hgi.comp_sub_right t
+    have hleft : Integrable (fun x : ℝ ↦ |f (x - t) - g (x - t)|) volume :=
+      (hft.sub hgt).abs
+    have hmid : Integrable (fun x : ℝ ↦ |g (x - t) - g x|) volume :=
+      (hgt.sub hgi).abs
+    have hright : Integrable (fun x : ℝ ↦ |g x - f x|) volume :=
+      (hgi.sub hf).abs
+    have hmono :
+        (∫ x : ℝ, |f (x - t) - f x|) ≤
+          ∫ x : ℝ, |f (x - t) - g (x - t)| +
+            |g (x - t) - g x| + |g x - f x| := by
+      apply integral_mono
+      · exact (hft.sub hf).abs
+      · exact (hleft.add hmid).add hright
+      · intro x
+        calc
+          |f (x - t) - f x| ≤
+              |f (x - t) - g (x - t)| + |g (x - t) - f x| := abs_sub_le _ _ _
+          _ ≤ |f (x - t) - g (x - t)| +
+              (|g (x - t) - g x| + |g x - f x|) :=
+                add_le_add (le_refl _) (abs_sub_le (g (x - t)) (g x) (f x))
+          _ = |f (x - t) - g (x - t)| +
+              |g (x - t) - g x| + |g x - f x| := by ring
+    have hrhs :
+        (∫ x : ℝ, |f (x - t) - g (x - t)| +
+            |g (x - t) - g x| + |g x - f x|) =
+          (∫ x : ℝ, |f (x - t) - g (x - t)|) +
+          (∫ x : ℝ, |g (x - t) - g x|) +
+          (∫ x : ℝ, |g x - f x|) := by
+      calc
+        _ = (∫ x : ℝ, (|f (x - t) - g (x - t)| +
+              |g (x - t) - g x|) + |g x - f x|) := rfl
+        _ = (∫ x : ℝ, |f (x - t) - g (x - t)| +
+              |g (x - t) - g x|) + (∫ x : ℝ, |g x - f x|) :=
+                integral_add (hleft.add hmid) hright
+        _ = _ := by rw [integral_add hleft hmid]
+    rw [hrhs, apm_a96J03_integral_abs_sub_translate f g t] at hmono
+    have hgf : (∫ x : ℝ, |g x - f x|) = ∫ x : ℝ, |f x - g x| := by
+      apply integral_congr_ae
+      filter_upwards [] with x
+      rw [abs_sub_comm]
+    rw [hgf] at hmono
+    have ht' : (∫ x : ℝ, |g (x - t) - g x|) < ε / 3 := by
+      simpa [Real.dist_eq, abs_of_nonneg (integral_nonneg fun _ ↦ abs_nonneg _)] using ht
+    exact lt_of_le_of_lt hmono (by linarith)
+  · exact integral_nonneg fun _ ↦ abs_nonneg _
