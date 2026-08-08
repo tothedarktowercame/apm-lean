@@ -39,7 +39,10 @@
       "apm_b96j03_nilpotent_implies_solvable",
       "apm_b96j03_solvable_not_nilpotent_exists",
       "apm_b96j03_toA7_relations",
-      "apm_b96j03_toA7"
+      "apm_b96j03_toA7",
+      "apm_b96j03_b7_c7_mem_range",
+      "apm_b96j03_closure_b7_c7_le_range",
+      "apm_b96j03_toA7_surjective_of_generate"
     ],
     "axioms": "propext, sorryAx, Classical.choice, Quot.sound, and native_decide-generated theorem axioms from the existing finite S3 computations",
     "blockers": [

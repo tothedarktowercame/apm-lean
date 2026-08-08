@@ -30,6 +30,16 @@ Closure along this route now requires proving those two permutations generate
 subgroup embedding, but that embedding and the required generation theorem
 are not packaged in the searched corpus.
 
+## Closer hop 3 (2026-08-08)
+
+The quotient-range assembly is complete. The images of the presented
+generators explicitly contain `b7` and `c7`; consequently their subgroup
+closure lies in the homomorphism range, and equality of that closure with
+`⊤` immediately gives surjectivity. Direct `native_decide` cannot establish
+the equality because `Subgroup.closure` has no computable decidability
+instance. The remaining finite route is exactly the concrete generation
+equality and nonsolvability of `A₇`.
+
 ## Imported Proof Plan
 
 ```clojure
