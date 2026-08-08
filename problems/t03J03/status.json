@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "All Euler-characteristic and character-count conjuncts compile. Remaining work is the actual classification of connected and disconnected double covers of the polygon quotient and the fundamental-group range argument for cylinder lifting.",
+  "closer_hop": 3,
+  "boundary": "All Euler-characteristic and character-count conjuncts compile. The cylinder lift is now constructed from the exact fundamental-group range condition via Mathlib's lifting criterion. Remaining work is the actual classification of connected and disconnected double covers, the cylinder connectivity instances, a fiber point, and the orientation-character range argument.",
   "imported_at": "2026-07-13T17:26:57.065885Z"
 }

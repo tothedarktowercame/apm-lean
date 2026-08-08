@@ -12,13 +12,17 @@ The elementary classification invariants are now formalized and compile.
 - The subtype of nonzero characters `Fin 3 → ZMod 2` has cardinality seven.
 - The all-ones orientation character is proved nonzero and bundled as an
   element of the character subtype.
+- `apm_t03J03_exists_cylinderLift_of_range_le` applies Mathlib's precise
+  fundamental-group lifting criterion and produces the continuous cylinder
+  lift, including its commuting equation, once a fiber point and range
+  inclusion are supplied.
 
 ## Remaining boundary
 
 One must build the seven connected double covers, classify every connected
 cover uniquely by its character, identify the orientable cover with `Σ₂` and
 the other six with `N₄`, classify disconnected double covers as trivial, and
-use the orientation character to verify the fundamental-group range condition
-for lifting an embedded cylinder. Mathlib provides a general covering lifting
-criterion, but the polygon-surface fundamental groups and cover classification
-needed to apply it are absent.
+prove the cylinder's standard connectivity instances, choose a point in the
+relevant fiber, and use the orientation character to verify the
+fundamental-group range condition. The remaining polygon-surface fundamental
+groups and cover classification needed for that inclusion are absent.

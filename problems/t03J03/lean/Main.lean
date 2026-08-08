@@ -92,6 +92,30 @@ lemma apm_t03J03_orientationCharacter_ne_zero :
 def apm_t03J03_orientationCharacterAsCharacter : apm_t03J03_character :=
   ⟨apm_t03J03_orientationCharacter, apm_t03J03_orientationCharacter_ne_zero⟩
 
+/-- The final cylinder-lifting conclusion follows directly from Mathlib's
+fundamental-group lifting criterion once its range inclusion is supplied. -/
+lemma apm_t03J03_exists_cylinderLift_of_range_le
+    [PathConnectedSpace apm_t03J03_Cylinder]
+    [LocPathConnectedSpace apm_t03J03_Cylinder]
+    (Y : Type) (tY : TopologicalSpace Y) (p : Y → apm_t03J03_N3)
+    (hp : apm_t03J03_isTwoFoldCover tY inferInstance p)
+    (f : apm_t03J03_Cylinder → apm_t03J03_N3)
+    (hf : @Topology.IsEmbedding apm_t03J03_Cylinder apm_t03J03_N3
+      inferInstance inferInstance f)
+    (z₀ : apm_t03J03_Cylinder) (y₀ : Y)
+    (hy₀ : p y₀ = f z₀)
+    (hle : (FundamentalGroup.map ⟨f, hf.continuous⟩ z₀).range ≤
+      (FundamentalGroup.mapOfEq ⟨p, hp.1.continuous⟩ hy₀).range) :
+    ∃ lift : apm_t03J03_Cylinder → Y,
+      @Continuous apm_t03J03_Cylinder Y inferInstance tY lift ∧
+      ∀ z, p (lift z) = f z := by
+  letI : TopologicalSpace Y := tY
+  let fc : C(apm_t03J03_Cylinder, apm_t03J03_N3) := ⟨f, hf.continuous⟩
+  obtain ⟨F, hF, _⟩ := hp.1.existsUnique_continuousMap_lifts_of_range_le hy₀ hle
+  refine ⟨F, F.continuous, ?_⟩
+  intro z
+  exact congrFun hF.2 z
+
 theorem apm_t03j03
     :
     eulerCharacteristic false 3 = -1 ∧
@@ -127,7 +151,7 @@ theorem apm_t03j03
   refine ⟨apm_t03J03_euler_N3, apm_t03J03_euler_Sigma2,
     apm_t03J03_euler_N4, apm_t03J03_character_card, ?_⟩
   /-
-  Boundary (closer hop 2): four frozen numerical conjuncts are now closed.
+  Boundary (closer hop 3): hop 2 closed four frozen numerical conjuncts.
   The three Euler-characteristic identities reduce directly to
   `ConstructionTargets.Surfaces.eulerCharacteristic`, and
   `apm_t03J03_character_card` computes the cardinality of the nonzero
@@ -143,11 +167,16 @@ theorem apm_t03j03
   computation. The disconnected clause likewise requires the theorem that a
   disconnected two-sheeted cover of this connected base is the trivial cover.
 
-  I additionally investigated Mathlib's covering lifting criterion
-  `IsCoveringMap.existsUnique_continuousMap_lifts_of_range_le`. It can produce
-  the final cylinder lift only after proving the relevant fundamental-group
-  range inclusion (normally from orientation-character classification), which
-  is exactly the missing global input. Searches of `LEMMA-INDEX.md`, all
+  Going beyond that boundary, hop 3 packages Mathlib's covering lifting
+  criterion as `apm_t03J03_exists_cylinderLift_of_range_le`. Given the
+  standard path-connected/local-path-connected instances for the cylinder, a
+  chosen point in the fiber, and the induced fundamental-group range
+  inclusion, it constructs exactly the continuous lift and commuting equation
+  required by the frozen final conjunct. Thus no additional lifting or
+  topology-instance bookkeeping remains after those inputs are available.
+
+  The range inclusion normally follows from the missing orientation-character
+  classification. Renewed searches of `LEMMA-INDEX.md`, all
   `ConstructionTargets/`, Mathlib's covering, monodromy, fundamental-group,
   quotient-surface, and surface-classification sources, related covering
   siblings, and git history found no compiled classification bridge. The
