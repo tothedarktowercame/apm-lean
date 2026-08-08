@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "closer_note": "Compiled value/derivative endpoint vanishing, the Ioo-to-adjacent-interval integral split, and iteratedDeriv-two normalization. Remaining are branch-product integrability and four integrations by parts.",
   "imported_at": "2026-07-13T17:26:54.629724Z"
 }

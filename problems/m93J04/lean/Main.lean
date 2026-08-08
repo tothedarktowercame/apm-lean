@@ -37,8 +37,59 @@ lemma apm_m93J04_kernel_derivative_jump (y : ℝ) :
     (Real.log y + 1) / y ^ 2 - Real.log y / y ^ 2 = 1 / y ^ 2 := by
   ring
 
+/-- Test functions whose support lies in `(0,1)`
+vanish together with their first derivative at both outer endpoints. -/
+lemma apm_m93J04_testFunction_endpoints
+    (φ : ℝ → ℝ)
+    (hsupp : Function.support φ ⊆ Ioo (0 : ℝ) 1) :
+    φ 0 = 0 ∧ deriv φ 0 = 0 ∧ φ 1 = 0 ∧ deriv φ 1 = 0 := by
+  have hzero_left : ∀ x ≤ (0 : ℝ), φ x = 0 := by
+    intro x hx
+    by_contra hne
+    exact (not_lt_of_ge hx) (hsupp hne).1
+  have hzero_right : ∀ x, (1 : ℝ) ≤ x → φ x = 0 := by
+    intro x hx
+    by_contra hne
+    exact (not_lt_of_ge hx) (hsupp hne).2
+  have hφ0 : φ 0 = 0 := hzero_left 0 le_rfl
+  have hφ1 : φ 1 = 0 := hzero_right 1 le_rfl
+  refine ⟨hφ0, ?_, hφ1, ?_⟩
+  · refine HasDerivWithinAt.deriv_eq_zero ?_
+      (uniqueDiffOn_Iic 0 0 (mem_Iic.mpr le_rfl))
+    refine (hasDerivWithinAt_const 0 (Iic 0) 0).congr_of_mem ?_ (mem_Iic.mpr le_rfl)
+    intro x hx
+    exact hzero_left x hx
+  · refine HasDerivWithinAt.deriv_eq_zero ?_
+      (uniqueDiffOn_Ici 1 1 (mem_Ici.mpr le_rfl))
+    refine (hasDerivWithinAt_const 1 (Ici 1) 0).congr_of_mem ?_ (mem_Ici.mpr le_rfl)
+    intro x hx
+    exact hzero_right x hx
+
+/-- Convert the puncture-free set integral to the two adjacent interval
+integrals used by the branchwise calculation. -/
+lemma apm_m93J04_integral_Ioo_split
+    (f : ℝ → ℝ) {y : ℝ}
+    (hleft : IntervalIntegrable f volume 0 y)
+    (hright : IntervalIntegrable f volume y 1) :
+    (∫ x in Ioo (0 : ℝ) 1, f x) =
+      (∫ x in (0 : ℝ)..y, f x) + ∫ x in y..1, f x := by
+  rw [← integral_Icc_eq_integral_Ioo, integral_Icc_eq_integral_Ioc,
+    ← intervalIntegral.integral_of_le (show (0 : ℝ) ≤ 1 by norm_num)]
+  exact (intervalIntegral.integral_add_adjacent_intervals hleft hright).symm
+
 def apm_m93J04_formalAdjoint (φ : ℝ → ℝ) (x : ℝ) : ℝ :=
   x ^ 2 * iteratedDeriv 2 φ x + 5 * x * deriv φ x + 4 * φ x
+
+lemma apm_m93J04_formalAdjoint_eq (φ : ℝ → ℝ) (x : ℝ) :
+    apm_m93J04_formalAdjoint φ x =
+      x ^ 2 * deriv (deriv φ) x + 5 * x * deriv φ x + 4 * φ x := by
+  unfold apm_m93J04_formalAdjoint
+  have h : iteratedDeriv 2 φ = deriv (deriv φ) := by
+    calc
+      iteratedDeriv 2 φ = iteratedDeriv (1 + 1) φ := by norm_num
+      _ = deriv (iteratedDeriv 1 φ) := iteratedDeriv_succ
+      _ = deriv (deriv φ) := by rw [iteratedDeriv_one]
+  rw [h]
 
 theorem apm_m93j04 :
     ∀ y : ℝ, y ∈ Ioo (0 : ℝ) 1 →
@@ -78,6 +129,22 @@ theorem apm_m93j04 :
   bridge is now the set-integral-to-two-interval-integrals conversion, the
   corresponding integrability proofs, and four applications of integration
   by parts whose outer terms vanish and whose inner terms use the proved jump.
-  The frozen statement was left unchanged.
+
+  Closer hop 2 closes two of those bookkeeping layers instead of repeating
+  the API search. `apm_m93J04_testFunction_endpoints` derives both value and
+  first-derivative vanishing at `0` and `1` directly from support containment,
+  using one-sided unique differentiability at the endpoints.
+  `apm_m93J04_integral_Ioo_split` converts the set integral into the two
+  adjacent interval integrals once their interval integrability is known, and
+  `apm_m93J04_formalAdjoint_eq` rewrites `iteratedDeriv 2` to the nested
+  derivative required by integration by parts.
+
+  Renewed consultation of `LEMMA-INDEX.md`, `ConstructionTargets.Sinc`,
+  solved artifact `a02J03`, Mathlib's set-integral and repeated-derivative
+  sources, and git history found no second-order branch lemma. The remaining
+  bridge is narrower: establish interval integrability of the fully expanded
+  products on `[0,y]` and `[y,1]`, then perform the four integration-by-parts
+  applications and combine their inner boundary terms via the compiled jump.
+  The frozen statement is unchanged.
   -/
   sorry
