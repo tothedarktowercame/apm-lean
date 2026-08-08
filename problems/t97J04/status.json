@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "The quotient map, continuous summand inclusions, and full continuous pushout eliminator with computation and uniqueness laws are compiled. The fundamental-group and homology conclusions still require unavailable Seifert–van Kampen and singular Mayer–Vietoris/cellular comparison APIs.",
+  "closer_hop": 3,
+  "closer_note": "Constructed continuous retractions from the wedge onto both the torus and circle summands and used them to prove both canonical inclusions injective. The fundamental-group and homology conclusions still require unavailable circle/torus computations, Seifert–van Kampen, and singular Mayer–Vietoris/cellular comparison APIs.",
   "imported_at": "2026-07-13T17:26:58.496489Z"
 }

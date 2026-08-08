@@ -14,6 +14,10 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 - `apm_t97J04_wedgeDesc` descends every compatible pair of continuous maps;
   its computation and uniqueness lemmas establish the full continuous
   pushout eliminator. This follows the reusable pattern in sibling `t02A03`.
+- `apm_t97J04_torusRetraction` and `apm_t97J04_circleRetraction` continuously
+  collapse the opposite summand and are left inverses to their inclusions.
+- `apm_t97J04_summandInclusions_injective` uses those retractions to prove
+  both summands embed injectively at the point-set level.
 
 ## Remaining bridges
 

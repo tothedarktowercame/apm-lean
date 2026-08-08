@@ -131,6 +131,37 @@ lemma apm_t97J04_wedgeDesc_unique
   | inl x => exact huT x
   | inr z => exact huC z
 
+/-- Collapse the circle summand to the wedge point, giving a continuous
+retraction onto the torus summand. -/
+noncomputable def apm_t97J04_torusRetraction :
+    C(apm_t97J04_X, apm_t97J04_Torus) :=
+  apm_t97J04_wedgeDesc (ContinuousMap.id apm_t97J04_Torus)
+    (ContinuousMap.const Circle (1, 1)) rfl
+
+@[simp] lemma apm_t97J04_torusRetraction_torusInclusion
+    (x : apm_t97J04_Torus) :
+    apm_t97J04_torusRetraction (apm_t97J04_torusInclusion x) = x := rfl
+
+/-- Collapse the torus summand to the wedge point, giving a continuous
+retraction onto the circle summand. -/
+noncomputable def apm_t97J04_circleRetraction : C(apm_t97J04_X, Circle) :=
+  apm_t97J04_wedgeDesc (ContinuousMap.const apm_t97J04_Torus 1)
+    (ContinuousMap.id Circle) rfl
+
+@[simp] lemma apm_t97J04_circleRetraction_circleInclusion (z : Circle) :
+    apm_t97J04_circleRetraction (apm_t97J04_circleInclusion z) = z := rfl
+
+/-- Both canonical summand maps are injective, witnessed by the compiled
+retractions rather than by analysis of the generated equivalence relation. -/
+lemma apm_t97J04_summandInclusions_injective :
+    Function.Injective apm_t97J04_torusInclusion ∧
+      Function.Injective apm_t97J04_circleInclusion := by
+  constructor
+  · exact Function.LeftInverse.injective
+      apm_t97J04_torusRetraction_torusInclusion
+  · exact Function.LeftInverse.injective
+      apm_t97J04_circleRetraction_circleInclusion
+
 /-- The relation `[a,b]` in the requested three-generator presentation. -/
 def apm_t97J04_relator : FreeGroup (Fin 3) :=
   FreeGroup.of 0 * FreeGroup.of 1 *
@@ -183,5 +214,19 @@ theorem apm_t97j04 :
   does not compute singular homology. No circle/torus fundamental-group
   computation, singular Mayer--Vietoris sequence, or cellular comparison was
   found, so the five frozen invariant claims remain open.
+
+  CLOSER HOP 3: the pushout eliminator now constructs explicit continuous
+  retractions onto both summands. `apm_t97J04_torusRetraction` collapses the
+  circle and is definitionally a left inverse to the torus inclusion;
+  `apm_t97J04_circleRetraction` does the converse. The compiled theorem
+  `apm_t97J04_summandInclusions_injective` consequently proves both canonical
+  inclusions injective without analyzing `Relation.EqvGen`. This supplies
+  split summand data that a future functorial homology or fundamental-group
+  argument can consume. Renewed searches of `LEMMA-INDEX.md`,
+  `ConstructionTargets/`, wedge siblings, Mathlib's singular-homology,
+  fundamental-groupoid, van Kampen, and Mayer--Vietoris sources, and git
+  history still found no theorem computing the circle/torus invariants or
+  assembling them across this wedge. The five frozen invariant claims remain
+  open and the statement is unchanged.
   -/
   sorry
