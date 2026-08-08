@@ -11,7 +11,11 @@ The frozen theorem has a compiling partial Lean development.
   `ω₂ = 2π`.
 - `apm_m95J02_fundamental_two` unfolds the exact logarithmic kernel in
   dimension two.
-- The signs of both kernel branches were audited against `ΔΦ = δ`.
+- `apm_m95J02_sphereArea_pos` proves the Gamma normalization positive in all
+  positive dimensions.
+- `apm_m95J02_power_denominator_pos` and
+  `apm_m95J02_fundamental_neg` compile the denominator and sign calculations
+  for every `n > 2`.
 
 ## Remaining boundary
 

@@ -27,6 +27,15 @@ def apm_m95J02_sphereArea (n : ℕ) : ℝ :=
 lemma apm_m95J02_sphereArea_two : apm_m95J02_sphereArea 2 = 2 * Real.pi := by
   simp [apm_m95J02_sphereArea, Real.Gamma_one, Real.rpow_one]
 
+/-- The Gamma-function normalization really is a positive surface-area
+constant in every positive dimension. -/
+lemma apm_m95J02_sphereArea_pos {n : ℕ} (hn : 0 < n) :
+    0 < apm_m95J02_sphereArea n := by
+  unfold apm_m95J02_sphereArea
+  have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+  exact div_pos (mul_pos (by norm_num) (Real.rpow_pos_of_pos Real.pi_pos _))
+    (Real.Gamma_pos_of_pos (div_pos hnR (by norm_num)))
+
 def apm_m95J02_fundamental (n : ℕ) (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
   if n = 2 then Real.log ‖x‖ / (2 * Real.pi)
   else -Real.rpow ‖x‖ (2 - (n : ℝ)) /
@@ -35,6 +44,24 @@ def apm_m95J02_fundamental (n : ℕ) (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
 lemma apm_m95J02_fundamental_two (x : EuclideanSpace ℝ (Fin 2)) :
     apm_m95J02_fundamental 2 x = Real.log ‖x‖ / (2 * Real.pi) := by
   simp [apm_m95J02_fundamental]
+
+/-- In dimensions above two the denominator of the power-law branch is
+strictly positive, fixing its normalization and sign before the distributional
+calculation. -/
+lemma apm_m95J02_power_denominator_pos {n : ℕ} (hn : 2 < n) :
+    0 < ((n : ℝ) - 2) * apm_m95J02_sphereArea n := by
+  have hnR : (2 : ℝ) < n := by exact_mod_cast hn
+  exact mul_pos (sub_pos.mpr hnR) (apm_m95J02_sphereArea_pos (by omega))
+
+/-- Away from its pole, the higher-dimensional fundamental solution has the
+expected negative sign for the convention `ΔΦ = δ`. -/
+lemma apm_m95J02_fundamental_neg {n : ℕ} (hn : 2 < n)
+    {x : EuclideanSpace ℝ (Fin n)} (hx : x ≠ 0) :
+    apm_m95J02_fundamental n x < 0 := by
+  rw [apm_m95J02_fundamental, if_neg (by omega)]
+  exact div_neg_of_neg_of_pos
+    (neg_neg_of_pos (Real.rpow_pos_of_pos (norm_pos_iff.mpr hx) _))
+    (apm_m95J02_power_denominator_pos hn)
 
 def apm_m95J02_poissonSolution (n : ℕ)
     (f : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
@@ -62,7 +89,15 @@ theorem apm_m95j02
   file uses `+ log ‖x‖ / (2π)` in dimension two and
   `-‖x‖^(2-n) / ((n-2)ωₙ)` otherwise, both corresponding to `ΔΦ = δ`.
 
-  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets`, Mathlib's new
+  Closer hop 2 extends that normalization beyond the special dimension.
+  `apm_m95J02_sphereArea_pos` proves positivity of the Gamma-defined sphere
+  area in every positive dimension. `apm_m95J02_power_denominator_pos` proves
+  the complete power-branch denominator positive for `n > 2`, and
+  `apm_m95J02_fundamental_neg` uses it to certify the expected strict negative
+  sign of the kernel away from its pole. Thus all dimension-dependent sign and
+  denominator obligations are now compiled.
+
+  Searches across both hops of `LEMMA-INDEX.md`, `ConstructionTargets`, Mathlib's new
   `Analysis.InnerProductSpace.Laplacian`, Schwartz-space integration by parts,
   prior radial-integration artifacts (`a95A03`, `m94A03`, and `m96J03`), and
   git history found no radial-composition Laplacian formula or singular-kernel
