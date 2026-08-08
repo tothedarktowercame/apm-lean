@@ -10,12 +10,12 @@
     "problem_tex": "apm/t97A02.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Bundled the two circle projections and proved that their null-homotopies recombine into a null-homotopy of the torus map. The remaining bridge is the one-circle classification [X,S1] by integral H1/H^1, absent from Mathlib and the corpus.",
   "imported_at": "2026-07-13T17:26:58.423472Z"
 }
