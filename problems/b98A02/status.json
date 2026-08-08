@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "Parts (b), (c), and (d) are closed. The newly found IsAbelianGalois.of_algHom API proves subextensions and intersections remain abelian Galois. Only embedded construction of the commutator fixed field for part (a) remains.",
+  "closer_hop": 3,
+  "note": "Parts (b), (c), and (d) are closed. Exact map/comap transport between fields inside E and ambient fields below E is now compiled. Part (a) still needs Galois and automorphism-quotient transport for the mapped commutator fixed field and its universal property.",
   "imported_at": "2026-07-13T17:26:54.143315Z"
 }

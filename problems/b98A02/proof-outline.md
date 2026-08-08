@@ -16,9 +16,12 @@ The canonical Lean attempt compiles with one remaining `sorry`.
   `IsAbelianGalois.of_algHom` for subfields of the maximal abelian extension.
 - `apm_b98a02_intersection_maximal_eq` closes part (d) by giving
   `A_E ⊓ A_L` the inherited abelian Galois structure and applying maximality.
+- Three map/comap helpers close the exact order-theoretic transport between
+  intermediate fields inside `E` and ambient fields below `E`.
 
 ## Remaining bridge
 
-Construct the commutator fixed field inside `E`, lift it through `E.subtype`
-to an intermediate field inside `Ω`, and prove its universal property. This is
-the sole remaining conjunct, part (a).
+Construct the commutator fixed field inside `E`, map it through `E.val`, then
+transport its Galois structure and automorphism quotient to the mapped field.
+Finally prove its universal property using restriction and exact map/comap
+recovery. This is the sole remaining conjunct, part (a).

@@ -117,6 +117,31 @@ lemma apm_b98a02_maximal_iff
     letI : IsAbelianGalois F K := IsAbelianGalois.of_algHom f
     exact ⟨inferInstance, fun σ τ => mul_comm σ τ⟩
 
+/-- Mapping an intermediate field of `E` through the canonical embedding
+produces an ambient intermediate field below `E`. -/
+lemma apm_b98a02_map_subtype_le
+    (F Ω : Type*) [Field F] [Field Ω] [Algebra F Ω]
+    (E : IntermediateField F Ω) (A : IntermediateField F E) :
+    A.map E.val ≤ E := by
+  rw [IntermediateField.map_le_iff_le_comap]
+  intro x hx
+  exact x.property
+
+/-- The whole extension type maps back onto the ambient intermediate field. -/
+lemma apm_b98a02_map_subtype_top
+    (F Ω : Type*) [Field F] [Field Ω] [Algebra F Ω]
+    (E : IntermediateField F Ω) :
+    (⊤ : IntermediateField F E).map E.val = E := by
+  rw [← AlgHom.fieldRange_eq_map, E.fieldRange_val]
+
+/-- Comapping an ambient subfield below `E` and mapping it back recovers it. -/
+lemma apm_b98a02_map_comap_subtype
+    (F Ω : Type*) [Field F] [Field Ω] [Algebra F Ω]
+    (E K : IntermediateField F Ω) (hKE : K ≤ E) :
+    (K.comap E.val).map E.val = K := by
+  apply IntermediateField.map_comap_eq_self
+  rwa [E.fieldRange_val]
+
 theorem apm_b98a02 :
     ∀ (F Ω : Type*) [Field F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω],
       (∀ (E : IntermediateField F Ω) [FiniteDimensional F E],
@@ -173,9 +198,18 @@ theorem apm_b98a02 :
   for arbitrary embedded `K ≤ E`. No commutator-fixed-field theorem or proved
   sibling performs this chain.
 
-  that fixed field through `E.subtype`, transport Galoisness and the quotient
-  automorphism equivalence across the lift, and prove its universal property
-  for arbitrary embedded `K ≤ E`. No closed artifact or construction module
-  performs that remaining chain. The statement is unchanged and appears sound.
+  CLOSER HOP 3: the field-lifting portion is now closed.
+  `apm_b98a02_map_subtype_le`, `apm_b98a02_map_subtype_top`, and
+  `apm_b98a02_map_comap_subtype` prove respectively that the mapped field lies
+  below `E`, that the top field maps onto `E`, and that every ambient `K ≤ E`
+  is recovered exactly after comap then map. Thus the earlier order-theoretic
+  embedding gap is eliminated.
+
+  The remaining bridge is narrower: transport Galoisness and commutativity of
+  the automorphism group across the mapped fixed field, identify its
+  automorphisms with the quotient by the commutator subgroup, and use
+  restriction to prove the universal property for arbitrary `K ≤ E`.
+  Searches of the Galois map/transfer and fixed-field APIs found no packaged
+  theorem performing that chain. The statement is unchanged and appears sound.
   -/
   all_goals sorry
