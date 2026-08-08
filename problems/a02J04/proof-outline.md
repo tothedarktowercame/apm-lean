@@ -9,14 +9,17 @@ Imported source: `lean-proofs/a02J04`
 
 - `lean/Main.lean`
 
-## Closer hop 1
+## Closer hop 2
 
-The frozen theorem remains open. This hop establishes measurability of the
+The frozen theorem remains open. Hop 1 established measurability of the
 planar and proposed marginal densities, proves that the marginal density
 vanishes outside `[0,1]`, and proves it is nonzero on `[0,1]` except at zero.
 
-The remaining core calculation is Tonelli on the triangular vertical fibers:
-the fiber over `x` is `[0,x]` when `x ∈ [0,1]`, hence has volume `x`, producing
-density `2*x`. Once this marginal identity is formalized, the support and
+Hop 2 proves the vertical-section measure formula and the complete pointwise
+inner Tonelli identity
+`∫⁻ y, g (x,y) = ofReal (tauDensity x)` for every real `x`.
+
+The remaining core calculation is the measure-level Tonelli/map extensionality
+step using this identity. Once the marginal equality is formalized, the support and
 positivity lemmas feed the absolute-continuity, mutual-singularity, and
 reciprocal Radon–Nikodym calculations.

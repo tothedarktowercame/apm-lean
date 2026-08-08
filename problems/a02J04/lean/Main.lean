@@ -63,6 +63,38 @@ lemma apm_a02J04_tauDensity_ne_zero {x : ℝ}
   exact (ENNReal.ofReal_pos.mpr
     (mul_pos (by norm_num) (lt_of_le_of_ne hx.1 (Ne.symm hx0)))).ne'
 
+/-- The vertical section of the triangular support has exactly the expected
+Lebesgue measure (and is automatically empty when `x < 0`). -/
+lemma apm_a02J04_volume_verticalSection (x : ℝ) :
+    volume {y : ℝ | 0 ≤ y ∧ y ≤ x} = ENNReal.ofReal x := by
+  change volume (Icc (0 : ℝ) x) = ENNReal.ofReal x
+  rw [Real.volume_Icc, sub_zero]
+
+/-- The inner Tonelli integral of the planar density is the proposed marginal
+density. This is the scalar heart of the pushforward calculation. -/
+lemma apm_a02J04_lintegral_g_right (x : ℝ) :
+    (∫⁻ y : ℝ, apm_a02J04_g (x, y) ∂volume) =
+      ENNReal.ofReal (apm_a02J04_tauDensity x) := by
+  by_cases hx : x ∈ Icc (0 : ℝ) 1
+  · have hfun : (fun y : ℝ ↦ apm_a02J04_g (x, y)) =
+        (Icc (0 : ℝ) x).indicator (fun _ ↦ (2 : ℝ≥0∞)) := by
+      funext y
+      by_cases hy : 0 ≤ y ∧ y ≤ x <;>
+        simp [apm_a02J04_g, Set.indicator, hy, hx.2, mem_Icc]
+    rw [hfun, lintegral_indicator measurableSet_Icc]
+    rw [setLIntegral_const, Real.volume_Icc, sub_zero]
+    rw [apm_a02J04_tauDensity_of_mem hx]
+    rw [ENNReal.ofReal_mul (by norm_num : (0 : ℝ) ≤ 2)]
+    norm_num
+  · have hzero : ∀ y : ℝ, apm_a02J04_g (x, y) = 0 := by
+      intro y
+      simp only [apm_a02J04_g]
+      split_ifs with h
+      · exfalso
+        exact hx ⟨le_trans h.1 h.2.1, h.2.2⟩
+      · rfl
+    simp [hzero, apm_a02J04_tauDensity_of_not_mem hx]
+
 theorem apm_a02j04 :
     apm_a02J04_tau =
       volume.withDensity (fun x ↦ ENNReal.ofReal (apm_a02J04_tauDensity x)) ∧
@@ -72,23 +104,30 @@ theorem apm_a02j04 :
       =ᵐ[apm_a02J04_tau]
         fun x ↦ ENNReal.ofReal (1 / (2 * x)) := by
   /-
-  Closer hop 1 compiles the measurable-density prerequisites above.  In
-  particular, the planar density and proposed marginal density are measurable,
+  Closer hop 2 builds on the measurable-density prerequisites compiled by
+  hop 1. In particular, the planar and proposed marginal densities are measurable,
   the latter vanishes off `[0,1]`, and it is nonzero on `[0,1] \ {0}`.  These
   are exactly the support and reciprocal-density facts needed by Mathlib's
   `rnDeriv_withDensity_right` API after the marginal identity is known.
 
-  Searches of `LEMMA-INDEX.md`, every `ConstructionTargets/` module, prior
-  measure-decomposition artifacts (especially `a01J03`), Mathlib's marginal,
+  Going beyond that boundary, `apm_a02J04_volume_verticalSection` proves the
+  exact interval measure `volume {y | 0 ≤ y ∧ y ≤ x} = ofReal x`, including
+  negative `x`. `apm_a02J04_lintegral_g_right` then performs the complete
+  inner Tonelli calculation and identifies it pointwise with the proposed
+  marginal density, treating both `x ∈ [0,1]` and the zero-density complement.
+  Thus the vertical-section calculation is no longer open.
+
+  Renewed searches of `LEMMA-INDEX.md`, every `ConstructionTargets/` module,
+  prior measure-decomposition artifacts (especially `a01J03`), Mathlib's marginal,
   product-measure, `withDensity`, and Radon--Nikodym sources, and git history
   found no packaged theorem computing the first-coordinate marginal of this
-  triangular density.  The remaining first bridge is the explicit Tonelli
-  calculation: for measurable `s`, rewrite the mapped measure as
+  triangular density. The remaining first bridge is measure-level Tonelli and
+  map extensionality: for measurable `s`, rewrite the mapped measure as
 
     `∫⁻ x, 2 * volume ({y | 0 ≤ y ∧ y ≤ x}) * 1_s x ∂volume`,
 
-  evaluate the vertical interval measure as `x` on `Icc 0 1`, and identify the
-  result with `volume.withDensity (ofReal (2*x))`.  Once this equality is
+  substitute the compiled inner integral, and identify the result with
+  `volume.withDensity (ofReal (2*x))`. Once this equality is
   compiled, absolute continuity and singularity follow from the support and
   positivity lemmas above (the exceptional point `{0}` is volume-null), and
   `Measure.rnDeriv_withDensity_right` gives the displayed reciprocal density.
