@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Compiled integrability of the closed-interval singular majorant and integrated the pointwise kernel estimate to the exact uniform bound 4*B. Dominated parameter continuity, ContinuousMap self-map packaging, and the fixed-point application remain open.",
   "imported_at": "2026-07-13T17:26:55.652154Z"
 }

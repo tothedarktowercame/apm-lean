@@ -43,6 +43,16 @@ lemma apm_m97A03_integral_rpow_neg_half :
   rw [integral_rpow (Or.inl (by norm_num))]
   norm_num
 
+/-- The singular majorant is integrable on the closed interval; changing the
+two endpoints from the standard open-interval theorem is measure-theoretically
+harmless. -/
+lemma apm_m97A03_integrableOn_rpow_neg_half :
+    IntegrableOn (fun s : ℝ ↦ s ^ (-1 / 2 : ℝ)) (Icc 0 1) := by
+  refine IntegrableOn.congr_set_ae
+    ((intervalIntegral.integrableOn_Ioo_rpow_iff
+      (by norm_num : (0 : ℝ) < 1)).2 (by norm_num)) ?_
+  exact (Ioo_ae_eq_Icc : Ioo (0 : ℝ) 1 =ᵐ[volume] Icc 0 1).symm
+
 /-- Away from the null endpoint, the singular square-root kernel factors into
 its parameter part and the integrable power majorant. -/
 lemma apm_m97A03_sqrt_div_factor {t s : ℝ} (ht : 0 ≤ t + 3) (hs : 0 < s) :
@@ -85,6 +95,34 @@ lemma apm_m97A03_integrand_sub_bound {t s u v : ℝ}
       ring
     _ ≤ (2 * s ^ (-1 / 2 : ℝ)) * |u - v| :=
       mul_le_mul_of_nonneg_right (apm_m97A03_kernel_lipschitz_majorant ht hs) huv0
+
+/-- Integrated form of the contraction estimate. The auxiliary uniform bound
+`B` is what will later be instantiated by the `ContinuousMap` sup norm. -/
+lemma apm_m97A03_integral_integrand_sub_bound
+    {t B : ℝ} (ht : t ∈ Icc (0 : ℝ) 1)
+    (u v : ℝ → ℝ) (huv : ∀ s ∈ Icc (0 : ℝ) 1, |u s - v s| ≤ B) :
+    |∫ s in Icc (0 : ℝ) 1,
+        Real.sqrt ((t + 3) / s) *
+          (Real.sin (t * u s) - Real.sin (t * v s))| ≤ 4 * B := by
+  have hg : IntegrableOn (fun s : ℝ ↦ 2 * s ^ (-1 / 2 : ℝ) * B) (Icc 0 1) :=
+    (apm_m97A03_integrableOn_rpow_neg_half.const_mul 2).mul_const B
+  have hae : ∀ᵐ s ∂volume.restrict (Icc (0 : ℝ) 1),
+      ‖Real.sqrt ((t + 3) / s) *
+          (Real.sin (t * u s) - Real.sin (t * v s))‖ ≤
+        2 * s ^ (-1 / 2 : ℝ) * B := by
+    filter_upwards [ae_restrict_mem measurableSet_Icc] with s hs
+    by_cases hs0 : s = 0
+    · simp [hs0]
+    · exact (apm_m97A03_integrand_sub_bound ht (lt_of_le_of_ne hs.1 (Ne.symm hs0)) |>.trans
+        (mul_le_mul_of_nonneg_left (huv s hs) (mul_nonneg (by norm_num)
+          (Real.rpow_nonneg hs.1 _))))
+  calc
+    |∫ s in Icc (0 : ℝ) 1, Real.sqrt ((t + 3) / s) *
+        (Real.sin (t * u s) - Real.sin (t * v s))| ≤
+        ∫ s in Icc (0 : ℝ) 1, 2 * s ^ (-1 / 2 : ℝ) * B :=
+      norm_integral_le_of_norm_le hg hae
+    _ = 4 * B := by rw [integral_mul_const, integral_const_mul,
+      apm_m97A03_integral_rpow_neg_half]; ring
 
 theorem apm_m97a03
     (lam : ℝ) (hlam : |lam| < (1 / 4 : ℝ)) :
@@ -142,5 +180,17 @@ theorem apm_m97a03
   Bochner-integral and `ContinuousMap` APIs found no theorem that combines
   this a.e.-singular majorant with the required packaged continuity, so that
   final assembly remains honestly open.
+
+  CLOSER HOP 3 compiles the integration step itself.
+  `apm_m97A03_integrableOn_rpow_neg_half` transports Mathlib's open-interval
+  result across `Ioo_ae_eq_Icc`, and
+  `apm_m97A03_integral_integrand_sub_bound` combines the hop-2 pointwise bound,
+  an arbitrary uniform bound `|u s-v s| ≤ B`, and
+  `norm_integral_le_of_norm_le` to prove the exact estimate `≤ 4*B`. The
+  endpoint is handled explicitly, so this is directly suitable for the
+  `ContinuousMap` sup norm. What remains is dominated continuity in `t`,
+  construction of the continuous self-map, and the contraction theorem.
+  Searches of the parametric-integral APIs still found no packaged
+  singular-kernel continuity result; the frozen statement is unchanged.
   -/
   sorry

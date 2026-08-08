@@ -9,6 +9,8 @@ ingredients are compiled:
   `sqrt ((t+3)/s) = sqrt (t+3) * s^(-1/2)`;
 - the nonlinear integrand difference is pointwise bounded by
   `2 * s^(-1/2) * |u-v|` using `Real.abs_sin_sub_sin_le`.
+- the singular majorant is integrable on the closed interval;
+- integrating under a uniform bound `|u s-v s| ≤ B` gives `≤ 4*B`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m97A03.md`
@@ -18,8 +20,8 @@ ingredients are compiled:
 - establish dominated continuity in the parameter `t` despite the endpoint
   singularity;
 - package the integral operator on `ContinuousMap (Icc 0 1) ℝ`;
-- integrate the compiled pointwise domination and replace `|u s-v s|` by the
-  `ContinuousMap` sup norm to derive the constant `4 * |lam|`;
+- instantiate the compiled uniform-bound estimate with the `ContinuousMap`
+  sup norm and the factor `|lam|`;
 - apply the contraction theorem and extend the fixed point to `ℝ → ℝ`.
 
 The two proved estimates account exactly for the threshold `|lam| < 1/4`.
