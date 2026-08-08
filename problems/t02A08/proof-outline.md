@@ -15,12 +15,17 @@ singular homology and pins the repaired complementary-dimensional cycle.
 - `apm_t02a08_id_hasDegree` proves the identity map has degree one relative
   to any supplied orientation isomorphism, using functoriality on identity
   morphisms.
+- `apm_t02a08_comp_hasDegree` proves multiplicativity of computed degrees
+  under composition, relative to a common orientation, using functoriality on
+  composites.
 - The main theorem's single `sorry` is narrowed to existence of a degree-`n`
   sphere self-map.
 
 ## Remaining boundary
 
-Construct continuous self-maps of the concrete metric `S²` of every integer
-degree and compute their action on integral singular `H₂`. Mathlib provides
+Construct an orientation isomorphism and initial nontrivial continuous
+self-maps of the concrete metric `S²`, then compute their action on integral
+singular `H₂`; the compiled composition lemma handles subsequent products.
+Mathlib provides
 stereographic charts and a one-point-compactification homeomorphism for the
 sphere, but no compiled `H₂(S²) ≅ ℤ` theorem or induced-degree computation.

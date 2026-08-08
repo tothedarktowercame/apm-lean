@@ -108,6 +108,28 @@ lemma apm_t02a08_id_hasDegree
   rw [hmap]
   rfl
 
+/-- Functoriality also supplies the algebraic multiplication law for degrees
+once both maps have been computed relative to the same orientation. -/
+lemma apm_t02a08_comp_hasDegree
+    (orientation : apm_t02a08_H2 ≅ ModuleCat.of ℤ ℤ)
+    (g h : C(apm_t02a08_S2, apm_t02a08_S2)) (m n : ℤ)
+    (hg : ∀ a : apm_t02a08_H2,
+      orientation.hom (apm_t02a08_H2Map g a) = m * orientation.hom a)
+    (hh : ∀ a : apm_t02a08_H2,
+      orientation.hom (apm_t02a08_H2Map h a) = n * orientation.hom a) :
+    apm_t02a08_HasDegree (g.comp h) (m * n) := by
+  refine ⟨orientation, fun a ↦ ?_⟩
+  have hcomp : apm_t02a08_H2Map (g.comp h) =
+      apm_t02a08_H2Map h ≫ apm_t02a08_H2Map g := by
+    unfold apm_t02a08_H2Map
+    simpa using
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+        (ModuleCat.of ℤ ℤ)).map_comp (TopCat.ofHom h) (TopCat.ofHom g)
+  rw [hcomp]
+  change orientation.hom (apm_t02a08_H2Map g (apm_t02a08_H2Map h a)) = _
+  rw [hg, hh]
+  ring
+
 theorem apm_t02a08
     (p : Circle) (q : apm_t02a08_S2) :
     ∀ n : ℤ,
@@ -151,6 +173,18 @@ theorem apm_t02a08
     `H₂` computation or induced-degree theorem for nontrivial maps. Arbitrary
     integer degree therefore remains open and the frozen statement is
     unchanged.
+
+    CLOSER HOP 3 goes beyond the identity case by compiling the degree
+    composition law. `apm_t02a08_comp_hasDegree` uses `map_comp` for the
+    singular-homology functor and proves that maps acting by `m` and `n`
+    relative to a common orientation have composite degree `m*n`. This
+    completes the algebraic iteration needed once a generator such as a
+    degree `-1` map and positive-degree constructions are available. Searches
+    of Mathlib's chain-homotopy, suspension, reduced-homology, and sphere
+    sources still provide neither the initial orientation isomorphism nor a
+    computed nontrivial generator, so the geometric/homological construction
+    of arbitrary degrees remains honestly open. The frozen statement is
+    unchanged, and no unproved intermediate assertion was introduced.
     -/
     sorry
   exact ⟨g, hg, apm_t02a08_fiberMap_hasOrientedIntersection p q g n hg⟩
