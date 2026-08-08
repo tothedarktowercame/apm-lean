@@ -15,12 +15,14 @@ nonregularity of its covering map.
   equality in the custom quotient.
 - `apm_t00A02_antipodalCover_surjective` proves the quotient projection is
   surjective.
+- `apm_t00A02_antipodalCover_fiber_card` constructs an explicit equivalence
+  of each fiber with `Bool`, proving its `Nat.card` is exactly two.
 - The regular/nonregular witness eliminators from hop 1 remain compiled.
 
 ## Remaining boundary
 
-- prove local covering charts for the antipodal projection and convert the
-  compiled two-representative classification into exact fiber cardinality;
+- prove local covering charts for the antipodal projection; its exact fiber
+  cardinality is already compiled;
 - construct the regular and irregular four-sheeted wedge covers;
 - prove classification of connected ten-sheeted covers of a genus-five
   surface, requiring Euler-characteristic multiplicativity and surface

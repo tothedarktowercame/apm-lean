@@ -105,6 +105,43 @@ lemma apm_t00A02_antipodalCover_surjective :
   induction q using Quotient.inductionOn with
   | _ x => exact ⟨x, rfl⟩
 
+/-- Every fiber of the antipodal quotient has exactly two points. -/
+lemma apm_t00A02_antipodalCover_fiber_card
+    (b : apm_t00A02_RP2) :
+    Nat.card {e : apm_t00A02_Sphere2 //
+      apm_t00A02_antipodalCover e = b} = 2 := by
+  obtain ⟨x, rfl⟩ := apm_t00A02_antipodalCover_surjective b
+  have hx0 : (x : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+    intro hx
+    have hs := x.property
+    simp [hx] at hs
+  have hneg : (-x : apm_t00A02_Sphere2) ≠ x := by
+    intro h
+    apply hx0
+    have h' : -(x : EuclideanSpace ℝ (Fin 3)) = x :=
+      congrArg Subtype.val h
+    have htwo : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      rw [two_smul]
+      simpa using (congrArg
+        (fun z ↦ z + (x : EuclideanSpace ℝ (Fin 3))) h').symm
+    exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+  let e : Bool ≃ {z : apm_t00A02_Sphere2 //
+      apm_t00A02_antipodalCover z = apm_t00A02_antipodalCover x} :=
+    { toFun := fun q ↦ q.casesOn
+        ⟨x, rfl⟩ ⟨-x, apm_t00A02_antipodalCover_neg x⟩
+      invFun := fun z ↦ if z.1 = x then false else true
+      left_inv := by
+        intro q
+        cases q <;> simp [hneg]
+      right_inv := by
+        intro z
+        apply Subtype.ext
+        rcases (apm_t00A02_antipodalCover_eq_iff x z.1).mp z.2.symm with h | h
+        · simp [h]
+        · simp [h, hneg] }
+  rw [Nat.card_congr e.symm]
+  simp
+
 inductive apm_t00A02_wedgeRel (r₀ : apm_t00A02_RP2) :
     Sum apm_t00A02_RP2 apm_t00A02_RP2 →
       Sum apm_t00A02_RP2 apm_t00A02_RP2 → Prop
@@ -198,5 +235,18 @@ theorem apm_t00a02 :
   and the two concrete wedge-cover constructions remain independently open;
   no closed sibling or Mathlib theorem packages them. The frozen statement is
   unchanged.
+
+  Closer hop 3 closes the remaining set-theoretic fiber obligation.
+  `apm_t00A02_antipodalCover_fiber_card` chooses a representative `x` of an
+  arbitrary quotient point and constructs an explicit equivalence from its
+  fiber to `Bool`: the two points are `x` and `-x`, exhaustive by
+  `apm_t00A02_antipodalCover_eq_iff`. Their distinctness follows from the
+  unit-sphere equation. `Nat.card_congr` then proves every fiber has cardinality
+  two. The antipodal conjunct is now blocked only by `IsCoveringMap` for this
+  custom `EqvGen` quotient. Reinspection of `Topology.Covering.Quotient`
+  confirms its theorem applies to the action-orbit quotient, so it still needs
+  a topological quotient identification, not merely the proved relation
+  classification. The genus-five classification and both wedge covers remain
+  independently open.
   -/
   sorry
