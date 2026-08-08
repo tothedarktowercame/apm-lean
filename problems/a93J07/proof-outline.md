@@ -62,3 +62,16 @@ Shared extension root for promoted lemmas:
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 [Back-port calibrated difficulty and local blockers into the reader-facing proof.]
+
+## Closer hop 1
+
+The limit is now proved analytic, and locally uniform convergence is proved to
+eventually preserve nonvanishing on any compact circle where the limit is
+nonzero. These lemmas were recovered from historical commit `b898439`.
+
+That commit also records the remaining route: use
+`DiffContOnCl.ball_subset_image_closedBall` to prove that every finite-order
+zero of the limit forces a nearby zero of all sufficiently late approximants.
+The zero-free hypothesis rules this out. An infinite-order zero makes the
+analytic limit locally zero, and the identity theorem propagates this across
+the preconnected domain.

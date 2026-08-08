@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 3,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
