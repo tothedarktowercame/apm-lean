@@ -149,6 +149,16 @@ lemma t91A08_timesFive_not_injective :
   apply hinj
   simpa using hu5
 
+/-- Why this unblocks `apm_t91a08`: this is the missing integer-degree
+obstruction in the exact additive-circle encoding used here. A lift through
+the universal cover must translate by five after one period for
+`t91A08TimesFive`, but by one for the identity, so no homotopy can connect
+the two maps. -/
+theorem apm_t91A08_bridge_1 :
+    ¬ ContinuousMap.Homotopic t91A08TimesFive
+      (ContinuousMap.id UnitAddCircle) := by
+  sorry
+
 theorem apm_t91a08
     (beta gamma : T91A08Form2)
     (hbeta : t91A08IsInduced beta)
