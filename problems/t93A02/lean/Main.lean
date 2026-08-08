@@ -69,6 +69,58 @@ lemma t93A02H.exists_closeds_limit
       Tendsto (fun n => (A n).toCloseds) atTop (nhds L) := by
   exact cauchySeq_tendsto_of_complete (t93A02H.cauchySeq_toCloseds A hA)
 
+/-- A limit in Mathlib's extended Hausdorff space of closed sets of a sequence
+of nonempty closed bounded sets is again nonempty and bounded, and convergence
+converts back to the real Hausdorff distance. -/
+lemma t93A02H.lift_closeds_limit
+    {X : Type*} [MetricSpace X]
+    (A : ℕ → t93A02H X) (L : TopologicalSpace.Closeds X)
+    (hL : Tendsto (fun n => (A n).toCloseds) atTop (nhds L)) :
+    ∃ L' : t93A02H X, L'.1 = L.1 ∧
+      Tendsto (fun n => Metric.hausdorffDist (A n).1 L'.1)
+        atTop (nhds 0) := by
+  have hev : ∀ᶠ n : ℕ in atTop,
+      edist ((A n).toCloseds) L < (1 : ENNReal) :=
+    (EMetric.tendsto_nhds.1 hL) 1 zero_lt_one
+  obtain ⟨N, hN⟩ := Filter.eventually_atTop.1 hev
+  have hfin : Metric.hausdorffEDist (A N).1 L.1 ≠ ⊤ := by
+    change edist (A N).toCloseds L ≠ ⊤
+    exact ne_top_of_lt (hN N le_rfl)
+  have hnonempty : L.1.Nonempty :=
+    Metric.nonempty_of_hausdorffEDist_ne_top (A N).2.1 hfin
+  obtain ⟨c, hc⟩ := (A N).2.1
+  obtain ⟨r, hr⟩ :=
+    (Metric.isBounded_iff_subset_closedBall c).1 (A N).2.2.2
+  let R : ℝ := Metric.hausdorffDist L.1 (A N).1 + 1
+  have hR : Metric.hausdorffDist L.1 (A N).1 < R := by
+    simp [R]
+  have hfin' : Metric.hausdorffEDist L.1 (A N).1 ≠ ⊤ := by
+    simpa [Metric.hausdorffEDist_comm] using hfin
+  have hbounded : Bornology.IsBounded L.1 := by
+    rw [Metric.isBounded_iff_subset_closedBall c]
+    refine ⟨R + r, ?_⟩
+    intro y hy
+    obtain ⟨x, hx, hyx⟩ :=
+      Metric.exists_dist_lt_of_hausdorffDist_lt hy hR hfin'
+    have hxc : dist x c ≤ r := hr hx
+    change dist y c ≤ R + r
+    exact (dist_triangle y x c).trans (add_le_add hyx.le hxc)
+  let L' : t93A02H X := ⟨L.1, hnonempty, L.2, hbounded⟩
+  refine ⟨L', rfl, ?_⟩
+  rw [Metric.tendsto_nhds]
+  intro ε hε
+  have heε : (0 : ENNReal) < ENNReal.ofReal ε := ENNReal.ofReal_pos.2 hε
+  have hevent := (EMetric.tendsto_nhds.1 hL) (ENNReal.ofReal ε) heε
+  filter_upwards [hevent] with n hn
+  have hreal : Metric.hausdorffDist (A n).1 L.1 < ε := by
+    rw [Metric.hausdorffDist]
+    rw [← ENNReal.toReal_ofReal hε.le]
+    apply (ENNReal.toReal_lt_toReal ?_ ENNReal.ofReal_ne_top).2
+    · simpa [TopologicalSpace.Closeds.edist_eq] using hn
+    · change edist (A n).toCloseds L ≠ ⊤
+      exact ne_top_of_lt hn
+  simpa [L', Real.dist_eq, abs_of_nonneg Metric.hausdorffDist_nonneg] using hreal
+
 theorem apm_t93a02
     (X : Type*) [MetricSpace X] [CompleteSpace X] :
     ∀ A : ℕ → t93A02H X, IsT93A02HausdorffCauchy A →
@@ -117,4 +169,7 @@ theorem apm_t93a02
   edistance from one `A n` (hence nonempty and bounded), then convert its
   extended convergence to the frozen real `hausdorffDist` statement.
   -/
-  sorry
+  intro A hA
+  obtain ⟨L, hL⟩ := t93A02H.exists_closeds_limit A hA
+  obtain ⟨L', _hcarrier, hconv⟩ := t93A02H.lift_closeds_limit A L hL
+  exact ⟨L', hconv⟩
