@@ -62,6 +62,26 @@ def apm_t92J07_criticalValues
     (f : M → apm_t92J07_E m) : Set (apm_t92J07_E m) :=
   {x | ¬ apm_t92J07_IsRegularValue (n := n) (m := m) f x}
 
+/-- Every value of a map to the zero-dimensional Euclidean space is regular:
+the codomain of every manifold derivative is a subsingleton. -/
+lemma apm_t92J07_isRegularValue_fin_zero
+    {n : ℕ} {M : Type*} [TopologicalSpace M]
+    [ChartedSpace (apm_t92J07_E n) M]
+    (f : M → apm_t92J07_E 0) (x : apm_t92J07_E 0) :
+    apm_t92J07_IsRegularValue (n := n) (m := 0) f x := by
+  intro p hp y
+  refine ⟨0, ?_⟩
+  apply (NormedSpace.fromTangentSpace (f p)).injective
+  exact Subsingleton.elim _ _
+
+@[simp] lemma apm_t92J07_criticalValues_fin_zero
+    {n : ℕ} {M : Type*} [TopologicalSpace M]
+    [ChartedSpace (apm_t92J07_E n) M]
+    (f : M → apm_t92J07_E 0) :
+    apm_t92J07_criticalValues (n := n) (m := 0) f = ∅ := by
+  ext x
+  simp [apm_t92J07_criticalValues, apm_t92J07_isRegularValue_fin_zero]
+
 /-- Countably many null critical-value sets have a common regular value.
 This is the complete measure-theoretic assembly needed after manifold Sard. -/
 lemma apm_t92J07_exists_common_regularValue_of_null
@@ -162,5 +182,27 @@ theorem apm_t92j07
   critical-image inclusion is therefore still a substantive theorem, not
   countable-union bookkeeping.  No statement defect or alternate route was
   found; the frozen statement is unchanged.
+
+  CLOSER HOP 3 routes around manifold Sard for the complete
+  zero-dimensional-target branch. `apm_t92J07_isRegularValue_fin_zero` proves
+  directly that every derivative into `EuclideanSpace ℝ (Fin 0)` is
+  surjective, and `apm_t92J07_criticalValues_fin_zero` identifies its critical
+  values with the empty set. The `m = 0` branch of the frozen theorem is now
+  closed below without Sard, measure theory, or chart extension.
+
+  For `m = k + 1`, renewed inspection of the Hausdorff-dimension Sard theorem,
+  Jacobian null-image results, `ContMDiff` chart representatives, smooth bump
+  extension APIs, Lindelöf/countable-cover results, `LEMMA-INDEX.md`, every
+  `ConstructionTargets/` module, related Sard artifacts, and git history found
+  no within-set Sard theorem or smooth extension theorem with the required
+  critical-image control. Thus only positive-dimensional manifold Sard
+  remains open. The frozen statement is unchanged; no placeholder declaration
+  was introduced.
   -/
-  sorry
+  cases m with
+  | zero =>
+      refine ⟨0, fun i => ?_⟩
+      exact (apm_t92J07_isSmoothRegularFiber_preimage_iff
+        (f := f i) 0).2 (apm_t92J07_isRegularValue_fin_zero (f i) 0)
+  | succ m =>
+      sorry

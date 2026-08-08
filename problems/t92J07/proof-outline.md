@@ -14,10 +14,15 @@ now reduced definitionally to common regular-value regularity.
 - `apm_t92J07_exists_common_regularValue_of_null` proves the complete
   countable-union avoidance step, uniformly including a zero-dimensional
   target.
+- `apm_t92J07_isRegularValue_fin_zero` proves every value is regular for a
+  zero-dimensional target, using the canonical tangent-space identification.
+- `apm_t92J07_criticalValues_fin_zero` proves the exceptional set is empty,
+  and the main theorem now closes the entire `m = 0` branch.
 
 ## Remaining boundary
 
-- Prove manifold Sard: the critical values of each smooth `f i` are null.
+- For positive-dimensional targets, prove manifold Sard: the critical values
+  of each smooth `f i` are null.
 - Implement manifold Sard chartwise from Mathlib's vector-space theorem. This
   still requires a countable chart cover, `mfderiv`/chart-derivative
   compatibility, and extending chart representatives to the whole model
