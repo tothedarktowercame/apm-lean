@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "note": "Arbitrary-shift control, a.e.-invariance of the L1 constructor, and mollifier nonnegativity, support scaling, and normalization are compiled. Tonelli estimates, Arzela-Ascoli packaging/net transfer, and compactness remain.",
   "imported_at": "2026-07-13T17:26:54.530440Z"
 }

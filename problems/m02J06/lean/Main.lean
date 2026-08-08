@@ -46,6 +46,45 @@ def apm_m02J06_KL1 : Set (Lp ℝ 1 (volume : Measure ℝ)) :=
   {u | ∃ (f : ℝ → ℝ) (hf : Integrable f volume),
     f ∈ apm_m02J06_K ∧ u = apm_m02J06_toL1 f hf}
 
+/-- The chosen `L¹` class is independent of the integrable representative. -/
+lemma apm_m02J06_toL1_congr_ae
+    {f g : ℝ → ℝ} (hf : Integrable f volume) (hg : Integrable g volume)
+    (hfg : f =ᵐ[volume] g) :
+    apm_m02J06_toL1 f hf = apm_m02J06_toL1 g hg := by
+  exact MemLp.toLp_congr (memLp_one_iff_integrable.2 hf)
+    (memLp_one_iff_integrable.2 hg) hfg
+
+/-- Positive rescaling preserves nonnegativity of the mollifier. -/
+lemma apm_m02J06_mollifier_nonneg
+    {φ : ℝ → ℝ} (hφ : ∀ x, 0 ≤ φ x) {ε : ℝ} (hε : 0 < ε) (x : ℝ) :
+    0 ≤ apm_m02J06_mollifier φ ε x := by
+  exact mul_nonneg (inv_nonneg.mpr hε.le) (hφ (x / ε))
+
+/-- A mollifier supported in the unit interval rescales to support radius
+`ε`. -/
+lemma apm_m02J06_mollifier_eq_zero
+    {φ : ℝ → ℝ} (hφ : ∀ x, 1 ≤ |x| → φ x = 0)
+    {ε x : ℝ} (hε : 0 < ε) (hx : ε ≤ |x|) :
+    apm_m02J06_mollifier φ ε x = 0 := by
+  rw [apm_m02J06_mollifier, hφ (x / ε)]
+  · simp
+  · rw [abs_div, abs_of_pos hε]
+    exact (le_div_iff₀ hε).2 (by simpa using hx)
+
+/-- The positive rescaling preserves total mass one. -/
+lemma apm_m02J06_mollifier_integral_one
+    {φ : ℝ → ℝ} (hφ : ∫ x, φ x ∂volume = 1)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∫ x, apm_m02J06_mollifier φ ε x ∂volume = 1 := by
+  have hscale := Measure.integral_comp_mul_left φ ε⁻¹
+  simp only [inv_inv, abs_of_pos hε] at hscale
+  have hscale' : (∫ x, φ (ε⁻¹ * x) ∂volume) = ε := by
+    simpa [hφ, smul_eq_mul] using hscale
+  change (∫ x, ε⁻¹ * φ (x / ε) ∂volume) = 1
+  simp_rw [div_eq_inv_mul]
+  rw [integral_const_mul, hscale']
+  field_simp
+
 /-- The defining one-sided translation estimate for `apm_m02J06_K` extends
 to arbitrary shifts.  The negative case uses Mathlib's
 `integral_add_right_eq_self`; compare the translated-integral helper
@@ -112,5 +151,20 @@ theorem apm_m02j06 :
   equality. `a96J02` contains convolution identities but no compactness route;
   `a96J03` only records an unfinished translation-continuity plan. The frozen
   statement was left unchanged.
+
+  CLOSER HOP 2: the rescaling and representative prerequisites are now closed.
+  `apm_m02J06_toL1_congr_ae` proves independence of the integrable
+  representative. `apm_m02J06_mollifier_nonneg` and
+  `apm_m02J06_mollifier_eq_zero` prove nonnegativity and support radius `ε`.
+  `apm_m02J06_mollifier_integral_one` applies
+  `Measure.integral_comp_mul_left` to prove exact normalization.
+
+  Searches beyond hop 1 covered `ConstructionTargets.LpRepresentative`, Haar
+  scaling, `LpSpace.Basic`, and convolution/Tonelli sources. They supplied the
+  compiled quotient and scaling lemmas above, but no packaged route builds the
+  equicontinuous compact-domain family or transfers Arzelà--Ascoli nets into
+  `L¹`. The remaining bridge is the Tonelli estimates, bounded-continuous-map
+  packaging, finite-net transfer, and final compactness argument. The frozen
+  statement remains unchanged.
   -/
   sorry
