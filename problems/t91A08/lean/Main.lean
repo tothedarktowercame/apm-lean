@@ -1,6 +1,7 @@
 import Mathlib
 import Mathlib.Analysis.Calculus.DifferentialForm.Basic
 import Mathlib.Analysis.Fourier.AddCircle
+import Mathlib.Topology.Covering.AddCircle
 
 /-!
 # APM t91A08 — a two-form on the torus
@@ -118,6 +119,36 @@ lemma t91A08_timesFive_homotopic_of_g_homotopic
     ext z <;>
     simp [t91A08FirstProjection, t91A08FirstCircle, t91A08TimesFive, t91A08g]
 
+/-- The degree-five circle map is the quotient covering by its five-torsion
+kernel.  This records the exact covering structure implicated by the remaining
+homotopy obstruction. -/
+lemma t91A08_timesFive_isAddQuotientCoveringMap :
+    IsAddQuotientCoveringMap (5 • · : UnitAddCircle → UnitAddCircle)
+      (nsmulAddMonoidHom (α := UnitAddCircle) 5).ker := by
+  exact AddCircle.isAddQuotientCoveringMap_nsmul_of_ne_zero (1 : ℝ) 5
+
+/-- The covering is genuinely nontrivial: the class of `1/5` is a nonzero
+element killed by multiplication by five. -/
+lemma t91A08_timesFive_not_injective :
+    ¬Function.Injective (5 • · : UnitAddCircle → UnitAddCircle) := by
+  let u : UnitAddCircle := ((1 / 5 : ℝ) : UnitAddCircle)
+  have hu5 : 5 • u = 0 := by
+    apply (AddCircle.nsmul_eq_zero_iff (p := (1 : ℝ)) (by norm_num : 0 < 5)).2
+    refine ⟨1, by norm_num, ?_⟩
+    simp [u]
+  have hu0 : u ≠ 0 := by
+    intro hu
+    have hord : addOrderOf u = 5 := by
+      simpa [u] using
+        (AddCircle.addOrderOf_div_of_gcd_eq_one (p := (1 : ℝ))
+          (m := 1) (n := 5) (by norm_num) (by norm_num))
+    rw [hu] at hord
+    norm_num at hord
+  intro hinj
+  apply hu0
+  apply hinj
+  simpa using hu5
+
 theorem apm_t91a08
     (beta gamma : T91A08Form2)
     (hbeta : t91A08IsInduced beta)
@@ -128,7 +159,7 @@ theorem apm_t91a08
   refine ⟨t91A08Integral_induced beta hbeta,
     t91A08Integral_pullback beta gamma hbeta hgamma, ?_⟩
   /-
-  CLOSER HOP 2 BOUNDARY (statement unchanged).
+  CLOSER HOP 3 BOUNDARY (statement unchanged).
 
   This hop reconstructs the two integral computations for the repaired genuine
   quotient/Haar formulation. `t91A08Cover_surjective` supplies representatives
@@ -138,14 +169,30 @@ theorem apm_t91a08
   then evaluated using `Measure.volume_eq_prod`, `Measure.prod_prod`, and
   `AddCircle.measure_univ`.
 
-  It also reconstructs the homotopy reduction in the additive-circle encoding:
+  Hop 2 also reconstructed the homotopy reduction in the additive-circle encoding:
   `t91A08_timesFive_homotopic_of_g_homotopic` restricts a hypothetical torus
   homotopy to the first coordinate and projects back, producing a homotopy
   between `z ↦ 5 • z` and the identity on `UnitAddCircle`. The sole remaining
-  bridge is proving those circle maps nonhomotopic. Renewed searches of
-  `LEMMA-INDEX.md`, `ConstructionTargets`, solved circle/covering artifacts,
-  Mathlib's `AddCircle`, homotopy, fundamental-group, and lifting sources, and
-  git history found no compiled integer-degree classification or winding-number
-  invariant for `UnitAddCircle` self-maps.
+  bridge is proving those circle maps nonhomotopic.
+
+  Going beyond that search, this hop imports Mathlib's previously relevant
+  `Topology.Covering.AddCircle` interface and proves
+  `t91A08_timesFive_isAddQuotientCoveringMap`: times-five is exactly the
+  quotient covering by its five-torsion kernel.  It also proves
+  `t91A08_timesFive_not_injective` constructively, using the nonzero class of
+  `1/5`, whose additive order is five.  Thus the map's nontrivial five-sheeted
+  covering structure is now compiled rather than merely inferred.
+
+  This does not by itself obstruct an arbitrary homotopy: injectivity and
+  covering-sheet cardinality are not homotopy invariants without the missing
+  lifting/degree assembly.  Inspection of `IsCoveringMap.liftHomotopy` shows
+  that applying it here still requires fixing a lift and proving the endpoint
+  deck-translation/periodicity equation; that equation is precisely the
+  integer-degree invariant in another form.  Renewed searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets`, `t98A01`, Mathlib's covering,
+  homotopy-lifting, additive-order, Fourier-character, and singular-homology
+  sources, and git history found no theorem closing it.  The statement is
+  mathematically sound, but the degree-one-versus-degree-five bridge remains
+  open.
   -/
   sorry
