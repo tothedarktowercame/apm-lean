@@ -28,6 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 2 closes the complete polynomial zero-count conjunct by a direct norm contradiction. One sorry remains: generalized Liouville for arbitrary real growth exponent, including the arbitrary-radius Cauchy limit and global finite Taylor reconstruction.",
+  "classification_detail": "Closer hop 3 closes the complete polynomial zero-count conjunct and compiles the arbitrary-positive-radius Cauchy estimate with the exact A+B*R^m growth bound. One sorry remains: send that estimate to zero for each natural k>m and reconstruct the entire function globally from its finitely supported Taylor coefficients.",
+  "closer_hop": 3,
+  "closer_note": "Proved the exact arbitrary-radius Cauchy derivative bound k!*(A+B*R^m)/R^k. The scalar rpow limit, vanishing of high derivatives, and global finite Taylor reconstruction remain.",
   "imported_at": "2026-07-13T17:26:53.138765Z"
 }

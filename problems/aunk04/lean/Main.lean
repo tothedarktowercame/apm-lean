@@ -86,6 +86,22 @@ lemma apm_aunk04_no_roots_in_unitDisk :
   rw [hrem, norm_neg] at hsmall
   norm_num at hsmall
 
+/-- Cauchy's estimate at an arbitrary positive radius, with the polynomial
+growth hypothesis substituted on the boundary sphere. -/
+lemma apm_aunk04_growth_cauchy_bound
+    (f : ℂ → ℂ) (A B m : ℝ)
+    (hf : Differentiable ℂ f)
+    (hgrowth : ∀ z : ℂ, ‖f z‖ ≤ A + B * Real.rpow ‖z‖ m)
+    (k : ℕ) {R : ℝ} (hR : 0 < R) :
+    ‖iteratedDeriv k f 0‖ ≤
+      k.factorial * (A + B * Real.rpow R m) / R ^ k := by
+  apply Complex.norm_iteratedDeriv_le_of_forall_mem_sphere_norm_le k hR
+    hf.diffContOnCl
+  intro z hz
+  have hnorm : ‖z‖ = R := by
+    exact mem_sphere_zero_iff_norm.mp hz
+  simpa [hnorm] using hgrowth z
+
 theorem apm_aunk04 :
     (apm_aunk04_polynomial.roots.filter (fun z => ‖z‖ < 1)).card = 0 ∧
       ∀ (f : ℂ → ℂ) (A B m : ℝ),
@@ -127,5 +143,16 @@ theorem apm_aunk04 :
   iterated derivatives vanish.  The remaining proof must still establish the
   arbitrary-radius limit for every natural `k > m`, then connect vanishing
   iterated derivatives at zero to a finite Taylor polynomial globally.
+
+  Closer hop 3 proves `apm_aunk04_growth_cauchy_bound`, applying Mathlib's
+  Cauchy estimate at every positive radius and rewriting the sphere growth
+  bound to the exact expression
+  `k! * (A + B * R^m) / R^k`. This removes all circle/sphere and analytic
+  packaging from the limiting argument. Searches of real-rpow asymptotics and
+  analytic power-series extensionality found the separate ingredients but no
+  theorem directly sending this mixed natural/real-power bound to zero and
+  reconstructing `f` as a finite polynomial. The remaining bridge is now the
+  scalar limit for `m < k`, deduction that `iteratedDeriv k f 0 = 0`, and
+  global Taylor-series uniqueness/finiteness.
   -/
   sorry

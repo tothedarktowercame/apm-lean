@@ -9,6 +9,8 @@ strict unit-circle inequality supplied by the Rouché route.
 - `apm_aunk04_no_roots_in_unitDisk` bypasses the general divisor conversion:
   an interior root would force the remainder to equal `-6`, contradicting a
   direct norm bound.  This proves the frozen filtered-root cardinality is zero.
+- `apm_aunk04_growth_cauchy_bound` proves the exact arbitrary-radius estimate
+  `‖f⁽ᵏ⁾(0)‖ ≤ k! * (A + B*R^m) / R^k` from the frozen growth hypothesis.
 
 ## Follow-up Needed
 
