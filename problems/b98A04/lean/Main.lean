@@ -97,6 +97,26 @@ lemma apm_b98a04_exists_faithful_tuple
     rcases hr with rfl
     simp
 
+/-- Once the regular module embeds in a finite power of `M`, every simple
+module is a quotient of the image submodule. This isolates the remaining
+Jordan--Hölder obligation to factor transport for a submodule. -/
+lemma apm_b98a04_simple_quotient_of_embedded_regular
+    (R M V : Type*) [Ring R] [AddCommGroup M] [Module R M]
+    [AddCommGroup V] [Module R V] [IsSimpleModule R V]
+    (s : ℕ) (f : R →ₗ[R] (Fin s → M)) (hf : Function.Injective f) :
+    ∃ (S : Submodule R (Fin s → M)) (g : S →ₗ[R] V),
+      Function.Surjective g := by
+  letI : Nontrivial V := IsSimpleModule.nontrivial R V
+  obtain ⟨v, hv⟩ := exists_ne (0 : V)
+  let e : R ≃ₗ[R] f.range := LinearEquiv.ofInjective f hf
+  let g : f.range →ₗ[R] V :=
+    (LinearMap.toSpanSingleton R V v).comp e.symm.toLinearMap
+  refine ⟨f.range, g, ?_⟩
+  intro y
+  obtain ⟨r, hr⟩ := IsSimpleModule.toSpanSingleton_surjective R hv y
+  refine ⟨e r, ?_⟩
+  simpa [g, e] using hr
+
 theorem apm_b98a04 :
     ∀ (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
       [FaithfulSMul R M] [IsArtinian R R],
@@ -144,5 +164,19 @@ theorem apm_b98a04 :
   representation frozen here, and repository-wide searches found no sibling
   implementation. That Jordan--Hölder factor-transport bridge remains open;
   the statement is unchanged.
+
+  CLOSER HOP 3: `apm_b98a04_simple_quotient_of_embedded_regular` now proves
+  the exact reduction beyond hop 2. Given the compiled injection
+  `R → Fin s → M`, `LinearEquiv.ofInjective` identifies `R` with its image;
+  a nonzero vector of any simple `V` makes `LinearMap.toSpanSingleton`
+  surjective, and composition gives a surjection from that image submodule
+  onto `V`. Thus every target simple module is now explicitly a quotient of a
+  submodule of a finite power of `M`.
+
+  The sole remaining bridge is consequently the factor-occurrence theorem:
+  a simple quotient of a submodule of `Fin s → M` must occur in the supplied
+  composition series of `M`. Searches of Jordan--Hölder, modular-lattice,
+  quotient, and finite-direct-product APIs found no packaged theorem deriving
+  that occurrence in the frozen quotient representation.
   -/
   sorry

@@ -15,11 +15,12 @@ The canonical Lean attempt compiles with one remaining `sorry`.
   exists. This closes the second conjunct.
 - Bundled the action map `R →ₗ[R] (Fin s → M)` and proved it injective when the
   common annihilator is zero, closing the third conjunct.
+- Proved every simple `R`-module is a quotient of the image of that embedded
+  regular module inside `Fin s → M`.
 
 ## Remaining bridge
 
-Translate the raw strictly monotone submodule chain to Jordan–Hölder machinery,
-then transport simple factors through the embedding of the regular module into
-a finite power of `M`. The available Jordan–Hölder theorem compares series of
-one module; the missing bridge is the submodule/refinement factor-occurrence
-argument in the exact quotient representation of the frozen conclusion.
+Prove that a simple quotient of a submodule of `Fin s → M` occurs among the
+factors of the supplied composition series of `M`. The embedding and quotient
+reduction are compiled; only the submodule/refinement factor-occurrence
+argument in the frozen quotient representation remains.

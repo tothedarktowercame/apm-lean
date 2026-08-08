@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
+  "closer_hop": 3,
+  "note": "The first three conjuncts are closed. Every simple module is now explicitly a quotient of the embedded regular module's image inside a finite power of M. The remaining gap is the Jordan-Hölder factor-occurrence theorem transporting that simple quotient to the supplied composition series of M.",
   "imported_at": "2026-07-13T17:26:54.155409Z"
 }
