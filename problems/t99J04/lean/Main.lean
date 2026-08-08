@@ -118,6 +118,47 @@ lemma apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT
   intro x
   exact hlocalIFT x hf.contMDiffAt (hbij x)
 
+/-- Why this unblocks `apm_t99j04`: this is the missing manifold inverse
+function theorem.  It converts the pointwise smoothness and invertible
+manifold derivative used in both conjuncts into the local diffeomorphism
+needed by the compiled local and global arguments. -/
+theorem apm_t99J04_bridge_local_inverse_function
+    {E E' X Y : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [FiniteDimensional ℝ E'] [CompleteSpace E']
+    [TopologicalSpace X] [ChartedSpace E X]
+    [IsManifold (𝓘(ℝ, E)) ⊤ X]
+    [TopologicalSpace Y] [ChartedSpace E' Y]
+    [IsManifold (𝓘(ℝ, E')) ⊤ Y]
+    (f : X → Y) (x : X)
+    (hf : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) ⊤ f x)
+    (hbij : Function.Bijective
+      (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) :
+    IsLocalDiffeomorphAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) ⊤ f x := by
+  sorry
+
+/-- Why this unblocks `apm_t99j04`: this is the missing derivative formula
+and finite-dimensional packaging for the coordinate map.  Once its derivative
+is bijective, `apm_t99J04_bridge_local_inverse_function` gives exactly the
+first frozen conjunct. -/
+theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
+    (n : ℕ) (X : Type) [TopologicalSpace X]
+    [ChartedSpace (apm_t99J04_Euclidean n) X]
+    [IsManifold (𝓘(ℝ, apm_t99J04_Euclidean n)) ⊤ X]
+    (x : X) (f : Fin n → X → ℝ)
+    (hf : ∀ i,
+      ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) ⊤ (f i))
+    (hli : LinearIndependent ℝ
+      (fun i : Fin n ↦
+        (NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+          mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x)) :
+    Function.Bijective
+      (mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n))
+        𝓘(ℝ, apm_t99J04_Euclidean n) (apm_t99J04_coordinateMap f) x) := by
+  sorry
+
 theorem apm_t99j04 :
     (∀ (n : ℕ) (X : Type) [TopologicalSpace X]
       [ChartedSpace (apm_t99J04_Euclidean n) X]

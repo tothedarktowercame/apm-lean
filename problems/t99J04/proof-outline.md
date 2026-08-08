@@ -1,5 +1,15 @@
 # Proof Outline: t99J04
 
+## Closer hop 4 update
+
+The two remaining local gaps are now explicit Lean contracts. The general
+`apm_t99J04_bridge_local_inverse_function` promotes `ContMDiffAt` plus a
+bijective `mfderiv` to `IsLocalDiffeomorphAt`. The specialized
+`apm_t99J04_bridge_coordinateMap_mfderiv_bijective` states the componentwise
+derivative calculation and finite-dimensional conclusion for the frozen
+coordinate map. Together they feed the first conjunct directly and the second
+through `apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT`.
+
 ## Closer hop 3 update
 
 The second conjunct is now compiled modulo exactly the missing local theorem.
