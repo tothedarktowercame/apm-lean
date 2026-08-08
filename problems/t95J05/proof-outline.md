@@ -11,6 +11,10 @@ mixed and square terms, and
 `t95J05Integral_eq_neg_pi_sq_of_sphereIntegral` verifies the final quotient
 normalization once the sphere integral is known to be `-2π²`.
 
+`t95J05_hausdorffIntegral_eq_zero_of_isometry_odd` compiles the symmetry
+argument at the measure level: Hausdorff measure is preserved by an isometry
+equivalence, so any function negated by that equivalence has integral zero.
+
 After rewriting with pullback equality, the quotient integral is half the
 Hausdorff-measure integral over the unit `S³` of `(x₁³ - 4x₀)x₀`.
 Antipodal/coordinate reflection symmetry kills the mixed term. Rotational
@@ -28,3 +32,8 @@ locally.
 Ambient radial integration does not provide this bridge: it concerns
 Lebesgue measure on the whole Euclidean space, not Hausdorff measure on the
 sphere subtype.
+
+The remaining local symmetry bookkeeping is to package the sign change of
+coordinate zero as an isometry equivalence of the sphere subtype and apply the
+general cancellation lemma. The substantive unresolved calculation remains
+the normalized value `∫_{S³} x₀² = π²/2`.

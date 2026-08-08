@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_progress": "Descent and uniqueness are closed; the main proof now rewrites to the normalized sphere integral, the density polynomial is expanded, and the final factor-of-two arithmetic is compiled. Only the odd mixed moment and the Hausdorff-normalized coordinate-square moment remain.",
+  "closer_hop": 3,
+  "closer_progress": "Descent, uniqueness, pullback rewriting, density expansion, and final arithmetic are closed. A general Hausdorff-integral cancellation theorem under an odd isometry is now compiled, leaving only coordinate-reflection packaging and the Hausdorff-normalized sphere coordinate-square moment.",
   "imported_at": "2026-07-13T17:26:58.366454Z"
 }

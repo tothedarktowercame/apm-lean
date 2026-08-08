@@ -98,6 +98,30 @@ lemma t95J05Integral_eq_neg_pi_sq_of_sphereIntegral
   rw [t95J05Integral_eq_sphereIntegral η hη, hsphere]
   ring
 
+/-- Hausdorff measure is invariant under isometries, so a function negated by
+an isometry equivalence has zero integral. This is the measure-theoretic core
+of the odd-coordinate cancellation used for the mixed moment. -/
+lemma t95J05_hausdorffIntegral_eq_zero_of_isometry_odd
+    {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+    (d : ℝ) (e : X ≃ᵢ X) (f : X → ℝ) (hodd : ∀ x, f (e x) = -f x) :
+    (∫ x, f x ∂Measure.hausdorffMeasure d) = 0 := by
+  let em : X ≃ᵐ X := e.toHomeomorph.toMeasurableEquiv
+  have hmp : MeasurePreserving em (Measure.hausdorffMeasure d)
+      (Measure.hausdorffMeasure d) := e.measurePreserving_hausdorffMeasure d
+  have heq := hmp.integral_comp' f
+  change (∫ x, f (e x) ∂Measure.hausdorffMeasure d) =
+    ∫ x, f x ∂Measure.hausdorffMeasure d at heq
+  have hneg : -(∫ x, f x ∂Measure.hausdorffMeasure d) =
+      (∫ x, f x ∂Measure.hausdorffMeasure d) := by
+    calc
+      _ = ∫ x, -f x ∂Measure.hausdorffMeasure d := (integral_neg _).symm
+      _ = ∫ x, f (e x) ∂Measure.hausdorffMeasure d := by
+        congr 1
+        funext x
+        exact (hodd x).symm
+      _ = _ := heq
+  linarith
+
 theorem apm_t95j05 :
     (∃! η : T95J05ProjectiveThreeForm,
       t95J05ProjectionPullback η = t95J05InclusionPullback) ∧
@@ -140,5 +164,17 @@ theorem apm_t95j05 :
   subtype-Hausdorff normalization. Thus the remaining sorry is confined to
   the odd-moment cancellation and `∫_{S³} x₀² = π²/2`; the frozen statement
   is unchanged.
+
+  CLOSER HOP 3: the general Hausdorff-measure symmetry mechanism is now
+  compiled as `t95J05_hausdorffIntegral_eq_zero_of_isometry_odd`. It uses
+  `IsometryEquiv.measurePreserving_hausdorffMeasure` and change of variables
+  to prove cancellation for every function negated by an isometry, with no
+  separate integrability premise. This removes the analytic change-of-
+  variables part of the odd-moment argument. A final search of the Pi-Lp
+  coordinate-isometry, subtype-sphere, Hausdorff, and Euclidean-volume APIs
+  found no packaged coordinate reflection on the sphere subtype and still no
+  formula identifying `∫_{S³} x₀²` with `π²/2`. The live bridge is therefore
+  the finite packaging of that coordinate reflection plus the substantive
+  Hausdorff-normalized square moment. The frozen statement is unchanged.
   -/
   sorry
