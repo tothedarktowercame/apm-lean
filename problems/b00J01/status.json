@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "Additionally proved separability over ZMod 13, Galoisness of every arbitrary splitting field, and equality of automorphism-group cardinality with extension degree. Exact degree/Frobenius transport and real/rational components remain.",
+  "closer_hop": 3,
+  "note": "Additionally proved that both the arbitrary finite-field splitting-field degree and its automorphism-group cardinality are divisible by three. The exact upper bound/Frobenius transport and real/rational components remain.",
   "imported_at": "2026-07-13T17:26:53.186900Z"
 }

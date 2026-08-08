@@ -64,6 +64,29 @@ lemma apm_b00j01_finiteField_card_aut
   letI : IsGalois (ZMod 13) M := apm_b00j01_finiteField_isGalois M
   exact IsGalois.card_aut_eq_finrank (ZMod 13) M
 
+/-- Irreducibility already forces the arbitrary splitting field's degree to
+be a multiple of three.  This is the exact lower-degree constraint needed
+before identifying it with the canonical degree-three Galois field. -/
+lemma apm_b00j01_three_dvd_finiteField_finrank
+    [Fact (Nat.Prime 13)]
+    (M : Type*) [Field M] [Algebra (ZMod 13) M]
+    [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))] :
+    3 ∣ Module.finrank (ZMod 13) M := by
+  have hdvd := apm_b00j01_irreducible_mod13.natDegree_dvd_finrank
+    (Polynomial.IsSplittingField.splits M (apm_b00j01_poly (ZMod 13)))
+  norm_num [apm_b00j01_poly] at hdvd ⊢
+  exact hdvd
+
+/-- Consequently the automorphism group of the finite-field splitting field
+has cardinality divisible by three. -/
+lemma apm_b00j01_three_dvd_finiteField_card_aut
+    [Fact (Nat.Prime 13)]
+    (M : Type*) [Field M] [Algebra (ZMod 13) M]
+    [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))] :
+    3 ∣ Nat.card (M ≃ₐ[ZMod 13] M) := by
+  rw [apm_b00j01_finiteField_card_aut M]
+  exact apm_b00j01_three_dvd_finiteField_finrank M
+
 theorem apm_b00j01 :
     (∀ (K : Type*) [Field K] [Algebra ℚ K]
         [IsSplittingField ℚ K (apm_b00j01_poly ℚ)],
@@ -83,26 +106,26 @@ theorem apm_b00j01 :
         [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))],
       Nonempty ((M ≃ₐ[ZMod 13] M) ≃* Multiplicative (ZMod 3))) := by
   /-
-  PARTIAL boundary (closer hop 2). Beyond the arithmetic from hop 1,
-  `apm_b00j01_separable_mod13` now uses perfectness of the finite base field,
-  and `apm_b00j01_finiteField_isGalois` upgrades every arbitrary splitting
-  field in the frozen quantifier to a finite-dimensional Galois extension.
-  `apm_b00j01_finiteField_card_aut` then applies
-  `IsGalois.card_aut_eq_finrank`, reducing the desired cyclic order-three
-  result to the exact extension-degree computation and Frobenius generation.
+  PARTIAL boundary (closer hop 3). This hop applies the general theorem
+  `Polynomial.Irreducible.natDegree_dvd_finrank` to the arbitrary splitting
+  field.  The compiled helpers
+  `apm_b00j01_three_dvd_finiteField_finrank` and
+  `apm_b00j01_three_dvd_finiteField_card_aut` prove respectively that its
+  degree and its Galois automorphism-group cardinality are divisible by three.
+  Thus the lower-bound half of the exact degree-three calculation is closed.
 
-  Prior hop 1: the finite-field arithmetic is compiled.
-  `apm_b00j01_seven_not_cube_mod13` exhausts `ZMod 13`, and
-  `apm_b00j01_irreducible_mod13` packages the result as irreducibility of
-  `X³ - 7`. This also corrects the original skip comment: the polynomial has
-  no root over `𝔽₁₃`, rather than one root.
+  Source inspection found `IsSplittingField.algEquiv`, which identifies two
+  splitting fields of the *same polynomial*, and the canonical
+  `GaloisField 13 3`, which is presented instead as a splitting field of
+  `X^(13^3)-X`.  No theorem in the finite-field or splitting-field APIs shows
+  directly that the roots of this particular irreducible cubic all lie in the
+  degree-three root field, so the needed upper bound `finrank ≤ 3` and the
+  transport to the canonical Frobenius equivalence remain open.
 
-  Mathlib's `FieldTheory/Finite/GaloisField.lean` constructs and computes the
-  canonical fields splitting `X^(p^n)-X`, but the frozen quantifier supplies an
-  arbitrary splitting field of this cubic. The remaining finite-field bridge
-  is transporting its degree-three irreducibility/splitting data to the
-  canonical `GaloisField 13 3`, then transporting the Frobenius automorphism
-  equivalence. The real splitting-field identification and the substantially
-  larger rational `S₃` Galois-correspondence enumeration remain open.
+  The real splitting-field identification and the much larger rational `S₃`
+  Galois-correspondence enumeration also remain open. Searches included
+  `LEMMA-INDEX.md`, all construction targets, splitting-field uniqueness,
+  finite Galois fields, cubic minpolys, and prior Galois siblings; none packages
+  either classification required by the frozen conjunction.
   -/
   sorry

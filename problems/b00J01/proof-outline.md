@@ -10,15 +10,17 @@ concrete finite-field foundation:
 - every arbitrary splitting field from the frozen quantifier is a
   finite-dimensional Galois extension;
 - its automorphism-group cardinality equals its extension degree.
+- irreducibility and splitting imply that the extension degree is divisible by
+  three, hence the automorphism-group cardinality is also divisible by three.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b00J01.md`
 
 ## Remaining boundary
 
-- identify an arbitrary splitting field of this irreducible cubic with the
-  canonical degree-three finite Galois field, prove the exact degree, and
-  transport Frobenius;
+- prove the complementary upper bound that the irreducible cubic's root field
+  already contains all three roots, then identify the arbitrary splitting
+  field with the canonical degree-three Galois field and transport Frobenius;
 - identify the real splitting field with `ℂ` and its automorphism group with
   `ZMod 2`;
 - over `ℚ`, establish the `S₃` automorphism group and formalize the complete
