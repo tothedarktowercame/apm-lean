@@ -112,6 +112,44 @@ def apm_t98a05_IsDifferential
         deriv (fun s => f (c s)) t =
           alpha' (c t) (deriv (fun s => (c s : apm_t98a05_E3)) t)
 
+lemma apm_t98a05_wedgeEval_eq_zero
+    (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha)
+    (beta : apm_t98a05_Form 2) (hbeta : apm_t98a05_isBeta beta)
+    (x : apm_t98a05_E3) (v : Fin 3 → apm_t98a05_E3) :
+    apm_t98a05_wedgeEval alpha beta x v = 0 := by
+  simp only [apm_t98a05_wedgeEval]
+  rw [halpha x ![v 0], halpha x ![v 1], halpha x ![v 2],
+    hbeta x ![v 1, v 2], hbeta x ![v 0, v 2], hbeta x ![v 0, v 1]]
+  simp
+  ring
+
+/-- Once the displayed ambient exterior-derivative formula is known, its
+restriction to two circle-tangent vectors vanishes by a two-dimensional
+determinant calculation. -/
+lemma apm_t98a05_circleClosed_of_extDeriv_formula
+    (alpha : apm_t98a05_Form 1)
+    (hd : ∀ (x : apm_t98a05_E3) (v : Fin 2 → apm_t98a05_E3),
+      extDeriv alpha x v =
+        2 * (v 0 0 * v 1 1 - v 0 1 * v 1 0)) :
+    apm_t98a05_isCircleClosed alpha := by
+  intro x v hv
+  rw [hd]
+  have ht0 := (hv 0).1
+  have ht1 := (hv 1).1
+  have hx := x.2.1
+  have hA := congrArg (fun z : ℝ ↦ z * v 1 1) ht0
+  have hB := congrArg (fun z : ℝ ↦ z * v 0 1) ht1
+  have hC := congrArg (fun z : ℝ ↦ z * v 1 0) ht0
+  have hD := congrArg (fun z : ℝ ↦ z * v 0 0) ht1
+  have ha : (x : apm_t98a05_E3) 0 *
+      (v 0 0 * v 1 1 - v 0 1 * v 1 0) = 0 := by
+    nlinarith
+  have hb : (x : apm_t98a05_E3) 1 *
+      (v 0 0 * v 1 1 - v 0 1 * v 1 0) = 0 := by
+    nlinarith
+  nlinarith [sq_nonneg
+    (v 0 0 * v 1 1 - v 0 1 * v 1 0)]
+
 theorem apm_t98a05
     (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha)
     (beta : apm_t98a05_Form 2) (hbeta : apm_t98a05_isBeta beta)
@@ -129,4 +167,26 @@ theorem apm_t98a05
     apm_t98a05_isCircleClosed alpha ∧
     ¬∃ f : apm_t98a05_circle → ℝ,
       apm_t98a05_IsDifferential f alpha' := by
+  /-
+  CLOSER HOP 3 goes beyond the previous statement-only artifact in two
+  independent directions.  `apm_t98a05_wedgeEval_eq_zero` expands the frozen
+  representatives of `alpha` and `beta` and proves the full fourth conjunct
+  by polynomial normalization.  The lemma
+  `apm_t98a05_circleClosed_of_extDeriv_formula` proves that the first frozen
+  conjunct implies the sixth: two vectors tangent to the unit circle have
+  zero determinant.  Thus neither the wedge cancellation nor the tangency
+  argument remains open.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, the related
+  differential-form artifacts `t94J07`, `t03J06`, and `t02A05`, Mathlib's
+  `DifferentialForm.Basic` and `DifferentialForm.VectorField` sources, and
+  this bundle's git history found no theorem computing `extDeriv` directly
+  from the pointwise coordinate specifications `isAlpha`, `isBeta`, and
+  `isGamma`.  `extDeriv_apply` is the appropriate low-level route, but it
+  still requires locally bundling and proving the Frechet derivatives of the
+  alternating-map-valued coordinate formulas.  After those computations,
+  the remaining bridges are the two-dimensional simplex integral and the
+  nonexactness argument via a differentiable parametrization of the circle
+  and its nonzero period.  The frozen statement is unchanged.
+  -/
   sorry
