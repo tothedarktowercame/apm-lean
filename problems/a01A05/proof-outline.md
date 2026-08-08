@@ -22,8 +22,11 @@ eventual Hilbert-space witness:
 
 To prove the repaired negation, construct an infinite sequence in `ℓ²(ℕ,ℝ)`
 whose first vectors are `e₀` and `(1/2)e₀ + (sqrt 3/2)e₁`, followed by unused
-coordinate vectors. The remaining Lean work is bundling the pairwise bounds
-and unit norms and proving `sqrt (2 - sqrt 3) > 1/2`.
+coordinate vectors. This sequence is now implemented as
+`apm_a01A05_counterexample`, and
+`apm_a01A05_counterexample_norm_one_all` proves all its terms have unit norm.
+The remaining Lean work is bundling the pairwise bounds and proving
+`sqrt (2 - sqrt 3) > 1/2` in the normalized index-one calculation.
 
 ## Problem
 

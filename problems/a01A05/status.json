@@ -28,16 +28,16 @@
   },
   "classification": "partial",
   "imported_at": "2026-07-13T17:26:51.654811Z",
-  "closer_hop": 2,
+  "closer_hop": 3,
   "checked_at": "2026-08-08T00:00:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a01A05/lean/Main.lean",
-  "validation_result": "exit 0; 0 errors; 1 sorry (the explicit infinite lp counterexample)",
+  "validation_result": "exit 0; 0 errors; 1 sorry (pairwise estimates and final index-one contradiction)",
   "sorry_details": {
     "sorry_count": 1,
     "sorry_locations": [
-      "main theorem first conjunct: bundle the infinite l2 counterexample"
+      "main theorem first conjunct: pairwise estimates and final contradiction for the compiled l2 witness"
     ],
-    "sorry_reason": "Part (b) is closed and the index-one raw and normalized Gram-Schmidt formulas compile. Part (a) still needs the infinite lp witness, its unit-norm and pairwise estimates, and the final radical inequality."
+    "sorry_reason": "Part (b), the index-one Gram-Schmidt formulas, the infinite lp witness, and all its unit norms compile. Part (a) still needs the witness's pairwise estimates and the final normalized-distance radical inequality."
   },
   "harvest_mismatch": true,
   "harvest_mismatch_detail": "The mislabeled a01A04 proof was removed from this bundle and the harvest corpus. No worked informal solution for a01A05 is currently available."

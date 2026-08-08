@@ -1,6 +1,7 @@
 import Mathlib.Analysis.InnerProductSpace.GramSchmidtOrtho
 import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
 import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Analysis.InnerProductSpace.l2Space
 
 /-!
 # APM a01A05 — nearly orthogonal sequences and Gram–Schmidt
@@ -140,6 +141,64 @@ lemma apm_a01A05_gramSchmidtNormed_one
     apm_a01A05_gramSchmidt_one f h0]
   norm_num
 
+abbrev apm_a01A05_l2 := lp (fun _ : ℕ ↦ ℝ) 2
+
+/-- The infinite counterexample: the exceptional first pair is followed by
+fresh coordinate vectors. -/
+noncomputable def apm_a01A05_counterexample (n : ℕ) : apm_a01A05_l2 :=
+  if n = 0 then lp.single 2 0 1
+  else if n = 1 then
+    (1 / 2 : ℝ) • lp.single 2 0 1 +
+      (Real.sqrt 3 / 2) • lp.single 2 1 1
+  else lp.single 2 n 1
+
+lemma apm_a01A05_counterexample_zero :
+    apm_a01A05_counterexample 0 = lp.single 2 0 1 := by
+  simp [apm_a01A05_counterexample]
+
+lemma apm_a01A05_counterexample_one :
+    apm_a01A05_counterexample 1 =
+      (1 / 2 : ℝ) • lp.single 2 0 1 +
+        (Real.sqrt 3 / 2) • lp.single 2 1 1 := by
+  simp [apm_a01A05_counterexample]
+
+lemma apm_a01A05_counterexample_of_two_le {n : ℕ} (hn : 2 ≤ n) :
+    apm_a01A05_counterexample n = lp.single 2 n 1 := by
+  simp [apm_a01A05_counterexample, (show n ≠ 0 by omega),
+    (show n ≠ 1 by omega)]
+
+lemma apm_a01A05_counterexample_norm_zero :
+    ‖apm_a01A05_counterexample 0‖ = 1 := by
+  simp [apm_a01A05_counterexample_zero, lp.norm_single]
+
+lemma apm_a01A05_counterexample_norm_of_two_le {n : ℕ} (hn : 2 ≤ n) :
+    ‖apm_a01A05_counterexample n‖ = 1 := by
+  rw [apm_a01A05_counterexample_of_two_le hn]
+  simp [lp.norm_single]
+
+lemma apm_a01A05_counterexample_norm_one :
+    ‖apm_a01A05_counterexample 1‖ = 1 := by
+  rw [apm_a01A05_counterexample_one]
+  let e0 : apm_a01A05_l2 := lp.single 2 0 1
+  let e1 : apm_a01A05_l2 := lp.single 2 1 1
+  have hinner : inner ℝ ((1 / 2 : ℝ) • e0) ((Real.sqrt 3 / 2) • e1) = 0 := by
+    rw [inner_smul_left, inner_smul_right, lp.inner_single_left]
+    simp [e1]
+  have hsqrt : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hsq := norm_add_sq_eq_norm_sq_add_norm_sq_real hinner
+  simp [e0, e1, lp.norm_single, norm_smul] at hsq
+  have hnonneg : 0 ≤ ‖(1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1‖ := norm_nonneg _
+  rw [abs_of_nonneg (Real.sqrt_nonneg 3)] at hsq
+  nlinarith
+
+lemma apm_a01A05_counterexample_norm_one_all (n : ℕ) :
+    ‖apm_a01A05_counterexample n‖ = 1 := by
+  rcases n with _ | n
+  · exact apm_a01A05_counterexample_norm_zero
+  rcases n with _ | n
+  · exact apm_a01A05_counterexample_norm_one
+  exact apm_a01A05_counterexample_norm_of_two_le (by omega)
+
 theorem apm_a01a05 :
     (¬ ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
       (seq : apm_a01A05_NearOrthogonalSeq H) (m : ℕ),
@@ -150,7 +209,7 @@ theorem apm_a01a05 :
       Tendsto (fun m ↦ inner ℝ g (seq.f m)) atTop (nhds 0)) := by
   constructor
   · /-
-    Boundary (closer hop 2): hop 1 closed the valid weak-convergence conjunct
+    Boundary (closer hop 3): hop 1 closed the valid weak-convergence conjunct
     with `apm_a01A05_inner_tendsto_zero`. The proof was recovered from
     repository history (`f4bf72c`) and revalidated against the frozen repaired
     statement. It first proves decay on the algebraic span using
@@ -174,6 +233,12 @@ theorem apm_a01a05 :
     projection sum exactly to `f 1 - ⟪f 0, f 1⟫ • f 0`. The live bridge is
     therefore only the infinite `lp.single` sequence's unit norms and
     pairwise bounds, followed by the resulting square-root inequality.
+
+    Going beyond hop 2, `apm_a01A05_counterexample` now implements that
+    infinite witness. Its values at zero, one, and later indices are compiled,
+    and `apm_a01A05_counterexample_norm_one_all` proves every term has unit
+    norm, including the exceptional radical calculation. The live bridge is
+    narrowed to its pairwise estimates and the final index-one contradiction.
 
     `LEMMA-INDEX.md` pointed to `a98A02`'s Bessel coefficient lemmas, but the
     recovered closed-span argument is more direct and was used instead. All
