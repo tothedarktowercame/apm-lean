@@ -102,6 +102,13 @@ Then \(q\) is holomorphic on the unit disk, satisfies \(q(0)=0\), and by constru
 
 **Stage 3 — LEAN FORMALIZATION**
 
+Closer hop 2 compiles `apm_a96J06_hasDerivAt_zero` and
+`apm_a96J06_rescaled_hasDerivAt_zero`, fully discharging differentiability and
+derivative normalization for the rescaled map. The remaining implementation
+is to extract a closed-unit-ball mapping from the negated witness, apply the
+affine equality case beneath `ConstructionTargets.SchwarzEquality`, and turn
+the resulting open-disk identity into polynomial coefficient equality.
+
 Plan: (1) implement the normalization lemma in `Main.lean` (scaling the polynomial and the disk). (2) Invoke Mathlib’s Schwarz lemma (`Complex.Analytic.schwarz_sublemma`) to deduce rigidity of `q`. (3) Conclude coefficient vanishing using polynomial extensionality. Stage 3 remains in progress; these lemmas still need to be formalized.
 
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**

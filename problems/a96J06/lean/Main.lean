@@ -35,6 +35,43 @@ lemma apm_a96J06_coeff_top (N : ℕ) (hN : 2 ≤ N) (c : ℕ → ℂ) :
     simp [h1N]
   simp [apm_a96J06_poly, Polynomial.finset_sum_coeff, hN, hx]
 
+/-- The displayed polynomial has the normalized derivative `1` at zero. -/
+lemma apm_a96J06_hasDerivAt_zero (N : ℕ) (c : ℕ → ℂ) :
+    HasDerivAt (apm_a96J06_polynomial N c) 1 0 := by
+  unfold apm_a96J06_polynomial
+  have hsum : HasDerivAt
+      (fun z : ℂ => ∑ n ∈ Finset.Icc 2 N, c n * z ^ n) 0 0 := by
+    have hterm : ∀ n ∈ Finset.Icc 2 N,
+        HasDerivAt (fun z : ℂ => c n * z ^ n) 0 0 := by
+      intro n hn
+      convert (hasDerivAt_const (x := (0 : ℂ)) (c n)).mul
+        ((hasDerivAt_id (𝕜 := ℂ) (0 : ℂ)).pow n) using 1
+      · have hn2 : 2 ≤ n := (Finset.mem_Icc.mp hn).1
+        have hn1 : n - 1 ≠ 0 := by omega
+        simp [hn1]
+    convert HasDerivAt.sum (u := Finset.Icc 2 N) hterm using 1
+    · funext z
+      simp [Finset.sum_apply]
+    · simp
+  simpa using (hasDerivAt_id (𝕜 := ℂ) (0 : ℂ)).add hsum
+
+/-- Rescaling by a positive radius preserves the normalized derivative. -/
+lemma apm_a96J06_rescaled_hasDerivAt_zero
+    (N : ℕ) (c : ℕ → ℂ) {r : ℝ} (hr : 0 < r) :
+    HasDerivAt
+      (fun z : ℂ => (r : ℂ)⁻¹ * apm_a96J06_polynomial N c ((r : ℂ) * z))
+      1 0 := by
+  have hrC : (r : ℂ) ≠ 0 := by exact_mod_cast hr.ne'
+  have hinner : HasDerivAt (fun z : ℂ => (r : ℂ) * z) (r : ℂ) 0 := by
+    simpa using (hasDerivAt_const (x := (0 : ℂ)) (r : ℂ)).mul
+      (hasDerivAt_id (𝕜 := ℂ) (0 : ℂ))
+  have hout : HasDerivAt (apm_a96J06_polynomial N c) 1 ((r : ℂ) * 0) := by
+    simpa using apm_a96J06_hasDerivAt_zero N c
+  convert (hasDerivAt_const (x := (0 : ℂ)) (r : ℂ)⁻¹).mul
+    (HasDerivAt.comp (x := (0 : ℂ)) (h := fun z : ℂ => (r : ℂ) * z)
+      hout hinner) using 1 <;>
+    simp [hrC]
+
 theorem apm_a96j06
     (N : ℕ) (hN : 2 ≤ N) (c : ℕ → ℂ) (hcN : c N ≠ 0) :
     ∀ r : ℝ, 0 < r →
@@ -58,5 +95,15 @@ theorem apm_a96j06
   `Polynomial.eq_of_infinite_eval_eq`.  Mathlib and solved-sibling searches
   found the individual facts but no already compiled theorem combining them.
   The frozen statement is unchanged.
+
+  CLOSER HOP 2 goes beyond that boundary by compiling the calculus portion.
+  `apm_a96J06_hasDerivAt_zero` proves directly from the displayed finite sum
+  that the polynomial has derivative `1` at zero, and
+  `apm_a96J06_rescaled_hasDerivAt_zero` proves the normalized map
+  `z ↦ r⁻¹ * p (r*z)` retains derivative `1`. The remaining assembly is now
+  the negated-goal map into the *closed* unit ball, application of Mathlib's
+  underlying affine equality theorem (the strict open-ball wrapper is not
+  directly applicable), and conversion of disk equality into polynomial
+  coefficient equality. The frozen statement is unchanged.
   -/
   sorry

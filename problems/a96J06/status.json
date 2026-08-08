@@ -28,5 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
+  "closer_hop": 2,
+  "closer_note": "Compiled derivative-one normalization for both the original polynomial and its radius-rescaled unit-disk map. Closed-ball mapping and polynomial coefficient rigidity remain.",
   "imported_at": "2026-05-01T19:38:16.951065Z"
 }
