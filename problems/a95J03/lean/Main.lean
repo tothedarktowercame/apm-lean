@@ -87,6 +87,55 @@ lemma apm_a95J03_trigPoly_eq_laurent (a : ℤ → ℂ) (N : ℕ) (t : ℝ) :
   push_cast
   ring
 
+/-- Clearing the negative powers in the Laurent sum gives exactly the
+algebraic polynomial. -/
+lemma apm_a95J03_algPoly_eval_eq_mul_laurent
+    (a : ℤ → ℂ) (N : ℕ) (w : ℂ) (hw : w ≠ 0) :
+    (apm_a95J03_algPoly a N).eval w =
+      w ^ N * ((Finset.Icc (-(N : ℤ)) N).sum fun n => a n * w ^ n) := by
+  rw [apm_a95J03_algPoly, Polynomial.eval_finset_sum]
+  simp only [Polynomial.eval_mul, Polynomial.eval_C, Polynomial.eval_pow,
+    Polynomial.eval_X]
+  rw [Finset.mul_sum]
+  refine Finset.sum_bij (fun k _ => (k : ℤ) - N) ?_ ?_ ?_ ?_
+  · intro k hk
+    simp only [Finset.mem_range] at hk
+    simp only [Finset.mem_Icc]
+    constructor <;> omega
+  · intro k₁ hk₁ k₂ hk₂ heq
+    have hi : (k₁ : ℤ) = k₂ := sub_left_inj.mp heq
+    exact Int.ofNat_inj.mp hi
+  · intro n hn
+    simp only [Finset.mem_Icc] at hn
+    refine ⟨(n + N).toNat, ?_, ?_⟩
+    · simp only [Finset.mem_range]
+      omega
+    · have hnonneg : 0 ≤ n + (N : ℤ) := by omega
+      change (((n + (N : ℤ)).toNat : ℕ) : ℤ) - N = n
+      rw [Int.toNat_of_nonneg hnonneg]
+      ring
+  · intro k hk
+    simp only [Finset.mem_range] at hk
+    simp only
+    have hpow : w ^ k = w ^ N * w ^ ((k : ℤ) - N) := by
+      calc
+        w ^ k = w ^ (k : ℤ) := by rw [zpow_natCast]
+        _ = w ^ ((N : ℤ) + ((k : ℤ) - N)) := by congr 1 <;> omega
+        _ = w ^ (N : ℤ) * w ^ ((k : ℤ) - N) := zpow_add₀ hw _ _
+        _ = w ^ N * w ^ ((k : ℤ) - N) := by rw [zpow_natCast]
+    rw [hpow]
+    ring
+
+lemma apm_a95J03_clearedPoly_eval_eq
+    (a : ℤ → ℂ) (N : ℕ) (z w : ℂ) (hw : w ≠ 0) :
+    (apm_a95J03_algPoly a N - Polynomial.C z * Polynomial.X ^ N).eval w =
+      w ^ N *
+        (((Finset.Icc (-(N : ℤ)) N).sum fun n => a n * w ^ n) - z) := by
+  rw [Polynomial.eval_sub, Polynomial.eval_mul, Polynomial.eval_C,
+    Polynomial.eval_pow, Polynomial.eval_X,
+    apm_a95J03_algPoly_eval_eq_mul_laurent a N w hw]
+  ring
+
 def apm_a95J03_windingIntegral (γ : ℝ → ℂ) (z : ℂ) : ℂ :=
   ((((2 * Real.pi : ℝ) : ℂ) * Complex.I)⁻¹) *
     ∫ t in (0 : ℝ)..2 * Real.pi,
@@ -101,26 +150,20 @@ theorem apm_a95j03 {a : ℤ → ℂ} {N : ℕ}
       apm_a95J03_windingIntegral (apm_a95J03_trigPoly a N) z = (k : ℂ) ∧
       -(N : ℤ) ≤ k ∧ k ≤ N := by
   /-
-  CLOSER HOP 1: historical commits `d8c8079`--`1bf56f4` do not prove the
-  repaired theorem: their `windingNumber` is an opaque definition equal to
-  zero.  The sound algebraic portion has nevertheless been ported above.
-  `apm_a95J03_algPoly_degree_le` and
-  `apm_a95J03_algPoly_sub_degree_le` now compile the sharp degree-`2N` bound
-  for the polynomial obtained after clearing the negative Fourier powers.
+  CLOSER HOP 3 boundary. The finite-sum reindexing left by hop 2 is now
+  compiled. `apm_a95J03_algPoly_eval_eq_mul_laurent` gives the exact identity
+  obtained by multiplying the Laurent sum by `w^N`; its proof constructs the
+  bijection `k ↦ k-N` between `range (2N+1)` and `Icc (-N) N` and handles
+  integer powers at nonzero `w`. `apm_a95J03_clearedPoly_eval_eq` incorporates
+  the target value `z`, so zeros of the cleared polynomial on the unit circle
+  now correspond directly to forbidden curve hits.
 
-  CLOSER HOP 2 (partial): the real-calculus side is now explicit.
-  `apm_a95J03_trigPoly_hasDerivAt` differentiates the finite Fourier sum,
-  `apm_a95J03_fderiv_apply_one` rewrites the exact frozen `fderiv ℝ`
-  expression, and `apm_a95J03_trigPoly_eq_laurent` identifies the exponential
-  parametrization with the corresponding integer-power Laurent sum.
-
-  Renewed inspection of `ConstructionTargets.CircleParam`, Mathlib's unfolded
-  `circleIntegral`, and `ConstructionTargets.Rouche` confirms that the
-  parametrization and argument-principle endpoints exist separately. The live
-  bridge is now the finite-sum reindexing that proves the cleared-polynomial
-  identity, followed by the logarithmic-derivative product rule for its
-  `X⁻ᴺ` factor and conversion of the divisor sum to a root count bounded by
-  `2N`. No searched helper assembles those Laurent/polynomial and multiplicity
-  steps. The frozen statement is unchanged and no defect was found.
+  Further consultation of `LEMMA-INDEX.md`, `ConstructionTargets.CircleParam`,
+  `ConstructionTargets.Rouche`, Mathlib's `circleIntegral`, polynomial root
+  multiplicity/divisor APIs, sibling artifacts, and git history found no
+  compiled logarithmic-derivative rule converting the frozen real interval
+  integral of the Laurent curve into the cleared polynomial's contour
+  integral. The remaining bridge is that analytic conversion and the ensuing
+  divisor-mass bound by `natDegree ≤ 2N`. The frozen statement is unchanged.
   -/
   sorry

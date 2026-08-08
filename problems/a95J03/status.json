@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
+  "closer_hop": 3,
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T03:30:00Z",
   "checked_lean_state": {
@@ -39,8 +39,8 @@
       "apm_a95j03 (genuine winding integral to divisor-count bridge)"
     ],
     "blockers": [
-      "Reindex the compiled Laurent sum as the cleared algebraic polynomial on the unit circle.",
-      "Apply the logarithmic-derivative product rule and account for the X⁻ᴺ pole contribution.",
+      "Convert the frozen real interval integral to the complex circle integral of the cleared polynomial's logarithmic derivative.",
+      "Account for the X⁻ᴺ pole contribution through a logarithmic-derivative product rule.",
       "Transport the divisor sum to a root-multiplicity count bounded by the degree-2N lemma."
     ]
   }

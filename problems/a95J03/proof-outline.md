@@ -38,6 +38,22 @@ the algebraic middle: reindex the Laurent sum as `X⁻ᴺ * algPoly`, apply the
 logarithmic-derivative product rule including the monomial pole contribution,
 and bound the resulting divisor multiplicity by the compiled degree bound.
 
+## Closer Hop 3
+
+The Laurent-to-polynomial reindexing is now closed.
+`apm_a95J03_algPoly_eval_eq_mul_laurent` constructs the explicit bijection
+between `range (2N+1)` and `Icc (-N) N` and proves, for nonzero `w`,
+
+```text
+algPoly.eval w = w^N * ∑ n ∈ [-N,N], a n * w^n.
+```
+
+`apm_a95J03_clearedPoly_eval_eq` further proves the corresponding identity
+for `algPoly - z X^N`. Thus the remaining bridge is analytic rather than
+finite algebra: convert the real interval integral to the cleared
+polynomial's circle integral, account for the monomial logarithmic derivative,
+and bound the resulting divisor mass using the degree estimate.
+
 ## Statement repair
 
 Generated `windingNumber` had sorry in its def — replaced with opaque
