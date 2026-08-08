@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "complete",
-  "closer_hop": 2,
+  "closer_hop": 3,
   "boundary": null,
   "imported_at": "2026-07-13T17:26:56.610626Z"
 }
