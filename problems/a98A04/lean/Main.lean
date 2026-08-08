@@ -60,6 +60,21 @@ lemma apm_a98a04_spike_pos_iff {a b x : ℝ} (hab : a < b) :
     exact one_div_pos.mpr (Real.sqrt_pos.2
       (mul_pos (sub_pos.mpr hab) (sub_pos.mpr hx.1)))
 
+/-- The strict positivity set of a nondegenerate spike is literally its open
+support interval. -/
+lemma apm_a98a04_spike_pos_set {a b : ℝ} (hab : a < b) :
+    {x : ℝ | 0 < apm_a98a04_spike a b x} = Ioo a b := by
+  ext x
+  exact apm_a98a04_spike_pos_iff hab
+
+/-- In particular, the positivity set has strictly positive Lebesgue measure.
+This is the measure-theoretic input needed to make later height assertions
+survive replacement by an almost-everywhere equal representative. -/
+lemma apm_a98a04_spike_pos_set_measure_pos {a b : ℝ} (hab : a < b) :
+    0 < volume {x : ℝ | 0 < apm_a98a04_spike a b x} := by
+  rw [apm_a98a04_spike_pos_set hab, Real.volume_Ioo]
+  exact ENNReal.ofReal_pos.mpr (sub_pos.mpr hab)
+
 theorem apm_a98a04 :
     (∀ a b : ℝ, a < b →
       Integrable (apm_a98a04_spike a b) volume ∧
@@ -70,7 +85,7 @@ theorem apm_a98a04 :
         ∀ α β : ℝ, α < β →
           ∀ M : ℝ, ∃ x ∈ Ioo α β, M < g x) := by
   /-
-  PARTIAL boundary (closer hop 1).
+  PARTIAL boundary (closer hop 3).
 
   The local spike is now proved nonnegative and exactly supported in `(a,b)`
   by `apm_a98a04_spike_nonneg` and
@@ -101,5 +116,16 @@ theorem apm_a98a04 :
   contained there. Searches beyond hop 1 also found sibling `a01J01`'s
   normalized compact spikes, but those are bounded and concentrated near zero,
   so they do not replace the required dense family of singular intervals.
+
+  CLOSER HOP 3: `apm_a98a04_spike_pos_set` upgrades the pointwise support
+  equivalence to a literal set identity, and
+  `apm_a98a04_spike_pos_set_measure_pos` proves that set has strictly positive
+  Lebesgue measure. This supplies the first measure-theoretic robustness fact
+  needed to survive a.e. modification, beyond hop 2's pointwise statement.
+  The full construction still needs the stronger assertion that every finite
+  height superlevel set contains a positive-measure subinterval, together with
+  the translated exact spike integral and summable dense enumeration. Searches
+  of the order-filter inverse-limit and real-rpow APIs exposed the elementary
+  ingredients but no packaged singular-superlevel lemma or global assembly.
   -/
   sorry

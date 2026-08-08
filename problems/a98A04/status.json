@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Compiled measurability of the singular spike and proved strict positivity exactly on its defining interval. Remaining work is the translated/scaled rpow integral and the countable dense weighted-spike construction with a.e.-robust unboundedness.",
+  "closer_hop": 3,
+  "closer_note": "Compiled measurability, exact strict support, the literal positivity-set identity, and strict positivity of its Lebesgue measure. Remaining work is the translated/scaled rpow integral and positive-measure arbitrary-height superlevels within the countable dense weighted-spike construction.",
   "imported_at": "2026-07-13T17:26:52.963473Z"
 }
