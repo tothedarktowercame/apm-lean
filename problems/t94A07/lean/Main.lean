@@ -121,6 +121,69 @@ lemma apm_t94a07_fixedPoints_card (R r : ℝ)
       (apm_t94a07_fixedPointParam_injective R r hr hR)]
   simp
 
+/-- Solving the defining equation on the fixed axis gives exactly the four
+displayed points. -/
+lemma apm_t94a07_fixedSet_eq (R r : ℝ) (hr : 0 < r) (hR : r < R) :
+    {p | p ∈ apm_t94a07_torus R r ∧ apm_t94a07_halfTurn p = p} =
+      apm_t94a07_fixedPoints R r := by
+  ext p
+  constructor
+  · rintro ⟨hp, hfix⟩
+    obtain ⟨hy, hz⟩ := (apm_t94a07_halfTurn_eq_iff p).1 hfix
+    have hs : (|p 0| - R) ^ 2 = r ^ 2 := by
+      simpa [apm_t94a07_torus, hy, hz, Real.sqrt_sq_eq_abs] using hp
+    rcases eq_or_eq_neg_of_sq_eq_sq (|p 0| - R) r hs with hs | hs
+    · have ha : |p 0| = R + r := by linarith
+      rcases (abs_eq (by linarith : 0 ≤ R + r)).1 ha with hx | hx
+      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
+          Set.mem_singleton_iff]
+        left
+        apply PiLp.ext
+        intro i
+        fin_cases i <;> simp [hx, hy, hz]
+      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
+          Set.mem_singleton_iff]
+        right; right; right
+        apply PiLp.ext
+        intro i
+        fin_cases i <;> simp [hx, hy, hz]
+    · have ha : |p 0| = R - r := by linarith
+      rcases (abs_eq (by linarith : 0 ≤ R - r)).1 ha with hx | hx
+      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
+          Set.mem_singleton_iff]
+        right; left
+        apply PiLp.ext
+        intro i
+        fin_cases i <;> simp [hx, hy, hz]
+      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
+          Set.mem_singleton_iff]
+        right; right; left
+        apply PiLp.ext
+        intro i
+        fin_cases i <;> simp [hx, hy, hz]
+  · intro hp
+    simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
+      Set.mem_singleton_iff] at hp
+    rcases hp with rfl | rfl | rfl | rfl
+    · constructor
+      · simp [apm_t94a07_torus, Real.sqrt_sq_eq_abs,
+          abs_of_pos (by linarith : 0 < R + r)]
+      · simp [apm_t94a07_halfTurn]
+    · constructor
+      · simp [apm_t94a07_torus, Real.sqrt_sq_eq_abs,
+          abs_of_pos (by linarith : 0 < R - r)]
+      · simp [apm_t94a07_halfTurn]
+    · constructor
+      · rw [show -(R - r) = r - R by ring]
+        simp [apm_t94a07_torus, Real.sqrt_sq_eq_abs,
+          abs_of_neg (by linarith : r - R < 0)]
+      · simp [apm_t94a07_halfTurn]
+    · constructor
+      · rw [show -(R + r) = -r - R by ring]
+        simp [apm_t94a07_torus, Real.sqrt_sq_eq_abs,
+          abs_of_neg (by linarith : -r - R < 0)]
+      · simp [apm_t94a07_halfTurn]
+
 theorem apm_t94a07 (R r : ℝ) (hr : 0 < r) (hR : r < R) :
     {p | p ∈ apm_t94a07_torus R r ∧ apm_t94a07_halfTurn p = p} =
         apm_t94a07_fixedPoints R r ∧
@@ -137,8 +200,6 @@ theorem apm_t94a07 (R r : ℝ) (hr : 0 < r) (hR : r < R) :
     Nat.card {p // p ∈ apm_t94a07_fixedPoints R r} = 4 ∧
     ¬apm_t94a07_IsHomotopyToIdentity R r := by
   let hcore :
-      {p | p ∈ apm_t94a07_torus R r ∧ apm_t94a07_halfTurn p = p} =
-          apm_t94a07_fixedPoints R r ∧
       (∀ p ∈ apm_t94a07_fixedPoints R r,
         apm_t94a07_IsLefschetzFixedPoint R r p ∧
         apm_t94a07_tangent R r p =
@@ -151,17 +212,22 @@ theorem apm_t94a07 (R r : ℝ) (hr : 0 < r) (hR : r < R) :
         apm_t94a07_localLefschetzNumber p = 1) ∧
       ¬apm_t94a07_IsHomotopyToIdentity R r := by
     /-
-    CLOSER HOP 2 boundary. This hop parametrizes the displayed fixed-point set
-    by `Fin 4`, proves the parametrization injective from `0 < r < R`, and
-    closes the exact `Nat.card = 4` conjunct independently.
+    CLOSER HOP 3 boundary. Hop 2 parametrized the displayed fixed-point set by
+    `Fin 4`, proved the parametrization injective from `0 < r < R`, and closed
+    the exact `Nat.card = 4` conjunct independently.
 
-    The remaining coordinate bridge starts from the compiled
-    `apm_t94a07_halfTurn_eq_iff`: substitute `p 1 = p 2 = 0` into the torus
-    equation, rewrite `sqrt (p 0 ^ 2)` as `|p 0|`, and split the two absolute-
-    value equations to obtain the displayed points. Its local clauses require
-    a continuous-linear-map presentation of the half-turn and a derivative of
-    the square-root constraint at those four nonzero-axis points; this yields
-    the yz-plane kernel, `-I` on its basis, determinant four, and index one.
+    Going beyond that boundary, `apm_t94a07_fixedSet_eq` now closes the entire
+    coordinate bridge: it substitutes the fixed-axis equations, rewrites
+    `sqrt (x^2)` as `|x|`, splits equality of squares and then `abs_eq`, and
+    verifies all four reverse inclusions.  The theorem uses that result below,
+    so the remaining sorry no longer covers the fixed-set equality.
+
+    Its local clauses still require a continuous-linear-map presentation of
+    the half-turn and a derivative of the square-root constraint at those four
+    nonzero-axis points; this yields the yz-plane kernel, `-I` on its basis,
+    determinant four, and index one.  Searches of Mathlib's `fderiv_sqrt`,
+    coordinate continuous-linear-map, kernel, and matrix APIs found the scalar
+    derivative ingredients but no assembled computation for this subtype.
 
     The final conjunct remains the independent global obstruction: a homotopy
     through this embedded torus would identify the induced maps on first
@@ -172,5 +238,5 @@ theorem apm_t94a07 (R r : ℝ) (hr : 0 < r) (hR : r < R) :
     embedded-torus homology calculation or Lefschetz homotopy obstruction.
     -/
     sorry
-  exact ⟨hcore.1, hcore.2.1, apm_t94a07_fixedPoints_card R r hr hR,
-    hcore.2.2⟩
+  exact ⟨apm_t94a07_fixedSet_eq R r hr hR, hcore.1,
+    apm_t94a07_fixedPoints_card R r hr hR, hcore.2⟩

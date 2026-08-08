@@ -21,3 +21,19 @@ and explicit `fderiv` computation. The non-homotopy conjunct requires computing
 the induced action as `-I` on first homology, or developing the equivalent
 global Lefschetz obstruction; Mathlib has no packaged theorem for this
 embedded torus.
+
+## Closer hop 3 (2026-08-08)
+
+The fixed-set coordinate proof is now complete in
+`apm_t94a07_fixedSet_eq`.  Fixedness forces the last two coordinates to zero;
+the torus equation becomes `(|x|-R)^2=r^2`, and successive square and absolute-
+value splits yield exactly the four displayed points.  All reverse membership
+checks also compile.  The main theorem now consumes this lemma directly, so
+the remaining `sorry` no longer covers the set equality.
+
+The remaining local calculation is the explicit derivative/kernel assembly at
+the four points.  The independent global obstruction still requires torus
+homology or a Lefschetz homotopy theorem.  Searches found the scalar square-
+root derivative ingredients but no packaged computation or global invariant,
+so the bundle remains honestly partial with one `sorry`; its frozen statement
+is unchanged.
