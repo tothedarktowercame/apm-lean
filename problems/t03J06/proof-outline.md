@@ -1,5 +1,26 @@
 # Proof Outline: t03J06
 
+## Hop 4 gap audit
+
+Outcomes A and B both failed. A deeper search found Mathlib's
+`Real.integral_comp_polarCoord_symm` and sibling `a01A07`'s derived
+`integral_closedBall_zero_eq_polar`, but those results only change variables
+on a full disk. They do not discharge integrability at the square-root
+boundary, the nonradial symmetry cancellations, or Stokes for the capped
+cylinder.
+
+The precise missing local result is:
+
+```lean
+lemma apm_t03J06_bulletIntegral_eq_seven_pi
+    (omega : apm_t03J06_Form2)
+    (homega : apm_t03J06_isOmega omega) :
+    apm_t03J06_bulletIntegral omega = 7 * Real.pi
+```
+
+It can be proved either by direct AE/polar integration of the two compiled
+integrands or by a specialized Stokes theorem for the solid capped cylinder.
+
 The local surface-form algebra is now formalized and compiles.
 
 - informal-solution: `informal-solution.md`

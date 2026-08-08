@@ -189,5 +189,32 @@ theorem apm_t03j06 (omega : apm_t03J06_Form2)
   `t96J08`, and `m96J03` found no packaged bridge. In particular `t96J08`
   contains essentially the same hemisphere parametrization but its theorem
   remains unproved. The frozen statement is unchanged.
+
+  HOP 4 GAP AUDIT (outcomes A and B both failed).
+
+  The deeper search did locate
+  `Real.integral_comp_polarCoord_symm` and the repository helper
+  `integral_closedBall_zero_eq_polar` in solved sibling `a01A07`. They provide
+  a change of variables for a full planar disk after identifying `ℝ × ℝ`
+  with `ℂ`. They do not supply the required integrability of the boundary
+  quotients, the odd/swap cancellations of the nonradial coefficient terms,
+  or a Stokes theorem relating the two frozen parametrized integrals to the
+  solid bullet. The box-only divergence theorem likewise cannot be applied to
+  the curved cap.
+
+  The precise local lemma still needed is:
+
+      lemma apm_t03J06_bulletIntegral_eq_seven_pi
+          (omega : apm_t03J06_Form2)
+          (homega : apm_t03J06_isOmega omega) :
+          apm_t03J06_bulletIntegral omega = 7 * Real.pi
+
+  A proof may either establish this directly from the two compiled integrand
+  formulas (including AE boundary handling and polar/symmetry reductions), or
+  prove a Stokes theorem specialized to the solid capped cylinder. No existing
+  declaration found in Mathlib, `ConstructionTargets`, the indexed corpus, or
+  git history has this statement or the required curved-surface interface.
+  The sorry is therefore retained honestly; no axiom, opaque declaration, or
+  native evaluation was introduced.
   -/
   sorry

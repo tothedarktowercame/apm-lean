@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "The form is uniquely determined, both parametrized pullback integrands are explicit, and the displayed extDeriv value is proved to imply both nonclosedness and nonexactness via d²=0. Remaining work is smoothness, the explicit extDeriv calculation, and either a Stokes theorem for the bullet surface or direct singular disk integration.",
+  "closer_hop": 4,
+  "boundary": "Hop 4 audited the exact analytic gap. Real.integral_comp_polarCoord_symm exists but does not provide boundary-quotient integrability, nonradial cancellations, or curved-surface Stokes. The precise missing lemma is apm_t03J06_bulletIntegral_eq_seven_pi with homega as its sole hypothesis; smoothness and the extDeriv calculation also remain.",
   "imported_at": "2026-07-13T17:26:57.135870Z"
 }
