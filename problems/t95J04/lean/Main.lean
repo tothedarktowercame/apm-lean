@@ -39,6 +39,21 @@ def t95J04NullHomotopic {X Y : Type*}
   ∃ y : Y,
     ContinuousMap.Homotopic ⟨f, hf⟩ (ContinuousMap.const X y)
 
+/-- An explicit coordinate point on every sphere used in the statement. -/
+lemma t95J04_sphere_nonempty (n : ℕ) : Nonempty (T95J04Sphere n) := by
+  exact ⟨⟨EuclideanSpace.single 0 1, by simp [T95J04Sphere]⟩⟩
+
+lemma t95J04_sphereSix_nonempty : Nonempty T95J04SphereSix :=
+  t95J04_sphere_nonempty 6
+
+lemma t95J04_sphereTwoFour_nonempty : Nonempty T95J04SphereTwoFour :=
+  Nonempty.map2 (fun x y ↦ (x, y))
+    (t95J04_sphere_nonempty 2) (t95J04_sphere_nonempty 4)
+
+lemma t95J04_sphereThreeThree_nonempty : Nonempty T95J04SphereThreeThree :=
+  Nonempty.map2 (fun x y ↦ (x, y))
+    (t95J04_sphere_nonempty 3) (t95J04_sphere_nonempty 3)
+
 theorem apm_t95j04 :
     (∀ (k n : ℕ), k < n →
       ∀ (M : Type*) [TopologicalSpace M] [T2Space M]
@@ -55,4 +70,25 @@ theorem apm_t95j04 :
     ¬ Nonempty (T95J04SphereSix ≃ₜ T95J04SphereTwoFour) ∧
     ¬ Nonempty (T95J04SphereSix ≃ₜ T95J04SphereThreeThree) ∧
     ¬ Nonempty (T95J04SphereTwoFour ≃ₜ T95J04SphereThreeThree) := by
+  /-
+  CLOSER HOP 2 boundary. The repaired statement now again has compiled,
+  explicit inhabitants for `S⁶`, `S² × S⁴`, and `S³ × S³`; unlike relying on
+  eventual simple-connectivity instances, these close the nonemptiness input
+  needed by any direct fundamental-group or homotopy construction.
+
+  The first conjunct still requires a manifold-domain Sard theorem proving
+  `μH[n] (range f) = 0`. The repository's chartwise Sard artifacts and
+  Mathlib's available results cover maps between finite-dimensional normed
+  vector spaces, not arbitrary `IsManifold` domains. Non-surjectivity would
+  then follow from positive Hausdorff measure of the sphere, and null-homotopy
+  requires contracting the complement of an omitted point via stereographic
+  projection.
+
+  For the remaining clauses, searches of `LEMMA-INDEX.md`,
+  `ConstructionTargets/`, sphere/product siblings, Mathlib's sphere,
+  stereographic, fundamental-groupoid, singular-homology, and Künneth sources,
+  and git history found no compiled simple-connectivity theorem for these
+  metric spheres and no homology computations distinguishing the three
+  six-dimensional spaces. Those foundational bridges remain open.
+  -/
   sorry
