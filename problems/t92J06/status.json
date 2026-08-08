@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 2 compiled the two continuous canonical circle maps into the quotient and their basepoint equality, giving the cocone data required by a gluing construction. The actual evenly-covered-neighborhood gluing, exact fibers, pairwise nonhomeomorphism, and Cayley-tree universal cover remain unavailable.",
+  "closer_hop": 3,
+  "closer_progress": "The two continuous canonical circle maps, their basepoint equality, and the full continuous maps-out quotient eliminator with restriction and uniqueness lemmas are compiled. The source graph realizations, evenly-covered neighborhoods, exact fibers, pairwise nonhomeomorphism, and Cayley-tree universal cover remain unavailable.",
   "imported_at": "2026-07-13T17:26:57.514637Z"
 }

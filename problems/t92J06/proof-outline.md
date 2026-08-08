@@ -23,3 +23,9 @@ Closer hop 2 now supplies the concrete quotient cocone data: both circle
 inclusions are continuous and their basepoints are propositionally equal in
 the wedge. This isolates the next missing step as the construction and
 compatibility of evenly covered neighborhoods at that common point.
+
+Closer hop 3 adds the complete continuous maps-out universal property:
+`apm_t92J06_wedgeDesc` descends compatible circle maps, its two simp lemmas
+recover them, and `apm_t92J06_wedgeDesc_unique` proves uniqueness. The target
+quotient therefore needs no further bookkeeping; only realization and local
+trivialization of the covering graphs remain.
