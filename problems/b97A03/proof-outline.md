@@ -13,10 +13,13 @@ proved directly from an arbitrary complex root.
 - The defined `ζ = (1 + α³)/2` satisfies `ζ² - ζ + 1 = 0`.
 - The same relation gives `ζ³ = -1` and `ζ⁶ = 1`.
 - `ζ` lies in `ℚ(α)`, and every `ζ^k α` is a root lying in `ℚ(α)`.
+- `apm_b97a03_zeta_primitive` proves `ζ` has exact order six, and
+  `apm_b97a03_candidate_roots_injective` proves the six candidate roots are
+  pairwise distinct.
 
 ## Remaining bridge
 
-Prove that the six compiled candidate roots are distinct and exhaust the root
-set, prove the adjoin is the splitting field, construct its six automorphisms
+Turn the six distinct compiled roots into root-set exhaustion, prove the
+adjoin is the splitting field, construct its six automorphisms
 and `S₃` equivalence, classify subgroups of `S₃`, and identify their fixed
 fields with the four explicit adjoins in the frozen statement.

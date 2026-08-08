@@ -65,6 +65,61 @@ lemma apm_b97a03_zeta_pow_six {α : ℂ}
   rw [show 6 = 3 * 2 by norm_num, pow_mul, apm_b97a03_zeta_pow_three hα]
   norm_num
 
+/-- The derived sixth root of unity is primitive, not merely a root of
+unity. -/
+lemma apm_b97a03_zeta_primitive {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    IsPrimitiveRoot (apm_b97a03_zeta α) 6 := by
+  let z := apm_b97a03_zeta α
+  have hrel : z ^ 2 - z + 1 = 0 := apm_b97a03_zeta_relation hα
+  have h3 : z ^ 3 = -1 := apm_b97a03_zeta_pow_three hα
+  have h6 : z ^ 6 = 1 := apm_b97a03_zeta_pow_six hα
+  have ho : orderOf z = 6 := (orderOf_eq_iff (by norm_num : 0 < 6)).2 (by
+    constructor
+    · exact h6
+    · intro m hm hm0 heq
+      interval_cases m
+      · have hz : z = 1 := by simpa only [pow_one] using heq
+        rw [hz] at h3
+        norm_num at h3
+      · have hz2 : z ^ 2 = 1 := heq
+        have hz : z = 2 := by linear_combination -hrel + hz2
+        rw [hz] at h3
+        norm_num at h3
+      · rw [h3] at heq
+        norm_num at heq
+      · have hz2 : z ^ 2 = 1 := by
+          calc z ^ 2 = z ^ 4 * z ^ 2 := by rw [heq, one_mul]
+               _ = z ^ 6 := by ring
+               _ = 1 := h6
+        have hz : z = 2 := by linear_combination -hrel + hz2
+        rw [hz] at h3
+        norm_num at h3
+      · have hz : z = 1 := by
+          calc z = z ^ 5 * z := by rw [heq, one_mul]
+               _ = z ^ 6 := by ring
+               _ = 1 := h6
+        rw [hz] at h3
+        norm_num at h3)
+  rw [← ho]
+  exact IsPrimitiveRoot.orderOf z
+
+/-- The six candidate roots obtained from a chosen root are pairwise
+distinct. -/
+lemma apm_b97a03_candidate_roots_injective {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Function.Injective
+      (fun k : Fin 6 => apm_b97a03_zeta α ^ (k : ℕ) * α) := by
+  have ha : α ≠ 0 := by
+    intro ha
+    have hpow := apm_b97a03_root_pow_six hα
+    rw [ha] at hpow
+    norm_num at hpow
+  intro i j hij
+  apply Fin.ext
+  exact (apm_b97a03_zeta_primitive hα).pow_inj i.isLt j.isLt
+    (mul_right_cancel₀ ha hij)
+
 /-- The root of unity extracted from `α` belongs to the same generated
 intermediate field. -/
 lemma apm_b97a03_zeta_mem_field {α : ℂ} :
@@ -163,5 +218,13 @@ theorem apm_b97a03 :
   candidate six-root orbit without a Kummer API. Remaining are proving the
   six candidates exhaust the root set (including distinctness), packaging the
   splitting field and automorphisms, and computing the exact fixed fields.
+
+  Closer hop 3 proves `apm_b97a03_zeta_primitive`, showing that the derived
+  element has exact order six, and
+  `apm_b97a03_candidate_roots_injective`, showing the six compiled candidates
+  are pairwise distinct.  Together with hop 2, this gives six distinct roots
+  of the degree-six polynomial inside `ℚ(α)`.  The remaining bridge is to turn
+  that fact into root-set exhaustion/splitting in the exact API, then package
+  the automorphisms and fixed-field classification.
   -/
   sorry
