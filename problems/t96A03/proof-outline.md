@@ -1,5 +1,18 @@
 # Proof Outline: t96A03
 
+## Closer hop 2
+
+The concrete quotient now satisfies the full function-level topological
+pushout property.  Given compatible continuous maps from the two sphere
+summands, `apm_t96A03_glueDesc` constructs the unique continuous map out of
+the glued space, and its two computation lemmas recover the original maps.
+The compatibility proof is extended through `Relation.EqvGen` explicitly.
+
+The remaining boundary is no longer point-set topology.  Closing the frozen
+homology claims requires a singular Mayer–Vietoris sequence (or a cellular
+comparison) plus singular homology computations for the metric sphere and
+equator; none is present in the searched repository or Mathlib snapshot.
+
 ## Closer hop 1
 
 The actual quotient layer now compiles.  The canonical projection is proved

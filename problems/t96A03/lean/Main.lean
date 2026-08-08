@@ -105,6 +105,67 @@ lemma apm_t96A03_inl_eq_inr_on_equator
   funext x
   exact apm_t96A03_quotient_glue h x
 
+lemma apm_t96A03_glueDesc_respects
+    {Z : Type*} [TopologicalSpace Z]
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace)
+    (f g : C(apm_t96A03_Sphere2, Z))
+    (hfg : ∀ x : apm_t96A03_EquatorSpace, f x.1 = g (h x).1)
+    {x y : Sum apm_t96A03_Sphere2 apm_t96A03_Sphere2}
+    (hxy : Relation.EqvGen (apm_t96A03_glueRel h) x y) :
+    Sum.elim f g x = Sum.elim f g y := by
+  induction hxy with
+  | rel a b hab =>
+      cases hab with
+      | glue x => exact hfg x
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- Continuous maps-out universal property of the equator gluing. -/
+noncomputable def apm_t96A03_glueDesc
+    {Z : Type*} [TopologicalSpace Z]
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace)
+    (f g : C(apm_t96A03_Sphere2, Z))
+    (hfg : ∀ x : apm_t96A03_EquatorSpace, f x.1 = g (h x).1) :
+    C(apm_t96A03_X h, Z) := by
+  let raw : Sum apm_t96A03_Sphere2 apm_t96A03_Sphere2 → Z := Sum.elim f g
+  have hraw : Continuous raw := continuous_sum_dom.2 ⟨f.continuous, g.continuous⟩
+  exact ⟨Quotient.lift raw (fun _ _ hxy ↦
+      apm_t96A03_glueDesc_respects h f g hfg hxy),
+    hraw.quotient_lift (fun _ _ hxy ↦
+      apm_t96A03_glueDesc_respects h f g hfg hxy)⟩
+
+@[simp] lemma apm_t96A03_glueDesc_inl
+    {Z : Type*} [TopologicalSpace Z]
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace)
+    (f g : C(apm_t96A03_Sphere2, Z))
+    (hfg : ∀ x : apm_t96A03_EquatorSpace, f x.1 = g (h x).1)
+    (x : apm_t96A03_Sphere2) :
+    apm_t96A03_glueDesc h f g hfg (apm_t96A03_inl h x) = f x := rfl
+
+@[simp] lemma apm_t96A03_glueDesc_inr
+    {Z : Type*} [TopologicalSpace Z]
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace)
+    (f g : C(apm_t96A03_Sphere2, Z))
+    (hfg : ∀ x : apm_t96A03_EquatorSpace, f x.1 = g (h x).1)
+    (x : apm_t96A03_Sphere2) :
+    apm_t96A03_glueDesc h f g hfg (apm_t96A03_inr h x) = g x := rfl
+
+lemma apm_t96A03_glueDesc_unique
+    {Z : Type*} [TopologicalSpace Z]
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace)
+    (f g : C(apm_t96A03_Sphere2, Z))
+    (hfg : ∀ x : apm_t96A03_EquatorSpace, f x.1 = g (h x).1)
+    (u : C(apm_t96A03_X h, Z))
+    (hul : ∀ x, u (apm_t96A03_inl h x) = f x)
+    (hur : ∀ x, u (apm_t96A03_inr h x) = g x) :
+    u = apm_t96A03_glueDesc h f g hfg := by
+  ext y
+  obtain ⟨x, rfl⟩ := apm_t96A03_surjective_quotient h y
+  cases x with
+  | inl x => exact hul x
+  | inr x => exact hur x
+
 abbrev apm_t96A03_H (k : ℕ) (Y : Type) [TopologicalSpace Y] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y))
@@ -141,5 +202,23 @@ theorem apm_t96a03
   boundary calculation yield `H₁ = 0` and `H₂ ≅ ℤ³`, together with the degree
   bounds.  The frozen statement is unchanged; no axiom or opaque placeholder
   was introduced.
+
+  CLOSER HOP 2: the cocone is now promoted to its complete function-level
+  topological pushout property.  `apm_t96A03_glueDesc_respects` extends the
+  equator compatibility through the generated equivalence relation;
+  `apm_t96A03_glueDesc` descends compatible continuous maps from the two
+  spheres; and its two computation lemmas plus `apm_t96A03_glueDesc_unique`
+  prove existence and uniqueness of the induced continuous map.  This reuses
+  Mathlib's `Continuous.quotient_lift` and the compiled quotient-eliminator
+  pattern in siblings `t01J03`, `t02A03`, and `t97J04`.
+
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, the gluing and
+  homology siblings, Mathlib's categorical pushout, singular-homology, sphere,
+  and Mayer--Vietoris sources, and git history found no theorem sending this
+  now-explicit pushout to a homological exact sequence.  Nor was a computation
+  of the metric sphere/equator singular homology found.  Thus all point-set
+  pushout bookkeeping is closed; the remaining bridge is exclusively the
+  missing functorial algebraic-topology computation.  The frozen statement is
+  unchanged.
   -/
   sorry
