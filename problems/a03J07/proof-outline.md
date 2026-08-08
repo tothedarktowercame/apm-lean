@@ -59,3 +59,13 @@ Shared extension root for promoted lemmas:
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 [Back-port calibrated difficulty and local blockers into the reader-facing proof.]
+
+## Closer hop 1 — complete
+
+Rotate the upper half-plane to the right half-plane by setting
+`g(w) = f(I*w)`. The supplied uniform bound gives the order-zero exponential
+growth hypothesis and boundedness on the positive real axis. The original
+real-axis estimate becomes the imaginary-axis estimate for `g`. Apply
+`PhragmenLindelof.right_half_plane_of_bounded_on_real`, then rotate the target
+point back. This packaging is adapted from the already solved sibling
+`b99A01`.
