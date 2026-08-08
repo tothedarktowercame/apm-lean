@@ -117,6 +117,35 @@ lemma apm_t03J06_hemisphere_integrand (omega : apm_t03J06_Form2)
   simp [apm_t03J06_hemispherePoint, apm_t03J06_hemisphereTangents]
   ring
 
+/-- The displayed nonzero coordinate value of the exterior derivative makes
+the exterior derivative itself nonzero. -/
+lemma apm_t03J06_extDeriv_ne_zero_of_eval_three
+    (omega : apm_t03J06_Form2)
+    (hd : ∀ x : apm_t03J06_E3,
+      extDeriv omega x (fun i ↦ EuclideanSpace.single i (1 : ℝ)) = 3) :
+    extDeriv omega ≠ 0 := by
+  intro hzero
+  have h := hd 0
+  rw [hzero] at h
+  norm_num at h
+
+/-- The same coordinate computation rules out a smooth primitive via
+`extDeriv_extDeriv`, so the nonexactness conjunct needs no integration. -/
+lemma apm_t03J06_not_exact_of_extDeriv_eval_three
+    (omega : apm_t03J06_Form2)
+    (hd : ∀ x : apm_t03J06_E3,
+      extDeriv omega x (fun i ↦ EuclideanSpace.single i (1 : ℝ)) = 3) :
+    ¬(∃ eta : apm_t03J06_Form1,
+      ContDiff ℝ (⊤ : ℕ∞) eta ∧ extDeriv eta = omega) := by
+  rintro ⟨eta, heta, hetaomega⟩
+  have hzero : extDeriv (extDeriv eta) = 0 :=
+    extDeriv_extDeriv heta (by
+      rw [minSmoothness_of_isRCLikeNormedField]
+      exact WithTop.coe_le_coe.mpr (show (2 : ℕ∞) ≤ ⊤ from le_top))
+  have h := hd 0
+  rw [← hetaomega, hzero] at h
+  norm_num at h
+
 theorem apm_t03j06 (omega : apm_t03J06_Form2)
     (homega : apm_t03J06_isOmega omega) :
     ContDiff ℝ (⊤ : ℕ∞) omega ∧
@@ -127,7 +156,7 @@ theorem apm_t03j06 (omega : apm_t03J06_Form2)
       ContDiff ℝ (⊤ : ℕ∞) eta ∧ extDeriv eta = omega) ∧
     apm_t03J06_bulletIntegral omega = 7 * Real.pi := by
   /-
-  Boundary (closer hop 2): this hop goes beyond the initial API search by
+  Boundary (closer hop 3): hop 2 went beyond the initial API search by
   compiling the pointwise algebra on both surface pieces.
   `apm_t03J06_isOmega_unique` proves that the coefficient predicate leaves no
   freedom in `omega`. `apm_t03J06_vec3_apply` exposes its three coordinates,
@@ -136,6 +165,14 @@ theorem apm_t03j06 (omega : apm_t03J06_Form2)
   oriented tangent pairs into the frozen form. Thus the remaining integral is
   now a concrete scalar integral, including the hemisphere's explicit
   `pᵢ / sqrt (1-p₀²-p₁²)` boundary factors.
+
+  Going beyond that boundary, hop 3 proves
+  `apm_t03J06_extDeriv_ne_zero_of_eval_three`: the displayed coordinate value
+  `3` immediately makes `extDeriv omega` nonzero. It also proves
+  `apm_t03J06_not_exact_of_extDeriv_eval_three`, applying Mathlib's
+  `extDeriv_extDeriv` to rule out every smooth primitive. Consequently the
+  theorem's second conjunct now implies both its third and fourth conjuncts;
+  no integration or additional smoothness computation is needed for them.
 
   The intended short route still needs a Stokes/divergence theorem identifying
   the sum of these parametrized surface integrals with the integral of
@@ -146,7 +183,7 @@ theorem apm_t03j06 (omega : apm_t03J06_Form2)
   two-dimensional disk symmetry/change-of-variables results and domination
   for the displayed boundary quotients.
 
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's
+  Renewed searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's
   differential-form, divergence, disk/radial-integration, and parametrized-
   integral sources, git history, and siblings `t01J06`, `t02A05`, `t94A10`,
   `t96J08`, and `m96J03` found no packaged bridge. In particular `t96J08`

@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The form is uniquely determined and both parametrized pullback integrands are compiled explicitly. Remaining work is the extDeriv calculation plus either a Stokes theorem for the bullet surface or direct singular disk integration.",
+  "closer_hop": 3,
+  "boundary": "The form is uniquely determined, both parametrized pullback integrands are explicit, and the displayed extDeriv value is proved to imply both nonclosedness and nonexactness via d²=0. Remaining work is smoothness, the explicit extDeriv calculation, and either a Stokes theorem for the bullet surface or direct singular disk integration.",
   "imported_at": "2026-07-13T17:26:57.135870Z"
 }
