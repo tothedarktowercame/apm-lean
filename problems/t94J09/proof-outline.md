@@ -1,5 +1,14 @@
 # Proof Outline: t94J09
 
+## Closer hop 3
+
+`apm_t94J09_homeomorphOfDiskMaps` packages the complete homeomorphism
+assembly. Two continuous disk maps respecting the respective generating
+relations and inverse modulo those relations descend to mutually inverse
+continuous maps of the quotients. The remaining point-set input is only the
+construction of those concrete polygon-move maps; quotient bookkeeping is
+finished. The singular-homology computation remains independently open.
+
 ## Closer hop 2
 
 Both actual quotient presentations now expose their point-set universal

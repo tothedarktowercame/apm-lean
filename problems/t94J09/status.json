@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Both concrete polygon quotients now have continuous surjective quotient maps and full continuous eliminator/computation/uniqueness APIs. The explicit polygon-move homeomorphism and singular-homology computations remain open.",
+  "closer_hop": 3,
+  "closer_note": "The full quotient homeomorphism assembly from mutually inverse relation-respecting disk maps is compiled. Constructing those explicit polygon-move maps and computing singular homology remain open.",
   "imported_at": "2026-07-13T17:26:58.150687Z"
 }

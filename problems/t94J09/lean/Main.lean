@@ -212,6 +212,41 @@ lemma apm_t94J09_n6Desc_unique
   obtain ⟨x, rfl⟩ := apm_t94J09_surjective_n6Quotient y
   exact hu x
 
+/-- Two relation-respecting disk maps whose composites are identities modulo
+the respective relations induce a homeomorphism of the quotient surfaces. -/
+noncomputable def apm_t94J09_homeomorphOfDiskMaps
+    (p q : C(apm_t94J09_Disk, apm_t94J09_Disk))
+    (hp : ∀ x y, apm_t94J09_PolygonRel x y →
+      apm_t94J09_n6Quotient (p x) = apm_t94J09_n6Quotient (p y))
+    (hq : ∀ x y, apm_t94J09_N6Rel x y →
+      apm_t94J09_polygonQuotient (q x) = apm_t94J09_polygonQuotient (q y))
+    (hqp : ∀ x, apm_t94J09_polygonQuotient (q (p x)) =
+      apm_t94J09_polygonQuotient x)
+    (hpq : ∀ x, apm_t94J09_n6Quotient (p (q x)) =
+      apm_t94J09_n6Quotient x) :
+    apm_t94J09_PolygonSurface ≃ₜ apm_t94J09_N6 := by
+  let pbar : C(apm_t94J09_Disk, apm_t94J09_N6) :=
+    ⟨fun x => apm_t94J09_n6Quotient (p x),
+      apm_t94J09_continuous_n6Quotient.comp p.continuous⟩
+  let qbar : C(apm_t94J09_Disk, apm_t94J09_PolygonSurface) :=
+    ⟨fun x => apm_t94J09_polygonQuotient (q x),
+      apm_t94J09_continuous_polygonQuotient.comp q.continuous⟩
+  let u := apm_t94J09_polygonDesc pbar hp
+  let v := apm_t94J09_n6Desc qbar hq
+  exact
+    { toFun := u
+      invFun := v
+      continuous_toFun := u.continuous
+      continuous_invFun := v.continuous
+      left_inv := by
+        intro z
+        obtain ⟨x, rfl⟩ := apm_t94J09_surjective_polygonQuotient z
+        exact hqp x
+      right_inv := by
+        intro z
+        obtain ⟨x, rfl⟩ := apm_t94J09_surjective_n6Quotient z
+        exact hpq x }
+
 abbrev apm_t94J09_H (k : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t94J09_PolygonSurface))
@@ -302,5 +337,19 @@ theorem apm_t94j09 :
   homeomorphism, the displayed singular homology still requires a cellular-to-
   singular comparison or equivalent surface computation absent from the
   searched corpus.  The frozen statement remains unchanged.
+
+  CLOSER HOP 3 (2026-08-08): the homeomorphism assembly after constructing
+  disk maps is now completely compiled as
+  `apm_t94J09_homeomorphOfDiskMaps`. It accepts continuous self-maps `p,q` of
+  the disk, compatibility with the two generating relations, and quotient-
+  level identities for `q ∘ p` and `p ∘ q`; the two hop-2 eliminators descend
+  them, quotient surjectivity proves the inverse laws, and the result is an
+  actual `Homeomorph`. Thus the point-set bridge no longer includes any
+  quotient lifting, continuity, or inverse bookkeeping. Searches of explicit
+  polygon-word rewrite artifacts, PL disk maps, and Alexander-trick APIs
+  found no maps implementing this seven-pair word normalization. The live
+  topology input is precisely those concrete `p,q` witnesses. Independently,
+  the singular-homology conclusions still require the absent surface/cellular
+  computation. The frozen statement remains unchanged.
   -/
   sorry
