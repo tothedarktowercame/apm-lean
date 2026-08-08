@@ -91,6 +91,28 @@ lemma apm_m02a06_greenKernel_le_half {x y : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) :
   unfold apm_m02a06_greenKernel
   nlinarith
 
+/-- On the lower triangle the absolute value in the Green kernel disappears. -/
+lemma apm_m02a06_greenKernel_of_le {x y : ℝ} (hyx : y ≤ x) :
+    apm_m02a06_greenKernel x y =
+      (1 / 2 : ℝ) * (Real.exp (-(x - y)) - Real.exp (-(x + y))) := by
+  simp [apm_m02a06_greenKernel, abs_of_nonneg (sub_nonneg.mpr hyx)]
+
+/-- On the upper triangle the absolute value in the Green kernel disappears
+with the opposite affine branch. -/
+lemma apm_m02a06_greenKernel_of_ge {x y : ℝ} (hxy : x ≤ y) :
+    apm_m02a06_greenKernel x y =
+      (1 / 2 : ℝ) * (Real.exp (-(y - x)) - Real.exp (-(x + y))) := by
+  rw [apm_m02a06_greenKernel_comm]
+  simpa [add_comm] using apm_m02a06_greenKernel_of_le hxy
+
+/-- The exponentially decaying part of the kernel is already a pointwise
+majorant; this is the domination needed for the improper Green integral. -/
+lemma apm_m02a06_greenKernel_le_exp {x y : ℝ} :
+    apm_m02a06_greenKernel x y ≤ (1 / 2 : ℝ) * Real.exp (-|x - y|) := by
+  have hnonneg : 0 ≤ Real.exp (-(x + y)) := (Real.exp_pos _).le
+  unfold apm_m02a06_greenKernel
+  nlinarith
+
 theorem apm_m02a06
     (f : ℝ → ℝ) (hf_smooth : ContDiff ℝ ∞ f)
     (hf_compact : HasCompactSupport f) (hf_support : Function.support f ⊆ Ioi 0)
@@ -134,5 +156,18 @@ theorem apm_m02a06
   estimate, and then apply the compiled contraction layer. Searches of the
   exponential integral and parameter-integral APIs found primitives for these
   steps but no packaged half-line Green-operator theorem.
+
+  Closer hop 3 carries out the exact algebraic preparation for that split.
+  `apm_m02a06_greenKernel_of_le` and `apm_m02a06_greenKernel_of_ge` give the
+  two smooth exponential formulas on `y ≤ x` and `x ≤ y`, respectively,
+  and `apm_m02a06_greenKernel_le_exp` gives the integrable exponential
+  majorant needed for dominated improper integration. Inspection of
+  `ImproperIntegrals.lean` found `integrableOn_exp_neg_Ioi` and
+  `integral_exp_neg_Ioi`, so the scalar tails are available. What remains is
+  still the substantial parameter-integral assembly: combine the two moving
+  domains, differentiate both pieces twice including their boundary terms,
+  prove the resulting function tends to zero, then bundle a complete
+  sup-norm function space and apply Banach contraction. No packaged theorem
+  performs that assembly, and it was not completed in this final hop.
   -/
   sorry

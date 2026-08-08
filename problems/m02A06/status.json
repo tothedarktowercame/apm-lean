@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "classification_detail": "The explicit half-line Green kernel and its symmetry, boundary values, nonnegativity, and pointwise bound compile; integral-operator regularity, decay, mass estimate, and contraction assembly remain.",
+  "closer_hop": 3,
+  "classification_detail": "Final honest partial: the kernel now has compiled smooth formulas on both sides of y=x and an exponential domination bound. The moving-domain parameter integral, twice-differentiable Green identity, decay, and Banach-space contraction assembly remain.",
   "imported_at": "2026-07-13T17:26:54.456143Z"
 }
