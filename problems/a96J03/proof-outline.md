@@ -7,6 +7,24 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+The formal reduction now contains two compiled, sorry-free helpers.  The lemma
+`apm_a96J03_integral_abs_sub_translate` proves exact invariance of the `L¹`
+error under `x ↦ x - t` using `integral_sub_right_eq_self`.
+`apm_a96J03_exists_compact_continuous_approx` specializes
+`Integrable.exists_hasCompactSupport_integral_sub_le` to produce a continuous,
+compactly supported, integrable approximant in the theorem's absolute-value
+metric.
+
+The remaining formal bridge is translation continuity for a continuous
+compactly supported real function.  The intended dominated-convergence proof
+needs a fixed compact thickening of `tsupport g` for all `t` near zero and an
+integrable indicator bound on that thickening.  Mathlib's convolution
+continuity results do not directly state continuity of this translation norm.
+Consequently the main theorem remains partial with one `sorry`; its statement
+was not changed.
+
 ## Imported Proof Plan
 
 ```clojure
