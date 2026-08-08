@@ -1,5 +1,21 @@
 # Proof Outline: t99J03
 
+## Compiled progress
+
+The lemmas `apm_t99J03_eulerCharacteristic_orientable` and
+`apm_t99J03_eulerCharacteristic_nonorientable` prove both displayed Euler
+formulas definitionally. The main theorem is reduced by simplification to the
+classification dichotomy and uniqueness alone.
+
+## Remaining Lean boundary
+
+Classify every compact connected smooth two-manifold as exactly one of the
+concrete orientable polygon quotients or a positive-genus nonorientable
+quotient. This requires triangulation, fundamental-polygon construction,
+paired-edge normalization, homeomorphism assembly, and invariants proving
+uniqueness. Neither Mathlib nor `ConstructionTargets.Surfaces` packages this
+classification.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 

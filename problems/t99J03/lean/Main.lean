@@ -61,6 +61,12 @@ noncomputable instance (orientable : Bool) (genus : ℕ) :
 def apm_t99J03_eulerCharacteristic (orientable : Bool) (genus : ℕ) : ℤ :=
   if orientable then 2 - 2 * genus else 2 - genus
 
+@[simp] lemma apm_t99J03_eulerCharacteristic_orientable (genus : ℕ) :
+    apm_t99J03_eulerCharacteristic true genus = 2 - 2 * genus := rfl
+
+@[simp] lemma apm_t99J03_eulerCharacteristic_nonorientable (genus : ℕ) :
+    apm_t99J03_eulerCharacteristic false genus = 2 - genus := rfl
+
 theorem apm_t99j03 :
     ∀ (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
       [ConnectedSpace X] [ChartedSpace apm_t99J03_E2 X]
@@ -71,4 +77,28 @@ theorem apm_t99j03 :
       (∃! k : ℕ,
         0 < k ∧ Nonempty (X ≃ₜ apm_t99J03_Surface false k) ∧
         apm_t99J03_eulerCharacteristic false k = 2 - k) := by
-  sorry
+  intro X _ _ _ _ _ _
+  have hclassification :
+      (∃! g : ℕ, Nonempty (X ≃ₜ apm_t99J03_Surface true g)) ∨
+      (∃! k : ℕ, 0 < k ∧ Nonempty (X ≃ₜ apm_t99J03_Surface false k)) := by
+    /-
+    CLOSER HOP 1 boundary. The two Euler-characteristic equations are now
+    compiled definitional lemmas, and the final `simpa` below removes them
+    from both existence and uniqueness predicates. Thus the remaining bridge
+    is exactly the classification dichotomy with uniqueness of genus/crosscap
+    number for the concrete polygon quotients.
+
+    A proof must triangulate an arbitrary compact connected smooth surface,
+    cut it to a fundamental polygon, normalize the paired-edge word into
+    handle or crosscap form, construct the resulting homeomorphism to
+    `apm_t99J03_Surface`, and prove uniqueness (for example via orientability
+    and integral/mod-two homology). Searches of `LEMMA-INDEX.md`, all
+    `ConstructionTargets/`, classification and polygon-quotient siblings,
+    Mathlib's surface, triangulation, CW-complex, manifold, homology, and
+    quotient APIs, and git history found no packaged surface-classification
+    theorem or polygon-normal-form development. `ConstructionTargets.Surfaces`
+    provides another concrete quotient family and the same definitional Euler
+    formulas, but no theorem classifying arbitrary manifolds into it.
+    -/
+    sorry
+  simpa using hclassification
