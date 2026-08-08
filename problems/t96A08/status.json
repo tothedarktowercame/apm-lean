@@ -27,6 +27,8 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "complete",
+  "classification": "partial",
+  "closer_hop": 1,
+  "boundary": "A chosen-path potential is constructed from reachability and proved equal to the integral along every admissible path. Remaining work is the local chart calculus proving smoothness and mfderiv equal to the one-form.",
   "imported_at": "2026-05-01T19:38:18.441190Z"
 }

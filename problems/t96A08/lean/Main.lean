@@ -61,4 +61,27 @@ theorem apm_t96a08
         f p = apm_t96a08_LineIntegral I ω γ) ∧
       ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = ω p := by
-  sorry
+  classical
+  choose γ hγ using hreachable
+  refine ⟨fun p ↦ apm_t96a08_LineIntegral I ω (γ p), ?_, ?_⟩
+  · intro p δ hδ hδ0 hδ1
+    exact hindependent (γ p) δ (hγ p).1 hδ
+      (by rw [(hγ p).2.1, hδ0]) (by rw [(hγ p).2.2, hδ1])
+  · /-
+    CLOSER HOP 1 boundary. The potential is now constructed by classical
+    choice from `hreachable`, and its defining value for every admissible path
+    is proved from `hindependent`; well-definedness and endpoint bookkeeping
+    are compiled outside this `sorry`.
+
+    The remaining bridge is local calculus for the concrete line integral.
+    One must append a short chart-linear path to the chosen base path, prove
+    the concatenation piecewise smooth, split and reparameterize its integral,
+    and differentiate the short-segment integral with respect to its endpoint.
+    This must yield both `ContMDiff` and the exact `mfderiv = ω` equality.
+    Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, line-integral
+    siblings, Mathlib's manifold derivative, interval-integral, path
+    concatenation, tangent-bundle, and differential-form sources, and git
+    history found no manifold one-form fundamental theorem or compatible
+    piecewise-smooth concatenation API.
+    -/
+    sorry

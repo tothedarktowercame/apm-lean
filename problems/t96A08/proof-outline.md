@@ -1,5 +1,21 @@
 # Proof Outline: t96A08
 
+## Compiled progress
+
+Classical choice selects an admissible path from `base` to each point. The
+potential is defined as its concrete line integral, and `hindependent` proves
+that its value equals the integral along every other admissible path with the
+same endpoints. Thus existence and well-definedness of the potential are fully
+compiled.
+
+## Remaining Lean boundary
+
+Local chart calculus must prove the potential smooth and identify its
+manifold derivative with `ω`. This requires concatenating the chosen path with
+a short chart-linear segment, splitting and reparameterizing the integral, and
+differentiating the endpoint-dependent segment. No compatible manifold
+one-form fundamental theorem or piecewise-smooth concatenation API was found.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
