@@ -1,5 +1,18 @@
 # Proof Outline: t98J03
 
+## Closer hop 1 update
+
+Mathlib does provide a precise zero-sphere route that the imported notes
+missed: `isZero_singularHomologyFunctor_of_totallyDisconnectedSpace` gives all
+positive-degree vanishing, while
+`singularHomologyFunctorZeroOfTotallyDisconnectedSpace` computes `H₀` as the
+free module on the points. Applying these requires proving the concrete
+one-dimensional unit sphere is a discrete two-point space and normalizing its
+two-object coproduct to `ℤ × ℤ`. No comparable theorem exists for positive
+metric spheres: the searched library has neither cellular comparison,
+singular Mayer--Vietoris, nor suspension homology. The main theorem remains an
+honest partial with one `sorry` and an unchanged declaration.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
