@@ -105,6 +105,32 @@ def apm_t02a06_intersectionAntipodalEquiv
     apply Subtype.ext
     simp
 
+/-- The antipodal involution has no fixed point on the unit-sphere
+intersection. Thus every common point already supplies two distinct points. -/
+lemma apm_t02a06_intersectionAntipodal_ne
+    {normal₁ normal₂ : apm_t02a06_S2}
+    (x : apm_t02a06_intersection normal₁ normal₂) :
+    apm_t02a06_intersectionAntipodal x ≠ x := by
+  intro h
+  have hv : -(x.1 : EuclideanSpace ℝ (Fin 3)) = x.1 := by
+    exact congrArg (fun y : apm_t02a06_intersection normal₁ normal₂ =>
+      (y.1 : EuclideanSpace ℝ (Fin 3))) h
+  have hadd : (x.1 : EuclideanSpace ℝ (Fin 3)) + x.1 = 0 := by
+    calc
+      (x.1 : EuclideanSpace ℝ (Fin 3)) + x.1 = -x.1 + x.1 :=
+        congrArg (fun y : EuclideanSpace ℝ (Fin 3) => y + x.1) hv.symm
+      _ = 0 := neg_add_cancel _
+  have htwo : (2 : ℝ) • (x.1 : EuclideanSpace ℝ (Fin 3)) = 0 := by
+    simpa [two_smul ℝ] using hadd
+  have hx0 : (x.1 : EuclideanSpace ℝ (Fin 3)) = 0 := by
+    rcases smul_eq_zero.mp htwo with h2 | hx
+    · norm_num at h2
+    · exact hx
+  have hnorm : ‖(x.1 : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using x.1.property
+  rw [hx0, norm_zero] at hnorm
+  norm_num at hnorm
+
 /-- At a transverse common point, antipodal negation reverses the local
 intersection sign. -/
 lemma apm_t02a06_localSign_antipodal
@@ -196,5 +222,21 @@ theorem apm_t02a06 :
   packaged subtype-cardinality or normalization theorem. The two homology
   conjuncts remain unchanged: no sphere computation or Künneth bridge was
   found in the newly consulted sphere-product and torus artifacts.
+
+  CLOSER HOP 3: the antipodal pairing is now proved genuinely two-point at
+  every common intersection point. `apm_t02a06_intersectionAntipodal_ne`
+  proves the involution has no fixed point: equality with the antipode forces
+  the ambient Euclidean vector to be zero, contradicting its unit norm. Thus
+  existence of one intersection point automatically supplies a distinct
+  antipodal partner; only existence and exhaustiveness remain in the first
+  conjunct. Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`,
+  cross-product/projectivization lemmas, finite-dimensional orthogonal
+  complements, all problem artifacts, singular homology, and git history
+  found `mk_eq_mk_iff_crossProduct_eq_zero` and
+  `finrank_orthogonal_span_singleton`, but no compiled chain converting
+  inequality of these zero-set subtypes into nonproportional normals and then
+  classifying the common unit vectors. No metric-sphere homology computation
+  or Künneth theorem appeared. The exhaustiveness and both homological
+  conjuncts therefore remain open; the frozen statement is unchanged.
   -/
   sorry

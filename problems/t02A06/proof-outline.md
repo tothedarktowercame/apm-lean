@@ -12,6 +12,8 @@ cancellation are compiled using the pattern from sibling `t01A07`.
 - Opposite signs are proved to make the `Fin 2` signed sum vanish.
 - Antipodal negation is proved to preserve the common great-circle
   intersection and is bundled as an involutive equivalence.
+- The antipodal involution is proved fixed-point-free, so every intersection
+  point supplies a distinct paired point.
 - At every transverse intersection point, antipodal negation is proved to
   reverse the local sign.
 
