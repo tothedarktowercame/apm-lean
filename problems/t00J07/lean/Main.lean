@@ -78,6 +78,53 @@ lemma apm_t00j07_attach_glue (f : C(Circle, apm_t00j07_RP2)) (z : Circle) :
   exact Quotient.sound
     (Relation.EqvGen.rel _ _ (apm_t00j07_attachRel.glue z))
 
+/-- The generated attaching relation never moves the interior disk center. -/
+lemma apm_t00j07_center_eqvGen_iff
+    (f : C(Circle, apm_t00j07_RP2))
+    (s : Sum apm_t00j07_RP2 apm_t00j07_Disk) :
+    Relation.EqvGen (apm_t00j07_attachRel f)
+        (.inr apm_t00j07_diskCenter) s ↔
+      s = .inr apm_t00j07_diskCenter := by
+  constructor
+  · intro h
+    have preserve : ∀ a b,
+        apm_t00j07_attachRel f a b →
+        (a = .inr apm_t00j07_diskCenter ↔
+          b = .inr apm_t00j07_diskCenter) := by
+      intro a b hab
+      cases hab with
+      | glue z =>
+          constructor
+          · intro h
+            cases h
+          · intro h
+            exact False.elim
+              (apm_t00j07_diskCenter_ne_boundary z (Sum.inr.inj h.symm))
+    have invariant : ∀ a b,
+        Relation.EqvGen (apm_t00j07_attachRel f) a b →
+        (a = .inr apm_t00j07_diskCenter ↔
+          b = .inr apm_t00j07_diskCenter) := by
+      intro a b hab
+      induction hab with
+      | rel a b hab => exact preserve a b hab
+      | refl => exact Iff.rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+    exact (invariant _ _ h).mp rfl
+  · rintro rfl
+    exact Relation.EqvGen.refl _
+
+/-- Consequently the quotient basepoint is not a point of the attached
+`RP²` summand. -/
+lemma apm_t00j07_basepoint_ne_left
+    (f : C(Circle, apm_t00j07_RP2)) (p : apm_t00j07_RP2) :
+    apm_t00j07_basepoint f ≠
+      (Quotient.mk _ (.inl p) : apm_t00j07_attachDisk f) := by
+  intro h
+  have heq := Quotient.exact h
+  have hs := (apm_t00j07_center_eqvGen_iff f (.inl p)).mp heq
+  simp at hs
+
 abbrev apm_t00j07_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -126,5 +173,18 @@ theorem apm_t00j07 :
   a boundary point. These certify that the encoded disk really has a faithful
   attaching circle disjoint from its chosen center; they do not supply the
   missing van Kampen or cellular-homology computation.
+
+  Closer hop 3 pushes this separation through the quotient itself.
+  `apm_t00j07_center_eqvGen_iff` proves by induction on `Relation.EqvGen` that
+  the disk center's generated-equivalence class is a singleton: every glue
+  generator has an `RP²` point on one side and a norm-one boundary point on
+  the other, so neither endpoint is the center. Consequently
+  `apm_t00j07_basepoint_ne_left` proves that the chosen quotient basepoint is
+  distinct from every point of the attached `RP²` summand. This closes the
+  point-set basepoint separation that a future based van Kampen computation
+  would require. Renewed inspection of the categorical `TopCat` pushout,
+  relative-cell-complex, classical/abstract CW, and singular-homology sources
+  still found no theorem computing fundamental group or singular homology of
+  this concrete attachment, so the invariant bridge remains open.
   -/
   sorry

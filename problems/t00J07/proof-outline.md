@@ -15,6 +15,10 @@ quotient, its fundamental group, and integral singular homology.
   norm-one points.
 - `apm_t00j07_diskCenter_ne_boundary` proves the chosen disk-center basepoint
   is disjoint from the attaching circle before quotienting.
+- `apm_t00j07_center_eqvGen_iff` proves that the center remains a singleton
+  equivalence class under the generated attaching relation.
+- `apm_t00j07_basepoint_ne_left` therefore separates the quotient basepoint
+  from every point in the attached `RP²` summand.
 
 ## Remaining boundary
 
