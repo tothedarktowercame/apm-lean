@@ -5,10 +5,9 @@ import Mathlib
 
 We use Mathlib's genuine projectivization of `ℂ³`.  The fixed component and
 isolated fixed point are concrete subsets/points of that projectivization.
-The displayed determinants are those of `I - Dg` in the complex normal
-coordinate to the fixed line and in the two complex affine coordinates at the
-isolated point.  Their positivity gives local index `+1`; the fixed line has
-the two even-dimensional cells of `ℂP¹`, hence contribution two.
+The affine parametrizations below pin the local representatives of the
+projective map.  Thus the derivatives used for the local indices are derived
+from the actual map rather than supplied as unrelated matrices.
 
 ## Statement repairs
 
@@ -50,15 +49,45 @@ noncomputable def t97J07IsolatedPoint : T97J07CP2 :=
     have := congrFun h 2
     simp at this)
 
+/-- Affine coordinates normal to the fixed line, based at `[1:a:0]`. -/
+noncomputable def t97J07LineChart (a u : ℂ) : T97J07CP2 :=
+  Projectivization.mk ℂ ![1, a, u] (by
+    intro h
+    have := congrFun h 0
+    simp at this)
+
+/-- The local representative in the normal coordinate to the fixed line. -/
+def t97J07LineLocal (u : ℂ) : ℂ := 3 * u
+
+/-- Affine coordinates based at the isolated point `[0:0:1]`. -/
+noncomputable def t97J07PointChart (w : Fin 2 → ℂ) : T97J07CP2 :=
+  Projectivization.mk ℂ ![w 0, w 1, 1] (by
+    intro h
+    have := congrFun h 2
+    simp at this)
+
+/-- The local representative at `[0:0:1]`. -/
+noncomputable def t97J07PointLocal (w : Fin 2 → ℂ) : Fin 2 → ℂ :=
+  fun i ↦ w i / 3
+
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
         t97J07FixedLine ∪ {t97J07IsolatedPoint} ∧
     t97J07IsolatedPoint ∉ t97J07FixedLine ∧
-    (0 : ℝ) < Matrix.det !![(1 : ℝ) - 3, 0; 0, 1 - 3] ∧
-    (0 : ℝ) < Matrix.det !![(1 : ℝ) - 1 / 3, 0, 0, 0;
-      0, 1 - 1 / 3, 0, 0;
-      0, 0, 1 - 1 / 3, 0;
-      0, 0, 0, 1 - 1 / 3] ∧
+    (∀ a u : ℂ,
+      t97J07Map (t97J07LineChart a u) =
+        t97J07LineChart a (t97J07LineLocal u)) ∧
+    (∀ w : Fin 2 → ℂ,
+      t97J07Map (t97J07PointChart w) =
+        t97J07PointChart (t97J07PointLocal w)) ∧
+    fderiv ℂ t97J07LineLocal 0 1 = 3 ∧
+    (∀ i : Fin 2,
+      fderiv ℂ t97J07PointLocal 0 (Pi.single i 1) =
+        Pi.single i (1 / 3)) ∧
+    (0 : ℝ) < Complex.normSq (1 - fderiv ℂ t97J07LineLocal 0 1) ∧
+    (0 : ℝ) < Complex.normSq
+      ((1 - (fderiv ℂ t97J07PointLocal 0 (Pi.single 0 1)) 0) *
+       (1 - (fderiv ℂ t97J07PointLocal 0 (Pi.single 1 1)) 1)) ∧
     ((1 : ℤ) + 1 = 2) ∧
     ((2 : ℤ) + 1 = 3) := by
   sorry
