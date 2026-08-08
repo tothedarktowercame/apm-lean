@@ -135,5 +135,17 @@ theorem apm_b94j03 :
      `apm_b94J03_finiteField_conclusion` therefore closes the complete third
      conjunct: degree three, cardinality 343, and the requested bundled cyclic
      Galois-group equivalence.  Only the rational and real splitting-field
-     identifications remain. -/
-  sorry
+     identifications remain.
+
+     Closer hop 3 wires that finite-field helper into the frozen theorem, so
+     the sole sorry is now syntactically restricted to the first two
+     conjuncts.  Renewed inspection of `IsSplittingField.algEquiv`, real-closed
+     field APIs, cubic discriminants, and `AlgEquiv.autCongr` found the
+     uniqueness transport once a concrete model is proved, but no theorem
+     proving that `ℂ` is the splitting field of this real cubic or constructing
+     the rational `S₃` action. -/
+  refine ⟨?_, ?_, ?_⟩
+  rotate_left 2
+  intro hprime K
+  exact apm_b94J03_finiteField_conclusion K
+  all_goals sorry

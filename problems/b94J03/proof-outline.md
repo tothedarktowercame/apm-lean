@@ -18,6 +18,8 @@ consequences of the target degree are packaged as reusable lemmas.
   `finrank_of_isSplittingField_X_pow_sub_C` and `autEquivZmod`, closing the
   entire finite-field conjunct: degree three, cardinality 343, and the exact
   bundled cyclic Galois-group equivalence.
+- The main theorem now invokes `apm_b94J03_finiteField_conclusion` directly;
+  its sole sorry is restricted to the paired characteristic-zero clauses.
 
 ## Remaining bridge
 
