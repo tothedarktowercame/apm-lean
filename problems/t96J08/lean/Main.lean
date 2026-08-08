@@ -59,10 +59,78 @@ def apm_t96j08_paramTangentX (q : apm_t96j08_DiskPoint) : apm_t96j08_Point :=
 def apm_t96j08_paramTangentY (q : apm_t96j08_DiskPoint) : apm_t96j08_Point :=
   WithLp.toLp 2 ![0, 1, -(q 1) / Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2)]
 
+/-- Reflection of the parameter disk across the diagonal. -/
+def apm_t96j08_swap (q : apm_t96j08_DiskPoint) : apm_t96j08_DiskPoint :=
+  WithLp.toLp 2 ![q 1, q 0]
+
+/-- The coordinate swap as a volume-preserving linear isometry. -/
+def apm_t96j08_swapEquiv :
+    apm_t96j08_DiskPoint ≃ₗᵢ[ℝ] apm_t96j08_DiskPoint :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℝ ℝ (Equiv.swap (0 : Fin 2) 1)
+
+lemma apm_t96j08_swapEquiv_apply (q : apm_t96j08_DiskPoint) :
+    apm_t96j08_swapEquiv q = apm_t96j08_swap q := by
+  ext i
+  fin_cases i <;>
+    simp [apm_t96j08_swapEquiv, apm_t96j08_swap,
+      LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft']
+
+@[simp] lemma apm_t96j08_swap_zero (q : apm_t96j08_DiskPoint) :
+    apm_t96j08_swap q 0 = q 1 := by
+  simp [apm_t96j08_swap, Matrix.cons_val_zero]
+
+@[simp] lemma apm_t96j08_swap_one (q : apm_t96j08_DiskPoint) :
+    apm_t96j08_swap q 1 = q 0 := by
+  simp [apm_t96j08_swap, Matrix.cons_val_one]
+
+lemma apm_t96j08_singularTerm_swap (q : apm_t96j08_DiskPoint) :
+    ((apm_t96j08_swap q 0) ^ 2 - (apm_t96j08_swap q 1) ^ 2) /
+        Real.sqrt
+          (1 - (apm_t96j08_swap q 0) ^ 2 - (apm_t96j08_swap q 1) ^ 2) =
+      -(((q 0) ^ 2 - (q 1) ^ 2) /
+        Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2)) := by
+  simp
+  ring_nf
+
 def apm_t96j08_hemisphereIntegral : ℝ :=
   ∫ q : apm_t96j08_DiskPoint in Metric.closedBall 0 1,
     apm_t96j08_omega (apm_t96j08_upperHemisphere q)
       (apm_t96j08_paramTangentX q) (apm_t96j08_paramTangentY q)
+
+lemma apm_t96j08_pullback_eq (q : apm_t96j08_DiskPoint) :
+    apm_t96j08_omega (apm_t96j08_upperHemisphere q)
+        (apm_t96j08_paramTangentX q) (apm_t96j08_paramTangentY q) =
+      1 + Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2) +
+        ((q 0) ^ 2 - (q 1) ^ 2) /
+          Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2) := by
+  simp [apm_t96j08_omega, apm_t96j08_upperHemisphere,
+    apm_t96j08_paramTangentX, apm_t96j08_paramTangentY,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two]
+  ring
+
+lemma apm_t96j08_integral_singularTerm_eq_zero :
+    (∫ q : apm_t96j08_DiskPoint in Metric.closedBall 0 1,
+      ((q 0) ^ 2 - (q 1) ^ 2) /
+        Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2)) = 0 := by
+  let g : apm_t96j08_DiskPoint → ℝ := fun q ↦
+    ((q 0) ^ 2 - (q 1) ^ 2) /
+      Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2)
+  have hpre : apm_t96j08_swapEquiv ⁻¹' Metric.closedBall 0 1 =
+      Metric.closedBall (0 : apm_t96j08_DiskPoint) 1 := by
+    ext q
+    simp only [Set.mem_preimage, Metric.mem_closedBall, dist_zero_right,
+      LinearIsometryEquiv.norm_map]
+  have h := apm_t96j08_swapEquiv.measurePreserving.setIntegral_preimage_emb
+    apm_t96j08_swapEquiv.toMeasurableEquiv.measurableEmbedding g
+    (Metric.closedBall (0 : apm_t96j08_DiskPoint) 1)
+  rw [hpre] at h
+  have hswap : ∀ q, g (apm_t96j08_swapEquiv q) = -g q := by
+    intro q
+    rw [apm_t96j08_swapEquiv_apply]
+    exact apm_t96j08_singularTerm_swap q
+  simp_rw [hswap, MeasureTheory.integral_neg] at h
+  change (∫ q : apm_t96j08_DiskPoint in Metric.closedBall 0 1, g q) = 0
+  linarith
 
 /-- The coordinate exterior derivative is nonzero on the standard oriented
 basis. This is the direct obstruction to closedness. -/
@@ -102,5 +170,23 @@ theorem apm_t96j08 :
   formula or evaluating this singular boundary representative directly.
   Thus the exactness packaging and disk-integration bridges remain open; the
   frozen statement is unchanged.
+
+  CLOSER HOP 2: the pullback simplification and the full antisymmetric
+  cancellation now compile. `apm_t96j08_pullback_eq` proves the displayed
+  three-term coordinate identity exactly. `apm_t96j08_swapEquiv` realizes
+  coordinate exchange as a volume-preserving linear isometry of
+  `EuclideanSpace ℝ (Fin 2)`, and
+  `apm_t96j08_integral_singularTerm_eq_zero` uses Mathlib's
+  `MeasurePreserving.setIntegral_preimage_emb` to show that the singular last
+  term integrates to its own negative over the invariant closed disk, hence
+  to zero. This bypasses the missing Euclidean-to-complex polar transport for
+  the nonradial term.
+
+  Renewed consultation of `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling
+  `a01A07`, Mathlib's `LinearIsometryEquiv` Haar-measure API, radial integral
+  sources, exterior-derivative sources, and git history leaves two independent
+  bridges: evaluate the radial square-root disk integral as `2 * π / 3`, and
+  package the custom exactness predicate into the `extDeriv_extDeriv`
+  obstruction. The frozen statement remains unchanged.
   -/
   sorry

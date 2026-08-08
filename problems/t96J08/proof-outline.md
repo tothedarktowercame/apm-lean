@@ -1,5 +1,19 @@
 # Proof Outline: t96J08
 
+## Closer hop 2 update
+
+The parametrized pullback is now proved equal to the sum of the constant,
+radial square-root, and singular antisymmetric terms. Coordinate exchange is
+bundled as a volume-preserving linear isometry of `EuclideanSpace ℝ (Fin 2)`.
+Since it preserves the closed unit disk and negates the singular term, the
+change-of-variables theorem proves that term's set integral is zero.
+
+The remaining integral calculation is purely radial: prove that the disk
+integral of `sqrt (1-x²-y²)` is `2π/3`, then combine it with the disk area.
+The separate exactness conjunct still needs an identification of the custom
+`dOneForm` encoding with Mathlib's exterior derivative so that `d² = 0` can
+contradict the compiled nonclosedness witness.
+
 ## Closer hop 1 update
 
 The new Lean lemma `apm_t96j08_not_isClosed` proves the first conjunct by a
