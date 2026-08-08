@@ -84,6 +84,19 @@ private lemma apm_m00A02_counterexample_hasDerivAt (x : ℝ) :
   field_simp [Real.exp_ne_zero x]
   <;> ring
 
+/-- Why this unblocks `apm_m00a02`: this isolates the missing improper-FTC
+argument. Integrating the order-by-order expansion of `deriv f` from a large
+point to infinity forces its coefficients to be the termwise derivatives of
+the coefficients of `f`; coefficient uniqueness then yields the expansion
+required by the main theorem. -/
+theorem apm_m00A02_derivative_expansion_coefficients
+    {f : ℝ → ℝ} {a b : ℕ → ℝ}
+    (hf : Differentiable ℝ f)
+    (ha : apm_m00A02_hasExpansion f a)
+    (hb : apm_m00A02_hasExpansion (deriv f) b) :
+    b = apm_m00A02_derivativeCoefficients a := by
+  sorry
+
 theorem apm_m00a02 :
     apm_m00A02_hasExpansion (fun x : ℝ ↦ Real.exp (-x)) 0 ∧
     ContDiff ℝ ∞ apm_m00A02_counterexample ∧
