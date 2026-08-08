@@ -9,15 +9,17 @@ Imported source: `lean-proofs/a01J05`
 
 - `lean/Main.lean`
 
-## Closer hop 2
+## Closer hop 3
 
-The frozen theorem remains open. This hop compiled the local analytic
-consequences of the neighborhood hypothesis: `f` and `deriv f` are analytic
-at every point of the unit disk, and their analytic orders satisfy the exact
-pointwise derivative order-drop identity.
+The frozen theorem remains open. Hop 2 compiled the local analytic
+consequences and pointwise derivative order-drop identity. Hop 3 proves
+`apm_a01J05_exists_finiteDivisor_factorization`: the function factors on the
+closed unit disk into Mathlib's finite divisor product times an analytic
+zero-free remainder. The larger analytic neighborhood and unit boundary norm
+discharge the factorization theorem's hypotheses.
 
 The remaining global step is not a local multiplicity calculation. One must
-derive a finite Blaschke-product factorization from the unit boundary norm and
-the custom `tsum` zero count, then count the product's critical points in the
+upgrade this finite-divisor factorization to a reflected Blaschke-product
+factorization, relate the divisor finsum to the custom `tsum`, then count the product's critical points in the
 disk. The available argument-principle helper counts zeros of a single
 function but does not relate the total divisors of `f` and `deriv f`.
