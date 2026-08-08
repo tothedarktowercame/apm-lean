@@ -1,5 +1,17 @@
 # Proof Outline: t96A03
 
+## Closer hop 1
+
+The actual quotient layer now compiles.  The canonical projection is proved
+continuous, surjective, and a quotient map.  Its restrictions to both sphere
+summands are continuous and agree on the equator after applying the supplied
+homeomorphism.  These are precisely the cocone inputs for a future topological
+pushout or singular Mayer–Vietoris theorem.
+
+The homology conclusions remain open because Mathlib has neither singular
+Mayer–Vietoris nor cellular-to-singular comparison for this quotient.  The
+detailed searched boundary is recorded at the remaining `sorry`.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
