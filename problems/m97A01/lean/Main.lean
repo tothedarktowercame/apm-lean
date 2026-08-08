@@ -124,6 +124,16 @@ lemma apm_m97A01_modulusInclusion_apply
     (apm_m97A01_modulusInclusion B x).1 = B x := by
   rfl
 
+/-- Why this unblocks `apm_m97a01`: the polar isometry is already defined on
+the algebraic range of `B`; this dense-range statement is the exact hypothesis
+needed to extend it uniquely and continuously to `apm_m97A01_modulusRange B`,
+the closure of that range. -/
+theorem apm_m97A01_modulusInclusion_denseRange
+    {X : Type*} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
+    (B : X →L[ℂ] X) :
+    DenseRange (apm_m97A01_modulusInclusion B) := by
+  sorry
+
 theorem apm_m97a01
     (X : Type*) [NormedAddCommGroup X]
     [InnerProductSpace ℂ X] [CompleteSpace X]
