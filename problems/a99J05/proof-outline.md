@@ -140,3 +140,13 @@ that concludes `ae` convergence; wiring this up is the remaining blocker before 
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 The informal solution mirrors the Lean plan exactly: build the moving-indicator example for (a), then apply Chebyshev plus Borel–Cantelli for (b). Once the dyadic-interval enumeration and the “summable exceptional sets ⇒ ae convergence” lemma are formalized, the Lean code will match the prose line-for-line. EOF
+
+## Closer hop 3
+
+The second conjunct is fully compiled through Tonelli. For the first conjunct,
+this hop ports the diagonal stage/position definitions, proves stage cofinality,
+computes the exact integral of each moving cell, proves those integrals tend to
+zero, and establishes integrability for the restricted measure. The remaining
+gap is the floor-based cofinal cell-selection lemma. An orphaned historical
+proof was tested, but its nonlinear `Nat.pair` estimate and obsolete
+minimum/floor/division API calls do not compile in the current snapshot.
