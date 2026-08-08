@@ -62,6 +62,59 @@ lemma apm_a96J05_mem_iff_exists_Lp
     refine ⟨k, 0, ?_⟩
     simp
 
+lemma apm_a96J05_antitone_norm_le {p q : ℝ≥0∞} (hpq : p ≤ q)
+    (h : Lp ℝ q apm_a96J05_measure) (h' : Lp ℝ p apm_a96J05_measure)
+    (heq : (h' : AEEqFun ℝ ℝ apm_a96J05_measure) = h) :
+    ‖h'‖ ≤ ‖h‖ := by
+  letI : IsFiniteMeasure apm_a96J05_measure := by
+    unfold apm_a96J05_measure
+    infer_instance
+  letI : IsProbabilityMeasure apm_a96J05_measure := ⟨by
+    unfold apm_a96J05_measure
+    rw [Measure.restrict_apply_univ]
+    simp⟩
+  rw [Lp.norm_def, Lp.norm_def]
+  apply ENNReal.toReal_mono
+  · exact ne_of_lt h.prop
+  · rw [show eLpNorm h' p apm_a96J05_measure =
+        eLpNorm h p apm_a96J05_measure by rw [heq]]
+    exact eLpNorm_le_eLpNorm_of_exponent_le hpq (Lp.aestronglyMeasurable h)
+
+lemma apm_a96J05_norm_eq_Lp_norm {p q : ℝ≥0∞} (hp : 1 ≤ p) (hpq : p ≤ q)
+    (f : AEEqFun ℝ ℝ apm_a96J05_measure) (k : Lp ℝ p apm_a96J05_measure)
+    (hk : (k : AEEqFun ℝ ℝ apm_a96J05_measure) = f) :
+    apm_a96J05_norm p q f = ‖k‖ := by
+  letI : Fact (1 ≤ p) := ⟨hp⟩
+  letI : Fact (1 ≤ q) := ⟨hp.trans hpq⟩
+  letI : IsFiniteMeasure apm_a96J05_measure := by
+    unfold apm_a96J05_measure
+    infer_instance
+  let S : Set ℝ := {r | ∃ g : Lp ℝ p apm_a96J05_measure,
+    ∃ h : Lp ℝ q apm_a96J05_measure,
+      (g : AEEqFun ℝ ℝ apm_a96J05_measure) + h = f ∧ ‖g‖ + ‖h‖ = r}
+  have hSnonempty : S.Nonempty := by
+    refine ⟨‖k‖, k, 0, ?_, by simp⟩
+    simpa [hk]
+  have hSbdd : BddBelow S := by
+    refine ⟨0, ?_⟩
+    rintro r ⟨g, h, _, rfl⟩
+    exact add_nonneg (norm_nonneg g) (norm_nonneg h)
+  change sInf S = ‖k‖
+  apply le_antisymm
+  · apply csInf_le hSbdd
+    exact ⟨k, 0, by simpa [hk], by simp⟩
+  · apply le_csInf hSnonempty
+    rintro r ⟨g, h, hsum, rfl⟩
+    let h' : Lp ℝ p apm_a96J05_measure := ⟨h, Lp.antitone hpq h.prop⟩
+    have hkh : k = g + h' := by
+      apply Subtype.ext
+      exact hk.trans (hsum.symm.trans rfl)
+    rw [hkh]
+    calc
+      ‖g + h'‖ ≤ ‖g‖ + ‖h'‖ := norm_add_le _ _
+      _ ≤ ‖g‖ + ‖h‖ := add_le_add (le_refl _)
+        (apm_a96J05_antitone_norm_le hpq h h' rfl)
+
 theorem apm_a96j05 (p q : ℝ≥0∞) (hp : 1 ≤ p) (hpq : p < q) :
     let X := apm_a96J05_mem p q
     let N := apm_a96J05_norm p q
@@ -79,26 +132,72 @@ theorem apm_a96j05 (p q : ℝ≥0∞) (hp : 1 ≤ p) (hpq : p < q) :
       (∀ n, X (u n)) →
       (∀ ε > 0, ∃ k, ∀ m ≥ k, ∀ n ≥ k, N (u m - u n) < ε) →
       ∃ f, X f ∧ Tendsto (fun n => N (u n - f)) atTop (nhds 0)) := by
-  /-
-  CLOSER HOP 2 (2026-08-08): the compiled lemma
-  `apm_a96J05_mem_iff_exists_Lp` uses `Lp.antitone` and finiteness of the
-  restricted Lebesgue measure to identify the frozen sum space with `L^p`
-  itself.  This goes beyond the previous generic quotient observation and
-  removes the need to construct an antidiagonal quotient.
-
-  The remaining bridge is the isometry statement for the *literal* `sInf`:
-  prove `apm_a96J05_norm p q f = ‖k‖` whenever the `Lp p` element `k` coerces
-  to `f`.  The upper bound uses the decomposition `(k,0)`.  The lower bound
-  needs the finite-measure norm comparison `‖h_as_Lp_p‖ ≤ ‖h‖_q`; Mathlib's
-  `Lp.antitone` gives membership but is not a norm-nonincreasing bundled map,
-  so this comparison still requires the measure-one specialization of the
-  `eLpNorm` monotonicity theorem and coercion bookkeeping.  Once compiled,
-  definiteness, triangle inequality and completeness follow directly from
-  the normed complete space `Lp ℝ p`.
-
-  Searches covered `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's
-  `Lp.antitone`, `Lp` completeness and quotient APIs, git history, and related
-  artifacts `m95A04` and `m02J05`; none packages this exact `sInf` equality.
-  The frozen statement is unchanged and no unproved helper was introduced.
-  -/
-  sorry
+  dsimp only
+  have hpqle : p ≤ q := hpq.le
+  letI : Fact (1 ≤ p) := ⟨hp⟩
+  letI : Fact (1 ≤ q) := ⟨hp.trans hpqle⟩
+  have hmem := apm_a96J05_mem_iff_exists_Lp (p := p) (q := q) hpqle
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact (hmem 0).2 ⟨0, by simp⟩
+  · intro f g hf hg
+    obtain ⟨kf, hkf⟩ := (hmem f).1 hf
+    obtain ⟨kg, hkg⟩ := (hmem g).1 hg
+    exact (hmem (f + g)).2 ⟨kf + kg, by simpa [hkf, hkg]⟩
+  · intro c f hf
+    obtain ⟨k, hk⟩ := (hmem f).1 hf
+    apply (hmem (c • f)).2
+    refine ⟨c • k, ?_⟩
+    change c • (k : AEEqFun ℝ ℝ apm_a96J05_measure) = c • f
+    rw [hk]
+  · intro f hf
+    obtain ⟨k, hk⟩ := (hmem f).1 hf
+    rw [apm_a96J05_norm_eq_Lp_norm hp hpqle f k hk]
+    exact norm_nonneg k
+  · intro f hf
+    obtain ⟨k, hk⟩ := (hmem f).1 hf
+    rw [apm_a96J05_norm_eq_Lp_norm hp hpqle f k hk, norm_eq_zero]
+    constructor
+    · intro hk0
+      rw [← hk]
+      simp [hk0]
+    · intro hf0
+      apply Subtype.ext
+      simpa [hf0] using hk
+  · intro c f hf
+    obtain ⟨k, hk⟩ := (hmem f).1 hf
+    have hck : ((c • k : Lp ℝ p apm_a96J05_measure) :
+        AEEqFun ℝ ℝ apm_a96J05_measure) = c • f := by
+      change c • (k : AEEqFun ℝ ℝ apm_a96J05_measure) = c • f
+      rw [hk]
+    rw [apm_a96J05_norm_eq_Lp_norm hp hpqle f k hk,
+      apm_a96J05_norm_eq_Lp_norm hp hpqle (c • f) (c • k) hck,
+      norm_smul, Real.norm_eq_abs]
+  · intro f g hf hg
+    obtain ⟨kf, hkf⟩ := (hmem f).1 hf
+    obtain ⟨kg, hkg⟩ := (hmem g).1 hg
+    rw [apm_a96J05_norm_eq_Lp_norm hp hpqle f kf hkf,
+      apm_a96J05_norm_eq_Lp_norm hp hpqle g kg hkg,
+      apm_a96J05_norm_eq_Lp_norm hp hpqle (f + g) (kf + kg) (by simpa [hkf, hkg])]
+    exact norm_add_le _ _
+  · intro u hu hCauchy
+    choose v hv using fun n ↦ (hmem (u n)).1 (hu n)
+    have hvCauchy : CauchySeq v := by
+      rw [Metric.cauchySeq_iff]
+      intro ε hε
+      obtain ⟨k, hk⟩ := hCauchy ε hε
+      refine ⟨k, fun m hm n hn ↦ ?_⟩
+      have hcoe : ((v m - v n : Lp ℝ p apm_a96J05_measure) :
+          AEEqFun ℝ ℝ apm_a96J05_measure) = u m - u n := by
+        simpa [hv m, hv n]
+      simpa [dist_eq_norm,
+        apm_a96J05_norm_eq_Lp_norm hp hpqle (u m - u n) (v m - v n) hcoe]
+        using hk m hm n hn
+    obtain ⟨k, hk⟩ := cauchySeq_tendsto_of_complete hvCauchy
+    refine ⟨(k : AEEqFun ℝ ℝ apm_a96J05_measure),
+      (hmem k).2 ⟨k, rfl⟩, ?_⟩
+    have hnorm : Tendsto (fun n ↦ ‖v n - k‖) atTop (nhds 0) := by
+      simpa [dist_eq_norm] using (tendsto_iff_dist_tendsto_zero.1 hk)
+    convert hnorm using 1
+    funext n
+    apply apm_a96J05_norm_eq_Lp_norm hp hpqle
+    simpa [hv n]
