@@ -26,4 +26,4 @@ theorem apm_a97a04
     (hbounded : ∀ x : X, ∃ C : ℝ, ∀ n : ℕ, |f n x| ≤ C) :
     MeasurableSet {x : X |
       ∃ l : ℝ, Tendsto (fun n : ℕ ↦ f n x) atTop (nhds l)} := by
-  sorry
+  exact MeasureTheory.measurableSet_exists_tendsto hf

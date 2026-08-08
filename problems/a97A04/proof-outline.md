@@ -7,6 +7,15 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+The theorem closes directly with Mathlib's
+`MeasureTheory.measurableSet_exists_tendsto`, specialized to the measurable
+real-valued sequence and `atTop`. The library theorem internally implements
+the planned Cauchy characterization in a Polish codomain. The pointwise
+boundedness hypothesis is not needed, as anticipated in the source comments.
+The frozen statement is unchanged and the Lean proof is sorry-free.
+
 ## Imported Proof Plan
 
 ```clojure
