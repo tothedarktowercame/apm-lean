@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
+  "closer_hop": 2,
+  "boundary": "Both canonical polygon quotient maps are now explicit, continuous, and surjective, with representative generating-edge equalities compiled. Remaining invariant computations require cellular-to-singular comparison or topological Seifert-van Kampen, absent from Mathlib.",
   "imported_at": "2026-07-13T17:26:58.418369Z"
 }

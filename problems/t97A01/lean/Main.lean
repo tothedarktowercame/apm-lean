@@ -65,6 +65,37 @@ noncomputable instance : TopologicalSpace apm_t97a01_X :=
 noncomputable instance : TopologicalSpace apm_t97a01_TorusRP2 :=
   TopologicalSpace.coinduced (fun x : apm_t97a01_Disk ↦ Quotient.mk _ x) inferInstance
 
+def apm_t97a01_quotientX : apm_t97a01_Disk → apm_t97a01_X :=
+  fun x => Quotient.mk _ x
+
+def apm_t97a01_quotientTorusRP2 : apm_t97a01_Disk → apm_t97a01_TorusRP2 :=
+  fun x => Quotient.mk _ x
+
+lemma apm_t97a01_continuous_quotientX : Continuous apm_t97a01_quotientX := by
+  exact continuous_coinduced_rng
+
+lemma apm_t97a01_surjective_quotientX :
+    Function.Surjective apm_t97a01_quotientX := by
+  exact Quotient.mk_surjective
+
+lemma apm_t97a01_continuous_quotientTorusRP2 :
+    Continuous apm_t97a01_quotientTorusRP2 := by
+  exact continuous_coinduced_rng
+
+lemma apm_t97a01_surjective_quotientTorusRP2 :
+    Function.Surjective apm_t97a01_quotientTorusRP2 := by
+  exact Quotient.mk_surjective
+
+lemma apm_t97a01_quotientX_identifies_a (t : Set.Icc (0 : ℝ) 1) :
+    apm_t97a01_quotientX (apm_t97a01_edgePoint 0 t) =
+      apm_t97a01_quotientX (apm_t97a01_edgePoint 1 t) := by
+  exact Quotient.sound (Relation.EqvGen.rel _ _ (.a t))
+
+lemma apm_t97a01_quotientTorusRP2_identifies_c (t : Set.Icc (0 : ℝ) 1) :
+    apm_t97a01_quotientTorusRP2 (apm_t97a01_edgePoint 4 t) =
+      apm_t97a01_quotientTorusRP2 (apm_t97a01_edgePoint 5 t) := by
+  exact Quotient.sound (Relation.EqvGen.rel _ _ (.c t))
+
 abbrev apm_t97a01_H (k : ℕ) (Y : Type) [TopologicalSpace Y] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y))
@@ -105,5 +136,22 @@ theorem apm_t97a01 :
   this frozen theorem.  Closure requires developing one of those missing
   topology bridges, including continuity/quotient identifications for these
   concrete edge relations.
+
+  CLOSER HOP 2: the canonical polygon projections are now explicit as
+  `apm_t97a01_quotientX` and `apm_t97a01_quotientTorusRP2`; their continuity
+  and surjectivity are compiled from the coinduced topology. Representative
+  gluing equations are compiled in `apm_t97a01_quotientX_identifies_a` and
+  `apm_t97a01_quotientTorusRP2_identifies_c`, confirming that generating edge
+  relations become actual quotient equalities. These are the raw inputs a
+  future cellular comparison or van Kampen theorem would consume.
+
+  Going beyond the previous search, I compared the newer cocone layers in
+  `t02A03` and `t01J03` and inspected Mathlib's `IsQuotientMap` lifting APIs.
+  They prove continuity of descended relation-respecting maps but do not
+  compute singular homology or fundamental groups. The covering-quotient API
+  concerns properly discontinuous group actions, not these boundary-pairing
+  `EqvGen` relations. Thus all frozen invariant computations still require
+  cellular-to-singular comparison or topological van Kampen; the statement is
+  unchanged.
   -/
   sorry
