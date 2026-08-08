@@ -91,11 +91,49 @@ def apm_t00j01_fold (z : Circle) : Circle :=
 
 def apm_t00j01_foldLift (θ : ℝ) : ℝ := θ + 2 * Real.sin θ
 
+lemma apm_t00j01_fold_exp (θ : ℝ) :
+    apm_t00j01_fold (Circle.exp θ) =
+      Circle.exp (apm_t00j01_foldLift θ) := by
+  rw [apm_t00j01_fold, apm_t00j01_foldLift, Circle.exp_add]
+  congr 2
+  rw [Circle.coe_exp, Complex.exp_ofReal_mul_I_im]
+
+lemma apm_t00j01_hasDerivAt_foldLift (θ : ℝ) :
+    HasDerivAt apm_t00j01_foldLift (1 + 2 * Real.cos θ) θ := by
+  simpa [apm_t00j01_foldLift] using
+    (hasDerivAt_id θ).add ((Real.hasDerivAt_sin θ).const_mul 2)
+
+@[simp] lemma apm_t00j01_deriv_foldLift (θ : ℝ) :
+    deriv apm_t00j01_foldLift θ = 1 + 2 * Real.cos θ :=
+  (apm_t00j01_hasDerivAt_foldLift θ).deriv
+
 /-- For this explicit lift, regularity is nonvanishing of its derivative at
 every lift of a point in the fiber. -/
 def apm_t00j01_foldRegular (y : Circle) : Prop :=
   ∀ θ : ℝ, apm_t00j01_fold (Circle.exp θ) = y →
-    1 + 2 * Real.cos θ ≠ 0
+  1 + 2 * Real.cos θ ≠ 0
+
+lemma apm_t00j01_fold_continuous : Continuous apm_t00j01_fold := by
+  unfold apm_t00j01_fold
+  fun_prop
+
+/-- The evident preimage of `1` is regular. -/
+lemma apm_t00j01_fold_zero : apm_t00j01_fold (Circle.exp 0) = 1 := by
+  rw [apm_t00j01_fold_exp]
+  simp [apm_t00j01_foldLift]
+
+lemma apm_t00j01_fold_zero_deriv_ne : 1 + 2 * Real.cos 0 ≠ 0 := by
+  norm_num
+
+/-- The evident preimage of `exp π` is regular. -/
+lemma apm_t00j01_fold_pi :
+    apm_t00j01_fold (Circle.exp Real.pi) = Circle.exp Real.pi := by
+  rw [apm_t00j01_fold_exp]
+  simp [apm_t00j01_foldLift]
+
+lemma apm_t00j01_fold_pi_deriv_ne :
+    1 + 2 * Real.cos Real.pi ≠ 0 := by
+  norm_num
 
 theorem apm_t00j01 :
     (apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧
@@ -107,4 +145,27 @@ theorem apm_t00j01 :
       apm_t00j01_foldRegular 1 ∧
       Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} = 3 ∧
       Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1) := by
+  /-
+  CLOSER HOP 3 boundary. The frozen repair at commit `da7d3d2` replaced the
+  detached Lefschetz arithmetic by `t00J01HasSphereLefschetzNumber`, but also
+  removed the compatible circle helpers described by the earlier hop record.
+  This hop ports those facts to the repaired statement:
+  `apm_t00j01_fold_exp` identifies the circle fold with its real lift,
+  `apm_t00j01_hasDerivAt_foldLift` and `apm_t00j01_deriv_foldLift` compute the
+  derivative, and `apm_t00j01_fold_continuous` closes continuity. Going beyond
+  restoration, `apm_t00j01_fold_zero` and `apm_t00j01_fold_pi` exhibit the
+  evident points of the two target fibers, while the corresponding `_deriv_ne`
+  lemmas prove both are regular preimages.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, related Klein,
+  Lefschetz, circle-covering, and sphere artifacts, Mathlib's circle
+  exponential/root APIs, singular homology, quotient/manifold sources, and git
+  history found no packaged exact root count for `θ + 2 sin θ` modulo `2π`,
+  no singular-homology computation for this metric `S²`, and no theorem making
+  the concrete coinduced Klein quotient a compact 2-manifold. The remaining
+  circle proof needs a fundamental-interval root classification with
+  monotonicity split at `cos θ = -1/2`; the topology conjuncts require the
+  independent missing quotient-manifold and homology infrastructure. The
+  theorem statement is unchanged.
+  -/
   sorry
