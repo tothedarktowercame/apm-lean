@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "notes": "Regular-distribution faithfulness and test-function derivative injectivity compile; explicit distributional integration by parts and weak-graph completeness remain."
+  "closer_hop": 4,
+  "notes": "The total integral of a test-function derivative now compiles from Mathlib's two improper-FTC endpoint lemmas. The three nonsmooth distribution identities and weak-graph completeness remain, and their exact Lean propositions are recorded at the sorry boundary."
 }

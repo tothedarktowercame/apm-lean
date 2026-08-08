@@ -99,6 +99,22 @@ lemma apm_m95A04_regular_iff_ae
     filter_upwards [hfg] with x hx
     rw [hx]
 
+/-- The integral of the derivative of a test function on the real line
+vanishes. This is the endpoint calculation needed to put the regular
+distribution associated to the constant function in the kernel of
+distributional differentiation. -/
+lemma apm_m95A04_integral_deriv_testFunction_eq_zero
+    (φ : apm_m95A04_Test) :
+    ∫ x : ℝ, deriv (φ : ℝ → ℝ) x = 0 := by
+  have hdiff : ContDiff ℝ 1 (φ : ℝ → ℝ) := φ.contDiff.of_le (by simp)
+  have hcompact : HasCompactSupport (φ : ℝ → ℝ) := φ.hasCompactSupport
+  have hint : Integrable (deriv (φ : ℝ → ℝ)) :=
+    hdiff.continuous_deriv le_rfl |>.integrable_of_hasCompactSupport hcompact.deriv
+  rw [← integral_add_compl measurableSet_Iic hint, compl_Iic]
+  rw [hcompact.integral_Iic_deriv_eq hdiff 0,
+    hcompact.integral_Ioi_deriv_eq hdiff 0]
+  ring
+
 theorem apm_m95a04
     (regular : (ℝ → ℝ) → apm_m95A04_Dist)
     (hregular : ∀ (f : ℝ → ℝ), LocallyIntegrable f volume →
@@ -158,5 +174,29 @@ theorem apm_m95a04
   `a96J05`), but transferring it to `W` requires proving that the custom
   weak-derivative graph is closed and building a norm-compatible equivalence;
   no searched sibling or construction target supplies that bridge.
+
+  Hop 4 reduces the missing analytic content to these exact propositions:
+
+    `∀ φ : apm_m95A04_Test,
+      -(∫ x : ℝ, |x| * deriv (φ : ℝ → ℝ) x) =
+        ∫ x : ℝ, (SignType.sign x : ℝ) * φ x`,
+
+    `∀ φ : apm_m95A04_Test,
+      -(∫ x : ℝ, (SignType.sign x : ℝ) * deriv (φ : ℝ → ℝ) x) =
+        2 * φ 0`,
+
+    `∀ (lam : ℝ) (φ : apm_m95A04_Test),
+      -(∫ x in Set.Ioi (0 : ℝ),
+          Real.exp (-lam * x) * deriv (φ : ℝ → ℝ) x) +
+        lam * (∫ x in Set.Ioi (0 : ℝ), Real.exp (-lam * x) * φ x) = φ 0`.
+
+  The exact remaining functional-analytic statement is
+  `Nonempty (CompleteSpace W)` under `Fact (1 ≤ p)`, `p ≠ ⊤`, `hW_graph`,
+  `hW_exact`, and `hW_norm` above. It amounts to closedness of
+  `apm_m95A04_weakDeriv` in `Lp × Lp`, followed by transport of completeness
+  across the norm-preserving graph equivalence. The locally proved
+  `apm_m95A04_integral_deriv_testFunction_eq_zero` closes the independent
+  total-derivative endpoint calculation but does not imply these four
+  statements.
   -/
   sorry
