@@ -120,6 +120,45 @@ lemma apm_t00a03_parallel_of_range_subset_component
   exact apm_t00a03_parallel_of_range_subset_cut curves hmax c hc hessential
     (hcomponent.trans (connectedComponentIn_subset _ _))
 
+/-- The connected components indexed by points of the cut cover the entire
+cut-open surface. -/
+lemma apm_t00a03_iUnion_components_eq_cut {F : Type} [TopologicalSpace F]
+    {n : ℕ} (curves : Fin n → apm_t00a03_Curve F) :
+    (⋃ x : ↥(apm_t00a03_cut curves),
+      connectedComponentIn (apm_t00a03_cut curves) x) =
+        apm_t00a03_cut curves := by
+  apply Set.Subset.antisymm
+  · exact iUnion_subset fun x => connectedComponentIn_subset _ _
+  · intro x hx
+    exact mem_iUnion_of_mem (⟨x, hx⟩ : ↥(apm_t00a03_cut curves))
+      (mem_connectedComponentIn hx)
+
+/-- Two component sets of the cut that meet are equal. This supplies the
+partition compatibility needed for any future boundary-incidence count. -/
+lemma apm_t00a03_components_eq_of_inter_nonempty
+    {F : Type} [TopologicalSpace F] {n : ℕ}
+    (curves : Fin n → apm_t00a03_Curve F) {x y : F}
+    (hxy : (connectedComponentIn (apm_t00a03_cut curves) x ∩
+      connectedComponentIn (apm_t00a03_cut curves) y).Nonempty) :
+    connectedComponentIn (apm_t00a03_cut curves) x =
+      connectedComponentIn (apm_t00a03_cut curves) y := by
+  rcases hxy with ⟨z, hzx, hzy⟩
+  exact (connectedComponentIn_eq hzx).trans (connectedComponentIn_eq hzy).symm
+
+lemma apm_t00a03_components_eq_or_disjoint
+    {F : Type} [TopologicalSpace F] {n : ℕ}
+    (curves : Fin n → apm_t00a03_Curve F) (x y : F) :
+    connectedComponentIn (apm_t00a03_cut curves) x =
+        connectedComponentIn (apm_t00a03_cut curves) y ∨
+      Disjoint (connectedComponentIn (apm_t00a03_cut curves) x)
+        (connectedComponentIn (apm_t00a03_cut curves) y) := by
+  by_cases h : (connectedComponentIn (apm_t00a03_cut curves) x ∩
+      connectedComponentIn (apm_t00a03_cut curves) y).Nonempty
+  · exact Or.inl (apm_t00a03_components_eq_of_inter_nonempty curves h)
+  · right
+    rw [Set.disjoint_iff_inter_eq_empty]
+    exact not_nonempty_iff_eq_empty.mp h
+
 theorem apm_t00a03 :
     ∀ (g n : ℕ) (F : Type)
       [TopologicalSpace F] [T2Space F] [CompactSpace F]
@@ -173,5 +212,22 @@ theorem apm_t00a03 :
   `apm_t00a03_Pants`, nor connects the singular-homology genus hypothesis to
   Euler characteristic under cutting.  Consequently neither frozen conjunct
   can yet be completed without the same missing surface-topology development.
+
+  CLOSER HOP 3 packages the complementary-component decomposition needed by a
+  future classification and incidence argument. The compiled theorem
+  `apm_t00a03_iUnion_components_eq_cut` proves that components indexed by cut
+  points cover the whole complement. `apm_t00a03_components_eq_of_inter_nonempty`
+  and `apm_t00a03_components_eq_or_disjoint` prove that two such component
+  sets are equal whenever they meet, and otherwise disjoint. Combined with
+  hop 1's openness and hop 2's no-new-essential-curve consequence, the cut is
+  now formally available as an open partition into maximal connected pieces.
+
+  Renewed inspection of connected-component quotients, surface manifold
+  sources, singular homology, and Euler-characteristic APIs found no theorem
+  promoting these partition properties to a pants homeomorphism or assigning
+  finite component/boundary counts. Thus the remaining gap is still the
+  genuine compact-surface classification and Euler-characteristic-under-cutting
+  development; it cannot be discharged from the newly completed point-set
+  partition facts alone.
   -/
   sorry

@@ -17,6 +17,12 @@ The canonical Lean attempt is `lean/Main.lean`.
   circle lying in the complement is parallel to a selected curve.
 - `apm_t00a03_parallel_of_range_subset_component` specializes that statement
   to a single connected component using `connectedComponentIn_subset`.
+- `apm_t00a03_iUnion_components_eq_cut` proves that the component family
+  covers the entire cut-open complement.
+- `apm_t00a03_components_eq_of_inter_nonempty` and
+  `apm_t00a03_components_eq_or_disjoint` prove that these component sets form
+  a genuine partition: intersecting components coincide, otherwise they are
+  disjoint.
 
 ## Remaining boundary
 
