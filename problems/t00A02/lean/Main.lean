@@ -183,6 +183,16 @@ lemma apm_t00A02_coverWitness.not_regular
     ¬@apm_t00A02_isRegularCover w.E B w.topology _ w.p := by
   simpa using w.regularity
 
+/-- Why this unblocks `apm_t00a02`: together with
+`apm_t00A02_antipodalCover_fiber_card`, this is exactly the two-sheeted-cover
+conjunct.  Its missing mathematical content is the topological statement that
+the concrete `EqvGen` quotient map has evenly covered neighborhoods; the
+already-proved relation and fiber classifications supply no local
+trivializations. -/
+theorem apm_t00A02_bridge_antipodalCover_isCoveringMap :
+    IsCoveringMap apm_t00A02_antipodalCover := by
+  sorry
+
 theorem apm_t00a02 :
     (∀ (F E₁ E₂ : Type)
         [TopologicalSpace F] [T2Space F] [CompactSpace F]
