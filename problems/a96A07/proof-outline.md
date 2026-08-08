@@ -26,11 +26,22 @@ Show g maps Δ one-to-one onto the bounded domain D whose boundary is C = g(Γ).
     connected.
   - `apm_a96A07_isBounded_image_disk` proves it is bounded via the compact
     closed-disk image.
+  - `apm_a96A07_isOpen_image_disk` proves it is open directly from the complex
+    open-mapping theorem; boundary injectivity excludes the constant branch.
 - **Remaining blockers**:
   - **Jordan curve theorem**: injective continuous image of circle bounds a domain — not formalized
   - **Winding number = 1 for simple closed curves** — not formalized
   - Identification of the bounded complementary component with the image and
     proof of the exact frontier equality.
+
+## Closer Hop 3
+
+Openness no longer depends on Jordan separation. The analytic function is
+holomorphic on a slightly larger open ball, so Mathlib's open-mapping theorem
+applies; its constant alternative contradicts injectivity of the two boundary
+points `1` and `-1`. The final unresolved content is precisely the deep
+topological implication from an embedded boundary circle to winding number
+one, which is needed for interior injectivity and the exact frontier identity.
 
 ## References
 

@@ -28,7 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "classification_detail": "1 sorry remains. Connectedness and boundedness of the canonical disk image now compile. The shared blocker is the Jordan-curve/winding-number bridge from boundary injectivity to interior degree one, openness, and the exact frontier identity.",
+  "classification_detail": "1 sorry remains. Openness, connectedness, and boundedness of the canonical disk image now compile. The final blocker is the Jordan-curve/winding-number bridge from boundary injectivity to interior degree one, interior injectivity, and exact frontier identification.",
+  "closer_hop": 3,
   "imported_at": "2026-08-03T07:45:00Z",
   "checked_at": "2026-08-07",
   "checked_lean_state": {
