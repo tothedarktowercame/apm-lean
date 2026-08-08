@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Compiled that every affine coordinate slice is an isometry, isolating compact-support pullback through properness. The composite volume transport, Fubini assembly, and integration by parts remain open.",
   "imported_at": "2026-07-13T17:26:54.890807Z"
 }

@@ -20,3 +20,9 @@ line and every component of a test function.
 
 The ambient divergence and line-derivative integration-by-parts theorems do
 not apply directly across the discontinuity at `x = 0`.
+
+Closer hop 3 proves that each affine coordinate-line parametrization is an
+isometry. Consequently the missing slice-support result can be approached as
+compact-preimage transport along a proper embedding; the remaining work is
+to connect that fact to the explicit coordinate measure equivalences and
+Fubini.

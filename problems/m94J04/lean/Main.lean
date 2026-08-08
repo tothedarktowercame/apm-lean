@@ -99,6 +99,18 @@ lemma apm_m94J04_slice_hasDerivAt
       ((hasDerivAt_id r).smul_const (apm_m94J04_basis i)).const_add p
   exact hcoord.differentiableAt.hasFDerivAt.comp_hasDerivAt r hline
 
+/-- Every affine coordinate-line parametrization is an isometry.  In
+particular it is a proper embedding, which is the geometric input needed to
+pull compact test-function support back to one-dimensional slices. -/
+lemma apm_m94J04_sliceLine_isometry (p : apm_m94J04_E) (i : Fin 3) :
+    Isometry (fun s : ℝ ↦ p + s • apm_m94J04_basis i) := by
+  rw [isometry_iff_dist_eq]
+  intro s t
+  rw [dist_eq_norm, dist_eq_norm]
+  simp only [add_sub_add_left_eq_sub, ← sub_smul]
+  rw [norm_smul]
+  simp [apm_m94J04_basis, Real.norm_eq_abs]
+
 theorem apm_m94j04 :
     ∀ φ : TestFunction (⊤ : TopologicalSpace.Opens apm_m94J04_E)
       apm_m94J04_E ⊤,
@@ -169,5 +181,16 @@ theorem apm_m94j04 :
   compact support/integrability for almost every slice, apply one-dimensional
   integration by parts using the compiled derivative identity, and reassemble
   by Fubini. The frozen statement remains unchanged.
+
+  Closer hop 3 goes beyond the analytic slice identity by proving
+  `apm_m94J04_sliceLine_isometry`: every affine coordinate slice is an
+  isometric embedding of `ℝ` into `ℝ³`. This isolates the compact-support
+  transport as a compact-preimage consequence of properness, rather than a
+  coordinate norm estimate that must be reproved for each slice. A renewed
+  search of proper-map/compact-support and product-integral APIs found no
+  theorem combining that pullback with the two successive volume-preserving
+  coordinate equivalences and Fubini. Those measure transports and the final
+  one-dimensional integration-by-parts assembly remain open without adding
+  an unproved assertion.
   -/
   sorry
