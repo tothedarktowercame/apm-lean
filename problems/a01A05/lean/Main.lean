@@ -114,6 +114,32 @@ lemma apm_a01A05_inner_tendsto_zero
     exact subset_closure (Submodule.subset_span ⟨m, rfl⟩)⟩
   exact (K.inner_orthogonalProjection_eq_of_mem_right u g).symm
 
+/-- At index one, Gram--Schmidt subtracts only the projection onto the first
+unit vector. This isolates the finite calculation needed by the counterexample. -/
+lemma apm_a01A05_gramSchmidt_one
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (f : ℕ → H) (h0 : ‖f 0‖ = 1) :
+    InnerProductSpace.gramSchmidt ℝ f 1 =
+      f 1 - inner ℝ (f 0) (f 1) • f 0 := by
+  rw [InnerProductSpace.gramSchmidt_def]
+  rw [show Finset.Iio (1 : ℕ) = {0} by ext i; simp]
+  rw [Finset.sum_singleton]
+  have hg0 : InnerProductSpace.gramSchmidt ℝ f 0 = f 0 :=
+    InnerProductSpace.gramSchmidt_bot ℝ f
+  rw [hg0]
+  rw [Submodule.starProjection_singleton]
+  simp [h0]
+
+lemma apm_a01A05_gramSchmidtNormed_one
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (f : ℕ → H) (h0 : ‖f 0‖ = 1) :
+    InnerProductSpace.gramSchmidtNormed ℝ f 1 =
+      ‖f 1 - inner ℝ (f 0) (f 1) • f 0‖⁻¹ •
+        (f 1 - inner ℝ (f 0) (f 1) • f 0) := by
+  simp only [InnerProductSpace.gramSchmidtNormed,
+    apm_a01A05_gramSchmidt_one f h0]
+  norm_num
+
 theorem apm_a01a05 :
     (¬ ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
       (seq : apm_a01A05_NearOrthogonalSeq H) (m : ℕ),
@@ -124,8 +150,8 @@ theorem apm_a01a05 :
       Tendsto (fun m ↦ inner ℝ g (seq.f m)) atTop (nhds 0)) := by
   constructor
   · /-
-    Boundary (closer hop 1): the entire valid weak-convergence conjunct is now
-    closed by `apm_a01A05_inner_tendsto_zero`. The proof was recovered from
+    Boundary (closer hop 2): hop 1 closed the valid weak-convergence conjunct
+    with `apm_a01A05_inner_tendsto_zero`. The proof was recovered from
     repository history (`f4bf72c`) and revalidated against the frozen repaired
     statement. It first proves decay on the algebraic span using
     `Submodule.span_induction`, extends to the closed span using the unit-norm
@@ -139,14 +165,21 @@ theorem apm_a01a05 :
     exceptional first pair `e₀` and `(1/2)e₀ + (sqrt 3/2)e₁`, then continue
     with fresh coordinate vectors. Source inspection found `lp.single`,
     `lp.inner_single_left/right`, and the low-index expansion through
-    `gramSchmidt_def`/`gramSchmidt_bot`; assembling their norm, pairwise-bound,
-    and exact normalized Gram--Schmidt calculations remains open.
+    `gramSchmidt_def`/`gramSchmidt_bot`.
+
+    Going beyond that boundary, hop 2 proves the space-independent lemmas
+    `apm_a01A05_gramSchmidt_one` and
+    `apm_a01A05_gramSchmidtNormed_one`. They expand the raw and normalized
+    Gram--Schmidt vectors at index one under only `‖f 0‖ = 1`, reducing the
+    projection sum exactly to `f 1 - ⟪f 0, f 1⟫ • f 0`. The live bridge is
+    therefore only the infinite `lp.single` sequence's unit norms and
+    pairwise bounds, followed by the resulting square-root inequality.
 
     `LEMMA-INDEX.md` pointed to `a98A02`'s Bessel coefficient lemmas, but the
     recovered closed-span argument is more direct and was used instead. All
-    `ConstructionTargets/` modules are unrelated. Searches of prior solved
-    Gram--Schmidt artifacts, Mathlib's `lp` and Gram--Schmidt APIs, and git
-    history found no pre-bundled counterexample. The frozen statement is
+    `ConstructionTargets/` modules are unrelated. Renewed searches of prior
+    solved Gram--Schmidt artifacts, Mathlib's `lp` and Gram--Schmidt APIs, and
+    git history found no pre-bundled counterexample. The frozen statement is
     unchanged.
     -/
     sorry

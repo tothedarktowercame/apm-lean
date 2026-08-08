@@ -13,11 +13,17 @@
 
 ## Remaining counterexample
 
+The low-index Gram--Schmidt calculation is now compiled independently of the
+eventual Hilbert-space witness:
+
+- `apm_a01A05_gramSchmidt_one` computes the raw index-one vector as
+  `f 1 - ⟪f 0, f 1⟫ • f 0` when the first vector has norm one.
+- `apm_a01A05_gramSchmidtNormed_one` gives its exact normalized form.
+
 To prove the repaired negation, construct an infinite sequence in `ℓ²(ℕ,ℝ)`
 whose first vectors are `e₀` and `(1/2)e₀ + (sqrt 3/2)e₁`, followed by unused
-coordinate vectors. The pairwise bounds and unit norms are elementary. The
-remaining Lean work is expanding normalized Gram--Schmidt at index one and
-proving `sqrt (2 - sqrt 3) > 1/2`.
+coordinate vectors. The remaining Lean work is bundling the pairwise bounds
+and unit norms and proving `sqrt (2 - sqrt 3) > 1/2`.
 
 ## Problem
 
