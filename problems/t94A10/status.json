@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Strengthened the analytic side conditions to strict positivity and nonvanishing of the full cubed denominator appearing in the solid-angle form. Closedness still needs the exterior-derivative calculation; non-exactness needs sphere integration and Stokes infrastructure absent from Mathlib and the corpus.",
+  "closer_hop": 3,
+  "closer_note": "Identified the coordinate radial square with the Euclidean norm square and normalized the full denominator to one on the unit sphere. Closedness still needs the exterior-derivative calculation; non-exactness still needs sphere integration and Stokes infrastructure absent from Mathlib and the corpus.",
   "imported_at": "2026-07-13T17:26:57.948116Z"
 }

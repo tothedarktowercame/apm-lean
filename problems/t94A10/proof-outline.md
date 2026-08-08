@@ -13,6 +13,12 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 - `apm_t94a10_radial_denominator_pos` and
   `apm_t94a10_radial_denominator_ne_zero` strengthen this to the full cubed
   denominator used by the frozen formula.
+- `apm_t94a10_radial_sq_eq_norm_sq` reuses Mathlib's
+  `EuclideanSpace.real_norm_sq_eq` to identify the coordinate radial square
+  with `‖x‖ ^ 2`.
+- `apm_t94a10_radial_denominator_eq_one_of_norm_eq_one` consequently
+  normalizes the solid-angle denominator to one on the unit sphere, preparing
+  the still-missing period computation.
 - `apm_t94a10_ambientExtension_apply_of_isOmega` rewrites the arbitrary
   ambient extension to the frozen solid-angle formula at punctured points.
 

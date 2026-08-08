@@ -81,6 +81,23 @@ lemma apm_t94a10_radial_denominator_ne_zero (x : apm_t94a10_Punctured) :
     (Real.sqrt (x.1 0 ^ 2 + x.1 1 ^ 2 + x.1 2 ^ 2)) ^ 3 ≠ 0 :=
   ne_of_gt (apm_t94a10_radial_denominator_pos x)
 
+/-- Mathlib's Euclidean norm formula identifies the coordinate expression
+used by the solid-angle form with the squared ambient norm. -/
+lemma apm_t94a10_radial_sq_eq_norm_sq (x : apm_t94a10_E3) :
+    x 0 ^ 2 + x 1 ^ 2 + x 2 ^ 2 = ‖x‖ ^ 2 := by
+  rw [EuclideanSpace.real_norm_sq_eq]
+  simp [Fin.sum_univ_succ]
+  ring
+
+/-- Consequently the denominator of the solid-angle form restricts to one on
+the unit sphere.  This is the normalization needed by the sphere-period
+calculation in the remaining non-exactness argument. -/
+lemma apm_t94a10_radial_denominator_eq_one_of_norm_eq_one
+    (x : apm_t94a10_E3) (hx : ‖x‖ = 1) :
+    (Real.sqrt (x 0 ^ 2 + x 1 ^ 2 + x 2 ^ 2)) ^ 3 = 1 := by
+  rw [apm_t94a10_radial_sq_eq_norm_sq, hx]
+  norm_num
+
 /-- On the punctured space the arbitrary ambient extension reduces to the
 specified solid-angle formula. -/
 lemma apm_t94a10_ambientExtension_apply_of_isOmega
@@ -127,5 +144,14 @@ theorem apm_t94a10 (omega : apm_t94a10_Form 2)
   prove its exterior derivative vanishes, and (2) formalize the sphere period
   `4 * π` plus Stokes to exclude a global primitive.  The second step requires
   substantial integration infrastructure absent from the searched corpus.
+
+  Closer hop 3 uses Mathlib's `EuclideanSpace.real_norm_sq_eq` to compile
+  `apm_t94a10_radial_sq_eq_norm_sq`, identifying the frozen coordinate sum
+  with the squared Euclidean norm.  The derived lemma
+  `apm_t94a10_radial_denominator_eq_one_of_norm_eq_one` then normalizes the
+  complete denominator to one on the unit sphere.  This advances the period
+  branch beyond the previous quotient side conditions, but does not provide
+  the missing integration or Stokes theorem, so the global non-exactness
+  obstruction remains open and the frozen statement is unchanged.
   -/
   sorry
