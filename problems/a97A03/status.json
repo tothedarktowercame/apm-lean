@@ -28,5 +28,7 @@
     "has_receipt": true
   },
   "classification": "complete",
+  "closer_hop": 1,
+  "boundary": "Closed. A LipschitzOnWith witness gives the a.e. derivWithin bound after replacing Icc by the a.e.-equal Ioo. Conversely, the absolutely-continuous FTC and intervalIntegral.norm_integral_le_of_norm_le_const_ae integrate the restricted a.e. derivative bound on every subinterval.",
   "imported_at": "2026-05-01T19:38:17.049602Z"
 }

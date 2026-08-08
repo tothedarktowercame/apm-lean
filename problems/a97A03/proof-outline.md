@@ -1,5 +1,17 @@
 # Proof Outline: a97A03
 
+## Closer hop 1 completion
+
+The theorem is closed without changing its statement.  In the forward
+direction, the displayed difference estimate is bundled as
+`LipschitzOnWith`; after replacing `Icc a b` by the almost-everywhere equal
+open interval, `norm_deriv_le_of_lipschitzOn` bounds `derivWithin`.  In the
+reverse direction, the given restricted almost-everywhere bound is transferred
+to `deriv` away from the two null endpoints.  The absolute-continuity FTC
+`AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`, together with
+`intervalIntegral.norm_integral_le_of_norm_le_const_ae`, then gives the
+required estimate on every subinterval.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
