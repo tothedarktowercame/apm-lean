@@ -168,6 +168,36 @@ def apm_t01a04_torusCoverMap : C(apm_t01a04_TorusCover, apm_t01a04_X) := by
   simp [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverBase,
     apm_t01a04_torusCoverRaw, apm_t01a04_basepoint]
 
+/-- The first descended map is onto: torus representatives lift to either
+torus sheet, while circle representatives lift through circle squaring. -/
+lemma apm_t01a04_circleCoverMap_surjective :
+    Function.Surjective apm_t01a04_circleCoverMap := by
+  letI : NeZero (2 : ℕ) := ⟨by norm_num⟩
+  have hs : Function.Surjective (fun z : Circle ↦ z ^ 2) :=
+    (Circle.isQuotientCoveringMap_npow 2).surjective
+  intro x
+  refine Quotient.inductionOn x ?_
+  rintro (q | z)
+  · exact ⟨Quotient.mk _ (.inl (0, q)), rfl⟩
+  · rcases hs z with ⟨w, hw⟩
+    exact ⟨Quotient.mk _ (.inr w), by
+      simp [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw, hw]⟩
+
+/-- The second descended map is onto: its torus part lifts through squaring in
+the first coordinate, and either attached circle sheet lifts the circle part. -/
+lemma apm_t01a04_torusCoverMap_surjective :
+    Function.Surjective apm_t01a04_torusCoverMap := by
+  letI : NeZero (2 : ℕ) := ⟨by norm_num⟩
+  have hs : Function.Surjective (fun z : Circle ↦ z ^ 2) :=
+    (Circle.isQuotientCoveringMap_npow 2).surjective
+  intro x
+  refine Quotient.inductionOn x ?_
+  rintro (q | z)
+  · rcases hs q.1 with ⟨w, hw⟩
+    exact ⟨Quotient.mk _ (.inl (w, q.2)), by
+      simp [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw, hw]⟩
+  · exact ⟨Quotient.mk _ (.inr (0, z)), rfl⟩
+
 abbrev apm_t01a04_piOne := FundamentalGroup apm_t01a04_X apm_t01a04_basepoint
 
 theorem apm_t01a04 :
@@ -235,5 +265,20 @@ theorem apm_t01a04 :
   neighborhoods still found no theorem proving these descended maps are
   covering maps.  The van Kampen presentation, induced-range identification,
   and `H₂` distinction remain exactly as in hop 1.
+
+  CLOSER HOP 3: both descended quotient maps are now proved surjective.
+  `apm_t01a04_circleCoverMap_surjective` lifts torus representatives directly
+  and circle representatives through `Circle.isQuotientCoveringMap_npow 2`;
+  `apm_t01a04_torusCoverMap_surjective` uses the same theorem on the first
+  torus coordinate and lifts circle representatives directly to either sheet.
+  This closes another necessary covering-map field without assuming any
+  quotient-gluing theorem. Renewed searches of `LEMMA-INDEX.md`, every
+  `ConstructionTargets/` module, Mathlib's covering/quotient sources, all
+  problem artifacts, and git history found no result upgrading these
+  continuous surjections to covering maps. The only `VanKampen` namespace
+  results found are categorical colimit properties, not Seifert--van Kampen.
+  Consequently the local evenly-covered-neighborhood construction, the
+  fundamental-group presentation/range computation, and the singular `H₂`
+  distinction remain open; the frozen statement is unchanged.
   -/
   sorry

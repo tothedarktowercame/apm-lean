@@ -17,6 +17,9 @@ remain open.
   continuous maps from the two concrete quotient total spaces to the wedge.
   Their representative maps respect `Relation.EqvGen`, and both basepoint
   equations are proved.
+- `apm_t01a04_circleCoverMap_surjective` and
+  `apm_t01a04_torusCoverMap_surjective` prove both quotient maps are onto,
+  using the packaged surjectivity of circle squaring on the doubled pieces.
 
 ## Remaining boundary
 
