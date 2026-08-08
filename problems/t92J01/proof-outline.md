@@ -7,6 +7,14 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+The proof specializes Mathlib's `isPreconnected_iUnion`. The shared point
+witnesses nonemptiness of the intersection of every `C a`, while nonemptiness
+of the index type selects one member and hence witnesses nonemptiness of the
+whole union. Each connected member supplies the required preconnectedness.
+The frozen statement is unchanged and the result is sorry-free.
+
 ## Imported Proof Plan
 
 ```clojure

@@ -23,4 +23,7 @@ theorem apm_t92j01
     (hConn : ∀ a, IsConnected (C a))
     (hx : ∀ a, x ∈ C a) :
     IsConnected (⋃ a, C a) := by
-  sorry
+  refine ⟨?_, isPreconnected_iUnion ?_ fun a => (hConn a).isPreconnected⟩
+  · let a : A := Classical.choice inferInstance
+    exact ⟨x, Set.mem_iUnion.2 ⟨a, hx a⟩⟩
+  · exact ⟨x, Set.mem_iInter.2 hx⟩
