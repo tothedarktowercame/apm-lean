@@ -7,6 +7,20 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+`apm_a99J05_summable_l1Norm_of_geometric_bound` now proves that the geometric
+bound in the second conjunct makes the displayed `L¹` norms summable. The next
+step is the Tonelli argument, visible inside Mathlib's implementation of
+`MeasureTheory.integral_tsum`, which turns summability of the integrals into
+almost-everywhere pointwise summability of the norms and hence convergence to
+zero.
+
+The first conjunct still needs a formal typewriter sequence of shrinking
+indicator intervals visiting almost every point infinitely often. No solved
+sibling packages that dyadic enumeration. The main theorem remains partial
+with one `sorry`; its frozen statement is unchanged.
+
 ## Imported Proof Plan
 
 ```clojure
