@@ -11,10 +11,13 @@ The necessity direction of the test-function primitive criterion is complete.
 - A compactly supported smooth function has derivative integral zero on `ℝ`.
 - Therefore any test function represented pointwise as a test-function
   derivative has total integral zero.
+- `apm_m02j01_primitive_smooth` constructs the explicit interval-integral
+  primitive, proves it is globally smooth, and proves its derivative is the
+  original test function pointwise.
 
 ## Remaining bridge
 
-For a zero-integral test function, construct its compactly supported primitive
-and bundle it as a test function. To transpose this construction and prove
+For a zero-integral test function, prove the compiled smooth primitive vanishes
+on both tails, then bundle it as a test function. To transpose this construction and prove
 distributional surjectivity/kernel uniqueness, establish continuity of the
 primitive operator for Mathlib's LF test-function topology.

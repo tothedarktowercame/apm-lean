@@ -46,6 +46,26 @@ lemma apm_m02j01_integral_eq_zero_of_eq_deriv
       integral_congr_ae (Filter.Eventually.of_forall h)
     _ = 0 := apm_m02j01_integral_deriv_testFunction_eq_zero ψ
 
+/-- The ordinary interval-integral primitive of a test function is smooth and
+has the original function as its derivative. -/
+lemma apm_m02j01_primitive_smooth
+    (φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤) :
+    let P : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, φ t
+    ContDiff ℝ ∞ P ∧ ∀ x : ℝ, deriv P x = φ x := by
+  let P : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, φ t
+  have hderiv (x : ℝ) : HasDerivAt P (φ x) x := by
+    exact intervalIntegral.integral_hasDerivAt_right
+      (φ.contDiff.continuous.intervalIntegrable 0 x)
+      (φ.contDiff.continuous.stronglyMeasurableAtFilter volume (nhds x))
+      φ.contDiff.continuous.continuousAt
+  have hderiv_eq : deriv P = (φ : ℝ → ℝ) := by
+    funext x
+    exact (hderiv x).deriv
+  refine ⟨(contDiff_infty_iff_deriv.mpr ⟨?_, ?_⟩), fun x => congrFun hderiv_eq x⟩
+  · exact fun x => (hderiv x).differentiableAt
+  · rw [hderiv_eq]
+    exact φ.contDiff
+
 theorem apm_m02j01 :
     (∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤,
       (∫ x : ℝ, φ x) = 0 ↔
@@ -77,14 +97,21 @@ theorem apm_m02j01 :
   the pointwise derivative identity. Thus every test-function derivative now
   formally has total integral zero.
 
-  The reverse pointwise FTC and compact-support argument still requires
-  constructing and bundling the primitive as a `TestFunction`. Parts (b) and
-  (c) further require bundling that
+  Closer hop 2 now compiles the reverse FTC/smoothness component as
+  `apm_m02j01_primitive_smooth`: the explicit interval-integral primitive is
+  globally `C∞` and its derivative is pointwise equal to the original test
+  function. This uses `intervalIntegral.integral_hasDerivAt_right` and
+  `contDiff_infty_iff_deriv`, neither of which was exploited by hop 1.
+
+  The remaining function-level step is to use compact support and the
+  zero-total-integral hypothesis to show this primitive vanishes on both
+  tails, then bundle it as a `TestFunction`. Parts (b) and (c) further require
+  bundling that
   construction as a continuous linear map before it can be transposed to a
   `Distribution`; this bridge is not supplied by the abstract distribution
   derivative API. Renewed searches of `LEMMA-INDEX.md`, closed artifacts,
   `ConstructionTargets/`, `TestFunction`, and `Distribution` sources found no
   compiled sibling route or reusable LF-continuity theorem, and the
-  frozen statement was left unchanged.
+  frozen statement remains unchanged.
   -/
   sorry
