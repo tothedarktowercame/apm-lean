@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "informal-only",
+  "closer_hop": 2,
+  "closer_progress": "The normal-line derivative, determinant, index, and Lefschetz contribution are compiled. Remaining work is the projectivization fixed-set/chart equalities and the isolated-point coordinate derivative/determinant chain.",
   "imported_at": "2026-07-13T17:26:58.509785Z"
 }

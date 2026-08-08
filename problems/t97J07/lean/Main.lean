@@ -90,6 +90,24 @@ normal Lefschetz index. -/
 noncomputable def t97J07LineContribution : ℤ :=
   2 * t97J07IndexFromDet t97J07LineNormalDet
 
+/-- The normal derivative is the expected scalar multiplication. -/
+lemma t97J07LineLocal_fderiv :
+    fderiv ℂ t97J07LineLocal 0 1 = 3 := by
+  have h := ((hasFDerivAt_id (𝕜 := ℂ) (0 : ℂ)).const_mul (3 : ℂ)).fderiv
+  have h' := congrArg (fun L : ℂ →L[ℂ] ℂ => L 1) h
+  simpa [t97J07LineLocal] using h'
+
+lemma t97J07LineNormalDet_eq : t97J07LineNormalDet = 4 := by
+  rw [t97J07LineNormalDet, t97J07LineLocal_fderiv]
+  norm_num [Complex.normSq_apply]
+
+lemma t97J07LineIndex_eq :
+    t97J07IndexFromDet t97J07LineNormalDet = 1 := by
+  simp [t97J07IndexFromDet, t97J07LineNormalDet_eq]
+
+lemma t97J07LineContribution_eq : t97J07LineContribution = 2 := by
+  simp [t97J07LineContribution, t97J07LineIndex_eq]
+
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
         t97J07FixedLine ∪ {t97J07IsolatedPoint} ∧
@@ -110,4 +128,21 @@ theorem apm_t97j07 :
     t97J07IndexFromDet t97J07PointDet = 1 ∧
     t97J07LineContribution = 2 ∧
     t97J07LineContribution + t97J07IndexFromDet t97J07PointDet = 3 := by
+  /-
+  CLOSER HOP 2 boundary. The checked-in baseline contained only the theorem's
+  `sorry`, despite the dispatch excerpt describing prior boundary work. This
+  hop therefore establishes the computational normal-line chain directly.
+  `t97J07LineLocal_fderiv` proves the derivative of `u ↦ 3u` from
+  `HasFDerivAt.const_mul`; `t97J07LineNormalDet_eq` evaluates its real
+  determinant as four; and `t97J07LineIndex_eq` plus
+  `t97J07LineContribution_eq` close the corresponding index and contribution.
+
+  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, projectivization map
+  equality APIs, and related projective fixed-point artifacts found no helper
+  classifying fixed projective lines for this diagonal map. The remaining
+  bridge is the quotient/projectivization equality establishing the fixed set
+  and chart identities, together with the coordinatewise derivative of
+  `w ↦ w/3`, its determinant `16/81`, and the final arithmetic chain. The
+  frozen theorem statement is unchanged.
+  -/
   sorry
