@@ -72,6 +72,15 @@ lemma apm_t94a10_radial_sqrt_ne_zero (x : apm_t94a10_Punctured) :
     Real.sqrt (x.1 0 ^ 2 + x.1 1 ^ 2 + x.1 2 ^ 2) ≠ 0 :=
   ne_of_gt (Real.sqrt_pos.2 (apm_t94a10_radial_sq_pos x))
 
+/-- The complete cubed denominator of the solid-angle form is positive. -/
+lemma apm_t94a10_radial_denominator_pos (x : apm_t94a10_Punctured) :
+    0 < (Real.sqrt (x.1 0 ^ 2 + x.1 1 ^ 2 + x.1 2 ^ 2)) ^ 3 := by
+  exact pow_pos (Real.sqrt_pos.2 (apm_t94a10_radial_sq_pos x)) _
+
+lemma apm_t94a10_radial_denominator_ne_zero (x : apm_t94a10_Punctured) :
+    (Real.sqrt (x.1 0 ^ 2 + x.1 1 ^ 2 + x.1 2 ^ 2)) ^ 3 ≠ 0 :=
+  ne_of_gt (apm_t94a10_radial_denominator_pos x)
+
 /-- On the punctured space the arbitrary ambient extension reduces to the
 specified solid-angle formula. -/
 lemma apm_t94a10_ambientExtension_apply_of_isOmega
@@ -99,6 +108,12 @@ theorem apm_t94a10 (omega : apm_t94a10_Form 2)
   value of the ambient extension at the origin and exposes the exact formula
   to be differentiated.  These close the domain and division side conditions
   for a direct `extDeriv_apply` computation of closedness.
+
+  Closer hop 2 additionally proves strict positivity and nonvanishing of the
+  full cubed denominator in `apm_t94a10_radial_denominator_pos` and
+  `apm_t94a10_radial_denominator_ne_zero`. This is the exact quotient-rule
+  side condition, but it does not supply the alternating multilinear
+  derivative calculation or the global period/Stokes obstruction.
 
   Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, the completed corpus,
   Mathlib's differential-form sources, and git history found no reusable

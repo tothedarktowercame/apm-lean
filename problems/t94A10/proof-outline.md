@@ -10,6 +10,9 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 - `apm_t94a10_radial_sq_pos` proves the squared radius is positive away from
   the origin.
 - `apm_t94a10_radial_sqrt_ne_zero` discharges the denominator's nonvanishing.
+- `apm_t94a10_radial_denominator_pos` and
+  `apm_t94a10_radial_denominator_ne_zero` strengthen this to the full cubed
+  denominator used by the frozen formula.
 - `apm_t94a10_ambientExtension_apply_of_isOmega` rewrites the arbitrary
   ambient extension to the frozen solid-angle formula at punctured points.
 
