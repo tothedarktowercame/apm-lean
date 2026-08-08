@@ -32,5 +32,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "closer_progress": "Finite multiplicity aggregation is compiled: the enumeration preimage of any finite value set is finite, and its cardinality equals the finsum of analyticOrderNatAt over that set. Remaining work is the quantitative Jensen-to-linear-disk-count estimate and the dyadic-shell summability comparison.",
   "imported_at": "2026-05-01T19:52:19.168029Z"
 }

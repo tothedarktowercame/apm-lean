@@ -31,3 +31,19 @@ Imported source: `lean-proofs/a01J06`
    by `apm_a01J06_EnumeratesZeros`.
 3. Convert the linear disk count into summability of the weighted sequence by
    a dyadic-shell estimate and the geometric-series criterion for `α > 1`.
+
+## Closer Hop 3 Progress
+
+- `apm_a01J06_finite_preimage_of_enumeratesZeros` proves that indices mapping
+  into any finite set of complex values form a finite set.
+- `apm_a01J06_card_preimage_eq_finsum_analyticOrder` proves the exact finite
+  multiplicity identity
+  `Nat.card {n // ω n ∈ s} = ∑ᶠ z ∈ s, analyticOrderNatAt f z`.
+  It decomposes the preimage into pairwise-disjoint fibers and uses
+  `Set.Finite.ncard_biUnion` together with the frozen fiber-cardinality
+  hypothesis.
+
+Thus the abstract finite-fiber aggregation step is closed. The remaining
+divisor work is to extract its finite disk support and identify that support's
+mass with the Jensen/log-counting expression before proving the linear bound
+and dyadic summability estimate.

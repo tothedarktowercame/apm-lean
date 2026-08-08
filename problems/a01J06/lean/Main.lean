@@ -44,6 +44,46 @@ lemma apm_a01J06_apply_eq_zero_of_enumeratesZeros
   rw [← (hω (ω n)).2]
   exact Nat.ne_of_gt hcard
 
+/-- A multiplicity-preserving enumeration has only finitely many indices over
+any finite set of values. This is the finite-union step needed to compare
+ordinary disk counts with divisor mass. -/
+lemma apm_a01J06_finite_preimage_of_enumeratesZeros
+    {f : ℂ → ℂ} {ω : ℕ → ℂ}
+    (hω : apm_a01J06_EnumeratesZeros f ω)
+    {s : Set ℂ} (hs : s.Finite) :
+    {n : ℕ | ω n ∈ s}.Finite := by
+  have heq : {n : ℕ | ω n ∈ s} = ⋃ z ∈ s, {n : ℕ | ω n = z} := by
+    ext n
+    simp
+  rw [heq]
+  exact hs.biUnion fun z _ => Set.finite_coe_iff.mp (hω z).1
+
+/-- On a finite set of values, the enumeration count is exactly the sum of
+the analytic multiplicities. -/
+lemma apm_a01J06_card_preimage_eq_finsum_analyticOrder
+    {f : ℂ → ℂ} {ω : ℕ → ℂ}
+    (hω : apm_a01J06_EnumeratesZeros f ω)
+    {s : Set ℂ} (hs : s.Finite) :
+    Nat.card {n : ℕ // ω n ∈ s} =
+      ∑ᶠ z ∈ s, analyticOrderNatAt f z := by
+  have heq : {n : ℕ | ω n ∈ s} = ⋃ z ∈ s, {n : ℕ | ω n = z} := by
+    ext n
+    simp
+  change {n : ℕ | ω n ∈ s}.ncard = _
+  rw [heq]
+  have hc : (⋃ z ∈ s, {n : ℕ | ω n = z}).ncard =
+      ∑ᶠ z ∈ s, ({n : ℕ | ω n = z}).ncard := hs.ncard_biUnion
+    (fun z _ => Set.finite_coe_iff.mp (hω z).1) (by
+      intro z hz w hw hne
+      dsimp only [Function.onFun]
+      rw [Set.disjoint_left]
+      intro n hnz hnw
+      exact hne (hnz.symm.trans hnw))
+  rw [hc]
+  apply finsum_mem_congr rfl
+  intro z hz
+  simpa only [Nat.card_coe_set_eq] using (hω z).2
+
 theorem apm_a01j06 (f : ℂ → ℂ) (ω : ℕ → ℂ) (A B : ℝ)
     (hf_entire : Differentiable ℂ f)
     (hf_nonzero : f ≠ 0)
@@ -54,21 +94,28 @@ theorem apm_a01j06 (f : ℂ → ℂ) (ω : ℕ → ℂ) (A B : ℝ)
     ∀ α : ℝ, 1 < α →
       Summable (fun n : ℕ => Real.rpow (1 + ‖ω n‖) (-α)) := by
   /-
-  CLOSER HOP 2: Mathlib now contains Jensen's formula as
-  `MeromorphicOn.circleAverage_log_norm` and its divisor/log-counting
-  reformulation
-  `Function.locallyFinsuppWithin.logCounting_divisor_eq_circleAverage_sub_const`.
-  The prior repository artifact at commit `a8f8752` cannot be reused: its
-  `zeroCount` is definitionally zero and is not related to its `zeros`; the
-  artifact itself proves a counterexample to precisely that missing link.
+  CLOSER HOP 3 boundary. Going beyond the pointwise zero result, this hop
+  compiles the finite multiplicity aggregation needed to compare the sequence
+  with Mathlib's divisor. `apm_a01J06_finite_preimage_of_enumeratesZeros`
+  proves that the indices mapping into any finite value set form a finite set,
+  by expressing the preimage as a finite union of the fibers supplied by
+  `hω`. `apm_a01J06_card_preimage_eq_finsum_analyticOrder` then applies
+  `Set.Finite.ncard_biUnion` to the pairwise-disjoint fibers and proves the
+  exact identity
+  `card {n | ω n ∈ s} = ∑ z∈s, analyticOrderNatAt f z`.
 
-  The compiled lemma `apm_a01J06_apply_eq_zero_of_enumeratesZeros` above goes
-  beyond that artifact and proves the repaired fiber-cardinality hypothesis
-  sends every `ω n` to an actual zero.  The remaining bridge is quantitative:
-  derive a linear ordinary zero-count bound from the logarithmic Jensen
-  identity and the exponential bound, identify the finite divisor mass in a
-  disk with the sum of the finite fiber cardinalities supplied by `hω`, and
-  formalize the dyadic-shell comparison with the `α > 1` geometric series.
-  No statement defect was found.
+  Renewed searches consulted `LEMMA-INDEX.md`, all `ConstructionTargets/`
+  modules (especially `Rouche`), the historical defective zero-count artifact,
+  Mathlib's Jensen/log-counting, locally-finite divisor, set-cardinality,
+  finite-union, geometric-series, and summability sources, related zero-count
+  problems, and git history. The finite-union and `ncard_biUnion` APIs were
+  used above. No packaged theorem bounds ordinary divisor mass linearly from
+  the logarithmic Jensen identity, nor converts that bound directly to this
+  indexed `Real.rpow` series.
+
+  The remaining bridge is quantitative: identify the finite divisor support
+  inside each disk, apply the compiled aggregation identity, derive an `O(r)`
+  count from Jensen and the exponential bound, and complete the dyadic-shell
+  geometric comparison for `α > 1`. No statement defect was found.
   -/
   sorry
