@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "Globalized the gradient norm identity through the origin, proved measurability of both representatives for arbitrary measures, and reduced vector MemLp exactly to scalar radial MemLp. Radial integration and weak-gradient uniqueness remain.",
+  "closer_hop": 3,
+  "closer_note": "Used the reusable R3 radial-integration theorem to prove inverse-radius L2 membership on the three-dimensional unit ball and transfer it to the vector gradient. Logarithm integrability, weak-gradient integration by parts, dimension four, and dimension-two uniqueness remain.",
   "imported_at": "2026-07-13T17:26:54.732874Z"
 }

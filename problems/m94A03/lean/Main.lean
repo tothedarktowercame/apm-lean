@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.RadialIntegrationR3
 
 /-!
 # APM m94A03
@@ -74,6 +75,57 @@ lemma apm_m94a03_logNormGradient_memLp_iff {n : ℕ} {p : ℝ≥0∞}
     rw [apm_m94a03_norm_logNormGradient_all, Real.norm_eq_abs,
       abs_of_nonneg (inv_nonneg.mpr (norm_nonneg x))]
 
+/-- In dimension three the scalar inverse-radius singularity is square
+integrable on the unit ball. This specializes the repository's proved radial
+integration theorem; its radial density is simply the indicator of `(0,1)`. -/
+lemma apm_m94a03_invNorm_memLp_two_ball_fin_three :
+    MemLp (fun x : EuclideanSpace ℝ (Fin 3) => ‖x‖⁻¹) 2
+      (volume.restrict (Metric.ball 0 1)) := by
+  rw [← memLp_indicator_iff_restrict measurableSet_ball]
+  let g : ℝ → ℝ := fun r ↦ if 0 < r ∧ r < 1 then r⁻¹ else 0
+  have hfun :
+      (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 1).indicator
+          (fun x => ‖x‖⁻¹) =
+        fun x => g ‖x‖ := by
+    funext x
+    by_cases hx : x = 0
+    · subst x
+      simp [g]
+    · by_cases hball : x ∈ Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 1
+      · have hlt : ‖x‖ < 1 := by simpa [Metric.mem_ball] using hball
+        simp [Set.indicator_apply, hball, g, norm_pos_iff.mpr hx, hlt]
+      · have hnorm : ¬‖x‖ < 1 := by simpa [Metric.mem_ball] using hball
+        simp [Set.indicator_apply, hball, g, hnorm]
+  rw [hfun, ConstructionTargets.RadialIntegrationR3.memLp_radial_R3_iff]
+  · have hdensity :
+        (fun r : ℝ => r ^ 2 * ‖g r‖ ^ (2 : ℝ≥0∞).toReal) =
+          (Set.Ioo (0 : ℝ) 1).indicator (fun _ ↦ (1 : ℝ)) := by
+      funext r
+      by_cases hr0 : 0 < r
+      · by_cases hr1 : r < 1
+        · simp [g, hr0, hr1, Real.norm_eq_abs, abs_of_pos hr0]
+          field_simp
+        · simp [g, hr0, hr1]
+      · have hrI : r ∉ Set.Ioo (0 : ℝ) 1 := fun hr ↦ hr0 hr.1
+        simp [g, hr0, hrI]
+    rw [hdensity]
+    exact ((integrableOn_const (s := Set.Ioo (0 : ℝ) 1)
+      (measure_Ioo_lt_top.ne)).integrable_indicator
+      measurableSet_Ioo).integrableOn
+  · rw [← hfun]
+    exact (measurable_norm.inv.indicator measurableSet_ball).aestronglyMeasurable
+  · norm_num
+  · norm_num
+
+/-- Consequently the actual vector-valued classical gradient candidate is in
+`L²` on the three-dimensional unit ball. -/
+lemma apm_m94a03_logNormGradient_memLp_two_ball_fin_three :
+    MemLp (apm_m94a03_logNormGradient :
+      EuclideanSpace ℝ (Fin 3) → EuclideanSpace ℝ (Fin 3)) 2
+      (volume.restrict (Metric.ball 0 1)) := by
+  rw [apm_m94a03_logNormGradient_memLp_iff]
+  exact apm_m94a03_invNorm_memLp_two_ball_fin_three
+
 def apm_m94a03_IsWeakGradientOn {n : ℕ}
     (s : Set (EuclideanSpace ℝ (Fin n)))
     (f : EuclideanSpace ℝ (Fin n) → ℝ)
@@ -139,5 +191,22 @@ theorem apm_m94a03 :
   for the restricted unit ball. The remaining bridges are now the scalar
   radial integrals, punctured-ball integration by parts, and weak-gradient
   uniqueness in dimension two. The frozen statement is unchanged.
+
+  CLOSER HOP 3 (partial). The dimension-three gradient-integrability bridge
+  is now closed using the previously proved reusable module
+  `ConstructionTargets.RadialIntegrationR3`.
+  `apm_m94a03_invNorm_memLp_two_ball_fin_three` converts restriction to an
+  indicator, rewrites it as a radial profile, and applies
+  `memLp_radial_R3_iff`; its density is exactly the indicator of `(0,1)`.
+  `apm_m94a03_logNormGradient_memLp_two_ball_fin_three` transfers this scalar
+  result to the vector candidate via the hop-2 norm equivalence.
+
+  The three-dimensional positive conjunct still needs logarithm `L²`
+  integrability and the punctured-ball weak-gradient identity. Dimension four
+  lacks a corresponding compiled radial specialization, while dimension two
+  still needs weak-gradient uniqueness and inverse-radius nonintegrability.
+  The general `integral_fun_norm_addHaar` interface is a possible route, but
+  the distributional integration-by-parts bridge remains substantial. The
+  frozen statement is unchanged.
   -/
   sorry

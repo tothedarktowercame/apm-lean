@@ -15,11 +15,16 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
   measures.
 - `apm_m94a03_logNormGradient_memLp_iff` reduces all vector `Lᵖ` questions
   exactly to the scalar radial function `x ↦ ‖x‖⁻¹`.
+- `apm_m94a03_invNorm_memLp_two_ball_fin_three` proves inverse-radius `L²`
+  membership on the three-dimensional unit ball using the reusable radial
+  integration module.
+- `apm_m94a03_logNormGradient_memLp_two_ball_fin_three` transfers this to the
+  vector classical-gradient candidate.
 
 ## Remaining boundary
 
-- establish scalar radial `L²` integrability of `log ‖x‖` and `‖x‖⁻¹` in
-  dimensions three and four;
+- establish scalar radial `L²` integrability of `log ‖x‖` in dimension three,
+  and of both scalar functions in dimension four;
 - prove the weak-gradient identity using punctured balls and a vanishing inner
   boundary term;
 - in dimension two, prove uniqueness of weak gradients away from zero and use
