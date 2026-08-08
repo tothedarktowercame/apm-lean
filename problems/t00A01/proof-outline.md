@@ -10,12 +10,19 @@ cocone: `apm_t00A01_continuous_inl`, `apm_t00A01_continuous_inr`, and
 `apm_t00A01_inl_comp_iA_eq_inr_comp_iB` provide the two canonical maps and
 their boundary compatibility.
 
+Closer hop 3 proves the full mapping universal property of this concrete
+quotient. Compatible piece maps descend through `apm_t00A01_glueLift`, the
+lift computes on both canonical inclusions, continuity follows from continuity
+on each piece, and `apm_t00A01_glueLift_unique` proves uniqueness. Thus the
+point-set topological pushout layer is complete.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t00A01.md`
 
 ## Remaining boundary
 
-The main theorem remains open.  Its two conclusions require precisely:
+The main theorem remains open. Its quotient/pushout construction is now
+complete, but its two conclusions still require precisely:
 
 1. a Seifert--van Kampen theorem for the fundamental group of the supplied
    open cover, including basepoint/change-of-basepoint bookkeeping; and

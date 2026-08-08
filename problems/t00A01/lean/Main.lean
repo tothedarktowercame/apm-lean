@@ -95,6 +95,60 @@ lemma apm_t00A01_inl_comp_iA_eq_inr_comp_iB {A B : Type}
   funext s
   exact apm_t00A01_mk_inl_eq_mk_inr iA iB s
 
+/-- A compatible pair of maps from the two pieces descends to the glued
+quotient. This is the set-level universal map underlying the pushout. -/
+def apm_t00A01_glueLift {A B C : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (fA : A → C) (fB : B → C) (hcompat : fA ∘ iA = fB ∘ iB) :
+    apm_t00A01_connectedSum iA iB → C :=
+  Quotient.lift (Sum.elim fA fB) (by
+    intro x y hxy
+    induction hxy with
+    | rel x y h =>
+        cases h with
+        | glue s => exact congrFun hcompat s
+    | refl => rfl
+    | symm x y h ih => exact ih.symm
+    | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz)
+
+@[simp] lemma apm_t00A01_glueLift_inl {A B C : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (fA : A → C) (fB : B → C) (hcompat : fA ∘ iA = fB ∘ iB) (a : A) :
+    apm_t00A01_glueLift iA iB fA fB hcompat (apm_t00A01_inl iA iB a) = fA a :=
+  rfl
+
+@[simp] lemma apm_t00A01_glueLift_inr {A B C : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (fA : A → C) (fB : B → C) (hcompat : fA ∘ iA = fB ∘ iB) (b : B) :
+    apm_t00A01_glueLift iA iB fA fB hcompat (apm_t00A01_inr iA iB b) = fB b :=
+  rfl
+
+/-- The descended map is continuous whenever both piece maps are continuous. -/
+lemma apm_t00A01_continuous_glueLift {A B C : Type}
+    [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace C]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (fA : A → C) (fB : B → C) (hcompat : fA ∘ iA = fB ∘ iB)
+    (hfA : Continuous fA) (hfB : Continuous fB) :
+    Continuous (apm_t00A01_glueLift iA iB fA fB hcompat) := by
+  apply continuous_coinduced_dom.mpr
+  simpa [apm_t00A01_glueLift] using hfA.sumElim hfB
+
+/-- The descended map is the unique map having the prescribed restrictions to
+the two canonical pieces. -/
+lemma apm_t00A01_glueLift_unique {A B C : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (fA : A → C) (fB : B → C) (hcompat : fA ∘ iA = fB ∘ iB)
+    (g : apm_t00A01_connectedSum iA iB → C)
+    (hgA : g ∘ apm_t00A01_inl iA iB = fA)
+    (hgB : g ∘ apm_t00A01_inr iA iB = fB) :
+    g = apm_t00A01_glueLift iA iB fA fB hcompat := by
+  funext q
+  induction q using Quotient.inductionOn with
+  | _ z =>
+      cases z with
+      | inl a => exact congrFun hgA a
+      | inr b => exact congrFun hgB b
+
 abbrev apm_t00A01_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -163,5 +217,21 @@ theorem apm_t00a01
   still cannot replace either theorem-level bridge. The hypotheses deliberately expose exactly the
   geometric inputs, but proving either requested conclusion would require
   developing those two missing algebraic-topology theorems.
+
+  CLOSER HOP 3 goes beyond cocone compatibility and proves the full mapping
+  universal property of the concrete quotient. `apm_t00A01_glueLift`
+  descends every compatible pair of piece maps through `Relation.EqvGen`;
+  its two simp lemmas compute both restrictions;
+  `apm_t00A01_continuous_glueLift` proves the descended map continuous for
+  continuous piece maps; and `apm_t00A01_glueLift_unique` proves uniqueness.
+  Thus the quotient is now locally certified as the expected topological
+  pushout at the level of continuous maps, not merely as a cocone.
+
+  Renewed searches of Mathlib's `FundamentalGroupoid`, `TopCat` colimits, and
+  singular-homology functor sources found no theorem carrying this pushout
+  universal property to a fundamental-group coproduct or a homology long
+  exact sequence. Consequently the remaining boundary is exclusively the
+  invariant-preservation layer—Seifert--van Kampen and singular
+  Mayer--Vietoris—and remains honestly open.
   -/
   sorry
