@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 2,
-  "classification_detail": "The conductor universal bound and equality of contractions to every singleton adjoin compile; elementwise conductor and final intersection equalities remain.",
+  "classification": "complete",
+  "closer_hop": 3,
+  "classification_detail": "Sorry-free proof: the supremum conductor is identified with a concrete elementwise ideal; prime uniqueness and the final map/intersection/conductor equalities follow from singleton-adjoin contraction.",
   "imported_at": "2026-07-13T17:26:54.147607Z"
 }

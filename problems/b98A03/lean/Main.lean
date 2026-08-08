@@ -21,6 +21,50 @@ noncomputable section
 def apm_b98A03_conductor (R T : Type*) [CommRing R] [CommRing T] [Algebra R T] : Ideal T :=
   sSup {J : Ideal T | (J : Set T) ⊆ Set.range (algebraMap R T)}
 
+/-- The elementwise conductor, used to identify the lattice supremum with its
+classical description. -/
+def apm_b98A03_elementwiseConductor
+    (R T : Type*) [CommRing R] [CommRing T] [Algebra R T] : Ideal T where
+  carrier := {x | ∃ r : R,
+    (∀ t : T, algebraMap R T r * t ∈ Set.range (algebraMap R T)) ∧
+      algebraMap R T r = x}
+  zero_mem' := ⟨0, (fun _ => ⟨0, by simp⟩), by simp⟩
+  add_mem' := by
+    rintro x y ⟨r, hr, rfl⟩ ⟨s, hs, rfl⟩
+    refine ⟨r + s, ?_, by simp⟩
+    intro t
+    rcases hr t with ⟨a, ha⟩
+    rcases hs t with ⟨b, hb⟩
+    refine ⟨a + b, ?_⟩
+    simpa [add_mul, ha, hb]
+  smul_mem' := by
+    rintro c x ⟨r, hr, rfl⟩
+    rcases hr c with ⟨s, hs⟩
+    refine ⟨s, ?_, ?_⟩
+    · intro t
+      rcases hr (c * t) with ⟨a, ha⟩
+      refine ⟨a, ?_⟩
+      rw [hs]
+      simpa [mul_assoc] using ha
+    · simpa [mul_comm] using hs
+
+/-- The supremum definition of the conductor agrees with the elementwise
+description because the latter is itself the greatest eligible ideal. -/
+lemma apm_b98A03_conductor_eq_elementwise
+    (R T : Type*) [CommRing R] [CommRing T] [Algebra R T] :
+    apm_b98A03_conductor R T = apm_b98A03_elementwiseConductor R T := by
+  apply le_antisymm
+  · apply sSup_le
+    intro J hJ x hx
+    rcases hJ hx with ⟨r, hr⟩
+    refine ⟨r, ?_, hr⟩
+    intro t
+    rw [hr]
+    exact hJ (J.mul_mem_right t hx)
+  · apply le_sSup
+    rintro x ⟨r, -, rfl⟩
+    exact ⟨r, rfl⟩
+
 /-- The conductor supremum contains every ideal whose elements come from the
 base ring. -/
 lemma apm_b98A03_le_conductor
@@ -69,6 +113,111 @@ lemma apm_b98A03_comap_adjoin_singleton_eq
   simpa [Polynomial.aeval_def] using
     (apm_b98A03_eval₂_mem_iff_coeff_zero_mem R T P Q₁ hcomap₁ hu.1 p).trans
       (apm_b98A03_eval₂_mem_iff_coeff_zero_mem R T P Q₂ hcomap₂ hu.2 p).symm
+
+/-- An element of the conductor outside the prime below forces two primes
+lying above it to coincide. -/
+lemma apm_b98A03_eq_of_conductor_not_mem
+    (R T : Type*) [CommRing R] [CommRing T] [Algebra R T]
+    (P : Ideal R) (Q₁ Q₂ : Ideal T) (hQ₁ : Q₁.IsPrime) (hQ₂ : Q₂.IsPrime)
+    (hcomap₁ : Ideal.comap (algebraMap R T) Q₁ = P)
+    (hcomap₂ : Ideal.comap (algebraMap R T) Q₂ = P)
+    {r : R} (hrI : algebraMap R T r ∈ apm_b98A03_conductor R T)
+    (hrP : r ∉ P) : Q₁ = Q₂ := by
+  have hr : ∀ t : T, algebraMap R T r * t ∈ Set.range (algebraMap R T) := by
+    rw [apm_b98A03_conductor_eq_elementwise] at hrI
+    rcases hrI with ⟨s, hs, hsr⟩
+    intro t
+    simpa [hsr] using hs t
+  have hrQ₁ : algebraMap R T r ∉ Q₁ := by
+    intro h
+    apply hrP
+    rw [← hcomap₁]
+    exact h
+  have hrQ₂ : algebraMap R T r ∉ Q₂ := by
+    intro h
+    apply hrP
+    rw [← hcomap₂]
+    exact h
+  apply le_antisymm
+  · intro x hx
+    rcases hr x with ⟨s, hs⟩
+    have hsQ₁ : algebraMap R T s ∈ Q₁ := hs.symm ▸ Q₁.mul_mem_left _ hx
+    have hsP : s ∈ P := by
+      rw [← hcomap₁]
+      exact hsQ₁
+    have hsQ₂ : algebraMap R T s ∈ Q₂ := by
+      exact (show s ∈ Ideal.comap (algebraMap R T) Q₂ from hcomap₂.symm ▸ hsP)
+    have hprod : algebraMap R T r * x ∈ Q₂ := hs ▸ hsQ₂
+    exact (hQ₂.mem_or_mem hprod).resolve_left hrQ₂
+  · intro x hx
+    rcases hr x with ⟨s, hs⟩
+    have hsQ₂ : algebraMap R T s ∈ Q₂ := hs.symm ▸ Q₂.mul_mem_left _ hx
+    have hsP : s ∈ P := by
+      rw [← hcomap₂]
+      exact hsQ₂
+    have hsQ₁ : algebraMap R T s ∈ Q₁ := by
+      exact (show s ∈ Ideal.comap (algebraMap R T) Q₁ from hcomap₁.symm ▸ hsP)
+    have hprod : algebraMap R T r * x ∈ Q₁ := hs ▸ hsQ₁
+    exact (hQ₁.mem_or_mem hprod).resolve_left hrQ₁
+
+lemma apm_b98A03_intersection_subset_range
+    (R T : Type*) [CommRing R] [CommRing T] [Algebra R T]
+    (P : Ideal R) (Q₁ Q₂ : Ideal T)
+    (hcomap₁ : Ideal.comap (algebraMap R T) Q₁ = P)
+    (hcomap₂ : Ideal.comap (algebraMap R T) Q₂ = P)
+    (hsmall : ∀ S : Subalgebra R T,
+      Ideal.comap S.val Q₁ = Ideal.comap S.val Q₂ → S = ⊥) :
+    (Q₁ ⊓ Q₂ : Set T) ⊆ Set.range (algebraMap R T) := by
+  intro x hx
+  have hadjoin : Algebra.adjoin R {x} = ⊥ := hsmall _
+    (apm_b98A03_comap_adjoin_singleton_eq R T P Q₁ Q₂ hcomap₁ hcomap₂ hx)
+  rw [← Algebra.mem_bot, ← hadjoin]
+  exact Algebra.subset_adjoin (Set.mem_singleton x)
+
+lemma apm_b98A03_intersection_eq
+    (R T : Type*) [CommRing R] [CommRing T] [Algebra R T]
+    (P : Ideal R) (Q₁ Q₂ : Ideal T)
+    (hcomap₁ : Ideal.comap (algebraMap R T) Q₁ = P)
+    (hcomap₂ : Ideal.comap (algebraMap R T) Q₂ = P)
+    (hsmall : ∀ S : Subalgebra R T,
+      Ideal.comap S.val Q₁ = Ideal.comap S.val Q₂ → S = ⊥) :
+    Ideal.map (algebraMap R T) P = Q₁ ⊓ Q₂ := by
+  apply le_antisymm
+  · exact le_inf (Ideal.map_le_iff_le_comap.mpr (hcomap₁.ge))
+      (Ideal.map_le_iff_le_comap.mpr (hcomap₂.ge))
+  · intro x hx
+    have hxrange := apm_b98A03_intersection_subset_range R T P Q₁ Q₂
+      hcomap₁ hcomap₂ hsmall hx
+    rcases hxrange with ⟨r, rfl⟩
+    apply Ideal.mem_map_of_mem
+    rw [← hcomap₁]
+    exact hx.1
+
+lemma apm_b98A03_intersection_eq_conductor
+    (R T : Type*) [CommRing R] [CommRing T] [Algebra R T]
+    (P : Ideal R) (Q₁ Q₂ : Ideal T) (hne : Q₁ ≠ Q₂)
+    (hQ₁ : Q₁.IsPrime) (hQ₂ : Q₂.IsPrime)
+    (hcomap₁ : Ideal.comap (algebraMap R T) Q₁ = P)
+    (hcomap₂ : Ideal.comap (algebraMap R T) Q₂ = P)
+    (hsmall : ∀ S : Subalgebra R T,
+      Ideal.comap S.val Q₁ = Ideal.comap S.val Q₂ → S = ⊥)
+    (hmap : Ideal.map (algebraMap R T) P = Q₁ ⊓ Q₂) :
+    Q₁ ⊓ Q₂ = apm_b98A03_conductor R T := by
+  apply le_antisymm
+  · apply apm_b98A03_le_conductor
+    exact apm_b98A03_intersection_subset_range R T P Q₁ Q₂
+      hcomap₁ hcomap₂ hsmall
+  · intro x hx
+    rw [apm_b98A03_conductor_eq_elementwise] at hx
+    rcases hx with ⟨r, hr, rfl⟩
+    have hrP : r ∈ P := by
+      by_contra hrP
+      exact hne (apm_b98A03_eq_of_conductor_not_mem R T P Q₁ Q₂ hQ₁ hQ₂
+        hcomap₁ hcomap₂ (by
+          rw [apm_b98A03_conductor_eq_elementwise]
+          exact ⟨r, hr, rfl⟩) hrP)
+    rw [← hmap]
+    exact Ideal.mem_map_of_mem _ hrP
 
 theorem apm_b98a03 :
     ∀ (R T : Type*) [CommRing R] [CommRing T] [IsDomain R] [IsDomain T]
@@ -135,5 +284,29 @@ theorem apm_b98a03 :
   the elementwise characterization showing the ideal supremum itself stays in
   the algebra-map range, the conductor uniqueness implication, and the final
   map/intersection/conductor equalities.
+
+  Closer hop 3 constructs the classical elementwise conductor as an actual
+  ideal and proves it is the supremum defining `apm_b98A03_conductor`. This
+  closes the elementwise characterization without unpacking arbitrary
+  `sSup` membership. It then proves the prime-separation argument directly:
+  a conductor element outside `P` forces the two primes above `P` to coincide.
+  Finally, the singleton-adjoin contraction lemma shows every element of the
+  intersection comes from `R`; this gives both the map/intersection equality
+  and conductor equality. No external construction target is needed.
   -/
-  sorry
+  intro R T _ _ _ _ _ _ P Q₁ Q₂ hP hQ₁ hQ₂ hcomap₁ hcomap₂
+  dsimp only
+  refine ⟨?_, apm_b98A03_le_conductor R T, ?_, ?_, ?_, ?_⟩
+  · rw [apm_b98A03_conductor_eq_elementwise]
+    rfl
+  · rintro ⟨r, hrI, hrP⟩
+    exact apm_b98A03_eq_of_conductor_not_mem R T P Q₁ Q₂ hQ₁ hQ₂
+      hcomap₁ hcomap₂ hrI hrP
+  · intro Q _ hcomap u hu p
+    exact apm_b98A03_eval₂_mem_iff_coeff_zero_mem R T P Q hcomap hu p
+  · intro u hu
+    exact apm_b98A03_comap_adjoin_singleton_eq R T P Q₁ Q₂ hcomap₁ hcomap₂ hu
+  · intro hne hsmall
+    have hmap := apm_b98A03_intersection_eq R T P Q₁ Q₂ hcomap₁ hcomap₂ hsmall
+    exact ⟨hmap, apm_b98A03_intersection_eq_conductor R T P Q₁ Q₂ hne hQ₁ hQ₂
+      hcomap₁ hcomap₂ hsmall hmap⟩

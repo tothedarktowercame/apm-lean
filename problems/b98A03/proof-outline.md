@@ -1,7 +1,6 @@
 # Proof Outline: b98A03
 
-The frozen theorem has a compiling partial formalization in `lean/Main.lean`.
-The polynomial constant-term membership criterion is now proved in full.
+The frozen theorem has a complete, sorry-free formalization in `lean/Main.lean`.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b98A03.md`
@@ -14,9 +13,15 @@ The polynomial constant-term membership criterion is now proved in full.
 - Every eligible ideal lies below the conductor supremum.
 - If `u ∈ Q₁ ∩ Q₂`, the two contractions to `R[u]` are equal: represent each
   adjoin element by `aeval u p` and apply the constant-term criterion twice.
+- The elementwise conductor is constructed as an ideal and proved equal to the
+  supremum definition by its greatest-eligible-ideal property.
+- A conductor element represented by `r ∉ P` forces primes `Q₁` and `Q₂`
+  above `P` to coincide, using primality on the products `r * x`.
+- Under the minimal-subalgebra hypothesis, adjoining any element of `Q₁ ∩ Q₂`
+  gives the bottom subalgebra, so every such element lies in the algebra-map
+  range. This proves `map P = Q₁ ∩ Q₂`; prime separation then proves that
+  this intersection is the conductor.
 
 ## Remaining bridge
 
-Characterize the ideal supremum conductor elementwise, prove the conductor
-uniqueness implication, then transport the minimal-subalgebra hypothesis into
-the final equalities with `Ideal.map P`, `Q₁ ⊓ Q₂`, and the conductor.
+None.
