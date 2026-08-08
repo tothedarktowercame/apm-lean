@@ -2,23 +2,26 @@ import Mathlib
 import Mathlib.Topology.Constructions.SumProd
 
 /-!
-# APM t98A03
+# APM t98A03 — the wedge of a torus and the real projective plane
 
 ## Statement repairs
 
 The missing question mark in part (d) is treated as punctuation only; no
 mathematical repair is made.
 
+The former opaque predicates are replaced by native structure: a topological
+manifold is a Hausdorff space admitting a finite-dimensional Euclidean atlas,
+and a regular cover is an `IsCoveringMap` whose deck homeomorphisms act
+transitively on every fiber.
+
 ## Encoding questions
 
-Mathlib has no single dimension-generic predicate saying that a topological
-space is a manifold, nor a packaged predicate for a covering to be regular.
-Those two notions are isolated as typed opaque predicates. The torus,
-`ℝP²`, their genuine topological wedge quotient, its fundamental group, and
-the connected three-sheeted covering maps themselves remain explicit.
+The torus, `ℝP²`, their genuine topological wedge quotient, its fundamental
+group, and the connected three-sheeted covering maps are all explicit.
 -/
 
 open scoped LinearAlgebra.Projectivization
+open scoped Manifold
 
 noncomputable section
 
@@ -52,8 +55,13 @@ def apm_t98a03_basepoint
 abbrev apm_t98a03_expectedFundamentalGroup :=
   Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative (ZMod 2))
 
-opaque apm_t98a03_IsTopologicalManifold
-    (X : Type*) [TopologicalSpace X] : Prop
+def apm_t98a03_IsTopologicalManifold
+    (X : Type*) [TopologicalSpace X] : Prop :=
+  Nonempty (T2Space X) ∧
+    ∃ n : ℕ,
+      ∃ charts : ChartedSpace (EuclideanSpace ℝ (Fin n)) X,
+        let _ := charts
+        IsManifold (𝓘(ℝ, EuclideanSpace ℝ (Fin n))) 0 X
 
 structure apm_t98a03_Cover (X : Type*) [TopologicalSpace X] where
   total : Type
@@ -67,8 +75,13 @@ def apm_t98a03_IsConnectedThreeFoldCover
     Nonempty (ConnectedSpace C.total) ∧
     ∀ x : X, Nat.card {e : C.total // C.projection e = x} = 3
 
-opaque apm_t98a03_IsRegularCover
-    {X : Type*} [TopologicalSpace X] (C : apm_t98a03_Cover X) : Prop
+def apm_t98a03_IsRegularCover
+    {X : Type*} [TopologicalSpace X] (C : apm_t98a03_Cover X) : Prop :=
+  letI := C.topology
+  IsCoveringMap C.projection ∧
+    ∀ x y : C.total, C.projection x = C.projection y →
+      ∃ h : C.total ≃ₜ C.total,
+        (∀ z : C.total, C.projection (h z) = C.projection z) ∧ h x = y
 
 theorem apm_t98a03
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
