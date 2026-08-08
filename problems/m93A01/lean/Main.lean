@@ -70,6 +70,46 @@ lemma apm_m93A01_not_compact_of_separated_unit
   have hge := hsep (φ N) (φ (N + 1)) hne
   exact (not_lt_of_ge hge) (by simpa [Function.comp_apply] using hlt)
 
+/-- The same compactness obstruction with an arbitrary positive separation
+constant. This avoids an artificial normalization of the witnesses. -/
+lemma apm_m93A01_not_compact_of_pos_separated_unit
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    (A : E →L[ℂ] E) (u : ℕ → E) {δ : ℝ} (hδ : 0 < δ)
+    (hu : ∀ n, ‖u n‖ ≤ 1)
+    (hsep : ∀ n m, n ≠ m → δ ≤ dist (A (u n)) (A (u m))) :
+    ¬ IsCompactOperator A := by
+  intro hcompact
+  obtain ⟨K, hK, hAK⟩ := hcompact.image_closedBall_subset_compact 1
+  have hmem : ∀ n, A (u n) ∈ K := fun n ↦ hAK ⟨u n, by
+    simpa [Metric.mem_closedBall, dist_eq_norm] using hu n, rfl⟩
+  obtain ⟨x, hx, ψ, hψ, htend⟩ := hK.tendsto_subseq hmem
+  have hcauchy : CauchySeq (A ∘ u ∘ ψ) := htend.cauchySeq
+  obtain ⟨N, hN⟩ := (Metric.cauchySeq_iff.mp hcauchy) δ hδ
+  have hlt := hN N le_rfl (N + 1) (Nat.le_succ N)
+  have hne : ψ N ≠ ψ (N + 1) := ne_of_lt (hψ (Nat.lt_succ_self N))
+  exact (not_lt_of_ge (hsep (ψ N) (ψ (N + 1)) hne))
+    (by simpa [Function.comp_apply] using hlt)
+
+/-- The `H¹` derivative symbol is uniformly bounded below on the strictly
+positive integer frequencies. -/
+lemma apm_m93A01_circleDerivH1Coeff_lower (n : ℕ) :
+    (1 / 2 : ℝ) ≤ ‖apm_m93A01_circleDerivH1Coeff (n + 1)‖ := by
+  rw [apm_m93A01_circleDerivH1Coeff, norm_div, norm_mul, Complex.norm_I]
+  simp only [one_mul, Complex.norm_real, Real.norm_eq_abs,
+    abs_of_nonneg (Real.sqrt_nonneg _)]
+  have hn : (1 : ℝ) ≤ n + 1 := by norm_num
+  rw [norm_intCast_eq_abs_mul_norm_one ℂ, norm_one, mul_one,
+    abs_of_nonneg (by omega : (0 : ℤ) ≤ (n : ℤ) + 1)]
+  norm_num [Int.cast_add, Int.cast_natCast]
+  have hspos : 0 < Real.sqrt (1 + ((n : ℝ) + 1) ^ 2) := by positivity
+  rw [le_div_iff₀ hspos]
+  have hs : Real.sqrt (1 + ((n : ℝ) + 1) ^ 2) ≤ 2 * ((n : ℝ) + 1) := by
+    rw [Real.sqrt_le_iff]
+    constructor
+    · positivity
+    · nlinarith [sq_nonneg ((n : ℝ))]
+  linarith
+
 /-- The standard coordinate vectors in the Fourier `ℓ²` model are unit
 vectors.  This is the bounded sequence used for the derivative obstruction. -/
 lemma apm_m93A01_norm_single (n : ℤ) :
@@ -104,6 +144,33 @@ lemma apm_m93A01_norm_diagonal_single
     ‖A (lp.single 2 n (1 : ℂ))‖ = ‖c n‖ := by
   rw [apm_m93A01_diagonal_single A c hA n, norm_smul,
     apm_m93A01_norm_single, mul_one]
+
+/-- The `H¹` derivative multiplier is noncompact: positive-frequency unit
+coordinates stay uniformly separated.  Looking at just the first coordinate
+of each difference avoids any closed formula for the two-coordinate norm. -/
+lemma apm_m93A01_circleDerivH1_not_compact
+    (D1 : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z)
+    (hD1 : ∀ (f : apm_m93A01_l2Z) (n : ℤ),
+      D1 f n = apm_m93A01_circleDerivH1Coeff n * f n) :
+    ¬ IsCompactOperator D1 := by
+  apply apm_m93A01_not_compact_of_pos_separated_unit D1
+    (fun n ↦ lp.single 2 ((n : ℤ) + 1) (1 : ℂ)) (δ := 1 / 2) (by norm_num)
+  · intro n
+    rw [apm_m93A01_norm_single]
+  · intro n m hnm
+    rw [dist_eq_norm]
+    have hidx : (m : ℤ) + 1 ≠ (n : ℤ) + 1 := by
+      exact fun h ↦ hnm (by exact_mod_cast (add_right_cancel h).symm)
+    have hcoord := lp.norm_apply_le_norm (by norm_num : (2 : ENNReal) ≠ 0)
+      (D1 (lp.single 2 ((n : ℤ) + 1) (1 : ℂ)) -
+        D1 (lp.single 2 ((m : ℤ) + 1) (1 : ℂ))) ((n : ℤ) + 1)
+    change ‖D1 (lp.single 2 ((n : ℤ) + 1) (1 : ℂ)) ((n : ℤ) + 1) -
+      D1 (lp.single 2 ((m : ℤ) + 1) (1 : ℂ)) ((n : ℤ) + 1)‖ ≤ _ at hcoord
+    rw [hD1, hD1, lp.single_apply,
+      lp.single_apply_ne (E := fun _ : ℤ => ℂ) 2 ((m : ℤ) + 1) (1 : ℂ) hidx.symm]
+      at hcoord
+    simp at hcoord
+    exact (apm_m93A01_circleDerivH1Coeff_lower n).trans hcoord
 
 theorem apm_m93a01
     (ιS1 D1 D2 : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z)
@@ -165,5 +232,24 @@ theorem apm_m93a01
   artifacts found coordinate estimates but no packaged diagonal compactness
   or nonatomic multiplication-operator theorem. The frozen statement remains
   unchanged.
+
+  CLOSER HOP 3 (partial). The `D1` noncompactness bridge is now closed.
+  `apm_m93A01_not_compact_of_pos_separated_unit` generalizes the sequential
+  obstruction to any positive separation constant;
+  `apm_m93A01_circleDerivH1Coeff_lower` proves the symbol is at least `1/2`
+  on every strictly positive integer frequency; and
+  `apm_m93A01_circleDerivH1_not_compact` combines these with
+  `lp.norm_apply_le_norm`. Crucially, evaluating the image difference at one
+  selected coordinate avoids the previously open exact two-coordinate norm
+  formula.
+
+  The remaining three clauses are still open. Searches of Mathlib's compact-
+  operator closure and finite-rank APIs found no ready-made diagonal
+  multiplier criterion, so `ιS1` and `D2` still require explicit finite-rank
+  coordinate truncations with operator-norm tail bounds. The `ιR` clause still
+  requires constructing measurable normalized indicators on disjoint
+  positive-measure subsets and transporting the pinned a.e. identity through
+  quotient `Lp`. No `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling, or git-
+  history result supplies either bridge. The frozen statement is unchanged.
   -/
   sorry
