@@ -11,10 +11,14 @@ The frozen theorem has a compiling partial Lean development.
   `A†A` and proves positivity, its square identity, and uniqueness.
 - `apm_m97A01_modulus_norm` proves `‖|A|x‖ = ‖Ax‖`, completing every field of
   the frozen modulus predicate.
+- `apm_m97A01_polarOnRange` constructs the well-defined continuous range map
+  `|A|x ↦ Ax` using `LinearMap.compLeftInverse`.
+- Its application equation and exact norm preservation are proved by
+  `apm_m97A01_polarOnRange_apply` and `apm_m97A01_polarOnRange_norm`.
 
 ## Remaining boundary
 
-- extend the isometry `|A|x ↦ Ax` from the dense range into the stated
-  codomain without requiring dense codomain range, and prove uniqueness;
+- bundle `range |A| ↪ closure (range |A|)` as a dense uniform embedding and
+  apply `ContinuousLinearMap.extend`, preserving the isometry and uniqueness;
 - prove that the adjoint of a compact continuous linear operator on a Hilbert
   space is compact, either directly or through polar decomposition.

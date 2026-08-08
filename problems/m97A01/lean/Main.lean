@@ -83,6 +83,33 @@ lemma apm_m97A01_modulus_norm
     A.apply_norm_sq_eq_inner_adjoint_left]
   rw [hB.isSelfAdjoint.adjoint_eq, hB2]
 
+/-- The polar factor on the algebraic range of the modulus. Mathlib's
+`LinearMap.compLeftInverse` performs the quotient-by-kernel construction. -/
+noncomputable def apm_m97A01_polarOnRange
+    {X : Type*} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
+    (A B : X →L[ℂ] X) (hnorm : ∀ x : X, ‖B x‖ = ‖A x‖) :
+    LinearMap.range B.toLinearMap →L[ℂ] X :=
+  A.toLinearMap.compLeftInverse B.toLinearMap
+
+lemma apm_m97A01_polarOnRange_apply
+    {X : Type*} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
+    (A B : X →L[ℂ] X) (hnorm : ∀ x : X, ‖B x‖ = ‖A x‖) (x : X) :
+    apm_m97A01_polarOnRange A B hnorm ⟨B x, LinearMap.mem_range_self _ x⟩ = A x := by
+  apply LinearMap.compLeftInverse_apply_of_bdd
+  · exact ⟨1, fun z ↦ by simpa [hnorm z]⟩
+  · rfl
+
+/-- The algebraic-range polar factor is genuinely isometric. -/
+lemma apm_m97A01_polarOnRange_norm
+    {X : Type*} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
+    (A B : X →L[ℂ] X) (hnorm : ∀ x : X, ‖B x‖ = ‖A x‖)
+    (y : LinearMap.range B.toLinearMap) :
+    ‖apm_m97A01_polarOnRange A B hnorm y‖ = ‖y‖ := by
+  obtain ⟨x, hx⟩ := y.2
+  rw [show y = ⟨B x, LinearMap.mem_range_self _ x⟩ from Subtype.ext hx.symm]
+  rw [apm_m97A01_polarOnRange_apply]
+  simpa using (hnorm x).symm
+
 theorem apm_m97a01
     (X : Type*) [NormedAddCommGroup X]
     [InnerProductSpace ℂ X] [CompleteSpace X]
@@ -99,6 +126,15 @@ theorem apm_m97a01
   this lemma now supplies every field of `apm_m97A01_isModulus`; only the
   polar-factor extension remains in the first conjunct.
 
+  Closer hop 2 finds a previously missed range-factor primitive.
+  `apm_m97A01_polarOnRange` uses `LinearMap.compLeftInverse` to construct the
+  well-defined continuous map `B x ↦ A x` on the algebraic range of `B`; its
+  internal quotient-by-kernel construction is justified by the modulus norm
+  equality. `apm_m97A01_polarOnRange_apply` proves the generator equation and
+  `apm_m97A01_polarOnRange_norm` proves exact norm preservation on every range
+  element. Thus the polar isometry is now compiled on `range B`, and only its
+  dense continuous extension to `topologicalClosure (range B)` remains.
+
   PASS-1 PARTIAL boundary (codex): `apm_m97A01_modulus_core` constructs
   the modulus as `CFC.sqrt ((ContinuousLinearMap.adjoint A).comp A)` and
   proves its positivity, square identity, and uniqueness using
@@ -108,14 +144,15 @@ theorem apm_m97a01
   closed sibling artifacts, `ConstructionTargets/`, and `YoungL2.lean` did
   not locate either of the two remaining packaged Hilbert-space results:
 
-  * extension of the densely defined isometry `absA x ↦ A x` from the
-    closure of `range absA` with exactly the stated codomain and uniqueness;
+  * extension of the now-compiled algebraic-range isometry from `range absA`
+    to its topological closure, with the stated codomain and uniqueness;
   * compactness of `ContinuousLinearMap.adjoint A` from `IsCompactOperator A`.
 
-  `LinearEquiv.extendOfIsometry` was also checked, but requires dense range in
-  the target and therefore does not apply to the polar factor here.  Proving
-  both results locally would require a substantial Hilbert-space approximation
-  development beyond this pass's budget.  Renewed searches covered
+  `ContinuousLinearMap.extend` is now the relevant extension API: the remaining
+  local bookkeeping is to bundle the inclusion of the algebraic range into its
+  closure as a dense uniform embedding and transport norm preservation to the
+  extension. `LinearEquiv.extendOfIsometry` still requires dense target range
+  and does not apply directly. Renewed searches covered
   `LEMMA-INDEX.md`, Mathlib's compact-operator, adjoint, extension, projection,
   and compact spectral-theorem sources, `ConstructionTargets`, solved siblings,
   and git history.  No compact-adjoint theorem or codomain-nonsurjective
