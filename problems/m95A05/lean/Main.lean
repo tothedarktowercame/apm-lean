@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped NNReal
+
 /-!
 # APM m95A05: coercivity on a reflexive Banach space
 
@@ -47,6 +49,22 @@ lemma apm_m95a05_injective
   have : ‖x - y‖ = 0 := by nlinarith [norm_nonneg (x - y)]
   exact sub_eq_zero.mp (norm_eq_zero.mp this)
 
+/-- Coercivity makes the operator anti-Lipschitz, hence its range is closed
+when the domain is complete. -/
+lemma apm_m95a05_isClosed_range
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [CompleteSpace V]
+    (A : V →L[ℝ] StrongDual ℝ V) (c : ℝ) (hc : 0 < c)
+    (hcoercive : ∀ v : V, c * ‖v‖ ^ 2 ≤ A v v) :
+    IsClosed (Set.range A) := by
+  let cNN : ℝ≥0 := Real.toNNReal c⁻¹
+  have hanti : AntilipschitzWith cNN A := by
+    rw [antilipschitzWith_iff_le_mul_dist]
+    intro x y
+    change dist x y ≤ (cNN : ℝ) * dist (A x) (A y)
+    rw [Real.coe_toNNReal _ (inv_nonneg.mpr hc.le), le_inv_mul_iff₀ hc]
+    simpa [dist_eq_norm] using apm_m95a05_norm_le_apply A c hcoercive (x - y)
+  exact hanti.isClosed_range A.uniformContinuous
+
 theorem apm_m95a05
     (V : Type*) [NormedAddCommGroup V] [NormedSpace ℝ V] [CompleteSpace V]
     (hrefl : Function.Surjective (NormedSpace.inclusionInDoubleDual ℝ V))
@@ -61,18 +79,26 @@ theorem apm_m95a05
   and `apm_m95a05_injective` derives uniqueness.  Thus the quantitative lower
   bound and the entire uniqueness half of the theorem are closed.
 
-  The remaining existence argument is the closed-range/reflexivity route:
-  use the lower bound and completeness to prove `Set.range A` closed; if it is
-  proper, Hahn--Banach must produce a nonzero member of `V''` annihilating the
+  Closer hop 2 proves `apm_m95a05_isClosed_range`.  Recasting the coercive
+  estimate as an `AntilipschitzWith (Real.toNNReal c⁻¹) A` bound allows direct
+  application of `AntilipschitzWith.isClosed_range`; consequently the complete
+  closed-range step is now compiled rather than merely planned.
+
+  The remaining existence argument is now the separation/reflexivity route:
+  if the proved-closed range is proper, geometric Hahn--Banach must produce a
+  nonzero member of `V''` annihilating the
   range; use `hrefl` to write it as evaluation at `w : V`, and contradict
   coercivity by testing at `A w`.
 
   Searches of `LEMMA-INDEX.md`, `ConstructionTargets`, the closed-range Hilbert
   proof in `m96A03`, the dual-annihilator partial development in `m03J04`,
   Mathlib's Banach-operator, double-dual, and Hahn--Banach sources, and git
-  history found no packaged normed-Banach theorem producing the required
-  nonzero annihilator of an arbitrary proper closed range.  `m96A03` uses
-  Hilbert orthogonal complements and therefore does not apply to `StrongDual`.
+  history found no single packaged normed-Banach annihilator theorem.  A new
+  inspection of `Analysis.LocallyConvex.Separation` found
+  `geometric_hahn_banach_closed_point`, which supplies the separator but still
+  requires a local scaling argument showing it vanishes on the linear range,
+  followed by transport through `hrefl`. `m96A03` uses Hilbert orthogonal
+  complements and therefore does not apply directly to `StrongDual`.
 
   Original boundary:
   SKIPPED: Lax-Milgram theorem on reflexive Banach space.
