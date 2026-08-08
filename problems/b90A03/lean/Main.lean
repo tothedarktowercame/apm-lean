@@ -73,6 +73,27 @@ lemma apm_b90a03_exists_intermediateField
     have hpn_one : 1 < p ^ n := one_lt_pow₀ hp.one_lt (by omega)
     omega
 
+/-- Literal singleton equality transports to equality of the fixed fields of
+all Sylow subgroups.  This is the set-extensionality step left implicit in the
+previous hop. -/
+lemma apm_b90a03_fixedField_eq_of_degree_singleton
+    (K F : Type) [Field K] [Field F] [Algebra K F]
+    [FiniteDimensional K F] [IsGalois K F]
+    (p q n m : ℕ) (hp : p.Prime) (hq : q.Prime) (hpq : p ≠ q)
+    (hdegree : Module.finrank K F = p ^ n * q ^ m)
+    (L : IntermediateField K F)
+    (hunique : ({L' : IntermediateField K F |
+        Module.finrank (↥L') F = p ^ n} : Set (IntermediateField K F)) = {L})
+    (P : Sylow p Gal(F/K)) :
+    IntermediateField.fixedField (P : Subgroup Gal(F/K)) = L := by
+  have hmem : IntermediateField.fixedField (P : Subgroup Gal(F/K)) ∈
+      ({L' : IntermediateField K F |
+        Module.finrank (↥L') F = p ^ n} : Set (IntermediateField K F)) := by
+    rw [Set.mem_setOf_eq, IntermediateField.finrank_fixedField_eq_card]
+    exact apm_b90a03_sylow_card K F p q n m hp hq hpq hdegree P
+  rw [hunique] at hmem
+  exact Set.mem_singleton_iff.mp hmem
+
 theorem apm_b90a03
     (K F : Type) [Field K] [Field F] [Algebra K F]
     [FiniteDimensional K F] [IsGalois K F]
@@ -127,6 +148,14 @@ theorem apm_b90a03
      reduce to `p^n > 1`, `q^m > 1`, and the tower degree formula already
      present as `hdegree`.
 
-     The remaining universal equivalence still needs transporting literal
-     singleton equality through `intermediateFieldEquivSubgroup`. -/
+     Closer hop 3 now compiles the first literal-set transport as
+     `apm_b90a03_fixedField_eq_of_degree_singleton`: singleton equality forces
+     the fixed field of every Sylow subgroup to equal `L`.  The remaining
+     forward implication is to apply injectivity of the Galois correspondence
+     to deduce that all Sylow subgroups equal `L.fixingSubgroup`, hence that it
+     is normal.  The reverse implication requires installing the `Unique`
+     Sylow instance from normality and transporting it back to the literal set
+     equality. Searches of the correspondence, `OrderIso` image/preimage, and
+     Sylow uniqueness APIs found no declaration packaging this restricted
+     singleton equivalence. -/
   sorry

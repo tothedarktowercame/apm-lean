@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "classification_detail": "Closer hop 2 closes the full existential conjunct by taking the fixed field of a Sylow p-subgroup and proving it proper. One sorry remains for the universal singleton-degree-field iff Galois equivalence.",
+  "classification_detail": "Closer hop 2 closes the full existential conjunct. Closer hop 3 proves that literal singleton equality forces every Sylow fixed field to equal L. One sorry remains to transport this through injectivity/normality of the Galois correspondence and prove the reverse singleton implication.",
   "imported_at": "2026-07-13T17:26:53.664895Z"
 }

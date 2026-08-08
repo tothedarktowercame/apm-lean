@@ -16,6 +16,9 @@ deduces that every Sylow `p`-subgroup of `Gal(F/K)` has cardinality `p ^ n`.
   subgroup. `IntermediateField.finrank_fixedField_eq_card` gives relative
   degree `p ^ n`; tower finrank arithmetic and `n,m>1` prove it is neither
   bottom nor top. This closes the complete existential conjunct.
+- `apm_b90a03_fixedField_eq_of_degree_singleton` performs the literal-set
+  transport: singleton equality forces the fixed field of every Sylow
+  subgroup to equal the specified field `L`.
 
 ## Remaining bridge
 
