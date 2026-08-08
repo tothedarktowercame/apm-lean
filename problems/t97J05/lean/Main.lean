@@ -1,7 +1,7 @@
 import Mathlib
 
 /-!
-# APM t97J05
+# APM t97J05 — a regular fiber and its local normal form
 
 ## Statement repairs
 
@@ -9,24 +9,28 @@ Part (c) prints `φ` as a map from a neighborhood of the origin in `ℝ²`
 to a neighborhood of `p ∈ ℝ³`, but then evaluates it at `(x,y,z)`.
 Its domain is minimally corrected to a neighborhood of the origin in `ℝ³`.
 
+The former opaque submanifold predicate is replaced by an actual
+one-dimensional smooth manifold structure on the fiber subtype whose
+inclusion into `ℝ³` is both smooth and a topological embedding.
+
 ## Encoding questions
 
 Euclidean spaces are encoded as `EuclideanSpace ℝ (Fin n)`. The Jacobian
 is stated by its action on every tangent vector. The fiber is the actual
 preimage set, and its requested explicit local parameterization is a smooth
 bijection from `(1/2,3/2)` onto the corresponding neighborhood in the fiber.
-Mathlib lacks a general subset-level embedded-submanifold predicate, so only
-that predicate is isolated. Local diffeomorphisms are actual
-`LocalHomeomorph`s with smooth forward and inverse maps.
+Local diffeomorphisms are actual `LocalHomeomorph`s with smooth forward and
+inverse maps.
 -/
 
 open Set
-open scoped ContDiff
+open scoped ContDiff Manifold
 
 noncomputable section
 
 abbrev apm_t97J05_R3 := EuclideanSpace ℝ (Fin 3)
 abbrev apm_t97J05_R2 := EuclideanSpace ℝ (Fin 2)
+abbrev apm_t97J05_R1 := EuclideanSpace ℝ (Fin 1)
 
 def apm_t97J05_f (q : apm_t97J05_R3) : apm_t97J05_R2 :=
   WithLp.toLp 2 ![Real.exp (q 0) * Real.cos (q 1), q 0 * q 2]
@@ -51,9 +55,14 @@ def apm_t97J05_parameterTarget : Set apm_t97J05_R3 :=
   {q | q ∈ apm_t97J05_W ∧ q 0 ∈ apm_t97J05_parameterDomain ∧
     q 1 ∈ Ioo (0 : ℝ) Real.pi}
 
-/-- A subset-level assertion that the fiber is a smooth embedded submanifold. -/
-opaque apm_t97J05_IsSmoothSubmanifold
-    (s : Set apm_t97J05_R3) : Prop
+def apm_t97J05_IsSmoothSubmanifold
+    (s : Set apm_t97J05_R3) : Prop :=
+  ∃ charts : ChartedSpace apm_t97J05_R1 s,
+    let _ := charts
+    IsManifold (𝓘(ℝ, apm_t97J05_R1)) (⊤ : ℕ∞) s ∧
+      ContMDiff (𝓘(ℝ, apm_t97J05_R1)) (𝓘(ℝ, apm_t97J05_R3))
+        (⊤ : ℕ∞) (Subtype.val : s → apm_t97J05_R3) ∧
+      Topology.IsEmbedding (Subtype.val : s → apm_t97J05_R3)
 
 theorem apm_t97j05 :
     (∀ h : apm_t97J05_R3,
