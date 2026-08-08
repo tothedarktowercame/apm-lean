@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "The index-one case is fully proved using Subgroup.index_eq_one. General positive index remains blocked on realizing subgroups as finite covers, multiplying Euler characteristic, classifying the covering surfaces, and connecting the frozen homology predicate to genus two.",
+  "closer_hop": 2,
+  "closer_progress": "The main theorem now dispatches index one without sorry, and the genus k+1 Euler-characteristic arithmetic is compiled. Only the k != 1 branch remains, blocked on subgroup-cover realization, finite-cover Euler-characteristic multiplicativity, surface classification, and interpreting the frozen homology signature.",
   "imported_at": "2026-07-13T17:26:58.044834Z"
 }

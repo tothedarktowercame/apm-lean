@@ -49,6 +49,13 @@ lemma apm_t94J04_subgroups_equiv_of_index_one
   subst K
   exact ⟨MulEquiv.refl _⟩
 
+/-- The numerical part of the covering-surface argument: multiplying the
+genus-two Euler characteristic by `k` gives the Euler characteristic of genus
+`k+1`. -/
+lemma apm_t94J04_eulerChar_cover_arithmetic (k : ℕ) :
+    (2 : ℤ) - 2 * ((k : ℤ) + 1) = (k : ℤ) * (2 - 2 * 2) := by
+  ring
+
 theorem apm_t94j04
     {F : Type} [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t94J04_E F]
@@ -58,6 +65,11 @@ theorem apm_t94j04
     (H K : Subgroup (FundamentalGroup F p))
     (hH : H.index = k) (hK : K.index = k) :
     Nonempty (H ≃* K) := by
+  by_cases hk1 : k = 1
+  · apply apm_t94J04_subgroups_equiv_of_index_one H K
+    · simpa [hk1] using hH
+    · simpa [hk1] using hK
+  ·
   /-
   Boundary (closer hop 1): the index-one edge case is now closed by
   `apm_t94J04_subgroups_equiv_of_index_one`.  For general positive `k`, the
@@ -76,5 +88,24 @@ theorem apm_t94j04
   one-relator genus-two surface group.  Moreover the frozen homology predicate
   must first be connected to an actual genus-two surface classification.
   Those topological bridges remain open.
+
+  CLOSER HOP 2: the main theorem now genuinely dispatches `k = 1` through
+  `apm_t94J04_subgroups_equiv_of_index_one`; the remaining `sorry` is confined
+  to `k ≠ 1`.  The numerical genus computation is also compiled separately as
+  `apm_t94J04_eulerChar_cover_arithmetic`, proving
+  `2 - 2(k+1) = k(2 - 2·2)` over `ℤ`. Thus once a `k`-sheeted covering surface
+  and Euler-characteristic multiplicativity are available, no arithmetic
+  bridge remains.
+
+  Going beyond the earlier free-group search, I inspected Mathlib's
+  `FundamentalGroupoid` covering-lift machinery and the categorical
+  `TopCat`/covering sources for a Galois correspondence between connected
+  coverings and subgroups. The APIs lift maps and paths for a supplied cover,
+  but do not construct a cover from an arbitrary subgroup. The singular
+  homology functor likewise has no finite-cover transfer/Euler-characteristic
+  comparison. Hence the unresolved branch still requires the same three
+  absent topological assemblies: subgroup realization, Euler-characteristic
+  multiplicativity, and orientable-surface classification. The frozen
+  statement is unchanged.
   -/
-  sorry
+    sorry
