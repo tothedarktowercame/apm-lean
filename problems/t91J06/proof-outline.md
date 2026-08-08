@@ -15,6 +15,9 @@ exhaustion of the ambient space.
 - `apm_t91J06_exists_mem_stage_interior` proves every point occurs in the
   relative interior image of a later embedded interval, providing genuine
   local arc coordinates rather than endpoint-only coverage.
+- `apm_t91J06_exists_pair_mem_stage_interior` proves any two points occur in
+  one common later interior chart, providing the directed comparison needed
+  for a prospective global order.
 
 ## Remaining boundary
 

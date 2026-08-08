@@ -63,6 +63,27 @@ lemma apm_t91J06_exists_mem_stage_interior
   obtain ⟨n, hn⟩ := apm_t91J06_exists_mem_stage f hcover x
   exact ⟨n + 1, hnested n hn⟩
 
+/-- Any two points occur simultaneously in the same later interior stage.
+This directed common-chart form is stronger than separate pointwise interior
+coverage and is the local input needed to compare eventual orientations. -/
+lemma apm_t91J06_exists_pair_mem_stage_interior
+    {X : Type*} (f : ℕ → apm_t91J06_I → X)
+    (hnested : ∀ n,
+      f n '' (univ : Set apm_t91J06_I) ⊆ f (n + 1) '' apm_t91J06_Iinterior)
+    (hcover : (⋃ n, f n '' (univ : Set apm_t91J06_I)) = (univ : Set X))
+    (x y : X) :
+    ∃ n, x ∈ f n '' apm_t91J06_Iinterior ∧
+      y ∈ f n '' apm_t91J06_Iinterior := by
+  obtain ⟨nx, hx⟩ := apm_t91J06_exists_mem_stage f hcover x
+  obtain ⟨ny, hy⟩ := apm_t91J06_exists_mem_stage f hcover y
+  have hmono := apm_t91J06_stage_mono f hnested
+  have hxmax : x ∈ apm_t91J06_stage f (max nx ny) :=
+    hmono (Nat.le_max_left _ _) hx
+  have hymax : y ∈ apm_t91J06_stage f (max nx ny) :=
+    hmono (Nat.le_max_right _ _) hy
+  exact ⟨max nx ny + 1, hnested (max nx ny) hxmax,
+    hnested (max nx ny) hymax⟩
+
 theorem apm_t91j06
     {X : Type*} [TopologicalSpace X]
     (f : ℕ → apm_t91J06_I → X)
@@ -107,5 +128,18 @@ theorem apm_t91j06
   compatibly across stages. The unresolved bridge is now specifically the
   inductive orientation/extension and global gluing; the frozen statement is
   unchanged.
+
+  Closer hop 3 strengthens local coordinate coverage to a directed common
+  chart. `apm_t91J06_exists_pair_mem_stage_interior` uses monotonicity and the
+  maximum of two stage indices to prove that any two points of `X` occur
+  simultaneously in the relative interior image of one later embedded
+  interval. This supplies the common-chart comparison needed to define a
+  global order once compatible orientations exist, rather than merely giving
+  unrelated pointwise charts. Renewed searches of `LEMMA-INDEX.md`, all
+  `ConstructionTargets/`, interval homeomorphism/embedding-extension sources,
+  compactly generated spaces, direct limits, and solved topology siblings
+  still found no theorem selecting the orientations or extending a coordinate
+  across both complementary components. The bridge remains open precisely at
+  that choice/extension step and the subsequent gluing.
   -/
   sorry
