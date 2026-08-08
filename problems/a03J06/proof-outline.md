@@ -13,11 +13,20 @@ compiled helper `apm_a03J06_growth_cauchy_bound`, adapted from sibling
 ‖iteratedDeriv k f 0‖ ≤ k! * (A * R^m) / R^k       (1 < R).
 ```
 
-The remaining proof must let `R → ∞` to make every coefficient above
-degree `m` vanish, then use analytic Taylor-series uniqueness to identify `f`
-globally with the finite polynomial formed from its first `m + 1`
-coefficients. Mathlib's Cauchy estimate and Taylor power-series APIs provide
-the separate ingredients but not this assembled reconstruction theorem.
+Closer hop 2 adds the compiled helper
+`apm_a03J06_iteratedDeriv_eq_zero_of_natDegree_lt`. It specializes the
+Cauchy estimate to radii `2^n`, cancels the first `m` powers, and uses the
+limit of `(1/2)^n` to prove
+
+```text
+m < k  →  iteratedDeriv k f 0 = 0.
+```
+
+The remaining proof must build the polynomial from the first `m + 1` Taylor
+coefficients, establish local equality through the analytic power-series
+coefficient formula, and propagate equality globally. The searched analytic
+uniqueness and polynomial APIs provide separate ingredients but no assembled
+reconstruction theorem for this exact bridge.
 
 ## Imported Proof Plan
 
