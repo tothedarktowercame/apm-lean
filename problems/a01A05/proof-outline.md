@@ -1,5 +1,24 @@
 # Proof Outline: a01A05
 
+## Compiled weak-convergence proof
+
+- The geometric bound `2⁻ᵐ` tends to zero.
+- Inner products tend to zero for vectors in the algebraic span of the
+  sequence, by induction over `Submodule.span`.
+- Unit norms give a uniform Cauchy--Schwarz estimate, extending convergence to
+  the closed span.
+- Orthogonal projection onto that closed span has the same inner products with
+  every sequence vector, proving the second frozen conjunct for arbitrary
+  `g`.
+
+## Remaining counterexample
+
+To prove the repaired negation, construct an infinite sequence in `ℓ²(ℕ,ℝ)`
+whose first vectors are `e₀` and `(1/2)e₀ + (sqrt 3/2)e₁`, followed by unused
+coordinate vectors. The pairwise bounds and unit norms are elementary. The
+remaining Lean work is expanding normalized Gram--Schmidt at index one and
+proving `sqrt (2 - sqrt 3) > 1/2`.
+
 ## Problem
 
 Let {fₙ} be a sequence in L² with ‖fₙ‖=1 and |∫fₙfₘ| ≤ 2⁻ᵐ for n<m.
@@ -16,15 +35,13 @@ The informal-solution file `apm-a01A05.md` contains the proof for **a01A04**
 The proposed Lean statements are for the ball volume problem. This bundle
 implements the correct problem from `a01A05.tex`.
 
-## Proof Strategy
+## Statement repair
 
-(a) Gram-Schmidt: eₘ = uₘ/‖uₘ‖ where uₘ = fₘ - Σ⟨fₘ,eₙ⟩eₙ.
-    Near-orthogonality bounds |⟨fₘ,eₙ⟩|, giving ‖fₘ-eₘ‖ ≤ 2⁻ᵐ.
-(b) Bessel's inequality: Σ|⟨g,eₙ⟩|² ≤ ‖g‖², so ⟨g,eₙ⟩ → 0.
-    Since ‖fₘ-eₘ‖ ≤ 2⁻ᵐ → 0, |⟨g,fₘ⟩-⟨g,eₘ⟩| → 0, hence ⟨g,fₘ⟩ → 0.
+The printed estimate in part (a) is false, so the frozen theorem asserts its
+negation. Part (b) is proved independently and does not rely on that estimate.
 
 ## Lean State
 
 - **Checked**: yes (Lean 4 v4.29.0-rc8 + Mathlib)
-- **Sorry count**: 2 (parts a and b)
+- **Sorry count**: 1 (the explicit infinite counterexample for part a)
 - **Classification**: partial

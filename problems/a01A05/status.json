@@ -12,9 +12,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,16 +28,16 @@
   },
   "classification": "partial",
   "imported_at": "2026-07-13T17:26:51.654811Z",
-  "checked_at": "2026-07-13T19:40:00Z",
+  "closer_hop": 1,
+  "checked_at": "2026-08-08T00:00:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a01A05/lean/Main.lean",
-  "validation_result": "exit 0; 0 errors; 2 sorries (parts a, b)",
+  "validation_result": "exit 0; 0 errors; 1 sorry (the explicit infinite Gram-Schmidt counterexample)",
   "sorry_details": {
-    "sorry_count": 2,
+    "sorry_count": 1,
     "sorry_locations": [
-      "inner_tendsto_zero (part b: inner products tend to zero)",
-      "gramSchmidt_approximation (part a: Gram-Schmidt approximation bound)"
+      "main theorem first conjunct: bundle the infinite l2 counterexample"
     ],
-    "sorry_reason": "Part (a) requires bounding Gram-Schmidt projection using near-orthogonality. Part (b) requires Bessel's inequality + transfer via part (a)."
+    "sorry_reason": "Part (b) is closed by the closed-span/orthogonal-projection argument. Part (a) needs formalizing the repaired negation using an infinite l2 sequence whose first two vectors violate the estimate."
   },
   "harvest_mismatch": true,
   "harvest_mismatch_detail": "The mislabeled a01A04 proof was removed from this bundle and the harvest corpus. No worked informal solution for a01A05 is currently available."
