@@ -127,6 +127,91 @@ noncomputable instance : TopologicalSpace apm_t94J09_N6 :=
   TopologicalSpace.coinduced
     (fun x : apm_t94J09_Disk ↦ Quotient.mk _ x) inferInstance
 
+/-- The canonical map from the fourteen-gon to its glued surface. -/
+def apm_t94J09_polygonQuotient :
+    apm_t94J09_Disk → apm_t94J09_PolygonSurface :=
+  fun x => Quotient.mk _ x
+
+lemma apm_t94J09_continuous_polygonQuotient :
+    Continuous apm_t94J09_polygonQuotient := by
+  exact continuous_coinduced_rng
+
+lemma apm_t94J09_surjective_polygonQuotient :
+    Function.Surjective apm_t94J09_polygonQuotient := by
+  exact Quotient.mk_surjective
+
+/-- The canonical map from the standard twelve-gon to `N₆`. -/
+def apm_t94J09_n6Quotient : apm_t94J09_Disk → apm_t94J09_N6 :=
+  fun x => Quotient.mk _ x
+
+lemma apm_t94J09_continuous_n6Quotient :
+    Continuous apm_t94J09_n6Quotient := by
+  exact continuous_coinduced_rng
+
+lemma apm_t94J09_surjective_n6Quotient :
+    Function.Surjective apm_t94J09_n6Quotient := by
+  exact Quotient.mk_surjective
+
+private lemma apm_t94J09_eqvGen_respects
+    {X Z : Type*} {r : X → X → Prop} (f : X → Z)
+    (hr : ∀ x y, r x y → f x = f y) {x y : X}
+    (hxy : Relation.EqvGen r x y) : f x = f y := by
+  induction hxy with
+  | rel a b hab => exact hr a b hab
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- Continuous eliminator for the quotient defined by the signed word. -/
+noncomputable def apm_t94J09_polygonDesc
+    {Z : Type*} [TopologicalSpace Z] (f : C(apm_t94J09_Disk, Z))
+    (hr : ∀ x y, apm_t94J09_PolygonRel x y → f x = f y) :
+    C(apm_t94J09_PolygonSurface, Z) :=
+  ⟨Quotient.lift f (fun _ _ hxy ↦ apm_t94J09_eqvGen_respects f hr hxy),
+    f.continuous.quotient_lift
+      (fun _ _ hxy ↦ apm_t94J09_eqvGen_respects f hr hxy)⟩
+
+@[simp] lemma apm_t94J09_polygonDesc_quotient
+    {Z : Type*} [TopologicalSpace Z] (f : C(apm_t94J09_Disk, Z))
+    (hr : ∀ x y, apm_t94J09_PolygonRel x y → f x = f y)
+    (x : apm_t94J09_Disk) :
+    apm_t94J09_polygonDesc f hr (apm_t94J09_polygonQuotient x) = f x := rfl
+
+lemma apm_t94J09_polygonDesc_unique
+    {Z : Type*} [TopologicalSpace Z] (f : C(apm_t94J09_Disk, Z))
+    (hr : ∀ x y, apm_t94J09_PolygonRel x y → f x = f y)
+    (u : C(apm_t94J09_PolygonSurface, Z))
+    (hu : ∀ x, u (apm_t94J09_polygonQuotient x) = f x) :
+    u = apm_t94J09_polygonDesc f hr := by
+  ext y
+  obtain ⟨x, rfl⟩ := apm_t94J09_surjective_polygonQuotient y
+  exact hu x
+
+/-- Continuous eliminator for the standard genus-six polygon quotient. -/
+noncomputable def apm_t94J09_n6Desc
+    {Z : Type*} [TopologicalSpace Z] (f : C(apm_t94J09_Disk, Z))
+    (hr : ∀ x y, apm_t94J09_N6Rel x y → f x = f y) :
+    C(apm_t94J09_N6, Z) :=
+  ⟨Quotient.lift f (fun _ _ hxy ↦ apm_t94J09_eqvGen_respects f hr hxy),
+    f.continuous.quotient_lift
+      (fun _ _ hxy ↦ apm_t94J09_eqvGen_respects f hr hxy)⟩
+
+@[simp] lemma apm_t94J09_n6Desc_quotient
+    {Z : Type*} [TopologicalSpace Z] (f : C(apm_t94J09_Disk, Z))
+    (hr : ∀ x y, apm_t94J09_N6Rel x y → f x = f y)
+    (x : apm_t94J09_Disk) :
+    apm_t94J09_n6Desc f hr (apm_t94J09_n6Quotient x) = f x := rfl
+
+lemma apm_t94J09_n6Desc_unique
+    {Z : Type*} [TopologicalSpace Z] (f : C(apm_t94J09_Disk, Z))
+    (hr : ∀ x y, apm_t94J09_N6Rel x y → f x = f y)
+    (u : C(apm_t94J09_N6, Z))
+    (hu : ∀ x, u (apm_t94J09_n6Quotient x) = f x) :
+    u = apm_t94J09_n6Desc f hr := by
+  ext y
+  obtain ⟨x, rfl⟩ := apm_t94J09_surjective_n6Quotient y
+  exact hu x
+
 abbrev apm_t94J09_H (k : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t94J09_PolygonSurface))
@@ -199,5 +284,23 @@ theorem apm_t94j09 :
   is sheaf cohomology).  Consequently the expected cellular boundary
   calculation `ℤ → ℤ⁷` cannot yet be transported to `apm_t94J09_H`.  The
   frozen statement is unchanged; no axiom or opaque placeholder was added.
+
+  CLOSER HOP 2: both presentations now have compiled canonical quotient maps,
+  with continuity and surjectivity proofs.  The new continuous eliminators
+  `apm_t94J09_polygonDesc` and `apm_t94J09_n6Desc` descend any continuous disk
+  map respecting the corresponding generating edge relation; their
+  computation and uniqueness lemmas prove the full point-set universal
+  properties.  These use Mathlib's `Continuous.quotient_lift` and the cocone
+  pattern from sibling `t97J04`, extending the arithmetic-only first hop.
+
+  Further searches of `LEMMA-INDEX.md`, `ConstructionTargets.Surfaces`, the
+  polygon siblings `t97A01` and `t97J02`, Mathlib's quotient-homeomorphism and
+  singular-homology sources, and bundle git history found no explicit disk map
+  implementing the required polygon moves and no invariant computation.  The
+  next bridge is therefore concrete: construct mutually inverse relation-
+  respecting disk maps and feed them to the two eliminators.  Even after that
+  homeomorphism, the displayed singular homology still requires a cellular-to-
+  singular comparison or equivalent surface computation absent from the
+  searched corpus.  The frozen statement remains unchanged.
   -/
   sorry
