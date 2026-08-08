@@ -70,6 +70,41 @@ lemma apm_m93A01_not_compact_of_separated_unit
   have hge := hsep (φ N) (φ (N + 1)) hne
   exact (not_lt_of_ge hge) (by simpa [Function.comp_apply] using hlt)
 
+/-- The standard coordinate vectors in the Fourier `ℓ²` model are unit
+vectors.  This is the bounded sequence used for the derivative obstruction. -/
+lemma apm_m93A01_norm_single (n : ℤ) :
+    ‖(lp.single 2 n (1 : ℂ) : apm_m93A01_l2Z)‖ = 1 := by
+  rw [lp.norm_single (hp := by norm_num)]
+  norm_num
+
+/-- A continuous diagonal multiplier acts on a coordinate vector by scalar
+multiplication.  This isolates the `lp` bookkeeping from the remaining scalar
+estimate for the `H¹` derivative symbol. -/
+lemma apm_m93A01_diagonal_single
+    (A : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z) (c : ℤ → ℂ)
+    (hA : ∀ (f : apm_m93A01_l2Z) (n : ℤ), A f n = c n * f n)
+    (n : ℤ) :
+    A (lp.single 2 n (1 : ℂ)) = c n • lp.single 2 n (1 : ℂ) := by
+  ext j
+  rw [hA]
+  by_cases h : j = n
+  · subst j
+    simp
+  · rw [lp.single_apply_ne (E := fun _ : ℤ => ℂ) 2 n (1 : ℂ) h]
+    change c j * 0 = c n * (lp.single 2 n (1 : ℂ) : apm_m93A01_l2Z) j
+    rw [lp.single_apply_ne (E := fun _ : ℤ => ℂ) 2 n (1 : ℂ) h]
+    simp
+
+/-- Consequently, the norm of a diagonal multiplier on a unit coordinate is
+exactly the norm of its symbol at that coordinate. -/
+lemma apm_m93A01_norm_diagonal_single
+    (A : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z) (c : ℤ → ℂ)
+    (hA : ∀ (f : apm_m93A01_l2Z) (n : ℤ), A f n = c n * f n)
+    (n : ℤ) :
+    ‖A (lp.single 2 n (1 : ℂ))‖ = ‖c n‖ := by
+  rw [apm_m93A01_diagonal_single A c hA n, norm_smul,
+    apm_m93A01_norm_single, mul_one]
+
 theorem apm_m93a01
     (ιS1 D1 D2 : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z)
     (ιR : apm_m93A01_l2R →L[ℂ] apm_m93A01_l2R)
@@ -110,5 +145,25 @@ theorem apm_m93a01
   sequence in the image. None of the solved siblings provides these exact
   `lp`/`Lp` operator constructions, so no sibling code was reused and the
   frozen statement was left unchanged.
+
+  CLOSER HOP 2 (partial). The `lp.single` coordinate route is now compiled
+  through `apm_m93A01_norm_single`, `apm_m93A01_diagonal_single`, and
+  `apm_m93A01_norm_diagonal_single`. Thus the proposed witnesses are proved
+  to lie in the unit ball, every operator satisfying a frozen diagonal
+  identity acts on them by the corresponding scalar symbol, and the image
+  norm is exactly the symbol norm. This uses Mathlib's `lp.norm_single` and
+  `lp.single_apply_ne`, following the coordinate calculations in solved
+  sibling `m99A03`.
+
+  The `D1` clause is consequently narrowed to a scalar lower bound for
+  `|n| / sqrt (1+n^2)` along positive integer coordinates and the resulting
+  two-coordinate separation estimate. The positive compactness clauses still
+  require finite-coordinate projections and operator-norm tail estimates;
+  `ιR` still requires measurable normalized indicators on disjoint sets and
+  transport through the a.e. multiplier identity. Further searches of the
+  `lp` single-coordinate API and the solved `m99A03`, `m95A02`, and `m02J06`
+  artifacts found coordinate estimates but no packaged diagonal compactness
+  or nonatomic multiplication-operator theorem. The frozen statement remains
+  unchanged.
   -/
   sorry
