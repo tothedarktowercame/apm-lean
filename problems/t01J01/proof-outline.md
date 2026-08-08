@@ -17,6 +17,10 @@ homology, embedded circle maps, and a concrete annular subset predicate.
 - `apm_t01j01_isCompact_of_isAnnulusBetween` and
   `apm_t01j01_isClosed_of_isAnnulusBetween` show that every requested witness
   is necessarily a compact closed subset of the Hausdorff surface.
+- `apm_t01j01_ranges_subset_of_isAnnulusBetween` proves both prescribed
+  boundary images lie inside that closed witness.
+- `apm_t01j01_ne_univ_of_isAnnulusBetween` proves the witness is a proper
+  subset of the ambient surface.
 
 ## Remaining boundary
 

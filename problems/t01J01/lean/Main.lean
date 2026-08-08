@@ -101,6 +101,32 @@ lemma apm_t01j01_isClosed_of_isAnnulusBetween
     (hA : apm_t01j01_IsAnnulusBetween A γ₁ γ₂) : IsClosed A :=
   (apm_t01j01_isCompact_of_isAnnulusBetween hA).isClosed
 
+/-- Both prescribed boundary circles actually lie in any annular witness.
+This uses compactness of the witness in the Hausdorff ambient surface, not an
+extra convention hidden in the frontier equality. -/
+lemma apm_t01j01_ranges_subset_of_isAnnulusBetween
+    {S : Type*} [TopologicalSpace S] [T2Space S] {A : Set S}
+    {γ₁ γ₂ : C(Circle, S)}
+    (hA : apm_t01j01_IsAnnulusBetween A γ₁ γ₂) :
+    Set.range γ₁ ⊆ A ∧ Set.range γ₂ ⊆ A := by
+  have hf : frontier A ⊆ A :=
+    (apm_t01j01_isClosed_of_isAnnulusBetween hA).frontier_subset
+  rw [hA.2] at hf
+  exact ⟨subset_union_left.trans hf, subset_union_right.trans hf⟩
+
+/-- A requested annulus cannot be the whole ambient surface, since its
+frontier contains the nonempty image of the first boundary circle. -/
+lemma apm_t01j01_ne_univ_of_isAnnulusBetween
+    {S : Type*} [TopologicalSpace S] {A : Set S}
+    {γ₁ γ₂ : C(Circle, S)}
+    (hA : apm_t01j01_IsAnnulusBetween A γ₁ γ₂) : A ≠ Set.univ := by
+  intro hAS
+  have hz : γ₁ 1 ∈ frontier A := by
+    rw [hA.2]
+    exact Or.inl ⟨1, rfl⟩
+  rw [hAS, frontier_univ] at hz
+  exact hz
+
 theorem apm_t01j01
     (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
@@ -138,5 +164,20 @@ theorem apm_t01j01
   Euler-characteristic, cobordism, and surface-classification APIs found no
   packaged cutting theorem, surface classification, or annulus/isotopy theorem
   connecting the frozen homology hypotheses to this geometric subset.
+
+  CLOSER HOP 3: the requested witness interface is sharpened by two compiled
+  consequences. `apm_t01j01_ranges_subset_of_isAnnulusBetween` combines the
+  frontier equality with compactness/closedness to prove that both prescribed
+  circle images are actually contained in the annular subset.
+  `apm_t01j01_ne_univ_of_isAnnulusBetween` proves the witness is a proper
+  subset, since its frontier contains the nonempty first circle image. Thus a
+  future cutting theorem must construct a proper closed compact subsurface
+  containing both boundary curves, not merely an abstract annulus-shaped set.
+  Renewed searches of the lemma index, construction modules, manifold and
+  algebraic-topology sources, all problem artifacts, and git history again
+  found only sibling boundary reports: no null-homology-to-separation theorem,
+  surface cutting operation, or annulus classification is compiled. The
+  classification bridge therefore remains open and the frozen statement is
+  unchanged.
   -/
   sorry
