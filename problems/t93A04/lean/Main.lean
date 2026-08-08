@@ -72,6 +72,14 @@ lemma apm_t93a04_range_sup_span_eq_top_of_projection_surjective
   rw [← add_sub_cancel (L y) x]
   exact Submodule.add_mem_sup ⟨y, rfl⟩ hd
 
+def apm_t93a04_lineDirection : apm_t93a04_Point :=
+  EuclideanSpace.single 0 1
+
+lemma apm_t93a04_lineDirection_ne_zero : apm_t93a04_lineDirection ≠ 0 := by
+  intro h
+  have h0 := congrFun (congrArg WithLp.ofLp h) 0
+  simpa [apm_t93a04_lineDirection] using h0
+
 theorem apm_t93a04 :
     ∀ (n : ℕ) (M : Type)
       [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
@@ -115,5 +123,30 @@ theorem apm_t93a04 :
   lemmas expect whole-space differentiability. Hence extending chart maps and
   proving the required critical-image inclusion remains the sole substantive
   bridge. The frozen statement is unchanged.
+
+  CLOSER HOP 3 closes the previously hidden empty-domain branch. The concrete
+  nonzero vector `apm_t93a04_lineDirection` supplies an affine line, and when
+  `M` is empty the range-plus-span obligation is vacuous. Thus the main proof
+  below dispatches every empty manifold without Sard and confines the
+  remaining gap to nonempty domains.
+
+  For nonempty `M`, renewed searches of the Hausdorff-dimension and Jacobian
+  Sard lemmas, `writtenInExtChartAt`, smooth bump/partition-of-unity extension
+  machinery, countable chart-cover APIs, the newly advanced `t92J07`,
+  `LEMMA-INDEX.md`, every `ConstructionTargets/` module, related Sard
+  artifacts, and git history still found no whole-space extension preserving
+  critical-image inclusion and no manifold-domain Sard theorem. The frozen
+  statement is unchanged; no placeholder declaration was introduced.
   -/
-  sorry
+  intro n M _ _ _ _ _ f hf
+  cases isEmpty_or_nonempty M with
+  | inl hM =>
+      letI : IsEmpty M := hM
+      refine ⟨apm_t93a04_line 0 apm_t93a04_lineDirection, ?_⟩
+      apply (apm_t93a04_isSmoothLinePreimage_preimage_iff f _).2
+      refine ⟨0, apm_t93a04_lineDirection,
+        apm_t93a04_lineDirection_ne_zero, rfl, ?_⟩
+      intro x hx
+      exact isEmptyElim x
+  | inr hM =>
+      sorry

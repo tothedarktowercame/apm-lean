@@ -8,6 +8,10 @@ for the actual inverse image to the transversality condition alone.
 linear-algebra step: a derivative whose composition with projection along
 `v` is surjective has range which, together with `span {v}`, is all of `ℝ³`.
 
+`apm_t93a04_lineDirection_ne_zero` supplies a concrete line direction, and
+the main theorem now closes the entire empty-domain branch because its
+transversality obligation is vacuous.
+
 Fix a nonzero direction in `ℝ³` and project along it to `ℝ²`.  A regular
 value of the composite projection with `f` determines an affine fiber line.
 Surjectivity of the composite derivative is equivalent to the range of
@@ -15,8 +19,8 @@ Surjectivity of the composite derivative is equivalent to the range of
 
 ## Remaining boundary
 
-Mathlib supplies Sard-type results for finite-dimensional normed vector-space
-domains, but not arbitrary second-countable manifold domains.  Closure needs a
+For nonempty domains, Mathlib supplies Sard-type results for finite-dimensional
+normed vector spaces but not arbitrary second-countable manifolds. Closure needs a
 countable chart cover, chartwise Sard, compatibility of criticality with chart
 derivatives, and countable-union nullity.
 
