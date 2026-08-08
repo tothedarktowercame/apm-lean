@@ -1,5 +1,18 @@
 # Proof Outline: t99J04
 
+## Closer hop 1 update
+
+The compiled helper `apm_t99J04_surjective_of_isLocalDiffeomorph` completes
+the compact-to-connected global argument: the range is open by local
+diffeomorphism, compact and therefore closed, nonempty, and hence all of the
+connected target. Both frozen conjuncts now share one local obstruction:
+Mathlib has the Banach-space inverse function theorem in charts, but its
+manifold local-diffeomorphism file explicitly marks promotion from invertible
+`mfderiv` as a TODO. The coordinate-map conjunct also needs the derivative
+calculation and finite-dimensional linear-independence-to-bijectivity step.
+The main theorem remains an honest partial with one `sorry` and an unchanged
+declaration.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
