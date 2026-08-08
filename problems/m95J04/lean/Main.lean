@@ -44,6 +44,25 @@ lemma apm_m95J04_green_le_quarter {t s : ℝ}
     have hsq : 0 ≤ (t - 1 / 2) ^ 2 := sq_nonneg _
     nlinarith
 
+/-- For fixed `t`, the piecewise-affine Green kernel is continuous across its
+diagonal seam.  This is the regularity needed to define its interval integral
+without any measurable-piece bookkeeping. -/
+lemma apm_m95J04_continuous_green_right (t : ℝ) :
+    Continuous (apm_m95J04_green t) := by
+  unfold apm_m95J04_green
+  apply continuous_if_le continuous_const continuous_id <;> try fun_prop
+  intro s hs
+  dsimp
+  have hs' : t = s := by simpa using hs
+  rw [← hs']
+
+/-- The polynomial which is the Green kernel's total mass has global sharp
+maximum `1/8`. -/
+lemma apm_m95J04_green_mass_polynomial_le (t : ℝ) :
+    t * (1 - t) / 2 ≤ (1 / 8 : ℝ) := by
+  have hsq : 0 ≤ (t - 1 / 2) ^ 2 := sq_nonneg _
+  nlinarith
+
 /-- Simultaneous reflection of both variables preserves the Dirichlet Green
 kernel. -/
 lemma apm_m95J04_green_reflection (t s : ℝ) :
@@ -146,6 +165,12 @@ theorem apm_m95j04 :
   Green kernel under `(t,s) ↦ (1-t,1-s)`. Thus the specific nonlinearity's
   complete contraction and symmetry input is compiled.
 
+  Closer hop 3 adds the missing regularity at the kernel's diagonal seam:
+  `apm_m95J04_continuous_green_right` proves continuity of `s ↦ G(t,s)` for
+  every fixed `t` using Mathlib's gluing theorem `continuous_if_le`.
+  `apm_m95J04_green_mass_polynomial_le` also proves the sharp `1/8` bound for
+  the polynomial `t(1-t)/2` which results from integrating this kernel.
+
   Searches across both hops of `LEMMA-INDEX.md`, `ConstructionTargets`, the partial
   Green developments `m94J05`, `m02A06`, and `m99J02`, Mathlib's
   `ContractingWith` and interval-integral APIs, and git history found no
@@ -155,6 +180,15 @@ theorem apm_m95j04 :
   derivatives at the endpoints, lift the kernel estimate to the sup norm,
   and apply contraction. The sharp Lipschitz-one estimate for the specific
   clause is no longer part of this boundary.
+
+  The final hop additionally inspected Mathlib's piecewise-continuity,
+  interval-integral splitting/congruence, polynomial antiderivative, and
+  `ContractingWith` fixed-point APIs. An attempted direct proof of
+  `∫₀¹ G(t,s) ds = t(1-t)/2` successfully reduced the piecewise kernel to its
+  two affine branches, but the remaining interval-integral normalization was
+  not retained without a clean stable proof. The exact mass identity, operator
+  bundling, and fixed-point/within-second-derivative equivalence remain open;
+  the frozen statement is unchanged.
 
   Original boundary:
   SKIPPED: nonlinear BVP via Green's function + contraction mapping.

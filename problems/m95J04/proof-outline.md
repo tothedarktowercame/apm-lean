@@ -14,6 +14,10 @@ The frozen theorem has a compiling partial Lean development.
   `apm_m95J04_specific_lipschitz` proves the sharp global Lipschitz-one bound.
 - `apm_m95J04_green_reflection` proves simultaneous reflection invariance of
   the Green kernel.
+- `apm_m95J04_continuous_green_right` proves continuity through the kernel's
+  piecewise-affine diagonal seam.
+- `apm_m95J04_green_mass_polynomial_le` proves the sharp `1/8` maximum of the
+  polynomial obtained by integrating the Green kernel.
 
 ## Remaining boundary
 
@@ -23,3 +27,7 @@ The frozen theorem has a compiling partial Lean development.
 - lift the kernel and nonlinear Lipschitz estimates to the sup norm and apply
   Banach's fixed-point theorem;
 - derive reflection symmetry from uniqueness.
+
+Closer hop 3 leaves an honest partial. The kernel continuity and sharp mass
+polynomial bound compile, while the exact integral identity, bundled Green
+operator, and fixed-point/ODE equivalence remain open.
