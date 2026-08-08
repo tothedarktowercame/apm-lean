@@ -72,6 +72,51 @@ def apm_t03J06_bulletIntegral (omega : apm_t03J06_Form2) : ℝ :=
     omega (apm_t03J06_hemispherePoint p)
       (apm_t03J06_hemisphereTangents p)
 
+/-- The displayed coefficient specification determines the alternating form
+pointwise. -/
+lemma apm_t03J06_isOmega_unique (omega eta : apm_t03J06_Form2)
+    (homega : apm_t03J06_isOmega omega) (heta : apm_t03J06_isOmega eta) :
+    omega = eta := by
+  funext x
+  ext v
+  exact (homega x v).trans (heta x v).symm
+
+@[simp] lemma apm_t03J06_vec3_apply (a b c : ℝ) (i : Fin 3) :
+    apm_t03J06_vec3 a b c i = ![a, b, c] i := by
+  fin_cases i <;> simp [apm_t03J06_vec3]
+
+/-- The raw pullback coefficient on the cylindrical part. -/
+lemma apm_t03J06_cylinder_integrand (omega : apm_t03J06_Form2)
+    (homega : apm_t03J06_isOmega omega) (theta z : ℝ) :
+    omega (apm_t03J06_cylinderPoint theta z)
+        (apm_t03J06_cylinderTangents theta) =
+      -(z ^ 2 * Real.exp (Real.cos theta * z) *
+          Real.log (Real.cos theta ^ 2 + 1) - Real.sin theta) * Real.sin theta +
+        (Real.cos theta + Real.sin theta ^ 2 * z ^ 3 *
+          Real.cos (Real.sin theta ^ 2 + z ^ 2)) * Real.cos theta := by
+  rw [homega]
+  simp [apm_t03J06_cylinderPoint, apm_t03J06_cylinderTangents]
+  ring
+
+/-- The raw pullback coefficient on the hemispherical graph.  This exposes
+the only singular-looking factors (`x / sqrt` and `y / sqrt`) explicitly. -/
+lemma apm_t03J06_hemisphere_integrand (omega : apm_t03J06_Form2)
+    (homega : apm_t03J06_isOmega omega) (p : ℝ × ℝ) :
+    let s := Real.sqrt (1 - p.1 ^ 2 - p.2 ^ 2)
+    omega (apm_t03J06_hemispherePoint p)
+        (apm_t03J06_hemisphereTangents p) =
+      (1 + s) -
+        (apm_t03J06_hemispherePoint p 2 ^ 2 *
+            Real.exp (p.1 * apm_t03J06_hemispherePoint p 2) *
+            Real.log (p.1 ^ 2 + 1) - p.2) * (p.2 / s) +
+        (p.1 + p.2 ^ 2 * apm_t03J06_hemispherePoint p 2 ^ 3 *
+            Real.cos (p.2 ^ 2 + apm_t03J06_hemispherePoint p 2 ^ 2)) *
+          (p.1 / s) := by
+  dsimp only
+  rw [homega]
+  simp [apm_t03J06_hemispherePoint, apm_t03J06_hemisphereTangents]
+  ring
+
 theorem apm_t03j06 (omega : apm_t03J06_Form2)
     (homega : apm_t03J06_isOmega omega) :
     ContDiff ℝ (⊤ : ℕ∞) omega ∧
@@ -81,4 +126,31 @@ theorem apm_t03j06 (omega : apm_t03J06_Form2)
     ¬(∃ eta : apm_t03J06_Form1,
       ContDiff ℝ (⊤ : ℕ∞) eta ∧ extDeriv eta = omega) ∧
     apm_t03J06_bulletIntegral omega = 7 * Real.pi := by
+  /-
+  Boundary (closer hop 2): this hop goes beyond the initial API search by
+  compiling the pointwise algebra on both surface pieces.
+  `apm_t03J06_isOmega_unique` proves that the coefficient predicate leaves no
+  freedom in `omega`. `apm_t03J06_vec3_apply` exposes its three coordinates,
+  and `apm_t03J06_cylinder_integrand` and
+  `apm_t03J06_hemisphere_integrand` substitute both parametrizations and their
+  oriented tangent pairs into the frozen form. Thus the remaining integral is
+  now a concrete scalar integral, including the hemisphere's explicit
+  `pᵢ / sqrt (1-p₀²-p₁²)` boundary factors.
+
+  The intended short route still needs a Stokes/divergence theorem identifying
+  the sum of these parametrized surface integrals with the integral of
+  `extDeriv omega` over the solid cylinder-plus-hemisphere. Mathlib's
+  `MeasureTheory.Integral.DivergenceTheorem` is for rectangular boxes and its
+  differential-form API has `extDeriv_extDeriv`, but no integration/Stokes
+  bridge for this surface encoding. Direct integration instead requires
+  two-dimensional disk symmetry/change-of-variables results and domination
+  for the displayed boundary quotients.
+
+  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's
+  differential-form, divergence, disk/radial-integration, and parametrized-
+  integral sources, git history, and siblings `t01J06`, `t02A05`, `t94A10`,
+  `t96J08`, and `m96J03` found no packaged bridge. In particular `t96J08`
+  contains essentially the same hemisphere parametrization but its theorem
+  remains unproved. The frozen statement is unchanged.
+  -/
   sorry
