@@ -2,7 +2,7 @@ import Mathlib
 import Mathlib.Analysis.Calculus.DifferentialForm.Basic
 
 /-!
-# APM t98A05
+# APM t98A05 — differential forms in three-dimensional Euclidean space
 
 ## Statement repairs
 
@@ -11,20 +11,25 @@ that lies between the coordinate planes and the standard 2-simplex” is read
 as the standard triangular 2-simplex itself:
 `x,y,z ≥ 0` and `x+y+z=1`. It is oriented by the normal `(1,1,1)`.
 
+The former opaque form operations are replaced by explicit definitions:
+wedge evaluation uses the alternating shuffle formula, the simplex integral
+is the Lebesgue integral of the pulled-back form under its affine
+parameterization, circle closedness restricts the genuine ambient `extDeriv`
+to tangent vectors, and exactness is equality with derivatives along every
+differentiable circle-valued curve.
+
 ## Encoding questions
 
-Mathlib provides ambient alternating differential forms and their exterior
-derivative, but not wedge products, oriented integration over an embedded
-simplex, or intrinsic exterior differentiation and exactness on the circle in
-a common manifold API. Those operations are isolated as typed placeholders.
 The three original forms, their exterior derivatives, the simplex and its
-orientation, the actual unit circle, and the restricted one-form remain
-explicit.
+orientation, the actual unit circle, and the restricted one-form are explicit.
 -/
+
+open MeasureTheory Set
 
 noncomputable section
 
 abbrev apm_t98a05_E3 := EuclideanSpace ℝ (Fin 3)
+abbrev apm_t98a05_E2 := EuclideanSpace ℝ (Fin 2)
 abbrev apm_t98a05_Form (k : ℕ) :=
   apm_t98a05_E3 → apm_t98a05_E3 [⋀^Fin k]→L[ℝ] ℝ
 
@@ -58,27 +63,54 @@ abbrev apm_t98a05_circle :=
 abbrev apm_t98a05_CircleForm1 :=
   apm_t98a05_circle → apm_t98a05_E3 →L[ℝ] ℝ
 
-abbrev apm_t98a05_CircleForm2 :=
-  apm_t98a05_circle → apm_t98a05_E3 [⋀^Fin 2]→L[ℝ] ℝ
-
 def apm_t98a05_isRestriction
     (alpha : apm_t98a05_Form 1) (alpha' : apm_t98a05_CircleForm1) : Prop :=
   ∀ (x : apm_t98a05_circle) (v : apm_t98a05_E3),
     alpha' x v = alpha x (fun _ ↦ v)
 
-opaque apm_t98a05_wedge
-    (alpha : apm_t98a05_Form 1) (beta : apm_t98a05_Form 2) :
-    apm_t98a05_Form 3
+def apm_t98a05_wedgeEval
+    (alpha : apm_t98a05_Form 1) (beta : apm_t98a05_Form 2)
+    (x : apm_t98a05_E3) (v : Fin 3 → apm_t98a05_E3) : ℝ :=
+  alpha x ![v 0] * beta x ![v 1, v 2] -
+    alpha x ![v 1] * beta x ![v 0, v 2] +
+    alpha x ![v 2] * beta x ![v 0, v 1]
 
-opaque apm_t98a05_orientedIntegral
-    (omega : apm_t98a05_Form 2) (surface : Set apm_t98a05_E3)
-    (positiveNormal : apm_t98a05_E3) : ℝ
+def apm_t98a05_simplexParameterDomain : Set apm_t98a05_E2 :=
+  {u | 0 ≤ u 0 ∧ 0 ≤ u 1 ∧ u 0 + u 1 ≤ 1}
 
-opaque apm_t98a05_circleExtDeriv
-    (alpha' : apm_t98a05_CircleForm1) : apm_t98a05_CircleForm2
+def apm_t98a05_simplexParameter (u : apm_t98a05_E2) : apm_t98a05_E3 :=
+  WithLp.toLp 2 ![u 0, u 1, 1 - u 0 - u 1]
 
-opaque apm_t98a05_IsDifferential
-    (f : apm_t98a05_circle → ℝ) (alpha' : apm_t98a05_CircleForm1) : Prop
+def apm_t98a05_simplexTangent0 : apm_t98a05_E3 :=
+  WithLp.toLp 2 ![(1 : ℝ), 0, -1]
+
+def apm_t98a05_simplexTangent1 : apm_t98a05_E3 :=
+  WithLp.toLp 2 ![(0 : ℝ), 1, -1]
+
+def apm_t98a05_orientedSimplexIntegral
+    (omega : apm_t98a05_Form 2) : ℝ :=
+  ∫ u in apm_t98a05_simplexParameterDomain,
+    omega (apm_t98a05_simplexParameter u)
+      ![apm_t98a05_simplexTangent0, apm_t98a05_simplexTangent1]
+
+def apm_t98a05_isCircleTangent
+    (x : apm_t98a05_circle) (v : apm_t98a05_E3) : Prop :=
+  (x : apm_t98a05_E3) 0 * v 0 + (x : apm_t98a05_E3) 1 * v 1 = 0 ∧
+    v 2 = 0
+
+def apm_t98a05_isCircleClosed (alpha : apm_t98a05_Form 1) : Prop :=
+  ∀ (x : apm_t98a05_circle) (v : Fin 2 → apm_t98a05_E3),
+    (∀ i, apm_t98a05_isCircleTangent x (v i)) →
+      extDeriv alpha x v = 0
+
+def apm_t98a05_IsDifferential
+    (f : apm_t98a05_circle → ℝ) (alpha' : apm_t98a05_CircleForm1) : Prop :=
+  ∀ c : ℝ → apm_t98a05_circle,
+    Differentiable ℝ (fun t => (c t : apm_t98a05_E3)) →
+    Differentiable ℝ (fun t => f (c t)) ∧
+      ∀ t : ℝ,
+        deriv (fun s => f (c s)) t =
+          alpha' (c t) (deriv (fun s => (c s : apm_t98a05_E3)) t)
 
 theorem apm_t98a05
     (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha)
@@ -91,10 +123,10 @@ theorem apm_t98a05
         2 * (v 0 0 * v 1 1 - v 0 1 * v 1 0)) ∧
     extDeriv beta = 3 • gamma ∧
     extDeriv gamma = 0 ∧
-    apm_t98a05_wedge alpha beta = 0 ∧
-    apm_t98a05_orientedIntegral
-      (extDeriv alpha) apm_t98a05_simplex apm_t98a05_simplexNormal = 1 ∧
-    apm_t98a05_circleExtDeriv alpha' = 0 ∧
+    (∀ (x : apm_t98a05_E3) (v : Fin 3 → apm_t98a05_E3),
+      apm_t98a05_wedgeEval alpha beta x v = 0) ∧
+    apm_t98a05_orientedSimplexIntegral (extDeriv alpha) = 1 ∧
+    apm_t98a05_isCircleClosed alpha ∧
     ¬∃ f : apm_t98a05_circle → ℝ,
       apm_t98a05_IsDifferential f alpha' := by
   sorry
