@@ -4,6 +4,8 @@ The frozen Lean theorem is present in `lean/Main.lean`. The explicit mixed
 eigenfunctions have now been checked at both boundary conditions. Their
 frequencies and eigenvalues are positive, their first derivatives are
 compiled, and they satisfy `-u'' = λₙu` pointwise.
+The frequency and eigenvalue sequences are also proved strictly increasing,
+so the displayed exceptional eigenvalue determines its index uniquely.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m03J05.md`

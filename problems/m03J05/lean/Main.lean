@@ -50,6 +50,26 @@ lemma m03J05MixedEigenvalue_pos (n : ℕ) :
   unfold m03J05MixedEigenvalue
   positivity
 
+/-- The half-integer frequencies are strictly increasing. -/
+lemma m03J05MixedFrequency_strictMono : StrictMono (fun n : ℕ ↦
+    ((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2) := by
+  intro a b hab
+  have hab' : (a : ℝ) < b := by exact_mod_cast hab
+  norm_num [Nat.cast_add, Nat.cast_mul]
+  nlinarith [Real.pi_pos]
+
+/-- Hence the displayed mixed eigenvalues are pairwise strictly ordered. -/
+lemma m03J05MixedEigenvalue_strictMono : StrictMono m03J05MixedEigenvalue := by
+  intro a b hab
+  have hfreq := m03J05MixedFrequency_strictMono hab
+  have hapos := m03J05MixedFrequency_pos a
+  have hbpos := m03J05MixedFrequency_pos b
+  simp only [m03J05MixedEigenvalue]
+  nlinarith
+
+lemma m03J05MixedEigenvalue_injective : Function.Injective m03J05MixedEigenvalue :=
+  m03J05MixedEigenvalue_strictMono.injective
+
 /-- The first derivative of each displayed mixed eigenfunction. -/
 lemma m03J05MixedEigenfunction_hasDerivAt (n : ℕ) (x : ℝ) :
     HasDerivAt (m03J05MixedEigenfunction n)
@@ -173,5 +193,19 @@ theorem apm_m03j05 (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) :
   an isomorphism between the custom pair encoding and a standard Sobolev
   space. Consequently the Fredholm and nonlinear operator bridges remain
   open; the frozen statement is unchanged.
+
+  Closer hop 3 proves the remaining elementary spectral separation facts:
+  `m03J05MixedFrequency_strictMono` shows the half-integer frequencies are
+  strictly increasing, `m03J05MixedEigenvalue_strictMono` transports this
+  through squaring using positivity, and
+  `m03J05MixedEigenvalue_injective` rules out all eigenvalue collisions. Thus
+  a future eigenspace/Fredholm proof may treat the exceptional index as
+  unique without further arithmetic. Searches were extended to Mathlib's
+  Sturm--Liouville, trigonometric orthogonality, Hilbert bases, compact
+  self-adjoint spectra, and `Lp` interval equivalences, plus all related
+  repository artifacts. No completeness theorem for the half-integer sine
+  system or compatible realization of the mixed operator was found. The
+  nonlinear Sobolev/Nemytskii and monotone-existence chain is likewise still
+  absent, so the main conjunction remains honestly open.
   -/
   sorry
