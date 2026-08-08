@@ -21,3 +21,13 @@ equivalence and the supplied homotopy equivalence.
 - Compute the fundamental group of the concrete quotient wedge.
 - This requires `π₁(Circle)=ℤ` and a topological Seifert--van Kampen or
   wedge/free-product theorem, neither currently packaged in Mathlib.
+
+## Closer hop 3 (2026-08-08)
+
+The quotient bookkeeping needed for a future Van Kampen proof is now fully
+compiled. The canonical quotient map is continuous and surjective, the two
+circle basepoints agree, and `apm_t93a03_spineDesc` plus its computation and
+uniqueness lemmas proves the continuous pushout universal property.
+
+The remaining gap is no longer point-set topology: it is the absent
+fundamental-group computation for this pushout and for `Circle` itself.

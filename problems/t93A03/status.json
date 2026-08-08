@@ -28,7 +28,23 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "For the repaired statement, non-simple-connectivity is now compiled from the requested free-group equivalence and transported across the supplied homotopy equivalence. The only remaining bridge is computing the fundamental group of the concrete circle wedge, requiring the absent circle pi1 computation and topological Seifert-van Kampen/wedge theorem.",
+  "closer_hop": 3,
+  "boundary": "The concrete circle wedge now has a compiled continuous pushout eliminator and uniqueness theorem. The remaining bridge is circle pi1 plus a topological Seifert-van Kampen/free-product computation.",
+  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/t93A03/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": ["apm_t93a03 (fundamental group of the explicit circle wedge)"],
+    "proved": [
+      "apm_t93a03_spine_not_simplyConnected_of_piOne_equiv",
+      "apm_t93a03_connectedSum_not_simplyConnected_of_piOne_equiv",
+      "apm_t93a03_continuous_spineQuotient",
+      "apm_t93a03_spineDesc",
+      "apm_t93a03_spineDesc_unique"
+    ],
+    "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
+    "blockers": ["Compute FundamentalGroup Circle 1", "Prove a topological wedge/free-product theorem"]
+  },
   "imported_at": "2026-07-13T17:26:57.613735Z"
 }
