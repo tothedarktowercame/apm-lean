@@ -48,6 +48,21 @@ lemma apm_a03J05_integral_neg (t : ℝ) :
   filter_upwards with x
   exact apm_a03J05_integrand_neg t x
 
+/-- The oscillatory kernel is absolutely integrable, uniformly dominated by
+`(1 + x²)⁻¹`. -/
+lemma apm_a03J05_integrable (t : ℝ) :
+    Integrable (apm_a03J05_integrand t) volume := by
+  apply integrable_inv_one_add_sq.mono'
+  · apply Continuous.aestronglyMeasurable
+    unfold apm_a03J05_integrand
+    exact (Real.continuous_cos.comp (continuous_id.mul continuous_const)).div
+      (continuous_const.add (continuous_id.pow 2)) (fun x => by positivity)
+  · filter_upwards with x
+    unfold apm_a03J05_integrand
+    rw [Real.norm_eq_abs, abs_div, abs_of_pos (by positivity : 0 < 1 + x ^ 2),
+      inv_eq_one_div]
+    exact div_le_div_of_nonneg_right (Real.abs_cos_le_one _) (by positivity)
+
 /-! ## Base case: t = 0 gives ∫₀^∞ 1/(1+x²) dx = π/2
 
    This uses `integral_Ioi_of_hasDerivAt_of_tendsto'` with f = arctan,
@@ -92,7 +107,7 @@ theorem apm_a03j05 (t : ℝ) :
     ∫ x in Ioi (0 : ℝ), apm_a03J05_integrand t x ∂volume =
       (Real.pi / 2) * Real.exp (-|t|) := by
   /-
-  PARTIAL boundary (closer hop 2).
+  PARTIAL boundary (closer hop 3).
 
   `apm_a03J05_integral_zero` now closes the complete `t = 0` case using
   Mathlib's packaged `integral_Ioi_inv_one_add_sq` theorem.
@@ -114,6 +129,15 @@ theorem apm_a03j05 (t : ℝ) :
   evaluation. Thus the nonzero-frequency evaluation remains open; the ODE route still
   introduces the non-Bochner-integrable term `∫ cos (t*x)`, while the contour
   route requires an ad hoc arc construction and vanishing estimate.
+
+  This final closer hop additionally proves `apm_a03J05_integrable`, by
+  dominating the absolute value of the cosine kernel with Mathlib's globally
+  integrable `(1 + x^2)⁻¹`. This discharges the basic Bochner-integrability
+  obligation needed by either a future Fubini or Fourier-transform route, but
+  it does not manufacture the missing transform evaluation. Renewed source
+  inspection found `integrable_inv_one_add_sq` and nearby compiled domination
+  patterns, but no stronger oscillatory-integral theorem. The remaining bridge
+  is still the nonzero-frequency transform evaluation itself.
   -/
   sorry
 

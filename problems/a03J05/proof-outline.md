@@ -11,6 +11,8 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
   `integral_Ioi_inv_one_add_sq`.
 - `apm_a03J05_integrand_neg` and `apm_a03J05_integral_neg` prove evenness in
   the frequency parameter, reducing the missing evaluation to `t > 0`.
+- `apm_a03J05_integrable` proves global integrability for every frequency by
+  domination with Mathlib's `integrable_inv_one_add_sq`.
 
 ## Remaining bridge
 
