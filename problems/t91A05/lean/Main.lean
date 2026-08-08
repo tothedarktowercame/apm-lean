@@ -22,6 +22,13 @@ abbrev apm_t91a05_Circle := Metric.sphere (0 : ℂ) 1
 def apm_t91a05_boundaryInclusion : apm_t91a05_Circle → apm_t91a05_Disk :=
   fun z => ⟨z, by simpa [apm_t91a05_Circle] using z.property.le⟩
 
+lemma apm_t91a05_continuous_boundaryInclusion :
+    Continuous apm_t91a05_boundaryInclusion := by
+  exact Continuous.subtype_mk continuous_subtype_val _
+
+def apm_t91a05_circleBase : apm_t91a05_Circle :=
+  ⟨1, by simp [apm_t91a05_Circle]⟩
+
 /-- A retraction makes the induced map on fundamental groups injective.
 This is the route used in the related surface problem `t01A03`. -/
 lemma apm_t91a05_fundamentalGroupMap_injective_of_retraction
@@ -57,6 +64,32 @@ lemma apm_t91a05_no_retraction_of_subsingleton_fundamentalGroup
   apply hinj
   apply Subsingleton.elim
 
+/-- Concrete reduction for the frozen disk and boundary: Mathlib's
+`Metric.contractibleSpace_closedBall` supplies the target-group
+subsingleton instance, so only nontriviality of the exact metric circle's
+fundamental group remains as an input. -/
+lemma apm_t91a05_no_retraction_of_circle_fundamentalGroup_nontrivial
+    [Nontrivial
+      (FundamentalGroup apm_t91a05_Circle apm_t91a05_circleBase)] :
+    ¬∃ g : apm_t91a05_Disk → apm_t91a05_Circle,
+      Continuous g ∧
+        ∀ z : apm_t91a05_Circle, g (apm_t91a05_boundaryInclusion z) = z := by
+  let i : C(apm_t91a05_Circle, apm_t91a05_Disk) :=
+    ⟨apm_t91a05_boundaryInclusion, apm_t91a05_continuous_boundaryInclusion⟩
+  letI : ContractibleSpace apm_t91a05_Disk :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : SimplyConnectedSpace apm_t91a05_Disk :=
+    SimplyConnectedSpace.ofContractible _
+  letI : Subsingleton
+      (FundamentalGroup apm_t91a05_Disk (i apm_t91a05_circleBase)) := by
+    change Subsingleton
+      (Path.Homotopic.Quotient (i apm_t91a05_circleBase)
+        (i apm_t91a05_circleBase))
+    infer_instance
+  rintro ⟨g, hg, hretract⟩
+  exact apm_t91a05_no_retraction_of_subsingleton_fundamentalGroup
+    i apm_t91a05_circleBase ⟨⟨g, hg⟩, hretract⟩
+
 theorem apm_t91a05 :
     ¬∃ g : apm_t91a05_Disk → apm_t91a05_Circle,
       Continuous g ∧
@@ -91,5 +124,21 @@ theorem apm_t91a05 :
   for the circle group or alternative Brouwer theorem. The disk side is
   supplied by `Metric.contractibleSpace_closedBall`; the sole foundational
   bridge remains nontriviality of the circle fundamental group.
+
+  CLOSER HOP 3 compiles the concrete reduction that the earlier boundary only
+  described. `apm_t91a05_continuous_boundaryInclusion` bundles the frozen
+  subtype inclusion, while
+  `apm_t91a05_no_retraction_of_circle_fundamentalGroup_nontrivial` installs
+  `Metric.contractibleSpace_closedBall`, obtains the disk's simply-connected
+  and fundamental-group subsingleton instances, and applies the hop-2
+  contradiction directly to the frozen raw-function statement. Consequently
+  no disk-side instance synthesis or statement-shape conversion remains.
+  Searches of the native `Circle` definition (which is the same unit metric
+  sphere), covering/lift sources, singular homology, winding artifacts,
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, and git history still found no
+  compiled nontrivial loop or circle fundamental-group instance. The sole
+  remaining bridge is exactly `Nontrivial (FundamentalGroup
+  apm_t91a05_Circle apm_t91a05_circleBase)`. The frozen statement is
+  unchanged.
   -/
   sorry

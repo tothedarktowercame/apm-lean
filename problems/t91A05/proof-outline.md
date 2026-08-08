@@ -8,10 +8,14 @@ fundamental groups is injective; this step is compiled locally.
 entire contradiction from a subsingleton target fundamental group and a
 nontrivial source fundamental group. Thus no group-theoretic assembly remains.
 
-Mathlib proves the closed disk contractible via
-`Metric.contractibleSpace_closedBall`, hence its fundamental group is trivial.
-It remains to prove that the fundamental group of the unit circle is
-nontrivial. The standard identification with `Multiplicative ℤ`, or an
+`apm_t91a05_no_retraction_of_circle_fundamentalGroup_nontrivial` specializes
+this to the exact frozen metric disk and boundary. It bundles the subtype
+inclusion, installs closed-ball contractibility and the resulting
+simply-connected/fundamental-group subsingleton instances, and converts the
+raw continuous retraction statement directly.
+
+It remains only to prove that the fundamental group of the exact unit metric
+circle is nontrivial. The standard identification with `Multiplicative ℤ`, or an
 integral first-homology computation followed by functoriality, would finish.
 Neither computation is currently packaged in Mathlib or a closed sibling.
 

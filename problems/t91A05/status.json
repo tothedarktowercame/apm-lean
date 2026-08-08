@@ -28,8 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_progress": "The full abstract contradiction is compiled: a retraction cannot induce an injection from a nontrivial source fundamental group into a subsingleton target group. The sole remaining bridge is nontriviality of the unit circle's fundamental group.",
+  "closer_hop": 3,
+  "closer_progress": "The concrete frozen disk statement is now reduced to one exact typeclass input: nontriviality of the fundamental group of its metric-sphere boundary. The boundary inclusion is bundled continuously, closed-ball contractibility is installed, and all disk-side and raw-function statement conversions compile. The circle fundamental-group computation remains unavailable.",
   "stage": "attempted",
   "checked_at": "2026-08-07",
   "checked_lean_state": {
