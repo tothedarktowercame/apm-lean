@@ -44,6 +44,25 @@ def t94J07CircleVelocity (θ : ℝ) : T94J07E2 :=
   EuclideanSpace.single 0 (-Real.sin θ) +
     EuclideanSpace.single 1 (Real.cos θ)
 
+lemma t94J07CirclePoint_norm (θ : ℝ) : ‖t94J07CirclePoint θ‖ = 1 := by
+  have hsq : ‖t94J07CirclePoint θ‖ ^ 2 = 1 := by
+    rw [EuclideanSpace.real_norm_sq_eq]
+    simp [t94J07CirclePoint, Fin.sum_univ_succ]
+  have hn : 0 ≤ ‖t94J07CirclePoint θ‖ := norm_nonneg _
+  nlinarith
+
+lemma t94J07CircleVelocity_tangent (θ : ℝ) :
+    inner ℝ (t94J07CirclePoint θ) (t94J07CircleVelocity θ) = 0 := by
+  rw [PiLp.inner_apply]
+  simp [t94J07CirclePoint, t94J07CircleVelocity, Fin.sum_univ_succ]
+  rw [real_inner_comm (Real.sin θ) (Real.cos θ)]
+  ring
+
+lemma t94J07CirclePoint_two_pi :
+    t94J07CirclePoint (2 * Real.pi) = t94J07CirclePoint 0 := by
+  ext i
+  fin_cases i <;> simp [t94J07CirclePoint]
+
 /-- A smooth ambient representative of a smooth self-map of the unit circle. -/
 def t94J07IsSmoothCircleMap (f : T94J07E2 → T94J07E2) : Prop :=
   ContDiff ℝ (⊤ : ℕ∞) f ∧
@@ -85,4 +104,30 @@ theorem apm_t94j07
     (hH : t94J07IsSmoothCircleHomotopy f g H) :
     t94J07PullbackCircleIntegral alpha f =
       t94J07PullbackCircleIntegral alpha g := by
+  /-
+  CLOSER HOP 1: the concrete parameter geometry needed by a direct cylinder
+  proof is now compiled above. `t94J07CirclePoint_norm` proves the path lies
+  on the unit circle, `t94J07CircleVelocity_tangent` proves its velocity is
+  tangent, and `t94J07CirclePoint_two_pi` records the periodic endpoint
+  cancellation.
+
+  Desk research covered `LEMMA-INDEX.md`, every `ConstructionTargets/`
+  module, the solved and partial differential-form siblings (`t00J04`,
+  `t01J06`, `t02A05`, `t94A10`, `t98A05`), Mathlib's differential-form,
+  parametric-integral, interval-FTC, and integration-by-parts sources, and git
+  history.  `extDeriv_pullback` supplies the relevant local chain-rule
+  identity, while `integral_deriv_of_contDiffOn_Icc` and the parametric
+  integral differentiation theorems supply separate analytic pieces.  No
+  theorem combines them into homotopy invariance of this line integral.
+
+  A local completion must bundle the slice
+  `x ↦ H (x,t)`, identify its `fderiv` with the frozen integrand, differentiate
+  the resulting θ-integral in `t`, use `extDeriv_pullback` plus
+  `halpha_closed` after proving both partial derivatives of `H` are tangent by
+  differentiating the unit-norm constraint, and convert the remaining mixed
+  term into a θ-derivative whose integral vanishes by the compiled periodic
+  endpoint equality.  This also requires the dominated/continuous
+  parameter-integral hypotheses and both interval FTC applications.  The
+  frozen statement is unchanged; no axiom or opaque placeholder was added.
+  -/
   sorry

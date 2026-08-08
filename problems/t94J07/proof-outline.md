@@ -1,5 +1,17 @@
 # Proof Outline: t94J07
 
+## Closer hop 1
+
+Three concrete prerequisites for the direct cylinder calculation now compile:
+the standard parametrization has unit norm, its velocity is tangent to the
+circle, and its values at `0` and `2π` agree.  Mathlib's
+`extDeriv_pullback` was identified as the local differential identity needed
+for the main argument.  The remaining work is to combine it with
+differentation under the θ-integral, tangency of both homotopy partial
+derivatives, periodic cancellation, and interval FTC in the homotopy
+parameter.  The detailed searched boundary is recorded at the remaining
+`sorry`.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
