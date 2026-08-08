@@ -111,6 +111,15 @@ the resulting open-disk identity into polynomial coefficient equality.
 
 Plan: (1) implement the normalization lemma in `Main.lean` (scaling the polynomial and the disk). (2) Invoke Mathlib’s Schwarz lemma (`Complex.Analytic.schwarz_sublemma`) to deduce rigidity of `q`. (3) Conclude coefficient vanishing using polynomial extensionality. Stage 3 remains in progress; these lemmas still need to be formalized.
 
+Closer hop 3 completes the assembly. Negating the conclusion gives a bound by
+the closed radius-`r` ball. After rescaling, the map sends the open unit disk
+to the closed unit ball, fixes zero, and has derivative one. Mathlib's
+`Complex.affine_of_mapsTo_ball_of_norm_dslope_eq_div` therefore identifies it
+with the identity throughout the disk. Scaling back gives equality between
+`apm_a96J06_poly N c` and `X` on the infinite family `r/(n+2)`. The theorem
+`Polynomial.eq_of_infinite_eval_eq` makes the polynomials equal, while their
+coefficients at `N` are respectively `c N ≠ 0` and zero, a contradiction.
+
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 Once the Lean proof is finished, ensure the written proof cites the precise normalization and Schwarz lemmas used, emphasizing the rigidity argument.
