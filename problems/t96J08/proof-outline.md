@@ -1,5 +1,18 @@
 # Proof Outline: t96J08
 
+## Closer hop 1 update
+
+The new Lean lemma `apm_t96j08_not_isClosed` proves the first conjunct by a
+literal standard-basis evaluation of the encoded exterior derivative. The
+remaining exactness proof should use Mathlib's `extDeriv_extDeriv` after
+identifying the custom degree-one representation with an alternating form.
+For the integral, direct coordinate algebra reduces the pullback to a constant,
+a radial square-root term, and an antisymmetric term. Existing polar lemmas are
+stated for `ℂ`, while this disk is `EuclideanSpace ℝ (Fin 2)`; no existing
+artifact supplies the required volume-preserving transport and singular radial
+evaluation. The main theorem therefore remains an honest partial with one
+`sorry` and its statement unchanged.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 

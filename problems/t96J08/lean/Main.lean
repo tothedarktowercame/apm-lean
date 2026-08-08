@@ -64,8 +64,43 @@ def apm_t96j08_hemisphereIntegral : ℝ :=
     apm_t96j08_omega (apm_t96j08_upperHemisphere q)
       (apm_t96j08_paramTangentX q) (apm_t96j08_paramTangentY q)
 
+/-- The coordinate exterior derivative is nonzero on the standard oriented
+basis. This is the direct obstruction to closedness. -/
+lemma apm_t96j08_not_isClosed : ¬apm_t96j08_IsClosed := by
+  intro h
+  have hh := h 0 (WithLp.toLp 2 ![1, 0, 0])
+    (WithLp.toLp 2 ![0, 1, 0]) (WithLp.toLp 2 ![0, 0, 1])
+  norm_num [apm_t96j08_domega, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two] at hh
+
 theorem apm_t96j08 :
     ¬apm_t96j08_IsClosed ∧
     ¬apm_t96j08_IsExact ∧
     apm_t96j08_hemisphereIntegral = 5 * Real.pi / 3 := by
+  /-
+  PARTIAL boundary (closer hop 1).
+
+  `apm_t96j08_not_isClosed` now closes the first frozen conjunct by evaluating
+  the concrete coordinate exterior derivative on the three standard basis
+  vectors; it returns `1`, contradicting closedness.
+
+  The exactness obstruction can in principle be routed through Mathlib's
+  `extDeriv_extDeriv`: package the covector field `η` as a degree-one
+  continuous alternating form, identify the custom `apm_t96j08_dOneForm`
+  with `extDeriv η`, and use smoothness to obtain `d(dη)=0`, contradicting the
+  same basis evaluation. That representation/identification bridge is not
+  currently packaged in this encoding.
+
+  Direct simplification of the pullback gives
+  `1 + sqrt (1-x^2-y^2) + (x^2-y^2)/sqrt (1-x^2-y^2)` on the unit disk. The
+  last term cancels under coordinate swap, the constant integrates to `π`,
+  and the radial square-root term integrates to `2π/3`. Searches of
+  `LEMMA-INDEX.md`, all `ConstructionTargets/`, sibling disk/polar artifacts
+  (`a01A07`, `m99A02`, `m97A03`, `t92J09`), Mathlib's polar-coordinate and
+  differential-form sources, and git history found no theorem transporting
+  the `EuclideanSpace ℝ (Fin 2)` disk integral to the available complex polar
+  formula or evaluating this singular boundary representative directly.
+  Thus the exactness packaging and disk-integration bridges remain open; the
+  frozen statement is unchanged.
+  -/
   sorry
