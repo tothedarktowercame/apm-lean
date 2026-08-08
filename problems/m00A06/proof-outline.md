@@ -21,4 +21,8 @@ integrability when the test function vanishes at zero.
 ## Remaining Boundaries
 
 - Assemble the finite-part linear functional and its uniform order-one
-  seminorm estimate on each compact support.
+  seminorm estimate on each compact support. This is now stated precisely as
+  `apm_m00A06_bridge_finitePart`.
+- Recombine its two defining set integrals with the ordinary singular integral
+  when `φ 0 = 0`. This is stated as
+  `apm_m00A06_bridge_finitePart_eq_integral`.

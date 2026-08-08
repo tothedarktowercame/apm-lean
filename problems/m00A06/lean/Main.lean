@@ -49,6 +49,33 @@ private lemma apm_m00a06_kernel_mul_eq_sign_mul_dslope
   unfold apm_m00a06_singularKernel
   field_simp
 
+/-- Why this unblocks `apm_m00a06`: this is the missing finite-part
+functional, expressed by its two regularized integrals.  The distribution
+clause is exactly the compact-support order-one seminorm estimate required by
+the frozen encoding. -/
+theorem apm_m00A06_bridge_finitePart :
+    ∃ T : (ℝ → ℝ) →ₗ[ℝ] ℝ,
+      apm_m00a06_IsDistribution T ∧
+      ∀ φ : ℝ → ℝ, apm_m00a06_IsTestFunction φ →
+        T φ =
+          (∫ x in Icc (-1 : ℝ) 1,
+            apm_m00a06_singularKernel x * (φ x - φ 0)) +
+          ∫ x in (Icc (-1 : ℝ) 1)ᶜ,
+            apm_m00a06_singularKernel x * φ x := by
+  sorry
+
+/-- Why this unblocks `apm_m00a06`: when the test function vanishes at the
+origin, the regularization disappears and the two set integrals recombine into
+the ordinary singular integral demanded by the main theorem. -/
+theorem apm_m00A06_bridge_finitePart_eq_integral
+    {φ : ℝ → ℝ} (hφ : apm_m00a06_IsTestFunction φ) (hφ0 : φ 0 = 0) :
+    (∫ x in Icc (-1 : ℝ) 1,
+        apm_m00a06_singularKernel x * (φ x - φ 0)) +
+      ∫ x in (Icc (-1 : ℝ) 1)ᶜ,
+        apm_m00a06_singularKernel x * φ x =
+      ∫ x : ℝ, apm_m00a06_singularKernel x * φ x := by
+  sorry
+
 theorem apm_m00a06 :
     (∃ φ : ℝ → ℝ,
       apm_m00a06_IsTestFunction φ ∧
