@@ -89,6 +89,47 @@ lemma apm_t03j01_retraction_comp_inclusion_eq_id
   ext y
   exact congr_arg Subtype.val (h.choose_spec y)
 
+/-- Localized from the compiled categorical argument in solved sibling
+`t01A03`: a retraction makes the frozen first-homology inclusion injective. -/
+lemma apm_t03j01_H1Map_injective_of_retraction
+    {X : Type} [TopologicalSpace X] {J : Set X}
+    (h : apm_t03j01_RetractsOnto J) :
+    Function.Injective (apm_t03j01_H1Map (apm_t03j01_inclusion J)) := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  have hcomp :
+      apm_t03j01_H1Map (apm_t03j01_inclusion J) ≫
+          apm_t03j01_H1Map h.choose = 𝟙 (apm_t03j01_H1 J) := by
+    change F.map (TopCat.ofHom (apm_t03j01_inclusion J)) ≫
+        F.map (TopCat.ofHom h.choose) = 𝟙 _
+    rw [← F.map_comp]
+    change F.map (TopCat.ofHom
+      (h.choose.comp (apm_t03j01_inclusion J))) = 𝟙 _
+    rw [apm_t03j01_retraction_comp_inclusion_eq_id h]
+    exact F.map_id (TopCat.of J)
+  intro x y hxy
+  have hxy' := congrArg (fun z ↦ apm_t03j01_H1Map h.choose z) hxy
+  have hx := congrArg
+    (fun q : apm_t03j01_H1 J ⟶ apm_t03j01_H1 J ↦ q x) hcomp
+  have hy := congrArg
+    (fun q : apm_t03j01_H1 J ⟶ apm_t03j01_H1 J ↦ q y) hcomp
+  simpa only [CategoryTheory.comp_apply, CategoryTheory.id_apply] using
+    hx.symm.trans (hxy'.trans hy)
+
+/-- The negative direction reduced to precisely the missing nontriviality of
+the curve's integral first homology. -/
+lemma apm_t03j01_no_retraction_of_H1Map_zero
+    {X : Type} [TopologicalSpace X] {J : Set X}
+    (hzero : apm_t03j01_H1Map (apm_t03j01_inclusion J) = 0)
+    (hnonzero : ∃ a : apm_t03j01_H1 J, a ≠ 0) :
+    ¬apm_t03j01_RetractsOnto J := by
+  intro hret
+  obtain ⟨a, ha⟩ := hnonzero
+  apply ha
+  apply apm_t03j01_H1Map_injective_of_retraction hret
+  rw [hzero]
+  simp
+
 theorem apm_t03j01
     (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
     [PathConnectedSpace X] [ChartedSpace apm_t03j01_E2 X]
@@ -127,5 +168,18 @@ theorem apm_t03j01
   Mathlib's singular homology, circle, retract, cohomology, Eilenberg--MacLane,
   and manifold neighborhood APIs, and git history. No closed artifact supplies
   the circle homology computation or primitive-class-to-retraction bridge.
+
+  CLOSER HOP 2 goes beyond the continuous-map split by localizing the exact
+  singular-homology functor calculation from solved sibling `t01A03`.
+  `apm_t03j01_H1Map_injective_of_retraction` proves that a retraction makes
+  the frozen inclusion map on `H₁` injective, and
+  `apm_t03j01_no_retraction_of_H1Map_zero` now closes the entire negative
+  argument conditional only on one nonzero element of `H₁(J₂; ℤ)`. Thus all
+  categorical/functorial bookkeeping for `J₂` is compiled; its sole remaining
+  bridge is transporting a nonzero integral circle class through `hcurve₂`.
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, the circle
+  singular-homology sources, and the related retraction artifacts found no
+  such circle computation. The positive `J₁` direction remains blocked by the
+  independent primitive-class-to-circle-map/relative-adjustment bridge.
   -/
   sorry

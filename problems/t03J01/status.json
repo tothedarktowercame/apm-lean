@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The continuous-map splitting identity for any retraction is proved. The negative direction needs the unavailable integral H1 computation of Circle; the positive direction needs primitive-cohomology representability by circle maps and a relative adjustment/tubular-neighborhood construction.",
+  "closer_hop": 2,
+  "boundary": "Closer hop 2 proves that a retraction makes the exact frozen H1 inclusion injective and derives the no-retraction result from a zero inclusion map plus one nonzero H1 class. The negative direction now needs only the unavailable integral H1 computation of Circle; the positive direction still needs primitive-cohomology representability and a relative adjustment.",
   "imported_at": "2026-07-13T17:26:57.035052Z"
 }
