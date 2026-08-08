@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "Proved the open diameter lies in the half-disk closure and, via explicit positive/negative sequences plus boundary continuity, proved g(0)=0. Local Schwarz reflection of g² remains unavailable.",
+  "closer_hop": 3,
+  "note": "Proved the open diameter lies in the half-disk closure, g(0)=0, g² is real on the entire diameter including zero, and g² is continuous on the closed half-disk and holomorphic inside. The local Schwarz-reflection gluing theorem remains unavailable.",
   "imported_at": "2026-07-13T17:26:53.083580Z"
 }

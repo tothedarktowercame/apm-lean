@@ -127,6 +127,33 @@ lemma apm_a99J08_corner_zero
         positivity
     exact tendsto_nhds_unique him (him0.congr' heq.symm)
 
+/-- After the corner value is identified, the squared function is real on the
+entire open diameter, including the formerly missing origin. -/
+lemma apm_a99J08_sq_real_on_diameter
+    (g : ℂ → ℂ)
+    (hgcont : ContinuousOn g (closure apm_a99J08_upperHalfDisk))
+    (hpos : ∀ x : ℝ, 0 < x → x < 1 → (g x).re = 0)
+    (hneg : ∀ x : ℝ, -1 < x → x < 0 → (g x).im = 0)
+    {x : ℝ} (hx₁ : -1 < x) (hx₂ : x < 1) :
+    ((g x) ^ 2).im = 0 := by
+  by_cases hx₀ : x = 0
+  · subst x
+    have hz : g ((0 : ℝ) : ℂ) = 0 := by
+      simpa using apm_a99J08_corner_zero g hgcont hpos hneg
+    rw [hz]
+    simp
+  · exact apm_a99J08_sq_real_on_punctured_diameter g hpos hneg hx₁ hx₂ hx₀
+
+/-- The function to be reflected is continuous up to the boundary and
+holomorphic in the upper half-disk. -/
+lemma apm_a99J08_sq_regular
+    (g : ℂ → ℂ)
+    (hgcont : ContinuousOn g (closure apm_a99J08_upperHalfDisk))
+    (hgholo : DifferentiableOn ℂ g apm_a99J08_upperHalfDisk) :
+    ContinuousOn (fun z => g z ^ 2) (closure apm_a99J08_upperHalfDisk) ∧
+      DifferentiableOn ℂ (fun z => g z ^ 2) apm_a99J08_upperHalfDisk := by
+  exact ⟨hgcont.pow 2, hgholo.pow 2⟩
+
 theorem apm_a99j08
     (g : ℂ → ℂ)
     (hgcont : ContinuousOn g (closure apm_a99J08_upperHalfDisk))
@@ -137,7 +164,7 @@ theorem apm_a99j08
       ∀ z ∈ closure apm_a99J08_upperHalfDisk,
         ‖g z‖ ≤ C * Real.sqrt ‖z‖ := by
   /-
-  PARTIAL boundary (closer hop 2).  The geometric and corner-continuity steps
+  PARTIAL boundary (closer hop 3).  The geometric and corner-continuity steps
   are now compiled above. `apm_a99J08_real_mem_closure_upperHalfDisk` uses
   `Complex.closure_preimage_im` and `IsOpen.closure_inter` to put every point
   of the open real diameter in the half-disk closure.  Then
@@ -157,5 +184,16 @@ theorem apm_a99j08
   permits division by `z`, a local quotient bound, and compactness away from
   zero. No weaker continuity-only argument suffices to obtain a square-root
   rate from `g 0 = 0`.
+
+  CLOSER HOP 3: `apm_a99J08_sq_real_on_diameter` combines the corner-zero
+  theorem with the punctured result, proving that `g²` is real on the entire
+  open diameter with no exceptional point. `apm_a99J08_sq_regular` packages
+  continuity of `g²` on the closed upper half-disk and holomorphicity in its
+  interior. Thus every local hypothesis of Schwarz reflection is now a
+  compiled lemma in the exact frozen geometry. Renewed searches of
+  `HasPrimitives`, Morera, conjugation derivatives, and all construction
+  modules still found no theorem turning precisely these hypotheses into a
+  holomorphic reflected function. The reflection/gluing theorem, followed by
+  factorization at its zero and compact quotient bounds, remains open.
   -/
   sorry
