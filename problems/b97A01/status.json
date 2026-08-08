@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "classification_detail": "All five S4 conjugacy characterizations and class cardinalities compile; normal-subgroup, solvability, and order-24 Sylow structure remain.",
+  "closer_hop": 3,
+  "classification_detail": "The full S4 conjugacy-class conjunct now compiles, including exhaustive membership in the five displayed classes, and all class cardinalities compile. Normal-subgroup, solvability, universal order-24, and SL2(F3) structure remain.",
   "imported_at": "2026-07-13T17:26:54.096455Z"
 }

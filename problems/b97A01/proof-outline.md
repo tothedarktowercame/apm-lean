@@ -17,9 +17,12 @@ characterizations and all five conjugacy-class cardinalities now compile.
   `Equiv.Perm.isConj_iff_cycleType_eq`.
 - `apm_b97A01_conjugacy_class_cards` proves class sizes `1, 6, 3, 8, 6`
   using `Equiv.Perm.card_isConj_eq`.
+- `apm_b97A01_conjugacy_exhaustive` checks that the five concrete classes
+  exhaust `S₄`; `apm_b97A01_complete_conjugacy_classification` combines this
+  with the structural equivalences, closing the complete first conjunct.
 
 ## Remaining bridge
 
-Prove the exhaustive `Fin 4` cycle-type disjunction, classify normal subgroups
-of `S₄`, prove solvability and the universal order-24 action theorem, and
+Classify normal subgroups of `S₄`, prove solvability and the universal
+order-24 action theorem, and
 establish the structural Sylow and nonisomorphism facts for `SL₂(F₃)`.

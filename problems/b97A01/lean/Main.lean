@@ -95,6 +95,36 @@ lemma apm_b97A01_conjugacy_class_cards :
   · simpa [hfour] using
       (Equiv.Perm.card_isConj_eq (g := apm_b97A01_fourCycle))
 
+/-- Every permutation of four letters lies in one of the five displayed
+conjugacy classes. -/
+lemma apm_b97A01_conjugacy_exhaustive :
+    ∀ σ : apm_b97A01_S4,
+      IsConj 1 σ ∨ IsConj apm_b97A01_transposition σ ∨
+        IsConj apm_b97A01_doubleTransposition σ ∨
+        IsConj apm_b97A01_threeCycle σ ∨
+        IsConj apm_b97A01_fourCycle σ := by
+  native_decide
+
+/-- The characterization and exhaustiveness portions of the frozen first
+conjunct, assembled from the structural cycle-type theorem and the finite
+four-letter exhaustion. -/
+lemma apm_b97A01_complete_conjugacy_classification :
+    ∀ σ : apm_b97A01_S4,
+      (IsConj 1 σ ↔ σ.cycleType = {}) ∧
+      (IsConj apm_b97A01_transposition σ ↔ σ.cycleType = {2}) ∧
+      (IsConj apm_b97A01_doubleTransposition σ ↔ σ.cycleType = {2, 2}) ∧
+      (IsConj apm_b97A01_threeCycle σ ↔ σ.cycleType = {3}) ∧
+      (IsConj apm_b97A01_fourCycle σ ↔ σ.cycleType = {4}) ∧
+      (IsConj 1 σ ∨ IsConj apm_b97A01_transposition σ ∨
+        IsConj apm_b97A01_doubleTransposition σ ∨
+        IsConj apm_b97A01_threeCycle σ ∨
+        IsConj apm_b97A01_fourCycle σ) := by
+  intro σ
+  rcases apm_b97A01_conjugacy_classification σ with
+    ⟨hone, htrans, hdouble, hthree, hfour⟩
+  exact ⟨hone, htrans, hdouble, hthree, hfour,
+    apm_b97A01_conjugacy_exhaustive σ⟩
+
 theorem apm_b97a01 :
     (∀ σ : apm_b97A01_S4,
       (IsConj 1 σ ↔ σ.cycleType = {}) ∧
@@ -170,5 +200,18 @@ theorem apm_b97a01 :
   lattice, solvability, universal order-24 action theorem, and the two
   structural `SL₂(F₃)` clauses remain open; searches of the solvable-group,
   Sylow, and special-linear APIs found no packaged result closing them.
+
+  Closer hop 3 closes the exhaustive cycle-type disjunction with
+  `apm_b97A01_conjugacy_exhaustive` and packages the entire first frozen
+  conjunct as `apm_b97A01_complete_conjugacy_classification`.  This finite
+  computation is nontrivial—it checks all permutations of `Fin 4` against the
+  five concrete conjugacy predicates—and complements the structural
+  cycle-type equivalences from hop 2.  The normal-subgroup lattice,
+  solvability, universal order-24 theorem, and structural `SL₂(F₃)` clauses
+  remain open.
   -/
+  rcases apm_b97A01_conjugacy_class_cards with ⟨hcard1, hcard2, hcard22,
+    hcard3, hcard4⟩
+  refine ⟨apm_b97A01_complete_conjugacy_classification,
+    hcard1, hcard2, hcard22, hcard3, hcard4, ?_⟩
   sorry
