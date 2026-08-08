@@ -22,6 +22,22 @@ measure at the two moving endpoints. These conversions are not packaged in one
 existing theorem, so the main result remains partial with one `sorry`; its
 statement is unchanged.
 
+## Closer hop 2 (2026-08-08)
+
+The continuity conjunct is now completely proved by the local lemma
+`apm_a97A02_continuousOn_average`.  For the atomless restricted Lebesgue
+measure, an `Icc` integral is a difference of two `Iic` primitives; Mathlib's
+continuity theorem for those primitives and composition with `t-h` and `t+h`
+then give continuity of the quotient by the fixed nonzero denominator.
+
+Only the pointwise norm estimate remains.  The repository contains useful
+applications of `eLpNorm_le_eLpNorm_mul_rpow_measure_univ`, and that theorem
+does give the needed ENNReal estimate on the moving restricted measure.  The
+uncompleted portion is the exact chain from the Bochner integral norm to
+`eLpNorm · 1`, followed by monotonicity in the interval measure and the
+`ENNReal.rpow`/`toReal` normalization required by the frozen real-valued
+right-hand side.  The main theorem therefore honestly retains one `sorry`.
+
 ## Imported Proof Plan
 
 ```clojure

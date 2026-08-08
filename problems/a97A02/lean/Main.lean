@@ -46,6 +46,42 @@ lemma apm_a97A02_measure_Icc_le (h t : ℝ) (_hh : 0 < h) :
       congr 1
       linarith
 
+/-- The moving set integral is continuous.  This uses the atomless primitive
+API from `MeasureTheory.Integral.DominatedConvergence`; writing an `Icc`
+integral as the difference of two `Iic` primitives avoids any symmetric-
+difference bookkeeping. -/
+lemma apm_a97A02_continuousOn_average
+    (f : ℝ → ℂ) (hf : Integrable f apm_a97A02_measure)
+    (h : ℝ) (hh : 0 < h) :
+    ContinuousOn (apm_a97A02_average f h) (Set.Icc (0 : ℝ) 1) := by
+  letI : NoAtoms apm_a97A02_measure := by
+    unfold apm_a97A02_measure
+    infer_instance
+  let F : ℝ → ℂ := fun b => ∫ x in Set.Iic b, f x ∂apm_a97A02_measure
+  have hF : ContinuousOn F (Set.Iic (1 + h)) := by
+    exact hf.integrableOn.continuousOn_Iic_primitive_Iic
+  have hleft : ContinuousOn (fun t : ℝ => F (t - h)) (Set.Icc (0 : ℝ) 1) := by
+    exact hF.comp (continuous_id.sub continuous_const).continuousOn (by
+      intro t ht
+      simp only [Set.mem_Iic]
+      linarith [ht.2])
+  have hright : ContinuousOn (fun t : ℝ => F (t + h)) (Set.Icc (0 : ℝ) 1) := by
+    exact hF.comp (continuous_id.add continuous_const).continuousOn (by
+      intro t ht
+      simp only [Set.mem_Iic]
+      linarith [ht.2])
+  have hnum : ContinuousOn
+      (fun t : ℝ => ∫ x in Set.Icc (t - h) (t + h), f x ∂apm_a97A02_measure)
+      (Set.Icc (0 : ℝ) 1) := by
+    refine (hright.sub hleft).congr fun t ht => ?_
+    simp only [F]
+    rw [integral_Icc_eq_integral_Ioc]
+    rw [← intervalIntegral.integral_of_le (by linarith : t - h ≤ t + h)]
+    exact (intervalIntegral.integral_Iic_sub_Iic
+      hf.integrableOn hf.integrableOn).symm
+  unfold apm_a97A02_average
+  exact hnum.div_const (2 * h)
+
 theorem apm_a97a02
     (p : ENNReal) (hp : 1 ≤ p) (hp_top : p ≠ ⊤)
     (f : ℝ → ℂ) (hf : MemLp f p apm_a97A02_measure)
@@ -55,22 +91,30 @@ theorem apm_a97a02
       ‖apm_a97A02_average f h t‖ ≤
         (2 * h) ^ (-(1 / p.toReal)) *
           (eLpNorm f p apm_a97A02_measure).toReal := by
-  /- CLOSER HOP 1 BOUNDARY.
+  refine ⟨apm_a97A02_continuousOn_average f
+    (apm_a97A02_integrable_of_memLp hp hf) h hh, ?_⟩
+  /- CLOSER HOP 2 BOUNDARY.
 
-  The helpers above close two prerequisites hidden in the original goal:
-  `MemLp.integrable` applies because the restricted unit-interval measure is
-  finite, and every moving interval has measure at most `2*h` by
-  `Measure.restrict_le_self` and `Real.volume_Icc`.
+  This hop closes the complete continuity conjunct in
+  `apm_a97A02_continuousOn_average`.  The proof equips the restricted measure
+  with its inherited `NoAtoms` instance, writes each moving `Icc` integral as
+  the difference of two `Iic` primitives via
+  `intervalIntegral.integral_Iic_sub_Iic`, and composes Mathlib's
+  `IntegrableOn.continuousOn_Iic_primitive_Iic` with the affine endpoints.
+  Thus the earlier symmetric-difference/kernel-continuity bridge is no longer
+  live.
 
-  The norm estimate now reduces to the finite-measure `Lᵖ ⊆ L¹` inequality
-  on the restricted moving interval, followed by the compiled measure bound
-  and division by `2*h`.  The continuity clause reduces to continuity of the
-  indefinite integral of an integrable function for the atomless measure
-  `volume.restrict (Icc 0 1)`, applied at the two continuous endpoints
-  `t-h` and `t+h`.  Searches of Mathlib's interval-integral, `eLpNorm`,
-  indicator, and Bochner-integral APIs found the constituent results but no
-  theorem already combining arbitrary `ENNReal` exponent conversion with this
-  set-integral encoding.  No solved sibling or `ConstructionTargets` module
-  packages that conversion.  The frozen statement is unchanged.
+  The sole remaining bridge is the quantitative estimate.  Source inspection
+  found the precise ENNReal comparison theorem
+  `eLpNorm_le_eLpNorm_mul_rpow_measure_univ`; applied to the moving restricted
+  measure at exponents `1` and `p`, it gives the desired factor before
+  division.  What remains is the Lean normalization from the Bochner integral
+  norm through `eLpNorm f 1`, monotonicity from
+  `apm_a97A02_measure_Icc_le`, and conversion of ENNReal `rpow`/`toReal` into
+  the frozen real power `(2*h)^(-(1/p.toReal))`.  Searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, the solved problem corpus,
+  Mathlib's `CompareExp`, `LpNorm`, set-integral, and interval-integral APIs,
+  and git history found no compiled lemma performing that full conversion.
+  The frozen statement is unchanged.
   -/
   sorry
