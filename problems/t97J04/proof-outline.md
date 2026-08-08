@@ -9,6 +9,11 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 - `apm_t97J04_inl_base_eq_inr_base` proves that the torus and circle
   basepoints coincide in the EqvGen quotient.
+- `apm_t97J04_wedgeQuotient` is the continuous surjective quotient map, and
+  `apm_t97J04_torusInclusion` / `apm_t97J04_circleInclusion` are continuous.
+- `apm_t97J04_wedgeDesc` descends every compatible pair of continuous maps;
+  its computation and uniqueness lemmas establish the full continuous
+  pushout eliminator. This follows the reusable pattern in sibling `t02A03`.
 
 ## Remaining bridges
 
@@ -19,5 +24,8 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 3. Compute the torus and circle terms, yielding ranks `1, 3, 1` and vanishing
    above degree two.
 
-The closest sibling, `t02A03`, encodes the same wedge and confirms these APIs
-are not currently packaged in Mathlib.
+Mathlib's categorical `IsVanKampenColimit` concerns stability of categorical
+colimits and is not the topological fundamental-group theorem. Its available
+Mayer--Vietoris sequences concern sheaf cohomology rather than singular
+homology. Thus the point-set pushout interface is complete, but neither API
+computes the frozen invariants.

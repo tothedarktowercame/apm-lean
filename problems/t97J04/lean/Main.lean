@@ -51,6 +51,86 @@ lemma apm_t97J04_inl_base_eq_inr_base :
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ apm_t97J04_WedgeRel.base
 
+/-- Canonical quotient map from the disjoint union to the wedge. -/
+def apm_t97J04_wedgeQuotient :
+    Sum apm_t97J04_Torus Circle → apm_t97J04_X :=
+  fun x ↦ Quotient.mk _ x
+
+lemma apm_t97J04_continuous_wedgeQuotient :
+    Continuous apm_t97J04_wedgeQuotient := by
+  exact continuous_coinduced_rng
+
+lemma apm_t97J04_surjective_wedgeQuotient :
+    Function.Surjective apm_t97J04_wedgeQuotient := by
+  exact Quotient.mk_surjective
+
+def apm_t97J04_torusInclusion : apm_t97J04_Torus → apm_t97J04_X :=
+  fun x ↦ apm_t97J04_wedgeQuotient (.inl x)
+
+def apm_t97J04_circleInclusion : Circle → apm_t97J04_X :=
+  fun z ↦ apm_t97J04_wedgeQuotient (.inr z)
+
+lemma apm_t97J04_continuous_torusInclusion :
+    Continuous apm_t97J04_torusInclusion := by
+  exact apm_t97J04_continuous_wedgeQuotient.comp continuous_inl
+
+lemma apm_t97J04_continuous_circleInclusion :
+    Continuous apm_t97J04_circleInclusion := by
+  exact apm_t97J04_continuous_wedgeQuotient.comp continuous_inr
+
+/-- Compatible maps out of the two summands respect the generated relation. -/
+lemma apm_t97J04_wedgeDesc_respects
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t97J04_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) {x y}
+    (hxy : Relation.EqvGen apm_t97J04_WedgeRel x y) :
+    Sum.elim f g x = Sum.elim f g y := by
+  induction hxy with
+  | rel a b hab =>
+      cases hab with
+      | base => exact hbase
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- Continuous pushout eliminator for the concrete wedge quotient. -/
+noncomputable def apm_t97J04_wedgeDesc
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t97J04_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) : C(apm_t97J04_X, Z) := by
+  let raw : Sum apm_t97J04_Torus Circle → Z := Sum.elim f g
+  have hraw : Continuous raw := continuous_sum_dom.2 ⟨f.continuous, g.continuous⟩
+  exact ⟨Quotient.lift raw (fun _ _ hxy ↦
+      apm_t97J04_wedgeDesc_respects f g hbase hxy),
+    hraw.quotient_lift (fun _ _ hxy ↦
+      apm_t97J04_wedgeDesc_respects f g hbase hxy)⟩
+
+@[simp] lemma apm_t97J04_wedgeDesc_torusInclusion
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t97J04_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) (x : apm_t97J04_Torus) :
+    apm_t97J04_wedgeDesc f g hbase (apm_t97J04_torusInclusion x) = f x := rfl
+
+@[simp] lemma apm_t97J04_wedgeDesc_circleInclusion
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t97J04_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) (z : Circle) :
+    apm_t97J04_wedgeDesc f g hbase (apm_t97J04_circleInclusion z) = g z := rfl
+
+/-- The descended map is uniquely determined by its two restrictions. -/
+lemma apm_t97J04_wedgeDesc_unique
+    {Z : Type*} [TopologicalSpace Z]
+    (f : C(apm_t97J04_Torus, Z)) (g : C(Circle, Z))
+    (hbase : f (1, 1) = g 1) (u : C(apm_t97J04_X, Z))
+    (huT : ∀ x, u (apm_t97J04_torusInclusion x) = f x)
+    (huC : ∀ z, u (apm_t97J04_circleInclusion z) = g z) :
+    u = apm_t97J04_wedgeDesc f g hbase := by
+  ext y
+  obtain ⟨x, rfl⟩ := apm_t97J04_surjective_wedgeQuotient y
+  cases x with
+  | inl x => exact huT x
+  | inr z => exact huC z
+
 /-- The relation `[a,b]` in the requested three-generator presentation. -/
 def apm_t97J04_relator : FreeGroup (Fin 3) :=
   FreeGroup.of 0 * FreeGroup.of 1 *
@@ -89,5 +169,19 @@ theorem apm_t97j04 :
   history found product preservation but no circle fundamental-group
   computation, van Kampen theorem, singular Mayer--Vietoris sequence, or
   cellular comparison theorem capable of closing these frozen conjuncts.
+
+  CLOSER HOP 2: following the compiled quotient-eliminator pattern in sibling
+  `t02A03`, the full topological pushout interface is now explicit.
+  `apm_t97J04_wedgeQuotient` is continuous and surjective; the torus and
+  circle inclusions are continuous; and `apm_t97J04_wedgeDesc`, its two
+  computation lemmas, and `apm_t97J04_wedgeDesc_unique` prove the continuous
+  universal property for compatible maps. Thus quotient bookkeeping and the
+  point-set pushout eliminator are closed. Searches beyond hop 1 also checked
+  Mathlib's categorical `IsVanKampenColimit` and sheaf-cohomology
+  Mayer--Vietoris developments. The former is a general stability property of
+  colimits, not Seifert--van Kampen for fundamental groups, and the latter
+  does not compute singular homology. No circle/torus fundamental-group
+  computation, singular Mayer--Vietoris sequence, or cellular comparison was
+  found, so the five frozen invariant claims remain open.
   -/
   sorry

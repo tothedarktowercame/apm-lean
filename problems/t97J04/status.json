@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "closer_note": "Proved the quotient identifies the torus and circle basepoints. The fundamental-group and homology conclusions still require unavailable van Kampen and singular Mayer–Vietoris/cellular comparison APIs.",
+  "closer_hop": 2,
+  "closer_note": "The quotient map, continuous summand inclusions, and full continuous pushout eliminator with computation and uniqueness laws are compiled. The fundamental-group and homology conclusions still require unavailable Seifert–van Kampen and singular Mayer–Vietoris/cellular comparison APIs.",
   "imported_at": "2026-07-13T17:26:58.496489Z"
 }
