@@ -10,15 +10,16 @@ conjunct:
 - `apm_b01A02_sylow17_normal_of_card_255` proves that the number of Sylow-17
   subgroups divides 15 and is congruent to one modulo 17.  Hence it is one,
   giving the frozen normal subgroup of order 17.
+- `apm_b01A02_exists_normal_card_85` uses squarefreeness, the cyclic Sylow-3
+  subgroup, and Burnside transfer to construct a normal complement. Its
+  complement cardinality equation proves that it has order exactly 85.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b01A02.md`
 
 ## Remaining boundary
 
-- combine it with a Sylow-5 subgroup to construct an order-85 subgroup;
-- apply the now-closed index-three normality result;
-- prove the order-85 subgroup cyclic and show the final order-three conjugation
+- prove the transfer kernel of order 85 cyclic and show the final order-three conjugation
   action on it is trivial, yielding cyclicity of the full group.
 
 The original source comment claiming Sylow theory was absent is stale in the

@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "The smallest-prime-index theorem and existence of a normal order-17 subgroup in every group of order 255 are fully proved. The remaining sorry is the normal cyclic order-85 subgroup and cyclicity of the whole group.",
+  "closer_hop": 3,
+  "note": "The smallest-prime-index theorem and both required normal subgroup existence claims are fully proved. Burnside transfer constructs a normal complement of order 85 to a cyclic Sylow-3 subgroup. The remaining sorry is cyclicity of that subgroup and of the whole group.",
   "imported_at": "2026-07-13T17:26:53.336804Z"
 }

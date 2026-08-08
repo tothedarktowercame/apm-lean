@@ -73,6 +73,31 @@ lemma apm_b01A02_sylow17_normal_of_card_255
     (Nat.card_eq_one_iff_unique.mp hone).1
   exact ⟨Sylow.normal_of_subsingleton S, hScard⟩
 
+/-- Burnside transfer supplies the previously missing normal Hall subgroup of
+order `85`: a Sylow-3 subgroup is cyclic because `255` is squarefree, and it
+is a Sylow subgroup for the smallest prime divisor. -/
+lemma apm_b01A02_exists_normal_card_85
+    (G : Type*) [Group G] [Fintype G] (hG : Nat.card G = 255) :
+    ∃ H : Subgroup G, H.Normal ∧ Nat.card H = 85 := by
+  letI : IsZGroup G := IsZGroup.of_squarefree (by
+    rw [hG]
+    native_decide)
+  letI : Fact (Nat.Prime 3) := ⟨by norm_num⟩
+  let P : Sylow 3 G := default
+  have hPcyc : IsCyclic P := inferInstance
+  have hpmin : (Nat.card G).minFac = 3 := by rw [hG]; native_decide
+  let T := MonoidHom.transferSylow P (hPcyc.normalizer_le_centralizer hpmin)
+  let H : Subgroup G := T.ker
+  have hcomp : H.IsComplement' P := by
+    simpa [H, T] using hPcyc.isComplement' hpmin
+  have hPcard : Nat.card P = 3 := by
+    rw [Sylow.card_eq_multiplicity, hG]
+    native_decide
+  have hmul := hcomp.card_mul
+  rw [hPcard, hG] at hmul
+  haveI : H.Normal := inferInstance
+  exact ⟨H, inferInstance, by omega⟩
+
 theorem apm_b01a02 :
     (∀ (G : Type*) [Group G] [Fintype G]
       (p : ℕ) (H : Subgroup G),
@@ -94,32 +119,21 @@ theorem apm_b01a02 :
     have hS := apm_b01A02_sylow17_normal_of_card_255 G hGcard S
     refine ⟨⟨S, hS.1, hS.2⟩, ?_⟩
   /-
-  PARTIAL boundary (closer hop 1): the complete first conjunct is now proved
-  above as `apm_b01A02_normal_of_smallest_prime_index`. The original skip was
-  stale: Mathlib now contains both the Sylow theorems and
-  `Subgroup.normal_of_index_eq_minFac_card`, which packages exactly the
-  coset-action/kernel argument. The helper
-  `apmSmallestPrimeDivisor_eq_minFac` bridges the frozen custom predicate to
-  that API.
+  PARTIAL boundary (closer hop 3). A renewed inspection of Burnside transfer
+  found `IsCyclic.isComplement'`, which was more directly useful than the
+  semidirect-product classification.  Since `255` is squarefree,
+  `IsZGroup.of_squarefree` makes a Sylow-3 subgroup cyclic; because `3` is the
+  smallest prime divisor, its transfer kernel is a normal complement.
+  `apm_b01A02_exists_normal_card_85` now compiles this construction and uses
+  `IsComplement'.card_mul` to prove the kernel has order exactly `85`.
 
-  The order-255 conjunct remains. Source and corpus inspection identified the
-  usable ingredients `Sylow.card_dvd_index`, `card_sylow_modEq_one`, and
-  `Sylow.normal_of_subsingleton`; sibling `b93A01` demonstrates the uniqueness
-  arithmetic. The remaining assembly is constructing the normal Sylow-17
-  subgroup, adjoining a Sylow-5 subgroup to obtain order 85, applying the
-  newly closed index-three theorem, then proving cyclicity of the order-85
-  subgroup and triviality of the final order-three conjugation action.
-  Closer hop 2 additionally proves the first order-255 conclusion:
-  `apm_b01A02_sylow17_normal_of_card_255` specializes the compiled Sylow
-  counting pattern from sibling `b99A02`.  The number of Sylow-17 subgroups
-  divides 15 and is congruent to one modulo 17, hence is one.
-
-  A targeted search of `GroupTheory/SpecificGroups/ZGroup.lean` found
-  `IsZGroup.of_squarefree`, which gives cyclic Sylow subgroups for order 255,
-  and the semidirect-product classification `isZGroup_iff_exists_mulEquiv`.
-  It does not package the cyclic-number theorem (`gcd(n, φ(n)) = 1` implies
-  every group of order `n` is cyclic), nor extract the required normal
-  order-85 subgroup.  The remaining bridge is therefore construction of that
-  subgroup and triviality of the two resulting coprime conjugation actions.
+  Thus both required normal-subgroup existence claims are closed independently.
+  The remaining bridge is cyclicity: show the normal order-85 transfer kernel
+  is cyclic and then show the quotient order-three action on it is trivial.
+  `IsZGroup` only makes Sylow subgroups cyclic, not an arbitrary squarefree
+  group cyclic; Mathlib has no cyclic-number theorem implementing the needed
+  coprime automorphism-order argument. Searches of transfer, Z-groups,
+  automorphism groups of cyclic groups, nilpotence, all solved siblings,
+  `LEMMA-INDEX.md`, and construction targets found no packaged final step.
   -/
     sorry
