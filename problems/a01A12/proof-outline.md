@@ -25,3 +25,21 @@ the exact slit wedge (constructing and verifying its inverse), then prove that
 every conformal automorphism of the upper half-plane is a real Möbius map with
 positive determinant. Mathlib provides the `SL(2, ℝ)` action but not this
 converse classification theorem.
+
+## Closer hop 2
+
+The explicit map now has three further compiled properties:
+
+- `apm_a01A12_conformalMap_pow_four` proves
+  `apm_a01A12_conformalMap z ^ 4 = 1 - z ^ 2` using
+  `Complex.cpow_nat_inv_pow`;
+- `apm_a01A12_conformalMap_ne_zero` proves its values are nonzero throughout
+  the upper half-plane;
+- `apm_a01A12_conformalMap_injOn` proves injectivity: equality of images gives
+  equality of squares, and positivity of both imaginary parts eliminates the
+  sign ambiguity.
+
+The explicit biholomorphism still needs surjectivity onto the exact wedge slit
+and a compiled nonzero derivative. The separate converse classification of
+all upper-half-plane conformal automorphisms as real Möbius maps also remains
+absent from the searched corpus.

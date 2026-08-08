@@ -81,6 +81,44 @@ lemma apm_a01A12_sq_mem_slitPlane {w : ℂ} (hw : 0 < w.re) :
     exact hw.ne'
   · exact Or.inr him
 
+/-- The principal fourth root still satisfies the exact fourth-power identity;
+this avoids all branch bookkeeping when proving injectivity. -/
+lemma apm_a01A12_conformalMap_pow_four (z : ℂ) :
+    apm_a01A12_conformalMap z ^ 4 = 1 - z ^ 2 := by
+  unfold apm_a01A12_conformalMap
+  simpa only [one_div] using
+    (Complex.cpow_nat_inv_pow (1 - z ^ 2) (by norm_num : (4 : ℕ) ≠ 0))
+
+lemma apm_a01A12_conformalMap_ne_zero {z : ℂ}
+    (hz : z ∈ apm_a01A12_H) :
+    apm_a01A12_conformalMap z ≠ 0 := by
+  rw [apm_a01A12_conformalMap, Complex.cpow_ne_zero_iff]
+  exact Or.inl (apm_a01A12_one_sub_sq_ne_zero hz)
+
+/-- Equality of the fourth roots forces equality of the quadratic inputs;
+the alternative `z = -w` is impossible for two upper-half-plane points. -/
+lemma apm_a01A12_conformalMap_injOn :
+    Set.InjOn apm_a01A12_conformalMap apm_a01A12_H := by
+  intro z hz w hw hzw
+  have hpow := congrArg (fun u : ℂ ↦ u ^ 4) hzw
+  dsimp only at hpow
+  rw [apm_a01A12_conformalMap_pow_four,
+    apm_a01A12_conformalMap_pow_four] at hpow
+  have hsq : z ^ 2 = w ^ 2 := by
+    exact sub_right_inj.mp hpow
+  have hfac : (z - w) * (z + w) = 0 := by
+    calc
+      (z - w) * (z + w) = z ^ 2 - w ^ 2 := by ring
+      _ = 0 := sub_eq_zero.mpr hsq
+  rcases mul_eq_zero.mp hfac with h | h
+  · exact sub_eq_zero.mp h
+  · have hneg : z = -w := eq_neg_of_add_eq_zero_left h
+    have hzpos : 0 < z.im := hz
+    have hwpos : 0 < w.im := hw
+    rw [hneg] at hzpos
+    simp at hzpos
+    linarith
+
 theorem apm_a01a12 :
     apm_a01A12_ConformalBijOn apm_a01A12_conformalMap
       apm_a01A12_H apm_a01A12_wedgeSlit ∧
@@ -91,23 +129,27 @@ theorem apm_a01a12 :
             (apm_a01A12_conformalMap ∘ apm_a01A12_mobius a b c d)
             apm_a01A12_H := by
   /-
-  Closer hop 1 recovered the earlier range-only development from git history
-  (`3ed025e`, `3fa3a92`, and `fddc86c`) and localized its algebraic core above:
-  the quadratic input is nonzero on `H`, squaring the rotated half-plane avoids
-  the principal branch cut, and the concrete Möbius family contains the
-  identity with positive determinant.  Those earlier commits prove only that
-  the displayed fourth root maps `H` into `wedgeSlit`; they do not prove
-  surjectivity, injectivity of the principal fourth root on the exact slit
-  plane, or its nonvanishing derivative.
+  CLOSER HOP 2 boundary. Going beyond the recovered range-only development,
+  this hop closes injectivity of the explicit fourth-root map on the upper
+  half-plane. `apm_a01A12_conformalMap_pow_four` uses
+  `Complex.cpow_nat_inv_pow` to prove the branch-independent identity
+  `f(z)^4 = 1-z²`. Thus equal images imply `z²=w²`; factoring the difference
+  leaves `z=w` or `z=-w`, and the latter contradicts positive imaginary parts.
+  This is compiled as `apm_a01A12_conformalMap_injOn`.
+  `apm_a01A12_conformalMap_ne_zero` also records nonvanishing of the map from
+  the already-proved nonzero quadratic input.
 
-  Searches of `LEMMA-INDEX.md`, every `ConstructionTargets/` module, solved and
-  partial complex-analysis siblings, Mathlib's `UpperHalfPlane` Möbius-action
-  sources, and git history found no classification theorem saying that every
-  conformal self-bijection of the upper half-plane is a real fractional-linear
-  map.  Mathlib's `SL(2, ℝ)` action supplies the forward family, not the converse
-  automorphism classification.  Closing the frozen theorem therefore still
-  requires (1) finishing the explicit biholomorphism, including an inverse on
-  the wedge slit, and (2) developing that classical automorphism theorem (or an
-  equivalent disk-automorphism classification).
+  Renewed searches consulted `LEMMA-INDEX.md`, every `ConstructionTargets/`
+  module, prior a01A12 commits, complex-analysis siblings, Mathlib's complex
+  power and derivative sources, `UpperHalfPlane` Möbius-action sources, and
+  git history. The complex-power identity was used above. No theorem was found
+  that constructs the required inverse onto the exact wedge slit, packages the
+  derivative of this `cpow` composite with its branch hypotheses, or classifies
+  every conformal upper-half-plane automorphism as a positive-determinant real
+  Möbius map.
+
+  The explicit-map bridge is therefore narrowed to surjectivity and the
+  conformal derivative; the independent automorphism-classification bridge
+  remains open. The frozen statement is unchanged.
   -/
   sorry
