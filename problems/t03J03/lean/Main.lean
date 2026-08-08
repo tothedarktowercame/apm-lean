@@ -72,6 +72,9 @@ def apm_t03J03_generalCoverEquivalent
 
 theorem apm_t03j03
     :
+    eulerCharacteristic false 3 = -1 ∧
+    eulerCharacteristic true 2 = -2 ∧
+    eulerCharacteristic false 4 = -2 ∧
     Nat.card apm_t03J03_character = 7 ∧
     (∃ reps : apm_t03J03_character →
         apm_t03J03_connectedDoubleCover apm_t03J03_N3 inferInstance,
