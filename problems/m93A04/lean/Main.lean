@@ -110,6 +110,26 @@ lemma apm_m93A04_norm_D_le
       exact norm_sub_le (1 : apm_m93A04_C →L[ℝ] apm_m93A04_C) (1 - D x)
     _ ≤ 1 + c := by simpa using add_le_add_left hnorm 1
 
+/-- Why this unblocks `apm_m93a04`: this is the missing uniform
+Nemytskii-to-`ContinuousMap` remainder theorem.  Joint continuity of the
+scalar derivative on compact parameter/value ranges upgrades the pointwise
+Taylor formula, after integration, to a Fréchet derivative in the sup norm. -/
+theorem apm_m93A04_bridge_hasFDerivAt
+    (K K₂ : ℝ → ℝ → ℝ)
+    (hK : Continuous (Function.uncurry K))
+    (hK₂ : Continuous (Function.uncurry K₂))
+    (hpartial : ∀ t u : ℝ, HasDerivAt (K t) (K₂ t u) u)
+    (F : apm_m93A04_C → apm_m93A04_C)
+    (hF : ∀ (x : apm_m93A04_C) (t : apm_m93A04_I),
+      F x t = x t - ∫ s : apm_m93A04_I, K t.1 (x s))
+    (D : apm_m93A04_C →
+      (apm_m93A04_C →L[ℝ] apm_m93A04_C))
+    (hD : ∀ (x h : apm_m93A04_C) (t : apm_m93A04_I),
+      D x h t = h t - ∫ s : apm_m93A04_I, K₂ t.1 (x s) * h s)
+    (x : apm_m93A04_C) :
+    HasFDerivAt F (D x) x := by
+  sorry
+
 theorem apm_m93a04
     (K K₂ : ℝ → ℝ → ℝ)
     (hK : Continuous (Function.uncurry K))

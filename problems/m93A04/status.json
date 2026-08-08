@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "The full bijectivity conjunct remains closed. Hop 3 additionally proves the uniform bound ‖D x‖ ≤ 1 + c; the uniform ContinuousMap-norm Frechet remainder bridge remains open after renewed repository and Mathlib searches.",
+  "closer_hop": 4,
+  "closer_note": "The missing uniform ContinuousMap-norm remainder is now stated precisely as apm_m93A04_bridge_hasFDerivAt, a reusable parameterized Nemytskii-integral differentiation theorem. Its proof intentionally remains sorry.",
   "imported_at": "2026-07-13T17:26:54.586091Z"
 }

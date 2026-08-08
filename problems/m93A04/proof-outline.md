@@ -23,3 +23,8 @@ Closer hop 3 also derives the uniform operator bound `‖D x‖ ≤ 1 + c` from
 the already compiled estimate `‖1 - D x‖ ≤ c`.  This verifies boundedness
 of the proposed derivative but does not supply the missing uniform Taylor
 remainder.
+
+Closer hop 4 states that exact missing interface as
+`apm_m93A04_bridge_hasFDerivAt`. It assumes only joint continuity, the scalar
+partial-derivative formula, and the pointwise formulas for `F` and `D`, and
+concludes the required Fréchet derivative in the continuous-map sup norm.
