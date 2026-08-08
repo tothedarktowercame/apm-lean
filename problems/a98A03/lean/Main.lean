@@ -66,6 +66,31 @@ lemma apm_a98a03_sum_adjacent_sub
       simp only [Fin.castSucc_zero, Fin.succ_last]
       abel
 
+/-- A uniform `Fin`-indexed partition of `[0,1]` can be chosen with mesh
+smaller than any prescribed positive number. -/
+lemma apm_a98a03_exists_fine_uniform_partition {δ : ℝ} (hδ : 0 < δ) :
+    ∃ (n : ℕ) (hn : 0 < n) (x : Fin (n + 1) → ℝ),
+      x 0 = 0 ∧ x (Fin.last n) = 1 ∧ StrictMono x ∧
+      ∀ i : Fin n, x i.succ - x i.castSucc < δ := by
+  obtain ⟨k, hk⟩ := exists_nat_one_div_lt hδ
+  let n := k + 1
+  have hn : 0 < n := Nat.succ_pos k
+  let x : Fin (n + 1) → ℝ := fun i ↦ (i : ℝ) / n
+  refine ⟨n, hn, x, ?_, ?_, ?_, ?_⟩
+  · simp [x]
+  · simp [x, n, Nat.cast_add, Nat.cast_one,
+      show (k : ℝ) + 1 ≠ 0 by positivity]
+  · intro i j hij
+    exact div_lt_div_of_pos_right (by exact_mod_cast hij) (by positivity)
+  · intro i
+    calc
+      x i.succ - x i.castSucc = 1 / (n : ℝ) := by
+        simp only [x, Fin.val_castSucc]
+        rw [show (i.succ.val : ℝ) = i.val + 1 by norm_num]
+        field_simp
+        ring
+      _ < δ := by simpa [n, Nat.cast_add, Nat.cast_one] using hk
+
 theorem apm_a98a03 :
     (∃ (f f' : ℝ → ℝ),
       ContinuousOn f (Icc 0 1) ∧
@@ -102,5 +127,22 @@ theorem apm_a98a03 :
   Closure requires constructing the middle-thirds Cantor function (continuity,
   endpoints, local constancy off a null Cantor set), while the independent FTC
   conjunct can be finished from the compiled MVT tags and Fin telescoping.
+
+  CLOSER HOP 3: `apm_a98a03_exists_fine_uniform_partition` now compiles the
+  remaining Archimedean/`Fin` geometry: for every `δ > 0` it returns a positive
+  `n`, the uniform partition `x i = i/n`, its endpoint equations and strict
+  monotonicity, and the mesh bound required verbatim by the custom Riemann
+  predicate. Thus the FTC conjunct is reduced only to choosing the dependent
+  family of MVT tags and rewriting its sum with the two compiled helpers.
+
+  Going beyond the prior named searches, I inspected Mathlib's measure
+  decomposition and `AbsolutelyContinuousFun` developments for a distribution
+  function of a singular measure. They provide Radon--Nikodym/Lebesgue
+  decomposition and prove rigidity for already absolutely continuous
+  functions, but do not construct a nonzero atomless singular measure or its
+  continuous cumulative distribution. The real-cardinality digit series also
+  lacks an inverse/extension from the ternary Cantor set. Consequently the
+  Cantor-staircase construction remains the independent open boundary; the
+  statement is unchanged.
   -/
   sorry

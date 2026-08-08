@@ -13,10 +13,12 @@ a.e.-derivative counterexample. One `sorry` remains.
   `f b - f a = f' t * (b - a)` for an interior tag `t`.
 - `apm_a98a03_sum_adjacent_sub` proves that the resulting `Fin`-indexed
   adjacent increments telescope exactly to the endpoint difference.
+- `apm_a98a03_exists_fine_uniform_partition` constructs a positive-size
+  uniform partition with endpoints `0,1`, strict monotonicity, and mesh below
+  any prescribed `δ > 0`.
 
 ## Remaining FTC step
 
-- Choose a sufficiently fine uniform `Fin (n+1)` partition.
 - Choose the compiled MVT tag on each cell.
 - Rewrite the tagged sum and apply the compiled telescoping lemma.
 - Apply the defining estimate of `HasRiemannIntegralOnUnitInterval` and let
