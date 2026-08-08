@@ -33,6 +33,15 @@ The remaining boundary consists of the universal classification results,
 the three quaternion non-isomorphisms, the detailed `A₄` subgroup analysis,
 and the custom direct-sum statement for finite abelian groups and `ℚ`.
 
+## Closer hop 3 (2026-08-08)
+
+The explicit quaternion generators now prove `Q₈` noncommutative. Transporting
+commutativity through a hypothetical multiplicative equivalence closes the
+two frozen non-isomorphisms with `ZMod 8` and `ZMod 4 × ZMod 2`. The remaining
+dihedral comparison needs a different invariant because both groups are
+noncommutative. The universal classification, alternating-group, direct-sum,
+and order-`pq` components remain open.
+
 ## Imported Proof Plan
 
 ```clojure

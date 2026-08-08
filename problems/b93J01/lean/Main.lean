@@ -56,6 +56,31 @@ lemma apm_b93J01_not_isCyclic_S3 :
 lemma apm_b93J01_card_Q8 : Fintype.card (QuaternionGroup 2) = 8 := by
   rw [QuaternionGroup.card]
 
+/-- Two standard quaternion generators witness that `Q₈` is
+noncommutative. -/
+lemma apm_b93J01_Q8_not_commutative :
+    (QuaternionGroup.a 1 : QuaternionGroup 2) * QuaternionGroup.xa 0 ≠
+      QuaternionGroup.xa 0 * QuaternionGroup.a 1 := by
+  native_decide
+
+/-- Consequently `Q₈` cannot be isomorphic to any commutative group. -/
+lemma apm_b93J01_Q8_not_mulEquiv_commutative
+    (A : Type*) [CommGroup A] :
+    ¬Nonempty (QuaternionGroup 2 ≃* A) := by
+  rintro ⟨e⟩
+  apply apm_b93J01_Q8_not_commutative
+  apply e.injective
+  simp only [map_mul]
+  exact mul_comm _ _
+
+lemma apm_b93J01_Q8_not_equiv_ZMod8 :
+    ¬Nonempty (QuaternionGroup 2 ≃* Multiplicative (ZMod 8)) :=
+  apm_b93J01_Q8_not_mulEquiv_commutative _
+
+lemma apm_b93J01_Q8_not_equiv_ZMod4_prod_ZMod2 :
+    ¬Nonempty (QuaternionGroup 2 ≃* Multiplicative (ZMod 4 × ZMod 2)) :=
+  apm_b93J01_Q8_not_mulEquiv_commutative _
+
 theorem apm_b93j01 :
     -- (a): `A₄` is a counterexample; `Aₙ` is simple for `n ≥ 5`.
     ¬IsSimpleGroup (alternatingGroup (Fin 4)) ∧
@@ -109,5 +134,18 @@ theorem apm_b93j01 :
   Searches of `LEMMA-INDEX.md`, `ConstructionTargets`, solved group-theory
   siblings, Mathlib sources, and git history found no combined or reusable
   closure.  The frozen statement is unchanged.
+
+  CLOSER HOP 3 (2026-08-08): two of the three quaternion
+  non-isomorphisms are now compiled. `apm_b93J01_Q8_not_commutative` uses the
+  concrete generators `a 1` and `xa 0`; their unequal products normalize by
+  `native_decide`. `apm_b93J01_Q8_not_mulEquiv_commutative` transports
+  commutativity backward through a hypothetical multiplicative equivalence,
+  and its two specializations rule out `ZMod 8` and `ZMod 4 × ZMod 2` exactly
+  as they occur in the frozen theorem. The dihedral target is itself
+  noncommutative, so this invariant cannot settle the third clause; searches
+  of exponent, element-order, center, and quaternion/dihedral APIs found no
+  packaged separating invariant. The broader alternating-group, order-eight
+  classification, direct-sum, and order-`pq` bridges also remain. The frozen
+  statement is unchanged.
   -/
   sorry
