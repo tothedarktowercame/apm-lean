@@ -7,6 +7,19 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+The formal proof is now complete. Mathlib's
+`IsIdempotentElem.spectrum_subset` closes the spectral containment. The two
+singleton cases use `spectrum.notMem_iff`,
+`spectrum.isUnit_of_zero_notMem`, and the elementary fact that an invertible
+idempotent is one. Compactness is proved by restricting a compact projection
+to its range (where it is the identity), and conversely by factoring the
+projection through the finite-dimensional range subtype. The remaining
+closedness, commuting-invariance, and adjoint claims follow from the standard
+orthogonal-projection range, kernel, and self-adjointness lemmas. The frozen
+statement is unchanged and the development is sorry-free.
+
 ## Imported Proof Plan
 
 ```clojure
