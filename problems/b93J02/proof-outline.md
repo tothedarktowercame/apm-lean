@@ -7,6 +7,15 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+Closer hop 1 compiled the two universal implications, proved that `ℤ[X]` is
+not a principal ideal ring via
+`Ideal.IsField.of_isPrincipalIdealRing_polynomial`, and proved directly from
+the multiplicative quadratic norm that `Zsqrtd (-5)` is a domain. Mathlib also
+supplies both required polynomial UFD instances. The theorem remains partial:
+the infinite-variable polynomial ideal must be shown non-finitely generated,
+`Zsqrtd (-5)` must be packaged as a finite `ℤ`-module to obtain Noetherianity,
+and its classical non-PID/non-UFD factorization argument must be formalized.
+
 ## Imported Proof Plan
 
 ```clojure
