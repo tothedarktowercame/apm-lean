@@ -114,6 +114,34 @@ lemma apm_t01J06_inclusionPullback_unique
   ext v
   exact (halpha q v).trans (hbeta q v).symm
 
+/-- The coefficient specification determines the ambient form pointwise. -/
+lemma apm_t01J06_isOmega_unique
+    (omega eta : apm_t01J06_AmbientForm2)
+    (homega : apm_t01J06_isOmega omega)
+    (heta : apm_t01J06_isOmega eta) : omega = eta := by
+  funext x
+  ext v
+  exact (homega x v).trans (heta x v).symm
+
+/-- After restriction to the sphere, the supplied form has the same explicit
+coordinate formula on tangent vectors. This removes `omega` and `alpha` as
+unknowns from the remaining oriented-coefficient calculation. -/
+lemma apm_t01J06_inclusionPullback_apply
+    (omega : apm_t01J06_AmbientForm2)
+    (homega : apm_t01J06_isOmega omega)
+    (alpha : apm_t01J06_SphereForm2)
+    (halpha : apm_t01J06_isInclusionPullback omega alpha)
+    (q : apm_t01J06_S2)
+    (v : Fin 2 → apm_t01J06_sphereTangent q) :
+    alpha q v = ((q : apm_t01J06_E3) 2 + 3) *
+      ((v 0 : apm_t01J06_E3) 0 * (v 1 : apm_t01J06_E3) 1 -
+       (v 0 : apm_t01J06_E3) 1 * (v 1 : apm_t01J06_E3) 0) := by
+  exact (halpha q v).trans (homega q (fun k ↦ (v k : apm_t01J06_E3)))
+
+/-- The target period is strictly positive, so a future Stokes vanishing
+result yields an immediate contradiction. -/
+lemma apm_t01J06_target_period_pos : 0 < 4 * Real.pi / 3 := by positivity
+
 theorem apm_t01j06
     (omega : apm_t01J06_AmbientForm2)
     (homega : apm_t01J06_isOmega omega)
@@ -162,5 +190,23 @@ theorem apm_t01j06
   Hausdorff measure, sphere integration, and git history still yield no
   bridge. Thus restriction uniqueness and the full product existential are
   closed, while the numerical period and Stokes obstruction remain open.
+
+  CLOSER HOP 3: the remaining local form algebra is narrowed further.
+  `apm_t01J06_isOmega_unique` proves the displayed coefficient condition
+  determines the ambient alternating form pointwise, and
+  `apm_t01J06_inclusionPullback_apply` substitutes that condition through the
+  sphere inclusion to give the exact coordinate formula for `alpha` on all
+  tangent vectors. Hence neither abstract form is an unknown in the remaining
+  oriented-coefficient calculation. `apm_t01J06_target_period_pos` also
+  compiles the nonvanishing fact needed after any future Stokes theorem.
+  `LEMMA-INDEX.md` pointed to sibling `t92J09`'s `integral_form_on_sphere`, but
+  inspection showed that helper computes ordinary unit-ball volume in an old
+  canary, while its current main theorem is still sorry and uses a different
+  parametrized integral; it cannot identify this Hausdorff subtype integral.
+  Renewed searches of construction modules, sphere moments, orthogonal
+  projection, differential-form integration, sibling artifacts, and git
+  history found no further bridge. Projection-coordinate simplification plus
+  Hausdorff sphere moments, and the global Stokes obstruction, remain open;
+  the frozen statement is unchanged.
   -/
   sorry

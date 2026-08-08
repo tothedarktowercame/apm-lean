@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The complete product-pullback existential and uniqueness of the sphere restriction are proved. Remaining work is evaluating the custom Hausdorff sphere integral and supplying either the absent Stokes bridge or direct sphere-moment formulas to exclude a closed ambient extension.",
+  "closer_hop": 3,
+  "boundary": "The complete product-pullback existential, uniqueness of both ambient and restricted forms, the explicit tangent-coordinate formula for the restriction, and positivity of the target period are proved. Remaining work is evaluating the custom Hausdorff sphere integral and supplying either the absent Stokes bridge or direct sphere-moment formulas to exclude a closed ambient extension.",
   "imported_at": "2026-07-13T17:26:56.832807Z"
 }

@@ -14,6 +14,12 @@ now compiled directly from the alternating-map construction.
   required by the theorem's final conjunct.
 - `apm_t01J06_inclusionPullback_unique` proves the restricted sphere form is
   uniquely determined by its ambient form.
+- `apm_t01J06_isOmega_unique` proves the coefficient specification uniquely
+  determines the ambient form.
+- `apm_t01J06_inclusionPullback_apply` gives the exact coordinate formula for
+  the sphere restriction on tangent vectors, eliminating both abstract forms
+  from the remaining coefficient calculation.
+- `apm_t01J06_target_period_pos` proves the claimed period is nonzero.
 
 ## Remaining boundary
 
