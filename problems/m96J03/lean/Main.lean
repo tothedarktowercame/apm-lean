@@ -38,6 +38,23 @@ lemma apm_m96j03_laplacian_const {n : ℕ} (c : ℝ) (x : apm_m96j03_E n) :
     apm_m96j03_laplacian (fun _ ↦ c) x = 0 := by
   simp [apm_m96j03_laplacian]
 
+/-- Under the smoothness available in the theorem, each frozen coordinate
+term is exactly the corresponding diagonal value of the second iterated
+Fréchet derivative. -/
+lemma apm_m96j03_coordinate_second_derivative {n : ℕ}
+    (φ : apm_m96j03_E n → ℝ) (hφ : ContDiff ℝ (⊤ : ℕ∞) φ)
+    (x : apm_m96j03_E n) (i : Fin n) :
+    fderiv ℝ (fun y => fderiv ℝ φ y (EuclideanSpace.single i 1)) x
+        (EuclideanSpace.single i 1) =
+      iteratedFDeriv ℝ 2 φ x
+        ![EuclideanSpace.single i 1, EuclideanSpace.single i 1] := by
+  have h2 : ContDiff ℝ (2 : WithTop ℕ∞) φ :=
+    hφ.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hd : Differentiable ℝ (fderiv ℝ φ) :=
+    (h2.fderiv_right (m := 1) (by norm_num)).differentiable (by norm_num)
+  rw [fderiv_clm_apply (hd x) (by fun_prop)]
+  simp [iteratedFDeriv_two_apply]
+
 /-- The unit-ball indicator is measurable; this is needed before any
 Gauss--Green approximation or dominated-convergence argument. -/
 lemma apm_m96j03_measurable_ballIndicator {n : ℕ} :
@@ -111,6 +128,12 @@ theorem apm_m96j03
   theorem can even be used. This analytic compatibility is a new, narrower
   sub-boundary beyond the measure-normalization issue recorded by hop 1.
 
+  Closer hop 3 closes that analytic sub-boundary at its essential point.
+  `apm_m96j03_coordinate_second_derivative` uses `ContDiff.fderiv_right` and
+  `fderiv_clm_apply` to prove that every frozen coordinate term is exactly the
+  corresponding diagonal evaluation of `iteratedFDeriv ℝ 2 φ`. Thus no
+  differentiation-of-an-evaluation gap remains before summing coordinates.
+
   The helper
   `apm_m96j03_integral_ballIndicator` above proves the initial measurable-set
   reduction, so the remaining target is exactly
@@ -151,5 +174,13 @@ theorem apm_m96j03
   restricted Hausdorff measure or supplies the nonradial sphere-flux identity.
   For positive dimension, proving the theorem still requires this missing
   geometric-measure interface.
+
+  The final hop renewed searches in the Laplacian, iterated Fréchet
+  derivative, `HaarToSphere`, Hausdorff-measure, and divergence-theorem
+  sources, as well as the full lemma index and related flux artifacts. The
+  calculus sources supplied the new coordinate compatibility lemma. No source
+  supplied the ball Gauss--Green theorem or identified the frozen restricted
+  Hausdorff surface measure with `volume.toSphere`; the theorem-level bridge
+  remains open and the frozen statement is unchanged.
   -/
   sorry
