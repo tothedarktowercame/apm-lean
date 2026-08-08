@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The quotient map, attaching equality, and full function-level continuous pushout eliminator with restriction equations and uniqueness are compiled. Remaining work is the absent Seifert--van Kampen theorem, singular Mayer--Vietoris sequence, and concrete torus fundamental-group and homology computations.",
+  "closer_hop": 3,
+  "boundary": "The quotient map, canonical coprojections, and an explicit equivalence between maps out of the quotient and compatible pairs from the two summands are compiled. Remaining work is the absent Seifert--van Kampen theorem, singular Mayer--Vietoris sequence, and concrete torus fundamental-group and homology computations.",
   "imported_at": "2026-07-13T17:26:57.053364Z"
 }

@@ -127,6 +127,52 @@ lemma apm_t03J02_gluedDesc_unique
   · exact hul x
   · exact hur x
 
+/-- The two canonical continuous maps from the torus summands. -/
+def apm_t03J02_gluedInl
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) :
+    C(apm_t03J02_Torus, apm_t03J02_space j₁ j₂) :=
+  ⟨fun x ↦ apm_t03J02_quotientMap j₁ j₂ (.inl x),
+    (apm_t03J02_continuous_quotientMap j₁ j₂).comp continuous_inl⟩
+
+def apm_t03J02_gluedInr
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) :
+    C(apm_t03J02_Torus, apm_t03J02_space j₁ j₂) :=
+  ⟨fun x ↦ apm_t03J02_quotientMap j₁ j₂ (.inr x),
+    (apm_t03J02_continuous_quotientMap j₁ j₂).comp continuous_inr⟩
+
+/-- Compatible pairs of maps out of the two summands. -/
+def apm_t03J02_CompatibleMaps
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (Y : Type*) [TopologicalSpace Y] :=
+  {fg : C(apm_t03J02_Torus, Y) × C(apm_t03J02_Torus, Y) //
+    ∀ z, fg.1 (j₁ z) = fg.2 (j₂ z)}
+
+/-- The concrete quotient satisfies the full maps-out universal property as
+an actual equivalence, not merely as separate existence and uniqueness
+lemmas. -/
+def apm_t03J02_gluedDescEquiv
+    {Y : Type*} [TopologicalSpace Y]
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) :
+    apm_t03J02_CompatibleMaps j₁ j₂ Y ≃
+      C(apm_t03J02_space j₁ j₂, Y) where
+  toFun fg := apm_t03J02_gluedDesc j₁ j₂ fg.1.1 fg.1.2 fg.2
+  invFun u := ⟨(u.comp (apm_t03J02_gluedInl j₁ j₂),
+      u.comp (apm_t03J02_gluedInr j₁ j₂)), fun z ↦ by
+        exact congrArg u (apm_t03J02_glue_eq j₁ j₂ z)⟩
+  left_inv fg := by
+    apply Subtype.ext
+    apply Prod.ext <;> ext x <;> rfl
+  right_inv u := by
+    symm
+    apply apm_t03J02_gluedDesc_unique j₁ j₂
+        (u.comp (apm_t03J02_gluedInl j₁ j₂))
+        (u.comp (apm_t03J02_gluedInr j₁ j₂))
+        (fun z ↦ congrArg u (apm_t03J02_glue_eq j₁ j₂ z))
+    · intro x
+      rfl
+    · intro x
+      rfl
+
 def apm_t03J02_basepoint
     (j₁ j₂ : C(Circle, apm_t03J02_Torus)) (z₀ : Circle) :
     apm_t03J02_space j₁ j₂ :=
@@ -189,5 +235,17 @@ theorem apm_t03j02
   Mayer--Vietoris sequence, or concrete torus invariant computation. The
   remaining bridge is now entirely functorial algebraic topology; the frozen
   statement is unchanged.
+
+  CLOSER HOP 3 strengthens the eliminator into an explicit universal-property
+  equivalence. `apm_t03J02_gluedInl` and `apm_t03J02_gluedInr` are the two
+  continuous coprojections, `apm_t03J02_CompatibleMaps` packages compatible
+  pairs, and `apm_t03J02_gluedDescEquiv` proves that maps from the quotient are
+  equivalent to such pairs, with both inverse laws compiled. This removes any
+  remaining ambiguity about the concrete quotient being the intended maps-out
+  pushout. Searches of categorical pushout preservation by singular homology,
+  fundamental groupoids, and derived-colimit/Mayer--Vietoris APIs found no
+  theorem converting this universal property into the frozen invariants.
+  Hence the remaining bridge is still the absent functorial algebraic topology
+  and concrete torus computations; the frozen statement is unchanged.
   -/
   sorry
