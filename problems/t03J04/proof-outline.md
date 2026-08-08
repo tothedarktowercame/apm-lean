@@ -1,7 +1,6 @@
 # Proof Outline: t03J04
 
-This bundle currently has a harvested informal solution but no imported
-Lean proof attempt in this problem root.
+This bundle contains a compiling partial Lean formalization.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t03J04.md`
@@ -10,6 +9,10 @@ Lean proof attempt in this problem root.
 
 - `apm_t03J04_constantVectorField_ne_zero` proves the displayed global field
   is nowhere zero by evaluating its first coordinate.
+- `apm_t03J04_localDiffeomorph_surjective` proves the standard first step of
+  the finite-cover route when the connected target is Hausdorff: the range is
+  open by local diffeomorphism, compact/closed by compactness and `T2Space`,
+  and hence all of the connected target.
 
 ## Remaining boundary
 
@@ -17,3 +20,7 @@ Lean proof attempt in this problem root.
 - turn the compact-source local diffeomorphism into an appropriate finite
   covering and transport Euler characteristic, or develop the equivalent
   vector-field/Poincaré--Hopf argument.
+- The frozen target lacks `T2Space X`; Mathlib's manifold classes do not imply
+  it. Thus the compiled surjectivity bridge cannot be applied directly, and a
+  non-Hausdorff replacement is additionally required unless the statement is
+  later reviewed.

@@ -10,12 +10,12 @@
     "problem_tex": "apm/t03J04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "closer_hop": 2,
-  "closer_progress": "The explicit first-coordinate vector field is proved nowhere zero. Remaining work is the rational singular-homology computation for finite torus powers and Euler-characteristic transport through the compact-source local diffeomorphism.",
+  "classification": "partial",
+  "closer_hop": 3,
+  "closer_progress": "The nowhere-zero field and, conditionally on T2Space X, surjectivity of the compact-source local diffeomorphism are compiled. The frozen target lacks T2Space X, blocking the standard clopen-range promotion, and both rational-homology Euler equalities remain open.",
   "imported_at": "2026-07-13T17:26:57.084851Z"
 }
