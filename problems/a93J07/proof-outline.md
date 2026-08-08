@@ -75,3 +75,17 @@ zero of the limit forces a nearby zero of all sufficiently late approximants.
 The zero-free hypothesis rules this out. An infinite-order zero makes the
 analytic limit locally zero, and the identity theorem propagates this across
 the preconnected domain.
+
+## Closer hop 2
+
+The historical zero-persistence argument is now localized as
+`apm_a93J07_zero_persistence`. It isolates a finite-order zero, obtains a
+positive minimum of the limit norm on a surrounding circle, transfers the
+lower bound to late approximants by uniform convergence, and applies
+`DiffContOnCl.ball_subset_image_closedBall` to force a nearby zero.
+
+For the main theorem, choose a zero of the limit if it is not zero-free. If
+its analytic order is infinite, the analytic identity theorem propagates
+local vanishing throughout the preconnected domain. If its order is finite
+and positive, zero persistence contradicts the hypothesis that every
+approximant is zero-free. Hence the theorem is complete and sorry-free.
