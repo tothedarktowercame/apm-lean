@@ -14,13 +14,16 @@ clause and isolates the missing test-function-topology constructions.
   subtraction, and real scalar multiplication.
 - `apm_m98J02_solvesT_add_homogeneous` proves that adding a homogeneous
   solution preserves an inhomogeneous equation.
+- `apm_m98J02_translateTest` constructs the translated test function
+  `y ↦ φ (x + y)`. Its smoothness and compact support are proved using
+  composition and `HasCompactSupport.comp_homeomorph`.
 
 ## Remaining boundary
 
 - Construct the regular distribution `φ ↦ ∫ f φ` as a continuous linear map
   on Mathlib's test-function LF topology.
-- Construct cutoff and translated test functions and package the iterated
-  distribution pairing as the requested convolution.
+- Construct a cutoff test function and package the iterated distribution
+  pairing as the requested convolution; translation is already compiled.
 - Prove convolution regularity and commutation with the encoded differential
   operator.
 - Construct a nonzero homogeneous regular distribution; the compiled addition

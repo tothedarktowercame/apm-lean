@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Compact-support closure under addition, zero, negation, subtraction, and scalar multiplication is proved, as is preservation of solvesT under addition of a homogeneous solution. Remaining work requires a regular Distribution constructor, cutoff/translation test functions, convolution, differentiation through convolution, and a nonzero homogeneous witness.",
+  "closer_hop": 3,
+  "boundary": "Compact-support closure under addition, zero, negation, subtraction, and scalar multiplication is proved, as is preservation of solvesT under addition of a homogeneous solution. Translated test functions y ↦ φ (x+y) are now constructed with smoothness and compact support. Remaining work requires a regular Distribution constructor, a cutoff test function, continuity of the iterated convolution pairing, differentiation through convolution, and a nonzero homogeneous witness.",
   "imported_at": "2026-07-13T17:26:55.971140Z"
 }

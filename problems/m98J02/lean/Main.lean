@@ -153,6 +153,20 @@ lemma apm_m98J02_solvesT_add_homogeneous
   refine ⟨ψ, hψ, ?_⟩
   simp [hwψ, hzη]
 
+/-- Translation of a test function by a fixed vector.  This is the test
+function required pointwise in the definition of distributional convolution. -/
+def apm_m98J02_translateTest (x : apm_m98J02_E)
+    (φ : apm_m98J02_Test) : apm_m98J02_Test where
+  toFun := fun y ↦ φ (x + y)
+  contDiff' := φ.contDiff.comp (contDiff_const.add contDiff_id)
+  hasCompactSupport' :=
+    φ.hasCompactSupport.comp_homeomorph (Homeomorph.addLeft x)
+  tsupport_subset' := by simp
+
+@[simp] lemma apm_m98J02_translateTest_apply
+    (x y : apm_m98J02_E) (φ : apm_m98J02_Test) :
+    apm_m98J02_translateTest x φ y = φ (x + y) := rfl
+
 theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
@@ -177,7 +191,7 @@ theorem apm_m98j02 :
   · intro u v hu hv
     exact apm_m98J02_hasCompactSupport_add u v hu hv
   · /-
-    CLOSER HOP 2 boundary. The first conjunct is fully proved above as
+    CLOSER HOP 3 boundary. The first conjunct is fully proved above as
     `apm_m98J02_hasCompactSupport_add`, using the union of two compact support
     witnesses and `disjoint_union_right`.
 
@@ -196,11 +210,16 @@ theorem apm_m98j02 :
     `φ ↦ ∫ x, f x * φ x`. Thus even the canonical regular distribution `u`
     requires a new continuity proof for the test-function LF topology.
 
-    The second conjunct additionally requires a cutoff test function equal to
-    one on the compact support and, for every `x`, a translated test function
-    `y ↦ φ (x+y)`, followed by continuity of the iterated pairing defining
-    `Ψ`. No packaged general convolution of a compactly supported distribution
-    with an arbitrary distribution was found. The final conjunct then needs
+    Going beyond hop 2, `apm_m98J02_translateTest` now constructs, for every
+    `x` and `φ`, the required translated test function `y ↦ φ (x+y)`.
+    Its smoothness follows by composition and compact support follows from
+    `HasCompactSupport.comp_homeomorph` with `Homeomorph.addLeft`; the exact
+    evaluation equation is compiled as `apm_m98J02_translateTest_apply`.
+
+    The second conjunct still requires a cutoff test function equal to one on
+    the compact support, followed by continuity of the iterated pairing
+    defining `Ψ`. No packaged general convolution of a compactly supported
+    distribution with an arbitrary distribution was found. The final conjunct then needs
     differentiation-through-convolution and a nonzero homogeneous solution;
     once the latter exists, the new addition lemma supplies the second
     solution. The intended witness is a regular constant distribution, but it is
