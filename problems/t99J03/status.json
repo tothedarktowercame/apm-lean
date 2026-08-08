@@ -28,7 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Both Euler-characteristic equations and their injectivity in the genus parameter are proved. The open bridge is the orientable/nonorientable surface-classification dichotomy, homeomorphism invariance connecting genuine Euler characteristic to the encoding, and separation of the two families.",
+  "closer_hop": 3,
+  "boundary": "Euler formulas, injectivity in genus, and the full uniqueness assembly from existence plus Euler invariance are proved. The open bridge is existence of orientable/nonorientable polygon normal forms and a compatible homeomorphism-invariant Euler characteristic.",
   "imported_at": "2026-05-01T19:38:18.922991Z"
 }

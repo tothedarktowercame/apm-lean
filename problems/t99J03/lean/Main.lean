@@ -86,6 +86,37 @@ lemma apm_t99J03_nonorientable_genus_eq_of_eulerCharacteristic_eq
   simp only [apm_t99J03_eulerCharacteristic_nonorientable] at heq
   omega
 
+/-- Once existence and homeomorphism invariance of the encoded Euler
+characteristic are supplied, uniqueness of the genus parameters is purely
+arithmetic. -/
+lemma apm_t99J03_unique_classification_of_exists_of_euler_invariant
+    (X : Type) [TopologicalSpace X]
+    (hex : (∃ g : ℕ, Nonempty (X ≃ₜ apm_t99J03_Surface true g)) ∨
+      (∃ k : ℕ, 0 < k ∧ Nonempty (X ≃ₜ apm_t99J03_Surface false k)))
+    (hχo : ∀ g h : ℕ,
+      Nonempty (X ≃ₜ apm_t99J03_Surface true g) →
+      Nonempty (X ≃ₜ apm_t99J03_Surface true h) →
+      apm_t99J03_eulerCharacteristic true g =
+        apm_t99J03_eulerCharacteristic true h)
+    (hχn : ∀ g h : ℕ,
+      Nonempty (X ≃ₜ apm_t99J03_Surface false g) →
+      Nonempty (X ≃ₜ apm_t99J03_Surface false h) →
+      apm_t99J03_eulerCharacteristic false g =
+        apm_t99J03_eulerCharacteristic false h) :
+    (∃! g : ℕ, Nonempty (X ≃ₜ apm_t99J03_Surface true g)) ∨
+      (∃! k : ℕ, 0 < k ∧ Nonempty (X ≃ₜ apm_t99J03_Surface false k)) := by
+  rcases hex with ⟨g, hg⟩ | ⟨k, hk, hXk⟩
+  · left
+    refine ⟨g, hg, ?_⟩
+    intro h hh
+    exact apm_t99J03_orientable_genus_eq_of_eulerCharacteristic_eq
+      (hχo h g hh hg)
+  · right
+    refine ⟨k, ⟨hk, hXk⟩, ?_⟩
+    intro h hh
+    exact apm_t99J03_nonorientable_genus_eq_of_eulerCharacteristic_eq
+      (hχn h k hh.2 hXk)
+
 theorem apm_t99j03 :
     ∀ (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
       [ConnectedSpace X] [ChartedSpace apm_t99J03_E2 X]
@@ -128,6 +159,20 @@ theorem apm_t99j03 :
     provides another concrete quotient family and the same definitional Euler
     formulas, but no theorem classifying arbitrary manifolds into it.
     The frozen statement is unchanged.
+
+    CLOSER HOP 3 (2026-08-08): uniqueness is now separated completely from
+    polygon normalization and homology by
+    `apm_t99J03_unique_classification_of_exists_of_euler_invariant`. Given
+    only the existence dichotomy and homeomorphism invariance of the encoded
+    Euler characteristic within each family, the hop-2 injectivity lemmas
+    produce both `∃!` conclusions. Therefore integral/mod-two homology is not
+    needed for within-branch genus uniqueness; it is needed only if used to
+    establish orientability or Euler invariance. Searches of Mathlib's Euler
+    characteristic APIs found definitions for finite complexes and categories
+    but no invariant attached to these arbitrary manifolds or polygon
+    quotients. The live bridge is now existence of a normal form, the
+    orientable/nonorientable dichotomy, and homeomorphism invariance of a
+    compatible Euler characteristic. The frozen statement is unchanged.
     -/
     sorry
   simpa using hclassification

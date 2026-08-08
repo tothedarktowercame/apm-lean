@@ -13,14 +13,19 @@ encoded Euler characteristic determines the parameter within either family.
 Consequently no integer arithmetic remains in uniqueness once a genuine
 homeomorphism-invariant Euler characteristic is connected to the encoding.
 
+`apm_t99J03_unique_classification_of_exists_of_euler_invariant` now packages
+that implication: existence of either normal form plus Euler invariance within
+the chosen family yields the corresponding unique parameter. No homology or
+polygon normalization is needed in the uniqueness assembly itself.
+
 ## Remaining Lean boundary
 
 Classify every compact connected smooth two-manifold as exactly one of the
 concrete orientable polygon quotients or a positive-genus nonorientable
 quotient. This requires triangulation, fundamental-polygon construction,
-paired-edge normalization, homeomorphism assembly, and invariants proving
-uniqueness. Neither Mathlib nor `ConstructionTargets.Surfaces` packages this
-classification.
+paired-edge normalization, homeomorphism assembly, orientability, and a
+homeomorphism-invariant Euler characteristic. Neither Mathlib nor
+`ConstructionTargets.Surfaces` packages this classification.
 
 This file packages the formalization-oriented context that should travel
 with the Lean files.
