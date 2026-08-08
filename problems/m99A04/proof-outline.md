@@ -7,6 +7,11 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+Closer hop 1 closes the theorem directly with Mathlib's dense-extension API:
+`Dense.extend`, `Dense.uniformContinuous_extend`, `Dense.extend_of_ind`, and
+`Dense.extend_unique`. The completeness assumption on `X` is not needed by
+this construction; completeness of `Y` supplies the extension limits.
+
 ## Imported Proof Plan
 
 ```clojure

@@ -28,5 +28,7 @@
     "has_receipt": true
   },
   "classification": "complete",
+  "closer_hop": 1,
+  "classification_detail": "Closed with Dense.extend, uniformContinuous_extend, extend_of_ind, and extend_unique; no sorry remains.",
   "imported_at": "2026-05-01T19:38:17.835807Z"
 }

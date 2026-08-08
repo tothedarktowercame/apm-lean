@@ -23,4 +23,10 @@ theorem apm_m99a04
     (hf : UniformContinuous f) :
     ∃! F : X → Y,
       Continuous F ∧ ∀ ⦃x : X⦄ (hx : x ∈ A), F x = f ⟨x, hx⟩ := by
-  sorry
+  refine ⟨hA.extend f, ?_, ?_⟩
+  · exact ⟨(hA.uniformContinuous_extend hf).continuous,
+      fun {x} hx ↦ hA.extend_of_ind hf ⟨x, hx⟩⟩
+  · intro G hG
+    symm
+    apply hA.extend_unique (g := G) _ hG.1
+    exact fun x ↦ hG.2 x.property
