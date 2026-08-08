@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The boundary inclusion and both continuous canonical maps from the solid tori into the quotient are compiled, together with their gluing compatibility equation. Remaining work is the absent circle fundamental-group computation, van Kampen theorem, singular Mayer--Vietoris sequence, and numerical invariant transport.",
+  "closer_hop": 3,
+  "boundary": "The boundary inclusion, continuous canonical maps, compatibility equation, and full continuous pushout-style eliminator with restriction equations and uniqueness are compiled. Remaining work is the absent circle fundamental-group computation, van Kampen theorem, singular Mayer--Vietoris sequence, and numerical invariant transport.",
   "imported_at": "2026-07-13T17:26:56.796155Z"
 }

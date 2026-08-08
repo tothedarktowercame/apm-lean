@@ -15,6 +15,10 @@ lemma rather than duplicated inline topology reasoning.
   maps into the quotient, with compiled continuity lemmas.
 - `apm_t01J03_gluedInl_boundary_eq_gluedInr` proves the cocone compatibility
   equation imposed by the gluing homeomorphism.
+- `apm_t01J03_gluedDesc` descends every compatible pair of continuous maps
+  from the two pieces to the quotient. Its restriction equations and
+  `apm_t01J03_gluedDesc_unique` establish the full function-level continuous
+  pushout universal property.
 
 ## Remaining boundary
 
@@ -24,8 +28,8 @@ lemma rather than duplicated inline topology reasoning.
 - establish singular Mayer--Vietoris or a cellular-to-singular comparison for
   the same gluing;
 - transport the twice-spiral relation through those computations.
-- connect the now-explicit continuous quotient cocone to whichever van Kampen
-  or singular Mayer--Vietoris interface becomes available.
+- connect the now-compiled continuous pushout universal property to whichever
+  van Kampen or singular Mayer--Vietoris interface becomes available.
 
 Mathlib's existing Mayer--Vietoris sequence concerns sheaf cohomology and does
 not apply to the singular-homology functor in this statement.
