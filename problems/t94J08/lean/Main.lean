@@ -53,6 +53,46 @@ def t94J08HasDegree (n : ℕ)
       orientation.hom (t94J08TopHomologyMap n f a) =
         d * orientation.hom a
 
+/-- The scalar equation does not depend on the chosen orientation
+isomorphism. -/
+lemma t94J08HasDegree_with_orientation {n : ℕ}
+    {f : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1))} {d : ℤ}
+    (h : t94J08HasDegree n f d)
+    (orientation : T94J08TopHomology n ≅ ModuleCat.of ℤ ℤ) :
+    ∀ a : T94J08TopHomology n,
+      orientation.hom (t94J08TopHomologyMap n f a) =
+        d * orientation.hom a := by
+  obtain ⟨orientation₀, h₀⟩ := h
+  intro a
+  have hmap : t94J08TopHomologyMap n f a = d • a := by
+    apply (ConcreteCategory.bijective_of_isIso orientation₀.hom).1
+    simpa using h₀ a
+  rw [hmap]
+  simp
+
+/-- Degrees multiply under composition.  Unlike the same-orientation version
+in sibling `t02A08`, this lemma first transports either existentially chosen
+orientation to the other one. -/
+lemma t94J08HasDegree.comp {n : ℕ}
+    {g h : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1))}
+    {m d : ℤ} (hg : t94J08HasDegree n g m)
+    (hh : t94J08HasDegree n h d) :
+    t94J08HasDegree n (g.comp h) (m * d) := by
+  obtain ⟨orientation, hgo⟩ := hg
+  have hho := t94J08HasDegree_with_orientation hh orientation
+  refine ⟨orientation, fun a ↦ ?_⟩
+  have hcomp : t94J08TopHomologyMap n (g.comp h) =
+      t94J08TopHomologyMap n h ≫ t94J08TopHomologyMap n g := by
+    unfold t94J08TopHomologyMap
+    simpa using
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).map_comp (TopCat.ofHom h) (TopCat.ofHom g)
+  rw [hcomp]
+  change orientation.hom
+    (t94J08TopHomologyMap n g (t94J08TopHomologyMap n h a)) = _
+  rw [hgo, hho]
+  ring
+
 def t94J08HasIsolatedZero {n : ℕ}
     (v : T94J08Euclidean n → T94J08Euclidean n)
     (p : T94J08Euclidean n) : Prop :=
@@ -109,21 +149,40 @@ theorem apm_t94j08 :
       t94J08HasLocalIndex v p r hlink d →
       t94J08HasLocalIndex (fun x ↦ -v x) p r hlinkNeg
         ((-1 : ℤ) ^ (m + 1) * d) := by
+  let hantipodal : ∀ n : ℕ,
+      t94J08HasDegree n
+        (t94J08Antipodal : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1)))
+        ((-1 : ℤ) ^ (n + 1)) := by
   /-
-  CLOSER HOP 1 boundary. The new compiled lemma
-  `t94J08NormalizedLink_neg` proves the exact pointwise identity needed for
-  the second conjunct: normalization of `-v` is the antipodal map composed
-  with normalization of `v`, including the dependent nonvanishing witnesses.
+  CLOSER HOP 2 boundary. Hop 1 compiled `t94J08NormalizedLink_neg`, the exact
+  pointwise identity needed for the second conjunct.
 
-  Closing the homological step still requires two pieces not packaged by the
-  current imports: the actual top-dimensional singular-homology computation
-  for `T94J08Sphere (n+1)` (to construct the orientation isomorphism and
-  compute the antipodal action), and multiplicativity of the scalar action
-  encoded by `t94J08HasDegree`. The latter also requires proving independence
-  from the existentially chosen orientation isomorphism before applying
-  functoriality of `t94J08TopHomologyMap` to composition. Searches of
+  This hop goes beyond that boundary by proving orientation-independence in
+  `t94J08HasDegree_with_orientation` and full degree multiplicativity in
+  `t94J08HasDegree.comp`.  The proof first identifies the induced homology map
+  intrinsically with integer scalar multiplication, transports it through any
+  orientation isomorphism, and then applies functoriality of
+  `t94J08TopHomologyMap`.  Consequently the entire local-index-negation
+  conjunct is assembled below from the antipodal computation and the
+  normalized-link identity.
+
+  The sole remaining bridge is now the first conjunct: the actual top-
+  dimensional singular-homology computation for `T94J08Sphere (n+1)`, needed
+  both to construct an orientation isomorphism and compute the antipodal
+  action. Searches of
   `LEMMA-INDEX.md`, `ConstructionTargets/`, sphere/degree siblings, Mathlib's
   singular-homology, sphere, antipodal, ModuleCat, and functoriality sources,
-  and git history found no sphere homology generator or compiled degree API.
+  and git history found no sphere homology generator or compiled antipodal
+  computation.  The frozen statement is unchanged.
   -/
-  sorry
+    sorry
+  refine ⟨hantipodal, ?_⟩
+  intro m v hv p hp r hr hlink hlinkNeg d hindex
+  obtain ⟨link, hlink_eq, hdegree⟩ := hindex
+  let anti : C(T94J08Sphere (m + 1), T94J08Sphere (m + 1)) :=
+    t94J08Antipodal
+  refine ⟨anti.comp link, ?_, (hantipodal m).comp hdegree⟩
+  intro x
+  change anti (link x) = t94J08NormalizedLink (fun y ↦ -v y) p r hlinkNeg x
+  rw [t94J08NormalizedLink_neg v p r hlink hlinkNeg x]
+  rw [hlink_eq x]

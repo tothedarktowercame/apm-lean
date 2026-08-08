@@ -15,6 +15,23 @@ isomorphism, multiplicativity first needs an orientation-independence lemma.
 No packaged sphere generator or degree API was found in Mathlib or the
 repository.
 
+## Closer hop 2 (2026-08-08)
+
+The abstract degree machinery is now complete.  The lemma
+`t94J08HasDegree_with_orientation` proves that the scalar equation is
+independent of the existentially selected orientation by first identifying the
+induced map with intrinsic integer scalar multiplication.  The lemma
+`t94J08HasDegree.comp` then proves multiplicativity using singular-homology
+functoriality.  This generalizes the same-orientation composition lemma found
+in sibling `t02A08`.
+
+Using those lemmas and `t94J08NormalizedLink_neg`, the entire second conjunct
+of the main theorem now compiles: a linking map for `-v` is the antipodal map
+composed with the linking map for `v`, and its degree is the required product.
+The sole remaining `sorry` is confined to the antipodal-degree family itself,
+which still needs the concrete top singular homology of the encoded sphere and
+the antipodal action on its generator.  The frozen statement is unchanged.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
