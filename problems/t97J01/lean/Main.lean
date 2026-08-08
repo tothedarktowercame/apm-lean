@@ -46,17 +46,45 @@ theorem apm_t97j01
     (p : X → Y) (hp : IsCoveringMap p)
     (hfinite : ∀ y : Y, (p ⁻¹' ({y} : Set Y)).Finite) :
     T2Space Y := by
-  /- Boundary (closer hop 1): `apm_t97J01_surjective_of_connected` closes the
-  surjectivity gap (Mathlib deliberately permits empty fibers in
-  `IsCoveringMap`).  Hence `p` is an `IsOpenQuotientMap`.  Mathlib's exact
-  reduction `t2Space_iff_of_isOpenQuotientMap` leaves the closedness of
-  `{q : X × X | p q.1 = p q.2}`.
-
-  `hp.isSeparatedMap` only proves that the relative diagonal is closed inside
-  the pullback, not that this kernel relation is closed in `X × X`.  Finite
-  fibers must still be combined with the local covering trivializations to
-  prove that stronger fact (equivalently, prove that this finite covering is
-  a closed/proper map).  Searches of Mathlib, `LEMMA-INDEX.md`, all candidate
-  attempts and closed siblings, `ConstructionTargets/`, and git history found
-  no packaged finite-cover closedness theorem. -/
-  sorry
+  classical
+  have hsurj : Function.Surjective p :=
+    apm_t97J01_surjective_of_connected p hp
+  choose U hyU hU hpU H hH using fun y ↦ (hp y).2
+  let Uo : Y → TopologicalSpace.Opens Y := fun y ↦ ⟨U y, hU y⟩
+  have hcover : TopologicalSpace.IsOpenCover Uo :=
+    TopologicalSpace.IsOpenCover.of_sets (fun y ↦ hU y) <| by
+      apply Set.eq_univ_of_forall
+      intro y
+      exact Set.mem_iUnion.2 ⟨y, hyU y⟩
+  have hclosed : IsClosedMap p :=
+    (hcover.isClosedMap_iff_restrictPreimage).2 fun y ↦ by
+      letI : Fintype (p ⁻¹' ({y} : Set Y)) := (hfinite y).fintype
+      have heq : (Uo y).1.restrictPreimage p = Prod.fst ∘ H y := by
+        funext x
+        apply Subtype.ext
+        exact (hH y x).symm
+      rw [heq]
+      exact isClosedMap_fst_of_compactSpace.comp (H y).isClosedMap
+  refine ⟨?_⟩
+  intro y₁ y₂ hne
+  let F₁ : Set X := p ⁻¹' ({y₁} : Set Y)
+  let F₂ : Set X := p ⁻¹' ({y₂} : Set Y)
+  have hF₁c : IsCompact F₁ := (hfinite y₁).isCompact
+  have hF₂c : IsCompact F₂ := (hfinite y₂).isCompact
+  have hF₂closed : IsClosed F₂ := (hfinite y₂).isClosed
+  have hdisj : Disjoint F₁ F₂ := by
+    refine Set.disjoint_left.2 ?_
+    intro x hx₁ hx₂
+    exact hne (hx₁.symm.trans hx₂)
+  rcases SeparatedNhds.of_isCompact_isCompact_isClosed
+      hF₁c hF₂c hF₂closed hdisj with
+    ⟨V₁, V₂, hV₁, hV₂, hFV₁, hFV₂, hVV⟩
+  refine ⟨kernImage p V₁, kernImage p V₂,
+    (isClosedMap_iff_kernImage.1 hclosed) hV₁,
+    (isClosedMap_iff_kernImage.1 hclosed) hV₂, ?_, ?_, ?_⟩
+  · exact hFV₁
+  · exact hFV₂
+  · refine Set.disjoint_left.2 ?_
+    intro y hy₁ hy₂
+    obtain ⟨x, rfl⟩ := hsurj y
+    exact Set.disjoint_left.1 hVV (hy₁ rfl) (hy₂ rfl)
