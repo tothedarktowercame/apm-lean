@@ -34,6 +34,35 @@ lemma apm_a99J05_summable_l1Norm_of_geometric_bound
   · exact hbound
   · exact summable_geometric_of_norm_lt_one (by norm_num : ‖(2 : ℝ)⁻¹‖ < 1)
 
+/-- Tonelli extraction for the second half: summability of the `L¹` norms
+forces pointwise convergence to zero almost everywhere. -/
+lemma apm_a99J05_ae_tendsto_zero_of_summable_l1Norm
+    (f : ℕ → ℝ → ℝ)
+    (hint : ∀ n, Integrable (f n) apm_a99J05_measure)
+    (hsum : Summable (fun n ↦ apm_a99J05_l1Norm (f n))) :
+    ∀ᵐ x ∂apm_a99J05_measure,
+      Tendsto (fun n ↦ f n x) atTop (𝓝 0) := by
+  have hmeas : ∀ n, AEMeasurable (fun x ↦ ‖f n x‖ₑ) apm_a99J05_measure :=
+    fun n ↦ (hint n).aestronglyMeasurable.enorm
+  have htsum : (∑' n, ∫⁻ x, ‖f n x‖ₑ ∂apm_a99J05_measure) ≠ ∞ := by
+    rw [show (∑' n, ∫⁻ x, ‖f n x‖ₑ ∂apm_a99J05_measure) =
+        ∑' n, ENNReal.ofReal (apm_a99J05_l1Norm (f n)) by
+      apply tsum_congr
+      intro n
+      unfold apm_a99J05_l1Norm
+      exact (ofReal_integral_norm_eq_lintegral_enorm (hint n)).symm]
+    exact hsum.tsum_ofReal_ne_top
+  rw [← lintegral_tsum hmeas] at htsum
+  have hae : ∀ᵐ x ∂apm_a99J05_measure, (∑' n, ‖f n x‖ₑ) ≠ ∞ :=
+    (ae_lt_top' (AEMeasurable.ennreal_tsum hmeas) htsum).mono
+      (fun _ hx ↦ hx.ne)
+  filter_upwards [hae] with x hx
+  apply tendsto_zero_iff_norm_tendsto_zero.mpr
+  have henorm := ENNReal.tendsto_atTop_zero_of_tsum_ne_top hx
+  have hreal := (ENNReal.tendsto_toReal_zero_iff
+    (fun n ↦ enorm_ne_top)).2 henorm
+  simpa using hreal
+
 theorem apm_a99j05 :
     (∃ f : ℕ → ℝ → ℝ,
       (∀ n, Integrable (f n) apm_a99J05_measure) ∧
@@ -45,23 +74,29 @@ theorem apm_a99j05 :
       (∀ n, apm_a99J05_l1Norm (f n) ≤ (2 : ℝ)⁻¹ ^ n) →
       ∀ᵐ x ∂apm_a99J05_measure,
         Tendsto (fun n ↦ f n x) atTop (𝓝 0)) := by
-  /- CLOSER HOP 1 BOUNDARY.
+  constructor
+  · /- CLOSER HOP 2 BOUNDARY.
 
-  The helper above compiles the first decisive step of the second conjunct:
-  geometric domination implies summability of the displayed `L¹` norms.
-  Mathlib's proof of `MeasureTheory.integral_tsum` contains the next Tonelli
-  step: finiteness of the sum of integrals of `‖f n x‖` implies that
-  `∑' n, ‖f n x‖` is finite almost everywhere, hence `f n x → 0` almost
-  everywhere. That implication is not exposed as a standalone theorem in this
-  snapshot and still needs extraction with the ENNReal `lintegral` API.
+    This hop closes the complete second conjunct.  The new helper
+    `apm_a99J05_ae_tendsto_zero_of_summable_l1Norm` extracts the Tonelli
+    argument from Mathlib's `integral_tsum`: it converts the summable real
+    integrals to a finite ENNReal `tsum`, uses `lintegral_tsum` and
+    `ae_lt_top'`, and then applies
+    `ENNReal.tendsto_atTop_zero_of_tsum_ne_top`.  The geometric-bound helper
+    supplies its summability premise below.
 
-  The first conjunct additionally requires a concrete typewriter sequence on
-  `[0,1]`: integrable indicator spikes with measures tending to zero whose
-  supports nevertheless hit almost every point infinitely often. Searches of
-  `LEMMA-INDEX.md`, `ConstructionTargets`, solved probability/measure
-  artifacts, Borel--Cantelli, and git history found no compiled enumeration of
-  dyadic intervals or equivalent counterexample. Thus both the Tonelli
-  extraction and the explicit moving-spike construction remain open. The
-  frozen statement is unchanged.
-  -/
-  sorry
+    The sole remaining bridge is the first conjunct's typewriter sequence.
+    Renewed `LEMMA-INDEX.md` inspection found substantial compiled helpers in
+    solved/partial sibling `a01A01`: its stage, position, cell integral, and
+    vanishing-integral lemmas are precisely reusable mathematical ingredients.
+    However, that module's main theorem remains partial and it still lacks the
+    cofinal pointwise cell-selection lemma needed to prove that the sequence
+    has no pointwise limit.  `ConstructionTargets`, the broader solved corpus,
+    Borel--Cantelli sources, and git history contain no closed substitute.
+    Thus importing or copying those helpers alone cannot honestly close this
+    existential.  The frozen statement is unchanged.
+    -/
+    sorry
+  · intro f hint hbound
+    exact apm_a99J05_ae_tendsto_zero_of_summable_l1Norm f hint
+      (apm_a99J05_summable_l1Norm_of_geometric_bound f hbound)

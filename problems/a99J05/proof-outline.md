@@ -21,6 +21,22 @@ indicator intervals visiting almost every point infinitely often. No solved
 sibling packages that dyadic enumeration. The main theorem remains partial
 with one `sorry`; its frozen statement is unchanged.
 
+## Closer hop 2 (2026-08-08)
+
+The second conjunct is now fully compiled.  The helper
+`apm_a99J05_ae_tendsto_zero_of_summable_l1Norm` converts summability of the
+real `L¹` norms to finiteness of the corresponding ENNReal series, swaps the
+series and lower integral with `lintegral_tsum`, extracts pointwise finiteness
+almost everywhere using `ae_lt_top'`, and concludes termwise convergence to
+zero.  The existing geometric comparison supplies the summability premise.
+
+The first conjunct remains open.  `a01A01` now supplies a compiled typewriter
+stage, cell, integral formula, and vanishing-integral theorem, but its still-
+partial development does not prove the cofinal pointwise cell-selection fact.
+That fact is exactly what is required to refute pointwise convergence here.
+Accordingly the bundle remains partial with one honest `sorry`, confined to
+the counterexample existential; the frozen statement is unchanged.
+
 ## Imported Proof Plan
 
 ```clojure
