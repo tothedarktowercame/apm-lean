@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 0,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,21 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "complete",
-  "imported_at": "2026-05-01T19:38:16.983164Z"
+  "classification": "partial",
+  "imported_at": "2026-05-01T19:38:16.983164Z",
+  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/a97A01/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": ["apm_a97a01 (dyadic cancellation and L1 approximation)"],
+    "proved": [
+      "apm_a97A01_abs_rademacher",
+      "apm_a97A01_rademacher_measurable"
+    ],
+    "blockers": [
+      "Exact cancellation on coarser dyadic blocks",
+      "L1 density/convergence of dyadic step approximations"
+    ]
+  }
 }

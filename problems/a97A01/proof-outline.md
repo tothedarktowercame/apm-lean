@@ -1,5 +1,20 @@
 # Proof Outline: a97A01
 
+## Lean closure status
+
+The file currently has one `sorry` in the main theorem. Two prerequisites now
+compile:
+
+- `apm_a97A01_abs_rademacher`: the frozen dyadic sign has absolute value one
+  at every point.
+- `apm_a97A01_rademacher_measurable`: the nested existential/interval
+  definition is measurable.
+
+The remaining bridge is exact cancellation against functions constant on a
+coarser dyadic partition, together with `L¹` approximation by such dyadic step
+functions. The exceptional constant definition at `n = 1` is irrelevant to
+the `atTop` limit but must be excluded in cancellation statements.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
