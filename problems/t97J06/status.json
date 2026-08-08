@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The lift formula and determinant integral compile. Non-nullhomotopy reduces to proving that the identity map of Circle is not homotopic to a constant; this Mathlib snapshot has no circle noncontractibility, winding-degree, fundamental-group, or H1 computation.",
+  "closer_hop": 3,
+  "boundary": "The lift formula and determinant integral compile. A null-homotopy is now proved to yield ContractibleSpace Circle, and the final conjunct follows conditionally from its negation. This snapshot has no proof that Circle is noncontractible via winding degree, fundamental group, or H1.",
   "imported_at": "2026-07-13T17:26:58.506687Z"
 }

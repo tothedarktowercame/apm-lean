@@ -14,10 +14,15 @@ The coordinate formula and determinant integral are formalized and compile.
 - `t97J06_circle_identity_homotopic_of_map_homotopic_const` restricts any
   proposed null-homotopy to the meridian `z ↦ (z,1)` and projects to the second
   coordinate, producing a null-homotopy of `id : Circle → Circle`.
+- `t97J06_contractibleCircle_of_map_homotopic_const` packages that homotopy as
+  an actual `ContractibleSpace Circle` instance using Mathlib's exact
+  characterization of contractibility.
+- `t97J06_not_homotopic_const_of_not_contractibleCircle` proves the complete
+  final conjunct from the single missing input `¬ ContractibleSpace Circle`.
 
 ## Remaining boundary
 
-It remains to prove that the identity map of `Circle` is not homotopic to a
-constant. This is the standard noncontractibility of the circle, obtainable
+It remains to prove `¬ ContractibleSpace Circle`. This is the standard
+noncontractibility of the circle, obtainable
 from winding number, `π₁(S¹) ≃ ℤ`, or `H₁(S¹;ℤ) ≃ ℤ`; none of those computations
 is packaged in this Mathlib snapshot or in the proved repository corpus.
