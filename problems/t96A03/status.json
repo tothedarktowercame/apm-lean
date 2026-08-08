@@ -28,7 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "The quotient now has a full continuous maps-out pushout eliminator with computation and uniqueness. Singular Mayer-Vietoris, sphere homology, or cellular comparison remains unavailable.",
+  "closer_hop": 3,
+  "closer_note": "The quotient now has a full continuous pushout eliminator and a compiled CompactSpace instance. Singular Mayer-Vietoris, sphere homology, and cellular-to-singular comparison remain unavailable.",
   "imported_at": "2026-05-01T19:38:18.414705Z"
 }

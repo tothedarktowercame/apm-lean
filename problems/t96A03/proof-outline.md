@@ -108,3 +108,12 @@ Mathlib still lacks a Mayer–Vietoris package for singular homology, so I focus
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 The Lean lemma justifies the Mayer–Vietoris observation that the boundary map onto `H₁(S¹)` is onto, which is the key input for killing `H₁(X)` and building the short exact sequence for `H₂(X)`. Once the outstanding Mathlib infrastructure (cellular/singular comparison plus a formal treatment of the pushout space) is available, the existing algebraic lemma will slot into the full computation.
+
+## Closer hop 3
+
+The actual quotient is now proved compact as the continuous surjective image
+of the compact disjoint union of its two sphere summands. This complements the
+compiled maps-out pushout eliminator and removes the remaining global
+point-set concern. The unresolved work is exclusively homological: sphere and
+equator singular homology plus Mayer–Vietoris, or a cellular-to-singular
+comparison identifying the existing rank-one boundary calculation.

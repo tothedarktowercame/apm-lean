@@ -71,6 +71,15 @@ lemma apm_t96A03_isQuotientMap_quotient
   refine ⟨apm_t96A03_surjective_quotient h, ?_⟩
   rfl
 
+/-- The glued quotient is compact as a continuous surjective image of the
+compact disjoint union of its two sphere summands. -/
+noncomputable instance apm_t96A03_compactSpace
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :
+    CompactSpace (apm_t96A03_X h) where
+  isCompact_univ := by
+    rw [← Set.range_eq_univ.mpr (apm_t96A03_surjective_quotient h)]
+    exact isCompact_range (apm_t96A03_continuous_quotient h)
+
 lemma apm_t96A03_quotient_glue
     (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace)
     (x : apm_t96A03_EquatorSpace) :
@@ -220,5 +229,19 @@ theorem apm_t96a03
   pushout bookkeeping is closed; the remaining bridge is exclusively the
   missing functorial algebraic-topology computation.  The frozen statement is
   unchanged.
+
+  CLOSER HOP 3 goes beyond the prior boundary by compiling compactness of the
+  actual quotient: `apm_t96A03_compactSpace` realizes it as the continuous
+  surjective image of the compact disjoint union of the two metric spheres.
+  This removes another global topological obligation and confirms that the
+  coinduced quotient topology behaves as intended. Searches additionally
+  checked the newly advanced zero-sphere artifact `t98J03`, the antipodal
+  degree artifact `t94J08`, and path-connected sphere APIs. They provide no
+  `H₀` normalization for connected spaces and no positive-dimensional sphere
+  homology. Consequently none of the four frozen homology clauses can be
+  extracted without the same absent singular Mayer--Vietoris or
+  cellular-to-singular comparison theorem.
   -/
   sorry
+
+#print axioms apm_t96a03
