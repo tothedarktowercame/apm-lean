@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
+  "closer_hop": 2,
+  "classification_detail": "Sine functions, sine derivatives, and Hermite-Gaussian functions are globally smooth, with the Hermite frozen derivative certified; H10 approximation, independence, and spectral density remain.",
   "imported_at": "2026-07-13T17:26:54.494725Z"
 }

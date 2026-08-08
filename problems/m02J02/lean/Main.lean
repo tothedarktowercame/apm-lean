@@ -73,6 +73,34 @@ lemma apm_m02j02_sine_zero (n : ℕ) : apm_m02j02_sine n 0 = 0 := by
 lemma apm_m02j02_sine_one (n : ℕ) : apm_m02j02_sine n 1 = 0 := by
   simp [apm_m02j02_sine, add_mul]
 
+/-- Each interval basis function is smooth on the ambient real line. -/
+lemma apm_m02j02_sine_contDiff (n : ℕ) :
+    ContDiff ℝ ∞ (apm_m02j02_sine n) := by
+  unfold apm_m02j02_sine
+  fun_prop
+
+lemma apm_m02j02_sineDeriv_contDiff (n : ℕ) :
+    ContDiff ℝ ∞ (apm_m02j02_sineDeriv n) := by
+  unfold apm_m02j02_sineDeriv
+  fun_prop
+
+/-- The Hermite-Gaussian functions occurring in both unbounded-domain
+families are smooth. -/
+lemma apm_m02j02_hermiteFunction_contDiff (n : ℕ) :
+    ContDiff ℝ ∞ (apm_m02j02_hermiteFunction n) := by
+  let p : ℝ[X] := (Polynomial.hermite n).map (Int.castRingHom ℝ)
+  have hp : ContDiff ℝ ∞ (fun x : ℝ => Polynomial.eval x p) := by
+    simpa [Polynomial.aeval_def] using Polynomial.contDiff_aeval p ∞
+  unfold apm_m02j02_hermiteFunction
+  exact hp.mul (by fun_prop)
+
+lemma apm_m02j02_hermiteFunction_hasDerivAt (n : ℕ) (x : ℝ) :
+    HasDerivAt (apm_m02j02_hermiteFunction n)
+      (apm_m02j02_hermiteFunctionDeriv n x) x := by
+  simpa [apm_m02j02_hermiteFunctionDeriv] using
+    ((apm_m02j02_hermiteFunction_contDiff n).differentiable
+      (by simp)).differentiableAt.hasDerivAt
+
 theorem apm_m02j02 :
     apm_m02j02_IsH10Basis (Ioo (0 : ℝ) 1)
         apm_m02j02_sine apm_m02j02_sineDeriv ∧
@@ -104,5 +132,19 @@ theorem apm_m02j02 :
   `a96A04` uses Hermite polynomials only for finite Gaussian derivative
   formulas, and `m95A02` provides no reusable Fourier density theorem.
   Establishing the three spectral completeness theorems remains open.
+
+  Closer hop 2 closes the ambient smoothness layer for every displayed
+  family. `apm_m02j02_sine_contDiff` and
+  `apm_m02j02_sineDeriv_contDiff` prove global smoothness of the interval
+  functions and their frozen derivatives. For the unbounded families,
+  `apm_m02j02_hermiteFunction_contDiff` combines
+  `Polynomial.contDiff_aeval` with smoothness of the Gaussian factor, and
+  `apm_m02j02_hermiteFunction_hasDerivAt` certifies the frozen derivative at
+  every point. This removes ordinary differentiability/regularity from the
+  remaining obligations. Renewed searches of orthonormal-basis, Schwartz,
+  Fourier-sine, and Hermite sources still found no completeness theorem that
+  transports to the custom value/derivative-pair graph norm. Membership via
+  compactly supported approximation, linear independence, and the three
+  density clauses therefore remain open.
   -/
   sorry
