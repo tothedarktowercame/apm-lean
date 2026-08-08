@@ -28,8 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_progress": "The full fundamental-group obstruction has been localized: a retraction induces an injection, impossible from a nontrivial circle group into the subsingleton disk group. Only nontriviality of the circle fundamental group remains unavailable.",
+  "closer_hop": 3,
+  "closer_progress": "The abstract obstruction is now specialized completely to the exact norm-defined disk and circle: the disk is homeomorphic to the metric closed ball, contractibility and simple connectivity yield its subsingleton fundamental group, and the literal boundary retraction is ruled out conditional only on nontriviality of the circle fundamental group. That circle computation remains unavailable.",
   "stage": "attempted",
   "checked_at": "2026-08-07",
   "checked_lean_state": {

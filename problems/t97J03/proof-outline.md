@@ -10,6 +10,12 @@ The full abstract obstruction is now also compiled locally: a retraction
 induces an injective fundamental-group map, and no injection exists from a
 nontrivial group into a subsingleton group.
 
+`apm_t97J03_no_disk_retraction` specializes this to the precise frozen
+subtypes. It identifies `{z : ℂ // ‖z‖ ≤ 1}` with the metric closed ball,
+transports Mathlib's contractibility instance, derives simple connectivity,
+and installs the exact subsingleton disk fundamental-group instance. Its only
+remaining premise is nontriviality of the exact circle fundamental group.
+
 Thus the desired contradiction is exactly the theorem that the complex unit
 disk does not retract continuously onto its boundary. All functorial and group
 bookkeeping for that route is compiled. Mathlib currently lacks only the

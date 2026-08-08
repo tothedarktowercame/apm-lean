@@ -67,6 +67,36 @@ lemma apm_t97J03_no_retraction_of_subsingleton_fundamentalGroup
   apply hinj
   apply Subsingleton.elim
 
+/-- The concrete disk-boundary no-retraction theorem, conditional only on the
+single missing foundational fact that the circle fundamental group is
+nontrivial. The contractibility-to-simply-connected assembly follows the
+proved helper `apm_t91a05_no_retraction_of_circle_fundamentalGroup_nontrivial`
+in sibling `t91A05`. -/
+lemma apm_t97J03_no_disk_retraction
+    [Nontrivial (FundamentalGroup apm_t97J03_Circle
+      ⟨1, by simp⟩)] :
+    ¬∃ r : C(apm_t97J03_Disk, apm_t97J03_Circle),
+      ∀ z : apm_t97J03_Circle, r ⟨z.1, le_of_eq z.2⟩ = z := by
+  let i : C(apm_t97J03_Circle, apm_t97J03_Disk) :=
+    ⟨fun z ↦ ⟨z.1, le_of_eq z.2⟩, continuous_subtype_val.subtype_mk _⟩
+  let z₀ : apm_t97J03_Circle := ⟨1, by simp⟩
+  have hDisk : {z : ℂ | ‖z‖ ≤ 1} = Metric.closedBall (0 : ℂ) 1 := by
+    ext z
+    simp [dist_zero_right]
+  let eDisk : apm_t97J03_Disk ≃ₜ Metric.closedBall (0 : ℂ) 1 :=
+    Homeomorph.setCongr hDisk
+  letI : ContractibleSpace (Metric.closedBall (0 : ℂ) 1) :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : ContractibleSpace apm_t97J03_Disk :=
+    eDisk.contractibleSpace
+  letI : SimplyConnectedSpace apm_t97J03_Disk :=
+    SimplyConnectedSpace.ofContractible _
+  letI : Subsingleton (FundamentalGroup apm_t97J03_Disk (i z₀)) :=
+    by
+      change Subsingleton (Path.Homotopic.Quotient (i z₀) (i z₀))
+      infer_instance
+  exact apm_t97J03_no_retraction_of_subsingleton_fundamentalGroup i z₀
+
 theorem apm_t97j03 :
     ¬ ∃ F : apm_t97J03_Y → apm_t97J03_Torus,
       Continuous F ∧
@@ -110,5 +140,20 @@ theorem apm_t97j03 :
   group and singular-homology sources, and related no-retraction artifacts
   found no nontriviality instance for the unit-circle fundamental group. That
   single foundational computation remains open.
+
+  CLOSER HOP 3: `apm_t97J03_no_disk_retraction` now specializes the abstract
+  obstruction completely to the exact frozen disk and circle types. Because
+  the disk is encoded by `‖z‖ ≤ 1` rather than `Metric.closedBall 0 1`, the proof
+  first constructs `eDisk` from their set equality, transports
+  `Metric.contractibleSpace_closedBall` across that homeomorphism, derives
+  `SimplyConnectedSpace`, and installs the exact subsingleton fundamental-
+  group instance. It then applies the categorical obstruction to the literal
+  boundary inclusion. This closes the previously implicit representation and
+  typeclass bridge; the sole premise of the concrete helper is now
+  `Nontrivial (FundamentalGroup apm_t97J03_Circle ⟨1, ...⟩)`. Further
+  inspection of `AddCircle`, universal-cover, winding-number, Hurewicz,
+  singular-homology, and loop-lifting APIs found no compiled way to produce
+  that instance. The frozen theorem remains unchanged and the foundational
+  circle computation is the only open bridge.
   -/
   sorry
