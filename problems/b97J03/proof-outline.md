@@ -14,11 +14,14 @@ and contained in every embedded root field.
 - Consequently the special root count is at least two for every complex root.
 - Every restricted root count for a nonzero polynomial is at most its degree.
 - The special polynomial has degree six, so its count lies between two and six.
+- `apm_b97j03_special_factorization` explicitly factors the mapped polynomial
+  into the six linear factors `X - ζ^i α`, using a fixed primitive sixth root
+  of unity in `ℂ`.
 
 ## Remaining bridge
 
-Sharpen the general degree-six upper bound by excluding the other four sixth
-roots from `ℚ(α)` to obtain the exact count two.
+Use the compiled six-factor formula to exclude the four factors with
+`i ≠ 0,3` from `ℚ(α)`, obtaining the exact count two.
 For the general theorem, formalize the transitive Galois action and identify
 the restricted root count with a normalizer/stabilizer index, yielding
 divisibility and the abelian equality case.

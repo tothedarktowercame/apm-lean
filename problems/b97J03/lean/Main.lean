@@ -67,6 +67,27 @@ lemma apm_b97j03_special_root_ne_zero {α : ℂ}
   rw [hzero, zero_pow (by norm_num : 6 ≠ 0)] at hpow
   norm_num at hpow
 
+/-- A fixed primitive sixth root of unity used to enumerate all complex roots
+of the special polynomial. -/
+noncomputable def apm_b97j03_zeta6 : ℂ :=
+  Complex.exp (2 * Real.pi * Complex.I / 6)
+
+lemma apm_b97j03_zeta6_primitive : IsPrimitiveRoot apm_b97j03_zeta6 6 := by
+  exact Complex.isPrimitiveRoot_exp 6 (by norm_num)
+
+/-- For any chosen root `α`, the special polynomial factors into the six
+root-of-unity multiples of `α`.  This makes the total root list explicit; the
+remaining issue is which factors lie in the embedded field `ℚ(α)`. -/
+lemma apm_b97j03_special_factorization {α : ℂ}
+    (hα : (apm_b97j03_special.map (algebraMap ℚ ℂ)).IsRoot α) :
+    apm_b97j03_special.map (algebraMap ℚ ℂ) =
+      ∏ i ∈ Finset.range 6,
+        (X - C (apm_b97j03_zeta6 ^ i * α)) := by
+  have hpow := apm_b97j03_special_root_pow_six hα
+  simpa [apm_b97j03_special, apm_b97j03_zeta6] using
+    (X_pow_sub_C_eq_prod apm_b97j03_zeta6_primitive
+      (by norm_num : 0 < 6) hpow)
+
 /-- The second evident conjugate of every root is again a root. -/
 lemma apm_b97j03_special_neg_root {α : ℂ}
     (hα : (apm_b97j03_special.map (algebraMap ℚ ℂ)).IsRoot α) :
@@ -169,5 +190,15 @@ theorem apm_b97j03 :
   and normalizer APIs found no packaged theorem making that exclusion or
   identifying the general count with a normalizer index, so those bridges
   remain open.
+
+  Closer hop 3 constructs a fixed primitive sixth root
+  `apm_b97j03_zeta6` and proves `apm_b97j03_special_factorization`: for every
+  chosen root `α`, the mapped polynomial is exactly the product of the six
+  linear factors with roots `ζ^i α`.  Thus the complete ambient complex root
+  list is now compiled, narrowing the special-case obstruction precisely to
+  proving that only the `i = 0,3` factors lie in `ℚ(α)`.  Searches of embedded
+  power-basis coordinates and rational Kummer intersections still found no
+  packaged exclusion theorem; the general normalizer-index bridge also
+  remains open.
   -/
   sorry
