@@ -95,6 +95,27 @@ lemma apm_b94A02_exists_balancedMap
       apm_b94A02_coefficientLinearMap_apply R I b hAnn x r hr
     simp [φ, hx]
 
+/-- The balanced map descends through the tensor-product universal property.
+The descended map is already surjective and has the expected formula on pure
+tensors, so only injectivity remains in constructing the frozen equivalence. -/
+lemma apm_b94A02_exists_surjective_tensorLift
+    (R : Type*) [CommRing R] (I : Ideal R) (b : R)
+    (hAnn : ∀ c : R, b * c = 0 → c ∈ I) :
+    ∃ Φ : TensorProduct R (Ideal.span {b}) (R ⧸ I) →ₗ[R] (R ⧸ I),
+      Function.Surjective Φ ∧
+      ∀ (x : Ideal.span {b}) (r s : R),
+        (x : R) = b * r →
+          Φ (x ⊗ₜ[R] Ideal.Quotient.mk I s) = Ideal.Quotient.mk I (r * s) := by
+  obtain ⟨φ, hsurj, hφ⟩ := apm_b94A02_exists_balancedMap R I b hAnn
+  let Φ := TensorProduct.lift φ
+  refine ⟨Φ, ?_, ?_⟩
+  · intro q
+    obtain ⟨⟨x, y⟩, hxy⟩ := hsurj q
+    refine ⟨x ⊗ₜ[R] y, ?_⟩
+    simpa [Φ] using hxy
+  · intro x r s hr
+    simpa [Φ] using hφ x r s hr
+
 theorem apm_b94a02 :
     ∀ (R : Type*) [CommRing R] (I : Ideal R) (b : R),
       I ≠ ⊤ →
@@ -157,5 +178,22 @@ theorem apm_b94a02 :
      The general quotient-tensor equivalence reduces the middle conjunct to
      the still-missing problem-specific linear equivalence
      `(Ideal.span {b}) / (I • ⊤) ≃ R ⧸ I`.  Sibling `b93A03` supplies the
-     subsequent nonzero-tensor/map argument once that equivalence is built. -/
+     subsequent nonzero-tensor/map argument once that equivalence is built.
+
+     CLOSER HOP 3: `apm_b94A02_exists_surjective_tensorLift` now routes
+     directly through the tensor universal property instead of waiting for
+     quotient-submodule normalization. It applies `TensorProduct.lift` to the
+     compiled balanced map, proves the resulting map
+     `bR ⊗ (R/I) → R/I` surjective by lifting a preimage pair to a pure tensor,
+     and compiles its exact formula on `x ⊗ mk(s)`. Thus the forward map of the
+     desired linear equivalence, its surjectivity, and its generator formula
+     are complete. The remaining middle-conjunct obligation is injectivity
+     (equivalently, constructing and verifying the inverse `q ↦ b ⊗ q`).
+
+     Searches beyond hop 2 covered `TensorProduct.lift`, `TensorProduct.mk`,
+     quotient induction, `tensorQuotEquivQuotSMul`, and sibling `b93A03`.
+     They confirm the inverse should be the generator pure-tensor map, but no
+     packaged theorem proves its two inverse identities for this annihilator-
+     controlled cyclic module. That verification and the final mapped-tensor
+     noninjectivity assembly remain open. -/
   sorry

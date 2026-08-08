@@ -16,12 +16,18 @@ Composing it with multiplication in `R/I` gives
 `apm_b94A02_exists_balancedMap`, closing the theorem's entire first conjunct,
 including surjectivity.
 
+Closer hop 3 applies `TensorProduct.lift` to that balanced map. The resulting
+linear map from `bR ⊗ (R/I)` to `R/I` is proved surjective by turning each
+preimage pair into a pure tensor, and its value on every witnessed
+`x ⊗ mk(s)` is compiled. This constructs the forward half of the desired
+linear equivalence directly, independently of quotient-submodule rewriting.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b94A02.md`
 
 ## Remaining boundary
 
-- derive the tensor-product linear equivalence, either by its universal
-  property or `tensorQuotEquivQuotSMul`;
+- prove injectivity of the compiled surjective tensor lift, equivalently build
+  and verify the inverse `q ↦ b ⊗ q`;
 - reuse the nonzero pure-tensor/map argument from sibling `b93A03` for the
   final failure of injectivity.
