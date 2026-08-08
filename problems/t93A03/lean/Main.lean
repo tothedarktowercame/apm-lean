@@ -73,6 +73,38 @@ noncomputable instance : TopologicalSpace T93A03Spine :=
 def t93A03SpineBasepoint : T93A03Spine :=
   Quotient.mk _ (Sum.inl 1)
 
+/-- A free generator prevents the spine's fundamental group from being
+subsingleton, hence prevents simple connectivity.  This is adapted from the
+pre-repair `t93A03` artifact (`9c1bfb8`). -/
+lemma apm_t93a03_spine_not_simplyConnected_of_piOne_equiv
+    (e : FundamentalGroup T93A03Spine t93A03SpineBasepoint ≃*
+      FreeGroup (Fin 2)) :
+    ¬ SimplyConnectedSpace T93A03Spine := by
+  intro hsc
+  letI : SimplyConnectedSpace T93A03Spine := hsc
+  letI : Subsingleton
+      (FundamentalGroup T93A03Spine t93A03SpineBasepoint) :=
+    inferInstanceAs
+      (Subsingleton
+        (Path.Homotopic.Quotient t93A03SpineBasepoint t93A03SpineBasepoint))
+  have h := congrArg e
+    (Subsingleton.elim (e.symm (FreeGroup.of (0 : Fin 2))) (e.symm 1))
+  exact FreeGroup.of_ne_one (0 : Fin 2) (by simpa using h)
+
+/-- Non-simple-connectivity transports from the spine across the supplied
+homotopy equivalence. -/
+lemma apm_t93a03_connectedSum_not_simplyConnected_of_piOne_equiv
+    {φ₁ φ₂ : T93A03Disk → T93A03Summand}
+    (hspine : T93A03ConnectedSum φ₁ φ₂ ≃ₕ T93A03Spine)
+    (e : FundamentalGroup T93A03Spine t93A03SpineBasepoint ≃*
+      FreeGroup (Fin 2)) :
+    ¬ SimplyConnectedSpace (T93A03ConnectedSum φ₁ φ₂) := by
+  intro hconnected
+  letI : SimplyConnectedSpace (T93A03ConnectedSum φ₁ φ₂) := hconnected
+  have hspineSimply : SimplyConnectedSpace T93A03Spine :=
+    hspine.symm.simplyConnectedSpace
+  exact apm_t93a03_spine_not_simplyConnected_of_piOne_equiv e hspineSimply
+
 theorem apm_t93a03
     (φ₁ φ₂ : T93A03Disk → T93A03Summand)
     (hφ₁ : Topology.IsEmbedding φ₁) (hφ₂ : Topology.IsEmbedding φ₂)
@@ -81,4 +113,29 @@ theorem apm_t93a03
       (FundamentalGroup T93A03Spine t93A03SpineBasepoint ≃*
         FreeGroup (Fin 2)) ∧
     ¬ SimplyConnectedSpace (T93A03ConnectedSum φ₁ φ₂) := by
-  sorry
+  let hpi : Nonempty
+      (FundamentalGroup T93A03Spine t93A03SpineBasepoint ≃*
+        FreeGroup (Fin 2)) := by
+    /-
+    CLOSER HOP 2 boundary. This hop restores the earlier artifact's compiled
+    free-generator contradiction for the repaired `T93A03Spine`, then uses
+    `ContinuousMap.HomotopyEquiv.simplyConnectedSpace` to transport simple
+    connectivity from the connected sum to the spine. Thus, once the displayed
+    group equivalence is supplied, the second conjunct follows completely.
+
+    The sole remaining bridge is the first conjunct: compute the fundamental
+    group of the explicit quotient of two circles at their identified
+    basepoint as `FreeGroup (Fin 2)`. Renewed searches of `LEMMA-INDEX.md`, all
+    `ConstructionTargets/`, solved and partial topology siblings, Mathlib's
+    circle, fundamental-groupoid, graph bouquet, quotient, free-group, and
+    Van Kampen sources, and git history found no topological Seifert--van
+    Kampen theorem, wedge/free-product theorem, or even a packaged
+    `FundamentalGroup Circle 1` computation. The categorical Van Kampen API
+    concerns colimits of functors and does not prove the needed topological
+    result. A direct proof would still require developing winding number plus
+    subdivision and quotient gluing, so the bridge remains honestly open.
+    -/
+    sorry
+  refine ⟨hpi, ?_⟩
+  exact hpi.elim
+    (apm_t93a03_connectedSum_not_simplyConnected_of_piOne_equiv hspine)

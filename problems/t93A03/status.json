@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "Non-simple-connectivity is proved from the requested free-group equivalence. The only remaining bridge is computing the fundamental group of the concrete circle wedge, requiring the absent circle pi1 computation and topological Seifert-van Kampen/wedge theorem.",
+  "closer_hop": 2,
+  "boundary": "For the repaired statement, non-simple-connectivity is now compiled from the requested free-group equivalence and transported across the supplied homotopy equivalence. The only remaining bridge is computing the fundamental group of the concrete circle wedge, requiring the absent circle pi1 computation and topological Seifert-van Kampen/wedge theorem.",
   "imported_at": "2026-07-13T17:26:57.613735Z"
 }
