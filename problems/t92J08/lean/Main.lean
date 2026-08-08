@@ -29,6 +29,16 @@ def apm_t92J08_quadraticField (x : ℝ) : TangentSpace (𝓘(ℝ, ℝ)) x :=
 def apm_t92J08_blowupCurve (t : ℝ) : ℝ :=
   1 / (1 - t)
 
+/-- The ordinary-calculus core of the blow-up counterexample. -/
+lemma apm_t92J08_blowupCurve_hasDerivAt {t : ℝ} (ht : t ≠ 1) :
+    HasDerivAt apm_t92J08_blowupCurve
+      ((apm_t92J08_blowupCurve t) ^ 2) t := by
+  have hden : 1 - t ≠ 0 := sub_ne_zero.mpr ht.symm
+  unfold apm_t92J08_blowupCurve
+  simp only [one_div]
+  simpa using
+    (((hasDerivAt_const t (1 : ℝ)).sub (hasDerivAt_id t)).inv hden)
+
 theorem apm_t92j08 :
     (∀ (n : ℕ) (M : Type)
         [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
@@ -65,5 +75,12 @@ theorem apm_t92j08 :
   ordinary real normed-space derivative.  After that conversion, exclusion of
   a global extension can use continuity at `1` against the divergence of the
   frozen curve (or ODE uniqueness plus the same limit contradiction).
+
+  Closer hop 2 now compiles the ordinary analytic identity as
+  `apm_t92J08_blowupCurve_hasDerivAt`, avoiding the earlier derivative-rule
+  elaboration issue. The remaining counterexample bridge is specifically its
+  transport into `HasMFDerivWithinAt` with the tangent-space presentation,
+  followed by the endpoint contradiction; the independent compact uniform-
+  time construction remains open.
   -/
   sorry
