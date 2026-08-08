@@ -13,6 +13,12 @@ Mathlib's `Polynomial.card_rootSet_eq_natDegree` can then supply exhaustion
 once distinctness and separability have been proved, but it does not extract
 the radicals from an abstract splitting-field instance.
 
+Closer hop 3 proves `apm_b93j04_four_radical_roots_pairwise`, establishing all
+six pairwise inequalities among the four candidates from the two square
+relations. Thus hypothetical radical witnesses immediately give four distinct
+roots of the degree-four polynomial; root-count bounds can then provide
+exhaustion without a separate separability argument.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b93J04.md`
 
@@ -20,8 +26,8 @@ the radicals from an abstract splitting-field instance.
 
 - extract `√2` and `√3` witnesses from the root set of an arbitrary splitting
   field of the quartic;
-- prove the four compiled sign combinations are distinct and exhaust the root
-  set, then establish the displayed four-element basis;
+- use the four compiled distinct roots to exhaust the root set, then establish
+  the displayed four-element basis;
 - construct the independent sign-change algebra automorphisms and prove the
   automorphism group has cardinality four and exponent two;
 - apply the compiled Klein-four helper and the finite Galois correspondence to

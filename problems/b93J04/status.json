@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "All four sign combinations of hypothetical square-root witnesses are now proved roots, in addition to the Klein-four classification helper. Extracting those radicals from an arbitrary splitting field, proving exhaustion/distinctness, constructing the basis and automorphisms, and classifying intermediate fields remain.",
+  "closer_hop": 3,
+  "note": "All four radical candidates are proved roots and pairwise distinct, and the Klein-four classification helper is compiled. Extracting the radicals from an arbitrary splitting field remains the upstream blocker, followed by exhaustion, the basis and automorphisms, and intermediate-field classification.",
   "imported_at": "2026-07-13T17:26:53.858683Z"
 }

@@ -63,6 +63,80 @@ lemma apm_b93j04_four_radical_roots
     apm_b93j04_radical_root K (-r₂) r₃ hn₂ h₃,
     by simpa [sub_eq_add_neg] using apm_b93j04_radical_root K (-r₂) (-r₃) hn₂ hn₃⟩
 
+/-- The four radical candidates are pairwise distinct.  This is the missing
+separability-free input needed to turn the four root computations into root-
+set exhaustion for the quartic. -/
+lemma apm_b93j04_four_radical_roots_pairwise
+    (K : Type*) [Field K] [Algebra ℚ K]
+    (r₂ r₃ : K)
+    (h₂ : r₂ ^ 2 = algebraMap ℚ K 2)
+    (h₃ : r₃ ^ 2 = algebraMap ℚ K 3) :
+    r₂ + r₃ ≠ r₂ - r₃ ∧
+    r₂ + r₃ ≠ -r₂ + r₃ ∧
+    r₂ + r₃ ≠ -r₂ - r₃ ∧
+    r₂ - r₃ ≠ -r₂ + r₃ ∧
+    r₂ - r₃ ≠ -r₂ - r₃ ∧
+    -r₂ + r₃ ≠ -r₂ - r₃ := by
+  have htwo : (2 : K) ≠ 0 := by
+    intro h
+    have hh : algebraMap ℚ K 2 = algebraMap ℚ K 0 := by simpa using h
+    have := (algebraMap ℚ K).injective hh
+    norm_num at this
+  have hr₂ : r₂ ≠ 0 := by
+    intro h
+    rw [h] at h₂
+    have hh : algebraMap ℚ K 0 = algebraMap ℚ K 2 := by simpa using h₂
+    have := (algebraMap ℚ K).injective hh
+    norm_num at this
+  have hr₃ : r₃ ≠ 0 := by
+    intro h
+    rw [h] at h₃
+    have hh : algebraMap ℚ K 0 = algebraMap ℚ K 3 := by simpa using h₃
+    have := (algebraMap ℚ K).injective hh
+    norm_num at this
+  have hr₂r₃ : r₂ ≠ r₃ := by
+    intro h
+    rw [h] at h₂
+    rw [h₂] at h₃
+    have := (algebraMap ℚ K).injective h₃
+    norm_num at this
+  have hr₂nr₃ : r₂ ≠ -r₃ := by
+    intro h
+    rw [h] at h₂
+    have : (-r₃) ^ 2 = r₃ ^ 2 := by ring
+    rw [this, h₃] at h₂
+    have := (algebraMap ℚ K).injective h₂
+    norm_num at this
+  constructor
+  · intro h
+    apply hr₃
+    apply mul_left_cancel₀ (a := (2 : K)) htwo
+    linear_combination h
+  constructor
+  · intro h
+    apply hr₂
+    apply mul_left_cancel₀ (a := (2 : K)) htwo
+    linear_combination h
+  constructor
+  · intro h
+    apply hr₂nr₃
+    apply mul_left_cancel₀ (a := (2 : K)) htwo
+    linear_combination h
+  constructor
+  · intro h
+    apply hr₂r₃
+    apply mul_left_cancel₀ (a := (2 : K)) htwo
+    linear_combination h
+  constructor
+  · intro h
+    apply hr₂
+    apply mul_left_cancel₀ (a := (2 : K)) htwo
+    linear_combination h
+  · intro h
+    apply hr₃
+    apply mul_left_cancel₀ (a := (2 : K)) htwo
+    linear_combination h
+
 /-- Once the abstract automorphism group has the two numerical Klein-four
 invariants, Mathlib supplies exactly the group equivalence frozen below. -/
 lemma apm_b93J04_mulEquiv_kleinFour_of_card_exponent
@@ -127,5 +201,21 @@ theorem apm_b93j04 :
      then bundle the two independent sign-change automorphisms.  Only after
      that can the Galois correspondence and the five-subgroup classification
      identify every intermediate field.  No Mathlib theorem or closed sibling
-     packages this polynomial-specific realization. -/
+     packages this polynomial-specific realization.
+
+     CLOSER HOP 3: `apm_b93j04_four_radical_roots_pairwise` now proves all six
+     pairwise inequalities among the four compiled radical candidates. The
+     proof first derives `r₂ ≠ 0`, `r₃ ≠ 0`, `r₂ ≠ r₃`, and `r₂ ≠ -r₃` from
+     the two square equations using injectivity of `algebraMap ℚ K`, then
+     reduces every candidate equality to one of those contradictions. Hence,
+     once radical witnesses are extracted, the quartic already has four
+     distinct exhibited roots; the earlier distinctness/separability gap is
+     closed and degree-four root bounds can supply exhaustion.
+
+     Searches beyond hop 2 covered root-set cardinality/exhaustion, splitting-
+     field root extraction, quadratic/Kummer extension construction, and
+     closed neighboring Galois artifacts. They provided no reverse theorem
+     extracting `√2` and `√3` from this abstract quartic splitting field. That
+     extraction remains the upstream blocker, followed by the basis,
+     sign-change automorphisms, and intermediate-field classification. -/
   sorry
