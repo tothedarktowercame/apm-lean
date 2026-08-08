@@ -51,6 +51,24 @@ def t97A04HomologyMap (k : ℕ)
   ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
 
+/-- The frozen homology-map wrapper has the expected composition law. -/
+lemma t97A04HomologyMap_comp (k : ℕ)
+    (g f : C(apm_t97a04_Torus, apm_t97a04_Torus)) :
+    t97A04HomologyMap k (g.comp f) =
+      t97A04HomologyMap k f ≫ t97A04HomologyMap k g := by
+  unfold t97A04HomologyMap
+  simpa using
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map_comp (TopCat.ofHom f) (TopCat.ofHom g)
+
+/-- The identity torus map induces the identity on every homology degree. -/
+lemma t97A04HomologyMap_id (k : ℕ) :
+    t97A04HomologyMap k (ContinuousMap.id apm_t97a04_Torus) = 𝟙 _ := by
+  unfold t97A04HomologyMap
+  simpa using
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map_id (TopCat.of apm_t97a04_Torus)
+
 /-- The complete homological computation for a torus self-map.  The matrix,
 degree, and Lefschetz number are conclusions about `f` because the equations
 below use the actual singular-homology maps induced by `f`. -/
@@ -144,6 +162,19 @@ theorem apm_t97a04 :
     torus and circle siblings, Mathlib's singular-homology, AddCircle, product,
     Eilenberg--Zilber/Künneth, and induced-map sources, and git history found no
     compiled circle/torus homology computation or generator-level product map.
+    The frozen statement is unchanged.
+
+    CLOSER HOP 3 (2026-08-08): the categorical functoriality layer of the
+    frozen wrapper is now compiled as `t97A04HomologyMap_comp` and
+    `t97A04HomologyMap_id`, following the proven sphere-map pattern in sibling
+    `t94J08`. Future generator calculations can therefore decompose `Lbar`
+    into simpler torus maps without reopening `TopCat` or functor composition
+    bookkeeping. A renewed search for coordinate inclusions/projections and
+    product homology found the continuous torus maps themselves but still no
+    Künneth/Eilenberg--Zilber comparison or circle generator through which
+    these laws could compute `H₁` and `H₂`. Thus the remaining bridge is
+    purely the three explicit torus homology identifications and their
+    generator-level actions; no categorical composition obligations remain.
     The frozen statement is unchanged.
     -/
     sorry

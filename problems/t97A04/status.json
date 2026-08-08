@@ -28,7 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The trace, determinant, exact integral-coordinate action, scalar-extension identity for the real lift, and final Lefschetz arithmetic are proved and packaged. Remaining work is the integral homology of the AddCircle product and the induced actions of Lbar on H0, H1, and H2.",
+  "closer_hop": 3,
+  "boundary": "The trace, determinant, coordinate action, scalar-extension identity, Lefschetz arithmetic, and identity/composition laws for the induced homology map are compiled. Remaining work is the integral homology of the AddCircle product and the generator-level actions of Lbar on H0, H1, and H2.",
   "imported_at": "2026-05-01T19:38:18.659537Z"
 }

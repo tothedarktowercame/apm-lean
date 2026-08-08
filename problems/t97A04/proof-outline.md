@@ -14,6 +14,11 @@ coordinates, while `apm_t97a04_L_eq_matrix_mulVec` identifies the concrete
 real lift with the scalar extension of this matrix. Thus the remaining
 homology comparison has all determinant and coordinate algebra available.
 
+`t97A04HomologyMap_comp` and `t97A04HomologyMap_id` additionally compile
+functoriality of the exact singular-homology wrapper. Future decompositions of
+`Lbar` into coordinate torus maps therefore require no further categorical
+bookkeeping.
+
 ## Remaining Lean boundary
 
 Compute integral singular homology of `(AddCircle 1) × (AddCircle 1)` as
