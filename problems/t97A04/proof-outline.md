@@ -1,5 +1,20 @@
 # Proof Outline: t97A04
 
+## Compiled progress
+
+`apm_t97a04_matrix_trace` computes the displayed matrix trace as `3`, and
+`apm_t97a04_lefschetz_arithmetic` proves `1 = 1 - trace A + 3`.
+`t97A04HasHomologicalData.of_maps` packages these facts so the main theorem is
+reduced exactly to the three homology isomorphisms and their induced-map
+equations.
+
+## Remaining Lean boundary
+
+Compute integral singular homology of `(AddCircle 1) × (AddCircle 1)` as
+`H₀ ≅ ℤ`, `H₁ ≅ ℤ²`, and `H₂ ≅ ℤ`, with explicit natural generators,
+then calculate the action of `apm_t97a04_Lbar`. No compiled circle/torus
+homology or generator-level Künneth API was found.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 

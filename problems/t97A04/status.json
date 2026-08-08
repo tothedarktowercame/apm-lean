@@ -27,6 +27,8 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "complete",
+  "classification": "partial",
+  "closer_hop": 1,
+  "boundary": "The concrete matrix trace and final Lefschetz arithmetic are proved and packaged. Remaining work is the integral homology of the AddCircle product and the induced actions of Lbar on H0, H1, and H2.",
   "imported_at": "2026-05-01T19:38:18.659537Z"
 }
