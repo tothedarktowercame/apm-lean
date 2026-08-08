@@ -70,6 +70,32 @@ lemma apm_a99j06_exists_log_of_logDeriv_exact
       _ = f z₀ * Complex.exp (G z) := by rw [hc]
       _ = Complex.exp (G z) * f z₀ := mul_comm _ _
 
+/-- Simple connectivity already supplies a *continuous* logarithm through the
+covering-space lifting property of `Complex.exp`.  This bypasses the missing
+primitive theorem topologically; the remaining issue is upgrading this lift
+to complex differentiability. -/
+lemma apm_a99j06_exists_continuous_log
+    {Ω : Set ℂ} (hΩopen : IsOpen Ω) (hΩnonempty : Ω.Nonempty)
+    (hΩsc : IsSimplyConnected Ω) (f : ℂ → ℂ)
+    (hf : DifferentiableOn ℂ f Ω) (hf0 : ∀ z ∈ Ω, f z ≠ 0) :
+    ∃ G : C(Ω, ℂ), ∀ z : Ω, f z = Complex.exp (G z) := by
+  letI : SimplyConnectedSpace Ω := hΩsc.simplyConnectedSpace
+  letI : LocPathConnectedSpace Ω := hΩopen.locPathConnectedSpace
+  obtain ⟨z₀, hz₀⟩ := hΩnonempty
+  let F : C(Ω, {z : ℂ // z ≠ 0}) :=
+    ⟨fun z ↦ ⟨f z, hf0 z z.property⟩,
+      (hf.continuousOn.comp_continuous continuous_subtype_val
+        (fun z ↦ z.property)).subtype_mk _⟩
+  let e₀ : ℂ := Complex.log (f z₀)
+  have he₀ : (⟨Complex.exp e₀, Complex.exp_ne_zero e₀⟩ : {z : ℂ // z ≠ 0}) = F ⟨z₀, hz₀⟩ := by
+    apply Subtype.ext
+    exact Complex.exp_log (hf0 z₀ hz₀)
+  obtain ⟨G, hG, -⟩ := Complex.isCoveringMap_exp.existsUnique_continuousMap_lifts
+    F ⟨z₀, hz₀⟩ e₀ he₀
+  refine ⟨G, fun z ↦ ?_⟩
+  have hcomp := congrFun hG.2 z
+  exact (Subtype.ext_iff.mp hcomp).symm
+
 theorem apm_a99j06
     (Ω : Set ℂ) (hΩopen : IsOpen Ω) (hΩnonempty : Ω.Nonempty)
     (hΩsc : IsSimplyConnected Ω)
@@ -79,26 +105,22 @@ theorem apm_a99j06
       DifferentiableOn ℂ g Ω ∧
       ∀ z ∈ Ω, f z = Complex.exp (g z) := by
   /-
-  Boundary (closer hop 1): `apm_a99j06_logDeriv_differentiableOn` above now
-  compiles the complete analytic reduction: `z ↦ deriv f z / f z` is
-  holomorphic on `Ω`.  A renewed source search found
-  `Mathlib.Analysis.Complex.HasPrimitives`; its module documentation explicitly
-  says that extending primitives from disks to simply connected domains is a
-  TODO.  Its available theorem `DifferentiableOn.isExactOn_ball` therefore
-  cannot consume the frozen general `IsSimplyConnected Ω` hypothesis.
+  Boundary (closer hop 3): going beyond the missing-primitives route, this hop
+  found Mathlib's covering map `Complex.isCoveringMap_exp` and the simply
+  connected lifting theorem.  The compiled helper
+  `apm_a99j06_exists_continuous_log` now constructs a continuous lift
+  `G : C(Ω, ℂ)` with `f z = exp (G z)` directly, so global existence and all
+  monodromy bookkeeping are closed without `Complex.IsExactOn`.
 
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, closed artifacts,
-  complex logarithm/lifting/covering-space APIs, and git history found no
-  alternate global logarithm or exponential-lifting theorem.  Closer hop 2
-  proves `apm_a99j06_exists_log_of_logDeriv_exact`, closing every downstream
-  step: normalize a primitive, prove `f * exp (-G)` is constant using
-  connectedness, and absorb the nonzero constant via `Complex.log`.  The only
-  missing implication is
-
-  `IsSimplyConnected Ω → DifferentiableOn ℂ q Ω → Complex.IsExactOn q Ω`
-
-  Once developed, the new conditional lemma applies immediately.  The bridge
-  is thus still open at exactly Mathlib's stated simply-connected-primitives
-  TODO; all weaker analytic obligations are now compiled.
+  The remaining bridge is regularity of this lift.  One must show locally that
+  a continuous lift through the holomorphic local diffeomorphism `exp` is
+  holomorphic (equivalently, identify it locally with a suitable analytic
+  logarithm branch and differentiate).  Searches of the complex exponential,
+  covering-map, local-homeomorphism, and differentiability APIs found no lemma
+  upgrading `Continuous G` from `DifferentiableOn (exp ∘ G)` to
+  `DifferentiableOn G`.  Mathlib's covering structure records only topological
+  local inverses, not their complex differentiability.  The alternative
+  exactness route remains blocked at the documented simply-connected-
+  primitives TODO, but the topological half is now fully compiled.
   -/
   sorry

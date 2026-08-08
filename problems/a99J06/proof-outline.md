@@ -8,10 +8,15 @@ simply-connected primitive theorem.
 - `apm_a99j06_exists_log_of_logDeriv_exact` proves the full conclusion from
   exactness of `f'/f`: normalize a primitive, prove `f * exp (-G)` is constant,
   and absorb the constant using the complex logarithm.
+- `apm_a99j06_exists_continuous_log` uses `Complex.isCoveringMap_exp` and
+  `IsCoveringMap.existsUnique_continuousMap_lifts` to construct a global
+  continuous logarithm directly from simple connectivity, bypassing the
+  missing global-primitives theorem.
 
 ## Follow-up Needed
 
-- Extend Mathlib's `DifferentiableOn.isExactOn_ball` to arbitrary open simply
-  connected subsets of `ℂ`; this extension is explicitly listed as a TODO in
-  `Analysis.Complex.HasPrimitives`.
-- Apply that theorem to `f'/f` and invoke the compiled conditional lemma.
+- Upgrade the continuous exponential lift to a holomorphic lift. Locally this
+  amounts to identifying the covering-map inverse with an analytic logarithm
+  branch; Mathlib currently exposes only a topological local homeomorphism.
+- Alternatively, extend `DifferentiableOn.isExactOn_ball` to arbitrary open
+  simply connected subsets and invoke the already-compiled exactness route.
