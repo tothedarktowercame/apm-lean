@@ -24,13 +24,19 @@ function field. It is nonconstant and hence transcendental, so
 `RatFunc.algEquivOfTranscendental`, followed by the equivalence from its adjoin
 to `⊤`, constructs the required automorphism with the exact image of `X`.
 
+Hop 4 proves the missing extensionality result locally as
+`apm_b97A02_ratFunc_algHom_ext`. `RatFunc.induction_on'` presents an arbitrary
+rational function as a quotient of polynomial images; `mk_eq_div`,
+`aeval_X_left_eq_algebraMap`, and `Polynomial.aeval_algHom_apply` show that two
+algebra homomorphisms agreeing on `X` agree on that quotient. This closes the
+entire uniqueness clause of the main theorem.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-b97A02.md`
 
 ## Remaining boundary
 
-- prove uniqueness of the compiled affine substitution automorphism from its
-  image of `X`;
+- count the now uniquely parameterized affine substitution automorphisms;
 - combine characteristic-power additivity with the compiled coefficient lemmas
   to prove the displayed invariant is fixed;
 - prove the invariant generates the complete fixed field, including the

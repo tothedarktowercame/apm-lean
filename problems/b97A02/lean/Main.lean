@@ -108,6 +108,25 @@ lemma apm_b97A02_exists_affineAlgEquiv
   change e RatFunc.X = f
   simp [e, RatFunc.algEquivOfTranscendental_X]
 
+/-- An algebra homomorphism out of a rational-function field is determined by
+its value on `X`.  This is the fraction-field extensionality lemma missing
+from the public `RatFunc` API: polynomial values follow from `aeval`
+functoriality, and
+`RatFunc.induction_on'` reduces an arbitrary rational function to a quotient
+of two such polynomial values. -/
+lemma apm_b97A02_ratFunc_algHom_ext
+    (F : Type*) [Field F]
+    (φ ψ : RatFunc F →ₐ[F] RatFunc F)
+    (hX : φ RatFunc.X = ψ RatFunc.X) : φ = ψ := by
+  ext x
+  induction x using RatFunc.induction_on' with
+  | _ p q hq =>
+      rw [RatFunc.mk_eq_div, map_div₀, map_div₀]
+      rw [← RatFunc.aeval_X_left_eq_algebraMap p,
+        ← RatFunc.aeval_X_left_eq_algebraMap q,
+        ← Polynomial.aeval_algHom_apply, ← Polynomial.aeval_algHom_apply,
+        ← Polynomial.aeval_algHom_apply, ← Polynomial.aeval_algHom_apply, hX]
+
 theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
     (∀ a b : F, a ≠ 0 →
       ∃! σ : RatFunc F ≃ₐ[F] RatFunc F,
@@ -173,5 +192,22 @@ theorem apm_b97a02 (F : Type*) [Field F] [Fintype F] :
   construction above. No packaged extensionality theorem for `RatFunc`
   algebra homomorphisms was found, so uniqueness, action counting, invariant
   fixedness, and the fixed-field degree comparison remain open.
+  -/
+  · intro a b ha
+    obtain ⟨σ, hσ⟩ := apm_b97A02_exists_affineAlgEquiv F a b ha
+    refine ⟨σ, hσ, ?_⟩
+    intro τ hτ
+    apply AlgEquiv.ext
+    have hhom := apm_b97A02_ratFunc_algHom_ext F σ.toAlgHom τ.toAlgHom
+      (hσ.trans hτ.symm)
+    exact fun x => congrArg (fun f : RatFunc F →ₐ[F] RatFunc F => f x) hhom.symm
+  /-
+  HOP 4 closes the specifically identified Mathlib gap with the local theorem
+  `apm_b97A02_ratFunc_algHom_ext`, proved by `RatFunc.induction_on'`,
+  `RatFunc.mk_eq_div`, and polynomial `aeval` functoriality.  It is used above
+  to close the complete uniqueness conjunct.  The remaining placeholder is
+  not extensionality: it consists of the affine-action cardinality and the
+  fixed-field identification (including the degree comparison described in
+  the earlier boundary).
   -/
   all_goals sorry
