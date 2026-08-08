@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -31,16 +31,13 @@
   "imported_at": "2026-07-13T17:26:51.975598Z",
   "checked_at": "2026-07-14T23:00:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a93A02/lean/Main.lean",
-  "validation_result": "exit 0; 0 errors; 4 sorries",
+  "validation_result": "exit 0; 0 errors; 1 sorry",
   "sorry_details": {
-    "sorry_count": 4,
+    "sorry_count": 1,
     "sorry_locations": [
-      "unifIntegrable_of_L2_bounded: UI of {fₙ} in Lp from L² bound via Hölder",
-      "hg2: MemLp g 2 μ (Fatou's lemma for a.e. limit)",
-      "hgp: MemLp g p μ (L²→Lp embedding on finite measure)",
-      "hui_sub: UI of {fₙ-g} from UI of {fₙ} and g ∈ Lp"
+      "explicit normalized-spike L² norm, a.e. convergence, and nonconvergence conjunction"
     ],
-    "sorry_reason": "The Vitali convergence theorem application (tendsto_Lp_finite_of_tendsto_ae) is proven zero-sorry. The 4 sorries are in supporting infrastructure: (1) uniform integrability from L² bound requires Hölder inequality for eLpNorm on subsets, (2) Fatou's lemma for the a.e. limit, (3) L²→Lp embedding on finite measure spaces, (4) UI preservation under subtraction with a fixed Lp function."
+    "sorry_reason": "The complete positive Vitali result is now compiled. The sole remaining hole is the explicit square-root spike calculation over the restricted unit-interval measure."
   },
   "proven_lemmas": [
     "Vitali convergence theorem application (tendsto_Lp_finite_of_tendsto_ae) — zero-sorry",
