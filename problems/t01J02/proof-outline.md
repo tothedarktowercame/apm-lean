@@ -16,6 +16,8 @@ has been identified.
 - `apm_t01j02_homotopyMap_injective_of_boundary_nonempty` proves injectivity
   for a covering map using `IsCoveringMap.homotopicRel_iff_comp`; this removes
   cube-boundary connectivity from the injective half.
+- `apm_t01j02_inducedMap_injective` specializes this to `Fin n`, constructs
+  the required boundary point from `2 ≤ n`, and handles the basepoint cast.
 - `IsCoveringMap.existsUnique_continuousMap_lifts` provides the required lift
   of maps from the simply connected cube.
 
@@ -25,5 +27,3 @@ has been identified.
   and use lift uniqueness to show the lifted cube map is constant there.
 - Package that lift as a `GenLoop`, project it back, and descend the resulting
   equality to the homotopy quotient.
-- Transport the compiled injectivity result across the basepoint equality
-  `hbase` in `apm_t01j02_inducedMap`.

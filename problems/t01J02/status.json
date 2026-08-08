@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Functorial laws and injectivity of the covering-induced quotient map are compiled using homotopicRel_iff_comp, avoiding boundary connectivity for injectivity. Remaining work is surjectivity: prove the lifted cube is constant on the boundary, package it as a GenLoop, descend to the quotient, and perform the basepoint cast.",
+  "closer_hop": 3,
+  "boundary": "Functorial laws and injectivity of the frozen covering-induced map, including the Fin n boundary witness and basepoint cast, are compiled. Remaining work is solely surjectivity: prove the lifted cube is constant on the boundary, package it as a GenLoop, and descend to the quotient.",
   "imported_at": "2026-07-13T17:26:56.782852Z"
 }

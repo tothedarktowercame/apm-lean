@@ -80,6 +80,24 @@ def apm_t01j02_inducedMap
     HomotopyGroup.Pi n Xtilde xtilde₀ → HomotopyGroup.Pi n X x₀ :=
   fun a ↦ hbase ▸ apm_t01j02_homotopyMap p xtilde₀ a
 
+/-- The injective half of the main theorem, specialized to the actual
+`Fin n` cube and transported across the frozen basepoint equality. -/
+lemma apm_t01j02_inducedMap_injective
+    (n : ℕ) (hn : 2 ≤ n)
+    {X Xtilde : Type*} [TopologicalSpace X] [TopologicalSpace Xtilde]
+    (xtilde₀ : Xtilde) (x₀ : X) (p : Xtilde → X)
+    (hp : IsCoveringMap p) (hbase : p xtilde₀ = x₀) :
+    Function.Injective
+      (apm_t01j02_inducedMap n ⟨p, hp.continuous⟩ xtilde₀ x₀ hbase) := by
+  subst x₀
+  have hnpos : 0 < n := lt_of_lt_of_le (by norm_num) hn
+  let i : Fin n := ⟨0, hnpos⟩
+  let y : I^(Fin n) := fun _ ↦ 0
+  have hy : y ∈ Cube.boundary (Fin n) := ⟨i, Or.inl rfl⟩
+  simpa [apm_t01j02_inducedMap] using
+    (apm_t01j02_homotopyMap_injective_of_boundary_nonempty
+      (N := Fin n) p hp xtilde₀ y hy)
+
 theorem apm_t01j02
     (n : ℕ) (hn : 2 ≤ n)
     (X Xtilde : Type*) [TopologicalSpace X] [TopologicalSpace Xtilde]
@@ -121,5 +139,22 @@ theorem apm_t01j02
   `LEMMA-INDEX.md`, `ConstructionTargets/`, closed artifacts, both Mathlib
   homotopy files, cube/product connectivity, and git history likewise provide
   no packaged surjectivity bridge.
+
+  Closer hop 3 closes the injective half of the *frozen* theorem itself.
+  `apm_t01j02_inducedMap_injective` chooses the all-zero cube point and a
+  coordinate supplied by `2 ≤ n`, applies the general boundary-point lemma,
+  and transports the result across `hbase`. Thus no injectivity or basepoint-
+  cast work remains in the main theorem.
+
+  I also searched Mathlib's path, polygonal-path, cube splitting,
+  `Cube.boundary_sum_iff`, covering-lift uniqueness, sphere/homeomorphism, and
+  product-connectivity APIs for a local construction. `boundary_sum_iff`
+  decomposes membership but provides no path staying in the union of faces;
+  the lift APIs still require boundary preconnectedness to propagate the
+  chosen corner value. No prior solved artifact or construction target
+  supplies that fact. The sole remaining bridge is therefore surjectivity via
+  a path-connectedness proof for `Cube.boundary (Fin n)` (or an equivalent
+  face-by-face propagation lemma), followed by packaging the lifted map as a
+  `GenLoop` and quotient descent.
   -/
   sorry
