@@ -1,86 +1,84 @@
 import Mathlib
 
-/-! # APM t93A03: a connected sum with nontrivial fundamental group
+/-!
+# APM t93A03 — a connected sum with nontrivial fundamental group
+
+The connected sum is constructed as the quotient of two copies of
+`S¹ × S²` with open three-balls removed, identifying corresponding boundary
+points.  The wedge of two circles remains as the standard spine, but its role
+is now exposed by an explicit homotopy-equivalence hypothesis.
 
 ## Statement repairs
 
 None.
 
-## Encoding note
+## Encoding questions
 
-Mathlib has no connected-sum construction for smooth three-manifolds. Since
-the claim is purely homotopical, we use the standard deformation-retract spine
-of `(S¹ × S²) # (S¹ × S²)`: a wedge of two circles. Unlike the former typed
-placeholder, this is an actual quotient topological space with an actual
-basepoint. Its fundamental group is stated explicitly as the free group on
-two generators.
+Mathlib does not package the deformation retraction of this connected sum onto
+its wedge-of-circles spine.  Following the reviewer-approved route, that
+specific homotopy equivalence is therefore an explicit hypothesis rather than
+being hidden in a definition.
 -/
 
 open FundamentalGroupoid
+open scoped ContinuousMap
 
 noncomputable section
 
-inductive apm_t93a03_wedgeRel : Sum Circle Circle → Sum Circle Circle → Prop
-  | base : apm_t93a03_wedgeRel (Sum.inl 1) (Sum.inr 1)
+abbrev T93A03E3 := EuclideanSpace ℝ (Fin 3)
+abbrev T93A03Disk := Metric.closedBall (0 : T93A03E3) 1
+abbrev T93A03Sphere2 := Metric.sphere (0 : T93A03E3) 1
+abbrev T93A03Summand := Circle × T93A03Sphere2
+abbrev T93A03Boundary := Metric.sphere (0 : T93A03E3) 1
 
-def apm_t93a03_connectedSumSpine :=
-  Quotient (Relation.EqvGen.setoid apm_t93a03_wedgeRel)
+def t93A03BoundaryInDisk (x : T93A03Boundary) : T93A03Disk :=
+  ⟨x, by simpa [Metric.mem_closedBall, Metric.mem_sphere] using x.property.le⟩
 
-noncomputable instance : TopologicalSpace apm_t93a03_connectedSumSpine :=
-  TopologicalSpace.coinduced
-    (fun z : Sum Circle Circle ↦
-      Quotient.mk (Relation.EqvGen.setoid apm_t93a03_wedgeRel) z)
+abbrev T93A03Punctured (φ : T93A03Disk → T93A03Summand) :=
+  {x : T93A03Summand //
+    x ∉ φ '' {u : T93A03Disk | ‖(u : T93A03E3)‖ < 1}}
+
+inductive T93A03ConnectedSumRel
+    (φ₁ φ₂ : T93A03Disk → T93A03Summand) :
+    Sum (T93A03Punctured φ₁) (T93A03Punctured φ₂) →
+      Sum (T93A03Punctured φ₁) (T93A03Punctured φ₂) → Prop
+  | boundary (s : T93A03Boundary)
+      (h₁ : φ₁ (t93A03BoundaryInDisk s) ∉
+        φ₁ '' {u : T93A03Disk | ‖(u : T93A03E3)‖ < 1})
+      (h₂ : φ₂ (t93A03BoundaryInDisk s) ∉
+        φ₂ '' {u : T93A03Disk | ‖(u : T93A03E3)‖ < 1}) :
+      T93A03ConnectedSumRel φ₁ φ₂
+        (Sum.inl ⟨φ₁ (t93A03BoundaryInDisk s), h₁⟩)
+        (Sum.inr ⟨φ₂ (t93A03BoundaryInDisk s), h₂⟩)
+
+def T93A03ConnectedSum
+    (φ₁ φ₂ : T93A03Disk → T93A03Summand) :=
+  Quotient (Relation.EqvGen.setoid (T93A03ConnectedSumRel φ₁ φ₂))
+
+noncomputable instance
+    (φ₁ φ₂ : T93A03Disk → T93A03Summand) :
+    TopologicalSpace (T93A03ConnectedSum φ₁ φ₂) :=
+  TopologicalSpace.coinduced (fun z ↦ Quotient.mk _ z) inferInstance
+
+inductive T93A03WedgeRel : Sum Circle Circle → Sum Circle Circle → Prop
+  | base : T93A03WedgeRel (Sum.inl 1) (Sum.inr 1)
+
+def T93A03Spine :=
+  Quotient (Relation.EqvGen.setoid T93A03WedgeRel)
+
+noncomputable instance : TopologicalSpace T93A03Spine :=
+  TopologicalSpace.coinduced (fun z : Sum Circle Circle ↦ Quotient.mk _ z)
     inferInstance
 
-def apm_t93a03_basepoint : apm_t93a03_connectedSumSpine :=
+def t93A03SpineBasepoint : T93A03Spine :=
   Quotient.mk _ (Sum.inl 1)
 
-lemma apm_t93a03_not_simplyConnected_of_piOne_equiv
-    (e : FundamentalGroup apm_t93a03_connectedSumSpine apm_t93a03_basepoint ≃*
-      FreeGroup (Fin 2)) :
-    ¬SimplyConnectedSpace apm_t93a03_connectedSumSpine := by
-  intro hsc
-  letI : SimplyConnectedSpace apm_t93a03_connectedSumSpine := hsc
-  letI : Subsingleton
-      (FundamentalGroup apm_t93a03_connectedSumSpine apm_t93a03_basepoint) :=
-    inferInstanceAs
-      (Subsingleton
-        (Path.Homotopic.Quotient apm_t93a03_basepoint apm_t93a03_basepoint))
-  have h := congrArg e
-    (Subsingleton.elim (e.symm (FreeGroup.of (0 : Fin 2))) (e.symm 1))
-  exact FreeGroup.of_ne_one (0 : Fin 2) (by simpa using h)
-
-theorem apm_t93a03 :
+theorem apm_t93a03
+    (φ₁ φ₂ : T93A03Disk → T93A03Summand)
+    (hφ₁ : Topology.IsEmbedding φ₁) (hφ₂ : Topology.IsEmbedding φ₂)
+    (hspine : T93A03ConnectedSum φ₁ φ₂ ≃ₕ T93A03Spine) :
     Nonempty
-      (FundamentalGroup apm_t93a03_connectedSumSpine apm_t93a03_basepoint ≃*
+      (FundamentalGroup T93A03Spine t93A03SpineBasepoint ≃*
         FreeGroup (Fin 2)) ∧
-    ¬SimplyConnectedSpace apm_t93a03_connectedSumSpine := by
-  /-
-  CLOSER HOP 1 boundary. The second conjunct is now reduced completely to the
-  first by `apm_t93a03_not_simplyConnected_of_piOne_equiv`: simple connectivity
-  makes the based path-homotopy quotient subsingleton, whereas the free
-  generator `FreeGroup.of 0` is not the identity.
-
-  The remaining bridge is therefore exactly the fundamental-group computation
-  for this quotient wedge. The intended proof identifies the fundamental group
-  of each circle with `ℤ` and applies Seifert--van Kampen at their common
-  basepoint, obtaining `ℤ * ℤ ≅ FreeGroup (Fin 2)`. Mathlib has path/homotopy
-  quotients and product preservation for the fundamental groupoid, but no
-  topological Seifert--van Kampen theorem, no wedge/free-product theorem, and
-  no packaged `FundamentalGroup Circle 1 ≃* Multiplicative ℤ` computation.
-
-  A direct graph route was also checked: Mathlib defines combinatorial
-  `Graph.bouquet`, but does not connect graph realization fundamental groups to
-  `FreeGroup`, nor identify this raw quotient with such a realization. Building
-  explicit loops and a universal inverse would reproduce van Kampen, including
-  subdivision and quotient-continuity bookkeeping.
-
-  Searches covered `LEMMA-INDEX.md`, all `ConstructionTargets/`, wedge and
-  covering siblings (`t01A03`, `t01A04`, `t01J03`, `t92J05`, `t92J06`,
-  `t97A03`), Mathlib's FundamentalGroupoid, SimplyConnected, Circle/AddCircle,
-  quotient, graph bouquet, FreeGroup, and categorical/topological van Kampen
-  sources, and git history. The categorical `IsVanKampenColimit` API is
-  unrelated to the missing topological theorem. No reusable wedge π₁ bridge
-  was found.
-  -/
+    ¬ SimplyConnectedSpace (T93A03ConnectedSum φ₁ φ₂) := by
   sorry
