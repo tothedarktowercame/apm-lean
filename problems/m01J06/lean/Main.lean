@@ -129,6 +129,41 @@ private lemma apm_m01J06_critical_mode_exists (K : ℝ) (m : ℕ) :
     rw [mul_one, hw, Real.sin_add_nat_mul_pi, Real.sin_pi_div_two]
     exact mul_ne_zero (pow_ne_zero m (by norm_num : (-1 : ℝ) ≠ 0)) one_ne_zero
 
+/-- Why this unblocks `apm_m01j06`: this is the exact first-variation formula
+for the frozen set-integral energy.  It packages the uniform integrable
+majorant needed to differentiate under the integral, including the endpoint
+`derivWithin` convention, into the `HasDerivAt` statement consumed by
+stationarity. -/
+theorem apm_m01J06_bridge_energy_firstVariation
+    (lam K : ℝ) (φ η : ℝ → ℝ)
+    (hφ : ContDiffOn ℝ 2 φ (Icc 0 1))
+    (hη : ContDiffOn ℝ 2 η (Icc 0 1)) :
+    HasDerivAt
+      (fun ε : ℝ ↦ apm_m01J06_energy lam K
+        (fun s ↦ φ s + ε * η s))
+      (∫ s in Icc (0 : ℝ) 1,
+        (-lam * Real.sin (φ s) * η s) +
+          K * derivWithin φ (Icc 0 1) s *
+            derivWithin η (Icc 0 1) s) 0 := by
+  sorry
+
+/-- Why this unblocks `apm_m01j06`: it converts the bending contribution in
+the set-integral first variation to the boundary term and the interior
+Euler--Lagrange term.  This is precisely the set-integral/interval-integral
+conversion needed before applying the fundamental lemma and extracting the
+free-end condition at `1`. -/
+theorem apm_m01J06_bridge_setIntegral_integrationByParts
+    (φ η : ℝ → ℝ)
+    (hφ : ContDiffOn ℝ 2 φ (Icc 0 1))
+    (hη : ContDiffOn ℝ 2 η (Icc 0 1)) :
+    (∫ s in Icc (0 : ℝ) 1,
+      derivWithin φ (Icc 0 1) s * derivWithin η (Icc 0 1) s) =
+      derivWithin φ (Icc 0 1) 1 * η 1 -
+        derivWithin φ (Icc 0 1) 0 * η 0 -
+        ∫ s in Icc (0 : ℝ) 1,
+          iteratedDerivWithin 2 φ (Icc 0 1) s * η s := by
+  sorry
+
 theorem apm_m01j06
     (lam K : ℝ) (hlam : 0 < lam) (hK : 0 < K) :
     (∀ φ : ℝ → ℝ,
