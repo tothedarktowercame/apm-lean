@@ -18,6 +18,18 @@ and the nonsolvability of the free product (or constructing a suitable
 nonsolvable quotient). Nonnilpotence then follows from nilpotent implies
 solvable.
 
+## Closer hop 2 (2026-08-08)
+
+A route around the free-product isomorphism is now concrete. The file defines
+an explicit 3-cycle and 7-cycle in `A₇`, checks by computation that killing
+`a` and mapping `b,c` to these elements respects every relation, and bundles
+the resulting homomorphism `apm_b96j03_toA7` from the frozen presented group.
+
+Closure along this route now requires proving those two permutations generate
+`A₇` and proving `A₇` nonsolvable. The latter could be reduced to `A₅` by a
+subgroup embedding, but that embedding and the required generation theorem
+are not packaged in the searched corpus.
+
 ## Imported Proof Plan
 
 ```clojure

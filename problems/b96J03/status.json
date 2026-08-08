@@ -28,5 +28,23 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "imported_at": "2026-05-01T19:38:17.698306Z"
+  "imported_at": "2026-05-01T19:38:17.698306Z",
+  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/b96J03/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": ["apm_b96j03 (surjectivity and nonsolvability of the A7 quotient)"],
+    "proved": [
+      "apm_b96j03_nilpotent_implies_solvable",
+      "apm_b96j03_solvable_not_nilpotent_exists",
+      "apm_b96j03_toA7_relations",
+      "apm_b96j03_toA7"
+    ],
+    "axioms": "propext, sorryAx, Classical.choice, Quot.sound, and native_decide-generated theorem axioms from the existing finite S3 computations",
+    "blockers": [
+      "Prove the explicit 3-cycle and 7-cycle generate A7",
+      "Prove A7 nonsolvable, e.g. via an embedded nonsolvable A5"
+    ]
+  }
 }

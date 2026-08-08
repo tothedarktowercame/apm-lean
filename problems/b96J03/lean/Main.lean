@@ -110,6 +110,36 @@ lemma apm_b96j03_solvable_not_nilpotent_exists :
   · exact apm_b96j03_S3_solvable
   · exact apm_b96j03_S3_not_nilpotent
 
+/-- A 3-cycle in `A₇`, used for a finite nonsolvable-quotient route. -/
+def apm_b96j03_b7 : alternatingGroup (Fin 7) :=
+  ⟨Equiv.swap 0 1 * Equiv.swap 1 2,
+    Equiv.Perm.mem_alternatingGroup.2 (by decide)⟩
+
+/-- A 7-cycle in `A₇`. -/
+def apm_b96j03_c7 : alternatingGroup (Fin 7) :=
+  ⟨Equiv.swap 0 1 * Equiv.swap 1 2 * Equiv.swap 2 3 *
+    Equiv.swap 3 4 * Equiv.swap 4 5 * Equiv.swap 5 6,
+    Equiv.Perm.mem_alternatingGroup.2 (by decide)⟩
+
+def apm_b96j03_toA7Generators : Fin 3 → alternatingGroup (Fin 7)
+  | 0 => 1
+  | 1 => apm_b96j03_b7
+  | 2 => apm_b96j03_c7
+
+lemma apm_b96j03_toA7_relations (r : FreeGroup (Fin 3))
+    (hr : r ∈ apm_b96j03_relations) :
+    FreeGroup.lift apm_b96j03_toA7Generators r = 1 := by
+  simp only [apm_b96j03_relations, Set.mem_insert_iff, Set.mem_singleton_iff] at hr
+  rcases hr with rfl | rfl | rfl | rfl | rfl <;>
+    simp [apm_b96j03_a, apm_b96j03_b, apm_b96j03_c,
+      apm_b96j03_toA7Generators, apm_b96j03_b7, apm_b96j03_c7] <;>
+    native_decide
+
+/-- The relations therefore define a concrete homomorphism from the frozen
+presented group into `A₇`. -/
+def apm_b96j03_toA7 : apm_b96j03_G →* alternatingGroup (Fin 7) :=
+  PresentedGroup.toGroup apm_b96j03_toA7_relations
+
 theorem apm_b96j03 :
     (∀ (G : Type) [Group G],
       apm_b96j03_IsNilpotent G → apm_b96j03_IsSolvable G) ∧
@@ -121,13 +151,20 @@ theorem apm_b96j03 :
   refine ⟨apm_b96j03_nilpotent_implies_solvable,
     apm_b96j03_solvable_not_nilpotent_exists, ?_⟩
   /-
-  CLOSER HOP 1 BOUNDARY (statement unchanged).
+  CLOSER HOP 2 BOUNDARY (2026-08-08; statement unchanged).
 
   The first two conjuncts are now fully compiled. The implication uses
   `Group.IsNilpotent.to_isSolvable`. The converse counterexample is `S₃`, with
   solvability proved through the sign extension and nonnilpotence through the
   proper self-normalizing subgroup `{1, (01)}`; this code is reused from the
   closed `b97J01` artifact at git commit `f453ba3`.
+
+  Going beyond hop 1, a finite-quotient route is now partially compiled.
+  `apm_b96j03_b7` and `apm_b96j03_c7` are explicit elements of orders three
+  and seven in `A₇`; `apm_b96j03_toA7_relations` verifies all five frozen
+  relations by finite computation, and `apm_b96j03_toA7` is the resulting
+  honest homomorphism from the presented group. This avoids the full Tietze
+  transformation to `C₂ × (C₃ * C₇)`.
 
   The remaining presentation is not the semidirect product described in the
   imported proof plan: there is no relation between `b` and `c`. The relations
@@ -139,8 +176,11 @@ theorem apm_b96j03 :
   Mathlib's `PresentedGroup`, `Monoid.Coprod`/`CoprodI`, solvable, and
   nilpotent APIs, and git history found no packaged Tietze transformation,
   this presentation isomorphism, or a ready nonsolvability theorem for
-  `C₃ * C₇`. Since
-  nonnilpotence follows immediately from nonsolvability, this is the sole live
-  mathematical bridge.
+  `C₃ * C₇`. For the new finite route, one must prove that the selected
+  3-cycle and 7-cycle generate `A₇`, then prove `A₇` nonsolvable. The latter
+  can in principle follow from an embedded `A₅`, but no packaged embedding or
+  general `Aₙ` simplicity theorem is available. Since nonnilpotence follows
+  immediately from nonsolvability, this finite generation/invariant step is
+  now the sole live mathematical bridge.
   -/
   sorry
