@@ -7,6 +7,20 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+Three independent components now compile: the orders of `A₄` and `S₃`, and
+Lagrange's divisibility theorem for every finite subgroup. The helpers use
+`card_alternatingGroup`, `Fintype.card_perm`, and
+`Subgroup.card_subgroup_dvd_card`.
+
+The remaining statement requires several classification developments absent
+from this Mathlib snapshot: simplicity of all alternating groups of degree at
+least five, classification of groups of order eight, the finite-abelian
+structure theorem in the custom `iSupIndep` encoding, and the order-`pq`
+cyclicity theorem. The main theorem remains partial with one `sorry`; its
+frozen statement is unchanged.
+
 ## Imported Proof Plan
 
 ```clojure
