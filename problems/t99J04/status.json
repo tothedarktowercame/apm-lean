@@ -28,7 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "For positive dimension, n independent covectors on an n-dimensional real space now compile to a bijective coordinate map. The manifold derivative formula and promotion from invertible mfderiv to a local diffeomorphism remain open.",
+  "closer_hop": 3,
+  "closer_note": "The entire pointwise-to-global second-conjunct route now compiles conditional only on the missing local manifold inverse-function implication. The coordinate mfderiv formula and that local implication remain open.",
   "imported_at": "2026-05-01T19:38:18.953016Z"
 }

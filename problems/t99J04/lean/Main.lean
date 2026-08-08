@@ -89,6 +89,35 @@ lemma apm_t99J04_surjective_of_isLocalDiffeomorph
       (Set.range_nonempty f)
   exact Set.range_eq_univ.mp hrange
 
+/-- The second conjunct with the missing manifold inverse-function theorem
+made explicit as a local hypothesis.  This isolates the absent library bridge
+from the already-compiled compactness argument. -/
+lemma apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT
+    {E E' X Y : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [FiniteDimensional ℝ E'] [CompleteSpace E']
+    [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X]
+    [ChartedSpace E X] [IsManifold (modelWithCornersSelf ℝ E) ⊤ X]
+    [TopologicalSpace Y] [T2Space Y] [ConnectedSpace Y]
+    [ChartedSpace E' Y] [IsManifold (modelWithCornersSelf ℝ E') ⊤ Y]
+    (f : X → Y) (hf : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ E') ⊤ f)
+    (hbij : ∀ x, Function.Bijective
+      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E') f x))
+    (hlocalIFT : ∀ x,
+      ContMDiffAt (modelWithCornersSelf ℝ E)
+        (modelWithCornersSelf ℝ E') ⊤ f x →
+      Function.Bijective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E') f x) →
+      IsLocalDiffeomorphAt (modelWithCornersSelf ℝ E)
+        (modelWithCornersSelf ℝ E') ⊤ f x) :
+    Function.Surjective f := by
+  apply apm_t99J04_surjective_of_isLocalDiffeomorph (E := E) (E' := E') f
+  intro x
+  exact hlocalIFT x hf.contMDiffAt (hbij x)
+
 theorem apm_t99j04 :
     (∀ (n : ℕ) (X : Type) [TopologicalSpace X]
       [ChartedSpace (apm_t99J04_Euclidean n) X]
@@ -159,5 +188,21 @@ theorem apm_t99j04 :
   (with the zero-dimensional case separated), followed by the chart-local
   Banach inverse-function assembly common to both conjuncts. The frozen
   statement is unchanged.
+
+  CLOSER HOP 3 additionally compiles
+  `apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT`, which states the
+  second conjunct with the missing local inverse-function implication exposed
+  as a hypothesis and discharges everything else. Thus there is no remaining
+  pointwise-to-global assembly: `ContMDiff` supplies each `ContMDiffAt`, the
+  frozen bijectivity hypothesis supplies the derivative input, and the earlier
+  compact/local-diffeomorphism lemma proves surjectivity.
+
+  Inspection of `Geometry.Manifold.LocalDiffeomorph` confirms that the API
+  only provides the forward implication from a local diffeomorphism to an
+  invertible `mfderiv`; the converse is still absent. The source's chart-level
+  Banach inverse theorem would require constructing a `PartialDiffeomorph`
+  manually. The first conjunct additionally retains the coordinatewise
+  `mfderiv` computation. These genuine local bridges remain open, with no
+  axiom or opaque replacement.
   -/
   sorry

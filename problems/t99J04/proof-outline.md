@@ -1,5 +1,19 @@
 # Proof Outline: t99J04
 
+## Closer hop 3 update
+
+The second conjunct is now compiled modulo exactly the missing local theorem.
+`apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT` consumes the frozen
+smoothness and pointwise-bijective-`mfderiv` assumptions, invokes an explicit
+local inverse-function implication at each point, and feeds the resulting
+`IsLocalDiffeomorph` into the compact-source/connected-target argument.
+
+Mathlib's manifold API still only proves the reverse direction (a local
+diffeomorphism has invertible `mfderiv`). Constructing the converse requires
+manual chart transport and `PartialDiffeomorph` assembly. The first conjunct
+also still needs the coordinatewise `mfderiv` identity before the existing
+finite-dimensional algebra lemma applies.
+
 ## Closer hop 2 update
 
 The finite-dimensional linear-algebra bridge now compiles for `n>0`.
