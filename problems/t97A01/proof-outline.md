@@ -10,6 +10,9 @@ homology objects, and fundamental group.  One `sorry` remains.
 - `apm_t97a01_quotientX_identifies_a` and
   `apm_t97a01_quotientTorusRP2_identifies_c` expose representative edge
   identifications as literal equalities in the quotients.
+- The two relation-conversion lemmas prove that `apm_t97a01_RelX` is exactly
+  `ConstructionTargets.Surfaces.SurfaceRel false 3`, and
+  `apm_t97a01_X_equiv_standardN3` identifies the resulting quotient types.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t97A01.md`
@@ -36,3 +39,7 @@ statement deliberately retains the actual quotient spaces.
 Mathlib's generic quotient lifting can construct continuous descended maps
 from relation-respecting functions, but supplies no induced computation of
 singular homology or the fundamental group.
+
+`ConstructionTargets.Surfaces` now removes the polygon-normal-form ambiguity
+for `X`, but that module deliberately contains only quotient presentations and
+Euler arithmetic. It does not compute the frozen singular homology objects.

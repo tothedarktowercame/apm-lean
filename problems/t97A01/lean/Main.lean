@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t97A01 — the nonorientable genus-three surface
@@ -96,6 +97,49 @@ lemma apm_t97a01_quotientTorusRP2_identifies_c (t : Set.Icc (0 : ℝ) 1) :
       apm_t97a01_quotientTorusRP2 (apm_t97a01_edgePoint 5 t) := by
   exact Quotient.sound (Relation.EqvGen.rel _ _ (.c t))
 
+/-- Every generating identification for `X` is a generating identification
+in the repository's canonical nonorientable genus-three polygon. -/
+lemma apm_t97a01_RelX_to_standardN3 {x y : apm_t97a01_Disk}
+    (h : apm_t97a01_RelX x y) :
+    ConstructionTargets.Surfaces.SurfaceRel false 3 x y := by
+  cases h with
+  | a t =>
+      refine ⟨0, by omega, t, ?_, ?_⟩
+      · rfl
+      · rfl
+  | b t =>
+      refine ⟨1, by omega, t, ?_, ?_⟩
+      · rfl
+      · rfl
+  | c t =>
+      refine ⟨2, by omega, t, ?_, ?_⟩
+      · rfl
+      · rfl
+
+/-- Conversely, the canonical genus-three relation has exactly the three
+generators used in `apm_t97a01_RelX`. -/
+lemma apm_t97a01_standardN3_to_RelX {x y : apm_t97a01_Disk}
+    (h : ConstructionTargets.Surfaces.SurfaceRel false 3 x y) :
+    apm_t97a01_RelX x y := by
+  rcases h with ⟨j, hj, t, rfl, rfl⟩
+  interval_cases j
+  · exact .a t
+  · exact .b t
+  · exact .c t
+
+/-- The `aa bb cc` quotient is definitionally equivalent to the reusable
+canonical polygon presentation of the nonorientable genus-three surface. -/
+def apm_t97a01_X_equiv_standardN3 :
+    apm_t97a01_X ≃ ConstructionTargets.Surfaces.Surface false 3 := by
+  apply Quotient.congrRight
+  intro x y
+  have hrel : apm_t97a01_RelX =
+      ConstructionTargets.Surfaces.SurfaceRel false 3 := by
+    funext u v
+    apply propext
+    exact ⟨apm_t97a01_RelX_to_standardN3, apm_t97a01_standardN3_to_RelX⟩
+  rw [hrel]
+
 abbrev apm_t97a01_H (k : ℕ) (Y : Type) [TopologicalSpace Y] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y))
@@ -153,5 +197,22 @@ theorem apm_t97a01 :
   `EqvGen` relations. Thus all frozen invariant computations still require
   cellular-to-singular comparison or topological van Kampen; the statement is
   unchanged.
+
+  CLOSER HOP 3: `ConstructionTargets.Surfaces` is now imported and the first
+  polygon is connected to its canonical classified-surface encoding.
+  `apm_t97a01_RelX_to_standardN3` and its converse prove that the concrete
+  `aa bb cc` relation is exactly `SurfaceRel false 3`; consequently
+  `apm_t97a01_X_equiv_standardN3` gives an actual quotient equivalence with
+  `ConstructionTargets.Surfaces.Surface false 3`. This removes ambiguity
+  about the first quotient's polygon normal form. The reusable module,
+  however, intentionally stops at quotient presentations and elementary
+  Euler data: it has no singular-homology or fundamental-group theorem, and
+  an equivalence of underlying quotient types alone cannot transport the
+  topological invariants. Renewed inspection of quotient-congruence,
+  coinduced-topology, `TopCat`, singular-homology invariance, cellular, and
+  van Kampen APIs found no bridge completing any frozen invariant conjunct.
+  The remaining work is to upgrade the relation equivalence to the required
+  topological comparison and then supply cellular-to-singular homology and
+  van Kampen computations. The frozen statement is unchanged.
   -/
   sorry
