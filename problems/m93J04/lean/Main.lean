@@ -141,6 +141,65 @@ lemma apm_m93J04_branch_intervalIntegrable (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1
     · simp only
       rw [apm_m93J04_kernel_of_lt (lt_of_le_of_ne hyx (Ne.symm hxy))]
 
+private def apm_m93J04_leftPrimitive (y : ℝ) (φ : ℝ → ℝ) (x : ℝ) : ℝ :=
+  Real.log y / y ^ 2 * (x ^ 3 * deriv φ x + 2 * x ^ 2 * φ x)
+
+private def apm_m93J04_rightPrimitive (y : ℝ) (φ : ℝ → ℝ) (x : ℝ) : ℝ :=
+  (x ^ 3 * Real.log x * deriv φ x + x ^ 2 * (2 * Real.log x - 1) * φ x) /
+    y ^ 2
+
+/-- The left weighted formal adjoint has an explicit primitive.  This replaces
+two integrations by parts by one application of the interval FTC. -/
+lemma apm_m93J04_left_branch_integral (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1)
+    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ⊤ φ) :
+    (∫ x in (0 : ℝ)..y,
+        (x * Real.log y / y ^ 2) * apm_m93J04_formalAdjoint φ x) =
+      apm_m93J04_leftPrimitive y φ y - apm_m93J04_leftPrimitive y φ 0 := by
+  apply intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (f := apm_m93J04_leftPrimitive y φ)
+  · intro x hx
+    have h0 : HasDerivAt φ (deriv φ x) x :=
+      (hφ.differentiable (by simp)).differentiableAt.hasDerivAt
+    have h1 : HasDerivAt (deriv φ) (deriv (deriv φ) x) x := by
+      simpa [iteratedDeriv_one] using
+        ((hφ.differentiable_iteratedDeriv 1 (by simp)).differentiableAt.hasDerivAt)
+    unfold apm_m93J04_leftPrimitive
+    rw [apm_m93J04_formalAdjoint_eq]
+    convert (((((hasDerivAt_id x).pow 3).mul h1).add
+      (((hasDerivAt_const x (2 : ℝ)).mul ((hasDerivAt_id x).pow 2)).mul h0)).const_mul
+        (Real.log y / y ^ 2)) using 1 <;> simp [id] <;> ring
+  · exact (Continuous.intervalIntegrable
+      ((continuous_id.mul continuous_const).div_const _ |>.mul
+        (apm_m93J04_formalAdjoint_continuous φ hφ))) 0 y
+
+/-- The right weighted formal adjoint has an explicit primitive away from
+zero.  Positivity of the pole makes the logarithmic derivative legitimate. -/
+lemma apm_m93J04_right_branch_integral (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1)
+    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ⊤ φ) :
+    (∫ x in y..(1 : ℝ),
+        (x * Real.log x / y ^ 2) * apm_m93J04_formalAdjoint φ x) =
+      apm_m93J04_rightPrimitive y φ 1 - apm_m93J04_rightPrimitive y φ y := by
+  apply intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (f := apm_m93J04_rightPrimitive y φ)
+  · intro x hx
+    have hxpos : 0 < x := lt_of_lt_of_le hy.1 (by
+      rw [uIcc_of_le hy.2.le] at hx
+      exact hx.1)
+    have h0 : HasDerivAt φ (deriv φ x) x :=
+      (hφ.differentiable (by simp)).differentiableAt.hasDerivAt
+    have h1 : HasDerivAt (deriv φ) (deriv (deriv φ) x) x := by
+      simpa [iteratedDeriv_one] using
+        ((hφ.differentiable_iteratedDeriv 1 (by simp)).differentiableAt.hasDerivAt)
+    unfold apm_m93J04_rightPrimitive
+    rw [apm_m93J04_formalAdjoint_eq]
+    convert ((((((hasDerivAt_id x).pow 3).mul (Real.hasDerivAt_log hxpos.ne')).mul h1).add
+      (((((hasDerivAt_id x).pow 2).mul
+        (((Real.hasDerivAt_log hxpos.ne').const_mul 2).sub_const 1))).mul h0)).div_const
+          (y ^ 2)) using 1 <;> simp [id] <;> field_simp [hxpos.ne'] <;> ring
+  · exact (Continuous.intervalIntegrable
+      ((Real.continuous_mul_log.div_const _).mul
+        (apm_m93J04_formalAdjoint_continuous φ hφ))) y 1
+
 theorem apm_m93j04 :
     ∀ y : ℝ, y ∈ Ioo (0 : ℝ) 1 →
       ∀ φ : ℝ → ℝ,
@@ -207,4 +266,38 @@ theorem apm_m93j04 :
   their boundary-term algebra therefore remain open without an unproved
   assertion.
   -/
-  sorry
+  intro y hy φ hφ _ hsupp
+  obtain ⟨hφ0, hdφ0, hφ1, hdφ1⟩ :=
+    apm_m93J04_testFunction_endpoints φ hsupp
+  obtain ⟨hint0, hint1⟩ :=
+    apm_m93J04_branch_intervalIntegrable y hy φ hφ
+  rw [apm_m93J04_integral_Ioo_split _ hint0 hint1]
+  have hleft :
+      (∫ x in (0 : ℝ)..y,
+          apm_m93J04_kernel x y * apm_m93J04_formalAdjoint φ x) =
+        ∫ x in (0 : ℝ)..y,
+          (x * Real.log y / y ^ 2) * apm_m93J04_formalAdjoint φ x := by
+    apply intervalIntegral.integral_congr
+    intro x hx
+    dsimp only
+    rw [apm_m93J04_kernel_of_le]
+    rw [uIcc_of_le hy.1.le] at hx
+    exact hx.2
+  have hright :
+      (∫ x in y..(1 : ℝ),
+          apm_m93J04_kernel x y * apm_m93J04_formalAdjoint φ x) =
+        ∫ x in y..(1 : ℝ),
+          (x * Real.log x / y ^ 2) * apm_m93J04_formalAdjoint φ x := by
+    apply intervalIntegral.integral_congr
+    intro x hx
+    dsimp only
+    rw [uIcc_of_le hy.2.le] at hx
+    rcases eq_or_lt_of_le hx.1 with rfl | hyx
+    · rw [apm_m93J04_kernel_of_le le_rfl]
+    · rw [apm_m93J04_kernel_of_lt hyx]
+  rw [hleft, hright, apm_m93J04_left_branch_integral y hy φ hφ,
+    apm_m93J04_right_branch_integral y hy φ hφ]
+  unfold apm_m93J04_leftPrimitive apm_m93J04_rightPrimitive
+  rw [hφ0, hdφ0, hφ1, hdφ1]
+  field_simp [hy.1.ne']
+  ring

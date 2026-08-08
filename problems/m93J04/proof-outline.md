@@ -8,19 +8,12 @@ integral splitting and second-derivative normalization also compile.
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m93J04.md`
 
-## Remaining boundary
+## Completed proof
 
-- establish interval integrability for the kernel branches and test-function
-  derivatives;
-- integrate by parts twice on each side and simplify the inner terms using
-  `apm_m93J04_kernel_derivative_jump`.
-
-Mathlib provides the derivatives of `x * log x` and the required integration-
-by-parts APIs. The endpoint and integral-conversion bookkeeping has been
-localized, but no searched result packages the remaining second-order branch
-calculation.
-
-Closer hop 3 proves continuity of the formal adjoint and interval
-integrability of the complete branchwise integrand on both `[0,y]` and
-`[y,1]`.  Thus the split lemma can now be applied directly; only the four
-integration-by-parts identities and their boundary simplification remain.
+The final calculation is routed through explicit primitives rather than four
+separate integrations by parts. On `[0,y]` the primitive is
+`(log y / y²) * (x³ φ' + 2x² φ)`; on `[y,1]` it is
+`(x³ log x φ' + x²(2 log x - 1)φ) / y²`. Their derivatives are exactly the
+two weighted formal-adjoint integrands. The interval FTC evaluates both
+branches, the support hypothesis kills the outer endpoint terms, and the two
+values at `y` simplify to `φ y`.

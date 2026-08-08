@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Compiled continuity of the formal adjoint and interval integrability of the complete weak integrand on both kernel branches. The four integrations by parts and boundary-term combination remain open.",
+  "classification": "complete",
+  "closer_hop": 4,
+  "closer_note": "Closed the weighted second-order calculation by exhibiting explicit primitives on both kernel branches and applying the interval FTC; endpoint simplification proves the frozen theorem.",
   "imported_at": "2026-07-13T17:26:54.629724Z"
 }
