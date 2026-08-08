@@ -50,6 +50,18 @@ lemma apm_b01A04_isGaloisGroup_multiplicative_prod_iff
   · intro h
     exact apm_b01A04_isGaloisGroup_of_mulEquiv h (MulEquiv.prodMultiplicative A B).symm
 
+/-- A degree-three Galois extension has exactly the cyclic group requested in
+the first conjunct.  This isolates the remaining arithmetic task from the
+finite-group identification: `IsGalois.card_aut_eq_finrank` gives order three,
+and Mathlib's prime-cardinality classification supplies the isomorphism. -/
+lemma apm_b01A04_aut_mulEquiv_zmod_three
+    (K : Type*) [Field K] [Algebra ℚ K] [FiniteDimensional ℚ K]
+    [IsGalois ℚ K] (hfin : Module.finrank ℚ K = 3) :
+    Nonempty ((K ≃ₐ[ℚ] K) ≃* Multiplicative (ZMod 3)) := by
+  have hcard : Nat.card (K ≃ₐ[ℚ] K) = 3 := by
+    rw [IsGalois.card_aut_eq_finrank, hfin]
+  exact ⟨mulEquivOfPrimeCardEq hcard (by simp)⟩
+
 theorem apm_b01a04 :
     apm_b01A04_isGaloisGroup (Multiplicative (ZMod 3)) ∧
       apm_b01A04_isGaloisGroup
@@ -82,5 +94,17 @@ theorem apm_b01a04 :
   order-three Galois group.” Thus construction of the first witness remains
   open; the product witness additionally requires compositum Galois-group
   transport and linear disjointness.
+
+  CLOSER HOP 3: `apm_b01A04_aut_mulEquiv_zmod_three` now removes the group-
+  identification half of the explicit-polynomial route. For any finite-
+  dimensional degree-three Galois extension it combines
+  `IsGalois.card_aut_eq_finrank` with `mulEquivOfPrimeCardEq`, yielding exactly
+  the frozen `Multiplicative (ZMod 3)` model. Consequently no separate
+  classification of the resulting order-three group is needed after
+  Galoisness is established. Searches of the cyclic-group API, Galois
+  cardinality API, cyclotomic sources, and prior compositum sources still
+  produced no actual rational degree-three Galois field or a linearly
+  disjoint pair. Those arithmetic constructions and the simultaneous
+  restriction equivalence for the compositum remain open.
   -/
   sorry

@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "Realizability transport and the exact Multiplicative-product model equivalence are compiled. Mathlib's compositum restriction injectivity/surjectivity APIs were identified, but explicit rational cyclic cubic fields and their simultaneous product restriction equivalence remain.",
+  "closer_hop": 3,
+  "note": "Realizability transport, the exact Multiplicative-product model equivalence, and identification of every degree-three Galois automorphism group with Multiplicative (ZMod 3) are compiled. Explicit rational degree-three Galois fields and their linearly disjoint compositum restriction equivalence remain.",
   "imported_at": "2026-07-13T17:26:53.430709Z"
 }

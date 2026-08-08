@@ -11,6 +11,14 @@ statement's `Multiplicative (A × B)` convention with the direct product
 `Multiplicative A × Multiplicative B`. This is exactly the group model expected
 from restricting an automorphism of a compositum to its two factors.
 
+Closer hop 3 proves `apm_b01A04_aut_mulEquiv_zmod_three`. For any
+finite-dimensional Galois extension of degree three,
+`IsGalois.card_aut_eq_finrank` computes the automorphism group's cardinality,
+and `mulEquivOfPrimeCardEq` identifies it with
+`Multiplicative (ZMod 3)`. Thus the first conjunct now needs only an actual
+rational degree-three Galois extension; its finite-group identification is
+fully compiled.
+
 The Mathlib declarations
 `IntermediateField.restrictRestrictAlgEquivMapHom_injective` and
 `IntermediateField.restrictRestrictAlgEquivMapHom_surjective` provide the key
@@ -27,8 +35,6 @@ restriction equivalence and no construction of the two rational cubic fields.
 - construct a cyclic cubic Galois extension, either as the real cubic subfield
   of `ℚ(ζ₇)` or as the splitting field of an explicit irreducible cubic with
   square discriminant;
-- identify its automorphism group with an order-three concrete group and use
-  the compiled transport helper;
 - construct two linearly disjoint cyclic cubic extensions and formalize the
   simultaneous restriction isomorphism from their compositum's Galois group
   to the product; the final product-model transport is now compiled.
