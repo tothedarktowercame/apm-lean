@@ -18,6 +18,19 @@ search boundary is recorded at the remaining `sorry` in `lean/Main.lean`.
 The original regular-cone formalization was complete and sorry-free; the
 repaired statement's separately topological manifold conjuncts remain partial.
 
+## Closer hop 3
+
+The degenerate conic's branch structure is now formal rather than descriptive.
+`apm_t94a08_quadratic2_factor` proves
+`z₁²+z₂²=(z₁+iz₂)(z₁-iz₂)`, and
+`apm_t94a08_sigma2_eq_branches` identifies `sigma2` with the union of the two
+corresponding homogeneous projective lines. The distinguished node is proved
+to lie on both branches.
+
+The negative manifold claim is consequently reduced to a local invariant of
+this explicit crossing. The positive claim still requires projective quotient
+charts for the smooth conic.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t94A08.md`
 

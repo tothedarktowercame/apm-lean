@@ -109,20 +109,70 @@ lemma apm_t94a08_node_mem_sigma2 : apm_t94a08_node ∈ apm_t94a08_sigma2 := by
   rw [← ha]
   simp
 
+/-- The degenerate quadratic factors into its two complex-linear branches. -/
+lemma apm_t94a08_quadratic2_factor (z : apm_t94a08_C3) :
+    apm_t94a08_quadratic2 z =
+      (z 1 + Complex.I * z 2) * (z 1 - Complex.I * z 2) := by
+  unfold apm_t94a08_quadratic2
+  calc
+    z 1 ^ 2 + z 2 ^ 2 = z 1 ^ 2 - Complex.I ^ 2 * z 2 ^ 2 := by
+      rw [pow_two Complex.I, Complex.I_mul_I]
+      ring
+    _ = (z 1 + Complex.I * z 2) * (z 1 - Complex.I * z 2) := by ring
+
+def apm_t94a08_sigma2BranchPlus : Set apm_t94a08_CP2 :=
+  {p | Projectivization.rep p 1 + Complex.I * Projectivization.rep p 2 = 0}
+
+def apm_t94a08_sigma2BranchMinus : Set apm_t94a08_CP2 :=
+  {p | Projectivization.rep p 1 - Complex.I * Projectivization.rep p 2 = 0}
+
+/-- The nodal conic is exactly the union of its two projective-line branches.
+This is independent of the scalar chosen by `Projectivization.rep` because
+both branch equations are homogeneous. -/
+lemma apm_t94a08_sigma2_eq_branches :
+    apm_t94a08_sigma2 =
+      apm_t94a08_sigma2BranchPlus ∪ apm_t94a08_sigma2BranchMinus := by
+  ext p
+  rw [apm_t94a08_sigma2, mem_setOf_eq,
+    apm_t94a08_quadratic2_factor, mul_eq_zero]
+  rfl
+
+lemma apm_t94a08_node_mem_both_branches :
+    apm_t94a08_node ∈ apm_t94a08_sigma2BranchPlus ∩
+      apm_t94a08_sigma2BranchMinus := by
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep
+    (K := ℂ) (Pi.single 0 1 : apm_t94a08_C3) apm_t94a08_e0_ne_zero
+  constructor
+  · change apm_t94a08_node.rep 1 + Complex.I * apm_t94a08_node.rep 2 = 0
+    unfold apm_t94a08_node
+    rw [← ha]
+    simp
+  · change apm_t94a08_node.rep 1 - Complex.I * apm_t94a08_node.rep 2 = 0
+    unfold apm_t94a08_node
+    rw [← ha]
+    simp
+
 theorem apm_t94a08 :
     apm_t94a08_IsRegularLevelSet
         apm_t94a08_quadratic1 apm_t94a08_sigma1 ∧
       apm_t94a08_IsRealTwoManifold apm_t94a08_sigma1 ∧
       ¬apm_t94a08_IsRealTwoManifold apm_t94a08_sigma2 := by
   /-
-  CLOSER HOP 2: git history at `91276c8` supplied the earlier sorry-free
+  CLOSER HOP 3 (2026-08-08): hop 2 used git history at `91276c8` for the sorry-free
   Fréchet-derivative calculation, now restored above as
   `apm_t94a08_regularLevelSet_quadratic1`; this completely closes the first
   frozen conjunct.  The explicit projective node is also now constructed and
   `apm_t94a08_node_mem_sigma2` proves that it belongs to the degenerate conic,
   despite the noncanonical `Projectivization.rep`.
 
-  Searches beyond hop 1 covered `LEMMA-INDEX.md`, every `ConstructionTargets/`
+  Going beyond hop 2, `apm_t94a08_quadratic2_factor` now compiles the complex
+  linear factorization, `apm_t94a08_sigma2_eq_branches` identifies the nodal
+  conic exactly with the union of two explicit homogeneous projective-line
+  branches, and `apm_t94a08_node_mem_both_branches` proves the node lies on
+  their intersection despite the noncanonical representative. Thus the
+  branch-crossing geometry is no longer merely informal.
+
+  Searches covered `LEMMA-INDEX.md`, every `ConstructionTargets/`
   module, all projectivization siblings, Mathlib's projectivization,
   one-point-compactification/projective-line, quotient-map, manifold, and
   connectedness sources, plus git history.  Mathlib's `Projectivization` is
@@ -131,8 +181,8 @@ theorem apm_t94a08 :
   homeomorphism theorem for the custom coinduced topology used here.  Thus the
   remaining positive conjunct requires constructing local quotient charts for
   the smooth conic (equivalently a topological identification with `CP¹`).
-  The negative conjunct requires a local topological invariant at
-  `apm_t94a08_node`: the two projective-line branches have a punctured
+  The negative conjunct is narrowed to a local topological invariant at
+  `apm_t94a08_node`: the now-compiled two projective-line branches have a punctured
   neighborhood with four local sectors, unlike an open subset of `ℝ²`.
   Mathlib has no packaged nodal-cross nonmanifold theorem or suitable local
   branch/component invariant.  Failure of the derivative criterion cannot

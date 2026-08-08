@@ -28,7 +28,26 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "The regular-level conjunct and explicit membership of the node are proved. The custom projective quotient lacks local chart infrastructure, and the nodal-cross nonmanifold obstruction remains open.",
+  "closer_hop": 3,
+  "closer_note": "The regular-level conjunct is proved. The nodal conic is now exactly decomposed into two explicit projective-line branches and the node lies on both. Projective charts and the local branch-crossing nonmanifold obstruction remain open.",
+  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_lean_state": {
+    "exit_code": 0,
+    "command": "lake env lean problems/t94A08/lean/Main.lean",
+    "sorry_count": 1,
+    "sorry_locations": ["apm_t94a08 (two topological manifold conjuncts)"],
+    "proved": [
+      "apm_t94a08_regularLevelSet_quadratic1",
+      "apm_t94a08_node_mem_sigma2",
+      "apm_t94a08_quadratic2_factor",
+      "apm_t94a08_sigma2_eq_branches",
+      "apm_t94a08_node_mem_both_branches"
+    ],
+    "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
+    "blockers": [
+      "Construct local quotient charts for the smooth projective conic",
+      "Prove the explicit two-branch crossing is not locally Euclidean of real dimension two"
+    ]
+  },
   "imported_at": "2026-07-13T17:26:57.883602Z"
 }
