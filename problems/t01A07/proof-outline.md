@@ -1,5 +1,18 @@
 # Proof Outline: t01A07
 
+## Hop 4 closure
+
+Outcome B: the normalization gap was apparent rather than real. Mathlib's
+`Projectivization.exists_smul_eq_mk_rep` relates every explicit nonzero vector
+to the noncanonical representative by a unit scalar. Homogeneity transports
+the quartic and line equations through this scalar. The equation `x₀⁴=x₁⁴`
+then classifies every intersection point as the plus or minus class using
+`Projectivization.mk_eq_mk_iff'`.
+
+The two classes are proved distinct, both membership facts compile, and
+`apm_t01a07_finTwoEquivIntersection` gives the explicit `Fin 2` equivalence.
+`Nat.card_congr` finishes both cardinality clauses. The theorem is sorry-free.
+
 The canonical Lean attempt is `lean/Main.lean`. The local-sign range and the
 final two-term cancellation are compiled.
 
@@ -22,7 +35,7 @@ final two-term cancellation are compiled.
   derivative vanishes, the four directional formulas force the vector to be
   zero.
 
-## Remaining boundary
+## Former boundary (closed)
 
 - Normalize each projective solution to one of the two explicit classes
   represented by `(1,1,0,0)` and `(1,-1,0,0)` using the compiled scalar

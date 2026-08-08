@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Hop 3 closes the full coordinate fderiv regularity proof. Remaining work is projective representative normalization, the explicit two-point set equality, and construction of the Fin 2 equivalence/cardinality clauses.",
+  "classification": "complete",
+  "closer_hop": 4,
+  "boundary": "Closed via Mathlib's Projectivization.exists_smul_eq_mk_rep, followed by explicit projective classification and a Fin 2 equivalence.",
   "imported_at": "2026-07-13T17:26:56.757829Z"
 }
