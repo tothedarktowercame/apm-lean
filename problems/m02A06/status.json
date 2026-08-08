@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
+  "closer_hop": 2,
+  "classification_detail": "The explicit half-line Green kernel and its symmetry, boundary values, nonnegativity, and pointwise bound compile; integral-operator regularity, decay, mass estimate, and contraction assembly remain.",
   "imported_at": "2026-07-13T17:26:54.456143Z"
 }

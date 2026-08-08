@@ -54,6 +54,43 @@ lemma apm_m02a06_quadratic_lipschitz
       mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hadd hε) (abs_nonneg _)
     _ = 4 * ε * (1 + C) * |u - v| := by ring
 
+/-- The Dirichlet Green kernel for `-u'' + u` on the nonnegative half-line. -/
+noncomputable def apm_m02a06_greenKernel (x y : ℝ) : ℝ :=
+  (1 / 2 : ℝ) * (Real.exp (-|x - y|) - Real.exp (-(x + y)))
+
+lemma apm_m02a06_greenKernel_comm (x y : ℝ) :
+    apm_m02a06_greenKernel x y = apm_m02a06_greenKernel y x := by
+  simp only [apm_m02a06_greenKernel, add_comm]
+  rw [abs_sub_comm]
+
+lemma apm_m02a06_greenKernel_zero_left {y : ℝ} (hy : 0 ≤ y) :
+    apm_m02a06_greenKernel 0 y = 0 := by
+  simp [apm_m02a06_greenKernel, abs_of_nonneg hy]
+
+lemma apm_m02a06_greenKernel_zero_right {x : ℝ} (hx : 0 ≤ x) :
+    apm_m02a06_greenKernel x 0 = 0 := by
+  simp [apm_m02a06_greenKernel, abs_of_nonneg hx]
+
+lemma apm_m02a06_greenKernel_nonneg {x y : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) :
+    0 ≤ apm_m02a06_greenKernel x y := by
+  have habs : |x - y| ≤ x + y := by
+    calc
+      |x - y| ≤ |x| + |y| := abs_sub x y
+      _ = x + y := by rw [abs_of_nonneg hx, abs_of_nonneg hy]
+  have hexp : Real.exp (-(x + y)) ≤ Real.exp (-|x - y|) := by
+    exact Real.exp_le_exp.mpr (neg_le_neg habs)
+  unfold apm_m02a06_greenKernel
+  exact mul_nonneg (by norm_num) (sub_nonneg.mpr hexp)
+
+lemma apm_m02a06_greenKernel_le_half {x y : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) :
+    apm_m02a06_greenKernel x y ≤ 1 / 2 := by
+  have hsum : 0 ≤ x + y := add_nonneg hx hy
+  have hfirst : Real.exp (-|x - y|) ≤ 1 := by
+    simpa using Real.exp_le_one_iff.mpr (neg_nonpos.mpr (abs_nonneg _))
+  have hsecond : 0 ≤ Real.exp (-(x + y)) := Real.exp_pos _ |>.le
+  unfold apm_m02a06_greenKernel
+  nlinarith
+
 theorem apm_m02a06
     (f : ℝ → ℝ) (hf_smooth : ContDiff ℝ ∞ f)
     (hf_compact : HasCompactSupport f) (hf_support : Function.support f ⊆ Ioi 0)
@@ -85,5 +122,17 @@ theorem apm_m02a06
   sources, and git history found no such Green operator. Siblings `m94A05`,
   `m94J05`, and `m96A02` record the same concrete-operator boundary, while
   `t91A04` only supplies the already-known abstract fixed-point wrapper.
+
+  Closer hop 2 begins the missing concrete operator rather than repeating the
+  API search. `apm_m02a06_greenKernel` defines the half-line Dirichlet kernel
+  `G(x,y) = (exp(-|x-y|) - exp(-(x+y)))/2`.
+  `apm_m02a06_greenKernel_comm`, the two boundary lemmas, and the pointwise
+  bounds prove that it is symmetric, vanishes when either nonnegative
+  argument is zero, and satisfies `0 ≤ G(x,y) ≤ 1/2` on the half-line. The
+  remaining bridge is to define the improper integral operator, split at
+  `y=x` to differentiate twice, prove decay and the full kernel-mass/sup-norm
+  estimate, and then apply the compiled contraction layer. Searches of the
+  exponential integral and parameter-integral APIs found primitives for these
+  steps but no packaged half-line Green-operator theorem.
   -/
   sorry

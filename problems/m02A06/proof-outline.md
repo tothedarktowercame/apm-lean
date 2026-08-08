@@ -11,10 +11,14 @@ The canonical Lean attempt compiles with one remaining `sorry`.
 - Derived the strict contraction constant `4 * ε * (1 + C) < 1` from the
   frozen smallness hypothesis.
 - Proved the quadratic Lipschitz estimate on the frozen ball.
+- Defined the explicit half-line kernel
+  `G(x,y) = (exp(-|x-y|) - exp(-(x+y)))/2`.
+- Proved kernel symmetry, both zero-boundary identities, nonnegativity, and
+  the pointwise upper bound `G ≤ 1/2` for nonnegative arguments.
 
 ## Remaining bridge
 
-Construct and bound the half-line Dirichlet Green operator for
-`-u'' + u`, including `C²` regularity, the value at zero, decay at infinity,
-and its sup-norm estimate. The compiled arithmetic and nonlinear estimate can
-then be fed to the standard contraction API.
+Integrate the now-defined kernel to construct the half-line Dirichlet Green
+operator for `-u'' + u`. Split the integral at `y=x` to prove `C²` regularity,
+then establish decay and the kernel-mass sup-norm estimate. The compiled
+arithmetic and nonlinear estimate can then be fed to the contraction API.
