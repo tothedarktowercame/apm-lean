@@ -175,6 +175,58 @@ lemma t98A02_gluedDesc_unique
   | inl x => exact hul x
   | inr x => exact hur x
 
+def t98A02_leftInclusionMap
+    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
+    C(T98A02Punctured X₁ φ₁, T98A02ConnectedSum φ₁ φ₂) :=
+  ⟨t98A02_leftInclusion φ₁ φ₂, t98A02_continuous_leftInclusion φ₁ φ₂⟩
+
+def t98A02_rightInclusionMap
+    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
+    C(T98A02Punctured X₂ φ₂, T98A02ConnectedSum φ₁ φ₂) :=
+  ⟨t98A02_rightInclusion φ₁ φ₂, t98A02_continuous_rightInclusion φ₁ φ₂⟩
+
+/-- Compatible pairs of continuous maps from the two punctured summands. -/
+def t98A02CompatibleMaps
+    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
+    (Z : Type) [TopologicalSpace Z] :=
+  {fg : C(T98A02Punctured X₁ φ₁, Z) × C(T98A02Punctured X₂ φ₂, Z) //
+    ∀ (s : T98A02Sphere)
+      (h₁ : φ₁ (t98A02SphereInDisk s) ∉
+        φ₁ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1})
+      (h₂ : φ₂ (t98A02SphereInDisk s) ∉
+        φ₂ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1}),
+      fg.1 ⟨φ₁ (t98A02SphereInDisk s), h₁⟩ =
+        fg.2 ⟨φ₂ (t98A02SphereInDisk s), h₂⟩}
+
+/-- The concrete connected-sum quotient has the full maps-out universal
+property as an equivalence. -/
+def t98A02_gluedDescEquiv
+    {X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
+    [TopologicalSpace Z]
+    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
+    t98A02CompatibleMaps φ₁ φ₂ Z ≃ C(T98A02ConnectedSum φ₁ φ₂, Z) where
+  toFun fg := t98A02_gluedDesc φ₁ φ₂ fg.1.1 fg.1.2 fg.2
+  invFun u := ⟨(u.comp (t98A02_leftInclusionMap φ₁ φ₂),
+      u.comp (t98A02_rightInclusionMap φ₁ φ₂)), fun s h₁ h₂ ↦ by
+        exact congrArg u (t98A02_boundary_identified φ₁ φ₂ s h₁ h₂)⟩
+  left_inv fg := by
+    apply Subtype.ext
+    apply Prod.ext <;> ext x <;> rfl
+  right_inv u := by
+    symm
+    apply t98A02_gluedDesc_unique φ₁ φ₂
+      (u.comp (t98A02_leftInclusionMap φ₁ φ₂))
+      (u.comp (t98A02_rightInclusionMap φ₁ φ₂))
+      (fun s h₁ h₂ ↦ congrArg u
+        (t98A02_boundary_identified φ₁ φ₂ s h₁ h₂))
+    · intro x
+      rfl
+    · intro x
+      rfl
+
 abbrev t98A02H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -199,17 +251,23 @@ theorem apm_t98a02 :
       Nonempty (t98A02H 4 Y ≅ ModuleCat.of ℤ ℤ) ∧
       (∀ k : ℕ, 5 ≤ k → Limits.IsZero (t98A02H k Y)) := by
   /-
-  PARTIAL boundary (closer hop 2). Following the quotient-eliminator pattern
+  PARTIAL boundary (closer hop 3). Following the quotient-eliminator pattern
   indexed in `LEMMA-INDEX.md` from siblings `t01J03`, `t02A04`, and `t03J02`,
-  this hop compiles the full point-set gluing interface.
+  hop 2 compiled the point-set gluing interface.
   `t98A02QuotientMap` is continuous and surjective, the two punctured-piece
   inclusions are continuous, and `t98A02_boundary_identified` proves the
   generating boundary equality. `t98A02_gluedDesc_respects` performs EqvGen
   induction; `t98A02_gluedDesc`, its two computation lemmas, and
   `t98A02_gluedDesc_unique` give the continuous universal property of the
-  connected-sum quotient.
+  connected-sum quotient. Going beyond that boundary, hop 3 bundles the two
+  inclusions as continuous maps, defines `t98A02CompatibleMaps`, and proves
+  `t98A02_gluedDescEquiv`: maps out of the quotient are equivalent to pairs of
+  maps from the punctured summands agreeing on every boundary identification.
+  This is the complete maps-out pushout interface, rather than separate
+  existence and uniqueness lemmas.
 
-  Searches of `ConstructionTargets/`, all connected-sum and gluing siblings,
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, connected-sum
+  and gluing siblings (including the stronger equivalence in `t03J02`),
   Mathlib's singular-homology, excision, exact-sequence, CW, manifold, and
   Mayer--Vietoris sources, and git history found no singular excision theorem,
   singular Mayer--Vietoris sequence, or cellular-to-singular comparison.

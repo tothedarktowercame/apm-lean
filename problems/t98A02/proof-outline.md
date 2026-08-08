@@ -17,6 +17,10 @@ manifolds along corresponding boundary-sphere points. One theorem-level
   quotient. Its computation and uniqueness lemmas establish the full
   continuous pushout eliminator, adapting the indexed patterns from `t01J03`,
   `t02A04`, and `t03J02`.
+- `t98A02_gluedDescEquiv` packages this interface as an actual equivalence
+  between continuous maps out of the quotient and compatible pairs of maps
+  from the punctured summands. The canonical inclusions are bundled as
+  continuous maps for direct composition.
 
 ## Remaining boundary
 

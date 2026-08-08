@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The connected-sum quotient now has a compiled continuous pushout universal property. The remaining conclusions require unavailable singular excision/Mayer–Vietoris or cellular comparison, together with puncture, boundary-sphere, orientation, connectedness, and dimension-vanishing homology bridges.",
+  "closer_hop": 3,
+  "boundary": "The connected-sum quotient now has a compiled maps-out equivalence with compatible maps from its punctured summands. The remaining conclusions require unavailable singular excision/Mayer–Vietoris or cellular comparison, together with puncture, boundary-sphere, orientation, connectedness, and dimension-vanishing homology bridges.",
   "imported_at": "2026-07-13T17:26:58.531578Z"
 }
