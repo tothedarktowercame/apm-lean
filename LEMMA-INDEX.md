@@ -1,6 +1,6 @@
 # Helper-lemma index (generated — do not hand-edit)
 
-1766 lemmas already proved in this repo, outside the problems'
+1843 lemmas already proved in this repo, outside the problems'
 own statements. GREP THIS BEFORE RE-DERIVING ANYTHING.
 
 `LIB:` rows are importable today (182 lemmas across 17 modules,
@@ -494,6 +494,7 @@ still open can still contribute helpers here.
 | `apm_m02J05_young_zero` | m02J05 | `(α : ℝ → ℝ) : apm_m02J05_young α 0 = 0` |
 | `apm_m02J05_zero_mem_K` | m02J05 | `(α : ℝ → ℝ) : (0 : ℝ →ₘ[volume] ℝ) ∈ apm_m02J05_K α` |
 | `apm_m02J05_zero_mem_L` | m02J05 | `(α : ℝ → ℝ) : (0 : ℝ →ₘ[volume] ℝ) ∈ apm_m02J05_L α` |
+| `apm_m02J06_convolution_eq_zero` | m02J06 | `{φ f : ℝ → ℝ} (hφ : ∀ x, 1 ≤ \|x\| → φ x = 0) {ε : ℝ} (hε : 0 < ε) (hf : f ∈ apm_m02J06_K) {x : ℝ} (hx : 1 + ε ≤ \|x\|) : apm_m02J06_convolution f (apm_m02J06_mollifier φ ε) x = 0` |
 | `apm_m02J06_mollifier_eq_zero` | m02J06 | `{φ : ℝ → ℝ} (hφ : ∀ x, 1 ≤ \|x\| → φ x = 0) {ε x : ℝ} (hε : 0 < ε) (hx : ε ≤ \|x\|) : apm_m02J06_mollifier φ ε x = 0` |
 | `apm_m02J06_mollifier_integral_one` | m02J06 | `{φ : ℝ → ℝ} (hφ : ∫ x, φ x ∂volume = 1) {ε : ℝ} (hε : 0 < ε) : ∫ x, apm_m02J06_mollifier φ ε x ∂volume = 1` |
 | `apm_m02J06_mollifier_nonneg` | m02J06 | `{φ : ℝ → ℝ} (hφ : ∀ x, 0 ≤ φ x) {ε : ℝ} (hε : 0 < ε) (x : ℝ) : 0 ≤ apm_m02J06_mollifier φ ε x` |
@@ -502,16 +503,22 @@ still open can still contribute helpers here.
 | `apm_m03J01_abstract_variational` | m03J01 | `: ∀ (V : Type*) [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V], ∃ T : (V →L[ℝ] ℝ) →L[ℝ] V, ∀ f : V →L[ℝ] ℝ, (∃ C : ℝ, ∀ v : V, C ≤ (2 : ℝ)⁻¹ * ‖v‖ ^ 2 - f v) ∧ (∀ v : V, (2 : ℝ)⁻¹ * ‖T f‖ ^ 2 - f (T f) ≤ (2 : ℝ)⁻¹ * ‖v‖ ^ 2 - f v) ∧ (∀ u : V, (∀ v : V, (2 : ℝ)⁻¹ * ‖u‖ ^ 2 - f u ≤ (2 : ℝ)⁻¹ * ‖v‖ ^ 2 - f v) → u = T f) ∧ (∀ v : V, inner ℝ (T f) v = f v)` |
 | `apm_m03J01_inner_riesz` | m03J01 | `{V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V] (f : V →L[ℝ] ℝ) (v : V) : inner ℝ (apm_m03J01_riesz V f) v = f v` |
 | `apm_m03J01_weakSolution_zero_iff` | m03J01 | `{n : ℕ} {Ω : Set (apm_m03J01_E n)} (F : apm_m03J01_E n → ℝ) : apm_m03J01_weakSolution F (apm_m03J01_zeroH01 n Ω) ↔ ∀ v : apm_m03J01_H01 n Ω, ∫ x, F x * v.val x ∂volume = 0` |
+| `apm_m03J01_zero_H2size` | m03J01 | `(n : ℕ) (Ω : Set (apm_m03J01_E n)) : apm_m03J01_H2size (apm_m03J01_zeroH01 n Ω) (0 : apm_m03J01_E n → Fin n → Fin n → ℝ) = 0` |
+| `apm_m03J01_zero_weakHessian` | m03J01 | `(n : ℕ) (Ω : Set (apm_m03J01_E n)) : apm_m03J01_weakHessian (apm_m03J01_zeroH01 n Ω).grad (0 : apm_m03J01_E n → Fin n → Fin n → ℝ)` |
 | `apm_m03J04_closure_range_subset_dualAnnihilator` | m03J04 | `{V W : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [NormedAddCommGroup W] [NormedSpace ℝ W] (B : V →L[ℝ] W →L[ℝ] ℝ) : closure (B.range : Set (W →L[ℝ] ℝ)) ⊆ (dualAnnihilator ((dualAdjoint B).ker : Set W) : Set (W →L[ℝ] ℝ))` |
 | `apm_m03J04_range_subset_dualAnnihilator` | m03J04 | `{V W : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [NormedAddCommGroup W] [NormedSpace ℝ W] (B : V →L[ℝ] W →L[ℝ] ℝ) : (B.range : Set (W →L[ℝ] ℝ)) ⊆ (dualAnnihilator ((dualAdjoint B).ker : Set W) : Set (W →L[ℝ] ℝ))` |
+| `apm_m93A01_circleDerivH1_not_compact` | m93A01 | `(D1 : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z) (hD1 : ∀ (f : apm_m93A01_l2Z) (n : ℤ), D1 f n = apm_m93A01_circleDerivH1Coeff n * f n) : ¬ IsCompactOperator D1` |
+| `apm_m93A01_circleDerivH1Coeff_lower` | m93A01 | `(n : ℕ) : (1 / 2 : ℝ) ≤ ‖apm_m93A01_circleDerivH1Coeff (n + 1)‖` |
 | `apm_m93A01_diagonal_single` | m93A01 | `(A : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z) (c : ℤ → ℂ) (hA : ∀ (f : apm_m93A01_l2Z) (n : ℤ), A f n = c n * f n) (n : ℤ) : A (lp.single 2 n (1 : ℂ)) = c n • lp.single 2 n (1 : ℂ)` |
 | `apm_m93A01_norm_diagonal_single` | m93A01 | `(A : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z) (c : ℤ → ℂ) (hA : ∀ (f : apm_m93A01_l2Z) (n : ℤ), A f n = c n * f n) (n : ℤ) : ‖A (lp.single 2 n (1 : ℂ))‖ = ‖c n‖` |
 | `apm_m93A01_norm_single` | m93A01 | `(n : ℤ) : ‖(lp.single 2 n (1 : ℂ) : apm_m93A01_l2Z)‖ = 1` |
+| `apm_m93A01_not_compact_of_pos_separated_unit` | m93A01 | `{E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (A : E →L[ℂ] E) (u : ℕ → E) {δ : ℝ} (hδ : 0 < δ) (hu : ∀ n, ‖u n‖ ≤ 1) (hsep : ∀ n m, n ≠ m → δ ≤ dist (A (u n)) (A (u m))) : ¬ IsCompactOperator A` |
 | `apm_m93A01_not_compact_of_separated_unit` | m93A01 | `{E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (A : E →L[ℂ] E) (u : ℕ → E) (hu : ∀ n, ‖u n‖ ≤ 1) (hsep : ∀ n m, n ≠ m → 1 ≤ dist (A (u n)) (A (u m))) : ¬ IsCompactOperator A` |
 | `apm_m93a02_contraction_constants` | m93A02 | `{δ M q : ℝ} (hδ : 0 < δ) (hM : 0 < M) (hq : 0 ≤ q) (hqsmall : q < δ ^ 2 / (8 * M)) : δ⁻¹ * (q + M * (2 * q / δ) ^ 2) ≤ 2 * q / δ ∧ δ⁻¹ * M * (2 * (2 * q / δ)) < 1 / 2` |
 | `apm_m93a02_quadratic_sub_bound` | m93A02 | `{H K : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H] [NormedAddCommGroup K] [NormedSpace ℝ K] (Q : H →ₗ[ℝ] H →ₗ[ℝ] K) (M : ℝ) (hQ : ∀ h₁ h₂ : H, ‖Q h₁ h₂‖ ≤ M * ‖h₁‖ * ‖h₂‖) (x y : H) : ‖Q x x - Q y y‖ ≤ M * (‖x‖ + ‖y‖) * ‖x - y‖` |
 | `apm_m93A04_bijective_D` | m93A04 | `(K₂ : ℝ → ℝ → ℝ) (hK₂ : Continuous (Function.uncurry K₂)) (c : ℝ) (hc_nonneg : 0 ≤ c) (hc : c < 1) (hsmall : ∀ t u : ℝ, \|K₂ t u\| ≤ c) (D : apm_m93A04_C → apm_m93A04_C →L[ℝ] apm_m93A04_C) (hD : ∀ (x h : apm_m93A04_C) (t : apm_m93A04_I), D x h t = h t - ∫ s : apm_m93A04_I, K₂ t.1 (x s) * h s) (x : apm_m93A04_C) : Function.Bijective (D x)` |
 | `apm_m93A04_bijective_one_sub_of_norm_lt_one` | m93A04 | `(T : apm_m93A04_C →L[ℝ] apm_m93A04_C) (hT : ‖T‖ < 1) : Function.Bijective ((1 : apm_m93A04_C →L[ℝ] apm_m93A04_C) - T)` |
+| `apm_m93A04_norm_D_le` | m93A04 | `(K₂ : ℝ → ℝ → ℝ) (hK₂ : Continuous (Function.uncurry K₂)) (c : ℝ) (hc_nonneg : 0 ≤ c) (hsmall : ∀ t u : ℝ, \|K₂ t u\| ≤ c) (D : apm_m93A04_C → apm_m93A04_C →L[ℝ] apm_m93A04_C) (hD : ∀ (x h : apm_m93A04_C) (t : apm_m93A04_I), D x h t = h t - ∫ s : apm_m93A04_I, K₂ t.1 (x s) * h s) (x : apm_m93A04_C) : ‖D x‖ ≤ 1 + c` |
 | `apm_m93A04_norm_one_sub_D_le` | m93A04 | `(K₂ : ℝ → ℝ → ℝ) (hK₂ : Continuous (Function.uncurry K₂)) (c : ℝ) (hc_nonneg : 0 ≤ c) (hsmall : ∀ t u : ℝ, \|K₂ t u\| ≤ c) (D : apm_m93A04_C → apm_m93A04_C →L[ℝ] apm_m93A04_C) (hD : ∀ (x h : apm_m93A04_C) (t : apm_m93A04_I), D x h t = h t - ∫ s : apm_m93A04_I, K₂ t.1 (x s) * h s) (x : apm_m93A04_C) : ‖(1 : apm_m93A04_C →L[ℝ] apm_m93A04_C) - D x‖ ≤ c` |
 | `apm_m93J01_centered6_isBigO` | m93J01 | `(y : ℝ → ℝ) (hy : ContDiff ℝ 6 y) (x : ℝ) : (fun h : ℝ ↦ y (x + h) + y (x - h) - 2 * y x - (h ^ 2 * iteratedDeriv 2 y x + apm_m93J01_kappa * h ^ 4 * iteratedDeriv 4 y x)) =O[nhds 0] (fun h : ℝ ↦ h ^ 6)` |
 | `apm_m93J01_schrodinger_residual_eq` | m93J01 | `(y V : ℝ → ℝ) (x h : ℝ) : h ^ 2 * apm_m93J01_schrodinger V y x - (-y (x + h) - y (x - h) + (2 + h ^ 2 * V x) * y x + apm_m93J01_kappa * h ^ 4 * iteratedDeriv 4 y x) = y (x + h) + y (x - h) - 2 * y x - (h ^ 2 * iteratedDeriv 2 y x + apm_m93J01_kappa * h ^ 4 * iteratedDeriv 4 y x)` |
@@ -519,21 +526,27 @@ still open can still contribute helpers here.
 | `apm_m93J02_eq_zero_of_supNorm_eq_zero` | m93J02 | `{n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ} (hf : apm_m93J02_supNorm f = 0) : f = 0` |
 | `apm_m93J02_eq_zero_of_toReal_add_eq_zero` | m93J02 | `{n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ} {s : ℝ≥0∞} (hfinite : s + apm_m93J02_supNorm f ≠ ⊤) (hzero : (s + apm_m93J02_supNorm f).toReal = 0) : f = 0` |
 | `apm_m93J03_isSmall_mono` | m93J03 | `{x : ℝ → ℝ} {η η' : ℝ} (hx : apm_m93J03_isSmall x η) (hη : η ≤ η') : apm_m93J03_isSmall x η'` |
+| `apm_m93J03_isSolution_affineTrig_of_residual_eq_zero` | m93J03 | `{ε a b : ℝ} (hres : apm_m93J03_residual ε (a, b) = 0) : apm_m93J03_isSolution ε (apm_m93J03_affineTrig ε a b)` |
 | `apm_m93J03_solution_eq_affine_trig` | m93J03 | `{ε : ℝ} {x : ℝ → ℝ} (hx : apm_m93J03_isSolution ε x) : ∃ a b : ℝ, ∀ t ∈ Icc (-Real.pi) Real.pi, x t = ε + a * Real.sin t + b * Real.cos t` |
 | `apm_m93J03_zero_isSmall` | m93J03 | `{η : ℝ} (hη : 0 < η) : apm_m93J03_isSmall (fun _ ↦ 0) η` |
+| `apm_m93J04_branch_intervalIntegrable` | m93J04 | `(y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1) (φ : ℝ → ℝ) (hφ : ContDiff ℝ ⊤ φ) : IntervalIntegrable (fun x ↦ apm_m93J04_kernel x y * apm_m93J04_formalAdjoint φ x) volume 0 y ∧ IntervalIntegrable (fun x ↦ apm_m93J04_kernel x y * apm_m93J04_formalAdjoint φ x) volume y 1` |
+| `apm_m93J04_formalAdjoint_continuous` | m93J04 | `(φ : ℝ → ℝ) (hφ : ContDiff ℝ ⊤ φ) : Continuous (apm_m93J04_formalAdjoint φ)` |
 | `apm_m93J04_formalAdjoint_eq` | m93J04 | `(φ : ℝ → ℝ) (x : ℝ) : apm_m93J04_formalAdjoint φ x = x ^ 2 * deriv (deriv φ) x + 5 * x * deriv φ x + 4 * φ x` |
 | `apm_m93J04_integral_Ioo_split` | m93J04 | `(f : ℝ → ℝ) {y : ℝ} (hleft : IntervalIntegrable f volume 0 y) (hright : IntervalIntegrable f volume y 1) : (∫ x in Ioo (0 : ℝ) 1, f x) = (∫ x in (0 : ℝ)..y, f x) + ∫ x in y..1, f x` |
 | `apm_m93J04_kernel_derivative_jump` | m93J04 | `(y : ℝ) : (Real.log y + 1) / y ^ 2 - Real.log y / y ^ 2 = 1 / y ^ 2` |
 | `apm_m93J04_kernel_of_le` | m93J04 | `{x y : ℝ} (hxy : x ≤ y) : apm_m93J04_kernel x y = x * Real.log y / y ^ 2` |
 | `apm_m93J04_kernel_of_lt` | m93J04 | `{x y : ℝ} (hyx : y < x) : apm_m93J04_kernel x y = x * Real.log x / y ^ 2` |
 | `apm_m93J04_testFunction_endpoints` | m93J04 | `(φ : ℝ → ℝ) (hsupp : Function.support φ ⊆ Ioo (0 : ℝ) 1) : φ 0 = 0 ∧ deriv φ 0 = 0 ∧ φ 1 = 0 ∧ deriv φ 1 = 0` |
+| `apm_m93j06_abs_sqrt_sub_sqrt_le_sqrt_abs_sub` | m93J06 | `{u v : ℝ} (hu : 0 ≤ u) (hv : 0 ≤ v) : \|Real.sqrt u - Real.sqrt v\| ≤ Real.sqrt \|u - v\|` |
 | `apm_m93j06_flow_distance_zero` | m93J06 | `{f φ : ℝ → ℝ → ℝ} (hφ : apm_m93j06_IsFlow f φ) (L a b : ℝ) : \|φ 0 a - φ 0 b\| = Real.exp (L * \|(0 : ℝ)\|) * \|a - b\|` |
 | `apm_m93j06_flow_hasDerivAt` | m93J06 | `{f φ : ℝ → ℝ → ℝ} (hφ : apm_m93j06_IsFlow f φ) (y₀ t : ℝ) : HasDerivAt (fun s ↦ φ s y₀) (f t (φ t y₀)) t` |
 | `apm_m93j06_flow_zero` | m93J06 | `{f φ : ℝ → ℝ → ℝ} (hφ : apm_m93j06_IsFlow f φ) (y₀ : ℝ) : φ 0 y₀ = y₀` |
 | `apm_m93j06_hasDerivAt_mul_abs` | m93J06 | `(t : ℝ) : HasDerivAt (fun s : ℝ ↦ s * \|s\|) (2 * \|t\|) t` |
+| `apm_m93j06_not_holder_unique` | m93J06 | `: ¬ ∀ α : ℝ, 0 < α → α < 1 → ∀ f : ℝ → ℝ → ℝ, (∃ K > 0, ∀ t a b, \|f t a - f t b\| ≤ K * Real.rpow \|a - b\| α) → ∀ y₀, ∃! y : ℝ → ℝ, apm_m93j06_Solves f y₀ y` |
 | `apm_m93j06_signedSquare_ne_zero` | m93J06 | `: (fun t : ℝ ↦ t * \|t\|) ≠ fun _ ↦ 0` |
 | `apm_m93j06_signedSquare_solves_sqrt` | m93J06 | `: apm_m93j06_Solves (fun _ y ↦ 2 * Real.sqrt \|y\|) 0 (fun t ↦ t * \|t\|)` |
 | `apm_m93j06_sqrt_abs_mul_abs` | m93J06 | `(t : ℝ) : Real.sqrt \|t * abs t\| = \|t\|` |
+| `apm_m93j06_sqrt_field_holder` | m93J06 | `(t a b : ℝ) : \|2 * Real.sqrt (\|a\|) - 2 * Real.sqrt (\|b\|)\| ≤ 2 * Real.rpow (\|a - b\|) (1 / 2 : ℝ)` |
 | `apm_m93j06_zero_solves_sqrt` | m93J06 | `: apm_m93j06_Solves (fun _ y ↦ 2 * Real.sqrt \|y\|) 0 (fun _ ↦ 0)` |
 | `apm_m93J07_local_power_four_not_integrable` | m93J07 | `: ¬ IntegrableOn (fun x : ℝ => x ^ (-4 / 3 : ℝ)) (Set.Ioo 0 1) volume` |
 | `apm_m93J07_local_power_two_integrable` | m93J07 | `: IntegrableOn (fun x : ℝ => x ^ (-2 / 3 : ℝ)) (Set.Ioo 0 1) volume` |
@@ -547,16 +560,21 @@ still open can still contribute helpers here.
 | `apm_m94a01_contDiff_slice_snd` | m94A01 | `(u : ℝ × ℝ → ℝ) (hu : ContDiff ℝ 4 u) (x : ℝ) : ContDiff ℝ 4 (fun s : ℝ => u (x, s))` |
 | `apm_m94a01_iteratedDeriv_two` | m94A01 | `(f : ℝ → ℝ) : iteratedDeriv 2 f = deriv (deriv f)` |
 | `apm_m94a01_taylor4_isLittleO` | m94A01 | `(f : ℝ → ℝ) (hf : ContDiff ℝ 4 f) (x : ℝ) : (fun h : ℝ ↦ f (x + h) - (f x + h * iteratedDeriv 1 f x + h ^ 2 / 2 * iteratedDeriv 2 f x + h ^ 3 / 6 * iteratedDeriv 3 f x + h ^ 4 / 24 * iteratedDeriv 4 f x)) =o[nhds 0] (fun h : ℝ ↦ h ^ 4)` |
+| `apm_m94a02_I_smul_map_isHermitian_of_transpose_eq_neg` | m94A02 | `{n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.transpose = -A) : (Complex.I • A.map (algebraMap ℝ ℂ)).IsHermitian` |
+| `apm_m94a02_map_conjTranspose_eq_neg_of_transpose_eq_neg` | m94A02 | `{n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.transpose = -A) : (A.map (algebraMap ℝ ℂ))ᴴ = -(A.map (algebraMap ℝ ℂ))` |
 | `apm_m94a02_symmetricPart_eq_zero_of_transpose_eq_neg` | m94A02 | `{n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.transpose = -A) : apm_m94a02_symmetricPart A = 0` |
 | `apm_m94a02_symmetricPart_isHermitian` | m94A02 | `{n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) : (apm_m94a02_symmetricPart A).IsHermitian` |
 | `apm_m94a02_symmetricPart_map_isHermitian` | m94A02 | `{n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) : ((apm_m94a02_symmetricPart A).map (algebraMap ℝ ℂ)).IsHermitian` |
 | `apm_m94a02_symmetricPart_transpose` | m94A02 | `{n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) : (apm_m94a02_symmetricPart A).transpose = apm_m94a02_symmetricPart A` |
+| `apm_m94a03_invNorm_memLp_two_ball_fin_three` | m94A03 | `: MemLp (fun x : EuclideanSpace ℝ (Fin 3) => ‖x‖⁻¹) 2 (volume.restrict (Metric.ball 0 1))` |
 | `apm_m94a03_logNorm_aestronglyMeasurable` | m94A03 | `{n : ℕ} {μ : Measure (EuclideanSpace ℝ (Fin n))} : AEStronglyMeasurable (apm_m94a03_logNorm : EuclideanSpace ℝ (Fin n) → ℝ) μ` |
 | `apm_m94a03_logNormGradient_aestronglyMeasurable` | m94A03 | `{n : ℕ} {μ : Measure (EuclideanSpace ℝ (Fin n))} : AEStronglyMeasurable (apm_m94a03_logNormGradient : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) μ` |
 | `apm_m94a03_logNormGradient_memLp_iff` | m94A03 | `{n : ℕ} {p : ℝ≥0∞} {μ : Measure (EuclideanSpace ℝ (Fin n))} : MemLp (apm_m94a03_logNormGradient : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) p μ ↔ MemLp (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖⁻¹) p μ` |
 | `apm_m94a03_norm_logNormGradient` | m94A03 | `{n : ℕ} {x : EuclideanSpace ℝ (Fin n)} (hx : x ≠ 0) : ‖apm_m94a03_logNormGradient x‖ = ‖x‖⁻¹` |
 | `apm_m94a03_norm_logNormGradient_all` | m94A03 | `{n : ℕ} (x : EuclideanSpace ℝ (Fin n)) : ‖apm_m94a03_logNormGradient x‖ = ‖x‖⁻¹` |
+| `apm_m94a04_cube_coeFn` | m94A04 | `(f : Lp ℝ 8 apm_m94a04_measure) : (apm_m94a04_cube f : ℝ → ℝ) =ᵐ[apm_m94a04_measure] fun t ↦ (f t) ^ 3` |
 | `apm_m94a04_cubic_remainder` | m94A04 | `(a b : ℝ) : (a + b) ^ 3 - a ^ 3 - 3 * a ^ 2 * b = 3 * a * b ^ 2 + b ^ 3` |
+| `apm_m94a04_norm_cube_le` | m94A04 | `(f : Lp ℝ 8 apm_m94a04_measure) : ‖apm_m94a04_cube f‖ ≤ ‖f‖ ^ 3` |
 | `apm_m94a04_norm_square_le` | m94A04 | `(f : Lp ℝ 8 apm_m94a04_measure) : ‖apm_m94a04_square f‖ ≤ ‖f‖ ^ 2` |
 | `apm_m94a04_square_coeFn` | m94A04 | `(f : Lp ℝ 8 apm_m94a04_measure) : (apm_m94a04_square f : ℝ → ℝ) =ᵐ[apm_m94a04_measure] fun t ↦ (f t) ^ 2` |
 | `apm_m94a05_kernel_square_le` | m94A05 | `(u : ℝ → ℝ) {R t s : ℝ} (hu : \|u s\| ≤ R) : \|Real.sin (t * s) * (u s) ^ 2\| ≤ R ^ 2` |
@@ -692,7 +710,12 @@ still open can still contribute helpers here.
 | `apm_m98J02_hasCompactSupport_smul` | m98J02 | `(c : ℝ) (u : apm_m98J02_Dist) (hu : apm_m98J02_hasCompactSupport u) : apm_m98J02_hasCompactSupport (c • u)` |
 | `apm_m98J02_hasCompactSupport_sub` | m98J02 | `(u v : apm_m98J02_Dist) (hu : apm_m98J02_hasCompactSupport u) (hv : apm_m98J02_hasCompactSupport v) : apm_m98J02_hasCompactSupport (u - v)` |
 | `apm_m98J02_solvesT_add_homogeneous` | m98J02 | `(w z : apm_m98J02_Dist) (r : apm_m98J02_Test → ℝ) (hw : apm_m98J02_solvesT w r) (hz : apm_m98J02_solvesT z (fun _ ↦ 0)) : apm_m98J02_solvesT (w + z) r` |
+| `apm_m98J03_adjoint_starProjection` | m98J03 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H] (V : ClosedSubmodule ℝ H) : V.starProjection.adjoint = V.starProjection` |
+| `apm_m98J03_commute_preserves` | m98J03 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H] (V : ClosedSubmodule ℝ H) : ∀ A : H →L[ℝ] H, A.comp V.starProjection = V.starProjection.comp A → (∀ x ∈ (V : Set H), A x ∈ (V : Set H)) ∧ (∀ x ∈ (apm_m98J03_perp V : Set H), A x ∈ (apm_m98J03_perp V : Set H))` |
 | `apm_m98J03_compact_starProjection_iff` | m98J03 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H] (V : ClosedSubmodule ℝ H) : IsCompactOperator V.starProjection ↔ FiniteDimensional ℝ (↥(V : Submodule ℝ H))` |
+| `apm_m98J03_perp_isClosed` | m98J03 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] (V : ClosedSubmodule ℝ H) : IsClosed (apm_m98J03_perp V : Set H)` |
+| `apm_m98J03_spectrum_eq_one_iff` | m98J03 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H] [Nontrivial H] (V : ClosedSubmodule ℝ H) : spectrum ℝ V.starProjection = ({1} : Set ℝ) ↔ V = ⊤` |
+| `apm_m98J03_spectrum_eq_zero_iff` | m98J03 | `{H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H] [Nontrivial H] (V : ClosedSubmodule ℝ H) : spectrum ℝ V.starProjection = ({0} : Set ℝ) ↔ V = ⊥` |
 | `apm_m98J04_arcLength_line` | m98J04 | `(a b α β : ℝ) (hab : a < b) : apm_m98J04_arcLength a b (apm_m98J04_line a b α β) = (b - a) * Real.sqrt (1 + ((β - α) / (b - a)) ^ 2)` |
 | `apm_m98J04_arcLength_line_eq_sqrt` | m98J04 | `(a b α β : ℝ) (hab : a < b) : apm_m98J04_arcLength a b (apm_m98J04_line a b α β) = Real.sqrt ((b - a) ^ 2 + (β - α) ^ 2)` |
 | `apm_m98J04_deriv_line` | m98J04 | `(a b α β x : ℝ) : deriv (apm_m98J04_line a b α β) x = (β - α) / (b - a)` |
@@ -777,6 +800,8 @@ still open can still contribute helpers here.
 | `apm_t00j03_integral_angleFormValue_circle` | t00J03 | `: (∫ θ in (0 : ℝ)..Real.pi, apm_t00j03_angleFormValue (apm_t00j03_circlePoint θ) (apm_t00j03_circleVelocity θ)) = Real.pi` |
 | `apm_t00j03_integral_angleFormValue_circle_reverse` | t00J03 | `: (∫ θ in Real.pi..(0 : ℝ), apm_t00j03_angleFormValue (apm_t00j03_circlePoint θ) (apm_t00j03_circleVelocity θ)) = -Real.pi` |
 | `apm_t00j03_projectivize_surjective` | t00J03 | `: Function.Surjective apm_t00j03_projectivize` |
+| `apm_t00j04_differential_isClosed_of_contMDiff` | t00J04 | `{n : ℕ} {X : Type} [TopologicalSpace X] [T2Space X] [ChartedSpace (apm_t00j04_E n) X] [IsManifold (apm_t00j04_I n) ∞ X] {f : X → ℝ} (hf : ContMDiff (apm_t00j04_I n) 𝓘(ℝ, ℝ) ∞ f) : t00J04DifferentialIsClosed (n` |
+| `apm_t00j04_mfderiv_chart_linear` | t00J04 | `{n : ℕ} {X : Type} [TopologicalSpace X] [T2Space X] [ChartedSpace (apm_t00j04_E n) X] [IsManifold (apm_t00j04_I n) ∞ X] (p : X) (omega_p : TangentSpace (apm_t00j04_I n) p →L[ℝ] ℝ) : mfderiv (apm_t00j04_I n) 𝓘(ℝ, ℝ) (fun x ↦ omega_p (extChartAt (apm_t00j04_I n) p x)) p = omega_p` |
 | `apm_t00J06_fst_nat_fiber_infinite` | t00J06 | `(S : Type) [TopologicalSpace S] : ∀ s : S, ((Prod.fst : S × ℕ → S) ⁻¹' ({s} : Set S)).Infinite` |
 | `apm_t00J06_isCoveringMap_fst_nat` | t00J06 | `(S : Type) [TopologicalSpace S] : IsCoveringMap (Prod.fst : S × ℕ → S)` |
 | `apm_t00j07_attach_glue` | t00J07 | `(f : C(Circle, apm_t00j07_RP2)) (z : Circle) : (Quotient.mk _ (.inl (f z)) : apm_t00j07_attachDisk f) = Quotient.mk _ (.inr (apm_t00j07_circleToDisk z))` |
@@ -806,7 +831,12 @@ still open can still contribute helpers here.
 | `apm_t01a04_torusCoverMap_surjective` | t01A04 | `: Function.Surjective apm_t01a04_torusCoverMap` |
 | `apm_t01a04_torusCoverRaw_respects` | t01A04 | `{x y} (h : Relation.EqvGen apm_t01a04_torusCoverRel x y) : Relation.EqvGen apm_t01a04_wedgeRel (apm_t01a04_torusCoverRaw x) (apm_t01a04_torusCoverRaw y)` |
 | `apm_t01a07_eq_of_smul_rep_eq` | t01A07 | `(p q : apm_t01a07_RP3) (a : ℝ) (h : a • Projectivization.rep q = Projectivization.rep p) : p = q` |
+| `apm_t01a07_fderiv_apply_one` | t01A07 | `(v : Fin 4 → ℝ) : fderiv ℝ apm_t01a07_quartic v (Pi.single 1 1) = -(4 * v 1 ^ 3)` |
+| `apm_t01a07_fderiv_apply_three` | t01A07 | `(v : Fin 4 → ℝ) : fderiv ℝ apm_t01a07_quartic v (Pi.single 3 1) = 4 * v 3 ^ 3` |
+| `apm_t01a07_fderiv_apply_two` | t01A07 | `(v : Fin 4 → ℝ) : fderiv ℝ apm_t01a07_quartic v (Pi.single 2 1) = -(4 * v 2 ^ 3)` |
+| `apm_t01a07_fderiv_apply_zero` | t01A07 | `(v : Fin 4 → ℝ) : fderiv ℝ apm_t01a07_quartic v (Pi.single 0 1) = 4 * v 0 ^ 3` |
 | `apm_t01a07_fourth_pow_eq_iff` | t01A07 | `(x y : ℝ) : x ^ 4 = y ^ 4 ↔ x = y ∨ x = -y` |
+| `apm_t01a07_smooth` | t01A07 | `: apm_t01a07_IsSmoothProjectiveHypersurface` |
 | `apm_t01j01_boundary_union_isClosed` | t01J01 | `{S : Type*} [TopologicalSpace S] [T2Space S] (γ₁ γ₂ : C(Circle, S)) : IsClosed (Set.range γ₁ ∪ Set.range γ₂)` |
 | `apm_t01j01_isClosed_of_isAnnulusBetween` | t01J01 | `{S : Type*} [TopologicalSpace S] [T2Space S] {A : Set S} {γ₁ γ₂ : C(Circle, S)} (hA : apm_t01j01_IsAnnulusBetween A γ₁ γ₂) : IsClosed A` |
 | `apm_t01j01_isCompact_of_isAnnulusBetween` | t01J01 | `{S : Type*} [TopologicalSpace S] {A : Set S} {γ₁ γ₂ : C(Circle, S)} (hA : apm_t01j01_IsAnnulusBetween A γ₁ γ₂) : IsCompact A` |
@@ -894,9 +924,23 @@ still open can still contribute helpers here.
 | `apm_t92J06_inl_base_eq_inr_base` | t92J06 | `: apm_t92J06_inl apm_t92J06_circleBase = apm_t92J06_inr apm_t92J06_circleBase` |
 | `apm_t92J07_exists_common_regularValue_of_null` | t92J07 | `(m : ℕ) (d : PNat → ℕ) (M : PNat → Type*) [∀ i, TopologicalSpace (M i)] [∀ i, ChartedSpace (apm_t92J07_E (d i)) (M i)] (f : ∀ i, M i → apm_t92J07_E m) (hnull : ∀ i, volume (apm_t92J07_criticalValues (n` |
 | `apm_t92J08_blowupCurve_hasDerivAt` | t92J08 | `{t : ℝ} (ht : t ≠ 1) : HasDerivAt apm_t92J08_blowupCurve ((apm_t92J08_blowupCurve t) ^ 2) t` |
+| `apm_t92J09_inner_integral` | t92J09 | `(θ : ℝ) : (∫ φ in (0 : ℝ)..2 * Real.pi, apm_t92J09_pullbackOmega θ φ) = Real.pi * Real.sin θ ^ 3` |
+| `apm_t92J09_param_mem_sphere` | t92J09 | `(θ φ : ℝ) : apm_t92J09_param θ φ ∈ apm_t92J09_sphere` |
+| `apm_t92J09_pullbackOmega_eq` | t92J09 | `(θ φ : ℝ) : apm_t92J09_pullbackOmega θ φ = Real.sin θ ^ 3 * Real.cos φ ^ 2` |
+| `apm_t92J09_sphereIntegral_eq` | t92J09 | `: apm_t92J09_sphereIntegral = (4 / 3 : ℝ) * Real.pi` |
+| `apm_t93a03_connectedSum_not_simplyConnected_of_piOne_equiv` | t93A03 | `{φ₁ φ₂ : T93A03Disk → T93A03Summand} (hspine : T93A03ConnectedSum φ₁ φ₂ ≃ₕ T93A03Spine) (e : FundamentalGroup T93A03Spine t93A03SpineBasepoint ≃* FreeGroup (Fin 2)) : ¬ SimplyConnectedSpace (T93A03ConnectedSum φ₁ φ₂)` |
+| `apm_t93a03_spine_not_simplyConnected_of_piOne_equiv` | t93A03 | `(e : FundamentalGroup T93A03Spine t93A03SpineBasepoint ≃* FreeGroup (Fin 2)) : ¬ SimplyConnectedSpace T93A03Spine` |
 | `apm_t93a04_range_sup_span_eq_top_of_projection_surjective` | t93A04 | `{E F G : Type*} [AddCommGroup E] [AddCommGroup F] [AddCommGroup G] [Module ℝ E] [Module ℝ F] [Module ℝ G] (L : E →ₗ[ℝ] F) (q : F →ₗ[ℝ] G) (v : F) (hker : LinearMap.ker q = Submodule.span ℝ ({v} : Set F)) (hsurj : Function.Surjective (q.comp L)) : LinearMap.range L ⊔ Submodule.span ℝ ({v} : Set F) = ⊤` |
 | `apm_t94a06_family_zero` | t94A06 | `{X : Type*} (f : X → apm_t94a06_E3) : apm_t94a06_family f 0 = f` |
+| `apm_t94a07_fixedPointParam_injective` | t94A07 | `(R r : ℝ) (hr : 0 < r) (hR : r < R) : Function.Injective (apm_t94a07_fixedPointParam R r)` |
+| `apm_t94a07_fixedPoints_card` | t94A07 | `(R r : ℝ) (hr : 0 < r) (hR : r < R) : Nat.card {p // p ∈ apm_t94a07_fixedPoints R r} = 4` |
+| `apm_t94a07_fixedPoints_eq_range` | t94A07 | `(R r : ℝ) : apm_t94a07_fixedPoints R r = Set.range (apm_t94a07_fixedPointParam R r)` |
 | `apm_t94a07_halfTurn_eq_iff` | t94A07 | `(p : apm_t94a07_E3) : apm_t94a07_halfTurn p = p ↔ p 1 = 0 ∧ p 2 = 0` |
+| `apm_t94a08_dquadratic1_ne_zero` | t94A08 | `{z : apm_t94a08_C3} (hz : z ≠ 0) : apm_t94a08_dquadratic1 z ≠ 0` |
+| `apm_t94a08_e0_ne_zero` | t94A08 | `: (Pi.single 0 1 : apm_t94a08_C3) ≠ 0` |
+| `apm_t94a08_hasFDerivAt_quadratic1` | t94A08 | `(z : apm_t94a08_C3) : HasFDerivAt apm_t94a08_quadratic1 (apm_t94a08_dquadratic1 z) z` |
+| `apm_t94a08_node_mem_sigma2` | t94A08 | `: apm_t94a08_node ∈ apm_t94a08_sigma2` |
+| `apm_t94a08_regularLevelSet_quadratic1` | t94A08 | `: apm_t94a08_IsRegularLevelSet apm_t94a08_quadratic1 apm_t94a08_sigma1` |
 | `apm_t94a09_contDiff_J` | t94A09 | `: ContDiff ℝ ∞ apm_t94a09_J` |
 | `apm_t94a09_exists_smoothSphereField_S3` | t94A09 | `: ∃ V : apm_t94a09_S3 → apm_t94a09_E4, apm_t94a09_SmoothSphereField V ∧ ∀ p, V p ≠ 0` |
 | `apm_t94a09_inner_J` | t94A09 | `(x : apm_t94a09_E4) : ⟪apm_t94a09_J x, x⟫_ℝ = 0` |
@@ -921,8 +965,20 @@ still open can still contribute helpers here.
 | `apm_t94J06_boundaryHomotopy_continuous` | t94J06 | `: Continuous apm_t94J06_boundaryHomotopy` |
 | `apm_t94J06_boundaryHomotopy_ne_zero` | t94J06 | `(p : Set.Icc (0 : ℝ) 1 × Metric.sphere (0 : ℂ) 7) : apm_t94J06_boundaryHomotopy p ≠ 0` |
 | `apm_t94J06_continuous` | t94J06 | `: Continuous apm_t94J06_function` |
+| `apm_t94J09_edgeCount_eq` | t94J09 | `: apm_t94J09_edgeCount apm_t94J09_word = 7` |
+| `apm_t94J09_eulerCharacteristic_eq` | t94J09 | `: apm_t94J09_eulerCharacteristic apm_t94J09_word apm_t94J09_vertexClass = -4` |
+| `apm_t94J09_nonorientableGenus_eq` | t94J09 | `: apm_t94J09_nonorientableGenus (apm_t94J09_eulerCharacteristic apm_t94J09_word apm_t94J09_vertexClass) = 6` |
+| `apm_t94J09_not_oppositeOrientationPairing` | t94J09 | `: ¬apm_t94J09_hasOppositeOrientationPairing apm_t94J09_word` |
+| `apm_t94J09_vertexCount_eq` | t94J09 | `: apm_t94J09_vertexCount apm_t94J09_vertexClass = 2` |
 | `apm_t95j06_flow_periodic` | t95J06 | `(H : apm_t95j06_S5 × ℝ → apm_t95j06_S5) (hH : apm_t95j06_isHopfFlow H) (z : apm_t95j06_S5) (t : ℝ) : H (z, t + 2 * Real.pi) = H (z, t)` |
 | `apm_t95j06_T_invariant` | t95J06 | `(H : apm_t95j06_S5 × ℝ → apm_t95j06_S5) (hH : apm_t95j06_isHopfFlow H) : apm_t95j06_IsInvariant H apm_t95j06_T` |
+| `apm_t96A03_continuous_inl` | t96A03 | `(h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) : Continuous (apm_t96A03_inl h)` |
+| `apm_t96A03_continuous_inr` | t96A03 | `(h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) : Continuous (apm_t96A03_inr h)` |
+| `apm_t96A03_continuous_quotient` | t96A03 | `(h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) : Continuous (apm_t96A03_quotient h)` |
+| `apm_t96A03_inl_eq_inr_on_equator` | t96A03 | `(h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) : (fun x : apm_t96A03_EquatorSpace => apm_t96A03_inl h x.1) = (fun x => apm_t96A03_inr h (h x).1)` |
+| `apm_t96A03_isQuotientMap_quotient` | t96A03 | `(h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) : Topology.IsQuotientMap (apm_t96A03_quotient h)` |
+| `apm_t96A03_quotient_glue` | t96A03 | `(h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) (x : apm_t96A03_EquatorSpace) : apm_t96A03_quotient h (Sum.inl x.1) = apm_t96A03_quotient h (Sum.inr (h x).1)` |
+| `apm_t96A03_surjective_quotient` | t96A03 | `(h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) : Function.Surjective (apm_t96A03_quotient h)` |
 | `apm_t96j05_exists_positive_nonempty_radialLevel` | t96J05 | `{n : ℕ} {X : Set (apm_t96j05_E n)} (hXnz : ∃ x : X, (x.1 : apm_t96j05_E n) ≠ 0) : ∃ r : ℝ, 0 < r ∧ Nonempty (apm_t96j05_radialLevel X r)` |
 | `apm_t96j06_coordinatePoint_mem` | t96J06 | `: apm_t96j06_coordinatePoint ∈ apm_t96j06_RP1InRP2` |
 | `apm_t96j06_offLinePoint_not_mem` | t96J06 | `: apm_t96j06_offLinePoint ∉ apm_t96j06_RP1InRP2` |
@@ -931,6 +987,7 @@ still open can still contribute helpers here.
 | `apm_t96j06_single_two_ne` | t96J06 | `: (Pi.single 2 1 : Fin 3 → ℝ) ≠ 0` |
 | `apm_t96j06_single_zero_ne` | t96J06 | `: (Pi.single 0 1 : Fin 3 → ℝ) ≠ 0` |
 | `apm_t96j07_not_fixed_axis_clause` | t96J07 | `: ¬(∀ x : apm_t96j07_V, (x ≠ 0 → apm_t96j07_projectivelyEq x (apm_t96j07_A x)) ↔ ∃ i : Fin 4, apm_t96j07_projectivelyEq x (apm_t96j07_axis i))` |
+| `apm_t96j08_not_isClosed` | t96J08 | `: ¬apm_t96j08_IsClosed` |
 | `apm_t97a01_continuous_quotientTorusRP2` | t97A01 | `: Continuous apm_t97a01_quotientTorusRP2` |
 | `apm_t97a01_continuous_quotientX` | t97A01 | `: Continuous apm_t97a01_quotientX` |
 | `apm_t97a01_quotientTorusRP2_identifies_c` | t97A01 | `(t : Set.Icc (0 : ℝ) 1) : apm_t97a01_quotientTorusRP2 (apm_t97a01_edgePoint 4 t) = apm_t97a01_quotientTorusRP2 (apm_t97a01_edgePoint 5 t)` |
@@ -940,6 +997,8 @@ still open can still contribute helpers here.
 | `apm_t97A03_base_north_eq` | t97A03 | `(A B : Circle) : (Quotient.mk _ (.inl A) : apm_t97A03_BaseSpace A B) = Quotient.mk _ (.inr apm_t97A03_north)` |
 | `apm_t97A03_base_south_eq` | t97A03 | `(A B : Circle) : (Quotient.mk _ (.inl B) : apm_t97A03_BaseSpace A B) = Quotient.mk _ (.inr apm_t97A03_south)` |
 | `apm_t97A03_surjective_of_fiber_card_two` | t97A03 | `{A B : Circle} {Y : Type} (p : Y → apm_t97A03_BaseSpace A B) (hdegree : ∀ x : apm_t97A03_BaseSpace A B, Nat.card (p ⁻¹' ({x} : Set _)) = 2) : Function.Surjective p` |
+| `apm_t97a04_lefschetz_arithmetic` | t97A04 | `: (1 : ℤ) = 1 - Matrix.trace apm_t97a04_matrix + 3` |
+| `apm_t97a04_matrix_trace` | t97A04 | `: Matrix.trace apm_t97a04_matrix = 3` |
 | `apm_t97J01_surjective_of_connected` | t97J01 | `{X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] [ConnectedSpace X] [PreconnectedSpace Y] (p : X → Y) (hp : IsCoveringMap p) : Function.Surjective p` |
 | `apm_t97J02_candidate_eulerCharacteristics` | t97J02 | `: apm_t97J02_eulerCharacteristic false 4 = -2 ∧ apm_t97J02_eulerCharacteristic false 12 = 5 * apm_t97J02_eulerCharacteristic false 4 ∧ apm_t97J02_eulerCharacteristic true 7 = 6 * apm_t97J02_eulerCharacteristic false 4 ∧ apm_t97J02_eulerCharacteristic false 14 = 6 * apm_t97J02_eulerCharacteristic false 4` |
 | `apm_t97J02_continuous_surfaceQuotient` | t97J02 | `(orientable : Bool) (genus : ℕ) : Continuous (apm_t97J02_surfaceQuotient orientable genus)` |
@@ -953,6 +1012,7 @@ still open can still contribute helpers here.
 | `apm_t97J04_surjective_wedgeQuotient` | t97J04 | `: Function.Surjective apm_t97J04_wedgeQuotient` |
 | `apm_t97J04_wedgeDesc_respects` | t97J04 | `{Z : Type*} [TopologicalSpace Z] (f : C(apm_t97J04_Torus, Z)) (g : C(Circle, Z)) (hbase : f (1, 1) = g 1) {x y} (hxy : Relation.EqvGen apm_t97J04_WedgeRel x y) : Sum.elim f g x = Sum.elim f g y` |
 | `apm_t97J04_wedgeDesc_unique` | t97J04 | `{Z : Type*} [TopologicalSpace Z] (f : C(apm_t97J04_Torus, Z)) (g : C(Circle, Z)) (hbase : f (1, 1) = g 1) (u : C(apm_t97J04_X, Z)) (huT : ∀ x, u (apm_t97J04_torusInclusion x) = f x) (huC : ∀ z, u (apm_t97J04_circleInclusion z) = g z) : u = apm_t97J04_wedgeDesc f g hbase` |
+| `apm_t99J04_surjective_of_isLocalDiffeomorph` | t99J04 | `{E E' X Y : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup E'] [NormedSpace ℝ E'] [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X] [ChartedSpace E X] [TopologicalSpace Y] [T2Space Y] [ConnectedSpace Y] [ChartedSpace E' Y] (f : X → Y) (hf : IsLocalDiffeomorph (𝓘(ℝ, E)) (𝓘(ℝ, E')) ⊤ f) : Function.Surjective f` |
 | `apm_translation_symmDiff_tendsto_zero` | a99J02 | `(B : Set ℝ) (hB : MeasurableSet B) (hBfin : volume B ≠ ⊤) (x : ℝ) : Tendsto (fun y => volume (((apmSubtractionMap y) ⁻¹' B) ∆ ((apmSubtractionMap x) ⁻¹' B))) (nhds x) (nhds 0)` |
 | `apmAssociated_eq_C_mul_unique` | b96A03 | `{F n : Type*} [Field F] {x y : MvPolynomial n F} (hy : y ≠ 0) (hxy : Associated x y) : ∃! c : Fˣ, x = MvPolynomial.C (c : F) * y` |
 | `apmB03NotIntegrallyClosed` | b03J03 | `: ¬ IsIntegrallyClosed (AdjoinRoot apmB03Poly)` |
@@ -1391,13 +1451,17 @@ still open can still contribute helpers here.
 | `lowerQuantile_mem` | LIB: ConstructionTargets.BanachZarecki | `{f : ℝ → ℝ} (hf_cont : ContinuousOn f (Icc (0 : ℝ) 1)) {y : ℝ} (hy : y ≤ f 1) : lowerQuantile f y ∈ Icc (0 : ℝ) 1` |
 | `lowerQuantile_mono` | LIB: ConstructionTargets.BanachZarecki | `{f : ℝ → ℝ} {y₁ y₂ : ℝ} (hy : y₁ ≤ y₂) (hy₂ : y₂ ≤ f 1) : lowerQuantile f y₁ ≤ lowerQuantile f y₂` |
 | `m03J03_abs_eval_not_distribution` | m03J03 | `: ¬ ∃ T : Distribution (⊤ : Opens ℝ) ℝ ⊤, ∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤, T φ = \|φ 0\|` |
+| `m03J03_heaviside_sin_integral_deriv` | m03J03 | `(φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤) : -(∫ x : ℝ, m03J03Heaviside x * Real.sin x * deriv φ x) = ∫ x : ℝ, m03J03Heaviside x * Real.cos x * φ x` |
 | `m03J03_integral_heaviside_mul` | m03J03 | `(g : ℝ → ℝ) : (∫ x : ℝ, m03J03Heaviside x * g x) = ∫ x in Ioi (0 : ℝ), g x` |
 | `m03J05MixedEigenfunction_deriv_one` | m03J05 | `(n : ℕ) : deriv (m03J05MixedEigenfunction n) 1 = 0` |
 | `m03J05MixedEigenfunction_hasDerivAt` | m03J05 | `(n : ℕ) (x : ℝ) : HasDerivAt (m03J05MixedEigenfunction n) (((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2 * Real.cos ((((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2) * x)) x` |
 | `m03J05MixedEigenfunction_neg_deriv_deriv` | m03J05 | `(n : ℕ) (x : ℝ) : -deriv (deriv (m03J05MixedEigenfunction n)) x = m03J05MixedEigenvalue n * m03J05MixedEigenfunction n x` |
 | `m03J05MixedEigenfunction_zero` | m03J05 | `(n : ℕ) : m03J05MixedEigenfunction n 0 = 0` |
+| `m03J05MixedEigenvalue_injective` | m03J05 | `: Function.Injective m03J05MixedEigenvalue` |
 | `m03J05MixedEigenvalue_pos` | m03J05 | `(n : ℕ) : 0 < m03J05MixedEigenvalue n` |
+| `m03J05MixedEigenvalue_strictMono` | m03J05 | `: StrictMono m03J05MixedEigenvalue` |
 | `m03J05MixedFrequency_pos` | m03J05 | `(n : ℕ) : 0 < ((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2` |
+| `m03J05MixedFrequency_strictMono` | m03J05 | `: StrictMono (fun n : ℕ ↦ ((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2)` |
 | `m95A01_left_residual` | m95A01 | `{𝕜 X : Type*} [RCLike 𝕜] [NormedAddCommGroup X] [NormedSpace 𝕜 X] (A B₀ : X →L[𝕜] X) (n : ℕ) : 1 - A * m95A01Iterates A B₀ n = (1 - A * B₀) ^ (2 ^ n)` |
 | `m95A01_right_residual` | m95A01 | `{𝕜 X : Type*} [RCLike 𝕜] [NormedAddCommGroup X] [NormedSpace 𝕜 X] (A B₀ : X →L[𝕜] X) (n : ℕ) : 1 - m95A01Iterates A B₀ n * A = (1 - B₀ * A) ^ (2 ^ n)` |
 | `m95A02_tendsto_coord_of_weak` | m95A02 | `(f : ℕ → m95A02H) (g : m95A02H) (h : Tendsto (fun n ↦ toWeakSpace ℂ m95A02H (f n)) atTop (nhds (toWeakSpace ℂ m95A02H g))) (j : ℤ) : Tendsto (fun n ↦ f n j) atTop (nhds (g j))` |
@@ -1670,21 +1734,34 @@ still open can still contribute helpers here.
 | `sup_inv_sub_polynomial_ge_one` | a96A05 | `(P : Polynomial ℂ) : 1 ≤ ⨆ z ∈ sphere (0 : ℂ) 1, ‖z⁻¹ - Polynomial.aeval z P‖` |
 | `surjective_surfaceQuotient` | LIB: ConstructionTargets.Surfaces | `(orientable : Bool) (genus : ℕ) : Function.Surjective (surfaceQuotient orientable genus)` |
 | `symmetric_split` | a95A04 | `{f : ℝ → ℝ} (hsym : SymmetricMeanValue f) {a b : ℝ} (hab : a < b) (h_sub : Icc a b ⊆ Icc (0:ℝ) 1) (hf_int : IntervalIntegrable f volume a b) : ∫ t in a..((a + b) / 2), f t = (1 / 2 : ℝ) * ∫ t in a..b, f t` |
+| `t91A08_timesFive_homotopic_of_g_homotopic` | t91A08 | `(h : ContinuousMap.Homotopic t91A08g (ContinuousMap.id T91A08Torus)) : ContinuousMap.Homotopic t91A08TimesFive (ContinuousMap.id UnitAddCircle)` |
+| `t91A08Cover_surjective` | t91A08 | `: Function.Surjective t91A08Cover` |
+| `t91A08Integral_induced` | t91A08 | `(beta : T91A08Form2) (hbeta : t91A08IsInduced beta) : t91A08Integral beta = 3` |
+| `t91A08Integral_pullback` | t91A08 | `(beta gamma : T91A08Form2) (hbeta : t91A08IsInduced beta) (hgamma : t91A08IsPullback gamma beta) : t91A08Integral gamma = 21` |
 | `t93A02H.cauchySeq_toCloseds` | t93A02 | `{X : Type*} [MetricSpace X] (A : ℕ → t93A02H X) (hA : IsT93A02HausdorffCauchy A) : CauchySeq (fun n => (A n).toCloseds)` |
 | `t93A02H.edist_toCloseds_eq_ofReal_hausdorffDist` | t93A02 | `{X : Type*} [MetricSpace X] (A B : t93A02H X) : edist A.toCloseds B.toCloseds = ENNReal.ofReal (Metric.hausdorffDist A.1 B.1)` |
 | `t93A02H.exists_closeds_limit` | t93A02 | `{X : Type*} [MetricSpace X] [CompleteSpace X] (A : ℕ → t93A02H X) (hA : IsT93A02HausdorffCauchy A) : ∃ L : TopologicalSpace.Closeds X, Tendsto (fun n => (A n).toCloseds) atTop (nhds L)` |
 | `t93A02H.hausdorffEDist_ne_top` | t93A02 | `{X : Type*} [PseudoMetricSpace X] (A B : t93A02H X) : Metric.hausdorffEDist A.1 B.1 ≠ ⊤` |
+| `t94J07CirclePoint_norm` | t94J07 | `(θ : ℝ) : ‖t94J07CirclePoint θ‖ = 1` |
+| `t94J07CirclePoint_two_pi` | t94J07 | `: t94J07CirclePoint (2 * Real.pi) = t94J07CirclePoint 0` |
+| `t94J07CircleVelocity_tangent` | t94J07 | `(θ : ℝ) : inner ℝ (t94J07CirclePoint θ) (t94J07CircleVelocity θ) = 0` |
+| `t94J08NormalizedLink_neg` | t94J08 | `{m : ℕ} (v : T94J08Euclidean (m + 1) → T94J08Euclidean (m + 1)) (p : T94J08Euclidean (m + 1)) (r : ℝ) (hlink : ∀ x : T94J08Sphere (m + 1), v (p + r • x.1) ≠ 0) (hlinkNeg : ∀ x : T94J08Sphere (m + 1), (-v (p + r • x.1)) ≠ 0) (x : T94J08Sphere (m + 1)) : t94J08NormalizedLink (fun y ↦ -v y) p r hlinkNeg x = t94J08Antipodal (t94J08NormalizedLink v p r hlink x)` |
 | `t95J02CollapseARaw_continuous` | t95J02 | `: Continuous t95J02CollapseARaw` |
 | `t95J02CollapseARaw_eqvGen` | t95J02 | `{p q : ℝ × ℝ} (h : Relation.EqvGen t95J02KleinRel p q) : t95J02CollapseARaw p = t95J02CollapseARaw q` |
 | `t95J02CollapseARaw_generator` | t95J02 | `{p q : ℝ × ℝ} (h : t95J02KleinRel p q) : t95J02CollapseARaw p = t95J02CollapseARaw q` |
 | `t95J02QuotientPoint_glide` | t95J02 | `(x y : ℝ) : t95J02QuotientPoint (x, y) = t95J02QuotientPoint (x + 1, -y)` |
 | `t95J02QuotientPoint_vertical` | t95J02 | `(x y : ℝ) : t95J02QuotientPoint (x, y) = t95J02QuotientPoint (x, y + 1)` |
 | `t95J02RetractionA_comp_inclusion` | t95J02 | `: t95J02InclusionA ≫ t95J02RetractionA = 𝟙 t95J02CircleA` |
+| `t95J04_sphere_nonempty` | t95J04 | `(n : ℕ) : Nonempty (T95J04Sphere n)` |
+| `t95J04_sphereSix_nonempty` | t95J04 | `: Nonempty T95J04SphereSix` |
+| `t95J04_sphereThreeThree_nonempty` | t95J04 | `: Nonempty T95J04SphereThreeThree` |
+| `t95J04_sphereTwoFour_nonempty` | t95J04 | `: Nonempty T95J04SphereTwoFour` |
 | `t95J05_existsUnique_projectiveThreeForm` | t95J05 | `: ∃! η : T95J05ProjectiveThreeForm, t95J05ProjectionPullback η = t95J05InclusionPullback` |
 | `t95J05InclusionPullback_antipodal` | t95J05 | `(x : t95J05SphereThree) : t95J05InclusionPullback (t95J05Antipode x) = t95J05InclusionPullback x` |
 | `t95J05InclusionPullback_expand` | t95J05 | `(x : t95J05SphereThree) : t95J05InclusionPullback x = x.1 1 ^ 3 * x.1 0 - 4 * x.1 0 ^ 2` |
 | `t95J05Integral_eq_neg_pi_sq_of_sphereIntegral` | t95J05 | `(η : T95J05ProjectiveThreeForm) (hη : t95J05ProjectionPullback η = t95J05InclusionPullback) (hsphere : (∫ x, t95J05InclusionPullback x ∂Measure.hausdorffMeasure 3) = -2 * Real.pi ^ 2) : t95J05Integral η = -Real.pi ^ 2` |
 | `t95J05Integral_eq_sphereIntegral` | t95J05 | `(η : T95J05ProjectiveThreeForm) (hη : t95J05ProjectionPullback η = t95J05InclusionPullback) : t95J05Integral η = (1 / 2 : ℝ) * ∫ x, t95J05InclusionPullback x ∂Measure.hausdorffMeasure 3` |
+| `t97A04HasHomologicalData.of_maps` | t97A04 | `(h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ) (h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane) (h2 : T97A04Homology 2 ≅ ModuleCat.of ℤ ℤ) (H0 : ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a) (H1 : ∀ a : T97A04Homology 1, h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) = apm_t97a04_matrix.mulVec (h1.hom a)) (H2 : ∀ a : T97A04Homology 2, h2.hom (t97A04HomologyMap 2 apm_t97a04_Lbar a) = 3 * h2.hom a) : t97A04HasHomologicalData apm_t97a04_Lbar apm_t97a04_matrix 3 1` |
 | `t97J06_circle_identity_homotopic_of_map_homotopic_const` | t97J06 | `(q : T97J06Torus) (h : ContinuousMap.Homotopic t97J06Map (ContinuousMap.const T97J06Torus q)) : ContinuousMap.Homotopic (ContinuousMap.id Circle) (ContinuousMap.const Circle q.2)` |
 | `t97J06_determinant_integral_zero` | t97J06 | `: (∫ x in (0 : ℝ)..1, ∫ y in (0 : ℝ)..1, Matrix.det !![2 * Real.pi * Real.cos (2 * Real.pi * x + 4 * Real.pi * y), 4 * Real.pi * Real.cos (2 * Real.pi * x + 4 * Real.pi * y); (1 : ℝ), 1]) = 0` |
 | `t97J06Map_on_cover` | t97J06 | `(x y : ℝ) : t97J06Map (Circle.exp (2 * Real.pi * x), Circle.exp (2 * Real.pi * y)) = (Circle.exp (2 * Real.pi * Real.sin (2 * Real.pi * x + 4 * Real.pi * y)), Circle.exp (2 * Real.pi * (x + y)))` |
