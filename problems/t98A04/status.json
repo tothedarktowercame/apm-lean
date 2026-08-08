@@ -10,12 +10,12 @@
     "problem_tex": "apm/t98A04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "partial",
+  "closer_hop": 3,
+  "closer_note": "Proved continuity of the Hopf map from the coinduced projectivization topology and proved every unit-scalar circle orbit is contained in its Hopf fiber. Remaining are the reverse fiber normalization and homeomorphisms, explicit smooth atlases/submersion, and the global no-section obstruction.",
   "imported_at": "2026-07-13T17:26:58.536188Z"
 }

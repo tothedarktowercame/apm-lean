@@ -69,6 +69,27 @@ def apm_t98a04_IsSubmersion
         Function.Surjective
           (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2)) f z)
 
+/-- The Hopf map is continuous directly from the coinduced topology on
+projectivization and continuity of the subtype projection. -/
+lemma apm_t98a04_continuous_hopf : Continuous apm_t98a04_hopf := by
+  change Continuous
+    (Projectivization.mk' ℂ ∘
+      fun z : apm_t98a04_S3 ↦
+        (⟨z.1, z.2.1⟩ : {w : apm_t98a04_C2 // w ≠ 0}))
+  exact continuous_coinduced_rng.comp
+    (continuous_subtype_val.subtype_mk fun z ↦ z.2.1)
+
+/-- Every unit-scalar orbit lies in the corresponding Hopf fiber. This is the
+easy inclusion in the frozen fiber-orbit equality. -/
+lemma apm_t98a04_circleOrbit_subset_fiber (z : apm_t98a04_S3) :
+    apm_t98a04_circleOrbit z ⊆ apm_t98a04_fiber (apm_t98a04_hopf z) := by
+  intro w hw
+  rcases hw with ⟨u, hu⟩
+  change apm_t98a04_hopf w = apm_t98a04_hopf z
+  unfold apm_t98a04_hopf
+  apply (Projectivization.mk_eq_mk_iff' ℂ w.1 z.1 w.2.1 z.2.1).2
+  exact ⟨(u : ℂ), hu.symm⟩
+
 theorem apm_t98a04 :
     Continuous apm_t98a04_hopf ∧
     apm_t98a04_IsSubmersion apm_t98a04_hopf ∧
@@ -79,4 +100,27 @@ theorem apm_t98a04 :
         apm_t98a04_fiber p = apm_t98a04_circleOrbit z) ∧
     ¬∃ i : apm_t98a04_CP1 → apm_t98a04_S3,
       Continuous i ∧ ∀ p, apm_t98a04_hopf (i p) = p := by
+  /-
+  PARTIAL boundary (closer hop 3).
+
+  New compiled progress closes the first frozen conjunct:
+  `apm_t98a04_continuous_hopf` factors the Hopf map through
+  `Projectivization.mk'` and uses the explicitly coinduced topology together
+  with the continuous subtype projection. The point-set fiber calculation is
+  also advanced by `apm_t98a04_circleOrbit_subset_fiber`, which applies
+  Mathlib's `Projectivization.mk_eq_mk_iff'` to prove that every unit-complex
+  scalar orbit lies in the corresponding Hopf fiber.
+
+  The reverse fiber inclusion requires extracting the projective scalar and
+  proving its norm is one from the two unit-norm representatives; the global
+  fiber homeomorphisms then require continuous choices or local
+  trivializations. More substantially, Mathlib installs no smooth atlas on
+  this complex projectivization, so the frozen submersion witness needs a new
+  chart construction, and the no-section conclusion requires the absent Hopf
+  characteristic-class, homotopy, or homology obstruction. Searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets/`, projectivization/Hopf siblings,
+  Mathlib's projectivization, fiber-bundle, manifold, homotopy and homology
+  sources, and git history found no packaged bridge. The frozen statement is
+  unchanged.
+  -/
   sorry
