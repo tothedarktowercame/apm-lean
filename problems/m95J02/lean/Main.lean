@@ -63,6 +63,36 @@ lemma apm_m95J02_fundamental_neg {n : ℕ} (hn : 2 < n)
     (neg_neg_of_pos (Real.rpow_pos_of_pos (norm_pos_iff.mpr hx) _))
     (apm_m95J02_power_denominator_pos hn)
 
+/-- The one-variable radial profile underlying the Euclidean kernel.  Keeping
+this scalar function separate isolates the remaining geometric chain rule
+from the elementary power-law differentiation. -/
+def apm_m95J02_radialProfile (n : ℕ) (r : ℝ) : ℝ :=
+  if n = 2 then Real.log r / (2 * Real.pi)
+  else -Real.rpow r (2 - (n : ℝ)) /
+    (((n : ℝ) - 2) * apm_m95J02_sphereArea n)
+
+lemma apm_m95J02_fundamental_eq_radialProfile (n : ℕ)
+    (x : EuclideanSpace ℝ (Fin n)) :
+    apm_m95J02_fundamental n x = apm_m95J02_radialProfile n ‖x‖ := by
+  rfl
+
+/-- The scalar power-law profile has the expected first derivative away from
+the pole.  This is the analytic input to the still-missing radial Laplacian
+chain rule. -/
+lemma apm_m95J02_hasDerivAt_radialProfile_of_two_lt {n : ℕ} (hn : 2 < n)
+    {r : ℝ} (hr : r ≠ 0) :
+    HasDerivAt (apm_m95J02_radialProfile n)
+      (-( (2 - (n : ℝ)) * Real.rpow r ((2 - (n : ℝ)) - 1)) /
+        (((n : ℝ) - 2) * apm_m95J02_sphereArea n)) r := by
+  have hfun : apm_m95J02_radialProfile n =
+      fun r : ℝ => -Real.rpow r (2 - (n : ℝ)) /
+        (((n : ℝ) - 2) * apm_m95J02_sphereArea n) := by
+    funext s
+    simp [apm_m95J02_radialProfile, show n ≠ 2 by omega]
+  rw [hfun]
+  exact (Real.hasDerivAt_rpow_const (p := 2 - (n : ℝ)) (Or.inl hr)).neg.div_const
+    (((n : ℝ) - 2) * apm_m95J02_sphereArea n)
+
 def apm_m95J02_poissonSolution (n : ℕ)
     (f : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
   ∫ y, apm_m95J02_fundamental n (x - y) * f y
@@ -97,6 +127,15 @@ theorem apm_m95j02
   sign of the kernel away from its pole. Thus all dimension-dependent sign and
   denominator obligations are now compiled.
 
+  Closer hop 3 goes beyond normalization by separating the actual scalar
+  calculus from the Euclidean chain rule. `apm_m95J02_radialProfile` factors
+  the kernel through the radius,
+  `apm_m95J02_fundamental_eq_radialProfile` records that factorization, and
+  `apm_m95J02_hasDerivAt_radialProfile_of_two_lt` proves the power-law
+  profile's derivative at every nonzero radius directly from Mathlib's real
+  `rpow` derivative theorem. This is a compiled analytic input to part (a),
+  not merely another sign check.
+
   Searches across both hops of `LEMMA-INDEX.md`, `ConstructionTargets`, Mathlib's new
   `Analysis.InnerProductSpace.Laplacian`, Schwartz-space integration by parts,
   prior radial-integration artifacts (`a95A03`, `m94A03`, and `m96J03`), and
@@ -105,6 +144,16 @@ theorem apm_m95j02
   derivatives and orthonormal bases, but the chain rule for `z ↦ v ‖z‖`, the
   punctured-ball boundary limit, and differentiation of the singular
   convolution remain to be developed locally.
+
+  The final-hop search additionally checked the full repository lemma index,
+  `ConstructionTargets`, the concrete planar fundamental-solution artifact
+  `m02A03`, Mathlib's Laplacian, Schwartz/tempered-distribution, convolution,
+  and real-power derivative sources, and this bundle's git history. The
+  real-power API supplied the new scalar derivative lemma; the other sources
+  still contain no radial norm-composition Laplacian theorem, punctured-ball
+  Green identity, or singular-convolution differentiation theorem. The
+  theorem-level bridge therefore remains open and the frozen statement is
+  unchanged.
 
   Original boundary:
   SKIPPED: fundamental solution of Laplacian (three-part PDE problem).
