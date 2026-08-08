@@ -24,11 +24,10 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 
 ## Remaining bridge
 
-1. Use `extDeriv_apply` and the explicit quotient derivative to prove the
-   divergence cancellation, hence closedness.
-2. Construct the pullback/integral of the form over the unit sphere and prove
-   its value is `4 * Real.pi`.
-3. Apply a Stokes theorem for an exact form on the closed sphere. Mathlib
-   currently has local exterior-derivative operations but no suitable global
-   differential-form integration/Stokes interface; the same gap is recorded
-   by siblings `t01J06`, `t02A05`, and `t94J07`.
+1. Prove `apm_t94A10_bridge_solidAngle_closed` using `extDeriv_apply` and the
+   explicit quotient derivative.
+2. Prove `apm_t94A10_bridge_solidAngle_not_exact`. Since Mathlib currently
+   has no suitable surface-form integration type, this contract states the
+   specialized `4π` sphere-period/Stokes obstruction directly in the file's
+   genuine `IsOmega`/`IsExact` vocabulary. The same infrastructure gap is
+   recorded by siblings `t01J06`, `t02A05`, and `t94J07`.

@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Identified the coordinate radial square with the Euclidean norm square and normalized the full denominator to one on the unit sphere. Closedness still needs the exterior-derivative calculation; non-exactness still needs sphere integration and Stokes infrastructure absent from Mathlib and the corpus.",
+  "closer_hop": 4,
+  "closer_note": "Stated the two precise remaining contracts in the vocabulary available to the file: the local exterior-derivative calculation proving closedness, and the specialized sphere-period/Stokes obstruction proving non-exactness. Their proofs and the original main proof remain intentionally open.",
   "imported_at": "2026-07-13T17:26:57.948116Z"
 }

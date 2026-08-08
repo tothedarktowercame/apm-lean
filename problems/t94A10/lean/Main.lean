@@ -112,6 +112,26 @@ lemma apm_t94a10_ambientExtension_apply_of_isOmega
   simp only [dif_pos x.2]
   exact homega x v
 
+/-- Why this unblocks `apm_t94a10`: this is the missing local quotient-rule
+and alternating-coordinate calculation.  It states that the displayed
+solid-angle form is differentiable away from the origin and has vanishing
+exterior derivative there. -/
+theorem apm_t94A10_bridge_solidAngle_closed
+    (omega : apm_t94a10_Form 2)
+    (homega : apm_t94a10_IsOmega omega) :
+    apm_t94a10_IsClosed omega := by
+  sorry
+
+/-- Why this unblocks `apm_t94a10`: this is the specialized sphere-period
+and Stokes obstruction in the exact vocabulary available in this file.  Its
+content is that a form with the displayed solid-angle values cannot be the
+exterior derivative of a globally defined one-form on punctured space. -/
+theorem apm_t94A10_bridge_solidAngle_not_exact
+    (omega : apm_t94a10_Form 2)
+    (homega : apm_t94a10_IsOmega omega) :
+    ¬apm_t94a10_IsExact omega := by
+  sorry
+
 theorem apm_t94a10 (omega : apm_t94a10_Form 2)
     (homega : apm_t94a10_IsOmega omega) :
     apm_t94a10_IsClosed omega ∧ ¬apm_t94a10_IsExact omega := by
