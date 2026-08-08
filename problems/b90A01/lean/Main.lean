@@ -66,6 +66,64 @@ lemma apm_b90A01_exists_faithful_sylow_perm
   apply apm_b90A01_perm_fin_of_card hk
   exact apm_b90A01_sylow_action_faithful p hp (hk ▸ hk1)
 
+/-- A faithful permutation representation of a noncommutative simple group
+has even image.  Indeed, the kernel of its sign character is normal.  If that
+kernel were trivial, injectivity into the commutative sign group would force
+the source group itself to be commutative. -/
+lemma apm_b90A01_factor_faithful_through_alternating
+    {G α : Type*} [Group G] [IsSimpleGroup G] [Fintype α] [DecidableEq α]
+    (φ : G →* Equiv.Perm α) (hφ : Function.Injective φ)
+    (hnc : ∃ a b : G, a * b ≠ b * a) :
+    ∃ ψ : G →* alternatingGroup α, Function.Injective ψ := by
+  let sgn : G →* ℤˣ := Equiv.Perm.sign.comp φ
+  have hker : sgn.ker = ⊤ := by
+    rcases (inferInstance : sgn.ker.Normal).eq_bot_or_eq_top with hbot | htop
+    · exfalso
+      have hsgn : Function.Injective sgn := by
+        rw [← MonoidHom.ker_eq_bot_iff]
+        exact hbot
+      obtain ⟨a, b, hab⟩ := hnc
+      apply hab
+      apply hsgn
+      simp [sgn, mul_comm]
+    · exact htop
+  let ψ : G →* alternatingGroup α := φ.codRestrict (alternatingGroup α) fun g => by
+    rw [Equiv.Perm.mem_alternatingGroup]
+    have hg : g ∈ sgn.ker := by rw [hker]; exact Subgroup.mem_top g
+    exact MonoidHom.mem_ker.mp hg
+  exact ⟨ψ, fun _ _ h => hφ (congrArg Subtype.val h)⟩
+
+/-- More than one Sylow subgroup rules out commutativity: in a commutative
+group every subgroup is normal, so the conjugation action fixes every Sylow
+subgroup, contradicting Sylow conjugacy. -/
+lemma apm_b90A01_not_commutative_of_multiple_sylow
+    {G : Type*} [Group G] [Finite G] (p : ℕ) (hp : p.Prime)
+    (hk1 : 1 < Nat.card (Sylow p G)) :
+    ∃ a b : G, a * b ≠ b * a := by
+  by_contra hnc
+  push_neg at hnc
+  letI : IsMulCommutative G := ⟨⟨hnc⟩⟩
+  letI : CommGroup G := CommGroup.ofIsMulCommutative
+  letI : Fact p.Prime := ⟨hp⟩
+  haveI : Nontrivial (Sylow p G) := Finite.one_lt_card_iff_nontrivial.mp hk1
+  obtain ⟨P, Q, hPQ⟩ := exists_pair_ne (Sylow p G)
+  obtain ⟨g, hg⟩ := MulAction.exists_smul_eq G P Q
+  have hgfix : g • P = P := by
+    rw [Sylow.smul_eq_iff_mem_normalizer, Subgroup.normalizer_eq_top]
+    exact Subgroup.mem_top g
+  exact hPQ (hg ▸ hgfix.symm)
+
+/-- The Sylow action from the hypotheses lands faithfully in the alternating
+group, closing the parity stage of the frozen theorem. -/
+lemma apm_b90A01_exists_faithful_sylow_alternating
+    {G : Type*} [Group G] [Finite G] [IsSimpleGroup G]
+    (p k : ℕ) (hp : p.Prime)
+    (hk : Nat.card (Sylow p G) = k) (hk1 : 1 < k) :
+    ∃ ψ : G →* alternatingGroup (Fin k), Function.Injective ψ := by
+  obtain ⟨φ, hφ⟩ := apm_b90A01_exists_faithful_sylow_perm p k hp hk hk1
+  apply apm_b90A01_factor_faithful_through_alternating φ hφ
+  exact apm_b90A01_not_commutative_of_multiple_sylow p hp (hk ▸ hk1)
+
 theorem apm_b90a01
     (G : Type) [Group G] [Finite G] [IsSimpleGroup G]
     (p k : ℕ) (hp : p.Prime)
@@ -77,7 +135,8 @@ theorem apm_b90a01
       IsSimpleGroup H → H ≠ ⊤ → n ≤ H.index) ∧
     ∀ (G₁ : Type) [Group G₁] [Finite G₁],
       Nat.card G₁ = 120 → ¬IsSimpleGroup G₁ := by
-  refine ⟨apm_b90A01_exists_faithful_sylow_perm p k hp hk hk1, ?_⟩
+  refine ⟨apm_b90A01_exists_faithful_sylow_perm p k hp hk hk1,
+    apm_b90A01_exists_faithful_sylow_alternating p k hp hk hk1, ?_⟩
   /-
   PARTIAL boundary (closer hop 2): the finite-type transport stage is now
   compiled as `apm_b90A01_perm_fin_of_card`. Once the Sylow conjugation action
@@ -120,5 +179,23 @@ theorem apm_b90a01
   -- bound, and carrying out the exact Sylow-5 enumeration for order 120.
   -- These are mathematically standard but constitute a major group-theory
   -- development; no conjunct is asserted via an unproved shortcut.
+  --
+  -- CLOSER HOP 3: the parity bridge and hence the entire second conjunct are
+  -- now compiled. `apm_b90A01_not_commutative_of_multiple_sylow` shows that
+  -- the hypothesis `1 < Nat.card (Sylow p G)` rules out commutativity: in a
+  -- commutative group every Sylow subgroup is normal, while Sylow conjugacy
+  -- identifies any two of them. Then
+  -- `apm_b90A01_factor_faithful_through_alternating` applies simple-group
+  -- normal-kernel classification to the sign character. A trivial sign
+  -- kernel would embed `G` into the commutative group `ℤˣ`, contradicting
+  -- noncommutativity; therefore the kernel is top and `MonoidHom.codRestrict`
+  -- gives the required faithful map into `alternatingGroup (Fin k)`.
+  --
+  -- Searches beyond hop 2 covered the commutator/perfect-group API, the sign
+  -- kernel and alternating-group codomain APIs, and the general alternating-
+  -- group source. The first two supplied the local parity proof above. The
+  -- source still explicitly lists general simplicity of `A_n` as future work,
+  -- and no searched corpus artifact supplies either that theorem or the exact
+  -- order-120 Sylow enumeration. Those final two conjuncts remain open.
   -/
   sorry
