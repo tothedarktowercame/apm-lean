@@ -56,6 +56,28 @@ lemma apm_t94J06_boundary_homotopy_ne_zero :
   apply apm_t94J06_boundary_domination
   simpa [Metric.mem_sphere, dist_zero_right] using hz
 
+/-- The compiled straight-line expression as an actual boundary homotopy. -/
+noncomputable def apm_t94J06_boundaryHomotopy
+    (p : Set.Icc (0 : ℝ) 1 × Metric.sphere (0 : ℂ) 7) : ℂ :=
+  p.2.1 ^ 4 + (p.1.1 : ℂ) *
+    (apm_t94J06_function p.2.1 - p.2.1 ^ 4)
+
+/-- Continuity of the boundary homotopy, packaged for a future degree or
+winding-number theorem. -/
+lemma apm_t94J06_boundaryHomotopy_continuous :
+    Continuous apm_t94J06_boundaryHomotopy := by
+  unfold apm_t94J06_boundaryHomotopy
+  have hf : Continuous (fun p : Set.Icc (0 : ℝ) 1 ×
+      Metric.sphere (0 : ℂ) 7 => apm_t94J06_function p.2.1) :=
+    apm_t94J06_continuous.comp (continuous_subtype_val.comp continuous_snd)
+  fun_prop
+
+/-- The bundled boundary homotopy takes values in the punctured plane. -/
+lemma apm_t94J06_boundaryHomotopy_ne_zero
+    (p : Set.Icc (0 : ℝ) 1 × Metric.sphere (0 : ℂ) 7) :
+    apm_t94J06_boundaryHomotopy p ≠ 0 := by
+  exact apm_t94J06_boundary_homotopy_ne_zero p.1 p.2.1 p.2.2
+
 /-- In particular, the given function itself has no zero on the radius-seven
 boundary; this is the `t = 1` endpoint of the compiled homotopy. -/
 lemma apm_t94J06_boundary_ne_zero :
@@ -91,5 +113,19 @@ theorem apm_t94j06 :
   What remains is exactly the topological degree theorem
   turning that boundary homotopy into an interior zero; the frozen existential
   conclusion exposes no further smaller proposition.
+
+  Closer hop 3 packages the pointwise expression as the genuine map
+  `apm_t94J06_boundaryHomotopy` on `[0,1] × sphere 0 7`, proves its continuity
+  in `apm_t94J06_boundaryHomotopy_continuous`, and proves globally that it
+  lands in the punctured plane via
+  `apm_t94J06_boundaryHomotopy_ne_zero`. Thus a future degree/winding API can
+  consume an actual continuous zero-free homotopy without reconstructing any
+  analytic or subtype-continuity facts. A direct search for a real- or
+  imaginary-axis root was also discarded: the imaginary equation forces the
+  axis coordinate to zero, where the remaining real value is one. Renewed
+  searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's homotopy,
+  degree, Brouwer, punctured-plane, and fundamental-group sources, and related
+  no-retraction artifacts found no theorem converting this bundled homotopy
+  into an interior zero. The sole bridge remains that topological-degree step.
   -/
   sorry

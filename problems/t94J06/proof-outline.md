@@ -8,6 +8,9 @@ The lemma `apm_t94J06_boundary_homotopy_ne_zero` then reuses
 zero-free straight-line boundary homotopy.
 Closer hop 2 proves continuity of the full radial/non-holomorphic map and
 extracts its boundary nonvanishing as the endpoint of that homotopy.
+Closer hop 3 defines the actual map `apm_t94J06_boundaryHomotopy` on the
+product subtype and proves both its continuity and global nonvanishing, so the
+remaining topological theorem can consume the homotopy directly.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t94J06.md`
