@@ -7,6 +7,21 @@ with the Lean files.
 
 The content below was imported automatically and may need cleanup.
 
+## Closer hop 1 (2026-08-08)
+
+The new helper `apm_a98J02_sub_eq_integral_deriv` proves the exact
+fundamental-theorem identity on every subinterval of `[0,1]`. It uses
+`AbsolutelyContinuousOnInterval.mono` and
+`AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`.
+
+The remaining work is to replace `deriv f` almost everywhere by the supplied
+`derivWithin` expression, apply integral Cauchy--Schwarz, and invoke absolute
+continuity of the integral of the squared derivative to choose the uniform
+small interval length. Mathlib contains the individual Hölder and small-set
+integral tools, but the conversion chain is not packaged for this encoding.
+The theorem remains partial with one `sorry`; its frozen statement is
+unchanged.
+
 ## Imported Proof Plan
 
 ```clojure
