@@ -1,5 +1,17 @@
 # Proof Outline: aunk02
 
+## Closer hop 1 completion
+
+The theorem is closed without changing its statement.  Restricting
+holomorphicity to the supplied ball gives an `AnalyticOnNhd` function whose
+imaginary part is constantly zero.  Mathlib's open-mapping corollary
+`AnalyticOnNhd.eq_const_of_im_eq_const` therefore makes `f` constant on that
+ball.  Since the ball is a neighborhood of its center, this gives an eventual
+equality with a constant function.  The identity theorem
+`AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq` propagates the equality
+through the connected set `Ω`, and the constant's imaginary part is zero by
+the original disk hypothesis.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 
