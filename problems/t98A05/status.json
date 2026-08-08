@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
+  "closer_hop": 4,
+  "bridge_note": "Three precise bridge declarations now isolate the missing extDeriv coordinate computations, oriented simplex integral, and circle-period obstruction. Their proofs are intentionally left as sorry by the hop-4 statement-only protocol.",
   "imported_at": "2026-07-13T17:26:58.540484Z"
 }

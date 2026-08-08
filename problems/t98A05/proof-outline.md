@@ -1,5 +1,19 @@
 # Proof Outline: t98A05
 
+## Hop 4 bridge statements
+
+The remaining work is now isolated into three declarations immediately above
+the main theorem:
+
+- `apm_t98A05_bridge_extDerivs` states all three exterior-derivative formulas.
+- `apm_t98A05_bridge_simplexIntegral` states the oriented triangle integral.
+- `apm_t98A05_bridge_circle_not_differential` states the global circle-period
+  obstruction.
+
+Together with the two existing compiled helpers, these conclusions match all
+seven main conjuncts exactly. Their bodies intentionally remain `sorry` under
+the hop-4 statement-only instruction.
+
 The canonical Lean artifact is a compiling honest partial with one remaining
 `sorry` on the main theorem.
 

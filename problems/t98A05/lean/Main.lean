@@ -150,6 +150,39 @@ lemma apm_t98a05_circleClosed_of_extDeriv_formula
   nlinarith [sq_nonneg
     (v 0 0 * v 1 1 - v 0 1 * v 1 0)]
 
+/-- Why this unblocks `apm_t98a05`: it packages the three missing coordinate
+Fréchet-derivative calculations in exactly the exterior-derivative forms used
+by the first three conjuncts of the main theorem. -/
+theorem apm_t98A05_bridge_extDerivs
+    (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha)
+    (beta : apm_t98a05_Form 2) (hbeta : apm_t98a05_isBeta beta)
+    (gamma : apm_t98a05_Form 3) (hgamma : apm_t98a05_isGamma gamma) :
+    (∀ (x : apm_t98a05_E3) (v : Fin 2 → apm_t98a05_E3),
+      extDeriv alpha x v =
+        2 * (v 0 0 * v 1 1 - v 0 1 * v 1 0)) ∧
+    extDeriv beta = 3 • gamma ∧
+    extDeriv gamma = 0 := by
+  sorry
+
+/-- Why this unblocks `apm_t98a05`: after the first bridge identifies
+`d alpha`, this is precisely the remaining change-of-variables and elementary
+area calculation on the standard oriented triangular parameter domain. -/
+theorem apm_t98A05_bridge_simplexIntegral
+    (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha) :
+    apm_t98a05_orientedSimplexIntegral (extDeriv alpha) = 1 := by
+  sorry
+
+/-- Why this unblocks `apm_t98a05`: this is the global period obstruction for
+the angle form on the unit circle; it supplies exactly the final nonexactness
+conjunct for every restriction satisfying the displayed pointwise formula. -/
+theorem apm_t98A05_bridge_circle_not_differential
+    (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha)
+    (alpha' : apm_t98a05_CircleForm1)
+    (halpha' : apm_t98a05_isRestriction alpha alpha') :
+    ¬∃ f : apm_t98a05_circle → ℝ,
+      apm_t98a05_IsDifferential f alpha' := by
+  sorry
+
 theorem apm_t98a05
     (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha)
     (beta : apm_t98a05_Form 2) (hbeta : apm_t98a05_isBeta beta)
