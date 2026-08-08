@@ -99,6 +99,21 @@ lemma apm_a01J05_exists_finiteDivisor_factorization
   exact ConstructionTargets.Rouche.exists_zeroFree_factorization_on_closedBall
     (by norm_num) hfan hne
 
+/-- Why this unblocks `apm_a01j05`: this is the missing finite-Blaschke
+critical-point theorem, stated directly with the artifact's genuine analytic
+and open-disk multiplicity notions. Its proof must connect the finite divisor
+factorization to reflection across the unit circle and show that differentiation
+reduces the total interior divisor by exactly one. -/
+theorem apm_a01J05_bridge_1
+    (f : ℂ → ℂ) (N : ℕ)
+    (hN : 0 < N)
+    (hf_analytic : ∃ ε > 0,
+      DifferentiableOn ℂ f (closedBall 0 (1 + ε)))
+    (hf_boundary : ∀ z ∈ apm_a01J05_circle, ‖f z‖ = 1)
+    (hf_zeros : apm_a01J05_zeroMultiplicity f = N) :
+    apm_a01J05_zeroMultiplicity (deriv f) = (N - 1 : ℕ) := by
+  sorry
+
 theorem apm_a01j05 (f : ℂ → ℂ) (N : ℕ)
     (hN : 0 < N)
     (hf_analytic : ∃ ε > 0,
