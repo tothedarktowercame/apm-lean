@@ -72,6 +72,33 @@ lemma apm_t00j02_isCompact_connectedComponentIn_of_componentsBoundDisks
     continuous_subtype_val.subtype_mk _
   exact isCompact_range (hdcont.comp hcircleToDisk)
 
+/-- The disk-bounding presentation also upgrades each inverse-image component
+from connected to path connected, since its displayed boundary
+parametrization is a continuous image of the circle. -/
+lemma apm_t00j02_isPathConnected_connectedComponentIn_of_componentsBoundDisks
+    {S : Type} [TopologicalSpace S] {A : Set S}
+    (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
+    IsPathConnected (connectedComponentIn A x) := by
+  rcases hdisks x hx with ⟨d, hdcont, _hdemb, hd⟩
+  rw [← hd]
+  have hcircleToDisk : Continuous apm_t00j02_circleToDisk :=
+    continuous_subtype_val.subtype_mk _
+  have hexp : Function.Surjective Circle.exp :=
+    fun z : Circle => ⟨Complex.arg z, Circle.exp_arg z⟩
+  letI : PathConnectedSpace Circle :=
+    hexp.pathConnectedSpace Circle.exp.continuous
+  exact isPathConnected_range (hdcont.comp hcircleToDisk)
+
+/-- A compact path-connected package for every component supplied by
+`componentsBoundDisks`. -/
+lemma apm_t00j02_component_compact_and_pathConnected
+    {S : Type} [TopologicalSpace S] {A : Set S}
+    (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
+    IsCompact (connectedComponentIn A x) ∧
+      IsPathConnected (connectedComponentIn A x) :=
+  ⟨apm_t00j02_isCompact_connectedComponentIn_of_componentsBoundDisks hdisks hx,
+    apm_t00j02_isPathConnected_connectedComponentIn_of_componentsBoundDisks hdisks hx⟩
+
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
   ∃ e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ,
@@ -141,5 +168,22 @@ theorem apm_t00j02
   component class therefore cannot yet be killed categorically, and the
   subsequent transverse-preimage/Poincare-duality bridge to the `H₂` map
   remains unavailable.
+
+  CLOSER HOP 3 strengthens the geometric component package beyond compactness.
+  `apm_t00j02_isPathConnected_connectedComponentIn_of_componentsBoundDisks`
+  proves that every disk-bounding inverse-image component is path connected:
+  it first derives `PathConnectedSpace Circle` from the continuous surjection
+  `Circle.exp : ℝ → Circle`, then transports path connectedness through the
+  displayed boundary parametrization. The combined lemma
+  `apm_t00j02_component_compact_and_pathConnected` now exposes each component
+  as both compact and path connected, exactly the point-set input normally
+  used before assigning its null-homology class.
+
+  Further inspection of homotopy invariance, contractible spaces, singular
+  chains, and manifold transverse-preimage APIs still found no bridge from
+  this compact path-connected disk-bounding component to a zero `H₁` class,
+  nor from those component classes to `apm_t00j02_homologyMap 2 f = 0`.
+  Thus the remaining obstruction is purely the missing homological
+  null-boundary and Poincare-duality/intersection machinery, and remains open.
   -/
   sorry

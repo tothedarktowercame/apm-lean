@@ -14,6 +14,11 @@ The canonical Lean attempt is `lean/Main.lean`.
 - `apm_t00j02_isCompact_connectedComponentIn_of_componentsBoundDisks` proves
   each inverse-image component covered by the geometric hypothesis is compact,
   by realizing it as the continuous image of the compact boundary circle.
+- `apm_t00j02_isPathConnected_connectedComponentIn_of_componentsBoundDisks`
+  proves the same components path connected, deriving path connectedness of
+  `Circle` from its continuous exponential parametrization and transporting it
+  through the supplied boundary map.
+- `apm_t00j02_component_compact_and_pathConnected` packages both properties.
 
 ## Remaining boundary
 
