@@ -35,6 +35,34 @@ def apm_t91J02_circleProjection :
   ext z
   rfl
 
+/-- Any hypothetical torus--sphere homeomorphism transports the explicit
+torus retraction to a circle retraction of the metric sphere. -/
+lemma apm_t91J02_circleRetract_of_homeomorph
+    (e : apm_t91J02_Torus ≃ₜ apm_t91J02_S2) :
+    ∃ i : C(Circle, apm_t91J02_S2),
+      ∃ r : C(apm_t91J02_S2, Circle),
+        r.comp i = ContinuousMap.id Circle := by
+  let i : C(Circle, apm_t91J02_S2) :=
+    (⟨e, e.continuous⟩ : C(apm_t91J02_Torus, apm_t91J02_S2)).comp
+      apm_t91J02_circleInclusion
+  let r : C(apm_t91J02_S2, Circle) :=
+    apm_t91J02_circleProjection.comp
+      (⟨e.symm, e.symm.continuous⟩ : C(apm_t91J02_S2, apm_t91J02_Torus))
+  refine ⟨i, r, ?_⟩
+  ext z
+  simp [i, r]
+  rfl
+
+/-- A no-circle-retract theorem for the metric sphere is exactly sufficient
+to rule out the hypothesized homeomorphism. -/
+lemma apm_t91J02_not_homeomorph_of_no_circle_retract
+    (h : ¬ ∃ i : C(Circle, apm_t91J02_S2),
+      ∃ r : C(apm_t91J02_S2, Circle),
+        r.comp i = ContinuousMap.id Circle) :
+    ¬Nonempty (apm_t91J02_Torus ≃ₜ apm_t91J02_S2) := by
+  rintro ⟨e⟩
+  exact h (apm_t91J02_circleRetract_of_homeomorph e)
+
 theorem apm_t91j02 :
     ¬Nonempty (apm_t91J02_Torus ≃ₜ apm_t91J02_S2) := by
   /- Boundary (closer hop 1): the explicit maps above prove that `Circle` is a
@@ -49,5 +77,20 @@ theorem apm_t91j02 :
   circle retract of it.  The partial siblings `t01J03`, `t91A05`, `t02A06`,
   `t95J04`, and `t01A05` independently stop at those same computations.
   Consequently the remaining bridge is precisely a no-circle-retract theorem
-  for `apm_t91J02_S2` (obtainable from π₁ or H₁ once either is computed). -/
+  for `apm_t91J02_S2` (obtainable from π₁ or H₁ once either is computed).
+
+  CLOSER HOP 2: the transport assertion is now fully formal rather than only
+  described. `apm_t91J02_circleRetract_of_homeomorph` conjugates the explicit
+  torus inclusion and projection across a hypothesized homeomorphism and
+  proves their composite is the circle identity.
+  `apm_t91J02_not_homeomorph_of_no_circle_retract` then shows that the exact
+  no-circle-retract statement immediately closes the frozen conclusion.
+  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's
+  retract, fundamental-group and singular-homology sources, all topology
+  artifacts, and git history found generic functorial no-retraction patterns
+  in siblings `t03J01` and `t91A05`, but both still require the unavailable
+  nontriviality of `FundamentalGroup Circle` or the `H₁` computations for the
+  circle and metric sphere. Thus all transport bookkeeping is closed and only
+  the genuine invariant obstruction remains; the frozen statement is
+  unchanged. -/
   sorry

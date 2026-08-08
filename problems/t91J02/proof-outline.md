@@ -7,6 +7,11 @@ fundamental-group obstruction.  The maps
 their composite is proved to be the identity.  Hence `Circle` is a retract of
 the concrete torus.
 
+`apm_t91J02_circleRetract_of_homeomorph` transports this retraction across any
+hypothetical torus--sphere homeomorphism, and
+`apm_t91J02_not_homeomorph_of_no_circle_retract` reduces the frozen conclusion
+exactly to the absence of such a sphere retraction.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t91J02.md`
 
