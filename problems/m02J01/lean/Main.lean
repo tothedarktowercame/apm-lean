@@ -66,6 +66,45 @@ lemma apm_m02j01_primitive_smooth
   · rw [hderiv_eq]
     exact φ.contDiff
 
+/-- With an explicit support interval and zero total integral, the primitive
+based at its left endpoint is supported in the corresponding closed interval. -/
+lemma apm_m02j01_primitive_support
+    (φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤) (a b : ℝ)
+    (hsupp : Function.support (φ : ℝ → ℝ) ⊆ Ioc a b)
+    (hzero : ∫ x : ℝ, φ x = 0) :
+    Function.support (fun x => ∫ t in a..x, φ t) ⊆ Icc a b := by
+  intro x hx
+  by_contra hxab
+  rw [mem_Icc, not_and_or] at hxab
+  rcases hxab with hxa | hxb
+  · have hpoint : Set.EqOn (φ : ℝ → ℝ) 0 (uIcc a x) := by
+      intro t ht
+      have hta : t ≤ a := by
+        rw [uIcc_comm, uIcc_of_le (le_of_not_ge hxa)] at ht
+        exact ht.2
+      by_contra hφt
+      have ht_support : t ∈ Function.support (φ : ℝ → ℝ) := hφt
+      exact (not_lt_of_ge hta) (hsupp ht_support).1
+    have hint : (∫ t in a..x, φ t) = 0 := by
+      rw [intervalIntegral.integral_congr hpoint]
+      simp
+    exact hx hint
+  · have hsupp' : Function.support (φ : ℝ → ℝ) ⊆ Ioc a x := by
+      intro t ht
+      exact ⟨(hsupp ht).1, (hsupp ht).2.trans (le_of_not_ge hxb)⟩
+    have hint : (∫ t in a..x, φ t) = 0 := by
+      rw [intervalIntegral.integral_eq_integral_of_support_subset hsupp', hzero]
+    exact hx hint
+
+/-- Consequently the endpoint-based primitive has compact support. -/
+lemma apm_m02j01_primitive_hasCompactSupport
+    (φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤) (a b : ℝ)
+    (hsupp : Function.support (φ : ℝ → ℝ) ⊆ Ioc a b)
+    (hzero : ∫ x : ℝ, φ x = 0) :
+    HasCompactSupport (fun x => ∫ t in a..x, φ t) :=
+  HasCompactSupport.of_support_subset_isCompact isCompact_Icc
+    (apm_m02j01_primitive_support φ a b hsupp hzero)
+
 theorem apm_m02j01 :
     (∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤,
       (∫ x : ℝ, φ x) = 0 ↔
@@ -113,5 +152,23 @@ theorem apm_m02j01 :
   `ConstructionTargets/`, `TestFunction`, and `Distribution` sources found no
   compiled sibling route or reusable LF-continuity theorem, and the
   frozen statement remains unchanged.
+
+  CLOSER HOP 3: the tail-vanishing and compact-support layer is now compiled.
+  `apm_m02j01_primitive_support` shows that if `support φ ⊆ Ioc a b` and the
+  total integral is zero, then the endpoint-based primitive
+  `x ↦ ∫ t in a..x, φ t` has support contained in `Icc a b`. On the left tail
+  this follows by interval-integral congruence with zero; on the right tail,
+  `intervalIntegral.integral_eq_integral_of_support_subset` identifies the
+  primitive with the zero total integral. The wrapper
+  `apm_m02j01_primitive_hasCompactSupport` turns this into genuine
+  `HasCompactSupport`.
+
+  Thus the remaining function-level work is only extracting explicit real
+  bounds from `φ.hasCompactSupport` and invoking the `TestFunction` bundling
+  constructor together with smoothness (the FTC proof readily generalizes
+  from basepoint zero to `a`). Parts (b) and (c) still require LF-continuity of
+  that primitive operator and its transpose; renewed TestFunction and
+  Distribution searches found no packaged operator. The statement remains
+  unchanged.
   -/
   sorry

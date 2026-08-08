@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "Necessity and the smooth pointwise FTC primitive are proved. Remaining work is proving the zero-integral primitive has compact support, bundling it as a TestFunction, and establishing LF-continuity so the primitive construction can be transposed to distributions.",
+  "closer_hop": 3,
+  "boundary": "Necessity, smooth FTC, and compact support of an endpoint-based zero-integral primitive with explicit support bounds are proved. Remaining work is extracting bounds and bundling as a TestFunction, then establishing LF-continuity so the construction can be transposed to distributions.",
   "imported_at": "2026-07-13T17:26:54.480587Z"
 }
