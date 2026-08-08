@@ -105,3 +105,13 @@ Current Mathlib support for differential forms exists, but there is no surface-i
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
 Once surface integrals and the divergence theorem are available in Mathlib, the formal proof will align with Stage 1: compute dω, identify ω with ι_V(vol), apply the divergence theorem to the half-ball, subtract the disk flux, and obtain 5π/3.
+
+## Closer hop 3
+
+The exactness representation is substantially narrowed. The frozen covector
+field now bundles through `ContinuousAlternatingMap.ofSubsingletonLIE`, and
+its Mathlib exterior derivative is proved pointwise equal to the custom
+`dOneForm`. It remains to bundle the explicit `omega` formula as an
+alternating two-form and identify its derivative with `domega`, after which
+`extDeriv_extDeriv` gives the contradiction. Independently, evaluation of the
+radial square-root disk integral as `2π/3` remains open.

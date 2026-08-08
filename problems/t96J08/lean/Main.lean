@@ -50,6 +50,26 @@ def apm_t96j08_IsExact : Prop :=
     ContDiff ℝ (⊤ : ℕ∞) (fun q : apm_t96j08_Point => η q) ∧
     ∀ p u v, apm_t96j08_dOneForm η p u v = apm_t96j08_omega p u v
 
+def apm_t96j08_etaForm
+    (η : apm_t96j08_Point → apm_t96j08_Point →L[ℝ] ℝ) :
+    apm_t96j08_Point →
+      apm_t96j08_Point [⋀^Fin 1]→L[ℝ] ℝ :=
+  fun p ↦ ContinuousAlternatingMap.ofSubsingleton ℝ _ _ (0 : Fin 1) (η p)
+
+lemma apm_t96j08_extDeriv_etaForm_apply
+    (η : apm_t96j08_Point → apm_t96j08_Point →L[ℝ] ℝ)
+    (hη : ContDiff ℝ (⊤ : ℕ∞) η)
+    (p u v : apm_t96j08_Point) :
+    extDeriv (apm_t96j08_etaForm η) p ![u, v] =
+      apm_t96j08_dOneForm η p u v := by
+  have heta : ContDiff ℝ (⊤ : ℕ∞) (apm_t96j08_etaForm η) := by
+    unfold apm_t96j08_etaForm
+    exact (ContinuousAlternatingMap.ofSubsingletonLIE
+      (𝕜 := ℝ) (E := apm_t96j08_Point) (F := ℝ)
+      (0 : Fin 1)).toContinuousLinearEquiv.contDiff.comp hη
+  rw [extDeriv_apply (heta.differentiable (by simp) p)]
+  simp [apm_t96j08_etaForm, apm_t96j08_dOneForm, Fin.removeNth, sub_eq_add_neg]
+
 def apm_t96j08_upperHemisphere (q : apm_t96j08_DiskPoint) : apm_t96j08_Point :=
   WithLp.toLp 2 ![q 0, q 1, 1 + Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2)]
 
@@ -188,5 +208,21 @@ theorem apm_t96j08 :
   bridges: evaluate the radial square-root disk integral as `2 * π / 3`, and
   package the custom exactness predicate into the `extDeriv_extDeriv`
   obstruction. The frozen statement remains unchanged.
+
+  CLOSER HOP 3 closes the degree-one half of the exactness packaging.
+  `apm_t96j08_etaForm` converts the frozen covector field to Mathlib's
+  continuous alternating one-form, and
+  `apm_t96j08_extDeriv_etaForm_apply` proves that its actual `extDeriv`
+  evaluates exactly to `apm_t96j08_dOneForm` on every pair of vectors. This
+  uses `ContinuousAlternatingMap.ofSubsingletonLIE` and the general
+  `extDeriv_apply` formula, going beyond the prior representation-only
+  search. The remaining exactness sub-bridge is now only to bundle the
+  explicit trilinear coordinate formula `omega` as a continuous alternating
+  two-form and identify its exterior derivative with `domega`; then
+  `extDeriv_extDeriv` contradicts the compiled basis evaluation. The
+  independent radial disk integral `2 * π / 3` remains open.
   -/
   sorry
+
+
+#print axioms apm_t96j08
