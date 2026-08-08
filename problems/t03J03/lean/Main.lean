@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t03J03: double covers of the three-crosscap surface
@@ -9,30 +10,25 @@ None.
 
 ## Encoding questions
 
-Mathlib has no connected-sum construction or orientability and genus
-classifier for closed surfaces.  The four predicates naming `N₃`, `Σ₂`, `N₄`,
-and orientability are therefore `sorry`-typed placeholders.  Covering spaces,
-their maps and equivalences, the seven connected-cover representatives, the
-embedded cylinder, and its lift are all represented by their actual objects.
+The classified surfaces are the concrete polygon quotients from
+`ConstructionTargets.Surfaces`. Covering spaces, their maps and equivalences,
+the seven connected-cover representatives, the embedded cylinder, and its
+lift are represented by their actual objects.
 -/
 
 open Set
+open ConstructionTargets.Surfaces
 
 noncomputable section
 
-def apm_t03J03_IsN3Surface (X : Type) (_t : TopologicalSpace X) : Prop := by
-  sorry
+abbrev apm_t03J03_N3 := Surface false 3
+abbrev apm_t03J03_Sigma2 := Surface true 2
+abbrev apm_t03J03_N4 := Surface false 4
 
-def apm_t03J03_IsGenusTwoSurface (X : Type)
-    (_t : TopologicalSpace X) : Prop := by
-  sorry
-
-def apm_t03J03_IsN4Surface (X : Type) (_t : TopologicalSpace X) : Prop := by
-  sorry
-
-def apm_t03J03_IsOrientableSurface (X : Type)
-    (_t : TopologicalSpace X) : Prop := by
-  sorry
+def apm_t03J03_IsOrientableSurface (Y : Type)
+    (tY : TopologicalSpace Y) : Prop :=
+  ∃ g : ℕ, Nonempty
+    (@Homeomorph Y (Surface true g) tY (inferInstance : TopologicalSpace (Surface true g)))
 
 def apm_t03J03_isTwoFoldCover {E X : Type}
     (tE : TopologicalSpace E) (tX : TopologicalSpace X)
@@ -75,30 +71,31 @@ def apm_t03J03_generalCoverEquivalent
   ∃ h : E ≃ₜ F, ∀ e : E, q (h e) = p e
 
 theorem apm_t03j03
-    (X : Type) (tX : TopologicalSpace X)
-    (hX : apm_t03J03_IsN3Surface X tX) :
+    :
     Nat.card apm_t03J03_character = 7 ∧
     (∃ reps : apm_t03J03_character →
-        apm_t03J03_connectedDoubleCover X tX,
-      (∀ c : apm_t03J03_connectedDoubleCover X tX,
+        apm_t03J03_connectedDoubleCover apm_t03J03_N3 inferInstance,
+      (∀ c : apm_t03J03_connectedDoubleCover apm_t03J03_N3 inferInstance,
         ∃! phi : apm_t03J03_character,
           apm_t03J03_coverEquivalent c (reps phi)) ∧
       (∀ phi : apm_t03J03_character,
         if (phi : Fin 3 → ZMod 2) = apm_t03J03_orientationCharacter then
-          apm_t03J03_IsGenusTwoSurface
-            (reps phi).E (reps phi).topology
+          Nonempty (@Homeomorph (reps phi).E apm_t03J03_Sigma2
+            (reps phi).topology inferInstance)
         else
-          apm_t03J03_IsN4Surface (reps phi).E (reps phi).topology)) ∧
-    (∀ (E : Type) (tE : TopologicalSpace E) (p : E → X),
-      apm_t03J03_isTwoFoldCover tE tX p →
+          Nonempty (@Homeomorph (reps phi).E apm_t03J03_N4
+            (reps phi).topology inferInstance))) ∧
+    (∀ (E : Type) (tE : TopologicalSpace E) (p : E → apm_t03J03_N3),
+      apm_t03J03_isTwoFoldCover tE inferInstance p →
       ¬ @IsConnected E tE (Set.univ : Set E) →
       apm_t03J03_generalCoverEquivalent tE inferInstance
         p apm_t03J03_trivialCoverMap) ∧
-    (∀ (Y : Type) (tY : TopologicalSpace Y) (p : Y → X),
-      apm_t03J03_isTwoFoldCover tY tX p →
+    (∀ (Y : Type) (tY : TopologicalSpace Y) (p : Y → apm_t03J03_N3),
+      apm_t03J03_isTwoFoldCover tY inferInstance p →
       apm_t03J03_IsOrientableSurface Y tY →
-      ∀ f : apm_t03J03_Cylinder → X,
-        @Topology.IsEmbedding apm_t03J03_Cylinder X inferInstance tX f →
+      ∀ f : apm_t03J03_Cylinder → apm_t03J03_N3,
+        @Topology.IsEmbedding apm_t03J03_Cylinder apm_t03J03_N3
+          inferInstance inferInstance f →
         ∃ lift : apm_t03J03_Cylinder → Y,
           @Continuous apm_t03J03_Cylinder Y inferInstance tY lift ∧
           ∀ z, p (lift z) = f z) := by
