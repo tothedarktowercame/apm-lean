@@ -12,9 +12,13 @@ The canonical Lean attempt compiles with one remaining `sorry`.
 - Proved `A(E ⊓ L) ≤ A(E) ⊓ A(L)` directly from maximality.
 - Proved the intersection of the two finite Galois intermediate fields is
   Galois by installing the hypotheses as instances; this closes part (c).
+- `apm_b98a02_maximal_iff` closes part (b) using
+  `IsAbelianGalois.of_algHom` for subfields of the maximal abelian extension.
+- `apm_b98a02_intersection_maximal_eq` closes part (d) by giving
+  `A_E ⊓ A_L` the inherited abelian Galois structure and applying maximality.
 
 ## Remaining bridge
 
-Construct the commutator fixed field inside `Ω` and prove its universal
-property. For the reverse inclusion in part (d), package the fact that every
-intermediate field of an abelian Galois extension is abelian Galois.
+Construct the commutator fixed field inside `E`, lift it through `E.subtype`
+to an intermediate field inside `Ω`, and prove its universal property. This is
+the sole remaining conjunct, part (a).
