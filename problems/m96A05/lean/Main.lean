@@ -135,6 +135,28 @@ lemma apm_m96a05_diagonal_norm_gt_two
   · dsimp [t] at hb ⊢
     nlinarith
 
+/-- Why this unblocks `apm_m96a05`: this is the exact finite-row assembly
+missing from part (a). It collapses the three-supported matrix row and performs
+the first- and last-row Dirichlet substitutions, identifying the matrix system
+with the central-difference stencil. -/
+theorem apm_m96A05_stencil_matrix_equiv
+    (n : ℕ) (hn : 0 < n) (a b c : ℝ → ℝ) (U : Fin n → ℝ) :
+    apm_m96a05_approximateSolution n a b c U ↔
+      Matrix.mulVec (apm_m96a05_matrix n a b) U =
+        apm_m96a05_rhs n a c := by
+  sorry
+
+/-- Why this unblocks `apm_m96a05`: continuity bounds `a` on `[0,1]`, so for
+all sufficiently fine meshes both neighbor coefficients are nonnegative and
+the erased off-diagonal row sum is at most `2`. Together with
+`apm_m96a05_diagonal_norm_gt_two`, this is precisely strict row diagonal
+dominance for the Gershgorin determinant theorem. -/
+theorem apm_m96A05_eventually_offDiagonal_rowSum_le_two
+    (a b : ℝ → ℝ) (ha : ContinuousOn a (Icc 0 1)) :
+    ∃ N : ℕ, ∀ n : ℕ, N ≤ n → 0 < n → ∀ i : Fin n,
+      ∑ j ∈ Finset.univ.erase i, ‖apm_m96a05_matrix n a b i j‖ ≤ 2 := by
+  sorry
+
 theorem apm_m96a05 :
     (∀ (n : ℕ) (hn : 0 < n) (a b c : ℝ → ℝ) (U : Fin n → ℝ),
       apm_m96a05_approximateSolution n a b c U ↔
