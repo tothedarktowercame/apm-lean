@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_progress": "The two continuous canonical circle maps, their basepoint equality, and the full continuous maps-out quotient eliminator with restriction and uniqueness lemmas are compiled. The source graph realizations, evenly-covered neighborhoods, exact fibers, pairwise nonhomeomorphism, and Cayley-tree universal cover remain unavailable.",
+  "closer_hop": 4,
+  "closer_progress": "The simplicial-set geometric realization API was additionally checked. It has neither a comparison to this concrete quotient wedge nor a theorem converting simplicial coverings to IsCoveringMap. The exact universal-cover and four finite-cover construction contracts remain open.",
   "imported_at": "2026-07-13T17:26:57.514637Z"
 }

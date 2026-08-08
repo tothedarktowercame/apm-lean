@@ -173,5 +173,18 @@ theorem apm_t92j06 :
   at vertices and edge interiors, compute fibers, and separate the four total
   spaces. Renewed searches of graph geometric realization and covering gluing
   APIs found no such construction; the frozen statement is unchanged.
+
+  HOP 4 checked Mathlib's actual simplicial geometric-realization functor
+  (`SSet.toTop` and `SSet.GeometricRealization`) in addition to the graph and
+  covering APIs.  It realizes arbitrary simplicial sets, but supplies no
+  comparison homeomorphism from a one-dimensional realization to this
+  concrete quotient and no theorem turning a simplicial covering into
+  `IsCoveringMap`.  Thus it cannot discharge either source-side construction.
+  The exact missing contracts are (1) existence of a simply connected actual
+  covering of `apm_t92J06_X`, and (2) a `Fin 4` family of actual three-sheeted
+  coverings with pairwise nonhomeomorphic total spaces, exactly the two
+  conjuncts of the frozen theorem.  Proving either requires the absent
+  vertex/edge realization and evenly-covered-neighborhood development rather
+  than a small extensionality or transport lemma.
   -/
   sorry

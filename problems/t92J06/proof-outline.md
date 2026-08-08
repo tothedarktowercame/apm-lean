@@ -29,3 +29,11 @@ Closer hop 3 adds the complete continuous maps-out universal property:
 recover them, and `apm_t92J06_wedgeDesc_unique` proves uniqueness. The target
 quotient therefore needs no further bookkeeping; only realization and local
 trivialization of the covering graphs remain.
+
+Hop 4 also checks Mathlib's general simplicial geometric realization
+(`SSet.toTop`/`SSet.GeometricRealization`). It does not identify realized
+one-dimensional simplicial sets with this concrete circle quotient and does
+not promote a simplicial covering to `IsCoveringMap`. Consequently this is
+not an alternate packaged route: both the Cayley-tree cover and the four
+finite labeled-graph covers still require a new topological realization and
+evenly-covered-neighborhood development.
