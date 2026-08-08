@@ -8,15 +8,21 @@ f analytic near Δ̄, injective on Δ̄, f(0) = 0, |f'(0)| = 1.
 
 ## Proof approach
 
-1. Jensen's inequality for convex exp: (1/2π)∫g ≥ exp((1/2π)∫log g)
-2. Mean value property: (1/2π)∫log|f'| = log|f'(0)| = 0
-3. Combining: ℓ(C) = ∫|f'| ≥ 2π · exp(0) = 2π
-4. Equality → |f'| ≡ 1 → f is rotation → Δ ⊆ D
-5. Contrapositive: Δ ⊆ D → Schwarz lemma → f = rotation → ℓ = 2π
+1. Apply the circle mean-value theorem directly to the holomorphic function
+   `f'`: its circle average is `f'(0)`.
+2. The norm-of-integral inequality gives
+   `2π‖f'(0)‖ ≤ ∫ ‖f'(e^{iθ})‖`, hence the lower bound.
+3. For the converse, construct the analytic inverse on the disk with
+   `Function.invFunOn`; injectivity makes `f'` nonzero.
+4. Apply the Schwarz equality theorem to the inverse. This forces `f` to be a
+   rotation on the unit disk.
+5. The identity theorem extends that formula to the larger holomorphy disk,
+   so the boundary derivative norm is identically one and the length is `2π`.
 
 ## Lean closure
 
-All declarations are sorry-free. For part (b), `rotation_of_disk_subset_image`
+All declarations are sorry-free. For part (b),
+`apm_a95A08_rotation_of_disk_subset_image`
 constructs the analytic inverse with `Function.invFunOn` and applies
 `ConstructionTargets.SchwarzEquality`. The identity principle then extends
 the resulting rotation formula from the unit disk to the slightly larger disk
