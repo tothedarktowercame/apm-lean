@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Closer hop 2 compiled the exact ordinary derivative identity for t ↦ 1/(1-t) away from 1. Its transport to the real self-model tangent-space derivative and the endpoint contradiction remain, independently of the compactness-to-uniform-local-time bridge.",
+  "closer_hop": 3,
+  "closer_progress": "The exact ordinary derivative identity and its transport to IsMIntegralCurveOn for the real self-model are compiled, closing the frozen middle conjunct. The endpoint continuity contradiction and compactness-to-uniform-local-time construction remain.",
   "imported_at": "2026-07-13T17:26:57.546783Z"
 }

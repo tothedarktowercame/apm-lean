@@ -39,6 +39,15 @@ lemma apm_t92J08_blowupCurve_hasDerivAt {t : ℝ} (ht : t ≠ 1) :
   simpa using
     (((hasDerivAt_const t (1 : ℝ)).sub (hasDerivAt_id t)).inv hden)
 
+/-- The ordinary derivative identity transported into the self-model manifold
+derivative expected by `IsMIntegralCurveOn`. -/
+lemma apm_t92J08_blowupCurve_isMIntegralCurveOn :
+    IsMIntegralCurveOn apm_t92J08_blowupCurve
+      apm_t92J08_quadraticField (Iio 1) := by
+  intro t ht
+  rw [hasMFDerivWithinAt_iff_hasFDerivWithinAt]
+  exact (apm_t92J08_blowupCurve_hasDerivAt (ne_of_lt ht)).hasFDerivAt.hasFDerivWithinAt
+
 theorem apm_t92j08 :
     (∀ (n : ℕ) (M : Type)
         [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
@@ -82,5 +91,20 @@ theorem apm_t92j08 :
   transport into `HasMFDerivWithinAt` with the tangent-space presentation,
   followed by the endpoint contradiction; the independent compact uniform-
   time construction remains open.
+
+  CLOSER HOP 3 closes the derivative-transport bridge itself.
+  `apm_t92J08_blowupCurve_isMIntegralCurveOn` unfolds the native integral-
+  curve predicate pointwise, applies
+  `hasMFDerivWithinAt_iff_hasFDerivWithinAt`, and transports the hop-2
+  `HasDerivAt` proof through `hasFDerivAt` and restriction. Consequently the
+  frozen theorem's entire middle conjunct is now available as a proved lemma,
+  with no tangent-space instance mismatch remaining. The explicit
+  counterexample now only needs the endpoint contradiction: a global integral
+  curve is continuous, while agreement on `Iio 1` forces values
+  `1/(1-t)` to be unbounded near `1`. Separately, the compact-manifold conjunct
+  still needs extraction of a uniform local-existence radius. Searches of
+  compact-image boundedness, sequential endpoint limits, and uniform-time
+  integral-curve APIs found ingredients but no packaged combination. The
+  frozen statement is unchanged.
   -/
   sorry

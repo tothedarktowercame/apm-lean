@@ -22,3 +22,8 @@ the manifold self-model `𝒘(ℝ,ℝ)`.
 Closer hop 2 proves the ordinary derivative identity globally away from
 `t = 1`. Thus only the manifold-derivative transport and the continuity versus
 blow-up contradiction remain for the explicit counterexample.
+
+Closer hop 3 proves `apm_t92J08_blowupCurve_isMIntegralCurveOn`, transporting
+that identity through the self-model manifold derivative. The full middle
+conjunct is therefore closed; only continuity versus endpoint blow-up remains
+for the counterexample.
