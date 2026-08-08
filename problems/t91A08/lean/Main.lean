@@ -63,6 +63,61 @@ def t91A08Integral (beta : T91A08Form2) : ℝ :=
   ∫ p : T91A08Torus,
     beta p ![EuclideanSpace.single 0 1, EuclideanSpace.single 1 1]
 
+lemma t91A08Cover_surjective : Function.Surjective t91A08Cover := by
+  rintro ⟨p, q⟩
+  obtain ⟨x, rfl⟩ := QuotientAddGroup.mk'_surjective (AddSubgroup.zmultiples (1 : ℝ)) p
+  obtain ⟨y, rfl⟩ := QuotientAddGroup.mk'_surjective (AddSubgroup.zmultiples (1 : ℝ)) q
+  refine ⟨WithLp.toLp 2 ![x, y], ?_⟩
+  ext <;> simp [t91A08Cover]
+
+lemma t91A08Integral_induced (beta : T91A08Form2)
+    (hbeta : t91A08IsInduced beta) : t91A08Integral beta = 3 := by
+  have hconst (p : T91A08Torus) :
+      beta p ![EuclideanSpace.single 0 1, EuclideanSpace.single 1 1] = 3 := by
+    obtain ⟨x, rfl⟩ := t91A08Cover_surjective p
+    simpa [EuclideanSpace.single_apply] using
+      hbeta x ![EuclideanSpace.single 0 1, EuclideanSpace.single 1 1]
+  simp_rw [t91A08Integral, hconst]
+  rw [integral_const]
+  norm_num [Measure.real, Measure.volume_eq_prod, ← Set.univ_prod_univ, Measure.prod_prod,
+    AddCircle.measure_univ]
+
+lemma t91A08Integral_pullback (beta gamma : T91A08Form2)
+    (hbeta : t91A08IsInduced beta)
+    (hgamma : t91A08IsPullback gamma beta) : t91A08Integral gamma = 21 := by
+  have hconst (p : T91A08Torus) :
+      gamma p ![EuclideanSpace.single 0 1, EuclideanSpace.single 1 1] = 21 := by
+    rw [hgamma p]
+    obtain ⟨x, hx⟩ := t91A08Cover_surjective (t91A08g p)
+    rw [← hx]
+    rw [hbeta x]
+    norm_num [t91A08Linear, EuclideanSpace.single_apply]
+  simp_rw [t91A08Integral, hconst]
+  rw [integral_const]
+  norm_num [Measure.real, Measure.volume_eq_prod, ← Set.univ_prod_univ, Measure.prod_prod,
+    AddCircle.measure_univ]
+
+def t91A08FirstCircle : C(UnitAddCircle, T91A08Torus) :=
+  ⟨fun z ↦ (z, 0), by fun_prop⟩
+
+def t91A08FirstProjection : C(T91A08Torus, UnitAddCircle) :=
+  ⟨Prod.fst, continuous_fst⟩
+
+def t91A08TimesFive : C(UnitAddCircle, UnitAddCircle) :=
+  ⟨fun z ↦ 5 • z, by fun_prop⟩
+
+lemma t91A08_timesFive_homotopic_of_g_homotopic
+    (h : ContinuousMap.Homotopic t91A08g (ContinuousMap.id T91A08Torus)) :
+    ContinuousMap.Homotopic t91A08TimesFive
+      (ContinuousMap.id UnitAddCircle) := by
+  have hpost := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl t91A08FirstProjection) h
+  have hpre := ContinuousMap.Homotopic.comp hpost
+    (ContinuousMap.Homotopic.refl t91A08FirstCircle)
+  convert hpre using 1 <;>
+    ext z <;>
+    simp [t91A08FirstProjection, t91A08FirstCircle, t91A08TimesFive, t91A08g]
+
 theorem apm_t91a08
     (beta gamma : T91A08Form2)
     (hbeta : t91A08IsInduced beta)
@@ -70,4 +125,27 @@ theorem apm_t91a08
     t91A08Integral beta = 3 ∧
     t91A08Integral gamma = 21 ∧
     ¬ ContinuousMap.Homotopic t91A08g (ContinuousMap.id T91A08Torus) := by
+  refine ⟨t91A08Integral_induced beta hbeta,
+    t91A08Integral_pullback beta gamma hbeta hgamma, ?_⟩
+  /-
+  CLOSER HOP 2 BOUNDARY (statement unchanged).
+
+  This hop reconstructs the two integral computations for the repaired genuine
+  quotient/Haar formulation. `t91A08Cover_surjective` supplies representatives
+  for every torus point; the induced equation makes the first integrand
+  constantly `3`, while the pullback equation and the explicit matrix give
+  the determinant factor `7`, hence the constant `21`. Both Haar integrals are
+  then evaluated using `Measure.volume_eq_prod`, `Measure.prod_prod`, and
+  `AddCircle.measure_univ`.
+
+  It also reconstructs the homotopy reduction in the additive-circle encoding:
+  `t91A08_timesFive_homotopic_of_g_homotopic` restricts a hypothetical torus
+  homotopy to the first coordinate and projects back, producing a homotopy
+  between `z ↦ 5 • z` and the identity on `UnitAddCircle`. The sole remaining
+  bridge is proving those circle maps nonhomotopic. Renewed searches of
+  `LEMMA-INDEX.md`, `ConstructionTargets`, solved circle/covering artifacts,
+  Mathlib's `AddCircle`, homotopy, fundamental-group, and lifting sources, and
+  git history found no compiled integer-degree classification or winding-number
+  invariant for `UnitAddCircle` self-maps.
+  -/
   sorry
