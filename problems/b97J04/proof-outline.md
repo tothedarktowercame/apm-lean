@@ -14,11 +14,14 @@ The canonical Lean attempt compiles with one remaining `sorry`.
 - `apm_b97j04_eigenspace_subset_generalized` proves that every eigenvector of
   the semisimple part lies in the frozen positive-power generalized
   eigenspace of the original operator.
+- `apm_b97j04_mapsTo_generalizedEigenspace` proves that both additive
+  components preserve every generalized eigenspace of `T`, by commuting them
+  with all powers of `T-λ`.
 
 ## Remaining bridge
 
-Prove the reverse generalized-eigenspace inclusion by restricting the two
-Jordan--Chevalley decompositions to `T.maxGenEigenspace λ` and applying
-uniqueness. Use root multiplicities to deduce characteristic-polynomial
-equality, then derive the unique multiplicative decomposition of a linear
-equivalence.
+Use the compiled `MapsTo` facts to restrict the two Jordan--Chevalley
+components to `T.maxGenEigenspace λ`, and apply uniqueness to prove the reverse
+generalized-eigenspace inclusion. Then use root multiplicities for
+characteristic-polynomial equality and derive the unique multiplicative
+decomposition of a linear equivalence.

@@ -94,6 +94,51 @@ lemma apm_b97j04_eigenspace_subset_generalized
   rw [(hpow (k + 1)).1, pow_succ, hk, zero_mul]
   rfl
 
+/-- Both pieces of a commuting additive decomposition preserve every
+generalized eigenspace of `T`.  This supplies the `MapsTo` bookkeeping needed
+to restrict the decomposition to an intrinsic generalized-eigenspace block. -/
+lemma apm_b97j04_mapsTo_generalizedEigenspace
+    (F V : Type*) [Field F] [AddCommGroup V] [Module F V]
+    (T S N : Module.End F V) (h : APMAdditiveJC T S N) (lam : F) :
+    Set.MapsTo S (APMGeneralizedEigenspace T lam)
+        (APMGeneralizedEigenspace T lam) ∧
+      Set.MapsTo N (APMGeneralizedEigenspace T lam)
+        (APMGeneralizedEigenspace T lam) := by
+  obtain ⟨-, -, hSN, hT⟩ := h
+  have hSN' : Commute S N := hSN
+  let A := T - lam • (LinearMap.id : Module.End F V)
+  have hTS : Commute T S := by
+    rw [hT]
+    exact (Commute.refl S).add_left hSN'.symm
+  have hTN : Commute T N := by
+    rw [hT]
+    exact hSN'.add_left (Commute.refl N)
+  have hAS : Commute A S := by
+    dsimp [A]
+    apply hTS.sub_left
+    rw [commute_iff_eq]
+    ext v
+    simp
+  have hAN : Commute A N := by
+    dsimp [A]
+    apply hTN.sub_left
+    rw [commute_iff_eq]
+    ext v
+    simp
+  constructor
+  · rintro v ⟨k, hk, hv⟩
+    refine ⟨k, hk, ?_⟩
+    change (A ^ k) (S v) = 0
+    have he := congrFun (congrArg DFunLike.coe (hAS.pow_left k).eq) v
+    rw [Module.End.mul_apply, Module.End.mul_apply, hv, map_zero] at he
+    exact he
+  · rintro v ⟨k, hk, hv⟩
+    refine ⟨k, hk, ?_⟩
+    change (A ^ k) (N v) = 0
+    have he := congrFun (congrArg DFunLike.coe (hAN.pow_left k).eq) v
+    rw [Module.End.mul_apply, Module.End.mul_apply, hv, map_zero] at he
+    exact he
+
 theorem apm_b97j04 :
     ∀ (F V : Type*) [Field F] [IsAlgClosed F] [AddCommGroup V]
         [Module F V] [FiniteDimensional F V] (T : Module.End F V),
@@ -138,5 +183,21 @@ theorem apm_b97j04 :
   proving its unipotence, and translating multiplicative uniqueness back to
   additive uniqueness. No closed artifact or construction module packages
   those remaining assemblies. The statement is unchanged and appears sound.
+
+  CLOSER HOP 3: `apm_b97j04_mapsTo_generalizedEigenspace` now closes the
+  preservation bookkeeping required by the restriction route. From `T=S+N`
+  and `SN=NS`, it proves that both `S` and `N` commute with `T-λ`; their
+  commutation with every power then transports any positive-power vanishing
+  witness for a generalized eigenvector to its images under `S` and `N`.
+  Consequently both decomposition components map each frozen generalized
+  eigenspace into itself and can be restricted to that block.
+
+  Searches beyond hop 2 covered `Commute.pow_left`, restriction/`MapsTo`
+  constructors, max-generalized-eigenspace APIs, and charpoly/nilpotence
+  sources. The commutation API supplied the compiled lemma above, but no
+  packaged theorem completes restricted Jordan--Chevalley uniqueness or
+  charpoly invariance under adding a commuting nilpotent part. Reverse
+  inclusion, characteristic-polynomial equality, and the multiplicative
+  decomposition therefore remain open.
   -/
   all_goals sorry

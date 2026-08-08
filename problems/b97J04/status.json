@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "note": "Additive existence/uniqueness are explicitly assembled, and the eigenspace-to-generalized-eigenspace inclusion is now proved. Reverse inclusion via restricted JC uniqueness, charpoly transport, and multiplicative decomposition remain.",
+  "closer_hop": 3,
+  "note": "Additive existence/uniqueness and the easy eigenspace inclusion are compiled. Both decomposition components are now proved to preserve every generalized eigenspace, closing the MapsTo bookkeeping for the restriction route. Restricted uniqueness, charpoly transport, and multiplicative decomposition remain.",
   "imported_at": "2026-07-13T17:26:54.133307Z"
 }
