@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "closer_note": "For the repaired native-manifold statement, explicit coordinate witnesses now compile nonemptiness of S6, S2×S4, and S3×S3. Remaining work needs manifold-domain Sard, a punctured-sphere contraction, sphere π1, and sphere/product homology computations absent from the corpus.",
+  "closer_hop": 3,
+  "closer_note": "The punctured-sphere contraction and arbitrary-domain null-homotopy from non-surjectivity now compile, generalizing the t94J05 stereographic construction. Remaining work needs manifold-domain Sard, positive restricted Hausdorff measure of spheres, sphere simple-connectivity, and sphere/product homology computations absent from the corpus.",
   "imported_at": "2026-07-13T17:26:58.361777Z"
 }

@@ -54,6 +54,51 @@ lemma t95J04_sphereThreeThree_nonempty : Nonempty T95J04SphereThreeThree :=
   Nonempty.map2 (fun x y ↦ (x, y))
     (t95J04_sphere_nonempty 3) (t95J04_sphere_nonempty 3)
 
+/-- The complement of a point in one of the target spheres is contractible.
+This generalizes the stereographic-projection construction compiled in
+`t94J05`. -/
+lemma t95J04_contractibleSpace_sphere_complement (n : ℕ)
+    (q : T95J04Sphere n) :
+    ContractibleSpace {y : T95J04Sphere n // y ≠ q} := by
+  let hs := stereographic (norm_eq_of_mem_sphere q)
+  have hsource : ({y : T95J04Sphere n | y ≠ q} : Set (T95J04Sphere n)) =
+      hs.source := by
+    ext y
+    simp [hs]
+  have htarget : hs.target = Set.univ := stereographic_target _
+  let eSource : {y : T95J04Sphere n // y ≠ q} ≃ₜ hs.source :=
+    Homeomorph.setCongr hsource
+  let eTarget : hs.target ≃ₜ
+      (ℝ ∙ (q : EuclideanSpace ℝ (Fin (n + 1))))ᗮ :=
+    (Homeomorph.setCongr htarget).trans (Homeomorph.Set.univ _)
+  let e : {y : T95J04Sphere n // y ≠ q} ≃ₜ
+      (ℝ ∙ (q : EuclideanSpace ℝ (Fin (n + 1))))ᗮ :=
+    eSource.trans (hs.toHomeomorphSourceTarget.trans eTarget)
+  exact e.contractibleSpace
+
+/-- Once Sard supplies a missed point, stereographic projection closes the
+null-homotopy part of the first conjunct. This is the arbitrary-domain,
+arbitrary-sphere-dimension version of `t94J05`'s construction. -/
+lemma t95J04_nullHomotopic_of_not_surjective {X : Type*}
+    [TopologicalSpace X] (n : ℕ) (f : X → T95J04Sphere n)
+    (hf : Continuous f) (hnot_surj : ¬ Function.Surjective f) :
+    t95J04NullHomotopic f hf := by
+  obtain ⟨q, hq⟩ : ∃ q : T95J04Sphere n, ∀ x, f x ≠ q := by
+    simpa [Function.Surjective] using hnot_surj
+  let g : C(X, {y : T95J04Sphere n // y ≠ q}) :=
+    ⟨fun x ↦ ⟨f x, hq x⟩, hf.subtype_mk _⟩
+  letI : ContractibleSpace {y : T95J04Sphere n // y ≠ q} :=
+    t95J04_contractibleSpace_sphere_complement n q
+  have hg0 : g.Nullhomotopic := by
+    simpa using (id_nullhomotopic {y : T95J04Sphere n // y ≠ q}).comp_left g
+  rcases hg0 with ⟨p, hg⟩
+  let inclusion : C({y : T95J04Sphere n // y ≠ q}, T95J04Sphere n) :=
+    ⟨Subtype.val, continuous_subtype_val⟩
+  have hcomp := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl inclusion) hg
+  refine ⟨p, ?_⟩
+  simpa [g, inclusion] using hcomp
+
 theorem apm_t95j04 :
     (∀ (k n : ℕ), k < n →
       ∀ (M : Type*) [TopologicalSpace M] [T2Space M]
@@ -71,24 +116,28 @@ theorem apm_t95j04 :
     ¬ Nonempty (T95J04SphereSix ≃ₜ T95J04SphereThreeThree) ∧
     ¬ Nonempty (T95J04SphereTwoFour ≃ₜ T95J04SphereThreeThree) := by
   /-
-  CLOSER HOP 2 boundary. The repaired statement now again has compiled,
-  explicit inhabitants for `S⁶`, `S² × S⁴`, and `S³ × S³`; unlike relying on
-  eventual simple-connectivity instances, these close the nonemptiness input
-  needed by any direct fundamental-group or homotopy construction.
+  CLOSER HOP 3 boundary. The repaired statement has compiled explicit
+  inhabitants for `S⁶`, `S² × S⁴`, and `S³ × S³`. Going beyond hop 2,
+  `t95J04_contractibleSpace_sphere_complement` generalizes the stereographic
+  construction from `t94J05` to every `T95J04Sphere n`, and
+  `t95J04_nullHomotopic_of_not_surjective` packages the complement-valued
+  factor and descends its contraction for an arbitrary source. Thus the
+  null-homotopy clause now follows completely from non-surjectivity.
 
   The first conjunct still requires a manifold-domain Sard theorem proving
   `μH[n] (range f) = 0`. The repository's chartwise Sard artifacts and
   Mathlib's available results cover maps between finite-dimensional normed
   vector spaces, not arbitrary `IsManifold` domains. Non-surjectivity would
-  then follow from positive Hausdorff measure of the sphere, and null-homotopy
-  requires contracting the complement of an omitted point via stereographic
-  projection.
+  then follow from positive Hausdorff measure of the sphere; that positivity
+  bridge is also not packaged for this restricted Hausdorff measure.
 
   For the remaining clauses, searches of `LEMMA-INDEX.md`,
   `ConstructionTargets/`, sphere/product siblings, Mathlib's sphere,
   stereographic, fundamental-groupoid, singular-homology, and Künneth sources,
   and git history found no compiled simple-connectivity theorem for these
   metric spheres and no homology computations distinguishing the three
-  six-dimensional spaces. Those foundational bridges remain open.
+  six-dimensional spaces. A further inspection of `t94J05` supplied and was
+  used for the now-closed stereographic step, but not those foundational
+  bridges. The frozen statement is unchanged.
   -/
   sorry
