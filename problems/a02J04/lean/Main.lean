@@ -27,6 +27,8 @@ def apm_a02J04_mu : Measure (ℝ × ℝ) :=
 
 def apm_a02J04_P : ℝ × ℝ → ℝ := Prod.fst
 
+lemma apm_a02J04_measurable_P : Measurable apm_a02J04_P := measurable_fst
+
 def apm_a02J04_tau : Measure ℝ :=
   Measure.map apm_a02J04_P apm_a02J04_mu
 
@@ -95,6 +97,25 @@ lemma apm_a02J04_lintegral_g_right (x : ℝ) :
       · rfl
     simp [hzero, apm_a02J04_tauDensity_of_not_mem hx]
 
+lemma apm_a02J04_tau_eq_withDensity :
+    apm_a02J04_tau =
+      volume.withDensity (fun x ↦ ENNReal.ofReal (apm_a02J04_tauDensity x)) := by
+  ext s hs
+  rw [apm_a02J04_tau, Measure.map_apply apm_a02J04_measurable_P hs]
+  rw [apm_a02J04_mu, withDensity_apply _ (hs.preimage apm_a02J04_measurable_P)]
+  rw [withDensity_apply _ hs]
+  rw [← lintegral_indicator hs,
+    ← lintegral_indicator (hs.preimage apm_a02J04_measurable_P)]
+  rw [Measure.volume_eq_prod]
+  rw [lintegral_prod _
+    ((apm_a02J04_measurable_g.indicator
+      (hs.preimage apm_a02J04_measurable_P)).aemeasurable)]
+  apply lintegral_congr
+  intro x
+  by_cases hx : x ∈ s
+  · simp [apm_a02J04_P, hx, apm_a02J04_lintegral_g_right]
+  · simp [apm_a02J04_P, hx]
+
 theorem apm_a02j04 :
     apm_a02J04_tau =
       volume.withDensity (fun x ↦ ENNReal.ofReal (apm_a02J04_tauDensity x)) ∧
@@ -104,7 +125,7 @@ theorem apm_a02j04 :
       =ᵐ[apm_a02J04_tau]
         fun x ↦ ENNReal.ofReal (1 / (2 * x)) := by
   /-
-  Closer hop 2 builds on the measurable-density prerequisites compiled by
+  Closer hop 3 builds on the measurable-density prerequisites compiled by
   hop 1. In particular, the planar and proposed marginal densities are measurable,
   the latter vanishes off `[0,1]`, and it is nonzero on `[0,1] \ {0}`.  These
   are exactly the support and reciprocal-density facts needed by Mathlib's
@@ -117,19 +138,20 @@ theorem apm_a02j04 :
   marginal density, treating both `x ∈ [0,1]` and the zero-density complement.
   Thus the vertical-section calculation is no longer open.
 
+  Going beyond hop 2, `apm_a02J04_tau_eq_withDensity` now closes the full
+  measure-level bridge. It applies `Measure.ext`, expands `Measure.map` and
+  both `withDensity` measures on an arbitrary measurable set, rewrites ambient
+  product volume with `Measure.volume_eq_prod`, applies `lintegral_prod`, and
+  substitutes `apm_a02J04_lintegral_g_right`. Thus the exact first-coordinate
+  marginal identity is compiled.
+
   Renewed searches of `LEMMA-INDEX.md`, every `ConstructionTargets/` module,
   prior measure-decomposition artifacts (especially `a01J03`), Mathlib's marginal,
   product-measure, `withDensity`, and Radon--Nikodym sources, and git history
-  found no packaged theorem computing the first-coordinate marginal of this
-  triangular density. The remaining first bridge is measure-level Tonelli and
-  map extensionality: for measurable `s`, rewrite the mapped measure as
-
-    `∫⁻ x, 2 * volume ({y | 0 ≤ y ∧ y ≤ x}) * 1_s x ∂volume`,
-
-  substitute the compiled inner integral, and identify the result with
-  `volume.withDensity (ofReal (2*x))`. Once this equality is
-  compiled, absolute continuity and singularity follow from the support and
-  positivity lemmas above (the exceptional point `{0}` is volume-null), and
-  `Measure.rnDeriv_withDensity_right` gives the displayed reciprocal density.
+  found no higher-level marginal theorem, so the local Tonelli proof was used.
+  The remaining bridge is now only deriving absolute continuity and mutual
+  singularity from the density's support/positivity (with exceptional null
+  point `{0}`), then specializing `Measure.rnDeriv_withDensity_right` to the
+  displayed reciprocal. The frozen statement is unchanged.
   -/
   sorry
