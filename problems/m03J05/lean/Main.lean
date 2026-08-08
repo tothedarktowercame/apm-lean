@@ -50,6 +50,53 @@ lemma m03J05MixedEigenvalue_pos (n : ℕ) :
   unfold m03J05MixedEigenvalue
   positivity
 
+/-- The first derivative of each displayed mixed eigenfunction. -/
+lemma m03J05MixedEigenfunction_hasDerivAt (n : ℕ) (x : ℝ) :
+    HasDerivAt (m03J05MixedEigenfunction n)
+      (((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2 *
+        Real.cos ((((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2) * x)) x := by
+  unfold m03J05MixedEigenfunction
+  convert (((hasDerivAt_id x).const_mul
+    (((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2)).sin) using 1 <;>
+      simp only [id_eq] <;> ring
+
+/-- The explicit eigenfunctions satisfy the right Neumann boundary condition. -/
+lemma m03J05MixedEigenfunction_deriv_one (n : ℕ) :
+    deriv (m03J05MixedEigenfunction n) 1 = 0 := by
+  rw [(m03J05MixedEigenfunction_hasDerivAt n 1).deriv]
+  suffices Real.cos ((((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2)) = 0 by
+    simpa using congrArg
+      (fun z : ℝ => (((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2) * z) this
+  rw [Real.cos_eq_zero_iff]
+  refine ⟨(n : ℤ), ?_⟩
+  push_cast
+  ring
+
+/-- The displayed functions solve the expected constant-coefficient
+eigenvalue equation pointwise. -/
+lemma m03J05MixedEigenfunction_neg_deriv_deriv (n : ℕ) (x : ℝ) :
+    -deriv (deriv (m03J05MixedEigenfunction n)) x =
+      m03J05MixedEigenvalue n * m03J05MixedEigenfunction n x := by
+  have hfirst : deriv (m03J05MixedEigenfunction n) = fun y : ℝ =>
+      ((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2 *
+        Real.cos ((((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2) * y) := by
+    funext y
+    exact (m03J05MixedEigenfunction_hasDerivAt n y).deriv
+  rw [hfirst]
+  have hsecond := (((hasDerivAt_id x).const_mul
+    (((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2)).cos).const_mul
+      (((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2)
+  have hsecond' : deriv (fun y : ℝ =>
+      ((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2 *
+        Real.cos ((((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2) * y)) x =
+      ((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2 *
+        (-Real.sin ((((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2) * x) *
+          (((2 * n + 1 : ℕ) : ℝ) * Real.pi / 2)) := by
+    simpa only [id_eq, mul_one] using hsecond.deriv
+  rw [hsecond']
+  simp only [m03J05MixedEigenvalue, m03J05MixedEigenfunction]
+  ring
+
 def m03J05LinearWeakSolution
     (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) (u : m03J05H1) : Prop :=
   u.1 = 0 ∧ ∀ v : m03J05H1, v.1 = 0 →
@@ -112,6 +159,19 @@ theorem apm_m03j05 (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) :
   retains an unresolved Sturm–Liouville or variational bridge. `m94A04` and
   `m98A03` also stop at Nemytskii differentiability/packaging boundaries.
   Thus no compiled sibling closes either remaining operator-theoretic chain.
-  The frozen statement was left unchanged.
+
+  Closer hop 2 goes beyond the endpoint-positivity checks by compiling the
+  local differential operator calculation. `m03J05MixedEigenfunction_hasDerivAt`
+  gives the exact first derivative,
+  `m03J05MixedEigenfunction_deriv_one` proves the right Neumann condition,
+  and `m03J05MixedEigenfunction_neg_deriv_deriv` proves pointwise that
+  `-u'' = λₙu`. Mathlib's `Real.cos_eq_zero_iff` supplies the only
+  non-algebraic endpoint step. Searches additionally covered the derivative,
+  trigonometric periodicity, orthogonal-family, eigenvector, compact-resolvent,
+  and variational APIs. They provide these local identities but no theorem
+  upgrading them to completeness of the half-integer sine family in `L²`, nor
+  an isomorphism between the custom pair encoding and a standard Sobolev
+  space. Consequently the Fredholm and nonlinear operator bridges remain
+  open; the frozen statement is unchanged.
   -/
   sorry
