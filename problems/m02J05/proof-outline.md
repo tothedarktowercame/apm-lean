@@ -10,11 +10,13 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
 - the Young primitive vanishes at zero;
 - the zero `AEEqFun` belongs to both `apm_m02J05_K α` and
   `apm_m02J05_L α`.
+- the Young primitive is nonnegative on the nonnegative half-line;
+- the Young primitive is monotone there, by interval-integral monotonicity.
 
 ## Remaining boundary
 
-- prove convexity and monotonicity of the Young primitive from the hypotheses
-  on `α`;
+- upgrade the compiled nonnegativity and monotonicity of the Young primitive
+  to convexity from strict monotonicity of `α`;
 - build the submodule structure on the rescalable modular class;
 - develop the `sInf` theory needed for positivity, definiteness, homogeneity,
   and the triangle inequality of the Luxemburg functional;

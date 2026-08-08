@@ -49,6 +49,28 @@ lemma apm_m02J05_zero_mem_L (α : ℝ → ℝ) :
   refine ⟨1, one_ne_zero, ?_⟩
   simpa using apm_m02J05_zero_mem_K α
 
+/-- The Young primitive is nonnegative on the nonnegative half-line. -/
+lemma apm_m02J05_young_nonneg
+    {α : ℝ → ℝ} (hα : ∀ t, 0 ≤ t → 0 ≤ α t) {t : ℝ} (ht : 0 ≤ t) :
+    0 ≤ apm_m02J05_young α t := by
+  unfold apm_m02J05_young
+  exact intervalIntegral.integral_nonneg ht (fun x hx => hα x hx.1)
+
+/-- Monotonicity of the primitive follows directly by enlarging its interval
+of integration; continuity supplies interval integrability. -/
+lemma apm_m02J05_young_mono
+    {α : ℝ → ℝ} (hc : ContinuousOn α (Ici 0))
+    (hα : ∀ t, 0 ≤ t → 0 ≤ α t) {s t : ℝ} (hs : 0 ≤ s) (hst : s ≤ t) :
+    apm_m02J05_young α s ≤ apm_m02J05_young α t := by
+  unfold apm_m02J05_young
+  apply intervalIntegral.integral_mono_interval (le_refl 0) hs hst
+  · filter_upwards [ae_restrict_mem measurableSet_Ioc] with x hx
+    exact hα x hx.1.le
+  · have ht : 0 ≤ t := hs.trans hst
+    have hi : ContinuousOn α (uIcc (0 : ℝ) t) := by
+      simpa [uIcc_of_le ht] using hc.mono Icc_subset_Ici_self
+    exact hi.intervalIntegrable
+
 theorem apm_m02j05 :
     ∀ (α β : ℝ → ℝ),
       ContinuousOn α (Ici 0) →
@@ -97,5 +119,18 @@ theorem apm_m02j05 :
   normalized integral estimate. No solved sibling supplies that combined
   bridge, so no sibling code was reused and the frozen statement was left
   unchanged.
+
+  Closer hop 3 starts the missing primitive theory directly.
+  `apm_m02J05_young_nonneg` proves nonnegativity of the interval-integral
+  Young function, and `apm_m02J05_young_mono` proves its monotonicity on the
+  nonnegative half-line using `intervalIntegral.integral_mono_interval` and
+  continuity for interval integrability. Searches additionally inspected
+  Mathlib's convex-integral and Fenchel/Young inequalities; the latter remain
+  specialized to power conjugates and do not apply to the supplied inverse
+  pair. The remaining bridge is still broad: upgrade primitive monotonicity
+  to convexity, build the rescaling submodule on `AEEqFun`, establish the
+  `sInf` attainment/definiteness/homogeneity/triangle theory, and prove the
+  complementary integral identity. This final hop did not complete that
+  self-contained Orlicz development.
   -/
   sorry

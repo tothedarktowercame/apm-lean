@@ -28,5 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
+  "closer_hop": 3,
+  "classification_detail": "Final honest partial: the Young primitive is now proved nonnegative and monotone on the nonnegative half-line. Convexity, AEEqFun submodule closure, Luxemburg sInf norm theory, complementary Young inequality, and Holder estimate remain.",
   "imported_at": "2026-07-13T17:26:54.522400Z"
 }
