@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Compiled helpers characterize half-turn fixedness as vanishing of coordinates 1 and 2 and discharge the local-index equality once nondegeneracy is known. Remaining work is the torus-axis equation, tangent-kernel computation, and a homology/Lefschetz obstruction to homotopy.",
+  "closer_hop": 2,
+  "closer_progress": "Compiled helpers characterize half-turn fixedness as vanishing of coordinates 1 and 2, parametrize the four displayed points by Fin 4, prove that parametrization injective from 0 < r < R, and discharge the exact Nat.card = 4 conjunct. Remaining work is the torus-axis equation, tangent-kernel and derivative computation, and a homology/Lefschetz obstruction to homotopy.",
   "imported_at": "2026-07-13T17:26:57.854173Z"
 }
