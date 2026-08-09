@@ -106,6 +106,26 @@ def apm_m01J04_isTestFunction {d : ℕ}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ) : Prop :=
   ContDiff ℝ ⊤ φ ∧ HasCompactSupport φ ∧ Function.support φ ⊆ Ω
 
+/-- Why this unblocks `apm_m01j04`: this is the missing bounded multiplier
+and weak Leibniz theorem for the custom `H¹` record. It constructs the
+endpoint-zero test record used in `divStronglyConverges`, with a norm bound
+uniform in the multiplied function. -/
+theorem apm_m01J04_bridge_1
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ) :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ f : apm_m01J04_H1 d Ω,
+        ∃ h : apm_m01J04_H1 d Ω,
+          h.val = (fun x ↦ f.val x * φ x) ∧
+          h.grad = (fun x ↦
+            φ x • f.grad x +
+              f.val x • WithLp.toLp 2
+                (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))) ∧
+          apm_m01J04_isH1Zero h ∧
+          apm_m01J04_H1norm h ≤ C * apm_m01J04_H1norm f := by
+  sorry
+
 theorem apm_m01j04 :
     (∀ (X : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
         [CompleteSpace X] (f : ℕ → X) (x : X)
