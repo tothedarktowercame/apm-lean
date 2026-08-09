@@ -114,6 +114,21 @@ lemma apm_t92J07_exists_common_regularValue_of_null
     exact hx (Set.mem_iUnion.2 ⟨i, hi⟩)
   simpa [apm_t92J07_criticalValues] using hxi
 
+/-- Why this unblocks `apm_t92j07`: this is precisely manifold Sard for the
+critical-value predicate used in this file.  The compiled countable-union
+lemma consumes one instance of this statement for every family member. -/
+theorem apm_t92J07_bridge_1
+    {n m : ℕ} (hm : 0 < m) {M : Type*}
+    [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [ChartedSpace (apm_t92J07_E n) M]
+    [IsManifold (modelWithCornersSelf ℝ (apm_t92J07_E n)) ∞ M]
+    (f : M → apm_t92J07_E m)
+    (hf : ContMDiff
+      (modelWithCornersSelf ℝ (apm_t92J07_E n))
+      (modelWithCornersSelf ℝ (apm_t92J07_E m)) ∞ f) :
+    volume (apm_t92J07_criticalValues (n := n) (m := m) f) = 0 := by
+  sorry
+
 theorem apm_t92j07
     (m : ℕ) (d : PNat → ℕ) (M : PNat → Type*)
     [∀ i, TopologicalSpace (M i)]

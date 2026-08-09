@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "The zero-dimensional target branch is fully proved: tangent-space identification makes every derivative surjective and the critical-value set empty. For positive-dimensional targets, the regular-fiber packaging and countable null-set avoidance are compiled, leaving only manifold Sard and its unavailable chartwise extension bridge.",
+  "closer_hop": 4,
+  "boundary": "The exact positive-dimensional manifold Sard interface is now stated as apm_t92J07_bridge_1. It asserts nullity of the file's mfderiv-based critical-value set under the existing second-countable smooth-manifold hypotheses.",
   "imported_at": "2026-07-13T17:26:57.523610Z"
 }

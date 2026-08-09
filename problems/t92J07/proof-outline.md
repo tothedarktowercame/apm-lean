@@ -29,3 +29,12 @@ now reduced definitionally to common regular-value regularity.
   space in the form expected by the available Sard theorem.
 - Feed those nullity results directly to the compiled common-regular-value
   lemma, then apply the compiled fiber equivalence.
+
+## Hop 4: stated Sard bridge
+
+`apm_t92J07_bridge_1` states the missing theorem at the exact abstraction
+boundary used here: a smooth map from a second-countable finite-dimensional
+manifold to positive-dimensional Euclidean space has a null set of critical
+values, where criticality is defined by failure of surjectivity of `mfderiv`.
+It can be applied pointwise to the family and fed directly to
+`apm_t92J07_exists_common_regularValue_of_null`.
