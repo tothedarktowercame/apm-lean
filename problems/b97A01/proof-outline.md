@@ -26,3 +26,18 @@ characterizations and all five conjugacy-class cardinalities now compile.
 Classify normal subgroups of `S₄`, prove solvability and the universal
 order-24 action theorem, and
 establish the structural Sylow and nonisomorphism facts for `SL₂(F₃)`.
+
+## Hop 4 bridge statements
+
+- `apm_b97A01_bridge_normal_subgroups` states the complete normal-subgroup
+  lattice `1, V₄, A₄, S₄`.
+- `apm_b97A01_bridge_S4_solvable` states solvability, obtainable from the
+  corresponding normal series with abelian factors.
+- `apm_b97A01_bridge_order24_action` states the universal theorem for an
+  arbitrary finite group of order 24 with a nonnormal Sylow 3-subgroup.
+- `apm_b97A01_bridge_SL23_structure` states the two remaining concrete facts:
+  `SL₂(F₃)` is not isomorphic to `S₄` and has a nonnormal Sylow
+  3-subgroup.
+
+Together with the already proved cardinality of `SL₂(F₃)`, these four
+contracts are exactly the remaining tail of the frozen conjunction.

@@ -125,6 +125,46 @@ lemma apm_b97A01_complete_conjugacy_classification :
   exact ⟨hone, htrans, hdouble, hthree, hfour,
     apm_b97A01_conjugacy_exhaustive σ⟩
 
+/-- Why this unblocks `apm_b97a01`: this is the complete normal-subgroup
+lattice of `S₄`. It is a structural consequence of conjugacy-class closure
+and the already compiled five-class classification. -/
+theorem apm_b97A01_bridge_normal_subgroups :
+    ∀ N : Subgroup apm_b97A01_S4,
+      N.Normal ↔
+        N = ⊥ ∨ N = apm_b97A01_V4 ∨
+        N = alternatingGroup (Fin 4) ∨ N = ⊤ := by
+  sorry
+
+/-- Why this unblocks `apm_b97a01`: this supplies the requested derived-series
+property of `S₄`, for example via the normal series
+`1 ◁ V₄ ◁ A₄ ◁ S₄` with abelian factors. -/
+theorem apm_b97A01_bridge_S4_solvable :
+    IsSolvable apm_b97A01_S4 := by
+  sorry
+
+/-- Why this unblocks `apm_b97a01`: this is the universal order-24 action
+theorem isolated from the concrete `SL₂(F₃)` example. A nonnormal Sylow
+3-subgroup in a group not isomorphic to `S₄` yields the stated quotient map
+and forces a normal Sylow 2-subgroup. -/
+theorem apm_b97A01_bridge_order24_action :
+    ∀ (G : Type) [Group G] [Finite G],
+      Nat.card G = 24 →
+      ¬Nonempty (G ≃* apm_b97A01_S4) →
+      ∀ P3 : Sylow 3 G, ¬(P3 : Subgroup G).Normal →
+        ∃ phi : G →* apm_b97A01_S4,
+          Nat.card phi.ker = 2 ∧
+          ∃ P2 : Sylow 2 G, (P2 : Subgroup G).Normal := by
+  sorry
+
+/-- Why this unblocks `apm_b97a01`: these are the two remaining structural
+facts about the literal matrix group `SL₂(F₃)`. Its center distinguishes it
+from `S₄`, and its Sylow-3 subgroups are not normal. -/
+theorem apm_b97A01_bridge_SL23_structure :
+    ¬Nonempty (apm_b97A01_SL23 ≃* apm_b97A01_S4) ∧
+    ∃ P3 : Sylow 3 apm_b97A01_SL23,
+      ¬(P3 : Subgroup apm_b97A01_SL23).Normal := by
+  sorry
+
 theorem apm_b97a01 :
     (∀ σ : apm_b97A01_S4,
       (IsConj 1 σ ↔ σ.cycleType = {}) ∧
