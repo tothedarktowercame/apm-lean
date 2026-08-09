@@ -99,6 +99,54 @@ lemma apm_m98a06_positiveMode_admissible :
   change Real.sin (2 * (2 * Real.pi)) = 0
   convert Real.sin_nat_mul_pi 4 using 1 <;> ring
 
+/-- Why this unblocks the energy comparisons in `apm_m98a06`: integration
+by parts cancels the mixed term between a stationary curve and every
+endpoint-zero admissible variation, leaving an exact quadratic energy split. -/
+theorem apm_m98A06_bridge_1
+    (a y₀ ya : ℝ) (y η : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y)
+    (hη : apm_m98a06_Admissible a 0 0 η) :
+    apm_m98a06_I a (fun x ↦ y x + η x) =
+      apm_m98a06_I a y + apm_m98a06_I a η := by
+  sorry
+
+/-- Why this unblocks the Euler--Lagrange clauses of `apm_m98a06`: this is
+the fundamental-lemma classification of stationary curves for the resonant
+and nonresonant boundary-value problems. -/
+theorem apm_m98A06_bridge_2 :
+    (∀ y : ℝ → ℝ,
+      apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
+        ∃ B : ℝ, ∀ x ∈ Icc (0 : ℝ) (2 * Real.pi),
+          y x = Real.cos x + B * Real.sin x) ∧
+    ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
+      ∀ y : ℝ → ℝ, apm_m98a06_IsStationary a 0 1 y ↔
+        ∀ x ∈ Icc (0 : ℝ) a, y x = Real.sin x / Real.sin a := by
+  sorry
+
+/-- Why this unblocks the Sobolev portion of `apm_m98a06`: this is the sharp
+weak Poincaré--Wirtinger theorem for the artifact's explicit `H¹₀` encoding,
+including its equality modes, unbounded-above energy, and optimal constant. -/
+theorem apm_m98A06_bridge_3 :
+    ((∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+        ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+        0 ≤ ∫ x, (dy x) ^ 2 - (y x) ^ 2
+          ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ∧
+      (∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+        ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+        (∫ x, (dy x) ^ 2 - (y x) ^ 2
+          ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0 ↔
+          ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+            y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+              fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) ∧
+      (∀ M : ℝ, ∃ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy ∧
+        ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
+        M < ∫ x, (dy x) ^ 2 - (y x) ^ 2
+          ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ∧
+      IsLeast {C : ℝ | ∀ f df : ℝ → ℝ, apm_m98a06_InH10Pi f df →
+        ∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) ≤
+          C * ∫ x, (df x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))} 1) := by
+  sorry
+
 theorem apm_m98a06 :
     ((∀ y : ℝ → ℝ,
         apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
