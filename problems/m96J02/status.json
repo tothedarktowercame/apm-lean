@@ -10,12 +10,12 @@
     "problem_tex": "apm/m96J02.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "defective",
+  "closer_hop": 4,
+  "defect": "Endpoint mismatch: ContDiffOn on Icc 0 T is one-sided, but the hypotheses use global deriv at 0. For g=0, alpha=beta=0, x(t)=|t|, y=0, every hypothesis holds for every T>0 while x(T)=T != 0=y(T).",
   "imported_at": "2026-07-13T17:26:55.485873Z"
 }
