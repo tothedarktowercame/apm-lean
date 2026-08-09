@@ -41,6 +41,15 @@ lemma apm_m00A05_hasDerivAt_of_isSolution {u₀ : ℝ} {u : ℝ → ℝ}
   convert hd.hasDerivAt using 1
   linarith [hu.2.2.2 t ht]
 
+/-- Why this unblocks `apm_m00a05`: this is the missing globalization of the
+local Picard--Lindelöf solutions for the globally Lipschitz autonomous vector
+field.  It produces a single half-line representative in exactly the frozen
+solution predicate; the endpoint-safe Gronwall argument recorded below then
+supplies uniqueness. -/
+theorem apm_m00A05_bridge_global_exists (u₀ : ℝ) :
+    ∃ u : ℝ → ℝ, apm_m00A05_isSolution u₀ u := by
+  sorry
+
 theorem apm_m00a05 :
     (∀ u₀ : ℝ,
       ∃ u : ℝ → ℝ,

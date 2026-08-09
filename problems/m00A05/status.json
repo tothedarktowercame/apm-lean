@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Hop 3 isolates a valid endpoint-safe uniqueness proof via Gronwall on [delta,t] followed by delta tending to zero; global Picard gluing and the scalar attraction argument remain open.",
+  "closer_hop": 4,
+  "closer_progress": "Hop 4 states the exact unproved global Picard gluing contract: every initial value has a single half-line representative satisfying the frozen solution predicate. The endpoint-safe uniqueness and scalar attraction arguments remain local proof work.",
   "imported_at": "2026-07-13T17:26:54.264489Z"
 }

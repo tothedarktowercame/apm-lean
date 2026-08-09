@@ -37,3 +37,13 @@ and the common initial value make the right side tend to zero as `δ ↓ 0`.
 This avoids demanding a derivative at zero, unlike the packaged global and
 closed-interval uniqueness theorems. It still does not construct the global
 solution required by the first conjunct.
+
+## Hop 4 bridge contract
+
+`apm_m00A05_bridge_global_exists` states precisely the missing globalization:
+for every initial value there is one real-function representative satisfying
+`apm_m00A05_isSolution` on the full nonnegative half-line. Its proof must glue
+the uniformly local Picard solutions and verify continuity at zero plus the
+interior derivative equation. The declaration is intentionally unproved and
+does not fold the separately identified endpoint-safe uniqueness argument into
+the existence contract.
