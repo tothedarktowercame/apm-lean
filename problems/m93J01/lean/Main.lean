@@ -96,6 +96,19 @@ lemma apm_m93J01_centered6_isBigO
   simp only [apm_m93J01_kappa]
   ring
 
+/-- Why this unblocks `apm_m93j01`: applying the order-four centered Taylor
+estimate to `iteratedDeriv 2 y` requires transferring `ContDiff ℝ 8 y` to that
+derived function and identifying its second and fourth iterated derivatives
+with orders four and six of `y`.  This is precisely the remaining analytic
+estimate used by part (c) and the final Numerov substitution. -/
+theorem apm_m93J01_bridge_1
+    (y : ℝ → ℝ) (hy : ContDiff ℝ 8 y) (x : ℝ) :
+    (fun h : ℝ ↦
+      iteratedDeriv 2 y (x + h) + iteratedDeriv 2 y (x - h) -
+        2 * iteratedDeriv 2 y x - h ^ 2 * iteratedDeriv 4 y x)
+      =O[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+  sorry
+
 theorem apm_m93j01
     (y V : ℝ → ℝ) (hy : ContDiff ℝ 8 y) :
     apm_m93J01_kappa = (1 / 12 : ℝ) ∧
