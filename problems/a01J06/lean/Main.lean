@@ -117,5 +117,32 @@ theorem apm_a01j06 (f : ℂ → ℂ) (ω : ℕ → ℂ) (A B : ℝ)
   inside each disk, apply the compiled aggregation identity, derive an `O(r)`
   count from Jensen and the exponential bound, and complete the dyadic-shell
   geometric comparison for `α > 1`. No statement defect was found.
+
+  HOP 4 isolates the absent library-level content as the following two exact
+  contracts (not introduced as declarations, since neither was proved):
+
+    theorem apm_a01J06_linear_zero_count
+        (f : ℂ → ℂ) (omega : ℕ → ℂ) (A B : ℝ)
+        (hf_entire : Differentiable ℂ f) (hf_nonzero : f ≠ 0)
+        (hA : 0 < A) (hB : 0 < B)
+        (hf_bound : apm_a01J06_ExpTypeBound f A B)
+        (homega : apm_a01J06_EnumeratesZeros f omega) :
+        ∃ C : ℝ, 0 ≤ C ∧ ∀ R : ℝ, 1 ≤ R →
+          Finite {n : ℕ // ‖omega n‖ ≤ R} ∧
+          (Nat.card {n : ℕ // ‖omega n‖ ≤ R} : ℝ) ≤ C * R
+
+    theorem apm_a01J06_summable_of_linear_count
+        (omega : ℕ → ℂ) (C : ℝ) (hC : 0 ≤ C)
+        (hcount : ∀ R : ℝ, 1 ≤ R →
+          Finite {n : ℕ // ‖omega n‖ ≤ R} ∧
+          (Nat.card {n : ℕ // ‖omega n‖ ≤ R} : ℝ) ≤ C * R)
+        (α : ℝ) (hα : 1 < α) :
+        Summable (fun n : ℕ ↦ Real.rpow (1 + ‖omega n‖) (-α))
+
+  The first is exactly Jensen plus finite divisor aggregation; the second is
+  the dyadic-shell geometric comparison. Their composition closes the frozen
+  theorem. Searches of `JensenFormula`, value-distribution log counting,
+  locally finite divisors, and summability/comparison APIs found the
+  ingredients but no declarations proving either contract in this encoding.
   -/
   sorry

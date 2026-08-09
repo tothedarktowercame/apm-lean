@@ -33,6 +33,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "closer_progress": "Finite multiplicity aggregation is compiled: the enumeration preimage of any finite value set is finite, and its cardinality equals the finsum of analyticOrderNatAt over that set. Remaining work is the quantitative Jensen-to-linear-disk-count estimate and the dyadic-shell summability comparison.",
+  "closer_progress": "Hop 4 isolates two exact missing contracts without adding unproved declarations: Jensen plus divisor aggregation gives a finite linear disk-count bound, and a generic dyadic-shell theorem converts that bound to the indexed Real.rpow summability conclusion. Both include subtype finiteness explicitly.",
   "imported_at": "2026-05-01T19:52:19.168029Z"
 }

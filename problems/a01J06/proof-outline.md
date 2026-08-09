@@ -47,3 +47,17 @@ Thus the abstract finite-fiber aggregation step is closed. The remaining
 divisor work is to extract its finite disk support and identify that support's
 mass with the Jensen/log-counting expression before proving the linear bound
 and dyadic summability estimate.
+
+## Hop 4: exact missing contracts
+
+The remaining work has been reduced to two precise reusable lemmas:
+
+1. `apm_a01J06_linear_zero_count`: the analytic hypotheses and
+   multiplicity-preserving enumeration imply that every disk-index subtype is
+   finite and its cardinality is bounded by `C * R` for `R ≥ 1`.
+2. `apm_a01J06_summable_of_linear_count`: any complex sequence satisfying
+   that finite linear disk-count bound has summable weights
+   `(1 + ‖omega n‖) ^ (-α)` for every `α > 1`.
+
+Finiteness is included explicitly in both contracts; relying on `Nat.card`
+alone would be invalid because it totalizes infinite types to zero.
