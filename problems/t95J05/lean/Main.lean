@@ -176,5 +176,24 @@ theorem apm_t95j05 :
   formula identifying `∫_{S³} x₀²` with `π²/2`. The live bridge is therefore
   the finite packaging of that coordinate reflection plus the substantive
   Hausdorff-normalized square moment. The frozen statement is unchanged.
+
+  HOP 4 searched the more general inner-product-space reflection API.  It
+  provides `Submodule.reflection`, but using it here still requires computing
+  the orthogonal projection onto a coordinate line and restricting the result
+  to the sphere subtype.  More decisively, no Hausdorff-normalized sphere
+  moment or coarea theorem was found.  A precise sufficient missing lemma is:
+
+    let μ := Measure.hausdorffMeasure 3
+    MeasureTheory.Integrable
+        (fun x : t95J05SphereThree ↦ x.1 1 ^ 3 * x.1 0) μ ∧
+      MeasureTheory.Integrable
+        (fun x : t95J05SphereThree ↦ x.1 0 ^ 2) μ ∧
+      (∫ x : t95J05SphereThree, x.1 1 ^ 3 * x.1 0 ∂μ) = 0 ∧
+      (∫ x : t95J05SphereThree, x.1 0 ^ 2 ∂μ) = Real.pi ^ 2 / 2
+
+  The two integrability clauses permit `integral_sub`; the two evaluations,
+  together with `t95J05InclusionPullback_expand`, give the required sphere
+  integral `-2 * Real.pi ^ 2` by ring arithmetic.  This statement is the
+  remaining mathematical content rather than a coercion-only wrapper.
   -/
   sorry
