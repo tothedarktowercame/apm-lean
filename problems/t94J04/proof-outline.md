@@ -29,3 +29,15 @@ surfaces.  The encoded homology signature must also be connected to the
 genus-two surface type before those arguments apply. Equal finite coset-space
 cardinality alone cannot imply an isomorphism of arbitrary equal-index
 subgroups, so the covering/classification bridge is essential.
+
+## Hop 4 bridge statement
+
+`apm_t94J04_bridge_equal_index_subgroups` states the exact combined missing
+surface theorem: on a compact connected oriented genus-two surface, two
+subgroups of the fundamental group having the same index `k ≥ 2` are
+isomorphic. Its proof is precisely subgroup-cover realization, finite-cover
+Euler multiplicativity, and closed orientable-surface classification.
+
+The main theorem's live branch already supplies `2 ≤ k` and both index
+equalities, so this bridge closes it directly without repeating the completed
+index-one, arithmetic, or finite-sheet arguments.

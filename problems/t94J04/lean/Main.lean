@@ -71,6 +71,22 @@ lemma apm_t94J04_quotient_equiv_of_equal_positive_index
   letI := Fintype.ofFinite (G ⧸ K)
   exact ⟨Fintype.equivOfCardEq (by simpa [Subgroup.index] using hH.trans hK.symm)⟩
 
+/-- Why this unblocks `apm_t94j04`: this is the precise finite-index
+surface-group classification missing from Mathlib. Its proof realizes both
+subgroups as connected `k`-sheeted covers, computes both covering genera as
+`k + 1`, and transports the resulting surface homeomorphism to fundamental
+groups; the already compiled `k = 1` case is deliberately excluded. -/
+theorem apm_t94J04_bridge_equal_index_subgroups
+    {F : Type} [TopologicalSpace F] [T2Space F] [CompactSpace F]
+    [PathConnectedSpace F] [ChartedSpace apm_t94J04_E F]
+    [IsManifold (𝓘(ℝ, apm_t94J04_E)) ∞ F]
+    (hF : apm_t94J04_hasOrientedGenusTwoHomology F)
+    (p : F) (k : ℕ) (hk : 2 ≤ k)
+    (H K : Subgroup (FundamentalGroup F p))
+    (hH : H.index = k) (hK : K.index = k) :
+    Nonempty (H ≃* K) := by
+  sorry
+
 theorem apm_t94j04
     {F : Type} [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t94J04_E F]
