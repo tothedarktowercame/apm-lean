@@ -167,6 +167,27 @@ def apm_m98J02_translateTest (x : apm_m98J02_E)
     (x y : apm_m98J02_E) (φ : apm_m98J02_Test) :
     apm_m98J02_translateTest x φ y = φ (x + y) := rfl
 
+/-- Why this unblocks the cutoff step in `apm_m98j02`: every compact subset
+of the Euclidean plane admits a compactly supported smooth function that is
+identically one on that subset. -/
+theorem apm_m98J02_bridge_1
+    (K : Set apm_m98J02_E) (hK : IsCompact K) :
+    ∃ χ : apm_m98J02_Test, ∀ x ∈ K, χ x = 1 := by
+  sorry
+
+/-- Why this unblocks the convolution step in `apm_m98j02`: this packages the
+iterated pairing
+`φ ↦ u (x ↦ χ x * v (y ↦ φ (x + y)))` as a continuous linear functional on
+the LF space of test functions.  The conclusion records all cutoff and
+translation identities needed by the concrete convolution definition. -/
+theorem apm_m98J02_bridge_2
+    (u v : apm_m98J02_Dist) (K : Set apm_m98J02_E)
+    (hK : IsCompact K)
+    (huK : ∀ η : apm_m98J02_Test,
+      Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K → u η = 0) :
+    ∃ w : apm_m98J02_Dist, apm_m98J02_isConvolution u v w := by
+  sorry
+
 theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
