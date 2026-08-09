@@ -7,15 +7,21 @@ open MeasureTheory
 
 ## Statement repairs
 
-The final absolute-value bar in the TeX display is a typographical delimiter;
-the intended error-free claims are the exterior derivative and two integrals.
+1. The final absolute-value bar in the TeX display is a typographical
+   delimiter; the intended error-free claims are the exterior derivative and
+   two integrals.
+2. The parametrization of `C₂` is required to be injective on the half-open
+   period `[0, 2π)`.  This expresses the source's single traversal of the
+   oriented intersection while retaining the closed endpoint equation, and
+   excludes multiply-traversed parametrizations whose periods are multiplied.
 
 ## Encoding note
 
 A one-form on the coordinate domain is represented by its three coefficient
 functions, and its line integral is the integral of evaluation on the curve's
 velocity.  `C₂` is retained through its two defining equations and its stated
-counterclockwise orientation.
+counterclockwise orientation; injectivity on the half-open period records that
+the geometric component is traversed exactly once.
 -/
 
 def apm_t00a05_U := {p : ℝ × ℝ × ℝ // p.1 ≠ 0 ∨ p.2.1 ≠ 0}
@@ -45,6 +51,7 @@ noncomputable def apm_t00a05_C1 (t : ℝ) : ℝ × ℝ × ℝ :=
 
 def apm_t00a05_IsC2 (γ : ℝ → ℝ × ℝ × ℝ) : Prop :=
   ContDiff ℝ 1 γ ∧ γ 0 = γ (2 * Real.pi) ∧
+  Set.InjOn γ (Set.Ico (0 : ℝ) (2 * Real.pi)) ∧
   (∀ t, 0 ≤ t → t ≤ 2 * Real.pi →
     2 * (γ t).1 ^ 2 + (γ t).2.1 ^ 2 + (γ t).2.2 ^ 2 = 10 ∧
     (γ t).2.2 = Real.exp ((γ t).2.1 - (γ t).1)) ∧
@@ -57,44 +64,4 @@ theorem apm_t00a05 :
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
     (∀ γ, apm_t00a05_IsC2 γ →
       apm_t00a05_lineIntegral γ 0 (2 * Real.pi) = -2 * Real.pi) := by
-  have hdOmega : ∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0 := by
-    rintro ⟨⟨x, y, z⟩, hxy⟩
-    have hden : x ^ 2 + y ^ 2 ≠ 0 := by
-      rcases hxy with hx | hy <;> positivity
-    have hQ : deriv (fun u : ℝ => -u / (u ^ 2 + y ^ 2)) x =
-        (x ^ 2 - y ^ 2) / (x ^ 2 + y ^ 2) ^ 2 := by
-      have h := ((hasDerivAt_id x).neg.div
-        (((hasDerivAt_id x).pow 2).add_const (y ^ 2)) hden).deriv
-      convert h using 1 <;> simp [div_eq_mul_inv] <;> field_simp <;> ring <;> simp
-    have hP : deriv (fun v : ℝ => v / (x ^ 2 + v ^ 2)) y =
-        (x ^ 2 - y ^ 2) / (x ^ 2 + y ^ 2) ^ 2 := by
-      have h := ((hasDerivAt_id y).div
-        ((hasDerivAt_const y (x ^ 2)).add ((hasDerivAt_id y).pow 2)) hden).deriv
-      convert h using 1 <;> simp [div_eq_mul_inv] <;> field_simp <;> ring <;> simp
-    simp [apm_t00a05_dOmega, apm_t00a05_omega, hQ, hP]
-  have hC1 : apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) =
-      -2 * Real.pi := by
-    simp [apm_t00a05_lineIntegral, apm_t00a05_C1, apm_t00a05_omega]
-    rw [show (fun t : ℝ ↦ -(Real.sin t * Real.sin t) +
-        -(Real.cos t * Real.cos t)) = fun _ ↦ -1 by
-      funext t
-      nlinarith [Real.sin_sq_add_cos_sq t]]
-    simp [Real.pi_pos.le]
-  /-
-  Boundary (closer hop 2; defective frozen statement): the unit-circle period
-  is proved above by direct evaluation.
-  The remaining universal `C2` claim is not derivable from the stated
-  orientation predicate: positivity of the signed-area integral fixes the
-  sign but not the winding multiplicity. A positive multiple traversal of
-  the same counterclockwise component still satisfies every field of
-  `apm_t00a05_IsC2`, while the angle-form period is multiplied by that
-  traversal count. I also searched Mathlib's winding-number, convex-level-set,
-  differential-form, and line-integral APIs; no theorem could bridge these
-  raw `deriv` integrals, and such a bridge would not repair the missing
-  single-traversal hypothesis. This hop rechecked Mathlib's path
-  reparameterization APIs and all closed winding-number artifacts. They
-  confirm that range/image constraints are invariant under reparameterization,
-  while the frozen predicate contains no injectivity, embedding, or degree-one
-  field. The statement therefore needs review; it cannot be closed honestly.
-  -/
-  exact ⟨hdOmega, hC1, sorry⟩
+  sorry
