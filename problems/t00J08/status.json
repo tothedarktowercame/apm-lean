@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "notes": "Rank seven is realized, ranks zero and one are excluded, and these obstructions are packaged as the uniform necessary bound 2 ≤ n. Mathlib's Schreier rank bound is not the quantitative rank-minus-one equality needed to construct and classify ranks 2, 3, and 4.",
+  "notes": "Hop 4 states the exact quantitative Nielsen-Schreier formula specialized to rank seven and a constructive index-d subgroup theorem with exact rank. The former excludes all other ranks and the latter realizes ranks 2, 3, and 4; the frozen main statement is unchanged.",
   "imported_at": "2026-07-13T17:26:56.660844Z"
 }

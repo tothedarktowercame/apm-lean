@@ -29,3 +29,17 @@ The canonical Lean attempt is `lean/Main.lean`, with one documented boundary.
   and does not imply this equation.
 - Use the equation to exclude all remaining ranks and construct the index
   `6`, `3`, and `2` examples for ambient ranks `2`, `3`, and `4`.
+
+## Hop 4 bridge statements
+
+- `apm_t00J08_bridge_rank_formula` states the sharp Nielsen--Schreier
+  equation specialized to a finite-index subgroup isomorphic to the
+  rank-seven free group: `6 = G.index * (n - 1)`.
+- `apm_t00J08_bridge_subgroup_of_index` gives the constructive general form:
+  for positive `n,d`, the rank-`n` free group has an index-`d` subgroup free
+  of rank `1 + d * (n - 1)`.
+
+The first statement leaves only the positive divisor possibilities for `6`,
+hence ambient ranks `2,3,4,7`. The second supplies the missing witnesses by
+specializing to `(n,d) = (2,6)`, `(3,3)`, and `(4,2)`; rank seven was already
+compiled using the top subgroup.
