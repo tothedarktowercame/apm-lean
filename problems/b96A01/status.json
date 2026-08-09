@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "statement-defective",
-  "closer_hop": 1,
-  "note": "Frozen first conjunct is false: V=Q, s={1,2}, A=closure(s) satisfies the premise but no Q-basis can contain both dependent distinct vectors 1 and 2. Proof work stopped per frozen-statement protocol.",
+  "closer_hop": 4,
+  "note": "Hop 4 reconfirmed the frozen first conjunct is false: V=Q, s={1,2}, A=closure(s) satisfies the premise but no Q-basis can contain both dependent distinct vectors 1 and 2. The source asks instead for some basis subset generating A, so no bridge declaration was added.",
   "imported_at": "2026-07-13T17:26:54.066528Z"
 }
