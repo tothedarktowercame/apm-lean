@@ -7,10 +7,15 @@ open MeasureTheory Filter
 
 ## Statement repairs
 
-The source asks for the “cokernel” to be described.  For a projection this is
-canonically represented by its complementary (high-frequency) subspace; the
-statement records that direct-sum decomposition rather than the source note's
-incorrect description of the cokernel as functions with nonzero low modes.
+1. The source asks for the “cokernel” to be described.  For a projection this
+   is canonically represented by its complementary (high-frequency) subspace;
+   the statement records that direct-sum decomposition rather than the source
+   note's incorrect description of the cokernel as functions with nonzero low
+   modes.
+2. Variations in the Euler equation are restricted to `Lᵖ` directions.  Without
+   `MemLp h (ENNReal.ofReal p) μ`, the path immediately leaves the functional's
+   domain and `ENNReal.toReal` turns an infinite norm into the junk value zero,
+   so the asserted derivative can fail to exist.
 
 ## Encoding note
 
@@ -63,20 +68,7 @@ theorem apm_m93j05 :
       (∀ f₀, MemLp f₀ (ENNReal.ofReal p) μ →
         (∀ f, MemLp f (ENNReal.ofReal p) μ →
           apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f) →
-        ∀ h, HasDerivAt (fun t : ℝ => apm_m93j05_J N p g (f₀ + t • h)) 0 0)) := by
-  /-
-  Boundary / statement defect: the final stationarity clause quantifies over
-  every function `h : ℝ → ℝ`, although both the minimization premise and
-  the intended variational argument are restricted to `MemLp` competitors.
-  For a direction outside `L^p`, `f₀ + t • h` need not be admissible for any
-  nonzero `t`, so minimality supplies no derivative information.
-
-  This is especially material in the present encoding: an infinite `eLpNorm`
-  becomes zero after `.toReal` because `ENNReal.top.toReal = 0`. Thus the
-  displayed functional is not an extended-real coercive functional off its
-  `MemLp` domain, and its behavior along non-`L^p` directions cannot be
-  justified by the direct method. The intended conclusion would need at
-  least `MemLp h (ENNReal.ofReal p) μ`. Since the statement is frozen, I did
-  not add that hypothesis or attempt to repair the theorem.
-  -/
+        ∀ h, MemLp h (ENNReal.ofReal p) μ →
+          HasDerivAt
+            (fun t : ℝ => apm_m93j05_J N p g (f₀ + t • h)) 0 0)) := by
   sorry
