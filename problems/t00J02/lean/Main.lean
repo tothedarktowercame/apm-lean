@@ -121,6 +121,27 @@ lemma apm_t00j02_degree_eq_zero_of_homologyMap_eq_zero
   simp only [map_zero, hx, mul_one] at h
   exact h.symm
 
+/-- Why this unblocks `apm_t00j02`: this is the missing transverse-preimage
+and Poincare-duality bridge.  An essential handle circle pairs nontrivially
+with the surface fundamental class, while the disk-bounding hypothesis makes
+every component of its transverse inverse image null-homologous; naturality
+of the intersection pairing therefore forces the induced map on `H₂` to
+vanish. -/
+theorem apm_t00J02_bridge_1
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (hS : apm_t00j02_hasGenusTwo S)
+    (f : C(S, S)) (hf : ContMDiff apm_t00j02_I2 apm_t00j02_I2 ∞ f)
+    (c : C(Circle, S))
+    (hc : Topology.IsEmbedding c)
+    (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
+    (hhandle : apm_t00j02_wrapsHandle c)
+    (htrans : apm_t00j02_transverse f c)
+    (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c)) :
+    apm_t00j02_homologyMap 2 f = 0 := by
+  sorry
+
 theorem apm_t00j02
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
