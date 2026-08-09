@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "closer_hop": 3,
-  "boundary": "Canonical polygon projections are compiled as continuous surjections, and the Euler equation now uniquely forces genus 2n+2 in the nonorientable case and n+1 in the orientable case for arbitrary degree n. Remaining are explicit cover construction and verification, finite-cover Euler multiplicativity, orientation parity, and compact-surface classification.",
+  "closer_hop": 4,
+  "boundary": "Hop 4 states two precise unproved topological contracts: construction and covering verification of the three concrete polygon covers, and exhaustive classification of connected five- and six-sheeted covers via Euler multiplicativity, orientation parity, and compact-surface classification.",
   "imported_at": "2026-07-13T17:26:58.482218Z"
 }

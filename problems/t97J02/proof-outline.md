@@ -28,11 +28,15 @@ maps. One `sorry` remains.
 - Construct the orientable degree-six cover as a three-sheeted cyclic cover of
   the orientation double cover `Σ₃ → N₄`, yielding `Σ₇`.
 
-## Open boundary
+## Hop 4 bridge contracts
 
-Mathlib has general covering-map definitions but no Euler characteristic for
-topological surfaces, finite-cover multiplicativity, orientation-cover
-factorization, or compact-surface classification. It also lacks a gluing
-theorem that verifies the required explicit maps between these `EqvGen`
-polygon quotients are covering maps. Closed artifacts `t01A02`, `t01A04`,
-`t03J03`, and `t91A02` do not supply these bridges.
+- `apm_t97J02_bridge_candidate_covers` states the simultaneous construction
+  and covering verification of the concrete covers `N₁₂ → N₄`, `Σ₇ → N₄`,
+  and `N₁₄ → N₄`.
+- `apm_t97J02_bridge_classify_five_and_six_fold_covers` states the exhaustive
+  classification of arbitrary connected five- and six-sheeted covers. Its
+  proof must combine finite-cover Euler multiplicativity, orientation parity,
+  and compact-surface classification with the compiled genus arithmetic.
+
+Both declarations are intentionally unproved. Together they reduce the main
+theorem to rearranging conjunctions, without modifying its frozen statement.

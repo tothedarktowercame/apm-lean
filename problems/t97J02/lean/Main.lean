@@ -123,6 +123,36 @@ structure apm_t97J02_CoverWitness (orientable : Bool) (genus n : ℕ) where
   p : apm_t97J02_Surface orientable genus → apm_t97J02_X
   covering : apm_t97J02_IsNfoldCover n p
 
+/-- Why this unblocks `apm_t97j02`: this is the missing polygon-gluing
+construction and covering-chart verification for all three concrete covers.
+It supplies the three existential cover-witness conjuncts of the main
+theorem. -/
+theorem apm_t97J02_bridge_candidate_covers :
+    Nonempty (apm_t97J02_CoverWitness false 12 5) ∧
+    Nonempty (apm_t97J02_CoverWitness true 7 6) ∧
+    Nonempty (apm_t97J02_CoverWitness false 14 6) := by
+  sorry
+
+/-- Why this unblocks `apm_t97j02`: this packages finite-cover Euler
+multiplicativity, the odd-degree orientation obstruction, and classification
+of compact connected surfaces for the concrete polygon models.  It supplies
+both universal classification conjuncts of the main theorem. -/
+theorem apm_t97J02_bridge_classify_five_and_six_fold_covers :
+    (∀ (E : Type) [TopologicalSpace E] [T2Space E] [CompactSpace E]
+        [ConnectedSpace E] [ChartedSpace apm_t97J02_E2 E]
+        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) ⊤ E]
+        (p : E → apm_t97J02_X),
+      apm_t97J02_IsNfoldCover 5 p →
+        Nonempty (E ≃ₜ apm_t97J02_Surface false 12)) ∧
+    (∀ (E : Type) [TopologicalSpace E] [T2Space E] [CompactSpace E]
+        [ConnectedSpace E] [ChartedSpace apm_t97J02_E2 E]
+        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) ⊤ E]
+        (p : E → apm_t97J02_X),
+      apm_t97J02_IsNfoldCover 6 p →
+        Nonempty (E ≃ₜ apm_t97J02_Surface true 7) ∨
+        Nonempty (E ≃ₜ apm_t97J02_Surface false 14)) := by
+  sorry
+
 theorem apm_t97j02 :
     Nonempty (apm_t97J02_CoverWitness false 12 5) ∧
     (∀ (E : Type) [TopologicalSpace E] [T2Space E] [CompactSpace E]
