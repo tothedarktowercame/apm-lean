@@ -87,6 +87,45 @@ lemma apm_b00j01_three_dvd_finiteField_card_aut
   rw [apm_b00j01_finiteField_card_aut M]
   exact apm_b00j01_three_dvd_finiteField_finrank M
 
+/-- Why this unblocks the rational-field conjunct of `apm_b00j01`: it is the
+missing concrete Galois-correspondence computation for the splitting field of
+`X³ - 7`, including the exhaustive list of intermediate fields and their
+Galois status. -/
+theorem apm_b00J01_bridge_1
+    (K : Type*) [Field K] [Algebra ℚ K]
+    [IsSplittingField ℚ K (apm_b00j01_poly ℚ)] :
+    Nonempty ((K ≃ₐ[ℚ] K) ≃* Equiv.Perm (Fin 3)) ∧
+      ∃ (E₂ : IntermediateField ℚ K) (E₃ : Fin 3 → IntermediateField ℚ K),
+        Module.finrank ℚ E₂ = 2 ∧
+        Function.Injective E₃ ∧
+        (∀ i, Module.finrank ℚ (E₃ i) = 3) ∧
+        (∀ E : IntermediateField ℚ K,
+          E = ⊥ ∨ E = E₂ ∨ (∃ i, E = E₃ i) ∨ E = ⊤) ∧
+        IsGalois ℚ E₂ ∧
+        (∀ i, ¬IsGalois ℚ (E₃ i)) := by
+  sorry
+
+/-- Why this unblocks the real-field conjunct of `apm_b00j01`: it identifies
+the real splitting field as the quadratic extension obtained by adjoining a
+nonreal root and computes its two-element automorphism group. -/
+theorem apm_b00J01_bridge_2
+    (L : Type*) [Field L] [Algebra ℝ L]
+    [IsSplittingField ℝ L (apm_b00j01_poly ℝ)] :
+    Nonempty ((L ≃ₐ[ℝ] L) ≃* Multiplicative (ZMod 2)) := by
+  sorry
+
+/-- Why this unblocks the finite-field conjunct of `apm_b00j01`: the exact
+degree says that an irreducible cubic's root field already contains all three
+roots, and the second conjunct transports the canonical degree-three
+finite-field Frobenius action to the arbitrary splitting field. -/
+theorem apm_b00J01_bridge_3
+    [Fact (Nat.Prime 13)]
+    (M : Type*) [Field M] [Algebra (ZMod 13) M]
+    [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))] :
+    Module.finrank (ZMod 13) M = 3 ∧
+      Nonempty ((M ≃ₐ[ZMod 13] M) ≃* Multiplicative (ZMod 3)) := by
+  sorry
+
 theorem apm_b00j01 :
     (∀ (K : Type*) [Field K] [Algebra ℚ K]
         [IsSplittingField ℚ K (apm_b00j01_poly ℚ)],
