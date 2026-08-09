@@ -30,3 +30,13 @@ explicit, continuous, and surjective.
 
 Existing Mayer--Vietoris APIs concern sheaf cohomology, not this singular
 homology functor.
+
+## Hop 4 bridge statements
+
+- `apm_t02A03_bridge_1` states the missing based torus fundamental-group
+  computation.
+- `apm_t02A03_bridge_2` states the exact fundamental-group and degreewise
+  singular-homology computation for the compiled wedge pushout.
+
+Together their conclusions are precisely the conjuncts of the frozen main
+theorem.  Their proofs are intentionally left open for subsequent work.

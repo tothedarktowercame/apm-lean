@@ -131,6 +131,39 @@ lemma apm_t02a03_wedgeDesc_unique
   | inl x => exact huT x
   | inr z => exact huC z
 
+/-- Why this unblocks `apm_t02a03`: this is the missing based fundamental-
+group computation for the torus summand.  It isolates the circle computation
+and product preservation from the separate wedge calculation. -/
+theorem apm_t02A03_bridge_1 :
+    Nonempty
+      (FundamentalGroup apm_t02a03_Torus (1, 1) ≃*
+        Multiplicative (ℤ × ℤ)) := by
+  sorry
+
+/-- Why this unblocks `apm_t02a03`: this packages precisely the invariant
+preservation and computation for the compiled torus-circle pushout.  Its five
+conjuncts are the remaining fundamental-group and singular-homology claims for
+the explicit wedge quotient. -/
+theorem apm_t02A03_bridge_2 :
+    Nonempty
+      (FundamentalGroup apm_t02a03_Y apm_t02a03_ybase ≃*
+        Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ)) ∧
+    Nonempty
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 0).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y) ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y) ≅
+        ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
+    Nonempty
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y) ≅ ModuleCat.of ℤ ℤ) ∧
+    (∀ n : ℕ, 3 ≤ n →
+      Limits.IsZero
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y))) := by
+  sorry
+
 theorem apm_t02a03 :
     Nonempty
       (FundamentalGroup apm_t02a03_Torus (1, 1) ≃*

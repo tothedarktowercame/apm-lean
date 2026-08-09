@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "The quotient projection, based summand inclusions, and full continuous pushout eliminator with restriction and uniqueness laws are compiled. Remaining work is exclusively the absent circle fundamental-group computation, topological Seifert--van Kampen theorem, and singular Mayer--Vietoris or wedge-homology calculation.",
+  "closer_hop": 4,
+  "boundary": "The missing invariant computations are now stated precisely as apm_t02A03_bridge_1 (the based torus fundamental group) and apm_t02A03_bridge_2 (the wedge fundamental group and degreewise singular homology). Both bridges and the original main theorem remain unproved.",
   "imported_at": "2026-07-13T17:26:56.924953Z"
 }
