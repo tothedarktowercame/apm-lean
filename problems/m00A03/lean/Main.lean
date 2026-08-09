@@ -54,6 +54,15 @@ lemma apm_m00A03_derivedSet_subset_zero_of_annular_finite
   have hyT : y ∈ T := ⟨hy.2, hynorm⟩
   exact hy.1.2 ⟨hyT, by simpa [hyne]⟩
 
+/-- Why this unblocks `apm_m00a03`: this is the precise Riesz--Schauder
+finiteness assertion still missing from Mathlib. The already compiled
+topological lemma derives the claimed spectral derived-set bound from it. -/
+theorem apm_m00A03_bridge_1
+    {X : Type} [NormedAddCommGroup X] [NormedSpace ℂ X]
+    [CompleteSpace X] (A : X →L[ℂ] X) (hA : IsCompactOperator A) :
+    ∀ ε : ℝ, 0 < ε → {z ∈ spectrum ℂ A | ε < ‖z‖}.Finite := by
+  sorry
+
 theorem apm_m00a03
     (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X]
     [CompleteSpace X] :

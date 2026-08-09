@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Hop 3 proves the derived-set conclusion from annular finiteness; the sole remaining sorry is exactly the compact-operator annular spectral-finiteness argument.",
+  "closer_progress": "Hop 4 states the compact-operator annular spectral-finiteness argument precisely as apm_m00A03_bridge_1; Hop 3 already proves the derived-set conclusion from that assertion.",
   "imported_at": "2026-07-13T17:26:54.251473Z"
 }

@@ -28,3 +28,11 @@ build their strict invariant finite-span flag and shift identity, then apply
 Riesz's lemma to produce the separated sequence. This annular-finiteness claim
 is now the only proposition behind the remaining `sorry`; the derived-set
 conclusion is compiled from it.
+
+## Hop 4 bridge statement
+
+`apm_m00A03_bridge_1` now states the missing Riesz--Schauder interface
+verbatim: for a compact operator on a complex Banach space, the spectrum has
+only finitely many points above each positive norm cutoff. It can replace the
+local `hfinite` proof directly; the existing derived-set helper completes the
+rest of the frozen theorem.
