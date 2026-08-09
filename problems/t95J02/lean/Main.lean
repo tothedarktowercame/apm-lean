@@ -127,6 +127,36 @@ private lemma t95J02RetractionA_comp_inclusion :
   rcases z with ⟨z, ⟨x, rfl⟩⟩
   rfl
 
+/-- Integral first singular homology, used only to state the missing invariant
+without assuming a presentation for the quotient's fundamental group. -/
+abbrev apm_t95J02_H1 (X : Type) [TopologicalSpace X] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
+
+def apm_t95J02_H1Map {X Y : TopCat} (f : X ⟶ Y) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).map f
+
+/-- Why this unblocks `apm_t95j02`: this is the missing concrete invariant
+calculation. It identifies a nonzero integral first-homology class of the
+vertical core whose image in the Klein bottle vanishes (the class twice a
+circle generator, since the vertical class has order two after abelianizing). -/
+theorem apm_t95J02_bridge_vertical_H1_kernel :
+    ∃ gamma : apm_t95J02_H1 t95J02CircleB,
+      gamma ≠ 0 ∧
+      apm_t95J02_H1Map t95J02InclusionB gamma = 0 := by
+  sorry
+
+/-- Why this unblocks `apm_t95j02`: functoriality makes the first-homology map
+of any retract inclusion injective. Combined with
+`apm_t95J02_bridge_vertical_H1_kernel`, this rules out a retraction onto the
+vertical core without requiring any further quotient computation. -/
+theorem apm_t95J02_bridge_retraction_injective
+    (hret : HasT95J02Retraction t95J02InclusionB) :
+    Function.Injective
+      (apm_t95J02_H1Map t95J02InclusionB) := by
+  sorry
+
 theorem apm_t95j02 :
     HasT95J02Retraction t95J02InclusionA ∧
     ¬HasT95J02Retraction t95J02InclusionB := by

@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "closer_note": "Derived the horizontal period-two identity and the concrete glide/vertical-inverse conjugacy endpoint identity. The no-retraction result for circle B remains blocked on transporting these identities to loops and computing H1 or π1 of the custom quotient.",
+  "closer_note": "Hop 4 states the exact first-homology contracts: a nonzero vertical-core class lies in the kernel of inclusion, while every retract inclusion induces an injective H1 map. Their contradiction proves the negative half; the frozen main statement is unchanged.",
   "imported_at": "2026-07-13T17:26:58.349035Z"
 }

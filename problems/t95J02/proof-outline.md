@@ -31,3 +31,18 @@ homology. The B class is the order-two generator in
 requires computing `H₁` or `π₁` of this custom `Relation.EqvGen` quotient and
 identifying the B inclusion with the torsion generator. No such computation is
 currently packaged in Mathlib or the solved corpus.
+
+## Hop 4 bridge statements
+
+- `apm_t95J02_H1` and `apm_t95J02_H1Map` expose integral first singular
+  homology and its induced maps in the vocabulary of this file.
+- `apm_t95J02_bridge_vertical_H1_kernel` states the exact missing invariant:
+  a nonzero integral first-homology class of the vertical circle maps to zero
+  in the Klein bottle.
+- `apm_t95J02_bridge_retraction_injective` states the standard functorial
+  consequence of a retraction: the same inclusion-induced map is injective.
+
+The last two bridge statements contradict each other under a proposed
+retraction, so they directly prove the negative half. The kernel statement is where the
+endpoint glide/inversion identities must be transported into the loop or
+first-homology calculation.
