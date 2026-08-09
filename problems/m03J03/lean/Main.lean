@@ -78,6 +78,45 @@ lemma m03J03_abs_eval_not_distribution :
   simp [hφ] at hneg
   norm_num at hneg
 
+/-- Why this unblocks `apm_m03j03`: this is the locally finite one-sided
+Dirac-comb constructor, including the compact-dependent seminorm estimate
+needed for LF-continuity.  It supplies the first conjunct of the main theorem. -/
+theorem apm_m03J03_bridge_dirac_comb :
+    ∃ T : Distribution (⊤ : Opens ℝ) ℂ ⊤,
+      ∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤,
+        T φ = ∑' n : ℕ, (φ n : ℂ) := by
+  sorry
+
+/-- Why this unblocks `apm_m03j03`: repeated integration by parts converts
+polynomial coefficient growth into summable decay of the Fourier pairings;
+the resulting LF-continuous sum is the distribution required by the second
+conjunct. -/
+theorem apm_m03J03_bridge_polynomial_fourier_series
+    (a : ℕ → ℂ) (ha : ∃ (A : ℝ) (N : ℕ), 0 ≤ A ∧
+      ∀ n : ℕ, ‖a n‖ ≤ A * (n : ℝ) ^ N) :
+    ∃ T : Distribution (⊤ : Opens ℝ) ℂ ⊤,
+      ∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤,
+        HasSum (fun n : ℕ =>
+          a n * (∫ x : ℝ,
+            Complex.exp ((n : ℂ) * Complex.I * (x : ℂ)) * φ x)) (T φ) := by
+  sorry
+
+/-- Why this unblocks `apm_m03j03`: this bundles the three regular
+LF-continuous functionals for `H*sin` and its first two distributional
+derivatives.  The last equality contains the missing second half-line
+integration-by-parts identity and its Dirac boundary term. -/
+theorem apm_m03J03_bridge_heaviside_sin_distributions :
+    ∃ T DT D2T : Distribution (⊤ : Opens ℝ) ℝ ⊤,
+      ∀ φ : TestFunction (⊤ : Opens ℝ) ℝ ⊤,
+        T φ = ∫ x : ℝ, m03J03Heaviside x * Real.sin x * φ x ∧
+        DT φ = -∫ x : ℝ,
+          m03J03Heaviside x * Real.sin x * deriv φ x ∧
+        DT φ = ∫ x : ℝ, m03J03Heaviside x * Real.cos x * φ x ∧
+        D2T φ = ∫ x : ℝ,
+          m03J03Heaviside x * Real.sin x * iteratedDeriv 2 φ x ∧
+        D2T φ = φ 0 - T φ := by
+  sorry
+
 /-- The one-sided Dirac comb, polynomial-growth Fourier series, the two
 distributional derivatives of `H sin`, and the absolute-value non-example. -/
 theorem apm_m03j03 :

@@ -17,10 +17,16 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
   theorem to `sin · φ` and proves `-∫ H sin φ' = ∫ H cos φ` without explicit
   endpoint-limit bookkeeping.
 
-## Remaining boundary
+## Hop 4 bridge contracts
 
-- construct the locally finite one-sided Dirac comb as an LF-continuous map;
-- construct polynomial-growth Fourier series as distributions using repeated
-  integration by parts and summability;
-- prove the second half-line identity and bundle all three regular functionals
-  as LF-continuous distributions.
+- `apm_m03J03_bridge_dirac_comb` states the locally finite one-sided Dirac
+  comb as an LF-continuous distribution.
+- `apm_m03J03_bridge_polynomial_fourier_series` states the distributional
+  Fourier-series constructor under the frozen polynomial-growth hypothesis.
+- `apm_m03J03_bridge_heaviside_sin_distributions` states all three regular
+  functionals for `H*sin`, including their LF-continuity and the missing
+  second half-line identity with its Dirac boundary term.
+
+These declarations are intentionally unproved. Together with the compiled
+absolute-value non-example, they reduce the main theorem to conjunction
+assembly without modifying its frozen statement.

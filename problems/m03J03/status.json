@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "note": "The nonlinear non-example, Heaviside-to-Ioi reduction, and first identity -integral H sin phi' = integral H cos phi are compiled. The second identity, regular LF-continuity, and Dirac-comb/Fourier distribution constructors remain.",
+  "closer_hop": 4,
+  "note": "Hop 4 states three precise unproved distribution constructors: the locally finite Dirac comb, polynomial-growth Fourier series via repeated integration by parts, and the three regular H*sin derivative functionals including the second half-line identity.",
   "imported_at": "2026-07-13T17:26:54.554452Z"
 }
