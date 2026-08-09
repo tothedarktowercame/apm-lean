@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,8 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 3 closes the complete polynomial zero-count conjunct and compiles the arbitrary-positive-radius Cauchy estimate with the exact A+B*R^m growth bound. One sorry remains: send that estimate to zero for each natural k>m and reconstruct the entire function globally from its finitely supported Taylor coefficients.",
-  "closer_hop": 3,
-  "closer_note": "Proved the exact arbitrary-radius Cauchy derivative bound k!*(A+B*R^m)/R^k. The scalar rpow limit, vanishing of high derivatives, and global finite Taylor reconstruction remain.",
+  "classification_detail": "Hop 4 states the two remaining interfaces precisely: the mixed real/natural-power Cauchy bound forces high derivatives to vanish, and analytic uniqueness reconstructs the entire function as a finite polynomial.",
+  "closer_hop": 4,
+  "closer_note": "apm_aunk04_bridge_1 states high-derivative vanishing from the growth bound; apm_aunk04_bridge_2 states global finite Taylor reconstruction.",
   "imported_at": "2026-07-13T17:26:53.138765Z"
 }

@@ -102,6 +102,29 @@ lemma apm_aunk04_growth_cauchy_bound
     exact mem_sphere_zero_iff_norm.mp hz
   simpa [hnorm] using hgrowth z
 
+/-- Why this unblocks `apm_aunk04`: this is the exact scalar-asymptotic
+consequence of the compiled arbitrary-radius Cauchy estimate. It eliminates
+every Taylor coefficient whose natural order strictly exceeds the real growth
+exponent. -/
+theorem apm_aunk04_bridge_1
+    (f : ℂ → ℂ) (A B m : ℝ)
+    (hA : 0 < A) (hB : 0 < B) (hm : 0 < m)
+    (hf : Differentiable ℂ f)
+    (hgrowth : ∀ z : ℂ, ‖f z‖ ≤ A + B * Real.rpow ‖z‖ m) :
+    ∀ k : ℕ, m < k → iteratedDeriv k f 0 = 0 := by
+  sorry
+
+/-- Why this unblocks `apm_aunk04`: this is the missing analytic
+power-series uniqueness theorem specialized to a finite derivative tail. It
+constructs the global polynomial and records the frozen coefficient bound. -/
+theorem apm_aunk04_bridge_2
+    (f : ℂ → ℂ) (m : ℝ) (hf : Differentiable ℂ f)
+    (hvanish : ∀ k : ℕ, m < k → iteratedDeriv k f 0 = 0) :
+    ∃ p : ℂ[X],
+      (∀ z : ℂ, Polynomial.eval z p = f z) ∧
+      ∀ k : ℕ, m < k → p.coeff k = 0 := by
+  sorry
+
 theorem apm_aunk04 :
     (apm_aunk04_polynomial.roots.filter (fun z => ‖z‖ < 1)).card = 0 ∧
       ∀ (f : ℂ → ℂ) (A B m : ℝ),

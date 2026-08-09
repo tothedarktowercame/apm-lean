@@ -17,3 +17,11 @@ strict unit-circle inequality supplied by the Rouché route.
 - For part (b), apply the Cauchy iterated-derivative estimate at arbitrary
   radius and send the radius to infinity for each natural `k > m`.
 - Reconstruct the polynomial from the surviving Taylor coefficients.
+
+## Hop 4 bridge statements
+
+`apm_aunk04_bridge_1` isolates the real-rpow asymptotic step, concluding
+`iteratedDeriv k f 0 = 0` for every natural `k > m` from the frozen growth
+bound. `apm_aunk04_bridge_2` isolates global analytic uniqueness, constructing
+the polynomial from that finite derivative tail and proving its high
+coefficients vanish. Together they discharge part (b) directly.
