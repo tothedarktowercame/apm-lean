@@ -105,6 +105,25 @@ lemma m95A02_tendsto_coord_of_weak
     rw [InnerProductSpace.toDual_apply_apply, lp.inner_single_left]
     simp
 
+/-- Why this unblocks `apm_m95a02`: this is the sharp normalized Fourier-kernel
+estimate whose square root, combined with Cauchy--Schwarz, gives the frozen
+Hölder bound for `m95A02Value`. -/
+theorem apm_m95A02_bridge_1 (x y : ℝ) :
+    ∑' n : ℤ,
+        ‖m95A02BasisFunction n x - m95A02BasisFunction n y‖ ^ 2 ≤
+      |x - y| := by
+  sorry
+
+/-- Why this unblocks `apm_m95a02`: it packages the missing bilateral weighted
+tail argument: bounded ℓ² vectors converging in every coordinate have Fourier
+realizations converging uniformly in the custom maximum distance. -/
+theorem apm_m95A02_bridge_2
+    (f : ℕ → m95A02H) (g : m95A02H)
+    (hcoord : ∀ j : ℤ, Tendsto (fun n ↦ f n j) atTop (nhds (g j)))
+    (hbounded : ∃ C : ℝ, ∀ n : ℕ, ‖f n‖ ≤ C) :
+    Tendsto (fun n => m95A02MaxDist (f n) g) atTop (nhds 0) := by
+  sorry
+
 theorem apm_m95a02 :
     (∃ b : HilbertBasis ℤ ℂ m95A02H,
       ∀ n : ℤ, b n = lp.single 2 n 1 ∧
