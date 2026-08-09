@@ -111,6 +111,19 @@ lemma apm_m94J04_sliceLine_isometry (p : apm_m94J04_E) (i : Fin 3) :
   rw [norm_smul]
   simp [apm_m94J04_basis, Real.norm_eq_abs]
 
+/-- Why this unblocks `apm_m94j04`: after the two compiled coordinate-inner-
+product reductions, this is exactly the remaining scalar equality.  Its proof
+is the missing Euclidean-volume coordinate transport, Fubini decomposition,
+and compactly-supported one-dimensional integration by parts. -/
+theorem apm_m94J04_bridge_1
+    (φ : TestFunction (⊤ : TopologicalSpace.Opens apm_m94J04_E)
+      apm_m94J04_E ⊤) :
+    ∫ p, apm_m94J04_f p *
+        (fderiv ℝ (fun q ↦ φ q 2) p (apm_m94J04_basis 1) -
+          fderiv ℝ (fun q ↦ φ q 1) p (apm_m94J04_basis 2)) ∂volume =
+      ∫ p, (if 0 < p 0 then -φ p 2 else 0) ∂volume := by
+  sorry
+
 theorem apm_m94j04 :
     ∀ φ : TestFunction (⊤ : TopologicalSpace.Opens apm_m94J04_E)
       apm_m94J04_E ⊤,
