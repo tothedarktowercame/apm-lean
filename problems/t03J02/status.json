@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "The quotient map, canonical coprojections, and an explicit equivalence between maps out of the quotient and compatible pairs from the two summands are compiled. Remaining work is the absent Seifert--van Kampen theorem, singular Mayer--Vietoris sequence, and concrete torus fundamental-group and homology computations.",
+  "closer_hop": 4,
+  "boundary": "The missing invariant interface is now stated precisely: apm_t03J02_bridge_1 is the Seifert--van Kampen computation and apm_t03J02_bridge_2 is the complete singular Mayer--Vietoris homology computation for the compiled quotient.",
   "imported_at": "2026-07-13T17:26:57.053364Z"
 }

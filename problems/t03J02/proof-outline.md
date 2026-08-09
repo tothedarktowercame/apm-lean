@@ -28,3 +28,11 @@ coprojections are now named `apm_t03J02_gluedInl` and `apm_t03J02_gluedInr`.
 
 Mathlib currently provides neither the required topological van Kampen theorem
 nor a singular Mayer--Vietoris sequence.
+
+## Hop 4 bridge statements
+
+`apm_t03J02_bridge_1` isolates the fundamental-group computation for the
+actual quotient and basepoint. `apm_t03J02_bridge_2` isolates all four
+singular-homology conclusions for that same quotient. Together they match the
+frozen theorem's invariant clauses exactly, while relying on the already
+compiled maps-out pushout interface rather than restating it.

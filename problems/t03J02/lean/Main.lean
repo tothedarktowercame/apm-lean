@@ -192,6 +192,41 @@ abbrev apm_t03J02_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
+/-- Why this unblocks `apm_t03j02`: this is the precise Seifert--van Kampen
+computation missing from Mathlib for the compiled pushout. Null-homotopy of
+both attaching circles makes the result the free product of the two torus
+fundamental groups, in the frozen four-generator presentation. -/
+theorem apm_t03J02_bridge_1
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (hj₁ : Topology.IsEmbedding j₁)
+    (hj₂ : Topology.IsEmbedding j₂)
+    (hnull₁ : j₁.Nullhomotopic)
+    (hnull₂ : j₂.Nullhomotopic)
+    (z₀ : Circle) :
+    Nonempty
+      (FundamentalGroup (apm_t03J02_space j₁ j₂)
+        (apm_t03J02_basepoint j₁ j₂ z₀) ≃*
+          apm_t03J02_freeProductZ2Z2) := by
+  sorry
+
+/-- Why this unblocks `apm_t03j02`: this is the exact singular
+Mayer--Vietoris computation for the same compiled pushout, including every
+degree asserted by the frozen theorem. -/
+theorem apm_t03J02_bridge_2
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (hj₁ : Topology.IsEmbedding j₁)
+    (hj₂ : Topology.IsEmbedding j₂)
+    (hnull₁ : j₁.Nullhomotopic)
+    (hnull₂ : j₂.Nullhomotopic) :
+    Nonempty (apm_t03J02_H 0 (apm_t03J02_space j₁ j₂) ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t03J02_H 1 (apm_t03J02_space j₁ j₂) ≅
+      ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
+    Nonempty (apm_t03J02_H 2 (apm_t03J02_space j₁ j₂) ≅
+      ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
+    ∀ k : ℕ, 3 ≤ k →
+      Limits.IsZero (apm_t03J02_H k (apm_t03J02_space j₁ j₂)) := by
+  sorry
+
 theorem apm_t03j02
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hj₁ : Topology.IsEmbedding j₁)
