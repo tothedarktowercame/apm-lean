@@ -100,6 +100,15 @@ lemma apm_a97J06_integral_eq_half_standard (t : ℝ) :
   norm_num at hscale ⊢
   linarith
 
+/-- Why this unblocks `apm_a97j06`: this is the shared scale-one Cauchy
+cosine-transform evaluation left open here and in `a03J05`.  It is the exact
+positive-frequency consequence of the semicircle contour/residue argument;
+the zero-frequency and negative-frequency reductions are already proved. -/
+theorem apm_a97J06_bridge_1 (s : ℝ) (hs : 0 < s) :
+    ∫ x in Ioi (0 : ℝ), Real.cos (x * s) / (1 + x ^ 2) ∂volume =
+      (Real.pi / 2) * Real.exp (-s) := by
+  sorry
+
 theorem apm_a97j06 (t : ℝ) :
     ∫ x in Ioi (0 : ℝ), apm_a97J06_integrand t x ∂volume =
       (Real.pi / 4) * Real.exp (-2 * |t|) := by
