@@ -35,6 +35,58 @@ def apm_a03J04_weakL1Size {n : ℕ}
   ⨆ α : {α : ℝ // 0 < α},
     ENNReal.ofReal α.1 * apm_a03J04_distribution f α.1
 
+/-- The defining supremum of the weak-`L¹` size gives the usual reciprocal
+bound for every positive level. -/
+lemma apm_a03J04_distribution_le_div_weakL1Size
+    {n : ℕ} (f : A03J04Space n → ℝ) (M : ℝ≥0∞)
+    (hweak : apm_a03J04_weakL1Size f = M)
+    {α : ℝ} (hα : 0 < α) :
+    apm_a03J04_distribution f α ≤ M / ENNReal.ofReal α := by
+  have hmul : ENNReal.ofReal α * apm_a03J04_distribution f α ≤ M := by
+    rw [← hweak]
+    exact le_iSup (fun (a : {α : ℝ // 0 < α}) =>
+      ENNReal.ofReal a.1 * apm_a03J04_distribution f a.1) ⟨α, hα⟩
+  rw [ENNReal.le_div_iff_mul_le
+    (Or.inl (ne_of_gt (ENNReal.ofReal_pos.mpr hα)))
+    (Or.inl ENNReal.ofReal_ne_top)]
+  simpa [mul_comm] using hmul
+
+/-- On a measurable finite-measure set, each restricted superlevel measure is
+bounded both by the set's measure and by the weak-`L¹` reciprocal estimate. -/
+lemma apm_a03J04_restrict_level_le_min
+    {n : ℕ} (f : A03J04Space n → ℝ) (M : ℝ≥0∞)
+    (E : Set (A03J04Space n))
+    (hweak : apm_a03J04_weakL1Size f = M)
+    {α : ℝ} (hα : 0 < α) :
+    (volume.restrict E) {x | α < |f x|} ≤
+      min (volume E) (M / ENNReal.ofReal α) := by
+  apply le_min
+  · calc
+      (volume.restrict E) {x | α < |f x|} ≤
+          (volume.restrict E) Set.univ := measure_mono (subset_univ _)
+      _ = volume E := by simp
+  · calc
+      (volume.restrict E) {x | α < |f x|} ≤
+          volume {x | α < |f x|} := Measure.restrict_le_self _
+      _ = apm_a03J04_distribution f α := rfl
+      _ ≤ M / ENNReal.ofReal α :=
+        apm_a03J04_distribution_le_div_weakL1Size f M hweak hα
+
+/-- Weighted layer cake for `|f|^p` on the restricted measure. This is the
+exact Mathlib identity used before inserting the weak-`L¹` level bound. -/
+lemma apm_a03J04_lintegral_rpow_eq_level_lintegral
+    {n : ℕ} (f : A03J04Space n → ℝ) (p : ℝ)
+    (E : Set (A03J04Space n)) (hf : Measurable f) (hp : 0 < p) :
+    (∫⁻ x in E, ENNReal.ofReal (Real.rpow |f x| p) ∂volume) =
+      ENNReal.ofReal p *
+        ∫⁻ t in Ioi (0 : ℝ),
+          (volume.restrict E) {x | t < |f x|} *
+            ENNReal.ofReal (Real.rpow t (p - 1)) := by
+  exact MeasureTheory.lintegral_rpow_eq_lintegral_meas_lt_mul
+    (volume.restrict E)
+    (Filter.Eventually.of_forall fun x => abs_nonneg (f x))
+    hf.abs.aemeasurable hp
+
 /-- Why this unblocks `apm_a03j04`: this is the missing layer-cake and
 improper-integral estimate, including the ENNReal-to-real conversion. Its
 integrability conclusion closes part (b), while the sharp quantitative bound
@@ -72,6 +124,26 @@ theorem apm_a03J04_bridge_weakL1_rpow_setIntegral
   git history found no packaged weak-L1-to-local-Lp theorem or evaluator for
   this minimum majorant. No axiom, opaque declaration, or `native_decide` was
   introduced; the frozen statement is unchanged.
+
+  CLOSER HOP 2 goes beyond that search by compiling the missing measure-side
+  prerequisites. `apm_a03J04_distribution_le_div_weakL1Size` extracts the
+  reciprocal bound from the defining `iSup` using `ENNReal.le_div_iff_mul_le`.
+  `apm_a03J04_restrict_level_le_min` combines it with restriction monotonicity
+  to prove the exact minimum majorant above. Finally,
+  `apm_a03J04_lintegral_rpow_eq_level_lintegral` specializes Mathlib's
+  weighted layer-cake theorem to `|f|` and `volume.restrict E`. Thus no
+  level-set, measurability, or weak-size extraction remains open.
+
+  A separate search of Mathlib's Lorentz/weak-type APIs found no Lorentz-space
+  abstraction at all, and a truncation/eLpNorm route still reduces to the same
+  tail integral. The sole remaining bridge is the scalar ENNReal calculation:
+  integrate
+
+    min (volume E) (M / ofReal t) * ofReal (t^(p-1))
+
+  over `Ioi 0`, split at the crossover (including the zero-measure and zero-M
+  cases), use the real improper-rpow formulas on both pieces, then transport
+  the resulting finite lintegral to `IntegrableOn` and the stated real bound.
   -/
   sorry
 

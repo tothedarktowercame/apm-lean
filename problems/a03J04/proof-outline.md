@@ -29,3 +29,18 @@ bound the restricted level measure by
 `M.toReal / (volume E).toReal`, evaluate the two improper real-power
 integrals, and convert the finite ENNReal estimate to the claimed Bochner
 integrability and real bound.
+
+## Closer hop 2
+
+The following prerequisites are now compiled without sorries:
+
+- `apm_a03J04_distribution_le_div_weakL1Size` derives
+  `distribution f α ≤ M / ofReal α` directly from the defining supremum.
+- `apm_a03J04_restrict_level_le_min` proves the exact restricted level-set
+  majorant by `min (volume E) (M / ofReal α)`.
+- `apm_a03J04_lintegral_rpow_eq_level_lintegral` specializes Mathlib's
+  weighted layer-cake identity to `|f|` on `volume.restrict E`.
+
+Consequently the remaining work is only the scalar ENNReal integral of this
+minimum majorant, including zero/crossover cases, followed by the final
+Bochner-integrability and `toReal` conversion.

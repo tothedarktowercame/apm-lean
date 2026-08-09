@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 1,
-  "boundary": "The main theorem's part-(b) and part-(c) holes are closed by routing through apm_a03J04_bridge_weakL1_rpow_setIntegral. The sole remaining sorry is that bridge. Mathlib's weighted layer-cake theorem lintegral_rpow_eq_lintegral_meas_lt_mul removes the old power-level-set conversion; the remaining work is the ENNReal minimum-majorant split, improper rpow evaluations, and Bochner/toReal transport.",
+  "closer_hop": 2,
+  "boundary": "The sole remaining sorry is the analytic bridge. Hop 2 compiled the reciprocal distribution bound, the restricted min(volume E, M/ofReal t) level-set bound, and the weighted layer-cake identity on volume.restrict E. Only the scalar ENNReal minimum-majorant integral, its zero/crossover cases, improper-rpow evaluations, and final Bochner/toReal transport remain.",
   "imported_at": "2026-07-13T17:26:51.764499Z"
 }
