@@ -24,3 +24,16 @@ completed Hölder counterexample argument.
 Mathlib constructs local flows Lipschitz in initial data and provides ODE
 uniqueness/stability. No searched result packages the required globalization
 or differentiable parameter dependence.
+
+## Hop 4: precise missing globalization interface
+
+No existing declaration turns the local Picard solutions into a solution on
+all of `ℝ`. The required theorem is recorded verbatim in the boundary comment
+as `apm_m93j06_global_exists_unique_of_continuous_lipschitz`. Its hypotheses
+are exactly global continuity and a uniform Lipschitz constant, and its
+conclusion is the custom global solution predicate with uniqueness.
+
+Mathlib's `ODE_solution_unique_univ` handles compatibility once global
+solutions exist, but does not construct them. Closing the interface therefore
+requires an exhaustion by compact time intervals, a continuation bound, and
+gluing by uniqueness. No false or unproved declaration was added.

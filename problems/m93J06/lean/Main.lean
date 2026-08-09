@@ -234,5 +234,32 @@ theorem apm_m93j06 :
   square-root/rpow, Picard--Lindelöf, and Gronwall APIs and the cited siblings
   yielded no packaged globalization theorem. The frozen statement remains
   unchanged.
+
+  HOP 4 (failed-with-statement). A full search of
+  `Mathlib.Analysis.ODE.PicardLindelof`, including every theorem in the
+  `IsPicardLindelof` namespace, confirms that all existence constructors have
+  a bounded time interval in their conclusions. `ODE_solution_unique_univ`
+  supplies uniqueness only after two global solutions have already been
+  constructed. Neither `LEMMA-INDEX.md` nor `ConstructionTargets/` contains a
+  continuation or compatible-exhaustion theorem.
+
+  The precise missing globalization lemma is:
+
+      theorem apm_m93j06_global_exists_unique_of_continuous_lipschitz
+          (f : ℝ → ℝ → ℝ)
+          (hcont : Continuous (Function.uncurry f))
+          (hLip : ∃ L > 0, ∀ t a b,
+            |f t a - f t b| ≤ L * |a - b|) (y₀ : ℝ) :
+          ∃! y : ℝ → ℝ, apm_m93j06_Solves f y₀ y
+
+  It is true: continuity bounds `f (·) 0` on every compact time interval and
+  the global Lipschitz estimate gives the linear growth bound needed to
+  continue each local solution; uniqueness makes the exhaustion compatible.
+  This statement closes the first conjunct directly and supplies the global
+  trajectories used to construct the flow in the third conjunct. Proving it
+  here would require developing the missing continuation/gluing machinery,
+  not merely connecting two existing declarations. The second and fifth
+  conjuncts additionally retain their parameter-differentiability and
+  two-sided Gronwall assemblies.
   -/
   sorry

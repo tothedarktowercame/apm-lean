@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
+  "closer_hop": 4,
+  "closer_note": "Failed-with-statement: bounded-interval Picard existence and conditional global uniqueness do not construct a global solution. The precise missing apm_m93j06_global_exists_unique_of_continuous_lipschitz interface is recorded in Main.lean.",
   "imported_at": "2026-07-13T17:26:54.663034Z"
 }
