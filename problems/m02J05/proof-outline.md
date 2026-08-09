@@ -22,3 +22,17 @@ The frozen theorem has a partial Lean development with one remaining `sorry`.
   and the triangle inequality of the Luxemburg functional;
 - formalize complementary Young's inequality for the inverse pair `α`, `β`,
   then derive the normalized integral estimate.
+
+## Hop 4 bridge statements
+
+- `apm_m02J05_bridge_convex_and_submodule` states convexity of the modular
+  class and realizes the rescalable class as a real submodule of `AEEqFun`.
+- `apm_m02J05_bridge_luxemburg_laws` states the full `sInf` gauge theory:
+  nonnegativity, definiteness, absolute homogeneity, and the triangle
+  inequality.
+- `apm_m02J05_bridge_complementary_young_holder` states pointwise Young's
+  inequality for the inverse pair and the resulting integral estimate with
+  constant two.
+
+The three bridge conclusions concatenate verbatim into the frozen theorem's
+remaining conjunction.

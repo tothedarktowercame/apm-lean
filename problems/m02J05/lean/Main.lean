@@ -71,6 +71,63 @@ lemma apm_m02J05_young_mono
       simpa [uIcc_of_le ht] using hc.mono Icc_subset_Ici_self
     exact hi.intervalIntegrable
 
+/-- Why this unblocks `apm_m02j05`: this packages the missing convexity of
+the modular class and closure of its rescalable hull under the vector-space
+operations on `AEEqFun`. These are the two structural conjuncts preceding the
+Luxemburg functional laws. -/
+theorem apm_m02J05_bridge_convex_and_submodule
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
+    Convex ℝ (apm_m02J05_K α) ∧
+      ∃ S : Submodule ℝ (ℝ →ₘ[volume] ℝ),
+        (S : Set (ℝ →ₘ[volume] ℝ)) = apm_m02J05_L α := by
+  sorry
+
+/-- Why this unblocks `apm_m02j05`: this is the complete `sInf` theory for
+the Luxemburg gauge on the rescalable modular class: nonnegativity,
+definiteness modulo a.e. equality, absolute homogeneity, and the triangle
+inequality. -/
+theorem apm_m02J05_bridge_luxemburg_laws
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
+    (∀ u ∈ apm_m02J05_L α, 0 ≤ apm_m02J05_lux α u) ∧
+      (∀ u ∈ apm_m02J05_L α, apm_m02J05_lux α u = 0 ↔ u = 0) ∧
+      (∀ u ∈ apm_m02J05_L α, ∀ c : ℝ,
+        apm_m02J05_lux α (c • u) = |c| * apm_m02J05_lux α u) ∧
+      ∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L α,
+        apm_m02J05_lux α (u + v) ≤
+          apm_m02J05_lux α u + apm_m02J05_lux α v := by
+  sorry
+
+/-- Why this unblocks `apm_m02j05`: this packages the complementary integral
+identity for inverse functions into pointwise Young's inequality and the
+resulting normalized Orlicz--Hölder estimate. It supplies the final two
+conjuncts of the frozen theorem. -/
+theorem apm_m02J05_bridge_complementary_young_holder
+    (α β : ℝ → ℝ)
+    (hαc : ContinuousOn α (Ici 0))
+    (hαmono : StrictMonoOn α (Ici 0))
+    (hαzero : α 0 = 0)
+    (hαinfty : Tendsto α atTop atTop)
+    (hβc : ContinuousOn β (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t ∧ 0 ≤ β t)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
+    (∀ s t : ℝ, 0 ≤ s → 0 ≤ t →
+      s * t ≤ apm_m02J05_young α s + apm_m02J05_young β t) ∧
+      ∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L β,
+        ∫ x in Icc (0 : ℝ) 1, u x * v x ∂volume ≤
+          2 * apm_m02J05_lux α u * apm_m02J05_lux β v := by
+  sorry
+
 theorem apm_m02j05 :
     ∀ (α β : ℝ → ℝ),
       ContinuousOn α (Ici 0) →
