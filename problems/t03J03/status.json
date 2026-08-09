@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "All Euler-characteristic and character-count conjuncts compile. The cylinder lift is now constructed from the exact fundamental-group range condition via Mathlib's lifting criterion. Remaining work is the actual classification of connected and disconnected double covers, the cylinder connectivity instances, a fiber point, and the orientation-character range argument.",
+  "closer_hop": 4,
+  "boundary": "The remaining work is stated precisely in three bridges: apm_t03J03_bridge_1 classifies connected double covers by characters and total-space type, bridge_2 classifies disconnected covers as trivial, and bridge_3 states the orientable-cover cylinder-lifting consequence of the missing orientation-character range theorem. These bridges and the original main theorem remain unproved.",
   "imported_at": "2026-07-13T17:26:57.065885Z"
 }

@@ -26,3 +26,16 @@ prove the cylinder's standard connectivity instances, choose a point in the
 relevant fiber, and use the orientation character to verify the
 fundamental-group range condition. The remaining polygon-surface fundamental
 groups and cover classification needed for that inclusion are absent.
+
+## Hop 4 bridge statements
+
+- `apm_t03J03_bridge_1` states the complete connected-double-cover character
+  classification and the `Sigma₂`/`N₄` orientation-character dichotomy.
+- `apm_t03J03_bridge_2` states that every disconnected double cover is the
+  trivial cover.
+- `apm_t03J03_bridge_3` states the exact cylinder-lifting consequence for an
+  orientable double cover, isolating the missing orientation-character range
+  inclusion from the already-compiled general lifting criterion.
+
+Together these are exactly the three nonnumerical conjuncts still required by
+the frozen theorem.

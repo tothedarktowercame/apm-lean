@@ -116,6 +116,51 @@ lemma apm_t03J03_exists_cylinderLift_of_range_le
   intro z
   exact congrFun hF.2 z
 
+/-- Why this unblocks `apm_t03j03`: this is the missing classification of
+connected double covers by nonzero `ZMod 2` characters, including the
+orientation-character test that distinguishes `Sigma₂` from `N₄`. -/
+theorem apm_t03J03_bridge_1 :
+    ∃ reps : apm_t03J03_character →
+        apm_t03J03_connectedDoubleCover apm_t03J03_N3 inferInstance,
+      (∀ c : apm_t03J03_connectedDoubleCover apm_t03J03_N3 inferInstance,
+        ∃! phi : apm_t03J03_character,
+          apm_t03J03_coverEquivalent c (reps phi)) ∧
+      (∀ phi : apm_t03J03_character,
+        if (phi : Fin 3 → ZMod 2) = apm_t03J03_orientationCharacter then
+          Nonempty (@Homeomorph (reps phi).E apm_t03J03_Sigma2
+            (reps phi).topology inferInstance)
+        else
+          Nonempty (@Homeomorph (reps phi).E apm_t03J03_N4
+            (reps phi).topology inferInstance)) := by
+  sorry
+
+/-- Why this unblocks `apm_t03j03`: this is the complementary classification
+theorem for disconnected two-sheeted covers of the connected three-crosscap
+surface; it identifies every such cover with the trivial double cover. -/
+theorem apm_t03J03_bridge_2 :
+    ∀ (E : Type) (tE : TopologicalSpace E) (p : E → apm_t03J03_N3),
+      apm_t03J03_isTwoFoldCover tE inferInstance p →
+      ¬ @IsConnected E tE (Set.univ : Set E) →
+      apm_t03J03_generalCoverEquivalent tE inferInstance
+        p apm_t03J03_trivialCoverMap := by
+  sorry
+
+/-- Why this unblocks `apm_t03j03`: this is the orientation-character range
+consequence in its geometric form.  It states that every embedded cylinder
+lifts continuously to every orientable two-sheeted cover, exactly the final
+conjunct required after the general lifting criterion above. -/
+theorem apm_t03J03_bridge_3 :
+    ∀ (Y : Type) (tY : TopologicalSpace Y) (p : Y → apm_t03J03_N3),
+      apm_t03J03_isTwoFoldCover tY inferInstance p →
+      apm_t03J03_IsOrientableSurface Y tY →
+      ∀ f : apm_t03J03_Cylinder → apm_t03J03_N3,
+        @Topology.IsEmbedding apm_t03J03_Cylinder apm_t03J03_N3
+          inferInstance inferInstance f →
+        ∃ lift : apm_t03J03_Cylinder → Y,
+          @Continuous apm_t03J03_Cylinder Y inferInstance tY lift ∧
+          ∀ z, p (lift z) = f z := by
+  sorry
+
 theorem apm_t03j03
     :
     eulerCharacteristic false 3 = -1 ∧
