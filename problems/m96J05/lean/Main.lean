@@ -100,6 +100,21 @@ lemma apm_m96j05_pow_apply_ae
       rw [hstep, hpow]
       ring
 
+/-- Why this unblocks `apm_m96j05`: the finite-power identities above identify
+every partial sum; this is the missing passage through the operator-norm
+`tsum`, identifying the resulting `Lp` element almost everywhere with the
+scalar exponential multiplier.  The compiled pointwise limit and modulus-one
+bound can then be fed directly to `Lp` dominated convergence. -/
+theorem apm_m96J05_bridge_1
+    (D : ℝ → apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
+    (hD : ∀ (ε : ℝ), ε ≠ 0 → ∀ f : apm_m96j05_L2,
+      (fun ξ : ℝ => D ε f ξ) =ᵐ[volume]
+        fun ξ => apm_m96j05_differenceSymbol ε ξ * f ξ)
+    (ε : ℝ) (hε : ε ≠ 0) (f : apm_m96j05_L2) :
+    (fun ξ : ℝ => NormedSpace.exp (D ε) f ξ) =ᵐ[volume]
+      fun ξ => Complex.exp (apm_m96j05_differenceSymbol ε ξ) * f ξ := by
+  sorry
+
 theorem apm_m96j05
     (D : ℝ → apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
     (T : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
