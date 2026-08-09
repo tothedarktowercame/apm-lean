@@ -126,6 +126,35 @@ lemma apm_m98J05_heatSolution_integrable
     exact div_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr (sq_nonneg _)) (by positivity)
   simpa [mul_comm] using mul_le_mul_of_nonneg_left hk (norm_nonneg (f y))
 
+/-- Why this unblocks `apm_m98j05`: the positive unit-mass Gaussians form an
+approximate identity, so convolution with continuous `L¹` data converges at
+each point as time tends to zero from the right. -/
+theorem apm_m98J05_bridge_1
+    (f : ℝ → ℂ) (hf_cont : Continuous f) (hf : Integrable f) (x : ℝ) :
+    Tendsto (fun t ↦ apm_m98J05_heatSolution f x t)
+      (nhdsWithin 0 (Ioi 0)) (nhds (f x)) := by
+  sorry
+
+/-- Why this unblocks `apm_m98j05`: domination by derivatives of a positive-
+time Gaussian justifies differentiating the convolution in both variables;
+the kernel identity `∂ₜG = ∂ₓ²G` then gives the classical heat equation. -/
+theorem apm_m98J05_bridge_2
+    (f : ℝ → ℂ) (hf : Integrable f) (x t : ℝ) (ht : 0 < t) :
+    HasDerivAt
+      (fun s ↦ apm_m98J05_heatSolution f x s)
+      (iteratedDeriv 2 (fun z ↦ apm_m98J05_heatSolution f z t) x) t := by
+  sorry
+
+/-- Why this unblocks `apm_m98j05`: absolute integrability of the two-variable
+integrand permits Fubini, and the exactly normalized Gaussian transform turns
+the Fourier transform of the convolution into the displayed heat multiplier. -/
+theorem apm_m98J05_bridge_3
+    (f : ℝ → ℂ) (hf : Integrable f) (ξ t : ℝ) (ht : 0 < t) :
+    apm_m98J05_fourier (fun x ↦ apm_m98J05_heatSolution f x t) ξ =
+      apm_m98J05_fourier f ξ *
+        Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2) := by
+  sorry
+
 theorem apm_m98j05 :
     (∀ (f f' : ℝ → ℂ),
       (∀ x, HasDerivAt f (f' x) x) →
