@@ -153,6 +153,70 @@ lemma apm_m96a06_forceOnH_apply
     apm_m96a06_forceOnH value b hb h = ∫ t, b t * value h t ∂μ := by
   exact apm_m96a06_forceCLM_apply b hb (value h)
 
+/-- Why this unblocks `apm_m96a06`: it constructs the bounded bilinear form
+from the two `L²` pairings and the descended `L∞` multiplier, and records the
+coercivity estimate needed by Lax--Milgram. -/
+theorem apm_m96A06_bridge_1
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (hnorm : ∀ u : H, ‖u‖ ^ 2 =
+      ∫ t, (value u t) ^ 2 + (weakDeriv u t) ^ 2
+        ∂(volume.restrict (Icc (0 : ℝ) 1)))
+    (a : ℝ → ℝ)
+    (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1)))
+    (ε : ℝ) (hε : 0 < ε)
+    (ha_lower : ∀ᵐ t ∂(volume.restrict (Icc (0 : ℝ) 1)), ε ≤ a t) :
+    ∃ B : H →L[ℝ] H →L[ℝ] ℝ,
+      (∀ u h : H, B u h =
+        ∫ t, weakDeriv u t * weakDeriv h t +
+          a t * value u t * value h t
+          ∂(volume.restrict (Icc (0 : ℝ) 1))) ∧
+      0 < min 1 ε ∧
+      ∀ u : H, min 1 ε * ‖u‖ ^ 2 ≤ B u u := by
+  sorry
+
+/-- Why this unblocks the first two conjuncts of `apm_m96a06`: the exact
+quadratic expansion has a remainder bounded by `O(‖h‖²)`, yielding the stated
+Fréchet derivative; uniqueness of derivatives then identifies its vanishing
+with the weak Sturm--Liouville equation. -/
+theorem apm_m96A06_bridge_2
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (hnorm : ∀ u : H, ‖u‖ ^ 2 =
+      ∫ t, (value u t) ^ 2 + (weakDeriv u t) ^ 2
+        ∂(volume.restrict (Icc (0 : ℝ) 1)))
+    (a b : ℝ → ℝ)
+    (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1)))
+    (hb : MemLp b 2 (volume.restrict (Icc (0 : ℝ) 1))) :
+    (∀ u : H, ∃ L : H →L[ℝ] ℝ,
+      HasFDerivAt (apm_m96a06_energy value weakDeriv a b) L u ∧
+      ∀ h : H, L h = 2 *
+        (∫ t, weakDeriv u t * weakDeriv h t + a t * value u t * value h t -
+          b t * value h t ∂(volume.restrict (Icc (0 : ℝ) 1)))) ∧
+    ∀ u : H,
+      (∃ L : H →L[ℝ] ℝ,
+        HasFDerivAt (apm_m96a06_energy value weakDeriv a b) L u ∧ L = 0) ↔
+      apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u := by
+  sorry
+
+/-- Why this unblocks the final conjunct of `apm_m96a06`: coercivity of the
+weighted Sobolev form and continuity of the forcing functional give the
+unique weak Neumann solution by the real Hilbert-space Lax--Milgram theorem. -/
+theorem apm_m96A06_bridge_3
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (hnorm : ∀ u : H, ‖u‖ ^ 2 =
+      ∫ t, (value u t) ^ 2 + (weakDeriv u t) ^ 2
+        ∂(volume.restrict (Icc (0 : ℝ) 1)))
+    (a b : ℝ → ℝ)
+    (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1)))
+    (hb : MemLp b 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (ε : ℝ) (hε : 0 < ε)
+    (ha_lower : ∀ᵐ t ∂(volume.restrict (Icc (0 : ℝ) 1)), ε ≤ a t) :
+    ∃! u : H,
+      apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u := by
+  sorry
+
 theorem apm_m96a06
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
     (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
