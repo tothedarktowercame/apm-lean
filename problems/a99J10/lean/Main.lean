@@ -112,5 +112,39 @@ theorem apm_a99j10 (f : ℂ → ℂ)
   to one from below, and identify the same integrals with each interior value
   using the circle Cauchy formula.  Phragmén--Lindelöf still does not apply
   because its sector/strip theorems require continuous boundary control.
+
+  HOP 4 (failed-with-statement). The affine interval-integrability API has
+  translations and reflections, but applying it here still requires three
+  explicit sine identities and four `IntegrableOn` union conversions. No
+  existing theorem packages the result. The exact first missing lemma is:
+
+      theorem apm_a99J10_integrableOn_abs_sin_rpow_neg_half :
+          IntegrableOn
+            (fun θ : ℝ => Real.rpow |Real.sin θ| (-(1 : ℝ) / 2))
+            (Icc 0 (2 * Real.pi))
+
+  After this lemma, the remaining analytic interface can be stated without
+  hiding the domination hypothesis:
+
+      theorem apm_a99J10_boundary_unique_of_angular_integrable
+          (f : ℂ → ℂ)
+          (hf : DifferentiableOn ℂ f (ball (0 : ℂ) 1))
+          (hbound : ∀ z ∈ ball (0 : ℂ) 1, z.im ≠ 0 →
+            ‖f z‖ ≤ Real.rpow |z.im| (-(1 : ℝ) / 2))
+          (hradial : ∀ θ ∈ Icc (0 : ℝ) (2 * Real.pi),
+            Tendsto
+              (fun r : ℝ =>
+                f ((r : ℂ) * Complex.exp ((θ : ℂ) * Complex.I)))
+              (𝓝[<] (1 : ℝ)) (𝓝 0))
+          (hang : IntegrableOn
+            (fun θ : ℝ => Real.rpow |Real.sin θ| (-(1 : ℝ) / 2))
+            (Icc 0 (2 * Real.pi))) :
+          ∀ z ∈ ball (0 : ℂ) 1, f z = 0
+
+  The second statement is true by dominated convergence on circle Cauchy
+  integrals, using `apm_a99J10_polar_bound_uniform`, followed by the Cauchy
+  integral formula on each smaller circle. Proving it requires assembling the
+  parametrized complex integrals and the one-sided radial filter; no searched
+  declaration consumes these frozen pointwise radial limits directly.
   -/
   sorry

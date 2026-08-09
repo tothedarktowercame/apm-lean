@@ -26,3 +26,12 @@ The canonical Lean attempt is `lean/Main.lean`. Closer hops 1–2 prove:
 
 Mathlib's Phragmén–Lindelöf file was inspected, but its packaged strip/sector
 theorems require continuous boundary bounds rather than these radial limits.
+
+## Hop 4: precise missing interfaces
+
+The boundary comment records two complete Lean statements. The first is
+`apm_a99J10_integrableOn_abs_sin_rpow_neg_half`, the four-quadrant angular
+integrability result. The second is
+`apm_a99J10_boundary_unique_of_angular_integrable`, which explicitly accepts
+that integrability result and packages the dominated-convergence plus Cauchy
+integral argument. No unproved declaration was introduced.

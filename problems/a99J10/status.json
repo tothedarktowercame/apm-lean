@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "note": "Proved the radius-independent domination for r >= 1/2 by factoring |r sin theta|^(-1/2). The first-quadrant model integrability and Jordan bound were already compiled. Four-quadrant symmetry assembly and dominated Cauchy-integral convergence remain.",
+  "closer_hop": 4,
+  "note": "Failed-with-statement: Main.lean now records exact signatures for full-period integrability of |sin theta|^(-1/2) and the dominated-Cauchy boundary uniqueness theorem that consumes it.",
   "imported_at": "2026-07-13T17:26:53.113858Z"
 }
