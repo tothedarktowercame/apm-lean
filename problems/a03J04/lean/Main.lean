@@ -87,6 +87,20 @@ lemma apm_a03J04_lintegral_rpow_eq_level_lintegral
     (Filter.Eventually.of_forall fun x => abs_nonneg (f x))
     hf.abs.aemeasurable hp
 
+/-- The desired local weak-`L¹` estimate is immediate on a null set. Keeping
+this branch separate removes the zero denominator from the crossover split. -/
+lemma apm_a03J04_weakL1_rpow_setIntegral_of_measure_zero
+    {n : ℕ} (f : A03J04Space n → ℝ) (M : ℝ≥0∞) (p : ℝ)
+    (E : Set (A03J04Space n)) (hp1 : p < 1) (hE0 : volume E = 0) :
+    IntegrableOn (fun x => Real.rpow |f x| p) E volume ∧
+      (∫ x in E, Real.rpow |f x| p ∂volume) ≤
+        (1 / (1 - p)) * Real.rpow (volume E).toReal (1 - p) *
+          Real.rpow M.toReal p := by
+  constructor
+  · exact IntegrableOn.of_measure_zero hE0
+  · rw [setIntegral_measure_zero _ hE0, hE0]
+    simp [Real.zero_rpow (sub_pos.mpr hp1).ne']
+
 /-- Why this unblocks `apm_a03j04`: this is the missing layer-cake and
 improper-integral estimate, including the ENNReal-to-real conversion. Its
 integrability conclusion closes part (b), while the sharp quantitative bound
@@ -102,6 +116,10 @@ theorem apm_a03J04_bridge_weakL1_rpow_setIntegral
       (∫ x in E, Real.rpow |f x| p ∂volume) ≤
         (1 / (1 - p)) * Real.rpow (volume E).toReal (1 - p) *
           Real.rpow M.toReal p := by
+  by_cases hE0 : volume E = 0
+  · exact apm_a03J04_weakL1_rpow_setIntegral_of_measure_zero
+      f M p E hp1 hE0
+  have hEpos : 0 < (volume E).toReal := ENNReal.toReal_pos hE0 hEfin
   /-
   CLOSER HOP 1: the main theorem is now routed entirely through this bridge,
   so its former part-(b) and part-(c) sorries are closed. A renewed Mathlib
@@ -144,6 +162,23 @@ theorem apm_a03J04_bridge_weakL1_rpow_setIntegral
   over `Ioi 0`, split at the crossover (including the zero-measure and zero-M
   cases), use the real improper-rpow formulas on both pieces, then transport
   the resulting finite lintegral to `IntegrableOn` and the stated real bound.
+
+  CLOSER HOP 3 compiles and dispatches the zero-measure edge case in
+  `apm_a03J04_weakL1_rpow_setIntegral_of_measure_zero`; consequently the live
+  branch now carries `0 < (volume E).toReal`, proved from `hE0` and `hEfin`.
+  This removes the crossover's zero denominator. A renewed attempt to isolate
+  `M = 0` used the compiled minimum bound to make every positive superlevel
+  measure zero, but converting that family to an a.e.-zero statement (or
+  directly to a zero lintegral) requires the same countable-level/lintegral
+  assembly and did not shorten the proof.
+
+  Searches beyond hop 2 included Mathlib's `Measure.restrict_eq_zero`,
+  `IntegrableOn.of_measure_zero`, `setIntegral_measure_zero`, a.e.-zero and
+  superlevel-measure lemmas, plus solved null-set integration artifacts. The
+  first three were used to close the null-set branch; no packaged theorem was
+  found for the zero-superlevel-to-a.e.-zero conversion in this exact real
+  encoding. The remaining positive-measure branch is still the scalar ENNReal
+  crossover integration and final Bochner/toReal transport described above.
   -/
   sorry
 

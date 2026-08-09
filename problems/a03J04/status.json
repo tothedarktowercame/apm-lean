@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 2,
-  "boundary": "The sole remaining sorry is the analytic bridge. Hop 2 compiled the reciprocal distribution bound, the restricted min(volume E, M/ofReal t) level-set bound, and the weighted layer-cake identity on volume.restrict E. Only the scalar ENNReal minimum-majorant integral, its zero/crossover cases, improper-rpow evaluations, and final Bochner/toReal transport remain.",
+  "closer_hop": 3,
+  "boundary": "The sole remaining sorry is the analytic bridge. Hop 3 compiled and dispatched the volume E = 0 branch using IntegrableOn.of_measure_zero and setIntegral_measure_zero, so the live branch has 0 < (volume E).toReal. The positive-measure scalar ENNReal crossover integral, zero-M/countable-level handling, improper-rpow evaluation, and final Bochner/toReal transport remain.",
   "imported_at": "2026-07-13T17:26:51.764499Z"
 }

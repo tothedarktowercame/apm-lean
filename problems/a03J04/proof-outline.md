@@ -44,3 +44,13 @@ The following prerequisites are now compiled without sorries:
 Consequently the remaining work is only the scalar ENNReal integral of this
 minimum majorant, including zero/crossover cases, followed by the final
 Bochner-integrability and `toReal` conversion.
+
+## Closer hop 3
+
+`apm_a03J04_weakL1_rpow_setIntegral_of_measure_zero` now proves the full bridge
+conclusion when `volume E = 0`, using `IntegrableOn.of_measure_zero` and
+`setIntegral_measure_zero`. The bridge dispatches this case and records
+`0 < (volume E).toReal` in the remaining branch. The unresolved work is thus
+restricted to the positive-measure scalar crossover calculation; an attempted
+separate `M = 0` route still required a countable-superlevel or equivalent
+lintegral-to-a.e.-zero conversion and did not eliminate that assembly.
