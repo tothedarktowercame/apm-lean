@@ -67,6 +67,40 @@ lemma apm_t96j05_exists_positive_nonempty_radialLevel_of_nontrivial
     ⟨fun x y ↦ Subtype.ext ((h x).trans (h y).symm)⟩
   exact not_subsingleton X hsub
 
+/-- A nonempty manifold modelled on a positive-dimensional Euclidean space is
+nontrivial.  Indeed, every chart target is an open neighbourhood of the image
+of its centre, and moving a small amount in one coordinate gives a second
+point which can be pulled back through the chart. -/
+lemma apm_t96j05_nontrivial_of_pos_dim
+    {m : ℕ} (hm : 0 < m) {Y : Type*} [TopologicalSpace Y] [Nonempty Y]
+    [ChartedSpace (apm_t96j05_E m) Y]
+    [IsManifold (apm_t96j05_I m) ⊤ Y] : Nontrivial Y := by
+  let y₀ : Y := Classical.choice inferInstance
+  let c : apm_t96j05_E m := (chartAt (apm_t96j05_E m) y₀) y₀
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp
+    (chartAt (apm_t96j05_E m) y₀).open_target c
+    (mem_chart_target (apm_t96j05_E m) y₀)
+  let i : Fin m := ⟨0, hm⟩
+  let z : apm_t96j05_E m := c + EuclideanSpace.single i (ε / 2)
+  have hzball : z ∈ Metric.ball c ε := by
+    rw [Metric.mem_ball, dist_eq_norm]
+    simp only [z, add_sub_cancel_left]
+    rw [EuclideanSpace.norm_single]
+    simp [abs_of_pos hε, hε]
+  have hz : z ∈ (chartAt (apm_t96j05_E m) y₀).target := hball hzball
+  let y₁ : Y := (chartAt (apm_t96j05_E m) y₀).symm z
+  have hy : y₀ ≠ y₁ := by
+    intro heq
+    have hz_eq : z = c := by
+      calc
+        z = (chartAt (apm_t96j05_E m) y₀) y₁ :=
+          ((chartAt (apm_t96j05_E m) y₀).right_inv hz).symm
+        _ = c := by rw [← heq]
+    have hcoord := congrArg (fun v : apm_t96j05_E m ↦ v i) hz_eq
+    simp [z, c, i] at hcoord
+    linarith
+  exact ⟨⟨y₀, y₁, hy⟩⟩
+
 theorem apm_t96j05
     (m n : ℕ) (hm : 0 < m) (hmn : m ≤ n)
     (X : Set (apm_t96j05_E n))
@@ -117,5 +151,23 @@ theorem apm_t96j05
   would require showing a chart source around an existing point contains a
   second point. The independent manifold-Sard and global regular-level chart
   assemblies also remain absent. The frozen statement is unchanged.
+  -/
+  rcases hX with ⟨charts, hman, hsmooth⟩
+  letI : ChartedSpace (apm_t96j05_E m) X := charts
+  letI : IsManifold (apm_t96j05_I m) ⊤ X := hman
+  letI : Nonempty X := ⟨⟨hXne.choose, hXne.choose_spec⟩⟩
+  letI : Nontrivial X := apm_t96j05_nontrivial_of_pos_dim hm
+  obtain ⟨r, hr, hlevel⟩ :=
+    apm_t96j05_exists_positive_nonempty_radialLevel_of_nontrivial
+      (X := X)
+  refine ⟨r, hr, hlevel, ?_⟩
+  /-
+  HOP 4 closes the identified nontriviality hole with
+  `apm_t96j05_nontrivial_of_pos_dim`: an explicit small coordinate
+  perturbation in an open chart target pulls back to a point distinct from
+  the chart centre.  Consequently the positive inhabited radial level is now
+  constructed above.  The remaining sorry is exclusively the independent
+  manifold Sard theorem and globalization of regular-level charts already
+  identified in the preceding boundaries.
   -/
   sorry
