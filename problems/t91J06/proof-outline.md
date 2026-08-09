@@ -33,3 +33,15 @@ exhaustion of the ambient space.
 Mathlib provides compact-exhaustion and compactly-generated-space APIs, but no
 theorem constructs the compatible interval coordinates or performs this
 direct-limit gluing.
+
+## Hop 4 bridge contracts
+
+- `apm_t91J06_bridge_compatible_stage_coordinates` states the missing
+  orientation and extension construction as a compatible family of
+  homeomorphisms from stage `n` onto `[-(n+1), n+1]`.
+- `apm_t91J06_bridge_glue_compatible_stage_coordinates` states that such a
+  family glues, under the cover and weak-topology hypotheses, to a
+  homeomorphism `X ≃ₜ ℝ`.
+
+The first bridge feeds directly into the second, whose conclusion is exactly
+the frozen theorem's conclusion.

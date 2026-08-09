@@ -84,6 +84,46 @@ lemma apm_t91J06_exists_pair_mem_stage_interior
   exact ⟨max nx ny + 1, hnested (max nx ny) hxmax,
     hnested (max nx ny) hymax⟩
 
+/-- Why this unblocks `apm_t91j06`: this is the missing inductive
+orientation/extension step.  It chooses coordinates on every compact stage,
+with the coordinate on stage `n + 1` extending the one already chosen on
+stage `n`; the expanding symmetric target intervals make room on both sides. -/
+theorem apm_t91J06_bridge_compatible_stage_coordinates
+    {X : Type*} [TopologicalSpace X]
+    (f : ℕ → apm_t91J06_I → X)
+    (hf : ∀ n, Topology.IsEmbedding (f n))
+    (hnested : ∀ n,
+      f n '' (univ : Set apm_t91J06_I) ⊆
+        f (n + 1) '' apm_t91J06_Iinterior) :
+    ∃ g : ∀ n, ↥(apm_t91J06_stage f n) ≃ₜ
+        Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ),
+      ∀ (n : ℕ) (x : X) (hx : x ∈ apm_t91J06_stage f n),
+        ((g (n + 1))
+            ⟨x, (apm_t91J06_stage_mono f hnested (Nat.le_succ n)) hx⟩ : ℝ) =
+          ((g n) ⟨x, hx⟩ : ℝ) := by
+  sorry
+
+/-- Why this unblocks `apm_t91j06`: this is the subsequent gluing step.
+Compatible coordinates on the compact exhaustion define a single bijection
+to the union of the intervals `[-(n+1), n+1] = ℝ`; `hweak` proves its
+continuity and compact-stage continuity proves continuity of its inverse. -/
+theorem apm_t91J06_bridge_glue_compatible_stage_coordinates
+    {X : Type*} [TopologicalSpace X]
+    (f : ℕ → apm_t91J06_I → X)
+    (hnested : ∀ n,
+      f n '' (univ : Set apm_t91J06_I) ⊆
+        f (n + 1) '' apm_t91J06_Iinterior)
+    (hcover : (⋃ n, f n '' (univ : Set apm_t91J06_I)) = (univ : Set X))
+    (hweak : ∀ C : Set X, (∀ n, IsClosed (f n ⁻¹' C)) → IsClosed C)
+    (g : ∀ n, ↥(apm_t91J06_stage f n) ≃ₜ
+      Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ))
+    (hcompat : ∀ (n : ℕ) (x : X) (hx : x ∈ apm_t91J06_stage f n),
+      ((g (n + 1))
+          ⟨x, (apm_t91J06_stage_mono f hnested (Nat.le_succ n)) hx⟩ : ℝ) =
+        ((g n) ⟨x, hx⟩ : ℝ)) :
+    Nonempty (X ≃ₜ ℝ) := by
+  sorry
+
 theorem apm_t91j06
     {X : Type*} [TopologicalSpace X]
     (f : ℕ → apm_t91J06_I → X)
