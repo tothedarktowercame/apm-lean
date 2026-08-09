@@ -30,6 +30,10 @@ I(1 - e^{2πiω}) = -πi(1 + e^{2πiω}), giving I = -π cot(πω).
   for principal-value substitutions, beta/reflection integrals, cotangent
   integrals, and rectangle residue results found no packaged theorem that
   supplies the missing normalization.
+- **Exact handoff theorem**: `apm_a96J08_bridge_1` now states the missing
+  principal-value evaluation directly using the same interval integrals and
+  `𝓝[>] 0` filter as the frozen theorem. Proving it leaves no substitution or
+  normalization step unresolved.
 - **Mid-solve lookups**: psr_search "residue theorem rectangle boundary integral
   pole differentiable countable Cauchy-Goursat" — timed out, no relevant patterns.
   memory_search ["contour", "integral", "residue"] — empty.

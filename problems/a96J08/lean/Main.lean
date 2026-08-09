@@ -50,6 +50,19 @@ lemma integrand_one_sub_neg (ω : ℂ) (x : ℝ) :
   rw [show (Complex.exp (x : ℂ) - 1) = -(1 - Complex.exp x) by ring,
     div_neg]
 
+/-- Why this unblocks `apm_a96J08`: this is the missing analytic
+principal-value evaluation, stated directly in the truncation and filter API
+used by the frozen theorem. An indented-contour or beta/reflection argument
+can prove it without any further algebraic interface lemma. -/
+theorem apm_a96J08_bridge_1 (ω : ℂ)
+    (hre_pos : 0 < ω.re) (hre_lt : ω.re < 1) :
+    Tendsto (fun δ : ℝ =>
+      (∫ x in -(δ⁻¹)..(-δ), integrand ω x) +
+        (∫ x in δ..δ⁻¹, integrand ω x))
+      (𝓝[>] 0)
+      (𝓝 (-π * Complex.cos (π * ω) / Complex.sin (π * ω))) := by
+  sorry
+
 /-- **Main theorem**: ∫_{-∞}^{∞} e^{ωx}/(1-e^x) dx = -π cot(πω) for 0 < Re(ω) < 1.
 
     The integral is interpreted as a principal value at x = 0 (where 1-e^x has a simple zero).
