@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,6 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "classification_detail": "Closer hop 3 wires the complete ZMod 7 Kummer conclusion into the main theorem. Its sole sorry is now syntactically restricted to the rational and real splitting-field identifications; Mathlib supplies uniqueness transport but no concrete real-cubic or rational S3 model.",
+  "classification_detail": "Hop 4 states two precise unproved contracts: the concrete complex splitting-field model over R with its order-two automorphism group, and the rational degree-six/S3 theorem for every abstract splitting field. The finite-field conjunct remains fully compiled.",
+  "closer_hop": 4,
   "imported_at": "2026-07-13T17:26:53.987866Z"
 }

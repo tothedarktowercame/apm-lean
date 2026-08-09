@@ -21,8 +21,15 @@ consequences of the target degree are packaged as reusable lemmas.
 - The main theorem now invokes `apm_b94J03_finiteField_conclusion` directly;
   its sole sorry is restricted to the paired characteristic-zero clauses.
 
-## Remaining bridge
+## Hop 4 bridge contracts
 
-Realize the rational splitting field and its `S₃` action, and identify the
-real splitting field with `ℂ` and its Galois group with `ZMod 2`. The
-finite-field case is complete.
+- `apm_b94J03_bridge_complex_model` states that `ℂ` is the splitting field of
+  the real cubic and that its real automorphism group is `ZMod 2`.
+  `IsSplittingField.algEquiv` and `AlgEquiv.autCongr` provide the transport to
+  an arbitrary real splitting field.
+- `apm_b94J03_bridge_rational_conclusion` states the rational degree-six and
+  `S₃` result for an arbitrary splitting field, encapsulating the irreducible
+  cubic, discriminant, root action, and surjectivity calculation.
+
+Both declarations are intentionally unproved. The finite-field case remains
+complete, and the main theorem is unchanged.

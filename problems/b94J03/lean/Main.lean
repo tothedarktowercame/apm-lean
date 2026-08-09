@@ -79,6 +79,26 @@ lemma apm_b94J03_finiteField_conclusion
   refine ⟨hfin, apm_b94J03_card_of_finrank_three K hfin, ?_⟩
   exact ⟨autEquivZmod hirr K hζ⟩
 
+/-- Why this unblocks `apm_b94j03`: this is the concrete real splitting-field
+model and its conjugation action.  `IsSplittingField.algEquiv` and
+`AlgEquiv.autCongr` then transport both conclusions from `ℂ` to every abstract
+real splitting field in the main theorem. -/
+theorem apm_b94J03_bridge_complex_model :
+    IsSplittingField ℝ ℂ (apm_b94J03_poly ℝ) ∧
+      Nonempty ((ℂ ≃ₐ[ℝ] ℂ) ≃* Multiplicative (ZMod 2)) := by
+  sorry
+
+/-- Why this unblocks `apm_b94j03`: this is the missing rational cubic
+splitting-field theorem.  It combines irreducibility and the nonsquare
+discriminant with the faithful action on the three roots to identify both the
+degree and the full `S₃` automorphism group. -/
+theorem apm_b94J03_bridge_rational_conclusion
+    (K : Type*) [Field K] [Algebra ℚ K]
+    [IsSplittingField ℚ K (apm_b94J03_poly ℚ)] :
+    Module.finrank ℚ K = 6 ∧
+      Nonempty ((K ≃ₐ[ℚ] K) ≃* Equiv.Perm (Fin 3)) := by
+  sorry
+
 theorem apm_b94j03 :
     (∀ (K : Type*) [Field K] [Algebra ℚ K]
       [IsSplittingField ℚ K (apm_b94J03_poly ℚ)],
