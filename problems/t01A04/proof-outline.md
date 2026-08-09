@@ -30,3 +30,18 @@ remain open.
 - Identify their induced fundamental-group ranges with the parity kernels.
 - Compute enough singular homology of the quotient total spaces to rule out a
   homeomorphism (`H₂ ≅ ℤ²` versus `H₂ ≅ ℤ`).
+
+## Hop 4 bridge statements
+
+- `apm_t01A04_bridge_quotient_maps_are_coverings` states the missing local
+  evenly-covered-neighborhood theorem for both descended quotient maps.
+- `apm_t01A04_bridge_piOne_presentation_and_ranges` states the complete
+  `ℤ² * ℤ` universal presentation, its two parity characters, and the
+  equality of their kernels with the two inclusion-induced ranges.
+- `apm_t01A04_bridge_total_spaces_not_homeomorphic` states the consequence of
+  the singular `H₂` computation: the two concrete total spaces are not
+  homeomorphic.
+
+Choosing the concrete maps in the frozen existential, the first bridge gives
+the covering clauses, the second supplies all group-theoretic data and range
+clauses, and the third supplies the final distinction.

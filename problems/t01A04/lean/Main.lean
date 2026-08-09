@@ -200,6 +200,51 @@ lemma apm_t01a04_torusCoverMap_surjective :
 
 abbrev apm_t01a04_piOne := FundamentalGroup apm_t01a04_X apm_t01a04_basepoint
 
+/-- Why this unblocks `apm_t01a04`: this is the missing local
+evenly-covered-neighborhood construction for the two concrete quotient maps.
+Surjectivity and basepoint preservation are already proved separately. -/
+theorem apm_t01A04_bridge_quotient_maps_are_coverings :
+    IsCoveringMap apm_t01a04_circleCoverMap ∧
+    IsCoveringMap apm_t01a04_torusCoverMap := by
+  sorry
+
+/-- Why this unblocks `apm_t01a04`: this is the Seifert--van Kampen
+presentation of `T² ∨ S¹`, together with the two parity characters and the
+covering-subgroup range computation for the already constructed based maps. -/
+theorem apm_t01A04_bridge_piOne_presentation_and_ranges :
+    ∃ (a b c : apm_t01a04_piOne)
+      (phic phia : apm_t01a04_piOne →* apm_t01a04_Parity),
+      a * b = b * a ∧
+      Subgroup.closure {a, b, c} = ⊤ ∧
+      (∀ (G : Type) [Group G] (ga gb gc : G), ga * gb = gb * ga →
+        ∃! F : apm_t01a04_piOne →* G,
+          F a = ga ∧ F b = gb ∧ F c = gc) ∧
+      phic a = Multiplicative.ofAdd 0 ∧
+      phic b = Multiplicative.ofAdd 0 ∧
+      phic c = Multiplicative.ofAdd 1 ∧
+      phia a = Multiplicative.ofAdd 1 ∧
+      phia b = Multiplicative.ofAdd 0 ∧
+      phia c = Multiplicative.ofAdd 0 ∧
+      Function.Surjective phic ∧ Function.Surjective phia ∧
+      phic.ker.index = 2 ∧ phia.ker.index = 2 ∧ phic.ker ≠ phia.ker ∧
+      MonoidHom.range
+        (apm_t01a04_circleCoverMap_base ▸
+          FundamentalGroup.map apm_t01a04_circleCoverMap
+            apm_t01a04_circleCoverBase) = phic.ker ∧
+      MonoidHom.range
+        (apm_t01a04_torusCoverMap_base ▸
+          FundamentalGroup.map apm_t01a04_torusCoverMap
+            apm_t01a04_torusCoverBase) = phia.ker := by
+  sorry
+
+/-- Why this unblocks `apm_t01a04`: this is the missing singular `H₂`
+distinction. The circle-doubled total space has two independent torus
+fundamental classes whereas the torus-doubled total space has one, so the
+concrete quotient spaces cannot be homeomorphic. -/
+theorem apm_t01A04_bridge_total_spaces_not_homeomorphic :
+    ¬Nonempty (apm_t01a04_CircleCover ≃ₜ apm_t01a04_TorusCover) := by
+  sorry
+
 theorem apm_t01a04 :
     ∃ (a b c : apm_t01a04_piOne)
       (φc φa : apm_t01a04_piOne →* apm_t01a04_Parity)

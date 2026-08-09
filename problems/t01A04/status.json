@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "boundary": "The sheet-point square identities and both actual continuous, surjective quotient projection maps, including their basepoint equations, are compiled. Remaining work is covering-map certification by quotient gluing, the quotient-wedge fundamental-group presentation, induced-range identification, and singular-homology distinction of the total spaces.",
+  "boundary": "Hop 4 states three exact contracts: both concrete quotient maps are covering maps; the wedge fundamental group has the required torus-plus-circle presentation with parity kernels equal to the induced ranges; and singular H2 distinguishes the two total spaces. Together they unblock the frozen theorem.",
   "imported_at": "2026-07-13T17:26:56.718249Z"
 }
