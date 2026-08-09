@@ -35,6 +35,23 @@ def apm_a03J04_weakL1Size {n : ℕ}
   ⨆ α : {α : ℝ // 0 < α},
     ENNReal.ofReal α.1 * apm_a03J04_distribution f α.1
 
+/-- Why this unblocks `apm_a03j04`: this is the missing layer-cake and
+improper-integral estimate, including the ENNReal-to-real conversion. Its
+integrability conclusion closes part (b), while the sharp quantitative bound
+with constant `1 / (1-p)` closes part (c). -/
+theorem apm_a03J04_bridge_weakL1_rpow_setIntegral
+    {n : ℕ} (f : A03J04Space n → ℝ) (M : ℝ≥0∞) (p : ℝ)
+    (E : Set (A03J04Space n))
+    (hf : Measurable f)
+    (hweak : apm_a03J04_weakL1Size f = M)
+    (hM : M ≠ ⊤) (hp : 0 < p) (hp1 : p < 1)
+    (hE : MeasurableSet E) (hEfin : volume E ≠ ⊤) :
+    IntegrableOn (fun x => Real.rpow |f x| p) E volume ∧
+      (∫ x in E, Real.rpow |f x| p ∂volume) ≤
+        (1 / (1 - p)) * Real.rpow (volume E).toReal (1 - p) *
+          Real.rpow M.toReal p := by
+  sorry
+
 theorem apm_a03j04 (n : ℕ) :
     (∀ f : A03J04Space n → ℝ,
       Measurable f → Integrable f volume →
