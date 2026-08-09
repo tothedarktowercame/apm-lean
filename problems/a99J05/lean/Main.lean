@@ -217,6 +217,14 @@ lemma apm_a99J05_typewriter1d_integrable (k : ℕ) :
   rw [Set.indicator_apply]
   split_ifs <;> simp [abs_of_nonneg (Real.sqrt_nonneg _)]
 
+/-- Why this unblocks `apm_a99j05`: every point of the unit interval lies in
+arbitrarily late typewriter cells whose heights are arbitrarily large.  This
+gives the cofinal unbounded subsequence needed to refute pointwise convergence
+of the first example. -/
+theorem apm_a99J05_bridge_1 (x : ℝ) (hx : x ∈ Icc (0 : ℝ) 1) :
+    apm_a99J05_LimsupInfinite (fun k ↦ apm_a99J05_typewriter1d k x) := by
+  sorry
+
 /- CLOSER HOP 3 NOTE.
 
 The stage, position, cofinality, exact cell integral, vanishing-integral, and
