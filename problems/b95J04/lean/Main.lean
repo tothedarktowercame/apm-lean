@@ -72,6 +72,41 @@ lemma apm_b95J04_eigenvector_is_radical_generator
     rw [pow_mul, ← hcard, pow_card_eq_one', one_pow]
     exact one_mem _
 
+/-- Why this unblocks the forward implication of `apm_b95j04`: this is the
+missing binomial irreducibility step. A non-base-field `p`-th root of `a`
+forces `X ^ p - C a` to be irreducible when `p` is prime. -/
+theorem apm_b95J04_bridge_radical_irreducible
+    (p : ℕ) (hp : p.Prime)
+    (F E : Type*) [Field F] [Field E] [Algebra F E]
+    (a : F) (alpha : E)
+    (halpha : alpha ∉ (algebraMap F E).range)
+    (hpow : algebraMap F E a = alpha ^ p) :
+    Irreducible (X ^ p - C a : F[X]) := by
+  sorry
+
+/-- Why this unblocks the forward implication of `apm_b95j04`: this is the
+splitting-field/Kummer assembly on the actual subtype `F⟮alpha⟯`. It installs
+Galoisness and orients the standard cyclic automorphism equivalence so that
+its exponent gives exactly the frozen pointwise action on the adjoined root. -/
+theorem apm_b95J04_bridge_radical_adjoin_galois
+    (p : ℕ) [Fact p.Prime]
+    (F E : Type*) [Field F] [Field E] [Algebra F E]
+    (z a : F) (hz : IsPrimitiveRoot z p)
+    (alpha : E) (hpow : algebraMap F E a = alpha ^ p)
+    (hirr : Irreducible (X ^ p - C a : F[X])) :
+    IsGalois F ↥(IntermediateField.adjoin F {alpha}) ∧
+      ∃ e : (↥(IntermediateField.adjoin F {alpha}) ≃ₐ[F]
+          ↥(IntermediateField.adjoin F {alpha})) ≃* Multiplicative (ZMod p),
+        ∀ sigma : (↥(IntermediateField.adjoin F {alpha}) ≃ₐ[F]
+            ↥(IntermediateField.adjoin F {alpha})),
+          sigma ⟨alpha, IntermediateField.subset_adjoin (F := F)
+            (S := {alpha}) (Set.mem_singleton alpha)⟩ =
+            (algebraMap F ↥(IntermediateField.adjoin F {alpha}) z) ^
+                (Multiplicative.toAdd (e sigma)).val *
+              ⟨alpha, IntermediateField.subset_adjoin (F := F)
+                (S := {alpha}) (Set.mem_singleton alpha)⟩ := by
+  sorry
+
 /-!
 # APM b95J04
 

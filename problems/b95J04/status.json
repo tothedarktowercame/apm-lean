@@ -13,10 +13,10 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
-    "closer_progress": "Hop 3 closes the entire converse: the specified eigenvector is outside the base-field range, its p-th power is fixed and hence in the range, and its adjoin is top by Galois correspondence. Only the forward radical-to-splitting-field/autEquivZmod construction remains."
+    "sorry_count_total": 3,
+    "closer_progress": "Hop 4 states the two exact forward contracts: irreducibility of the prime binomial from a non-base radical, and the splitting-field/Kummer Galois equivalence on the actual adjoin subtype with the required pointwise orientation."
   },
   "artifacts": {
     "has_problem_tex": true,
