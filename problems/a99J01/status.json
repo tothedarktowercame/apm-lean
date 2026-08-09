@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 3 proved the direct tangent inequality log |x| ≤ m|x| - log m - 1, routing around normalized-measure Jensen. The remaining sorry is confined to the finite-negative-part EReal interface: package the custom negative part as AEMeasurable, deduce f ≠ 0 a.e. on E from its finite lintegral, and identify the EReal difference with the ordinary log integral before applying setIntegral_mono_ae.",
+  "classification_detail": "Hop 4 states the exact finite-negative-part EReal interfaces as apm_a99J01_bridge_1 and bridge_2: finite custom negative mass forces f != 0 almost everywhere on the restriction, and the custom EReal difference equals the coerced ordinary set integral of log |f|.",
   "imported_at": "2026-07-13T17:26:53.040560Z"
 }

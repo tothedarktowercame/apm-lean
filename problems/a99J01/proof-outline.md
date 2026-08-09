@@ -24,3 +24,11 @@ the extended logarithmic integral.
 - Identify the custom `EReal` difference with the ordinary set integral of
   `log |f|`, apply `setIntegral_mono_ae` to the tangent bound, and simplify
   using `hf_norm`.
+
+## Hop 4: stated extended-real bridges
+
+`apm_a99J01_bridge_1` states the representative/zero-set consequence of a
+finite custom negative lintegral. `apm_a99J01_bridge_2` states the exact
+conversion from `apmLogIntegralOn` to the coerced ordinary set integral of
+`Real.log |f|`. Together they expose all remaining custom `EReal` work and
+leave the compiled tangent inequality ready for direct integration.

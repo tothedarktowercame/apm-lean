@@ -79,6 +79,28 @@ lemma apm_log_abs_le_tangent {m x : ℝ} (hm : 0 < m) (hx : x ≠ 0) :
   rw [Real.log_mul hm.ne' hax.ne'] at h
   linarith
 
+/-- Why this unblocks `apm_a99j01`: finiteness of the custom negative
+logarithmic part rules out zeros almost everywhere on the restricted set,
+which is the missing hypothesis for applying the real logarithm estimates. -/
+theorem apm_a99J01_bridge_1
+    {X : Type*} [MeasurableSpace X] {mu : Measure X} {f : X → ℝ}
+    (hf : Integrable f mu) {E : Set X} (hE : MeasurableSet E)
+    (hneg : ∫⁻ x in E, apmLogAbsNegative f x ∂mu ≠ ⊤) :
+    ∀ᵐ x ∂mu.restrict E, f x ≠ 0 := by
+  sorry
+
+/-- Why this unblocks `apm_a99j01`: when both logarithmic parts are finite,
+the custom `EReal` subtraction is exactly the coercion of the ordinary
+set integral of `log |f|`; the tangent inequality can then be integrated with
+`setIntegral_mono_ae`. -/
+theorem apm_a99J01_bridge_2
+    {X : Type*} [MeasurableSpace X] {mu : Measure X} {f : X → ℝ}
+    (hf : Integrable f mu) {E : Set X} (hE : MeasurableSet E)
+    (hneg : ∫⁻ x in E, apmLogAbsNegative f x ∂mu ≠ ⊤) :
+    apmLogIntegralOn f E mu =
+      ((∫ x in E, Real.log |f x| ∂mu : ℝ) : EReal) := by
+  sorry
+
 theorem apm_a99j01
     {X : Type*} [MeasurableSpace X]
     (mu : Measure X) (f : X → ℝ)
