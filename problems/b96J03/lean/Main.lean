@@ -169,6 +169,21 @@ lemma apm_b96j03_toA7_surjective_of_generate
   rw [← MonoidHom.range_eq_top]
   exact top_unique (hgen ▸ apm_b96j03_closure_b7_c7_le_range)
 
+/-- Why this unblocks `apm_b96j03`: the two explicit images of the presented
+generators then generate the whole finite target, so
+`apm_b96j03_toA7_surjective_of_generate` makes the quotient map surjective. -/
+theorem apm_b96J03_bridge_1 :
+    Subgroup.closure ({apm_b96j03_b7, apm_b96j03_c7} :
+      Set (alternatingGroup (Fin 7))) = ⊤ := by
+  sorry
+
+/-- Why this unblocks `apm_b96j03`: together with the concrete surjection
+onto `A₇`, this transfers nonsolvability back to the frozen presented group;
+nonnilpotence then follows from nilpotent groups being solvable. -/
+theorem apm_b96J03_bridge_2 :
+    ¬IsSolvable (alternatingGroup (Fin 7)) := by
+  sorry
+
 theorem apm_b96j03 :
     (∀ (G : Type) [Group G],
       apm_b96j03_IsNilpotent G → apm_b96j03_IsSolvable G) ∧

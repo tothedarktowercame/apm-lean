@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -33,8 +33,12 @@
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/b96J03/lean/Main.lean",
-    "sorry_count": 1,
-    "sorry_locations": ["apm_b96j03 (surjectivity and nonsolvability of the A7 quotient)"],
+    "sorry_count": 3,
+    "sorry_locations": [
+      "apm_b96J03_bridge_1 (the explicit 3-cycle and 7-cycle generate A7)",
+      "apm_b96J03_bridge_2 (A7 is nonsolvable)",
+      "apm_b96j03 (assembly from the two stated bridges)"
+    ],
     "proved": [
       "apm_b96j03_nilpotent_implies_solvable",
       "apm_b96j03_solvable_not_nilpotent_exists",

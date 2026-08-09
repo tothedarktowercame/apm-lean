@@ -40,6 +40,16 @@ the equality because `Subgroup.closure` has no computable decidability
 instance. The remaining finite route is exactly the concrete generation
 equality and nonsolvability of `A₇`.
 
+## Hop 4 bridge statements
+
+The remaining mathematical interface is now explicit in Lean as two
+independent declarations. `apm_b96J03_bridge_1` says that the displayed
+3-cycle and 7-cycle generate `A₇`; this feeds the already proved
+`apm_b96j03_toA7_surjective_of_generate`. `apm_b96J03_bridge_2` states that
+`A₇` is not solvable. Surjective-image closure of solvability then gives the
+presented group's nonsolvability, and the compiled nilpotent-implies-solvable
+lemma gives its nonnilpotence.
+
 ## Imported Proof Plan
 
 ```clojure
