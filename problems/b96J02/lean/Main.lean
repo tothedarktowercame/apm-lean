@@ -100,6 +100,37 @@ abbrev apm_b96J02_mixedType :=
 abbrev apm_b96J02_trivialType :=
   apm_b96J02_k × (apm_b96J02_k × (apm_b96J02_k × apm_b96J02_k))
 
+/-- Why this unblocks `apm_b96j02`: these are the two concrete quotient
+cardinalities from which the cardinalities of all three displayed product
+modules follow. -/
+theorem apm_b96J02_bridge_1 :
+    Nat.card apm_b96J02_R = 4 ∧ Nat.card apm_b96J02_k = 2 := by
+  sorry
+
+/-- Why this unblocks `apm_b96j02`: an adapted basis for the square-zero
+operator `x • ·` decomposes a four-dimensional underlying `ZMod 2` space into
+rank-two, rank-one, or rank-zero blocks, yielding exactly these three
+`R`-linear module types. -/
+theorem apm_b96J02_bridge_2
+    (M : Type) [AddCommGroup M] [Module apm_b96J02_R M] [Finite M]
+    (hcard : Nat.card M = 16) :
+    Nonempty (M ≃ₗ[apm_b96J02_R] apm_b96J02_freeType) ∨
+      Nonempty (M ≃ₗ[apm_b96J02_R] apm_b96J02_mixedType) ∨
+      Nonempty (M ≃ₗ[apm_b96J02_R] apm_b96J02_trivialType) := by
+  sorry
+
+/-- Why this unblocks `apm_b96j02`: multiplication by `x` has respective
+underlying `ZMod 2` ranks two, one, and zero on the three model modules, so an
+`R`-linear equivalence cannot identify any two of them. -/
+theorem apm_b96J02_bridge_3 :
+    ¬Nonempty
+        (apm_b96J02_freeType ≃ₗ[apm_b96J02_R] apm_b96J02_mixedType) ∧
+      ¬Nonempty
+        (apm_b96J02_freeType ≃ₗ[apm_b96J02_R] apm_b96J02_trivialType) ∧
+      ¬Nonempty
+        (apm_b96J02_mixedType ≃ₗ[apm_b96J02_R] apm_b96J02_trivialType) := by
+  sorry
+
 theorem apm_b96j02 :
     Nat.card apm_b96J02_freeType = 16 ∧
     Nat.card apm_b96J02_mixedType = 16 ∧
