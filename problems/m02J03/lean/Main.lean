@@ -63,6 +63,34 @@ lemma apm_m02j03_tendsto_of_weak_and_norm
     hsqrt.congr (fun n => Real.sqrt_sq (norm_nonneg _))
   simpa [tendsto_iff_norm_sub_tendsto_zero] using hnorm_sub
 
+/-- Why this unblocks the first conjunct of `apm_m02j03`: this is the
+uniform-boundedness consequence of pointwise convergence of the inner-product
+functionals associated to a weakly convergent sequence. -/
+theorem apm_m02J03_bridge_1
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [CompleteSpace H]
+    (x : ℕ → H) (x₀ : H)
+    (hweak : ∀ y : H,
+      Tendsto (fun n ↦ inner ℂ (x n) y) atTop (nhds (inner ℂ x₀ y))) :
+    ∃ C : ℝ, ∀ n : ℕ, ‖x n‖ ≤ C := by
+  sorry
+
+/-- Why this unblocks the final conjunct of `apm_m02j03`: this is the
+strictly-positive triangular form of Mazur's theorem. Unlike an ordinary
+finite convex-hull witness, every coefficient on the full initial segment
+`0,…,n` is positive while the resulting combinations converge strongly. -/
+theorem apm_m02J03_bridge_2
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [CompleteSpace H]
+    (x : ℕ → H) (x₀ : H)
+    (hweak : ∀ y : H,
+      Tendsto (fun n ↦ inner ℂ (x n) y) atTop (nhds (inner ℂ x₀ y))) :
+    ∃ α : ∀ n : ℕ, Fin (n + 1) → ℝ,
+      (∀ n : ℕ, (∀ i : Fin (n + 1), 0 < α n i) ∧ ∑ i, α n i = 1) ∧
+      Tendsto (fun n ↦ ∑ i : Fin (n + 1), (α n i : ℂ) • x i.val)
+        atTop (nhds x₀) := by
+  sorry
+
 theorem apm_m02j03
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (x : ℕ → H) (x₀ : H)
