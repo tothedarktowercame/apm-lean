@@ -30,3 +30,15 @@ two once-punctured tori, and cutting again gives either a disk or an annulus.
 The non-null-homotopy hypothesis excludes the disk. Mathlib currently has no
 packaged surface-cutting, Euler-characteristic, or annulus theorem connecting
 these facts to the exact subset/frontier conclusion.
+
+## Hop 4 bridge statements
+
+- `apm_t01J01_bridge_separates_of_nullHomologous` states that an embedded
+  null-homologous circle separates the encoded closed oriented surface,
+  expressed as non-preconnectedness of its complement.
+- `apm_t01J01_bridge_annulus_of_separating` states the genus-two cutting
+  theorem: two disjoint, essential, separating embedded circles cobound a
+  subset satisfying the exact annulus and frontier predicate.
+
+Applying the first bridge to each curve supplies both separation hypotheses
+of the second, whose conclusion is exactly the frozen theorem's conclusion.

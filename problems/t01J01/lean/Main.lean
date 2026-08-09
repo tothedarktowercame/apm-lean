@@ -127,6 +127,41 @@ lemma apm_t01j01_ne_univ_of_isAnnulusBetween
   rw [hAS, frontier_univ] at hz
   exact hz
 
+/-- Why this unblocks `apm_t01j01`: this is the missing
+homology-to-separation theorem for an oriented closed surface.  It converts
+the actual vanishing singular-homology morphism into the topological cut used
+by surface classification. -/
+theorem apm_t01J01_bridge_separates_of_nullHomologous
+    (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
+    [IsManifold apm_t01j01_Model ∞ S]
+    (hS : apm_t01j01_HasGenusTwoHomology S)
+    (γ : C(Circle, S))
+    (hγ : Topology.IsEmbedding (γ : Circle → S))
+    (hhom : apm_t01j01_IsNullHomologous γ) :
+    ¬IsPreconnected ((Set.range γ)ᶜ : Set S) := by
+  sorry
+
+/-- Why this unblocks `apm_t01j01`: this is the remaining genus-two cutting
+and classification theorem.  Two disjoint essential separating embedded
+circles in a closed genus-two surface are parallel and therefore bound the
+requested closed annular subsurface. -/
+theorem apm_t01J01_bridge_annulus_of_separating
+    (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
+    [IsManifold apm_t01j01_Model ∞ S]
+    (hS : apm_t01j01_HasGenusTwoHomology S)
+    (γ₁ γ₂ : C(Circle, S))
+    (hγ₁ : Topology.IsEmbedding (γ₁ : Circle → S))
+    (hγ₂ : Topology.IsEmbedding (γ₂ : Circle → S))
+    (hdisjoint : Disjoint (Set.range γ₁) (Set.range γ₂))
+    (hsep₁ : ¬IsPreconnected ((Set.range γ₁)ᶜ : Set S))
+    (hsep₂ : ¬IsPreconnected ((Set.range γ₂)ᶜ : Set S))
+    (hπ₁ : ¬apm_t01j01_IsNullHomotopic γ₁)
+    (hπ₂ : ¬apm_t01j01_IsNullHomotopic γ₂) :
+    ∃ A : Set S, apm_t01j01_IsAnnulusBetween A γ₁ γ₂ := by
+  sorry
+
 theorem apm_t01j01
     (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
