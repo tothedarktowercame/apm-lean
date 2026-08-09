@@ -30,3 +30,7 @@ fixed-set classification bridge.
   `p.rep`, split according to its third coordinate, and transport the two
   cases through the noncanonical representative to either
   `t97J07FixedLine` or `t97J07IsolatedPoint`.
+
+Hop 4 states this exact missing result as `apm_t97J07_bridge_1`. Its conclusion
+is the first conjunct of the frozen theorem, so no additional interface or
+normalization lemma is hidden behind the remaining `sorry`.

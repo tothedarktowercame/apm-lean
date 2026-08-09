@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_progress": "All conjuncts except the global fixed-set equality are compiled: both projective chart identities, isolated-point exclusion, both derivative/determinant/index chains, and the final contribution arithmetic. The remaining bridge is classification of every fixed projective point via proportionality of the noncanonical representative.",
+  "closer_hop": 4,
+  "closer_progress": "The sole missing global fixed-set classification is now stated precisely as apm_t97J07_bridge_1. It identifies the fixed locus of the projectivized diagonal map with the fixed line union the isolated third-axis point; the bridge and original main theorem remain unproved.",
   "imported_at": "2026-07-13T17:26:58.509785Z"
 }

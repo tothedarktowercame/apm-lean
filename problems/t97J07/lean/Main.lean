@@ -174,6 +174,15 @@ lemma t97J07IsolatedPoint_not_mem :
   apply a.ne_zero
   simpa [Units.smul_def] using ha2
 
+/-- Why this unblocks `apm_t97j07`: this is the missing classification of
+all fixed points of the projectivized diagonal map.  It asserts that a fixed
+projective class is exactly either a class with zero third coordinate or the
+third coordinate axis, which is the sole unresolved conjunct below. -/
+theorem apm_t97J07_bridge_1 :
+    {p : T97J07CP2 | t97J07Map p = p} =
+      t97J07FixedLine ∪ {t97J07IsolatedPoint} := by
+  sorry
+
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
         t97J07FixedLine ∪ {t97J07IsolatedPoint} ∧
