@@ -90,6 +90,14 @@ lemma apm_t91a05_no_retraction_of_circle_fundamentalGroup_nontrivial
   exact apm_t91a05_no_retraction_of_subsingleton_fundamentalGroup
     i apm_t91a05_circleBase ⟨⟨g, hg⟩, hretract⟩
 
+/-- Why this unblocks `apm_t91a05`: the compiled reduction above proves the
+frozen no-retraction theorem from exactly this instance. Mathematically it is
+the nontriviality part of `π₁(S¹, 1) ≃ ℤ`. -/
+theorem apm_t91A05_bridge_1 :
+    Nontrivial
+      (FundamentalGroup apm_t91a05_Circle apm_t91a05_circleBase) := by
+  sorry
+
 theorem apm_t91a05 :
     ¬∃ g : apm_t91a05_Disk → apm_t91a05_Circle,
       Continuous g ∧

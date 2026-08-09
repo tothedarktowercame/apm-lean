@@ -19,4 +19,8 @@ circle is nontrivial. The standard identification with `Multiplicative ℤ`, or 
 integral first-homology computation followed by functoriality, would finish.
 Neither computation is currently packaged in Mathlib or a closed sibling.
 
-Checked Lean state: exit 0; one `sorry` remains.
+This missing input is now stated verbatim as `apm_t91A05_bridge_1`; the
+compiled concrete reduction can consume it directly as a typeclass instance.
+
+Checked Lean state: exit 0; two `sorry`s remain (the bridge declaration and the
+unchanged frozen theorem).
