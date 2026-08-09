@@ -14,11 +14,11 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
+    "sorry_count_total": 4,
     "sorry_count_by_file": {
-      "Main.lean": 1
+      "Main.lean": 4
     }
   },
   "artifacts": {
@@ -32,6 +32,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
+  "closer_hop": 4,
+  "closer_note": "Stated three precise unproved measure-theoretic contracts: reverse absolute continuity on [0,1], singularity of the complementary restriction, and the reciprocal Radon--Nikodym derivative.",
   "imported_at": "2026-05-01T19:52:19.171998Z"
 }

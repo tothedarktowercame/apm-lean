@@ -116,6 +116,34 @@ lemma apm_a02J04_tau_eq_withDensity :
   · simp [apm_a02J04_P, hx, apm_a02J04_lintegral_g_right]
   · simp [apm_a02J04_P, hx]
 
+/-- Why this unblocks `apm_a02j04`: positivity of the compiled density on
+`[0,1] \ {0}`, together with nullity of the exceptional singleton, makes
+restricted Lebesgue measure absolutely continuous with respect to the
+marginal.  This is the second conjunct of the main theorem. -/
+theorem apm_a02J04_bridge_restrict_absolutelyContinuous :
+    (volume.restrict (Icc (0 : ℝ) 1)).AbsolutelyContinuous
+      apm_a02J04_tau := by
+  sorry
+
+/-- Why this unblocks `apm_a02j04`: the compiled density vanishes off
+`[0,1]`, so the marginal is concentrated on that interval and is mutually
+singular with Lebesgue measure restricted to its complement.  This is the
+third conjunct of the main theorem. -/
+theorem apm_a02J04_bridge_compl_mutuallySingular :
+    Measure.MutuallySingular
+      (volume.restrict ((Icc (0 : ℝ) 1)ᶜ)) apm_a02J04_tau := by
+  sorry
+
+/-- Why this unblocks `apm_a02j04`: this is the specialization of
+`Measure.rnDeriv_withDensity_right` to the positive density `2*x` on
+`[0,1]`, with the null endpoint handled in the almost-everywhere equality.
+It is the final conjunct of the main theorem. -/
+theorem apm_a02J04_bridge_rnDeriv :
+    (volume.restrict (Icc (0 : ℝ) 1)).rnDeriv apm_a02J04_tau
+      =ᵐ[apm_a02J04_tau]
+        fun x ↦ ENNReal.ofReal (1 / (2 * x)) := by
+  sorry
+
 theorem apm_a02j04 :
     apm_a02J04_tau =
       volume.withDensity (fun x ↦ ENNReal.ofReal (apm_a02J04_tauDensity x)) ∧

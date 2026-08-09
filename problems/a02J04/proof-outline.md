@@ -23,7 +23,16 @@ inner Tonelli identity
 map-extensionality calculation, proving that the pushforward is exactly the
 proposed `withDensity` measure.
 
-The remaining work is to feed the compiled support and positivity facts into
-absolute continuity and mutual singularity, handle the null exceptional point
-`{0}`, and specialize `Measure.rnDeriv_withDensity_right` to the displayed
-reciprocal density.
+## Hop 4 bridge contracts
+
+- `apm_a02J04_bridge_restrict_absolutelyContinuous` states the reverse
+  absolute-continuity consequence of positivity away from the null singleton
+  `{0}`.
+- `apm_a02J04_bridge_compl_mutuallySingular` states the singularity consequence
+  of the density vanishing outside `[0,1]`.
+- `apm_a02J04_bridge_rnDeriv` states the exact reciprocal-density
+  specialization of `Measure.rnDeriv_withDensity_right`.
+
+These declarations are intentionally unproved. Together with the compiled
+marginal identity, they reduce `apm_a02j04` to conjunction assembly while
+leaving its frozen statement untouched.
