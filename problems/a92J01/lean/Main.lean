@@ -115,6 +115,28 @@ lemma apm_a92J01_neg_one_le_q_exponent
   field_simp
   nlinarith
 
+/-- Why this unblocks the sequence-space conjunct of `apm_a92j01`: it
+converts `MemLp` for counting measure into the shifted p-series criterion for
+the concrete sequence `(n+1)⁻ᵅ`, using the two scalar exponent bounds above. -/
+theorem apm_a92J01_bridge_1
+    (p q : ℝ) (hq : 1 ≤ q) (hpq : q < p) :
+    MemLp (apm_a92J01_ellCounterexample p q)
+        (ENNReal.ofReal p) Measure.count ∧
+      ¬MemLp (apm_a92J01_ellCounterexample p q)
+        (ENNReal.ofReal q) Measure.count := by
+  sorry
+
+/-- Why this unblocks the real-line conjunct of `apm_a92j01`: it converts the
+indicator-supported power tail to the improper-integral criterion on
+`[1,∞)`, including measurability and the two symmetric tails. -/
+theorem apm_a92J01_bridge_2
+    (p q : ℝ) (hq : 1 ≤ q) (hpq : q < p) :
+    MemLp (apm_a92J01_realCounterexample p q)
+        (ENNReal.ofReal p) volume ∧
+      ¬MemLp (apm_a92J01_realCounterexample p q)
+        (ENNReal.ofReal q) volume := by
+  sorry
+
 theorem apm_a92j01 :
     (∀ (p q : ℝ), 1 ≤ q → q < p → ∀ f : ℝ → ℝ,
       MemLp f (ENNReal.ofReal p) apm_a92J01_unitMeasure →
