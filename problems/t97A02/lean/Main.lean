@@ -58,6 +58,21 @@ lemma apm_t97A02_homotopic_const_of_projection_homotopies
   simpa [apm_t97A02_firstProjection, apm_t97A02_secondProjection] using
     h₁.prodMk h₂
 
+/-- Why this unblocks `apm_t97a02`: this is the missing one-circle
+classification/lifting theorem.  The identification `[X,S¹] ≅ H¹(X;ℤ)` and
+the universal-coefficient theorem make every class vanish when integral
+`H₁(X)` is finite; compact local connectedness handles the finitely many
+connected components and permits a single constant target point. -/
+theorem apm_t97A02_bridge_1
+    (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
+    [LocallyConnectedSpace X]
+    (hX : LocallyContractibleSpace X)
+    [Finite (apm_t97A02_H1 X)]
+    (f : C(X, Circle)) :
+    ∃ p : Circle,
+      ContinuousMap.Homotopic f (ContinuousMap.const X p) := by
+  sorry
+
 theorem apm_t97a02
     (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
     [LocallyConnectedSpace X]
