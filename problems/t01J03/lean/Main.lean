@@ -191,6 +191,45 @@ def apm_t01J03_hasTwiceSpiral
     (e₁.symm (Multiplicative.ofAdd (1, 0)))) =
       Multiplicative.ofAdd (1, 2)
 
+/-- Why this unblocks the first five conjuncts of `apm_t01j03`: this is the
+missing fundamental-group and integral singular-homology computation for the
+actual product `Circle × Circle`, including vanishing above its dimension. -/
+theorem apm_t01J03_bridge_1 :
+    Nonempty
+      (FundamentalGroup apm_t01J03_Torus (1, 1) ≃*
+        Multiplicative (ℤ × ℤ)) ∧
+    Nonempty (apm_t01J03_H 0 apm_t01J03_Torus ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t01J03_H 1 apm_t01J03_Torus ≅
+      ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
+    Nonempty (apm_t01J03_H 2 apm_t01J03_Torus ≅ ModuleCat.of ℤ ℤ) ∧
+    ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t01J03_H k apm_t01J03_Torus) := by
+  sorry
+
+/-- Why this unblocks the final conjunct of `apm_t01j03`: this is the missing
+Seifert--van Kampen and singular Mayer--Vietoris computation for the concrete
+pushout quotient under precisely the encoded twice-spiral boundary relation. -/
+theorem apm_t01J03_bridge_2
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus)
+    (z₀ : apm_t01J03_BoundaryTorus)
+    (e₁ : FundamentalGroup apm_t01J03_BoundaryTorus z₀ ≃*
+      Multiplicative (ℤ × ℤ))
+    (e₂ : FundamentalGroup apm_t01J03_BoundaryTorus (h z₀) ≃*
+      Multiplicative (ℤ × ℤ))
+    (c₁ : FundamentalGroup apm_t01J03_SolidTorus
+      (apm_t01J03_boundaryInclusion z₀) ≃* Multiplicative ℤ)
+    (c₂ : FundamentalGroup apm_t01J03_SolidTorus
+      (apm_t01J03_boundaryInclusion (h z₀)) ≃* Multiplicative ℤ)
+    (hspiral : apm_t01J03_hasTwiceSpiral h z₀ e₁ e₂ c₁ c₂) :
+    let M := apm_t01J03_gluedSpace h
+    let m₀ := apm_t01J03_gluedBasepoint h z₀
+    Nonempty (FundamentalGroup M m₀ ≃* Multiplicative (ZMod 2)) ∧
+    Nonempty (apm_t01J03_H 0 M ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t01J03_H 1 M ≅ ModuleCat.of ℤ (ZMod 2)) ∧
+    Limits.IsZero (apm_t01J03_H 2 M) ∧
+    Nonempty (apm_t01J03_H 3 M ≅ ModuleCat.of ℤ ℤ) ∧
+    ∀ k : ℕ, 4 ≤ k → Limits.IsZero (apm_t01J03_H k M) := by
+  sorry
+
 theorem apm_t01j03 :
     Nonempty
       (FundamentalGroup apm_t01J03_Torus (1, 1) ≃*
