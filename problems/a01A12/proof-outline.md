@@ -59,3 +59,14 @@ The explicit-map bridge is therefore reduced to surjectivity onto the frozen
 wedge slit. The separate automorphism-classification theorem remains absent:
 the available upper-half-plane Möbius action constructs the forward family
 but does not classify arbitrary conformal automorphisms.
+
+## Hop 4 bridge statement
+
+`apm_a01A12_bridge_automorphism_classification` states the missing
+classification as a torsor theorem: conditional on the explicit map being a
+conformal bijection, every conformal bijection from the upper half-plane onto
+the same slit wedge is its precomposition by a positive-determinant real
+Möbius map, and every such precomposition is a conformal bijection.
+
+Its conclusion is verbatim the second conjunct of the frozen theorem. The
+remaining surjectivity proof for the explicit map supplies its sole premise.

@@ -14,11 +14,11 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
+    "sorry_count_total": 2,
     "sorry_count_by_file": {
-      "Main.lean": 1
+      "Main.lean": 2
     }
   },
   "artifacts": {
@@ -33,6 +33,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "closer_progress": "The explicit fourth-root map now has a compiled exact derivative and its complex Fréchet derivative is nonzero throughout the upper half-plane. Remaining work is surjectivity onto the exact wedge slit and classification of upper-half-plane automorphisms as real positive-determinant Möbius maps.",
+  "closer_progress": "Hop 4 states the exact automorphism-classification torsor contract, conditional only on the explicit map being conformally bijective. Its conclusion is the second frozen conjunct. The independent explicit-map surjectivity obligation remains.",
   "imported_at": "2026-05-01T19:52:19.160390Z"
 }

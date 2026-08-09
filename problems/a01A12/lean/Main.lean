@@ -168,6 +168,23 @@ lemma apm_a01A12_conformalMap_injOn :
     simp at hzpos
     linarith
 
+/-- Why this unblocks `apm_a01a12`: once the displayed fourth-root map is
+known to be a conformal bijection, this is the missing automorphism
+classification.  It states that all conformal bijections with the same source
+and target form exactly the right torsor under positive-determinant real
+Möbius automorphisms of the upper half-plane. -/
+theorem apm_a01A12_bridge_automorphism_classification
+    (hF : apm_a01A12_ConformalBijOn apm_a01A12_conformalMap
+      apm_a01A12_H apm_a01A12_wedgeSlit) :
+    ∀ g : ℂ → ℂ,
+      apm_a01A12_ConformalBijOn g apm_a01A12_H apm_a01A12_wedgeSlit ↔
+        ∃ a b c d : ℝ, 0 < a * d - b * c ∧
+          Set.EqOn g
+            (apm_a01A12_conformalMap ∘
+              apm_a01A12_mobius a b c d)
+            apm_a01A12_H := by
+  sorry
+
 theorem apm_a01a12 :
     apm_a01A12_ConformalBijOn apm_a01A12_conformalMap
       apm_a01A12_H apm_a01A12_wedgeSlit ∧
