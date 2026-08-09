@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Each frozen fiber is now proved finite and equivalent to Fin 2, in addition to surjectivity and the concrete north/south attachment equalities. Remaining work needs global connected-cover classification/monodromy, van Kampen or cellular-to-singular comparison, and a quantitative Nielsen–Schreier rank formula.",
+  "closer_hop": 4,
+  "closer_note": "Stated two exact unproved contracts: global classification of connected double covers into the frozen models, and the common singular-homology/fundamental-group invariant package transported from either model.",
   "imported_at": "2026-07-13T17:26:58.425448Z"
 }

@@ -14,18 +14,15 @@ The Lean formalization is partial, with one theorem-level `sorry` remaining.
 - `apm_t97A03_fiber_equiv_fin_two` converts each numeric fiber-cardinality
   equation into finiteness and an actual equivalence with `Fin 2`.
 
-## Remaining bridges
+## Hop 4 bridge contracts
 
-1. Identify the base quotient with `S² ∨ S¹ ∨ S¹` and compute its fundamental
-   group as `F₂`.
-2. Classify connected double covers by index-two subgroups and construct
-   homeomorphisms with the one-circle or two-circle quotient models.
-3. Relate their explicit lifted CW structures to singular homology, obtaining
-   `H₀ = ℤ`, `H₁ = ℤ³`, `H₂ = ℤ²`, and vanishing above degree two.
-4. Combine covering-space `π₁` injection with the finite-index
-   Nielsen--Schreier equality to identify the group as `F₃`.
+- `apm_t97A03_bridge_classify_connected_double_cover` states the missing
+  global monodromy classification directly: every connected two-sheeted cover
+  satisfying the frozen hypotheses is homeomorphic to one of the two concrete
+  quotient models.
+- `apm_t97A03_bridge_invariants_of_model` states the common invariant package
+  for a space homeomorphic to either model: singular homology of ranks
+  `1,3,2`, vanishing above degree two, and fundamental group `F₃`.
 
-Mathlib currently lacks the covering classification, cellular-homology
-comparison, and quantitative free-rank equality required by this chain.
-The local two-sheet structure is now explicit; the missing classification is
-global, since the fiber equivalences do not determine monodromy.
+Both declarations are intentionally unproved. Together they reduce the main
+theorem to conjunction assembly while keeping its statement untouched.

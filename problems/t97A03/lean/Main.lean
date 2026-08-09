@@ -149,6 +149,36 @@ lemma apm_t97A03_fiber_equiv_fin_two
   letI := Fintype.ofFinite (p ⁻¹' ({x} : Set _))
   exact ⟨Fintype.equivOfCardEq (by simpa [Nat.card_eq_fintype_card] using hdegree x)⟩
 
+/-- Why this unblocks `apm_t97a03`: this is the missing global monodromy
+classification of connected two-sheeted covers of the concrete base.  It
+identifies the total space with one of the two quotient models appearing in
+the frozen conclusion. -/
+theorem apm_t97A03_bridge_classify_connected_double_cover
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (hp : IsCoveringMap p)
+    (hdegree : ∀ x : apm_t97A03_BaseSpace A B,
+      Nat.card (p ⁻¹' ({x} : Set _)) = 2) :
+    Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) ∨
+      Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover) := by
+  sorry
+
+/-- Why this unblocks `apm_t97a03`: this packages the cellular-to-singular
+homology calculation and quantitative Nielsen--Schreier computation for the
+two classified models, including transport along the displayed
+homeomorphism.  It supplies all five invariant conjuncts of the main theorem. -/
+theorem apm_t97A03_bridge_invariants_of_model
+    (Y : Type) [TopologicalSpace Y] (y : Y)
+    (hmodel : Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) ∨
+      Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover)) :
+    Nonempty (apm_t97A03_Homology Y 0 ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t97A03_Homology Y 1 ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
+    Nonempty (apm_t97A03_Homology Y 2 ≅ ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
+    (∀ n, 3 ≤ n → Limits.IsZero (apm_t97A03_Homology Y n)) ∧
+    Nonempty (FundamentalGroup Y y ≃* FreeGroup (Fin 3)) := by
+  sorry
+
 theorem apm_t97a03
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
