@@ -171,6 +171,42 @@ def apm_t00A01_hasStandardCover
     Nonempty (ContinuousMap.HomotopyEquiv ↥V B) ∧
     Nonempty (ContinuousMap.HomotopyEquiv ↥(U ∩ V) apm_t00A01_Sphere2)
 
+/-- Why this unblocks `apm_t00a01`: this is the Seifert--van Kampen
+comparison for the supplied standard cover, with the harmless
+change-of-basepoint and the two given puncture-group identifications already
+incorporated.  It supplies the first conjunct of the main theorem. -/
+theorem apm_t00A01_bridge_fundamentalGroup_coprod
+    (M₁ M₂ A B : Type)
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    [TopologicalSpace A] [TopologicalSpace B]
+    (m₁ : M₁) (m₂ : M₂) (a : A) (b : B)
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (hπA : Nonempty (FundamentalGroup A a ≃* FundamentalGroup M₁ m₁))
+    (hπB : Nonempty (FundamentalGroup B b ≃* FundamentalGroup M₂ m₂))
+    (hconnA : PathConnectedSpace A) (hconnB : PathConnectedSpace B)
+    (hiA : Continuous iA) (hiB : Continuous iB)
+    (hcover : apm_t00A01_hasStandardCover
+      (apm_t00A01_connectedSum iA iB) A B) :
+    Nonempty
+      (FundamentalGroup (apm_t00A01_connectedSum iA iB)
+          (apm_t00A01_basepoint iA iB a) ≃*
+        Monoid.Coprod (FundamentalGroup M₁ m₁) (FundamentalGroup M₂ m₂)) := by
+  sorry
+
+/-- Why this unblocks `apm_t00a01`: this is the singular-homology
+Mayer--Vietoris calculation for two homology balls glued along the supplied
+homotopy-sphere overlap.  It supplies the second conjunct of the main
+theorem. -/
+theorem apm_t00A01_bridge_connectedSum_isHomology3Sphere
+    (A B : Type) [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (hA : apm_t00A01_isHomologyBall A)
+    (hB : apm_t00A01_isHomologyBall B)
+    (hcover : apm_t00A01_hasStandardCover
+      (apm_t00A01_connectedSum iA iB) A B) :
+    apm_t00A01_isHomology3Sphere (apm_t00A01_connectedSum iA iB) := by
+  sorry
+
 theorem apm_t00a01
     (M₁ M₂ A B : Type)
     [TopologicalSpace M₁] [TopologicalSpace M₂]

@@ -19,18 +19,16 @@ point-set topological pushout layer is complete.
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t00A01.md`
 
-## Remaining boundary
+## Hop 4 bridge contracts
 
-The main theorem remains open. Its quotient/pushout construction is now
-complete, but its two conclusions still require precisely:
+- `apm_t00A01_bridge_fundamentalGroup_coprod` states the missing
+  Seifert--van Kampen comparison for the supplied cover. It includes the
+  necessary change of basepoint and transport through the two given
+  fundamental-group equivalences.
+- `apm_t00A01_bridge_connectedSum_isHomology3Sphere` states the singular
+  Mayer--Vietoris calculation for two homology balls glued along the standard
+  sphere overlap.
 
-1. a Seifert--van Kampen theorem for the fundamental group of the supplied
-   open cover, including basepoint/change-of-basepoint bookkeeping; and
-2. a Mayer--Vietoris long exact sequence for Mathlib's singular homology
-   functor, applied to the same cover.
-
-Mathlib searches found only categorical Van Kampen colimit results and
-sheaf-cohomology Mayer--Vietoris results, neither of which applies here.
-Searches of `LEMMA-INDEX.md`, closed and partial sibling artifacts,
-`ConstructionTargets/`, `YoungL2.lean`, and git history found no reusable
-bridge.  The theorem statement is unchanged and appears mathematically sound.
+Both contracts are intentionally unproved. They match the two conjuncts of
+the main theorem exactly, reducing its completion to conjunction assembly
+without changing the frozen statement.
