@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "note": "Arbitrary-shift control, a.e.-invariance of the L1 constructor, mollifier scaling/normalization, and common support radius 1+epsilon for every convolution are compiled. Tonelli estimates, Arzela-Ascoli packaging/net transfer, closedness, and compactness remain.",
+  "closer_hop": 4,
+  "note": "The two missing Tonelli estimates and the Arzela-Ascoli/net-transfer/closedness compactness conclusion are now stated precisely as apm_m02J06_bridge_1 through apm_m02J06_bridge_3.",
   "imported_at": "2026-07-13T17:26:54.530440Z"
 }

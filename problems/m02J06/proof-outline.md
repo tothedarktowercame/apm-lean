@@ -25,3 +25,13 @@ Mathlib provides `BoundedContinuousFunction.arzela_ascoli` and
 `isCompact_iff_totallyBounded_isComplete`; `ConstructionTargets.YoungConvolution`
 provides Young inequalities, but no searched result packages the remaining
 Kolmogorov–Riesz quotient bridge.
+
+## Hop 4 bridge statements
+
+- `apm_m02J06_bridge_1` states the exact `L¹` approximation estimate.
+- `apm_m02J06_bridge_2` states the exact equicontinuity estimate.
+- `apm_m02J06_bridge_3` isolates the final Arzelà--Ascoli finite-net transfer
+  and closedness argument as compactness of the actual `L¹` quotient-set.
+
+Together these are exactly the three conjuncts needed to assemble the frozen
+main theorem; they introduce no stronger representative-level assumptions.

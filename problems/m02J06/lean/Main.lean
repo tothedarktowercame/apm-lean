@@ -131,6 +131,36 @@ lemma apm_m02J06_convolution_eq_zero
       simp [hf.2.2.2 (x - t) hxt]
   simp [hz]
 
+/-- Why this unblocks `apm_m02j06`: this is the first missing Tonelli
+estimate, expressing approximation by the normalized nonnegative mollifier in
+terms of the translation modulus already compiled for `apm_m02J06_K`. -/
+theorem apm_m02J06_bridge_1
+    {φ : ℝ → ℝ} (hφnonneg : ∀ x, 0 ≤ φ x)
+    (hφint : ∫ x, φ x ∂volume = 1)
+    (hφsupport : ∀ x, 1 ≤ |x| → φ x = 0) :
+    ∀ ε : ℝ, 0 < ε → ∀ f ∈ apm_m02J06_K,
+      ∫ x, |f x - apm_m02J06_convolution f
+        (apm_m02J06_mollifier φ ε) x| ∂volume ≤ Real.sqrt ε := by
+  sorry
+
+/-- Why this unblocks `apm_m02j06`: this is the second missing Tonelli
+estimate. It turns the translation control on `f` and the uniform bound on
+the mollifier into the equicontinuity modulus used by Arzelà--Ascoli. -/
+theorem apm_m02J06_bridge_2
+    {φ : ℝ → ℝ} {M : ℝ} (hφbound : ∀ x, |φ x| ≤ M) :
+    ∀ ε : ℝ, 0 < ε → ∀ f ∈ apm_m02J06_K, ∀ x y : ℝ,
+      |apm_m02J06_convolution f (apm_m02J06_mollifier φ ε) x -
+        apm_m02J06_convolution f (apm_m02J06_mollifier φ ε) y| ≤
+          (M / ε) * Real.sqrt |x - y| := by
+  sorry
+
+/-- Why this unblocks `apm_m02j06`: this is the remaining
+Arzelà--Ascoli/finite-net/closedness interface after the two quantitative
+estimates. It states compactness for the actual `L¹` quotient-set in the
+frozen theorem, not merely for chosen function representatives. -/
+theorem apm_m02J06_bridge_3 : IsCompact apm_m02J06_KL1 := by
+  sorry
+
 theorem apm_m02j06 :
     ∀ (φ : ℝ → ℝ) (M : ℝ),
       ContDiff ℝ ⊤ φ →
