@@ -128,6 +128,35 @@ lemma t97A04HasHomologicalData.of_maps
     t97A04HasHomologicalData apm_t97a04_Lbar apm_t97a04_matrix 3 1 := by
   exact ⟨h0, h1, h2, H0, H1, H2, apm_t97a04_lefschetz_arithmetic⟩
 
+/-- Why this unblocks the degree-zero homology component of `apm_t97a04`:
+the torus is connected, so its integral `H₀` is `ℤ`, and every self-map acts
+as the identity under the component generator. -/
+theorem apm_t97A04_bridge_1 :
+    ∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ,
+      ∀ a : T97A04Homology 0,
+        h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a := by
+  sorry
+
+/-- Why this unblocks the first-homology component of `apm_t97a04`: under
+the two coordinate-circle generators of `H₁(T²;ℤ)`, the induced map of the
+concrete torus map is multiplication by its displayed integral matrix. -/
+theorem apm_t97A04_bridge_2 :
+    ∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane,
+      ∀ a : T97A04Homology 1,
+        h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) =
+          apm_t97a04_matrix.mulVec (h1.hom a) := by
+  sorry
+
+/-- Why this unblocks the top-homology component of `apm_t97a04`: under the
+product fundamental-class generator of `H₂(T²;ℤ)`, the induced map multiplies
+by the determinant `3` of the integral lift. -/
+theorem apm_t97A04_bridge_3 :
+    ∃ h2 : T97A04Homology 2 ≅ ModuleCat.of ℤ ℤ,
+      ∀ a : T97A04Homology 2,
+        h2.hom (t97A04HomologyMap 2 apm_t97a04_Lbar a) =
+          3 * h2.hom a := by
+  sorry
+
 theorem apm_t97a04 :
     t97A04HasHomologicalData apm_t97a04_Lbar apm_t97a04_matrix 3 1 := by
   let hcore :
