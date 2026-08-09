@@ -52,3 +52,19 @@ Two concrete library interfaces are still absent:
   while Mathlib only packages Möbius actions for the upper half-plane.
 
 These are now the exact remaining local developments.
+
+## Hop 4: zero-count interface closed
+
+The formerly missing Rouché interfaces are now proved locally. The polynomial
+divisor count is identified with the filtered root multiset (reusing the
+compiled argument from `a92J05`), which gives
+`apm_a94a09_zeroCount_id`. Independently,
+`apm_a94a09_exists_zero_of_zeroCount_ne_zero` shows directly from the divisor
+definition that a nonzero analytic count forces a zero in the closed ball.
+`apm_a94a09_exists_zero_id_add_of_rouche` combines both with the exported
+strict Rouché theorem.
+
+The main theorem remains open beyond this assigned interface: applying the new
+existence lemma along radii and parameters approaching one requires the
+compactness/continuity limit assembly, and uniqueness still requires the disk
+Möbius conjugation and Schwarz equality argument.

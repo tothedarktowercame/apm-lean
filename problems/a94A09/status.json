@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "closer_hop": 3,
-  "closer_note": "The shrink-radius route is now isolated: strict Rouche applies to z - t f on a smaller disk for every t < 1, then compactness can pass to t = 1. The remaining interfaces are identity zero-count/existence extraction from the divisor sum and a disk-Mobius conjugation for Schwarz uniqueness.",
+  "closer_hop": 4,
+  "closer_note": "The identified Rouche API hole is closed locally: monic-polynomial divisor counts are normalized to root multisets, the identity count is one, and any nonzero analytic divisor count yields an enclosed zero. The main theorem still needs the t-to-1 compactness assembly and disk-Mobius/Schwarz uniqueness.",
   "imported_at": "2026-07-13T17:26:52.206839Z"
 }

@@ -1,4 +1,7 @@
 import Mathlib
+import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.Analysis.Analytic.Polynomial
+import ConstructionTargets.Rouche
 
 /-!
 # APM a94A09
@@ -14,7 +17,7 @@ with continuity required only on `closedBall 0 1` and analyticity only on
 `ball 0 1`. The boundary `∂Δ` is `sphere 0 1`.
 -/
 
-open Complex Metric Set
+open Complex Filter MeromorphicOn Metric Polynomial Set
 
 noncomputable section
 
@@ -91,6 +94,145 @@ lemma apm_a94a09_mapsTo_closedBall
       ⟨hf_analytic, by simpa [closure_ball] using hf_continuous⟩
   · simpa [frontier_ball] using hf_boundary
   · simpa [closure_ball] using hz
+
+/-- A monic polynomial's divisor count is its multiset root count in the
+closed ball.  This is the polynomial normalization missing from the exported
+Rouché API; the proof is adapted from the compiled local bridge in `a92J05`. -/
+lemma apm_a94a09_zeroCount_aeval_eq_card_filter
+    (q : ℂ[X]) (hq : q.Monic) (c : ℂ) (R : ℝ) :
+    ConstructionTargets.Rouche.zeroCountInClosedBall (fun z ↦ aeval z q) c R =
+      (q.roots.filter (fun z ↦ dist z c ≤ R)).card := by
+  classical
+  let D : Function.locallyFinsupp ℂ ℤ :=
+    { toFun := fun z ↦ q.roots.count z
+      supportWithinDomain' := fun _ _ ↦ Set.mem_univ _
+      supportLocallyFiniteWithinDomain' := by
+        intro z _
+        refine ⟨Set.univ, Filter.univ_mem, ?_⟩
+        apply q.roots.toFinset.finite_toSet.subset
+        intro x hx
+        simp only [Set.mem_inter_iff, mem_univ, true_and, Function.mem_support,
+          ne_eq] at hx
+        apply Multiset.mem_toFinset.mpr
+        apply Multiset.count_pos.mp
+        have : q.roots.count x ≠ 0 := by exact_mod_cast hx
+        omega }
+  have hD : D.support.Finite := by
+    apply q.roots.toFinset.finite_toSet.subset
+    intro x hx
+    apply Multiset.mem_toFinset.mpr
+    apply Multiset.count_pos.mp
+    have : q.roots.count x ≠ 0 := by
+      change (q.roots.count x : ℤ) ≠ 0 at hx
+      exact_mod_cast hx
+    omega
+  have hfactor : (fun z ↦ aeval z q) = ∏ᶠ u, (· - u) ^ D u := by
+    funext z
+    change q.eval z = _
+    rw [(IsAlgClosed.splits q).eval_eq_prod_roots_of_monic hq]
+    rw [Finset.prod_multiset_map_count]
+    rw [finprod_eq_prod_of_mulSupport_subset (s := q.roots.toFinset)]
+    simp only [Finset.prod_apply]
+    · apply Finset.prod_congr rfl
+      intro u hu
+      change (z - u) ^ q.roots.count u = (z - u) ^ (q.roots.count u : ℤ)
+      simp
+    · intro u hu
+      simp only [Function.FactorizedRational.mulSupport, Function.mem_support] at hu
+      apply Multiset.mem_toFinset.mpr
+      apply Multiset.count_pos.mp
+      have : q.roots.count u ≠ 0 := by
+        change (q.roots.count u : ℤ) ≠ 0 at hu
+        exact_mod_cast hu
+      omega
+  unfold ConstructionTargets.Rouche.zeroCountInClosedBall
+  rw [hfactor]
+  have hmer : MeromorphicOn (∏ᶠ u, (· - u) ^ D u) Set.univ :=
+    (Function.FactorizedRational.meromorphicNFOn D Set.univ).meromorphicOn
+  rw [← hmer.divisor_restrict (show closedBall c R ⊆ Set.univ from subset_univ _),
+    Function.FactorizedRational.divisor hD]
+  rw [finsum_eq_sum_of_support_subset (s := q.roots.toFinset)]
+  · have hcount :
+        (∑ z ∈ q.roots.toFinset, if dist z c ≤ R then q.roots.count z else 0) =
+          (q.roots.filter (fun z ↦ dist z c ≤ R)).card := by
+      calc
+        _ = ∑ z ∈ q.roots.toFinset,
+              q.roots.count z * (if dist z c ≤ R then 1 else 0) := by
+            apply Finset.sum_congr rfl
+            intro z _
+            split <;> simp_all
+        _ = (q.roots.map fun z ↦ if dist z c ≤ R then 1 else 0).sum :=
+          Finset.sum_multiset_map_count q.roots _ |>.symm
+        _ = _ := by
+          induction q.roots using Multiset.induction_on with
+          | empty => simp
+          | cons a s ih =>
+              by_cases ha : dist a c ≤ R <;> simp [ha, ih, Nat.add_comm]
+    simp only [Function.locallyFinsuppWithin.restrict_apply]
+    change (∑ z ∈ q.roots.toFinset,
+      if dist z c ≤ R then (q.roots.count z : ℤ) else 0) = _
+    exact_mod_cast hcount
+  · intro z hz
+    simp only [Function.mem_support] at hz
+    by_contra hzroot
+    have hznot : z ∉ q.roots := fun hm => hzroot (Multiset.mem_toFinset.mpr hm)
+    have hzcount : q.roots.count z = 0 := Multiset.count_eq_zero.mpr hznot
+    simp only [Function.locallyFinsuppWithin.restrict_apply] at hz
+    change (if z ∈ closedBall c R then (q.roots.count z : ℤ) else 0) ≠ 0 at hz
+    simp [hzcount] at hz
+
+/-- The identity map has exactly one zero in every positive-radius disk
+centered at zero. -/
+lemma apm_a94a09_zeroCount_id {R : ℝ} (hR : 0 < R) :
+    ConstructionTargets.Rouche.zeroCountInClosedBall (fun z : ℂ ↦ z) 0 R = 1 := by
+  have h := apm_a94a09_zeroCount_aeval_eq_card_filter (Polynomial.X : ℂ[X])
+    Polynomial.monic_X 0 R
+  have h' : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z : ℂ ↦ z) 0 R =
+      ((Polynomial.X : ℂ[X]).roots.filter (fun z ↦ dist z 0 ≤ R)).card := by
+    simpa only [aeval_X] using h
+  rw [h']
+  simp only [Polynomial.roots_X, Multiset.filter_singleton, dist_zero_right,
+    norm_zero, hR.le, if_true, Multiset.card_singleton, Nat.cast_one]
+
+/-- A nonzero divisor count for an analytic function forces an actual zero in
+the closed ball.  This supplies the logical extraction step absent from the
+exported Rouché API. -/
+lemma apm_a94a09_exists_zero_of_zeroCount_ne_zero
+    {F : ℂ → ℂ} {c : ℂ} {R : ℝ}
+    (hF : AnalyticOnNhd ℂ F (closedBall c R))
+    (hcount : ConstructionTargets.Rouche.zeroCountInClosedBall F c R ≠ 0) :
+    ∃ z ∈ closedBall c R, F z = 0 := by
+  by_contra hzero
+  push_neg at hzero
+  have hdiv : divisor F (closedBall c R) = 0 := by
+    ext z
+    by_cases hz : z ∈ closedBall c R
+    · rw [divisor_apply hF.meromorphicOn hz]
+      have hord : meromorphicOrderAt F z = 0 :=
+        (hF z hz).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.mpr (hzero z hz)
+      simp [hord]
+    · simp [divisor_def, hz]
+  apply hcount
+  unfold ConstructionTargets.Rouche.zeroCountInClosedBall
+  rw [hdiv]
+  simp
+
+/-- The two bridge lemmas turn the exported Rouché count equality into the
+usual existence conclusion when the dominant function is the identity. -/
+lemma apm_a94a09_exists_zero_id_add_of_rouche
+    {g : ℂ → ℂ} {R : ℝ} (hR : 0 < R)
+    (hg : AnalyticOnNhd ℂ g (closedBall 0 R))
+    (hdom : ∀ z ∈ sphere (0 : ℂ) R, ‖g z‖ < ‖z‖) :
+    ∃ z ∈ closedBall (0 : ℂ) R, z + g z = 0 := by
+  let F : ℂ → ℂ := fun z ↦ z
+  have hF : AnalyticOnNhd ℂ F (closedBall 0 R) := analyticOnNhd_id
+  have htransfer := ConstructionTargets.Rouche.zeroCountInClosedBall_add_eq
+    hR hF hg hdom
+  have hcount : ConstructionTargets.Rouche.zeroCountInClosedBall (F + g) 0 R ≠ 0 := by
+    rw [htransfer, apm_a94a09_zeroCount_id hR]
+    norm_num
+  simpa [F, Pi.add_apply] using
+    (apm_a94a09_exists_zero_of_zeroCount_ne_zero (hF.add hg) hcount)
 
 theorem apm_a94a09
     {f : ℂ → ℂ}
