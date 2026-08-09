@@ -26,3 +26,13 @@ uses it to turn the one-form into a nowhere-zero vector field, and invokes
 Poincaré--Hopf. Mathlib has smooth sections and tangent bundles but no packaged
 Poincaré--Hopf or Euler-class theorem, nor a comparison with this alternating
 singular-homology finrank definition. The zero-dimensional endpoint is closed.
+
+## Hop 4: exact missing theorem
+
+The boundary comment now records the complete Lean signature of
+`apm_t01J05_poincareHopf_oneForm`. This is the positive-dimensional theorem
+needed after the main proof splits on `n`: a compact boundaryless manifold
+carrying a nowhere-zero smooth one-form has zero Euler characteristic in the
+file's rational singular-homology encoding. Proving it requires metric duality,
+Poincaré--Hopf or Euler-class vanishing, and the absent comparison theorem.
+No placeholder declaration was introduced.

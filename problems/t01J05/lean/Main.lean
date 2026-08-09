@@ -188,5 +188,33 @@ theorem apm_t01j05
   of the Riemannian-manifold files found metric structures but no theorem
   constructing the required global metric from these frozen hypotheses or
   relating a nowhere-zero section to the singular-homology finrank sum.
+
+  HOP 4 (failed-with-statement). Exhaustive inspection confirmed that the
+  available Riemannian metric files define and manipulate an already-given
+  metric, while the characteristic-class and singular-homology libraries do
+  not contain Poincaré--Hopf or an Euler-class/singular-Euler comparison.
+  Consequently neither an existing declaration nor a short local assembly
+  closes the identified interface.
+
+  The precise missing theorem is:
+
+      theorem apm_t01J05_poincareHopf_oneForm
+          (n : ℕ) (hn : 0 < n) (X : Type)
+          [TopologicalSpace X]
+          [ChartedSpace (apm_t01J05_Euclidean n) X]
+          [IsManifold (apm_t01J05_Model n) (⊤ : ℕ∞) X]
+          [BoundarylessManifold (apm_t01J05_Model n) X]
+          [CompactSpace X]
+          (orientation : apm_t01J05_IsOrientation (n := n) X)
+          (omega : apm_t01J05_OneForm (n := n) X)
+          (homega_ne : ∀ x : X, omega x ≠ 0) :
+          apm_t01J05_eulerCharacteristic n X = 0
+
+  This statement is true by choosing a smooth Riemannian metric, taking the
+  metric dual vector field of `omega`, applying Poincaré--Hopf to its empty
+  zero set, and comparing the resulting Euler number with the displayed
+  rational singular-homology alternating sum. It directly discharges the
+  positive-dimensional branch left after `cases n`; the `n = 0` branch is
+  already compiled above.
   -/
     sorry

@@ -30,7 +30,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_progress": "The zero-dimensional endpoint is fully proved using the totally-disconnected-space H0 computation and initiality of the empty categorical coproduct. The remaining positive-dimensional branch requires Poincare-Hopf/Euler-class machinery plus comparison with the singular-homology finrank Euler characteristic.",
+  "closer_hop": 4,
+  "closer_progress": "Failed-with-statement: the exact absent interface apm_t01J05_poincareHopf_oneForm is recorded in Main.lean. It combines metric duality, Poincare-Hopf, and comparison with the rational singular-homology finrank Euler characteristic.",
   "imported_at": "2026-07-13T17:26:56.823028Z"
 }
