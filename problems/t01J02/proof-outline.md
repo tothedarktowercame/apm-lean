@@ -23,7 +23,10 @@ has been identified.
 
 ## Remaining boundary
 
-- For surjectivity, prove connectedness of `Cube.boundary (Fin n)` for `2 ≤ n`
-  and use lift uniqueness to show the lifted cube map is constant there.
-- Package that lift as a `GenLoop`, project it back, and descend the resulting
-  equality to the homotopy quotient.
+Hop 4 states the missing topological fact as
+`apm_t01J02_bridge_pathConnectedSpace_cube_boundary`: the subtype boundary of
+the `Fin n` cube is path connected whenever `2 ≤ n`. The declaration is
+intentionally unproved. Once available, uniqueness of covering path lifts
+propagates the lifted corner value across the boundary; packaging the lift as
+a `GenLoop` and descending to the quotient then completes surjectivity. The
+main theorem remains unchanged.

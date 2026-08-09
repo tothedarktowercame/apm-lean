@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "Functorial laws and injectivity of the frozen covering-induced map, including the Fin n boundary witness and basepoint cast, are compiled. Remaining work is solely surjectivity: prove the lifted cube is constant on the boundary, package it as a GenLoop, and descend to the quotient.",
+  "closer_hop": 4,
+  "boundary": "Hop 4 states the exact unproved topology contract: the boundary of the Fin n cube is path connected for n at least two. This enables lift uniqueness to make a lifted cube constant on the boundary and hence supplies the missing surjectivity route.",
   "imported_at": "2026-07-13T17:26:56.782852Z"
 }

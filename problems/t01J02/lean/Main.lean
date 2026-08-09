@@ -98,6 +98,15 @@ lemma apm_t01j02_inducedMap_injective
     (apm_t01j02_homotopyMap_injective_of_boundary_nonempty
       (N := Fin n) p hp xtilde₀ y hy)
 
+/-- Why this unblocks `apm_t01j02`: path connectedness propagates the chosen
+corner value of a covering lift across the entire cube boundary by uniqueness
+of path lifting.  The lift therefore bundles as a `GenLoop`, which gives
+surjectivity of the induced map on the homotopy quotient. -/
+theorem apm_t01J02_bridge_pathConnectedSpace_cube_boundary
+    (n : ℕ) (hn : 2 ≤ n) :
+    PathConnectedSpace ↥(Cube.boundary (Fin n)) := by
+  sorry
+
 theorem apm_t01j02
     (n : ℕ) (hn : 2 ≤ n)
     (X Xtilde : Type*) [TopologicalSpace X] [TopologicalSpace Xtilde]
