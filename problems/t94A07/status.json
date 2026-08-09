@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 2,
-  "closer_progress": "Compiled helpers characterize half-turn fixedness as vanishing of coordinates 1 and 2, parametrize the four displayed points by Fin 4, prove that parametrization injective from 0 < r < R, and discharge the exact Nat.card = 4 conjunct. Remaining work is the torus-axis equation, tangent-kernel and derivative computation, and a homology/Lefschetz obstruction to homotopy.",
+  "closer_progress": "Hop 4 isolates the exact global contract `apm_t94a07_halfTurn_not_homotopic`: the concrete half-turn is not homotopic through the embedded torus to the identity. No singular-homology comparison or Lefschetz API for this torus was found. The local derivative/kernel assembly remains independently open.",
   "imported_at": "2026-07-13T17:26:57.854173Z"
 }

@@ -236,6 +236,23 @@ theorem apm_t94a07 (R r : ℝ) (hr : 0 < r) (hR : r < R) :
     Lefschetz artifacts, Mathlib's homotopy, homology, torus, derivative,
     square-root, and finite-cardinality APIs, and git history found no packaged
     embedded-torus homology calculation or Lefschetz homotopy obstruction.
+
+    HOP 4 (2026-08-09): a further declaration-level search confirmed that
+    Mathlib's available `homologyMap_eq` homotopy invariance belongs to
+    algebraic chain-complex homotopies; there is still no singular-homology
+    computation connecting the concrete embedded torus and its half-turn to
+    those APIs. The exact missing global contract is:
+
+      theorem apm_t94a07_halfTurn_not_homotopic
+          (R r : ℝ) (hr : 0 < r) (hR : r < R) :
+          ¬apm_t94a07_IsHomotopyToIdentity R r
+
+    This is true because the half-turn induces `-I` on `H₁(T²; ℤ)`, whereas
+    the identity induces `I`; equivalently its Lefschetz number is four while
+    the identity's is zero. It directly supplies `hcore.2`. Proving it needs
+    precisely the unavailable embedded-torus homology comparison (or a
+    concrete winding-number replacement). The separate local tangent and
+    derivative clauses in `hcore.1` also remain open.
     -/
     sorry
   exact ⟨apm_t94a07_fixedSet_eq R r hr hR, hcore.1,

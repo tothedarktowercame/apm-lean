@@ -37,3 +37,15 @@ homology or a Lefschetz homotopy theorem.  Searches found the scalar square-
 root derivative ingredients but no packaged computation or global invariant,
 so the bundle remains honestly partial with one `sorry`; its frozen statement
 is unchanged.
+
+## Hop 4 exact missing global contract
+
+```lean
+theorem apm_t94a07_halfTurn_not_homotopic
+    (R r : ℝ) (hr : 0 < r) (hR : r < R) :
+    ¬apm_t94a07_IsHomotopyToIdentity R r
+```
+
+The half-turn acts by `-I` on the first homology of the torus, while the
+identity acts by `I`. This contract therefore closes `hcore.2` directly. The
+local derivative and tangent-kernel assembly remains an independent task.
