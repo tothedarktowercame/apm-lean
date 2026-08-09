@@ -82,6 +82,41 @@ def apm_m94a02_IsOrderedSpectrum {n : ℕ}
   (∀ i j : Fin n, i ≤ j → σ j ≤ σ i) ∧
   Matrix.charpoly B = ∏ i : Fin n, (Polynomial.X - Polynomial.C (σ i))
 
+/-- Eigenvalues of the complex scalar extension of a real skew-symmetric
+matrix lie on the imaginary axis. Multiplication by `I` converts the matrix
+to a Hermitian one, and the self-adjoint eigenvalue-reality theorem then
+applies to the eigenvalue `I * lam`. -/
+lemma apm_m94a02_eigenvalue_re_eq_zero_of_transpose_eq_neg
+    {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.transpose = -A) {lam : ℂ}
+    (hlam : apm_m94a02_IsEigenvalue A lam) :
+    lam.re = 0 := by
+  rcases hlam with ⟨v, hv, heig⟩
+  let M : Matrix (Fin n) (Fin n) ℂ := A.map (algebraMap ℝ ℂ)
+  let B : Matrix (Fin n) (Fin n) ℂ := Complex.I • M
+  have hB : B.IsHermitian := by
+    simpa [B, M] using
+      apm_m94a02_I_smul_map_isHermitian_of_transpose_eq_neg hA
+  have heigB : B *ᵥ v = (Complex.I * lam) • v := by
+    simp only [B, Matrix.smul_mulVec]
+    rw [show M *ᵥ v = lam • v from heig]
+    simp [smul_smul]
+  have hvLp : WithLp.toLp 2 v ≠ (0 : EuclideanSpace ℂ (Fin n)) := by
+    intro h
+    apply hv
+    have h' := congrArg WithLp.ofLp h
+    simpa using h'
+  have hvec : Module.End.HasEigenvector B.toEuclideanLin
+      (Complex.I * lam) (WithLp.toLp 2 v) := by
+    refine ⟨?_, hvLp⟩
+    simpa [Matrix.toEuclideanLin_apply_piLp_toLp, heigB]
+  have hreal :=
+    (Matrix.isHermitian_iff_isSymmetric.mp hB).conj_eigenvalue_eq_self
+      (Module.End.hasEigenvalue_of_hasEigenvector hvec)
+  have him := congrArg Complex.im hreal
+  simp [map_mul, Complex.conj_I, Complex.mul_im] at him
+  linarith
+
 theorem apm_m94a02
     (n : ℕ) (A : Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ)
     (σ : Fin (n + 1) → ℝ)
@@ -90,6 +125,8 @@ theorem apm_m94a02
       σ (Fin.last n) ≤ lam.re ∧ lam.re ≤ σ 0) ∧
     (A.transpose = -A →
       ∀ lam : ℂ, apm_m94a02_IsEigenvalue A lam → lam.re = 0) := by
+  constructor
+  ·
   /-
   Boundary: the intended proof tests the complex eigenvalue equation against
   its eigenvector, rewrites `lam.re` as the Hermitian Rayleigh quotient of
@@ -157,4 +194,6 @@ theorem apm_m94a02
   against `star v`); the first conjunct still needs the arbitrary-`σ`
   multiplicity normalization. No unproved assertion was introduced.
   -/
-  sorry
+    sorry
+  · intro hA lam hlam
+    exact apm_m94a02_eigenvalue_re_eq_zero_of_transpose_eq_neg hA hlam

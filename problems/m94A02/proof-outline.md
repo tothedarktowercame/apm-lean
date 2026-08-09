@@ -24,3 +24,15 @@ skew-symmetric matrix is skew-Hermitian, and separately compiles that `I • A`
 is Hermitian. This isolates a route to the second conjunct without depending
 on the arbitrary ordered family `σ`; the final eigenvector conversion remains
 open.
+
+## Hop 4 closure
+
+`apm_m94a02_eigenvalue_re_eq_zero_of_transpose_eq_neg` closes the identified
+skew-adjoint gap. It turns a raw `mulVec` eigenvector for `A` into an
+eigenvector of the Hermitian operator associated to `I • A`, applies
+`LinearMap.IsSymmetric.conj_eigenvalue_eq_self`, and deduces `lam.re = 0`.
+The main theorem now invokes this lemma for its complete second conjunct.
+
+The one remaining `sorry` is confined to the independent first conjunct:
+normalizing the arbitrary ordered real factorization `σ` against Mathlib's
+canonical Hermitian spectrum and applying the extremal Rayleigh bounds.
