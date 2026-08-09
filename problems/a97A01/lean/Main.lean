@@ -112,6 +112,45 @@ lemma apm_a97A01_norm_integral_mul_rademacher_le
       filter_upwards with t
       simp [Real.norm_eq_abs, apm_a97A01_abs_rademacher]
 
+/-- Why this unblocks `apm_a97a01`: same-level half-open dyadic cells with
+the casted natural endpoints are disjoint, so membership in an admissible even
+cell excludes every odd-cell witness in the frozen existential encoding. -/
+theorem apm_a97A01_bridge_1
+    {n k : ℕ} {t : ℝ} (hn : n ≠ 1) (ht : t ≠ 1)
+    (hk₀ : 1 ≤ k) (hk₁ : k ≤ 2 ^ n) (hkeven : Even k)
+    (htk : t ∈ Ico (((k - 1 : ℕ) : ℝ) / (2 ^ n : ℕ))
+      ((k : ℝ) / (2 ^ n : ℕ))) :
+    apm_a97A01_rademacher n t = -1 := by
+  sorry
+
+/-- Why this unblocks `apm_a97a01`: refining a level-`m` dyadic cell to any
+strictly finer nonexceptional level pairs equal-length odd and even cells, so
+the encoded Rademacher function has exactly zero integral on the coarse cell. -/
+theorem apm_a97A01_bridge_2
+    (m j n : ℕ) (hj : j < 2 ^ m) (hmn : m < n) (hn : 1 < n) :
+    ∫ t,
+      (Ico ((j : ℝ) / (2 ^ m : ℕ))
+          (((j + 1 : ℕ) : ℝ) / (2 ^ m : ℕ))).indicator
+          (fun _ : ℝ => (1 : ℝ)) t *
+        apm_a97A01_rademacher n t ∂apm_a97A01_measure = 0 := by
+  sorry
+
+/-- Why this unblocks `apm_a97a01`: finite linear combinations of the casted
+half-open dyadic cells are dense in `L¹[0,1]`.  Together with coarse-cell
+cancellation and the compiled uniform integral bound, this transfers exact
+cancellation to an arbitrary frozen `L∞` test function. -/
+theorem apm_a97A01_bridge_3
+    (f : ℝ → ℝ) (hf : MemLp f ⊤ apm_a97A01_measure)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ (m : ℕ) (c : Fin (2 ^ m) → ℝ),
+      ∫ t,
+        |f t - ∑ j : Fin (2 ^ m),
+          c j *
+            (Ico (((j : ℕ) : ℝ) / (2 ^ m : ℕ))
+              ((((j : ℕ) + 1 : ℕ) : ℝ) / (2 ^ m : ℕ))).indicator
+              (fun _ : ℝ => (1 : ℝ)) t| ∂apm_a97A01_measure < ε := by
+  sorry
+
 theorem apm_a97a01
     (f : ℝ → ℝ) (hf : MemLp f ⊤ apm_a97A01_measure) :
     Tendsto
