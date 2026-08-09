@@ -129,6 +129,29 @@ lemma t94J07_integral_deriv_eq_zero_of_periodic
     ((hq.continuous_deriv le_rfl).intervalIntegrable 0 (2 * Real.pi))]
   linarith
 
+/-- Why this unblocks `apm_t94j07`: differentiating the homotopy-slice
+integral produces a mixed `θ`-derivative; closedness kills the exterior-
+derivative term and periodicity makes the mixed term integrate to zero.  The
+continuity clause records the domination needed to pass from the interior
+derivative identity to equality of the endpoint slices. -/
+theorem apm_t94J07_bridge_1
+    (alpha : T94J07Form1)
+    (halpha_smooth : ContDiff ℝ (⊤ : ℕ∞) alpha)
+    (halpha_closed : t94J07IsClosedOnCircle alpha)
+    (f g : T94J07E2 → T94J07E2)
+    (H : T94J07E2 × ℝ → T94J07E2)
+    (hH : t94J07IsSmoothCircleHomotopy f g H) :
+    ContinuousOn
+        (fun t : ℝ =>
+          t94J07PullbackCircleIntegral alpha (fun x ↦ H (x, t)))
+        (Icc (0 : ℝ) 1) ∧
+      ∀ t ∈ Ioo (0 : ℝ) 1,
+        HasDerivAt
+          (fun τ : ℝ =>
+            t94J07PullbackCircleIntegral alpha (fun x ↦ H (x, τ)))
+          0 t := by
+  sorry
+
 theorem apm_t94j07
     (alpha : T94J07Form1)
     (halpha_smooth : ContDiff ℝ (⊤ : ℕ∞) alpha)
