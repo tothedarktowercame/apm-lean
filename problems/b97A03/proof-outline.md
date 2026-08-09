@@ -19,7 +19,13 @@ proved directly from an arbitrary complex root.
 
 ## Remaining bridge
 
-Turn the six distinct compiled roots into root-set exhaustion, prove the
-adjoin is the splitting field, construct its six automorphisms
-and `S₃` equivalence, classify subgroups of `S₃`, and identify their fixed
-fields with the four explicit adjoins in the frozen statement.
+The remaining mathematics is now stated as three standalone handoff lemmas:
+
+- `apm_b97A03_bridge_1`: irreducibility of `X⁶ + 3` over `ℚ`.
+- `apm_b97A03_bridge_2`: every complex root is one of the six candidates and
+  `ℚ(α)` satisfies Mathlib's `Polynomial.IsSplittingField` predicate.
+- `apm_b97A03_bridge_3`: the automorphism group is `S₃`, and the six displayed
+  fields exhaust the intermediate-field lattice.
+
+Together with `apm_b97a03_zeta_mul_root_mem_field`, these statements directly
+assemble every conjunct of the frozen theorem.

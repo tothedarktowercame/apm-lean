@@ -160,6 +160,44 @@ lemma apm_b97a03_zeta_mul_root_mem_field {α : ℂ} (k : ℕ) :
         exact IntermediateField.mul_mem _ ih hz
   · exact ha
 
+/-- Why this unblocks `apm_b97a03`: this is the independent arithmetic input
+needed for the first conjunct; it can be proved by Eisenstein at `3`. -/
+theorem apm_b97A03_bridge_1 :
+    Irreducible apm_b97a03_polynomial := by
+  sorry
+
+/-- Why this unblocks `apm_b97a03`: it identifies every complex root with one
+of the six compiled candidates and packages the resulting splitting-field
+statement in Mathlib's exact API. -/
+theorem apm_b97A03_bridge_2 {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    (∀ z : ℂ,
+        (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot z →
+          ∃ k : Fin 6, z = apm_b97a03_zeta α ^ (k : ℕ) * α) ∧
+      Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
+        apm_b97a03_polynomial := by
+  sorry
+
+/-- Why this unblocks `apm_b97a03`: it is the concrete Galois-theoretic
+classification left after root exhaustion: the automorphism group is `S₃`
+and the displayed six fields exhaust the intermediate-field lattice. -/
+theorem apm_b97A03_bridge_3 {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Nonempty
+        ((apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) ≃*
+          Equiv.Perm (Fin 3)) ∧
+      ∀ L : IntermediateField ℚ ℂ,
+        L ≤ apm_b97a03_field α →
+        L = ⊥ ∨
+        L = IntermediateField.adjoin ℚ {α ^ 3} ∨
+        L = IntermediateField.adjoin ℚ {α ^ 2} ∨
+        L = IntermediateField.adjoin ℚ
+          {(apm_b97a03_zeta α) ^ 2 * α ^ 2} ∨
+        L = IntermediateField.adjoin ℚ
+          {(apm_b97a03_zeta α) ^ 4 * α ^ 2} ∨
+        L = apm_b97a03_field α := by
+  sorry
+
 theorem apm_b97a03 :
     Irreducible apm_b97a03_polynomial ∧
     ∀ α : ℂ,

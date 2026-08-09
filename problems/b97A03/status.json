@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "classification_detail": "The derived zeta now has proved exact order six, so the six candidate roots zeta^k alpha are proved pairwise distinct inside Q(alpha). Root-set exhaustion/API packaging, splitting-field automorphisms, and fixed fields remain.",
+  "closer_hop": 4,
+  "classification_detail": "Three precise handoff lemmas now isolate the remaining work: irreducibility by Eisenstein, six-root exhaustion plus Polynomial.IsSplittingField packaging, and the S3 automorphism/intermediate-field classification. The frozen main theorem remains unchanged.",
   "imported_at": "2026-07-13T17:26:54.106107Z"
 }
