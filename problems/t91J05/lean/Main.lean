@@ -56,6 +56,25 @@ lemma apm_t91J05_eulerCharacteristic_odd_genus (n : ℕ) :
   simp [eulerCharacteristic]
   omega
 
+/-- Why this unblocks the forward implication of `apm_t91j05`: this is the
+classification and Euler-characteristic multiplication theorem for connected
+finite covers of the concrete genus-three orientable surface. -/
+theorem apm_t91J05_bridge_1
+    (X : Type*) [TopologicalSpace X] [ConnectedSpace X]
+    (hX : apm_t91J05_IsFiniteCover X) :
+    ∃ n : ℕ, 0 < n ∧
+      Nonempty (X ≃ₜ apm_t91J05_Surface (2 * n + 1)) := by
+  sorry
+
+/-- Why this unblocks the reverse implication of `apm_t91j05`: this is the
+explicit polygonal `n`-sheeted covering construction from the orientable
+surface of genus `2n+1` to the genus-three surface. The existing homeomorphism
+transport lemma then handles every homeomorphic source `X`. -/
+theorem apm_t91J05_bridge_2
+    (n : ℕ) (hn : 0 < n) :
+    apm_t91J05_IsFiniteCover (apm_t91J05_Surface (2 * n + 1)) := by
+  sorry
+
 theorem apm_t91j05
     (X : Type*) [TopologicalSpace X] [ConnectedSpace X] :
     apm_t91J05_IsFiniteCover X ↔
