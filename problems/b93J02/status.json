@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "remaining_bridge": "non-Noetherianity of MvPolynomial Nat Int",
+  "classification": "complete",
+  "closer_hop": 4,
+  "remaining_bridge": null,
   "imported_at": "2026-05-01T19:38:17.443273Z"
 }
