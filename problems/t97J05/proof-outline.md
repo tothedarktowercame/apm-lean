@@ -22,3 +22,15 @@ This bundle has a partial Lean proof with one theorem-level `sorry`.
 - Install the global one-dimensional manifold structure on the full fiber.
 - Construct the exact smooth open partial homeomorphisms required by the
   local submersion normal form.
+
+## Hop 4 bridge statements
+
+- `apm_t97J05_bridge_1`: the displayed derivative formula and surjectivity.
+- `apm_t97J05_bridge_2`: smoothness of the explicit fiber parameterization.
+- `apm_t97J05_bridge_3`: the global one-dimensional manifold structure on
+  the actual fiber subtype.
+- `apm_t97J05_bridge_4`: the exact pair of smooth open partial homeomorphisms
+  realizing the local submersion normal form.
+
+These four facts plus the compiled `apm_t97J05_gamma_bijOn` are exactly the
+conjuncts of the frozen theorem.

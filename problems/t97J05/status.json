@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 5,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 5
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "closer_progress": "The explicit gamma parameterization is now proved to map into the frozen fiber target and to be bijective there. Remaining work includes the derivative and smoothness calculations, the global one-dimensional manifold structure on the fiber, and the exact smooth open-partial-homeomorphism normal form.",
+  "closer_hop": 4,
+  "closer_progress": "The four remaining interfaces are now stated precisely as apm_t97J05_bridge_1 through apm_t97J05_bridge_4: derivative/rank, gamma smoothness, global fiber manifold structure, and exact local normal-form charts.",
   "imported_at": "2026-07-13T17:26:58.502373Z"
 }

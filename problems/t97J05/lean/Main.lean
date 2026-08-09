@@ -124,6 +124,45 @@ lemma apm_t97J05_gamma_bijOn :
   intro t ht
   exact apm_t97J05_gamma_mem_parameterTarget ht
 
+/-- Why this unblocks `apm_t97j05`: this packages the exact derivative
+calculation and the regular-value rank condition at the distinguished point. -/
+theorem apm_t97J05_bridge_1 :
+    (∀ h : apm_t97J05_R3,
+      fderiv ℝ apm_t97J05_f apm_t97J05_p h =
+        WithLp.toLp 2 ![-Real.exp 1 * h 1, h 0 + h 2]) ∧
+    Function.Surjective (fderiv ℝ apm_t97J05_f apm_t97J05_p) := by
+  sorry
+
+/-- Why this unblocks `apm_t97j05`: this is the remaining calculus fact for
+the explicit parameterization; its set-theoretic bijection is already proved. -/
+theorem apm_t97J05_bridge_2 :
+    ContDiffOn ℝ ∞ apm_t97J05_gamma apm_t97J05_parameterDomain := by
+  sorry
+
+/-- Why this unblocks `apm_t97j05`: this is the missing global regular-level
+assembly, installing a one-dimensional smooth manifold structure on the
+entire fiber with smooth embedded inclusion. -/
+theorem apm_t97J05_bridge_3 :
+    apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
+  sorry
+
+/-- Why this unblocks `apm_t97j05`: this states the exact local submersion
+normal form in the frozen `OpenPartialHomeomorph` encoding, including
+smoothness of both charts and their inverses. -/
+theorem apm_t97J05_bridge_4 :
+    ∃ (φ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3)
+        (ψ : OpenPartialHomeomorph apm_t97J05_R2 apm_t97J05_R2),
+      0 ∈ φ.source ∧ φ 0 = apm_t97J05_p ∧
+      apm_t97J05_value ∈ ψ.source ∧ ψ apm_t97J05_value = 0 ∧
+      ContDiffOn ℝ ∞ φ φ.source ∧
+      ContDiffOn ℝ ∞ φ.symm φ.target ∧
+      ContDiffOn ℝ ∞ ψ ψ.source ∧
+      ContDiffOn ℝ ∞ ψ.symm ψ.target ∧
+      ∀ q ∈ φ.source,
+        apm_t97J05_f (φ q) ∈ ψ.source ∧
+        ψ (apm_t97J05_f (φ q)) = WithLp.toLp 2 ![q 0, q 1] := by
+  sorry
+
 theorem apm_t97j05 :
     (∀ h : apm_t97J05_R3,
       fderiv ℝ apm_t97J05_f apm_t97J05_p h =
