@@ -108,5 +108,33 @@ theorem apm_a98j02 (f : ℝ → ℝ)
   a symmetric interval controlled by the compiled limit.  No packaged lemma
   was found that performs these coercions and normalizations.  The frozen
   statement remains unchanged.
+
+  HOP 4: the exact local Hölder interface still needed is
+
+      ∀ {x y : ℝ}, y ≤ x →
+        |∫ t in y..x, deriv f t| ^ 2 ≤
+          (x - y) * ∫ t in y..x, |deriv f t| ^ 2.
+
+  This follows by applying `integral_mul_norm_le_Lp_mul_Lq` at exponents
+  `2,2` to `deriv f` and the constant one function under
+  `volume.restrict (Ioc y x)`, then normalizing the two real `rpow` factors.
+  No packaged declaration performs that coercion chain.
+
+  More importantly, the hop-3 symmetric-interval lemma is pointwise in its
+  center `b`; its `δ` may depend on `b`, so it does not provide the uniform
+  estimate for arbitrary `y,x` required by the frozen conclusion.  The second
+  precise missing interface is therefore
+
+      ∀ ε > 0, ∃ δ > 0, ∀ x y : ℝ,
+        0 ≤ y → y ≤ x → x ≤ 1 → x - y < δ →
+          ∫ t in y..x, |deriv f t| ^ 2 < ε.
+
+  It is the uniform absolute continuity of the integral for the integrable
+  nonnegative function `|deriv f|²`.  Mathlib's
+  `Integrable.tendsto_setIntegral_nhds_zero` proves the underlying general
+  result, but extracting this epsilon--delta interval form still requires a
+  filter over varying measurable sets; the fixed-center specialization above
+  cannot substitute for it. Outcomes A and B were not completed in this hop.
+  The frozen statement is unchanged.
   -/
   sorry

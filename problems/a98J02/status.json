@@ -29,7 +29,7 @@
   },
   "classification": "partial",
   "imported_at": "2026-05-01T19:38:17.147910Z",
-  "checked_at": "2026-08-08T00:00:00Z",
+  "checked_at": "2026-08-09T00:00:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a98J02/lean/Main.lean",
@@ -43,7 +43,8 @@
     ],
     "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
     "blockers": [
-      "Assemble localized real-valued integral Cauchy-Schwarz, square it, and normalize by the interval measure factor"
+      "Assemble localized real-valued integral Cauchy-Schwarz, square it, and normalize by the interval measure factor",
+      "Extract a uniform varying-set epsilon-delta estimate from Integrable.tendsto_setIntegral_nhds_zero; the compiled fixed-center symmetric-interval limit is insufficient"
     ]
   }
 }

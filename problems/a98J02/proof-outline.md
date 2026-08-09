@@ -46,6 +46,14 @@ Cauchy--Schwarz calculation: square its real-valued bound, divide by the
 positive interval length, and compare `[y,x]` with a controlled symmetric
 interval.
 
+## Closer hop 4 (2026-08-09)
+
+The localized Cauchy--Schwarz gap is now stated exactly in the boundary
+comment. Reinspection also found that the hop-3 fixed-center symmetric limit
+does not supply a single `δ` for all short intervals. A second exact bridge is
+therefore required: uniform absolute continuity of the integral of
+`|deriv f|²` over every `[y,x] ⊆ [0,1]` whose length is below `δ`.
+
 ## Imported Proof Plan
 
 ```clojure
