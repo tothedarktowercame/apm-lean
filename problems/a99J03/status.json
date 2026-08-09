@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,8 +28,8 @@
     "has_receipt": false
   },
   "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 3 proves the exact kernel derivative, its uniform local L1 domination, and nonintegrability of the endpoint comparison kernel 1/(x*(x+1)) by reduction to the rpow exponent -1 criterion. Remaining work is measurability/integrability packaging, iteration to ContDiffOn, Tonelli for the derivative L1 bound, and rewriting the explicit derivative to that compiled endpoint kernel.",
-  "closer_hop": 3,
-  "closer_note": "Proved the endpoint kernel 1/(x*(x+1)) is not integrable on (0,1), closing the final power-integrability obstruction for the counterexample. Dominated differentiation, smoothness iteration, Tonelli, and the explicit derivative rewrite remain.",
+  "classification_detail": "Hop 4 isolates the remaining work in three precise Lean contracts: smooth dominated differentiation with the derivative formula, the Tonelli integrability estimate on Ici a, and the counterexample derivative-norm identity on (0,1). Their proofs remain intentionally sorry, and the frozen main theorem is unchanged.",
+  "closer_hop": 4,
+  "closer_note": "Stated, without proving, the three exact analytic bridge lemmas needed to complete the already compiled main-theorem assembly.",
   "imported_at": "2026-07-13T17:26:53.061682Z"
 }

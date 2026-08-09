@@ -83,6 +83,38 @@ lemma apm_a99J03_endpoint_kernel_not_integrable :
   rw [intervalIntegral.integrableOn_Ioo_rpow_iff zero_lt_one] at hrpow
   norm_num at hrpow
 
+/-- Why this unblocks `apm_a99j03`: this is the dominated-differentiation
+package, including its iteration, for the Stieltjes kernel.  Its first
+component is the first conjunct of the main theorem, while its second
+component supplies the derivative formula used by both integrability
+arguments. -/
+theorem apm_a99J03_bridge_smooth_and_deriv
+    (f : ℝ → ℝ) (hf : IntegrableOn f (Ioi 0)) :
+    ContDiffOn ℝ ∞ (apm_a99J03_transform f) (Ioi 0) ∧
+      ∀ x : ℝ, 0 < x →
+        deriv (apm_a99J03_transform f) x =
+          -(∫ y in Ioi (0 : ℝ), f y / (x + y) ^ 2) := by
+  sorry
+
+/-- Why this unblocks `apm_a99j03`: this is exactly the Tonelli estimate
+away from the singular endpoint.  It supplies the second conjunct after the
+derivative has been identified by the preceding bridge. -/
+theorem apm_a99J03_bridge_deriv_integrableOn_Ici
+    (f : ℝ → ℝ) (hf : IntegrableOn f (Ioi 0))
+    {a : ℝ} (ha : 0 < a) :
+    IntegrableOn (deriv (apm_a99J03_transform f)) (Ici a) := by
+  sorry
+
+/-- Why this unblocks `apm_a99j03`: it specializes dominated differentiation
+to the indicator datum and identifies the derivative norm with the elementary
+kernel already proved nonintegrable above.  Restriction from `(0,∞)` to
+`(0,1)` then gives the final contradiction. -/
+theorem apm_a99J03_bridge_counterexample_deriv_norm
+    {x : ℝ} (hx : x ∈ Ioo (0 : ℝ) 1) :
+    ‖deriv (apm_a99J03_transform apm_a99J03_counterexample) x‖ =
+      1 / (x * (x + 1)) := by
+  sorry
+
 theorem apm_a99j03
     (f : ℝ → ℝ) (hf : IntegrableOn f (Ioi 0)) :
     ContDiffOn ℝ ∞ (apm_a99J03_transform f) (Ioi 0) ∧

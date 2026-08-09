@@ -15,10 +15,16 @@ counterexample belongs to `L¹(0,∞)`.
 
 ## Follow-up Needed
 
-- Discharge the measurability and restricted-integrability arguments needed
-  to apply `hasDerivAt_integral_of_dominated_loc_of_deriv_le` using the two
-  compiled kernel lemmas.
-- Iterate the dominated differentiation argument to obtain `ContDiffOn`.
-- Use Tonelli and the derivative formula for the `L¹(Ici a)` estimate.
-- Specialize the formula to the indicator datum and rewrite its derivative as
-  the now-compiled nonintegrable kernel `1 / (x * (x + 1))` near zero.
+Hop 4 records the remaining mathematics as three precise contracts:
+
+- `apm_a99J03_bridge_smooth_and_deriv` packages dominated differentiation
+  and its iteration, yielding both `ContDiffOn` and the exact first derivative.
+- `apm_a99J03_bridge_deriv_integrableOn_Ici` states the Tonelli estimate away
+  from zero in exactly the form consumed by the main theorem.
+- `apm_a99J03_bridge_counterexample_deriv_norm` identifies the norm of the
+  explicit counterexample's derivative on `(0,1)` with
+  `1 / (x * (x + 1))`; the compiled endpoint lemma then supplies the
+  contradiction.
+
+These declarations are intentionally unproved.  Proving them leaves only
+routine conjunction and restriction assembly in `apm_a99j03`.
