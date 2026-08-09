@@ -151,6 +151,23 @@ lemma apm_m94a05_norm_picardMap_le {ε : ℝ} (hε : 0 ≤ ε)
   intro t
   simpa [Real.norm_eq_abs] using apm_m94a05_abs_picardMap_le hε u t
 
+/-- Why this unblocks `apm_m94a05`: this is the missing bundled form of the
+polarization estimate, converting the pointwise kernel bound into the sup-norm
+Lipschitz estimate required by the contraction argument. -/
+theorem apm_m94A05_bridge_1 (ε : ℝ) (u v : apm_m94a05_space) :
+    ‖apm_m94a05_picardMap ε u - apm_m94a05_picardMap ε v‖ ≤
+      Real.pi * (‖u‖ + ‖v‖) * ‖u - v‖ := by
+  sorry
+
+/-- Why this unblocks `apm_m94a05`: the smallness hypothesis makes the Picard
+operator an invariant contraction on the closed ball of radius `2 * ε`; this
+states the fixed point extracted from that complete closed ball. -/
+theorem apm_m94A05_bridge_2
+    (ε : ℝ) (hε : 0 < ε) (hε_small : ε < 1 / (4 * Real.pi)) :
+    ∃ u : apm_m94a05_space,
+      ‖u‖ ≤ 2 * ε ∧ apm_m94a05_picardMap ε u = u := by
+  sorry
+
 theorem apm_m94a05
     (ε : ℝ) (hε : 0 < ε) (hε_small : ε < 1 / (4 * Real.pi)) :
     ∃ u : ℝ → ℝ, ContinuousOn u (Icc 0 Real.pi) ∧
