@@ -134,6 +134,21 @@ lemma apm_m98J04_eq_zero_on_Ioo_of_ae
   exact MeasureTheory.Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo hf
     continuous_zero.continuousOn
 
+/-- Why this unblocks `apm_m98j04`: this is the missing first-variation
+assembly theorem.  Its proof differentiates under the frozen interval
+integral, integrates the momentum term by parts, converts endpoint-zero
+variations to compactly supported smooth tests, applies the distributional
+fundamental lemma, and upgrades almost-everywhere vanishing to the pointwise
+Euler--Lagrange equation. -/
+theorem apm_m98J04_bridge_stationary_imp_eulerLagrange
+    (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ)
+    (hab : a < b)
+    (hF : ContDiff ℝ 2 (fun p : ℝ × ℝ × ℝ ↦ F p.1 p.2.1 p.2.2))
+    (hy : ContDiff ℝ 2 y)
+    (hstat : apm_m98J04_stationary F a b y) :
+    apm_m98J04_eulerLagrange F a b y := by
+  sorry
+
 theorem apm_m98j04 :
     (∀ (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ),
       a < b →
