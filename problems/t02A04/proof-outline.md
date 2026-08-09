@@ -28,3 +28,12 @@ that attachment, and no topological Lefschetz fixed-point theorem.
 Searches of Mathlib, `LEMMA-INDEX.md`, solved and partial sibling artifacts,
 `ConstructionTargets/`, and git history found no reusable replacement.  The
 statement is unchanged and appears mathematically non-trivial and sound.
+
+## Hop 4: stated bridges
+
+`apm_t02A04_HQ` names the actual rational singular-homology objects of the
+concrete quotient. `apm_t02A04_bridge_1` states the `ℝP²` computation: degree
+zero is `ℚ` and every positive degree vanishes. `apm_t02A04_bridge_2` states
+the specialized Lefschetz implication for this finite cell attachment. Once
+both are proved, the main theorem follows by direct application; neither
+bridge changes or repackages the frozen statement.

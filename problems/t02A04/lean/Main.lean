@@ -146,6 +146,30 @@ lemma apm_t02a04_gluedDesc_unique
   · exact hus x
   · exact hud x
 
+/-- Rational singular homology of the `(1,2)` attachment.  This is the
+homological content of its standard homotopy identification with `ℝP²`. -/
+noncomputable abbrev apm_t02A04_HQ (k : ℕ) :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)).obj (TopCat.of apm_t02a04_X))
+
+/-- Why this unblocks `apm_t02a04`: the attachment is rationally acyclic,
+exactly as `ℝP²`; this supplies the homology input whose Lefschetz number is
+one for every self-map. -/
+theorem apm_t02A04_bridge_1 :
+    Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧
+      ∀ k : ℕ, 0 < k → CategoryTheory.Limits.IsZero (apm_t02A04_HQ k) := by
+  sorry
+
+/-- Why this unblocks `apm_t02a04`: this is the specialized Lefschetz bridge
+for the concrete finite cell attachment.  Rational acyclicity makes the
+Lefschetz number of every continuous self-map equal to one, hence nonzero. -/
+theorem apm_t02A04_bridge_2
+    (hH : Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧
+      ∀ k : ℕ, 0 < k → CategoryTheory.Limits.IsZero (apm_t02A04_HQ k))
+    (f : apm_t02a04_X → apm_t02a04_X) (hf : Continuous f) :
+    ∃ x, f x = x := by
+  sorry
+
 theorem apm_t02a04 :
     ∀ f : apm_t02a04_X → apm_t02a04_X,
       Continuous f → ∃ x, f x = x := by
