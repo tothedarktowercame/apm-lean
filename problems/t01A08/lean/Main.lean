@@ -5,8 +5,12 @@ import Mathlib
 
 ## Statement repairs
 
-The codomain written once as `A` and later as `𝐀³` is read consistently as
-real affine three-space `ℝ³`.
+1. The codomain written once as `A` and later as `𝐀³` is read consistently as
+   real affine three-space `ℝ³`.
+2. The usual second-countability convention implicit in the source's “smooth
+   manifold” is made explicit. Mathlib's `IsManifold` deliberately omits it;
+   without this hypothesis an uncountable disjoint union of components can
+   make every value critical while the projection remains surjective.
 
 ## Encoding questions
 
@@ -34,7 +38,7 @@ theorem apm_t01a08
     (E H X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] [TopologicalSpace H]
     (I : ModelWithCorners ℝ E H)
-    [TopologicalSpace X] [ChartedSpace H X]
+    [TopologicalSpace X] [SecondCountableTopology X] [ChartedSpace H X]
     [IsManifold I (⊤ : ℕ∞) X]
     (f : X → apm_t01a08_R3)
     (hf : ContMDiff I apm_t01a08_I3 (⊤ : ℕ∞) f) :
@@ -44,23 +48,4 @@ theorem apm_t01a08
           Function.Surjective
             (mfderiv I apm_t01a08_I2
               (fun z => apm_t01a08_projection (f z)) x)) := by
-  /-
-  Boundary (skipped): the intended route is Sard's theorem for
-  `projection ∘ f`, but Mathlib does not currently provide manifold Sard in
-  this generality. More importantly, the frozen statement omits a
-  second-countability (or comparable countability) hypothesis on `X`, so it
-  is false as stated: take an uncountable topological sum of positive-
-  dimensional manifold components indexed by `p : R²`, and map the entire
-  `p`-component constantly to a point of `R³` whose projection is `p`. The map
-  is smooth and its projection is surjective, but its derivative is zero on
-  every fiber, hence no `p` is a regular value. I searched the manifold
-  regular-value, critical-value, Sard, and Whitney-embedding APIs; the only
-  Sard-related code assumes additional countability/local-Lipschitz machinery
-  and does not supply this theorem. Mathlib's own `IsManifold` documentation
-  explicitly says that neither Hausdorffness nor second countability is part
-  of the class. The partial sibling `t92J07` adds both hypotheses for the
-  corresponding countable-family Sard claim, while `t01J04` records another
-  failure caused by the deliberately weak manifold axioms. No relevant bridge
-  occurs in `ConstructionTargets/` or `YoungL2.lean`.
-  -/
   sorry
