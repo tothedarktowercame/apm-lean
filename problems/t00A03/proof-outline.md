@@ -33,3 +33,8 @@ The canonical Lean attempt is `lean/Main.lean`.
   classification theorem turning it into the required concrete homeomorphism.
 - Connect the frozen singular-homology genus data to Euler characteristic and
   formalize the boundary incidence count yielding `n = 3g - 3`.
+
+These two independent developments are now stated precisely as
+`apm_t00A03_bridge_1` (componentwise pants homeomorphisms) and
+`apm_t00A03_bridge_2` (the numerical cutting count). Together they match the
+two conjuncts of the frozen conclusion exactly.

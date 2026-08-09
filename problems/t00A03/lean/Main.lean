@@ -159,6 +159,57 @@ lemma apm_t00a03_components_eq_or_disjoint
     rw [Set.disjoint_iff_inter_eq_empty]
     exact not_nonempty_iff_eq_empty.mp h
 
+/-- Why this unblocks `apm_t00a03`: this is the missing compact-surface
+classification step. It says that maximality of the essential, disjoint,
+nonparallel curve family forces every complementary component to be the
+interior of a pair of pants. -/
+theorem apm_t00A03_bridge_1
+    (g n : ℕ) (F : Type)
+    [TopologicalSpace F] [T2Space F] [CompactSpace F]
+    [PathConnectedSpace F] [ChartedSpace apm_t00a03_E2 F]
+    [IsManifold apm_t00a03_I2 ⊤ F]
+    (hg : 2 ≤ g) (hgenus : apm_t00a03_hasGenus g F)
+    (curves : Fin n → apm_t00a03_Curve F)
+    (hemb : ∀ i, Topology.IsEmbedding (curves i))
+    (hessential : ∀ i, ¬apm_t00a03_nullHomotopic (curves i))
+    (hdisjoint : ∀ i j, i ≠ j →
+      apm_t00a03_disjoint (curves i) (curves j))
+    (hnonparallel : ∀ i j, i ≠ j →
+      ¬apm_t00a03_parallel (curves i) (curves j))
+    (hmax : ∀ c : apm_t00a03_Curve F,
+      Topology.IsEmbedding c → ¬apm_t00a03_nullHomotopic c →
+      (∀ i, apm_t00a03_disjoint c (curves i)) →
+      ∃ i, apm_t00a03_parallel c (curves i)) :
+    ∀ x ∈ apm_t00a03_cut curves,
+      Nonempty
+        (connectedComponentIn (apm_t00a03_cut curves) x ≃ₜ
+          apm_t00a03_Pants) := by
+  sorry
+
+/-- Why this unblocks `apm_t00a03`: this is the missing global
+Euler-characteristic and boundary-incidence calculation for cutting a genus
+`g` surface along the maximal curve family; it yields the frozen numerical
+conclusion independently of the component homeomorphisms. -/
+theorem apm_t00A03_bridge_2
+    (g n : ℕ) (F : Type)
+    [TopologicalSpace F] [T2Space F] [CompactSpace F]
+    [PathConnectedSpace F] [ChartedSpace apm_t00a03_E2 F]
+    [IsManifold apm_t00a03_I2 ⊤ F]
+    (hg : 2 ≤ g) (hgenus : apm_t00a03_hasGenus g F)
+    (curves : Fin n → apm_t00a03_Curve F)
+    (hemb : ∀ i, Topology.IsEmbedding (curves i))
+    (hessential : ∀ i, ¬apm_t00a03_nullHomotopic (curves i))
+    (hdisjoint : ∀ i j, i ≠ j →
+      apm_t00a03_disjoint (curves i) (curves j))
+    (hnonparallel : ∀ i j, i ≠ j →
+      ¬apm_t00a03_parallel (curves i) (curves j))
+    (hmax : ∀ c : apm_t00a03_Curve F,
+      Topology.IsEmbedding c → ¬apm_t00a03_nullHomotopic c →
+      (∀ i, apm_t00a03_disjoint c (curves i)) →
+      ∃ i, apm_t00a03_parallel c (curves i)) :
+    n = 3 * g - 3 := by
+  sorry
+
 theorem apm_t00a03 :
     ∀ (g n : ℕ) (F : Type)
       [TopologicalSpace F] [T2Space F] [CompactSpace F]

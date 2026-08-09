@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,6 +28,6 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_progress": "Hop 3 proves that the connected components indexed by cut points cover the complement and form a partition: intersecting components are equal and all others are disjoint. Together with openness and the maximality consequence, the point-set component decomposition is complete; pants classification and the Euler-characteristic incidence count remain unavailable.",
+  "closer_progress": "Hop 4 exposes two precise handoff theorems: apm_t00A03_bridge_1 is the pants classification for every complementary component, and apm_t00A03_bridge_2 is the Euler-characteristic/boundary-incidence count n = 3*g - 3. The frozen theorem is unchanged.",
   "imported_at": "2026-07-13T17:26:56.391573Z"
 }
