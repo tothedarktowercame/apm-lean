@@ -172,6 +172,19 @@ lemma apm_m93A01_circleDerivH1_not_compact
     simp at hcoord
     exact (apm_m93A01_circleDerivH1Coeff_lower n).trans hcoord
 
+/-- Why this unblocks `apm_m93a01`: this is exactly the real-line inclusion
+clause.  Its proof constructs normalized indicators of countably many
+pairwise-disjoint positive finite-volume subsets of a bounded interval, where
+`apm_m93A01_realInclCoeff` is uniformly bounded below; the pinned a.e.
+multiplier identity then sends them to a uniformly separated sequence. -/
+theorem apm_m93A01_bridge_1
+    (A : apm_m93A01_l2R →L[ℂ] apm_m93A01_l2R)
+    (hA : ∀ f : apm_m93A01_l2R,
+      (fun ξ : ℝ ↦ A f ξ) =ᵐ[volume]
+        fun ξ ↦ apm_m93A01_realInclCoeff ξ * f ξ) :
+    ¬ IsCompactOperator A := by
+  sorry
+
 theorem apm_m93a01
     (ιS1 D1 D2 : apm_m93A01_l2Z →L[ℂ] apm_m93A01_l2Z)
     (ιR : apm_m93A01_l2R →L[ℂ] apm_m93A01_l2R)
