@@ -29,3 +29,10 @@ Closer hop 3 proves the inner upper estimate
 `Σ |xᵢ|^p ≤ n · ‖x‖∞^p` for every nonnegative real exponent. It remains to
 apply the outer `1/p` power, normalize the positive-maximum branch, and combine
 this with the attained-coordinate lower bound.
+
+Closer hop 4 closes that final squeeze in `apm_m95J06_tendsto_lpNorm`. If the
+maximum is zero, every coordinate and hence every custom `lpNorm` is eventually
+zero. If it is positive, the attained coordinate gives the lower bound and the
+finite power-sum estimate gives the upper bound
+`n^(1/p) * linfNorm x`; `Real.rpow_rpow_inv` normalizes the maximum power and
+the cardinality factor tends to one. Both frozen conjuncts are now complete.

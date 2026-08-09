@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Compiled the inner upper power-sum bound sum |x_i|^p <= n times linfNorm(x)^p for every nonnegative real p. Outer rpow normalization, the lower bound, and final squeeze remain open.",
+  "classification": "complete",
+  "closer_hop": 4,
+  "closer_note": "Closed the custom real-exponent finite power-mean squeeze with a zero-maximum branch and a positive-maximum branch using attained-coordinate lower bounds, the compiled power-sum upper bound, rpow_rpow_inv normalization, and the cardinality-factor limit.",
   "imported_at": "2026-07-13T17:26:55.222943Z"
 }
