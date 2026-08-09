@@ -126,6 +126,41 @@ lemma apm_t92J05_product_group_of_subsingleton_left
       FundamentalGroup A a × FundamentalGroup B b ≃*
         FundamentalGroup B b).trans hB.some)⟩
 
+/-- Why this unblocks `apm_t92j05`: this is the missing antipodal-cover
+identification of the fundamental group of the concrete real projective
+plane. It supplies the first frozen conjunct directly at every basepoint. -/
+theorem apm_t92J05_bridge_projectivePlane_fundamentalGroup :
+    ∀ x : apm_t92J05_RP2,
+      Nonempty
+        (FundamentalGroup apm_t92J05_RP2 x ≃*
+          Multiplicative (ZMod 2)) := by
+  sorry
+
+/-- Why this unblocks `apm_t92j05`: these are exactly the two factor
+computations still needed by the already compiled product equivalence. The
+metric two-sphere is simply connected and the complex unit circle has
+fundamental group `ℤ`, uniformly in the chosen basepoints. -/
+theorem apm_t92J05_bridge_sphere_circle_fundamentalGroups :
+    (∀ x : apm_t92J05_S2,
+      Subsingleton (FundamentalGroup apm_t92J05_S2 x)) ∧
+    ∀ x : apm_t92J05_S1,
+      Nonempty
+        (FundamentalGroup apm_t92J05_S1 x ≃* Multiplicative ℤ) := by
+  sorry
+
+/-- Why this unblocks `apm_t92j05`: this is the missing compact oriented
+surface classification and Seifert--van Kampen theorem. The encoded genus-two
+homology signature identifies the actual fundamental group with the verified
+four-generator, one-relator presentation. -/
+theorem apm_t92J05_bridge_genusTwo_fundamentalGroup :
+    ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
+        [PathConnectedSpace S] [ChartedSpace apm_t92J05_E2 S]
+        [IsManifold apm_t92J05_Model ∞ S],
+      apm_t92J05_HasGenusTwoHomology S → ∀ x : S,
+        Nonempty
+          (FundamentalGroup S x ≃* apm_t92J05_genusTwoGroup) := by
+  sorry
+
 theorem apm_t92j05 :
     (∀ x : apm_t92J05_RP2,
       Nonempty

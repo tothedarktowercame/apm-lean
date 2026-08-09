@@ -29,3 +29,19 @@ compiled.
 - Construct the antipodal cover of projectivization and compute `π₁(RP²)`.
 - Formalize compact oriented surface classification and Seifert--van Kampen,
   yielding the standard genus-two presentation.
+
+## Hop 4 bridge statements
+
+- `apm_t92J05_bridge_projectivePlane_fundamentalGroup` identifies the
+  fundamental group of the concrete real projective plane with
+  `Multiplicative (ZMod 2)` at every basepoint.
+- `apm_t92J05_bridge_sphere_circle_fundamentalGroups` states the two factor
+  computations needed by the compiled product route: the metric two-sphere
+  has subsingleton fundamental group and the complex unit circle has
+  fundamental group `Multiplicative ℤ`.
+- `apm_t92J05_bridge_genusTwo_fundamentalGroup` states the missing surface
+  classification/Van Kampen identification with the verified presented
+  group.
+
+These three contracts supply the three frozen clauses; the middle one plugs
+directly into `apm_t92J05_product_group_of_subsingleton_left`.

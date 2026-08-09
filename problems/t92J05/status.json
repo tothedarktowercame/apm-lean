@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "boundary": "The based fundamental group of a product is now explicitly equivalent to the product of the factor groups, and a trivial left factor is compiled away. Thus the S2 x S1 clause only lacks the concrete factor computations. RP2 still needs the antipodal-cover computation, while the genus-two clause needs surface classification and Seifert-van Kampen.",
+  "boundary": "Hop 4 states three exact identification contracts: pi1(RP2)=Z/2, the concrete pi1(S2)=1 and pi1(S1)=Z factor computations consumed by the compiled product route, and the genus-two surface presentation theorem.",
   "imported_at": "2026-07-13T17:26:57.479654Z"
 }
