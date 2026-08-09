@@ -59,6 +59,36 @@ lemma apm_m03J04_closure_range_subset_dualAnnihilator
   exact hclosed.closure_subset_iff.2
     (apm_m03J04_range_subset_dualAnnihilator B)
 
+/-- Why this unblocks the closure identity in `apm_m03j04`: this is the
+missing Hahn--Banach/Riesz density direction, identifying the custom
+intersection of evaluation kernels with the closure of the represented
+functionals. The reverse inclusion is already proved above. -/
+theorem apm_m03J04_bridge_1
+    {V W : Type*}
+    [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [CompleteSpace W]
+    (B : V →L[ℝ] W →L[ℝ] ℝ) :
+    (dualAnnihilator ((dualAdjoint B).ker : Set W) :
+        Set (W →L[ℝ] ℝ)) ⊆
+      closure (B.range : Set (W →L[ℝ] ℝ)) := by
+  sorry
+
+/-- Why this unblocks the inf--sup clause of `apm_m03j04`: after rewriting
+the signed homogeneous supremum as the operator norm, the lower bound makes
+`B` injective with closed range; the density identity then identifies that
+range with the annihilator and supplies the bounded inverse. -/
+theorem apm_m03J04_bridge_2
+    {V W : Type*}
+    [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [CompleteSpace W]
+    (B : V →L[ℝ] W →L[ℝ] ℝ)
+    (hinfsup : ∃ α : ℝ, 0 < α ∧ ∀ v : V,
+      sSup {r : ℝ | ∃ w : W, w ≠ 0 ∧ r = B v w / ‖w‖} ≥ α * ‖v‖) :
+    ∃ e : V ≃L[ℝ]
+        dualAnnihilator ((dualAdjoint B).ker : Set W),
+      ∀ v : V, (e v).1 = B v := by
+  sorry
+
 /-- All four parts: continuity and involutivity of the adjoint, closedness of
 annihilators, the closure-of-range identity, and the inf-sup isomorphism. -/
 theorem apm_m03j04
