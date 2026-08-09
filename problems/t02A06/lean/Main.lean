@@ -167,6 +167,32 @@ def apm_t02a06_H3Map {X Y : Type} [TopologicalSpace X]
   ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 3).obj
     (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
 
+/-- Why this unblocks the first conjunct of `apm_t02a06`: it is the missing
+classification of the common unit vectors orthogonal to two nonproportional
+unit normals.  The existing opposite-sign lemma and two-term cancellation
+then supply the remaining signed-intersection assertion. -/
+theorem apm_t02A06_bridge_1 :
+    ∀ normal₁ normal₂ : apm_t02a06_S2,
+      apm_t02a06_greatCircle normal₁ ≠ apm_t02a06_greatCircle normal₂ →
+        ∃ e : Fin 2 ≃ apm_t02a06_intersection normal₁ normal₂,
+          apm_t02a06_localSign (e 0) = -apm_t02a06_localSign (e 1) := by
+  sorry
+
+/-- Why this unblocks the second conjunct of `apm_t02a06`: it is the exact
+topological consequence of the missing computations
+`H₂(S² × S²; ℤ) ≅ ℤ²` and `H₂(S⁴; ℤ) = 0`. -/
+theorem apm_t02A06_bridge_2 :
+    ¬ Nonempty ((apm_t02a06_S2 × apm_t02a06_S2) ≃ₜ apm_t02a06_S4) := by
+  sorry
+
+/-- Why this unblocks the third conjunct of `apm_t02a06`: every map from
+`S³` to `T³` lifts to the contractible universal cover `ℝ³` and is therefore
+nullhomotopic; this packages the resulting homology-map vanishing in exactly
+the functorial form needed here. -/
+theorem apm_t02A06_bridge_3 :
+    ∀ f : C(apm_t02a06_S3, apm_t02a06_T3), apm_t02a06_H3Map f = 0 := by
+  sorry
+
 theorem apm_t02a06 :
     (∀ normal₁ normal₂ : apm_t02a06_S2,
       apm_t02a06_greatCircle normal₁ ≠ apm_t02a06_greatCircle normal₂ →
