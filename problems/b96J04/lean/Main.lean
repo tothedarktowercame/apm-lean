@@ -52,7 +52,57 @@ lemma apm_b96J04_orderOf_41_mod_16 :
 /-- The concrete unit group modulo `16` has eight elements. -/
 lemma apm_b96J04_card_units_mod_16 : Nat.card (ZMod 16)ˣ = 8 := by
   rw [Nat.card_eq_fintype_card]
-  native_decide
+  decide
+
+def apm_b96J04_unitsCode (u : (ZMod 16)ˣ) :
+    Multiplicative (ZMod 2 × ZMod 4) :=
+  Multiplicative.ofAdd <| match u.1.val with
+    | 1  => (0, 0)
+    | 3  => (0, 1)
+    | 9  => (0, 2)
+    | 11 => (0, 3)
+    | 15 => (1, 0)
+    | 13 => (1, 1)
+    | 7  => (1, 2)
+    | 5  => (1, 3)
+    | _  => (0, 0)
+
+def apm_b96J04_unitsCodeHom :
+    (ZMod 16)ˣ →* Multiplicative (ZMod 2 × ZMod 4) where
+  toFun := apm_b96J04_unitsCode
+  map_one' := by decide
+  map_mul' := by decide
+
+lemma apm_b96J04_units_mod_16_equiv :
+    Nonempty ((ZMod 16)ˣ ≃* Multiplicative (ZMod 2 × ZMod 4)) := by
+  exact ⟨MulEquiv.ofBijective apm_b96J04_unitsCodeHom (by decide)⟩
+
+lemma apm_b96J04_isCyclotomicExtension_of_isSplittingField
+    (K : Type*) [Field K] [Algebra ℚ K]
+    [Polynomial.IsSplittingField ℚ K (cyclotomic 16 ℚ)] :
+    IsCyclotomicExtension {16} ℚ K := by
+  letI : CharZero K :=
+    charZero_of_injective_algebraMap (algebraMap ℚ K).injective
+  letI : NeZero (16 : ℕ) := ⟨by norm_num⟩
+  letI : NeZero (16 : K) := ⟨Nat.cast_ne_zero.mpr (by norm_num)⟩
+  rw [IsCyclotomicExtension.iff_singleton]
+  obtain ⟨ζ, hζ⟩ := (Polynomial.IsSplittingField.splits K
+    (cyclotomic 16 ℚ)).exists_eval_eq_zero
+      (by simpa only [map_cyclotomic] using
+        (degree_cyclotomic_pos 16 K (by norm_num)).ne')
+  have hprim : IsPrimitiveRoot ζ 16 := by
+    rw [← isRoot_cyclotomic_iff, IsRoot.def]
+    simpa only [map_cyclotomic] using hζ
+  refine ⟨⟨ζ, hprim⟩, ?_⟩
+  have htop : Algebra.adjoin ℚ {b : K | b ^ 16 = 1} = ⊤ := by
+    have heq :=
+      IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots
+        (A := ℚ) hprim
+    simp only [Set.mem_singleton_iff, exists_eq_left, ne_eq,
+      OfNat.ofNat_ne_zero, not_false_eq_true, true_and] at heq
+    rw [← heq]
+    exact Polynomial.IsSplittingField.adjoin_rootSet K (cyclotomic 16 ℚ)
+  exact Algebra.eq_top_iff.mp htop
 
 /-- Once the abstract splitting field has been recognized as the sixteenth
 cyclotomic extension, Mathlib's rational cyclotomic Galois equivalence applies
@@ -66,6 +116,16 @@ lemma apm_b96J04_aut_equiv_units_of_isCyclotomic
   let e := IsCyclotomicExtension.Rat.galEquivZMod 16 K
   refine ⟨⟨e⟩, ?_⟩
   rw [Nat.card_congr e.toEquiv, apm_b96J04_card_units_mod_16]
+
+/-- The concrete unit-group equivalence completes the rational automorphism
+group identification once the splitting field has been recognized as the
+sixteenth cyclotomic extension. -/
+lemma apm_b96J04_aut_equiv_product_of_isCyclotomic
+    (K : Type*) [Field K] [NumberField K]
+    [IsCyclotomicExtension {16} ℚ K] :
+    Nonempty ((K ≃ₐ[ℚ] K) ≃* Multiplicative (ZMod 2 × ZMod 4)) := by
+  obtain ⟨eunits⟩ := apm_b96J04_units_mod_16_equiv
+  exact ⟨(IsCyclotomicExtension.Rat.galEquivZMod 16 K).trans eunits⟩
 
 theorem apm_b96j04
     (K L : Type) [Field K] [Algebra ℚ K]
@@ -92,7 +152,7 @@ theorem apm_b96j04
   transport. `apm_b96J04_orderOf_41_mod_16` proves that the Frobenius exponent
   has order exactly two, using `orderOf_eq_prime` and decidable arithmetic in
   `ZMod 16`. `apm_b96J04_card_units_mod_16` proves that `(ZMod 16)ˣ` has eight
-  elements. A direct `native_decide` search cannot synthesize the requested
+  elements. A direct computational search cannot synthesize the requested
   structured group equivalence, and Mathlib's cyclotomic searches expose
   `IsCyclotomicExtension.finrank` over irreducible cyclotomic polynomials but
   no finite-field splitting-degree theorem consuming this order computation.
@@ -127,5 +187,19 @@ theorem apm_b96j04
   equivalence `(ZMod 16)ˣ ≃* Multiplicative (ZMod 2 × ZMod 4)`. The finite-
   field Frobenius-degree bridge and subsequent subgroup enumeration also
   remain open.
+  -/
+  /-
+  HOP 4 closes both identified rational-side holes.  The explicit computable
+  homomorphism `apm_b96J04_unitsCodeHom` yields the requested structured unit
+  equivalence, while
+  `apm_b96J04_isCyclotomicExtension_of_isSplittingField` converts the literal
+  cyclotomic splitting-field instance by comparing its root-set adjoin with
+  the primitive-root adjoin characterization.  Their composite proves the
+  rational automorphism-group conclusion in
+  `apm_b96J04_aut_equiv_product_of_isCyclotomic`.  Applying that conclusion
+  inside the frozen theorem still encounters its explicitly supplied
+  rational `Algebra` instance versus `NumberField`'s canonical rational
+  algebra, while the independent intermediate-field counts and finite-field
+  Frobenius automorphism clause also remain open.
   -/
   sorry
