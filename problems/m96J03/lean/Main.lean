@@ -98,6 +98,21 @@ lemma apm_m96j03_zero_dim (φ : apm_m96j03_E 0 → ℝ) :
   rw [hsphere]
   simp [apm_m96j03_laplacian]
 
+/-- Why this unblocks `apm_m96j03`: after
+`apm_m96j03_integral_ballIndicator`, this is exactly the remaining
+positive-dimensional goal.  It states the Euclidean unit-ball Gauss--Green
+formula directly with the frozen restricted Hausdorff surface measure, so no
+potentially misnormalized intermediate `Measure.toSphere` identification is
+hidden in the bridge. -/
+theorem apm_m96J03_bridge_1
+    {n : ℕ} (hn : 0 < n) (φ : apm_m96j03_E n → ℝ)
+    (hφ : ContDiff ℝ (⊤ : ℕ∞) φ) (hφc : HasCompactSupport φ) :
+    (∫ x : apm_m96j03_E n in Metric.closedBall 0 1,
+        apm_m96j03_laplacian φ x) =
+      ∫ x : apm_m96j03_E n in Metric.sphere 0 1,
+        fderiv ℝ φ x x ∂μH[(n - 1 : ℕ)] := by
+  sorry
+
 theorem apm_m96j03
     (n : ℕ) (φ : apm_m96j03_E n → ℝ)
     (hφ : apm_m96j03_IsTestFunction φ) :
