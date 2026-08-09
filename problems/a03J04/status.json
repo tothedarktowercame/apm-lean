@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 4,
-  "boundary": "The exact missing ENNReal/improper-integral assembly is stated as apm_a03J04_bridge_weakL1_rpow_setIntegral. It simultaneously yields local p-power integrability and the sharp 1/(1-p) set-integral bound.",
+  "closer_hop": 1,
+  "boundary": "The main theorem's part-(b) and part-(c) holes are closed by routing through apm_a03J04_bridge_weakL1_rpow_setIntegral. The sole remaining sorry is that bridge. Mathlib's weighted layer-cake theorem lintegral_rpow_eq_lintegral_meas_lt_mul removes the old power-level-set conversion; the remaining work is the ENNReal minimum-majorant split, improper rpow evaluations, and Bochner/toReal transport.",
   "imported_at": "2026-07-13T17:26:51.764499Z"
 }

@@ -50,6 +50,29 @@ theorem apm_a03J04_bridge_weakL1_rpow_setIntegral
       (∫ x in E, Real.rpow |f x| p ∂volume) ≤
         (1 / (1 - p)) * Real.rpow (volume E).toReal (1 - p) *
           Real.rpow M.toReal p := by
+  /-
+  CLOSER HOP 1: the main theorem is now routed entirely through this bridge,
+  so its former part-(b) and part-(c) sorries are closed. A renewed Mathlib
+  search found `MeasureTheory.lintegral_rpow_eq_lintegral_meas_lt_mul`, which
+  directly gives the weighted layer-cake identity
+
+    ∫⁻ |f|^p = ofReal p * ∫⁻ t>0, μ {|f| > t} * ofReal (t^(p-1)).
+
+  Applying it to `volume.restrict E` avoids the earlier level-set conversion
+  through `|f|^p`. The remaining local assembly is to derive
+
+    (volume.restrict E) {|f| > t} ≤ min (volume E) (M / ofReal t)
+
+  from the `iSup` definition of `apm_a03J04_weakL1Size`, split the weighted
+  lintegral at `t = M.toReal / (volume E).toReal`, evaluate both real-power
+  improper integrals, and transport the finite ENNReal bound back to Bochner
+  integrability and the displayed real inequality. Searches of
+  `LEMMA-INDEX.md`, all `ConstructionTargets`, solved weak-type siblings,
+  Mathlib's layer-cake, improper-integral, `min`, and `eLpNorm` sources, and
+  git history found no packaged weak-L1-to-local-Lp theorem or evaluator for
+  this minimum majorant. No axiom, opaque declaration, or `native_decide` was
+  introduced; the frozen statement is unchanged.
+  -/
   sorry
 
 theorem apm_a03j04 (n : ℕ) :
@@ -122,6 +145,11 @@ theorem apm_a03j04 (n : ℕ) :
     -- from `Mathlib.Analysis.SpecialFunctions.ImproperIntegrals` bridged
     -- through the ENNReal lintegral — a gap of ~15-20 tactic steps
     -- with non-trivial ENNReal/Real arithmetic.
-    sorry
+    exact (apm_a03J04_bridge_weakL1_rpow_setIntegral
+      f M p E hf hweak hM hp hp1 hE hEfin).1
   · -- Part (c): Explicit bound with c = 1/(1-p).
-    sorry
+    intro p hp hp1
+    refine ⟨1 / (1 - p), div_pos zero_lt_one (sub_pos.mpr hp1), ?_⟩
+    intro f M E hf hweak hM hE hEfin
+    exact (apm_a03J04_bridge_weakL1_rpow_setIntegral
+      f M p E hf hweak hM hp hp1 hE hEfin).2

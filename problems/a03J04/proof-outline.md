@@ -20,7 +20,12 @@ satisfies
 
 `∫_E |f|^p ≤ (1/(1-p)) · volume(E)^(1-p) · M^p`.
 
-The proof is the layer-cake level-set split followed by
-`integrableOn_Ioi_rpow`, with the required ENNReal/real conversions. The first
-conclusion closes part (b); the second closes part (c) using
-`c = 1 / (1-p)`.
+The main theorem now invokes this bridge for both remaining conjuncts, so only
+the bridge itself remains sorry. Mathlib's
+`MeasureTheory.lintegral_rpow_eq_lintegral_meas_lt_mul` supplies the weighted
+layer-cake identity directly on `volume.restrict E`. The remaining proof must
+bound the restricted level measure by
+`min (volume E) (M / ENNReal.ofReal t)`, split at
+`M.toReal / (volume E).toReal`, evaluate the two improper real-power
+integrals, and convert the finite ENNReal estimate to the claimed Bochner
+integrability and real bound.
