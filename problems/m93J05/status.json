@@ -10,12 +10,12 @@
     "problem_tex": "apm/m93J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": ["lean/Main.lean"],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
+  "classification": "statement-defective",
+  "closer_hop": 4,
+  "note": "The final stationarity clause is false because it quantifies over every function h. For N=0, p=q=2, g=1 and minimizer f0=-1/2, a non-L2 direction h(x)=1/x leaves the admissible domain for every nonzero t; eLpNorm.toReal collapses infinity to zero, so the path need not be continuous at zero. The missing MemLp h hypothesis cannot be supplied by a bridge.",
   "imported_at": "2026-07-13T17:26:54.642587Z"
 }
