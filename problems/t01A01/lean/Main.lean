@@ -59,6 +59,18 @@ lemma apm_t01A01_nullhomotopic_of_factor
     exact hfg x
   simpa [hleft, inclusion] using hcomp
 
+/-- Why this unblocks `apm_t01a01`: a punctured real projective plane has the
+homotopy type of a circle, while every map from `RP²` to a circle has trivial
+integral fundamental-group class.  Thus the complement-valued factor of a
+nonsurjective self-map is null-homotopic, after which
+`apm_t01A01_nullhomotopic_of_factor` supplies the required null-homotopy. -/
+theorem apm_t01A01_bridge_1
+    (q : apm_t01A01_RP2)
+    (g : C(apm_t01A01_RP2, {y : apm_t01A01_RP2 // y ≠ q})) :
+    ∃ p : {y : apm_t01A01_RP2 // y ≠ q},
+      ContinuousMap.Homotopic g (ContinuousMap.const apm_t01A01_RP2 p) := by
+  sorry
+
 theorem apm_t01a01 :
     ∀ f : C(apm_t01A01_RP2, apm_t01A01_RP2),
       ¬Function.Surjective f →
