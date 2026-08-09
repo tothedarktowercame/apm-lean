@@ -31,6 +31,18 @@ The negative manifold claim is consequently reduced to a local invariant of
 this explicit crossing. The positive claim still requires projective quotient
 charts for the smooth conic.
 
+## Hop 4 exact missing contract
+
+```lean
+theorem apm_t94a08_nodal_not_manifold_at :
+    ¬apm_t94a08_IsRealTwoManifoldAt
+      apm_t94a08_sigma2 apm_t94a08_node
+```
+
+Together with `apm_t94a08_node_mem_sigma2`, this directly supplies the
+negative manifold conjunct. Proving it requires projective local charts and a
+punctured-neighborhood component invariant; neither is packaged in Mathlib.
+
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t94A08.md`
 

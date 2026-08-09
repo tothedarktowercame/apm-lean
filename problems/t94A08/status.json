@@ -29,7 +29,7 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "closer_note": "The regular-level conjunct is proved. The nodal conic is now exactly decomposed into two explicit projective-line branches and the node lies on both. Projective charts and the local branch-crossing nonmanifold obstruction remain open.",
+  "closer_note": "Hop 4 precisely isolates the missing nodal contract as `not IsRealTwoManifoldAt sigma2 node`. No packaged punctured-neighborhood component invariant was found; the separate positive smooth-conic chart construction also remains open.",
   "checked_at": "2026-08-08T00:00:00Z",
   "checked_lean_state": {
     "exit_code": 0,

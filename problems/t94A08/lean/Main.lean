@@ -188,5 +188,24 @@ theorem apm_t94a08 :
   branch/component invariant.  Failure of the derivative criterion cannot
   prove this separately encoded topological negation.  The frozen statement
   is unchanged, and no axiom or opaque placeholder was introduced.
+
+  HOP 4 (2026-08-09): an exhaustive declaration search in Mathlib's local
+  connectedness, connected-components, punctured-neighborhood, homeomorphism,
+  and manifold APIs found transport lemmas such as
+  `Homeomorph.map_punctured_nhds_eq`, but no invariant distinguishing the
+  four-sector nodal cross from an open subset of `EuclideanSpace ℝ (Fin 2)`.
+  The exact missing contract for this identified gap is
+
+    theorem apm_t94a08_nodal_not_manifold_at :
+      ¬apm_t94a08_IsRealTwoManifoldAt
+        apm_t94a08_sigma2 apm_t94a08_node
+
+  It is true because the two complex-line branches meet only at the node and
+  a sufficiently small punctured neighborhood has four local sectors, whereas
+  a punctured planar disk is connected. The present file still lacks the
+  projective coordinate charts needed to state and prove that comparison at a
+  more reusable level. This contract would close the negative conjunct using
+  `apm_t94a08_node_mem_sigma2`; it would not by itself close the independently
+  open positive manifold conjunct for `sigma1`.
   -/
   sorry
