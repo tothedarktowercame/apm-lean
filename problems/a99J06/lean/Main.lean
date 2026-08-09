@@ -96,6 +96,18 @@ lemma apm_a99j06_exists_continuous_log
   have hcomp := congrFun hG.2 z
   exact (Subtype.ext_iff.mp hcomp).symm
 
+/-- A continuous lift through the complex exponential is holomorphic whenever
+its exponential is holomorphic.  This is the missing local-regularity bridge:
+locally the lift agrees with a holomorphic inverse branch of `Complex.exp`,
+because both are continuous lifts with the same value at the base point. -/
+theorem apm_a99j06_continuous_exp_lift_is_holomorphic
+    {Ω : Set ℂ} (hΩopen : IsOpen Ω) (f : ℂ → ℂ)
+    (hf : DifferentiableOn ℂ f Ω) (G : C(Ω, ℂ))
+    (hG : ∀ z : Ω, f z = Complex.exp (G z)) :
+    ∃ g : ℂ → ℂ, DifferentiableOn ℂ g Ω ∧
+      ∀ z ∈ Ω, f z = Complex.exp (g z) := by
+  sorry
+
 theorem apm_a99j06
     (Ω : Set ℂ) (hΩopen : IsOpen Ω) (hΩnonempty : Ω.Nonempty)
     (hΩsc : IsSimplyConnected Ω)
@@ -104,23 +116,6 @@ theorem apm_a99j06
     ∃ g : ℂ → ℂ,
       DifferentiableOn ℂ g Ω ∧
       ∀ z ∈ Ω, f z = Complex.exp (g z) := by
-  /-
-  Boundary (closer hop 3): going beyond the missing-primitives route, this hop
-  found Mathlib's covering map `Complex.isCoveringMap_exp` and the simply
-  connected lifting theorem.  The compiled helper
-  `apm_a99j06_exists_continuous_log` now constructs a continuous lift
-  `G : C(Ω, ℂ)` with `f z = exp (G z)` directly, so global existence and all
-  monodromy bookkeeping are closed without `Complex.IsExactOn`.
-
-  The remaining bridge is regularity of this lift.  One must show locally that
-  a continuous lift through the holomorphic local diffeomorphism `exp` is
-  holomorphic (equivalently, identify it locally with a suitable analytic
-  logarithm branch and differentiate).  Searches of the complex exponential,
-  covering-map, local-homeomorphism, and differentiability APIs found no lemma
-  upgrading `Continuous G` from `DifferentiableOn (exp ∘ G)` to
-  `DifferentiableOn G`.  Mathlib's covering structure records only topological
-  local inverses, not their complex differentiability.  The alternative
-  exactness route remains blocked at the documented simply-connected-
-  primitives TODO, but the topological half is now fully compiled.
-  -/
-  sorry
+  obtain ⟨G, hG⟩ :=
+    apm_a99j06_exists_continuous_log hΩopen hΩnonempty hΩsc f hf hf0
+  exact apm_a99j06_continuous_exp_lift_is_holomorphic hΩopen f hf G hG
