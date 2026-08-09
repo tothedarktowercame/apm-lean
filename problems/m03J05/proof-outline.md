@@ -24,3 +24,15 @@ Mathlib has abstract Fredholm machinery and enough calculus/trigonometry for
 the local eigenfunction calculation, but searches found no packaged mixed
 Sturm–Liouville resolvent or half-integer Fourier-sine completeness theorem.
 Related partial artifacts stop at the same spectral or Nemytskii bridges.
+
+## Hop 4 bridge statements
+
+- `apm_m03J05_bridge_1` states the complete mixed-boundary Fredholm
+  alternative, including resonance compatibility and the affine eigenspace.
+- `apm_m03J05_bridge_2` states differentiability of the frozen Nemytskii
+  energy under the printed Lipschitz/monotonicity hypotheses.
+- `apm_m03J05_bridge_3` states existence and uniqueness for the frozen
+  nonlinear weak equation.
+
+Together these three declarations match all four main conjuncts while keeping
+the spectral and nonlinear developments separate.

@@ -137,6 +137,42 @@ def m03J05NonlinearWeakSolution
       ∫ x in (0 : ℝ)..1, G (m03J05H1Value u x) * m03J05H1Value v x =
         ∫ x in (0 : ℝ)..1, F x * m03J05H1Value v x
 
+/-- Why this unblocks `apm_m03j05`: this is the exact mixed-boundary
+Fredholm alternative missing from Mathlib, including both the nonresonant
+unique solution and the resonant compatibility/kernel classification. -/
+theorem apm_m03J05_bridge_1
+    (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) :
+    ((¬ ∃ n : ℕ, c = -m03J05MixedEigenvalue n) →
+      ∃! u : m03J05H1, m03J05LinearWeakSolution c F u) ∧
+    (∀ n : ℕ, c = -m03J05MixedEigenvalue n →
+      ((∃ u : m03J05H1, m03J05LinearWeakSolution c F u) ↔
+        ∫ x in (0 : ℝ)..1, F x * m03J05MixedEigenfunction n x = 0) ∧
+      ∀ u : m03J05H1, m03J05LinearWeakSolution c F u →
+        ∀ v : m03J05H1,
+          m03J05LinearWeakSolution c F v ↔
+            ∃ a : ℝ, ∀ x ∈ Icc (0 : ℝ) 1,
+              m03J05H1Value v x =
+                m03J05H1Value u x + a * m03J05MixedEigenfunction n x) := by
+  sorry
+
+/-- Why this unblocks `apm_m03j05`: this is the precise Sobolev/Nemytskii
+differentiability statement for the frozen energy functional. -/
+theorem apm_m03J05_bridge_2
+    (F : Lp ℝ 2 m03J05UnitMeasure) :
+    ∀ (G g : ℝ → ℝ) (L : NNReal), LipschitzWith L G → Monotone G →
+      (∀ x : ℝ, HasDerivAt g (G x) x) → g 0 = 0 →
+        Differentiable ℝ (m03J05Energy F g) := by
+  sorry
+
+/-- Why this unblocks `apm_m03j05`: this is the exact coercive monotone
+existence-and-uniqueness theorem on the zero-trace Sobolev realization used
+by the frozen nonlinear weak equation. -/
+theorem apm_m03J05_bridge_3
+    (F : Lp ℝ 2 m03J05UnitMeasure) :
+    ∀ (G : ℝ → ℝ) (L : NNReal), LipschitzWith L G → Monotone G →
+      ∃! u : m03J05H1, m03J05NonlinearWeakSolution F G u := by
+  sorry
+
 theorem apm_m03j05 (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) :
     ((¬ ∃ n : ℕ, c = -m03J05MixedEigenvalue n) →
       ∃! u : m03J05H1, m03J05LinearWeakSolution c F u) ∧
