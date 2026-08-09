@@ -111,6 +111,35 @@ lemma apm_t01A02_cover_eq_iff (x y : apm_t01A02_Torus) :
   exact and_congr (apm_t01A02_circle_sq_eq_sq_iff x.1 y.1)
     (apm_t01A02_circle_sq_eq_sq_iff x.2 y.2)
 
+/-- Why this unblocks `apm_t01a02`: this packages the missing product
+trivialization and the coordinatewise sign action.  It asserts exactly that
+the concrete double-in-each-coordinate map is a regular cover with deck group
+`(ZMod 2)²`. -/
+theorem apm_t01A02_bridge_covering_group :
+    apm_t01A02_hasCoveringGroup
+      (G := apm_t01A02_Deck) apm_t01A02_cover := by
+  sorry
+
+/-- Why this unblocks `apm_t01a02`: this is the missing global degree bridge.
+For a torus self-map, nonsurjectivity forces degree zero, expressed here as
+vanishing of the actual morphism on integral second singular homology. -/
+theorem apm_t01A02_bridge_H2map_eq_zero
+    (f : C(apm_t01A02_Torus, apm_t01A02_Torus))
+    (hf : ¬Function.Surjective f) :
+    apm_t01A02_H2map f = 0 := by
+  sorry
+
+/-- Why this unblocks `apm_t01a02`: this isolates the remaining Lefschetz
+argument.  A nonsurjective torus self-map that lifts through the concrete
+four-sheeted cover must have a fixed point. -/
+theorem apm_t01A02_bridge_fixedPoint_of_lift
+    (f : C(apm_t01A02_Torus, apm_t01A02_Torus))
+    (hf : ¬Function.Surjective f)
+    (hlift : ∃ g : C(apm_t01A02_Torus, apm_t01A02_Torus),
+      ∀ x, f x = apm_t01A02_cover (g x)) :
+    ∃ x, f x = x := by
+  sorry
+
 theorem apm_t01a02 :
     ∀ f : C(apm_t01A02_Torus, apm_t01A02_Torus),
       ¬Function.Surjective f →

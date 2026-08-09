@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +29,6 @@
   },
   "classification": "partial",
     "closer_hop": 3,
-    "boundary": "Continuity, the direct Circle squaring covering theorem, surjectivity, and the exact equal-or-antipodal classification of both coordinates in every torus fiber are compiled. Remaining work is product-cover/deck-action assembly, torus H2 degree theory, and the Lefschetz fixed-point bridge.",
+    "boundary": "Hop 4 states three exact remaining contracts: the product-cover/deck-group package, nonsurjective torus maps acting trivially on H2, and the fixed-point consequence for maps lifting through the four-sheeted cover.",
   "imported_at": "2026-07-13T17:26:56.679076Z"
 }

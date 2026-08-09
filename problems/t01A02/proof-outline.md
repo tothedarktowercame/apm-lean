@@ -32,3 +32,15 @@ cover is compiled; its covering group and the homological claims remain.
   nonsurjective self-map has zero degree.
 - Formalize the Lefschetz fixed-point argument for a map lifting through the
   four-sheeted cover.
+
+## Hop 4 bridge statements
+
+- `apm_t01A02_bridge_covering_group` states the complete product-cover and
+  `(ZMod 2)²` deck-action package for the concrete squaring map.
+- `apm_t01A02_bridge_H2map_eq_zero` states that a nonsurjective torus self-map
+  induces the zero map on integral second singular homology.
+- `apm_t01A02_bridge_fixedPoint_of_lift` states the remaining Lefschetz
+  consequence: a nonsurjective self-map lifting through the four-sheeted
+  cover has a fixed point.
+
+These are precisely the three open components of the frozen conclusion.
