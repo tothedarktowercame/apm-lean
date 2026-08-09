@@ -26,6 +26,12 @@ The chart-linear derivative helper in `t00J04` only realizes a prescribed
 cotangent vector at one point and does not supply the endpoint-dependent
 integral identity needed here.
 
+Hop 4 states this missing interface verbatim as `apm_t96A08_bridge_1`.  Its
+hypotheses expose the smooth one-form, reachability, and the full path-integral
+specification; its conclusion is exactly the smoothness and `mfderiv = omega`
+pair needed by the final conjunct.  The bridge is intentionally left with a
+`sorry` for a subsequent proof and the frozen main theorem is unchanged.
+
 This file packages the formalization-oriented context that should travel
 with the Lean files.
 

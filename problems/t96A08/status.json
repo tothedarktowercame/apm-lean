@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "The chosen-path potential is constructed, normalized at the base point, and proved unique among functions satisfying the path-integral specification. Remaining work is solely the local chart calculus proving smoothness and mfderiv equal to the one-form.",
+  "closer_hop": 4,
+  "boundary": "The remaining local chart calculus is stated precisely as apm_t96A08_bridge_1: every reachable path-integral potential of the smooth one-form is smooth and has mfderiv equal to that form. The bridge and the original main theorem remain unproved.",
   "imported_at": "2026-05-01T19:38:18.441190Z"
 }

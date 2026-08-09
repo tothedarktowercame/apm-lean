@@ -93,6 +93,30 @@ lemma apm_t96a08_potential_unique
   obtain ⟨γ, hγ, hγ0, hγ1⟩ := hreachable p
   exact (hf p γ hγ hγ0 hγ1).trans (hg p γ hγ hγ0 hγ1).symm
 
+/-- Why this unblocks `apm_t96a08`: this is the missing local
+chart-linear extension calculation.  It says that a potential represented by
+the concrete path integral from a reachable base point is smooth and that its
+manifold derivative is the original smooth one-form. -/
+theorem apm_t96A08_bridge_1
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (hreachable : ∀ p : M, ∃ gamma : ℝ → M,
+      apm_t96a08_IsPiecewiseSmoothPath I gamma ∧
+        gamma 0 = base ∧ gamma 1 = p)
+    (f : M → ℝ)
+    (hf : ∀ p : M, ∀ gamma : ℝ → M,
+      apm_t96a08_IsPiecewiseSmoothPath I gamma →
+      gamma 0 = base → gamma 1 = p →
+      f p = apm_t96a08_LineIntegral I omega gamma) :
+    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
+      ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = omega p := by
+  sorry
+
 theorem apm_t96a08
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
