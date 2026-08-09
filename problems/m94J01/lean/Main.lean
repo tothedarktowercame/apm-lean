@@ -86,6 +86,18 @@ private lemma apm_m94J01_negOnePow_not_tendsto (a : ℂ) :
   have : (2 : ℝ) = 0 := tendsto_nhds_unique htwo hzero
   norm_num at this
 
+/-- Why this unblocks `apm_m94j01`: the factorially normalized, pairwise
+disjoint translated bumps have uniformly bounded weighted derivatives of every
+order, so their pointwise `finsum` is a Schwartz function.  Its prescribed
+diagonal jets turn evaluation of the moving delta derivatives into the
+nonconvergent sequence `(-1)^n`. -/
+theorem apm_m94J01_bridge_1 :
+    ∃ φ : 𝓢(ℝ, ℂ),
+      (∀ x : ℝ,
+        φ x = ∑ᶠ n : ℕ, (apm_m94J01_localSummand n x : ℂ)) ∧
+      ∀ n : ℕ, iteratedDeriv n (φ : ℝ → ℂ) (n : ℝ) = 1 := by
+  sorry
+
 theorem apm_m94j01 :
     (∀ φ : TestFunction (⊤ : TopologicalSpace.Opens ℝ) ℝ ⊤,
       Tendsto
