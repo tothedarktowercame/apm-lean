@@ -134,6 +134,20 @@ lemma apm_t96j06_mk_pair_mem_ProductSubspace_iff
     apm_t96j06_coordinatePlane.mk_mem_projectivization_iff hv]
   rfl
 
+/-- Why this unblocks `apm_t96j06`: this is the precise mod-two intersection
+bridge absent from Mathlib.  The product of the two standard projective lines
+has odd self-intersection in `ℝP² × ℝP²`, whereas the intrinsic boundary of a
+compact embedded three-manifold has zero intersection with every closed
+complementary cycle; hence that boundary cannot be the displayed product. -/
+theorem apm_t96J06_bridge_1
+    (W : Set apm_t96j06_Ambient) (hW : IsCompact W)
+    (charts : ChartedSpace (EuclideanHalfSpace 3) W) :
+    let _ := charts
+    IsManifold (𝓡∂ 3) ⊤ W →
+      Subtype.val '' ((𝓡∂ 3).boundary W) ≠
+        apm_t96j06_ProductSubspace := by
+  sorry
+
 theorem apm_t96j06 :
     ¬apm_t96j06_BoundsThreeManifold apm_t96j06_ProductSubspace := by
   /-
