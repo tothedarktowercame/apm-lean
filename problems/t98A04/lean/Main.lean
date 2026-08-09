@@ -122,5 +122,28 @@ theorem apm_t98a04 :
   Mathlib's projectivization, fiber-bundle, manifold, homotopy and homology
   sources, and git history found no packaged bridge. The frozen statement is
   unchanged.
+
+  HOP 4 (2026-08-09): the natural types and instances are coherent, but no
+  smaller reusable theorem bridges them. The exact missing contracts are:
+
+    theorem apm_t98a04_submersion_bridge :
+      apm_t98a04_IsSubmersion apm_t98a04_hopf
+
+    theorem apm_t98a04_fibers_bridge :
+      apm_t98a04_fiber apm_t98a04_p10 = {z | z.1 1 = 0} ∧
+        ∀ p : apm_t98a04_CP1,
+          Nonempty (apm_t98a04_fiber p ≃ₜ Circle) ∧
+          ∀ z ∈ apm_t98a04_fiber p,
+            apm_t98a04_fiber p = apm_t98a04_circleOrbit z
+
+    theorem apm_t98a04_no_section_bridge :
+      ¬∃ i : apm_t98a04_CP1 → apm_t98a04_S3,
+        Continuous i ∧ ∀ p, apm_t98a04_hopf (i p) = p
+
+  The first constructs the missing source and target atlases and verifies the
+  manifold derivative. The second packages scalar normalization and the
+  continuous circle parametrization of every fiber. The third is the global
+  Hopf obstruction. Together with `apm_t98a04_continuous_hopf`, they are
+  exactly the frozen conjunction. No statement defect was found.
   -/
   sorry

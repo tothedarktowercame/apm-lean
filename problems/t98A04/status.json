@@ -29,6 +29,6 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "closer_note": "Proved continuity of the Hopf map from the coinduced projectivization topology and proved every unit-scalar circle orbit is contained in its Hopf fiber. Remaining are the reverse fiber normalization and homeomorphisms, explicit smooth atlases/submersion, and the global no-section obstruction.",
+  "closer_note": "Hop 4 isolates three exact contracts: explicit atlases and submersion, complete fiber normalization/homeomorphisms, and the Hopf no-section obstruction. The types are coherent and no statement defect was found, but Mathlib packages none of these bridges.",
   "imported_at": "2026-07-13T17:26:58.536188Z"
 }
