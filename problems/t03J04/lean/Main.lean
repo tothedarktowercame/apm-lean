@@ -13,6 +13,11 @@ import Mathlib.Algebra.Category.ModuleCat.Abelian
 * We assume `X` is connected.  Otherwise the torus maps onto one component
   while arbitrary additional components make the Euler characteristic of all
   of `X` unconstrained.
+* We assume `X` is Hausdorff via `T2Space X`.  The source's smooth-manifold
+  convention includes Hausdorffness, while Mathlib's `IsManifold` does not;
+  without it the circle with one point doubled is a connected boundaryless
+  one-manifold admitting a local diffeomorphism from `S¹` but has rational
+  Euler characteristic `-1`.
 * The orientation-preserving hypothesis is omitted because it is redundant:
   the Euler-characteristic conclusion holds for every local diffeomorphism
   from the compact connected torus, whether or not it preserves orientation.
@@ -90,6 +95,7 @@ theorem apm_t03j04
     apm_t03J04_eulerCharacteristic n (apm_t03J04_Torus n) = 0 ∧
     ∀ (X : Type)
         [TopologicalSpace X]
+        [T2Space X]
         [ChartedSpace (apm_t03J04_E n) X]
         [IsManifold (modelWithCornersSelf ℝ (apm_t03J04_E n))
           (⊤ : ℕ∞) X]
@@ -100,29 +106,4 @@ theorem apm_t03j04
       IsLocalDiffeomorph (apm_t03J04_Model n)
           (modelWithCornersSelf ℝ (apm_t03J04_E n)) (⊤ : ℕ∞) phi →
       apm_t03J04_eulerCharacteristic n X = 0 := by
-  /-
-  CLOSER HOP 3 boundary. This hop goes beyond the earlier homology search by
-  compiling the first topological step of the finite-cover route:
-  `apm_t03J04_localDiffeomorph_surjective` proves that a local diffeomorphism
-  from the compact torus has clopen nonempty range and is surjective onto a
-  connected Hausdorff target. It uses
-  `IsLocalDiffeomorph.isLocalHomeomorph`, `isOpen_range`, compactness of the
-  finite circle product, and `IsClopen.eq_univ`.
-
-  This exposes an additional frozen-boundary issue: the quantified target `X`
-  has no `T2Space X` hypothesis, and Mathlib's `ChartedSpace`/`IsManifold`
-  classes do not synthesize one. Consequently compactness of the image cannot
-  establish closedness in the actual frozen context, so even the standard
-  promotion to a surjective finite cover is unavailable without a new
-  non-Hausdorff argument. Renewed searches of `LEMMA-INDEX.md`,
-  `ConstructionTargets/`, related torus/covering artifacts, Mathlib's
-  local-homeomorphism, compactness, connectedness, singular-homology, and
-  Künneth sources, and git history found neither such an argument nor the
-  rational homology computation for finite powers of `Circle`.
-
-  The two homological equalities remain open, with target surjectivity also
-  blocked by the absent separation assumption. The frozen statement is
-  unchanged.
-  -/
-  refine ⟨apm_t03J04_constantVectorField_ne_zero n, ?_⟩
   sorry
