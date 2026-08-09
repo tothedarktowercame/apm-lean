@@ -48,6 +48,33 @@ lemma apm_t92J08_blowupCurve_isMIntegralCurveOn :
   rw [hasMFDerivWithinAt_iff_hasFDerivWithinAt]
   exact (apm_t92J08_blowupCurve_hasDerivAt (ne_of_lt ht)).hasFDerivAt.hasFDerivWithinAt
 
+/-- Why this unblocks the compact-manifold half of `apm_t92j08`: this is the
+uniform local-existence radius extracted from pointwise ODE existence by a
+finite compact subcover. It is exactly the hypothesis consumed by
+`exists_isMIntegralCurve_of_isMIntegralCurveOn`. -/
+theorem apm_t92J08_bridge_1
+    (n : ℕ) (M : Type)
+    [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (apm_t92J08_E n) M]
+    [IsManifold (apm_t92J08_Model n) ∞ M]
+    [BoundarylessManifold (apm_t92J08_Model n) M]
+    (v : (x : M) → TangentSpace (apm_t92J08_Model n) x)
+    (hv : ContMDiff (apm_t92J08_Model n) (apm_t92J08_Model n).tangent 1
+      (fun x ↦ (⟨x, v x⟩ : TangentBundle (apm_t92J08_Model n) M))) :
+    ∃ ε : ℝ, 0 < ε ∧ ∀ x : M,
+      ∃ γ : ℝ → M, γ 0 = x ∧
+        IsMIntegralCurveOn γ v (Ioo (-ε) ε) := by
+  sorry
+
+/-- Why this unblocks the counterexample half of `apm_t92j08`: agreement
+with `1/(1-t)` on `t < 1` contradicts continuity at `1` of any global
+integral curve, because those values are unbounded as `t ↑ 1`. -/
+theorem apm_t92J08_bridge_2 :
+    ¬∃ δ : ℝ → ℝ,
+      IsMIntegralCurve δ apm_t92J08_quadraticField ∧
+      EqOn apm_t92J08_blowupCurve δ (Iio 1) := by
+  sorry
+
 theorem apm_t92j08 :
     (∀ (n : ℕ) (M : Type)
         [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
