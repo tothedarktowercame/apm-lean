@@ -124,6 +124,26 @@ lemma apm_b90A01_exists_faithful_sylow_alternating
   apply apm_b90A01_factor_faithful_through_alternating φ hφ
   exact apm_b90A01_not_commutative_of_multiple_sylow p hp (hk ▸ hk1)
 
+/-- Why this unblocks the third conjunct of `apm_b90a01`: this is the
+missing minimal-index theorem for proper simple subgroups of `Aₙ`. Its proof
+requires the general simplicity/permutation-action development for alternating
+groups beyond the currently packaged `A₅` case. -/
+theorem apm_b90A01_bridge_1
+    (n : ℕ) (hn : 5 ≤ n)
+    (H : Subgroup (alternatingGroup (Fin n)))
+    [IsSimpleGroup H] (hH : H ≠ ⊤) :
+    n ≤ H.index := by
+  sorry
+
+/-- Why this unblocks the fourth conjunct of `apm_b90a01`: this is the exact
+Sylow enumeration theorem excluding a finite simple group of order `120`.
+It is independent of the preceding faithful alternating representation. -/
+theorem apm_b90A01_bridge_2
+    (G : Type) [Group G] [Finite G]
+    (hcard : Nat.card G = 120) :
+    ¬IsSimpleGroup G := by
+  sorry
+
 theorem apm_b90a01
     (G : Type) [Group G] [Finite G] [IsSimpleGroup G]
     (p k : ℕ) (hp : p.Prime)
