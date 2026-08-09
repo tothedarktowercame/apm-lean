@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,15 +28,17 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
+  "closer_hop": 4,
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T03:30:00Z",
   "checked_lean_state": {
     "exit_code": 0,
     "command": "lake env lean problems/a95J03/lean/Main.lean",
-    "sorry_count": 1,
+    "sorry_count": 3,
     "sorry_locations": [
-      "apm_a95j03 (genuine winding integral to divisor-count bridge)"
+      "apm_a95J03_bridge_1 (winding integral to cleared-polynomial root count)",
+      "apm_a95J03_bridge_2 (disk root multiplicity bounded by 2N)",
+      "apm_a95j03 (main assembly)"
     ],
     "blockers": [
       "Convert the frozen real interval integral to the complex circle integral of the cleared polynomial's logarithmic derivative.",

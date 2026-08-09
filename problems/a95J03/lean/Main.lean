@@ -141,6 +141,30 @@ def apm_a95J03_windingIntegral (γ : ℝ → ℂ) (z : ℂ) : ℂ :=
     ∫ t in (0 : ℝ)..2 * Real.pi,
       (fderiv ℝ γ t) 1 / (γ t - z)
 
+/-- Why this unblocks `apm_a95j03`: this is the exact argument-principle
+conversion for the cleared Laurent polynomial.  It includes the contribution
+`-N` from the cleared monomial factor and expresses the remaining divisor mass
+as the number of polynomial roots in the open unit disk. -/
+theorem apm_a95J03_bridge_1
+    {a : ℤ → ℂ} {N : ℕ}
+    (hN : a (-(N : ℤ)) ≠ 0 ∨ a (N : ℤ) ≠ 0)
+    {z : ℂ}
+    (hz : ∀ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_a95J03_trigPoly a N t ≠ z) :
+    apm_a95J03_windingIntegral (apm_a95J03_trigPoly a N) z =
+      (((((apm_a95J03_algPoly a N - Polynomial.C z * Polynomial.X ^ N).roots
+        ).filter (fun w : ℂ ↦ ‖w‖ < 1)).card : ℤ) - (N : ℤ) : ℂ) := by
+  sorry
+
+/-- Why this unblocks `apm_a95j03`: the root multiplicity inside the disk is
+bounded by the total root multiplicity, hence by the already compiled
+`natDegree ≤ 2N` estimate for the cleared polynomial. -/
+theorem apm_a95J03_bridge_2
+    (a : ℤ → ℂ) (N : ℕ) (z : ℂ) :
+    (((apm_a95J03_algPoly a N - Polynomial.C z * Polynomial.X ^ N).roots
+      ).filter (fun w : ℂ ↦ ‖w‖ < 1)).card ≤ 2 * N := by
+  sorry
+
 theorem apm_a95j03 {a : ℤ → ℂ} {N : ℕ}
     (hN : a (-(N : ℤ)) ≠ 0 ∨ a (N : ℤ) ≠ 0)
     {z : ℂ}

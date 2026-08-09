@@ -54,6 +54,17 @@ finite algebra: convert the real interval integral to the cleared
 polynomial's circle integral, account for the monomial logarithmic derivative,
 and bound the resulting divisor mass using the degree estimate.
 
+## Hop 4: stated bridges
+
+`apm_a95J03_bridge_1` states the complete analytic conversion: the frozen
+normalized winding integral is the number of cleared-polynomial roots in the
+open unit disk, counted with multiplicity, minus `N`. The subtraction records
+the logarithmic derivative of the cleared monomial factor.
+
+`apm_a95J03_bridge_2` states the remaining mass bound: the filtered root
+multiset has cardinality at most `2N`, using the compiled degree estimate.
+Together these leave only integer arithmetic in the main theorem.
+
 ## Statement repair
 
 Generated `windingNumber` had sorry in its def — replaced with opaque
