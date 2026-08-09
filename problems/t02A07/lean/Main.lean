@@ -117,6 +117,27 @@ def apm_t02a07_IsTransverse (parameter : apm_t02a07_parameterCircle) : Prop :=
         (apm_t02a07_sphereTangent y) ⊔
       apm_t02a07_tangentZ (apm_t02a07_family parameter y) = ⊤
 
+/-- Why this unblocks the regularity conjunct of `apm_t02a07`: these are the
+two coordinate gradients of the sphere and product constraints, up to the
+harmless nonzero scalar `2` on the first row. Their linear independence is
+the exact rank-two Jacobian calculation needed for surjectivity of the frozen
+constraint derivative along `Z`. -/
+theorem apm_t02A07_bridge_constraint_gradients_independent
+    {x : apm_t02a07_E4} (hx : x ∈ apm_t02a07_Z) :
+    LinearIndependent ℝ
+      (![x, (WithLp.toLp 2 ![(0 : ℝ), 0, x 3, x 2] :
+        apm_t02a07_E4)] : Fin 2 → apm_t02a07_E4) := by
+  sorry
+
+/-- Why this unblocks the density conjunct of `apm_t02a07`: this is the
+parametric-transversality conclusion specialized to the displayed family and
+constraint surface. Equivalently, it may be proved by classifying the
+exceptional circle parameters and showing that their complement is dense. -/
+theorem apm_t02A07_bridge_transverse_parameters_dense :
+    Dense {parameter : apm_t02a07_parameterCircle |
+      apm_t02a07_IsTransverse parameter} := by
+  sorry
+
 theorem apm_t02a07 :
     apm_t02a07_IsRegularDimensionTwo ∧
     (∀ parameter : apm_t02a07_parameterCircle,

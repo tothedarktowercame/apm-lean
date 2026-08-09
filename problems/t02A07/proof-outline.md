@@ -27,3 +27,18 @@ definitionally linked to its ambient differentiable extension.
 
 Closer hop 3 leaves an honest partial: one Jacobian row is now proved
 nondegenerate, while full row independence and parameter density remain open.
+
+## Hop 4 bridge statements
+
+- `apm_t02A07_bridge_constraint_gradients_independent` states the exact local
+  rank calculation: the position vector (the norm-square gradient up to
+  multiplication by `2`) and `(0,0,x₃,x₂)` are linearly independent at
+  every point of `Z`.
+- `apm_t02A07_bridge_transverse_parameters_dense` states the specialized
+  parametric-transversality result for the concrete family, equivalently the
+  conclusion of a direct exceptional-parameter classification.
+
+The first bridge combines with the standard derivative formulas to make
+`fderiv ℝ apm_t02a07_constraints x` surjective on `Z`. The second is exactly
+the remaining density conjunct, while the range-in-sphere conjunct is already
+compiled.
