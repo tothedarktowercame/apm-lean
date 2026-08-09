@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": false
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "classification_detail": "Final honest partial: actual Hermite derivatives now rewrite to the frozen family and every selected odd Hermite-Gaussian has zero half-line trace. H10 graph-norm approximation, independence, and all three spectral density clauses remain.",
+  "closer_hop": 4,
+  "classification_detail": "The three missing domain-specific spectral completeness results are now stated precisely as apm_m02J02_bridge_1 through apm_m02J02_bridge_3 in the exact custom H10 predicate.",
   "imported_at": "2026-07-13T17:26:54.494725Z"
 }

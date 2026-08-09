@@ -118,6 +118,31 @@ lemma apm_m02j02_hermiteFunction_odd_zero (n : ℕ) :
   rw [← Polynomial.coeff_zero_eq_eval_zero, Polynomial.coeff_map, hc]
   exact map_zero _
 
+/-- Why this unblocks `apm_m02j02`: this is the exact Fourier-sine
+completeness theorem in the custom weak-derivative and compactly-supported
+graph-norm closure encoding used by the frozen statement. -/
+theorem apm_m02J02_bridge_1 :
+    apm_m02j02_IsH10Basis (Ioo (0 : ℝ) 1)
+      apm_m02j02_sine apm_m02j02_sineDeriv := by
+  sorry
+
+/-- Why this unblocks `apm_m02j02`: this packages half-line `H¹₀`
+membership, linear independence, and graph-norm density of the odd
+Hermite--Gaussian family in the exact frozen predicate. -/
+theorem apm_m02J02_bridge_2 :
+    apm_m02j02_IsH10Basis (Ioi (0 : ℝ))
+      (fun n ↦ apm_m02j02_hermiteFunction (2 * n + 1))
+      (fun n ↦ apm_m02j02_hermiteFunctionDeriv (2 * n + 1)) := by
+  sorry
+
+/-- Why this unblocks `apm_m02j02`: this packages whole-line `H¹`
+membership, linear independence, and graph-norm density of the full
+Hermite--Gaussian family in the exact frozen predicate. -/
+theorem apm_m02J02_bridge_3 :
+    apm_m02j02_IsH10Basis (Set.univ : Set ℝ)
+      apm_m02j02_hermiteFunction apm_m02j02_hermiteFunctionDeriv := by
+  sorry
+
 theorem apm_m02j02 :
     apm_m02j02_IsH10Basis (Ioo (0 : ℝ) 1)
         apm_m02j02_sine apm_m02j02_sineDeriv ∧
