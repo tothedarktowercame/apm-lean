@@ -74,6 +74,16 @@ lemma apm_b94J01_existsUnique_invariantFactors_of_card_eq_one
   · intro d hd
     exact apm_b94J01_invariantFactors_eq_nil_of_card_eq_one G d hd hcard
 
+/-- Why this unblocks `apm_b94j01`: this is precisely the nontrivial finite
+abelian invariant-factor theorem absent from Mathlib. Together with
+`apm_b94J01_existsUnique_invariantFactors_of_card_eq_one`, a case split on
+`Nat.card G = 1` proves the frozen existence-and-uniqueness clause. -/
+theorem apm_b94J01_bridge_1
+    (G : Type*) [CommGroup G] [Fintype G]
+    (hcard : Nat.card G ≠ 1) :
+    ∃! d : List ℕ, apm_b94J01_invariantFactors G d := by
+  sorry
+
 theorem apm_b94j01 :
     (∀ (G : Type*) [CommGroup G] [Fintype G],
       ∃! d : List ℕ, apm_b94J01_invariantFactors G d) ∧

@@ -22,3 +22,11 @@ One sorry remains, now only for nontrivial groups: normalize the primary factors
 into a divisibility chain and prove uniqueness of that chain. The argument requires
 recovering the entries from p-primary torsion ranks; Mathlib currently has no
 packaged invariant-factor theorem at this level.
+
+## Hop 4 bridge statement
+
+`apm_b94J01_bridge_1` states existence and uniqueness of the normalized
+invariant-factor list under the exact remaining hypothesis `Nat.card G ≠ 1`.
+A case split on cardinality combines it with the compiled cardinality-one
+helper, so no cyclic-product or field-unit-group facts are included in the
+bridge.

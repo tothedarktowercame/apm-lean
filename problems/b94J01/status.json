@@ -18,10 +18,12 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "classification": "partial",
+  "closer_hop": 4,
+  "boundary": "The missing nontrivial finite-abelian invariant-factor normalization and uniqueness theorem is now stated precisely as apm_b94J01_bridge_1; the cardinality-one case is already proved.",
   "imported_at": "2026-05-01T19:38:17.637008Z"
 }
