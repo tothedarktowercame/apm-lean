@@ -136,6 +136,37 @@ lemma apm_b97j03_two_le_special_rootCount {α : ℂ}
     2 = Set.ncard ({α, -α} : Set ℂ) := by simp [hne]
     _ ≤ Set.ncard T := Set.ncard_le_ncard hsub hTfin
 
+/-- Why this unblocks the divisibility clause of `apm_b97j03`: this is the
+normalizer--stabilizer orbit computation for the transitive Galois action on
+the roots of an irreducible rational polynomial, expressed in the frozen
+embedded-field root count. -/
+theorem apm_b97J03_bridge_1
+    (P : Polynomial ℚ) (α : ℂ) (hP : Irreducible P)
+    (hα : (P.map (algebraMap ℚ ℂ)).IsRoot α) :
+    apm_b97j03_rootCount P α ∣ P.natDegree := by
+  sorry
+
+/-- Why this unblocks the abelian clause of `apm_b97j03`: when the splitting
+field's Galois group is abelian, the stabilizer of one root is normal, so its
+normalizer orbit contains every root. -/
+theorem apm_b97J03_bridge_2
+    (P : Polynomial ℚ) (α : ℂ) (hP : Irreducible P)
+    (hα : (P.map (algebraMap ℚ ℂ)).IsRoot α)
+    (K : Type*) [Field K] [Algebra ℚ K] [IsSplittingField ℚ K P]
+    (hcomm : ∀ σ τ : K ≃ₐ[ℚ] K, σ * τ = τ * σ) :
+    apm_b97j03_rootCount P α = P.natDegree := by
+  sorry
+
+/-- Why this unblocks the special-polynomial clause of `apm_b97j03`: the
+compiled lower bound already supplies the roots `±α`; this is the missing
+Kummer-field exclusion showing that none of the other four sixth-root-of-
+unity multiples lies in the embedded field `ℚ(α)`. -/
+theorem apm_b97J03_bridge_3
+    {α : ℂ}
+    (hα : (apm_b97j03_special.map (algebraMap ℚ ℂ)).IsRoot α) :
+    apm_b97j03_rootCount apm_b97j03_special α ≤ 2 := by
+  sorry
+
 theorem apm_b97j03 :
     (∀ (P : Polynomial ℚ) (α : ℂ),
       Irreducible P → (P.map (algebraMap ℚ ℂ)).IsRoot α →
