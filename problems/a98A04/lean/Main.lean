@@ -75,6 +75,35 @@ lemma apm_a98a04_spike_pos_set_measure_pos {a b : ℝ} (hab : a < b) :
   rw [apm_a98a04_spike_pos_set hab, Real.volume_Ioo]
   exact ENNReal.ofReal_pos.mpr (sub_pos.mpr hab)
 
+/-- Why this unblocks the first conjunct of `apm_a98a04`: this is the
+translated inverse-square-root integral, including both integrability and the
+exact normalization independent of the interval endpoints. -/
+theorem apm_a98A04_bridge_1
+    (a b : ℝ) (hab : a < b) :
+    Integrable (apm_a98a04_spike a b) volume ∧
+      ∫ x : ℝ, apm_a98a04_spike a b x ∂volume = 2 := by
+  sorry
+
+/-- Why this unblocks the a.e.-robust height argument in `apm_a98a04`:
+every finite-height superlevel of a spike contains a genuine open subinterval,
+and hence has positive measure rather than merely containing isolated points. -/
+theorem apm_a98A04_bridge_2
+    (a b M : ℝ) (hab : a < b) :
+    ∃ c d : ℝ, a < c ∧ c < d ∧ d < b ∧
+      Ioo c d ⊆ {x : ℝ | M < apm_a98a04_spike a b x} := by
+  sorry
+
+/-- Why this unblocks the global construction in `apm_a98a04`: this is the
+summable dense enumeration of weighted spikes, with its conclusion stated in
+the representative-invariant form needed by the frozen theorem. -/
+theorem apm_a98A04_bridge_3 :
+    ∃ f : ℝ → ℝ,
+      Integrable f volume ∧
+      ∀ (g : ℝ → ℝ), g =ᵐ[volume] f →
+        ∀ α β : ℝ, α < β →
+          ∀ M : ℝ, ∃ x ∈ Ioo α β, M < g x := by
+  sorry
+
 theorem apm_a98a04 :
     (∀ a b : ℝ, a < b →
       Integrable (apm_a98a04_spike a b) volume ∧
