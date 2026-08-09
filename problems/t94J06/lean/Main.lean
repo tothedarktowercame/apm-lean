@@ -87,6 +87,23 @@ lemma apm_t94J06_boundary_ne_zero :
     ⟨1, by constructor <;> norm_num⟩ z hz
   simpa using h
 
+/-- Why this unblocks `apm_t94j06`: a zero-free boundary homotopy preserves
+the nonzero degree of `z ↦ z⁴`; if `F` avoided zero on the whole disk, radial
+restriction would extend that boundary map through the disk, contradicting
+its degree.  This is the missing topological-degree/no-retraction theorem for
+a merely continuous complex-valued map. -/
+theorem apm_t94J06_bridge_1
+    (F : ℂ → ℂ) (r : ℝ) (hr : 0 < r) (hF : Continuous F)
+    (H : Set.Icc (0 : ℝ) 1 × Metric.sphere (0 : ℂ) r → ℂ)
+    (hH_cont : Continuous H)
+    (hH_ne : ∀ p, H p ≠ 0)
+    (hH_zero : ∀ z : Metric.sphere (0 : ℂ) r,
+      H (⟨0, by constructor <;> norm_num⟩, z) = z.1 ^ 4)
+    (hH_one : ∀ z : Metric.sphere (0 : ℂ) r,
+      H (⟨1, by constructor <;> norm_num⟩, z) = F z.1) :
+    ∃ z ∈ Metric.closedBall (0 : ℂ) r, F z = 0 := by
+  sorry
+
 theorem apm_t94j06 :
     ∃ z : ℂ, apm_t94J06_function z = 0 := by
   /-
