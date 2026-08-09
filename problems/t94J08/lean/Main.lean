@@ -153,6 +153,20 @@ lemma t94J08NormalizedLink_neg {m : ℕ}
   apply Subtype.ext
   simp [t94J08NormalizedLink, t94J08Antipodal, norm_neg, smul_neg]
 
+/-- Why this unblocks `apm_t94j08`: this is the missing top-dimensional
+singular-homology computation for metric spheres, including both an integral
+orientation and the induced antipodal action.  Folding the conclusion with
+`t94J08HasDegree` gives exactly the family used in the main proof. -/
+theorem apm_t94J08_bridge_1 :
+    ∀ n : ℕ, ∃ orientation : T94J08TopHomology n ≅ ModuleCat.of ℤ ℤ,
+      ∀ a : T94J08TopHomology n,
+        orientation.hom
+            (t94J08TopHomologyMap n
+              (t94J08Antipodal :
+                C(T94J08Sphere (n + 1), T94J08Sphere (n + 1))) a) =
+          ((-1 : ℤ) ^ (n + 1)) * orientation.hom a := by
+  sorry
+
 theorem apm_t94j08 :
     (∀ n : ℕ,
       t94J08HasDegree n

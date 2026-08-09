@@ -127,3 +127,11 @@ degree composition and normalized-link identity, this removes all nonhomology
 bookkeeping. The remaining gap is exactly an orientation isomorphism for top
 singular homology of metric spheres and computation of the induced antipodal
 map; even the required `H₀(S⁰)` orientation is not packaged in the corpus.
+
+## Hop 4 bridge statement
+
+`apm_t94J08_bridge_1` now states that missing computation directly: for every
+`n`, it provides an isomorphism `T94J08TopHomology n ≅ ℤ` and proves that the
+actual functor-induced antipodal map becomes multiplication by
+`(-1)^(n+1)`. This unfolds exactly to the `t94J08HasDegree` family consumed by
+the already-compiled local-index argument.

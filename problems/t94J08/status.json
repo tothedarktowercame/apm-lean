@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 0,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_receipt": true
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "Degree composition, index negation, and the fixed-point-free involutive point-set antipodal map compile. The sole remaining bridge is top singular homology of metric spheres and the induced antipodal action.",
+  "closer_hop": 4,
+  "boundary": "The missing top singular-homology computation is stated precisely as apm_t94J08_bridge_1: it supplies an integral orientation of every encoded sphere and computes the induced antipodal action as multiplication by (-1)^(n+1). The bridge and original main theorem remain unproved.",
   "imported_at": "2026-05-01T19:38:18.333845Z"
 }
