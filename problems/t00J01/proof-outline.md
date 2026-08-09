@@ -27,3 +27,16 @@ continuity clauses are compiled; three major topology/analysis bridges remain.
   `θ + 2 sin θ` modulo `2π` over the two target fibers,
   prove their exact cardinalities, and verify derivative nonvanishing at all
   roots (the evident roots `0` and `π` are already handled).
+
+## Hop 4 exact missing contracts
+
+- `apm_t00j01_klein_product_bridge` packages three-manifoldness of the
+  concrete Klein quotient times the circle and vanishing of its integral top
+  homology.
+- `apm_t00j01_sphere_identity_bridge` computes the attached rational
+  Lefschetz predicate for the identity as exactly `2`, hence not `1`.
+- `apm_t00j01_fold_fibers_bridge` packages regularity and exact cardinalities
+  of the fibers over `exp π` and `1`.
+
+These three statements, together with the compiled continuity of the fold,
+are exactly the main theorem's remaining content.

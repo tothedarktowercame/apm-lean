@@ -167,5 +167,30 @@ theorem apm_t00j01 :
   monotonicity split at `cos θ = -1/2`; the topology conjuncts require the
   independent missing quotient-manifold and homology infrastructure. The
   theorem statement is unchanged.
+
+  HOP 4 (2026-08-09): further searches did not expose a bridge below these
+  three independent exact contracts:
+
+    theorem apm_t00j01_klein_product_bridge :
+      apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧
+        Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3)
+
+    theorem apm_t00j01_sphere_identity_bridge :
+      t00J01HasSphereLefschetzNumber t00J01SphereIdentity 2 ∧
+        ¬t00J01HasSphereLefschetzNumber t00J01SphereIdentity 1
+
+    theorem apm_t00j01_fold_fibers_bridge :
+      apm_t00j01_foldRegular (Circle.exp Real.pi) ∧
+        apm_t00j01_foldRegular 1 ∧
+        Nat.card {z : Circle //
+          apm_t00j01_fold z = Circle.exp Real.pi} = 3 ∧
+        Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1
+
+  The first needs quotient charts plus the nonorientable top-homology
+  calculation. The second needs the rational singular homology of the metric
+  two-sphere and functoriality for the identity. The third is the exact
+  fundamental-interval classification for `θ + 2 sin θ` modulo `2π`, including
+  exclusion of critical roots. Together with `apm_t00j01_fold_continuous`,
+  these contracts are exactly the frozen conjunction.
   -/
   sorry
