@@ -175,6 +175,28 @@ abbrev apm_t97J04_H (k : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t97J04_X))
 
+/-- Why this unblocks the fundamental-group conjunct of `apm_t97j04`: this
+is Seifert--van Kampen for the concrete pushout `T² ∨ S¹`, including the
+basepoint identification already proved above. The torus contributes the
+single commutator relation and the extra circle contributes the third free
+generator. -/
+theorem apm_t97J04_bridge_1 :
+    Nonempty
+      (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
+        apm_t97J04_piOne) := by
+  sorry
+
+/-- Why this unblocks the four homology conjuncts of `apm_t97j04`: this is
+the singular Mayer--Vietoris (equivalently cellular-to-singular) computation
+for the actual wedge quotient `T² ∨ S¹`, stated simultaneously in every
+degree needed by the frozen theorem. -/
+theorem apm_t97J04_bridge_2 :
+    Nonempty (apm_t97J04_H 0 ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t97J04_H 1 ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
+    Nonempty (apm_t97J04_H 2 ≅ ModuleCat.of ℤ ℤ) ∧
+    ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t97J04_H k) := by
+  sorry
+
 theorem apm_t97j04 :
     Nonempty
       (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
