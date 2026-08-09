@@ -122,6 +122,26 @@ lemma apm_a98A02_integral_tendsto_zero_of_memLp_two
   simpa [v, H] using
     (apm_a98A02_inner_toLp_eq_integral g M hg_meas hg_bound h hh n)
 
+/-- Why this unblocks `apm_a98a02`: bounded truncations of an `L¹[0,1]`
+function lie in `L²[0,1]` and converge back in `L¹`; the uniform bound on
+`g n` controls every truncation error by the same estimate
+`|∫ (f-h)g n| ≤ M ∫ |f-h|`.  Thus convergence on all `L²` approximants extends
+uniformly to every frozen `IntegrableOn` function. -/
+theorem apm_a98A02_bridge_1
+    (g : ℕ → ℝ → ℝ) (M : ℝ)
+    (hg_meas : ∀ n, Measurable ((Icc (0 : ℝ) 1).indicator (g n)))
+    (hg_bound : ∀ n x, x ∈ Icc (0 : ℝ) 1 → |g n x| ≤ M)
+    (hL2 : ∀ (h : ℝ → ℝ),
+      MemLp h 2 (volume.restrict (Icc (0 : ℝ) 1)) →
+        Tendsto
+          (fun n => ∫ x in Icc (0 : ℝ) 1, g n x * h x ∂volume)
+          atTop (𝓝 0))
+    (f : ℝ → ℝ) (hf : IntegrableOn f (Icc (0 : ℝ) 1) volume) :
+    Tendsto
+      (fun n => ∫ x in Icc (0 : ℝ) 1, f x * g n x ∂volume)
+      atTop (𝓝 0) := by
+  sorry
+
 theorem apm_a98a02 (g : ℕ → ℝ → ℝ) (M : ℝ)
     (hg_meas : ∀ n, Measurable ((Icc (0 : ℝ) 1).indicator (g n)))
     (hg_bound : ∀ n x, x ∈ Icc (0 : ℝ) 1 → |g n x| ≤ M)
