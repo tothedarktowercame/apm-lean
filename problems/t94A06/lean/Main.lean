@@ -5,7 +5,11 @@ import Mathlib
 
 ## Statement repairs
 
-None.
+The source uses the standard convention that a smooth manifold is second
+countable. Mathlib's `IsManifold` class does not include this separation/countability
+condition, so `SecondCountableTopology X` is stated explicitly; without it an
+uncountable discrete zero-dimensional manifold makes the almost-everywhere
+transversality conclusion false.
 
 ## Encoding questions
 
@@ -81,38 +85,10 @@ def apm_t94a06_IsTransverseToZAxis
 theorem apm_t94a06
     {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [NormedAddCommGroup H] [NormedSpace ℝ H] [TopologicalSpace X]
-    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    [SecondCountableTopology X] (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
     [IsManifold I ∞ X] (f : X → apm_t94a06_E3)
     (hf : ContMDiff I 𝓘(ℝ, apm_t94a06_E3) ∞ f) :
     apm_t94a06_family f 0 = f ∧
       ∀ᵐ s : apm_t94a06_E2,
         apm_t94a06_IsTransverseToZAxis I (apm_t94a06_family f s) := by
-  /-
-  Boundary (closer hop 2): `apm_t94a06_family_zero` now closes the first
-  conjunct exactly. The second conjunct is parametric transversality for an
-  arbitrary smooth manifold domain. Its standard proof applies Sard to the
-  projection of the incidence manifold
-  `{(x,s) | f x + normalTranslation s ∈ zAxis}` onto parameter space.
-
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, the related
-  artifacts `t02A07`, `t92J07`, `t93A04`, `t01A08`, Mathlib's fixed-vector-
-  space Sard/Jacobian results, manifold `mfderiv`, regular-value, and subtype-
-  chart APIs, and git history found no manifold Sard theorem, parametric
-  transversality theorem, or incidence-submanifold/projection package. The
-  available Sard lemmas concern maps between finite-dimensional normed vector
-  spaces and do not directly accept this arbitrary charted domain. Building
-  the incidence manifold chartwise and transporting null critical values is
-  therefore the remaining bridge; the frozen statement is unchanged.
-
-  CLOSER HOP 3 compiles the slice-level differential geometry consumed by
-  that incidence argument. `apm_t94a06_family_contMDiff` proves every
-  translated slice remains smooth, and `apm_t94a06_mfderiv_family` proves its
-  manifold derivative in `x` is exactly `mfderiv f x`, since translation is
-  constant. Thus no translation-derivative bookkeeping remains. The unresolved
-  step is global and measure-theoretic: construct the incidence submanifold,
-  identify bad parameters as critical values of its projection, and transport
-  fixed-vector-space Sard null sets through manifold charts. Searches of Sard,
-  regular-value, countable-atlas, and subtype-chart APIs found no packaged
-  theorem performing that assembly. The frozen statement is unchanged.
-  -/
   sorry
