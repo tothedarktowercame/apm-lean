@@ -90,6 +90,25 @@ private lemma apm_m00A04_zero_weak_solution {n : ℕ}
   intro v h hv
   simp
 
+/-- The positive-dimensional representative form of the Lax--Milgram theorem
+needed by `apm_m00a04`.  Its proof must construct the energy completion of
+compactly supported smooth functions and identify completion points with the
+raw function/weak-gradient pairs in `apm_m00A04_memH10WithGradient`. -/
+theorem apm_m00A04_positive_dimensional_weak_solution
+    {n : ℕ} (hn : n ≠ 0) (U : Set (Fin n → ℝ))
+    (hUne : U.Nonempty) (hUopen : IsOpen U)
+    (hUbounded : Bornology.IsBounded U)
+    (F : (Fin n → ℝ) → ℝ) (hF : apm_m00A04_L2On U F) (hF0 : F ≠ 0) :
+    ∃ (u : (Fin n → ℝ) → ℝ)
+      (g : Fin n → (Fin n → ℝ) → ℝ),
+      apm_m00A04_memH10WithGradient U u g ∧
+      ∀ (v : (Fin n → ℝ) → ℝ)
+        (h : Fin n → (Fin n → ℝ) → ℝ),
+        apm_m00A04_memH10WithGradient U v h →
+          (∫ x in U, (∑ i : Fin n, g i x * h i x) + u x * v x) =
+            ∫ x in U, F x * v x := by
+  sorry
+
 theorem apm_m00a04
     (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] (f : V →L[ℝ] ℝ) :
@@ -210,4 +229,5 @@ theorem apm_m00a04
           supported smooth tests and prove its elements admit representatives
           satisfying `apm_m00A04_memH10WithGradient`.
           -/
-          sorry
+          exact apm_m00A04_positive_dimensional_weak_solution
+            hn U hUne hUopen hUbounded F hF hF0
