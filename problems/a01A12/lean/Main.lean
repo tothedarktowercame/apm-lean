@@ -168,6 +168,22 @@ lemma apm_a01A12_conformalMap_injOn :
     simp at hzpos
     linarith
 
+/-- Once the exact range is known, the previously compiled injectivity and
+derivative calculations assemble the displayed map into a conformal
+bijection. -/
+theorem apm_a01A12_conformalMap_conformalBijOn
+    (hmap : Set.MapsTo apm_a01A12_conformalMap
+      apm_a01A12_H apm_a01A12_wedgeSlit)
+    (hsurj : Set.SurjOn apm_a01A12_conformalMap
+      apm_a01A12_H apm_a01A12_wedgeSlit) :
+    apm_a01A12_ConformalBijOn apm_a01A12_conformalMap
+      apm_a01A12_H apm_a01A12_wedgeSlit := by
+  constructor
+  · exact ⟨hmap, apm_a01A12_conformalMap_injOn, hsurj⟩
+  · intro z hz
+    exact ⟨(apm_a01A12_conformalMap_hasDerivAt hz).differentiableAt,
+      apm_a01A12_conformalMap_fderiv_ne_zero hz⟩
+
 /-- Why this unblocks `apm_a01a12`: once the displayed fourth-root map is
 known to be a conformal bijection, this is the missing automorphism
 classification.  It states that all conformal bijections with the same source
@@ -214,5 +230,20 @@ theorem apm_a01a12 :
   Thus the explicit-map bridge is narrowed to surjectivity onto the frozen
   wedge slit. The independent automorphism-classification bridge remains
   open. The frozen statement is unchanged.
+
+  CLOSER HOP 4: current Mathlib and Loogle/LeanSearch searches still expose
+  the `SL(2,ℝ)` action on `UpperHalfPlane` but no converse classification of
+  every conformal automorphism.  The explicit-map side is now packaged by
+  `apm_a01A12_conformalMap_conformalBijOn`: only the exact range statement
+  (`MapsTo` plus `SurjOn`) remains, with no injectivity or differential
+  bookkeeping hidden in that gap.  Once that range pair is proved, the main
+  theorem routes directly through the independent classification bridge.
   -/
-  sorry
+  have hrange :
+      Set.MapsTo apm_a01A12_conformalMap
+          apm_a01A12_H apm_a01A12_wedgeSlit ∧
+        Set.SurjOn apm_a01A12_conformalMap
+          apm_a01A12_H apm_a01A12_wedgeSlit := by
+    sorry
+  have hF := apm_a01A12_conformalMap_conformalBijOn hrange.1 hrange.2
+  exact ⟨hF, apm_a01A12_bridge_automorphism_classification hF⟩
