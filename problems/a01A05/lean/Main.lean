@@ -199,6 +199,36 @@ lemma apm_a01A05_counterexample_norm_one_all (n : ℕ) :
   · exact apm_a01A05_counterexample_norm_one
   exact apm_a01A05_counterexample_norm_of_two_le (by omega)
 
+lemma apm_a01A05_counterexample_inner_bound (n m : ℕ) (hnm : n < m) :
+    |inner ℝ (apm_a01A05_counterexample n) (apm_a01A05_counterexample m)| ≤
+      (2 : ℝ) ^ (-(m : ℝ)) := by
+  rcases m with _ | m
+  · omega
+  rcases m with _ | m
+  · have hn : n = 0 := by omega
+    subst n
+    rw [apm_a01A05_counterexample_zero, apm_a01A05_counterexample_one,
+      inner_add_right, inner_smul_right, inner_smul_right]
+    simp [lp.inner_single_left]
+    norm_num
+  · have hm : 2 ≤ m + 2 := by omega
+    rw [apm_a01A05_counterexample_of_two_le hm]
+    rcases n with _ | n
+    · rw [apm_a01A05_counterexample_zero, lp.inner_single_left]
+      simp
+      positivity
+    rcases n with _ | n
+    · rw [apm_a01A05_counterexample_one, inner_add_left, inner_smul_left,
+        inner_smul_left, lp.inner_single_left, lp.inner_single_left]
+      simp
+      positivity
+    · have hn : 2 ≤ n + 2 := by omega
+      rw [apm_a01A05_counterexample_of_two_le hn, lp.inner_single_left]
+      rw [lp.coeFn_single,
+        Pi.single_eq_of_ne (by omega : n + 2 ≠ m + 2)]
+      simp
+      positivity
+
 theorem apm_a01a05 :
     (¬ ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
       (seq : apm_a01A05_NearOrthogonalSeq H) (m : ℕ),
@@ -208,7 +238,51 @@ theorem apm_a01a05 :
       [CompleteSpace H] (seq : apm_a01A05_NearOrthogonalSeq H) (g : H),
       Tendsto (fun m ↦ inner ℝ g (seq.f m)) atTop (nhds 0)) := by
   constructor
-  · /-
+  · intro h
+    let seq : apm_a01A05_NearOrthogonalSeq apm_a01A05_l2 :=
+      { f := apm_a01A05_counterexample
+        norm_one := apm_a01A05_counterexample_norm_one_all
+        inner_bound := apm_a01A05_counterexample_inner_bound }
+    have hbound := h apm_a01A05_l2 seq 1
+    let e0 : apm_a01A05_l2 := lp.single 2 0 1
+    let e1 : apm_a01A05_l2 := lp.single 2 1 1
+    have hinner : inner ℝ e0
+        ((1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1) = 1 / 2 := by
+      rw [inner_add_right, inner_smul_right, inner_smul_right,
+        lp.inner_single_left, lp.inner_single_left]
+      simp [e0, e1]
+    have hgs : InnerProductSpace.gramSchmidtNormed ℝ seq.f 1 = e1 := by
+      rw [apm_a01A05_gramSchmidtNormed_one seq.f (seq.norm_one 0)]
+      change ‖((1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1) -
+          inner ℝ e0 ((1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1) • e0‖⁻¹ •
+          (((1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1) -
+            inner ℝ e0 ((1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1) • e0) = e1
+      rw [hinner]
+      have hsqrt : Real.sqrt 3 ≠ 0 := by positivity
+      rw [show ((1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1) -
+          (1 / 2 : ℝ) • e0 = (Real.sqrt 3 / 2) • e1 by module]
+      simp [norm_smul, e1, lp.norm_single, abs_of_nonneg (Real.sqrt_nonneg 3), hsqrt]
+      rw [smul_smul]
+      rw [show (2 / Real.sqrt 3) * (Real.sqrt 3 / 2) = (1 : ℝ) by field_simp,
+        one_smul]
+    rw [show seq.f 1 = (1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1 by
+      simp [seq, e0, e1, apm_a01A05_counterexample_one], hgs] at hbound
+    have horth : inner ℝ ((1 / 2 : ℝ) • e0)
+        ((Real.sqrt 3 / 2 - 1) • e1) = 0 := by
+      rw [inner_smul_left, inner_smul_right, lp.inner_single_left]
+      simp [e0, e1]
+    have hsq := norm_add_sq_eq_norm_sq_add_norm_sq_real horth
+    have hsqrt_sq : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+    have hnonneg : 0 ≤ ‖(1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2 - 1) • e1‖ :=
+      norm_nonneg _
+    have hsqrt_lt : Real.sqrt 3 < 7 / 4 := by nlinarith [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 3)]
+    simp [e0, e1, lp.norm_single, norm_smul,
+      abs_of_nonneg (Real.sqrt_nonneg 3)] at hsq
+    norm_num [Real.rpow_neg (by norm_num : (0 : ℝ) ≤ 2)] at hbound
+    rw [show (1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2) • e1 - e1 =
+      (1 / 2 : ℝ) • e0 + (Real.sqrt 3 / 2 - 1) • e1 by module] at hbound
+    nlinarith
+    /-
     Boundary (closer hop 3): hop 1 closed the valid weak-convergence conjunct
     with `apm_a01A05_inner_tendsto_zero`. The proof was recovered from
     repository history (`f4bf72c`) and revalidated against the frozen repaired
@@ -247,6 +321,5 @@ theorem apm_a01a05 :
     git history found no pre-bundled counterexample. The frozen statement is
     unchanged.
     -/
-    sorry
   · intro H _ _ _ seq g
     exact apm_a01A05_inner_tendsto_zero seq g
