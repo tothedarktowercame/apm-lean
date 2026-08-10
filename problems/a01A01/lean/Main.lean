@@ -71,6 +71,22 @@ lemma apm_a01A01_typewriter1d_nonneg (k : ℕ) (x : ℝ) :
   · exact mul_nonneg (Real.sqrt_nonneg _) zero_le_one
   · simp
 
+lemma apm_a01A01_typewriter1d_integrableOn (k : ℕ) :
+    IntegrableOn (apm_a01A01_typewriter1d k) (Icc (0 : ℝ) 1) volume := by
+  let C := Icc ((apm_a01A01_position k : ℝ) / apm_a01A01_stage k)
+    (((apm_a01A01_position k + 1 : ℕ) : ℝ) / apm_a01A01_stage k)
+  have hC : MeasurableSet C := measurableSet_Icc
+  have hCfin : volume C ≠ ⊤ := measure_Icc_lt_top.ne
+  have hi : Integrable (C.indicator
+      (fun _ : ℝ => Real.sqrt (apm_a01A01_stage k))) volume :=
+    (integrableOn_const hCfin).integrable_indicator hC
+  apply hi.integrableOn.congr_fun _ measurableSet_Icc
+  intro x _
+  unfold apm_a01A01_typewriter1d
+  dsimp [C]
+  rw [Set.indicator_apply, Set.indicator_apply]
+  split_ifs <;> ring
+
 lemma apm_a01A01_integral_typewriter1d (k : ℕ) :
     ∫ x in Icc (0 : ℝ) 1, apm_a01A01_typewriter1d k x ∂volume =
       Real.sqrt (apm_a01A01_stage k) / apm_a01A01_stage k := by
@@ -150,6 +166,60 @@ lemma apm_a01A01_integral_typewriter1d_tendsto :
     field_simp [hspos.ne', hkpos.ne']
     simpa [pow_two] using hsq
 
+lemma apm_a01A01_add_le_pair (a b : ℕ) : a + b ≤ Nat.pair a b := by
+  unfold Nat.pair
+  split_ifs <;> nlinarith [sq_nonneg a, sq_nonneg b]
+
+lemma apm_a01A01_typewriter1d_cofinal
+    (x : ℝ) (hx : x ∈ Icc (0 : ℝ) 1) (M : ℝ) (N : ℕ) :
+    ∃ k : ℕ, N ≤ k ∧ M ≤ apm_a01A01_typewriter1d k x := by
+  obtain ⟨s, hs⟩ := exists_nat_ge (max ((max M 0) ^ 2) (N + 1 : ℝ))
+  have hsNreal : (N + 1 : ℝ) ≤ s := (le_max_right _ _).trans hs
+  have hsN : N + 1 ≤ s := by exact_mod_cast hsNreal
+  have hspos : 0 < s := by omega
+  have hsposR : (0 : ℝ) < s := by exact_mod_cast hspos
+  let j : ℕ := if x = 1 then s - 1 else ⌊(s : ℝ) * x⌋₊
+  have hjlt : j < s := by
+    dsimp [j]
+    split_ifs with hxeq
+    · omega
+    · apply (Nat.floor_lt (mul_nonneg hsposR.le hx.1)).mpr
+      have hxlt : x < 1 := hx.2.lt_of_ne hxeq
+      nlinarith
+  let k := Nat.pair (s - 1 - j) j
+  have hstage : apm_a01A01_stage k = s := by
+    simp [k, apm_a01A01_stage]
+    omega
+  have hpos : apm_a01A01_position k = j := by
+    simp [k, apm_a01A01_position]
+  refine ⟨k, ?_, ?_⟩
+  · have hsum : s - 1 - j + j = s - 1 := by omega
+    have hpair := apm_a01A01_add_le_pair (s - 1 - j) j
+    dsimp [k]
+    omega
+  · have hcell : x ∈ Icc ((j : ℝ) / s) (((j + 1 : ℕ) : ℝ) / s) := by
+      constructor
+      · rw [div_le_iff₀ hsposR]
+        dsimp [j]
+        split_ifs with hxeq
+        · subst x
+          norm_num
+        · simpa [mul_comm] using Nat.floor_le (mul_nonneg hsposR.le hx.1)
+      · rw [le_div_iff₀ hsposR]
+        dsimp [j]
+        split_ifs with hxeq
+        · subst x
+          norm_num [Nat.sub_add_cancel hspos]
+        · simpa [Nat.cast_add_one, mul_comm] using
+            (Nat.lt_floor_add_one ((s : ℝ) * x)).le
+    have hM : M ≤ Real.sqrt s := by
+      have hsq : (max M 0) ^ 2 ≤ (s : ℝ) := (le_max_left _ _).trans hs
+      have hm0 : 0 ≤ max M 0 := le_max_right _ _
+      exact le_trans (le_max_left _ _) ((Real.le_sqrt hm0 hsposR.le).2 hsq)
+    unfold apm_a01A01_typewriter1d
+    rw [hstage, hpos, Set.indicator_of_mem hcell, mul_one]
+    exact hM
+
 theorem apm_a01a01 :
     (∃ f : ℕ → ℝ → ℝ,
       (∀ k, IntegrableOn (f k) (Icc (0 : ℝ) 1) volume) ∧
@@ -164,6 +234,14 @@ theorem apm_a01a01 :
         (∀ k x, 0 ≤ f k x) ∧
         (∀ x, ∀ M : ℝ, ∀ N : ℕ, ∃ k : ℕ, N ≤ k ∧ M ≤ f k x) ∧
         Tendsto (fun k ↦ ∫ x, f k x ∂volume) atTop (nhds 0)) := by
+  constructor
+  · refine ⟨apm_a01A01_typewriter1d, ?_, ?_, ?_,
+      apm_a01A01_integral_typewriter1d_tendsto⟩
+    · exact apm_a01A01_typewriter1d_integrableOn
+    · intro k x _
+      exact apm_a01A01_typewriter1d_nonneg k x
+    · exact apm_a01A01_typewriter1d_cofinal
+  ·
   /-
   CLOSER HOP 1 boundary: the bridge remains open after sustained research.
 
@@ -195,9 +273,23 @@ theorem apm_a01a01 :
   component. Remaining work is the exact integral computation and pointwise
   cell-selection proof in 1D, followed by the finite-product cube analogue.
 
-  Closer hop 3 now proves the exact 1D integral as
-  `sqrt(stage k) / stage k` and proves these integrals tend to zero. The
-  unresolved work is narrowed further to the cofinal pointwise cell-selection
-  argument and the Euclidean finite-product analogue.
+  This frame closes the entire one-dimensional conjunct.  In addition to the
+  earlier exact integral calculation, `apm_a01A01_add_le_pair` controls the
+  global index of a chosen diagonal cell,
+  `apm_a01A01_typewriter1d_cofinal` selects that cell using `Nat.floor`, and
+  `apm_a01A01_typewriter1d_integrableOn` supplies Bochner integrability.
+
+  The sole remaining obligation is now the Euclidean conjunct.  The same
+  construction needs, for each positive `d`, finite grids covering expanding
+  cubes, a single natural-number scheduler whose grid scale tends to infinity
+  along *every* global index, and a cell-volume estimate with height times
+  volume tending to zero.  A direct diagonal scheduler has only `stage` cells,
+  whereas a `d`-cube grid needs a `d`th-power number of cells; using it without
+  a slower expanding radius is therefore invalid.  Searches of the repo index,
+  construction modules, the orphan history, and Mathlib's Euclidean-volume
+  equivalences found the measure pieces but no such scheduler.  The Zulip
+  archive contained no `typewriter` construction.  No axiom, opaque
+  declaration, or `native_decide` was introduced, and the frozen statement is
+  unchanged.
   -/
-  sorry
+    sorry
