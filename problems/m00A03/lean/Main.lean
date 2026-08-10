@@ -146,7 +146,7 @@ theorem apm_m00a03
     finiteness, i.e. the multi-eigenvalue invariant-flag/Riesz-separation
     construction described above.
     -/
-      sorry
+      exact apm_m00A03_bridge_1 A hA
     refine ⟨hfinite, ?_⟩
     exact apm_m00A03_derivedSet_subset_zero_of_annular_finite
       (spectrum ℂ A) (fun ε hε ↦
