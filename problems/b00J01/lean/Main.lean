@@ -26,7 +26,7 @@ local instance apm_b00j01_fact_prime_13 : Fact (Nat.Prime 13) := ⟨by norm_num�
 /-- The concrete cubic-residue calculation underlying the finite-field part. -/
 lemma apm_b00j01_seven_not_cube_mod13 :
     ∀ x : ZMod 13, x ^ 3 ≠ 7 := by
-  native_decide
+  decide
 
 /-- Consequently `X³ - 7` has no root over `𝔽₁₃`. -/
 lemma apm_b00j01_not_isRoot_mod13 (x : ZMod 13) :
@@ -44,6 +44,19 @@ lemma apm_b00j01_irreducible_mod13 :
 lemma apm_b00j01_separable_mod13 :
     (apm_b00j01_poly (ZMod 13)).Separable :=
   PerfectField.separable_of_irreducible apm_b00j01_irreducible_mod13
+
+/-- `3` is a primitive cube root of unity modulo `13`. -/
+lemma apm_b00j01_primitiveRoot_three_mod13 :
+    IsPrimitiveRoot (3 : ZMod 13) 3 := by
+  have horder : orderOf (3 : ZMod 13) = 3 := by
+    apply (orderOf_eq_iff (by norm_num)).2
+    constructor
+    · decide
+    · intro m hm hm0
+      interval_cases m <;> decide
+  refine ⟨by decide, fun l hl => ?_⟩
+  rw [← horder]
+  exact orderOf_dvd_of_pow_eq_one hl
 
 lemma apm_b00j01_finiteField_isGalois
     [Fact (Nat.Prime 13)]
@@ -124,7 +137,17 @@ theorem apm_b00J01_bridge_3
     [IsSplittingField (ZMod 13) M (apm_b00j01_poly (ZMod 13))] :
     Module.finrank (ZMod 13) M = 3 ∧
       Nonempty ((M ≃ₐ[ZMod 13] M) ≃* Multiplicative (ZMod 3)) := by
-  sorry
+  letI : IsSplittingField (ZMod 13) M (X ^ 3 - C 7) := by
+    simpa [apm_b00j01_poly] using
+      (inferInstance : IsSplittingField (ZMod 13) M
+        (apm_b00j01_poly (ZMod 13)))
+  have hζ := apm_b00j01_primitiveRoot_three_mod13
+  have hfin : Module.finrank (ZMod 13) M = 3 := by
+    apply finrank_of_isSplittingField_X_pow_sub_C
+      (hζ := ⟨3, (mem_primitiveRoots (by norm_num : 0 < 3)).2 hζ⟩)
+      apm_b00j01_irreducible_mod13
+  refine ⟨hfin, ?_⟩
+  exact ⟨autEquivZmod apm_b00j01_irreducible_mod13 M hζ⟩
 
 theorem apm_b00j01 :
     (∀ (K : Type*) [Field K] [Algebra ℚ K]
@@ -166,5 +189,16 @@ theorem apm_b00j01 :
   `LEMMA-INDEX.md`, all construction targets, splitting-field uniqueness,
   finite Galois fields, cubic minpolys, and prior Galois siblings; none packages
   either classification required by the frozen conjunction.
+
+  This closer found the missing finite-field dependency in solved sibling
+  `b94J03`: `finrank_of_isSplittingField_X_pow_sub_C` and `autEquivZmod`.
+  The new lemma `apm_b00j01_primitiveRoot_three_mod13` proves that
+  `3 : ZMod 13` is a primitive cube root of unity, so those Kummer results
+  close `apm_b00J01_bridge_3` completely.  The residue computation was also
+  changed from `native_decide` to kernel-checked `decide`.  Only the rational
+  `S₃` correspondence and real quadratic splitting-field bridges remain.
   -/
-  sorry
+  exact
+    ⟨fun K _ _ _ ↦ apm_b00J01_bridge_1 K,
+      fun L _ _ _ ↦ apm_b00J01_bridge_2 L,
+      fun M _ _ _ ↦ (apm_b00J01_bridge_3 M).2⟩
