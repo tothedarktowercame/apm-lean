@@ -95,6 +95,29 @@ theorem apm_m00A02_derivative_expansion_coefficients
     (ha : apm_m00A02_hasExpansion f a)
     (hb : apm_m00A02_hasExpansion (deriv f) b) :
     b = apm_m00A02_derivativeCoefficients a := by
+  /-
+  Frame boundary: the reusable route is Mathlib's filter-valued l'Hôpital
+  theorem `HasDerivAt.lhopital_zero_atTop`, rather than Bochner integration.
+  For each remainder
+
+    Fₙ(x) = f(x) - ∑ i ∈ range (n + 1), a i / x^i,
+
+  compare `Fₙ` with `x ↦ x⁻ⁿ`.  The hypothesis `ha n` gives the quotient
+  limit, while `hb` and the already-established lower coefficient identities
+  give the derivative-quotient limit.  L'Hôpital and uniqueness of limits then
+  force `b (n+1) = -n * a n`.
+
+  The delicate base is precisely `b 0 = b 1 = 0`: compare `f-a 0` with
+  `x⁻¹`.  If either coefficient is nonzero, the derivative quotient tends to
+  `atTop` or `atBot`, so filter-valued l'Hôpital contradicts the finite limit
+  supplied by `ha 1`.  This avoids the earlier unjustified assumption that a
+  merely differentiable derivative is interval-integrable.  The remaining
+  formal work is the eventual nonvanishing of `deriv (fun x : ℝ => x⁻ⁿ)`,
+  the polynomial derivative normalization, and the two signed-infinity base
+  cases.  Repo/index searches found no packaged custom-expansion theorem;
+  the local Zulip archive path named by the packet is absent.  No axiom,
+  opaque declaration, or `native_decide` is introduced.
+  -/
   sorry
 
 theorem apm_m00a02 :
@@ -179,4 +202,7 @@ theorem apm_m00a02 :
     `integral_Ioi_rpow_of_lt`, but assembling their eventual hypotheses from
     the raw `Tendsto` remainder and merely `Differentiable ℝ f` remains open.
     -/
-    sorry
+    intro f a b hf ha hb
+    have hcoeff : b = apm_m00A02_derivativeCoefficients a :=
+      apm_m00A02_derivative_expansion_coefficients hf ha hb
+    simpa [← hcoeff] using hb
