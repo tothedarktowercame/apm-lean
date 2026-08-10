@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.Analytic.Polynomial
 import ConstructionTargets.Rouche
+import ConstructionTargets.SchwarzPick
 
 /-!
 # APM a94A09
@@ -416,7 +417,43 @@ theorem apm_a94a09
   arm (b) returned no uniqueness bridge.  No arXiv search was needed because
   the standard Schwarz--Pick route is known. The frozen statement is unchanged.
   -/
-  sorry
+  have hclosedmap : MapsTo f (closedBall (0 : ℂ) 1) (closedBall 0 1) :=
+    apm_a94a09_mapsTo_closedBall hf_continuous hf_analytic hf_boundary
+  have hdiffcl : DiffContOnCl ℂ f (ball (0 : ℂ) 1) :=
+    DiffContOnCl.mk_ball hf_analytic hf_continuous
+  have hopenmap : MapsTo f (ball (0 : ℂ) 1) (ball 0 1) := by
+    intro x hx
+    rw [mem_ball_zero_iff]
+    have hle : ‖f x‖ ≤ 1 := by
+      have := hclosedmap (ball_subset_closedBall hx)
+      simpa [mem_closedBall_zero_iff] using this
+    refine lt_of_le_of_ne hle ?_
+    intro heq
+    have hmax : IsMaxOn (norm ∘ f) (ball (0 : ℂ) 1) x := by
+      intro y hy
+      have hy_le : ‖f y‖ ≤ 1 := by
+        have := hclosedmap (ball_subset_closedBall hy)
+        simpa [mem_closedBall_zero_iff] using this
+      simpa [Function.comp_apply, heq] using hy_le
+    have hconst := Complex.eqOn_closure_of_isPreconnected_of_isMaxOn_norm
+      isPreconnected_ball isOpen_ball hdiffcl hx hmax
+    have hfxsphere : f x ∈ sphere (0 : ℂ) 1 := by
+      simpa [mem_sphere, dist_zero_right] using heq
+    have hfxclosure : f x ∈ closure (ball (0 : ℂ) 1) := by
+      rw [closure_ball _ one_ne_zero]
+      exact sphere_subset_closedBall hfxsphere
+    apply hf_no_boundary_fixed_point (f x) hfxsphere
+    simpa using hconst hfxclosure
+  by_contra hwz
+  have hid : EqOn f id (ball (0 : ℂ) 1) :=
+    ConstructionTargets.SchwarzPick.eq_id_of_two_fixed_points
+      hf_analytic hopenmap hzball hw.1 (Ne.symm hwz) hfix hw.2
+  have hid_closed : EqOn f id (closedBall (0 : ℂ) 1) :=
+    hid.of_subset_closure hf_continuous continuous_id.continuousOn
+      ball_subset_closedBall (by rw [closure_ball _ one_ne_zero])
+  have hone_sphere : (1 : ℂ) ∈ sphere (0 : ℂ) 1 := by
+    simp
+  exact hf_no_boundary_fixed_point 1 hone_sphere (hid_closed (sphere_subset_closedBall hone_sphere))
 
 
 end
