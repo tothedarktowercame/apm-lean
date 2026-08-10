@@ -281,4 +281,10 @@ theorem apm_t00a03 :
   development; it cannot be discharged from the newly completed point-set
   partition facts alone.
   -/
-  sorry
+  intro g n F _ _ _ _ _ _ hg hgenus curves hemb hessential hdisjoint
+    hnonparallel hmax
+  exact
+    ⟨apm_t00A03_bridge_1 g n F hg hgenus curves hemb hessential hdisjoint
+        hnonparallel hmax,
+      apm_t00A03_bridge_2 g n F hg hgenus curves hemb hessential hdisjoint
+        hnonparallel hmax⟩
