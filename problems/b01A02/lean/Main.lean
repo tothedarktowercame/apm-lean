@@ -157,5 +157,20 @@ theorem apm_b01a02 :
   supplies the final cyclicity conjunct for `G`. Proving them in this snapshot
   still requires assembling the coprime semidirect-action argument from
   `IsZGroup.isZGroup_iff_exists_mulEquiv` and cyclic automorphism cardinalities.
+
+  BATCH 2 CLOSER: current Mathlib source search found the Z-group
+  semidirect-product classification and cyclicity of nilpotent Z-groups, but no
+  theorem deriving nilpotence (equivalently, triviality of the relevant
+  semidirect actions) from the arithmetic conditions for 85 or 255. A local
+  assembly test confirmed that the two displayed cyclic-number contracts are
+  sufficient with no additional group-theoretic glue: they apply directly to
+  the transfer kernel and ambient group. The test was not retained as a helper
+  because its dependency audit inherited the file's existing `native_decide`
+  axioms from the Sylow-cardinality and transfer lemmas; it therefore did not
+  meet the axiom-clean declaration gate. Replacing those computations by
+  `norm_num`/kernel `decide` was also tested, but this snapshot does not reduce
+  `Nat.factorization 255`, `Squarefree 255`, or `Nat.minFac 255` through either
+  tactic. The mathematical obstruction remains Hölder's cyclic-number theorem;
+  the additional trust-cleanup obstruction is five finite arithmetic proofs.
   -/
     sorry
