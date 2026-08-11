@@ -127,7 +127,27 @@ theorem apm_m01j03
         isSelfAdjoint_starProjection (apm_m01j03_topEigenspace T)
       rw [hself, hPself] at hadj
       exact hadj
+    have hPP : P.comp P = P :=
+      (apm_m01j03_topEigenspace T).isIdempotentElem_starProjection
     have hgap : ‖S - P‖ < 1 := by
+      have hfactor : S - P = S.comp (1 - P) := by
+        ext x
+        simp [ContinuousLinearMap.comp_apply, sub_eq_add_neg, hSP]
+      have hle : ‖S - P‖ ≤ 1 := by
+        rw [hfactor]
+        calc
+          ‖S.comp (1 - P)‖ ≤ ‖S‖ * ‖1 - P‖ :=
+            ContinuousLinearMap.opNorm_comp_le S (1 - P)
+          _ ≤ 1 * 1 := mul_le_mul
+            (by simpa [S] using le_of_eq hnormSquare)
+            (by
+              rw [← Submodule.starProjection_orthogonal'
+                (apm_m01j03_topEigenspace T)]
+              exact Submodule.starProjection_norm_le _)
+            (norm_nonneg _) (by norm_num)
+          _ = 1 := by norm_num
+      apply lt_of_le_of_ne hle
+      intro heq
       /-
       Boundary (closer hop 2): all algebra after the compact spectral theorem
       is now compiled.  The local lemma `apm_m01j03_tendsto_powers_of_gap`
@@ -167,6 +187,77 @@ theorem apm_m01j03
       positivity exclusion), not spectrum isolation, and does not require
       annular spectral finiteness.
       -/
-      sorry
+      have hPself : ContinuousLinearMap.adjoint P = P := by
+        exact isSelfAdjoint_starProjection (apm_m01j03_topEigenspace T)
+      have hAself : IsSelfAdjoint (S - P) := by
+        have hSs : IsSelfAdjoint S := by simpa [S] using hself
+        have hPs : IsSelfAdjoint P := by simpa [P] using hPself
+        exact hSs.sub hPs
+      have hAcompact : IsCompactOperator (S - P) := by
+        rw [hfactor]
+        exact hcompact.comp_clm (1 - P)
+      have hTne : T ≠ 0 := by
+        intro h
+        rw [h, norm_zero] at hnorm
+        norm_num at hnorm
+      obtain ⟨x0, hx0⟩ : ∃ x, T x ≠ 0 := by
+        by_contra! h
+        apply hTne
+        ext x
+        exact h x
+      letI : Nontrivial H := ⟨⟨x0, 0, fun hx => hx0 (by simp [hx])⟩⟩
+      have hspectrum : algebraMap ℝ 𝕜 ‖S - P‖ ∈ spectrum 𝕜 (S - P) ∨
+          algebraMap ℝ 𝕜 (-‖S - P‖) ∈ spectrum 𝕜 (S - P) := by
+        simp_rw [spectrum, Set.mem_compl_iff, map_neg]
+        by_contra! h
+        obtain ⟨c, hc0, hc⟩ :=
+          (S - P).abs_rayleighQuotient_le_of_norm_mem_resolventSet h.1 h.2
+        grind [ciSup_le hc,
+          ContinuousLinearMap.norm_eq_iSup_rayleighQuotient (S - P) hAself.isSymmetric]
+      rw [heq] at hspectrum
+      rcases hspectrum with hspec | hspec
+      · have hspecK : algebraMap ℝ 𝕜 (1 : ℝ) ∈ spectrum 𝕜 (S - P) := by
+          simpa using hspec
+        have hev : Module.End.HasEigenvalue (S - P).toLinearMap (1 : 𝕜) :=
+          (hAcompact.hasEigenvalue_iff_mem_spectrum one_ne_zero).mpr (by simpa using hspecK)
+        obtain ⟨x, hx⟩ := hev.exists_hasEigenvector
+        have hxA : (S - P) x = x := by
+          simpa using hx.apply_eq_smul
+        have hxP : P x = 0 := by
+          have := congrArg P hxA
+          simp only [ContinuousLinearMap.sub_apply] at this
+          rw [map_sub, ← ContinuousLinearMap.comp_apply, hPS,
+            ← ContinuousLinearMap.comp_apply,
+            hPP] at this
+          simpa using this.symm
+        have hxS : S x = x := by simpa [ContinuousLinearMap.sub_apply, hxP] using hxA
+        have hxtop : x ∈ apm_m01j03_topEigenspace T := by
+          rw [apm_m01j03_topEigenspace, LinearMap.mem_ker]
+          exact sub_eq_zero.mpr (by simpa [S] using hxS)
+        have hxP' : P x = x := by
+          exact (apm_m01j03_topEigenspace T).starProjection_eq_self_iff.mpr hxtop
+        exact hx.2 (by simpa [hxP] using hxP'.symm)
+      · have hspecK : algebraMap ℝ 𝕜 (-1 : ℝ) ∈ spectrum 𝕜 (S - P) := by
+          simpa using hspec
+        have hneg : (-1 : 𝕜) ≠ 0 := by norm_num
+        have hev : Module.End.HasEigenvalue (S - P).toLinearMap (-1 : 𝕜) :=
+          (hAcompact.hasEigenvalue_iff_mem_spectrum hneg).mpr (by simpa using hspecK)
+        obtain ⟨x, hx⟩ := hev.exists_hasEigenvector
+        have hxA : (S - P) x = -x := by
+          simpa using hx.apply_eq_smul
+        have hxP : P x = 0 := by
+          have := congrArg P hxA
+          simp only [ContinuousLinearMap.sub_apply, map_neg] at this
+          rw [map_sub, ← ContinuousLinearMap.comp_apply, hPS,
+            ← ContinuousLinearMap.comp_apply,
+            hPP] at this
+          simpa using this
+        have hxS : S x = -x := by simpa [ContinuousLinearMap.sub_apply, hxP] using hxA
+        have hpos := hpositive.re_inner_nonneg_left x
+        rw [show apm_m01j03_selfAdjointSquare T = S by rfl] at hpos
+        rw [hxS] at hpos
+        have hxnorm : 0 < ‖x‖ := norm_pos_iff.mpr hx.2
+        have hneg : 0 ≤ -(‖x‖ ^ 2) := by simpa using hpos
+        nlinarith [sq_pos_of_pos hxnorm]
     exact apm_m01j03_tendsto_powers_of_gap S P
       (apm_m01j03_topEigenspace T).isIdempotentElem_starProjection hSP hPS hgap
