@@ -99,6 +99,25 @@ lemma apm_t00j02_component_compact_and_pathConnected
   ⟨apm_t00j02_isCompact_connectedComponentIn_of_componentsBoundDisks hdisks hx,
     apm_t00j02_isPathConnected_connectedComponentIn_of_componentsBoundDisks hdisks hx⟩
 
+/-- The boundary parametrization in `componentsBoundDisks` is not merely
+surjective: the embedded disk restricts to an embedding of the circle, so each
+displayed component is homeomorphic to `Circle`. -/
+lemma apm_t00j02_component_homeomorphic_circle
+    {S : Type} [TopologicalSpace S] {A : Set S}
+    (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
+    Nonempty (Circle ≃ₜ connectedComponentIn A x) := by
+  rcases hdisks x hx with ⟨d, _hdcont, hdemb, hd⟩
+  have hcircleToDisk : Topology.IsEmbedding apm_t00j02_circleToDisk := by
+    refine (Topology.IsEmbedding.of_comp_iff .subtypeVal).mp ?_
+    simpa [Function.comp_def, apm_t00j02_circleToDisk] using
+      (Topology.IsEmbedding.subtypeVal :
+        Topology.IsEmbedding ((↑) : Circle → ℂ))
+  have hemb : Topology.IsEmbedding
+      (fun z : Circle => d (apm_t00j02_circleToDisk z)) :=
+    hdemb.comp hcircleToDisk
+  rw [← hd]
+  exact ⟨hemb.toHomeomorph⟩
+
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
   ∃ e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ,
@@ -206,5 +225,17 @@ theorem apm_t00j02
   nor from those component classes to `apm_t00j02_homologyMap 2 f = 0`.
   Thus the remaining obstruction is purely the missing homological
   null-boundary and Poincare-duality/intersection machinery, and remains open.
+
+  BATCH 2 CLOSER: `apm_t00j02_component_homeomorphic_circle` now sharpens the
+  component description to an actual homeomorphism with `Circle`, by composing
+  the subtype embedding of the unit circle into the closed disk with the disk
+  embedding supplied by `hdisks`, then identifying its range with the connected
+  component.  This eliminates any remaining point-set ambiguity about the
+  inverse-image components.  Searches for a singular-homology theorem sending
+  an embedded circle which bounds an embedded disk to zero, and for the
+  transverse pullback/intersection naturality formula, still found neither in
+  Mathlib nor in the repository's indexed helpers.  Those two categorical
+  bridges (ultimately Poincare duality for the surface) remain the exact open
+  obligation.
   -/
   sorry
