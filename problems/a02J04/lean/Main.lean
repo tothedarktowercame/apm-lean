@@ -1,5 +1,5 @@
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Measure.Decomposition.Lebesgue
+import Mathlib.MeasureTheory.Measure.Decomposition.RadonNikodym
 
 /-!
 # APM a02J04 — a projected planar measure and its Lebesgue decomposition
@@ -116,6 +116,18 @@ lemma apm_a02J04_tau_eq_withDensity :
   · simp [apm_a02J04_P, hx, apm_a02J04_lintegral_g_right]
   · simp [apm_a02J04_P, hx]
 
+lemma apm_a02J04_tau_eq_restrict_withDensity :
+    apm_a02J04_tau =
+      (volume.restrict (Icc (0 : ℝ) 1)).withDensity
+        (fun x ↦ ENNReal.ofReal (apm_a02J04_tauDensity x)) := by
+  rw [apm_a02J04_tau_eq_withDensity,
+    ← restrict_withDensity measurableSet_Icc]
+  exact (Measure.restrict_eq_self_of_ae_mem
+    ((ae_withDensity_iff apm_a02J04_measurable_tauDensity).2
+      (Filter.Eventually.of_forall fun x hx ↦ by
+        by_contra hmem
+        exact hx (apm_a02J04_tauDensity_of_not_mem hmem)))).symm
+
 /-- Why this unblocks `apm_a02j04`: positivity of the compiled density on
 `[0,1] \ {0}`, together with nullity of the exceptional singleton, makes
 restricted Lebesgue measure absolutely continuous with respect to the
@@ -123,7 +135,15 @@ marginal.  This is the second conjunct of the main theorem. -/
 theorem apm_a02J04_bridge_restrict_absolutelyContinuous :
     (volume.restrict (Icc (0 : ℝ) 1)).AbsolutelyContinuous
       apm_a02J04_tau := by
-  sorry
+  rw [apm_a02J04_tau_eq_restrict_withDensity]
+  apply withDensity_absolutelyContinuous'
+  · exact apm_a02J04_measurable_tauDensity.aemeasurable.restrict
+  · have hx0 : ∀ᵐ x : ℝ ∂volume, x ≠ 0 := by
+      rw [ae_iff]
+      simp
+    filter_upwards [ae_restrict_mem measurableSet_Icc,
+      ae_restrict_of_ae hx0] with x hx hx0
+    exact apm_a02J04_tauDensity_ne_zero hx hx0
 
 /-- Why this unblocks `apm_a02j04`: the compiled density vanishes off
 `[0,1]`, so the marginal is concentrated on that interval and is mutually
@@ -132,7 +152,11 @@ third conjunct of the main theorem. -/
 theorem apm_a02J04_bridge_compl_mutuallySingular :
     Measure.MutuallySingular
       (volume.restrict ((Icc (0 : ℝ) 1)ᶜ)) apm_a02J04_tau := by
-  sorry
+  refine ⟨Icc (0 : ℝ) 1, measurableSet_Icc, ?_, ?_⟩
+  · simp
+  · rw [apm_a02J04_tau_eq_withDensity, withDensity_apply _ measurableSet_Icc.compl]
+    exact setLIntegral_eq_zero measurableSet_Icc.compl fun x hx ↦
+      apm_a02J04_tauDensity_of_not_mem hx
 
 /-- Why this unblocks `apm_a02j04`: this is the specialization of
 `Measure.rnDeriv_withDensity_right` to the positive density `2*x` on
@@ -142,7 +166,32 @@ theorem apm_a02J04_bridge_rnDeriv :
     (volume.restrict (Icc (0 : ℝ) 1)).rnDeriv apm_a02J04_tau
       =ᵐ[apm_a02J04_tau]
         fun x ↦ ENNReal.ofReal (1 / (2 * x)) := by
-  sorry
+  rw [apm_a02J04_tau_eq_restrict_withDensity]
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  let d := fun x : ℝ ↦ ENNReal.ofReal (apm_a02J04_tauDensity x)
+  have hx0 : ∀ᵐ x : ℝ ∂μ, x ≠ 0 := by
+    apply ae_restrict_of_ae
+    rw [ae_iff]
+    simp
+  have hd0 : ∀ᵐ x ∂μ, d x ≠ 0 := by
+    filter_upwards [ae_restrict_mem measurableSet_Icc, hx0] with x hx hx0
+    exact apm_a02J04_tauDensity_ne_zero hx hx0
+  have hdtop : ∀ᵐ x ∂μ, d x ≠ ∞ := by
+    filter_upwards with x
+    exact ENNReal.ofReal_ne_top
+  have hcalc := Measure.rnDeriv_withDensity_right μ μ
+    (apm_a02J04_measurable_tauDensity.aemeasurable.restrict) hd0 hdtop
+  have hself := Measure.rnDeriv_self μ
+  have hac : μ.withDensity d ≪ μ := withDensity_absolutelyContinuous μ d
+  apply hac.ae_eq
+  filter_upwards [hcalc, hself, ae_restrict_mem measurableSet_Icc, hx0]
+    with x hcalc hself hx hx0
+  rw [hcalc, hself, mul_one]
+  rw [apm_a02J04_tauDensity_of_mem hx]
+  have hxpos : 0 < 2 * x := mul_pos (by norm_num) (lt_of_le_of_ne hx.1 (Ne.symm hx0))
+  rw [← ENNReal.ofReal_inv_of_pos hxpos]
+  congr 1
+  simp [one_div]
 
 theorem apm_a02j04 :
     apm_a02J04_tau =
@@ -152,34 +201,7 @@ theorem apm_a02j04 :
     (volume.restrict (Icc (0 : ℝ) 1)).rnDeriv apm_a02J04_tau
       =ᵐ[apm_a02J04_tau]
         fun x ↦ ENNReal.ofReal (1 / (2 * x)) := by
-  /-
-  Closer hop 3 builds on the measurable-density prerequisites compiled by
-  hop 1. In particular, the planar and proposed marginal densities are measurable,
-  the latter vanishes off `[0,1]`, and it is nonzero on `[0,1] \ {0}`.  These
-  are exactly the support and reciprocal-density facts needed by Mathlib's
-  `rnDeriv_withDensity_right` API after the marginal identity is known.
-
-  Going beyond that boundary, `apm_a02J04_volume_verticalSection` proves the
-  exact interval measure `volume {y | 0 ≤ y ∧ y ≤ x} = ofReal x`, including
-  negative `x`. `apm_a02J04_lintegral_g_right` then performs the complete
-  inner Tonelli calculation and identifies it pointwise with the proposed
-  marginal density, treating both `x ∈ [0,1]` and the zero-density complement.
-  Thus the vertical-section calculation is no longer open.
-
-  Going beyond hop 2, `apm_a02J04_tau_eq_withDensity` now closes the full
-  measure-level bridge. It applies `Measure.ext`, expands `Measure.map` and
-  both `withDensity` measures on an arbitrary measurable set, rewrites ambient
-  product volume with `Measure.volume_eq_prod`, applies `lintegral_prod`, and
-  substitutes `apm_a02J04_lintegral_g_right`. Thus the exact first-coordinate
-  marginal identity is compiled.
-
-  Renewed searches of `LEMMA-INDEX.md`, every `ConstructionTargets/` module,
-  prior measure-decomposition artifacts (especially `a01J03`), Mathlib's marginal,
-  product-measure, `withDensity`, and Radon--Nikodym sources, and git history
-  found no higher-level marginal theorem, so the local Tonelli proof was used.
-  The remaining bridge is now only deriving absolute continuity and mutual
-  singularity from the density's support/positivity (with exceptional null
-  point `{0}`), then specializing `Measure.rnDeriv_withDensity_right` to the
-  displayed reciprocal. The frozen statement is unchanged.
-  -/
-  sorry
+  exact ⟨apm_a02J04_tau_eq_withDensity,
+    apm_a02J04_bridge_restrict_absolutelyContinuous,
+    apm_a02J04_bridge_compl_mutuallySingular,
+    apm_a02J04_bridge_rnDeriv⟩
