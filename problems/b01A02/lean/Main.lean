@@ -98,6 +98,97 @@ lemma apm_b01A02_exists_normal_card_85
   haveI : H.Normal := inferInstance
   exact ⟨H, inferInstance, by omega⟩
 
+/-- Every group of order `85 = 5 * 17` is cyclic.  Sylow arithmetic makes
+both Sylow subgroups unique; squarefreeness then upgrades nilpotence to
+cyclicity through Mathlib's `IsZGroup` instance. -/
+lemma apm_b01A02_isCyclic_of_card_85
+    (G : Type*) [Group G] [Fintype G] (hG : Nat.card G = 85) : IsCyclic G := by
+  have hsylow5 : Nat.card (Sylow 5 G) = 1 := by
+    letI : Fact (Nat.Prime 5) := ⟨by norm_num⟩
+    let P : Sylow 5 G := default
+    have hPcard : Nat.card P = 5 := by
+      rw [Sylow.card_eq_multiplicity, hG]
+      rw [show 85 = 5 * 17 by norm_num, Nat.factorization_mul (by norm_num) (by norm_num),
+        (show Nat.Prime 5 by norm_num).factorization,
+        (show Nat.Prime 17 by norm_num).factorization]
+      simp
+    have hPindex : P.index = 17 := by
+      have h := P.toSubgroup.index_mul_card
+      rw [hPcard, hG] at h
+      omega
+    have hdvd : Nat.card (Sylow 5 G) ∣ 17 := by
+      simpa [hPindex] using Sylow.card_dvd_index P
+    have hnmem : Nat.card (Sylow 5 G) ∈ Nat.divisors 17 :=
+      Nat.mem_divisors.mpr ⟨hdvd, by norm_num⟩
+    have hdivs : Nat.divisors 17 = {1, 17} := by decide
+    rw [hdivs] at hnmem
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hnmem
+    rcases hnmem with h1 | h17
+    · exact h1
+    · exfalso
+      have hmod : Nat.card (Sylow 5 G) ≡ 1 [MOD 5] :=
+        card_sylow_modEq_one 5 G
+      simp_all [Nat.ModEq]
+  have hsylow17 : Nat.card (Sylow 17 G) = 1 := by
+    letI : Fact (Nat.Prime 17) := ⟨by norm_num⟩
+    let P : Sylow 17 G := default
+    have hPcard : Nat.card P = 17 := by
+      rw [Sylow.card_eq_multiplicity, hG]
+      rw [show 85 = 5 * 17 by norm_num, Nat.factorization_mul (by norm_num) (by norm_num),
+        (show Nat.Prime 5 by norm_num).factorization,
+        (show Nat.Prime 17 by norm_num).factorization]
+      simp
+    have hPindex : P.index = 5 := by
+      have h := P.toSubgroup.index_mul_card
+      rw [hPcard, hG] at h
+      omega
+    have hdvd : Nat.card (Sylow 17 G) ∣ 5 := by
+      simpa [hPindex] using Sylow.card_dvd_index P
+    have hnmem : Nat.card (Sylow 17 G) ∈ Nat.divisors 5 :=
+      Nat.mem_divisors.mpr ⟨hdvd, by norm_num⟩
+    have hdivs : Nat.divisors 5 = {1, 5} := by decide
+    rw [hdivs] at hnmem
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hnmem
+    rcases hnmem with h1 | h5
+    · exact h1
+    · exfalso
+      have hmod : Nat.card (Sylow 17 G) ≡ 1 [MOD 17] :=
+        card_sylow_modEq_one 17 G
+      simp_all [Nat.ModEq]
+  letI : IsZGroup G := IsZGroup.of_squarefree (by
+    rw [hG, show 85 = 5 * 17 by norm_num]
+    exact (Nat.squarefree_mul (by norm_num)).mpr
+      ⟨(show Nat.Prime 5 by norm_num).squarefree,
+        (show Nat.Prime 17 by norm_num).squarefree⟩)
+  letI : Group.IsNilpotent G :=
+    ((isNilpotent_of_finite_tfae (G := G)).out 3 0).mp (by
+      intro p hp P
+      by_cases hpdvd : p ∣ Nat.card G
+      · have hp' : p.Prime := hp.out
+        rw [hG] at hpdvd
+        have hp85 : p ∣ 5 * 17 := by norm_num; exact hpdvd
+        rcases hp'.dvd_mul.mp hp85 with hp5 | hp17
+        · have hpEq : p = 5 := (Nat.dvd_prime (by norm_num)).mp hp5 |>.resolve_left hp'.ne_one
+          subst p
+          letI : Subsingleton (Sylow 5 G) :=
+            (Nat.card_eq_one_iff_unique.mp hsylow5).1
+          exact Sylow.normal_of_subsingleton P
+        · have hpEq : p = 17 := (Nat.dvd_prime (by norm_num)).mp hp17 |>.resolve_left hp'.ne_one
+          subst p
+          letI : Subsingleton (Sylow 17 G) :=
+            (Nat.card_eq_one_iff_unique.mp hsylow17).1
+          exact Sylow.normal_of_subsingleton P
+      · have hPcard : Nat.card P = 1 := by
+          rw [Sylow.card_eq_multiplicity,
+            Nat.factorization_eq_zero_of_not_dvd hpdvd, pow_zero]
+        haveI : Subsingleton P := (Nat.card_eq_one_iff_unique.mp hPcard).1
+        have hPbot : (P : Subgroup G) = ⊥ :=
+          (Subgroup.eq_bot_iff_forall _).mpr fun x hx =>
+            Subtype.ext_iff.mp (Subsingleton.elim ⟨x, hx⟩ 1)
+        rw [hPbot]
+        infer_instance)
+  infer_instance
+
 theorem apm_b01a02 :
     (∀ (G : Type*) [Group G] [Fintype G]
       (p : ℕ) (H : Subgroup G),
@@ -118,6 +209,10 @@ theorem apm_b01a02 :
     let S : Sylow 17 G := default
     have hS := apm_b01A02_sylow17_normal_of_card_255 G hGcard S
     refine ⟨⟨S, hS.1, hS.2⟩, ?_⟩
+    rcases apm_b01A02_exists_normal_card_85 G hGcard with ⟨H, hHnormal, hHcard⟩
+    letI : Fintype H := Fintype.ofFinite H
+    refine ⟨⟨H, hHnormal, hHcard,
+      apm_b01A02_isCyclic_of_card_85 H hHcard⟩, ?_⟩
   /-
   PARTIAL boundary (closer hop 3). A renewed inspection of Burnside transfer
   found `IsCyclic.isComplement'`, which was more directly useful than the
@@ -128,8 +223,11 @@ theorem apm_b01a02 :
   `IsComplement'.card_mul` to prove the kernel has order exactly `85`.
 
   Thus both required normal-subgroup existence claims are closed independently.
-  The remaining bridge is cyclicity: show the normal order-85 transfer kernel
-  is cyclic and then show the quotient order-three action on it is trivial.
+  `apm_b01A02_isCyclic_of_card_85` now also proves the transfer kernel cyclic:
+  explicit Sylow counts make any group of order `85` nilpotent, while its
+  squarefree order supplies `IsZGroup`, and Mathlib's combined instance yields
+  cyclicity. The remaining bridge is cyclicity of `G`: show the quotient
+  order-three action on the normal cyclic kernel is trivial.
   `IsZGroup` only makes Sylow subgroups cyclic, not an arbitrary squarefree
   group cyclic; Mathlib has no cyclic-number theorem implementing the needed
   coprime automorphism-order argument. Searches of transfer, Z-groups,
