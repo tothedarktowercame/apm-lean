@@ -106,6 +106,23 @@ def apm_m01J04_isTestFunction {d : ℕ}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ) : Prop :=
   ContDiff ℝ ⊤ φ ∧ HasCompactSupport φ ∧ Function.support φ ⊆ Ω
 
+/-- A test function in the custom encoding has a global pointwise bound.
+This is the scalar multiplier bound needed in the `L²` part of the product
+construction. -/
+lemma apm_m01J04_isTestFunction_exists_abs_le
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    {φ : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hφ : apm_m01J04_isTestFunction Ω φ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ x, |φ x| ≤ C := by
+  have hb : BddAbove ((fun x ↦ |φ x|) '' tsupport φ) :=
+    hφ.2.1.bddAbove_image hφ.1.continuous.abs.continuousOn
+  obtain ⟨C, hC⟩ := bddAbove_def.mp hb
+  refine ⟨max C 0, le_max_right _ _, fun x ↦ ?_⟩
+  by_cases hx : x ∈ Function.support φ
+  · exact (hC _ ⟨x, subset_closure hx, rfl⟩).trans (le_max_left _ _)
+  · have hzero : φ x = 0 := Function.notMem_support.mp hx
+    simp [hzero, le_max_right C 0]
+
 /-- Why this unblocks `apm_m01j04`: this is the missing bounded multiplier
 and weak Leibniz theorem for the custom `H¹` record. It constructs the
 endpoint-zero test record used in `divStronglyConverges`, with a norm bound
@@ -124,6 +141,15 @@ theorem apm_m01J04_bridge_1
                 (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))) ∧
           apm_m01J04_isH1Zero h ∧
           apm_m01J04_H1norm h ≤ C * apm_m01J04_H1norm f := by
+  /-
+  This pass closes the first multiplier prerequisite:
+  `apm_m01J04_isTestFunction_exists_abs_le` extracts a global nonnegative
+  pointwise bound for `φ` from continuity and compact support.  The remaining
+  construction still needs a corresponding bound for the finite-dimensional
+  `fderiv` field, the weak Leibniz identity, and density of compactly supported
+  smooth functions after multiplication in the custom `H1dist`.  Those are
+  record-level Sobolev facts, not supplied by raw `MemLp` multiplication.
+  -/
   sorry
 
 theorem apm_m01j04 :
