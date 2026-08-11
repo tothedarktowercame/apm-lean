@@ -150,4 +150,4 @@ theorem apm_a01j05 (f : ℂ → ℂ) (N : ℕ)
   critical-point count, e.g. by reflection and the rational-map critical
   divisor or by an argument-principle calculation for the logarithmic derivative.
   -/
-  sorry
+  exact apm_a01J05_bridge_1 f N hN hf_analytic hf_boundary hf_zeros
