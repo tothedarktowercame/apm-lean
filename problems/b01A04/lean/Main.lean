@@ -62,6 +62,70 @@ lemma apm_b01A04_aut_mulEquiv_zmod_three
     rw [IsGalois.card_aut_eq_finrank, hfin]
   exact ⟨mulEquivOfPrimeCardEq hcard (by simp)⟩
 
+private abbrev apm_b01A04_U7 := (ZMod 7)ˣ
+private abbrev apm_b01A04_U9 := (ZMod 9)ˣ
+
+private def apm_b01A04_conj7 : Subgroup apm_b01A04_U7 := Subgroup.zpowers (-1)
+private def apm_b01A04_conj9 : Subgroup apm_b01A04_U9 := Subgroup.zpowers (-1)
+
+private lemma apm_b01A04_card_conj7 : Nat.card apm_b01A04_conj7 = 2 := by
+  letI : NeZero 7 := ⟨by norm_num⟩
+  letI : Fact (1 < 7) := ⟨by norm_num⟩
+  unfold apm_b01A04_conj7
+  rw [Nat.card_zpowers, ← orderOf_units, Units.val_neg, Units.val_one, orderOf_neg_one,
+    ringChar.eq (ZMod 7) 7]
+  norm_num
+
+private lemma apm_b01A04_card_conj9 : Nat.card apm_b01A04_conj9 = 2 := by
+  letI : NeZero 9 := ⟨by norm_num⟩
+  letI : Fact (1 < 9) := ⟨by norm_num⟩
+  unfold apm_b01A04_conj9
+  rw [Nat.card_zpowers, ← orderOf_units, Units.val_neg, Units.val_one, orderOf_neg_one,
+    ringChar.eq (ZMod 9) 9]
+  norm_num
+
+private lemma apm_b01A04_cyclotomic_subgroup_inf :
+    (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) ⊓
+        ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) =
+      apm_b01A04_conj7.prod apm_b01A04_conj9 := by
+  ext x
+  simp only [Subgroup.mem_inf, Subgroup.mem_prod, Subgroup.mem_top, and_true, true_and]
+
+private lemma apm_b01A04_cyclotomic_subgroup_sup :
+    (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) ⊔
+        ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) = ⊤ := by
+  apply top_unique
+  rintro ⟨x, y⟩ -
+  have hx : (x, 1) ∈
+      (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) ⊔
+        ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) := by
+    apply Subgroup.mem_sup_right
+    simp [Subgroup.mem_prod]
+  have hy : (1, y) ∈
+      (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) ⊔
+        ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) := by
+    apply Subgroup.mem_sup_left
+    simp [Subgroup.mem_prod]
+  simpa using (Subgroup.mul_mem _ hx hy)
+
+private lemma apm_b01A04_card_cyclotomic_subgroups :
+    Nat.card (apm_b01A04_conj7.prod apm_b01A04_conj9) = 4 ∧
+      Nat.card (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) = 12 ∧
+      Nat.card ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) = 12 := by
+  letI : NeZero 7 := ⟨by norm_num⟩
+  letI : NeZero 9 := ⟨by norm_num⟩
+  simp only [Nat.card_congr (Subgroup.prodEquiv _ _).toEquiv, Nat.card_prod,
+    apm_b01A04_card_conj7, apm_b01A04_card_conj9, Subgroup.card_top,
+    Nat.card_eq_fintype_card, ZMod.card_units_eq_totient]
+  constructor
+  · norm_num
+  constructor
+  · rw [show Nat.totient 9 = 6 by
+      rw [show 9 = 3 ^ 2 by norm_num, Nat.totient_prime_pow (by norm_num) (by norm_num)]
+      norm_num]
+  · rw [show Nat.totient 7 = 6 by rw [Nat.totient_prime (by norm_num)]]
+
+
 /-- Why this unblocks `apm_b01a04`: this is the missing arithmetic
 construction of two linearly disjoint cyclic cubic extensions inside their
 degree-nine compositum. Either intermediate field supplies the first witness,
