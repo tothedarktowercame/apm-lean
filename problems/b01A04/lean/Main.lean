@@ -62,6 +62,71 @@ lemma apm_b01A04_aut_mulEquiv_zmod_three
     rw [IsGalois.card_aut_eq_finrank, hfin]
   exact ⟨mulEquivOfPrimeCardEq hcard (by simp)⟩
 
+private abbrev apm_b01A04_U7 := (ZMod 7)ˣ
+private abbrev apm_b01A04_U9 := (ZMod 9)ˣ
+
+private def apm_b01A04_conj7 : Subgroup apm_b01A04_U7 := Subgroup.zpowers (-1)
+private def apm_b01A04_conj9 : Subgroup apm_b01A04_U9 := Subgroup.zpowers (-1)
+
+private lemma apm_b01A04_card_conj7 : Nat.card apm_b01A04_conj7 = 2 := by
+  letI : NeZero 7 := ⟨by norm_num⟩
+  letI : Fact (1 < 7) := ⟨by norm_num⟩
+  unfold apm_b01A04_conj7
+  rw [Nat.card_zpowers, ← orderOf_units, Units.val_neg, Units.val_one, orderOf_neg_one,
+    ringChar.eq (ZMod 7) 7]
+  norm_num
+
+private lemma apm_b01A04_card_conj9 : Nat.card apm_b01A04_conj9 = 2 := by
+  letI : NeZero 9 := ⟨by norm_num⟩
+  letI : Fact (1 < 9) := ⟨by norm_num⟩
+  unfold apm_b01A04_conj9
+  rw [Nat.card_zpowers, ← orderOf_units, Units.val_neg, Units.val_one, orderOf_neg_one,
+    ringChar.eq (ZMod 9) 9]
+  norm_num
+
+private lemma apm_b01A04_cyclotomic_subgroup_inf :
+    (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) ⊓
+        ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) =
+      apm_b01A04_conj7.prod apm_b01A04_conj9 := by
+  ext x
+  simp only [Subgroup.mem_inf, Subgroup.mem_prod, Subgroup.mem_top, and_true, true_and]
+
+private lemma apm_b01A04_cyclotomic_subgroup_sup :
+    (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) ⊔
+        ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) = ⊤ := by
+  apply top_unique
+  rintro ⟨x, y⟩ -
+  have hx : (x, 1) ∈
+      (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) ⊔
+        ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) := by
+    apply Subgroup.mem_sup_right
+    simp [Subgroup.mem_prod]
+  have hy : (1, y) ∈
+      (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) ⊔
+        ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) := by
+    apply Subgroup.mem_sup_left
+    simp [Subgroup.mem_prod]
+  simpa using (Subgroup.mul_mem _ hx hy)
+
+private lemma apm_b01A04_card_cyclotomic_subgroups :
+    Nat.card (apm_b01A04_conj7.prod apm_b01A04_conj9) = 4 ∧
+      Nat.card (apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)) = 12 ∧
+      Nat.card ((⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9) = 12 := by
+  letI : NeZero 7 := ⟨by norm_num⟩
+  letI : NeZero 9 := ⟨by norm_num⟩
+  simp only [Nat.card_congr (Subgroup.prodEquiv _ _).toEquiv, Nat.card_prod,
+    apm_b01A04_card_conj7, apm_b01A04_card_conj9, Subgroup.card_top,
+    Nat.card_eq_fintype_card, ZMod.card_units_eq_totient]
+  constructor
+  · norm_num
+  constructor
+  · rw [show Nat.totient 9 = 6 by
+      rw [show 9 = 3 ^ 2 by norm_num, Nat.totient_prime_pow (by norm_num) (by norm_num)]
+      norm_num]
+  · rw [show Nat.totient 7 = 6 by rw [Nat.totient_prime (by norm_num)]]
+
+set_option maxHeartbeats 800000
+
 /-- Why this unblocks `apm_b01a04`: this is the missing arithmetic
 construction of two linearly disjoint cyclic cubic extensions inside their
 degree-nine compositum. Either intermediate field supplies the first witness,
@@ -82,7 +147,139 @@ theorem apm_b01A04_bridge_cubic_compositum_exists :
               Module.finrank ℚ L = 3 ∧
               K ⊓ L = ⊥ ∧
               K ⊔ L = ⊤ := by
-  sorry
+  let C := CyclotomicField 63 ℚ
+  letI : NeZero 63 := ⟨by norm_num⟩
+  letI : NeZero (63 : ℚ) := ⟨by norm_num⟩
+  letI : IsCyclotomicExtension {63} ℚ C := CyclotomicField.isCyclotomicExtension 63 ℚ
+  letI : NumberField C := IsCyclotomicExtension.numberField {63} ℚ C
+  letI : FiniteDimensional ℚ C := IsCyclotomicExtension.finiteDimensional {63} ℚ C
+  letI : IsGalois ℚ C := IsCyclotomicExtension.isGalois {63} ℚ C
+  letI : IsAbelianGalois ℚ C := IsCyclotomicExtension.isAbelianGalois {63} ℚ C
+  let eCRT : (ZMod 63)ˣ ≃* apm_b01A04_U7 × apm_b01A04_U9 :=
+    (Units.mapEquiv (ZMod.chineseRemainder (show Nat.Coprime 7 9 by norm_num)).toMulEquiv).trans
+      MulEquiv.prodUnits
+  let eG : (C ≃ₐ[ℚ] C) ≃* apm_b01A04_U7 × apm_b01A04_U9 :=
+    (IsCyclotomicExtension.Rat.galEquivZMod 63 C).trans eCRT
+  let P0 := apm_b01A04_conj7.prod apm_b01A04_conj9
+  let P1 := apm_b01A04_conj7.prod (⊤ : Subgroup apm_b01A04_U9)
+  let P2 := (⊤ : Subgroup apm_b01A04_U7).prod apm_b01A04_conj9
+  let H0 : Subgroup (C ≃ₐ[ℚ] C) := eG.comapSubgroup P0
+  let H1 : Subgroup (C ≃ₐ[ℚ] C) := eG.comapSubgroup P1
+  let H2 : Subgroup (C ≃ₐ[ℚ] C) := eG.comapSubgroup P2
+  let E0 : IntermediateField ℚ C := IntermediateField.fixedField H0
+  let F1 : IntermediateField ℚ C := IntermediateField.fixedField H1
+  let F2 : IntermediateField ℚ C := IntermediateField.fixedField H2
+  have h01 : H0 ≤ H1 := by
+    apply eG.comapSubgroup.monotone
+    intro x hx
+    exact ⟨hx.1, Subgroup.mem_top _⟩
+  have h02 : H0 ≤ H2 := by
+    apply eG.comapSubgroup.monotone
+    intro x hx
+    exact ⟨Subgroup.mem_top _, hx.2⟩
+  have hF1 : F1 ≤ E0 := IntermediateField.fixedField_le h01
+  have hF2 : F2 ≤ E0 := IntermediateField.fixedField_le h02
+  let K : IntermediateField ℚ E0 := IntermediateField.restrict hF1
+  let L : IntermediateField ℚ E0 := IntermediateField.restrict hF2
+  have hcardH0 : Nat.card H0 = 4 := by
+    calc
+      Nat.card H0 = Nat.card P0 := by
+        symm
+        rw [show H0 = Subgroup.map (eG.symm : _ →* _) P0 by
+          exact Subgroup.comap_equiv_eq_map_symm eG P0]
+        exact Nat.card_congr (eG.symm.subgroupMap P0).toEquiv
+      _ = 4 := apm_b01A04_card_cyclotomic_subgroups.1
+  have hcardH1 : Nat.card H1 = 12 := by
+    calc
+      Nat.card H1 = Nat.card P1 := by
+        symm
+        rw [show H1 = Subgroup.map (eG.symm : _ →* _) P1 by
+          exact Subgroup.comap_equiv_eq_map_symm eG P1]
+        exact Nat.card_congr (eG.symm.subgroupMap P1).toEquiv
+      _ = 12 := apm_b01A04_card_cyclotomic_subgroups.2.1
+  have hcardH2 : Nat.card H2 = 12 := by
+    calc
+      Nat.card H2 = Nat.card P2 := by
+        symm
+        rw [show H2 = Subgroup.map (eG.symm : _ →* _) P2 by
+          exact Subgroup.comap_equiv_eq_map_symm eG P2]
+        exact Nat.card_congr (eG.symm.subgroupMap P2).toEquiv
+      _ = 12 := apm_b01A04_card_cyclotomic_subgroups.2.2
+  have hfinC : Module.finrank ℚ C = 36 := by
+    rw [IsCyclotomicExtension.finrank (n := 63) C
+      (Polynomial.cyclotomic.irreducible_rat (by norm_num))]
+    rw [show 63 = 7 * 9 by norm_num, Nat.totient_mul (by norm_num)]
+    rw [Nat.totient_prime (by norm_num), show Nat.totient 9 = 6 by
+      rw [show 9 = 3 ^ 2 by norm_num, Nat.totient_prime_pow (by norm_num) (by norm_num)]
+      norm_num]
+  have hfinE : Module.finrank ℚ E0 = 9 := by
+    have ht := Module.finrank_mul_finrank ℚ E0 C
+    rw [IntermediateField.finrank_fixedField_eq_card H0, hcardH0, hfinC] at ht
+    omega
+  have hfinF1 : Module.finrank ℚ F1 = 3 := by
+    have ht := Module.finrank_mul_finrank ℚ F1 C
+    rw [IntermediateField.finrank_fixedField_eq_card H1, hcardH1, hfinC] at ht
+    omega
+  have hfinF2 : Module.finrank ℚ F2 = 3 := by
+    have ht := Module.finrank_mul_finrank ℚ F2 C
+    rw [IntermediateField.finrank_fixedField_eq_card H2, hcardH2, hfinC] at ht
+    omega
+  letI : FiniteDimensional ℚ E0 := inferInstance
+  letI : IsGalois ℚ E0 := IsGalois.of_fixedField_normal_subgroup H0
+  refine ⟨E0, inferInstance, inferInstance, inferInstance, K, L, ?_⟩
+  constructor
+  · infer_instance
+  constructor
+  · exact IsGalois.of_algEquiv (IntermediateField.restrict_algEquiv hF1)
+  constructor
+  · exact IsGalois.of_algEquiv (IntermediateField.restrict_algEquiv hF2)
+  constructor
+  · exact (IntermediateField.restrict_algEquiv hF1).toLinearEquiv.finrank_eq.symm.trans hfinF1
+  constructor
+  · exact (IntermediateField.restrict_algEquiv hF2).toLinearEquiv.finrank_eq.symm.trans hfinF2
+  constructor
+  · apply IntermediateField.lift_injective E0
+    dsimp only [K, L]
+    calc
+      IntermediateField.lift (IntermediateField.restrict hF1 ⊓
+          IntermediateField.restrict hF2) =
+          IntermediateField.lift (IntermediateField.restrict hF1) ⊓
+            IntermediateField.lift (IntermediateField.restrict hF2) :=
+        IntermediateField.lift_inf ℚ E0 _ _
+      _ = F1 ⊓ F2 := by rw [IntermediateField.lift_restrict, IntermediateField.lift_restrict]
+      _ = IntermediateField.lift (⊥ : IntermediateField ℚ E0) := by
+        rw [show IntermediateField.lift (⊥ : IntermediateField ℚ E0) =
+          (⊥ : IntermediateField ℚ C) from IntermediateField.lift_bot ℚ E0]
+        apply (IsGalois.intermediateFieldEquivSubgroup (F := ℚ) (E := C)).injective
+        dsimp only [F1, F2]
+        rw [(IsGalois.intermediateFieldEquivSubgroup (F := ℚ) (E := C)).map_inf]
+        simp only [IntermediateField.fixingSubgroup_fixedField,
+          IsGalois.intermediateFieldEquivSubgroup_apply,
+          IntermediateField.fixingSubgroup_bot]
+        change H1 ⊔ H2 = ⊤
+        change eG.comapSubgroup P1 ⊔ eG.comapSubgroup P2 = ⊤
+        rw [← eG.comapSubgroup.map_sup, apm_b01A04_cyclotomic_subgroup_sup,
+          eG.comapSubgroup.map_top]
+  · apply IntermediateField.lift_injective E0
+    dsimp only [K, L]
+    calc
+      IntermediateField.lift (IntermediateField.restrict hF1 ⊔
+          IntermediateField.restrict hF2) =
+          IntermediateField.lift (IntermediateField.restrict hF1) ⊔
+            IntermediateField.lift (IntermediateField.restrict hF2) :=
+        IntermediateField.lift_sup ℚ E0 _ _
+      _ = F1 ⊔ F2 := by rw [IntermediateField.lift_restrict, IntermediateField.lift_restrict]
+      _ = IntermediateField.lift (⊤ : IntermediateField ℚ E0) := by
+        rw [show IntermediateField.lift (⊤ : IntermediateField ℚ E0) = E0 from
+          IntermediateField.lift_top ℚ E0]
+        apply (IsGalois.intermediateFieldEquivSubgroup (F := ℚ) (E := C)).injective
+        dsimp only [F1, F2, E0]
+        rw [(IsGalois.intermediateFieldEquivSubgroup (F := ℚ) (E := C)).map_sup]
+        simp only [IntermediateField.fixingSubgroup_fixedField,
+          IsGalois.intermediateFieldEquivSubgroup_apply]
+        change H1 ⊓ H2 = H0
+        change eG.comapSubgroup P1 ⊓ eG.comapSubgroup P2 = eG.comapSubgroup P0
+        rw [← eG.comapSubgroup.map_inf, apm_b01A04_cyclotomic_subgroup_inf]
 
 /-- Why this unblocks `apm_b01a04`: this is the simultaneous restriction
 equivalence for a compositum. The intersection hypothesis gives surjectivity
