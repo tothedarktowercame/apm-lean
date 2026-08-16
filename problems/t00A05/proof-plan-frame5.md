@@ -237,3 +237,18 @@ strictly increasing order, split at the four canonical corner witnesses,
 apply the existing `x ≠ 0` and `y ≠ 0` arc-integral lemmas, and telescope their
 explicit `atan (±1)` endpoint values.  There is no longer an orientation
 dichotomy or an unproved local derivative bridge in that step.
+
+## Attempt-5 telescope boundary
+
+The endpoint algebra is now machine-derived rather than asserted.  The new
+`apm_t00a05_corner_time_ratios` proves, at the canonical BR/TR/TL/BL times,
+the exact successive ratios `-1, 1, -1, 1` required by the alternating
+arctangent primitives.  Each equality is pulled back through the positive
+gauge scaling from the recorded radial corner assignment.
+
+What remains is solely the interval partition: turn strict monotonicity of the
+rotated perimeter coordinate into the cyclic chronological order of those
+four canonical times, including the single interval split across `0`/`2π`,
+and establish the corresponding coordinate-nonvanishing hypothesis on each
+arc.  The existing two FTC lemmas and `Real.arctan_one` then make the final
+telescope algebraic.
