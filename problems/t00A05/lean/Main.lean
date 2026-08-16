@@ -331,6 +331,48 @@ lemma apm_t00a05_C2_radialized_closed {γ : ℝ → ℝ × ℝ × ℝ}
         ((γ (2 * Real.pi)).1, (γ (2 * Real.pi)).2.1) := by
   rw [apm_t00a05_C2_projection_closed hγ]
 
+lemma apm_t00a05_no_continuous_real_simple_loop {f : ℝ → ℝ} {T : ℝ}
+    (hT : 0 < T) (hf : Continuous f) (hinj : Set.InjOn f (Set.Ico 0 T))
+    (hclosed : f 0 = f T) : False := by
+  have hmono := hf.continuousOn.strictMonoOn_of_injOn_Ioo hT
+    (hinj.mono Set.Ioo_subset_Ico_self)
+  let m := T / 3
+  let n := 2 * T / 3
+  have hm : 0 < m := by dsimp [m]; positivity
+  have hmn : m < n := by dsimp [m, n]; linarith
+  have hn : n < T := by dsimp [n]; linarith
+  have hmT : m ∈ Set.Ioo (0 : ℝ) T := ⟨hm, hmn.trans hn⟩
+  have hnT : n ∈ Set.Ioo (0 : ℝ) T := ⟨hm.trans hmn, hn⟩
+  rcases hmono with hinc | hdec
+  · have h0m : f 0 ≤ f m := by
+      apply le_of_tendsto (x := nhdsWithin 0 (Set.Ioi 0))
+        (hf.continuousAt.tendsto.mono_left inf_le_left)
+      filter_upwards [self_mem_nhdsWithin,
+        (eventually_lt_nhds hm).filter_mono inf_le_left] with x hx hxm
+      exact (hinc ⟨hx, hxm.trans (hmn.trans hn)⟩ hmT hxm).le
+    have hnT' : f n ≤ f T := by
+      apply ge_of_tendsto (x := nhdsWithin T (Set.Iio T))
+        (hf.continuousAt.tendsto.mono_left inf_le_left)
+      filter_upwards [self_mem_nhdsWithin,
+        (eventually_gt_nhds hn).filter_mono inf_le_left] with x hx hnx
+      exact (hinc hnT ⟨(hm.trans hmn).trans hnx, hx⟩ hnx).le
+    have := h0m.trans_lt (hinc hmT hnT hmn) |>.trans_le hnT'
+    exact this.ne hclosed
+  · have h0m : f m ≤ f 0 := by
+      apply ge_of_tendsto (x := nhdsWithin 0 (Set.Ioi 0))
+        (hf.continuousAt.tendsto.mono_left inf_le_left)
+      filter_upwards [self_mem_nhdsWithin,
+        (eventually_lt_nhds hm).filter_mono inf_le_left] with x hx hxm
+      exact (hdec ⟨hx, hxm.trans (hmn.trans hn)⟩ hmT hxm).le
+    have hnT' : f T ≤ f n := by
+      apply le_of_tendsto (x := nhdsWithin T (Set.Iio T))
+        (hf.continuousAt.tendsto.mono_left inf_le_left)
+      filter_upwards [self_mem_nhdsWithin,
+        (eventually_gt_nhds hn).filter_mono inf_le_left] with x hx hnx
+      exact (hdec hnT ⟨(hm.trans hmn).trans hnx, hx⟩ hnx).le
+    have := hnT'.trans_lt (hdec hmT hnT hmn) |>.trans_le h0m
+    exact this.ne hclosed.symm
+
 lemma apm_t00a05_C2_exact_part_zero {γ : ℝ → ℝ × ℝ × ℝ}
     (hγ : apm_t00a05_IsC2 γ) :
     ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
