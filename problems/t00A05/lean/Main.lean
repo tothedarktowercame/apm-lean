@@ -1150,6 +1150,33 @@ lemma apm_t00a05_C2_radialized_surjOn {γ : ℝ → ℝ × ℝ × ℝ}
   · exact apm_t00a05_C2_radialized_injOn hγ
   · exact apm_t00a05_C2_radialized_closed hγ
 
+/-- Every point of the square sphere has one canonical preimage in the
+half-open parameter period.  Moving a possible endpoint witness from `2π` to
+`0` removes the sole duplication of the closed parametrization. -/
+lemma apm_t00a05_C2_radialized_unique_on_Ico
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {r : ℝ × ℝ} (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1) :
+    ∃! t : {t : ℝ // t ∈ Set.Ico (0 : ℝ) (2 * Real.pi)},
+      apm_t00a05_radialHomeomorph ((γ t.1).1, (γ t.1).2.1) = r := by
+  rcases apm_t00a05_C2_radialized_surjOn hγ hr with ⟨t, ht, htr⟩
+  let u : ℝ := if t = 2 * Real.pi then 0 else t
+  have hu : u ∈ Set.Ico (0 : ℝ) (2 * Real.pi) := by
+    dsimp [u]
+    split_ifs with heq
+    · exact ⟨le_rfl, Real.two_pi_pos⟩
+    · exact ⟨ht.1, lt_of_le_of_ne ht.2 heq⟩
+  have hur : apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1) = r := by
+    dsimp [u]
+    split_ifs with heq
+    · rw [apm_t00a05_C2_radialized_closed hγ, ← heq]
+      exact htr
+    · exact htr
+  refine ⟨⟨u, hu⟩, hur, ?_⟩
+  intro v hvr
+  apply Subtype.ext
+  exact (apm_t00a05_C2_radialized_injOn hγ hu v.2
+    (hur.trans hvr.symm)).symm
+
 lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
     (h : apm_t00a05_radialHomeomorph p = r) :
     (r.1 ≠ 0 → r.2 = 0 → p.2 = 0) ∧
