@@ -961,16 +961,16 @@ lemma apm_t00a05_C2_has_four_axis_crossings {γ : ℝ → ℝ × ℝ × ℝ}
     (hγ : apm_t00a05_IsC2 γ) :
     (∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
       apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = (1, 0) ∧
-      (γ t).2.1 = 0) ∧
+      0 < (γ t).1 ∧ (γ t).2.1 = 0) ∧
     (∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
       apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = (0, 1) ∧
-      (γ t).1 = 0) ∧
+      (γ t).1 = 0 ∧ 0 < (γ t).2.1) ∧
     (∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
       apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = (-1, 0) ∧
-      (γ t).2.1 = 0) ∧
+      (γ t).1 < 0 ∧ (γ t).2.1 = 0) ∧
     (∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
       apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = (0, -1) ∧
-      (γ t).1 = 0) := by
+      (γ t).1 = 0 ∧ (γ t).2.1 < 0) := by
   have hsurj := apm_t00a05_C2_radialized_surjOn hγ
   have hright : (1, 0) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
     rw [apm_t00a05_mem_supSphere_iff]
@@ -988,12 +988,39 @@ lemma apm_t00a05_C2_has_four_axis_crossings {γ : ℝ → ℝ × ℝ × ℝ}
   rcases hsurj htop with ⟨tt, htt, ht⟩
   rcases hsurj hleft with ⟨tl, htl, hl⟩
   rcases hsurj hbottom with ⟨tb, htb, hb⟩
-  refine ⟨⟨tr, htr, hr, ?_⟩, ⟨tt, htt, ht, ?_⟩,
-    ⟨tl, htl, hl, ?_⟩, ⟨tb, htb, hb, ?_⟩⟩
+  have scale_pos (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) (2 * Real.pi)) :=
+    apm_t00a05_radialHomeomorph_scale_pos
+      (apm_t00a05_C2_projection_mem_frontier hγ ht.1 ht.2)
+  refine ⟨⟨tr, htr, hr, ?_, ?_⟩, ⟨tt, htt, ht, ?_, ?_⟩,
+    ⟨tl, htl, hl, ?_, ?_⟩, ⟨tb, htb, hb, ?_, ?_⟩⟩
+  · change apm_t00a05_radialHomeomorph ((γ tr).1, (γ tr).2.1) = (1, 0) at hr
+    rw [apm_t00a05_radialHomeomorph_apply] at hr
+    have hx := congrArg Prod.fst hr
+    change (gauge apm_t00a05_region ((γ tr).1, (γ tr).2.1) /
+      gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ tr).1, (γ tr).2.1)) * (γ tr).1 = 1 at hx
+    nlinarith [scale_pos tr htr]
   · exact (apm_t00a05_radialHomeomorph_eq_axis hr).1 one_ne_zero rfl
   · exact (apm_t00a05_radialHomeomorph_eq_axis ht).2 one_ne_zero rfl
+  · change apm_t00a05_radialHomeomorph ((γ tt).1, (γ tt).2.1) = (0, 1) at ht
+    rw [apm_t00a05_radialHomeomorph_apply] at ht
+    have hy := congrArg Prod.snd ht
+    change (gauge apm_t00a05_region ((γ tt).1, (γ tt).2.1) /
+      gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ tt).1, (γ tt).2.1)) * (γ tt).2.1 = 1 at hy
+    nlinarith [scale_pos tt htt]
+  · change apm_t00a05_radialHomeomorph ((γ tl).1, (γ tl).2.1) = (-1, 0) at hl
+    rw [apm_t00a05_radialHomeomorph_apply] at hl
+    have hx := congrArg Prod.fst hl
+    change (gauge apm_t00a05_region ((γ tl).1, (γ tl).2.1) /
+      gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ tl).1, (γ tl).2.1)) * (γ tl).1 = -1 at hx
+    nlinarith [scale_pos tl htl]
   · exact (apm_t00a05_radialHomeomorph_eq_axis hl).1 (by norm_num) rfl
   · exact (apm_t00a05_radialHomeomorph_eq_axis hb).2 (by norm_num) rfl
+  · change apm_t00a05_radialHomeomorph ((γ tb).1, (γ tb).2.1) = (0, -1) at hb
+    rw [apm_t00a05_radialHomeomorph_apply] at hb
+    have hy := congrArg Prod.snd hb
+    change (gauge apm_t00a05_region ((γ tb).1, (γ tb).2.1) /
+      gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ tb).1, (γ tb).2.1)) * (γ tb).2.1 = -1 at hy
+    nlinarith [scale_pos tb htb]
 
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
