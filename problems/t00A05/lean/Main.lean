@@ -1607,7 +1607,7 @@ lemma apm_t00a05_simple_loop_chart_monotone {c : ℝ → ℝ × ℝ} {T : ℝ}
       c t ∈ Metric.sphere (0 : ℝ × ℝ) 1)
     (hinj : Set.InjOn c (Set.Ico (0 : ℝ) T))
     (hclosed : c 0 = c T) :
-    ∃ β : ℝ, 0 < β ∧ β ≤ 8 ∧
+    ∃ β : ℝ, 0 < β ∧ β ≤ 8 ∧ apm_t00a05_squareOfPerimeter β = c 0 ∧
       (StrictMonoOn
           (fun t => apm_t00a05_rot β (apm_t00a05_squarePerimeter (c t)))
           (Set.Ioo (0 : ℝ) T) ∨
@@ -1663,12 +1663,14 @@ lemma apm_t00a05_simple_loop_chart_monotone {c : ℝ → ℝ × ℝ} {T : ℝ}
       (apm_t00a05_rot_square_chart_injective
         (hsphere u ⟨hu.1.le, hu.2.le⟩)
         (hsphere v ⟨hv.1.le, hv.2.le⟩) huv)
-  exact ⟨β, hβ0, hβ8,
+  exact ⟨β, hβ0, hβ8, hdecode,
     hfcont.strictMonoOn_of_injOn_Ioo hT hfinj⟩
 
 lemma apm_t00a05_C2_radialized_chart_monotone
     {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
     ∃ β : ℝ, 0 < β ∧ β ≤ 8 ∧
+      apm_t00a05_squareOfPerimeter β =
+        apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1) ∧
       (StrictMonoOn
           (fun t => apm_t00a05_rot β
             (apm_t00a05_squarePerimeter
