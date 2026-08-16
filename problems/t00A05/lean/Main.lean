@@ -1177,4 +1177,7 @@ theorem apm_t00a05 :
   last orientation argument.
   -/
   intro γ hγ
+  rw [apm_t00a05_lineIntegral_eq_neg_angular hγ]
+  suffices ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_angularDensity γ t = 2 * Real.pi by linarith
   sorry
