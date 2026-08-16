@@ -62,8 +62,37 @@ def apm_t00a05_IsC2 (γ : ℝ → ℝ × ℝ × ℝ) : Prop :=
 noncomputable def apm_t00a05_level (q : ℝ × ℝ) : ℝ :=
   2 * q.1 ^ 2 + q.2 ^ 2 + Real.exp (q.2 - q.1) ^ 2
 
+def apm_t00a05_region : Set (ℝ × ℝ) :=
+  {q | apm_t00a05_level q ≤ 10}
+
+lemma apm_t00a05_level_convexOn :
+    ConvexOn ℝ Set.univ apm_t00a05_level := by
+  let px : ℝ × ℝ →ₗ[ℝ] ℝ := LinearMap.fst ℝ ℝ ℝ
+  let py : ℝ × ℝ →ₗ[ℝ] ℝ := LinearMap.snd ℝ ℝ ℝ
+  have hsq : ConvexOn ℝ Set.univ (fun x : ℝ ↦ x ^ 2) :=
+    (show Even 2 by decide).convexOn_pow
+  have hx := hsq.comp_linearMap px
+  have hy := hsq.comp_linearMap py
+  have he := convexOn_exp.comp_linearMap (2 • (py - px))
+  have hsum := (hx.smul (show (0 : ℝ) ≤ 2 by norm_num)).add hy |>.add he
+  convert hsum using 1
+  funext q
+  simp [apm_t00a05_level, px, py, Function.comp_apply, pow_two, ← Real.exp_add]
+  ring_nf
+
+lemma apm_t00a05_region_convex : Convex ℝ apm_t00a05_region := by
+  simpa [apm_t00a05_region] using apm_t00a05_level_convexOn.convex_le 10
+
 lemma apm_t00a05_level_origin : apm_t00a05_level (0, 0) < 10 := by
   norm_num [apm_t00a05_level]
+
+lemma apm_t00a05_origin_mem_region : (0, 0) ∈ apm_t00a05_region := by
+  exact apm_t00a05_level_origin.le
+
+lemma apm_t00a05_segment_origin_subset_region {q : ℝ × ℝ}
+    (hq : q ∈ apm_t00a05_region) :
+    segment ℝ (0, 0) q ⊆ apm_t00a05_region :=
+  apm_t00a05_region_convex.segment_subset apm_t00a05_origin_mem_region hq
 
 lemma apm_t00a05_C2_projected_level {γ : ℝ → ℝ × ℝ × ℝ}
     (hγ : apm_t00a05_IsC2 γ) {t : ℝ} (ht0 : 0 ≤ t)
