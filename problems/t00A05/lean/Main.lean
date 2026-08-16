@@ -339,10 +339,18 @@ lemma apm_t00a05_squareOfPerimeter_continuous :
 lemma apm_t00a05_squareOfPerimeter_mem_sphere {s : ℝ}
     (hs : s ∈ Set.Icc (0 : ℝ) 8) :
     apm_t00a05_squareOfPerimeter s ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+  rcases hs with ⟨hs0, hs8⟩
   rw [apm_t00a05_mem_supSphere_iff]
   unfold apm_t00a05_squareOfPerimeter
-  split_ifs with h2 h4 h6 <;> simp [Prod.fst, Prod.snd]
-  all_goals linarith
+  split_ifs with h2 h4 h6
+  · simp only [Prod.fst, Prod.snd, abs_neg, abs_one, max_eq_right_iff]
+    exact abs_le.mpr ⟨by linarith, by linarith⟩
+  · simp only [Prod.fst, Prod.snd, abs_one, max_eq_left_iff]
+    exact abs_le.mpr ⟨by linarith, by linarith⟩
+  · simp only [Prod.fst, Prod.snd, abs_one, max_eq_right_iff]
+    exact abs_le.mpr ⟨by linarith, by linarith⟩
+  · simp only [Prod.fst, Prod.snd, abs_neg, abs_one, max_eq_left_iff]
+    exact abs_le.mpr ⟨by linarith, by linarith⟩
 
 noncomputable def apm_t00a05_squareDecoder :
     Set.Icc (0 : ℝ) 8 → Metric.sphere (0 : ℝ × ℝ) 1 :=
@@ -388,7 +396,7 @@ lemma apm_t00a05_squareOfPerimeter_squarePerimeter {q : ℝ × ℝ}
 sphere, with its two endpoints identified at the lower-left corner. -/
 lemma apm_t00a05_squareDecoder_isQuotientMap :
     Topology.IsQuotientMap apm_t00a05_squareDecoder := by
-  apply Topology.IsQuotientMap.of_surjective_continuous
+  apply IsQuotientMap.of_surjective_continuous
   · intro q
     let s : Set.Icc (0 : ℝ) 8 :=
       ⟨apm_t00a05_squarePerimeter q,
@@ -722,6 +730,53 @@ lemma apm_t00a05_rot_square_chart_continuousWithinAt
     · rw [if_neg ht8]
   exact (apm_t00a05_rot_continuousAt huβ).continuousWithinAt.congr
     heq (heq u hu)
+
+/-- Removing one decoded point opens the square sphere into a real chart.
+Continuity is descended through the compact quotient presentation, rather
+than reproved separately at all four corners. -/
+lemma apm_t00a05_rot_square_chart_continuous {β : ℝ}
+    (hβ0 : 0 < β) (hβ8 : β ≤ 8) :
+    Continuous (fun q :
+      {q : Metric.sphere (0 : ℝ × ℝ) 1 |
+        q.1 ≠ apm_t00a05_squareOfPerimeter β} =>
+      apm_t00a05_rot β (apm_t00a05_squarePerimeter q.1.1)) := by
+  let b : Metric.sphere (0 : ℝ × ℝ) 1 :=
+    ⟨apm_t00a05_squareOfPerimeter β,
+      apm_t00a05_squareOfPerimeter_mem_sphere ⟨hβ0.le, hβ8⟩⟩
+  let S : Set (Metric.sphere (0 : ℝ × ℝ) 1) :=
+    {q | q.1 ≠ apm_t00a05_squareOfPerimeter β}
+  let D : Set (Set.Icc (0 : ℝ) 8) := apm_t00a05_squareDecoder ⁻¹' S
+  let f := S.restrictPreimage apm_t00a05_squareDecoder
+  let g : S → ℝ := fun q =>
+    apm_t00a05_rot β (apm_t00a05_squarePerimeter q.1.1)
+  have hSopen : IsOpen S := by
+    have hSb : S = {b}ᶜ := by
+      ext q
+      simp [S, b, Subtype.ext_iff]
+    rw [hSb]
+    exact isOpen_compl_singleton
+  have hquot : Topology.IsQuotientMap f :=
+    apm_t00a05_squareDecoder_isQuotientMap.restrictPreimage_isOpen
+      hSopen
+  have hK : ContinuousOn
+      (fun u : ℝ => apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter (apm_t00a05_squareOfPerimeter u)))
+      (Set.Icc (0 : ℝ) 8 \ {β}) := by
+    intro u hu
+    exact (apm_t00a05_rot_square_chart_continuousWithinAt hβ0 hβ8 hu.1
+      (by simpa using hu.2)).mono Set.diff_subset
+  have hj : Continuous (fun u : D =>
+      (⟨u.1.1, ⟨u.1.2, by
+        intro huβ
+        apply u.2
+        change apm_t00a05_squareOfPerimeter u.1.1 =
+          apm_t00a05_squareOfPerimeter β
+        rw [huβ]⟩⟩ : ↥(Set.Icc (0 : ℝ) 8 \ {β}))) := by
+    fun_prop
+  have hcomp : Continuous (g ∘ f) := by
+    have := hK.restrict.comp hj
+    simpa [Function.comp_def, f, g, D, S, b, apm_t00a05_squareDecoder] using this
+  simpa [g, S] using hquot.continuous_iff.mpr hcomp
 
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
