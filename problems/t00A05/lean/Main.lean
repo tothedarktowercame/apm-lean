@@ -1379,6 +1379,32 @@ lemma apm_t00a05_cornerTimes_pairwise_ne
   all_goals
     apply apm_t00a05_radializedTime_ne_of_ne hγ <;> norm_num
 
+lemma apm_t00a05_cornerTimes_perimeter_coordinates
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph
+          ((γ (apm_t00a05_cornerBRTime hγ).1).1,
+            (γ (apm_t00a05_cornerBRTime hγ).1).2.1)) = 2 ∧
+    apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph
+          ((γ (apm_t00a05_cornerTRTime hγ).1).1,
+            (γ (apm_t00a05_cornerTRTime hγ).1).2.1)) = 4 ∧
+    apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph
+          ((γ (apm_t00a05_cornerTLTime hγ).1).1,
+            (γ (apm_t00a05_cornerTLTime hγ).1).2.1)) = 6 ∧
+    apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph
+          ((γ (apm_t00a05_cornerBLTime hγ).1).1,
+            (γ (apm_t00a05_cornerBLTime hγ).1).2.1)) = 0 := by
+  unfold apm_t00a05_cornerBRTime apm_t00a05_cornerTRTime
+    apm_t00a05_cornerTLTime apm_t00a05_cornerBLTime
+  rw [apm_t00a05_radializedTime_perimeter,
+    apm_t00a05_radializedTime_perimeter,
+    apm_t00a05_radializedTime_perimeter,
+    apm_t00a05_radializedTime_perimeter]
+  norm_num [apm_t00a05_squarePerimeter]
+
 lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
     (h : apm_t00a05_radialHomeomorph p = r) :
     (r.1 ≠ 0 → r.2 = 0 → p.2 = 0) ∧
