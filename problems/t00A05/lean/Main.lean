@@ -297,6 +297,19 @@ lemma apm_t00a05_squarePerimeter_left {q : ℝ × ℝ}
     apm_t00a05_squarePerimeter q = 7 - q.2 := by
   simp [apm_t00a05_squarePerimeter, hyneg, hx, hy]
 
+lemma apm_t00a05_squarePerimeter_mem_Icc {q : ℝ × ℝ}
+    (hq : q ∈ Metric.sphere 0 1) :
+    apm_t00a05_squarePerimeter q ∈ Set.Icc (0 : ℝ) 8 := by
+  rcases apm_t00a05_supSphere_coordinate_bounds hq with ⟨hx0, hx1, hy0, hy1⟩
+  unfold apm_t00a05_squarePerimeter
+  split_ifs <;> constructor <;> linarith
+
+noncomputable def apm_t00a05_squareOfPerimeter (s : ℝ) : ℝ × ℝ :=
+  if s ≤ 2 then (s - 1, -1)
+  else if s ≤ 4 then (1, s - 3)
+  else if s ≤ 6 then (5 - s, 1)
+  else (-1, 7 - s)
+
 lemma apm_t00a05_segment_origin_subset_region {q : ℝ × ℝ}
     (hq : q ∈ apm_t00a05_region) :
     segment ℝ (0, 0) q ⊆ apm_t00a05_region :=
