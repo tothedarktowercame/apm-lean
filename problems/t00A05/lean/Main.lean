@@ -1635,6 +1635,25 @@ lemma apm_t00a05_simple_loop_chart_monotone {c : ℝ → ℝ × ℝ} {T : ℝ}
   exact ⟨β, hβ0, hβ8,
     hfcont.strictMonoOn_of_injOn_Ioo hT hfinj⟩
 
+lemma apm_t00a05_C2_radialized_chart_monotone
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    ∃ β : ℝ, 0 < β ∧ β ≤ 8 ∧
+      (StrictMonoOn
+          (fun t => apm_t00a05_rot β
+            (apm_t00a05_squarePerimeter
+              (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+          (Set.Ioo (0 : ℝ) (2 * Real.pi)) ∨
+       StrictAntiOn
+          (fun t => apm_t00a05_rot β
+            (apm_t00a05_squarePerimeter
+              (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+          (Set.Ioo (0 : ℝ) (2 * Real.pi))) := by
+  exact apm_t00a05_simple_loop_chart_monotone Real.two_pi_pos
+    (apm_t00a05_C2_radialized_continuous hγ)
+    (fun _ ht => apm_t00a05_C2_radialized_mem_sphere hγ ht.1 ht.2)
+    (apm_t00a05_C2_radialized_injOn hγ)
+    (apm_t00a05_C2_radialized_closed hγ)
+
 /-- The direct square-angle composition suggested by the geometric picture is
 periodic at the parameter endpoints.  Consequently it is not itself the
 unwrapped lift: a seam correction (depending on the traversal direction) is
