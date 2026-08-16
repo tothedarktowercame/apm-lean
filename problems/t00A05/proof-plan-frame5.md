@@ -197,3 +197,25 @@ lands, the antitone branch contradicts
 can use FTC on the lift itself (or equivalently the four existing arc lemmas)
 to obtain its proved `2π` endpoint change.  This route eliminates the separate
 manual corner-sort/telescope step from the original plan.
+
+## Attempt-3 boundary: pointwise chart identities are complete
+
+The radial part of that analytic lemma is now formalized.  Positive gauge
+scaling preserves both coordinate ratios, and on each of the four open square
+edges the raw square angle of the radialized curve is proved equal to the
+corresponding original-curve primitive plus its explicit branch constant:
+
+- right: `atan (y/x) + 2π`;
+- left: `atan (y/x) + 3π`;
+- bottom: `-atan (x/y) + 3π/2`;
+- top: `-atan (x/y) + 5π/2`.
+
+The remaining brick is no longer an algebraic identity.  It is the
+neighborhood upgrade needed by `deriv`: continuity of the radialized curve,
+the strict open-edge inequalities, sphere membership on the period, and
+avoidance of the rotated cut must be combined to show that one of these four
+pointwise identities holds *eventually at* each interior non-corner time, with
+the seam-correction branch fixed.  `Filter.EventuallyEq.deriv_eq` then turns
+the existing primitive derivative lemmas into the desired lift derivative.
+This is the sharp current boundary; no ratio, branch-constant, or radial-scale
+algebra remains behind it.
