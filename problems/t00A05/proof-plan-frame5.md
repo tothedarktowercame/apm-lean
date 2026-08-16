@@ -252,3 +252,21 @@ four canonical times, including the single interval split across `0`/`2π`,
 and establish the corresponding coordinate-nonvanishing hypothesis on each
 arc.  The existing two FTC lemmas and `Real.arctan_one` then make the final
 telescope algebraic.
+
+## Attempt-6 partition infrastructure
+
+Three missing structural facts now compile:
+
+1. strict perimeter ranges `(0,2)`, `(2,4)`, `(4,6)`, `(6,8)` force the
+   alternating original coordinates `y,x,y,x` to be nonzero, with the result
+   transported through positive radial scaling;
+2. comparison of two rotated corner coordinates implies comparison of their
+   canonical times whenever neither is the temporal cut;
+3. a canonical point has time zero exactly when its perimeter coordinate is
+   the selected cut (including the `β = 8` representation of perimeter seam
+   coordinate `0`).
+
+The remaining proof is now the finite four-way cut-location split
+(`β` between successive corner coordinates, with equality handled by item 3),
+followed by interval-integral additivity and the already-proved endpoint
+ratios.  No geometric nonvanishing or zero-time edge case remains implicit.
