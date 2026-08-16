@@ -571,6 +571,70 @@ lemma apm_t00a05_C2_exact_part_zero {γ : ℝ → ℝ × ℝ × ℝ}
       rw [← hzend]
       ring
 
+noncomputable def apm_t00a05_angularDensity
+    (γ : ℝ → ℝ × ℝ × ℝ) (t : ℝ) : ℝ :=
+  ((γ t).1 * deriv (fun s ↦ (γ s).2.1) t -
+    (γ t).2.1 * deriv (fun s ↦ (γ s).1) t) /
+    ((γ t).1 ^ 2 + (γ t).2.1 ^ 2)
+
+lemma apm_t00a05_angularDensity_continuousOn {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    ContinuousOn (apm_t00a05_angularDensity γ)
+      (Set.Icc (0 : ℝ) (2 * Real.pi)) := by
+  have hx : ContDiff ℝ 1 (fun t => (γ t).1) := hγ.1.fst
+  have hy : ContDiff ℝ 1 (fun t => (γ t).2.1) := hγ.1.snd.fst
+  apply ContinuousOn.div
+  · exact ((hx.continuous.mul hy.continuous_deriv_one).sub
+      (hy.continuous.mul hx.continuous_deriv_one)).continuousOn
+  · exact ((hx.continuous.pow 2).add (hy.continuous.pow 2)).continuousOn
+  · intro t ht hzero
+    have hsquares : (γ t).1 = 0 ∧ (γ t).2.1 = 0 := by
+      have hx2 : 0 ≤ (γ t).1 ^ 2 := sq_nonneg _
+      have hy2 : 0 ≤ (γ t).2.1 ^ 2 := sq_nonneg _
+      constructor <;> nlinarith
+    rcases apm_t00a05_C2_avoids_axis hγ ht.1 ht.2 with hx0 | hy0
+    · exact hx0 hsquares.1
+    · exact hy0 hsquares.2
+
+/-- The frozen line-integral encoding reduces exactly to the negative angular
+density: its `z` contribution is the already-proved exact term. -/
+lemma apm_t00a05_lineIntegral_eq_neg_angular {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    apm_t00a05_lineIntegral γ 0 (2 * Real.pi) =
+      -(∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+        apm_t00a05_angularDensity γ t) := by
+  have hAint : IntegrableOn (apm_t00a05_angularDensity γ)
+      (Set.Icc (0 : ℝ) (2 * Real.pi)) :=
+    (apm_t00a05_angularDensity_continuousOn hγ).integrableOn_Icc
+  let zterm : ℝ → ℝ := fun t =>
+    Real.cos ((γ t).2.2) * deriv (fun s ↦ (γ s).2.2) t
+  have hz : ContDiff ℝ 1 (fun t => (γ t).2.2) := hγ.1.snd.snd
+  have hzint : IntegrableOn zterm (Set.Icc (0 : ℝ) (2 * Real.pi)) :=
+    ((Real.continuous_cos.comp hz.continuous).mul
+      hz.continuous_deriv_one).continuousOn.integrableOn_Icc
+  unfold apm_t00a05_lineIntegral
+  calc
+    (∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+        let v := apm_t00a05_omega (γ t)
+        v.1 * deriv (fun s => (γ s).1) t +
+          v.2.1 * deriv (fun s => (γ s).2.1) t +
+          v.2.2 * deriv (fun s => (γ s).2.2) t) =
+      ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+        -apm_t00a05_angularDensity γ t + zterm t := by
+          apply integral_congr_ae
+          filter_upwards with t
+          simp only [apm_t00a05_omega, apm_t00a05_angularDensity,
+            zterm, Prod.fst, Prod.snd]
+          ring
+    _ = (∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+          -apm_t00a05_angularDensity γ t) +
+        ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi), zterm t := by
+          exact integral_add hAint.neg hzint
+    _ = -(∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+          apm_t00a05_angularDensity γ t) := by
+          rw [integral_neg, apm_t00a05_C2_exact_part_zero hγ]
+          simp [zterm]
+
 lemma apm_t00a05_angle_primitive_deriv {γ : ℝ → ℝ × ℝ × ℝ}
     (hγ : ContDiff ℝ 1 γ) {t : ℝ} (hx0 : (γ t).1 ≠ 0) :
     deriv (fun s ↦ Real.arctan ((γ s).2.1 / (γ s).1)) t =
