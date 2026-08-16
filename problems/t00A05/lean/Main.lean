@@ -1358,6 +1358,22 @@ lemma apm_t00a05_simple_loop_chart_monotone {c : ℝ → ℝ × ℝ} {T : ℝ}
   exact ⟨β, hβ0, hβ8,
     hfcont.strictMonoOn_of_injOn_Ioo hT hfinj⟩
 
+/-- The direct square-angle composition suggested by the geometric picture is
+periodic at the parameter endpoints.  Consequently it is not itself the
+unwrapped lift: a seam correction (depending on the traversal direction) is
+mathematically necessary before an endpoint-change argument can yield `±2π`. -/
+lemma apm_t00a05_direct_squareAngle_endpoint_change_zero
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph
+            ((γ (2 * Real.pi)).1, (γ (2 * Real.pi)).2.1))) -
+      apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))) = 0 := by
+  rw [← apm_t00a05_C2_radialized_closed hγ]
+  ring
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
