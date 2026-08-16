@@ -285,3 +285,21 @@ The exact next failing case is `0 < β ≤ 2`, whose cyclic order is
 middle cut-location cases are its mechanical rotations.  Once those three
 ordering lemmas land, the only remaining code is the four corresponding
 interval-additivity/telescope branches.
+
+## Attempt-8 boundary: all cut orders complete
+
+All four cut-location cases now compile, including every equality-at-zero
+case.  The chronological cycles are:
+
+- `0 < β ≤ 2`: BR, TR, TL, BL;
+- `2 < β ≤ 4`: TR, TL, BL, BR;
+- `4 < β ≤ 6`: TL, BL, BR, TR;
+- `6 < β ≤ 8`: BL, BR, TR, TL.
+
+The exact remaining Lean obligation is to lift each adjacent time inequality
+to a closed perimeter-range statement for every intermediate time.  For
+noninitial arcs this is strict monotonicity plus the same-side `rot` inverse;
+for the initial arc its lower bound is `rot_mem_Icc` because the first corner
+has rotated coordinate zero.  Feeding those range statements to the compiled
+closed-range nonvanishing lemma supplies the FTC hypotheses.  After that,
+interval additivity and the endpoint ratios are the only remaining lines.
