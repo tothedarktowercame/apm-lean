@@ -2686,6 +2686,68 @@ lemma apm_t00a05_corner_order_of_cut_le_two
     linarith
   exact ⟨hBRTR, hTRTL, hTLBL⟩
 
+lemma apm_t00a05_corner_order_of_two_lt_cut_le_four
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β : ℝ} (hβ2 : 2 < β) (hβ4 : β ≤ 4)
+    (hdecode : apm_t00a05_squareOfPerimeter β =
+      apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
+    (hmono : StrictMonoOn
+      (fun t => apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+      (Set.Ioo (0 : ℝ) (2 * Real.pi))) :
+    let tTR := (apm_t00a05_cornerTRTime hγ).1
+    let tTL := (apm_t00a05_cornerTLTime hγ).1
+    let tBL := (apm_t00a05_cornerBLTime hγ).1
+    let tBR := (apm_t00a05_cornerBRTime hγ).1
+    tTR ≤ tTL ∧ tTL < tBL ∧ tBL < tBR := by
+  dsimp only
+  have hβIcc : β ∈ Set.Icc (0 : ℝ) 8 := ⟨by linarith, by linarith⟩
+  have nonzero (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+      (hp : apm_t00a05_squarePerimeter r ≠ β) :
+      (apm_t00a05_radializedTime hγ r hr).1 ≠ 0 := by
+    intro hz
+    have heq := (apm_t00a05_radializedTime_eq_zero_iff_perimeter_eq_cut
+      hγ hβIcc hdecode hr).mp hz
+    simp [show β ≠ 8 by linarith] at heq
+    exact hp heq
+  have hTL0 := nonzero (-1, 1) apm_t00a05_cornerTL_mem_sphere (by
+    rw [apm_t00a05_squarePerimeter_corners.2.2.2]; linarith)
+  have hBL0 := nonzero (-1, -1) apm_t00a05_cornerBL_mem_sphere (by
+    rw [apm_t00a05_squarePerimeter_corners.1]; linarith)
+  have hBR0 := nonzero (1, -1) apm_t00a05_cornerBR_mem_sphere (by
+    rw [apm_t00a05_squarePerimeter_corners.2.1]; linarith)
+  have hTRTL : (apm_t00a05_cornerTRTime hγ).1 ≤
+      (apm_t00a05_cornerTLTime hγ).1 := by
+    by_cases hTR0 : (apm_t00a05_cornerTRTime hγ).1 = 0
+    · rw [hTR0]; exact (apm_t00a05_cornerTLTime hγ).2.1
+    · exact (apm_t00a05_radializedTime_lt_of_rot_perimeter_lt hγ hmono
+        apm_t00a05_cornerTR_mem_sphere apm_t00a05_cornerTL_mem_sphere
+        hTR0 hTL0 (by
+          rw [apm_t00a05_squarePerimeter_corners.2.2.1,
+            apm_t00a05_squarePerimeter_corners.2.2.2]
+          simp [apm_t00a05_rot, show ¬(4 : ℝ) < β by linarith,
+            show ¬(6 : ℝ) < β by linarith]
+          norm_num)) |>.le
+  have hTLBL : (apm_t00a05_cornerTLTime hγ).1 <
+      (apm_t00a05_cornerBLTime hγ).1 := by
+    apply apm_t00a05_radializedTime_lt_of_rot_perimeter_lt hγ hmono
+      apm_t00a05_cornerTL_mem_sphere apm_t00a05_cornerBL_mem_sphere hTL0 hBL0
+    rw [apm_t00a05_squarePerimeter_corners.2.2.2,
+      apm_t00a05_squarePerimeter_corners.1]
+    simp [apm_t00a05_rot, show ¬(6 : ℝ) < β by linarith,
+      show (0 : ℝ) < β by linarith]
+    linarith
+  have hBLBR : (apm_t00a05_cornerBLTime hγ).1 <
+      (apm_t00a05_cornerBRTime hγ).1 := by
+    apply apm_t00a05_radializedTime_lt_of_rot_perimeter_lt hγ hmono
+      apm_t00a05_cornerBL_mem_sphere apm_t00a05_cornerBR_mem_sphere hBL0 hBR0
+    rw [apm_t00a05_squarePerimeter_corners.1,
+      apm_t00a05_squarePerimeter_corners.2.1]
+    simp [apm_t00a05_rot, show (0 : ℝ) < β by linarith,
+      show (2 : ℝ) < β by linarith]
+  exact ⟨hTRTL, hTLBL, hBLBR⟩
+
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
 ordering input for the four FTC arcs. -/
