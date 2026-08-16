@@ -910,6 +910,73 @@ lemma apm_t00a05_C2_radialized_surjOn {γ : ℝ → ℝ × ℝ × ℝ}
   · exact apm_t00a05_C2_radialized_injOn hγ
   · exact apm_t00a05_C2_radialized_closed hγ
 
+lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
+    (h : apm_t00a05_radialHomeomorph p = r) :
+    (r.1 ≠ 0 → r.2 = 0 → p.2 = 0) ∧
+      (r.2 ≠ 0 → r.1 = 0 → p.1 = 0) := by
+  rw [apm_t00a05_radialHomeomorph_apply] at h
+  let a := gauge apm_t00a05_region p /
+    gauge (Metric.ball (0 : ℝ × ℝ) 1) p
+  have hx := congrArg Prod.fst h
+  have hy := congrArg Prod.snd h
+  change a * p.1 = r.1 at hx
+  change a * p.2 = r.2 at hy
+  constructor
+  · intro hrx hry
+    have ha : a ≠ 0 := by
+      intro ha
+      rw [ha, zero_mul] at hx
+      exact hrx hx.symm
+    rw [hry] at hy
+    exact (mul_eq_zero.mp hy).resolve_left ha
+  · intro hry hrx
+    have ha : a ≠ 0 := by
+      intro ha
+      rw [ha, zero_mul] at hy
+      exact hry hy.symm
+    rw [hrx] at hx
+    exact (mul_eq_zero.mp hx).resolve_left ha
+
+/-- Surjectivity of the radialized loop supplies all four half-axis crossing
+parameters of the original projected curve. -/
+lemma apm_t00a05_C2_has_four_axis_crossings {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    (∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = (1, 0) ∧
+      (γ t).2.1 = 0) ∧
+    (∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = (0, 1) ∧
+      (γ t).1 = 0) ∧
+    (∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = (-1, 0) ∧
+      (γ t).2.1 = 0) ∧
+    (∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = (0, -1) ∧
+      (γ t).1 = 0) := by
+  have hsurj := apm_t00a05_C2_radialized_surjOn hγ
+  have hright : (1, 0) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+    rw [apm_t00a05_mem_supSphere_iff]
+    norm_num
+  have htop : (0, 1) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+    rw [apm_t00a05_mem_supSphere_iff]
+    norm_num
+  have hleft : (-1, 0) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+    rw [apm_t00a05_mem_supSphere_iff]
+    norm_num
+  have hbottom : (0, -1) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+    rw [apm_t00a05_mem_supSphere_iff]
+    norm_num
+  rcases hsurj hright with ⟨tr, htr, hr⟩
+  rcases hsurj htop with ⟨tt, htt, ht⟩
+  rcases hsurj hleft with ⟨tl, htl, hl⟩
+  rcases hsurj hbottom with ⟨tb, htb, hb⟩
+  refine ⟨⟨tr, htr, hr, ?_⟩, ⟨tt, htt, ht, ?_⟩,
+    ⟨tl, htl, hl, ?_⟩, ⟨tb, htb, hb, ?_⟩⟩
+  · exact (apm_t00a05_radialHomeomorph_eq_axis hr).1 one_ne_zero rfl
+  · exact (apm_t00a05_radialHomeomorph_eq_axis ht).2 one_ne_zero rfl
+  · exact (apm_t00a05_radialHomeomorph_eq_axis hl).1 (by norm_num) rfl
+  · exact (apm_t00a05_radialHomeomorph_eq_axis hb).2 (by norm_num) rfl
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
