@@ -633,7 +633,9 @@ lemma apm_t00a05_squarePerimeter_squareOfPerimeter {s : ℝ}
       unfold apm_t00a05_squareOfPerimeter
       split_ifs with h1 h2 h3
       all_goals simp only [apm_t00a05_squarePerimeter]
-      all_goals split_ifs <;> linarith
+      all_goals split_ifs <;> first
+        | linarith
+        | exact absurd (by linarith : s = 8) h8
     rw [hres, if_neg h8]
 
 theorem apm_t00a05 :
