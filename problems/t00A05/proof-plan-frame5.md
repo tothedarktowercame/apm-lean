@@ -219,3 +219,21 @@ the seam-correction branch fixed.  `Filter.EventuallyEq.deriv_eq` then turns
 the existing primitive derivative lemmas into the desired lift derivative.
 This is the sharp current boundary; no ratio, branch-constant, or radial-scale
 algebra remains behind it.
+
+## Attempt-4 boundary: orientation is now formally resolved
+
+The neighborhood upgrade is complete on all four open edges.  Each local
+identity now yields the actual derivative equality by
+`Filter.EventuallyEq.deriv_eq`, and hence there is a machine-checked interior
+point where the raw radial square angle has positive derivative.  A second
+local argument proves that the seam-corrected lift has the same derivative at
+that point.  This excludes the strictly antitone branch using
+`AntitoneOn.derivWithin_nonpos`; consequently
+`apm_t00a05_C2_radialized_chart_strictMono` now proves the positive traversal
+orientation outright.
+
+The sole remaining task is the global FTC assembly.  In the now-proved
+strictly increasing order, split at the four canonical corner witnesses,
+apply the existing `x ≠ 0` and `y ≠ 0` arc-integral lemmas, and telescope their
+explicit `atan (±1)` endpoint values.  There is no longer an orientation
+dichotomy or an unproved local derivative bridge in that step.
