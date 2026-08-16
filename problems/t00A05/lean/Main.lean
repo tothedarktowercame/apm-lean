@@ -1785,6 +1785,26 @@ lemma apm_t00a05_radialHomeomorph_scale_pos {p : ℝ × ℝ}
         (Metric.isOpen_ball.mem_nhds (Metric.mem_ball_self zero_lt_one)))
       (NormedSpace.isVonNBounded_ball ℝ (ℝ × ℝ) 1)).2 hpne
 
+lemma apm_t00a05_radialHomeomorph_ratio_yx {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region) (hx : p.1 ≠ 0) :
+    (apm_t00a05_radialHomeomorph p).2 /
+        (apm_t00a05_radialHomeomorph p).1 = p.2 / p.1 := by
+  have ha := (apm_t00a05_radialHomeomorph_scale_pos hp).ne'
+  rw [apm_t00a05_radialHomeomorph_apply]
+  change ((gauge apm_t00a05_region p / gauge (Metric.ball 0 1) p) * p.2) /
+      ((gauge apm_t00a05_region p / gauge (Metric.ball 0 1) p) * p.1) = p.2 / p.1
+  exact mul_div_mul_left _ _ ha
+
+lemma apm_t00a05_radialHomeomorph_ratio_xy {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region) (hy : p.2 ≠ 0) :
+    (apm_t00a05_radialHomeomorph p).1 /
+        (apm_t00a05_radialHomeomorph p).2 = p.1 / p.2 := by
+  have ha := (apm_t00a05_radialHomeomorph_scale_pos hp).ne'
+  rw [apm_t00a05_radialHomeomorph_apply]
+  change ((gauge apm_t00a05_region p / gauge (Metric.ball 0 1) p) * p.1) /
+      ((gauge apm_t00a05_region p / gauge (Metric.ball 0 1) p) * p.2) = p.1 / p.2
+  exact mul_div_mul_left _ _ ha
+
 /-- Positive radial rescaling transfers both coordinate signs from a square
 sphere point to its canonical preimage on the original level-set curve. -/
 lemma apm_t00a05_radializedTime_coordinate_signs
