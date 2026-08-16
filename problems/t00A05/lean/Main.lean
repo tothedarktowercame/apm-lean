@@ -475,6 +475,64 @@ lemma apm_t00a05_squareAngle_strictMonoOn :
     (show IsLeast (Set.Icc (6 : ℝ) 8) 6 from
       ⟨⟨le_rfl, by norm_num⟩, fun _ h => h.1⟩)
 
+lemma apm_t00a05_squareAngleFrom_strictMonoOn {β : ℝ}
+    (hβ0 : 0 ≤ β) (hβ8 : β ≤ 8) :
+    StrictMonoOn (apm_t00a05_squareAngleFrom β) (Set.Icc (0 : ℝ) 8) := by
+  let c := 8 - β
+  have hc0 : 0 ≤ c := by dsimp [c]; linarith
+  have hc8 : c ≤ 8 := by dsimp [c]; linarith
+  have hleft : StrictMonoOn (apm_t00a05_squareAngleFrom β)
+      (Set.Icc (0 : ℝ) c) := by
+    intro x hx y hy hxy
+    rcases hx with ⟨hx0, hxc⟩
+    rcases hy with ⟨hy0, hyc⟩
+    dsimp [c] at hxc hyc
+    simp only [apm_t00a05_squareAngleFrom, if_pos hxc, if_pos hyc]
+    apply apm_t00a05_squareAngle_strictMonoOn
+    · constructor <;> linarith
+    · constructor <;> linarith
+    · linarith
+  have hright_formula {u : ℝ} (hu : u ∈ Set.Icc c 8) :
+      apm_t00a05_squareAngleFrom β u =
+        apm_t00a05_squareAngle (u + β - 8) + 2 * Real.pi := by
+    by_cases huc : u = c
+    · subst u
+      dsimp [c]
+      simp only [apm_t00a05_squareAngleFrom, if_pos le_rfl]
+      have hend := apm_t00a05_squareAngle_endpoints
+      convert (show apm_t00a05_squareAngle 8 =
+          apm_t00a05_squareAngle 0 + 2 * Real.pi by linarith) using 1 <;> ring
+    · have hgt : 8 - β < u := by
+        dsimp [c] at hu huc
+        exact lt_of_le_of_ne hu.1 (Ne.symm huc)
+      simp [apm_t00a05_squareAngleFrom, not_le.mpr hgt]
+  have hright : StrictMonoOn (apm_t00a05_squareAngleFrom β)
+      (Set.Icc c 8) := by
+    intro x hx y hy hxy
+    rw [hright_formula hx, hright_formula hy]
+    rcases hx with ⟨hcx, hx8'⟩
+    rcases hy with ⟨hcy, hy8'⟩
+    dsimp [c] at hcx hcy
+    have hxm : 0 ≤ x + β - 8 := by linarith
+    have hym : 0 ≤ y + β - 8 := by linarith
+    have hx8 : x + β - 8 ≤ 8 := by linarith
+    have hy8 : y + β - 8 ≤ 8 := by linarith
+    have := apm_t00a05_squareAngle_strictMonoOn
+      ⟨hxm, hx8⟩ ⟨hym, hy8⟩ (by linarith)
+    linarith
+  rw [show Set.Icc (0 : ℝ) 8 = Set.Icc 0 c ∪ Set.Icc c 8 by
+    ext x; simp only [Set.mem_Icc, Set.mem_union]; constructor
+    · intro hx
+      by_cases h : x ≤ c
+      · exact Or.inl ⟨hx.1, h⟩
+      · exact Or.inr ⟨le_of_not_ge h, hx.2⟩
+    · rintro (hx | hx) <;> constructor <;> linarith]
+  exact hleft.union hright
+    (show IsGreatest (Set.Icc (0 : ℝ) c) c from
+      ⟨⟨hc0, le_rfl⟩, fun _ h => h.2⟩)
+    (show IsLeast (Set.Icc c 8) c from
+      ⟨⟨le_rfl, hc8⟩, fun _ h => h.1⟩)
+
 /-- The four affine sides of the square perimeter decoder glue continuously
 at the three corners. -/
 lemma apm_t00a05_squareOfPerimeter_continuous :
