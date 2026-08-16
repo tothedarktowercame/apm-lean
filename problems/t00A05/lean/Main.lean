@@ -3167,16 +3167,15 @@ theorem apm_t00a05 :
   missed point would produce an impossible continuous simple real loop.  This
   proves surjectivity and supplies four distinct half-axis crossings.
 
-  The punctured chart's strict-monotonicity alternative is now proved, as are
-  positive radial scaling, signed axis/corner crossings, the two per-arc FTC
-  formulas, and exact reduction of the encoded line integral to the negative
-  angular-density integral.  What remains is one orientation bridge: use the
-  positive signed-area hypothesis to exclude the strictly antitone chart
-  alternative and order the four corner witnesses cyclically.  The proved FTC
-  formulas then telescope at ratios `±1` to `2π`, while
-  `apm_t00a05_C2_exact_part_zero` removes the `cos z dz` term.  At this pin there
-  is no library winding-number/change-of-variables theorem that packages that
-  last orientation argument.
+  The punctured chart's increasing orientation is now proved from the positive
+  angular-density witness.  All four possible cut locations have proved cyclic
+  corner orders, and the perimeter-coordinate range is proved both between
+  interior corners and across the two seam pieces.  The remaining formal step
+  is the finite four-case assembly: specialize those range lemmas to obtain the
+  alternating coordinate-nonvanishing hypotheses, apply the two proved per-arc
+  FTC formulas, use interval-integral additivity over the five pieces, and
+  telescope the corner endpoint ratios `±1` with `Real.arctan_one` to `2π`.
+  `apm_t00a05_C2_exact_part_zero` already removes the `cos z dz` term.
   -/
   intro γ hγ
   rw [apm_t00a05_lineIntegral_eq_neg_angular hγ]
