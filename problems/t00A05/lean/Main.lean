@@ -638,6 +638,15 @@ lemma apm_t00a05_squarePerimeter_squareOfPerimeter {s : ℝ}
         | exact absurd (by linarith : s = 8) h8
     rw [hres, if_neg h8]
 
+/-- The seam cancels under rotation: `rot β` takes the same value at `0` and
+`8` whenever the cut `β` lies in `(0, 8]` — this is what makes the composite
+`rot β ∘ squarePerimeter ∘ squareOfPerimeter` continuous across the corner. -/
+lemma apm_t00a05_rot_seam_cancel {β : ℝ} (hβ0 : 0 < β) (hβ8 : β ≤ 8) :
+    apm_t00a05_rot β 0 = apm_t00a05_rot β 8 := by
+  simp only [apm_t00a05_rot]
+  rw [if_pos hβ0, if_neg (by linarith : ¬ 8 < β)]
+  ring
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
