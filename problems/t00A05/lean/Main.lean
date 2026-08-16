@@ -2429,6 +2429,57 @@ lemma apm_t00a05_radialized_coordinate_ne_zero_of_perimeter_range
       rw [hqx]
       norm_num)
 
+lemma apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range
+    {p : ℝ × ℝ} (hp : p ∈ frontier apm_t00a05_region) :
+    let q := apm_t00a05_radialHomeomorph p
+    let s := apm_t00a05_squarePerimeter q
+    (s ∈ Set.Icc (0 : ℝ) 2 → p.2 ≠ 0) ∧
+    (s ∈ Set.Icc (2 : ℝ) 4 → p.1 ≠ 0) ∧
+    (s ∈ Set.Icc (4 : ℝ) 6 → p.2 ≠ 0) ∧
+    (s ∈ Set.Icc (6 : ℝ) 8 → p.1 ≠ 0) := by
+  dsimp only
+  have hq : apm_t00a05_radialHomeomorph p ∈
+      Metric.sphere (0 : ℝ × ℝ) 1 := by
+    rw [← apm_t00a05_radialHomeomorph_image_frontier]
+    exact ⟨p, hp, rfl⟩
+  have hinv := apm_t00a05_squareOfPerimeter_squarePerimeter hq
+  let s := apm_t00a05_squarePerimeter (apm_t00a05_radialHomeomorph p)
+  have hcoord : apm_t00a05_squareOfPerimeter s =
+      apm_t00a05_radialHomeomorph p := hinv
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro hs
+    change s ∈ Set.Icc (0 : ℝ) 2 at hs
+    have hqy : (apm_t00a05_radialHomeomorph p).2 = -1 := by
+      rw [← hcoord]
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs <;> simp_all <;> linarith
+    exact (apm_t00a05_radialHomeomorph_snd_ne_zero_iff hp).mp (by
+      rw [hqy]; norm_num)
+  · intro hs
+    change s ∈ Set.Icc (2 : ℝ) 4 at hs
+    have hqx : (apm_t00a05_radialHomeomorph p).1 = 1 := by
+      rw [← hcoord]
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs <;> simp_all <;> linarith
+    exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
+      rw [hqx]; norm_num)
+  · intro hs
+    change s ∈ Set.Icc (4 : ℝ) 6 at hs
+    have hqy : (apm_t00a05_radialHomeomorph p).2 = 1 := by
+      rw [← hcoord]
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs <;> simp_all <;> linarith
+    exact (apm_t00a05_radialHomeomorph_snd_ne_zero_iff hp).mp (by
+      rw [hqy]; norm_num)
+  · intro hs
+    change s ∈ Set.Icc (6 : ℝ) 8 at hs
+    have hqx : (apm_t00a05_radialHomeomorph p).1 = -1 := by
+      rw [← hcoord]
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs <;> simp_all <;> linarith
+    exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
+      rw [hqx]; norm_num)
+
 lemma apm_t00a05_radializedTime_lt_of_rot_perimeter_lt
     {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
     {β : ℝ}
