@@ -749,6 +749,25 @@ lemma apm_t00a05_signedAreaDensity_eq_radius_sq_mul_angularDensity
   simp only [apm_t00a05_angularDensity]
   field_simp
 
+/-- The registered positive signed area rules out an everywhere nonpositive
+angular density.  Later, clockwise chart order only has to establish that
+pointwise sign statement. -/
+lemma apm_t00a05_not_angularDensity_nonpos
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    ¬(∀ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_angularDensity γ t ≤ 0) := by
+  intro hnonpos
+  have harea_nonpos :
+      ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+          (γ t).1 * deriv (fun s => (γ s).2.1) t -
+            (γ t).2.1 * deriv (fun s => (γ s).1) t ≤ 0 := by
+    apply integral_nonpos_of_ae
+    filter_upwards [ae_restrict_mem measurableSet_Icc] with t ht
+    rw [apm_t00a05_signedAreaDensity_eq_radius_sq_mul_angularDensity hγ ht]
+    exact mul_nonpos_of_nonneg_of_nonpos
+      (apm_t00a05_projected_radius_sq_pos hγ ht).le (hnonpos t ht)
+  exact (not_lt_of_ge harea_nonpos) hγ.2.2.2.2
+
 /-- The frozen line-integral encoding reduces exactly to the negative angular
 density: its `z` contribution is the already-proved exact term. -/
 lemma apm_t00a05_lineIntegral_eq_neg_angular {γ : ℝ → ℝ × ℝ × ℝ}
