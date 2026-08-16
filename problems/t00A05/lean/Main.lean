@@ -984,14 +984,20 @@ theorem apm_t00a05 :
       apm_t00a05_lineIntegral γ 0 (2 * Real.pi) = -2 * Real.pi) := by
   refine ⟨apm_t00a05_dOmega_eq_zero, apm_t00a05_lineIntegral_C1, ?_⟩
   /-
-  This pass closes the exterior-derivative computation and the complete `C1`
-  period calculation.  The remaining assertion is genuinely global: an
-  injective, positively oriented parametrization of the specified connected
-  component must have winding number one around the deleted axis, after which
-  the exact angular-form integral is `-2π`; the `cos z dz` term is exact.
-  Mathlib exposes no theorem connecting these raw coordinate `deriv` integrals
-  and the frozen implicit-surface/simple-loop predicate to winding number or a
-  change-of-variables formula.
+  The problem-local topology bridge is now complete above: the gauge radializes
+  the level-set loop to the square sphere; the perimeter decoder is a compact
+  quotient; its punctured rotated chart is continuous and injective; hence a
+  missed point would produce an impossible continuous simple real loop.  This
+  proves surjectivity and supplies four distinct half-axis crossings.
+
+  What remains is the analytic orientation/telescope: order those crossings by
+  the strict-monotonicity alternative for the punctured real chart, use the
+  positive signed-area hypothesis to select the counterclockwise alternative,
+  and apply the two proved arctangent primitives on the four intervening arcs.
+  Their endpoint values telescope to `-2π`, while
+  `apm_t00a05_C2_exact_part_zero` removes the `cos z dz` term.  At this pin there
+  is no library winding-number/change-of-variables theorem that packages that
+  last orientation argument.
   -/
   intro γ hγ
   sorry
