@@ -290,7 +290,7 @@ lemma apm_t00a05_squarePerimeter_right {q : ℝ × ℝ}
 lemma apm_t00a05_squarePerimeter_top {q : ℝ × ℝ}
     (hyneg : q.2 ≠ -1) (hx : q.1 ≠ 1) (hy : q.2 = 1) :
     apm_t00a05_squarePerimeter q = 5 - q.1 := by
-  simp [apm_t00a05_squarePerimeter, hyneg, hx, hy]
+  norm_num [apm_t00a05_squarePerimeter, hyneg, hx, hy]
 
 lemma apm_t00a05_squarePerimeter_left {q : ℝ × ℝ}
     (hyneg : q.2 ≠ -1) (hx : q.1 ≠ 1) (hy : q.2 ≠ 1) :
