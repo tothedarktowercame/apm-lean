@@ -130,3 +130,28 @@ and `IsCoveringMap.liftPath`).  It supplies a continuous angle lift, but proving
 that this merely continuous lift is differentiable would recreate the local
 chart work already completed.  The canonical-crossing/FTC route therefore
 remains the shorter formal route at this pin.
+
+## Progress boundary for the first frame-5 siege
+
+The following plan interfaces now compile:
+
+- unique canonical half-open-period preimages of every square-sphere point;
+- a reusable canonical crossing-time definition and specification;
+- distinct sphere points have distinct canonical crossing times;
+- positive radial scaling transfers both coordinate signs to the original
+  curve;
+- exact perimeter coordinates `0,2,4,6` for the four corners;
+- signed-area density equals positive radius-squared times angular density;
+- positive signed area implies a positive angular-density witness in the open
+  period, hence a positive derivative of one of the two compiled local angle
+  primitives.
+
+The next lemma is now sharply local: under the `StrictAntiOn` branch returned
+by `apm_t00a05_simple_loop_chart_monotone`, the applicable local angle
+primitive is antitone on a neighborhood of that positive-derivative witness.
+The witness lies in `Ioo`; injectivity keeps it away from the temporal cut, and
+its nonzero coordinate selects the `x` or `y` chart.  Composing local
+antitonicity with `HasDerivAt.nonpos_of_antitoneOn` contradicts the proved
+positive derivative.  This will eliminate the clockwise branch without any
+global-angle endpoint assertion.  After that, only cyclically sorting the four
+canonical corner times and applying the existing FTC telescope remains.
