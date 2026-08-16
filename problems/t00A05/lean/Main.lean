@@ -1121,6 +1121,27 @@ lemma apm_t00a05_rot_le_rot_iff_of_same_side {β s t : ℝ}
   · simp [apm_t00a05_rot, h.1, h.2]
   · simp [apm_t00a05_rot, not_lt.mpr h.1, not_lt.mpr h.2]
 
+lemma apm_t00a05_rot_mem_Icc {β s : ℝ} (hβ0 : 0 ≤ β) (hβ8 : β ≤ 8)
+    (hs : s ∈ Set.Icc (0 : ℝ) 8) :
+    apm_t00a05_rot β s ∈ Set.Icc (0 : ℝ) 8 := by
+  unfold apm_t00a05_rot
+  split_ifs with h
+  · constructor <;> linarith [hs.1, hs.2]
+  · constructor <;> linarith [hs.1, hs.2, not_lt.mp h]
+
+lemma apm_t00a05_squareAngleFrom_strictAntiOn_comp_rot
+    {D : Set ℝ} {p : ℝ → ℝ} {β : ℝ}
+    (hβ0 : 0 ≤ β) (hβ8 : β ≤ 8)
+    (hpIcc : Set.MapsTo p D (Set.Icc (0 : ℝ) 8))
+    (hanti : StrictAntiOn (fun x => apm_t00a05_rot β (p x)) D) :
+    StrictAntiOn
+      (fun x => apm_t00a05_squareAngleFrom β (apm_t00a05_rot β (p x))) D := by
+  intro x hx y hy hxy
+  apply apm_t00a05_squareAngleFrom_strictMonoOn hβ0 hβ8
+  · exact apm_t00a05_rot_mem_Icc hβ0 hβ8 (hpIcc hy)
+  · exact apm_t00a05_rot_mem_Icc hβ0 hβ8 (hpIcc hx)
+  · exact hanti hx hy hxy
+
 lemma apm_t00a05_squareAngle_strictAntiOn_of_rot_strictAntiOn
     {D : Set ℝ} {p : ℝ → ℝ} {β : ℝ}
     (hpIcc : Set.MapsTo p D (Set.Icc (0 : ℝ) 8))
