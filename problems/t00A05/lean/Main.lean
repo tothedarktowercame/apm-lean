@@ -4065,4 +4065,16 @@ theorem apm_t00a05 :
   rw [apm_t00a05_lineIntegral_eq_neg_angular hγ]
   suffices ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
       apm_t00a05_angularDensity γ t = 2 * Real.pi by linarith
-  sorry
+  rcases apm_t00a05_C2_radialized_chart_strictMono hγ with
+    ⟨β, hβ0, hβ8, hdecode, hmono⟩
+  by_cases hβ2 : β ≤ 2
+  · exact apm_t00a05_angularDensity_integral_of_cut_le_two
+      hγ hβ0 hβ2 hdecode hmono
+  by_cases hβ4 : β ≤ 4
+  · exact apm_t00a05_angularDensity_integral_of_two_lt_cut_le_four
+      hγ (lt_of_not_ge hβ2) hβ4 hdecode hmono
+  by_cases hβ6 : β ≤ 6
+  · exact apm_t00a05_angularDensity_integral_of_four_lt_cut_le_six
+      hγ (lt_of_not_ge hβ4) hβ6 hdecode hmono
+  · exact apm_t00a05_angularDensity_integral_of_six_lt_cut_le_eight
+      hγ (lt_of_not_ge hβ6) hβ8 hdecode hmono
