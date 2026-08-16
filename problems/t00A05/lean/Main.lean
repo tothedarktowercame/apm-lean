@@ -810,6 +810,93 @@ lemma apm_t00a05_rot_square_chart_injective {β : ℝ} :
   simpa [apm_t00a05_squareOfPerimeter_squarePerimeter hp,
     apm_t00a05_squareOfPerimeter_squarePerimeter hq] using hdecoder
 
+/-- A continuous simple closed traversal of the square sphere cannot miss a
+point: puncturing at a hypothetical missed point puts the whole loop in the
+real chart above, contradicting monotonicity of an injective real path. -/
+lemma apm_t00a05_simple_loop_surj_square {c : ℝ → ℝ × ℝ} {T : ℝ}
+    (hT : 0 < T) (hc : Continuous c)
+    (hsphere : ∀ t ∈ Set.Icc (0 : ℝ) T,
+      c t ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+    (hinj : Set.InjOn c (Set.Ico (0 : ℝ) T))
+    (hclosed : c 0 = c T) :
+    Set.SurjOn c (Set.Icc (0 : ℝ) T)
+      (Metric.sphere (0 : ℝ × ℝ) 1) := by
+  classical
+  by_contra hsurj
+  rw [Set.SurjOn, Set.not_subset] at hsurj
+  obtain ⟨b, hb, hnotimage⟩ := hsurj
+  have hmiss (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) T) : c t ≠ b := by
+    intro htb
+    exact hnotimage ⟨t, ht, htb⟩
+  let s := apm_t00a05_squarePerimeter b
+  have hsIcc : s ∈ Set.Icc (0 : ℝ) 8 :=
+    apm_t00a05_squarePerimeter_mem_Icc hb
+  let β : ℝ := if s = 0 then 8 else s
+  have hβ0 : 0 < β := by
+    dsimp [β]
+    split_ifs with hs0
+    · norm_num
+    · exact lt_of_le_of_ne hsIcc.1 (Ne.symm hs0)
+  have hβ8 : β ≤ 8 := by
+    dsimp [β]
+    split_ifs
+    · norm_num
+    · exact hsIcc.2
+  have hdecode : apm_t00a05_squareOfPerimeter β = b := by
+    dsimp [β]
+    split_ifs with hs0
+    · have h0 : apm_t00a05_squareOfPerimeter 0 = b := by
+        change apm_t00a05_squarePerimeter b = 0 at hs0
+        rw [← apm_t00a05_squareOfPerimeter_squarePerimeter hb, hs0]
+      rw [← h0]
+      norm_num [apm_t00a05_squareOfPerimeter]
+    · exact apm_t00a05_squareOfPerimeter_squarePerimeter hb
+  let r : ℝ → ℝ := fun t => max 0 (min T t)
+  have hrcont : Continuous r := by
+    dsimp [r]
+    fun_prop
+  have hrmem (t : ℝ) : r t ∈ Set.Icc (0 : ℝ) T := by
+    dsimp [r]
+    constructor
+    · exact le_max_left _ _
+    · rw [max_le_iff]
+      exact ⟨hT.le, min_le_left _ _⟩
+  have hr_eq {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) T) : r t = t := by
+    simp [r, ht.1, ht.2]
+  let q : ℝ → Metric.sphere (0 : ℝ × ℝ) 1 := fun t =>
+    ⟨c (r t), hsphere (r t) (hrmem t)⟩
+  have hqcont : Continuous q := by
+    exact Continuous.subtype_mk (hc.comp hrcont) _
+  have hqmiss (t : ℝ) : q t ≠
+      (⟨apm_t00a05_squareOfPerimeter β,
+        apm_t00a05_squareOfPerimeter_mem_sphere ⟨hβ0.le, hβ8⟩⟩ :
+          Metric.sphere (0 : ℝ × ℝ) 1) := by
+    intro heq
+    apply hmiss (r t) (hrmem t)
+    rw [← hdecode]
+    exact congrArg Subtype.val heq
+  let q' : ℝ → {z : Metric.sphere (0 : ℝ × ℝ) 1 |
+      z.1 ≠ apm_t00a05_squareOfPerimeter β} := fun t =>
+    ⟨q t, by
+      intro heq
+      exact hqmiss t (Subtype.ext heq)⟩
+  have hq'cont : Continuous q' := Continuous.subtype_mk hqcont _
+  let f : ℝ → ℝ := fun t =>
+    apm_t00a05_rot β (apm_t00a05_squarePerimeter (q t).1)
+  have hfcont : Continuous f := by
+    exact (apm_t00a05_rot_square_chart_continuous hβ0 hβ8).comp hq'cont
+  have hfinj : Set.InjOn f (Set.Ico (0 : ℝ) T) := by
+    intro u hu v hv huv
+    have hquv : (q u).1 = (q v).1 :=
+      apm_t00a05_rot_square_chart_injective
+        (hsphere (r u) (hrmem u)) (hsphere (r v) (hrmem v)) huv
+    apply hinj hu hv
+    simpa [q, hr_eq ⟨hu.1, hu.2.le⟩, hr_eq ⟨hv.1, hv.2.le⟩] using hquv
+  have hfclosed : f 0 = f T := by
+    simp only [f, q]
+    rw [hr_eq ⟨le_rfl, hT.le⟩, hr_eq ⟨hT.le, le_rfl⟩, hclosed]
+  exact apm_t00a05_no_continuous_real_simple_loop hT hfcont hfinj hfclosed
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
