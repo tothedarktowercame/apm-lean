@@ -533,6 +533,15 @@ lemma apm_t00a05_squareAngleFrom_strictMonoOn {β : ℝ}
     (show IsLeast (Set.Icc c 8) c from
       ⟨⟨le_rfl, hc8⟩, fun _ h => h.1⟩)
 
+lemma apm_t00a05_squareAngleFrom_endpoints {β : ℝ}
+    (hβ0 : 0 < β) (hβ8 : β ≤ 8) :
+    apm_t00a05_squareAngleFrom β 8 -
+      apm_t00a05_squareAngleFrom β 0 = 2 * Real.pi := by
+  have h0 : (0 : ℝ) ≤ 8 - β := by linarith
+  have h8 : ¬(8 : ℝ) ≤ 8 - β := by linarith
+  simp only [apm_t00a05_squareAngleFrom, if_pos h0, if_neg h8]
+  ring_nf
+
 /-- The four affine sides of the square perimeter decoder glue continuously
 at the three corners. -/
 lemma apm_t00a05_squareOfPerimeter_continuous :
