@@ -2474,6 +2474,34 @@ lemma apm_t00a05_radializedTime_lt_of_rot_perimeter_lt
       apm_t00a05_radializedTime_perimeter] at hback
     exact False.elim ((not_lt_of_ge hback.le) hrot)
 
+lemma apm_t00a05_radializedTime_eq_zero_iff_perimeter_eq_cut
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β : ℝ} (hβ : β ∈ Set.Icc (0 : ℝ) 8)
+    (hdecode : apm_t00a05_squareOfPerimeter β =
+      apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
+    {r : ℝ × ℝ} (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1) :
+    (apm_t00a05_radializedTime hγ r hr).1 = 0 ↔
+      apm_t00a05_squarePerimeter r = if β = 8 then 0 else β := by
+  constructor
+  · intro ht0
+    have hspec := apm_t00a05_radializedTime_spec hγ r hr
+    rw [ht0] at hspec
+    have hrq : r = apm_t00a05_squareOfPerimeter β := by
+      rw [hdecode]
+      exact hspec.symm
+    rw [hrq]
+    exact apm_t00a05_squarePerimeter_squareOfPerimeter hβ.1 hβ.2
+  · intro hper
+    have hpoint : apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1) = r := by
+      rw [← hdecode, ← apm_t00a05_squareOfPerimeter_squarePerimeter hr, hper]
+      by_cases hb : β = 8
+      · subst β
+        norm_num [apm_t00a05_squareOfPerimeter]
+      · simp [hb]
+    have hz := (apm_t00a05_radializedTime_eq_iff hγ r hr
+      ⟨0, le_rfl, Real.two_pi_pos⟩).mpr hpoint
+    exact congrArg Subtype.val hz |>.symm
+
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
 ordering input for the four FTC arcs. -/
