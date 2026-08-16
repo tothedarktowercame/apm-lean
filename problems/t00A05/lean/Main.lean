@@ -3768,6 +3768,103 @@ lemma apm_t00a05_angularDensity_integral_of_two_lt_cut_le_four
   exacts [hTRrat.1, hTRrat.2, hTLrat.2, hTLrat.1,
     hBLrat.1, hBLrat.2, hBRrat.2, hBRrat.1]
 
+lemma apm_t00a05_angularDensity_integral_of_four_lt_cut_le_six
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β : ℝ} (hβ4 : 4 < β) (hβ6 : β ≤ 6)
+    (hdecode : apm_t00a05_squareOfPerimeter β =
+      apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
+    (hmono : StrictMonoOn
+      (fun t => apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+      (Set.Ioo (0 : ℝ) (2 * Real.pi))) :
+    ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_angularDensity γ t = 2 * Real.pi := by
+  let tBR := (apm_t00a05_cornerBRTime hγ).1
+  let tTR := (apm_t00a05_cornerTRTime hγ).1
+  let tTL := (apm_t00a05_cornerTLTime hγ).1
+  let tBL := (apm_t00a05_cornerBLTime hγ).1
+  have hβ0 : 0 < β := by linarith
+  have hβ8 : β < 8 := by linarith
+  have hβIcc : β ∈ Set.Icc (0 : ℝ) 8 := ⟨hβ0.le, hβ8.le⟩
+  rcases apm_t00a05_corner_order_of_four_lt_cut_le_six hγ hβ4 hβ6
+    hdecode hmono with hord
+  change tTL ≤ tBL ∧ tBL < tBR ∧ tBR < tTR at hord
+  rcases hord with ⟨hTLBL, hBLBR, hBRTR⟩
+  have hTLBL' : tTL < tBL := lt_of_le_of_ne hTLBL (by
+    intro heq
+    exact (apm_t00a05_cornerTimes_pairwise_ne hγ).2.2.2.2.2 (Subtype.ext heq))
+  rcases apm_t00a05_cornerTimes_perimeter_coordinates hγ with
+    ⟨hpBR, hpTR, hpTL, hpBL⟩
+  rcases apm_t00a05_corner_time_all_ratios hγ with
+    ⟨hBRrat, hTRrat, hTLrat, hBLrat⟩
+  have hBLi : tBL ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) := by
+    apply apm_t00a05_radializedTime_mem_Ioo_of_perimeter_ne_cut hγ hβIcc hdecode
+      apm_t00a05_cornerBL_mem_sphere
+    rw [apm_t00a05_squarePerimeter_corners.1]
+    simp [show β ≠ 8 by linarith]; linarith
+  have hBRi : tBR ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) := by
+    apply apm_t00a05_radializedTime_mem_Ioo_of_perimeter_ne_cut hγ hβIcc hdecode
+      apm_t00a05_cornerBR_mem_sphere
+    rw [apm_t00a05_squarePerimeter_corners.2.1]
+    simp [show β ≠ 8 by linarith]; linarith
+  have hTRi : tTR ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) := by
+    apply apm_t00a05_radializedTime_mem_Ioo_of_perimeter_ne_cut hγ hβIcc hdecode
+      apm_t00a05_cornerTR_mem_sphere
+    rw [apm_t00a05_squarePerimeter_corners.2.2.1]
+    simp [show β ≠ 8 by linarith]; linarith
+  have hy0 : ∀ t ∈ Set.Icc (0 : ℝ) tTL, (γ t).2.1 ≠ 0 := by
+    apply apm_t00a05_C2_y_ne_zero_of_perimeter_mem_Icc_four_six hγ le_rfl
+      (apm_t00a05_cornerTLTime hγ).2.2.le
+    intro t ht
+    rcases apm_t00a05_perimeter_mem_Icc_from_zero_to_first hγ hβ0 hβ8
+      hdecode hmono (apm_t00a05_cornerTLTime hγ).2 ht hpTL hβ6 with ⟨hl, hu⟩
+    exact ⟨hβ4.le.trans hl, hu⟩
+  have hx1 : ∀ t ∈ Set.Icc tTL tBL, (γ t).1 ≠ 0 := by
+    intro t ht
+    by_cases hβeq : β = 6
+    · have hTL0 : tTL = 0 := by
+        apply (apm_t00a05_radializedTime_eq_zero_iff_perimeter_eq_cut
+          hγ hβIcc hdecode apm_t00a05_cornerTL_mem_sphere).2
+        simp [hβeq, apm_t00a05_squarePerimeter_corners.2.2.2]
+      have ht' : t ∈ Set.Icc (0 : ℝ) tBL := ⟨hTL0 ▸ ht.1, ht.2⟩
+      exact apm_t00a05_x_ne_zero_zero_to_BL_of_six_le_cut hγ
+        (by linarith) hβ8 hdecode hmono hBLi hpBL ht'
+    · have hTLi : tTL ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) := by
+        apply apm_t00a05_radializedTime_mem_Ioo_of_perimeter_ne_cut
+          hγ hβIcc hdecode apm_t00a05_cornerTL_mem_sphere
+        rw [apm_t00a05_squarePerimeter_corners.2.2.2]
+        simp [show β ≠ 8 by linarith]; exact Ne.symm hβeq
+      exact apm_t00a05_x_ne_zero_TL_to_BL_of_cut_lt_six hγ hβ0
+        (lt_of_le_of_ne hβ6 hβeq) hmono hTLi hBLi hTLBL' hpTL hpBL ht
+  have hy2 : ∀ t ∈ Set.Icc tBL tBR, (γ t).2.1 ≠ 0 := by
+    apply apm_t00a05_C2_y_ne_zero_of_perimeter_mem_Icc_zero_two hγ
+      hBLi.1.le hBRi.2.le
+    intro t ht
+    exact apm_t00a05_perimeter_mem_Icc_between_times_same_side hγ hmono
+      hBLi hBRi ht hBLBR hpBL hpBR (by norm_num)
+      (Or.inl ⟨by linarith, by linarith⟩)
+  have hx3 : ∀ t ∈ Set.Icc tBR tTR, (γ t).1 ≠ 0 := by
+    apply apm_t00a05_C2_x_ne_zero_of_perimeter_mem_Icc_two_four hγ
+      hBRi.1.le hTRi.2.le
+    intro t ht
+    exact apm_t00a05_perimeter_mem_Icc_between_times_same_side hγ hmono
+      hBRi hTRi ht hBRTR hpBR hpTR (by norm_num)
+      (Or.inl ⟨by linarith, by linarith⟩)
+  have hy4 : ∀ t ∈ Set.Icc tTR (2 * Real.pi), (γ t).2.1 ≠ 0 := by
+    apply apm_t00a05_C2_y_ne_zero_of_perimeter_mem_Icc_four_six hγ
+      hTRi.1.le (le_refl _)
+    intro t ht
+    rcases apm_t00a05_perimeter_mem_Icc_from_last_to_end hγ hβ0 hβ8
+      hdecode hmono hTRi ht hpTR (by linarith) with ⟨hl, hu⟩
+    exact ⟨hl, hu.trans hβ6⟩
+  apply apm_t00a05_angularDensity_telescope_yxyxy hγ
+    ⟨(apm_t00a05_cornerTLTime hγ).2.1, hTLBL, hBLBR.le,
+      hBRTR.le, (apm_t00a05_cornerTRTime hγ).2.2.le⟩
+    hy0 hx1 hy2 hx3 hy4
+  exacts [hTLrat.2, hTLrat.1, hBLrat.1, hBLrat.2,
+    hBRrat.2, hBRrat.1, hTRrat.1, hTRrat.2]
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
