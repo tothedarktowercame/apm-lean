@@ -3164,6 +3164,73 @@ lemma apm_t00a05_x_ne_zero_from_last_to_end_cut_eight
   exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).2.2.2
     ⟨hlow, hpu8.le⟩
 
+lemma apm_t00a05_x_ne_zero_TL_to_BL_of_cut_lt_six
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β a b u : ℝ} (hβ0 : 0 < β) (hβ6 : β < 6)
+    (hmono : StrictMonoOn
+      (fun t => apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+      (Set.Ioo (0 : ℝ) (2 * Real.pi)))
+    (ha : a ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hb : b ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hab : a < b)
+    (hpa : apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ a).1, (γ a).2.1)) = 6)
+    (hpb : apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ b).1, (γ b).2.1)) = 0)
+    (hu : u ∈ Set.Icc a b) :
+    (γ u).1 ≠ 0 := by
+  by_cases hub : u = b
+  · subst u
+    have hp := apm_t00a05_C2_projection_mem_frontier hγ hb.1.le hb.2.le
+    have hq : (apm_t00a05_radialHomeomorph ((γ b).1, (γ b).2.1)).1 = -1 := by
+      rw [← apm_t00a05_squareOfPerimeter_squarePerimeter
+        (apm_t00a05_C2_radialized_mem_sphere hγ hb.1.le hb.2.le), hpb]
+      norm_num [apm_t00a05_squareOfPerimeter]
+    exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
+      rw [hq]; norm_num)
+  by_cases hua : u = a
+  · subst u
+    have hp := apm_t00a05_C2_projection_mem_frontier hγ ha.1.le ha.2.le
+    exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).2.2.2
+      ⟨by rw [hpa], by rw [hpa]; norm_num⟩
+  have huIoo : u ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) :=
+    ⟨ha.1.trans_le hu.1, hu.2.trans_lt hb.2⟩
+  have hpuIcc := apm_t00a05_squarePerimeter_mem_Icc
+    (apm_t00a05_C2_radialized_mem_sphere hγ huIoo.1.le huIoo.2.le)
+  have hlo := hmono ha huIoo (lt_of_le_of_ne hu.1 (Ne.symm hua))
+  have hhi := hmono huIoo hb (lt_of_le_of_ne hu.2 hub)
+  change apm_t00a05_rot β
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ a).1, (γ a).2.1))) <
+    apm_t00a05_rot β
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1))) at hlo
+  change apm_t00a05_rot β
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1))) <
+    apm_t00a05_rot β
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ b).1, (γ b).2.1))) at hhi
+  rw [hpa] at hlo
+  rw [hpb] at hhi
+  have hpu6 : 6 ≤ apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)) := by
+    by_contra hn
+    have hlt : apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)) < 6 :=
+      lt_of_not_ge hn
+    by_cases hcut : apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)) < β
+    · simp [apm_t00a05_rot, show ¬(6 : ℝ) < β by linarith, hβ0, hcut] at hlo hhi
+      linarith [hpuIcc.1]
+    · simp [apm_t00a05_rot, show ¬(6 : ℝ) < β by linarith, hβ0, hcut] at hlo hhi
+      linarith
+  have hp := apm_t00a05_C2_projection_mem_frontier hγ huIoo.1.le huIoo.2.le
+  exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).2.2.2
+    ⟨hpu6, hpuIcc.2⟩
+
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
 ordering input for the four FTC arcs. -/
