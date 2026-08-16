@@ -585,6 +585,27 @@ lemma apm_t00a05_squareAngleFrom_endpoints {β : ℝ}
   simp only [apm_t00a05_squareAngleFrom, if_pos h0, if_neg h8]
   ring_nf
 
+lemma apm_t00a05_squareAngle_perimeter_right_open {q : ℝ × ℝ}
+    (hx : q.1 = 1) (hy0 : -1 < q.2) (hy1 : q.2 < 1) :
+    apm_t00a05_squareAngle (apm_t00a05_squarePerimeter q) =
+      Real.arctan (q.2 / q.1) + 2 * Real.pi := by
+  rw [apm_t00a05_squarePerimeter_right (by linarith) hx]
+  have h2 : ¬q.2 + 3 ≤ 2 := not_le.mpr (by linarith)
+  have h4 : q.2 + 3 ≤ 4 := by linarith
+  simp only [apm_t00a05_squareAngle, if_neg h2, if_pos h4, hx, div_one]
+  ring
+
+lemma apm_t00a05_squareAngle_perimeter_left_open {q : ℝ × ℝ}
+    (hx : q.1 = -1) (hy0 : -1 < q.2) (hy1 : q.2 < 1) :
+    apm_t00a05_squareAngle (apm_t00a05_squarePerimeter q) =
+      Real.arctan (q.2 / q.1) + 3 * Real.pi := by
+  rw [apm_t00a05_squarePerimeter_left (by linarith) (by linarith) (by linarith)]
+  simp only [apm_t00a05_squareAngle, not_le.mpr (by linarith : 2 < 7 - q.2),
+    not_le.mpr (by linarith : 4 < 7 - q.2),
+    not_le.mpr (by linarith : 6 < 7 - q.2), hx, div_neg, div_one,
+    if_false]
+  congr 2 <;> ring
+
 /-- The four affine sides of the square perimeter decoder glue continuously
 at the three corners. -/
 lemma apm_t00a05_squareOfPerimeter_continuous :
