@@ -155,3 +155,45 @@ antitonicity with `HasDerivAt.nonpos_of_antitoneOn` contradicts the proved
 positive derivative.  This will eliminate the clockwise branch without any
 global-angle endpoint assertion.  After that, only cyclically sorting the four
 canonical corner times and applying the existing FTC telescope remains.
+
+## Attempt-2 revision: the seam-corrected lift now exists
+
+The local-only formulation above exposed a cleaner reusable object.  The file
+now defines
+
+```lean
+apm_t00a05_squareAngleFrom β u =
+  if u ≤ 8 - β then squareAngle (u + β)
+  else squareAngle (u + β - 8) + 2π
+```
+
+This is the missing path lift.  The explicit `+2π` is the seam correction
+whose absence made the naive composition periodic.  It is now proved:
+
+- continuous on `ℝ`;
+- strictly increasing on `[0,8]`;
+- endpoint change exactly `2π`;
+- explicitly computable after `rot β`;
+- it transfers an antitone rotated chart into an antitone lifted angle.
+
+The chart dichotomy now retains the provenance equation saying its cut decodes
+to the initial radialized point, and injectivity proves every interior time is
+away from that cut.  Thus the earlier structural gap is closed rather than
+handled by temporal endpoint cases.
+
+The remaining analytic lemma is now:
+
+```lean
+-- locally at every interior time
+deriv (fun t => squareAngleFrom β
+  (rot β (squarePerimeter (radialized γ t)))) t
+  = apm_t00a05_angularDensity γ t
+```
+
+It will be proved chartwise by showing the lifted angle differs by a constant
+from the already-compiled `atan (y/x)` or `-atan (x/y)` primitive.  Once this
+lands, the antitone branch contradicts
+`apm_t00a05_exists_local_angle_deriv_pos` immediately, and the monotone branch
+can use FTC on the lift itself (or equivalently the four existing arc lemmas)
+to obtain its proved `2π` endpoint change.  This route eliminates the separate
+manual corner-sort/telescope step from the original plan.
