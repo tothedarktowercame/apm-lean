@@ -2670,6 +2670,21 @@ lemma apm_t00a05_radializedTime_eq_zero_iff_perimeter_eq_cut
       ⟨0, le_rfl, Real.two_pi_pos⟩).mpr hpoint
     exact congrArg Subtype.val hz |>.symm
 
+lemma apm_t00a05_radializedTime_mem_Ioo_of_perimeter_ne_cut
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β : ℝ} (hβ : β ∈ Set.Icc (0 : ℝ) 8)
+    (hdecode : apm_t00a05_squareOfPerimeter β =
+      apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
+    {r : ℝ × ℝ} (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+    (hne : apm_t00a05_squarePerimeter r ≠ if β = 8 then 0 else β) :
+    (apm_t00a05_radializedTime hγ r hr).1 ∈
+      Set.Ioo (0 : ℝ) (2 * Real.pi) := by
+  refine ⟨lt_of_le_of_ne (apm_t00a05_radializedTime hγ r hr).2.1 ?_,
+    (apm_t00a05_radializedTime hγ r hr).2.2⟩
+  intro hz
+  exact hne ((apm_t00a05_radializedTime_eq_zero_iff_perimeter_eq_cut
+    hγ hβ hdecode hr).mp hz.symm)
+
 lemma apm_t00a05_corner_order_of_six_lt_cut
     {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
     {β : ℝ} (hβ6 : 6 < β) (hβ8 : β ≤ 8)
