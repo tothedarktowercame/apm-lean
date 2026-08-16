@@ -726,6 +726,29 @@ lemma apm_t00a05_angularDensity_continuousOn {γ : ℝ → ℝ × ℝ × ℝ}
     · exact hx0 hsquares.1
     · exact hy0 hsquares.2
 
+lemma apm_t00a05_projected_radius_sq_pos {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Icc (0 : ℝ) (2 * Real.pi)) :
+    0 < (γ t).1 ^ 2 + (γ t).2.1 ^ 2 := by
+  rcases apm_t00a05_C2_avoids_axis hγ ht.1 ht.2 with hx | hy
+  · nlinarith [sq_pos_of_ne_zero hx, sq_nonneg (γ t).2.1]
+  · nlinarith [sq_nonneg (γ t).1, sq_pos_of_ne_zero hy]
+
+/-- The signed-area density is the positive squared radius times angular
+density.  This is the algebraic bridge used to rule out clockwise order from
+the orientation hypothesis. -/
+lemma apm_t00a05_signedAreaDensity_eq_radius_sq_mul_angularDensity
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Icc (0 : ℝ) (2 * Real.pi)) :
+    (γ t).1 * deriv (fun s => (γ s).2.1) t -
+        (γ t).2.1 * deriv (fun s => (γ s).1) t =
+      ((γ t).1 ^ 2 + (γ t).2.1 ^ 2) *
+        apm_t00a05_angularDensity γ t := by
+  have hne : (γ t).1 ^ 2 + (γ t).2.1 ^ 2 ≠ 0 :=
+    ne_of_gt (apm_t00a05_projected_radius_sq_pos hγ ht)
+  simp only [apm_t00a05_angularDensity]
+  field_simp
+
 /-- The frozen line-integral encoding reduces exactly to the negative angular
 density: its `z` contribution is the already-proved exact term. -/
 lemma apm_t00a05_lineIntegral_eq_neg_angular {γ : ℝ → ℝ × ℝ × ℝ}
