@@ -278,6 +278,25 @@ lemma apm_t00a05_supSphere_on_edge {q : ℝ × ℝ}
     · exact Or.inr (Or.inr (Or.inr hy))
     · exact Or.inr (Or.inr (Or.inl hy))
 
+lemma apm_t00a05_squarePerimeter_bottom {q : ℝ × ℝ} (h : q.2 = -1) :
+    apm_t00a05_squarePerimeter q = q.1 + 1 := by
+  simp [apm_t00a05_squarePerimeter, h]
+
+lemma apm_t00a05_squarePerimeter_right {q : ℝ × ℝ}
+    (hy : q.2 ≠ -1) (hx : q.1 = 1) :
+    apm_t00a05_squarePerimeter q = q.2 + 3 := by
+  simp [apm_t00a05_squarePerimeter, hy, hx]
+
+lemma apm_t00a05_squarePerimeter_top {q : ℝ × ℝ}
+    (hyneg : q.2 ≠ -1) (hx : q.1 ≠ 1) (hy : q.2 = 1) :
+    apm_t00a05_squarePerimeter q = 5 - q.1 := by
+  simp [apm_t00a05_squarePerimeter, hyneg, hx, hy]
+
+lemma apm_t00a05_squarePerimeter_left {q : ℝ × ℝ}
+    (hyneg : q.2 ≠ -1) (hx : q.1 ≠ 1) (hy : q.2 ≠ 1) :
+    apm_t00a05_squarePerimeter q = 7 - q.2 := by
+  simp [apm_t00a05_squarePerimeter, hyneg, hx, hy]
+
 lemma apm_t00a05_segment_origin_subset_region {q : ℝ × ℝ}
     (hq : q ∈ apm_t00a05_region) :
     segment ℝ (0, 0) q ⊆ apm_t00a05_region :=
