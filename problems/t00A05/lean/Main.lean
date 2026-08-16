@@ -310,6 +310,32 @@ noncomputable def apm_t00a05_squareOfPerimeter (s : ℝ) : ℝ × ℝ :=
   else if s ≤ 6 then (5 - s, 1)
   else (-1, 7 - s)
 
+/-- The four affine sides of the square perimeter decoder glue continuously
+at the three corners. -/
+lemma apm_t00a05_squareOfPerimeter_continuous :
+    Continuous apm_t00a05_squareOfPerimeter := by
+  unfold apm_t00a05_squareOfPerimeter
+  have h6 : Continuous (fun s : ℝ =>
+      if s ≤ 6 then (5 - s, 1) else (-1, 7 - s)) := by
+    apply continuous_if_le (by fun_prop) (by fun_prop)
+        (by fun_prop) (by fun_prop)
+    intro x hx
+    subst x
+    norm_num
+  have h4 : Continuous (fun s : ℝ =>
+      if s ≤ 4 then (1, s - 3)
+      else if s ≤ 6 then (5 - s, 1) else (-1, 7 - s)) := by
+    apply continuous_if_le (by fun_prop) (by fun_prop)
+        (by fun_prop) h6.continuousOn
+    intro x hx
+    subst x
+    norm_num
+  apply continuous_if_le (by fun_prop) (by fun_prop)
+      (by fun_prop) h4.continuousOn
+  intro x hx
+  subst x
+  norm_num
+
 lemma apm_t00a05_squareOfPerimeter_squarePerimeter {q : ℝ × ℝ}
     (hq : q ∈ Metric.sphere 0 1) :
     apm_t00a05_squareOfPerimeter (apm_t00a05_squarePerimeter q) = q := by
