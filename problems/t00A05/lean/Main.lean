@@ -689,8 +689,9 @@ lemma apm_t00a05_angularDensity_integral_of_x_ne_zero
         ∫ t in a..b, deriv F t := by
       apply intervalIntegral.integral_congr
       intro t ht
+      have ht' : t ∈ Set.Icc a b := by simpa [Set.uIcc_of_le hab] using ht
       exact (apm_t00a05_angle_primitive_deriv hγ.1
-        (hx0 t ⟨ht.1.le, ht.2⟩)).symm
+        (hx0 t ht')).symm
     _ = F b - F a := intervalIntegral.integral_deriv_of_contDiffOn_Icc hF hab
     _ = _ := rfl
 
@@ -711,8 +712,9 @@ lemma apm_t00a05_angularDensity_integral_of_y_ne_zero
         ∫ t in a..b, deriv F t := by
       apply intervalIntegral.integral_congr
       intro t ht
+      have ht' : t ∈ Set.Icc a b := by simpa [Set.uIcc_of_le hab] using ht
       exact (apm_t00a05_angle_primitive_deriv_y hγ.1
-        (hy0 t ⟨ht.1.le, ht.2⟩)).symm
+        (hy0 t ht')).symm
     _ = F b - F a := intervalIntegral.integral_deriv_of_contDiffOn_Icc hF hab
     _ = _ := rfl
 
