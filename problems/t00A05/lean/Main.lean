@@ -1687,6 +1687,25 @@ lemma apm_t00a05_C2_radialized_chart_monotone
     (apm_t00a05_C2_radialized_injOn hγ)
     (apm_t00a05_C2_radialized_closed hγ)
 
+lemma apm_t00a05_C2_radialized_perimeter_ne_cut
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β t : ℝ}
+    (hdecode : apm_t00a05_squareOfPerimeter β =
+      apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi)) :
+    apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)) ≠ β := by
+  intro hper
+  have hsphere := apm_t00a05_C2_radialized_mem_sphere hγ ht.1.le ht.2.le
+  have hpoint :
+      apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) =
+        apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1) := by
+    rw [← hdecode, ← hper]
+    exact (apm_t00a05_squareOfPerimeter_squarePerimeter hsphere).symm
+  have ht0 := apm_t00a05_C2_radialized_injOn hγ
+    ⟨ht.1.le, ht.2⟩ ⟨le_rfl, Real.two_pi_pos⟩ hpoint
+  exact ht.1.ne' ht0
+
 /-- The direct square-angle composition suggested by the geometric picture is
 periodic at the parameter endpoints.  Consequently it is not itself the
 unwrapped lift: a seam correction (depending on the traversal direction) is
