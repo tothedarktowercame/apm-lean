@@ -937,6 +937,24 @@ lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
     rw [hrx] at hx
     exact (mul_eq_zero.mp hx).resolve_left ha
 
+lemma apm_t00a05_radialHomeomorph_scale_pos {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region) :
+    0 < gauge apm_t00a05_region p /
+      gauge (Metric.ball (0 : ℝ × ℝ) 1) p := by
+  have hpne : p ≠ 0 := by
+    intro hp0
+    have := apm_t00a05_mem_frontier_level_eq_ten hp
+    rw [hp0] at this
+    norm_num [apm_t00a05_level] at this
+  apply div_pos
+  · exact (gauge_pos (absorbent_nhds_zero apm_t00a05_region_mem_nhds_zero)
+      (NormedSpace.isVonNBounded_of_isBounded ℝ
+        apm_t00a05_region_isBounded)).2 hpne
+  · exact (gauge_pos
+      (absorbent_nhds_zero
+        (Metric.isOpen_ball.mem_nhds (Metric.mem_ball_self zero_lt_one)))
+      (NormedSpace.isVonNBounded_ball ℝ (ℝ × ℝ) 1)).2 hpne
+
 /-- Surjectivity of the radialized loop supplies all four half-axis crossing
 parameters of the original projected curve. -/
 lemma apm_t00a05_C2_has_four_axis_crossings {γ : ℝ → ℝ × ℝ × ℝ}
