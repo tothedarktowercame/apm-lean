@@ -59,6 +59,59 @@ def apm_t00a05_IsC2 (γ : ℝ → ℝ × ℝ × ℝ) : Prop :=
     (γ t).1 * deriv (fun s => (γ s).2.1) t -
       (γ t).2.1 * deriv (fun s => (γ s).1) t
 
+noncomputable def apm_t00a05_level (q : ℝ × ℝ) : ℝ :=
+  2 * q.1 ^ 2 + q.2 ^ 2 + Real.exp (q.2 - q.1) ^ 2
+
+lemma apm_t00a05_level_origin : apm_t00a05_level (0, 0) < 10 := by
+  norm_num [apm_t00a05_level]
+
+lemma apm_t00a05_C2_projected_level {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) {t : ℝ} (ht0 : 0 ≤ t)
+    (ht2pi : t ≤ 2 * Real.pi) :
+    apm_t00a05_level ((γ t).1, (γ t).2.1) = 10 := by
+  rcases hγ.2.2.2.1 t ht0 ht2pi with ⟨hellipsoid, hgraph⟩
+  unfold apm_t00a05_level
+  rw [← hgraph]
+  exact hellipsoid
+
+lemma apm_t00a05_C2_avoids_axis {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) {t : ℝ} (ht0 : 0 ≤ t)
+    (ht2pi : t ≤ 2 * Real.pi) :
+    (γ t).1 ≠ 0 ∨ (γ t).2.1 ≠ 0 := by
+  by_contra haxis
+  push_neg at haxis
+  rcases hγ.2.2.2.1 t ht0 ht2pi with ⟨hellipsoid, hgraph⟩
+  have hz : (γ t).2.2 = 1 := by
+    simpa [haxis.1, haxis.2] using hgraph
+  rw [haxis.1, haxis.2, hz] at hellipsoid
+  norm_num at hellipsoid
+
+lemma apm_t00a05_C2_projection_injOn {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    Set.InjOn (fun t ↦ ((γ t).1, (γ t).2.1))
+      (Set.Ico (0 : ℝ) (2 * Real.pi)) := by
+  intro s hs t ht hst
+  have hx : (γ s).1 = (γ t).1 :=
+    congrArg (fun q : ℝ × ℝ ↦ q.1) hst
+  have hy : (γ s).2.1 = (γ t).2.1 :=
+    congrArg (fun q : ℝ × ℝ ↦ q.2) hst
+  have hsgraph := (hγ.2.2.2.1 s hs.1 hs.2.le).2
+  have htgraph := (hγ.2.2.2.1 t ht.1 ht.2.le).2
+  have hz : (γ s).2.2 = (γ t).2.2 := by
+    rw [hsgraph, htgraph, hx, hy]
+  exact hγ.2.2.1 hs ht (Prod.ext hx (Prod.ext hy hz))
+
+lemma apm_t00a05_C2_projection_contDiff {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    ContDiff ℝ 1 (fun t ↦ ((γ t).1, (γ t).2.1)) := by
+  exact hγ.1.fst.prod hγ.1.snd.fst
+
+lemma apm_t00a05_C2_projection_closed {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    ((γ 0).1, (γ 0).2.1) =
+      ((γ (2 * Real.pi)).1, (γ (2 * Real.pi)).2.1) := by
+  exact congrArg (fun p : ℝ × ℝ × ℝ ↦ (p.1, p.2.1)) hγ.2.1
+
 lemma apm_t00a05_dOmega_eq_zero (p : apm_t00a05_U) :
     apm_t00a05_dOmega p.1 = 0 := by
   rcases p with ⟨⟨x, y, z⟩, hxy⟩
