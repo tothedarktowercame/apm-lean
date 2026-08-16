@@ -1021,6 +1021,20 @@ lemma apm_t00a05_rot_continuousAt {β s : ℝ} (hs : s ≠ β) :
     filter_upwards [hopen] with t ht
     exact (if_neg (not_lt.2 ht.le)).symm
 
+lemma apm_t00a05_rot_lt_rot_iff_of_same_side {β s t : ℝ}
+    (hside : (s < β ∧ t < β) ∨ (β ≤ s ∧ β ≤ t)) :
+    apm_t00a05_rot β s < apm_t00a05_rot β t ↔ s < t := by
+  rcases hside with h | h
+  · simp [apm_t00a05_rot, h.1, h.2]
+  · simp [apm_t00a05_rot, not_lt.mpr h.1, not_lt.mpr h.2]
+
+lemma apm_t00a05_rot_le_rot_iff_of_same_side {β s t : ℝ}
+    (hside : (s < β ∧ t < β) ∨ (β ≤ s ∧ β ≤ t)) :
+    apm_t00a05_rot β s ≤ apm_t00a05_rot β t ↔ s ≤ t := by
+  rcases hside with h | h
+  · simp [apm_t00a05_rot, h.1, h.2]
+  · simp [apm_t00a05_rot, not_lt.mpr h.1, not_lt.mpr h.2]
+
 /-- Route step 9 seam: the perimeter chart inverts the decoder on `[0, 8]`
 with the `0`/`8` seam — `8` decodes to the corner `(-1, -1)`, whose
 perimeter coordinate is `0`, and every other `s ∈ [0, 8]` is reproduced
