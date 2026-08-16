@@ -1130,6 +1130,34 @@ lemma apm_t00a05_C2_has_four_axis_crossings {γ : ℝ → ℝ × ℝ × ℝ}
       gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ tb).1, (γ tb).2.1)) * (γ tb).2.1 = -1 at hy
     nlinarith [scale_pos tb htb]
 
+/-- The four square corners give a second, FTC-adapted set of crossings: on
+each corner-to-corner arc one of `x` and `y` stays nonzero. -/
+lemma apm_t00a05_C2_has_four_corner_crossings {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    ∀ r : ℝ × ℝ, r ∈ ({(1, -1), (1, 1), (-1, 1), (-1, -1)} : Set (ℝ × ℝ)) →
+      ∃ t ∈ Set.Icc (0 : ℝ) (2 * Real.pi),
+        apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = r ∧
+        ((0 < r.1 → 0 < (γ t).1) ∧ (r.1 < 0 → (γ t).1 < 0)) ∧
+        ((0 < r.2 → 0 < (γ t).2.1) ∧ (r.2 < 0 → (γ t).2.1 < 0)) := by
+  intro r hr
+  have hrsphere : r ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hr
+    rcases hr with rfl | rfl | rfl | rfl <;>
+      rw [apm_t00a05_mem_supSphere_iff] <;> norm_num
+  rcases apm_t00a05_C2_radialized_surjOn hγ hrsphere with ⟨t, ht, htr⟩
+  have ha := apm_t00a05_radialHomeomorph_scale_pos
+    (apm_t00a05_C2_projection_mem_frontier hγ ht.1 ht.2)
+  change apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) = r at htr
+  have hscaled := htr
+  rw [apm_t00a05_radialHomeomorph_apply] at hscaled
+  have hx := congrArg Prod.fst hscaled
+  have hy := congrArg Prod.snd hscaled
+  change (gauge apm_t00a05_region ((γ t).1, (γ t).2.1) /
+    gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ t).1, (γ t).2.1)) * (γ t).1 = r.1 at hx
+  change (gauge apm_t00a05_region ((γ t).1, (γ t).2.1) /
+    gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ t).1, (γ t).2.1)) * (γ t).2.1 = r.2 at hy
+  refine ⟨t, ht, htr, ⟨?_, ?_⟩, ⟨?_, ?_⟩⟩ <;> intro hrsgn <;> nlinarith
+
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
 ordering input for the four FTC arcs. -/
