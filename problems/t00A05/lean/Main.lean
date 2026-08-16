@@ -2870,6 +2870,7 @@ lemma apm_t00a05_perimeter_mem_Icc_between_times_same_side
       linarith [hpuIcc.1, hpuIcc.2, hAIcc.1, hBIcc.2]
     simp [apm_t00a05_rot, hleft.1, hleft.2, hpu] at hlo hhi
     exact ⟨by linarith, by linarith⟩
+
   · have hpu : β ≤ p u := by
       by_contra hn
       have hlt : p u < β := lt_of_not_ge hn
@@ -2879,6 +2880,113 @@ lemma apm_t00a05_perimeter_mem_Icc_between_times_same_side
     simp [apm_t00a05_rot, not_lt.mpr hright.1,
       not_lt.mpr hright.2, not_lt.mpr hpu] at hlo hhi
     exact ⟨by linarith, by linarith⟩
+
+lemma apm_t00a05_perimeter_mem_Icc_from_zero_to_first
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β b B u : ℝ} (hβ0 : 0 < β) (hβ8 : β < 8)
+    (hdecode : apm_t00a05_squareOfPerimeter β =
+      apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
+    (hmono : StrictMonoOn
+      (fun t => apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+      (Set.Ioo (0 : ℝ) (2 * Real.pi)))
+    (hb : b ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hu : u ∈ Set.Icc (0 : ℝ) b)
+    (hpb : apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ b).1, (γ b).2.1)) = B)
+    (hβB : β ≤ B) :
+    apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)) ∈
+      Set.Icc β B := by
+  let p : ℝ → ℝ := fun t => apm_t00a05_squarePerimeter
+    (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))
+  have hp0 : p 0 = β := by
+    change apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1)) = β
+    rw [← hdecode, apm_t00a05_squarePerimeter_squareOfPerimeter hβ0.le hβ8.le]
+    simp [hβ8.ne]
+  by_cases hu0 : u = 0
+  · subst u; simp [p, hp0, hβB]
+  by_cases hub : u = b
+  · subst u; simp [p, hpb, hβB]
+  have huIoo : u ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) :=
+    ⟨lt_of_le_of_ne hu.1 (Ne.symm hu0), lt_of_le_of_lt hu.2 hb.2⟩
+  have hub' : u < b := lt_of_le_of_ne hu.2 hub
+  have hhi := hmono huIoo hb hub'
+  change apm_t00a05_rot β (p u) < apm_t00a05_rot β (p b) at hhi
+  change p b = B at hpb
+  rw [hpb] at hhi
+  have hpuIcc : p u ∈ Set.Icc (0 : ℝ) 8 :=
+    apm_t00a05_squarePerimeter_mem_Icc
+      (apm_t00a05_C2_radialized_mem_sphere hγ huIoo.1.le huIoo.2.le)
+  have hBIcc : B ∈ Set.Icc (0 : ℝ) 8 := by
+    rw [← hpb]
+    exact apm_t00a05_squarePerimeter_mem_Icc
+      (apm_t00a05_C2_radialized_mem_sphere hγ hb.1.le hb.2.le)
+  have hpu : β ≤ p u := by
+    by_contra hn
+    have hlt : p u < β := lt_of_not_ge hn
+    simp [apm_t00a05_rot, hlt, not_lt.mpr hβB] at hhi
+    linarith [hpuIcc.1, hpuIcc.2, hBIcc.2]
+  simp [apm_t00a05_rot, not_lt.mpr hpu, not_lt.mpr hβB] at hhi
+  exact ⟨hpu, by linarith⟩
+
+lemma apm_t00a05_perimeter_mem_Icc_from_last_to_end
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β a A u : ℝ} (hβ0 : 0 < β) (hβ8 : β < 8)
+    (hdecode : apm_t00a05_squareOfPerimeter β =
+      apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
+    (hmono : StrictMonoOn
+      (fun t => apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+      (Set.Ioo (0 : ℝ) (2 * Real.pi)))
+    (ha : a ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hu : u ∈ Set.Icc a (2 * Real.pi))
+    (hpa : apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ a).1, (γ a).2.1)) = A)
+    (hAβ : A < β) :
+    apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)) ∈
+      Set.Icc A β := by
+  let p : ℝ → ℝ := fun t => apm_t00a05_squarePerimeter
+    (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))
+  have hp0 : p 0 = β := by
+    change apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1)) = β
+    rw [← hdecode, apm_t00a05_squarePerimeter_squareOfPerimeter hβ0.le hβ8.le]
+    simp [hβ8.ne]
+  have hpT : p (2 * Real.pi) = β := by
+    rw [show p (2 * Real.pi) = p 0 by
+      simp only [p]
+      rw [hγ.2.1]]
+    exact hp0
+  by_cases hua : u = a
+  · subst u; simp [p, hpa, hAβ.le]
+  by_cases huT : u = 2 * Real.pi
+  · subst u; simp [p, hpT, hAβ.le]
+  have huIoo : u ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) :=
+    ⟨lt_of_lt_of_le ha.1 hu.1, lt_of_le_of_ne hu.2 huT⟩
+  have hau : a < u := lt_of_le_of_ne hu.1 (Ne.symm hua)
+  have hlo := hmono ha huIoo hau
+  change apm_t00a05_rot β (p a) < apm_t00a05_rot β (p u) at hlo
+  change p a = A at hpa
+  rw [hpa] at hlo
+  have hpuIcc : p u ∈ Set.Icc (0 : ℝ) 8 :=
+    apm_t00a05_squarePerimeter_mem_Icc
+      (apm_t00a05_C2_radialized_mem_sphere hγ huIoo.1.le huIoo.2.le)
+  have hAIcc : A ∈ Set.Icc (0 : ℝ) 8 := by
+    rw [← hpa]
+    exact apm_t00a05_squarePerimeter_mem_Icc
+      (apm_t00a05_C2_radialized_mem_sphere hγ ha.1.le ha.2.le)
+  have hpu : p u < β := by
+    by_contra hn
+    have hge : β ≤ p u := le_of_not_gt hn
+    simp [apm_t00a05_rot, hAβ, not_lt.mpr hge] at hlo
+    linarith [hpuIcc.1, hpuIcc.2, hAIcc.1]
+  simp [apm_t00a05_rot, hAβ, hpu] at hlo
+  exact ⟨by linarith, hpu.le⟩
 
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
