@@ -2520,6 +2520,58 @@ lemma apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range
     exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
       rw [hqx]; norm_num)
 
+lemma apm_t00a05_C2_y_ne_zero_of_perimeter_mem_Icc_zero_two
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b : ℝ} (ha : 0 ≤ a) (hb : b ≤ 2 * Real.pi)
+    (hrange : ∀ t ∈ Set.Icc a b,
+      apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)) ∈ Set.Icc (0 : ℝ) 2) :
+    ∀ t ∈ Set.Icc a b, (γ t).2.1 ≠ 0 := by
+  intro t ht
+  have hp := apm_t00a05_C2_projection_mem_frontier hγ
+    (ha.trans ht.1) (ht.2.trans hb)
+  exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).1
+    (hrange t ht)
+
+lemma apm_t00a05_C2_x_ne_zero_of_perimeter_mem_Icc_two_four
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b : ℝ} (ha : 0 ≤ a) (hb : b ≤ 2 * Real.pi)
+    (hrange : ∀ t ∈ Set.Icc a b,
+      apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)) ∈ Set.Icc (2 : ℝ) 4) :
+    ∀ t ∈ Set.Icc a b, (γ t).1 ≠ 0 := by
+  intro t ht
+  have hp := apm_t00a05_C2_projection_mem_frontier hγ
+    (ha.trans ht.1) (ht.2.trans hb)
+  exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).2.1
+    (hrange t ht)
+
+lemma apm_t00a05_C2_y_ne_zero_of_perimeter_mem_Icc_four_six
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b : ℝ} (ha : 0 ≤ a) (hb : b ≤ 2 * Real.pi)
+    (hrange : ∀ t ∈ Set.Icc a b,
+      apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)) ∈ Set.Icc (4 : ℝ) 6) :
+    ∀ t ∈ Set.Icc a b, (γ t).2.1 ≠ 0 := by
+  intro t ht
+  have hp := apm_t00a05_C2_projection_mem_frontier hγ
+    (ha.trans ht.1) (ht.2.trans hb)
+  exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).2.2.1
+    (hrange t ht)
+
+lemma apm_t00a05_C2_x_ne_zero_of_perimeter_mem_Icc_six_eight
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b : ℝ} (ha : 0 ≤ a) (hb : b ≤ 2 * Real.pi)
+    (hrange : ∀ t ∈ Set.Icc a b,
+      apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)) ∈ Set.Icc (6 : ℝ) 8) :
+    ∀ t ∈ Set.Icc a b, (γ t).1 ≠ 0 := by
+  intro t ht
+  have hp := apm_t00a05_C2_projection_mem_frontier hγ
+    (ha.trans ht.1) (ht.2.trans hb)
+  exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).2.2.2
+    (hrange t ht)
+
 lemma apm_t00a05_radializedTime_lt_of_rot_perimeter_lt
     {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
     {β : ℝ}
