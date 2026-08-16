@@ -353,6 +353,93 @@ lemma apm_t00a05_squareAngle_endpoints :
   norm_num [apm_t00a05_squareAngle, Real.arctan_neg, Real.arctan_one]
   ring
 
+lemma apm_t00a05_squareAngle_strictMonoOn :
+    StrictMonoOn apm_t00a05_squareAngle (Set.Icc (0 : ℝ) 8) := by
+  have heq24 {s : ℝ} (hs : s ∈ Set.Icc (2 : ℝ) 4) :
+      apm_t00a05_squareAngle s = Real.arctan (s - 3) + 2 * Real.pi := by
+    by_cases hs2 : s = 2
+    · subst s
+      norm_num [apm_t00a05_squareAngle, Real.arctan_neg, Real.arctan_one]
+      ring
+    · simp [apm_t00a05_squareAngle, not_le.mpr (lt_of_le_of_ne hs.1 (Ne.symm hs2)), hs.2]
+  have heq46 {s : ℝ} (hs : s ∈ Set.Icc (4 : ℝ) 6) :
+      apm_t00a05_squareAngle s =
+        -Real.arctan (5 - s) + 5 * Real.pi / 2 := by
+    by_cases hs4 : s = 4
+    · subst s
+      norm_num [apm_t00a05_squareAngle, Real.arctan_one]
+      ring
+    · have h4s : 4 < s := lt_of_le_of_ne hs.1 (Ne.symm hs4)
+      simp [apm_t00a05_squareAngle, not_le.mpr (by linarith : 2 < s),
+        not_le.mpr h4s, hs.2]
+  have heq68 {s : ℝ} (hs : s ∈ Set.Icc (6 : ℝ) 8) :
+      apm_t00a05_squareAngle s = Real.arctan (s - 7) + 3 * Real.pi := by
+    by_cases hs6 : s = 6
+    · subst s
+      norm_num [apm_t00a05_squareAngle, Real.arctan_neg, Real.arctan_one]
+      ring
+    · have h6s : 6 < s := lt_of_le_of_ne hs.1 (Ne.symm hs6)
+      simp [apm_t00a05_squareAngle, not_le.mpr (by linarith : 2 < s),
+        not_le.mpr (by linarith : 4 < s), not_le.mpr h6s]
+  have h02 : StrictMonoOn apm_t00a05_squareAngle (Set.Icc (0 : ℝ) 2) := by
+    intro x hx y hy hxy
+    simp only [apm_t00a05_squareAngle, if_pos hx.2, if_pos hy.2]
+    have := Real.arctan_strictMono (sub_lt_sub_right hxy 1)
+    linarith
+  have h24 : StrictMonoOn apm_t00a05_squareAngle (Set.Icc (2 : ℝ) 4) := by
+    intro x hx y hy hxy
+    rw [heq24 hx, heq24 hy]
+    have := Real.arctan_strictMono (sub_lt_sub_right hxy 3)
+    linarith
+  have h46 : StrictMonoOn apm_t00a05_squareAngle (Set.Icc (4 : ℝ) 6) := by
+    intro x hx y hy hxy
+    rw [heq46 hx, heq46 hy]
+    have := neg_lt_neg (Real.arctan_strictMono (sub_lt_sub_left hxy 5))
+    linarith
+  have h68 : StrictMonoOn apm_t00a05_squareAngle (Set.Icc (6 : ℝ) 8) := by
+    intro x hx y hy hxy
+    rw [heq68 hx, heq68 hy]
+    have := Real.arctan_strictMono (sub_lt_sub_right hxy 7)
+    linarith
+  have h04 : StrictMonoOn apm_t00a05_squareAngle (Set.Icc (0 : ℝ) 4) := by
+    rw [show Set.Icc (0 : ℝ) 4 = Set.Icc 0 2 ∪ Set.Icc 2 4 by
+      ext x; simp only [Set.mem_Icc, Set.mem_union]; constructor
+      · intro hx
+        by_cases h : x ≤ 2
+        · exact Or.inl ⟨hx.1, h⟩
+        · exact Or.inr ⟨le_of_not_ge h, hx.2⟩
+      · rintro (hx | hx) <;> constructor <;> linarith]
+    exact h02.union h24
+      (show IsGreatest (Set.Icc (0 : ℝ) 2) 2 from
+        ⟨⟨by norm_num, le_rfl⟩, fun _ h => h.2⟩)
+      (show IsLeast (Set.Icc (2 : ℝ) 4) 2 from
+        ⟨⟨le_rfl, by norm_num⟩, fun _ h => h.1⟩)
+  have h06 : StrictMonoOn apm_t00a05_squareAngle (Set.Icc (0 : ℝ) 6) := by
+    rw [show Set.Icc (0 : ℝ) 6 = Set.Icc 0 4 ∪ Set.Icc 4 6 by
+      ext x; simp only [Set.mem_Icc, Set.mem_union]; constructor
+      · intro hx
+        by_cases h : x ≤ 4
+        · exact Or.inl ⟨hx.1, h⟩
+        · exact Or.inr ⟨le_of_not_ge h, hx.2⟩
+      · rintro (hx | hx) <;> constructor <;> linarith]
+    exact h04.union h46
+      (show IsGreatest (Set.Icc (0 : ℝ) 4) 4 from
+        ⟨⟨by norm_num, le_rfl⟩, fun _ h => h.2⟩)
+      (show IsLeast (Set.Icc (4 : ℝ) 6) 4 from
+        ⟨⟨le_rfl, by norm_num⟩, fun _ h => h.1⟩)
+  rw [show Set.Icc (0 : ℝ) 8 = Set.Icc 0 6 ∪ Set.Icc 6 8 by
+    ext x; simp only [Set.mem_Icc, Set.mem_union]; constructor
+    · intro hx
+      by_cases h : x ≤ 6
+      · exact Or.inl ⟨hx.1, h⟩
+      · exact Or.inr ⟨le_of_not_ge h, hx.2⟩
+    · rintro (hx | hx) <;> constructor <;> linarith]
+  exact h06.union h68
+    (show IsGreatest (Set.Icc (0 : ℝ) 6) 6 from
+      ⟨⟨by norm_num, le_rfl⟩, fun _ h => h.2⟩)
+    (show IsLeast (Set.Icc (6 : ℝ) 8) 6 from
+      ⟨⟨le_rfl, by norm_num⟩, fun _ h => h.1⟩)
+
 /-- The four affine sides of the square perimeter decoder glue continuously
 at the three corners. -/
 lemma apm_t00a05_squareOfPerimeter_continuous :
