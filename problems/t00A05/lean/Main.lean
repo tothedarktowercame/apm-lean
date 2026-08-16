@@ -297,6 +297,13 @@ lemma apm_t00a05_squarePerimeter_left {q : ℝ × ℝ}
     apm_t00a05_squarePerimeter q = 7 - q.2 := by
   simp [apm_t00a05_squarePerimeter, hyneg, hx, hy]
 
+lemma apm_t00a05_squarePerimeter_corners :
+    apm_t00a05_squarePerimeter ((-1, -1) : ℝ × ℝ) = 0 ∧
+    apm_t00a05_squarePerimeter ((1, -1) : ℝ × ℝ) = 2 ∧
+    apm_t00a05_squarePerimeter ((1, 1) : ℝ × ℝ) = 4 ∧
+    apm_t00a05_squarePerimeter ((-1, 1) : ℝ × ℝ) = 6 := by
+  norm_num [apm_t00a05_squarePerimeter]
+
 lemma apm_t00a05_squarePerimeter_mem_Icc {q : ℝ × ℝ}
     (hq : q ∈ Metric.sphere 0 1) :
     apm_t00a05_squarePerimeter q ∈ Set.Icc (0 : ℝ) 8 := by
@@ -1235,6 +1242,16 @@ lemma apm_t00a05_radializedTime_spec
           (γ (apm_t00a05_radializedTime hγ r hr).1).2.1) = r :=
   Classical.choose_spec
     (apm_t00a05_C2_radialized_unique_on_Ico hγ hr) |>.1
+
+lemma apm_t00a05_radializedTime_perimeter
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1) :
+    apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph
+          ((γ (apm_t00a05_radializedTime hγ r hr).1).1,
+            (γ (apm_t00a05_radializedTime hγ r hr).1).2.1)) =
+      apm_t00a05_squarePerimeter r := by
+  rw [apm_t00a05_radializedTime_spec hγ r hr]
 
 lemma apm_t00a05_radializedTime_eq_iff
     {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
