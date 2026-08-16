@@ -278,6 +278,49 @@ lemma apm_t00a05_supSphere_on_edge {q : ℝ × ℝ}
     · exact Or.inr (Or.inr (Or.inr hy))
     · exact Or.inr (Or.inr (Or.inl hy))
 
+lemma apm_t00a05_supSphere_open_edge_of_not_corner {q : ℝ × ℝ}
+    (hq : q ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+    (hcorners : q ≠ (1, -1) ∧ q ≠ (1, 1) ∧
+      q ≠ (-1, 1) ∧ q ≠ (-1, -1)) :
+    (q.2 = -1 ∧ -1 < q.1 ∧ q.1 < 1) ∨
+    (q.1 = 1 ∧ -1 < q.2 ∧ q.2 < 1) ∨
+    (q.2 = 1 ∧ -1 < q.1 ∧ q.1 < 1) ∨
+    (q.1 = -1 ∧ -1 < q.2 ∧ q.2 < 1) := by
+  rcases apm_t00a05_supSphere_coordinate_bounds hq with ⟨hx0, hx1, hy0, hy1⟩
+  rcases apm_t00a05_supSphere_on_edge hq with hx | hx | hy | hy
+  · right; right; right
+    refine ⟨hx, lt_of_le_of_ne hy0 ?_, lt_of_le_of_ne hy1 ?_⟩
+    · intro heq
+      apply hcorners.2.2.2
+      exact Prod.ext hx heq.symm
+    · intro heq
+      apply hcorners.2.2.1
+      exact Prod.ext hx heq
+  · right; left
+    refine ⟨hx, lt_of_le_of_ne hy0 ?_, lt_of_le_of_ne hy1 ?_⟩
+    · intro heq
+      apply hcorners.1
+      exact Prod.ext hx heq.symm
+    · intro heq
+      apply hcorners.2.1
+      exact Prod.ext hx heq
+  · left
+    refine ⟨hy, lt_of_le_of_ne hx0 ?_, lt_of_le_of_ne hx1 ?_⟩
+    · intro heq
+      apply hcorners.2.2.2
+      exact Prod.ext heq.symm hy
+    · intro heq
+      apply hcorners.1
+      exact Prod.ext heq hy
+  · right; right; left
+    refine ⟨hy, lt_of_le_of_ne hx0 ?_, lt_of_le_of_ne hx1 ?_⟩
+    · intro heq
+      apply hcorners.2.2.1
+      exact Prod.ext heq.symm hy
+    · intro heq
+      apply hcorners.2.1
+      exact Prod.ext heq hy
+
 lemma apm_t00a05_squarePerimeter_bottom {q : ℝ × ℝ} (h : q.2 = -1) :
     apm_t00a05_squarePerimeter q = q.1 + 1 := by
   simp [apm_t00a05_squarePerimeter, h]
