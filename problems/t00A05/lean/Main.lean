@@ -784,6 +784,28 @@ lemma apm_t00a05_exists_angularDensity_pos
   intro t ht
   exact le_of_not_gt (fun hpos => h ⟨t, ht, hpos⟩)
 
+lemma apm_t00a05_exists_angularDensity_pos_Ioo
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    ∃ t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi),
+      0 < apm_t00a05_angularDensity γ t := by
+  by_contra h
+  have hnonpos : ∀ t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_angularDensity γ t ≤ 0 := by
+    intro t ht
+    exact le_of_not_gt (fun hpos => h ⟨t, ht, hpos⟩)
+  have harea_nonpos :
+      ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+          (γ t).1 * deriv (fun s => (γ s).2.1) t -
+            (γ t).2.1 * deriv (fun s => (γ s).1) t ≤ 0 := by
+    rw [integral_Icc_eq_integral_Ioo]
+    apply integral_nonpos_of_ae
+    filter_upwards [ae_restrict_mem measurableSet_Ioo] with t ht
+    have ht' : t ∈ Set.Icc (0 : ℝ) (2 * Real.pi) := ⟨ht.1.le, ht.2.le⟩
+    rw [apm_t00a05_signedAreaDensity_eq_radius_sq_mul_angularDensity hγ ht']
+    exact mul_nonpos_of_nonneg_of_nonpos
+      (apm_t00a05_projected_radius_sq_pos hγ ht').le (hnonpos t ht)
+  exact (not_lt_of_ge harea_nonpos) hγ.2.2.2.2
+
 /-- The frozen line-integral encoding reduces exactly to the negative angular
 density: its `z` contribution is the already-proved exact term. -/
 lemma apm_t00a05_lineIntegral_eq_neg_angular {γ : ℝ → ℝ × ℝ × ℝ}
