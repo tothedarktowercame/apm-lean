@@ -2364,6 +2364,70 @@ lemma apm_t00a05_corner_time_ratios
   · simpa using ratio_yx (-1, 1) apm_t00a05_cornerTL_mem_sphere (by norm_num)
   · simpa using ratio_xy (-1, -1) apm_t00a05_cornerBL_mem_sphere (by norm_num)
 
+lemma apm_t00a05_radialized_coordinate_ne_zero_of_perimeter_range
+    {p : ℝ × ℝ} (hp : p ∈ frontier apm_t00a05_region) :
+    let q := apm_t00a05_radialHomeomorph p
+    let s := apm_t00a05_squarePerimeter q
+    ((0 < s ∧ s < 2) → p.2 ≠ 0) ∧
+    ((2 < s ∧ s < 4) → p.1 ≠ 0) ∧
+    ((4 < s ∧ s < 6) → p.2 ≠ 0) ∧
+    ((6 < s ∧ s < 8) → p.1 ≠ 0) := by
+  dsimp only
+  have hq : apm_t00a05_radialHomeomorph p ∈
+      Metric.sphere (0 : ℝ × ℝ) 1 :=
+    (by rw [← apm_t00a05_radialHomeomorph_image_frontier]
+        exact ⟨p, hp, rfl⟩)
+  have hinv := apm_t00a05_squareOfPerimeter_squarePerimeter hq
+  let s := apm_t00a05_squarePerimeter (apm_t00a05_radialHomeomorph p)
+  have hcoord (hs : s ∈ Set.Icc (0 : ℝ) 8) :
+      apm_t00a05_squareOfPerimeter s = apm_t00a05_radialHomeomorph p := by
+    exact hinv
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rintro ⟨hs0, hs2⟩
+    change 0 < s at hs0
+    change s < 2 at hs2
+    have heq := hcoord ⟨hs0.le, by linarith⟩
+    have hqy : (apm_t00a05_radialHomeomorph p).2 = -1 := by
+      rw [← heq]
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs <;> simp_all <;> linarith
+    exact (apm_t00a05_radialHomeomorph_snd_ne_zero_iff hp).mp (by
+      rw [hqy]
+      norm_num)
+  · rintro ⟨hs2, hs4⟩
+    change 2 < s at hs2
+    change s < 4 at hs4
+    have heq := hcoord ⟨by linarith, by linarith⟩
+    have hqx : (apm_t00a05_radialHomeomorph p).1 = 1 := by
+      rw [← heq]
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs <;> simp_all <;> linarith
+    exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
+      rw [hqx]
+      norm_num)
+  · rintro ⟨hs4, hs6⟩
+    change 4 < s at hs4
+    change s < 6 at hs6
+    have heq := hcoord ⟨by linarith, by linarith⟩
+    have hqy : (apm_t00a05_radialHomeomorph p).2 = 1 := by
+      rw [← heq]
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs <;> simp_all <;> linarith
+    exact (apm_t00a05_radialHomeomorph_snd_ne_zero_iff hp).mp (by
+      rw [hqy]
+      norm_num)
+  · rintro ⟨hs6, hs8⟩
+    change 6 < s at hs6
+    change s < 8 at hs8
+    have heq := hcoord ⟨by linarith, hs8.le⟩
+    have hqx : (apm_t00a05_radialHomeomorph p).1 = -1 := by
+      rw [← heq]
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs <;> simp_all <;> linarith
+    exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
+      rw [hqx]
+      norm_num)
+
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
 ordering input for the four FTC arcs. -/
