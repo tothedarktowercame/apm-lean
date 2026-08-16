@@ -17,6 +17,12 @@ change to the ambient typeclass instance.
 
 theorem apm_t94j02 {X : Type*} (σ : TopologicalSpace X)
     (hcompact : @CompactSpace X σ) (hhausdorff : @T2Space X σ) :
-    (∀ τ : TopologicalSpace X, σ < τ → ¬@CompactSpace X τ) ∧
-    (∀ τ : TopologicalSpace X, τ < σ → ¬@T2Space X τ) := by
+    -- STATEMENT REPAIR (frame-1, 2026-08-16, operator-authorized: Joe's
+    -- ruling "if the Lean is incorrect but the original problem is correct,
+    -- repair the Lean and redispatch"). Mathlib orders TopologicalSpace with
+    -- ⊥ = discrete: σ < τ means τ COARSER. The original conjuncts were both
+    -- inverted (counterexample: X=Bool, σ=⊥, τ=⊤ — indiscrete is compact).
+    -- Correct maximal-compact/minimal-Hausdorff directions:
+    (∀ τ : TopologicalSpace X, τ < σ → ¬@CompactSpace X τ) ∧
+    (∀ τ : TopologicalSpace X, σ < τ → ¬@T2Space X τ) := by
   sorry
