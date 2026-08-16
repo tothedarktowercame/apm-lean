@@ -195,6 +195,53 @@ lemma apm_t00a05_level_set_eq_frontier :
   exact ⟨apm_t00a05_level_eq_ten_mem_frontier,
     apm_t00a05_mem_frontier_level_eq_ten⟩
 
+lemma apm_t00a05_region_mem_nhds_zero : apm_t00a05_region ∈ nhds (0, 0) := by
+  exact Filter.mem_of_superset
+    (isOpen_interior.mem_nhds apm_t00a05_origin_mem_interior_region)
+    interior_subset
+
+noncomputable def apm_t00a05_radialHomeomorph :
+    (ℝ × ℝ) ≃ₜ (ℝ × ℝ) :=
+  gaugeRescaleHomeomorph apm_t00a05_region (Metric.ball 0 1)
+    apm_t00a05_region_convex apm_t00a05_region_mem_nhds_zero
+    (NormedSpace.isVonNBounded_of_isBounded ℝ apm_t00a05_region_isBounded)
+    (convex_ball 0 1) (Metric.isOpen_ball.mem_nhds (Metric.mem_ball_self zero_lt_one))
+    (NormedSpace.isVonNBounded_ball ℝ (ℝ × ℝ) 1)
+
+lemma apm_t00a05_radialHomeomorph_apply (q : ℝ × ℝ) :
+    apm_t00a05_radialHomeomorph q =
+      (gauge apm_t00a05_region q / gauge (Metric.ball (0 : ℝ × ℝ) 1) q) • q :=
+  rfl
+
+lemma apm_t00a05_radialHomeomorph_smul {c : ℝ} (hc : 0 ≤ c)
+    (q : ℝ × ℝ) :
+    apm_t00a05_radialHomeomorph (c • q) =
+      c • apm_t00a05_radialHomeomorph q := by
+  exact gaugeRescale_smul apm_t00a05_region (Metric.ball 0 1) hc q
+
+lemma apm_t00a05_radialHomeomorph_image_frontier :
+    apm_t00a05_radialHomeomorph '' frontier apm_t00a05_region =
+      Metric.sphere 0 1 := by
+  rw [Homeomorph.image_frontier]
+  have himage : apm_t00a05_radialHomeomorph '' apm_t00a05_region =
+      Metric.closedBall 0 1 := by
+    change gaugeRescaleHomeomorph apm_t00a05_region (Metric.ball 0 1)
+      apm_t00a05_region_convex apm_t00a05_region_mem_nhds_zero
+      (NormedSpace.isVonNBounded_of_isBounded ℝ apm_t00a05_region_isBounded)
+      (convex_ball 0 1)
+      (Metric.isOpen_ball.mem_nhds (Metric.mem_ball_self zero_lt_one))
+      (NormedSpace.isVonNBounded_ball ℝ (ℝ × ℝ) 1) ''
+        apm_t00a05_region = _
+    have hclose := image_gaugeRescaleHomeomorph_closure
+      apm_t00a05_region_convex apm_t00a05_region_mem_nhds_zero
+      (NormedSpace.isVonNBounded_of_isBounded ℝ apm_t00a05_region_isBounded)
+      (convex_ball 0 1)
+      (Metric.isOpen_ball.mem_nhds (Metric.mem_ball_self zero_lt_one))
+      (NormedSpace.isVonNBounded_ball ℝ (ℝ × ℝ) 1)
+    simpa [apm_t00a05_region_isClosed.closure_eq, closure_ball] using hclose
+  rw [himage, frontier_closedBall]
+  norm_num
+
 lemma apm_t00a05_segment_origin_subset_region {q : ℝ × ℝ}
     (hq : q ∈ apm_t00a05_region) :
     segment ℝ (0, 0) q ⊆ apm_t00a05_region :=
