@@ -1138,6 +1138,24 @@ lemma apm_t00a05_rot_mem_Icc {β s : ℝ} (hβ0 : 0 ≤ β) (hβ8 : β ≤ 8)
   · constructor <;> linarith [hs.1, hs.2]
   · constructor <;> linarith [hs.1, hs.2, not_lt.mp h]
 
+lemma apm_t00a05_squareAngleFrom_rot {β s : ℝ}
+    (hβ0 : 0 < β) (hβ8 : β ≤ 8) (hs : s ∈ Set.Icc (0 : ℝ) 8) :
+    apm_t00a05_squareAngleFrom β (apm_t00a05_rot β s) =
+      if s < β then apm_t00a05_squareAngle s + 2 * Real.pi
+      else apm_t00a05_squareAngle s := by
+  unfold apm_t00a05_rot
+  split_ifs with h
+  · by_cases hs0 : s = 0
+    · subst s
+      have hend := apm_t00a05_squareAngle_endpoints
+      simp [apm_t00a05_squareAngleFrom]
+      linarith
+    · have hspos : 0 < s := lt_of_le_of_ne hs.1 (Ne.symm hs0)
+      have hcut : ¬s + 8 - β ≤ 8 - β := by linarith
+      simp [apm_t00a05_squareAngleFrom, hcut]
+  · have hcut : s - β ≤ 8 - β := by linarith [hs.2]
+    simp [apm_t00a05_squareAngleFrom, hcut]
+
 lemma apm_t00a05_squareAngleFrom_strictAntiOn_comp_rot
     {D : Set ℝ} {p : ℝ → ℝ} {β : ℝ}
     (hβ0 : 0 ≤ β) (hβ8 : β ≤ 8)
