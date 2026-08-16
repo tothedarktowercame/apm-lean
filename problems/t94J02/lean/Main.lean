@@ -25,4 +25,20 @@ theorem apm_t94j02 {X : Type*} (σ : TopologicalSpace X)
     -- Correct maximal-compact/minimal-Hausdorff directions:
     (∀ τ : TopologicalSpace X, τ < σ → ¬@CompactSpace X τ) ∧
     (∀ τ : TopologicalSpace X, σ < τ → ¬@T2Space X τ) := by
-  sorry
+  have topology_eq_of_compact_to_hausdorff
+      (source target : TopologicalSpace X)
+      (hc : @CompactSpace X source) (hh : @T2Space X target)
+      (hle : source ≤ target) : target = source := by
+    have homeo : @IsHomeomorph X X source target id :=
+      (@isHomeomorph_iff_continuous_bijective X X source target id hc hh).2
+        ⟨continuous_id_of_le hle, Function.bijective_id⟩
+    apply le_antisymm
+    · exact (@isOpen_implies_isOpen_iff X source target).1 fun s hs ↦ by
+        simpa only [Set.image_id] using
+          (@IsHomeomorph.isOpenMap X X source target id homeo s hs)
+    · exact hle
+  constructor
+  · intro τ hτ hτcompact
+    exact hτ.ne (topology_eq_of_compact_to_hausdorff τ σ hτcompact hhausdorff hτ.le).symm
+  · intro τ hτ hτhausdorff
+    exact hτ.ne (topology_eq_of_compact_to_hausdorff σ τ hcompact hτhausdorff hτ.le).symm
