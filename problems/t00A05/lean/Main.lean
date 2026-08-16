@@ -928,6 +928,27 @@ lemma apm_t00a05_angularDensity_integral_of_y_ne_zero
     _ = F b - F a := intervalIntegral.integral_deriv_of_contDiffOn_Icc hF hab
     _ = _ := rfl
 
+/-- Positive orientation is witnessed by a positive derivative of one of the
+two local angle primitives at an interior time. -/
+lemma apm_t00a05_exists_local_angle_deriv_pos
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    ∃ t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi),
+      (((γ t).1 ≠ 0 ∧
+          0 < deriv (fun u => Real.arctan ((γ u).2.1 / (γ u).1)) t) ∨
+       ((γ t).2.1 ≠ 0 ∧
+          0 < deriv (fun u => -Real.arctan ((γ u).1 / (γ u).2.1)) t)) := by
+  rcases apm_t00a05_exists_angularDensity_pos_Ioo hγ with ⟨t, ht, hpos⟩
+  refine ⟨t, ht, ?_⟩
+  rcases apm_t00a05_C2_avoids_axis hγ ht.1.le ht.2.le with hx | hy
+  · left
+    exact ⟨hx, by
+      rw [apm_t00a05_angle_primitive_deriv hγ.1 hx]
+      exact hpos⟩
+  · right
+    exact ⟨hy, by
+      rw [apm_t00a05_angle_primitive_deriv_y hγ.1 hy]
+      exact hpos⟩
+
 lemma apm_t00a05_dOmega_eq_zero (p : apm_t00a05_U) :
     apm_t00a05_dOmega p.1 = 0 := by
   rcases p with ⟨⟨x, y, z⟩, hxy⟩
