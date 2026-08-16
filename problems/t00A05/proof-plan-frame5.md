@@ -270,3 +270,18 @@ The remaining proof is now the finite four-way cut-location split
 (`β` between successive corner coordinates, with equality handled by item 3),
 followed by interval-integral additivity and the already-proved endpoint
 ratios.  No geometric nonvanishing or zero-time edge case remains implicit.
+
+## Attempt-7 case-split boundary
+
+The arc nonvanishing result now includes closed endpoints, so each corner is
+accepted by both adjacent FTC charts without an endpoint exception.  The
+`6 < β ≤ 8` ordering case is also complete: BL precedes BR, BR precedes TR,
+and TR precedes TL, including the possibility that BL is exactly the temporal
+cut at zero.  Its proof uses the generic rotated-coordinate comparison and the
+zero-time characterization, not an asserted diagram.
+
+The exact next failing case is `0 < β ≤ 2`, whose cyclic order is
+`BR < TR < TL < BL` (with BR possibly at time zero when `β = 2`).  The two
+middle cut-location cases are its mechanical rotations.  Once those three
+ordering lemmas land, the only remaining code is the four corresponding
+interval-additivity/telescope branches.
