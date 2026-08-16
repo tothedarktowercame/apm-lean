@@ -778,6 +778,38 @@ lemma apm_t00a05_rot_square_chart_continuous {β : ℝ}
     simpa [Function.comp_def, f, g, D, S, b, apm_t00a05_squareDecoder] using this
   simpa [g, S] using hquot.continuous_iff.mpr hcomp
 
+lemma apm_t00a05_squareOfPerimeter_eq_of_rot_eq {β s t : ℝ}
+    (hs : s ∈ Set.Icc (0 : ℝ) 8) (ht : t ∈ Set.Icc (0 : ℝ) 8)
+    (hst : apm_t00a05_rot β s = apm_t00a05_rot β t) :
+    apm_t00a05_squareOfPerimeter s =
+      apm_t00a05_squareOfPerimeter t := by
+  rcases hs with ⟨hs0, hs8⟩
+  rcases ht with ⟨ht0, ht8⟩
+  unfold apm_t00a05_rot at hst
+  split_ifs at hst with hsβ htβ
+  · rw [show s = t by linarith]
+  · have hs0 : s = 0 := by linarith
+    have ht8 : t = 8 := by linarith
+    rw [hs0, ht8]
+    norm_num [apm_t00a05_squareOfPerimeter]
+  · have hs8 : s = 8 := by linarith
+    have ht0 : t = 0 := by linarith
+    rw [hs8, ht0]
+    norm_num [apm_t00a05_squareOfPerimeter]
+  · rw [show s = t by linarith]
+
+lemma apm_t00a05_rot_square_chart_injective {β : ℝ} :
+    Set.InjOn
+      (fun q : ℝ × ℝ =>
+        apm_t00a05_rot β (apm_t00a05_squarePerimeter q))
+      (Metric.sphere (0 : ℝ × ℝ) 1) := by
+  intro p hp q hq hpq
+  have hdecoder := apm_t00a05_squareOfPerimeter_eq_of_rot_eq
+    (apm_t00a05_squarePerimeter_mem_Icc hp)
+    (apm_t00a05_squarePerimeter_mem_Icc hq) hpq
+  simpa [apm_t00a05_squareOfPerimeter_squarePerimeter hp,
+    apm_t00a05_squareOfPerimeter_squarePerimeter hq] using hdecoder
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
