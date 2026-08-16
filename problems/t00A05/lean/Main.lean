@@ -2404,6 +2404,31 @@ lemma apm_t00a05_corner_time_ratios
   · simpa using ratio_yx (-1, 1) apm_t00a05_cornerTL_mem_sphere (by norm_num)
   · simpa using ratio_xy (-1, -1) apm_t00a05_cornerBL_mem_sphere (by norm_num)
 
+lemma apm_t00a05_corner_time_all_ratios
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    let tBR := (apm_t00a05_cornerBRTime hγ).1
+    let tTR := (apm_t00a05_cornerTRTime hγ).1
+    let tTL := (apm_t00a05_cornerTLTime hγ).1
+    let tBL := (apm_t00a05_cornerBLTime hγ).1
+    ((γ tBR).2.1 / (γ tBR).1 = -1 ∧ (γ tBR).1 / (γ tBR).2.1 = -1) ∧
+    ((γ tTR).2.1 / (γ tTR).1 = 1 ∧ (γ tTR).1 / (γ tTR).2.1 = 1) ∧
+    ((γ tTL).2.1 / (γ tTL).1 = -1 ∧ (γ tTL).1 / (γ tTL).2.1 = -1) ∧
+    ((γ tBL).2.1 / (γ tBL).1 = 1 ∧ (γ tBL).1 / (γ tBL).2.1 = 1) := by
+  dsimp only
+  rcases apm_t00a05_corner_time_ratios hγ with ⟨hBR, hTR, hTL, hBL⟩
+  have inv_neg {x y : ℝ} (h : y / x = -1) : x / y = -1 := by
+    have hx : x ≠ 0 := by rintro rfl; norm_num at h
+    have hy : y ≠ 0 := by rintro rfl; simp [hx] at h
+    field_simp [hx, hy] at h ⊢
+    linarith
+  have inv_one {x y : ℝ} (h : x / y = 1) : y / x = 1 := by
+    have hy : y ≠ 0 := by rintro rfl; norm_num at h
+    have hx : x ≠ 0 := by rintro rfl; simp [hy] at h
+    field_simp [hx, hy] at h ⊢
+    linarith
+  exact ⟨⟨hBR, inv_neg hBR⟩, ⟨inv_one hTR, hTR⟩,
+    ⟨hTL, inv_neg hTL⟩, ⟨inv_one hBL, hBL⟩⟩
+
 lemma apm_t00a05_radialized_coordinate_ne_zero_of_perimeter_range
     {p : ℝ × ℝ} (hp : p ∈ frontier apm_t00a05_region) :
     let q := apm_t00a05_radialHomeomorph p
