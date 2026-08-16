@@ -336,6 +336,19 @@ lemma apm_t00a05_squareOfPerimeter_continuous :
   subst x
   norm_num
 
+lemma apm_t00a05_squareOfPerimeter_mem_sphere {s : ℝ}
+    (hs : s ∈ Set.Icc (0 : ℝ) 8) :
+    apm_t00a05_squareOfPerimeter s ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+  rw [apm_t00a05_mem_supSphere_iff]
+  unfold apm_t00a05_squareOfPerimeter
+  split_ifs with h2 h4 h6 <;> simp [Prod.fst, Prod.snd]
+  all_goals linarith
+
+noncomputable def apm_t00a05_squareDecoder :
+    Set.Icc (0 : ℝ) 8 → Metric.sphere (0 : ℝ × ℝ) 1 :=
+  fun s => ⟨apm_t00a05_squareOfPerimeter s,
+    apm_t00a05_squareOfPerimeter_mem_sphere s.2⟩
+
 lemma apm_t00a05_squareOfPerimeter_squarePerimeter {q : ℝ × ℝ}
     (hq : q ∈ Metric.sphere 0 1) :
     apm_t00a05_squareOfPerimeter (apm_t00a05_squarePerimeter q) = q := by
@@ -370,6 +383,21 @@ lemma apm_t00a05_squareOfPerimeter_squarePerimeter {q : ℝ × ℝ}
       if_neg (by linarith : ¬ 7 - q.2 ≤ 4),
       if_neg (by linarith : ¬ 7 - q.2 ≤ 6)]
     ext <;> simp [hxneg]
+
+/-- The closed perimeter interval is a quotient presentation of the square
+sphere, with its two endpoints identified at the lower-left corner. -/
+lemma apm_t00a05_squareDecoder_isQuotientMap :
+    Topology.IsQuotientMap apm_t00a05_squareDecoder := by
+  apply Topology.IsQuotientMap.of_surjective_continuous
+  · intro q
+    let s : Set.Icc (0 : ℝ) 8 :=
+      ⟨apm_t00a05_squarePerimeter q,
+        apm_t00a05_squarePerimeter_mem_Icc q.2⟩
+    refine ⟨s, ?_⟩
+    apply Subtype.ext
+    exact apm_t00a05_squareOfPerimeter_squarePerimeter q.2
+  · exact Continuous.subtype_mk
+      (apm_t00a05_squareOfPerimeter_continuous.comp continuous_subtype_val) _
 
 lemma apm_t00a05_squarePerimeter_injOn :
     Set.InjOn apm_t00a05_squarePerimeter (Metric.sphere (0 : ℝ × ℝ) 1) := by
