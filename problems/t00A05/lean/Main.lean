@@ -1985,6 +1985,122 @@ lemma apm_t00a05_radialized_eventually_top_open
   · exfalso; linarith
   · exact ⟨hyp, hux0, hux1⟩
 
+lemma apm_t00a05_raw_radial_angle_deriv_of_right_open
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hx : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1 = 1)
+    (hy0 : -1 < (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2)
+    (hy1 : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2 < 1) :
+    deriv (fun u => apm_t00a05_squareAngle
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) t =
+      apm_t00a05_angularDensity γ t := by
+  have hedge := apm_t00a05_radialized_eventually_right_open hγ ht hx hy0 hy1
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  have hev :
+      (fun u => apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) =ᶠ[nhds t]
+      (fun u => Real.arctan ((γ u).2.1 / (γ u).1) + 2 * Real.pi) := by
+    filter_upwards [hedge, hperiod] with u hu hup
+    exact apm_t00a05_squareAngle_radialized_right_open
+      (apm_t00a05_C2_projection_mem_frontier hγ hup.1.le hup.2.le)
+      hu.1 hu.2.1 hu.2.2
+  rw [hev.deriv_eq, deriv_add_const,
+    apm_t00a05_angle_primitive_deriv hγ.1]
+  · rfl
+  · exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff
+      (apm_t00a05_C2_projection_mem_frontier hγ ht.1.le ht.2.le)).mp
+        (by simp [hx])
+
+lemma apm_t00a05_raw_radial_angle_deriv_of_left_open
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hx : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1 = -1)
+    (hy0 : -1 < (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2)
+    (hy1 : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2 < 1) :
+    deriv (fun u => apm_t00a05_squareAngle
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) t =
+      apm_t00a05_angularDensity γ t := by
+  have hedge := apm_t00a05_radialized_eventually_left_open hγ ht hx hy0 hy1
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  have hev :
+      (fun u => apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) =ᶠ[nhds t]
+      (fun u => Real.arctan ((γ u).2.1 / (γ u).1) + 3 * Real.pi) := by
+    filter_upwards [hedge, hperiod] with u hu hup
+    exact apm_t00a05_squareAngle_radialized_left_open
+      (apm_t00a05_C2_projection_mem_frontier hγ hup.1.le hup.2.le)
+      hu.1 hu.2.1 hu.2.2
+  rw [hev.deriv_eq, deriv_add_const,
+    apm_t00a05_angle_primitive_deriv hγ.1]
+  · rfl
+  · exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff
+      (apm_t00a05_C2_projection_mem_frontier hγ ht.1.le ht.2.le)).mp
+        (by simp [hx])
+
+lemma apm_t00a05_raw_radial_angle_deriv_of_bottom_open
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hy : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2 = -1)
+    (hx0 : -1 < (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1)
+    (hx1 : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1 < 1) :
+    deriv (fun u => apm_t00a05_squareAngle
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) t =
+      apm_t00a05_angularDensity γ t := by
+  have hedge := apm_t00a05_radialized_eventually_bottom_open hγ ht hy hx0 hx1
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  have hev :
+      (fun u => apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) =ᶠ[nhds t]
+      (fun u => -Real.arctan ((γ u).1 / (γ u).2.1) + 3 * Real.pi / 2) := by
+    filter_upwards [hedge, hperiod] with u hu hup
+    exact apm_t00a05_squareAngle_radialized_bottom_open
+      (apm_t00a05_C2_projection_mem_frontier hγ hup.1.le hup.2.le)
+      hu.1 hu.2.1 hu.2.2
+  rw [hev.deriv_eq, deriv_add_const,
+    apm_t00a05_angle_primitive_deriv_y hγ.1]
+  · rfl
+  · exact (apm_t00a05_radialHomeomorph_snd_ne_zero_iff
+      (apm_t00a05_C2_projection_mem_frontier hγ ht.1.le ht.2.le)).mp
+        (by simp [hy])
+
+lemma apm_t00a05_raw_radial_angle_deriv_of_top_open
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hy : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2 = 1)
+    (hx0 : -1 < (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1)
+    (hx1 : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1 < 1) :
+    deriv (fun u => apm_t00a05_squareAngle
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) t =
+      apm_t00a05_angularDensity γ t := by
+  have hedge := apm_t00a05_radialized_eventually_top_open hγ ht hy hx0 hx1
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  have hev :
+      (fun u => apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) =ᶠ[nhds t]
+      (fun u => -Real.arctan ((γ u).1 / (γ u).2.1) + 5 * Real.pi / 2) := by
+    filter_upwards [hedge, hperiod] with u hu hup
+    exact apm_t00a05_squareAngle_radialized_top_open
+      (apm_t00a05_C2_projection_mem_frontier hγ hup.1.le hup.2.le)
+      hu.1 hu.2.1 hu.2.2
+  rw [hev.deriv_eq, deriv_add_const,
+    apm_t00a05_angle_primitive_deriv_y hγ.1]
+  · rfl
+  · exact (apm_t00a05_radialHomeomorph_snd_ne_zero_iff
+      (apm_t00a05_C2_projection_mem_frontier hγ ht.1.le ht.2.le)).mp
+        (by simp [hy])
+
 /-- Positive radial rescaling transfers both coordinate signs from a square
 sphere point to its canonical preimage on the original level-set curve. -/
 lemma apm_t00a05_radializedTime_coordinate_signs
