@@ -1177,6 +1177,36 @@ lemma apm_t00a05_C2_radialized_unique_on_Ico
   exact (apm_t00a05_C2_radialized_injOn hγ hu v.2
     (hur.trans hvr.symm)).symm
 
+/-- The canonical half-open-period time at which the radialized curve reaches
+a prescribed square-sphere point. -/
+noncomputable def apm_t00a05_radializedTime
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1) :
+    {t : ℝ // t ∈ Set.Ico (0 : ℝ) (2 * Real.pi)} :=
+  Classical.choose (apm_t00a05_C2_radialized_unique_on_Ico hγ hr)
+
+lemma apm_t00a05_radializedTime_spec
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1) :
+    apm_t00a05_radialHomeomorph
+        ((γ (apm_t00a05_radializedTime hγ r hr).1).1,
+          (γ (apm_t00a05_radializedTime hγ r hr).1).2.1) = r :=
+  Classical.choose_spec
+    (apm_t00a05_C2_radialized_unique_on_Ico hγ hr) |>.1
+
+lemma apm_t00a05_radializedTime_eq_iff
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+    (t : {t : ℝ // t ∈ Set.Ico (0 : ℝ) (2 * Real.pi)}) :
+    t = apm_t00a05_radializedTime hγ r hr ↔
+      apm_t00a05_radialHomeomorph ((γ t.1).1, (γ t.1).2.1) = r := by
+  constructor
+  · rintro rfl
+    exact apm_t00a05_radializedTime_spec hγ r hr
+  · intro ht
+    exact Classical.choose_spec
+      (apm_t00a05_C2_radialized_unique_on_Ico hγ hr) |>.2 t ht
+
 lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
     (h : apm_t00a05_radialHomeomorph p = r) :
     (r.1 ≠ 0 → r.2 = 0 → p.2 = 0) ∧
