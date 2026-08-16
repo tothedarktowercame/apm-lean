@@ -2405,6 +2405,7 @@ lemma apm_t00a05_radialized_coordinate_ne_zero_of_perimeter_range
     exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
       rw [hqx]
       norm_num)
+
   · rintro ⟨hs4, hs6⟩
     change 4 < s at hs4
     change s < 6 at hs6
@@ -2427,6 +2428,51 @@ lemma apm_t00a05_radialized_coordinate_ne_zero_of_perimeter_range
     exact (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
       rw [hqx]
       norm_num)
+
+lemma apm_t00a05_radializedTime_lt_of_rot_perimeter_lt
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β : ℝ}
+    (hmono : StrictMonoOn
+      (fun t => apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+      (Set.Ioo (0 : ℝ) (2 * Real.pi)))
+    {r s : ℝ × ℝ} (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+    (hs : s ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+    (htr0 : (apm_t00a05_radializedTime hγ r hr).1 ≠ 0)
+    (hts0 : (apm_t00a05_radializedTime hγ s hs).1 ≠ 0)
+    (hrot : apm_t00a05_rot β (apm_t00a05_squarePerimeter r) <
+      apm_t00a05_rot β (apm_t00a05_squarePerimeter s)) :
+    (apm_t00a05_radializedTime hγ r hr).1 <
+      (apm_t00a05_radializedTime hγ s hs).1 := by
+  let tr := (apm_t00a05_radializedTime hγ r hr).1
+  let ts := (apm_t00a05_radializedTime hγ s hs).1
+  have htr := (apm_t00a05_radializedTime hγ r hr).2
+  have hts := (apm_t00a05_radializedTime hγ s hs).2
+  have htrIoo : tr ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) :=
+    ⟨lt_of_le_of_ne htr.1 (Ne.symm htr0), htr.2⟩
+  have htsIoo : ts ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) :=
+    ⟨lt_of_le_of_ne hts.1 (Ne.symm hts0), hts.2⟩
+  rcases lt_or_gt_of_ne
+      (apm_t00a05_radializedTime_ne_of_ne hγ hr hs (by
+        intro hrs
+        subst s
+        exact hrot.false)) with hlt | hgt
+  · exact hlt
+  · have hback := hmono htsIoo htrIoo hgt
+    change apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph
+            ((γ (apm_t00a05_radializedTime hγ s hs).1).1,
+              (γ (apm_t00a05_radializedTime hγ s hs).1).2.1))) <
+      apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph
+            ((γ (apm_t00a05_radializedTime hγ r hr).1).1,
+              (γ (apm_t00a05_radializedTime hγ r hr).1).2.1))) at hback
+    rw [apm_t00a05_radializedTime_perimeter,
+      apm_t00a05_radializedTime_perimeter] at hback
+    exact False.elim ((not_lt_of_ge hback.le) hrot)
 
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
