@@ -1869,6 +1869,122 @@ lemma apm_t00a05_squareAngle_radialized_top_open {p : ℝ × ℝ}
   rw [apm_t00a05_radialHomeomorph_ratio_xy hp
     ((apm_t00a05_radialHomeomorph_snd_ne_zero_iff hp).mp (by simp [hy]))]
 
+lemma apm_t00a05_radialized_eventually_right_open
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hx : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1 = 1)
+    (hy0 : -1 < (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2)
+    (hy1 : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2 < 1) :
+    ∀ᶠ u in nhds t,
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).1 = 1 ∧
+      -1 < (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).2 ∧
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).2 < 1 := by
+  let q : ℝ → ℝ × ℝ := fun u =>
+    apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)
+  have hqc : Continuous q := apm_t00a05_C2_radialized_continuous hγ
+  have hpos : {u | 0 < (q u).1} ∈ nhds t :=
+    (isOpen_lt continuous_const hqc.fst).mem_nhds (by simpa [q, hx])
+  have hlo : {u | -1 < (q u).2} ∈ nhds t :=
+    (isOpen_lt continuous_const hqc.snd).mem_nhds (by simpa [q] using hy0)
+  have hhi : {u | (q u).2 < 1} ∈ nhds t :=
+    (isOpen_lt hqc.snd continuous_const).mem_nhds (by simpa [q] using hy1)
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  filter_upwards [hpos, hlo, hhi, hperiod] with u hux huy0 huy1 hu
+  have hs := apm_t00a05_C2_radialized_mem_sphere hγ hu.1.le hu.2.le
+  rcases apm_t00a05_supSphere_on_edge hs with hxm | hxp | hym | hyp
+  · exfalso; linarith
+  · exact ⟨hxp, huy0, huy1⟩
+  · exfalso; linarith
+  · exfalso; linarith
+
+lemma apm_t00a05_radialized_eventually_left_open
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hx : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1 = -1)
+    (hy0 : -1 < (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2)
+    (hy1 : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2 < 1) :
+    ∀ᶠ u in nhds t,
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).1 = -1 ∧
+      -1 < (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).2 ∧
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).2 < 1 := by
+  let q : ℝ → ℝ × ℝ := fun u =>
+    apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)
+  have hqc : Continuous q := apm_t00a05_C2_radialized_continuous hγ
+  have hneg : {u | (q u).1 < 0} ∈ nhds t :=
+    (isOpen_lt hqc.fst continuous_const).mem_nhds (by simpa [q, hx])
+  have hlo : {u | -1 < (q u).2} ∈ nhds t :=
+    (isOpen_lt continuous_const hqc.snd).mem_nhds (by simpa [q] using hy0)
+  have hhi : {u | (q u).2 < 1} ∈ nhds t :=
+    (isOpen_lt hqc.snd continuous_const).mem_nhds (by simpa [q] using hy1)
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  filter_upwards [hneg, hlo, hhi, hperiod] with u hux huy0 huy1 hu
+  have hs := apm_t00a05_C2_radialized_mem_sphere hγ hu.1.le hu.2.le
+  rcases apm_t00a05_supSphere_on_edge hs with hxm | hxp | hym | hyp
+  · exact ⟨hxm, huy0, huy1⟩
+  · exfalso; linarith
+  · exfalso; linarith
+  · exfalso; linarith
+
+lemma apm_t00a05_radialized_eventually_bottom_open
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hy : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2 = -1)
+    (hx0 : -1 < (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1)
+    (hx1 : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1 < 1) :
+    ∀ᶠ u in nhds t,
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).2 = -1 ∧
+      -1 < (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).1 ∧
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).1 < 1 := by
+  let q : ℝ → ℝ × ℝ := fun u =>
+    apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)
+  have hqc : Continuous q := apm_t00a05_C2_radialized_continuous hγ
+  have hneg : {u | (q u).2 < 0} ∈ nhds t :=
+    (isOpen_lt hqc.snd continuous_const).mem_nhds (by simpa [q, hy])
+  have hlo : {u | -1 < (q u).1} ∈ nhds t :=
+    (isOpen_lt continuous_const hqc.fst).mem_nhds (by simpa [q] using hx0)
+  have hhi : {u | (q u).1 < 1} ∈ nhds t :=
+    (isOpen_lt hqc.fst continuous_const).mem_nhds (by simpa [q] using hx1)
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  filter_upwards [hneg, hlo, hhi, hperiod] with u huy hux0 hux1 hu
+  have hs := apm_t00a05_C2_radialized_mem_sphere hγ hu.1.le hu.2.le
+  rcases apm_t00a05_supSphere_on_edge hs with hxm | hxp | hym | hyp
+  · exfalso; linarith
+  · exfalso; linarith
+  · exact ⟨hym, hux0, hux1⟩
+  · exfalso; linarith
+
+lemma apm_t00a05_radialized_eventually_top_open
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) {t : ℝ}
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hy : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).2 = 1)
+    (hx0 : -1 < (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1)
+    (hx1 : (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)).1 < 1) :
+    ∀ᶠ u in nhds t,
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).2 = 1 ∧
+      -1 < (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).1 ∧
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)).1 < 1 := by
+  let q : ℝ → ℝ × ℝ := fun u =>
+    apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)
+  have hqc : Continuous q := apm_t00a05_C2_radialized_continuous hγ
+  have hpos : {u | 0 < (q u).2} ∈ nhds t :=
+    (isOpen_lt continuous_const hqc.snd).mem_nhds (by simpa [q, hy])
+  have hlo : {u | -1 < (q u).1} ∈ nhds t :=
+    (isOpen_lt continuous_const hqc.fst).mem_nhds (by simpa [q] using hx0)
+  have hhi : {u | (q u).1 < 1} ∈ nhds t :=
+    (isOpen_lt hqc.fst continuous_const).mem_nhds (by simpa [q] using hx1)
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  filter_upwards [hpos, hlo, hhi, hperiod] with u huy hux0 hux1 hu
+  have hs := apm_t00a05_C2_radialized_mem_sphere hγ hu.1.le hu.2.le
+  rcases apm_t00a05_supSphere_on_edge hs with hxm | hxp | hym | hyp
+  · exfalso; linarith
+  · exfalso; linarith
+  · exfalso; linarith
+  · exact ⟨hyp, hux0, hux1⟩
+
 /-- Positive radial rescaling transfers both coordinate signs from a square
 sphere point to its canonical preimage on the original level-set curve. -/
 lemma apm_t00a05_radializedTime_coordinate_signs
