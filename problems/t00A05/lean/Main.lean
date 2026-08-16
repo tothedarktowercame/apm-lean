@@ -1109,6 +1109,46 @@ lemma apm_t00a05_angularDensity_integral_of_y_ne_zero
     _ = F b - F a := intervalIntegral.integral_deriv_of_contDiffOn_Icc hF hab
     _ = _ := rfl
 
+lemma apm_t00a05_angularDensity_intervalIntegrable_of_x_ne_zero
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b : ℝ} (hab : a ≤ b)
+    (hx0 : ∀ t ∈ Set.Icc a b, (γ t).1 ≠ 0) :
+    IntervalIntegrable (apm_t00a05_angularDensity γ) volume a b := by
+  have hγc : Continuous γ := hγ.1.continuous
+  have hdx : Continuous (deriv (fun s => (γ s).1)) :=
+    hγ.1.fst.continuous_deriv (by norm_num)
+  have hdy : Continuous (deriv (fun s => (γ s).2.1)) :=
+    hγ.1.snd.fst.continuous_deriv (by norm_num)
+  apply ContinuousOn.intervalIntegrable
+  rw [Set.uIcc_of_le hab]
+  unfold apm_t00a05_angularDensity
+  apply ContinuousOn.div
+  · exact ((hγc.fst.mul hdy).sub (hγc.snd.fst.mul hdx)).continuousOn
+  · exact ((hγc.fst.pow 2).add (hγc.snd.fst.pow 2)).continuousOn
+  · intro t ht hzero
+    have hx := hx0 t ht
+    nlinarith [sq_pos_of_ne_zero hx, sq_nonneg (γ t).2.1]
+
+lemma apm_t00a05_angularDensity_intervalIntegrable_of_y_ne_zero
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b : ℝ} (hab : a ≤ b)
+    (hy0 : ∀ t ∈ Set.Icc a b, (γ t).2.1 ≠ 0) :
+    IntervalIntegrable (apm_t00a05_angularDensity γ) volume a b := by
+  have hγc : Continuous γ := hγ.1.continuous
+  have hdx : Continuous (deriv (fun s => (γ s).1)) :=
+    hγ.1.fst.continuous_deriv (by norm_num)
+  have hdy : Continuous (deriv (fun s => (γ s).2.1)) :=
+    hγ.1.snd.fst.continuous_deriv (by norm_num)
+  apply ContinuousOn.intervalIntegrable
+  rw [Set.uIcc_of_le hab]
+  unfold apm_t00a05_angularDensity
+  apply ContinuousOn.div
+  · exact ((hγc.fst.mul hdy).sub (hγc.snd.fst.mul hdx)).continuousOn
+  · exact ((hγc.fst.pow 2).add (hγc.snd.fst.pow 2)).continuousOn
+  · intro t ht hzero
+    have hy := hy0 t ht
+    nlinarith [sq_nonneg (γ t).1, sq_pos_of_ne_zero hy]
+
 /-- Positive orientation is witnessed by a positive derivative of one of the
 two local angle primitives at an interior time. -/
 lemma apm_t00a05_exists_local_angle_deriv_pos
