@@ -1805,6 +1805,70 @@ lemma apm_t00a05_radialHomeomorph_ratio_xy {p : ℝ × ℝ}
       ((gauge apm_t00a05_region p / gauge (Metric.ball 0 1) p) * p.2) = p.1 / p.2
   exact mul_div_mul_left _ _ ha
 
+lemma apm_t00a05_radialHomeomorph_fst_ne_zero_iff {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region) :
+    (apm_t00a05_radialHomeomorph p).1 ≠ 0 ↔ p.1 ≠ 0 := by
+  rw [apm_t00a05_radialHomeomorph_apply]
+  change (gauge apm_t00a05_region p / gauge (Metric.ball 0 1) p) * p.1 ≠ 0 ↔ _
+  rw [mul_ne_zero_iff]
+  simp [(apm_t00a05_radialHomeomorph_scale_pos hp).ne']
+
+lemma apm_t00a05_radialHomeomorph_snd_ne_zero_iff {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region) :
+    (apm_t00a05_radialHomeomorph p).2 ≠ 0 ↔ p.2 ≠ 0 := by
+  rw [apm_t00a05_radialHomeomorph_apply]
+  change (gauge apm_t00a05_region p / gauge (Metric.ball 0 1) p) * p.2 ≠ 0 ↔ _
+  rw [mul_ne_zero_iff]
+  simp [(apm_t00a05_radialHomeomorph_scale_pos hp).ne']
+
+lemma apm_t00a05_squareAngle_radialized_right_open {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region)
+    (hx : (apm_t00a05_radialHomeomorph p).1 = 1)
+    (hy0 : -1 < (apm_t00a05_radialHomeomorph p).2)
+    (hy1 : (apm_t00a05_radialHomeomorph p).2 < 1) :
+    apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter (apm_t00a05_radialHomeomorph p)) =
+      Real.arctan (p.2 / p.1) + 2 * Real.pi := by
+  rw [apm_t00a05_squareAngle_perimeter_right_open hx hy0 hy1]
+  rw [apm_t00a05_radialHomeomorph_ratio_yx hp
+    ((apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by simp [hx]))]
+
+lemma apm_t00a05_squareAngle_radialized_left_open {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region)
+    (hx : (apm_t00a05_radialHomeomorph p).1 = -1)
+    (hy0 : -1 < (apm_t00a05_radialHomeomorph p).2)
+    (hy1 : (apm_t00a05_radialHomeomorph p).2 < 1) :
+    apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter (apm_t00a05_radialHomeomorph p)) =
+      Real.arctan (p.2 / p.1) + 3 * Real.pi := by
+  rw [apm_t00a05_squareAngle_perimeter_left_open hx hy0 hy1]
+  rw [apm_t00a05_radialHomeomorph_ratio_yx hp
+    ((apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by simp [hx]))]
+
+lemma apm_t00a05_squareAngle_radialized_bottom_open {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region)
+    (hy : (apm_t00a05_radialHomeomorph p).2 = -1)
+    (hx0 : -1 < (apm_t00a05_radialHomeomorph p).1)
+    (hx1 : (apm_t00a05_radialHomeomorph p).1 < 1) :
+    apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter (apm_t00a05_radialHomeomorph p)) =
+      -Real.arctan (p.1 / p.2) + 3 * Real.pi / 2 := by
+  rw [apm_t00a05_squareAngle_perimeter_bottom_open hy hx0 hx1]
+  rw [apm_t00a05_radialHomeomorph_ratio_xy hp
+    ((apm_t00a05_radialHomeomorph_snd_ne_zero_iff hp).mp (by simp [hy]))]
+
+lemma apm_t00a05_squareAngle_radialized_top_open {p : ℝ × ℝ}
+    (hp : p ∈ frontier apm_t00a05_region)
+    (hy : (apm_t00a05_radialHomeomorph p).2 = 1)
+    (hx0 : -1 < (apm_t00a05_radialHomeomorph p).1)
+    (hx1 : (apm_t00a05_radialHomeomorph p).1 < 1) :
+    apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter (apm_t00a05_radialHomeomorph p)) =
+      -Real.arctan (p.1 / p.2) + 5 * Real.pi / 2 := by
+  rw [apm_t00a05_squareAngle_perimeter_top_open hy hx0 hx1]
+  rw [apm_t00a05_radialHomeomorph_ratio_xy hp
+    ((apm_t00a05_radialHomeomorph_snd_ne_zero_iff hp).mp (by simp [hy]))]
+
 /-- Positive radial rescaling transfers both coordinate signs from a square
 sphere point to its canonical preimage on the original level-set curve. -/
 lemma apm_t00a05_radializedTime_coordinate_signs
