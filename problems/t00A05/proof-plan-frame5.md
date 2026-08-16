@@ -303,3 +303,19 @@ for the initial arc its lower bound is `rot_mem_Icc` because the first corner
 has rotated coordinate zero.  Feeding those range statements to the compiled
 closed-range nonvanishing lemma supplies the FTC hypotheses.  After that,
 interval additivity and the endpoint ratios are the only remaining lines.
+
+## Attempt-9 boundary: interior range lifting complete
+
+The generic same-side range lemma now compiles.  For any two nonzero interior
+times on the same side of the cut, it converts their time order and endpoint
+perimeter coordinates into a closed perimeter bound for every intermediate
+time.  It explicitly excludes a hidden branch crossing by combining the
+rotated inequalities with the global `[0,8]` perimeter bounds.
+
+Thus every one of the three corner-to-corner arcs internal to a chronological
+case now feeds directly into the closed-range coordinate-nonvanishing lemma.
+The exact remaining form is the temporal seam pair: prove the analogous
+one-sided range bound on `[0, firstCorner]` from `rot_mem_Icc` and on
+`[lastCorner, 2π]`, then combine those two pieces using `γ 0 = γ (2π)` so their
+primitive endpoint terms cancel.  After that, all five interval pieces have
+the FTC hypotheses already available.
