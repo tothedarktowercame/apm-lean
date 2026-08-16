@@ -89,6 +89,44 @@ lemma apm_t00a05_level_origin : apm_t00a05_level (0, 0) < 10 := by
 lemma apm_t00a05_origin_mem_region : (0, 0) ∈ apm_t00a05_region := by
   exact apm_t00a05_level_origin.le
 
+lemma apm_t00a05_level_continuous : Continuous apm_t00a05_level := by
+  unfold apm_t00a05_level
+  fun_prop
+
+lemma apm_t00a05_region_isClosed : IsClosed apm_t00a05_region := by
+  exact isClosed_le apm_t00a05_level_continuous continuous_const
+
+lemma apm_t00a05_origin_mem_interior_region :
+    (0, 0) ∈ interior apm_t00a05_region := by
+  have hopen : IsOpen {q : ℝ × ℝ | apm_t00a05_level q < 10} :=
+    isOpen_lt apm_t00a05_level_continuous continuous_const
+  exact (interior_maximal (by
+    intro q hq
+    simpa [apm_t00a05_region] using hq.le) hopen) apm_t00a05_level_origin
+
+lemma apm_t00a05_region_isBounded : Bornology.IsBounded apm_t00a05_region := by
+  apply (Metric.isBounded_Icc (-10 : ℝ) 10).prod
+    (Metric.isBounded_Icc (-10 : ℝ) 10) |>.subset
+  intro q hq
+  change 2 * q.1 ^ 2 + q.2 ^ 2 + Real.exp (q.2 - q.1) ^ 2 ≤ 10 at hq
+  constructor <;> constructor <;>
+    nlinarith [sq_nonneg q.1, sq_nonneg q.2,
+      sq_nonneg (Real.exp (q.2 - q.1))]
+
+lemma apm_t00a05_region_isCompact : IsCompact apm_t00a05_region := by
+  exact Metric.isCompact_iff_isClosed_bounded.mpr
+    ⟨apm_t00a05_region_isClosed, apm_t00a05_region_isBounded⟩
+
+lemma apm_t00a05_region_frontier_homeomorphic_sphere :
+    ∃ h : (ℝ × ℝ) ≃ₜ (ℝ × ℝ),
+      h '' interior apm_t00a05_region = Metric.ball 0 1 ∧
+      h '' closure apm_t00a05_region = Metric.closedBall 0 1 ∧
+      h '' frontier apm_t00a05_region = Metric.sphere 0 1 := by
+  exact exists_homeomorph_image_interior_closure_frontier_eq_unitBall
+    apm_t00a05_region_convex
+    ⟨(0, 0), apm_t00a05_origin_mem_interior_region⟩
+    apm_t00a05_region_isBounded
+
 lemma apm_t00a05_segment_origin_subset_region {q : ℝ × ℝ}
     (hq : q ∈ apm_t00a05_region) :
     segment ℝ (0, 0) q ⊆ apm_t00a05_region :=
