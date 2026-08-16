@@ -360,6 +360,34 @@ lemma apm_t00a05_squareAngle_endpoints :
   norm_num [apm_t00a05_squareAngle, Real.arctan_neg, Real.arctan_one]
   ring
 
+/-- The genuinely unwrapped angle after cutting the square perimeter at `β`.
+Unlike the direct periodic composite, the second branch carries the explicit
+`2π` seam correction. -/
+noncomputable def apm_t00a05_squareAngleFrom (β u : ℝ) : ℝ :=
+  if u ≤ 8 - β then apm_t00a05_squareAngle (u + β)
+  else apm_t00a05_squareAngle (u + β - 8) + 2 * Real.pi
+
+lemma apm_t00a05_squareAngleFrom_continuous (β : ℝ) :
+    Continuous (apm_t00a05_squareAngleFrom β) := by
+  unfold apm_t00a05_squareAngleFrom
+  apply continuous_if_le (by fun_prop) (by fun_prop)
+      (show Continuous (fun u : ℝ => apm_t00a05_squareAngle (u + β)) by
+        simpa [Function.comp_def] using
+          apm_t00a05_squareAngle_continuous.comp
+            (continuous_id.add continuous_const)).continuousOn
+      (show Continuous (fun u : ℝ =>
+          apm_t00a05_squareAngle (u + β - 8) + 2 * Real.pi) by
+        exact (by
+          simpa [Function.comp_def] using
+            (apm_t00a05_squareAngle_continuous.comp
+              ((continuous_id.add continuous_const).sub continuous_const)).add
+                continuous_const)).continuousOn
+  intro x hx
+  subst x
+  have hend := apm_t00a05_squareAngle_endpoints
+  convert (show apm_t00a05_squareAngle 8 =
+      apm_t00a05_squareAngle 0 + 2 * Real.pi by linarith) using 1 <;> ring
+
 lemma apm_t00a05_squareAngle_strictMonoOn :
     StrictMonoOn apm_t00a05_squareAngle (Set.Icc (0 : ℝ) 8) := by
   have heq24 {s : ℝ} (hs : s ∈ Set.Icc (2 : ℝ) 4) :
