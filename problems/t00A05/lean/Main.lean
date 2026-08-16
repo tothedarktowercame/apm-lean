@@ -647,6 +647,28 @@ lemma apm_t00a05_rot_seam_cancel {β : ℝ} (hβ0 : 0 < β) (hβ8 : β ≤ 8) :
   rw [if_pos hβ0, if_neg (by linarith : ¬ 8 < β)]
   ring
 
+/-- On the closed perimeter parameter interval the decoder/encoder seam is
+invisible after rotation, so the composite is continuous everywhere except at
+the deliberately removed cut `β`. -/
+lemma apm_t00a05_rot_square_chart_continuousWithinAt
+    {β u : ℝ} (hβ0 : 0 < β) (hβ8 : β ≤ 8)
+    (hu : u ∈ Set.Icc (0 : ℝ) 8) (huβ : u ≠ β) :
+    ContinuousWithinAt
+      (fun t ↦ apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter (apm_t00a05_squareOfPerimeter t)))
+      (Set.Icc (0 : ℝ) 8) u := by
+  have heq (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 8) :
+      apm_t00a05_rot β
+          (apm_t00a05_squarePerimeter (apm_t00a05_squareOfPerimeter t)) =
+        apm_t00a05_rot β t := by
+    rw [apm_t00a05_squarePerimeter_squareOfPerimeter ht.1 ht.2]
+    by_cases ht8 : t = 8
+    · rw [if_pos ht8, ht8]
+      exact apm_t00a05_rot_seam_cancel hβ0 hβ8
+    · rw [if_neg ht8]
+  exact (apm_t00a05_rot_continuousAt huβ).continuousWithinAt.congr
+    heq (heq u hu)
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
