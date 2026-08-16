@@ -3023,7 +3023,7 @@ lemma apm_t00a05_perimeter_mem_Icc_from_zero_to_first
         (apm_t00a05_squarePerimeter
           (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
       (Set.Ioo (0 : ℝ) (2 * Real.pi)))
-    (hb : b ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hb : b ∈ Set.Ico (0 : ℝ) (2 * Real.pi))
     (hu : u ∈ Set.Icc (0 : ℝ) b)
     (hpb : apm_t00a05_squarePerimeter
       (apm_t00a05_radialHomeomorph ((γ b).1, (γ b).2.1)) = B)
@@ -3045,7 +3045,9 @@ lemma apm_t00a05_perimeter_mem_Icc_from_zero_to_first
   have huIoo : u ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) :=
     ⟨lt_of_le_of_ne hu.1 (Ne.symm hu0), lt_of_le_of_lt hu.2 hb.2⟩
   have hub' : u < b := lt_of_le_of_ne hu.2 hub
-  have hhi := hmono huIoo hb hub'
+  have hbIoo : b ∈ Set.Ioo (0 : ℝ) (2 * Real.pi) :=
+    ⟨huIoo.1.trans hub', hb.2⟩
+  have hhi := hmono huIoo hbIoo hub'
   change apm_t00a05_rot β (p u) < apm_t00a05_rot β (p b) at hhi
   change p b = B at hpb
   rw [hpb] at hhi
@@ -3055,7 +3057,7 @@ lemma apm_t00a05_perimeter_mem_Icc_from_zero_to_first
   have hBIcc : B ∈ Set.Icc (0 : ℝ) 8 := by
     rw [← hpb]
     exact apm_t00a05_squarePerimeter_mem_Icc
-      (apm_t00a05_C2_radialized_mem_sphere hγ hb.1.le hb.2.le)
+      (apm_t00a05_C2_radialized_mem_sphere hγ hb.1 hb.2.le)
   have hpu : β ≤ p u := by
     by_contra hn
     have hlt : p u < β := lt_of_not_ge hn
