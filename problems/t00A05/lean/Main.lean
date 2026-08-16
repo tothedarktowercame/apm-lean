@@ -310,6 +310,49 @@ noncomputable def apm_t00a05_squareOfPerimeter (s : ℝ) : ℝ × ℝ :=
   else if s ≤ 6 then (5 - s, 1)
   else (-1, 7 - s)
 
+/-- A continuous unwrapped polar angle along one counterclockwise traversal
+of the square perimeter.  Its endpoint increase is exactly `2π`. -/
+noncomputable def apm_t00a05_squareAngle (s : ℝ) : ℝ :=
+  if s ≤ 2 then Real.arctan (s - 1) + 3 * Real.pi / 2
+  else if s ≤ 4 then Real.arctan (s - 3) + 2 * Real.pi
+  else if s ≤ 6 then -Real.arctan (5 - s) + 5 * Real.pi / 2
+  else Real.arctan (s - 7) + 3 * Real.pi
+
+lemma apm_t00a05_squareAngle_continuous :
+    Continuous apm_t00a05_squareAngle := by
+  unfold apm_t00a05_squareAngle
+  have h6 : Continuous (fun s : ℝ =>
+      if s ≤ 6 then -Real.arctan (5 - s) + 5 * Real.pi / 2
+      else Real.arctan (s - 7) + 3 * Real.pi) := by
+    apply continuous_if_le (by fun_prop) (by fun_prop)
+        (by fun_prop) (by fun_prop)
+    intro x hx
+    subst x
+    norm_num [Real.arctan_neg, Real.arctan_one]
+    ring
+  have h4 : Continuous (fun s : ℝ =>
+      if s ≤ 4 then Real.arctan (s - 3) + 2 * Real.pi
+      else if s ≤ 6 then -Real.arctan (5 - s) + 5 * Real.pi / 2
+      else Real.arctan (s - 7) + 3 * Real.pi) := by
+    apply continuous_if_le (by fun_prop) (by fun_prop)
+        (by fun_prop) h6.continuousOn
+    intro x hx
+    subst x
+    norm_num [Real.arctan_neg, Real.arctan_one]
+    ring
+  apply continuous_if_le (by fun_prop) (by fun_prop)
+      (by fun_prop) h4.continuousOn
+  intro x hx
+  subst x
+  norm_num [Real.arctan_neg, Real.arctan_one]
+  ring
+
+lemma apm_t00a05_squareAngle_endpoints :
+    apm_t00a05_squareAngle 8 - apm_t00a05_squareAngle 0 =
+      2 * Real.pi := by
+  norm_num [apm_t00a05_squareAngle, Real.arctan_neg, Real.arctan_one]
+  ring
+
 /-- The four affine sides of the square perimeter decoder glue continuously
 at the three corners. -/
 lemma apm_t00a05_squareOfPerimeter_continuous :
