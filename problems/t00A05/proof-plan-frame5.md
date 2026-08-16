@@ -106,3 +106,27 @@ If step 7's library monotone-derivative lemma is unavailable at this pin, the
 fallback is its elementary difference-quotient proof from `HasDerivAt`: the
 sign of every nonzero difference quotient follows from antitonicity, and the
 derivative sign follows by the limit.  This changes no mathematical interface.
+
+## Revision after the first landings
+
+Steps 1–2 survived contact: canonical `Ico` preimages, their uniqueness,
+separation, perimeter coordinates, and original-coordinate signs are now
+formal.  The signed-area identity and the final contradiction from an
+everywhere nonpositive angular density are also formal.
+
+Step 3 needs one refinement.  Applying the punctured chart at the original
+parameter origin leaves a special case when a chosen corner is itself at time
+zero.  Rather than proliferating endpoint cases, cyclically rebase the
+*topological ordering argument* at the canonical `(-1,-1)` crossing.  This is
+only a continuous piecewise translation of the parameter interval and is used
+to order points; it does not reparametrize the differentiable curve in the
+integral.  After deriving the cyclic inequalities, split and reorder the
+original interval integrals algebraically.  This keeps all FTC applications on
+the original `γ`, so no derivative-matching assumption at the temporal seam is
+introduced.
+
+I also checked the general covering-map/path-lift API (`Circle.isCoveringMap_exp`
+and `IsCoveringMap.liftPath`).  It supplies a continuous angle lift, but proving
+that this merely continuous lift is differentiable would recreate the local
+chart work already completed.  The canonical-crossing/FTC route therefore
+remains the shorter formal route at this pin.
