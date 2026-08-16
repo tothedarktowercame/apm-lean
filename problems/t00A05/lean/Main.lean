@@ -2124,6 +2124,82 @@ lemma apm_t00a05_exists_raw_radial_angle_deriv_pos
       hleft.1 hleft.2.1 hleft.2.2]
     exact hpos
 
+lemma apm_t00a05_corrected_lift_deriv_eq_raw_of_raw_deriv_pos
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {β t : ℝ} (hβ0 : 0 < β) (hβ8 : β ≤ 8)
+    (hdecode : apm_t00a05_squareOfPerimeter β =
+      apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
+    (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+    (hpos : 0 < deriv (fun u => apm_t00a05_squareAngle
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) t) :
+    deriv (fun u => apm_t00a05_squareAngleFrom β
+      (apm_t00a05_rot β
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1))))) t =
+    deriv (fun u => apm_t00a05_squareAngle
+      (apm_t00a05_squarePerimeter
+        (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) t := by
+  let p : ℝ → ℝ := fun u => apm_t00a05_squarePerimeter
+    (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1))
+  let raw : ℝ → ℝ := fun u => apm_t00a05_squareAngle (p u)
+  let lift : ℝ → ℝ := fun u =>
+    apm_t00a05_squareAngleFrom β (apm_t00a05_rot β (p u))
+  have hpIcc (u : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (2 * Real.pi)) :
+      p u ∈ Set.Icc (0 : ℝ) 8 :=
+    apm_t00a05_squarePerimeter_mem_Icc
+      (apm_t00a05_C2_radialized_mem_sphere hγ hu.1 hu.2)
+  have hpne : p t ≠ β := by
+    intro hper
+    have hsphere := apm_t00a05_C2_radialized_mem_sphere hγ ht.1.le ht.2.le
+    have hpoint :
+        apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) =
+          apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1) := by
+      rw [← hdecode, ← hper]
+      exact (apm_t00a05_squareOfPerimeter_squarePerimeter hsphere).symm
+    have ht0 := apm_t00a05_C2_radialized_injOn hγ
+      ⟨ht.1.le, ht.2⟩ ⟨le_rfl, Real.two_pi_pos⟩ hpoint
+    exact ht.1.ne' ht0
+  have hrawdiff : DifferentiableAt ℝ raw t := by
+    apply differentiableAt_of_deriv_ne_zero
+    simpa [raw, p] using hpos.ne'
+  have hperiod : Set.Ioo (0 : ℝ) (2 * Real.pi) ∈ nhds t :=
+    isOpen_Ioo.mem_nhds ht
+  rcases lt_or_gt_of_ne hpne with hlt | hgt
+  · have hrawlt : raw t < apm_t00a05_squareAngle β :=
+      apm_t00a05_squareAngle_strictMonoOn
+        (hpIcc t ⟨ht.1.le, ht.2.le⟩) ⟨hβ0.le, hβ8⟩ hlt
+    have hevent : {u | raw u < apm_t00a05_squareAngle β} ∈ nhds t :=
+      hrawdiff.continuousAt.eventually_lt_const hrawlt
+    have hev : lift =ᶠ[nhds t] (fun u => raw u + 2 * Real.pi) := by
+      filter_upwards [hevent, hperiod] with u hru hu
+      have hpu : p u < β := by
+        by_contra hn
+        have hle : β ≤ p u := le_of_not_gt hn
+        have hang := apm_t00a05_squareAngle_strictMonoOn.monotoneOn
+          ⟨hβ0.le, hβ8⟩ (hpIcc u ⟨hu.1.le, hu.2.le⟩) hle
+        exact (not_lt_of_ge hang) hru
+      simpa [lift, raw] using
+        apm_t00a05_squareAngleFrom_rot hβ0 hβ8
+          (hpIcc u ⟨hu.1.le, hu.2.le⟩) |>.trans (if_pos hpu)
+    simpa [lift, raw, p, deriv_add_const] using hev.deriv_eq
+  · have hrawgt : apm_t00a05_squareAngle β < raw t :=
+      apm_t00a05_squareAngle_strictMonoOn
+        ⟨hβ0.le, hβ8⟩ (hpIcc t ⟨ht.1.le, ht.2.le⟩) hgt
+    have hevent : {u | apm_t00a05_squareAngle β < raw u} ∈ nhds t :=
+      hrawdiff.continuousAt.eventually_const_lt hrawgt
+    have hev : lift =ᶠ[nhds t] raw := by
+      filter_upwards [hevent, hperiod] with u hru hu
+      have hpu : ¬p u < β := by
+        intro h
+        have hang := apm_t00a05_squareAngle_strictMonoOn.monotoneOn
+          (hpIcc u ⟨hu.1.le, hu.2.le⟩) ⟨hβ0.le, hβ8⟩ h.le
+        exact (not_lt_of_ge hang) hru
+      simpa [lift, raw] using
+        apm_t00a05_squareAngleFrom_rot hβ0 hβ8
+          (hpIcc u ⟨hu.1.le, hu.2.le⟩) |>.trans (if_neg hpu)
+    simpa [lift, raw, p] using hev.deriv_eq
+
 /-- Positive radial rescaling transfers both coordinate signs from a square
 sphere point to its canonical preimage on the original level-set curve. -/
 lemma apm_t00a05_radializedTime_coordinate_signs
@@ -2348,6 +2424,48 @@ lemma apm_t00a05_C2_radialized_perimeter_ne_cut
   have ht0 := apm_t00a05_C2_radialized_injOn hγ
     ⟨ht.1.le, ht.2⟩ ⟨le_rfl, Real.two_pi_pos⟩ hpoint
   exact ht.1.ne' ht0
+
+lemma apm_t00a05_C2_radialized_chart_strictMono
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    ∃ β : ℝ, 0 < β ∧ β ≤ 8 ∧
+      apm_t00a05_squareOfPerimeter β =
+        apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1) ∧
+      StrictMonoOn
+        (fun t => apm_t00a05_rot β
+          (apm_t00a05_squarePerimeter
+            (apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))))
+        (Set.Ioo (0 : ℝ) (2 * Real.pi)) := by
+  rcases apm_t00a05_C2_radialized_chart_monotone hγ with
+    ⟨β, hβ0, hβ8, hdecode, hmono | hanti⟩
+  · exact ⟨β, hβ0, hβ8, hdecode, hmono⟩
+  · exfalso
+    rcases apm_t00a05_exists_raw_radial_angle_deriv_pos hγ with
+      ⟨t, ht, hpos⟩
+    let p : ℝ → ℝ := fun u => apm_t00a05_squarePerimeter
+      (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1))
+    let lift : ℝ → ℝ := fun u =>
+      apm_t00a05_squareAngleFrom β (apm_t00a05_rot β (p u))
+    have hpIcc : Set.MapsTo p (Set.Ioo (0 : ℝ) (2 * Real.pi))
+        (Set.Icc (0 : ℝ) 8) := by
+      intro u hu
+      exact apm_t00a05_squarePerimeter_mem_Icc
+        (apm_t00a05_C2_radialized_mem_sphere hγ hu.1.le hu.2.le)
+    have hliftanti : StrictAntiOn lift (Set.Ioo (0 : ℝ) (2 * Real.pi)) := by
+      exact apm_t00a05_squareAngleFrom_strictAntiOn_comp_rot
+        hβ0.le hβ8 hpIcc hanti
+    have hdeq := apm_t00a05_corrected_lift_deriv_eq_raw_of_raw_deriv_pos
+      hγ hβ0 hβ8 hdecode ht hpos
+    have hliftpos : 0 < deriv lift t := by
+      rw [show deriv lift t = deriv (fun u => apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) t by
+        simpa [lift, p] using hdeq]
+      exact hpos
+    have hdiff : DifferentiableAt ℝ lift t :=
+      differentiableAt_of_deriv_ne_zero hliftpos.ne'
+    have hnon := hliftanti.antitoneOn.derivWithin_nonpos (x := t)
+    rw [hdiff.derivWithin (uniqueDiffWithinAt_Ioo ht)] at hnon
+    linarith
 
 /-- The direct square-angle composition suggested by the geometric picture is
 periodic at the parameter endpoints.  Consequently it is not itself the
