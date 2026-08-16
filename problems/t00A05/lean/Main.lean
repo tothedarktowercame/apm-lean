@@ -127,6 +127,74 @@ lemma apm_t00a05_region_frontier_homeomorphic_sphere :
     ⟨(0, 0), apm_t00a05_origin_mem_interior_region⟩
     apm_t00a05_region_isBounded
 
+lemma apm_t00a05_level_radial_convexOn (q : ℝ × ℝ) :
+    ConvexOn ℝ Set.univ (fun t : ℝ ↦ apm_t00a05_level (t • q)) := by
+  let ray : ℝ →ₗ[ℝ] ℝ × ℝ := LinearMap.toSpanSingleton ℝ (ℝ × ℝ) q
+  simpa [ray, Function.comp_def] using
+    apm_t00a05_level_convexOn.comp_linearMap ray
+
+lemma apm_t00a05_level_radial_strictMonoOn {q : ℝ × ℝ}
+    (hq : apm_t00a05_level q = 10) :
+    StrictMonoOn (fun t : ℝ ↦ apm_t00a05_level (t • q)) (Set.Ici 1) := by
+  have hmono := (apm_t00a05_level_radial_convexOn q).strictMonoOn
+    (Set.mem_univ 0) (show (0 : ℝ) < 1 by norm_num) (by
+      simpa [hq] using apm_t00a05_level_origin)
+  simpa only [Set.univ_inter] using hmono
+
+lemma apm_t00a05_level_gt_of_one_lt_smul {q : ℝ × ℝ}
+    (hq : apm_t00a05_level q = 10) {t : ℝ} (ht : 1 < t) :
+    10 < apm_t00a05_level (t • q) := by
+  rw [← hq]
+  simpa using apm_t00a05_level_radial_strictMonoOn hq
+    (Set.mem_Ici.mpr le_rfl) (Set.mem_Ici.mpr ht.le) ht
+
+lemma apm_t00a05_level_eq_ten_mem_frontier {q : ℝ × ℝ}
+    (hq : apm_t00a05_level q = 10) : q ∈ frontier apm_t00a05_region := by
+  have hqmem : q ∈ apm_t00a05_region := by
+    simpa [apm_t00a05_region, hq]
+  rw [mem_frontier_iff_notMem_interior hqmem]
+  intro hqint
+  have hray : Continuous (fun t : ℝ ↦ t • q) := by fun_prop
+  have hopen : IsOpen ((fun t : ℝ ↦ t • q) ⁻¹' interior apm_t00a05_region) :=
+    isOpen_interior.preimage hray
+  have h1 : (1 : ℝ) ∈ (fun t : ℝ ↦ t • q) ⁻¹' interior apm_t00a05_region := by
+    simpa using hqint
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hopen 1 h1
+  let t : ℝ := 1 + ε / 2
+  have ht : 1 < t := by dsimp [t]; linarith
+  have htball : t ∈ Metric.ball (1 : ℝ) ε := by
+    rw [Metric.mem_ball, Real.dist_eq]
+    dsimp [t]
+    rw [abs_of_nonneg] <;> linarith
+  have htmem : t • q ∈ apm_t00a05_region :=
+    interior_subset (hball htball)
+  have htle : apm_t00a05_level (t • q) ≤ 10 := htmem
+  exact (not_lt_of_ge htle) (apm_t00a05_level_gt_of_one_lt_smul hq ht)
+
+lemma apm_t00a05_mem_frontier_level_eq_ten {q : ℝ × ℝ}
+    (hq : q ∈ frontier apm_t00a05_region) : apm_t00a05_level q = 10 := by
+  have hqmem : q ∈ apm_t00a05_region := by
+    have : q ∈ closure apm_t00a05_region := frontier_subset_closure hq
+    simpa [apm_t00a05_region_isClosed.closure_eq] using this
+  have hle : apm_t00a05_level q ≤ 10 := hqmem
+  apply le_antisymm hle
+  by_contra hnle
+  have hlt : apm_t00a05_level q < 10 := lt_of_not_ge hnle
+  have hopen : IsOpen {r : ℝ × ℝ | apm_t00a05_level r < 10} :=
+    isOpen_lt apm_t00a05_level_continuous continuous_const
+  have hqint : q ∈ interior apm_t00a05_region :=
+    (interior_maximal (by
+      intro r hr
+      simpa [apm_t00a05_region] using hr.le) hopen) hlt
+  exact (mem_frontier_iff_notMem_interior hqmem).mp hq hqint
+
+lemma apm_t00a05_level_set_eq_frontier :
+    {q : ℝ × ℝ | apm_t00a05_level q = 10} =
+      frontier apm_t00a05_region := by
+  ext q
+  exact ⟨apm_t00a05_level_eq_ten_mem_frontier,
+    apm_t00a05_mem_frontier_level_eq_ten⟩
+
 lemma apm_t00a05_segment_origin_subset_region {q : ℝ × ℝ}
     (hq : q ∈ apm_t00a05_region) :
     segment ℝ (0, 0) q ⊆ apm_t00a05_region :=
