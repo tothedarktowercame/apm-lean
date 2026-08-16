@@ -1329,6 +1329,56 @@ lemma apm_t00a05_radializedTime_ne_of_ne
   rw [← apm_t00a05_radializedTime_spec hγ r hr,
     ← apm_t00a05_radializedTime_spec hγ s hs, htime]
 
+lemma apm_t00a05_cornerBR_mem_sphere :
+    ((1, -1) : ℝ × ℝ) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+  rw [apm_t00a05_mem_supSphere_iff]
+  norm_num
+
+lemma apm_t00a05_cornerTR_mem_sphere :
+    ((1, 1) : ℝ × ℝ) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+  rw [apm_t00a05_mem_supSphere_iff]
+  norm_num
+
+lemma apm_t00a05_cornerTL_mem_sphere :
+    ((-1, 1) : ℝ × ℝ) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+  rw [apm_t00a05_mem_supSphere_iff]
+  norm_num
+
+lemma apm_t00a05_cornerBL_mem_sphere :
+    ((-1, -1) : ℝ × ℝ) ∈ Metric.sphere (0 : ℝ × ℝ) 1 := by
+  rw [apm_t00a05_mem_supSphere_iff]
+  norm_num
+
+noncomputable def apm_t00a05_cornerBRTime
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :=
+  apm_t00a05_radializedTime hγ (1, -1) apm_t00a05_cornerBR_mem_sphere
+
+noncomputable def apm_t00a05_cornerTRTime
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :=
+  apm_t00a05_radializedTime hγ (1, 1) apm_t00a05_cornerTR_mem_sphere
+
+noncomputable def apm_t00a05_cornerTLTime
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :=
+  apm_t00a05_radializedTime hγ (-1, 1) apm_t00a05_cornerTL_mem_sphere
+
+noncomputable def apm_t00a05_cornerBLTime
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :=
+  apm_t00a05_radializedTime hγ (-1, -1) apm_t00a05_cornerBL_mem_sphere
+
+lemma apm_t00a05_cornerTimes_pairwise_ne
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    apm_t00a05_cornerBRTime hγ ≠ apm_t00a05_cornerTRTime hγ ∧
+    apm_t00a05_cornerBRTime hγ ≠ apm_t00a05_cornerTLTime hγ ∧
+    apm_t00a05_cornerBRTime hγ ≠ apm_t00a05_cornerBLTime hγ ∧
+    apm_t00a05_cornerTRTime hγ ≠ apm_t00a05_cornerTLTime hγ ∧
+    apm_t00a05_cornerTRTime hγ ≠ apm_t00a05_cornerBLTime hγ ∧
+    apm_t00a05_cornerTLTime hγ ≠ apm_t00a05_cornerBLTime hγ := by
+  unfold apm_t00a05_cornerBRTime apm_t00a05_cornerTRTime
+    apm_t00a05_cornerTLTime apm_t00a05_cornerBLTime
+  repeat' apply And.intro
+  all_goals
+    apply apm_t00a05_radializedTime_ne_of_ne hγ <;> norm_num
+
 lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
     (h : apm_t00a05_radialHomeomorph p = r) :
     (r.1 ≠ 0 → r.2 = 0 → p.2 = 0) ∧
