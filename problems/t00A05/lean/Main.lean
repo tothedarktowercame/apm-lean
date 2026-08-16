@@ -2101,6 +2101,29 @@ lemma apm_t00a05_raw_radial_angle_deriv_of_top_open
       (apm_t00a05_C2_projection_mem_frontier hγ ht.1.le ht.2.le)).mp
         (by simp [hy])
 
+lemma apm_t00a05_exists_raw_radial_angle_deriv_pos
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    ∃ t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi),
+      0 < deriv (fun u => apm_t00a05_squareAngle
+        (apm_t00a05_squarePerimeter
+          (apm_t00a05_radialHomeomorph ((γ u).1, (γ u).2.1)))) t := by
+  rcases apm_t00a05_exists_angularDensity_pos_on_open_edge hγ with
+    ⟨t, ht, hedge, hpos⟩
+  refine ⟨t, ht, ?_⟩
+  rcases hedge with hbottom | hright | htop | hleft
+  · rw [apm_t00a05_raw_radial_angle_deriv_of_bottom_open hγ ht
+      hbottom.1 hbottom.2.1 hbottom.2.2]
+    exact hpos
+  · rw [apm_t00a05_raw_radial_angle_deriv_of_right_open hγ ht
+      hright.1 hright.2.1 hright.2.2]
+    exact hpos
+  · rw [apm_t00a05_raw_radial_angle_deriv_of_top_open hγ ht
+      htop.1 htop.2.1 htop.2.2]
+    exact hpos
+  · rw [apm_t00a05_raw_radial_angle_deriv_of_left_open hγ ht
+      hleft.1 hleft.2.1 hleft.2.2]
+    exact hpos
+
 /-- Positive radial rescaling transfers both coordinate signs from a square
 sphere point to its canonical preimage on the original level-set curve. -/
 lemma apm_t00a05_radializedTime_coordinate_signs
