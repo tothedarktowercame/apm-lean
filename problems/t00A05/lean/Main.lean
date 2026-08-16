@@ -977,6 +977,74 @@ lemma apm_t00a05_C2_has_four_axis_crossings {γ : ℝ → ℝ × ℝ × ℝ}
   · exact (apm_t00a05_radialHomeomorph_eq_axis hl).1 (by norm_num) rfl
   · exact (apm_t00a05_radialHomeomorph_eq_axis hb).2 (by norm_num) rfl
 
+/-- Cutting the square chart at the initial point turns the open part of any
+simple closed traversal into one strictly monotone real path.  This is the
+ordering input for the four FTC arcs. -/
+lemma apm_t00a05_simple_loop_chart_monotone {c : ℝ → ℝ × ℝ} {T : ℝ}
+    (hT : 0 < T) (hc : Continuous c)
+    (hsphere : ∀ t ∈ Set.Icc (0 : ℝ) T,
+      c t ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+    (hinj : Set.InjOn c (Set.Ico (0 : ℝ) T))
+    (hclosed : c 0 = c T) :
+    ∃ β : ℝ, 0 < β ∧ β ≤ 8 ∧
+      (StrictMonoOn
+          (fun t => apm_t00a05_rot β (apm_t00a05_squarePerimeter (c t)))
+          (Set.Ioo (0 : ℝ) T) ∨
+       StrictAntiOn
+          (fun t => apm_t00a05_rot β (apm_t00a05_squarePerimeter (c t)))
+          (Set.Ioo (0 : ℝ) T)) := by
+  let s := apm_t00a05_squarePerimeter (c 0)
+  have hsIcc : s ∈ Set.Icc (0 : ℝ) 8 :=
+    apm_t00a05_squarePerimeter_mem_Icc (hsphere 0 ⟨le_rfl, hT.le⟩)
+  let β : ℝ := if s = 0 then 8 else s
+  have hβ0 : 0 < β := by
+    dsimp [β]
+    split_ifs with hs0
+    · norm_num
+    · exact lt_of_le_of_ne hsIcc.1 (Ne.symm hs0)
+  have hβ8 : β ≤ 8 := by
+    dsimp [β]
+    split_ifs
+    · norm_num
+    · exact hsIcc.2
+  have hdecode : apm_t00a05_squareOfPerimeter β = c 0 := by
+    dsimp [β]
+    split_ifs with hs0
+    · change apm_t00a05_squarePerimeter (c 0) = 0 at hs0
+      have h0 : apm_t00a05_squareOfPerimeter 0 = c 0 := by
+        rw [← apm_t00a05_squareOfPerimeter_squarePerimeter
+          (hsphere 0 ⟨le_rfl, hT.le⟩), hs0]
+      rw [← h0]
+      norm_num [apm_t00a05_squareOfPerimeter]
+    · exact apm_t00a05_squareOfPerimeter_squarePerimeter
+        (hsphere 0 ⟨le_rfl, hT.le⟩)
+  let q' : Set.Ioo (0 : ℝ) T →
+      {z : Metric.sphere (0 : ℝ × ℝ) 1 |
+        z.1 ≠ apm_t00a05_squareOfPerimeter β} := fun t =>
+    ⟨⟨c t, hsphere t ⟨t.2.1.le, t.2.2.le⟩⟩, by
+      intro heq
+      have hct0 : c t = c 0 := by simpa [hdecode] using heq
+      have ht0 : (0 : ℝ) ∈ Set.Ico 0 T := ⟨le_rfl, hT⟩
+      have htt : (t : ℝ) ∈ Set.Ico 0 T := ⟨t.2.1.le, t.2.2⟩
+      have := hinj htt ht0 hct0
+      exact t.2.1.ne' this⟩
+  have hq'cont : Continuous q' := by
+    exact Continuous.subtype_mk
+      (Continuous.subtype_mk (hc.comp continuous_subtype_val) _) _
+  let f : ℝ → ℝ := fun t =>
+    apm_t00a05_rot β (apm_t00a05_squarePerimeter (c t))
+  have hfcont : ContinuousOn f (Set.Ioo (0 : ℝ) T) := by
+    rw [continuousOn_iff_continuous_restrict]
+    exact (apm_t00a05_rot_square_chart_continuous hβ0 hβ8).comp hq'cont
+  have hfinj : Set.InjOn f (Set.Ioo (0 : ℝ) T) := by
+    intro u hu v hv huv
+    exact hinj ⟨hu.1.le, hu.2⟩ ⟨hv.1.le, hv.2⟩
+      (apm_t00a05_rot_square_chart_injective
+        (hsphere u ⟨hu.1.le, hu.2.le⟩)
+        (hsphere v ⟨hv.1.le, hv.2.le⟩) huv)
+  exact ⟨β, hβ0, hβ8,
+    hfcont.strictMonoOn_of_injOn_Ioo hT hfinj⟩
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
