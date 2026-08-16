@@ -3231,9 +3231,9 @@ lemma apm_t00a05_x_ne_zero_TL_to_BL_of_cut_lt_six
   exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).2.2.2
     ⟨hpu6, hpuIcc.2⟩
 
-lemma apm_t00a05_x_ne_zero_zero_to_BL_of_six_lt_cut
+lemma apm_t00a05_x_ne_zero_zero_to_BL_of_six_le_cut
     {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
-    {β b u : ℝ} (hβ6 : 6 < β) (hβ8 : β < 8)
+    {β b u : ℝ} (hβ6 : 6 ≤ β) (hβ8 : β < 8)
     (hdecode : apm_t00a05_squareOfPerimeter β =
       apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1))
     (hmono : StrictMonoOn
@@ -3283,7 +3283,7 @@ lemma apm_t00a05_x_ne_zero_zero_to_BL_of_six_lt_cut
     linarith [hpuIcc.1]
   have hp := apm_t00a05_C2_projection_mem_frontier hγ huIoo.1.le huIoo.2.le
   exact (apm_t00a05_radialized_coordinate_ne_zero_of_closed_perimeter_range hp).2.2.2
-    ⟨hβ6.le.trans hpuβ, hpuIcc.2⟩
+    ⟨hβ6.trans hpuβ, hpuIcc.2⟩
 
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
