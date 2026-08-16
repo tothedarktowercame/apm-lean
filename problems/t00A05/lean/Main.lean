@@ -1662,6 +1662,41 @@ lemma apm_t00a05_exists_angularDensity_pos_off_corners
       (apm_t00a05_projected_radius_sq_pos hγ ht').le (hnonpos ht htc)
   exact (not_lt_of_ge harea_nonpos) hγ.2.2.2.2
 
+lemma apm_t00a05_exists_angularDensity_pos_on_open_edge
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    ∃ t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi),
+      let q := apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)
+      ((q.2 = -1 ∧ -1 < q.1 ∧ q.1 < 1) ∨
+       (q.1 = 1 ∧ -1 < q.2 ∧ q.2 < 1) ∨
+       (q.2 = 1 ∧ -1 < q.1 ∧ q.1 < 1) ∨
+       (q.1 = -1 ∧ -1 < q.2 ∧ q.2 < 1)) ∧
+      0 < apm_t00a05_angularDensity γ t := by
+  rcases apm_t00a05_exists_angularDensity_pos_off_corners hγ with
+    ⟨t, ht, hbr, htr, htl, hbl, hpos⟩
+  let q := apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)
+  have qt_ne (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+      (htime : t ≠ (apm_t00a05_radializedTime hγ r hr).1) : q ≠ r := by
+    intro hqr
+    apply htime
+    have heq : (⟨t, ⟨ht.1.le, ht.2⟩⟩ :
+        {u : ℝ // u ∈ Set.Ico (0 : ℝ) (2 * Real.pi)}) =
+        apm_t00a05_radializedTime hγ r hr :=
+      (apm_t00a05_radializedTime_eq_iff hγ r hr _).mpr hqr
+    exact congrArg Subtype.val heq
+  have hqcorners : q ≠ (1, -1) ∧ q ≠ (1, 1) ∧
+      q ≠ (-1, 1) ∧ q ≠ (-1, -1) := by
+    unfold apm_t00a05_cornerBRTime at hbr
+    unfold apm_t00a05_cornerTRTime at htr
+    unfold apm_t00a05_cornerTLTime at htl
+    unfold apm_t00a05_cornerBLTime at hbl
+    exact ⟨qt_ne _ apm_t00a05_cornerBR_mem_sphere hbr,
+      qt_ne _ apm_t00a05_cornerTR_mem_sphere htr,
+      qt_ne _ apm_t00a05_cornerTL_mem_sphere htl,
+      qt_ne _ apm_t00a05_cornerBL_mem_sphere hbl⟩
+  refine ⟨t, ht, ?_, hpos⟩
+  exact apm_t00a05_supSphere_open_edge_of_not_corner
+    (apm_t00a05_C2_radialized_mem_sphere hγ ht.1.le ht.2.le) hqcorners
+
 lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
     (h : apm_t00a05_radialHomeomorph p = r) :
     (r.1 ≠ 0 → r.2 = 0 → p.2 = 0) ∧
