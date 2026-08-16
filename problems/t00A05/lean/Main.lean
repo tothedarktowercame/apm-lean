@@ -3247,6 +3247,53 @@ lemma apm_t00a05_angularDensity_telescope_yxyxy
   rw [Real.arctan_neg, Real.arctan_one]
   ring
 
+lemma apm_t00a05_angularDensity_telescope_xyxyx
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b c d : ℝ}
+    (hord : 0 ≤ a ∧ a ≤ b ∧ b ≤ c ∧ c ≤ d ∧ d ≤ 2 * Real.pi)
+    (hx0 : ∀ t ∈ Set.Icc (0 : ℝ) a, (γ t).1 ≠ 0)
+    (hy1 : ∀ t ∈ Set.Icc a b, (γ t).2.1 ≠ 0)
+    (hx2 : ∀ t ∈ Set.Icc b c, (γ t).1 ≠ 0)
+    (hy3 : ∀ t ∈ Set.Icc c d, (γ t).2.1 ≠ 0)
+    (hx4 : ∀ t ∈ Set.Icc d (2 * Real.pi), (γ t).1 ≠ 0)
+    (ha : (γ a).2.1 / (γ a).1 = 1)
+    (ha' : (γ a).1 / (γ a).2.1 = 1)
+    (hb : (γ b).1 / (γ b).2.1 = -1)
+    (hb' : (γ b).2.1 / (γ b).1 = -1)
+    (hc : (γ c).2.1 / (γ c).1 = 1)
+    (hc' : (γ c).1 / (γ c).2.1 = 1)
+    (hd : (γ d).1 / (γ d).2.1 = -1)
+    (hd' : (γ d).2.1 / (γ d).1 = -1) :
+    ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+      apm_t00a05_angularDensity γ t = 2 * Real.pi := by
+  rcases hord with ⟨h0a, hab, hbc, hcd, hdT⟩
+  have hi0 := apm_t00a05_angularDensity_intervalIntegrable_of_x_ne_zero hγ h0a hx0
+  have hi1 := apm_t00a05_angularDensity_intervalIntegrable_of_y_ne_zero hγ hab hy1
+  have hi2 := apm_t00a05_angularDensity_intervalIntegrable_of_x_ne_zero hγ hbc hx2
+  have hi3 := apm_t00a05_angularDensity_intervalIntegrable_of_y_ne_zero hγ hcd hy3
+  have hi4 := apm_t00a05_angularDensity_intervalIntegrable_of_x_ne_zero hγ hdT hx4
+  have e0 := apm_t00a05_angularDensity_integral_of_x_ne_zero hγ h0a hx0
+  have e1 := apm_t00a05_angularDensity_integral_of_y_ne_zero hγ hab hy1
+  have e2 := apm_t00a05_angularDensity_integral_of_x_ne_zero hγ hbc hx2
+  have e3 := apm_t00a05_angularDensity_integral_of_y_ne_zero hγ hcd hy3
+  have e4 := apm_t00a05_angularDensity_integral_of_x_ne_zero hγ hdT hx4
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le h0a] at e0
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hab] at e1
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hbc] at e2
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hcd] at e3
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hdT] at e4
+  rw [integral_Icc_eq_integral_Ioc,
+    ← intervalIntegral.integral_of_le (le_trans h0a (le_trans hab
+      (le_trans hbc (le_trans hcd hdT)))),
+    ← intervalIntegral.integral_add_adjacent_intervals
+      (((hi0.trans hi1).trans hi2).trans hi3) hi4,
+    ← intervalIntegral.integral_add_adjacent_intervals ((hi0.trans hi1).trans hi2) hi3,
+    ← intervalIntegral.integral_add_adjacent_intervals (hi0.trans hi1) hi2,
+    ← intervalIntegral.integral_add_adjacent_intervals hi0 hi1,
+    e0, e1, e2, e3, e4, ha, ha', hb, hb', hc, hc', hd, hd', hγ.2.1,
+    Real.arctan_neg, Real.arctan_one]
+  ring
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
