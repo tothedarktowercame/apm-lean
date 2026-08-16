@@ -294,6 +294,43 @@ lemma apm_t00a05_C2_projection_closed {γ : ℝ → ℝ × ℝ × ℝ}
       ((γ (2 * Real.pi)).1, (γ (2 * Real.pi)).2.1) := by
   exact congrArg (fun p : ℝ × ℝ × ℝ ↦ (p.1, p.2.1)) hγ.2.1
 
+lemma apm_t00a05_C2_projection_mem_frontier {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) {t : ℝ} (ht0 : 0 ≤ t)
+    (ht2pi : t ≤ 2 * Real.pi) :
+    ((γ t).1, (γ t).2.1) ∈ frontier apm_t00a05_region :=
+  apm_t00a05_level_eq_ten_mem_frontier
+    (apm_t00a05_C2_projected_level hγ ht0 ht2pi)
+
+lemma apm_t00a05_C2_radialized_mem_sphere {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) {t : ℝ} (ht0 : 0 ≤ t)
+    (ht2pi : t ≤ 2 * Real.pi) :
+    apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1) ∈
+      Metric.sphere 0 1 := by
+  rw [← apm_t00a05_radialHomeomorph_image_frontier]
+  exact ⟨_, apm_t00a05_C2_projection_mem_frontier hγ ht0 ht2pi, rfl⟩
+
+lemma apm_t00a05_C2_radialized_continuous {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    Continuous (fun t ↦
+      apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1)) := by
+  exact apm_t00a05_radialHomeomorph.continuous.comp
+    (apm_t00a05_C2_projection_contDiff hγ).continuous
+
+lemma apm_t00a05_C2_radialized_injOn {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    Set.InjOn (fun t ↦
+      apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))
+      (Set.Ico (0 : ℝ) (2 * Real.pi)) :=
+  apm_t00a05_radialHomeomorph.injective.injOn.comp
+    (apm_t00a05_C2_projection_injOn hγ) (Set.mapsTo_image _ _)
+
+lemma apm_t00a05_C2_radialized_closed {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    apm_t00a05_radialHomeomorph ((γ 0).1, (γ 0).2.1) =
+      apm_t00a05_radialHomeomorph
+        ((γ (2 * Real.pi)).1, (γ (2 * Real.pi)).2.1) := by
+  rw [apm_t00a05_C2_projection_closed hγ]
+
 lemma apm_t00a05_C2_exact_part_zero {γ : ℝ → ℝ × ℝ × ℝ}
     (hγ : apm_t00a05_IsC2 γ) :
     ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
