@@ -1570,6 +1570,55 @@ lemma apm_t00a05_cornerTimes_perimeter_coordinates
     apm_t00a05_radializedTime_perimeter]
   norm_num [apm_t00a05_squarePerimeter]
 
+/-- Positive orientation has a witness away from all four square corners.
+Those four canonical times are null sets, so they cannot account for a
+positive signed-area integral. -/
+lemma apm_t00a05_exists_angularDensity_pos_off_corners
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    ∃ t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi),
+      t ≠ (apm_t00a05_cornerBRTime hγ).1 ∧
+      t ≠ (apm_t00a05_cornerTRTime hγ).1 ∧
+      t ≠ (apm_t00a05_cornerTLTime hγ).1 ∧
+      t ≠ (apm_t00a05_cornerBLTime hγ).1 ∧
+      0 < apm_t00a05_angularDensity γ t := by
+  let corners : Set ℝ :=
+    {(apm_t00a05_cornerBRTime hγ).1,
+     (apm_t00a05_cornerTRTime hγ).1,
+     (apm_t00a05_cornerTLTime hγ).1,
+     (apm_t00a05_cornerBLTime hγ).1}
+  have hcorners : volume corners = 0 := by
+    have hfinite : corners.Finite := by simp [corners]
+    exact hfinite.measure_zero volume
+  by_contra h
+  have hnonpos {t : ℝ} (ht : t ∈ Set.Ioo (0 : ℝ) (2 * Real.pi))
+      (htc : t ∉ corners) : apm_t00a05_angularDensity γ t ≤ 0 := by
+    apply le_of_not_gt
+    intro hpos
+    apply h
+    simp only [corners, Set.mem_insert_iff, Set.mem_singleton_iff,
+      not_or, not_false_eq_true] at htc
+    exact ⟨t, ht, htc.1, htc.2.1, htc.2.2.1, htc.2.2.2, hpos⟩
+  have harea_nonpos :
+      ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+          (γ t).1 * deriv (fun s => (γ s).2.1) t -
+            (γ t).2.1 * deriv (fun s => (γ s).1) t ≤ 0 := by
+    rw [integral_Icc_eq_integral_Ioo]
+    apply integral_nonpos_of_ae
+    have hae_corners : ∀ᵐ t ∂volume.restrict
+        (Set.Ioo (0 : ℝ) (2 * Real.pi)), t ∉ corners := by
+      rw [ae_iff]
+      have hmeas : MeasurableSet corners := by
+        simp [corners]
+      rw [show {t : ℝ | ¬t ∉ corners} = corners by ext t; simp,
+        Measure.restrict_apply hmeas]
+      exact measure_mono_null Set.inter_subset_left hcorners
+    filter_upwards [ae_restrict_mem measurableSet_Ioo, hae_corners] with t ht htc
+    have ht' : t ∈ Set.Icc (0 : ℝ) (2 * Real.pi) := ⟨ht.1.le, ht.2.le⟩
+    rw [apm_t00a05_signedAreaDensity_eq_radius_sq_mul_angularDensity hγ ht']
+    exact mul_nonpos_of_nonneg_of_nonpos
+      (apm_t00a05_projected_radius_sq_pos hγ ht').le (hnonpos ht htc)
+  exact (not_lt_of_ge harea_nonpos) hγ.2.2.2.2
+
 lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
     (h : apm_t00a05_radialHomeomorph p = r) :
     (r.1 ≠ 0 → r.2 = 0 → p.2 = 0) ∧
