@@ -310,6 +310,47 @@ noncomputable def apm_t00a05_squareOfPerimeter (s : ℝ) : ℝ × ℝ :=
   else if s ≤ 6 then (5 - s, 1)
   else (-1, 7 - s)
 
+lemma apm_t00a05_squareOfPerimeter_squarePerimeter {q : ℝ × ℝ}
+    (hq : q ∈ Metric.sphere 0 1) :
+    apm_t00a05_squareOfPerimeter (apm_t00a05_squarePerimeter q) = q := by
+  rcases apm_t00a05_supSphere_coordinate_bounds hq with ⟨hx0, hx1, hy0, hy1⟩
+  have hedge := apm_t00a05_supSphere_on_edge hq
+  unfold apm_t00a05_squarePerimeter
+  split_ifs with hb hr ht
+  · unfold apm_t00a05_squareOfPerimeter
+    rw [if_pos (by linarith : q.1 + 1 ≤ 2)]
+    ext <;> simp [hb]
+  · unfold apm_t00a05_squareOfPerimeter
+    have hygt : -1 < q.2 := lt_of_le_of_ne hy0 (Ne.symm hb)
+    rw [if_neg (by linarith : ¬ q.2 + 3 ≤ 2),
+      if_pos (by linarith : q.2 + 3 ≤ 4)]
+    ext <;> simp [hr]
+  · unfold apm_t00a05_squareOfPerimeter
+    have hxlt : q.1 < 1 := lt_of_le_of_ne hx1 hr
+    rw [if_neg (by linarith : ¬ 5 - q.1 ≤ 2),
+      if_neg (by linarith : ¬ 5 - q.1 ≤ 4),
+      if_pos (by linarith : 5 - q.1 ≤ 6)]
+    ext <;> simp [ht]
+  · have hxneg : q.1 = -1 := by
+      rcases hedge with hxneg | hxpos | hyneg | hypos
+      · exact hxneg
+      · exact False.elim (hr hxpos)
+      · exact False.elim (hb hyneg)
+      · exact False.elim (ht hypos)
+    have hygt : -1 < q.2 := lt_of_le_of_ne hy0 (Ne.symm hb)
+    have hylt : q.2 < 1 := lt_of_le_of_ne hy1 ht
+    unfold apm_t00a05_squareOfPerimeter
+    rw [if_neg (by linarith : ¬ 7 - q.2 ≤ 2),
+      if_neg (by linarith : ¬ 7 - q.2 ≤ 4),
+      if_neg (by linarith : ¬ 7 - q.2 ≤ 6)]
+    ext <;> simp [hxneg]
+
+lemma apm_t00a05_squarePerimeter_injOn :
+    Set.InjOn apm_t00a05_squarePerimeter (Metric.sphere (0 : ℝ × ℝ) 1) := by
+  intro p hp q hq hpq
+  rw [← apm_t00a05_squareOfPerimeter_squarePerimeter hp,
+    ← apm_t00a05_squareOfPerimeter_squarePerimeter hq, hpq]
+
 lemma apm_t00a05_segment_origin_subset_region {q : ℝ × ℝ}
     (hq : q ∈ apm_t00a05_region) :
     segment ℝ (0, 0) q ⊆ apm_t00a05_region :=
