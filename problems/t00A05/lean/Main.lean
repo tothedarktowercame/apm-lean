@@ -2317,6 +2317,53 @@ lemma apm_t00a05_C2_has_four_corner_crossings {γ : ℝ → ℝ × ℝ × ℝ}
     gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ t).1, (γ t).2.1)) * (γ t).2.1 = r.2 at hy
   refine ⟨t, ht, htr, ⟨?_, ?_⟩, ⟨?_, ?_⟩⟩ <;> intro hrsgn <;> nlinarith
 
+lemma apm_t00a05_corner_time_ratios
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ) :
+    let tBR := (apm_t00a05_cornerBRTime hγ).1
+    let tTR := (apm_t00a05_cornerTRTime hγ).1
+    let tTL := (apm_t00a05_cornerTLTime hγ).1
+    let tBL := (apm_t00a05_cornerBLTime hγ).1
+    (γ tBR).2.1 / (γ tBR).1 = -1 ∧
+    (γ tTR).1 / (γ tTR).2.1 = 1 ∧
+    (γ tTL).2.1 / (γ tTL).1 = -1 ∧
+    (γ tBL).1 / (γ tBL).2.1 = 1 := by
+  dsimp only
+  have ratio_yx (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+      (hrx : r.1 ≠ 0) :
+      let t := (apm_t00a05_radializedTime hγ r hr).1
+      (γ t).2.1 / (γ t).1 = r.2 / r.1 := by
+    dsimp only
+    have ht := (apm_t00a05_radializedTime hγ r hr).2
+    have hp := apm_t00a05_C2_projection_mem_frontier hγ ht.1 ht.2.le
+    have hx : (γ (apm_t00a05_radializedTime hγ r hr).1).1 ≠ 0 :=
+      (apm_t00a05_radialHomeomorph_fst_ne_zero_iff hp).mp (by
+        rw [apm_t00a05_radializedTime_spec hγ r hr]
+        exact hrx)
+    rw [← apm_t00a05_radialHomeomorph_ratio_yx hp hx]
+    rw [apm_t00a05_radializedTime_spec hγ r hr]
+  have ratio_xy (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+      (hry : r.2 ≠ 0) :
+      let t := (apm_t00a05_radializedTime hγ r hr).1
+      (γ t).1 / (γ t).2.1 = r.1 / r.2 := by
+    dsimp only
+    have ht := (apm_t00a05_radializedTime hγ r hr).2
+    have hp := apm_t00a05_C2_projection_mem_frontier hγ ht.1 ht.2.le
+    have hy : (γ (apm_t00a05_radializedTime hγ r hr).1).2.1 ≠ 0 :=
+      (apm_t00a05_radialHomeomorph_snd_ne_zero_iff hp).mp (by
+        rw [apm_t00a05_radializedTime_spec hγ r hr]
+        exact hry)
+    rw [← apm_t00a05_radialHomeomorph_ratio_xy hp hy]
+    rw [apm_t00a05_radializedTime_spec hγ r hr]
+  unfold apm_t00a05_cornerBRTime apm_t00a05_cornerTRTime
+    apm_t00a05_cornerTLTime apm_t00a05_cornerBLTime
+  constructor
+  · simpa using ratio_yx (1, -1) apm_t00a05_cornerBR_mem_sphere (by norm_num)
+  constructor
+  · simpa using ratio_xy (1, 1) apm_t00a05_cornerTR_mem_sphere (by norm_num)
+  constructor
+  · simpa using ratio_yx (-1, 1) apm_t00a05_cornerTL_mem_sphere (by norm_num)
+  · simpa using ratio_xy (-1, -1) apm_t00a05_cornerBL_mem_sphere (by norm_num)
+
 /-- Cutting the square chart at the initial point turns the open part of any
 simple closed traversal into one strictly monotone real path.  This is the
 ordering input for the four FTC arcs. -/
