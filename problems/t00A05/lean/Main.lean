@@ -1239,11 +1239,13 @@ theorem apm_t00a05 :
   missed point would produce an impossible continuous simple real loop.  This
   proves surjectivity and supplies four distinct half-axis crossings.
 
-  What remains is the analytic orientation/telescope: order those crossings by
-  the strict-monotonicity alternative for the punctured real chart, use the
-  positive signed-area hypothesis to select the counterclockwise alternative,
-  and apply the two proved arctangent primitives on the four intervening arcs.
-  Their endpoint values telescope to `-2π`, while
+  The punctured chart's strict-monotonicity alternative is now proved, as are
+  positive radial scaling, signed axis/corner crossings, the two per-arc FTC
+  formulas, and exact reduction of the encoded line integral to the negative
+  angular-density integral.  What remains is one orientation bridge: use the
+  positive signed-area hypothesis to exclude the strictly antitone chart
+  alternative and order the four corner witnesses cyclically.  The proved FTC
+  formulas then telescope at ratios `±1` to `2π`, while
   `apm_t00a05_C2_exact_part_zero` removes the `cos z dz` term.  At this pin there
   is no library winding-number/change-of-variables theorem that packages that
   last orientation argument.
