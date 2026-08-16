@@ -1035,6 +1035,23 @@ lemma apm_t00a05_rot_le_rot_iff_of_same_side {β s t : ℝ}
   · simp [apm_t00a05_rot, h.1, h.2]
   · simp [apm_t00a05_rot, not_lt.mpr h.1, not_lt.mpr h.2]
 
+lemma apm_t00a05_squareAngle_strictAntiOn_of_rot_strictAntiOn
+    {D : Set ℝ} {p : ℝ → ℝ} {β : ℝ}
+    (hpIcc : Set.MapsTo p D (Set.Icc (0 : ℝ) 8))
+    (hside : (∀ x ∈ D, p x < β) ∨ (∀ x ∈ D, β ≤ p x))
+    (hanti : StrictAntiOn (fun x => apm_t00a05_rot β (p x)) D) :
+    StrictAntiOn (fun x => apm_t00a05_squareAngle (p x)) D := by
+  intro x hx y hy hxy
+  have hrot := hanti hx hy hxy
+  have hpyx : p y < p x := by
+    apply (apm_t00a05_rot_lt_rot_iff_of_same_side
+      (show (p y < β ∧ p x < β) ∨ (β ≤ p y ∧ β ≤ p x) by
+        rcases hside with h | h
+        · exact Or.inl ⟨h y hy, h x hx⟩
+        · exact Or.inr ⟨h y hy, h x hx⟩)).mp
+    exact hrot
+  exact apm_t00a05_squareAngle_strictMonoOn (hpIcc hy) (hpIcc hx) hpyx
+
 /-- Route step 9 seam: the perimeter chart inverts the decoder on `[0, 8]`
 with the `0`/`8` seam — `8` decodes to the corner `(-1, -1)`, whose
 perimeter coordinate is `0`, and every other `s ∈ [0, 8]` is reproduced
