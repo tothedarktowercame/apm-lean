@@ -897,6 +897,19 @@ lemma apm_t00a05_simple_loop_surj_square {c : ℝ → ℝ × ℝ} {T : ℝ}
     rw [hr_eq ⟨le_rfl, hT.le⟩, hr_eq ⟨hT.le, le_rfl⟩, hclosed]
   exact apm_t00a05_no_continuous_real_simple_loop hT hfcont hfinj hfclosed
 
+lemma apm_t00a05_C2_radialized_surjOn {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    Set.SurjOn
+      (fun t => apm_t00a05_radialHomeomorph ((γ t).1, (γ t).2.1))
+      (Set.Icc (0 : ℝ) (2 * Real.pi))
+      (Metric.sphere (0 : ℝ × ℝ) 1) := by
+  apply apm_t00a05_simple_loop_surj_square Real.two_pi_pos
+    (apm_t00a05_C2_radialized_continuous hγ)
+  · intro t ht
+    exact apm_t00a05_C2_radialized_mem_sphere hγ ht.1 ht.2
+  · exact apm_t00a05_C2_radialized_injOn hγ
+  · exact apm_t00a05_C2_radialized_closed hγ
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
