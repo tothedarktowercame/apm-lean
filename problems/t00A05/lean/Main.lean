@@ -242,6 +242,42 @@ lemma apm_t00a05_radialHomeomorph_image_frontier :
   rw [himage, frontier_closedBall]
   norm_num
 
+noncomputable def apm_t00a05_squarePerimeter (q : ℝ × ℝ) : ℝ :=
+  if q.2 = -1 then q.1 + 1
+  else if q.1 = 1 then q.2 + 3
+  else if q.2 = 1 then 5 - q.1
+  else 7 - q.2
+
+lemma apm_t00a05_mem_supSphere_iff (q : ℝ × ℝ) :
+    q ∈ Metric.sphere 0 1 ↔ max |q.1| |q.2| = 1 := by
+  simp [Metric.mem_sphere, Real.dist_eq, Prod.norm_def]
+
+lemma apm_t00a05_supSphere_coordinate_bounds {q : ℝ × ℝ}
+    (hq : q ∈ Metric.sphere 0 1) :
+    -1 ≤ q.1 ∧ q.1 ≤ 1 ∧ -1 ≤ q.2 ∧ q.2 ≤ 1 := by
+  have hmax := (apm_t00a05_mem_supSphere_iff q).mp hq
+  have hx : |q.1| ≤ 1 := by rw [← hmax]; exact le_max_left _ _
+  have hy : |q.2| ≤ 1 := by rw [← hmax]; exact le_max_right _ _
+  constructor
+  · exact (abs_le.mp hx).1
+  constructor
+  · exact (abs_le.mp hx).2
+  · exact ⟨(abs_le.mp hy).1, (abs_le.mp hy).2⟩
+
+lemma apm_t00a05_supSphere_on_edge {q : ℝ × ℝ}
+    (hq : q ∈ Metric.sphere 0 1) :
+    q.1 = -1 ∨ q.1 = 1 ∨ q.2 = -1 ∨ q.2 = 1 := by
+  have hmax := (apm_t00a05_mem_supSphere_iff q).mp hq
+  rcases max_choice |q.1| |q.2| with h | h
+  · have hx : |q.1| = 1 := by rw [h] at hmax; exact hmax
+    rcases (abs_eq (by norm_num : (1 : ℝ) ≥ 0)).mp hx with hx | hx
+    · exact Or.inr (Or.inl hx)
+    · exact Or.inl hx
+  · have hy : |q.2| = 1 := by rw [h] at hmax; exact hmax
+    rcases (abs_eq (by norm_num : (1 : ℝ) ≥ 0)).mp hy with hy | hy
+    · exact Or.inr (Or.inr (Or.inr hy))
+    · exact Or.inr (Or.inr (Or.inl hy))
+
 lemma apm_t00a05_segment_origin_subset_region {q : ℝ × ℝ}
     (hq : q ∈ apm_t00a05_region) :
     segment ℝ (0, 0) q ⊆ apm_t00a05_region :=
