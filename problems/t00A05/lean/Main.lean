@@ -672,6 +672,50 @@ lemma apm_t00a05_angle_primitive_deriv_y {γ : ℝ → ℝ × ℝ × ℝ}
     ((fun u ↦ (γ u).1) / (fun u ↦ (γ u).2.1))) t = _
   convert hneg.deriv using 1 <;> field_simp <;> ring
 
+/-- FTC for one arc contained in an `x ≠ 0` half-plane. -/
+lemma apm_t00a05_angularDensity_integral_of_x_ne_zero
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b : ℝ} (hab : a ≤ b)
+    (hx0 : ∀ t ∈ Set.Icc a b, (γ t).1 ≠ 0) :
+    ∫ t in Set.Icc a b, apm_t00a05_angularDensity γ t =
+      Real.arctan ((γ b).2.1 / (γ b).1) -
+        Real.arctan ((γ a).2.1 / (γ a).1) := by
+  let F : ℝ → ℝ := fun t => Real.arctan ((γ t).2.1 / (γ t).1)
+  have hF : ContDiffOn ℝ 1 F (Set.Icc a b) := by
+    exact ((hγ.1.snd.fst.contDiffOn.div hγ.1.fst.contDiffOn hx0).arctan)
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hab]
+  calc
+    ∫ t in a..b, apm_t00a05_angularDensity γ t =
+        ∫ t in a..b, deriv F t := by
+      apply intervalIntegral.integral_congr
+      intro t ht
+      exact (apm_t00a05_angle_primitive_deriv hγ.1
+        (hx0 t ⟨ht.1.le, ht.2⟩)).symm
+    _ = F b - F a := intervalIntegral.integral_deriv_of_contDiffOn_Icc hF hab
+    _ = _ := rfl
+
+/-- FTC for one arc contained in a `y ≠ 0` half-plane. -/
+lemma apm_t00a05_angularDensity_integral_of_y_ne_zero
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {a b : ℝ} (hab : a ≤ b)
+    (hy0 : ∀ t ∈ Set.Icc a b, (γ t).2.1 ≠ 0) :
+    ∫ t in Set.Icc a b, apm_t00a05_angularDensity γ t =
+      -Real.arctan ((γ b).1 / (γ b).2.1) -
+        -Real.arctan ((γ a).1 / (γ a).2.1) := by
+  let F : ℝ → ℝ := fun t => -Real.arctan ((γ t).1 / (γ t).2.1)
+  have hF : ContDiffOn ℝ 1 F (Set.Icc a b) := by
+    exact ((hγ.1.fst.contDiffOn.div hγ.1.snd.fst.contDiffOn hy0).arctan).neg
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hab]
+  calc
+    ∫ t in a..b, apm_t00a05_angularDensity γ t =
+        ∫ t in a..b, deriv F t := by
+      apply intervalIntegral.integral_congr
+      intro t ht
+      exact (apm_t00a05_angle_primitive_deriv_y hγ.1
+        (hy0 t ⟨ht.1.le, ht.2⟩)).symm
+    _ = F b - F a := intervalIntegral.integral_deriv_of_contDiffOn_Icc hF hab
+    _ = _ := rfl
+
 lemma apm_t00a05_dOmega_eq_zero (p : apm_t00a05_U) :
     apm_t00a05_dOmega p.1 = 0 := by
   rcases p with ⟨⟨x, y, z⟩, hxy⟩
