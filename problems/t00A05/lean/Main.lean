@@ -1207,6 +1207,17 @@ lemma apm_t00a05_radializedTime_eq_iff
     exact Classical.choose_spec
       (apm_t00a05_C2_radialized_unique_on_Ico hγ hr) |>.2 t ht
 
+lemma apm_t00a05_radializedTime_ne_of_ne
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    {r s : ℝ × ℝ} (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1)
+    (hs : s ∈ Metric.sphere (0 : ℝ × ℝ) 1) (hrs : r ≠ s) :
+    apm_t00a05_radializedTime hγ r hr ≠
+      apm_t00a05_radializedTime hγ s hs := by
+  intro htime
+  apply hrs
+  rw [← apm_t00a05_radializedTime_spec hγ r hr,
+    ← apm_t00a05_radializedTime_spec hγ s hs, htime]
+
 lemma apm_t00a05_radialHomeomorph_eq_axis {p r : ℝ × ℝ}
     (h : apm_t00a05_radialHomeomorph p = r) :
     (r.1 ≠ 0 → r.2 = 0 → p.2 = 0) ∧
@@ -1251,6 +1262,28 @@ lemma apm_t00a05_radialHomeomorph_scale_pos {p : ℝ × ℝ}
       (absorbent_nhds_zero
         (Metric.isOpen_ball.mem_nhds (Metric.mem_ball_self zero_lt_one)))
       (NormedSpace.isVonNBounded_ball ℝ (ℝ × ℝ) 1)).2 hpne
+
+/-- Positive radial rescaling transfers both coordinate signs from a square
+sphere point to its canonical preimage on the original level-set curve. -/
+lemma apm_t00a05_radializedTime_coordinate_signs
+    {γ : ℝ → ℝ × ℝ × ℝ} (hγ : apm_t00a05_IsC2 γ)
+    (r : ℝ × ℝ) (hr : r ∈ Metric.sphere (0 : ℝ × ℝ) 1) :
+    let t := (apm_t00a05_radializedTime hγ r hr).1
+    ((0 < r.1 → 0 < (γ t).1) ∧ (r.1 < 0 → (γ t).1 < 0)) ∧
+      ((0 < r.2 → 0 < (γ t).2.1) ∧ (r.2 < 0 → (γ t).2.1 < 0)) := by
+  let t := (apm_t00a05_radializedTime hγ r hr).1
+  have ht := (apm_t00a05_radializedTime hγ r hr).2
+  have ha := apm_t00a05_radialHomeomorph_scale_pos
+    (apm_t00a05_C2_projection_mem_frontier hγ ht.1 ht.2.le)
+  have hscaled := apm_t00a05_radializedTime_spec hγ r hr
+  rw [apm_t00a05_radialHomeomorph_apply] at hscaled
+  have hx := congrArg Prod.fst hscaled
+  have hy := congrArg Prod.snd hscaled
+  change (gauge apm_t00a05_region ((γ t).1, (γ t).2.1) /
+    gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ t).1, (γ t).2.1)) * (γ t).1 = r.1 at hx
+  change (gauge apm_t00a05_region ((γ t).1, (γ t).2.1) /
+    gauge (Metric.ball (0 : ℝ × ℝ) 1) ((γ t).1, (γ t).2.1)) * (γ t).2.1 = r.2 at hy
+  refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩ <;> intro hrsign <;> nlinarith
 
 /-- Surjectivity of the radialized loop supplies all four half-axis crossing
 parameters of the original projected curve. -/
