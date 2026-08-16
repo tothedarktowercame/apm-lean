@@ -104,13 +104,40 @@ lemma apm_t00a05_C2_projection_injOn {γ : ℝ → ℝ × ℝ × ℝ}
 lemma apm_t00a05_C2_projection_contDiff {γ : ℝ → ℝ × ℝ × ℝ}
     (hγ : apm_t00a05_IsC2 γ) :
     ContDiff ℝ 1 (fun t ↦ ((γ t).1, (γ t).2.1)) := by
-  exact hγ.1.fst.prod hγ.1.snd.fst
+  exact hγ.1.fst.prodMk hγ.1.snd.fst
 
 lemma apm_t00a05_C2_projection_closed {γ : ℝ → ℝ × ℝ × ℝ}
     (hγ : apm_t00a05_IsC2 γ) :
     ((γ 0).1, (γ 0).2.1) =
       ((γ (2 * Real.pi)).1, (γ (2 * Real.pi)).2.1) := by
   exact congrArg (fun p : ℝ × ℝ × ℝ ↦ (p.1, p.2.1)) hγ.2.1
+
+lemma apm_t00a05_C2_exact_part_zero {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : apm_t00a05_IsC2 γ) :
+    ∫ t in Set.Icc (0 : ℝ) (2 * Real.pi),
+      Real.cos ((γ t).2.2) * deriv (fun s ↦ (γ s).2.2) t = 0 := by
+  have hz : ContDiff ℝ 1 (fun t ↦ (γ t).2.2) := hγ.1.snd.snd
+  have hderiv (t : ℝ) :
+      deriv (fun s ↦ Real.sin ((γ s).2.2)) t =
+        Real.cos ((γ t).2.2) * deriv (fun s ↦ (γ s).2.2) t :=
+    (hz.differentiable_one.differentiableAt.hasDerivAt.sin).deriv
+  have hle : (0 : ℝ) ≤ 2 * Real.pi := by positivity
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hle]
+  calc
+    ∫ t in (0 : ℝ)..2 * Real.pi,
+        Real.cos ((γ t).2.2) * deriv (fun s ↦ (γ s).2.2) t =
+        ∫ t in (0 : ℝ)..2 * Real.pi,
+          deriv (fun s ↦ Real.sin ((γ s).2.2)) t := by
+            apply intervalIntegral.integral_congr
+            intro t _
+            exact (hderiv t).symm
+    _ = Real.sin ((γ (2 * Real.pi)).2.2) - Real.sin ((γ 0).2.2) :=
+      intervalIntegral.integral_deriv_of_contDiffOn_Icc hz.sin.contDiffOn hle
+    _ = 0 := by
+      have hzend : (γ 0).2.2 = (γ (2 * Real.pi)).2.2 :=
+        congrArg (fun p : ℝ × ℝ × ℝ ↦ p.2.2) hγ.2.1
+      rw [← hzend]
+      ring
 
 lemma apm_t00a05_dOmega_eq_zero (p : apm_t00a05_U) :
     apm_t00a05_dOmega p.1 = 0 := by
