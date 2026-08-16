@@ -186,6 +186,25 @@ lemma apm_t00a05_angle_primitive_deriv {γ : ℝ → ℝ × ℝ × ℝ}
   rw [hatan.deriv]
   field_simp
 
+lemma apm_t00a05_angle_primitive_deriv_y {γ : ℝ → ℝ × ℝ × ℝ}
+    (hγ : ContDiff ℝ 1 γ) {t : ℝ} (hy0 : (γ t).2.1 ≠ 0) :
+    deriv (fun s ↦ -Real.arctan ((γ s).1 / (γ s).2.1)) t =
+      ((γ t).1 * deriv (fun s ↦ (γ s).2.1) t -
+        (γ t).2.1 * deriv (fun s ↦ (γ s).1) t) /
+        ((γ t).1 ^ 2 + (γ t).2.1 ^ 2) := by
+  have hx : HasDerivAt (fun s ↦ (γ s).1)
+      (deriv (fun s ↦ (γ s).1) t) t :=
+    hγ.fst.differentiable_one.differentiableAt.hasDerivAt
+  have hy : HasDerivAt (fun s ↦ (γ s).2.1)
+      (deriv (fun s ↦ (γ s).2.1) t) t :=
+    hγ.snd.fst.differentiable_one.differentiableAt.hasDerivAt
+  have hquot := hx.div hy hy0
+  have hatan := (Real.hasDerivAt_arctan ((γ t).1 / (γ t).2.1)).comp t hquot
+  have hneg := hatan.neg
+  change deriv ((-Real.arctan) ∘
+    ((fun u ↦ (γ u).1) / (fun u ↦ (γ u).2.1))) t = _
+  convert hneg.deriv using 1 <;> field_simp <;> ring
+
 lemma apm_t00a05_dOmega_eq_zero (p : apm_t00a05_U) :
     apm_t00a05_dOmega p.1 = 0 := by
   rcases p with ⟨⟨x, y, z⟩, hxy⟩
