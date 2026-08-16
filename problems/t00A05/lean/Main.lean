@@ -594,6 +594,48 @@ lemma apm_t00a05_lineIntegral_C1 :
       rw [setIntegral_const]
       simp [Real.volume_Icc, Real.pi_pos.le]
 
+/-- Route step 9 (memory e-1f2d3d6d, formula verified in trial 1): rotate the
+perimeter coordinate so the cut sits at `β`. -/
+noncomputable def apm_t00a05_rot (β s : ℝ) : ℝ :=
+  if s < β then s + 8 - β else s - β
+
+/-- `rot β` is continuous away from its cut `s = β`: on each side it is
+eventually affine, since the branch condition `s < β` is eventually constant. -/
+lemma apm_t00a05_rot_continuousAt {β s : ℝ} (hs : s ≠ β) :
+    ContinuousAt (apm_t00a05_rot β) s := by
+  unfold apm_t00a05_rot
+  rcases lt_or_gt_of_ne hs with h | h
+  · have hopen : {t : ℝ | t < β} ∈ nhds s :=
+      (isOpen_lt (continuous_id (X := ℝ))
+        (continuous_const (X := ℝ) (y := β))).mem_nhds h
+    refine (show ContinuousAt (fun t : ℝ => t + 8 - β) s by fun_prop).congr ?_
+    filter_upwards [hopen] with t ht
+    exact (if_pos ht).symm
+  · have hopen : {t : ℝ | β < t} ∈ nhds s :=
+      (isOpen_lt (continuous_const (X := ℝ) (y := β))
+        (continuous_id (X := ℝ))).mem_nhds h
+    refine (show ContinuousAt (fun t : ℝ => t - β) s by fun_prop).congr ?_
+    filter_upwards [hopen] with t ht
+    exact (if_neg (not_lt.2 ht.le)).symm
+
+/-- Route step 9 seam: the perimeter chart inverts the decoder on `[0, 8]`
+with the `0`/`8` seam — `8` decodes to the corner `(-1, -1)`, whose
+perimeter coordinate is `0`, and every other `s ∈ [0, 8]` is reproduced
+exactly. -/
+lemma apm_t00a05_squarePerimeter_squareOfPerimeter {s : ℝ}
+    (hs0 : 0 ≤ s) (hs8 : s ≤ 8) :
+    apm_t00a05_squarePerimeter (apm_t00a05_squareOfPerimeter s) =
+      if s = 8 then 0 else s := by
+  by_cases h8 : s = 8
+  · subst h8
+    norm_num [apm_t00a05_squareOfPerimeter, apm_t00a05_squarePerimeter]
+  · have hres : apm_t00a05_squarePerimeter (apm_t00a05_squareOfPerimeter s) = s := by
+      unfold apm_t00a05_squareOfPerimeter
+      split_ifs with h1 h2 h3
+      all_goals simp only [apm_t00a05_squarePerimeter]
+      all_goals split_ifs <;> linarith
+    rw [hres, if_neg h8]
+
 theorem apm_t00a05 :
     (∀ p : apm_t00a05_U, apm_t00a05_dOmega p.1 = 0) ∧
     apm_t00a05_lineIntegral apm_t00a05_C1 0 (2 * Real.pi) = -2 * Real.pi ∧
