@@ -101,6 +101,235 @@ lemma apm_a03J04_weakL1_rpow_setIntegral_of_measure_zero
   · rw [setIntegral_measure_zero _ hE0, hE0]
     simp [Real.zero_rpow (sub_pos.mpr hp1).ne']
 
+/-- The lower part of the scalar crossover integral. -/
+lemma apm_a03J04_lintegral_Ioc_const_rpow
+    (m p A : ℝ) (hm : 0 ≤ m) (hp : 0 < p) (hA : 0 < A) :
+    (∫⁻ t in Ioc (0 : ℝ) A,
+        ENNReal.ofReal (m * Real.rpow t (p - 1)) ∂volume) =
+      ENNReal.ofReal (m * (Real.rpow A p / p)) := by
+  have hpow_int :
+      IntegrableOn (fun t : ℝ => Real.rpow t (p - 1)) (Ioc 0 A) volume := by
+    have hi := intervalIntegral.intervalIntegrable_rpow'
+      (a := (0 : ℝ)) (b := A) (r := p - 1) (by linarith)
+    rw [intervalIntegrable_iff, uIoc_of_le hA.le] at hi
+    exact hi
+  have hint :
+      IntegrableOn (fun t : ℝ => m * Real.rpow t (p - 1)) (Ioc 0 A) volume := by
+    change Integrable (fun t : ℝ => m * Real.rpow t (p - 1))
+      (volume.restrict (Ioc 0 A))
+    exact hpow_int.const_mul m
+  have hnn : 0 ≤ᵐ[volume.restrict (Ioc (0 : ℝ) A)]
+      (fun t : ℝ => m * Real.rpow t (p - 1)) := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioc] with t ht
+    exact mul_nonneg hm (Real.rpow_nonneg ht.1.le _)
+  rw [← MeasureTheory.ofReal_integral_eq_lintegral_ofReal hint hnn]
+  congr 1
+  rw [integral_const_mul, ← intervalIntegral.integral_of_le hA.le]
+  change m * (∫ x : ℝ in 0..A, x ^ (p - 1)) = m * (A ^ p / p)
+  rw [integral_rpow (Or.inl (by linarith : -1 < p - 1))]
+  rw [show p - 1 + 1 = p by ring, Real.zero_rpow hp.ne']
+  ring
+
+/-- The upper part of the scalar crossover integral. -/
+lemma apm_a03J04_lintegral_Ioi_const_rpow
+    (m p A : ℝ) (hm : 0 ≤ m) (hp1 : p < 1) (hA : 0 < A) :
+    (∫⁻ t in Ioi A,
+        ENNReal.ofReal (m * Real.rpow t (p - 2)) ∂volume) =
+      ENNReal.ofReal (m * (Real.rpow A (p - 1) / (1 - p))) := by
+  have hpow_int :
+      IntegrableOn (fun t : ℝ => Real.rpow t (p - 2)) (Ioi A) volume :=
+    integrableOn_Ioi_rpow_of_lt (by linarith) hA
+  have hint :
+      IntegrableOn (fun t : ℝ => m * Real.rpow t (p - 2)) (Ioi A) volume := by
+    change Integrable (fun t : ℝ => m * Real.rpow t (p - 2))
+      (volume.restrict (Ioi A))
+    exact hpow_int.const_mul m
+  have hnn : 0 ≤ᵐ[volume.restrict (Ioi A)]
+      (fun t : ℝ => m * Real.rpow t (p - 2)) := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+    exact mul_nonneg hm (Real.rpow_nonneg (hA.trans ht).le _)
+  rw [← MeasureTheory.ofReal_integral_eq_lintegral_ofReal hint hnn]
+  congr 1
+  rw [integral_const_mul]
+  change m * (∫ x : ℝ in Ioi A, x ^ (p - 2)) =
+    m * (A ^ (p - 1) / (1 - p))
+  rw [integral_Ioi_rpow_of_lt (by linarith : p - 2 < -1) hA]
+  rw [show p - 2 + 1 = p - 1 by ring]
+  field_simp [show p - 1 ≠ 0 by linarith, show 1 - p ≠ 0 by linarith]
+  ring
+
+/-- Rewrite a finite ENNReal factor as the `ofReal` of its real value. -/
+lemma apm_a03J04_mul_ofReal_rpow_eq
+    (V : ℝ≥0∞) (p t : ℝ) (hV : V ≠ ⊤) :
+    V * ENNReal.ofReal (Real.rpow t (p - 1)) =
+      ENNReal.ofReal (V.toReal * Real.rpow t (p - 1)) := by
+  rw [ENNReal.ofReal_mul ENNReal.toReal_nonneg, ENNReal.ofReal_toReal hV]
+
+/-- On a positive level, the weak tail majorant times the layer-cake weight
+is the `ofReal` of the corresponding real power. -/
+lemma apm_a03J04_div_mul_ofReal_rpow_eq
+    (M : ℝ≥0∞) (p t : ℝ) (hM : M ≠ ⊤) (ht : 0 < t) :
+    (M / ENNReal.ofReal t) * ENNReal.ofReal (Real.rpow t (p - 1)) =
+      ENNReal.ofReal (M.toReal * Real.rpow t (p - 2)) := by
+  calc
+    (M / ENNReal.ofReal t) * ENNReal.ofReal (Real.rpow t (p - 1)) =
+        (ENNReal.ofReal M.toReal / ENNReal.ofReal t) *
+          ENNReal.ofReal (Real.rpow t (p - 1)) := by
+      rw [ENNReal.ofReal_toReal hM]
+    _ = ENNReal.ofReal (M.toReal / t) *
+          ENNReal.ofReal (Real.rpow t (p - 1)) := by
+      rw [ENNReal.ofReal_div_of_pos ht]
+    _ = ENNReal.ofReal ((M.toReal / t) * Real.rpow t (p - 1)) := by
+      rw [ENNReal.ofReal_mul (div_nonneg ENNReal.toReal_nonneg ht.le)]
+    _ = ENNReal.ofReal (M.toReal * Real.rpow t (p - 2)) := by
+      congr 1
+      change M.toReal / t * t ^ (p - 1) = M.toReal * t ^ (p - 2)
+      calc
+        M.toReal / t * t ^ (p - 1) =
+            M.toReal * (t ^ (p - 1) / t) := by ring
+        _ = M.toReal * t ^ ((p - 1) - 1) := by
+          congr 1
+          exact (Real.rpow_sub_one ht.ne' (p - 1)).symm
+        _ = M.toReal * t ^ (p - 2) := by ring
+
+/-- The two pieces at `A = m / v` combine to the sharp weak-L¹ constant. -/
+lemma apm_a03J04_crossover_algebra
+    (v m p : ℝ) (hv : 0 < v) (hm : 0 < m)
+    (hp : 0 < p) (hp1 : p < 1) :
+    p * (v * ((m / v) ^ p / p) +
+      m * ((m / v) ^ (p - 1) / (1 - p))) =
+      (1 / (1 - p)) * v ^ (1 - p) * m ^ p := by
+  let A := m / v
+  have hA : 0 < A := div_pos hm hv
+  have hcross : m * A ^ (p - 1) = v * A ^ p := by
+    have hmA : m = v * A := by
+      dsimp [A]
+      field_simp [hv.ne']
+    have hAp : A ^ p = A ^ (p - 1) * A := by
+      calc
+        A ^ p = A ^ ((p - 1) + 1) := by congr 1 <;> ring
+        _ = A ^ (p - 1) * A ^ (1 : ℝ) := Real.rpow_add hA (p - 1) 1
+        _ = A ^ (p - 1) * A := by rw [Real.rpow_one]
+    rw [hmA, hAp]
+    ring
+  have hfirst :
+      p * (v * (A ^ p / p) + m * (A ^ (p - 1) / (1 - p))) =
+        (1 / (1 - p)) * (v * A ^ p) := by
+    calc
+      p * (v * (A ^ p / p) + m * (A ^ (p - 1) / (1 - p))) =
+          v * A ^ p + (p / (1 - p)) * (m * A ^ (p - 1)) := by
+        field_simp [hp.ne', show 1 - p ≠ 0 by linarith]
+      _ = v * A ^ p + (p / (1 - p)) * (v * A ^ p) := by rw [hcross]
+      _ = (1 / (1 - p)) * (v * A ^ p) := by
+        field_simp [show 1 - p ≠ 0 by linarith]
+        ring
+  rw [show m / v = A by rfl, hfirst]
+  have hscale : v * A ^ p = v ^ (1 - p) * m ^ p := by
+    dsimp [A]
+    rw [Real.div_rpow hm.le hv.le]
+    have hvpow : v ^ (1 - p) = v / v ^ p := by
+      rw [Real.rpow_sub hv, Real.rpow_one]
+    rw [hvpow]
+    ring
+  rw [hscale]
+  ring
+
+/-- Scalar form of the layer-cake estimate. Splitting at `M.toReal / V.toReal`
+integrates the finite-set bound below the crossover and the weak tail above it. -/
+lemma apm_a03J04_scalar_crossover_bound
+    (D : ℝ → ℝ≥0∞) (V M : ℝ≥0∞) (p : ℝ)
+    (hVtop : V ≠ ⊤) (hMtop : M ≠ ⊤) (hVpos : 0 < V.toReal)
+    (hp : 0 < p) (hp1 : p < 1)
+    (hD : ∀ t : ℝ, 0 < t → D t ≤ min V (M / ENNReal.ofReal t)) :
+    ENNReal.ofReal p *
+        (∫⁻ t in Ioi (0 : ℝ),
+          D t * ENNReal.ofReal (Real.rpow t (p - 1)) ∂volume) ≤
+      ENNReal.ofReal ((1 / (1 - p)) * Real.rpow V.toReal (1 - p) *
+        Real.rpow M.toReal p) := by
+  by_cases hM0 : M = 0
+  · have hD0 : ∀ t : ℝ, 0 < t → D t = 0 := by
+      intro t ht
+      apply le_antisymm _ bot_le
+      calc
+        D t ≤ min V (M / ENNReal.ofReal t) := hD t ht
+        _ = 0 := by simp [hM0]
+    have hJ0 :
+        (∫⁻ t in Ioi (0 : ℝ),
+          D t * ENNReal.ofReal (Real.rpow t (p - 1)) ∂volume) = 0 := by
+      calc
+        (∫⁻ t in Ioi (0 : ℝ),
+            D t * ENNReal.ofReal (Real.rpow t (p - 1)) ∂volume) =
+            ∫⁻ _t : ℝ in Ioi (0 : ℝ), 0 ∂volume := by
+              apply setLIntegral_congr_fun measurableSet_Ioi
+              intro t ht
+              simp [hD0 t ht]
+        _ = 0 := by simp
+    rw [hJ0]
+    simp [hM0, Real.zero_rpow hp.ne']
+  · have hMpos : 0 < M.toReal := ENNReal.toReal_pos hM0 hMtop
+    let A : ℝ := M.toReal / V.toReal
+    have hA : 0 < A := div_pos hMpos hVpos
+    let w : ℝ → ℝ≥0∞ := fun t =>
+      D t * ENNReal.ofReal (Real.rpow t (p - 1))
+    have hsplit :
+        (∫⁻ t in Ioi (0 : ℝ), w t ∂volume) =
+          (∫⁻ t in Ioc (0 : ℝ) A, w t ∂volume) +
+            ∫⁻ t in Ioi A, w t ∂volume := by
+      rw [← Ioc_union_Ioi_eq_Ioi hA.le,
+        MeasureTheory.lintegral_union measurableSet_Ioi (Ioc_disjoint_Ioi le_rfl)]
+    have hlow :
+        (∫⁻ t in Ioc (0 : ℝ) A, w t ∂volume) ≤
+          ENNReal.ofReal (V.toReal * (Real.rpow A p / p)) := by
+      calc
+        (∫⁻ t in Ioc (0 : ℝ) A, w t ∂volume) ≤
+            ∫⁻ t in Ioc (0 : ℝ) A,
+              ENNReal.ofReal (V.toReal * Real.rpow t (p - 1)) ∂volume := by
+          apply setLIntegral_mono' measurableSet_Ioc
+          intro t ht
+          dsimp [w]
+          calc
+            D t * ENNReal.ofReal (Real.rpow t (p - 1)) ≤
+                V * ENNReal.ofReal (Real.rpow t (p - 1)) :=
+              mul_le_mul_right' ((hD t ht.1).trans (min_le_left _ _)) _
+            _ = ENNReal.ofReal (V.toReal * Real.rpow t (p - 1)) :=
+              apm_a03J04_mul_ofReal_rpow_eq V p t hVtop
+        _ = ENNReal.ofReal (V.toReal * (Real.rpow A p / p)) :=
+          apm_a03J04_lintegral_Ioc_const_rpow
+            V.toReal p A ENNReal.toReal_nonneg hp hA
+    have hhigh :
+        (∫⁻ t in Ioi A, w t ∂volume) ≤
+          ENNReal.ofReal (M.toReal * (Real.rpow A (p - 1) / (1 - p))) := by
+      calc
+        (∫⁻ t in Ioi A, w t ∂volume) ≤
+            ∫⁻ t in Ioi A,
+              ENNReal.ofReal (M.toReal * Real.rpow t (p - 2)) ∂volume := by
+          apply setLIntegral_mono' measurableSet_Ioi
+          intro t ht
+          have ht0 : 0 < t := hA.trans ht
+          dsimp [w]
+          calc
+            D t * ENNReal.ofReal (Real.rpow t (p - 1)) ≤
+                (M / ENNReal.ofReal t) *
+                  ENNReal.ofReal (Real.rpow t (p - 1)) :=
+              mul_le_mul_right' ((hD t ht0).trans (min_le_right _ _)) _
+            _ = ENNReal.ofReal (M.toReal * Real.rpow t (p - 2)) :=
+              apm_a03J04_div_mul_ofReal_rpow_eq M p t hMtop ht0
+        _ = ENNReal.ofReal (M.toReal * (Real.rpow A (p - 1) / (1 - p))) :=
+          apm_a03J04_lintegral_Ioi_const_rpow
+            M.toReal p A ENNReal.toReal_nonneg hp1 hA
+    rw [hsplit]
+    refine (mul_le_mul_left' (add_le_add hlow hhigh) _).trans_eq ?_
+    have hlow_nn : 0 ≤ V.toReal * (Real.rpow A p / p) :=
+      mul_nonneg ENNReal.toReal_nonneg
+        (div_nonneg (Real.rpow_nonneg hA.le _) hp.le)
+    have hhigh_nn : 0 ≤ M.toReal * (Real.rpow A (p - 1) / (1 - p)) :=
+      mul_nonneg ENNReal.toReal_nonneg
+        (div_nonneg (Real.rpow_nonneg hA.le _) (sub_nonneg.mpr hp1.le))
+    rw [← ENNReal.ofReal_add hlow_nn hhigh_nn,
+      ← ENNReal.ofReal_mul hp.le]
+    congr 1
+    exact apm_a03J04_crossover_algebra V.toReal M.toReal p hVpos hMpos hp hp1
+
 /-- Why this unblocks `apm_a03j04`: this is the missing layer-cake and
 improper-integral estimate, including the ENNReal-to-real conversion. Its
 integrability conclusion closes part (b), while the sharp quantitative bound
