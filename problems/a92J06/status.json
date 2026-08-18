@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.886803Z",
   "checked_at": "2026-07-14T22:35:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a92J06/lean/Main.lean",
@@ -36,15 +38,22 @@
     "sorry_count": 2,
     "sorry_locations": [
       "contour_integral_eval (residue computation via circle integral API)",
-      "integral_inv_two_plus_cos (z=e^{iθ} substitution)"
+      "integral_inv_two_plus_cos (z=e^{i\u03b8} substitution)"
     ],
-    "sorry_reason": "Two sorry boundaries: (1) The contour integral evaluation requires partial fraction decomposition combined with integral_sub_inv_of_mem_ball (root inside disk) and integral_sub_zpow_of_ne (root outside). (2) The z=e^{iθ} substitution converting the real trig integral to a contour integral requires change-of-variables for complex-valued interval integrals on the circle."
+    "sorry_reason": "Two sorry boundaries: (1) The contour integral evaluation requires partial fraction decomposition combined with integral_sub_inv_of_mem_ball (root inside disk) and integral_sub_zpow_of_ne (root outside). (2) The z=e^{i\u03b8} substitution converting the real trig integral to a contour integral requires change-of-variables for complex-valued interval integrals on the circle."
   },
   "proven_lemmas": [
-    "sqrt_three_gt_one: √3 > 1",
-    "sq_sqrt_three_complex: (√3 : ℂ)² = 3",
-    "quadratic_factor: z²+4z+1 = (z-z₁)(z-z₂) via linear_combination",
-    "z1_norm_lt_one: |z₁| = 2-√3 < 1",
-    "z2_norm_gt_one: |z₂| = 2+√3 > 1"
-  ]
+    "sqrt_three_gt_one: \u221a3 > 1",
+    "sq_sqrt_three_complex: (\u221a3 : \u2102)\u00b2 = 3",
+    "quadratic_factor: z\u00b2+4z+1 = (z-z\u2081)(z-z\u2082) via linear_combination",
+    "z1_norm_lt_one: |z\u2081| = 2-\u221a3 < 1",
+    "z2_norm_gt_one: |z\u2082| = 2+\u221a3 > 1"
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

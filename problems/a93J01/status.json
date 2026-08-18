@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.067704Z",
   "checked_at": "2026-07-14T23:25:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a93J01/lean/Main.lean",
@@ -37,6 +39,13 @@
     "sorry_locations": [
       "ac_on_01_of_continuous_bv_ac_from_a: main theorem"
     ],
-    "sorry_reason": "The proof combines three ingredients: (1) BoundedVariationOn.tendsto_eVariationOn_Icc_zero_left gives V(f,[0,a])→0 as a→0 using continuity+BV, (2) AC on [a₀,1] gives δ for ε/2, (3) splitting disjoint intervals into those near 0 (bounded by variation) and those in [a₀,1] (bounded by AC). The main difficulty is the combinatorial bookkeeping of the interval partition and connecting eVariationOn to the AbsolutelyContinuousOnInterval ε-δ definition."
+    "sorry_reason": "The proof combines three ingredients: (1) BoundedVariationOn.tendsto_eVariationOn_Icc_zero_left gives V(f,[0,a])\u21920 as a\u21920 using continuity+BV, (2) AC on [a\u2080,1] gives \u03b4 for \u03b5/2, (3) splitting disjoint intervals into those near 0 (bounded by variation) and those in [a\u2080,1] (bounded by AC). The main difficulty is the combinatorial bookkeeping of the interval partition and connecting eVariationOn to the AbsolutelyContinuousOnInterval \u03b5-\u03b4 definition."
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

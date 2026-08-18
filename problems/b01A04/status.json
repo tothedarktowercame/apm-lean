@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +29,15 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "note": "Hop 4 states the exact remaining contracts: existence of two rational cyclic cubic intermediate fields with trivial intersection and full compositum, and the simultaneous restriction equivalence from the compositum Galois group to the product. The frozen main statement is unchanged.",
-  "imported_at": "2026-07-13T17:26:53.430709Z"
+  "imported_at": "2026-07-13T17:26:53.430709Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

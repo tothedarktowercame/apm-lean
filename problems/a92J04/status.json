@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.876830Z",
   "checked_at": "2026-07-14T22:05:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a92J04/lean/Main.lean",
@@ -37,10 +39,17 @@
     "sorry_locations": [
       "disk_selfmap_tangent_identity (connecting power series to DifferentiableOn)"
     ],
-    "sorry_reason": "The main theorem requires showing that f(z) = z + Σ a(n+2)z^(n+2) is DifferentiableOn the disk from the summability hypothesis. Mathlib's HasFPowerSeriesOnBall/AnalyticAt infrastructure can establish this, but connecting Summable (fun n => a n * z^n) for each z to a uniform DifferentiableOn requires building the analytic structure. Once DifferentiableOn is established, the result follows immediately from disk_selfmap_deriv_one_eq_identity."
+    "sorry_reason": "The main theorem requires showing that f(z) = z + \u03a3 a(n+2)z^(n+2) is DifferentiableOn the disk from the summability hypothesis. Mathlib's HasFPowerSeriesOnBall/AnalyticAt infrastructure can establish this, but connecting Summable (fun n => a n * z^n) for each z to a uniform DifferentiableOn requires building the analytic structure. Once DifferentiableOn is established, the result follows immediately from disk_selfmap_deriv_one_eq_identity."
   },
   "proven_lemmas": [
-    "disk_selfmap_deriv_one_eq_identity (zero-sorry): Schwarz lemma equality case — if f maps disk to disk, f(0)=0, deriv f 0=1, then f=id",
+    "disk_selfmap_deriv_one_eq_identity (zero-sorry): Schwarz lemma equality case \u2014 if f maps disk to disk, f(0)=0, deriv f 0=1, then f=id",
     "disk_selfmap_tangent_identity': direct version using DifferentiableOn (zero-sorry)"
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +31,13 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "note": "Proved the open diameter lies in the half-disk closure, g(0)=0, g² is real on the entire diameter including zero, and g² is continuous on the closed half-disk and holomorphic inside. The local Schwarz-reflection gluing theorem remains unavailable.",
-  "imported_at": "2026-07-13T17:26:53.083580Z"
+  "note": "Proved the open diameter lies in the half-disk closure, g(0)=0, g\u00b2 is real on the entire diameter including zero, and g\u00b2 is continuous on the closed half-disk and holomorphic inside. The local Schwarz-reflection gluing theorem remains unavailable.",
+  "imported_at": "2026-07-13T17:26:53.083580Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial"
+  }
 }

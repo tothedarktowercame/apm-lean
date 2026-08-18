@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +31,13 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "closer_note": "Proved the time-zero identity and additive composition law for the Hopf formula; together with 2π-periodicity, all elementary circle-action descent equations now compile. The universal classification remains blocked on the continuous-action quotient/principal bundle, Euler characteristic zero, and compact orientable surface classification.",
-  "imported_at": "2026-07-13T17:26:58.368278Z"
+  "closer_note": "Proved the time-zero identity and additive composition law for the Hopf formula; together with 2\u03c0-periodicity, all elementary circle-action descent equations now compile. The universal classification remains blocked on the continuous-action quotient/principal bundle, Euler characteristic zero, and compact orientable surface classification.",
+  "imported_at": "2026-07-13T17:26:58.368278Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial"
+  }
 }

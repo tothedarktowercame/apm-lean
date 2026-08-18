@@ -13,10 +13,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +30,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.650949Z",
   "checked_at": "2026-07-13T19:30:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a01A04/lean/Main.lean",
@@ -47,5 +49,12 @@
     ]
   },
   "harvest_mismatch": true,
-  "harvest_mismatch_detail": "informal-solution.md and apm-a01A04.md contain the a01A03 convolution identity proof, not the a01A04 unit ball volumes problem. The Lean file implements the correct problem from a01A04.tex."
+  "harvest_mismatch_detail": "informal-solution.md and apm-a01A04.md contain the a01A03 convolution identity proof, not the a01A04 unit ball volumes problem. The Lean file implements the correct problem from a01A04.tex.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

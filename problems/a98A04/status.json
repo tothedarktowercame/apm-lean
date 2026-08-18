@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "Compiled measurability, exact strict support, the literal positivity-set identity, and strict positivity of its Lebesgue measure. Remaining work is the translated/scaled rpow integral and positive-measure arbitrary-height superlevels within the countable dense weighted-spike construction.",
-  "imported_at": "2026-07-13T17:26:52.963473Z"
+  "imported_at": "2026-07-13T17:26:52.963473Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 4,
+    "previous_classification": "partial"
+  }
 }

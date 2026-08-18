@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T05:30:00Z",
   "checked_lean_state": {
@@ -35,12 +37,12 @@
     "command": "lake env lean problems/a95J07/lean/Main.lean",
     "sorry_count": 3,
     "sorry_locations": [
-      "tsum_volume_disjoint_le_one (disjoint intervals total length ≤ 1)",
-      "vitali_covering_5 (part a: Vitali covering lemma with 5× factor)",
+      "tsum_volume_disjoint_le_one (disjoint intervals total length \u2264 1)",
+      "vitali_covering_5 (part a: Vitali covering lemma with 5\u00d7 factor)",
       "measure_image_criticalSet_eq_zero (part b: 1D Sard theorem)"
     ],
     "blockers": [
-      "Vitali covering lemma (5× formulation): Mathlib has VitaliFamily abstract version but not the specific 1D interval 5× version.",
+      "Vitali covering lemma (5\u00d7 formulation): Mathlib has VitaliFamily abstract version but not the specific 1D interval 5\u00d7 version.",
       "1D Sard theorem: f(D) has measure zero where D = {f'=0}. NOT in Mathlib.",
       "Disjoint total length: provable from measure_iUnion but needs measurable set setup."
     ],
@@ -48,5 +50,12 @@
       "inflate5_center (I and I' have same center)",
       "inflate5_length (|I'| = 5|I|)"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.169109Z",
   "checked_at": "2026-07-18T22:30:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94J07/lean/Main.lean",
@@ -35,21 +37,28 @@
   "sorry_details": {
     "sorry_count": 4,
     "sorry_locations": [
-      "rouche_deriv_bound: |e^z + 3z²| < 8 norm arithmetic",
-      "rouche_f_bound: |e^z + z³| < |8z| norm arithmetic",
-      "f_poly_exp_deriv_ne_zero: f' no zeros (needs Rouché)",
-      "f_poly_exp_injective_on_disk: injectivity (needs Rouché)"
+      "rouche_deriv_bound: |e^z + 3z\u00b2| < 8 norm arithmetic",
+      "rouche_f_bound: |e^z + z\u00b3| < |8z| norm arithmetic",
+      "f_poly_exp_deriv_ne_zero: f' no zeros (needs Rouch\u00e9)",
+      "f_poly_exp_injective_on_disk: injectivity (needs Rouch\u00e9)"
     ],
-    "sorry_reason": "Rouché's theorem and the argument principle are not in Mathlib. The norm bound computations (triangle inequality + e < 5) are mathematically straightforward but hit elaboration issues with complex norm arithmetic in calc/linarith.",
+    "sorry_reason": "Rouch\u00e9's theorem and the argument principle are not in Mathlib. The norm bound computations (triangle inequality + e < 5) are mathematically straightforward but hit elaboration issues with complex norm arithmetic in calc/linarith.",
     "proved_lemmas": [
-      "norm_exp_le_e: |e^z| ≤ e for |z| ≤ 1"
+      "norm_exp_le_e: |e^z| \u2264 e for |z| \u2264 1"
     ]
   },
   "proof_notes": {
-    "strategy": "Two applications of Rouché: (1) f' has no zeros, (2) f has winding number 1",
+    "strategy": "Two applications of Rouch\u00e9: (1) f' has no zeros, (2) f has winding number 1",
     "key_mathlib_gaps": [
-      "Rouché's theorem (counting zeros via winding numbers)",
+      "Rouch\u00e9's theorem (counting zeros via winding numbers)",
       "Argument principle / winding number for holomorphic functions"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

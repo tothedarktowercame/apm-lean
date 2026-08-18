@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +31,13 @@
   },
   "classification": "partial",
   "closer_hop": 2,
-  "closer_progress": "Both Haar integrals in the repaired UnitAddCircle formulation compile via quotient-cover surjectivity and the determinant computation. A restriction/projection lemma reduces torus non-homotopy to non-homotopy of z ↦ 5 • z and the identity on UnitAddCircle. The remaining bridge is the absent integer-degree classification of additive-circle self-maps.",
-  "imported_at": "2026-07-13T17:26:57.293961Z"
+  "closer_progress": "Both Haar integrals in the repaired UnitAddCircle formulation compile via quotient-cover surjectivity and the determinant computation. A restriction/projection lemma reduces torus non-homotopy to non-homotopy of z \u21a6 5 \u2022 z and the identity on UnitAddCircle. The remaining bridge is the absent integer-degree classification of additive-circle self-maps.",
+  "imported_at": "2026-07-13T17:26:57.293961Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial"
+  }
 }

@@ -13,10 +13,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +30,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.636309Z",
   "checked_at": "2026-07-13T19:05:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a00J06/lean/Main.lean",
@@ -38,9 +40,16 @@
     "sorry_location": "singular_at_one (main theorem)",
     "sorry_reason": "The proof requires change-of-origin for FormalMultilinearSeries (computing Taylor coefficients of f at x in terms of original a(n)), showing nonneg of re-centered coefficients, Tonelli interchange for nonneg double sums, and deriving the contradiction. Mathlib has changeOrigin but the specific ofScalars computation is not pre-built.",
     "proved_lemmas": [
-      "radius_gt_one_of_summable (summability at 1+ε implies radius > 1)"
+      "radius_gt_one_of_summable (summability at 1+\u03b5 implies radius > 1)"
     ]
   },
   "harvest_mismatch": true,
-  "harvest_mismatch_detail": "informal-solution.md and apm-a00J06.md contain the a00J05 Cauchy transform proof, not the a00J06 power series singularity problem. The Lean file implements the correct problem from a00J06.tex."
+  "harvest_mismatch_detail": "informal-solution.md and apm-a00J06.md contain the a00J05 Cauchy transform proof, not the a00J06 power series singularity problem. The Lean file implements the correct problem from a00J06.tex.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

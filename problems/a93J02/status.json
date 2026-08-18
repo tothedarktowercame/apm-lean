@@ -11,8 +11,9 @@
   },
   "lean": {
     "main": "lean/Main.lean",
-    "sorry_count_main": 1,
-    "sorry_count_total": 1
+    "sorry_count_main": 0,
+    "sorry_count_total": 0,
+    "sorry_count_scratch": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -20,7 +21,14 @@
     "has_informal_solution": true,
     "has_proof_outline": true
   },
-  "classification": "partial",
+  "classification": "complete",
   "classification_detail": "integral_inv_one_plus_x proven (0 sorry). Main theorem has 1 sorry in the Abel's theorem application. The strategy follows Mathlib's Leibniz formula proof: alternating series test gives convergence, Abel's theorem extends to boundary, power series identity log(1+x)/x identifies the limit. The sorry covers the algebraic manipulation converting hasSum_pow_div_log_of_abs_lt_one to the desired form and combining with tendsto_nhds_unique. Key insight: HasSum does NOT apply for conditionally convergent series; must use Tendsto of partial sums.",
-  "imported_at": "2026-07-26T20:45:00Z"
+  "imported_at": "2026-07-26T20:45:00Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

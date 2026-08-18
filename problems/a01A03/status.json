@@ -8,15 +8,17 @@
     "informal_solution": "informal-solution.md",
     "harvested_filename": "apm-a01A03.md",
     "problem_tex": "apm/a01A03.tex",
-    "harvest_mismatch_note": "The harvested informal proof (apm-a01A03.md) contains the proof for a01A02 (weak-L²), not a01A03 (convolution identity). The Lean formalization implements the correct problem from a01A03.tex."
+    "harvest_mismatch_note": "The harvested informal proof (apm-a01A03.md) contains the proof for a01A02 (weak-L\u00b2), not a01A03 (convolution identity). The Lean formalization implements the correct problem from a01A03.tex."
   },
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +30,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.648775Z",
   "checked_at": "2026-07-13T19:20:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a01A03/lean/Main.lean",
@@ -36,8 +38,15 @@
   "sorry_details": {
     "sorry_count": 1,
     "sorry_location": "convolution_identity_implies_indicator (main theorem)",
-    "sorry_reason": "Fourier transform proof: convolution theorem for L¹, Fourier derivative rule, specific Fourier pair chi_{[-h,h]} <-> 2sin(hξ)/ξ, injectivity of L¹ Fourier transform."
+    "sorry_reason": "Fourier transform proof: convolution theorem for L\u00b9, Fourier derivative rule, specific Fourier pair chi_{[-h,h]} <-> 2sin(h\u03be)/\u03be, injectivity of L\u00b9 Fourier transform."
   },
   "harvest_mismatch": true,
-  "harvest_mismatch_detail": "informal-solution.md and apm-a01A03.md contain the a01A02 weak-L² proof, not the a01A03 convolution identity problem. The Lean file implements the correct problem from a01A03.tex."
+  "harvest_mismatch_detail": "informal-solution.md and apm-a01A03.md contain the a01A02 weak-L\u00b2 proof, not the a01A03 convolution identity problem. The Lean file implements the correct problem from a01A03.tex.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

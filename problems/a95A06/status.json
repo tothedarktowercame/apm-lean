@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T01:00:00Z",
   "checked_lean_state": {
@@ -38,14 +40,21 @@
       "lacunarySeries_differentiableOn (part a: analyticity on open disk)",
       "lacunarySeries_natural_boundary (part b: natural boundary theorem)"
     ],
-    "blocker": "Part (a) analyticity requires termwise differentiability of the power series on the open disk (uniform convergence on compact subsets). Part (b) requires the Hadamard gap theorem or equivalent divergence of lacunary series at boundary points — not in Mathlib.",
+    "blocker": "Part (a) analyticity requires termwise differentiability of the power series on the open disk (uniform convergence on compact subsets). Part (b) requires the Hadamard gap theorem or equivalent divergence of lacunary series at boundary points \u2014 not in Mathlib.",
     "proved_lemmas": [
-      "lacunary_term_bound (M-test bound: ‖z^{n!}/n!‖ ≤ 1/n!)",
-      "lacunary_majorant_summable (Σ 1/n! converges)",
+      "lacunary_term_bound (M-test bound: \u2016z^{n!}/n!\u2016 \u2264 1/n!)",
+      "lacunary_majorant_summable (\u03a3 1/n! converges)",
       "lacunaryTerm_continuousOn (each term continuous on closed disk)",
-      "lacunarySeries_continuousOn (part a: f continuous on Δ̄ via Weierstrass M-test)",
+      "lacunarySeries_continuousOn (part a: f continuous on \u0394\u0304 via Weierstrass M-test)",
       "lacunaryTerm_differentiableOn (each term analytic on open disk)",
-      "factorial_dvd_of_le (q ∣ n! when q ≤ n)"
+      "factorial_dvd_of_le (q \u2223 n! when q \u2264 n)"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

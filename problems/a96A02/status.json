@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T07:00:00Z",
   "checked_lean_state": {
@@ -35,17 +37,24 @@
     "command": "lake env lean problems/a96A02/lean/Main.lean",
     "sorry_count": 3,
     "sorry_locations": [
-      "spike_height_slope_bound (trivial arithmetic: (1/n)·2(n+1) ≤ 4)",
-      "spikeFunction_holderWith (Hölder-1/2 bound)",
+      "spike_height_slope_bound (trivial arithmetic: (1/n)\u00b72(n+1) \u2264 4)",
+      "spikeFunction_holderWith (H\u00f6lder-1/2 bound)",
       "spikeFunction_not_absolutelyContinuous (non-AC)"
     ],
     "blockers": [
       "Spike function definition: piecewise linear with infinitely many pieces is hard to define.",
-      "Hölder-1/2 proof requires within-spike and cross-spike arguments.",
+      "H\u00f6lder-1/2 proof requires within-spike and cross-spike arguments.",
       "Non-AC proof requires constructing AC-violating interval collections."
     ],
     "proved_lemmas": [
       "spike_base_length (|1/n - 1/(n+1)| = 1/(n(n+1)))"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

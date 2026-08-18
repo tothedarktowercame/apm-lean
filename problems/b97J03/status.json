@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "classification_detail": "The complete ambient factorization of X^6-2 into the six roots zeta^i alpha now compiles for every chosen root. Excluding the four non-antipodal roots from Q(alpha), and the general normalizer-index argument, remain.",
-  "imported_at": "2026-07-13T17:26:54.127299Z"
+  "imported_at": "2026-07-13T17:26:54.127299Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 4,
+    "previous_classification": "partial"
+  }
 }

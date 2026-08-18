@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T04:30:00Z",
   "checked_lean_state": {
@@ -35,18 +37,25 @@
     "command": "lake env lean problems/a95J05/lean/Main.lean",
     "sorry_count": 2,
     "sorry_locations": [
-      "tendstoInMeasure_of_integral_arctan_tendsto (⟸ direction: Markov bound)",
-      "integral_arctan_tendsto_of_tendstoInMeasure (⟹ direction: splitting bound)"
+      "tendstoInMeasure_of_integral_arctan_tendsto (\u27f8 direction: Markov bound)",
+      "integral_arctan_tendsto_of_tendstoInMeasure (\u27f9 direction: splitting bound)"
     ],
     "blockers": [
-      "Markov bound μ({|f|>ε}) ≤ ∫|arctan f| / arctan(ε) requires set integral decomposition.",
-      "Splitting bound ∫|arctan fₙ| ≤ arctan(δ)·μ(Ω) + (π/2)·μ({|fₙ|>δ}) requires integral_add_compl."
+      "Markov bound \u03bc({|f|>\u03b5}) \u2264 \u222b|arctan f| / arctan(\u03b5) requires set integral decomposition.",
+      "Splitting bound \u222b|arctan f\u2099| \u2264 arctan(\u03b4)\u00b7\u03bc(\u03a9) + (\u03c0/2)\u00b7\u03bc({|f\u2099|>\u03b4}) requires integral_add_compl."
     ],
     "proved_lemmas": [
       "arctan_zero' (arctan(0) = 0)",
       "arctan_pos' (arctan(t) > 0 for t > 0)",
-      "abs_arctan_lt (|arctan(t)| < π/2)",
+      "abs_arctan_lt (|arctan(t)| < \u03c0/2)",
       "tendstoInMeasure_iff_integral_arctan (iff assembled from two directions)"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

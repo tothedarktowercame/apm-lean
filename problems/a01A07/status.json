@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 5,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 5
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.662017Z",
   "lean_attempt_at": "2026-07-13T22:45:00Z",
   "lean_sorry_count": 5,
@@ -37,5 +39,12 @@
     "differentiableOn_of_L1_limit: Morera theorem not packaged in Mathlib",
     "deriv_norm_le_sup_div_radius: Cauchy derivative estimate needs circleIntegral assembly",
     "tendstoUniformlyOn_deriv_of_L1: depends on steps 1-2 + Cauchy estimate"
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

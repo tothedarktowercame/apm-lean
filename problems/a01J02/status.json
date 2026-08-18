@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 2,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,12 +27,19 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-05-01T19:38:16.011088Z",
   "historical_sources": [
     {
       "kind": "legacy-lean-proofs",
       "path": "problems/a01J02/historical/legacy-lean-proofs"
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

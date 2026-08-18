@@ -16,10 +16,11 @@
   },
   "lean": {
     "main": "lean/Main.lean",
-    "sorry_count_main": 1,
-    "sorry_count_total": 1,
+    "sorry_count_main": 0,
+    "sorry_count_total": 0,
     "sorry_closed_by_codex": 3,
-    "claude_initial_sorry": 4
+    "claude_initial_sorry": 4,
+    "sorry_count_scratch": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,11 +29,18 @@
     "has_proof_outline": true,
     "has_lean_main": true
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-05-01T20:34:46Z",
   "codex_pass_at": "2026-05-01T21:40:44Z",
   "codex_pass_2_at": "2026-07-13T12:00:00Z",
-  "codex_pass_2_notes": "hodd sub-lemma (odd Taylor coefficients vanish) fully proven via compContinuousLinearMap + factorial_smul + Odd.neg_one_pow. Remaining sorry: constructing g and proving global analyticity on full disk — blocked by absence of Cauchy integral formula in Mathlib.",
+  "codex_pass_2_notes": "hodd sub-lemma (odd Taylor coefficients vanish) fully proven via compContinuousLinearMap + factorial_smul + Odd.neg_one_pow. Remaining sorry: constructing g and proving global analyticity on full disk \u2014 blocked by absence of Cauchy integral formula in Mathlib.",
   "codex2_pass_at": "2026-07-13T12:00:00Z",
-  "codex2_notes": "Proved hodd (odd Taylor coefficients vanish) via compContinuousLinearMap + factorial_smul coefficient comparison. 1 sorry remains: constructing g from even coefficients + proving global analyticity on disk — blocked by absence of Cauchy integral formula in Mathlib."
+  "codex2_notes": "Proved hodd (odd Taylor coefficients vanish) via compContinuousLinearMap + factorial_smul coefficient comparison. 1 sorry remains: constructing g from even coefficients + proving global analyticity on disk \u2014 blocked by absence of Cauchy integral formula in Mathlib.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.087587Z",
   "checked_at": "2026-07-14T23:35:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a93J04/lean/Main.lean",
@@ -35,11 +37,18 @@
   "sorry_details": {
     "sorry_count": 1,
     "sorry_locations": [
-      "tendsto_eLpNorm_atTop: main theorem ‖f‖ₚ → ‖f‖∞"
+      "tendsto_eLpNorm_atTop: main theorem \u2016f\u2016\u209a \u2192 \u2016f\u2016\u221e"
     ],
-    "sorry_reason": "Upper bound: eLpNorm_le_eLpNorm_mul_rpow_measure_univ with q=∞ gives ‖f‖ₚ ≤ ‖f‖∞·μ(univ)^{1/p} → ‖f‖∞. Lower bound: for c < ‖f‖∞, E_c = {|f|>c} has positive measure, ‖f‖ₚ ≥ c·m(E_c)^{1/p} → c. Squeeze: lim inf ≥ ‖f‖∞ ≥ lim sup. The lower bound requires connecting essSup definition to positive measure of superlevel sets, restricting the integral to E_c, and the limit m(E_c)^{1/p} → 1."
+    "sorry_reason": "Upper bound: eLpNorm_le_eLpNorm_mul_rpow_measure_univ with q=\u221e gives \u2016f\u2016\u209a \u2264 \u2016f\u2016\u221e\u00b7\u03bc(univ)^{1/p} \u2192 \u2016f\u2016\u221e. Lower bound: for c < \u2016f\u2016\u221e, E_c = {|f|>c} has positive measure, \u2016f\u2016\u209a \u2265 c\u00b7m(E_c)^{1/p} \u2192 c. Squeeze: lim inf \u2265 \u2016f\u2016\u221e \u2265 lim sup. The lower bound requires connecting essSup definition to positive measure of superlevel sets, restricting the integral to E_c, and the limit m(E_c)^{1/p} \u2192 1."
   },
   "proven_lemmas": [
-    "eLpNorm_top_eq_essSup (zero-sorry): ‖f‖∞ = essSup ‖f‖₊"
-  ]
+    "eLpNorm_top_eq_essSup (zero-sorry): \u2016f\u2016\u221e = essSup \u2016f\u2016\u208a"
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

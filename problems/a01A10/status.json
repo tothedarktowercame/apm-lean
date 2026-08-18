@@ -13,10 +13,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +30,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.670783Z",
   "checked_at": "2026-07-13T22:15:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a01A10/lean/Main.lean",
@@ -43,5 +45,12 @@
     "sorry_reason": "Part (b) requires contour-shift argument not in Mathlib. Part (a) requires sector contour + decay estimates. Helper lemma has I^2=-1 ring identity issue with linear_combination."
   },
   "harvest_mismatch": true,
-  "harvest_mismatch_detail": "informal-solution.md and apm-a01A10.md contain the a01A09 Laplace transform proof, not the a01A10 contour integral problem."
+  "harvest_mismatch_detail": "informal-solution.md and apm-a01A10.md contain the a01A09 Laplace transform proof, not the a01A10 contour integral problem.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

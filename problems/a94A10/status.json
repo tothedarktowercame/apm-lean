@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.169109Z",
   "checked_at": "2026-07-18T21:30:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94A10/lean/Main.lean",
@@ -35,24 +37,31 @@
   "sorry_details": {
     "sorry_count": 1,
     "sorry_location": "exists_nonreal_preimage_of_real",
-    "sorry_reason": "Core step: showing that a holomorphic function with a critical point of order n ≥ 2 at a real point maps some non-real point near it to a real value. Requires Rouché's theorem, the argument principle, or a delicate IVT argument on Im(f(x₀ + r·e^{iα})) — none readily available in Mathlib.",
+    "sorry_reason": "Core step: showing that a holomorphic function with a critical point of order n \u2265 2 at a real point maps some non-real point near it to a real value. Requires Rouch\u00e9's theorem, the argument principle, or a delicate IVT argument on Im(f(x\u2080 + r\u00b7e^{i\u03b1})) \u2014 none readily available in Mathlib.",
     "proved_lemmas": [
       "nonconstant_of_realIffReal: f is non-constant",
-      "order_ge_two_of_deriv_zero: order of f - f(x₀) at x₀ is ≥ 2 when f'(x₀) = 0",
-      "exists_factorization_of_order_ge_two: local factorization f(z)-f(x₀) = (z-x₀)^n · g(z) with g(x₀) ≠ 0",
+      "order_ge_two_of_deriv_zero: order of f - f(x\u2080) at x\u2080 is \u2265 2 when f'(x\u2080) = 0",
+      "exists_factorization_of_order_ge_two: local factorization f(z)-f(x\u2080) = (z-x\u2080)^n \u00b7 g(z) with g(x\u2080) \u2260 0",
       "deriv_ne_zero_on_reals: main theorem (modulo the sorry boundary)"
     ]
   },
   "proof_notes": {
-    "strategy": "Proof by contradiction. Assume f'(x₀)=0 for real x₀. Then f-f(x₀) has order n≥2 at x₀, giving local factorization (z-x₀)^n · g(z) with g(x₀)≠0. The n-to-1 local structure produces non-real preimages of real values, contradicting f(z)∈ℝ ⟹ z∈ℝ.",
+    "strategy": "Proof by contradiction. Assume f'(x\u2080)=0 for real x\u2080. Then f-f(x\u2080) has order n\u22652 at x\u2080, giving local factorization (z-x\u2080)^n \u00b7 g(z) with g(x\u2080)\u22600. The n-to-1 local structure produces non-real preimages of real values, contradicting f(z)\u2208\u211d \u27f9 z\u2208\u211d.",
     "statement_repairs": [
       "Used analyticOrderAt instead of iteratedDeriv for the order theory",
       "Restructured helper lemmas around Mathlib's Analytic.Order API"
     ],
     "key_mathlib_lemmas": [
-      "AnalyticAt.analyticOrderAt_deriv_add_one: connects deriv f = 0 to order ≥ 2",
+      "AnalyticAt.analyticOrderAt_deriv_add_one: connects deriv f = 0 to order \u2265 2",
       "AnalyticAt.analyticOrderAt_eq_natCast: gives local factorization",
       "AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq: identity theorem for showing f constant"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

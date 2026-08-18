@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.908347Z",
   "checked_at": "2026-07-14T22:50:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a92J07/lean/Main.lean",
@@ -38,12 +40,19 @@
       "entire_avoids_ray_const: concluding f constant from h constant (chain rule step)",
       "cauchy_riemann_ray_implies_const: CR-to-complex reduction"
     ],
-    "sorry_reason": "Two sorry boundaries: (1) From 'h = exp(I*log f) constant' to 'f constant' requires showing deriv(log f) = 0 via chain rule and exp_ne_zero, then that zero-derivative implies constant. (2) The CR-to-complex reduction (building f = u+iv from Cauchy-Riemann equations and showing f is entire). The proven infrastructure includes: log∘f is entire (Differentiable.clog), |Im(log f)| ≤ π (arg bounds), h = exp(I*log f) is bounded entire, and Liouville application (exists_const_forall_eq_of_bounded)."
+    "sorry_reason": "Two sorry boundaries: (1) From 'h = exp(I*log f) constant' to 'f constant' requires showing deriv(log f) = 0 via chain rule and exp_ne_zero, then that zero-derivative implies constant. (2) The CR-to-complex reduction (building f = u+iv from Cauchy-Riemann equations and showing f is entire). The proven infrastructure includes: log\u2218f is entire (Differentiable.clog), |Im(log f)| \u2264 \u03c0 (arg bounds), h = exp(I*log f) is bounded entire, and Liouville application (exists_const_forall_eq_of_bounded)."
   },
   "proven_lemmas": [
-    "Differentiable.clog composition (log∘f entire)",
-    "|Im(log f)| ≤ π (argument bound)",
-    "h = exp(I·log f) is bounded (closedBall membership via norm_exp + Im bound)",
+    "Differentiable.clog composition (log\u2218f entire)",
+    "|Im(log f)| \u2264 \u03c0 (argument bound)",
+    "h = exp(I\u00b7log f) is bounded (closedBall membership via norm_exp + Im bound)",
     "Liouville application (exists_const_forall_eq_of_bounded)"
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

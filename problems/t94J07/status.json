@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 1,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -35,7 +35,9 @@
     "exit_code": 0,
     "command": "lake env lean problems/t94J07/lean/Main.lean",
     "sorry_count": 1,
-    "sorry_locations": ["apm_t94j07 (homotopy-cylinder differential and parameter-integral assembly)"],
+    "sorry_locations": [
+      "apm_t94j07 (homotopy-cylinder differential and parameter-integral assembly)"
+    ],
     "proved": [
       "t94J07CirclePoint_norm",
       "t94J07CircleVelocity_tangent",
@@ -51,5 +53,12 @@
       "Assemble extDeriv_pullback and differentiation under the integral; the theta FTC step is now compiled"
     ]
   },
-  "imported_at": "2026-05-01T19:38:18.305300Z"
+  "imported_at": "2026-05-01T19:38:18.305300Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial"
+  }
 }

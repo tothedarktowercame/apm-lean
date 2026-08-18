@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "notes": "Raw self-map integrability, the sharp quadratic bound, and the two-input endpoint Young estimate compile. Polarization, L1 quotient fixed-point construction, and representative extraction remain.",
-  "imported_at": "2026-07-13T17:26:56.155573Z"
+  "imported_at": "2026-07-13T17:26:56.155573Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial"
+  }
 }

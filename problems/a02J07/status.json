@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.678071Z",
   "checked_at": "2026-07-14T20:45:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a02J07/lean/Main.lean",
@@ -38,7 +40,14 @@
       "logIntegral_im_eq_argStar_diff (FTC for interval integrals with one-sided limit at singular endpoint)",
       "logIntegral_im_bounds (main theorem: combines FTC result with case split on exit direction)"
     ],
-    "sorry_reason": "The fundamental theorem of calculus for interval integrals with a one-sided limit at an endpoint where the integrand may be singular (logStar is not defined at t=0 since γ(0)=π is on the slit) requires careful MeasureTheory/integration machinery in Mathlib. The proven infrastructure includes: posSlitPlane domain, logStar (branch of log on ℂ\\\\[0,∞)), argStar ∈ (0,2π) bounds, and hasDerivAt_logStar (antiderivative of 1/z on the slit domain)."
+    "sorry_reason": "The fundamental theorem of calculus for interval integrals with a one-sided limit at an endpoint where the integrand may be singular (logStar is not defined at t=0 since \u03b3(0)=\u03c0 is on the slit) requires careful MeasureTheory/integration machinery in Mathlib. The proven infrastructure includes: posSlitPlane domain, logStar (branch of log on \u2102\\\\[0,\u221e)), argStar \u2208 (0,2\u03c0) bounds, and hasDerivAt_logStar (antiderivative of 1/z on the slit domain)."
   },
-  "statement_repair": "The generated informal proof proposed arg_star with range (0,2π) branched along [0,∞). Mathlib's Complex.arg has range (-π,π] and Complex.log is on slitPlane {z : 0 < z.re ∨ z.im ≠ 0} (complement of (-∞,0]). Our domain Ω = ℂ\\\\[0,∞) is the mirror image. We define logStar z = log(-z) + iπ using the biholomorphism z↦-z from Ω to slitPlane, deriving all properties from Mathlib's existing Complex.log."
+  "statement_repair": "The generated informal proof proposed arg_star with range (0,2\u03c0) branched along [0,\u221e). Mathlib's Complex.arg has range (-\u03c0,\u03c0] and Complex.log is on slitPlane {z : 0 < z.re \u2228 z.im \u2260 0} (complement of (-\u221e,0]). Our domain \u03a9 = \u2102\\\\[0,\u221e) is the mirror image. We define logStar z = log(-z) + i\u03c0 using the biholomorphism z\u21a6-z from \u03a9 to slitPlane, deriving all properties from Mathlib's existing Complex.log.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

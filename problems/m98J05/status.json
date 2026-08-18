@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,5 +31,12 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "notes": "Fourier differentiation, multiplier ODE, heat-kernel normalization, and absolute integrability of every heat-solution convolution integrand compile. Fubini/convolution, differentiation, and pointwise convergence remain."
+  "notes": "Fourier differentiation, multiplier ODE, heat-kernel normalization, and absolute integrability of every heat-solution convolution integrand compile. Fubini/convolution, differentiation, and pointwise convergence remain.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 4,
+    "previous_classification": "partial"
+  }
 }

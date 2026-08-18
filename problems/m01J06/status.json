@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 6,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 6
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,5 +31,12 @@
   },
   "classification": "partial",
   "boundary": "four major boundaries remain; hop 3 closes scalar-linearity of within-derivatives along variations and isolates dominated parametric integration as the shared stationarity prerequisite",
-  "imported_at": "2026-07-13T17:26:54.355112Z"
+  "imported_at": "2026-07-13T17:26:54.355112Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 3,
+    "previous_classification": "partial"
+  }
 }

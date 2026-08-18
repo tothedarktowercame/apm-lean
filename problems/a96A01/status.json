@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T06:30:00Z",
   "checked_lean_state": {
@@ -35,18 +37,25 @@
     "command": "lake env lean problems/a96A01/lean/Main.lean",
     "sorry_count": 4,
     "sorry_locations": [
-      "quasiNorm_antitone (part a: ‖f‖_p ≤ ‖f‖_q for p < q ≤ 1)",
+      "quasiNorm_antitone (part a: \u2016f\u2016_p \u2264 \u2016f\u2016_q for p < q \u2264 1)",
       "quasiNorm_tendsto_exists (limit L exists)",
-      "ae_pos_of_limit_pos (part b: L > 0 ⟹ |f| > 0 a.e.)",
-      "limit_ge_geometric_mean (part c: L ≥ exp(∫log|f|))"
+      "ae_pos_of_limit_pos (part b: L > 0 \u27f9 |f| > 0 a.e.)",
+      "limit_ge_geometric_mean (part c: L \u2265 exp(\u222blog|f|))"
     ],
     "blockers": [
-      "Hölder for quasi-norms (0 < p < 1): needs adaptation from Mathlib's Hölder API.",
-      "DCT for p → 0 limit: ∫|f|^p → m({f≠0}) requires dominated convergence setup.",
-      "Jensen for exp: ∫e^{p log|f|} ≥ e^{p∫log|f|} requires ConvexOn integral API."
+      "H\u00f6lder for quasi-norms (0 < p < 1): needs adaptation from Mathlib's H\u00f6lder API.",
+      "DCT for p \u2192 0 limit: \u222b|f|^p \u2192 m({f\u22600}) requires dominated convergence setup.",
+      "Jensen for exp: \u222be^{p log|f|} \u2265 e^{p\u222blog|f|} requires ConvexOn integral API."
     ],
     "proved_lemmas": [
-      "rpow_le_one_add (t^p ≤ 1+t for t≥0, 0<p≤1: the hint from the TeX)"
+      "rpow_le_one_add (t^p \u2264 1+t for t\u22650, 0<p\u22641: the hint from the TeX)"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

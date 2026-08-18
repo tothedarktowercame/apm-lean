@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "Found and compiled the quotient L-infinity multiplier via ha.toLp a and heterogeneous Lp scalar multiplication, including its a.e. representative, norm bound, and continuous-linear packaging via holderL. Bilinear-form assembly, coercivity, Lax-Milgram, and the Frechet remainder remain open.",
-  "imported_at": "2026-07-13T17:26:55.465440Z"
+  "imported_at": "2026-07-13T17:26:55.465440Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 4,
+    "previous_classification": "partial"
+  }
 }

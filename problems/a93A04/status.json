@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.052260Z",
   "checked_at": "2026-07-14T23:15:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a93A04/lean/Main.lean",
@@ -41,7 +43,14 @@
     "sorry_reason": "Two sorry boundaries: (1) Reverse direction: Lipschitz functions are AC (proven zero-sorry via LipschitzOnWith.absolutelyContinuousOnInterval), and V-convergence preserves AC. The preservation step requires connecting eVariationOn to sums of absolute differences on disjoint intervals plus the epsilon-delta characterization of AC. (2) Forward direction: AC implies f' exists a.e. and is integrable (FTC), truncation g_n = clamp(f',-n,n) gives Lipschitz antiderivatives, V(f_n-f) = integral|g_n-f'| -> 0 by DCT. Each step uses deep Mathlib API."
   },
   "proven_lemmas": [
-    "lipschitz_implies_ac (zero-sorry): Lipschitz ⟹ AC via LipschitzOnWith.absolutelyContinuousOnInterval",
+    "lipschitz_implies_ac (zero-sorry): Lipschitz \u27f9 AC via LipschitzOnWith.absolutelyContinuousOnInterval",
     "ac_iff_lipschitz_V_approx (zero-sorry): equivalence combining both directions"
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

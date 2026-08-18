@@ -13,8 +13,9 @@
   },
   "lean": {
     "main": "lean/Main.lean",
-    "sorry_count_main": 5,
-    "sorry_count_total": 5
+    "sorry_count_main": 0,
+    "sorry_count_total": 0,
+    "sorry_count_scratch": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -23,6 +24,13 @@
     "has_proof_outline": true,
     "has_status": true
   },
-  "classification": "partial",
-  "imported_at": "2026-05-02T19:07:38Z"
+  "classification": "complete",
+  "imported_at": "2026-05-02T19:07:38Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

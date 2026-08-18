@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 1,
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -34,7 +34,9 @@
     "exit_code": 0,
     "command": "lake env lean problems/a97A01/lean/Main.lean",
     "sorry_count": 1,
-    "sorry_locations": ["apm_a97a01 (dyadic cancellation and L1 approximation)"],
+    "sorry_locations": [
+      "apm_a97a01 (dyadic cancellation and L1 approximation)"
+    ],
     "proved": [
       "apm_a97A01_abs_rademacher",
       "apm_a97A01_rademacher_measurable",
@@ -47,5 +49,12 @@
       "L1 density/convergence of dyadic step approximations"
     ],
     "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)"
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 4,
+    "previous_classification": "partial"
   }
 }

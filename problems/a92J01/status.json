@@ -13,9 +13,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 1,
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +30,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "Compiled both exact exponent-threshold inequalities shared by the sequence and real-line power-law examples. The remaining gap is only converting the concrete MemLp goals to Mathlib's p-series and tail-integral criteria; the finite-measure and discontinuous-indicator conjuncts are closed.",
-  "imported_at": "2026-05-01T19:38:16.190845Z"
+  "imported_at": "2026-05-01T19:38:16.190845Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 3,
+    "previous_classification": "partial"
+  }
 }

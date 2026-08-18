@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,5 +31,12 @@
   },
   "classification": "partial",
   "closer_progress": "Hop 4 exposes two precise handoff theorems: apm_t00A03_bridge_1 is the pants classification for every complementary component, and apm_t00A03_bridge_2 is the Euler-characteristic/boundary-incidence count n = 3*g - 3. The frozen theorem is unchanged.",
-  "imported_at": "2026-07-13T17:26:56.391573Z"
+  "imported_at": "2026-07-13T17:26:56.391573Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial"
+  }
 }

@@ -13,10 +13,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +30,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.643344Z",
   "checked_at": "2026-07-13T19:15:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a01A02/lean/Main.lean",
@@ -36,9 +38,16 @@
   "sorry_details": {
     "sorry_count": 1,
     "sorry_location": "weakL2_implies_L1_bound (main theorem)",
-    "sorry_reason": "Layer cake formula (Integrable.integral_eq_integral_meas_lt) application to |f| restricted to E, with integral splitting at t₀ = √(C/m(E)) and ENNReal/Real conversion management.",
+    "sorry_reason": "Layer cake formula (Integrable.integral_eq_integral_meas_lt) application to |f| restricted to E, with integral splitting at t\u2080 = \u221a(C/m(E)) and ENNReal/Real conversion management.",
     "proved_lemmas": []
   },
   "harvest_mismatch": true,
-  "harvest_mismatch_detail": "informal-solution.md and apm-a01A02.md contain the a01A01 typewriter sequence proof, not the a01A02 weak-type estimate problem. The Lean file implements the correct problem from a01A02.tex."
+  "harvest_mismatch_detail": "informal-solution.md and apm-a01A02.md contain the a01A01 typewriter sequence proof, not the a01A02 weak-type estimate problem. The Lean file implements the correct problem from a01A02.tex.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

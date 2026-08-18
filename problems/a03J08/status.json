@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.843729Z",
   "checked_at": "2026-07-14T21:30:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a03J08/lean/Main.lean",
@@ -37,16 +39,23 @@
     "sorry_locations": [
       "hg_entire: extending g across the finite set F via Riemann removable singularities"
     ],
-    "sorry_reason": "The proof requires showing g_ext (defined as if z∈F then 0 else (f-w₀)⁻¹) is Differentiable ℂ. At z∉F, g_ext equals (f-w₀)⁻¹ near z since F is closed. At z∈F, the Riemann removable singularity theorem (Complex.analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt) applies: g_ext is differentiable on a punctured neighborhood (from hg_diff) and continuous at z (from hg_poles). The sorry is at the interface between the if-then-else definition, the finite set structure, and Mathlib's analytic API — all mathematically routine but requiring careful filter/set bookkeeping."
+    "sorry_reason": "The proof requires showing g_ext (defined as if z\u2208F then 0 else (f-w\u2080)\u207b\u00b9) is Differentiable \u2102. At z\u2209F, g_ext equals (f-w\u2080)\u207b\u00b9 near z since F is closed. At z\u2208F, the Riemann removable singularity theorem (Complex.analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt) applies: g_ext is differentiable on a punctured neighborhood (from hg_diff) and continuous at z (from hg_poles). The sorry is at the interface between the if-then-else definition, the finite set structure, and Mathlib's analytic API \u2014 all mathematically routine but requiring careful filter/set bookkeeping."
   },
   "proven_lemmas": [
-    "tendsto_norm_sub_atTop: ‖f‖ → ∞ implies ‖f - w₀‖ → ∞",
-    "tendsto_norm_reciprocal_zero: ‖f‖ → ∞ implies ‖(f-w₀)⁻¹‖ → 0",
-    "hg_diff: g = (f-w₀)⁻¹ is differentiable on Fᶜ",
-    "hg_poles: ‖g‖ → 0 near each point of F",
-    "hg_infty: ‖g‖ → 0 at cocompact",
-    "hg_ext_infty: g_ext → 0 at cocompact",
-    "Liouville step: g_ext ≡ 0 by eq_const_of_tendsto_cocompact",
-    "Contradiction: g_ext ≠ 0 on D"
-  ]
+    "tendsto_norm_sub_atTop: \u2016f\u2016 \u2192 \u221e implies \u2016f - w\u2080\u2016 \u2192 \u221e",
+    "tendsto_norm_reciprocal_zero: \u2016f\u2016 \u2192 \u221e implies \u2016(f-w\u2080)\u207b\u00b9\u2016 \u2192 0",
+    "hg_diff: g = (f-w\u2080)\u207b\u00b9 is differentiable on F\u1d9c",
+    "hg_poles: \u2016g\u2016 \u2192 0 near each point of F",
+    "hg_infty: \u2016g\u2016 \u2192 0 at cocompact",
+    "hg_ext_infty: g_ext \u2192 0 at cocompact",
+    "Liouville step: g_ext \u2261 0 by eq_const_of_tendsto_cocompact",
+    "Contradiction: g_ext \u2260 0 on D"
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

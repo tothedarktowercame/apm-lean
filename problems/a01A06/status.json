@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,14 +29,21 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.658997Z",
   "lean_attempt_at": "2026-07-13T22:30:00Z",
   "lean_sorry_count": 4,
   "lean_blockers": [
-    "test_function_admissible: integration of e^{c·χ_E} over [0,1] requires glue lemmas for indicator decomposition",
+    "test_function_admissible: integration of e^{c\u00b7\u03c7_E} over [0,1] requires glue lemmas for indicator decomposition",
     "distribution_exponential_decay: optimization argument needs distribution function manipulation beyond current Mathlib API",
-    "orlicz_bound_implies_L2: depends on part (a) plus layer-cake/Cavalieri for g²",
+    "orlicz_bound_implies_L2: depends on part (a) plus layer-cake/Cavalieri for g\u00b2",
     "exponential_decay_implies_L2: layer-cake formula needs careful ENNReal setup"
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

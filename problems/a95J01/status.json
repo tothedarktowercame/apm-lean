@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T02:30:00Z",
   "checked_lean_state": {
@@ -36,17 +38,24 @@
     "sorry_count": 4,
     "sorry_locations": [
       "chain_rule_at_zero (deriv composition at 0)",
-      "subordination_deriv_le (part a: |f'(0)| ≤ |g'(0)|)",
+      "subordination_deriv_le (part a: |f'(0)| \u2264 |g'(0)|)",
       "subordination_deriv_eq (part b: equality iff rotation)",
       "schwarz_equality (Schwarz lemma equality case)"
     ],
     "blockers": [
       "Chain rule deriv.comp API is tricky for pointwise composition with a.e. equality.",
-      "Subordination function h = g⁻¹ ∘ f requires analytic inverse function theorem setup.",
-      "Schwarz equality case (|h'(0)| = 1 → rotation) is not in Mathlib."
+      "Subordination function h = g\u207b\u00b9 \u2218 f requires analytic inverse function theorem setup.",
+      "Schwarz equality case (|h'(0)| = 1 \u2192 rotation) is not in Mathlib."
     ],
     "proved_lemmas": [
-      "schwarz_deriv_bound (Schwarz lemma: ‖h'(0)‖ ≤ 1 via norm_deriv_le_one_of_mapsTo_ball)"
+      "schwarz_deriv_bound (Schwarz lemma: \u2016h'(0)\u2016 \u2264 1 via norm_deriv_le_one_of_mapsTo_ball)"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

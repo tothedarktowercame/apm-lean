@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,12 +29,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.662029Z",
   "lean_attempt_at": "2026-07-13T22:55:00Z",
   "lean_sorry_count": 1,
   "statement_repair": "Informal proof file was harvested with wrong content (a01A07's proof). Actual problem from TeX is identical to a00J04. Adapted a00J04 formalization.",
   "lean_blockers": [
     "connectedComponents_complement_lemniscate_le: topological assembly (connected-component classification, superlevel connectivity, injection from sublevel components to roots) not available in Mathlib"
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

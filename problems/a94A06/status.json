@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,14 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.197032Z",
-  "notes": "Partial Lean proof. Verified: antiderivative H'(u)=u/(1+u^3), antiderivative G'(x)=x^7/(1+x^12), G(0)=-pi*sqrt(3)/72, and all algebraic identities. Remaining: tendsto_G_atTop (limit as x->infty) and the main integral theorem."
+  "notes": "Partial Lean proof. Verified: antiderivative H'(u)=u/(1+u^3), antiderivative G'(x)=x^7/(1+x^12), G(0)=-pi*sqrt(3)/72, and all algebraic identities. Remaining: tendsto_G_atTop (limit as x->infty) and the main integral theorem.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

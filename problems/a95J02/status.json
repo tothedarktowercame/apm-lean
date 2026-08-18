@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T03:00:00Z",
   "checked_lean_state": {
@@ -39,11 +41,18 @@
       "entire_lower_bound_is_monomial (main theorem: f = z^n)"
     ],
     "blockers": [
-      "f_zero_eq_zero requires constructing 1/f as differentiable and bounded, then applying Liouville. The boundedness (1/|z|^lam → 0 at infinity) needs the rpow → 0 limit which requires setting up the tendsto at infinity.",
+      "f_zero_eq_zero requires constructing 1/f as differentiable and bounded, then applying Liouville. The boundedness (1/|z|^lam \u2192 0 at infinity) needs the rpow \u2192 0 limit which requires setting up the tendsto at infinity.",
       "Main theorem inherits from f_zero_eq_zero plus zero factoring and Liouville on g."
     ],
     "proved_lemmas": [
-      "zero_only_at_origin (f has no zeros for z ≠ 0)"
+      "zero_only_at_origin (f has no zeros for z \u2260 0)"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

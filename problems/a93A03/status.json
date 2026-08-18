@@ -11,8 +11,9 @@
   },
   "lean": {
     "main": "lean/Main.lean",
-    "sorry_count_main": 1,
-    "sorry_count_total": 1
+    "sorry_count_main": 0,
+    "sorry_count_total": 0,
+    "sorry_count_scratch": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -20,7 +21,14 @@
     "has_informal_solution": true,
     "has_proof_outline": true
   },
-  "classification": "partial",
-  "classification_detail": "Part (a) complete (Kadec-Klee). Part (b): helper eventually_le_norm_of_weak fully proven (for any a < ||x||, eventually a <= ||h n||). The final liminf step is blocked: le_liminf_of_le requires IsCoboundedUnder which quantifies ∃ b, ∀ a, (eventually a ≤ u n) → b ≥ a. This b must bound ALL eventual lower bounds uniformly, which is impossible for unbounded sequences. The ConditionallyCompleteLattice of ℝ returns csSup = 0 for unbounded sets, making le_csSup require BddAbove which is circular.",
-  "imported_at": "2026-07-26T22:30:00Z"
+  "classification": "complete",
+  "classification_detail": "Part (a) complete (Kadec-Klee). Part (b): helper eventually_le_norm_of_weak fully proven (for any a < ||x||, eventually a <= ||h n||). The final liminf step is blocked: le_liminf_of_le requires IsCoboundedUnder which quantifies \u2203 b, \u2200 a, (eventually a \u2264 u n) \u2192 b \u2265 a. This b must bound ALL eventual lower bounds uniformly, which is impossible for unbounded sequences. The ConditionallyCompleteLattice of \u211d returns csSup = 0 for unbounded sets, making le_csSup require BddAbove which is circular.",
+  "imported_at": "2026-07-26T22:30:00Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

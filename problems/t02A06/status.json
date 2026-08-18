@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "Antipodal negation is now a fixed-point-free involutive equivalence of the great-circle intersection, and it reverses local sign under nonzero cross-product pairing. Remaining work is existence and exhaustiveness of the two normalized cross-product points and unavailable integral homology/Kunneth computations for metric spheres and the 3-torus.",
-  "imported_at": "2026-07-13T17:26:56.995704Z"
+  "imported_at": "2026-07-13T17:26:56.995704Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 4,
+    "previous_classification": "partial"
+  }
 }

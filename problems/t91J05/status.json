@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "Homeomorphism transport for finite-cover data and the exact Euler-characteristic odd-genus arithmetic are compiled. Remaining work is connected finite-cover classification/Euler multiplicativity and explicit n-sheeted covers between the concrete polygon surfaces.",
-  "imported_at": "2026-07-13T17:26:57.405253Z"
+  "imported_at": "2026-07-13T17:26:57.405253Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 3,
+    "previous_classification": "partial"
+  }
 }

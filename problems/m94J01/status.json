@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,5 +31,12 @@
   },
   "classification": "partial",
   "boundary": "The plateau-bump summands, exact diagonal derivatives, and radius-one-half support bounds are formalized. The remaining bridge is packaging the pointwise-finite sum as a Schwartz map and proving uniform weighted derivative seminorm bounds.",
-  "imported_at": "2026-07-13T17:26:54.811595Z"
+  "imported_at": "2026-07-13T17:26:54.811595Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial"
+  }
 }

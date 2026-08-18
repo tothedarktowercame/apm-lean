@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 5,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 5
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "Compiled continuity of B and punctured-neighborhood convergence of diagonalJordan to zero. Nonzero-parameter conjugacy, exponential identification, and the IVP derivative formula remain open.",
-  "imported_at": "2026-07-13T17:26:55.138016Z"
+  "imported_at": "2026-07-13T17:26:55.138016Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 5,
+    "previous_classification": "partial"
+  }
 }

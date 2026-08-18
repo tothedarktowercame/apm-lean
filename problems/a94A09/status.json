@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +29,15 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial-lean-proof",
+  "classification": "complete",
   "closer_hop": 4,
   "closer_note": "The identified Rouche API hole is closed locally: monic-polynomial divisor counts are normalized to root multisets, the identity count is one, and any nonzero analytic divisor count yields an enclosed zero. The main theorem still needs the t-to-1 compactness assembly and disk-Mobius/Schwarz uniqueness.",
-  "imported_at": "2026-07-13T17:26:52.206839Z"
+  "imported_at": "2026-07-13T17:26:52.206839Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial-lean-proof"
+  }
 }

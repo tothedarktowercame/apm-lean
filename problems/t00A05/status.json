@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "statement-defective",
   "closer_hop": 4,
   "notes": "The frozen universal C2 claim is false. If gamma0 is the intended smooth counterclockwise single traversal, its periodic double traversal gamma2(t)=gamma0(2*t mod 2*pi) has the same image, satisfies both level-set equations and closedness, and has positive signed-area integral, hence satisfies apm_t00a05_IsC2. Reparameterization doubles both the signed-area integral and the omega line integral, so its period is -4*pi rather than -2*pi. The predicate needs injectivity, embedding, or winding number one; no bridge was added.",
-  "imported_at": "2026-07-13T17:26:56.460906Z"
+  "imported_at": "2026-07-13T17:26:56.460906Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "statement-defective"
+  }
 }

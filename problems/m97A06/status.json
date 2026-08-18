@@ -13,9 +13,9 @@
     "main": null,
     "scratch": null,
     "files": [],
-    "sorry_count_main": 0,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +27,13 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:55.697743Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:55.697743Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 1,
+    "previous_classification": "informal-only"
+  }
 }

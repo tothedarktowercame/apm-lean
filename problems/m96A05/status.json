@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 4,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 4
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "The strict diagonal norm bound, exact three-point row support, and center/predecessor/successor mesh identities are proved. Remaining work is the supported Fin row-sum normalization, endpoint bookkeeping, and the eventual off-diagonal bound from compact boundedness of a.",
-  "imported_at": "2026-07-13T17:26:55.419020Z"
+  "imported_at": "2026-07-13T17:26:55.419020Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 3,
+    "previous_classification": "partial"
+  }
 }

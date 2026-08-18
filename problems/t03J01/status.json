@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 3,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 3
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -30,5 +32,12 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "Closer hop 3 maps the curve homeomorphism through the exact singular H1 functor and transports nonzero classes, so the negative direction now depends solely on the unavailable computation H1(Circle; Z) != 0. The positive direction still needs primitive-cohomology representability by a circle map and a relative adjustment producing a retraction.",
-  "imported_at": "2026-07-13T17:26:57.035052Z"
+  "imported_at": "2026-07-13T17:26:57.035052Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 3,
+    "previous_classification": "partial"
+  }
 }

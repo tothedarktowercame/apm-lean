@@ -13,10 +13,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +30,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.629719Z",
   "checked_at": "2026-07-13T18:55:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a00J05/lean/Main.lean",
@@ -47,5 +49,12 @@
     ]
   },
   "harvest_mismatch": true,
-  "harvest_mismatch_detail": "informal-solution.md and apm-a00J05.md contain the a00J04 lemniscate proof, not the a00J05 Cauchy transform problem. The Lean file implements the correct problem from a00J05.tex."
+  "harvest_mismatch_detail": "informal-solution.md and apm-a00J05.md contain the a00J04 lemniscate proof, not the a00J05 Cauchy transform problem. The Lean file implements the correct problem from a00J05.tex.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

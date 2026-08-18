@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.169109Z",
   "checked_at": "2026-07-18T23:30:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a95A01/lean/Main.lean",
@@ -40,16 +42,23 @@
     ],
     "sorry_reason": "Mathlib has no Riemann integral theory. The Riemann sum definitions and comparison with Lebesgue integrals require substantial machinery not currently available.",
     "proved_lemmas": [
-      "dense_compl_of_interior_empty: Kᶜ dense when interior K = ∅",
-      "exists_not_mem_of_dense_compl: every interval meets Kᶜ",
-      "inf_indicator_eq_zero: inf χ_K = 0 on every interval"
+      "dense_compl_of_interior_empty: K\u1d9c dense when interior K = \u2205",
+      "exists_not_mem_of_dense_compl: every interval meets K\u1d9c",
+      "inf_indicator_eq_zero: inf \u03c7_K = 0 on every interval"
     ]
   },
   "proof_notes": {
-    "strategy": "Part (a) via step functions and monotonicity of Lebesgue integral. Part (b) via density of Kᶜ giving lower integral = 0, positive measure giving upper integral > 0.",
+    "strategy": "Part (a) via step functions and monotonicity of Lebesgue integral. Part (b) via density of K\u1d9c giving lower integral = 0, positive measure giving upper integral > 0.",
     "key_mathlib_lemmas": [
-      "interior_eq_empty_iff_dense_compl: interior s = ∅ ↔ Dense sᶜ",
+      "interior_eq_empty_iff_dense_compl: interior s = \u2205 \u2194 Dense s\u1d9c",
       "Dense.inter_open_nonempty: dense set meets every nonempty open set"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.169109Z",
   "checked_at": "2026-07-18T23:00:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a94J08/lean/Main.lean",
@@ -36,7 +38,7 @@
     "sorry_count": 2,
     "sorry_locations": [
       "Case B (f(0)=0): factorization f(z)=z^n h(z) needs analytic order theory",
-      "Case A (f(0)≠0): boundedness of 1/f on compact disk via compactness+continuity"
+      "Case A (f(0)\u22600): boundedness of 1/f on compact disk via compactness+continuity"
     ],
     "sorry_reason": "Case A needs combining the |z|>=1 bound (proved) with a compactness argument on closedBall 0 1. Case B needs Mathlib's analytic order theory (analyticOrderAt) for the factorization f(z)=z^n h(z).",
     "proved_lemmas": [
@@ -53,5 +55,12 @@
       "Real.one_le_rpow: 1 <= |z|^(3/2) when 1 <= |z|",
       "Real.rpow_pos_of_pos: |z|^(3/2) > 0 for |z| > 0"
     ]
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
   }
 }

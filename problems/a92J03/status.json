@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:51.870828Z",
   "checked_at": "2026-07-14T21:50:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a92J03/lean/Main.lean",
@@ -37,11 +39,18 @@
     "sorry_locations": [
       "fourierTransform_tendsto_zero (part c: Riemann-Lebesgue lemma)"
     ],
-    "sorry_reason": "Mathlib's Real.tendsto_integral_exp_smul_cocompact proves Riemann-Lebesgue for the 2π-convention (𝐞(-(v*w)) = exp(-2πivw)). The problem uses exp(ixξ) without 2π. Connecting the two conventions requires: (1) showing exp(ixξ) = 𝐞(x*ξ/(2π)) by unfolding fourierChar and Circle.smul, and (2) composing the Tendsto with the cocompact-preserving homeomorphism ξ ↦ -ξ/(2π). Both steps are mathematically straightforward but require navigating Mathlib's AddChar/Circle/fourierChar API."
+    "sorry_reason": "Mathlib's Real.tendsto_integral_exp_smul_cocompact proves Riemann-Lebesgue for the 2\u03c0-convention (\ud835\udc1e(-(v*w)) = exp(-2\u03c0ivw)). The problem uses exp(ix\u03be) without 2\u03c0. Connecting the two conventions requires: (1) showing exp(ix\u03be) = \ud835\udc1e(x*\u03be/(2\u03c0)) by unfolding fourierChar and Circle.smul, and (2) composing the Tendsto with the cocompact-preserving homeomorphism \u03be \u21a6 -\u03be/(2\u03c0). Both steps are mathematically straightforward but require navigating Mathlib's AddChar/Circle/fourierChar API."
   },
   "proven_lemmas": [
-    "fourierTransform_norm_le (part b): ‖f̂(ξ)‖ ≤ ∫ ‖f(x)‖ dx",
-    "fourierTransform_continuous (part a): f̂ is continuous via continuous_of_dominated (DCT)",
+    "fourierTransform_norm_le (part b): \u2016f\u0302(\u03be)\u2016 \u2264 \u222b \u2016f(x)\u2016 dx",
+    "fourierTransform_continuous (part a): f\u0302 is continuous via continuous_of_dominated (DCT)",
     "fourier_maps_L1_to_C0: combines (a), (b), and (c)"
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }

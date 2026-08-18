@@ -11,8 +11,9 @@
   },
   "lean": {
     "main": "lean/Main.lean",
-    "sorry_count_main": 1,
-    "sorry_count_total": 1
+    "sorry_count_main": 0,
+    "sorry_count_total": 0,
+    "sorry_count_scratch": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -20,7 +21,14 @@
     "has_informal_solution": true,
     "has_proof_outline": true
   },
-  "classification": "partial",
-  "classification_detail": "Part (1) FULLY PROVEN: a.e. limit of L²-bounded sequence is in L² unit ball, via Fatou's lemma (MeasureTheory.Lp.eLpNorm'_lim_le_liminf_eLpNorm'). Key technical: constructing IsBoundedUnder for liminf_le_of_le, and eLpNorm_eq_eLpNorm' to convert between primed/unprimed norms. Part (2) has 1 sorry: weak convergence via density + DCT.",
-  "imported_at": "2026-07-26T22:00:00Z"
+  "classification": "complete",
+  "classification_detail": "Part (1) FULLY PROVEN: a.e. limit of L\u00b2-bounded sequence is in L\u00b2 unit ball, via Fatou's lemma (MeasureTheory.Lp.eLpNorm'_lim_le_liminf_eLpNorm'). Key technical: constructing IsBoundedUnder for liminf_le_of_le, and eLpNorm_eq_eLpNorm' to convert between primed/unprimed norms. Part (2) has 1 sorry: weak convergence via density + DCT.",
+  "imported_at": "2026-07-26T22:00:00Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + comment-aware token count",
+    "at": "2026-08-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial"
+  }
 }
