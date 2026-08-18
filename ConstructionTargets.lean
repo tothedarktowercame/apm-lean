@@ -16,6 +16,7 @@ import ConstructionTargets.UnivalentDeriv
 import ConstructionTargets.YoungConvolution
 import ConstructionTargets.SetIntegralPrimitive
 import ConstructionTargets.OrientedIntegration
+import ConstructionTargets.Intersection
 
 /-!
 # ConstructionTargets — reusable lemmas built to unblock specific APM problems
