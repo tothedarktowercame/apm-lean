@@ -1,0 +1,775 @@
+{
+  "eligible_lemmas": 900,
+  "hand_audit": [
+    {
+      "duplicate": false,
+      "key": "a96J10:apm_a96J10_q_analytic|a97A06:apm_a97A06_F_analytic",
+      "reason": "same AnalyticOn shape, but q is exp's dslope while F is a different quotient function"
+    },
+    {
+      "duplicate": true,
+      "key": "a96J02:continuous_convolution_indicator|a99J02:apm_continuous_convolution_indicator",
+      "reason": "same statement; top infinity notation differs"
+    },
+    {
+      "duplicate": true,
+      "key": "a96J02:continuous_overlapMeasure|a99J02:apm_continuous_overlapMeasure",
+      "reason": "same statement after unfolding identical subtraction maps"
+    },
+    {
+      "duplicate": true,
+      "key": "a96J02:continuous_overlapSet|a99J02:apm_continuous_overlapSet",
+      "reason": "same statement over identically defined overlapSet wrappers"
+    },
+    {
+      "duplicate": true,
+      "key": "a96J02:continuous_subtractionMap|a99J02:apm_continuous_subtractionMap",
+      "reason": "local maps have identical definitions fun t => x - t"
+    },
+    {
+      "duplicate": true,
+      "key": "a96J02:convolution_indicator_eq_overlapReal|a99J02:apm_convolution_eq_overlapReal",
+      "reason": "same equality after unfolding identical subtraction maps"
+    },
+    {
+      "duplicate": true,
+      "key": "a96J02:translation_symmDiff_tendsto_zero|a99J02:apm_translation_symmDiff_tendsto_zero",
+      "reason": "same limit; nhds notation and local map names differ"
+    }
+  ],
+  "hand_audit_precision": 0.8571428571428571,
+  "known_cluster_pairs": 26,
+  "known_pair_recall": {
+    "constant_jaccard_ge_0.72": 0.8461538461538461,
+    "minilm_cosine_ge_0.88": null,
+    "structural_exact": 1.0
+  },
+  "minilm_status": "unavailable: ModuleNotFoundError: No module named 'sentence_transformers'",
+  "minilm_warning": "out-of-domain natural-language model; secondary signal only",
+  "novel_candidates": [
+    {
+      "a": {
+        "constants": [
+          "AnalyticOn",
+          "exp"
+        ],
+        "lemma": "apm_a96J10_q_analytic",
+        "problem_id": "a96J10",
+        "signature": ": AnalyticOn \u2102 apm_a96J10_q univ"
+      },
+      "b": {
+        "constants": [
+          "AnalyticOn",
+          "exp"
+        ],
+        "lemma": "apm_a97A06_F_analytic",
+        "problem_id": "a97A06",
+        "signature": ": AnalyticOn \u2102 apm_a97A06_F univ"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a96J10:apm_a96J10_q_analytic|a97A06:apm_a97A06_F_analytic",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": true
+    },
+    {
+      "a": {
+        "constants": [
+          "Continuous",
+          "MeasurableSet",
+          "mul"
+        ],
+        "lemma": "apm_continuous_convolution_indicator",
+        "problem_id": "a99J02",
+        "signature": "(A B : Set \u211d) (hA : MeasurableSet A) (hB : MeasurableSet B) (hAfin : volume A \u2260 \u22a4) (hBfin : volume B \u2260 \u22a4) : Continuous ((indicator A (1 : \u211d \u2192 \u211d)) \u22c6[ContinuousLinearMap.mul \u211d \u211d, volume] (indicator B (1 : \u211d \u2192 \u211d)))"
+      },
+      "b": {
+        "constants": [
+          "Continuous",
+          "MeasurableSet",
+          "mul"
+        ],
+        "lemma": "continuous_convolution_indicator",
+        "problem_id": "a96J02",
+        "signature": "(A B : Set \u211d) (hA : MeasurableSet A) (hB : MeasurableSet B) (hAfin : volume A \u2260 \u221e) (hBfin : volume B \u2260 \u221e) : Continuous ((indicator A (1 : \u211d \u2192 \u211d)) \u22c6[ContinuousLinearMap.mul \u211d \u211d, volume] (indicator B (1 : \u211d \u2192 \u211d)))"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a96J02:continuous_convolution_indicator|a99J02:apm_continuous_convolution_indicator",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": true
+    },
+    {
+      "a": {
+        "constants": [
+          "Continuous",
+          "MeasurableSet"
+        ],
+        "lemma": "apm_continuous_overlapMeasure",
+        "problem_id": "a99J02",
+        "signature": "(A B : Set \u211d) (hA : MeasurableSet A) (hB : MeasurableSet B) (hBfin : volume B \u2260 \u22a4) : Continuous (fun x => volume (A \u2229 (apmSubtractionMap x) \u207b\u00b9' B))"
+      },
+      "b": {
+        "constants": [
+          "Continuous",
+          "MeasurableSet"
+        ],
+        "lemma": "continuous_overlapMeasure",
+        "problem_id": "a96J02",
+        "signature": "(A B : Set \u211d) (hA : MeasurableSet A) (hB : MeasurableSet B) (hBfin : volume B \u2260 \u221e) : Continuous (fun x => volume (A \u2229 (subtractionMap x) \u207b\u00b9' B))"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a96J02:continuous_overlapMeasure|a99J02:apm_continuous_overlapMeasure",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": true
+    },
+    {
+      "a": {
+        "constants": [
+          "Continuous",
+          "MeasurableSet",
+          "Measure",
+          "MeasuredSets",
+          "inter",
+          "measurePreserving_sub_left"
+        ],
+        "lemma": "apm_continuous_overlapSet",
+        "problem_id": "a99J02",
+        "signature": "(A B : Set \u211d) (hA : MeasurableSet A) (hB : MeasurableSet B) (hBfin : volume B \u2260 \u22a4) : Continuous (apmOverlapSet A B hA hB)"
+      },
+      "b": {
+        "constants": [
+          "Continuous",
+          "MeasurableSet",
+          "Measure",
+          "MeasuredSets",
+          "inter",
+          "measurePreserving_sub_left"
+        ],
+        "lemma": "continuous_overlapSet",
+        "problem_id": "a96J02",
+        "signature": "(A B : Set \u211d) (hA : MeasurableSet A) (hB : MeasurableSet B) (hBfin : volume B \u2260 \u221e) : Continuous (overlapSet A B hA hB)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a96J02:continuous_overlapSet|a99J02:apm_continuous_overlapSet",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": true
+    },
+    {
+      "a": {
+        "constants": [
+          "Continuous"
+        ],
+        "lemma": "apm_continuous_subtractionMap",
+        "problem_id": "a99J02",
+        "signature": ": Continuous apmSubtractionMap"
+      },
+      "b": {
+        "constants": [
+          "Continuous"
+        ],
+        "lemma": "continuous_subtractionMap",
+        "problem_id": "a96J02",
+        "signature": ": Continuous subtractionMap"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a96J02:continuous_subtractionMap|a99J02:apm_continuous_subtractionMap",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": true
+    },
+    {
+      "a": {
+        "constants": [
+          "MeasurableSet",
+          "mul",
+          "real"
+        ],
+        "lemma": "apm_convolution_eq_overlapReal",
+        "problem_id": "a99J02",
+        "signature": "(A B : Set \u211d) (hA : MeasurableSet A) (hB : MeasurableSet B) (x : \u211d) : ((indicator A (1 : \u211d \u2192 \u211d)) \u22c6[ContinuousLinearMap.mul \u211d \u211d, volume] (indicator B (1 : \u211d \u2192 \u211d))) x = volume.real (A \u2229 (apmSubtractionMap x) \u207b\u00b9' B)"
+      },
+      "b": {
+        "constants": [
+          "MeasurableSet",
+          "mul",
+          "real"
+        ],
+        "lemma": "convolution_indicator_eq_overlapReal",
+        "problem_id": "a96J02",
+        "signature": "(A B : Set \u211d) (hA : MeasurableSet A) (hB : MeasurableSet B) (x : \u211d) : ((indicator A (1 : \u211d \u2192 \u211d)) \u22c6[ContinuousLinearMap.mul \u211d \u211d, volume] (indicator B (1 : \u211d \u2192 \u211d))) x = volume.real (A \u2229 (subtractionMap x) \u207b\u00b9' B)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a96J02:convolution_indicator_eq_overlapReal|a99J02:apm_convolution_eq_overlapReal",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": true
+    },
+    {
+      "a": {
+        "constants": [
+          "MeasurableSet",
+          "Tendsto"
+        ],
+        "lemma": "apm_translation_symmDiff_tendsto_zero",
+        "problem_id": "a99J02",
+        "signature": "(B : Set \u211d) (hB : MeasurableSet B) (hBfin : volume B \u2260 \u22a4) (x : \u211d) : Tendsto (fun y => volume (((apmSubtractionMap y) \u207b\u00b9' B) \u2206 ((apmSubtractionMap x) \u207b\u00b9' B))) (nhds x) (nhds 0)"
+      },
+      "b": {
+        "constants": [
+          "MeasurableSet",
+          "Tendsto"
+        ],
+        "lemma": "translation_symmDiff_tendsto_zero",
+        "problem_id": "a96J02",
+        "signature": "(B : Set \u211d) (hB : MeasurableSet B) (hBfin : volume B \u2260 \u221e) (x : \u211d) : Tendsto (fun y => volume (((subtractionMap y) \u207b\u00b9' B) \u2206 ((subtractionMap x) \u207b\u00b9' B))) (\ud835\udcdd x) (\ud835\udcdd 0)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a96J02:translation_symmDiff_tendsto_zero|a99J02:apm_translation_symmDiff_tendsto_zero",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": true
+    },
+    {
+      "a": {
+        "constants": [
+          "natDegree"
+        ],
+        "lemma": "exists_root_in_componentSet_of_subset_sublevel",
+        "problem_id": "a00J04",
+        "signature": "(hp : 0 < p.natDegree) (x : \u21a5((lemniscate p)\u1d9c)) (hsub : componentSet x \u2286 sublevel p) : \u2203 z \u2208 componentSet x, aeval z p = 0"
+      },
+      "b": {
+        "constants": [
+          "natDegree"
+        ],
+        "lemma": "p_natDegree",
+        "problem_id": "a92J05",
+        "signature": ": p.natDegree = 10"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a00J04:exists_root_in_componentSet_of_subset_sublevel|a92J05:p_natDegree",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "natDegree"
+        ],
+        "lemma": "exists_root_in_componentSet_of_subset_sublevel",
+        "problem_id": "a01A08",
+        "signature": "(hp : 0 < p.natDegree) (x : \u21a5((lemniscate p)\u1d9c)) (hsub : componentSet x \u2286 sublevel p) : \u2203 z \u2208 componentSet x, aeval z p = 0"
+      },
+      "b": {
+        "constants": [
+          "natDegree"
+        ],
+        "lemma": "p_natDegree",
+        "problem_id": "a92J05",
+        "signature": ": p.natDegree = 10"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A08:exists_root_in_componentSet_of_subset_sublevel|a92J05:p_natDegree",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "exp",
+          "re"
+        ],
+        "lemma": "apm_a99j09_norm_kernel",
+        "problem_id": "a99J09",
+        "signature": "(z : \u2102) (t : \u211d) : \u2016Complex.exp (-(t : \u2102) * z)\u2016 = Real.exp (-z.re * t)"
+      },
+      "b": {
+        "constants": [
+          "exp",
+          "re"
+        ],
+        "lemma": "abs_exp_mul_real",
+        "problem_id": "a01A09",
+        "signature": "(z : \u2102) (t : \u211d) : \u2016Complex.exp (z * (t : \u2102))\u2016 = Real.exp (z.re * t)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A09:abs_exp_mul_real|a99J09:apm_a99j09_norm_kernel",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "IsBounded"
+        ],
+        "lemma": "not_isBounded_componentSet_of_subset_superlevel",
+        "problem_id": "a00J04",
+        "signature": "(x : \u21a5((lemniscate p)\u1d9c)) (hsuper : componentSet x \u2286 superlevel p) : \u00ac IsBounded (componentSet x)"
+      },
+      "b": {
+        "constants": [
+          "IsBounded"
+        ],
+        "lemma": "ball_bounded",
+        "problem_id": "a95A05",
+        "signature": ": Bornology.IsBounded (ball (0 : \u2102) 1)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a00J04:not_isBounded_componentSet_of_subset_superlevel|a95A05:ball_bounded",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "IsBounded"
+        ],
+        "lemma": "not_isBounded_componentSet_of_subset_superlevel",
+        "problem_id": "a01A08",
+        "signature": "(x : \u21a5((lemniscate p)\u1d9c)) (hsuper : componentSet x \u2286 superlevel p) : \u00ac IsBounded (componentSet x)"
+      },
+      "b": {
+        "constants": [
+          "IsBounded"
+        ],
+        "lemma": "ball_bounded",
+        "problem_id": "a95A05",
+        "signature": ": Bornology.IsBounded (ball (0 : \u2102) 1)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A08:not_isBounded_componentSet_of_subset_superlevel|a95A05:ball_bounded",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "IsConnected"
+        ],
+        "lemma": "componentSet_connected",
+        "problem_id": "a00J04",
+        "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsConnected (componentSet x)"
+      },
+      "b": {
+        "constants": [
+          "IsConnected"
+        ],
+        "lemma": "connected_superset_meets_unit_sphere",
+        "problem_id": "a95A06",
+        "signature": "{U : Set \u2102} (hconn : IsConnected U) (hstrict : ball (0 : \u2102) 1 \u2282 U) : \u2203 z \u2208 U, \u2016z\u2016 = 1"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a00J04:componentSet_connected|a95A06:connected_superset_meets_unit_sphere",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "IsConnected"
+        ],
+        "lemma": "componentSet_connected",
+        "problem_id": "a01A08",
+        "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsConnected (componentSet x)"
+      },
+      "b": {
+        "constants": [
+          "IsConnected"
+        ],
+        "lemma": "connected_superset_meets_unit_sphere",
+        "problem_id": "a95A06",
+        "signature": "{U : Set \u2102} (hconn : IsConnected U) (hstrict : ball (0 : \u2102) 1 \u2282 U) : \u2203 z \u2208 U, \u2016z\u2016 = 1"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A08:componentSet_connected|a95A06:connected_superset_meets_unit_sphere",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "IsOpen"
+        ],
+        "lemma": "componentSet_open",
+        "problem_id": "a00J04",
+        "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)"
+      },
+      "b": {
+        "constants": [
+          "IsOpen"
+        ],
+        "lemma": "exists_closedBall_subset_of_mem_open",
+        "problem_id": "a01A07",
+        "signature": "{U : Set \u2102} (hU : IsOpen U) {x : \u2102} (hx : x \u2208 U) : \u2203 r : \u211d, 0 < r \u2227 closedBall x r \u2286 U"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a00J04:componentSet_open|a01A07:exists_closedBall_subset_of_mem_open",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "IsOpen"
+        ],
+        "lemma": "componentSet_open",
+        "problem_id": "a00J04",
+        "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)"
+      },
+      "b": {
+        "constants": [
+          "IsOpen"
+        ],
+        "lemma": "isOpen_ordConnectedComponent_of_isOpen",
+        "problem_id": "a95A02",
+        "signature": "{U : Set \u211d} (hU : IsOpen U) (x : \u211d) : IsOpen (ordConnectedComponent U x)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a00J04:componentSet_open|a95A02:isOpen_ordConnectedComponent_of_isOpen",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "IsOpen"
+        ],
+        "lemma": "componentSet_open",
+        "problem_id": "a01A08",
+        "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)"
+      },
+      "b": {
+        "constants": [
+          "IsOpen"
+        ],
+        "lemma": "exists_closedBall_subset_of_mem_open",
+        "problem_id": "a01A07",
+        "signature": "{U : Set \u2102} (hU : IsOpen U) {x : \u2102} (hx : x \u2208 U) : \u2203 r : \u211d, 0 < r \u2227 closedBall x r \u2286 U"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A07:exists_closedBall_subset_of_mem_open|a01A08:componentSet_open",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "IsOpen"
+        ],
+        "lemma": "componentSet_open",
+        "problem_id": "a01A08",
+        "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)"
+      },
+      "b": {
+        "constants": [
+          "IsOpen"
+        ],
+        "lemma": "isOpen_ordConnectedComponent_of_isOpen",
+        "problem_id": "a95A02",
+        "signature": "{U : Set \u211d} (hU : IsOpen U) (x : \u211d) : IsOpen (ordConnectedComponent U x)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A08:componentSet_open|a95A02:isOpen_ordConnectedComponent_of_isOpen",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "MemLp"
+        ],
+        "lemma": "poisson_translation_average_toLp",
+        "problem_id": "a94J04",
+        "signature": "{y : \u211d} (hy : 0 < y) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+      },
+      "b": {
+        "constants": [
+          "MemLp"
+        ],
+        "lemma": "heat_translation_average_tendsto_L2",
+        "problem_id": "a96A04",
+        "signature": "{f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a94J04:poisson_translation_average_toLp|a96A04:heat_translation_average_tendsto_L2",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "MemLp"
+        ],
+        "lemma": "heat_translation_average_toLp",
+        "problem_id": "a96A04",
+        "signature": "{t : \u211d} (ht : 0 < t) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+      },
+      "b": {
+        "constants": [
+          "MemLp"
+        ],
+        "lemma": "poisson_translation_average_tendsto_L2",
+        "problem_id": "a94J04",
+        "signature": "{f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a94J04:poisson_translation_average_tendsto_L2|a96A04:heat_translation_average_toLp",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "apm_a01A05_geometric_decay_tendsto_zero",
+        "problem_id": "a01A05",
+        "signature": ": Tendsto (fun m : \u2115 => (2 : \u211d) ^ (-(m : \u211d))) atTop (nhds 0)"
+      },
+      "b": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "tendsto_bound_zero",
+        "problem_id": "a02J03",
+        "signature": "(M c : \u211d) (hc : 0 < c) : Tendsto (fun k : \u211d => M * c / (1 + k * c)) atTop (nhds 0)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A05:apm_a01A05_geometric_decay_tendsto_zero|a02J03:tendsto_bound_zero",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "apm_a01A05_geometric_decay_tendsto_zero",
+        "problem_id": "a01A05",
+        "signature": ": Tendsto (fun m : \u2115 => (2 : \u211d) ^ (-(m : \u211d))) atTop (nhds 0)"
+      },
+      "b": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "tendsto_damped_fresnel_closed_form",
+        "problem_id": "a01A10",
+        "signature": ": Filter.Tendsto (fun \u03b5 : \u211d => ((\u03c0 : \u2102) / ((\u03b5 : \u2102) - I)) ^ (1 / 2 : \u2102) / 2) (\ud835\udcdd[>] 0) (\ud835\udcdd ((1 + I) * \u221a\u03c0 / (2 * \u221a2)))"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A05:apm_a01A05_geometric_decay_tendsto_zero|a01A10:tendsto_damped_fresnel_closed_form",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "apm_a01A05_geometric_decay_tendsto_zero",
+        "problem_id": "a01A05",
+        "signature": ": Tendsto (fun m : \u2115 => (2 : \u211d) ^ (-(m : \u211d))) atTop (nhds 0)"
+      },
+      "b": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "tendsto_integral_damped_fresnel_interval",
+        "problem_id": "a01A10",
+        "signature": "(a : \u211d) : Filter.Tendsto (fun \u03b5 : \u211d => \u222b x in (0 : \u211d)..a, cexp (-((\u03b5 : \u2102) - I) * (x : \u2102) ^ 2)) (\ud835\udcdd[>] (0 : \u211d)) (nhds (\u222b x in (0 : \u211d)..a, cexp (I * (x : \u2102) ^ 2)))"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A05:apm_a01A05_geometric_decay_tendsto_zero|a01A10:tendsto_integral_damped_fresnel_interval",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "apm_a01A05_geometric_decay_tendsto_zero",
+        "problem_id": "a01A05",
+        "signature": ": Tendsto (fun m : \u2115 => (2 : \u211d) ^ (-(m : \u211d))) atTop (nhds 0)"
+      },
+      "b": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "tendsto_rpow_inv_nat_atTop",
+        "problem_id": "a00J01",
+        "signature": "(t : \u211d) (ht : 0 < t) : Tendsto (fun n : \u2115 => t ^ (1 / (n : \u211d))) atTop (\ud835\udcdd 1)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a00J01:tendsto_rpow_inv_nat_atTop|a01A05:apm_a01A05_geometric_decay_tendsto_zero",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "apm_a01A05_geometric_decay_tendsto_zero",
+        "problem_id": "a01A05",
+        "signature": ": Tendsto (fun m : \u2115 => (2 : \u211d) ^ (-(m : \u211d))) atTop (nhds 0)"
+      },
+      "b": {
+        "constants": [
+          "Tendsto"
+        ],
+        "lemma": "tendsto_scaled_primitive_bound_zero",
+        "problem_id": "a02J03",
+        "signature": "(M : \u211d) : Tendsto (fun k : \u211d => M / k) atTop (nhds 0)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01A05:apm_a01A05_geometric_decay_tendsto_zero|a02J03:tendsto_scaled_primitive_bound_zero",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "Differentiable",
+          "factorial"
+        ],
+        "lemma": "apm_a01J04_error_eq_entire",
+        "problem_id": "a01J04",
+        "signature": "(f g : \u2102 \u2192 \u2102) (lam : \u2102) (hg : Differentiable \u2102 g) (hf : \u2200 z : \u2102, f z = lam / (z - 1) + g z) (n : \u2115) : (-1 : \u2102) ^ n * iteratedDeriv n f 2 / (Nat.factorial n : \u2102) - lam = (-1 : \u2102) ^ n * (iteratedDeriv n g 2 / (Nat.factorial n : \u2102))"
+      },
+      "b": {
+        "constants": [
+          "Differentiable",
+          "factorial"
+        ],
+        "lemma": "apm_a03J06_growth_cauchy_bound",
+        "problem_id": "a03J06",
+        "signature": "(f : \u2102 \u2192 \u2102) (hf : Differentiable \u2102 f) (A : \u211d) (m k : \u2115) (hbound : \u2200 z : \u2102, 1 < \u2016z\u2016 \u2192 \u2016f z\u2016 \u2264 A * \u2016z\u2016 ^ m) {R : \u211d} (hR : 1 < R) : \u2016iteratedDeriv k f 0\u2016 \u2264 k.factorial * (A * R ^ m) / R ^ k"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01J04:apm_a01J04_error_eq_entire|a03J06:apm_a03J06_growth_cauchy_bound",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "factorial"
+        ],
+        "lemma": "apm_a01J04_geom_iteratedDeriv",
+        "problem_id": "a01J04",
+        "signature": "(n : \u2115) : iteratedDeriv n (fun z : \u2102 => (1 - z)\u207b\u00b9) 0 = (n.factorial : \u2102)"
+      },
+      "b": {
+        "constants": [
+          "factorial"
+        ],
+        "lemma": "extension_deriv_eq_lacunary_deriv_series",
+        "problem_id": "a95A06",
+        "signature": "{F : \u2102 \u2192 \u2102} {w : \u2102} (hw : w \u2208 ball (0 : \u2102) 1) (hF_eq : \u2200 z \u2208 ball (0 : \u2102) 1, F z = lacunarySeries z) : deriv F w = \u2211' n : \u2115, w ^ (n.factorial - 1)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01J04:apm_a01J04_geom_iteratedDeriv|a95A06:extension_deriv_eq_lacunary_deriv_series",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "factorial"
+        ],
+        "lemma": "apm_a01J04_geom_iteratedDeriv",
+        "problem_id": "a01J04",
+        "signature": "(n : \u2115) : iteratedDeriv n (fun z : \u2102 => (1 - z)\u207b\u00b9) 0 = (n.factorial : \u2102)"
+      },
+      "b": {
+        "constants": [
+          "factorial"
+        ],
+        "lemma": "factorial_dvd_of_le",
+        "problem_id": "a95A06",
+        "signature": "{n q : \u2115} (hq : 0 < q) (hn : q \u2264 n) : q \u2223 n.factorial"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01J04:apm_a01J04_geom_iteratedDeriv|a95A06:factorial_dvd_of_le",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "factorial"
+        ],
+        "lemma": "apm_a01J04_pole_iteratedDeriv",
+        "problem_id": "a01J04",
+        "signature": "(lam : \u2102) (n : \u2115) : iteratedDeriv n (fun z : \u2102 => lam / (z - 1)) 2 = lam * ((-1 : \u2102) ^ n * (n.factorial : \u2102))"
+      },
+      "b": {
+        "constants": [
+          "factorial"
+        ],
+        "lemma": "extension_deriv_eq_lacunary_deriv_series",
+        "problem_id": "a95A06",
+        "signature": "{F : \u2102 \u2192 \u2102} {w : \u2102} (hw : w \u2208 ball (0 : \u2102) 1) (hF_eq : \u2200 z \u2208 ball (0 : \u2102) 1, F z = lacunarySeries z) : deriv F w = \u2211' n : \u2115, w ^ (n.factorial - 1)"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01J04:apm_a01J04_pole_iteratedDeriv|a95A06:extension_deriv_eq_lacunary_deriv_series",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    },
+    {
+      "a": {
+        "constants": [
+          "factorial"
+        ],
+        "lemma": "apm_a01J04_pole_iteratedDeriv",
+        "problem_id": "a01J04",
+        "signature": "(lam : \u2102) (n : \u2115) : iteratedDeriv n (fun z : \u2102 => lam / (z - 1)) 2 = lam * ((-1 : \u2102) ^ n * (n.factorial : \u2102))"
+      },
+      "b": {
+        "constants": [
+          "factorial"
+        ],
+        "lemma": "factorial_dvd_of_le",
+        "problem_id": "a95A06",
+        "signature": "{n q : \u2115} (hq : 0 < q) (hn : q \u2264 n) : q \u2223 n.factorial"
+      },
+      "constant_jaccard": 1.0,
+      "key": "a01J04:apm_a01J04_pole_iteratedDeriv|a95A06:factorial_dvd_of_le",
+      "known": false,
+      "minilm_cosine": null,
+      "structural_match": false
+    }
+  ],
+  "schema_version": 1,
+  "thresholds": {
+    "constant_jaccard": 0.72,
+    "minilm_cosine": 0.88,
+    "structural": "exact fingerprint"
+  }
+}
