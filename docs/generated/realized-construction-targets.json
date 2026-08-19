@@ -1,0 +1,850 @@
+{
+  "consumer_unit": "distinct problem bundles reaching the module through direct or transitive ConstructionTargets imports",
+  "cost_caveat": "line churn weights formatting and rewrites as work, misses thinking and review, and can count shared commits in several modules",
+  "cost_unit": "changed source lines: additions plus deletions from git log --follow --numstat",
+  "modules": [
+    {
+      "consumer_count": 1,
+      "consumers": [
+        "a95J06"
+      ],
+      "consumers_per_100_changed_source_lines": 0.18083182640144665,
+      "consumers_per_touching_commit": 0.3333333333333333,
+      "cost": {
+        "changed_source_lines": 553,
+        "current_nonblank_noncomment_lines": 456,
+        "lines_added": 528,
+        "lines_deleted": 25,
+        "touching_commits": 3
+      },
+      "imports": [
+        "LusinN"
+      ],
+      "module": "BanachZarecki"
+    },
+    {
+      "consumer_count": 1,
+      "consumers": [
+        "a97A07"
+      ],
+      "consumers_per_100_changed_source_lines": 1.3513513513513513,
+      "consumers_per_touching_commit": 1.0,
+      "cost": {
+        "changed_source_lines": 74,
+        "current_nonblank_noncomment_lines": 67,
+        "lines_added": 74,
+        "lines_deleted": 0,
+        "touching_commits": 1
+      },
+      "imports": [],
+      "module": "CircleParam"
+    },
+    {
+      "consumer_count": 1,
+      "consumers": [
+        "a94A10"
+      ],
+      "consumers_per_100_changed_source_lines": 0.1392757660167131,
+      "consumers_per_touching_commit": 0.16666666666666666,
+      "cost": {
+        "changed_source_lines": 718,
+        "current_nonblank_noncomment_lines": 647,
+        "lines_added": 695,
+        "lines_deleted": 23,
+        "touching_commits": 6
+      },
+      "imports": [],
+      "module": "HerglotzRigidity"
+    },
+    {
+      "consumer_count": 0,
+      "consumers": [],
+      "consumers_per_100_changed_source_lines": 0.0,
+      "consumers_per_touching_commit": 0.0,
+      "cost": {
+        "changed_source_lines": 687,
+        "current_nonblank_noncomment_lines": 603,
+        "lines_added": 687,
+        "lines_deleted": 0,
+        "touching_commits": 7
+      },
+      "imports": [
+        "OrientedIntegration"
+      ],
+      "module": "Intersection"
+    },
+    {
+      "consumer_count": 0,
+      "consumers": [],
+      "consumers_per_100_changed_source_lines": 0.0,
+      "consumers_per_touching_commit": 0.0,
+      "cost": {
+        "changed_source_lines": 48,
+        "current_nonblank_noncomment_lines": 40,
+        "lines_added": 48,
+        "lines_deleted": 0,
+        "touching_commits": 1
+      },
+      "imports": [],
+      "module": "KernelAverage"
+    },
+    {
+      "consumer_count": 3,
+      "consumers": [
+        "a94A03",
+        "a94J04",
+        "a96A04"
+      ],
+      "consumers_per_100_changed_source_lines": 3.409090909090909,
+      "consumers_per_touching_commit": 1.5,
+      "cost": {
+        "changed_source_lines": 88,
+        "current_nonblank_noncomment_lines": 55,
+        "lines_added": 77,
+        "lines_deleted": 11,
+        "touching_commits": 2
+      },
+      "imports": [],
+      "module": "L2Translation"
+    },
+    {
+      "consumer_count": 0,
+      "consumers": [],
+      "consumers_per_100_changed_source_lines": 0.0,
+      "consumers_per_touching_commit": 0.0,
+      "cost": {
+        "changed_source_lines": 650,
+        "current_nonblank_noncomment_lines": 532,
+        "lines_added": 626,
+        "lines_deleted": 24,
+        "touching_commits": 2
+      },
+      "imports": [],
+      "module": "LemniscateComponents"
+    },
+    {
+      "consumer_count": 3,
+      "consumers": [
+        "a94A03",
+        "a94J04",
+        "a96A04"
+      ],
+      "consumers_per_100_changed_source_lines": 1.7241379310344827,
+      "consumers_per_touching_commit": 1.5,
+      "cost": {
+        "changed_source_lines": 174,
+        "current_nonblank_noncomment_lines": 163,
+        "lines_added": 174,
+        "lines_deleted": 0,
+        "touching_commits": 2
+      },
+      "imports": [],
+      "module": "LpRepresentative"
+    },
+    {
+      "consumer_count": 1,
+      "consumers": [
+        "a95J06"
+      ],
+      "consumers_per_100_changed_source_lines": 0.09433962264150944,
+      "consumers_per_touching_commit": 0.1111111111111111,
+      "cost": {
+        "changed_source_lines": 1060,
+        "current_nonblank_noncomment_lines": 524,
+        "lines_added": 824,
+        "lines_deleted": 236,
+        "touching_commits": 9
+      },
+      "imports": [],
+      "module": "LusinN"
+    },
+    {
+      "consumer_count": 0,
+      "consumers": [],
+      "consumers_per_100_changed_source_lines": 0.0,
+      "consumers_per_touching_commit": 0.0,
+      "cost": {
+        "changed_source_lines": 111,
+        "current_nonblank_noncomment_lines": 94,
+        "lines_added": 111,
+        "lines_deleted": 0,
+        "touching_commits": 1
+      },
+      "imports": [],
+      "module": "OrientedIntegration"
+    },
+    {
+      "consumer_count": 2,
+      "consumers": [
+        "a95A03",
+        "m94A03"
+      ],
+      "consumers_per_100_changed_source_lines": 2.857142857142857,
+      "consumers_per_touching_commit": 2.0,
+      "cost": {
+        "changed_source_lines": 70,
+        "current_nonblank_noncomment_lines": 58,
+        "lines_added": 70,
+        "lines_deleted": 0,
+        "touching_commits": 1
+      },
+      "imports": [],
+      "module": "RadialIntegrationR3"
+    },
+    {
+      "consumer_count": 2,
+      "consumers": [
+        "a94J04",
+        "a98J03"
+      ],
+      "consumers_per_100_changed_source_lines": 0.25806451612903225,
+      "consumers_per_touching_commit": 0.18181818181818182,
+      "cost": {
+        "changed_source_lines": 775,
+        "current_nonblank_noncomment_lines": 727,
+        "lines_added": 774,
+        "lines_deleted": 1,
+        "touching_commits": 11
+      },
+      "imports": [],
+      "module": "RadialMajorantAE"
+    },
+    {
+      "consumer_count": 6,
+      "consumers": [
+        "a01J05",
+        "a92J05",
+        "a94A09",
+        "a97A08",
+        "aunk04",
+        "t94J06"
+      ],
+      "consumers_per_100_changed_source_lines": 1.1904761904761905,
+      "consumers_per_touching_commit": 1.0,
+      "cost": {
+        "changed_source_lines": 504,
+        "current_nonblank_noncomment_lines": 465,
+        "lines_added": 496,
+        "lines_deleted": 8,
+        "touching_commits": 6
+      },
+      "imports": [],
+      "module": "Rouche"
+    },
+    {
+      "consumer_count": 3,
+      "consumers": [
+        "a95A08",
+        "a95J01",
+        "a96J06"
+      ],
+      "consumers_per_100_changed_source_lines": 4.285714285714286,
+      "consumers_per_touching_commit": 3.0,
+      "cost": {
+        "changed_source_lines": 70,
+        "current_nonblank_noncomment_lines": 62,
+        "lines_added": 70,
+        "lines_deleted": 0,
+        "touching_commits": 1
+      },
+      "imports": [],
+      "module": "SchwarzEquality"
+    },
+    {
+      "consumer_count": 1,
+      "consumers": [
+        "a94A09"
+      ],
+      "consumers_per_100_changed_source_lines": 0.4830917874396135,
+      "consumers_per_touching_commit": 1.0,
+      "cost": {
+        "changed_source_lines": 207,
+        "current_nonblank_noncomment_lines": 185,
+        "lines_added": 207,
+        "lines_deleted": 0,
+        "touching_commits": 1
+      },
+      "imports": [],
+      "module": "SchwarzPick"
+    },
+    {
+      "consumer_count": 0,
+      "consumers": [],
+      "consumers_per_100_changed_source_lines": 0.0,
+      "consumers_per_touching_commit": 0.0,
+      "cost": {
+        "changed_source_lines": 30,
+        "current_nonblank_noncomment_lines": 25,
+        "lines_added": 30,
+        "lines_deleted": 0,
+        "touching_commits": 1
+      },
+      "imports": [],
+      "module": "SetIntegralPrimitive"
+    },
+    {
+      "consumer_count": 2,
+      "consumers": [
+        "a02J05",
+        "a97A06"
+      ],
+      "consumers_per_100_changed_source_lines": 0.27434842249657065,
+      "consumers_per_touching_commit": 0.3333333333333333,
+      "cost": {
+        "changed_source_lines": 729,
+        "current_nonblank_noncomment_lines": 604,
+        "lines_added": 688,
+        "lines_deleted": 41,
+        "touching_commits": 6
+      },
+      "imports": [],
+      "module": "Sinc"
+    },
+    {
+      "consumer_count": 5,
+      "consumers": [
+        "t03J03",
+        "t03J05",
+        "t91J05",
+        "t97A01",
+        "t98A01"
+      ],
+      "consumers_per_100_changed_source_lines": 5.319148936170213,
+      "consumers_per_touching_commit": 5.0,
+      "cost": {
+        "changed_source_lines": 94,
+        "current_nonblank_noncomment_lines": 73,
+        "lines_added": 94,
+        "lines_deleted": 0,
+        "touching_commits": 1
+      },
+      "imports": [],
+      "module": "Surfaces"
+    },
+    {
+      "consumer_count": 2,
+      "consumers": [
+        "a95A08",
+        "a95J01"
+      ],
+      "consumers_per_100_changed_source_lines": 1.015228426395939,
+      "consumers_per_touching_commit": 0.6666666666666666,
+      "cost": {
+        "changed_source_lines": 197,
+        "current_nonblank_noncomment_lines": 164,
+        "lines_added": 186,
+        "lines_deleted": 11,
+        "touching_commits": 3
+      },
+      "imports": [],
+      "module": "UnivalentDeriv"
+    },
+    {
+      "consumer_count": 5,
+      "consumers": [
+        "a94A03",
+        "a95J08",
+        "a96A04",
+        "a98J03",
+        "m99A06"
+      ],
+      "consumers_per_100_changed_source_lines": 1.1627906976744187,
+      "consumers_per_touching_commit": 0.8333333333333334,
+      "cost": {
+        "changed_source_lines": 430,
+        "current_nonblank_noncomment_lines": 247,
+        "lines_added": 350,
+        "lines_deleted": 80,
+        "touching_commits": 6
+      },
+      "imports": [],
+      "module": "YoungConvolution"
+    }
+  ],
+  "schema_version": 1,
+  "validation": {
+    "actual_transitive_edges": 38,
+    "false_negative_edges": 32,
+    "false_negatives": [
+      [
+        "a01J05",
+        "Rouche"
+      ],
+      [
+        "a02J05",
+        "Sinc"
+      ],
+      [
+        "a92J05",
+        "Rouche"
+      ],
+      [
+        "a94A03",
+        "L2Translation"
+      ],
+      [
+        "a94A03",
+        "LpRepresentative"
+      ],
+      [
+        "a94A03",
+        "YoungConvolution"
+      ],
+      [
+        "a94A09",
+        "Rouche"
+      ],
+      [
+        "a94A09",
+        "SchwarzPick"
+      ],
+      [
+        "a94A10",
+        "HerglotzRigidity"
+      ],
+      [
+        "a94J04",
+        "L2Translation"
+      ],
+      [
+        "a94J04",
+        "LpRepresentative"
+      ],
+      [
+        "a94J04",
+        "RadialMajorantAE"
+      ],
+      [
+        "a95A03",
+        "RadialIntegrationR3"
+      ],
+      [
+        "a95A08",
+        "SchwarzEquality"
+      ],
+      [
+        "a95A08",
+        "UnivalentDeriv"
+      ],
+      [
+        "a95J01",
+        "SchwarzEquality"
+      ],
+      [
+        "a95J01",
+        "UnivalentDeriv"
+      ],
+      [
+        "a95J06",
+        "BanachZarecki"
+      ],
+      [
+        "a95J06",
+        "LusinN"
+      ],
+      [
+        "a96A04",
+        "L2Translation"
+      ],
+      [
+        "a96A04",
+        "LpRepresentative"
+      ],
+      [
+        "a96A04",
+        "YoungConvolution"
+      ],
+      [
+        "a96J06",
+        "SchwarzEquality"
+      ],
+      [
+        "a97A06",
+        "Sinc"
+      ],
+      [
+        "a97A07",
+        "CircleParam"
+      ],
+      [
+        "a97A08",
+        "Rouche"
+      ],
+      [
+        "a98J03",
+        "RadialMajorantAE"
+      ],
+      [
+        "a98J03",
+        "YoungConvolution"
+      ],
+      [
+        "aunk04",
+        "Rouche"
+      ],
+      [
+        "m99A06",
+        "YoungConvolution"
+      ],
+      [
+        "t94J06",
+        "Rouche"
+      ],
+      [
+        "t97A01",
+        "Surfaces"
+      ]
+    ],
+    "false_positive_edges": 2,
+    "false_positives": [
+      [
+        "aunk04",
+        "Surfaces"
+      ],
+      [
+        "t03J03",
+        "RadialIntegrationR3"
+      ]
+    ],
+    "per_problem": [
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a01J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Sinc"
+        ],
+        "direct_imports": [
+          "Sinc"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a02J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a92J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a94A03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche",
+          "SchwarzPick"
+        ],
+        "direct_imports": [
+          "Rouche",
+          "SchwarzPick"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a94A09"
+      },
+      {
+        "actual_transitive_modules": [
+          "HerglotzRigidity"
+        ],
+        "direct_imports": [
+          "HerglotzRigidity"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a94A10"
+      },
+      {
+        "actual_transitive_modules": [
+          "L2Translation",
+          "LpRepresentative",
+          "RadialMajorantAE"
+        ],
+        "direct_imports": [
+          "L2Translation",
+          "LpRepresentative",
+          "RadialMajorantAE"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a94J04"
+      },
+      {
+        "actual_transitive_modules": [
+          "RadialIntegrationR3"
+        ],
+        "direct_imports": [
+          "RadialIntegrationR3"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a95A03"
+      },
+      {
+        "actual_transitive_modules": [
+          "SchwarzEquality",
+          "UnivalentDeriv"
+        ],
+        "direct_imports": [
+          "SchwarzEquality",
+          "UnivalentDeriv"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a95A08"
+      },
+      {
+        "actual_transitive_modules": [
+          "SchwarzEquality",
+          "UnivalentDeriv"
+        ],
+        "direct_imports": [
+          "SchwarzEquality",
+          "UnivalentDeriv"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a95J01"
+      },
+      {
+        "actual_transitive_modules": [
+          "BanachZarecki",
+          "LusinN"
+        ],
+        "direct_imports": [
+          "BanachZarecki"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a95J06"
+      },
+      {
+        "actual_transitive_modules": [
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "YoungConvolution"
+        ],
+        "predicted_modules": [
+          "YoungConvolution"
+        ],
+        "problem_id": "a95J08"
+      },
+      {
+        "actual_transitive_modules": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a96A04"
+      },
+      {
+        "actual_transitive_modules": [
+          "SchwarzEquality"
+        ],
+        "direct_imports": [
+          "SchwarzEquality"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a96J06"
+      },
+      {
+        "actual_transitive_modules": [
+          "Sinc"
+        ],
+        "direct_imports": [
+          "Sinc"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a97A06"
+      },
+      {
+        "actual_transitive_modules": [
+          "CircleParam"
+        ],
+        "direct_imports": [
+          "CircleParam"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a97A07"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a97A08"
+      },
+      {
+        "actual_transitive_modules": [
+          "RadialMajorantAE",
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "RadialMajorantAE",
+          "YoungConvolution"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a98J03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [
+          "Surfaces"
+        ],
+        "problem_id": "aunk04"
+      },
+      {
+        "actual_transitive_modules": [
+          "RadialIntegrationR3"
+        ],
+        "direct_imports": [
+          "RadialIntegrationR3"
+        ],
+        "predicted_modules": [
+          "RadialIntegrationR3"
+        ],
+        "problem_id": "m94A03"
+      },
+      {
+        "actual_transitive_modules": [
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "YoungConvolution"
+        ],
+        "predicted_modules": [],
+        "problem_id": "m99A06"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [
+          "RadialIntegrationR3",
+          "Surfaces"
+        ],
+        "problem_id": "t03J03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [
+          "Surfaces"
+        ],
+        "problem_id": "t03J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [
+          "Surfaces"
+        ],
+        "problem_id": "t91J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [],
+        "problem_id": "t94J06"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [],
+        "problem_id": "t97A01"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [
+          "Surfaces"
+        ],
+        "problem_id": "t98A01"
+      }
+    ],
+    "population_problem_count": 27,
+    "precision": 0.75,
+    "predicted_edges": 8,
+    "problems_with_any_correct_prediction": 6,
+    "recall": 0.15789473684210525,
+    "true_positive_edges": 6,
+    "true_positives": [
+      [
+        "a95J08",
+        "YoungConvolution"
+      ],
+      [
+        "m94A03",
+        "RadialIntegrationR3"
+      ],
+      [
+        "t03J03",
+        "Surfaces"
+      ],
+      [
+        "t03J05",
+        "Surfaces"
+      ],
+      [
+        "t91J05",
+        "Surfaces"
+      ],
+      [
+        "t98A01",
+        "Surfaces"
+      ]
+    ]
+  }
+}
