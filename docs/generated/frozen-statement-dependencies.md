@@ -10,9 +10,10 @@ statement dependency fields.
 ## Coverage
 
 - Bundles: 475
-- Parsed frozen statements: 375
-- Unparseable or unclassified: 100
-- Closed parsed frozen theorems: 157
+- Parsed frozen statements: 448
+- Not encoded (no `lean/Main.lean`): 27
+- Encoded but unparseable/unclassified: 0
+- Closed parsed frozen theorems: 229
 
 ## Machinery mentions: frozen Lean signatures versus informal solution
 
@@ -39,78 +40,8 @@ statement dependency fields.
 These counts are lexical observations included to expose divergence. They are
 not the declaration dependency classification.
 
-## Unparseable bundles
+## Not encoded
 
-- `a00J01`: no unique frozen theorem candidate
-- `a00J03`: no unique frozen theorem candidate
-- `a00J04`: no unique frozen theorem candidate
-- `a00J05`: no unique frozen theorem candidate
-- `a00J06`: no unique frozen theorem candidate
-- `a01A03`: no unique frozen theorem candidate
-- `a01A04`: no unique frozen theorem candidate
-- `a01A06`: no unique frozen theorem candidate
-- `a01A07`: no unique frozen theorem candidate
-- `a01A08`: no unique frozen theorem candidate
-- `a01A09`: no unique frozen theorem candidate
-- `a01A10`: no unique frozen theorem candidate
-- `a01A11`: no unique frozen theorem candidate
-- `a01J01`: no unique frozen theorem candidate
-- `a01J02`: no unique frozen theorem candidate
-- `a01J03`: no unique frozen theorem candidate
-- `a02J01`: no unique frozen theorem candidate
-- `a02J02`: no unique frozen theorem candidate
-- `a02J03`: no unique frozen theorem candidate
-- `a02J06`: no unique frozen theorem candidate
-- `a02J07`: no unique frozen theorem candidate
-- `a03J02`: no unique frozen theorem candidate
-- `a03J03`: no unique frozen theorem candidate
-- `a03J08`: no unique frozen theorem candidate
-- `a92J02`: no unique frozen theorem candidate
-- `a92J03`: no unique frozen theorem candidate
-- `a92J04`: no unique frozen theorem candidate
-- `a92J05`: no unique frozen theorem candidate
-- `a92J06`: no unique frozen theorem candidate
-- `a92J07`: no unique frozen theorem candidate
-- `a93A01`: no unique frozen theorem candidate
-- `a93A03`: no unique frozen theorem candidate
-- `a93A04`: no unique frozen theorem candidate
-- `a93J02`: no unique frozen theorem candidate
-- `a93J04`: no unique frozen theorem candidate
-- `a93J05`: no unique frozen theorem candidate
-- `a93J06`: no unique frozen theorem candidate
-- `a94A01`: no unique frozen theorem candidate
-- `a94A03`: no unique frozen theorem candidate
-- `a94A04`: no unique frozen theorem candidate
-- `a94A05`: no unique frozen theorem candidate
-- `a94A06`: no unique frozen theorem candidate
-- `a94A10`: no unique frozen theorem candidate
-- `a94J01`: no unique frozen theorem candidate
-- `a94J04`: no unique frozen theorem candidate
-- `a94J05`: no unique frozen theorem candidate
-- `a94J07`: no unique frozen theorem candidate
-- `a94J08`: no unique frozen theorem candidate
-- `a95A01`: no unique frozen theorem candidate
-- `a95A02`: no unique frozen theorem candidate
-- `a95A03`: no unique frozen theorem candidate
-- `a95A04`: no unique frozen theorem candidate
-- `a95A05`: no unique frozen theorem candidate
-- `a95A06`: no unique frozen theorem candidate
-- `a95A07`: no unique frozen theorem candidate
-- `a95J01`: no unique frozen theorem candidate
-- `a95J02`: no unique frozen theorem candidate
-- `a95J05`: no unique frozen theorem candidate
-- `a95J06`: no unique frozen theorem candidate
-- `a95J07`: no unique frozen theorem candidate
-- `a95J08`: no unique frozen theorem candidate
-- `a96A01`: no unique frozen theorem candidate
-- `a96A02`: no unique frozen theorem candidate
-- `a96A03`: no unique frozen theorem candidate
-- `a96A04`: no unique frozen theorem candidate
-- `a96A05`: no unique frozen theorem candidate
-- `a96A06`: no unique frozen theorem candidate
-- `a96J04`: no unique frozen theorem candidate
-- `m96J01`: no unique frozen theorem candidate
-- `t92J02`: no unique frozen theorem candidate
 - `t93A05`: missing lean/Main.lean
 - `t93A06`: missing lean/Main.lean
 - `t93J01`: missing lean/Main.lean
@@ -119,11 +50,8 @@ not the declaration dependency classification.
 - `t93J05`: missing lean/Main.lean
 - `t93J06`: missing lean/Main.lean
 - `t94A01`: missing lean/Main.lean
-- `t94A02`: no unique frozen theorem candidate
 - `t94A03`: missing lean/Main.lean
 - `t94A04`: missing lean/Main.lean
-- `t94A05`: no unique frozen theorem candidate
-- `t94J01`: no unique frozen theorem candidate
 - `t94J10`: missing lean/Main.lean
 - `t94J11`: missing lean/Main.lean
 - `t95A01`: missing lean/Main.lean
@@ -142,115 +70,119 @@ not the declaration dependency classification.
 - `t97A06`: missing lean/Main.lean
 - `t97A07`: missing lean/Main.lean
 
+## Encoded but unparseable or unclassified
+
+None.
+
 ## Per-bundle compact view
 
 Full signatures and declaration lists are in the adjacent JSON artifact.
 
 | Problem | Frozen theorem | Closed | Local closure | Unresolved declaration-like | Statement machinery | Informal machinery |
 |---|---|---:|---:|---:|---|---|
-| a00J01 | UNPARSEABLE | — | — | — |  |  |
+| a00J01 | `eLpNorm_tendsto_top` | yes | 1 | 0 |  |  |
 | a00J02 | `apm_a00j02` | yes | 1 | 0 |  |  |
-| a00J03 | UNPARSEABLE | — | — | — |  |  |
-| a00J04 | UNPARSEABLE | — | — | — |  |  |
-| a00J05 | UNPARSEABLE | — | — | — |  |  |
-| a00J06 | UNPARSEABLE | — | — | — |  |  |
+| a00J03 | `composition_isometry`, `norm_comp_eq`, `composition_isometric_isomorphism` | yes | 3 | 0 |  |  |
+| a00J04 | `connectedComponents_complement_lemniscate_le` | yes | 2 | 0 |  |  |
+| a00J05 | `cauchyTransform_differentiableAt`, `cauchyTransform_differentiableOn`, `cauchyTransform_mul_z_tendsto`, `cauchyTransform_not_extendable_to_entire` | yes | 5 | 1 |  |  |
+| a00J06 | `singular_at_one` | yes | 3 | 0 |  |  |
 | a01A01 | `apm_a01a01` | no | 1 | 0 |  |  |
 | a01A02 | `weakL2_implies_L1_bound` | yes | 1 | 0 |  |  |
-| a01A03 | UNPARSEABLE | — | — | — |  |  |
-| a01A04 | UNPARSEABLE | — | — | — |  |  |
+| a01A03 | `convolution_identity_implies_indicator`, `analytic_compactSupport_eq_zero`, `convolution_identity_counterexample` | yes | 3 | 0 |  |  |
+| a01A04 | `ball_volume_recursion`, `ballSlice_integral_tendsto_zero`, `ball_volume_superexponential_decay` | yes | 4 | 0 |  |  |
 | a01A05 | `apm_a01a05` | yes | 2 | 0 |  |  |
-| a01A06 | UNPARSEABLE | — | — | — |  |  |
-| a01A07 | UNPARSEABLE | — | — | — |  |  |
-| a01A08 | UNPARSEABLE | — | — | — |  |  |
-| a01A09 | UNPARSEABLE | — | — | — |  |  |
-| a01A10 | UNPARSEABLE | — | — | — |  |  |
-| a01A11 | UNPARSEABLE | — | — | — |  |  |
+| a01A06 | `distribution_polynomial_decay`, `orlicz_bound_not_implies_L2`, `exponential_decay_implies_L2` | yes | 4 | 0 |  |  |
+| a01A07 | `tendstoUniformlyOn_of_L1_on_disks`, `differentiableOn_of_L1_limit`, `tendstoUniformlyOn_deriv_of_L1`, `L1_disk_convergence_analytic_upgrade` | yes | 5 | 0 |  |  |
+| a01A08 | `connectedComponents_complement_lemniscate_le` | yes | 2 | 0 |  |  |
+| a01A09 | `laplace_transform_analytic`, `laplace_transform_entire_of_compact_support` | yes | 8 | 0 |  |  |
+| a01A10 | `gaussian_fourier_transform`, `fresnel_integral` | yes | 2 | 0 |  |  |
+| a01A11 | `cauchyTransform_differentiableAt`, `cauchyTransform_tendsto_neg_vol`, `cauchyTransform_not_entire` | yes | 4 | 0 |  |  |
 | a01A12 | `apm_a01a12` | no | 6 | 0 |  |  |
-| a01J01 | UNPARSEABLE | — | — | — |  |  |
-| a01J02 | UNPARSEABLE | — | — | — |  |  |
-| a01J03 | UNPARSEABLE | — | — | — |  |  |
+| a01J01 | `uniform_small_set_of_L3_bound`, `counterexample_from_spikes` | yes | 4 | 0 |  |  |
+| a01J02 | `measurable_set_ae_eq_borel`, `measurable_function_ae_eq_borel` | yes | 3 | 0 |  |  |
+| a01J03 | `deriv_sum_of_monotone`, `deriv_sum_of_monotone_ae` | yes | 4 | 0 |  |  |
 | a01J04 | `apm_a01j04` | yes | 1 | 0 |  |  |
 | a01J05 | `apm_a01j05` | yes | 4 | 0 |  | degree-theory |
 | a01J06 | `apm_a01j06` | no | 3 | 0 |  |  |
-| a02J01 | UNPARSEABLE | — | — | — |  |  |
-| a02J02 | UNPARSEABLE | — | — | — |  |  |
-| a02J03 | UNPARSEABLE | — | — | — |  |  |
+| a02J01 | `schur_test` | yes | 2 | 2 |  |  |
+| a02J02 | `radon_riesz` | yes | 1 | 0 |  |  |
+| a02J03 | `scaled_integral_vanishes` | yes | 2 | 0 |  |  |
 | a02J04 | `apm_a02j04` | yes | 6 | 2 |  |  |
 | a02J05 | `dirichlet_integral_improper` | yes | 1 | 0 |  | orientation |
-| a02J06 | UNPARSEABLE | — | — | — |  |  |
-| a02J07 | UNPARSEABLE | — | — | — |  |  |
+| a02J06 | `quadratic_bound`, `second_deriv_bound`, `rigidity`, `solves_problem` | yes | 6 | 0 |  |  |
+| a02J07 | `logIntegral_im_bounds` | yes | 4 | 0 |  |  |
 | a03J01 | `apm_a03j01` | yes | 2 | 0 |  |  |
-| a03J02 | UNPARSEABLE | — | — | — |  |  |
-| a03J03 | UNPARSEABLE | — | — | — |  |  |
+| a03J02 | `differentiable_image_null_of_null`, `polynomial_map_image_null` | yes | 3 | 0 |  |  |
+| a03J03 | `convolution_continuous`, `convolution_tendsto_zero` | yes | 2 | 0 |  |  |
 | a03J04 | `apm_a03j04` | yes | 4 | 0 |  |  |
 | a03J05 | `apm_a03j05` | no | 2 | 0 |  |  |
 | a03J06 | `apm_a03j06` | yes | 1 | 0 |  |  |
 | a03J07 | `apm_a03j07` | yes | 2 | 0 |  |  |
-| a03J08 | UNPARSEABLE | — | — | — |  |  |
+| a03J08 | `analytic_blowup_surjective` | yes | 1 | 0 |  |  |
 | a92J01 | `apm_a92j01` | no | 5 | 0 |  |  |
-| a92J02 | UNPARSEABLE | — | — | — |  |  |
-| a92J03 | UNPARSEABLE | — | — | — |  |  |
-| a92J04 | UNPARSEABLE | — | — | — |  |  |
-| a92J05 | UNPARSEABLE | — | — | — |  | degree-theory |
-| a92J06 | UNPARSEABLE | — | — | — |  |  |
-| a92J07 | UNPARSEABLE | — | — | — |  |  |
-| a93A01 | UNPARSEABLE | — | — | — |  |  |
+| a92J02 | `convergesInMeasure` | yes | 2 | 1 |  |  |
+| a92J03 | `fourierTransform_norm_le`, `fourierTransform_continuous`, `fourierTransform_tendsto_zero`, `fourier_maps_L1_to_C0` | yes | 5 | 0 |  |  |
+| a92J04 | `disk_selfmap_deriv_one_eq_identity`, `disk_selfmap_tangent_identity`, `disk_selfmap_tangent_identity'` | yes | 3 | 0 |  |  |
+| a92J05 | `roots_outside_unit_disk` | yes | 1 | 0 |  | degree-theory |
+| a92J06 | `integral_inv_two_plus_cos` | yes | 1 | 0 |  |  |
+| a92J07 | `entire_avoids_ray_const`, `cauchy_riemann_ray_implies_const` | yes | 2 | 0 |  |  |
+| a93A01 | `diffQuot_implies_unifCont`, `unifCont_implies_diffQuot`, `unifCont_iff_diffQuot` | yes | 6 | 0 |  |  |
 | a93A02 | `apm_a93a02` | yes | 3 | 0 |  |  |
-| a93A03 | UNPARSEABLE | — | — | — |  |  |
-| a93A04 | UNPARSEABLE | — | — | — |  |  |
+| a93A03 | `norm_sub_tendsto_zero_of_weak_and_norm`, `norm_le_liminf_of_weak` | yes | 3 | 0 |  |  |
+| a93A04 | `lipschitz_implies_ac`, `lipschitz_V_limit_implies_ac`, `ac_implies_lipschitz_V_approx`, `ac_iff_lipschitz_V_approx` | yes | 6 | 0 |  |  |
 | a93J01 | `ac_on_01_of_continuous_bv_ac_from_a` | yes | 1 | 0 |  |  |
-| a93J02 | UNPARSEABLE | — | — | — |  |  |
+| a93J02 | `tendsto_sum_alternating_harmonic`, `alternating_harmonic_eq_log_two` | yes | 2 | 0 |  |  |
 | a93J03 | `apm_a93j03` | yes | 2 | 0 |  |  |
-| a93J04 | UNPARSEABLE | — | — | — |  |  |
-| a93J05 | UNPARSEABLE | — | — | — |  |  |
-| a93J06 | UNPARSEABLE | — | — | — |  |  |
+| a93J04 | `tendsto_eLpNorm_atTop` | yes | 1 | 0 |  |  |
+| a93J05 | `doubly_periodic_entire_is_const` | yes | 1 | 0 |  |  |
+| a93J06 | `deriv_norm_le_norm`, `schwarz_second_order_bound` | yes | 2 | 0 |  |  |
 | a93J07 | `apm_a93j07` | yes | 1 | 0 |  |  |
-| a94A01 | UNPARSEABLE | — | — | — |  |  |
+| a94A01 | `ae_limit_indicator_eq_indicator`, `tendsto_setIntegral_of_indicator_limit`, `tendsto_eLpNorm_indicator_sub_iff_tendsto_measure_symmDiff` | yes | 3 | 0 |  |  |
 | a94A02 | `apm_a94a02` | no | 3 | 0 |  |  |
-| a94A03 | UNPARSEABLE | — | — | — |  |  |
-| a94A04 | UNPARSEABLE | — | — | — |  |  |
-| a94A05 | UNPARSEABLE | — | — | — |  |  |
-| a94A06 | UNPARSEABLE | — | — | — |  |  |
+| a94A03 | `gaussConv_Lp_contraction`, `gaussConv_tendsto_Lp` | yes | 4 | 0 |  |  |
+| a94A04 | `zero_of_orthogonal_to_monomials` | yes | 1 | 0 |  |  |
+| a94A05 | `vitali_covering_lemma_5`, `measure_image_critical_set_eq_zero` | yes | 2 | 0 |  |  |
+| a94A06 | `integral_x7_over_1_plus_x12` | yes | 1 | 0 |  |  |
 | a94A07 | `apm_a94a07` | no | 1 | 0 |  |  |
 | a94A08 | `apm_a94a08` | yes | 1 | 0 |  |  |
 | a94A09 | `apm_a94a09` | yes | 1 | 0 |  |  |
-| a94A10 | UNPARSEABLE | — | — | — |  |  |
-| a94J01 | UNPARSEABLE | — | — | — |  |  |
+| a94A10 | `deriv_ne_zero_on_reals` | yes | 2 | 0 |  |  |
+| a94J01 | `absolute_continuity_integral_norm`, `absolute_continuity_integral` | yes | 2 | 0 |  |  |
 | a94J02 | `apm_a94j02` | yes | 1 | 0 |  |  |
 | a94J03 | `apm_a94j03` | yes | 1 | 0 |  |  |
-| a94J04 | UNPARSEABLE | — | — | — |  |  |
-| a94J05 | UNPARSEABLE | — | — | — |  |  |
+| a94J04 | `poissonConv_L2_contraction`, `poissonConv_tendsto_L2`, `poissonConv_tendsto_ae` | yes | 5 | 0 |  |  |
+| a94J05 | `liouville_bounded`, `liouville_re_bounded_below` | yes | 2 | 0 |  |  |
 | a94J06 | `apm_a94j06` | yes | 2 | 0 |  |  |
-| a94J07 | UNPARSEABLE | — | — | — |  |  |
-| a94J08 | UNPARSEABLE | — | — | — |  |  |
-| a95A01 | UNPARSEABLE | — | — | — |  |  |
-| a95A02 | UNPARSEABLE | — | — | — |  |  |
-| a95A03 | UNPARSEABLE | — | — | — |  |  |
-| a95A04 | UNPARSEABLE | — | — | — |  |  |
-| a95A05 | UNPARSEABLE | — | — | — |  |  |
-| a95A06 | UNPARSEABLE | — | — | — |  |  |
-| a95A07 | UNPARSEABLE | — | — | — |  |  |
+| a94J07 | `f_poly_exp_injective_on_disk` | yes | 2 | 0 |  |  |
+| a94J08 | `no_entire_lower_bound_three_halves` | yes | 1 | 0 |  |  |
+| a95A01 | `riemann_lebesgue_sandwich`, `indicator_not_riemann_integrable` | yes | 4 | 0 |  |  |
+| a95A02 | `acOnUnitInterval_iff`, `ac_lusin_condition_N_lt_aux`, `ac_lusin_condition_N`, `ac_maps_null_to_null`, `ac_maps_measurable_to_measurable` | yes | 6 | 2 |  |  |
+| a95A03 | `f_radial_integral`, `f_radial_memLp_iff`, `f_radial_not_memLp_top`, `f_radial_integrable`, `f_radial_conv_L2_bound` | yes | 7 | 0 |  |  |
+| a95A04 | `constant_of_symmetric_mean_value` | yes | 2 | 0 |  |  |
+| a95A05 | `eq_zero_of_vanishing_on_upper_arc` | yes | 1 | 0 |  |  |
+| a95A06 | `lacunarySeries_continuousOn`, `lacunarySeries_differentiableOn`, `lacunarySeries_natural_boundary` | yes | 4 | 0 |  |  |
+| a95A07 | `sum_inv_sq_eq_pi_sq_div_six`, `tsum_inv_sq`, `summable_inv_sq` | yes | 3 | 0 |  |  |
 | a95A08 | `apm_a95a08` | yes | 4 | 0 |  |  |
-| a95J01 | UNPARSEABLE | — | — | — |  |  |
-| a95J02 | UNPARSEABLE | — | — | — |  |  |
+| a95J01 | `subordination_deriv_le`, `subordination_deriv_eq` | yes | 2 | 0 |  |  |
+| a95J02 | `entire_lower_bound_is_monomial` | yes | 1 | 0 |  |  |
 | a95J03 | `apm_a95j03` | no | 3 | 0 |  | degree-theory |
 | a95J04 | `apm_a95j04` | no | 1 | 0 |  |  |
-| a95J05 | UNPARSEABLE | — | — | — |  |  |
-| a95J06 | UNPARSEABLE | — | — | — |  | orientation |
-| a95J07 | UNPARSEABLE | — | — | — |  |  |
-| a95J08 | UNPARSEABLE | — | — | — |  |  |
-| a96A01 | UNPARSEABLE | — | — | — |  |  |
-| a96A02 | UNPARSEABLE | — | — | — |  |  |
-| a96A03 | UNPARSEABLE | — | — | — |  |  |
-| a96A04 | UNPARSEABLE | — | — | — |  |  |
-| a96A05 | UNPARSEABLE | — | — | — |  |  |
-| a96A06 | UNPARSEABLE | — | — | — |  |  |
+| a95J05 | `tendstoInMeasure_of_integral_arctan_tendsto`, `integral_arctan_tendsto_of_tendstoInMeasure`, `tendstoInMeasure_iff_integral_arctan` | yes | 4 | 0 |  |  |
+| a95J06 | `ac_on_01_of_homeo_fixing_cantor` | yes | 1 | 0 |  | orientation |
+| a95J07 | `vitali_covering_5`, `measure_image_criticalSet_eq_zero` | yes | 4 | 0 |  |  |
+| a95J08 | `convolution_integrand_integrableAE`, `young_convolution_inequality` | yes | 2 | 0 |  |  |
+| a96A01 | `quasiNorm_antitone`, `quasiNorm_tendsto_exists`, `ae_pos_of_limit_pos`, `limit_ge_geometric_mean` | yes | 5 | 0 |  |  |
+| a96A02 | `spikeFunction_spec`, `spikeFunction_holderWith`, `spikeFunction_not_absolutelyContinuous` | yes | 7 | 1 |  |  |
+| a96A03 | `memLp_limit_of_ae_tendsto_bounded`, `weak_convergence_of_ae_tendsto_L2_bounded` | yes | 2 | 0 |  |  |
+| a96A04 | `heatConv_contDiff`, `heatConv_L2_le`, `heatConv_tendsto_L2` | yes | 5 | 0 |  |  |
+| a96A05 | `one_le_of_uniform_bound`, `sup_inv_sub_polynomial_ge_one` | yes | 2 | 0 |  |  |
+| a96A06 | `taylor_coeffs_tend_to_one` | no | 1 | 0 |  |  |
 | a96A07 | `apm_a96a07` | no | 4 | 0 |  | orientation |
 | a96A08 | `apm_a96a08` | no | 2 | 0 |  |  |
 | a96J01 | `apm_a96J01` | yes | 1 | 1 |  |  |
 | a96J02 | `a96J02` | yes | 1 | 0 |  |  |
 | a96J03 | `apm_a96j03` | yes | 1 | 0 |  |  |
-| a96J04 | UNPARSEABLE | — | — | — |  |  |
+| a96J04 | `ac_monotone_maps_null_to_null` | yes | 1 | 4 |  |  |
 | a96J05 | `apm_a96j05` | yes | 1 | 0 |  |  |
 | a96J06 | `apm_a96j06` | yes | 2 | 0 |  |  |
 | a96J07 | `apm_a96J07` | yes | 1 | 0 |  |  |
@@ -444,7 +376,7 @@ Full signatures and declaration lists are in the adjacent JSON artifact.
 | m96A04 | `apm_m96a04` | yes | 1 | 0 |  |  |
 | m96A05 | `apm_m96a05` | no | 6 | 0 |  | cohomology |
 | m96A06 | `apm_m96a06` | no | 4 | 0 |  | cohomology |
-| m96J01 | UNPARSEABLE | — | — | — |  |  |
+| m96J01 | `projection_properties` | yes | 1 | 0 |  |  |
 | m96J02 | `apm_m96j02` | no | 2 | 2 |  |  |
 | m96J03 | `apm_m96j03` | no | 5 | 0 |  | orientation |
 | m96J04 | `apm_m96j04` | no | 4 | 0 |  |  |
@@ -532,7 +464,7 @@ Full signatures and declaration lists are in the adjacent JSON artifact.
 | t91J05 | `apm_t91j05` | no | 3 | 0 | covering-space | covering-space, fundamental-group, orientation, singular-homology |
 | t91J06 | `apm_t91j06` | no | 3 | 1 |  | cohomology, singular-homology |
 | t92J01 | `apm_t92j01` | yes | 1 | 0 |  |  |
-| t92J02 | UNPARSEABLE | — | — | — |  |  |
+| t92J02 | `image_of_compact_isCompact`, `homeomorph_of_compact_to_T2` | yes | 2 | 0 |  |  |
 | t92J03 | `apm_t92j03` | yes | 1 | 0 |  |  |
 | t92J04 | `apm_t92j04` | yes | 1 | 0 |  |  |
 | t92J05 | `apm_t92j05` | no | 11 | 0 | fundamental-group, singular-homology | cellular-homology, covering-space, fundamental-group, orientation, singular-homology, van-kampen |
@@ -553,16 +485,16 @@ Full signatures and declaration lists are in the adjacent JSON artifact.
 | t93J05 | UNPARSEABLE | — | — | — |  | orientation, stokes, transversality |
 | t93J06 | UNPARSEABLE | — | — | — |  | degree-theory, singular-homology |
 | t94A01 | UNPARSEABLE | — | — | — |  |  |
-| t94A02 | UNPARSEABLE | — | — | — |  |  |
+| t94A02 | `separate_closed_sets` | yes | 1 | 0 |  |  |
 | t94A03 | UNPARSEABLE | — | — | — |  |  |
 | t94A04 | UNPARSEABLE | — | — | — |  | fundamental-group, van-kampen |
-| t94A05 | UNPARSEABLE | — | — | — |  | van-kampen |
+| t94A05 | `connected_manifold_path_connected` | yes | 1 | 0 |  | van-kampen |
 | t94A06 | `apm_t94a06` | no | 7 | 0 |  | transversality |
 | t94A07 | `apm_t94a07` | no | 12 | 0 |  | orientation, singular-homology |
 | t94A08 | `apm_t94a08` | no | 10 | 0 |  |  |
 | t94A09 | `apm_t94a09` | no | 8 | 2 |  |  |
 | t94A10 | `apm_t94a10` | no | 8 | 1 |  | cohomology, differential-forms, stokes |
-| t94J01 | UNPARSEABLE | — | — | — |  |  |
+| t94J01 | `connected_of_ladderConnected`, `ladderConnected_of_connected`, `connected_iff_ladderConnected` | yes | 5 | 0 |  |  |
 | t94J02 | `apm_t94j02` | yes | 1 | 0 |  |  |
 | t94J03 | `apm_t94j03` | yes | 3 | 1 |  |  |
 | t94J04 | `apm_t94j04` | no | 4 | 0 | fundamental-group, singular-homology | fundamental-group, orientation |

@@ -124,18 +124,28 @@ def normalized(value: str) -> str:
     return re.sub(r"[^a-z0-9]", "", value.lower())
 
 
-def select_main(problem_id: str, decls: list[dict]) -> tuple[dict | None, str]:
+def select_roots(problem_id: str, decls: list[dict]) -> tuple[list[dict], str]:
+    """Select the encoded statement roots without per-problem exceptions.
+
+    Canonical bundles have one normalized ``apm_<problem-id>`` wrapper. Legacy
+    bundles often encode a problem as several independent top-level theorems
+    and have no wrapper at all; for those, every ``theorem`` (but no helper
+    ``lemma``) is a root. A file with no theorem remains unclassified.
+    """
     theoremish = [d for d in decls if d["kind"] in {"theorem", "lemma"}]
     target = "apm" + normalized(problem_id)
     exact = [d for d in theoremish if normalized(d["name"]) == target]
     if len(exact) == 1:
-        return exact[0], "normalized apm_<problem-id> match"
+        return exact, "normalized apm_<problem-id> match"
     main = [d for d in theoremish if normalized(d["name"]) in {target + "main", normalized(problem_id)}]
     if len(main) == 1:
-        return main[0], "normalized main-name match"
+        return main, "normalized main-name match"
+    theorems = [d for d in decls if d["kind"] == "theorem"]
+    if theorems:
+        return theorems, "legacy split encoding: all top-level theorems"
     if len(theoremish) == 1:
-        return theoremish[0], "only theorem/lemma in file"
-    return None, "no unique frozen theorem candidate"
+        return theoremish, "only lemma in file"
+    return [], "encoded file has no selectable theorem"
 
 
 def identifiers(header: str) -> set[str]:
@@ -183,15 +193,16 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
 
     text = main_path.read_text(errors="replace")
     decls = declarations(text)
-    main, method = select_main(pid, decls)
-    if main is None:
+    roots, method = select_roots(pid, decls)
+    if not roots:
         return base | {
             "parse_status": "unparseable", "reason": method,
             "theorem_candidates": [d["name"] for d in decls if d["kind"] in {"theorem", "lemma"}],
         }
 
     by_name = {d["name"]: d for d in decls}
-    closure, frontier = set(), [main["name"]]
+    root_names = {root["name"] for root in roots}
+    closure, frontier = set(), list(root_names)
     while frontier:
         name = frontier.pop()
         if name in closure:
@@ -199,7 +210,7 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
         closure.add(name)
         decl = by_name[name]
         dependency_text = (decl["definition_text"]
-                           if name != main["name"] and decl["kind"] in
+                           if name not in root_names and decl["kind"] in
                            {"def", "abbrev", "structure", "class"}
                            else decl["header"])
         for ref in identifiers(dependency_text):
@@ -211,7 +222,7 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
     for name in closure:
         decl = by_name[name]
         dependency_text = (decl["definition_text"]
-                           if name != main["name"] and decl["kind"] in
+                           if name not in root_names and decl["kind"] in
                            {"def", "abbrev", "structure", "class"}
                            else decl["header"])
         refs |= identifiers(dependency_text)
@@ -225,7 +236,7 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
                         and ("." in r or r[:1].isupper()))
     statement_text = "\n".join(
         (by_name[name]["definition_text"]
-         if name != main["name"] and by_name[name]["kind"] in
+         if name not in root_names and by_name[name]["kind"] in
          {"def", "abbrev", "structure", "class"}
          else by_name[name]["header"])
         for name in closure)
@@ -233,9 +244,15 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
 
     return base | {
         "parse_status": "ok", "selection_method": method,
-        "frozen_theorem": main["name"], "frozen_theorem_line": main["line"],
-        "frozen_statement": main["header"],
-        "frozen_theorem_closed": not main["body_has_sorry"],
+        "frozen_theorem": roots[0]["name"] if len(roots) == 1 else None,
+        "frozen_theorem_line": roots[0]["line"] if len(roots) == 1 else None,
+        "frozen_statement": roots[0]["header"] if len(roots) == 1 else None,
+        "frozen_theorems": [
+            {"name": root["name"], "line": root["line"],
+             "statement": root["header"], "closed": not root["body_has_sorry"]}
+            for root in roots
+        ],
+        "frozen_theorem_closed": all(not root["body_has_sorry"] for root in roots),
         "bridge_declarations": [
             {"name": d["name"], "line": d["line"], "closed": not d["body_has_sorry"]}
             for d in bridges
@@ -252,6 +269,8 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
 def render_markdown(records: list[dict], generated: str) -> str:
     ok = [r for r in records if r["parse_status"] == "ok"]
     bad = [r for r in records if r["parse_status"] != "ok"]
+    not_encoded = [r for r in bad if r.get("reason") == "missing lean/Main.lean"]
+    encoded_bad = [r for r in bad if r.get("reason") != "missing lean/Main.lean"]
     statement_counts = Counter(x for r in records for x in r["statement_machinery_mentions"])
     informal_counts = Counter(x for r in records for x in r["informal_solution_machinery_mentions"])
     lines = [
@@ -261,7 +280,8 @@ def render_markdown(records: list[dict], generated: str) -> str:
         "signatures. Informal solutions are scanned independently and never contribute to the",
         "statement dependency fields.", "", "## Coverage", "",
         f"- Bundles: {len(records)}", f"- Parsed frozen statements: {len(ok)}",
-        f"- Unparseable or unclassified: {len(bad)}",
+        f"- Not encoded (no `lean/Main.lean`): {len(not_encoded)}",
+        f"- Encoded but unparseable/unclassified: {len(encoded_bad)}",
         f"- Closed parsed frozen theorems: {sum(r['frozen_theorem_closed'] for r in ok)}", "",
         "## Machinery mentions: frozen Lean signatures versus informal solution", "",
         "| Machinery | Statement bundles | Informal-solution bundles |", "|---|---:|---:|",
@@ -269,9 +289,14 @@ def render_markdown(records: list[dict], generated: str) -> str:
     for key in MACHINERY:
         lines.append(f"| {key} | {statement_counts[key]} | {informal_counts[key]} |")
     lines += ["", "These counts are lexical observations included to expose divergence. They are",
-              "not the declaration dependency classification.", "", "## Unparseable bundles", ""]
-    if bad:
-        lines += [f"- `{r['problem_id']}`: {r['reason']}" for r in bad]
+              "not the declaration dependency classification.", "", "## Not encoded", ""]
+    if not_encoded:
+        lines += [f"- `{r['problem_id']}`: {r['reason']}" for r in not_encoded]
+    else:
+        lines.append("None.")
+    lines += ["", "## Encoded but unparseable or unclassified", ""]
+    if encoded_bad:
+        lines += [f"- `{r['problem_id']}`: {r['reason']}" for r in encoded_bad]
     else:
         lines.append("None.")
     lines += ["", "## Per-bundle compact view", "",
@@ -282,7 +307,8 @@ def render_markdown(records: list[dict], generated: str) -> str:
         if r["parse_status"] != "ok":
             lines.append(f"| {r['problem_id']} | UNPARSEABLE | — | — | — | {', '.join(r['statement_machinery_mentions'])} | {', '.join(r['informal_solution_machinery_mentions'])} |")
         else:
-            lines.append(f"| {r['problem_id']} | `{r['frozen_theorem']}` | {'yes' if r['frozen_theorem_closed'] else 'no'} | {len(r['local_statement_dependency_closure'])} | {len(r['unresolved_declaration_like_references'])} | {', '.join(r['statement_machinery_mentions'])} | {', '.join(r['informal_solution_machinery_mentions'])} |")
+            roots = ", ".join(f"`{root['name']}`" for root in r["frozen_theorems"])
+            lines.append(f"| {r['problem_id']} | {roots} | {'yes' if r['frozen_theorem_closed'] else 'no'} | {len(r['local_statement_dependency_closure'])} | {len(r['unresolved_declaration_like_references'])} | {', '.join(r['statement_machinery_mentions'])} | {', '.join(r['informal_solution_machinery_mentions'])} |")
     lines += ["", "## Method limits", "",
               "The extractor is lexical, not Lean's elaborator. A declaration basename found in",
               "Mathlib or ConstructionTargets is reported as available even when namespace, typeclass,",
