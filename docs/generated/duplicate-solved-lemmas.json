@@ -1,0 +1,564 @@
+{
+  "cluster_count": 24,
+  "clusters": [
+    {
+      "members": [
+        {
+          "lemma": "zeroCountInClosedBall_aeval_eq_card_filter",
+          "normalized": "(v0:\u2102[X])(v1:v0.Monic)(v2:\u2102)(v3:\u211d):zeroCountInClosedBall(funz\u21a6aevalzv0)v2v3=(v0.roots.filter(funz\u21a6distzv2\u2264v3)).card",
+          "problem_id": "a92J05",
+          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card"
+        },
+        {
+          "lemma": "apm_a94a09_zeroCount_aeval_eq_card_filter",
+          "normalized": "(v0:\u2102[X])(v1:v0.Monic)(v2:\u2102)(v3:\u211d):zeroCountInClosedBall(funz\u21a6aevalzv0)v2v3=(v0.roots.filter(funz\u21a6distzv2\u2264v3)).card",
+          "problem_id": "a94A09",
+          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card"
+        },
+        {
+          "lemma": "zeroCountInClosedBall_aeval_eq_card_filter",
+          "normalized": "(v0:\u2102[X])(v1:v0.Monic)(v2:\u2102)(v3:\u211d):zeroCountInClosedBall(funz\u21a6aevalzv0)v2v3=(v0.roots.filter(funz\u21a6distzv2\u2264v3)).card",
+          "problem_id": "a97A08",
+          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card"
+        }
+      ],
+      "normalized": "(v0:\u2102[X])(v1:v0.Monic)(v2:\u2102)(v3:\u211d):zeroCountInClosedBall(funz\u21a6aevalzv0)v2v3=(v0.roots.filter(funz\u21a6distzv2\u2264v3)).card",
+      "problem_count": 3,
+      "problems": [
+        "a92J05",
+        "a94A09",
+        "a97A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "exists_root_in_componentSet_of_subset_sublevel",
+          "normalized": "(v0:0<p.natDegree)(x:\u21a5((lemniscatep)\u1d9c))(v1:componentSetx\u2286sublevelp):\u2203z\u2208componentSetx,aevalzp=0",
+          "problem_id": "a00J04",
+          "signature": "(hp : 0 < p.natDegree) (x : \u21a5((lemniscate p)\u1d9c)) (hsub : componentSet x \u2286 sublevel p) : \u2203 z \u2208 componentSet x, aeval z p = 0"
+        },
+        {
+          "lemma": "exists_root_in_componentSet_of_subset_sublevel",
+          "normalized": "(v0:0<p.natDegree)(x:\u21a5((lemniscatep)\u1d9c))(v1:componentSetx\u2286sublevelp):\u2203z\u2208componentSetx,aevalzp=0",
+          "problem_id": "a01A08",
+          "signature": "(hp : 0 < p.natDegree) (x : \u21a5((lemniscate p)\u1d9c)) (hsub : componentSet x \u2286 sublevel p) : \u2203 z \u2208 componentSet x, aeval z p = 0"
+        }
+      ],
+      "normalized": "(v0:0<p.natDegree)(x:\u21a5((lemniscatep)\u1d9c))(v1:componentSetx\u2286sublevelp):\u2203z\u2208componentSetx,aevalzp=0",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "card_roots_le_degree",
+          "normalized": "(v0:0<p.natDegree):(rootsp).toFinset.card\u2264p.natDegree",
+          "problem_id": "a00J04",
+          "signature": "(hp : 0 < p.natDegree) : (Polynomial.roots p).toFinset.card \u2264 p.natDegree"
+        },
+        {
+          "lemma": "card_roots_le_degree",
+          "normalized": "(v0:0<p.natDegree):(rootsp).toFinset.card\u2264p.natDegree",
+          "problem_id": "a01A08",
+          "signature": "(hp : 0 < p.natDegree) : (Polynomial.roots p).toFinset.card \u2264 p.natDegree"
+        }
+      ],
+      "normalized": "(v0:0<p.natDegree):(rootsp).toFinset.card\u2264p.natDegree",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "isBounded_sublevel",
+          "normalized": "(v0:0<p.natDegree):IsBounded(sublevelp)",
+          "problem_id": "a00J04",
+          "signature": "(hp : 0 < p.natDegree) : IsBounded (sublevel p)"
+        },
+        {
+          "lemma": "isBounded_sublevel",
+          "normalized": "(v0:0<p.natDegree):IsBounded(sublevelp)",
+          "problem_id": "a01A08",
+          "signature": "(hp : 0 < p.natDegree) : IsBounded (sublevel p)"
+        }
+      ],
+      "normalized": "(v0:0<p.natDegree):IsBounded(sublevelp)",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "component_eq_of_subset_superlevel",
+          "normalized": "(v0:0<p.natDegree){xy:\u21a5((lemniscatep)\u1d9c)}(v1:componentSetx\u2286superlevelp)(v2:componentSety\u2286superlevelp):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+          "problem_id": "a00J04",
+          "signature": "(hp : 0 < p.natDegree) {x y : \u21a5((lemniscate p)\u1d9c)} (hxsuper : componentSet x \u2286 superlevel p) (hysuper : componentSet y \u2286 superlevel p) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y"
+        },
+        {
+          "lemma": "component_eq_of_subset_superlevel",
+          "normalized": "(v0:0<p.natDegree){xy:\u21a5((lemniscatep)\u1d9c)}(v1:componentSetx\u2286superlevelp)(v2:componentSety\u2286superlevelp):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+          "problem_id": "a01A08",
+          "signature": "(hp : 0 < p.natDegree) {x y : \u21a5((lemniscate p)\u1d9c)} (hxsuper : componentSet x \u2286 superlevel p) (hysuper : componentSet y \u2286 superlevel p) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y"
+        }
+      ],
+      "normalized": "(v0:0<p.natDegree){xy:\u21a5((lemniscatep)\u1d9c)}(v1:componentSetx\u2286superlevelp)(v2:componentSety\u2286superlevelp):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "abs_laplace_kernel",
+          "normalized": "(v0:\u2102)(v1:\u211d):\u2016exp(-(v1:\u2102)*v0)\u2016=exp(-v0.re*v1)",
+          "problem_id": "a01A09",
+          "signature": "(z : \u2102) (t : \u211d) : \u2016Complex.exp (-(t : \u2102) * z)\u2016 = Real.exp (-z.re * t)"
+        },
+        {
+          "lemma": "apm_a99j09_norm_kernel",
+          "normalized": "(v0:\u2102)(v1:\u211d):\u2016exp(-(v1:\u2102)*v0)\u2016=exp(-v0.re*v1)",
+          "problem_id": "a99J09",
+          "signature": "(z : \u2102) (t : \u211d) : \u2016Complex.exp (-(t : \u2102) * z)\u2016 = Real.exp (-z.re * t)"
+        }
+      ],
+      "normalized": "(v0:\u2102)(v1:\u211d):\u2016exp(-(v1:\u2102)*v0)\u2016=exp(-v0.re*v1)",
+      "problem_count": 2,
+      "problems": [
+        "a01A09",
+        "a99J09"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "diffContOnCl_aeval",
+          "normalized": "(v0:\u2102[X])(v1:Set\u2102):DiffContOnCl\u2102(v2v3:\u2102=>aevalv3v0)v1",
+          "problem_id": "a00J04",
+          "signature": "(p : \u2102[X]) (U : Set \u2102) : DiffContOnCl \u2102 (fun z : \u2102 => aeval z p) U"
+        },
+        {
+          "lemma": "diffContOnCl_aeval",
+          "normalized": "(v0:\u2102[X])(v1:Set\u2102):DiffContOnCl\u2102(v2v3:\u2102=>aevalv3v0)v1",
+          "problem_id": "a01A08",
+          "signature": "(p : \u2102[X]) (U : Set \u2102) : DiffContOnCl \u2102 (fun z : \u2102 => aeval z p) U"
+        }
+      ],
+      "normalized": "(v0:\u2102[X])(v1:Set\u2102):DiffContOnCl\u2102(v2v3:\u2102=>aevalv3v0)v1",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "exterior_pathConnected",
+          "normalized": "(v0:\u211d)(v1:0\u2264v0):IsPathConnected{v2:\u2102\\|v0<\u2016v2\u2016}",
+          "problem_id": "a00J04",
+          "signature": "(R : \u211d) (hR : 0 \u2264 R) : IsPathConnected {z : \u2102 \\| R < \u2016z\u2016}"
+        },
+        {
+          "lemma": "exterior_pathConnected",
+          "normalized": "(v0:\u211d)(v1:0\u2264v0):IsPathConnected{v2:\u2102\\|v0<\u2016v2\u2016}",
+          "problem_id": "a01A08",
+          "signature": "(R : \u211d) (hR : 0 \u2264 R) : IsPathConnected {z : \u2102 \\| R < \u2016z\u2016}"
+        }
+      ],
+      "normalized": "(v0:\u211d)(v1:0\u2264v0):IsPathConnected{v2:\u2102\\|v0<\u2016v2\u2016}",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "not_isBounded_componentSet_of_subset_superlevel",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c))(v0:componentSetx\u2286superlevelp):\u00acIsBounded(componentSetx)",
+          "problem_id": "a00J04",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) (hsuper : componentSet x \u2286 superlevel p) : \u00ac IsBounded (componentSet x)"
+        },
+        {
+          "lemma": "not_isBounded_componentSet_of_subset_superlevel",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c))(v0:componentSetx\u2286superlevelp):\u00acIsBounded(componentSetx)",
+          "problem_id": "a01A08",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) (hsuper : componentSet x \u2286 superlevel p) : \u00ac IsBounded (componentSet x)"
+        }
+      ],
+      "normalized": "(x:\u21a5((lemniscatep)\u1d9c))(v0:componentSetx\u2286superlevelp):\u00acIsBounded(componentSetx)",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "componentSet_nonempty",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):(componentSetx).Nonempty",
+          "problem_id": "a00J04",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : (componentSet x).Nonempty"
+        },
+        {
+          "lemma": "componentSet_nonempty",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):(componentSetx).Nonempty",
+          "problem_id": "a01A08",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : (componentSet x).Nonempty"
+        }
+      ],
+      "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):(componentSetx).Nonempty",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "componentSet_connected",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsConnected(componentSetx)",
+          "problem_id": "a00J04",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsConnected (componentSet x)"
+        },
+        {
+          "lemma": "componentSet_connected",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsConnected(componentSetx)",
+          "problem_id": "a01A08",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsConnected (componentSet x)"
+        }
+      ],
+      "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsConnected(componentSetx)",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "componentSet_open",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsOpen(componentSetx)",
+          "problem_id": "a00J04",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)"
+        },
+        {
+          "lemma": "componentSet_open",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsOpen(componentSetx)",
+          "problem_id": "a01A08",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)"
+        }
+      ],
+      "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsOpen(componentSetx)",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "componentSet_subset_compl",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286(lemniscatep)\u1d9c",
+          "problem_id": "a00J04",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 (lemniscate p)\u1d9c"
+        },
+        {
+          "lemma": "componentSet_subset_compl",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286(lemniscatep)\u1d9c",
+          "problem_id": "a01A08",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 (lemniscate p)\u1d9c"
+        }
+      ],
+      "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286(lemniscatep)\u1d9c",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "componentSet_subset_superlevel_or_sublevel",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286superlevelp\u2228componentSetx\u2286sublevelp",
+          "problem_id": "a00J04",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 superlevel p \u2228 componentSet x \u2286 sublevel p"
+        },
+        {
+          "lemma": "componentSet_subset_superlevel_or_sublevel",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286superlevelp\u2228componentSetx\u2286sublevelp",
+          "problem_id": "a01A08",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 superlevel p \u2228 componentSet x \u2286 sublevel p"
+        }
+      ],
+      "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286superlevelp\u2228componentSetx\u2286sublevelp",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "componentSet_frontier_subset_lemniscate",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):frontier(componentSetx)\u2286lemniscatep",
+          "problem_id": "a00J04",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : frontier (componentSet x) \u2286 lemniscate p"
+        },
+        {
+          "lemma": "componentSet_frontier_subset_lemniscate",
+          "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):frontier(componentSetx)\u2286lemniscatep",
+          "problem_id": "a01A08",
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : frontier (componentSet x) \u2286 lemniscate p"
+        }
+      ],
+      "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):frontier(componentSetx)\u2286lemniscatep",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "isClosed_lemniscate",
+          "normalized": ":IsClosed(lemniscatep)",
+          "problem_id": "a00J04",
+          "signature": ": IsClosed (lemniscate p)"
+        },
+        {
+          "lemma": "isClosed_lemniscate",
+          "normalized": ":IsClosed(lemniscatep)",
+          "problem_id": "a01A08",
+          "signature": ": IsClosed (lemniscate p)"
+        }
+      ],
+      "normalized": ":IsClosed(lemniscatep)",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "connectedComponents_complement_lemniscate_le",
+          "normalized": ":card(ConnectedComponents\u21a5((lemniscatep)\u1d9c))\u2264p.natDegree+1",
+          "problem_id": "a00J04",
+          "signature": ": Nat.card (ConnectedComponents \u21a5((lemniscate p)\u1d9c)) \u2264 p.natDegree + 1"
+        },
+        {
+          "lemma": "connectedComponents_complement_lemniscate_le",
+          "normalized": ":card(ConnectedComponents\u21a5((lemniscatep)\u1d9c))\u2264p.natDegree+1",
+          "problem_id": "a01A08",
+          "signature": ": Nat.card (ConnectedComponents \u21a5((lemniscate p)\u1d9c)) \u2264 p.natDegree + 1"
+        }
+      ],
+      "normalized": ":card(ConnectedComponents\u21a5((lemniscatep)\u1d9c))\u2264p.natDegree+1",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "cantorSet_measure_zero",
+          "normalized": ":volumecantorSet=0",
+          "problem_id": "a95J06",
+          "signature": ": volume cantorSet = 0"
+        },
+        {
+          "lemma": "apm_t91J01_cantorSet_measure_zero",
+          "normalized": ":volumecantorSet=0",
+          "problem_id": "t91J01",
+          "signature": ": volume cantorSet = 0"
+        }
+      ],
+      "normalized": ":volumecantorSet=0",
+      "problem_count": 2,
+      "problems": [
+        "a95J06",
+        "t91J01"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "exists_root_in_bounded_isOpen_sublevel_frontier_lemniscate",
+          "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286sublevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):\u2203z\u2208v0,aevalzp=0",
+          "problem_id": "a00J04",
+          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 sublevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : \u2203 z \u2208 U, aeval z p = 0"
+        },
+        {
+          "lemma": "exists_root_in_bounded_isOpen_sublevel_frontier_lemniscate",
+          "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286sublevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):\u2203z\u2208v0,aevalzp=0",
+          "problem_id": "a01A08",
+          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 sublevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : \u2203 z \u2208 U, aeval z p = 0"
+        }
+      ],
+      "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286sublevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):\u2203z\u2208v0,aevalzp=0",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "not_bounded_isOpen_superlevel_frontier_lemniscate",
+          "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286superlevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):False",
+          "problem_id": "a00J04",
+          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 superlevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : False"
+        },
+        {
+          "lemma": "not_bounded_isOpen_superlevel_frontier_lemniscate",
+          "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286superlevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):False",
+          "problem_id": "a01A08",
+          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 superlevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : False"
+        }
+      ],
+      "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286superlevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):False",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "isPreconnected_subset_superlevel_or_sublevel",
+          "normalized": "{v0:Set\u2102}(v1:IsPreconnectedv0)(hSL:Disjointv0(lemniscatep)):v0\u2286superlevelp\u2228v0\u2286sublevelp",
+          "problem_id": "a00J04",
+          "signature": "{S : Set \u2102} (hS : IsPreconnected S) (hSL : Disjoint S (lemniscate p)) : S \u2286 superlevel p \u2228 S \u2286 sublevel p"
+        },
+        {
+          "lemma": "isPreconnected_subset_superlevel_or_sublevel",
+          "normalized": "{v0:Set\u2102}(v1:IsPreconnectedv0)(hSL:Disjointv0(lemniscatep)):v0\u2286superlevelp\u2228v0\u2286sublevelp",
+          "problem_id": "a01A08",
+          "signature": "{S : Set \u2102} (hS : IsPreconnected S) (hSL : Disjoint S (lemniscate p)) : S \u2286 superlevel p \u2228 S \u2286 sublevel p"
+        }
+      ],
+      "normalized": "{v0:Set\u2102}(v1:IsPreconnectedv0)(hSL:Disjointv0(lemniscatep)):v0\u2286superlevelp\u2228v0\u2286sublevelp",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "poisson_translation_average_toLp",
+          "normalized": "{v0:\u211d}(v1:0<v0){v2:\u211d\u2192\u211d}(v3:MemLpv22volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+          "problem_id": "a94J04",
+          "signature": "{y : \u211d} (hy : 0 < y) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+        },
+        {
+          "lemma": "heat_translation_average_toLp",
+          "normalized": "{v0:\u211d}(v1:0<v0){v2:\u211d\u2192\u211d}(v3:MemLpv22volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+          "problem_id": "a96A04",
+          "signature": "{t : \u211d} (ht : 0 < t) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+        }
+      ],
+      "normalized": "{v0:\u211d}(v1:0<v0){v2:\u211d\u2192\u211d}(v3:MemLpv22volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+      "problem_count": 2,
+      "problems": [
+        "a94J04",
+        "a96A04"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "poisson_translation_average_tendsto_L2",
+          "normalized": "{v0:\u211d\u2192\u211d}(v1:MemLpv02volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+          "problem_id": "a94J04",
+          "signature": "{f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+        },
+        {
+          "lemma": "heat_translation_average_tendsto_L2",
+          "normalized": "{v0:\u211d\u2192\u211d}(v1:MemLpv02volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+          "problem_id": "a96A04",
+          "signature": "{f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+        }
+      ],
+      "normalized": "{v0:\u211d\u2192\u211d}(v1:MemLpv02volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+      "problem_count": 2,
+      "problems": [
+        "a94J04",
+        "a96A04"
+      ]
+    },
+    {
+      "members": [
+        {
+          "lemma": "componentSet_eq_of_common_point",
+          "normalized": "{xy:\u21a5((lemniscatep)\u1d9c)}{v0:\u2102}(v1:v0\u2208componentSetx)(v2:v0\u2208componentSety):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+          "problem_id": "a00J04",
+          "signature": "{x y : \u21a5((lemniscate p)\u1d9c)} {z : \u2102} (hzx : z \u2208 componentSet x) (hzy : z \u2208 componentSet y) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y"
+        },
+        {
+          "lemma": "componentSet_eq_of_common_point",
+          "normalized": "{xy:\u21a5((lemniscatep)\u1d9c)}{v0:\u2102}(v1:v0\u2208componentSetx)(v2:v0\u2208componentSety):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+          "problem_id": "a01A08",
+          "signature": "{x y : \u21a5((lemniscate p)\u1d9c)} {z : \u2102} (hzx : z \u2208 componentSet x) (hzy : z \u2208 componentSet y) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y"
+        }
+      ],
+      "normalized": "{xy:\u21a5((lemniscatep)\u1d9c)}{v0:\u2102}(v1:v0\u2208componentSetx)(v2:v0\u2208componentSety):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+      "problem_count": 2,
+      "problems": [
+        "a00J04",
+        "a01A08"
+      ]
+    }
+  ],
+  "completed_classifications": [
+    "closed",
+    "compiled",
+    "complete",
+    "complete-lean-proof",
+    "proved",
+    "solved"
+  ],
+  "completed_problem_count": 188,
+  "eligible_problem_lemma_rows": 900,
+  "index_rows": 2139,
+  "normalization": [
+    "alpha-rename explicitly typed binder names in encounter order",
+    "replace APM problem-local identifier prefixes with apm_local_",
+    "strip capitalized namespace qualification to declaration basename",
+    "remove all whitespace"
+  ],
+  "schema_version": 1,
+  "source": "LEMMA-INDEX.md generated proved-lemma inventory",
+  "timing": {
+    "reason": "LEMMA-INDEX rows carry neither source line nor introduction commit; reliable timing requires source/history attribution across revisions",
+    "status": "deferred"
+  },
+  "unparsed": []
+}
