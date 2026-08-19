@@ -45,10 +45,10 @@
       "areas": [
         "singular-homology"
       ],
-      "missing": "H0 naturality for totally disconnected spaces: nothing identifies the coproduct injection with the homology map induced by the corresponding point inclusion, so the endpoint map H0(dI) -> H0(I) cannot be shown to be the codiagonal. Blocks H_k(S^n) via the S^0 base case of any sphere induction.",
+      "missing": "Mathlib's totally-disconnected H0 API has TWO independent missing coherence layers, found by two consecutive attempts. (1) Naturality of singularChainComplexFunctorIsoOfTotallyDisconnectedSpace / toSSetIsoConst -- locally provable, done in the experiment via Sigma.map', Sigma.iota_comp_map' and naturality of alternatingFaceMapComplexConst. (2) Naturality of ChainComplex.alternatingConstHomologyZero -- STILL MISSING and not a short simplification: its inverse does not land definitionally in the coefficient object, passing through the abstract opcycles supplied by HomologyData.ofZeros. Consequence: the coproduct injection cannot be identified with the point-inclusion homology map, so H0(dI) -> H0(I) cannot be shown to be the codiagonal, blocking the S^0 base case of any sphere induction. GENUINE MATHLIB GAP, worth upstreaming as a natural-isomorphism packaging of the totally-disconnected computation.",
       "recorded_by": "codex-3",
       "frame": "t02A06-bridge-2",
-      "at_commit": "b17cbe0",
+      "at_commit": "18f2340",
       "date": "2026-08-19",
       "resolved": null
     },
