@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "Hop 4 states precise contracts for logarithm L2 membership on the three-dimensional unit ball and the punctured-ball weak-gradient identity. Together with the compiled gradient L2 result they close the logical gap in the dimension-three positive conjunct; dimension four and dimension-two uniqueness remain separate.",
-  "imported_at": "2026-07-13T17:26:54.732874Z"
+  "imported_at": "2026-07-13T17:26:54.732874Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] Hop 4 states precise contracts for logarithm L2 membership on the three-dimensional unit ball and the punctured-ball weak-gradient identity. Together with the compiled gradient L2 result they close the logical gap in the dimension-three positive conjunct; dimension four and dimension-two uniqueness remain separate.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

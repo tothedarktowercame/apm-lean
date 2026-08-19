@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,19 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "A nonzero point yields a positive nonempty radial level, and the nonzero-point step is now proved from Nontrivial X. Remaining: derive Nontrivial X from positive manifold dimension, prove manifold Sard for the radial function, and globalize regular-level local charts into the exact subtype manifold instance.",
-  "imported_at": "2026-07-13T17:26:58.409665Z"
+  "imported_at": "2026-07-13T17:26:58.409665Z",
+  "obstructions": [
+    {
+      "areas": [
+        "transversality"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[boundary] A nonzero point yields a positive nonempty radial level, and the nonzero-point step is now proved from Nontrivial X. Remaining: derive Nontrivial X from positive manifold dimension, prove manifold Sard for the radial function, and globalize regular-level local charts into the exact subtype manifold instance.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

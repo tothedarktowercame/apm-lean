@@ -32,5 +32,19 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "The wedge and disconnected branches are closed. Retraction-induced injectivity on singular H1, the general zero-map obstruction, and a specialized interface requiring only Nontrivial H1(Circle) are proved. The middle-circle branch remains blocked solely on a compiled nonzero class or Nontrivial instance for integral H1 of Circle.",
-  "imported_at": "2026-07-13T17:26:56.697998Z"
+  "imported_at": "2026-07-13T17:26:56.697998Z",
+  "obstructions": [
+    {
+      "areas": [
+        "singular-homology"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[boundary] The wedge and disconnected branches are closed. Retraction-induced injectivity on singular H1, the general zero-map obstruction, and a specialized interface requiring only Nontrivial H1(Circle) are proved. The middle-circle branch remains blocked solely on a compiled nonzero class or Nontrivial instance for integral H1 of Circle.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

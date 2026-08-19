@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 4,
   "boundary": "The remaining Finset work is now specified by exact Lean contracts: mulVec equals the displayed stencil, and each erased-row norm sum is at most two under the pointwise mesh-smallness condition. These contracts remain unproved; compact boundedness of a then supplies their eventual hypothesis.",
-  "imported_at": "2026-07-13T17:26:55.677967Z"
+  "imported_at": "2026-07-13T17:26:55.677967Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[boundary] The remaining Finset work is now specified by exact Lean contracts: mulVec equals the displayed stencil, and each erased-row norm sum is at most two under the pointwise mesh-smallness condition. These contracts remain unproved; compact boundedness of a then supplies their eventual hypothesis.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,20 @@
   "classification": "partial",
   "closer_hop": 4,
   "boundary": "Hop 4 audited the exact analytic gap. Real.integral_comp_polarCoord_symm exists but does not provide boundary-quotient integrability, nonradial cancellations, or curved-surface Stokes. The precise missing lemma is apm_t03J06_bulletIntegral_eq_seven_pi with homega as its sole hypothesis; smoothness and the extDeriv calculation also remain.",
-  "imported_at": "2026-07-13T17:26:57.135870Z"
+  "imported_at": "2026-07-13T17:26:57.135870Z",
+  "obstructions": [
+    {
+      "areas": [
+        "differential-forms",
+        "stokes"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[boundary] Hop 4 audited the exact analytic gap. Real.integral_comp_polarCoord_symm exists but does not provide boundary-quotient integrability, nonradial cancellations, or curved-surface Stokes. The precise missing lemma is apm_t03J06_bulletIntegral_eq_seven_pi with homega as its sole hypothesis; smoothness and the extDeriv calculation also remain.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

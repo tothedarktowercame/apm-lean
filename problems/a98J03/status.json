@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "Imported the sharp YoungL2 contraction and proved that raw Poisson convolution and its packaged L2 output are invariant under a.e.-equal representatives, closing quotient well-definedness. Remaining work is proving/bundling linearity as a continuous linear map and transporting sibling a94J04 strong convergence.",
-  "imported_at": "2026-07-13T17:26:53.021359Z"
+  "imported_at": "2026-07-13T17:26:53.021359Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] Imported the sharp YoungL2 contraction and proved that raw Poisson convolution and its packaged L2 output are invariant under a.e.-equal representatives, closing quotient well-definedness. Remaining work is proving/bundling linearity as a continuous linear map and transporting sibling a94J04 strong convergence.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,21 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "The punctured-sphere contraction and arbitrary-domain null-homotopy from non-surjectivity now compile, generalizing the t94J05 stereographic construction. Remaining work needs manifold-domain Sard, positive restricted Hausdorff measure of spheres, sphere simple-connectivity, and sphere/product homology computations absent from the corpus.",
-  "imported_at": "2026-07-13T17:26:58.361777Z"
+  "imported_at": "2026-07-13T17:26:58.361777Z",
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space",
+        "singular-homology",
+        "transversality"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] The punctured-sphere contraction and arbitrary-domain null-homotopy from non-surjectivity now compile, generalizing the t94J05 stereographic construction. Remaining work needs manifold-domain Sard, positive restricted Hausdorff measure of spheres, sphere simple-connectivity, and sphere/product homology computations absent from the corpus.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

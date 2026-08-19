@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_progress": "Descent, uniqueness, pullback rewriting, density expansion, and final arithmetic are closed. A general Hausdorff-integral cancellation theorem under an odd isometry is now compiled, leaving only coordinate-reflection packaging and the Hausdorff-normalized sphere coordinate-square moment.",
-  "imported_at": "2026-07-13T17:26:58.366454Z"
+  "imported_at": "2026-07-13T17:26:58.366454Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_progress] Descent, uniqueness, pullback rewriting, density expansion, and final arithmetic are closed. A general Hausdorff-integral cancellation theorem under an odd isometry is now compiled, leaving only coordinate-reflection packaging and the Hausdorff-normalized sphere coordinate-square moment.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

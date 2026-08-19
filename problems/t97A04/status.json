@@ -37,5 +37,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 4,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "singular-homology"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[boundary] The trace, determinant, coordinate action, scalar-extension identity, Lefschetz arithmetic, and identity/composition laws for the induced homology map are compiled. Remaining work is the integral homology of the AddCircle product and the generator-level actions of Lbar on H0, H1, and H2.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

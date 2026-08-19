@@ -34,5 +34,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_progress": "Hop 4 isolates two exact missing contracts without adding unproved declarations: Jensen plus divisor aggregation gives a finite linear disk-count bound, and a generic dyadic-shell theorem converts that bound to the indexed Real.rpow summability conclusion. Both include subtype finiteness explicitly.",
-  "imported_at": "2026-05-01T19:52:19.168029Z"
+  "imported_at": "2026-05-01T19:52:19.168029Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_progress] Hop 4 isolates two exact missing contracts without adding unproved declarations: Jensen plus divisor aggregation gives a finite linear disk-count bound, and a generic dyadic-shell theorem converts that bound to the indexed Real.rpow summability conclusion. Both include subtype finiteness explicitly.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

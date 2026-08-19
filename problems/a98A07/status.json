@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 4,
   "closer_note": "Failed-with-statement: Jacobian and improper-substitution APIs were found, but both retain the transformed integrability obligation. The exact remaining interfaces are majorant integrability, measurable-limit/DCT boundary L1 convergence, and Cauchy reconstruction from boundary L1 convergence to local uniform convergence.",
-  "imported_at": "2026-07-13T17:26:52.990883Z"
+  "imported_at": "2026-07-13T17:26:52.990883Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[closer_note] Failed-with-statement: Jacobian and improper-substitution APIs were found, but both retain the transformed integrability obligation. The exact remaining interfaces are majorant integrability, measurable-limit/DCT boundary L1 convergence, and Cauchy reconstruction from boundary L1 convergence to local uniform convergence.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,19 @@
   "classification": "partial",
   "closer_hop": 2,
   "closer_progress": "Hop 4 isolates the exact global contract `apm_t94a07_halfTurn_not_homotopic`: the concrete half-turn is not homotopic through the embedded torus to the identity. No singular-homology comparison or Lefschetz API for this torus was found. The local derivative/kernel assembly remains independently open.",
-  "imported_at": "2026-07-13T17:26:57.854173Z"
+  "imported_at": "2026-07-13T17:26:57.854173Z",
+  "obstructions": [
+    {
+      "areas": [
+        "singular-homology"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 2\n\n[closer_progress] Hop 4 isolates the exact global contract `apm_t94a07_halfTurn_not_homotopic`: the concrete half-turn is not homotopic through the embedded torus to the identity. No singular-homology comparison or Lefschetz API for this torus was found. The local derivative/kernel assembly remains independently open.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

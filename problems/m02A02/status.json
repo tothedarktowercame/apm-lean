@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "Completeness, weak/strong equivalence, triviality of the mean-zero gradient joint kernel, and uniqueness on each affine mean slice are proved. Remaining work is compactness-to-Poincare and Lax-Milgram existence; compact-image and Fredholm APIs do not directly assemble the differing-codomain coercivity bridge.",
-  "imported_at": "2026-07-13T17:26:54.383609Z"
+  "imported_at": "2026-07-13T17:26:54.383609Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[boundary] Completeness, weak/strong equivalence, triviality of the mean-zero gradient joint kernel, and uniqueness on each affine mean slice are proved. Remaining work is compactness-to-Poincare and Lax-Milgram existence; compact-image and Fredholm APIs do not directly assemble the differing-codomain coercivity bridge.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

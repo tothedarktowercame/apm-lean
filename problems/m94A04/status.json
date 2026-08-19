@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 4,
     "sorry_count_scratch": 0,
     "sorry_count_total": 4
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 4,
   "closer_note": "Three precise bridge declarations now isolate the representative-preserving L^(8/3)-to-L2 downgrade, construction of the operator and bounded linearization, and the ENNReal epsilon-delta remainder estimate. Their proofs are intentionally sorry under the statement-only protocol.",
-  "imported_at": "2026-07-13T17:26:54.762759Z"
+  "imported_at": "2026-07-13T17:26:54.762759Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[closer_note] Three precise bridge declarations now isolate the representative-preserving L^(8/3)-to-L2 downgrade, construction of the operator and bounded linearization, and the ENNReal epsilon-delta remainder estimate. Their proofs are intentionally sorry under the statement-only protocol.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

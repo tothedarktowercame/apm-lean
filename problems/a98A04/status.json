@@ -39,5 +39,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 4,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] Compiled measurability, exact strict support, the literal positivity-set identity, and strict positivity of its Lebesgue measure. Remaining work is the translated/scaled rpow integral and positive-measure arbitrary-height superlevels within the countable dense weighted-spike construction.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

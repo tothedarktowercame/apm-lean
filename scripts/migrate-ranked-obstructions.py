@@ -65,7 +65,32 @@ NEXT_AREAS = {
     "m93A04": [], "t97J05": [], "t01J01": ["singular-homology"],
 }
 
+ADVERSARIAL_AREAS = {
+    "m98J02": [],
+    "t01A05": ["covering-space", "singular-homology"],
+    "t94J05": ["transversality"],
+    "t94A09": [], "t91J03": [],
+    "t91A08": ["degree-theory"],
+    "t03J05": ["intersection-theory"],
+    "t95J04": ["covering-space", "singular-homology", "transversality"],
+    "t03J06": ["differential-forms", "stokes"],
+    "t98A03": ["covering-space", "fundamental-group"],
+    "t01A03": ["singular-homology"],
+    "a98A07": [], "m98J04": [], "m94A03": [], "a98J03": [],
+    # Three sufficient routes to the same transform evaluation.
+    "a03J05": ["complex-analysis", "fourier-analysis", "measure-integral"],
+    "m02A02": [], "t96J05": ["transversality"],
+    "t94A07": ["singular-homology"],
+    "a01J06": [], "t95J05": [], "m96A06": [], "m97A04": [],
+    "t94A10": ["differential-forms", "stokes"],
+    "a98A04": [], "a92J01": [], "m97A03": [],
+    "t97A04": ["singular-homology"],
+    "t00A02": ["covering-space", "orientation"],
+    "m94A04": [],
+}
+
 AMBIGUOUS = {"a96A08", "a99J03", "t00J07", "t97J05"}
+ALTERNATIVES = {"a03J05"}
 
 LEGACY_FIELDS = ("closer_hop", "boundary", "closer_note", "sorry_details", "closer_progress")
 RESOLVED_CLASSIFICATIONS = {"complete", "compiled", "closed", "proved", "solved"}
@@ -88,11 +113,12 @@ def main() -> None:
         if changed:
             path.write_text(json.dumps(status, indent=2) + "\n")
 
-    for problem_id, areas in (AREAS | NEXT_AREAS).items():
+    for problem_id, areas in (AREAS | NEXT_AREAS | ADVERSARIAL_AREAS).items():
         path = repo / "problems" / problem_id / "status.json"
         status = json.loads(path.read_text())
         existing = status.get("obstructions", [])
-        frame = ("phase-2c-legacy-migration" if problem_id in NEXT_AREAS
+        frame = ("phase-2d-adversarial-migration" if problem_id in ADVERSARIAL_AREAS
+                 else "phase-2c-legacy-migration" if problem_id in NEXT_AREAS
                  else "phase-2b-legacy-migration")
         if any(item.get("frame") == frame for item in existing):
             path.write_text(json.dumps(status, indent=2) + "\n")
@@ -109,7 +135,8 @@ def main() -> None:
                         "date": "2026-08-19", "at_commit": "a00ea1f"}
         entry = {
             "areas": areas,
-            "areas_are": "ambiguous" if problem_id in AMBIGUOUS else "necessary",
+            "areas_are": ("ambiguous" if problem_id in AMBIGUOUS else
+                          "alternatives" if problem_id in ALTERNATIVES else "necessary"),
             "missing": "\n\n".join(paragraphs),
             "recorded_by": "codex-6",
             "frame": frame,

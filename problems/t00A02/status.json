@@ -39,5 +39,20 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space",
+        "orientation"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[boundary] The generated antipodal relation, quotient equality, quotient surjectivity, and exact two-point fiber cardinality are proved explicitly. Remaining work is antipodal local covering charts, the two four-sheeted wedge-cover constructions, and genus-five finite-cover surface classification.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

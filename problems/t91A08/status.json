@@ -39,5 +39,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "degree-theory"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 2\n\n[closer_progress] Both Haar integrals in the repaired UnitAddCircle formulation compile via quotient-cover surjectivity and the determinant computation. A restriction/projection lemma reduces torus non-homotopy to non-homotopy of z \u21a6 5 \u2022 z and the identity on UnitAddCircle. The remaining bridge is the absent integer-degree classification of additive-circle self-maps.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

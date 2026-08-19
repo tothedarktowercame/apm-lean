@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 2,
     "sorry_count_scratch": 0,
     "sorry_count_total": 2
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 4,
   "closer_progress": "Hop 4 states the exact unproved first-variation assembly theorem, from the frozen stationarity and C2 hypotheses to the pointwise Euler--Lagrange predicate. Its proof boundary is dominated differentiation, integration by parts, compact-test conversion, and the already identified distributional fundamental lemma.",
-  "imported_at": "2026-07-13T17:26:55.985855Z"
+  "imported_at": "2026-07-13T17:26:55.985855Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[closer_progress] Hop 4 states the exact unproved first-variation assembly theorem, from the frozen stationarity and C2 hypotheses to the pointwise Euler--Lagrange predicate. Its proof boundary is dominated differentiation, integration by parts, compact-test conversion, and the already identified distributional fundamental lemma.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

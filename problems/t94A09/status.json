@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_progress": "Both positive clauses are fully compiled. The torus field uses an explicit four-square real polynomial scalar times the two standard circle rotations; continuous-linear complex coordinate maps establish smoothness, and coordinate algebra proves tangency and the unique zero at (1,1). The sole remaining boundary is the absent hairy-ball obstruction for S2.",
-  "imported_at": "2026-07-13T17:26:57.921643Z"
+  "imported_at": "2026-07-13T17:26:57.921643Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_progress] Both positive clauses are fully compiled. The torus field uses an explicit four-square real polynomial scalar times the two standard circle rotations; continuous-linear complex coordinate maps establish smoothness, and coordinate algebra proves tangency and the unique zero at (1,1). The sole remaining boundary is the absent hairy-ball obstruction for S2.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -11,7 +11,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -29,5 +31,21 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "Closed the frequency-zero case, proved pointwise and integral evenness, and proved global integrability of every oscillatory kernel by domination with (1+x^2)^-1. The positive-frequency transform evaluation still requires an unavailable Fourier-transform, Laplace-inversion/Fubini, or residue-contour bridge.",
-  "imported_at": "2026-07-13T17:26:51.819921Z"
+  "imported_at": "2026-07-13T17:26:51.819921Z",
+  "obstructions": [
+    {
+      "areas": [
+        "complex-analysis",
+        "fourier-analysis",
+        "measure-integral"
+      ],
+      "areas_are": "alternatives",
+      "missing": "[closer_hop] 3\n\n[closer_note] Closed the frequency-zero case, proved pointwise and integral evenness, and proved global integrability of every oscillatory kernel by domination with (1+x^2)^-1. The positive-frequency transform evaluation still requires an unavailable Fourier-transform, Laplace-inversion/Fubini, or residue-contour bridge.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2d-adversarial-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }
