@@ -27,8 +27,9 @@ declaration compiles without `sorryAx`.
 - [x] Define product orientations from separately oriented left and right
   tangent models (`productFrame`, `productOrientation`,
   `productOrientedFrame`).
-- [ ] Prove swapping the two tangent factors changes the sign by
-  `(-1)^(p*q)`.
+- [x] Prove swapping the two tangent factors changes the determinant and local
+  sign by `(-1)^(p*q)` (`factorSwap_det`,
+  `localSign_swapSourceFactors`).
 
 ## Orientations and coordinate independence
 

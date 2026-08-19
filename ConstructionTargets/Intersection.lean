@@ -439,6 +439,129 @@ theorem productOrientation_standard_lines :
   rw [productOrientation, productFrame_standard]
   exact (standardOrientedFrame 2).frame_represents
 
+/-! ## Swapping complementary tangent factors -/
+
+/-- Reindex standard coordinates by a finite permutation. -/
+noncomputable def coordinatePermutation {n : ℕ} (σ : Equiv.Perm (Fin n)) :
+    Model n ≃ₗ[ℝ] Model n :=
+  LinearEquiv.piCongrLeft ℝ (fun _ : Fin n ↦ ℝ) σ
+
+theorem coordinatePermutation_det {n : ℕ} (σ : Equiv.Perm (Fin n)) :
+    LinearMap.det (coordinatePermutation σ).toLinearMap = ((σ.sign : ℤˣ) : ℝ) := by
+  rw [← LinearMap.det_toMatrix']
+  calc
+    _ = Matrix.det ((σ⁻¹).permMatrix ℝ) := by
+      congr 1
+      ext i j
+      classical
+      by_cases h : σ.symm i = j <;>
+        simp [coordinatePermutation, LinearEquiv.piCongrLeft,
+          LinearEquiv.piCongrLeft', Equiv.Perm.permMatrix,
+          PEquiv.toMatrix_apply, Pi.single_apply, h]
+    _ = (((σ⁻¹).sign : ℤˣ) : ℝ) := Matrix.det_permutation (σ⁻¹)
+    _ = ((σ.sign : ℤˣ) : ℝ) := by simp
+
+/-- Moving the final `q` coordinates in front of the first `p` coordinates is
+the `q`-th power of cyclic rotation. -/
+def factorSwapPermutation (p q : ℕ) : Equiv.Perm (Fin (p + q)) :=
+  finRotate (p + q) ^ q
+
+/-- The block permutation has the Koszul sign `(-1)^(p*q)`.  The proof reduces
+cyclic rotation to its known sign and checks the parity identity
+`(p+q-1)q ≡ pq (mod 2)` using the evenness of `q(q-1)`. -/
+theorem factorSwapPermutation_sign (p q : ℕ) :
+    (((factorSwapPermutation p q).sign : ℤˣ) : ℝ) = (-1 : ℝ) ^ (p * q) := by
+  by_cases h : p + q = 0
+  · have hp : p = 0 := by omega
+    have hq : q = 0 := by omega
+    subst p
+    subst q
+    simp [factorSwapPermutation]
+  · obtain ⟨k, hk⟩ := Nat.exists_eq_succ_of_ne_zero h
+    change (((Equiv.Perm.sign ((finRotate (p + q)) ^ q) : ℤˣ)) : ℝ) = _
+    rw [map_pow, hk, sign_finRotate]
+    norm_num
+    rw [← pow_mul]
+    have hmod : k * q % 2 = p * q % 2 := by
+      cases q with
+      | zero => simp
+      | succ r =>
+        have hk' : k = p + r := by omega
+        subst k
+        rw [Nat.add_mul, Nat.add_mod]
+        have he : Even (r * (r + 1)) := Nat.even_mul_succ_self r
+        rw [Nat.even_iff] at he
+        rw [show r * (r + 1) % 2 = 0 by omega]
+        simp
+    calc
+      (-1 : ℝ) ^ (k * q) = (-1) ^ (k * q % 2) := neg_one_pow_eq_pow_mod_two _
+      _ = (-1) ^ (p * q % 2) := by rw [hmod]
+      _ = (-1) ^ (p * q) := (neg_one_pow_eq_pow_mod_two _).symm
+
+/-- Linear block swap on the ordered `(p+q)`-dimensional source model. -/
+noncomputable def factorSwap (p q : ℕ) : Model (p + q) ≃ₗ[ℝ] Model (p + q) :=
+  coordinatePermutation (factorSwapPermutation p q)
+
+/-- Determinant form of the factor-swap law. -/
+theorem factorSwap_det (p q : ℕ) :
+    LinearMap.det (factorSwap p q).toLinearMap = (-1 : ℝ) ^ (p * q) := by
+  rw [factorSwap, coordinatePermutation_det, factorSwapPermutation_sign]
+
+theorem factorSwap_det_of_even (p q : ℕ) (h : Even (p * q)) :
+    LinearMap.det (factorSwap p q).toLinearMap = 1 := by
+  rw [factorSwap_det, h.neg_one_pow]
+
+theorem factorSwap_det_of_odd (p q : ℕ) (h : Odd (p * q)) :
+    LinearMap.det (factorSwap p q).toLinearMap = -1 := by
+  rw [factorSwap_det, h.neg_one_pow]
+
+/-- Anti-vacuity in the first nontrivial case: exchanging two oriented lines
+reverses the orientation of their plane. -/
+theorem factorSwap_lines_det :
+    LinearMap.det (factorSwap 1 1).toLinearMap = -1 := by
+  simpa using factorSwap_det_of_odd 1 1 (by norm_num)
+
+/-- Precompose the ordered source tangent coordinates by the block swap. -/
+noncomputable def PointDatum.swapSourceFactors {p q : ℕ}
+    (d : PointDatum (Model (p + q))) : PointDatum (Model (p + q)) where
+  sourceFrame := d.sourceFrame
+  ambientFrame := d.ambientFrame
+  tangentSum := (factorSwap p q).trans d.tangentSum
+
+theorem PointDatum.swapSourceFactors_comparison_det {p q : ℕ}
+    (d : PointDatum (Model (p + q))) :
+    LinearMap.det (d.swapSourceFactors.comparison : Model (p + q) →ₗ[ℝ] Model (p + q)) =
+      (-1 : ℝ) ^ (p * q) *
+        LinearMap.det (d.comparison : Model (p + q) →ₗ[ℝ] Model (p + q)) := by
+  simp only [← LinearEquiv.coe_det, PointDatum.swapSourceFactors,
+    PointDatum.comparison, LinearEquiv.det_trans, Units.val_mul]
+  rw [LinearEquiv.coe_det (factorSwap p q), factorSwap_det]
+  ring
+
+/-- Swapping complementary tangent factors changes the local intersection sign by the
+Koszul factor `(-1)^(p*q)`. -/
+theorem localSign_swapSourceFactors {p q : ℕ}
+    (d : PointDatum (Model (p + q))) :
+    localSign d.swapSourceFactors = (-1 : ℤ) ^ (p * q) * localSign d := by
+  have hdet_ne :
+      LinearMap.det (d.comparison : Model (p + q) →ₗ[ℝ] Model (p + q)) ≠ 0 :=
+    by
+      rw [← LinearEquiv.coe_det]
+      exact Units.ne_zero _
+  rw [localSign, localSign, LinearEquiv.coe_det, LinearEquiv.coe_det,
+    PointDatum.swapSourceFactors_comparison_det]
+  rcases Nat.even_or_odd (p * q) with heven | hodd
+  · rw [heven.neg_one_pow, heven.neg_one_pow]
+    simp
+  · rw [hodd.neg_one_pow, hodd.neg_one_pow]
+    by_cases hpos : 0 < LinearMap.det
+        (d.comparison : Model (p + q) →ₗ[ℝ] Model (p + q))
+    · simp [hpos, not_lt.mpr hpos.le]
+    · have hneg : LinearMap.det
+          (d.comparison : Model (p + q) →ₗ[ℝ] Model (p + q)) < 0 :=
+        lt_of_le_of_ne (not_lt.mp hpos) hdet_ne
+      simp [hpos, neg_pos.mpr hneg]
+
 /-- The exact cancellation pattern shared by `t01A07` and the antipodal pair in
 `t02A06`.  It is stated for independently computed signs, not for a fabricated
 intersection-number constant. -/
@@ -474,5 +597,11 @@ theorem standard_lines_in_plane_nonvacuous :
 #print axioms productOrientedFrame_represents
 #print axioms productFrame_standard
 #print axioms productOrientation_standard_lines
+#print axioms coordinatePermutation_det
+#print axioms factorSwapPermutation_sign
+#print axioms factorSwap_det
+#print axioms factorSwap_lines_det
+#print axioms PointDatum.swapSourceFactors_comparison_det
+#print axioms localSign_swapSourceFactors
 
 end Intersection
