@@ -290,7 +290,7 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
 
     by_name = {d["name"]: d for d in decls}
     root_names = {root["name"] for root in roots}
-    closure, frontier = set(), list(root_names)
+    closure, frontier = set(), sorted(root_names)
     while frontier:
         name = frontier.pop()
         if name in closure:
@@ -330,8 +330,8 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
                 {"def", "abbrev", "structure", "class"}
                 else decl["header"])
 
-    paths = {name: [name] for name in root_names}
-    queue = list(root_names)
+    paths = {name: [name] for name in sorted(root_names)}
+    queue = sorted(root_names)
     while queue:
         name = queue.pop(0)
         for ref in identifiers(dependency_text(name)):
@@ -343,7 +343,7 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
 
     requirement_evidence: dict[str, list[dict]] = {}
     indexed = mathlib_symbols | ct_symbols
-    for name in closure:
+    for name in sorted(closure):
         for ref in sorted(identifiers(dependency_text(name))):
             leaf = ref.rsplit(".", 1)[-1]
             if ref in by_name or leaf in by_name:

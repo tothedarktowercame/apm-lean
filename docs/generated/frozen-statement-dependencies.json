@@ -1034,12 +1034,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "cauchyTransform_mul_z_tendsto",
+                "cauchyTransform_differentiableAt",
                 "cauchyTransform"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem cauchyTransform_mul_z_tendsto : Tendsto (fun z : \u2102 => z * cauchyTransform K z) (cocompact \u2102) (\ud835\udcdd (-(volume K).toReal))",
+              "root_statement": "theorem cauchyTransform_differentiableAt {z\u2080 : \u2102} (hz\u2080 : z\u2080 \u2209 (\u2191) '' K) : DifferentiableAt \u2102 (cauchyTransform K) z\u2080",
               "source_declaration": "cauchyTransform",
               "source_expression": "noncomputable def cauchyTransform (z : \u2102) : \u2102 := \u222b t in K, ((t : \u2102) - z)\u207b\u00b9"
             }
@@ -2260,12 +2260,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "orlicz_bound_not_implies_L2",
+                "distribution_polynomial_decay",
                 "OrliczBound"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem orlicz_bound_not_implies_L2 : \u2203 (g : \u211d \u2192 \u211d) (A : \u211d), 0 < A \u2227 OrliczBound g A \u2227 \u00ac IntegrableOn (fun x => g x ^ 2) (Icc (0 : \u211d) 1) volume",
+              "root_statement": "theorem distribution_polynomial_decay {g : \u211d \u2192 \u211d} {A : \u211d} (hg : OrliczBound g A) (hA : 0 < A) : \u2203 C : \u211d, 0 < C \u2227 \u2200 (lam : \u211d), 1 \u2264 lam \u2192 \u03bc {x \u2208 Icc (0 : \u211d) 1 | lam < g x} \u2264 ENNReal.ofReal (C / lam)",
               "source_declaration": "OrliczBound",
               "source_expression": "structure OrliczBound (g : \u211d \u2192 \u211d) (A : \u211d) : Prop where measurable : Measurable g nonneg : \u2200 x \u2208 Icc (0 : \u211d) 1, 0 \u2264 g x integrable : IntegrableOn g (Icc (0 : \u211d) 1) volume bound : \u2200 f : \u211d \u2192 \u211d, Measurable f \u2192 IntegrableOn (fun x => Real.exp (f x)) (Icc (0 : \u211d) 1) volume \u2192 (\u222b x in Icc (0 : \u211d) 1, Real.exp (f x)) \u2264 1 \u2192 IntegrableOn (fun x => g x * f x) (Icc (0 : \u211d) 1) volume \u2192 (\u222b x in Icc (0 : \u211d) 1, g x * f x) < A"
             }
@@ -2277,12 +2277,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "orlicz_bound_not_implies_L2",
+                "distribution_polynomial_decay",
                 "OrliczBound"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem orlicz_bound_not_implies_L2 : \u2203 (g : \u211d \u2192 \u211d) (A : \u211d), 0 < A \u2227 OrliczBound g A \u2227 \u00ac IntegrableOn (fun x => g x ^ 2) (Icc (0 : \u211d) 1) volume",
+              "root_statement": "theorem distribution_polynomial_decay {g : \u211d \u2192 \u211d} {A : \u211d} (hg : OrliczBound g A) (hA : 0 < A) : \u2203 C : \u211d, 0 < C \u2227 \u2200 (lam : \u211d), 1 \u2264 lam \u2192 \u03bc {x \u2208 Icc (0 : \u211d) 1 | lam < g x} \u2264 ENNReal.ofReal (C / lam)",
               "source_declaration": "OrliczBound",
               "source_expression": "structure OrliczBound (g : \u211d \u2192 \u211d) (A : \u211d) : Prop where measurable : Measurable g nonneg : \u2200 x \u2208 Icc (0 : \u211d) 1, 0 \u2264 g x integrable : IntegrableOn g (Icc (0 : \u211d) 1) volume bound : \u2200 f : \u211d \u2192 \u211d, Measurable f \u2192 IntegrableOn (fun x => Real.exp (f x)) (Icc (0 : \u211d) 1) volume \u2192 (\u222b x in Icc (0 : \u211d) 1, Real.exp (f x)) \u2264 1 \u2192 IntegrableOn (fun x => g x * f x) (Icc (0 : \u211d) 1) volume \u2192 (\u222b x in Icc (0 : \u211d) 1, g x * f x) < A"
             }
@@ -2294,12 +2294,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "orlicz_bound_not_implies_L2",
+                "distribution_polynomial_decay",
                 "OrliczBound"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem orlicz_bound_not_implies_L2 : \u2203 (g : \u211d \u2192 \u211d) (A : \u211d), 0 < A \u2227 OrliczBound g A \u2227 \u00ac IntegrableOn (fun x => g x ^ 2) (Icc (0 : \u211d) 1) volume",
+              "root_statement": "theorem distribution_polynomial_decay {g : \u211d \u2192 \u211d} {A : \u211d} (hg : OrliczBound g A) (hA : 0 < A) : \u2203 C : \u211d, 0 < C \u2227 \u2200 (lam : \u211d), 1 \u2264 lam \u2192 \u03bc {x \u2208 Icc (0 : \u211d) 1 | lam < g x} \u2264 ENNReal.ofReal (C / lam)",
               "source_declaration": "OrliczBound",
               "source_expression": "structure OrliczBound (g : \u211d \u2192 \u211d) (A : \u211d) : Prop where measurable : Measurable g nonneg : \u2200 x \u2208 Icc (0 : \u211d) 1, 0 \u2264 g x integrable : IntegrableOn g (Icc (0 : \u211d) 1) volume bound : \u2200 f : \u211d \u2192 \u211d, Measurable f \u2192 IntegrableOn (fun x => Real.exp (f x)) (Icc (0 : \u211d) 1) volume \u2192 (\u222b x in Icc (0 : \u211d) 1, Real.exp (f x)) \u2264 1 \u2192 IntegrableOn (fun x => g x * f x) (Icc (0 : \u211d) 1) volume \u2192 (\u222b x in Icc (0 : \u211d) 1, g x * f x) < A"
             }
@@ -2311,12 +2311,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "orlicz_bound_not_implies_L2",
+                "distribution_polynomial_decay",
                 "OrliczBound"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem orlicz_bound_not_implies_L2 : \u2203 (g : \u211d \u2192 \u211d) (A : \u211d), 0 < A \u2227 OrliczBound g A \u2227 \u00ac IntegrableOn (fun x => g x ^ 2) (Icc (0 : \u211d) 1) volume",
+              "root_statement": "theorem distribution_polynomial_decay {g : \u211d \u2192 \u211d} {A : \u211d} (hg : OrliczBound g A) (hA : 0 < A) : \u2203 C : \u211d, 0 < C \u2227 \u2200 (lam : \u211d), 1 \u2264 lam \u2192 \u03bc {x \u2208 Icc (0 : \u211d) 1 | lam < g x} \u2264 ENNReal.ofReal (C / lam)",
               "source_declaration": "OrliczBound",
               "source_expression": "structure OrliczBound (g : \u211d \u2192 \u211d) (A : \u211d) : Prop where measurable : Measurable g nonneg : \u2200 x \u2208 Icc (0 : \u211d) 1, 0 \u2264 g x integrable : IntegrableOn g (Icc (0 : \u211d) 1) volume bound : \u2200 f : \u211d \u2192 \u211d, Measurable f \u2192 IntegrableOn (fun x => Real.exp (f x)) (Icc (0 : \u211d) 1) volume \u2192 (\u222b x in Icc (0 : \u211d) 1, Real.exp (f x)) \u2264 1 \u2192 IntegrableOn (fun x => g x * f x) (Icc (0 : \u211d) 1) volume \u2192 (\u222b x in Icc (0 : \u211d) 1, g x * f x) < A"
             }
@@ -2553,12 +2553,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "tendstoUniformlyOn_deriv_of_L1",
+                "L1_disk_convergence_analytic_upgrade",
                 "L1ConvergesOnDisks"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem tendstoUniformlyOn_deriv_of_L1 {f : \u2115 \u2192 \u2102 \u2192 \u2102} {F : \u2102 \u2192 \u2102} (h\u03a9 : IsOpen \u03a9) (hf : \u2200 n, DifferentiableOn \u2102 (f n) \u03a9) (hF : ContinuousOn F \u03a9) (hconv : L1ConvergesOnDisks f F \u03a9) {K : Set \u2102} (hK : IsCompact K) (hK\u03a9 : K \u2286 \u03a9) : TendstoUniformlyOn (fun n z => deriv (f n) z) (deriv F) atTop K",
+              "root_statement": "theorem L1_disk_convergence_analytic_upgrade {f : \u2115 \u2192 \u2102 \u2192 \u2102} {F : \u2102 \u2192 \u2102} (h\u03a9 : IsOpen \u03a9) (hf : \u2200 n, DifferentiableOn \u2102 (f n) \u03a9) (hF : ContinuousOn F \u03a9) (hconv : L1ConvergesOnDisks f F \u03a9) : DifferentiableOn \u2102 F \u03a9 \u2227 (\u2200 K, IsCompact K \u2192 K \u2286 \u03a9 \u2192 TendstoUniformlyOn f F atTop K) \u2227 (\u2200 K, IsCompact K \u2192 K \u2286 \u03a9 \u2192 TendstoUniformlyOn (fun n z => deriv (f n) z) (deriv F) atTop K)",
               "source_declaration": "L1ConvergesOnDisks",
               "source_expression": "def L1ConvergesOnDisks (f : \u2115 \u2192 \u2102 \u2192 \u2102) (F : \u2102 \u2192 \u2102) (\u03a9 : Set \u2102) : Prop := \u2200 (z : \u2102) (r : \u211d), 0 < r \u2192 closedBall z r \u2286 \u03a9 \u2192 Tendsto (fun n => \u222b w in closedBall z r, \u2016f n w - F w\u2016) atTop (\ud835\udcdd 0)"
             }
@@ -3154,13 +3154,13 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "laplace_transform_entire_of_compact_support",
+                "laplace_transform_analytic",
                 "laplaceTransform",
                 "laplaceKernel"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem laplace_transform_entire_of_compact_support (f : \u211d \u2192 \u2102) (hf : compactSupportOnHalfLine f) : AnalyticOn \u2102 (fun z => laplaceTransform f z) Set.univ",
+              "root_statement": "theorem laplace_transform_analytic (data : LaplaceData) : AnalyticOn \u2102 (laplaceTransform data.f) rightHalfPlane",
               "source_declaration": "laplaceKernel",
               "source_expression": "def laplaceKernel (z : \u2102) (t : \u211d) : \u2102 := Complex.exp (-(t : \u2102) * z)"
             }
@@ -3518,12 +3518,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "cauchyTransform_not_entire",
+                "cauchyTransform_differentiableAt",
                 "cauchyTransform"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem cauchyTransform_not_entire (h_diff : \u2200 z, z \u2209 ofReal '' K \u2192 DifferentiableAt \u2102 (cauchyTransform K) z) (h_decay : Tendsto (cauchyTransform K) (cocompact \u2102) (nhds 0)) (h_nonzero : \u2203 z, z \u2209 ofReal '' K \u2227 cauchyTransform K z \u2260 0) : \u00ac \u2203 G : \u2102 \u2192 \u2102, Differentiable \u2102 G \u2227 \u2200 z, z \u2209 ofReal '' K \u2192 G z = cauchyTransform K z",
+              "root_statement": "theorem cauchyTransform_differentiableAt (z : \u2102) (hz : z \u2209 ofReal '' K) : DifferentiableAt \u2102 (cauchyTransform K) z",
               "source_declaration": "cauchyTransform",
               "source_expression": "def cauchyTransform (z : \u2102) : \u2102 := \u222b t : \u211d in K, (1 : \u2102) / ((\u2191t : \u2102) - z)"
             }
@@ -7492,12 +7492,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "fourierTransform_norm_le",
+                "fourierTransform_continuous",
                 "fourierTransform"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem fourierTransform_norm_le {f : \u211d \u2192 \u2102} (hf : Integrable f volume) (\u03be : \u211d) : \u2016fourierTransform f \u03be\u2016 \u2264 \u222b x, \u2016f x\u2016 \u2202volume",
+              "root_statement": "theorem fourierTransform_continuous {f : \u211d \u2192 \u2102} (hf : Integrable f volume) : Continuous (fourierTransform f)",
               "source_declaration": "fourierTransform",
               "source_expression": "noncomputable def fourierTransform (f : \u211d \u2192 \u2102) (\u03be : \u211d) : \u2102 := \u222b x, f x * Complex.exp (I * x * \u03be) \u2202volume"
             }
@@ -7509,12 +7509,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "fourierTransform_norm_le",
+                "fourierTransform_continuous",
                 "fourierTransform"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem fourierTransform_norm_le {f : \u211d \u2192 \u2102} (hf : Integrable f volume) (\u03be : \u211d) : \u2016fourierTransform f \u03be\u2016 \u2264 \u222b x, \u2016f x\u2016 \u2202volume",
+              "root_statement": "theorem fourierTransform_continuous {f : \u211d \u2192 \u2102} (hf : Integrable f volume) : Continuous (fourierTransform f)",
               "source_declaration": "fourierTransform",
               "source_expression": "noncomputable def fourierTransform (f : \u211d \u2192 \u2102) (\u03be : \u211d) : \u2102 := \u222b x, f x * Complex.exp (I * x * \u03be) \u2202volume"
             }
@@ -8130,7 +8130,7 @@
             {
               "local_definition_chain": [
                 "diffQuot_implies_unifCont",
-                "DiffQuotientCondition",
+                "UnifContOn01",
                 "I01"
               ],
               "method": "frozen-statement lexical closure",
@@ -8598,12 +8598,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "lipschitz_V_limit_implies_ac",
+                "ac_iff_lipschitz_V_approx",
                 "LipschitzOn01"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem lipschitz_V_limit_implies_ac {f : \u211d \u2192 \u211d} {f\u2099 : \u2115 \u2192 \u211d \u2192 \u211d} (hlip : \u2200 n, LipschitzOn01 (f\u2099 n)) (hconv : Tendsto (fun n => totalVariation (fun x => f\u2099 n x - f x)) atTop (\ud835\udcdd 0)) : AbsolutelyContinuousOnInterval f 0 1",
+              "root_statement": "theorem ac_iff_lipschitz_V_approx (f : \u211d \u2192 \u211d) : AbsolutelyContinuousOnInterval f 0 1 \u2194 \u2203 f\u2099 : \u2115 \u2192 \u211d \u2192 \u211d, (\u2200 n, LipschitzOn01 (f\u2099 n)) \u2227 Tendsto (fun n => totalVariation (fun x => f\u2099 n x - f x)) atTop (\ud835\udcdd 0)",
               "source_declaration": "LipschitzOn01",
               "source_expression": "def LipschitzOn01 (f : \u211d \u2192 \u211d) : Prop := \u2203 K : \u211d\u22650, LipschitzOnWith K f (uIcc (0:\u211d) 1)"
             }
@@ -8663,12 +8663,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "lipschitz_V_limit_implies_ac",
+                "ac_iff_lipschitz_V_approx",
                 "totalVariation"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem lipschitz_V_limit_implies_ac {f : \u211d \u2192 \u211d} {f\u2099 : \u2115 \u2192 \u211d \u2192 \u211d} (hlip : \u2200 n, LipschitzOn01 (f\u2099 n)) (hconv : Tendsto (fun n => totalVariation (fun x => f\u2099 n x - f x)) atTop (\ud835\udcdd 0)) : AbsolutelyContinuousOnInterval f 0 1",
+              "root_statement": "theorem ac_iff_lipschitz_V_approx (f : \u211d \u2192 \u211d) : AbsolutelyContinuousOnInterval f 0 1 \u2194 \u2203 f\u2099 : \u2115 \u2192 \u211d \u2192 \u211d, (\u2200 n, LipschitzOn01 (f\u2099 n)) \u2227 Tendsto (fun n => totalVariation (fun x => f\u2099 n x - f x)) atTop (\ud835\udcdd 0)",
               "source_declaration": "totalVariation",
               "source_expression": "noncomputable def totalVariation (f : \u211d \u2192 \u211d) : ENNReal := eVariationOn f (uIcc (0:\u211d) 1)"
             }
@@ -11919,12 +11919,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "riemann_lebesgue_sandwich",
+                "indicator_not_riemann_integrable",
                 "lowerRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
+              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
               "source_declaration": "lowerRiemannIntegral",
               "source_expression": "noncomputable def lowerRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sSup {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sInf (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -11936,12 +11936,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "riemann_lebesgue_sandwich",
+                "indicator_not_riemann_integrable",
                 "lowerRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
+              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
               "source_declaration": "lowerRiemannIntegral",
               "source_expression": "noncomputable def lowerRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sSup {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sInf (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -11953,12 +11953,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "riemann_lebesgue_sandwich",
+                "indicator_not_riemann_integrable",
                 "lowerRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
+              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
               "source_declaration": "lowerRiemannIntegral",
               "source_expression": "noncomputable def lowerRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sSup {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sInf (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -11970,12 +11970,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "riemann_lebesgue_sandwich",
+                "indicator_not_riemann_integrable",
                 "lowerRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
+              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
               "source_declaration": "lowerRiemannIntegral",
               "source_expression": "noncomputable def lowerRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sSup {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sInf (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12035,12 +12035,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "riemann_lebesgue_sandwich",
+                "indicator_not_riemann_integrable",
                 "upperRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
+              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
               "source_declaration": "upperRiemannIntegral",
               "source_expression": "noncomputable def upperRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sInf {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sSup (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12052,12 +12052,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "riemann_lebesgue_sandwich",
+                "indicator_not_riemann_integrable",
                 "upperRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
+              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
               "source_declaration": "upperRiemannIntegral",
               "source_expression": "noncomputable def upperRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sInf {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sSup (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12069,12 +12069,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "riemann_lebesgue_sandwich",
+                "indicator_not_riemann_integrable",
                 "upperRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
+              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
               "source_declaration": "upperRiemannIntegral",
               "source_expression": "noncomputable def upperRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sInf {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sSup (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12086,12 +12086,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "riemann_lebesgue_sandwich",
+                "indicator_not_riemann_integrable",
                 "upperRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
+              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
               "source_declaration": "upperRiemannIntegral",
               "source_expression": "noncomputable def upperRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sInf {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sSup (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12534,12 +12534,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "f_radial_not_memLp_top",
+                "f_radial_conv_L2_bound",
                 "E"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem f_radial_not_memLp_top : \u00ac MemLp f_radial \u22a4 (volume : Measure E)",
+              "root_statement": "theorem f_radial_conv_L2_bound {g : E \u2192 \u211d} (hg : MemLp g 2 volume) : eLpNorm (fun x => \u222b y, f_radial (x - y) * g y \u2202volume) 2 volume \u2264 ENNReal.ofReal (2 * \u03c0 ^ 2) * eLpNorm g 2 volume",
               "source_declaration": "E",
               "source_expression": "abbrev E := EuclideanSpace \u211d (Fin 3)"
             }
@@ -13886,12 +13886,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "tendstoInMeasure_iff_integral_arctan",
+                "integral_arctan_tendsto_of_tendstoInMeasure",
                 "TendstoInMeasureZero"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem tendstoInMeasure_iff_integral_arctan {f : \u2115 \u2192 \u03a9 \u2192 \u211d} (hf : \u2200 n, Measurable (f n)) : TendstoInMeasureZero f \u03bc \u2194 Tendsto (fun n => \u222b x, |arctan (f n x)| \u2202\u03bc) atTop (\ud835\udcdd 0)",
+              "root_statement": "theorem integral_arctan_tendsto_of_tendstoInMeasure {f : \u2115 \u2192 \u03a9 \u2192 \u211d} (hf : \u2200 n, Measurable (f n)) (hconv : TendstoInMeasureZero f \u03bc) : Tendsto (fun n => \u222b x, |arctan (f n x)| \u2202\u03bc) atTop (\ud835\udcdd 0)",
               "source_declaration": "TendstoInMeasureZero",
               "source_expression": "def TendstoInMeasureZero (f : \u2115 \u2192 \u03a9 \u2192 \u211d) (\u03bc : Measure \u03a9) : Prop := \u2200 \u03b5 : \u211d, 0 < \u03b5 \u2192 Tendsto (fun n => \u03bc {x | \u03b5 < |f n x|}) atTop (\ud835\udcdd 0)"
             }
@@ -13903,12 +13903,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "tendstoInMeasure_iff_integral_arctan",
+                "integral_arctan_tendsto_of_tendstoInMeasure",
                 "TendstoInMeasureZero"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem tendstoInMeasure_iff_integral_arctan {f : \u2115 \u2192 \u03a9 \u2192 \u211d} (hf : \u2200 n, Measurable (f n)) : TendstoInMeasureZero f \u03bc \u2194 Tendsto (fun n => \u222b x, |arctan (f n x)| \u2202\u03bc) atTop (\ud835\udcdd 0)",
+              "root_statement": "theorem integral_arctan_tendsto_of_tendstoInMeasure {f : \u2115 \u2192 \u03a9 \u2192 \u211d} (hf : \u2200 n, Measurable (f n)) (hconv : TendstoInMeasureZero f \u03bc) : Tendsto (fun n => \u222b x, |arctan (f n x)| \u2202\u03bc) atTop (\ud835\udcdd 0)",
               "source_declaration": "TendstoInMeasureZero",
               "source_expression": "def TendstoInMeasureZero (f : \u2115 \u2192 \u03a9 \u2192 \u211d) (\u03bc : Measure \u03a9) : Prop := \u2200 \u03b5 : \u211d, 0 < \u03b5 \u2192 Tendsto (fun n => \u03bc {x | \u03b5 < |f n x|}) atTop (\ud835\udcdd 0)"
             }
@@ -14700,12 +14700,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "limit_ge_geometric_mean",
+                "ae_pos_of_limit_pos",
                 "quasiNorm"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem limit_ge_geometric_mean {f : \u211d \u2192 \u211d} (hf : IntegrableOn f (Icc 0 1) volume) (hf_pos : \u2200\u1d50 x \u2202(volume.restrict (Icc 0 1)), 0 < \u2016f x\u2016) {L : \u211d} (hL : 0 < L) (hLim : Tendsto (quasiNorm f) (nhdsWithin 0 (Set.Ioi 0)) (nhds L)) : exp (\u222b x in Set.Icc (0:\u211d) 1, log \u2016f x\u2016 \u2202volume) \u2264 L",
+              "root_statement": "theorem ae_pos_of_limit_pos {f : \u211d \u2192 \u211d} (hf : IntegrableOn f (Icc 0 1) volume) {L : \u211d} (hL : 0 < L) (hLim : Tendsto (quasiNorm f) (nhdsWithin 0 (Set.Ioi 0)) (nhds L)) : \u2200\u1d50 x \u2202(volume.restrict (Icc 0 1)), 0 < \u2016f x\u2016",
               "source_declaration": "quasiNorm",
               "source_expression": "def quasiNorm (f : \u211d \u2192 \u211d) (p : \u211d) : \u211d := (\u222b x in Set.Icc (0:\u211d) 1, \u2016f x\u2016 ^ p \u2202volume) ^ (1 / p)"
             }
@@ -15265,13 +15265,13 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "heatConv_contDiff",
+                "heatConv_L2_le",
                 "heatConv",
                 "heatKernel"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem heatConv_contDiff {t : \u211d} (ht : 0 < t) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : ContDiff \u211d \u221e (heatConv t f)",
+              "root_statement": "theorem heatConv_L2_le {t : \u211d} (ht : 0 < t) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : eLpNorm (heatConv t f) 2 volume \u2264 eLpNorm f 2 volume",
               "source_declaration": "heatKernel",
               "source_expression": "def heatKernel (t : \u211d) (x : \u211d) : \u211d := (4 * \u03c0 * t) ^ (-(1 : \u211d) / 2) * Real.exp (- x ^ 2 / (4 * t))"
             }
@@ -47756,7 +47756,7 @@
             {
               "local_definition_chain": [
                 "apm_m02a02",
-                "m02A02WeakSolution",
+                "m02A02GradientEnergy",
                 "m02A02DirichletPair"
               ],
               "method": "frozen-statement lexical closure",
@@ -52548,7 +52548,7 @@
             {
               "local_definition_chain": [
                 "apm_m93j02",
-                "apm_m93J02_globalSeminorm",
+                "apm_m93J02_localSeminorm",
                 "apm_m93J02_quotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -52566,7 +52566,7 @@
             {
               "local_definition_chain": [
                 "apm_m93j02",
-                "apm_m93J02_localNorm",
+                "apm_m93J02_globalNorm",
                 "apm_m93J02_supNorm"
               ],
               "method": "frozen-statement lexical closure",
@@ -55735,7 +55735,7 @@
             {
               "local_definition_chain": [
                 "apm_m94j04",
-                "apm_m94J04_curlValue",
+                "apm_m94J04_curlTest",
                 "apm_m94J04_basis"
               ],
               "method": "frozen-statement lexical closure",
@@ -66722,7 +66722,7 @@
             {
               "local_definition_chain": [
                 "apm_m99a02",
-                "IsM99A02WeakDerivative",
+                "m99A02Omega",
                 "m99A02Point"
               ],
               "method": "frozen-statement lexical closure",
@@ -69428,7 +69428,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomologyBall",
+                "apm_t00A01_isHomology3Sphere",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -69446,7 +69446,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomologyBall",
+                "apm_t00A01_isHomology3Sphere",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -69464,7 +69464,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomologyBall",
+                "apm_t00A01_isHomology3Sphere",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -69482,7 +69482,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomologyBall",
+                "apm_t00A01_isHomology3Sphere",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -69500,7 +69500,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomologyBall",
+                "apm_t00A01_isHomology3Sphere",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -71981,7 +71981,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a05",
-                "apm_t00a05_dOmega",
+                "apm_t00a05_lineIntegral",
                 "apm_t00a05_omega"
               ],
               "method": "frozen-statement lexical closure",
@@ -73679,7 +73679,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasDegree",
+                "apm_t00j02_wrapsHandle",
                 "apm_t00j02_homologyMap"
               ],
               "method": "frozen-statement lexical closure",
@@ -73697,7 +73697,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasDegree",
+                "apm_t00j02_wrapsHandle",
                 "apm_t00j02_homologyMap"
               ],
               "method": "frozen-statement lexical closure",
@@ -73715,7 +73715,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasDegree",
+                "apm_t00j02_wrapsHandle",
                 "apm_t00j02_homologyMap"
               ],
               "method": "frozen-statement lexical closure",
@@ -73733,7 +73733,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasDegree",
+                "apm_t00j02_wrapsHandle",
                 "apm_t00j02_homologyMap"
               ],
               "method": "frozen-statement lexical closure",
@@ -73751,7 +73751,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasDegree",
+                "apm_t00j02_wrapsHandle",
                 "apm_t00j02_homologyMap"
               ],
               "method": "frozen-statement lexical closure",
@@ -73769,7 +73769,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasDegree",
+                "apm_t00j02_wrapsHandle",
                 "apm_t00j02_homologyMap"
               ],
               "method": "frozen-statement lexical closure",
@@ -78009,7 +78009,7 @@
             {
               "local_definition_chain": [
                 "apm_t01a04",
-                "apm_t01a04_X",
+                "apm_t01a04_Parity",
                 "apm_t01a04_Torus"
               ],
               "method": "frozen-statement lexical closure",
@@ -82944,7 +82944,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_isOmega",
+                "apm_t01J06_AmbientForm2",
                 "apm_t01J06_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -83893,7 +83893,7 @@
               "local_definition_chain": [
                 "apm_t02a03",
                 "apm_t02a03_ybase",
-                "apm_t02a03_circleInclusion",
+                "apm_t02a03_torusInclusion",
                 "apm_t02a03_wedgeQuotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -83912,7 +83912,7 @@
               "local_definition_chain": [
                 "apm_t02a03",
                 "apm_t02a03_ybase",
-                "apm_t02a03_circleInclusion",
+                "apm_t02a03_torusInclusion",
                 "apm_t02a03_wedgeQuotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -83931,7 +83931,7 @@
               "local_definition_chain": [
                 "apm_t02a03",
                 "apm_t02a03_ybase",
-                "apm_t02a03_circleInclusion",
+                "apm_t02a03_torusInclusion",
                 "apm_t02a03_wedgeQuotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -84918,11 +84918,11 @@
             "areas": [
               "covering-space"
             ],
-            "at_commit": "9578534",
+            "at_commit": "c614480",
             "date": "2026-08-19",
             "frame": "t02A06-bridge-3",
             "missing": "SimplyConnectedSpace S3, via the two-open gluing theorem. THREE independent encodings attempted. Encodings 1 and 2 (simultaneous connector construction; strengthened induction) both failed on chart-label dependence: the connector path's TYPE depended on the equality test between adjacent chart labels. Encoding 3 SOLVED that -- the label case split is confined to a Prop-valued existential (exists_path_mem_twoChart_inter) and `choose` extracts a flat conn/hconn pair, so the induction motive is non-dependent. The REMAINING wall is different in kind and purely algebraic: the finite telescope step. Induction through Path.concat_succ produces connector indices k.castSucc.succ and k.succ.castSucc, which are propositionally but not definitionally equal Fin values, so the paths have propositionally equal endpoints but different dependent Path types and the IH cannot rewrite without transporting paths and homotopies across endpoint equalities. MATHLIB ADDITION THAT WOULD UNBLOCK: a telescope lemma Path.Homotopic.concat_connector_telescope, or Path.concat reindexing lemmas that normalise castSucc/succ endpoint transports automatically.",
-            "progress": "Chart-label dependence RESOLVED at 9578534 (twoChart, exists_path_mem_twoChart_inter, exists_twoChart_connectors, all axiom-clean). Wall moved, not removed.",
+            "progress": "THREE walls hit, two closed, each strictly narrower than the last. (1) Chart-label dependence -- CLOSED at 9578534: the label case split is confined to a Prop-valued existential and `choose` yields a flat conn/hconn pair, so the induction motive is non-dependent. (2) Fin castSucc/succ telescope algebra -- CLOSED at c614480: Path.Homotopic.concat_connector_telescope, proved directly via Fin.succ_castSucc plus trans_assoc/symm_trans/refl_trans. The fundamental-groupoid route was tried as a diagnostic and works in principle, but Quotient.mk did not reliably rewrite the outer dependent Path.trans, so the direct proof implements the same groupoid algebra without the rewriting friction. (3) OPEN: cyclic endpoint packaging. For a LOOP, subdivision vertex 0 and vertex m are the same point, so the boundary connector must be a single path lying in the intersection of the FIRST and LAST intervals' charts -- otherwise the telescope leaves conn 0 . (conn m)inverse, which need contract in neither chart. The existential follows from the proved exists_path_mem_twoChart_inter; the remaining work is packaging that one boundary path with the interior flat connectors across the endpoint equality gamma(t 0) = gamma(t m).",
             "recorded_by": "codex-7",
             "resolved": null
           },
@@ -85137,7 +85137,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a07",
-                "apm_t02a07_IsTransverse",
+                "apm_t02a07_family",
                 "apm_t02a07_S2",
                 "apm_t02a07_E3"
               ],
@@ -85208,7 +85208,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a07",
-                "apm_t02a07_IsTransverse",
+                "apm_t02a07_family",
                 "apm_t02a07_S2"
               ],
               "method": "frozen-statement lexical closure",
@@ -85826,7 +85826,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a08",
-                "apm_t02a08_HasOrientedIntersection",
+                "apm_t02a08_Z",
                 "apm_t02a08_Y"
               ],
               "method": "frozen-statement lexical closure",
@@ -86357,8 +86357,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_H1Map"
               ],
               "method": "frozen-statement lexical closure",
@@ -86376,8 +86376,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_H1Map"
               ],
               "method": "frozen-statement lexical closure",
@@ -86395,8 +86395,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_H1Map"
               ],
               "method": "frozen-statement lexical closure",
@@ -86414,8 +86414,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_H1Map"
               ],
               "method": "frozen-statement lexical closure",
@@ -86433,8 +86433,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_H1Map"
               ],
               "method": "frozen-statement lexical closure",
@@ -86452,8 +86452,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_H1Map"
               ],
               "method": "frozen-statement lexical closure",
@@ -86786,8 +86786,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_inclusion"
               ],
               "method": "frozen-statement lexical closure",
@@ -86805,8 +86805,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_inclusion"
               ],
               "method": "frozen-statement lexical closure",
@@ -86824,8 +86824,8 @@
             {
               "local_definition_chain": [
                 "apm_t03j01",
-                "apm_t03j01_CutsIntoTwoOncePuncturedTori",
-                "apm_t03j01_IsNullHomologous",
+                "apm_t03j01_CutsIntoTwicePuncturedTorus",
+                "apm_t03j01_HasPrimitiveClass",
                 "apm_t03j01_inclusion"
               ],
               "method": "frozen-statement lexical closure",
@@ -89672,7 +89672,7 @@
               "local_definition_chain": [
                 "apm_t03j06",
                 "apm_t03J06_bulletIntegral",
-                "apm_t03J06_hemispherePoint",
+                "apm_t03J06_cylinderTangents",
                 "apm_t03J06_vec3"
               ],
               "method": "frozen-statement lexical closure",
@@ -90935,7 +90935,7 @@
             {
               "local_definition_chain": [
                 "apm_t91a08",
-                "t91A08IsInduced",
+                "t91A08IsPullback",
                 "T91A08R2"
               ],
               "method": "frozen-statement lexical closure",
@@ -94860,7 +94860,7 @@
             {
               "local_definition_chain": [
                 "apm_t92j09",
-                "apm_t92J09_sphere",
+                "apm_t92J09_param",
                 "apm_t92J09_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -97794,7 +97794,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a07",
-                "apm_t94a07_IsHomotopyToIdentity",
+                "apm_t94a07_tangent",
                 "apm_t94a07_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -98160,7 +98160,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a08",
-                "apm_t94a08_sigma1",
+                "apm_t94a08_IsRegularLevelSet",
                 "apm_t94a08_CP2"
               ],
               "method": "frozen-statement lexical closure",
@@ -98662,7 +98662,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a10",
-                "apm_t94a10_IsOmega",
+                "apm_t94a10_Form",
                 "apm_t94a10_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -98748,7 +98748,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a10",
-                "apm_t94a10_IsClosed",
+                "apm_t94a10_IsExact",
                 "apm_t94a10_ambientExtension"
               ],
               "method": "frozen-statement lexical closure",
@@ -102522,7 +102522,7 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionB",
+                "t95J02InclusionA",
                 "t95J02KleinBottle"
               ],
               "method": "frozen-statement lexical closure",
@@ -102540,7 +102540,7 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionB",
+                "t95J02InclusionA",
                 "t95J02KleinBottle"
               ],
               "method": "frozen-statement lexical closure",
@@ -102558,8 +102558,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionB",
-                "t95J02CircleB",
+                "t95J02InclusionA",
+                "t95J02CircleA",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102577,8 +102577,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionB",
-                "t95J02CircleB",
+                "t95J02InclusionA",
+                "t95J02CircleA",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102596,8 +102596,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionB",
-                "t95J02CircleB",
+                "t95J02InclusionA",
+                "t95J02CircleA",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102615,8 +102615,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionB",
-                "t95J02CircleB",
+                "t95J02InclusionA",
+                "t95J02CircleA",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102634,8 +102634,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionB",
-                "t95J02CircleB",
+                "t95J02InclusionA",
+                "t95J02CircleA",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102653,8 +102653,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionB",
-                "t95J02CircleB",
+                "t95J02InclusionA",
+                "t95J02CircleA",
                 "t95J02QuotientPoint"
               ],
               "method": "frozen-statement lexical closure",
@@ -103428,8 +103428,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j05",
-                "t95J05InclusionPullback",
-                "t95J05Omega",
+                "T95J05ProjectiveThreeForm",
+                "t95J05SphereThree",
                 "t95J05R4"
               ],
               "method": "frozen-statement lexical closure",
@@ -103447,7 +103447,7 @@
             {
               "local_definition_chain": [
                 "apm_t95j05",
-                "t95J05InclusionPullback",
+                "T95J05ProjectiveThreeForm",
                 "t95J05SphereThree"
               ],
               "method": "frozen-statement lexical closure",
@@ -104268,7 +104268,7 @@
             {
               "local_definition_chain": [
                 "apm_t96a03",
-                "apm_t96A03_EquatorSpace",
+                "apm_t96A03_X",
                 "apm_t96A03_Sphere2"
               ],
               "method": "frozen-statement lexical closure",
@@ -104286,7 +104286,7 @@
             {
               "local_definition_chain": [
                 "apm_t96a03",
-                "apm_t96A03_EquatorSpace",
+                "apm_t96A03_X",
                 "apm_t96A03_Sphere2"
               ],
               "method": "frozen-statement lexical closure",
@@ -105782,7 +105782,7 @@
             {
               "local_definition_chain": [
                 "apm_t96j06",
-                "apm_t96j06_BoundsThreeManifold",
+                "apm_t96j06_ProductSubspace",
                 "apm_t96j06_Ambient",
                 "apm_t96j06_RP2"
               ],
@@ -105801,7 +105801,7 @@
             {
               "local_definition_chain": [
                 "apm_t96j06",
-                "apm_t96j06_BoundsThreeManifold",
+                "apm_t96j06_ProductSubspace",
                 "apm_t96j06_Ambient",
                 "apm_t96j06_RP2"
               ],
@@ -105820,7 +105820,7 @@
             {
               "local_definition_chain": [
                 "apm_t96j06",
-                "apm_t96j06_BoundsThreeManifold",
+                "apm_t96j06_ProductSubspace",
                 "apm_t96j06_Ambient",
                 "apm_t96j06_RP2"
               ],
@@ -106537,7 +106537,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a01",
-                "apm_t97a01_TorusRP2",
+                "apm_t97a01_baseTorusRP2",
                 "apm_t97a01_Disk"
               ],
               "method": "frozen-statement lexical closure",
@@ -107840,7 +107840,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_TwoCircleCover",
+                "apm_t97A03_OneCircleCover",
                 "apm_t97A03_TwoSpheres"
               ],
               "method": "frozen-statement lexical closure",
@@ -107858,7 +107858,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_TwoCircleCover",
+                "apm_t97A03_OneCircleCover",
                 "apm_t97A03_TwoSpheres"
               ],
               "method": "frozen-statement lexical closure",
@@ -107876,7 +107876,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_TwoCircleCover",
+                "apm_t97A03_OneCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleI"
               ],
@@ -107895,7 +107895,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_TwoCircleCover",
+                "apm_t97A03_OneCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleI"
               ],
@@ -107914,7 +107914,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_TwoCircleCover",
+                "apm_t97A03_OneCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleI"
               ],
@@ -107933,7 +107933,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_TwoCircleCover",
+                "apm_t97A03_OneCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleNegI"
               ],
@@ -107952,7 +107952,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_TwoCircleCover",
+                "apm_t97A03_OneCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleNegI"
               ],
@@ -107971,7 +107971,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_TwoCircleCover",
+                "apm_t97A03_OneCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleNegI"
               ],
@@ -108509,7 +108509,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a04",
-                "t97A04HasHomologicalData",
+                "apm_t97a04_Lbar",
                 "apm_t97a04_Torus"
               ],
               "method": "frozen-statement lexical closure",
@@ -113512,7 +113512,7 @@
             {
               "local_definition_chain": [
                 "apm_t98a04",
-                "apm_t98a04_CP1",
+                "apm_t98a04_S3",
                 "apm_t98a04_C2"
               ],
               "method": "frozen-statement lexical closure",
