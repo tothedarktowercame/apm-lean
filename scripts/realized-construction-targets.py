@@ -186,13 +186,65 @@ def main() -> int:
             for problem in sorted(problem_modules)
         ],
     }
+    blocked_problems = {
+        problem for problem in problem_modules
+        if records[problem]["obstruction_evidence"]["has_record"]
+    }
+    blocked_predictions = {}
+    for problem in blocked_problems:
+        areas = records[problem]["obstruction_evidence"]["provisional_blocked_areas"]
+        blocked_predictions[problem] = set().union(
+            *(AREA_TO_MODULES.get(area, set()) for area in areas)
+        ) if areas else set()
+    blocked_actual_edges = {
+        (problem, module) for problem in blocked_problems
+        for module in problem_modules[problem]
+    }
+    blocked_predicted_edges = {
+        (problem, module) for problem in blocked_problems
+        for module in blocked_predictions[problem]
+    }
+    blocked_true_positive = blocked_actual_edges & blocked_predicted_edges
+    blocked_false_positive = blocked_predicted_edges - blocked_actual_edges
+    blocked_false_negative = blocked_actual_edges - blocked_predicted_edges
+    blocked_validation = {
+        "population_problem_count": len(blocked_problems),
+        "population_of_observed_import_problem_count": len(problem_modules),
+        "actual_transitive_edges": len(blocked_actual_edges),
+        "predicted_edges": len(blocked_predicted_edges),
+        "true_positive_edges": len(blocked_true_positive),
+        "false_positive_edges": len(blocked_false_positive),
+        "false_negative_edges": len(blocked_false_negative),
+        "precision": (len(blocked_true_positive) / len(blocked_predicted_edges)
+                      if blocked_predicted_edges else None),
+        "recall": (len(blocked_true_positive) / len(blocked_actual_edges)
+                   if blocked_actual_edges else None),
+        "problems_with_any_correct_prediction": sum(
+            bool(problem_modules[p] & blocked_predictions[p]) for p in blocked_problems
+        ),
+        "true_positives": sorted([list(edge) for edge in blocked_true_positive]),
+        "false_positives": sorted([list(edge) for edge in blocked_false_positive]),
+        "false_negatives": sorted([list(edge) for edge in blocked_false_negative]),
+        "per_problem": [
+            {"problem_id": problem,
+             "obstruction_areas": records[problem]["obstruction_evidence"]["provisional_blocked_areas"],
+             "actual_transitive_modules": sorted(problem_modules[problem]),
+             "predicted_modules": sorted(blocked_predictions[problem])}
+            for problem in sorted(blocked_problems)
+        ],
+    }
     payload = {
         "schema_version": 1,
         "cost_unit": "changed source lines: additions plus deletions from git log --follow --numstat",
         "cost_caveat": "line churn weights formatting and rewrites as work, misses thinking and review, and can count shared commits in several modules",
         "consumer_unit": "distinct problem bundles reaching the module through direct or transitive ConstructionTargets imports",
+        "area_to_modules_frozen_before_scoring": {
+            area: sorted(mapped) for area, mapped in sorted(AREA_TO_MODULES.items())
+        },
         "modules": modules,
         "validation": validation,
+        "statement_layer_validation": validation,
+        "blocked_layer_validation": blocked_validation,
     }
     json_path = repo / "docs/generated/realized-construction-targets.json"
     md_path = repo / "docs/generated/realized-construction-targets.md"
@@ -243,6 +295,44 @@ def main() -> int:
         "the proof infrastructure later imported to close it. The score validates the map as",
         "a topic/object map, not as a reliable predictor of required ConstructionTargets modules.",
         "The two false positives also expose basename collisions in the lexical symbol map.", "",
+        "## Blocked-consumer validation", "",
+        "The area-to-module mapping was committed before this score was calculated. Empty",
+        "mappings are deliberate: no current module honestly implements those areas.", "",
+        "| Obstruction area | ConstructionTargets modules |",
+        "|---|---|",
+    ]
+    for area, mapped in sorted(AREA_TO_MODULES.items()):
+        lines.append(f"| {area} | {', '.join(sorted(mapped)) or '—'} |")
+    lines += [
+        "", f"Scorable subset: {blocked_validation['population_problem_count']}/"
+        f"{blocked_validation['population_of_observed_import_problem_count']} importing problems",
+        "carry an obstruction record. Empty-area records remain in the subset and make no",
+        "prediction; excluding them would inflate recall.", "",
+        "| Layer | Scorable problems | Actual edges | Predicted edges | Precision | Recall | Problems with any correct prediction |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+        f"| Frozen statement | {validation['population_problem_count']} | "
+        f"{validation['actual_transitive_edges']} | {validation['predicted_edges']} | "
+        f"{validation['true_positive_edges']}/{validation['predicted_edges']} "
+        f"({100 * validation['precision']:.1f}%) | "
+        f"{validation['true_positive_edges']}/{validation['actual_transitive_edges']} "
+        f"({100 * validation['recall']:.1f}%) | "
+        f"{validation['problems_with_any_correct_prediction']}/{validation['population_problem_count']} |",
+        f"| Blocked consumer | {blocked_validation['population_problem_count']} | "
+        f"{blocked_validation['actual_transitive_edges']} | {blocked_validation['predicted_edges']} | "
+        f"{blocked_validation['true_positive_edges']}/{blocked_validation['predicted_edges']} "
+        f"({100 * blocked_validation['precision']:.1f}%) | "
+        f"{blocked_validation['true_positive_edges']}/{blocked_validation['actual_transitive_edges']} "
+        f"({100 * blocked_validation['recall']:.1f}%) | "
+        f"{blocked_validation['problems_with_any_correct_prediction']}/{blocked_validation['population_problem_count']} |",
+        "", "The blocked layer performs worse on its covered subset: it predicts only 3 of",
+        "23 observed edges and produces 13 false-positive edges. Neither predictive layer",
+        "reliably identifies the ConstructionTargets module later imported. Historical imports",
+        "measure realised use; the statement and obstruction layers remain descriptive signals.", "",
+        "Temporal caveat: a current obstruction can name the next unsolved wall after an imported",
+        "module already discharged an earlier wall. The score therefore tests whether the present",
+        "obstruction record reconstructs all realised imports, not whether it correctly names its",
+        "own moment's blocker. Repository imports and status records lack aligned timestamps, so",
+        "those interpretations cannot be separated here.", "",
         "## Reproduce", "", "```sh", "python3 scripts/realized-construction-targets.py", "```", "",
         "The adjacent JSON contains every cost component, import edge, prediction, true",
         "positive, false positive, and false negative.", "",

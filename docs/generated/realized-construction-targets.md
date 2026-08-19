@@ -77,6 +77,52 @@ the proof infrastructure later imported to close it. The score validates the map
 a topic/object map, not as a reliable predictor of required ConstructionTargets modules.
 The two false positives also expose basename collisions in the lexical symbol map.
 
+## Blocked-consumer validation
+
+The area-to-module mapping was committed before this score was calculated. Empty
+mappings are deliberate: no current module honestly implements those areas.
+
+| Obstruction area | ConstructionTargets modules |
+|---|---|
+| cellular-homology | — |
+| cohomology | — |
+| complex-analysis | CircleParam, HerglotzRigidity, LemniscateComponents, Rouche, SchwarzEquality, SchwarzPick, UnivalentDeriv |
+| covering-space | — |
+| degree-theory | — |
+| differential-forms | OrientedIntegration |
+| excision | — |
+| fourier-analysis | Sinc |
+| fundamental-group | — |
+| intersection-theory | Intersection |
+| kunneth | — |
+| mayer-vietoris | — |
+| measure-integral | BanachZarecki, KernelAverage, L2Translation, LpRepresentative, LusinN, RadialIntegrationR3, RadialMajorantAE, SetIntegralPrimitive, Sinc, YoungConvolution |
+| orientation | OrientedIntegration |
+| singular-homology | — |
+| stokes | OrientedIntegration |
+| transversality | Intersection |
+| van-kampen | — |
+
+Scorable subset: 17/27 importing problems
+carry an obstruction record. Empty-area records remain in the subset and make no
+prediction; excluding them would inflate recall.
+
+| Layer | Scorable problems | Actual edges | Predicted edges | Precision | Recall | Problems with any correct prediction |
+|---|---:|---:|---:|---:|---:|---:|
+| Frozen statement | 27 | 38 | 8 | 6/8 (75.0%) | 6/38 (15.8%) | 6/27 |
+| Blocked consumer | 17 | 23 | 16 | 3/16 (18.8%) | 3/23 (13.0%) | 2/17 |
+
+The blocked layer performs worse on its covered subset: it predicts only 3 of
+23 observed edges and produces 13 false-positive edges. Neither predictive layer
+reliably identifies the ConstructionTargets module later imported. Historical imports
+measure realised use; the statement and obstruction layers remain descriptive signals.
+
+Temporal caveat: a current obstruction can name the next unsolved wall after an imported
+module already discharged an earlier wall. The score therefore tests whether the present
+obstruction record reconstructs all realised imports, not whether it correctly names its
+own moment's blocker. Repository imports and status records lack aligned timestamps, so
+those interpretations cannot be separated here.
+
 ## Reproduce
 
 ```sh

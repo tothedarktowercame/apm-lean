@@ -1,4 +1,398 @@
 {
+  "area_to_modules_frozen_before_scoring": {
+    "cellular-homology": [],
+    "cohomology": [],
+    "complex-analysis": [
+      "CircleParam",
+      "HerglotzRigidity",
+      "LemniscateComponents",
+      "Rouche",
+      "SchwarzEquality",
+      "SchwarzPick",
+      "UnivalentDeriv"
+    ],
+    "covering-space": [],
+    "degree-theory": [],
+    "differential-forms": [
+      "OrientedIntegration"
+    ],
+    "excision": [],
+    "fourier-analysis": [
+      "Sinc"
+    ],
+    "fundamental-group": [],
+    "intersection-theory": [
+      "Intersection"
+    ],
+    "kunneth": [],
+    "mayer-vietoris": [],
+    "measure-integral": [
+      "BanachZarecki",
+      "KernelAverage",
+      "L2Translation",
+      "LpRepresentative",
+      "LusinN",
+      "RadialIntegrationR3",
+      "RadialMajorantAE",
+      "SetIntegralPrimitive",
+      "Sinc",
+      "YoungConvolution"
+    ],
+    "orientation": [
+      "OrientedIntegration"
+    ],
+    "singular-homology": [],
+    "stokes": [
+      "OrientedIntegration"
+    ],
+    "transversality": [
+      "Intersection"
+    ],
+    "van-kampen": []
+  },
+  "blocked_layer_validation": {
+    "actual_transitive_edges": 23,
+    "false_negative_edges": 20,
+    "false_negatives": [
+      [
+        "a01J05",
+        "Rouche"
+      ],
+      [
+        "a94A03",
+        "L2Translation"
+      ],
+      [
+        "a94A03",
+        "LpRepresentative"
+      ],
+      [
+        "a94A03",
+        "YoungConvolution"
+      ],
+      [
+        "a94A10",
+        "HerglotzRigidity"
+      ],
+      [
+        "a94J04",
+        "L2Translation"
+      ],
+      [
+        "a94J04",
+        "LpRepresentative"
+      ],
+      [
+        "a94J04",
+        "RadialMajorantAE"
+      ],
+      [
+        "a96J06",
+        "SchwarzEquality"
+      ],
+      [
+        "a98J03",
+        "RadialMajorantAE"
+      ],
+      [
+        "a98J03",
+        "YoungConvolution"
+      ],
+      [
+        "aunk04",
+        "Rouche"
+      ],
+      [
+        "m94A03",
+        "RadialIntegrationR3"
+      ],
+      [
+        "m99A06",
+        "YoungConvolution"
+      ],
+      [
+        "t03J03",
+        "Surfaces"
+      ],
+      [
+        "t03J05",
+        "Surfaces"
+      ],
+      [
+        "t91J05",
+        "Surfaces"
+      ],
+      [
+        "t94J06",
+        "Rouche"
+      ],
+      [
+        "t97A01",
+        "Surfaces"
+      ],
+      [
+        "t98A01",
+        "Surfaces"
+      ]
+    ],
+    "false_positive_edges": 13,
+    "false_positives": [
+      [
+        "a92J05",
+        "CircleParam"
+      ],
+      [
+        "a92J05",
+        "HerglotzRigidity"
+      ],
+      [
+        "a92J05",
+        "LemniscateComponents"
+      ],
+      [
+        "a92J05",
+        "SchwarzEquality"
+      ],
+      [
+        "a92J05",
+        "SchwarzPick"
+      ],
+      [
+        "a92J05",
+        "UnivalentDeriv"
+      ],
+      [
+        "a94A09",
+        "CircleParam"
+      ],
+      [
+        "a94A09",
+        "HerglotzRigidity"
+      ],
+      [
+        "a94A09",
+        "LemniscateComponents"
+      ],
+      [
+        "a94A09",
+        "SchwarzEquality"
+      ],
+      [
+        "a94A09",
+        "UnivalentDeriv"
+      ],
+      [
+        "t03J03",
+        "OrientedIntegration"
+      ],
+      [
+        "t03J05",
+        "Intersection"
+      ]
+    ],
+    "per_problem": [
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "a01J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "obstruction_areas": [
+          "complex-analysis"
+        ],
+        "predicted_modules": [
+          "CircleParam",
+          "HerglotzRigidity",
+          "LemniscateComponents",
+          "Rouche",
+          "SchwarzEquality",
+          "SchwarzPick",
+          "UnivalentDeriv"
+        ],
+        "problem_id": "a92J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "a94A03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche",
+          "SchwarzPick"
+        ],
+        "obstruction_areas": [
+          "complex-analysis"
+        ],
+        "predicted_modules": [
+          "CircleParam",
+          "HerglotzRigidity",
+          "LemniscateComponents",
+          "Rouche",
+          "SchwarzEquality",
+          "SchwarzPick",
+          "UnivalentDeriv"
+        ],
+        "problem_id": "a94A09"
+      },
+      {
+        "actual_transitive_modules": [
+          "HerglotzRigidity"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "a94A10"
+      },
+      {
+        "actual_transitive_modules": [
+          "L2Translation",
+          "LpRepresentative",
+          "RadialMajorantAE"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "a94J04"
+      },
+      {
+        "actual_transitive_modules": [
+          "SchwarzEquality"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "a96J06"
+      },
+      {
+        "actual_transitive_modules": [
+          "RadialMajorantAE",
+          "YoungConvolution"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "a98J03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "aunk04"
+      },
+      {
+        "actual_transitive_modules": [
+          "RadialIntegrationR3"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "m94A03"
+      },
+      {
+        "actual_transitive_modules": [
+          "YoungConvolution"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "m99A06"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "obstruction_areas": [
+          "covering-space",
+          "fundamental-group",
+          "orientation"
+        ],
+        "predicted_modules": [
+          "OrientedIntegration"
+        ],
+        "problem_id": "t03J03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "obstruction_areas": [
+          "intersection-theory"
+        ],
+        "predicted_modules": [
+          "Intersection"
+        ],
+        "problem_id": "t03J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "t91J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "obstruction_areas": [],
+        "predicted_modules": [],
+        "problem_id": "t94J06"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "obstruction_areas": [
+          "cellular-homology",
+          "fundamental-group",
+          "singular-homology",
+          "van-kampen"
+        ],
+        "predicted_modules": [],
+        "problem_id": "t97A01"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "obstruction_areas": [
+          "covering-space"
+        ],
+        "predicted_modules": [],
+        "problem_id": "t98A01"
+      }
+    ],
+    "population_of_observed_import_problem_count": 27,
+    "population_problem_count": 17,
+    "precision": 0.1875,
+    "predicted_edges": 16,
+    "problems_with_any_correct_prediction": 2,
+    "recall": 0.13043478260869565,
+    "true_positive_edges": 3,
+    "true_positives": [
+      [
+        "a92J05",
+        "Rouche"
+      ],
+      [
+        "a94A09",
+        "Rouche"
+      ],
+      [
+        "a94A09",
+        "SchwarzPick"
+      ]
+    ]
+  },
   "consumer_unit": "distinct problem bundles reaching the module through direct or transitive ConstructionTargets imports",
   "cost_caveat": "line churn weights formatting and rewrites as work, misses thinking and review, and can count shared commits in several modules",
   "cost_unit": "changed source lines: additions plus deletions from git log --follow --numstat",
@@ -362,6 +756,491 @@
     }
   ],
   "schema_version": 1,
+  "statement_layer_validation": {
+    "actual_transitive_edges": 38,
+    "false_negative_edges": 32,
+    "false_negatives": [
+      [
+        "a01J05",
+        "Rouche"
+      ],
+      [
+        "a02J05",
+        "Sinc"
+      ],
+      [
+        "a92J05",
+        "Rouche"
+      ],
+      [
+        "a94A03",
+        "L2Translation"
+      ],
+      [
+        "a94A03",
+        "LpRepresentative"
+      ],
+      [
+        "a94A03",
+        "YoungConvolution"
+      ],
+      [
+        "a94A09",
+        "Rouche"
+      ],
+      [
+        "a94A09",
+        "SchwarzPick"
+      ],
+      [
+        "a94A10",
+        "HerglotzRigidity"
+      ],
+      [
+        "a94J04",
+        "L2Translation"
+      ],
+      [
+        "a94J04",
+        "LpRepresentative"
+      ],
+      [
+        "a94J04",
+        "RadialMajorantAE"
+      ],
+      [
+        "a95A03",
+        "RadialIntegrationR3"
+      ],
+      [
+        "a95A08",
+        "SchwarzEquality"
+      ],
+      [
+        "a95A08",
+        "UnivalentDeriv"
+      ],
+      [
+        "a95J01",
+        "SchwarzEquality"
+      ],
+      [
+        "a95J01",
+        "UnivalentDeriv"
+      ],
+      [
+        "a95J06",
+        "BanachZarecki"
+      ],
+      [
+        "a95J06",
+        "LusinN"
+      ],
+      [
+        "a96A04",
+        "L2Translation"
+      ],
+      [
+        "a96A04",
+        "LpRepresentative"
+      ],
+      [
+        "a96A04",
+        "YoungConvolution"
+      ],
+      [
+        "a96J06",
+        "SchwarzEquality"
+      ],
+      [
+        "a97A06",
+        "Sinc"
+      ],
+      [
+        "a97A07",
+        "CircleParam"
+      ],
+      [
+        "a97A08",
+        "Rouche"
+      ],
+      [
+        "a98J03",
+        "RadialMajorantAE"
+      ],
+      [
+        "a98J03",
+        "YoungConvolution"
+      ],
+      [
+        "aunk04",
+        "Rouche"
+      ],
+      [
+        "m99A06",
+        "YoungConvolution"
+      ],
+      [
+        "t94J06",
+        "Rouche"
+      ],
+      [
+        "t97A01",
+        "Surfaces"
+      ]
+    ],
+    "false_positive_edges": 2,
+    "false_positives": [
+      [
+        "aunk04",
+        "Surfaces"
+      ],
+      [
+        "t03J03",
+        "RadialIntegrationR3"
+      ]
+    ],
+    "per_problem": [
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a01J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Sinc"
+        ],
+        "direct_imports": [
+          "Sinc"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a02J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a92J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a94A03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche",
+          "SchwarzPick"
+        ],
+        "direct_imports": [
+          "Rouche",
+          "SchwarzPick"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a94A09"
+      },
+      {
+        "actual_transitive_modules": [
+          "HerglotzRigidity"
+        ],
+        "direct_imports": [
+          "HerglotzRigidity"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a94A10"
+      },
+      {
+        "actual_transitive_modules": [
+          "L2Translation",
+          "LpRepresentative",
+          "RadialMajorantAE"
+        ],
+        "direct_imports": [
+          "L2Translation",
+          "LpRepresentative",
+          "RadialMajorantAE"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a94J04"
+      },
+      {
+        "actual_transitive_modules": [
+          "RadialIntegrationR3"
+        ],
+        "direct_imports": [
+          "RadialIntegrationR3"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a95A03"
+      },
+      {
+        "actual_transitive_modules": [
+          "SchwarzEquality",
+          "UnivalentDeriv"
+        ],
+        "direct_imports": [
+          "SchwarzEquality",
+          "UnivalentDeriv"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a95A08"
+      },
+      {
+        "actual_transitive_modules": [
+          "SchwarzEquality",
+          "UnivalentDeriv"
+        ],
+        "direct_imports": [
+          "SchwarzEquality",
+          "UnivalentDeriv"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a95J01"
+      },
+      {
+        "actual_transitive_modules": [
+          "BanachZarecki",
+          "LusinN"
+        ],
+        "direct_imports": [
+          "BanachZarecki"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a95J06"
+      },
+      {
+        "actual_transitive_modules": [
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "YoungConvolution"
+        ],
+        "predicted_modules": [
+          "YoungConvolution"
+        ],
+        "problem_id": "a95J08"
+      },
+      {
+        "actual_transitive_modules": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "L2Translation",
+          "LpRepresentative",
+          "YoungConvolution"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a96A04"
+      },
+      {
+        "actual_transitive_modules": [
+          "SchwarzEquality"
+        ],
+        "direct_imports": [
+          "SchwarzEquality"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a96J06"
+      },
+      {
+        "actual_transitive_modules": [
+          "Sinc"
+        ],
+        "direct_imports": [
+          "Sinc"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a97A06"
+      },
+      {
+        "actual_transitive_modules": [
+          "CircleParam"
+        ],
+        "direct_imports": [
+          "CircleParam"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a97A07"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a97A08"
+      },
+      {
+        "actual_transitive_modules": [
+          "RadialMajorantAE",
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "RadialMajorantAE",
+          "YoungConvolution"
+        ],
+        "predicted_modules": [],
+        "problem_id": "a98J03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [
+          "Surfaces"
+        ],
+        "problem_id": "aunk04"
+      },
+      {
+        "actual_transitive_modules": [
+          "RadialIntegrationR3"
+        ],
+        "direct_imports": [
+          "RadialIntegrationR3"
+        ],
+        "predicted_modules": [
+          "RadialIntegrationR3"
+        ],
+        "problem_id": "m94A03"
+      },
+      {
+        "actual_transitive_modules": [
+          "YoungConvolution"
+        ],
+        "direct_imports": [
+          "YoungConvolution"
+        ],
+        "predicted_modules": [],
+        "problem_id": "m99A06"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [
+          "RadialIntegrationR3",
+          "Surfaces"
+        ],
+        "problem_id": "t03J03"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [
+          "Surfaces"
+        ],
+        "problem_id": "t03J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [
+          "Surfaces"
+        ],
+        "problem_id": "t91J05"
+      },
+      {
+        "actual_transitive_modules": [
+          "Rouche"
+        ],
+        "direct_imports": [
+          "Rouche"
+        ],
+        "predicted_modules": [],
+        "problem_id": "t94J06"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [],
+        "problem_id": "t97A01"
+      },
+      {
+        "actual_transitive_modules": [
+          "Surfaces"
+        ],
+        "direct_imports": [
+          "Surfaces"
+        ],
+        "predicted_modules": [
+          "Surfaces"
+        ],
+        "problem_id": "t98A01"
+      }
+    ],
+    "population_problem_count": 27,
+    "precision": 0.75,
+    "predicted_edges": 8,
+    "problems_with_any_correct_prediction": 6,
+    "recall": 0.15789473684210525,
+    "true_positive_edges": 6,
+    "true_positives": [
+      [
+        "a95J08",
+        "YoungConvolution"
+      ],
+      [
+        "m94A03",
+        "RadialIntegrationR3"
+      ],
+      [
+        "t03J03",
+        "Surfaces"
+      ],
+      [
+        "t03J05",
+        "Surfaces"
+      ],
+      [
+        "t91J05",
+        "Surfaces"
+      ],
+      [
+        "t98A01",
+        "Surfaces"
+      ]
+    ]
+  },
   "validation": {
     "actual_transitive_edges": 38,
     "false_negative_edges": 32,
