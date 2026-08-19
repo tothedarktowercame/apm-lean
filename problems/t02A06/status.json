@@ -59,7 +59,8 @@
         "measured_cost_commits": 1,
         "note": "Cost includes TWO failed dispatches that produced no commit -- attempts to repair the Mathlib API rather than bypass it. A cost model built only on landed commits undercounts blocked paths by exactly this much."
       },
-      "upstreamable": "Mathlib addition: a natural isomorphism from degree-zero singular homology of a totally disconnected space to the point-indexed coproduct of coefficients, with naturality for continuous maps and a simp lemma identifying point inclusions with coproduct injections. Separately, naturality of singularChainComplexFunctorIsoOfTotallyDisconnectedSpace is independently upstreamable and was proved en route."
+      "upstreamable": "Mathlib addition: a natural isomorphism from degree-zero singular homology of a totally disconnected space to the point-indexed coproduct of coefficients, with naturality for continuous maps and a simp lemma identifying point inclusions with coproduct injections. Separately, naturality of singularChainComplexFunctorIsoOfTotallyDisconnectedSpace is independently upstreamable and was proved en route.",
+      "areas_are": "necessary"
     },
     {
       "areas": [
@@ -71,7 +72,8 @@
       "at_commit": "7390e5c",
       "date": "2026-08-19",
       "resolved": null,
-      "progress": "FOUR walls hit, THREE closed, each strictly narrower. (1) Chart-label dependence -- CLOSED 9578534: label split confined to a Prop-valued existential, `choose` yields flat conn/hconn, induction motive non-dependent. (2) Fin castSucc/succ telescope algebra -- CLOSED c614480: Path.Homotopic.concat_connector_telescope. Fundamental-groupoid route works in principle but Quotient.mk would not rewrite the outer dependent Path.trans; the direct proof does the same groupoid algebra without that friction. (3) Cyclic endpoint packaging -- CLOSED 7390e5c: exists_cyclic_twoChart_connectors puts the boundary equation INSIDE the existential, choosing the boundary path first and assembling with Fin.cases/Fin.lastCases so every endpoint cast stays inside the proof. (4) OPEN, and now pure index bookkeeping with no mathematics left: an adapter from Mathlib's N-indexed subdivision output (exists_monotone_Icc_subset_open_cover_unitInterval gives t : N -> I with t 0 = 0 and eventually 1) to the Fin (n+2)-indexed family the connector and telescope APIs consume, with t 0 = 0, t (Fin.last (n+1)) = 1, side : Fin (n+1) -> Bool, and each edge's containment. That adapter is the exact missing statement between existing Mathlib subdivision and the completed machinery, and is itself plausibly upstreamable."
+      "progress": "FOUR walls hit, THREE closed, each strictly narrower. (1) Chart-label dependence -- CLOSED 9578534: label split confined to a Prop-valued existential, `choose` yields flat conn/hconn, induction motive non-dependent. (2) Fin castSucc/succ telescope algebra -- CLOSED c614480: Path.Homotopic.concat_connector_telescope. Fundamental-groupoid route works in principle but Quotient.mk would not rewrite the outer dependent Path.trans; the direct proof does the same groupoid algebra without that friction. (3) Cyclic endpoint packaging -- CLOSED 7390e5c: exists_cyclic_twoChart_connectors puts the boundary equation INSIDE the existential, choosing the boundary path first and assembling with Fin.cases/Fin.lastCases so every endpoint cast stays inside the proof. (4) OPEN, and now pure index bookkeeping with no mathematics left: an adapter from Mathlib's N-indexed subdivision output (exists_monotone_Icc_subset_open_cover_unitInterval gives t : N -> I with t 0 = 0 and eventually 1) to the Fin (n+2)-indexed family the connector and telescope APIs consume, with t 0 = 0, t (Fin.last (n+1)) = 1, side : Fin (n+1) -> Bool, and each edge's containment. That adapter is the exact missing statement between existing Mathlib subdivision and the completed machinery, and is itself plausibly upstreamable.",
+      "areas_are": "necessary"
     },
     {
       "areas": [],
@@ -83,7 +85,8 @@
       "resolved": {
         "by": "route survey supersedes the informal-proof attribution",
         "date": "2026-08-19"
-      }
+      },
+      "areas_are": "necessary"
     }
   ]
 }

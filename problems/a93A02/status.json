@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -38,11 +40,27 @@
     "sorry_reason": null
   },
   "proven_lemmas": [
-    "Vitali convergence theorem application (tendsto_Lp_finite_of_tendsto_ae) — zero-sorry",
-    "a.e. convergence of fₙ-g to 0 — zero-sorry",
-    "p ≠ ∞ from p < 2 — zero-sorry",
-    "normalized square-root spike has restricted L² norm exactly one — zero-sorry",
-    "normalized spike converges almost everywhere to zero — zero-sorry",
-    "constant norm one refutes L² convergence to zero — zero-sorry"
+    "Vitali convergence theorem application (tendsto_Lp_finite_of_tendsto_ae) \u2014 zero-sorry",
+    "a.e. convergence of f\u2099-g to 0 \u2014 zero-sorry",
+    "p \u2260 \u221e from p < 2 \u2014 zero-sorry",
+    "normalized square-root spike has restricted L\u00b2 norm exactly one \u2014 zero-sorry",
+    "normalized spike converges almost everywhere to zero \u2014 zero-sorry",
+    "constant norm one refutes L\u00b2 convergence to zero \u2014 zero-sorry"
+  ],
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[sorry_details] {\"sorry_count\": 0, \"sorry_locations\": [], \"sorry_reason\": null}",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": {
+        "by": "bundle classification records the work closed",
+        "date": "2026-08-19",
+        "at_commit": "a00ea1f"
+      }
+    }
   ]
 }

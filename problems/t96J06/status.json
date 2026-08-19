@@ -52,7 +52,8 @@
       "frame": "phase-2b-legacy-migration",
       "at_commit": "a00ea1f",
       "date": "2026-08-19",
-      "resolved": null
+      "resolved": null,
+      "areas_are": "necessary"
     }
   ]
 }

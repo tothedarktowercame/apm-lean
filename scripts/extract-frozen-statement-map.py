@@ -251,7 +251,14 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
         text_value = json.dumps(raw, sort_keys=True) if not isinstance(raw, str) else raw
         legacy.append({"field": field, "areas": machinery_mentions(text_value), "value": raw})
     structured_open_areas = sorted({area for item in structured if not item.get("resolved")
+                                    and item.get("areas_are", "ambiguous") != "ambiguous"
                                     for area in item.get("areas", [])})
+    structured_necessary_areas = sorted({area for item in structured if not item.get("resolved")
+                                         and item.get("areas_are") == "necessary"
+                                         for area in item.get("areas", [])})
+    structured_alternative_areas = sorted({area for item in structured if not item.get("resolved")
+                                           and item.get("areas_are") == "alternatives"
+                                           for area in item.get("areas", [])})
     legacy_areas = sorted({area for item in legacy for area in item["areas"]})
     noncomplete = status.get("classification") != "complete"
     base = {
@@ -266,6 +273,8 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
             "structured": structured,
             "legacy_by_field": legacy,
             "structured_unresolved_areas": structured_open_areas,
+            "structured_necessary_areas": structured_necessary_areas,
+            "structured_alternative_areas": structured_alternative_areas,
             "legacy_areas": legacy_areas,
             # Structured records supersede legacy prose for ranking on that
             # bundle. This prevents a newer explicit negative such as
@@ -419,6 +428,16 @@ def blocked_summary(records: list[dict]) -> dict:
                      "object_consumer_coverage": {"covered": len(object_covered),
                                                   "total": len(object_consumers)}})
     rows.sort(key=lambda row: (-row["blocked_count"], row["area"]))
+    necessary_rows = []
+    for area in all_areas:
+        consumers = sorted(r["problem_id"] for r in noncomplete
+                           if area in r["obstruction_evidence"]["structured_necessary_areas"])
+        necessary_rows.append({"area": area, "blocked_consumers": consumers,
+                               "blocked_count": len(consumers)})
+    necessary_rows.sort(key=lambda row: (-row["blocked_count"], row["area"]))
+    disposition_counts = Counter(item.get("areas_are", "ambiguous")
+                                 for r in records
+                                 for item in r["obstruction_evidence"]["structured"])
     return {"corpus_coverage": {"covered": len(covered), "total": total},
             "noncomplete_coverage": {"covered": len(covered_noncomplete),
                                      "total": len(noncomplete)},
@@ -428,8 +447,9 @@ def blocked_summary(records: list[dict]) -> dict:
                                        for r in records),
             "explicit_empty_areas_bundle_count": sum(
                 r["obstruction_evidence"]["has_explicit_empty_areas"] for r in records),
+            "structured_disposition_counts": dict(disposition_counts),
             "ranking_basis": "unweighted unresolved blocked-consumer count; no cost term",
-            "areas": rows}
+            "areas": rows, "necessary_only_areas": necessary_rows}
 
 
 def render_markdown(records: list[dict], generated: str) -> str:
@@ -506,6 +526,10 @@ def render_markdown(records: list[dict], generated: str) -> str:
     for row in summary["areas"]:
         obj = row["object_consumer_coverage"]
         lines.append(f"| {row['area']} | {row['blocked_count']}/{open_cov['covered']} obstruction-covered non-complete bundles | {row['structured_count']}/{row['blocked_count']} | {row['legacy_count']}/{row['blocked_count']} | {obj['covered']}/{obj['total']} | {open_cov['covered']}/{open_cov['total']} |")
+    lines += ["", "### Necessary-only blocked consumers", "",
+              "| Area | Necessary blocked consumers |", "|---|---:|"]
+    for row in summary["necessary_only_areas"]:
+        lines.append(f"| {row['area']} | {row['blocked_count']}/{open_cov['covered']} |")
     lines += ["", f"Bundles with an explicit structured `areas: []`: {summary['explicit_empty_areas_bundle_count']}.",
               "Structured and legacy sources remain separate in JSON; their union is used only for",
               "the explicitly provisional ranking above.", ""]

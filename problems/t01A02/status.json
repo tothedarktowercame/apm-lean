@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 4,
     "sorry_count_scratch": 0,
     "sorry_count_total": 4
@@ -28,7 +30,22 @@
     "has_receipt": false
   },
   "classification": "partial",
-    "closer_hop": 3,
-    "boundary": "Hop 4 states three exact remaining contracts: the product-cover/deck-group package, nonsurjective torus maps acting trivially on H2, and the fixed-point consequence for maps lifting through the four-sheeted cover.",
-  "imported_at": "2026-07-13T17:26:56.679076Z"
+  "closer_hop": 3,
+  "boundary": "Hop 4 states three exact remaining contracts: the product-cover/deck-group package, nonsurjective torus maps acting trivially on H2, and the fixed-point consequence for maps lifting through the four-sheeted cover.",
+  "imported_at": "2026-07-13T17:26:56.679076Z",
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space",
+        "singular-homology"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[boundary] Hop 4 states three exact remaining contracts: the product-cover/deck-group package, nonsurjective torus maps acting trivially on H2, and the fixed-point consequence for maps lifting through the four-sheeted cover.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

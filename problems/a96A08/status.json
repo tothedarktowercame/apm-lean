@@ -47,5 +47,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 1,
     "previous_classification": "complete-lean-proof"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "ambiguous",
+      "missing": "[closer_hop] 3\n\n[closer_note] Recovered the historical symmetric-limit proof and updated the absolute-integrability argument for the current Mathlib API.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

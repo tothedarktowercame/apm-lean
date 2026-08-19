@@ -38,5 +38,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 3,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[boundary] four major boundaries remain; hop 3 closes scalar-linearity of within-derivatives along variations and isolates dominated parametric integration as the shared stationarity prerequisite",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

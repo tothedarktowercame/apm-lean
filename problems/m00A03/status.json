@@ -38,5 +38,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 1,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_progress] Hop 4 states the compact-operator annular spectral-finiteness argument precisely as apm_m00A03_bridge_1; Hop 3 already proves the derived-set conclusion from that assertion.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

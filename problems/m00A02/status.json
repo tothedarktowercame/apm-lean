@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "Proved uniqueness of coefficients for the custom Poincare expansion. The remaining implication requires integration of the derivative remainder from infinity and the improper FTC.",
-  "imported_at": "2026-07-13T17:26:54.243622Z"
+  "imported_at": "2026-07-13T17:26:54.243622Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] Proved uniqueness of coefficients for the custom Poincare expansion. The remaining implication requires integration of the derivative remainder from infinity and the improper FTC.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

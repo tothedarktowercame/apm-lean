@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 4,
     "sorry_count_scratch": 0,
     "sorry_count_total": 4
@@ -30,5 +32,19 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "Hop 4 states three exact identification contracts: pi1(RP2)=Z/2, the concrete pi1(S2)=1 and pi1(S1)=Z factor computations consumed by the compiled product route, and the genus-two surface presentation theorem.",
-  "imported_at": "2026-07-13T17:26:57.479654Z"
+  "imported_at": "2026-07-13T17:26:57.479654Z",
+  "obstructions": [
+    {
+      "areas": [
+        "fundamental-group"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[boundary] Hop 4 states three exact identification contracts: pi1(RP2)=Z/2, the concrete pi1(S2)=1 and pi1(S1)=Z factor computations consumed by the compiled product route, and the genus-two surface presentation theorem.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

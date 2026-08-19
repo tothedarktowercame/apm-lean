@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 2,
     "sorry_count_scratch": 0,
     "sorry_count_total": 2
@@ -30,5 +32,19 @@
   "classification": "partial",
   "closer_hop": 4,
   "closer_note": "Stated apm_m94J04_bridge_1: the exact scalar weak-curl identity left after coordinate reduction, encapsulating Euclidean volume transport, Fubini, and one-dimensional compact-support integration by parts.",
-  "imported_at": "2026-07-13T17:26:54.890807Z"
+  "imported_at": "2026-07-13T17:26:54.890807Z",
+  "obstructions": [
+    {
+      "areas": [
+        "differential-forms"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[closer_note] Stated apm_m94J04_bridge_1: the exact scalar weak-curl identity left after coordinate reduction, encapsulating Euclidean volume transport, Fubini, and one-dimensional compact-support integration by parts.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

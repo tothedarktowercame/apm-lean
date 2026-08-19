@@ -30,5 +30,21 @@
   "classification": "solved",
   "closer_hop": 3,
   "closer_note": "Closed using the finite-measure Lp exponent comparison on the moving restricted measure, measure monotonicity, the Bochner integral norm bound, and explicit ENNReal-to-real rpow normalization.",
-  "imported_at": "2026-05-01T19:38:17.014581Z"
+  "imported_at": "2026-05-01T19:38:17.014581Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] Closed using the finite-measure Lp exponent comparison on the moving restricted measure, measure monotonicity, the Bochner integral norm bound, and explicit ENNReal-to-real rpow normalization.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": {
+        "by": "bundle classification records the work closed",
+        "date": "2026-08-19",
+        "at_commit": "a00ea1f"
+      }
+    }
+  ]
 }

@@ -37,5 +37,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "differential-forms"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] The frozen dOneForm is now identified pointwise with Mathlib extDeriv of the bundled degree-one form. Remaining work is the bundled omega/domega identity and the radial disk integral.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

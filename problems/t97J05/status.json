@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 5,
     "sorry_count_scratch": 0,
     "sorry_count_total": 5
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 4,
   "closer_progress": "The four remaining interfaces are now stated precisely as apm_t97J05_bridge_1 through apm_t97J05_bridge_4: derivative/rank, gamma smoothness, global fiber manifold structure, and exact local normal-form charts.",
-  "imported_at": "2026-07-13T17:26:58.502373Z"
+  "imported_at": "2026-07-13T17:26:58.502373Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "ambiguous",
+      "missing": "[closer_hop] 4\n\n[closer_progress] The four remaining interfaces are now stated precisely as apm_t97J05_bridge_1 through apm_t97J05_bridge_4: derivative/rank, gamma smoothness, global fiber manifold structure, and exact local normal-form charts.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

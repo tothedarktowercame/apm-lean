@@ -60,5 +60,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "differential-forms"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] The theta-direction periodic FTC cancellation is compiled. Tangency of homotopy partial derivatives and the mixed-derivative/parameter-integral cylinder argument remain open.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

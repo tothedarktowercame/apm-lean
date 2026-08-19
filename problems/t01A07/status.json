@@ -50,7 +50,8 @@
         "at_commit": "0f5a271",
         "on_branch": "infra/t01A07-charts (not yet landed on master)",
         "measured_cost_commits": 5
-      }
+      },
+      "areas_are": "necessary"
     }
   ]
 }

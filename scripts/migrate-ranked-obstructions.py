@@ -52,17 +52,49 @@ AREAS = {
     "t99J03": ["orientation"],
 }
 
+NEXT_AREAS = {
+    "a93A02": [], "a96A08": [], "a99J03": [], "m95A02": [], "aunk04": [],
+    "m93A02": [], "m93J02": [], "t94J07": ["differential-forms"],
+    "m00A03": [], "m99A01": [], "m00A02": [], "b94J01": [], "b96A02": [],
+    "b98J04": [], "m01J06": [], "t96J08": ["differential-forms"],
+    "m95J03": [], "a97A02": [], "m98A05": [], "m00A04": [], "m98A03": [],
+    "m94J04": ["differential-forms"], "t92J05": ["fundamental-group"],
+    "t00J07": [],
+    "t97A03": ["covering-space", "fundamental-group", "singular-homology"],
+    "m95J01": [], "t01A02": ["covering-space", "singular-homology"],
+    "m93A04": [], "t97J05": [], "t01J01": ["singular-homology"],
+}
+
+AMBIGUOUS = {"a96A08", "a99J03", "t00J07", "t97J05"}
+
 LEGACY_FIELDS = ("closer_hop", "boundary", "closer_note", "sorry_details", "closer_progress")
 RESOLVED_CLASSIFICATIONS = {"complete", "compiled", "closed", "proved", "solved"}
 
 
 def main() -> None:
     repo = Path(__file__).resolve().parents[1]
-    for problem_id, areas in AREAS.items():
+    # Backfill the discriminator on every structured record, including records
+    # authored before this migration. t97J06 explicitly names alternative
+    # witnesses; all other existing records describe jointly required pieces.
+    for path in (repo / "problems").glob("*/status.json"):
+        status = json.loads(path.read_text())
+        changed = False
+        for item in status.get("obstructions", []):
+            if "areas_are" not in item:
+                item["areas_are"] = ("alternatives" if path.parent.name == "t97J06"
+                                     and item.get("frame") == "phase-2b-legacy-migration"
+                                     else "necessary")
+                changed = True
+        if changed:
+            path.write_text(json.dumps(status, indent=2) + "\n")
+
+    for problem_id, areas in (AREAS | NEXT_AREAS).items():
         path = repo / "problems" / problem_id / "status.json"
         status = json.loads(path.read_text())
         existing = status.get("obstructions", [])
-        if any(item.get("frame") == "phase-2b-legacy-migration" for item in existing):
+        frame = ("phase-2c-legacy-migration" if problem_id in NEXT_AREAS
+                 else "phase-2b-legacy-migration")
+        if any(item.get("frame") == frame for item in existing):
             path.write_text(json.dumps(status, indent=2) + "\n")
             continue
         paragraphs = []
@@ -77,9 +109,10 @@ def main() -> None:
                         "date": "2026-08-19", "at_commit": "a00ea1f"}
         entry = {
             "areas": areas,
+            "areas_are": "ambiguous" if problem_id in AMBIGUOUS else "necessary",
             "missing": "\n\n".join(paragraphs),
             "recorded_by": "codex-6",
-            "frame": "phase-2b-legacy-migration",
+            "frame": frame,
             "at_commit": "a00ea1f",
             "date": "2026-08-19",
             "resolved": resolved,

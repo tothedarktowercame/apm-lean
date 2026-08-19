@@ -39,5 +39,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 5,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] Compiled continuity of B and punctured-neighborhood convergence of diagonalJordan to zero. Nonzero-parameter conjugacy, exponential identification, and the IVP derivative formula remain open.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

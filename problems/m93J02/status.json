@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -29,5 +31,17 @@
   },
   "classification": "partial",
   "boundary": "nested ENNReal local-limsup compactness and completeness development; hop 3 compiles the full generic toReal definiteness step, leaving finiteness and norm algebra",
-  "imported_at": "2026-07-13T17:26:54.602608Z"
+  "imported_at": "2026-07-13T17:26:54.602608Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[boundary] nested ENNReal local-limsup compactness and completeness development; hop 3 compiles the full generic toReal definiteness step, leaving finiteness and norm algebra",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

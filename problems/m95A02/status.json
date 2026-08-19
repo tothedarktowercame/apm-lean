@@ -38,5 +38,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 3,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_progress] Hop 3 compiles uniform-pointwise-bound transport through m95A02MaxDist; only the bilateral weighted Fourier tail estimate remains.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

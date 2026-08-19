@@ -31,5 +31,19 @@
   },
   "classification": "partial",
   "closer_progress": "Hop 4 isolates two exact classification contracts: null-homology of an embedded circle implies separation, and two disjoint essential separating curves on the encoded genus-two surface cobound the requested annulus.",
-  "imported_at": "2026-07-13T17:26:56.777282Z"
+  "imported_at": "2026-07-13T17:26:56.777282Z",
+  "obstructions": [
+    {
+      "areas": [
+        "singular-homology"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_progress] Hop 4 isolates two exact classification contracts: null-homology of an embedded circle implies separation, and two disjoint essential separating curves on the encoded genus-two surface cobound the requested annulus.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2c-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }
