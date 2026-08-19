@@ -1,20 +1,61 @@
 # Frozen-statement dependency map
 
-This directory contains a reproducible map for deciding which shared
-infrastructure to build first while completing the APM corpus:
+This directory contains a reproducible descriptive map of the encoded APM
+corpus and its recorded obstructions:
 
 - `frozen-statement-dependencies.json` is the machine-readable artifact.
 - `frozen-statement-dependencies.md` is its generated summary.
 - This README explains the method, evidence coverage, and limits.
 
-The map does not estimate implementation cost and is not, by itself, a funding
-recommendation. Reference demand, recorded obstruction demand, and cost are
+The map does not estimate implementation cost or predict which infrastructure
+will close a problem. Reference demand, recorded obstruction demand, and cost are
 different quantities. For example, `t01A07` had no statement-level machinery
 classification and still took five commits to close. The two-open
 simply-connected theorem took eight dispatches, seven commits, and two
 no-commit stops across five distinct walls; its prior estimate of six to twelve
 commits was consistent with the observed work. Costs must be measured from
 completed work rather than inferred from dependency counts.
+
+## Validation: description, not infrastructure prediction
+
+The map was tested against the 27 problem bundles that actually import one or
+more of the 20 `ConstructionTargets` modules. Their transitive imports provide
+38 observed problem--module edges: a cumulative record of infrastructure used
+in real formalizations. A predicted edge means that the statement layer names
+a declaration owned by the imported module, or that a recorded obstruction
+area maps to that module under the mapping frozen in commit `a1e99ab` before
+scoring.
+
+| Layer | Scorable problems | Observed edges | Predicted edges | Precision | Recall | Problems with any correct prediction |
+|---|---:|---:|---:|---:|---:|---:|
+| Frozen statement | 27 | 38 | 8 | 6/8 (75.0%) | 6/38 (15.8%) | 6/27 |
+| Blocked consumer | 17 | 23 | 16 | 3/16 (18.8%) | 3/23 (13.0%) | 2/17 |
+
+The frozen-statement result is a clean negative result. Statements are static,
+yet the object layer recovered only 15.8% of realised infrastructure edges. It
+describes what encoded theorems are about; it does not predict what must be
+built to prove them.
+
+The blocked-consumer score has a different interpretation. Obstruction records
+describe the current wall, whereas imports accumulate every earlier wall
+already passed. Scoring a moving frontier against a cumulative history is
+structurally misaligned. The 13.0% recall therefore does not refute the blocked
+layer as a forward signal, but neither does it validate it. It remains useful
+as a description of what attempts reported being stopped by, and no claim that
+it predicts future infrastructure is supported by present evidence.
+
+Measured history is the only infrastructure-use signal validated here. The
+adjacent `realized-construction-targets` artifacts report transitive consumers
+and historical changed-line cost for all 20 modules. Imports establish realised
+use, not causal necessity, and changed lines remain an imperfect cost unit, but
+both are observations rather than forecasts.
+
+Future structured obstruction records carry `date` and `at_commit`. Those
+fields make it possible to reconstruct the imports and obstruction frontier at
+the same historical point and run a temporally aligned validation. Most legacy
+records lack that provenance, so the fairer test cannot be run retrospectively.
+This is a concrete reason to keep recording structured obstructions beyond
+bookkeeping.
 
 ## Evidence layers
 
@@ -29,9 +70,9 @@ The artifact keeps three kinds of evidence separate:
    statements name mathematical objects while proofs name techniques. This is
    weaker evidence and never contributes to object requirements.
 3. **Blocked consumers:** current obstruction records from `status.json`.
-   Structured records take precedence over legacy prose. These counts are the
-   scheduling signal, because merely referencing an area does not mean that
-   area blocks the proof.
+   Structured records take precedence over legacy prose. These counts describe
+   reported blockers; validation above does not establish them as a scheduling
+   signal.
 
 An obstruction's `areas_are` field is `necessary` when all named areas are
 jointly required, `alternatives` when any one named area suffices, and
@@ -82,7 +123,8 @@ keyword matcher. Four regimes tested different failure modes:
    ambiguous records. It changed no tracked-area count.
 
 The leading three areas retained the same order and zero-width bands under all
-four regimes. This supports using their order for scheduling. It does not show
+four regimes. That establishes stability of the descriptive ranking, not its
+ability to predict which infrastructure should be built. It also does not show
 that their costs are equal, that every consumer needs the same lemma, or that
 the unmigrated records contain no further consumers.
 
@@ -122,9 +164,10 @@ missing explanation, and forcing such records into an area would replace an
 explicit evidence gap with false precision. In this map, `ambiguous` therefore
 often measures record sparsity rather than subtle Boolean structure.
 
-The map can order infrastructure using the evidence that exists. It cannot
-tell us why undocumented work stopped, reliably infer proof obligations from a
-declaration reference, or predict implementation cost.
+The map describes the corpus and its recorded blockers. It cannot tell us why
+undocumented work stopped, reliably infer proof obligations from a declaration
+reference, predict which infrastructure will be used, or predict implementation
+cost.
 
 ## Regeneration
 
