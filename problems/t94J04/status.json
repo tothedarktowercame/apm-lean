@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 2,
     "sorry_count_scratch": 0,
     "sorry_count_total": 2
@@ -30,5 +32,20 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_progress": "Hop 4 states the exact missing finite-index surface-group theorem for k >= 2. It combines subgroup-cover realization, Euler-characteristic multiplicativity, and orientable-surface classification, while excluding the already completed index-one and finite-sheet work.",
-  "imported_at": "2026-07-13T17:26:58.044834Z"
+  "imported_at": "2026-07-13T17:26:58.044834Z",
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space",
+        "fundamental-group",
+        "orientation"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_progress] Hop 4 states the exact missing finite-index surface-group theorem for k >= 2. It combines subgroup-cover realization, Euler-characteristic multiplicativity, and orientable-surface classification, while excluding the already completed index-one and finite-sheet work.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

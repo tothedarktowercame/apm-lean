@@ -2,43 +2,115 @@
   "blocked_consumer_summary": {
     "areas": [
       {
+        "area": "singular-homology",
+        "blocked_consumers": [
+          "t00J02",
+          "t01A04",
+          "t01J03",
+          "t02A03",
+          "t02A04",
+          "t02A06",
+          "t02A08",
+          "t03J01",
+          "t03J02",
+          "t94J08",
+          "t94J09",
+          "t96A03",
+          "t96J06",
+          "t97A01",
+          "t97A02",
+          "t97J04",
+          "t98A02"
+        ],
+        "blocked_count": 17,
+        "legacy_count": 0,
+        "object_consumer_coverage": {
+          "covered": 32,
+          "total": 32
+        },
+        "structured_count": 17
+      },
+      {
+        "area": "fundamental-group",
+        "blocked_consumers": [
+          "t01A04",
+          "t01J03",
+          "t02A03",
+          "t03J02",
+          "t03J03",
+          "t91A05",
+          "t91J02",
+          "t93A03",
+          "t94J04",
+          "t97A01",
+          "t97J03",
+          "t97J04"
+        ],
+        "blocked_count": 12,
+        "legacy_count": 0,
+        "object_consumer_coverage": {
+          "covered": 15,
+          "total": 16
+        },
+        "structured_count": 12
+      },
+      {
+        "area": "covering-space",
+        "blocked_consumers": [
+          "t01A04",
+          "t02A06",
+          "t03J03",
+          "t92J06",
+          "t94J04",
+          "t95J06",
+          "t97J02",
+          "t98A01"
+        ],
+        "blocked_count": 8,
+        "legacy_count": 0,
+        "object_consumer_coverage": {
+          "covered": 13,
+          "total": 14
+        },
+        "structured_count": 8
+      },
+      {
         "area": "orientation",
         "blocked_consumers": [
           "t02A08",
           "t03J03",
           "t94J04",
           "t94J08",
-          "t95J03",
           "t95J06",
           "t97J02",
           "t98A02",
           "t99J03"
         ],
-        "blocked_count": 9,
-        "legacy_count": 9,
+        "blocked_count": 8,
+        "legacy_count": 0,
         "object_consumer_coverage": {
           "covered": 8,
           "total": 9
         },
-        "structured_count": 0
+        "structured_count": 8
       },
       {
-        "area": "fundamental-group",
+        "area": "mayer-vietoris",
         "blocked_consumers": [
-          "t01A04",
-          "t02A03",
-          "t91A05",
-          "t91J02",
-          "t97J03",
-          "t97J06"
+          "t00A01",
+          "t01J03",
+          "t03J02",
+          "t96A03",
+          "t97J04",
+          "t98A02"
         ],
         "blocked_count": 6,
-        "legacy_count": 6,
+        "legacy_count": 0,
         "object_consumer_coverage": {
-          "covered": 15,
-          "total": 16
+          "covered": 0,
+          "total": 0
         },
-        "structured_count": 0
+        "structured_count": 6
       },
       {
         "area": "van-kampen",
@@ -51,45 +123,12 @@
           "t97J04"
         ],
         "blocked_count": 6,
-        "legacy_count": 6,
+        "legacy_count": 0,
         "object_consumer_coverage": {
           "covered": 0,
           "total": 0
         },
-        "structured_count": 0
-      },
-      {
-        "area": "singular-homology",
-        "blocked_consumers": [
-          "t02A03",
-          "t02A04",
-          "t02A06",
-          "t94J09",
-          "t97A01"
-        ],
-        "blocked_count": 5,
-        "legacy_count": 4,
-        "object_consumer_coverage": {
-          "covered": 32,
-          "total": 32
-        },
-        "structured_count": 1
-      },
-      {
-        "area": "covering-space",
-        "blocked_consumers": [
-          "t01A04",
-          "t02A06",
-          "t92J06",
-          "t98A01"
-        ],
-        "blocked_count": 4,
-        "legacy_count": 3,
-        "object_consumer_coverage": {
-          "covered": 13,
-          "total": 14
-        },
-        "structured_count": 1
+        "structured_count": 6
       },
       {
         "area": "transversality",
@@ -100,42 +139,41 @@
           "t94A06"
         ],
         "blocked_count": 4,
-        "legacy_count": 4,
+        "legacy_count": 0,
         "object_consumer_coverage": {
           "covered": 0,
           "total": 0
         },
-        "structured_count": 0
+        "structured_count": 4
+      },
+      {
+        "area": "cellular-homology",
+        "blocked_consumers": [
+          "t96A03",
+          "t97A01",
+          "t98A02"
+        ],
+        "blocked_count": 3,
+        "legacy_count": 0,
+        "object_consumer_coverage": {
+          "covered": 0,
+          "total": 0
+        },
+        "structured_count": 3
       },
       {
         "area": "cohomology",
         "blocked_consumers": [
-          "m94A01",
           "t03J01",
           "t97A02"
         ],
-        "blocked_count": 3,
-        "legacy_count": 3,
+        "blocked_count": 2,
+        "legacy_count": 0,
         "object_consumer_coverage": {
           "covered": 1,
           "total": 1
         },
-        "structured_count": 0
-      },
-      {
-        "area": "mayer-vietoris",
-        "blocked_consumers": [
-          "t96A03",
-          "t97J04",
-          "t98A02"
-        ],
-        "blocked_count": 3,
-        "legacy_count": 3,
-        "object_consumer_coverage": {
-          "covered": 0,
-          "total": 0
-        },
-        "structured_count": 0
+        "structured_count": 2
       },
       {
         "area": "excision",
@@ -143,12 +181,12 @@
           "t98A02"
         ],
         "blocked_count": 1,
-        "legacy_count": 1,
+        "legacy_count": 0,
         "object_consumer_coverage": {
           "covered": 0,
           "total": 0
         },
-        "structured_count": 0
+        "structured_count": 1
       },
       {
         "area": "intersection-theory",
@@ -156,12 +194,12 @@
           "t96J06"
         ],
         "blocked_count": 1,
-        "legacy_count": 1,
+        "legacy_count": 0,
         "object_consumer_coverage": {
           "covered": 0,
           "total": 0
         },
-        "structured_count": 0
+        "structured_count": 1
       },
       {
         "area": "kunneth",
@@ -169,26 +207,26 @@
           "t96J06"
         ],
         "blocked_count": 1,
-        "legacy_count": 1,
+        "legacy_count": 0,
         "object_consumer_coverage": {
           "covered": 0,
           "total": 0
         },
-        "structured_count": 0
+        "structured_count": 1
       }
     ],
     "corpus_coverage": {
       "covered": 266,
       "total": 475
     },
-    "explicit_empty_areas_bundle_count": 1,
+    "explicit_empty_areas_bundle_count": 4,
     "legacy_bundle_count": 266,
     "noncomplete_coverage": {
       "covered": 197,
       "total": 319
     },
     "ranking_basis": "unweighted unresolved blocked-consumer count; no cost term",
-    "structured_bundle_count": 2
+    "structured_bundle_count": 36
   },
   "generated": "2026-08-19 (deterministic corpus snapshot; rerun updates content)",
   "method": "frozen theorem signature plus transitive local signature closure",
@@ -996,12 +1034,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "cauchyTransform_not_extendable_to_entire",
+                "cauchyTransform_mul_z_tendsto",
                 "cauchyTransform"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem cauchyTransform_not_extendable_to_entire (g : \u2102 \u2192 \u2102) (hg : Differentiable \u2102 g) (hagree : Set.EqOn g (cauchyTransform K) ((\u2191) '' K)\u1d9c) : False",
+              "root_statement": "theorem cauchyTransform_mul_z_tendsto : Tendsto (fun z : \u2102 => z * cauchyTransform K z) (cocompact \u2102) (\ud835\udcdd (-(volume K).toReal))",
               "source_declaration": "cauchyTransform",
               "source_expression": "noncomputable def cauchyTransform (z : \u2102) : \u2102 := \u222b t in K, ((t : \u2102) - z)\u207b\u00b9"
             }
@@ -1796,12 +1834,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ball_volume_recursion",
+                "ballSlice_integral_tendsto_zero",
                 "ballSlice"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ball_volume_recursion (n : \u2115) (hn : 0 < n) : \u2203 f : \u211d \u2192 \u211d, (\u2200 t, 0 \u2264 f t \u2227 f t \u2264 1) \u2227 (volume (Metric.ball (0 : EuclideanSpace \u211d (Fin (n + 1))) 1)).toReal = (volume (Metric.ball (0 : EuclideanSpace \u211d (Fin n)) 1)).toReal * \u222b t, (ballSlice t) ^ n",
+              "root_statement": "theorem ballSlice_integral_tendsto_zero : Tendsto (fun n => \u222b t, (ballSlice t) ^ n) atTop (nhds 0)",
               "source_declaration": "ballSlice",
               "source_expression": "noncomputable def ballSlice (t : \u211d) : \u211d := if t \u2208 Set.Icc (-1) 1 then Real.sqrt (1 - t^2) else 0"
             }
@@ -1813,12 +1851,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ball_volume_recursion",
+                "ballSlice_integral_tendsto_zero",
                 "ballSlice"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ball_volume_recursion (n : \u2115) (hn : 0 < n) : \u2203 f : \u211d \u2192 \u211d, (\u2200 t, 0 \u2264 f t \u2227 f t \u2264 1) \u2227 (volume (Metric.ball (0 : EuclideanSpace \u211d (Fin (n + 1))) 1)).toReal = (volume (Metric.ball (0 : EuclideanSpace \u211d (Fin n)) 1)).toReal * \u222b t, (ballSlice t) ^ n",
+              "root_statement": "theorem ballSlice_integral_tendsto_zero : Tendsto (fun n => \u222b t, (ballSlice t) ^ n) atTop (nhds 0)",
               "source_declaration": "ballSlice",
               "source_expression": "noncomputable def ballSlice (t : \u211d) : \u211d := if t \u2208 Set.Icc (-1) 1 then Real.sqrt (1 - t^2) else 0"
             }
@@ -2515,12 +2553,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "L1_disk_convergence_analytic_upgrade",
+                "tendstoUniformlyOn_deriv_of_L1",
                 "L1ConvergesOnDisks"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem L1_disk_convergence_analytic_upgrade {f : \u2115 \u2192 \u2102 \u2192 \u2102} {F : \u2102 \u2192 \u2102} (h\u03a9 : IsOpen \u03a9) (hf : \u2200 n, DifferentiableOn \u2102 (f n) \u03a9) (hF : ContinuousOn F \u03a9) (hconv : L1ConvergesOnDisks f F \u03a9) : DifferentiableOn \u2102 F \u03a9 \u2227 (\u2200 K, IsCompact K \u2192 K \u2286 \u03a9 \u2192 TendstoUniformlyOn f F atTop K) \u2227 (\u2200 K, IsCompact K \u2192 K \u2286 \u03a9 \u2192 TendstoUniformlyOn (fun n z => deriv (f n) z) (deriv F) atTop K)",
+              "root_statement": "theorem tendstoUniformlyOn_deriv_of_L1 {f : \u2115 \u2192 \u2102 \u2192 \u2102} {F : \u2102 \u2192 \u2102} (h\u03a9 : IsOpen \u03a9) (hf : \u2200 n, DifferentiableOn \u2102 (f n) \u03a9) (hF : ContinuousOn F \u03a9) (hconv : L1ConvergesOnDisks f F \u03a9) {K : Set \u2102} (hK : IsCompact K) (hK\u03a9 : K \u2286 \u03a9) : TendstoUniformlyOn (fun n z => deriv (f n) z) (deriv F) atTop K",
               "source_declaration": "L1ConvergesOnDisks",
               "source_expression": "def L1ConvergesOnDisks (f : \u2115 \u2192 \u2102 \u2192 \u2102) (F : \u2102 \u2192 \u2102) (\u03a9 : Set \u2102) : Prop := \u2200 (z : \u2102) (r : \u211d), 0 < r \u2192 closedBall z r \u2286 \u03a9 \u2192 Tendsto (fun n => \u222b w in closedBall z r, \u2016f n w - F w\u2016) atTop (\ud835\udcdd 0)"
             }
@@ -3116,13 +3154,13 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "laplace_transform_analytic",
+                "laplace_transform_entire_of_compact_support",
                 "laplaceTransform",
                 "laplaceKernel"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem laplace_transform_analytic (data : LaplaceData) : AnalyticOn \u2102 (laplaceTransform data.f) rightHalfPlane",
+              "root_statement": "theorem laplace_transform_entire_of_compact_support (f : \u211d \u2192 \u2102) (hf : compactSupportOnHalfLine f) : AnalyticOn \u2102 (fun z => laplaceTransform f z) Set.univ",
               "source_declaration": "laplaceKernel",
               "source_expression": "def laplaceKernel (z : \u2102) (t : \u211d) : \u2102 := Complex.exp (-(t : \u2102) * z)"
             }
@@ -5464,12 +5502,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "second_deriv_bound",
+                "quadratic_bound",
                 "SchwarzData"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem second_deriv_bound (data : SchwarzData) : \u2016deriv (deriv data.f) 0\u2016 \u2264 2",
+              "root_statement": "theorem quadratic_bound (data : SchwarzData) {z : \u2102} (hz : z \u2208 unitDisk) : \u2016data.f z\u2016 \u2264 \u2016z\u2016 ^ 2",
               "source_declaration": "SchwarzData",
               "source_expression": "structure SchwarzData where f : \u2102 \u2192 \u2102 hol : AnalyticOn \u2102 f unitDisk bounded : \u2200 {z}, z \u2208 unitDisk \u2192 \u2016f z\u2016 \u2264 1 origin_zero : f 0 = 0 deriv_zero : deriv f 0 = 0 namespace SchwarzData"
             }
@@ -5545,12 +5583,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "rigidity",
+                "quadratic_bound",
                 "unitDisk"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem rigidity (data : SchwarzData) {w : \u2102} (hw : w \u2208 unitDisk) (hne : w \u2260 0) (heq : \u2016data.f w\u2016 = \u2016w\u2016 ^ 2) : \u2203 \u03b2 : \u2102, \u2016\u03b2\u2016 = 1 \u2227 \u2200 z \u2208 unitDisk, data.f z = \u03b2 * z ^ 2",
+              "root_statement": "theorem quadratic_bound (data : SchwarzData) {z : \u2102} (hz : z \u2208 unitDisk) : \u2016data.f z\u2016 \u2264 \u2016z\u2016 ^ 2",
               "source_declaration": "unitDisk",
               "source_expression": "def unitDisk : Set \u2102 := Metric.ball 0 1"
             }
@@ -7454,12 +7492,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "fourier_maps_L1_to_C0",
+                "fourierTransform_norm_le",
                 "fourierTransform"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem fourier_maps_L1_to_C0 {f : \u211d \u2192 \u2102} (hf : Integrable f volume) : Continuous (fourierTransform f) \u2227 (\u2200 \u03be, \u2016fourierTransform f \u03be\u2016 \u2264 \u222b x, \u2016f x\u2016 \u2202volume) \u2227 Tendsto (fourierTransform f) (cocompact \u211d) (\ud835\udcdd 0)",
+              "root_statement": "theorem fourierTransform_norm_le {f : \u211d \u2192 \u2102} (hf : Integrable f volume) (\u03be : \u211d) : \u2016fourierTransform f \u03be\u2016 \u2264 \u222b x, \u2016f x\u2016 \u2202volume",
               "source_declaration": "fourierTransform",
               "source_expression": "noncomputable def fourierTransform (f : \u211d \u2192 \u2102) (\u03be : \u211d) : \u2102 := \u222b x, f x * Complex.exp (I * x * \u03be) \u2202volume"
             }
@@ -7471,12 +7509,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "fourier_maps_L1_to_C0",
+                "fourierTransform_norm_le",
                 "fourierTransform"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem fourier_maps_L1_to_C0 {f : \u211d \u2192 \u2102} (hf : Integrable f volume) : Continuous (fourierTransform f) \u2227 (\u2200 \u03be, \u2016fourierTransform f \u03be\u2016 \u2264 \u222b x, \u2016f x\u2016 \u2202volume) \u2227 Tendsto (fourierTransform f) (cocompact \u211d) (\ud835\udcdd 0)",
+              "root_statement": "theorem fourierTransform_norm_le {f : \u211d \u2192 \u2102} (hf : Integrable f volume) (\u03be : \u211d) : \u2016fourierTransform f \u03be\u2016 \u2264 \u222b x, \u2016f x\u2016 \u2202volume",
               "source_declaration": "fourierTransform",
               "source_expression": "noncomputable def fourierTransform (f : \u211d \u2192 \u2102) (\u03be : \u211d) : \u2102 := \u222b x, f x * Complex.exp (I * x * \u03be) \u2202volume"
             }
@@ -8091,13 +8129,13 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "unifCont_implies_diffQuot",
+                "diffQuot_implies_unifCont",
                 "DiffQuotientCondition",
                 "I01"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem unifCont_implies_diffQuot {f : \u211d \u2192 \u211d} (hf : UnifContOn01 f) : DiffQuotientCondition f",
+              "root_statement": "theorem diffQuot_implies_unifCont {f : \u211d \u2192 \u211d} (hf : DiffQuotientCondition f) : UnifContOn01 f",
               "source_declaration": "I01",
               "source_expression": "abbrev I01 : Set \u211d := Ioo (0 : \u211d) 1"
             }
@@ -8385,12 +8423,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "norm_sub_tendsto_zero_of_weak_and_norm",
+                "norm_le_liminf_of_weak",
                 "WeakTendsto"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem norm_sub_tendsto_zero_of_weak_and_norm {h : \u2115 \u2192 H} {x : H} (hweak : WeakTendsto h x) (hnorm : Tendsto (fun n => \u2016h n\u2016) atTop (\ud835\udcdd \u2016x\u2016)) : Tendsto (fun n => \u2016h n - x\u2016) atTop (\ud835\udcdd 0)",
+              "root_statement": "theorem norm_le_liminf_of_weak [CompleteSpace H] {h : \u2115 \u2192 H} {x : H} (hweak : WeakTendsto h x) : \u2016x\u2016 \u2264 liminf (fun n => (\u2016h n\u2016 : \u211d)) atTop",
               "source_declaration": "WeakTendsto",
               "source_expression": "def WeakTendsto (h : \u2115 \u2192 H) (x : H) : Prop := \u2200 k : H, Tendsto (fun n => \u27eah n, k\u27eb_\u211d) atTop (\ud835\udcdd \u27eax, k\u27eb_\u211d)"
             }
@@ -8402,12 +8440,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "norm_sub_tendsto_zero_of_weak_and_norm",
+                "norm_le_liminf_of_weak",
                 "WeakTendsto"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem norm_sub_tendsto_zero_of_weak_and_norm {h : \u2115 \u2192 H} {x : H} (hweak : WeakTendsto h x) (hnorm : Tendsto (fun n => \u2016h n\u2016) atTop (\ud835\udcdd \u2016x\u2016)) : Tendsto (fun n => \u2016h n - x\u2016) atTop (\ud835\udcdd 0)",
+              "root_statement": "theorem norm_le_liminf_of_weak [CompleteSpace H] {h : \u2115 \u2192 H} {x : H} (hweak : WeakTendsto h x) : \u2016x\u2016 \u2264 liminf (fun n => (\u2016h n\u2016 : \u211d)) atTop",
               "source_declaration": "WeakTendsto",
               "source_expression": "def WeakTendsto (h : \u2115 \u2192 H) (x : H) : Prop := \u2200 k : H, Tendsto (fun n => \u27eah n, k\u27eb_\u211d) atTop (\ud835\udcdd \u27eax, k\u27eb_\u211d)"
             }
@@ -11881,12 +11919,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "indicator_not_riemann_integrable",
+                "riemann_lebesgue_sandwich",
                 "lowerRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
+              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
               "source_declaration": "lowerRiemannIntegral",
               "source_expression": "noncomputable def lowerRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sSup {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sInf (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -11898,12 +11936,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "indicator_not_riemann_integrable",
+                "riemann_lebesgue_sandwich",
                 "lowerRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
+              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
               "source_declaration": "lowerRiemannIntegral",
               "source_expression": "noncomputable def lowerRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sSup {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sInf (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -11915,12 +11953,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "indicator_not_riemann_integrable",
+                "riemann_lebesgue_sandwich",
                 "lowerRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
+              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
               "source_declaration": "lowerRiemannIntegral",
               "source_expression": "noncomputable def lowerRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sSup {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sInf (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -11932,12 +11970,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "indicator_not_riemann_integrable",
+                "riemann_lebesgue_sandwich",
                 "lowerRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
+              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
               "source_declaration": "lowerRiemannIntegral",
               "source_expression": "noncomputable def lowerRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sSup {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sInf (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -11997,12 +12035,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "indicator_not_riemann_integrable",
+                "riemann_lebesgue_sandwich",
                 "upperRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
+              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
               "source_declaration": "upperRiemannIntegral",
               "source_expression": "noncomputable def upperRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sInf {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sSup (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12014,12 +12052,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "indicator_not_riemann_integrable",
+                "riemann_lebesgue_sandwich",
                 "upperRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
+              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
               "source_declaration": "upperRiemannIntegral",
               "source_expression": "noncomputable def upperRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sInf {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sSup (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12031,12 +12069,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "indicator_not_riemann_integrable",
+                "riemann_lebesgue_sandwich",
                 "upperRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
+              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
               "source_declaration": "upperRiemannIntegral",
               "source_expression": "noncomputable def upperRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sInf {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sSup (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12048,12 +12086,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "indicator_not_riemann_integrable",
+                "riemann_lebesgue_sandwich",
                 "upperRiemannIntegral"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem indicator_not_riemann_integrable (K : Set \u211d) (hK : IsCompact K) (hK_sub : K \u2286 Icc 0 1) (hK_meas : 0 < volume K) (hK_int : interior K = \u2205) : lowerRiemannIntegral (K.indicator (fun _ => (1:\u211d))) < upperRiemannIntegral (K.indicator (fun _ => (1:\u211d)))",
+              "root_statement": "theorem riemann_lebesgue_sandwich (f : \u211d \u2192 \u211d) (hf_meas : Measurable f) (hf_bdd : \u2203 M, \u2200 x \u2208 Icc (0:\u211d) 1, |f x| \u2264 M) : (lowerRiemannIntegral f \u2264 \u222b x in Icc (0:\u211d) 1, f x \u2202volume) \u2227 (\u222b x in Icc (0:\u211d) 1, f x \u2202volume \u2264 upperRiemannIntegral f)",
               "source_declaration": "upperRiemannIntegral",
               "source_expression": "noncomputable def upperRiemannIntegral (f : \u211d \u2192 \u211d) : \u211d := sInf {s : \u211d | \u2203 (n : \u2115) (t : Fin (n+2) \u2192 \u211d), t 0 = 0 \u2227 t (Fin.last _) = 1 \u2227 (\u2200 i : Fin (n+1), t i.castSucc < t i.succ) \u2227 s = \u2211 i : Fin (n+1), (sSup (f '' Icc (t i.castSucc) (t i.succ))) * (t i.succ - t i.castSucc)}"
             }
@@ -12496,12 +12534,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "f_radial_conv_L2_bound",
+                "f_radial_not_memLp_top",
                 "E"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem f_radial_conv_L2_bound {g : E \u2192 \u211d} (hg : MemLp g 2 volume) : eLpNorm (fun x => \u222b y, f_radial (x - y) * g y \u2202volume) 2 volume \u2264 ENNReal.ofReal (2 * \u03c0 ^ 2) * eLpNorm g 2 volume",
+              "root_statement": "theorem f_radial_not_memLp_top : \u00ac MemLp f_radial \u22a4 (volume : Measure E)",
               "source_declaration": "E",
               "source_expression": "abbrev E := EuclideanSpace \u211d (Fin 3)"
             }
@@ -12929,12 +12967,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "lacunarySeries_natural_boundary",
+                "lacunarySeries_continuousOn",
                 "lacunarySeries"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem lacunarySeries_natural_boundary : \u00ac\u2203 (U : Set \u2102) (F : \u2102 \u2192 \u2102), IsOpen U \u2227 IsConnected U \u2227 ball (0 : \u2102) 1 \u2282 U \u2227 DifferentiableOn \u2102 F U \u2227 \u2200 z \u2208 ball (0 : \u2102) 1, F z = lacunarySeries z",
+              "root_statement": "theorem lacunarySeries_continuousOn : ContinuousOn lacunarySeries (closedBall (0 : \u2102) 1)",
               "source_declaration": "lacunarySeries",
               "source_expression": "def lacunarySeries (z : \u2102) : \u2102 := \u2211' n : \u2115, z ^ n.factorial / \u2191n.factorial"
             }
@@ -13848,12 +13886,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "integral_arctan_tendsto_of_tendstoInMeasure",
+                "tendstoInMeasure_iff_integral_arctan",
                 "TendstoInMeasureZero"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem integral_arctan_tendsto_of_tendstoInMeasure {f : \u2115 \u2192 \u03a9 \u2192 \u211d} (hf : \u2200 n, Measurable (f n)) (hconv : TendstoInMeasureZero f \u03bc) : Tendsto (fun n => \u222b x, |arctan (f n x)| \u2202\u03bc) atTop (\ud835\udcdd 0)",
+              "root_statement": "theorem tendstoInMeasure_iff_integral_arctan {f : \u2115 \u2192 \u03a9 \u2192 \u211d} (hf : \u2200 n, Measurable (f n)) : TendstoInMeasureZero f \u03bc \u2194 Tendsto (fun n => \u222b x, |arctan (f n x)| \u2202\u03bc) atTop (\ud835\udcdd 0)",
               "source_declaration": "TendstoInMeasureZero",
               "source_expression": "def TendstoInMeasureZero (f : \u2115 \u2192 \u03a9 \u2192 \u211d) (\u03bc : Measure \u03a9) : Prop := \u2200 \u03b5 : \u211d, 0 < \u03b5 \u2192 Tendsto (fun n => \u03bc {x | \u03b5 < |f n x|}) atTop (\ud835\udcdd 0)"
             }
@@ -13865,12 +13903,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "integral_arctan_tendsto_of_tendstoInMeasure",
+                "tendstoInMeasure_iff_integral_arctan",
                 "TendstoInMeasureZero"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem integral_arctan_tendsto_of_tendstoInMeasure {f : \u2115 \u2192 \u03a9 \u2192 \u211d} (hf : \u2200 n, Measurable (f n)) (hconv : TendstoInMeasureZero f \u03bc) : Tendsto (fun n => \u222b x, |arctan (f n x)| \u2202\u03bc) atTop (\ud835\udcdd 0)",
+              "root_statement": "theorem tendstoInMeasure_iff_integral_arctan {f : \u2115 \u2192 \u03a9 \u2192 \u211d} (hf : \u2200 n, Measurable (f n)) : TendstoInMeasureZero f \u03bc \u2194 Tendsto (fun n => \u222b x, |arctan (f n x)| \u2202\u03bc) atTop (\ud835\udcdd 0)",
               "source_declaration": "TendstoInMeasureZero",
               "source_expression": "def TendstoInMeasureZero (f : \u2115 \u2192 \u03a9 \u2192 \u211d) (\u03bc : Measure \u03a9) : Prop := \u2200 \u03b5 : \u211d, 0 < \u03b5 \u2192 Tendsto (fun n => \u03bc {x | \u03b5 < |f n x|}) atTop (\ud835\udcdd 0)"
             }
@@ -35233,7 +35271,7 @@
             {
               "local_definition_chain": [
                 "apm_b96j02",
-                "apm_b96J02_trivialType",
+                "apm_b96J02_mixedType",
                 "apm_b96J02_k",
                 "apm_b96J02_xIdeal",
                 "apm_b96J02_x"
@@ -35253,7 +35291,7 @@
             {
               "local_definition_chain": [
                 "apm_b96j02",
-                "apm_b96J02_trivialType",
+                "apm_b96J02_mixedType",
                 "apm_b96J02_k",
                 "apm_b96J02_xIdeal",
                 "apm_b96J02_x"
@@ -35273,7 +35311,7 @@
             {
               "local_definition_chain": [
                 "apm_b96j02",
-                "apm_b96J02_trivialType",
+                "apm_b96J02_mixedType",
                 "apm_b96J02_k",
                 "apm_b96J02_xIdeal"
               ],
@@ -35292,7 +35330,7 @@
             {
               "local_definition_chain": [
                 "apm_b96j02",
-                "apm_b96J02_trivialType",
+                "apm_b96J02_mixedType",
                 "apm_b96J02_k",
                 "apm_b96J02_xIdeal"
               ],
@@ -52510,7 +52548,7 @@
             {
               "local_definition_chain": [
                 "apm_m93j02",
-                "apm_m93J02_localSeminorm",
+                "apm_m93J02_globalSeminorm",
                 "apm_m93J02_quotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -52528,7 +52566,7 @@
             {
               "local_definition_chain": [
                 "apm_m93j02",
-                "apm_m93J02_globalNorm",
+                "apm_m93J02_localNorm",
                 "apm_m93J02_supNorm"
               ],
               "method": "frozen-statement lexical closure",
@@ -54112,7 +54150,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [
           "cohomology"
@@ -54131,10 +54169,22 @@
             "value": "Closed by transporting ContDiff to coordinate slices, adding their centered O(h^4) bounds, normalizing iteratedDeriv 2, and extracting/dividing the local asymptotic estimate."
           }
         ],
-        "provisional_blocked_areas": [
-          "cohomology"
+        "provisional_blocked_areas": [],
+        "structured": [
+          {
+            "areas": [],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 2\n\n[closer_note] Closed by transporting ContDiff to coordinate slices, adding their centered O(h^4) bounds, normalizing iteratedDeriv 2, and extracting/dividing the local asymptotic estimate.",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
         ],
-        "structured": [],
         "structured_unresolved_areas": []
       },
       "parse_status": "ok",
@@ -55685,7 +55735,7 @@
             {
               "local_definition_chain": [
                 "apm_m94j04",
-                "apm_m94J04_curlTest",
+                "apm_m94J04_curlValue",
                 "apm_m94J04_basis"
               ],
               "method": "frozen-statement lexical closure",
@@ -56957,7 +57007,7 @@
             {
               "local_definition_chain": [
                 "apm_m95a04",
-                "apm_m95A04_Dist",
+                "apm_m95A04_Test",
                 "apm_m95A04_"
               ],
               "method": "frozen-statement lexical closure",
@@ -56975,7 +57025,7 @@
             {
               "local_definition_chain": [
                 "apm_m95a04",
-                "apm_m95A04_weakDeriv",
+                "apm_m95A04_LpI",
                 "apm_m95A04_I"
               ],
               "method": "frozen-statement lexical closure",
@@ -65135,7 +65185,7 @@
             {
               "local_definition_chain": [
                 "apm_m98j02",
-                "apm_m98J02_representsFunction",
+                "apm_m98J02_hasCompactSupport",
                 "apm_m98J02_Test"
               ],
               "method": "frozen-statement lexical closure",
@@ -65153,7 +65203,7 @@
             {
               "local_definition_chain": [
                 "apm_m98j02",
-                "apm_m98J02_representsFunction",
+                "apm_m98J02_hasCompactSupport",
                 "apm_m98J02_Test"
               ],
               "method": "frozen-statement lexical closure",
@@ -66672,7 +66722,7 @@
             {
               "local_definition_chain": [
                 "apm_m99a02",
-                "m99A02Omega",
+                "IsM99A02WeakDerivative",
                 "m99A02Point"
               ],
               "method": "frozen-statement lexical closure",
@@ -70038,10 +70088,27 @@
           }
         ],
         "provisional_blocked_areas": [
+          "mayer-vietoris",
           "van-kampen"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "mayer-vietoris",
+              "van-kampen"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 4\n\n[closer_progress] Hop 4 states the two exact remaining contracts without proof: Seifert--van Kampen for the supplied standard cover (including basepoint and group-identification transport), and the singular Mayer--Vietoris homology-sphere calculation.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "mayer-vietoris",
+          "van-kampen"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t00A01",
@@ -70379,7 +70446,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a02",
-                "apm_t00A02_RP2",
+                "apm_t00A02_antipodalCover",
                 "apm_t00A02_Sphere2"
               ],
               "method": "frozen-statement lexical closure",
@@ -70397,7 +70464,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a02",
-                "apm_t00A02_RP2",
+                "apm_t00A02_antipodalCover",
                 "apm_t00A02_Sphere2"
               ],
               "method": "frozen-statement lexical closure",
@@ -71914,7 +71981,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a05",
-                "apm_t00a05_lineIntegral",
+                "apm_t00a05_dOmega",
                 "apm_t00a05_omega"
               ],
               "method": "frozen-statement lexical closure",
@@ -72430,7 +72497,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j01",
-                "t00J01HasSphereLefschetzNumber",
+                "t00J01SphereIdentity",
                 "apm_t00j01_S2"
               ],
               "method": "frozen-statement lexical closure",
@@ -73282,7 +73349,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -73300,7 +73367,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -73318,7 +73385,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -73336,7 +73403,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -73354,7 +73421,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -73850,10 +73917,27 @@
           }
         ],
         "provisional_blocked_areas": [
+          "singular-homology",
           "transversality"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "singular-homology",
+              "transversality"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_progress] Hop 3 proves every disk-bounding inverse-image component is both compact and path connected, deriving path connectedness of Circle from its exponential parametrization. The remaining gap is the homological null-boundary theorem and the transverse-preimage/Poincare-duality bridge to the induced H2 map.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "singular-homology",
+          "transversality"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t00J02",
@@ -78392,10 +78476,29 @@
         ],
         "provisional_blocked_areas": [
           "covering-space",
-          "fundamental-group"
+          "fundamental-group",
+          "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "covering-space",
+              "fundamental-group",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] Hop 4 states three exact contracts: both concrete quotient maps are covering maps; the wedge fundamental group has the required torus-plus-circle presentation with parity kernels equal to the induced ranges; and singular H2 distinguishes the two total spaces. Together they unblock the frozen theorem.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "covering-space",
+          "fundamental-group",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t01A04",
@@ -81851,10 +81954,33 @@
           }
         ],
         "provisional_blocked_areas": [
+          "fundamental-group",
+          "mayer-vietoris",
+          "singular-homology",
           "van-kampen"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "fundamental-group",
+              "mayer-vietoris",
+              "singular-homology",
+              "van-kampen"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] The boundary inclusion, continuous canonical maps, compatibility equation, and full continuous pushout-style eliminator with restriction equations and uniqueness are compiled. Remaining work is the absent circle fundamental-group computation, van Kampen theorem, singular Mayer--Vietoris sequence, and numerical invariant transport.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "fundamental-group",
+          "mayer-vietoris",
+          "singular-homology",
+          "van-kampen"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t01J03",
@@ -82818,7 +82944,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_isInclusionPullback",
+                "apm_t01J06_isOmega",
                 "apm_t01J06_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -82870,7 +82996,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_isInclusionPullback",
+                "apm_t01J06_ProductForm2",
                 "apm_t01J06_S2"
               ],
               "method": "frozen-statement lexical closure",
@@ -82905,7 +83031,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_projectionPullback",
+                "apm_t01J06_ProductForm2",
                 "apm_t01J06_circleTangent"
               ],
               "method": "frozen-statement lexical closure",
@@ -82923,7 +83049,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_projectionPullback",
+                "apm_t01J06_ProductForm2",
                 "apm_t01J06_circleTangent"
               ],
               "method": "frozen-statement lexical closure",
@@ -82975,7 +83101,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_isInclusionPullback",
+                "apm_t01J06_ProductForm2",
                 "apm_t01J06_sphereTangent"
               ],
               "method": "frozen-statement lexical closure",
@@ -82993,7 +83119,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_isInclusionPullback",
+                "apm_t01J06_ProductForm2",
                 "apm_t01J06_sphereTangent"
               ],
               "method": "frozen-statement lexical closure",
@@ -83878,8 +84004,24 @@
           "fundamental-group",
           "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "fundamental-group",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 4\n\n[boundary] The missing invariant computations are now stated precisely as apm_t02A03_bridge_1 (the based torus fundamental group) and apm_t02A03_bridge_2 (the wedge fundamental group and degreewise singular homology). Both bridges and the original main theorem remain unproved.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "fundamental-group",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t02A03",
@@ -84106,8 +84248,22 @@
         "provisional_blocked_areas": [
           "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_progress] Hop 4 states two precise bridges: rational singular homology of the concrete attachment is Q in degree zero and zero above, and the specialized Lefschetz theorem turns that computation into a fixed point for every continuous self-map.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t02A04",
@@ -84981,7 +85137,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a07",
-                "apm_t02a07_family",
+                "apm_t02a07_IsTransverse",
                 "apm_t02a07_S2",
                 "apm_t02a07_E3"
               ],
@@ -85000,7 +85156,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a07",
-                "apm_t02a07_family",
+                "apm_t02a07_X",
                 "apm_t02a07_E4"
               ],
               "method": "frozen-statement lexical closure",
@@ -85052,7 +85208,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a07",
-                "apm_t02a07_family",
+                "apm_t02a07_IsTransverse",
                 "apm_t02a07_S2"
               ],
               "method": "frozen-statement lexical closure",
@@ -85247,8 +85403,22 @@
         "provisional_blocked_areas": [
           "transversality"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "transversality"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] Hop 4 states the exact remaining contracts: linear independence of the norm and product constraint gradients on Z, and density of transverse parameters for the concrete family. These respectively unblock regularity and the parametric-transversality conjunct; the frozen main statement is unchanged.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "transversality"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t02A07",
@@ -85748,10 +85918,27 @@
           }
         ],
         "provisional_blocked_areas": [
-          "orientation"
+          "orientation",
+          "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "orientation",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_note] Compiled multiplicativity of induced degrees under composition relative to a common orientation. The initial H2(S2)=Z orientation and nontrivial computed sphere maps remain unavailable.\n\n[closer_progress] Closer hop 2 additionally proves that the identity sphere map has degree one relative to any supplied orientation isomorphism, isolating that base case from the missing homology computation. The sole remaining sorry is existence of metric-sphere self-maps of every integer degree, requiring H2(S2)=Z and induced-map computations.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "orientation",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t02A08",
@@ -86672,10 +86859,27 @@
           }
         ],
         "provisional_blocked_areas": [
-          "cohomology"
+          "cohomology",
+          "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "cohomology",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] Closer hop 3 maps the curve homeomorphism through the exact singular H1 functor and transports nonzero classes, so the negative direction now depends solely on the unavailable computation H1(Circle; Z) != 0. The positive direction still needs primitive-cohomology representability by a circle map and a relative adjustment producing a retraction.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "cohomology",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t03J01",
@@ -87403,10 +87607,33 @@
           }
         ],
         "provisional_blocked_areas": [
+          "fundamental-group",
+          "mayer-vietoris",
+          "singular-homology",
           "van-kampen"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "fundamental-group",
+              "mayer-vietoris",
+              "singular-homology",
+              "van-kampen"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 4\n\n[boundary] The missing invariant interface is now stated precisely: apm_t03J02_bridge_1 is the Seifert--van Kampen computation and apm_t03J02_bridge_2 is the complete singular Mayer--Vietoris homology computation for the compiled quotient.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "fundamental-group",
+          "mayer-vietoris",
+          "singular-homology",
+          "van-kampen"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t03J02",
@@ -88139,10 +88366,30 @@
           }
         ],
         "provisional_blocked_areas": [
+          "covering-space",
+          "fundamental-group",
           "orientation"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "covering-space",
+              "fundamental-group",
+              "orientation"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 4\n\n[boundary] The remaining work is stated precisely in three bridges: apm_t03J03_bridge_1 classifies connected double covers by characters and total-space type, bridge_2 classifies disconnected covers as trivial, and bridge_3 states the orientable-cover cylinder-lifting consequence of the missing orientation-character range theorem. These bridges and the original main theorem remain unproved.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "covering-space",
+          "fundamental-group",
+          "orientation"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t03J03",
@@ -90224,8 +90471,22 @@
         "provisional_blocked_areas": [
           "fundamental-group"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "fundamental-group"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 4\n\n[closer_progress] The sole missing foundational result is now exposed as the precise standalone theorem apm_t91A05_bridge_1: Nontrivial (FundamentalGroup apm_t91a05_Circle apm_t91a05_circleBase). The compiled reduction consumes exactly this instance; the frozen statement is unchanged.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "fundamental-group"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t91A05",
@@ -91098,8 +91359,22 @@
         "provisional_blocked_areas": [
           "fundamental-group"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "fundamental-group"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] The explicit retraction transport and the complete fundamental-group contradiction are compiled. Remaining work is exactly the unavailable Nontrivial instance for FundamentalGroup Circle 1 and subsingleton fundamental groups for the concrete metric two-sphere.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "fundamental-group"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t91J02",
@@ -93842,8 +94117,22 @@
         "provisional_blocked_areas": [
           "covering-space"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "covering-space"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 4\n\n[closer_progress] The simplicial-set geometric realization API was additionally checked. It has neither a comparison to this concrete quotient wedge nor a theorem converting simplicial coverings to IsCoveringMap. The exact universal-cover and four finite-cover construction contracts remain open.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "covering-space"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t92J06",
@@ -94571,7 +94860,7 @@
             {
               "local_definition_chain": [
                 "apm_t92j09",
-                "apm_t92J09_param",
+                "apm_t92J09_sphere",
                 "apm_t92J09_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -95790,10 +96079,27 @@
           }
         ],
         "provisional_blocked_areas": [
+          "fundamental-group",
           "van-kampen"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "fundamental-group",
+              "van-kampen"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] The concrete circle wedge now has a compiled continuous pushout eliminator and uniqueness theorem. The remaining bridge is circle pi1 plus a topological Seifert-van Kampen/free-product computation.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "fundamental-group",
+          "van-kampen"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t93A03",
@@ -96086,8 +96392,22 @@
         "provisional_blocked_areas": [
           "transversality"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "transversality"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_progress] The empty-manifold branch is fully proved using a concrete nonzero line direction and vacuous transversality. The inverse-image packaging and projection linear algebra remain compiled. The sole substantive boundary is manifold Sard for a nonempty second-countable finite-dimensional manifold domain.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "transversality"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t93A04",
@@ -97302,8 +97622,22 @@
         "provisional_blocked_areas": [
           "transversality"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "transversality"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_progress] The zero-parameter identity, smoothness of every translated slice, and equality of its manifold derivative with mfderiv f are compiled. The remaining almost-everywhere assertion requires manifold Sard/parametric transversality through an incidence submanifold.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "transversality"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t94A06",
@@ -97460,7 +97794,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a07",
-                "apm_t94a07_localLefschetzNumber",
+                "apm_t94a07_IsHomotopyToIdentity",
                 "apm_t94a07_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -97826,7 +98160,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a08",
-                "apm_t94a08_IsRealTwoManifold",
+                "apm_t94a08_sigma1",
                 "apm_t94a08_CP2"
               ],
               "method": "frozen-statement lexical closure",
@@ -98414,7 +98748,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a10",
-                "apm_t94a10_IsExact",
+                "apm_t94a10_IsClosed",
                 "apm_t94a10_ambientExtension"
               ],
               "method": "frozen-statement lexical closure",
@@ -98536,13 +98870,13 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ladderConnected_of_connected",
+                "connected_iff_ladderConnected",
                 "LadderConnectedSpace",
                 "LadderChain"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ladderConnected_of_connected (h : IsPreconnected (Set.univ : Set X)) : LadderConnectedSpace X",
+              "root_statement": "theorem connected_iff_ladderConnected : IsPreconnected (Set.univ : Set X) \u2194 LadderConnectedSpace X",
               "source_declaration": "LadderChain",
               "source_expression": "structure LadderChain {X : Type*} (U : Set (Set X)) (p q : X) where length : \u2115 chain : Fin (length + 1) \u2192 Set X cover_mem : \u2200 i, chain i \u2208 U first_mem : p \u2208 chain 0 last_mem : q \u2208 chain \u27e8length, by exact Nat.lt_succ_self length\u27e9 overlap : \u2200 i : Fin length, (chain (Fin.castSucc i) \u2229 chain i.succ).Nonempty namespace LadderChain"
             }
@@ -98554,13 +98888,13 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ladderConnected_of_connected",
+                "connected_iff_ladderConnected",
                 "LadderConnectedSpace",
                 "LadderChain"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ladderConnected_of_connected (h : IsPreconnected (Set.univ : Set X)) : LadderConnectedSpace X",
+              "root_statement": "theorem connected_iff_ladderConnected : IsPreconnected (Set.univ : Set X) \u2194 LadderConnectedSpace X",
               "source_declaration": "LadderChain",
               "source_expression": "structure LadderChain {X : Type*} (U : Set (Set X)) (p q : X) where length : \u2115 chain : Fin (length + 1) \u2192 Set X cover_mem : \u2200 i, chain i \u2208 U first_mem : p \u2208 chain 0 last_mem : q \u2208 chain \u27e8length, by exact Nat.lt_succ_self length\u27e9 overlap : \u2200 i : Fin length, (chain (Fin.castSucc i) \u2229 chain i.succ).Nonempty namespace LadderChain"
             }
@@ -98572,13 +98906,13 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ladderConnected_of_connected",
+                "connected_iff_ladderConnected",
                 "LadderConnectedSpace",
                 "LadderChain"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ladderConnected_of_connected (h : IsPreconnected (Set.univ : Set X)) : LadderConnectedSpace X",
+              "root_statement": "theorem connected_iff_ladderConnected : IsPreconnected (Set.univ : Set X) \u2194 LadderConnectedSpace X",
               "source_declaration": "LadderChain",
               "source_expression": "structure LadderChain {X : Type*} (U : Set (Set X)) (p q : X) where length : \u2115 chain : Fin (length + 1) \u2192 Set X cover_mem : \u2200 i, chain i \u2208 U first_mem : p \u2208 chain 0 last_mem : q \u2208 chain \u27e8length, by exact Nat.lt_succ_self length\u27e9 overlap : \u2200 i : Fin length, (chain (Fin.castSucc i) \u2229 chain i.succ).Nonempty namespace LadderChain"
             }
@@ -98590,13 +98924,13 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ladderConnected_of_connected",
+                "connected_iff_ladderConnected",
                 "LadderConnectedSpace",
                 "LadderChain"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ladderConnected_of_connected (h : IsPreconnected (Set.univ : Set X)) : LadderConnectedSpace X",
+              "root_statement": "theorem connected_iff_ladderConnected : IsPreconnected (Set.univ : Set X) \u2194 LadderConnectedSpace X",
               "source_declaration": "LadderChain",
               "source_expression": "structure LadderChain {X : Type*} (U : Set (Set X)) (p q : X) where length : \u2115 chain : Fin (length + 1) \u2192 Set X cover_mem : \u2200 i, chain i \u2208 U first_mem : p \u2208 chain 0 last_mem : q \u2208 chain \u27e8length, by exact Nat.lt_succ_self length\u27e9 overlap : \u2200 i : Fin length, (chain (Fin.castSucc i) \u2229 chain i.succ).Nonempty namespace LadderChain"
             }
@@ -98608,12 +98942,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ladderConnected_of_connected",
+                "connected_iff_ladderConnected",
                 "LadderConnectedSpace"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ladderConnected_of_connected (h : IsPreconnected (Set.univ : Set X)) : LadderConnectedSpace X",
+              "root_statement": "theorem connected_iff_ladderConnected : IsPreconnected (Set.univ : Set X) \u2194 LadderConnectedSpace X",
               "source_declaration": "LadderConnectedSpace",
               "source_expression": "def LadderConnectedSpace (X : Type*) [TopologicalSpace X] : Prop := \u2200 (U : Set (Set X)), (\u2200 s \u2208 U, IsOpen s) \u2192 \u22c3\u2080 U = (Set.univ : Set X) \u2192 \u2200 p q : X, Nonempty (LadderChain U p q)"
             }
@@ -98625,12 +98959,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ladderConnected_of_connected",
+                "connected_iff_ladderConnected",
                 "LadderConnectedSpace"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ladderConnected_of_connected (h : IsPreconnected (Set.univ : Set X)) : LadderConnectedSpace X",
+              "root_statement": "theorem connected_iff_ladderConnected : IsPreconnected (Set.univ : Set X) \u2194 LadderConnectedSpace X",
               "source_declaration": "LadderConnectedSpace",
               "source_expression": "def LadderConnectedSpace (X : Type*) [TopologicalSpace X] : Prop := \u2200 (U : Set (Set X)), (\u2200 s \u2208 U, IsOpen s) \u2192 \u22c3\u2080 U = (Set.univ : Set X) \u2192 \u2200 p q : X, Nonempty (LadderChain U p q)"
             }
@@ -98642,12 +98976,12 @@
           "evidence": [
             {
               "local_definition_chain": [
-                "ladderConnected_of_connected",
+                "connected_iff_ladderConnected",
                 "LadderConnectedSpace"
               ],
               "method": "frozen-statement lexical closure",
               "provider": "mathlib",
-              "root_statement": "theorem ladderConnected_of_connected (h : IsPreconnected (Set.univ : Set X)) : LadderConnectedSpace X",
+              "root_statement": "theorem connected_iff_ladderConnected : IsPreconnected (Set.univ : Set X) \u2194 LadderConnectedSpace X",
               "source_declaration": "LadderConnectedSpace",
               "source_expression": "def LadderConnectedSpace (X : Type*) [TopologicalSpace X] : Prop := \u2200 (U : Set (Set X)), (\u2200 s \u2208 U, IsOpen s) \u2192 \u22c3\u2080 U = (Set.univ : Set X) \u2192 \u2200 p q : X, Nonempty (LadderChain U p q)"
             }
@@ -99482,10 +99816,30 @@
           }
         ],
         "provisional_blocked_areas": [
+          "covering-space",
+          "fundamental-group",
           "orientation"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "covering-space",
+              "fundamental-group",
+              "orientation"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_progress] Hop 4 states the exact missing finite-index surface-group theorem for k >= 2. It combines subgroup-cover realization, Euler-characteristic multiplicativity, and orientable-surface classification, while excluding the already completed index-one and finite-sheet work.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "covering-space",
+          "fundamental-group",
+          "orientation"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t94J04",
@@ -100595,10 +100949,27 @@
           }
         ],
         "provisional_blocked_areas": [
-          "orientation"
+          "orientation",
+          "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "orientation",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 4\n\n[boundary] The missing top singular-homology computation is stated precisely as apm_t94J08_bridge_1: it supplies an integral orientation of every encoded sphere and computes the induced antipodal action as multiplication by (-1)^(n+1). The bridge and original main theorem remain unproved.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "orientation",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t94J08",
@@ -101315,8 +101686,22 @@
         "provisional_blocked_areas": [
           "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_note] The full quotient homeomorphism assembly from mutually inverse relation-respecting disk maps is compiled. Constructing those explicit polygon-move maps and computing singular homology remain open.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t94J09",
@@ -102137,7 +102522,7 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionA",
+                "t95J02InclusionB",
                 "t95J02KleinBottle"
               ],
               "method": "frozen-statement lexical closure",
@@ -102155,7 +102540,7 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionA",
+                "t95J02InclusionB",
                 "t95J02KleinBottle"
               ],
               "method": "frozen-statement lexical closure",
@@ -102173,8 +102558,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionA",
-                "t95J02KleinBottle",
+                "t95J02InclusionB",
+                "t95J02CircleB",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102192,8 +102577,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionA",
-                "t95J02KleinBottle",
+                "t95J02InclusionB",
+                "t95J02CircleB",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102211,8 +102596,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionA",
-                "t95J02KleinBottle",
+                "t95J02InclusionB",
+                "t95J02CircleB",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102230,8 +102615,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionA",
-                "t95J02KleinBottle",
+                "t95J02InclusionB",
+                "t95J02CircleB",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102249,8 +102634,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionA",
-                "t95J02KleinBottle",
+                "t95J02InclusionB",
+                "t95J02CircleB",
                 "t95J02KleinBottleType"
               ],
               "method": "frozen-statement lexical closure",
@@ -102268,8 +102653,8 @@
             {
               "local_definition_chain": [
                 "apm_t95j02",
-                "t95J02InclusionA",
-                "t95J02CircleA",
+                "t95J02InclusionB",
+                "t95J02CircleB",
                 "t95J02QuotientPoint"
               ],
               "method": "frozen-statement lexical closure",
@@ -102443,7 +102828,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [
           "orientation"
@@ -102462,10 +102847,22 @@
             "value": "Fully proved by case analysis on parity and surface classification coordinates. Euler-profile equality and positivity of k force genus one in the orientable case and genus two in the nonorientable case; the profile orientability equation gives exactly the parity condition."
           }
         ],
-        "provisional_blocked_areas": [
-          "orientation"
+        "provisional_blocked_areas": [],
+        "structured": [
+          {
+            "areas": [],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 2\n\n[closer_progress] Fully proved by case analysis on parity and surface classification coordinates. Euler-profile equality and positivity of k force genus one in the orientable case and genus two in the nonorientable case; the profile orientability equation gives exactly the parity condition.",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
         ],
-        "structured": [],
         "structured_unresolved_areas": []
       },
       "parse_status": "ok",
@@ -103539,10 +103936,27 @@
           }
         ],
         "provisional_blocked_areas": [
+          "covering-space",
           "orientation"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "covering-space",
+              "orientation"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_note] Proved the time-zero identity and additive composition law for the Hopf formula; together with 2\u03c0-periodicity, all elementary circle-action descent equations now compile. The universal classification remains blocked on the continuous-action quotient/principal bundle, Euler characteristic zero, and compact orientable surface classification.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "covering-space",
+          "orientation"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t95J06",
@@ -104056,10 +104470,30 @@
           }
         ],
         "provisional_blocked_areas": [
-          "mayer-vietoris"
+          "cellular-homology",
+          "mayer-vietoris",
+          "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "cellular-homology",
+              "mayer-vietoris",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_note] The quotient now has a full continuous pushout eliminator and a compiled CompactSpace instance. Singular Mayer-Vietoris, sphere homology, and cellular-to-singular comparison remain unavailable.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "cellular-homology",
+          "mayer-vietoris",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t96A03",
@@ -105424,10 +105858,29 @@
         ],
         "provisional_blocked_areas": [
           "intersection-theory",
-          "kunneth"
+          "kunneth",
+          "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "intersection-theory",
+              "kunneth",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_note] Characterized membership of arbitrary nonzero projective representatives in RP1\u00d7RP1 exactly by the two third-coordinate equations, exposing the codimension-two incidence condition. The non-bounding result remains blocked on mod-two fundamental classes, boundary null-homology, K\u00fcnneth, and self-intersection theory absent from Mathlib and the corpus.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "intersection-theory",
+          "kunneth",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t96J06",
@@ -106084,7 +106537,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a01",
-                "apm_t97a01_baseTorusRP2",
+                "apm_t97a01_TorusRP2",
                 "apm_t97a01_Disk"
               ],
               "method": "frozen-statement lexical closure",
@@ -106358,11 +106811,33 @@
           }
         ],
         "provisional_blocked_areas": [
+          "cellular-homology",
+          "fundamental-group",
           "singular-homology",
           "van-kampen"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "cellular-homology",
+              "fundamental-group",
+              "singular-homology",
+              "van-kampen"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] The first polygon relation is now proved equal to ConstructionTargets.Surfaces.SurfaceRel false 3, yielding an equivalence with the canonical N3 quotient. Remaining: topological transport plus cellular-to-singular homology and Seifert-van Kampen computations, absent from Mathlib.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "cellular-homology",
+          "fundamental-group",
+          "singular-homology",
+          "van-kampen"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t97A01",
@@ -106741,10 +107216,27 @@
           }
         ],
         "provisional_blocked_areas": [
-          "cohomology"
+          "cohomology",
+          "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "cohomology",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_note] Bundled the two circle projections and proved that their null-homotopies recombine into a null-homotopy of the torus map. The remaining bridge is the one-circle classification [X,S1] by integral H1/H^1, absent from Mathlib and the corpus.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "cohomology",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t97A02",
@@ -107348,7 +107840,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_OneCircleCover",
+                "apm_t97A03_TwoCircleCover",
                 "apm_t97A03_TwoSpheres"
               ],
               "method": "frozen-statement lexical closure",
@@ -107366,7 +107858,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_OneCircleCover",
+                "apm_t97A03_TwoCircleCover",
                 "apm_t97A03_TwoSpheres"
               ],
               "method": "frozen-statement lexical closure",
@@ -107384,7 +107876,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_OneCircleCover",
+                "apm_t97A03_TwoCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleI"
               ],
@@ -107403,7 +107895,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_OneCircleCover",
+                "apm_t97A03_TwoCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleI"
               ],
@@ -107422,7 +107914,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_OneCircleCover",
+                "apm_t97A03_TwoCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleI"
               ],
@@ -107441,7 +107933,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_OneCircleCover",
+                "apm_t97A03_TwoCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleNegI"
               ],
@@ -107460,7 +107952,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_OneCircleCover",
+                "apm_t97A03_TwoCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleNegI"
               ],
@@ -107479,7 +107971,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a03",
-                "apm_t97A03_OneCircleCover",
+                "apm_t97A03_TwoCircleCover",
                 "apm_t97A03_TwoSpheres",
                 "apm_t97A03_circleNegI"
               ],
@@ -108017,7 +108509,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a04",
-                "apm_t97a04_Lbar",
+                "t97A04HasHomologicalData",
                 "apm_t97a04_Torus"
               ],
               "method": "frozen-statement lexical closure",
@@ -109098,10 +109590,27 @@
           }
         ],
         "provisional_blocked_areas": [
+          "covering-space",
           "orientation"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "covering-space",
+              "orientation"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 4\n\n[boundary] Hop 4 states two precise unproved topological contracts: construction and covering verification of the three concrete polygon covers, and exhaustive classification of connected five- and six-sheeted covers via Euler multiplicativity, orientation parity, and compact-surface classification.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "covering-space",
+          "orientation"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t97J02",
@@ -109239,8 +109748,22 @@
         "provisional_blocked_areas": [
           "fundamental-group"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "fundamental-group"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_progress] The abstract obstruction is now specialized completely to the exact norm-defined disk and circle: the disk is homeomorphic to the metric closed ball, contractibility and simple connectivity yield its subsingleton fundamental group, and the literal boundary retraction is ruled out conditional only on nontriviality of the circle fundamental group. That circle computation remains unavailable.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "fundamental-group"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t97J03",
@@ -109721,11 +110244,33 @@
           }
         ],
         "provisional_blocked_areas": [
+          "fundamental-group",
           "mayer-vietoris",
+          "singular-homology",
           "van-kampen"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "fundamental-group",
+              "mayer-vietoris",
+              "singular-homology",
+              "van-kampen"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_note] Constructed continuous retractions from the wedge onto both the torus and circle summands and used them to prove both canonical inclusions injective. The fundamental-group and homology conclusions still require unavailable circle/torus computations, Seifert\u2013van Kampen, and singular Mayer\u2013Vietoris/cellular comparison APIs.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "fundamental-group",
+          "mayer-vietoris",
+          "singular-homology",
+          "van-kampen"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t97J04",
@@ -110542,7 +111087,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [
           "fundamental-group"
@@ -110561,10 +111106,18 @@
             "value": "The lift formula and determinant integral compile. A null-homotopy is now proved to yield ContractibleSpace Circle, and the final conjunct follows conditionally from its negation. This snapshot has no proof that Circle is noncontractible via winding degree, fundamental group, or H1."
           }
         ],
-        "provisional_blocked_areas": [
-          "fundamental-group"
+        "provisional_blocked_areas": [],
+        "structured": [
+          {
+            "areas": [],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] The lift formula and determinant integral compile. A null-homotopy is now proved to yield ContractibleSpace Circle, and the final conjunct follows conditionally from its negation. This snapshot has no proof that Circle is noncontractible via winding degree, fundamental group, or H1.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
         ],
-        "structured": [],
         "structured_unresolved_areas": []
       },
       "parse_status": "ok",
@@ -111504,8 +112057,22 @@
         "provisional_blocked_areas": [
           "covering-space"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "covering-space"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[closer_progress] The circle map x \u21a6 5 \u2022 x is now compiled as an additive quotient covering by its torsion kernel, hence as a covering map and surjection. The theorem's complete connected-sum tail is wired. Remaining work is the product torus covering/fiber-card/deck packaging plus polygon-surface classification injectivity and Euler multiplicativity.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "covering-space"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t98A01",
@@ -111996,12 +112563,36 @@
           }
         ],
         "provisional_blocked_areas": [
+          "cellular-homology",
           "excision",
           "mayer-vietoris",
-          "orientation"
+          "orientation",
+          "singular-homology"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "cellular-homology",
+              "excision",
+              "mayer-vietoris",
+              "orientation",
+              "singular-homology"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] The connected-sum quotient now has a compiled maps-out equivalence with compatible maps from its punctured summands. The remaining conclusions require unavailable singular excision/Mayer\u2013Vietoris or cellular comparison, together with puncture, boundary-sphere, orientation, connectedness, and dimension-vanishing homology bridges.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "cellular-homology",
+          "excision",
+          "mayer-vietoris",
+          "orientation",
+          "singular-homology"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t98A02",
@@ -112921,7 +113512,7 @@
             {
               "local_definition_chain": [
                 "apm_t98a04",
-                "apm_t98a04_S3",
+                "apm_t98a04_CP1",
                 "apm_t98a04_C2"
               ],
               "method": "frozen-statement lexical closure",
@@ -114200,8 +114791,22 @@
         "provisional_blocked_areas": [
           "orientation"
         ],
-        "structured": [],
-        "structured_unresolved_areas": []
+        "structured": [
+          {
+            "areas": [
+              "orientation"
+            ],
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2b-legacy-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] Euler formulas, injectivity in genus, and the full uniqueness assembly from existence plus Euler invariance are proved. The open bridge is existence of orientable/nonorientable polygon normal forms and a compatible homeomorphism-invariant Euler characteristic.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
+        "structured_unresolved_areas": [
+          "orientation"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "t99J03",

@@ -39,5 +39,21 @@
     "elaborated_exit": 0,
     "sorry_declarations": 3,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "fundamental-group",
+        "mayer-vietoris",
+        "singular-homology",
+        "van-kampen"
+      ],
+      "missing": "[closer_hop] 3\n\n[boundary] The boundary inclusion, continuous canonical maps, compatibility equation, and full continuous pushout-style eliminator with restriction equations and uniqueness are compiled. Remaining work is the absent circle fundamental-group computation, van Kampen theorem, singular Mayer--Vietoris sequence, and numerical invariant transport.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -39,5 +39,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 3,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "cohomology",
+        "singular-homology"
+      ],
+      "missing": "[closer_hop] 3\n\n[boundary] Closer hop 3 maps the curve homeomorphism through the exact singular H1 functor and transports nonzero classes, so the negative direction now depends solely on the unavailable computation H1(Circle; Z) != 0. The positive direction still needs primitive-cohomology representability by a circle map and a relative adjustment producing a retraction.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

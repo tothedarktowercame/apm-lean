@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 4,
     "sorry_count_scratch": 0,
     "sorry_count_total": 4
@@ -30,5 +32,20 @@
   "classification": "partial",
   "closer_hop": 4,
   "boundary": "The remaining work is stated precisely in three bridges: apm_t03J03_bridge_1 classifies connected double covers by characters and total-space type, bridge_2 classifies disconnected covers as trivial, and bridge_3 states the orientable-cover cylinder-lifting consequence of the missing orientation-character range theorem. These bridges and the original main theorem remain unproved.",
-  "imported_at": "2026-07-13T17:26:57.065885Z"
+  "imported_at": "2026-07-13T17:26:57.065885Z",
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space",
+        "fundamental-group",
+        "orientation"
+      ],
+      "missing": "[closer_hop] 4\n\n[boundary] The remaining work is stated precisely in three bridges: apm_t03J03_bridge_1 classifies connected double covers by characters and total-space type, bridge_2 classifies disconnected covers as trivial, and bridge_3 states the orientable-cover cylinder-lifting consequence of the missing orientation-character range theorem. These bridges and the original main theorem remain unproved.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

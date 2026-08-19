@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,18 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_progress": "The zero-parameter identity, smoothness of every translated slice, and equality of its manifold derivative with mfderiv f are compiled. The remaining almost-everywhere assertion requires manifold Sard/parametric transversality through an incidence submanifold.",
-  "imported_at": "2026-07-13T17:26:57.830356Z"
+  "imported_at": "2026-07-13T17:26:57.830356Z",
+  "obstructions": [
+    {
+      "areas": [
+        "transversality"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_progress] The zero-parameter identity, smoothness of every translated slice, and equality of its manifold derivative with mfderiv f are compiled. The remaining almost-everywhere assertion requires manifold Sard/parametric transversality through an incidence submanifold.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

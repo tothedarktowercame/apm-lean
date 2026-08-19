@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -30,5 +32,19 @@
   "classification": "partial",
   "closer_hop": 4,
   "closer_progress": "Hop 4 states the two exact remaining contracts without proof: Seifert--van Kampen for the supplied standard cover (including basepoint and group-identification transport), and the singular Mayer--Vietoris homology-sphere calculation.",
-  "imported_at": "2026-07-13T17:26:56.344839Z"
+  "imported_at": "2026-07-13T17:26:56.344839Z",
+  "obstructions": [
+    {
+      "areas": [
+        "mayer-vietoris",
+        "van-kampen"
+      ],
+      "missing": "[closer_hop] 4\n\n[closer_progress] Hop 4 states the two exact remaining contracts without proof: Seifert--van Kampen for the supplied standard cover (including basepoint and group-identification transport), and the singular Mayer--Vietoris homology-sphere calculation.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 4,
     "sorry_count_scratch": 0,
     "sorry_count_total": 4
@@ -30,5 +32,20 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "Hop 4 states three exact contracts: both concrete quotient maps are covering maps; the wedge fundamental group has the required torus-plus-circle presentation with parity kernels equal to the induced ranges; and singular H2 distinguishes the two total spaces. Together they unblock the frozen theorem.",
-  "imported_at": "2026-07-13T17:26:56.718249Z"
+  "imported_at": "2026-07-13T17:26:56.718249Z",
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space",
+        "fundamental-group",
+        "singular-homology"
+      ],
+      "missing": "[closer_hop] 3\n\n[boundary] Hop 4 states three exact contracts: both concrete quotient maps are covering maps; the wedge fundamental group has the required torus-plus-circle presentation with parity kernels equal to the induced ranges; and singular H2 distinguishes the two total spaces. Together they unblock the frozen theorem.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

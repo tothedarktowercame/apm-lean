@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -30,5 +32,19 @@
   "classification": "partial-lean-proof",
   "closer_hop": 4,
   "boundary": "Hop 4 states two precise unproved topological contracts: construction and covering verification of the three concrete polygon covers, and exhaustive classification of connected five- and six-sheeted covers via Euler multiplicativity, orientation parity, and compact-surface classification.",
-  "imported_at": "2026-07-13T17:26:58.482218Z"
+  "imported_at": "2026-07-13T17:26:58.482218Z",
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space",
+        "orientation"
+      ],
+      "missing": "[closer_hop] 4\n\n[boundary] Hop 4 states two precise unproved topological contracts: construction and covering verification of the three concrete polygon covers, and exhaustive classification of connected five- and six-sheeted covers via Euler multiplicativity, orientation parity, and compact-surface classification.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

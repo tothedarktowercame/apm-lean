@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,18 @@
   "classification": "partial",
   "closer_hop": 3,
   "closer_note": "The full quotient homeomorphism assembly from mutually inverse relation-respecting disk maps is compiled. Constructing those explicit polygon-move maps and computing singular homology remain open.",
-  "imported_at": "2026-07-13T17:26:58.150687Z"
+  "imported_at": "2026-07-13T17:26:58.150687Z",
+  "obstructions": [
+    {
+      "areas": [
+        "singular-homology"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_note] The full quotient homeomorphism assembly from mutually inverse relation-respecting disk maps is compiled. Constructing those explicit polygon-move maps and computing singular homology remain open.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

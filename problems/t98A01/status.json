@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -29,6 +31,19 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "closer_progress": "The circle map x ↦ 5 • x is now compiled as an additive quotient covering by its torsion kernel, hence as a covering map and surjection. The theorem's complete connected-sum tail is wired. Remaining work is the product torus covering/fiber-card/deck packaging plus polygon-surface classification injectivity and Euler multiplicativity.",
-  "imported_at": "2026-07-13T17:26:58.523947Z"
+  "closer_progress": "The circle map x \u21a6 5 \u2022 x is now compiled as an additive quotient covering by its torsion kernel, hence as a covering map and surjection. The theorem's complete connected-sum tail is wired. Remaining work is the product torus covering/fiber-card/deck packaging plus polygon-surface classification injectivity and Euler multiplicativity.",
+  "imported_at": "2026-07-13T17:26:58.523947Z",
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_progress] The circle map x \u21a6 5 \u2022 x is now compiled as an additive quotient covering by its torsion kernel, hence as a covering map and surjection. The theorem's complete connected-sum tail is wired. Remaining work is the product torus covering/fiber-card/deck packaging plus polygon-surface classification injectivity and Euler multiplicativity.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

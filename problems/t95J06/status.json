@@ -39,5 +39,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space",
+        "orientation"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_note] Proved the time-zero identity and additive composition law for the Hopf formula; together with 2\u03c0-periodicity, all elementary circle-action descent equations now compile. The universal classification remains blocked on the continuous-action quotient/principal bundle, Euler characteristic zero, and compact orientable surface classification.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

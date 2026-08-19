@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -29,5 +31,18 @@
   },
   "classification": "partial",
   "closer_progress": "Hop 4 states two precise bridges: rational singular homology of the concrete attachment is Q in degree zero and zero above, and the specialized Lefschetz theorem turns that computation into a fixed point for every continuous self-map.",
-  "imported_at": "2026-07-13T17:26:56.969666Z"
+  "imported_at": "2026-07-13T17:26:56.969666Z",
+  "obstructions": [
+    {
+      "areas": [
+        "singular-homology"
+      ],
+      "missing": "[closer_progress] Hop 4 states two precise bridges: rational singular homology of the concrete attachment is Q in degree zero and zero above, and the specialized Lefschetz theorem turns that computation into a fixed point for every continuous self-map.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

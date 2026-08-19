@@ -595,18 +595,19 @@ unweighted by cost and is not a funding recommendation.
 
 | Area | Blocked consumers | Structured | Legacy text | Object-consumer coverage | Overall obstruction coverage |
 |---|---:|---:|---:|---:|---:|
-| orientation | 9/197 obstruction-covered non-complete bundles | 0/9 | 9/9 | 8/9 | 197/319 |
-| fundamental-group | 6/197 obstruction-covered non-complete bundles | 0/6 | 6/6 | 15/16 | 197/319 |
-| van-kampen | 6/197 obstruction-covered non-complete bundles | 0/6 | 6/6 | 0/0 | 197/319 |
-| singular-homology | 5/197 obstruction-covered non-complete bundles | 1/5 | 4/5 | 32/32 | 197/319 |
-| covering-space | 4/197 obstruction-covered non-complete bundles | 1/4 | 3/4 | 13/14 | 197/319 |
-| transversality | 4/197 obstruction-covered non-complete bundles | 0/4 | 4/4 | 0/0 | 197/319 |
-| cohomology | 3/197 obstruction-covered non-complete bundles | 0/3 | 3/3 | 1/1 | 197/319 |
-| mayer-vietoris | 3/197 obstruction-covered non-complete bundles | 0/3 | 3/3 | 0/0 | 197/319 |
-| excision | 1/197 obstruction-covered non-complete bundles | 0/1 | 1/1 | 0/0 | 197/319 |
-| intersection-theory | 1/197 obstruction-covered non-complete bundles | 0/1 | 1/1 | 0/0 | 197/319 |
-| kunneth | 1/197 obstruction-covered non-complete bundles | 0/1 | 1/1 | 0/0 | 197/319 |
+| singular-homology | 17/197 obstruction-covered non-complete bundles | 17/17 | 0/17 | 32/32 | 197/319 |
+| fundamental-group | 12/197 obstruction-covered non-complete bundles | 12/12 | 0/12 | 15/16 | 197/319 |
+| covering-space | 8/197 obstruction-covered non-complete bundles | 8/8 | 0/8 | 13/14 | 197/319 |
+| orientation | 8/197 obstruction-covered non-complete bundles | 8/8 | 0/8 | 8/9 | 197/319 |
+| mayer-vietoris | 6/197 obstruction-covered non-complete bundles | 6/6 | 0/6 | 0/0 | 197/319 |
+| van-kampen | 6/197 obstruction-covered non-complete bundles | 6/6 | 0/6 | 0/0 | 197/319 |
+| transversality | 4/197 obstruction-covered non-complete bundles | 4/4 | 0/4 | 0/0 | 197/319 |
+| cellular-homology | 3/197 obstruction-covered non-complete bundles | 3/3 | 0/3 | 0/0 | 197/319 |
+| cohomology | 2/197 obstruction-covered non-complete bundles | 2/2 | 0/2 | 1/1 | 197/319 |
+| excision | 1/197 obstruction-covered non-complete bundles | 1/1 | 0/1 | 0/0 | 197/319 |
+| intersection-theory | 1/197 obstruction-covered non-complete bundles | 1/1 | 0/1 | 0/0 | 197/319 |
+| kunneth | 1/197 obstruction-covered non-complete bundles | 1/1 | 0/1 | 0/0 | 197/319 |
 
-Bundles with an explicit structured `areas: []`: 1.
+Bundles with an explicit structured `areas: []`: 4.
 Structured and legacy sources remain separate in JSON; their union is used only for
 the explicitly provisional ranking above.

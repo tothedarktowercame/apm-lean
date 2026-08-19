@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -31,5 +33,20 @@
   "closer_hop": 2,
   "sorry_count_verified": 0,
   "closer_progress": "Fully proved by case analysis on parity and surface classification coordinates. Euler-profile equality and positivity of k force genus one in the orientable case and genus two in the nonorientable case; the profile orientability equation gives exactly the parity condition.",
-  "imported_at": "2026-07-13T17:26:58.359796Z"
+  "imported_at": "2026-07-13T17:26:58.359796Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "missing": "[closer_hop] 2\n\n[closer_progress] Fully proved by case analysis on parity and surface classification coordinates. Euler-profile equality and positivity of k force genus one in the orientable case and genus two in the nonorientable case; the profile orientability equation gives exactly the parity condition.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": {
+        "by": "bundle classification records the work closed",
+        "date": "2026-08-19",
+        "at_commit": "a00ea1f"
+      }
+    }
+  ]
 }

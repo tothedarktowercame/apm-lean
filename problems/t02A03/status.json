@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -30,5 +32,19 @@
   "classification": "partial",
   "closer_hop": 4,
   "boundary": "The missing invariant computations are now stated precisely as apm_t02A03_bridge_1 (the based torus fundamental group) and apm_t02A03_bridge_2 (the wedge fundamental group and degreewise singular homology). Both bridges and the original main theorem remain unproved.",
-  "imported_at": "2026-07-13T17:26:56.924953Z"
+  "imported_at": "2026-07-13T17:26:56.924953Z",
+  "obstructions": [
+    {
+      "areas": [
+        "fundamental-group",
+        "singular-homology"
+      ],
+      "missing": "[closer_hop] 4\n\n[boundary] The missing invariant computations are now stated precisely as apm_t02A03_bridge_1 (the based torus fundamental group) and apm_t02A03_bridge_2 (the wedge fundamental group and degreewise singular homology). Both bridges and the original main theorem remain unproved.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 2,
     "sorry_count_scratch": 0,
     "sorry_count_total": 2
@@ -36,5 +38,18 @@
     "exit_code": 0,
     "command": "lake env lean problems/t91A05/lean/Main.lean",
     "sorry_count": 2
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "fundamental-group"
+      ],
+      "missing": "[closer_hop] 4\n\n[closer_progress] The sole missing foundational result is now exposed as the precise standalone theorem apm_t91A05_bridge_1: Nontrivial (FundamentalGroup apm_t91a05_Circle apm_t91a05_circleBase). The compiled reduction consumes exactly this instance; the frozen statement is unchanged.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

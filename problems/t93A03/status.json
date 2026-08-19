@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -35,7 +37,9 @@
     "exit_code": 0,
     "command": "lake env lean problems/t93A03/lean/Main.lean",
     "sorry_count": 1,
-    "sorry_locations": ["apm_t93a03 (fundamental group of the explicit circle wedge)"],
+    "sorry_locations": [
+      "apm_t93a03 (fundamental group of the explicit circle wedge)"
+    ],
     "proved": [
       "apm_t93a03_spine_not_simplyConnected_of_piOne_equiv",
       "apm_t93a03_connectedSum_not_simplyConnected_of_piOne_equiv",
@@ -44,7 +48,24 @@
       "apm_t93a03_spineDesc_unique"
     ],
     "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
-    "blockers": ["Compute FundamentalGroup Circle 1", "Prove a topological wedge/free-product theorem"]
+    "blockers": [
+      "Compute FundamentalGroup Circle 1",
+      "Prove a topological wedge/free-product theorem"
+    ]
   },
-  "imported_at": "2026-07-13T17:26:57.613735Z"
+  "imported_at": "2026-07-13T17:26:57.613735Z",
+  "obstructions": [
+    {
+      "areas": [
+        "fundamental-group",
+        "van-kampen"
+      ],
+      "missing": "[closer_hop] 3\n\n[boundary] The concrete circle wedge now has a compiled continuous pushout eliminator and uniqueness theorem. The remaining bridge is circle pi1 plus a topological Seifert-van Kampen/free-product computation.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

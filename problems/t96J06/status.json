@@ -39,5 +39,20 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "intersection-theory",
+        "kunneth",
+        "singular-homology"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_note] Characterized membership of arbitrary nonzero projective representatives in RP1\u00d7RP1 exactly by the two third-coordinate equations, exposing the codimension-two incidence condition. The non-bounding result remains blocked on mod-two fundamental classes, boundary null-homology, K\u00fcnneth, and self-intersection theory absent from Mathlib and the corpus.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

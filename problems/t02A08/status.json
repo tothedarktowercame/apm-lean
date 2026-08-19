@@ -33,5 +33,19 @@
   "closer_progress": "Closer hop 2 additionally proves that the identity sphere map has degree one relative to any supplied orientation isomorphism, isolating that base case from the missing homology computation. The sole remaining sorry is existence of metric-sphere self-maps of every integer degree, requiring H2(S2)=Z and induced-map computations.",
   "closer_hop": 3,
   "closer_note": "Compiled multiplicativity of induced degrees under composition relative to a common orientation. The initial H2(S2)=Z orientation and nontrivial computed sphere maps remain unavailable.",
-  "imported_at": "2026-07-13T17:26:57.022816Z"
+  "imported_at": "2026-07-13T17:26:57.022816Z",
+  "obstructions": [
+    {
+      "areas": [
+        "orientation",
+        "singular-homology"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_note] Compiled multiplicativity of induced degrees under composition relative to a common orientation. The initial H2(S2)=Z orientation and nontrivial computed sphere maps remain unavailable.\n\n[closer_progress] Closer hop 2 additionally proves that the identity sphere map has degree one relative to any supplied orientation isomorphism, isolating that base case from the missing homology computation. The sole remaining sorry is existence of metric-sphere self-maps of every integer degree, requiring H2(S2)=Z and induced-map computations.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

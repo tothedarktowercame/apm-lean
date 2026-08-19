@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -29,6 +31,23 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "boundary": "The connected-sum quotient now has a compiled maps-out equivalence with compatible maps from its punctured summands. The remaining conclusions require unavailable singular excision/Mayer–Vietoris or cellular comparison, together with puncture, boundary-sphere, orientation, connectedness, and dimension-vanishing homology bridges.",
-  "imported_at": "2026-07-13T17:26:58.531578Z"
+  "boundary": "The connected-sum quotient now has a compiled maps-out equivalence with compatible maps from its punctured summands. The remaining conclusions require unavailable singular excision/Mayer\u2013Vietoris or cellular comparison, together with puncture, boundary-sphere, orientation, connectedness, and dimension-vanishing homology bridges.",
+  "imported_at": "2026-07-13T17:26:58.531578Z",
+  "obstructions": [
+    {
+      "areas": [
+        "cellular-homology",
+        "excision",
+        "mayer-vietoris",
+        "orientation",
+        "singular-homology"
+      ],
+      "missing": "[closer_hop] 3\n\n[boundary] The connected-sum quotient now has a compiled maps-out equivalence with compatible maps from its punctured summands. The remaining conclusions require unavailable singular excision/Mayer\u2013Vietoris or cellular comparison, together with puncture, boundary-sphere, orientation, connectedness, and dimension-vanishing homology bridges.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,18 @@
   "classification": "partial",
   "closer_hop": 4,
   "closer_progress": "The simplicial-set geometric realization API was additionally checked. It has neither a comparison to this concrete quotient wedge nor a theorem converting simplicial coverings to IsCoveringMap. The exact universal-cover and four finite-cover construction contracts remain open.",
-  "imported_at": "2026-07-13T17:26:57.514637Z"
+  "imported_at": "2026-07-13T17:26:57.514637Z",
+  "obstructions": [
+    {
+      "areas": [
+        "covering-space"
+      ],
+      "missing": "[closer_hop] 4\n\n[closer_progress] The simplicial-set geometric realization API was additionally checked. It has neither a comparison to this concrete quotient wedge nor a theorem converting simplicial coverings to IsCoveringMap. The exact universal-cover and four finite-cover construction contracts remain open.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

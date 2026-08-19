@@ -39,5 +39,21 @@
     "elaborated_exit": 0,
     "sorry_declarations": 3,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "fundamental-group",
+        "mayer-vietoris",
+        "singular-homology",
+        "van-kampen"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_note] Constructed continuous retractions from the wedge onto both the torus and circle summands and used them to prove both canonical inclusions injective. The fundamental-group and homology conclusions still require unavailable circle/torus computations, Seifert\u2013van Kampen, and singular Mayer\u2013Vietoris/cellular comparison APIs.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

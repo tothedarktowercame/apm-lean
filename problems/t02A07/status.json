@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -30,5 +32,18 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "Hop 4 states the exact remaining contracts: linear independence of the norm and product constraint gradients on Z, and density of transverse parameters for the concrete family. These respectively unblock regularity and the parametric-transversality conjunct; the frozen main statement is unchanged.",
-  "imported_at": "2026-07-13T17:26:57.011844Z"
+  "imported_at": "2026-07-13T17:26:57.011844Z",
+  "obstructions": [
+    {
+      "areas": [
+        "transversality"
+      ],
+      "missing": "[closer_hop] 3\n\n[boundary] Hop 4 states the exact remaining contracts: linear independence of the norm and product constraint gradients on Z, and density of transverse parameters for the concrete family. These respectively unblock regularity and the parametric-transversality conjunct; the frozen main statement is unchanged.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

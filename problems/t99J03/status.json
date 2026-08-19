@@ -30,5 +30,18 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "Euler formulas, injectivity in genus, and the full uniqueness assembly from existence plus Euler invariance are proved. The open bridge is existence of orientable/nonorientable polygon normal forms and a compatible homeomorphism-invariant Euler characteristic.",
-  "imported_at": "2026-05-01T19:38:18.922991Z"
+  "imported_at": "2026-05-01T19:38:18.922991Z",
+  "obstructions": [
+    {
+      "areas": [
+        "orientation"
+      ],
+      "missing": "[closer_hop] 3\n\n[boundary] Euler formulas, injectivity in genus, and the full uniqueness assembly from existence plus Euler invariance are proved. The open bridge is existence of orientable/nonorientable polygon normal forms and a compatible homeomorphism-invariant Euler characteristic.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

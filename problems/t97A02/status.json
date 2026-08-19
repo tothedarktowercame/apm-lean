@@ -39,5 +39,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "cohomology",
+        "singular-homology"
+      ],
+      "missing": "[closer_hop] 3\n\n[closer_note] Bundled the two circle projections and proved that their null-homotopies recombine into a null-homotopy of the torus map. The remaining bridge is the one-circle classification [X,S1] by integral H1/H^1, absent from Mathlib and the corpus.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2b-legacy-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }
