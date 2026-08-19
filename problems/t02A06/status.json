@@ -50,7 +50,16 @@
       "frame": "t02A06-bridge-2",
       "at_commit": "18f2340",
       "date": "2026-08-19",
-      "resolved": null
+      "resolved": {
+        "by": "BYPASSED rather than repaired. Mathlib's alternatingConstHomologyZero naturality gap was not closed; instead H0 of a totally disconnected space is computed DIRECTLY from the degree-zero chain complex, natural by construction: directDiscreteH0Iso, with directDiscreteH0Iso_naturality for arbitrary maps, directDiscreteH0Iso_pointInclusion identifying point inclusions with coproduct injections, and directDiscreteH0Iso_boolCollapse_codiagonal. General in the category and coefficient object. alternatingConstHomologyZero does not appear in the file at all -- verified by grep. The codiagonal fell out in ~9 lines, which is the evidence the interface composes rather than relocating the coherence problem.",
+        "date": "2026-08-19",
+        "at_commit": "4f5dce7",
+        "on_branch": "infra/SingularHomologyConcrete (not landed on master)",
+        "measured_cost_dispatches": 3,
+        "measured_cost_commits": 1,
+        "note": "Cost includes TWO failed dispatches that produced no commit -- attempts to repair the Mathlib API rather than bypass it. A cost model built only on landed commits undercounts blocked paths by exactly this much."
+      },
+      "upstreamable": "Mathlib addition: a natural isomorphism from degree-zero singular homology of a totally disconnected space to the point-indexed coproduct of coefficients, with naturality for continuous maps and a simp lemma identifying point inclusions with coproduct injections. Separately, naturality of singularChainComplexFunctorIsoOfTotallyDisconnectedSpace is independently upstreamable and was proved en route."
     },
     {
       "areas": [
