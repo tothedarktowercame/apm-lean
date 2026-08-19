@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -29,6 +31,20 @@
   },
   "classification": "partial",
   "closer_hop": 4,
-  "boundary": "The remaining LF-topological gap is now an exact Lean contract: existence of a fixed unit-integral test function and a continuous linear normalized primitive whose derivative is φ minus its integral times that test function. The contract remains unproved.",
-  "imported_at": "2026-07-13T17:26:54.480587Z"
+  "boundary": "The remaining LF-topological gap is now an exact Lean contract: existence of a fixed unit-integral test function and a continuous linear normalized primitive whose derivative is \u03c6 minus its integral times that test function. The contract remains unproved.",
+  "imported_at": "2026-07-13T17:26:54.480587Z",
+  "obstructions": [
+    {
+      "areas": [
+        "differential-forms"
+      ],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[boundary] The remaining LF-topological gap is now an exact Lean contract: existence of a fixed unit-integral test function and a continuous linear normalized primitive whose derivative is \u03c6 minus its integral times that test function. The contract remains unproved.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

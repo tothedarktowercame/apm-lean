@@ -51,5 +51,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 0,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[sorry_details] {\"proved_lemmas\": [\"radius_gt_one_of_summable (summability at 1+\\u03b5 implies radius > 1)\"], \"sorry_count\": 1, \"sorry_location\": \"singular_at_one (main theorem)\", \"sorry_reason\": \"The proof requires change-of-origin for FormalMultilinearSeries (computing Taylor coefficients of f at x in terms of original a(n)), showing nonneg of re-centered coefficients, Tonelli interchange for nonneg double sums, and deriving the contradiction. Mathlib has changeOrigin but the specific ofScalars computation is not pre-built.\"}",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

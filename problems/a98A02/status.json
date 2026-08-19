@@ -39,5 +39,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_note] Compiled MemLp-two packaging, the actual L\u00b2 orthonormal family, exact identification of L\u00b2 inner products with raw integral coefficients, and Bessel convergence for every L\u00b2 approximant. Only the uniform truncation/density extension from arbitrary L\u00b9 functions remains.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

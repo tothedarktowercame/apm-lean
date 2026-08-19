@@ -131,6 +131,24 @@
         "structured_count": 7
       },
       {
+        "area": "differential-forms",
+        "blocked_consumers": [
+          "m02J01",
+          "m94J04",
+          "t03J06",
+          "t94A10",
+          "t94J07",
+          "t96J08"
+        ],
+        "blocked_count": 6,
+        "legacy_count": 0,
+        "object_consumer_coverage": {
+          "covered": 0,
+          "total": 0
+        },
+        "structured_count": 6
+      },
+      {
         "area": "mayer-vietoris",
         "blocked_consumers": [
           "t00A01",
@@ -165,23 +183,6 @@
           "total": 0
         },
         "structured_count": 6
-      },
-      {
-        "area": "differential-forms",
-        "blocked_consumers": [
-          "m94J04",
-          "t03J06",
-          "t94A10",
-          "t94J07",
-          "t96J08"
-        ],
-        "blocked_count": 5,
-        "legacy_count": 0,
-        "object_consumer_coverage": {
-          "covered": 0,
-          "total": 0
-        },
-        "structured_count": 5
       },
       {
         "area": "cellular-homology",
@@ -323,7 +324,7 @@
       "covered": 266,
       "total": 475
     },
-    "explicit_empty_areas_bundle_count": 43,
+    "explicit_empty_areas_bundle_count": 77,
     "legacy_bundle_count": 266,
     "necessary_only_areas": [
       {
@@ -426,6 +427,18 @@
         "blocked_count": 7
       },
       {
+        "area": "differential-forms",
+        "blocked_consumers": [
+          "m02J01",
+          "m94J04",
+          "t03J06",
+          "t94A10",
+          "t94J07",
+          "t96J08"
+        ],
+        "blocked_count": 6
+      },
+      {
         "area": "mayer-vietoris",
         "blocked_consumers": [
           "t00A01",
@@ -448,17 +461,6 @@
           "t97J04"
         ],
         "blocked_count": 6
-      },
-      {
-        "area": "differential-forms",
-        "blocked_consumers": [
-          "m94J04",
-          "t03J06",
-          "t94A10",
-          "t94J07",
-          "t96J08"
-        ],
-        "blocked_count": 5
       },
       {
         "area": "cellular-homology",
@@ -535,11 +537,11 @@
       "total": 319
     },
     "ranking_basis": "unweighted unresolved blocked-consumer count; no cost term",
-    "structured_bundle_count": 96,
+    "structured_bundle_count": 136,
     "structured_disposition_counts": {
       "alternatives": 2,
-      "ambiguous": 4,
-      "necessary": 92
+      "ambiguous": 25,
+      "necessary": 111
     }
   },
   "generated": "2026-08-19 (deterministic corpus snapshot; rerun updates content)",
@@ -1625,7 +1627,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -1643,7 +1645,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[sorry_details] {\"proved_lemmas\": [\"radius_gt_one_of_summable (summability at 1+\\u03b5 implies radius > 1)\"], \"sorry_count\": 1, \"sorry_location\": \"singular_at_one (main theorem)\", \"sorry_reason\": \"The proof requires change-of-origin for FormalMultilinearSeries (computing Taylor coefficients of f at x in terms of original a(n)), showing nonneg of re-centered coefficients, Tonelli interchange for nonneg double sums, and deriving the contradiction. Mathlib has changeOrigin but the specific ofScalars computation is not pre-built.\"}",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -2095,11 +2108,30 @@
             }
           }
         ],
-        "provisional_blocked_areas": [],
-        "structured": [],
+        "provisional_blocked_areas": [
+          "fourier-analysis"
+        ],
+        "structured": [
+          {
+            "areas": [
+              "fourier-analysis"
+            ],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[sorry_details] {\"sorry_count\": 1, \"sorry_location\": \"convolution_identity_implies_indicator (main theorem)\", \"sorry_reason\": \"Fourier transform proof: convolution theorem for L\\u00b9, Fourier derivative rule, specific Fourier pair chi_{[-h,h]} <-> 2sin(h\\u03be)/\\u03be, injectivity of L\\u00b9 Fourier transform.\"}",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
-        "structured_necessary_areas": [],
-        "structured_unresolved_areas": []
+        "structured_necessary_areas": [
+          "fourier-analysis"
+        ],
+        "structured_unresolved_areas": [
+          "fourier-analysis"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "a01A03",
@@ -4837,7 +4869,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -4848,7 +4880,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -6195,11 +6238,30 @@
             }
           }
         ],
-        "provisional_blocked_areas": [],
-        "structured": [],
+        "provisional_blocked_areas": [
+          "measure-integral"
+        ],
+        "structured": [
+          {
+            "areas": [
+              "measure-integral"
+            ],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[sorry_details] {\"sorry_count\": 2, \"sorry_locations\": [\"logIntegral_im_eq_argStar_diff (FTC for interval integrals with one-sided limit at singular endpoint)\", \"logIntegral_im_bounds (main theorem: combines FTC result with case split on exit direction)\"], \"sorry_reason\": \"The fundamental theorem of calculus for interval integrals with a one-sided limit at an endpoint where the integrand may be singular (logStar is not defined at t=0 since \\u03b3(0)=\\u03c0 is on the slit) requires careful MeasureTheory/integration machinery in Mathlib. The proven infrastructure includes: posSlitPlane domain, logStar (branch of log on \\u2102\\\\\\\\[0,\\u221e)), argStar \\u2208 (0,2\\u03c0) bounds, and hasDerivAt_logStar (antiderivative of 1/z on the slit domain).\"}",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
-        "structured_necessary_areas": [],
-        "structured_unresolved_areas": []
+        "structured_necessary_areas": [
+          "measure-integral"
+        ],
+        "structured_unresolved_areas": [
+          "measure-integral"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "a02J07",
@@ -8307,11 +8369,30 @@
             }
           }
         ],
-        "provisional_blocked_areas": [],
-        "structured": [],
+        "provisional_blocked_areas": [
+          "complex-analysis"
+        ],
+        "structured": [
+          {
+            "areas": [
+              "complex-analysis"
+            ],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[sorry_details] {\"sorry_count\": 1, \"sorry_locations\": [\"roots_outside_unit_disk (Rouch\\u00e9 application to count roots inside/outside disk)\"], \"sorry_reason\": \"Mathlib does not have Rouch\\u00e9's theorem. The proven lemmas establish: (1) the Rouch\\u00e9 condition |h(z)| \\u2264 4 < 5 = |g(z)| on |z| = 1, and (2) p has no roots on |z| = 1. The missing step is Rouch\\u00e9's theorem itself: since |g| > |h| on |z| = 1, p = g + h has the same number of zeros inside {|z| < 1} as g = 5z\\u00b3 (which has 3). Then 10 \\u2212 3 = 7 roots outside.\"}",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
-        "structured_necessary_areas": [],
-        "structured_unresolved_areas": []
+        "structured_necessary_areas": [
+          "complex-analysis"
+        ],
+        "structured_unresolved_areas": [
+          "complex-analysis"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "a92J05",
@@ -9170,11 +9251,30 @@
             }
           }
         ],
-        "provisional_blocked_areas": [],
-        "structured": [],
+        "provisional_blocked_areas": [
+          "measure-integral"
+        ],
+        "structured": [
+          {
+            "areas": [
+              "measure-integral"
+            ],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[sorry_details] {\"sorry_count\": 2, \"sorry_locations\": [\"lipschitz_V_limit_implies_ac: V-limits of Lipschitz functions are AC\", \"ac_implies_lipschitz_V_approx: AC functions are V-limits of Lipschitz functions\"], \"sorry_reason\": \"Two sorry boundaries: (1) Reverse direction: Lipschitz functions are AC (proven zero-sorry via LipschitzOnWith.absolutelyContinuousOnInterval), and V-convergence preserves AC. The preservation step requires connecting eVariationOn to sums of absolute differences on disjoint intervals plus the epsilon-delta characterization of AC. (2) Forward direction: AC implies f' exists a.e. and is integrable (FTC), truncation g_n = clamp(f',-n,n) gives Lipschitz antiderivatives, V(f_n-f) = integral|g_n-f'| -> 0 by DCT. Each step uses deep Mathlib API.\"}",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
-        "structured_necessary_areas": [],
-        "structured_unresolved_areas": []
+        "structured_necessary_areas": [
+          "measure-integral"
+        ],
+        "structured_unresolved_areas": [
+          "measure-integral"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "a93A04",
@@ -10686,7 +10786,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -10705,7 +10805,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[sorry_details] {\"sorry_count\": 3, \"sorry_locations\": [\"orthogonal_to_polynomials: monomial case (a*x^n integral = 0)\", \"orthogonal_to_polynomials: add case (splitting integral of sum)\", \"zero_of_orthogonal_to_monomials: main theorem\"], \"sorry_reason\": \"Three sorries: (1-2) The polynomial linearity step needs integral_add for interval integrals (MeasureSpace \\u211d vs Measure \\u211d issue) plus connecting a*x^n to x^n. (3) The main theorem requires Stone-Weierstrass density (polynomials dense in C([0,1])) + continuous functions dense in L^2 + Cauchy-Schwarz to conclude ||f||^2 = 0.\"}",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -11203,11 +11314,30 @@
             "value": "The identified Rouche API hole is closed locally: monic-polynomial divisor counts are normalized to root multisets, the identity count is one, and any nonzero analytic divisor count yields an enclosed zero. The main theorem still needs the t-to-1 compactness assembly and disk-Mobius/Schwarz uniqueness."
           }
         ],
-        "provisional_blocked_areas": [],
-        "structured": [],
+        "provisional_blocked_areas": [
+          "complex-analysis"
+        ],
+        "structured": [
+          {
+            "areas": [
+              "complex-analysis"
+            ],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4\n\n[closer_note] The identified Rouche API hole is closed locally: monic-polynomial divisor counts are normalized to root multisets, the identity count is one, and any nonzero analytic divisor count yields an enclosed zero. The main theorem still needs the t-to-1 compactness assembly and disk-Mobius/Schwarz uniqueness.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
-        "structured_necessary_areas": [],
-        "structured_unresolved_areas": []
+        "structured_necessary_areas": [
+          "complex-analysis"
+        ],
+        "structured_unresolved_areas": [
+          "complex-analysis"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "a94A09",
@@ -14196,7 +14326,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -14207,7 +14337,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -20335,7 +20476,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -20351,7 +20492,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3\n\n[closer_note] Compiled MemLp-two packaging, the actual L\u00b2 orthonormal family, exact identification of L\u00b2 inner products with raw integral coefficients, and Bessel convergence for every L\u00b2 approximant. Only the uniform truncation/density extension from arbitrary L\u00b9 functions remains.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -21753,7 +21905,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -21769,7 +21921,22 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 1\n\n[boundary] Closed. Complex differentiability identifies the real fderiv with the scalar restriction of the complex-linear fderiv. The derivatives of conjugation and h are computed as explicit real continuous-linear maps, and their failure to commute with multiplication by I follows by evaluation at 1.",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -22089,7 +22256,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -22105,7 +22272,22 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 2\n\n[closer_note] Closed by adapting sibling a96J02's measured-set continuity argument locally. Reflection converts its subtraction-preimage overlap to the frozen image translate; continuity and positivity at zero yield positive overlap on a neighborhood.",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -23690,7 +23872,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -23701,7 +23883,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -23906,7 +24099,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -23922,7 +24115,22 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 1\n\n[boundary] Closed. AnalyticOnNhd.eq_const_of_im_eq_const makes f constant on the supplied disk, and AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq propagates that local equality across the connected region.",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -25085,7 +25293,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -25096,7 +25304,22 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -34716,7 +34939,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -34727,7 +34950,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -36140,7 +36374,7 @@
             {
               "local_definition_chain": [
                 "apm_b96j02",
-                "apm_b96J02_mixedType",
+                "apm_b96J02_trivialType",
                 "apm_b96J02_k",
                 "apm_b96J02_xIdeal",
                 "apm_b96J02_x"
@@ -36160,7 +36394,7 @@
             {
               "local_definition_chain": [
                 "apm_b96j02",
-                "apm_b96J02_mixedType",
+                "apm_b96J02_trivialType",
                 "apm_b96J02_k",
                 "apm_b96J02_xIdeal",
                 "apm_b96J02_x"
@@ -36180,7 +36414,7 @@
             {
               "local_definition_chain": [
                 "apm_b96j02",
-                "apm_b96J02_mixedType",
+                "apm_b96J02_trivialType",
                 "apm_b96J02_k",
                 "apm_b96J02_xIdeal"
               ],
@@ -36199,7 +36433,7 @@
             {
               "local_definition_chain": [
                 "apm_b96j02",
-                "apm_b96J02_mixedType",
+                "apm_b96J02_trivialType",
                 "apm_b96J02_k",
                 "apm_b96J02_xIdeal"
               ],
@@ -37581,7 +37815,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -37592,7 +37826,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -38108,7 +38353,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -38119,7 +38364,22 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 2",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -38292,7 +38552,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -38303,7 +38563,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -39728,7 +39999,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -39739,7 +40010,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -40640,7 +40922,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -40651,7 +40933,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -49736,11 +50029,30 @@
             "value": "The remaining LF-topological gap is now an exact Lean contract: existence of a fixed unit-integral test function and a continuous linear normalized primitive whose derivative is \u03c6 minus its integral times that test function. The contract remains unproved."
           }
         ],
-        "provisional_blocked_areas": [],
-        "structured": [],
+        "provisional_blocked_areas": [
+          "differential-forms"
+        ],
+        "structured": [
+          {
+            "areas": [
+              "differential-forms"
+            ],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4\n\n[boundary] The remaining LF-topological gap is now an exact Lean contract: existence of a fixed unit-integral test function and a continuous linear normalized primitive whose derivative is \u03c6 minus its integral times that test function. The contract remains unproved.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
-        "structured_necessary_areas": [],
-        "structured_unresolved_areas": []
+        "structured_necessary_areas": [
+          "differential-forms"
+        ],
+        "structured_unresolved_areas": [
+          "differential-forms"
+        ]
       },
       "parse_status": "ok",
       "problem_id": "m02J01",
@@ -51170,7 +51482,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -51181,7 +51493,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -51661,7 +51984,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -51672,7 +51995,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -52215,7 +52549,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -52226,7 +52560,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -52593,7 +52938,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -52609,7 +52954,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4\n\n[closer_note] The remaining interfaces are now stated precisely: apm_m03J05_bridge_1 is the mixed Fredholm alternative, apm_m03J05_bridge_2 is Nemytskii energy differentiability, and apm_m03J05_bridge_3 is monotone nonlinear existence and uniqueness.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -53639,7 +53995,7 @@
             {
               "local_definition_chain": [
                 "apm_m93j02",
-                "apm_m93J02_globalSeminorm",
+                "apm_m93J02_localSeminorm",
                 "apm_m93J02_quotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -53946,7 +54302,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -53957,7 +54313,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -56282,7 +56649,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -56293,7 +56660,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -56888,7 +57266,7 @@
             {
               "local_definition_chain": [
                 "apm_m94j04",
-                "apm_m94J04_curlValue",
+                "apm_m94J04_curlTest",
                 "apm_m94J04_basis"
               ],
               "method": "frozen-statement lexical closure",
@@ -58220,7 +58598,7 @@
             {
               "local_definition_chain": [
                 "apm_m95a04",
-                "apm_m95A04_weakDeriv",
+                "apm_m95A04_LpI",
                 "apm_m95A04_I"
               ],
               "method": "frozen-statement lexical closure",
@@ -58561,7 +58939,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -58572,7 +58950,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -60003,7 +60392,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -60014,7 +60403,22 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_progress] Hop 2 closes the theorem. The frozen unscoped `ContDiff \u211d \u22a4` hypothesis is analytic regularity (`\u03c9`), so analytic uniqueness forces every compactly supported admitted test function to vanish; the inhomogeneous solution and ODE then reduce to zero. Hop 1's fundamental-kernel proof remains unchanged.",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -62254,7 +62658,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -62265,7 +62669,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -62591,7 +63006,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -62602,7 +63017,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_progress] Hop 4 records exact Lean statements for the Volterra continuous-linear compact operator and the endpoint eigenvector-uniqueness theorem. Searches confirmed L1.integralCLM does not provide the variable-upper-limit continuous-map assembly.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -62966,7 +63392,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -62982,7 +63408,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3\n\n[boundary] The bounded linear involution, bundled quadratic map, its sup-norm size estimate, and the two-radius sup-norm difference estimate are formalized. Remaining work is the closed-ball contraction packaging and extraction of the raw-function solution.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -63440,7 +63877,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -63451,7 +63888,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -68101,7 +68549,7 @@
             {
               "local_definition_chain": [
                 "apm_m99a02",
-                "m99A02Omega",
+                "m99A02Function",
                 "m99A02Point"
               ],
               "method": "frozen-statement lexical closure",
@@ -70829,7 +71277,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomology3Sphere",
+                "apm_t00A01_isHomologyBall",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -70847,7 +71295,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomology3Sphere",
+                "apm_t00A01_isHomologyBall",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -70865,7 +71313,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomology3Sphere",
+                "apm_t00A01_isHomologyBall",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -70883,7 +71331,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomology3Sphere",
+                "apm_t00A01_isHomologyBall",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -70901,7 +71349,7 @@
             {
               "local_definition_chain": [
                 "apm_t00a01",
-                "apm_t00A01_isHomology3Sphere",
+                "apm_t00A01_isHomologyBall",
                 "apm_t00A01_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -72993,7 +73441,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -73004,7 +73452,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_progress] Hop 4 exposes two precise handoff theorems: apm_t00A03_bridge_1 is the pants classification for every complementary component, and apm_t00A03_bridge_2 is the Euler-characteristic/boundary-incidence count n = 3*g - 3. The frozen theorem is unchanged.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -74789,7 +75248,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -74807,7 +75266,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -74825,7 +75284,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -74843,7 +75302,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -74861,7 +75320,7 @@
             {
               "local_definition_chain": [
                 "apm_t00j02",
-                "apm_t00j02_hasGenusTwo",
+                "apm_t00j02_hasDegree",
                 "apm_t00j02_H"
               ],
               "method": "frozen-statement lexical closure",
@@ -77487,7 +77946,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -77498,7 +77957,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -79524,7 +79994,7 @@
             {
               "local_definition_chain": [
                 "apm_t01a04",
-                "apm_t01a04_circleCoverBase",
+                "apm_t01a04_TorusCover",
                 "apm_t01a04_Torus"
               ],
               "method": "frozen-statement lexical closure",
@@ -82072,7 +82542,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j01",
-                "apm_t01j01_IsNullHomotopic",
+                "apm_t01j01_IsAnnulusBetween",
                 "apm_t01j01_I"
               ],
               "method": "frozen-statement lexical closure",
@@ -82809,7 +83279,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -82825,7 +83295,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4\n\n[boundary] Hop 4 states the exact unproved topology contract: the boundary of the Fin n cube is path connected for n at least two. This enables lift uniqueness to make a lifted cube constant on the boundary and hence supplies the missing surjectivity route.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -83010,8 +83491,8 @@
             {
               "local_definition_chain": [
                 "apm_t01j03",
-                "apm_t01J03_BoundaryTorus",
-                "apm_t01J03_BoundaryCircle",
+                "apm_t01J03_SolidTorus",
+                "apm_t01J03_Disk2",
                 "apm_t01J03_E2"
               ],
               "method": "frozen-statement lexical closure",
@@ -84533,7 +85014,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_isInclusionPullback",
+                "apm_t01J06_isOmega",
                 "apm_t01J06_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -84620,7 +85101,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_ProductForm2",
+                "apm_t01J06_projectionPullback",
                 "apm_t01J06_circleTangent"
               ],
               "method": "frozen-statement lexical closure",
@@ -84638,7 +85119,7 @@
             {
               "local_definition_chain": [
                 "apm_t01j06",
-                "apm_t01J06_ProductForm2",
+                "apm_t01J06_projectionPullback",
                 "apm_t01J06_circleTangent"
               ],
               "method": "frozen-statement lexical closure",
@@ -85072,7 +85553,7 @@
               "local_definition_chain": [
                 "apm_t02a02",
                 "apm_t02a02_validVertexQuotient",
-                "apm_t02a02_orientedStart",
+                "apm_t02a02_orientedEnd",
                 "apm_t02a02_next"
               ],
               "method": "frozen-statement lexical closure",
@@ -85091,7 +85572,7 @@
               "local_definition_chain": [
                 "apm_t02a02",
                 "apm_t02a02_validVertexQuotient",
-                "apm_t02a02_orientedStart",
+                "apm_t02a02_orientedEnd",
                 "apm_t02a02_next"
               ],
               "method": "frozen-statement lexical closure",
@@ -85488,7 +85969,7 @@
               "local_definition_chain": [
                 "apm_t02a03",
                 "apm_t02a03_ybase",
-                "apm_t02a03_torusInclusion",
+                "apm_t02a03_circleInclusion",
                 "apm_t02a03_wedgeQuotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -85507,7 +85988,7 @@
               "local_definition_chain": [
                 "apm_t02a03",
                 "apm_t02a03_ybase",
-                "apm_t02a03_torusInclusion",
+                "apm_t02a03_circleInclusion",
                 "apm_t02a03_wedgeQuotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -85526,7 +86007,7 @@
               "local_definition_chain": [
                 "apm_t02a03",
                 "apm_t02a03_ybase",
-                "apm_t02a03_torusInclusion",
+                "apm_t02a03_circleInclusion",
                 "apm_t02a03_wedgeQuotient"
               ],
               "method": "frozen-statement lexical closure",
@@ -86436,7 +86917,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a06",
-                "apm_t02a06_S3",
+                "apm_t02a06_S2",
                 "apm_t02a06_Sphere"
               ],
               "method": "frozen-statement lexical closure",
@@ -86454,7 +86935,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a06",
-                "apm_t02a06_S3",
+                "apm_t02a06_S2",
                 "apm_t02a06_Sphere"
               ],
               "method": "frozen-statement lexical closure",
@@ -86536,11 +87017,11 @@
               "covering-space"
             ],
             "areas_are": "necessary",
-            "at_commit": "7390e5c",
+            "at_commit": "2f40019",
             "date": "2026-08-19",
             "frame": "t02A06-bridge-3",
             "missing": "SimplyConnectedSpace S3, via the two-open gluing theorem. THREE independent encodings attempted. Encodings 1 and 2 (simultaneous connector construction; strengthened induction) both failed on chart-label dependence: the connector path's TYPE depended on the equality test between adjacent chart labels. Encoding 3 SOLVED that -- the label case split is confined to a Prop-valued existential (exists_path_mem_twoChart_inter) and `choose` extracts a flat conn/hconn pair, so the induction motive is non-dependent. The REMAINING wall is different in kind and purely algebraic: the finite telescope step. Induction through Path.concat_succ produces connector indices k.castSucc.succ and k.succ.castSucc, which are propositionally but not definitionally equal Fin values, so the paths have propositionally equal endpoints but different dependent Path types and the IH cannot rewrite without transporting paths and homotopies across endpoint equalities. MATHLIB ADDITION THAT WOULD UNBLOCK: a telescope lemma Path.Homotopic.concat_connector_telescope, or Path.concat reindexing lemmas that normalise castSucc/succ endpoint transports automatically.",
-            "progress": "FOUR walls hit, THREE closed, each strictly narrower. (1) Chart-label dependence -- CLOSED 9578534: label split confined to a Prop-valued existential, `choose` yields flat conn/hconn, induction motive non-dependent. (2) Fin castSucc/succ telescope algebra -- CLOSED c614480: Path.Homotopic.concat_connector_telescope. Fundamental-groupoid route works in principle but Quotient.mk would not rewrite the outer dependent Path.trans; the direct proof does the same groupoid algebra without that friction. (3) Cyclic endpoint packaging -- CLOSED 7390e5c: exists_cyclic_twoChart_connectors puts the boundary equation INSIDE the existential, choosing the boundary path first and assembling with Fin.cases/Fin.lastCases so every endpoint cast stays inside the proof. (4) OPEN, and now pure index bookkeeping with no mathematics left: an adapter from Mathlib's N-indexed subdivision output (exists_monotone_Icc_subset_open_cover_unitInterval gives t : N -> I with t 0 = 0 and eventually 1) to the Fin (n+2)-indexed family the connector and telescope APIs consume, with t 0 = 0, t (Fin.last (n+1)) = 1, side : Fin (n+1) -> Bool, and each edge's containment. That adapter is the exact missing statement between existing Mathlib subdivision and the completed machinery, and is itself plausibly upstreamable.",
+            "progress": "FIVE walls hit, FOUR closed, each strictly narrower. (1) Chart-label dependence CLOSED 9578534 -- label split confined to a Prop-valued existential, choose yields flat data, induction motive non-dependent. (2) Fin castSucc/succ telescope algebra CLOSED c614480 -- Path.Homotopic.concat_connector_telescope. Fundamental-groupoid route works in principle but Quotient.mk would not rewrite the outer dependent Path.trans. (3) Cyclic endpoint packaging CLOSED 7390e5c -- boundary equation placed INSIDE the existential, assembled with Fin.cases/Fin.lastCases. (4) N-to-Fin subdivision adapter CLOSED e6831c9 + 2f40019 -- exists_fin_Icc_subset_open_cover_unitInterval, by choosing the side function at N level BEFORE introducing Fin, so reindexing is composition not transport. Plausibly upstreamable to Mathlib as a Fin-indexed wrapper. (5) OPEN: homotopy-range retention. IsSimplyConnected of a UNION requires an exhibited homotopy whose whole image stays in the union, but IsSimplyConnected.pathsHomotopic_of_mem, concat_subpath, concat_hcomp and the telescope all export bare Path.Homotopic and forget the range certificate. Structural fix: run the entire argument in the subtype of the union, where every path and homotopy is definitionally valued there, and obtain the Set-level statement by specialisation.",
             "recorded_by": "codex-7",
             "resolved": null
           },
@@ -86759,8 +87240,8 @@
             {
               "local_definition_chain": [
                 "apm_t02a07",
-                "apm_t02a07_family",
-                "apm_t02a07_S2",
+                "apm_t02a07_IsTransverse",
+                "apm_t02a07_sphereTangent",
                 "apm_t02a07_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -86778,7 +87259,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a07",
-                "apm_t02a07_X",
+                "apm_t02a07_family",
                 "apm_t02a07_E4"
               ],
               "method": "frozen-statement lexical closure",
@@ -86830,7 +87311,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a07",
-                "apm_t02a07_family",
+                "apm_t02a07_IsTransverse",
                 "apm_t02a07_S2"
               ],
               "method": "frozen-statement lexical closure",
@@ -87453,7 +87934,7 @@
             {
               "local_definition_chain": [
                 "apm_t02a08",
-                "apm_t02a08_HasOrientedIntersection",
+                "apm_t02a08_fiberMap",
                 "apm_t02a08_Y"
               ],
               "method": "frozen-statement lexical closure",
@@ -91349,7 +91830,7 @@
               "local_definition_chain": [
                 "apm_t03j06",
                 "apm_t03J06_bulletIntegral",
-                "apm_t03J06_hemispherePoint",
+                "apm_t03J06_hemisphereTangents",
                 "apm_t03J06_vec3"
               ],
               "method": "frozen-statement lexical closure",
@@ -92654,7 +93135,7 @@
             {
               "local_definition_chain": [
                 "apm_t91a08",
-                "t91A08IsInduced",
+                "t91A08IsPullback",
                 "T91A08R2"
               ],
               "method": "frozen-statement lexical closure",
@@ -94641,7 +95122,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -94652,7 +95133,22 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 1",
+            "recorded_by": "codex-6",
+            "resolved": {
+              "at_commit": "a00ea1f",
+              "by": "bundle classification records the work closed",
+              "date": "2026-08-19"
+            }
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -96565,7 +97061,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -96581,7 +97077,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "necessary",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 3\n\n[closer_progress] The exact ordinary derivative identity and its transport to IsMIntegralCurveOn for the real self-model are compiled, closing the frozen middle conjunct. The endpoint continuity contradiction and compactness-to-uniform-local-time construction remain.",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []
@@ -96664,7 +97171,7 @@
             {
               "local_definition_chain": [
                 "apm_t92j09",
-                "apm_t92J09_param",
+                "apm_t92J09_sphere",
                 "apm_t92J09_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -100033,7 +100540,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a08",
-                "apm_t94a08_sigma1",
+                "apm_t94a08_IsRegularLevelSet",
                 "apm_t94a08_CP2"
               ],
               "method": "frozen-statement lexical closure",
@@ -100550,7 +101057,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a10",
-                "apm_t94a10_Form",
+                "apm_t94a10_IsOmega",
                 "apm_t94a10_E3"
               ],
               "method": "frozen-statement lexical closure",
@@ -100636,7 +101143,7 @@
             {
               "local_definition_chain": [
                 "apm_t94a10",
-                "apm_t94a10_IsClosed",
+                "apm_t94a10_IsExact",
                 "apm_t94a10_ambientExtension"
               ],
               "method": "frozen-statement lexical closure",
@@ -105459,7 +105966,7 @@
             {
               "local_definition_chain": [
                 "apm_t95j05",
-                "t95J05ProjectionPullback",
+                "T95J05ProjectiveThreeForm",
                 "t95J05SphereThree",
                 "t95J05R4"
               ],
@@ -105478,7 +105985,7 @@
             {
               "local_definition_chain": [
                 "apm_t95j05",
-                "t95J05ProjectionPullback",
+                "T95J05ProjectiveThreeForm",
                 "t95J05SphereThree"
               ],
               "method": "frozen-statement lexical closure",
@@ -108667,7 +109174,7 @@
             {
               "local_definition_chain": [
                 "apm_t97a01",
-                "apm_t97a01_baseTorusRP2",
+                "apm_t97a01_TorusRP2",
                 "apm_t97a01_Disk"
               ],
               "method": "frozen-statement lexical closure",
@@ -115792,7 +116299,7 @@
             {
               "local_definition_chain": [
                 "apm_t98a04",
-                "apm_t98a04_CP1",
+                "apm_t98a04_S3",
                 "apm_t98a04_C2"
               ],
               "method": "frozen-statement lexical closure",
@@ -116213,7 +116720,7 @@
               "local_definition_chain": [
                 "apm_t98a05",
                 "apm_t98a05_orientedSimplexIntegral",
-                "apm_t98a05_simplexParameterDomain",
+                "apm_t98a05_simplexParameter",
                 "apm_t98a05_E2"
               ],
               "method": "frozen-statement lexical closure",
@@ -116332,7 +116839,7 @@
         }
       ],
       "obstruction_evidence": {
-        "has_explicit_empty_areas": false,
+        "has_explicit_empty_areas": true,
         "has_record": true,
         "legacy_areas": [],
         "legacy_by_field": [
@@ -116343,7 +116850,18 @@
           }
         ],
         "provisional_blocked_areas": [],
-        "structured": [],
+        "structured": [
+          {
+            "areas": [],
+            "areas_are": "ambiguous",
+            "at_commit": "a00ea1f",
+            "date": "2026-08-19",
+            "frame": "phase-2e-stratified-migration",
+            "missing": "[closer_hop] 4",
+            "recorded_by": "codex-6",
+            "resolved": null
+          }
+        ],
         "structured_alternative_areas": [],
         "structured_necessary_areas": [],
         "structured_unresolved_areas": []

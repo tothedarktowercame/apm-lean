@@ -48,5 +48,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 0,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "fourier-analysis"
+      ],
+      "areas_are": "necessary",
+      "missing": "[sorry_details] {\"sorry_count\": 1, \"sorry_location\": \"convolution_identity_implies_indicator (main theorem)\", \"sorry_reason\": \"Fourier transform proof: convolution theorem for L\\u00b9, Fourier derivative rule, specific Fourier pair chi_{[-h,h]} <-> 2sin(h\\u03be)/\\u03be, injectivity of L\\u00b9 Fourier transform.\"}",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

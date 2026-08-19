@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "notes": "Hop 4 states the exact quantitative Nielsen-Schreier formula specialized to rank seven and a constructive index-d subgroup theorem with exact rank. The former excludes all other ranks and the latter realizes ranks 2, 3, and 4; the frozen main statement is unchanged.",
-  "imported_at": "2026-07-13T17:26:56.660844Z"
+  "imported_at": "2026-07-13T17:26:56.660844Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "ambiguous",
+      "missing": "[closer_hop] 3",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

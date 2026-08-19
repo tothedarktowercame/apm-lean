@@ -53,5 +53,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 0,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "complex-analysis"
+      ],
+      "areas_are": "necessary",
+      "missing": "[sorry_details] {\"sorry_count\": 1, \"sorry_locations\": [\"roots_outside_unit_disk (Rouch\\u00e9 application to count roots inside/outside disk)\"], \"sorry_reason\": \"Mathlib does not have Rouch\\u00e9's theorem. The proven lemmas establish: (1) the Rouch\\u00e9 condition |h(z)| \\u2264 4 < 5 = |g(z)| on |z| = 1, and (2) p has no roots on |z| = 1. The missing step is Rouch\\u00e9's theorem itself: since |g| > |h| on |z| = 1, p = g + h has the same number of zeros inside {|z| < 1} as g = 5z\\u00b3 (which has 3). Then 10 \\u2212 3 = 7 roots outside.\"}",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

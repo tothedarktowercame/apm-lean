@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 4,
   "note": "Failed-with-statement: Main.lean now records exact signatures for full-period integrability of |sin theta|^(-1/2) and the dominated-Cauchy boundary uniqueness theorem that consumes it.",
-  "imported_at": "2026-07-13T17:26:53.113858Z"
+  "imported_at": "2026-07-13T17:26:53.113858Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "ambiguous",
+      "missing": "[closer_hop] 4",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

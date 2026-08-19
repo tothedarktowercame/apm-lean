@@ -39,5 +39,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 3,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[closer_progress] The exact ordinary derivative identity and its transport to IsMIntegralCurveOn for the real self-model are compiled, closing the frozen middle conjunct. The endpoint continuity contradiction and compactness-to-uniform-local-time construction remain.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

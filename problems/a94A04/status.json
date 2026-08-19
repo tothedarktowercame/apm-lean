@@ -49,5 +49,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 0,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[sorry_details] {\"sorry_count\": 3, \"sorry_locations\": [\"orthogonal_to_polynomials: monomial case (a*x^n integral = 0)\", \"orthogonal_to_polynomials: add case (splitting integral of sum)\", \"zero_of_orthogonal_to_monomials: main theorem\"], \"sorry_reason\": \"Three sorries: (1-2) The polynomial linearity step needs integral_add for interval integrals (MeasureSpace \\u211d vs Measure \\u211d issue) plus connecting a*x^n to x^n. (3) The main theorem requires Stone-Weierstrass density (polynomials dense in C([0,1])) + continuous functions dense in L^2 + Cauchy-Schwarz to conclude ||f||^2 = 0.\"}",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

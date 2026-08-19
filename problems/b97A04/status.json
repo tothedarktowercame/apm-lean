@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -30,5 +32,21 @@
   "classification": "complete",
   "closer_hop": 2,
   "note": "Closed by Jacobson density: Schur scalarity identifies the double centralizer with the complex endomorphism algebra. The resulting matrix-algebra equivalence makes R simple Artinian, and isotypic decomposition handles every module.",
-  "imported_at": "2026-07-13T17:26:54.114435Z"
+  "imported_at": "2026-07-13T17:26:54.114435Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "ambiguous",
+      "missing": "[closer_hop] 2",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": {
+        "by": "bundle classification records the work closed",
+        "date": "2026-08-19",
+        "at_commit": "a00ea1f"
+      }
+    }
+  ]
 }

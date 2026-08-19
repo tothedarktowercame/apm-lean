@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 4,
     "sorry_count_scratch": 0,
     "sorry_count_total": 4
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 4,
   "closer_note": "The remaining interfaces are now stated precisely: apm_m03J05_bridge_1 is the mixed Fredholm alternative, apm_m03J05_bridge_2 is Nemytskii energy differentiability, and apm_m03J05_bridge_3 is monotone nonlinear existence and uniqueness.",
-  "imported_at": "2026-07-13T17:26:54.565716Z"
+  "imported_at": "2026-07-13T17:26:54.565716Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[closer_note] The remaining interfaces are now stated precisely: apm_m03J05_bridge_1 is the mixed Fredholm alternative, apm_m03J05_bridge_2 is Nemytskii energy differentiability, and apm_m03J05_bridge_3 is monotone nonlinear existence and uniqueness.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

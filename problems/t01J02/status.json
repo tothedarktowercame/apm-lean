@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 2,
     "sorry_count_scratch": 0,
     "sorry_count_total": 2
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 4,
   "boundary": "Hop 4 states the exact unproved topology contract: the boundary of the Fin n cube is path connected for n at least two. This enables lift uniqueness to make a lifted cube constant on the boundary and hence supplies the missing surjectivity route.",
-  "imported_at": "2026-07-13T17:26:56.782852Z"
+  "imported_at": "2026-07-13T17:26:56.782852Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 4\n\n[boundary] Hop 4 states the exact unproved topology contract: the boundary of the Fin n cube is path connected for n at least two. This enables lift uniqueness to make a lifted cube constant on the boundary and hence supplies the missing surjectivity route.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

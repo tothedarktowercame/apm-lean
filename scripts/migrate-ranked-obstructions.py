@@ -89,8 +89,33 @@ ADVERSARIAL_AREAS = {
     "m94A04": [],
 }
 
-AMBIGUOUS = {"a96A08", "a99J03", "t00J07", "t97J05"}
+# Deterministic sample: sort the 170 remaining obstruction-bearing bundles by
+# preserved-prose length, split into four equal-index strata, and draw ten per
+# stratum with `random.seed(20260819)`. The explicit result is frozen here so a
+# rerun does not depend on subsequent status edits.
+STRATIFIED_AREAS = {
+    "a01J05": [], "a95J03": [], "a99J10": [], "b00J04": [], "b96A01": [],
+    "b97A02": [], "b97A04": [], "b97J01": [], "b98A01": [], "b98A04": [],
+    "m02J06": [], "m03J01": [], "m03J04": [], "m93J03": [], "m94A05": [],
+    "m95A04": [], "m96J02": [], "m97A01": [], "t00J08": [], "t92J03": [],
+    "t98A05": [], "aunk02": [], "m96J04": [], "m03J05": [], "a99J02": [],
+    "t00A03": [], "m96J06": [], "t01J02": [], "m02J01": ["differential-forms"],
+    "t92J08": [], "a01A03": ["fourier-analysis"], "a98A02": [],
+    "a98J04": [], "m95J05": [], "a94A09": ["complex-analysis"],
+    "a92J05": ["complex-analysis"], "a00J06": [], "a94A04": [],
+    "a02J07": ["measure-integral"], "a93A04": ["measure-integral"],
+}
+
+AMBIGUOUS = {
+    "a96A08", "a99J03", "t00J07", "t97J05",
+    "a01J05", "a95J03", "a99J10", "b00J04", "b96A01", "b97A02",
+    "b97A04", "b97J01", "b98A01", "b98A04", "m02J06", "m03J01",
+    "m03J04", "m93J03", "m94A05", "m95A04", "m96J02", "m97A01",
+    "t00J08", "t92J03", "t98A05",
+}
 ALTERNATIVES = {"a03J05"}
+FORCE_UNRESOLVED = {"a01A03", "a94A09", "a92J05", "a00J06", "a94A04",
+                    "a02J07", "a93A04"}
 
 LEGACY_FIELDS = ("closer_hop", "boundary", "closer_note", "sorry_details", "closer_progress")
 RESOLVED_CLASSIFICATIONS = {"complete", "compiled", "closed", "proved", "solved"}
@@ -113,11 +138,13 @@ def main() -> None:
         if changed:
             path.write_text(json.dumps(status, indent=2) + "\n")
 
-    for problem_id, areas in (AREAS | NEXT_AREAS | ADVERSARIAL_AREAS).items():
+    for problem_id, areas in (AREAS | NEXT_AREAS | ADVERSARIAL_AREAS |
+                              STRATIFIED_AREAS).items():
         path = repo / "problems" / problem_id / "status.json"
         status = json.loads(path.read_text())
         existing = status.get("obstructions", [])
-        frame = ("phase-2d-adversarial-migration" if problem_id in ADVERSARIAL_AREAS
+        frame = ("phase-2e-stratified-migration" if problem_id in STRATIFIED_AREAS
+                 else "phase-2d-adversarial-migration" if problem_id in ADVERSARIAL_AREAS
                  else "phase-2c-legacy-migration" if problem_id in NEXT_AREAS
                  else "phase-2b-legacy-migration")
         if any(item.get("frame") == frame for item in existing):
@@ -130,7 +157,8 @@ def main() -> None:
                 rendered = value if isinstance(value, str) else json.dumps(value, sort_keys=True)
                 paragraphs.append(f"[{field}] {rendered}")
         resolved = None
-        if status.get("classification") in RESOLVED_CLASSIFICATIONS:
+        if (status.get("classification") in RESOLVED_CLASSIFICATIONS
+                and problem_id not in FORCE_UNRESOLVED):
             resolved = {"by": "bundle classification records the work closed",
                         "date": "2026-08-19", "at_commit": "a00ea1f"}
         entry = {

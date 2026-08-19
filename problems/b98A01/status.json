@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "classification_detail": "Part (a)'s Fin-index coset action and normal-core universal property now compile and are wired into the theorem, together with the 10-or-35 normalizer alternative. Refinement/exclusivity and the order-35/normal-7 equivalence remain.",
-  "imported_at": "2026-07-13T17:26:54.138359Z"
+  "imported_at": "2026-07-13T17:26:54.138359Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "ambiguous",
+      "missing": "[closer_hop] 3",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

@@ -49,5 +49,19 @@
     "elaborated_exit": 0,
     "sorry_declarations": 0,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [
+        "measure-integral"
+      ],
+      "areas_are": "necessary",
+      "missing": "[sorry_details] {\"sorry_count\": 2, \"sorry_locations\": [\"logIntegral_im_eq_argStar_diff (FTC for interval integrals with one-sided limit at singular endpoint)\", \"logIntegral_im_bounds (main theorem: combines FTC result with case split on exit direction)\"], \"sorry_reason\": \"The fundamental theorem of calculus for interval integrals with a one-sided limit at an endpoint where the integrand may be singular (logStar is not defined at t=0 since \\u03b3(0)=\\u03c0 is on the slit) requires careful MeasureTheory/integration machinery in Mathlib. The proven infrastructure includes: posSlitPlane domain, logStar (branch of log on \\u2102\\\\\\\\[0,\\u221e)), argStar \\u2208 (0,2\\u03c0) bounds, and hasDerivAt_logStar (antiderivative of 1/z on the slit domain).\"}",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

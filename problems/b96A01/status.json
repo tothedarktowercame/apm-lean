@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "statement-defective",
   "closer_hop": 4,
   "note": "Hop 4 reconfirmed the frozen first conjunct is false: V=Q, s={1,2}, A=closure(s) satisfies the premise but no Q-basis can contain both dependent distinct vectors 1 and 2. The source asks instead for some basis subset generating A, so no bridge declaration was added.",
-  "imported_at": "2026-07-13T17:26:54.066528Z"
+  "imported_at": "2026-07-13T17:26:54.066528Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "ambiguous",
+      "missing": "[closer_hop] 4",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

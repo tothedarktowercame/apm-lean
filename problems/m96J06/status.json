@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,5 +32,17 @@
   "classification": "partial",
   "closer_hop": 3,
   "boundary": "The bounded linear involution, bundled quadratic map, its sup-norm size estimate, and the two-radius sup-norm difference estimate are formalized. Remaining work is the closed-ball contraction packaging and extraction of the raw-function solution.",
-  "imported_at": "2026-07-13T17:26:55.570715Z"
+  "imported_at": "2026-07-13T17:26:55.570715Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 3\n\n[boundary] The bounded linear involution, bundled quadratic map, its sup-norm size estimate, and the two-radius sup-norm difference estimate are formalized. Remaining work is the closed-ball contraction packaging and extraction of the raw-function solution.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

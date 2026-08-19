@@ -38,5 +38,17 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_progress] Hop 4 exposes two precise handoff theorems: apm_t00A03_bridge_1 is the pants classification for every complementary component, and apm_t00A03_bridge_2 is the Euler-characteristic/boundary-incidence count n = 3*g - 3. The frozen theorem is unchanged.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }

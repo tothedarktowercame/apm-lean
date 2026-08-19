@@ -30,5 +30,21 @@
   "classification": "complete",
   "closer_hop": 1,
   "boundary": "Closed. AnalyticOnNhd.eq_const_of_im_eq_const makes f constant on the supplied disk, and AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq propagates that local equality across the connected region.",
-  "imported_at": "2026-05-01T19:38:17.321285Z"
+  "imported_at": "2026-05-01T19:38:17.321285Z",
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "necessary",
+      "missing": "[closer_hop] 1\n\n[boundary] Closed. AnalyticOnNhd.eq_const_of_im_eq_const makes f constant on the supplied disk, and AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq propagates that local equality across the connected region.",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": {
+        "by": "bundle classification records the work closed",
+        "date": "2026-08-19",
+        "at_commit": "a00ea1f"
+      }
+    }
+  ]
 }

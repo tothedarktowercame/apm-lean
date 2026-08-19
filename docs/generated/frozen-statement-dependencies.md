@@ -600,9 +600,9 @@ unweighted by cost and is not a funding recommendation.
 | covering-space | 14/197 obstruction-covered non-complete bundles | 14/14 | 0/14 | 13/14 | 197/319 |
 | orientation | 9/197 obstruction-covered non-complete bundles | 9/9 | 0/9 | 8/9 | 197/319 |
 | transversality | 7/197 obstruction-covered non-complete bundles | 7/7 | 0/7 | 0/0 | 197/319 |
+| differential-forms | 6/197 obstruction-covered non-complete bundles | 6/6 | 0/6 | 0/0 | 197/319 |
 | mayer-vietoris | 6/197 obstruction-covered non-complete bundles | 6/6 | 0/6 | 0/0 | 197/319 |
 | van-kampen | 6/197 obstruction-covered non-complete bundles | 6/6 | 0/6 | 0/0 | 197/319 |
-| differential-forms | 5/197 obstruction-covered non-complete bundles | 5/5 | 0/5 | 0/0 | 197/319 |
 | cellular-homology | 3/197 obstruction-covered non-complete bundles | 3/3 | 0/3 | 0/0 | 197/319 |
 | cohomology | 2/197 obstruction-covered non-complete bundles | 2/2 | 0/2 | 1/1 | 197/319 |
 | intersection-theory | 2/197 obstruction-covered non-complete bundles | 2/2 | 0/2 | 0/0 | 197/319 |
@@ -623,9 +623,9 @@ unweighted by cost and is not a funding recommendation.
 | covering-space | 14/197 |
 | orientation | 9/197 |
 | transversality | 7/197 |
+| differential-forms | 6/197 |
 | mayer-vietoris | 6/197 |
 | van-kampen | 6/197 |
-| differential-forms | 5/197 |
 | cellular-homology | 3/197 |
 | cohomology | 2/197 |
 | intersection-theory | 2/197 |
@@ -637,6 +637,6 @@ unweighted by cost and is not a funding recommendation.
 | fourier-analysis | 0/197 |
 | measure-integral | 0/197 |
 
-Bundles with an explicit structured `areas: []`: 43.
+Bundles with an explicit structured `areas: []`: 77.
 Structured and legacy sources remain separate in JSON; their union is used only for
 the explicitly provisional ranking above.

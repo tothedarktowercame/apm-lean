@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -42,8 +44,20 @@
     ],
     "blockers": [
       "Convert the frozen real interval integral to the complex circle integral of the cleared polynomial's logarithmic derivative.",
-      "Account for the X⁻ᴺ pole contribution through a logarithmic-derivative product rule.",
+      "Account for the X\u207b\u1d3a pole contribution through a logarithmic-derivative product rule.",
       "Transport the divisor sum to a root-multiplicity count bounded by the degree-2N lemma."
     ]
-  }
+  },
+  "obstructions": [
+    {
+      "areas": [],
+      "areas_are": "ambiguous",
+      "missing": "[closer_hop] 4",
+      "recorded_by": "codex-6",
+      "frame": "phase-2e-stratified-migration",
+      "at_commit": "a00ea1f",
+      "date": "2026-08-19",
+      "resolved": null
+    }
+  ]
 }
