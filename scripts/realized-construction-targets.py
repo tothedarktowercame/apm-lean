@@ -19,6 +19,38 @@ DECL_RE = re.compile(
     r"([A-Za-z_][A-Za-z0-9_']*(?:\.[A-Za-z_][A-Za-z0-9_']*)*)"
 )
 
+# Frozen before blocked-layer scoring. This maps obstruction taxonomy areas to
+# modules whose documented mathematical purpose directly implements that area.
+# It is intentionally conservative: Surfaces has no honest current taxonomy
+# label, while Intersection and OrientedIntegration can implement two aspects.
+AREA_TO_MODULES = {
+    "cellular-homology": set(),
+    "cohomology": set(),
+    "complex-analysis": {
+        "CircleParam", "HerglotzRigidity", "LemniscateComponents", "Rouche",
+        "SchwarzEquality", "SchwarzPick", "UnivalentDeriv",
+    },
+    "covering-space": set(),
+    "degree-theory": set(),
+    "differential-forms": {"OrientedIntegration"},
+    "excision": set(),
+    "fourier-analysis": {"Sinc"},
+    "fundamental-group": set(),
+    "intersection-theory": {"Intersection"},
+    "kunneth": set(),
+    "mayer-vietoris": set(),
+    "measure-integral": {
+        "BanachZarecki", "KernelAverage", "L2Translation", "LpRepresentative",
+        "LusinN", "RadialIntegrationR3", "RadialMajorantAE", "SetIntegralPrimitive",
+        "Sinc", "YoungConvolution",
+    },
+    "orientation": {"OrientedIntegration"},
+    "singular-homology": set(),
+    "stokes": {"OrientedIntegration"},
+    "transversality": {"Intersection"},
+    "van-kampen": set(),
+}
+
 
 def git_history_cost(repo: Path, path: Path) -> dict:
     output = subprocess.run(
