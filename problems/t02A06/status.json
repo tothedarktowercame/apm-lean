@@ -40,24 +40,40 @@
     "sorry_declarations": 4,
     "previous_classification": "partial"
   },
-  "obstruction": {
-    "names_areas": [
-      "singular-homology",
-      "covering-space"
-    ],
-    "missing": [
-      {
-        "area": "singular-homology",
-        "what": "H_k(S^n) for all k; blocked upstream on naturality for Mathlib's totally-disconnected H0 (no lemma identifies the coproduct injection with the point-inclusion homology map)",
-        "recorded_by": "codex-3"
-      },
-      {
-        "area": "covering-space",
-        "what": "SimplyConnectedSpace S3; blocked on the finite two-chart gluing coherence -- constructing per-vertex connector paths whose type depends on the adjacent chart-label branch",
-        "recorded_by": "codex-7"
+  "obstructions": [
+    {
+      "areas": [
+        "singular-homology"
+      ],
+      "missing": "H0 naturality for totally disconnected spaces: nothing identifies the coproduct injection with the homology map induced by the corresponding point inclusion, so the endpoint map H0(dI) -> H0(I) cannot be shown to be the codiagonal. Blocks H_k(S^n) via the S^0 base case of any sphere induction.",
+      "recorded_by": "codex-3",
+      "frame": "t02A06-bridge-2",
+      "at_commit": "b17cbe0",
+      "date": "2026-08-19",
+      "resolved": null
+    },
+    {
+      "areas": [
+        "covering-space"
+      ],
+      "missing": "SimplyConnectedSpace S3. Mathlib has the covering lifting API and this repo has homotopy invariance, but the two-open gluing theorem does not close in Lean: the per-vertex connector path's TYPE depends on the equality test between adjacent chart labels, so the induction must transport the connector, its endpoints and its range proof across that branch. Two independent encodings (simultaneous, and strengthened induction) hit the same dependent-coherence wall.",
+      "recorded_by": "codex-7",
+      "frame": "t02A06-bridge-3",
+      "at_commit": "cb53196",
+      "date": "2026-08-19",
+      "resolved": null
+    },
+    {
+      "areas": [],
+      "missing": "NOT blocked on Kunneth, despite the informal solution using it. A retract argument (i : x -> (x,p), r = Prod.fst, r . i = id) makes H2(i) split injective, so bridge_2 needs only H2(S2) nonzero and H2(S4) = 0. Recorded as an empty area set: attempted, blocker identified, names no tracked area.",
+      "recorded_by": "codex-6",
+      "frame": "t02A06-bridge-2",
+      "at_commit": "fc15d0c",
+      "date": "2026-08-19",
+      "resolved": {
+        "by": "route survey supersedes the informal-proof attribution",
+        "date": "2026-08-19"
       }
-    ],
-    "recorded_at": "2026-08-19",
-    "recorded_via": "claude-10 review protocol"
-  }
+    }
+  ]
 }

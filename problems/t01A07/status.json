@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -30,5 +32,25 @@
   "classification": "complete",
   "closer_hop": 4,
   "boundary": "Closed via Mathlib's Projectivization.exists_smul_eq_mk_rep, followed by explicit projective classification and a Fin 2 equivalence.",
-  "imported_at": "2026-07-13T17:26:56.757829Z"
+  "imported_at": "2026-07-13T17:26:56.757829Z",
+  "obstructions": [
+    {
+      "areas": [
+        "intersection-theory",
+        "orientation"
+      ],
+      "missing": "Part (b) was stated as the orientation-free mod-2 intersection number, a declared weakening of the source's integer-valued request, because Mathlib has no projective tangent-orientation or oriented-intersection API.",
+      "recorded_by": "codex-7",
+      "frame": "t01A07-integer-signed-count",
+      "at_commit": "5c95846",
+      "date": "2026-08-19",
+      "resolved": {
+        "by": "Built the missing layer locally in ConstructionTargets/Intersection: affine projective charts proved to be pullbacks of the actual homogeneous quartic and line, ComplementaryTangents with range equalities, one uniform normal-first orientation convention driven by the quartic derivative, and the integer signed count 0 replacing the mod-2 conjunct. Note the identification of the chart-level model with intrinsic projective tangent spaces remains assumed, not proved.",
+        "date": "2026-08-19",
+        "at_commit": "0f5a271",
+        "on_branch": "infra/t01A07-charts (not yet landed on master)",
+        "measured_cost_commits": 5
+      }
+    }
+  ]
 }
