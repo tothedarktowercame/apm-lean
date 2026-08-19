@@ -69,11 +69,24 @@
       "missing": "SimplyConnectedSpace S3, via the two-open gluing theorem. THREE independent encodings attempted. Encodings 1 and 2 (simultaneous connector construction; strengthened induction) both failed on chart-label dependence: the connector path's TYPE depended on the equality test between adjacent chart labels. Encoding 3 SOLVED that -- the label case split is confined to a Prop-valued existential (exists_path_mem_twoChart_inter) and `choose` extracts a flat conn/hconn pair, so the induction motive is non-dependent. The REMAINING wall is different in kind and purely algebraic: the finite telescope step. Induction through Path.concat_succ produces connector indices k.castSucc.succ and k.succ.castSucc, which are propositionally but not definitionally equal Fin values, so the paths have propositionally equal endpoints but different dependent Path types and the IH cannot rewrite without transporting paths and homotopies across endpoint equalities. MATHLIB ADDITION THAT WOULD UNBLOCK: a telescope lemma Path.Homotopic.concat_connector_telescope, or Path.concat reindexing lemmas that normalise castSucc/succ endpoint transports automatically.",
       "recorded_by": "codex-7",
       "frame": "t02A06-bridge-3",
-      "at_commit": "2f40019",
+      "at_commit": "bc96a0f",
       "date": "2026-08-19",
       "resolved": null,
-      "progress": "FIVE walls hit, FOUR closed, each strictly narrower. (1) Chart-label dependence CLOSED 9578534 -- label split confined to a Prop-valued existential, choose yields flat data, induction motive non-dependent. (2) Fin castSucc/succ telescope algebra CLOSED c614480 -- Path.Homotopic.concat_connector_telescope. Fundamental-groupoid route works in principle but Quotient.mk would not rewrite the outer dependent Path.trans. (3) Cyclic endpoint packaging CLOSED 7390e5c -- boundary equation placed INSIDE the existential, assembled with Fin.cases/Fin.lastCases. (4) N-to-Fin subdivision adapter CLOSED e6831c9 + 2f40019 -- exists_fin_Icc_subset_open_cover_unitInterval, by choosing the side function at N level BEFORE introducing Fin, so reindexing is composition not transport. Plausibly upstreamable to Mathlib as a Fin-indexed wrapper. (5) OPEN: homotopy-range retention. IsSimplyConnected of a UNION requires an exhibited homotopy whose whole image stays in the union, but IsSimplyConnected.pathsHomotopic_of_mem, concat_subpath, concat_hcomp and the telescope all export bare Path.Homotopic and forget the range certificate. Structural fix: run the entire argument in the subtype of the union, where every path and homotopy is definitionally valued there, and obtain the Set-level statement by specialisation.",
-      "areas_are": "necessary"
+      "progress": "FIVE walls, ALL CLOSED. The general two-open-cover theorem simplyConnectedSpace_of_union_eq_univ is proved and axiom-clean at bc96a0f: two open simply connected subsets covering a space, with path-connected intersection, imply the space is simply connected. No sphere-specific assumptions; verified by grep that the module mentions no sphere at all. Wall trace: (1) chart-label dependence CLOSED 9578534 by confining the label split to a Prop-valued existential; (2) Fin castSucc/succ telescope algebra CLOSED c614480; (3) cyclic endpoint packaging CLOSED 7390e5c by putting the boundary equation inside the existential; (4) N-to-Fin subdivision adapter CLOSED e6831c9 + 2f40019 by choosing at N before indexing; (5) homotopy-range retention CLOSED bc96a0f by restating for a SPACE (cover = univ) instead of a subset, which dissolved the range certificate rather than threading it. The recurring successful move across four of the five: resolve choices where the types are simple (inside a Prop, at N, before indexing), then reindex by composition rather than transport. STILL OPEN for bridge_3: apply to S3 via two hemispherical charts, the metric-sphere-to-Circle adapter, and the coordinate lifts.",
+      "areas_are": "necessary",
+      "reusable_artifacts": [
+        "simplyConnectedSpace_of_union_eq_univ -- general two-open-cover theorem; t92J06 references both IsCoveringMap and SimplyConnectedSpace in its frozen statement and is the identified second consumer",
+        "exists_fin_Icc_subset_open_cover_unitInterval -- Fin-indexed wrapper around Mathlib's N-indexed subdivision theorem; plausibly upstreamable",
+        "Path.Homotopic.concat_connector_telescope -- finite connector telescope"
+      ],
+      "measured_cost": {
+        "dispatches": 8,
+        "commits": 7,
+        "no_commit_stops": 2,
+        "walls_hit": 5,
+        "original_estimate_commits": "6-12",
+        "note": "Estimate was accurate. The reusability premium codex-7 predicted -- about 1 commit for the general theorem over a sphere-specific one -- held, and the sphere-specific version would have hit the same five walls anyway."
+      }
     },
     {
       "areas": [],
