@@ -224,6 +224,160 @@ theorem singletonReversedAdapter_signedCount : singletonReversedAdapter.signedCo
   simp [Adapter.signedCount, Adapter.pointDatum, intersectionNumber, localSign,
     PointDatum.comparison, singletonReversedAdapter, standardOrientedFrame, hdet]
 
+/-! ## Complementary tangent maps
+
+This is the shape needed by geometric clients: separate derivatives for the two
+submanifolds, rather than a preassembled endomorphism of the ambient model.
+-/
+
+/-- Split the standard `(p + q)`-dimensional model into its first `p` and last `q`
+coordinates.  Fixing this order also fixes the intersection-sign convention. -/
+def modelSplit (p q : ℕ) : Model (p + q) ≃ₗ[ℝ] Model p × Model q where
+  toFun x := (fun i ↦ x (Fin.castAdd q i), fun j ↦ x (Fin.natAdd p j))
+  invFun x := Fin.addCases x.1 x.2
+  left_inv x := by
+    funext i
+    refine Fin.addCases ?_ ?_ i <;> intro j <;> simp
+  right_inv x := by
+    apply Prod.ext <;> funext i <;> simp
+  map_add' x y := by
+    apply Prod.ext <;> funext i <;> rfl
+  map_smul' c x := by
+    apply Prod.ext <;> funext i <;> rfl
+
+/-- Separate tangent inclusions for complementary dimensions.  Transversality says
+their sum `(u,v) ↦ left u + right v` is a bijection onto the ambient tangent model. -/
+structure ComplementaryTangents (p q : ℕ) where
+  left : Model p →ₗ[ℝ] Model (p + q)
+  right : Model q →ₗ[ℝ] Model (p + q)
+  transverse : Function.Bijective (LinearMap.coprod left right)
+
+/-- The tangent-sum equivalence produced by complementary transversality. -/
+noncomputable def ComplementaryTangents.sumEquiv {p q : ℕ}
+    (t : ComplementaryTangents p q) :
+    (Model p × Model q) ≃ₗ[ℝ] Model (p + q) :=
+  LinearEquiv.ofBijective (LinearMap.coprod t.left t.right) t.transverse
+
+/-- The ordered tangent-sum comparison as an automorphism of the standard ambient
+model.  Its determinant is the local intersection sign before orientation-frame
+adjustment. -/
+noncomputable def ComplementaryTangents.comparison {p q : ℕ}
+    (t : ComplementaryTangents p q) : Model (p + q) ≃ₗ[ℝ] Model (p + q) :=
+  (modelSplit p q).trans t.sumEquiv
+
+/-- Coordinate inclusions give a satisfiable complementary-transversality model. -/
+noncomputable def standardComplementaryTangents (p q : ℕ) :
+    ComplementaryTangents p q where
+  left := (modelSplit p q).symm.toLinearMap.comp (LinearMap.inl ℝ (Model p) (Model q))
+  right := (modelSplit p q).symm.toLinearMap.comp (LinearMap.inr ℝ (Model p) (Model q))
+  transverse := by
+    have hmap : LinearMap.coprod
+        ((modelSplit p q).symm.toLinearMap.comp (LinearMap.inl ℝ (Model p) (Model q)))
+        ((modelSplit p q).symm.toLinearMap.comp (LinearMap.inr ℝ (Model p) (Model q))) =
+        (modelSplit p q).symm.toLinearMap := by
+      apply LinearMap.ext
+      rintro ⟨x, y⟩
+      change (modelSplit p q).symm (x, 0) + (modelSplit p q).symm (0, y) =
+        (modelSplit p q).symm (x, y)
+      rw [← map_add]
+      congr 1
+      ext <;> simp
+    rw [hmap]
+    exact (modelSplit p q).symm.bijective
+
+theorem standardComplementaryTangents_sumEquiv (p q : ℕ) :
+    (standardComplementaryTangents p q).sumEquiv = (modelSplit p q).symm := by
+  apply LinearEquiv.ext
+  rintro ⟨x, y⟩
+  change (modelSplit p q).symm (x, 0) + (modelSplit p q).symm (0, y) =
+    (modelSplit p q).symm (x, y)
+  rw [← map_add]
+  congr 1
+  ext <;> simp
+
+theorem standardComplementaryTangents_comparison_apply (p q : ℕ)
+    (x : Model (p + q)) :
+    (standardComplementaryTangents p q).comparison x = x := by
+  rw [ComplementaryTangents.comparison, standardComplementaryTangents_sumEquiv]
+  exact (modelSplit p q).symm_apply_apply x
+
+theorem standardComplementaryTangents_comparison (p q : ℕ) :
+    (standardComplementaryTangents p q).comparison = LinearEquiv.refl ℝ (Model (p + q)) := by
+  apply LinearEquiv.ext
+  intro x
+  exact standardComplementaryTangents_comparison_apply p q x
+
+/-- Postcomposing the coordinate tangent inclusions by any ambient automorphism
+realizes that automorphism as the ordered tangent comparison. -/
+noncomputable def complementaryTangentsOfEquiv {p q : ℕ}
+    (e : Model (p + q) ≃ₗ[ℝ] Model (p + q)) : ComplementaryTangents p q where
+  left := e.toLinearMap.comp (standardComplementaryTangents p q).left
+  right := e.toLinearMap.comp (standardComplementaryTangents p q).right
+  transverse := by
+    have hmap : LinearMap.coprod
+        (e.toLinearMap.comp (standardComplementaryTangents p q).left)
+        (e.toLinearMap.comp (standardComplementaryTangents p q).right) =
+        e.toLinearMap.comp (LinearMap.coprod
+          (standardComplementaryTangents p q).left
+          (standardComplementaryTangents p q).right) := by
+      apply LinearMap.ext
+      rintro ⟨x, y⟩
+      simp [LinearMap.coprod_apply]
+    rw [hmap]
+    exact e.bijective.comp (standardComplementaryTangents p q).transverse
+
+theorem complementaryTangentsOfEquiv_comparison {p q : ℕ}
+    (e : Model (p + q) ≃ₗ[ℝ] Model (p + q)) :
+    (complementaryTangentsOfEquiv e).comparison = e := by
+  unfold ComplementaryTangents.comparison ComplementaryTangents.sumEquiv
+  apply LinearEquiv.ext
+  intro x
+  simp only [complementaryTangentsOfEquiv, standardComplementaryTangents,
+    LinearMap.coprod_apply, LinearEquiv.trans_apply, LinearEquiv.ofBijective_apply,
+    LinearMap.comp_apply, LinearMap.inl_apply, LinearMap.inr_apply]
+  rw [← map_add]
+  apply e.injective
+  rw [← map_add]
+  simp
+
+/-- A direct-sum datum converted to the existing oriented local-sign core. -/
+noncomputable def ComplementaryTangents.pointDatum {p q : ℕ}
+    (t : ComplementaryTangents p q) (source ambient : OrientedFrame (p + q)) :
+    PointDatum (Model (p + q)) where
+  sourceFrame := source.frame
+  ambientFrame := ambient.frame
+  tangentSum := t.comparison
+
+/-- The direct-sum API can exhibit a negative local sign: in dimension one,
+postcomposition by negation reverses the ambient tangent direction. -/
+theorem complementaryTangents_negative_witness :
+    localSign ((complementaryTangentsOfEquiv (p := 1) (q := 0)
+      (LinearEquiv.neg ℝ : Model 1 ≃ₗ[ℝ] Model 1)).pointDatum
+        (standardOrientedFrame 1) (standardOrientedFrame 1)) = -1 := by
+  have hdet : LinearMap.det
+      ((LinearEquiv.neg ℝ : Model 1 ≃ₗ[ℝ] Model 1).toLinearMap) = -1 := by
+    rw [show (LinearEquiv.neg ℝ : Model 1 ≃ₗ[ℝ] Model 1).toLinearMap =
+      (-1 : ℝ) • LinearMap.id by ext x i; simp]
+    rw [LinearMap.det_smul]
+    simp
+  rw [ComplementaryTangents.pointDatum, complementaryTangentsOfEquiv_comparison]
+  simp [localSign, PointDatum.comparison, standardOrientedFrame, hdet]
+
+/-- The exact cancellation pattern shared by `t01A07` and the antipodal pair in
+`t02A06`.  It is stated for independently computed signs, not for a fabricated
+intersection-number constant. -/
+theorem signedCount_finTwo_eq_zero_of_opposite (sign : Fin 2 → ℤ)
+    (h : sign 0 = -sign 1) : (∑ i, sign i) = 0 := by
+  rw [Fin.sum_univ_two, h]
+  omega
+
+/-- Anti-vacuity for the new direct-sum API: the standard line-plane model is
+transverse and its ordered comparison is genuinely the identity. -/
+theorem standard_lines_in_plane_nonvacuous :
+    (standardComplementaryTangents 1 1).comparison =
+      LinearEquiv.refl ℝ (Model 2) :=
+  standardComplementaryTangents_comparison 1 1
+
 #print axioms isTransverse_refl
 #print axioms not_isTransverse_zero_real
 #print axioms localSign_ne_zero
@@ -233,5 +387,10 @@ theorem singletonReversedAdapter_signedCount : singletonReversedAdapter.signedCo
 #print axioms standardOrientedFrame_satisfiable
 #print axioms singletonAdapter_signedCount
 #print axioms singletonReversedAdapter_signedCount
+#print axioms standardComplementaryTangents_comparison
+#print axioms signedCount_finTwo_eq_zero_of_opposite
+#print axioms standard_lines_in_plane_nonvacuous
+#print axioms complementaryTangentsOfEquiv_comparison
+#print axioms complementaryTangents_negative_witness
 
 end Intersection
