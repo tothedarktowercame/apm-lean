@@ -586,3 +586,27 @@ statement-rooted pass reports 33 after source adjudication.
 | t03J02 | statement-required | frozen statement directly applies apm_t03J02_H in four conjuncts after two let binders |
 | t94J08 | statement-required | t94J08HasDegree unfolds through t94J08TopHomologyMap to singularHomologyFunctor |
 | t95J02 | not statement-required | frozen statement only asserts retractions; H1 occurs in proof bridge declarations |
+
+## Obstruction coverage and provisional blocked-consumer ranking
+
+Corpus coverage: 266/475 bundles. Non-complete
+coverage: 197/319 bundles. The ranking is
+unweighted by cost and is not a funding recommendation.
+
+| Area | Blocked consumers | Structured | Legacy text | Object-consumer coverage | Overall obstruction coverage |
+|---|---:|---:|---:|---:|---:|
+| orientation | 9/197 obstruction-covered non-complete bundles | 0/9 | 9/9 | 8/9 | 197/319 |
+| fundamental-group | 6/197 obstruction-covered non-complete bundles | 0/6 | 6/6 | 15/16 | 197/319 |
+| van-kampen | 6/197 obstruction-covered non-complete bundles | 0/6 | 6/6 | 0/0 | 197/319 |
+| singular-homology | 5/197 obstruction-covered non-complete bundles | 1/5 | 4/5 | 32/32 | 197/319 |
+| covering-space | 4/197 obstruction-covered non-complete bundles | 1/4 | 3/4 | 13/14 | 197/319 |
+| transversality | 4/197 obstruction-covered non-complete bundles | 0/4 | 4/4 | 0/0 | 197/319 |
+| cohomology | 3/197 obstruction-covered non-complete bundles | 0/3 | 3/3 | 1/1 | 197/319 |
+| mayer-vietoris | 3/197 obstruction-covered non-complete bundles | 0/3 | 3/3 | 0/0 | 197/319 |
+| excision | 1/197 obstruction-covered non-complete bundles | 0/1 | 1/1 | 0/0 | 197/319 |
+| intersection-theory | 1/197 obstruction-covered non-complete bundles | 0/1 | 1/1 | 0/0 | 197/319 |
+| kunneth | 1/197 obstruction-covered non-complete bundles | 0/1 | 1/1 | 0/0 | 197/319 |
+
+Bundles with an explicit structured `areas: []`: 1.
+Structured and legacy sources remain separate in JSON; their union is used only for
+the explicitly provisional ranking above.

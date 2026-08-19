@@ -52,6 +52,14 @@ MACHINERY = {
     "van-kampen": r"van Kampen|Seifert[–-]van Kampen",
 }
 
+# `closer_progress` was not in the original field list for this audit, but it
+# is required to reproduce the independently measured 266/475 and 197/319
+# coverage ceiling. Keep its provenance explicit rather than folding it into a
+# generic text blob.
+LEGACY_OBSTRUCTION_FIELDS = (
+    "closer_hop", "boundary", "closer_note", "sorry_details", "closer_progress"
+)
+
 SINGULAR_HOMOLOGY_RECONCILIATION = [
     {"problem_id": "t01A04", "adjudication": "not statement-required",
      "reason": "frozen statement names covering maps and FundamentalGroup; homology occurs only in later proof commentary"},
@@ -229,12 +237,44 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
     main_path = bundle / "lean" / "Main.lean"
     informal_text = ((bundle / "informal-solution.md").read_text(errors="replace")
                      if (bundle / "informal-solution.md").exists() else "")
+    status_path = bundle / "status.json"
+    try:
+        status = json.loads(status_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        status = {}
+    structured = status.get("obstructions") if isinstance(status.get("obstructions"), list) else []
+    legacy = []
+    for field in LEGACY_OBSTRUCTION_FIELDS:
+        if field not in status or status[field] is None:
+            continue
+        raw = status[field]
+        text_value = json.dumps(raw, sort_keys=True) if not isinstance(raw, str) else raw
+        legacy.append({"field": field, "areas": machinery_mentions(text_value), "value": raw})
+    structured_open_areas = sorted({area for item in structured if not item.get("resolved")
+                                    for area in item.get("areas", [])})
+    legacy_areas = sorted({area for item in legacy for area in item["areas"]})
+    noncomplete = status.get("classification") != "complete"
     base = {
         "problem_id": pid,
         "main_file": str(main_path.relative_to(bundle.parents[1])) if main_path.exists() else None,
         "statement_machinery_mentions": [],
         "informal_solution_machinery_mentions": machinery_mentions(informal_text),
         "technique_requirements": technique_evidence(informal_text),
+        "classification": status.get("classification"),
+        "obstruction_evidence": {
+            "has_record": bool(structured or legacy),
+            "structured": structured,
+            "legacy_by_field": legacy,
+            "structured_unresolved_areas": structured_open_areas,
+            "legacy_areas": legacy_areas,
+            # Structured records supersede legacy prose for ranking on that
+            # bundle. This prevents a newer explicit negative such as
+            # t02A06's `areas: []` / NOT blocked on Kunneth from being reversed
+            # by a lexical hit in its older boundary text.
+            "provisional_blocked_areas": sorted(set(structured_open_areas)
+                if structured else (set(legacy_areas) if noncomplete else set())),
+            "has_explicit_empty_areas": any(item.get("areas") == [] for item in structured),
+        },
     }
     if not main_path.exists():
         return base | {"parse_status": "unparseable", "reason": "missing lean/Main.lean"}
@@ -357,6 +397,41 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
     }
 
 
+def blocked_summary(records: list[dict]) -> dict:
+    total = len(records)
+    noncomplete = [r for r in records if r.get("classification") != "complete"]
+    covered = [r for r in records if r["obstruction_evidence"]["has_record"]]
+    covered_noncomplete = [r for r in noncomplete if r["obstruction_evidence"]["has_record"]]
+    all_areas = sorted({area for r in records
+                        for area in r["obstruction_evidence"]["provisional_blocked_areas"]})
+    rows = []
+    for area in all_areas:
+        structured = {r["problem_id"] for r in noncomplete
+                      if area in r["obstruction_evidence"]["structured_unresolved_areas"]}
+        legacy = {r["problem_id"] for r in noncomplete
+                  if not r["obstruction_evidence"]["structured"]
+                  and area in r["obstruction_evidence"]["legacy_areas"]}
+        object_consumers = [r for r in noncomplete if area in r["statement_machinery_mentions"]]
+        object_covered = [r for r in object_consumers if r["obstruction_evidence"]["has_record"]]
+        rows.append({"area": area, "blocked_consumers": sorted(structured | legacy),
+                     "blocked_count": len(structured | legacy),
+                     "structured_count": len(structured), "legacy_count": len(legacy),
+                     "object_consumer_coverage": {"covered": len(object_covered),
+                                                  "total": len(object_consumers)}})
+    rows.sort(key=lambda row: (-row["blocked_count"], row["area"]))
+    return {"corpus_coverage": {"covered": len(covered), "total": total},
+            "noncomplete_coverage": {"covered": len(covered_noncomplete),
+                                     "total": len(noncomplete)},
+            "structured_bundle_count": sum(bool(r["obstruction_evidence"]["structured"])
+                                           for r in records),
+            "legacy_bundle_count": sum(bool(r["obstruction_evidence"]["legacy_by_field"])
+                                       for r in records),
+            "explicit_empty_areas_bundle_count": sum(
+                r["obstruction_evidence"]["has_explicit_empty_areas"] for r in records),
+            "ranking_basis": "unweighted unresolved blocked-consumer count; no cost term",
+            "areas": rows}
+
+
 def render_markdown(records: list[dict], generated: str) -> str:
     ok = [r for r in records if r["parse_status"] == "ok"]
     bad = [r for r in records if r["parse_status"] != "ok"]
@@ -419,7 +494,21 @@ def render_markdown(records: list[dict], generated: str) -> str:
               "| Problem | Adjudication | Reason |", "|---|---|---|"]
     for item in SINGULAR_HOMOLOGY_RECONCILIATION:
         lines.append(f"| {item['problem_id']} | {item['adjudication']} | {item['reason']} |")
-    lines.append("")
+    summary = blocked_summary(records)
+    corpus = summary["corpus_coverage"]
+    open_cov = summary["noncomplete_coverage"]
+    lines += ["", "## Obstruction coverage and provisional blocked-consumer ranking", "",
+              f"Corpus coverage: {corpus['covered']}/{corpus['total']} bundles. Non-complete",
+              f"coverage: {open_cov['covered']}/{open_cov['total']} bundles. The ranking is",
+              "unweighted by cost and is not a funding recommendation.", "",
+              "| Area | Blocked consumers | Structured | Legacy text | Object-consumer coverage | Overall obstruction coverage |",
+              "|---|---:|---:|---:|---:|---:|"]
+    for row in summary["areas"]:
+        obj = row["object_consumer_coverage"]
+        lines.append(f"| {row['area']} | {row['blocked_count']}/{open_cov['covered']} obstruction-covered non-complete bundles | {row['structured_count']}/{row['blocked_count']} | {row['legacy_count']}/{row['blocked_count']} | {obj['covered']}/{obj['total']} | {open_cov['covered']}/{open_cov['total']} |")
+    lines += ["", f"Bundles with an explicit structured `areas: []`: {summary['explicit_empty_areas_bundle_count']}.",
+              "Structured and legacy sources remain separate in JSON; their union is used only for",
+              "the explicitly provisional ranking above.", ""]
     return "\n".join(lines)
 
 
@@ -437,9 +526,10 @@ def main() -> int:
                for p in sorted((repo / "problems").iterdir()) if p.is_dir()]
     generated = "2026-08-19 (deterministic corpus snapshot; rerun updates content)"
     payload = {
-        "schema_version": 2, "generated": generated,
+        "schema_version": 3, "generated": generated,
         "method": "frozen theorem signature plus transitive local signature closure",
         "singular_homology_method_reconciliation": SINGULAR_HOMOLOGY_RECONCILIATION,
+        "blocked_consumer_summary": blocked_summary(records),
         "records": records,
     }
     json_path = repo / args.json
