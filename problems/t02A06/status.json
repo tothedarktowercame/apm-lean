@@ -56,12 +56,13 @@
       "areas": [
         "covering-space"
       ],
-      "missing": "SimplyConnectedSpace S3. Mathlib has the covering lifting API and this repo has homotopy invariance, but the two-open gluing theorem does not close in Lean: the per-vertex connector path's TYPE depends on the equality test between adjacent chart labels, so the induction must transport the connector, its endpoints and its range proof across that branch. Two independent encodings (simultaneous, and strengthened induction) hit the same dependent-coherence wall.",
+      "missing": "SimplyConnectedSpace S3, via the two-open gluing theorem. THREE independent encodings attempted. Encodings 1 and 2 (simultaneous connector construction; strengthened induction) both failed on chart-label dependence: the connector path's TYPE depended on the equality test between adjacent chart labels. Encoding 3 SOLVED that -- the label case split is confined to a Prop-valued existential (exists_path_mem_twoChart_inter) and `choose` extracts a flat conn/hconn pair, so the induction motive is non-dependent. The REMAINING wall is different in kind and purely algebraic: the finite telescope step. Induction through Path.concat_succ produces connector indices k.castSucc.succ and k.succ.castSucc, which are propositionally but not definitionally equal Fin values, so the paths have propositionally equal endpoints but different dependent Path types and the IH cannot rewrite without transporting paths and homotopies across endpoint equalities. MATHLIB ADDITION THAT WOULD UNBLOCK: a telescope lemma Path.Homotopic.concat_connector_telescope, or Path.concat reindexing lemmas that normalise castSucc/succ endpoint transports automatically.",
       "recorded_by": "codex-7",
       "frame": "t02A06-bridge-3",
-      "at_commit": "cb53196",
+      "at_commit": "9578534",
       "date": "2026-08-19",
-      "resolved": null
+      "resolved": null,
+      "progress": "Chart-label dependence RESOLVED at 9578534 (twoChart, exists_path_mem_twoChart_inter, exists_twoChart_connectors, all axiom-clean). Wall moved, not removed."
     },
     {
       "areas": [],
