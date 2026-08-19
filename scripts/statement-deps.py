@@ -100,16 +100,29 @@ def analyse(pid):
     if not os.path.exists(path):
         return {'problem': pid, 'error': 'no Main.lean'}
     src = open(path, errors='replace').read()
+    # Two naming conventions in this corpus. Most bundles freeze an `apm_*`
+    # theorem; 92 of 448 use domain names (a00J01 `eLpNorm_tendsto_top`,
+    # a01A02 `weakL2_implies_L1_bound`) and carry zero sorries -- an older,
+    # already-complete shape. Requiring `apm_` silently dropped all 92 and
+    # reported 356/448 as if it were the corpus. Fall back to the LAST
+    # top-level theorem, which is where the frozen statement conventionally
+    # sits, and RECORD which convention was used so the two populations stay
+    # distinguishable rather than being silently merged.
     m = re.search(r'^theorem\s+(apm_\w+)', src, re.M)
-    if not m:
-        return {'problem': pid, 'error': 'no apm_ theorem'}
-    root = m.group(1)
+    if m:
+        root, convention = m.group(1), 'apm-named'
+    else:
+        alts = re.findall(r'^(?:noncomputable\s+)?theorem\s+([A-Za-z_][\w\']*)', src, re.M)
+        if not alts:
+            return {'problem': pid, 'error': 'no top-level theorem'}
+        root, convention = alts[-1], 'last-theorem-fallback'
     followed, external = closure(src, root)
     try:
         cls = json.load(open(f'problems/{pid}/status.json')).get('classification')
     except Exception:
         cls = '?'
     return {'problem': pid, 'classification': cls, 'root': root,
+            'root_convention': convention,
             'local_defs_followed': sorted(followed - {root}),
             'areas': areas_for(external),
             'top_external': [d for d, _ in external.most_common(12)]}
@@ -132,8 +145,11 @@ def main():
         print(f"  [{'PASS' if ok_k else 'FAIL'}] does NOT depend on Kunneth")
         sys.exit(0 if (ok_h and ok_k) else 1)
 
+    # NB: dirname of problems/<pid>/lean/Main.lean is .../lean, so the problem
+    # id is TWO levels up. Getting this wrong yields 448 rows of "no Main.lean"
+    # that look like a completed survey -- caught 2026-08-19.
     pids = args.problems or sorted(
-        os.path.basename(os.path.dirname(p))
+        os.path.basename(os.path.dirname(os.path.dirname(p)))
         for p in __import__('glob').glob('problems/*/lean/Main.lean'))
     rows = [analyse(p) for p in pids]
     if args.json:
