@@ -34,6 +34,8 @@ declaration compiles without `sorryAx`.
 ## Orientations and coordinate independence
 
 - [x] Connect determinant frames to Mathlib `Orientation` (`OrientedFrame`).
+- [x] Prove frames representing the same Mathlib orientation have a
+  positive-determinant transition (`OrientedFrame.transition_det_pos`).
 - [x] Coherently reframe the source, ambient space, and tangent map
   (`PointDatum.reframe`).
 - [x] Prove the comparison and local sign are invariant under coherent
@@ -42,6 +44,9 @@ declaration compiles without `sorryAx`.
 - [x] Prove the packaged product frame represents the corresponding Mathlib
   orientation (`productOrientedFrame_represents`), with the independent
   standard-lines witness `productOrientation_standard_lines`.
+- [x] Prove the ordered product orientation is independent of the chosen
+  representative frames (`productFrame_transition_det`,
+  `productOrientation_eq_of_orientation_eq`).
 
 ## Finiteness adapter
 

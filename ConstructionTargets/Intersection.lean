@@ -439,6 +439,83 @@ theorem productOrientation_standard_lines :
   rw [productOrientation, productFrame_standard]
   exact (standardOrientedFrame 2).frame_represents
 
+/-- Transporting the orientation represented by one frame along the transition to another
+frame gives the orientation represented by the latter. -/
+theorem orientationOfFrame_transition {n : ℕ} (a b : OrientedFrame n) :
+    Orientation.map (Fin n) (a.frame.symm.trans b.frame) (orientationOfFrame a.frame) =
+      orientationOfFrame b.frame := by
+  unfold orientationOfFrame
+  rw [← Module.Basis.orientation_map]
+  congr 1
+  ext i
+  simp
+
+/-- Two frames representing the same Mathlib orientation differ by a positive-determinant
+transition.  This is the intrinsic content missing from mere frame packaging. -/
+theorem OrientedFrame.transition_det_pos {n : ℕ} (a b : OrientedFrame n)
+    (h : a.orientation = b.orientation) :
+    0 < LinearMap.det (a.frame.symm.trans b.frame : Model n →ₗ[ℝ] Model n) := by
+  apply (Orientation.map_eq_iff_det_pos (orientationOfFrame a.frame)
+    (a.frame.symm.trans b.frame) (by simp)).mp
+  rw [orientationOfFrame_transition]
+  rw [a.frame_represents, b.frame_represents, h]
+
+theorem productFrame_transition_det {p q : ℕ}
+    (a₁ b₁ : OrientedFrame p) (a₂ b₂ : OrientedFrame q) :
+    LinearMap.det ((productFrame a₁ a₂).symm.trans (productFrame b₁ b₂) :
+      Model (p + q) →ₗ[ℝ] Model (p + q)) =
+      LinearMap.det (a₁.frame.symm.trans b₁.frame : Model p →ₗ[ℝ] Model p) *
+      LinearMap.det (a₂.frame.symm.trans b₂.frame : Model q →ₗ[ℝ] Model q) := by
+  have heq : (productFrame a₁ a₂).symm.trans (productFrame b₁ b₂) =
+      ((modelSplit p q).trans
+        ((a₁.frame.symm.trans b₁.frame).prodCongr
+          (a₂.frame.symm.trans b₂.frame))).trans (modelSplit p q).symm := by
+    apply LinearEquiv.ext
+    intro x
+    simp [productFrame, LinearEquiv.prodCongr_symm]
+  have hprod : LinearEquiv.det ((a₁.frame.symm.trans b₁.frame).prodCongr
+      (a₂.frame.symm.trans b₂.frame)) =
+      LinearEquiv.det (a₁.frame.symm.trans b₁.frame) *
+      LinearEquiv.det (a₂.frame.symm.trans b₂.frame) := by
+    apply Units.ext
+    simp only [LinearEquiv.coe_det, Units.val_mul, LinearEquiv.coe_prodCongr]
+    exact LinearMap.det_prodMap _ _
+  rw [heq, ← LinearEquiv.coe_det]
+  have hc := LinearEquiv.det_conj
+    ((a₁.frame.symm.trans b₁.frame).prodCongr
+      (a₂.frame.symm.trans b₂.frame)) (modelSplit p q).symm
+  have hc' : LinearEquiv.det
+      (((modelSplit p q).trans
+        ((a₁.frame.symm.trans b₁.frame).prodCongr
+          (a₂.frame.symm.trans b₂.frame))).trans (modelSplit p q).symm) =
+      LinearEquiv.det ((a₁.frame.symm.trans b₁.frame).prodCongr
+        (a₂.frame.symm.trans b₂.frame)) := by
+    simpa using hc
+  rw [hc', hprod]
+  simp only [Units.val_mul, LinearEquiv.coe_det]
+
+/-- The ordered product orientation depends only on the two input orientations, not on the
+chosen frames representing them. -/
+theorem productOrientation_eq_of_orientation_eq {p q : ℕ}
+    (a₁ b₁ : OrientedFrame p) (a₂ b₂ : OrientedFrame q)
+    (h₁ : a₁.orientation = b₁.orientation) (h₂ : a₂.orientation = b₂.orientation) :
+    productOrientation a₁ a₂ = productOrientation b₁ b₂ := by
+  have hdet : 0 < LinearMap.det
+      ((productFrame a₁ a₂).symm.trans (productFrame b₁ b₂) :
+        Model (p + q) →ₗ[ℝ] Model (p + q)) := by
+    rw [productFrame_transition_det]
+    exact mul_pos (a₁.transition_det_pos b₁ h₁) (a₂.transition_det_pos b₂ h₂)
+  have hmap := (Orientation.map_eq_iff_det_pos (productOrientation a₁ a₂)
+    ((productFrame a₁ a₂).symm.trans (productFrame b₁ b₂)) (by simp)).mpr hdet
+  have htransition := orientationOfFrame_transition (productOrientedFrame a₁ a₂)
+    (productOrientedFrame b₁ b₂)
+  rw [productOrientedFrame_represents, productOrientedFrame_represents] at htransition
+  have ht : (Orientation.map (Fin (p + q))
+      ((productFrame a₁ a₂).symm.trans (productFrame b₁ b₂)))
+      (productOrientation a₁ a₂) = productOrientation b₁ b₂ := by
+    simpa [productOrientedFrame] using htransition
+  exact hmap.symm.trans ht
+
 /-! ## Swapping complementary tangent factors -/
 
 /-- Reindex standard coordinates by a finite permutation. -/
@@ -597,6 +674,9 @@ theorem standard_lines_in_plane_nonvacuous :
 #print axioms productOrientedFrame_represents
 #print axioms productFrame_standard
 #print axioms productOrientation_standard_lines
+#print axioms OrientedFrame.transition_det_pos
+#print axioms productFrame_transition_det
+#print axioms productOrientation_eq_of_orientation_eq
 #print axioms coordinatePermutation_det
 #print axioms factorSwapPermutation_sign
 #print axioms factorSwap_det
