@@ -2,24 +2,68 @@
   "cluster_count": 24,
   "clusters": [
     {
+      "earliest_day": "2026-08-01",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "d4198ec5c88bc643c360843e2d2c0b597b998a34",
+            "date": "2026-08-01T11:52:57+01:00"
+          },
           "lemma": "zeroCountInClosedBall_aeval_eq_card_filter",
           "normalized": "(v0:\u2102[X])(v1:v0.Monic)(v2:\u2102)(v3:\u211d):zeroCountInClosedBall(funz\u21a6aevalzv0)v2v3=(v0.roots.filter(funz\u21a6distzv2\u2264v3)).card",
+          "prior_equivalent_indexed": [],
           "problem_id": "a92J05",
-          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card"
+          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "ae23c954f12b96f318376a5b2e42c7597557b544",
+            "date": "2026-08-10T17:10:03+00:00"
+          },
+          "introduced": {
+            "commit": "a9fa1ab5941040b84081196d37a9237023648821",
+            "date": "2026-08-09T01:10:21+00:00"
+          },
           "lemma": "apm_a94a09_zeroCount_aeval_eq_card_filter",
           "normalized": "(v0:\u2102[X])(v1:v0.Monic)(v2:\u2102)(v3:\u211d):zeroCountInClosedBall(funz\u21a6aevalzv0)v2v3=(v0.roots.filter(funz\u21a6distzv2\u2264v3)).card",
+          "prior_equivalent_indexed": [
+            {
+              "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+              "date": "2026-08-06T22:32:59+00:00",
+              "lemma": "zeroCountInClosedBall_aeval_eq_card_filter",
+              "problem_id": "a92J05"
+            },
+            {
+              "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+              "date": "2026-08-06T22:32:59+00:00",
+              "lemma": "zeroCountInClosedBall_aeval_eq_card_filter",
+              "problem_id": "a97A08"
+            }
+          ],
           "problem_id": "a94A09",
-          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card"
+          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card",
+          "timing_class": "post-dates-earliest"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "b4e979d5743ec0e56b9fb823e1e85d405b6e86f9",
+            "date": "2026-08-01T11:58:16+01:00"
+          },
           "lemma": "zeroCountInClosedBall_aeval_eq_card_filter",
           "normalized": "(v0:\u2102[X])(v1:v0.Monic)(v2:\u2102)(v3:\u211d):zeroCountInClosedBall(funz\u21a6aevalzv0)v2v3=(v0.roots.filter(funz\u21a6distzv2\u2264v3)).card",
+          "prior_equivalent_indexed": [],
           "problem_id": "a97A08",
-          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card"
+          "signature": "(q : \u2102[X]) (hq : q.Monic) (c : \u2102) (R : \u211d) : ConstructionTargets.Rouche.zeroCountInClosedBall (fun z \u21a6 aeval z q) c R = (q.roots.filter (fun z \u21a6 dist z c \u2264 R)).card",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(v0:\u2102[X])(v1:v0.Monic)(v2:\u2102)(v3:\u211d):zeroCountInClosedBall(funz\u21a6aevalzv0)v2v3=(v0.roots.filter(funz\u21a6distzv2\u2264v3)).card",
@@ -31,18 +75,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "exists_root_in_componentSet_of_subset_sublevel",
           "normalized": "(v0:0<p.natDegree)(x:\u21a5((lemniscatep)\u1d9c))(v1:componentSetx\u2286sublevelp):\u2203z\u2208componentSetx,aevalzp=0",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(hp : 0 < p.natDegree) (x : \u21a5((lemniscate p)\u1d9c)) (hsub : componentSet x \u2286 sublevel p) : \u2203 z \u2208 componentSet x, aeval z p = 0"
+          "signature": "(hp : 0 < p.natDegree) (x : \u21a5((lemniscate p)\u1d9c)) (hsub : componentSet x \u2286 sublevel p) : \u2203 z \u2208 componentSet x, aeval z p = 0",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "exists_root_in_componentSet_of_subset_sublevel",
           "normalized": "(v0:0<p.natDegree)(x:\u21a5((lemniscatep)\u1d9c))(v1:componentSetx\u2286sublevelp):\u2203z\u2208componentSetx,aevalzp=0",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(hp : 0 < p.natDegree) (x : \u21a5((lemniscate p)\u1d9c)) (hsub : componentSet x \u2286 sublevel p) : \u2203 z \u2208 componentSet x, aeval z p = 0"
+          "signature": "(hp : 0 < p.natDegree) (x : \u21a5((lemniscate p)\u1d9c)) (hsub : componentSet x \u2286 sublevel p) : \u2203 z \u2208 componentSet x, aeval z p = 0",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(v0:0<p.natDegree)(x:\u21a5((lemniscatep)\u1d9c))(v1:componentSetx\u2286sublevelp):\u2203z\u2208componentSetx,aevalzp=0",
@@ -53,18 +118,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-13",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "e63654514db5d8d01347a2421193971c8a63ec29",
+            "date": "2026-07-13T19:41:11+01:00"
+          },
           "lemma": "card_roots_le_degree",
           "normalized": "(v0:0<p.natDegree):(rootsp).toFinset.card\u2264p.natDegree",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(hp : 0 < p.natDegree) : (Polynomial.roots p).toFinset.card \u2264 p.natDegree"
+          "signature": "(hp : 0 < p.natDegree) : (Polynomial.roots p).toFinset.card \u2264 p.natDegree",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "182c2743c801352138981de635034e4adae519ac",
+            "date": "2026-07-13T23:01:41+01:00"
+          },
           "lemma": "card_roots_le_degree",
           "normalized": "(v0:0<p.natDegree):(rootsp).toFinset.card\u2264p.natDegree",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(hp : 0 < p.natDegree) : (Polynomial.roots p).toFinset.card \u2264 p.natDegree"
+          "signature": "(hp : 0 < p.natDegree) : (Polynomial.roots p).toFinset.card \u2264 p.natDegree",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(v0:0<p.natDegree):(rootsp).toFinset.card\u2264p.natDegree",
@@ -75,18 +161,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "isBounded_sublevel",
           "normalized": "(v0:0<p.natDegree):IsBounded(sublevelp)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(hp : 0 < p.natDegree) : IsBounded (sublevel p)"
+          "signature": "(hp : 0 < p.natDegree) : IsBounded (sublevel p)",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "isBounded_sublevel",
           "normalized": "(v0:0<p.natDegree):IsBounded(sublevelp)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(hp : 0 < p.natDegree) : IsBounded (sublevel p)"
+          "signature": "(hp : 0 < p.natDegree) : IsBounded (sublevel p)",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(v0:0<p.natDegree):IsBounded(sublevelp)",
@@ -97,18 +204,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "component_eq_of_subset_superlevel",
           "normalized": "(v0:0<p.natDegree){xy:\u21a5((lemniscatep)\u1d9c)}(v1:componentSetx\u2286superlevelp)(v2:componentSety\u2286superlevelp):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(hp : 0 < p.natDegree) {x y : \u21a5((lemniscate p)\u1d9c)} (hxsuper : componentSet x \u2286 superlevel p) (hysuper : componentSet y \u2286 superlevel p) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y"
+          "signature": "(hp : 0 < p.natDegree) {x y : \u21a5((lemniscate p)\u1d9c)} (hxsuper : componentSet x \u2286 superlevel p) (hysuper : componentSet y \u2286 superlevel p) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "component_eq_of_subset_superlevel",
           "normalized": "(v0:0<p.natDegree){xy:\u21a5((lemniscatep)\u1d9c)}(v1:componentSetx\u2286superlevelp)(v2:componentSety\u2286superlevelp):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(hp : 0 < p.natDegree) {x y : \u21a5((lemniscate p)\u1d9c)} (hxsuper : componentSet x \u2286 superlevel p) (hysuper : componentSet y \u2286 superlevel p) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y"
+          "signature": "(hp : 0 < p.natDegree) {x y : \u21a5((lemniscate p)\u1d9c)} (hxsuper : componentSet x \u2286 superlevel p) (hysuper : componentSet y \u2286 superlevel p) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(v0:0<p.natDegree){xy:\u21a5((lemniscatep)\u1d9c)}(v1:componentSetx\u2286superlevelp)(v2:componentSety\u2286superlevelp):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
@@ -119,18 +247,46 @@
       ]
     },
     {
+      "earliest_day": "2026-05-01",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "25bcef429038b7e449f09408bae55030f33a18f1",
+            "date": "2026-05-01T22:55:27+01:00"
+          },
           "lemma": "abs_laplace_kernel",
           "normalized": "(v0:\u2102)(v1:\u211d):\u2016exp(-(v1:\u2102)*v0)\u2016=exp(-v0.re*v1)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A09",
-          "signature": "(z : \u2102) (t : \u211d) : \u2016Complex.exp (-(t : \u2102) * z)\u2016 = Real.exp (-z.re * t)"
+          "signature": "(z : \u2102) (t : \u211d) : \u2016Complex.exp (-(t : \u2102) * z)\u2016 = Real.exp (-z.re * t)",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "39a3f1a0c1232df4cd824b15e3999f3e8317a380",
+            "date": "2026-08-08T15:23:39+00:00"
+          },
+          "introduced": {
+            "commit": "c5fef77dd7e78ed1533d8ebae88028031b9aea70",
+            "date": "2026-08-07T17:43:57+00:00"
+          },
           "lemma": "apm_a99j09_norm_kernel",
           "normalized": "(v0:\u2102)(v1:\u211d):\u2016exp(-(v1:\u2102)*v0)\u2016=exp(-v0.re*v1)",
+          "prior_equivalent_indexed": [
+            {
+              "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+              "date": "2026-08-06T22:32:59+00:00",
+              "lemma": "abs_laplace_kernel",
+              "problem_id": "a01A09"
+            }
+          ],
           "problem_id": "a99J09",
-          "signature": "(z : \u2102) (t : \u211d) : \u2016Complex.exp (-(t : \u2102) * z)\u2016 = Real.exp (-z.re * t)"
+          "signature": "(z : \u2102) (t : \u211d) : \u2016Complex.exp (-(t : \u2102) * z)\u2016 = Real.exp (-z.re * t)",
+          "timing_class": "post-dates-earliest"
         }
       ],
       "normalized": "(v0:\u2102)(v1:\u211d):\u2016exp(-(v1:\u2102)*v0)\u2016=exp(-v0.re*v1)",
@@ -141,18 +297,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-13",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "e63654514db5d8d01347a2421193971c8a63ec29",
+            "date": "2026-07-13T19:41:11+01:00"
+          },
           "lemma": "diffContOnCl_aeval",
           "normalized": "(v0:\u2102[X])(v1:Set\u2102):DiffContOnCl\u2102(v2v3:\u2102=>aevalv3v0)v1",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(p : \u2102[X]) (U : Set \u2102) : DiffContOnCl \u2102 (fun z : \u2102 => aeval z p) U"
+          "signature": "(p : \u2102[X]) (U : Set \u2102) : DiffContOnCl \u2102 (fun z : \u2102 => aeval z p) U",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "182c2743c801352138981de635034e4adae519ac",
+            "date": "2026-07-13T23:01:41+01:00"
+          },
           "lemma": "diffContOnCl_aeval",
           "normalized": "(v0:\u2102[X])(v1:Set\u2102):DiffContOnCl\u2102(v2v3:\u2102=>aevalv3v0)v1",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(p : \u2102[X]) (U : Set \u2102) : DiffContOnCl \u2102 (fun z : \u2102 => aeval z p) U"
+          "signature": "(p : \u2102[X]) (U : Set \u2102) : DiffContOnCl \u2102 (fun z : \u2102 => aeval z p) U",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(v0:\u2102[X])(v1:Set\u2102):DiffContOnCl\u2102(v2v3:\u2102=>aevalv3v0)v1",
@@ -163,18 +340,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "exterior_pathConnected",
           "normalized": "(v0:\u211d)(v1:0\u2264v0):IsPathConnected{v2:\u2102\\|v0<\u2016v2\u2016}",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(R : \u211d) (hR : 0 \u2264 R) : IsPathConnected {z : \u2102 \\| R < \u2016z\u2016}"
+          "signature": "(R : \u211d) (hR : 0 \u2264 R) : IsPathConnected {z : \u2102 \\| R < \u2016z\u2016}",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "exterior_pathConnected",
           "normalized": "(v0:\u211d)(v1:0\u2264v0):IsPathConnected{v2:\u2102\\|v0<\u2016v2\u2016}",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(R : \u211d) (hR : 0 \u2264 R) : IsPathConnected {z : \u2102 \\| R < \u2016z\u2016}"
+          "signature": "(R : \u211d) (hR : 0 \u2264 R) : IsPathConnected {z : \u2102 \\| R < \u2016z\u2016}",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(v0:\u211d)(v1:0\u2264v0):IsPathConnected{v2:\u2102\\|v0<\u2016v2\u2016}",
@@ -185,18 +383,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "not_isBounded_componentSet_of_subset_superlevel",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c))(v0:componentSetx\u2286superlevelp):\u00acIsBounded(componentSetx)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) (hsuper : componentSet x \u2286 superlevel p) : \u00ac IsBounded (componentSet x)"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) (hsuper : componentSet x \u2286 superlevel p) : \u00ac IsBounded (componentSet x)",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "not_isBounded_componentSet_of_subset_superlevel",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c))(v0:componentSetx\u2286superlevelp):\u00acIsBounded(componentSetx)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) (hsuper : componentSet x \u2286 superlevel p) : \u00ac IsBounded (componentSet x)"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) (hsuper : componentSet x \u2286 superlevel p) : \u00ac IsBounded (componentSet x)",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(x:\u21a5((lemniscatep)\u1d9c))(v0:componentSetx\u2286superlevelp):\u00acIsBounded(componentSetx)",
@@ -207,18 +426,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "componentSet_nonempty",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):(componentSetx).Nonempty",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : (componentSet x).Nonempty"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : (componentSet x).Nonempty",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "componentSet_nonempty",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):(componentSetx).Nonempty",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : (componentSet x).Nonempty"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : (componentSet x).Nonempty",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):(componentSetx).Nonempty",
@@ -229,18 +469,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "componentSet_connected",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsConnected(componentSetx)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsConnected (componentSet x)"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsConnected (componentSet x)",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "componentSet_connected",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsConnected(componentSetx)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsConnected (componentSet x)"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsConnected (componentSet x)",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsConnected(componentSetx)",
@@ -251,18 +512,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "componentSet_open",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsOpen(componentSetx)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "componentSet_open",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsOpen(componentSetx)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : IsOpen (componentSet x)",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):IsOpen(componentSetx)",
@@ -273,18 +555,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "componentSet_subset_compl",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286(lemniscatep)\u1d9c",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 (lemniscate p)\u1d9c"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 (lemniscate p)\u1d9c",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "componentSet_subset_compl",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286(lemniscatep)\u1d9c",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 (lemniscate p)\u1d9c"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 (lemniscate p)\u1d9c",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286(lemniscatep)\u1d9c",
@@ -295,18 +598,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "componentSet_subset_superlevel_or_sublevel",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286superlevelp\u2228componentSetx\u2286sublevelp",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 superlevel p \u2228 componentSet x \u2286 sublevel p"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 superlevel p \u2228 componentSet x \u2286 sublevel p",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "componentSet_subset_superlevel_or_sublevel",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286superlevelp\u2228componentSetx\u2286sublevelp",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 superlevel p \u2228 componentSet x \u2286 sublevel p"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : componentSet x \u2286 superlevel p \u2228 componentSet x \u2286 sublevel p",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):componentSetx\u2286superlevelp\u2228componentSetx\u2286sublevelp",
@@ -317,18 +641,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "componentSet_frontier_subset_lemniscate",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):frontier(componentSetx)\u2286lemniscatep",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : frontier (componentSet x) \u2286 lemniscate p"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : frontier (componentSet x) \u2286 lemniscate p",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "componentSet_frontier_subset_lemniscate",
           "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):frontier(componentSetx)\u2286lemniscatep",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : frontier (componentSet x) \u2286 lemniscate p"
+          "signature": "(x : \u21a5((lemniscate p)\u1d9c)) : frontier (componentSet x) \u2286 lemniscate p",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "(x:\u21a5((lemniscatep)\u1d9c)):frontier(componentSetx)\u2286lemniscatep",
@@ -339,18 +684,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "isClosed_lemniscate",
           "normalized": ":IsClosed(lemniscatep)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": ": IsClosed (lemniscate p)"
+          "signature": ": IsClosed (lemniscate p)",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "isClosed_lemniscate",
           "normalized": ":IsClosed(lemniscatep)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": ": IsClosed (lemniscate p)"
+          "signature": ": IsClosed (lemniscate p)",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": ":IsClosed(lemniscatep)",
@@ -361,18 +727,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-13",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "e63654514db5d8d01347a2421193971c8a63ec29",
+            "date": "2026-07-13T19:41:11+01:00"
+          },
           "lemma": "connectedComponents_complement_lemniscate_le",
           "normalized": ":card(ConnectedComponents\u21a5((lemniscatep)\u1d9c))\u2264p.natDegree+1",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": ": Nat.card (ConnectedComponents \u21a5((lemniscate p)\u1d9c)) \u2264 p.natDegree + 1"
+          "signature": ": Nat.card (ConnectedComponents \u21a5((lemniscate p)\u1d9c)) \u2264 p.natDegree + 1",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "182c2743c801352138981de635034e4adae519ac",
+            "date": "2026-07-13T23:01:41+01:00"
+          },
           "lemma": "connectedComponents_complement_lemniscate_le",
           "normalized": ":card(ConnectedComponents\u21a5((lemniscatep)\u1d9c))\u2264p.natDegree+1",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": ": Nat.card (ConnectedComponents \u21a5((lemniscate p)\u1d9c)) \u2264 p.natDegree + 1"
+          "signature": ": Nat.card (ConnectedComponents \u21a5((lemniscate p)\u1d9c)) \u2264 p.natDegree + 1",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": ":card(ConnectedComponents\u21a5((lemniscatep)\u1d9c))\u2264p.natDegree+1",
@@ -383,18 +770,46 @@
       ]
     },
     {
+      "earliest_day": "2026-07-26",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "dfe0cd3e764b507315a90f52f9d058916576e3d8",
+            "date": "2026-07-26T04:47:40+01:00"
+          },
           "lemma": "cantorSet_measure_zero",
           "normalized": ":volumecantorSet=0",
+          "prior_equivalent_indexed": [],
           "problem_id": "a95J06",
-          "signature": ": volume cantorSet = 0"
+          "signature": ": volume cantorSet = 0",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "39a3f1a0c1232df4cd824b15e3999f3e8317a380",
+            "date": "2026-08-08T15:23:39+00:00"
+          },
+          "introduced": {
+            "commit": "5370a07860c4bd3b8e81fd6d87d8879b2f0620e8",
+            "date": "2026-08-07T11:22:06+00:00"
+          },
           "lemma": "apm_t91J01_cantorSet_measure_zero",
           "normalized": ":volumecantorSet=0",
+          "prior_equivalent_indexed": [
+            {
+              "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+              "date": "2026-08-06T22:32:59+00:00",
+              "lemma": "cantorSet_measure_zero",
+              "problem_id": "a95J06"
+            }
+          ],
           "problem_id": "t91J01",
-          "signature": ": volume cantorSet = 0"
+          "signature": ": volume cantorSet = 0",
+          "timing_class": "post-dates-earliest"
         }
       ],
       "normalized": ":volumecantorSet=0",
@@ -405,18 +820,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-13",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "e63654514db5d8d01347a2421193971c8a63ec29",
+            "date": "2026-07-13T19:41:11+01:00"
+          },
           "lemma": "exists_root_in_bounded_isOpen_sublevel_frontier_lemniscate",
           "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286sublevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):\u2203z\u2208v0,aevalzp=0",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 sublevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : \u2203 z \u2208 U, aeval z p = 0"
+          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 sublevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : \u2203 z \u2208 U, aeval z p = 0",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "182c2743c801352138981de635034e4adae519ac",
+            "date": "2026-07-13T23:01:41+01:00"
+          },
           "lemma": "exists_root_in_bounded_isOpen_sublevel_frontier_lemniscate",
           "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286sublevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):\u2203z\u2208v0,aevalzp=0",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 sublevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : \u2203 z \u2208 U, aeval z p = 0"
+          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 sublevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : \u2203 z \u2208 U, aeval z p = 0",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286sublevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):\u2203z\u2208v0,aevalzp=0",
@@ -427,18 +863,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-13",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "e63654514db5d8d01347a2421193971c8a63ec29",
+            "date": "2026-07-13T19:41:11+01:00"
+          },
           "lemma": "not_bounded_isOpen_superlevel_frontier_lemniscate",
           "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286superlevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):False",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 superlevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : False"
+          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 superlevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : False",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "182c2743c801352138981de635034e4adae519ac",
+            "date": "2026-07-13T23:01:41+01:00"
+          },
           "lemma": "not_bounded_isOpen_superlevel_frontier_lemniscate",
           "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286superlevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):False",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 superlevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : False"
+          "signature": "{U : Set \u2102} (hU : IsOpen U) (hB : IsBounded U) (hS : U \u2286 superlevel p) (hF : frontier U \u2286 lemniscate p) (hnonempty : U.Nonempty) : False",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "{v0:Set\u2102}(v1:IsOpenv0)(v2:IsBoundedv0)(v3:v0\u2286superlevelp)(v4:frontierv0\u2286lemniscatep)(v5:v0.Nonempty):False",
@@ -449,18 +906,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-13",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "e63654514db5d8d01347a2421193971c8a63ec29",
+            "date": "2026-07-13T19:41:11+01:00"
+          },
           "lemma": "isPreconnected_subset_superlevel_or_sublevel",
           "normalized": "{v0:Set\u2102}(v1:IsPreconnectedv0)(hSL:Disjointv0(lemniscatep)):v0\u2286superlevelp\u2228v0\u2286sublevelp",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "{S : Set \u2102} (hS : IsPreconnected S) (hSL : Disjoint S (lemniscate p)) : S \u2286 superlevel p \u2228 S \u2286 sublevel p"
+          "signature": "{S : Set \u2102} (hS : IsPreconnected S) (hSL : Disjoint S (lemniscate p)) : S \u2286 superlevel p \u2228 S \u2286 sublevel p",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "182c2743c801352138981de635034e4adae519ac",
+            "date": "2026-07-13T23:01:41+01:00"
+          },
           "lemma": "isPreconnected_subset_superlevel_or_sublevel",
           "normalized": "{v0:Set\u2102}(v1:IsPreconnectedv0)(hSL:Disjointv0(lemniscatep)):v0\u2286superlevelp\u2228v0\u2286sublevelp",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "{S : Set \u2102} (hS : IsPreconnected S) (hSL : Disjoint S (lemniscate p)) : S \u2286 superlevel p \u2228 S \u2286 sublevel p"
+          "signature": "{S : Set \u2102} (hS : IsPreconnected S) (hSL : Disjoint S (lemniscate p)) : S \u2286 superlevel p \u2228 S \u2286 sublevel p",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "{v0:Set\u2102}(v1:IsPreconnectedv0)(hSL:Disjointv0(lemniscatep)):v0\u2286superlevelp\u2228v0\u2286sublevelp",
@@ -471,18 +949,39 @@
       ]
     },
     {
+      "earliest_day": "2026-08-01",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "43271c8e63a33123728c9bfccca553937ce007ff",
+            "date": "2026-08-01T14:23:30+01:00"
+          },
           "lemma": "poisson_translation_average_toLp",
           "normalized": "{v0:\u211d}(v1:0<v0){v2:\u211d\u2192\u211d}(v3:MemLpv22volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a94J04",
-          "signature": "{y : \u211d} (hy : 0 < y) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+          "signature": "{y : \u211d} (hy : 0 < y) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "a354e5b9cefd7052319d0fa9c9ef56285a6ae31f",
+            "date": "2026-08-01T14:32:42+01:00"
+          },
           "lemma": "heat_translation_average_toLp",
           "normalized": "{v0:\u211d}(v1:0<v0){v2:\u211d\u2192\u211d}(v3:MemLpv22volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a96A04",
-          "signature": "{t : \u211d} (ht : 0 < t) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+          "signature": "{t : \u211d} (ht : 0 < t) {f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "{v0:\u211d}(v1:0<v0){v2:\u211d\u2192\u211d}(v3:MemLpv22volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
@@ -493,18 +992,39 @@
       ]
     },
     {
+      "earliest_day": "2026-08-01",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "43271c8e63a33123728c9bfccca553937ce007ff",
+            "date": "2026-08-01T14:23:30+01:00"
+          },
           "lemma": "poisson_translation_average_tendsto_L2",
           "normalized": "{v0:\u211d\u2192\u211d}(v1:MemLpv02volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a94J04",
-          "signature": "{f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+          "signature": "{f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "987ab3de8fdcbd66c0b920bd9b43e0075784ee22",
+            "date": "2026-08-01T12:26:45+01:00"
+          },
           "lemma": "heat_translation_average_tendsto_L2",
           "normalized": "{v0:\u211d\u2192\u211d}(v1:MemLpv02volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
+          "prior_equivalent_indexed": [],
           "problem_id": "a96A04",
-          "signature": "{f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)"
+          "signature": "{f : \u211d \u2192 \u211d} (hf : MemLp f 2 volume) : let \u03c4 : \u211d \u2192 C(\u211d, \u211d)",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "{v0:\u211d\u2192\u211d}(v1:MemLpv02volume):let\u03c4:\u211d\u2192C(\u211d,\u211d)",
@@ -515,18 +1035,39 @@
       ]
     },
     {
+      "earliest_day": "2026-07-30",
       "members": [
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "3e9a506e621aa0d121c0a8bd9b6245da9ce0a742",
+            "date": "2026-07-30T19:24:37+01:00"
+          },
           "lemma": "componentSet_eq_of_common_point",
           "normalized": "{xy:\u21a5((lemniscatep)\u1d9c)}{v0:\u2102}(v1:v0\u2208componentSetx)(v2:v0\u2208componentSety):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+          "prior_equivalent_indexed": [],
           "problem_id": "a00J04",
-          "signature": "{x y : \u21a5((lemniscate p)\u1d9c)} {z : \u2102} (hzx : z \u2208 componentSet x) (hzy : z \u2208 componentSet y) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y"
+          "signature": "{x y : \u21a5((lemniscate p)\u1d9c)} {z : \u2102} (hzx : z \u2208 componentSet x) (hzy : z \u2208 componentSet y) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y",
+          "timing_class": "earliest-or-same-day"
         },
         {
+          "indexed": {
+            "commit": "497acbdd7f9b155d3be23ec35f02bdb755d60a54",
+            "date": "2026-08-06T22:32:59+00:00"
+          },
+          "introduced": {
+            "commit": "c512690e7fa996bb53cba54b56b40fe28b87a2d4",
+            "date": "2026-07-30T19:31:38+01:00"
+          },
           "lemma": "componentSet_eq_of_common_point",
           "normalized": "{xy:\u21a5((lemniscatep)\u1d9c)}{v0:\u2102}(v1:v0\u2208componentSetx)(v2:v0\u2208componentSety):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
+          "prior_equivalent_indexed": [],
           "problem_id": "a01A08",
-          "signature": "{x y : \u21a5((lemniscate p)\u1d9c)} {z : \u2102} (hzx : z \u2208 componentSet x) (hzy : z \u2208 componentSet y) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y"
+          "signature": "{x y : \u21a5((lemniscate p)\u1d9c)} {z : \u2102} (hzx : z \u2208 componentSet x) (hzy : z \u2208 componentSet y) : (x : ConnectedComponents \u21a5((lemniscate p)\u1d9c)) = y",
+          "timing_class": "earliest-or-same-day"
         }
       ],
       "normalized": "{xy:\u21a5((lemniscatep)\u1d9c)}{v0:\u2102}(v1:v0\u2208componentSetx)(v2:v0\u2208componentSety):(x:ConnectedComponents\u21a5((lemniscatep)\u1d9c))=y",
@@ -557,8 +1098,15 @@
   "schema_version": 1,
   "source": "LEMMA-INDEX.md generated proved-lemma inventory",
   "timing": {
-    "reason": "LEMMA-INDEX rows carry neither source line nor introduction commit; reliable timing requires source/history attribution across revisions",
-    "status": "deferred"
+    "cluster_earliest_members": 24,
+    "dated_members": 49,
+    "earliest_or_same_day_members": 46,
+    "members_with_prior_equivalent_indexed": 3,
+    "method": "repo-wide git log --all --reverse -S declaration-name, attributed by inspecting the problem file at each candidate commit; member-specific LEMMA-INDEX row pickaxe for index availability",
+    "post_dates_earliest_members": 3,
+    "same_day_later_members": 22,
+    "status": "complete",
+    "undated_members": 0
   },
   "unparsed": []
 }
