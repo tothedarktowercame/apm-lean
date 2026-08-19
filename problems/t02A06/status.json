@@ -31,7 +31,7 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "boundary": "Antipodal negation is now a fixed-point-free involutive equivalence of the great-circle intersection, and it reverses local sign under nonzero cross-product pairing. Remaining work is existence and exhaustiveness of the two normalized cross-product points and unavailable integral homology/Kunneth computations for metric spheres and the 3-torus.",
+  "boundary": "Conjunct 1 (oriented intersection of two great circles) is CLOSED: apm_t02A06_bridge_1 is axiom-clean, via nonproportional normals from unequal zero sets, the normalized cross product and its antipode, and an exhaustiveness classification giving Fin 2 equiv apm_t02a06_intersection. NOTE this lives on branch infra/t01A07-charts and has not landed on master, so the checked-out tree still shows all three bridges sorried. Conjunct 2 (bridge_2) needs only H2(S2) nonzero and H2(S4) = 0: a retract argument (i : x -> (x,p), r = Prod.fst, r . i = id) makes H2(i) split injective, so Kunneth is NOT required despite the informal solution using it. Conjunct 3 (bridge_3) needs SimplyConnectedSpace S3 for the covering-space lift to R^3; Mathlib has the lifting API and homotopy invariance but not the instance. Note H3(T3) is Z, not 0 -- the conjunct is non-trivial precisely because the target does not vanish.",
   "imported_at": "2026-07-13T17:26:56.995704Z",
   "sorry_audit": {
     "method": "lake env lean elaboration + comment-aware token count",
@@ -39,5 +39,25 @@
     "elaborated_exit": 0,
     "sorry_declarations": 4,
     "previous_classification": "partial"
+  },
+  "obstruction": {
+    "names_areas": [
+      "singular-homology",
+      "covering-space"
+    ],
+    "missing": [
+      {
+        "area": "singular-homology",
+        "what": "H_k(S^n) for all k; blocked upstream on naturality for Mathlib's totally-disconnected H0 (no lemma identifies the coproduct injection with the point-inclusion homology map)",
+        "recorded_by": "codex-3"
+      },
+      {
+        "area": "covering-space",
+        "what": "SimplyConnectedSpace S3; blocked on the finite two-chart gluing coherence -- constructing per-vertex connector paths whose type depends on the adjacent chart-label branch",
+        "recorded_by": "codex-7"
+      }
+    ],
+    "recorded_at": "2026-08-19",
+    "recorded_via": "claude-10 review protocol"
   }
 }
