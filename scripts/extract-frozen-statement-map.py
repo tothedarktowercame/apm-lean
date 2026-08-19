@@ -18,7 +18,7 @@ from pathlib import Path
 DECL_RE = re.compile(
     r"(?m)^\s*(?:(?:private|protected|noncomputable)\s+)*"
     r"(theorem|lemma|def|abbrev|structure|class|instance)\s+"
-    r"([A-Za-z_][A-Za-z0-9_']*)"
+    r"([A-Za-z_][A-Za-z0-9_']*(?:\.[A-Za-z_][A-Za-z0-9_']*)*)"
 )
 IDENT_RE = re.compile(r"(?<![A-Za-z0-9_'])[A-Za-z_][A-Za-z0-9_'.]*(?![A-Za-z0-9_'])")
 
@@ -51,6 +51,21 @@ MACHINERY = {
     "transversality": r"\btransvers(?:e|ality)\b",
     "van-kampen": r"van Kampen|Seifert[–-]van Kampen",
 }
+
+SINGULAR_HOMOLOGY_RECONCILIATION = [
+    {"problem_id": "t01A04", "adjudication": "not statement-required",
+     "reason": "frozen statement names covering maps and FundamentalGroup; homology occurs only in later proof commentary"},
+    {"problem_id": "t01J05", "adjudication": "statement-required",
+     "reason": "conclusion uses apm_t01J05_eulerCharacteristic, whose definition sums finranks of apm_t01J05_H"},
+    {"problem_id": "t02A04", "adjudication": "not statement-required",
+     "reason": "frozen statement is the fixed-point property; rational homology occurs in bridge_1, not its object definitions"},
+    {"problem_id": "t03J02", "adjudication": "statement-required",
+     "reason": "frozen statement directly applies apm_t03J02_H in four conjuncts after two let binders"},
+    {"problem_id": "t94J08", "adjudication": "statement-required",
+     "reason": "t94J08HasDegree unfolds through t94J08TopHomologyMap to singularHomologyFunctor"},
+    {"problem_id": "t95J02", "adjudication": "not statement-required",
+     "reason": "frozen statement only asserts retractions; H1 occurs in proof bridge declarations"},
+]
 
 
 def mask_comments_and_strings(text: str) -> str:
@@ -106,8 +121,28 @@ def declarations(text: str) -> list[dict]:
     for pos, match in enumerate(matches):
         end = matches[pos + 1].start() if pos + 1 < len(matches) else len(masked)
         chunk = masked[match.start():end]
-        assign = re.search(r"(?<!:)\s:=\s|\bwhere\b", chunk)
-        header_end = match.start() + (assign.start() if assign else len(chunk))
+        depth = 0
+        assign_at = None
+        for i, char in enumerate(chunk):
+            if char in "([{":
+                depth += 1
+            elif char in ")]}":
+                depth = max(0, depth - 1)
+            elif depth == 0 and chunk.startswith(":=", i):
+                # A dependent theorem type may contain `let X := ...`; that is
+                # part of the frozen statement, not the declaration body.
+                if re.search(r"\blet\s+\S+\s*$", chunk[:i]):
+                    continue
+                assign_at = i
+                break
+            elif (depth == 0 and chunk.startswith("where", i)
+                  and (i == 0 or not (chunk[i - 1].isalnum()
+                                      or chunk[i - 1] in "_'"))
+                  and (i + 5 == len(chunk) or not
+                       (chunk[i + 5].isalnum() or chunk[i + 5] in "_'"))):
+                assign_at = i
+                break
+        header_end = match.start() + (assign_at if assign_at is not None else len(chunk))
         header = masked[match.start():header_end]
         body = masked[header_end:end]
         result.append({
@@ -177,6 +212,18 @@ def machinery_mentions(text: str) -> list[str]:
                   if re.search(pattern, text, re.I))
 
 
+def technique_evidence(text: str) -> list[dict]:
+    evidence = []
+    for name, pattern in MACHINERY.items():
+        match = re.search(pattern, text, re.I)
+        if match:
+            line = text.count("\n", 0, match.start()) + 1
+            excerpt = text.splitlines()[line - 1].strip()
+            evidence.append({"technique": name, "method": "informal-solution lexical marker",
+                             "line": line, "excerpt": excerpt})
+    return evidence
+
+
 def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]) -> dict:
     pid = bundle.name
     main_path = bundle / "lean" / "Main.lean"
@@ -187,6 +234,7 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
         "main_file": str(main_path.relative_to(bundle.parents[1])) if main_path.exists() else None,
         "statement_machinery_mentions": [],
         "informal_solution_machinery_mentions": machinery_mentions(informal_text),
+        "technique_requirements": technique_evidence(informal_text),
     }
     if not main_path.exists():
         return base | {"parse_status": "unparseable", "reason": "missing lean/Main.lean"}
@@ -234,6 +282,48 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
     unresolved = sorted(r for r in external
                         if r.rsplit(".", 1)[-1] not in mathlib_symbols | ct_symbols
                         and ("." in r or r[:1].isupper()))
+
+    def dependency_text(name: str) -> str:
+        decl = by_name[name]
+        return (decl["definition_text"]
+                if name not in root_names and decl["kind"] in
+                {"def", "abbrev", "structure", "class"}
+                else decl["header"])
+
+    paths = {name: [name] for name in root_names}
+    queue = list(root_names)
+    while queue:
+        name = queue.pop(0)
+        for ref in identifiers(dependency_text(name)):
+            leaf = ref.rsplit(".", 1)[-1]
+            target = ref if ref in by_name else leaf if leaf in by_name else None
+            if target and target not in paths:
+                paths[target] = paths[name] + [target]
+                queue.append(target)
+
+    requirement_evidence: dict[str, list[dict]] = {}
+    indexed = mathlib_symbols | ct_symbols
+    for name in closure:
+        for ref in sorted(identifiers(dependency_text(name))):
+            leaf = ref.rsplit(".", 1)[-1]
+            if ref in by_name or leaf in by_name:
+                continue
+            if not ("." in ref or ref[:1].isupper()) or leaf not in indexed:
+                continue
+            provider = ("construction-targets" if leaf in ct_symbols
+                        else "mathlib")
+            item = {"method": "frozen-statement lexical closure",
+                    "provider": provider,
+                    "local_definition_chain": paths.get(name, [name]),
+                    "root_statement": by_name[paths.get(name, [name])[0]]["header"],
+                    "source_declaration": name,
+                    "source_expression": dependency_text(name)}
+            requirement_evidence.setdefault(f"{name}::{ref}", []).append(item)
+    object_requirements = [
+        {"requirement": requirement, "backing_declaration": requirement.rsplit("::", 1)[1],
+         "evidence": evidence}
+        for requirement, evidence in sorted(requirement_evidence.items())
+    ]
     statement_text = "\n".join(
         (by_name[name]["definition_text"]
          if name not in root_names and by_name[name]["kind"] in
@@ -263,6 +353,7 @@ def analyze_bundle(bundle: Path, mathlib_symbols: set[str], ct_symbols: set[str]
         "provided_by_mathlib": provided_mathlib,
         "provided_by_construction_targets": provided_ct,
         "unresolved_declaration_like_references": unresolved,
+        "object_requirements": object_requirements,
     }
 
 
@@ -314,7 +405,21 @@ def render_markdown(records: list[dict], generated: str) -> str:
               "Mathlib or ConstructionTargets is reported as available even when namespace, typeclass,",
               "or type mismatches would prevent its use. Conversely, notation and elaborator-generated",
               "dependencies are invisible. `unresolved_declaration_like_references` is therefore an",
-              "audit queue, not proof that infrastructure is absent.", ""]
+              "audit queue, not proof that infrastructure is absent.", "",
+              "## Requirement layers", "",
+              "`object_requirements` records exact declarations reached from frozen statements,",
+              "including the problem-local definition chain and source expression. Its requirement",
+              "name combines the local semantic wrapper with the backing declaration, so distinct",
+              "instantiations do not collapse merely because both use `singularHomologyFunctor`.",
+              "`technique_requirements` records the first matching informal-solution line and remains",
+              "a separate, lower-confidence layer; it is never merged into object requirements.", ""]
+    lines += ["## Singular-homology method reconciliation", "",
+              "The independent first-`apm_*`/whole-body pass reported 36 consumers; this",
+              "statement-rooted pass reports 33 after source adjudication.", "",
+              "| Problem | Adjudication | Reason |", "|---|---|---|"]
+    for item in SINGULAR_HOMOLOGY_RECONCILIATION:
+        lines.append(f"| {item['problem_id']} | {item['adjudication']} | {item['reason']} |")
+    lines.append("")
     return "\n".join(lines)
 
 
@@ -332,8 +437,9 @@ def main() -> int:
                for p in sorted((repo / "problems").iterdir()) if p.is_dir()]
     generated = "2026-08-19 (deterministic corpus snapshot; rerun updates content)"
     payload = {
-        "schema_version": 1, "generated": generated,
+        "schema_version": 2, "generated": generated,
         "method": "frozen theorem signature plus transitive local signature closure",
+        "singular_homology_method_reconciliation": SINGULAR_HOMOLOGY_RECONCILIATION,
         "records": records,
     }
     json_path = repo / args.json
