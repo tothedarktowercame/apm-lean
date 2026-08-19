@@ -397,6 +397,48 @@ theorem negativePoint_reframe_witness :
   rw [localSign_reframe]
   exact localSign_negativePoint
 
+/-! ## Ordered product orientations -/
+
+/-- The frame on the ordered direct sum obtained from frames on its two factors. -/
+noncomputable def productFrame {p q : ℕ} (left : OrientedFrame p) (right : OrientedFrame q) :
+    Model (p + q) ≃ₗ[ℝ] Model (p + q) :=
+  ((modelSplit p q).trans (left.frame.prodCongr right.frame)).trans (modelSplit p q).symm
+
+/-- Mathlib orientation carried by the ordered product frame.  The order is deliberately
+part of the definition; exchanging the factors is not definitionally harmless. -/
+noncomputable def productOrientation {p q : ℕ}
+    (left : OrientedFrame p) (right : OrientedFrame q) :
+    Orientation ℝ (Model (p + q)) (Fin (p + q)) :=
+  orientationOfFrame (productFrame left right)
+
+/-- Package two separately oriented tangent models as the ordered source orientation used
+by the complementary-tangent comparison. -/
+noncomputable def productOrientedFrame {p q : ℕ}
+    (left : OrientedFrame p) (right : OrientedFrame q) : OrientedFrame (p + q) where
+  orientation := productOrientation left right
+  frame := productFrame left right
+  frame_represents := rfl
+
+theorem productOrientedFrame_represents {p q : ℕ}
+    (left : OrientedFrame p) (right : OrientedFrame q) :
+    orientationOfFrame (productOrientedFrame left right).frame =
+      productOrientation left right := rfl
+
+theorem productFrame_standard (p q : ℕ) :
+    productFrame (standardOrientedFrame p) (standardOrientedFrame q) =
+      LinearEquiv.refl ℝ (Model (p + q)) := by
+  apply LinearEquiv.ext
+  intro x
+  simp [productFrame, standardOrientedFrame]
+
+/-- Anti-vacuity: the product of two standard oriented lines represents the independently
+known standard orientation of the plane. -/
+theorem productOrientation_standard_lines :
+    productOrientation (standardOrientedFrame 1) (standardOrientedFrame 1) =
+      OrientedIntegration.standardOrientation 2 := by
+  rw [productOrientation, productFrame_standard]
+  exact (standardOrientedFrame 2).frame_represents
+
 /-- The exact cancellation pattern shared by `t01A07` and the antipodal pair in
 `t02A06`.  It is stated for independently computed signs, not for a fabricated
 intersection-number constant. -/
@@ -429,5 +471,8 @@ theorem standard_lines_in_plane_nonvacuous :
 #print axioms PointDatum.reframe_comparison
 #print axioms localSign_reframe
 #print axioms negativePoint_reframe_witness
+#print axioms productOrientedFrame_represents
+#print axioms productFrame_standard
+#print axioms productOrientation_standard_lines
 
 end Intersection

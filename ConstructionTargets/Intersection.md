@@ -24,8 +24,9 @@ declaration compiles without `sorryAx`.
 - [x] Convert a transverse tangent sum to an ambient comparison equivalence.
 - [x] Standard coordinate inclusions give the identity comparison.
 - [x] The direct-sum API exhibits a negative local sign.
-- [ ] Define product orientations from separately oriented left and right
-  tangent models.
+- [x] Define product orientations from separately oriented left and right
+  tangent models (`productFrame`, `productOrientation`,
+  `productOrientedFrame`).
 - [ ] Prove swapping the two tangent factors changes the sign by
   `(-1)^(p*q)`.
 
@@ -36,9 +37,10 @@ declaration compiles without `sorryAx`.
   (`PointDatum.reframe`).
 - [x] Prove the comparison and local sign are invariant under coherent
   reframing (`PointDatum.reframe_comparison`, `localSign_reframe`).
-- [ ] Package separate left/right orientations into the source product frame.
-- [ ] Prove the packaged product frame represents the corresponding Mathlib
-  product orientation.
+- [x] Package separate left/right orientations into the source product frame.
+- [x] Prove the packaged product frame represents the corresponding Mathlib
+  orientation (`productOrientedFrame_represents`), with the independent
+  standard-lines witness `productOrientation_standard_lines`.
 
 ## Finiteness adapter
 
