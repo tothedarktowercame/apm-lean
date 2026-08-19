@@ -363,6 +363,40 @@ theorem complementaryTangents_negative_witness :
   rw [ComplementaryTangents.pointDatum, complementaryTangentsOfEquiv_comparison]
   simp [localSign, PointDatum.comparison, standardOrientedFrame, hdet]
 
+/-! ## Coordinate and frame independence -/
+
+/-- Change source and ambient tangent coordinates coherently.  The tangent map is
+transported contravariantly in the source and covariantly in the ambient space;
+changing frames without transporting this map would describe different geometric data. -/
+def PointDatum.reframe {E : Type*} [AddCommGroup E] [Module ℝ E]
+    (d : PointDatum E) (sourceChange ambientChange : E ≃ₗ[ℝ] E) : PointDatum E where
+  sourceFrame := d.sourceFrame.trans sourceChange
+  ambientFrame := d.ambientFrame.trans ambientChange
+  tangentSum := (sourceChange.symm.trans d.tangentSum).trans ambientChange
+
+/-- A coherent coordinate change leaves the actual oriented tangent comparison unchanged. -/
+theorem PointDatum.reframe_comparison {E : Type*} [AddCommGroup E] [Module ℝ E]
+    (d : PointDatum E) (sourceChange ambientChange : E ≃ₗ[ℝ] E) :
+    (d.reframe sourceChange ambientChange).comparison = d.comparison := by
+  apply LinearEquiv.ext
+  intro x
+  simp [PointDatum.reframe, PointDatum.comparison]
+
+/-- Local intersection sign is intrinsic under simultaneous changes of tangent coordinates
+and their representing frames. -/
+theorem localSign_reframe {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] (d : PointDatum E)
+    (sourceChange ambientChange : E ≃ₗ[ℝ] E) :
+    localSign (d.reframe sourceChange ambientChange) = localSign d := by
+  simp only [localSign, PointDatum.reframe_comparison]
+
+/-- Anti-vacuity: frame independence preserves the already exhibited negative local sign,
+even after nontrivial source and ambient coordinate reversals. -/
+theorem negativePoint_reframe_witness :
+    localSign (negativePoint.reframe (LinearEquiv.neg ℝ) (LinearEquiv.neg ℝ)) = -1 := by
+  rw [localSign_reframe]
+  exact localSign_negativePoint
+
 /-- The exact cancellation pattern shared by `t01A07` and the antipodal pair in
 `t02A06`.  It is stated for independently computed signs, not for a fabricated
 intersection-number constant. -/
@@ -392,5 +426,8 @@ theorem standard_lines_in_plane_nonvacuous :
 #print axioms standard_lines_in_plane_nonvacuous
 #print axioms complementaryTangentsOfEquiv_comparison
 #print axioms complementaryTangents_negative_witness
+#print axioms PointDatum.reframe_comparison
+#print axioms localSign_reframe
+#print axioms negativePoint_reframe_witness
 
 end Intersection
