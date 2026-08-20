@@ -37,7 +37,7 @@ theorem apm_m97a06 :
     ∀ T : ℝ, 0 < T →
       (∀ φ : ℝ → ℝ, ContDiffOn ℝ 2 φ (Set.Icc 0 T) →
         (apm_m97a06_stationary T φ ↔ apm_m97a06_EL φ T)) ∧
-      (∀ φ, apm_m97a06_EL φ T →
+      (∀ φ, ContDiffOn ℝ 2 φ (Set.Icc 0 T) → apm_m97a06_EL φ T →
         ∃ E, ∀ t ∈ Set.Icc (0 : ℝ) T, apm_m97a06_energy φ t = E) ∧
       apm_m97a06_EL (fun _ => 0) T ∧
       (∀ η : ℝ → ℝ, η 0 = 0 → η T = 0 →
