@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.SingularHomologyConcrete
 
 /-!
 # APM t00J02
@@ -135,6 +136,75 @@ lemma apm_t00j02_exists_nullhomotopic_boundary_eq_component
   rcases hdisks x hx with ⟨d, hdcont, hdemb, hd⟩
   exact ⟨d, hdcont, hdemb, hd,
     apm_t00j02_nullhomotopic_boundary_of_continuous_disk d hdcont⟩
+
+/-- The continuous homotopy-invariance bridge, specialized to the
+`ModuleCat ℤ`-valued singular homology used by this problem. -/
+lemma apm_t00j02_homologyMap_eq_of_homotopic
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopic f g) (n : ℕ) :
+    apm_t00j02_homologyMap n f = apm_t00j02_homologyMap n g := by
+  rcases H with ⟨H⟩
+  let h :=
+    ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder H
+  have h₀ :=
+    ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero H
+  have h₁ :=
+    ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one H
+  simpa [apm_t00j02_homologyMap,
+    AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using
+    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
+      (C := ModuleCat ℤ) (R := ModuleCat.of ℤ ℤ)
+      (f := TopCat.toSSet.map (TopCat.ofHom f))
+      (g := TopCat.toSSet.map (TopCat.ofHom g))
+      (H := (ConstructionTargets.SingularHomologyConcrete.topCatHomotopyToSSet
+        h h₀ h₁).toSimplicialObjectHomotopy) n
+
+/-- A constant map induces the zero map on positive-degree singular
+homology. -/
+lemma apm_t00j02_homologyMap_const_eq_zero
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (n : ℕ) (hn : n ≠ 0) (y : Y) :
+    apm_t00j02_homologyMap n (ContinuousMap.const X y) = 0 := by
+  let p : C(X, Unit) := ContinuousMap.const X ()
+  let q : C(Unit, Y) := ContinuousMap.const Unit y
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+    (ModuleCat.of ℤ ℤ)
+  have hfactor : ContinuousMap.const X y = q.comp p := by
+    ext
+    rfl
+  have hzero : Limits.IsZero (F.obj (TopCat.of Unit)) :=
+    AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+      (ModuleCat ℤ) n (ModuleCat.of ℤ ℤ) (TopCat.of Unit) hn
+  rw [hfactor]
+  change F.map (TopCat.ofHom (q.comp p)) = 0
+  rw [show TopCat.ofHom (q.comp p) = TopCat.ofHom p ≫ TopCat.ofHom q by rfl,
+    F.map_comp]
+  have hq : F.map (TopCat.ofHom q) = 0 := hzero.eq_of_src _ _
+  rw [hq]
+  simp
+
+/-- A nullhomotopic map induces zero on singular homology in every positive
+degree. -/
+lemma apm_t00j02_homologyMap_eq_zero_of_nullhomotopic
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (n : ℕ) (hn : n ≠ 0) (f : C(X, Y))
+    (hf : ContinuousMap.Nullhomotopic f) :
+    apm_t00j02_homologyMap n f = 0 := by
+  rcases hf with ⟨y, H⟩
+  rw [apm_t00j02_homologyMap_eq_of_homotopic H n]
+  exact apm_t00j02_homologyMap_const_eq_zero n hn y
+
+/-- In particular, the boundary of a continuous filling disk induces zero on
+positive-degree singular homology. -/
+lemma apm_t00j02_homologyMap_boundary_of_continuous_disk_eq_zero
+    {S : Type} [TopologicalSpace S] (d : apm_t00j02_Disk → S)
+    (hd : Continuous d) (n : ℕ) (hn : n ≠ 0) :
+    apm_t00j02_homologyMap n
+      ⟨fun z : Circle => d (apm_t00j02_circleToDisk z),
+        hd.comp (continuous_subtype_val.subtype_mk _)⟩ = 0 :=
+  apm_t00j02_homologyMap_eq_zero_of_nullhomotopic n hn _
+    (apm_t00j02_nullhomotopic_boundary_of_continuous_disk d hd)
 
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
