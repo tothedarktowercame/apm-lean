@@ -448,6 +448,27 @@ lemma apm_t00j02_component_lift_homologyMap_eq_zero_of_mono
   rw [← cancel_mono (apm_t00j02_homologyMap 1 c)]
   simpa using hcomp
 
+/-- Integrated component conclusion after supplying the standard circle
+homology computation: every lifted inverse-image component has zero winding
+map on `H₁`. -/
+lemma apm_t00j02_exists_component_lift_homologyMap_eq_zero
+    {S : Type} [TopologicalSpace S]
+    (eCircle : apm_t00j02_H 1 Circle ≅ ModuleCat.of ℤ ℤ)
+    (hS : apm_t00j02_hasGenusTwo S) (f : C(S, S))
+    (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (hhandle : apm_t00j02_wrapsHandle c)
+    (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c))
+    {x : S} (hx : x ∈ f ⁻¹' range c) :
+    ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
+      x ∈ range γ ∧ c.comp ℓ = f.comp γ ∧
+      apm_t00j02_homologyMap 1 ℓ = 0 := by
+  letI : Mono (apm_t00j02_homologyMap 1 c) :=
+    apm_t00j02_mono_homologyMap_of_wrapsHandle eCircle hS c hhandle
+  rcases apm_t00j02_exists_component_lift_homology_comp_eq_zero
+    f c hc hdisks hx with ⟨γ, ℓ, hxγ, hlift, hcomp⟩
+  exact ⟨γ, ℓ, hxγ, hlift,
+    apm_t00j02_component_lift_homologyMap_eq_zero_of_mono c ℓ hcomp⟩
+
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
   ∃ e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ,
