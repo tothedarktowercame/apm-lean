@@ -281,6 +281,18 @@ noncomputable def apm_t00j02_liftToEmbeddedCircle
   change ↑(hc.toHomeomorph (hc.toHomeomorph.symm ⟨f x, hfc x⟩)) = f x
   rw [Homeomorph.apply_symm_apply]
 
+/-- Functoriality of the singular-homology map in the problem's notation. -/
+lemma apm_t00j02_homologyMap_comp
+    {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (n : ℕ) (f : C(X, Y)) (g : C(Y, Z)) :
+    apm_t00j02_homologyMap n (g.comp f) =
+      apm_t00j02_homologyMap n f ≫ apm_t00j02_homologyMap n g := by
+  change
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (g.comp f)) = _
+  rw [show TopCat.ofHom (g.comp f) = TopCat.ofHom f ≫ TopCat.ofHom g by rfl]
+  exact Functor.map_comp _ _ _
+
 /-- Each point of the transverse inverse-image set lies on a homologically
 trivial component circle, and the restriction of `f` to that circle factors
 continuously through the embedded target circle. -/
@@ -300,6 +312,24 @@ lemma apm_t00j02_exists_trivial_component_with_circle_lift
   let ℓ := apm_t00j02_liftToEmbeddedCircle (f.comp γ) c hc hlands
   exact ⟨γ, ℓ, hxγ, hγzero,
     apm_t00j02_comp_liftToEmbeddedCircle (f.comp γ) c hc hlands⟩
+
+/-- Homological consequence of the lifted component factorization: its
+winding map followed by the handle inclusion is zero. -/
+lemma apm_t00j02_exists_component_lift_homology_comp_eq_zero
+    {S : Type} [TopologicalSpace S] (f : C(S, S))
+    (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c))
+    {x : S} (hx : x ∈ f ⁻¹' range c) :
+    ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
+      x ∈ range γ ∧ c.comp ℓ = f.comp γ ∧
+      apm_t00j02_homologyMap 1 ℓ ≫ apm_t00j02_homologyMap 1 c = 0 := by
+  rcases apm_t00j02_exists_trivial_component_with_circle_lift
+    f c hc hdisks hx with ⟨γ, ℓ, hxγ, hγzero, hlift⟩
+  refine ⟨γ, ℓ, hxγ, hlift, ?_⟩
+  have hmaps := congrArg (apm_t00j02_homologyMap 1) hlift
+  rw [apm_t00j02_homologyMap_comp,
+    apm_t00j02_homologyMap_comp, hγzero] at hmaps
+  simpa using hmaps
 
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
