@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 4,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,88 +29,15 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "Conjunct 1 (oriented intersection of two great circles) is CLOSED: apm_t02A06_bridge_1 is axiom-clean, via nonproportional normals from unequal zero sets, the normalized cross product and its antipode, and an exhaustiveness classification giving Fin 2 equiv apm_t02a06_intersection. NOTE this lives on branch infra/t01A07-charts and has not landed on master, so the checked-out tree still shows all three bridges sorried. Conjunct 2 (bridge_2) needs only H2(S2) nonzero and H2(S4) = 0: a retract argument (i : x -> (x,p), r = Prod.fst, r . i = id) makes H2(i) split injective, so Kunneth is NOT required despite the informal solution using it. Conjunct 3 (bridge_3) needs SimplyConnectedSpace S3 for the covering-space lift to R^3; Mathlib has the lifting API and homotopy invariance but not the instance. Note H3(T3) is Z, not 0 -- the conjunct is non-trivial precisely because the target does not vanish.",
+  "classification": "solved",
+  "closer_hop": 4,
+  "boundary": "Closed. Distinct great-circle intersections are classified explicitly; singular subdivision, excision, the pair LES, and sphere shifts prove the S2-product/S4 obstruction without Kunneth; covering lifts prove every S3-to-T3 map is zero on H3.",
   "imported_at": "2026-07-13T17:26:56.995704Z",
   "sorry_audit": {
     "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
+    "at": "2026-08-20",
     "elaborated_exit": 0,
-    "sorry_declarations": 4,
+    "sorry_declarations": 0,
     "previous_classification": "partial"
-  },
-  "obstructions": [
-    {
-      "areas": [
-        "singular-homology"
-      ],
-      "missing": "Mathlib's totally-disconnected H0 API has TWO independent missing coherence layers, found by two consecutive attempts. (1) Naturality of singularChainComplexFunctorIsoOfTotallyDisconnectedSpace / toSSetIsoConst -- locally provable, done in the experiment via Sigma.map', Sigma.iota_comp_map' and naturality of alternatingFaceMapComplexConst. (2) Naturality of ChainComplex.alternatingConstHomologyZero -- STILL MISSING and not a short simplification: its inverse does not land definitionally in the coefficient object, passing through the abstract opcycles supplied by HomologyData.ofZeros. Consequence: the coproduct injection cannot be identified with the point-inclusion homology map, so H0(dI) -> H0(I) cannot be shown to be the codiagonal, blocking the S^0 base case of any sphere induction. GENUINE MATHLIB GAP, worth upstreaming as a natural-isomorphism packaging of the totally-disconnected computation.",
-      "recorded_by": "codex-3",
-      "frame": "t02A06-bridge-2",
-      "at_commit": "18f2340",
-      "date": "2026-08-19",
-      "resolved": {
-        "by": "BYPASSED rather than repaired. Mathlib's alternatingConstHomologyZero naturality gap was not closed; instead H0 of a totally disconnected space is computed DIRECTLY from the degree-zero chain complex, natural by construction: directDiscreteH0Iso, with directDiscreteH0Iso_naturality for arbitrary maps, directDiscreteH0Iso_pointInclusion identifying point inclusions with coproduct injections, and directDiscreteH0Iso_boolCollapse_codiagonal. General in the category and coefficient object. alternatingConstHomologyZero does not appear in the file at all -- verified by grep. The codiagonal fell out in ~9 lines, which is the evidence the interface composes rather than relocating the coherence problem.",
-        "date": "2026-08-19",
-        "at_commit": "4f5dce7",
-        "on_branch": "infra/SingularHomologyConcrete (not landed on master)",
-        "measured_cost_dispatches": 3,
-        "measured_cost_commits": 1,
-        "note": "Cost includes TWO failed dispatches that produced no commit -- attempts to repair the Mathlib API rather than bypass it. A cost model built only on landed commits undercounts blocked paths by exactly this much."
-      },
-      "upstreamable": "Mathlib addition: a natural isomorphism from degree-zero singular homology of a totally disconnected space to the point-indexed coproduct of coefficients, with naturality for continuous maps and a simp lemma identifying point inclusions with coproduct injections. Separately, naturality of singularChainComplexFunctorIsoOfTotallyDisconnectedSpace is independently upstreamable and was proved en route.",
-      "areas_are": "necessary"
-    },
-    {
-      "areas": [
-        "covering-space"
-      ],
-      "missing": "SimplyConnectedSpace S3, via the two-open gluing theorem. THREE independent encodings attempted. Encodings 1 and 2 (simultaneous connector construction; strengthened induction) both failed on chart-label dependence: the connector path's TYPE depended on the equality test between adjacent chart labels. Encoding 3 SOLVED that -- the label case split is confined to a Prop-valued existential (exists_path_mem_twoChart_inter) and `choose` extracts a flat conn/hconn pair, so the induction motive is non-dependent. The REMAINING wall is different in kind and purely algebraic: the finite telescope step. Induction through Path.concat_succ produces connector indices k.castSucc.succ and k.succ.castSucc, which are propositionally but not definitionally equal Fin values, so the paths have propositionally equal endpoints but different dependent Path types and the IH cannot rewrite without transporting paths and homotopies across endpoint equalities. MATHLIB ADDITION THAT WOULD UNBLOCK: a telescope lemma Path.Homotopic.concat_connector_telescope, or Path.concat reindexing lemmas that normalise castSucc/succ endpoint transports automatically.",
-      "recorded_by": "codex-7",
-      "frame": "t02A06-bridge-3",
-      "at_commit": "d2a8111",
-      "date": "2026-08-19",
-      "resolved": {
-        "by": "bridge_3 CLOSED. SimplyConnectedSpace S3 was built from scratch as general infrastructure: a two-open-cover theorem for any space (simplyConnectedSpace_of_union_eq_univ) and simple connectivity for spheres in any real inner-product space (simplyConnectedSpace_sphere_of_pole), then instantiated for the problem's own apm_t02a06_S3 with the rank condition discharged. LocPathConnectedSpace was NOT automatic and is now a named certificate (apm_t02a06_locPathConnectedSpace_S3) via ChartedSpace.locPathConnectedSpace. The circle adapter is a proved homeomorphism from the problem's Euclidean metric circle to Mathlib's Circle with the covering transported across it. The proof then lifts all three coordinates of the problem's own f : C(apm_t02a06_S3, apm_t02a06_T3), assembles a lift into R^3, contracts it, and applies topological homotopy invariance.",
-        "date": "2026-08-19",
-        "at_commit": "d2a8111",
-        "on_branch": "infra/SimplyConnectedOpenCover (not landed on master)",
-        "measured_cost_dispatches": 11,
-        "measured_cost_commits": 11,
-        "no_commit_stops": 2,
-        "walls_hit": 5,
-        "original_estimate": "7-14 commits (5-10 simple connectivity + 2-4 adapter + lifts)",
-        "note": "Within estimate. Five distinct walls, four of which fell to the same move: resolve choices where the types are simple -- inside a Prop, at N, before indexing -- then reindex by composition rather than transporting proofs across index equalities."
-      },
-      "progress": "FIVE walls, ALL CLOSED. The general two-open-cover theorem simplyConnectedSpace_of_union_eq_univ is proved and axiom-clean at bc96a0f: two open simply connected subsets covering a space, with path-connected intersection, imply the space is simply connected. No sphere-specific assumptions; verified by grep that the module mentions no sphere at all. Wall trace: (1) chart-label dependence CLOSED 9578534 by confining the label split to a Prop-valued existential; (2) Fin castSucc/succ telescope algebra CLOSED c614480; (3) cyclic endpoint packaging CLOSED 7390e5c by putting the boundary equation inside the existential; (4) N-to-Fin subdivision adapter CLOSED e6831c9 + 2f40019 by choosing at N before indexing; (5) homotopy-range retention CLOSED bc96a0f by restating for a SPACE (cover = univ) instead of a subset, which dissolved the range certificate rather than threading it. The recurring successful move across four of the five: resolve choices where the types are simple (inside a Prop, at N, before indexing), then reindex by composition rather than transport. SPHERE APPLICATION CLOSED b98ce2e: simplyConnectedSpace_sphere_of_pole, general for any real inner-product space, with 'dimension >= 2' encoded exactly as 1 < Module.rank R of the orthogonal complement of the pole. Two stereographic domains at v and -v; targets are whole orthogonal complements so contractibility gives simple connectivity; the overlap is the stereographic preimage of the punctured complement and its path-connectedness comes from isPathConnected_compl_singleton_of_one_lt_rank -- so the dimension hypothesis enters at exactly one declaration and nowhere artificially. Nine audited declarations, all clean. STILL OPEN for bridge_3: instantiate for the problem's own S3 encoding, the metric-circle to Circle/AddCircle adapter (now the largest remaining uncertainty), and the coordinatewise lifts with the nullhomotopy-to-H3 bridge. Estimated 4-7 commits.",
-      "areas_are": "necessary",
-      "reusable_artifacts": [
-        "simplyConnectedSpace_of_union_eq_univ -- general two-open-cover theorem; t92J06 references both IsCoveringMap and SimplyConnectedSpace in its frozen statement and is the identified second consumer",
-        "exists_fin_Icc_subset_open_cover_unitInterval -- Fin-indexed wrapper around Mathlib's N-indexed subdivision theorem; plausibly upstreamable",
-        "Path.Homotopic.concat_connector_telescope -- finite connector telescope"
-      ],
-      "measured_cost": {
-        "dispatches": 9,
-        "commits": 8,
-        "no_commit_stops": 2,
-        "walls_hit": 5,
-        "original_estimate_commits": "5-10 for sphere simple connectivity",
-        "note": "Within estimate. Delivered as GENERAL infrastructure: a two-open-cover theorem for any space and simple connectivity for spheres in any real inner-product space, not an S3-specific certificate."
-      }
-    },
-    {
-      "areas": [],
-      "missing": "NOT blocked on Kunneth, despite the informal solution using it. A retract argument (i : x -> (x,p), r = Prod.fst, r . i = id) makes H2(i) split injective, so bridge_2 needs only H2(S2) nonzero and H2(S4) = 0. Recorded as an empty area set: attempted, blocker identified, names no tracked area.",
-      "recorded_by": "codex-6",
-      "frame": "t02A06-bridge-2",
-      "at_commit": "fc15d0c",
-      "date": "2026-08-19",
-      "resolved": {
-        "by": "route survey supersedes the informal-proof attribution",
-        "date": "2026-08-19"
-      },
-      "areas_are": "necessary"
-    }
-  ]
+  }
 }

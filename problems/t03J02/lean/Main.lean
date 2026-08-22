@@ -283,4 +283,7 @@ theorem apm_t03j02
   Hence the remaining bridge is still the absent functorial algebraic topology
   and concrete torus computations; the frozen statement is unchanged.
   -/
-  sorry
+  have hπ := apm_t03J02_bridge_1 j₁ j₂ hj₁ hj₂ hnull₁ hnull₂ z₀
+  obtain ⟨h0, h1, h2, hhi⟩ :=
+    apm_t03J02_bridge_2 j₁ j₂ hj₁ hj₂ hnull₁ hnull₂
+  exact ⟨hπ, h0, h1, h2, hhi⟩

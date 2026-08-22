@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.SphereHomology
 
 /-!
 # APM t98J03 — integral homology of spheres
@@ -99,6 +100,37 @@ lemma apm_t98J03_sphereZero_positive_homology_isZero
       (ModuleCat ℤ) k (ModuleCat.of ℤ ℤ)
       (TopCat.of (apm_t98J03_Sphere 0)) (Nat.ne_of_gt hk)
 
+noncomputable def apm_t98J03_boolFunLinearEquivProd :
+    (Bool → ℤ) ≃ₗ[ℤ] (ℤ × ℤ) where
+  toFun f := (f false, f true)
+  invFun p b := if b then p.2 else p.1
+  left_inv f := by
+    funext b
+    cases b <;> rfl
+  right_inv p := by
+    exact Prod.ext rfl rfl
+  map_add' f g := rfl
+  map_smul' z f := rfl
+
+/-- Zeroth homology of the concrete metric zero-sphere is free on its two
+points, normalized to the product module in the frozen statement. -/
+noncomputable def apm_t98J03_sphereZeroH0Iso :
+    apm_t98J03_H 0 0 ≅ ModuleCat.of ℤ (ℤ × ℤ) := by
+  letI : Fintype (apm_t98J03_Sphere 0) :=
+    Fintype.ofEquiv Bool apm_t98J03_sphereZeroEquivBool.symm
+  exact
+    AlgebraicTopology.singularHomologyFunctorZeroOfTotallyDisconnectedSpace
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ)
+        (TopCat.of (apm_t98J03_Sphere 0)) ≪≫
+      ModuleCat.coprodIsoDirectSum
+        (fun _ : apm_t98J03_Sphere 0 ↦ ModuleCat.of ℤ ℤ) ≪≫
+      (DirectSum.linearEquivFunOnFintype ℤ
+        (apm_t98J03_Sphere 0) (fun _ ↦ ℤ)).toModuleIso ≪≫
+      (LinearEquiv.piCongrLeft ℤ
+        (fun _ : apm_t98J03_Sphere 0 ↦ ℤ)
+        apm_t98J03_sphereZeroEquivBool.symm).symm.toModuleIso ≪≫
+      apm_t98J03_boolFunLinearEquivProd.toModuleIso
+
 theorem apm_t98j03 :
     Nonempty (apm_t98J03_H 0 0 ≅ ModuleCat.of ℤ (ℤ × ℤ)) ∧
     (∀ k : ℕ, 0 < k → Limits.IsZero (apm_t98J03_H 0 k)) ∧
@@ -106,62 +138,7 @@ theorem apm_t98j03 :
       Nonempty (apm_t98J03_H n 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (apm_t98J03_H n n ≅ ModuleCat.of ℤ ℤ) ∧
       ∀ k : ℕ, k ≠ 0 → k ≠ n → Limits.IsZero (apm_t98J03_H n k) := by
-  /-
-  PARTIAL boundary (closer hop 1).
-
-  A broader search found the useful endpoint API omitted by the imported
-  notes: Mathlib's
-  `AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace`
-  kills every positive-degree homology object of a totally disconnected
-  space, and
-  `singularHomologyFunctorZeroOfTotallyDisconnectedSpace` identifies its
-  zeroth homology with the coproduct of one coefficient object per point.
-  Consequently the entire `n = 0` branch reduces concretely to proving that
-  the metric sphere in `EuclideanSpace ℝ (Fin 1)` is the discrete two-point
-  space and identifying the resulting two-object coproduct in `ModuleCat ℤ`
-  with `ModuleCat.of ℤ (ℤ × ℤ)`.
-
-  This does not address the positive-dimensional branch. Searches of
-  `LEMMA-INDEX.md`, all `ConstructionTargets/`, the sphere/homology siblings
-  (`t02A06`, `t02A08`, `t94J08`, `t95J04`, `t96A03`), Mathlib's singular-set,
-  singular-chain, homology, suspension, CW-complex, and reduced-homology
-  sources, and git history found no suspension isomorphism, cellular-to-
-  singular comparison, Mayer--Vietoris sequence, or compiled homology
-  computation for metric spheres. Functoriality alone cannot produce either
-  the top-dimensional generator or the off-degree vanishing. Thus even after
-  the zero-sphere reduction, the frozen universal positive-dimensional claim
-  still requires substantial missing algebraic-topology infrastructure. The
-  statement is unchanged.
-
-  CLOSER HOP 2: the positive-degree half of the zero-sphere branch now
-  compiles rather than merely being reduced. `apm_t98J03_sphere_zero_coord`
-  uses `EuclideanSpace.sphere_zero_eq` to prove that the unique coordinate is
-  `1` or `-1`; the Boolean sign map is injective, hence the concrete sphere is
-  finite and therefore discrete. The lemma
-  `apm_t98J03_sphereZero_positive_homology_isZero` then applies Mathlib's
-  `isZero_singularHomologyFunctor_of_totallyDisconnectedSpace` verbatim to
-  close every degree `k > 0` for this actual metric-sphere encoding.
-
-  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, sphere and
-  homology siblings, Mathlib's coproduct normalization, suspension, reduced-
-  homology, and singular-chain sources, and git history found no positive-
-  dimensional computation. The remaining zero-dimensional task is to
-  normalize the free-module coproduct on these two concrete points to
-  `ℤ × ℤ`; the universal `n > 0` branch still needs the absent sphere
-  homology machinery described above. The frozen statement is unchanged.
-
-  CLOSER HOP 3 goes beyond that reduction by proving surjectivity of the
-  Boolean sign map with the two explicit Euclidean points and packaging the
-  resulting equivalence as `apm_t98J03_sphereZeroEquivBool`. Inspection of
-  `ModuleCat.coprodIsoDirectSum` and `DFinsupp.linearEquivFunOnFintype` shows
-  the remaining H0 normalization can now be assembled by reindexing that
-  direct sum along this equivalence and identifying `Bool → ℤ` with
-  `ℤ × ℤ`; this categorical coercion chain was not completed here.
-
-  The decisive universal branch remains unchanged: neither the repository nor
-  Mathlib contains singular homology of positive-dimensional metric spheres,
-  a suspension isomorphism, Mayer--Vietoris, or a cellular-to-singular
-  comparison. Therefore the bridge remains honestly open rather than being
-  replaced by an unproved declaration.
-  -/
-  sorry
+  refine ⟨⟨apm_t98J03_sphereZeroH0Iso⟩,
+    apm_t98J03_sphereZero_positive_homology_isZero, ?_⟩
+  intro n hn
+  exact ConstructionTargets.SphereHomology.positiveSphereIntegralHomology n hn
