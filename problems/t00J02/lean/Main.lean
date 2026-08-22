@@ -51,7 +51,9 @@ def apm_t00j02_transverse {S : Type} [TopologicalSpace S]
 abbrev apm_t00j02_Disk := Metric.closedBall (0 : ℂ) 1
 
 def apm_t00j02_circleToDisk (z : Circle) : apm_t00j02_Disk :=
-  ⟨(z : ℂ), by simpa [mem_closedBall_zero_iff] using (Circle.norm_coe z).le⟩
+  ⟨(z : ℂ), by
+    rw [mem_closedBall_zero_iff]
+    exact (Circle.norm_coe z).le⟩
 
 def apm_t00j02_componentsBoundDisks {S : Type} [TopologicalSpace S]
     (A : Set S) : Prop :=
@@ -116,6 +118,23 @@ lemma apm_t00j02_nullhomotopic_boundary_of_continuous_disk
   have hdnull : ContinuousMap.Nullhomotopic d' := by
     simpa [d'] using (id_nullhomotopic apm_t00j02_Disk).comp_right d'
   simpa [d', boundary] using hdnull.comp_left boundary
+
+/-- Every component selected by `componentsBoundDisks` comes with a boundary
+parametrization which is simultaneously its displayed range and nullhomotopic
+in the ambient space. -/
+lemma apm_t00j02_exists_nullhomotopic_boundary_eq_component
+    {S : Type} [TopologicalSpace S] {A : Set S}
+    (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
+    ∃ d : apm_t00j02_Disk → S,
+      ∃ hdcont : Continuous d, Topology.IsEmbedding d ∧
+      range (fun z : Circle => d (apm_t00j02_circleToDisk z)) =
+        connectedComponentIn A x ∧
+      ContinuousMap.Nullhomotopic
+        ⟨fun z : Circle => d (apm_t00j02_circleToDisk z),
+          hdcont.comp (continuous_subtype_val.subtype_mk _)⟩ := by
+  rcases hdisks x hx with ⟨d, hdcont, hdemb, hd⟩
+  exact ⟨d, hdcont, hdemb, hd,
+    apm_t00j02_nullhomotopic_boundary_of_continuous_disk d hdcont⟩
 
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
