@@ -3,6 +3,7 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.SingularHomologyConcrete
+import ConstructionTargets.T02A06SphereOne
 
 /-!
 # APM t00J02
@@ -21,11 +22,46 @@ open scoped ContDiff Manifold
 
 noncomputable section
 
+/-- The complex unit circle and the Euclidean one-sphere used by the corpus's
+concrete sphere-homology computation are canonically homeomorphic. -/
+noncomputable def apm_t00j02_circleHomeomorphAmbientSphereOne :
+    Circle ≃ₜ
+      ConstructionTargets.T02A06HemisphereExcision.ambientSphere 1 where
+  toFun z := ⟨Complex.orthonormalBasisOneI.repr z, by
+    rw [Metric.mem_sphere, dist_zero_right,
+      Complex.orthonormalBasisOneI.repr.norm_map]
+    exact Circle.norm_coe z⟩
+  invFun x := ⟨Complex.orthonormalBasisOneI.repr.symm x, by
+    change Complex.orthonormalBasisOneI.repr.symm x ∈
+      Metric.sphere (0 : ℂ) 1
+    rw [mem_sphere_zero_iff_norm]
+    rw [Complex.orthonormalBasisOneI.repr.symm.norm_map]
+    rw [← mem_sphere_zero_iff_norm]
+    exact x.property⟩
+  left_inv z := by
+    apply Subtype.ext
+    exact Complex.orthonormalBasisOneI.repr.symm_apply_apply z
+  right_inv x := by
+    apply Subtype.ext
+    exact Complex.orthonormalBasisOneI.repr.apply_symm_apply x
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
 abbrev apm_t00j02_E2 := EuclideanSpace ℝ (Fin 2)
 abbrev apm_t00j02_I2 := 𝓘(ℝ, apm_t00j02_E2)
 abbrev apm_t00j02_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
+
+/-- Transport on `H₁` induced by the concrete circle/Euclidean-sphere
+homeomorphism. -/
+noncomputable def apm_t00j02_circleH1IsoAmbientSphereOne :
+    apm_t00j02_H 1 Circle ≅
+      apm_t00j02_H 1
+        (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 1) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+      (TopCat.isoOfHomeo apm_t00j02_circleHomeomorphAmbientSphereOne)
 
 def apm_t00j02_hasGenusTwo (S : Type) [TopologicalSpace S] : Prop :=
   Nonempty (apm_t00j02_H 0 S ≅ ModuleCat.of ℤ ℤ) ∧
@@ -330,6 +366,17 @@ lemma apm_t00j02_exists_component_lift_homology_comp_eq_zero
   rw [apm_t00j02_homologyMap_comp,
     apm_t00j02_homologyMap_comp, hγzero] at hmaps
   simpa using hmaps
+
+/-- Once the handle homology morphism is known to be mono, the lifted winding
+morphism of every disk-bounded component vanishes. -/
+lemma apm_t00j02_component_lift_homologyMap_eq_zero_of_mono
+    {S : Type} [TopologicalSpace S] (c : C(Circle, S))
+    [Mono (apm_t00j02_homologyMap 1 c)] (ℓ : C(Circle, Circle))
+    (hcomp : apm_t00j02_homologyMap 1 ℓ ≫
+      apm_t00j02_homologyMap 1 c = 0) :
+    apm_t00j02_homologyMap 1 ℓ = 0 := by
+  rw [← cancel_mono (apm_t00j02_homologyMap 1 c)]
+  simpa using hcomp
 
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
