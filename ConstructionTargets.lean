@@ -17,6 +17,23 @@ import ConstructionTargets.YoungConvolution
 import ConstructionTargets.SetIntegralPrimitive
 import ConstructionTargets.OrientedIntegration
 import ConstructionTargets.Intersection
+import ConstructionTargets.CoveringDegree
+import ConstructionTargets.IntegralSingularHomologyComparison
+import ConstructionTargets.SimplyConnectedOpenCover
+import ConstructionTargets.SingularExcision
+import ConstructionTargets.SingularHomologyConcrete
+import ConstructionTargets.SingularHomologyHomotopy
+import ConstructionTargets.SingularSubdivision
+import ConstructionTargets.SphereHomology
+import ConstructionTargets.SphereOneH1Concrete
+import ConstructionTargets.T02A06DiskPairShift
+import ConstructionTargets.T02A06DiskRadialComparison
+import ConstructionTargets.T02A06HemisphereCoordinates
+import ConstructionTargets.T02A06HemisphereExcision
+import ConstructionTargets.T02A06SphereH0
+import ConstructionTargets.T02A06SphereOne
+import ConstructionTargets.T02A06SphereShift
+import ConstructionTargets.T02A06SphereVanishingBridge
 
 /-!
 # ConstructionTargets — reusable lemmas built to unblock specific APM problems

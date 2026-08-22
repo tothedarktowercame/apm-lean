@@ -2,6 +2,9 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.T02A06SphereOne
+import ConstructionTargets.SimplyConnectedOpenCover
+import ConstructionTargets.SingularHomologyHomotopy
 
 /-!
 # APM t02A06
@@ -24,6 +27,7 @@ integral third singular homology.
 -/
 
 open CategoryTheory Set
+open ConstructionTargets.SingularHomologyHomotopy
 
 noncomputable section
 
@@ -35,6 +39,84 @@ abbrev apm_t02a06_S2 := apm_t02a06_Sphere 2
 abbrev apm_t02a06_S3 := apm_t02a06_Sphere 3
 abbrev apm_t02a06_S4 := apm_t02a06_Sphere 4
 abbrev apm_t02a06_T3 := apm_t02a06_S1 × apm_t02a06_S1 × apm_t02a06_S1
+
+/-- The problem's own encoding of `S³` is simply connected. -/
+theorem apm_t02a06_simplyConnectedSpace_S3 :
+    SimplyConnectedSpace apm_t02a06_S3 := by
+  let v : EuclideanSpace ℝ (Fin 4) := EuclideanSpace.single 0 1
+  have hv : ‖v‖ = 1 := by simp [v]
+  have hv0 : v ≠ 0 := by
+    intro h
+    have := congrArg (fun x : EuclideanSpace ℝ (Fin 4) ↦ x 0) h
+    simpa [v] using this
+  haveI : Fact (Module.finrank ℝ (EuclideanSpace ℝ (Fin 4)) = 3 + 1) :=
+    ⟨by simp [Module.finrank_fin_fun]⟩
+  have hfin : Module.finrank ℝ (ℝ ∙ v)ᗮ = 3 :=
+    Submodule.finrank_orthogonal_span_singleton hv0
+  apply simplyConnectedSpace_sphere_of_pole v hv
+  rw [← Module.finrank_eq_rank, hfin]
+  norm_num
+
+/-- The problem's Euclidean two-coordinate unit circle, identified with
+Mathlib's complex unit circle by the standard orthonormal basis `(1, i)`. -/
+def apm_t02a06_euclideanCircleHomeomorph : apm_t02a06_S1 ≃ₜ Circle := by
+  let e : EuclideanSpace ℝ (Fin 2) ≃ₜ ℂ :=
+    Complex.orthonormalBasisOneI.repr.symm.toHomeomorph
+  exact e.subtype fun x ↦ by
+    change x ∈ Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ↔
+      e x ∈ Submonoid.unitSphere ℂ
+    rw [mem_sphere_zero_iff_norm]
+    change ‖x‖ = 1 ↔ e x ∈ Metric.sphere (0 : ℂ) 1
+    rw [mem_sphere_zero_iff_norm]
+    exact (Complex.orthonormalBasisOneI.repr.symm.norm_map x).symm ▸ Iff.rfl
+
+/-- The universal covering of `AddCircle (2π)` transported to the problem's
+Euclidean-coordinate circle. -/
+theorem apm_t02a06_isCoveringMap_euclideanCircle :
+    IsCoveringMap
+      (apm_t02a06_euclideanCircleHomeomorph.symm ∘
+        AddCircle.homeomorphCircle' ∘
+        ((↑) : ℝ → AddCircle (2 * Real.pi))) :=
+  ((AddCircle.isCoveringMap_coe (2 * Real.pi)).homeomorph_comp
+    AddCircle.homeomorphCircle').homeomorph_comp
+      apm_t02a06_euclideanCircleHomeomorph.symm
+
+#print axioms apm_t02a06_simplyConnectedSpace_S3
+#print axioms apm_t02a06_euclideanCircleHomeomorph
+#print axioms apm_t02a06_isCoveringMap_euclideanCircle
+
+/-- The problem's metric-sphere encoding of `S³` is locally path-connected,
+via its standard three-dimensional Euclidean atlas. -/
+@[reducible] def apm_t02a06_locPathConnectedSpace_S3 :
+    LocPathConnectedSpace apm_t02a06_S3 :=
+  ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 3)) apm_t02a06_S3
+
+/-- Every map from the problem's `S³` to its Euclidean circle has a continuous
+real lift through the transported universal covering. -/
+theorem apm_t02a06_exists_real_lift (g : C(apm_t02a06_S3, apm_t02a06_S1)) :
+    ∃ G : C(apm_t02a06_S3, ℝ),
+      (apm_t02a06_euclideanCircleHomeomorph.symm ∘
+        AddCircle.homeomorphCircle' ∘
+        ((↑) : ℝ → AddCircle (2 * Real.pi))) ∘ G = g := by
+  letI : SimplyConnectedSpace apm_t02a06_S3 :=
+    apm_t02a06_simplyConnectedSpace_S3
+  letI : LocPathConnectedSpace apm_t02a06_S3 :=
+    apm_t02a06_locPathConnectedSpace_S3
+  let p : ℝ → apm_t02a06_S1 :=
+    apm_t02a06_euclideanCircleHomeomorph.symm ∘
+      AddCircle.homeomorphCircle' ∘
+      ((↑) : ℝ → AddCircle (2 * Real.pi))
+  have hp : IsCoveringMap p := apm_t02a06_isCoveringMap_euclideanCircle
+  have hpsurj : Function.Surjective p :=
+    apm_t02a06_euclideanCircleHomeomorph.symm.surjective.comp
+      (AddCircle.homeomorphCircle'.surjective.comp QuotientAddGroup.mk_surjective)
+  let a₀ : apm_t02a06_S3 := Classical.choice inferInstance
+  obtain ⟨e₀, he₀⟩ := hpsurj (g a₀)
+  obtain ⟨G, hG, -⟩ := hp.existsUnique_continuousMap_lifts g a₀ e₀ he₀
+  exact ⟨G, hG.2⟩
+
+#print axioms apm_t02a06_locPathConnectedSpace_S3
+#print axioms apm_t02a06_exists_real_lift
 
 def apm_t02a06_greatCircle (normal : apm_t02a06_S2) : Set apm_t02a06_S2 :=
   {x | inner ℝ (x : EuclideanSpace ℝ (Fin 3)) normal = 0}
@@ -158,6 +240,302 @@ lemma apm_t02a06_localSign_antipodal
     have hnegpos : 0 < -d := neg_pos.mpr hdneg
     simp [hd, hnegpos]
 
+lemma apm_t02a06_normal_ne_zero (normal : apm_t02a06_S2) :
+    (normal : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+  intro h
+  have hnorm : ‖(normal : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using normal.property
+  rw [h, norm_zero] at hnorm
+  norm_num at hnorm
+
+lemma apm_t02a06_normal_coe_ne_zero (normal : apm_t02a06_S2) :
+    (normal : Fin 3 → ℝ) ≠ 0 := by
+  intro h
+  apply apm_t02a06_normal_ne_zero normal
+  ext i
+  exact congrFun h i
+
+/-- Unequal great-circle zero sets force the unit normals to be genuinely
+nonproportional.  In particular, this excludes antipodal normals, not merely
+equal normals. -/
+theorem apm_t02a06_normals_nonproportional
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    ¬ ∃ r : ℝ, (normal₁ : Fin 3 → ℝ) =
+      r • (normal₂ : Fin 3 → ℝ) := by
+  rintro ⟨r, hr⟩
+  have hrE : (normal₁ : EuclideanSpace ℝ (Fin 3)) =
+      r • (normal₂ : EuclideanSpace ℝ (Fin 3)) := by
+    ext i
+    exact congrFun hr i
+  have hr0 : r ≠ 0 := by
+    intro hz
+    apply apm_t02a06_normal_ne_zero normal₁
+    rw [hrE, hz, zero_smul]
+  apply hcircles
+  ext x
+  change inner ℝ (x : EuclideanSpace ℝ (Fin 3)) normal₁ = 0 ↔
+    inner ℝ (x : EuclideanSpace ℝ (Fin 3)) normal₂ = 0
+  rw [hrE, inner_smul_right]
+  constructor
+  · intro h
+    exact (mul_eq_zero.mp h).resolve_left hr0
+  · intro h
+    rw [h, mul_zero]
+
+/-- Distinct great-circle zero sets therefore have a nonzero cross product of
+their actual normals. -/
+theorem apm_t02a06_crossProduct_ne_zero
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ) ≠ 0 := by
+  rw [crossProduct_ne_zero_iff_linearIndependent,
+    LinearIndependent.pair_symm_iff,
+    LinearIndependent.pair_iff' (apm_t02a06_normal_coe_ne_zero normal₂)]
+  intro r
+  exact fun h ↦ apm_t02a06_normals_nonproportional normal₁ normal₂ hcircles ⟨r, h.symm⟩
+
+/-- The cross product, regarded as a Euclidean vector and normalized to unit
+length. -/
+noncomputable def apm_t02a06_normalizedCrossVector
+    (normal₁ normal₂ : apm_t02a06_S2) : EuclideanSpace ℝ (Fin 3) :=
+  ‖WithLp.toLp 2 (crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ))‖⁻¹ •
+    WithLp.toLp 2 (crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ))
+
+theorem apm_t02a06_normalizedCrossVector_norm
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    ‖apm_t02a06_normalizedCrossVector normal₁ normal₂‖ = 1 := by
+  let c := crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ)
+  have hc : c ≠ 0 := apm_t02a06_crossProduct_ne_zero normal₁ normal₂ hcircles
+  have hcLp : (WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+    intro h
+    apply hc
+    have hof := congrArg (fun z : EuclideanSpace ℝ (Fin 3) ↦ WithLp.ofLp z) h
+    simpa using hof
+  have hnorm : ‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖ ≠ 0 :=
+    norm_ne_zero_iff.mpr hcLp
+  rw [apm_t02a06_normalizedCrossVector]
+  change ‖‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖⁻¹ • WithLp.toLp 2 c‖ = 1
+  rw [norm_smul, norm_inv, norm_norm, inv_mul_cancel₀ hnorm]
+
+/-- The normalized cross product as a point of the problem's unit sphere. -/
+noncomputable def apm_t02a06_crossPoint
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) : apm_t02a06_S2 :=
+  ⟨apm_t02a06_normalizedCrossVector normal₁ normal₂, by
+    simpa [mem_sphere_zero_iff_norm] using
+      apm_t02a06_normalizedCrossVector_norm normal₁ normal₂ hcircles⟩
+
+/-- Its antipode, also packaged as a unit-sphere point. -/
+noncomputable def apm_t02a06_negCrossPoint
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) : apm_t02a06_S2 :=
+  ⟨-apm_t02a06_normalizedCrossVector normal₁ normal₂, by
+    rw [mem_sphere_zero_iff_norm, norm_neg,
+      apm_t02a06_normalizedCrossVector_norm normal₁ normal₂ hcircles]⟩
+
+theorem apm_t02a06_crossPoint_mem_both
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    apm_t02a06_crossPoint normal₁ normal₂ hcircles ∈
+      apm_t02a06_greatCircle normal₁ ∩ apm_t02a06_greatCircle normal₂ := by
+  constructor
+  · change inner ℝ
+      (‖WithLp.toLp 2 (crossProduct (normal₁ : Fin 3 → ℝ)
+        (normal₂ : Fin 3 → ℝ))‖⁻¹ •
+        WithLp.toLp 2 (crossProduct (normal₁ : Fin 3 → ℝ)
+          (normal₂ : Fin 3 → ℝ)))
+      (WithLp.toLp 2 (normal₁ : Fin 3 → ℝ)) = 0
+    rw [inner_smul_left]
+    change (starRingEnd ℝ) _ * dotProduct (normal₁ : Fin 3 → ℝ)
+      (star (crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ))) = 0
+    simp [dotProduct_comm]
+  · change inner ℝ
+      (‖WithLp.toLp 2 (crossProduct (normal₁ : Fin 3 → ℝ)
+        (normal₂ : Fin 3 → ℝ))‖⁻¹ •
+        WithLp.toLp 2 (crossProduct (normal₁ : Fin 3 → ℝ)
+          (normal₂ : Fin 3 → ℝ)))
+      (WithLp.toLp 2 (normal₂ : Fin 3 → ℝ)) = 0
+    rw [inner_smul_left]
+    change (starRingEnd ℝ) _ * dotProduct (normal₂ : Fin 3 → ℝ)
+      (star (crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ))) = 0
+    simp [dotProduct_comm]
+
+theorem apm_t02a06_negCrossPoint_mem_both
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    apm_t02a06_negCrossPoint normal₁ normal₂ hcircles ∈
+      apm_t02a06_greatCircle normal₁ ∩ apm_t02a06_greatCircle normal₂ := by
+  rcases apm_t02a06_crossPoint_mem_both normal₁ normal₂ hcircles with ⟨h₁, h₂⟩
+  constructor <;> change inner ℝ
+    (-apm_t02a06_normalizedCrossVector normal₁ normal₂) _ = 0
+  · simpa using congrArg Neg.neg h₁
+  · simpa using congrArg Neg.neg h₂
+
+noncomputable def apm_t02a06_crossIntersectionPoint
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    apm_t02a06_intersection normal₁ normal₂ :=
+  ⟨apm_t02a06_crossPoint normal₁ normal₂ hcircles,
+    apm_t02a06_crossPoint_mem_both normal₁ normal₂ hcircles⟩
+
+noncomputable def apm_t02a06_negCrossIntersectionPoint
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    apm_t02a06_intersection normal₁ normal₂ :=
+  ⟨apm_t02a06_negCrossPoint normal₁ normal₂ hcircles,
+    apm_t02a06_negCrossPoint_mem_both normal₁ normal₂ hcircles⟩
+
+theorem apm_t02a06_crossIntersectionPoint_ne_neg
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles ≠
+      apm_t02a06_negCrossIntersectionPoint normal₁ normal₂ hcircles := by
+  have heq : apm_t02a06_negCrossIntersectionPoint normal₁ normal₂ hcircles =
+      apm_t02a06_intersectionAntipodal
+        (apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles) := rfl
+  rw [heq]
+  exact Ne.symm (apm_t02a06_intersectionAntipodal_ne
+    (apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles))
+
+/-- Exhaustiveness: every common unit vector is one of the two normalized
+cross-product points. -/
+theorem apm_t02a06_intersection_eq_cross_or_neg
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂)
+    (x : apm_t02a06_intersection normal₁ normal₂) :
+    x = apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles ∨
+      x = apm_t02a06_negCrossIntersectionPoint normal₁ normal₂ hcircles := by
+  let c := crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ)
+  let xF : Fin 3 → ℝ := (x.1 : Fin 3 → ℝ)
+  have hc : c ≠ 0 := apm_t02a06_crossProduct_ne_zero normal₁ normal₂ hcircles
+  rcases x.2 with ⟨hx₁, hx₂⟩
+  have hd₁ : dotProduct (normal₁ : Fin 3 → ℝ) xF = 0 := by
+    change inner ℝ (x.1 : EuclideanSpace ℝ (Fin 3)) normal₁ = 0 at hx₁
+    simpa [EuclideanSpace.inner_eq_star_dotProduct, xF] using hx₁
+  have hd₂ : dotProduct (normal₂ : Fin 3 → ℝ) xF = 0 := by
+    change inner ℝ (x.1 : EuclideanSpace ℝ (Fin 3)) normal₂ = 0 at hx₂
+    simpa [EuclideanSpace.inner_eq_star_dotProduct, xF] using hx₂
+  have hcross : crossProduct c xF = 0 := by
+    unfold c
+    rw [cross_cross_eq_smul_sub_smul, hd₁, hd₂]
+    simp
+  have hnotLI : ¬ LinearIndependent ℝ ![c, xF] := by
+    rw [← crossProduct_ne_zero_iff_linearIndependent]
+    exact not_ne_iff.mpr hcross
+  have hexists : ∃ r : ℝ, xF = r • c := by
+    rw [LinearIndependent.pair_iff' hc] at hnotLI
+    simpa only [not_forall, not_ne_iff, eq_comm] using hnotLI
+  obtain ⟨r, hr⟩ := hexists
+  have hrLp : (x.1 : EuclideanSpace ℝ (Fin 3)) =
+      r • WithLp.toLp 2 c := by
+    ext i
+    exact congrFun hr i
+  have hxnorm : ‖(x.1 : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using x.1.property
+  have hcNorm : ‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖ ≠ 0 := by
+    apply norm_ne_zero_iff.mpr
+    intro h
+    apply hc
+    have hof := congrArg (fun z : EuclideanSpace ℝ (Fin 3) ↦ WithLp.ofLp z) h
+    simpa using hof
+  have hmul : |r| * ‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+    have hn := congrArg norm hrLp
+    rw [hxnorm, norm_smul, Real.norm_eq_abs] at hn
+    exact hn.symm
+  by_cases hrnonneg : 0 ≤ r
+  · left
+    have hrval : r = ‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖⁻¹ :=
+      eq_inv_of_mul_eq_one_left (by simpa [abs_of_nonneg hrnonneg] using hmul)
+    apply Subtype.ext
+    apply Subtype.ext
+    rw [hrLp, hrval]
+    rfl
+  · right
+    have hrneg : r < 0 := lt_of_not_ge hrnonneg
+    have hnegval : -r = ‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖⁻¹ :=
+      eq_inv_of_mul_eq_one_left (by simpa [abs_of_neg hrneg] using hmul)
+    have hrval : r = -‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖⁻¹ := by
+      linarith
+    apply Subtype.ext
+    apply Subtype.ext
+    rw [hrLp, hrval]
+    simp [apm_t02a06_negCrossIntersectionPoint, apm_t02a06_negCrossPoint,
+      apm_t02a06_normalizedCrossVector, c]
+
+/-- The exact two-point enumeration, constructed from the classification above. -/
+noncomputable def apm_t02a06_finTwoEquivIntersection
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    Fin 2 ≃ apm_t02a06_intersection normal₁ normal₂ where
+  toFun i := if i = 0 then
+    apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles
+  else apm_t02a06_negCrossIntersectionPoint normal₁ normal₂ hcircles
+  invFun x := if x = apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles
+    then 0 else 1
+  left_inv i := by
+    have hne := apm_t02a06_crossIntersectionPoint_ne_neg normal₁ normal₂ hcircles
+    have hne' := Ne.symm hne
+    fin_cases i <;> simp [hne, hne']
+  right_inv x := by
+    rcases apm_t02a06_intersection_eq_cross_or_neg normal₁ normal₂ hcircles x with h | h
+    · simp [h]
+    · have hne := apm_t02a06_crossIntersectionPoint_ne_neg normal₁ normal₂ hcircles
+      simp [h, hne, Ne.symm hne]
+
+@[simp] theorem apm_t02a06_finTwoEquivIntersection_zero
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    apm_t02a06_finTwoEquivIntersection normal₁ normal₂ hcircles 0 =
+      apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles := by
+  rfl
+
+@[simp] theorem apm_t02a06_finTwoEquivIntersection_one
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    apm_t02a06_finTwoEquivIntersection normal₁ normal₂ hcircles 1 =
+      apm_t02a06_negCrossIntersectionPoint normal₁ normal₂ hcircles := by
+  rfl
+
+theorem apm_t02a06_crossPoint_tripleProduct_ne_zero
+    (normal₁ normal₂ : apm_t02a06_S2)
+    (hcircles : apm_t02a06_greatCircle normal₁ ≠
+      apm_t02a06_greatCircle normal₂) :
+    dotProduct (crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ))
+      ((apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles).1 :
+        Fin 3 → ℝ) ≠ 0 := by
+  let c := crossProduct (normal₁ : Fin 3 → ℝ) (normal₂ : Fin 3 → ℝ)
+  have hc : c ≠ 0 := apm_t02a06_crossProduct_ne_zero normal₁ normal₂ hcircles
+  have hcLp : (WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+    intro h
+    apply hc
+    have hof := congrArg (fun z : EuclideanSpace ℝ (Fin 3) ↦ WithLp.ofLp z) h
+    simpa using hof
+  have hnormpos : 0 < ‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖⁻¹ :=
+    inv_pos.mpr (norm_pos_iff.mpr hcLp)
+  have hself : 0 < dotProduct c c := by
+    simpa using (Matrix.dotProduct_self_star_pos_iff (v := c)).mpr hc
+  apply ne_of_gt
+  change 0 < dotProduct c
+    (‖(WithLp.toLp 2 c : EuclideanSpace ℝ (Fin 3))‖⁻¹ • c)
+  rw [dotProduct_smul]
+  exact mul_pos hnormpos hself
+
 abbrev apm_t02a06_H3 (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 3).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -176,14 +554,42 @@ theorem apm_t02A06_bridge_1 :
       apm_t02a06_greatCircle normal₁ ≠ apm_t02a06_greatCircle normal₂ →
         ∃ e : Fin 2 ≃ apm_t02a06_intersection normal₁ normal₂,
           apm_t02a06_localSign (e 0) = -apm_t02a06_localSign (e 1) := by
-  sorry
+  intro normal₁ normal₂ hcircles
+  let e := apm_t02a06_finTwoEquivIntersection normal₁ normal₂ hcircles
+  refine ⟨e, ?_⟩
+  have hanti := apm_t02a06_localSign_antipodal
+    (apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles)
+    (apm_t02a06_crossPoint_tripleProduct_ne_zero normal₁ normal₂ hcircles)
+  change apm_t02a06_localSign
+      (apm_t02a06_negCrossIntersectionPoint normal₁ normal₂ hcircles) =
+    -apm_t02a06_localSign
+      (apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles) at hanti
+  change apm_t02a06_localSign
+      (apm_t02a06_crossIntersectionPoint normal₁ normal₂ hcircles) =
+    -apm_t02a06_localSign
+      (apm_t02a06_negCrossIntersectionPoint normal₁ normal₂ hcircles)
+  omega
+
+theorem apm_t02a06_first_conjunct :
+    ∀ normal₁ normal₂ : apm_t02a06_S2,
+      apm_t02a06_greatCircle normal₁ ≠ apm_t02a06_greatCircle normal₂ →
+        ∃ e : Fin 2 ≃ apm_t02a06_intersection normal₁ normal₂,
+          apm_t02a06_localSign (e 0) = -apm_t02a06_localSign (e 1) ∧
+          apm_t02a06_signedIntersection e = 0 := by
+  intro normal₁ normal₂ hcircles
+  obtain ⟨e, hopposite⟩ := apm_t02A06_bridge_1 normal₁ normal₂ hcircles
+  exact ⟨e, hopposite,
+    apm_t02a06_signedIntersection_eq_zero_of_opposite e hopposite⟩
 
 /-- Why this unblocks the second conjunct of `apm_t02a06`: it is the exact
 topological consequence of the missing computations
 `H₂(S² × S²; ℤ) ≅ ℤ²` and `H₂(S⁴; ℤ) = 0`. -/
 theorem apm_t02A06_bridge_2 :
     ¬ Nonempty ((apm_t02a06_S2 × apm_t02a06_S2) ≃ₜ apm_t02a06_S4) := by
-  sorry
+  exact
+    ConstructionTargets.T02A06SphereOne.no_homeomorph_sphereTwo_product_sphereTwo_sphereFour
+
+#print axioms apm_t02A06_bridge_2
 
 /-- Why this unblocks the third conjunct of `apm_t02a06`: every map from
 `S³` to `T³` lifts to the contractible universal cover `ℝ³` and is therefore
@@ -191,7 +597,67 @@ nullhomotopic; this packages the resulting homology-map vanishing in exactly
 the functorial form needed here. -/
 theorem apm_t02A06_bridge_3 :
     ∀ f : C(apm_t02a06_S3, apm_t02a06_T3), apm_t02a06_H3Map f = 0 := by
-  sorry
+  intro f
+  let f₀ : C(apm_t02a06_S3, apm_t02a06_S1) := ContinuousMap.fst.comp f
+  let f₁ : C(apm_t02a06_S3, apm_t02a06_S1) :=
+    ContinuousMap.fst.comp (ContinuousMap.snd.comp f)
+  let f₂ : C(apm_t02a06_S3, apm_t02a06_S1) :=
+    ContinuousMap.snd.comp (ContinuousMap.snd.comp f)
+  obtain ⟨L₀, hL₀⟩ := apm_t02a06_exists_real_lift f₀
+  obtain ⟨L₁, hL₁⟩ := apm_t02a06_exists_real_lift f₁
+  obtain ⟨L₂, hL₂⟩ := apm_t02a06_exists_real_lift f₂
+  let L : C(apm_t02a06_S3, ℝ × ℝ × ℝ) := L₀.prodMk (L₁.prodMk L₂)
+  let p : C(ℝ, apm_t02a06_S1) :=
+    ⟨apm_t02a06_euclideanCircleHomeomorph.symm ∘
+      AddCircle.homeomorphCircle' ∘
+      ((↑) : ℝ → AddCircle (2 * Real.pi)),
+      apm_t02a06_isCoveringMap_euclideanCircle.continuous⟩
+  let p₃ : C(ℝ × ℝ × ℝ, apm_t02a06_T3) :=
+    (p.comp ContinuousMap.fst).prodMk
+      ((p.comp (ContinuousMap.fst.comp ContinuousMap.snd)).prodMk
+        (p.comp (ContinuousMap.snd.comp ContinuousMap.snd)))
+  have hpL : p₃.comp L = f := by
+    apply ContinuousMap.ext
+    intro x
+    apply Prod.ext
+    · simpa [p₃, L, p, f₀] using congrFun hL₀ x
+    · apply Prod.ext
+      · simpa [p₃, L, p, f₁] using congrFun hL₁ x
+      · simpa [p₃, L, p, f₂] using congrFun hL₂ x
+  have hLnull : L.Nullhomotopic := by
+    simpa using (id_nullhomotopic (ℝ × ℝ × ℝ)).comp_left L
+  have hfnull : f.Nullhomotopic := by
+    rw [← hpL]
+    exact hLnull.comp_right p₃
+  obtain ⟨c, hc⟩ := hfnull
+  obtain ⟨H⟩ := hc
+  have hmap := singularHomology_map_eq_of_topCatHomotopy
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ)
+    (continuousMapHomotopyCylinder H)
+    (continuousMapHomotopyCylinder_zero H)
+    (continuousMapHomotopyCylinder_one H) 3
+  change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 3).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f) = 0
+  rw [hmap]
+  let toPoint : C(apm_t02a06_S3, Unit) := ContinuousMap.const _ ()
+  let fromPoint : C(Unit, apm_t02a06_T3) := ContinuousMap.const _ c
+  have hconst : ContinuousMap.const apm_t02a06_S3 c = fromPoint.comp toPoint := by
+    apply ContinuousMap.ext
+    intro x
+    rfl
+  rw [hconst]
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 3).obj
+    (ModuleCat.of ℤ ℤ)
+  change F.map (TopCat.ofHom (fromPoint.comp toPoint)) = 0
+  rw [show TopCat.ofHom (fromPoint.comp toPoint) =
+      TopCat.ofHom toPoint ≫ TopCat.ofHom fromPoint by rfl, F.map_comp]
+  have hzero : CategoryTheory.Limits.IsZero (F.obj (TopCat.of Unit)) :=
+    AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+      (ModuleCat ℤ) 3 (ModuleCat.of ℤ ℤ) (TopCat.of Unit) (by norm_num)
+  rw [hzero.eq_of_tgt (F.map (TopCat.ofHom toPoint)) 0]
+  simp
+
+#print axioms apm_t02A06_bridge_3
 
 theorem apm_t02a06 :
     (∀ normal₁ normal₂ : apm_t02a06_S2,
@@ -265,4 +731,20 @@ theorem apm_t02a06 :
   or Künneth theorem appeared. The exhaustiveness and both homological
   conjuncts therefore remain open; the frozen statement is unchanged.
   -/
-  sorry
+  exact ⟨apm_t02a06_first_conjunct, apm_t02A06_bridge_2, apm_t02A06_bridge_3⟩
+
+#print axioms apm_t02a06_normals_nonproportional
+#print axioms apm_t02a06_crossProduct_ne_zero
+#print axioms apm_t02a06_localSign_antipodal
+#print axioms apm_t02a06_signedIntersection_eq_zero_of_opposite
+#print axioms apm_t02a06_normalizedCrossVector_norm
+#print axioms apm_t02a06_crossPoint_mem_both
+#print axioms apm_t02a06_negCrossPoint_mem_both
+#print axioms apm_t02a06_crossIntersectionPoint_ne_neg
+#print axioms apm_t02a06_intersection_eq_cross_or_neg
+#print axioms apm_t02a06_finTwoEquivIntersection_zero
+#print axioms apm_t02a06_finTwoEquivIntersection_one
+#print axioms apm_t02a06_crossPoint_tripleProduct_ne_zero
+#print axioms apm_t02A06_bridge_1
+#print axioms apm_t02a06_first_conjunct
+#print axioms apm_t02a06

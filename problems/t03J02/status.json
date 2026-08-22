@@ -12,9 +12,7 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
+    "files": ["lean/Main.lean"],
     "sorry_count_main": 3,
     "sorry_count_scratch": 0,
     "sorry_count_total": 3
@@ -32,22 +30,5 @@
   "classification": "partial",
   "closer_hop": 4,
   "boundary": "The missing invariant interface is now stated precisely: apm_t03J02_bridge_1 is the Seifert--van Kampen computation and apm_t03J02_bridge_2 is the complete singular Mayer--Vietoris homology computation for the compiled quotient.",
-  "imported_at": "2026-07-13T17:26:57.053364Z",
-  "obstructions": [
-    {
-      "areas": [
-        "fundamental-group",
-        "mayer-vietoris",
-        "singular-homology",
-        "van-kampen"
-      ],
-      "missing": "[closer_hop] 4\n\n[boundary] The missing invariant interface is now stated precisely: apm_t03J02_bridge_1 is the Seifert--van Kampen computation and apm_t03J02_bridge_2 is the complete singular Mayer--Vietoris homology computation for the compiled quotient.",
-      "recorded_by": "codex-6",
-      "frame": "phase-2b-legacy-migration",
-      "at_commit": "a00ea1f",
-      "date": "2026-08-19",
-      "resolved": null,
-      "areas_are": "necessary"
-    }
-  ]
+  "imported_at": "2026-07-13T17:26:57.053364Z"
 }
