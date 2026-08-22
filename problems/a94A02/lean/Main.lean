@@ -1,4 +1,5 @@
 import Mathlib
+import a01J03.lean.Main
 
 open MeasureTheory Set
 
@@ -55,35 +56,104 @@ theorem apm_a94a02
       (∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)),
         ENNReal.ofReal (deriv (apmFunctionSeries f) x) =
           apmDerivativeSeries f x) := by
-  -- Boundary (closer hop 3): still open, but the guarded branch is now resolved a.e.
-  --
-  -- Attempted to close conjuncts (1) and (2) separately:
-  --
-  -- (1) ∫⁻ g < ⊤: The lintegral of the ENNReal-valued derivative series.
-  --     Key issue: `apmDerivativeSeries` has an if-then-else branch:
-  --       g(x) = ∑ ENNReal.ofReal(deriv(fₙ)(x)) if all fₙ differentiable at x, else 0.
-  --     The new proved helper `apm_a94a02_ae_all_differentiable` closes this issue:
-  --     `AbsolutelyContinuousOnInterval.ae_differentiableAt` and `ae_all_iff`
-  --     assemble the countable intersection directly on the restricted measure.
-  --
-  -- (2) g < ⊤ a.e.: depends on (1).
-  --
-  -- (3) deriv(f) = g a.e.: `LEMMA-INDEX.md` exposed the fully proved sibling
-  --     `APM.deriv_sum_of_monotone_ae` in `a01J03`.  Its Stieltjes/Radon--Nikodym
-  --     argument proves exactly derivative-of-series interchange for globally
-  --     monotone functions with pointwise summability.  Here monotonicity is only
-  --     on `Icc 0 1`.  A viable route is to replace each term by
-  --     `x ↦ f n (max 0 (min 1 x))`, apply the sibling globally, and transfer the
-  --     derivative equality back on `Ioo 0 1`; the endpoints are null.  Completing
-  --     this requires the clamp map's monotonicity, pointwise summability (using
-  --     `0 ≤ f n x ≤ f n 1`), and local derivative congruence for both each term
-  --     and the tsum.  Those localization lemmas remain unproved in this hop.
-  --
-  -- Mathlib source additionally checked:
-  -- `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub` supplies the exact
-  -- per-term integral identity, and
-  -- `lintegral_deriv_eq_volume_image_of_monotoneOn` supplies a set-local
-  -- monotone derivative formula, but the latter requires differentiability at
-  -- every point and therefore does not directly replace the sibling's a.e.
-  -- Stieltjes argument.
-  sorry
+  let clamp : ℝ → ℝ := fun x => max 0 (min 1 x)
+  let F : ℕ → ℝ → ℝ := fun n x => f n (clamp x)
+  have hclamp_mem (x : ℝ) : clamp x ∈ Icc (0 : ℝ) 1 := by
+    dsimp [clamp]
+    constructor <;> simp
+  have hclamp_mono : Monotone clamp := by
+    intro x y hxy
+    dsimp [clamp]
+    exact max_le_max (le_refl (0 : ℝ)) (min_le_min (le_refl (1 : ℝ)) hxy)
+  have hF_mono (n : ℕ) : Monotone (F n) := by
+    intro x y hxy
+    exact hf_monotone n (hclamp_mem x) (hclamp_mem y) (hclamp_mono hxy)
+  have hF_summable (x : ℝ) : Summable (fun n => F n x) := by
+    apply Summable.of_norm_bounded hf_sum
+    intro n
+    rw [Real.norm_eq_abs, abs_of_nonneg (hf_nonnegative n _ (hclamp_mem x))]
+    exact hf_monotone n (hclamp_mem x) (by norm_num) (hclamp_mem x).2
+  have hF_deriv := APM.deriv_sum_of_monotone_ae
+      (APM.pointwiseSum F) F hF_mono hF_summable (fun _ => rfl)
+  have h_interior : ∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)), x ∈ Ioo (0 : ℝ) 1 := by
+    rw [ae_restrict_iff' measurableSet_Icc]
+    filter_upwards [(volume : Measure ℝ).ae_ne 0, (volume : Measure ℝ).ae_ne 1]
+      with x hx0 hx1 hmem
+    exact ⟨lt_of_le_of_ne hmem.1 (Ne.symm hx0), lt_of_le_of_ne hmem.2 hx1⟩
+  have hderiv_nonneg (n : ℕ) :
+      ∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)), 0 ≤ deriv (f n) x := by
+    filter_upwards [h_interior] with x hx
+    have heq : F n =ᶠ[nhds x] f n := by
+      filter_upwards [Ioo_mem_nhds hx.1 hx.2] with y hy
+      simp [F, clamp, hy.1.le, hy.2.le]
+    rw [← heq.deriv_eq]
+    exact (hF_mono n).deriv_nonneg
+  have hderiv_nonneg_all :
+      ∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)), ∀ n, 0 ≤ deriv (f n) x :=
+    ae_all_iff.2 hderiv_nonneg
+  have hterm_integral (n : ℕ) :
+      ∫⁻ x in Icc (0 : ℝ) 1, ENNReal.ofReal (deriv (f n) x) ∂volume =
+        ENNReal.ofReal (f n 1 - f n 0) := by
+    have hi : Integrable (deriv (f n)) (volume.restrict (Icc (0 : ℝ) 1)) :=
+      (intervalIntegrable_iff_integrableOn_Icc_of_le (by norm_num)).1
+        (hf_ac n).intervalIntegrable_deriv
+    rw [← ofReal_integral_eq_lintegral_ofReal hi (hderiv_nonneg n),
+      integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le (by norm_num),
+      (hf_ac n).integral_deriv_eq_sub]
+  have hdiff_summable : Summable (fun n => f n 1 - f n 0) := by
+    apply Summable.of_norm_bounded hf_sum
+    intro n
+    rw [Real.norm_eq_abs, abs_of_nonneg]
+    · exact sub_le_self _ (hf_nonnegative n 0 (by norm_num))
+    · exact sub_nonneg.mpr (hf_monotone n (by norm_num) (by norm_num) (by norm_num))
+  have hg_eq : apmDerivativeSeries f =ᵐ[volume.restrict (Icc (0 : ℝ) 1)]
+      fun x => ∑' n, ENNReal.ofReal (deriv (f n) x) := by
+    filter_upwards [apm_a94a02_ae_all_differentiable f hf_ac] with x hx
+    simp [apmDerivativeSeries, hx]
+  have hlintegral :
+      (∫⁻ x in Icc (0 : ℝ) 1, apmDerivativeSeries f x ∂volume) =
+        ENNReal.ofReal (∑' n, (f n 1 - f n 0)) := by
+    rw [lintegral_congr_ae hg_eq, lintegral_tsum]
+    · simp_rw [hterm_integral]
+      exact (ENNReal.ofReal_tsum_of_nonneg
+        (fun n => sub_nonneg.mpr (hf_monotone n (by norm_num) (by norm_num) (by norm_num)))
+        hdiff_summable).symm
+    · intro n
+      exact (measurable_deriv (f n)).ennreal_ofReal.aemeasurable
+  have hg_int : (∫⁻ x in Icc (0 : ℝ) 1, apmDerivativeSeries f x ∂volume) < ⊤ := by
+    rw [hlintegral]
+    exact ENNReal.ofReal_lt_top
+  refine ⟨hg_int, ?_, ?_⟩
+  · apply ae_lt_top'
+    · apply AEMeasurable.congr _ hg_eq.symm
+      fun_prop
+    · exact hg_int.ne
+  · have hF_deriv_restrict :=
+      ae_restrict_of_ae (s := Icc (0 : ℝ) 1) hF_deriv
+    have hg_finite :
+        ∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)), apmDerivativeSeries f x < ⊤ := by
+      apply ae_lt_top'
+      · apply AEMeasurable.congr _ hg_eq.symm
+        fun_prop
+      · exact hg_int.ne
+    filter_upwards [h_interior, hF_deriv_restrict, hg_eq, hg_finite,
+      hderiv_nonneg_all] with x hx hseries hgx hgfin hnonneg
+    have hterm_local (n : ℕ) : F n =ᶠ[nhds x] f n := by
+      filter_upwards [Ioo_mem_nhds hx.1 hx.2] with y hy
+      simp [F, clamp, hy.1.le, hy.2.le]
+    have hsum_local : APM.pointwiseSum F =ᶠ[nhds x] apmFunctionSeries f := by
+      filter_upwards [Ioo_mem_nhds hx.1 hx.2] with y hy
+      simp [APM.pointwiseSum, apmFunctionSeries, F, clamp, hy.1.le, hy.2.le]
+    have hreal : deriv (apmFunctionSeries f) x = ∑' n, deriv (f n) x := by
+      rw [← hsum_local.deriv_eq, hseries]
+      apply tsum_congr
+      intro n
+      exact (hterm_local n).deriv_eq
+    have htsum : (∑' n, ENNReal.ofReal (deriv (f n) x)) ≠ ⊤ := by
+      rw [← hgx]
+      exact hgfin.ne
+    have hsummable_real : Summable (fun n => deriv (f n) x) := by
+      have hs := ENNReal.summable_toReal htsum
+      simpa only [ENNReal.toReal_ofReal (hnonneg _)] using hs
+    rw [hreal, ENNReal.ofReal_tsum_of_nonneg hnonneg hsummable_real]
+    exact hgx.symm

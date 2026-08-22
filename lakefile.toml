@@ -31,3 +31,8 @@ name = "ConstructionTargets"
 # the proved lemma as unreachable. Added by claude-9, same fix as above.
 [[lean_lib]]
 name = "YoungL2"
+
+[[lean_lib]]
+name = "ApmProblems"
+srcDir = "problems"
+roots = ["a01J03.lean.Main"]
