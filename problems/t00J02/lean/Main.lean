@@ -206,6 +206,35 @@ lemma apm_t00j02_homologyMap_boundary_of_continuous_disk_eq_zero
   apm_t00j02_homologyMap_eq_zero_of_nullhomotopic n hn _
     (apm_t00j02_nullhomotopic_boundary_of_continuous_disk d hd)
 
+/-- The disk-bounding hypothesis supplies, for every selected component, a
+parametrization of that component whose induced map on `H₁` is zero. -/
+lemma apm_t00j02_exists_boundary_eq_component_and_homologyMap_eq_zero
+    {S : Type} [TopologicalSpace S] {A : Set S}
+    (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
+    ∃ d : apm_t00j02_Disk → S,
+      ∃ hdcont : Continuous d, Topology.IsEmbedding d ∧
+      range (fun z : Circle => d (apm_t00j02_circleToDisk z)) =
+        connectedComponentIn A x ∧
+      apm_t00j02_homologyMap 1
+        ⟨fun z : Circle => d (apm_t00j02_circleToDisk z),
+          hdcont.comp (continuous_subtype_val.subtype_mk _)⟩ = 0 := by
+  rcases hdisks x hx with ⟨d, hdcont, hdemb, hd⟩
+  exact ⟨d, hdcont, hdemb, hd,
+    apm_t00j02_homologyMap_boundary_of_continuous_disk_eq_zero
+      d hdcont 1 one_ne_zero⟩
+
+/-- Nonvanishing of the morphism induced by the handle circle can be witnessed
+on an actual degree-one homology class. -/
+lemma apm_t00j02_exists_handle_class_of_wrapsHandle
+    {S : Type} [TopologicalSpace S] (c : C(Circle, S))
+    (hc : apm_t00j02_wrapsHandle c) :
+    ∃ a : apm_t00j02_H 1 Circle, apm_t00j02_homologyMap 1 c a ≠ 0 := by
+  by_contra h
+  push_neg at h
+  apply hc
+  ext a
+  exact h a
+
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
   ∃ e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ,
