@@ -63,6 +63,64 @@ noncomputable def apm_t00j02_circleH1IsoAmbientSphereOne :
     (ModuleCat.of ℤ ℤ)).mapIso
       (TopCat.isoOfHomeo apm_t00j02_circleHomeomorphAmbientSphereOne)
 
+/-- A nonzero homomorphism from a rank-one free integer module to a rank-four
+free integer module is a monomorphism. -/
+lemma apm_t00j02_mono_of_nonzero_hom_int_fin4
+    (F : ModuleCat.of ℤ ℤ ⟶ ModuleCat.of ℤ (Fin 4 → ℤ))
+    (hF : F ≠ 0) : Mono F := by
+  rw [ModuleCat.mono_iff_injective]
+  have hFone : F (1 : ℤ) ≠ 0 := by
+    intro h
+    apply hF
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext
+    intro z
+    calc
+      F.hom z = F.hom (z • (1 : ℤ)) := by simp
+      _ = z • F.hom (1 : ℤ) := map_smul F.hom z 1
+      _ = 0 := by rw [h]; simp
+  obtain ⟨i, hi⟩ : ∃ i, F (1 : ℤ) i ≠ 0 := by
+    by_contra h
+    push_neg at h
+    apply hFone
+    funext i
+    exact h i
+  intro x y hxy
+  have hsub : F (x - y) = 0 := by
+    rw [map_sub, hxy, sub_self]
+  have hcoord := congrFun hsub i
+  rw [show x - y = (x - y) • (1 : ℤ) by simp, map_smul] at hcoord
+  change (x - y) * F (1 : ℤ) i = 0 at hcoord
+  have hmul : (x - y) * F (1 : ℤ) i = 0 := hcoord
+  have : x - y = 0 := (mul_eq_zero.mp hmul).resolve_right hi
+  exact sub_eq_zero.mp this
+
+/-- Isomorphism-invariant form of the preceding rank-one-to-rank-four
+monomorphism criterion. -/
+lemma apm_t00j02_mono_of_nonzero_of_iso_int_fin4
+    {A B : ModuleCat ℤ} (eA : A ≅ ModuleCat.of ℤ ℤ)
+    (eB : B ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) (f : A ⟶ B)
+    (hf : f ≠ 0) : Mono f := by
+  let F : ModuleCat.of ℤ ℤ ⟶ ModuleCat.of ℤ (Fin 4 → ℤ) :=
+    eA.inv ≫ f ≫ eB.hom
+  have hF : F ≠ 0 := by
+    intro h
+    apply hf
+    rw [← cancel_epi eA.inv, ← cancel_mono eB.hom]
+    simpa [F] using h
+  haveI : Mono F := apm_t00j02_mono_of_nonzero_hom_int_fin4 F hF
+  rw [ModuleCat.mono_iff_injective]
+  intro x y hxy
+  have hFinj : Function.Injective F :=
+    (ModuleCat.mono_iff_injective F).mp inferInstance
+  have heAinj : Function.Injective eA.hom :=
+    (ModuleCat.mono_iff_injective eA.hom).mp inferInstance
+  apply heAinj
+  apply hFinj
+  change eB.hom (f (eA.inv (eA.hom x))) =
+    eB.hom (f (eA.inv (eA.hom y)))
+  simpa using congrArg eB.hom hxy
+
 def apm_t00j02_hasGenusTwo (S : Type) [TopologicalSpace S] : Prop :=
   Nonempty (apm_t00j02_H 0 S ≅ ModuleCat.of ℤ ℤ) ∧
   Nonempty (apm_t00j02_H 1 S ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
@@ -270,6 +328,18 @@ lemma apm_t00j02_exists_handle_class_of_wrapsHandle
   apply hc
   ext a
   exact h a
+
+/-- Given the standard computation `H₁(S¹) ≅ ℤ`, the handle hypothesis and
+the genus-two `H₁` coordinates force the induced handle map to be mono. -/
+lemma apm_t00j02_mono_homologyMap_of_wrapsHandle
+    {S : Type} [TopologicalSpace S]
+    (eCircle : apm_t00j02_H 1 Circle ≅ ModuleCat.of ℤ ℤ)
+    (hS : apm_t00j02_hasGenusTwo S) (c : C(Circle, S))
+    (hc : apm_t00j02_wrapsHandle c) :
+    Mono (apm_t00j02_homologyMap 1 c) := by
+  rcases hS.2.1 with ⟨eS⟩
+  exact apm_t00j02_mono_of_nonzero_of_iso_int_fin4
+    eCircle eS (apm_t00j02_homologyMap 1 c) hc
 
 /-- Consumer-level form of the disk consequence: each component is the range
 of a continuous circle whose `H₁` class vanishes in the surface. -/
