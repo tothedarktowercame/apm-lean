@@ -20,6 +20,73 @@ integral of a nonintegrable function is defined to be zero.
 
 open MeasureTheory
 
+lemma apm_a98J02_uniform_small_set_integral {g : ℝ → ℝ} {s₀ : Set ℝ}
+    (hs₀ : volume s₀ < ⊤) (hg : Integrable g (volume.restrict s₀)) :
+    ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧ ∀ s : Set ℝ,
+      (volume.restrict s₀ s).toReal < δ →
+      |∫ x in s, g x ∂volume.restrict s₀| < ε := by
+  intro ε hε
+  let μ := volume.restrict s₀
+  have ht : Filter.Tendsto (fun s : Set ℝ ↦ ∫ x in s, g x ∂μ)
+      (Filter.comap (fun s : Set ℝ ↦ μ s) (nhds 0)) (nhds 0) := by
+    apply hg.tendsto_setIntegral_nhds_zero
+    exact Filter.tendsto_comap
+  have he : ∀ᶠ s in Filter.comap (fun s : Set ℝ ↦ μ s) (nhds 0),
+      |∫ x in s, g x ∂μ| < ε := by
+    simpa [Real.dist_eq] using ht.eventually (Metric.ball_mem_nhds 0 hε)
+  change {s : Set ℝ | |∫ x in s, g x ∂μ| < ε} ∈
+    Filter.comap (fun s : Set ℝ ↦ μ s) (nhds 0) at he
+  rw [Filter.mem_comap] at he
+  rcases he with ⟨t, ht, hpre⟩
+  rcases ENNReal.nhds_zero_basis.mem_iff.mp ht with ⟨d, hd, hdt⟩
+  let e : ENNReal := min d 1
+  have he_pos : 0 < e := by simp [e, hd]
+  have he_top : e ≠ (⊤ : ENNReal) :=
+    ne_of_lt (lt_of_le_of_lt (min_le_right d 1) ENNReal.one_lt_top)
+  refine ⟨e.toReal, ENNReal.toReal_pos he_pos.ne' he_top, ?_⟩
+  intro s hs
+  apply hpre
+  apply hdt
+  change μ s < d
+  apply lt_of_lt_of_le ?_ (min_le_left d 1)
+  apply (ENNReal.toReal_lt_toReal ?_ he_top).mp hs
+  have hμuniv : μ Set.univ < ⊤ := by simpa [μ] using hs₀
+  exact ne_of_lt <| lt_of_le_of_lt
+    (measure_mono (show s ⊆ (Set.univ : Set ℝ) from Set.subset_univ s)) hμuniv
+
+lemma apm_a98J02_integral_sq_le_mul_integral_sq {g : ℝ → ℝ} {y x : ℝ}
+    (hyx : y ≤ x) (hg : IntervalIntegrable g volume y x)
+    (hg2 : Integrable (fun t ↦ |g t| ^ 2) (volume.restrict (Set.Ioc y x))) :
+    |∫ t in y..x, g t| ^ 2 ≤ (x - y) * ∫ t in y..x, |g t| ^ 2 := by
+  let μ := volume.restrict (Set.Ioc y x)
+  have hgm : MemLp g 2 μ := by
+    apply (memLp_two_iff_integrable_sq hg.1.aestronglyMeasurable).2
+    simpa [sq_abs] using hg2
+  have h1m : MemLp (fun _ : ℝ ↦ (1 : ℝ)) 2 μ := memLp_const 1
+  have hh := integral_mul_norm_le_Lp_mul_Lq (p := (2 : ℝ)) (q := (2 : ℝ))
+    (μ := μ) (E := ℝ) (f := g) (g := fun _ ↦ 1)
+    (by constructor <;> norm_num) (by simpa using hgm) (by simpa using h1m)
+  rw [intervalIntegral.integral_of_le hyx, intervalIntegral.integral_of_le hyx]
+  simp [μ, Real.norm_eq_abs, hyx] at hh
+  have hhalf : (2 : ℝ)⁻¹ = 1 / 2 := by norm_num
+  rw [hhalf, ← Real.sqrt_eq_rpow, ← Real.sqrt_eq_rpow] at hh
+  have hi : |∫ t in Set.Ioc y x, g t| ≤ ∫ t in Set.Ioc y x, |g t| := by
+    simpa [Real.norm_eq_abs] using
+      (norm_integral_le_integral_norm (f := g) (μ := volume.restrict (Set.Ioc y x)))
+  have hA : 0 ≤ ∫ t in Set.Ioc y x, |g t| ^ 2 := integral_nonneg fun _ ↦ sq_nonneg _
+  have hL : 0 ≤ x - y := sub_nonneg.mpr hyx
+  have hsA := Real.sq_sqrt hA
+  have hsL := Real.sq_sqrt hL
+  have habs : 0 ≤ |∫ t in Set.Ioc y x, g t| := abs_nonneg _
+  have hroot : 0 ≤ √(∫ t in Set.Ioc y x, |g t| ^ 2) * √(x - y) :=
+    mul_nonneg (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
+  have hbound : |∫ t in Set.Ioc y x, g t| ≤
+      √(∫ t in Set.Ioc y x, |g t| ^ 2) * √(x - y) := by
+    calc
+      _ ≤ ∫ t in Set.Ioc y x, |g t| := hi
+      _ ≤ _ := by simpa [sq_abs] using hh
+  nlinarith
+
 lemma apm_a98J02_sub_eq_integral_deriv (f : ℝ → ℝ)
     (hf : AbsolutelyContinuousOnInterval f 0 1)
     {x y : ℝ} (hy : 0 ≤ y) (hyx : y ≤ x) (hx : x ≤ 1) :
@@ -137,4 +204,47 @@ theorem apm_a98j02 (f : ℝ → ℝ)
   cannot substitute for it. Outcomes A and B were not completed in this hop.
   The frozen statement is unchanged.
   -/
-  sorry
+  intro ε hε
+  have hsq : IntegrableOn (fun x : ℝ ↦ |deriv f x| ^ 2) (Set.Icc 0 1) :=
+    apm_a98J02_integrableOn_deriv_sq f hderiv
+  rcases apm_a98J02_uniform_small_set_integral
+      (s₀ := Set.Icc (0 : ℝ) 1) (by simp) hsq ε hε with ⟨δ, hδ, hsmall⟩
+  refine ⟨δ, hδ, ?_⟩
+  intro x y hy hyx hx hxyδ
+  have hyx' : y ≤ x := hyx.le
+  have hsub : Set.Ioc y x ⊆ Set.Icc (0 : ℝ) 1 := by
+    intro t ht
+    exact ⟨hy.trans ht.1.le, ht.2.trans hx⟩
+  have hsqI : Integrable (fun t : ℝ ↦ |deriv f t| ^ 2)
+      (volume.restrict (Set.Ioc y x)) :=
+    (show Integrable (fun t : ℝ ↦ |deriv f t| ^ 2)
+      (volume.restrict (Set.Icc 0 1)) from hsq).mono_measure
+        (Measure.restrict_mono_set volume hsub)
+  have hg : IntervalIntegrable (deriv f) volume y x := by
+    apply (hf.mono ?_).intervalIntegrable_deriv
+    rw [Set.uIcc_of_le hyx', Set.uIcc_of_le (show (0 : ℝ) ≤ 1 by norm_num)]
+    exact Set.Icc_subset_Icc hy hx
+  have hcs := apm_a98J02_integral_sq_le_mul_integral_sq hyx' hg hsqI
+  have hmeasure : (volume.restrict (Set.Icc (0 : ℝ) 1) (Set.Ioc y x)).toReal = x - y := by
+    rw [Measure.restrict_apply measurableSet_Ioc, Set.inter_eq_left.mpr hsub,
+      Real.volume_Ioc]
+    simp [hyx']
+  have hlocalAbs : |∫ t in Set.Ioc y x, |deriv f t| ^ 2
+      ∂volume.restrict (Set.Icc (0 : ℝ) 1)| < ε := by
+    apply hsmall
+    rw [hmeasure]
+    simpa [abs_of_pos (sub_pos.mpr hyx)] using hxyδ
+  have hlocal : ∫ t in y..x, |deriv f t| ^ 2 < ε := by
+    rw [intervalIntegral.integral_of_le hyx']
+    have heq : (volume.restrict (Set.Icc (0 : ℝ) 1)).restrict (Set.Ioc y x) =
+        volume.restrict (Set.Ioc y x) := by
+      rw [Measure.restrict_restrict measurableSet_Ioc]
+      rw [Set.inter_eq_left.mpr hsub]
+    have hn : 0 ≤ ∫ t in Set.Ioc y x, |deriv f t| ^ 2
+        ∂volume.restrict (Set.Icc (0 : ℝ) 1) := integral_nonneg fun _ ↦ sq_nonneg _
+    rw [abs_of_nonneg hn] at hlocalAbs
+    simpa [heq] using hlocalAbs
+  rw [apm_a98J02_sub_eq_integral_deriv f hf hy hyx' hx]
+  rw [abs_of_pos (sub_pos.mpr hyx)]
+  apply (div_lt_iff₀ (sub_pos.mpr hyx)).2
+  nlinarith [mul_lt_mul_of_pos_left hlocal (sub_pos.mpr hyx)]
