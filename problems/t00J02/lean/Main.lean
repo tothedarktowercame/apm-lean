@@ -247,6 +247,21 @@ lemma apm_t00j02_component_is_range_of_homology_trivial_circle
   exact ⟨⟨fun z => d (apm_t00j02_circleToDisk z),
     hdcont.comp (continuous_subtype_val.subtype_mk _)⟩, hrange, hzero⟩
 
+/-- Pointwise cover form: every point of the disk-bounded set lies on a
+homologically trivial circle contained in that set. -/
+lemma apm_t00j02_exists_homology_trivial_circle_through_point
+    {S : Type} [TopologicalSpace S] {A : Set S}
+    (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
+    ∃ γ : C(Circle, S), x ∈ range γ ∧ range γ ⊆ A ∧
+      apm_t00j02_homologyMap 1 γ = 0 := by
+  rcases apm_t00j02_component_is_range_of_homology_trivial_circle hdisks hx with
+    ⟨γ, hrange, hzero⟩
+  refine ⟨γ, ?_, ?_, hzero⟩
+  · rw [hrange]
+    exact mem_connectedComponentIn hx
+  · rw [hrange]
+    exact connectedComponentIn_subset A x
+
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
   ∃ e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ,
