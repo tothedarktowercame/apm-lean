@@ -235,6 +235,18 @@ lemma apm_t00j02_exists_handle_class_of_wrapsHandle
   ext a
   exact h a
 
+/-- Consumer-level form of the disk consequence: each component is the range
+of a continuous circle whose `H₁` class vanishes in the surface. -/
+lemma apm_t00j02_component_is_range_of_homology_trivial_circle
+    {S : Type} [TopologicalSpace S] {A : Set S}
+    (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
+    ∃ γ : C(Circle, S), range γ = connectedComponentIn A x ∧
+      apm_t00j02_homologyMap 1 γ = 0 := by
+  rcases apm_t00j02_exists_boundary_eq_component_and_homologyMap_eq_zero
+    hdisks hx with ⟨d, hdcont, _hdemb, hrange, hzero⟩
+  exact ⟨⟨fun z => d (apm_t00j02_circleToDisk z),
+    hdcont.comp (continuous_subtype_val.subtype_mk _)⟩, hrange, hzero⟩
+
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
   ∃ e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ,
