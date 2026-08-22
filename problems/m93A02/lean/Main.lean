@@ -105,35 +105,78 @@ theorem apm_m93a02
       rw [hQzero]
       rw [add_zero, ← he_apply, e.apply_symm_apply]
     · have hMpos : 0 < M := lt_of_le_of_ne hM (Ne.symm hM0)
-      /-
-      Boundary (closer hop 2), now restricted to `0 < M`.  The degenerate
-      case `M = 0` is completely proved above by taking `h = e.symm k`.
-      In addition, `apm_m93a02_quadratic_sub_bound` compiles the exact
-      Lipschitz estimate
-      `‖Q x x - Q y y‖ ≤ M (‖x‖ + ‖y‖) ‖x-y‖` needed on the ball.
-
-      The remaining assembly is to choose `ε = δ^2/(8*M)` and
-      `r = 2*‖k‖/δ`, define `F x = e.symm (k - Q x x)`, prove `F` maps
-      `Metric.closedBall 0 r` to itself, and use the displayed estimate plus
-      `he_symm_bound` to obtain contraction constant at most `1/2`.
-      Mathlib source confirms `Metric.isClosed_closedBall.isComplete` and
-      `ContractingWith.exists_fixedPoint'`; siblings `t91A04` and `m96J06`
-      demonstrate the abstract API, but neither packages these parameterized
-      ball inequalities or the plain-`LinearEquiv` inverse bound.
-
-      Closer hop 3 closes all parameter arithmetic in
-      `apm_m93a02_contraction_constants`.  From
-      `‖k‖ < δ²/(8M)` it proves both
-      `δ⁻¹(‖k‖ + M(2‖k‖/δ)²) ≤ 2‖k‖/δ`, the invariant-ball estimate, and
-      `δ⁻¹ M (2(2‖k‖/δ)) < 1/2`, the contraction estimate.  Further source
-      inspection confirms that `ContractingWith.exists_fixedPoint'` accepts a
-      complete closed subset and a restricted `MapsTo` map.  The remaining
-      elaboration is therefore only packaging `F x = e.symm (k-Q x x)` as
-      that restricted self-map, translating norm inequalities to `dist`, and
-      extracting its fixed-point equation; the analytic and scalar estimates
-      are now compiled.
-      -/
-      sorry
+      refine ⟨δ ^ 2 / (8 * M), 2 * δ⁻¹, ?_, by positivity, ?_⟩
+      · positivity
+      intro k hk
+      let r : ℝ := 2 * ‖k‖ / δ
+      let F : H → H := fun x => e.symm (k - Q x x)
+      have hc := apm_m93a02_contraction_constants hδ hMpos (norm_nonneg k) hk
+      have hmaps : Set.MapsTo F (Metric.closedBall 0 r) (Metric.closedBall 0 r) := by
+        intro x hx
+        rw [Metric.mem_closedBall, dist_zero_right] at hx ⊢
+        calc
+          ‖F x‖ ≤ δ⁻¹ * ‖k - Q x x‖ := he_symm_bound _
+          _ ≤ δ⁻¹ * (‖k‖ + ‖Q x x‖) := by
+            gcongr
+            exact norm_sub_le _ _
+          _ ≤ δ⁻¹ * (‖k‖ + M * r ^ 2) := by
+            gcongr
+            calc
+              ‖Q x x‖ ≤ M * ‖x‖ * ‖x‖ := hQ _ _
+              _ ≤ M * r * r := by gcongr
+              _ = M * r ^ 2 := by ring
+          _ ≤ r := by simpa [r] using hc.1
+      have hcontract : ContractingWith (1 / 2 : NNReal)
+          (Set.MapsTo.restrict F (Metric.closedBall 0 r) (Metric.closedBall 0 r) hmaps) := by
+        constructor
+        · norm_num
+        · rw [lipschitzWith_iff_dist_le_mul]
+          intro x y
+          change dist (F x) (F y) ≤ (1 / 2 : ℝ) * dist (x : H) y
+          rw [dist_eq_norm]
+          have hxy := apm_m93a02_quadratic_sub_bound Q M hQ x y
+          have hx : ‖(x : H)‖ ≤ r := by
+            simpa only [dist_zero_right] using (Metric.mem_closedBall.mp x.property)
+          have hy : ‖(y : H)‖ ≤ r := by
+            simpa only [dist_zero_right] using (Metric.mem_closedBall.mp y.property)
+          have hcoef : δ⁻¹ * M * (‖(x : H)‖ + ‖(y : H)‖) ≤ 1 / 2 := by
+            apply le_of_lt
+            calc
+              δ⁻¹ * M * (‖(x : H)‖ + ‖(y : H)‖) ≤ δ⁻¹ * M * (r + r) := by gcongr
+              _ = δ⁻¹ * M * (2 * r) := by ring
+              _ < 1 / 2 := by simpa only [r] using hc.2
+          have hnorm : ‖(k - Q x x) - (k - Q y y)‖ = ‖Q x x - Q y y‖ := by
+            calc
+              ‖(k - Q x x) - (k - Q y y)‖ = ‖-(Q x x - Q y y)‖ := by
+                congr 1
+                abel
+              _ = ‖Q x x - Q y y‖ := norm_neg _
+          calc
+            ‖F x - F y‖ ≤ δ⁻¹ * ‖(k - Q x x) - (k - Q y y)‖ := by
+              simpa [F, ← map_sub] using he_symm_bound ((k - Q x x) - (k - Q y y))
+            _ = δ⁻¹ * ‖Q x x - Q y y‖ := by rw [hnorm]
+            _ ≤ δ⁻¹ * (M * (‖(x : H)‖ + ‖(y : H)‖) * ‖(x : H) - y‖) := by gcongr
+            _ ≤ (1 / 2 : ℝ) * ‖(x : H) - y‖ := by
+              simpa only [mul_assoc] using
+                mul_le_mul_of_nonneg_right hcoef (norm_nonneg ((x : H) - y))
+            _ = (1 / 2 : NNReal) * dist (x : H) y := by
+              simp [dist_eq_norm]
+      have hzero : (0 : H) ∈ Metric.closedBall 0 r := by
+        rw [Metric.mem_closedBall, dist_self]
+        dsimp [r]
+        positivity
+      obtain ⟨h, hhmem, hhfix, -⟩ :=
+        hcontract.exists_fixedPoint' Metric.isClosed_closedBall.isComplete hmaps hzero (by simp)
+      refine ⟨h, ?_, ?_⟩
+      · have hh : e.symm (k - Q h h) = h := hhfix
+        symm at hh
+        have := congrArg e hh
+        simp only [e.apply_symm_apply] at this
+        rw [he_apply] at this
+        exact (eq_sub_iff_add_eq).mp this
+      · have hh : ‖h‖ ≤ r := by
+          simpa [Metric.mem_closedBall, dist_zero_right] using hhmem
+        simpa [r, div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm] using hh
   · intro ε hε
     refine ⟨(0, ε / 2), ?_, ?_⟩
     · simp [Real.norm_eq_abs, abs_of_pos hε, hε]
