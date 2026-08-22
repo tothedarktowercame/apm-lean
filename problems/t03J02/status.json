@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 2
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,6 +31,13 @@
   },
   "classification": "partial",
   "closer_hop": 4,
-  "boundary": "The missing invariant interface is now stated precisely: apm_t03J02_bridge_1 is the Seifert--van Kampen computation and apm_t03J02_bridge_2 is the complete singular Mayer--Vietoris homology computation for the compiled quotient.",
-  "imported_at": "2026-07-13T17:26:57.053364Z"
+  "boundary": "PARTIAL. The main theorem apm_t03j02 no longer carries a sorry: it now derives from apm_t03J02_bridge_1 (Seifert-van Kampen) and apm_t03J02_bridge_2 (singular Mayer-Vietoris), which are the two remaining sorries. A GENERAL chain-level Mayer-Vietoris short exact sequence for arbitrary simplicial subcomplex pairs is now available and axiom-clean (ConstructionTargets.SingularExcision.subcomplexMayerVietorisShortComplex_shortExact). It does not discharge bridge_2: the frozen EqvGen quotient is a CLOSED gluing, so the two torus summands are closed and their interiors do not cover. Both bridges need an arbitrary Topology.IsEmbedding of Circle into the torus promoted to a collared/cofibration attachment -- Jordan-Schoenflies in dimension 2 -- which is absent from the pinned Mathlib. The statement is consistent; the seam is one level deeper than 'Mayer-Vietoris is missing'. See Reports/t03J02-defect.md.",
+  "imported_at": "2026-07-13T17:26:57.053364Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; 2 `declaration uses `sorry`` warnings at Main.lean:199 and :215",
+    "at": "2026-08-22",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_sorry_count_total": 3
+  }
 }
