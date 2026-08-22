@@ -99,6 +99,24 @@ lemma apm_t00j02_component_compact_and_pathConnected
   ⟨apm_t00j02_isCompact_connectedComponentIn_of_componentsBoundDisks hdisks hx,
     apm_t00j02_isPathConnected_connectedComponentIn_of_componentsBoundDisks hdisks hx⟩
 
+/-- The boundary parametrization of any displayed filling disk is
+nullhomotopic in the ambient space.  This is the homotopical content of the
+disk-bounding hypothesis needed before passing to singular homology. -/
+lemma apm_t00j02_nullhomotopic_boundary_of_continuous_disk
+    {S : Type} [TopologicalSpace S] (d : apm_t00j02_Disk → S)
+    (hd : Continuous d) :
+    ContinuousMap.Nullhomotopic
+      ⟨fun z : Circle => d (apm_t00j02_circleToDisk z),
+        hd.comp (continuous_subtype_val.subtype_mk _)⟩ := by
+  let d' : C(apm_t00j02_Disk, S) := ⟨d, hd⟩
+  let boundary : C(Circle, apm_t00j02_Disk) :=
+    ⟨apm_t00j02_circleToDisk, continuous_subtype_val.subtype_mk _⟩
+  letI : ContractibleSpace apm_t00j02_Disk :=
+    Metric.contractibleSpace_closedBall (x := (0 : ℂ)) (r := 1) zero_le_one
+  have hdnull : ContinuousMap.Nullhomotopic d' := by
+    simpa [d'] using (id_nullhomotopic apm_t00j02_Disk).comp_right d'
+  simpa [d', boundary] using hdnull.comp_left boundary
+
 def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     (f : C(S, S)) (degree : ℤ) : Prop :=
   ∃ e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ,
