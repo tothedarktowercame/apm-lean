@@ -37,7 +37,7 @@
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "ConstructionTargets.DiskBoundaryHomology now exposes a coefficient-generic pointwise cover of any disk-bounded set by homologically trivial circles; the keying bridge consumes it through HasNullWindingPreimage and the DetectsTopMap eliminator. The remaining dependent obligation is precisely the geometric producer of DetectsTopMap from smoothness, transversality, and surface Poincare duality.",
+  "closer_progress" : "ConstructionTargets.DiskBoundaryHomology now exposes an axiom-clean, coefficient-generic pointwise cover of any disk-bounded set by homologically trivial circles; the keying bridge consumes it through HasNullWindingPreimage and the DetectsTopMap eliminator. The remaining dependent obligation is precisely the geometric producer of DetectsTopMap from smoothness, transversality, and surface Poincare duality.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,
