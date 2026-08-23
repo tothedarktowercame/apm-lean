@@ -5,7 +5,7 @@
   "problem_id" : "t00J02",
   "obstructions" : [ {
     "areas" : [ "singular-homology", "transversality" ],
-    "missing" : "[library_progress] Disk-boundary homology vanishing, the functor-generic embedded-circle lift/cancellation theorem, and the pointwise preimage lifting theorem now live under ConstructionTargets and are consumed by the bridge. The remaining gap is the transverse-preimage/Poincare-duality theorem relating zero winding of every lifted inverse-image component to vanishing of the induced H2 map.",
+    "missing" : "[library_progress] Disk-boundary homology vanishing, the functor-generic embedded-circle lift/cancellation theorem, and the named HasNullWindingPreimage interface now live under ConstructionTargets and are consumed by the bridge. The remaining dependent gap is a transverse-preimage/Poincare-duality theorem taking that interface (plus smoothness and transversality) to vanishing of the induced H2 map.",
     "recorded_by" : "codex-6",
     "frame" : "phase-2b-legacy-migration",
     "at_commit" : "a00ea1f",
@@ -37,7 +37,7 @@
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "The reusable embedded-circle preimage theorem now retains each parametrizing circle's containment in the inverse image while producing a lift with zero functorial winding, and the bridge consumes this stronger interface. Together with disk-boundary homology, it proves that every lifted inverse-image component has zero winding and remains geometrically available to the next argument. The remaining dependent obligation is the transverse-preimage/Poincare-duality bridge from those componentwise vanishings to vanishing on H2.",
+  "closer_progress" : "ConstructionTargets.EmbeddedCirclePreimage now exposes HasNullWindingPreimage, a reusable named boundary between component construction and intersection/Poincare-duality arguments, plus a sorry-free constructor from a pointwise homologically trivial circle cover. The keying bridge consumes this interface. The remaining dependent obligation is the geometric theorem deriving vanishing on H2 from this null-winding preimage package together with smoothness and transversality.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,

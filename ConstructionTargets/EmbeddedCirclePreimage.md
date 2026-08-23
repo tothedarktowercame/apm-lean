@@ -13,5 +13,11 @@ later orientation or intersection argument. The projection
 `exists_component_lift_eq_zero` remains available to purely homological
 consumers.
 
+`HasNullWindingPreimage` names this full geometric-homological output as a
+predicate, and `hasNullWindingPreimage_of_components` constructs it from a
+pointwise cover by homologically trivial circles. This is the intended input
+boundary for later intersection or Poincare-duality theorems: such theorems no
+longer need to depend on how the component circles and their lifts were built.
+
 The module deliberately leaves the differential-topological
 transverse-preimage/Poincaré-duality step to its consumer.

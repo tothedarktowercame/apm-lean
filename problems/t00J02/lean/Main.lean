@@ -360,17 +360,12 @@ theorem apm_t00J02_bridge_1
     (ModuleCat.of ℤ ℤ)
   letI : Mono (F.map (TopCat.ofHom c)) :=
     apm_t00j02_mono_homologyMap_of_wrapsHandle hS c hhandle
-  have hcomponent : ∀ x ∈ f ⁻¹' range c,
-      ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
-        x ∈ range γ ∧ c.comp ℓ = f.comp γ ∧
-          F.map (TopCat.ofHom ℓ) = 0 := by
-    intro x hx
-    rcases ConstructionTargets.EmbeddedCirclePreimage.exists_component_lift_eq_zero_and_range
-        F f c hc
-        (fun y hy =>
-          apm_t00j02_exists_homology_trivial_circle_through_point hdisks hy)
-        x hx with ⟨γ, ℓ, hxγ, _hγsub, hlift, hzero⟩
-    exact ⟨γ, ℓ, hxγ, hlift, hzero⟩
+  have hcomponent :
+      ConstructionTargets.EmbeddedCirclePreimage.HasNullWindingPreimage F f c :=
+    ConstructionTargets.EmbeddedCirclePreimage.hasNullWindingPreimage_of_components
+      F f c hc
+      (fun y hy =>
+        apm_t00j02_exists_homology_trivial_circle_through_point hdisks hy)
   have _ := hcomponent
   sorry
 
