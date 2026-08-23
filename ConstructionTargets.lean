@@ -3,6 +3,7 @@ import ConstructionTargets.CircleParam
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.DiskBoundaryHomology
 import ConstructionTargets.EmbeddedCircleLift
+import ConstructionTargets.EmbeddedCirclePreimage
 import ConstructionTargets.HerglotzRigidity
 import ConstructionTargets.KernelAverage
 import ConstructionTargets.L2Translation

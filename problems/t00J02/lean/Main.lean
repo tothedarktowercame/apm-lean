@@ -7,6 +7,7 @@ import ConstructionTargets.CircleHomology
 import ConstructionTargets.IntegerCyclic
 import ConstructionTargets.DiskBoundaryHomology
 import ConstructionTargets.EmbeddedCircleLift
+import ConstructionTargets.EmbeddedCirclePreimage
 
 /-!
 # APM t00J02
@@ -363,12 +364,10 @@ theorem apm_t00J02_bridge_1
       ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
         x ∈ range γ ∧ c.comp ℓ = f.comp γ ∧
           F.map (TopCat.ofHom ℓ) = 0 := by
-    intro x hx
-    rcases apm_t00j02_exists_homology_trivial_circle_through_point hdisks hx with
-      ⟨γ, hxγ, hγsub, hγzero⟩
-    rcases ConstructionTargets.EmbeddedCircleLift.map_component_lift_eq_zero
-      F f c hc γ hγsub hγzero with ⟨ℓ, hlift, hℓzero⟩
-    exact ⟨γ, ℓ, hxγ, hlift, hℓzero⟩
+    apply ConstructionTargets.EmbeddedCirclePreimage.exists_component_lift_eq_zero
+      F f c hc
+    exact fun x hx =>
+      apm_t00j02_exists_homology_trivial_circle_through_point hdisks hx
   have _ := hcomponent
   sorry
 

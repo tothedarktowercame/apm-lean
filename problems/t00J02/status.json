@@ -5,7 +5,7 @@
   "problem_id" : "t00J02",
   "obstructions" : [ {
     "areas" : [ "singular-homology", "transversality" ],
-    "missing" : "[library_progress] Disk-boundary homology vanishing and the functor-generic embedded-circle lift/cancellation theorem now live under ConstructionTargets and are consumed by the bridge. The remaining gap is the transverse-preimage/Poincare-duality theorem relating zero winding of every lifted inverse-image component to vanishing of the induced H2 map.",
+    "missing" : "[library_progress] Disk-boundary homology vanishing, the functor-generic embedded-circle lift/cancellation theorem, and the pointwise preimage lifting theorem now live under ConstructionTargets and are consumed by the bridge. The remaining gap is the transverse-preimage/Poincare-duality theorem relating zero winding of every lifted inverse-image component to vanishing of the induced H2 map.",
     "recorded_by" : "codex-6",
     "frame" : "phase-2b-legacy-migration",
     "at_commit" : "a00ea1f",
@@ -37,7 +37,7 @@
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "Extracted and consumed a functor-generic embedded-circle lift and mono-cancellation module. Together with disk-boundary homology, it proves that every lifted inverse-image component has zero functorial winding. The remaining dependent obligation is the transverse-preimage/Poincare-duality bridge from those componentwise vanishings to vanishing on H2.",
+  "closer_progress" : "Generalized the embedded-circle component lift from self-maps to arbitrary source spaces, then extracted and consumed a pointwise preimage lifting theorem. Together with disk-boundary homology, it proves that every lifted inverse-image component has zero functorial winding. The remaining dependent obligation is the transverse-preimage/Poincare-duality bridge from those componentwise vanishings to vanishing on H2.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,
