@@ -59,9 +59,9 @@ theorem map_lift_eq_zero {D : Type*} [Category D] [Limits.HasZeroMorphisms D]
 component parametrization `γ` whose range lies in `f ⁻¹' range c`. -/
 theorem map_component_lift_eq_zero {D : Type*} [Category D]
     [Limits.HasZeroMorphisms D] (F : TopCat ⥤ D)
-    {S : Type} [TopologicalSpace S] (f : C(S, S))
+    {X S : Type} [TopologicalSpace X] [TopologicalSpace S] (f : C(X, S))
     (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
-    [Mono (F.map (TopCat.ofHom c))] (γ : C(Circle, S))
+    [Mono (F.map (TopCat.ofHom c))] (γ : C(Circle, X))
     (hγ : range γ ⊆ f ⁻¹' range c)
     (hzero : F.map (TopCat.ofHom γ) = 0) :
     ∃ ℓ : C(Circle, Circle), c.comp ℓ = f.comp γ ∧
@@ -76,3 +76,5 @@ theorem map_component_lift_eq_zero {D : Type*} [Category D]
   simp
 
 end ConstructionTargets.EmbeddedCircleLift
+
+#print axioms ConstructionTargets.EmbeddedCircleLift.map_component_lift_eq_zero
