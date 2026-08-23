@@ -6,3 +6,12 @@ nullhomotopic, and consequently induces zero on positive-degree singular
 homology. It was extracted for `t00J02`, whose disk-bounded inverse-image
 components need precisely this input before the missing intersection-duality
 bridge can be applied.
+
+The module also provides the consumer-depth interface
+`ComponentsBoundByDisks` and two coefficient-generic consequences. The first
+produces a boundary circle whose range is the selected connected component;
+the second produces, through every point of the set, a circle contained in the
+set whose positive-degree singular-homology map is zero. This pointwise form
+feeds directly into `EmbeddedCirclePreimage.hasNullWindingPreimage_of_components`
+and avoids rebuilding the disk-boundary and connected-component argument in
+each geometric consumer.

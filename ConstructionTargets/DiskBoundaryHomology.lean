@@ -60,4 +60,49 @@ theorem singularHomology_map_boundary_eq_zero
   exact ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_zero_of_nullhomotopic
     C A n hn f (nullhomotopic_boundary d hd)
 
+/-- A set has disk-bounded components when every point lies in a connected
+component displayed as the boundary range of an embedded continuous disk. -/
+def ComponentsBoundByDisks {X : Type} [TopologicalSpace X] (s : Set X) : Prop :=
+  ∀ x ∈ s, ∃ d : Disk → X,
+    Continuous d ∧ Topology.IsEmbedding d ∧
+      range (fun z : Circle => d (circleToDisk z)) = connectedComponentIn s x
+
+/-- A disk-bounded component is the range of a continuous circle whose map on
+positive-degree singular homology vanishes, for arbitrary coefficients. -/
+theorem exists_boundary_eq_component_and_singularHomology_map_eq_zero
+    (C : Type*) [Category C] [Preadditive C] [Limits.HasCoproducts C]
+    [CategoryWithHomology C]
+    (A : C) {X : Type} [TopologicalSpace X] {s : Set X}
+    (hdisks : ComponentsBoundByDisks s) {x : X} (hx : x ∈ s)
+    (n : ℕ) (hn : n ≠ 0) :
+    ∃ γ : C(Circle, X), range γ = connectedComponentIn s x ∧
+      ((AlgebraicTopology.singularHomologyFunctor C n).obj A).map
+        (TopCat.ofHom γ) = 0 := by
+  rcases hdisks x hx with ⟨d, hd, _hemb, hrange⟩
+  let γ : C(Circle, X) :=
+    ⟨fun z => d (circleToDisk z), hd.comp continuous_circleToDisk⟩
+  refine ⟨γ, hrange, ?_⟩
+  exact singularHomology_map_boundary_eq_zero C A d hd n hn
+
+/-- Every point of a disk-bounded set lies on a circle contained in the set
+and killed by positive-degree singular homology. -/
+theorem exists_homology_trivial_circle_through_point
+    (C : Type*) [Category C] [Preadditive C] [Limits.HasCoproducts C]
+    [CategoryWithHomology C]
+    (A : C) {X : Type} [TopologicalSpace X] {s : Set X}
+    (hdisks : ComponentsBoundByDisks s) {x : X} (hx : x ∈ s)
+    (n : ℕ) (hn : n ≠ 0) :
+    ∃ γ : C(Circle, X), x ∈ range γ ∧ range γ ⊆ s ∧
+      ((AlgebraicTopology.singularHomologyFunctor C n).obj A).map
+        (TopCat.ofHom γ) = 0 := by
+  rcases exists_boundary_eq_component_and_singularHomology_map_eq_zero
+    C A hdisks hx n hn with ⟨γ, hrange, hzero⟩
+  refine ⟨γ, ?_, ?_, hzero⟩
+  · rw [hrange]
+    exact mem_connectedComponentIn hx
+  · rw [hrange]
+    exact connectedComponentIn_subset s x
+
 end ConstructionTargets.DiskBoundaryHomology
+
+#print axioms ConstructionTargets.DiskBoundaryHomology.exists_homology_trivial_circle_through_point

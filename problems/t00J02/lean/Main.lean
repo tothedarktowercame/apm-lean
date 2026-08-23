@@ -62,12 +62,9 @@ def apm_t00j02_circleToDisk (z : Circle) : apm_t00j02_Disk :=
     rw [mem_closedBall_zero_iff]
     exact (Circle.norm_coe z).le⟩
 
-def apm_t00j02_componentsBoundDisks {S : Type} [TopologicalSpace S]
+abbrev apm_t00j02_componentsBoundDisks {S : Type} [TopologicalSpace S]
     (A : Set S) : Prop :=
-  ∀ x ∈ A, ∃ d : apm_t00j02_Disk → S,
-    Continuous d ∧ Topology.IsEmbedding d ∧
-      range (fun z : Circle => d (apm_t00j02_circleToDisk z)) =
-        connectedComponentIn A x
+  ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks A
 
 /-- A component covered by the disk-bounding hypothesis is compact: it is the
 continuous image of the compact boundary circle. -/
@@ -207,14 +204,9 @@ lemma apm_t00j02_exists_homology_trivial_circle_through_point
     {S : Type} [TopologicalSpace S] {A : Set S}
     (hdisks : apm_t00j02_componentsBoundDisks A) {x : S} (hx : x ∈ A) :
     ∃ γ : C(Circle, S), x ∈ range γ ∧ range γ ⊆ A ∧
-      apm_t00j02_homologyMap 1 γ = 0 := by
-  rcases apm_t00j02_component_is_range_of_homology_trivial_circle hdisks hx with
-    ⟨γ, hrange, hzero⟩
-  refine ⟨γ, ?_, ?_, hzero⟩
-  · rw [hrange]
-    exact mem_connectedComponentIn hx
-  · rw [hrange]
-    exact connectedComponentIn_subset A x
+      apm_t00j02_homologyMap 1 γ = 0 :=
+  ConstructionTargets.DiskBoundaryHomology.exists_homology_trivial_circle_through_point
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hdisks hx 1 one_ne_zero
 
 /-- A map whose composite lands in an embedded circle has a continuous lift
 to that circle. -/
