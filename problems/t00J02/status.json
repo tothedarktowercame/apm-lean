@@ -5,7 +5,7 @@
   "problem_id" : "t00J02",
   "obstructions" : [ {
     "areas" : [ "singular-homology", "transversality" ],
-    "missing" : "[closer_progress] Hop 3 proves every disk-bounding inverse-image component is both compact and path connected, deriving path connectedness of Circle from its exponential parametrization. The remaining gap is the homological null-boundary theorem and the transverse-preimage/Poincare-duality bridge to the induced H2 map.",
+    "missing" : "[library_progress] The coefficient-independent disk-boundary nullhomotopy and positive-degree singular-homology vanishing theorem now live in ConstructionTargets/DiskBoundaryHomology.lean and the consumer uses them. The remaining gap is the transverse-preimage/Poincare-duality theorem relating null-homologous inverse-image components to vanishing of the induced H2 map.",
     "recorded_by" : "codex-6",
     "frame" : "phase-2b-legacy-migration",
     "at_commit" : "a00ea1f",
@@ -37,7 +37,7 @@
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "Hop 3 proves every disk-bounding inverse-image component is both compact and path connected, deriving path connectedness of Circle from its exponential parametrization. The remaining gap is the homological null-boundary theorem and the transverse-preimage/Poincare-duality bridge to the induced H2 map.",
+  "closer_progress" : "Extracted and consumed a general disk-boundary nullhomotopy and positive-degree singular-homology vanishing module. The remaining dependent obligation is the transverse-preimage/Poincare-duality bridge from the null-homologous component circles to vanishing of the induced H2 map.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,
