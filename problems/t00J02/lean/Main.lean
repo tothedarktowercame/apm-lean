@@ -355,8 +355,6 @@ theorem apm_t00J02_bridge_1
     apm_t00j02_homologyMap 2 f = 0 := by
   let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
     (ModuleCat.of ℤ ℤ)
-  letI : Mono (F.map (TopCat.ofHom c)) :=
-    apm_t00j02_mono_homologyMap_of_wrapsHandle hS c hhandle
   let Htop := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
     (ModuleCat.of ℤ ℤ)
   have hproducer :
@@ -372,10 +370,11 @@ theorem apm_t00J02_bridge_1
     fun x => (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
   let K : Circle → EuclideanSpace ℝ (Fin 1) →ₗ[ℝ] apm_t00j02_E2 :=
     fun z => (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap
-  exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks
-    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop
+  exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks_of_isos
+    (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop
     (fun (x : S) (z : Circle) => f x = c z)
-    L K f c hc (by simpa [L, K] using hproducer)
+    L K f c hc ConstructionTargets.CircleHomology.circleH1IsoInt
+    hS.2.1.some hhandle (by simpa [L, K] using hproducer)
     (by simpa [L, K, apm_t00j02_transverse] using htrans) hdisks
 
 theorem apm_t00j02

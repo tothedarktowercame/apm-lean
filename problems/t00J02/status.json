@@ -30,16 +30,16 @@
   },
   "bundle_root" : "problems/t00J02",
   "sorry_audit" : {
-    "method" : "lake env lean problems/t00J02/lean/Main.lean after integrating the direct range-sum/disk-bounded duality composition; counted declaration-uses-sorry warnings",
+    "method" : "lake build ConstructionTargets.DiskBoundedPreimageDuality followed by lake env lean problems/t00J02/lean/Main.lean after integrating the integral-isomorphism specialization; counted declaration-uses-sorry warnings",
     "at" : "2026-08-23",
     "elaborated_exit" : 0,
     "sorry_declarations" : 1,
-    "library_axiom_method" : "lake env lean ConstructionTargets/TransversePreimageGeometry.lean; read the five #print axioms results",
+    "library_axiom_method" : "lake env lean ConstructionTargets/DiskBoundedPreimageDuality.lean; read the six #print axioms results, including map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks_of_isos",
     "library_axioms" : [ "propext", "Classical.choice", "Quot.sound" ],
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "ConstructionTargets.DiskBoundedPreimageDuality now exposes an axiom-clean theorem composing range-sum transversality, the operational duality producer, and disk-bounded preimage elimination. The keying bridge consumes it directly; the remaining dependent obligation is the oriented Poincare-duality producer from operational tangent-sum surjectivity.",
+  "closer_progress" : "ConstructionTargets.DiskBoundedPreimageDuality now exposes an axiom-clean integral specialization that derives the embedded-circle monomorphism from H₁(S¹) ≅ ℤ, torsion-free ambient H₁ coordinates, and nonvanishing, then composes range-sum transversality with disk-bounded elimination. The keying bridge consumes it directly; the remaining dependent obligation is the oriented Poincare-duality producer from operational tangent-sum surjectivity.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,

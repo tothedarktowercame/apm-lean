@@ -32,6 +32,12 @@ manifold consumers: `range L ⊔ range K = ⊤` gives surjectivity of
 `LinearMap.coprod L K`.  The keyed bridge consumes this adapter while retaining
 its geometric transversality hypothesis.
 
+The integral `..._of_isos` specialization additionally turns a nonzero map
+from circle homology into the monomorphism needed for cancellation, using
+chosen identifications `H₁(S¹) ≅ ℤ` and `H₁(S) ≅ M` for torsion-free `M`.
+Thus surface consumers provide their homology computations and essentiality
+directly, without installing a local categorical instance.
+
 ## Axiom audit
 
 All exported theorems are sorry-free.  Direct standalone elaboration reports
