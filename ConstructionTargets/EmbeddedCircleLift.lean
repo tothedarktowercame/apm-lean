@@ -76,3 +76,5 @@ theorem map_component_lift_eq_zero {D : Type*} [Category D]
   simp
 
 end ConstructionTargets.EmbeddedCircleLift
+
+#print axioms ConstructionTargets.EmbeddedCircleLift.map_component_lift_eq_zero

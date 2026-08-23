@@ -41,3 +41,5 @@ theorem exists_component_lift_eq_zero
   exact ⟨γ, ℓ, hxγ, hlift, hℓzero⟩
 
 end ConstructionTargets.EmbeddedCirclePreimage
+
+#print axioms ConstructionTargets.EmbeddedCirclePreimage.exists_component_lift_eq_zero
