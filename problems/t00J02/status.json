@@ -30,7 +30,7 @@
   },
   "bundle_root" : "problems/t00J02",
   "sorry_audit" : {
-    "method" : "lake env lean problems/t00J02/lean/Main.lean after integrating the DiskBoundedPreimageDuality range-sum adapter; counted declaration-uses-sorry warnings",
+    "method" : "lake env lean problems/t00J02/lean/Main.lean after integrating the direct range-sum/disk-bounded duality composition; counted declaration-uses-sorry warnings",
     "at" : "2026-08-23",
     "elaborated_exit" : 0,
     "sorry_declarations" : 1,
@@ -39,7 +39,7 @@
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "ConstructionTargets.DiskBoundedPreimageDuality now exposes an axiom-clean range-sum-to-coproduct-surjectivity adapter at the consumer boundary. The keying bridge consumes it; the remaining dependent obligation is the oriented Poincare-duality producer from operational tangent-sum surjectivity.",
+  "closer_progress" : "ConstructionTargets.DiskBoundedPreimageDuality now exposes an axiom-clean theorem composing range-sum transversality, the operational duality producer, and disk-bounded preimage elimination. The keying bridge consumes it directly; the remaining dependent obligation is the oriented Poincare-duality producer from operational tangent-sum surjectivity.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,

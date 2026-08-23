@@ -90,6 +90,40 @@ theorem map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
       f c hproducer hcondition
   · exact hdisks
 
+/-- Range-sum transversality, a producer translating its operational coproduct
+surjectivity form to duality, and disk-bounded preimage components force the
+selected top map to vanish. -/
+theorem map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks
+    (C : Type*) [Category C] [Preadditive C] [Limits.HasCoproducts C]
+    [CategoryWithHomology C]
+    (A : C) (n : ℕ) (hn : n ≠ 0)
+    {E : Type*} [Category E] [Limits.HasZeroMorphisms E]
+    (Htop : Functor TopCat E)
+    {X Z R M N P : Type*} [Semiring R]
+    [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid P]
+    [Module R M] [Module R N] [Module R P]
+    (incident : X → Z → Prop)
+    (L : X → M →ₗ[R] P) (K : Z → N →ₗ[R] P)
+    {Y S : Type} [TopologicalSpace Y] [TopologicalSpace S]
+    (f : C(Y, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    [Mono (((AlgebraicTopology.singularHomologyFunctor C n).obj A).map
+      (TopCat.ofHom c))]
+    (hproducer : TransversePreimageGeometry.HoldsAlong incident
+        (fun x z => Function.Surjective (LinearMap.coprod (L x) (K z))) →
+      TransversePreimageDuality.DetectsTopMap
+        ((AlgebraicTopology.singularHomologyFunctor C n).obj A) Htop f c)
+    (htrans : ∀ x z, incident x z →
+      LinearMap.range (L x) ⊔ LinearMap.range (K z) = ⊤)
+    (hdisks : DiskBoundaryHomology.ComponentsBoundByDisks (f ⁻¹' range c)) :
+    Htop.map (TopCat.ofHom f) = 0 := by
+  apply map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
+    C A n hn Htop incident
+    (fun x z => Function.Surjective (LinearMap.coprod (L x) (K z)))
+    f c hc hproducer
+  · exact TransversePreimageGeometry.holdsAlong_surjective_coprod_of_range_sup_eq_top
+      incident L K htrans
+  · exact hdisks
+
 /-- Convert one range-sum transversality witness into the operational
 surjectivity condition consumed by the disk-bounded duality theorem. -/
 theorem surjective_coprod_of_range_sup_eq_top
@@ -106,4 +140,5 @@ end ConstructionTargets.DiskBoundedPreimageDuality
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.hasNullWindingPreimage_of_componentsBoundByDisks
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_componentsBoundByDisks
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
+#print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.surjective_coprod_of_range_sup_eq_top
