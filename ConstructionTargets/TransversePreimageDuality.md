@@ -11,3 +11,10 @@ consumers then use the axiom-free eliminator `map_eq_zero`.
 
 The interface is functor-generic and does not bake the genus-two surface or
 integral singular homology into the categorical boundary.
+
+## Verification
+
+The module ends with `#print axioms` for `map_eq_zero`.  Its elaborated output
+is `[propext, Classical.choice, Quot.sound]`; in particular, the library
+increment itself has no `sorryAx`.  The keying problem remains open only in the
+separate geometric proof that produces `DetectsTopMap`.
