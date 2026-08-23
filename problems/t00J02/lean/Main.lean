@@ -11,6 +11,7 @@ import ConstructionTargets.EmbeddedCircleLift
 import ConstructionTargets.EmbeddedCirclePreimage
 import ConstructionTargets.TransversePreimageDuality
 import ConstructionTargets.TransverseLinearPair
+import ConstructionTargets.TransversePreimageGeometry
 
 /-!
 # APM t00J02
@@ -367,15 +368,21 @@ theorem apm_t00J02_bridge_1
   have hduality :
       ConstructionTargets.TransversePreimageDuality.DetectsTopMap
         F Htop f c := by
-    have hgeometric :
-        (∀ x z, f x = c z →
-          Function.Surjective (LinearMap.coprod
+    have hproducer :
+        ConstructionTargets.TransversePreimageGeometry.HoldsAlong
+          (fun x z => f x = c z)
+          (fun x z => Function.Surjective (LinearMap.coprod
             (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
             (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap)) →
           ConstructionTargets.TransversePreimageDuality.DetectsTopMap
             F Htop f c := by
       sorry
-    exact hgeometric htangent
+    exact ConstructionTargets.TransversePreimageGeometry.detectsTopMap_of_pointwise_condition
+      (fun x z => f x = c z)
+      (fun x z => Function.Surjective (LinearMap.coprod
+        (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
+        (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap))
+      F Htop f c hproducer htangent
   exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_componentsBoundByDisks
     (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop f c hc hduality hdisks
 
