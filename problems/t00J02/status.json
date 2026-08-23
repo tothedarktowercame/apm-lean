@@ -20,14 +20,6 @@
     "problem_tex" : "apm/t00J02.tex"
   },
   "classification" : "partial-banked",
-  "sorry_audit" : {
-    "method" : "lake env lean elaboration; counted declaration-uses-sorry warnings",
-    "at" : "2026-08-23",
-    "elaborated_exit" : 0,
-    "sorry_declarations" : 1,
-    "previous_classification" : "partial-banked",
-    "previous_sorry_count_total" : 1
-  },
   "lean" : {
     "main" : "lean/Main.lean",
     "scratch" : null,
@@ -37,6 +29,14 @@
     "sorry_count_total" : 1
   },
   "bundle_root" : "problems/t00J02",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; counted declaration-uses-sorry warnings",
+    "at" : "2026-08-23",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 1,
+    "previous_classification" : "partial-banked",
+    "previous_sorry_count_total" : 1
+  },
   "closer_progress" : "Hop 3 proves every disk-bounding inverse-image component is both compact and path connected, deriving path connectedness of Circle from its exponential parametrization. The remaining gap is the homological null-boundary theorem and the transverse-preimage/Poincare-duality bridge to the induced H2 map.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
