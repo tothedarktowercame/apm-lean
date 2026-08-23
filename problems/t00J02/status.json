@@ -30,14 +30,14 @@
   },
   "bundle_root" : "problems/t00J02",
   "sorry_audit" : {
-    "method" : "lake env lean elaboration; counted declaration-uses-sorry warnings",
+    "method" : "lake env lean problems/t00J02/lean/Main.lean; counted declaration-uses-sorry warnings",
     "at" : "2026-08-23",
     "elaborated_exit" : 0,
     "sorry_declarations" : 1,
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "Generalized the embedded-circle component lift from self-maps to arbitrary source spaces, then extracted and consumed a pointwise preimage lifting theorem. Together with disk-boundary homology, it proves that every lifted inverse-image component has zero functorial winding. The remaining dependent obligation is the transverse-preimage/Poincare-duality bridge from those componentwise vanishings to vanishing on H2.",
+  "closer_progress" : "The reusable embedded-circle preimage theorem now retains each parametrizing circle's containment in the inverse image while producing a lift with zero functorial winding, and the bridge consumes this stronger interface. Together with disk-boundary homology, it proves that every lifted inverse-image component has zero winding and remains geometrically available to the next argument. The remaining dependent obligation is the transverse-preimage/Poincare-duality bridge from those componentwise vanishings to vanishing on H2.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,

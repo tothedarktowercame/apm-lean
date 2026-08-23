@@ -364,10 +364,13 @@ theorem apm_t00J02_bridge_1
       ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
         x ∈ range γ ∧ c.comp ℓ = f.comp γ ∧
           F.map (TopCat.ofHom ℓ) = 0 := by
-    apply ConstructionTargets.EmbeddedCirclePreimage.exists_component_lift_eq_zero
-      F f c hc
-    exact fun x hx =>
-      apm_t00j02_exists_homology_trivial_circle_through_point hdisks hx
+    intro x hx
+    rcases ConstructionTargets.EmbeddedCirclePreimage.exists_component_lift_eq_zero_and_range
+        F f c hc
+        (fun y hy =>
+          apm_t00j02_exists_homology_trivial_circle_through_point hdisks hy)
+        x hx with ⟨γ, ℓ, hxγ, _hγsub, hlift, hzero⟩
+    exact ⟨γ, ℓ, hxγ, hlift, hzero⟩
   have _ := hcomponent
   sorry
 
