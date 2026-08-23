@@ -34,6 +34,8 @@
     "at" : "2026-08-23",
     "elaborated_exit" : 0,
     "sorry_declarations" : 1,
+    "library_axiom_method" : "lake env lean ConstructionTargets/TransversePreimageGeometry.lean; read the five #print axioms results",
+    "library_axioms" : [ "propext", "Classical.choice", "Quot.sound" ],
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
