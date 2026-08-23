@@ -368,20 +368,15 @@ theorem apm_t00J02_bridge_1
         ConstructionTargets.TransversePreimageDuality.DetectsTopMap
           F Htop f c := by
     sorry
-  have htangent : ∀ x z, f x = c z →
-      Function.Surjective (LinearMap.coprod
-        (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
-        (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap) := by
-    intro x z hxz
-    exact ConstructionTargets.DiskBoundedPreimageDuality.surjective_coprod_of_range_sup_eq_top
-      (htrans x z hxz)
-  exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
+  let L : S → apm_t00j02_E2 →ₗ[ℝ] apm_t00j02_E2 :=
+    fun x => (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
+  let K : Circle → EuclideanSpace ℝ (Fin 1) →ₗ[ℝ] apm_t00j02_E2 :=
+    fun z => (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap
+  exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks
     (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop
     (fun (x : S) (z : Circle) => f x = c z)
-    (fun x z => Function.Surjective (LinearMap.coprod
-      (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
-      (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap))
-    f c hc hproducer htangent hdisks
+    L K f c hc (by simpa [L, K] using hproducer)
+    (by simpa [L, K, apm_t00j02_transverse] using htrans) hdisks
 
 theorem apm_t00j02
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]

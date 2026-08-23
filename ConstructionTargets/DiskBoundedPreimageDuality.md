@@ -22,6 +22,11 @@ problem obligation is precisely the construction of `DetectsTopMap` from the
 smoothness and transversality hypotheses; no disk-component or categorical
 cancellation bookkeeping remains in the problem file.
 
+`map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks` is the direct
+fixed-model-space interface used by `t00J02`. It composes range-sum
+transversality with the coproduct-surjectivity producer and disk-bounded
+elimination, avoiding a separate intermediate tangent lemma in consumers.
+
 The pointwise range-sum adapter exposes the exact final conversion used by
 manifold consumers: `range L ⊔ range K = ⊤` gives surjectivity of
 `LinearMap.coprod L K`.  The keyed bridge consumes this adapter while retaining
