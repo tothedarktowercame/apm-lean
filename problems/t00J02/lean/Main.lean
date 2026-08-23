@@ -6,6 +6,7 @@ import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.IntegerCyclic
 import ConstructionTargets.DiskBoundaryHomology
+import ConstructionTargets.DiskBoundedPreimageDuality
 import ConstructionTargets.EmbeddedCircleLift
 import ConstructionTargets.EmbeddedCirclePreimage
 import ConstructionTargets.TransversePreimageDuality
@@ -353,20 +354,14 @@ theorem apm_t00J02_bridge_1
     (ModuleCat.of ℤ ℤ)
   letI : Mono (F.map (TopCat.ofHom c)) :=
     apm_t00j02_mono_homologyMap_of_wrapsHandle hS c hhandle
-  have hcomponent :
-      ConstructionTargets.EmbeddedCirclePreimage.HasNullWindingPreimage F f c :=
-    ConstructionTargets.EmbeddedCirclePreimage.hasNullWindingPreimage_of_components
-      F f c hc
-      (fun y hy =>
-        apm_t00j02_exists_homology_trivial_circle_through_point hdisks hy)
   let Htop := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
     (ModuleCat.of ℤ ℤ)
   have hduality :
       ConstructionTargets.TransversePreimageDuality.DetectsTopMap
         F Htop f c := by
     sorry
-  exact ConstructionTargets.TransversePreimageDuality.map_eq_zero
-    F Htop f c hduality hcomponent
+  exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_componentsBoundByDisks
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop f c hc hduality hdisks
 
 theorem apm_t00j02
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
