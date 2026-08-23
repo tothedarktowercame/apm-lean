@@ -117,6 +117,32 @@ lemma apm_m94a02_eigenvalue_re_eq_zero_of_transpose_eq_neg
   simp [map_mul, Complex.conj_I, Complex.mul_im] at him
   linarith
 
+/-! ## Student attempt 1 (f25-student) — closing the first conjunct
+
+Method (from memory `e-0b15c2c9` and `e-53fe93b7`):
+1. Rayleigh identity: testing the eigenvector equation against the
+   eigenvector gives `Re lam · ‖v‖²` as the Hermitian quadratic form of
+   the scalar-extended symmetric part `Bc`.
+2. Expand that quadratic form in the unitary eigenbasis of `Bc` as a
+   convex combination of `eigenvalues₀`, then bound by the endpoints.
+3. Normalize the arbitrary antitone family `σ` against `eigenvalues₀` by
+   sortedness (`mergeSort`), never by pointwise algebra. -/
+
+private lemma apm_m94a02_star_dot_conj {m : Type*} [Fintype m]
+    (M : Matrix m m ℂ) (v : m → ℂ) :
+    star v ⬝ᵥ (Mᴴ *ᵥ v) = star (star v ⬝ᵥ (M *ᵥ v)) := by
+  simp only [Matrix.mulVec, dotProduct, Matrix.conjTranspose_apply, Pi.star_apply,
+    star_sum, StarMul.star_mul, star_star, Finset.mul_sum]
+  rw [Finset.sum_comm]
+  exact Finset.sum_congr rfl fun k _ =>
+    Finset.sum_congr rfl fun i _ => by ring
+
+private lemma apm_m94a02_unitary_quadratic {m : Type*} [Fintype m] [DecidableEq m]
+    {U : Matrix m m ℂ} (hU : Uᴴ * U = 1) (w z : m → ℂ) :
+    star (U *ᵥ w) ⬝ᵥ (U *ᵥ z) = star w ⬝ᵥ z := by
+  rw [Matrix.star_mulVec, Matrix.dotProduct_mulVec, Matrix.vecMul_vecMul, hU,
+    Matrix.vecMul_one]
+
 theorem apm_m94a02
     (n : ℕ) (A : Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ)
     (σ : Fin (n + 1) → ℝ)
@@ -126,74 +152,142 @@ theorem apm_m94a02
     (A.transpose = -A →
       ∀ lam : ℂ, apm_m94a02_IsEigenvalue A lam → lam.re = 0) := by
   constructor
-  ·
-  /-
-  Boundary: the intended proof tests the complex eigenvalue equation against
-  its eigenvector, rewrites `lam.re` as the Hermitian Rayleigh quotient of
-  `(A + Aᵀ) / 2`, and bounds that quotient by the extreme eigenvalues.
-
-  I found Mathlib's Hermitian spectrum and Rayleigh infrastructure in
-  `Mathlib.Analysis.Matrix.Spectrum` and
-  `Mathlib.Analysis.InnerProductSpace.Rayleigh`, including canonical ordered
-  eigenvalues and quadratic-form formulas. The statement, however, supplies
-  an arbitrary ordered family `σ` characterized only by
-  `Matrix.charpoly B = ∏ i, (X - C (σ i))`. I did not complete the
-  polynomial-root multiplicity argument identifying this family with
-  Mathlib's canonical Hermitian eigenvalue ordering, nor the conversion of
-  the explicit `Matrix.mulVec` complex eigenvector equation to the library's
-  continuous-linear-map Rayleigh quotient. The skew-symmetric conclusion can
-  then follow either from the same calculation or by showing the symmetric
-  part is zero, but depends on those bridges in this encoding.
-
-  Closer hop 1 proves
-  `apm_m94a02_symmetricPart_eq_zero_of_transpose_eq_neg`, closing the
-  matrix-algebra reduction for the skew-symmetric case. A deeper source pass
-  finds the exact canonical-spectrum comparison API in
-  `Analysis/Matrix/Spectrum.lean`:
-  `Matrix.IsHermitian.sort_roots_charpoly_eq_eigenvalues₀` reconstructs the
-  ordered eigenvalue list from the real parts of the characteristic roots,
-  while `roots_charpoly_eq_eigenvalues` and `charpoly_eq` preserve
-  multiplicity. These results provide a route to identify the arbitrary
-  antitone `σ`, but applying them still requires proving the symmetric part is
-  Hermitian and normalizing the supplied real-factor product into Mathlib's
-  complex-root multiset.
-
-  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling matrix
-  artifacts, and git history found no already-compiled normalization bridge.
-  The remaining second step is still the dot-product/Rayleigh identity for the
-  explicitly encoded `mulVec` eigenvector. The frozen statement was unchanged.
-
-  CLOSER HOP 2 (partial). The Hermitian prerequisite is now fully compiled.
-  `apm_m94a02_symmetricPart_transpose` proves the explicit average is fixed by
-  transpose; `apm_m94a02_symmetricPart_isHermitian` transports this through
-  the trivial real star operation; and
-  `apm_m94a02_symmetricPart_map_isHermitian` proves that its scalar extension
-  along `algebraMap ℝ ℂ` is Hermitian. The last lemma uses
-  `Matrix.IsHermitian.map` and is exactly the input required by the canonical
-  spectrum API identified in hop 1.
-
-  A further inspection of `Analysis/Matrix/Hermitian.lean`,
-  `Analysis/Matrix/Spectrum.lean`, `LinearAlgebra/Matrix/PosDef.lean`, and the
-  dot-product/mulVec lemmas confirms that the quadratic-form representation is
-  available once the explicit eigenvector equation is tested against
-  `star v`. No theorem directly normalizes the frozen real-factor product to
-  the complex root multiset or identifies an arbitrary antitone enumeration
-  with `IsHermitian.eigenvalues`. Those polynomial-multiplicity and Rayleigh
-  assembly steps remain open. The frozen statement is unchanged.
-
-  Closer hop 3 routes around the ordered-spectrum obstruction for the second
-  conjunct by compiling
-  `apm_m94a02_map_conjTranspose_eq_neg_of_transpose_eq_neg`: complex scalar
-  extension carries real skew-symmetry to skew-Hermitian symmetry. It also
-  proves `apm_m94a02_I_smul_map_isHermitian_of_transpose_eq_neg`, packaging
-  the corresponding self-adjoint matrix. A renewed
-  search of the skew-adjoint, eigenspace, and inner-product spectrum APIs found
-  the self-adjoint eigenvalue reality theorem, but no packaged corresponding
-  imaginary-axis theorem for skew-adjoint eigenvalues. The remaining local
-  step is to apply that theorem to `I • A` (or test the eigenvector equation
-  against `star v`); the first conjunct still needs the arbitrary-`σ`
-  multiplicity normalization. No unproved assertion was introduced.
-  -/
-    sorry
+  · intro lam hlam
+    obtain ⟨v, hv, heig⟩ := hlam
+    set M := A.map (algebraMap ℝ ℂ) with hMdef
+    set Bc := (apm_m94a02_symmetricPart A).map (algebraMap ℝ ℂ) with hBcdef
+    have hB : Bc.IsHermitian := apm_m94a02_symmetricPart_map_isHermitian A
+    have hBceq : Bc = (2 : ℂ)⁻¹ • (M + Mᴴ) := by
+      ext i j
+      simp only [hBcdef, hMdef, apm_m94a02_symmetricPart, Matrix.map_apply,
+        Matrix.smul_apply, smul_eq_mul, Matrix.add_apply, Matrix.conjTranspose_apply,
+        star_apply]
+      simp [Complex.conj_ofReal, Complex.ofReal_inv, Complex.ofReal_add,
+        Complex.ofReal_mul]
+    have hS : star v ⬝ᵥ (M *ᵥ v) = lam * (star v ⬝ᵥ v) := by
+      rw [heig, dotProduct_smul, smul_eq_mul]
+    have hq : (2 : ℂ) * (star v ⬝ᵥ (Bc *ᵥ v)) =
+        lam * (star v ⬝ᵥ v) + star (lam * (star v ⬝ᵥ v)) := by
+      rw [hBceq, Matrix.smul_mulVec, dotProduct_smul, Matrix.add_mulVec,
+        dotProduct_add, apm_m94a02_star_dot_conj, hS, smul_eq_mul]
+      field_simp
+    have hc : star v ⬝ᵥ v = ∑ i, ((Complex.normSq (v i) : ℝ) : ℂ) := by
+      simp [dotProduct, Complex.normSq_eq_conj_mul_self, Complex.ofReal_mul]
+    have hSv : 0 < ∑ i, Complex.normSq (v i) := by
+      obtain ⟨i, hi⟩ : ∃ i, v i ≠ 0 := by
+        by_contra hcon; push_neg at hcon; exact hv (funext hcon)
+      exact Finset.sum_pos' (fun j _ => Complex.normSq_nonneg _)
+        ⟨i, Finset.mem_univ i, Complex.normSq_pos.mpr hi⟩
+    have hcre : (star v ⬝ᵥ v).re = ∑ i, Complex.normSq (v i) := by
+      rw [hc]; simp
+    have hqre : (star v ⬝ᵥ (Bc *ᵥ v)).re = lam.re * (∑ i, Complex.normSq (v i)) := by
+      have hvi : (star v ⬝ᵥ v).im = 0 := by
+        rw [hc]; simp
+      have hmulre : (lam * (star v ⬝ᵥ v)).re = lam.re * (star v ⬝ᵥ v).re := by
+        rw [Complex.mul_re, hvi, mul_zero, sub_zero]
+      have hsr : ∀ z : ℂ, (star z).re = z.re := by
+        intro z; rw [← starRingEnd_apply]; exact Complex.conj_re z
+      have h1 := congrArg Complex.re hq
+      rw [Complex.mul_re, Complex.add_re, hsr, hmulre, hcre] at h1
+      norm_num at h1
+      linarith
+    set U := (hB.eigenvectorUnitary : Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ) with hUdef
+    have hUstar : Uᴴ * U = 1 := Unitary.coe_star_mul_self _
+    set w := Uᴴ *ᵥ v with hwdef
+    have hvw : U *ᵥ w = v := by
+      rw [hwdef, Matrix.mulVec_mulVec]
+      have h3 : U * Uᴴ = 1 := (Matrix.mul_eq_one_comm).mp hUstar
+      rw [h3, Matrix.one_mulVec]
+    set D := Matrix.diagonal (fun i => ((hB.eigenvalues i : ℝ) : ℂ)) with hDdef
+    have hspec : Bc = U * D * Uᴴ := by
+      simpa [hUdef, hDdef] using hB.spectral_theorem
+    have hBvec : Bc *ᵥ v = U *ᵥ (D *ᵥ w) := by
+      rw [hspec, hwdef, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
+    have hexp : star v ⬝ᵥ (Bc *ᵥ v) =
+        ∑ i, ((hB.eigenvalues i : ℝ) : ℂ) * ((Complex.normSq (w i) : ℝ) : ℂ) := by
+      rw [hBvec, ← hvw, apm_m94a02_unitary_quadratic hUstar w (D *ᵥ w), hDdef]
+      simp [Matrix.mulVec, dotProduct, Matrix.diagonal_apply, Finset.sum_ite_eq',
+        Matrix.mulVec_diagonal, Complex.normSq_eq_conj_mul_self, Complex.ofReal_mul]
+      exact Finset.sum_congr rfl fun x _ => by ring
+    have hwnorm : ∑ i, Complex.normSq (w i) = ∑ i, Complex.normSq (v i) := by
+      have hww : star w ⬝ᵥ w = star v ⬝ᵥ v := by
+        rw [← hvw, apm_m94a02_unitary_quadratic hUstar w w]
+      have h2 : star w ⬝ᵥ w = ∑ i, ((Complex.normSq (w i) : ℝ) : ℂ) := by
+        simp [dotProduct, Complex.normSq_eq_conj_mul_self, Complex.ofReal_mul]
+      rw [h2, hc] at hww
+      have h1 := congrArg Complex.re hww
+      simpa [Complex.re_sum] using h1
+    have hanti : Antitone σ := fun a b hab => hσ.1 a b hab
+    have hcp : Bc.charpoly.roots =
+        Multiset.map (RCLike.ofReal ∘ σ) Finset.univ.val := by
+      have hmap : Bc.charpoly =
+          ∏ i : Fin (n + 1), (Polynomial.X - Polynomial.C (((σ i : ℝ) : ℂ))) := by
+        rw [hBcdef, Matrix.charpoly_map, hσ.2, Polynomial.map_prod]
+        simp [Polynomial.map_X, Polynomial.map_C]
+      rw [hmap]
+      have hne : (∏ i : Fin (n + 1),
+          (Polynomial.X - Polynomial.C (((σ i : ℝ) : ℂ)))) ≠ 0 := by
+        simp [Finset.prod_ne_zero_iff, Polynomial.X_sub_C_ne_zero]
+      rw [Polynomial.roots_prod _ _ hne]
+      simp [Function.comp_def]
+    have hsort : (Bc.charpoly.roots.map RCLike.re).sort (· ≥ ·) = List.ofFn σ := by
+      simp_rw [hcp, ← Multiset.map_map, Fin.univ_val_map, Multiset.map_coe,
+        List.map_ofFn, Function.comp_def, RCLike.ofReal_re, Multiset.coe_sort]
+      apply List.mergeSort_of_pairwise
+      simp_rw [decide_eq_true_eq, ← List.sortedGE_iff_pairwise]
+      exact hanti.sortedGE_ofFn
+    have hnorm : List.ofFn hB.eigenvalues₀ = List.ofFn σ :=
+      (hB.sort_roots_charpoly_eq_eigenvalues₀).symm.trans hsort
+    have hcard : Fintype.card (Fin (n + 1)) = n + 1 := Fintype.card_fin _
+    have hmem : ∀ i : Fin (n + 1), ∃ j : Fin (n + 1),
+        hB.eigenvalues i = σ j := by
+      intro i
+      have hi : hB.eigenvalues i = hB.eigenvalues₀
+          ((Fintype.equivOfCardEq (Fintype.card_fin _)).symm i) := rfl
+      set c : Fin (Fintype.card (Fin (n + 1))) :=
+        (Fintype.equivOfCardEq (Fintype.card_fin _)).symm i with hcdef
+      have h9' : c.val < n + 1 := by omega
+      refine ⟨Fin.cast hcard c, ?_⟩
+      rw [hi]
+      have h2 : (List.ofFn hB.eigenvalues₀)[c.val] = (List.ofFn σ)[c.val] := by
+        simp only [hnorm]
+      have ha : hB.eigenvalues₀ c = (List.ofFn hB.eigenvalues₀)[c.val] := by
+        have hlen : (List.ofFn hB.eigenvalues₀).length =
+            Fintype.card (Fin (n + 1)) := List.length_ofFn
+        rw [List.getElem_ofFn (by rw [hlen]; exact c.isLt)]
+      have hb : σ (Fin.cast hcard c) = (List.ofFn σ)[c.val] := by
+        have hlen : (List.ofFn σ).length = n + 1 := List.length_ofFn
+        have hlt : c.val < n + 1 :=
+          Nat.lt_of_lt_of_le c.isLt (Nat.le_of_eq hcard)
+        rw [List.getElem_ofFn (by rw [hlen]; exact hlt)]
+        simp [Fin.cast, hcard]
+      rw [ha, hb]
+      exact h2
+    have hmax : ∀ i, hB.eigenvalues i ≤ σ 0 := fun i => by
+      obtain ⟨j, hj⟩ := hmem i
+      rw [hj]; exact hσ.1 0 j (Fin.zero_le j)
+    have hmin : ∀ i, σ (Fin.last n) ≤ hB.eigenvalues i := fun i => by
+      obtain ⟨j, hj⟩ := hmem i
+      rw [hj]; exact hσ.1 j (Fin.last n) (Fin.le_last j)
+    have hqexp : (star v ⬝ᵥ (Bc *ᵥ v)).re =
+        ∑ i, hB.eigenvalues i * Complex.normSq (w i) := by
+      rw [hexp]
+      simp only [Complex.re_sum]
+      exact Finset.sum_congr rfl fun i _ => by
+        rw [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_re, Complex.ofReal_im,
+          Complex.ofReal_im, mul_zero, sub_zero]
+    constructor
+    · have hsum : ∑ i, σ (Fin.last n) * Complex.normSq (w i) ≤
+          ∑ i, hB.eigenvalues i * Complex.normSq (w i) :=
+        Finset.sum_le_sum fun i _ =>
+          mul_le_mul_of_nonneg_right (hmin i) (Complex.normSq_nonneg _)
+      rw [← Finset.mul_sum, ← hqexp, hqre, hwnorm] at hsum
+      exact (mul_le_mul_iff_of_pos_right hSv).mp hsum
+    · have hsum : ∑ i, hB.eigenvalues i * Complex.normSq (w i) ≤
+          ∑ i, σ 0 * Complex.normSq (w i) :=
+        Finset.sum_le_sum fun i _ =>
+          mul_le_mul_of_nonneg_right (hmax i) (Complex.normSq_nonneg _)
+      rw [← Finset.mul_sum, ← hqexp, hqre, hwnorm] at hsum
+      exact (mul_le_mul_iff_of_pos_right hSv).mp hsum
   · intro hA lam hlam
     exact apm_m94a02_eigenvalue_re_eq_zero_of_transpose_eq_neg hA hlam
