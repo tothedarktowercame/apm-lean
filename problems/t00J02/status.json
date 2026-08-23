@@ -5,7 +5,7 @@
   "problem_id" : "t00J02",
   "obstructions" : [ {
     "areas" : [ "singular-homology", "transversality" ],
-    "missing" : "[library_progress] DiskBoundedPreimageDuality now composes the coefficient-generic disk-boundary calculation, embedded-circle lift/cancellation, HasNullWindingPreimage, and DetectsTopMap elimination into one theorem consumed by the bridge. The remaining dependent gap is the geometric producer of DetectsTopMap from smoothness, transversality, and surface Poincare duality.",
+    "missing" : "[library_progress] TransverseLinearPair now converts the range-sup formulation of manifold transversality into surjectivity of the coproduct tangent map, and the bridge consumes this conversion. The remaining dependent gap is proving that pointwise tangent-sum surjectivity yields DetectsTopMap via oriented surface Poincare duality.",
     "recorded_by" : "codex-6",
     "frame" : "phase-2b-legacy-migration",
     "at_commit" : "a00ea1f",
@@ -30,14 +30,14 @@
   },
   "bundle_root" : "problems/t00J02",
   "sorry_audit" : {
-    "method" : "lake env lean problems/t00J02/lean/Main.lean after the DiskBoundedPreimageDuality increment; counted declaration-uses-sorry warnings",
+    "method" : "lake env lean problems/t00J02/lean/Main.lean after the TransverseLinearPair increment; counted declaration-uses-sorry warnings",
     "at" : "2026-08-23",
     "elaborated_exit" : 0,
     "sorry_declarations" : 1,
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "ConstructionTargets.DiskBoundedPreimageDuality now exposes an axiom-clean end-to-end theorem from disk-bounded embedded-circle preimages and DetectsTopMap to vanishing of the selected top map; the keying bridge consumes it directly. The remaining dependent obligation is precisely the geometric producer of DetectsTopMap from smoothness, transversality, and surface Poincare duality.",
+  "closer_progress" : "ConstructionTargets.TransverseLinearPair now exposes the axiom-clean equivalence between range-sup transversality and surjectivity of the coproduct tangent map. The keying bridge consumes it pointwise, narrowing the remaining dependent obligation to the oriented Poincare-duality theorem from this operational tangent data to DetectsTopMap.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,

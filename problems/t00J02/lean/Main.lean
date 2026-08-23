@@ -10,6 +10,7 @@ import ConstructionTargets.DiskBoundedPreimageDuality
 import ConstructionTargets.EmbeddedCircleLift
 import ConstructionTargets.EmbeddedCirclePreimage
 import ConstructionTargets.TransversePreimageDuality
+import ConstructionTargets.TransverseLinearPair
 
 /-!
 # APM t00J02
@@ -356,10 +357,25 @@ theorem apm_t00J02_bridge_1
     apm_t00j02_mono_homologyMap_of_wrapsHandle hS c hhandle
   let Htop := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
     (ModuleCat.of ℤ ℤ)
+  have htangent : ∀ x z, f x = c z →
+      Function.Surjective (LinearMap.coprod
+        (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
+        (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap) := by
+    intro x z hxz
+    rw [← ConstructionTargets.TransverseLinearPair.isTransversePair_iff_surjective_coprod]
+    exact htrans x z hxz
   have hduality :
       ConstructionTargets.TransversePreimageDuality.DetectsTopMap
         F Htop f c := by
-    sorry
+    have hgeometric :
+        (∀ x z, f x = c z →
+          Function.Surjective (LinearMap.coprod
+            (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
+            (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap)) →
+          ConstructionTargets.TransversePreimageDuality.DetectsTopMap
+            F Htop f c := by
+      sorry
+    exact hgeometric htangent
   exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_componentsBoundByDisks
     (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop f c hc hduality hdisks
 
