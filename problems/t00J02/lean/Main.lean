@@ -5,6 +5,7 @@ import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.IntegerCyclic
+import ConstructionTargets.DiskBoundaryHomology
 
 /-!
 # APM t00J02
@@ -113,14 +114,7 @@ lemma apm_t00j02_nullhomotopic_boundary_of_continuous_disk
     ContinuousMap.Nullhomotopic
       ⟨fun z : Circle => d (apm_t00j02_circleToDisk z),
         hd.comp (continuous_subtype_val.subtype_mk _)⟩ := by
-  let d' : C(apm_t00j02_Disk, S) := ⟨d, hd⟩
-  let boundary : C(Circle, apm_t00j02_Disk) :=
-    ⟨apm_t00j02_circleToDisk, continuous_subtype_val.subtype_mk _⟩
-  letI : ContractibleSpace apm_t00j02_Disk :=
-    Metric.contractibleSpace_closedBall (x := (0 : ℂ)) (r := 1) zero_le_one
-  have hdnull : ContinuousMap.Nullhomotopic d' := by
-    simpa [d'] using (id_nullhomotopic apm_t00j02_Disk).comp_right d'
-  simpa [d', boundary] using hdnull.comp_left boundary
+  exact ConstructionTargets.DiskBoundaryHomology.nullhomotopic_boundary d hd
 
 /-- Every component selected by `componentsBoundDisks` comes with a boundary
 parametrization which is simultaneously its displayed range and nullhomotopic
@@ -147,9 +141,8 @@ lemma apm_t00j02_homologyMap_boundary_of_continuous_disk_eq_zero
     apm_t00j02_homologyMap n
       ⟨fun z : Circle => d (apm_t00j02_circleToDisk z),
         hd.comp (continuous_subtype_val.subtype_mk _)⟩ = 0 :=
-  ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_zero_of_nullhomotopic
-      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) n hn _
-    (apm_t00j02_nullhomotopic_boundary_of_continuous_disk d hd)
+  ConstructionTargets.DiskBoundaryHomology.singularHomology_map_boundary_eq_zero
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) d hd n hn
 
 /-- The disk-bounding hypothesis supplies, for every selected component, a
 parametrization of that component whose induced map on `H₁` is zero. -/
