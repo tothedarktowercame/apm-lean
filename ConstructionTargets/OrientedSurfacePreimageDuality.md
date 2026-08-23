@@ -10,3 +10,15 @@ singular homology in degrees one and two.
 the embedded circle, and disk fillings.  Those hypotheses are consumed by
 `DiskBoundedPreimageDuality`; mixing them into the geometric producer would
 make the interface unusable by other surface arguments.
+
+Its output uses the geometric contrapositive
+`NonzeroTopMapHasNonNullWinding`: a nonzero pushed-forward fundamental class
+must give an inverse-image component with nonzero winding.  This is the exact
+claim an intersection-pairing naturality theorem should establish.  A proved
+adapter converts it to the eliminator-shaped `DetectsTopMap` predicate.
+
+`topHomologyMap_eq_zero_of_producer_and_componentsBoundByDisks` is the
+end-to-end eliminator.  It composes the producer with operational
+transversality, the standard cyclic-domain monomorphism argument, and the
+disk-bounded null-winding theorem.  Thus consumers need not reconstruct the
+categorical chain locally.

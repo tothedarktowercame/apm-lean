@@ -354,34 +354,12 @@ theorem apm_t00J02_bridge_1
     (htrans : apm_t00j02_transverse f c)
     (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c)) :
     apm_t00j02_homologyMap 2 f = 0 := by
-  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
-    (ModuleCat.of ℤ ℤ)
-  let Htop := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
-    (ModuleCat.of ℤ ℤ)
   have hPD :
       ConstructionTargets.OrientedSurfacePreimageDuality.Producer S := by
     sorry
-  have hproducer :
-      ConstructionTargets.TransversePreimageGeometry.HoldsAlong
-        (fun x z => f x = c z)
-        (fun x z => Function.Surjective (LinearMap.coprod
-          (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
-          (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap)) →
-        ConstructionTargets.TransversePreimageDuality.DetectsTopMap
-          F Htop f c := by
-    intro hsurj
-    exact ConstructionTargets.OrientedSurfacePreimageDuality.detectsTopMap
-      hPD f c hf hc hcsmooth hsurj
-  let L : S → apm_t00j02_E2 →ₗ[ℝ] apm_t00j02_E2 :=
-    fun x => (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
-  let K : Circle → EuclideanSpace ℝ (Fin 1) →ₗ[ℝ] apm_t00j02_E2 :=
-    fun z => (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap
-  exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks_of_isos
-    (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop
-    (fun (x : S) (z : Circle) => f x = c z)
-    L K f c hc ConstructionTargets.CircleHomology.circleH1IsoInt
-    hS.2.1.some hhandle (by simpa [L, K] using hproducer)
-    (by simpa [L, K, apm_t00j02_transverse] using htrans) hdisks
+  exact ConstructionTargets.OrientedSurfacePreimageDuality.topHomologyMap_eq_zero_of_producer_and_componentsBoundByDisks
+    hPD f hf c hc hcsmooth ConstructionTargets.CircleHomology.circleH1IsoInt
+    hS.2.1.some hhandle (by simpa [apm_t00j02_transverse] using htrans) hdisks
 
 theorem apm_t00j02
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
