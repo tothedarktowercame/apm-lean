@@ -20,6 +20,14 @@
     "problem_tex" : "apm/t00J02.tex"
   },
   "classification" : "partial-banked",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; counted declaration-uses-sorry warnings",
+    "at" : "2026-08-23",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 1,
+    "previous_classification" : "partial-banked",
+    "previous_sorry_count_total" : 1
+  },
   "lean" : {
     "main" : "lean/Main.lean",
     "scratch" : null,
