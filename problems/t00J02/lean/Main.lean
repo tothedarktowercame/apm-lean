@@ -6,6 +6,7 @@ import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.IntegerCyclic
 import ConstructionTargets.DiskBoundaryHomology
+import ConstructionTargets.EmbeddedCircleLift
 
 /-!
 # APM t00J02
@@ -354,6 +355,21 @@ theorem apm_t00J02_bridge_1
     (htrans : apm_t00j02_transverse f c)
     (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c)) :
     apm_t00j02_homologyMap 2 f = 0 := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  letI : Mono (F.map (TopCat.ofHom c)) :=
+    apm_t00j02_mono_homologyMap_of_wrapsHandle hS c hhandle
+  have hcomponent : ∀ x ∈ f ⁻¹' range c,
+      ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
+        x ∈ range γ ∧ c.comp ℓ = f.comp γ ∧
+          F.map (TopCat.ofHom ℓ) = 0 := by
+    intro x hx
+    rcases apm_t00j02_exists_homology_trivial_circle_through_point hdisks hx with
+      ⟨γ, hxγ, hγsub, hγzero⟩
+    rcases ConstructionTargets.EmbeddedCircleLift.map_component_lift_eq_zero
+      F f c hc γ hγsub hγzero with ⟨ℓ, hlift, hℓzero⟩
+    exact ⟨γ, ℓ, hxγ, hlift, hℓzero⟩
+  have _ := hcomponent
   sorry
 
 theorem apm_t00j02
