@@ -2,8 +2,8 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
-import ConstructionTargets.SingularHomologyConcrete
-import ConstructionTargets.T02A06SphereOne
+import ConstructionTargets.SingularHomologyHomotopy
+import ConstructionTargets.CircleHomology
 
 /-!
 # APM t00J02
@@ -22,46 +22,11 @@ open scoped ContDiff Manifold
 
 noncomputable section
 
-/-- The complex unit circle and the Euclidean one-sphere used by the corpus's
-concrete sphere-homology computation are canonically homeomorphic. -/
-noncomputable def apm_t00j02_circleHomeomorphAmbientSphereOne :
-    Circle ≃ₜ
-      ConstructionTargets.T02A06HemisphereExcision.ambientSphere 1 where
-  toFun z := ⟨Complex.orthonormalBasisOneI.repr z, by
-    rw [Metric.mem_sphere, dist_zero_right,
-      Complex.orthonormalBasisOneI.repr.norm_map]
-    exact Circle.norm_coe z⟩
-  invFun x := ⟨Complex.orthonormalBasisOneI.repr.symm x, by
-    change Complex.orthonormalBasisOneI.repr.symm x ∈
-      Metric.sphere (0 : ℂ) 1
-    rw [mem_sphere_zero_iff_norm]
-    rw [Complex.orthonormalBasisOneI.repr.symm.norm_map]
-    rw [← mem_sphere_zero_iff_norm]
-    exact x.property⟩
-  left_inv z := by
-    apply Subtype.ext
-    exact Complex.orthonormalBasisOneI.repr.symm_apply_apply z
-  right_inv x := by
-    apply Subtype.ext
-    exact Complex.orthonormalBasisOneI.repr.apply_symm_apply x
-  continuous_toFun := by fun_prop
-  continuous_invFun := by fun_prop
-
 abbrev apm_t00j02_E2 := EuclideanSpace ℝ (Fin 2)
 abbrev apm_t00j02_I2 := 𝓘(ℝ, apm_t00j02_E2)
 abbrev apm_t00j02_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
-
-/-- Transport on `H₁` induced by the concrete circle/Euclidean-sphere
-homeomorphism. -/
-noncomputable def apm_t00j02_circleH1IsoAmbientSphereOne :
-    apm_t00j02_H 1 Circle ≅
-      apm_t00j02_H 1
-        (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 1) :=
-  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
-    (ModuleCat.of ℤ ℤ)).mapIso
-      (TopCat.isoOfHomeo apm_t00j02_circleHomeomorphAmbientSphereOne)
 
 /-- A nonzero homomorphism from a rank-one free integer module to a rank-four
 free integer module is a monomorphism. -/
@@ -231,64 +196,6 @@ lemma apm_t00j02_exists_nullhomotopic_boundary_eq_component
   exact ⟨d, hdcont, hdemb, hd,
     apm_t00j02_nullhomotopic_boundary_of_continuous_disk d hdcont⟩
 
-/-- The continuous homotopy-invariance bridge, specialized to the
-`ModuleCat ℤ`-valued singular homology used by this problem. -/
-lemma apm_t00j02_homologyMap_eq_of_homotopic
-    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
-    {f g : C(X, Y)} (H : ContinuousMap.Homotopic f g) (n : ℕ) :
-    apm_t00j02_homologyMap n f = apm_t00j02_homologyMap n g := by
-  rcases H with ⟨H⟩
-  let h :=
-    ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder H
-  have h₀ :=
-    ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero H
-  have h₁ :=
-    ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one H
-  simpa [apm_t00j02_homologyMap,
-    AlgebraicTopology.singularHomologyFunctor,
-    AlgebraicTopology.singularChainComplexFunctor] using
-    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
-      (C := ModuleCat ℤ) (R := ModuleCat.of ℤ ℤ)
-      (f := TopCat.toSSet.map (TopCat.ofHom f))
-      (g := TopCat.toSSet.map (TopCat.ofHom g))
-      (H := (ConstructionTargets.SingularHomologyConcrete.topCatHomotopyToSSet
-        h h₀ h₁).toSimplicialObjectHomotopy) n
-
-/-- A constant map induces the zero map on positive-degree singular
-homology. -/
-lemma apm_t00j02_homologyMap_const_eq_zero
-    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
-    (n : ℕ) (hn : n ≠ 0) (y : Y) :
-    apm_t00j02_homologyMap n (ContinuousMap.const X y) = 0 := by
-  let p : C(X, Unit) := ContinuousMap.const X ()
-  let q : C(Unit, Y) := ContinuousMap.const Unit y
-  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
-    (ModuleCat.of ℤ ℤ)
-  have hfactor : ContinuousMap.const X y = q.comp p := by
-    ext
-    rfl
-  have hzero : Limits.IsZero (F.obj (TopCat.of Unit)) :=
-    AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
-      (ModuleCat ℤ) n (ModuleCat.of ℤ ℤ) (TopCat.of Unit) hn
-  rw [hfactor]
-  change F.map (TopCat.ofHom (q.comp p)) = 0
-  rw [show TopCat.ofHom (q.comp p) = TopCat.ofHom p ≫ TopCat.ofHom q by rfl,
-    F.map_comp]
-  have hq : F.map (TopCat.ofHom q) = 0 := hzero.eq_of_src _ _
-  rw [hq]
-  simp
-
-/-- A nullhomotopic map induces zero on singular homology in every positive
-degree. -/
-lemma apm_t00j02_homologyMap_eq_zero_of_nullhomotopic
-    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
-    (n : ℕ) (hn : n ≠ 0) (f : C(X, Y))
-    (hf : ContinuousMap.Nullhomotopic f) :
-    apm_t00j02_homologyMap n f = 0 := by
-  rcases hf with ⟨y, H⟩
-  rw [apm_t00j02_homologyMap_eq_of_homotopic H n]
-  exact apm_t00j02_homologyMap_const_eq_zero n hn y
-
 /-- In particular, the boundary of a continuous filling disk induces zero on
 positive-degree singular homology. -/
 lemma apm_t00j02_homologyMap_boundary_of_continuous_disk_eq_zero
@@ -297,7 +204,8 @@ lemma apm_t00j02_homologyMap_boundary_of_continuous_disk_eq_zero
     apm_t00j02_homologyMap n
       ⟨fun z : Circle => d (apm_t00j02_circleToDisk z),
         hd.comp (continuous_subtype_val.subtype_mk _)⟩ = 0 :=
-  apm_t00j02_homologyMap_eq_zero_of_nullhomotopic n hn _
+  ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_zero_of_nullhomotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) n hn _
     (apm_t00j02_nullhomotopic_boundary_of_continuous_disk d hd)
 
 /-- The disk-bounding hypothesis supplies, for every selected component, a
@@ -333,13 +241,13 @@ lemma apm_t00j02_exists_handle_class_of_wrapsHandle
 the genus-two `H₁` coordinates force the induced handle map to be mono. -/
 lemma apm_t00j02_mono_homologyMap_of_wrapsHandle
     {S : Type} [TopologicalSpace S]
-    (eCircle : apm_t00j02_H 1 Circle ≅ ModuleCat.of ℤ ℤ)
     (hS : apm_t00j02_hasGenusTwo S) (c : C(Circle, S))
     (hc : apm_t00j02_wrapsHandle c) :
     Mono (apm_t00j02_homologyMap 1 c) := by
   rcases hS.2.1 with ⟨eS⟩
   exact apm_t00j02_mono_of_nonzero_of_iso_int_fin4
-    eCircle eS (apm_t00j02_homologyMap 1 c) hc
+    ConstructionTargets.CircleHomology.circleH1IsoInt eS
+      (apm_t00j02_homologyMap 1 c) hc
 
 /-- Consumer-level form of the disk consequence: each component is the range
 of a continuous circle whose `H₁` class vanishes in the surface. -/
@@ -453,7 +361,6 @@ homology computation: every lifted inverse-image component has zero winding
 map on `H₁`. -/
 lemma apm_t00j02_exists_component_lift_homologyMap_eq_zero
     {S : Type} [TopologicalSpace S]
-    (eCircle : apm_t00j02_H 1 Circle ≅ ModuleCat.of ℤ ℤ)
     (hS : apm_t00j02_hasGenusTwo S) (f : C(S, S))
     (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
     (hhandle : apm_t00j02_wrapsHandle c)
@@ -463,7 +370,7 @@ lemma apm_t00j02_exists_component_lift_homologyMap_eq_zero
       x ∈ range γ ∧ c.comp ℓ = f.comp γ ∧
       apm_t00j02_homologyMap 1 ℓ = 0 := by
   letI : Mono (apm_t00j02_homologyMap 1 c) :=
-    apm_t00j02_mono_homologyMap_of_wrapsHandle eCircle hS c hhandle
+    apm_t00j02_mono_homologyMap_of_wrapsHandle hS c hhandle
   rcases apm_t00j02_exists_component_lift_homology_comp_eq_zero
     f c hc hdisks hx with ⟨γ, ℓ, hxγ, hlift, hcomp⟩
   exact ⟨γ, ℓ, hxγ, hlift,
