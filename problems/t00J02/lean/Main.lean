@@ -373,7 +373,7 @@ theorem apm_t00J02_bridge_1
         (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
         (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap) := by
     intro x z hxz
-    exact ConstructionTargets.TransversePreimageGeometry.surjective_coprod_of_range_sup_eq_top
+    exact ConstructionTargets.DiskBoundedPreimageDuality.surjective_coprod_of_range_sup_eq_top
       (htrans x z hxz)
   exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
     (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop
