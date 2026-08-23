@@ -20,6 +20,7 @@ import ConstructionTargets.OrientedIntegration
 import ConstructionTargets.Intersection
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.IntegralSingularHomologyComparison
+import ConstructionTargets.IntegerCyclic
 import ConstructionTargets.SimplyConnectedOpenCover
 import ConstructionTargets.SingularExcision
 import ConstructionTargets.SingularHomologyConcrete
