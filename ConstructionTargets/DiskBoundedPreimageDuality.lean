@@ -1,5 +1,6 @@
 import ConstructionTargets.DiskBoundaryHomology
 import ConstructionTargets.EmbeddedCirclePreimage
+import ConstructionTargets.IntegerCyclic
 import ConstructionTargets.TransversePreimageDuality
 import ConstructionTargets.TransversePreimageGeometry
 
@@ -124,6 +125,45 @@ theorem map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks
       incident L K htrans
   · exact hdisks
 
+/-- Integral specialization of the range-sum eliminator in which essentiality
+of the target circle supplies the monomorphism automatically.  This is the
+consumer-depth interface for surface arguments: computations identifying the
+circle homology with `ℤ` and the ambient degree-one homology with a torsion-free
+module, together with nonvanishing of the circle inclusion, discharge all
+categorical cancellation bookkeeping. -/
+theorem map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks_of_isos
+    (A : ModuleCat ℤ) (n : ℕ) (hn : n ≠ 0)
+    {E : Type*} [Category E] [Limits.HasZeroMorphisms E]
+    (Htop : Functor TopCat E)
+    {X Z M N P : Type*} {Q : Type}
+    [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid P]
+    [Module ℝ M] [Module ℝ N] [Module ℝ P]
+    (incident : X → Z → Prop)
+    (L : X → M →ₗ[ℝ] P) (K : Z → N →ₗ[ℝ] P)
+    {Y S : Type} [TopologicalSpace Y] [TopologicalSpace S]
+    (f : C(Y, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eCircle : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) n).obj A).obj (TopCat.of Circle)) ≅ ModuleCat.of ℤ ℤ)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) n).obj A).obj (TopCat.of S)) ≅ ModuleCat.of ℤ Q)
+    (hessential : ((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) n).obj A).map (TopCat.ofHom c) ≠ 0)
+    (hproducer : TransversePreimageGeometry.HoldsAlong incident
+        (fun x z => Function.Surjective (LinearMap.coprod (L x) (K z))) →
+      TransversePreimageDuality.DetectsTopMap
+        ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj A)
+        Htop f c)
+    (htrans : ∀ x z, incident x z →
+      LinearMap.range (L x) ⊔ LinearMap.range (K z) = ⊤)
+    (hdisks : DiskBoundaryHomology.ComponentsBoundByDisks (f ⁻¹' range c)) :
+    Htop.map (TopCat.ofHom f) = 0 := by
+  letI : Mono (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) n).obj A).map (TopCat.ofHom c)) :=
+    IntegerCyclic.mono_of_ne_zero_of_iso Q eCircle eS _ hessential
+  exact map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks
+    (ModuleCat ℤ) A n hn Htop incident L K f c hc hproducer htrans hdisks
+
 /-- Convert one range-sum transversality witness into the operational
 surjectivity condition consumed by the disk-bounded duality theorem. -/
 theorem surjective_coprod_of_range_sup_eq_top
@@ -141,4 +181,5 @@ end ConstructionTargets.DiskBoundedPreimageDuality
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_componentsBoundByDisks
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks
+#print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_range_sup_eq_top_and_componentsBoundByDisks_of_isos
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.surjective_coprod_of_range_sup_eq_top
