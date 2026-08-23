@@ -8,6 +8,7 @@ import ConstructionTargets.IntegerCyclic
 import ConstructionTargets.DiskBoundaryHomology
 import ConstructionTargets.EmbeddedCircleLift
 import ConstructionTargets.EmbeddedCirclePreimage
+import ConstructionTargets.TransversePreimageDuality
 
 /-!
 # APM t00J02
@@ -366,8 +367,14 @@ theorem apm_t00J02_bridge_1
       F f c hc
       (fun y hy =>
         apm_t00j02_exists_homology_trivial_circle_through_point hdisks hy)
-  have _ := hcomponent
-  sorry
+  let Htop := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)
+  have hduality :
+      ConstructionTargets.TransversePreimageDuality.DetectsTopMap
+        F Htop f c := by
+    sorry
+  exact ConstructionTargets.TransversePreimageDuality.map_eq_zero
+    F Htop f c hduality hcomponent
 
 theorem apm_t00j02
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
