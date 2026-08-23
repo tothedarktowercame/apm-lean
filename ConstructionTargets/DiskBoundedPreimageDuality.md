@@ -22,6 +22,11 @@ problem obligation is precisely the construction of `DetectsTopMap` from the
 smoothness and transversality hypotheses; no disk-component or categorical
 cancellation bookkeeping remains in the problem file.
 
+The pointwise range-sum adapter exposes the exact final conversion used by
+manifold consumers: `range L ⊔ range K = ⊤` gives surjectivity of
+`LinearMap.coprod L K`.  The keyed bridge consumes this adapter while retaining
+its geometric transversality hypothesis.
+
 ## Axiom audit
 
 All exported theorems are sorry-free.  Direct standalone elaboration reports

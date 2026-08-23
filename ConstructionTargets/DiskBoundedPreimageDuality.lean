@@ -90,8 +90,20 @@ theorem map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
       f c hproducer hcondition
   · exact hdisks
 
+/-- Convert one range-sum transversality witness into the operational
+surjectivity condition consumed by the disk-bounded duality theorem. -/
+theorem surjective_coprod_of_range_sup_eq_top
+    {R M N P : Type*} [Semiring R]
+    [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid P]
+    [Module R M] [Module R N] [Module R P]
+    {L : M →ₗ[R] P} {K : N →ₗ[R] P}
+    (htrans : LinearMap.range L ⊔ LinearMap.range K = ⊤) :
+    Function.Surjective (LinearMap.coprod L K) :=
+  TransversePreimageGeometry.surjective_coprod_of_range_sup_eq_top htrans
+
 end ConstructionTargets.DiskBoundedPreimageDuality
 
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.hasNullWindingPreimage_of_componentsBoundByDisks
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_componentsBoundByDisks
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
+#print axioms ConstructionTargets.DiskBoundedPreimageDuality.surjective_coprod_of_range_sup_eq_top
