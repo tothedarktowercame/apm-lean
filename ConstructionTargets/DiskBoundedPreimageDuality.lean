@@ -1,6 +1,7 @@
 import ConstructionTargets.DiskBoundaryHomology
 import ConstructionTargets.EmbeddedCirclePreimage
 import ConstructionTargets.TransversePreimageDuality
+import ConstructionTargets.TransversePreimageGeometry
 
 /-!
 # Disk-bounded embedded-circle preimages
@@ -61,7 +62,36 @@ theorem map_eq_zero_of_componentsBoundByDisks
   exact hasNullWindingPreimage_of_componentsBoundByDisks
     C A n hn f c hc hdisks
 
+/-- A pointwise geometric condition, a producer translating that condition to
+duality, and disk-bounded preimage components force the selected top map to
+vanish.  This version supports dependent geometric data by leaving the
+condition as a proposition family. -/
+theorem map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
+    (C : Type*) [Category C] [Preadditive C] [Limits.HasCoproducts C]
+    [CategoryWithHomology C]
+    (A : C) (n : ℕ) (hn : n ≠ 0)
+    {E : Type*} [Category E] [Limits.HasZeroMorphisms E]
+    (Htop : Functor TopCat E)
+    {X Z : Type*} (incident condition : X → Z → Prop)
+    {Y S : Type} [TopologicalSpace Y] [TopologicalSpace S]
+    (f : C(Y, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    [Mono (((AlgebraicTopology.singularHomologyFunctor C n).obj A).map
+      (TopCat.ofHom c))]
+    (hproducer : TransversePreimageGeometry.HoldsAlong incident condition →
+      TransversePreimageDuality.DetectsTopMap
+        ((AlgebraicTopology.singularHomologyFunctor C n).obj A) Htop f c)
+    (hcondition : ∀ x z, incident x z → condition x z)
+    (hdisks : DiskBoundaryHomology.ComponentsBoundByDisks (f ⁻¹' range c)) :
+    Htop.map (TopCat.ofHom f) = 0 := by
+  apply map_eq_zero_of_componentsBoundByDisks C A n hn Htop f c hc
+  · exact TransversePreimageGeometry.detectsTopMap_of_pointwise_condition
+      incident condition
+      ((AlgebraicTopology.singularHomologyFunctor C n).obj A) Htop
+      f c hproducer hcondition
+  · exact hdisks
+
 end ConstructionTargets.DiskBoundedPreimageDuality
 
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.hasNullWindingPreimage_of_componentsBoundByDisks
 #print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_componentsBoundByDisks
+#print axioms ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
