@@ -333,6 +333,7 @@ lemma apm_t00j02_degree_eq_zero_of_homologyMap_eq_zero
   simp only [map_zero, hx, mul_one] at h
   exact h.symm
 
+set_option maxHeartbeats 400000 in
 /-- Why this unblocks `apm_t00j02`: this is the missing transverse-preimage
 and Poincare-duality bridge.  An essential handle circle pairs nontrivially
 with the surface fundamental class, while the disk-bounding hypothesis makes
@@ -358,6 +359,15 @@ theorem apm_t00J02_bridge_1
     apm_t00j02_mono_homologyMap_of_wrapsHandle hS c hhandle
   let Htop := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
     (ModuleCat.of ℤ ℤ)
+  have hproducer :
+      ConstructionTargets.TransversePreimageGeometry.HoldsAlong
+        (fun x z => f x = c z)
+        (fun x z => Function.Surjective (LinearMap.coprod
+          (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
+          (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap)) →
+        ConstructionTargets.TransversePreimageDuality.DetectsTopMap
+          F Htop f c := by
+    sorry
   have htangent : ∀ x z, f x = c z →
       Function.Surjective (LinearMap.coprod
         (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
@@ -365,26 +375,13 @@ theorem apm_t00J02_bridge_1
     intro x z hxz
     exact ConstructionTargets.TransversePreimageGeometry.surjective_coprod_of_range_sup_eq_top
       (htrans x z hxz)
-  have hduality :
-      ConstructionTargets.TransversePreimageDuality.DetectsTopMap
-        F Htop f c := by
-    have hproducer :
-        ConstructionTargets.TransversePreimageGeometry.HoldsAlong
-          (fun x z => f x = c z)
-          (fun x z => Function.Surjective (LinearMap.coprod
-            (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
-            (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap)) →
-          ConstructionTargets.TransversePreimageDuality.DetectsTopMap
-            F Htop f c := by
-      sorry
-    exact ConstructionTargets.TransversePreimageGeometry.detectsTopMap_of_pointwise_condition
-      (fun x z => f x = c z)
-      (fun x z => Function.Surjective (LinearMap.coprod
-        (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
-        (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap))
-      F Htop f c hproducer htangent
-  exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_componentsBoundByDisks
-    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop f c hc hduality hdisks
+  exact ConstructionTargets.DiskBoundedPreimageDuality.map_eq_zero_of_pointwise_condition_and_componentsBoundByDisks
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero Htop
+    (fun (x : S) (z : Circle) => f x = c z)
+    (fun x z => Function.Surjective (LinearMap.coprod
+      (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
+      (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap))
+    f c hc hproducer htangent hdisks
 
 theorem apm_t00j02
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]

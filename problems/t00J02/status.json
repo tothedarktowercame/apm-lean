@@ -5,7 +5,7 @@
   "problem_id" : "t00J02",
   "obstructions" : [ {
     "areas" : [ "singular-homology", "transversality" ],
-    "missing" : "[library_progress] TransversePreimageGeometry now also converts range-sum transversality to coproduct surjectivity in reusable pointwise and family forms; the bridge consumes the pointwise theorem. The remaining dependent gap is the producer proving that pointwise tangent-sum surjectivity yields DetectsTopMap via oriented surface Poincare duality.",
+    "missing" : "[library_progress] DiskBoundedPreimageDuality now composes dependent pointwise geometric conditions with the disk-bounded homological elimination theorem; the bridge consumes this proposition-family form. The remaining dependent gap is the producer proving that pointwise tangent-sum surjectivity yields DetectsTopMap via oriented surface Poincare duality.",
     "recorded_by" : "codex-6",
     "frame" : "phase-2b-legacy-migration",
     "at_commit" : "a00ea1f",
@@ -30,7 +30,7 @@
   },
   "bundle_root" : "problems/t00J02",
   "sorry_audit" : {
-    "method" : "lake env lean problems/t00J02/lean/Main.lean after the range-sum TransversePreimageGeometry increment; counted declaration-uses-sorry warnings",
+    "method" : "lake env lean problems/t00J02/lean/Main.lean after integrating the DiskBoundedPreimageDuality pointwise-condition increment; counted declaration-uses-sorry warnings",
     "at" : "2026-08-23",
     "elaborated_exit" : 0,
     "sorry_declarations" : 1,
@@ -39,7 +39,7 @@
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "ConstructionTargets.TransversePreimageGeometry now exposes axiom-clean family and pointwise conversions from derivative range sums to coproduct surjectivity. The keying bridge consumes the pointwise conversion; the remaining dependent obligation is the oriented Poincare-duality producer from operational tangent-sum surjectivity.",
+  "closer_progress" : "ConstructionTargets.DiskBoundedPreimageDuality now exposes an axiom-clean end-to-end dependent pointwise-condition vanishing theorem. The keying bridge consumes it; the remaining dependent obligation is the oriented Poincare-duality producer from operational tangent-sum surjectivity.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,
