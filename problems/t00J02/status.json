@@ -1,50 +1,44 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "t00J02",
-  "bundle_root": "problems/t00J02",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-t00J02.md",
-    "problem_tex": "apm/t00J02.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "sorry_count_total" : 1,
+  "layout" : "single-bundle",
+  "problem_id" : "t00J02",
+  "obstructions" : [ {
+    "areas" : [ "singular-homology", "transversality" ],
+    "missing" : "[closer_progress] Hop 3 proves every disk-bounding inverse-image component is both compact and path connected, deriving path connectedness of Circle from its exponential parametrization. The remaining gap is the homological null-boundary theorem and the transverse-preimage/Poincare-duality bridge to the induced H2 map.",
+    "recorded_by" : "codex-6",
+    "frame" : "phase-2b-legacy-migration",
+    "at_commit" : "a00ea1f",
+    "date" : "2026-08-19",
+    "resolved" : null,
+    "areas_are" : "necessary"
+  } ],
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-t00J02.md",
+    "problem_tex" : "apm/t00J02.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
-    "sorry_count_main": 1,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+  "classification" : "partial-banked",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 1,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 1
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
-  },
-  "classification": "partial",
-  "closer_progress": "Hop 3 proves every disk-bounding inverse-image component is both compact and path connected, deriving path connectedness of Circle from its exponential parametrization. The remaining gap is the homological null-boundary theorem and the transverse-preimage/Poincare-duality bridge to the induced H2 map.",
-  "imported_at": "2026-07-13T17:26:56.526023Z",
-  "obstructions": [
-    {
-      "areas": [
-        "singular-homology",
-        "transversality"
-      ],
-      "missing": "[closer_progress] Hop 3 proves every disk-bounding inverse-image component is both compact and path connected, deriving path connectedness of Circle from its exponential parametrization. The remaining gap is the homological null-boundary theorem and the transverse-preimage/Poincare-duality bridge to the induced H2 map.",
-      "recorded_by": "codex-6",
-      "frame": "phase-2b-legacy-migration",
-      "at_commit": "a00ea1f",
-      "date": "2026-08-19",
-      "resolved": null,
-      "areas_are": "necessary"
-    }
-  ]
+  "bundle_root" : "problems/t00J02",
+  "closer_progress" : "Hop 3 proves every disk-bounding inverse-image component is both compact and path connected, deriving path connectedness of Circle from its exponential parametrization. The remaining gap is the homological null-boundary theorem and the transverse-preimage/Poincare-duality bridge to the induced H2 map.",
+  "imported_at" : "2026-07-13T17:26:56.526023Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }
