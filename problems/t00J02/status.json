@@ -5,7 +5,7 @@
   "problem_id" : "t00J02",
   "obstructions" : [ {
     "areas" : [ "singular-homology", "transversality" ],
-    "missing" : "[library_progress] Disk-boundary homology vanishing, the functor-generic embedded-circle lift/cancellation theorem, and the named HasNullWindingPreimage interface now live under ConstructionTargets and are consumed by the bridge. The remaining dependent gap is a transverse-preimage/Poincare-duality theorem taking that interface (plus smoothness and transversality) to vanishing of the induced H2 map.",
+    "missing" : "[library_progress] Disk-boundary homology vanishing, the functor-generic embedded-circle lift/cancellation theorem, HasNullWindingPreimage, and the functor-generic DetectsTopMap elimination seam now live under ConstructionTargets and are consumed by the bridge. The remaining dependent gap is the geometric producer of DetectsTopMap from smoothness, transversality, and surface Poincare duality.",
     "recorded_by" : "codex-6",
     "frame" : "phase-2b-legacy-migration",
     "at_commit" : "a00ea1f",
@@ -37,7 +37,7 @@
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "ConstructionTargets.EmbeddedCirclePreimage now exposes HasNullWindingPreimage, a reusable named boundary between component construction and intersection/Poincare-duality arguments, plus a sorry-free constructor from a pointwise homologically trivial circle cover. The keying bridge consumes this interface. The remaining dependent obligation is the geometric theorem deriving vanishing on H2 from this null-winding preimage package together with smoothness and transversality.",
+  "closer_progress" : "ConstructionTargets.TransversePreimageDuality now exposes the functor-generic DetectsTopMap property and its sorry-free map_eq_zero eliminator. The keying bridge consumes both this seam and HasNullWindingPreimage. The remaining dependent obligation is precisely the geometric producer of DetectsTopMap from smoothness, transversality, and surface Poincare duality.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,

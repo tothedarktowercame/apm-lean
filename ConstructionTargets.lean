@@ -39,6 +39,7 @@ import ConstructionTargets.T02A06SphereH0
 import ConstructionTargets.T02A06SphereOne
 import ConstructionTargets.T02A06SphereShift
 import ConstructionTargets.T02A06SphereVanishingBridge
+import ConstructionTargets.TransversePreimageDuality
 
 /-!
 # ConstructionTargets — reusable lemmas built to unblock specific APM problems
