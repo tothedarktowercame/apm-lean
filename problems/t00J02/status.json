@@ -30,16 +30,16 @@
   },
   "bundle_root" : "problems/t00J02",
   "sorry_audit" : {
-    "method" : "lake build ConstructionTargets.OrientedSurfacePreimageDuality followed by lake env lean problems/t00J02/lean/Main.lean after integrating the end-to-end oriented-surface eliminator; counted declaration-uses-sorry warnings",
+    "method" : "lake build ConstructionTargets.OrientedSurfacePreimageDuality followed by lake env lean problems/t00J02/lean/Main.lean after refining Producer to the non-null-winding contrapositive; counted declaration-uses-sorry warnings",
     "at" : "2026-08-23",
     "elaborated_exit" : 0,
     "sorry_declarations" : 1,
-    "library_axiom_method" : "lake env lean ConstructionTargets/OrientedSurfacePreimageDuality.lean; read #print axioms for detectsTopMap and topHomologyMap_eq_zero_of_producer_and_componentsBoundByDisks",
+    "library_axiom_method" : "lake env lean ConstructionTargets/TransversePreimageDuality.lean and ConstructionTargets/OrientedSurfacePreimageDuality.lean; read #print axioms for the contrapositive equivalence and both oriented-surface eliminators",
     "library_axioms" : [ "propext", "Classical.choice", "Quot.sound" ],
     "previous_classification" : "partial-banked",
     "previous_sorry_count_total" : 1
   },
-  "closer_progress" : "ConstructionTargets.OrientedSurfacePreimageDuality now exposes an axiom-clean end-to-end eliminator composing Producer specialization, derivative range-sum conversion, the essential-circle monomorphism, and disk-bounded null winding. The keying bridge consumes this theorem directly. Mathlib source search found no Poincare-duality or manifold fundamental-class implementation; the single remaining sequential obligation is constructing Producer S from hS's integral top-homology witness via new oriented Poincare-duality infrastructure.",
+  "closer_progress" : "Producer now states the concrete geometric contrapositive NonzeroTopMapHasNonNullWinding: a nonzero pushed-forward top class forces failure of null winding somewhere in the transverse inverse image. TransversePreimageDuality proves this equivalent to DetectsTopMap, and the keying bridge reaches that equivalence through the oriented-surface end-to-end eliminator. The remaining sequential obligation is an intersection-pairing/fundamental-class proof of this contrapositive from hS's integral H2 witness.",
   "imported_at" : "2026-07-13T17:26:56.526023Z",
   "artifacts" : {
     "has_problem_tex" : true,

@@ -38,7 +38,7 @@ def Producer (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
       (fun x z => Function.Surjective (LinearMap.coprod
         (mfderiv I2 I2 f x).toLinearMap
         (mfderiv (𝓡 1) I2 c z).toLinearMap)) →
-    TransversePreimageDuality.DetectsTopMap
+    TransversePreimageDuality.NonzeroTopMapHasNonNullWinding
       ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
         (ModuleCat.of ℤ ℤ))
       ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
@@ -61,7 +61,8 @@ theorem detectsTopMap
         (ModuleCat.of ℤ ℤ))
       ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
         (ModuleCat.of ℤ ℤ)) f c :=
-  hPD f c hf hc hcsmooth htrans
+  (TransversePreimageDuality.nonzeroTopMapHasNonNullWinding_iff_detectsTopMap
+    _ _ f c).mp (hPD f c hf hc hcsmooth htrans)
 
 set_option maxHeartbeats 800000 in
 /-- End-to-end surface specialization: an oriented-surface duality producer,
