@@ -21,6 +21,7 @@ import ConstructionTargets.UnivalentDeriv
 import ConstructionTargets.YoungConvolution
 import ConstructionTargets.SetIntegralPrimitive
 import ConstructionTargets.OrientedIntegration
+import ConstructionTargets.OrientedSurfacePreimageDuality
 import ConstructionTargets.Intersection
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.IntegralSingularHomologyComparison

@@ -12,6 +12,7 @@ import ConstructionTargets.EmbeddedCirclePreimage
 import ConstructionTargets.TransversePreimageDuality
 import ConstructionTargets.TransverseLinearPair
 import ConstructionTargets.TransversePreimageGeometry
+import ConstructionTargets.OrientedSurfacePreimageDuality
 
 /-!
 # APM t00J02
@@ -357,6 +358,9 @@ theorem apm_t00J02_bridge_1
     (ModuleCat.of ℤ ℤ)
   let Htop := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
     (ModuleCat.of ℤ ℤ)
+  have hPD :
+      ConstructionTargets.OrientedSurfacePreimageDuality.Producer S := by
+    sorry
   have hproducer :
       ConstructionTargets.TransversePreimageGeometry.HoldsAlong
         (fun x z => f x = c z)
@@ -365,7 +369,9 @@ theorem apm_t00J02_bridge_1
           (mfderiv (𝓡 1) apm_t00j02_I2 c z).toLinearMap)) →
         ConstructionTargets.TransversePreimageDuality.DetectsTopMap
           F Htop f c := by
-    sorry
+    intro hsurj
+    exact ConstructionTargets.OrientedSurfacePreimageDuality.detectsTopMap
+      hPD f c hf hc hcsmooth hsurj
   let L : S → apm_t00j02_E2 →ₗ[ℝ] apm_t00j02_E2 :=
     fun x => (mfderiv apm_t00j02_I2 apm_t00j02_I2 f x).toLinearMap
   let K : Circle → EuclideanSpace ℝ (Fin 1) →ₗ[ℝ] apm_t00j02_E2 :=
