@@ -15,3 +15,10 @@ and degree-two integral singular homology for the top functor.  The remaining
 problem obligation is precisely the construction of `DetectsTopMap` from the
 smoothness and transversality hypotheses; no disk-component or categorical
 cancellation bookkeeping remains in the problem file.
+
+## Axiom audit
+
+Both exported theorems are sorry-free.  Direct standalone elaboration reports
+exactly `[propext, Classical.choice, Quot.sound]` for each.  The unfinished
+consumer theorem still has its separately audited geometric `sorry`; that hole
+is not part of this library module or its axiom set.
