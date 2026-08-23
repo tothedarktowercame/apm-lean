@@ -51,7 +51,60 @@ theorem detectsTopMap_of_pointwise_condition
     TransversePreimageDuality.DetectsTopMap Hcircle Htop f c :=
   hproducer (holdsAlong_of_pointwise incident condition hcondition)
 
+/-- Range-sum transversality along an incidence relation gives the operational
+surjectivity condition for the coproduct linear map. -/
+theorem holdsAlong_surjective_coprod_of_range_sup_eq_top
+    {X Z R M N P : Type*} [Semiring R]
+    [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid P]
+    [Module R M] [Module R N] [Module R P]
+    (incident : X → Z → Prop)
+    (L : X → M →ₗ[R] P) (K : Z → N →ₗ[R] P)
+    (htrans : ∀ x z, incident x z →
+      LinearMap.range (L x) ⊔ LinearMap.range (K z) = ⊤) :
+    HoldsAlong incident
+      (fun x z => Function.Surjective (LinearMap.coprod (L x) (K z))) := by
+  intro x z hxz
+  rw [← TransverseLinearPair.isTransversePair_iff_surjective_coprod]
+  exact htrans x z hxz
+
+/-- Feed the range-sum formulation of transversality directly to a duality
+producer whose input is coproduct surjectivity. -/
+theorem detectsTopMap_of_range_sup_eq_top
+    {X Z R M N P : Type*} [Semiring R]
+    [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid P]
+    [Module R M] [Module R N] [Module R P]
+    {D E : Type*} [Category D] [Category E]
+    [Limits.HasZeroMorphisms D] [Limits.HasZeroMorphisms E]
+    (incident : X → Z → Prop)
+    (L : X → M →ₗ[R] P) (K : Z → N →ₗ[R] P)
+    (Hcircle : TopCat ⥤ D) (Htop : TopCat ⥤ E)
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (f : C(A, B)) (c : C(Circle, B))
+    (hproducer : HoldsAlong incident
+        (fun x z => Function.Surjective (LinearMap.coprod (L x) (K z))) →
+      TransversePreimageDuality.DetectsTopMap Hcircle Htop f c)
+    (htrans : ∀ x z, incident x z →
+      LinearMap.range (L x) ⊔ LinearMap.range (K z) = ⊤) :
+    TransversePreimageDuality.DetectsTopMap Hcircle Htop f c :=
+  hproducer
+    (holdsAlong_surjective_coprod_of_range_sup_eq_top incident L K htrans)
+
+/-- Pointwise range-sum transversality implies surjectivity of the coproduct
+linear map.  This directional form avoids unfolding the equivalence at each
+geometric incidence point. -/
+theorem surjective_coprod_of_range_sup_eq_top
+    {R M N P : Type*} [Semiring R]
+    [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid P]
+    [Module R M] [Module R N] [Module R P]
+    {L : M →ₗ[R] P} {K : N →ₗ[R] P}
+    (htrans : LinearMap.range L ⊔ LinearMap.range K = ⊤) :
+    Function.Surjective (LinearMap.coprod L K) :=
+  (TransverseLinearPair.isTransversePair_iff_surjective_coprod L K).mp htrans
+
 end ConstructionTargets.TransversePreimageGeometry
 
 #print axioms ConstructionTargets.TransversePreimageGeometry.holdsAlong_of_pointwise
 #print axioms ConstructionTargets.TransversePreimageGeometry.detectsTopMap_of_pointwise_condition
+#print axioms ConstructionTargets.TransversePreimageGeometry.holdsAlong_surjective_coprod_of_range_sup_eq_top
+#print axioms ConstructionTargets.TransversePreimageGeometry.detectsTopMap_of_range_sup_eq_top
+#print axioms ConstructionTargets.TransversePreimageGeometry.surjective_coprod_of_range_sup_eq_top
