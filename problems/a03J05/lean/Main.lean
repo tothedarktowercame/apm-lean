@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Sinc
 
 /-!
 # APM a03J05: A cosine integral
@@ -62,6 +63,31 @@ lemma apm_a03J05_integrable (t : ℝ) :
     rw [Real.norm_eq_abs, abs_div, abs_of_pos (by positivity : 0 < 1 + x ^ 2),
       inv_eq_one_div]
     exact div_le_div_of_nonneg_right (Real.abs_cos_le_one _) (by positivity)
+
+/-- The real Fourier kernel of the two-sided exponential.  This is the
+Laplace-transform input for a Fourier-inversion proof of the main identity. -/
+lemma apm_a03J05_exp_abs_cos_transform (t : ℝ) :
+    (∫ x : ℝ, Real.exp (-|x|) * Real.cos (t * x)) = 2 / (1 + t ^ 2) := by
+  have heven (x : ℝ) :
+      Real.exp (-|x|) * Real.cos (t * x) =
+        (fun y : ℝ => Real.exp (-y) * Real.cos (t * y)) |x| := by
+    by_cases hx : 0 ≤ x
+    · simp [abs_of_nonneg hx]
+    · have hx' : x < 0 := lt_of_not_ge hx
+      rw [abs_of_neg hx']
+      simp only [neg_neg, mul_neg, Real.cos_neg]
+  calc
+    (∫ x : ℝ, Real.exp (-|x|) * Real.cos (t * x)) =
+        ∫ x : ℝ, (fun y : ℝ => Real.exp (-y) * Real.cos (t * y)) |x| := by
+          apply integral_congr_ae
+          exact ae_of_all _ heven
+    _ = 2 * ∫ x in Ioi (0 : ℝ), Real.exp (-x) * Real.cos (t * x) :=
+      integral_comp_abs (f := fun y : ℝ => Real.exp (-y) * Real.cos (t * y))
+    _ = 2 * (1 / (1 ^ 2 + t ^ 2)) := by
+      congr 1
+      simpa only [one_mul, neg_mul] using
+        (ConstructionTargets.Sinc.integral_exp_neg_mul_cos_Ioi (a := 1) (by positivity) t)
+    _ = 2 / (1 + t ^ 2) := by ring
 
 /-! ## Base case: t = 0 gives ∫₀^∞ 1/(1+x²) dx = π/2
 
@@ -138,6 +164,18 @@ theorem apm_a03j05 (t : ℝ) :
   inspection found `integrable_inv_one_add_sq` and nearby compiled domination
   patterns, but no stronger oscillatory-integral theorem. The remaining bridge
   is still the nonzero-frequency transform evaluation itself.
+
+  F31 opens a different route through Mathlib's Fourier inversion theorem.
+  The new compiled lemma `apm_a03J05_exp_abs_cos_transform` evaluates the
+  real part of the Fourier transform of `x ↦ exp (-|x|)` on the full line:
+  `∫ exp (-|x|) cos (t*x) = 2 / (1+t²)`.  It uses the already compiled
+  Laplace-cosine integral from `ConstructionTargets.Sinc` and Mathlib's
+  `integral_comp_abs`, so it avoids contour integration entirely.  To finish
+  this route one must package the vanishing odd sine part into the complex
+  identity for `𝓕 (fun x : ℝ ↦ (Real.exp (-|x|) : ℂ))`, prove that rational
+  transform integrable after the `2*π` scaling, apply
+  `Integrable.fourierInv_fourier_eq`, and extract/rescale its real part to the
+  requested positive-half-line cosine integral.
   -/
   sorry
 
