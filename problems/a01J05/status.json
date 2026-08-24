@@ -14,11 +14,11 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
+    "sorry_count_total": 0,
     "sorry_count_by_file": {
-      "Main.lean": 1
+      "Main.lean": 0
     }
   },
   "artifacts": {
@@ -31,9 +31,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 3,
+  "classification": "solved",
   "imported_at": "2026-05-01T19:52:19.166992Z",
+  "boundary": "Closed by the f29 Student on attempt 3 (campaign jit-all-open-nontopology-v1, 2026-08-24), using memories mined from the Solver's own attempt plus a Guide correction of a wrong first plan. Frozen statement apm_a01j05 unchanged from the pre-solve base.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-08-24",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_a01j05 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f29"
+  },
   "obstructions": [
     {
       "areas": [],
@@ -43,7 +53,7 @@
       "frame": "phase-2e-stratified-migration",
       "at_commit": "a00ea1f",
       "date": "2026-08-19",
-      "resolved": null
+      "resolved": "2026-08-24 by f29 Student attempt 3 -- see sorry_audit"
     }
   ]
 }
