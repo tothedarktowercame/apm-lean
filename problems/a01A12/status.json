@@ -14,11 +14,11 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 2,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2,
+    "sorry_count_total": 0,
     "sorry_count_by_file": {
-      "Main.lean": 2
+      "Main.lean": 0
     }
   },
   "artifacts": {
@@ -31,8 +31,17 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "closer_progress": "Hop 4 states the exact automorphism-classification torsor contract, conditional only on the explicit map being conformally bijective. Its conclusion is the second frozen conjunct. The independent explicit-map surjectivity obligation remains.",
-  "imported_at": "2026-05-01T19:52:19.160390Z"
+  "classification": "solved",
+  "imported_at": "2026-05-01T19:52:19.160390Z",
+  "boundary": "Closed by the f28 Solver (campaign jit-all-open-nontopology-v1, 2026-08-24), before promote-solver. The frame itself closed :partial because the Student's own 3-attempt cycle never independently re-derived the proof, not because the mathematics is incomplete -- same pattern as the f21/a94A02 precedent. Frozen statement apm_a01a12 unchanged from the pre-solve base.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-08-24",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 2,
+    "axioms": "apm_a01a12 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f28; the campaign closed :partial, but that disposition is about the frame as evidence (the Student's 3 attempts never closed it), not the mathematics."
+  }
 }
