@@ -19,11 +19,14 @@ the relevant induced maps.
   for any domain whose first homology contains a nonzero element.
 - `apm_t01a03_noRetraction_circle_of_H1_nontrivial` specializes the entire
   middle-circle argument to the exact missing `Nontrivial H₁(Circle)` instance.
+- `ConstructionTargets.SingularHomologyConcrete.circleHomeomorphSphereOne`
+  identifies Mathlib's complex unit circle with the Euclidean one-sphere.
+  The induced singular-homology isomorphism
+  `circleSingularH1IsoInt` sends the named class
+  `circleSingularH1Generator` to `1 : ℤ`, proving it nonzero and supplying
+  the `Nontrivial` instance consumed by the middle-circle branch.
 
-## Remaining boundary
+## Completion
 
-For the separating middle circle, the functorial injectivity and zero-map
-contradiction are now compiled. The only remaining input is a nonzero element
-of integral `H₁(Circle)`. The current Mathlib singular
-homology API provides the functor and homotopy invariance, but the searches in
-this hop found no compiled circle-homology computation.
+All three retraction branches compile. The frozen theorem is unchanged and
+has no remaining proof obligation.

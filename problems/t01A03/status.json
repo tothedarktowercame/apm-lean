@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -26,12 +26,12 @@
     "has_proof_outline": true,
     "has_proof_plan": false,
     "has_changelog": false,
-    "has_workspace_metadata": false,
+    "has_workspace_metadata": true,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "The wedge and disconnected branches are closed. Retraction-induced injectivity on singular H1, the general zero-map obstruction, and a specialized interface requiring only Nontrivial H1(Circle) are proved. The middle-circle branch remains blocked solely on a compiled nonzero class or Nontrivial instance for integral H1 of Circle.",
+  "classification": "solved",
+  "closer_hop": 4,
+  "boundary": null,
   "imported_at": "2026-07-13T17:26:56.697998Z",
   "obstructions": [
     {
@@ -44,7 +44,7 @@
       "frame": "phase-2d-adversarial-migration",
       "at_commit": "a00ea1f",
       "date": "2026-08-19",
-      "resolved": null
+      "resolved": "2026-08-24: ConstructionTargets.CircleSingularHomology transports the production Euclidean one-sphere computation to Mathlib's Circle, supplies a normalized nonzero generator and Nontrivial instance, and closes the frozen consumer."
     }
   ]
 }

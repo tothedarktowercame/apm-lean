@@ -22,6 +22,7 @@ import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.SimplyConnectedOpenCover
 import ConstructionTargets.SingularExcision
 import ConstructionTargets.SingularHomologyConcrete
+import ConstructionTargets.CircleSingularHomology
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.SingularSubdivision
 import ConstructionTargets.SphereHomology

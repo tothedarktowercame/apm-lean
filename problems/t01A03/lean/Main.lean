@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.CircleSingularHomology
 
 /-!
 # APM t01A03 — three retraction problems for surfaces
@@ -183,39 +184,10 @@ theorem apm_t01a03 :
   intro S _ _ _ _ _ _ hgenus middle wedgeInTorus twoCircles
     _ hmiddleH1 _ hwedgePi _
   refine ⟨?_, ?_, apm_t01a03_noRetraction_twoCircles twoCircles⟩
-  · /-
-    Boundary (closer hop 2): the wedge and disconnected-target branches are
-    closed below by functoriality of the fundamental group and connectedness.
-    This hop proves `apm_t01a03_H1map_injective_of_retraction`, carrying the
-    split-monomorphism argument out categorically for Mathlib's exact singular
-    `H₁` functor. It also proves `apm_t01a03_noRetraction_of_H1map_zero`, so
-    the middle-circle branch now reduces solely to exhibiting one nonzero
-    element of the exact integral `H₁ Circle` object.
-
-    Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, solved topology
-    artifacts, and Mathlib's singular-homology and circle APIs found no
-    compiled computation or nonzero class for the exact integral `H₁` object of
-    `Circle` is nonzero (or isomorphic to `ℤ`).  Mathlib supplies functoriality
-    and homotopy invariance, but without this circle computation the zero-map
-    contradiction cannot be completed locally.
-
-    Closer hop 3 searched below the object-level computation as well: the
-    singular-chain complex, reduced-homology, long-exact-sequence, circle
-    fundamental-group, Hurewicz/abelianization, and `AddCircle` APIs provide
-    neither a certified nonboundary 1-cycle nor an alternate route to a
-    nonzero class. The same missing computation is recorded independently by
-    `t03J01`, `t01J03`, `t02A03`, `t91A05`, and `t97J03`.
-
-    This hop packages the exact reusable interface as
-    `apm_t01a03_noRetraction_circle_of_H1_nontrivial`: a future
-    `Nontrivial (apm_t01a03_H1 Circle)` instance closes this branch directly,
-    with no need to expose a chosen cycle. The remaining `sorry` is therefore
-    still exactly the absent integral circle-homology nontriviality theorem,
-    not retraction or category-theory bookkeeping. The frozen statement is
-    unchanged.
-    -/
-    sorry
+  · exact apm_t01a03_noRetraction_circle_of_H1_nontrivial middle hmiddleH1
   · intro hret
     exact hwedgePi
       (apm_t01a03_fundamentalGroupMap_injective_of_retraction
         wedgeInTorus apm_t01a03_wedgeBase hret)
+
+#print axioms apm_t01a03
