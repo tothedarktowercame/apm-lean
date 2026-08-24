@@ -1,5 +1,5 @@
 [{:module "ConstructionTargets.CircleSingularHomology"
-  :created-turn 3
+  :created-turn 2
   :status :production
   :obligation "Transport the axiom-clean Euclidean one-sphere computation across a concrete homeomorphism to prove genuine integral singular H1(Circle) is infinite cyclic, with a normalized nonzero generator and Nontrivial instance."
   :declarations
