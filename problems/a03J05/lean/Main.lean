@@ -196,6 +196,101 @@ lemma apm_a03J05_integrable_fourier_exp_neg_abs :
     Complex.ofRealCLM.integrable_comp hreal
   exact hcomplex.congr (ae_of_all _ fun w => (apm_a03J05_fourier_exp_neg_abs w).symm)
 
+/-- Fourier inversion and the dilation `x = 2πw` give the full-line cosine
+transform of the Cauchy kernel. -/
+lemma apm_a03J05_integral_univ (t : ℝ) :
+    (∫ x : ℝ, Real.cos (t * x) / (1 + x ^ 2)) =
+      Real.pi * Real.exp (-|t|) := by
+  let e : ℝ → ℂ := fun x => (Real.exp (-|x|) : ℂ)
+  have he : Integrable e :=
+    Complex.ofRealCLM.integrable_comp apm_a03J05_integrable_exp_neg_abs
+  have hecont : ContinuousAt e t := by
+    dsimp [e]
+    fun_prop
+  have hinv := he.fourierInv_fourier_eq
+    apm_a03J05_integrable_fourier_exp_neg_abs hecont
+  rw [Real.fourierInv_eq'] at hinv
+  let q : ℝ → ℂ := fun w =>
+    Complex.exp ((↑(2 * Real.pi * inner ℝ w t) * Complex.I)) •
+      ((2 / (1 + (2 * Real.pi * w) ^ 2) : ℝ) : ℂ)
+  have hq : Integrable q := by
+    have hbase : Integrable
+        (fun w : ℝ => 2 / (1 + (2 * Real.pi * w) ^ 2)) := by
+      have hscaled := integrable_inv_one_add_sq.comp_mul_left'
+        (mul_ne_zero (by norm_num : (2 : ℝ) ≠ 0) Real.pi_ne_zero)
+      exact hscaled.const_mul 2
+    refine hbase.congr' (by fun_prop) ?_
+    filter_upwards with w
+    have hrpos : 0 < 2 / (1 + (2 * Real.pi * w) ^ 2) := by positivity
+    calc
+      ‖2 / (1 + (2 * Real.pi * w) ^ 2)‖ =
+          2 / (1 + (2 * Real.pi * w) ^ 2) := by
+            rw [Real.norm_eq_abs, abs_of_pos hrpos]
+      _ = ‖q w‖ := by
+        change 2 / (1 + (2 * Real.pi * w) ^ 2) =
+          ‖Complex.exp ((↑(2 * Real.pi * inner ℝ w t) * Complex.I)) •
+            Complex.ofReal (2 / (1 + (2 * Real.pi * w) ^ 2))‖
+        rw [norm_smul, Complex.norm_exp]
+        simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re,
+          Complex.I_im, mul_zero, sub_self, Real.exp_zero, one_mul, Complex.norm_real,
+          zero_mul, sub_zero, Real.norm_eq_abs, abs_of_pos hrpos]
+  have hreal : (∫ w : ℝ,
+      2 * Real.cos (2 * Real.pi * w * t) /
+        (1 + (2 * Real.pi * w) ^ 2)) = Real.exp (-|t|) := by
+    have hqi : (∫ w : ℝ, q w) = (Real.exp (-|t|) : ℂ) := by
+      calc
+        (∫ w : ℝ, q w) = ∫ w : ℝ,
+            Complex.exp ((↑(2 * Real.pi * inner ℝ w t) * Complex.I)) •
+              (𝓕 e) w := by
+                apply integral_congr_ae
+                filter_upwards with w
+                rw [apm_a03J05_fourier_exp_neg_abs]
+        _ = (Real.exp (-|t|) : ℂ) := by simpa only [e] using hinv
+    calc
+      (∫ w : ℝ, 2 * Real.cos (2 * Real.pi * w * t) /
+          (1 + (2 * Real.pi * w) ^ 2)) = ∫ w : ℝ, (q w).re := by
+            apply integral_congr_ae
+            filter_upwards with w
+            have hinner : inner ℝ w t = w * t := by
+              change t * w = w * t
+              ring
+            change 2 * Real.cos (2 * Real.pi * w * t) /
+                (1 + (2 * Real.pi * w) ^ 2) =
+              (Complex.exp ((↑(2 * Real.pi * inner ℝ w t) * Complex.I)) *
+                ((2 / (1 + (2 * Real.pi * w) ^ 2) : ℝ) : ℂ)).re
+            rw [Complex.mul_re]
+            simp only [Complex.ofReal_re, Complex.ofReal_im, mul_zero, sub_zero,
+              Complex.exp_re, Complex.mul_re, Complex.mul_im, Complex.I_re, Complex.I_im,
+              zero_mul, mul_zero, sub_zero, one_mul, Real.exp_zero, hinner]
+            ring
+      _ = (∫ w : ℝ, q w).re := integral_re hq
+      _ = Real.exp (-|t|) := by
+        simpa only [Complex.ofReal_re] using congrArg Complex.re hqi
+  let g : ℝ → ℝ := fun x => Real.cos (t * x) / (1 + x ^ 2)
+  have hdilate := Measure.integral_comp_mul_left g (2 * Real.pi)
+  simp only [smul_eq_mul] at hdilate
+  have hpos : 0 < 2 * Real.pi := mul_pos (by norm_num) Real.pi_pos
+  have hscaled : (∫ w : ℝ,
+      2 * Real.cos (2 * Real.pi * w * t) /
+        (1 + (2 * Real.pi * w) ^ 2)) =
+      (1 / Real.pi) * ∫ x : ℝ, g x := by
+    calc
+      (∫ w : ℝ, 2 * Real.cos (2 * Real.pi * w * t) /
+          (1 + (2 * Real.pi * w) ^ 2)) =
+          2 * ∫ w : ℝ, g ((2 * Real.pi) * w) := by
+            rw [← integral_const_mul]
+            apply integral_congr_ae
+            filter_upwards with w
+            simp only [g]
+            congr 2 <;> ring
+      _ = 2 * |(2 * Real.pi)⁻¹| * ∫ x : ℝ, g x := by rw [hdilate]; ring
+      _ = (1 / Real.pi) * ∫ x : ℝ, g x := by
+        rw [abs_of_pos (inv_pos.mpr hpos)]
+        field_simp [Real.pi_ne_zero]
+  rw [hscaled] at hreal
+  field_simp [Real.pi_ne_zero] at hreal
+  simpa [g] using hreal
+
 /-! ## Base case: t = 0 gives ∫₀^∞ 1/(1+x²) dx = π/2
 
    This uses `integral_Ioi_of_hasDerivAt_of_tendsto'` with f = arctan,
@@ -294,6 +389,34 @@ theorem apm_a03j05 (t : ℝ) :
   expansion via `Real.fourierInv_eq'`, the positive dilation `x = 2*π*w`, and
   taking real parts/evenness to identify the requested half-line integral.
   -/
-  sorry
+  have heven (x : ℝ) :
+      Real.cos (t * x) / (1 + x ^ 2) =
+        (fun y : ℝ => Real.cos (t * y) / (1 + y ^ 2)) |x| := by
+    by_cases hx : 0 ≤ x
+    · simp [abs_of_nonneg hx]
+    · have hx' : x < 0 := lt_of_not_ge hx
+      rw [abs_of_neg hx']
+      simp only [mul_neg, Real.cos_neg, neg_sq]
+  have hsplit :
+      (∫ x : ℝ, Real.cos (t * x) / (1 + x ^ 2)) =
+        2 * ∫ x in Ioi (0 : ℝ), Real.cos (t * x) / (1 + x ^ 2) := by
+    calc
+      (∫ x : ℝ, Real.cos (t * x) / (1 + x ^ 2)) =
+          ∫ x : ℝ, (fun y : ℝ => Real.cos (t * y) / (1 + y ^ 2)) |x| := by
+            apply integral_congr_ae
+            exact ae_of_all _ heven
+      _ = 2 * ∫ x in Ioi (0 : ℝ), Real.cos (t * x) / (1 + x ^ 2) :=
+        integral_comp_abs (f := fun y : ℝ => Real.cos (t * y) / (1 + y ^ 2))
+  have hfull := apm_a03J05_integral_univ t
+  rw [hsplit] at hfull
+  calc
+    (∫ x in Ioi (0 : ℝ), apm_a03J05_integrand t x ∂volume) =
+        ∫ x in Ioi (0 : ℝ), Real.cos (t * x) / (1 + x ^ 2) := by
+          apply integral_congr_ae
+          filter_upwards with x
+          simp only [apm_a03J05_integrand]
+          congr 2
+          ring
+    _ = (Real.pi / 2) * Real.exp (-|t|) := by linarith
 
 end
