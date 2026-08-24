@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Sinc
 
 /-!
 # APM a03J05: A cosine integral
@@ -20,6 +21,7 @@ therefore the sole intent source for this formal statement.
 -/
 
 open Filter MeasureTheory Set
+open scoped FourierTransform
 
 noncomputable section
 
@@ -62,6 +64,232 @@ lemma apm_a03J05_integrable (t : ℝ) :
     rw [Real.norm_eq_abs, abs_div, abs_of_pos (by positivity : 0 < 1 + x ^ 2),
       inv_eq_one_div]
     exact div_le_div_of_nonneg_right (Real.abs_cos_le_one _) (by positivity)
+
+/-- The real Fourier kernel of the two-sided exponential.  This is the
+Laplace-transform input for a Fourier-inversion proof of the main identity. -/
+lemma apm_a03J05_exp_abs_cos_transform (t : ℝ) :
+    (∫ x : ℝ, Real.exp (-|x|) * Real.cos (t * x)) = 2 / (1 + t ^ 2) := by
+  have heven (x : ℝ) :
+      Real.exp (-|x|) * Real.cos (t * x) =
+        (fun y : ℝ => Real.exp (-y) * Real.cos (t * y)) |x| := by
+    by_cases hx : 0 ≤ x
+    · simp [abs_of_nonneg hx]
+    · have hx' : x < 0 := lt_of_not_ge hx
+      rw [abs_of_neg hx']
+      simp only [neg_neg, mul_neg, Real.cos_neg]
+  calc
+    (∫ x : ℝ, Real.exp (-|x|) * Real.cos (t * x)) =
+        ∫ x : ℝ, (fun y : ℝ => Real.exp (-y) * Real.cos (t * y)) |x| := by
+          apply integral_congr_ae
+          exact ae_of_all _ heven
+    _ = 2 * ∫ x in Ioi (0 : ℝ), Real.exp (-x) * Real.cos (t * x) :=
+      integral_comp_abs (f := fun y : ℝ => Real.exp (-y) * Real.cos (t * y))
+    _ = 2 * (1 / (1 ^ 2 + t ^ 2)) := by
+      congr 1
+      simpa only [one_mul, neg_mul] using
+        (ConstructionTargets.Sinc.integral_exp_neg_mul_cos_Ioi (a := 1) (by positivity) t)
+    _ = 2 / (1 + t ^ 2) := by ring
+
+/-- The two-sided exponential used for Fourier inversion is integrable. -/
+lemma apm_a03J05_integrable_exp_neg_abs :
+    Integrable (fun x : ℝ => Real.exp (-|x|)) volume := by
+  have hpos : IntegrableOn (fun x : ℝ => Real.exp (-|x|)) (Ioi 0) := by
+    refine (integrableOn_exp_mul_Ioi (a := -1) (by norm_num) 0).congr_fun ?_
+      measurableSet_Ioi
+    intro x hx
+    have hx' : 0 < x := hx
+    simp [abs_of_pos hx']
+  have hneg : IntegrableOn (fun x : ℝ => Real.exp (-|x|)) (Iic 0) := by
+    refine (integrableOn_exp_mul_Iic (a := 1) (by norm_num) 0).congr_fun ?_
+      measurableSet_Iic
+    intro x hx
+    have hx' : x ≤ 0 := hx
+    simp [abs_of_nonpos hx']
+  rw [← integrableOn_univ]
+  simpa only [Iic_union_Ioi] using hneg.union hpos
+
+/-- The imaginary part of the Fourier kernel vanishes by oddness. -/
+lemma apm_a03J05_exp_abs_sin_transform (t : ℝ) :
+    (∫ x : ℝ, Real.exp (-|x|) * Real.sin (t * x)) = 0 := by
+  let g : ℝ → ℝ := fun x => Real.exp (-|x|) * Real.sin (t * x)
+  have hg : Integrable g := by
+    refine apm_a03J05_integrable_exp_neg_abs.mono' (by fun_prop) ?_
+    filter_upwards with x
+    dsimp [g]
+    rw [abs_mul, abs_of_pos (Real.exp_pos _)]
+    exact mul_le_of_le_one_right (Real.exp_pos _).le (Real.abs_sin_le_one _)
+  have hodd (x : ℝ) : g (-x) = -g x := by
+    simp [g, abs_neg]
+  have hsubst : (∫ x : ℝ, g (-x)) = ∫ x : ℝ, g x :=
+    integral_neg_eq_self g volume
+  rw [show (fun x => g (-x)) = fun x => -g x by funext x; exact hodd x,
+    integral_neg] at hsubst
+  linarith
+
+/-- The complex Fourier transform of the two-sided exponential, in Mathlib's
+`2π` normalization. -/
+lemma apm_a03J05_fourier_exp_neg_abs (w : ℝ) :
+    (𝓕 (fun x : ℝ => (Real.exp (-|x|) : ℂ))) w =
+      ((2 / (1 + (2 * Real.pi * w) ^ 2) : ℝ) : ℂ) := by
+  let f : ℝ → ℂ := fun x =>
+    Complex.exp ((↑(-2 * Real.pi * (x * w)) * Complex.I)) * Real.exp (-|x|)
+  have hf : Integrable f := by
+    refine apm_a03J05_integrable_exp_neg_abs.mono' (by fun_prop) ?_
+    filter_upwards with x
+    simp [f, Complex.norm_exp]
+  rw [Real.fourier_eq']
+  rw [show (fun x : ℝ =>
+      Complex.exp ((↑(-2 * Real.pi * inner ℝ x w) * Complex.I)) •
+        (Real.exp (-|x|) : ℂ)) = f by
+    funext x
+    have hinner : inner ℝ x w = x * w := by
+      change w * x = x * w
+      ring
+    simp [f, hinner]]
+  change (∫ x : ℝ, f x) = _
+  apply Complex.ext
+  · change (∫ x : ℝ, f x).re = 2 / (1 + (2 * Real.pi * w) ^ 2)
+    have hre : (∫ x : ℝ, (f x).re) = (∫ x : ℝ, f x).re := integral_re hf
+    rw [← hre]
+    simp only [f, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, mul_zero, sub_zero,
+      Complex.exp_re, Complex.mul_re, Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
+      Complex.I_re, Complex.I_im, zero_mul, mul_zero, sub_zero, add_zero, one_mul,
+      Real.exp_zero, Complex.div_re, Complex.ofReal_div, Complex.ofReal_ofNat,
+      Complex.ofReal_add, Complex.ofReal_one, Complex.ofReal_pow, mul_one]
+    rw [show (∫ x : ℝ, Real.cos (-2 * Real.pi * (x * w)) * Real.exp (-|x|)) =
+        ∫ x : ℝ, Real.exp (-|x|) * Real.cos ((2 * Real.pi * w) * x) by
+      apply integral_congr_ae
+      filter_upwards with x
+      rw [show -2 * Real.pi * (x * w) = -(2 * Real.pi * w * x) by ring,
+        Real.cos_neg]
+      ring]
+    simpa using apm_a03J05_exp_abs_cos_transform (2 * Real.pi * w)
+  · change (∫ x : ℝ, f x).im = 0
+    have him : (∫ x : ℝ, (f x).im) = (∫ x : ℝ, f x).im := integral_im hf
+    rw [← him]
+    simp only [f, Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im, mul_zero, add_zero,
+      Complex.exp_im, Complex.mul_re, Complex.mul_im, Complex.I_re, Complex.I_im,
+      zero_mul, mul_zero, sub_zero, one_mul, Real.exp_zero, Complex.ofReal_im, mul_one,
+      zero_add]
+    rw [show (∫ x : ℝ, Real.sin (-2 * Real.pi * (x * w)) * Real.exp (-|x|)) =
+        -(∫ x : ℝ, Real.exp (-|x|) * Real.sin ((2 * Real.pi * w) * x)) by
+      rw [← integral_neg]
+      apply integral_congr_ae
+      filter_upwards with x
+      rw [show -2 * Real.pi * (x * w) = -(2 * Real.pi * w * x) by ring,
+        Real.sin_neg]
+      ring]
+    rw [apm_a03J05_exp_abs_sin_transform]
+    simp
+
+/-- The transformed two-sided exponential is integrable, the second analytic
+hypothesis needed by Fourier inversion. -/
+lemma apm_a03J05_integrable_fourier_exp_neg_abs :
+    Integrable (𝓕 (fun x : ℝ => (Real.exp (-|x|) : ℂ))) volume := by
+  have hreal : Integrable (fun w : ℝ => 2 / (1 + (2 * Real.pi * w) ^ 2)) := by
+    have hscaled := integrable_inv_one_add_sq.comp_mul_left'
+      (mul_ne_zero (by norm_num : (2 : ℝ) ≠ 0) Real.pi_ne_zero)
+    have hmul := hscaled.const_mul (2 : ℝ)
+    convert hmul using 1
+  have hcomplex : Integrable
+      (fun w : ℝ => ((2 / (1 + (2 * Real.pi * w) ^ 2) : ℝ) : ℂ)) :=
+    Complex.ofRealCLM.integrable_comp hreal
+  exact hcomplex.congr (ae_of_all _ fun w => (apm_a03J05_fourier_exp_neg_abs w).symm)
+
+/-- Fourier inversion and the dilation `x = 2πw` give the full-line cosine
+transform of the Cauchy kernel. -/
+lemma apm_a03J05_integral_univ (t : ℝ) :
+    (∫ x : ℝ, Real.cos (t * x) / (1 + x ^ 2)) =
+      Real.pi * Real.exp (-|t|) := by
+  let e : ℝ → ℂ := fun x => (Real.exp (-|x|) : ℂ)
+  have he : Integrable e :=
+    Complex.ofRealCLM.integrable_comp apm_a03J05_integrable_exp_neg_abs
+  have hecont : ContinuousAt e t := by
+    dsimp [e]
+    fun_prop
+  have hinv := he.fourierInv_fourier_eq
+    apm_a03J05_integrable_fourier_exp_neg_abs hecont
+  rw [Real.fourierInv_eq'] at hinv
+  let q : ℝ → ℂ := fun w =>
+    Complex.exp ((↑(2 * Real.pi * inner ℝ w t) * Complex.I)) •
+      ((2 / (1 + (2 * Real.pi * w) ^ 2) : ℝ) : ℂ)
+  have hq : Integrable q := by
+    have hbase : Integrable
+        (fun w : ℝ => 2 / (1 + (2 * Real.pi * w) ^ 2)) := by
+      have hscaled := integrable_inv_one_add_sq.comp_mul_left'
+        (mul_ne_zero (by norm_num : (2 : ℝ) ≠ 0) Real.pi_ne_zero)
+      exact hscaled.const_mul 2
+    refine hbase.congr' (by fun_prop) ?_
+    filter_upwards with w
+    have hrpos : 0 < 2 / (1 + (2 * Real.pi * w) ^ 2) := by positivity
+    calc
+      ‖2 / (1 + (2 * Real.pi * w) ^ 2)‖ =
+          2 / (1 + (2 * Real.pi * w) ^ 2) := by
+            rw [Real.norm_eq_abs, abs_of_pos hrpos]
+      _ = ‖q w‖ := by
+        change 2 / (1 + (2 * Real.pi * w) ^ 2) =
+          ‖Complex.exp ((↑(2 * Real.pi * inner ℝ w t) * Complex.I)) •
+            Complex.ofReal (2 / (1 + (2 * Real.pi * w) ^ 2))‖
+        rw [norm_smul, Complex.norm_exp]
+        simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re,
+          Complex.I_im, mul_zero, sub_self, Real.exp_zero, one_mul, Complex.norm_real,
+          zero_mul, sub_zero, Real.norm_eq_abs, abs_of_pos hrpos]
+  have hreal : (∫ w : ℝ,
+      2 * Real.cos (2 * Real.pi * w * t) /
+        (1 + (2 * Real.pi * w) ^ 2)) = Real.exp (-|t|) := by
+    have hqi : (∫ w : ℝ, q w) = (Real.exp (-|t|) : ℂ) := by
+      calc
+        (∫ w : ℝ, q w) = ∫ w : ℝ,
+            Complex.exp ((↑(2 * Real.pi * inner ℝ w t) * Complex.I)) •
+              (𝓕 e) w := by
+                apply integral_congr_ae
+                filter_upwards with w
+                rw [apm_a03J05_fourier_exp_neg_abs]
+        _ = (Real.exp (-|t|) : ℂ) := by simpa only [e] using hinv
+    calc
+      (∫ w : ℝ, 2 * Real.cos (2 * Real.pi * w * t) /
+          (1 + (2 * Real.pi * w) ^ 2)) = ∫ w : ℝ, (q w).re := by
+            apply integral_congr_ae
+            filter_upwards with w
+            have hinner : inner ℝ w t = w * t := by
+              change t * w = w * t
+              ring
+            change 2 * Real.cos (2 * Real.pi * w * t) /
+                (1 + (2 * Real.pi * w) ^ 2) =
+              (Complex.exp ((↑(2 * Real.pi * inner ℝ w t) * Complex.I)) *
+                ((2 / (1 + (2 * Real.pi * w) ^ 2) : ℝ) : ℂ)).re
+            rw [Complex.mul_re]
+            simp only [Complex.ofReal_re, Complex.ofReal_im, mul_zero, sub_zero,
+              Complex.exp_re, Complex.mul_re, Complex.mul_im, Complex.I_re, Complex.I_im,
+              zero_mul, mul_zero, sub_zero, one_mul, Real.exp_zero, hinner]
+            ring
+      _ = (∫ w : ℝ, q w).re := integral_re hq
+      _ = Real.exp (-|t|) := by
+        simpa only [Complex.ofReal_re] using congrArg Complex.re hqi
+  let g : ℝ → ℝ := fun x => Real.cos (t * x) / (1 + x ^ 2)
+  have hdilate := Measure.integral_comp_mul_left g (2 * Real.pi)
+  simp only [smul_eq_mul] at hdilate
+  have hpos : 0 < 2 * Real.pi := mul_pos (by norm_num) Real.pi_pos
+  have hscaled : (∫ w : ℝ,
+      2 * Real.cos (2 * Real.pi * w * t) /
+        (1 + (2 * Real.pi * w) ^ 2)) =
+      (1 / Real.pi) * ∫ x : ℝ, g x := by
+    calc
+      (∫ w : ℝ, 2 * Real.cos (2 * Real.pi * w * t) /
+          (1 + (2 * Real.pi * w) ^ 2)) =
+          2 * ∫ w : ℝ, g ((2 * Real.pi) * w) := by
+            rw [← integral_const_mul]
+            apply integral_congr_ae
+            filter_upwards with w
+            simp only [g]
+            congr 2 <;> ring
+      _ = 2 * |(2 * Real.pi)⁻¹| * ∫ x : ℝ, g x := by rw [hdilate]; ring
+      _ = (1 / Real.pi) * ∫ x : ℝ, g x := by
+        rw [abs_of_pos (inv_pos.mpr hpos)]
+        field_simp [Real.pi_ne_zero]
+  rw [hscaled] at hreal
+  field_simp [Real.pi_ne_zero] at hreal
+  simpa [g] using hreal
 
 /-! ## Base case: t = 0 gives ∫₀^∞ 1/(1+x²) dx = π/2
 
@@ -138,7 +366,57 @@ theorem apm_a03j05 (t : ℝ) :
   inspection found `integrable_inv_one_add_sq` and nearby compiled domination
   patterns, but no stronger oscillatory-integral theorem. The remaining bridge
   is still the nonzero-frequency transform evaluation itself.
+
+  F31 opens a different route through Mathlib's Fourier inversion theorem.
+  The new compiled lemma `apm_a03J05_exp_abs_cos_transform` evaluates the
+  real part of the Fourier transform of `x ↦ exp (-|x|)` on the full line:
+  `∫ exp (-|x|) cos (t*x) = 2 / (1+t²)`.  It uses the already compiled
+  Laplace-cosine integral from `ConstructionTargets.Sinc` and Mathlib's
+  `integral_comp_abs`, so it avoids contour integration entirely.  To finish
+  this route one must package the vanishing odd sine part into the complex
+  identity for `𝓕 (fun x : ℝ ↦ (Real.exp (-|x|) : ℂ))`, prove that rational
+  transform integrable after the `2*π` scaling, apply
+  `Integrable.fourierInv_fourier_eq`, and extract/rescale its real part to the
+  requested positive-half-line cosine integral.
+
+  F31 round 2 compiles all prerequisites named in the previous residual:
+  `apm_a03J05_integrable_exp_neg_abs` supplies the original `L¹` hypothesis;
+  `apm_a03J05_exp_abs_sin_transform` proves the odd imaginary part vanishes;
+  `apm_a03J05_fourier_exp_neg_abs` packages the exact complex Fourier transform
+  in Mathlib's `2*π` normalization; and
+  `apm_a03J05_integrable_fourier_exp_neg_abs` supplies the transformed `L¹`
+  hypothesis.  What remains is now only the inversion application at `t`, its
+  expansion via `Real.fourierInv_eq'`, the positive dilation `x = 2*π*w`, and
+  taking real parts/evenness to identify the requested half-line integral.
   -/
-  sorry
+  have heven (x : ℝ) :
+      Real.cos (t * x) / (1 + x ^ 2) =
+        (fun y : ℝ => Real.cos (t * y) / (1 + y ^ 2)) |x| := by
+    by_cases hx : 0 ≤ x
+    · simp [abs_of_nonneg hx]
+    · have hx' : x < 0 := lt_of_not_ge hx
+      rw [abs_of_neg hx']
+      simp only [mul_neg, Real.cos_neg, neg_sq]
+  have hsplit :
+      (∫ x : ℝ, Real.cos (t * x) / (1 + x ^ 2)) =
+        2 * ∫ x in Ioi (0 : ℝ), Real.cos (t * x) / (1 + x ^ 2) := by
+    calc
+      (∫ x : ℝ, Real.cos (t * x) / (1 + x ^ 2)) =
+          ∫ x : ℝ, (fun y : ℝ => Real.cos (t * y) / (1 + y ^ 2)) |x| := by
+            apply integral_congr_ae
+            exact ae_of_all _ heven
+      _ = 2 * ∫ x in Ioi (0 : ℝ), Real.cos (t * x) / (1 + x ^ 2) :=
+        integral_comp_abs (f := fun y : ℝ => Real.cos (t * y) / (1 + y ^ 2))
+  have hfull := apm_a03J05_integral_univ t
+  rw [hsplit] at hfull
+  calc
+    (∫ x in Ioi (0 : ℝ), apm_a03J05_integrand t x ∂volume) =
+        ∫ x in Ioi (0 : ℝ), Real.cos (t * x) / (1 + x ^ 2) := by
+          apply integral_congr_ae
+          filter_upwards with x
+          simp only [apm_a03J05_integrand]
+          congr 2
+          ring
+    _ = (Real.pi / 2) * Real.exp (-|t|) := by linarith
 
 end

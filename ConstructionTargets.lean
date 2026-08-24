@@ -1,5 +1,10 @@
 import ConstructionTargets.BanachZarecki
 import ConstructionTargets.CircleParam
+import ConstructionTargets.CircleHomology
+import ConstructionTargets.DiskBoundaryHomology
+import ConstructionTargets.DiskBoundedPreimageDuality
+import ConstructionTargets.EmbeddedCircleLift
+import ConstructionTargets.EmbeddedCirclePreimage
 import ConstructionTargets.HerglotzRigidity
 import ConstructionTargets.KernelAverage
 import ConstructionTargets.L2Translation
@@ -16,9 +21,11 @@ import ConstructionTargets.UnivalentDeriv
 import ConstructionTargets.YoungConvolution
 import ConstructionTargets.SetIntegralPrimitive
 import ConstructionTargets.OrientedIntegration
+import ConstructionTargets.OrientedSurfacePreimageDuality
 import ConstructionTargets.Intersection
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.IntegralSingularHomologyComparison
+import ConstructionTargets.IntegerCyclic
 import ConstructionTargets.SimplyConnectedOpenCover
 import ConstructionTargets.SingularExcision
 import ConstructionTargets.SingularHomologyConcrete
@@ -35,6 +42,9 @@ import ConstructionTargets.T02A06SphereH0
 import ConstructionTargets.T02A06SphereOne
 import ConstructionTargets.T02A06SphereShift
 import ConstructionTargets.T02A06SphereVanishingBridge
+import ConstructionTargets.TransversePreimageDuality
+import ConstructionTargets.TransverseLinearPair
+import ConstructionTargets.TransversePreimageGeometry
 
 /-!
 # ConstructionTargets — reusable lemmas built to unblock specific APM problems
