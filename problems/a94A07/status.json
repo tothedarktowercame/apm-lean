@@ -10,12 +10,14 @@
     "problem_tex": "apm/a94A07.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,13 +29,17 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "imported_at": "2026-07-13T17:26:52.198826Z",
+  "boundary": "Closed by the f33 Student, attempt 3 (campaign jit-all-open-nontopology-v1, 2026-08-25); attempts are independent cold starts against the same frozen base -- all 3 attempts independently closed it here with genuinely different proof texts (366 vs 254 lines between attempt 1 and attempt 3), not a repeated/cached result. Banked content is attempt 3's submission. Frozen statement apm_a94a07 unchanged from the pre-solve base.",
   "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-08-25",
     "elaborated_exit": 0,
-    "sorry_declarations": 1,
-    "previous_classification": "informal-only"
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_a94a07 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f33"
   }
 }
