@@ -124,7 +124,51 @@ theorem apm_a92J01_bridge_1
         (ENNReal.ofReal p) Measure.count ∧
       ¬MemLp (apm_a92J01_ellCounterexample p q)
         (ENNReal.ofReal q) Measure.count := by
-  sorry
+  have hp : 0 < p := lt_of_lt_of_le (by linarith : (0 : ℝ) < q) hpq.le
+  have hq0 : 0 < q := lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1) hq
+  have hmeas : AEStronglyMeasurable
+      (apm_a92J01_ellCounterexample p q) Measure.count :=
+    (measurable_of_countable _).aestronglyMeasurable
+  have hpt : ∀ r : ℝ, 0 < r → ∀ n : ℕ,
+      ‖‖apm_a92J01_ellCounterexample p q n‖ ^ (ENNReal.ofReal r).toReal‖
+        = ((n.succ : ℝ) ^ (-((1 / p + 1 / q) / 2) * r)) := by
+    intro r hr n
+    have hpos : 0 < (n.succ : ℝ) := Nat.cast_pos.mpr n.succ_pos
+    have hnn : 0 ≤ ‖apm_a92J01_ellCounterexample p q n‖ ^
+        (ENNReal.ofReal r).toReal :=
+      Real.rpow_nonneg (norm_nonneg _) _
+    have h1 : ‖apm_a92J01_ellCounterexample p q n‖ ^
+        (ENNReal.ofReal r).toReal
+        = ((n.succ : ℝ) ^ (-((1 / p + 1 / q) / 2) * r)) := by
+      unfold apm_a92J01_ellCounterexample
+      rw [Real.norm_eq_abs, abs_of_nonneg (Real.rpow_nonneg hpos.le _),
+        ENNReal.toReal_ofReal hr.le, Real.rpow_mul hpos.le]
+    rw [Real.norm_eq_abs, abs_of_nonneg hnn, h1]
+  constructor
+  · refine (integrable_norm_rpow_iff (p := ENNReal.ofReal p) hmeas
+      (by simpa [ENNReal.ofReal_eq_zero] using hp) (by simp)).mp ?_
+    rw [integrable_count_iff]
+    have hsum : Summable (fun n : ℕ =>
+        ((n.succ : ℝ) ^ (-((1 / p + 1 / q) / 2) * p))) := by
+      simpa only [Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one] using
+        (summable_nat_add_iff
+          (f := fun n : ℕ => ((n : ℝ) ^ (-((1 / p + 1 / q) / 2) * p))) 1).mpr
+          (Real.summable_nat_rpow.mpr
+            (apm_a92J01_p_exponent_lt_neg_one hq hpq))
+    exact hsum.congr fun n => (hpt p hp n).symm
+  · intro hmem
+    have hint := (integrable_norm_rpow_iff (p := ENNReal.ofReal q) hmeas
+      (by simpa [ENNReal.ofReal_eq_zero] using hq0) (by simp)).mpr hmem
+    rw [integrable_count_iff] at hint
+    have hnosum : ¬ Summable (fun n : ℕ =>
+        ((n.succ : ℝ) ^ (-((1 / p + 1 / q) / 2) * q))) := by
+      intro hsum
+      have hshift := (summable_nat_add_iff
+        (f := fun n : ℕ => ((n : ℝ) ^ (-((1 / p + 1 / q) / 2) * q))) 1).mp
+        (by simpa only [Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one] using hsum)
+      have hlt := Real.summable_nat_rpow.mp hshift
+      exact absurd hlt (not_lt.mpr (apm_a92J01_neg_one_le_q_exponent hq hpq))
+    exact hnosum (hint.congr fun n => (hpt q hq0 n))
 
 /-- Why this unblocks the real-line conjunct of `apm_a92j01`: it converts the
 indicator-supported power tail to the improper-integral criterion on
@@ -135,7 +179,121 @@ theorem apm_a92J01_bridge_2
         (ENNReal.ofReal p) volume ∧
       ¬MemLp (apm_a92J01_realCounterexample p q)
         (ENNReal.ofReal q) volume := by
-  sorry
+  have hp : 0 < p := lt_of_lt_of_le (by linarith : (0 : ℝ) < q) hpq.le
+  have hq0 : 0 < q := lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1) hq
+  have hmeas : AEStronglyMeasurable
+      (apm_a92J01_realCounterexample p q) volume :=
+    (Measurable.ite (measurableSet_le measurable_const measurable_abs)
+      (by fun_prop) measurable_const).aestronglyMeasurable
+  have hcollapse : ∀ r : ℝ, 0 < r → ∀ x : ℝ, 1 < x →
+      ‖apm_a92J01_realCounterexample p q x‖ ^ (ENNReal.ofReal r).toReal
+        = x ^ (-((1 / p + 1 / q) / 2) * r) := by
+    intro r hr x hx
+    have hxabs : |x| = x := abs_of_pos (by linarith)
+    have hx0 : 0 ≤ |x| := abs_nonneg x
+    rw [apm_a92J01_realCounterexample,
+      if_pos (by rw [hxabs]; linarith),
+      Real.norm_eq_abs,
+      abs_of_nonneg (Real.rpow_nonneg hx0 _),
+      ENNReal.toReal_ofReal hr.le,
+      ← Real.rpow_mul hx0, hxabs]
+  constructor
+  · refine (integrable_norm_rpow_iff (p := ENNReal.ofReal p) hmeas
+      (by simpa [ENNReal.ofReal_eq_zero] using hp) (by simp)).mp ?_
+    have hOn : IntegrableOn
+        (fun x : ℝ => x ^ (-((1 / p + 1 / q) / 2) * p))
+        (Ioi (1 : ℝ)) volume :=
+      integrableOn_Ioi_rpow_of_lt
+        (apm_a92J01_p_exponent_lt_neg_one hq hpq) one_pos
+    have hpos : Integrable
+        ((Ioi (1 : ℝ)).indicator
+          (fun x : ℝ => x ^ (-((1 / p + 1 / q) / 2) * p))) volume :=
+      (integrable_indicator_iff measurableSet_Ioi).2 hOn
+    have hneg : Integrable
+        (fun x : ℝ => (Ioi (1 : ℝ)).indicator
+          (fun x : ℝ => x ^ (-((1 / p + 1 / q) / 2) * p)) (-x)) volume :=
+      hpos.comp_neg
+    refine (hpos.add hneg).congr ?_
+    filter_upwards [Measure.ae_ne volume 1, Measure.ae_ne volume (-1 : ℝ)] with x hne1 hneneg1
+    by_cases hx1 : 1 < x
+    · have hnotmemneg : -x ∉ Ioi (1 : ℝ) := by
+        intro hmem
+        have : (1 : ℝ) < -x := hmem
+        linarith
+      rw [hcollapse p hp x hx1]
+      simp only [Pi.add_apply]
+      rw [Set.indicator_of_mem (by simpa using hx1),
+        Set.indicator_of_notMem hnotmemneg]
+      ring
+    · by_cases hx2 : 1 < -x
+      · have hxa : |x| = -x := abs_of_neg (by linarith : x < 0)
+        have hx0 : 0 ≤ |x| := abs_nonneg x
+        have hnotmemx : x ∉ Ioi (1 : ℝ) := by
+          intro hmem
+          have : (1 : ℝ) < x := by simpa using hmem
+          exact hx1 this
+        simp only [Pi.add_apply]
+        rw [ENNReal.toReal_ofReal hp.le,
+          apm_a92J01_realCounterexample,
+          if_pos (by rw [hxa]; linarith),
+          Real.norm_eq_abs,
+          abs_of_nonneg (Real.rpow_nonneg hx0 _),
+          ← Real.rpow_mul hx0, hxa,
+          Set.indicator_of_notMem hnotmemx,
+          Set.indicator_of_mem (by simpa using hx2)]
+        ring
+      · have hxabsle : |x| ≤ 1 := by
+          by_contra h
+          have hbig : (1 : ℝ) < |x| := by
+            push_neg at h
+            linarith
+          rcases lt_abs.mp hbig with hx | hx
+          · exact hx1 hx
+          · exact hx2 hx
+        have hnotbig : ¬ 1 ≤ |x| := by
+          intro hbig
+          have hxeq : |x| = 1 := le_antisymm hxabsle hbig
+          by_cases hx0 : 0 ≤ x
+          · exact hne1 (by
+              have := abs_of_nonneg hx0
+              linarith)
+          · exact hneneg1 (by
+              have := abs_of_neg (by linarith : x < 0)
+              linarith)
+        simp only [Pi.add_apply]
+        rw [ENNReal.toReal_ofReal hp.le,
+          apm_a92J01_realCounterexample,
+          if_neg hnotbig,
+          Real.norm_eq_abs, abs_zero,
+          Real.zero_rpow hp.ne']
+        rw [Set.indicator_of_notMem (by
+            intro hmem
+            have : (1 : ℝ) < x := hmem
+            linarith),
+          Set.indicator_of_notMem (by
+            intro hmem
+            have : (1 : ℝ) < -x := hmem
+            linarith)]
+        ring
+  · intro hmem
+    have hint := (integrable_norm_rpow_iff (p := ENNReal.ofReal q) hmeas
+      (by simpa [ENNReal.ofReal_eq_zero] using hq0) (by simp)).mpr hmem
+    rw [ENNReal.toReal_ofReal hq0.le] at hint
+    have hOn : IntegrableOn
+        (fun x : ℝ => ‖apm_a92J01_realCounterexample p q x‖ ^ q)
+        (Ioi (1 : ℝ)) volume := hint.integrableOn
+    have hOn' : IntegrableOn
+        (fun x : ℝ => ‖apm_a92J01_realCounterexample p q x‖ ^ (ENNReal.ofReal q).toReal)
+        (Ioi (1 : ℝ)) volume := by
+      simpa [ENNReal.toReal_ofReal hq0.le] using hOn
+    have hconv : IntegrableOn
+        (fun x : ℝ => x ^ (-((1 / p + 1 / q) / 2) * q))
+        (Ioi (1 : ℝ)) volume := by
+      refine hOn'.congr_fun (fun x hx => ?_) measurableSet_Ioi
+      simpa [ENNReal.toReal_ofReal hq0.le] using hcollapse q hq0 x hx
+    have hlt := (integrableOn_Ioi_rpow_iff
+      (by norm_num : (0 : ℝ) < 1)).mp hconv
+    exact absurd hlt (not_lt.mpr (apm_a92J01_neg_one_le_q_exponent hq hpq))
 
 theorem apm_a92j01 :
     (∀ (p q : ℝ), 1 ≤ q → q < p → ∀ f : ℝ → ℝ,
@@ -180,4 +338,9 @@ theorem apm_a92j01 :
   measurability, successor-index, and indicator conversions connecting the
   two concrete functions to those criteria. The frozen statement is unchanged.
   -/
-  sorry
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact fun p q _ hpq f hf => apm_a92J01_memLp_mono_on_unitMeasure p q hpq f hf
+  · exact fun p q hq hpq => apm_a92J01_bridge_1 p q hq hpq
+  · exact fun p q hq hpq => apm_a92J01_bridge_2 p q hq hpq
+  · exact fun p _ => ⟨apm_a92J01_discontinuousCounterexample_memLp p,
+      apm_a92J01_discontinuousCounterexample_not_continuousOn⟩
