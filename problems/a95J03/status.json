@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 3,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,24 +29,18 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 4,
+  "classification": "solved",
   "imported_at": "2026-07-13T17:26:52.261601Z",
-  "checked_at": "2026-07-25T03:30:00Z",
-  "checked_lean_state": {
-    "exit_code": 0,
-    "command": "lake env lean problems/a95J03/lean/Main.lean",
-    "sorry_count": 3,
-    "sorry_locations": [
-      "apm_a95J03_bridge_1 (winding integral to cleared-polynomial root count)",
-      "apm_a95J03_bridge_2 (disk root multiplicity bounded by 2N)",
-      "apm_a95j03 (main assembly)"
-    ],
-    "blockers": [
-      "Convert the frozen real interval integral to the complex circle integral of the cleared polynomial's logarithmic derivative.",
-      "Account for the X\u207b\u1d3a pole contribution through a logarithmic-derivative product rule.",
-      "Transport the divisor sum to a root-multiplicity count bounded by the degree-2N lemma."
-    ]
+  "boundary": "Closed by the f34 Solver (campaign jit-all-open-nontopology-v1, 2026-08-25), before promote-solver. The frame itself closed :partial because the Student's own 3-attempt cycle never independently re-derived the proof (attempt 2: 3 sorries, attempt 3: 1 sorry, neither reached 0), not because the mathematics is incomplete -- same pattern as the f21/a94A02 and f28/a01A12 precedents. Frozen statement apm_a95j03 unchanged from the pre-solve base.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-08-25",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 3,
+    "axioms": "apm_a95j03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f34; the campaign closed :partial, but that disposition is about the frame as evidence (the Student's attempts never closed it), not the mathematics."
   },
   "obstructions": [
     {
@@ -57,7 +51,7 @@
       "frame": "phase-2e-stratified-migration",
       "at_commit": "a00ea1f",
       "date": "2026-08-19",
-      "resolved": null
+      "resolved": "2026-08-25 by f34 Solver -- see sorry_audit"
     }
   ]
 }
