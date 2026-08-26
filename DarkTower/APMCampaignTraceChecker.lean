@@ -114,6 +114,7 @@ structure CampaignTrace where
   phaseReceiptIds : List String
   problemOutcome : String
   frameResult : String
+  voidClassification : Option String := none
   analystWakes : List TraceAnalystWake
   deriving FromJson, Repr
 
@@ -137,6 +138,11 @@ def expectedEdges : List (String × String) :=
 
 def stepEdges (trace : CampaignTrace) : List (String × String) :=
   trace.steps.map fun step => (step.fromPhase, step.toPhase)
+
+def edgePrefix : List (String × String) → List (String × String) → Bool
+  | [], _ => true
+  | _, [] => false
+  | x :: xs, y :: ys => x == y && edgePrefix xs ys
 
 def ledgerContinuous : List TraceStep → Bool
   | [] => true
@@ -372,7 +378,17 @@ def terminalFrameValid (trace : CampaignTrace) : Bool :=
   ((trace.problemOutcome == "solved" &&
       (trace.frameResult == "closed" || trace.frameResult == "partial")) ||
    (trace.problemOutcome == "unsolved" &&
-      (trace.frameResult == "partial" || trace.frameResult == "void")))
+      (trace.frameResult == "partial" || trace.frameResult == "void")) ||
+   (trace.problemOutcome == "refuted" && trace.frameResult == "void"))
+
+def earlyVoidValid (trace : CampaignTrace) : Bool :=
+  !trace.steps.isEmpty &&
+  edgePrefix (stepEdges trace) expectedEdges &&
+  trace.phaseReceiptIds == trace.steps.map (·.receiptId) &&
+  trace.phaseReceiptIds.Nodup &&
+  trace.problemOutcome == "refuted" &&
+  trace.frameResult == "void" &&
+  trace.voidClassification == some "statement-refuted" && !trace.closed
 
 def analystValid (trace : CampaignTrace) : Bool :=
   trace.analystWakes.length == 2 &&
@@ -393,20 +409,18 @@ def accepts (trace : CampaignTrace) : Bool :=
   !trace.manifestHash.isEmpty &&
   trace.contractId == canonicalContract.id &&
   trace.phaseOrder == canonicalNames &&
-  stepEdges trace == expectedEdges &&
   ledgerContinuous trace.steps &&
   receiptContinuous trace.steps &&
   dispatchLifecycleValid trace.steps &&
-  memoryValid trace &&
-  reviewResolutionValid trace &&
   campaignIsolationValid trace &&
-  terminalFrameValid trace &&
-  analystValid trace &&
-  trace.closed && terminalDigestMatches trace
+  terminalDigestMatches trace &&
+  ((stepEdges trace == expectedEdges && memoryValid trace &&
+      reviewResolutionValid trace && terminalFrameValid trace &&
+      analystValid trace && trace.closed) || earlyVoidValid trace)
 
 theorem acceptance_implies_canonical_order (trace : CampaignTrace)
     (h : accepts trace = true) : trace.phaseOrder = canonicalNames := by
-  simp [accepts] at h
+  simp [accepts, earlyVoidValid] at h
   aesop
 
 theorem acceptance_implies_registration_identity (trace : CampaignTrace)
@@ -416,10 +430,12 @@ theorem acceptance_implies_registration_identity (trace : CampaignTrace)
   simp [accepts] at h
   aesop
 
-theorem acceptance_implies_terminal_close (trace : CampaignTrace)
+theorem acceptance_implies_terminal_disposition (trace : CampaignTrace)
     (h : accepts trace = true) :
-    trace.closed = true ∧ terminalDigestMatches trace = true := by
-  simp [accepts] at h
+    terminalDigestMatches trace = true ∧
+      (trace.closed = true ∨
+       (trace.problemOutcome = "refuted" ∧ trace.frameResult = "void")) := by
+  simp [accepts, earlyVoidValid] at h
   aesop
 
 def checkFile (path : System.FilePath) : IO UInt32 := do
