@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 5,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 5
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,29 +29,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "imported_at": "2026-07-13T17:26:52.261601Z",
-  "checked_at": "2026-08-08T00:00:00Z",
-  "checked_lean_state": {
-    "exit_code": 0,
-    "command": "lake env lean problems/a95J04/lean/Main.lean",
-    "sorry_count": 5,
-    "sorry_locations": [
-      "apm_a95J04_bridge_taylor_coefficients",
-      "apm_a95J04_bridge_absolute_convergence",
-      "apm_a95J04_bridge_holomorphic_past_circle",
-      "apm_a95J04_bridge_simple_pole_decomposition",
-      "apm_a95j04 (global pole existence and finite principal-part coefficient argument)"
-    ],
-    "blockers": [
-      "Uniform holomorphic extension and pointwise HasSum-to-Taylor-coefficient identification are not assembled.",
-      "Subtraction of the finite collection of simple principal parts remains to be assembled."
-    ],
-    "proved_lemmas": [
-      "apm_a95J04_pole_mem_sphere_of_mem_closedBall",
-      "apm_a95J04_boundary_poles_finite"
-    ]
-  },
   "closer_hop": 4,
-  "closer_note": "Stated four precise, independently handoff-ready bridges for Taylor coefficient identification, larger-disk absolute convergence, pole-free continuation, and finite simple-principal-part decomposition. Proofs were intentionally not attempted."
+  "closer_note": "Stated four precise, independently handoff-ready bridges for Taylor coefficient identification, larger-disk absolute convergence, pole-free continuation, and finite simple-principal-part decomposition. Proofs were intentionally not attempted.",
+  "boundary": "Closed by frame f35 (campaign jit-all-open-nontopology-v1, 2026-08-26): \"complete meromorphic coefficient bound proof\". Banked verbatim from the f35 Solver terminal head e885b1320f5b5135de85121c748579b4b1c06ad3 on branch exp/countdown-f35-a95J04-solver; content identical to that head, no re-derivation. Frozen statement apm_a95j04 unchanged from the pre-solve base.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-08-26",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 5,
+    "axioms": "apm_a95j04 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f35; the campaign closed :partial, but that disposition is about the frame as evidence, not the mathematics."
+  }
 }
