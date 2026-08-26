@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 2,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,31 +29,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 3,
   "closer_note": "Compiled the exact x = 2u scaling reduction and proved global absolute integrability of the oscillatory kernel by scaling integrable_inv_one_add_sq and domination by |cos| <= 1. The shared positive-frequency Cauchy characteristic-function bridge remains open.",
   "imported_at": "2026-07-13T17:26:52.853875Z",
-  "checked_at": "2026-08-05T13:30:00Z",
-  "checked_lean_state": {
-    "exit_code": 0,
-    "command": "lake env lean problems/a97J06/lean/Main.lean",
-    "sorry_count": 1,
-    "sorry_locations": [
-      "cos_integral_eval (contour integral evaluation proof body)"
-    ],
-    "blockers": [
-      "Zero-frequency case is proved by the compiled cos_integral_eval_zero lemma using Cauchy normalization and evenness",
-      "Frequency sign reduction is proved by the compiled cos_integral_even lemma",
-      "The Cauchy characteristic function for nonzero frequency is not packaged",
-      "Compiled a92J06 full-circle rational contour pattern is reusable only for the pole subcalculation",
-      "No packaged semicircle/Jordan-lemma API was found; remaining bridge is custom upper-arc contour, decay, and improper-integral limit"
-    ]
-  },
   "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-08-26",
     "elaborated_exit": 0,
-    "sorry_declarations": 2,
-    "previous_classification": "partial"
-  }
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 2,
+    "axioms": "apm_a97j06 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f41; the campaign closed :partial, but that disposition is about the frame as evidence, not the mathematics."
+  },
+  "boundary": "Closed by frame f41 (campaign jit-all-open-nontopology-v1, 2026-08-26): \"close Cauchy cosine transform by Fourier inversion\". Banked verbatim from the f41 Solver terminal head 6bf011133fc46aa9bb38e90f302b602b837c646a on branch exp/countdown-f41-a97J06-solver; content identical to that head, no re-derivation. Frozen statement apm_a97j06 unchanged from the pre-solve base."
 }
