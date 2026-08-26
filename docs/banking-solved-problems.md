@@ -35,6 +35,40 @@ absence of preservation, is the actual defect.** The mechanism exists; solved
 solver heads are simply not routed into it. Verified: zero of the 47 `refs/apm/`
 refs reach any of the four solver heads.
 
+### Where things are actually saved (as of 2026-08-26)
+
+    refs/apm/banked-solves/<frame>/<pid>/<head>
+        A solved solver head that PASSED the axiom gate: elaborated exit 0,
+        zero sorry warnings, axioms exactly [propext, Classical.choice,
+        Quot.sound]. Written by futon3c bank-audit/verify-and-pin!, called from
+        countdown_control at frame close. This is the pin the sweep requires
+        before it will put anything on master.
+
+    refs/apm/parked-artifacts/<frame>/<pid>/<head>
+        Substantial work from a frame that was PARKED rather than solved, so it
+        will never pass the axiom gate and the sweep will never touch it. First
+        entry is f43/a97J08 at a3e800ba: 1962 lines, one remaining sorry at
+        line 1806, blocked on absent planar-topology infrastructure (Jordan
+        curve, degree, winding number, Alexander duality) rather than on the
+        proof. Written by hand today; no code writes this yet.
+
+    refs/apm/preserved-student-attempts/<frame>/<pid>/<head>
+    refs/apm/student-candidates/<frame>/<pid>/attempt-N/<head>
+        Student candidates the machine REJECTED, pinned by the frame machine
+        itself. 19 and 27 refs respectively. Some point at the base revision --
+        attempts that wrote nothing are pinned too.
+
+To see any of them:
+
+    git for-each-ref --format='%(refname)' refs/apm/
+
+**None of this is on master, and none of it is findable by browsing.** A proof
+under refs/apm/ is durable and effectively invisible: it will survive gc and
+will not be found by anyone who does not already know the namespace exists.
+That is why banking to master is the destination and pinning is only the
+guardrail. Getting a solve onto master is what makes it findable; the pin only
+guarantees it is still there to be found.
+
 Two commands lie about this, and both were used while writing this document:
 
 - `git branch --contains <sha>` and `git branch -a --contains` **cannot see
