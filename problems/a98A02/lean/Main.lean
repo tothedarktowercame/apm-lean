@@ -140,7 +140,116 @@ theorem apm_a98A02_bridge_1
     Tendsto
       (fun n => ∫ x in Icc (0 : ℝ) 1, f x * g n x ∂volume)
       atTop (𝓝 0) := by
-  sorry
+  let μ : Measure ℝ := volume.restrict (Icc (0 : ℝ) 1)
+  let h : ℕ → ℝ → ℝ := fun k x => max (-(k : ℝ)) (min (k : ℝ) (f x))
+  have hfμ : Integrable f μ := hf
+  have hfmeas : AEStronglyMeasurable f μ := hfμ.1
+  have hh_meas (k : ℕ) : AEStronglyMeasurable (h k) μ := by
+    rw [aestronglyMeasurable_iff_aemeasurable]
+    exact (measurable_const.aemeasurable.max
+      (measurable_const.aemeasurable.min hfmeas.aemeasurable))
+  have hh_bound (k : ℕ) : ∀ᵐ x ∂μ, ‖h k x‖ ≤ (k : ℝ) := by
+    filter_upwards with x
+    dsimp [h]
+    rw [abs_le]
+    constructor
+    · exact le_max_left _ _
+    · exact max_le ((neg_nonpos.mpr (Nat.cast_nonneg k)).trans (Nat.cast_nonneg k))
+        (min_le_left _ _)
+  have hhL2 (k : ℕ) : MemLp (h k) 2 μ :=
+    MemLp.of_bound (hh_meas k) k (hh_bound k)
+  have hM : 0 ≤ M := by
+    exact (abs_nonneg (g 0 0)).trans (hg_bound 0 0 ⟨le_rfl, zero_le_one⟩)
+  have hgmeas (n : ℕ) : AEStronglyMeasurable (g n) μ :=
+    ((hg_meas n).aestronglyMeasurable.mono_measure Measure.restrict_le_self).congr
+      (indicator_ae_eq_restrict measurableSet_Icc)
+  have hgbound (n : ℕ) : ∀ᵐ x ∂μ, ‖g n x‖ ≤ M := by
+    filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+    simpa [Real.norm_eq_abs] using hg_bound n x hx
+  have hpoint (x : ℝ) : Tendsto (fun k => h k x) atTop (𝓝 (f x)) := by
+    obtain ⟨N : ℕ, hN : |f x| < N⟩ := exists_nat_gt |f x|
+    apply tendsto_atTop_of_eventually_const (i₀ := N)
+    intro k hk
+    have hk' : |f x| ≤ (k : ℝ) := hN.le.trans (Nat.cast_le.mpr hk)
+    change max (-(k : ℝ)) (min (k : ℝ) (f x)) = f x
+    rw [min_eq_right (abs_le.mp hk').2, max_eq_right (abs_le.mp hk').1]
+  have herr : Tendsto (fun k => ∫ x, |f x - h k x| ∂μ) atTop (𝓝 0) := by
+    have hd := tendsto_integral_of_dominated_convergence (μ := μ) (fun x => 2 * |f x|)
+      (F := fun k x => |f x - h k x|) (f := fun _ => 0)
+    have hdmeas : ∀ k, AEStronglyMeasurable (fun x => |f x - h k x|) μ := fun k =>
+      (hfmeas.sub (hh_meas k)).norm
+    have hdbound : ∀ k, ∀ᵐ x ∂μ, ‖|f x - h k x|‖ ≤ 2 * |f x| := by
+      intro k
+      filter_upwards with x
+      rw [Real.norm_eq_abs, abs_abs]
+      calc
+        |f x - h k x| ≤ |f x| + |h k x| := abs_sub _ _
+        _ ≤ |f x| + |f x| := by
+          apply add_le_add (le_refl _)
+          change |max (-(k : ℝ)) (min (k : ℝ) (f x))| ≤ |f x|
+          simp only [abs_le]
+          constructor <;> grind
+        _ = 2 * |f x| := by ring
+    have hdlim : ∀ᵐ x ∂μ, Tendsto (fun k => |f x - h k x|) atTop (𝓝 0) := by
+      filter_upwards with x
+      have hc : Tendsto (fun _ : ℕ => f x) atTop (𝓝 (f x)) := tendsto_const_nhds
+      simpa using (hc.sub (hpoint x)).abs
+    simpa only [integral_zero] using hd hdmeas (hfμ.abs.const_mul 2) hdbound hdlim
+  refine Metric.tendsto_atTop.2 ?_
+  intro ε hε
+  have hδ : 0 < ε / (2 * (M + 1)) := div_pos hε (by positivity)
+  rcases Metric.tendsto_atTop.1 herr _ hδ with ⟨k, hk⟩
+  have hkerr : ∫ x, |f x - h k x| ∂μ < ε / (2 * (M + 1)) := by
+    simpa [Real.dist_eq, abs_of_nonneg (integral_nonneg fun _ => abs_nonneg _)] using hk k le_rfl
+  have hhk := hL2 (h k) (hhL2 k)
+  rcases Metric.tendsto_atTop.1 hhk _ (half_pos hε) with ⟨N, hN⟩
+  refine ⟨N, fun n hn => ?_⟩
+  have hprod_int : Integrable (fun x => (f x - h k x) * g n x) μ := by
+    simpa [smul_eq_mul, mul_comm] using
+      (hfμ.sub ((hhL2 k).integrable (by norm_num))).bdd_smul M (hgmeas n) (hgbound n)
+  have hprod_bound : ‖∫ x, (f x - h k x) * g n x ∂μ‖ ≤
+      M * ∫ x, |f x - h k x| ∂μ := by
+    calc
+      ‖∫ x, (f x - h k x) * g n x ∂μ‖ ≤
+          ∫ x, M * |f x - h k x| ∂μ := by
+        apply norm_integral_le_of_norm_le
+        · exact (hfμ.sub ((hhL2 k).integrable (by norm_num))).abs.const_mul M
+        filter_upwards [hgbound n] with x hx
+        rw [norm_mul, Real.norm_eq_abs, Real.norm_eq_abs]
+        simpa [mul_comm] using mul_le_mul_of_nonneg_left hx (abs_nonneg (f x - h k x))
+      _ = M * ∫ x, |f x - h k x| ∂μ := by
+        rw [integral_const_mul]
+  have hsmall : ‖∫ x, (f x - h k x) * g n x ∂μ‖ < ε / 2 := by
+    refine hprod_bound.trans_lt ?_
+    calc
+      M * ∫ x, |f x - h k x| ∂μ ≤ (M + 1) * ∫ x, |f x - h k x| ∂μ := by
+        exact mul_le_mul_of_nonneg_right (by linarith) (integral_nonneg fun _ => abs_nonneg _)
+      _ < (M + 1) * (ε / (2 * (M + 1))) :=
+        mul_lt_mul_of_pos_left hkerr (by linarith)
+      _ = ε / 2 := by field_simp
+  have happ : dist (∫ x in Icc (0 : ℝ) 1, g n x * h k x ∂volume) 0 < ε / 2 :=
+    hN n hn
+  have hhprod_int : Integrable (fun x => g n x * h k x) μ := by
+    simpa [smul_eq_mul] using
+      ((hhL2 k).integrable (by norm_num)).bdd_smul M (hgmeas n) (hgbound n)
+  have heq : (∫ x in Icc (0 : ℝ) 1, f x * g n x ∂volume) =
+      (∫ x, (f x - h k x) * g n x ∂μ) +
+        (∫ x in Icc (0 : ℝ) 1, g n x * h k x ∂volume) := by
+    change (∫ x, f x * g n x ∂μ) =
+      (∫ x, (f x - h k x) * g n x ∂μ) + (∫ x, g n x * h k x ∂μ)
+    rw [← integral_add hprod_int hhprod_int]
+    apply integral_congr_ae
+    filter_upwards with x
+    ring
+  rw [heq]
+  rw [dist_zero_right]
+  calc
+    ‖(∫ x, (f x - h k x) * g n x ∂μ) +
+        (∫ x in Icc (0 : ℝ) 1, g n x * h k x ∂volume)‖ ≤
+        ‖∫ x, (f x - h k x) * g n x ∂μ‖ +
+          ‖∫ x in Icc (0 : ℝ) 1, g n x * h k x ∂volume‖ := norm_add_le _ _
+    _ < ε / 2 + ε / 2 := add_lt_add hsmall (by simpa [dist_zero_right] using happ)
+    _ = ε := by ring
 
 theorem apm_a98a02 (g : ℕ → ℝ → ℝ) (M : ℝ)
     (hg_meas : ∀ n, Measurable ((Icc (0 : ℝ) 1).indicator (g n)))
@@ -195,4 +304,9 @@ theorem apm_a98a02 (g : ℕ → ℝ → ℝ) (M : ℝ)
   `|∫ (f-h)g_n| ≤ M ∫|f-h|`; no corpus theorem assembles that raw-function
   truncation and uniform limit in the frozen encoding.
   -/
-  sorry
+  intro f hf
+  apply apm_a98A02_bridge_1 g M hg_meas hg_bound
+  · intro h hh
+    exact apm_a98A02_integral_tendsto_zero_of_memLp_two
+      g M hg_meas hg_bound hg_orthonormal h hh
+  exact hf
