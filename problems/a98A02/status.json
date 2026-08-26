@@ -1,55 +1,55 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "a98A02",
-  "bundle_root": "problems/a98A02",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-a98A02.md",
-    "problem_tex": "apm/a98A02.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "a98A02",
+  "obstructions" : [ {
+    "areas" : [ ],
+    "areas_are" : "necessary",
+    "missing" : "[closer_hop] 3\n\n[closer_note] Compiled MemLp-two packaging, the actual L² orthonormal family, exact identification of L² inner products with raw integral coefficients, and Bessel convergence for every L² approximant. Only the uniform truncation/density extension from arbitrary L¹ functions remains.",
+    "recorded_by" : "codex-6",
+    "frame" : "phase-2e-stratified-migration",
+    "at_commit" : "a00ea1f",
+    "date" : "2026-08-19",
+    "resolved" : null
+  } ],
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-a98A02.md",
+    "problem_tex" : "apm/a98A02.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
-    "sorry_count_main": 2,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+  "boundary" : "Closed by frame f44 (campaign jit-all-open-nontopology-v1, 2026-08-26): \"prove a98A02 via bounded L2 truncations\". Banked verbatim from the f44 Solver terminal head abdca8f9c6403ff247067e12e5aaba97f50edab2 on branch exp/countdown-f44-a98A02-solver; content identical to that head, no re-derivation. Frozen statement apm_a98a02 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/a98A02",
+  "closer_hop" : 3,
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-26",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 2,
+    "axioms" : "apm_a98a02 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f44"
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Compiled MemLp-two packaging, the actual L\u00b2 orthonormal family, exact identification of L\u00b2 inner products with raw integral coefficients, and Bessel convergence for every L\u00b2 approximant. Only the uniform truncation/density extension from arbitrary L\u00b9 functions remains.",
-  "imported_at": "2026-07-13T17:26:52.934944Z",
-  "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
-    "elaborated_exit": 0,
-    "sorry_declarations": 2,
-    "previous_classification": "partial"
-  },
-  "obstructions": [
-    {
-      "areas": [],
-      "areas_are": "necessary",
-      "missing": "[closer_hop] 3\n\n[closer_note] Compiled MemLp-two packaging, the actual L\u00b2 orthonormal family, exact identification of L\u00b2 inner products with raw integral coefficients, and Bessel convergence for every L\u00b2 approximant. Only the uniform truncation/density extension from arbitrary L\u00b9 functions remains.",
-      "recorded_by": "codex-6",
-      "frame": "phase-2e-stratified-migration",
-      "at_commit": "a00ea1f",
-      "date": "2026-08-19",
-      "resolved": null
-    }
-  ]
+  "closer_note" : "Compiled MemLp-two packaging, the actual L² orthonormal family, exact identification of L² inner products with raw integral coefficients, and Bessel convergence for every L² approximant. Only the uniform truncation/density extension from arbitrary L¹ functions remains.",
+  "imported_at" : "2026-07-13T17:26:52.934944Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }
