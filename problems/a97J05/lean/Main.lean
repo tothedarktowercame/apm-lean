@@ -54,6 +54,45 @@ lemma apm_a97J05_remainder_update_continuousAt
     heq.mono fun z hz => by dsimp; rw [hz]; ring
   exact (hg.continuousAt.mono_left inf_le_left).congr' heq'.symm
 
+lemma apm_a97J05_coeff_tendsto_zero
+    (D : Set ℂ) (hD_open : IsOpen D) (u : ℂ → ℂ)
+    (hu : AnalyticOn ℂ u D)
+    (hclosed : closedBall (0 : ℂ) 1 ⊆ D) :
+    Tendsto (fun n : ℕ => ‖iteratedDeriv n u 0‖ / n.factorial) atTop (𝓝 0) := by
+  obtain ⟨δ, hδpos, hδsub⟩ :=
+    (isCompact_closedBall (0 : ℂ) (1 : ℝ)).exists_cthickening_subset_open hD_open hclosed
+  have hbigClosed : closedBall (0 : ℂ) (1 + δ) ⊆ D := by
+    intro z hz
+    apply hδsub
+    rw [cthickening_closedBall hδpos.le (by positivity : (0 : ℝ) ≤ 1) (0 : ℂ)]
+    simpa [add_comm] using hz
+  have hRpos : 0 < 1 + δ := by linarith
+  have hdiff : DiffContOnCl ℂ u (ball (0 : ℂ) (1 + δ)) :=
+    hu.differentiableOn.diffContOnCl_ball hbigClosed
+  have hcont : ContinuousOn u (sphere (0 : ℂ) (1 + δ)) :=
+    (hdiff.continuousOn_ball).mono sphere_subset_closedBall
+  have hbounded : Bornology.IsBounded (u '' sphere (0 : ℂ) (1 + δ)) :=
+    (isCompact_sphere (0 : ℂ) (1 + δ)).image_of_continuousOn hcont |>.isBounded
+  rcases isBounded_iff_forall_norm_le.mp hbounded with ⟨C, hCball⟩
+  have hC : ∀ z ∈ sphere (0 : ℂ) (1 + δ), ‖u z‖ ≤ C := by
+    intro z hz; exact hCball (u z) ⟨z, hz, rfl⟩
+  have hseq_bound (n : ℕ) :
+      ‖iteratedDeriv n u 0‖ / n.factorial ≤ C / (1 + δ) ^ n := by
+    have hd := Complex.norm_iteratedDeriv_le_of_forall_mem_sphere_norm_le
+      (f := u) (c := (0 : ℂ)) (R := 1 + δ) (C := C) n hRpos hdiff hC
+    have hfact_pos : 0 < (n.factorial : ℝ) := by exact_mod_cast Nat.factorial_pos n
+    apply (div_le_iff₀ hfact_pos).2
+    simpa [div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using hd
+  have hratio : |(1 / (1 + δ : ℝ))| < 1 := by
+    rw [abs_of_pos (one_div_pos.mpr hRpos), div_lt_one hRpos]
+    linarith
+  have hpow : Tendsto (fun n : ℕ => (1 / (1 + δ : ℝ)) ^ n) atTop (𝓝 0) :=
+    tendsto_pow_atTop_nhds_zero_of_abs_lt_one hratio
+  have hgeom : Tendsto (fun n : ℕ => C / (1 + δ) ^ n) atTop (𝓝 0) := by
+    simpa [div_eq_mul_inv, one_div_pow] using (tendsto_const_nhds.mul hpow)
+  exact squeeze_zero' (Eventually.of_forall fun n => by positivity)
+    (Eventually.of_forall hseq_bound) hgeom
+
 theorem apm_a97j05
     (f : ℂ → ℂ) (A : ℂ) (a : ℕ → ℂ)
     (hanalytic : AnalyticOn ℂ f (ball 0 2 \ ({1} : Set ℂ)))
@@ -183,4 +222,85 @@ theorem apm_a97j05
   -- `HasSum` on `ball 0 1`; converting that family into the corresponding
   -- `HasFPowerSeriesAt (ofScalars ℂ a)` (including its radius bound), then
   -- copying the closed `a96J09` Cauchy-decay estimate, remains the open bridge.
-  sorry
+  let h : ℂ → ℂ := fun z => f z - A / (z - 1)
+  let G : ℂ → ℂ := Function.update h 1 (g₀ 1)
+  have hG_cont : ContinuousAt G 1 := by
+    exact apm_a97J05_remainder_update_continuousAt f g₀ 1 A hg₀ heq_pole
+  have hG_diff_punct : ∀ᶠ z in 𝓝[≠] (1 : ℂ), DifferentiableAt ℂ G z := by
+    have hev : ∀ᶠ z in nhdsWithin (1 : ℂ) {1}ᶜ, z ∈ ball (1 : ℂ) 1 :=
+      Filter.mem_of_superset
+        (mem_inf_of_left (Metric.ball_mem_nhds (1 : ℂ) zero_lt_one)) (fun _ h => h)
+    filter_upwards [self_mem_nhdsWithin, hev]
+      with z hz hball
+    have hz1 : z ≠ 1 := hz
+    have hzD : z ∈ ball (0 : ℂ) 2 \ ({1} : Set ℂ) := by
+      constructor
+      · rw [mem_ball] at hball ⊢
+        calc dist z 0 ≤ dist z 1 + dist 1 0 := dist_triangle _ _ _
+          _ = dist z 1 + 1 := by norm_num
+          _ < 1 + 1 := by simpa [add_comm] using add_lt_add_right hball 1
+          _ = 2 := by norm_num
+      · simpa using hz1
+    have hfz : AnalyticAt ℂ f z :=
+      h_isOpen_punctured.analyticOn_iff_analyticOnNhd.mp hanalytic z hzD
+    have hh : AnalyticAt ℂ h z := by
+      dsimp [h]
+      exact hfz.sub
+        (analyticAt_const.div (analyticAt_id.sub (analyticAt_const (v := (1 : ℂ))))
+          (sub_ne_zero.mpr hz1))
+    exact (hh.congr ((eventually_ne_nhds hz1).mono fun w hw => by
+      simp [G, hw])).differentiableAt
+  have hG_at_one : AnalyticAt ℂ G 1 :=
+    Complex.analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
+      hG_diff_punct hG_cont
+  have hG_analytic : AnalyticOn ℂ G (ball (0 : ℂ) 2) := by
+    intro z hz
+    by_cases hz1 : z = 1
+    · simpa [hz1] using hG_at_one.analyticWithinAt
+    · have hzD : z ∈ ball (0 : ℂ) 2 \ ({1} : Set ℂ) := ⟨hz, by simpa using hz1⟩
+      have hfz : AnalyticAt ℂ f z :=
+        h_isOpen_punctured.analyticOn_iff_analyticOnNhd.mp hanalytic z hzD
+      have hh : AnalyticAt ℂ h z := by
+        dsimp [h]
+        exact hfz.sub (analyticAt_const.div (analyticAt_id.sub analyticAt_const)
+          (sub_ne_zero.mpr hz1))
+      exact hh.congr ((eventually_ne_nhds hz1).mono fun w hw => by
+        simp [G, hw]) |>.analyticWithinAt
+  have hf_series : HasFPowerSeriesAt f
+      (FormalMultilinearSeries.ofScalars ℂ a) 0 := by
+    rw [hasFPowerSeriesAt_iff]
+    filter_upwards [Metric.ball_mem_nhds (0 : ℂ) zero_lt_one] with z hz
+    simpa [FormalMultilinearSeries.coeff_ofScalars, mul_comm] using hseries z hz
+  have hh_series : HasFPowerSeriesAt h
+      (FormalMultilinearSeries.ofScalars ℂ a -
+        FormalMultilinearSeries.ofScalars ℂ (fun _ => -A)) 0 := by
+    simpa [h] using hf_series.sub (apm_a97J05_hasFPowerSeriesAt_div_sub_one A)
+  have hG_eq_h : G =ᶠ[nhds (0 : ℂ)] h := by
+    filter_upwards [eventually_ne_nhds (by norm_num : (0 : ℂ) ≠ 1)] with z hz
+    simp [G, hz]
+  have hG_series := hh_series.congr hG_eq_h.symm
+  have hseries_eq := hG_series.eq_formalMultilinearSeries
+    ((hG_analytic.analyticAt (isOpen_ball.mem_nhds (by simp [mem_ball]))).hasFPowerSeriesAt)
+  have hcoeff : ∀ n : ℕ,
+      a n + A = iteratedDeriv n G 0 / (n.factorial : ℂ) := by
+    intro n
+    have hn := congrArg (fun p : FormalMultilinearSeries ℂ ℂ ℂ => p.coeff n) hseries_eq
+    change (FormalMultilinearSeries.ofScalars ℂ a).coeff n -
+      (FormalMultilinearSeries.ofScalars ℂ (fun _ => -A)).coeff n =
+      (FormalMultilinearSeries.ofScalars ℂ
+        (fun n => iteratedDeriv n G 0 / (n.factorial : ℂ))).coeff n at hn
+    simpa [FormalMultilinearSeries.coeff_ofScalars] using hn
+  have hclosed : closedBall (0 : ℂ) 1 ⊆ ball (0 : ℂ) 2 := by
+    intro z hz
+    rw [mem_closedBall] at hz
+    rw [mem_ball]
+    linarith
+  have hdecay := apm_a97J05_coeff_tendsto_zero (ball (0 : ℂ) 2)
+    isOpen_ball G hG_analytic hclosed
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  convert hdecay using 1
+  funext n
+  rw [hcoeff n, norm_div]
+  norm_num
+
+#print axioms apm_a97j05
