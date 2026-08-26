@@ -24,6 +24,11 @@ theorem refuted_problem_cannot_be_retried :
     ¬ retryEligible refutedVoidOutcome := by
   exact refuted_void_is_valid_but_not_bankable_or_retryable.2.2.2
 
+theorem statement_repair_is_single_shot_and_guide_owned :
+    statementRepairEligible 0 "guide" ∧
+    ¬ statementRepairEligible 1 "guide" := by
+  simp [statementRepairEligible]
+
 theorem close_json_wire_boundary_nonvacuous :
     validCloseWireResult "closed" := json_closed_result_is_accepted
 

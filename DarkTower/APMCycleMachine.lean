@@ -1756,6 +1756,17 @@ theorem refuted_void_is_valid_but_not_bankable_or_retryable :
   simp [refutedVoidOutcome, validTerminalOutcome, validOutcome, bankableSolved,
     successorEligible, retryEligible]
 
+def statementRepairEligible (completedRepairs : Nat) (role : String) : Prop :=
+  completedRepairs = 0 ∧ role = "guide"
+
+theorem first_guide_statement_repair_is_eligible :
+    statementRepairEligible 0 "guide" := by
+  simp [statementRepairEligible]
+
+theorem second_statement_repair_is_refused (role : String) :
+    ¬ statementRepairEligible 1 role := by
+  simp [statementRepairEligible]
+
 inductive ObservationAuthor
   | student
   | controller
