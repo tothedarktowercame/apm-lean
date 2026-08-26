@@ -1767,6 +1767,54 @@ theorem second_statement_repair_is_refused (role : String) :
     ¬ statementRepairEligible 1 role := by
   simp [statementRepairEligible]
 
+/-- A refuted slot is not allowed to become an inert waiting state.  Before
+the frame disappears, the queue persists a complete, content-addressed job
+for the Guide.  The dispatch may then be retried safely after a crash. -/
+structure StatementRepairHandoff where
+  obligationId : String
+  problemId : String
+  frameId : String
+  role : String
+  attempt : Nat
+  maxAttempts : Nat
+  sourceRevision : String
+  sourcePath : String
+  sourceBlob : String
+  intentPersisted : Bool
+
+def validStatementRepairHandoff (h : StatementRepairHandoff) : Prop :=
+  h.obligationId ≠ "" ∧ h.problemId ≠ "" ∧ h.frameId ≠ "" ∧
+  h.role = "guide" ∧ h.attempt = 1 ∧ h.maxAttempts = 1 ∧
+  h.sourceRevision ≠ "" ∧ h.sourcePath ≠ "" ∧ h.sourceBlob ≠ "" ∧
+  h.intentPersisted = true
+
+theorem awaiting_statement_repair_requires_executable_guide_handoff
+    (h : Option StatementRepairHandoff)
+    (valid : ∃ handoff, h = some handoff ∧ validStatementRepairHandoff handoff) :
+    ∃ handoff, h = some handoff ∧ handoff.role = "guide" ∧
+      handoff.attempt = 1 ∧ handoff.intentPersisted = true := by
+  obtain ⟨handoff, rfl, hv⟩ := valid
+  rcases hv with ⟨_, _, _, role, attempt, _, _, _, _, intent⟩
+  exact ⟨handoff, rfl, role, attempt, intent⟩
+
+inductive StatementRepairDisposition
+  | correctedAndReminted
+  | failedAndAdvanced
+  deriving DecidableEq, Repr
+
+/-- Once the one Guide job is terminal there is no waiting disposition: valid
+collection either installs the corrected pins and remints, or discards the
+slot and advances. -/
+def validStatementRepairCompletion
+    (guideJobTerminal : Bool) (disposition : Option StatementRepairDisposition) : Prop :=
+  guideJobTerminal = true → disposition.isSome
+
+theorem terminal_guide_repair_cannot_leave_queue_awaiting
+    (disposition : Option StatementRepairDisposition)
+    (valid : validStatementRepairCompletion true disposition) :
+    disposition.isSome := by
+  exact valid rfl
+
 inductive ObservationAuthor
   | student
   | controller

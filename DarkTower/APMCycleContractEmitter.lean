@@ -279,6 +279,13 @@ def contractJson : Json :=
         ("corrected-pins-require-plan-revision", Json.bool true),
         ("statement-repair-role", Json.str "guide"),
         ("statement-repair-max-attempts", Json.num 1),
+        ("statement-repair-handoff-required", Json.bool true),
+        ("statement-repair-intent-before-dispatch", Json.bool true),
+        ("statement-repair-dispatch-retryable", Json.bool true),
+        ("statement-repair-terminal-result-collected", Json.bool true),
+        ("statement-repair-success-action", Json.str "install-and-remint"),
+        ("statement-repair-required-output", Json.arr
+          #[Json.str "replacement-pinned-problem", Json.str "guide-receipt"]),
         ("statement-repair-exhaustion-action", Json.str "discard-and-advance"),
         ("retry-requires-retained-solver-head", Json.bool true),
         ("retry-does-not-advance-problem-queue", Json.bool true),
