@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 1,
     "sorry_count_scratch": 0,
     "sorry_count_total": 1
@@ -30,18 +32,14 @@
   "classification": "partial-lean-proof",
   "classification_detail": "Hop 4 records exact Lean statements for Jordan compact-closure/containment/frontier and arbitrary-Jordan Rouche transfer in the frozen divisor encoding. Neither is packaged in Mathlib or ConstructionTargets.",
   "imported_at": "2026-07-13T17:26:52.894437Z",
-  "checked_at": "2026-08-05T14:15:00Z",
-  "checked_lean_state": {
-    "exit_code": 0,
-    "command": "lake env lean problems/a97J08/lean/Main.lean",
-    "sorry_count": 1,
-    "sorry_locations": [
-      "zero_stability_under_convergence (main proof body — requires Rouché/argument principle)"
-    ],
-    "blockers": [
-      "ConstructionTargets.Rouche handles disks but not arbitrary rectifiable Jordan curves",
-      "Jordan curve theorem and containment of the encoded interior in D are unavailable",
-      "No arbitrary-contour argument principle connects the divisor sum to the curve interior"
-    ]
+  "boundary": "Inherited from frame f43 (campaign jit-all-open-nontopology-v1, 2026-08-26), which was parked infrastructure-blocked rather than closed. Landed verbatim from the f43 Solver head a3e800ba1db642e154b0d896c73ca98c14b75f4c (branch exp/countdown-f43-a97J08-solver), also pinned at refs/apm/parked-artifacts/f43/a97J08/a3e800ba1db642e154b0d896c73ca98c14b75f4c. 232 lines -> 1962. A future frame on a97J08 inherits this as its base, the same way problems start from a bare sorry, only further along.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; one `declaration uses `sorry`` warning at line 1796",
+    "at": "2026-08-26",
+    "elaborated_exit": 0,
+    "sorry_declarations": 1,
+    "previous_sorry_count_total": 1,
+    "remaining_obstruction": "A bounded component of the complement of an open plane domain produces a loop in the domain that cannot be contracted within it -- the Jordan/winding-number input, absent from Mathlib. The solver's own note at Main.lean:1802 states the deduction from it plus simple connectivity is purely fundamental-groupoid API and is already proved below it.",
+    "frame": "f43; parked infrastructure-blocked, not solved. Two of four parked frames share this gap."
   }
 }
