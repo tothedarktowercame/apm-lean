@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,22 +29,17 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "imported_at": "2026-07-13T17:26:52.822715Z",
-  "checked_at": "2026-08-07T00:00:00Z",
-  "checked_lean_state": {
-    "exit_code": 0,
-    "command": "lake env lean problems/a97J05/lean/Main.lean",
-    "sorry_count": 1,
-    "sorry_locations": [
-      "apm_a97j05 (main proof body)"
-    ],
-    "blockers": [
-      "Compiled Cauchy-decay pattern found in a96J09 for the analytic remainder",
-      "Scaled geometric polar series is proved by apm_a97J05_hasFPowerSeriesAt_div_sub_one",
-      "Continuity of the updated pole-subtracted remainder at the pole is proved by apm_a97J05_remainder_update_continuousAt",
-      "Historical commit 3bc0aea proves coefficient uniqueness only for an older theorem receiving HasFPowerSeriesAt directly",
-      "Remaining bridge: package the frozen pointwise HasSum family as HasFPowerSeriesAt, glue removability globally, and apply the a96J09 Cauchy estimate"
-    ]
+  "boundary": "Closed by frame f40 (campaign jit-all-open-nontopology-v1, 2026-08-26): \"a97J05: prove coefficient convergence\". Banked verbatim from the f40 Solver terminal head 143e17dd25b60d09f1546f669d097f462490d073 on branch exp/countdown-f40-a97J05-solver; content identical to that head, no re-derivation. Frozen statement apm_a97j05 unchanged from the pre-solve base.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-08-26",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_a97j05 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f40; the campaign closed :closed."
   }
 }
