@@ -13,11 +13,41 @@ nothing else points at it.
 
 That is the whole reason this procedure exists. On 2026-08-26 four solved
 problems (a95J04, a97J05, a97J06, a97J07, from frames f35/f40/f41/f42) were
-each reachable from **exactly one ref**, their own `exp/countdown-*` branch,
-with the worktrees that produced them already gone. A prune of `exp/` refs, or
-any cleanup that treats those branches as spent scratch, would have destroyed
-four completed proofs — while the campaign records went on citing them as
-solved with terminal heads that no longer resolved.
+each reachable only from their own `exp/countdown-*` branch, with the worktrees
+that produced them already gone. A prune of `exp/` refs, or any cleanup that
+treats those branches as spent scratch, would have destroyed four completed
+proofs — while the campaign records went on citing them as solved with terminal
+heads that no longer resolved.
+
+### The machine already preserves work — just not this work
+
+This repo carries a `refs/apm/` namespace that nothing in the branch commands
+will show you. As of 2026-08-26 it holds **47 refs**: 19 under
+`preserved-student-attempts/`, 27 under `student-candidates/`, 1 under
+`preserved/`. They pin student candidates the frame machine REJECTED — f42's
+attempt 2, for instance, is held at
+`refs/apm/preserved-student-attempts/f42/a97J07/21ff7f4d...` under a commit
+whose message is "preserve f42 a97J07 student attempt 2".
+
+So the machine deliberately preserves candidates it throws away, and left the
+four completed proofs on single `exp/` branches. **That asymmetry, not a total
+absence of preservation, is the actual defect.** The mechanism exists; solved
+solver heads are simply not routed into it. Verified: zero of the 47 `refs/apm/`
+refs reach any of the four solver heads.
+
+Two commands lie about this, and both were used while writing this document:
+
+- `git branch --contains <sha>` and `git branch -a --contains` **cannot see
+  `refs/apm/`** at all — they enumerate branches. Anything preserved outside
+  `refs/heads` is invisible to them.
+- `git for-each-ref 'refs/apm/*'` returns **zero**, because the glob does not
+  cross `/` and these refs are five levels deep. Use the prefix form, with the
+  trailing slash and no star:
+
+      git for-each-ref --format='%(refname)' refs/apm/
+
+  To ask whether anything anywhere reaches a commit, prefer
+  `git rev-list --all | grep <sha>`, which spans every ref namespace.
 
 Banking replays the solved file onto a `bank/` branch that is merged to
 `master`, so the proof lives on the trunk that actually gets backed up.
@@ -127,7 +157,10 @@ names is reachable from anything durable.
 
 The obvious closure is to make it part of the loop: on a terminal receipt with
 `:problem/outcome :solved`, verify the head elaborates with no `sorryAx`, then
-bank it and recompute metadata as two commits. Frame close is exactly when the
+bank it and recompute metadata as two commits. Note that the machine already
+does the analogous thing for rejected candidates via `refs/apm/`, so the
+plumbing to pin a commit at frame close exists and is proven; what is missing is
+routing the SOLVED solver head through it and onward to master. Frame close is exactly when the
 information needed is all in hand and the worktree still exists. Until that is
 built, `bank/` batches will keep being written by whoever notices, and the
 window between solving and banking is a window in which a routine branch
