@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,20 +29,17 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "imported_at": "2026-07-13T17:26:52.880727Z",
-  "checked_at": "2026-08-05T14:00:00Z",
-  "checked_lean_state": {
-    "exit_code": 0,
-    "command": "lake env lean problems/a97J07/lean/Main.lean",
-    "sorry_count": 0,
-    "axioms": "propext, Classical.choice, Quot.sound"
-  },
   "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-08-26",
     "elaborated_exit": 0,
-    "sorry_declarations": 1,
-    "previous_classification": "complete"
-  }
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_a97j07 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f42; the campaign closed :closed."
+  },
+  "boundary": "Closed by frame f42 (campaign jit-all-open-nontopology-v1, 2026-08-26): \"Solve a97J07 by maximum modulus\". Banked verbatim from the f42 Solver terminal head d84e28b164f3355c53089c19a58f2056e8c1b6db on branch exp/countdown-f42-a97J07-solver; content identical to that head, no re-derivation. Frozen statement apm_a97j07 unchanged from the pre-solve base."
 }
