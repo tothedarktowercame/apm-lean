@@ -14,7 +14,7 @@ integral over `Set.Ioi 0`; the omitted endpoint is a null set.
 -/
 
 open MeasureTheory Set
-open scoped NNReal
+open scoped NNReal FourierTransform
 
 noncomputable section
 
@@ -76,6 +76,170 @@ lemma apm_a97J06_integrable (t : ℝ) :
       inv_eq_one_div]
     exact div_le_div_of_nonneg_right (Real.abs_cos_le_one _) (by positivity)
 
+/-- The absolutely integrable function whose Fourier inversion gives the
+scale-one Cauchy kernel. -/
+lemma apm_a97J06_integrable_exp_neg_abs :
+    Integrable (fun x : ℝ => Complex.exp (-(2 * Real.pi) * |x|)) volume := by
+  have hp := integrableOn_exp_mul_complex_Ioi
+    (a := (-(2 * Real.pi) : ℝ)) (by norm_num [Real.pi_pos]) 0
+  have hn := integrableOn_exp_mul_complex_Iic
+    (a := ((2 * Real.pi) : ℝ)) (by norm_num [Real.pi_pos]) 0
+  have hp' : IntegrableOn
+      (fun x : ℝ => Complex.exp (-(2 * Real.pi) * |x|)) (Ioi 0) volume :=
+    hp.congr_fun (fun x hx => by
+      rw [abs_of_pos hx]
+      push_cast
+      ring_nf) measurableSet_Ioi
+  have hn' : IntegrableOn
+      (fun x : ℝ => Complex.exp (-(2 * Real.pi) * |x|)) (Iic 0) volume :=
+    hn.congr_fun (fun x hx => by
+      rw [abs_of_nonpos hx]
+      push_cast
+      ring_nf) measurableSet_Iic
+  simpa only [Iic_union_Ioi, integrableOn_univ] using hn'.union hp'
+
+/-- Fourier transform of `exp (-2π|x|)` in Mathlib's `2π` convention. -/
+lemma apm_a97J06_fourier_exp_neg_abs (w : ℝ) :
+    (𝓕 (fun x : ℝ => Complex.exp (-(2 * Real.pi) * |x|))) w =
+      (1 : ℂ) / (Real.pi * (1 + w ^ 2)) := by
+  let a : ℂ := -(2 * Real.pi) - (2 * Real.pi * w) * Complex.I
+  let b : ℂ := 2 * Real.pi - (2 * Real.pi * w) * Complex.I
+  have ha : a.re < 0 := by simp [a, Real.pi_pos]
+  have hb : 0 < b.re := by simp [b, Real.pi_pos]
+  have hpa := integrableOn_exp_mul_complex_Ioi ha 0
+  have hnb := integrableOn_exp_mul_complex_Iic hb 0
+  let g : ℝ → ℂ := fun x =>
+    Complex.exp ((-2 * Real.pi * x * w : ℝ) * Complex.I) •
+      Complex.exp (-(2 * Real.pi) * |x|)
+  have hgpos : EqOn g (fun x : ℝ => Complex.exp (a * x)) (Ioi 0) := by
+    intro x hx
+    simp only [g]
+    rw [show |x| = x by exact abs_of_pos hx]
+    simp only [smul_eq_mul, ← Complex.exp_add]
+    congr 1
+    simp [a]
+    ring
+  have hgneg : EqOn g (fun x : ℝ => Complex.exp (b * x)) (Iic 0) := by
+    intro x hx
+    simp only [g]
+    rw [show |x| = -x by exact abs_of_nonpos hx]
+    simp only [smul_eq_mul, ← Complex.exp_add]
+    congr 1
+    simp [b]
+    ring
+  have hgp : IntegrableOn g (Ioi 0) volume :=
+    hpa.congr_fun hgpos.symm measurableSet_Ioi
+  have hgn : IntegrableOn g (Iic 0) volume :=
+    hnb.congr_fun hgneg.symm measurableSet_Iic
+  rw [Real.fourier_real_eq_integral_exp_smul]
+  change (∫ x : ℝ, g x) = _
+  rw [← intervalIntegral.integral_Iic_add_Ioi hgn hgp]
+  rw [setIntegral_congr_fun measurableSet_Iic hgneg,
+    setIntegral_congr_fun measurableSet_Ioi hgpos,
+    integral_exp_mul_complex_Iic hb, integral_exp_mul_complex_Ioi ha]
+  dsimp [a, b]
+  have hpi : (Real.pi : ℂ) ≠ 0 := by exact_mod_cast Real.pi_ne_zero
+  have h₁ : (1 : ℂ) - w * Complex.I ≠ 0 := by
+    intro h
+    have := congrArg Complex.re h
+    norm_num at this
+  have h₂ : (-1 : ℂ) - w * Complex.I ≠ 0 := by
+    intro h
+    have := congrArg Complex.re h
+    norm_num at this
+  have hsq : (1 : ℂ) + w ^ 2 ≠ 0 := by
+    exact_mod_cast (show (1 : ℝ) + w ^ 2 ≠ 0 by positivity)
+  field_simp [hpi, h₁, h₂, hsq]
+  simp only [mul_zero, zero_mul, Complex.exp_zero, one_mul]
+  ring_nf
+  rw [show Complex.I ^ 2 = -1 by norm_num]
+  ring
+
+/-- Fourier inversion of the preceding pair, before restricting to a half-line. -/
+lemma apm_a97J06_integral_cos_full (s : ℝ) :
+    ∫ x : ℝ, Real.cos (x * s) / (1 + x ^ 2) =
+      Real.pi * Real.exp (-|s|) := by
+  let f : ℝ → ℂ := fun x => Complex.exp (-(2 * Real.pi) * |x|)
+  have hf : Integrable f volume := apm_a97J06_integrable_exp_neg_abs
+  have hr : Integrable (fun w : ℝ => (1 / Real.pi) * (1 + w ^ 2)⁻¹) volume :=
+    integrable_inv_one_add_sq.const_mul (1 / Real.pi)
+  have hrat : Integrable (fun w : ℝ => (1 : ℂ) / (Real.pi * (1 + w ^ 2))) volume := by
+    have hc : Integrable
+        (fun w : ℝ => (((1 / Real.pi) * (1 + w ^ 2)⁻¹ : ℝ) : ℂ)) volume := hr.ofReal
+    convert hc using 1
+    funext w
+    push_cast
+    field_simp
+  have hF : Integrable (𝓕 f) volume := by
+    convert hrat using 1
+    funext w
+    simpa only [f] using apm_a97J06_fourier_exp_neg_abs w
+  have hFeq : 𝓕 f = fun w : ℝ => (1 : ℂ) / (Real.pi * (1 + w ^ 2)) := by
+    funext w
+    simpa only [f] using apm_a97J06_fourier_exp_neg_abs w
+  have hinv := hf.fourierInv_fourier_eq hF
+    (v := s / (2 * Real.pi)) (by fun_prop : ContinuousAt f (s / (2 * Real.pi)))
+  rw [Real.fourierInv_eq'] at hinv
+  rw [hFeq] at hinv
+  have hg : Integrable (fun v : ℝ =>
+      Complex.exp (↑(2 * Real.pi * inner ℝ v (s / (2 * Real.pi))) * Complex.I) •
+        ((1 : ℂ) / (Real.pi * (1 + v ^ 2)))) volume := by
+    apply hr.mono'
+    · fun_prop
+    · filter_upwards with v
+      rw [norm_smul, Complex.norm_exp]
+      rw [show (↑(2 * Real.pi * inner ℝ v (s / (2 * Real.pi))) * Complex.I).re = 0 by simp]
+      simp only [Real.exp_zero, one_mul, Complex.norm_div, norm_one, Complex.norm_mul,
+        Complex.norm_real, Real.norm_eq_abs]
+      rw [abs_of_pos Real.pi_pos]
+      have hc : (1 : ℂ) + (v : ℂ) ^ 2 = ((1 + v ^ 2 : ℝ) : ℂ) := by norm_cast
+      have hnorm : ‖(1 : ℂ) + (v : ℂ) ^ 2‖ = 1 + v ^ 2 := by
+        rw [hc, Complex.norm_real]
+        exact abs_of_pos (by positivity : 0 < 1 + v ^ 2)
+      rw [hnorm]
+      field_simp [Real.pi_ne_zero, show 1 + v ^ 2 ≠ 0 by positivity]
+      norm_num
+  change (∫ v : ℝ,
+      Complex.exp (↑(2 * Real.pi * inner ℝ v (s / (2 * Real.pi))) * Complex.I) •
+        ((1 : ℂ) / (Real.pi * (1 + v ^ 2)))) = f (s / (2 * Real.pi)) at hinv
+  have hre := integral_re hg
+  have hre' := hre.trans (congrArg Complex.re hinv)
+  have hpoint (x : ℝ) :
+      RCLike.re (Complex.exp (↑(2 * Real.pi * inner ℝ x (s / (2 * Real.pi))) * Complex.I) •
+        ((1 : ℂ) / (Real.pi * (1 + x ^ 2)))) =
+        (1 / Real.pi) * (Real.cos (x * s) / (1 + x ^ 2)) := by
+    change (Complex.exp (↑(2 * Real.pi * inner ℝ x (s / (2 * Real.pi))) * Complex.I) *
+      ((1 : ℂ) / ((Real.pi : ℂ) * ((1 : ℂ) + (x : ℂ) ^ 2)))).re = _
+    let q : ℝ := (1 : ℝ) / (Real.pi * (1 + x ^ 2))
+    have hcast : (1 : ℂ) / ((Real.pi : ℂ) * ((1 : ℂ) + (x : ℂ) ^ 2)) = (q : ℂ) := by
+      dsimp [q]
+      norm_cast
+    rw [hcast]
+    simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, mul_zero, sub_zero]
+    dsimp [q]
+    rw [Complex.exp_re]
+    norm_num
+    field_simp [Real.pi_ne_zero]
+    congr 1
+    have hinner (a b : ℝ) : inner ℝ a b = a * b := by
+      rw [show a = a • (1 : ℝ) by simp, show b = b • (1 : ℝ) by simp,
+        real_inner_smul_left, real_inner_smul_right]
+      simp
+    rw [hinner]
+    field_simp [Real.pi_ne_zero]
+  simp_rw [hpoint] at hre'
+  simp only [f, Complex.exp_re] at hre'
+  rw [integral_const_mul] at hre'
+  have hpi : Real.pi ≠ 0 := Real.pi_ne_zero
+  norm_num [Complex.div_re, Complex.div_im, abs_div, abs_of_pos Real.pi_pos] at hre'
+  have heq : 2 * Real.pi * (|s| * (2 * Real.pi) /
+      (4 * (Real.pi * Real.pi))) = |s| := by
+    field_simp [hpi]
+    ring
+  rw [heq] at hre'
+  field_simp [hpi] at hre'
+  exact hre'
+
 /-- Scaling `x = 2u` reduces this problem exactly to the standard Cauchy
 kernel `1 / (1 + u²)` at frequency `2t`. -/
 lemma apm_a97J06_integral_eq_half_standard (t : ℝ) :
@@ -107,7 +271,18 @@ the zero-frequency and negative-frequency reductions are already proved. -/
 theorem apm_a97J06_bridge_1 (s : ℝ) (hs : 0 < s) :
     ∫ x in Ioi (0 : ℝ), Real.cos (x * s) / (1 + x ^ 2) ∂volume =
       (Real.pi / 2) * Real.exp (-s) := by
-  sorry
+  have heven := integral_comp_abs
+    (f := fun x : ℝ => Real.cos (x * s) / (1 + x ^ 2))
+  have hfun : (fun x : ℝ => Real.cos (|x| * s) / (1 + |x| ^ 2)) =
+      fun x : ℝ => Real.cos (x * s) / (1 + x ^ 2) := by
+    funext x
+    rcases le_total 0 x with hx | hx
+    · rw [abs_of_nonneg hx]
+    · rw [abs_of_nonpos hx, neg_mul, Real.cos_neg]
+      ring_nf
+  rw [hfun, apm_a97J06_integral_cos_full s] at heven
+  rw [abs_of_pos hs] at heven
+  linarith
 
 theorem apm_a97j06 (t : ℝ) :
     ∫ x in Ioi (0 : ℝ), apm_a97J06_integrand t x ∂volume =
@@ -179,4 +354,14 @@ theorem apm_a97j06 (t : ℝ) :
   -- the same fact at scale one, but its positive-frequency evaluation remains
   -- sorry-backed. Renewed inspection therefore leaves precisely the same
   -- characteristic-function / contour-limit bridge open.
-  sorry
+  rcases lt_trichotomy t 0 with ht | rfl | ht
+  · rw [← apm_a97J06_integral_neg t]
+    have hpos : 0 < -t := neg_pos.mpr ht
+    rw [apm_a97J06_integral_eq_half_standard,
+      apm_a97J06_bridge_1 (2 * -t) (mul_pos (by norm_num) hpos)]
+    rw [abs_of_neg ht]
+    ring_nf
+  · simpa using apm_a97J06_integral_zero
+  · rw [apm_a97J06_integral_eq_half_standard,
+      apm_a97J06_bridge_1 (2 * t) (mul_pos (by norm_num) ht), abs_of_pos ht]
+    ring_nf
