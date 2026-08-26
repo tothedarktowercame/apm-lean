@@ -14,9 +14,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +28,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 3,
   "closer_note": "Closed the frequency-zero case, proved pointwise and integral evenness, and proved global integrability of every oscillatory kernel by domination with (1+x^2)^-1. The positive-frequency transform evaluation still requires an unavailable Fourier-transform, Laplace-inversion/Fubini, or residue-contour bridge.",
   "imported_at": "2026-07-13T17:26:51.819921Z",
@@ -47,5 +47,15 @@
       "date": "2026-08-19",
       "resolved": null
     }
-  ]
+  ],
+  "boundary": "Metadata corrected 2026-08-26: the Lean on master has no sorry, but status.json still advertised this problem as open. f31 (voided frame); the solve landed and the metadata was never recomputed. The stale status made the problem selectable by open-problem-queue, and the frame qualifier then refused it \u2014 stalling the regulator rather than skipping it.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings; #print axioms",
+    "at": "2026-08-26",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_a03j05 depends on axioms: [propext, Classical.choice, Quot.sound]"
+  }
 }

@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +29,18 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 3,
   "closer_note": "Hop 4 proves the missing imaginary-axis theorem locally and wires it into the complete skew-symmetric conjunct. The single remaining sorry is only the independent arbitrary ordered-spectrum normalization and Rayleigh bound for the first conjunct.",
-  "imported_at": "2026-07-13T17:26:54.710925Z"
+  "imported_at": "2026-07-13T17:26:54.710925Z",
+  "boundary": "Metadata corrected 2026-08-26: the Lean on master has no sorry, but status.json still advertised this problem as open. banked on bank/f22-f25-20260823 (f25 student-attempt-2); the metadata recompute was never made. The stale status made the problem selectable by open-problem-queue, and the frame qualifier then refused it \u2014 stalling the regulator rather than skipping it.",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings; #print axioms",
+    "at": "2026-08-26",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_m94a02 depends on axioms: [propext, Classical.choice, Quot.sound]"
+  }
 }
