@@ -60,17 +60,26 @@ theorem apm_a96J08_bridge_1 (ω : ℂ)
       (∫ x in -(δ⁻¹)..(-δ), integrand ω x) +
         (∫ x in δ..δ⁻¹, integrand ω x))
       (𝓝[>] 0)
-      (𝓝 (-π * Complex.cos (π * ω) / Complex.sin (π * ω))) := by
+      (𝓝 (π * Complex.cos (π * ω) / Complex.sin (π * ω))) := by
   sorry
 
-/-- **Main theorem**: ∫_{-∞}^{∞} e^{ωx}/(1-e^x) dx = -π cot(πω) for 0 < Re(ω) < 1.
+/-- **Main theorem**: ∫_{-∞}^{∞} e^{ωx}/(1-e^x) dx = +π cot(πω) for 0 < Re(ω) < 1.
 
     The integral is interpreted as a principal value at x = 0 (where 1-e^x has a simple zero).
-    The answer is -π cos(πω)/sin(πω) = -π cot(πω). -/
+    The answer is +π cos(πω)/sin(πω) = +π cot(πω).
+
+    SIGN CORRECTED 2026-08-26 (frame f45 -> recast as f46). The registered target
+    was -π cot(πω), transcribed faithfully from the informal solution's boxed
+    answer. That boxed answer is wrong: the informal derivation itself ends at
+    I(1 - e^(2πiω)) = -πi(1 + e^(2πiω)), and (1 + e^(2iθ))/(1 - e^(2iθ)) = i·cot θ,
+    so I = -πi·(i cot πω) = +π cot(πω). The f45 Solver refuted the minus sign
+    with two axiom-clean instances -- ω = 1/4 (truncations positive, target -π)
+    and ω = 3/4 (truncations negative, target +π). ω = 1/2 cannot discriminate,
+    since cot(π/2) = 0 under either sign. -/
 theorem apm_a96J08 (ω : ℂ) (hre_pos : 0 < ω.re) (hre_lt : ω.re < 1) :
     Tendsto (fun δ : ℝ =>
       (∫ x in -(δ⁻¹)..(-δ), integrand ω x) + (∫ x in δ..δ⁻¹, integrand ω x))
-      (𝓝[>] 0) (𝓝 (-π * Complex.cos (π * ω) / Complex.sin (π * ω))) := by
+      (𝓝[>] 0) (𝓝 (π * Complex.cos (π * ω) / Complex.sin (π * ω))) := by
   -- The proof uses a rectangular contour with corners at -R and R+2πi.
   -- Bottom edge: ∫_{-R}^{R} f(x) dx → I (principal value)
   -- Top edge: ∫_{R}^{-R} f(x+2πi) dx = -e^{2πiω} I (period shift, reversed direction)
