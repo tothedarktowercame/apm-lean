@@ -64,6 +64,20 @@ noncomputable def ambientRangeProductionHomologyIso
   (HomologicalComplex.homologyFunctor AddCommGrpCat
     (ComplexShape.down ℕ) n).mapIso (ambientSubspaceRangeChainsIso A)
 
+theorem ambientRangeProductionHomologyIso_hom
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    (ambientRangeProductionHomologyIso A n).hom =
+      HomologicalComplex.homologyMap
+        (ambientSubspaceRangeChainsIso A).hom n := by
+  rfl
+
+theorem ambientRangeProductionHomologyIso_inv
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    (ambientRangeProductionHomologyIso A n).inv =
+      HomologicalComplex.homologyMap
+        (ambientSubspaceRangeChainsIso A).inv n := by
+  rfl
+
 /-- The stored Boolean-cover intersection term as production homology of
 `U ∩ V`. -/
 noncomputable def booleanIntersectionProductionHomologyIso
@@ -72,6 +86,20 @@ noncomputable def booleanIntersectionProductionHomologyIso
       (SingularChains (TopCat.of (U ∩ V : Set X))).homology n :=
   (ambientIntersectionRangeHomologyIso U V n).symm ≪≫
     ambientRangeProductionHomologyIso (U ∩ V) n
+
+theorem booleanIntersectionProductionHomologyIso_hom
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (booleanIntersectionProductionHomologyIso U V n).hom =
+      (ambientIntersectionRangeHomologyIso U V n).inv ≫
+        (ambientRangeProductionHomologyIso (U ∩ V) n).hom := by
+  rfl
+
+theorem booleanIntersectionProductionHomologyIso_inv
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (booleanIntersectionProductionHomologyIso U V n).inv =
+      (ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+        (ambientIntersectionRangeHomologyIso U V n).hom := by
+  rfl
 
 /-- The stored Boolean-cover middle term as the biproduct of the production
 homologies of `U` and `V`. -/
@@ -87,6 +115,28 @@ noncomputable def booleanPiecesProductionHomologyIso
     biprod.mapIso
       (ambientRangeProductionHomologyIso U n)
       (ambientRangeProductionHomologyIso V n)
+
+theorem booleanPiecesProductionHomologyIso_hom
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (booleanPiecesProductionHomologyIso U V n).hom =
+      (homologyBiprodIso
+        (ssetChains.obj (leftRange U : SSet))
+        (ssetChains.obj (rightRange V : SSet)) n).hom ≫
+      biprod.map
+        (ambientRangeProductionHomologyIso U n).hom
+        (ambientRangeProductionHomologyIso V n).hom := by
+  rfl
+
+theorem booleanPiecesProductionHomologyIso_inv
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (booleanPiecesProductionHomologyIso U V n).inv =
+      biprod.map
+        (ambientRangeProductionHomologyIso U n).inv
+        (ambientRangeProductionHomologyIso V n).inv ≫
+      (homologyBiprodIso
+        (ssetChains.obj (leftRange U : SSet))
+        (ssetChains.obj (rightRange V : SSet)) n).inv := by
+  rfl
 
 /-- The actual signed pair of inclusion-induced maps from `U ∩ V` into
 the two members of the cover. -/
@@ -187,3 +237,6 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanPiecesProductionHomologyIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.ambientRangeProductionHomologyIso_hom
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso_hom
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanPiecesProductionHomologyIso_hom

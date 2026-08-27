@@ -76,3 +76,20 @@ composite intersection isomorphism and the `biprod.mapIso`/homology-biproduct
 composite. This exact arrow equality was not proved in this round, so neither
 the reassembly comparison nor production Mayer--Vietoris exactness is
 asserted.
+
+The hom and inverse components of all three production isomorphisms are now
+named. After expanding them and applying biproduct extensionality, the first
+literal remaining goal is the left projection
+
+```text
+rangeIso(U∩V).inv ≫ intersectionIso(U,V).hom ≫
+  homologyMap (biprod.lift interLeft (-interRight)) n ≫
+  homologyBiprodIso.hom ≫ biprod.fst ≫ rangeIso(U).hom
+= homologyMap (actual inclusion (U∩V) → U) n.
+```
+
+The right projection is identical with `biprod.snd`, the negated right
+intersection leg, and the actual inclusion into `V`. These projection goals
+still require normalization of `homologyMap` through the signed
+`biprod.lift` and the homology-biproduct comparison before the upstream
+intersection triangles apply. The arrow equality remains unclaimed.
