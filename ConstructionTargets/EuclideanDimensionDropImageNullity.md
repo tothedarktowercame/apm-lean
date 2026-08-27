@@ -26,6 +26,15 @@ nontrivial, and `ContinuousLinearEquiv.ofFinrankEq` supplies
 `F ≃L[ℝ] E × G`. Thus the target now covers arbitrary finite-dimensional
 real normed source and target spaces with strict finrank inequality.
 
+The corresponding `DifferentiableOn` result does not extend the map outside
+its source set.  `addHaar_image_eq_zero_of_differentiableOn` applies the
+fixed-dimensional Sard theorem to the complement extension only on
+`s × univ`; its within derivative kills the complementary factor there.
+`addHaar_image_eq_zero_of_equiv_differentiableOn` transports that local
+statement through the target equivalence, and
+`addHaar_image_eq_zero_of_finrank_lt_differentiableOn` constructs the finite
+coordinate complement from the strict finrank inequality.
+
 This is the bounded dimension-drop interface supported directly by the
 current Jacobian API. It does not prove manifold Sard, construct regular
 values, or promote a regular fiber to a manifold.
