@@ -39,11 +39,10 @@ Keep four interfaces separate:
 4. incidence projections for parametric and relative transversality.
 
 The product-complement Euclidean dimension-drop theorem is banked in
-`1f0a8882`.  The next bounded milestone is transport across explicit
-finite-dimensional linear equivalences so an arbitrary strict-finrank pair can
-use that theorem.  Only then should it be combined with chart-null transport.
-The first geometric milestone remains a boundaryless regular-preimage theorem,
-not full parametric transversality.
+`1f0a8882`, and arbitrary strict-finrank transport is banked in `20191b38`.
+The next bounded milestone is combination with chart-coordinate null transport
+and a countable chart cover.  The first geometric milestone remains a
+boundaryless regular-preimage theorem, not full parametric transversality.
 
 ## Covering constructors
 
@@ -81,8 +80,9 @@ algebra.
 
 Goal: relate geometric transverse inverse images to homology and cohomology.
 
-First extract the experimental low-degree integral cap construction as a
-standalone module.  General comparison work must wait for:
+The experimental low-degree integral cap construction has been extracted as
+the standalone canonical module `SingularCapLowDegree` in `408be02b`.  General
+comparison work must still wait for:
 
 - manifold fundamental classes;
 - regular-preimage orientations;

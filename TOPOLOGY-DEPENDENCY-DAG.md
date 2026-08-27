@@ -29,7 +29,7 @@ for banked results.
 ```text
 SINGULAR-SUBDIVISION/EXCISION [BANKED]
        ├── ALEXANDER-WHITNEY DEGREE TWO [BANKED]
-       │      └── LOW-DEGREE-CAP [LOCAL-GO/EXTRACTION]
+       │      └── LOW-DEGREE-CAP [BANKED]
        ├── MANIFOLD-FUNDAMENTAL-CLASS [FOUNDATION]
        │      ├── MODEL-PAIR LOCAL H1 [BANKED]
        │      ├── CHART-PAIR TRANSPORT [LOCAL-GO]
@@ -40,7 +40,7 @@ SINGULAR-SUBDIVISION/EXCISION [BANKED]
 
 MANIFOLD-CALCULUS [BANKED MATHLIB SUBSTRATE]
        ├── PRODUCT-COMPLEMENT IMAGE NULLITY [BANKED]
-       │      ├── ARBITRARY FINRANK ADAPTER [LOCAL-GO]
+       │      ├── ARBITRARY FINRANK ADAPTER [BANKED]
        │      └── CHARTWISE-DIMENSION-DROP NULLITY [LOCAL-GO]
        │             └── MANIFOLD-SARD [FOUNDATION]
        ├── REGULAR-PREIMAGE/SUBMERSION [FOUNDATION]
@@ -124,10 +124,9 @@ into frozen `t01A03` remains an `UPTAKE` task.
 
 1. Extend the banked generic product-covering constructor only through new
    independent consumers.  It was reviewed and committed as `935fc228`.
-2. Extract the experimental low-degree integral cap operations into a
-   standalone module; do not merge the expanded t00J02 subdivision file.  Its
-   first prerequisite, the generic degree-two Alexander--Whitney face layer,
-   is banked in `b94fdc26` without the experimental t00J02 metadata edit.
+2. Add independent consumers for the banked low-degree integral cap module
+   `SingularCapLowDegree`; do not merge the expanded t00J02 subdivision file or
+   promote its chartwise/survivor structures as generic geometry.
 3. Prototype covering pullback/base-change using existing fibre-bundle
    pullback trivializations.
 4. Retain chart-coordinate null-set transport; build a separate
@@ -216,6 +215,8 @@ not substitutes for those missing generic interfaces.
 | `3c96f98e` | `H₁(B¹, B¹ \ {0}; ℤ) ≅ ℤ`, named nonzero local generator, and radial pair-map transport | transport through a manifold chart; global fundamental-class localization remains foundational |
 | `b94fdc26` | degree-two Alexander--Whitney front/back edges, chain maps, boundary formula, and naturality | extract the now-unblocked low-degree cap module |
 | `1f0a8882` | image nullity for differentiable `E → E × G` with nontrivial finite-dimensional complement | add explicit linear-equivalence/complement transport, then combine with chart-null transport |
+| `408be02b` | integral singular one-cocycles, low-degree cap operations, Leibniz identities, homology descent, and naturality | add independent consumers; manifold fundamental-class comparison remains foundational |
+| `20191b38` | arbitrary strict-finrank differentiable image nullity via an explicit finite-dimensional complement equivalence | combine with chart-coordinate null transport; then prove the manifold chart-cover statement |
 
 ## Next decision point
 
