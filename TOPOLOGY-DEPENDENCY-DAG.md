@@ -44,6 +44,47 @@ an exception must name its intended consumer, explain the exact remaining
 adapter or theory, and have an explicit stop condition.  Repeated creation of
 uncertified adapters for the same blocked chain is not progress.
 
+Consumer closure is the final certification, not the only admissible unit of
+work.  A scaffold increment may also be banked when it discharges a named
+shared edge used by several downstream nodes.  Such an increment must record:
+
+- the representation and coefficient category in which it is stated;
+- the declarations it consumes and provides;
+- observed consumers separately from proposed consumers;
+- an axiom-clean fixture;
+- the exact next edge and a stop condition.
+
+Thin aliases and wrappers around an existing theorem do not discharge a
+shared edge.  Representation comparisons, naturality squares, chain
+homotopies, and generic geometric equivalences do when later arguments would
+otherwise have to reconstruct them.
+
+## Edge evidence model
+
+The DAG distinguishes two kinds of edge:
+
+- **observed**: a current import or declaration use on canonical master;
+- **proposed**: a concrete consumer location that would use an absent theorem
+  or representation comparison.
+
+Proposed edges must name one of `reusable-theorem`,
+`representation-comparison`, or `final-adapter`, and carry a stop condition.
+The machine-readable form should follow this shape:
+
+```clojure
+{:node/id "ConstructionTargets.ProductionOpenCoverMayerVietoris"
+ :node/kind :construction-target
+ :authority {:path "ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"
+             :git-sha "1906ef4e"}
+ :state :api-gap
+ :representation {:chains :AddCommGrpCat :coefficients :integers}
+ :edges [{:to "problem/t95J04"
+          :relation :would-consume
+          :need :representation-comparison
+          :status :missing
+          :stop-condition "signed eqToIso transport is not normalized"}]}
+```
+
 ## Shared dependency graph
 
 ```text
@@ -57,7 +98,10 @@ SINGULAR-SUBDIVISION/EXCISION [BANKED]
        │      ├── GLOBAL LOCALIZATION [FOUNDATION]
        │      ├── COVER-DEGREE [API-GAP]
        │      └── POINCARE/THOM COMPARISON [FOUNDATION]
-       └── MAYER-VIETORIS APPLICATIONS [API-GAP]
+       ├── OPEN-COVER MV SUBCOMPLEX EXACTNESS [BANKED]
+       │      └── PRODUCTION SIGNED-ARROW NORMALIZATION [API-GAP]
+       ├── CLOSED-GLUING/COLLAR TO OPEN-COVER [FOUNDATION]
+       └── MAYER-VIETORIS APPLICATIONS [depends on the two edges above]
 
 MANIFOLD-CALCULUS [BANKED MATHLIB SUBSTRATE]
        ├── PRODUCT-COMPLEMENT IMAGE NULLITY [BANKED]
@@ -97,6 +141,47 @@ VAN KAMPEN / SURFACE FOUNDATIONS
        ├── SURFACE CUTTING/CLASSIFICATION [FOUNDATION]
        └── INTERSECTION/SELF-INTERSECTION [depends on fundamental classes]
 ```
+
+## Scaffold layers and representations
+
+| Layer | Canonical providers | Representation | Exact outgoing edge |
+|---|---|---|---|
+| Singular-chain trunk | `SingularHomologyConcrete`, `SingularSubdivision` | unnormalized alternating-face chains in `AddCommGrpCat` | relative/excision/MV and concrete computations |
+| Relative and excision | `SingularExcision` | ambient `SSet.Subcomplex`, actual `TopCat` subspaces, integral chains | production open-cover MV; closed-gluing comparison |
+| Coefficient-category comparison | `IntegralSingularHomologyComparison` | `AddCommGrpCat ↔ ModuleCat ℤ` | integral sphere and circle results |
+| Concrete sphere/circle homology | `SphereHomology`, `CircleSingularHomology`, `T02A06Sphere*` | exported mainly in `ModuleCat ℤ` | degree, retract, and obstruction consumers |
+| Low-degree operations | `SingularCapLowDegree`, `Intersection` | integral chain cocycles versus finite-dimensional determinant signs | absent cap/fundamental-class/geometric-intersection comparison |
+| Chartwise nullity | dimension-drop/chart decomposition/fixed-chart targets | explicit target-chart Haar measure | nonsurjectivity; not intrinsic manifold measure or critical-value Sard |
+| Coverings | Mathlib lifting plus product-cover and higher-homotopy targets | evenly-covered maps and explicit lifts | quotient/deck-action classification remains separate |
+| Local homology | `ModelPairLocalHomologyOne`, `ChartPairRelativeHomologyTransport` | one-dimensional relative integral homology | oriented-manifold global-to-local fundamental class |
+| Open-cover product geometry | radial and Euclidean pole-overlap targets | homotopy equivalences of concrete subtypes | integral MV computation after production arrow normalization |
+
+Important representation decisions:
+
+- `IntegralSingularHomologyComparison` is the intended bridge between
+  `AddCommGrpCat` and `ModuleCat ℤ`; do not duplicate integral computations.
+- `circleCellularChainComplex` is not definitionally genuine singular chains;
+  it needs a cellular-to-singular comparison before topological use.
+- `CircleSingularHomology` is stronger and consumed; `CircleHomology`
+  duplicates its `H₁ ≅ ℤ` route without the normalized generator.
+- `Intersection` and `SingularCapLowDegree` are complementary local and chain
+  layers, not competing implementations of the same theorem.
+- The untracked `TensorHomologySplitReduction` pair is not canonical and does
+  not provide Eilenberg--Zilber or Kunneth.
+
+## Uptake census
+
+The 2026-08-27 import/declaration traversal found 69 ConstructionTargets:
+50 are transitively consumed by frozen problems and 19 have no current frozen
+uptake.  Absence of uptake is not by itself a deletion criterion, but it
+requires an explicit proposed edge before extension.
+
+High-value unconsumed scaffold includes `SingularCapLowDegree`,
+`ChartPairRelativeHomologyTransport`, `ModelPairLocalHomologyOne`, the
+open-cover Mayer--Vietoris targets, and the radial pole-overlap targets.
+`T02A06HomologyScaffold` appears superseded by the compiled
+`T02A06SphereOne`/`SphereHomology` route.  New work should prefer
+`CircleSingularHomology` over the duplicate `CircleHomology` presentation.
 
 ## Canonical generic infrastructure
 
@@ -181,12 +266,14 @@ shared foundational conclusion.
 
 Ranked by demonstrated reuse:
 
-1. oriented-manifold fundamental classes and localization;
-2. manifold Sard plus regular-preimage/submersion geometry;
-3. manifold integration and Stokes;
-4. covering classification and equivariant gluing;
-5. Poincare/Thom/intersection comparison;
-6. van Kampen and compact-surface foundations.
+1. closed-gluing/collar comparison to production open-cover singular chains;
+2. oriented-manifold fundamental classes and localization;
+3. Eilenberg--Zilber and product homology/Kunneth;
+4. manifold Sard plus regular-preimage/submersion geometry;
+5. manifold integration and Stokes;
+6. covering classification and equivariant gluing;
+7. Poincare/Thom/intersection comparison;
+8. van Kampen and compact-surface foundations.
 
 Each program requires a separate design note and a first milestone that
 compiles independently of every final problem.
@@ -198,8 +285,10 @@ compiles independently of every final problem.
 | Critical-value manifold Sard | `t01A08`, `t01J04`, `t92J07`, `t93A04`, `t96J05` | `FOUNDATION`; dimension-gap nullity does not address these regular-value problems |
 | Dimension-gap manifold nullity | closed `t94J05`; nonsurjectivity part of `t95J04` | generic coordinate-nullity and nonsurjectivity chain is `BANKED`; exact Hausdorff nullity in `t95J04` remains separate |
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
-| Fundamental classes/localization | `t00J02`, `t00A01`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; highest-priority homological program |
+| Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
+| Closed gluing to open-cover MV | `t96A03`, `t03J02`, `t01J03`, `t00A01` | `FOUNDATION`; require collars/cofibrations or an honest excisive-open-cover comparison before applying banked MV algebra |
+| Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and coefficient-compatible computations do not |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, `t94J06`, `t97A02`, `t97J08` | mixed concrete progress; shared naturality/lifting APIs remain |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
@@ -282,6 +371,17 @@ critical-value Sard.
 | `t01A03` | `8ef14798` | no executable placeholders; only standard axioms |
 | `t01J02` | `3ba7726a` using `37524eb4` | status `solved`, zero placeholders, statements unchanged, only standard axioms |
 | `t94J05` | `3348f833` using the banked dimension-gap chain | status `solved`, zero placeholders, statements unchanged, only standard axioms |
+
+Current audited classification beyond these closures:
+
+- `t00J02` and `a97J08` are `UPTAKE`: each has one genuine geometric producer
+  remaining, respectively oriented-surface duality and planar separation.
+- `t96A03`, `t03J02`, `t01J03`, and `t97A01` are `API-GAP` problems whose
+  current presentations do not yet compare with the relevant singular-chain
+  scaffold.
+- `t95J04` and `t00A01` remain `FOUNDATION`.
+- `t96J07` remains `SPEC-DEFECT` and must not receive proof scaffolding before
+  statement repair.
 
 ## Next decision point
 
