@@ -546,6 +546,7 @@ theorem ambientSubspaceRange_inf
         congr 1
       simpa only [NatTrans.comp_app, Function.comp_apply] using
         (congrArg (fun k ↦ k.app n σAB) hc).trans hAB
+
     · refine ⟨(TopCat.toSSet.map incB).app n σAB, ?_⟩
       have hc : TopCat.toSSet.map incB ≫
           TopCat.toSSet.map (subspaceInclusion B) =
@@ -733,6 +734,104 @@ def ambientSubspaceRangeInclusion {X : Type} [TopologicalSpace X]
     {A B : Set X} (h : A ⊆ B) :
     (ambientSubspaceRange A : SSet) ⟶ (ambientSubspaceRange B : SSet) :=
   SSet.Subcomplex.homOfLE (ambientSubspaceRange_mono h)
+
+/-- The actual intersection range and the infimum of the two ambient ranges
+are canonically isomorphic by their inclusion maps.  Unlike an `eqToIso`,
+this presentation retains the concrete simplicial maps on both sides. -/
+def ambientIntersectionRangeIso
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientSubspaceRange (A ∩ B) : SSet) ≅
+      ((ambientSubspaceRange A ⊓ ambientSubspaceRange B :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet) where
+  hom := SSet.Subcomplex.homOfLE (ambientSubspaceRange_inf A B).ge
+  inv := SSet.Subcomplex.homOfLE (ambientSubspaceRange_inf A B).le
+  hom_inv_id := by rfl
+  inv_hom_id := by rfl
+
+/-- The canonical intersection-range identification commutes with inclusion
+into the left ambient range. -/
+theorem ambientIntersectionRangeIso_hom_comp_left
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientIntersectionRangeIso A B).hom ≫
+        subcomplexIntersectionToLeft
+          (ambientSubspaceRange A) (ambientSubspaceRange B) =
+      ambientSubspaceRangeInclusion (Set.inter_subset_left) := by
+  rfl
+
+/-- The canonical intersection-range identification commutes with inclusion
+into the right ambient range. -/
+theorem ambientIntersectionRangeIso_hom_comp_right
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientIntersectionRangeIso A B).hom ≫
+        subcomplexIntersectionToRight
+          (ambientSubspaceRange A) (ambientSubspaceRange B) =
+      ambientSubspaceRangeInclusion (Set.inter_subset_right) := by
+  rfl
+
+/-- Chain-level form of the canonical intersection-range identification. -/
+noncomputable def ambientIntersectionRangeChainsIso
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    ssetChains.obj (ambientSubspaceRange (A ∩ B) : SSet) ≅
+      ssetChains.obj ((ambientSubspaceRange A ⊓ ambientSubspaceRange B :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet) :=
+  ssetChains.mapIso (ambientIntersectionRangeIso A B)
+
+theorem ambientIntersectionRangeChainsIso_hom_comp_left
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientIntersectionRangeChainsIso A B).hom ≫
+        ssetChains.map (subcomplexIntersectionToLeft
+          (ambientSubspaceRange A) (ambientSubspaceRange B)) =
+      ssetChains.map
+        (ambientSubspaceRangeInclusion (Set.inter_subset_left)) := by
+  change ssetChains.map _ ≫ ssetChains.map _ = ssetChains.map _
+  rw [← Functor.map_comp, ambientIntersectionRangeIso_hom_comp_left]
+
+theorem ambientIntersectionRangeChainsIso_hom_comp_right
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientIntersectionRangeChainsIso A B).hom ≫
+        ssetChains.map (subcomplexIntersectionToRight
+          (ambientSubspaceRange A) (ambientSubspaceRange B)) =
+      ssetChains.map
+        (ambientSubspaceRangeInclusion (Set.inter_subset_right)) := by
+  change ssetChains.map _ ≫ ssetChains.map _ = ssetChains.map _
+  rw [← Functor.map_comp, ambientIntersectionRangeIso_hom_comp_right]
+
+/-- Homology-level form of the canonical intersection-range identification. -/
+noncomputable def ambientIntersectionRangeHomologyIso
+    {X : Type} [TopologicalSpace X] (A B : Set X) (n : ℕ) :
+    (ssetChains.obj (ambientSubspaceRange (A ∩ B) : SSet)).homology n ≅
+      (ssetChains.obj ((ambientSubspaceRange A ⊓ ambientSubspaceRange B :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet)).homology n :=
+  (HomologicalComplex.homologyFunctor AddCommGrpCat
+    (ComplexShape.down ℕ) n).mapIso (ambientIntersectionRangeChainsIso A B)
+
+theorem ambientIntersectionRangeHomologyIso_hom_comp_left
+    {X : Type} [TopologicalSpace X] (A B : Set X) (n : ℕ) :
+    (ambientIntersectionRangeHomologyIso A B n).hom ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexIntersectionToLeft
+            (ambientSubspaceRange A) (ambientSubspaceRange B))) n =
+      HomologicalComplex.homologyMap
+        (ssetChains.map
+          (ambientSubspaceRangeInclusion (Set.inter_subset_left))) n := by
+  change HomologicalComplex.homologyMap _ n ≫
+      HomologicalComplex.homologyMap _ n = HomologicalComplex.homologyMap _ n
+  rw [← HomologicalComplex.homologyMap_comp,
+    ambientIntersectionRangeChainsIso_hom_comp_left]
+
+theorem ambientIntersectionRangeHomologyIso_hom_comp_right
+    {X : Type} [TopologicalSpace X] (A B : Set X) (n : ℕ) :
+    (ambientIntersectionRangeHomologyIso A B n).hom ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexIntersectionToRight
+            (ambientSubspaceRange A) (ambientSubspaceRange B))) n =
+      HomologicalComplex.homologyMap
+        (ssetChains.map
+          (ambientSubspaceRangeInclusion (Set.inter_subset_right))) n := by
+  change HomologicalComplex.homologyMap _ n ≫
+      HomologicalComplex.homologyMap _ n = HomologicalComplex.homologyMap _ n
+  rw [← HomologicalComplex.homologyMap_comp,
+    ambientIntersectionRangeChainsIso_hom_comp_right]
 
 /-- The range presentation of subspace singular chains. -/
 noncomputable def ambientSubspaceRangeChainsIso
@@ -1755,6 +1854,12 @@ theorem relativeExcision : RelativeExcisionStatement := by
 #print axioms subcomplexMayerVietoris_exact_union
 #print axioms subcomplexChains_isPushout
 #print axioms ambientSubspaceRangeInclusion_square
+#print axioms ambientIntersectionRangeIso_hom_comp_left
+#print axioms ambientIntersectionRangeIso_hom_comp_right
+#print axioms ambientIntersectionRangeChainsIso_hom_comp_left
+#print axioms ambientIntersectionRangeChainsIso_hom_comp_right
+#print axioms ambientIntersectionRangeHomologyIso_hom_comp_left
+#print axioms ambientIntersectionRangeHomologyIso_hom_comp_right
 #print axioms ambientSubspaceRangeChainsIso_naturality
 #print axioms ambientSubspaceRangeHomologyIso_naturality
 #print axioms ambientIntersectionRangeToLeft_naturality

@@ -34,3 +34,19 @@ the actual subspace inclusion. The remaining adapter work is categorical:
 assemble the two memberwise squares through the biproduct comparison for the
 homology functor and transport the intersection along
 `ambientSubspaceRange_inf`.
+
+## Intersection-range coherence
+
+`ambientIntersectionRangeIso` presents the equality
+`ambientSubspaceRange (A ∩ B) = ambientSubspaceRange A ⊓
+ambientSubspaceRange B` as an isomorphism whose maps are the actual
+`SSet.Subcomplex.homOfLE` inclusions, rather than an opaque `eqToIso`.
+`ambientIntersectionRangeIso_hom_comp_left` and `_right` prove definitionally
+that this identification commutes with the two intersection inclusions.
+
+`ambientIntersectionRangeChainsIso` and
+`ambientIntersectionRangeHomologyIso` lift the same identification through
+integral singular chains and homology. Their `_hom_comp_left` and
+`_hom_comp_right` theorems retain the actual inclusion-induced arrows. This is
+the public transport-coherence interface needed by the Boolean two-cover
+Mayer--Vietoris consumer; it does not assert production exactness.
