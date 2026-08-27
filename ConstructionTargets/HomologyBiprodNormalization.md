@@ -32,3 +32,9 @@ association `a ≫ homologyMap (biprod.lift f (-g)) ≫
 ((homologyBiprodIso.hom ≫ biprod.map u v) ≫ fst/snd)` to the corresponding
 left or signed-right component.  Their proofs use categorical reassociation
 and the unwhiskered formulas, without relying on rewrite occurrence selection.
+
+Fully left-associated corollaries spell the same two equations exactly as a
+long production composite elaborates them: the prefix, signed lift homology
+map, canonical biproduct comparison, componentwise postmap, and projection
+are parenthesized successively from the left.  They follow solely by category
+associativity from the whiskered formulas.

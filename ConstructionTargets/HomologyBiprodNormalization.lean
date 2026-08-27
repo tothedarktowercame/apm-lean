@@ -135,6 +135,28 @@ theorem whiskerLeft_homologyMap_signedLift_biprodIso_map_snd
         rw [homologyMap_signedLift_biprodIso_map_snd]
     _ = _ := rfl
 
+/-- Fully left-associated spelling of the whiskered left-component formula.
+This is the literal association produced by the production composite. -/
+theorem fullyLeftAssociated_homologyMap_signedLift_biprodIso_map_fst
+    (a : X ⟶ W.homology n) (f : W ⟶ K) (g : W ⟶ L)
+    (u : K.homology n ⟶ A) (v : L.homology n ⟶ B) :
+    ((((a ≫ HomologicalComplex.homologyMap (biprod.lift f (-g)) n) ≫
+          (homologyBiprodIso K L n).hom) ≫ biprod.map u v) ≫ biprod.fst) =
+      ((a ≫ HomologicalComplex.homologyMap f n) ≫ u) := by
+  simpa only [Category.assoc] using
+    whiskerLeft_homologyMap_signedLift_biprodIso_map_fst n a f g u v
+
+/-- Fully left-associated spelling of the whiskered signed right-component
+formula, again matching the literal production composite. -/
+theorem fullyLeftAssociated_homologyMap_signedLift_biprodIso_map_snd
+    (a : X ⟶ W.homology n) (f : W ⟶ K) (g : W ⟶ L)
+    (u : K.homology n ⟶ A) (v : L.homology n ⟶ B) :
+    ((((a ≫ HomologicalComplex.homologyMap (biprod.lift f (-g)) n) ≫
+          (homologyBiprodIso K L n).hom) ≫ biprod.map u v) ≫ biprod.snd) =
+      ((a ≫ (-HomologicalComplex.homologyMap g n)) ≫ v) := by
+  simpa only [Category.assoc] using
+    whiskerLeft_homologyMap_signedLift_biprodIso_map_snd n a f g u v
+
 end WhiskerLeft
 
 end PostcomposeBiprodMap
@@ -178,6 +200,8 @@ theorem homologyBiprodIso_inv_homologyMap_desc
 #print axioms homologyMap_signedLift_biprodIso_map_snd
 #print axioms whiskerLeft_homologyMap_signedLift_biprodIso_map_fst
 #print axioms whiskerLeft_homologyMap_signedLift_biprodIso_map_snd
+#print axioms fullyLeftAssociated_homologyMap_signedLift_biprodIso_map_fst
+#print axioms fullyLeftAssociated_homologyMap_signedLift_biprodIso_map_snd
 #print axioms homologyBiprodIso_inv_homologyMap_desc
 
 end ConstructionTargets.HomologyBiprodNormalization
