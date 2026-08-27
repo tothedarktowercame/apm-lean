@@ -259,3 +259,17 @@ of the five fell to the same move — resolve choices where the types are simple
 (inside a `Prop`, at `ℕ`, before indexing), then reindex by composition rather
 than transporting proofs across index equalities. That build's estimate held.
 This one's has already moved once.
+
+## Postcomposition representation coherence
+
+`ssetChainMap_eq_singularPostcomposition` identifies, for every continuous
+map `f : C(X, Y)`, the chain map obtained by applying the simplicial singular
+chain functor to `TopCat.toSSet.map (TopCat.ofHom f)` with the production
+`singularPostcomposition f`. The equality is definitional: the production
+topological singular-chain functor is the same simplicial chain functor after
+`TopCat.toSSet`.
+
+`ssetHomologyMap_eq_singularPostcomposition` lifts that equality to the
+induced integral homology map in every natural-number degree. This is a
+representation adapter only; it asserts no geometric or homological property
+of `f`.

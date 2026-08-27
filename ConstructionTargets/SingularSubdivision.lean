@@ -1987,6 +1987,28 @@ def singularPostcomposition {X Y : Type} [TopologicalSpace X]
   ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
     (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f)
 
+/-- The map obtained by applying the simplicial singular-chain functor to
+postcomposition of singular simplices is the production postcomposition map. -/
+theorem ssetChainMap_eq_singularPostcomposition {X Y : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) :
+    ((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+          (TopCat.toSSet.map (TopCat.ofHom f)) =
+      singularPostcomposition f := by
+  rfl
+
+/-- Consequently the two presentations induce the same map on integral
+singular homology in every degree. -/
+theorem ssetHomologyMap_eq_singularPostcomposition {X Y : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) (n : ℕ) :
+    HomologicalComplex.homologyMap
+        (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).map
+            (TopCat.toSSet.map (TopCat.ofHom f))) n =
+      HomologicalComplex.homologyMap (singularPostcomposition f) n := by
+  exact congrArg (fun k ↦ HomologicalComplex.homologyMap k n)
+    (ssetChainMap_eq_singularPostcomposition f)
+
 @[reassoc] theorem singularPostcomposition_comp {X Y Z : Type} [TopologicalSpace X]
     [TopologicalSpace Y] [TopologicalSpace Z] (f : C(X, Y)) (g : C(Y, Z)) :
     singularPostcomposition f ≫ singularPostcomposition g =
@@ -3901,6 +3923,8 @@ theorem coverSmall_homologyMap_isIso_succ
 #print axioms standardEdge_postcomposedSubdivision_small
 #print axioms twoTermChain_uniform_depth
 #print axioms standardEdge_postcomposedPrism_small
+#print axioms ssetChainMap_eq_singularPostcomposition
+#print axioms ssetHomologyMap_eq_singularPostcomposition
 
 
 end ConstructionTargets.SingularSubdivision
