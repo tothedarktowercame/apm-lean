@@ -1,0 +1,87 @@
+import ConstructionTargets.ProductionOpenCoverMayerVietoris
+
+/-!
+# Definition-first Boolean two-cover scaffold
+
+The two range subcomplexes are primary data. Their infimum and supremum are
+therefore definitionally the source and target of the subcomplex
+Mayer--Vietoris short complex; the generic Boolean cover is compared only at
+the outer boundary of the construction.
+-/
+
+open CategoryTheory CategoryTheory.Limits
+
+noncomputable section
+
+namespace ConstructionTargets.BooleanTwoCoverScaffold
+
+open ConstructionTargets.SingularExcision
+open ConstructionTargets.SingularSubdivision
+
+private abbrev ssetChains :=
+  (AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+    (AddCommGrpCat.of ℤ)
+
+def booleanCover {X : Type} (U V : Set X) : Bool → Set X
+  | true => U
+  | false => V
+
+def leftRange {X : Type} [TopologicalSpace X] (U : Set X) :
+    (TopCat.toSSet.obj (TopCat.of X)).Subcomplex :=
+  ambientSubspaceRange U
+
+def rightRange {X : Type} [TopologicalSpace X] (V : Set X) :
+    (TopCat.toSSet.obj (TopCat.of X)).Subcomplex :=
+  ambientSubspaceRange V
+
+def smallSSet {X : Type} [TopologicalSpace X] (U V : Set X) :
+    (TopCat.toSSet.obj (TopCat.of X)).Subcomplex :=
+  leftRange U ⊔ rightRange V
+
+theorem coverSmallSSet_booleanCover
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    coverSmallSSet (booleanCover U V) = smallSSet U V := by
+  rw [coverSmallSSet_bool_eq_sup]
+  rfl
+
+noncomputable def shortComplex
+    {X : Type} [TopologicalSpace X] (U V : Set X) :=
+  subcomplexMayerVietorisShortComplex (leftRange U) (rightRange V)
+
+/-- Reassembly in the stored union, followed by its ambient inclusion, is
+literally the descent of the two ambient range inclusions. -/
+theorem reassembly_comp_ambient
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    (shortComplex U V).g ≫ ssetChains.map (smallSSet U V).ι =
+      biprod.desc
+        (ssetChains.map (leftRange U).ι)
+        (ssetChains.map (rightRange V).ι) := by
+  dsimp [shortComplex, subcomplexMayerVietorisShortComplex]
+  apply biprod.hom_ext'
+  · rw [biprod.inl_desc_assoc, biprod.inl_desc]
+    rw [← Functor.map_comp]
+    rfl
+
+  · rw [biprod.inr_desc_assoc, biprod.inr_desc]
+    rw [← Functor.map_comp]
+    rfl
+
+/-- Fixture: the intersection and union objects are definitionally built from
+the same two stored ranges, so all four canonical arrows type without an
+equality transport. -/
+example {X : Type} [TopologicalSpace X] (U V : Set X) :
+    IsPushout
+      (ssetChains.map (subcomplexIntersectionToLeft
+        (leftRange U) (rightRange V)))
+      (ssetChains.map (subcomplexIntersectionToRight
+        (leftRange U) (rightRange V)))
+      (ssetChains.map (subcomplexLeftToUnion
+        (leftRange U) (rightRange V)))
+      (ssetChains.map (subcomplexRightToUnion
+        (leftRange U) (rightRange V))) :=
+  subcomplexChains_isPushout (leftRange U) (rightRange V)
+
+end ConstructionTargets.BooleanTwoCoverScaffold
+
+#print axioms ConstructionTargets.BooleanTwoCoverScaffold.coverSmallSSet_booleanCover
+#print axioms ConstructionTargets.BooleanTwoCoverScaffold.reassembly_comp_ambient
