@@ -189,3 +189,47 @@ Its two biproduct components still need to combine the chain-level reassembly
 triangle, the new member triangles, `coverMemberRangeHomologyIso_naturality`,
 and `homologyBiprodIso_inv_homologyMap_desc`. That composite is not asserted;
 connecting maps and production exactness remain unclaimed.
+
+The first componentwise attempt at the reassembly equality stops at the
+literal association
+
+```text
+biprod.inl ≫
+  (biprod.map rangeU.inv rangeV.inv ≫ homologyBiprodIso.inv) ≫
+  homologyMap shortComplex.g ≫ booleanUnionProductionHomologyIso.hom.
+```
+
+`biprod.inl_map_assoc` expects the map outside the parenthesized composite and
+does not rewrite this term; the `inr` component has the identical residual.
+No reassembly equality, connecting map, or production exactness is asserted.
+
+The banked fully-associated biproduct/descent theorem now closes that first
+association step when used as a whole equality. The left component reduces to
+
+```text
+rangeU.inv ≫ homologyMap storedLeftToUnion ≫
+  booleanUnionProductionHomologyIso.hom
+= homologyMap (actual cover inclusion U → X).
+```
+
+The right component has the analogous expression for `V`. The remaining
+literal task is to normalize this composite through the stored member
+triangle, `booleanSmallChainsIso_hom_comp_ambient`, and cover-member homology
+naturality. That equality, and hence connecting maps and production
+exactness, remains unclaimed.
+
+That memberwise normalization is now complete. The named theorems
+`leftReassemblyComponent_eq_production` and
+`rightReassemblyComponent_eq_production` pass through the concrete Boolean
+small-chain isomorphism and cancel the ambient range isomorphism using
+`coverMemberRangeHomologyIso_naturality`. The biproduct component laws then
+give `booleanReassemblyArrow_eq_production`, identifying the conjugated
+Boolean reassembly map with the actual descent of the two inclusion-induced
+maps into the ambient space.
+
+This target still does not claim the complete production long exact
+Mayer--Vietoris sequence. The remaining work is to define the adjacent-degree
+connecting morphism by conjugating the existing subcomplex connecting map and
+to transport the separately compiled exactness results at intersection,
+pieces, and union. Both production arrows are now identified; no arrow
+comparison remains hidden in that transport.

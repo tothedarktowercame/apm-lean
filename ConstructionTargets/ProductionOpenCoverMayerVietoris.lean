@@ -371,6 +371,237 @@ noncomputable def booleanUnionProductionHomologyIso
       · exact Set.mem_iUnion.2 ⟨true, hx⟩
       · exact Set.mem_iUnion.2 ⟨false, hx⟩) n
 
+theorem leftReassemblyComponent_eq_production
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (n : ℕ) :
+    (ambientRangeProductionHomologyIso U n).inv ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexLeftToUnion
+            (leftRange U) (rightRange V))) n ≫
+        (booleanUnionProductionHomologyIso U V hU hV hcover n).hom =
+      HomologicalComplex.homologyMap
+        (ssetChains.map (TopCat.toSSet.map
+          (coverSubspaceInclusion (booleanCover U V) true))) n := by
+  let hOpen : ∀ b, IsOpen (booleanCover U V b) := by
+    intro b
+    cases b <;> assumption
+  let hCover : Set.univ ⊆ ⋃ b, booleanCover U V b := by
+    intro x _
+    have hx : x ∈ U ∪ V := by rw [hcover]; trivial
+    rcases hx with hx | hx
+    · exact Set.mem_iUnion.2 ⟨true, hx⟩
+    · exact Set.mem_iUnion.2 ⟨false, hx⟩
+  have hmember :
+      ssetChains.map (subcomplexLeftToUnion
+          (leftRange U) (rightRange V)) ≫
+          (booleanSmallChainsIso U V).hom =
+        ssetChains.map
+          (coverMemberRangeInclusion (booleanCover U V) true) := by
+    change ssetChains.map _ ≫ ssetChains.map _ = ssetChains.map _
+    rw [← Functor.map_comp]
+    exact congrArg ssetChains.map
+      (leftToSmall_comp_smallSSetIsoCoverSmall U V)
+  have hmemberHomology :
+      HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexLeftToUnion
+            (leftRange U) (rightRange V))) n ≫
+        HomologicalComplex.homologyMap
+          (booleanSmallChainsIso U V).hom n =
+      HomologicalComplex.homologyMap
+        (ssetChains.map
+          (coverMemberRangeInclusion (booleanCover U V) true)) n := by
+    calc
+      _ = HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexLeftToUnion
+              (leftRange U) (rightRange V)) ≫
+            (booleanSmallChainsIso U V).hom) n :=
+        (HomologicalComplex.homologyMap_comp _ _ n).symm
+      _ = _ := congrArg (fun k ↦ HomologicalComplex.homologyMap k n) hmember
+  have hsmall :
+      (coverSmallHomologyIso (booleanCover U V) hOpen hCover n).hom =
+        HomologicalComplex.homologyMap
+          (coverSmallChains.ι (booleanCover U V)) n := by
+    letI := coverSmall_homologyMap_isIso
+      (booleanCover U V) hOpen hCover n
+    exact asIso_hom _
+  simp only [booleanUnionProductionHomologyIso, Iso.trans_hom,
+    booleanSmallHomologyIso_hom]
+  rw [hsmall]
+  calc
+    _ = (ambientRangeProductionHomologyIso U n).inv ≫
+        (HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexLeftToUnion
+            (leftRange U) (rightRange V))) n ≫
+          HomologicalComplex.homologyMap
+            (booleanSmallChainsIso U V).hom n) ≫
+        HomologicalComplex.homologyMap
+          (coverSmallChains.ι (booleanCover U V)) n := by rfl
+    _ = (ambientRangeProductionHomologyIso U n).inv ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map
+            (coverMemberRangeInclusion (booleanCover U V) true)) n ≫
+        HomologicalComplex.homologyMap
+          (coverSmallChains.ι (booleanCover U V)) n := by
+      exact congrArg
+        (fun k ↦ (ambientRangeProductionHomologyIso U n).inv ≫ k ≫
+          HomologicalComplex.homologyMap
+            (coverSmallChains.ι (booleanCover U V)) n)
+        hmemberHomology
+    _ = (ambientRangeProductionHomologyIso U n).inv ≫
+        (ambientRangeProductionHomologyIso U n).hom ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map (TopCat.toSSet.map
+            (coverSubspaceInclusion (booleanCover U V) true))) n := by
+      rw [ambientRangeProductionHomologyIso_hom]
+      simpa only [Category.assoc] using congrArg
+        (fun k ↦ (ambientRangeProductionHomologyIso U n).inv ≫ k)
+        (coverMemberRangeHomologyIso_naturality
+          (booleanCover U V) true n).symm
+    _ = _ := by simp
+
+theorem rightReassemblyComponent_eq_production
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (n : ℕ) :
+    (ambientRangeProductionHomologyIso V n).inv ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexRightToUnion
+            (leftRange U) (rightRange V))) n ≫
+        (booleanUnionProductionHomologyIso U V hU hV hcover n).hom =
+      HomologicalComplex.homologyMap
+        (ssetChains.map (TopCat.toSSet.map
+          (coverSubspaceInclusion (booleanCover U V) false))) n := by
+  let hOpen : ∀ b, IsOpen (booleanCover U V b) := by
+    intro b
+    cases b <;> assumption
+  let hCover : Set.univ ⊆ ⋃ b, booleanCover U V b := by
+    intro x _
+    have hx : x ∈ U ∪ V := by rw [hcover]; trivial
+    rcases hx with hx | hx
+    · exact Set.mem_iUnion.2 ⟨true, hx⟩
+    · exact Set.mem_iUnion.2 ⟨false, hx⟩
+  have hmember :
+      ssetChains.map (subcomplexRightToUnion
+          (leftRange U) (rightRange V)) ≫
+          (booleanSmallChainsIso U V).hom =
+        ssetChains.map
+          (coverMemberRangeInclusion (booleanCover U V) false) := by
+    change ssetChains.map _ ≫ ssetChains.map _ = ssetChains.map _
+    rw [← Functor.map_comp]
+    exact congrArg ssetChains.map
+      (rightToSmall_comp_smallSSetIsoCoverSmall U V)
+  have hmemberHomology :
+      HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexRightToUnion
+            (leftRange U) (rightRange V))) n ≫
+        HomologicalComplex.homologyMap
+          (booleanSmallChainsIso U V).hom n =
+      HomologicalComplex.homologyMap
+        (ssetChains.map
+          (coverMemberRangeInclusion (booleanCover U V) false)) n := by
+    calc
+      _ = HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexRightToUnion
+              (leftRange U) (rightRange V)) ≫
+            (booleanSmallChainsIso U V).hom) n :=
+        (HomologicalComplex.homologyMap_comp _ _ n).symm
+      _ = _ := congrArg (fun k ↦ HomologicalComplex.homologyMap k n) hmember
+  have hsmall :
+      (coverSmallHomologyIso (booleanCover U V) hOpen hCover n).hom =
+        HomologicalComplex.homologyMap
+          (coverSmallChains.ι (booleanCover U V)) n := by
+    letI := coverSmall_homologyMap_isIso
+      (booleanCover U V) hOpen hCover n
+    exact asIso_hom _
+  simp only [booleanUnionProductionHomologyIso, Iso.trans_hom,
+    booleanSmallHomologyIso_hom]
+  rw [hsmall]
+  calc
+    _ = (ambientRangeProductionHomologyIso V n).inv ≫
+        (HomologicalComplex.homologyMap
+          (ssetChains.map (subcomplexRightToUnion
+            (leftRange U) (rightRange V))) n ≫
+          HomologicalComplex.homologyMap
+            (booleanSmallChainsIso U V).hom n) ≫
+        HomologicalComplex.homologyMap
+          (coverSmallChains.ι (booleanCover U V)) n := by rfl
+    _ = (ambientRangeProductionHomologyIso V n).inv ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map
+            (coverMemberRangeInclusion (booleanCover U V) false)) n ≫
+        HomologicalComplex.homologyMap
+          (coverSmallChains.ι (booleanCover U V)) n := by
+      exact congrArg
+        (fun k ↦ (ambientRangeProductionHomologyIso V n).inv ≫ k ≫
+          HomologicalComplex.homologyMap
+            (coverSmallChains.ι (booleanCover U V)) n)
+        hmemberHomology
+    _ = (ambientRangeProductionHomologyIso V n).inv ≫
+        (ambientRangeProductionHomologyIso V n).hom ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map (TopCat.toSSet.map
+            (coverSubspaceInclusion (booleanCover U V) false))) n := by
+      rw [ambientRangeProductionHomologyIso_hom]
+      simpa only [Category.assoc] using congrArg
+        (fun k ↦ (ambientRangeProductionHomologyIso V n).inv ≫ k)
+        (coverMemberRangeHomologyIso_naturality
+          (booleanCover U V) false n).symm
+    _ = _ := by simp
+
+/-- Reassembly in the Boolean subcomplex presentation, conjugated to
+production singular homology, is the actual descent of the two cover-member
+inclusions. -/
+theorem booleanReassemblyArrow_eq_production
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (n : ℕ) :
+    (booleanPiecesProductionHomologyIso U V n).inv ≫
+        HomologicalComplex.homologyMap (shortComplex U V).g n ≫
+        (booleanUnionProductionHomologyIso U V hU hV hcover n).hom =
+      productionReassemblyArrow U V n := by
+  apply biprod.hom_ext'
+  · simp only [booleanPiecesProductionHomologyIso_inv,
+      productionReassemblyArrow, biprod.inl_desc]
+    calc
+      _ = (ambientRangeProductionHomologyIso U n).inv ≫
+          HomologicalComplex.homologyMap
+            (ssetChains.map (subcomplexLeftToUnion
+              (leftRange U) (rightRange V))) n ≫
+          (booleanUnionProductionHomologyIso U V hU hV hcover n).hom := by
+        exact congrArg
+          (fun k ↦ k ≫
+            (booleanUnionProductionHomologyIso U V hU hV hcover n).hom)
+          (ConstructionTargets.HomologyBiprodNormalization.fullyAssociated_biprod_inl_map_homologyBiprodIso_inv_homologyMap_desc
+            n
+            (ambientRangeProductionHomologyIso U n).inv
+            (ambientRangeProductionHomologyIso V n).inv
+            (ssetChains.map (subcomplexLeftToUnion
+              (leftRange U) (rightRange V)))
+            (ssetChains.map (subcomplexRightToUnion
+              (leftRange U) (rightRange V))))
+      _ = _ := leftReassemblyComponent_eq_production U V hU hV hcover n
+  · simp only [booleanPiecesProductionHomologyIso_inv,
+      productionReassemblyArrow, biprod.inr_desc]
+    calc
+      _ = (ambientRangeProductionHomologyIso V n).inv ≫
+          HomologicalComplex.homologyMap
+            (ssetChains.map (subcomplexRightToUnion
+              (leftRange U) (rightRange V))) n ≫
+          (booleanUnionProductionHomologyIso U V hU hV hcover n).hom := by
+        exact congrArg
+          (fun k ↦ k ≫
+            (booleanUnionProductionHomologyIso U V hU hV hcover n).hom)
+          (ConstructionTargets.HomologyBiprodNormalization.fullyAssociated_biprod_inr_map_homologyBiprodIso_inv_homologyMap_desc
+            n
+            (ambientRangeProductionHomologyIso U n).inv
+            (ambientRangeProductionHomologyIso V n).inv
+            (ssetChains.map (subcomplexLeftToUnion
+              (leftRange U) (rightRange V)))
+            (ssetChains.map (subcomplexRightToUnion
+              (leftRange U) (rightRange V))))
+      _ = _ := rightReassemblyComponent_eq_production U V hU hV hcover n
+
 /-- The already-compiled subcomplex Mayer--Vietoris exact segment can be
 transported to any three production objects once the comparison isomorphisms
 and arrow squares have been established. -/
@@ -410,5 +641,8 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallChainsIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallHomologyIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallChainsIso_hom_comp_ambient
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.leftReassemblyComponent_eq_production
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.rightReassemblyComponent_eq_production
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanReassemblyArrow_eq_production
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanUnionProductionHomologyIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
