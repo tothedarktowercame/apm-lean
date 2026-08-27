@@ -28,8 +28,8 @@ for banked results.
 
 ```text
 SINGULAR-SUBDIVISION/EXCISION [BANKED]
-       ├── ALEXANDER-WHITNEY DEGREE TWO [LOCAL-GO]
-       │      └── LOW-DEGREE-CAP [UPTAKE/EXTRACTION]
+       ├── ALEXANDER-WHITNEY DEGREE TWO [BANKED]
+       │      └── LOW-DEGREE-CAP [LOCAL-GO/EXTRACTION]
        ├── MANIFOLD-FUNDAMENTAL-CLASS [FOUNDATION]
        │      ├── MODEL-PAIR LOCAL H1 [BANKED]
        │      ├── CHART-PAIR TRANSPORT [LOCAL-GO]
@@ -39,8 +39,10 @@ SINGULAR-SUBDIVISION/EXCISION [BANKED]
        └── MAYER-VIETORIS APPLICATIONS [API-GAP]
 
 MANIFOLD-CALCULUS [BANKED MATHLIB SUBSTRATE]
-       ├── CHARTWISE-DIMENSION-DROP NULLITY [API-GAP]
-       │      └── MANIFOLD-SARD [FOUNDATION]
+       ├── PRODUCT-COMPLEMENT IMAGE NULLITY [BANKED]
+       │      ├── ARBITRARY FINRANK ADAPTER [LOCAL-GO]
+       │      └── CHARTWISE-DIMENSION-DROP NULLITY [LOCAL-GO]
+       │             └── MANIFOLD-SARD [FOUNDATION]
        ├── REGULAR-PREIMAGE/SUBMERSION [FOUNDATION]
        │      ├── TRANSVERSE-PULLBACK [FOUNDATION]
        │      └── PARAMETRIC/RELATIVE TRANSVERSALITY [FOUNDATION]
@@ -124,9 +126,8 @@ into frozen `t01A03` remains an `UPTAKE` task.
    independent consumers.  It was reviewed and committed as `935fc228`.
 2. Extract the experimental low-degree integral cap operations into a
    standalone module; do not merge the expanded t00J02 subdivision file.  Its
-   first prerequisite is the generic degree-two Alexander--Whitney face layer
-   from experimental commit `e30113f3`; review and extract that layer without
-   the accompanying t00J02 metadata edit.
+   first prerequisite, the generic degree-two Alexander--Whitney face layer,
+   is banked in `b94fdc26` without the experimental t00J02 metadata edit.
 3. Prototype covering pullback/base-change using existing fibre-bundle
    pullback trivializations.
 4. Retain chart-coordinate null-set transport; build a separate
@@ -213,6 +214,8 @@ not substitutes for those missing generic interfaces.
 | `935fc228` | product evenly-covered trivializations and `IsCoveringMap` closure | instantiate in concrete covering consumers |
 | `b61210cf` | three generic retraction obstructions, including the categorical integral-H1 form | frozen `t01A03` uptake |
 | `3c96f98e` | `H₁(B¹, B¹ \ {0}; ℤ) ≅ ℤ`, named nonzero local generator, and radial pair-map transport | transport through a manifold chart; global fundamental-class localization remains foundational |
+| `b94fdc26` | degree-two Alexander--Whitney front/back edges, chain maps, boundary formula, and naturality | extract the now-unblocked low-degree cap module |
+| `1f0a8882` | image nullity for differentiable `E → E × G` with nontrivial finite-dimensional complement | add explicit linear-equivalence/complement transport, then combine with chart-null transport |
 
 ## Next decision point
 

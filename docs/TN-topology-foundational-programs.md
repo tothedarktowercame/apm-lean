@@ -38,9 +38,12 @@ Keep four interfaces separate:
 3. regular-value/submersion preimage manifolds with tangent kernel;
 4. incidence projections for parametric and relative transversality.
 
-The first implementation milestone is the Euclidean dimension-drop theorem
-needed after chartwise null transport.  The first geometric milestone is a
-boundaryless regular-preimage theorem, not full parametric transversality.
+The product-complement Euclidean dimension-drop theorem is banked in
+`1f0a8882`.  The next bounded milestone is transport across explicit
+finite-dimensional linear equivalences so an arbitrary strict-finrank pair can
+use that theorem.  Only then should it be combined with chart-null transport.
+The first geometric milestone remains a boundaryless regular-preimage theorem,
+not full parametric transversality.
 
 ## Covering constructors
 
