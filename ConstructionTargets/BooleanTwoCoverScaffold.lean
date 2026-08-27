@@ -1,4 +1,4 @@
-import ConstructionTargets.ProductionOpenCoverMayerVietoris
+import ConstructionTargets.SingularExcision
 
 /-!
 # Definition-first Boolean two-cover scaffold

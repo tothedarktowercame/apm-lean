@@ -53,3 +53,26 @@ descent, while the left side above contains the `eqToIso` identifying
 `P ⊔ Q` with the Boolean `coverSmallSSet`. Existing simp lemmas do not close
 that transport. The analogous signed intersection equation additionally
 transports `P ⊓ Q` along `ambientSubspaceRange_inf`.
+
+The banked `ambientIntersectionRange*` coherence now supports the concrete
+production objects without equality transport. This target defines
+`ambientRangeProductionHomologyIso`,
+`booleanIntersectionProductionHomologyIso`, and
+`booleanPiecesProductionHomologyIso`, together with the actual signed
+inclusion arrow `productionIntersectionArrow`.
+
+The first remaining literal normalization is
+
+```text
+booleanIntersectionProductionHomologyIso(U,V,n).inv ≫
+  homologyMap (BooleanTwoCoverScaffold.shortComplex U V).f n ≫
+  booleanPiecesProductionHomologyIso(U,V,n).hom
+= productionIntersectionArrow U V n.
+```
+
+All component triangles needed for this equation are compiled upstream, but
+the current categorical normal form still contains the inverse of the
+composite intersection isomorphism and the `biprod.mapIso`/homology-biproduct
+composite. This exact arrow equality was not proved in this round, so neither
+the reassembly comparison nor production Mayer--Vietoris exactness is
+asserted.

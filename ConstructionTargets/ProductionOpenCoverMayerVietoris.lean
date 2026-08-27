@@ -1,4 +1,4 @@
-import ConstructionTargets.SingularExcision
+import ConstructionTargets.BooleanTwoCoverScaffold
 import Mathlib.Algebra.Homology.Additive
 
 /-!
@@ -19,6 +19,11 @@ namespace ConstructionTargets.ProductionOpenCoverMayerVietoris
 
 open ConstructionTargets.SingularExcision
 open ConstructionTargets.SingularSubdivision
+open ConstructionTargets.BooleanTwoCoverScaffold
+
+private abbrev ssetChains :=
+  (AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+    (AddCommGrpCat.of ℤ)
 
 /-- The canonical additive-functor comparison between homology of a chain
 complex biproduct and the biproduct of homology objects. -/
@@ -49,6 +54,54 @@ theorem homologyBiprodIso_inv
         (HomologicalComplex.homologyMap (biprod.inl : K ⟶ K ⊞ L) n)
         (HomologicalComplex.homologyMap (biprod.inr : L ⟶ K ⊞ L) n) := by
   rfl
+
+/-- Homology of an ambient range subcomplex as the production singular
+homology of its underlying topological subspace. -/
+noncomputable def ambientRangeProductionHomologyIso
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    (ssetChains.obj (ambientSubspaceRange A : SSet)).homology n ≅
+      (SingularChains (TopCat.of A)).homology n :=
+  (HomologicalComplex.homologyFunctor AddCommGrpCat
+    (ComplexShape.down ℕ) n).mapIso (ambientSubspaceRangeChainsIso A)
+
+/-- The stored Boolean-cover intersection term as production homology of
+`U ∩ V`. -/
+noncomputable def booleanIntersectionProductionHomologyIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    ((shortComplex U V).X₁).homology n ≅
+      (SingularChains (TopCat.of (U ∩ V : Set X))).homology n :=
+  (ambientIntersectionRangeHomologyIso U V n).symm ≪≫
+    ambientRangeProductionHomologyIso (U ∩ V) n
+
+/-- The stored Boolean-cover middle term as the biproduct of the production
+homologies of `U` and `V`. -/
+noncomputable def booleanPiecesProductionHomologyIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    ((shortComplex U V).X₂).homology n ≅
+      (SingularChains (TopCat.of U)).homology n ⊞
+        (SingularChains (TopCat.of V)).homology n := by
+  dsimp [shortComplex, subcomplexMayerVietorisShortComplex]
+  exact (homologyBiprodIso
+      (ssetChains.obj (leftRange U : SSet))
+      (ssetChains.obj (rightRange V : SSet)) n) ≪≫
+    biprod.mapIso
+      (ambientRangeProductionHomologyIso U n)
+      (ambientRangeProductionHomologyIso V n)
+
+/-- The actual signed pair of inclusion-induced maps from `U ∩ V` into
+the two members of the cover. -/
+noncomputable def productionIntersectionArrow
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (SingularChains (TopCat.of (U ∩ V : Set X))).homology n ⟶
+      (SingularChains (TopCat.of U)).homology n ⊞
+        (SingularChains (TopCat.of V)).homology n :=
+  biprod.lift
+    (HomologicalComplex.homologyMap
+      (ssetChains.map (TopCat.toSSet.map
+        (topologicalSubspaceInclusion (Set.inter_subset_left)))) n)
+    (-HomologicalComplex.homologyMap
+      (ssetChains.map (TopCat.toSSet.map
+        (topologicalSubspaceInclusion (Set.inter_subset_right)))) n)
 
 
 /-- Transport all three objects and both arrows of a short complex through
@@ -130,3 +183,7 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.homologyBiprodIso_inv
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverSmall_homologyMap_isIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMayerVietoris_exact_transport
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.ambientRangeProductionHomologyIso
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanPiecesProductionHomologyIso
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
