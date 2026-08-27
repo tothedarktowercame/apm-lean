@@ -31,3 +31,9 @@ name = "ConstructionTargets"
 # the proved lemma as unreachable. Added by claude-9, same fix as above.
 [[lean_lib]]
 name = "YoungL2"
+
+# Executable formal specification for the APM campaign controller. This is a
+# local port of the DarkTower reference implementation, built and tested wholly
+# against apm-lean's pinned Mathlib substrate.
+[[lean_lib]]
+name = "DarkTower"
