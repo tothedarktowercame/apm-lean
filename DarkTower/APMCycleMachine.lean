@@ -1849,6 +1849,38 @@ inductive LearningOutcome
   | skipped
   deriving DecidableEq, Repr
 
+/-! Closure consumes a checker receipt for the complete generated observation
+inventory.  The invariant is cardinality- and digest-based, so it does not
+name today's observation constructors. -/
+structure CombinedTraceReceipt where
+  traceDigest : String
+  checkerTraceDigest : String
+  declaredObservationCount : Nat
+  projectedObservationCount : Nat
+  projectedFromDurableState : Bool
+  checkerAccepted : Bool
+  deriving DecidableEq, Repr
+
+def validCombinedTraceReceipt (receipt : CombinedTraceReceipt) : Prop :=
+  receipt.traceDigest ≠ "" ∧
+  receipt.checkerTraceDigest = receipt.traceDigest ∧
+  receipt.declaredObservationCount > 0 ∧
+  receipt.projectedObservationCount = receipt.declaredObservationCount ∧
+  receipt.projectedFromDurableState = true ∧
+  receipt.checkerAccepted = true
+
+def closurePermitted (receipt : Option CombinedTraceReceipt) : Prop :=
+  ∃ value, receipt = some value ∧ validCombinedTraceReceipt value
+
+theorem closure_without_combined_trace_is_rejected :
+    ¬ closurePermitted none := by simp [closurePermitted]
+
+theorem closure_with_unbound_checker_digest_is_rejected
+    (receipt : CombinedTraceReceipt)
+    (mismatch : receipt.checkerTraceDigest ≠ receipt.traceDigest) :
+    ¬ validCombinedTraceReceipt receipt := by
+  simp [validCombinedTraceReceipt, mismatch]
+
 def validOutcome : ProblemOutcome → FrameResult → Prop
   | .solved, .frameClosed => True
   | .solved, .framePartial => True
