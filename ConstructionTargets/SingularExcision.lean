@@ -728,6 +728,38 @@ def topologicalSubspaceInclusion {X : Type} [TopologicalSpace X]
   TopCat.ofHom ⟨fun x ↦ ⟨x.1, h x.2⟩,
     continuous_subtype_val.subtype_mk _⟩
 
+/-- The named topological subspace inclusion is the independently written
+continuous-map inclusion used by production postcomposition. -/
+theorem topologicalSubspaceInclusion_eq_ofHom
+    {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) :
+    topologicalSubspaceInclusion h =
+      TopCat.ofHom ⟨fun x : A ↦ ⟨x.1, h x.2⟩,
+        continuous_subtype_val.subtype_mk _⟩ := by
+  rfl
+
+/-- The simplicial-chain map of a named subspace inclusion is the production
+postcomposition map for the corresponding continuous inclusion. -/
+theorem topologicalSubspaceInclusion_chainMap
+    {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) :
+    ssetChains.map (TopCat.toSSet.map (topologicalSubspaceInclusion h)) =
+      ConstructionTargets.SingularSubdivision.singularPostcomposition
+        ⟨fun x : A ↦ ⟨x.1, h x.2⟩,
+          continuous_subtype_val.subtype_mk _⟩ := by
+  exact ConstructionTargets.SingularSubdivision.ssetChainMap_eq_singularPostcomposition _
+
+/-- Homology-level normalization of an actual subspace inclusion into the
+production postcomposition presentation. -/
+theorem topologicalSubspaceInclusion_homologyMap
+    {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) (n : ℕ) :
+    HomologicalComplex.homologyMap
+        (ssetChains.map (TopCat.toSSet.map
+          (topologicalSubspaceInclusion h))) n =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          ⟨fun x : A ↦ ⟨x.1, h x.2⟩,
+            continuous_subtype_val.subtype_mk _⟩) n := by
+  exact ConstructionTargets.SingularSubdivision.ssetHomologyMap_eq_singularPostcomposition _ n
+
 /-- The inclusion between ambient range subcomplexes determined by a set
 inclusion. -/
 def ambientSubspaceRangeInclusion {X : Type} [TopologicalSpace X]
@@ -1869,6 +1901,9 @@ theorem relativeExcision : RelativeExcisionStatement := by
 #print axioms coverMemberRangeInclusion_square
 #print axioms coverMemberRangeChainsIso_naturality
 #print axioms coverMemberRangeHomologyIso_naturality
+#print axioms topologicalSubspaceInclusion_eq_ofHom
+#print axioms topologicalSubspaceInclusion_chainMap
+#print axioms topologicalSubspaceInclusion_homologyMap
 #print axioms subcomplexUnionRelativeIso
 #print axioms cokernelSquare_homologyMap_isIso
 #print axioms restrictedCoverSmallMap_comp_ι

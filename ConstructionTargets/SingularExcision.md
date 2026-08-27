@@ -50,3 +50,15 @@ integral singular chains and homology. Their `_hom_comp_left` and
 `_hom_comp_right` theorems retain the actual inclusion-induced arrows. This is
 the public transport-coherence interface needed by the Boolean two-cover
 Mayer--Vietoris consumer; it does not assert production exactness.
+
+## Topological subspace-inclusion representation
+
+`topologicalSubspaceInclusion_eq_ofHom` records that the named inclusion for
+`h : A ⊆ B` is exactly the independently written continuous map
+`x ↦ ⟨x.1, h x.2⟩`. The proof is definitional.
+
+`topologicalSubspaceInclusion_chainMap` and
+`topologicalSubspaceInclusion_homologyMap` combine that identification with
+the generic simplicial/production postcomposition coherence theorem. They
+normalize the induced integral chain and homology maps in every degree. These
+are representation equalities only and do not claim closure of a consumer.
