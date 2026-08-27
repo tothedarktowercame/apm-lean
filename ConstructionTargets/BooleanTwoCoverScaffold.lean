@@ -44,6 +44,28 @@ theorem coverSmallSSet_booleanCover
   rw [coverSmallSSet_bool_eq_sup]
   rfl
 
+/-- Concrete inclusion-map identification of the stored Boolean union with
+the generic cover-small subcomplex. -/
+def smallSSetIsoCoverSmall
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    (smallSSet U V : SSet) ≅
+      (coverSmallSSet (booleanCover U V) : SSet) where
+  hom := SSet.Subcomplex.homOfLE (by
+    rw [coverSmallSSet_booleanCover])
+  inv := SSet.Subcomplex.homOfLE (by
+    rw [coverSmallSSet_booleanCover])
+  hom_inv_id := by rfl
+  inv_hom_id := by rfl
+
+/-- The concrete Boolean-union identification commutes with inclusion into
+the ambient singular simplicial set. -/
+theorem smallSSetIsoCoverSmall_hom_comp_ambient
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    (smallSSetIsoCoverSmall U V).hom ≫
+        (coverSmallSSet (booleanCover U V)).ι =
+      (smallSSet U V).ι := by
+  rfl
+
 noncomputable def shortComplex
     {X : Type} [TopologicalSpace X] (U V : Set X) :=
   subcomplexMayerVietorisShortComplex (leftRange U) (rightRange V)

@@ -47,3 +47,9 @@ Neither `ambientSubspaceRange_inf` nor the existing range-chain naturality
 lemmas provide transport coherence for that equality.  Hiding it behind a
 fresh assumed square would merely restate the missing comparison, so this
 target stops here.
+
+The union-side comparison now uses `smallSSetIsoCoverSmall`, a concrete
+`Subcomplex.homOfLE` isomorphism in both directions. Its forward map commutes
+definitionally with ambient inclusion by
+`smallSSetIsoCoverSmall_hom_comp_ambient`. This supplies representation
+coherence only, not production Mayer--Vietoris exactness.

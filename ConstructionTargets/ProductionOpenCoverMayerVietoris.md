@@ -145,3 +145,32 @@ object at this use site.  A named homology isomorphism induced by that equality,
 with its hom component normalized against `reassembly_comp_ambient`, is needed
 before the production reassembly arrow can be stated without concealing a
 transport.  Reassembly and production exactness remain unclaimed.
+
+The named equality-induced interfaces `booleanSmallSSetIso`,
+`booleanSmallChainsIso`, and `booleanSmallHomologyIso` now compile, including
+hom/inv component formulas.  Their first ambient normalization square reduces
+to
+
+```text
+ssetChains.map (eqToHom coverSmallSSet_booleanCover.symm ≫
+  (coverSmallSSet (booleanCover U V)).ι)
+= ssetChains.map (smallSSet U V).ι.
+```
+
+Rewriting `coverSmallSSet_booleanCover` fails because the `eqToHom` proof
+depends on the subcomplex occurrence being rewritten; Lean rejects the motive
+as ill-typed.  The ambient-inclusion normalization, reassembly equality, and
+production exactness therefore remain unclaimed.
+
+The equality-induced comparison has now been replaced by the concrete
+`Subcomplex.homOfLE` isomorphism `smallSSetIsoCoverSmall`, owned by
+`BooleanTwoCoverScaffold`. Its ambient simplicial triangle is definitional,
+and `booleanSmallChainsIso_hom_comp_ambient` lifts that triangle functorially
+to chains. The earlier dependent `eqToHom` obstruction is therefore removed.
+
+The first remaining reassembly comparison is memberwise: the stored
+`leftRange U` and `rightRange V` inclusions into `smallSSet U V` must be
+identified, through `smallSSetIsoCoverSmall`, with
+`coverMemberRangeInclusion (booleanCover U V) true` and `false`. Those two
+triangles have not yet been proved, so no reassembly arrow or production
+exactness is claimed.

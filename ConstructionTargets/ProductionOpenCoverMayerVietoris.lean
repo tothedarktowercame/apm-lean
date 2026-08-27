@@ -282,6 +282,52 @@ theorem coverSmall_homologyMap_isIso
   | zero => exact coverSmall_homologyMap_isIso_zero U hUOpen hUCover
   | succ n => exact coverSmall_homologyMap_isIso_succ U hUOpen hUCover n
 
+/-- Equality-induced identification of the stored Boolean union with the
+generic cover-small simplicial object. -/
+noncomputable def booleanSmallSSetIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    (smallSSet U V : SSet) ≅
+      (coverSmallSSet (booleanCover U V) : SSet) :=
+  smallSSetIsoCoverSmall U V
+
+/-- Chain-level form of `booleanSmallSSetIso`. -/
+noncomputable def booleanSmallChainsIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    ssetChains.obj (smallSSet U V : SSet) ≅
+      coverSmallChains (booleanCover U V) :=
+  ssetChains.mapIso (booleanSmallSSetIso U V)
+
+/-- Homology-level form of the stored/generic Boolean-cover identification. -/
+noncomputable def booleanSmallHomologyIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (ssetChains.obj (smallSSet U V : SSet)).homology n ≅
+      (coverSmallChains (booleanCover U V)).homology n :=
+  (HomologicalComplex.homologyFunctor AddCommGrpCat
+    (ComplexShape.down ℕ) n).mapIso (booleanSmallChainsIso U V)
+
+theorem booleanSmallHomologyIso_hom
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (booleanSmallHomologyIso U V n).hom =
+      HomologicalComplex.homologyMap (booleanSmallChainsIso U V).hom n := by
+  rfl
+
+theorem booleanSmallHomologyIso_inv
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (booleanSmallHomologyIso U V n).inv =
+      HomologicalComplex.homologyMap (booleanSmallChainsIso U V).inv n := by
+  rfl
+
+theorem booleanSmallChainsIso_hom_comp_ambient
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    (booleanSmallChainsIso U V).hom ≫
+        coverSmallChains.ι (booleanCover U V) =
+      ssetChains.map (smallSSet U V).ι := by
+  change ssetChains.map _ ≫ ssetChains.map _ = ssetChains.map _
+  rw [← Functor.map_comp]
+  change ssetChains.map ((smallSSetIsoCoverSmall U V).hom ≫
+    (coverSmallSSet (booleanCover U V)).ι) = _
+  rw [smallSSetIsoCoverSmall_hom_comp_ambient]
+
 /-- The corresponding named comparison isomorphism from cover-small homology
 to production singular homology. -/
 def coverSmallHomologyIso
@@ -327,3 +373,7 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso_hom
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanPiecesProductionHomologyIso_hom
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionArrow_eq_production
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallSSetIso
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallChainsIso
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallHomologyIso
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallChainsIso_hom_comp_ambient
