@@ -1,5 +1,6 @@
 import ConstructionTargets.BooleanTwoCoverScaffold
 import ConstructionTargets.HomologyBiprodIso
+import ConstructionTargets.HomologyBiprodNormalization
 
 /-!
 # Production open-cover Mayer--Vietoris transport
@@ -124,6 +125,122 @@ noncomputable def productionIntersectionArrow
       (ssetChains.map (TopCat.toSSet.map
         (topologicalSubspaceInclusion (Set.inter_subset_right)))) n)
 
+/-- The stored Boolean-cover intersection map becomes the actual signed pair
+of subspace inclusions under the production homology identifications. -/
+theorem booleanIntersectionArrow_eq_production
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (booleanIntersectionProductionHomologyIso U V n).inv ≫
+        HomologicalComplex.homologyMap (shortComplex U V).f n ≫
+        (booleanPiecesProductionHomologyIso U V n).hom =
+      productionIntersectionArrow U V n := by
+  rw [show (shortComplex U V).f =
+      biprod.lift
+        (ssetChains.map (subcomplexIntersectionToLeft
+          (leftRange U) (rightRange V)))
+        (-ssetChains.map (subcomplexIntersectionToRight
+          (leftRange U) (rightRange V))) by rfl]
+  apply biprod.hom_ext
+  · simp only [booleanIntersectionProductionHomologyIso_inv,
+      booleanPiecesProductionHomologyIso_hom, productionIntersectionArrow,
+      biprod.lift_fst]
+    calc
+      _ = (((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+              (ambientIntersectionRangeHomologyIso U V n).hom) ≫
+            HomologicalComplex.homologyMap
+              (ssetChains.map (subcomplexIntersectionToLeft
+                (leftRange U) (rightRange V))) n) ≫
+          (ambientRangeProductionHomologyIso U n).hom := by
+            exact ConstructionTargets.HomologyBiprodNormalization.fullyLeftAssociated_homologyMap_signedLift_biprodIso_map_fst
+                n _ _ _ _ _
+      _ = _ := by
+        calc
+          _ = ((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+                HomologicalComplex.homologyMap
+                  (ssetChains.map (ambientSubspaceRangeInclusion
+                    Set.inter_subset_left)) n) ≫
+              (ambientRangeProductionHomologyIso U n).hom := by
+                simpa only [Category.assoc, leftRange, rightRange] using
+                  congrArg (fun k ↦
+                    ((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫ k) ≫
+                      (ambientRangeProductionHomologyIso U n).hom)
+                    (ambientIntersectionRangeHomologyIso_hom_comp_left U V n)
+          _ = ((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+                (ambientRangeProductionHomologyIso (U ∩ V) n).hom) ≫
+              HomologicalComplex.homologyMap
+                (ssetChains.map (TopCat.toSSet.map
+                  (topologicalSubspaceInclusion Set.inter_subset_left))) n := by
+                simpa only [ambientRangeProductionHomologyIso_hom,
+                  Category.assoc] using
+                  congrArg (fun k ↦
+                    (ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫ k)
+                    (ambientSubspaceRangeHomologyIso_naturality
+                      Set.inter_subset_left n).symm
+          _ = _ := by simp
+  · simp only [booleanIntersectionProductionHomologyIso_inv,
+      booleanPiecesProductionHomologyIso_hom, productionIntersectionArrow,
+      biprod.lift_snd]
+    calc
+      _ = (((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+              (ambientIntersectionRangeHomologyIso U V n).hom) ≫
+            (-HomologicalComplex.homologyMap
+              (ssetChains.map (subcomplexIntersectionToRight
+                (leftRange U) (rightRange V))) n)) ≫
+          (ambientRangeProductionHomologyIso V n).hom := by
+            exact ConstructionTargets.HomologyBiprodNormalization.fullyLeftAssociated_homologyMap_signedLift_biprodIso_map_snd
+                n _ _ _ _ _
+      _ = _ := by
+        have hp :
+            (((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+                (ambientIntersectionRangeHomologyIso U V n).hom) ≫
+              HomologicalComplex.homologyMap
+                (ssetChains.map (subcomplexIntersectionToRight
+                  (leftRange U) (rightRange V))) n) ≫
+              (ambientRangeProductionHomologyIso V n).hom =
+            HomologicalComplex.homologyMap
+              (ssetChains.map (TopCat.toSSet.map
+                (topologicalSubspaceInclusion Set.inter_subset_right))) n := by
+          calc
+          _ = ((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+                HomologicalComplex.homologyMap
+                  (ssetChains.map (ambientSubspaceRangeInclusion
+                    Set.inter_subset_right)) n) ≫
+              (ambientRangeProductionHomologyIso V n).hom := by
+                simpa only [Category.assoc, leftRange, rightRange] using
+                  congrArg (fun k ↦
+                    ((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫ k) ≫
+                      (ambientRangeProductionHomologyIso V n).hom)
+                    (ambientIntersectionRangeHomologyIso_hom_comp_right U V n)
+          _ = ((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+                (ambientRangeProductionHomologyIso (U ∩ V) n).hom) ≫
+              HomologicalComplex.homologyMap
+                (ssetChains.map (TopCat.toSSet.map
+                  (topologicalSubspaceInclusion Set.inter_subset_right))) n := by
+                simpa only [ambientRangeProductionHomologyIso_hom,
+                  Category.assoc] using
+                  congrArg (fun k ↦
+                    (ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫ k)
+                    (ambientSubspaceRangeHomologyIso_naturality
+                      Set.inter_subset_right n).symm
+          _ = _ := by simp
+        calc
+          _ = (-(
+              ((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+                (ambientIntersectionRangeHomologyIso U V n).hom) ≫
+              HomologicalComplex.homologyMap
+                (ssetChains.map (subcomplexIntersectionToRight
+                  (leftRange U) (rightRange V))) n)) ≫
+              (ambientRangeProductionHomologyIso V n).hom := by
+                exact congrArg
+                  (fun k ↦ k ≫ (ambientRangeProductionHomologyIso V n).hom)
+                  (Preadditive.comp_neg _ _)
+          _ = -((((ambientRangeProductionHomologyIso (U ∩ V) n).inv ≫
+                (ambientIntersectionRangeHomologyIso U V n).hom) ≫
+              HomologicalComplex.homologyMap
+                (ssetChains.map (subcomplexIntersectionToRight
+                  (leftRange U) (rightRange V))) n) ≫
+              (ambientRangeProductionHomologyIso V n).hom) := by
+                exact Preadditive.neg_comp _ _
+          _ = _ := congrArg Neg.neg hp
 
 /-- Transport all three objects and both arrows of a short complex through
 specified isomorphisms. -/
@@ -209,3 +326,4 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.ambientRangeProductionHomologyIso_hom
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso_hom
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanPiecesProductionHomologyIso_hom
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionArrow_eq_production

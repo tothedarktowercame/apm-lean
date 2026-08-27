@@ -95,3 +95,53 @@ intersection leg, and the actual inclusion into `V`. These projection goals
 still require normalization of `homologyMap` through the signed
 `biprod.lift` and the homology-biproduct comparison before the upstream
 intersection triangles apply. The arrow equality remains unclaimed.
+
+After the upstream import-cycle repair, this target now imports
+`HomologyBiprodNormalization`. Its signed-lift theorem applies once the
+projection is adjacent to `homologyBiprodIso.hom`, but the first requested
+conjugation still stops at the literal left component
+
+```text
+homologyMap (biprod.lift interLeft (-interRight)) n ≫
+  (homologyBiprodIso.hom ≫ biprod.map rangeU rangeV) ≫ biprod.fst.
+```
+
+The newer
+`homologyMap_signedLift_biprodIso_map_fst`/`map_snd` declarations state the
+desired four-factor suffix, but `rw` still reports no occurrence in this
+elaborated expression: the leading composite intersection transport and the
+parenthesized middle production isomorphism remain part of one dependent
+composition. The right component has the same residual with `biprod.snd`.
+This round therefore claims neither an intersection-arrow equality, a
+reassembly-arrow equality, nor production exactness.
+
+The subsequent whiskered normalization declarations remove the missing
+prefix from the statement, but the production goal elaborates as the fully
+left-associated composite
+
+```text
+((((rangeInter.inv ≫ intersection.hom) ≫ homologyMap signedLift) ≫
+    homologyBiprodIso.hom) ≫ biprod.map rangeU rangeV) ≫ biprod.fst,
+```
+
+whereas `whiskerLeft_homologyMap_signedLift_biprodIso_map_fst` groups the
+final production-isomorphism/projection suffix. Lean reports that this exact
+pattern does not occur. The `snd` component fails at the identical grouping.
+No arrow equality or exactness theorem is claimed from this attempt.
+
+Using the fully left-associated normalization lemmas as whole-expression
+equalities closes the first production comparison:
+`booleanIntersectionArrow_eq_production` proves that the conjugated Boolean
+short-complex first map is exactly `productionIntersectionArrow`.  The proof
+then uses the concrete intersection-range triangles and ambient-range
+homology naturality; the right component transports the minus sign explicitly.
+
+The next literal reassembly boundary is the target object.  The Boolean short
+complex ends in chains on `smallSSet U V`, whereas `coverSmallHomologyIso`
+starts at `coverSmallChains (booleanCover U V)`.  Their simplicial objects are
+identified by the proved proposition
+`coverSmallSSet_booleanCover U V`, but they are not definitionally the same
+object at this use site.  A named homology isomorphism induced by that equality,
+with its hom component normalized against `reassembly_comp_ambient`, is needed
+before the production reassembly arrow can be stated without concealing a
+transport.  Reassembly and production exactness remain unclaimed.
