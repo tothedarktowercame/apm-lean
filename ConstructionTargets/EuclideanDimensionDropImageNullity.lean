@@ -1,6 +1,8 @@
 import Mathlib.MeasureTheory.Function.Jacobian
 import Mathlib.Analysis.Calculus.FDeriv.Comp
 import Mathlib.Analysis.Calculus.FDeriv.Prod
+import Mathlib.MeasureTheory.Measure.Map
+import Mathlib.LinearAlgebra.Dimension.Constructions
 
 /-! # Null images from an explicit positive-dimensional complement -/
 
@@ -76,9 +78,79 @@ theorem addHaar_image_eq_zero_of_differentiable
   exact measure_mono_null (image_subset_range f s)
     (addHaar_range_eq_zero_of_differentiable f hf μ)
 
+section EquivTransport
+
+variable {F : Type*}
+  [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+  [MeasurableSpace F] [BorelSpace F]
+
+/-- Nullity transports through an explicit continuous linear splitting of the
+target into the source and a nontrivial complementary factor. -/
+theorem addHaar_range_eq_zero_of_equiv
+    (e : F ≃L[ℝ] E × G) (f : E → F) (hf : Differentiable ℝ f)
+    (μ : Measure F) [μ.IsAddHaarMeasure] :
+    μ (range f) = 0 := by
+  let ν : Measure (E × G) := Measure.map e μ
+  letI : ν.IsAddHaarMeasure := e.isAddHaarMeasure_map μ
+  have hef : Differentiable ℝ (fun x ↦ e (f x)) := by
+    intro x
+    exact (e.toContinuousLinearMap.hasFDerivAt.comp x
+      (hf x).hasFDerivAt).differentiableAt
+  have hnull : ν (range fun x ↦ e (f x)) = 0 :=
+    addHaar_range_eq_zero_of_differentiable (fun x ↦ e (f x)) hef ν
+  have hpre := Measure.preimage_null_of_map_null
+    e.continuous.measurable.aemeasurable hnull
+  have hrange : e ⁻¹' (range fun x ↦ e (f x)) = range f := by
+    ext x
+    simp
+  rw [hrange] at hpre
+  exact hpre
+
+/-- Subset form of `addHaar_range_eq_zero_of_equiv`. -/
+theorem addHaar_image_eq_zero_of_equiv
+    (e : F ≃L[ℝ] E × G) (f : E → F) (hf : Differentiable ℝ f)
+    (μ : Measure F) [μ.IsAddHaarMeasure] (s : Set E) :
+    μ (f '' s) = 0 := by
+  exact measure_mono_null (image_subset_range f s)
+    (addHaar_range_eq_zero_of_equiv e f hf μ)
+
+/-- Strictly lower finite real dimension implies null range. The complement is
+constructed as a finite coordinate space of dimension
+`finrank F - finrank E`; no complement is assumed. -/
+theorem addHaar_range_eq_zero_of_finrank_lt
+    (hdim : Module.finrank ℝ E < Module.finrank ℝ F)
+    (f : E → F) (hf : Differentiable ℝ f)
+    (μ : Measure F) [μ.IsAddHaarMeasure] :
+    μ (range f) = 0 := by
+  let d := Module.finrank ℝ F - Module.finrank ℝ E
+  have hd : 0 < d := Nat.sub_pos_of_lt hdim
+  letI : Nonempty (Fin d) := ⟨⟨0, hd⟩⟩
+  let e : F ≃L[ℝ] E × (Fin d → ℝ) :=
+    ContinuousLinearEquiv.ofFinrankEq (by
+      simp only [Module.finrank_prod]
+      have hfin : Module.finrank ℝ (Fin d → ℝ) = d := by simp
+      rw [hfin]
+      omega)
+  exact addHaar_range_eq_zero_of_equiv e f hf μ
+
+/-- Arbitrary-subset form of the strict-finrank image-nullity theorem. -/
+theorem addHaar_image_eq_zero_of_finrank_lt
+    (hdim : Module.finrank ℝ E < Module.finrank ℝ F)
+    (f : E → F) (hf : Differentiable ℝ f)
+    (μ : Measure F) [μ.IsAddHaarMeasure] (s : Set E) :
+    μ (f '' s) = 0 := by
+  exact measure_mono_null (image_subset_range f s)
+    (addHaar_range_eq_zero_of_finrank_lt hdim f hf μ)
+
+end EquivTransport
+
 #print axioms range_complementExtension
 #print axioms det_complementExtensionDerivative_eq_zero
 #print axioms addHaar_range_eq_zero_of_differentiable
 #print axioms addHaar_image_eq_zero_of_differentiable
+#print axioms addHaar_range_eq_zero_of_equiv
+#print axioms addHaar_image_eq_zero_of_equiv
+#print axioms addHaar_range_eq_zero_of_finrank_lt
+#print axioms addHaar_image_eq_zero_of_finrank_lt
 
 end ConstructionTargets.EuclideanDimensionDropImageNullity

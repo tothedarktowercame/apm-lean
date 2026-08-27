@@ -14,11 +14,21 @@ the entire `G` direction. Mathlib's
 range, and hence the image of every source subset, is null for any add-Haar
 measure on `E × G`.
 
+`addHaar_range_eq_zero_of_equiv` first transports the result through an
+explicit continuous linear equivalence `F ≃L[ℝ] E × G`. Nullness is
+transported without a measurability assumption on the range, using
+`Measure.preimage_null_of_map_null` for the pushforward add-Haar measure.
+
+`addHaar_range_eq_zero_of_finrank_lt` then constructs the complement rather
+than assuming it. For `finrank E < finrank F`, take
+`G = Fin (finrank F - finrank E) → ℝ`; strict inequality makes `G`
+nontrivial, and `ContinuousLinearEquiv.ofFinrankEq` supplies
+`F ≃L[ℝ] E × G`. Thus the target now covers arbitrary finite-dimensional
+real normed source and target spaces with strict finrank inequality.
+
 This is the bounded dimension-drop interface supported directly by the
-current Jacobian API. It does not prove manifold Sard or construct regular
-values. Applying it to arbitrary finite-dimensional source and target spaces
-with strict finrank inequality still requires an explicit continuous linear
-equivalence of the target with the source times a nontrivial complement.
+current Jacobian API. It does not prove manifold Sard, construct regular
+values, or promote a regular fiber to a manifold.
 
 `ChartCoordinateNullTransport` is experimental-only and is deliberately not
 imported here. Once promoted separately, it can transport this coordinate
