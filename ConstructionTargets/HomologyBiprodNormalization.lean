@@ -180,6 +180,46 @@ theorem biprod_inr_homologyBiprodIso_inv_homologyMap_desc
   rw [homologyBiprodIso_inv, biprod.inr_desc_assoc,
     ← HomologicalComplex.homologyMap_comp, biprod.inr_desc]
 
+section PrecomposeBiprodMap
+
+variable {A' B' : AddCommGrpCat}
+
+/-- Fully associated left-component law for reassembly after an arbitrary
+componentwise map into the canonical homology biproduct. -/
+theorem fullyAssociated_biprod_inl_map_homologyBiprodIso_inv_homologyMap_desc
+    (u : A' ⟶ K.homology n) (v : B' ⟶ L.homology n)
+    (f : K ⟶ T) (g : L ⟶ T) :
+    ((biprod.inl ≫
+        (biprod.map u v ≫ (homologyBiprodIso K L n).inv)) ≫
+          HomologicalComplex.homologyMap (biprod.desc f g) n) =
+      (u ≫ HomologicalComplex.homologyMap f n) := by
+  calc
+    _ = u ≫
+        (biprod.inl ≫ (homologyBiprodIso K L n).inv ≫
+          HomologicalComplex.homologyMap (biprod.desc f g) n) := by
+        simp only [Category.assoc, biprod.inl_map_assoc]
+    _ = u ≫ HomologicalComplex.homologyMap f n := by
+        rw [biprod_inl_homologyBiprodIso_inv_homologyMap_desc]
+
+/-- Fully associated right-component law for reassembly after an arbitrary
+componentwise map into the canonical homology biproduct. -/
+theorem fullyAssociated_biprod_inr_map_homologyBiprodIso_inv_homologyMap_desc
+    (u : A' ⟶ K.homology n) (v : B' ⟶ L.homology n)
+    (f : K ⟶ T) (g : L ⟶ T) :
+    ((biprod.inr ≫
+        (biprod.map u v ≫ (homologyBiprodIso K L n).inv)) ≫
+          HomologicalComplex.homologyMap (biprod.desc f g) n) =
+      (v ≫ HomologicalComplex.homologyMap g n) := by
+  calc
+    _ = v ≫
+        (biprod.inr ≫ (homologyBiprodIso K L n).inv ≫
+          HomologicalComplex.homologyMap (biprod.desc f g) n) := by
+        simp only [Category.assoc, biprod.inr_map_assoc]
+    _ = v ≫ HomologicalComplex.homologyMap g n := by
+        rw [biprod_inr_homologyBiprodIso_inv_homologyMap_desc]
+
+end PrecomposeBiprodMap
+
 /-- Full reassembly of a chain-level descent map after transporting out of
 the homology biproduct. -/
 theorem homologyBiprodIso_inv_homologyMap_desc
@@ -202,6 +242,8 @@ theorem homologyBiprodIso_inv_homologyMap_desc
 #print axioms whiskerLeft_homologyMap_signedLift_biprodIso_map_snd
 #print axioms fullyLeftAssociated_homologyMap_signedLift_biprodIso_map_fst
 #print axioms fullyLeftAssociated_homologyMap_signedLift_biprodIso_map_snd
+#print axioms fullyAssociated_biprod_inl_map_homologyBiprodIso_inv_homologyMap_desc
+#print axioms fullyAssociated_biprod_inr_map_homologyBiprodIso_inv_homologyMap_desc
 #print axioms homologyBiprodIso_inv_homologyMap_desc
 
 end ConstructionTargets.HomologyBiprodNormalization

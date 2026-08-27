@@ -38,3 +38,11 @@ long production composite elaborates them: the prefix, signed lift homology
 map, canonical biproduct comparison, componentwise postmap, and projection
 are parenthesized successively from the left.  They follow solely by category
 associativity from the whiskered formulas.
+
+Reassembly has matching fully associated component laws.  Given arbitrary
+maps `u` and `v` into the two homology components, precomposing the canonical
+inverse comparison and the homology map of `biprod.desc f g` by the left or
+right inclusion recovers respectively `u ≫ homologyMap f` or
+`v ≫ homologyMap g`.  The statements retain the nested association used by
+the production composite and are derived explicitly from `biprod.inl_map_assoc`
+or `biprod.inr_map_assoc` and the unwhiskered inverse-descent laws.
