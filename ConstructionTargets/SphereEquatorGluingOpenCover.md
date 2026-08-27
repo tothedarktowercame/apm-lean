@@ -36,14 +36,23 @@ three specializations identify the left source with `AmbientSphere ⊕ band`,
 the right source with `band ⊕ AmbientSphere`, and the overlap source with
 `band ⊕ band`.
 
-The immediate remaining source-level step is to transport the identity/band
-contractions through these homeomorphisms and `Homeomorph.sumProdDistrib`.
-The direct elaboration of that composition currently exhausts Lean's
-deterministic heartbeat budget while checking the `Continuous.comp` goal; no
-such declaration is retained here.
+The source homotopies are now compiled without the earlier
+`Homeomorph.sumProdDistrib` elaboration problem.  Small named maps first prove
+continuity of the fixed whole-sphere branch and the flattened band branch.
+`continuous_sum_dom` combines these after an explicit
+`Homeomorph.prodSumDistrib`, and conjugation by the three source
+homeomorphisms gives jointly continuous homotopies on
+`unitInterval × leftPreimage`, `unitInterval × rightPreimage`, and
+`unitInterval × bothBandPreimage`.
 
-The next obstruction is the dependent quotient lift, before the
-`continuous_lift_prod_left` argument can be applied.  For example the left
+The next exact obligation is fiber coherence for each named restricted
+quotient map: if two source representatives have the same quotient image,
+their images under the source homotopy at a fixed time must again have the
+same quotient image.  On the generator this reduces to
+`bandFlatten_glue_compatible`; the remaining work is normalization of the
+conjugated source-homotopy definitions through the three explicit
+homeomorphisms.  Once this equation is available, the dependent quotient lift
+and `continuous_lift_prod_left` can be applied.  For example the left
 deformation must define a function of exact type
 
 ```lean

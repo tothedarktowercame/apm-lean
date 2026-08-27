@@ -680,6 +680,111 @@ def bothBandPreimageSumHomeomorph (n : ℕ) :
       (Homeomorph.setCongr (by ext; rfl))
       (Homeomorph.setCongr (by ext; rfl))
 
+/-! ## Branchwise source homotopies -/
+
+/-- A whole-sphere branch is fixed throughout the deformation. -/
+def fixedSphereBranch (n : ℕ) :
+    unitInterval × AmbientSphere n → AmbientSphere n := Prod.snd
+
+theorem continuous_fixedSphereBranch (n : ℕ) :
+    Continuous (fixedSphereBranch n) := continuous_snd
+
+/-- The band branch uses the already compiled normalized flattening. -/
+def flattenedBandBranch (n : ℕ) :
+    unitInterval × equatorialBand n → equatorialBand n :=
+  fun p => bandFlatten n p.1 p.2
+
+theorem continuous_flattenedBandBranch (n : ℕ) :
+    Continuous (flattenedBandBranch n) :=
+  continuous_bandFlatten_uncurried n
+
+/-- Branchwise deformation of the split left source. -/
+def leftSplitBranchHomotopy (n : ℕ) :
+    (unitInterval × AmbientSphere n) ⊕
+      (unitInterval × equatorialBand n) →
+        AmbientSphere n ⊕ equatorialBand n :=
+  Sum.elim (Sum.inl ∘ fixedSphereBranch n)
+    (Sum.inr ∘ flattenedBandBranch n)
+
+theorem continuous_leftSplitBranchHomotopy (n : ℕ) :
+    Continuous (leftSplitBranchHomotopy n) := by
+  apply Continuous.sumElim
+  · exact continuous_inl.comp (continuous_fixedSphereBranch n)
+  · exact continuous_inr.comp (continuous_flattenedBandBranch n)
+
+/-- Branchwise deformation of the split right source. -/
+def rightSplitBranchHomotopy (n : ℕ) :
+    (unitInterval × equatorialBand n) ⊕
+      (unitInterval × AmbientSphere n) →
+        equatorialBand n ⊕ AmbientSphere n :=
+  Sum.elim (Sum.inl ∘ flattenedBandBranch n)
+    (Sum.inr ∘ fixedSphereBranch n)
+
+theorem continuous_rightSplitBranchHomotopy (n : ℕ) :
+    Continuous (rightSplitBranchHomotopy n) := by
+  apply Continuous.sumElim
+  · exact continuous_inl.comp (continuous_flattenedBandBranch n)
+  · exact continuous_inr.comp (continuous_fixedSphereBranch n)
+
+/-- Both branches of the split overlap are flattened. -/
+def intersectionSplitBranchHomotopy (n : ℕ) :
+    (unitInterval × equatorialBand n) ⊕
+      (unitInterval × equatorialBand n) →
+        equatorialBand n ⊕ equatorialBand n :=
+  Sum.elim (Sum.inl ∘ flattenedBandBranch n)
+    (Sum.inr ∘ flattenedBandBranch n)
+
+theorem continuous_intersectionSplitBranchHomotopy (n : ℕ) :
+    Continuous (intersectionSplitBranchHomotopy n) := by
+  apply Continuous.sumElim
+  · exact continuous_inl.comp (continuous_flattenedBandBranch n)
+  · exact continuous_inr.comp (continuous_flattenedBandBranch n)
+
+/-- Jointly continuous source homotopy on the named left preimage. -/
+def leftPieceSourceHomotopy (n : ℕ) :
+    unitInterval × leftPreimage n → leftPreimage n :=
+  (leftPreimageSumHomeomorph n).symm ∘
+    leftSplitBranchHomotopy n ∘
+      Homeomorph.prodSumDistrib ∘
+        Prod.map id (leftPreimageSumHomeomorph n)
+
+theorem continuous_leftPieceSourceHomotopy (n : ℕ) :
+    Continuous (leftPieceSourceHomotopy n) := by
+  exact (leftPreimageSumHomeomorph n).symm.continuous.comp <|
+    (continuous_leftSplitBranchHomotopy n).comp <|
+      Homeomorph.prodSumDistrib.continuous.comp <|
+        continuous_id.prodMap (leftPreimageSumHomeomorph n).continuous
+
+/-- Jointly continuous source homotopy on the named right preimage. -/
+def rightPieceSourceHomotopy (n : ℕ) :
+    unitInterval × rightPreimage n → rightPreimage n :=
+  (rightPreimageSumHomeomorph n).symm ∘
+    rightSplitBranchHomotopy n ∘
+      Homeomorph.prodSumDistrib ∘
+        Prod.map id (rightPreimageSumHomeomorph n)
+
+theorem continuous_rightPieceSourceHomotopy (n : ℕ) :
+    Continuous (rightPieceSourceHomotopy n) := by
+  exact (rightPreimageSumHomeomorph n).symm.continuous.comp <|
+    (continuous_rightSplitBranchHomotopy n).comp <|
+      Homeomorph.prodSumDistrib.continuous.comp <|
+        continuous_id.prodMap (rightPreimageSumHomeomorph n).continuous
+
+/-- Jointly continuous source homotopy on the named overlap preimage. -/
+def intersectionPieceSourceHomotopy (n : ℕ) :
+    unitInterval × bothBandPreimage n → bothBandPreimage n :=
+  (bothBandPreimageSumHomeomorph n).symm ∘
+    intersectionSplitBranchHomotopy n ∘
+      Homeomorph.prodSumDistrib ∘
+        Prod.map id (bothBandPreimageSumHomeomorph n)
+
+theorem continuous_intersectionPieceSourceHomotopy (n : ℕ) :
+    Continuous (intersectionPieceSourceHomotopy n) := by
+  exact (bothBandPreimageSumHomeomorph n).symm.continuous.comp <|
+    (continuous_intersectionSplitBranchHomotopy n).comp <|
+      Homeomorph.prodSumDistrib.continuous.comp <|
+        continuous_id.prodMap (bothBandPreimageSumHomeomorph n).continuous
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -709,5 +814,13 @@ def bothBandPreimageSumHomeomorph (n : ℕ) :
 #print axioms leftPreimageSumHomeomorph
 #print axioms rightPreimageSumHomeomorph
 #print axioms bothBandPreimageSumHomeomorph
+#print axioms continuous_fixedSphereBranch
+#print axioms continuous_flattenedBandBranch
+#print axioms continuous_leftSplitBranchHomotopy
+#print axioms continuous_rightSplitBranchHomotopy
+#print axioms continuous_intersectionSplitBranchHomotopy
+#print axioms continuous_leftPieceSourceHomotopy
+#print axioms continuous_rightPieceSourceHomotopy
+#print axioms continuous_intersectionPieceSourceHomotopy
 
 end ConstructionTargets.SphereEquatorGluingOpenCover
