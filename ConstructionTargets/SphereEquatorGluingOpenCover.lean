@@ -785,6 +785,68 @@ theorem continuous_intersectionPieceSourceHomotopy (n : ℕ) :
       Homeomorph.prodSumDistrib.continuous.comp <|
         continuous_id.prodMap (bothBandPreimageSumHomeomorph n).continuous
 
+@[simp] theorem leftPieceSourceHomotopy_inl (n : ℕ) (s : unitInterval)
+    (x : AmbientSphere n) :
+    (leftPieceSourceHomotopy n (s, ⟨Sum.inl x, trivial⟩)).1 = Sum.inl x := rfl
+
+@[simp] theorem leftPieceSourceHomotopy_inr (n : ℕ) (s : unitInterval)
+    (x : equatorialBand n) :
+    (leftPieceSourceHomotopy n (s, ⟨Sum.inr x.1, x.2⟩)).1 =
+      Sum.inr (bandFlatten n s x).1 := rfl
+
+@[simp] theorem rightPieceSourceHomotopy_inl (n : ℕ) (s : unitInterval)
+    (x : equatorialBand n) :
+    (rightPieceSourceHomotopy n (s, ⟨Sum.inl x.1, x.2⟩)).1 =
+      Sum.inl (bandFlatten n s x).1 := rfl
+
+@[simp] theorem rightPieceSourceHomotopy_inr (n : ℕ) (s : unitInterval)
+    (x : AmbientSphere n) :
+    (rightPieceSourceHomotopy n (s, ⟨Sum.inr x, trivial⟩)).1 = Sum.inr x := rfl
+
+@[simp] theorem intersectionPieceSourceHomotopy_inl (n : ℕ)
+    (s : unitInterval) (x : equatorialBand n) :
+    (intersectionPieceSourceHomotopy n (s, ⟨Sum.inl x.1, x.2⟩)).1 =
+      Sum.inl (bandFlatten n s x).1 := rfl
+
+@[simp] theorem intersectionPieceSourceHomotopy_inr (n : ℕ)
+    (s : unitInterval) (x : equatorialBand n) :
+    (intersectionPieceSourceHomotopy n (s, ⟨Sum.inr x.1, x.2⟩)).1 =
+      Sum.inr (bandFlatten n s x).1 := rfl
+
+theorem leftPieceSourceHomotopy_eq_of_eqv (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (s : unitInterval)
+    {a b : Sum (AmbientSphere n) (AmbientSphere n)}
+    (ha : a ∈ leftPreimage n) (hb : b ∈ leftPreimage n)
+    (hab : Relation.EqvGen (EquatorGlueRel n h) a b) :
+    quotientMap n h (leftPieceSourceHomotopy n (s, ⟨a, ha⟩)).1 =
+      quotientMap n h (leftPieceSourceHomotopy n (s, ⟨b, hb⟩)).1 := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue x =>
+          have hx := bandFlatten_glue_compatible n h s x
+          rw [bandFlatten_fixes_equator] at hx
+          simpa using hx
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hmid : b ∈ leftPreimage n :=
+        (leftPreimage_respects n h hab).mp ha
+      exact (ih₁ ha hmid).trans (ih₂ hmid hb)
+
+theorem leftPieceSourceHomotopy_fiber_coherent (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (s : unitInterval)
+    {a b : leftPreimage n}
+    (hab : namedLeftPieceQuotientMap n h a =
+      namedLeftPieceQuotientMap n h b) :
+    namedLeftPieceQuotientMap n h (leftPieceSourceHomotopy n (s, a)) =
+      namedLeftPieceQuotientMap n h (leftPieceSourceHomotopy n (s, b)) := by
+  apply Subtype.ext
+  apply leftPieceSourceHomotopy_eq_of_eqv n h s a.2 b.2
+  have hab' := congrArg Subtype.val hab
+  change Quotient.mk _ a.1 = Quotient.mk _ b.1 at hab'
+  exact Quotient.exact hab'
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -822,5 +884,7 @@ theorem continuous_intersectionPieceSourceHomotopy (n : ℕ) :
 #print axioms continuous_leftPieceSourceHomotopy
 #print axioms continuous_rightPieceSourceHomotopy
 #print axioms continuous_intersectionPieceSourceHomotopy
+#print axioms leftPieceSourceHomotopy_eq_of_eqv
+#print axioms leftPieceSourceHomotopy_fiber_coherent
 
 end ConstructionTargets.SphereEquatorGluingOpenCover
