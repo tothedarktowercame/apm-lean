@@ -602,6 +602,189 @@ theorem booleanReassemblyArrow_eq_production
               (leftRange U) (rightRange V))))
       _ = _ := rightReassemblyComponent_eq_production U V hU hV hcover n
 
+/-- The connecting morphism of the production open-cover Mayer--Vietoris
+sequence, obtained by conjugating the canonical subcomplex connecting map. -/
+noncomputable def productionConnecting
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (n : ℕ) :
+    (SingularChains (TopCat.of X)).homology (n + 1) ⟶
+      (SingularChains (TopCat.of (U ∩ V : Set X))).homology n :=
+  (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+    subcomplexMayerVietorisConnecting (leftRange U) (rightRange V) n ≫
+    (booleanIntersectionProductionHomologyIso U V n).hom
+
+/-- Exactness at the two cover pieces in the production presentation. -/
+theorem productionMayerVietoris_exact_pieces
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (n : ℕ) :
+    (ShortComplex.mk (productionIntersectionArrow U V n)
+      (productionReassemblyArrow U V n) (by
+        rw [← booleanIntersectionArrow_eq_production U V n,
+          ← booleanReassemblyArrow_eq_production U V hU hV hcover n]
+        simp only [Category.assoc, Iso.hom_inv_id_assoc]
+        have hz :
+            HomologicalComplex.homologyMap (shortComplex U V).f n ≫
+                HomologicalComplex.homologyMap (shortComplex U V).g n = 0 := by
+          rw [← HomologicalComplex.homologyMap_comp,
+            (shortComplex U V).zero, HomologicalComplex.homologyMap_zero]
+        simpa only [Category.assoc, zero_comp, comp_zero] using
+          congrArg (fun k ↦
+            (booleanIntersectionProductionHomologyIso U V n).inv ≫ k ≫
+              (booleanUnionProductionHomologyIso U V hU hV hcover n).hom) hz)).Exact := by
+  simpa only [transportShortComplex, booleanIntersectionArrow_eq_production,
+    booleanReassemblyArrow_eq_production] using
+    transportShortComplex_exact
+      (ShortComplex.mk
+        (HomologicalComplex.homologyMap (shortComplex U V).f n)
+        (HomologicalComplex.homologyMap (shortComplex U V).g n)
+        (by
+          rw [← HomologicalComplex.homologyMap_comp,
+            (shortComplex U V).zero,
+            HomologicalComplex.homologyMap_zero]))
+      (booleanIntersectionProductionHomologyIso U V n)
+      (booleanPiecesProductionHomologyIso U V n)
+      (booleanUnionProductionHomologyIso U V hU hV hcover n)
+      (subcomplexMayerVietoris_exact_pieces
+        (leftRange U) (rightRange V) n)
+
+/-- Exactness at the ambient union term in the production presentation. -/
+theorem productionMayerVietoris_exact_union
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (n : ℕ) :
+    (ShortComplex.mk (productionReassemblyArrow U V (n + 1))
+      (productionConnecting U V hU hV hcover n) (by
+        rw [← booleanReassemblyArrow_eq_production U V hU hV hcover (n + 1)]
+        have hcancel :
+            HomologicalComplex.homologyMap (shortComplex U V).g (n + 1) ≫
+                (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).hom ≫
+                (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+                subcomplexMayerVietorisConnecting
+                  (leftRange U) (rightRange V) n =
+              HomologicalComplex.homologyMap (shortComplex U V).g (n + 1) ≫
+                subcomplexMayerVietorisConnecting
+                  (leftRange U) (rightRange V) n := by simp
+        have hz :
+            HomologicalComplex.homologyMap (shortComplex U V).g (n + 1) ≫
+                subcomplexMayerVietorisConnecting
+                  (leftRange U) (rightRange V) n = 0 :=
+          (subcomplexMayerVietorisShortComplex_shortExact
+            (leftRange U) (rightRange V)).comp_δ (n + 1) n rfl
+        simp only [productionConnecting]
+        calc
+          _ = (booleanPiecesProductionHomologyIso U V (n + 1)).inv ≫
+              (HomologicalComplex.homologyMap (shortComplex U V).g (n + 1) ≫
+                (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).hom ≫
+                (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+                subcomplexMayerVietorisConnecting
+                  (leftRange U) (rightRange V) n) ≫
+              (booleanIntersectionProductionHomologyIso U V n).hom := by
+                simp only [Category.assoc]
+          _ = (booleanPiecesProductionHomologyIso U V (n + 1)).inv ≫
+              (HomologicalComplex.homologyMap (shortComplex U V).g (n + 1) ≫
+                subcomplexMayerVietorisConnecting
+                  (leftRange U) (rightRange V) n) ≫
+              (booleanIntersectionProductionHomologyIso U V n).hom :=
+                congrArg (fun k ↦
+                  (booleanPiecesProductionHomologyIso U V (n + 1)).inv ≫ k ≫
+                    (booleanIntersectionProductionHomologyIso U V n).hom) hcancel
+          _ = 0 := by
+            calc
+              _ = (booleanPiecesProductionHomologyIso U V (n + 1)).inv ≫
+                  0 ≫ (booleanIntersectionProductionHomologyIso U V n).hom :=
+                congrArg (fun k ↦
+                  (booleanPiecesProductionHomologyIso U V (n + 1)).inv ≫ k ≫
+                    (booleanIntersectionProductionHomologyIso U V n).hom) hz
+              _ = 0 := by simp)).Exact := by
+  simpa only [transportShortComplex, productionConnecting,
+    booleanReassemblyArrow_eq_production] using
+    transportShortComplex_exact
+      (ShortComplex.mk
+        (HomologicalComplex.homologyMap (shortComplex U V).g (n + 1))
+        (subcomplexMayerVietorisConnecting
+          (leftRange U) (rightRange V) n)
+        ((subcomplexMayerVietorisShortComplex_shortExact
+          (leftRange U) (rightRange V)).comp_δ (n + 1) n rfl))
+      (booleanPiecesProductionHomologyIso U V (n + 1))
+      (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1))
+      (booleanIntersectionProductionHomologyIso U V n)
+      (subcomplexMayerVietoris_exact_union
+        (leftRange U) (rightRange V) n)
+
+/-- Exactness at the intersection term in the production presentation. -/
+theorem productionMayerVietoris_exact_intersection
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (n : ℕ) :
+    (ShortComplex.mk (productionConnecting U V hU hV hcover n)
+      (productionIntersectionArrow U V n) (by
+        rw [← booleanIntersectionArrow_eq_production U V n]
+        have hcancel :
+            subcomplexMayerVietorisConnecting
+                (leftRange U) (rightRange V) n ≫
+              (booleanIntersectionProductionHomologyIso U V n).hom ≫
+              (booleanIntersectionProductionHomologyIso U V n).inv ≫
+              HomologicalComplex.homologyMap (shortComplex U V).f n =
+            subcomplexMayerVietorisConnecting
+                (leftRange U) (rightRange V) n ≫
+              HomologicalComplex.homologyMap (shortComplex U V).f n := by
+                simpa only [Category.assoc] using congrArg
+                  (fun k ↦ subcomplexMayerVietorisConnecting
+                    (leftRange U) (rightRange V) n ≫ k)
+                  ((booleanIntersectionProductionHomologyIso U V n).hom_inv_id_assoc
+                    (HomologicalComplex.homologyMap (shortComplex U V).f n))
+        have hz :
+            subcomplexMayerVietorisConnecting
+                (leftRange U) (rightRange V) n ≫
+              HomologicalComplex.homologyMap (shortComplex U V).f n = 0 :=
+          (subcomplexMayerVietorisShortComplex_shortExact
+            (leftRange U) (rightRange V)).δ_comp (n + 1) n rfl
+        simp only [productionConnecting]
+        calc
+          _ = (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+              (subcomplexMayerVietorisConnecting
+                  (leftRange U) (rightRange V) n ≫
+                (booleanIntersectionProductionHomologyIso U V n).hom ≫
+                (booleanIntersectionProductionHomologyIso U V n).inv ≫
+                HomologicalComplex.homologyMap (shortComplex U V).f n) ≫
+              (booleanPiecesProductionHomologyIso U V n).hom := by
+                simp only [Category.assoc]
+          _ = (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+              (subcomplexMayerVietorisConnecting
+                  (leftRange U) (rightRange V) n ≫
+                HomologicalComplex.homologyMap (shortComplex U V).f n) ≫
+              (booleanPiecesProductionHomologyIso U V n).hom :=
+                congrArg (fun k ↦
+                  (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+                    k ≫ (booleanPiecesProductionHomologyIso U V n).hom) hcancel
+          _ = 0 := by
+            calc
+              _ = (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+                  0 ≫ (booleanPiecesProductionHomologyIso U V n).hom :=
+                congrArg (fun k ↦
+                  (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+                    k ≫ (booleanPiecesProductionHomologyIso U V n).hom) hz
+              _ = 0 := by simp)).Exact := by
+  let htransport := transportShortComplex_exact
+      (ShortComplex.mk
+        (subcomplexMayerVietorisConnecting
+          (leftRange U) (rightRange V) n)
+        (HomologicalComplex.homologyMap (shortComplex U V).f n)
+        ((subcomplexMayerVietorisShortComplex_shortExact
+          (leftRange U) (rightRange V)).δ_comp (n + 1) n rfl))
+      (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1))
+      (booleanIntersectionProductionHomologyIso U V n)
+      (booleanPiecesProductionHomologyIso U V n)
+      (subcomplexMayerVietoris_exact_intersection
+        (leftRange U) (rightRange V) n)
+  apply ShortComplex.exact_of_iso ?_ htransport
+  exact ShortComplex.isoMk (Iso.refl _) (Iso.refl _) (Iso.refl _)
+    (by rfl)
+    (by simpa only [transportShortComplex] using
+      (booleanIntersectionArrow_eq_production U V n).symm)
+
 /-- The already-compiled subcomplex Mayer--Vietoris exact segment can be
 transported to any three production objects once the comparison isomorphisms
 and arrow squares have been established. -/
@@ -644,5 +827,9 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.leftReassemblyComponent_eq_production
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.rightReassemblyComponent_eq_production
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanReassemblyArrow_eq_production
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_intersection
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanUnionProductionHomologyIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow

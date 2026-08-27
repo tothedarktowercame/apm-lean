@@ -3,6 +3,12 @@
 This target closes the generic categorical part of transporting the existing
 subcomplex Mayer--Vietoris sequence to production homology objects.
 
+The final API assumes a topological space `X`, subsets `U V : Set X`, proofs
+that both subsets are open, and `U ∪ V = Set.univ`. It is stated in every
+degree `n : ℕ` for the repository's integral singular-chain complexes and
+their homology objects in `AddCommGrpCat`. It does not assert a theorem for an
+arbitrary coefficient ring or a different homology theory.
+
 Compiled declarations:
 
 - `transportShortComplex` and `transportShortComplexIso` conjugate both arrows
@@ -15,9 +21,8 @@ Compiled declarations:
   the compiled exactness at the sum-of-pieces term.
 
 The public range and memberwise cover-small naturality squares are compiled in
-`SingularExcision`. This target does not replace the remaining comparison with
-assumed isomorphisms or claim a production topological Mayer--Vietoris
-sequence.
+`SingularExcision`. The comparisons here are derived from those squares rather
+than supplied as assumptions.
 
 The middle-object isomorphism
 `H_n(C(P) ⊞ C(Q)) ≅ H_n(C(P)) ⊞ H_n(C(Q))`, together with normalization of
@@ -227,9 +232,24 @@ give `booleanReassemblyArrow_eq_production`, identifying the conjugated
 Boolean reassembly map with the actual descent of the two inclusion-induced
 maps into the ambient space.
 
-This target still does not claim the complete production long exact
-Mayer--Vietoris sequence. The remaining work is to define the adjacent-degree
-connecting morphism by conjugating the existing subcomplex connecting map and
-to transport the separately compiled exactness results at intersection,
-pieces, and union. Both production arrows are now identified; no arrow
-comparison remains hidden in that transport.
+The adjacent-degree map is now exposed as `productionConnecting`, obtained by
+conjugating `subcomplexMayerVietorisConnecting` through the production union
+and intersection isomorphisms. The three actual four-term positions are
+proved exact in every natural-number degree:
+
+- `productionMayerVietoris_exact_pieces`;
+- `productionMayerVietoris_exact_union`;
+- `productionMayerVietoris_exact_intersection`.
+
+Their arrows are `productionIntersectionArrow`,
+`productionReassemblyArrow`, and `productionConnecting`; the proofs transport
+the canonical subcomplex exactness and use the two compiled actual-arrow
+equalities. Thus this target now supplies the production two-open-cover
+Mayer--Vietoris exactness API. It does not compute any space's homology or
+claim deformation-retract or sphere-specific results.
+
+Likely consumers include the open-cover calculations in `t00A01` and
+`t96A03`, and product/sphere calculations such as `t95J04` once their chosen
+covers and local homology inputs are supplied. Those frozen problems were
+used only as compatibility compiles in this work; this target does not claim
+that they import the API or that any remaining frozen placeholder is closed.
