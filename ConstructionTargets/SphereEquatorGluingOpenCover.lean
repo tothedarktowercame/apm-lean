@@ -847,6 +847,98 @@ theorem leftPieceSourceHomotopy_fiber_coherent (n : ℕ)
   change Quotient.mk _ a.1 = Quotient.mk _ b.1 at hab'
   exact Quotient.exact hab'
 
+theorem rightPieceSourceHomotopy_eq_of_eqv (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (s : unitInterval)
+    {a b : Sum (AmbientSphere n) (AmbientSphere n)}
+    (ha : a ∈ rightPreimage n) (hb : b ∈ rightPreimage n)
+    (hab : Relation.EqvGen (EquatorGlueRel n h) a b) :
+    quotientMap n h (rightPieceSourceHomotopy n (s, ⟨a, ha⟩)).1 =
+      quotientMap n h (rightPieceSourceHomotopy n (s, ⟨b, hb⟩)).1 := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue x =>
+          calc
+            _ = quotientMap n h
+                (Sum.inr (bandFlatten n s
+                  ⟨equatorInclusion n (h x),
+                    equatorInclusion_mem_band n (h x)⟩).1) :=
+              bandFlatten_glue_compatible n h s x
+            _ = quotientMap n h
+                (Sum.inr (equatorInclusion n (h x))) := by
+              rw [bandFlatten_fixes_equator]
+            _ = _ := by
+              simpa only [Subsingleton.elim hb trivial] using
+                congrArg (quotientMap n h)
+                  (rightPieceSourceHomotopy_inr n s
+                    (equatorInclusion n (h x))).symm
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hmid : b ∈ rightPreimage n :=
+        (rightPreimage_respects n h hab).mp ha
+      exact (ih₁ ha hmid).trans (ih₂ hmid hb)
+
+theorem rightPieceSourceHomotopy_fiber_coherent (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (s : unitInterval)
+    {a b : rightPreimage n}
+    (hab : namedRightPieceQuotientMap n h a =
+      namedRightPieceQuotientMap n h b) :
+    namedRightPieceQuotientMap n h (rightPieceSourceHomotopy n (s, a)) =
+      namedRightPieceQuotientMap n h (rightPieceSourceHomotopy n (s, b)) := by
+  apply Subtype.ext
+  apply rightPieceSourceHomotopy_eq_of_eqv n h s a.2 b.2
+  have hab' := congrArg Subtype.val hab
+  change Quotient.mk _ a.1 = Quotient.mk _ b.1 at hab'
+  exact Quotient.exact hab'
+
+theorem intersectionPieceSourceHomotopy_eq_of_eqv (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (s : unitInterval)
+    {a b : Sum (AmbientSphere n) (AmbientSphere n)}
+    (ha : a ∈ bothBandPreimage n) (hb : b ∈ bothBandPreimage n)
+    (hab : Relation.EqvGen (EquatorGlueRel n h) a b) :
+    quotientMap n h (intersectionPieceSourceHomotopy n (s, ⟨a, ha⟩)).1 =
+      quotientMap n h (intersectionPieceSourceHomotopy n (s, ⟨b, hb⟩)).1 := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue x => exact bandFlatten_glue_compatible n h s x
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have haLeft : a ∈ leftPreimage n := by
+        cases a with
+        | inl => trivial
+        | inr => exact ha
+      have haRight : a ∈ rightPreimage n := by
+        cases a with
+        | inl => exact ha
+        | inr => trivial
+      have hmidLeft : b ∈ leftPreimage n :=
+        (leftPreimage_respects n h hab).mp haLeft
+      have hmidRight : b ∈ rightPreimage n :=
+        (rightPreimage_respects n h hab).mp haRight
+      have hmid : b ∈ bothBandPreimage n := by
+        cases b with
+        | inl => exact hmidRight
+        | inr => exact hmidLeft
+      exact (ih₁ ha hmid).trans (ih₂ hmid hb)
+
+theorem intersectionPieceSourceHomotopy_fiber_coherent (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (s : unitInterval)
+    {a b : bothBandPreimage n}
+    (hab : namedIntersectionPieceQuotientMap n h a =
+      namedIntersectionPieceQuotientMap n h b) :
+    namedIntersectionPieceQuotientMap n h
+        (intersectionPieceSourceHomotopy n (s, a)) =
+      namedIntersectionPieceQuotientMap n h
+        (intersectionPieceSourceHomotopy n (s, b)) := by
+  apply Subtype.ext
+  apply intersectionPieceSourceHomotopy_eq_of_eqv n h s a.2 b.2
+  have hab' := congrArg Subtype.val hab
+  change Quotient.mk _ a.1 = Quotient.mk _ b.1 at hab'
+  exact Quotient.exact hab'
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -886,5 +978,9 @@ theorem leftPieceSourceHomotopy_fiber_coherent (n : ℕ)
 #print axioms continuous_intersectionPieceSourceHomotopy
 #print axioms leftPieceSourceHomotopy_eq_of_eqv
 #print axioms leftPieceSourceHomotopy_fiber_coherent
+#print axioms rightPieceSourceHomotopy_eq_of_eqv
+#print axioms rightPieceSourceHomotopy_fiber_coherent
+#print axioms intersectionPieceSourceHomotopy_eq_of_eqv
+#print axioms intersectionPieceSourceHomotopy_fiber_coherent
 
 end ConstructionTargets.SphereEquatorGluingOpenCover

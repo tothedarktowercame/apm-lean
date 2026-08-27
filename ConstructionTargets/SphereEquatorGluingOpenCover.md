@@ -45,13 +45,12 @@ homeomorphisms gives jointly continuous homotopies on
 `unitInterval × leftPreimage`, `unitInterval × rightPreimage`, and
 `unitInterval × bothBandPreimage`.
 
-Fiber coherence is now proved for the left source by induction over
-`Relation.EqvGen`; the generator case normalizes the explicit branch formulas
-and invokes `bandFlatten_glue_compatible`.  Thus equal fibers of
-`namedLeftPieceQuotientMap` remain equal throughout the left source homotopy.
-The exact remaining obligations are the symmetric right and intersection
-fiber-coherence equations.  Once all three equations are available, the
-dependent quotient lifts and `continuous_lift_prod_left` can be applied.  For
+Fiber coherence is proved for all three sources by induction over
+`Relation.EqvGen`; each generator case normalizes the explicit branch formulas
+and invokes `bandFlatten_glue_compatible`.  Thus equal fibers of each named
+piece quotient map remain equal throughout its source homotopy.  The exact
+remaining obligation is to construct the subtype-valued dependent quotient
+lifts and apply `continuous_lift_prod_left`.  For
 example the left
 deformation must define a function of exact type
 
