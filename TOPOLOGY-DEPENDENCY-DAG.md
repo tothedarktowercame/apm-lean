@@ -48,7 +48,7 @@ MANIFOLD-CALCULUS [BANKED MATHLIB SUBSTRATE]
        │                    ├── COMMON TARGET-CHART NULL TRANSPORT [BANKED]
        │                    ├── GLOBAL FIXED-CHART RANGE NULLITY [BANKED]
        │                    └── DIMENSION-GAP MANIFOLD NONSURJECTIVITY [BANKED]
-       │                           └── t94J05 FROZEN SPECIALIZATION [LOCAL-GO]
+       │                           └── t94J05 [CLOSED `3348f833`]
        ├── CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]
        ├── REGULAR-PREIMAGE/SUBMERSION [FOUNDATION]
        │      ├── TRANSVERSE-PULLBACK [FOUNDATION]
@@ -175,7 +175,8 @@ compiles independently of every final problem.
 
 | Cluster | Representative consumers | Current disposition |
 |---|---|---|
-| Manifold Sard/nullity | `t01A08`, `t01J04`, `t92J07`, `t93A04`, `t94J05`, `t95J04`, `t96J05` | `FOUNDATION`; do not create problem-specific Sard assumptions |
+| Critical-value manifold Sard | `t01A08`, `t01J04`, `t92J07`, `t93A04`, `t96J05` | `FOUNDATION`; dimension-gap nullity does not address these regular-value problems |
+| Dimension-gap manifold nullity | closed `t94J05`; nonsurjectivity part of `t95J04` | generic coordinate-nullity and nonsurjectivity chain is `BANKED`; exact Hausdorff nullity in `t95J04` remains separate |
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t00A01`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; highest-priority homological program |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
@@ -232,10 +233,11 @@ not substitutes for those missing generic interfaces.
 | `ce5839a7` | one-chart strict-finrank nullity, fixed-chart countable unions, and differentiable chart-change transport | consumed by the countable range-decomposition layer; no canonical manifold measure is asserted |
 | `707efa05` | relative singular homology isomorphism for a homeomorphism of pairs and nonzero transport of the model local generator | construct the restricted manifold chart pair and its deleted-point equivalence |
 | `fb05ffe9` | countable source/target chart-pair patches, full range decomposition, and exact coordinate equation | prove local `DifferentiableOn` dimension-drop nullity and compare varying target-chart null sets |
-| `7c2f83a6` | strict-finrank image nullity for maps differentiable only on the source subset | prove differentiability of each manifold coordinate representative on its literal patch |
-| `b4d6065f` | transport varying extended-chart null patches into any fixed target chart and assemble the countable union | combine with per-patch coordinate nullity, then derive nonsurjectivity from positivity of a chart target |
+| `7c2f83a6` | strict-finrank image nullity for maps differentiable only on the source subset | consumed by the manifold coordinate-patch theorem |
+| `b4d6065f` | transport varying extended-chart null patches into any fixed target chart and assemble the countable union | consumed by fixed-target-chart global range nullity |
 | `7e531b1d` | fixed-target-chart range nullity for `C¹` strict-dimension-drop manifold maps | consumed by the boundaryless target nonsurjectivity theorem |
-| `0193d098` | fixed-chart coordinate nullity contradicts surjectivity for boundaryless targets | specialize to frozen `t94J05`; reuse for the nonsurjectivity component of `t95J04` |
+| `0193d098` | fixed-chart coordinate nullity contradicts surjectivity for boundaryless targets | consumed by closed `t94J05`; reusable for the nonsurjectivity component of `t95J04` |
+| `3348f833` | specialization of the dimension-gap chain to smooth `T² → S³`, followed by the existing missed-point contraction | frozen `t94J05` closed with statements unchanged |
 
 ## Dimension-gap versus critical-value Sard
 
@@ -243,9 +245,9 @@ The banked dimension-drop chain is useful when
 `finrank ℝ sourceModel < finrank ℝ targetModel`.  It is not a proof of general
 critical-value Sard.
 
-- Direct first consumer: `t94J05`, which only needs nonsurjectivity of a smooth
-  two-dimensional-to-three-dimensional manifold map.  All generic mathematics
-  needed for this specialization is now banked.
+- Direct first consumer: `t94J05`, closed in `3348f833`.  It uses
+  nonsurjectivity of a smooth two-dimensional-to-three-dimensional manifold
+  map and the previously compiled missed-point contraction.
 - Partial consumer: the nonsurjectivity component of `t95J04`; its exact
   ambient Hausdorff-measure statement still needs a measure-comparison theorem.
 - Not consumers of this branch: `t93A04`, `t01A08`, `t01J04`, and `t96J05`.
@@ -259,6 +261,7 @@ critical-value Sard.
 |---|---|---|
 | `t01A03` | `8ef14798` | no executable placeholders; only standard axioms |
 | `t01J02` | `3ba7726a` using `37524eb4` | status `solved`, zero placeholders, statements unchanged, only standard axioms |
+| `t94J05` | `3348f833` using the banked dimension-gap chain | status `solved`, zero placeholders, statements unchanged, only standard axioms |
 
 ## Next decision point
 

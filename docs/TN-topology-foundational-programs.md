@@ -48,11 +48,19 @@ decomposition, and local coordinate equations are banked in `fb05ffe9`.  The
 transport of countably many varying-chart null patches into a fixed target
 chart is banked in `b4d6065f`.  Their composition for `C¹` manifold maps is
 banked in `7e531b1d`, and the boundaryless fixed-chart positivity contradiction
-is banked in `0193d098`.  The remaining work for the first consumer is only
-specialization to frozen `t94J05`.  This branch applies only under strict
-model-dimension drop; it does not address critical-value Sard.  The first
-geometric milestone for that separate program remains a boundaryless
+is banked in `0193d098`.  The first consumer, frozen `t94J05`, is closed in
+`3348f833` without changing its statement.  This branch applies only under
+strict model-dimension drop; it does not address critical-value Sard.  The
+first geometric milestone for that separate program remains a boundaryless
 regular-preimage theorem, not full parametric transversality.
+
+This program was the first strategy-informed build test.  The method survey
+successfully separated an already-supported Euclidean nullity theorem from
+four missing generic interfaces: subset differentiability, countable chart
+selection, overlap transport, and the chart-local positivity contradiction.
+Each became an independently compiled theorem, and their first consumer then
+closed with a short specialization.  The result supports continuing to elect
+small reusable interfaces before starting a monolithic foundational proof.
 
 ## Covering constructors
 
