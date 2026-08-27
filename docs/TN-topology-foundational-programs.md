@@ -122,7 +122,19 @@ A foundational program is ready for sustained implementation only when:
 4. the first milestone has an explicit stop condition;
 5. canonical ownership, review, and axiom-audit procedures are assigned.
 
-Under this rule, the next recommended work is low-degree cap extraction plus a
-model-pair/local-orientation prototype.  A full t00J02 producer, full manifold
-Sard theorem, or generic covering-space gluing theorem is not yet a bounded
-first milestone.
+In addition, every sustained program should aim to certify its infrastructure
+by closing at least one named problem or frozen branch.  The reusable theorem
+must remain independent of that consumer, but the program is not considered
+successful merely because a sequence of ConstructionTargets compiles.
+
+If immediate closure is impossible, the program note must record:
+
+- the intended first consumer;
+- the exact remaining specialization or missing theory;
+- why that remainder is not equivalent to the final theorem;
+- the condition under which work stops instead of producing another adapter.
+
+The dimension-gap program is the reference example: its generic chain closed
+`t94J05` in `3348f833`.  A full t00J02 producer, critical-value manifold Sard
+theorem, or generic covering-space gluing theorem is not yet a bounded first
+milestone until a comparable consumer path is identified.

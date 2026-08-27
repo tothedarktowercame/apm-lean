@@ -24,6 +24,26 @@ for banked results.
 | `SPEC-DEFECT` | The source or frozen statement is false or materially mismatched | Repair both statement and paper trail before proof work |
 | `DEFERRED-REP` | The route is valid but representation-specific and less reusable | Preserve results; do not continue automatically |
 
+## Consumer certification rule
+
+A new `ConstructionTarget` should aim to close at least one real problem, or a
+separately named frozen branch of a problem, in the same bounded program.  A
+target that merely compiles is infrastructure, not yet certified by uptake.
+
+The expected sequence is:
+
+1. state and compile the reusable theorem;
+2. audit it independently;
+3. specialize it to a named frozen consumer without changing that consumer's
+   statement;
+4. compile the consumer with fewer placeholders, ideally zero;
+5. record the closing commit in this DAG.
+
+Some foundational increments cannot have an immediate closing consumer.  Such
+an exception must name its intended consumer, explain the exact remaining
+adapter or theory, and have an explicit stop condition.  Repeated creation of
+uncertified adapters for the same blocked chain is not progress.
+
 ## Shared dependency graph
 
 ```text
@@ -265,12 +285,16 @@ critical-value Sard.
 
 ## Next decision point
 
-After the first Queue A promotion batch is independently reviewed, elect two
-bounded program milestones:
+The first strategy-informed build is complete: the dimension-gap nullity chain
+closed `t94J05`.  Before electing another foundational implementation, perform
+a method survey and identify its first plausible closing consumer.  Current
+choices are:
 
-1. extraction of the low-degree cap module;
-2. a design/prototype for oriented-manifold local fundamental classes.
+1. critical-value Sard, with `t93A04` or `t01A08` as the desired first closure;
+2. manifold fundamental-class localization, with a punctured-manifold problem
+   as the desired first closure;
+3. a bounded reuse of dimension-gap nonsurjectivity inside `t95J04`, while
+   keeping its Hausdorff-measure and topology branches separate.
 
-Continue chartwise Sard work only at the Euclidean dimension-drop nullity
-interface.  Do not begin a monolithic manifold-Sard implementation until that
-prototype and the regular-preimage interface have been separately reviewed.
+Do not begin a monolithic manifold-Sard, Poincare-duality, or surface
+classification implementation without a reviewed path to a named consumer.
