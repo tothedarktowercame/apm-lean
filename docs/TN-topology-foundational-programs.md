@@ -44,11 +44,14 @@ The product-complement Euclidean dimension-drop theorem is banked in
 One-chart dimension-drop nullity and coordinate-change transport are banked in
 `ce5839a7`; countable source/target chart-pair selection, exact range
 decomposition, and local coordinate equations are banked in `fb05ffe9`.  The
-next boundary has two parts: a `DifferentiableOn` dimension-drop theorem for
-the local coordinate representative, and a proved comparison of null sets
-across the varying target charts.  This still does not define a canonical
-manifold measure.  The first geometric milestone remains a boundaryless
-regular-preimage theorem, not full parametric transversality.
+`DifferentiableOn` dimension-drop theorem is banked in `7c2f83a6`, and
+transport of countably many varying-chart null patches into a fixed target
+chart is banked in `b4d6065f`.  The next milestone is their composition for a
+`C¹` manifold map, followed by nonsurjectivity from positivity of a nonempty
+target-chart open set.  This branch applies only under strict model-dimension
+drop; it does not address critical-value Sard.  The first geometric milestone
+for that separate program remains a boundaryless regular-preimage theorem,
+not full parametric transversality.
 
 ## Covering constructors
 

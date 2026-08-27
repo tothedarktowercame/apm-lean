@@ -44,9 +44,11 @@ MANIFOLD-CALCULUS [BANKED MATHLIB SUBSTRATE]
        │      ├── ARBITRARY FINRANK ADAPTER [BANKED]
        │      └── ONE-CHART DIMENSION-DROP NULLITY [BANKED]
        │             └── COUNTABLE CHART RANGE DECOMPOSITION [BANKED]
-       │                    ├── DIFFERENTIABLE-ON LOCAL NULLITY [LOCAL-GO]
-       │                    ├── COMMON TARGET-CHART NULL TRANSPORT [API-GAP]
-       │                    └── MANIFOLD-SARD [FOUNDATION]
+       │                    ├── DIFFERENTIABLE-ON LOCAL NULLITY [BANKED]
+       │                    ├── COMMON TARGET-CHART NULL TRANSPORT [BANKED]
+       │                    ├── GLOBAL FIXED-CHART RANGE NULLITY [LOCAL-GO]
+       │                    └── DIMENSION-GAP MANIFOLD NONSURJECTIVITY [LOCAL-GO]
+       ├── CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]
        ├── REGULAR-PREIMAGE/SUBMERSION [FOUNDATION]
        │      ├── TRANSVERSE-PULLBACK [FOUNDATION]
        │      └── PARAMETRIC/RELATIVE TRANSVERSALITY [FOUNDATION]
@@ -229,6 +231,23 @@ not substitutes for those missing generic interfaces.
 | `ce5839a7` | one-chart strict-finrank nullity, fixed-chart countable unions, and differentiable chart-change transport | consumed by the countable range-decomposition layer; no canonical manifold measure is asserted |
 | `707efa05` | relative singular homology isomorphism for a homeomorphism of pairs and nonzero transport of the model local generator | construct the restricted manifold chart pair and its deleted-point equivalence |
 | `fb05ffe9` | countable source/target chart-pair patches, full range decomposition, and exact coordinate equation | prove local `DifferentiableOn` dimension-drop nullity and compare varying target-chart null sets |
+| `7c2f83a6` | strict-finrank image nullity for maps differentiable only on the source subset | prove differentiability of each manifold coordinate representative on its literal patch |
+| `b4d6065f` | transport varying extended-chart null patches into any fixed target chart and assemble the countable union | combine with per-patch coordinate nullity, then derive nonsurjectivity from positivity of a chart target |
+
+## Dimension-gap versus critical-value Sard
+
+The banked dimension-drop chain is useful when
+`finrank ℝ sourceModel < finrank ℝ targetModel`.  It is not a proof of general
+critical-value Sard.
+
+- Direct first consumer: `t94J05`, which only needs nonsurjectivity of a smooth
+  two-dimensional-to-three-dimensional manifold map.
+- Partial consumer: the nonsurjectivity component of `t95J04`; its exact
+  ambient Hausdorff-measure statement still needs a measure-comparison theorem.
+- Not consumers of this branch: `t93A04`, `t01A08`, `t01J04`, and `t96J05`.
+  They need regular values of maps without a strict source/target dimension
+  gap, hence the separate critical-value Sard program.  `t01J04` additionally
+  lacks the second-countability assumption used by the chart-cover chain.
 
 ## Problems closed during consolidation
 
