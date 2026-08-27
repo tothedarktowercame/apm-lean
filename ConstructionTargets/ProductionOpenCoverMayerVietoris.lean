@@ -1,5 +1,5 @@
 import ConstructionTargets.BooleanTwoCoverScaffold
-import Mathlib.Algebra.Homology.Additive
+import ConstructionTargets.HomologyBiprodIso
 
 /-!
 # Production open-cover Mayer--Vietoris transport
@@ -20,40 +20,11 @@ namespace ConstructionTargets.ProductionOpenCoverMayerVietoris
 open ConstructionTargets.SingularExcision
 open ConstructionTargets.SingularSubdivision
 open ConstructionTargets.BooleanTwoCoverScaffold
+open ConstructionTargets.HomologyBiprodIso
 
 private abbrev ssetChains :=
   (AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
     (AddCommGrpCat.of ℤ)
-
-/-- The canonical additive-functor comparison between homology of a chain
-complex biproduct and the biproduct of homology objects. -/
-noncomputable def homologyBiprodIso
-    (K L : ChainComplex AddCommGrpCat ℕ) (n : ℕ) :
-    (K ⊞ L).homology n ≅ K.homology n ⊞ L.homology n := by
-  let F := HomologicalComplex.homologyFunctor AddCommGrpCat
-    (ComplexShape.down ℕ) n
-  letI : F.Additive := inferInstance
-  letI : PreservesFiniteBiproducts F :=
-    Functor.preservesFiniteBiproductsOfAdditive F
-  letI : PreservesBinaryBiproducts F :=
-    preservesBinaryBiproducts_of_preservesBiproducts F
-  exact F.mapBiprod K L
-
-theorem homologyBiprodIso_hom
-    (K L : ChainComplex AddCommGrpCat ℕ) (n : ℕ) :
-    (homologyBiprodIso K L n).hom =
-      biprod.lift
-        (HomologicalComplex.homologyMap (biprod.fst : K ⊞ L ⟶ K) n)
-        (HomologicalComplex.homologyMap (biprod.snd : K ⊞ L ⟶ L) n) := by
-  rfl
-
-theorem homologyBiprodIso_inv
-    (K L : ChainComplex AddCommGrpCat ℕ) (n : ℕ) :
-    (homologyBiprodIso K L n).inv =
-      biprod.desc
-        (HomologicalComplex.homologyMap (biprod.inl : K ⟶ K ⊞ L) n)
-        (HomologicalComplex.homologyMap (biprod.inr : L ⟶ K ⊞ L) n) := by
-  rfl
 
 /-- Homology of an ambient range subcomplex as the production singular
 homology of its underlying topological subspace. -/
@@ -229,8 +200,6 @@ theorem subcomplexMayerVietoris_exact_transport
 end ConstructionTargets.ProductionOpenCoverMayerVietoris
 
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
-#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.homologyBiprodIso_hom
-#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.homologyBiprodIso_inv
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverSmall_homologyMap_isIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMayerVietoris_exact_transport
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.ambientRangeProductionHomologyIso

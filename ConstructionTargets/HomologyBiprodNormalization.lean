@@ -1,4 +1,4 @@
-import ConstructionTargets.ProductionOpenCoverMayerVietoris
+import ConstructionTargets.HomologyBiprodIso
 
 /-!
 # Homology normalization for binary biproduct maps
@@ -14,7 +14,7 @@ noncomputable section
 
 namespace ConstructionTargets.HomologyBiprodNormalization
 
-open ConstructionTargets.ProductionOpenCoverMayerVietoris
+open ConstructionTargets.HomologyBiprodIso
 
 variable {W K L T : ChainComplex AddCommGrpCat ℕ} (n : ℕ)
 

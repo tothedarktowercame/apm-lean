@@ -7,6 +7,9 @@ biproduct is transported through the canonical additive-functor isomorphism
 homology (K ⊞ L) ≅ homology K ⊞ homology L.
 ```
 
+The isomorphism itself and its hom/inverse formulas have one upstream owner,
+`HomologyBiprodIso`; this module only owns normalization through that object.
+
 For an arbitrary lift it proves that the two projections are the homology
 maps of the original components.  Specializing the right component to `-g`
 gives the signed Mayer--Vietoris convention: the first projection is

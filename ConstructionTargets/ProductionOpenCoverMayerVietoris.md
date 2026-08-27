@@ -21,7 +21,9 @@ sequence.
 
 The middle-object isomorphism
 `H_n(C(P) ⊞ C(Q)) ≅ H_n(C(P)) ⊞ H_n(C(Q))`, together with normalization of
-the additive homology functor through it, is now compiled. This file retains
+the additive homology functor through it, is now compiled. The isomorphism and
+its hom/inv formulas are owned upstream by `HomologyBiprodIso`; component
+formulas are owned by `HomologyBiprodNormalization`. This file retains
 the conjugated-arrow exactness theorem because the final signed-arrow
 equalities still contain the transports described below.
 
