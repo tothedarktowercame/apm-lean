@@ -1,4 +1,5 @@
 import ConstructionTargets.T02A06SphereH0
+import ConstructionTargets.IntegralSingularHomologyComparison
 
 /-!
 # The canonical augmentation of integral singular zeroth homology
@@ -17,6 +18,7 @@ namespace ConstructionTargets.SingularH0Augmentation
 open ConstructionTargets.SingularHomologyConcrete
 open ConstructionTargets.SingularSubdivision
 open ConstructionTargets.T02A06SphereH0
+open ConstructionTargets.IntegralSingularHomologyComparison
 
 private abbrev Chains (X : Type) [TopologicalSpace X] :=
   ConstructionTargets.SingularHomologyConcrete.SingularChains (TopCat.of X)
@@ -209,6 +211,47 @@ theorem singularVertexH0Class_comp_h0Augmentation
       Limits.Sigma.desc (fun _ ↦ 𝟙 (AddCommGrpCat.of ℤ)) = 𝟙 _
   exact Limits.Sigma.ι_desc _ _
 
+/-- An explicit integral `H₀(X) ≅ ℤ` coordinate rules out the empty
+space.  No nonemptiness premise is used. -/
+theorem nonempty_of_singularH0_iso_int
+    {X : Type} [TopologicalSpace X]
+    (e : SingularHomology 0 (TopCat.of X) ≅ AddCommGrpCat.of ℤ) :
+    Nonempty X := by
+  apply not_isEmpty_iff.mp
+  intro hX
+  letI : IsEmpty X := hX
+  have hchains : IsZero ((Chains X).X 0) := by
+    rw [IsZero.iff_id_eq_zero]
+    apply Limits.Sigma.hom_ext
+    intro s
+    exact isEmptyElim
+      ((TopCat.toSSetObjEquiv (TopCat.of X)
+        (Opposite.op (SimplexCategory.mk 0)) s)
+        (Classical.choice inferInstance))
+  have hcycles : IsZero ((Chains X).cycles 0) :=
+    IsZero.of_mono ((Chains X).iCycles 0) hchains
+  letI : Epi ((Chains X).homologyπ 0) :=
+    Limits.epi_of_isColimit_cofork
+      ((Chains X).homologyIsCokernel 1 0 (by simp))
+  have hhomology' : IsZero ((Chains X).homology 0) :=
+    IsZero.of_epi ((Chains X).homologyπ 0) hcycles
+  have hhomology : IsZero (SingularHomology 0 (TopCat.of X)) := hhomology'
+  have hint : IsZero (AddCommGrpCat.of ℤ) := hhomology.of_iso e.symm
+  haveI : Subsingleton (AddCommGrpCat.of ℤ) :=
+    AddCommGrpCat.isZero_iff_subsingleton.mp hint
+  exact one_ne_zero (Subsingleton.elim (1 : ℤ) 0)
+
+/-- Module-valued integral singular `H₀ ≅ ℤ` also forces the space to
+be nonempty, by the canonical comparison with additive-group homology. -/
+theorem nonempty_of_module_singularH0_iso_int
+    {X : Type} [TopologicalSpace X]
+    (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 0).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of X)) ≅ ModuleCat.of ℤ ℤ) :
+    Nonempty X := by
+  apply nonempty_of_singularH0_iso_int
+  exact (singularHomologyComparison (TopCat.of X) 0).symm ≪≫
+    forgetIntModules.mapIso e
+
 /-- For a nonempty space with infinite-cyclic integral `H₀`, the canonical
 augmentation is an isomorphism. -/
 noncomputable instance h0Augmentation_isIso_of_iso_int
@@ -258,4 +301,6 @@ end ConstructionTargets.SingularH0Augmentation
 #print axioms ConstructionTargets.SingularH0Augmentation.h0Augmentation
 #print axioms ConstructionTargets.SingularH0Augmentation.zeroChainH0Class_comp_h0Augmentation
 #print axioms ConstructionTargets.SingularH0Augmentation.h0Augmentation_naturality
+#print axioms ConstructionTargets.SingularH0Augmentation.nonempty_of_singularH0_iso_int
+#print axioms ConstructionTargets.SingularH0Augmentation.nonempty_of_module_singularH0_iso_int
 #print axioms ConstructionTargets.SingularH0Augmentation.h0Map_isIso_of_iso_int

@@ -15,6 +15,13 @@ monomorphism by the existing integer-group lemma. Thus the augmentation is an
 isomorphism. Naturality then proves that every continuous map between two such
 spaces induces an isomorphism on `H₀`.
 
+Conversely, an explicit integral `H₀(X) ≅ ℤ` coordinate proves `X` is
+nonempty.  If `X` were empty, the degree-zero singular-simplex indexing type
+would be empty, so coproduct extensionality makes the zero-chain object zero.
+Its cycle object and homology are then zero by the canonical mono and epi,
+contradicting that `ℤ` is nonzero.  The module-valued version follows through
+`IntegralSingularHomologyComparison`; it does not assume a point of `X`.
+
 This result does not infer topological connectedness from homology and does
 not choose path-component representatives. It proves only the map-level fact
 needed by the degree-zero end of t00A01's connected-sum Mayer--Vietoris
