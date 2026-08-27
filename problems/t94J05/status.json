@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,9 +29,9 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 3,
-  "boundary": "The punctured sphere is contractible via Mathlib's stereographic homeomorphism, so every nonsurjective continuous torus-to-sphere map is now proved homotopic to the fixed north-pole constant. The sole remaining bridge is deriving nonsurjectivity from the opaque smoothness predicate; no eliminator or applicable manifold Sard theorem exists in the consulted corpus.",
+  "boundary": "Closed 2026-08-27. The concrete ContMDiff hypothesis is lowered to order 1; chartwise strict-dimension-drop nullity in an explicit target-model Haar measure proves nonsurjectivity, and the existing stereographic-complement argument proves null-homotopy to the north pole.",
   "imported_at": "2026-07-13T17:26:58.083657Z",
   "obstructions": [
     {
@@ -44,7 +44,16 @@
       "frame": "phase-2d-adversarial-migration",
       "at_commit": "a00ea1f",
       "date": "2026-08-19",
-      "resolved": null
+      "resolved": "2026-08-27 by FixedTargetChartDimensionDropNullity and FixedChartNullForcesNonsurjectivity"
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings; #print axioms",
+    "at": "2026-08-27",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_t94j05 depends on axioms: [propext, Classical.choice, Quot.sound]"
+  }
 }

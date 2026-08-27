@@ -1,4 +1,6 @@
 import Mathlib
+import ConstructionTargets.FixedTargetChartDimensionDropNullity
+import ConstructionTargets.FixedChartNullForcesNonsurjectivity
 
 /-!
 # APM t94J05 — smooth maps from the torus to the three-sphere
@@ -117,4 +119,18 @@ theorem apm_t94j05
     (hf : ContMDiff ((𝓡 1).prod (𝓡 1)) (𝓡 3) (⊤ : ℕ∞) f) :
     ContinuousMap.Homotopic f
       (ContinuousMap.const apm_t94J05_Torus apm_t94J05_northPole) := by
-  sorry
+  have hf_one : ContMDiff ((𝓡 1).prod (𝓡 1)) (𝓡 3) 1 f :=
+    hf.of_le (by simp)
+  have hdim :
+      Module.finrank ℝ
+          (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 1)) <
+        Module.finrank ℝ (EuclideanSpace ℝ (Fin 3)) := by
+    simp
+  let μ : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 3)) := MeasureTheory.volume
+  have hnull :=
+    ConstructionTargets.FixedTargetChartDimensionDropNullity.fixed_extChartAt_range_inter_source_null
+        ((𝓡 1).prod (𝓡 1)) (𝓡 3) f hf_one hdim μ apm_t94J05_northPole
+  have hnot :=
+    ConstructionTargets.FixedChartNullForcesNonsurjectivity.not_surjective_of_fixedChart_coordinateNull
+        (𝓡 3) μ f apm_t94J05_northPole hnull
+  exact apm_t94J05_nullhomotopic_of_not_surjective f hnot

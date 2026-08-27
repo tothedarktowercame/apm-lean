@@ -20,12 +20,18 @@ map.
 - `apm_t94J05_nullhomotopic_of_not_surjective` assembles factorization,
   contractibility, descent, and endpoint normalization to prove the full frozen
   conclusion for every nonsurjective map.
+- `FixedTargetChartDimensionDropNullity` applies Euclidean
+  `DifferentiableOn` image nullity to the literal source-chart image of every
+  chart-pair patch and assembles those patches in a fixed target chart.
+- For the concrete models, `simp` proves the strict finrank inequality
+  `2 < 3`, while `hf.of_le` lowers the frozen `ContMDiff` hypothesis from
+  order `⊤` to order `1`.
+- `FixedChartNullForcesNonsurjectivity` contradicts positivity of the nonempty
+  open north-pole chart target if the map were surjective. The existing
+  nonsurjective-map theorem then supplies the frozen null-homotopy.
 
-## Remaining boundary
+## Result
 
-- connect the opaque `apm_t94J05_IsSmooth` predicate to a concrete smoothness
-  notion and prove the Sard/non-surjectivity consequence.
-
-All topology after nonsurjectivity is now compiled; the opaque predicate has no
-available eliminator, and the consulted Mathlib snapshot has no applicable
-manifold Sard theorem.
+The frozen theorem is fully proved with no executable placeholders. The proof
+uses an explicit add-Haar measure on the three-dimensional target model; it
+does not introduce a measure on the sphere or assume nonsurjectivity.
