@@ -314,6 +314,7 @@ def contractJson : Json :=
         ("projection-ledger-binding", Json.bool true)]),
      ("terminal-policy", Json.mkObj
        [("certified-phase-receipts", Json.num 11),
+        ("closure-policy-version", Json.num 1),
         ("closure-combined-trace-required", Json.bool true),
         ("closure-trace-observation-inventory", Json.str "lean-declared-total"),
         ("closure-trace-projection-authority", Json.str "durable-state"),

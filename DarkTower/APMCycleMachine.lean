@@ -1872,6 +1872,25 @@ def validCombinedTraceReceipt (receipt : CombinedTraceReceipt) : Prop :=
 def closurePermitted (receipt : Option CombinedTraceReceipt) : Prop :=
   ∃ value, receipt = some value ∧ validCombinedTraceReceipt value
 
+inductive ClosurePolicyVersion
+  | legacy
+  | combinedTraceV1
+  deriving DecidableEq, Repr
+
+def versionedClosurePermitted :
+    ClosurePolicyVersion → Option CombinedTraceReceipt → Prop
+  | .legacy, _ => True
+  | .combinedTraceV1, receipt => closurePermitted receipt
+
+theorem legacy_closure_remains_replayable
+    (receipt : Option CombinedTraceReceipt) :
+    versionedClosurePermitted .legacy receipt := by
+  simp [versionedClosurePermitted]
+
+theorem combined_trace_v1_closure_without_receipt_is_rejected :
+    ¬ versionedClosurePermitted .combinedTraceV1 none := by
+  simp [versionedClosurePermitted, closurePermitted]
+
 theorem closure_without_combined_trace_is_rejected :
     ¬ closurePermitted none := by simp [closurePermitted]
 
