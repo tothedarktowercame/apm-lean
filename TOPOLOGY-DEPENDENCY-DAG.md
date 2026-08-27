@@ -99,7 +99,11 @@ SINGULAR-SUBDIVISION/EXCISION [BANKED]
        │      ├── COVER-DEGREE [API-GAP]
        │      └── POINCARE/THOM COMPARISON [FOUNDATION]
        ├── OPEN-COVER MV SUBCOMPLEX EXACTNESS [BANKED]
-       │      └── PRODUCTION SIGNED-ARROW NORMALIZATION [API-GAP]
+       │      ├── BOOLEAN UNION/REASSEMBLY PRESENTATION [BANKED]
+       │      ├── INTEGRAL H0 AUGMENTATION/NATURALITY [BANKED]
+       │      ├── SIGNED-DIAGONAL MONO/COKERNEL [BANKED]
+       │      └── INTERSECTION-RANGE TRANSPORT AND PRODUCTION
+       │             SIGNED-ARROW NORMALIZATION [API-GAP]
        ├── CLOSED-GLUING/COLLAR TO OPEN-COVER [FOUNDATION]
        └── MAYER-VIETORIS APPLICATIONS [depends on the two edges above]
 
@@ -140,6 +144,59 @@ VAN KAMPEN / SURFACE FOUNDATIONS
        ├── QUOTIENT AND GLUING PI1 [FOUNDATION]
        ├── SURFACE CUTTING/CLASSIFICATION [FOUNDATION]
        └── INTERSECTION/SELF-INTERSECTION [depends on fundamental classes]
+```
+
+The four most recent open-cover nodes have these evidence-backed edges.  An
+`observed` edge below is an import or declaration use on canonical master; a
+`proposed` edge is not a frozen import or a claim of consumer closure.
+
+```clojure
+[{:node/id "ConstructionTargets.BooleanTwoCoverScaffold"
+  :authority {:git-sha "44d294de"}
+  :state :banked
+  :edges [{:to "ConstructionTargets.SingularExcision"
+           :relation :imports
+           :status :observed}
+          {:to "ConstructionTargets.ProductionOpenCoverMayerVietoris"
+           :relation :would-supply
+           :need :representation-comparison
+           :status :missing
+           :stop-condition "dependent Subcomplex.obj transport for the intersection range is not naturalized"}]}
+ {:node/id "ConstructionTargets.SingularH0Augmentation"
+  :authority {:git-sha "781eed21"}
+  :state :banked
+  :edges [{:to "ConstructionTargets.T02A06SphereH0"
+           :relation :imports
+           :declarations [:h0Augmentation_naturality
+                          :h0Map_isIso_of_iso_int]
+           :status :observed}
+          {:to "problem/t00A01/homology-bridge"
+           :relation :would-consume
+           :need :final-adapter
+           :status :missing
+           :stop-condition "production Mayer-Vietoris H0 arrows are not identified with the normalized maps"}]}
+ {:node/id "ConstructionTargets.SphereEquatorGluingOpenCover"
+  :authority {:git-sha "bb7a7c67"}
+  :state :banked
+  :edges [{:to "problem/t96A03"
+           :relation :would-consume
+           :need :final-adapter
+           :status :missing
+           :stop-condition "dependent quotient lift of the piece deformations is absent"}]}
+ {:node/id "ConstructionTargets.SignedDiagonalCokernel"
+  :authority {:git-sha "915ee169"}
+  :state :banked
+  :edges [{:to "ConstructionTargets.MayerVietorisExactnessIsZero"
+           :relation :imports
+           :declarations [:signedDiagonalCokernelIso
+                          :cokernel_π_comp_signedDiagonalCokernelIso_hom
+                          :signedDiagonal_mono]
+           :status :observed}
+          {:to "problem/t00A01/homology-bridge"
+           :relation :would-consume
+           :need :final-adapter
+           :status :missing
+           :stop-condition "the production degree-zero sequence has not been transported to the literal signed diagonal and codiagonal"}]}]
 ```
 
 ## Scaffold layers and representations
@@ -253,6 +310,9 @@ canonical, and frozen `t01J02` was closed without changing its interface in
 
 ### Queue C: concrete local go-nodes
 
+- descend the compiled t96A03 band deformations through the three restricted
+  quotient maps, stopping at the first dependent quotient motive/coherence
+  goal that cannot transport open-subtype membership;
 - sphere and ball moment calculations after a shared measure normalization;
 - finite coordinate and derivative calculations already isolated in the leaf
   survey;
@@ -266,7 +326,9 @@ shared foundational conclusion.
 
 Ranked by demonstrated reuse:
 
-1. closed-gluing/collar comparison to production open-cover singular chains;
+1. intersection-range transport and production open-cover singular-chain
+   normalization; the generic closed-gluing/collar comparison remains the
+   subsequent foundational layer for consumers without an explicit cover;
 2. oriented-manifold fundamental classes and localization;
 3. Eilenberg--Zilber and product homology/Kunneth;
 4. manifold Sard plus regular-preimage/submersion geometry;
@@ -287,7 +349,7 @@ compiles independently of every final problem.
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
-| Closed gluing to open-cover MV | `t96A03`, `t03J02`, `t01J03`, `t00A01` | `FOUNDATION`; require collars/cofibrations or an honest excisive-open-cover comparison before applying banked MV algebra |
+| Closed gluing to open-cover MV | `t96A03`, `t03J02`, `t01J03`, `t00A01` | production intersection-range comparison is `API-GAP`; generic collar/cofibration construction remains `FOUNDATION`; t96A03 has a direct `LOCAL-GO` open-cover geometry route |
 | Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and coefficient-compatible computations do not |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, `t94J06`, `t97A02`, `t97J08` | mixed concrete progress; shared naturality/lifting APIs remain |
@@ -347,6 +409,10 @@ not substitutes for those missing generic interfaces.
 | `7e531b1d` | fixed-target-chart range nullity for `C¹` strict-dimension-drop manifold maps | consumed by the boundaryless target nonsurjectivity theorem |
 | `0193d098` | fixed-chart coordinate nullity contradicts surjectivity for boundaryless targets | consumed by closed `t94J05`; reusable for the nonsurjectivity component of `t95J04` |
 | `3348f833` | specialization of the dimension-gap chain to smooth `T² → S³`, followed by the existing missed-point contraction | frozen `t94J05` closed with statements unchanged |
+| `44d294de` | Boolean two-cover with definitionally aligned union and reassembly arrows | construct the intersection-range chain isomorphism and its two inclusion naturality squares; no production MV theorem yet |
+| `781eed21` | canonical integral `H₀` augmentation, naturality, and isomorphism of induced `H₀` maps between nonempty spaces explicitly identified with `ℤ` | transport the production MV degree-zero maps through these coordinates; no connectedness inference or t00A01 bridge is claimed |
+| `bb7a7c67` | dimension-generic sphere-equator quotient open cover, equatorial-band contraction, and three restricted quotient maps | descend the deformations through dependent quotient subtypes, then use production MV; frozen t96A03 does not import this target |
+| `915ee169` | signed diagonal is monic and has cokernel canonically isomorphic to its coefficient object, with quotient projection equal to the codiagonal | identify the actual production `H₀` arrows before applying it; no frozen consumer is closed |
 
 ## Dimension-gap versus critical-value Sard
 
@@ -376,18 +442,42 @@ Current audited classification beyond these closures:
 
 - `t00J02` and `a97J08` are `UPTAKE`: each has one genuine geometric producer
   remaining, respectively oriented-surface duality and planar separation.
-- `t96A03`, `t03J02`, `t01J03`, and `t97A01` are `API-GAP` problems whose
+- Frozen `t96A03` remains `API-GAP`, while its explicit open-cover geometry is
+  now `LOCAL-GO`: the dependent quotient deformations are the next bounded
+  producer.  `t03J02`, `t01J03`, and `t97A01` remain `API-GAP` problems whose
   current presentations do not yet compare with the relevant singular-chain
   scaffold.
-- `t95J04` and `t00A01` remain `FOUNDATION`.
+- The homology branch of `t00A01` is now a precise `API-GAP`: its degreewise
+  augmentation, signed-diagonal, cokernel, and exactness algebra are banked,
+  but the production MV arrows and final `ModuleCat ℤ` adapter are absent.
+  Whole-problem `t00A01` remains `FOUNDATION` because its independent van
+  Kampen branch is still missing.  `t95J04` also remains `FOUNDATION`.
 - `t96J07` remains `SPEC-DEFECT` and must not receive proof scaffolding before
   statement repair.
 
 ## Next decision point
 
-The second strategy-informed campaign elected an integral open-cover
-Mayer--Vietoris route toward the product-homology branch of `t95J04`.  The
-banked candidate increment supplies:
+The next two bounded packets are now ordered by concrete consumer uptake.
+
+1. **t96A03 dependent quotient deformation lifts.**  Descend the left, right,
+   and intersection band deformations through the restricted quotient maps
+   and package the resulting homotopy equivalences.  Stop at the first exact
+   dependent `Quotient.lift`/`Quotient.inductionOn` motive or generated-relation
+   coherence goal that cannot transport membership in the quotient open
+   subtype.  Do not assume a lift or a homotopy equivalence.
+2. **Intersection-range chain naturality and production MV normalization.**
+   Construct the chain isomorphism from the actual intersection subspace to
+   `leftRange U ⊓ rightRange V`, prove both inclusion squares, and only then
+   normalize the signed intersection and Boolean reassembly arrows.  The first
+   certification consumer is t96A03; the next is the t00A01 homology bridge,
+   with the t95J04 product branch remaining a proposed consumer.  Stop if the
+   dependent equality
+   `range (subspaceInclusion (U ∩ V)).app n =
+   ambientSubspaceRange U .obj n ⊓ ambientSubspaceRange V .obj n`
+   still lacks transport coherence.  Do not replace it with the desired square
+   as a premise or dispatch another equivalent `eqToIso` rewrite.
+
+The banked production-MV scaffold already supplies:
 
 - radial equivalences for punctured normed spaces and concrete two-pole sphere
   complements, including product transport;
@@ -395,11 +485,22 @@ banked candidate increment supplies:
   and cover members;
 - homology-biproduct normalization and generic exactness-to-vanishing lemmas.
 
-It does **not** yet state production open-cover Mayer--Vietoris exactness.  The
-exact stop is normalization of the signed reassembly and intersection arrows
-through the `eqToIso` identifications
-`P ⊔ Q = coverSmallSSet` and
-`P ⊓ Q = ambientSubspaceRange (U ∩ V)`.  Do not dispatch another equivalent
-arrow-rewriting reduction.  Resume only after selecting a structural API that
-makes those identifications canonical, or choose a different certified
-consumer route.
+The Boolean scaffold makes the union/reassembly side literal, so the former
+two-sided `eqToIso` stop has narrowed.  It still does **not** state production
+open-cover Mayer--Vietoris exactness: the exact remaining shared stop is the
+intersection-range comparison and its dependent chain-map naturality.
+
+For t00A01, once that production sequence and its actual arrows are available,
+the homology calculation has banked algebra in every degree: the overlap
+`H₂ ≅ ℤ` gives the degree-three class; the intervening sphere/ball groups give
+degree-two and higher vanishing; signed-diagonal monicity gives degree-one
+vanishing; and its canonical cokernel plus the natural augmentation gives
+`H₀ ≅ ℤ`.  This is a closure plan, not a frozen import or theorem: the
+production sequence, representation transport, and independent van Kampen
+theorem remain absent.
+
+For t96A03, `bb7a7c67` has compiled the explicit open cover and quotient-map
+sources.  The first local stop is the dependent quotient lift described in
+packet 1.  After that, the same production intersection comparison and MV
+normalization are required.  Neither geometry progress nor the banked algebra
+closes frozen t96A03.
