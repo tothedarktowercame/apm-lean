@@ -328,6 +328,21 @@ theorem booleanSmallChainsIso_hom_comp_ambient
     (coverSmallSSet (booleanCover U V)).ι) = _
   rw [smallSSetIsoCoverSmall_hom_comp_ambient]
 
+/-- The actual descent of the two cover-member inclusions into the ambient
+space. -/
+noncomputable def productionReassemblyArrow
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (SingularChains (TopCat.of U)).homology n ⊞
+        (SingularChains (TopCat.of V)).homology n ⟶
+      (SingularChains (TopCat.of X)).homology n :=
+  biprod.desc
+    (HomologicalComplex.homologyMap
+      (ssetChains.map (TopCat.toSSet.map
+        (coverSubspaceInclusion (booleanCover U V) true))) n)
+    (HomologicalComplex.homologyMap
+      (ssetChains.map (TopCat.toSSet.map
+        (coverSubspaceInclusion (booleanCover U V) false))) n)
+
 /-- The corresponding named comparison isomorphism from cover-small homology
 to production singular homology. -/
 def coverSmallHomologyIso
@@ -337,6 +352,24 @@ def coverSmallHomologyIso
     (coverSmallChains U).homology n ≅ (SingularChains (TopCat.of X)).homology n := by
   letI := coverSmall_homologyMap_isIso U hUOpen hUCover n
   exact asIso (HomologicalComplex.homologyMap (coverSmallChains.ι U) n)
+
+/-- Production homology identification for the union term of an open Boolean
+two-cover of the ambient space. -/
+noncomputable def booleanUnionProductionHomologyIso
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (n : ℕ) :
+    ((shortComplex U V).X₃).homology n ≅
+      (SingularChains (TopCat.of X)).homology n :=
+  booleanSmallHomologyIso U V n ≪≫
+    coverSmallHomologyIso (booleanCover U V) (by
+      intro b
+      cases b <;> assumption) (by
+      intro x _
+      have hx : x ∈ U ∪ V := by rw [hcover]; trivial
+      rcases hx with hx | hx
+      · exact Set.mem_iUnion.2 ⟨true, hx⟩
+      · exact Set.mem_iUnion.2 ⟨false, hx⟩) n
 
 /-- The already-compiled subcomplex Mayer--Vietoris exact segment can be
 transported to any three production objects once the comparison isomorphisms
@@ -377,3 +410,5 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallChainsIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallHomologyIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanSmallChainsIso_hom_comp_ambient
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanUnionProductionHomologyIso
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow

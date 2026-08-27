@@ -174,3 +174,18 @@ identified, through `smallSSetIsoCoverSmall`, with
 `coverMemberRangeInclusion (booleanCover U V) true` and `false`. Those two
 triangles have not yet been proved, so no reassembly arrow or production
 exactness is claimed.
+
+The two stored/generic member triangles now compile upstream. This target
+also defines `productionReassemblyArrow` and the open-cover union comparison
+`booleanUnionProductionHomologyIso`. The first remaining literal theorem is
+the full conjugation
+
+```text
+booleanPiecesProductionHomologyIso.inv ≫ homologyMap shortComplex.g ≫
+  booleanUnionProductionHomologyIso.hom = productionReassemblyArrow.
+```
+
+Its two biproduct components still need to combine the chain-level reassembly
+triangle, the new member triangles, `coverMemberRangeHomologyIso_naturality`,
+and `homologyBiprodIso_inv_homologyMap_desc`. That composite is not asserted;
+connecting maps and production exactness remain unclaimed.

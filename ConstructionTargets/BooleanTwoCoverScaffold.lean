@@ -66,6 +66,24 @@ theorem smallSSetIsoCoverSmall_hom_comp_ambient
       (smallSSet U V).ι := by
   rfl
 
+/-- The stored left member inclusion agrees with the generic Boolean-cover
+member inclusion after the concrete union identification. -/
+theorem leftToSmall_comp_smallSSetIsoCoverSmall
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    subcomplexLeftToUnion (leftRange U) (rightRange V) ≫
+        (smallSSetIsoCoverSmall U V).hom =
+      coverMemberRangeInclusion (booleanCover U V) true := by
+  rfl
+
+/-- The stored right member inclusion agrees with the generic Boolean-cover
+member inclusion after the concrete union identification. -/
+theorem rightToSmall_comp_smallSSetIsoCoverSmall
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
+    subcomplexRightToUnion (leftRange U) (rightRange V) ≫
+        (smallSSetIsoCoverSmall U V).hom =
+      coverMemberRangeInclusion (booleanCover U V) false := by
+  rfl
+
 noncomputable def shortComplex
     {X : Type} [TopologicalSpace X] (U V : Set X) :=
   subcomplexMayerVietorisShortComplex (leftRange U) (rightRange V)

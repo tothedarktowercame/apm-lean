@@ -53,3 +53,8 @@ The union-side comparison now uses `smallSSetIsoCoverSmall`, a concrete
 definitionally with ambient inclusion by
 `smallSSetIsoCoverSmall_hom_comp_ambient`. This supplies representation
 coherence only, not production Mayer--Vietoris exactness.
+
+The `true` and `false` member triangles now compile as
+`leftToSmall_comp_smallSSetIsoCoverSmall` and
+`rightToSmall_comp_smallSSetIsoCoverSmall`; both are definitional consequences
+of the concrete `homOfLE` maps.
