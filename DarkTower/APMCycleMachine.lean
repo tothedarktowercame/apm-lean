@@ -2194,4 +2194,36 @@ theorem retry_beyond_bound_is_refused :
     ¬ validCoordinatorRegistryEntry freshCoordinatorRetryMutant := by
   simp [validCoordinatorRegistryEntry, freshCoordinatorRetryMutant]
 
+/-! A failure of the apparatus to answer is not an evidence verdict. Only the
+transport class admits delayed automatic retry; mathematical and evidence
+failures remain terminal. -/
+inductive PhaseFailureClass
+  | transport
+  | evidence
+  deriving DecidableEq, Repr
+
+inductive PhaseFailureDisposition
+  | delayedRetry
+  | apparatusRepair
+  deriving DecidableEq, Repr
+
+def validPhaseFailureDisposition
+    (failure : PhaseFailureClass) (disposition : PhaseFailureDisposition) : Prop :=
+  match failure, disposition with
+  | .transport, .delayedRetry => True
+  | .transport, .apparatusRepair => True
+  | .evidence, .apparatusRepair => True
+  | .evidence, .delayedRetry => False
+
+theorem evidence_failure_cannot_enter_transport_retry :
+    ¬ validPhaseFailureDisposition .evidence .delayedRetry := by
+  simp [validPhaseFailureDisposition]
+
+def validTransportRetryAttempt (attempt maxAttempts : Nat) : Prop :=
+  0 < maxAttempts ∧ attempt < maxAttempts
+
+theorem transport_retry_at_bound_is_refused (maxAttempts : Nat) :
+    ¬ validTransportRetryAttempt maxAttempts maxAttempts := by
+  simp [validTransportRetryAttempt]
+
 end DarkTower.APMCycleMachine

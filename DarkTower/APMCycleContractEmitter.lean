@@ -243,6 +243,11 @@ def contractJson : Json :=
         ("projection-repair-exhaustion-decision-owner", Json.str
           "claude-supervisor"),
         ("projection-repair-exhaustion-bell-required", Json.bool true),
+        ("transport-failure-action", Json.str "bounded-delayed-retry"),
+        ("transport-retry-delay-ms", Json.num 600000),
+        ("transport-retry-max-attempts", Json.num 3),
+        ("transport-retry-history-required", Json.bool true),
+        ("evidence-failure-retryable", Json.bool false),
         ("promotion-successor-validation", Json.str
           "before-snapshot-publication-and-certification"),
         ("certified-pass-snapshot-materialized", Json.bool true),
