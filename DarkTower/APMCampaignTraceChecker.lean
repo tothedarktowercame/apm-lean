@@ -93,6 +93,147 @@ structure TraceAnalystWake where
   mutatesInFlight : Bool
   deriving FromJson, Repr
 
+/-! Cross-transition observations are checked separately from the closed frame
+trace because they span coordinator ticks, repair successors, and delivery
+effects outside one mathematical frame. -/
+structure TraceProgressObservation where
+  coordinatorEnabled : Bool
+  elapsedMs : Nat
+  validExternalWait : Bool
+  semanticCursorAdvanced : Bool
+  coordinatorDisabled : Bool
+  firstViolationRecorded : Bool
+  deriving FromJson, Repr
+
+structure TraceSuccessorObservation where
+  predecessorId : String
+  terminalEvidenceId : String
+  collectionEvidenceId : String
+  disposition : String
+  predecessorPersisted : Bool
+  successorAnnouncedId : String
+  successorActivatedId : String
+  deriving FromJson, Repr
+
+structure TraceDeliveryObservation where
+  terminalJobId : String
+  deliveryStatus : String
+  inboxFileCreated : Bool
+  registeredPushPerformed : Bool
+  pollingAvailable : Bool
+  deriving FromJson, Repr
+
+def progressObservationValid (observation : TraceProgressObservation) : Bool :=
+  !observation.coordinatorEnabled ||
+  ((decide (observation.elapsedMs ≤ 300000)) &&
+    (observation.validExternalWait || observation.semanticCursorAdvanced)) ||
+  (observation.coordinatorDisabled && observation.firstViolationRecorded)
+
+def progressTraceValid (trace : List TraceProgressObservation) : Bool :=
+  !trace.isEmpty && trace.all progressObservationValid
+
+def predecessorRecordComplete (observation : TraceSuccessorObservation) : Bool :=
+  !observation.predecessorId.isEmpty &&
+  !observation.terminalEvidenceId.isEmpty &&
+  !observation.collectionEvidenceId.isEmpty &&
+  !observation.disposition.isEmpty && observation.predecessorPersisted
+
+def successorAbsent (observation : TraceSuccessorObservation) : Bool :=
+  observation.successorAnnouncedId.isEmpty &&
+  observation.successorActivatedId.isEmpty
+
+def successorTraceValid (trace : List TraceSuccessorObservation) : Bool :=
+  !trace.isEmpty && trace.all fun observation =>
+    successorAbsent observation || predecessorRecordComplete observation
+
+def deliveryObservationValid (observation : TraceDeliveryObservation) : Bool :=
+  !observation.terminalJobId.isEmpty &&
+  (observation.deliveryStatus != "delivered" ||
+    observation.inboxFileCreated || observation.registeredPushPerformed)
+
+def deliveryTraceValid (trace : List TraceDeliveryObservation) : Bool :=
+  !trace.isEmpty && trace.all deliveryObservationValid
+
+def healthyProgressWitness : TraceProgressObservation where
+  coordinatorEnabled := true
+  elapsedMs := 120000
+  validExternalWait := false
+  semanticCursorAdvanced := true
+  coordinatorDisabled := false
+  firstViolationRecorded := false
+
+def stoppedViolationWitness : TraceProgressObservation where
+  coordinatorEnabled := true
+  elapsedMs := 300001
+  validExternalWait := false
+  semanticCursorAdvanced := false
+  coordinatorDisabled := true
+  firstViolationRecorded := true
+
+def unstoppedViolationMutant : TraceProgressObservation where
+  coordinatorEnabled := true
+  elapsedMs := 300001
+  validExternalWait := false
+  semanticCursorAdvanced := false
+  coordinatorDisabled := false
+  firstViolationRecorded := false
+
+theorem semantic_progress_trace_nonvacuous :
+    progressTraceValid [healthyProgressWitness, stoppedViolationWitness] = true := by
+  rfl
+
+theorem unstopped_semantic_stall_is_killed :
+    progressTraceValid [unstoppedViolationMutant] = false := by
+  rfl
+
+def durableSuccessorWitness : TraceSuccessorObservation where
+  predecessorId := "job-1"
+  terminalEvidenceId := "terminal-1"
+  collectionEvidenceId := "collection-1"
+  disposition := "repair"
+  predecessorPersisted := true
+  successorAnnouncedId := "job-2"
+  successorActivatedId := "job-2"
+
+def missingPredecessorMutant : TraceSuccessorObservation where
+  predecessorId := "job-1"
+  terminalEvidenceId := ""
+  collectionEvidenceId := ""
+  disposition := "repair"
+  predecessorPersisted := false
+  successorAnnouncedId := "job-2"
+  successorActivatedId := "job-2"
+
+theorem predecessor_durability_trace_nonvacuous :
+    successorTraceValid [durableSuccessorWitness] = true := by
+  rfl
+
+theorem successor_without_durable_predecessor_is_killed :
+    successorTraceValid [missingPredecessorMutant] = false := by
+  rfl
+
+def pushedDeliveryWitness : TraceDeliveryObservation where
+  terminalJobId := "job-1"
+  deliveryStatus := "delivered"
+  inboxFileCreated := false
+  registeredPushPerformed := true
+  pollingAvailable := true
+
+def pollingOnlyDeliveryMutant : TraceDeliveryObservation where
+  terminalJobId := "job-1"
+  deliveryStatus := "delivered"
+  inboxFileCreated := false
+  registeredPushPerformed := false
+  pollingAvailable := true
+
+theorem delivery_honesty_trace_nonvacuous :
+    deliveryTraceValid [pushedDeliveryWitness] = true := by
+  rfl
+
+theorem polling_only_delivery_claim_is_killed :
+    deliveryTraceValid [pollingOnlyDeliveryMutant] = false := by
+  rfl
+
 structure CampaignTrace where
   schemaVersion : Nat
   campaignId : String
