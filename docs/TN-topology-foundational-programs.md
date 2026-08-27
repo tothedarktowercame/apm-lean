@@ -13,8 +13,10 @@ local and global orientation classes of finite-dimensional manifolds.
 
 First milestones:
 
-1. compute local homology of the model pair at the origin;
-2. transport that computation through one boundaryless manifold chart;
+1. compute local homology of the model pair at the origin (the
+   one-dimensional case is banked in `3c96f98e`);
+2. transport that computation through one boundaryless manifold chart as a
+   map of pairs;
 3. define a local orientation generator and prove overlap compatibility;
 4. define the global fundamental class for compact connected oriented
    manifolds;

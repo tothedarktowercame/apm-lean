@@ -28,9 +28,12 @@ for banked results.
 
 ```text
 SINGULAR-SUBDIVISION/EXCISION [BANKED]
-       ├── LOW-DEGREE-CAP [UPTAKE/EXTRACTION]
+       ├── ALEXANDER-WHITNEY DEGREE TWO [LOCAL-GO]
+       │      └── LOW-DEGREE-CAP [UPTAKE/EXTRACTION]
        ├── MANIFOLD-FUNDAMENTAL-CLASS [FOUNDATION]
-       │      ├── LOCAL-HOMOLOGY/LOCALIZATION [FOUNDATION]
+       │      ├── MODEL-PAIR LOCAL H1 [BANKED]
+       │      ├── CHART-PAIR TRANSPORT [LOCAL-GO]
+       │      ├── GLOBAL LOCALIZATION [FOUNDATION]
        │      ├── COVER-DEGREE [API-GAP]
        │      └── POINCARE/THOM COMPARISON [FOUNDATION]
        └── MAYER-VIETORIS APPLICATIONS [API-GAP]
@@ -111,12 +114,19 @@ from canonical `ConstructionTargets/` and exists only on the experimental
 solver line.  Accordingly, `UPTAKE` here means selective promotion and review,
 not merely adding an import to canonical Main.
 
+First promoted result: `ThreeRetractionObstructionAdapter` was reviewed and
+banked in `b61210cf`.  Its generic conjunction is canonical; integrating it
+into frozen `t01A03` remains an `UPTAKE` task.
+
 ### Queue B: bounded reusable constructions
 
 1. Extend the banked generic product-covering constructor only through new
    independent consumers.  It was reviewed and committed as `935fc228`.
 2. Extract the experimental low-degree integral cap operations into a
-   standalone module; do not merge the expanded t00J02 subdivision file.
+   standalone module; do not merge the expanded t00J02 subdivision file.  Its
+   first prerequisite is the generic degree-two Alexander--Whitney face layer
+   from experimental commit `e30113f3`; review and extract that layer without
+   the accompanying t00J02 metadata edit.
 3. Prototype covering pullback/base-change using existing fibre-bundle
    pullback trivializations.
 4. Retain chart-coordinate null-set transport; build a separate
@@ -195,6 +205,14 @@ method surveys are recorded in
 The experimental geometric-chain route is preserved as research evidence.
 Its conditional incidence structures and genus-two-specific calculations are
 not substitutes for those missing generic interfaces.
+
+## Banked consolidation increments
+
+| Commit | Reusable result | Remaining consumer work |
+|---|---|---|
+| `935fc228` | product evenly-covered trivializations and `IsCoveringMap` closure | instantiate in concrete covering consumers |
+| `b61210cf` | three generic retraction obstructions, including the categorical integral-H1 form | frozen `t01A03` uptake |
+| `3c96f98e` | `H₁(B¹, B¹ \ {0}; ℤ) ≅ ℤ`, named nonzero local generator, and radial pair-map transport | transport through a manifold chart; global fundamental-class localization remains foundational |
 
 ## Next decision point
 
