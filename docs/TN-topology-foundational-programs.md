@@ -15,8 +15,9 @@ First milestones:
 
 1. compute local homology of the model pair at the origin (the
    one-dimensional case is banked in `3c96f98e`);
-2. transport that computation through one boundaryless manifold chart as a
-   map of pairs;
+2. transport that computation through a homeomorphism of pairs (banked in
+   `707efa05`), then construct the restricted boundaryless manifold chart pair
+   and its deleted-point equivalence;
 3. define a local orientation generator and prove overlap compatibility;
 4. define the global fundamental class for compact connected oriented
    manifolds;
@@ -40,9 +41,12 @@ Keep four interfaces separate:
 
 The product-complement Euclidean dimension-drop theorem is banked in
 `1f0a8882`, and arbitrary strict-finrank transport is banked in `20191b38`.
-The next bounded milestone is combination with chart-coordinate null transport
-and a countable chart cover.  The first geometric milestone remains a
-boundaryless regular-preimage theorem, not full parametric transversality.
+One-chart dimension-drop nullity and coordinate-change transport are banked in
+`ce5839a7`.  The next bounded milestone is a countable source-chart selection,
+exact global range decomposition, and the coordinate equations on every
+piece.  This still does not define a canonical manifold measure.  The first
+geometric milestone remains a boundaryless regular-preimage theorem, not full
+parametric transversality.
 
 ## Covering constructors
 

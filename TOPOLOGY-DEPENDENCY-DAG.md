@@ -32,7 +32,8 @@ SINGULAR-SUBDIVISION/EXCISION [BANKED]
        │      └── LOW-DEGREE-CAP [BANKED]
        ├── MANIFOLD-FUNDAMENTAL-CLASS [FOUNDATION]
        │      ├── MODEL-PAIR LOCAL H1 [BANKED]
-       │      ├── CHART-PAIR TRANSPORT [LOCAL-GO]
+       │      ├── HOMEOMORPHISM-OF-PAIRS TRANSPORT [BANKED]
+       │      ├── RESTRICTED MANIFOLD CHART PAIR [LOCAL-GO]
        │      ├── GLOBAL LOCALIZATION [FOUNDATION]
        │      ├── COVER-DEGREE [API-GAP]
        │      └── POINCARE/THOM COMPARISON [FOUNDATION]
@@ -41,8 +42,9 @@ SINGULAR-SUBDIVISION/EXCISION [BANKED]
 MANIFOLD-CALCULUS [BANKED MATHLIB SUBSTRATE]
        ├── PRODUCT-COMPLEMENT IMAGE NULLITY [BANKED]
        │      ├── ARBITRARY FINRANK ADAPTER [BANKED]
-       │      └── CHARTWISE-DIMENSION-DROP NULLITY [LOCAL-GO]
-       │             └── MANIFOLD-SARD [FOUNDATION]
+       │      └── ONE-CHART DIMENSION-DROP NULLITY [BANKED]
+       │             └── COUNTABLE CHART RANGE DECOMPOSITION [LOCAL-GO]
+       │                    └── MANIFOLD-SARD [FOUNDATION]
        ├── REGULAR-PREIMAGE/SUBMERSION [FOUNDATION]
        │      ├── TRANSVERSE-PULLBACK [FOUNDATION]
        │      └── PARAMETRIC/RELATIVE TRANSVERSALITY [FOUNDATION]
@@ -119,6 +121,10 @@ not merely adding an import to canonical Main.
 First promoted result: `ThreeRetractionObstructionAdapter` was reviewed and
 banked in `b61210cf`.  Its generic conjunction is canonical; integrating it
 into frozen `t01A03` remains an `UPTAKE` task.
+
+Second promoted result: the three-pair higher-homotopy covering closure was
+reviewed and banked in `37524eb4`.  Its exact frozen-facing bijection is
+canonical; frozen `t01J02` proof uptake remains.
 
 ### Queue B: bounded reusable constructions
 
@@ -217,6 +223,9 @@ not substitutes for those missing generic interfaces.
 | `1f0a8882` | image nullity for differentiable `E → E × G` with nontrivial finite-dimensional complement | add explicit linear-equivalence/complement transport, then combine with chart-null transport |
 | `408be02b` | integral singular one-cocycles, low-degree cap operations, Leibniz identities, homology descent, and naturality | add independent consumers; manifold fundamental-class comparison remains foundational |
 | `20191b38` | arbitrary strict-finrank differentiable image nullity via an explicit finite-dimensional complement equivalence | combine with chart-coordinate null transport; then prove the manifold chart-cover statement |
+| `37524eb4` | cube-boundary path connectivity and covering-induced higher-homotopy bijectivity | frozen `t01J02` uptake |
+| `ce5839a7` | one-chart strict-finrank nullity, fixed-chart countable unions, and differentiable chart-change transport | select a countable source cover and prove exact global range decomposition; no canonical manifold measure is asserted |
+| `707efa05` | relative singular homology isomorphism for a homeomorphism of pairs and nonzero transport of the model local generator | construct the restricted manifold chart pair and its deleted-point equivalence |
 
 ## Next decision point
 
