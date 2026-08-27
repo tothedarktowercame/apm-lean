@@ -259,7 +259,15 @@ structure CampaignTrace where
   frameResult : String
   voidClassification : Option String := none
   analystWakes : List TraceAnalystWake
+  progressObservations : Option (List TraceProgressObservation) := none
+  successorObservations : Option (List TraceSuccessorObservation) := none
+  deliveryObservations : Option (List TraceDeliveryObservation) := none
   deriving FromJson, Repr
+
+def operationalTraceValid (trace : CampaignTrace) : Bool :=
+  progressTraceValid (trace.progressObservations.getD []) &&
+  successorTraceValid (trace.successorObservations.getD []) &&
+  deliveryTraceValid (trace.deliveryObservations.getD [])
 
 def phaseName : Phase → String
   | .preflight => "preflight"
@@ -547,7 +555,8 @@ def analystValid (trace : CampaignTrace) : Bool :=
   | none => false
 
 def accepts (trace : CampaignTrace) : Bool :=
-  trace.schemaVersion == 1 &&
+  (trace.schemaVersion == 1 ||
+   (trace.schemaVersion == 2 && operationalTraceValid trace)) &&
   !trace.campaignId.isEmpty &&
   !trace.manifestHash.isEmpty &&
   trace.contractId == canonicalContract.id &&
@@ -581,12 +590,21 @@ theorem acceptance_implies_terminal_disposition (trace : CampaignTrace)
   simp [accepts, earlyVoidValid] at h
   aesop
 
+theorem version_two_acceptance_implies_operational_trace_valid
+    (trace : CampaignTrace) (version : trace.schemaVersion = 2)
+    (accepted : accepts trace = true) : operationalTraceValid trace = true := by
+  simp [accepts, version] at accepted
+  aesop
+
 def checkFile (path : System.FilePath) : IO UInt32 := do
   let contents ← IO.FS.readFile path
   let json ← IO.ofExcept (Json.parse contents)
   let trace : CampaignTrace ← IO.ofExcept (fromJson? json)
   IO.println s!"APM-TRACE-BINDING-CHAIN {if memoryValid trace then "VALID" else "INVALID"}"
   IO.println s!"APM-TRACE-REVIEW-RESOLUTION {if reviewResolutionValid trace then "VALID" else "INVALID"}"
+  IO.println s!"APM-TRACE-PROGRESS {if progressTraceValid (trace.progressObservations.getD []) then "VALID" else "INVALID"}"
+  IO.println s!"APM-TRACE-SUCCESSOR {if successorTraceValid (trace.successorObservations.getD []) then "VALID" else "INVALID"}"
+  IO.println s!"APM-TRACE-DELIVERY {if deliveryTraceValid (trace.deliveryObservations.getD []) then "VALID" else "INVALID"}"
   for pass in trace.reviewPasses do
     if !traceReviewPassResolved pass then
       IO.println s!"APM-TRACE-UNRESOLVED-PASS {pass.phase} {pass.ordinal}"
