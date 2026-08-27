@@ -2,7 +2,7 @@
 Copyright (c) 2026 Joseph Corneli. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import DarkTower.APMCycleMachine
+import DarkTower.APMTraceObservationSchema
 import Lean.Data.Json
 
 /-!
@@ -16,6 +16,7 @@ an independently maintained phase table.
 namespace DarkTower.APMCycleMachine.ContractEmitter
 
 open Lean
+open DarkTower.APMTraceObservationSchema
 
 def phaseName : Phase → String
   | .preflight => "preflight"
@@ -35,6 +36,22 @@ def phaseJson (phases : List Phase) : Json :=
 
 def stringArray (values : List String) : Json :=
   Json.arr (values.map Json.str).toArray
+
+def traceObservationKindName : TraceObservationKind → String
+  | .progress => "progress"
+  | .successor => "successor"
+  | .delivery => "delivery"
+
+def traceObservationFieldJson (field : TraceObservationField) : Json :=
+  Json.mkObj [("wire-name", Json.str field.wireName),
+              ("source-path", stringArray field.sourcePath)]
+
+def traceObservationSchemasJson : Json :=
+  Json.arr (traceObservationKinds.map fun kind => Json.mkObj
+    [("kind", Json.str (traceObservationKindName kind)),
+     ("collection-field", Json.str (traceObservationCollection kind)),
+     ("fields", Json.arr
+       ((traceObservationFields kind).map traceObservationFieldJson).toArray)]).toArray
 
 def liveRoleName : LiveRole → String
   | .solver => "solver"
@@ -91,6 +108,8 @@ def contractJson : Json :=
      ("phases", phasesJson),
      ("receipt-schemas", receiptSchemasJson),
      ("submission-schemas", submissionSchemasJson),
+     ("trace-observation-schemas", traceObservationSchemasJson),
+     ("trace-observation-schema-count", Json.num traceObservationKinds.length),
      ("transitions", Json.arr
        (canonicalContract.phases.map transitionJson).toArray),
      ("dispatch-policy", Json.mkObj

@@ -3,6 +3,7 @@ Copyright (c) 2026 Joseph Corneli. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import DarkTower.APMCycleMachine
+import DarkTower.APMTraceObservationSchema
 import Lean
 
 /-!
@@ -122,6 +123,7 @@ structure TraceDeliveryObservation where
   registeredPushPerformed : Bool
   pollingAvailable : Bool
   deriving FromJson, Repr
+
 
 def progressObservationValid (observation : TraceProgressObservation) : Bool :=
   !observation.coordinatorEnabled ||
