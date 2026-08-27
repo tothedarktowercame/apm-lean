@@ -1,60 +1,43 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "a97A01",
-  "bundle_root": "problems/a97A01",
-  "layout": "single-bundle",
-  "source": {
-    "workspace_metadata": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/workspace.json",
-    "receipt": "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734.json",
-    "problem_tex": "/home/joe/code/apm-lean/apm/a97A01.tex",
-    "frame_id": "apm-v2-a97A01-1775003392734",
-    "module_root": "ApmCanaries.Frames.A97A01.Apm_v2_a97A01_1775003392734"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "a97A01",
+  "source" : {
+    "workspace_metadata" : "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734/workspace.json",
+    "receipt" : "/home/joe/code/futon6/.state/proof-frames/a97A01/apm-v2-a97A01-1775003392734.json",
+    "problem_tex" : "/home/joe/code/apm-lean/apm/a97A01.tex",
+    "frame_id" : "apm-v2-a97A01-1775003392734",
+    "module_root" : "ApmCanaries.Frames.A97A01.Apm_v2_a97A01_1775003392734"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 4,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+  "boundary" : "Closed by frame f47 (campaign jit-all-open-v2, 2026-08-27): \"a97A01: prove dyadic step density and weak convergence\". Banked verbatim from the f47 Solver terminal head 443f3ce6983ca3bf1489e3648373a3290191a6cf on branch exp/countdown-f47-a97A01-solver; content identical to that head, no re-derivation. Frozen statement apm_a97a01 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : "lean/Scratch.lean",
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": true,
-    "has_changelog": true,
-    "has_workspace_metadata": true,
-    "has_receipt": true
+  "bundle_root" : "problems/a97A01",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-27",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 4,
+    "axioms" : "apm_a97a01 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f47"
   },
-  "classification": "partial",
-  "imported_at": "2026-05-01T19:38:16.983164Z",
-  "checked_at": "2026-08-08T00:00:00Z",
-  "checked_lean_state": {
-    "exit_code": 0,
-    "command": "lake env lean problems/a97A01/lean/Main.lean",
-    "sorry_count": 1,
-    "sorry_locations": [
-      "apm_a97a01 (dyadic cancellation and L1 approximation)"
-    ],
-    "proved": [
-      "apm_a97A01_abs_rademacher",
-      "apm_a97A01_rademacher_measurable",
-      "apm_a97A01_integrable_mul_rademacher",
-      "apm_a97A01_norm_integral_mul_rademacher_le",
-      "apm_a97A01_rademacher_eq_one_of_mem_odd_cell"
-    ],
-    "blockers": [
-      "Dyadic-cell uniqueness/even-cell sign and exact cancellation on coarser blocks",
-      "L1 density/convergence of dyadic step approximations"
-    ],
-    "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)"
-  },
-  "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
-    "elaborated_exit": 0,
-    "sorry_declarations": 4,
-    "previous_classification": "partial"
+  "imported_at" : "2026-05-01T19:38:16.983164Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : true,
+    "has_changelog" : true,
+    "has_workspace_metadata" : true,
+    "has_receipt" : true
   }
 }
