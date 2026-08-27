@@ -607,6 +607,79 @@ theorem namedIntersectionPieceQuotientMap_isQuotientMap (n : ℕ)
   (intersectionPieceQuotientMap_isQuotientMap n h).comp
     (intersectionPieceSourceHomeomorph n h).isQuotientMap
 
+/-! ## Explicit sum decompositions of the piece sources -/
+
+/-- The logical equivalence `Equiv.subtypeSum` is a homeomorphism for the
+standard sum and subtype topologies. -/
+def subtypeSumHomeomorph {X Y : Type*} [TopologicalSpace X]
+    [TopologicalSpace Y] (p : X ⊕ Y → Prop)
+    (hleft : IsOpen {x | p (Sum.inl x)})
+    (hright : IsOpen {y | p (Sum.inr y)}) :
+    {z // p z} ≃ₜ {x // p (Sum.inl x)} ⊕ {y // p (Sum.inr y)} where
+  toEquiv := Equiv.subtypeSum
+  continuous_toFun := by
+    rw [continuous_def]
+    intro u hu
+    have hl : IsOpen (Sum.inl ⁻¹' u) := hu.preimage continuous_inl
+    have hr : IsOpen (Sum.inr ⁻¹' u) := hu.preimage continuous_inr
+    have hl' : IsOpen (Subtype.val '' (Sum.inl ⁻¹' u)) :=
+      hleft.isOpenMap_subtype_val _ hl
+    have hr' : IsOpen (Subtype.val '' (Sum.inr ⁻¹' u)) :=
+      hright.isOpenMap_subtype_val _ hr
+    have hs : IsOpen
+        (Sum.inl '' (Subtype.val '' (Sum.inl ⁻¹' u)) ∪
+          Sum.inr '' (Subtype.val '' (Sum.inr ⁻¹' u))) :=
+      (isOpenMap_inl _ hl').union (isOpenMap_inr _ hr')
+    change IsOpen (Equiv.subtypeSum ⁻¹' u)
+    rw [show Equiv.subtypeSum ⁻¹' u =
+        Subtype.val ⁻¹'
+          (Sum.inl '' (Subtype.val '' (Sum.inl ⁻¹' u)) ∪
+            Sum.inr '' (Subtype.val '' (Sum.inr ⁻¹' u))) by
+      ext z
+      rcases z with ⟨x | y, hz⟩
+      · simp only [Equiv.subtypeSum, Equiv.coe_fn_mk, Set.mem_preimage,
+          Set.mem_union, Set.mem_image]
+        aesop
+      · simp only [Equiv.subtypeSum, Equiv.coe_fn_mk, Set.mem_preimage,
+          Set.mem_union, Set.mem_image]
+        aesop]
+    exact hs.preimage continuous_subtype_val
+  continuous_invFun := by
+    rw [continuous_sum_dom]
+    constructor <;> apply Continuous.subtype_mk
+    · exact continuous_inl.comp continuous_subtype_val
+    · exact continuous_inr.comp continuous_subtype_val
+
+/-- The left source is literally one whole sphere plus the opposite
+equatorial band. -/
+def leftPreimageSumHomeomorph (n : ℕ) :
+    leftPreimage n ≃ₜ AmbientSphere n ⊕ equatorialBand n :=
+  (subtypeSumHomeomorph (leftPreimage n) isOpen_univ
+      (equatorialBand_isOpen n)).trans <|
+    Homeomorph.sumCongr
+      ((Homeomorph.setCongr (by ext; exact iff_true_intro trivial)).trans
+        (Homeomorph.Set.univ _))
+      (Homeomorph.setCongr (by ext; rfl))
+
+/-- The right source is its band followed by one whole sphere. -/
+def rightPreimageSumHomeomorph (n : ℕ) :
+    rightPreimage n ≃ₜ equatorialBand n ⊕ AmbientSphere n :=
+  (subtypeSumHomeomorph (rightPreimage n) (equatorialBand_isOpen n)
+      isOpen_univ).trans <|
+    Homeomorph.sumCongr
+      (Homeomorph.setCongr (by ext; rfl))
+      ((Homeomorph.setCongr (by ext; exact iff_true_intro trivial)).trans
+        (Homeomorph.Set.univ _))
+
+/-- The overlap source is the sum of its two literal equatorial bands. -/
+def bothBandPreimageSumHomeomorph (n : ℕ) :
+    bothBandPreimage n ≃ₜ equatorialBand n ⊕ equatorialBand n :=
+  (subtypeSumHomeomorph (bothBandPreimage n) (equatorialBand_isOpen n)
+      (equatorialBand_isOpen n)).trans <|
+    Homeomorph.sumCongr
+      (Homeomorph.setCongr (by ext; rfl))
+      (Homeomorph.setCongr (by ext; rfl))
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -632,5 +705,9 @@ theorem namedIntersectionPieceQuotientMap_isQuotientMap (n : ℕ)
 #print axioms namedLeftPieceQuotientMap_isQuotientMap
 #print axioms namedRightPieceQuotientMap_isQuotientMap
 #print axioms namedIntersectionPieceQuotientMap_isQuotientMap
+#print axioms subtypeSumHomeomorph
+#print axioms leftPreimageSumHomeomorph
+#print axioms rightPreimageSumHomeomorph
+#print axioms bothBandPreimageSumHomeomorph
 
 end ConstructionTargets.SphereEquatorGluingOpenCover
