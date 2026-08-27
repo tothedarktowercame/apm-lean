@@ -43,7 +43,9 @@ MANIFOLD-CALCULUS [BANKED MATHLIB SUBSTRATE]
        ├── PRODUCT-COMPLEMENT IMAGE NULLITY [BANKED]
        │      ├── ARBITRARY FINRANK ADAPTER [BANKED]
        │      └── ONE-CHART DIMENSION-DROP NULLITY [BANKED]
-       │             └── COUNTABLE CHART RANGE DECOMPOSITION [LOCAL-GO]
+       │             └── COUNTABLE CHART RANGE DECOMPOSITION [BANKED]
+       │                    ├── DIFFERENTIABLE-ON LOCAL NULLITY [LOCAL-GO]
+       │                    ├── COMMON TARGET-CHART NULL TRANSPORT [API-GAP]
        │                    └── MANIFOLD-SARD [FOUNDATION]
        ├── REGULAR-PREIMAGE/SUBMERSION [FOUNDATION]
        │      ├── TRANSVERSE-PULLBACK [FOUNDATION]
@@ -100,8 +102,6 @@ Each item must be checked against canonical master and independently reviewed
 before it is marked `BANKED`:
 
 - `t00J01`: exact Circle fibre cardinalities and regularity;
-- `t01A03`: the three retraction obstructions;
-- `t01J02`: covering-induced higher-homotopy bijectivity;
 - `t03J06`: capped-cylinder integral and final conjunction;
 - `t94J06`: degree-four disk zero obstruction;
 - `t97J06`: Circle noncontractibility consumer;
@@ -119,12 +119,14 @@ solver line.  Accordingly, `UPTAKE` here means selective promotion and review,
 not merely adding an import to canonical Main.
 
 First promoted result: `ThreeRetractionObstructionAdapter` was reviewed and
-banked in `b61210cf`.  Its generic conjunction is canonical; integrating it
-into frozen `t01A03` remains an `UPTAKE` task.
+banked in `b61210cf`.  Canonical `t01A03` was independently already closed by
+`8ef14798`, so replacing its existing proof with the adapter would be an
+unnecessary refactor.
 
 Second promoted result: the three-pair higher-homotopy covering closure was
 reviewed and banked in `37524eb4`.  Its exact frozen-facing bijection is
-canonical; frozen `t01J02` proof uptake remains.
+canonical, and frozen `t01J02` was closed without changing its interface in
+`3ba7726a`.
 
 ### Queue B: bounded reusable constructions
 
@@ -217,15 +219,23 @@ not substitutes for those missing generic interfaces.
 | Commit | Reusable result | Remaining consumer work |
 |---|---|---|
 | `935fc228` | product evenly-covered trivializations and `IsCoveringMap` closure | instantiate in concrete covering consumers |
-| `b61210cf` | three generic retraction obstructions, including the categorical integral-H1 form | frozen `t01A03` uptake |
+| `b61210cf` | three generic retraction obstructions, including the categorical integral-H1 form | reusable infrastructure; `t01A03` was already closed independently in `8ef14798` |
 | `3c96f98e` | `H₁(B¹, B¹ \ {0}; ℤ) ≅ ℤ`, named nonzero local generator, and radial pair-map transport | transport through a manifold chart; global fundamental-class localization remains foundational |
 | `b94fdc26` | degree-two Alexander--Whitney front/back edges, chain maps, boundary formula, and naturality | extract the now-unblocked low-degree cap module |
 | `1f0a8882` | image nullity for differentiable `E → E × G` with nontrivial finite-dimensional complement | add explicit linear-equivalence/complement transport, then combine with chart-null transport |
 | `408be02b` | integral singular one-cocycles, low-degree cap operations, Leibniz identities, homology descent, and naturality | add independent consumers; manifold fundamental-class comparison remains foundational |
 | `20191b38` | arbitrary strict-finrank differentiable image nullity via an explicit finite-dimensional complement equivalence | combine with chart-coordinate null transport; then prove the manifold chart-cover statement |
-| `37524eb4` | cube-boundary path connectivity and covering-induced higher-homotopy bijectivity | frozen `t01J02` uptake |
-| `ce5839a7` | one-chart strict-finrank nullity, fixed-chart countable unions, and differentiable chart-change transport | select a countable source cover and prove exact global range decomposition; no canonical manifold measure is asserted |
+| `37524eb4` | cube-boundary path connectivity and covering-induced higher-homotopy bijectivity | consumed by closed `t01J02` in `3ba7726a` |
+| `ce5839a7` | one-chart strict-finrank nullity, fixed-chart countable unions, and differentiable chart-change transport | consumed by the countable range-decomposition layer; no canonical manifold measure is asserted |
 | `707efa05` | relative singular homology isomorphism for a homeomorphism of pairs and nonzero transport of the model local generator | construct the restricted manifold chart pair and its deleted-point equivalence |
+| `fb05ffe9` | countable source/target chart-pair patches, full range decomposition, and exact coordinate equation | prove local `DifferentiableOn` dimension-drop nullity and compare varying target-chart null sets |
+
+## Problems closed during consolidation
+
+| Problem | Canonical closure | Audit result |
+|---|---|---|
+| `t01A03` | `8ef14798` | no executable placeholders; only standard axioms |
+| `t01J02` | `3ba7726a` using `37524eb4` | status `solved`, zero placeholders, statements unchanged, only standard axioms |
 
 ## Next decision point
 

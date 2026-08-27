@@ -42,11 +42,13 @@ Keep four interfaces separate:
 The product-complement Euclidean dimension-drop theorem is banked in
 `1f0a8882`, and arbitrary strict-finrank transport is banked in `20191b38`.
 One-chart dimension-drop nullity and coordinate-change transport are banked in
-`ce5839a7`.  The next bounded milestone is a countable source-chart selection,
-exact global range decomposition, and the coordinate equations on every
-piece.  This still does not define a canonical manifold measure.  The first
-geometric milestone remains a boundaryless regular-preimage theorem, not full
-parametric transversality.
+`ce5839a7`; countable source/target chart-pair selection, exact range
+decomposition, and local coordinate equations are banked in `fb05ffe9`.  The
+next boundary has two parts: a `DifferentiableOn` dimension-drop theorem for
+the local coordinate representative, and a proved comparison of null sets
+across the varying target charts.  This still does not define a canonical
+manifold measure.  The first geometric milestone remains a boundaryless
+regular-preimage theorem, not full parametric transversality.
 
 ## Covering constructors
 
