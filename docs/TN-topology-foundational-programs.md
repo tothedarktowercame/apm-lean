@@ -46,12 +46,13 @@ One-chart dimension-drop nullity and coordinate-change transport are banked in
 decomposition, and local coordinate equations are banked in `fb05ffe9`.  The
 `DifferentiableOn` dimension-drop theorem is banked in `7c2f83a6`, and
 transport of countably many varying-chart null patches into a fixed target
-chart is banked in `b4d6065f`.  The next milestone is their composition for a
-`C¹` manifold map, followed by nonsurjectivity from positivity of a nonempty
-target-chart open set.  This branch applies only under strict model-dimension
-drop; it does not address critical-value Sard.  The first geometric milestone
-for that separate program remains a boundaryless regular-preimage theorem,
-not full parametric transversality.
+chart is banked in `b4d6065f`.  Their composition for `C¹` manifold maps is
+banked in `7e531b1d`, and the boundaryless fixed-chart positivity contradiction
+is banked in `0193d098`.  The remaining work for the first consumer is only
+specialization to frozen `t94J05`.  This branch applies only under strict
+model-dimension drop; it does not address critical-value Sard.  The first
+geometric milestone for that separate program remains a boundaryless
+regular-preimage theorem, not full parametric transversality.
 
 ## Covering constructors
 
