@@ -25,3 +25,10 @@ postcomposition `biprod.map u v`: projection to the left gives
 `homologyMap f ≫ u`, while projection to the right gives
 `(-homologyMap g) ≫ v`.  These forms match consumers whose two homology
 components are subsequently transported by separate comparison maps.
+
+Both postcomposition formulas also have explicitly left-whiskered versions.
+For any prefix `a` into the source homology object, they normalize the exact
+association `a ≫ homologyMap (biprod.lift f (-g)) ≫
+((homologyBiprodIso.hom ≫ biprod.map u v) ≫ fst/snd)` to the corresponding
+left or signed-right component.  Their proofs use categorical reassociation
+and the unwhiskered formulas, without relying on rewrite occurrence selection.

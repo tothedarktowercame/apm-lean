@@ -96,6 +96,47 @@ theorem homologyMap_signedLift_biprodIso_map_snd
         simp only [Category.assoc, biprod.map_snd]
     _ = _ := by rw [homologyMap_signedLift_biprodIso_snd]
 
+section WhiskerLeft
+
+variable {X : AddCommGrpCat}
+
+/-- The postcomposed left-component formula is stable under an arbitrary
+prefix into the source homology object, in the association used by downstream
+exact-sequence composites. -/
+theorem whiskerLeft_homologyMap_signedLift_biprodIso_map_fst
+    (a : X ⟶ W.homology n) (f : W ⟶ K) (g : W ⟶ L)
+    (u : K.homology n ⟶ A) (v : L.homology n ⟶ B) :
+    a ≫ HomologicalComplex.homologyMap (biprod.lift f (-g)) n ≫
+        (((homologyBiprodIso K L n).hom ≫ biprod.map u v) ≫ biprod.fst) =
+      a ≫ HomologicalComplex.homologyMap f n ≫ u := by
+  calc
+    _ = a ≫
+        (HomologicalComplex.homologyMap (biprod.lift f (-g)) n ≫
+          (homologyBiprodIso K L n).hom ≫ biprod.map u v ≫ biprod.fst) := by
+        simp only [Category.assoc]
+    _ = a ≫ (HomologicalComplex.homologyMap f n ≫ u) := by
+        rw [homologyMap_signedLift_biprodIso_map_fst]
+    _ = _ := rfl
+
+/-- The postcomposed right-component formula, with its Mayer--Vietoris sign,
+is stable under an arbitrary prefix into the source homology object. -/
+theorem whiskerLeft_homologyMap_signedLift_biprodIso_map_snd
+    (a : X ⟶ W.homology n) (f : W ⟶ K) (g : W ⟶ L)
+    (u : K.homology n ⟶ A) (v : L.homology n ⟶ B) :
+    a ≫ HomologicalComplex.homologyMap (biprod.lift f (-g)) n ≫
+        (((homologyBiprodIso K L n).hom ≫ biprod.map u v) ≫ biprod.snd) =
+      a ≫ (-HomologicalComplex.homologyMap g n) ≫ v := by
+  calc
+    _ = a ≫
+        (HomologicalComplex.homologyMap (biprod.lift f (-g)) n ≫
+          (homologyBiprodIso K L n).hom ≫ biprod.map u v ≫ biprod.snd) := by
+        simp only [Category.assoc]
+    _ = a ≫ ((-HomologicalComplex.homologyMap g n) ≫ v) := by
+        rw [homologyMap_signedLift_biprodIso_map_snd]
+    _ = _ := rfl
+
+end WhiskerLeft
+
 end PostcomposeBiprodMap
 
 /-- Mapping the canonical homology biproduct back into homology of the chain
@@ -135,6 +176,8 @@ theorem homologyBiprodIso_inv_homologyMap_desc
 #print axioms homologyMap_signedLift_biprodIso_snd
 #print axioms homologyMap_signedLift_biprodIso_map_fst
 #print axioms homologyMap_signedLift_biprodIso_map_snd
+#print axioms whiskerLeft_homologyMap_signedLift_biprodIso_map_fst
+#print axioms whiskerLeft_homologyMap_signedLift_biprodIso_map_snd
 #print axioms homologyBiprodIso_inv_homologyMap_desc
 
 end ConstructionTargets.HomologyBiprodNormalization
