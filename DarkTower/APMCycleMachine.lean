@@ -369,6 +369,79 @@ theorem nonapproval_does_not_require_exact_pattern_set
     verdict.patternSetValid edgePatterns reviewPatterns := by
   cases verdict <;> simp_all [AttachmentReviewVerdict.patternSetValid]
 
+/-! The Promotion Proctor authors a merit judgement; the controller later
+creates and projects review evidence. Requiring controller-owned fields in
+the returned role payload makes the valid first stage impossible. -/
+inductive PromotionReviewStage
+  | returnedByReviewer
+  | persistedByController
+  deriving DecidableEq, Repr
+
+structure PromotionReviewEvidence where
+  publishing : Bool
+  patternIds : List String
+  reviewEvidenceId : String
+  attachmentStatus : String
+  deriving DecidableEq, Repr
+
+def PromotionReviewEvidence.ValidAt
+    (review : PromotionReviewEvidence) : PromotionReviewStage → Prop
+  | .returnedByReviewer => review.patternIds ≠ []
+  | .persistedByController =>
+      review.patternIds ≠ [] ∧
+      (review.publishing = true →
+        review.reviewEvidenceId ≠ "" ∧ review.attachmentStatus = "reviewed")
+
+def returnedPublishingReview : PromotionReviewEvidence where
+  publishing := true
+  patternIds := ["math-formalization/example"]
+  reviewEvidenceId := ""
+  attachmentStatus := ""
+
+theorem controller_evidence_is_not_required_from_reviewer :
+    returnedPublishingReview.ValidAt .returnedByReviewer := by
+  simp [PromotionReviewEvidence.ValidAt, returnedPublishingReview]
+
+theorem unpersisted_publishing_review_cannot_be_a_disposition :
+    ¬ returnedPublishingReview.ValidAt .persistedByController := by
+  simp [PromotionReviewEvidence.ValidAt, returnedPublishingReview]
+
+/-! Launch authority is one bundle. A gate may not select a manifest from a
+different campaign/frame, a qualification may not attest a different emitted
+contract, and a proof audit may not synthesize a theorem name. -/
+structure LaunchAuthorityBundle where
+  campaignId : String
+  frameId : String
+  manifestCampaignId : String
+  manifestFrameId : String
+  generatedContractDigest : String
+  qualificationRegisteredDigest : String
+  qualificationObservedDigest : String
+  sourceTheoremName : String
+  auditedTheoremName : String
+  deriving DecidableEq, Repr
+
+def LaunchAuthorityBundle.Valid (authority : LaunchAuthorityBundle) : Prop :=
+  authority.campaignId ≠ "" ∧ authority.frameId ≠ "" ∧
+  authority.manifestCampaignId = authority.campaignId ∧
+  authority.manifestFrameId = authority.frameId ∧
+  authority.generatedContractDigest ≠ "" ∧
+  authority.qualificationRegisteredDigest = authority.generatedContractDigest ∧
+  authority.qualificationObservedDigest = authority.generatedContractDigest ∧
+  authority.sourceTheoremName ≠ "" ∧
+  authority.auditedTheoremName = authority.sourceTheoremName
+
+theorem valid_launch_authority_has_no_cross_artifact_drift
+    (authority : LaunchAuthorityBundle) (valid : authority.Valid) :
+    authority.manifestCampaignId = authority.campaignId ∧
+    authority.manifestFrameId = authority.frameId ∧
+    authority.qualificationRegisteredDigest = authority.generatedContractDigest ∧
+    authority.qualificationObservedDigest = authority.generatedContractDigest ∧
+    authority.auditedTheoremName = authority.sourceTheoremName := by
+  rcases valid with ⟨_, _, manifestCampaign, manifestFrame, _, registered,
+    observed, _, theoremName⟩
+  exact ⟨manifestCampaign, manifestFrame, registered, observed, theoremName⟩
+
 /-! Promotion is allowed to leave review only with materialized artifacts and
 one persisted disposition for every candidate.  These types model the
 controller-owned boundary: an agent may report an identifier, but only the

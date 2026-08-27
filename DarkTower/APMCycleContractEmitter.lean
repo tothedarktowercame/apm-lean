@@ -170,7 +170,10 @@ def contractJson : Json :=
         ("coordinator-one-registration-per-problem", Json.bool true),
         ("coordinator-retries-increment-same-entry", Json.bool true),
         ("coordinator-retry-beyond-maximum-refused", Json.bool true),
-        ("coordinator-startup-directory-heuristics", Json.bool false)]),
+        ("coordinator-startup-directory-heuristics", Json.bool false),
+        ("gate-manifest-authority-binding", Json.str "campaign-and-frame-exact"),
+        ("qualification-contract-digest-binding", Json.str "registered-and-observed-exact"),
+        ("proof-target-name-authority", Json.str "source-declaration")]),
      ("memory-policy", Json.mkObj
        [("content-addressed-snapshot", Json.bool true),
         ("admit-after-solve-verify", Json.bool true),
@@ -219,6 +222,8 @@ def contractJson : Json :=
             Json.str "persistence-receipt-id"]),
         ("materialized-artifact-digests-must-match", Json.bool true),
         ("review-evidence-materialized-before-disposition", Json.bool true),
+        ("returned-review-controller-evidence-required", Json.bool false),
+        ("persisted-review-controller-evidence-required", Json.bool true),
         ("nonpublishing-dispositions", Json.arr
           #[Json.str "reject"]),
         ("projection-failure-action", Json.str
