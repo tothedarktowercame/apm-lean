@@ -2,6 +2,10 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.ProductionOpenCoverMayerVietoris
+import ConstructionTargets.T00A01MayerVietorisAdapters
+import ConstructionTargets.SphereHomology
+import ConstructionTargets.MayerVietorisExactnessIsZero
 
 /-!
 # APM t00A01: Connected sums of integral homology 3-spheres
@@ -22,7 +26,7 @@ The conclusion still concerns the genuine fundamental group and singular
 homology of the quotient space, not scalar stand-ins.
 -/
 
-open CategoryTheory Set
+open CategoryTheory CategoryTheory.Limits Set
 
 noncomputable section
 
@@ -205,7 +209,193 @@ theorem apm_t00A01_bridge_connectedSum_isHomology3Sphere
     (hcover : apm_t00A01_hasStandardCover
       (apm_t00A01_connectedSum iA iB) A B) :
     apm_t00A01_isHomology3Sphere (apm_t00A01_connectedSum iA iB) := by
-  sorry
+  open ConstructionTargets.ProductionOpenCoverMayerVietoris in
+   open ConstructionTargets.T00A01MayerVietorisAdapters in
+   open ConstructionTargets.IntegralSingularHomologyComparison in
+   open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.SphereHomology in
+   open ConstructionTargets.MayerVietorisExactnessIsZero in
+   rcases hcover with ⟨U, V, hU, hV, hUV, ⟨eUA⟩, ⟨eVB⟩, ⟨eIS⟩⟩
+   rcases hA with ⟨⟨eA0⟩, hAz⟩
+   rcases hB with ⟨⟨eB0⟩, hBz⟩
+   let X := apm_t00A01_connectedSum iA iB
+   let groupIso (e : ContinuousMap.HomotopyEquiv U A) (k : ℕ) :=
+     singularHomologyIsoOfHomotopyEquiv e k
+   let eU0 : SingularHomology 0 (TopCat.of U) ≅ AddCommGrpCat.of ℤ :=
+     groupIso eUA 0 ≪≫
+       (singularHomologyComparison (TopCat.of A) 0).symm ≪≫
+       forgetIntModules.mapIso eA0
+   let eV0 : SingularHomology 0 (TopCat.of V) ≅ AddCommGrpCat.of ℤ :=
+     singularHomologyIsoOfHomotopyEquiv eVB 0 ≪≫
+       (singularHomologyComparison (TopCat.of B) 0).symm ≪≫
+       forgetIntModules.mapIso eB0
+   let eI0 : SingularHomology 0 (TopCat.of (U ∩ V : Set X)) ≅
+       AddCommGrpCat.of ℤ :=
+     singularHomologyIsoOfHomotopyEquiv eIS 0 ≪≫ sphereH0IsoInt 2 (by omega)
+   let eI2 : SingularHomology 2 (TopCat.of (U ∩ V : Set X)) ≅
+       AddCommGrpCat.of ℤ :=
+     singularHomologyIsoOfHomotopyEquiv eIS 2 ≪≫
+       sphereTopHomologyIsoInt 2 (by omega)
+   let hUz (k : ℕ) (hk : k ≠ 0) : Limits.IsZero (SingularHomology k (TopCat.of U)) :=
+     (groupHomologyIsZeroOfModuleHomologyIsZero (TopCat.of A) k (hAz k hk)).of_iso
+       (singularHomologyIsoOfHomotopyEquiv eUA k)
+   let hVz (k : ℕ) (hk : k ≠ 0) : Limits.IsZero (SingularHomology k (TopCat.of V)) :=
+     (groupHomologyIsZeroOfModuleHomologyIsZero (TopCat.of B) k (hBz k hk)).of_iso
+       (singularHomologyIsoOfHomotopyEquiv eVB k)
+   let hIz (k : ℕ) (hk0 : k ≠ 0) (hk2 : k ≠ 2) :
+       Limits.IsZero (SingularHomology k (TopCat.of (U ∩ V : Set X))) :=
+     (sphereModuleHomology_isZero_of_ne_zero_top 2 k hk0 hk2 |> fun hm ↦
+       groupHomologyIsZeroOfModuleHomologyIsZero (TopCat.of apm_t00A01_Sphere2) k hm).of_iso
+       (singularHomologyIsoOfHomotopyEquiv eIS k)
+   letI : Nonempty A :=
+     ConstructionTargets.SingularH0Augmentation.nonempty_of_module_singularH0_iso_int eA0
+   letI : Nonempty B :=
+     ConstructionTargets.SingularH0Augmentation.nonempty_of_module_singularH0_iso_int eB0
+   letI : Nonempty U := ⟨eUA.symm.toFun (Classical.choice inferInstance)⟩
+   letI : Nonempty V := ⟨eVB.symm.toFun (Classical.choice inferInstance)⟩
+   letI : Nonempty apm_t00A01_Sphere2 :=
+     ⟨⟨EuclideanSpace.single 0 1, by simp⟩⟩
+   letI : Nonempty (U ∩ V : Set X) :=
+     ⟨eIS.symm.toFun (Classical.choice inferInstance)⟩
+   let eX0g := openCoverH0IsoOfCoordinates U V hU hV hUV eI0 eU0 eV0
+   let eX0 := singularHomologyModuleIsoOfGroupIso (TopCat.of X) 0
+     (ModuleCat.of ℤ ℤ) eX0g
+   have hfg1 : productionReassemblyArrow U V 1 ≫
+       productionConnecting U V hU hV hUV 0 = 0 := by
+     rw [← booleanReassemblyArrow_eq_production U V hU hV hUV 1]
+     simp only [productionConnecting]
+     have hz := (ConstructionTargets.SingularExcision.subcomplexMayerVietorisShortComplex_shortExact
+       (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+       (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V)).comp_δ 1 0 rfl
+     have hcancel :
+         HomologicalComplex.homologyMap
+             (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).g 1 ≫
+           (booleanUnionProductionHomologyIso U V hU hV hUV 1).hom ≫
+           (booleanUnionProductionHomologyIso U V hU hV hUV 1).inv ≫
+           ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+             (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+             (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0 =
+         HomologicalComplex.homologyMap
+             (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).g 1 ≫
+           ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+             (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+             (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0 := by simp
+     calc
+       _ = (booleanPiecesProductionHomologyIso U V 1).inv ≫
+           (HomologicalComplex.homologyMap
+               (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).g 1 ≫
+             (booleanUnionProductionHomologyIso U V hU hV hUV 1).hom ≫
+             (booleanUnionProductionHomologyIso U V hU hV hUV 1).inv ≫
+             ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+               (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+               (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0) ≫
+           (booleanIntersectionProductionHomologyIso U V 0).hom := by
+             simp only [Category.assoc]
+       _ = (booleanPiecesProductionHomologyIso U V 1).inv ≫
+           (HomologicalComplex.homologyMap
+               (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).g 1 ≫
+             ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+               (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+               (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0) ≫
+           (booleanIntersectionProductionHomologyIso U V 0).hom :=
+             congrArg (fun k ↦
+               (booleanPiecesProductionHomologyIso U V 1).inv ≫ k ≫
+                 (booleanIntersectionProductionHomologyIso U V 0).hom) hcancel
+       _ = (booleanPiecesProductionHomologyIso U V 1).inv ≫ 0 ≫
+           (booleanIntersectionProductionHomologyIso U V 0).hom :=
+             congrArg (fun k ↦
+               (booleanPiecesProductionHomologyIso U V 1).inv ≫ k ≫
+                 (booleanIntersectionProductionHomologyIso U V 0).hom) hz
+       _ = 0 := by simp
+   have hgh0 : productionConnecting U V hU hV hUV 0 ≫
+       productionIntersectionArrow U V 0 = 0 := by
+     rw [← booleanIntersectionArrow_eq_production U V 0]
+     simp only [productionConnecting]
+     have hz := (ConstructionTargets.SingularExcision.subcomplexMayerVietorisShortComplex_shortExact
+       (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+       (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V)).δ_comp 1 0 rfl
+     have hcancel :
+         ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+             (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+             (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0 ≫
+           (booleanIntersectionProductionHomologyIso U V 0).hom ≫
+           (booleanIntersectionProductionHomologyIso U V 0).inv ≫
+           HomologicalComplex.homologyMap
+             (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).f 0 =
+         ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+             (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+             (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0 ≫
+           HomologicalComplex.homologyMap
+             (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).f 0 := by
+       simpa only [Category.assoc] using congrArg
+         (fun k ↦
+           ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+               (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+               (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0 ≫ k)
+         ((booleanIntersectionProductionHomologyIso U V 0).hom_inv_id_assoc
+           (HomologicalComplex.homologyMap
+             (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).f 0))
+     calc
+       _ = (booleanUnionProductionHomologyIso U V hU hV hUV 1).inv ≫
+           (ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+               (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+               (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0 ≫
+             (booleanIntersectionProductionHomologyIso U V 0).hom ≫
+             (booleanIntersectionProductionHomologyIso U V 0).inv ≫
+             HomologicalComplex.homologyMap
+               (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).f 0) ≫
+           (booleanPiecesProductionHomologyIso U V 0).hom := by
+             simp only [Category.assoc]
+       _ = (booleanUnionProductionHomologyIso U V hU hV hUV 1).inv ≫
+           (ConstructionTargets.SingularExcision.subcomplexMayerVietorisConnecting
+               (ConstructionTargets.BooleanTwoCoverScaffold.leftRange U)
+               (ConstructionTargets.BooleanTwoCoverScaffold.rightRange V) 0 ≫
+             HomologicalComplex.homologyMap
+               (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex U V).f 0) ≫
+           (booleanPiecesProductionHomologyIso U V 0).hom :=
+             congrArg (fun k ↦
+               (booleanUnionProductionHomologyIso U V hU hV hUV 1).inv ≫ k ≫
+                 (booleanPiecesProductionHomologyIso U V 0).hom) hcancel
+       _ = (booleanUnionProductionHomologyIso U V hU hV hUV 1).inv ≫ 0 ≫
+           (booleanPiecesProductionHomologyIso U V 0).hom :=
+             congrArg (fun k ↦
+               (booleanUnionProductionHomologyIso U V hU hV hUV 1).inv ≫ k ≫
+                 (booleanPiecesProductionHomologyIso U V 0).hom) hz
+       _ = 0 := by simp
+   have hX1g : Limits.IsZero (SingularHomology 1 (TopCat.of X)) := by
+     letI : Mono (productionIntersectionArrow U V 0) :=
+       productionIntersectionArrow_mono_zero_of_coordinates U V eI0 eU0
+     exact isZero_middle_of_two_exact_of_isZero_left_of_mono_right
+       (productionReassemblyArrow U V 1)
+       (productionConnecting U V hU hV hUV 0)
+       (productionIntersectionArrow U V 0) hfg1 hgh0
+       (productionMayerVietoris_exact_union U V hU hV hUV 0)
+       (productionMayerVietoris_exact_intersection U V hU hV hUV 0)
+       ((Limits.biprod_isZero_iff _ _).mpr ⟨hUz 1 (by omega), hVz 1 (by omega)⟩)
+   have hX2g : Limits.IsZero (SingularHomology 2 (TopCat.of X)) := by
+     apply (productionMayerVietoris_exact_union U V hU hV hUV 1).isZero_X₂
+     · exact (Limits.biprod_isZero_iff _ _).mpr
+         ⟨hUz 2 (by omega), hVz 2 (by omega)⟩ |>.eq_of_src _ _
+     · exact (hIz 1 (by omega) (by omega)).eq_of_tgt _ _
+   let hconn : IsIso (productionConnecting U V hU hV hUV 2) :=
+     productionConnecting_isIso_of_pieces_isZero U V hU hV hUV 2
+       (hUz 3 (by omega)) (hVz 3 (by omega))
+       (hUz 2 (by omega)) (hVz 2 (by omega))
+   let eX3g : SingularHomology 3 (TopCat.of X) ≅ AddCommGrpCat.of ℤ :=
+     @asIso _ _ _ _ (productionConnecting U V hU hV hUV 2) hconn ≪≫ eI2
+   let eX3 := singularHomologyModuleIsoOfGroupIso (TopCat.of X) 3
+     (ModuleCat.of ℤ ℤ) eX3g
+   refine ⟨⟨eX0⟩, ⟨eX3⟩, ?_⟩
+   intro k hk0 hk3
+   apply singularHomologyModuleIsZeroOfGroupIsZero
+   rcases k with _ | _ | _ | k
+   · exact (hk0 rfl).elim
+   · exact hX1g
+   · exact hX2g
+   · apply (productionMayerVietoris_exact_union U V hU hV hUV (k + 2)).isZero_X₂
+     · exact (Limits.biprod_isZero_iff _ _).mpr
+         ⟨hUz (k + 3) (by omega), hVz (k + 3) (by omega)⟩ |>.eq_of_src _ _
+     · exact (hIz (k + 2) (by omega) (by omega)).eq_of_tgt _ _
 
 theorem apm_t00a01
     (M₁ M₂ A B : Type)
