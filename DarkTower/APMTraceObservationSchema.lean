@@ -18,6 +18,11 @@ def traceObservationCollection : TraceObservationKind → String
   | .successor => "successorObservations"
   | .delivery => "deliveryObservations"
 
+def traceObservationDurableRecordKey : TraceObservationKind → String
+  | .progress => "watchdog/trace-observation"
+  | .successor => "trace/successor-observation"
+  | .delivery => "trace/delivery-observation"
+
 def traceObservationFields : TraceObservationKind → List TraceObservationField
   | .progress =>
     [{wireName := "coordinatorEnabled", sourcePath := ["coordinator-enabled?"]},

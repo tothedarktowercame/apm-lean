@@ -156,6 +156,20 @@ def deliveryObservationValid (observation : TraceDeliveryObservation) : Bool :=
 def deliveryTraceValid (trace : List TraceDeliveryObservation) : Bool :=
   !trace.isEmpty && trace.all deliveryObservationValid
 
+structure CombinedOperationalTrace where
+  schemaVersion : Nat
+  traceKind : String
+  progressObservations : List TraceProgressObservation
+  successorObservations : List TraceSuccessorObservation
+  deliveryObservations : List TraceDeliveryObservation
+  deriving FromJson, Repr
+
+def combinedOperationalTraceValid (trace : CombinedOperationalTrace) : Bool :=
+  trace.schemaVersion == 1 && trace.traceKind == "apm-combined-operational" &&
+  progressTraceValid trace.progressObservations &&
+  successorTraceValid trace.successorObservations &&
+  deliveryTraceValid trace.deliveryObservations
+
 def healthyProgressWitness : TraceProgressObservation where
   coordinatorEnabled := true
   elapsedMs := 120000
@@ -615,11 +629,23 @@ def checkFile (path : System.FilePath) : IO UInt32 := do
     IO.eprintln "APM-TRACE-REJECTED"
     pure 1
 
+def checkOperationalFile (path : System.FilePath) : IO UInt32 := do
+  let contents ← IO.FS.readFile path
+  let json ← IO.ofExcept (Json.parse contents)
+  let trace : CombinedOperationalTrace ← IO.ofExcept (fromJson? json)
+  if combinedOperationalTraceValid trace then
+    IO.println "APM-OPERATIONAL-TRACE-ACCEPTED"
+    pure 0
+  else
+    IO.eprintln "APM-OPERATIONAL-TRACE-REJECTED"
+    pure 1
+
 def run (args : List String) : IO UInt32 :=
   match args with
   | [path] => checkFile path
+  | ["--operational", path] => checkOperationalFile path
   | _ => do
-      IO.eprintln "usage: APMCampaignTraceChecker TRACE.json"
+      IO.eprintln "usage: APMCampaignTraceChecker [--operational] TRACE.json"
       pure 2
 
 end DarkTower.APMCampaignTraceChecker

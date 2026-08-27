@@ -50,6 +50,8 @@ def traceObservationSchemasJson : Json :=
   Json.arr (traceObservationKinds.map fun kind => Json.mkObj
     [("kind", Json.str (traceObservationKindName kind)),
      ("collection-field", Json.str (traceObservationCollection kind)),
+     ("durable-record-key", Json.str
+       (traceObservationDurableRecordKey kind)),
      ("fields", Json.arr
        ((traceObservationFields kind).map traceObservationFieldJson).toArray)]).toArray
 
