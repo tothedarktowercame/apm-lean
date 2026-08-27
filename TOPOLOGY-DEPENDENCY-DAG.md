@@ -285,16 +285,21 @@ critical-value Sard.
 
 ## Next decision point
 
-The first strategy-informed build is complete: the dimension-gap nullity chain
-closed `t94J05`.  Before electing another foundational implementation, perform
-a method survey and identify its first plausible closing consumer.  Current
-choices are:
+The second strategy-informed campaign elected an integral open-cover
+Mayer--Vietoris route toward the product-homology branch of `t95J04`.  The
+banked candidate increment supplies:
 
-1. critical-value Sard, with `t93A04` or `t01A08` as the desired first closure;
-2. manifold fundamental-class localization, with a punctured-manifold problem
-   as the desired first closure;
-3. a bounded reuse of dimension-gap nonsurjectivity inside `t95J04`, while
-   keeping its Hausdorff-measure and topology branches separate.
+- radial equivalences for punctured normed spaces and concrete two-pole sphere
+  complements, including product transport;
+- public chain- and homology-level naturality for range subcomplex inclusions
+  and cover members;
+- homology-biproduct normalization and generic exactness-to-vanishing lemmas.
 
-Do not begin a monolithic manifold-Sard, Poincare-duality, or surface
-classification implementation without a reviewed path to a named consumer.
+It does **not** yet state production open-cover Mayer--Vietoris exactness.  The
+exact stop is normalization of the signed reassembly and intersection arrows
+through the `eqToIso` identifications
+`P ⊔ Q = coverSmallSSet` and
+`P ⊓ Q = ambientSubspaceRange (U ∩ V)`.  Do not dispatch another equivalent
+arrow-rewriting reduction.  Resume only after selecting a structural API that
+makes those identifications canonical, or choose a different certified
+consumer route.

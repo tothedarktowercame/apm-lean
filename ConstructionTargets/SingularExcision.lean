@@ -105,21 +105,36 @@ noncomputable local instance ssetChains_preserves_pushouts :
       sigmaConst.obj (AddCommGrpCat.of ℤ))
   infer_instance
 
-private def interToLeft {S : SSet} (P Q : S.Subcomplex) :
+/-- The canonical inclusion from the intersection of two simplicial
+subcomplexes into the left subcomplex. -/
+def subcomplexIntersectionToLeft {S : SSet} (P Q : S.Subcomplex) :
     ((P ⊓ Q : S.Subcomplex) : SSet) ⟶ (P : SSet) :=
   SSet.Subcomplex.homOfLE (show P ⊓ Q ≤ P from inf_le_left)
 
-private def interToRight {S : SSet} (P Q : S.Subcomplex) :
+/-- The canonical inclusion from the intersection of two simplicial
+subcomplexes into the right subcomplex. -/
+def subcomplexIntersectionToRight {S : SSet} (P Q : S.Subcomplex) :
     ((P ⊓ Q : S.Subcomplex) : SSet) ⟶ (Q : SSet) :=
   SSet.Subcomplex.homOfLE (show P ⊓ Q ≤ Q from inf_le_right)
 
-private def leftToUnion {S : SSet} (P Q : S.Subcomplex) :
+/-- The canonical inclusion of the left simplicial subcomplex into a union. -/
+def subcomplexLeftToUnion {S : SSet} (P Q : S.Subcomplex) :
     (P : SSet) ⟶ ((P ⊔ Q : S.Subcomplex) : SSet) :=
   SSet.Subcomplex.homOfLE (show P ≤ P ⊔ Q from le_sup_left)
 
-private def rightToUnion {S : SSet} (P Q : S.Subcomplex) :
+/-- The canonical inclusion of the right simplicial subcomplex into a union. -/
+def subcomplexRightToUnion {S : SSet} (P Q : S.Subcomplex) :
     (Q : SSet) ⟶ ((P ⊔ Q : S.Subcomplex) : SSet) :=
   SSet.Subcomplex.homOfLE (show Q ≤ P ⊔ Q from le_sup_right)
+
+private abbrev interToLeft {S : SSet} (P Q : S.Subcomplex) :=
+  subcomplexIntersectionToLeft P Q
+private abbrev interToRight {S : SSet} (P Q : S.Subcomplex) :=
+  subcomplexIntersectionToRight P Q
+private abbrev leftToUnion {S : SSet} (P Q : S.Subcomplex) :=
+  subcomplexLeftToUnion P Q
+private abbrev rightToUnion {S : SSet} (P Q : S.Subcomplex) :=
+  subcomplexRightToUnion P Q
 
 /-- Inclusion of simplicial subcomplexes is degreewise monic after applying
 free integral chains. -/
@@ -461,7 +476,9 @@ theorem excisionCoverSmallSSet_eq_sup
           (excisionCover A Z) false)) :=
   coverSmallSSet_bool_eq_sup _
 
-private def ambientSubspaceRange {X : Type} [TopologicalSpace X] (A : Set X) :
+/-- The simplicial subcomplex of ambient singular simplices which factor
+through a specified topological subspace. -/
+def ambientSubspaceRange {X : Type} [TopologicalSpace X] (A : Set X) :
     (TopCat.toSSet.obj (TopCat.of X)).Subcomplex :=
   SSet.Subcomplex.range (TopCat.toSSet.map (subspaceInclusion A))
 
@@ -697,18 +714,221 @@ noncomputable def rangeChainsIso {S T : SSet} (f : S ⟶ T) [Mono f] :
     ssetChains.obj (SSet.Subcomplex.range f : SSet) ≅ ssetChains.obj S :=
   ssetChains.mapIso (asIso (Subfunctor.toRange f)).symm
 
+theorem rangeIso_hom_comp {S T : SSet} (f : S ⟶ T) [Mono f] :
+    (asIso (Subfunctor.toRange f)).inv ≫ f =
+      (SSet.Subcomplex.range f).ι := by
+  apply (cancel_epi (Subfunctor.toRange f)).1
+  simp
+
+/-- The actual inclusion between topological subspaces determined by a set
+inclusion. -/
+def topologicalSubspaceInclusion {X : Type} [TopologicalSpace X]
+    {A B : Set X} (h : A ⊆ B) : TopCat.of A ⟶ TopCat.of B :=
+  TopCat.ofHom ⟨fun x ↦ ⟨x.1, h x.2⟩,
+    continuous_subtype_val.subtype_mk _⟩
+
+/-- The inclusion between ambient range subcomplexes determined by a set
+inclusion. -/
+def ambientSubspaceRangeInclusion {X : Type} [TopologicalSpace X]
+    {A B : Set X} (h : A ⊆ B) :
+    (ambientSubspaceRange A : SSet) ⟶ (ambientSubspaceRange B : SSet) :=
+  SSet.Subcomplex.homOfLE (ambientSubspaceRange_mono h)
+
+/-- The range presentation of subspace singular chains. -/
+noncomputable def ambientSubspaceRangeChainsIso
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    ssetChains.obj (ambientSubspaceRange A : SSet) ≅
+      SingularChains (TopCat.of A) :=
+  rangeChainsIso (TopCat.toSSet.map (subspaceInclusion A))
+
+/-- Factoring through the range and then including into the larger range is
+compatible with the actual inclusion of topological subspaces. -/
+theorem ambientSubspaceRangeInclusion_square
+    {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) :
+    (asIso (Subfunctor.toRange
+          (TopCat.toSSet.map (subspaceInclusion A)))).inv ≫
+        TopCat.toSSet.map (topologicalSubspaceInclusion h) =
+      ambientSubspaceRangeInclusion h ≫
+        (asIso (Subfunctor.toRange
+          (TopCat.toSSet.map (subspaceInclusion B)))).inv := by
+  apply (cancel_mono (TopCat.toSSet.map (subspaceInclusion B))).1
+  calc
+    _ = (asIso (Subfunctor.toRange
+          (TopCat.toSSet.map (subspaceInclusion A)))).inv ≫
+        (TopCat.toSSet.map (topologicalSubspaceInclusion h) ≫
+          TopCat.toSSet.map (subspaceInclusion B)) := by simp only [Category.assoc]
+    _ = (asIso (Subfunctor.toRange
+          (TopCat.toSSet.map (subspaceInclusion A)))).inv ≫
+        TopCat.toSSet.map (subspaceInclusion A) := by
+          rw [← TopCat.toSSet.map_comp]
+          rfl
+    _ = (ambientSubspaceRange A).ι := rangeIso_hom_comp _
+    _ = ambientSubspaceRangeInclusion h ≫
+        (ambientSubspaceRange B).ι := rfl
+    _ = (ambientSubspaceRangeInclusion h ≫
+          (asIso (Subfunctor.toRange
+            (TopCat.toSSet.map (subspaceInclusion B)))).inv) ≫
+        TopCat.toSSet.map (subspaceInclusion B) := by
+          rw [Category.assoc]
+          exact congrArg (fun k ↦ ambientSubspaceRangeInclusion h ≫ k)
+            (rangeIso_hom_comp
+              (TopCat.toSSet.map (subspaceInclusion B))).symm
+
+/-- Chain-level naturality of the range presentation with respect to an
+actual subspace inclusion. -/
+theorem ambientSubspaceRangeChainsIso_naturality
+    {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) :
+    (ambientSubspaceRangeChainsIso A).hom ≫
+        ssetChains.map (TopCat.toSSet.map (topologicalSubspaceInclusion h)) =
+      ssetChains.map (ambientSubspaceRangeInclusion h) ≫
+        (ambientSubspaceRangeChainsIso B).hom := by
+  change ssetChains.map _ ≫ ssetChains.map _ =
+    ssetChains.map _ ≫ ssetChains.map _
+  simpa only [← Functor.map_comp] using
+    congrArg ssetChains.map (ambientSubspaceRangeInclusion_square h)
+
+/-- Homology-level naturality of the range presentation with respect to an
+actual subspace inclusion. -/
+theorem ambientSubspaceRangeHomologyIso_naturality
+    {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) (n : ℕ) :
+    HomologicalComplex.homologyMap
+          (ambientSubspaceRangeChainsIso A).hom n ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map
+            (TopCat.toSSet.map (topologicalSubspaceInclusion h))) n =
+      HomologicalComplex.homologyMap
+          (ssetChains.map (ambientSubspaceRangeInclusion h)) n ≫
+        HomologicalComplex.homologyMap
+          (ambientSubspaceRangeChainsIso B).hom n := by
+  calc
+    _ = HomologicalComplex.homologyMap
+        ((ambientSubspaceRangeChainsIso A).hom ≫
+          ssetChains.map
+            (TopCat.toSSet.map (topologicalSubspaceInclusion h))) n :=
+      (HomologicalComplex.homologyMap_comp _ _ _).symm
+    _ = HomologicalComplex.homologyMap
+        (ssetChains.map (ambientSubspaceRangeInclusion h) ≫
+          (ambientSubspaceRangeChainsIso B).hom) n := by
+      rw [ambientSubspaceRangeChainsIso_naturality]
+      rfl
+    _ = _ := HomologicalComplex.homologyMap_comp _ _ _
+
+/-- Naturality for the production inclusion `A ∩ B ⟶ A`. -/
+theorem ambientIntersectionRangeToLeft_naturality
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientSubspaceRangeChainsIso (A ∩ B)).hom ≫
+        ssetChains.map (TopCat.toSSet.map
+          (topologicalSubspaceInclusion (Set.inter_subset_left))) =
+      ssetChains.map
+          (ambientSubspaceRangeInclusion (Set.inter_subset_left)) ≫
+        (ambientSubspaceRangeChainsIso A).hom :=
+  ambientSubspaceRangeChainsIso_naturality Set.inter_subset_left
+
+/-- Naturality for the production inclusion `A ∩ B ⟶ B`. -/
+theorem ambientIntersectionRangeToRight_naturality
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientSubspaceRangeChainsIso (A ∩ B)).hom ≫
+        ssetChains.map (TopCat.toSSet.map
+          (topologicalSubspaceInclusion (Set.inter_subset_right))) =
+      ssetChains.map
+          (ambientSubspaceRangeInclusion (Set.inter_subset_right)) ≫
+        (ambientSubspaceRangeChainsIso B).hom :=
+  ambientSubspaceRangeChainsIso_naturality Set.inter_subset_right
+
+/-- Naturality for the production inclusion `A ⟶ A ∪ B`. -/
+theorem ambientLeftRangeToUnion_naturality
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientSubspaceRangeChainsIso A).hom ≫
+        ssetChains.map (TopCat.toSSet.map
+          (topologicalSubspaceInclusion (Set.subset_union_left))) =
+      ssetChains.map
+          (ambientSubspaceRangeInclusion (Set.subset_union_left)) ≫
+        (ambientSubspaceRangeChainsIso (A ∪ B)).hom :=
+  ambientSubspaceRangeChainsIso_naturality Set.subset_union_left
+
+/-- Naturality for the production inclusion `B ⟶ A ∪ B`. -/
+theorem ambientRightRangeToUnion_naturality
+    {X : Type} [TopologicalSpace X] (A B : Set X) :
+    (ambientSubspaceRangeChainsIso B).hom ≫
+        ssetChains.map (TopCat.toSSet.map
+          (topologicalSubspaceInclusion (Set.subset_union_right))) =
+      ssetChains.map
+          (ambientSubspaceRangeInclusion (Set.subset_union_right)) ≫
+        (ambientSubspaceRangeChainsIso (A ∪ B)).hom :=
+  ambientSubspaceRangeChainsIso_naturality Set.subset_union_right
+
+/-- Inclusion of one member's ambient range into the simplicial subcomplex
+subordinate to the whole cover. -/
+def coverMemberRangeInclusion
+    {X α : Type} [TopologicalSpace X] (U : α → Set X) (a : α) :
+    (ambientSubspaceRange (U a) : SSet) ⟶
+      (SingularSubdivision.coverSmallSSet U : SSet) :=
+  SSet.Subcomplex.homOfLE (by
+    apply le_iSup_of_le a
+    rfl)
+
+/-- The range-to-cover-small inclusion followed by the production inclusion
+is the actual inclusion of the cover member into the ambient space. -/
+theorem coverMemberRangeInclusion_square
+    {X α : Type} [TopologicalSpace X] (U : α → Set X) (a : α) :
+    (asIso (Subfunctor.toRange
+        (TopCat.toSSet.map (subspaceInclusion (U a))))).inv ≫
+        TopCat.toSSet.map
+          (SingularSubdivision.coverSubspaceInclusion U a) =
+      coverMemberRangeInclusion U a ≫
+        (SingularSubdivision.coverSmallSSet U).ι := by
+  change (asIso (Subfunctor.toRange
+      (TopCat.toSSet.map (subspaceInclusion (U a))))).inv ≫
+      TopCat.toSSet.map (subspaceInclusion (U a)) = _
+  rw [rangeIso_hom_comp]
+  rfl
+
+/-- Chain-level naturality of the cover-small comparison on each cover
+member. -/
+theorem coverMemberRangeChainsIso_naturality
+    {X α : Type} [TopologicalSpace X] (U : α → Set X) (a : α) :
+    (ambientSubspaceRangeChainsIso (U a)).hom ≫
+        ssetChains.map (TopCat.toSSet.map
+          (SingularSubdivision.coverSubspaceInclusion U a)) =
+      ssetChains.map (coverMemberRangeInclusion U a) ≫
+        SingularSubdivision.coverSmallChains.ι U := by
+  change ssetChains.map _ ≫ ssetChains.map _ =
+    ssetChains.map _ ≫ ssetChains.map _
+  simpa only [← Functor.map_comp] using congrArg ssetChains.map
+    (coverMemberRangeInclusion_square U a)
+
+/-- Homology-level naturality of the cover-small comparison on each cover
+member. -/
+theorem coverMemberRangeHomologyIso_naturality
+    {X α : Type} [TopologicalSpace X] (U : α → Set X) (a : α) (n : ℕ) :
+    HomologicalComplex.homologyMap
+          (ambientSubspaceRangeChainsIso (U a)).hom n ≫
+        HomologicalComplex.homologyMap
+          (ssetChains.map (TopCat.toSSet.map
+            (SingularSubdivision.coverSubspaceInclusion U a))) n =
+      HomologicalComplex.homologyMap
+          (ssetChains.map (coverMemberRangeInclusion U a)) n ≫
+        HomologicalComplex.homologyMap
+          (SingularSubdivision.coverSmallChains.ι U) n := by
+  calc
+    _ = HomologicalComplex.homologyMap
+        ((ambientSubspaceRangeChainsIso (U a)).hom ≫
+          ssetChains.map (TopCat.toSSet.map
+            (SingularSubdivision.coverSubspaceInclusion U a))) n :=
+      (HomologicalComplex.homologyMap_comp _ _ _).symm
+    _ = HomologicalComplex.homologyMap
+        (ssetChains.map (coverMemberRangeInclusion U a) ≫
+          SingularSubdivision.coverSmallChains.ι U) n := by
+      rw [coverMemberRangeChainsIso_naturality]
+      rfl
+    _ = _ := HomologicalComplex.homologyMap_comp _ _ _
+
 theorem eqToIso_subcomplex_hom_comp_ι {S : SSet}
     (P Q : S.Subcomplex) (h : P = Q) :
     (eqToIso (congrArg (fun R : S.Subcomplex ↦ (R : SSet)) h)).hom ≫ Q.ι =
       P.ι := by
   subst Q
   rfl
-
-theorem rangeIso_hom_comp {S T : SSet} (f : S ⟶ T) [Mono f] :
-    (asIso (Subfunctor.toRange f)).inv ≫ f =
-      (SSet.Subcomplex.range f).ι := by
-  apply (cancel_epi (Subfunctor.toRange f)).1
-  simp
 
 theorem excisionCoverSmallSSet_eq_ambientSC
     {X : Type} [TopologicalSpace X] (A Z : Set X) :
@@ -1534,6 +1754,16 @@ theorem relativeExcision : RelativeExcisionStatement := by
 #print axioms subcomplexMayerVietoris_exact_pieces
 #print axioms subcomplexMayerVietoris_exact_union
 #print axioms subcomplexChains_isPushout
+#print axioms ambientSubspaceRangeInclusion_square
+#print axioms ambientSubspaceRangeChainsIso_naturality
+#print axioms ambientSubspaceRangeHomologyIso_naturality
+#print axioms ambientIntersectionRangeToLeft_naturality
+#print axioms ambientIntersectionRangeToRight_naturality
+#print axioms ambientLeftRangeToUnion_naturality
+#print axioms ambientRightRangeToUnion_naturality
+#print axioms coverMemberRangeInclusion_square
+#print axioms coverMemberRangeChainsIso_naturality
+#print axioms coverMemberRangeHomologyIso_naturality
 #print axioms subcomplexUnionRelativeIso
 #print axioms cokernelSquare_homologyMap_isIso
 #print axioms restrictedCoverSmallMap_comp_ι
