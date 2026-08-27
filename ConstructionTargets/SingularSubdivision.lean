@@ -143,6 +143,64 @@ theorem singularGenerator_boundary (X : TopCat) (n : ℕ)
           rw [Limits.Sigma.ι_comp_map']
           simp
 
+/-! ## Degree-two Alexander--Whitney faces -/
+
+/-- The front edge `[0,1]` of a singular two-simplex. -/
+def alexanderWhitneyFrontEdge (X : TopCat) (s : SingularSimplex X 2) :
+    SingularSimplex X 1 :=
+  (TopCat.toSSet.obj X).δ (2 : Fin 3) s
+
+/-- The back edge `[1,2]` of a singular two-simplex. -/
+def alexanderWhitneyBackEdge (X : TopCat) (s : SingularSimplex X 2) :
+    SingularSimplex X 1 :=
+  (TopCat.toSSet.obj X).δ (0 : Fin 3) s
+
+/-- Linear extension of the Alexander--Whitney front edge from singular
+two-simplices to degree-two singular chains. -/
+def alexanderWhitneyFrontEdgeMap (X : TopCat) :
+    (SingularChains X).X 2 ⟶ (SingularChains X).X 1 := by
+  dsimp [SingularChains, AlgebraicTopology.singularChainComplexFunctor,
+    AlgebraicTopology.SSet.singularChainComplexFunctor]
+  exact Limits.Sigma.desc (fun s =>
+    singularGenerator X 1 (alexanderWhitneyFrontEdge X s))
+
+/-- Linear extension of the Alexander--Whitney back edge. -/
+def alexanderWhitneyBackEdgeMap (X : TopCat) :
+    (SingularChains X).X 2 ⟶ (SingularChains X).X 1 := by
+  dsimp [SingularChains, AlgebraicTopology.singularChainComplexFunctor,
+    AlgebraicTopology.SSet.singularChainComplexFunctor]
+  exact Limits.Sigma.desc (fun s =>
+    singularGenerator X 1 (alexanderWhitneyBackEdge X s))
+
+@[reassoc]
+theorem singularGenerator_alexanderWhitneyFrontEdgeMap
+    (X : TopCat) (s : SingularSimplex X 2) :
+    singularGenerator X 2 s ≫ alexanderWhitneyFrontEdgeMap X =
+      singularGenerator X 1 (alexanderWhitneyFrontEdge X s) := by
+  dsimp [singularGenerator, alexanderWhitneyFrontEdgeMap]
+  exact Limits.Sigma.ι_desc _ s
+
+@[reassoc]
+theorem singularGenerator_alexanderWhitneyBackEdgeMap
+    (X : TopCat) (s : SingularSimplex X 2) :
+    singularGenerator X 2 s ≫ alexanderWhitneyBackEdgeMap X =
+      singularGenerator X 1 (alexanderWhitneyBackEdge X s) := by
+  dsimp [singularGenerator, alexanderWhitneyBackEdgeMap]
+  exact Limits.Sigma.ι_desc _ s
+
+/-- In degree two the singular boundary is back edge minus the middle edge
+plus front edge, the low-dimensional Alexander--Whitney sign convention. -/
+theorem singularGenerator_boundary_two (X : TopCat)
+    (s : SingularSimplex X 2) :
+    singularGenerator X 2 s ≫ (SingularChains X).d 2 1 =
+      singularGenerator X 1 (alexanderWhitneyBackEdge X s) -
+        singularGenerator X 1 ((TopCat.toSSet.obj X).δ (1 : Fin 3) s) +
+      singularGenerator X 1 (alexanderWhitneyFrontEdge X s) := by
+  rw [singularGenerator_boundary]
+  simp [alexanderWhitneyFrontEdge, alexanderWhitneyBackEdge,
+    Fin.sum_univ_succ]
+  abel
+
 /-- The singular-chain generator represented by an ordered affine simplex. -/
 def affineGenerator {m : ℕ} {ι : Type} [Fintype ι]
     (v : Fin (m + 1) → stdSimplex ℝ ι) :
@@ -1951,6 +2009,36 @@ theorem singularGenerator_singularPostcomposition {X Y : Type}
     AlgebraicTopology.SSet.singularChainComplexFunctor]
   rw [Limits.Sigma.ι_comp_map']
   congr 1
+
+/-- Postcomposition commutes with the front-edge term on every represented
+singular two-simplex. -/
+theorem alexanderWhitneyFrontEdge_generator_natural
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (τ : C(stdSimplex ℝ (Fin 3), X)) (f : C(X, Y)) :
+    singularGenerator (TopCat.of X) 1
+        (alexanderWhitneyFrontEdge _
+          (singularSimplexOfContinuousMap _ 2 τ)) ≫
+        (singularPostcomposition f).f 1 =
+      singularGenerator (TopCat.of Y) 1
+        (alexanderWhitneyFrontEdge _
+          (singularSimplexOfContinuousMap _ 2 (f.comp τ))) := by
+  have hx : alexanderWhitneyFrontEdge (TopCat.of X)
+      (singularSimplexOfContinuousMap _ 2 τ) =
+      singularSimplexOfContinuousMap _ 1
+        (τ.comp (affineSimplex (fun j : Fin 2 =>
+          ⟨Pi.single ((2 : Fin 3).succAbove j) 1,
+            single_mem_stdSimplex ℝ ((2 : Fin 3).succAbove j)⟩))) :=
+    singularSimplexOfContinuousMap_face τ (2 : Fin 3)
+  rw [hx, singularGenerator_singularPostcomposition]
+  have hy : alexanderWhitneyFrontEdge (TopCat.of Y)
+      (singularSimplexOfContinuousMap _ 2 (f.comp τ)) =
+      singularSimplexOfContinuousMap _ 1
+        ((f.comp τ).comp (affineSimplex (fun j : Fin 2 =>
+          ⟨Pi.single ((2 : Fin 3).succAbove j) 1,
+            single_mem_stdSimplex ℝ ((2 : Fin 3).succAbove j)⟩))) :=
+    singularSimplexOfContinuousMap_face (f.comp τ) (2 : Fin 3)
+  rw [hy]
+  congr 2
 
 /-- Affine realization commutes with affine postcomposition.  This is the
 square connecting ordered-vertex chains to the production singular complex. -/
@@ -3780,6 +3868,10 @@ theorem coverSmall_homologyMap_isIso_succ
 #print axioms productionChain_factors_coverSmallChains
 
 #print axioms vertexSubdivision_comm_d
+#print axioms singularGenerator_alexanderWhitneyFrontEdgeMap
+#print axioms singularGenerator_alexanderWhitneyBackEdgeMap
+#print axioms singularGenerator_boundary_two
+#print axioms alexanderWhitneyFrontEdge_generator_natural
 #print axioms singularSimplexOfContinuousMap_face
 #print axioms affineSubdivision_boundary
 #print axioms affineSubdivision_edge_boundary

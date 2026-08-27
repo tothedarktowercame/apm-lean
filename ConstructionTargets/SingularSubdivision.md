@@ -130,6 +130,13 @@ subdivision.
 - ULift / universe friction. Real at W1, but absorbed once and for all by W6.
 - Alternating-sign bookkeeping. `singularGenerator_boundary` packages it.
 
+For the surface intersection program, the degree-two
+Alexander--Whitney foundation is now explicit.  `alexanderWhitneyFrontEdge`
+and `alexanderWhitneyBackEdge` select `[0,1]` and `[1,2]`; their maps extend
+linearly over the free singular-chain coproduct.  The generator boundary is
+proved to be back edge minus middle edge plus front edge, and the front-edge
+generator is proved natural under continuous postcomposition.
+
 **Expensive: proving a generator-linear operation is a CHAIN MAP.**
 
 The generator-level differential square crosses FOUR representations of the same
