@@ -64,6 +64,40 @@ theorem homologyMap_signedLift_biprodIso_snd (f : W ⟶ K) (g : W ⟶ L) :
       -HomologicalComplex.homologyMap g n := by
   rw [homologyMap_lift_biprodIso_snd, HomologicalComplex.homologyMap_neg]
 
+section PostcomposeBiprodMap
+
+variable {A B : AddCommGrpCat}
+
+/-- The left component formula remains literal after applying an arbitrary
+map to each output of the homology biproduct. -/
+theorem homologyMap_signedLift_biprodIso_map_fst
+    (f : W ⟶ K) (g : W ⟶ L)
+    (u : K.homology n ⟶ A) (v : L.homology n ⟶ B) :
+    HomologicalComplex.homologyMap (biprod.lift f (-g)) n ≫
+        (homologyBiprodIso K L n).hom ≫ biprod.map u v ≫ biprod.fst =
+      HomologicalComplex.homologyMap f n ≫ u := by
+  calc
+    _ = (HomologicalComplex.homologyMap (biprod.lift f (-g)) n ≫
+          (homologyBiprodIso K L n).hom ≫ biprod.fst) ≫ u := by
+        simp only [Category.assoc, biprod.map_fst]
+    _ = _ := by rw [homologyMap_signedLift_biprodIso_fst]
+
+/-- The right component after an arbitrary biproduct map retains the
+Mayer--Vietoris minus sign. -/
+theorem homologyMap_signedLift_biprodIso_map_snd
+    (f : W ⟶ K) (g : W ⟶ L)
+    (u : K.homology n ⟶ A) (v : L.homology n ⟶ B) :
+    HomologicalComplex.homologyMap (biprod.lift f (-g)) n ≫
+        (homologyBiprodIso K L n).hom ≫ biprod.map u v ≫ biprod.snd =
+      (-HomologicalComplex.homologyMap g n) ≫ v := by
+  calc
+    _ = (HomologicalComplex.homologyMap (biprod.lift f (-g)) n ≫
+          (homologyBiprodIso K L n).hom ≫ biprod.snd) ≫ v := by
+        simp only [Category.assoc, biprod.map_snd]
+    _ = _ := by rw [homologyMap_signedLift_biprodIso_snd]
+
+end PostcomposeBiprodMap
+
 /-- Mapping the canonical homology biproduct back into homology of the chain
 biproduct and then along a chain-level descent map gives the homology maps of
 the two descent components. -/
@@ -99,6 +133,8 @@ theorem homologyBiprodIso_inv_homologyMap_desc
 
 #print axioms homologyMap_signedLift_biprodIso_fst
 #print axioms homologyMap_signedLift_biprodIso_snd
+#print axioms homologyMap_signedLift_biprodIso_map_fst
+#print axioms homologyMap_signedLift_biprodIso_map_snd
 #print axioms homologyBiprodIso_inv_homologyMap_desc
 
 end ConstructionTargets.HomologyBiprodNormalization

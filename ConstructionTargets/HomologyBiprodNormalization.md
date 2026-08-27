@@ -19,3 +19,9 @@ In the other direction, the target proves both inclusion formulas and the
 full `biprod.desc` reassembly formula after applying the inverse canonical
 comparison.  These are categorical normalization statements only; no
 Mayer--Vietoris exactness or geometric identification is assumed.
+
+The signed projection formulas are also stable under an arbitrary
+postcomposition `biprod.map u v`: projection to the left gives
+`homologyMap f ≫ u`, while projection to the right gives
+`(-homologyMap g) ≫ v`.  These forms match consumers whose two homology
+components are subsequently transported by separate comparison maps.
