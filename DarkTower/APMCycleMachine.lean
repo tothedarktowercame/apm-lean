@@ -1038,6 +1038,70 @@ theorem unreviewed_guide_snapshot_is_refused :
     ¬ validGuideSnapshotTransition unreviewedGuideSnapshot := by
   simp [validGuideSnapshotTransition, unreviewedGuideSnapshot]
 
+/-! A cumulative snapshot may carry a memory through many later frames, but
+that transport never changes where the memory was deposited. Shelf holdout is
+sound only over this depositor-owned origin. -/
+structure MemoryOrigin where
+  campaignId : String
+  frameId : String
+  problemId : String
+  deriving DecidableEq, Repr
+
+structure SnapshotMemory where
+  memoryId : String
+  depositorId : String
+  depositorFrameId : String
+  origin : MemoryOrigin
+  deriving DecidableEq, Repr
+
+def SnapshotMemory.ValidOrigin (memory : SnapshotMemory) : Prop :=
+  memory.memoryId ≠ "" ∧ memory.depositorId ≠ "" ∧
+  memory.origin.campaignId ≠ "" ∧ memory.origin.frameId ≠ "" ∧
+  memory.origin.problemId ≠ "" ∧
+  memory.origin.frameId = memory.depositorFrameId
+
+def provenancePreserved
+    (prior republished : SnapshotMemory) : Prop :=
+  prior.memoryId = republished.memoryId → republished.origin = prior.origin
+
+theorem carrying_frame_cannot_replace_depositor_origin
+    (prior republished : SnapshotMemory)
+    (sameMemory : prior.memoryId = republished.memoryId)
+    (preserved : provenancePreserved prior republished) :
+    republished.origin = prior.origin := by
+  exact preserved sameMemory
+
+structure CumulativeSnapshotPublication where
+  declaredLineage : List String
+  prior : List SnapshotMemory
+  published : List SnapshotMemory
+  deriving DecidableEq, Repr
+
+def CumulativeSnapshotPublication.Valid
+    (publication : CumulativeSnapshotPublication) : Prop :=
+  publication.declaredLineage ≠ [] ∧ publication.declaredLineage.Nodup ∧
+  (∀ memory ∈ publication.published, memory.ValidOrigin) ∧
+  (∀ priorMemory ∈ publication.prior,
+    ∀ publishedMemory ∈ publication.published,
+      provenancePreserved priorMemory publishedMemory)
+
+def SameProblemHoldoutValid
+    (problemId : String) (shelf : List SnapshotMemory)
+    (withheld : List String) : Prop :=
+  (∀ memory ∈ shelf, memory.ValidOrigin) ∧
+  ∀ memory, memory ∈ shelf →
+    (memory.memoryId ∈ withheld ↔ memory.origin.problemId = problemId)
+
+theorem same_problem_holdout_uses_depositor_truth
+    (problemId : String) (shelf : List SnapshotMemory) (withheld : List String)
+    (valid : SameProblemHoldoutValid problemId shelf withheld)
+    (memory : SnapshotMemory) (member : memory ∈ shelf)
+    (held : memory.memoryId ∈ withheld) :
+    memory.origin.problemId = problemId ∧
+    memory.origin.frameId = memory.depositorFrameId := by
+  rcases valid.1 memory member with ⟨_, _, _, _, _, depositorTruth⟩
+  exact ⟨(valid.2 memory member).mp held, depositorTruth⟩
+
 def analystWakeEligibleFrameResult (frameResult : String) : Prop :=
   frameResult = "closed" ∨ frameResult = "partial"
 

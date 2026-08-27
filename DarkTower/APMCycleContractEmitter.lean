@@ -189,6 +189,13 @@ def contractJson : Json :=
         ("guide-union-snapshot-content-addressed", Json.bool true),
         ("next-student-binds-latest-reviewed-snapshot", Json.bool true),
         ("candidate-pattern-binding-required", Json.bool true),
+        ("memory-provenance-authority", Json.str "depositor-origin"),
+        ("memory-provenance-preserved-on-republication", Json.bool true),
+        ("memory-lineage-source", Json.str "declared-predecessors-only"),
+        ("memory-lineage-dedup", Json.str "earliest-carrier-wins"),
+        ("memory-snapshot-lineage-pinned", Json.bool true),
+        ("same-problem-holdout-requires-valid-origin", Json.bool true),
+        ("legacy-provenance-repair-marked", Json.bool true),
         ("open-reviewed-corpus-search", Json.bool true),
         ("search-capable-roles", Json.arr
           #[Json.str "student", Json.str "scribe",
