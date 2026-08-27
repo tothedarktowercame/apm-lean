@@ -29,6 +29,9 @@ reassembly, and the conjugated signed-diagonal cokernel to compute ambient H₀.
 `productionConnecting_isIso_of_pieces_isZero` packages the top-degree
 connecting-map calculation, while
 `groupHomologyIsZeroOfModuleHomologyIsZero` moves frozen vanishing hypotheses
-back to the additive-group presentation. This file still does not claim that
+back to the additive-group presentation.
+`productionIntersectionArrow_mono_zero_of_coordinates` exposes the actual
+degree-zero overlap arrow's monicity needed for the H₁ exactness argument.
+This file still does not claim that
 the frozen homology bridge closes; the cover-specific all-degree assembly has
 not yet been wired into Main.

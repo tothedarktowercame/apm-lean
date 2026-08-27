@@ -162,6 +162,34 @@ noncomputable def openCoverH0IsoOfCoordinates
     eI i j (productionReassemblyArrow U V 0) hr hex
     (productionReassemblyArrow_epi_zero U V hU hV hcover)
 
+/-- If the overlap and left cover piece have integral H₀ coordinate, the
+actual signed production overlap arrow is monic in degree zero. -/
+theorem productionIntersectionArrow_mono_zero_of_coordinates
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    [Nonempty (U ∩ V : Set X)] [Nonempty U]
+    (eI : SingularHomology 0 (TopCat.of (U ∩ V : Set X)) ≅ AddCommGrpCat.of ℤ)
+    (eU : SingularHomology 0 (TopCat.of U) ≅ AddCommGrpCat.of ℤ) :
+    Mono (productionIntersectionArrow U V 0) := by
+  let fi : C((U ∩ V : Set X), U) :=
+    ⟨fun x ↦ ⟨x.1, Set.inter_subset_left x.2⟩,
+      continuous_subtype_val.subtype_mk _⟩
+  have hi0 : IsIso (HomologicalComplex.homologyMap
+      (singularPostcomposition fi) 0) := h0Map_isIso_of_iso_int fi eI eU
+  let imap := HomologicalComplex.homologyMap
+      (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.toSSet.map
+          (topologicalSubspaceInclusion (X := X) (A := U ∩ V) (B := U)
+            Set.inter_subset_left))) 0
+  have hi : IsIso imap := by
+    rw [show imap = HomologicalComplex.homologyMap
+      (singularPostcomposition fi) 0 from
+        topologicalSubspaceInclusion_homologyMap _ 0]
+    exact hi0
+  letI : IsIso imap := hi
+  unfold productionIntersectionArrow
+  change Mono (biprod.lift imap _)
+  apply ConstructionTargets.MayerVietorisExactnessIsZero.mono_signedBiprodLift_of_mono_left
+
 /-- If both cover pieces vanish in two adjacent degrees, the production
 connecting arrow between them is an isomorphism. -/
 theorem productionConnecting_isIso_of_pieces_isZero
@@ -202,3 +230,4 @@ end ConstructionTargets.T00A01MayerVietorisAdapters
 #print axioms ConstructionTargets.T00A01MayerVietorisAdapters.openCoverH0IsoOfCoordinates
 #print axioms ConstructionTargets.T00A01MayerVietorisAdapters.productionConnecting_isIso_of_pieces_isZero
 #print axioms ConstructionTargets.T00A01MayerVietorisAdapters.groupHomologyIsZeroOfModuleHomologyIsZero
+#print axioms ConstructionTargets.T00A01MayerVietorisAdapters.productionIntersectionArrow_mono_zero_of_coordinates
