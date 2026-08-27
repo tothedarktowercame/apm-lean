@@ -1,4 +1,7 @@
 import Mathlib
+import ConstructionTargets.CubeBoundaryPathConnected
+import ConstructionTargets.HigherHomotopyCoveringSurjectivity
+import ConstructionTargets.HigherHomotopyCoveringFrozenAdapter
 
 /-!
 # APM t01J02
@@ -105,7 +108,9 @@ surjectivity of the induced map on the homotopy quotient. -/
 theorem apm_t01J02_bridge_pathConnectedSpace_cube_boundary
     (n : ℕ) (hn : 2 ≤ n) :
     PathConnectedSpace ↥(Cube.boundary (Fin n)) := by
-  sorry
+  exact
+    ConstructionTargets.CubeBoundaryPathConnected.cubeBoundary_pathConnectedSpace
+      n hn
 
 theorem apm_t01j02
     (n : ℕ) (hn : 2 ≤ n)
@@ -116,54 +121,17 @@ theorem apm_t01j02
     Function.Bijective
       (apm_t01j02_inducedMap n ⟨p, hp.continuous⟩ xtilde₀ x₀ hbase) := by
   /-
-  CLOSER HOP 2 boundary. The action on quotient representatives is exposed by
-  `apm_t01j02_homotopyMap_mk`; identity and composition laws are now compiled
-  as `apm_t01j02_homotopyMap_id` and `apm_t01j02_homotopyMap_comp`.
-
-  Going beyond the prior boundary search, injectivity no longer requires a
-  separate connectivity construction for the cube boundary. Mathlib's
-  `IsCoveringMap.homotopicRel_iff_comp` applies directly to two generalized
-  loops on the preconnected cube: they agree at any chosen boundary point,
-  and a relative homotopy of their projections therefore lifts to a relative
-  homotopy upstairs. This is compiled in
-  `apm_t01j02_homotopyMap_injective_of_boundary_nonempty`. For `Fin n`, the
-  hypothesis `2 ≤ n` trivially supplies such a boundary point; transporting
-  injectivity across `hbase` is routine equality recasting.
-
-  Mathlib's `IsCoveringMap.existsUnique_continuousMap_lifts` applies to the
-  cube `I^(Fin n)`, since it is simply connected and locally path connected.
-  It therefore supplies a unique lift of every representative cube map after
-  fixing the value at one corner. To make that lift a `GenLoop`, however, one
-  must prove it equals `xtilde₀` on the *entire cube boundary*. This follows
-  because the boundary of an n-cube is path connected for `2 ≤ n`, and each
-  boundary path lifts the constant base path uniquely. Searches found no
-  `PathConnected (Cube.boundary (Fin n))` theorem or equivalent packaged
-  boundary-path construction.
-
-  Thus only surjectivity retains the substantial missing step: after lifting
-  a cube representative with `existsUnique_continuousMap_lifts`, show that the
-  lift is constant on the entire boundary. A second source inspection found
-  no boundary-connectedness theorem, sphere/cube-boundary homeomorphism, or
-  alternative higher-homotopy covering theorem. The earlier searches of
-  `LEMMA-INDEX.md`, `ConstructionTargets/`, closed artifacts, both Mathlib
-  homotopy files, cube/product connectivity, and git history likewise provide
-  no packaged surjectivity bridge.
-
-  Closer hop 3 closes the injective half of the *frozen* theorem itself.
-  `apm_t01j02_inducedMap_injective` chooses the all-zero cube point and a
-  coordinate supplied by `2 ≤ n`, applies the general boundary-point lemma,
-  and transports the result across `hbase`. Thus no injectivity or basepoint-
-  cast work remains in the main theorem.
-
-  I also searched Mathlib's path, polygonal-path, cube splitting,
-  `Cube.boundary_sum_iff`, covering-lift uniqueness, sphere/homeomorphism, and
-  product-connectivity APIs for a local construction. `boundary_sum_iff`
-  decomposes membership but provides no path staying in the union of faces;
-  the lift APIs still require boundary preconnectedness to propagate the
-  chosen corner value. No prior solved artifact or construction target
-  supplies that fact. The sole remaining bridge is therefore surjectivity via
-  a path-connectedness proof for `Cube.boundary (Fin n)` (or an equivalent
-  face-by-face propagation lemma), followed by packaging the lifted map as a
-  `GenLoop` and quotient descent.
+  `CubeBoundaryPathConnected` supplies boundary path connectedness.
+  `HigherHomotopyCoveringSurjectivity` uses it to make the covering lift
+  constant on the boundary and proves bijectivity on the cube quotient.
+  `HigherHomotopyCoveringFrozenAdapter` transports that theorem across
+  `hbase`; unfolding shows its induced map is exactly the frozen map above.
   -/
-  sorry
+  simpa [apm_t01j02_inducedMap,
+    ConstructionTargets.HigherHomotopyCoveringFrozenAdapter.inducedMap,
+    apm_t01j02_homotopyMap,
+    ConstructionTargets.HigherHomotopyCoveringSurjectivity.homotopyMap,
+    apm_t01j02_genLoopMap,
+    ConstructionTargets.HigherHomotopyCoveringSurjectivity.genLoopMap] using
+    (ConstructionTargets.HigherHomotopyCoveringFrozenAdapter.inducedMap_bijective
+      n hn xtilde₀ x₀ p hp hbase)

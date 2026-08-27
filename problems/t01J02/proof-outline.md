@@ -20,13 +20,15 @@ has been identified.
   the required boundary point from `2 ≤ n`, and handles the basepoint cast.
 - `IsCoveringMap.existsUnique_continuousMap_lifts` provides the required lift
   of maps from the simply connected cube.
+- `CubeBoundaryPathConnected.cubeBoundary_pathConnectedSpace` proves the
+  required path connectedness of the finite cube boundary.
+- `HigherHomotopyCoveringSurjectivity.fin_homotopyMap_bijective` packages lift
+  existence, boundary constancy, and relative-homotopy uniqueness.
+- `HigherHomotopyCoveringFrozenAdapter.inducedMap_bijective` transports this
+  bijection through the frozen basepoint equality.
 
-## Remaining boundary
+## Completion
 
-Hop 4 states the missing topological fact as
-`apm_t01J02_bridge_pathConnectedSpace_cube_boundary`: the subtype boundary of
-the `Fin n` cube is path connected whenever `2 ≤ n`. The declaration is
-intentionally unproved. Once available, uniqueness of covering path lifts
-propagates the lifted corner value across the boundary; packaging the lift as
-a `GenLoop` and descending to the quotient then completes surjectivity. The
-main theorem remains unchanged.
+The bridge and final theorem are proved. The frozen definitions and theorem
+statements remain unchanged; the final proof unfolds the two induced-map
+definitions and applies the promoted frozen adapter.
