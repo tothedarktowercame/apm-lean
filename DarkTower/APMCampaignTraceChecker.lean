@@ -220,6 +220,19 @@ def missingPredecessorMutant : TraceSuccessorObservation where
   successorAnnouncedId := "job-2"
   successorActivatedId := "job-2"
 
+def cleanNoSuccessorWitness : TraceSuccessorObservation where
+  predecessorId := ""
+  terminalEvidenceId := ""
+  collectionEvidenceId := ""
+  disposition := "no-supersession"
+  predecessorPersisted := false
+  successorAnnouncedId := ""
+  successorActivatedId := ""
+
+theorem clean_no_successor_trace_nonvacuous :
+    successorTraceValid [cleanNoSuccessorWitness] = true := by
+  rfl
+
 theorem predecessor_durability_trace_nonvacuous :
     successorTraceValid [durableSuccessorWitness] = true := by
   rfl
