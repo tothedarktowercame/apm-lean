@@ -7,6 +7,14 @@ The overlap is transported, without Künneth, to the already constructed
 disjoint union `Circle ⊕ Circle`.  `twoCircleFold` records the literal map
 which retains the first circle coordinate on either component.
 
+At point-set level, `twoCirclesToOverlap` names the inverse map of the overlap
+homotopy equivalence, while `overlapToLeft` and `overlapToRight` are the actual
+subtype inclusions and `leftPieceRetraction`/`rightPieceRetraction` are the
+piece equivalences' maps to `Circle`.  Both resulting composites are proved
+equal to `twoCircleFold`, component by component.  Consequently their native
+`AddCommGrpCat` singular-homology maps agree in every degree, before choosing
+any biproduct coordinates.
+
 The first remaining representation interface is a generic, natural
 isomorphism
 
@@ -14,13 +22,13 @@ isomorphism
 H k (X ⊕ Y) ≅ H k X ⨞ H k Y
 ```
 
-for the production singular-chain functor.  Neither Mathlib nor the current
-ConstructionTargets expose this comparison.  It is needed before the overlap
-can receive explicit `ℤ ⊕ ℤ` coordinates.  After that, the geometric
-square still has to identify each actual subtype inclusion
-`Overlap → leftOpen/rightOpen`, conjugated by the banked homotopy
-equivalences, with `twoCircleFold`; only then may one state the signed H0/H1
-matrices or derive boundary-torus homology from production Mayer–Vietoris.
+for the production singular-chain functor. No banked ConstructionTarget
+exposes this comparison yet. It is needed before the overlap can receive
+explicit `ℤ ⊕ ℤ` coordinates. The geometric inclusion comparison is
+now complete before applying homology.
+After the missing topological-sum comparison is supplied, these map equalities
+can be normalized into signed H0/H1 matrices and used with production
+Mayer–Vietoris to derive boundary-torus homology.
 
 No coproduct-homology comparison, inclusion matrix, Künneth theorem, or
 frozen `t01J03` conclusion is assumed here.
