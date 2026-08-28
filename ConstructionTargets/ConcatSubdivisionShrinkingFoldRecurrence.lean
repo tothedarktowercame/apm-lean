@@ -2052,6 +2052,32 @@ theorem midpointLeftVertexIndex_last
   simp [midpointLeftVertexIndex, concatSegmentCount]
   omega
 
+/-- The subtraction-indexed midpoint chain has the same number of arrows as
+the original left subdivision.  Keeping this equality named prevents its
+elimination underneath the specialized dependent arrow family. -/
+theorem midpointLeftLength_eq
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    concatSegmentCount S T - (T.n + 1) = S.n + 1 := by
+  simp [concatSegmentCount]
+  omega
+
+theorem midpointLeftSegmentIndex_eq_castChainSegment
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    midpointLeftSegmentIndex S T i =
+      castChainSegment (midpointLeftLength_eq S T) i := by
+  apply Fin.ext
+  rfl
+
+theorem midpointLeftVertexIndex_eq_castChainVertex
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 2)) :
+    midpointLeftVertexIndex S T i =
+      castChainVertex (midpointLeftLength_eq S T) i := by
+  apply Fin.ext
+  rfl
+
 /-- Three source and three target transports around one aligned arrow collapse
 to the direct endpoint transports. -/
 theorem eqToHom_three_three_eq_one_one
@@ -2125,6 +2151,48 @@ theorem midpointLeftReindexedFold_eq
         (midpointLeftSegmentIndex S T i))
     (shrinkingPrefixArrow_midpointLeft_eq_conjugate D S T)
   simpa only [shrinkingPrefixObject, Function.comp_apply] using hfold
+
+/-- The generic cross-cardinality reindex theorem applied to the literal
+midpoint shrinking chain.  The displayed chain uses the original-left
+cardinality, while the middle fold remains the definitionally literal
+`shrinkingPrefixFold`. -/
+theorem midpointLeftDisplayedFold_eq_literal
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    TwoOpenDescentDatum.composeFin
+      (fun i : Fin (S.n + 2) =>
+        shrinkingPrefixObject D S T (T.n + 1)
+          (midpointLeftVertexIndex S T i))
+      (fun i : Fin (S.n + 1) =>
+        shrinkingPrefixArrow D S T (T.n + 1)
+          (midpointLeftSegmentIndex S T i)) =
+      (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+        (show midpointLeftVertexIndex S T 0 = 0 by
+          exact midpointLeftVertexIndex_zero S T)).hom ≫
+        shrinkingPrefixFold D S T (T.n + 1) ≫
+        (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+          (show midpointLeftVertexIndex S T (Fin.last (S.n + 1)) =
+              Fin.last (concatSegmentCount S T - (T.n + 1)) by
+            exact midpointLeftVertexIndex_last S T)).inv := by
+  have h := composeFin_cast_reindex (C := C)
+    (midpointLeftLength_eq S T)
+    (shrinkingPrefixObject D S T (T.n + 1))
+    (shrinkingPrefixArrow D S T (T.n + 1))
+    (fun i : Fin (S.n + 1) =>
+      shrinkingPrefixArrow D S T (T.n + 1)
+        (midpointLeftSegmentIndex S T i))
+    (fun i => by
+      change shrinkingPrefixArrow D S T (T.n + 1)
+          (midpointLeftSegmentIndex S T i) = _
+      simpa [objectIsoOfIndexEq,
+        midpointLeftVertexIndex_eq_castChainVertex] using
+        dependentArrow_conjugation_fin
+          (shrinkingPrefixObject D S T (T.n + 1))
+          (shrinkingPrefixArrow D S T (T.n + 1))
+          (midpointLeftSegmentIndex_eq_castChainSegment S T i))
+  simpa only [shrinkingPrefixFold,
+    midpointLeftVertexIndex_eq_castChainVertex] using h
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
@@ -2234,8 +2302,12 @@ theorem midpointLeftReindexedFold_eq
 #print axioms midpointLeftPoint_succ
 #print axioms midpointLeftVertexIndex_zero
 #print axioms midpointLeftVertexIndex_last
+#print axioms midpointLeftLength_eq
+#print axioms midpointLeftSegmentIndex_eq_castChainSegment
+#print axioms midpointLeftVertexIndex_eq_castChainVertex
 #print axioms eqToHom_three_three_eq_one_one
 #print axioms shrinkingPrefixArrow_midpointLeft_eq_conjugate
 #print axioms midpointLeftReindexedFold_eq
+#print axioms midpointLeftDisplayedFold_eq_literal
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence

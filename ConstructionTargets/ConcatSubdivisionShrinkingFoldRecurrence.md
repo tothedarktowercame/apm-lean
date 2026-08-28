@@ -281,15 +281,16 @@ midpoint arrow through these endpoint equalities and
 `composeFin_reindex_of_index_eq`, identifying the entire midpoint fold
 displayed through `midpointLeftVertexIndex` with the literal `S` fold.
 
-The remaining representation seam is the cardinality cast between the
-definition of `shrinkingPrefixFold D S T (T.n+1)`, indexed by
-`Fin (concatSegmentCount S T - (T.n+1) + 1)`, and that compiled displayed
-fold, indexed by `Fin (S.n+2)`. These cardinalities are arithmetically equal,
-but their dependent arrow families cannot be rewritten definitionally.
-`midpointLeftVertexIndex_zero` and `midpointLeftVertexIndex_last` now provide
-the exact endpoint equations for the second whole-chain comparison. Directly
-eliminating the arithmetic cardinality equality inside `shrinkingPrefixFold`
-fails dependent elimination, so the next reusable unit must cast a generic
-`composeFin` chain across a cardinality equality before specializing its
-object and arrow families. No literal midpoint-fold or evaluation equality is
-claimed yet.
+`midpointLeftLength_eq` names the arithmetic equality without eliminating it
+inside the specialized chain. Its segment and vertex coordinate lemmas
+identify the pre-existing midpoint casts with the generic `castChainSegment`
+and `castChainVertex` interface. `midpointLeftDisplayedFold_eq_literal` then
+applies `composeFin_cast_reindex`: the displayed original-left-cardinality
+fold is the literal `shrinkingPrefixFold D S T (T.n+1)`, bracketed by its
+explicit zero and final object transports.
+
+The next seam is categorical cancellation of those outer midpoint transports
+against the point-coordinate transports in `midpointLeftReindexedFold_eq` and
+the accumulated right-block transports in
+`concatComposeFin_eq_midpoint_rightBlock`, before assembling the final
+evaluation-composition theorem.

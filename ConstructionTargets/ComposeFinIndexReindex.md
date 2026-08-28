@@ -6,6 +6,13 @@ successor-arrow compatibility is required only after those isomorphisms align
 the endpoints. `composeFin_reindex_of_index_eq` then applies the banked
 conjugation theorem, so internal transports cancel.
 
+`castChainVertex` and `castChainSegment` represent a chain through a
+propositionally equal length. `composeFin_cast_reindex` is the corresponding
+cross-cardinality theorem: callers provide the cast-indexed arrows with their
+endpoint conjugations, and the total comparison retains only explicit zero
+and final object isomorphisms. The length equality is eliminated only inside
+this generic theorem, before any problem-specific dependent family exists.
+
 `succ_castSucc_eq_castSucc_succ` and `frontRecursionObjectIso` certify the
 specific front-recursion equality that blocked the append proof. No dependent
 arrow family is rewritten by raw `congrArg`.
