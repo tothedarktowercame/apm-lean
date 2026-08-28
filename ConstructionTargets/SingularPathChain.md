@@ -35,3 +35,10 @@ edge-reversal two-simplex before it can identify the subdivision of
 `pathTrans_difference_boundary_of_subdivision_formula` verifies that this one
 orientation/parametrization equation is sufficient to produce the desired
 boundary.  It does not treat the equation as established.
+
+The direct-triangle coordinate layer is now compiled independently of that
+subdivision normal form.  `intervalConcatenationTriangle` has affine parameter
+`z₁ / 2 + z₂`; its three public, proof-insensitive face-value lemmas reduce to
+`(1 + u₁) / 2`, `u₁`, and `u₁ / 2`.  These are the exact scalar identities
+needed to identify the delta, full-concatenation, and gamma faces.  No chain
+boundary theorem is claimed yet.

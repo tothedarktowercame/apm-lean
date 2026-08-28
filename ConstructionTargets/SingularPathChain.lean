@@ -428,6 +428,95 @@ theorem basedLoopH1Class_trans_of_subdivision_formula
   apply sub_eq_zero.mp
   simpa [sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using hclasses
 
+/-! ## Direct concatenation-triangle coordinates -/
+
+/-- The affine parameter with ordered vertex values `0`, `1/2`, and `1`. -/
+def intervalConcatenationTriangle : C(stdSimplex ℝ (Fin 3), unitInterval) :=
+  ⟨fun z ↦ ⟨z.1 1 / 2 + z.1 2, by
+      constructor
+      · exact add_nonneg (div_nonneg (z.2.1 1) (by norm_num)) (z.2.1 2)
+      · have hs := z.2.2
+        rw [Fin.sum_univ_three] at hs
+        nlinarith [z.2.1 0, z.2.1 1, z.2.1 2]⟩,
+    Continuous.subtype_mk
+      (((continuous_apply 1).comp continuous_subtype_val).div_const 2 |>.add
+        ((continuous_apply 2).comp continuous_subtype_val)) (fun z ↦ by
+          constructor
+          · exact add_nonneg (div_nonneg (z.2.1 1) (by norm_num)) (z.2.1 2)
+          · change z.1 1 / 2 + z.1 2 ≤ 1
+            have hs := z.2.2
+            rw [Fin.sum_univ_three] at hs
+            nlinarith [z.2.1 0, z.2.1 1, z.2.1 2])⟩
+
+private theorem faceAffine_one_zero_coord_one
+    (u : stdSimplex ℝ (Fin 2)) : (faceAffine 1 0 u).1 1 = u.1 0 := by
+  change ∑ j : Fin 2, u.1 j *
+      (Pi.single ((0 : Fin 3).succAbove j) 1 : Fin 3 → ℝ) 1 = u.1 0
+  rw [Fin.sum_univ_two]
+  simp
+
+private theorem faceAffine_one_zero_coord_two
+    (u : stdSimplex ℝ (Fin 2)) : (faceAffine 1 0 u).1 2 = u.1 1 := by
+  change ∑ j : Fin 2, u.1 j *
+      (Pi.single ((0 : Fin 3).succAbove j) 1 : Fin 3 → ℝ) 2 = u.1 1
+  rw [Fin.sum_univ_two]
+  simp
+
+private theorem faceAffine_one_one_coord_one
+    (u : stdSimplex ℝ (Fin 2)) : (faceAffine 1 1 u).1 1 = 0 := by
+  change ∑ j : Fin 2, u.1 j *
+      (Pi.single ((1 : Fin 3).succAbove j) 1 : Fin 3 → ℝ) 1 = 0
+  rw [Fin.sum_univ_two]
+  simp [Fin.succAbove]
+
+private theorem faceAffine_one_one_coord_two
+    (u : stdSimplex ℝ (Fin 2)) : (faceAffine 1 1 u).1 2 = u.1 1 := by
+  change ∑ j : Fin 2, u.1 j *
+      (Pi.single ((1 : Fin 3).succAbove j) 1 : Fin 3 → ℝ) 2 = u.1 1
+  rw [Fin.sum_univ_two]
+  simp [Fin.succAbove]
+
+private theorem faceAffine_one_two_coord_one
+    (u : stdSimplex ℝ (Fin 2)) : (faceAffine 1 2 u).1 1 = u.1 1 := by
+  change ∑ j : Fin 2, u.1 j *
+      (Pi.single ((2 : Fin 3).succAbove j) 1 : Fin 3 → ℝ) 1 = u.1 1
+  rw [Fin.sum_univ_two]
+  simp [Fin.succAbove]
+
+private theorem faceAffine_one_two_coord_two
+    (u : stdSimplex ℝ (Fin 2)) : (faceAffine 1 2 u).1 2 = 0 := by
+  change ∑ j : Fin 2, u.1 j *
+      (Pi.single ((2 : Fin 3).succAbove j) 1 : Fin 3 → ℝ) 2 = 0
+  rw [Fin.sum_univ_two]
+  simp [Fin.succAbove]
+
+/-- On face zero, the concatenation parameter runs from `1/2` to `1`. -/
+theorem intervalConcatenationTriangle_face_zero_val
+    (u : stdSimplex ℝ (Fin 2)) :
+    ((intervalConcatenationTriangle.comp (faceAffine 1 0)) u : ℝ) =
+      (1 + u.1 1) / 2 := by
+  change (faceAffine 1 0 u).1 1 / 2 + (faceAffine 1 0 u).1 2 = _
+  rw [faceAffine_one_zero_coord_one, faceAffine_one_zero_coord_two]
+  have hu := u.2.2
+  rw [Fin.sum_univ_two] at hu
+  linarith
+
+/-- On face one, the concatenation parameter is the full interval parameter. -/
+theorem intervalConcatenationTriangle_face_one_val
+    (u : stdSimplex ℝ (Fin 2)) :
+    ((intervalConcatenationTriangle.comp (faceAffine 1 1)) u : ℝ) = u.1 1 := by
+  change (faceAffine 1 1 u).1 1 / 2 + (faceAffine 1 1 u).1 2 = _
+  rw [faceAffine_one_one_coord_one, faceAffine_one_one_coord_two]
+  ring
+
+/-- On face two, the concatenation parameter runs from `0` to `1/2`. -/
+theorem intervalConcatenationTriangle_face_two_val
+    (u : stdSimplex ℝ (Fin 2)) :
+    ((intervalConcatenationTriangle.comp (faceAffine 1 2)) u : ℝ) = u.1 1 / 2 := by
+  change (faceAffine 1 2 u).1 1 / 2 + (faceAffine 1 2 u).1 2 = _
+  rw [faceAffine_one_two_coord_one, faceAffine_one_two_coord_two]
+  ring
+
 #print axioms pathChain_boundary
 #print axioms pathChain_cycle
 #print axioms pathChain_postcomp
@@ -437,5 +526,8 @@ theorem basedLoopH1Class_trans_of_subdivision_formula
 #print axioms basedLoop_subdivision_difference_boundary
 #print axioms pathTrans_difference_boundary_of_subdivision_formula
 #print axioms basedLoopH1Class_trans_of_subdivision_formula
+#print axioms intervalConcatenationTriangle_face_zero_val
+#print axioms intervalConcatenationTriangle_face_one_val
+#print axioms intervalConcatenationTriangle_face_two_val
 
 end ConstructionTargets.SingularPathChain
