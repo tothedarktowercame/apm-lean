@@ -6,11 +6,20 @@ backtracking filler.  For every production singular edge it proves that its
 closed based-loop chain differs from the edge chain plus the initial connector
 minus the terminal connector by an actual production two-chain boundary.
 
-The remaining step is finite assembly: weight this equation by the coefficients
-on `oneChainSupport`, regroup connector chains by their endpoint zero-simplex,
-use `cycle_vertex_balance`, and identify the remaining edge sum with the
-original chain.  The target does compile the coefficient-weighted finite sum
-of all individual defects as one production boundary; the unresolved part is
-the endpoint-indexed regrouping of its connector terms.  Only after that can
-the result be passed through `homologyπ` and
-`fundamentalGroupH1Hom`.  Neither surjectivity nor injectivity is claimed here.
+The endpoint layer is now complete.  It identifies the point represented by
+each production face zero-simplex with the corresponding endpoint of the
+recovered interval path, regroups both connector sums over a finite endpoint
+support, and applies `cycle_vertex_balance` with the terminal-minus-initial
+sign convention.  Thus the connector sums cancel for every production
+one-cycle.
+
+The target reconstructs the original chain from its canonical coefficients,
+builds the weighted closed-loop chain and boundary witness, and proves that
+the original cycle and the finite weighted sum of directly closed edge loops
+have equal production H1 classes.
+
+The remaining step toward surjectivity is algebraic realization of that
+weighted sum as the image under `fundamentalGroupH1Hom` of a finite product of
+integer powers of the closed-edge loops, followed by choosing a cycle
+representative for an arbitrary homology element.  Neither surjectivity nor an
+`Epi` instance is claimed here.
