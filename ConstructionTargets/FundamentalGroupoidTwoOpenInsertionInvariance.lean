@@ -28,15 +28,17 @@ variable {S : PathTwoOpenSubdivision p U V}
 /-- The inserted vertex tuple starts at the old initial vertex. -/
 theorem insertedVertex_zero (ins : SingleVertexInsertion S) :
     insertedVertex S ins.segment ins.parameter 0 = S.vertex 0 := by
-  simpa using insertedVertex_old S ins.segment ins.parameter
-    (0 : Fin (S.n + 2))
+  change ins.refined.vertex 0 = S.vertex 0
+  rw [ins.refined.vertex_zero, S.vertex_zero]
 
 /-- The inserted vertex tuple ends at the old terminal vertex. -/
 theorem insertedVertex_last (ins : SingleVertexInsertion S) :
     insertedVertex S ins.segment ins.parameter (Fin.last (S.n + 2)) =
       S.vertex (Fin.last (S.n + 1)) := by
-  simpa using insertedVertex_old S ins.segment ins.parameter
-    (Fin.last (S.n + 1))
+  change ins.refined.vertex (Fin.last (S.n + 2)) =
+    S.vertex (Fin.last (S.n + 1))
+  simpa only [SingleVertexInsertion.refined_n, S.vertex_last] using
+    ins.refined.vertex_last
 
 end PathTwoOpenSubdivision
 
