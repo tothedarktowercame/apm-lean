@@ -18,7 +18,12 @@ specializations expose the full refined-chain maps with correctly oriented
 retains the single nonadjacent full-chain map.
 
 The remaining proof is `mappedPiece` normalization. Ordinary indices must
-identify the unchanged refined piece and its proof arguments. At the crossing
+identify the unchanged refined piece and its proof arguments. The compiled
+`fullRefined_map_before_eq_mappedPiece` and
+`fullRefined_map_after_eq_mappedPiece` lemmas already expose the relevant
+refined successor maps as concrete `mappedPiece` terms; the remaining equality
+must transport those terms back to the old subdivision through the endpoint
+coordinates. At the crossing
 index, `Functor.map_comp` factors the exposed nonadjacent map into two
 successors; those transported maps then reduce to `mapPath_subpath_split`.
 Only after these successor squares are proved can `ComposableArrows.isoMk`

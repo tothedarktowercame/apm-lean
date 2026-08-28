@@ -206,6 +206,36 @@ theorem refinedRestrictedChain_map_crossing
     (succAbove_old_successor_crossing ins).1
     (succAbove_old_successor_crossing ins).2
 
+/-- The full refined map exposed in the before case is its adjacent mapped
+piece. -/
+theorem fullRefined_map_before_eq_mappedPiece
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S)
+    (i : Fin (S.n + 1)) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain D ins.refined).map
+      (homOfLE (Fin.castSucc_le_castSucc_iff.mpr i.castSucc_le_succ)) =
+        D.mappedPiece ins.refined ⟨i.val, by
+          rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+          omega⟩ := by
+  exact FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.adjacentChain_map_succ
+    _ _ i.val (by
+      rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+      omega)
+
+/-- The shifted full refined map exposed in the after case is its adjacent
+mapped piece. -/
+theorem fullRefined_map_after_eq_mappedPiece
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S)
+    (i : Fin (S.n + 1)) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain D ins.refined).map
+      (homOfLE (Fin.succ_le_succ_iff.mpr i.castSucc_le_succ)) =
+        D.mappedPiece ins.refined ⟨i.val + 1, by
+          rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+          omega⟩ := by
+  exact FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.adjacentChain_map_succ
+    _ _ (i.val + 1) (by
+      rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+      omega)
+
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
 #print axioms succAbove_old_successor_before
@@ -215,6 +245,8 @@ theorem refinedRestrictedChain_map_crossing
 #print axioms refinedRestrictedChain_map_before
 #print axioms refinedRestrictedChain_map_after
 #print axioms refinedRestrictedChain_map_crossing
+#print axioms fullRefined_map_before_eq_mappedPiece
+#print axioms fullRefined_map_after_eq_mappedPiece
 
 end TwoOpenDescentDatum
 
