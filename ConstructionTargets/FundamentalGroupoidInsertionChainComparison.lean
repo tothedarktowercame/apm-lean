@@ -102,6 +102,36 @@ theorem comp_eq_of_prefix_suffix
     _ = (a' ≫ b') ≫ m ≫ (c' ≫ d') := by rw [hleft, hright]
     _ = _ := by simp
 
+/-- The same prefix/suffix substitution with the association produced by
+`evaluate` after its central chain morphism is expanded. -/
+theorem comp_eq_of_prefix_suffix_evaluate_assoc
+    {A B B' C₀ D₀ E E' F : C}
+    (a : A ⟶ B) (b : B ⟶ C₀) (m : C₀ ⟶ D₀)
+    (c : D₀ ⟶ E) (d : E ⟶ F)
+    (a' : A ⟶ B') (b' : B' ⟶ C₀)
+    (c' : D₀ ⟶ E') (d' : E' ⟶ F)
+    (hleft : a ≫ b = a' ≫ b') (hright : c ≫ d = c' ≫ d') :
+    a ≫ ((b ≫ (m ≫ c)) ≫ d) = a' ≫ b' ≫ m ≫ c' ≫ d' := by
+  simpa only [Category.assoc] using
+    comp_eq_of_prefix_suffix a b m c d a' b' c' d' hleft hright
+
+/-- Cancel an isomorphism component inside the right-associated composite
+shape produced by `evaluate`. -/
+theorem comp_iso_hom_inv_evaluate_assoc
+    {A B C₀ E D₀ : C} (a : A ⟶ B) (m : B ⟶ C₀) (e : C₀ ≅ E)
+    (d : C₀ ⟶ D₀) :
+    a ≫ ((m ≫ e.hom) ≫ e.inv ≫ d) = a ≫ m ≫ d := by
+  simp
+
+/-- Whisker an equality of central composites in `evaluate`'s association. -/
+theorem whisker_evaluate_assoc
+    {A B B' C₀ D₀ E : C} (a : A ⟶ B) {q₁ : B ⟶ B'} {q₂ : B' ⟶ C₀}
+    {r : B ⟶ C₀} (h : q₁ ≫ q₂ = r) (c : C₀ ⟶ D₀) (d : D₀ ⟶ E) :
+    a ≫ q₁ ≫ q₂ ≫ c ≫ d = a ≫ r ≫ c ≫ d := by
+  calc
+    _ = a ≫ ((q₁ ≫ q₂) ≫ c ≫ d) := by simp only [Category.assoc]
+    _ = _ := by rw [h]
+
 /-- Changing a Boolean cover label along an actual equality changes neither
 the common-coordinate morphism nor its proof-carrying membership argument. -/
 theorem mapPath_label_eq {b b' : Bool} {a z : X} (q : Path a z)
@@ -1064,6 +1094,70 @@ theorem subdivisionRefinement_hom_naturality
   exact ComposableArrows.naturality' (subdivisionRefinementChainIso D ins).hom
     0 (S.n + 1)
 
+/-- Inserting one vertex into a subordinate subdivision preserves its ordered
+descent evaluation. -/
+theorem evaluate_refined_eq
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    D.evaluate ins.refined = D.evaluate S := by
+  unfold FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.evaluate
+  rw [← FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.adjacentChain_hom_eq_composeFin,
+    ← FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.adjacentChain_hom_eq_composeFin]
+  change eqToHom (congrArg D.obj ins.refined.point_zero).symm ≫
+      (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D ins.refined).hom ≫
+      eqToHom (congrArg D.obj ins.refined.point_last) =
+    eqToHom (congrArg D.obj S.point_zero).symm ≫
+      (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D S).hom ≫
+      eqToHom (congrArg D.obj S.point_last)
+  rw [refined_hom_eq_refinedRestrictedChain_hom D ins]
+  have hstart :
+      eqToHom (congrArg D.obj ins.refined.point_zero).symm ≫
+          eqToHom (congrArg
+            (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+              D ins.refined).obj
+            (succAbove_insertedVertexPosition_zero ins)).symm =
+        eqToHom (congrArg D.obj S.point_zero).symm ≫
+          (subdivisionRefinementChainIso D ins).hom.app 0 := by
+    rw [show (subdivisionRefinementChainIso D ins).hom.app 0 =
+        eqToHom (subdivisionChain_obj_eq_refinedRestrictedChain_obj D ins 0) from rfl]
+    apply eqToHom_two_step_coherence
+  have hend :
+      eqToHom (congrArg
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+            D ins.refined).obj
+          (succAbove_insertedVertexPosition_last ins)) ≫
+          eqToHom (congrArg D.obj ins.refined.point_last) =
+        (subdivisionRefinementChainIso D ins).inv.app (Fin.last (S.n + 1)) ≫
+          eqToHom (congrArg D.obj S.point_last) := by
+    rw [show (subdivisionRefinementChainIso D ins).inv.app (Fin.last (S.n + 1)) =
+        eqToHom (subdivisionChain_obj_eq_refinedRestrictedChain_obj
+          D ins (Fin.last (S.n + 1))).symm from rfl]
+    apply eqToHom_two_step_coherence
+  calc
+    _ = eqToHom (congrArg D.obj S.point_zero).symm ≫
+          (subdivisionRefinementChainIso D ins).hom.app 0 ≫
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+            D ins).hom ≫
+          (subdivisionRefinementChainIso D ins).inv.app (Fin.last (S.n + 1)) ≫
+          eqToHom (congrArg D.obj S.point_last) := by
+      exact comp_eq_of_prefix_suffix_evaluate_assoc _ _
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+            D ins).hom _ _ _ _ _ _ hstart hend
+    _ = _ := by
+      have hnat := (subdivisionRefinement_hom_naturality D ins).symm
+      calc
+        _ = eqToHom (congrArg D.obj S.point_zero).symm ≫
+              ((FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+                  D S).hom ≫
+                (subdivisionRefinementChainIso D ins).hom.app (Fin.last (S.n + 1))) ≫
+              (subdivisionRefinementChainIso D ins).inv.app (Fin.last (S.n + 1)) ≫
+              eqToHom (congrArg D.obj S.point_last) := by
+            exact whisker_evaluate_assoc _ hnat _ _
+        _ = _ := by
+          exact comp_iso_hom_inv_evaluate_assoc _ _
+            ((subdivisionRefinementChainIso D ins).app (Fin.last (S.n + 1))) _
+
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
 #print axioms succAbove_old_successor_before
@@ -1102,6 +1196,8 @@ theorem subdivisionRefinement_hom_naturality
 #print axioms subdivisionRefinementChainIso
 #print axioms subdivisionRefinement_hom_naturality
 #print axioms comp_eq_of_prefix_suffix
+#print axioms comp_eq_of_prefix_suffix_evaluate_assoc
+#print axioms evaluate_refined_eq
 #print axioms eqToHom_conjugation_square
 
 end TwoOpenDescentDatum

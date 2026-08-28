@@ -80,12 +80,17 @@ bridge between `ComposableArrows.hom` and `composeFin` is proved in
 `FundamentalGroupoidTwoOpenInsertion`.
 
 `comp_eq_of_prefix_suffix` is the generic categorical substitution lemma for
-a five-morphism composite: it replaces an explicitly proved two-map prefix
-and two-map suffix while retaining the central morphism. The remaining
-evaluation seam is applying it to Lean's dependent parenthesization after
-unfolding `evaluate`: the refined term elaborates as
-`(a ≫ (b ≫ m) ≫ c) ≫ d`, so neither endpoint pair is present as a
-rewrite subterm. The endpoint equalities themselves compile from
-`eqToHom_two_step_coherence`; what remains is a typed reassociation into the
-lemma's input shape, followed by `subdivisionRefinement_hom_naturality`. No
-evaluation equality is claimed here.
+a five-morphism composite.  Its narrowly associated companion
+`comp_eq_of_prefix_suffix_evaluate_assoc` matches the expression produced by
+unfolding `evaluate`; `whisker_evaluate_assoc` applies the total-chain
+naturality equality inside the surrounding endpoint maps, and
+`comp_iso_hom_inv_evaluate_assoc` cancels the terminal isomorphism component.
+Together these prove `evaluate_refined_eq`: inserting one vertex leaves the
+ordered descent evaluation unchanged.
+
+The next theorem needed for subdivision independence is geometric rather than
+categorical: construct a common ordered refinement of two arbitrary
+subordinate subdivisions, then express each passage to that refinement as a
+finite iteration of `SingleVertexInsertion`.  The current target does not
+claim that common-refinement construction or arbitrary-subdivision
+independence.
