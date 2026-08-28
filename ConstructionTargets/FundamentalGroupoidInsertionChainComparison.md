@@ -79,12 +79,13 @@ restricted refined total morphism.  The separate generic representation
 bridge between `ComposableArrows.hom` and `composeFin` is proved in
 `FundamentalGroupoidTwoOpenInsertion`.
 
-The remaining evaluation seam is endpoint reassociation.  After unfolding
-`evaluate`, the refined expression contains the point-zero transport, the
-restriction transport, the restricted total morphism, the inverse terminal
-component, and the point-last transport.  The endpoint pairs have each been
-proved equal to the corresponding old transport composed with the chain-iso
-component, but the final theorem still needs a reusable whiskered
-reassociation lemma that replaces those pairs inside the five-morphism
-composite before applying `subdivisionRefinement_hom_naturality`.  No
+`comp_eq_of_prefix_suffix` is the generic categorical substitution lemma for
+a five-morphism composite: it replaces an explicitly proved two-map prefix
+and two-map suffix while retaining the central morphism. The remaining
+evaluation seam is applying it to Lean's dependent parenthesization after
+unfolding `evaluate`: the refined term elaborates as
+`(a ≫ (b ≫ m) ≫ c) ≫ d`, so neither endpoint pair is present as a
+rewrite subterm. The endpoint equalities themselves compile from
+`eqToHom_two_step_coherence`; what remains is a typed reassociation into the
+lemma's input shape, followed by `subdivisionRefinement_hom_naturality`. No
 evaluation equality is claimed here.

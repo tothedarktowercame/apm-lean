@@ -87,6 +87,21 @@ theorem eqToHom_two_step_coherence
   subst C₀
   simp
 
+/-- Replace an explicitly proved two-map prefix and two-map suffix around an
+unchanged central morphism. -/
+theorem comp_eq_of_prefix_suffix
+    {A B B' C₀ D₀ E E' F : C}
+    (a : A ⟶ B) (b : B ⟶ C₀) (m : C₀ ⟶ D₀)
+    (c : D₀ ⟶ E) (d : E ⟶ F)
+    (a' : A ⟶ B') (b' : B' ⟶ C₀)
+    (c' : D₀ ⟶ E') (d' : E' ⟶ F)
+    (hleft : a ≫ b = a' ≫ b') (hright : c ≫ d = c' ≫ d') :
+    (a ≫ (b ≫ m ≫ c)) ≫ d = a' ≫ b' ≫ m ≫ c' ≫ d' := by
+  calc
+    _ = (a ≫ b) ≫ m ≫ (c ≫ d) := by simp
+    _ = (a' ≫ b') ≫ m ≫ (c' ≫ d') := by rw [hleft, hright]
+    _ = _ := by simp
+
 /-- Changing a Boolean cover label along an actual equality changes neither
 the common-coordinate morphism nor its proof-carrying membership argument. -/
 theorem mapPath_label_eq {b b' : Bool} {a z : X} (q : Path a z)
@@ -1085,6 +1100,8 @@ theorem subdivisionRefinement_hom_naturality
 #print axioms eqToHom_double_conjugation_square
 #print axioms subdivisionRefinement_naturality_crossing
 #print axioms subdivisionRefinementChainIso
+#print axioms subdivisionRefinement_hom_naturality
+#print axioms comp_eq_of_prefix_suffix
 #print axioms eqToHom_conjugation_square
 
 end TwoOpenDescentDatum
