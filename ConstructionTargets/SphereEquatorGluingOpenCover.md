@@ -45,15 +45,29 @@ homeomorphisms gives jointly continuous homotopies on
 `unitInterval × leftPreimage`, `unitInterval × rightPreimage`, and
 `unitInterval × bothBandPreimage`.
 
+The source endpoint calculations are public and insensitive to subtype
+proofs. `leftPieceSourceHomotopy_zero`,
+`rightPieceSourceHomotopy_zero`, and
+`intersectionPieceSourceHomotopy_zero` prove that all three deformations
+start at the identity. The fixed whole-sphere branches are recorded by
+`leftPieceSourceHomotopy_fixes_inl` and
+`rightPieceSourceHomotopy_fixes_inr`. The four `*_one` lemmas identify each
+band branch at time one with `bandProjectionToEquator`, while the four
+`*_fixes_*_equator` lemmas prove pointwise equator fixation at every time.
+Each branch lemma accepts an arbitrary proof of membership in the named source
+subtype, so later quotient pullbacks do not need to normalize dependent proof
+terms.
+
 Fiber coherence is proved for all three sources by induction over
 `Relation.EqvGen`; each generator case normalizes the explicit branch formulas
 and invokes `bandFlatten_glue_compatible`.  Thus equal fibers of each named
-piece quotient map remain equal throughout its source homotopy.  The exact
-All three subtype-valued quotient lifts are now explicit, with proved pullback
+piece quotient map remain equal throughout its source homotopy. All three
+subtype-valued quotient lifts are now explicit, with proved pullback
 equations and continuity obtained from `continuous_lift_prod_right` (time is
-the locally compact first factor).  The exact remaining obligations are the
-time-zero, endpoint, and fixation equations needed to package the three
-homotopy equivalences.  For example the left
+the locally compact first factor). The remaining obligations are the
+quotient-level endpoint and fixation equations needed to package the three
+homotopy equivalences; their source-level counterparts are complete. For
+example the left
 deformation must define a function of exact type
 
 ```lean

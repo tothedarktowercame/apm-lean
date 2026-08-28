@@ -813,6 +813,152 @@ theorem continuous_intersectionPieceSourceHomotopy (n : ℕ) :
     (intersectionPieceSourceHomotopy n (s, ⟨Sum.inr x.1, x.2⟩)).1 =
       Sum.inr (bandFlatten n s x).1 := rfl
 
+/-! ## Source endpoint and fixation formulas -/
+
+/-- The left-piece source deformation starts at the identity, independently
+of the proof carried by the source subtype. -/
+@[simp] theorem leftPieceSourceHomotopy_zero (n : ℕ)
+    (x : leftPreimage n) :
+    leftPieceSourceHomotopy n ((0 : unitInterval), x) = x := by
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl x => rfl
+  | inr x =>
+      apply Subtype.ext
+      simpa only [leftPieceSourceHomotopy_inr] using
+        congrArg (fun y : equatorialBand n => Sum.inr y.1)
+          (bandFlatten_zero n ⟨x, hx⟩)
+
+/-- The right-piece source deformation starts at the identity, independently
+of the proof carried by the source subtype. -/
+@[simp] theorem rightPieceSourceHomotopy_zero (n : ℕ)
+    (x : rightPreimage n) :
+    rightPieceSourceHomotopy n ((0 : unitInterval), x) = x := by
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl x =>
+      apply Subtype.ext
+      simpa only [rightPieceSourceHomotopy_inl] using
+        congrArg (fun y : equatorialBand n => Sum.inl y.1)
+          (bandFlatten_zero n ⟨x, hx⟩)
+  | inr x => rfl
+
+/-- The overlap source deformation starts at the identity, independently of
+the proof carried by the source subtype. -/
+@[simp] theorem intersectionPieceSourceHomotopy_zero (n : ℕ)
+    (x : bothBandPreimage n) :
+    intersectionPieceSourceHomotopy n ((0 : unitInterval), x) = x := by
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl x =>
+      apply Subtype.ext
+      simpa only [intersectionPieceSourceHomotopy_inl] using
+        congrArg (fun y : equatorialBand n => Sum.inl y.1)
+          (bandFlatten_zero n ⟨x, hx⟩)
+  | inr x =>
+      apply Subtype.ext
+      simpa only [intersectionPieceSourceHomotopy_inr] using
+        congrArg (fun y : equatorialBand n => Sum.inr y.1)
+          (bandFlatten_zero n ⟨x, hx⟩)
+
+/-- The whole-sphere branch of the left source is fixed at every time. -/
+theorem leftPieceSourceHomotopy_fixes_inl (n : ℕ) (s : unitInterval)
+    (x : AmbientSphere n) (hx : Sum.inl x ∈ leftPreimage n) :
+    leftPieceSourceHomotopy n (s, ⟨Sum.inl x, hx⟩) =
+      ⟨Sum.inl x, hx⟩ := by
+  apply Subtype.ext
+  exact leftPieceSourceHomotopy_inl n s x
+
+/-- The whole-sphere branch of the right source is fixed at every time. -/
+theorem rightPieceSourceHomotopy_fixes_inr (n : ℕ) (s : unitInterval)
+    (x : AmbientSphere n) (hx : Sum.inr x ∈ rightPreimage n) :
+    rightPieceSourceHomotopy n (s, ⟨Sum.inr x, hx⟩) =
+      ⟨Sum.inr x, hx⟩ := by
+  apply Subtype.ext
+  exact rightPieceSourceHomotopy_inr n s x
+
+/-- At time one the band branch of the left source lies on the equator. -/
+theorem leftPieceSourceHomotopy_inr_one (n : ℕ) (x : equatorialBand n)
+    (hx : Sum.inr x.1 ∈ leftPreimage n) :
+    (leftPieceSourceHomotopy n
+      ((1 : unitInterval), ⟨Sum.inr x.1, hx⟩)).1 =
+        Sum.inr (equatorInclusion n (bandProjectionToEquator n x)) := by
+  rw [leftPieceSourceHomotopy_inr]
+  rfl
+
+/-- At time one the band branch of the right source lies on the equator. -/
+theorem rightPieceSourceHomotopy_inl_one (n : ℕ) (x : equatorialBand n)
+    (hx : Sum.inl x.1 ∈ rightPreimage n) :
+    (rightPieceSourceHomotopy n
+      ((1 : unitInterval), ⟨Sum.inl x.1, hx⟩)).1 =
+        Sum.inl (equatorInclusion n (bandProjectionToEquator n x)) := by
+  rw [rightPieceSourceHomotopy_inl]
+  rfl
+
+/-- At time one the left band branch of the overlap lies on the equator. -/
+theorem intersectionPieceSourceHomotopy_inl_one (n : ℕ)
+    (x : equatorialBand n) (hx : Sum.inl x.1 ∈ bothBandPreimage n) :
+    (intersectionPieceSourceHomotopy n
+      ((1 : unitInterval), ⟨Sum.inl x.1, hx⟩)).1 =
+        Sum.inl (equatorInclusion n (bandProjectionToEquator n x)) := by
+  rw [intersectionPieceSourceHomotopy_inl]
+  rfl
+
+/-- At time one the right band branch of the overlap lies on the equator. -/
+theorem intersectionPieceSourceHomotopy_inr_one (n : ℕ)
+    (x : equatorialBand n) (hx : Sum.inr x.1 ∈ bothBandPreimage n) :
+    (intersectionPieceSourceHomotopy n
+      ((1 : unitInterval), ⟨Sum.inr x.1, hx⟩)).1 =
+        Sum.inr (equatorInclusion n (bandProjectionToEquator n x)) := by
+  rw [intersectionPieceSourceHomotopy_inr]
+  rfl
+
+/-- The equator in the right band branch of the left source is fixed at every
+time, with no dependence on the chosen membership proof. -/
+theorem leftPieceSourceHomotopy_fixes_inr_equator (n : ℕ)
+    (s : unitInterval) (x : sphereEquator n)
+    (hx : Sum.inr (equatorInclusion n x) ∈ leftPreimage n) :
+    leftPieceSourceHomotopy n
+      (s, ⟨Sum.inr (equatorInclusion n x), hx⟩) =
+        ⟨Sum.inr (equatorInclusion n x), hx⟩ := by
+  apply Subtype.ext
+  simpa only [leftPieceSourceHomotopy_inr] using
+    congrArg Sum.inr (bandFlatten_fixes_equator n s x)
+
+/-- The equator in the left band branch of the right source is fixed at every
+time, with no dependence on the chosen membership proof. -/
+theorem rightPieceSourceHomotopy_fixes_inl_equator (n : ℕ)
+    (s : unitInterval) (x : sphereEquator n)
+    (hx : Sum.inl (equatorInclusion n x) ∈ rightPreimage n) :
+    rightPieceSourceHomotopy n
+      (s, ⟨Sum.inl (equatorInclusion n x), hx⟩) =
+        ⟨Sum.inl (equatorInclusion n x), hx⟩ := by
+  apply Subtype.ext
+  simpa only [rightPieceSourceHomotopy_inl] using
+    congrArg Sum.inl (bandFlatten_fixes_equator n s x)
+
+/-- The left equator branch of the overlap source is fixed at every time. -/
+theorem intersectionPieceSourceHomotopy_fixes_inl_equator (n : ℕ)
+    (s : unitInterval) (x : sphereEquator n)
+    (hx : Sum.inl (equatorInclusion n x) ∈ bothBandPreimage n) :
+    intersectionPieceSourceHomotopy n
+      (s, ⟨Sum.inl (equatorInclusion n x), hx⟩) =
+        ⟨Sum.inl (equatorInclusion n x), hx⟩ := by
+  apply Subtype.ext
+  simpa only [intersectionPieceSourceHomotopy_inl] using
+    congrArg Sum.inl (bandFlatten_fixes_equator n s x)
+
+/-- The right equator branch of the overlap source is fixed at every time. -/
+theorem intersectionPieceSourceHomotopy_fixes_inr_equator (n : ℕ)
+    (s : unitInterval) (x : sphereEquator n)
+    (hx : Sum.inr (equatorInclusion n x) ∈ bothBandPreimage n) :
+    intersectionPieceSourceHomotopy n
+      (s, ⟨Sum.inr (equatorInclusion n x), hx⟩) =
+        ⟨Sum.inr (equatorInclusion n x), hx⟩ := by
+  apply Subtype.ext
+  simpa only [intersectionPieceSourceHomotopy_inr] using
+    congrArg Sum.inr (bandFlatten_fixes_equator n s x)
+
 theorem leftPieceSourceHomotopy_eq_of_eqv (n : ℕ)
     (h : sphereEquator n ≃ₜ sphereEquator n) (s : unitInterval)
     {a b : Sum (AmbientSphere n) (AmbientSphere n)}
@@ -1035,7 +1181,6 @@ theorem continuous_intersectionPieceHomotopyMap (n : ℕ)
   funext p
   exact intersectionPieceHomotopyMap_pullback n h p
 
-
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -1073,6 +1218,19 @@ theorem continuous_intersectionPieceHomotopyMap (n : ℕ)
 #print axioms continuous_leftPieceSourceHomotopy
 #print axioms continuous_rightPieceSourceHomotopy
 #print axioms continuous_intersectionPieceSourceHomotopy
+#print axioms leftPieceSourceHomotopy_zero
+#print axioms rightPieceSourceHomotopy_zero
+#print axioms intersectionPieceSourceHomotopy_zero
+#print axioms leftPieceSourceHomotopy_fixes_inl
+#print axioms rightPieceSourceHomotopy_fixes_inr
+#print axioms leftPieceSourceHomotopy_inr_one
+#print axioms rightPieceSourceHomotopy_inl_one
+#print axioms intersectionPieceSourceHomotopy_inl_one
+#print axioms intersectionPieceSourceHomotopy_inr_one
+#print axioms leftPieceSourceHomotopy_fixes_inr_equator
+#print axioms rightPieceSourceHomotopy_fixes_inl_equator
+#print axioms intersectionPieceSourceHomotopy_fixes_inl_equator
+#print axioms intersectionPieceSourceHomotopy_fixes_inr_equator
 #print axioms leftPieceSourceHomotopy_eq_of_eqv
 #print axioms leftPieceSourceHomotopy_fiber_coherent
 #print axioms rightPieceSourceHomotopy_eq_of_eqv
