@@ -1282,7 +1282,7 @@ def receiptRequiredFields : String → List String
       "receipt/problem-id", "receipt/solve-receipt-id",
       "receipt/mathematical-sound?"]
   | "solver-promotion" => ["receipt/id", "receipt/type", "receipt/frame-id",
-      "receipt/problem-id", "receipt/input-receipt-ids", "receipt/lanes",
+      "receipt/problem-id", "receipt/job-id", "receipt/input-receipt-ids", "receipt/lanes",
       "receipt/dispositions", "receipt/promotion-reviews", "receipt/snapshot-id",
       "receipt/snapshot-digest", "receipt/snapshot-path",
       "receipt/reviewed-memory-ids", "receipt/independent-review?",
@@ -1306,7 +1306,7 @@ def receiptRequiredFields : String → List String
       "receipt/problem-id", "receipt/intervention-ordinal", "receipt/mode",
       "receipt/input-attempt-id", "receipt/effect", "receipt/channel-audit"]
   | "scribe-reduce" => ["receipt/id", "receipt/type", "receipt/frame-id",
-      "receipt/problem-id", "receipt/input-receipt-ids", "receipt/lanes",
+      "receipt/problem-id", "receipt/job-id", "receipt/input-receipt-ids", "receipt/lanes",
       "receipt/dispositions", "receipt/promotion-reviews",
       "receipt/promotion-pass-witness"]
   | "frame-close" => ["receipt/id", "receipt/type", "receipt/frame-id",
