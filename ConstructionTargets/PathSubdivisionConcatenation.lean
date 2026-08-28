@@ -1,16 +1,19 @@
 import ConstructionTargets.TwoOpenDescentQuotient
+import ConstructionTargets.PathMapPathTransport
 
 /-!
 # Coordinate layer for concatenating two-open path subdivisions
 -/
 
-open Set
+open Set CategoryTheory
 open scoped unitInterval
 noncomputable section
 
 namespace ConstructionTargets.PathSubdivisionConcatenation
 
 open ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision
+open ConstructionTargets.FundamentalGroupoidTwoOpenDescent
+open ConstructionTargets.PathMapPathTransport
 
 variable {X : Type*} [TopologicalSpace X]
 variable {x y z : X} {p : Path x y} {q : Path y z} {U V : Set X}
@@ -314,6 +317,173 @@ def concatSubdivision (S : PathTwoOpenSubdivision p U V)
     (concatSubdivision S T).side i = concatSide S T
       (Fin.cast (by simp [concatSubdivision]; omega) i) := rfl
 
+/-- The segment of the concatenated subdivision inherited from `S`. -/
+def leftSegment (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    Fin ((concatSubdivision S T).n + 1) :=
+  Fin.cast (by simp [concatSubdivision]; omega) (Fin.castAdd (T.n + 1) i)
+
+/-- The segment of the concatenated subdivision inherited from `T`. -/
+def rightSegment (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    Fin ((concatSubdivision S T).n + 1) :=
+  Fin.cast (by simp [concatSubdivision]; omega) (Fin.natAdd (S.n + 1) j)
+
+theorem trans_leftHalf_apply (t : unitInterval) : (p.trans q) (leftHalf t) = p t := by
+  rw [Path.trans_apply]
+  split_ifs with h
+  · apply congrArg p
+    apply Subtype.ext
+    simp [leftHalf]
+    ring
+  · exfalso
+    apply h
+    change (t : ℝ) / 2 ≤ 1 / 2
+    linarith [t.2.2]
+
+theorem trans_rightHalf_apply (t : unitInterval) : (p.trans q) (rightHalf t) = q t := by
+  rw [Path.trans_apply]
+  split_ifs with h
+  · have ht : (1 : ℝ) / 2 ≤ (rightHalf t : ℝ) := by
+      change (1 : ℝ) / 2 ≤ (1 + (t : ℝ)) / 2
+      linarith [t.2.1]
+    have heq : (rightHalf t : ℝ) = 1 / 2 := le_antisymm h ht
+    have : t = 0 := by
+      apply Subtype.ext
+      change (t : ℝ) = 0
+      change (1 + (t : ℝ)) / 2 = 1 / 2 at heq
+      linarith
+    subst t
+    simp [p.target, q.source]
+  · apply congrArg q
+    apply Subtype.ext
+    simp [rightHalf]
+    ring
+
+theorem leftSegment_point_castSucc (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    (concatSubdivision S T).point (leftSegment S T i).castSucc = S.point i.castSucc := by
+  change (p.trans q) ((concatSubdivision S T).vertex (leftSegment S T i).castSucc) =
+    p (S.vertex i.castSucc)
+  rw [concatSubdivision_vertex]
+  rw [show Fin.cast _ (leftSegment S T i).castSucc =
+      Fin.cast (by omega) (Fin.castAdd (T.n + 1) i).castSucc by apply Fin.ext; rfl]
+  rw [concatVertex_segment_left_castSucc, trans_leftHalf_apply]
+
+theorem leftSegment_point_succ (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    (concatSubdivision S T).point (leftSegment S T i).succ = S.point i.succ := by
+  change (p.trans q) ((concatSubdivision S T).vertex (leftSegment S T i).succ) =
+    p (S.vertex i.succ)
+  rw [concatSubdivision_vertex]
+  rw [show Fin.cast _ (leftSegment S T i).succ =
+      Fin.cast (by omega) (Fin.castAdd (T.n + 1) i).succ by apply Fin.ext; rfl]
+  rw [concatVertex_segment_left_succ, trans_leftHalf_apply]
+
+theorem rightSegment_point_castSucc (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    (concatSubdivision S T).point (rightSegment S T j).castSucc = T.point j.castSucc := by
+  change (p.trans q) ((concatSubdivision S T).vertex (rightSegment S T j).castSucc) =
+    q (T.vertex j.castSucc)
+  rw [concatSubdivision_vertex]
+  rw [show Fin.cast _ (rightSegment S T j).castSucc =
+      Fin.cast (by omega) (Fin.natAdd (S.n + 1) j).castSucc by apply Fin.ext; rfl]
+  rw [concatVertex_segment_right_castSucc, trans_rightHalf_apply]
+
+theorem rightSegment_point_succ (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    (concatSubdivision S T).point (rightSegment S T j).succ = T.point j.succ := by
+  change (p.trans q) ((concatSubdivision S T).vertex (rightSegment S T j).succ) =
+    q (T.vertex j.succ)
+  rw [concatSubdivision_vertex]
+  rw [show Fin.cast _ (rightSegment S T j).succ =
+      Fin.cast (by omega) (Fin.natAdd (S.n + 1) j).succ by apply Fin.ext; rfl]
+  rw [concatVertex_segment_right_succ, trans_rightHalf_apply]
+
+theorem concatPiece_left_eq_cast (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    (concatSubdivision S T).piece (leftSegment S T i) =
+      (S.piece i).cast (leftSegment_point_castSucc S T i) (leftSegment_point_succ S T i) := by
+  apply Path.ext
+  funext t
+  change (p.trans q).subpath
+    ((concatSubdivision S T).vertex (leftSegment S T i).castSucc)
+    ((concatSubdivision S T).vertex (leftSegment S T i).succ) t = S.piece i t
+  rw [concatSubdivision_vertex, concatSubdivision_vertex]
+  rw [show Fin.cast _ (leftSegment S T i).castSucc =
+      Fin.cast (by omega) (Fin.castAdd (T.n + 1) i).castSucc by apply Fin.ext; rfl,
+    show Fin.cast _ (leftSegment S T i).succ =
+      Fin.cast (by omega) (Fin.castAdd (T.n + 1) i).succ by apply Fin.ext; rfl]
+  rw [concatVertex_segment_left_castSucc, concatVertex_segment_left_succ]
+  exact trans_subpath_left_apply (p := p) (q := q) _ _ t
+
+theorem concatPiece_right_eq_cast (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    (concatSubdivision S T).piece (rightSegment S T j) =
+      (T.piece j).cast (rightSegment_point_castSucc S T j) (rightSegment_point_succ S T j) := by
+  apply Path.ext
+  funext t
+  change (p.trans q).subpath
+    ((concatSubdivision S T).vertex (rightSegment S T j).castSucc)
+    ((concatSubdivision S T).vertex (rightSegment S T j).succ) t = T.piece j t
+  rw [concatSubdivision_vertex, concatSubdivision_vertex]
+  rw [show Fin.cast _ (rightSegment S T j).castSucc =
+      Fin.cast (by omega) (Fin.natAdd (S.n + 1) j).castSucc by apply Fin.ext; rfl,
+    show Fin.cast _ (rightSegment S T j).succ =
+      Fin.cast (by omega) (Fin.natAdd (S.n + 1) j).succ by apply Fin.ext; rfl]
+  rw [concatVertex_segment_right_castSucc, concatVertex_segment_right_succ]
+  exact trans_subpath_right_apply (p := p) (q := q) _ _ t
+
+@[simp] theorem concatSubdivision_side_leftSegment
+    (S : PathTwoOpenSubdivision p U V) (T : PathTwoOpenSubdivision q U V)
+    (i : Fin (S.n + 1)) :
+    (concatSubdivision S T).side (leftSegment S T i) = S.side i := by
+  change concatSide S T (Fin.cast _ (leftSegment S T i)) = S.side i
+  rw [show Fin.cast _ (leftSegment S T i) = Fin.castAdd (T.n + 1) i by
+    apply Fin.ext; rfl]
+  exact concatSide_left S T i
+
+@[simp] theorem concatSubdivision_side_rightSegment
+    (S : PathTwoOpenSubdivision p U V) (T : PathTwoOpenSubdivision q U V)
+    (j : Fin (T.n + 1)) :
+    (concatSubdivision S T).side (rightSegment S T j) = T.side j := by
+  change concatSide S T (Fin.cast _ (rightSegment S T j)) = T.side j
+  rw [show Fin.cast _ (rightSegment S T j) = Fin.natAdd (S.n + 1) j by
+    apply Fin.ext; rfl]
+  exact concatSide_right S T j
+
+theorem mappedPiece_concat_left
+    {C : Type*} [Category C] (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V) (T : PathTwoOpenSubdivision q U V)
+    (i : Fin (S.n + 1)) :
+    D.mappedPiece (concatSubdivision S T) (leftSegment S T i) =
+      eqToHom (congrArg D.obj (leftSegment_point_castSucc S T i)) ≫
+        D.mappedPiece S i ≫
+        eqToHom (congrArg D.obj (leftSegment_point_succ S T i)).symm := by
+  change D.mapPath ((concatSubdivision S T).side (leftSegment S T i))
+      ((concatSubdivision S T).piece (leftSegment S T i)) _ = _
+  simp only [concatSubdivision_side_leftSegment]
+  simp only [concatPiece_left_eq_cast]
+  exact ConstructionTargets.PathMapPathTransport.TwoOpenDescentDatum.mapPath_cast D (S.piece i)
+    (leftSegment_point_castSucc S T i) (leftSegment_point_succ S T i)
+    (S.piece_mem i) _
+
+theorem mappedPiece_concat_right
+    {C : Type*} [Category C] (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V) (T : PathTwoOpenSubdivision q U V)
+    (j : Fin (T.n + 1)) :
+    D.mappedPiece (concatSubdivision S T) (rightSegment S T j) =
+      eqToHom (congrArg D.obj (rightSegment_point_castSucc S T j)) ≫
+        D.mappedPiece T j ≫
+        eqToHom (congrArg D.obj (rightSegment_point_succ S T j)).symm := by
+  change D.mapPath ((concatSubdivision S T).side (rightSegment S T j))
+      ((concatSubdivision S T).piece (rightSegment S T j)) _ = _
+  simp only [concatSubdivision_side_rightSegment]
+  simp only [concatPiece_right_eq_cast]
+  exact ConstructionTargets.PathMapPathTransport.TwoOpenDescentDatum.mapPath_cast D (T.piece j)
+    (rightSegment_point_castSucc S T j) (rightSegment_point_succ S T j)
+    (T.piece_mem j) _
+
 #print axioms concatVertex
 #print axioms concatSide
 #print axioms concatVertex_zero
@@ -323,5 +493,13 @@ def concatSubdivision (S : PathTwoOpenSubdivision p U V)
 #print axioms trans_subpath_right_apply
 #print axioms concatSegment_mem
 #print axioms concatSubdivision
+#print axioms leftSegment_point_castSucc
+#print axioms leftSegment_point_succ
+#print axioms rightSegment_point_castSucc
+#print axioms rightSegment_point_succ
+#print axioms concatPiece_left_eq_cast
+#print axioms concatPiece_right_eq_cast
+#print axioms mappedPiece_concat_left
+#print axioms mappedPiece_concat_right
 
 end ConstructionTargets.PathSubdivisionConcatenation
