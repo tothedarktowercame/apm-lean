@@ -29,16 +29,19 @@ membership proofs after the duplicated Boolean side label is identified with
 the old label. `FunctorMapPreorderTransport.map_eq_of_fixed_endpoints` proves
 that distinct `homOfLE` witnesses have identical functor images.
 
-The remaining ordinary-square step is to state the two endpoint equalities
-used by `mappedPiece_*_eq_transport_refined` in the same named form as
-`subdivisionChain_obj_eq_refinedRestrictedChain_obj` and the `succAbove`
-restriction equalities. This lets the three adjacent `eqToHom` chains cancel
-without eliminating a dependent functor equality. The path and preorder-arrow
-parts no longer remain.
+The ordinary successor squares are now complete.
+`refinedRestrictedChain_map_before_mappedPiece` and its after analogue first
+use `map_eq_of_fixed_endpoints` to normalize the proof-carrying preorder arrow.
+The generic `eqToHom_conjugation_square` then compares the old, restricted,
+and explicit-refined endpoint equalities using their actual equality
+premises.  This yields `subdivisionRefinement_naturality_before` and
+`subdivisionRefinement_naturality_after`, in exactly the orientation required
+by `ComposableArrows.isoMk`.
 
 At the crossing
 index, `Functor.map_comp` factors the exposed nonadjacent map into two
 successors; those transported maps then reduce to `mapPath_subpath_split`.
-Only after these successor squares are proved can `ComposableArrows.isoMk`
-and existing `ComposableArrows.naturality'` be applied. No natural isomorphism
-or total-chain equality is claimed here.
+The remaining successor case is the crossing edge.  Only after its square is
+proved can `ComposableArrows.isoMk` and existing
+`ComposableArrows.naturality'` be applied. No natural isomorphism or
+total-chain equality is claimed here.

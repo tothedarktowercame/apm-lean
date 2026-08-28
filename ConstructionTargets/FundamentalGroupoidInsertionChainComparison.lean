@@ -26,6 +26,22 @@ namespace TwoOpenDescentDatum
 variable (D : @FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum X _ U V C _)
 variable {x y : X} {p : Path x y} {S : PathTwoOpenSubdivision p U V}
 
+/-- Coherence of the three equality transports occurring in an objectwise
+comparison square.  The six equality propositions are explicit; only their
+proofs are identified by proof irrelevance after the objects are aligned. -/
+theorem eqToHom_conjugation_square
+    {A R E B R' E' : C} (f : E ⟶ E')
+    (ha : A = E) (hb : B = E')
+    (ea : A = R) (eb : B = R')
+    (ra : R = E) (rb : R' = E') :
+    (eqToHom ha ≫ f ≫ eqToHom hb.symm) ≫ eqToHom eb =
+      eqToHom ea ≫ (eqToHom ra ≫ f ≫ eqToHom rb.symm) := by
+  subst E
+  subst E'
+  subst R
+  subst R'
+  simp
+
 /-- Changing a Boolean cover label along an actual equality changes neither
 the common-coordinate morphism nor its proof-carrying membership argument. -/
 theorem mapPath_label_eq {b b' : Bool} {a z : X} (q : Path a z)
@@ -304,7 +320,7 @@ theorem mappedPiece_before_eq_transport_refined
     let j : Fin (S.n + 2) := ⟨i.val, by omega⟩
     have hlt : j < PathTwoOpenSubdivision.insertedSidePosition S ins.segment := by
       apply Fin.mk_lt_mk.mpr
-      simp [j, PathTwoOpenSubdivision.insertedSidePosition]
+      change i.val < ins.segment.val + 1
       omega
     simpa [PathTwoOpenSubdivision.insertedSide, j] using
       Fin.insertNth_apply_below (α := fun _ ↦ Bool) hlt
@@ -427,6 +443,104 @@ theorem mappedPiece_after_eq_transport_refined
     PathMapPathTransport.TwoOpenDescentDatum.mapPath_subpath_parameter_eq
       D p ha hb hp (S.piece_mem i)
 
+/-- The before-insertion restricted map with its internal preorder-arrow
+witness normalized before applying the adjacent-map formula. -/
+theorem refinedRestrictedChain_map_before_mappedPiece
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S)
+    (i : Fin (S.n + 1)) (hi : i < ins.segment) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+        D ins).map (homOfLE i.castSucc_le_succ) =
+      eqToHom (congrArg
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).obj (succAbove_old_successor_before ins i hi).1) ≫
+        D.mappedPiece ins.refined ⟨i.val, by
+          rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+          omega⟩ ≫
+        eqToHom (congrArg
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+            D ins.refined).obj (succAbove_old_successor_before ins i hi).2).symm := by
+  rw [refinedRestrictedChain_map_before D ins i hi]
+  congr 1
+  congr 1
+  calc
+    _ = (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).map
+          (homOfLE (Fin.castSucc_le_castSucc_iff.mpr i.castSucc_le_succ)) :=
+      map_eq_of_fixed_endpoints _ _ _
+    _ = _ := fullRefined_map_before_eq_mappedPiece D ins i
+
+/-- The after-insertion restricted map with the shifted internal arrow
+normalized before applying the adjacent-map formula. -/
+theorem refinedRestrictedChain_map_after_mappedPiece
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S)
+    (i : Fin (S.n + 1)) (hi : ins.segment < i) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+        D ins).map (homOfLE i.castSucc_le_succ) =
+      eqToHom (congrArg
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).obj (succAbove_old_successor_after ins i hi).1) ≫
+        D.mappedPiece ins.refined ⟨i.val + 1, by
+          rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+          omega⟩ ≫
+        eqToHom (congrArg
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+            D ins.refined).obj (succAbove_old_successor_after ins i hi).2).symm := by
+  rw [refinedRestrictedChain_map_after D ins i hi]
+  congr 1
+  congr 1
+  calc
+    _ = (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).map
+          (homOfLE (Fin.succ_le_succ_iff.mpr i.castSucc_le_succ)) :=
+      map_eq_of_fixed_endpoints _ _ _
+    _ = _ := fullRefined_map_after_eq_mappedPiece D ins i
+
+/-- Successor naturality for an old edge strictly before the insertion. -/
+theorem subdivisionRefinement_naturality_before
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S)
+    (i : Fin (S.n + 1)) (hi : i < ins.segment) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain D S).map
+          (homOfLE i.castSucc_le_succ) ≫
+        (subdivisionRefinementObjectIso D ins i.succ).hom =
+      (subdivisionRefinementObjectIso D ins i.castSucc).hom ≫
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+          D ins).map (homOfLE i.castSucc_le_succ) := by
+  rw [fullOld_map_eq_mappedPiece D i,
+    refinedRestrictedChain_map_before_mappedPiece D ins i hi,
+    mappedPiece_before_eq_transport_refined D ins i hi]
+  rw [subdivisionRefinementObjectIso_hom, subdivisionRefinementObjectIso_hom]
+  apply eqToHom_conjugation_square
+  · exact (subdivisionChain_obj_eq_refinedRestrictedChain_obj D ins i.succ).trans
+      (congrArg
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).obj (succAbove_old_successor_before ins i hi).2)
+  · exact congrArg
+      (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D ins.refined).obj (succAbove_old_successor_before ins i hi).2
+
+/-- Successor naturality for an old edge strictly after the insertion. -/
+theorem subdivisionRefinement_naturality_after
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S)
+    (i : Fin (S.n + 1)) (hi : ins.segment < i) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain D S).map
+          (homOfLE i.castSucc_le_succ) ≫
+        (subdivisionRefinementObjectIso D ins i.succ).hom =
+      (subdivisionRefinementObjectIso D ins i.castSucc).hom ≫
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+          D ins).map (homOfLE i.castSucc_le_succ) := by
+  rw [fullOld_map_eq_mappedPiece D i,
+    refinedRestrictedChain_map_after_mappedPiece D ins i hi,
+    mappedPiece_after_eq_transport_refined D ins i hi]
+  rw [subdivisionRefinementObjectIso_hom, subdivisionRefinementObjectIso_hom]
+  apply eqToHom_conjugation_square
+  · exact (subdivisionChain_obj_eq_refinedRestrictedChain_obj D ins i.succ).trans
+      (congrArg
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).obj (succAbove_old_successor_after ins i hi).2)
+  · exact congrArg
+      (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D ins.refined).obj (succAbove_old_successor_after ins i hi).2
+
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
 #print axioms succAbove_old_successor_before
@@ -442,6 +556,11 @@ theorem mappedPiece_after_eq_transport_refined
 #print axioms mapPath_label_eq
 #print axioms mappedPiece_before_eq_transport_refined
 #print axioms mappedPiece_after_eq_transport_refined
+#print axioms refinedRestrictedChain_map_before_mappedPiece
+#print axioms refinedRestrictedChain_map_after_mappedPiece
+#print axioms subdivisionRefinement_naturality_before
+#print axioms subdivisionRefinement_naturality_after
+#print axioms eqToHom_conjugation_square
 
 end TwoOpenDescentDatum
 
