@@ -1974,6 +1974,68 @@ theorem concatComposeFin_eq_midpoint_rightBlock
   rw [concatComposeFin_eq_midpoint_rightAccum D S T]
   rw [rightSuffixAccum_full_eq_rightBlock D S T]
 
+/-- Structural segment reindex from the midpoint shrinking stage to the
+original left subdivision. -/
+def midpointLeftSegmentIndex
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    Fin (concatSegmentCount S T - (T.n + 1)) :=
+  Fin.cast (by simp [concatSegmentCount]; omega) i
+
+/-- Structural vertex reindex from the midpoint shrinking stage to the
+original left subdivision. -/
+def midpointLeftVertexIndex
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 2)) :
+    Fin (concatSegmentCount S T - (T.n + 1) + 1) :=
+  Fin.cast (by simp [concatSegmentCount]; omega) i
+
+theorem midpointLeftSegmentEmbedding_eq
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    shrinkingSegmentEmbedding S T (T.n + 1)
+        (midpointLeftSegmentIndex S T i) = leftSegment S T i := by
+  apply Fin.ext
+  rfl
+
+/-- At the midpoint stage, the concatenated path vertex is the corresponding
+vertex of the original left subdivision. -/
+theorem midpointLeftPoint_eq
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 2)) :
+    (concatSubdivision S T).point
+        (shrinkingVertexEmbedding S T (T.n + 1)
+          (midpointLeftVertexIndex S T i)) = S.point i := by
+  refine Fin.lastCases ?_ (fun j => ?_) i
+  · rw [show shrinkingVertexEmbedding S T (T.n + 1)
+        (midpointLeftVertexIndex S T (Fin.last (S.n + 1))) =
+          (leftSegment S T (Fin.last S.n)).succ by
+        apply Fin.ext
+        rfl]
+    exact leftSegment_point_succ S T (Fin.last S.n)
+  · rw [show shrinkingVertexEmbedding S T (T.n + 1)
+        (midpointLeftVertexIndex S T j.castSucc) =
+          (leftSegment S T j).castSucc by
+        apply Fin.ext
+        rfl]
+    exact leftSegment_point_castSucc S T j
+
+theorem midpointLeftPoint_castSucc
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    (concatSubdivision S T).point
+        (shrinkingVertexEmbedding S T (T.n + 1)
+          (midpointLeftVertexIndex S T i.castSucc)) = S.point i.castSucc :=
+  midpointLeftPoint_eq S T i.castSucc
+
+theorem midpointLeftPoint_succ
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    (concatSubdivision S T).point
+        (shrinkingVertexEmbedding S T (T.n + 1)
+          (midpointLeftVertexIndex S T i.succ)) = S.point i.succ :=
+  midpointLeftPoint_eq S T i.succ
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -2074,5 +2136,11 @@ theorem concatComposeFin_eq_midpoint_rightBlock
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum
 #print axioms concatComposeFin_eq_midpoint_rightBlock
+#print axioms midpointLeftSegmentIndex
+#print axioms midpointLeftVertexIndex
+#print axioms midpointLeftSegmentEmbedding_eq
+#print axioms midpointLeftPoint_eq
+#print axioms midpointLeftPoint_castSucc
+#print axioms midpointLeftPoint_succ
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence

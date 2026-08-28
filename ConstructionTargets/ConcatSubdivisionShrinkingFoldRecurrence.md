@@ -268,8 +268,15 @@ is literally the original subdivision `T`'s mapped-piece fold.
 full concatenated fold comparison. It deliberately retains every midpoint,
 reverse-chain, right-block, and terminal endpoint transport.
 
-The next seam is evaluation-level normalization: compare the midpoint prefix
-and its outer transports with `D.evaluate S`, then cancel the displayed
-midpoint and terminal transports against the three-morphism definition of
-`D.evaluate`. No evaluation composition or quotient-functor law is claimed
-here.
+For the remaining left prefix, `midpointLeftSegmentIndex` and
+`midpointLeftVertexIndex` give explicit casts from the original `S` indices
+into the subtraction-indexed midpoint stage.
+`midpointLeftSegmentEmbedding_eq` proves that every such segment is the
+literal `leftSegment`; `midpointLeftPoint_eq` and its `castSucc`/`succ` forms
+identify every midpoint object with the corresponding `S.point` object.
+
+The next seam is arrow-level: conjugate each midpoint
+`shrinkingPrefixArrow` through these endpoint equalities and
+`mappedPiece_concat_left`, then apply the finite-fold reindex theorem. Until
+that dependent arrow comparison is compiled, the midpoint prefix cannot be
+replaced honestly by `S`'s fold, and evaluation composition is not claimed.
