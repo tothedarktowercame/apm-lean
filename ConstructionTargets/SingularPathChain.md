@@ -15,17 +15,15 @@ for `gamma : Path x y`.  A based loop therefore lifts canonically to the
 degree-one cycles object.  Both path chains and point chains commute with the
 production singular-chain map induced by continuous postcomposition.
 
-No homotopy invariance, concatenation formula, Hurewicz homomorphism, or
-homology isomorphism is assumed or proved.  The next missing step is an
-explicit normalization of the six faces of the two compiled square triangles.
-The target now defines `lowerSquareTriangle`, `upperSquareTriangle`, their
-postcomposition with a relative path homotopy, and the signed production chain
-`pathHomotopyPrismChain`.  Its differential is proved to be the oriented sum
-of the two literal alternating face sums.  What remains is to identify the two
-diagonal faces, the time-zero/time-one faces, and the constant endpoint faces.
-In Mathlib's production *unnormalized* singular complex, a constant
-one-simplex is not definitionally the zero chain.  Thus the relative endpoint
-conditions do not themselves delete the two side terms: explicit degenerate
-two-simplex fillers are additionally required.  Only after those fillers are
-constructed can the based-loop homology classes be compared.  Concatenation
-subdivision remains a separate later obligation.
+The target defines the two oriented triangles of the homotopy square and
+proves all six face identities.  Their shared diagonal cancels.  Because
+Mathlib's production singular complex is unnormalized, the two constant side
+edges are removed by subtracting explicit constant two-simplices, rather than
+by treating degenerate chains as zero.  The resulting chain has differential
+`pathChain delta - pathChain gamma`, which proves equality of the associated
+first-homology classes for path-homotopic based loops.
+
+No concatenation formula, Hurewicz homomorphism, or homology isomorphism is
+assumed or proved.  The next separate obligation is the interval-subdivision
+two-chain relating `pathChain (gamma.trans delta)` to the sum of the two path
+chains.

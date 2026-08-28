@@ -177,9 +177,184 @@ theorem pathHomotopyPrismChain_boundary_raw {X : Type} [TopologicalSpace X]
   rw [pathHomotopyPrismChain, Preadditive.add_comp]
   rw [singularGenerator_boundary, singularGenerator_boundary]
 
+theorem lowerHomotopySimplex_face_zero {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    (TopCat.toSSet.obj (TopCat.of X)).δ (0 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (lowerHomotopySimplex H)) =
+      singularSimplexOfContinuousMap _ 1 (pathSimplex delta) := by
+  rw [singularSimplexOfContinuousMap_face]
+  congr 1
+  ext z
+  simp [lowerHomotopySimplex, lowerSquareTriangle, pathSimplex,
+    ConstructionTargets.T02A06SphereH0.singularEdgeOfPath, affineSimplex]
+  calc
+    _ = H (1, stdSimplexHomeomorphUnitInterval z) := by
+      apply congrArg H
+      apply Prod.ext <;> apply Subtype.ext
+      · simpa [Fin.sum_univ_two] using z.2.2
+      · change z.1 1 = z.1 1
+        rfl
+    _ = _ := H.map_one_left _
+
+theorem upperHomotopySimplex_face_one {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    (TopCat.toSSet.obj (TopCat.of X)).δ (1 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (upperHomotopySimplex H)) =
+      singularSimplexOfContinuousMap _ 1 (pathSimplex gamma) := by
+  rw [singularSimplexOfContinuousMap_face]
+  congr 1
+  ext z
+  simp [upperHomotopySimplex, upperSquareTriangle, pathSimplex,
+    ConstructionTargets.T02A06SphereH0.singularEdgeOfPath, affineSimplex]
+  apply congrArg gamma
+  apply Subtype.ext
+  simp [stdSimplexHomeomorphUnitInterval, stdSimplexEquivIcc, Fin.succAbove]
+  rfl
+
+theorem homotopySimplex_diagonal_faces {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    (TopCat.toSSet.obj (TopCat.of X)).δ (1 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (lowerHomotopySimplex H)) =
+      (TopCat.toSSet.obj (TopCat.of X)).δ (2 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (upperHomotopySimplex H)) := by
+  rw [singularSimplexOfContinuousMap_face,
+    singularSimplexOfContinuousMap_face]
+  congr 1
+  ext z
+  simp [lowerHomotopySimplex, upperHomotopySimplex, lowerSquareTriangle,
+    upperSquareTriangle, affineSimplex]
+  apply congrArg H
+  apply Prod.ext <;> apply Subtype.ext <;>
+    simp [Fin.succAbove]
+
+theorem lowerHomotopySimplex_face_two {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    (TopCat.toSSet.obj (TopCat.of X)).δ (2 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (lowerHomotopySimplex H)) =
+      singularSimplexOfContinuousMap _ 1 (pathSimplex (Path.refl x)) := by
+  rw [singularSimplexOfContinuousMap_face]
+  congr 1
+  ext z
+  simp [lowerHomotopySimplex, lowerSquareTriangle, pathSimplex,
+    ConstructionTargets.T02A06SphereH0.singularEdgeOfPath, affineSimplex]
+
+theorem upperHomotopySimplex_face_zero {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    (TopCat.toSSet.obj (TopCat.of X)).δ (0 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (upperHomotopySimplex H)) =
+      singularSimplexOfContinuousMap _ 1 (pathSimplex (Path.refl y)) := by
+  rw [singularSimplexOfContinuousMap_face]
+  congr 1
+  ext z
+  simp [upperHomotopySimplex, upperSquareTriangle, pathSimplex,
+    ConstructionTargets.T02A06SphereH0.singularEdgeOfPath, affineSimplex]
+  calc
+    _ = H (⟨z.1 0, by
+          constructor
+          · exact z.2.1 0
+          · have hs := z.2.2
+            rw [Fin.sum_univ_two] at hs
+            linarith [z.2.1 1]⟩, 1) := by
+      apply congrArg H
+      apply Prod.ext
+      · rfl
+      · apply Subtype.ext
+        simpa [Fin.sum_univ_two] using z.2.2
+    _ = y := H.target _
+
+/-- The completely degenerate singular two-simplex at a point. -/
+def constantTwoSimplex {X : Type} [TopologicalSpace X] (x : X) :
+    C(stdSimplex ℝ (Fin 3), X) := ContinuousMap.const _ x
+
+/-- In the unnormalized singular complex, the alternating boundary of a
+constant two-simplex is the constant one-simplex. -/
+theorem constantTwoSimplex_boundary {X : Type} [TopologicalSpace X] (x : X) :
+    singularGenerator (TopCat.of X) 2
+        (singularSimplexOfContinuousMap _ 2 (constantTwoSimplex x)) ≫
+        (SingularChains (TopCat.of X)).d 2 1 =
+      pathChain (Path.refl x) := by
+  rw [singularGenerator_boundary]
+  rw [Fin.sum_univ_three]
+  simp [pathChain, pathSimplex, constantTwoSimplex,
+    singularSimplexOfContinuousMap_face,
+    ConstructionTargets.T02A06SphereH0.singularEdgeOfPath]
+  congr 2
+
+/-- The six prism faces normalize to top minus bottom, the two constant side
+edges, and two opposite copies of the diagonal. -/
+theorem pathHomotopyPrismChain_boundary {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    pathHomotopyPrismChain H ≫ (SingularChains (TopCat.of X)).d 2 1 =
+      pathChain delta - pathChain gamma + pathChain (Path.refl x) +
+        pathChain (Path.refl y) := by
+  rw [pathHomotopyPrismChain_boundary_raw]
+  rw [Fin.sum_univ_three, Fin.sum_univ_three]
+  rw [lowerHomotopySimplex_face_zero H,
+    upperHomotopySimplex_face_one H,
+    lowerHomotopySimplex_face_two H,
+    upperHomotopySimplex_face_zero H,
+    homotopySimplex_diagonal_faces H]
+  simp [pathChain, sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+
+/-- Subtracting the two explicit degenerate fillers removes the constant side
+edges without passing to normalized chains. -/
+def pathHomotopyBoundaryChain {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    AddCommGrpCat.of ℤ ⟶ (SingularChains (TopCat.of X)).X 2 :=
+  pathHomotopyPrismChain H -
+    singularGenerator (TopCat.of X) 2
+      (singularSimplexOfContinuousMap _ 2 (constantTwoSimplex x)) -
+    singularGenerator (TopCat.of X) 2
+      (singularSimplexOfContinuousMap _ 2 (constantTwoSimplex y))
+
+theorem pathHomotopyBoundaryChain_boundary {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    pathHomotopyBoundaryChain H ≫ (SingularChains (TopCat.of X)).d 2 1 =
+      pathChain delta - pathChain gamma := by
+  rw [pathHomotopyBoundaryChain, Preadditive.sub_comp, Preadditive.sub_comp,
+    pathHomotopyPrismChain_boundary H, constantTwoSimplex_boundary,
+    constantTwoSimplex_boundary]
+  abel
+
+/-- The integral first-homology class represented by a based loop. -/
+noncomputable def basedLoopH1Class {X : Type} [TopologicalSpace X] {x : X}
+    (gamma : Path x x) :
+    AddCommGrpCat.of ℤ ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of X) :=
+  basedLoopCycle gamma ≫ (SingularChains (TopCat.of X)).homologyπ 1
+
+/-- Path-homotopic based loops determine the same integral first-homology
+class.  The proof uses the explicit unnormalized filler above. -/
+theorem basedLoopH1Class_eq_of_homotopy {X : Type} [TopologicalSpace X]
+    {x : X} {gamma delta : Path x x} (H : Path.Homotopy gamma delta) :
+    basedLoopH1Class gamma = basedLoopH1Class delta := by
+  let K := SingularChains (TopCat.of X)
+  let c := pathChain delta - pathChain gamma
+  have hc : c ≫ K.d 1 0 = 0 := by
+    dsimp [c, K]
+    rw [Preadditive.sub_comp, pathChain_cycle, pathChain_cycle, sub_zero]
+  have hboundary : c = pathHomotopyBoundaryChain H ≫ K.d 2 1 := by
+    exact (pathHomotopyBoundaryChain_boundary H).symm
+  have hzero : K.liftCycles c 0 (by simp) hc ≫ K.homologyπ 1 = 0 :=
+    K.liftCycles_homologyπ_eq_zero_of_boundary c 0 (by simp)
+      (pathHomotopyBoundaryChain H) hboundary
+  have hlift : K.liftCycles c 0 (by simp) hc =
+      basedLoopCycle delta - basedLoopCycle gamma := by
+    apply (cancel_mono (K.iCycles 1)).1
+    rw [K.liftCycles_i, Preadditive.sub_comp, basedLoopCycle_i,
+      basedLoopCycle_i]
+  have hclasses : basedLoopH1Class delta - basedLoopH1Class gamma = 0 := by
+    rw [basedLoopH1Class, basedLoopH1Class]
+    rw [← Preadditive.sub_comp, ← hlift]
+    exact hzero
+  exact (sub_eq_zero.mp hclasses).symm
+
 #print axioms pathChain_boundary
 #print axioms pathChain_cycle
 #print axioms pathChain_postcomp
 #print axioms pathHomotopyPrismChain_boundary_raw
+#print axioms pathHomotopyBoundaryChain_boundary
+#print axioms basedLoopH1Class_eq_of_homotopy
 
 end ConstructionTargets.SingularPathChain
