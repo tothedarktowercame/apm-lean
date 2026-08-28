@@ -939,6 +939,38 @@ theorem intersectionPieceSourceHomotopy_fiber_coherent (n : ℕ)
   change Quotient.mk _ a.1 = Quotient.mk _ b.1 at hab'
   exact Quotient.exact hab'
 
+/-! ## Descent to the open quotient pieces -/
+
+noncomputable def leftPieceHomotopyMap (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    unitInterval × leftOpen n h → leftOpen n h := fun p =>
+  namedLeftPieceQuotientMap n h
+    (leftPieceSourceHomotopy n
+      (p.1, Function.surjInv
+        (namedLeftPieceQuotientMap_isQuotientMap n h).surjective p.2))
+
+theorem leftPieceHomotopyMap_pullback (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    (p : unitInterval × leftPreimage n) :
+    leftPieceHomotopyMap n h (p.1, namedLeftPieceQuotientMap n h p.2) =
+      namedLeftPieceQuotientMap n h (leftPieceSourceHomotopy n p) := by
+  apply leftPieceSourceHomotopy_fiber_coherent n h p.1
+  exact Function.surjInv_eq
+    (namedLeftPieceQuotientMap_isQuotientMap n h).surjective
+    (namedLeftPieceQuotientMap n h p.2)
+
+theorem continuous_leftPieceHomotopyMap (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (leftPieceHomotopyMap n h) := by
+  apply (namedLeftPieceQuotientMap_isQuotientMap n h).continuous_lift_prod_right
+  have hc : Continuous (fun p : unitInterval × leftPreimage n =>
+      namedLeftPieceQuotientMap n h (leftPieceSourceHomotopy n p)) :=
+    (namedLeftPieceQuotientMap_isQuotientMap n h).continuous.comp
+      (continuous_leftPieceSourceHomotopy n)
+  convert hc using 1
+  funext p
+  exact leftPieceHomotopyMap_pullback n h p
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -982,5 +1014,7 @@ theorem intersectionPieceSourceHomotopy_fiber_coherent (n : ℕ)
 #print axioms rightPieceSourceHomotopy_fiber_coherent
 #print axioms intersectionPieceSourceHomotopy_eq_of_eqv
 #print axioms intersectionPieceSourceHomotopy_fiber_coherent
+#print axioms leftPieceHomotopyMap_pullback
+#print axioms continuous_leftPieceHomotopyMap
 
 end ConstructionTargets.SphereEquatorGluingOpenCover
