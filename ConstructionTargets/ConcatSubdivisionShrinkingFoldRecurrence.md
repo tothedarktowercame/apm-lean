@@ -285,8 +285,11 @@ The remaining representation seam is the cardinality cast between the
 definition of `shrinkingPrefixFold D S T (T.n+1)`, indexed by
 `Fin (concatSegmentCount S T - (T.n+1) + 1)`, and that compiled displayed
 fold, indexed by `Fin (S.n+2)`. These cardinalities are arithmetically equal,
-but their dependent arrow families cannot be rewritten definitionally. A
-second whole-chain `composeFin_reindex_of_index_eq` comparison with named
-zero/last transports is required before `rightInitialAccum` and the outer
-`evaluate` maps can be normalized. No literal midpoint-fold or evaluation
-equality is claimed yet.
+but their dependent arrow families cannot be rewritten definitionally.
+`midpointLeftVertexIndex_zero` and `midpointLeftVertexIndex_last` now provide
+the exact endpoint equations for the second whole-chain comparison. Directly
+eliminating the arithmetic cardinality equality inside `shrinkingPrefixFold`
+fails dependent elimination, so the next reusable unit must cast a generic
+`composeFin` chain across a cardinality equality before specializing its
+object and arrow families. No literal midpoint-fold or evaluation equality is
+claimed yet.

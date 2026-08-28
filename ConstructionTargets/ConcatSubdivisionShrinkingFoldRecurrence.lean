@@ -2036,6 +2036,22 @@ theorem midpointLeftPoint_succ
           (midpointLeftVertexIndex S T i.succ)) = S.point i.succ :=
   midpointLeftPoint_eq S T i.succ
 
+theorem midpointLeftVertexIndex_zero
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    midpointLeftVertexIndex S T 0 = 0 := by
+  apply Fin.ext
+  rfl
+
+theorem midpointLeftVertexIndex_last
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    midpointLeftVertexIndex S T (Fin.last (S.n + 1)) =
+      Fin.last (concatSegmentCount S T - (T.n + 1)) := by
+  apply Fin.ext
+  simp [midpointLeftVertexIndex, concatSegmentCount]
+  omega
+
 /-- Three source and three target transports around one aligned arrow collapse
 to the direct endpoint transports. -/
 theorem eqToHom_three_three_eq_one_one
@@ -2216,6 +2232,8 @@ theorem midpointLeftReindexedFold_eq
 #print axioms midpointLeftPoint_eq
 #print axioms midpointLeftPoint_castSucc
 #print axioms midpointLeftPoint_succ
+#print axioms midpointLeftVertexIndex_zero
+#print axioms midpointLeftVertexIndex_last
 #print axioms eqToHom_three_three_eq_one_one
 #print axioms shrinkingPrefixArrow_midpointLeft_eq_conjugate
 #print axioms midpointLeftReindexedFold_eq
