@@ -1058,12 +1058,41 @@ theorem reverseRemovalStage_segment_coordinate
 /-- Pointwise actual-mapped-piece comparison in forward segment coordinates.
 The theorem's inferred equality retains all source and target transports from
 `shrinkingPrefixArrow_terminal_eq_rightMappedPiece`. -/
-def reverseRemovalStage_terminalArrow_eq_rightMappedPiece
+theorem reverseRemovalStage_terminalArrow_eq_rightMappedPiece
     (D : @TwoOpenDescentDatum X _ U V C _)
     (S : PathTwoOpenSubdivision p U V)
-    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :=
-  shrinkingPrefixArrow_terminal_eq_rightMappedPiece D S T (T.n - j)
-    (by omega)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    shrinkingPrefixArrow D S T (T.n - j)
+        (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+          simp [concatSegmentCount]
+          omega))) =
+      eqToHom (congrArg
+          (fun k => D.obj ((concatSubdivision S T).point k))
+          (shrinkingEndpoint_castSucc S T (T.n - j)
+            (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+              simp [concatSegmentCount]
+              omega))))) ≫
+        (eqToHom (congrArg
+            (fun k => D.obj ((concatSubdivision S T).point k))
+            (congrArg Fin.castSucc
+              (reverseRemovalStage_segment_coordinate S T j))) ≫
+          D.mappedPiece (concatSubdivision S T) (rightSegment S T j) ≫
+          eqToHom (congrArg
+            (fun k => D.obj ((concatSubdivision S T).point k))
+            (congrArg Fin.succ
+              (reverseRemovalStage_segment_coordinate S T j))).symm) ≫
+        eqToHom (congrArg
+          (fun k => D.obj ((concatSubdivision S T).point k))
+          (shrinkingEndpoint_succ S T (T.n - j)
+            (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+              simp [concatSegmentCount]
+              omega))))).symm := by
+  unfold shrinkingPrefixArrow
+  rw [dependentArrow_conjugation_fin
+    (fun k => D.obj ((concatSubdivision S T).point k))
+    (D.mappedPiece (concatSubdivision S T))
+    (reverseRemovalStage_segment_coordinate S T j)]
+  congr 1
 
 /-- The complete accumulator starts with removal stage `T.n`, hence with
 forward right segment zero, and then continues with the shorter accumulator.
@@ -1148,6 +1177,24 @@ theorem reverseRightObjectIso_last
         (fun k => D.obj ((concatSubdivision S T).point k))
         (reverseRightTerminalVertex_eq_rightBlockVertex S T
           (Fin.last (T.n + 1)))) := rfl
+
+/-- The removal arrow in forward right-block indexing.  Its two outer
+transports identify the arithmetic removal stages with the structural
+`castSucc`/`succ` objects of `reverseRightObject`. -/
+def reverseRightArrow
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    reverseRightObject D S T j.castSucc ⟶
+      reverseRightObject D S T j.succ :=
+  eqToHom (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+      (show reverseRightStage T j.castSucc = (T.n - j) + 1 by
+        rw [reverseRightStage_castSucc]
+        omega)) ≫
+    rightRemovalStep D S T (T.n - j) (by omega) ≫
+    eqToHom (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+      (show reverseRightStage T j.succ = T.n - j by
+        exact reverseRightStage_succ T j)).symm
 
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
@@ -1259,6 +1306,7 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms reverseRightObjectIso
 #print axioms reverseRightObjectIso_zero
 #print axioms reverseRightObjectIso_last
+#print axioms reverseRightArrow
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum

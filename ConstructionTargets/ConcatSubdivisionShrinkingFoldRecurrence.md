@@ -151,16 +151,6 @@ the proof uses index arithmetic and does not identify dependent objects by
 definition. `reverseRightObject` and `reverseRightObjectIso` lift that equality
 to the requested objectwise comparison, with explicit zero and last formulas.
 
-The next exact seam is the arrow family: `rightRemovalStep` at stage
-`T.n-j` has source and target indexed by arithmetic expressions
-`(T.n-j)+1` and `T.n-j`, while `reverseRightObject` uses
-`T.n+1-j.castSucc` and `T.n+1-j.succ`. The banked stage equations prove these
-indices equal, but their induced source/target `eqToHom`s must be composed with
-the boundary and terminal transports inside `rightRemovalStep` before the
-pointwise conjugation theorem typechecks. Consequently
-`composeFin_conjugation_from_comparisonIso` is not applied yet, and no internal
-transport cancellation is assumed.
-
 `eqToHom_three_step_whisker_arrow` supplies the generic terminal-side
 normalization without moving the dependent arrow.
 `shrinkingPrefix_terminal_transport_coherence` applies it to the two inverse
@@ -185,9 +175,16 @@ the midpoint. `concatComposeFin_eq_midpoint_rightAccum` then uses
 `shrinkingPrefixFold_zero` to connect this comparison to the literal full
 concatenated segment fold, retaining its endpoint transports.
 
-The next seam is a whole-chain comparison between `rightSuffixAccum` and
-`rightBlockComposeFin_eq`. The former is indexed from the midpoint back toward
-the original terminal object and carries every stage's named transports; the
-latter is the forward right-block fold. Their coordinate order and endpoint
-transport families must be related explicitly before the concatenated
-evaluation formula can be concluded.
+`reverseRemovalStage_terminalArrow_eq_rightMappedPiece` now states its result
+directly at forward coordinate `j`; it no longer leaves the dependent segment
+`T.n - (T.n - j)` in the mapped-piece term. `reverseRightArrow` packages the
+actual removal step as a forward-indexed heterogeneous chain, using
+`reverseRightStage_castSucc` and `reverseRightStage_succ` at its endpoints.
+
+The next exact seam is its pointwise conjugation by `reverseRightObjectIso`.
+After the segment coordinate is normalized, the remaining source equality is
+between the penultimate vertex of shrinking stage `T.n - j` and
+`(rightSegment S T j).castSucc`; the target has the analogous terminal-vertex
+transport. These equalities must be composed with the boundary and terminal
+transports before `composeFin_conjugation_from_comparisonIso` applies. No
+whole-fold or accumulator comparison is claimed yet.
