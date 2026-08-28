@@ -6,8 +6,13 @@ conjugates the production differential into the degree-one and degree-zero
 coefficient presentations and proves that a cycle maps to zero there.
 
 The next missing algebraic layer is a generator formula for
-`degreeOneCoefficientBoundary`: each one-simplex coefficient must contribute
-its terminal zero-simplex coefficient minus its initial coefficient.  From
-that formula one can derive the finite vertex-balance relation and close each
-simplex path using paths to the chosen basepoint.  No cycle decomposition,
-path-connected closing data, or Hurewicz surjectivity is assumed here.
+the finite vertex-balance relation and the subsequent graph-cycle
+decomposition.  The target now owns coherent one- and zero-coefficient
+generators as images of the production coproduct injections under the same
+coordinate isomorphisms.  It proves their direct-sum normalization and the
+literal formula that the coefficient boundary of a one-simplex generator is
+its terminal generator minus its initial generator.  No separately chosen
+`DecidableEq` instance is compared downstream.
+
+No vertex balance, cycle decomposition, path-connected closing data, or
+Hurewicz surjectivity is assumed here.
