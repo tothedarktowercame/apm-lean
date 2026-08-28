@@ -57,15 +57,18 @@ side label with `mapPath_label_eq`, then invokes
 the dependent membership proofs are aligned only after the path and label
 have been aligned.
 
-The remaining crossing step is categorical normalization of their composite:
-reassociate the four displayed endpoint transports, cancel the two middle
-`eqToHom`s at `p ins.parameter`, apply
-`mapPath_subpath_split_of_subpath_mem` with `S.piece_mem ins.segment`, and then
-feed the resulting conjugated old piece through
-`fullRefined_map_crossing_eq_mappedPieces` and
-`eqToHom_conjugation_square`.  No crossing naturality or chain isomorphism is
-claimed here.
-Only after its square is
-proved can `ComposableArrows.isoMk` and existing
-`ComposableArrows.naturality'` be applied. No natural isomorphism or
-total-chain equality is claimed here.
+The crossing successor square is now complete. The reusable
+`eqToHom_middle_cancel` lemma cancels independently proved transports at the
+inserted point. `mappedPieces_crossing_eq_transport_split` exposes the two
+subpath maps, and `mappedPieces_crossing_eq_transport_old` applies the localized
+subpath-splitting theorem to recover the old mapped piece. The restricted map
+normalizations then yield `subdivisionRefinement_naturality_crossing` in the
+same orientation as the ordinary successor squares. The final endpoint proof
+uses `eqToHom_double_conjugation_square`; it compares the actual equality
+premises rather than depending on definitional equality of their proofs.
+
+The next packet is purely the dependent finite-index assembly: split an
+arbitrary successor index into before/crossing/after cases, supply these three
+squares to `ComposableArrows.isoMk`, and normalize the endpoint components in
+`ComposableArrows.naturality'` to obtain equality of `evaluate`. No chain
+isomorphism or total-evaluation equality is claimed in this target yet.

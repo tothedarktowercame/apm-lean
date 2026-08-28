@@ -44,6 +44,29 @@ theorem eqToHom_conjugation_square
   subst R'
   simp
 
+/-- Two independently constructed equality transports through the same
+intermediate object cancel inside an explicitly reassociated composite. -/
+theorem eqToHom_middle_cancel
+    {A A' B M C₀ E : C} (a : A ⟶ A') (f : A' ⟶ M)
+    (b : M ⟶ C₀) (c : C₀ ⟶ E)
+    (h h' : B = M) :
+    (a ≫ f ≫ eqToHom h.symm) ≫ eqToHom h' ≫ b ≫ c =
+      a ≫ (f ≫ b) ≫ c := by
+  subst M
+  cases h'
+  simp
+
+/-- A pair of source transports which returns to the original source, and two
+independently proved copies of the same target transport, do not change a
+morphism square. -/
+theorem eqToHom_double_conjugation_square
+    {A B R B' : C} (f : A ⟶ B) (hb hb' : B = B')
+    (ha : A = R) (ha' : R = A) :
+    f ≫ eqToHom hb = eqToHom ha ≫ eqToHom ha' ≫ f ≫ eqToHom hb' := by
+  subst B'
+  subst R
+  simp
+
 /-- Changing a Boolean cover label along an actual equality changes neither
 the common-coordinate morphism nor its proof-carrying membership argument. -/
 theorem mapPath_label_eq {b b' : Bool} {a z : X} (q : Path a z)
@@ -759,6 +782,152 @@ theorem mappedPiece_crossingRight_eq_transport
       (crossingRight_vertex_castSucc ins) (crossingRight_vertex_succ ins)
       hp hmem
 
+/-- The two refined crossing pieces, after cancelling their independently
+constructed transports at the inserted point, are the transported composite
+of the two old subpath maps. -/
+theorem mappedPieces_crossing_eq_transport_split
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    D.mappedPiece ins.refined (crossingLeftIndex ins) ≫
+        D.mappedPiece ins.refined (crossingRightIndex ins) =
+      eqToHom (congrArg D.obj (congrArg p
+          (crossingLeft_vertex_castSucc ins))) ≫
+        (D.mapPath (S.side ins.segment)
+            (p.subpath (S.vertex ins.segment.castSucc) ins.parameter)
+            (subpath_mem_of_mem_ordered_segment p
+              (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ)
+              (S.vertex ins.segment.castSucc) ins.parameter
+              (S.monotone_vertex ins.segment.castSucc_le_succ) le_rfl ins.upper
+              ins.lower (S.piece_mem ins.segment)) ≫
+          D.mapPath (S.side ins.segment)
+            (p.subpath ins.parameter (S.vertex ins.segment.succ))
+            (subpath_mem_of_mem_ordered_segment p
+              (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ)
+              ins.parameter (S.vertex ins.segment.succ)
+              (S.monotone_vertex ins.segment.castSucc_le_succ) ins.lower le_rfl
+              ins.upper (S.piece_mem ins.segment))) ≫
+        eqToHom (congrArg D.obj (congrArg p
+          (crossingRight_vertex_succ ins))).symm := by
+  rw [mappedPiece_crossingLeft_eq_transport,
+    mappedPiece_crossingRight_eq_transport]
+  apply eqToHom_middle_cancel
+    (eqToHom (congrArg D.obj (congrArg p
+      (crossingLeft_vertex_castSucc ins))))
+    (D.mapPath (S.side ins.segment)
+      (p.subpath (S.vertex ins.segment.castSucc) ins.parameter) _)
+    (D.mapPath (S.side ins.segment)
+      (p.subpath ins.parameter (S.vertex ins.segment.succ)) _)
+    (eqToHom (congrArg D.obj (congrArg p
+      (crossingRight_vertex_succ ins))).symm)
+    (congrArg D.obj (congrArg p (crossingLeft_vertex_succ ins)))
+    (congrArg D.obj (congrArg p (crossingRight_vertex_castSucc ins)))
+
+/-- The two refined crossing pieces are the old unsplit mapped piece, conjugated
+by the explicit outer endpoint transports. -/
+theorem mappedPieces_crossing_eq_transport_old
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    D.mappedPiece ins.refined (crossingLeftIndex ins) ≫
+        D.mappedPiece ins.refined (crossingRightIndex ins) =
+      eqToHom (congrArg D.obj (congrArg p
+          (crossingLeft_vertex_castSucc ins))) ≫
+        D.mappedPiece S ins.segment ≫
+        eqToHom (congrArg D.obj (congrArg p
+          (crossingRight_vertex_succ ins))).symm := by
+  rw [mappedPieces_crossing_eq_transport_split]
+  unfold FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.mappedPiece
+  simp only [PathTwoOpenSubdivision.piece]
+  have hsplit := mapPath_subpath_split_of_subpath_mem D p
+    (S.vertex ins.segment.castSucc) ins.parameter
+    (S.vertex ins.segment.succ) ins.lower ins.upper (S.piece_mem ins.segment)
+  have hmap :
+      D.mapPath (S.side ins.segment)
+          (p.subpath (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ))
+          (S.piece_mem ins.segment) =
+        D.mapPath (S.side ins.segment)
+            (p.subpath (S.vertex ins.segment.castSucc) ins.parameter)
+            (subpath_mem_of_mem_ordered_segment p
+              (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ)
+              (S.vertex ins.segment.castSucc) ins.parameter
+              (S.monotone_vertex ins.segment.castSucc_le_succ) le_rfl ins.upper
+              ins.lower (S.piece_mem ins.segment)) ≫
+          D.mapPath (S.side ins.segment)
+            (p.subpath ins.parameter (S.vertex ins.segment.succ))
+            (subpath_mem_of_mem_ordered_segment p
+              (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ)
+              ins.parameter (S.vertex ins.segment.succ)
+              (S.monotone_vertex ins.segment.castSucc_le_succ) ins.lower le_rfl
+              ins.upper (S.piece_mem ins.segment)) := by
+    simpa only using hsplit
+  rw [← hmap]
+  rfl
+
+/-- The restricted crossing map with the skipped refined arrow normalized to
+the two adjacent mapped pieces. -/
+theorem refinedRestrictedChain_map_crossing_mappedPieces
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+        D ins).map (homOfLE ins.segment.castSucc_le_succ) =
+      eqToHom (congrArg
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).obj (succAbove_old_successor_crossing ins).1) ≫
+        (D.mappedPiece ins.refined (crossingLeftIndex ins) ≫
+          D.mappedPiece ins.refined (crossingRightIndex ins)) ≫
+        eqToHom (congrArg
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+            D ins.refined).obj (succAbove_old_successor_crossing ins).2).symm := by
+  rw [refinedRestrictedChain_map_crossing D ins]
+  congr 1
+  congr 1
+  calc
+    _ = (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).map (homOfLE (show
+            (⟨ins.segment.val, by change ins.segment.val < S.n + 3; omega⟩ :
+              Fin (ins.refined.n + 2)) ≤
+            ⟨ins.segment.val + 2, by
+              change ins.segment.val + 2 < S.n + 3
+              omega⟩ by exact Fin.mk_le_mk.mpr (by omega))) :=
+      map_eq_of_fixed_endpoints _ _ _
+    _ = _ := by
+      simpa only [crossingLeftIndex, crossingRightIndex] using
+        fullRefined_map_crossing_eq_mappedPieces D ins
+
+/-- The restricted crossing map normalized all the way to the transported old
+mapped piece. -/
+theorem refinedRestrictedChain_map_crossing_old
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+        D ins).map (homOfLE ins.segment.castSucc_le_succ) =
+      eqToHom (congrArg
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).obj (succAbove_old_successor_crossing ins).1) ≫
+        (eqToHom (congrArg D.obj (congrArg p
+            (crossingLeft_vertex_castSucc ins))) ≫
+          D.mappedPiece S ins.segment ≫
+          eqToHom (congrArg D.obj (congrArg p
+            (crossingRight_vertex_succ ins))).symm) ≫
+        eqToHom (congrArg
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+            D ins.refined).obj (succAbove_old_successor_crossing ins).2).symm := by
+  rw [refinedRestrictedChain_map_crossing_mappedPieces D ins]
+  congr 1
+  congr 1
+  exact mappedPieces_crossing_eq_transport_old D ins
+
+/-- Successor naturality at the old edge which is split by the inserted
+vertex. -/
+theorem subdivisionRefinement_naturality_crossing
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain D S).map
+          (homOfLE ins.segment.castSucc_le_succ) ≫
+        (subdivisionRefinementObjectIso D ins ins.segment.succ).hom =
+      (subdivisionRefinementObjectIso D ins ins.segment.castSucc).hom ≫
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+          D ins).map (homOfLE ins.segment.castSucc_le_succ) := by
+  rw [fullOld_map_eq_mappedPiece D ins.segment,
+    refinedRestrictedChain_map_crossing_old D ins]
+  rw [subdivisionRefinementObjectIso_hom, subdivisionRefinementObjectIso_hom]
+  simp only [Category.assoc, eqToHom_trans_assoc, eqToHom_trans]
+  apply eqToHom_double_conjugation_square
+
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
 #print axioms succAbove_old_successor_before
@@ -787,6 +956,13 @@ theorem mappedPiece_crossingRight_eq_transport
 #print axioms crossingRight_side
 #print axioms mappedPiece_crossingLeft_eq_transport
 #print axioms mappedPiece_crossingRight_eq_transport
+#print axioms eqToHom_middle_cancel
+#print axioms mappedPieces_crossing_eq_transport_split
+#print axioms mappedPieces_crossing_eq_transport_old
+#print axioms refinedRestrictedChain_map_crossing_mappedPieces
+#print axioms refinedRestrictedChain_map_crossing_old
+#print axioms eqToHom_double_conjugation_square
+#print axioms subdivisionRefinement_naturality_crossing
 #print axioms eqToHom_conjugation_square
 
 end TwoOpenDescentDatum
