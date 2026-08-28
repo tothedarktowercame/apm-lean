@@ -104,6 +104,19 @@ retraction equation, time-one comparison, `rightPieceHomotopy`, and
 rightOpen n h ≃ₕ AmbientSphere n
 ```
 
-without importing a symmetry or assuming the endpoint equality. The
-intersection retraction, endpoint comparison, and homotopy-equivalence package
-remain downstream. No homology or Mayer--Vietoris statement is present.
+without importing a symmetry or assuming the endpoint equality.
+
+The intersection is complete in one left-equator coordinate.
+`intersectionSourceRetraction` uses `bandProjectionToEquator` on the left
+branch and `h.symm ∘ bandProjectionToEquator` on the right branch, so the
+generator relation has equal coordinates. Its continuity, generated-relation
+coherence, quotient descent, strict retraction equation, and time-one
+comparison are explicit. `intersectionPieceHomotopyEquiv` proves
+
+```lean
+↥(leftOpen n h ∩ rightOpen n h) ≃ₕ sphereEquator n
+```
+
+Thus all three open-cover pieces now have the geometric homotopy equivalences
+needed by a Mayer--Vietoris consumer. No homology or Mayer--Vietoris conclusion
+is stated in this target.

@@ -1599,6 +1599,231 @@ def rightPieceHomotopyEquiv (n : ℕ)
   left_inv := ⟨(rightPieceHomotopy n h).symm⟩
   right_inv := by rw [rightPieceRetraction_comp_inclusion]
 
+/-! ## Intersection quotient-piece equivalence -/
+
+def intersectionSplitRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    equatorialBand n ⊕ equatorialBand n → sphereEquator n :=
+  Sum.elim (bandProjectionToEquator n)
+    (h.symm ∘ bandProjectionToEquator n)
+
+theorem continuous_intersectionSplitRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (intersectionSplitRetraction n h) := by
+  apply Continuous.sumElim
+  · exact continuous_bandProjectionToEquator n
+  · exact h.symm.continuous.comp (continuous_bandProjectionToEquator n)
+
+def intersectionSourceRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    bothBandPreimage n → sphereEquator n :=
+  intersectionSplitRetraction n h ∘ bothBandPreimageSumHomeomorph n
+
+theorem continuous_intersectionSourceRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (intersectionSourceRetraction n h) :=
+  (continuous_intersectionSplitRetraction n h).comp
+    (bothBandPreimageSumHomeomorph n).continuous
+
+@[simp] theorem intersectionSourceRetraction_inl (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (x : equatorialBand n)
+    (hx : Sum.inl x.1 ∈ bothBandPreimage n) :
+    intersectionSourceRetraction n h ⟨Sum.inl x.1, hx⟩ =
+      bandProjectionToEquator n x := rfl
+
+@[simp] theorem intersectionSourceRetraction_inr (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (x : equatorialBand n)
+    (hx : Sum.inr x.1 ∈ bothBandPreimage n) :
+    intersectionSourceRetraction n h ⟨Sum.inr x.1, hx⟩ =
+      h.symm (bandProjectionToEquator n x) := rfl
+
+theorem intersectionSourceRetraction_eq_of_eqv (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    {a b : Sum (AmbientSphere n) (AmbientSphere n)}
+    (ha : a ∈ bothBandPreimage n) (hb : b ∈ bothBandPreimage n)
+    (hab : Relation.EqvGen (EquatorGlueRel n h) a b) :
+    intersectionSourceRetraction n h ⟨a, ha⟩ =
+      intersectionSourceRetraction n h ⟨b, hb⟩ := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue x =>
+          let xl : equatorialBand n :=
+            ⟨equatorInclusion n x, equatorInclusion_mem_band n x⟩
+          let xr : equatorialBand n :=
+            ⟨equatorInclusion n (h x), equatorInclusion_mem_band n (h x)⟩
+          have hpl : bandProjectionToEquator n xl = x := by
+            apply Subtype.ext
+            simpa only [bandProjectionToEquator, xl, bandFlatten,
+              equatorInclusion] using congrArg Subtype.val
+                (bandFlatten_fixes_equator n (1 : unitInterval) x)
+          have hpr : bandProjectionToEquator n xr = h x := by
+            apply Subtype.ext
+            simpa only [bandProjectionToEquator, xr, bandFlatten,
+              equatorInclusion] using congrArg Subtype.val
+                (bandFlatten_fixes_equator n (1 : unitInterval) (h x))
+          have hl := intersectionSourceRetraction_inl n h xl ha
+          have hr := intersectionSourceRetraction_inr n h xr hb
+          rw [hl, hr, hpl, hpr, Homeomorph.symm_apply_apply]
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have haLeft : a ∈ leftPreimage n := by
+        cases a with
+        | inl => trivial
+        | inr => exact ha
+      have haRight : a ∈ rightPreimage n := by
+        cases a with
+        | inl => exact ha
+        | inr => trivial
+      have hmidLeft : b ∈ leftPreimage n :=
+        (leftPreimage_respects n h hab).mp haLeft
+      have hmidRight : b ∈ rightPreimage n :=
+        (rightPreimage_respects n h hab).mp haRight
+      have hmid : b ∈ bothBandPreimage n := by
+        cases b with
+        | inl => exact hmidRight
+        | inr => exact hmidLeft
+      exact (ih₁ ha hmid).trans (ih₂ hmid hb)
+
+theorem intersectionSourceRetraction_fiber_coherent (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    {a b : bothBandPreimage n}
+    (hab : namedIntersectionPieceQuotientMap n h a =
+      namedIntersectionPieceQuotientMap n h b) :
+    intersectionSourceRetraction n h a =
+      intersectionSourceRetraction n h b := by
+  have hab' := congrArg Subtype.val hab
+  change Quotient.mk _ a.1 = Quotient.mk _ b.1 at hab'
+  apply intersectionSourceRetraction_eq_of_eqv n h a.2 b.2
+  exact Quotient.exact hab'
+
+noncomputable def intersectionPieceRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    ↥(leftOpen n h ∩ rightOpen n h) → sphereEquator n := fun x =>
+  intersectionSourceRetraction n h <|
+    Function.surjInv
+      (namedIntersectionPieceQuotientMap_isQuotientMap n h).surjective x
+
+theorem intersectionPieceRetraction_pullback (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    (x : bothBandPreimage n) :
+    intersectionPieceRetraction n h
+        (namedIntersectionPieceQuotientMap n h x) =
+      intersectionSourceRetraction n h x := by
+  apply intersectionSourceRetraction_fiber_coherent n h
+  exact Function.surjInv_eq
+    (namedIntersectionPieceQuotientMap_isQuotientMap n h).surjective
+    (namedIntersectionPieceQuotientMap n h x)
+
+theorem continuous_intersectionPieceRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (intersectionPieceRetraction n h) := by
+  rw [(namedIntersectionPieceQuotientMap_isQuotientMap n h).continuous_iff]
+  convert continuous_intersectionSourceRetraction n h using 1
+  funext x
+  exact intersectionPieceRetraction_pullback n h x
+
+theorem intersectionPieceRetraction_comp_inclusion (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    (⟨intersectionPieceRetraction n h,
+        continuous_intersectionPieceRetraction n h⟩ :
+      C(↥(leftOpen n h ∩ rightOpen n h), sphereEquator n)).comp
+        (equatorIntersectionInclusion n h) =
+      ContinuousMap.id (sphereEquator n) := by
+  apply ContinuousMap.ext
+  intro x
+  change intersectionPieceRetraction n h
+      (namedIntersectionPieceQuotientMap n h
+        ⟨Sum.inl (equatorInclusion n x), equatorInclusion_mem_band n x⟩) = x
+  rw [intersectionPieceRetraction_pullback]
+  let xb : equatorialBand n :=
+    ⟨equatorInclusion n x, equatorInclusion_mem_band n x⟩
+  have hr := intersectionSourceRetraction_inl n h xb
+    (equatorInclusion_mem_band n x)
+  rw [hr]
+  apply Subtype.ext
+  simpa only [bandProjectionToEquator, xb, bandFlatten,
+    equatorInclusion] using congrArg Subtype.val
+      (bandFlatten_fixes_equator n (1 : unitInterval) x)
+
+theorem intersectionPieceHomotopyMap_one (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    (x : ↥(leftOpen n h ∩ rightOpen n h)) :
+    intersectionPieceHomotopyMap n h ((1 : unitInterval), x) =
+      equatorIntersectionInclusion n h
+        (intersectionPieceRetraction n h x) := by
+  obtain ⟨y, rfl⟩ :=
+    (namedIntersectionPieceQuotientMap_isQuotientMap n h).surjective x
+  rw [intersectionPieceRetraction_pullback]
+  calc
+   intersectionPieceHomotopyMap n h
+       ((1 : unitInterval), namedIntersectionPieceQuotientMap n h y) =
+      namedIntersectionPieceQuotientMap n h
+        (intersectionPieceSourceHomotopy n ((1 : unitInterval), y)) :=
+    intersectionPieceHomotopyMap_pullback n h ((1 : unitInterval), y)
+   _ = equatorIntersectionInclusion n h
+       (intersectionSourceRetraction n h y) := by
+    rcases y with ⟨y, hy⟩
+    cases y with
+    | inl y =>
+        let yb : equatorialBand n := ⟨y, hy⟩
+        have hs : intersectionPieceSourceHomotopy n
+            ((1 : unitInterval), ⟨Sum.inl y, hy⟩) =
+            ⟨Sum.inl (equatorInclusion n (bandProjectionToEquator n yb)),
+              equatorInclusion_mem_band n (bandProjectionToEquator n yb)⟩ := by
+          apply Subtype.ext
+          exact intersectionPieceSourceHomotopy_inl_one n yb hy
+        have hr : intersectionSourceRetraction n h ⟨Sum.inl y, hy⟩ =
+            bandProjectionToEquator n yb := by
+          simpa only [yb] using intersectionSourceRetraction_inl n h yb hy
+        rw [hr, congrArg (namedIntersectionPieceQuotientMap n h) hs]
+        apply Subtype.ext
+        rfl
+    | inr y =>
+        let yb : equatorialBand n := ⟨y, hy⟩
+        let z : sphereEquator n := h.symm (bandProjectionToEquator n yb)
+        have hs : intersectionPieceSourceHomotopy n
+            ((1 : unitInterval), ⟨Sum.inr y, hy⟩) =
+            ⟨Sum.inr (equatorInclusion n (bandProjectionToEquator n yb)),
+              equatorInclusion_mem_band n (bandProjectionToEquator n yb)⟩ := by
+          apply Subtype.ext
+          exact intersectionPieceSourceHomotopy_inr_one n yb hy
+        have hr : intersectionSourceRetraction n h ⟨Sum.inr y, hy⟩ = z := by
+          simpa only [yb, z] using intersectionSourceRetraction_inr n h yb hy
+        rw [hr, congrArg (namedIntersectionPieceQuotientMap n h) hs]
+        apply Subtype.ext
+        change Quotient.mk _
+            (Sum.inr (equatorInclusion n (bandProjectionToEquator n yb))) =
+          Quotient.mk _ (Sum.inl (equatorInclusion n z))
+        have hglue : quotientMap n h (Sum.inl (equatorInclusion n z)) =
+            quotientMap n h (Sum.inr (equatorInclusion n (h z))) := by
+          exact Quotient.sound
+            (Relation.EqvGen.rel _ _
+              (EquatorGlueRel.glue (n := n) (h := h) z))
+        simpa only [z, Homeomorph.apply_symm_apply] using hglue.symm
+
+def intersectionPieceHomotopy (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    ContinuousMap.Homotopy
+      (ContinuousMap.id ↥(leftOpen n h ∩ rightOpen n h))
+      ((equatorIntersectionInclusion n h).comp
+        ⟨intersectionPieceRetraction n h,
+          continuous_intersectionPieceRetraction n h⟩) where
+  toFun := intersectionPieceHomotopyMap n h
+  continuous_toFun := continuous_intersectionPieceHomotopyMap n h
+  map_zero_left := intersectionPieceHomotopyMap_zero n h
+  map_one_left := intersectionPieceHomotopyMap_one n h
+
+def intersectionPieceHomotopyEquiv (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    ↥(leftOpen n h ∩ rightOpen n h) ≃ₕ sphereEquator n where
+  toFun := ⟨intersectionPieceRetraction n h,
+    continuous_intersectionPieceRetraction n h⟩
+  invFun := equatorIntersectionInclusion n h
+  left_inv := ⟨(intersectionPieceHomotopy n h).symm⟩
+  right_inv := by rw [intersectionPieceRetraction_comp_inclusion]
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -1683,5 +1908,13 @@ def rightPieceHomotopyEquiv (n : ℕ)
 #print axioms rightPieceHomotopyMap_one
 #print axioms rightPieceHomotopy
 #print axioms rightPieceHomotopyEquiv
+#print axioms continuous_intersectionSourceRetraction
+#print axioms intersectionSourceRetraction_eq_of_eqv
+#print axioms intersectionSourceRetraction_fiber_coherent
+#print axioms continuous_intersectionPieceRetraction
+#print axioms intersectionPieceRetraction_comp_inclusion
+#print axioms intersectionPieceHomotopyMap_one
+#print axioms intersectionPieceHomotopy
+#print axioms intersectionPieceHomotopyEquiv
 
 end ConstructionTargets.SphereEquatorGluingOpenCover
