@@ -517,6 +517,161 @@ theorem intervalConcatenationTriangle_face_two_val
   rw [faceAffine_one_two_coord_one, faceAffine_one_two_coord_two]
   ring
 
+/-! ## The direct concatenation boundary -/
+
+/-- The singular triangle obtained by evaluating the concatenated path at the
+affine parameter with vertex values `0`, `1/2`, and `1`. -/
+def pathTransTriangle {X : Type} [TopologicalSpace X] {x y z : X}
+    (gamma : Path x y) (delta : Path y z) :
+    C(stdSimplex ℝ (Fin 3), X) :=
+  (gamma.trans delta).toContinuousMap.comp intervalConcatenationTriangle
+
+theorem pathTransTriangle_face_zero {X : Type} [TopologicalSpace X]
+    {x y z : X} (gamma : Path x y) (delta : Path y z) :
+    (TopCat.toSSet.obj (TopCat.of X)).δ (0 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (pathTransTriangle gamma delta)) =
+      singularSimplexOfContinuousMap _ 1 (pathSimplex delta) := by
+  rw [singularSimplexOfContinuousMap_face]
+  congr 1
+  ext u
+  change (gamma.trans delta)
+      (intervalConcatenationTriangle (faceAffine 1 0 u)) =
+    delta (stdSimplexHomeomorphUnitInterval u)
+  rw [Path.trans_apply]
+  split_ifs with h
+  · have hu := u.2.2
+    rw [Fin.sum_univ_two] at hu
+    have hval := intervalConcatenationTriangle_face_zero_val u
+    have hu1 : u.1 1 = 0 := by
+      change ((intervalConcatenationTriangle.comp (faceAffine 1 0)) u : ℝ) ≤ 1 / 2 at h
+      rw [hval] at h
+      nlinarith [u.2.1 0, u.2.1 1]
+    have hp : (intervalConcatenationTriangle
+        (faceAffine 1 0 u) : ℝ) = 1 / 2 := by
+      change ((intervalConcatenationTriangle.comp
+        (faceAffine 1 0)) u : ℝ) = 1 / 2
+      rw [hval, hu1]
+      norm_num
+    have huparam : (stdSimplexHomeomorphUnitInterval u : ℝ) = 0 := by
+      simp [stdSimplexHomeomorphUnitInterval, stdSimplexEquivIcc, hu1]
+    calc
+      gamma ⟨2 * (intervalConcatenationTriangle
+          (faceAffine 1 0 u) : ℝ), _⟩ = gamma 1 := by
+        apply congrArg gamma
+        apply Subtype.ext
+        change 2 * (intervalConcatenationTriangle
+          (faceAffine 1 0 u) : ℝ) = 1
+        linarith
+      _ = y := gamma.target
+      _ = delta 0 := delta.source.symm
+      _ = delta (stdSimplexHomeomorphUnitInterval u) := by
+        apply congrArg delta
+        apply Subtype.ext
+        exact huparam.symm
+  · apply congrArg delta
+    apply Subtype.ext
+    have hval := intervalConcatenationTriangle_face_zero_val u
+    change 2 * ((intervalConcatenationTriangle.comp
+      (faceAffine 1 0)) u : ℝ) - 1 = _
+    rw [hval]
+    simp [stdSimplexHomeomorphUnitInterval, stdSimplexEquivIcc]
+    ring
+
+theorem pathTransTriangle_face_one {X : Type} [TopologicalSpace X]
+    {x y z : X} (gamma : Path x y) (delta : Path y z) :
+    (TopCat.toSSet.obj (TopCat.of X)).δ (1 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (pathTransTriangle gamma delta)) =
+      singularSimplexOfContinuousMap _ 1
+        (pathSimplex (gamma.trans delta)) := by
+  rw [singularSimplexOfContinuousMap_face]
+  congr 1
+  ext u
+  apply congrArg (gamma.trans delta)
+  apply Subtype.ext
+  exact intervalConcatenationTriangle_face_one_val u
+
+theorem pathTransTriangle_face_two {X : Type} [TopologicalSpace X]
+    {x y z : X} (gamma : Path x y) (delta : Path y z) :
+    (TopCat.toSSet.obj (TopCat.of X)).δ (2 : Fin 3)
+        (singularSimplexOfContinuousMap _ 2 (pathTransTriangle gamma delta)) =
+      singularSimplexOfContinuousMap _ 1 (pathSimplex gamma) := by
+  rw [singularSimplexOfContinuousMap_face]
+  congr 1
+  ext u
+  change (gamma.trans delta)
+      (intervalConcatenationTriangle (faceAffine 1 2 u)) =
+    gamma (stdSimplexHomeomorphUnitInterval u)
+  rw [Path.trans_apply]
+  split_ifs with h
+  · apply congrArg gamma
+    apply Subtype.ext
+    have hval := intervalConcatenationTriangle_face_two_val u
+    change 2 * ((intervalConcatenationTriangle.comp
+      (faceAffine 1 2)) u : ℝ) = _
+    rw [hval]
+    simp [stdSimplexHomeomorphUnitInterval, stdSimplexEquivIcc]
+    ring
+  · have hval := intervalConcatenationTriangle_face_two_val u
+    exfalso
+    apply h
+    change ((intervalConcatenationTriangle.comp (faceAffine 1 2)) u : ℝ) ≤ 1 / 2
+    rw [hval]
+    have hu := u.2.2
+    rw [Fin.sum_univ_two] at hu
+    nlinarith [u.2.1 0, u.2.1 1]
+
+/-- The production differential of the direct concatenation triangle has the
+standard oriented boundary `delta - (gamma.trans delta) + gamma`. -/
+theorem pathTransTriangle_boundary {X : Type} [TopologicalSpace X]
+    {x y z : X} (gamma : Path x y) (delta : Path y z) :
+    singularGenerator (TopCat.of X) 2
+        (singularSimplexOfContinuousMap _ 2
+          (pathTransTriangle gamma delta)) ≫
+        (SingularChains (TopCat.of X)).d 2 1 =
+      pathChain delta - pathChain (gamma.trans delta) + pathChain gamma := by
+  rw [singularGenerator_boundary, Fin.sum_univ_three,
+    pathTransTriangle_face_zero, pathTransTriangle_face_one,
+    pathTransTriangle_face_two]
+  simp [pathChain, sub_eq_add_neg]
+
+theorem pathTrans_difference_boundary {X : Type} [TopologicalSpace X]
+    {x : X} (gamma delta : Path x x) :
+    ∃ b : AddCommGrpCat.of ℤ ⟶ (SingularChains (TopCat.of X)).X 2,
+      pathChain (gamma.trans delta) - pathChain gamma - pathChain delta =
+        b ≫ (SingularChains (TopCat.of X)).d 2 1 := by
+  refine ⟨-singularGenerator (TopCat.of X) 2
+    (singularSimplexOfContinuousMap _ 2 (pathTransTriangle gamma delta)), ?_⟩
+  rw [Preadditive.neg_comp, pathTransTriangle_boundary]
+  abel
+
+theorem basedLoopH1Class_trans {X : Type} [TopologicalSpace X] {x : X}
+    (gamma delta : Path x x) :
+    basedLoopH1Class (gamma.trans delta) =
+      basedLoopH1Class gamma + basedLoopH1Class delta := by
+  let K := SingularChains (TopCat.of X)
+  let c := pathChain (gamma.trans delta) - pathChain gamma - pathChain delta
+  have hc : c ≫ K.d 1 0 = 0 := by
+    dsimp [c, K]
+    rw [Preadditive.sub_comp, Preadditive.sub_comp, pathChain_cycle,
+      pathChain_cycle, pathChain_cycle]
+    simp
+  obtain ⟨b, hb⟩ := pathTrans_difference_boundary gamma delta
+  have hzero : K.liftCycles c 0 (by simp) hc ≫ K.homologyπ 1 = 0 :=
+    K.liftCycles_homologyπ_eq_zero_of_boundary c 0 (by simp) b hb
+  have hlift : K.liftCycles c 0 (by simp) hc =
+      basedLoopCycle (gamma.trans delta) - basedLoopCycle gamma -
+        basedLoopCycle delta := by
+    apply (cancel_mono (K.iCycles 1)).1
+    rw [K.liftCycles_i, Preadditive.sub_comp, Preadditive.sub_comp,
+      basedLoopCycle_i, basedLoopCycle_i, basedLoopCycle_i]
+  have hclasses : basedLoopH1Class (gamma.trans delta) -
+      basedLoopH1Class gamma - basedLoopH1Class delta = 0 := by
+    rw [basedLoopH1Class, basedLoopH1Class, basedLoopH1Class]
+    rw [← Preadditive.sub_comp, ← Preadditive.sub_comp, ← hlift]
+    exact hzero
+  apply sub_eq_zero.mp
+  simpa [sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using hclasses
+
 #print axioms pathChain_boundary
 #print axioms pathChain_cycle
 #print axioms pathChain_postcomp
@@ -529,5 +684,8 @@ theorem intervalConcatenationTriangle_face_two_val
 #print axioms intervalConcatenationTriangle_face_zero_val
 #print axioms intervalConcatenationTriangle_face_one_val
 #print axioms intervalConcatenationTriangle_face_two_val
+#print axioms pathTransTriangle_boundary
+#print axioms pathTrans_difference_boundary
+#print axioms basedLoopH1Class_trans
 
 end ConstructionTargets.SingularPathChain

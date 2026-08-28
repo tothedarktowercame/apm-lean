@@ -23,10 +23,10 @@ by treating degenerate chains as zero.  The resulting chain has differential
 `pathChain delta - pathChain gamma`, which proves equality of the associated
 first-homology classes for path-homotopic based loops.
 
-No concatenation formula, Hurewicz homomorphism, or homology isomorphism is
-assumed or proved.  The production singular prism does prove that a based
-loop and its barycentric subdivision differ by a boundary.  The remaining
-concatenation seam is recorded exactly by `PathTransSubdivisionFormula`.
+No Hurewicz homomorphism or homology isomorphism is assumed or proved.  The
+production singular prism also proves that a based loop and its barycentric
+subdivision differ by a boundary.  The older subdivision normalization seam
+is recorded exactly by `PathTransSubdivisionFormula`.
 The recursive barycentric subdivision orders the first half as a
 barycentre-first edge, so proving that formula requires an explicit
 edge-reversal two-simplex before it can identify the subdivision of
@@ -40,5 +40,12 @@ The direct-triangle coordinate layer is now compiled independently of that
 subdivision normal form.  `intervalConcatenationTriangle` has affine parameter
 `z₁ / 2 + z₂`; its three public, proof-insensitive face-value lemmas reduce to
 `(1 + u₁) / 2`, `u₁`, and `u₁ / 2`.  These are the exact scalar identities
-needed to identify the delta, full-concatenation, and gamma faces.  No chain
-boundary theorem is claimed yet.
+needed to identify the delta, full-concatenation, and gamma faces.
+
+The direct triangle now identifies all three singular faces and proves the
+unconditional production boundary and integral-H1 concatenation formula in
+Mathlib's order (`gamma.trans delta` traverses `gamma` and then `delta`).  This
+supersedes the earlier literal `PathTransSubdivisionFormula`, which is not
+asserted: production subdivision represents its first half as the negative of
+the reversed edge, not literally as the forward edge.  No Hurewicz theorem is
+claimed.
