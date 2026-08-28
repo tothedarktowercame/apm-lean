@@ -53,6 +53,22 @@ theorem conjugatedArrow_compose {ι : Type*} (O : ι → C)
   subst a₁
   simp
 
+/-- The endpoint-conjugation composition law remains valid under explicit
+left and right whiskering. -/
+theorem whisker_conjugatedArrow_compose {ι : Type*} (O : ι → C)
+    {a₀ a₁ b₀ b₁ c₀ c₁ : ι} (f : O a₀ ⟶ O a₁)
+    (hbc₀ : b₀ = c₀) (hca₀ : c₀ = a₀) (hba₀ : b₀ = a₀)
+    (hbc₁ : b₁ = c₁) (hca₁ : c₁ = a₁) (hba₁ : b₁ = a₁)
+    {Z W : C} (l : Z ⟶ O b₀) (r : O b₁ ⟶ W) :
+    l ≫ (eqToHom (congrArg O hbc₀) ≫
+        (eqToHom (congrArg O hca₀) ≫ f ≫
+          eqToHom (congrArg O hca₁).symm) ≫
+        eqToHom (congrArg O hbc₁).symm) ≫ r =
+      l ≫ (eqToHom (congrArg O hba₀) ≫ f ≫
+        eqToHom (congrArg O hba₁).symm) ≫ r := by
+  rw [conjugatedArrow_compose O f hbc₀ hca₀ hba₀
+    hbc₁ hca₁ hba₁]
+
 theorem shrinkingEndpoint_castSucc
     (S : PathTwoOpenSubdivision p U V)
     (T : PathTwoOpenSubdivision q U V) (r : ℕ)
@@ -162,6 +178,7 @@ theorem shrinkingPrefixFold_zero
 #print axioms shrinkingEndpoint_succ
 #print axioms conjugatedArrow_proof_irrel
 #print axioms conjugatedArrow_compose
+#print axioms whisker_conjugatedArrow_compose
 #print axioms shrinkingPrefixFold_zero
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFold

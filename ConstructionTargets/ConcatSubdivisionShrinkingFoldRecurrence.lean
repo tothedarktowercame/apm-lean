@@ -517,6 +517,34 @@ def shrinkingSuccessorPrefixArrow
     (shrinkingPrefixObject D S T r) (shrinkingPrefixArrow D S T r)
     (Fin.cast (by omega) i).castSucc
 
+theorem shrinkingSuccessorPrefixArrow_eq_conjugate
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T)
+    (i : Fin (concatSegmentCount S T - (r + 1))) :
+    shrinkingSuccessorPrefixArrow D S T r hr i =
+      eqToHom (congrArg
+          (fun k => D.obj ((concatSubdivision S T).point k))
+          (shrinkingSuccessorPrefixVertex_eq S T r hr i.castSucc)) ≫
+        shrinkingPrefixArrow D S T (r + 1) i ≫
+        eqToHom (congrArg
+          (fun k => D.obj ((concatSubdivision S T).point k))
+          (shrinkingSuccessorPrefixVertex_eq S T r hr i.succ)).symm := by
+  unfold shrinkingSuccessorPrefixArrow successorChainArrow
+  unfold shrinkingPrefixArrow shrinkingPrefixObject
+  rw [dependentArrow_conjugation
+    (fun k => D.obj ((concatSubdivision S T).point k))
+    (D.mappedPiece (concatSubdivision S T))
+    (shrinkingSuccessorPrefixSegment_eq S T r hr i)]
+  exact whisker_conjugatedArrow_compose
+    (fun k => D.obj ((concatSubdivision S T).point k))
+    (D.mappedPiece (concatSubdivision S T)
+      (shrinkingSegmentEmbedding S T (r + 1) i))
+    (by apply Fin.ext; rfl) (by apply Fin.ext; rfl) (by apply Fin.ext; rfl)
+    (by apply Fin.ext; rfl) (by apply Fin.ext; rfl) (by apply Fin.ext; rfl)
+    (l := _) (r := _)
+
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
@@ -539,5 +567,6 @@ def shrinkingSuccessorPrefixArrow
 #print axioms shrinkingPrefixTerminalIso
 #print axioms shrinkingSuccessorPrefixVertex_eq
 #print axioms shrinkingSuccessorPrefixSegment_eq
+#print axioms shrinkingSuccessorPrefixArrow_eq_conjugate
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
