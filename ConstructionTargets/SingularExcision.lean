@@ -1595,6 +1595,55 @@ noncomputable def relativeCokernelMap
       slice_lhs 1 2 => rw [singularSubspaceMap_naturality A B f hf]
       rw [Category.assoc, cokernel.condition, comp_zero])
 
+theorem relativeCokernelMap_id
+    {X : Type} [TopologicalSpace X] (A : Set X)
+    (hA : Set.MapsTo (ContinuousMap.id X) A A) :
+    relativeCokernelMap A A (ContinuousMap.id X) hA = 𝟙 _ := by
+  apply (cancel_epi (cokernel.π (singularSubspaceMap A))).1
+  dsimp only [relativeCokernelMap, absoluteMap]
+  rw [cokernel.π_desc]
+  simp
+
+@[reassoc] theorem cokernelπ_relativeCokernelMap
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B) :
+    cokernel.π (singularSubspaceMap A) ≫ relativeCokernelMap A B f hf =
+      absoluteMap f ≫ cokernel.π (singularSubspaceMap B) := by
+  dsimp only [relativeCokernelMap]
+  rw [cokernel.π_desc]
+
+@[reassoc] theorem relativeCokernelMap_comp
+    {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z]
+    (A : Set X) (B : Set Y) (C : Set Z)
+    (f : C(X, Y)) (g : C(Y, Z))
+    (hf : Set.MapsTo f A B) (hg : Set.MapsTo g B C)
+    (hgf : Set.MapsTo (g.comp f) A C) :
+    relativeCokernelMap A B f hf ≫ relativeCokernelMap B C g hg =
+      relativeCokernelMap A C (g.comp f) hgf := by
+  apply (cancel_epi (cokernel.π (singularSubspaceMap A))).1
+  calc
+    cokernel.π (singularSubspaceMap A) ≫
+          relativeCokernelMap A B f hf ≫ relativeCokernelMap B C g hg =
+        (absoluteMap f ≫ cokernel.π (singularSubspaceMap B)) ≫
+          relativeCokernelMap B C g hg := by
+            simpa only [Category.assoc] using
+              cokernelπ_relativeCokernelMap_assoc A B f hf
+                (relativeCokernelMap B C g hg)
+    _ = absoluteMap f ≫
+          (cokernel.π (singularSubspaceMap B) ≫
+          relativeCokernelMap B C g hg) := (Category.assoc _ _ _).symm
+    _ = absoluteMap f ≫ absoluteMap g ≫
+          cokernel.π (singularSubspaceMap C) := by
+            rw [cokernelπ_relativeCokernelMap]
+    _ = cokernel.π (singularSubspaceMap A) ≫
+          relativeCokernelMap A C (g.comp f) hgf := by
+      rw [cokernelπ_relativeCokernelMap]
+      dsimp only [absoluteMap]
+      rw [show TopCat.ofHom (g.comp f) =
+          TopCat.ofHom f ≫ TopCat.ofHom g by rfl, Functor.map_comp]
+      simp only [Category.assoc]
+
 /-- The direct relative map is the canonical cokernel map of the natural
 square on subspace and ambient singular chains.  This form is what the
 five-lemma comparison consumes. -/
@@ -1684,6 +1733,43 @@ theorem relativeSingularMap_projection_naturality
   dsimp only [relativeCokernelMap]
   rw [cokernel.π_desc]
   simp
+
+/-- The relative singular-chain map induced by the identity map is the
+identity.  The `MapsTo` witness is intentionally arbitrary. -/
+theorem relativeSingularMap_id
+    {X : Type} [TopologicalSpace X] (A : Set X)
+    (hA : Set.MapsTo (ContinuousMap.id X) A A) :
+    relativeSingularMap A A (ContinuousMap.id X) hA = 𝟙 _ := by
+  simp [relativeSingularMap, relativeCokernelMap_id]
+
+/-- Relative singular-chain maps respect composition.  In particular, the
+result does not depend on the proof terms witnessing the three `MapsTo`
+statements. -/
+theorem relativeSingularMap_comp
+    {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z]
+    (A : Set X) (B : Set Y) (C : Set Z)
+    (f : C(X, Y)) (g : C(Y, Z))
+    (hf : Set.MapsTo f A B) (hg : Set.MapsTo g B C)
+    (hgf : Set.MapsTo (g.comp f) A C) :
+    relativeSingularMap A B f hf ≫ relativeSingularMap B C g hg =
+      relativeSingularMap A C (g.comp f) hgf := by
+  simp only [relativeSingularMap, Category.assoc, Iso.inv_hom_id_assoc]
+  rw [relativeCokernelMap_comp_assoc]
+
+/-- Homology-level composition law for maps of pairs. -/
+theorem relativeSingularHomologyMap_comp
+    {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z]
+    (A : Set X) (B : Set Y) (C : Set Z)
+    (f : C(X, Y)) (g : C(Y, Z))
+    (hf : Set.MapsTo f A B) (hg : Set.MapsTo g B C)
+    (hgf : Set.MapsTo (g.comp f) A C) (n : ℕ) :
+    HomologicalComplex.homologyMap (relativeSingularMap A B f hf) n ≫
+        HomologicalComplex.homologyMap (relativeSingularMap B C g hg) n =
+      HomologicalComplex.homologyMap
+        (relativeSingularMap A C (g.comp f) hgf) n := by
+  rw [← HomologicalComplex.homologyMap_comp, relativeSingularMap_comp]
 
 /-- The induced map on relative singular homology. -/
 noncomputable def relativeSingularHomologyMap
@@ -1877,6 +1963,11 @@ theorem relativeExcision : RelativeExcisionStatement := by
 #print axioms relativeCokernelMap_eq_cokernel_map
 #print axioms relativeSingularMap_homologyMap_isIso
 #print axioms relativeSingularMap_projection_naturality
+#print axioms relativeCokernelMap_id
+#print axioms relativeCokernelMap_comp
+#print axioms relativeSingularMap_id
+#print axioms relativeSingularMap_comp
+#print axioms relativeSingularHomologyMap_comp
 #print axioms relativeSingularHomologyMap
 #print axioms relativeExcisionMap
 #print axioms subcomplexMayerVietorisShortComplex_shortExact

@@ -62,3 +62,15 @@ Mayer--Vietoris consumer; it does not assert production exactness.
 the generic simplicial/production postcomposition coherence theorem. They
 normalize the induced integral chain and homology maps in every degree. These
 are representation equalities only and do not claim closure of a consumer.
+
+## Functoriality of relative maps
+
+`relativeCokernelMap_id` and `relativeCokernelMap_comp` prove identity and
+composition directly from the cokernel universal property. Their transported
+forms `relativeSingularMap_id` and `relativeSingularMap_comp` make the
+production relative singular-chain construction functorial for arbitrary
+continuous maps respecting the chosen subspaces. The statements accept an
+independent `MapsTo` witness for the composite, so proof terms do not leak into
+consumer equations. `relativeSingularHomologyMap_comp` supplies the matching
+homology-level composition formula. These are generic map-of-pairs facts; no
+excision, antipodal, or consumer-specific conclusion is assumed.
