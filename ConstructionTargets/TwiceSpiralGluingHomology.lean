@@ -3,6 +3,7 @@ import ConstructionTargets.ProductionOpenCoverMayerVietoris
 import ConstructionTargets.BoundaryTorusH0Cokernel
 import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.IntegralSingularHomologyComparison
+import ConstructionTargets.HomotopyEquivHomologySquare
 
 /-!
 # Production Mayer--Vietoris coordinates for twice-spiral gluing
@@ -25,6 +26,7 @@ open ConstructionTargets.BoundaryTorusH0Cokernel
 open ConstructionTargets.SolidTorusHomotopyAndHomology
 open ConstructionTargets.T00A01MayerVietorisAdapters
 open ConstructionTargets.IntegralSingularHomologyComparison
+open ConstructionTargets.HomotopyEquivHomologySquare
 
 private abbrev H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   SingularHomology k (TopCat.of X)
@@ -150,9 +152,47 @@ theorem productionH1CoordinateArrow_eq_conjugated
         productionIntersectionArrow (leftOpen h) (rightOpen h) 1 ≫
           (piecesH1Coordinate h z₀ c₁ c₂).hom := rfl
 
+theorem intersection_left_homology_square
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    (singularHomologyIsoOfHomotopyEquiv
+        (intersectionPieceHomotopyEquiv h) 1).inv ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (intersectionToLeftOpen h)) ≫
+      (singularHomologyIsoOfHomotopyEquiv
+        (leftPieceHomotopyEquiv h) 1).hom =
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom ⟨boundaryInclusion, continuous_boundaryInclusion⟩) :=
+  conjugated_homologyMap_of_strict_square
+    (intersectionPieceHomotopyEquiv h) (leftPieceHomotopyEquiv h)
+    (intersectionToLeftOpen h)
+    ⟨boundaryInclusion, continuous_boundaryInclusion⟩
+    (intersection_left_coordinate_strict h) 1
+
+theorem intersection_right_homology_square
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    (singularHomologyIsoOfHomotopyEquiv
+        (intersectionPieceHomotopyEquiv h) 1).inv ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (intersectionToRightOpen h)) ≫
+      (singularHomologyIsoOfHomotopyEquiv
+        (rightPieceHomotopyEquiv h) 1).hom =
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom ⟨boundaryInclusion ∘ h,
+          continuous_boundaryInclusion.comp h.continuous⟩) :=
+  conjugated_homologyMap_of_strict_square
+    (intersectionPieceHomotopyEquiv h) (rightPieceHomotopyEquiv h)
+    (intersectionToRightOpen h)
+    ⟨boundaryInclusion ∘ h,
+      continuous_boundaryInclusion.comp h.continuous⟩
+    (intersection_right_coordinate_strict h) 1
+
 #print axioms additiveEquivOfMultiplicativeEquiv
 #print axioms gluingH0GroupIsoInt
 #print axioms gluingH0ModuleIsoInt
 #print axioms productionH1CoordinateArrow_eq_conjugated
+#print axioms intersection_left_homology_square
+#print axioms intersection_right_homology_square
 
 end ConstructionTargets.TwiceSpiralGluingHomology

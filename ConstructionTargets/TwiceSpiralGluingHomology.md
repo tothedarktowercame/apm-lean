@@ -18,11 +18,13 @@ conjugated by those isomorphisms.
 The first remaining theorem is the literal equality expressed by
 `productionH1ArrowComparisonStatement`: this conjugated arrow must equal
 `twiceSpiralSignedArrow d`, where `d` is the second coordinate of
-`h_*(0,1)`.  The gluing-cover file currently proves the three homotopy
-equivalences but does not prove the two naturality squares identifying its
-intersection inclusions under those equivalences with `boundaryInclusion` and
-`boundaryInclusion ∘ h`.  Without those squares, the already-proved Hurewicz
-coordinate formula cannot honestly be rewritten into the production arrow.
+`h_*(0,1)`.
+
+The continuous-map squares are now transported through singular homology by
+`intersection_left_homology_square` and
+`intersection_right_homology_square`.  The remaining step is the categorical
+biproduct association that assembles those two component formulas, including
+the Mayer--Vietoris minus sign, into the literal production arrow comparison.
 
 Accordingly this target does not claim H1, H2, H3, or higher-degree homology
 of the glued space.  It assumes neither the missing comparison nor any part of
