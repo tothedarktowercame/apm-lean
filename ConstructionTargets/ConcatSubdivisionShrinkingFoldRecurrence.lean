@@ -505,6 +505,19 @@ theorem shrinkingSuccessorPrefixSegment_eq
   apply Fin.ext
   rfl
 
+/-- The displayed successor-prefix arrow, reindexed to the stage-`r+1`
+segment coordinate. -/
+def shrinkingSuccessorPrefixArrow
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T)
+    (i : Fin (concatSegmentCount S T - (r + 1))) :=
+  successorChainArrow (Nat.sub_pos_of_lt (by omega))
+    (shrinkingPrefixObject D S T r) (shrinkingPrefixArrow D S T r)
+    (Fin.cast (by omega) i).castSucc
+
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
