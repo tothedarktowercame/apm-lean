@@ -541,6 +541,69 @@ theorem subdivisionRefinement_naturality_after
       (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
         D ins.refined).obj (succAbove_old_successor_after ins i hi).2
 
+/-- The nonadjacent refined map across the inserted vertex factors as its two
+adjacent mapped pieces. -/
+theorem fullRefined_map_crossing_eq_mappedPieces
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D ins.refined).map (homOfLE (show
+          (⟨ins.segment.val, by
+            change ins.segment.val < S.n + 3
+            omega⟩ : Fin (ins.refined.n + 2)) ≤
+            ⟨ins.segment.val + 2, by
+              change ins.segment.val + 2 < S.n + 3
+              omega⟩ by exact Fin.mk_le_mk.mpr (by omega))) =
+      D.mappedPiece ins.refined
+          ⟨ins.segment.val, by
+            change ins.segment.val < S.n + 2
+            omega⟩ ≫
+        D.mappedPiece ins.refined
+          ⟨ins.segment.val + 1, by
+            change ins.segment.val + 1 < S.n + 2
+            omega⟩ := by
+  let F := FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+    D ins.refined
+  have h₀₁ : (⟨ins.segment.val, by
+      change ins.segment.val < S.n + 3
+      omega⟩ : Fin (ins.refined.n + 2)) ≤
+      ⟨ins.segment.val + 1, by
+        change ins.segment.val + 1 < S.n + 3
+        omega⟩ := Fin.mk_le_mk.mpr (by omega)
+  have h₁₂ : (⟨ins.segment.val + 1, by
+      change ins.segment.val + 1 < S.n + 3
+      omega⟩ : Fin (ins.refined.n + 2)) ≤
+      ⟨ins.segment.val + 2, by
+        change ins.segment.val + 2 < S.n + 3
+        omega⟩ := Fin.mk_le_mk.mpr (by omega)
+  have e₀₁ : F.map (homOfLE h₀₁) =
+      D.mappedPiece ins.refined ⟨ins.segment.val, by
+        change ins.segment.val < S.n + 2
+        omega⟩ := by
+    calc
+      F.map (homOfLE h₀₁) =
+          F.map (homOfLE (Fin.castSucc_le_castSucc_iff.mpr
+            ins.segment.castSucc_le_succ)) := map_eq_of_fixed_endpoints F _ _
+      _ = _ := by
+        simpa only [F] using
+          fullRefined_map_before_eq_mappedPiece D ins ins.segment
+  have e₁₂ : F.map (homOfLE h₁₂) =
+      D.mappedPiece ins.refined ⟨ins.segment.val + 1, by
+        change ins.segment.val + 1 < S.n + 2
+        omega⟩ := by
+    calc
+      F.map (homOfLE h₁₂) =
+          F.map (homOfLE (Fin.succ_le_succ_iff.mpr
+            ins.segment.castSucc_le_succ)) := map_eq_of_fixed_endpoints F _ _
+      _ = _ := by
+        simpa only [F] using
+          fullRefined_map_after_eq_mappedPiece D ins ins.segment
+  calc
+    F.map _ = F.map (homOfLE h₀₁) ≫ F.map (homOfLE h₁₂) := by
+      rw [← F.map_comp]
+      exact map_eq_of_fixed_endpoints F _ _
+    _ = _ := by rw [e₀₁, e₁₂]
+                rfl
+
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
 #print axioms succAbove_old_successor_before
@@ -560,6 +623,7 @@ theorem subdivisionRefinement_naturality_after
 #print axioms refinedRestrictedChain_map_after_mappedPiece
 #print axioms subdivisionRefinement_naturality_before
 #print axioms subdivisionRefinement_naturality_after
+#print axioms fullRefined_map_crossing_eq_mappedPieces
 #print axioms eqToHom_conjugation_square
 
 end TwoOpenDescentDatum

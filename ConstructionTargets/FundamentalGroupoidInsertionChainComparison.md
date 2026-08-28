@@ -40,8 +40,18 @@ by `ComposableArrows.isoMk`.
 
 At the crossing
 index, `Functor.map_comp` factors the exposed nonadjacent map into two
-successors; those transported maps then reduce to `mapPath_subpath_split`.
-The remaining successor case is the crossing edge.  Only after its square is
+successors. `fullRefined_map_crossing_eq_mappedPieces` now compiles this
+factorization and normalizes both arrow witnesses to the two concrete refined
+`mappedPiece` terms.
+
+The next required theorem is a localized form of `mapPath_subpath_split` whose
+hypothesis says only that `p.subpath t₀ t₂` lies in the selected cover
+piece. The banked theorem assumes the entire ambient `p` lies there, whereas a
+`PathTwoOpenSubdivision` honestly supplies membership only on the segment
+being split; applying the stronger theorem to the original path is not valid.
+After that localized lemma identifies the two refined mapped pieces with the
+old crossing piece, `eqToHom_conjugation_square` can close the crossing square.
+Only after its square is
 proved can `ComposableArrows.isoMk` and existing
 `ComposableArrows.naturality'` be applied. No natural isomorphism or
 total-chain equality is claimed here.
