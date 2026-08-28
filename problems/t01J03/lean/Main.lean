@@ -3,6 +3,7 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.T01J03FrozenQuotientRepresentation
+import ConstructionTargets.BoundaryTorusH0Cokernel
 
 /-!
 # APM t01J03: A twice-wound gluing of solid tori
@@ -233,6 +234,34 @@ def apm_t01J03_gluedBasepoint (h : apm_t01J03_BoundaryTorus ≃ₜ
 abbrev apm_t01J03_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
+
+/-- The frozen product-of-complex-circles presentation is homeomorphic to the
+Euclidean boundary-torus presentation used by the Mayer--Vietoris calculation. -/
+noncomputable def apm_t01J03_torusHomeomorphBoundaryTorus :
+    apm_t01J03_Torus ≃ₜ apm_t01J03_BoundaryTorus :=
+  (Homeomorph.refl Circle).prodCongr
+    ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+
+/-- The four integral homology clauses of `apm_t01J03_bridge_1`, separated
+from its still-independent fundamental-group clause. -/
+theorem apm_t01J03_torus_module_homology :
+    Nonempty (apm_t01J03_H 0 apm_t01J03_Torus ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t01J03_H 1 apm_t01J03_Torus ≅
+      ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
+    Nonempty (apm_t01J03_H 2 apm_t01J03_Torus ≅ ModuleCat.of ℤ ℤ) ∧
+    ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t01J03_H k apm_t01J03_Torus) := by
+  let e (k : ℕ) :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      apm_t01J03_torusHomeomorphBoundaryTorus.toHomotopyEquiv k
+  obtain ⟨h0, h1, h2, hhigh⟩ :=
+    ConstructionTargets.BoundaryTorusH0Cokernel.boundaryTorus_complete_module_homology
+  refine ⟨⟨e 0 ≪≫ Classical.choice h0⟩,
+    ⟨e 1 ≪≫ Classical.choice h1⟩,
+    ⟨e 2 ≪≫ Classical.choice h2⟩, ?_⟩
+  intro k hk
+  exact (hhigh k hk).of_iso (e k)
+
+#print axioms apm_t01J03_torus_module_homology
 
 def apm_t01J03_hasTwiceSpiral
     (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus)
