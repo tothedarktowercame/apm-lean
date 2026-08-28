@@ -47,6 +47,35 @@ theorem composeFin_terminal_split {n : ℕ} (A : Fin (n + 2) → C)
         f (Fin.last n) :=
   TwoOpenDescentDatum.composeFin_succ A f
 
+/-- Initial vertex inclusion for the prefix of a positive-length chain. -/
+def terminalPrefixVertex {m : ℕ} (hm : 0 < m) :
+    Fin (m - 1 + 1) → Fin (m + 1) := fun i => ⟨i, by omega⟩
+
+/-- Initial segment inclusion for the same prefix. -/
+def terminalPrefixSegment {m : ℕ} (hm : 0 < m) :
+    Fin (m - 1) → Fin m := fun i => ⟨i, by omega⟩
+
+def terminalSegmentIndex {m : ℕ} (hm : 0 < m) : Fin m := ⟨m - 1, by omega⟩
+
+theorem terminalPrefixVertex_zero {m : ℕ} (hm : 0 < m) :
+    terminalPrefixVertex hm 0 = (0 : Fin (m + 1)) := by apply Fin.ext; rfl
+
+theorem terminalSegmentIndex_succ {m : ℕ} (hm : 0 < m) :
+    (terminalSegmentIndex hm).succ = Fin.last m := by
+  apply Fin.ext
+  simp [terminalSegmentIndex]
+  omega
+
+theorem terminalPrefixEndpoint_castSucc {m : ℕ} (hm : 0 < m)
+    (i : Fin (m - 1)) :
+    terminalPrefixVertex hm i.castSucc = (terminalPrefixSegment hm i).castSucc := by
+  apply Fin.ext; rfl
+
+theorem terminalPrefixEndpoint_succ {m : ℕ} (hm : 0 < m)
+    (i : Fin (m - 1)) :
+    terminalPrefixVertex hm i.succ = (terminalPrefixSegment hm i).succ := by
+  apply Fin.ext; rfl
+
 /-- The source objects of successive stages are canonically equal. -/
 def shrinkingPrefixInitialIso
     (D : @TwoOpenDescentDatum X _ U V C _)
