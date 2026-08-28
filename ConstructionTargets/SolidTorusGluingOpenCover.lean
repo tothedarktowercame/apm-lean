@@ -132,6 +132,18 @@ def annularProjection (z : annularBand) : BoundaryTorus :=
     simp [annularProjection, annularRadialVector, boundaryInclusion,
       Metric.mem_sphere, dist_zero_right, z.2.2]
 
+@[simp] theorem annularRadial_boundary (s : unitInterval) (z : BoundaryTorus) :
+    annularRadial s
+      ⟨boundaryInclusion z, boundaryInclusion_mem_annularBand z⟩ =
+        ⟨boundaryInclusion z, boundaryInclusion_mem_annularBand z⟩ := by
+  apply Subtype.ext
+  apply Prod.ext
+  · rfl
+  · apply Subtype.ext
+    have hz : ‖z.2.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using z.2.2
+    simp [annularRadial, annularRadialVector, boundaryInclusion, hz]
+
 theorem continuous_annularRadial :
     Continuous (fun p : unitInterval × annularBand ↦ annularRadial p.1 p.2) := by
   apply Continuous.subtype_mk
@@ -340,6 +352,486 @@ theorem intersectionPieceQuotientMap_isQuotientMap
     IsQuotientMap (intersectionPieceQuotientMap h) :=
   (quotientMap_isQuotientMap h).restrictPreimage_isOpen
     ((leftOpen_isOpen h).inter (rightOpen_isOpen h))
+
+def leftPieceSourceHomeomorph (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    leftPreimage ≃ₜ quotientMap h ⁻¹' leftOpen h :=
+  Homeomorph.setCongr (quotientMap_preimage_leftOpen h).symm
+
+def rightPieceSourceHomeomorph (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    rightPreimage ≃ₜ quotientMap h ⁻¹' rightOpen h :=
+  Homeomorph.setCongr (quotientMap_preimage_rightOpen h).symm
+
+def intersectionPieceSourceHomeomorph (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    bothBandPreimage ≃ₜ quotientMap h ⁻¹' (leftOpen h ∩ rightOpen h) :=
+  Homeomorph.setCongr (quotientMap_preimage_inter_open h).symm
+
+def namedLeftPieceQuotientMap (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    leftPreimage → leftOpen h :=
+  leftPieceQuotientMap h ∘ leftPieceSourceHomeomorph h
+
+def namedRightPieceQuotientMap (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    rightPreimage → rightOpen h :=
+  rightPieceQuotientMap h ∘ rightPieceSourceHomeomorph h
+
+def namedIntersectionPieceQuotientMap (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    bothBandPreimage → ↥(leftOpen h ∩ rightOpen h) :=
+  intersectionPieceQuotientMap h ∘ intersectionPieceSourceHomeomorph h
+
+theorem namedLeftPieceQuotientMap_isQuotientMap
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    IsQuotientMap (namedLeftPieceQuotientMap h) :=
+  (leftPieceQuotientMap_isQuotientMap h).comp
+    (leftPieceSourceHomeomorph h).isQuotientMap
+
+theorem namedRightPieceQuotientMap_isQuotientMap
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    IsQuotientMap (namedRightPieceQuotientMap h) :=
+  (rightPieceQuotientMap_isQuotientMap h).comp
+    (rightPieceSourceHomeomorph h).isQuotientMap
+
+theorem namedIntersectionPieceQuotientMap_isQuotientMap
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    IsQuotientMap (namedIntersectionPieceQuotientMap h) :=
+  (intersectionPieceQuotientMap_isQuotientMap h).comp
+    (intersectionPieceSourceHomeomorph h).isQuotientMap
+
+/-! ## Explicit source decompositions and branchwise homotopies -/
+
+def subtypeSumHomeomorph {X Y : Type*} [TopologicalSpace X]
+    [TopologicalSpace Y] (p : X ⊕ Y → Prop)
+    (hleft : IsOpen {x | p (Sum.inl x)})
+    (hright : IsOpen {y | p (Sum.inr y)}) :
+    {z // p z} ≃ₜ {x // p (Sum.inl x)} ⊕ {y // p (Sum.inr y)} where
+  toEquiv := Equiv.subtypeSum
+  continuous_toFun := by
+    rw [continuous_def]
+    intro u hu
+    have hl := hu.preimage continuous_inl
+    have hr := hu.preimage continuous_inr
+    have hl' := hleft.isOpenMap_subtype_val _ hl
+    have hr' := hright.isOpenMap_subtype_val _ hr
+    have hs : IsOpen
+        (Sum.inl '' (Subtype.val '' (Sum.inl ⁻¹' u)) ∪
+          Sum.inr '' (Subtype.val '' (Sum.inr ⁻¹' u))) :=
+      (isOpenMap_inl _ hl').union (isOpenMap_inr _ hr')
+    change IsOpen (Equiv.subtypeSum ⁻¹' u)
+    rw [show Equiv.subtypeSum ⁻¹' u =
+        Subtype.val ⁻¹'
+          (Sum.inl '' (Subtype.val '' (Sum.inl ⁻¹' u)) ∪
+            Sum.inr '' (Subtype.val '' (Sum.inr ⁻¹' u))) by
+      ext z
+      rcases z with ⟨x | y, hz⟩ <;>
+        simp only [Equiv.subtypeSum, Equiv.coe_fn_mk, Set.mem_preimage,
+          Set.mem_union, Set.mem_image] <;> aesop]
+    exact hs.preimage continuous_subtype_val
+  continuous_invFun := by
+    rw [continuous_sum_dom]
+    constructor <;> apply Continuous.subtype_mk
+    · exact continuous_inl.comp continuous_subtype_val
+    · exact continuous_inr.comp continuous_subtype_val
+
+def leftPreimageSumHomeomorph :
+    leftPreimage ≃ₜ SolidTorus ⊕ annularBand :=
+  (subtypeSumHomeomorph leftPreimage isOpen_univ annularBand_isOpen).trans <|
+    Homeomorph.sumCongr
+      ((Homeomorph.setCongr (by ext; exact iff_true_intro trivial)).trans
+        (Homeomorph.Set.univ _))
+      (Homeomorph.setCongr (by ext; rfl))
+
+def rightPreimageSumHomeomorph :
+    rightPreimage ≃ₜ annularBand ⊕ SolidTorus :=
+  (subtypeSumHomeomorph rightPreimage annularBand_isOpen isOpen_univ).trans <|
+    Homeomorph.sumCongr
+      (Homeomorph.setCongr (by ext; rfl))
+      ((Homeomorph.setCongr (by ext; exact iff_true_intro trivial)).trans
+        (Homeomorph.Set.univ _))
+
+def bothBandPreimageSumHomeomorph :
+    bothBandPreimage ≃ₜ annularBand ⊕ annularBand :=
+  (subtypeSumHomeomorph bothBandPreimage annularBand_isOpen
+      annularBand_isOpen).trans <|
+    Homeomorph.sumCongr (Homeomorph.setCongr (by ext; rfl))
+      (Homeomorph.setCongr (by ext; rfl))
+
+def fixedSolidTorusBranch : unitInterval × SolidTorus → SolidTorus := Prod.snd
+
+def radialBandBranch : unitInterval × annularBand → annularBand :=
+  fun p ↦ annularRadial p.1 p.2
+
+theorem continuous_radialBandBranch : Continuous radialBandBranch :=
+  continuous_annularRadial
+
+def leftSplitBranchHomotopy :
+    (unitInterval × SolidTorus) ⊕ (unitInterval × annularBand) →
+      SolidTorus ⊕ annularBand :=
+  Sum.elim (Sum.inl ∘ fixedSolidTorusBranch)
+    (Sum.inr ∘ radialBandBranch)
+
+def rightSplitBranchHomotopy :
+    (unitInterval × annularBand) ⊕ (unitInterval × SolidTorus) →
+      annularBand ⊕ SolidTorus :=
+  Sum.elim (Sum.inl ∘ radialBandBranch)
+    (Sum.inr ∘ fixedSolidTorusBranch)
+
+def intersectionSplitBranchHomotopy :
+    (unitInterval × annularBand) ⊕ (unitInterval × annularBand) →
+      annularBand ⊕ annularBand :=
+  Sum.elim (Sum.inl ∘ radialBandBranch) (Sum.inr ∘ radialBandBranch)
+
+theorem continuous_leftSplitBranchHomotopy :
+    Continuous leftSplitBranchHomotopy := by
+  apply Continuous.sumElim
+  · exact continuous_inl.comp continuous_snd
+  · exact continuous_inr.comp continuous_radialBandBranch
+
+theorem continuous_rightSplitBranchHomotopy :
+    Continuous rightSplitBranchHomotopy := by
+  apply Continuous.sumElim
+  · exact continuous_inl.comp continuous_radialBandBranch
+  · exact continuous_inr.comp continuous_snd
+
+theorem continuous_intersectionSplitBranchHomotopy :
+    Continuous intersectionSplitBranchHomotopy := by
+  apply Continuous.sumElim <;>
+    first | exact continuous_inl.comp continuous_radialBandBranch
+          | exact continuous_inr.comp continuous_radialBandBranch
+
+def leftPieceSourceHomotopy : unitInterval × leftPreimage → leftPreimage :=
+  leftPreimageSumHomeomorph.symm ∘ leftSplitBranchHomotopy ∘
+    Homeomorph.prodSumDistrib ∘ Prod.map id leftPreimageSumHomeomorph
+
+def rightPieceSourceHomotopy : unitInterval × rightPreimage → rightPreimage :=
+  rightPreimageSumHomeomorph.symm ∘ rightSplitBranchHomotopy ∘
+    Homeomorph.prodSumDistrib ∘ Prod.map id rightPreimageSumHomeomorph
+
+def intersectionPieceSourceHomotopy :
+    unitInterval × bothBandPreimage → bothBandPreimage :=
+  bothBandPreimageSumHomeomorph.symm ∘ intersectionSplitBranchHomotopy ∘
+    Homeomorph.prodSumDistrib ∘ Prod.map id bothBandPreimageSumHomeomorph
+
+theorem continuous_leftPieceSourceHomotopy :
+    Continuous leftPieceSourceHomotopy :=
+  leftPreimageSumHomeomorph.symm.continuous.comp <|
+    continuous_leftSplitBranchHomotopy.comp <|
+      Homeomorph.prodSumDistrib.continuous.comp <|
+        continuous_id.prodMap leftPreimageSumHomeomorph.continuous
+
+theorem continuous_rightPieceSourceHomotopy :
+    Continuous rightPieceSourceHomotopy :=
+  rightPreimageSumHomeomorph.symm.continuous.comp <|
+    continuous_rightSplitBranchHomotopy.comp <|
+      Homeomorph.prodSumDistrib.continuous.comp <|
+        continuous_id.prodMap rightPreimageSumHomeomorph.continuous
+
+theorem continuous_intersectionPieceSourceHomotopy :
+    Continuous intersectionPieceSourceHomotopy :=
+  bothBandPreimageSumHomeomorph.symm.continuous.comp <|
+    continuous_intersectionSplitBranchHomotopy.comp <|
+      Homeomorph.prodSumDistrib.continuous.comp <|
+        continuous_id.prodMap bothBandPreimageSumHomeomorph.continuous
+
+@[simp] theorem leftPieceSourceHomotopy_inl (s : unitInterval) (x : SolidTorus) :
+    (leftPieceSourceHomotopy (s, ⟨Sum.inl x, trivial⟩)).1 = Sum.inl x := rfl
+
+@[simp] theorem leftPieceSourceHomotopy_inr (s : unitInterval) (x : annularBand) :
+    (leftPieceSourceHomotopy (s, ⟨Sum.inr x.1, x.2⟩)).1 =
+      Sum.inr (annularRadial s x).1 := rfl
+
+@[simp] theorem rightPieceSourceHomotopy_inl (s : unitInterval) (x : annularBand) :
+    (rightPieceSourceHomotopy (s, ⟨Sum.inl x.1, x.2⟩)).1 =
+      Sum.inl (annularRadial s x).1 := rfl
+
+@[simp] theorem rightPieceSourceHomotopy_inr (s : unitInterval) (x : SolidTorus) :
+    (rightPieceSourceHomotopy (s, ⟨Sum.inr x, trivial⟩)).1 = Sum.inr x := rfl
+
+@[simp] theorem intersectionPieceSourceHomotopy_inl
+    (s : unitInterval) (x : annularBand) :
+    (intersectionPieceSourceHomotopy (s, ⟨Sum.inl x.1, x.2⟩)).1 =
+      Sum.inl (annularRadial s x).1 := rfl
+
+@[simp] theorem intersectionPieceSourceHomotopy_inr
+    (s : unitInterval) (x : annularBand) :
+    (intersectionPieceSourceHomotopy (s, ⟨Sum.inr x.1, x.2⟩)).1 =
+      Sum.inr (annularRadial s x).1 := rfl
+
+@[simp] theorem leftPieceSourceHomotopy_zero (x : leftPreimage) :
+    leftPieceSourceHomotopy (0, x) = x := by
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl x => rfl
+  | inr x =>
+      apply Subtype.ext
+      simpa only [leftPieceSourceHomotopy_inr] using
+        congrArg (fun y : annularBand ↦ Sum.inr y.1)
+          (annularRadial_zero ⟨x, hx⟩)
+
+@[simp] theorem rightPieceSourceHomotopy_zero (x : rightPreimage) :
+    rightPieceSourceHomotopy (0, x) = x := by
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl x =>
+      apply Subtype.ext
+      simpa only [rightPieceSourceHomotopy_inl] using
+        congrArg (fun y : annularBand ↦ Sum.inl y.1)
+          (annularRadial_zero ⟨x, hx⟩)
+  | inr x => rfl
+
+@[simp] theorem intersectionPieceSourceHomotopy_zero (x : bothBandPreimage) :
+    intersectionPieceSourceHomotopy (0, x) = x := by
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl x =>
+      apply Subtype.ext
+      simpa only [intersectionPieceSourceHomotopy_inl] using
+        congrArg (fun y : annularBand ↦ Sum.inl y.1)
+          (annularRadial_zero ⟨x, hx⟩)
+  | inr x =>
+      apply Subtype.ext
+      simpa only [intersectionPieceSourceHomotopy_inr] using
+        congrArg (fun y : annularBand ↦ Sum.inr y.1)
+          (annularRadial_zero ⟨x, hx⟩)
+
+theorem leftPieceSourceHomotopy_fixes_inr_boundary (s : unitInterval)
+    (z : BoundaryTorus) (hz : Sum.inr (boundaryInclusion z) ∈ leftPreimage) :
+    leftPieceSourceHomotopy (s, ⟨Sum.inr (boundaryInclusion z), hz⟩) =
+      ⟨Sum.inr (boundaryInclusion z), hz⟩ := by
+  apply Subtype.ext
+  simpa only [leftPieceSourceHomotopy_inr] using
+    congrArg (fun y : annularBand ↦ Sum.inr y.1) (annularRadial_boundary s z)
+
+theorem rightPieceSourceHomotopy_fixes_inl_boundary (s : unitInterval)
+    (z : BoundaryTorus) (hz : Sum.inl (boundaryInclusion z) ∈ rightPreimage) :
+    rightPieceSourceHomotopy (s, ⟨Sum.inl (boundaryInclusion z), hz⟩) =
+      ⟨Sum.inl (boundaryInclusion z), hz⟩ := by
+  apply Subtype.ext
+  simpa only [rightPieceSourceHomotopy_inl] using
+    congrArg (fun y : annularBand ↦ Sum.inl y.1) (annularRadial_boundary s z)
+
+theorem intersectionPieceSourceHomotopy_fixes_inl_boundary (s : unitInterval)
+    (z : BoundaryTorus) (hz : Sum.inl (boundaryInclusion z) ∈ bothBandPreimage) :
+    intersectionPieceSourceHomotopy
+      (s, ⟨Sum.inl (boundaryInclusion z), hz⟩) =
+        ⟨Sum.inl (boundaryInclusion z), hz⟩ := by
+  apply Subtype.ext
+  simpa only [intersectionPieceSourceHomotopy_inl] using
+    congrArg (fun y : annularBand ↦ Sum.inl y.1) (annularRadial_boundary s z)
+
+theorem intersectionPieceSourceHomotopy_fixes_inr_boundary (s : unitInterval)
+    (z : BoundaryTorus) (hz : Sum.inr (boundaryInclusion z) ∈ bothBandPreimage) :
+    intersectionPieceSourceHomotopy
+      (s, ⟨Sum.inr (boundaryInclusion z), hz⟩) =
+        ⟨Sum.inr (boundaryInclusion z), hz⟩ := by
+  apply Subtype.ext
+  simpa only [intersectionPieceSourceHomotopy_inr] using
+    congrArg (fun y : annularBand ↦ Sum.inr y.1) (annularRadial_boundary s z)
+
+theorem leftPieceSourceHomotopy_eq_of_eqv
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (s : unitInterval) {a b}
+    (ha : a ∈ leftPreimage) (hb : b ∈ leftPreimage)
+    (hab : Relation.EqvGen (BoundaryGlueRel h) a b) :
+    quotientMap h (leftPieceSourceHomotopy (s, ⟨a, ha⟩)).1 =
+      quotientMap h (leftPieceSourceHomotopy (s, ⟨b, hb⟩)).1 := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue z =>
+          rw [leftPieceSourceHomotopy_fixes_inr_boundary]
+          exact Quotient.sound (Relation.EqvGen.rel _ _ (BoundaryGlueRel.glue z))
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hm := (leftPreimage_respects h hab).mp ha
+      exact (ih₁ ha hm).trans (ih₂ hm hb)
+
+theorem rightPieceSourceHomotopy_eq_of_eqv
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (s : unitInterval) {a b}
+    (ha : a ∈ rightPreimage) (hb : b ∈ rightPreimage)
+    (hab : Relation.EqvGen (BoundaryGlueRel h) a b) :
+    quotientMap h (rightPieceSourceHomotopy (s, ⟨a, ha⟩)).1 =
+      quotientMap h (rightPieceSourceHomotopy (s, ⟨b, hb⟩)).1 := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue z =>
+          rw [rightPieceSourceHomotopy_fixes_inl_boundary]
+          exact Quotient.sound (Relation.EqvGen.rel _ _ (BoundaryGlueRel.glue z))
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hm := (rightPreimage_respects h hab).mp ha
+      exact (ih₁ ha hm).trans (ih₂ hm hb)
+
+theorem intersectionPieceSourceHomotopy_eq_of_eqv
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (s : unitInterval) {a b}
+    (ha : a ∈ bothBandPreimage) (hb : b ∈ bothBandPreimage)
+    (hab : Relation.EqvGen (BoundaryGlueRel h) a b) :
+    quotientMap h (intersectionPieceSourceHomotopy (s, ⟨a, ha⟩)).1 =
+      quotientMap h (intersectionPieceSourceHomotopy (s, ⟨b, hb⟩)).1 := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue z =>
+          rw [intersectionPieceSourceHomotopy_fixes_inl_boundary,
+            intersectionPieceSourceHomotopy_fixes_inr_boundary]
+          exact Quotient.sound (Relation.EqvGen.rel _ _ (BoundaryGlueRel.glue z))
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hal : a ∈ leftPreimage := by
+        cases a with
+        | inl => trivial
+        | inr => exact ha
+      have har : a ∈ rightPreimage := by
+        cases a with
+        | inl => exact ha
+        | inr => trivial
+      have hml := (leftPreimage_respects h hab).mp hal
+      have hmr := (rightPreimage_respects h hab).mp har
+      have hm : b ∈ bothBandPreimage := by
+        cases b with
+        | inl => exact hmr
+        | inr => exact hml
+      exact (ih₁ ha hm).trans (ih₂ hm hb)
+
+theorem leftPieceSourceHomotopy_fiber_coherent
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (s : unitInterval)
+    {a b : leftPreimage} (hab : namedLeftPieceQuotientMap h a =
+      namedLeftPieceQuotientMap h b) :
+    namedLeftPieceQuotientMap h (leftPieceSourceHomotopy (s, a)) =
+      namedLeftPieceQuotientMap h (leftPieceSourceHomotopy (s, b)) := by
+  apply Subtype.ext
+  apply leftPieceSourceHomotopy_eq_of_eqv h s a.2 b.2
+  exact Quotient.exact (congrArg Subtype.val hab)
+
+theorem rightPieceSourceHomotopy_fiber_coherent
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (s : unitInterval)
+    {a b : rightPreimage} (hab : namedRightPieceQuotientMap h a =
+      namedRightPieceQuotientMap h b) :
+    namedRightPieceQuotientMap h (rightPieceSourceHomotopy (s, a)) =
+      namedRightPieceQuotientMap h (rightPieceSourceHomotopy (s, b)) := by
+  apply Subtype.ext
+  apply rightPieceSourceHomotopy_eq_of_eqv h s a.2 b.2
+  exact Quotient.exact (congrArg Subtype.val hab)
+
+theorem intersectionPieceSourceHomotopy_fiber_coherent
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (s : unitInterval)
+    {a b : bothBandPreimage} (hab : namedIntersectionPieceQuotientMap h a =
+      namedIntersectionPieceQuotientMap h b) :
+    namedIntersectionPieceQuotientMap h
+        (intersectionPieceSourceHomotopy (s, a)) =
+      namedIntersectionPieceQuotientMap h
+        (intersectionPieceSourceHomotopy (s, b)) := by
+  apply Subtype.ext
+  apply intersectionPieceSourceHomotopy_eq_of_eqv h s a.2 b.2
+  exact Quotient.exact (congrArg Subtype.val hab)
+
+/-! ## Descent to the quotient pieces -/
+
+noncomputable def leftPieceHomotopyMap (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    unitInterval × leftOpen h → leftOpen h := fun p ↦
+  namedLeftPieceQuotientMap h (leftPieceSourceHomotopy
+    (p.1, Function.surjInv (namedLeftPieceQuotientMap_isQuotientMap h).surjective p.2))
+
+theorem leftPieceHomotopyMap_pullback (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (p : unitInterval × leftPreimage) :
+    leftPieceHomotopyMap h (p.1, namedLeftPieceQuotientMap h p.2) =
+      namedLeftPieceQuotientMap h (leftPieceSourceHomotopy p) := by
+  apply leftPieceSourceHomotopy_fiber_coherent h p.1
+  exact Function.surjInv_eq
+    (namedLeftPieceQuotientMap_isQuotientMap h).surjective _
+
+theorem continuous_leftPieceHomotopyMap (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (leftPieceHomotopyMap h) := by
+  apply (namedLeftPieceQuotientMap_isQuotientMap h).continuous_lift_prod_right
+  have hc := (namedLeftPieceQuotientMap_isQuotientMap h).continuous.comp
+    continuous_leftPieceSourceHomotopy
+  convert hc using 1
+  funext p
+  exact leftPieceHomotopyMap_pullback h p
+
+noncomputable def rightPieceHomotopyMap (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    unitInterval × rightOpen h → rightOpen h := fun p ↦
+  namedRightPieceQuotientMap h (rightPieceSourceHomotopy
+    (p.1, Function.surjInv (namedRightPieceQuotientMap_isQuotientMap h).surjective p.2))
+
+theorem rightPieceHomotopyMap_pullback (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (p : unitInterval × rightPreimage) :
+    rightPieceHomotopyMap h (p.1, namedRightPieceQuotientMap h p.2) =
+      namedRightPieceQuotientMap h (rightPieceSourceHomotopy p) := by
+  apply rightPieceSourceHomotopy_fiber_coherent h p.1
+  exact Function.surjInv_eq
+    (namedRightPieceQuotientMap_isQuotientMap h).surjective _
+
+theorem continuous_rightPieceHomotopyMap (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (rightPieceHomotopyMap h) := by
+  apply (namedRightPieceQuotientMap_isQuotientMap h).continuous_lift_prod_right
+  have hc := (namedRightPieceQuotientMap_isQuotientMap h).continuous.comp
+    continuous_rightPieceSourceHomotopy
+  convert hc using 1
+  funext p
+  exact rightPieceHomotopyMap_pullback h p
+
+noncomputable def intersectionPieceHomotopyMap
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    unitInterval × ↥(leftOpen h ∩ rightOpen h) →
+      ↥(leftOpen h ∩ rightOpen h) := fun p ↦
+  namedIntersectionPieceQuotientMap h (intersectionPieceSourceHomotopy
+    (p.1, Function.surjInv
+      (namedIntersectionPieceQuotientMap_isQuotientMap h).surjective p.2))
+
+theorem intersectionPieceHomotopyMap_pullback
+    (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (p : unitInterval × bothBandPreimage) :
+    intersectionPieceHomotopyMap h
+        (p.1, namedIntersectionPieceQuotientMap h p.2) =
+      namedIntersectionPieceQuotientMap h
+        (intersectionPieceSourceHomotopy p) := by
+  apply intersectionPieceSourceHomotopy_fiber_coherent h p.1
+  exact Function.surjInv_eq
+    (namedIntersectionPieceQuotientMap_isQuotientMap h).surjective _
+
+theorem continuous_intersectionPieceHomotopyMap
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (intersectionPieceHomotopyMap h) := by
+  apply (namedIntersectionPieceQuotientMap_isQuotientMap h).continuous_lift_prod_right
+  have hc := (namedIntersectionPieceQuotientMap_isQuotientMap h).continuous.comp
+    continuous_intersectionPieceSourceHomotopy
+  convert hc using 1
+  funext p
+  exact intersectionPieceHomotopyMap_pullback h p
+
+@[simp] theorem leftPieceHomotopyMap_zero
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (x : leftOpen h) :
+    leftPieceHomotopyMap h (0, x) = x := by
+  obtain ⟨y, rfl⟩ := (namedLeftPieceQuotientMap_isQuotientMap h).surjective x
+  calc
+    _ = namedLeftPieceQuotientMap h (leftPieceSourceHomotopy (0, y)) :=
+      leftPieceHomotopyMap_pullback h (0, y)
+    _ = _ := congrArg (namedLeftPieceQuotientMap h)
+      (leftPieceSourceHomotopy_zero y)
+
+@[simp] theorem rightPieceHomotopyMap_zero
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (x : rightOpen h) :
+    rightPieceHomotopyMap h (0, x) = x := by
+  obtain ⟨y, rfl⟩ := (namedRightPieceQuotientMap_isQuotientMap h).surjective x
+  calc
+    _ = namedRightPieceQuotientMap h (rightPieceSourceHomotopy (0, y)) :=
+      rightPieceHomotopyMap_pullback h (0, y)
+    _ = _ := congrArg (namedRightPieceQuotientMap h)
+      (rightPieceSourceHomotopy_zero y)
+
+@[simp] theorem intersectionPieceHomotopyMap_zero
+    (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : ↥(leftOpen h ∩ rightOpen h)) :
+    intersectionPieceHomotopyMap h (0, x) = x := by
+  obtain ⟨y, rfl⟩ :=
+    (namedIntersectionPieceQuotientMap_isQuotientMap h).surjective x
+  calc
+    _ = namedIntersectionPieceQuotientMap h
+        (intersectionPieceSourceHomotopy (0, y)) :=
+      intersectionPieceHomotopyMap_pullback h (0, y)
+    _ = _ := congrArg (namedIntersectionPieceQuotientMap h)
+      (intersectionPieceSourceHomotopy_zero y)
 
 #print axioms annularBand_isOpen
 #print axioms leftPreimage_respects

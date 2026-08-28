@@ -16,11 +16,15 @@ The compiled declarations provide:
   quotient-map proofs.
 - an explicit continuous radial strong deformation of the annular band onto
   the literal boundary torus, packaged as `annularBandHomotopyEquiv`.
+- explicit homeomorphic sum decompositions of all three named quotient
+  preimages, continuous branchwise source homotopies, proof-insensitive branch
+  formulas, and generated-relation/fiber coherence;
+- continuous descended homotopy maps on the left, right, and intersection
+  quotient pieces, with their time-zero identity formulas.
 
 No openness of the quotient projection is assumed.  Openness is obtained from
 the saturated-preimage equations and the coinduced quotient topology.
 
-The branchwise descent of this deformation through the three restricted
-quotient maps, and hence the homotopy equivalences of the quotient cover
-pieces, remain.  No homology, assumed collar, or frozen conclusion is asserted
-here.
+The time-one retractions and homotopy-equivalence packages for the quotient
+cover pieces remain.  No homology, assumed collar, or frozen conclusion is
+asserted here.
