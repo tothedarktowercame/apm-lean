@@ -89,23 +89,11 @@ presentation with the syntactic prefix inside
 reindex; the same-size `Fin.cast` remains in the vertex map, and the endpoint
 isomorphisms returned by `composeFin_reindex_of_index_eq` remain visible.
 
-The remaining seam is categorical assembly: substitute this comparison and
-`shrinkingSuccessorPrefixFold_eq` into the literal terminal split, then combine
-the two initial transports and the three midpoint/terminal transports.  Only
-under `r ≤ T.n` may the removed arrow be rewritten with
-`shrinkingTerminalSegment_eq_rightSegment`; suffix iteration must stop at that
-midpoint.  No shrinking-fold recurrence is claimed yet.
-
 `eqToHom_three_step_coherence` proves that any three explicitly typed equality
 transports agree with the direct transport having the same source and target.
 `shrinkingPrefix_initial_transport_coherence` applies it to the initial end of
 the three fold comparisons: the inverse successor-chain transport and the two
-reindex transports compose to `shrinkingPrefixInitialIso.hom`.  The remaining
-recurrence seam is the corresponding terminal-side statement, where two
-inverse reindex transports must first be composed with the terminal-source
-transport before the mapped terminal arrow is well typed.  The right-segment
-specialization remains downstream of that statement and still requires
-`r ≤ T.n`.
+reindex transports compose to `shrinkingPrefixInitialIso.hom`.
 
 `comp_eq_of_three_prefix_three_suffix` is the generic categorical assembly
 lemma for the association emitted by the two fold reindexings.  It substitutes
@@ -116,14 +104,14 @@ the initial/terminal coherence theorems, giving the clean one-step recurrence
 in terms of `shrinkingPrefixInitialIso`, `shrinkingPrefixBoundaryIso`, and
 `shrinkingPrefixTerminalIso`.
 
-The right-block specialization remains bounded by `r ≤ T.n`.  Its direct
-expanded statement currently exceeds the elaborator heartbeat limit while
-checking the dependent `mappedPiece` type, even at 800000 heartbeats.  The
-compiled recurrence deliberately retains `shrinkingPrefixArrow`; the next
-packet should introduce a separately typed terminal-arrow coordinate lemma
-before rewriting that arrow to `rightSegment`, rather than asking elaboration
-to normalize the full recurrence statement at once.  No statement peels an
-arrow after the right block reaches the shared midpoint.
+`shrinkingPrefixArrow_terminal_eq_rightMappedPiece` provides the separately
+typed coordinate layer under `r ≤ T.n`: the removed arrow is the actual
+concatenated `mappedPiece` at `rightSegment S T ⟨T.n - r, _⟩`, surrounded by
+the shrinking-prefix endpoint transports and the transports induced by the
+segment-coordinate equality. `shrinkingPrefixFold_succ_right` substitutes
+only that theorem into the generic recurrence. No statement peels an arrow
+after the right block reaches the shared midpoint, and no finite iteration is
+claimed here.
 
 `eqToHom_three_step_whisker_arrow` supplies the generic terminal-side
 normalization without moving the dependent arrow.

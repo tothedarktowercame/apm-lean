@@ -834,6 +834,92 @@ theorem shrinkingPrefixFold_succ
   · exact shrinkingPrefix_initial_transport_coherence D S T r hr
   · exact shrinkingPrefix_terminal_transport_coherence D S T r hr
 
+/-- While the removed arrow is still in the right block, expose its actual
+concatenated mapped piece.  The endpoint transports already belonging to the
+shrinking prefix remain outside the proof-carrying transports induced by the
+segment-coordinate equality. -/
+theorem shrinkingPrefixArrow_terminal_eq_rightMappedPiece
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r ≤ T.n) :
+    shrinkingPrefixArrow D S T r
+        (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+          simp [concatSegmentCount]
+          omega))) =
+      eqToHom (congrArg
+          (fun k => D.obj ((concatSubdivision S T).point k))
+          (shrinkingEndpoint_castSucc S T r
+            (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+              simp [concatSegmentCount]
+              omega))))) ≫
+        (eqToHom (congrArg
+            (fun k => D.obj ((concatSubdivision S T).point k))
+            (congrArg Fin.castSucc
+              (shrinkingTerminalSegment_eq_rightSegment S T r hr))) ≫
+          D.mappedPiece (concatSubdivision S T)
+            (rightSegment S T ⟨T.n - r, by omega⟩) ≫
+          eqToHom (congrArg
+            (fun k => D.obj ((concatSubdivision S T).point k))
+            (congrArg Fin.succ
+              (shrinkingTerminalSegment_eq_rightSegment S T r hr))).symm) ≫
+        eqToHom (congrArg
+          (fun k => D.obj ((concatSubdivision S T).point k))
+          (shrinkingEndpoint_succ S T r
+            (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+              simp [concatSegmentCount]
+              omega))))).symm := by
+  unfold shrinkingPrefixArrow
+  rw [dependentArrow_conjugation_fin
+    (fun k => D.obj ((concatSubdivision S T).point k))
+    (D.mappedPiece (concatSubdivision S T))
+    (shrinkingTerminalSegment_eq_rightSegment S T r hr)]
+  congr 1
+
+/-- The one-step recurrence specialized to the part of the shrinking process
+that still removes a literal right-block segment. -/
+theorem shrinkingPrefixFold_succ_right
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r ≤ T.n) :
+    shrinkingPrefixFold D S T r =
+      (shrinkingPrefixInitialIso D S T r).hom ≫
+        shrinkingPrefixFold D S T (r + 1) ≫
+        (shrinkingPrefixBoundaryIso D S T r (by
+          simp [concatSegmentCount]
+          omega)).hom ≫
+        (eqToHom (congrArg
+            (fun k => D.obj ((concatSubdivision S T).point k))
+            (shrinkingEndpoint_castSucc S T r
+              (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+                simp [concatSegmentCount]
+                omega))))) ≫
+          (eqToHom (congrArg
+              (fun k => D.obj ((concatSubdivision S T).point k))
+              (congrArg Fin.castSucc
+                (shrinkingTerminalSegment_eq_rightSegment S T r hr))) ≫
+            D.mappedPiece (concatSubdivision S T)
+              (rightSegment S T ⟨T.n - r, by omega⟩) ≫
+            eqToHom (congrArg
+              (fun k => D.obj ((concatSubdivision S T).point k))
+              (congrArg Fin.succ
+                (shrinkingTerminalSegment_eq_rightSegment S T r hr))).symm) ≫
+          eqToHom (congrArg
+            (fun k => D.obj ((concatSubdivision S T).point k))
+            (shrinkingEndpoint_succ S T r
+              (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+                simp [concatSegmentCount]
+                omega))))).symm) ≫
+        (shrinkingPrefixTerminalIso D S T r (by
+          simp [concatSegmentCount]
+          omega)).hom := by
+  rw [shrinkingPrefixFold_succ D S T r (by
+    simp [concatSegmentCount]
+    omega)]
+  rw [shrinkingPrefixArrow_terminal_eq_rightMappedPiece D S T r hr]
+  congr 1
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -865,5 +951,7 @@ theorem shrinkingPrefixFold_succ
 #print axioms shrinkingPrefix_terminal_transport_coherence
 #print axioms comp_eq_of_three_prefix_three_suffix
 #print axioms shrinkingPrefixFold_succ
+#print axioms shrinkingPrefixArrow_terminal_eq_rightMappedPiece
+#print axioms shrinkingPrefixFold_succ_right
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
