@@ -33,21 +33,32 @@ the generic `relativeSingularMap_comp` theorem, and
 Thus both the projection and hemisphere-excision portions of the production
 shift commute with the north-to-south antipodal map.
 
-The first remaining comparison is the coordinate/radial part of the shift.
-The production composite uses `openDiskToOpenUpperMap`; its antipodal image
-lands in the lower hemisphere.  One must define the lower-hemisphere
-coordinate and the negation map on the punctured open disk and prove the
-map-level square
+The coordinate/radial part is now literal as well.  `openDiskNegation` is the
+continuous negation of the full open disk and `puncturedOpenDiskNegation` is
+its restriction.  `openDiskToOpenLowerMap` has final coordinate
+`-sqrt (1 - ‖x‖²)`.  The ambient square is
 
 ```
 antipodalOpenUpperToOpenLower n ∘ openDiskToOpenUpperMap n
-  = openDiskToOpenLowerMap n ∘ puncturedOpenDiskNegation n.
+  = openDiskToOpenLowerMap n ∘ openDiskNegation n.
 ```
 
-After that square, the radial comparison must calculate the induced action of
-disk negation on the boundary-sphere coordinate.  That calculation is where
-the next sign in the recurrence occurs; it is not supplied by the excision
-naturality proved here.
+The restricted punctured square and its relative chain and homology
+naturality statements are also proved.  The separate names are necessary:
+the ambient equation has the full open disk as domain, whereas
+`puncturedOpenDiskNegation` has the punctured subtype as domain.
+
+The radial comparison introduces no sign.  Negation commutes literally with
+`halfDiskMap`, `halfSphereMap`, and `radialNormalizeMap`; the last proof uses
+`NormedSpace.normalize_neg`.  It also commutes with
+`closedDiskBoundaryHomeomorph`, which leaves the underlying vector unchanged.
+
+The sole remaining sign-producing comparison is therefore the north-versus-
+south suspension/excision identification after these literal transports.  It
+must prove that the south identification is the negative of the north one;
+generic relative-map composition and connecting-map naturality do not supply
+that negative sign.  Schematically, the exact residual is
+`southShiftComparison = -northShiftComparison` after the required transports.
 
 This module therefore claims the exact base sign only.  It does not assume a
 suspension naturality square, an antipodal degree in positive dimension, or

@@ -18,6 +18,7 @@ open ConstructionTargets.SingularHomologyConcrete
 open ConstructionTargets.SingularExcision
 open ConstructionTargets.SphereHomology
 open ConstructionTargets.T02A06HemisphereExcision
+open ConstructionTargets.T02A06DiskRadialComparison
 open T02A06
 
 abbrev SphereZero := Sphere 0
@@ -247,6 +248,194 @@ theorem antipodal_hemisphereExcision_homology_naturality (n k : ℕ) :
     ← HomologicalComplex.homologyMap_comp,
     antipodal_hemisphereExcision_naturality]
 
+/-! ## Literal disk-coordinate and radial squares -/
+
+/-- Negation of the full open disk. -/
+def openDiskNegation (n : ℕ) : C(euclideanOpenDisk n, euclideanOpenDisk n) where
+  toFun x := ⟨-x.1, by
+    have hx := x.2
+    change dist x.1 0 < 1 at hx
+    rw [Metric.mem_ball, dist_zero_right, norm_neg]
+    simpa [dist_zero_right] using hx⟩
+  continuous_toFun := by fun_prop
+
+@[simp] theorem openDiskNegation_involutive (n : ℕ) (x : euclideanOpenDisk n) :
+    openDiskNegation n (openDiskNegation n x) = x := by
+  ext
+  simp [openDiskNegation]
+
+theorem openDiskNegation_mapsTo (n : ℕ) :
+    Set.MapsTo (openDiskNegation n) (puncturedOpenDiskSet n)
+      (puncturedOpenDiskSet n) := by
+  intro x hx
+  exact neg_ne_zero.mpr hx
+
+/-- Negation restricted to the punctured open disk. -/
+def puncturedOpenDiskNegation (n : ℕ) :
+    C(puncturedOpenDisk n, puncturedOpenDisk n) where
+  toFun x := ⟨openDiskNegation n x.1, openDiskNegation_mapsTo n x.2⟩
+  continuous_toFun := by fun_prop
+
+/-- Lower-hemisphere disk coordinates.  Its underlying vector is
+`euclideanSnoc x (-sqrt (1 - ‖x‖ ^ 2))`. -/
+def openDiskToOpenLowerMap (n : ℕ) :
+    C(euclideanOpenDisk n, openLowerHemisphere n) :=
+  (antipodalOpenUpperToOpenLower n).comp
+    ((openDiskToOpenUpperMap n).comp (openDiskNegation n))
+
+theorem openDiskToOpenLowerMap_apply_val (n : ℕ) (x : euclideanOpenDisk n) :
+    (openDiskToOpenLowerMap n x).1.1 =
+      euclideanSnoc x.1 (-Real.sqrt (1 - ‖x.1‖ ^ 2)) := by
+  ext i
+  cases i using Fin.lastCases <;>
+    simp [openDiskToOpenLowerMap, antipodalOpenUpperToOpenLower,
+    sphereAntipodal, openDiskToOpenUpperMap, openDiskToOpenUpper,
+    openDiskNegation, norm_neg, euclideanSnoc]
+
+theorem openDiskToOpenLowerMap_mapsTo (n : ℕ) :
+    Set.MapsTo (openDiskToOpenLowerMap n) (puncturedOpenDiskSet n)
+      (puncturedLowerHemisphere n) := by
+  intro x hx
+  exact antipodalOpenUpperToOpenLower_mapsTo n
+    (openDiskToOpenUpperMap_mapsTo n (openDiskNegation_mapsTo n hx))
+
+/-- The ambient disk-coordinate square. -/
+theorem antipodal_openDisk_coordinate_square (n : ℕ) :
+    (antipodalOpenUpperToOpenLower n).comp (openDiskToOpenUpperMap n) =
+      (openDiskToOpenLowerMap n).comp (openDiskNegation n) := by
+  ext x
+  simp [openDiskToOpenLowerMap, ContinuousMap.comp_apply]
+
+/-- The restriction of the coordinate square to punctured disks. -/
+theorem antipodal_puncturedOpenDisk_coordinate_square (n : ℕ) :
+    subspaceMap (puncturedOpenDiskSet n) (puncturedUpperHemisphere n)
+        (openDiskToOpenUpperMap n) (openDiskToOpenUpperMap_mapsTo n) ≫
+      subspaceMap (puncturedUpperHemisphere n) (puncturedLowerHemisphere n)
+        (antipodalOpenUpperToOpenLower n)
+        (antipodalOpenUpperToOpenLower_mapsTo n) =
+    TopCat.ofHom (puncturedOpenDiskNegation n) ≫
+      subspaceMap (puncturedOpenDiskSet n) (puncturedLowerHemisphere n)
+        (openDiskToOpenLowerMap n) (openDiskToOpenLowerMap_mapsTo n) := by
+  apply ConcreteCategory.hom_ext
+  intro x
+  apply Subtype.ext
+  exact congrFun (congrArg ContinuousMap.toFun
+    (antipodal_openDisk_coordinate_square n)) x.1
+
+noncomputable def openDiskNegationRelativeMap (n : ℕ) :=
+  relativeSingularMap (puncturedOpenDiskSet n) (puncturedOpenDiskSet n)
+    (openDiskNegation n) (openDiskNegation_mapsTo n)
+
+noncomputable def openDiskToOpenLowerRelativeMap (n : ℕ) :=
+  relativeSingularMap (puncturedOpenDiskSet n) (puncturedLowerHemisphere n)
+    (openDiskToOpenLowerMap n) (openDiskToOpenLowerMap_mapsTo n)
+
+private theorem relativeSingularMap_congr
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f g : C(X, Y))
+    (hf : Set.MapsTo f A B) (hg : Set.MapsTo g A B) (h : f = g) :
+    relativeSingularMap A B f hf = relativeSingularMap A B g hg := by
+  subst g
+  rfl
+
+theorem antipodal_openDisk_coordinate_chain_naturality (n : ℕ) :
+    relativeSingularMap (puncturedOpenDiskSet n) (puncturedUpperHemisphere n)
+        (openDiskToOpenUpperMap n) (openDiskToOpenUpperMap_mapsTo n) ≫
+      antipodalExcisedRelativeMap n =
+    openDiskNegationRelativeMap n ≫ openDiskToOpenLowerRelativeMap n := by
+  dsimp only [antipodalExcisedRelativeMap, openDiskNegationRelativeMap,
+    openDiskToOpenLowerRelativeMap]
+  have hleft : Set.MapsTo
+      ((antipodalOpenUpperToOpenLower n).comp (openDiskToOpenUpperMap n))
+      (puncturedOpenDiskSet n) (puncturedLowerHemisphere n) :=
+    fun x hx => antipodalOpenUpperToOpenLower_mapsTo n
+      (openDiskToOpenUpperMap_mapsTo n hx)
+  have hright : Set.MapsTo
+      ((openDiskToOpenLowerMap n).comp (openDiskNegation n))
+      (puncturedOpenDiskSet n) (puncturedLowerHemisphere n) :=
+    fun x hx => openDiskToOpenLowerMap_mapsTo n
+      (openDiskNegation_mapsTo n hx)
+  rw [relativeSingularMap_comp _ _ _ _ _ _ _ hleft,
+    relativeSingularMap_comp _ _ _ _ _ _ _ hright]
+  apply relativeSingularMap_congr
+  exact antipodal_openDisk_coordinate_square n
+
+theorem antipodal_openDisk_coordinate_homology_naturality (n k : ℕ) :
+    HomologicalComplex.homologyMap
+        (relativeSingularMap (puncturedOpenDiskSet n) (puncturedUpperHemisphere n)
+          (openDiskToOpenUpperMap n) (openDiskToOpenUpperMap_mapsTo n)) k ≫
+      HomologicalComplex.homologyMap (antipodalExcisedRelativeMap n) k =
+    HomologicalComplex.homologyMap (openDiskNegationRelativeMap n) k ≫
+      HomologicalComplex.homologyMap (openDiskToOpenLowerRelativeMap n) k := by
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← HomologicalComplex.homologyMap_comp,
+    antipodal_openDisk_coordinate_chain_naturality]
+
+/-- Negation of the closed disk. -/
+def closedDiskNegation (n : ℕ) : C(euclideanClosedDisk n, euclideanClosedDisk n) where
+  toFun x := ⟨-x.1, by
+    have hx := x.2
+    change dist x.1 0 ≤ 1 at hx
+    rw [Metric.mem_closedBall, dist_zero_right, norm_neg]
+    simpa [dist_zero_right] using hx⟩
+  continuous_toFun := by fun_prop
+
+/-- Negation of the unit sphere in `Fin n` coordinates. -/
+def unitSphereNegation (n : ℕ) : C(euclideanUnitSphere n, euclideanUnitSphere n) where
+  toFun x := ⟨-x.1, by
+    have hx := x.2
+    change dist x.1 0 = 1 at hx
+    rw [Metric.mem_sphere, dist_zero_right, norm_neg]
+    simpa [dist_zero_right] using hx⟩
+  continuous_toFun := by fun_prop
+
+/-- Negation restricted to the closed-disk boundary subtype. -/
+def closedDiskBoundaryNegation (n : ℕ) :
+    C(closedDiskBoundarySet n, closedDiskBoundarySet n) where
+  toFun x := ⟨closedDiskNegation n x.1, by
+    change -x.1.1 ∈ euclideanUnitSphere n
+    have hx := x.2
+    change dist x.1.1 0 = 1 at hx
+    rw [Metric.mem_sphere, dist_zero_right, norm_neg]
+    simpa [dist_zero_right] using hx⟩
+  continuous_toFun := by fun_prop
+
+theorem halfDisk_negation_square (n : ℕ) :
+    (openDiskNegation n).comp (halfDiskMap n) =
+      (halfDiskMap n).comp (closedDiskNegation n) := by
+  apply ContinuousMap.ext
+  intro x
+  apply Subtype.ext
+  simp [openDiskNegation, halfDiskMap, closedDiskNegation]
+
+theorem halfSphere_negation_square (n : ℕ) :
+    (puncturedOpenDiskNegation n).comp (halfSphereMap n) =
+      (halfSphereMap n).comp (unitSphereNegation n) := by
+  apply ContinuousMap.ext
+  intro x
+  apply Subtype.ext
+  apply Subtype.ext
+  simp [puncturedOpenDiskNegation, openDiskNegation, halfSphereMap,
+    unitSphereNegation]
+
+theorem radialNormalize_negation_square (n : ℕ) :
+    (unitSphereNegation n).comp (radialNormalizeMap n) =
+      (radialNormalizeMap n).comp (puncturedOpenDiskNegation n) := by
+  apply ContinuousMap.ext
+  intro x
+  apply Subtype.ext
+  exact (NormedSpace.normalize_neg x.1.1).symm
+
+theorem closedDiskBoundaryHomeomorph_negation_square (n : ℕ) :
+    TopCat.ofHom (closedDiskBoundaryNegation n) ≫
+        (TopCat.isoOfHomeo (closedDiskBoundaryHomeomorph n)).hom =
+      (TopCat.isoOfHomeo (closedDiskBoundaryHomeomorph n)).hom ≫
+        TopCat.ofHom (unitSphereNegation n) := by
+  apply ConcreteCategory.hom_ext
+  intro x
+  apply Subtype.ext
+  rfl
+
 noncomputable def antipodalAbsoluteMap (n : ℕ) :
     SingularChains (TopCat.of (Sphere n)) ⟶ SingularChains (TopCat.of (Sphere n)) :=
   ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
@@ -312,5 +501,14 @@ theorem antipodal_relativeProjection_reverse_homology_naturality (n k : ℕ) :
 #print axioms antipodal_relativeProjection_reverse_homology_naturality
 #print axioms antipodal_hemisphereExcision_naturality
 #print axioms antipodal_hemisphereExcision_homology_naturality
+#print axioms openDiskToOpenLowerMap_apply_val
+#print axioms antipodal_openDisk_coordinate_square
+#print axioms antipodal_puncturedOpenDisk_coordinate_square
+#print axioms antipodal_openDisk_coordinate_chain_naturality
+#print axioms antipodal_openDisk_coordinate_homology_naturality
+#print axioms halfDisk_negation_square
+#print axioms halfSphere_negation_square
+#print axioms radialNormalize_negation_square
+#print axioms closedDiskBoundaryHomeomorph_negation_square
 
 end ConstructionTargets.SphereAntipodalHomology
