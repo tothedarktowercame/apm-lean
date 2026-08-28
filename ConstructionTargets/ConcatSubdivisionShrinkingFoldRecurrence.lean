@@ -478,6 +478,33 @@ def shrinkingPrefixTerminalIso
       concatSegmentCount S T - r
     omega)
 
+/-- Vertex-level identification of the successor-shaped displayed prefix with
+stage `r+1`. -/
+theorem shrinkingSuccessorPrefixVertex_eq
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T)
+    (i : Fin (concatSegmentCount S T - (r + 1) + 1)) :
+    shrinkingVertexEmbedding S T r
+        (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+          (Fin.cast (by omega) i).castSucc) =
+      shrinkingVertexEmbedding S T (r + 1) i := by
+  apply Fin.ext
+  rfl
+
+/-- Segment-level identification for the same prefix. -/
+theorem shrinkingSuccessorPrefixSegment_eq
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T)
+    (i : Fin (concatSegmentCount S T - (r + 1))) :
+    shrinkingSegmentEmbedding S T r
+        (successorChainSegment (Nat.sub_pos_of_lt (by omega))
+          (Fin.cast (by omega) i).castSucc) =
+      shrinkingSegmentEmbedding S T (r + 1) i := by
+  apply Fin.ext
+  rfl
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -497,5 +524,7 @@ def shrinkingPrefixTerminalIso
 #print axioms shrinkingPrefixInitialIso
 #print axioms shrinkingPrefixBoundaryIso
 #print axioms shrinkingPrefixTerminalIso
+#print axioms shrinkingSuccessorPrefixVertex_eq
+#print axioms shrinkingSuccessorPrefixSegment_eq
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence

@@ -52,6 +52,13 @@ positive-length split with a literal terminal arrow. The remaining seam is
 specializing its successor-shaped prefix and source transport to consecutive
 `shrinkingPrefixFold` stages.
 
+`shrinkingSuccessorPrefixVertex_eq` and
+`shrinkingSuccessorPrefixSegment_eq` now give the exact pointwise index
+identifications for that specialization. The residual is the dependent arrow
+conjugation: the endpoint transports already inside `successorChainArrow`
+must be composed with those already inside the stage-`r` and stage-`r+1`
+`shrinkingPrefixArrow`s before `composeFin_reindex_of_index_eq` applies.
+
 `shrinkingPrefixFold_terminal_split_literal` performs the generic shrinking
 stage specialization. `shrinkingTerminalSegment_eq_rightSegment` identifies
 its terminal segment with the decreasing right-block segment under the
