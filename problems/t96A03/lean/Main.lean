@@ -3,6 +3,8 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.T96A03FrozenQuotientRepresentation
+import ConstructionTargets.T96A03DegreeTwoMayerVietoris
+import ConstructionTargets.T96A03NonDegreeTwoHomology
 
 /-!
 # APM t96A03 — two 2-spheres glued along their equators
@@ -317,6 +319,20 @@ theorem apm_t96a03
   extracted without the same absent singular Mayer--Vietoris or
   cellular-to-singular comparison theorem.
   -/
-  sorry
+  let hGeom :=
+    ConstructionTargets.T96A03FrozenQuotientRepresentation.conjugateEquatorHomeomorph h
+  let eX := apm_t96A03_homeomorph_equatorGluing h
+  let eH (k : ℕ) :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      eX.toHomotopyEquiv k
+  obtain ⟨h0, h1, hhigh⟩ :=
+    ConstructionTargets.T96A03NonDegreeTwoHomology.nonDegreeTwoIntegralHomology hGeom
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact ⟨eH 0 ≪≫ Classical.choice h0⟩
+  · exact h1.of_iso (eH 1)
+  · exact ⟨eH 2 ≪≫
+      ConstructionTargets.T96A03DegreeTwoMayerVietoris.degreeTwoModuleIsoFinThree hGeom⟩
+  · intro k hk
+    exact (hhigh k (by omega)).of_iso (eH k)
 
 #print axioms apm_t96a03
