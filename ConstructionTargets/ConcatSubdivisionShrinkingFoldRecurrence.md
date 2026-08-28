@@ -301,10 +301,19 @@ zero-vertex transports to one direct transport.
 midpoint cardinality and point-coordinate maps, yielding exactly the direct
 map from the concatenated initial point to `S`'s initial point.
 
-The remaining seam is terminal-side. After substituting the midpoint theorem
-into `concatComposeFin_eq_midpoint_rightBlock` and unfolding the named
-right-block isomorphisms, the whiskered concatenated evaluation retains two
-composable `eqToHom` terms after its segment fold, whereas `evaluate` contains
-the single direct endpoint transport. A typed terminal coherence theorem for
-that pair (and the corresponding midpoint `S`-to-`T` pair) is still required;
-no evaluation-composition theorem is claimed yet.
+`concat_right_terminal_evaluate_coherence` now collapses the five explicit
+transports after the literal `T` fold to the endpoint transport occurring in
+`D.evaluate T`.  `concat_midpoint_evaluate_coherence` similarly collapses the
+six transports between the literal `S` and `T` folds to the direct map induced
+by `S.point_last.trans T.point_zero.symm`.  The generic
+`eqToHom_five_step_coherence` and `eqToHom_six_step_coherence` prove these
+equalities by eliminating the named object equalities before proof
+irrelevance is used.
+
+The remaining seam is the fully typed substitution of
+`concatComposeFin_eq_midpoint_rightBlock` into the outer evaluation maps.  Its
+right-hand morphism must be stated explicitly before rewriting: an inferred
+placeholder does not determine the dependent source and target objects.  A
+small association/substitution theorem around the literal `S` and `T` folds
+can then use the banked initial, midpoint, and terminal coherence equalities.
+No evaluation-composition theorem is claimed in this packet.

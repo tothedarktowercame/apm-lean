@@ -2271,6 +2271,71 @@ theorem rightInitialAccum_midpoint_left_source
   simp only [objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv]
   apply eqToHom_three_step_coherence
 
+theorem eqToHom_five_step_coherence
+    {A₀ A₁ A₂ A₃ A₄ A₅ : C}
+    (h₁ : A₀ = A₁) (h₂ : A₁ = A₂) (h₃ : A₂ = A₃)
+    (h₄ : A₃ = A₄) (h₅ : A₄ = A₅) (h : A₀ = A₅) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫ eqToHom h₃ ≫ eqToHom h₄ ≫
+      eqToHom h₅ = eqToHom h := by
+  subst A₁
+  subst A₂
+  subst A₃
+  subst A₄
+  subst A₅
+  simp
+
+theorem eqToHom_six_step_coherence
+    {A₀ A₁ A₂ A₃ A₄ A₅ A₆ : C}
+    (h₁ : A₀ = A₁) (h₂ : A₁ = A₂) (h₃ : A₂ = A₃)
+    (h₄ : A₃ = A₄) (h₅ : A₄ = A₅) (h₆ : A₅ = A₆)
+    (h : A₀ = A₆) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫ eqToHom h₃ ≫ eqToHom h₄ ≫
+      eqToHom h₅ ≫ eqToHom h₆ = eqToHom h := by
+  subst A₁
+  subst A₂
+  subst A₃
+  subst A₄
+  subst A₅
+  subst A₆
+  simp
+
+/-- All transports after the literal `T` fold, including the concatenated
+evaluation endpoint, collapse to `T`'s evaluation endpoint. -/
+theorem concat_right_terminal_evaluate_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (rightBlockObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+      (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv ≫
+      (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom ≫
+      eqToHom (congrArg D.obj (concatSubdivision S T).point_last) =
+        eqToHom (congrArg D.obj T.point_last) := by
+  simp only [rightBlockObjectIso, reverseRightObjectIso,
+    rightSuffixSliceTargetIso, objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv]
+  exact eqToHom_five_step_coherence _ _ _ _ _ _
+
+/-- The transports between the literal `S` and `T` folds collapse to the
+shared midpoint equality supplied by their endpoint certificates. -/
+theorem concat_midpoint_evaluate_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (objectIsoOfIndexEq D.obj
+        (midpointLeftPoint_eq S T (Fin.last (S.n + 1)))).inv ≫
+      (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+        (midpointLeftVertexIndex_last S T)).hom ≫
+      (rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T 0)).hom ≫
+      (reverseRightObjectIso D S T 0).hom ≫
+      (rightBlockObjectIso D S T 0).hom =
+        eqToHom (congrArg D.obj (S.point_last.trans T.point_zero.symm)) := by
+  simp only [rightBlockObjectIso, reverseRightObjectIso,
+    rightSuffixSliceSourceIso, objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv]
+  exact eqToHom_six_step_coherence _ _ _ _ _ _ _
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -2296,6 +2361,10 @@ theorem rightInitialAccum_midpoint_left_source
 #print axioms shrinkingSuccessorPrefixFold_eq
 #print axioms shrinkingSyntacticSuccessorPrefixFold_eq
 #print axioms eqToHom_three_step_coherence
+#print axioms eqToHom_five_step_coherence
+#print axioms eqToHom_six_step_coherence
+#print axioms concat_right_terminal_evaluate_coherence
+#print axioms concat_midpoint_evaluate_coherence
 #print axioms shrinkingPrefix_initial_transport_coherence
 #print axioms shrinkingPrefix_initial_transport_whisker
 #print axioms eqToHom_three_step_whisker_arrow
