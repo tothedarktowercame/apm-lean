@@ -236,11 +236,18 @@ coordinates as explicit object transports. The base bridge
 it does not obtain the equality by treating the two proof witnesses as
 definitionally equal.
 
-`composeFin_front_split` now supplies that generic first-arrow recursion, and
-`rightSuffixSliceFold_succ_front` specializes it to the `(k+1)` slice. Its
-tail deliberately remains the literal successor restriction of that slice.
-The next seam is the proof-carrying reindex of this tail to
-`rightSuffixSliceFold k`, using `rightSuffixSliceVertex_succ_tail` and
-`rightSuffixSliceSegment_succ_tail`; the first arrow must then be normalized
-with `rightSuffixSliceSegment_succ_zero` to `rightRemovalStep k`. No successor
-accumulator bridge or combined fold formula is assumed.
+`composeFin_front_split` supplies the generic first-arrow recursion, and
+`rightSuffixSliceFold_succ_front` specializes it to the `(k+1)` slice.
+`rightSuffixSliceArrow_succ_tail_eq_conjugate` aligns every successor-tail
+arrow with the corresponding `k`-slice arrow, including both endpoint
+transports. `rightSuffixSliceTailFold_eq` applies the dependent reindex theorem
+to the whole tail, and `rightSuffixSliceFold_succ` gives the resulting
+successor recurrence with only the first arrow and the two outer tail
+transports exposed.
+
+The next seam is to normalize that first arrow together with the tail's source
+transport to `rightRemovalStep k`, and to reconcile the final tail transport
+with the named accumulator endpoint transport. Only after those two typed
+equalities compile can the successor recurrence be iterated to identify
+`rightSuffixAccum` with the reverse-right finite fold. No accumulator bridge
+or combined concatenated-fold formula is assumed here.

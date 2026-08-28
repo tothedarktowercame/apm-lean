@@ -1507,7 +1507,7 @@ theorem eqToHom_two_two_conjugation
     (k₁ : B₀ = B₁) (k₂ : B₁ = B₂)
     (r₁ : B₀ = B₃) (r₂ : B₃ = B₂) :
     eqToHom h₁ ≫ eqToHom h₂ ≫ f ≫ eqToHom k₁ ≫ eqToHom k₂ =
-      eqToHom l₁ ≫ eqToHom l₂ ≫ f ≫ eqToHom r₁ ≫ eqToHom r₂ := by
+      eqToHom l₁ ≫ (eqToHom l₂ ≫ f ≫ eqToHom r₁) ≫ eqToHom r₂ := by
   subst A₁
   subst A₂
   subst A₃
@@ -1515,6 +1515,71 @@ theorem eqToHom_two_two_conjugation
   subst B₂
   subst B₃
   simp
+
+/-- The literal successor tail arrow of the `(k+1)` slice is the corresponding
+`k`-slice arrow, conjugated by the proof-carrying vertex-tail equalities. -/
+theorem rightSuffixSliceArrow_succ_tail_eq_conjugate
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) (i : Fin k) :
+    rightSuffixSliceArrow D S T (k + 1) hk i.succ =
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_succ_tail T k hk i.castSucc)).hom ≫
+      rightSuffixSliceArrow D S T k (by omega) i ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_succ_tail T k hk i.succ)).inv := by
+  unfold rightSuffixSliceArrow
+  rw [dependentArrow_conjugation
+    (reverseRightObject D S T) (reverseRightArrow D S T)
+    (rightSuffixSliceSegment_succ_tail T k hk i)]
+  simp only [objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv,
+    Category.assoc]
+  exact eqToHom_two_two_conjugation (C := C) _ _ _ _ _ _ _ _ _
+
+/-- The successor-restricted tail fold of the `(k+1)` slice is the `k`-slice
+fold with only its two outer vertex transports remaining. -/
+theorem rightSuffixSliceTailFold_eq
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) :
+    TwoOpenDescentDatum.composeFin
+        (rightSuffixSliceObject D S T (k + 1) hk ∘
+          fun i : Fin (k + 1) ↦ i.succ)
+        (fun i : Fin k ↦
+          rightSuffixSliceArrow D S T (k + 1) hk i.succ) =
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_succ_tail T k hk 0)).hom ≫
+      rightSuffixSliceFold D S T k (by omega) ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_succ_tail T k hk (Fin.last k))).inv := by
+  apply composeFin_reindex_of_index_eq
+    (reverseRightObject D S T)
+    (rightSuffixSliceVertex T k (by omega))
+    (fun i : Fin (k + 1) ↦ rightSuffixSliceVertex T (k + 1) hk i.succ)
+    (rightSuffixSliceVertex_succ_tail T k hk)
+    (rightSuffixSliceArrow D S T k (by omega))
+    (fun i : Fin k ↦ rightSuffixSliceArrow D S T (k + 1) hk i.succ)
+  exact rightSuffixSliceArrow_succ_tail_eq_conjugate D S T k hk
+
+/-- Successor recurrence for the slice fold, with the front arrow and the two
+tail-reindex endpoint transports still explicit. -/
+theorem rightSuffixSliceFold_succ
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) :
+    rightSuffixSliceFold D S T (k + 1) hk =
+      rightSuffixSliceArrow D S T (k + 1) hk 0 ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_succ_tail T k hk 0)).hom ≫
+        rightSuffixSliceFold D S T k (by omega) ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_succ_tail T k hk (Fin.last k))).inv := by
+  rw [rightSuffixSliceFold_succ_front D S T k hk]
+  rw [rightSuffixSliceTailFold_eq D S T k hk]
+  congr 1
 
 theorem rightSuffixSlice_source_stage
     (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
@@ -1698,6 +1763,9 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightSuffixSliceFold_zero
 #print axioms rightSuffixSliceFold_succ_front
 #print axioms eqToHom_two_two_conjugation
+#print axioms rightSuffixSliceArrow_succ_tail_eq_conjugate
+#print axioms rightSuffixSliceTailFold_eq
+#print axioms rightSuffixSliceFold_succ
 #print axioms rightSuffixSlice_source_stage
 #print axioms rightSuffixSlice_target_stage
 #print axioms rightSuffixSliceSourceIso
