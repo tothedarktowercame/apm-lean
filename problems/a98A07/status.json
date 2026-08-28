@@ -1,48 +1,55 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "a98A07",
-  "bundle_root": "problems/a98A07",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-a98A07.md",
-    "problem_tex": "apm/a98A07.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "a98A07",
+  "obstructions" : [ {
+    "areas" : [ ],
+    "areas_are" : "necessary",
+    "missing" : "[closer_hop] 4\n\n[closer_note] Failed-with-statement: Jacobian and improper-substitution APIs were found, but both retain the transformed integrability obligation. The exact remaining interfaces are majorant integrability, measurable-limit/DCT boundary L1 convergence, and Cauchy reconstruction from boundary L1 convergence to local uniform convergence.",
+    "recorded_by" : "codex-6",
+    "frame" : "phase-2d-adversarial-migration",
+    "at_commit" : "a00ea1f",
+    "date" : "2026-08-19",
+    "resolved" : null
+  } ],
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-a98A07.md",
+    "problem_tex" : "apm/a98A07.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
-    "sorry_count_main": 1,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+  "boundary" : "Closed by frame f50 (campaign jit-all-open-v2, 2026-08-28): \"a98A07 close boundary convergence proof\". Banked verbatim from the f50 Solver terminal head 9f3b22b88255deb6142c210174a00a426ece974c on branch exp/countdown-f50-a98A07-solver; content identical to that head, no re-derivation. Frozen statement apm_a98a07 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/a98A07",
+  "closer_hop" : 4,
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-28",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 1,
+    "axioms" : "apm_a98a07 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f50"
   },
-  "classification": "partial",
-  "closer_hop": 4,
-  "closer_note": "Failed-with-statement: Jacobian and improper-substitution APIs were found, but both retain the transformed integrability obligation. The exact remaining interfaces are majorant integrability, measurable-limit/DCT boundary L1 convergence, and Cauchy reconstruction from boundary L1 convergence to local uniform convergence.",
-  "imported_at": "2026-07-13T17:26:52.990883Z",
-  "obstructions": [
-    {
-      "areas": [],
-      "areas_are": "necessary",
-      "missing": "[closer_hop] 4\n\n[closer_note] Failed-with-statement: Jacobian and improper-substitution APIs were found, but both retain the transformed integrability obligation. The exact remaining interfaces are majorant integrability, measurable-limit/DCT boundary L1 convergence, and Cauchy reconstruction from boundary L1 convergence to local uniform convergence.",
-      "recorded_by": "codex-6",
-      "frame": "phase-2d-adversarial-migration",
-      "at_commit": "a00ea1f",
-      "date": "2026-08-19",
-      "resolved": null
-    }
-  ]
+  "closer_note" : "Failed-with-statement: Jacobian and improper-substitution APIs were found, but both retain the transformed integrability obligation. The exact remaining interfaces are majorant integrability, measurable-limit/DCT boundary L1 convergence, and Cauchy reconstruction from boundary L1 convergence to local uniform convergence.",
+  "imported_at" : "2026-07-13T17:26:52.990883Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }
