@@ -322,7 +322,18 @@ stage-zero cancellation. Its left side is the literal concatenated
 whiskers required by the propositionally aligned endpoint objects.
 
 The remaining seam is final evaluation assembly: substitute the literal-left
-midpoint fold into this unbracketed formula, then apply the compiled initial,
-six-map midpoint, and five-map terminal substitutions with the outer
-evaluation endpoint maps. No evaluation or quotient-composition theorem is
+midpoint fold into this unbracketed formula. The complete endpoint blocks now
+compile as `concat_left_initial_unbracketed_coherence` and
+`concat_right_terminal_unbracketed_coherence`; these include the inverse and
+forward stage-zero coordinates omitted by the earlier evaluation lemmas.
+`two_arrow_three_block_substitution` and its nested variant prove the abstract
+two-fold substitution.
+
+The exact remaining equality is reassociation between the unbracketed
+theorem's grouped right-hand morphism
+`prefix ≫ (initial ≫ leftFold ≫ midpoint ≫ rightFold ≫ terminal) ≫ suffix`
+and the nested generic substitution's separately packaged blocks. Neither
+right- nor left-associated `Category.assoc` normalization currently bridges
+those dependent group boundaries. A theorem stated in that precise grouped
+shape is still required. No evaluation or quotient-composition theorem is
 claimed in this packet.

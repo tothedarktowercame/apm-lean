@@ -2457,6 +2457,86 @@ theorem concat_midpoint_evaluate_expand
   symm
   exact eqToHom_two_step_to_direct _ _ _
 
+/-- The evaluation prefix, the inverse zero-stage coordinate, and the three
+initial midpoint transports collapse to the literal `S` evaluation prefix. -/
+theorem concat_left_initial_unbracketed_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    eqToHom (congrArg D.obj (concatSubdivision S T).point_zero).symm ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T 0)).inv ≫
+      rightInitialAccum D S T (T.n + 1) ≫
+      (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+        (midpointLeftVertexIndex_zero S T)).inv ≫
+      (objectIsoOfIndexEq D.obj (midpointLeftPoint_eq S T 0)).hom =
+        eqToHom (congrArg D.obj S.point_zero).symm := by
+  rw [rightInitialAccum_eq_eqToHom]
+  simp only [objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv]
+  exact eqToHom_five_step_coherence _ _ _ _ _ _
+
+theorem concat_left_initial_unbracketed_coherence_assoc
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V)
+    {W : C} (r : D.obj (S.point 0) ⟶ W) :
+    eqToHom (congrArg D.obj (concatSubdivision S T).point_zero).symm ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T 0)).inv ≫
+      rightInitialAccum D S T (T.n + 1) ≫
+      (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+        (midpointLeftVertexIndex_zero S T)).inv ≫
+      (objectIsoOfIndexEq D.obj (midpointLeftPoint_eq S T 0)).hom ≫ r =
+        eqToHom (congrArg D.obj S.point_zero).symm ≫ r := by
+  rw [← concat_left_initial_unbracketed_coherence D S T]
+  simp only [Category.assoc]
+
+/-- The five terminal transports from the right fold, the forward zero-stage
+endpoint coordinate, and the concatenated evaluation suffix collapse to the
+literal `T` evaluation suffix. -/
+theorem concat_right_terminal_unbracketed_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (rightBlockObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+      (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv ≫
+      (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T
+          (Fin.last (concatSegmentCount S T)))).hom ≫
+      eqToHom (congrArg D.obj (concatSubdivision S T).point_last) =
+        eqToHom (congrArg D.obj T.point_last) := by
+  simp only [rightBlockObjectIso, reverseRightObjectIso,
+    rightSuffixSliceTargetIso, objectIsoOfIndexEq,
+    eqToIso.hom, eqToIso.inv]
+  exact eqToHom_six_step_coherence _ _ _ _ _ _ _
+
+/-- Substitute three already typed transport blocks around two arbitrary
+morphisms. -/
+theorem two_arrow_three_block_substitution
+    {A B C₀ D₀ E F : C}
+    (i i' : A ⟶ B) (f : B ⟶ C₀)
+    (m m' : C₀ ⟶ D₀) (g : D₀ ⟶ E) (t t' : E ⟶ F)
+    (hi : i = i') (hm : m = m') (ht : t = t') :
+    i ≫ f ≫ m ≫ g ≫ t = i' ≫ f ≫ m' ≫ g ≫ t' := by
+  rw [hi, hm, ht]
+
+/-- The association shape produced by whiskering the unbracketed fold with
+the two outer evaluation endpoint maps. -/
+theorem nested_two_arrow_three_block_substitution
+    {A B C₀ D₀ E F G H : C}
+    (l : A ⟶ B) (a : B ⟶ C₀) (i : A ⟶ C₀) (f : C₀ ⟶ D₀)
+    (m m' : D₀ ⟶ E) (g : E ⟶ F) (t : F ⟶ G) (r : G ⟶ H)
+    (u : F ⟶ H) (hi : l ≫ a = i) (hm : m = m') (ht : t ≫ r = u) :
+    l ≫ (a ≫ f ≫ m ≫ g ≫ t) ≫ r = i ≫ f ≫ m' ≫ g ≫ u := by
+  simpa only [Category.assoc] using
+    two_arrow_three_block_substitution (l ≫ a) i f m m' g (t ≫ r) u hi hm ht
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -2492,6 +2572,11 @@ theorem concat_midpoint_evaluate_expand
 #print axioms eqToHom_two_step_to_direct
 #print axioms concat_left_initial_evaluate_coherence
 #print axioms concat_midpoint_evaluate_expand
+#print axioms concat_left_initial_unbracketed_coherence
+#print axioms concat_left_initial_unbracketed_coherence_assoc
+#print axioms concat_right_terminal_unbracketed_coherence
+#print axioms two_arrow_three_block_substitution
+#print axioms nested_two_arrow_three_block_substitution
 #print axioms shrinkingPrefix_initial_transport_coherence
 #print axioms shrinkingPrefix_initial_transport_whisker
 #print axioms eqToHom_three_step_whisker_arrow
