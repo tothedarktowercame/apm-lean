@@ -387,6 +387,52 @@ theorem composeFin_terminal_split_of_pos_literal {m : ℕ} (hm : 0 < m)
         (fun i => successorChainArrow hm A f i.castSucc) ≫ k)
     (successorChain_terminal_arrow_normalization hm A f)
 
+/-- The literal positive-length split specialized to a shrinking prefix
+stage. -/
+theorem shrinkingPrefixFold_terminal_split_literal
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r < concatSegmentCount S T) :
+    shrinkingPrefixFold D S T r =
+      (successorChainInitialObjectIso (Nat.sub_pos_of_lt hr)
+          (shrinkingPrefixObject D S T r)).inv ≫
+        TwoOpenDescentDatum.composeFin
+          (((shrinkingPrefixObject D S T r) ∘
+              successorChainVertex (Nat.sub_pos_of_lt hr)) ∘ Fin.castSucc)
+          (fun i => successorChainArrow (Nat.sub_pos_of_lt hr)
+            (shrinkingPrefixObject D S T r)
+            (shrinkingPrefixArrow D S T r) i.castSucc) ≫
+        eqToHom (congrArg (shrinkingPrefixObject D S T r)
+          (successorChainLastSource_eq_terminal (Nat.sub_pos_of_lt hr))) ≫
+        shrinkingPrefixArrow D S T r
+          (terminalSegmentIndex (Nat.sub_pos_of_lt hr)) ≫
+        eqToHom (congrArg (shrinkingPrefixObject D S T r)
+          (terminalSegmentIndex_succ (Nat.sub_pos_of_lt hr))) := by
+  exact composeFin_terminal_split_of_pos_literal (Nat.sub_pos_of_lt hr)
+    (shrinkingPrefixObject D S T r) (shrinkingPrefixArrow D S T r)
+
+/-- While the terminal arrow remains in the right block, its generic positive
+length coordinate is the decreasing literal `rightSegment` coordinate. -/
+theorem shrinkingTerminalSegment_eq_rightSegment
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ) (hr : r ≤ T.n) :
+    shrinkingSegmentEmbedding S T r
+        (terminalSegmentIndex (by
+          exact Nat.sub_pos_of_lt
+            (by simp [concatSegmentCount]; omega))) =
+      rightSegment S T ⟨T.n - r, by omega⟩ := by
+  let hp : 0 < concatSegmentCount S T - r := Nat.sub_pos_of_lt
+    (by simp [concatSegmentCount]; omega)
+  have hi : terminalSegmentIndex hp =
+      (⟨concatSegmentCount S T - r - 1, by omega⟩ :
+        Fin (concatSegmentCount S T - r)) := by
+    apply Fin.ext
+    rfl
+  change shrinkingSegmentEmbedding S T r (terminalSegmentIndex hp) = _
+  rw [hi]
+  exact shrinkingSegment_last_eq_rightSegment S T r hr
+
 /-- The source objects of successive stages are canonically equal. -/
 def shrinkingPrefixInitialIso
     (D : @TwoOpenDescentDatum X _ U V C _)
@@ -443,6 +489,8 @@ def shrinkingPrefixTerminalIso
 #print axioms composeFin_eq_successorChain
 #print axioms composeFin_terminal_split_of_pos
 #print axioms composeFin_terminal_split_of_pos_literal
+#print axioms shrinkingPrefixFold_terminal_split_literal
+#print axioms shrinkingTerminalSegment_eq_rightSegment
 #print axioms successorChain_initial_object_transport
 #print axioms successorChainCastLast_eq_last
 #print axioms successorChain_final_object_transport

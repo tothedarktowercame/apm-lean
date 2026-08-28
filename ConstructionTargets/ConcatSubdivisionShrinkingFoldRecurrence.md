@@ -51,3 +51,15 @@ isomorphisms.
 positive-length split with a literal terminal arrow. The remaining seam is
 specializing its successor-shaped prefix and source transport to consecutive
 `shrinkingPrefixFold` stages.
+
+`shrinkingPrefixFold_terminal_split_literal` performs the generic shrinking
+stage specialization. `shrinkingTerminalSegment_eq_rightSegment` identifies
+its terminal segment with the decreasing right-block segment under the
+necessary hypothesis `r ≤ T.n`.
+
+The weaker hypothesis `r < concatSegmentCount S T` does not imply that the
+terminal arrow remains in the right block: after `r > T.n`, it lies in the
+left subdivision. Thus right-suffix iteration must stop at the midpoint. The
+next proof is the pointwise reindex between the displayed successor-shaped
+prefix and stage `r+1`, retaining the named initial, boundary, and terminal
+isomorphisms.
