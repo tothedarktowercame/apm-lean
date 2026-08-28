@@ -115,11 +115,31 @@ theorem mapPath_subpath_split {b : Bool} {x y : X} (p : Path x y)
       simpa only [] using
         (mapPath_trans D (p.subpath t₀ t₁) (p.subpath t₁ t₂) hp01 hp12)
 
+/-- Membership of an ordered whole segment restricts to any ordered
+subsegment.  This is the range-theoretic prerequisite for a localized split
+homotopy and does not require membership of the ambient path outside the
+segment. -/
+theorem subpath_mem_of_mem_ordered_segment {b : Bool} {x y : X}
+    (p : Path x y) (t₀ t₂ a c : unitInterval)
+    (h02 : t₀ ≤ t₂) (ha : t₀ ≤ a) (hc : c ≤ t₂) (hac : a ≤ c)
+    (hp02 : ∀ s, p.subpath t₀ t₂ s ∈ twoChart U V b) :
+    ∀ s, p.subpath a c s ∈ twoChart U V b := by
+  intro s
+  have hrange : Set.range (p.subpath t₀ t₂) ⊆ twoChart U V b := by
+    rintro _ ⟨r, rfl⟩
+    exact hp02 r
+  apply hrange
+  have hs : p.subpath a c s ∈ Set.range (p.subpath a c) := Set.mem_range_self s
+  rw [Path.range_subpath_of_le p a c hac] at hs
+  rw [Path.range_subpath_of_le p t₀ t₂ h02]
+  exact Set.image_mono (Set.Icc_subset_Icc ha hc) hs
+
 #print axioms pathInPiece_trans
 #print axioms pathInPiece_subpath
 #print axioms mapPath_trans
 #print axioms subpathSplitHomotopyInPiece
 #print axioms mapPath_subpath_split
+#print axioms subpath_mem_of_mem_ordered_segment
 
 end TwoOpenDescentDatum
 
