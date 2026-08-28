@@ -1366,6 +1366,121 @@ theorem reverseRightAccumTargetIso_hom
       eqToHom (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
         (reverseRightStage_last T)) := rfl
 
+/-- Vertex embedding of the last `k` arrows of the forward reverse-right
+chain.  This slice represents removal stages `k-1, ..., 0`. -/
+def rightSuffixSliceVertex
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1)
+    (i : Fin (k + 1)) : Fin (T.n + 2) :=
+  ⟨T.n + 1 - k + i, by omega⟩
+
+/-- Segment embedding belonging to `rightSuffixSliceVertex`. -/
+def rightSuffixSliceSegment
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1)
+    (i : Fin k) : Fin (T.n + 1) :=
+  ⟨T.n + 1 - k + i, by omega⟩
+
+theorem rightSuffixSliceSegment_castSucc
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1)
+    (i : Fin k) :
+    (rightSuffixSliceSegment T k hk i).castSucc =
+      rightSuffixSliceVertex T k hk i.castSucc := by
+  apply Fin.ext
+  rfl
+
+theorem rightSuffixSliceSegment_succ
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1)
+    (i : Fin k) :
+    (rightSuffixSliceSegment T k hk i).succ =
+      rightSuffixSliceVertex T k hk i.succ := by
+  apply Fin.ext
+  rfl
+
+theorem rightSuffixSliceVertex_zero
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
+    rightSuffixSliceVertex T k hk 0 =
+      ⟨T.n + 1 - k, by omega⟩ := by
+  apply Fin.ext
+  simp [rightSuffixSliceVertex]
+
+theorem rightSuffixSliceVertex_last
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
+    rightSuffixSliceVertex T k hk (Fin.last k) =
+      Fin.last (T.n + 1) := by
+  apply Fin.ext
+  simp [rightSuffixSliceVertex]
+  omega
+
+/-- The new first segment of the `(k+1)`-slice is forward coordinate
+`T.n-k`, hence removal stage `k`. -/
+theorem rightSuffixSliceSegment_succ_zero
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) :
+    rightSuffixSliceSegment T (k + 1) hk 0 =
+      ⟨T.n - k, by omega⟩ := by
+  apply Fin.ext
+  simp [rightSuffixSliceSegment]
+
+/-- Dropping the newly prepended segment recovers the preceding slice's
+segment embedding. -/
+theorem rightSuffixSliceSegment_succ_tail
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) (i : Fin k) :
+    rightSuffixSliceSegment T (k + 1) hk i.succ =
+      rightSuffixSliceSegment T k (by omega) i := by
+  apply Fin.ext
+  simp [rightSuffixSliceSegment]
+  omega
+
+/-- The vertex tail of the `(k+1)`-slice is the complete `k`-slice. -/
+theorem rightSuffixSliceVertex_succ_tail
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) (i : Fin (k + 1)) :
+    rightSuffixSliceVertex T (k + 1) hk i.succ =
+      rightSuffixSliceVertex T k (by omega) i := by
+  apply Fin.ext
+  simp [rightSuffixSliceVertex]
+  omega
+
+/-- Objects of the proof-carrying terminal slice. -/
+def rightSuffixSliceObject
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1)
+    (i : Fin (k + 1)) : C :=
+  reverseRightObject D S T (rightSuffixSliceVertex T k hk i)
+
+/-- Arrows of the terminal slice, transported from the actual reverse-right
+chain only after the segment and vertex embeddings have been aligned. -/
+def rightSuffixSliceArrow
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1)
+    (i : Fin k) :
+    rightSuffixSliceObject D S T k hk i.castSucc ⟶
+      rightSuffixSliceObject D S T k hk i.succ :=
+  eqToHom (congrArg (reverseRightObject D S T)
+      (rightSuffixSliceSegment_castSucc T k hk i).symm) ≫
+    reverseRightArrow D S T (rightSuffixSliceSegment T k hk i) ≫
+    eqToHom (congrArg (reverseRightObject D S T)
+      (rightSuffixSliceSegment_succ T k hk i))
+
+/-- The dependent fold of the last `k` forward reverse-right arrows. -/
+def rightSuffixSliceFold
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
+    rightSuffixSliceObject D S T k hk 0 ⟶
+      rightSuffixSliceObject D S T k hk (Fin.last k) :=
+  TwoOpenDescentDatum.composeFin (rightSuffixSliceObject D S T k hk)
+    (rightSuffixSliceArrow D S T k hk)
+
+@[simp] theorem rightSuffixSliceFold_zero
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (hk : 0 ≤ T.n + 1) :
+    rightSuffixSliceFold D S T 0 hk = 𝟙 _ := by
+  exact TwoOpenDescentDatum.composeFin_zero _ _
+
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
 original terminal object. -/
@@ -1489,6 +1604,14 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms reverseRightAccumTargetIso
 #print axioms reverseRightAccumSourceIso_hom
 #print axioms reverseRightAccumTargetIso_hom
+#print axioms rightSuffixSliceVertex
+#print axioms rightSuffixSliceSegment
+#print axioms rightSuffixSliceSegment_succ_zero
+#print axioms rightSuffixSliceSegment_succ_tail
+#print axioms rightSuffixSliceVertex_succ_tail
+#print axioms rightSuffixSliceArrow
+#print axioms rightSuffixSliceFold
+#print axioms rightSuffixSliceFold_zero
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum

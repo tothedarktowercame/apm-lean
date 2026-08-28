@@ -201,6 +201,20 @@ objects. The remaining seam is recursive: identify `rightSuffixAccum` with
 this `reverseRightArrow` `composeFin`, including its zero and successor reindex
 equations. No accumulator equality is claimed yet.
 
+`rightSuffixSliceVertex` and `rightSuffixSliceSegment` now select the terminal
+`k` arrows of that forward chain. `rightSuffixSliceArrow` retains the two
+proof-carrying endpoint transports into the actual `reverseRightArrow`, and
+`rightSuffixSliceFold` is their dependent composite. The zero fold and the
+successor coordinate equations compile: the new first segment is coordinate
+`T.n-k`, while the remaining vertex and segment tails are exactly the previous
+`k`-slice.
+
+The next theorem must turn those coordinate equations into a head-split law
+for `rightSuffixSliceFold (k+1)`. Mathlib's banked `composeFin_succ` exposes
+the final arrow, whereas this slice grows by prepending its first arrow. A
+proof-carrying front/tail reindex is therefore still required before the
+recursive equation can be matched with `rightSuffixAccum_succ`.
+
 `reverseRightAccumSourceIso` and `reverseRightAccumTargetIso` provide the two
 outer coordinates for that bridge. They identify the reverse fold at zero and
 `Fin.last` with accumulator stages `T.n+1` and zero; their `_hom` theorems
