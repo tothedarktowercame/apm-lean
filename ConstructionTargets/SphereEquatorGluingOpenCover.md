@@ -77,17 +77,21 @@ compatibility with the generated gluing relation, so `leftPieceRetraction`
 descends continuously through the restricted quotient.
 `leftPieceRetraction_comp_inclusion` proves the strict retraction equation.
 
-The first remaining literal endpoint goal is
+The left endpoint comparison is now complete:
 
 ```lean
 leftPieceHomotopyMap n h (1, x) =
   leftSphereInclusion n h (leftPieceRetraction n h x)
 ```
 
-after choosing a source representative. The retained branch is fixed
-definitionally. The band branch must turn
+After choosing a source representative, the retained branch is fixed
+definitionally. In the band branch, the proof turns
 `EquatorGlueRel.glue (h.symm (bandProjectionToEquator n y))` into equality in
 the restricted quotient subtype after applying
-`leftPieceSourceHomotopy_inr_one`. The right and intersection retractions and
-the three `ContinuousMap.HomotopyEquiv` packages remain downstream; none is
-asserted here. No homology or Mayer--Vietoris statement is present.
+`leftPieceSourceHomotopy_inr_one`. `leftPieceHomotopy` packages the descended
+deformation, and `leftPieceHomotopyEquiv` proves that `leftOpen n h` is
+homotopy equivalent to `AmbientSphere n`.
+
+The analogous right and intersection retractions, endpoint comparisons, and
+homotopy-equivalence packages remain downstream. No homology or
+Mayer--Vietoris statement is present.

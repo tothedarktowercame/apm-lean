@@ -1366,6 +1366,74 @@ theorem leftPieceRetraction_comp_inclusion (n : ℕ)
   intro x
   exact leftPieceRetraction_pullback n h ⟨Sum.inl x, trivial⟩
 
+/-- At time one, the descended left-piece homotopy is the retained-sphere
+inclusion after the quotient retraction. -/
+theorem leftPieceHomotopyMap_one (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (x : leftOpen n h) :
+    leftPieceHomotopyMap n h ((1 : unitInterval), x) =
+      leftSphereInclusion n h (leftPieceRetraction n h x) := by
+  obtain ⟨y, rfl⟩ :=
+    (namedLeftPieceQuotientMap_isQuotientMap n h).surjective x
+  rw [leftPieceRetraction_pullback]
+  calc
+   leftPieceHomotopyMap n h
+       ((1 : unitInterval), namedLeftPieceQuotientMap n h y) =
+      namedLeftPieceQuotientMap n h
+        (leftPieceSourceHomotopy n ((1 : unitInterval), y)) :=
+   leftPieceHomotopyMap_pullback n h ((1 : unitInterval), y)
+   _ = leftSphereInclusion n h (leftSourceRetraction n h y) := by
+    rcases y with ⟨y, hy⟩
+    cases y with
+    | inl y =>
+        rw [leftSourceRetraction_inl]
+        exact congrArg (namedLeftPieceQuotientMap n h)
+          (leftPieceSourceHomotopy_fixes_inl n (1 : unitInterval) y hy)
+    | inr y =>
+        let yb : equatorialBand n := ⟨y, hy⟩
+        let z : sphereEquator n := h.symm (bandProjectionToEquator n yb)
+        have hs : leftPieceSourceHomotopy n
+            ((1 : unitInterval), ⟨Sum.inr y, hy⟩) =
+            ⟨Sum.inr (equatorInclusion n (bandProjectionToEquator n yb)),
+              equatorInclusion_mem_band n (bandProjectionToEquator n yb)⟩ := by
+          apply Subtype.ext
+          exact leftPieceSourceHomotopy_inr_one n yb hy
+        have hr : leftSourceRetraction n h ⟨Sum.inr y, hy⟩ =
+            equatorInclusion n (h.symm (bandProjectionToEquator n yb)) := by
+          simpa only [yb] using leftSourceRetraction_inr n h yb hy
+        rw [hr]
+        rw [congrArg (namedLeftPieceQuotientMap n h) hs]
+        apply Subtype.ext
+        change Quotient.mk _
+            (Sum.inr (equatorInclusion n (bandProjectionToEquator n yb))) =
+          Quotient.mk _ (Sum.inl (equatorInclusion n z))
+        have hglue : quotientMap n h (Sum.inl (equatorInclusion n z)) =
+            quotientMap n h (Sum.inr (equatorInclusion n (h z))) := by
+          exact Quotient.sound
+            (Relation.EqvGen.rel _ _ (EquatorGlueRel.glue (n := n) (h := h) z))
+        simpa only [z, Homeomorph.apply_symm_apply] using hglue.symm
+
+/-- The descended deformation of the left quotient piece. -/
+def leftPieceHomotopy (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    ContinuousMap.Homotopy
+      (ContinuousMap.id (leftOpen n h))
+      ((leftSphereInclusion n h).comp
+        ⟨leftPieceRetraction n h, continuous_leftPieceRetraction n h⟩) where
+  toFun := leftPieceHomotopyMap n h
+  continuous_toFun := continuous_leftPieceHomotopyMap n h
+  map_zero_left := leftPieceHomotopyMap_zero n h
+  map_one_left := leftPieceHomotopyMap_one n h
+
+/-- The left quotient piece is homotopy equivalent to its retained whole
+sphere. -/
+def leftPieceHomotopyEquiv (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    leftOpen n h ≃ₕ AmbientSphere n where
+  toFun := ⟨leftPieceRetraction n h, continuous_leftPieceRetraction n h⟩
+  invFun := leftSphereInclusion n h
+  left_inv := ⟨(leftPieceHomotopy n h).symm⟩
+  right_inv := by rw [leftPieceRetraction_comp_inclusion]
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -1439,5 +1507,8 @@ theorem leftPieceRetraction_comp_inclusion (n : ℕ)
 #print axioms leftSourceRetraction_fiber_coherent
 #print axioms continuous_leftPieceRetraction
 #print axioms leftPieceRetraction_comp_inclusion
+#print axioms leftPieceHomotopyMap_one
+#print axioms leftPieceHomotopy
+#print axioms leftPieceHomotopyEquiv
 
 end ConstructionTargets.SphereEquatorGluingOpenCover
