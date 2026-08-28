@@ -75,10 +75,28 @@ def shrinkingPrefixBoundaryIso
       concatSegmentCount S T - r - 1
     omega)
 
+def shrinkingPrefixTerminalIso
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r < concatSegmentCount S T) :
+    shrinkingPrefixObject D S T r
+        (⟨concatSegmentCount S T - r - 1, by omega⟩ :
+          Fin (concatSegmentCount S T - r)).succ ≅
+      shrinkingPrefixObject D S T r
+        (Fin.last (concatSegmentCount S T - r)) :=
+  eqToIso (by
+    apply congrArg (shrinkingPrefixObject D S T r)
+    apply Fin.ext
+    change concatSegmentCount S T - r - 1 + 1 =
+      concatSegmentCount S T - r
+    omega)
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
 #print axioms shrinkingPrefixInitialIso
 #print axioms shrinkingPrefixBoundaryIso
+#print axioms shrinkingPrefixTerminalIso
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
