@@ -200,3 +200,16 @@ fold, bracketed only by `reverseRightObjectIso` at its midpoint and terminal
 objects. The remaining seam is recursive: identify `rightSuffixAccum` with
 this `reverseRightArrow` `composeFin`, including its zero and successor reindex
 equations. No accumulator equality is claimed yet.
+
+`reverseRightAccumSourceIso` and `reverseRightAccumTargetIso` provide the two
+outer coordinates for that bridge. They identify the reverse fold at zero and
+`Fin.last` with accumulator stages `T.n+1` and zero; their `_hom` theorems
+expose the exact equality transports.
+
+The remaining comparison requires a generalized dependent interval fold.
+`rightSuffixAccum (k+1)` prepends removal step `k`, while `composeFin_succ`
+peels the final forward arrow. Induction therefore needs the slice of
+`reverseRightArrow` corresponding to removal stages `k-1, ..., 0`, together
+with its transported endpoints. The current `composeFin` API has no such
+offset/slice family. No equality with `rightSuffixAccum`, and consequently no
+combined concatenated-fold formula, is assumed here.

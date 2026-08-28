@@ -1329,6 +1329,43 @@ theorem reverseRightComposeFin_eq
   apply ConstructionTargets.ComposeFinConjugation.composeFin_conjugation_from_comparisonIso
   exact reverseRightArrow_eq_conjugate D S T
 
+/-- Source coordinate from the reverse-stage fold to the full accumulator. -/
+def reverseRightAccumSourceIso
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    reverseRightObject D S T 0 ≅
+      shrinkingPrefixTerminalObject (C := C) D S T (T.n + 1) :=
+  eqToIso (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+    (reverseRightStage_zero T))
+
+/-- Target coordinate from the reverse-stage fold to accumulator stage zero.
+-/
+def reverseRightAccumTargetIso
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    reverseRightObject D S T (Fin.last (T.n + 1)) ≅
+      shrinkingPrefixTerminalObject (C := C) D S T 0 :=
+  eqToIso (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+    (reverseRightStage_last T))
+
+theorem reverseRightAccumSourceIso_hom
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (reverseRightAccumSourceIso D S T).hom =
+      eqToHom (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+        (reverseRightStage_zero T)) := rfl
+
+theorem reverseRightAccumTargetIso_hom
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (reverseRightAccumTargetIso D S T).hom =
+      eqToHom (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+        (reverseRightStage_last T)) := rfl
+
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
 original terminal object. -/
@@ -1448,6 +1485,10 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms reverseRightArrow
 #print axioms reverseRightArrow_eq_conjugate
 #print axioms reverseRightComposeFin_eq
+#print axioms reverseRightAccumSourceIso
+#print axioms reverseRightAccumTargetIso
+#print axioms reverseRightAccumSourceIso_hom
+#print axioms reverseRightAccumTargetIso_hom
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum
