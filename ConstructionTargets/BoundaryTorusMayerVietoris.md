@@ -15,20 +15,29 @@ equal to `twoCircleFold`, component by component.  Consequently their native
 `AddCommGrpCat` singular-homology maps agree in every degree, before choosing
 any biproduct coordinates.
 
-The first remaining representation interface is a generic, natural
-isomorphism
+`TopologicalSumSingularHomology` now supplies the generic natural isomorphism
 
 ```
 H k (X ⊕ Y) ≅ H k X ⨞ H k Y
 ```
 
-for the production singular-chain functor. No banked ConstructionTarget
-exposes this comparison yet. It is needed before the overlap can receive
-explicit `ℤ ⊕ ℤ` coordinates. The geometric inclusion comparison is
-now complete before applying homology.
-After the missing topological-sum comparison is supplied, these map equalities
-can be normalized into signed H0/H1 matrices and used with production
-Mayer–Vietoris to derive boundary-torus homology.
+for the production singular-chain functor.  This file now gives overlap and
+piece coordinates in degrees zero and one, proves the inverse formula for a
+homotopy-equivalence homology isomorphism, and proves that the homology map of
+`twoCircleFold` is the categorical codiagonal in the normalized sum
+coordinates.
 
-No coproduct-homology comparison, inclusion matrix, Künneth theorem, or
-frozen `t01J03` conclusion is assumed here.
+The next literal equality is the association-sensitive composite of the
+overlap inverse, the actual overlap inclusion, and the piece retraction.  Its
+point-set composite is already `twoCircleFold`; it still needs to be normalized
+as a three-factor homology-functor composite.  After that, integer coordinates
+give the signed fold matrix.
+
+There is also an ownership/import boundary: `BoundaryTorusMayerVietorisAlgebra`
+currently imports this file, so this file cannot import that algebra target to
+state equality with its `intSignedFold` without creating an import cycle.  The
+table extraction therefore belongs in a downstream integration target, or the
+generic signed-fold algebra must be moved upstream of this file.
+
+No inclusion matrix, Künneth theorem, torus homology table, or frozen `t01J03`
+conclusion is assumed here.

@@ -1,6 +1,7 @@
 import ConstructionTargets.BoundaryTorusOpenCover
 import ConstructionTargets.ProductionOpenCoverMayerVietoris
 import ConstructionTargets.CircleHomology
+import ConstructionTargets.TopologicalSumSingularHomology
 
 /-!
 # Homology coordinates for the boundary-torus open cover
@@ -24,9 +25,38 @@ open ConstructionTargets.CircleHomology
 open ConstructionTargets.SingularHomologyConcrete
 open ConstructionTargets.SphereHomology
 open ConstructionTargets.ProductionOpenCoverMayerVietoris
+open ConstructionTargets.TopologicalSumSingularHomology
 
 abbrev H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   SingularHomology k (TopCat.of X)
+
+theorem singularHomologyIsoOfHomotopyEquiv_inv_local
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) (k : ℕ) :
+    (singularHomologyIsoOfHomotopyEquiv e k).inv =
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom e.invFun) := by
+  apply (cancel_mono (singularHomologyIsoOfHomotopyEquiv e k).hom).1
+  rw [Iso.inv_hom_id]
+  rw [singularHomologyIsoOfHomotopyEquiv_hom]
+  change 𝟙 (H k Y) =
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+      (AddCommGrpCat.of ℤ)).map (TopCat.ofHom e.invFun) ≫
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+      (AddCommGrpCat.of ℤ)).map (TopCat.ofHom e.toFun)
+  rw [← Functor.map_comp]
+  change 𝟙 (H k Y) =
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+      (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom (e.toFun.comp e.invFun))
+  rw [singularHomology_map_eq_of_topCatHomotopy
+    (continuousMapHomotopyCylinder (Classical.choice e.right_inv))
+    (continuousMapHomotopyCylinder_zero (Classical.choice e.right_inv))
+    (continuousMapHomotopyCylinder_one (Classical.choice e.right_inv))]
+  have h : TopCat.ofHom (ContinuousMap.id Y) = 𝟙 (TopCat.of Y) := by rfl
+  rw [h]
+  exact ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+    (AddCommGrpCat.of ℤ)).map_id (TopCat.of Y) |>.symm
 
 noncomputable def circleHomologyIsoSphereOne (k : ℕ) :
     H k Circle ≅ GroupHomology 1 k :=
@@ -77,6 +107,31 @@ theorem rightHomology_isZero_of_one_lt (k : ℕ) (hk : 1 < k) :
 noncomputable def overlapHomologyIsoTwoCircles (k : ℕ) :
     H k Overlap ≅ H k (Circle ⊕ Circle) :=
   singularHomologyIsoOfHomotopyEquiv overlapHomotopyEquivTwoCircles k
+
+/-- Coordinates on overlap homology before choosing circle coordinates. -/
+noncomputable def overlapHomologyIsoCircleBiprod (k : ℕ) :
+    H k Overlap ≅ H k Circle ⊞ H k Circle :=
+  overlapHomologyIsoTwoCircles k ≪≫ sumHomologyIsoBiprod Circle Circle k
+
+noncomputable def overlapH0IsoIntBiprod :
+    H 0 Overlap ≅ (AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ) :=
+  overlapHomologyIsoCircleBiprod 0 ≪≫
+    biprod.mapIso circleH0GroupIsoInt circleH0GroupIsoInt
+
+noncomputable def overlapH1IsoIntBiprod :
+    H 1 Overlap ≅ (AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ) :=
+  overlapHomologyIsoCircleBiprod 1 ≪≫
+    biprod.mapIso circleH1GroupIsoInt circleH1GroupIsoInt
+
+noncomputable def piecesH0IsoIntBiprod :
+    (H 0 leftOpen ⊞ H 0 rightOpen) ≅
+      (AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ) :=
+  biprod.mapIso leftH0IsoInt rightH0IsoInt
+
+noncomputable def piecesH1IsoIntBiprod :
+    (H 1 leftOpen ⊞ H 1 rightOpen) ≅
+      (AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ) :=
+  biprod.mapIso leftH1IsoInt rightH1IsoInt
 
 /-- Both connected components retain the first circle coordinate.  This is
 the continuous map whose induced homology map must occur in each geometric
@@ -156,6 +211,69 @@ theorem rightOverlapComposite_homologyMap (k : ℕ) :
       ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
         (AddCommGrpCat.of ℤ)).map (TopCat.ofHom twoCircleFold) := by
   rw [rightOverlapComposite_eq_fold]
+
+/-- In the normalized topological-sum coordinates, the map induced by folding
+the two circles is the categorical codiagonal. -/
+theorem sumCircleIso_inv_comp_foldHomologyMap (k : ℕ) :
+    (sumHomologyIsoBiprod Circle Circle k).inv ≫
+        ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+          (AddCommGrpCat.of ℤ)).map (TopCat.ofHom twoCircleFold) =
+      biprod.desc (𝟙 (H k Circle)) (𝟙 (H k Circle)) := by
+  apply biprod.hom_ext'
+  · calc
+      _ = HomologicalComplex.homologyMap
+            ((AlgebraicTopology.SSet.singularChainComplexFunctor
+              AddCommGrpCat).obj (AddCommGrpCat.of ℤ) |>.map
+                (TopCat.toSSet.map (sumInl Circle Circle))) k ≫
+          ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+            (AddCommGrpCat.of ℤ)).map (TopCat.ofHom twoCircleFold) := by
+        simpa only [Category.assoc] using congrArg
+          (fun q ↦ q ≫ ((AlgebraicTopology.singularHomologyFunctor
+            AddCommGrpCat k).obj (AddCommGrpCat.of ℤ)).map
+              (TopCat.ofHom twoCircleFold))
+          (sumInl_homologyMap_eq_inl_comp_iso_inv Circle Circle k).symm
+      _ = 𝟙 (H k Circle) := by
+        change ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+            (AddCommGrpCat.of ℤ)).map (sumInl Circle Circle) ≫
+          ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+            (AddCommGrpCat.of ℤ)).map (TopCat.ofHom twoCircleFold) = _
+        rw [← Functor.map_comp]
+        have h : sumInl Circle Circle ≫ TopCat.ofHom twoCircleFold =
+            𝟙 (TopCat.of Circle) := by
+          apply ConcreteCategory.hom_ext
+          intro z
+          rfl
+        rw [h]
+        exact ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+          (AddCommGrpCat.of ℤ)).map_id (TopCat.of Circle)
+      _ = _ := (biprod.inl_desc _ _).symm
+  · calc
+      _ = HomologicalComplex.homologyMap
+            ((AlgebraicTopology.SSet.singularChainComplexFunctor
+              AddCommGrpCat).obj (AddCommGrpCat.of ℤ) |>.map
+                (TopCat.toSSet.map (sumInr Circle Circle))) k ≫
+          ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+            (AddCommGrpCat.of ℤ)).map (TopCat.ofHom twoCircleFold) := by
+        simpa only [Category.assoc] using congrArg
+          (fun q ↦ q ≫ ((AlgebraicTopology.singularHomologyFunctor
+            AddCommGrpCat k).obj (AddCommGrpCat.of ℤ)).map
+              (TopCat.ofHom twoCircleFold))
+          (sumInr_homologyMap_eq_inr_comp_iso_inv Circle Circle k).symm
+      _ = 𝟙 (H k Circle) := by
+        change ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+            (AddCommGrpCat.of ℤ)).map (sumInr Circle Circle) ≫
+          ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+            (AddCommGrpCat.of ℤ)).map (TopCat.ofHom twoCircleFold) = _
+        rw [← Functor.map_comp]
+        have h : sumInr Circle Circle ≫ TopCat.ofHom twoCircleFold =
+            𝟙 (TopCat.of Circle) := by
+          apply ConcreteCategory.hom_ext
+          intro z
+          rfl
+        rw [h]
+        exact ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+          (AddCommGrpCat.of ℤ)).map_id (TopCat.of Circle)
+      _ = _ := (biprod.inr_desc _ _).symm
 
 #print axioms circleH0GroupIsoInt
 #print axioms circleH1GroupIsoInt
