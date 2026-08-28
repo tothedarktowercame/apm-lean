@@ -125,6 +125,23 @@ intended for the next heterogeneous fold that combines
 `rightBlockComposeFin_eq` with the stage-zero comparison; it does not assume
 that composite.
 
+`reverseRemovalStage_segment_coordinate` makes the order conversion explicit:
+removal stage `T.n-j` is forward right-block segment `j`.
+`reverseRemovalStage_terminalArrow_eq_rightMappedPiece` specializes the banked
+terminal-arrow theorem at that reverse stage, retaining its complete endpoint
+conjugation and the actual concatenated mapped piece. Finally,
+`rightSuffixAccum_full_unfold` shows that the full accumulator begins with
+stage `T.n` (therefore forward segment zero) and then recurses through the
+shorter accumulator. Together these declarations certify the forward order
+`0, ..., T.n` while the recursive stage indices run `T.n, ..., 0`.
+
+The remaining comparison with `rightBlockComposeFin_eq` is a genuinely
+dependent reverse-index fold theorem: it must compose the boundary/terminal
+isomorphisms between successive removal stages and show that their internal
+`eqToHom`s cancel to the structural `rightBlockObject` endpoints. No such
+finite conjugation theorem is yet present, so no accumulator/right-block fold
+equality or concatenated segment-fold formula is claimed here.
+
 `eqToHom_three_step_whisker_arrow` supplies the generic terminal-side
 normalization without moving the dependent arrow.
 `shrinkingPrefix_terminal_transport_coherence` applies it to the two inverse

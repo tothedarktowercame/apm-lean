@@ -1038,6 +1038,43 @@ theorem rightSuffixAccum_succ
         rightSuffixAccum D S T k (by omega) := by
   rfl
 
+/-- Reverse the removal-stage coordinate into the forward right-segment
+coordinate. Stage `T.n - j` removes actual segment `j`. -/
+theorem reverseRemovalStage_segment_coordinate
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    shrinkingSegmentEmbedding S T (T.n - j)
+        (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+          simp [concatSegmentCount]
+          omega))) = rightSegment S T j := by
+  rw [shrinkingTerminalSegment_eq_rightSegment S T (T.n - j) (by omega)]
+  congr 1
+  apply Fin.ext
+  simp
+  omega
+
+/-- Pointwise actual-mapped-piece comparison in forward segment coordinates.
+The theorem's inferred equality retains all source and target transports from
+`shrinkingPrefixArrow_terminal_eq_rightMappedPiece`. -/
+def reverseRemovalStage_terminalArrow_eq_rightMappedPiece
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :=
+  shrinkingPrefixArrow_terminal_eq_rightMappedPiece D S T (T.n - j)
+    (by omega)
+
+/-- The complete accumulator starts with removal stage `T.n`, hence with
+forward right segment zero, and then continues with the shorter accumulator.
+-/
+theorem rightSuffixAccum_full_unfold
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    rightSuffixAccum D S T (T.n + 1) (le_refl _) =
+      rightRemovalStep D S T T.n (le_refl _) ≫
+        rightSuffixAccum D S T T.n (by omega) := by
+  exact rightSuffixAccum_succ D S T T.n (le_refl _)
+
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
 original terminal object. -/
@@ -1137,6 +1174,9 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightRemovalStep
 #print axioms rightInitialAccum
 #print axioms rightSuffixAccum
+#print axioms reverseRemovalStage_segment_coordinate
+#print axioms reverseRemovalStage_terminalArrow_eq_rightMappedPiece
+#print axioms rightSuffixAccum_full_unfold
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum
