@@ -168,6 +168,76 @@ noncomputable def singularChainsComparison (X : TopCat) :
     rw [hhom]
     exact (Limits.map_ι_comp_inv_sigmaComparison _ _ _).symm)
 
+/-- The chain comparison commutes with the singular-chain map induced by a
+continuous map.  This is proved on the canonical singular-simplex generators;
+in particular it is not an objectwise comparison promoted to naturality by an
+assumption. -/
+theorem singularChainsComparison_naturality {X Y : TopCat} (f : X ⟶ Y) :
+    ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).map f)) ≫
+        (singularChainsComparison Y).hom =
+      (singularChainsComparison X).hom ≫
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).map f) := by
+  apply HomologicalComplex.Hom.ext
+  funext n
+  apply (cancel_epi (singularChainsComparisonXIso X n).inv).1
+  simp only [HomologicalComplex.comp_f]
+  dsimp [singularChainsComparison]
+  rw [Iso.inv_hom_id_assoc]
+  apply Limits.Sigma.hom_ext
+  intro s
+  dsimp only [singularChainsComparison, singularChainsComparisonXIso]
+  rw [PreservesCoproduct.inv_hom]
+  erw [Limits.ι_comp_sigmaComparison_assoc]
+  have hmodule :
+      Limits.Sigma.ι (fun _ : SingularSimplex X n => ModuleCat.of ℤ ℤ) s ≫
+          ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map f).f n) =
+        Limits.Sigma.ι (fun _ : SingularSimplex Y n => ModuleCat.of ℤ ℤ)
+          ((TopCat.toSSet.map f).app _ s) := by
+    dsimp [AlgebraicTopology.singularChainComplexFunctor,
+      AlgebraicTopology.SSet.singularChainComplexFunctor]
+    rw [Limits.Sigma.ι_comp_map']
+    simp
+  change forgetIntModules.map
+      (Limits.Sigma.ι (fun _ : SingularSimplex X n => ModuleCat.of ℤ ℤ) s) ≫
+        forgetIntModules.map
+          ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map f).f n) ≫
+        (PreservesCoproduct.iso forgetIntModules
+          (fun _ : SingularSimplex Y n => ModuleCat.of ℤ ℤ)).hom = _
+  rw [← forgetIntModules.map_comp_assoc]
+  rw [hmodule]
+  have hhom : (PreservesCoproduct.iso forgetIntModules
+      (fun _ : SingularSimplex Y n => ModuleCat.of ℤ ℤ)).hom =
+        inv (sigmaComparison forgetIntModules
+          (fun _ : SingularSimplex Y n => ModuleCat.of ℤ ℤ)) := by
+    symm
+    apply IsIso.inv_eq_of_hom_inv_id
+    simpa only [PreservesCoproduct.inv_hom] using
+      (PreservesCoproduct.iso forgetIntModules
+        (fun _ : SingularSimplex Y n => ModuleCat.of ℤ ℤ)).inv_hom_id
+  rw [hhom]
+  calc
+    _ = Limits.Sigma.ι
+        (fun _ : SingularSimplex Y n => forgetIntModules.obj (ModuleCat.of ℤ ℤ))
+        ((TopCat.toSSet.map f).app _ s) := by
+      exact Limits.map_ι_comp_inv_sigmaComparison
+        (G := forgetIntModules)
+        (f := fun _ : SingularSimplex Y n => ModuleCat.of ℤ ℤ)
+        ((TopCat.toSSet.map f).app _ s)
+    _ = _ := by
+      dsimp [AlgebraicTopology.singularChainComplexFunctor,
+        AlgebraicTopology.SSet.singularChainComplexFunctor]
+      symm
+      simpa only [Category.id_comp] using Limits.Sigma.ι_comp_map'
+        (f := fun _ : SingularSimplex X n => AddCommGrpCat.of ℤ)
+        (g := fun _ : SingularSimplex Y n => AddCommGrpCat.of ℤ)
+        ((TopCat.toSSet.map f).app (Opposite.op (SimplexCategory.mk n)))
+        (fun _ ↦ 𝟙 (AddCommGrpCat.of ℤ)) s
+
 /-- Integral singular homology in `ModuleCat ℤ`, after forgetting, is the
 same object as integral singular homology computed in `AddCommGrpCat`. -/
 noncomputable def singularHomologyComparison (X : TopCat) (k : ℕ) :
@@ -180,6 +250,72 @@ noncomputable def singularHomologyComparison (X : TopCat) (k : ℕ) :
   exact ((K.sc k).mapHomologyIso forgetIntModules).symm ≪≫
     (HomologicalComplex.homologyFunctor AddCommGrpCat
       (ComplexShape.down ℕ) k).mapIso (singularChainsComparison X)
+
+/-- The homology comparison is natural for every continuous map.  The left
+side is the integral-module homology map after forgetting its scalar
+structure; the right side is the map computed natively in additive
+commutative groups. -/
+theorem singularHomologyComparison_naturality {X Y : TopCat} (f : X ⟶ Y)
+    (k : ℕ) :
+    forgetIntModules.map
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+          (ModuleCat.of ℤ ℤ)).map f) ≫
+        (singularHomologyComparison Y k).hom =
+      (singularHomologyComparison X k).hom ≫
+        (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+          (AddCommGrpCat.of ℤ)).map f) := by
+  let φ := ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+    (ModuleCat.of ℤ ℤ)).map f
+  let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ)
+    (ComplexShape.down ℕ) k).map φ
+  let H := HomologicalComplex.homologyFunctor AddCommGrpCat
+    (ComplexShape.down ℕ) k
+  change forgetIntModules.map (HomologicalComplex.homologyMap φ k) ≫
+      ((HomologicalComplex.sc (moduleChains Y) k).mapHomologyIso
+        forgetIntModules).inv ≫
+      H.map (singularChainsComparison Y).hom =
+    (((HomologicalComplex.sc (moduleChains X) k).mapHomologyIso
+        forgetIntModules).inv ≫
+      H.map (singularChainsComparison X).hom) ≫
+      H.map ((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map f))
+  have hφ : ShortComplex.homologyMap ψ =
+      HomologicalComplex.homologyMap φ k := rfl
+  rw [← hφ]
+  have hpres := ShortComplex.mapHomologyIso_inv_naturality ψ forgetIntModules
+  change forgetIntModules.map (ShortComplex.homologyMap ψ) ≫
+      ((HomologicalComplex.sc (moduleChains Y) k).mapHomologyIso
+        forgetIntModules).inv =
+    ((HomologicalComplex.sc (moduleChains X) k).mapHomologyIso
+        forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        (((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map φ)) k
+    at hpres
+  change (forgetIntModules.map (ShortComplex.homologyMap ψ) ≫
+      ((HomologicalComplex.sc (moduleChains Y) k).mapHomologyIso
+        forgetIntModules).inv) ≫ _ = _
+  rw [hpres]
+  change ((HomologicalComplex.sc (moduleChains X) k).mapHomologyIso
+      forgetIntModules).inv ≫
+        (H.map (((forgetIntModules.mapHomologicalComplex
+              (ComplexShape.down ℕ)).map φ)) ≫
+          H.map (singularChainsComparison Y).hom) =
+    ((HomologicalComplex.sc (moduleChains X) k).mapHomologyIso
+      forgetIntModules).inv ≫
+        (H.map (singularChainsComparison X).hom ≫
+          H.map ((((AlgebraicTopology.singularChainComplexFunctor
+            AddCommGrpCat).obj (AddCommGrpCat.of ℤ)).map f)))
+  have hinner :
+      H.map (((forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map φ)) ≫
+          H.map (singularChainsComparison Y).hom =
+        H.map (singularChainsComparison X).hom ≫
+          H.map ((((AlgebraicTopology.singularChainComplexFunctor
+            AddCommGrpCat).obj (AddCommGrpCat.of ℤ)).map f)) := by
+    rw [← H.map_comp, singularChainsComparison_naturality f, H.map_comp]
+  exact congrArg
+    (fun z ↦ ((HomologicalComplex.sc (moduleChains X) k).mapHomologyIso
+      forgetIntModules).inv ≫ z) hinner
 
 /-- Lift an isomorphism of underlying additive groups uniquely to an
 isomorphism of `ℤ`-modules. -/
@@ -217,7 +353,9 @@ theorem singularHomologyModuleIsZeroOfGroupIsZero
     (h.of_iso (singularHomologyComparison X k))
 
 #print axioms singularChainsComparison
+#print axioms singularChainsComparison_naturality
 #print axioms singularHomologyComparison
+#print axioms singularHomologyComparison_naturality
 #print axioms singularHomologyModuleIsoOfGroupIso
 #print axioms singularHomologyModuleIsZeroOfGroupIsZero
 
