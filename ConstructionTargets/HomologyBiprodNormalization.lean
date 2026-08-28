@@ -16,6 +16,45 @@ namespace ConstructionTargets.HomologyBiprodNormalization
 
 open ConstructionTargets.HomologyBiprodIso
 
+section PreadditiveSignNormalization
+
+universe v
+
+variable {C : Type v} [Category C] [Preadditive C]
+variable {A₀ A₁ A₂ A₃ A₄ A₅ : C}
+
+/-- A minus sign on the middle leg of a fully left-associated five-fold
+composite can be moved to the outside.  The association is deliberately the
+one produced by expanded downstream coordinate composites. -/
+theorem fullyLeftAssociated_comp_neg_comp_comp
+    (a : A₀ ⟶ A₁) (b : A₁ ⟶ A₂) (c : A₂ ⟶ A₃)
+    (d : A₃ ⟶ A₄) (e : A₄ ⟶ A₅) :
+    ((((a ≫ b) ≫ (-c)) ≫ d) ≫ e) =
+      -((((a ≫ b) ≫ c) ≫ d) ≫ e) := by
+  simp only [Preadditive.comp_neg, Preadditive.neg_comp]
+
+/-- Variant in which the second leg is negated, as happens after conjugating
+the right inclusion of a signed Mayer--Vietoris arrow. -/
+theorem fullyLeftAssociated_comp_neg_comp_comp_comp
+    (a : A₀ ⟶ A₁) (b : A₁ ⟶ A₂) (c : A₂ ⟶ A₃)
+    (d : A₃ ⟶ A₄) (e : A₄ ⟶ A₅) :
+    ((((a ≫ (-b)) ≫ c) ≫ d) ≫ e) =
+      -((((a ≫ b) ≫ c) ≫ d) ≫ e) := by
+  simp only [Preadditive.comp_neg, Preadditive.neg_comp]
+
+/-- The same normalization with the final morphism displayed as a biproduct
+second projection, matching right-component calculations. -/
+theorem fullyLeftAssociated_comp_neg_comp_biprod_snd
+    {B₀ B₁ : C}
+    [HasBinaryBiproduct B₀ B₁]
+    (a : A₀ ⟶ A₁) (b : A₁ ⟶ A₂) (c : A₂ ⟶ A₃)
+    (d : A₃ ⟶ B₀ ⊞ B₁) :
+    ((((a ≫ b) ≫ (-c)) ≫ d) ≫ (biprod.snd : B₀ ⊞ B₁ ⟶ B₁)) =
+      -((((a ≫ b) ≫ c) ≫ d) ≫ (biprod.snd : B₀ ⊞ B₁ ⟶ B₁)) := by
+  exact fullyLeftAssociated_comp_neg_comp_comp a b c d biprod.snd
+
+end PreadditiveSignNormalization
+
 variable {W K L T : ChainComplex AddCommGrpCat ℕ} (n : ℕ)
 
 /-- After the canonical homology-biproduct comparison, the first component of
@@ -235,6 +274,9 @@ theorem homologyBiprodIso_inv_homologyMap_desc
       biprod_inr_homologyBiprodIso_inv_homologyMap_desc n f g
 
 #print axioms homologyMap_signedLift_biprodIso_fst
+#print axioms fullyLeftAssociated_comp_neg_comp_comp
+#print axioms fullyLeftAssociated_comp_neg_comp_comp_comp
+#print axioms fullyLeftAssociated_comp_neg_comp_biprod_snd
 #print axioms homologyMap_signedLift_biprodIso_snd
 #print axioms homologyMap_signedLift_biprodIso_map_fst
 #print axioms homologyMap_signedLift_biprodIso_map_snd

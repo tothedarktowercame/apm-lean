@@ -10,6 +10,12 @@ homology (K ⊞ L) ≅ homology K ⊞ homology L.
 The isomorphism itself and its hom/inverse formulas have one upstream owner,
 `HomologyBiprodIso`; this module only owns normalization through that object.
 
+It also owns the generic preadditive sign normalization used by the component
+calculations: a negated middle leg of a fully left-associated five-morphism
+composite can be pulled to the outside.  A specialization with a final
+biproduct second projection matches the association used by production
+right-component coordinates.
+
 For an arbitrary lift it proves that the two projections are the homology
 maps of the original components.  Specializing the right component to `-g`
 gives the signed Mayer--Vietoris convention: the first projection is
