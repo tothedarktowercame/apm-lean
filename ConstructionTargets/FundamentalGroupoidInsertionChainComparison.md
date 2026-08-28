@@ -44,13 +44,18 @@ successors. `fullRefined_map_crossing_eq_mappedPieces` now compiles this
 factorization and normalizes both arrow witnesses to the two concrete refined
 `mappedPiece` terms.
 
-The next required theorem is a localized form of `mapPath_subpath_split` whose
-hypothesis says only that `p.subpath t₀ t₂` lies in the selected cover
-piece. The banked theorem assumes the entire ambient `p` lies there, whereas a
-`PathTwoOpenSubdivision` honestly supplies membership only on the segment
-being split; applying the stronger theorem to the original path is not valid.
-After that localized lemma identifies the two refined mapped pieces with the
-old crossing piece, `eqToHom_conjugation_square` can close the crossing square.
+The localized theorem `mapPath_subpath_split_of_subpath_mem` is now banked.
+The crossing coordinate layer is also explicit: `crossingLeftIndex` and
+`crossingRightIndex` name the new segments; four vertex-coordinate theorems
+identify their endpoints with the old endpoints and inserted parameter; and
+`crossingLeft_side`/`crossingRight_side` identify both duplicated labels.
+The exact remaining step is two applications of
+`mapPath_subpath_parameter_eq`, one for each refined `mappedPiece`. Directly
+rewriting the vertex and label equations under `mapPath` fails because its
+membership proof depends simultaneously on the Boolean label and the
+endpoint-indexed path. Those two explicit conjugation formulas will let the
+localized split theorem and `eqToHom_conjugation_square` close the crossing
+square.
 Only after its square is
 proved can `ComposableArrows.isoMk` and existing
 `ComposableArrows.naturality'` be applied. No natural isomorphism or

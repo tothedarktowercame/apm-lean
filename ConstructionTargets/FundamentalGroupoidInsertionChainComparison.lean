@@ -604,6 +604,88 @@ theorem fullRefined_map_crossing_eq_mappedPieces
     _ = _ := by rw [e₀₁, e₁₂]
                 rfl
 
+/-- The left refined segment index at the inserted crossing. -/
+def crossingLeftIndex (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    Fin (ins.refined.n + 1) :=
+  ⟨ins.segment.val, by change ins.segment.val < S.n + 2; omega⟩
+
+/-- The right refined segment index at the inserted crossing. -/
+def crossingRightIndex (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    Fin (ins.refined.n + 1) :=
+  ⟨ins.segment.val + 1, by change ins.segment.val + 1 < S.n + 2; omega⟩
+
+/-- Left endpoint of the left refined crossing piece. -/
+theorem crossingLeft_vertex_castSucc
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    ins.refined.vertex (crossingLeftIndex ins).castSucc =
+      S.vertex ins.segment.castSucc := by
+  change PathTwoOpenSubdivision.insertedVertex S ins.segment ins.parameter _ = _
+  rw [show (crossingLeftIndex ins).castSucc =
+      (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment).succAbove
+        ins.segment.castSucc by
+    apply Fin.ext
+    exact congrArg Fin.val (succAbove_old_successor_crossing ins).1.symm]
+  exact PathTwoOpenSubdivision.insertedVertex_old _ _ _ _
+
+/-- Both new crossing pieces meet at the inserted parameter. -/
+theorem crossingLeft_vertex_succ
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    ins.refined.vertex (crossingLeftIndex ins).succ = ins.parameter := by
+  change PathTwoOpenSubdivision.insertedVertex S ins.segment ins.parameter _ = _
+  rw [show (crossingLeftIndex ins).succ =
+      PathTwoOpenSubdivision.insertedVertexPosition S ins.segment by
+    apply Fin.ext
+    rfl]
+  exact PathTwoOpenSubdivision.insertedVertex_at _ _ _
+
+theorem crossingRight_vertex_castSucc
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    ins.refined.vertex (crossingRightIndex ins).castSucc = ins.parameter := by
+  change PathTwoOpenSubdivision.insertedVertex S ins.segment ins.parameter _ = _
+  rw [show (crossingRightIndex ins).castSucc =
+      PathTwoOpenSubdivision.insertedVertexPosition S ins.segment by
+    apply Fin.ext
+    rfl]
+  exact PathTwoOpenSubdivision.insertedVertex_at _ _ _
+
+/-- Right endpoint of the right refined crossing piece. -/
+theorem crossingRight_vertex_succ
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    ins.refined.vertex (crossingRightIndex ins).succ = S.vertex ins.segment.succ := by
+  change PathTwoOpenSubdivision.insertedVertex S ins.segment ins.parameter _ = _
+  rw [show (crossingRightIndex ins).succ =
+      (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment).succAbove
+        ins.segment.succ by
+    apply Fin.ext
+    exact congrArg Fin.val (succAbove_old_successor_crossing ins).2.symm]
+  exact PathTwoOpenSubdivision.insertedVertex_old _ _ _ _
+
+/-- Both crossing pieces carry the duplicated old segment label. -/
+theorem crossingLeft_side
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    ins.refined.side (crossingLeftIndex ins) = S.side ins.segment := by
+  change PathTwoOpenSubdivision.insertedSide S ins.segment _ = _
+  rw [show crossingLeftIndex ins =
+      (PathTwoOpenSubdivision.insertedSidePosition S ins.segment).succAbove
+        ins.segment by
+    apply Fin.ext
+    have hp : PathTwoOpenSubdivision.insertedSidePosition S ins.segment =
+        ins.segment.succ := by apply Fin.ext; rfl
+    rw [hp]
+    exact congrArg Fin.val (Fin.succAbove_succ_self ins.segment).symm]
+  exact PathTwoOpenSubdivision.insertedSide_old _ _ _
+
+theorem crossingRight_side
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    ins.refined.side (crossingRightIndex ins) = S.side ins.segment := by
+  change PathTwoOpenSubdivision.insertedSide S ins.segment _ = _
+  rw [show crossingRightIndex ins =
+      PathTwoOpenSubdivision.insertedSidePosition S ins.segment by
+    apply Fin.ext
+    rfl]
+  exact PathTwoOpenSubdivision.insertedSide_at _ _
+
+
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
 #print axioms succAbove_old_successor_before
@@ -624,6 +706,12 @@ theorem fullRefined_map_crossing_eq_mappedPieces
 #print axioms subdivisionRefinement_naturality_before
 #print axioms subdivisionRefinement_naturality_after
 #print axioms fullRefined_map_crossing_eq_mappedPieces
+#print axioms crossingLeft_vertex_castSucc
+#print axioms crossingLeft_vertex_succ
+#print axioms crossingRight_vertex_castSucc
+#print axioms crossingRight_vertex_succ
+#print axioms crossingLeft_side
+#print axioms crossingRight_side
 #print axioms eqToHom_conjugation_square
 
 end TwoOpenDescentDatum
