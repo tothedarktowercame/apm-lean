@@ -305,6 +305,38 @@ theorem successorChainComposeFin_terminal_split {m : ℕ} (hm : 0 < m)
         successorChainArrow hm A f (Fin.last (m - 1)) := by
   exact composeFin_terminal_split _ _
 
+/-- The literal original fold in successor-shaped coordinates, with only the
+direct initial and final object isomorphisms remaining. -/
+theorem composeFin_eq_successorChain {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ) :
+    TwoOpenDescentDatum.composeFin A f =
+      (successorChainInitialObjectIso hm A).inv ≫
+        TwoOpenDescentDatum.composeFin (A ∘ successorChainVertex hm)
+          (successorChainArrow hm A f) ≫
+        (successorChainFinalObjectIso hm A).hom := by
+  rw [successorChainComposeFin_eq, castIndexedComposeFin_eq]
+  simp [successorChainInitialObjectIso, successorChainFinalObjectIso,
+    objectIsoOfIndexEq]
+  assumption
+
+/-- Original-coordinate terminal split, retaining the single direct initial
+and final coordinate isomorphisms around the syntactic prefix and terminal
+arrow. -/
+theorem composeFin_terminal_split_of_pos {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ) :
+    TwoOpenDescentDatum.composeFin A f =
+      (successorChainInitialObjectIso hm A).inv ≫
+        (TwoOpenDescentDatum.composeFin
+            ((A ∘ successorChainVertex hm) ∘ Fin.castSucc)
+            (fun i => successorChainArrow hm A f i.castSucc) ≫
+          successorChainArrow hm A f (Fin.last (m - 1))) ≫
+        (successorChainFinalObjectIso hm A).hom := by
+  rw [composeFin_eq_successorChain hm A f,
+    successorChainComposeFin_terminal_split]
+  simp [Category.assoc]
+
 /-- The source objects of successive stages are canonically equal. -/
 def shrinkingPrefixInitialIso
     (D : @TwoOpenDescentDatum X _ U V C _)
@@ -357,6 +389,8 @@ def shrinkingPrefixTerminalIso
 #print axioms successorChainComposeFin_eq
 #print axioms castIndexedComposeFin_eq
 #print axioms successorChainComposeFin_terminal_split
+#print axioms composeFin_eq_successorChain
+#print axioms composeFin_terminal_split_of_pos
 #print axioms successorChain_initial_object_transport
 #print axioms successorChainCastLast_eq_last
 #print axioms successorChain_final_object_transport

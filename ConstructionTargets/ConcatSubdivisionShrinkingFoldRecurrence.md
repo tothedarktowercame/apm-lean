@@ -38,7 +38,13 @@ of the successor-shaped whole chain.
 These are the typed inputs for the next recurrence theorem.  This target does
 not claim the fold equality or full right-block iteration.
 
-The remaining seam is the fully-associated calculation combining the two
-fold comparisons, initial cancellation, syntactic terminal split, terminal
-arrow transport, and final-object normalization. The shrinking recurrence
-remains downstream of that assembly.
+`composeFin_eq_successorChain` completes the two fold comparisons in literal
+original coordinates. `composeFin_terminal_split_of_pos` then splits the
+literal original fold into the successor-shaped prefix and its terminal
+transported arrow, retaining only the direct initial and final object
+isomorphisms.
+
+The remaining local normalization combines that final `successorChainArrow`
+with `successorChainFinalObjectIso.hom` via `terminalArrow_transport`, yielding
+literal `f (terminalSegmentIndex hm)`. The shrinking recurrence remains
+downstream of that specialization.
