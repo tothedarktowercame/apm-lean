@@ -719,6 +719,84 @@ theorem shrinkingPrefix_initial_transport_coherence
   · unfold shrinkingPrefixObject
     congr 2
 
+/-- The initial transport coherence in the association produced by
+substituting the two whole-fold comparisons. -/
+theorem shrinkingPrefix_initial_transport_whisker
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T)
+    {W : C} (f : shrinkingPrefixObject D S T (r + 1) 0 ⟶ W) :
+    (successorChainInitialObjectIso (Nat.sub_pos_of_lt (by omega))
+        (shrinkingPrefixObject D S T r)).inv ≫
+      ((objectIsoOfIndexEq
+          (fun k : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+            D.obj ((concatSubdivision S T).point
+              (shrinkingVertexEmbedding S T r
+                (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+                  k.castSucc))))
+          (show (0 : Fin _) = Fin.cast (by omega) 0 by
+            apply Fin.ext
+            rfl)).hom ≫
+        ((objectIsoOfIndexEq
+          (fun k => D.obj ((concatSubdivision S T).point k))
+          (shrinkingSuccessorPrefixVertex_eq S T r hr 0)).hom ≫ f)) =
+      (shrinkingPrefixInitialIso D S T r).hom ≫ f := by
+  simpa only [← Category.assoc] using congrArg
+    (fun k => k ≫ f)
+    (shrinkingPrefix_initial_transport_coherence D S T r hr)
+
+/-- Three equality transports can be normalized while a dependent arrow and
+its final transport remain explicitly whiskered on the right. -/
+theorem eqToHom_three_step_whisker_arrow
+    {A B C₀ D₀ E F : C}
+    (h₁ : A = B) (h₂ : B = C₀) (h₃ : C₀ = D₀)
+    (h : A = D₀) (f : D₀ ⟶ E) (k : E = F) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫ eqToHom h₃ ≫ f ≫ eqToHom k =
+      eqToHom h ≫ f ≫ eqToHom k := by
+  simpa only [Category.assoc] using congrArg
+    (fun t => t ≫ f ≫ eqToHom k)
+    (eqToHom_three_step_coherence h₁ h₂ h₃ h)
+
+/-- The terminal transports produced by the two fold reindexings and the
+literal terminal split normalize to the named boundary and terminal
+isomorphisms, without moving the dependent terminal arrow. -/
+theorem shrinkingPrefix_terminal_transport_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T) :
+    (objectIsoOfIndexEq
+        (fun k => D.obj ((concatSubdivision S T).point k))
+        (shrinkingSuccessorPrefixVertex_eq S T r hr
+          (Fin.last (concatSegmentCount S T - (r + 1))))).inv ≫
+      (objectIsoOfIndexEq
+        (fun k : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+          D.obj ((concatSubdivision S T).point
+            (shrinkingVertexEmbedding S T r
+              (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+                k.castSucc))))
+        (show (Fin.last _ : Fin _) = Fin.cast (by omega) (Fin.last _) by
+          apply Fin.ext
+          rfl)).inv ≫
+      eqToHom (congrArg (shrinkingPrefixObject D S T r)
+        (successorChainLastSource_eq_terminal
+          (Nat.sub_pos_of_lt (by omega)))) ≫
+      shrinkingPrefixArrow D S T r
+        (terminalSegmentIndex (Nat.sub_pos_of_lt (by omega))) ≫
+      eqToHom (congrArg (shrinkingPrefixObject D S T r)
+        (terminalSegmentIndex_succ (Nat.sub_pos_of_lt (by omega)))) =
+    (shrinkingPrefixBoundaryIso D S T r (by omega)).hom ≫
+      shrinkingPrefixArrow D S T r
+        (terminalSegmentIndex (Nat.sub_pos_of_lt (by omega))) ≫
+      (shrinkingPrefixTerminalIso D S T r (by omega)).hom := by
+  simp only [objectIsoOfIndexEq, shrinkingPrefixBoundaryIso,
+    shrinkingPrefixTerminalIso]
+  apply eqToHom_three_step_whisker_arrow
+  · congr 2
+  · congr 4
+  · rfl
+
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
@@ -746,5 +824,8 @@ theorem shrinkingPrefix_initial_transport_coherence
 #print axioms shrinkingSyntacticSuccessorPrefixFold_eq
 #print axioms eqToHom_three_step_coherence
 #print axioms shrinkingPrefix_initial_transport_coherence
+#print axioms shrinkingPrefix_initial_transport_whisker
+#print axioms eqToHom_three_step_whisker_arrow
+#print axioms shrinkingPrefix_terminal_transport_coherence
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence

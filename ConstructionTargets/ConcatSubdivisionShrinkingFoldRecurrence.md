@@ -106,3 +106,19 @@ inverse reindex transports must first be composed with the terminal-source
 transport before the mapped terminal arrow is well typed.  The right-segment
 specialization remains downstream of that statement and still requires
 `r ≤ T.n`.
+
+`eqToHom_three_step_whisker_arrow` supplies the generic terminal-side
+normalization without moving the dependent arrow.
+`shrinkingPrefix_terminal_transport_coherence` applies it to the two inverse
+reindex transports, the literal split's source transport, the terminal arrow,
+and its final transport.  The result is exactly
+`shrinkingPrefixBoundaryIso.hom`, the unchanged terminal arrow, and
+`shrinkingPrefixTerminalIso.hom`.
+
+The remaining assembly mismatch is the association produced after both fold
+equalities are substituted: the initial transports occur outside a nested
+composite that also contains the stage fold and both terminal reindex
+transports.  The standalone initial and terminal whiskered statements compile,
+but neither is a syntactic rewrite of that entire nested expression without a
+further two-sided reassociation lemma.  No recurrence or right-segment
+specialization is claimed yet.
