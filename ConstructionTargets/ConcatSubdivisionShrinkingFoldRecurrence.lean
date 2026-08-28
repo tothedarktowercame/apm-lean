@@ -150,6 +150,48 @@ theorem successorChainSegment_eq {m : ℕ} (hm : 0 < m)
   apply Fin.ext
   rfl
 
+/-- The cast structural last vertex of the successor-shaped presentation is
+the literal last vertex of the original chain. -/
+theorem successorChainCastLast_eq_last {m : ℕ} (hm : 0 < m) :
+    Fin.cast (by omega) (Fin.last (m - 1 + 1)) = Fin.last m := by
+  apply Fin.ext
+  simp
+
+def successorChainLastObjectIso {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C) :
+    A (Fin.cast (by omega) (Fin.last (m - 1 + 1))) ≅ A (Fin.last m) :=
+  eqToIso (congrArg A (successorChainCastLast_eq_last hm))
+
+def successorChainFinalObjectIso {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C) :
+    A (successorChainVertex hm (Fin.last (m - 1 + 1))) ≅ A (Fin.last m) :=
+  eqToIso (congrArg A
+    ((successorChainVertex_eq hm (Fin.last (m - 1 + 1))).trans
+      (successorChainCastLast_eq_last hm)))
+
+theorem eqToHom_inv_comp_trans {ι : Type*} (O : ι → C)
+    {a b c : ι} (h : a = b) (k : b = c) :
+    eqToHom (congrArg O h).symm ≫ eqToHom (congrArg O (h.trans k)) =
+      eqToHom (congrArg O k) := by
+  subst b
+  subst c
+  simp
+
+/-- The final reindex isomorphism from the whole-chain comparison followed by
+the cast-last isomorphism is the single composite index transport. -/
+theorem successorChain_final_object_transport {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C) :
+    (objectIsoOfIndexEq A
+        (successorChainVertex_eq hm (Fin.last (m - 1 + 1)))).inv ≫
+      (successorChainFinalObjectIso hm A).hom =
+    eqToHom (congrArg A (successorChainCastLast_eq_last hm)) := by
+  -- Insert the direct successor-vertex-to-last transport; the inverse
+  -- reindex transport then cancels its first leg.
+  simpa [successorChainFinalObjectIso, objectIsoOfIndexEq] using
+    eqToHom_inv_comp_trans A
+      (successorChainVertex_eq hm (Fin.last (m - 1 + 1)))
+      (successorChainCastLast_eq_last hm)
+
 theorem dependentArrow_conjugation_fin {m : ℕ}
     (A : Fin (m + 1) → C)
     (f : (i : Fin m) → A i.castSucc ⟶ A i.succ)
@@ -246,6 +288,8 @@ def shrinkingPrefixTerminalIso
 #print axioms composeFin_terminal_split
 #print axioms terminalArrow_transport
 #print axioms successorChainComposeFin_eq
+#print axioms successorChainCastLast_eq_last
+#print axioms successorChain_final_object_transport
 #print axioms shrinkingPrefixInitialIso
 #print axioms shrinkingPrefixBoundaryIso
 #print axioms shrinkingPrefixTerminalIso

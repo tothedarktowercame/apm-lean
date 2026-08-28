@@ -19,6 +19,9 @@ successor.
 `successorChainVertex`, `successorChainSegment`, and `successorChainArrow`
 now package the complete chain in the syntactic successor sizes
 `Fin ((m-1)+2)` and `Fin ((m-1)+1)`, with explicit endpoint equalities.
+`successorChainCastLast_eq_last` identifies its cast structural last vertex
+with literal `Fin.last m`; `successorChain_final_object_transport` composes the
+two resulting object transports into one explicit equality transport.
 `successorChainComposeFin_eq` compares its total fold with the proof-carrying
 reindex of the original fold. The arrow comparison never rewrites the
 terminal index beneath the dependent family.
