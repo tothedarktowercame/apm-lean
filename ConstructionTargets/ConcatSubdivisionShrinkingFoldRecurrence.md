@@ -25,6 +25,10 @@ two resulting object transports into one explicit equality transport.
 `successorChainComposeFin_eq` compares its total fold with the proof-carrying
 reindex of the original fold. The arrow comparison never rewrites the
 terminal index beneath the dependent family.
+`castIndexedComposeFin_eq` compares that cast-indexed fold with the literal
+original fold while retaining explicit zero and last endpoint transports.
+After eliminating positivity, only same-size casts and proof-irrelevant
+equality witnesses are reduced.
 `successorChain_initial_object_transport` is the matching zero-endpoint
 normalization: the direct successor-source-to-zero transport followed by the
 inverse cast-zero transport is exactly the source transport emitted by the
@@ -34,9 +38,7 @@ of the successor-shaped whole chain.
 These are the typed inputs for the next recurrence theorem.  This target does
 not claim the fold equality or full right-block iteration.
 
-The remaining seam is the comparison between the cast-indexed original fold
-inside `successorChainComposeFin_eq` and the literal `m`-indexed original
-fold. Their index types are propositionally equal but not definitionally the
-same, so this requires another proof-carrying whole-chain reindex rather than
-a rewrite beneath dependent arrows. The shrinking recurrence remains
-downstream of that comparison.
+The remaining seam is the fully-associated calculation combining the two
+fold comparisons, initial cancellation, syntactic terminal split, terminal
+arrow transport, and final-object normalization. The shrinking recurrence
+remains downstream of that assembly.

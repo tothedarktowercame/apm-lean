@@ -269,6 +269,29 @@ theorem successorChainComposeFin_eq {m : ℕ} (hm : 0 < m)
       (fun i => f (Fin.cast (by omega) i))
       (successorChainArrow hm A f) harr)
 
+/-- The cast-indexed copy of a positive-length chain has the same total fold
+as the literal chain.  Positivity is eliminated first, so all casts become
+same-size casts before the dependent arrow families are compared. -/
+theorem castIndexedComposeFin_eq {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ) :
+    TwoOpenDescentDatum.composeFin
+        (A ∘ fun i : Fin ((m - 1) + 2) => Fin.cast (by omega) i)
+        (fun i : Fin ((m - 1) + 1) => f (Fin.cast (by omega) i)) =
+      eqToHom (congrArg A (successorChainCastZero_eq_zero hm)) ≫
+        TwoOpenDescentDatum.composeFin A f ≫
+        eqToHom (congrArg A (successorChainCastLast_eq_last hm)).symm := by
+  cases m with
+  | zero => omega
+  | succ n =>
+      change TwoOpenDescentDatum.composeFin A f =
+        eqToHom _ ≫ TwoOpenDescentDatum.composeFin A f ≫ eqToHom _
+      rw [show successorChainCastZero_eq_zero hm = rfl from
+        Subsingleton.elim _ _]
+      rw [show successorChainCastLast_eq_last hm = rfl from
+        Subsingleton.elim _ _]
+      simp
+
 /-- The successor-shaped whole chain splits syntactically into its prefix and
 terminal transported arrow. -/
 theorem successorChainComposeFin_terminal_split {m : ℕ} (hm : 0 < m)
@@ -332,6 +355,7 @@ def shrinkingPrefixTerminalIso
 #print axioms composeFin_terminal_split
 #print axioms terminalArrow_transport
 #print axioms successorChainComposeFin_eq
+#print axioms castIndexedComposeFin_eq
 #print axioms successorChainComposeFin_terminal_split
 #print axioms successorChain_initial_object_transport
 #print axioms successorChainCastLast_eq_last
