@@ -2347,6 +2347,58 @@ theorem whisker_replace_three
   rw [← h]
   simp only [Category.assoc]
 
+/-- Substitute a typed six-map block under arbitrary whiskers. -/
+theorem whisker_replace_six
+    {A B C₀ D₀ E F G H I : C}
+    (l : A ⟶ B) (a : B ⟶ C₀) (b : C₀ ⟶ D₀) (c : D₀ ⟶ E)
+    (d : E ⟶ F) (e : F ⟶ G) (f : G ⟶ H)
+    (g : B ⟶ H) (r : H ⟶ I)
+    (h : a ≫ b ≫ c ≫ d ≫ e ≫ f = g) :
+    l ≫ (a ≫ b ≫ c ≫ d ≫ e ≫ f ≫ r) = l ≫ g ≫ r := by
+  rw [← h]
+  simp only [Category.assoc]
+
+/-- Substitute a typed five-map block under arbitrary whiskers. -/
+theorem whisker_replace_five
+    {A B C₀ D₀ E F G H : C}
+    (l : A ⟶ B) (a : B ⟶ C₀) (b : C₀ ⟶ D₀) (c : D₀ ⟶ E)
+    (d : E ⟶ F) (e : F ⟶ G) (f : B ⟶ G) (r : G ⟶ H)
+    (h : a ≫ b ≫ c ≫ d ≫ e = f) :
+    l ≫ (a ≫ b ≫ c ≫ d ≫ e ≫ r) = l ≫ f ≫ r := by
+  rw [← h]
+  simp only [Category.assoc]
+
+theorem eqToHom_two_step_to_direct
+    {A B C₀ : C} (h₁ : A = B) (h₂ : B = C₀) (h : A = C₀) :
+    eqToHom h₁ ≫ eqToHom h₂ = eqToHom h := by
+  subst B
+  subst C₀
+  simp
+
+/-- The concatenated initial endpoint followed by the direct transport into
+`S` is exactly `S`'s evaluation prefix. -/
+theorem concat_left_initial_evaluate_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    eqToHom (congrArg D.obj (concatSubdivision S T).point_zero).symm ≫
+      eqToHom (congrArg D.obj
+        ((concatSubdivision S T).point_zero.trans S.point_zero.symm)) =
+      eqToHom (congrArg D.obj S.point_zero).symm := by
+  exact eqToHom_two_step_to_direct _ _ _
+
+/-- The direct shared-midpoint transport is the two evaluation endpoint
+transports of `S` and `T`. -/
+theorem concat_midpoint_evaluate_expand
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    eqToHom (congrArg D.obj (S.point_last.trans T.point_zero.symm)) =
+      eqToHom (congrArg D.obj S.point_last) ≫
+        eqToHom (congrArg D.obj T.point_zero).symm := by
+  symm
+  exact eqToHom_two_step_to_direct _ _ _
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -2377,6 +2429,11 @@ theorem whisker_replace_three
 #print axioms concat_right_terminal_evaluate_coherence
 #print axioms concat_midpoint_evaluate_coherence
 #print axioms whisker_replace_three
+#print axioms whisker_replace_five
+#print axioms whisker_replace_six
+#print axioms eqToHom_two_step_to_direct
+#print axioms concat_left_initial_evaluate_coherence
+#print axioms concat_midpoint_evaluate_expand
 #print axioms shrinkingPrefix_initial_transport_coherence
 #print axioms shrinkingPrefix_initial_transport_whisker
 #print axioms eqToHom_three_step_whisker_arrow

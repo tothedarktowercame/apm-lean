@@ -310,13 +310,18 @@ by `S.point_last.trans T.point_zero.symm`.  The generic
 equalities by eliminating the named object equalities before proof
 irrelevance is used.
 
-`whisker_replace_three` supplies the reusable typed substitution rule for a
-three-map block beneath the exact left/right whiskers produced by evaluation.
+`whisker_replace_three`, `whisker_replace_five`, and
+`whisker_replace_six` provide typed substitution beneath arbitrary left and
+right morphisms. `concat_left_initial_evaluate_coherence` and
+`concat_midpoint_evaluate_expand` align the direct initial and midpoint maps
+with the endpoint maps in the two source evaluations.
 
-The remaining seam is its six-map analogue at the midpoint. After
-`shrinkingPrefixFold_midpoint_eq_leftFold` is substituted into the whiskered
-production comparison, the source, midpoint, and terminal coherence blocks
-are nested under the remainder of the right-hand fold. Ordinary `rw` cannot
-select them without first giving that six-map block an explicit typed
-whiskered substitution theorem. No evaluation-composition theorem is claimed
-in this packet.
+The remaining seam precedes those substitutions. The stage-zero fold theorem
+is bracketed by `objectIsoOfIndexEq` transports whose endpoint objects are
+only propositionally equal to the literal concatenated-fold endpoints. They
+are not identity endomorphisms and cannot be erased by proof irrelevance. The
+next theorem must whisker `concatComposeFin_eq_midpoint_rightBlock` by the
+inverse stage-zero endpoint isomorphisms, retain those transports explicitly,
+and only then apply the compiled initial, six-map midpoint, and five-map
+terminal substitutions. No evaluation or quotient-composition theorem is
+claimed in this packet.
