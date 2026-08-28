@@ -12,13 +12,19 @@ the singular edge, and the reverse terminal connector.  Two explicit
 concatenation triangles prove the chain-boundary comparisons that expand this
 loop into those three path chains.
 
-The remaining exact step is reverse-connector normalization: prove, in the
-unnormalized production singular complex, that `pathChain c.symm + pathChain c`
-is a boundary.  After that equation, the two compiled concatenation boundaries
-give the individual closed-edge formula.  Summing it over `oneChainSupport`
-and applying `cycle_vertex_balance` cancels connector coefficients pointwise.
-The subsequent passage from arbitrary homology representatives to the range
-of `fundamentalGroupH1Hom` is therefore not claimed here.
+The target also constructs Mathlib's explicit relative contraction of
+`c.trans c.symm`, combines its prism with the direct concatenation triangle,
+and retains the constant two-simplex correction required by the unnormalized
+complex.  The resulting `backtrackingBoundaryChain_boundary` proves that
+`pathChain c.symm + pathChain c` is an actual boundary.  The corresponding
+backtracking loop has the same H1 class as the constant loop.
+The target then uses the already proved constant-loop calculation to state
+the resulting H1 class as zero explicitly.
 
-No circulation decomposition, reverse-edge relation, Hurewicz surjectivity,
+The remaining exact step is to combine the individual closed-edge expansions
+over `oneChainSupport` and use `cycle_vertex_balance` to cancel connector
+coefficients pointwise.  The subsequent passage from arbitrary homology
+representatives to the range of `fundamentalGroupH1Hom` is not claimed here.
+
+No connector cancellation, circulation decomposition, Hurewicz surjectivity,
 or Hurewicz injectivity is assumed.

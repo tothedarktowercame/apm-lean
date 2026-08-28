@@ -17,6 +17,7 @@ open CategoryTheory
 open ConstructionTargets.SingularSubdivision
 open ConstructionTargets.SingularPathChain
 open ConstructionTargets.DegreeOneHurewiczSurjectivity
+open ConstructionTargets.DegreeOneHurewiczMap
 
 def edgeInitialPoint {X : Type} [TopologicalSpace X] (σ : OneSimplex X) : X :=
   continuousMapOfSingularSimplex 1 σ
@@ -103,9 +104,82 @@ theorem closedEdgeLoop_two_concatenation_boundaries
   · exact pathTrans_chain_difference_boundary (singularEdgePath σ)
       (connector x0 (edgeTerminalPoint σ)).symm
 
+/-! ## Backtracking paths -/
+
+/-- The canonical relative homotopy contracting a path followed by its
+reverse.  Mathlib constructs this homotopy explicitly in the fundamental
+groupoid development; the orientation here is from the backtracking loop to
+the constant path. -/
+def backtrackingHomotopy {X : Type} [TopologicalSpace X] {x y : X}
+    (c : Path x y) : Path.Homotopy (c.trans c.symm) (Path.refl x) :=
+  (Path.Homotopy.reflTransSymm c).symm
+
+/-- The concrete triangle chain measuring the concatenation defect of a path
+and its reverse. -/
+def backtrackingConcatenationChain {X : Type} [TopologicalSpace X]
+    {x y : X} (c : Path x y) :
+    AddCommGrpCat.of ℤ ⟶ (SingularChains (TopCat.of X)).X 2 :=
+  -singularGenerator (TopCat.of X) 2
+    (singularSimplexOfContinuousMap _ 2 (pathTransTriangle c c.symm))
+
+theorem backtrackingConcatenationChain_boundary
+    {X : Type} [TopologicalSpace X] {x y : X} (c : Path x y) :
+    backtrackingConcatenationChain c ≫
+        (SingularChains (TopCat.of X)).d 2 1 =
+      pathChain (c.trans c.symm) - pathChain c - pathChain c.symm := by
+  rw [backtrackingConcatenationChain, Preadditive.neg_comp,
+    pathTransTriangle_boundary]
+  abel
+
+/-- An explicit unnormalized singular two-chain filling a path together with
+its reverse.  The constant two-simplex is essential: it removes the constant
+edge left by the relative homotopy prism. -/
+def backtrackingBoundaryChain {X : Type} [TopologicalSpace X]
+    {x y : X} (c : Path x y) :
+    AddCommGrpCat.of ℤ ⟶ (SingularChains (TopCat.of X)).X 2 :=
+  singularGenerator (TopCat.of X) 2
+      (singularSimplexOfContinuousMap _ 2 (constantTwoSimplex x)) -
+    pathHomotopyBoundaryChain (backtrackingHomotopy c) -
+    backtrackingConcatenationChain c
+
+/-- Reversal cancellation as an actual boundary equation in the production
+unnormalized singular complex. -/
+theorem backtrackingBoundaryChain_boundary
+    {X : Type} [TopologicalSpace X] {x y : X} (c : Path x y) :
+    backtrackingBoundaryChain c ≫
+        (SingularChains (TopCat.of X)).d 2 1 =
+      pathChain c.symm + pathChain c := by
+  rw [backtrackingBoundaryChain, Preadditive.sub_comp,
+    Preadditive.sub_comp, constantTwoSimplex_boundary,
+    pathHomotopyBoundaryChain_boundary,
+    backtrackingConcatenationChain_boundary]
+  abel
+
+/-- The backtracking loop and the constant loop determine the same integral
+first-homology class. -/
+theorem basedLoopH1Class_backtracking
+    {X : Type} [TopologicalSpace X] {x y : X} (c : Path x y) :
+    basedLoopH1Class (c.trans c.symm) =
+      basedLoopH1Class (Path.refl x) :=
+  basedLoopH1Class_eq_of_homotopy (backtrackingHomotopy c)
+
+/-- In particular, the backtracking loop represents zero in integral first
+homology. -/
+theorem basedLoopH1Class_backtracking_eq_zero
+    {X : Type} [TopologicalSpace X] {x y : X} (c : Path x y) :
+    basedLoopH1Class (c.trans c.symm) = 0 := by
+  rw [basedLoopH1Class_backtracking]
+  apply AddCommGrpCat.int_hom_ext
+  exact basedLoopH1Element_refl x
+
 #print axioms pathSimplex_singularEdgePath
 #print axioms pathChain_singularEdgePath
 #print axioms pathTrans_chain_difference_boundary
 #print axioms closedEdgeLoop_two_concatenation_boundaries
+#print axioms backtrackingHomotopy
+#print axioms backtrackingConcatenationChain_boundary
+#print axioms backtrackingBoundaryChain_boundary
+#print axioms basedLoopH1Class_backtracking
+#print axioms basedLoopH1Class_backtracking_eq_zero
 
 end ConstructionTargets.DegreeOneHurewiczDirectClosing
