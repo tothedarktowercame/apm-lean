@@ -15,6 +15,12 @@ shift.  Antipodal reflection maps the north-pole complement to the south-pole
 complement, and `antipodal_relativeProjection_naturality` proves the resulting
 absolute-to-relative projection square at chain level;
 `antipodal_relativeProjection_homology_naturality` is its homology image.
+The reverse map is also explicit: `antipodalNorthSouthHomeomorph` identifies
+the two punctured-sphere subspaces, the named north-to-south and south-to-north
+relative maps package both directions, and
+`antipodal_relativeProjection_reverse_naturality` proves the reverse square
+(with a corresponding homology theorem).  Hence the full projection portion
+of the production shift is compared without choosing an orientation or sign.
 
 The next required theorem is a comparison between the north-based and
 south-based production shifts.  It is not presently a formal consequence of
@@ -24,6 +30,15 @@ comparison, and the pair connecting isomorphism.  None of the banked APIs
 states that this whole composite, or its individual relative-pair maps,
 commutes with antipodal reflection.  In particular, antipodal exchanges the
 north- and south-pole complements used asymmetrically by the construction.
+The first remaining square is precise: construct the south-pole analogue of
+`relativeExcisionMap northPoleComplement closedLowerHemisphere` and prove that
+the antipodal maps of pairs commute with the two excision inclusions.  The
+current generic API proves projection naturality for `relativeSingularMap`,
+but supplies no composition/naturality theorem for those relative maps, so it
+does not yet express this excision square.  Beyond it, antipodal reflection
+lands in the lower hemisphere, requiring an explicit lower/upper hemisphere
+coordinate and radial comparison before the production shift composites can
+be related.
 
 This module therefore claims the exact base sign only.  It does not assume a
 suspension naturality square, an antipodal degree in positive dimension, or

@@ -116,6 +116,9 @@ the north-pole complement used by `spherePositiveHomologyShift`. -/
 def southPoleComplement (n : ℕ) : Set (Sphere n) :=
   {x | -1 < sphereHeight n x}
 
+/-- The south-punctured sphere as an actual topological subspace. -/
+abbrev SouthPoleSubspace (n : ℕ) := southPoleComplement n
+
 theorem sphereHeight_antipodal (n : ℕ) (x : Sphere n) :
     sphereHeight n (sphereAntipodal n x) = -sphereHeight n x := by
   simp [sphereHeight, sphereAntipodal]
@@ -124,13 +127,48 @@ theorem sphereAntipodal_mapsTo_north_south (n : ℕ) :
     Set.MapsTo (sphereAntipodal n) (northPoleComplement n)
       (southPoleComplement n) := by
   intro x hx
+  change sphereHeight n x < 1 at hx
   change -1 < sphereHeight n (sphereAntipodal n x)
   rw [sphereHeight_antipodal]
-  exact neg_lt_neg hx
+  simpa using neg_lt_neg hx
+
+theorem sphereAntipodal_mapsTo_south_north (n : ℕ) :
+    Set.MapsTo (sphereAntipodal n) (southPoleComplement n)
+      (northPoleComplement n) := by
+  intro x hx
+  change -1 < sphereHeight n x at hx
+  change sphereHeight n (sphereAntipodal n x) < 1
+  rw [sphereHeight_antipodal]
+  simpa using neg_lt_neg hx
+
+/-- Antipodal reflection identifies the north- and south-punctured sphere
+subspaces. -/
+def antipodalNorthSouthHomeomorph (n : ℕ) :
+    northPoleComplement n ≃ₜ SouthPoleSubspace n where
+  toFun x := ⟨sphereAntipodal n x.1,
+    sphereAntipodal_mapsTo_north_south n x.2⟩
+  invFun x := ⟨sphereAntipodal n x.1,
+    sphereAntipodal_mapsTo_south_north n x.2⟩
+  left_inv x := Subtype.ext (sphereAntipodal_involutive n x.1)
+  right_inv x := Subtype.ext (sphereAntipodal_involutive n x.1)
+  continuous_toFun :=
+    ((sphereAntipodal n).continuous.comp continuous_subtype_val).subtype_mk _
+  continuous_invFun :=
+    ((sphereAntipodal n).continuous.comp continuous_subtype_val).subtype_mk _
 
 noncomputable def antipodalNorthSouthRelativeMap (n : ℕ) :=
   relativeSingularMap (northPoleComplement n) (southPoleComplement n)
     (sphereAntipodal n) (sphereAntipodal_mapsTo_north_south n)
+
+noncomputable def antipodalSouthNorthRelativeMap (n : ℕ) :=
+  relativeSingularMap (southPoleComplement n) (northPoleComplement n)
+    (sphereAntipodal n) (sphereAntipodal_mapsTo_south_north n)
+
+noncomputable def antipodalNorthSouthRelativeHomologyMap (n k : ℕ) :=
+  HomologicalComplex.homologyMap (antipodalNorthSouthRelativeMap n) k
+
+noncomputable def antipodalSouthNorthRelativeHomologyMap (n k : ℕ) :=
+  HomologicalComplex.homologyMap (antipodalSouthNorthRelativeMap n) k
 
 noncomputable def antipodalAbsoluteMap (n : ℕ) :
     SingularChains (TopCat.of (Sphere n)) ⟶ SingularChains (TopCat.of (Sphere n)) :=
@@ -163,10 +201,37 @@ theorem antipodal_relativeProjection_homology_naturality (n k : ℕ) :
     ← HomologicalComplex.homologyMap_comp,
     antipodal_relativeProjection_naturality]
 
+/-- The reverse absolute-to-relative square, needed because antipodal
+reflection exchanges rather than preserves the pole used by the shift. -/
+theorem antipodal_relativeProjection_reverse_naturality (n : ℕ) :
+    antipodalAbsoluteMap n ≫
+        relativeSingularProjection (northPoleComplement n) =
+      relativeSingularProjection (southPoleComplement n) ≫
+        antipodalSouthNorthRelativeMap n := by
+  simpa [antipodalAbsoluteMap] using
+    relativeSingularMap_projection_naturality
+      (southPoleComplement n) (northPoleComplement n)
+      (sphereAntipodal n) (sphereAntipodal_mapsTo_south_north n)
+
+theorem antipodal_relativeProjection_reverse_homology_naturality (n k : ℕ) :
+    HomologicalComplex.homologyMap (antipodalAbsoluteMap n) k ≫
+        HomologicalComplex.homologyMap
+          (relativeSingularProjection (northPoleComplement n)) k =
+      HomologicalComplex.homologyMap
+          (relativeSingularProjection (southPoleComplement n)) k ≫
+        antipodalSouthNorthRelativeHomologyMap n k := by
+  dsimp only [antipodalSouthNorthRelativeHomologyMap]
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← HomologicalComplex.homologyMap_comp,
+    antipodal_relativeProjection_reverse_naturality]
+
 #print axioms sphereZeroAntipodalH0_coordinates
 #print axioms sphereZeroCoordinateAntipodal_orientedDifference
 #print axioms sphereZeroAntipodalH0_orientedDifference
 #print axioms antipodal_relativeProjection_naturality
 #print axioms antipodal_relativeProjection_homology_naturality
+#print axioms antipodalNorthSouthHomeomorph
+#print axioms antipodal_relativeProjection_reverse_naturality
+#print axioms antipodal_relativeProjection_reverse_homology_naturality
 
 end ConstructionTargets.SphereAntipodalHomology
