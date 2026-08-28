@@ -157,6 +157,18 @@ theorem successorChainCastLast_eq_last {m : ℕ} (hm : 0 < m) :
   apply Fin.ext
   simp
 
+theorem successorChainCastZero_eq_zero {m : ℕ} (hm : 0 < m) :
+    Fin.cast (by omega) (0 : Fin (m - 1 + 2)) = (0 : Fin (m + 1)) := by
+  apply Fin.ext
+  rfl
+
+def successorChainInitialObjectIso {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C) :
+    A (successorChainVertex hm 0) ≅ A 0 :=
+  eqToIso (congrArg A
+    ((successorChainVertex_eq hm 0).trans
+      (successorChainCastZero_eq_zero hm)))
+
 def successorChainLastObjectIso {m : ℕ} (hm : 0 < m)
     (A : Fin (m + 1) → C) :
     A (Fin.cast (by omega) (Fin.last (m - 1 + 1))) ≅ A (Fin.last m) :=
@@ -191,6 +203,25 @@ theorem successorChain_final_object_transport {m : ℕ} (hm : 0 < m)
     eqToHom_inv_comp_trans A
       (successorChainVertex_eq hm (Fin.last (m - 1 + 1)))
       (successorChainCastLast_eq_last hm)
+
+theorem eqToHom_trans_comp_inv {ι : Type*} (O : ι → C)
+    {a b c : ι} (h : a = b) (k : b = c) :
+    eqToHom (congrArg O (h.trans k)) ≫ eqToHom (congrArg O k).symm =
+      eqToHom (congrArg O h) := by
+  subst b
+  subst c
+  simp
+
+/-- The direct successor-source-to-zero transport followed by the inverse
+cast-zero transport is precisely the reindex source transport. -/
+theorem successorChain_initial_object_transport {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C) :
+    (successorChainInitialObjectIso hm A).hom ≫
+      (eqToIso (congrArg A (successorChainCastZero_eq_zero hm))).inv =
+    (objectIsoOfIndexEq A (successorChainVertex_eq hm 0)).hom := by
+  simpa [successorChainInitialObjectIso, objectIsoOfIndexEq] using
+    eqToHom_trans_comp_inv A
+      (successorChainVertex_eq hm 0) (successorChainCastZero_eq_zero hm)
 
 theorem dependentArrow_conjugation_fin {m : ℕ}
     (A : Fin (m + 1) → C)
@@ -288,6 +319,7 @@ def shrinkingPrefixTerminalIso
 #print axioms composeFin_terminal_split
 #print axioms terminalArrow_transport
 #print axioms successorChainComposeFin_eq
+#print axioms successorChain_initial_object_transport
 #print axioms successorChainCastLast_eq_last
 #print axioms successorChain_final_object_transport
 #print axioms shrinkingPrefixInitialIso
