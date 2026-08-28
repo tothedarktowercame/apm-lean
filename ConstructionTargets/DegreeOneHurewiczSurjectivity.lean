@@ -183,11 +183,133 @@ theorem degreeOneCoefficientBoundary_generator
   simp [zeroCoefficientGenerator, terminalZeroSimplex, initialZeroSimplex,
     sub_eq_add_neg]
 
+/-! ## Finite reconstruction and vertex balance -/
+
+/-- The finite support of a one-chain in the owned coefficient coordinates. -/
+noncomputable def oneChainSupport {X : Type} [TopologicalSpace X]
+    (z : (SingularChains (TopCat.of X)).X 1) : Finset (OneSimplex X) := by
+  letI := Classical.decEq (OneSimplex X)
+  exact (DFinsupp.toFinsupp (oneChainCoefficients z)).support
+
+/-- Every production one-chain coefficient family is the finite sum of its
+actual supported simplex generators. -/
+theorem oneChainCoefficients_eq_sum_support
+    {X : Type} [TopologicalSpace X]
+    (z : (SingularChains (TopCat.of X)).X 1) :
+    oneChainCoefficients z =
+      ∑ σ ∈ oneChainSupport z,
+        oneCoefficientGenerator σ (oneChainCoefficients z σ) := by
+  classical
+  ext τ
+  simp [oneChainSupport, oneCoefficientGenerator_eq_directSumOf,
+    DirectSum.of_apply]
+
+/-- Transporting the boundary through the finite reconstruction gives the
+finite endpoint-difference formula. -/
+theorem degreeOneCoefficientBoundary_eq_sum_endpoints
+    {X : Type} [TopologicalSpace X]
+    (z : (SingularChains (TopCat.of X)).X 1) :
+    degreeOneCoefficientBoundary X (oneChainCoefficients z) =
+      ∑ σ ∈ oneChainSupport z,
+        zeroCoefficientGenerator (terminalZeroSimplex σ)
+          (oneChainCoefficients z σ) -
+      ∑ σ ∈ oneChainSupport z,
+        zeroCoefficientGenerator (initialZeroSimplex σ)
+          (oneChainCoefficients z σ) := by
+  conv_lhs => rw [oneChainCoefficients_eq_sum_support]
+  simp only [map_sum]
+  rw [← Finset.sum_sub_distrib]
+  apply Finset.sum_congr rfl
+  intro σ hσ
+  rw [← CategoryTheory.comp_apply, degreeOneCoefficientBoundary_generator]
+  rfl
+
+/-- Evaluation of a zero-chain coefficient at one production zero-simplex.
+This definition is independent of every `DecidableEq` choice used to package
+the direct sum. -/
+def zeroCoefficientAt {X : Type} [TopologicalSpace X]
+    (v : ZeroSimplex X) : ZeroCoefficientGroup X →+ ℤ where
+  toFun a := a v
+  map_zero' := rfl
+  map_add' _ _ := rfl
+
+noncomputable def zeroCoefficientIndicator {X : Type} [TopologicalSpace X]
+    (p v : ZeroSimplex X) (n : ℤ) : ℤ := by
+  classical
+  exact if v = p then n else 0
+
+@[simp] theorem zeroCoefficientAt_generator
+    {X : Type} [TopologicalSpace X] (p v : ZeroSimplex X) (n : ℤ) :
+    zeroCoefficientAt p (zeroCoefficientGenerator v n) =
+      zeroCoefficientIndicator p v n := by
+  classical
+  rw [zeroCoefficientGenerator_eq_directSumOf]
+  simp [zeroCoefficientAt, zeroCoefficientIndicator, DirectSum.of_apply]
+
+noncomputable def incomingSupport {X : Type} [TopologicalSpace X]
+    (z : (SingularChains (TopCat.of X)).X 1) (p : ZeroSimplex X) :
+    Finset (OneSimplex X) := by
+  classical
+  exact (oneChainSupport z).filter (terminalZeroSimplex · = p)
+
+noncomputable def outgoingSupport {X : Type} [TopologicalSpace X]
+    (z : (SingularChains (TopCat.of X)).X 1) (p : ZeroSimplex X) :
+    Finset (OneSimplex X) := by
+  classical
+  exact (oneChainSupport z).filter (initialZeroSimplex · = p)
+
+/-- At every zero-simplex, a cycle has equal total incoming and outgoing
+coefficients among the finitely many simplices in its actual support. -/
+theorem cycle_vertex_balance
+    {X : Type} [TopologicalSpace X]
+    (z : (SingularChains (TopCat.of X)).X 1)
+    (hz : (SingularChains (TopCat.of X)).d 1 0 z = 0)
+    (p : ZeroSimplex X) :
+    ∑ σ ∈ incomingSupport z p,
+        oneChainCoefficients z σ =
+      ∑ σ ∈ outgoingSupport z p,
+        oneChainCoefficients z σ := by
+  classical
+  have hb := congrArg (zeroCoefficientAt p)
+    (degreeOneCoefficientBoundary_eq_sum_endpoints z)
+  rw [degreeOneCoefficientBoundary_eq_zero_of_cycle z hz] at hb
+  simp only [map_zero, map_sub, map_sum] at hb
+  have hin :
+      ∑ σ ∈ oneChainSupport z,
+          zeroCoefficientAt p
+            (zeroCoefficientGenerator (terminalZeroSimplex σ)
+              (oneChainCoefficients z σ)) =
+        ∑ σ ∈ oneChainSupport z,
+          zeroCoefficientIndicator p (terminalZeroSimplex σ)
+            (oneChainCoefficients z σ) := by
+    apply Finset.sum_congr rfl
+    intro σ hσ
+    exact zeroCoefficientAt_generator p _ _
+  have hout :
+      ∑ σ ∈ oneChainSupport z,
+          zeroCoefficientAt p
+            (zeroCoefficientGenerator (initialZeroSimplex σ)
+              (oneChainCoefficients z σ)) =
+        ∑ σ ∈ oneChainSupport z,
+          zeroCoefficientIndicator p (initialZeroSimplex σ)
+            (oneChainCoefficients z σ) := by
+    apply Finset.sum_congr rfl
+    intro σ hσ
+    exact zeroCoefficientAt_generator p _ _
+  rw [hin, hout] at hb
+  have hbalance := sub_eq_zero.mp hb.symm
+  simpa [incomingSupport, outgoingSupport, zeroCoefficientIndicator,
+    Finset.sum_filter] using hbalance
+
 #print axioms oneChainOfCoefficients_coefficients
 #print axioms oneChainCoefficients_finite
 #print axioms degreeOneCoefficientBoundary_eq_zero_of_cycle
 #print axioms oneCoefficientGenerator_eq_directSumOf
 #print axioms zeroCoefficientGenerator_eq_directSumOf
 #print axioms degreeOneCoefficientBoundary_generator
+#print axioms oneChainCoefficients_eq_sum_support
+#print axioms degreeOneCoefficientBoundary_eq_sum_endpoints
+#print axioms zeroCoefficientAt_generator
+#print axioms cycle_vertex_balance
 
 end ConstructionTargets.DegreeOneHurewiczSurjectivity
