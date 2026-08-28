@@ -797,6 +797,42 @@ theorem shrinkingPrefix_terminal_transport_coherence
   · congr 4
   · rfl
 
+/-- Substitute independently proved three-arrow prefix and three-arrow suffix
+equalities around an unchanged central morphism.  The nested association is
+the one produced by the two successive `composeFin` reindexings. -/
+theorem comp_eq_of_three_prefix_three_suffix
+    {A B C₀ D₀ E F G H : C}
+    (a : A ⟶ B) (b : B ⟶ C₀) (c : C₀ ⟶ D₀)
+    (middle : D₀ ⟶ E) (d : E ⟶ F) (e : F ⟶ G)
+    (terminal : G ⟶ H) (prefixMap : A ⟶ D₀) (suffix : E ⟶ H)
+    (hprefix : a ≫ b ≫ c = prefixMap)
+    (hsuffix : d ≫ e ≫ terminal = suffix) :
+    a ≫ (b ≫ (c ≫ middle ≫ d) ≫ e) ≫ terminal =
+      prefixMap ≫ middle ≫ suffix := by
+  rw [← hprefix, ← hsuffix]
+  simp only [Category.assoc]
+
+/-- One shrinking step: remove the terminal arrow and identify the remaining
+prefix with stage `r+1`.  All surviving endpoint changes use the named stage
+isomorphisms. -/
+theorem shrinkingPrefixFold_succ
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T) :
+    shrinkingPrefixFold D S T r =
+      (shrinkingPrefixInitialIso D S T r).hom ≫
+        shrinkingPrefixFold D S T (r + 1) ≫
+        (shrinkingPrefixBoundaryIso D S T r (by omega)).hom ≫
+        shrinkingPrefixArrow D S T r
+          (terminalSegmentIndex (Nat.sub_pos_of_lt (by omega))) ≫
+        (shrinkingPrefixTerminalIso D S T r (by omega)).hom := by
+  rw [shrinkingPrefixFold_terminal_split_literal D S T r (by omega)]
+  rw [shrinkingSyntacticSuccessorPrefixFold_eq D S T r hr]
+  rw [shrinkingSuccessorPrefixFold_eq D S T r hr]
+  apply comp_eq_of_three_prefix_three_suffix
+  · exact shrinkingPrefix_initial_transport_coherence D S T r hr
+  · exact shrinkingPrefix_terminal_transport_coherence D S T r hr
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
@@ -827,5 +863,7 @@ theorem shrinkingPrefix_terminal_transport_coherence
 #print axioms shrinkingPrefix_initial_transport_whisker
 #print axioms eqToHom_three_step_whisker_arrow
 #print axioms shrinkingPrefix_terminal_transport_coherence
+#print axioms comp_eq_of_three_prefix_three_suffix
+#print axioms shrinkingPrefixFold_succ
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence

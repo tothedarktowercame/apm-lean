@@ -107,6 +107,24 @@ transport before the mapped terminal arrow is well typed.  The right-segment
 specialization remains downstream of that statement and still requires
 `r ≤ T.n`.
 
+`comp_eq_of_three_prefix_three_suffix` is the generic categorical assembly
+lemma for the association emitted by the two fold reindexings.  It substitutes
+an independently normalized three-arrow prefix and three-arrow suffix around
+an unchanged middle morphism without changing any dependent transport first.
+`shrinkingPrefixFold_succ` applies it to the three banked fold equalities and
+the initial/terminal coherence theorems, giving the clean one-step recurrence
+in terms of `shrinkingPrefixInitialIso`, `shrinkingPrefixBoundaryIso`, and
+`shrinkingPrefixTerminalIso`.
+
+The right-block specialization remains bounded by `r ≤ T.n`.  Its direct
+expanded statement currently exceeds the elaborator heartbeat limit while
+checking the dependent `mappedPiece` type, even at 800000 heartbeats.  The
+compiled recurrence deliberately retains `shrinkingPrefixArrow`; the next
+packet should introduce a separately typed terminal-arrow coordinate lemma
+before rewriting that arrow to `rightSegment`, rather than asking elaboration
+to normalize the full recurrence statement at once.  No statement peels an
+arrow after the right block reaches the shared midpoint.
+
 `eqToHom_three_step_whisker_arrow` supplies the generic terminal-side
 normalization without moving the dependent arrow.
 `shrinkingPrefix_terminal_transport_coherence` applies it to the two inverse
@@ -114,11 +132,3 @@ reindex transports, the literal split's source transport, the terminal arrow,
 and its final transport.  The result is exactly
 `shrinkingPrefixBoundaryIso.hom`, the unchanged terminal arrow, and
 `shrinkingPrefixTerminalIso.hom`.
-
-The remaining assembly mismatch is the association produced after both fold
-equalities are substituted: the initial transports occur outside a nested
-composite that also contains the stage fold and both terminal reindex
-transports.  The standalone initial and terminal whiskered statements compile,
-but neither is a syntactic rewrite of that entire nested expression without a
-further two-sided reassociation lemma.  No recurrence or right-segment
-specialization is claimed yet.
