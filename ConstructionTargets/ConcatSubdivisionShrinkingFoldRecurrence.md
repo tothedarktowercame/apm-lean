@@ -132,3 +132,26 @@ reindex transports, the literal split's source transport, the terminal arrow,
 and its final transport.  The result is exactly
 `shrinkingPrefixBoundaryIso.hom`, the unchanged terminal arrow, and
 `shrinkingPrefixTerminalIso.hom`.
+
+`rightRemovalStep` packages one legal stage morphism, including its named
+boundary and terminal transports. `rightInitialAccum` and `rightSuffixAccum`
+are proof-carrying heterogeneous composites: the former accumulates the
+initial-object transports, while the latter recursively prepends the removal
+at stage `k`. Thus the midpoint suffix records precisely the removal order
+`T.n, ..., 0`; every contained terminal arrow is identified with the actual
+right-block mapped piece by
+`shrinkingPrefixArrow_terminal_eq_rightMappedPiece`.
+
+`shrinkingPrefixFold_rightBlockAccum` proves the finite comparison at every
+stage `k <= T.n + 1`. `shrinkingPrefixFold_zero_eq_midpoint` specializes it
+after exactly all legal right-block removals, without invoking a recurrence at
+the midpoint. `concatComposeFin_eq_midpoint_rightAccum` then uses
+`shrinkingPrefixFold_zero` to connect this comparison to the literal full
+concatenated segment fold, retaining its endpoint transports.
+
+The next seam is a whole-chain comparison between `rightSuffixAccum` and
+`rightBlockComposeFin_eq`. The former is indexed from the midpoint back toward
+the original terminal object and carries every stage's named transports; the
+latter is the forward right-block fold. Their coordinate order and endpoint
+transport families must be related explicitly before the concatenated
+evaluation formula can be concluded.

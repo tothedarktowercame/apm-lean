@@ -958,6 +958,145 @@ theorem rightBlockIteration_stops_at_midpoint
     ((Fin.last T.n : Fin (T.n + 1)).val + 1) = T.n + 1 := by
   simp
 
+/-- The terminal object of a shrinking stage. -/
+abbrev shrinkingPrefixTerminalObject
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ) : C :=
+  shrinkingPrefixObject D S T r
+    (Fin.last (concatSegmentCount S T - r))
+
+/-- The suffix morphism contributed by one legal right-block removal. -/
+def rightRemovalStep
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ) (hr : r ≤ T.n) :
+    shrinkingPrefixTerminalObject (C := C) D S T (r + 1) ⟶
+      shrinkingPrefixTerminalObject (C := C) D S T r :=
+  (shrinkingPrefixBoundaryIso D S T r (by
+      simp [concatSegmentCount]
+      omega)).hom ≫
+    shrinkingPrefixArrow D S T r
+      (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+        simp [concatSegmentCount]
+        omega))) ≫
+    (shrinkingPrefixTerminalIso D S T r (by
+      simp [concatSegmentCount]
+      omega)).hom
+
+/-- Initial-end transports accumulated through `k` shrinking stages. -/
+def rightInitialAccum
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (k : ℕ) → shrinkingPrefixObject D S T 0 0 ⟶
+      shrinkingPrefixObject D S T k 0
+  | 0 => 𝟙 _
+  | k + 1 => rightInitialAccum D S T k ≫
+      (shrinkingPrefixInitialIso D S T k).hom
+
+/-- Terminal-end transports accumulated in removal order.  The proof bounds
+the recursion to exactly the right block. -/
+def rightSuffixAccum
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (k : ℕ) → k ≤ T.n + 1 →
+      (shrinkingPrefixTerminalObject (C := C) D S T k ⟶
+        shrinkingPrefixTerminalObject (C := C) D S T 0)
+  | 0, _ => 𝟙 _
+  | k + 1, hk => rightRemovalStep D S T k (by omega) ≫
+      rightSuffixAccum D S T k (by omega)
+
+@[simp] theorem rightInitialAccum_zero
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    rightInitialAccum D S T 0 = 𝟙 _ := rfl
+
+theorem rightInitialAccum_succ
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) :
+    rightInitialAccum D S T (k + 1) =
+      rightInitialAccum D S T k ≫
+        (shrinkingPrefixInitialIso D S T k).hom := rfl
+
+@[simp] theorem rightSuffixAccum_zero
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (h0 : 0 ≤ T.n + 1) :
+    rightSuffixAccum D S T 0 h0 = 𝟙 _ := rfl
+
+theorem rightSuffixAccum_succ
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) :
+    rightSuffixAccum D S T (k + 1) hk =
+      rightRemovalStep D S T k (by omega) ≫
+        rightSuffixAccum D S T k (by omega) := by
+  rfl
+
+/-- Heterogeneous iteration of the right-block recurrence.  The suffix is
+ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
+original terminal object. -/
+theorem shrinkingPrefixFold_rightBlockAccum
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    ∀ (k : ℕ) (hk : k ≤ T.n + 1),
+      shrinkingPrefixFold D S T 0 =
+        rightInitialAccum D S T k ≫
+          shrinkingPrefixFold D S T k ≫
+          rightSuffixAccum D S T k hk
+  | 0, hk => by
+      simp only [rightInitialAccum, rightSuffixAccum, Category.id_comp,
+        Category.comp_id]
+  | k + 1, hk => by
+      rw [shrinkingPrefixFold_rightBlockAccum D S T k (by omega)]
+      rw [shrinkingPrefixFold_succ D S T k (by
+        simp [concatSegmentCount]
+        omega)]
+      rw [rightInitialAccum_succ, rightSuffixAccum_succ]
+      unfold rightRemovalStep
+      simp only [Category.assoc]
+
+/-- Stage zero compared directly with the midpoint stage after every legal
+right-block removal. -/
+theorem shrinkingPrefixFold_zero_eq_midpoint
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    shrinkingPrefixFold D S T 0 =
+      rightInitialAccum D S T (T.n + 1) ≫
+        shrinkingPrefixFold D S T (T.n + 1) ≫
+        rightSuffixAccum D S T (T.n + 1) (le_refl _) :=
+  shrinkingPrefixFold_rightBlockAccum D S T (T.n + 1) (le_refl _)
+
+/-- The full concatenated segment fold, with the stage-zero endpoint
+transports retained, equals the midpoint fold followed by the complete
+right-block removal suffix. -/
+theorem concatComposeFin_eq_midpoint_rightAccum
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T 0)).hom ≫
+      TwoOpenDescentDatum.composeFin
+        (D.obj ∘ (concatSubdivision S T).point)
+        (D.mappedPiece (concatSubdivision S T)) ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T
+          (Fin.last (concatSegmentCount S T)))).inv =
+    rightInitialAccum D S T (T.n + 1) ≫
+      shrinkingPrefixFold D S T (T.n + 1) ≫
+      rightSuffixAccum D S T (T.n + 1) (le_refl _) := by
+  rw [← shrinkingPrefixFold_zero D S T]
+  exact shrinkingPrefixFold_zero_eq_midpoint D S T
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -995,5 +1134,11 @@ theorem rightBlockIteration_stops_at_midpoint
 #print axioms rightBlockIteration_segment_coordinate
 #print axioms shrinkingPrefixFold_rightBlockIteration_last
 #print axioms rightBlockIteration_stops_at_midpoint
+#print axioms rightRemovalStep
+#print axioms rightInitialAccum
+#print axioms rightSuffixAccum
+#print axioms shrinkingPrefixFold_rightBlockAccum
+#print axioms shrinkingPrefixFold_zero_eq_midpoint
+#print axioms concatComposeFin_eq_midpoint_rightAccum
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
