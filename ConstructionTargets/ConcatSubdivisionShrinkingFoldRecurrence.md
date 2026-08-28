@@ -95,3 +95,14 @@ the two initial transports and the three midpoint/terminal transports.  Only
 under `r ≤ T.n` may the removed arrow be rewritten with
 `shrinkingTerminalSegment_eq_rightSegment`; suffix iteration must stop at that
 midpoint.  No shrinking-fold recurrence is claimed yet.
+
+`eqToHom_three_step_coherence` proves that any three explicitly typed equality
+transports agree with the direct transport having the same source and target.
+`shrinkingPrefix_initial_transport_coherence` applies it to the initial end of
+the three fold comparisons: the inverse successor-chain transport and the two
+reindex transports compose to `shrinkingPrefixInitialIso.hom`.  The remaining
+recurrence seam is the corresponding terminal-side statement, where two
+inverse reindex transports must first be composed with the terminal-source
+transport before the mapped terminal arrow is well typed.  The right-segment
+specialization remains downstream of that statement and still requires
+`r ≤ T.n`.

@@ -675,6 +675,50 @@ theorem shrinkingSyntacticSuccessorPrefixFold_eq
     g ha
   simpa only [O, oldVertex, castVertex, g] using h
 
+theorem eqToHom_three_step_coherence
+    {A B C₀ D₀ : C}
+    (h₁ : A = B) (h₂ : B = C₀) (h₃ : C₀ = D₀)
+    (h : A = D₀) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫ eqToHom h₃ =
+      eqToHom h := by
+  subst B
+  subst C₀
+  subst D₀
+  simp
+
+/-- The three initial-object transports produced by the terminal split and
+the two whole-chain reindexings are the named initial-stage transport. -/
+theorem shrinkingPrefix_initial_transport_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T) :
+    (successorChainInitialObjectIso (Nat.sub_pos_of_lt (by omega))
+        (shrinkingPrefixObject D S T r)).inv ≫
+      (objectIsoOfIndexEq
+        (fun k : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+          D.obj ((concatSubdivision S T).point
+            (shrinkingVertexEmbedding S T r
+              (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+                k.castSucc))))
+        (show (0 : Fin _) = Fin.cast (by omega) 0 by
+          apply Fin.ext
+          rfl)).hom ≫
+      (objectIsoOfIndexEq
+        (fun k => D.obj ((concatSubdivision S T).point k))
+        (shrinkingSuccessorPrefixVertex_eq S T r hr 0)).hom =
+      (shrinkingPrefixInitialIso D S T r).hom := by
+  simp only [successorChainInitialObjectIso, objectIsoOfIndexEq,
+    shrinkingPrefixInitialIso]
+  apply eqToHom_three_step_coherence
+  · unfold shrinkingPrefixObject
+    congr 2
+  · unfold shrinkingPrefixObject
+    congr 2
+  · congr 2
+  · unfold shrinkingPrefixObject
+    congr 2
+
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
@@ -700,5 +744,7 @@ theorem shrinkingSyntacticSuccessorPrefixFold_eq
 #print axioms shrinkingSuccessorPrefixArrow_eq_conjugate
 #print axioms shrinkingSuccessorPrefixFold_eq
 #print axioms shrinkingSyntacticSuccessorPrefixFold_eq
+#print axioms eqToHom_three_step_coherence
+#print axioms shrinkingPrefix_initial_transport_coherence
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
