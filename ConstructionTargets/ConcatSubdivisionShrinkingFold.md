@@ -5,12 +5,14 @@ This target defines `shrinkingPrefixObject`, `shrinkingPrefixArrow`, and
 endpoint lemmas align every restricted segment with its restricted vertices,
 and the arrow definition retains both resulting `eqToHom` transports.
 
-The first remaining theorem is the zero-stage comparison. Its literal goal is
-`composeFin (shrinkingPrefixObject D S T 0) (shrinkingPrefixArrow D S T 0) =
-composeFin (D.obj ∘ concatSubdivision.point) concatSubdivision.mappedPiece`.
-Although both embeddings preserve `Fin.val`, their dependent endpoint proof
-fields differ, so simplification does not identify the arrow families. It must
-use `composeFin_reindex_of_index_eq` with an explicit zero-stage index equality.
+`conjugatedArrow_compose` is the generic endpoint coherence theorem: two
+successive, independently generated pairs of `eqToHom` transports equal one
+supplied composite pair after index equalities are eliminated.
+
+`shrinkingPrefixFold_zero` applies that theorem pointwise and then uses
+`composeFin_reindex_of_index_eq`. It identifies stage zero with the full
+concatenated fold while retaining the two outer identity-coordinate
+isomorphisms returned by the generic reindex theorem.
 
 The successor theorem must then compare the stage-`r+1` object family
 with the `Fin.castSucc` restriction of stage `r`, then transport the final
