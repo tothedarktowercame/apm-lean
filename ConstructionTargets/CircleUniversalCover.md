@@ -15,7 +15,9 @@ lifting theorem prove that concatenation adds endpoint integers.  A separate
 corollary records Mathlib's reversed `CategoryTheory.End` multiplication order
 explicitly; commutativity of integer addition gives the required orientation.
 
-This is not yet a computation of `FundamentalGroup Circle 1`.  The remaining
-step is to descend this invariant to the based-loop homotopy
-quotient and package the resulting bijective homomorphism.  No winding
-classification or fundamental-group quotient equivalence is assumed here.
+The endpoint coordinate descends to the actual based-loop homotopy quotient.
+Explicit integer loops prove surjectivity.  For injectivity, equal coordinates
+give equal lifted endpoints; the two lifts are joined by the explicit affine
+homotopy in `Real`, which projects to a based homotopy in `Circle`.  This gives
+the axiom-clean classification
+`FundamentalGroup Circle 1 ≃* Multiplicative Int`.

@@ -219,6 +219,120 @@ theorem liftBasedLoopEndpointInteger_mul_order (gamma delta : Path (1 : Circle) 
         liftBasedLoopEndpointInteger delta delta.source delta.target := by
   rw [liftBasedLoopEndpointInteger_trans, add_comm]
 
+@[simp] theorem liftBasedLoopEndpointInteger_refl :
+    liftBasedLoopEndpointInteger (Path.refl (1 : Circle)) rfl rfl = 0 := by
+  apply period_integer_unique
+    (liftBasedLoopEndpointInteger_spec (Path.refl (1 : Circle)) rfl rfl)
+  rw [show liftBasedLoop (Path.refl (1 : Circle)) rfl =
+      ContinuousMap.const _ 0 by
+    exact circleCover_isCoveringMap.liftPath_const circleCover_zero.symm]
+  simp
+
+/-- The endpoint coordinate descended to the actual based-loop homotopy
+quotient. -/
+noncomputable def circleWindingHom :
+    FundamentalGroup Circle 1 →* Multiplicative ℤ where
+  toFun := Quotient.lift
+    (fun gamma : Path (1 : Circle) 1 ↦
+      Multiplicative.ofAdd
+        (liftBasedLoopEndpointInteger gamma gamma.source gamma.target))
+    (fun gamma delta h ↦ congrArg Multiplicative.ofAdd
+      (liftBasedLoopEndpointInteger_eq_of_homotopicRel h
+        gamma.source gamma.target delta.source delta.target))
+  map_one' := by
+    change Multiplicative.ofAdd
+      (liftBasedLoopEndpointInteger (Path.refl (1 : Circle)) rfl rfl) = 1
+    simp
+  map_mul' p q := by
+    induction p, q using Path.Homotopic.Quotient.ind₂ with
+    | mk gamma delta =>
+        change Multiplicative.ofAdd
+            (liftBasedLoopEndpointInteger (delta.trans gamma)
+              (delta.trans gamma).source (delta.trans gamma).target) =
+          Multiplicative.ofAdd
+              (liftBasedLoopEndpointInteger gamma gamma.source gamma.target) *
+            Multiplicative.ofAdd
+              (liftBasedLoopEndpointInteger delta delta.source delta.target)
+        exact congrArg Multiplicative.ofAdd
+          (liftBasedLoopEndpointInteger_mul_order gamma delta)
+
+@[simp] theorem circleWindingHom_mk (gamma : Path (1 : Circle) 1) :
+    circleWindingHom (Path.Homotopic.Quotient.mk gamma) =
+      Multiplicative.ofAdd
+        (liftBasedLoopEndpointInteger gamma gamma.source gamma.target) := rfl
+
+theorem circleWindingHom_surjective : Function.Surjective circleWindingHom := by
+  intro n
+  refine ⟨Path.Homotopic.Quotient.mk (integerLoop n.toAdd), ?_⟩
+  simp [circleWindingHom_mk]
+
+/-- Equal endpoint coordinates give a straight-line relative homotopy between
+the two canonical lifts in `ℝ`. -/
+def liftBasedLoopStraightHomotopy
+    (gamma delta : Path (1 : Circle) 1)
+    (hend : liftBasedLoop gamma gamma.source 1 =
+      liftBasedLoop delta delta.source 1) :
+    (liftBasedLoop gamma gamma.source).HomotopyRel
+      (liftBasedLoop delta delta.source) {0, 1} where
+  toFun ts :=
+    (1 - (ts.1 : ℝ)) * liftBasedLoop gamma gamma.source ts.2 +
+      (ts.1 : ℝ) * liftBasedLoop delta delta.source ts.2
+  continuous_toFun :=
+    ((continuous_const.sub (continuous_subtype_val.comp continuous_fst)).mul
+      ((liftBasedLoop gamma gamma.source).continuous.comp continuous_snd)).add
+    ((continuous_subtype_val.comp continuous_fst).mul
+      ((liftBasedLoop delta delta.source).continuous.comp continuous_snd))
+  map_zero_left s := by simp
+  map_one_left s := by simp
+  prop' t s hs := by
+    rcases hs with (rfl | rfl)
+    · simp
+    · change (1 - (t : ℝ)) * liftBasedLoop gamma gamma.source 1 +
+        (t : ℝ) * liftBasedLoop delta delta.source 1 =
+          liftBasedLoop gamma gamma.source 1
+      rw [hend]
+      ring
+
+/-- Equal endpoint integers imply that two based loops are homotopic relative
+to their endpoints: linearly homotope their lifts and project the homotopy
+through the exponential cover. -/
+theorem basedLoops_homotopic_of_endpointInteger_eq
+    (gamma delta : Path (1 : Circle) 1)
+    (hcoord : liftBasedLoopEndpointInteger gamma gamma.source gamma.target =
+      liftBasedLoopEndpointInteger delta delta.source delta.target) :
+    gamma.HomotopicRel delta {0, 1} := by
+  have hend : liftBasedLoop gamma gamma.source 1 =
+      liftBasedLoop delta delta.source 1 := by
+    rw [← liftBasedLoopEndpointInteger_spec gamma gamma.source gamma.target,
+      ← liftBasedLoopEndpointInteger_spec delta delta.source delta.target,
+      hcoord]
+  let F := liftBasedLoopStraightHomotopy gamma delta hend
+  let Fc := F.compContinuousMap
+    ⟨circleCover, circleCover_isCoveringMap.continuous⟩
+  refine ⟨ContinuousMap.HomotopyRel.cast Fc ?_ ?_⟩
+  · dsimp [Fc]
+    apply ContinuousMap.ext
+    intro t
+    exact congrFun (circleCover_comp_liftBasedLoop gamma gamma.source) t
+  · dsimp [Fc]
+    apply ContinuousMap.ext
+    intro t
+    exact congrFun (circleCover_comp_liftBasedLoop delta delta.source) t
+
+theorem circleWindingHom_injective : Function.Injective circleWindingHom := by
+  intro p q hpq
+  induction p, q using Path.Homotopic.Quotient.ind₂ with
+  | mk gamma delta =>
+      apply Path.Homotopic.Quotient.eq.mpr
+      apply basedLoops_homotopic_of_endpointInteger_eq gamma delta
+      exact Multiplicative.ofAdd.injective hpq
+
+/-- The exponential lift endpoint classifies based loops in the circle. -/
+noncomputable def circleFundamentalGroupMulEquivInt :
+    FundamentalGroup Circle 1 ≃* Multiplicative ℤ :=
+  MulEquiv.ofBijective circleWindingHom
+    ⟨circleWindingHom_injective, circleWindingHom_surjective⟩
+
 #print axioms circleCover_isCoveringMap
 #print axioms circleCover_eq_iff
 #print axioms liftBasedLoop_endpoint_periodic
@@ -228,5 +342,8 @@ theorem liftBasedLoopEndpointInteger_mul_order (gamma delta : Path (1 : Circle) 
 #print axioms liftBasedLoopEndpointInteger_integerLoop
 #print axioms liftBasedLoopEndpointInteger_trans
 #print axioms liftBasedLoopEndpointInteger_mul_order
+#print axioms circleWindingHom
+#print axioms basedLoops_homotopic_of_endpointInteger_eq
+#print axioms circleFundamentalGroupMulEquivInt
 
 end ConstructionTargets.CircleUniversalCover
