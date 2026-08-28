@@ -1,5 +1,6 @@
 import ConstructionTargets.ConcatSubdivisionShrinkingFold
 import ConstructionTargets.ComposeFinIndexReindex
+import ConstructionTargets.ComposeFinConjugation
 
 /-!
 # Zero stage and one-step recurrence for shrinking prefix folds
@@ -760,6 +761,50 @@ theorem eqToHom_three_step_whisker_arrow
     (fun t => t ≫ f ≫ eqToHom k)
     (eqToHom_three_step_coherence h₁ h₂ h₃ h)
 
+/-- Two source transports and three target transports around a dependent
+arrow normalize to direct endpoint transports.  Equality proofs are
+eliminated only after every intermediate object has been named in the type. -/
+theorem eqToHom_two_three_conjugation
+    {A₀ A₁ A₂ B₀ B₁ B₂ B₃ : C}
+    (h₁ : A₀ = A₁) (h₂ : A₁ = A₂) (h : A₀ = A₂)
+    (f : A₂ ⟶ B₀)
+    (k₁ : B₀ = B₁) (k₂ : B₁ = B₂) (k₃ : B₂ = B₃)
+    (k : B₀ = B₃) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫ f ≫ eqToHom k₁ ≫
+        eqToHom k₂ ≫ eqToHom k₃ =
+      eqToHom h ≫ f ≫ eqToHom k := by
+  subst A₁
+  subst A₂
+  subst B₁
+  subst B₂
+  subst B₃
+  simp
+
+/-- Four independently generated transports on either side of an arrow agree
+with a two-transport presentation once their intermediate objects are stated
+explicitly. -/
+theorem eqToHom_four_four_eq_two_two_conjugation
+    {A₀ A₁ A₂ A₃ A₄ A₅ B₀ B₁ B₂ B₃ B₄ B₅ : C}
+    (h₁ : A₀ = A₁) (h₂ : A₁ = A₂) (h₃ : A₂ = A₃) (h₄ : A₃ = A₄)
+    (l₁ : A₀ = A₅) (l₂ : A₅ = A₄) (f : A₄ ⟶ B₀)
+    (k₁ : B₀ = B₁) (k₂ : B₁ = B₂) (k₃ : B₂ = B₃) (k₄ : B₃ = B₄)
+    (r₁ : B₀ = B₅) (r₂ : B₅ = B₄) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫
+        (eqToHom h₃ ≫ eqToHom h₄ ≫ f ≫ eqToHom k₁ ≫ eqToHom k₂) ≫
+        eqToHom k₃ ≫ eqToHom k₄ =
+      eqToHom l₁ ≫ eqToHom l₂ ≫ f ≫ eqToHom r₁ ≫ eqToHom r₂ := by
+  subst A₁
+  subst A₂
+  subst A₃
+  subst A₄
+  subst A₅
+  subst B₁
+  subst B₂
+  subst B₃
+  subst B₄
+  subst B₅
+  simp
+
 /-- The terminal transports produced by the two fold reindexings and the
 literal terminal split normalize to the named boundary and terminal
 isomorphisms, without moving the dependent terminal arrow. -/
@@ -1246,6 +1291,44 @@ def reverseRightArrow
       (show reverseRightStage T j.succ = T.n - j by
         exact reverseRightStage_succ T j)).symm
 
+/-- Pointwise comparison of the reverse removal chain with the literal
+forward right-block chain. -/
+theorem reverseRightArrow_eq_conjugate
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    reverseRightArrow D S T j =
+      (reverseRightObjectIso D S T j.castSucc).hom ≫
+        rightBlockArrow D S T j ≫
+        (reverseRightObjectIso D S T j.succ).inv := by
+  unfold reverseRightArrow rightRemovalStep reverseRightObjectIso
+  rw [reverseRemovalStage_terminalArrow_eq_rightMappedPiece D S T j]
+  unfold rightBlockArrow
+  simp only [shrinkingPrefixBoundaryIso, shrinkingPrefixTerminalIso,
+    eqToIso.hom, eqToIso.inv, Category.assoc]
+  exact
+    (eqToHom_four_four_eq_two_two_conjugation
+      (f := D.mappedPiece (concatSubdivision S T) (rightSegment S T j))
+      (h₁ := _) (h₂ := _) (h₃ := _) (h₄ := _)
+      (l₁ := _) (l₂ := _)
+      (k₁ := _) (k₂ := _) (k₃ := _) (k₄ := _)
+      (r₁ := _) (r₂ := _))
+
+/-- The entire reverse-stage removal chain is the literal forward right-block
+fold with only its two outer object transports remaining. -/
+theorem reverseRightComposeFin_eq
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    TwoOpenDescentDatum.composeFin (reverseRightObject D S T)
+        (reverseRightArrow D S T) =
+      (reverseRightObjectIso D S T 0).hom ≫
+        TwoOpenDescentDatum.composeFin (rightBlockObject D S T)
+          (rightBlockArrow D S T) ≫
+        (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv := by
+  apply ConstructionTargets.ComposeFinConjugation.composeFin_conjugation_from_comparisonIso
+  exact reverseRightArrow_eq_conjugate D S T
+
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
 original terminal object. -/
@@ -1333,6 +1416,8 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms shrinkingPrefix_initial_transport_coherence
 #print axioms shrinkingPrefix_initial_transport_whisker
 #print axioms eqToHom_three_step_whisker_arrow
+#print axioms eqToHom_two_three_conjugation
+#print axioms eqToHom_four_four_eq_two_two_conjugation
 #print axioms shrinkingPrefix_terminal_transport_coherence
 #print axioms comp_eq_of_three_prefix_three_suffix
 #print axioms shrinkingPrefixFold_succ
@@ -1361,6 +1446,8 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms reverseRemovalStageSourceIso
 #print axioms reverseRemovalStageTargetIso
 #print axioms reverseRightArrow
+#print axioms reverseRightArrow_eq_conjugate
+#print axioms reverseRightComposeFin_eq
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum

@@ -188,15 +188,15 @@ banked reverse-stage segment coordinate. `reverseRemovalStageSourceIso` and
 `reverseRemovalStageTargetIso` lift them through the actual ambient-point
 object family.
 
-The next exact seam is still the pointwise conjugation by
-`reverseRightObjectIso`, but it has been reduced to a categorical coherence
-statement. After unfolding, its left side has the arithmetic-stage transport,
-the boundary transport, two source transports around the actual mapped piece,
-two target transports, the terminal transport, and the final arithmetic-stage
-transport. The right side has the object comparison, the structural
-right-block endpoint transports, and the inverse object comparison. The
-existing two-layer `whisker_conjugatedArrow_compose` does not match this
-five-layer association directly. A generic multi-transport normalization (or
-two staged applications with an intermediate typed equality) is required
-before `composeFin_conjugation_from_comparisonIso` applies. No whole-fold or
-accumulator comparison is claimed yet.
+`eqToHom_four_four_eq_two_two_conjugation` names every intermediate source and
+target object and proves the required multi-transport cancellation without
+simplifying dependent arrows. `reverseRightArrow_eq_conjugate` applies it to
+the arithmetic-stage, boundary, segment-endpoint, terminal, and right-block
+transports.
+
+`reverseRightComposeFin_eq` then applies the generic dependent finite-fold
+conjugation theorem. The reverse-stage chain is the actual forward right-block
+fold, bracketed only by `reverseRightObjectIso` at its midpoint and terminal
+objects. The remaining seam is recursive: identify `rightSuffixAccum` with
+this `reverseRightArrow` `composeFin`, including its zero and successor reindex
+equations. No accumulator equality is claimed yet.
