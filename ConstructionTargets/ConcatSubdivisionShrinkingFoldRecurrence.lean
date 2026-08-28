@@ -16,6 +16,7 @@ open ConstructionTargets.PathSubdivisionConcatenation
 open ConstructionTargets.ConcatSubdivisionShrinkingPrefix
 open ConstructionTargets.ConcatSubdivisionShrinkingFold
 open ConstructionTargets.ComposeFinIndexReindex
+open ConstructionTargets.ComposeFinAppend
 
 variable {X : Type*} [TopologicalSpace X]
 variable {x y z : X} {p : Path x y} {q : Path y z} {U V : Set X}
@@ -137,6 +138,64 @@ theorem successorChainArrow_eq {m : ℕ} (hm : 0 < m)
         f (successorChainSegment hm i) ≫
         eqToHom (congrArg A (successorChainEndpoint_succ hm i)).symm := rfl
 
+theorem successorChainVertex_eq {m : ℕ} (hm : 0 < m)
+    (i : Fin ((m - 1) + 2)) :
+    successorChainVertex hm i = Fin.cast (by omega) i := by
+  apply Fin.ext
+  rfl
+
+theorem successorChainSegment_eq {m : ℕ} (hm : 0 < m)
+    (i : Fin ((m - 1) + 1)) :
+    successorChainSegment hm i = Fin.cast (by omega) i := by
+  apply Fin.ext
+  rfl
+
+theorem dependentArrow_conjugation_fin {m : ℕ}
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ)
+    {a b : Fin m} (h : a = b) :
+    f a = eqToHom (congrArg A (congrArg Fin.castSucc h)) ≫ f b ≫
+      eqToHom (congrArg A (congrArg Fin.succ h)).symm := by
+  subst b
+  simp
+
+/-- The total fold of the successor-shaped presentation is the original fold,
+with only the endpoint isomorphisms produced by its index equality. -/
+theorem successorChainComposeFin_eq {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ) :
+    TwoOpenDescentDatum.composeFin (A ∘ successorChainVertex hm)
+        (successorChainArrow hm A f) =
+      (objectIsoOfIndexEq A (successorChainVertex_eq hm 0)).hom ≫
+        TwoOpenDescentDatum.composeFin
+          (A ∘ fun i : Fin ((m - 1) + 2) => Fin.cast (by omega) i)
+          (fun i : Fin ((m - 1) + 1) => f (Fin.cast (by omega) i)) ≫
+        (objectIsoOfIndexEq A
+          (successorChainVertex_eq hm (Fin.last (m - 1 + 1)))).inv := by
+  let r : Fin ((m - 1) + 2) → Fin (m + 1) := fun i => Fin.cast (by omega) i
+  let s : Fin ((m - 1) + 2) → Fin (m + 1) := successorChainVertex hm
+  have hv : ∀ i, s i = r i := successorChainVertex_eq hm
+  have hs : ∀ i : Fin ((m - 1) + 1),
+      successorChainSegment hm i = Fin.cast (by omega) i :=
+    successorChainSegment_eq hm
+  have harr : ∀ i : Fin ((m - 1) + 1),
+      successorChainArrow hm A f i =
+        (objectIsoOfIndexEq A (hv i.castSucc)).hom ≫
+          f (Fin.cast (by omega) i) ≫
+          (objectIsoOfIndexEq A (hv i.succ)).inv := by
+    intro i
+    rw [successorChainArrow_eq]
+    rw [dependentArrow_conjugation_fin A f (hs i)]
+    exact conjugatedArrow_compose A (f (Fin.cast (by omega) i))
+      (successorChainEndpoint_castSucc hm i)
+      (congrArg Fin.castSucc (hs i)) (hv i.castSucc)
+      (successorChainEndpoint_succ hm i)
+      (congrArg Fin.succ (hs i)) (hv i.succ)
+  simpa [r, s] using
+    (composeFin_reindex_of_index_eq A r s hv
+      (fun i => f (Fin.cast (by omega) i))
+      (successorChainArrow hm A f) harr)
+
 /-- The source objects of successive stages are canonically equal. -/
 def shrinkingPrefixInitialIso
     (D : @TwoOpenDescentDatum X _ U V C _)
@@ -186,6 +245,7 @@ def shrinkingPrefixTerminalIso
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
 #print axioms terminalArrow_transport
+#print axioms successorChainComposeFin_eq
 #print axioms shrinkingPrefixInitialIso
 #print axioms shrinkingPrefixBoundaryIso
 #print axioms shrinkingPrefixTerminalIso

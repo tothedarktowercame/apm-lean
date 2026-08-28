@@ -19,12 +19,13 @@ successor.
 `successorChainVertex`, `successorChainSegment`, and `successorChainArrow`
 now package the complete chain in the syntactic successor sizes
 `Fin ((m-1)+2)` and `Fin ((m-1)+1)`, with explicit endpoint equalities.
+`successorChainComposeFin_eq` compares its total fold with the proof-carrying
+reindex of the original fold. The arrow comparison never rewrites the
+terminal index beneath the dependent family.
 These are the typed inputs for the next recurrence theorem.  This target does
 not claim the fold equality or full right-block iteration.
 
-The remaining split seam is the total-fold comparison between this
-successor-shaped family and the original `m`-indexed family. It must use
-`composeFin_reindex_of_index_eq`; direct rewriting of
-`terminalSegmentIndex hm = Fin.last (m-1)` beneath the final dependent arrow
-is rejected by Lean's motive checker. After that fold comparison,
-`terminalArrow_transport` supplies the terminal normalization.
+The remaining seam is normalization from the reindexed fold to the literal
+original fold. Its final object uses a cast of the structural last index,
+whereas the literal fold ends at `Fin.last m`. That endpoint transport must
+be combined with `terminalArrow_transport` before the shrinking recurrence.
