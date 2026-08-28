@@ -6,6 +6,7 @@ import ConstructionTargets.T01J03FrozenQuotientRepresentation
 import ConstructionTargets.BoundaryTorusH0Cokernel
 import ConstructionTargets.CircleUniversalCover
 import ConstructionTargets.FundamentalGroupProduct
+import ConstructionTargets.TwiceSpiralGluingHomologyTable
 
 /-!
 # APM t01J03: A twice-wound gluing of solid tori
@@ -311,6 +312,68 @@ theorem apm_t01J03_bridge_1 :
   exact ⟨⟨e⟩, h0, h1, h2, hhigh⟩
 
 #print axioms apm_t01J03_bridge_1
+
+/-- The five homology clauses needed by `apm_t01J03_bridge_2`, separated from
+its still-independent fundamental-group clause. -/
+theorem apm_t01J03_twiceSpiral_module_homology
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus)
+    (z₀ : apm_t01J03_BoundaryTorus)
+    (e₁ : FundamentalGroup apm_t01J03_BoundaryTorus z₀ ≃*
+      Multiplicative (ℤ × ℤ))
+    (e₂ : FundamentalGroup apm_t01J03_BoundaryTorus (h z₀) ≃*
+      Multiplicative (ℤ × ℤ))
+    (c₁ : FundamentalGroup apm_t01J03_SolidTorus
+      (apm_t01J03_boundaryInclusion z₀) ≃* Multiplicative ℤ)
+    (c₂ : FundamentalGroup apm_t01J03_SolidTorus
+      (apm_t01J03_boundaryInclusion (h z₀)) ≃* Multiplicative ℤ)
+    (hspiral : apm_t01J03_hasTwiceSpiral h z₀ e₁ e₂ c₁ c₂) :
+    let M := apm_t01J03_gluedSpace h
+    Nonempty (apm_t01J03_H 0 M ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t01J03_H 1 M ≅ ModuleCat.of ℤ (ZMod 2)) ∧
+    Limits.IsZero (apm_t01J03_H 2 M) ∧
+    Nonempty (apm_t01J03_H 3 M ≅ ModuleCat.of ℤ ℤ) ∧
+    ∀ k : ℕ, 4 ≤ k → Limits.IsZero (apm_t01J03_H k M) := by
+  dsimp only
+  rcases hspiral with ⟨hinc₁, hinc₂, h10⟩
+  let h' := conjugateBoundaryHomeomorph h
+  let z₀' := coordinateBoundaryTorusHomeomorph z₀
+  have hinc₁' : ∀ p, c₁ (FundamentalGroup.map
+      ⟨ConstructionTargets.SolidTorusGluingOpenCover.boundaryInclusion,
+        ConstructionTargets.SolidTorusGluingOpenCover.continuous_boundaryInclusion⟩
+      z₀' p) =
+        ConstructionTargets.TwiceSpiralH1Coordinates.secondCoordinateHom (e₁ p) := by
+    simpa [z₀', coordinateBoundaryTorusHomeomorph,
+      apm_t01J03_boundaryInclusion,
+      ConstructionTargets.SolidTorusGluingOpenCover.boundaryInclusion,
+      ConstructionTargets.TwiceSpiralH1Coordinates.secondCoordinateHom] using hinc₁
+  have hinc₂' : ∀ p, c₂ (FundamentalGroup.map
+      ⟨ConstructionTargets.SolidTorusGluingOpenCover.boundaryInclusion,
+        ConstructionTargets.SolidTorusGluingOpenCover.continuous_boundaryInclusion⟩
+      (h' z₀') p) =
+        ConstructionTargets.TwiceSpiralH1Coordinates.secondCoordinateHom (e₂ p) := by
+    simpa [h', z₀', conjugateBoundaryHomeomorph,
+      coordinateBoundaryTorusHomeomorph, apm_t01J03_boundaryInclusion,
+      ConstructionTargets.SolidTorusGluingOpenCover.boundaryInclusion,
+      ConstructionTargets.TwiceSpiralH1Coordinates.secondCoordinateHom] using hinc₂
+  have h10' : ConstructionTargets.TwiceSpiralH1Coordinates.boundaryCoordinateMap
+      h' z₀' e₁ e₂ (Multiplicative.ofAdd (1, 0)) =
+        Multiplicative.ofAdd (1, 2) := by
+    simpa [h', z₀', conjugateBoundaryHomeomorph,
+      coordinateBoundaryTorusHomeomorph,
+      ConstructionTargets.TwiceSpiralH1Coordinates.boundaryCoordinateMap] using h10
+  obtain ⟨g0, g1, g2, g3, ghi⟩ :=
+    ConstructionTargets.TwiceSpiralGluingHomologyTable.gluing_complete_module_homology
+      h' z₀' e₁ e₂ c₁ c₂ hinc₁' hinc₂' h10'
+  let transfer (k : ℕ) :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      (apm_t01J03_homeomorph_gluing h).toHomotopyEquiv k
+  exact ⟨⟨transfer 0 ≪≫ Classical.choice g0⟩,
+    ⟨transfer 1 ≪≫ Classical.choice g1⟩,
+    g2.of_iso (transfer 2),
+    ⟨transfer 3 ≪≫ Classical.choice g3⟩,
+    fun k hk => (ghi k hk).of_iso (transfer k)⟩
+
+#print axioms apm_t01J03_twiceSpiral_module_homology
 
 /-- Why this unblocks the final conjunct of `apm_t01j03`: this is the missing
 Seifert--van Kampen and singular Mayer--Vietoris computation for the concrete
