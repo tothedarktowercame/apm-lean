@@ -2336,6 +2336,17 @@ theorem concat_midpoint_evaluate_coherence
     rightSuffixSliceSourceIso, objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv]
   exact eqToHom_six_step_coherence _ _ _ _ _ _ _
 
+/-- Substitute a typed three-map block beneath arbitrary left and right
+whiskers. This is the association shape produced by the evaluation whisker of
+the concatenated-fold comparison. -/
+theorem whisker_replace_three
+    {A B C₀ D₀ E F : C}
+    (l : A ⟶ B) (a : B ⟶ C₀) (b : C₀ ⟶ D₀) (c : D₀ ⟶ E)
+    (d : B ⟶ E) (r : E ⟶ F) (h : a ≫ b ≫ c = d) :
+    l ≫ (a ≫ b ≫ c ≫ r) = l ≫ d ≫ r := by
+  rw [← h]
+  simp only [Category.assoc]
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -2365,6 +2376,7 @@ theorem concat_midpoint_evaluate_coherence
 #print axioms eqToHom_six_step_coherence
 #print axioms concat_right_terminal_evaluate_coherence
 #print axioms concat_midpoint_evaluate_coherence
+#print axioms whisker_replace_three
 #print axioms shrinkingPrefix_initial_transport_coherence
 #print axioms shrinkingPrefix_initial_transport_whisker
 #print axioms eqToHom_three_step_whisker_arrow

@@ -310,10 +310,13 @@ by `S.point_last.trans T.point_zero.symm`.  The generic
 equalities by eliminating the named object equalities before proof
 irrelevance is used.
 
-The remaining seam is the fully typed substitution of
-`concatComposeFin_eq_midpoint_rightBlock` into the outer evaluation maps.  Its
-right-hand morphism must be stated explicitly before rewriting: an inferred
-placeholder does not determine the dependent source and target objects.  A
-small association/substitution theorem around the literal `S` and `T` folds
-can then use the banked initial, midpoint, and terminal coherence equalities.
-No evaluation-composition theorem is claimed in this packet.
+`whisker_replace_three` supplies the reusable typed substitution rule for a
+three-map block beneath the exact left/right whiskers produced by evaluation.
+
+The remaining seam is its six-map analogue at the midpoint. After
+`shrinkingPrefixFold_midpoint_eq_leftFold` is substituted into the whiskered
+production comparison, the source, midpoint, and terminal coherence blocks
+are nested under the remainder of the right-hand fold. Ordinary `rw` cannot
+select them without first giving that six-map block an explicit typed
+whiskered substitution theorem. No evaluation-composition theorem is claimed
+in this packet.
