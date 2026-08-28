@@ -1644,6 +1644,79 @@ theorem rightSuffixSliceFold_succ
   rw [rightSuffixSliceTailFold_eq D S T k hk]
   congr 1
 
+/-- At full length the suffix vertex embedding is pointwise the identity.
+The equality remains named because its proof is used below to transport
+dependent object types. -/
+theorem rightSuffixSliceVertex_full
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (T.n + 2)) :
+    rightSuffixSliceVertex T (T.n + 1) (le_refl _) i = i := by
+  apply Fin.ext
+  simp [rightSuffixSliceVertex]
+
+/-- At full length the suffix segment embedding is pointwise the identity. -/
+theorem rightSuffixSliceSegment_full
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (T.n + 1)) :
+    rightSuffixSliceSegment T (T.n + 1) (le_refl _) i = i := by
+  apply Fin.ext
+  simp [rightSuffixSliceSegment]
+
+/-- Two-step endpoint transports around an aligned arrow equal direct
+endpoint transports with the same source and target. -/
+theorem eqToHom_two_two_eq_one_one
+    {A₀ A₁ A₂ B₀ B₁ B₂ : C}
+    (h₁ : A₀ = A₁) (h₂ : A₁ = A₂) (h : A₀ = A₂)
+    (f : A₂ ⟶ B₀)
+    (k₁ : B₀ = B₁) (k₂ : B₁ = B₂) (k : B₀ = B₂) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫ f ≫ eqToHom k₁ ≫ eqToHom k₂ =
+      eqToHom h ≫ f ≫ eqToHom k := by
+  subst A₁
+  subst A₂
+  subst B₁
+  subst B₂
+  simp
+
+/-- The full-slice arrow is the corresponding reverse-right arrow conjugated
+by the explicit full-length vertex equalities. -/
+theorem rightSuffixSliceArrow_full_eq_conjugate
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (T.n + 1)) :
+    rightSuffixSliceArrow D S T (T.n + 1) (le_refl _) i =
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T i.castSucc)).hom ≫
+      reverseRightArrow D S T i ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T i.succ)).inv := by
+  unfold rightSuffixSliceArrow
+  rw [dependentArrow_conjugation
+    (reverseRightObject D S T) (reverseRightArrow D S T)
+    (rightSuffixSliceSegment_full T i)]
+  simp only [objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv,
+    Category.assoc]
+  exact eqToHom_two_two_eq_one_one (C := C) _ _ _ _ _ _ _
+
+/-- The complete proof-carrying suffix slice is the literal reverse-right
+fold, with only the full-length endpoint transports remaining. -/
+theorem rightSuffixSliceFold_full_eq
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    rightSuffixSliceFold D S T (T.n + 1) (le_refl _) =
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T 0)).hom ≫
+      TwoOpenDescentDatum.composeFin (reverseRightObject D S T)
+        (reverseRightArrow D S T) ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv := by
+  apply composeFin_reindex_of_index_eq
+    (reverseRightObject D S T)
+    (fun i : Fin (T.n + 2) => i)
+    (rightSuffixSliceVertex T (T.n + 1) (le_refl _))
+    (rightSuffixSliceVertex_full T)
+    (reverseRightArrow D S T)
+    (rightSuffixSliceArrow D S T (T.n + 1) (le_refl _))
+  exact rightSuffixSliceArrow_full_eq_conjugate D S T
+
 theorem rightSuffixSlice_source_stage
     (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
     reverseRightStage T (rightSuffixSliceVertex T k hk 0) = k := by
@@ -1760,6 +1833,55 @@ theorem rightSuffixSliceFold_eq_accum
           (rightSuffixSliceVertex_succ_tail T k hk (Fin.last k)).symm)
         _ _
 
+/-- The complete recursive suffix accumulator is the complete reverse-right
+fold, with every comparison endpoint retained explicitly. -/
+theorem rightSuffixAccum_full_eq_reverseRight
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    rightSuffixAccum D S T (T.n + 1) (le_refl _) =
+      (rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+      ((objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_full T 0)).hom ≫
+        TwoOpenDescentDatum.composeFin (reverseRightObject D S T)
+          (reverseRightArrow D S T) ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv) ≫
+      (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom := by
+  calc
+    rightSuffixAccum D S T (T.n + 1) (le_refl _) =
+        (rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+          rightSuffixSliceFold D S T (T.n + 1) (le_refl _) ≫
+          (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom := by
+      rw [rightSuffixSliceFold_eq_accum D S T (T.n + 1) (le_refl _)]
+      simp [Category.assoc]
+    _ = _ := by
+      rw [rightSuffixSliceFold_full_eq D S T]
+      congr 1
+
+/-- The complete suffix accumulator in the literal right-block coordinate,
+normalized further to the original subdivision `T`'s dependent fold. -/
+theorem rightSuffixAccum_full_eq_rightBlock
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    rightSuffixAccum D S T (T.n + 1) (le_refl _) =
+      (rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T 0)).hom ≫
+      (reverseRightObjectIso D S T 0).hom ≫
+      (rightBlockObjectIso D S T 0).hom ≫
+      TwoOpenDescentDatum.composeFin (D.obj ∘ T.point) (D.mappedPiece T) ≫
+      (rightBlockObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+      (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv ≫
+      (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom := by
+  rw [rightSuffixAccum_full_eq_reverseRight D S T]
+  rw [reverseRightComposeFin_eq D S T]
+  rw [rightBlockComposeFin_eq D S T]
+  simp only [Category.assoc]
+
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
 original terminal object. -/
@@ -1818,6 +1940,39 @@ theorem concatComposeFin_eq_midpoint_rightAccum
       rightSuffixAccum D S T (T.n + 1) (le_refl _) := by
   rw [← shrinkingPrefixFold_zero D S T]
   exact shrinkingPrefixFold_zero_eq_midpoint D S T
+
+/-- The strongest current concatenated segment-fold formula: after the
+midpoint prefix, the complete right suffix is the original subdivision `T`'s
+fold bracketed by the accumulated proof-carrying coordinate transports. -/
+theorem concatComposeFin_eq_midpoint_rightBlock
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T 0)).hom ≫
+      TwoOpenDescentDatum.composeFin
+        (D.obj ∘ (concatSubdivision S T).point)
+        (D.mappedPiece (concatSubdivision S T)) ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T
+          (Fin.last (concatSegmentCount S T)))).inv =
+    rightInitialAccum D S T (T.n + 1) ≫
+      shrinkingPrefixFold D S T (T.n + 1) ≫
+      ((rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_full T 0)).hom ≫
+        (reverseRightObjectIso D S T 0).hom ≫
+        (rightBlockObjectIso D S T 0).hom ≫
+        TwoOpenDescentDatum.composeFin (D.obj ∘ T.point) (D.mappedPiece T) ≫
+        (rightBlockObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+        (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv ≫
+        (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom) := by
+  rw [concatComposeFin_eq_midpoint_rightAccum D S T]
+  rw [rightSuffixAccum_full_eq_rightBlock D S T]
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
@@ -1900,6 +2055,11 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightSuffixSliceArrow_succ_tail_eq_conjugate
 #print axioms rightSuffixSliceTailFold_eq
 #print axioms rightSuffixSliceFold_succ
+#print axioms rightSuffixSliceVertex_full
+#print axioms rightSuffixSliceSegment_full
+#print axioms eqToHom_two_two_eq_one_one
+#print axioms rightSuffixSliceArrow_full_eq_conjugate
+#print axioms rightSuffixSliceFold_full_eq
 #print axioms rightSuffixSlice_source_stage
 #print axioms rightSuffixSlice_target_stage
 #print axioms rightSuffixSliceSourceIso
@@ -1908,8 +2068,11 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightSuffixSlice_front_source_coherence
 #print axioms rightSuffixSlice_target_coherence
 #print axioms rightSuffixSliceFold_eq_accum
+#print axioms rightSuffixAccum_full_eq_reverseRight
+#print axioms rightSuffixAccum_full_eq_rightBlock
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum
+#print axioms concatComposeFin_eq_midpoint_rightBlock
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence

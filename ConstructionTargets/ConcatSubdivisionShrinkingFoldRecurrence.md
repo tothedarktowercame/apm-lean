@@ -252,10 +252,24 @@ first slice arrow and tail-source transport with `rightRemovalStep k` between
 the named source coordinates. `rightSuffixSlice_target_coherence` performs
 the corresponding terminal normalization.
 
-`rightSuffixSliceFold_eq_accum` now proves by finite induction that every
-slice fold is `rightSuffixAccum`, bracketed by
-`rightSuffixSliceSourceIso` and `rightSuffixSliceTargetIso`. The remaining
-seam is the full-length endpoint comparison between this slice presentation
-and `composeFin reverseRightObject reverseRightArrow`; only after that
-comparison is compiled can the reverse/right-block and concatenated-fold
-theorems be combined. No combined concatenated-fold formula is claimed here.
+`rightSuffixSliceFold_eq_accum` proves by finite induction that every slice
+fold is `rightSuffixAccum`, bracketed by `rightSuffixSliceSourceIso` and
+`rightSuffixSliceTargetIso`. At full length,
+`rightSuffixSliceVertex_full` and `rightSuffixSliceSegment_full` give the
+proof-carrying pointwise identity coordinates. The arrow comparison
+`rightSuffixSliceArrow_full_eq_conjugate` and dependent reindex theorem then
+yield `rightSuffixSliceFold_full_eq`.
+
+`rightSuffixAccum_full_eq_reverseRight` combines the full slice with the
+accumulator induction. `rightSuffixAccum_full_eq_rightBlock` continues through
+`reverseRightComposeFin_eq` and `rightBlockComposeFin_eq`, so the central fold
+is literally the original subdivision `T`'s mapped-piece fold.
+`concatComposeFin_eq_midpoint_rightBlock` substitutes that result into the
+full concatenated fold comparison. It deliberately retains every midpoint,
+reverse-chain, right-block, and terminal endpoint transport.
+
+The next seam is evaluation-level normalization: compare the midpoint prefix
+and its outer transports with `D.evaluate S`, then cancel the displayed
+midpoint and terminal transports against the three-morphism definition of
+`D.evaluate`. No evaluation composition or quotient-functor law is claimed
+here.
