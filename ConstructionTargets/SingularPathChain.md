@@ -24,6 +24,14 @@ by treating degenerate chains as zero.  The resulting chain has differential
 first-homology classes for path-homotopic based loops.
 
 No concatenation formula, Hurewicz homomorphism, or homology isomorphism is
-assumed or proved.  The next separate obligation is the interval-subdivision
-two-chain relating `pathChain (gamma.trans delta)` to the sum of the two path
-chains.
+assumed or proved.  The production singular prism does prove that a based
+loop and its barycentric subdivision differ by a boundary.  The remaining
+concatenation seam is recorded exactly by `PathTransSubdivisionFormula`.
+The recursive barycentric subdivision orders the first half as a
+barycentre-first edge, so proving that formula requires an explicit
+edge-reversal two-simplex before it can identify the subdivision of
+`gamma.trans delta` with `pathChain gamma + pathChain delta`.
+
+`pathTrans_difference_boundary_of_subdivision_formula` verifies that this one
+orientation/parametrization equation is sufficient to produce the desired
+boundary.  It does not treat the equation as established.

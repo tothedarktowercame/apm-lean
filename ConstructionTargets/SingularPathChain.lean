@@ -350,11 +350,92 @@ theorem basedLoopH1Class_eq_of_homotopy {X : Type} [TopologicalSpace X]
     exact hzero
   exact (sub_eq_zero.mp hclasses).symm
 
+/-! ## Reduction of concatenation additivity to the oriented edge split -/
+
+/-- The production barycentric subdivision of the singular edge represented
+by a path. -/
+def subdividedPathChain {X : Type} [TopologicalSpace X] {x y : X}
+    (gamma : Path x y) :
+    AddCommGrpCat.of ℤ ⟶ (SingularChains (TopCat.of X)).X 1 :=
+  pathChain gamma ≫ singularSubdivisionDegree 1
+
+/-- For a based loop, the production subdivision differs from the original
+edge by the boundary of the production singular prism. -/
+theorem basedLoop_subdivision_difference_boundary {X : Type}
+    [TopologicalSpace X] {x : X} (gamma : Path x x) :
+    ∃ b : AddCommGrpCat.of ℤ ⟶ (SingularChains (TopCat.of X)).X 2,
+      subdividedPathChain gamma - pathChain gamma =
+        b ≫ (SingularChains (TopCat.of X)).d 2 1 := by
+  simpa [subdividedPathChain] using
+    productionCycle_homologous_to_subdivision 0 (pathChain gamma)
+      (pathChain_cycle gamma)
+
+/-- The exact remaining degree-one normalization statement.  It is kept as a
+predicate because the recursive production subdivision orders the first half
+as a barycentre-first edge; identifying it with the forward first path needs
+an explicit edge-reversal two-simplex. -/
+def PathTransSubdivisionFormula {X : Type} [TopologicalSpace X]
+    {x y z : X} (gamma : Path x y) (delta : Path y z) : Prop :=
+  subdividedPathChain (gamma.trans delta) =
+    pathChain gamma + pathChain delta
+
+/-- Once the explicit oriented-edge normalization is supplied, the already
+compiled production prism gives the desired concatenation difference as an
+actual boundary.  No homology or subdivision invariance is assumed. -/
+theorem pathTrans_difference_boundary_of_subdivision_formula
+    {X : Type} [TopologicalSpace X] {x : X}
+    (gamma delta : Path x x) (h : PathTransSubdivisionFormula gamma delta) :
+    ∃ b : AddCommGrpCat.of ℤ ⟶ (SingularChains (TopCat.of X)).X 2,
+      pathChain (gamma.trans delta) - pathChain gamma - pathChain delta =
+        b ≫ (SingularChains (TopCat.of X)).d 2 1 := by
+  obtain ⟨b, hb⟩ := basedLoop_subdivision_difference_boundary
+    (gamma.trans delta)
+  refine ⟨-b, ?_⟩
+  rw [Preadditive.neg_comp, ← hb]
+  dsimp [PathTransSubdivisionFormula] at h
+  rw [h]
+  abel
+
+/-- Conditional homology additivity in Mathlib's actual path-composition
+order: `gamma.trans delta` traverses `gamma` first and `delta` second. -/
+theorem basedLoopH1Class_trans_of_subdivision_formula
+    {X : Type} [TopologicalSpace X] {x : X}
+    (gamma delta : Path x x) (h : PathTransSubdivisionFormula gamma delta) :
+    basedLoopH1Class (gamma.trans delta) =
+      basedLoopH1Class gamma + basedLoopH1Class delta := by
+  let K := SingularChains (TopCat.of X)
+  let c := pathChain (gamma.trans delta) - pathChain gamma - pathChain delta
+  have hc : c ≫ K.d 1 0 = 0 := by
+    dsimp [c, K]
+    rw [Preadditive.sub_comp, Preadditive.sub_comp, pathChain_cycle,
+      pathChain_cycle, pathChain_cycle]
+    simp
+  obtain ⟨b, hb⟩ :=
+    pathTrans_difference_boundary_of_subdivision_formula gamma delta h
+  have hzero : K.liftCycles c 0 (by simp) hc ≫ K.homologyπ 1 = 0 :=
+    K.liftCycles_homologyπ_eq_zero_of_boundary c 0 (by simp) b hb
+  have hlift : K.liftCycles c 0 (by simp) hc =
+      basedLoopCycle (gamma.trans delta) - basedLoopCycle gamma -
+        basedLoopCycle delta := by
+    apply (cancel_mono (K.iCycles 1)).1
+    rw [K.liftCycles_i, Preadditive.sub_comp, Preadditive.sub_comp,
+      basedLoopCycle_i, basedLoopCycle_i, basedLoopCycle_i]
+  have hclasses : basedLoopH1Class (gamma.trans delta) -
+      basedLoopH1Class gamma - basedLoopH1Class delta = 0 := by
+    rw [basedLoopH1Class, basedLoopH1Class, basedLoopH1Class]
+    rw [← Preadditive.sub_comp, ← Preadditive.sub_comp, ← hlift]
+    exact hzero
+  apply sub_eq_zero.mp
+  simpa [sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using hclasses
+
 #print axioms pathChain_boundary
 #print axioms pathChain_cycle
 #print axioms pathChain_postcomp
 #print axioms pathHomotopyPrismChain_boundary_raw
 #print axioms pathHomotopyBoundaryChain_boundary
 #print axioms basedLoopH1Class_eq_of_homotopy
+#print axioms basedLoop_subdivision_difference_boundary
+#print axioms pathTrans_difference_boundary_of_subdivision_formula
+#print axioms basedLoopH1Class_trans_of_subdivision_formula
 
 end ConstructionTargets.SingularPathChain
