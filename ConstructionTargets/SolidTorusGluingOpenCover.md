@@ -28,6 +28,11 @@ The compiled declarations provide:
   `BoundaryGlueRel.glue`;
 - homotopy equivalences from the left and right quotient pieces to the solid
   torus and from their intersection to the boundary torus.
+- the actual intersection-to-piece subtype inclusions and strict coordinate
+  equations: the left composite is `boundaryInclusion`, while the right
+  composite is `boundaryInclusion ∘ h`.  Representative lemmas establish
+  these equations independently of membership proofs before quotient
+  retraction.
 
 No openness of the quotient projection is assumed.  Openness is obtained from
 the saturated-preimage equations and the coinduced quotient topology.

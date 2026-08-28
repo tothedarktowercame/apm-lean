@@ -1288,9 +1288,87 @@ def intersectionPieceHomotopyEquiv (h : BoundaryTorus ≃ₜ BoundaryTorus) :
   left_inv := ⟨(intersectionPieceHomotopy h).symm⟩
   right_inv := by rw [intersectionPieceRetraction_comp_inclusion]
 
+/-! ## Compatibility of the intersection and piece coordinates -/
+
+def intersectionToLeftOpen (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    C(↥(leftOpen h ∩ rightOpen h), leftOpen h) :=
+  ⟨fun x => ⟨x.1, x.2.1⟩, continuous_subtype_val.subtype_mk _⟩
+
+def intersectionToRightOpen (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    C(↥(leftOpen h ∩ rightOpen h), rightOpen h) :=
+  ⟨fun x => ⟨x.1, x.2.2⟩, continuous_subtype_val.subtype_mk _⟩
+
+theorem intersectionToLeftOpen_named_inl
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (z : BoundaryTorus)
+    (hz : Sum.inl (boundaryInclusion z) ∈ bothBandPreimage) :
+    intersectionToLeftOpen h
+        (namedIntersectionPieceQuotientMap h
+          ⟨Sum.inl (boundaryInclusion z), hz⟩) =
+      namedLeftPieceQuotientMap h
+        ⟨Sum.inl (boundaryInclusion z), trivial⟩ := by
+  apply Subtype.ext
+  rfl
+
+theorem intersectionToRightOpen_named_inl
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (z : BoundaryTorus)
+    (hz : Sum.inl (boundaryInclusion z) ∈ bothBandPreimage) :
+    intersectionToRightOpen h
+        (namedIntersectionPieceQuotientMap h
+          ⟨Sum.inl (boundaryInclusion z), hz⟩) =
+      namedRightPieceQuotientMap h
+        ⟨Sum.inl (boundaryInclusion z),
+          boundaryInclusion_mem_annularBand z⟩ := by
+  apply Subtype.ext
+  rfl
+
+theorem intersection_left_coordinate_strict (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    (leftPieceHomotopyEquiv h).toFun.comp
+        ((intersectionToLeftOpen h).comp
+          (intersectionPieceHomotopyEquiv h).invFun) =
+      ⟨boundaryInclusion, continuous_boundaryInclusion⟩ := by
+  apply ContinuousMap.ext
+  intro z
+  change leftPieceRetraction h
+      (intersectionToLeftOpen h (boundaryIntersectionInclusion h z)) =
+    boundaryInclusion z
+  rw [show intersectionToLeftOpen h (boundaryIntersectionInclusion h z) =
+      namedLeftPieceQuotientMap h
+        ⟨Sum.inl (boundaryInclusion z), trivial⟩ by
+    exact intersectionToLeftOpen_named_inl h z
+      (boundaryInclusion_mem_annularBand z)]
+  exact leftPieceRetraction_pullback h
+    ⟨Sum.inl (boundaryInclusion z), trivial⟩
+
+theorem intersection_right_coordinate_strict
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    (rightPieceHomotopyEquiv h).toFun.comp
+        ((intersectionToRightOpen h).comp
+          (intersectionPieceHomotopyEquiv h).invFun) =
+      ⟨boundaryInclusion ∘ h,
+        continuous_boundaryInclusion.comp h.continuous⟩ := by
+  apply ContinuousMap.ext
+  intro z
+  change rightPieceRetraction h
+      (intersectionToRightOpen h (boundaryIntersectionInclusion h z)) =
+    boundaryInclusion (h z)
+  rw [show intersectionToRightOpen h (boundaryIntersectionInclusion h z) =
+      namedRightPieceQuotientMap h
+        ⟨Sum.inl (boundaryInclusion z),
+          boundaryInclusion_mem_annularBand z⟩ by
+    exact intersectionToRightOpen_named_inl h z
+      (boundaryInclusion_mem_annularBand z)]
+  rw [rightPieceRetraction_pullback]
+  let xb : annularBand :=
+    ⟨boundaryInclusion z, boundaryInclusion_mem_annularBand z⟩
+  have hr := rightSourceRetraction_inl h xb
+    (boundaryInclusion_mem_annularBand z)
+  rw [hr, annularProjection_boundary]
+
 #print axioms annularBand_isOpen
 #print axioms leftPreimage_respects
 #print axioms quotientMap_preimage_inter_open
 #print axioms intersectionPieceQuotientMap_isQuotientMap
+#print axioms intersection_left_coordinate_strict
+#print axioms intersection_right_coordinate_strict
 
 end ConstructionTargets.SolidTorusGluingOpenCover
