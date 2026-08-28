@@ -79,7 +79,11 @@ stage-`r+1` `shrinkingPrefixArrow`.  Its proof uses the generic whiskered
 conjugation-composition law, so the three independently generated endpoint
 transport layers are retained until their index equalities have aligned.
 
-The remaining seam is the whole-fold application of
-`composeFin_reindex_of_index_eq`, followed by substitution of that comparison
-into `shrinkingPrefixFold_terminal_split_literal`.  No shrinking-fold
-recurrence or iteration is claimed yet.
+`shrinkingSuccessorPrefixFold_eq` applies that pointwise comparison through
+`composeFin_reindex_of_index_eq`, identifying the complete displayed prefix
+with stage `r+1` while retaining both endpoint transports.
+
+The remaining seam is matching this stage-indexed presentation with the
+syntactic prefix inside `shrinkingPrefixFold_terminal_split_literal`; their
+finite sizes are arithmetically equal but connected by explicit casts. No
+shrinking-fold recurrence or right-segment peel beyond `r ≤ T.n` is claimed.

@@ -545,6 +545,44 @@ theorem shrinkingSuccessorPrefixArrow_eq_conjugate
     (by apply Fin.ext; rfl) (by apply Fin.ext; rfl) (by apply Fin.ext; rfl)
     (l := _) (r := _)
 
+/-- Whole-fold comparison between the successor-shaped displayed prefix and
+stage `r+1`, with the two endpoint transports retained. -/
+theorem shrinkingSuccessorPrefixFold_eq
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T) :
+    TwoOpenDescentDatum.composeFin
+        (fun i : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+          D.obj ((concatSubdivision S T).point
+            (shrinkingVertexEmbedding S T r
+              (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+                (Fin.cast (by omega) i).castSucc))))
+        (shrinkingSuccessorPrefixArrow D S T r hr) =
+      (objectIsoOfIndexEq
+        (fun k => D.obj ((concatSubdivision S T).point k))
+        (shrinkingSuccessorPrefixVertex_eq S T r hr 0)).hom ≫
+      shrinkingPrefixFold D S T (r + 1) ≫
+      (objectIsoOfIndexEq
+        (fun k => D.obj ((concatSubdivision S T).point k))
+        (shrinkingSuccessorPrefixVertex_eq S T r hr
+          (Fin.last (concatSegmentCount S T - (r + 1))))).inv := by
+  let O := fun k => D.obj ((concatSubdivision S T).point k)
+  let newVertex := fun i : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+    shrinkingVertexEmbedding S T (r + 1) i
+  let shownVertex := fun i : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+    shrinkingVertexEmbedding S T r
+      (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+        (Fin.cast (by omega) i).castSucc)
+  have hv : ∀ i, shownVertex i = newVertex i :=
+    shrinkingSuccessorPrefixVertex_eq S T r hr
+  have h := composeFin_reindex_of_index_eq O newVertex shownVertex hv
+    (shrinkingPrefixArrow D S T (r + 1))
+    (shrinkingSuccessorPrefixArrow D S T r hr)
+    (shrinkingSuccessorPrefixArrow_eq_conjugate D S T r hr)
+  simpa [shrinkingPrefixFold, shrinkingPrefixObject, O, newVertex,
+    shownVertex] using h
+
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
@@ -568,5 +606,6 @@ theorem shrinkingSuccessorPrefixArrow_eq_conjugate
 #print axioms shrinkingSuccessorPrefixVertex_eq
 #print axioms shrinkingSuccessorPrefixSegment_eq
 #print axioms shrinkingSuccessorPrefixArrow_eq_conjugate
+#print axioms shrinkingSuccessorPrefixFold_eq
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
