@@ -98,6 +98,45 @@ theorem terminalPrefixEndpoint_succ {m : ℕ} (hm : 0 < m)
     terminalPrefixVertex hm i.succ = (terminalPrefixSegment hm i).succ := by
   apply Fin.ext; rfl
 
+def successorChainVertex {m : ℕ} (hm : 0 < m) :
+    Fin ((m - 1) + 2) → Fin (m + 1) := fun i => ⟨i, by omega⟩
+
+def successorChainSegment {m : ℕ} (hm : 0 < m) :
+    Fin ((m - 1) + 1) → Fin m := fun i => ⟨i, by omega⟩
+
+theorem successorChainEndpoint_castSucc {m : ℕ} (hm : 0 < m)
+    (i : Fin ((m - 1) + 1)) :
+    successorChainVertex hm i.castSucc =
+      (successorChainSegment hm i).castSucc := by
+  apply Fin.ext; rfl
+
+theorem successorChainEndpoint_succ {m : ℕ} (hm : 0 < m)
+    (i : Fin ((m - 1) + 1)) :
+    successorChainVertex hm i.succ =
+      (successorChainSegment hm i).succ := by
+  apply Fin.ext; rfl
+
+/-- The proof-carrying arrow family of the successor-shaped whole-chain copy.
+-/
+def successorChainArrow {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ)
+    (i : Fin ((m - 1) + 1)) :
+    A (successorChainVertex hm i.castSucc) ⟶
+      A (successorChainVertex hm i.succ) :=
+  eqToHom (congrArg A (successorChainEndpoint_castSucc hm i)) ≫
+    f (successorChainSegment hm i) ≫
+    eqToHom (congrArg A (successorChainEndpoint_succ hm i)).symm
+
+theorem successorChainArrow_eq {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ)
+    (i : Fin ((m - 1) + 1)) :
+    successorChainArrow hm A f i =
+      eqToHom (congrArg A (successorChainEndpoint_castSucc hm i)) ≫
+        f (successorChainSegment hm i) ≫
+        eqToHom (congrArg A (successorChainEndpoint_succ hm i)).symm := rfl
+
 /-- The source objects of successive stages are canonically equal. -/
 def shrinkingPrefixInitialIso
     (D : @TwoOpenDescentDatum X _ U V C _)

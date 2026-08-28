@@ -16,18 +16,15 @@ The positive-length interface now includes `terminalPrefixVertex`,
 zero, and terminal endpoint equalities. These are valid for an arbitrary
 `m` with `0 < m`, without requiring `m` to elaborate syntactically as a
 successor.
+`successorChainVertex`, `successorChainSegment`, and `successorChainArrow`
+now package the complete chain in the syntactic successor sizes
+`Fin ((m-1)+2)` and `Fin ((m-1)+1)`, with explicit endpoint equalities.
 These are the typed inputs for the next recurrence theorem.  This target does
 not claim the fold equality or full right-block iteration.
 
-The exact remaining zero-stage seam is normalization of the two `eqToHom`s in
-`shrinkingPrefixArrow`: their equality proofs arise from the separately
-defined vertex and segment embeddings.  Rewriting the segment equality under
-the dependent arrow is rejected by Lean's motive checker, so the next theorem
-must compare those endpoint transports explicitly before applying
-`composeFin_reindex_of_index_eq`.
-
-The remaining split seam is arithmetic rather than arrow transport:
-`composeFin_succ` expects the positive length syntactically as `n+1`, while
-the generic interface retains `m` with `0 < m`. A proof-carrying reindex of
-the complete object and arrow families across `m = (m-1)+1` is still needed
-before the positive-length split can specialize to the shrinking recurrence.
+The remaining split seam is the total-fold comparison between this
+successor-shaped family and the original `m`-indexed family. It must use
+`composeFin_reindex_of_index_eq`; direct rewriting of
+`terminalSegmentIndex hm = Fin.last (m-1)` beneath the final dependent arrow
+is rejected by Lean's motive checker. After that fold comparison,
+`terminalArrow_transport` supplies the terminal normalization.
