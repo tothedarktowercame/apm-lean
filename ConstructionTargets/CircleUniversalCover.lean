@@ -87,9 +87,48 @@ theorem existsUnique_liftBasedLoop_endpoint_integer
   obtain ⟨n, hn⟩ := liftBasedLoop_endpoint_periodic gamma hzero hone
   exact ⟨n, hn, fun m hm ↦ period_integer_unique hm hn⟩
 
+/-- The integer coordinate of the endpoint of the lift of a based loop. -/
+noncomputable def liftBasedLoopEndpointInteger
+    (gamma : C(Set.Icc (0 : ℝ) 1, Circle))
+    (hzero : gamma 0 = 1) (hone : gamma 1 = 1) : ℤ :=
+  (existsUnique_liftBasedLoop_endpoint_integer gamma hzero hone).choose
+
+theorem liftBasedLoopEndpointInteger_spec
+    (gamma : C(Set.Icc (0 : ℝ) 1, Circle))
+    (hzero : gamma 0 = 1) (hone : gamma 1 = 1) :
+    liftBasedLoopEndpointInteger gamma hzero hone • (2 * Real.pi) =
+      liftBasedLoop gamma hzero 1 :=
+  (existsUnique_liftBasedLoop_endpoint_integer gamma hzero hone).choose_spec.1
+
+/-- Based-homotopic loops have lifts from zero with the same endpoint. -/
+theorem liftBasedLoop_one_eq_of_homotopicRel
+    {gamma₀ gamma₁ : C(Set.Icc (0 : ℝ) 1, Circle)}
+    (h : gamma₀.HomotopicRel gamma₁ {0, 1})
+    (hzero₀ : gamma₀ 0 = 1) (hzero₁ : gamma₁ 0 = 1) :
+    liftBasedLoop gamma₀ hzero₀ 1 = liftBasedLoop gamma₁ hzero₁ 1 := by
+  simpa only [liftBasedLoop] using
+    circleCover_isCoveringMap.liftPath_apply_one_eq_of_homotopicRel h 0
+      (by simpa using hzero₀) (by simpa using hzero₁)
+
+/-- The lifted endpoint integer is invariant under homotopy relative to both
+endpoints. -/
+theorem liftBasedLoopEndpointInteger_eq_of_homotopicRel
+    {gamma₀ gamma₁ : C(Set.Icc (0 : ℝ) 1, Circle)}
+    (h : gamma₀.HomotopicRel gamma₁ {0, 1})
+    (hzero₀ : gamma₀ 0 = 1) (hone₀ : gamma₀ 1 = 1)
+    (hzero₁ : gamma₁ 0 = 1) (hone₁ : gamma₁ 1 = 1) :
+    liftBasedLoopEndpointInteger gamma₀ hzero₀ hone₀ =
+      liftBasedLoopEndpointInteger gamma₁ hzero₁ hone₁ := by
+  apply period_integer_unique
+    (liftBasedLoopEndpointInteger_spec gamma₀ hzero₀ hone₀)
+  rw [liftBasedLoop_one_eq_of_homotopicRel h hzero₀ hzero₁]
+  exact liftBasedLoopEndpointInteger_spec gamma₁ hzero₁ hone₁
+
 #print axioms circleCover_isCoveringMap
 #print axioms circleCover_eq_iff
 #print axioms liftBasedLoop_endpoint_periodic
 #print axioms existsUnique_liftBasedLoop_endpoint_integer
+#print axioms liftBasedLoop_one_eq_of_homotopicRel
+#print axioms liftBasedLoopEndpointInteger_eq_of_homotopicRel
 
 end ConstructionTargets.CircleUniversalCover
