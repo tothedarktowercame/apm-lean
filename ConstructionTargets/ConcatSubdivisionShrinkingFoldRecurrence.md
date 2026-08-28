@@ -289,8 +289,14 @@ applies `composeFin_cast_reindex`: the displayed original-left-cardinality
 fold is the literal `shrinkingPrefixFold D S T (T.n+1)`, bracketed by its
 explicit zero and final object transports.
 
-The next seam is categorical cancellation of those outer midpoint transports
-against the point-coordinate transports in `midpointLeftReindexedFold_eq` and
-the accumulated right-block transports in
-`concatComposeFin_eq_midpoint_rightBlock`, before assembling the final
-evaluation-composition theorem.
+`shrinkingPrefixFold_midpoint_eq_leftFold` now combines the two displayed-fold
+equalities. It expresses the literal midpoint `shrinkingPrefixFold` as the
+literal `S` mapped-piece fold with all four zero/final transports retained;
+`five_morphism_reassociation` supplies only the required categorical
+parenthesization.
+
+The next seam is normalization of `rightInitialAccum (T.n+1)` against the
+source transports of this theorem, followed by cancellation of the midpoint
+and terminal transport chain in `concatComposeFin_eq_midpoint_rightBlock`
+against the outer maps in `evaluate`. No evaluation-composition theorem is
+claimed yet.

@@ -1904,7 +1904,7 @@ theorem shrinkingPrefixFold_rightBlockAccum
         omega)]
       rw [rightInitialAccum_succ, rightSuffixAccum_succ]
       unfold rightRemovalStep
-      simp only [Category.assoc]
+      simp only [← Category.assoc]
 
 /-- Stage zero compared directly with the midpoint stage after every legal
 right-block removal. -/
@@ -2194,6 +2194,51 @@ theorem midpointLeftDisplayedFold_eq_literal
   simpa only [shrinkingPrefixFold,
     midpointLeftVertexIndex_eq_castChainVertex] using h
 
+theorem five_morphism_reassociation
+    {A₀ A₁ A₂ A₃ A₄ A₅ : C}
+    (a : A₀ ⟶ A₁) (b : A₁ ⟶ A₂) (c : A₂ ⟶ A₃)
+    (d : A₃ ⟶ A₄) (e : A₄ ⟶ A₅) :
+    a ≫ (b ≫ c ≫ d) ≫ e = a ≫ b ≫ c ≫ d ≫ e := by
+  simp only [Category.assoc]
+
+/-- The literal subtraction-indexed midpoint fold expressed as the literal
+`S` fold. All endpoint transports from the two whole-chain comparisons remain
+visible. -/
+theorem shrinkingPrefixFold_midpoint_eq_leftFold
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    shrinkingPrefixFold D S T (T.n + 1) =
+      (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+        (midpointLeftVertexIndex_zero S T)).inv ≫
+      (objectIsoOfIndexEq D.obj (midpointLeftPoint_eq S T 0)).hom ≫
+      TwoOpenDescentDatum.composeFin (D.obj ∘ S.point) (D.mappedPiece S) ≫
+      (objectIsoOfIndexEq D.obj
+        (midpointLeftPoint_eq S T (Fin.last (S.n + 1)))).inv ≫
+      (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+        (midpointLeftVertexIndex_last S T)).hom := by
+  let e₀ := objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+    (midpointLeftVertexIndex_zero S T)
+  let e₁ := objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+    (midpointLeftVertexIndex_last S T)
+  calc
+    shrinkingPrefixFold D S T (T.n + 1) =
+        e₀.inv ≫ (e₀.hom ≫ shrinkingPrefixFold D S T (T.n + 1) ≫ e₁.inv) ≫
+          e₁.hom := by simp
+    _ = e₀.inv ≫
+        TwoOpenDescentDatum.composeFin
+          (fun i : Fin (S.n + 2) =>
+            shrinkingPrefixObject D S T (T.n + 1)
+              (midpointLeftVertexIndex S T i))
+          (fun i : Fin (S.n + 1) =>
+            shrinkingPrefixArrow D S T (T.n + 1)
+              (midpointLeftSegmentIndex S T i)) ≫ e₁.hom := by
+          rw [midpointLeftDisplayedFold_eq_literal D S T]
+    _ = _ := by
+      rw [midpointLeftReindexedFold_eq D S T]
+      dsimp [e₀, e₁]
+      exact five_morphism_reassociation _ _ _ _ _
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -2309,5 +2354,7 @@ theorem midpointLeftDisplayedFold_eq_literal
 #print axioms shrinkingPrefixArrow_midpointLeft_eq_conjugate
 #print axioms midpointLeftReindexedFold_eq
 #print axioms midpointLeftDisplayedFold_eq_literal
+#print axioms five_morphism_reassociation
+#print axioms shrinkingPrefixFold_midpoint_eq_leftFold
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
