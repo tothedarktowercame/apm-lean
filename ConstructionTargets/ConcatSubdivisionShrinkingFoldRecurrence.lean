@@ -1178,6 +1178,56 @@ theorem reverseRightObjectIso_last
         (reverseRightTerminalVertex_eq_rightBlockVertex S T
           (Fin.last (T.n + 1)))) := rfl
 
+/-- The penultimate vertex of reverse removal stage `T.n-j` is the source of
+literal right segment `j`. -/
+theorem reverseRemovalStage_sourceVertex_eq_rightSegment
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    shrinkingVertexEmbedding S T (T.n - j)
+        (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+          simp [concatSegmentCount]
+          omega))).castSucc =
+      (rightSegment S T j).castSucc :=
+  (shrinkingEndpoint_castSucc S T (T.n - j)
+    (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+      simp [concatSegmentCount]
+      omega)))).trans
+    (congrArg Fin.castSucc
+      (reverseRemovalStage_segment_coordinate S T j))
+
+/-- The terminal vertex of reverse removal stage `T.n-j` is the target of
+literal right segment `j`. -/
+theorem reverseRemovalStage_targetVertex_eq_rightSegment
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    shrinkingVertexEmbedding S T (T.n - j)
+        (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+          simp [concatSegmentCount]
+          omega))).succ =
+      (rightSegment S T j).succ :=
+  (shrinkingEndpoint_succ S T (T.n - j)
+    (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+      simp [concatSegmentCount]
+      omega)))).trans
+    (congrArg Fin.succ
+      (reverseRemovalStage_segment_coordinate S T j))
+
+def reverseRemovalStageSourceIso
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :=
+  eqToIso (congrArg
+    (fun k => D.obj ((concatSubdivision S T).point k))
+    (reverseRemovalStage_sourceVertex_eq_rightSegment S T j))
+
+def reverseRemovalStageTargetIso
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :=
+  eqToIso (congrArg
+    (fun k => D.obj ((concatSubdivision S T).point k))
+    (reverseRemovalStage_targetVertex_eq_rightSegment S T j))
+
 /-- The removal arrow in forward right-block indexing.  Its two outer
 transports identify the arithmetic removal stages with the structural
 `castSucc`/`succ` objects of `reverseRightObject`. -/
@@ -1306,6 +1356,10 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms reverseRightObjectIso
 #print axioms reverseRightObjectIso_zero
 #print axioms reverseRightObjectIso_last
+#print axioms reverseRemovalStage_sourceVertex_eq_rightSegment
+#print axioms reverseRemovalStage_targetVertex_eq_rightSegment
+#print axioms reverseRemovalStageSourceIso
+#print axioms reverseRemovalStageTargetIso
 #print axioms reverseRightArrow
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint

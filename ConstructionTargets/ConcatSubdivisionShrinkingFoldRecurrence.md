@@ -181,10 +181,22 @@ directly at forward coordinate `j`; it no longer leaves the dependent segment
 actual removal step as a forward-indexed heterogeneous chain, using
 `reverseRightStage_castSucc` and `reverseRightStage_succ` at its endpoints.
 
-The next exact seam is its pointwise conjugation by `reverseRightObjectIso`.
-After the segment coordinate is normalized, the remaining source equality is
-between the penultimate vertex of shrinking stage `T.n - j` and
-`(rightSegment S T j).castSucc`; the target has the analogous terminal-vertex
-transport. These equalities must be composed with the boundary and terminal
-transports before `composeFin_conjugation_from_comparisonIso` applies. No
-whole-fold or accumulator comparison is claimed yet.
+`reverseRemovalStage_sourceVertex_eq_rightSegment` and
+`reverseRemovalStage_targetVertex_eq_rightSegment` now prove those two ambient
+endpoint equalities by composing the shrinking endpoint theorem with the
+banked reverse-stage segment coordinate. `reverseRemovalStageSourceIso` and
+`reverseRemovalStageTargetIso` lift them through the actual ambient-point
+object family.
+
+The next exact seam is still the pointwise conjugation by
+`reverseRightObjectIso`, but it has been reduced to a categorical coherence
+statement. After unfolding, its left side has the arithmetic-stage transport,
+the boundary transport, two source transports around the actual mapped piece,
+two target transports, the terminal transport, and the final arithmetic-stage
+transport. The right side has the object comparison, the structural
+right-block endpoint transports, and the inverse object comparison. The
+existing two-layer `whisker_conjugatedArrow_compose` does not match this
+five-layer association directly. A generic multi-transport normalization (or
+two staged applications with an intermediate typed equality) is required
+before `composeFin_conjugation_from_comparisonIso` applies. No whole-fold or
+accumulator comparison is claimed yet.
