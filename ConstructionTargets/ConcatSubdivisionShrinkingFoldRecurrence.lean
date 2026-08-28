@@ -15,6 +15,8 @@ open ConstructionTargets.FundamentalGroupoidTwoOpenDescent
 open ConstructionTargets.PathSubdivisionConcatenation
 open ConstructionTargets.ConcatSubdivisionShrinkingPrefix
 open ConstructionTargets.ConcatSubdivisionShrinkingFold
+open ConstructionTargets.ConcatSubdivisionRightSuffix
+open ConstructionTargets.ConcatSubdivisionRightFold
 open ConstructionTargets.ComposeFinIndexReindex
 open ConstructionTargets.ComposeFinAppend
 
@@ -1075,6 +1077,78 @@ theorem rightSuffixAccum_full_unfold
         rightSuffixAccum D S T T.n (by omega) := by
   exact rightSuffixAccum_succ D S T T.n (le_refl _)
 
+/-- Removal stage attached to forward right-block vertex `j`. -/
+def reverseRightStage (T : PathTwoOpenSubdivision q U V)
+    (j : Fin (T.n + 2)) : ℕ := T.n + 1 - j
+
+theorem reverseRightStage_zero (T : PathTwoOpenSubdivision q U V) :
+    reverseRightStage T 0 = T.n + 1 := by
+  simp [reverseRightStage]
+
+theorem reverseRightStage_last (T : PathTwoOpenSubdivision q U V) :
+    reverseRightStage T (Fin.last (T.n + 1)) = 0 := by
+  simp [reverseRightStage]
+
+theorem reverseRightStage_castSucc
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    reverseRightStage T j.castSucc = T.n + 1 - j := by
+  simp [reverseRightStage]
+
+theorem reverseRightStage_succ
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 1)) :
+    reverseRightStage T j.succ = T.n - j := by
+  simp [reverseRightStage]
+
+/-- The terminal vertex of the reverse removal stage is the corresponding
+literal right-block vertex. -/
+theorem reverseRightTerminalVertex_eq_rightBlockVertex
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 2)) :
+    shrinkingVertexEmbedding S T (reverseRightStage T j)
+        (Fin.last (concatSegmentCount S T - reverseRightStage T j)) =
+      rightBlockVertex S T j := by
+  apply Fin.ext
+  rw [rightBlockVertex_val]
+  change concatSegmentCount S T - (T.n + 1 - j) = S.n + 1 + j
+  simp only [concatSegmentCount]
+  omega
+
+def reverseRightObject
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 2)) : C :=
+  shrinkingPrefixTerminalObject (C := C) D S T (reverseRightStage T j)
+
+/-- Objectwise comparison from the reverse-stage terminal chain to the
+structural forward right-block chain. -/
+def reverseRightObjectIso
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (j : Fin (T.n + 2)) :
+    reverseRightObject D S T j ≅ rightBlockObject D S T j :=
+  eqToIso (congrArg
+    (fun k => D.obj ((concatSubdivision S T).point k))
+    (reverseRightTerminalVertex_eq_rightBlockVertex S T j))
+
+theorem reverseRightObjectIso_zero
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    reverseRightObjectIso D S T 0 =
+      eqToIso (congrArg
+        (fun k => D.obj ((concatSubdivision S T).point k))
+        (reverseRightTerminalVertex_eq_rightBlockVertex S T 0)) := rfl
+
+theorem reverseRightObjectIso_last
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    reverseRightObjectIso D S T (Fin.last (T.n + 1)) =
+      eqToIso (congrArg
+        (fun k => D.obj ((concatSubdivision S T).point k))
+        (reverseRightTerminalVertex_eq_rightBlockVertex S T
+          (Fin.last (T.n + 1)))) := rfl
+
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
 original terminal object. -/
@@ -1177,6 +1251,14 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms reverseRemovalStage_segment_coordinate
 #print axioms reverseRemovalStage_terminalArrow_eq_rightMappedPiece
 #print axioms rightSuffixAccum_full_unfold
+#print axioms reverseRightStage_zero
+#print axioms reverseRightStage_last
+#print axioms reverseRightStage_castSucc
+#print axioms reverseRightStage_succ
+#print axioms reverseRightTerminalVertex_eq_rightBlockVertex
+#print axioms reverseRightObjectIso
+#print axioms reverseRightObjectIso_zero
+#print axioms reverseRightObjectIso_last
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum

@@ -142,6 +142,25 @@ isomorphisms between successive removal stages and show that their internal
 finite conjugation theorem is yet present, so no accumulator/right-block fold
 equality or concatenated segment-fold formula is claimed here.
 
+`reverseRightStage` assigns forward right-block vertex `j` to removal stage
+`T.n+1-j`. Its zero, last, `castSucc`, and `succ` theorems state the midpoint,
+terminal, source-stage, and target-stage coordinates separately.
+`reverseRightTerminalVertex_eq_rightBlockVertex` proves that the terminal
+vertex of this removal stage is literally the ambient right-block vertex;
+the proof uses index arithmetic and does not identify dependent objects by
+definition. `reverseRightObject` and `reverseRightObjectIso` lift that equality
+to the requested objectwise comparison, with explicit zero and last formulas.
+
+The next exact seam is the arrow family: `rightRemovalStep` at stage
+`T.n-j` has source and target indexed by arithmetic expressions
+`(T.n-j)+1` and `T.n-j`, while `reverseRightObject` uses
+`T.n+1-j.castSucc` and `T.n+1-j.succ`. The banked stage equations prove these
+indices equal, but their induced source/target `eqToHom`s must be composed with
+the boundary and terminal transports inside `rightRemovalStep` before the
+pointwise conjugation theorem typechecks. Consequently
+`composeFin_conjugation_from_comparisonIso` is not applied yet, and no internal
+transport cancellation is assumed.
+
 `eqToHom_three_step_whisker_arrow` supplies the generic terminal-side
 normalization without moving the dependent arrow.
 `shrinkingPrefix_terminal_transport_coherence` applies it to the two inverse
