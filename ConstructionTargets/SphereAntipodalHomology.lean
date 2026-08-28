@@ -170,6 +170,83 @@ noncomputable def antipodalNorthSouthRelativeHomologyMap (n k : ℕ) :=
 noncomputable def antipodalSouthNorthRelativeHomologyMap (n k : ℕ) :=
   HomologicalComplex.homologyMap (antipodalSouthNorthRelativeMap n) k
 
+/-! ## Naturality through hemisphere excision -/
+
+/-- The closed upper hemisphere, exchanged with the production closed lower
+hemisphere by antipodal reflection. -/
+def closedUpperHemisphere (n : ℕ) : Set (Sphere n) :=
+  {x | 0 ≤ sphereHeight n x}
+
+abbrev openLowerHemisphere (n : ℕ) : Set (Sphere n) :=
+  (closedUpperHemisphere n)ᶜ
+
+abbrev puncturedLowerHemisphere (n : ℕ) : Set (openLowerHemisphere n) :=
+  excisedSubspace (southPoleComplement n) (closedUpperHemisphere n)
+
+/-- Antipodal reflection restricted from the open upper to the open lower
+hemisphere. -/
+def antipodalOpenUpperToOpenLower (n : ℕ) :
+    C(openUpperHemisphere n, openLowerHemisphere n) where
+  toFun x := ⟨sphereAntipodal n x.1, by
+    change ¬ 0 ≤ sphereHeight n (sphereAntipodal n x.1)
+    rw [sphereHeight_antipodal]
+    exact not_le.mpr (neg_lt_zero.mpr
+      ((mem_openUpperHemisphere_iff n x.1).1 x.2))⟩
+  continuous_toFun :=
+    ((sphereAntipodal n).continuous.comp continuous_subtype_val).subtype_mk _
+
+theorem antipodalOpenUpperToOpenLower_mapsTo (n : ℕ) :
+    Set.MapsTo (antipodalOpenUpperToOpenLower n)
+      (puncturedUpperHemisphere n) (puncturedLowerHemisphere n) := by
+  intro x hx
+  change -1 < sphereHeight n (sphereAntipodal n x.1)
+  rw [sphereHeight_antipodal]
+  exact neg_lt_neg hx
+
+noncomputable def antipodalExcisedRelativeMap (n : ℕ) :=
+  relativeSingularMap (puncturedUpperHemisphere n)
+    (puncturedLowerHemisphere n) (antipodalOpenUpperToOpenLower n)
+    (antipodalOpenUpperToOpenLower_mapsTo n)
+
+noncomputable def southHemisphereExcisionMap (n : ℕ) :=
+  relativeExcisionMap (southPoleComplement n) (closedUpperHemisphere n)
+
+theorem antipodal_excision_continuousMap_square (n : ℕ) :
+    (excisionInclusion (closedUpperHemisphere n)).comp
+        (antipodalOpenUpperToOpenLower n) =
+      (sphereAntipodal n).comp
+        (excisionInclusion (closedLowerHemisphere n)) := by
+  ext x
+  rfl
+
+/-- The actual chain-level square through the hemisphere excision map used by
+the production sphere shift. -/
+theorem antipodal_hemisphereExcision_naturality (n : ℕ) :
+    antipodalExcisedRelativeMap n ≫ southHemisphereExcisionMap n =
+      relativeExcisionMap (northPoleComplement n) (closedLowerHemisphere n) ≫
+        antipodalNorthSouthRelativeMap n := by
+  dsimp only [southHemisphereExcisionMap, antipodalExcisedRelativeMap,
+    relativeExcisionMap, antipodalNorthSouthRelativeMap]
+  rw [relativeSingularMap_comp, relativeSingularMap_comp]
+  cases antipodal_excision_continuousMap_square n
+  case hgf =>
+    intro x hx
+    exact sphereAntipodal_mapsTo_north_south n
+      (excisionInclusion_mapsTo (northPoleComplement n)
+        (closedLowerHemisphere n) hx)
+  rfl
+
+theorem antipodal_hemisphereExcision_homology_naturality (n k : ℕ) :
+    HomologicalComplex.homologyMap (antipodalExcisedRelativeMap n) k ≫
+        HomologicalComplex.homologyMap (southHemisphereExcisionMap n) k =
+      HomologicalComplex.homologyMap
+          (relativeExcisionMap (northPoleComplement n) (closedLowerHemisphere n)) k ≫
+        antipodalNorthSouthRelativeHomologyMap n k := by
+  dsimp only [antipodalNorthSouthRelativeHomologyMap]
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← HomologicalComplex.homologyMap_comp,
+    antipodal_hemisphereExcision_naturality]
+
 noncomputable def antipodalAbsoluteMap (n : ℕ) :
     SingularChains (TopCat.of (Sphere n)) ⟶ SingularChains (TopCat.of (Sphere n)) :=
   ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
@@ -233,5 +310,7 @@ theorem antipodal_relativeProjection_reverse_homology_naturality (n k : ℕ) :
 #print axioms antipodalNorthSouthHomeomorph
 #print axioms antipodal_relativeProjection_reverse_naturality
 #print axioms antipodal_relativeProjection_reverse_homology_naturality
+#print axioms antipodal_hemisphereExcision_naturality
+#print axioms antipodal_hemisphereExcision_homology_naturality
 
 end ConstructionTargets.SphereAntipodalHomology

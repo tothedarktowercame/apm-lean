@@ -22,23 +22,32 @@ relative maps package both directions, and
 (with a corresponding homology theorem).  Hence the full projection portion
 of the production shift is compared without choosing an orientation or sign.
 
-The next required theorem is a comparison between the north-based and
-south-based production shifts.  It is not presently a formal consequence of
-the definition: the shift is a composite of the north-pole relative
-projection, hemisphere excision, open-disk/hemisphere coordinates, radial
-comparison, and the pair connecting isomorphism.  None of the banked APIs
-states that this whole composite, or its individual relative-pair maps,
-commutes with antipodal reflection.  In particular, antipodal exchanges the
-north- and south-pole complements used asymmetrically by the construction.
-The first remaining square is precise: construct the south-pole analogue of
-`relativeExcisionMap northPoleComplement closedLowerHemisphere` and prove that
-the antipodal maps of pairs commute with the two excision inclusions.  The
-current generic API proves projection naturality for `relativeSingularMap`,
-but supplies no composition/naturality theorem for those relative maps, so it
-does not yet express this excision square.  Beyond it, antipodal reflection
-lands in the lower hemisphere, requiring an explicit lower/upper hemisphere
-coordinate and radial comparison before the production shift composites can
-be related.
+The target now also compares the hemisphere-excision portion.  It defines the
+closed upper hemisphere, its open lower complement, the corresponding
+punctured lower hemisphere, and the restricted antipodal map between the two
+open hemispheres.  `antipodal_excision_continuousMap_square` is the literal
+map square for the two excision inclusions.
+`antipodal_hemisphereExcision_naturality` derives the chain-map square from
+the generic `relativeSingularMap_comp` theorem, and
+`antipodal_hemisphereExcision_homology_naturality` is its homology image.
+Thus both the projection and hemisphere-excision portions of the production
+shift commute with the north-to-south antipodal map.
+
+The first remaining comparison is the coordinate/radial part of the shift.
+The production composite uses `openDiskToOpenUpperMap`; its antipodal image
+lands in the lower hemisphere.  One must define the lower-hemisphere
+coordinate and the negation map on the punctured open disk and prove the
+map-level square
+
+```
+antipodalOpenUpperToOpenLower n ∘ openDiskToOpenUpperMap n
+  = openDiskToOpenLowerMap n ∘ puncturedOpenDiskNegation n.
+```
+
+After that square, the radial comparison must calculate the induced action of
+disk negation on the boundary-sphere coordinate.  That calculation is where
+the next sign in the recurrence occurs; it is not supplied by the excision
+naturality proved here.
 
 This module therefore claims the exact base sign only.  It does not assume a
 suspension naturality square, an antipodal degree in positive dimension, or
