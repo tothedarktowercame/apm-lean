@@ -14,10 +14,13 @@ The compiled declarations provide:
 - the literal preimage of their intersection as the two annular bands;
 - restricted quotient maps for both pieces and their intersection, with
   quotient-map proofs.
+- an explicit continuous radial strong deformation of the annular band onto
+  the literal boundary torus, packaged as `annularBandHomotopyEquiv`.
 
 No openness of the quotient projection is assumed.  Openness is obtained from
 the saturated-preimage equations and the coinduced quotient topology.
 
-The radial band deformation and the resulting homotopy equivalences with the
-solid torus and boundary torus remain for the next packet.  No homology,
-collar, or frozen conclusion is asserted here.
+The branchwise descent of this deformation through the three restricted
+quotient maps, and hence the homotopy equivalences of the quotient cover
+pieces, remain.  No homology, assumed collar, or frozen conclusion is asserted
+here.
