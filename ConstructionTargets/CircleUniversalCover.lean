@@ -124,11 +124,109 @@ theorem liftBasedLoopEndpointInteger_eq_of_homotopicRel
   rw [liftBasedLoop_one_eq_of_homotopicRel h hzero₀ hzero₁]
   exact liftBasedLoopEndpointInteger_spec gamma₁ hzero₁ hone₁
 
+/-- The based loop that travels through `n` full turns of the exponential
+cover at constant speed. -/
+def integerLoop (n : ℤ) : Path (1 : Circle) 1 where
+  toFun t := circleCover ((n • (2 * Real.pi)) * (t : ℝ))
+  continuous_toFun := circleCover_isCoveringMap.continuous.comp
+    (continuous_const.mul continuous_subtype_val)
+  source' := by simp
+  target' := by
+    have h := (circleCover_eq_iff ((n • (2 * Real.pi)) * (1 : ℝ)) 0).2
+      ⟨n, by simp⟩
+    simpa using h
+
+/-- The evident linear real path is the canonical lift of `integerLoop`. -/
+theorem liftBasedLoop_integerLoop (n : ℤ) :
+    liftBasedLoop (integerLoop n) (integerLoop n).source =
+      ⟨fun t ↦ (n • (2 * Real.pi)) * (t : ℝ),
+        continuous_const.mul continuous_subtype_val⟩ := by
+  symm
+  apply (circleCover_isCoveringMap.eq_liftPath_iff' _).2
+  constructor
+  · rfl
+  · simp
+
+/-- The explicit `n`-turn loop has endpoint integer `n`. -/
+@[simp] theorem liftBasedLoopEndpointInteger_integerLoop (n : ℤ) :
+    liftBasedLoopEndpointInteger (integerLoop n) (integerLoop n).source
+      (integerLoop n).target = n := by
+  apply period_integer_unique
+    (liftBasedLoopEndpointInteger_spec (integerLoop n) (integerLoop n).source
+      (integerLoop n).target)
+  rw [liftBasedLoop_integerLoop]
+  simp
+
+/-- Starting the lift of a based loop at another point over `1` translates
+the canonical lift by that starting point. -/
+theorem liftPath_basedLoop_from_period
+    (gamma : Path (1 : Circle) 1) (a : ℝ) (ha : circleCover a = 1) :
+    circleCover_isCoveringMap.liftPath gamma a (gamma.source.trans ha.symm) =
+      ⟨fun t ↦ a + liftBasedLoop gamma gamma.source t,
+        continuous_const.add (liftBasedLoop gamma gamma.source).continuous⟩ := by
+  symm
+  apply (circleCover_isCoveringMap.eq_liftPath_iff' _).2
+  constructor
+  · funext t
+    change Circle.exp (a + liftBasedLoop gamma gamma.source t) = gamma t
+    rw [Circle.exp_add, ← circleCover_apply, ha, one_mul]
+    exact congrFun (circleCover_comp_liftBasedLoop gamma gamma.source) t
+  · simp
+
+/-- The endpoint of the canonical lift of a concatenation is the sum of the
+two canonical lifted endpoints. -/
+theorem liftBasedLoop_trans_endpoint (gamma delta : Path (1 : Circle) 1) :
+    liftBasedLoop (gamma.trans delta) (gamma.trans delta).source 1 =
+      liftBasedLoop gamma gamma.source 1 + liftBasedLoop delta delta.source 1 := by
+  have htrans := DFunLike.congr_fun
+    (circleCover_isCoveringMap.liftPath_trans circleCover_zero.symm gamma delta) 1
+  have ha : circleCover (liftBasedLoop gamma gamma.source 1) = 1 := by
+    rw [show circleCover (liftBasedLoop gamma gamma.source 1) = gamma 1 by
+      exact congrFun (circleCover_comp_liftBasedLoop gamma gamma.source) 1]
+    exact gamma.target
+  have htrans' :
+      liftBasedLoop (gamma.trans delta) (gamma.trans delta).source 1 =
+        circleCover_isCoveringMap.liftPath delta
+          (liftBasedLoop gamma gamma.source 1) (delta.source.trans ha.symm) 1 := by
+    simpa [liftBasedLoop, Path.trans_apply] using htrans
+  have hshift := DFunLike.congr_fun
+    (liftPath_basedLoop_from_period delta
+      (liftBasedLoop gamma gamma.source 1) ha) 1
+  exact htrans'.trans (by simpa using hshift)
+
+/-- The endpoint integer is additive under the path concatenation used to
+multiply based-loop homotopy classes. -/
+theorem liftBasedLoopEndpointInteger_trans (gamma delta : Path (1 : Circle) 1) :
+    liftBasedLoopEndpointInteger (gamma.trans delta) (gamma.trans delta).source
+        (gamma.trans delta).target =
+      liftBasedLoopEndpointInteger gamma gamma.source gamma.target +
+        liftBasedLoopEndpointInteger delta delta.source delta.target := by
+  apply period_integer_unique
+    (liftBasedLoopEndpointInteger_spec (gamma.trans delta) (gamma.trans delta).source
+      (gamma.trans delta).target)
+  rw [liftBasedLoop_trans_endpoint]
+  rw [add_zsmul]
+  rw [liftBasedLoopEndpointInteger_spec gamma gamma.source gamma.target]
+  rw [liftBasedLoopEndpointInteger_spec delta delta.source delta.target]
+
+/-- In Mathlib's fundamental group, `gamma * delta` is represented by
+`delta.trans gamma` (`CategoryTheory.End.mul_def`).  This is the path-level
+additivity formula in that exact multiplication order. -/
+theorem liftBasedLoopEndpointInteger_mul_order (gamma delta : Path (1 : Circle) 1) :
+    liftBasedLoopEndpointInteger (delta.trans gamma) (delta.trans gamma).source
+        (delta.trans gamma).target =
+      liftBasedLoopEndpointInteger gamma gamma.source gamma.target +
+        liftBasedLoopEndpointInteger delta delta.source delta.target := by
+  rw [liftBasedLoopEndpointInteger_trans, add_comm]
+
 #print axioms circleCover_isCoveringMap
 #print axioms circleCover_eq_iff
 #print axioms liftBasedLoop_endpoint_periodic
 #print axioms existsUnique_liftBasedLoop_endpoint_integer
 #print axioms liftBasedLoop_one_eq_of_homotopicRel
 #print axioms liftBasedLoopEndpointInteger_eq_of_homotopicRel
+#print axioms liftBasedLoopEndpointInteger_integerLoop
+#print axioms liftBasedLoopEndpointInteger_trans
+#print axioms liftBasedLoopEndpointInteger_mul_order
 
 end ConstructionTargets.CircleUniversalCover
