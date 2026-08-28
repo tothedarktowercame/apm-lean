@@ -86,8 +86,100 @@ theorem pointChain_postcomp {X Y : Type} [TopologicalSpace X]
   rw [pointChain, singularGenerator_singularPostcomposition]
   rfl
 
+/-! ## The two triangles of the path-homotopy square
+
+The following maps record the standard triangulation
+`(0,0),(1,0),(1,1)` and `(0,0),(1,1),(0,1)` of the unit square.  Keeping
+these maps explicit makes the remaining face-normalization obligation
+independent of any choice of a general singular-prism operator.
+-/
+
+/-- The lower/right triangle of the standard triangulation of `I × I`. -/
+def lowerSquareTriangle : C(stdSimplex ℝ (Fin 3), unitInterval × unitInterval) :=
+  ⟨fun z ↦
+    (⟨z.1 1 + z.1 2, by
+        constructor
+        · exact add_nonneg (z.2.1 1) (z.2.1 2)
+        · have hs := z.2.2
+          rw [Fin.sum_univ_three] at hs
+          linarith [z.2.1 0]⟩,
+     ⟨z.1 2, by
+        constructor
+        · exact z.2.1 2
+        · have hs := z.2.2
+          rw [Fin.sum_univ_three] at hs
+          linarith [z.2.1 0, z.2.1 1]⟩),
+   by
+    apply Continuous.prodMk
+    · exact Continuous.subtype_mk
+        ((continuous_apply 1).comp continuous_subtype_val |>.add
+          ((continuous_apply 2).comp continuous_subtype_val)) _
+    · exact Continuous.subtype_mk
+        ((continuous_apply 2).comp continuous_subtype_val) _⟩
+
+/-- The upper/left triangle of the standard triangulation of `I × I`. -/
+def upperSquareTriangle : C(stdSimplex ℝ (Fin 3), unitInterval × unitInterval) :=
+  ⟨fun z ↦
+    (⟨z.1 1, by
+        constructor
+        · exact z.2.1 1
+        · have hs := z.2.2
+          rw [Fin.sum_univ_three] at hs
+          linarith [z.2.1 0, z.2.1 2]⟩,
+     ⟨z.1 1 + z.1 2, by
+        constructor
+        · exact add_nonneg (z.2.1 1) (z.2.1 2)
+        · have hs := z.2.2
+          rw [Fin.sum_univ_three] at hs
+          linarith [z.2.1 0]⟩),
+   by
+    apply Continuous.prodMk
+    · exact Continuous.subtype_mk
+        ((continuous_apply 1).comp continuous_subtype_val) _
+    · exact Continuous.subtype_mk
+        ((continuous_apply 1).comp continuous_subtype_val |>.add
+          ((continuous_apply 2).comp continuous_subtype_val)) _⟩
+
+/-- The two singular two-simplices obtained by postcomposing a path homotopy
+with the standard square triangulation. -/
+def lowerHomotopySimplex {X : Type} [TopologicalSpace X] {x y : X}
+    {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    C(stdSimplex ℝ (Fin 3), X) := H.toContinuousMap.comp lowerSquareTriangle
+
+def upperHomotopySimplex {X : Type} [TopologicalSpace X] {x y : X}
+    {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    C(stdSimplex ℝ (Fin 3), X) := H.toContinuousMap.comp upperSquareTriangle
+
+/-- The collision-safe production two-chain associated to the two triangles.
+The sign is the orientation induced by the diagonal from `(0,0)` to `(1,1)`. -/
+def pathHomotopyPrismChain {X : Type} [TopologicalSpace X] {x y : X}
+    {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    AddCommGrpCat.of ℤ ⟶ (SingularChains (TopCat.of X)).X 2 :=
+  singularGenerator (TopCat.of X) 2
+      (singularSimplexOfContinuousMap _ 2 (lowerHomotopySimplex H)) +
+    singularGenerator (TopCat.of X) 2
+      (singularSimplexOfContinuousMap _ 2 (upperHomotopySimplex H))
+
+/-- Raw production boundary formula for the two-triangle prism.  The residual
+is now only normalization of its six affine faces; no homology or homotopy
+invariance is used here. -/
+theorem pathHomotopyPrismChain_boundary_raw {X : Type} [TopologicalSpace X]
+    {x y : X} {gamma delta : Path x y} (H : Path.Homotopy gamma delta) :
+    pathHomotopyPrismChain H ≫ (SingularChains (TopCat.of X)).d 2 1 =
+      (∑ i : Fin 3, (-1 : ℤ) ^ (i : ℕ) •
+        singularGenerator (TopCat.of X) 1
+          ((TopCat.toSSet.obj (TopCat.of X)).δ i
+            (singularSimplexOfContinuousMap _ 2 (lowerHomotopySimplex H)))) +
+      (∑ i : Fin 3, (-1 : ℤ) ^ (i : ℕ) •
+        singularGenerator (TopCat.of X) 1
+          ((TopCat.toSSet.obj (TopCat.of X)).δ i
+            (singularSimplexOfContinuousMap _ 2 (upperHomotopySimplex H)))) := by
+  rw [pathHomotopyPrismChain, Preadditive.add_comp]
+  rw [singularGenerator_boundary, singularGenerator_boundary]
+
 #print axioms pathChain_boundary
 #print axioms pathChain_cycle
 #print axioms pathChain_postcomp
+#print axioms pathHomotopyPrismChain_boundary_raw
 
 end ConstructionTargets.SingularPathChain
