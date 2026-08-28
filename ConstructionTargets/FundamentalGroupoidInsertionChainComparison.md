@@ -73,11 +73,18 @@ successor index into before, equality, and after cases; the equality case is
 rewritten explicitly, so distinct bound proofs are not treated as
 definitionally equal.
 
-The remaining evaluation step is a representation bridge. Mathlib's
-`ComposableArrows.naturality'` compares the chains' total `hom` fields, while
-`TwoOpenDescentDatum.evaluate` uses the repository's separate `composeFin`
-fold. There is currently no theorem identifying
-`(adjacentChain A f).hom` with `composeFin A f`. Proving that generic fold/map
-comparison, followed by normalization of the endpoint components, is the
-exact prerequisite for insertion invariance of `evaluate`. No evaluation
-equality is claimed here.
+`subdivisionRefinement_hom_naturality` now applies
+`ComposableArrows.naturality'` to compare the old total morphism with the
+restricted refined total morphism.  The separate generic representation
+bridge between `ComposableArrows.hom` and `composeFin` is proved in
+`FundamentalGroupoidTwoOpenInsertion`.
+
+The remaining evaluation seam is endpoint reassociation.  After unfolding
+`evaluate`, the refined expression contains the point-zero transport, the
+restriction transport, the restricted total morphism, the inverse terminal
+component, and the point-last transport.  The endpoint pairs have each been
+proved equal to the corresponding old transport composed with the chain-iso
+component, but the final theorem still needs a reusable whiskered
+reassociation lemma that replaces those pairs inside the five-morphism
+composite before applying `subdivisionRefinement_hom_naturality`.  No
+evaluation equality is claimed here.

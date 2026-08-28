@@ -67,6 +67,26 @@ theorem eqToHom_double_conjugation_square
   subst R
   simp
 
+/-- Explicit inverse endpoint transports cancel a conjugated morphism. -/
+theorem eqToHom_conjugation_cancel
+    {A A' B B' : C} (f : A ⟶ B) (ha : A' = A) (hb : B' = B) :
+    eqToHom ha.symm ≫ (eqToHom ha ≫ f ≫ eqToHom hb.symm) ≫
+        eqToHom hb = f := by
+  subst A
+  subst B
+  simp
+
+/-- Two equality-transport paths with the same endpoints agree even when they
+pass through different propositionally equal intermediate objects. -/
+theorem eqToHom_two_step_coherence
+    {A B B' C₀ : C} (h₁ : A = B) (h₂ : B = C₀)
+    (h₁' : A = B') (h₂' : B' = C₀) :
+    eqToHom h₁ ≫ eqToHom h₂ = eqToHom h₁' ≫ eqToHom h₂' := by
+  subst B
+  subst B'
+  subst C₀
+  simp
+
 /-- Changing a Boolean cover label along an actual equality changes neither
 the common-coordinate morphism nor its proof-carrying membership argument. -/
 theorem mapPath_label_eq {b b' : Bool} {a z : X} (q : Path a z)
@@ -928,6 +948,71 @@ theorem subdivisionRefinement_naturality_crossing
   simp only [Category.assoc, eqToHom_trans_assoc, eqToHom_trans]
   apply eqToHom_double_conjugation_square
 
+/-- The vertex-skipping embedding preserves the first vertex. -/
+theorem succAbove_insertedVertexPosition_zero
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment).succAbove 0 = 0 := by
+  apply Fin.ext
+  simp [PathTwoOpenSubdivision.insertedVertexPosition,
+    PathTwoOpenSubdivision.insertedSidePosition]
+
+/-- The vertex-skipping embedding sends the old last vertex to the refined
+last vertex. -/
+theorem succAbove_insertedVertexPosition_last
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment).succAbove
+        (Fin.last (S.n + 1)) = Fin.last (S.n + 2) := by
+  have hle : PathTwoOpenSubdivision.insertedVertexPosition S ins.segment ≤
+      (Fin.last (S.n + 1)).castSucc := by
+    apply Fin.mk_le_mk.mpr
+    simp [PathTwoOpenSubdivision.insertedVertexPosition,
+      PathTwoOpenSubdivision.insertedSidePosition]
+    omega
+  rw [Fin.succAbove_of_le_castSucc _ _ hle]
+  rfl
+
+/-- The total morphism of the restricted refined chain is the total refined
+chain morphism, with the two explicit endpoint transports retained. -/
+theorem refinedRestrictedChain_hom_eq_refined_hom
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+        D ins).hom =
+      eqToHom (congrArg
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).obj (succAbove_insertedVertexPosition_zero ins)) ≫
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).hom ≫
+        eqToHom (congrArg
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+            D ins.refined).obj (succAbove_insertedVertexPosition_last ins)).symm := by
+  exact refinedRestrictedChain_map_transport D ins (Fin.zero_le _)
+    (succAbove_insertedVertexPosition_zero ins)
+    (succAbove_insertedVertexPosition_last ins)
+
+/-- Inverse form of the restricted/full total-map comparison. -/
+theorem refined_hom_eq_refinedRestrictedChain_hom
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D ins.refined).hom =
+      eqToHom (congrArg
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+          D ins.refined).obj (succAbove_insertedVertexPosition_zero ins)).symm ≫
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+          D ins).hom ≫
+        eqToHom (congrArg
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+            D ins.refined).obj (succAbove_insertedVertexPosition_last ins)) := by
+  rw [refinedRestrictedChain_hom_eq_refined_hom D ins]
+  exact eqToHom_conjugation_cancel
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+      D ins.refined).hom
+    (congrArg
+      (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D ins.refined).obj (succAbove_insertedVertexPosition_zero ins))
+    (congrArg
+      (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D ins.refined).obj (succAbove_insertedVertexPosition_last ins)) |>.symm
+
 /-- The composable-arrow chain of an old subdivision is canonically
 isomorphic to the refined chain restricted along the vertex-skipping order
 embedding. -/
@@ -950,6 +1035,19 @@ def subdivisionRefinementChainIso
     · rw [h]
       exact subdivisionRefinement_naturality_crossing D ins
     · exact subdivisionRefinement_naturality_after D ins j h)
+
+/-- Naturality of the assembled chain isomorphism on the total old and
+restricted-refined morphisms. -/
+theorem subdivisionRefinement_hom_naturality
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain
+        D S).hom ≫
+        (subdivisionRefinementChainIso D ins).hom.app (Fin.last (S.n + 1)) =
+      (subdivisionRefinementChainIso D ins).hom.app 0 ≫
+        (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+          D ins).hom := by
+  exact ComposableArrows.naturality' (subdivisionRefinementChainIso D ins).hom
+    0 (S.n + 1)
 
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso

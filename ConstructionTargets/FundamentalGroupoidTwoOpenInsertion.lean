@@ -27,6 +27,8 @@ namespace TwoOpenDescentDatum
 
 variable {C : Type*} [Category C]
 
+open ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum
+
 /-- The composable-arrow chain determined by dependent adjacent arrows. -/
 def adjacentChain {n : ℕ} (A : Fin (n + 1) → C)
     (f : (i : Fin n) → A i.castSucc ⟶ A i.succ) :
@@ -41,6 +43,38 @@ theorem adjacentChain_map_succ {n : ℕ} (A : Fin (n + 1) → C)
     (f : (i : Fin n) → A i.castSucc ⟶ A i.succ) (i : ℕ) (hi : i < n) :
     (adjacentChain A f).map' i (i + 1) = f ⟨i, hi⟩ :=
   ComposableArrows.mkOfObjOfMapSucc_map_succ A f i hi
+
+/-- The canonical morphism of a composable-arrow chain is the same ordered
+finite fold as `composeFin`, when the fold is fed the chain's successor maps. -/
+theorem composableArrows_hom_eq_composeFin {n : ℕ}
+    (F : ComposableArrows C n) :
+    F.hom = composeFin F.obj (fun i ↦ F.map' i.val (i.val + 1)) := by
+  induction n with
+  | zero =>
+      rw [composeFin_zero]
+      exact F.map'_self 0
+  | succ n ih =>
+      rw [composeFin_succ]
+      change F.map' 0 (n + 1) =
+        composeFin (F.obj ∘ Fin.castSucc)
+            (fun i ↦ F.map' i.val (i.val + 1)) ≫
+          F.map' n (n + 1)
+      have hih := ih F.δlast
+      change F.map' 0 n =
+        composeFin (F.obj ∘ Fin.castSucc)
+          (fun i ↦ F.map' i.val (i.val + 1)) at hih
+      rw [← hih]
+      exact F.map'_comp 0 n (n + 1)
+
+/-- For chains built from explicit adjacent arrows, the repository fold is
+literally Mathlib's canonical `ComposableArrows.hom`. -/
+theorem adjacentChain_hom_eq_composeFin {n : ℕ} (A : Fin (n + 1) → C)
+    (f : (i : Fin n) → A i.castSucc ⟶ A i.succ) :
+    (adjacentChain A f).hom = composeFin A f := by
+  rw [composableArrows_hom_eq_composeFin]
+  congr
+  funext i
+  exact adjacentChain_map_succ A f i.val i.isLt
 
 variable (D : @FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum X _ U V C _)
 
@@ -310,5 +344,7 @@ end TwoOpenDescentDatum
 #print axioms PathTwoOpenSubdivision.insertedVertex_old
 #print axioms PathTwoOpenSubdivision.insertedSide_old
 #print axioms PathTwoOpenSubdivision.SingleVertexInsertion.refined
+#print axioms TwoOpenDescentDatum.composableArrows_hom_eq_composeFin
+#print axioms TwoOpenDescentDatum.adjacentChain_hom_eq_composeFin
 
 end ConstructionTargets.FundamentalGroupoidTwoOpenInsertion
