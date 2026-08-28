@@ -1481,6 +1481,23 @@ def rightSuffixSliceFold
     rightSuffixSliceFold D S T 0 hk = 𝟙 _ := by
   exact TwoOpenDescentDatum.composeFin_zero _ _
 
+/-- Front recursion for the terminal slice.  The displayed tail deliberately
+retains the literal successor restriction of the `(k+1)` slice; its comparison
+with the separately constructed `k` slice is the next reindex step. -/
+theorem rightSuffixSliceFold_succ_front
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) :
+    rightSuffixSliceFold D S T (k + 1) hk =
+      rightSuffixSliceArrow D S T (k + 1) hk 0 ≫
+        TwoOpenDescentDatum.composeFin
+          (rightSuffixSliceObject D S T (k + 1) hk ∘
+            fun i : Fin (k + 1) ↦ i.succ)
+          (fun i : Fin k ↦
+            rightSuffixSliceArrow D S T (k + 1) hk i.succ) := by
+  exact ConstructionTargets.ComposeFinAppend.composeFin_front_split _ _
+
 theorem rightSuffixSlice_source_stage
     (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
     reverseRightStage T (rightSuffixSliceVertex T k hk 0) = k := by
@@ -1661,6 +1678,7 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightSuffixSliceArrow
 #print axioms rightSuffixSliceFold
 #print axioms rightSuffixSliceFold_zero
+#print axioms rightSuffixSliceFold_succ_front
 #print axioms rightSuffixSlice_source_stage
 #print axioms rightSuffixSlice_target_stage
 #print axioms rightSuffixSliceSourceIso

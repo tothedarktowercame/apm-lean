@@ -236,13 +236,11 @@ coordinates as explicit object transports. The base bridge
 it does not obtain the equality by treating the two proof witnesses as
 definitionally equal.
 
-The successor case remains stopped at the front-recursion theorem requested
-by this packet. Mathlib's `composeFin_succ` peels the final arrow, and the
-banked `composeFin_front_tail_reindex` compares only the two representations
-of an already isolated tail; it does not state that the original fold equals
-its first arrow followed by that tail. A proof-carrying front split must first
-be added, with the `succ.castSucc`/`castSucc.succ` endpoint isomorphisms from
-`rightSuffixSliceVertex_succ_tail`. Only then can
-`rightSuffixSliceSegment_succ_zero` identify the prepended removal and the
-induction hypothesis match `rightSuffixAccum_succ`. No successor bridge or
-combined fold formula is assumed.
+`composeFin_front_split` now supplies that generic first-arrow recursion, and
+`rightSuffixSliceFold_succ_front` specializes it to the `(k+1)` slice. Its
+tail deliberately remains the literal successor restriction of that slice.
+The next seam is the proof-carrying reindex of this tail to
+`rightSuffixSliceFold k`, using `rightSuffixSliceVertex_succ_tail` and
+`rightSuffixSliceSegment_succ_tail`; the first arrow must then be normalized
+with `rightSuffixSliceSegment_succ_zero` to `rightRemovalStep k`. No successor
+accumulator bridge or combined fold formula is assumed.
