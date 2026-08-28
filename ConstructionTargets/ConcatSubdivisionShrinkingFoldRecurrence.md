@@ -83,7 +83,15 @@ transport layers are retained until their index equalities have aligned.
 `composeFin_reindex_of_index_eq`, identifying the complete displayed prefix
 with stage `r+1` while retaining both endpoint transports.
 
-The remaining seam is matching this stage-indexed presentation with the
-syntactic prefix inside `shrinkingPrefixFold_terminal_split_literal`; their
-finite sizes are arithmetically equal but connected by explicit casts. No
-shrinking-fold recurrence or right-segment peel beyond `r ≤ T.n` is claimed.
+`shrinkingSyntacticSuccessorPrefixFold_eq` now matches this stage-indexed
+presentation with the syntactic prefix inside
+`shrinkingPrefixFold_terminal_split_literal`.  It uses an explicit whole-chain
+reindex; the same-size `Fin.cast` remains in the vertex map, and the endpoint
+isomorphisms returned by `composeFin_reindex_of_index_eq` remain visible.
+
+The remaining seam is categorical assembly: substitute this comparison and
+`shrinkingSuccessorPrefixFold_eq` into the literal terminal split, then combine
+the two initial transports and the three midpoint/terminal transports.  Only
+under `r ≤ T.n` may the removed arrow be rewritten with
+`shrinkingTerminalSegment_eq_rightSegment`; suffix iteration must stop at that
+midpoint.  No shrinking-fold recurrence is claimed yet.

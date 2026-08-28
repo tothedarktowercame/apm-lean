@@ -583,6 +583,98 @@ theorem shrinkingSuccessorPrefixFold_eq
   simpa [shrinkingPrefixFold, shrinkingPrefixObject, O, newVertex,
     shownVertex] using h
 
+/-- The syntactic prefix emitted by the positive-length terminal split is the
+stage-sized displayed successor prefix.  The casts connecting the two `Fin`
+presentations are kept in the index maps and discharged through the generic
+whole-chain reindex theorem. -/
+theorem shrinkingSyntacticSuccessorPrefixFold_eq
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (r : ℕ)
+    (hr : r + 1 < concatSegmentCount S T) :
+    TwoOpenDescentDatum.composeFin
+        (((shrinkingPrefixObject D S T r) ∘
+            successorChainVertex (Nat.sub_pos_of_lt (by omega))) ∘ Fin.castSucc)
+        (fun i => successorChainArrow (Nat.sub_pos_of_lt (by omega))
+          (shrinkingPrefixObject D S T r)
+          (shrinkingPrefixArrow D S T r) i.castSucc) =
+      (objectIsoOfIndexEq
+        (fun k : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+          D.obj ((concatSubdivision S T).point
+            (shrinkingVertexEmbedding S T r
+              (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+                k.castSucc))))
+        (show (0 : Fin _) = Fin.cast (by omega) 0 by apply Fin.ext; rfl)).hom ≫
+      TwoOpenDescentDatum.composeFin
+        (fun i : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+          D.obj ((concatSubdivision S T).point
+            (shrinkingVertexEmbedding S T r
+              (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+                (Fin.cast (by omega) i).castSucc))))
+        (shrinkingSuccessorPrefixArrow D S T r hr) ≫
+      (objectIsoOfIndexEq
+        (fun k : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+          D.obj ((concatSubdivision S T).point
+            (shrinkingVertexEmbedding S T r
+              (successorChainVertex (Nat.sub_pos_of_lt (by omega))
+                k.castSucc))))
+        (show (Fin.last _ : Fin _) = Fin.cast (by omega) (Fin.last _) by
+          apply Fin.ext; rfl)).inv := by
+  let O := fun k : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+    D.obj ((concatSubdivision S T).point
+      (shrinkingVertexEmbedding S T r
+        (successorChainVertex (Nat.sub_pos_of_lt (by omega)) k.castSucc)))
+  let oldVertex := fun i : Fin (concatSegmentCount S T - (r + 1) + 1) => i
+  let castVertex := fun i : Fin (concatSegmentCount S T - (r + 1) + 1) =>
+    (Fin.cast (by omega) i : Fin (concatSegmentCount S T - (r + 1) + 1))
+  have hv : ∀ i, oldVertex i = castVertex i := by
+    intro i
+    apply Fin.ext
+    rfl
+  let g : (i : Fin (concatSegmentCount S T - (r + 1))) →
+      O i.castSucc ⟶ O i.succ := fun i =>
+    successorChainArrow (Nat.sub_pos_of_lt (by omega))
+      (shrinkingPrefixObject D S T r)
+      (shrinkingPrefixArrow D S T r) i.castSucc
+  have ha : ∀ i : Fin (concatSegmentCount S T - (r + 1)),
+      g i =
+        (objectIsoOfIndexEq O (hv i.castSucc)).hom ≫
+          shrinkingSuccessorPrefixArrow D S T r hr i ≫
+          (objectIsoOfIndexEq O (hv i.succ)).inv := by
+    intro i
+    have hi : (Fin.cast (by omega) i :
+        Fin (concatSegmentCount S T - (r + 1))) = i := by
+      apply Fin.ext
+      rfl
+    cases hi
+    have h₀ : castVertex i.castSucc = oldVertex i.castSucc := by
+      apply Fin.ext
+      rfl
+    have h₁ : castVertex i.succ = oldVertex i.succ := by
+      apply Fin.ext
+      rfl
+    cases h₀
+    cases h₁
+    change g i = _
+    change g i = (objectIsoOfIndexEq O (hv i.castSucc)).hom ≫
+      g i ≫ (objectIsoOfIndexEq O (hv i.succ)).inv
+    calc
+      g i = eqToHom (congrArg O
+            (rfl : oldVertex i.castSucc = oldVertex i.castSucc)) ≫
+          g i ≫ eqToHom (congrArg O
+            (rfl : oldVertex i.succ = oldVertex i.succ)).symm := by simp
+      _ = eqToHom (congrArg O (hv i.castSucc)) ≫
+          g i ≫ eqToHom (congrArg O (hv i.succ)).symm :=
+        conjugatedArrow_proof_irrel O (g i)
+          (rfl : oldVertex i.castSucc = oldVertex i.castSucc)
+          (hv i.castSucc)
+          (rfl : oldVertex i.succ = oldVertex i.succ)
+          (hv i.succ)
+  have h := composeFin_reindex_of_index_eq O castVertex oldVertex hv
+    (shrinkingSuccessorPrefixArrow D S T r hr)
+    g ha
+  simpa only [O, oldVertex, castVertex, g] using h
+
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
@@ -607,5 +699,6 @@ theorem shrinkingSuccessorPrefixFold_eq
 #print axioms shrinkingSuccessorPrefixSegment_eq
 #print axioms shrinkingSuccessorPrefixArrow_eq_conjugate
 #print axioms shrinkingSuccessorPrefixFold_eq
+#print axioms shrinkingSyntacticSuccessorPrefixFold_eq
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
