@@ -1,4 +1,5 @@
 import ConstructionTargets.FundamentalGroupoidTwoOpenRefinement
+import Mathlib.CategoryTheory.ComposableArrows.Basic
 
 /-!
 # Inserting one vertex in a subordinate two-open path subdivision
@@ -21,6 +22,34 @@ open ConstructionTargets.FundamentalGroupoidTwoOpenRefinement
 
 variable {X : Type*} [TopologicalSpace X] {U V : Set X}
 variable {x y : X} {p : Path x y}
+
+namespace TwoOpenDescentDatum
+
+variable {C : Type*} [Category C]
+
+/-- The composable-arrow chain determined by dependent adjacent arrows. -/
+def adjacentChain {n : ℕ} (A : Fin (n + 1) → C)
+    (f : (i : Fin n) → A i.castSucc ⟶ A i.succ) :
+    ComposableArrows C n :=
+  ComposableArrows.mkOfObjOfMapSucc A f
+
+@[simp] theorem adjacentChain_obj {n : ℕ} (A : Fin (n + 1) → C)
+    (f : (i : Fin n) → A i.castSucc ⟶ A i.succ) (i) :
+    (adjacentChain A f).obj i = A i := rfl
+
+theorem adjacentChain_map_succ {n : ℕ} (A : Fin (n + 1) → C)
+    (f : (i : Fin n) → A i.castSucc ⟶ A i.succ) (i : ℕ) (hi : i < n) :
+    (adjacentChain A f).map' i (i + 1) = f ⟨i, hi⟩ :=
+  ComposableArrows.mkOfObjOfMapSucc_map_succ A f i hi
+
+variable (D : @FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum X _ U V C _)
+
+/-- The composable-arrow presentation of a subdivision's mapped pieces. -/
+def subdivisionChain {x y : X} {p : Path x y}
+    (S : PathTwoOpenSubdivision p U V) : ComposableArrows C (S.n + 1) :=
+  adjacentChain (D.obj ∘ S.point) (D.mappedPiece S)
+
+end TwoOpenDescentDatum
 
 namespace PathTwoOpenSubdivision
 
@@ -260,6 +289,23 @@ def refined : PathTwoOpenSubdivision p U V where
 end SingleVertexInsertion
 
 end PathTwoOpenSubdivision
+
+namespace TwoOpenDescentDatum
+
+variable {C : Type*} [Category C]
+variable (D : @FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum X _ U V C _)
+
+/-- The refined mapped-piece chain restricted along the order embedding which
+skips the inserted vertex. -/
+def refinedRestrictedChain {x y : X} {p : Path x y}
+    {S : PathTwoOpenSubdivision p U V}
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    ComposableArrows C (S.n + 1) :=
+  (Fin.succAboveOrderEmb
+      (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment)).monotone.functor ⋙
+    subdivisionChain D ins.refined
+
+end TwoOpenDescentDatum
 
 #print axioms PathTwoOpenSubdivision.insertedVertex_old
 #print axioms PathTwoOpenSubdivision.insertedSide_old

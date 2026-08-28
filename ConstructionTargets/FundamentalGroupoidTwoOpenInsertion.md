@@ -15,12 +15,16 @@ the two split pieces separately and transport every unchanged segment through
 the explicit `Fin.insertNth` coordinates.
 
 This target does not assume refinement invariance.  The remaining bounded
-step is an arbitrary-position normalization theorem for `composeFin`:
-replacing one arrow by the composite
-of its two inserted arrows leaves the dependent fold unchanged.  Once the
-coordinates are normalized through that fold, the banked
-`TwoOpenDescentDatum.mapPath_subpath_split` supplies exactly its local arrow
-equation and will yield evaluation invariance.
+layer now has `adjacentChain`, `subdivisionChain`, and
+`refinedRestrictedChain`: the last is the refined chain precomposed with
+`insertedVertexPosition.succAboveOrderEmb.monotone.functor`.  The remaining
+crossing lemma must insert the explicit `eqToHom` object transports between
+the restricted chain's endpoint objects and the refined chain objects before
+`Functor.map_comp` can identify the skipped map with two adjacent maps.
+After that square is proved, `ComposableArrows.naturality'` compares the total
+composites and the banked `TwoOpenDescentDatum.mapPath_subpath_split` supplies
+the local split-arrow equation.  No duplicate endpoint-naturality theorem is
+introduced.
 
 No common-refinement theorem, descent functor, or Seifert--van Kampen result is
 claimed here.
