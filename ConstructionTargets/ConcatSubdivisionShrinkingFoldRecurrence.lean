@@ -20,6 +20,7 @@ open ConstructionTargets.ConcatSubdivisionRightSuffix
 open ConstructionTargets.ConcatSubdivisionRightFold
 open ConstructionTargets.ComposeFinIndexReindex
 open ConstructionTargets.ComposeFinAppend
+open ConstructionTargets.TwoOpenDescentQuotient
 
 variable {X : Type*} [TopologicalSpace X]
 variable {x y z : X} {p : Path x y} {q : Path y z} {U V : Set X}
@@ -2536,6 +2537,173 @@ theorem nested_two_arrow_three_block_substitution
     l ≫ (a ≫ f ≫ m ≫ g ≫ t) ≫ r = i ≫ f ≫ m' ≫ g ≫ u := by
   simpa only [Category.assoc] using
     two_arrow_three_block_substitution (l ≫ a) i f m m' g (t ≫ r) u hi hm ht
+
+/-- The exact parenthesized morphism emitted after expanding the midpoint fold
+inside the unbracketed concatenated-fold comparison. -/
+def concatEvaluationExpandedRHS
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) : D.obj x ⟶ D.obj z :=
+  eqToHom (congrArg D.obj (concatSubdivision S T).point_zero).symm ≫
+    ((objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T 0)).inv ≫
+      (rightInitialAccum D S T (T.n + 1) ≫
+        ((objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+            (midpointLeftVertexIndex_zero S T)).inv ≫
+          (objectIsoOfIndexEq D.obj (midpointLeftPoint_eq S T 0)).hom ≫
+          TwoOpenDescentDatum.composeFin (D.obj ∘ S.point) (D.mappedPiece S) ≫
+          (objectIsoOfIndexEq D.obj
+            (midpointLeftPoint_eq S T (Fin.last (S.n + 1)))).inv ≫
+          (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+            (midpointLeftVertexIndex_last S T)).hom) ≫
+        (rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_full T 0)).hom ≫
+        (reverseRightObjectIso D S T 0).hom ≫
+        (rightBlockObjectIso D S T 0).hom ≫
+        TwoOpenDescentDatum.composeFin (D.obj ∘ T.point) (D.mappedPiece T) ≫
+        (rightBlockObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+        (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv ≫
+        (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom) ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T
+          (Fin.last (concatSegmentCount S T)))).hom) ≫
+    eqToHom (congrArg D.obj (concatSubdivision S T).point_last)
+
+theorem evaluate_concatSubdivision_eq_expandedRHS
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    D.evaluate (concatSubdivision S T) = concatEvaluationExpandedRHS D S T := by
+  unfold TwoOpenDescentDatum.evaluate concatEvaluationExpandedRHS
+  rw [concatComposeFin_eq_midpoint_rightBlock_unbracketed D S T]
+  rw [shrinkingPrefixFold_midpoint_eq_leftFold D S T]
+  congr 1
+
+/-- The same expanded morphism regrouped into the three transport blocks and
+two literal subdivision folds consumed by the substitution theorem. -/
+def concatEvaluationBlockRHS
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) : D.obj x ⟶ D.obj z :=
+  (eqToHom (congrArg D.obj (concatSubdivision S T).point_zero).symm ≫
+    (objectIsoOfIndexEq
+      (D.obj ∘ (concatSubdivision S T).point)
+      (shrinkingVertexEmbedding_zero_eq_id S T 0)).inv ≫
+    rightInitialAccum D S T (T.n + 1) ≫
+    (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+      (midpointLeftVertexIndex_zero S T)).inv ≫
+    (objectIsoOfIndexEq D.obj (midpointLeftPoint_eq S T 0)).hom) ≫
+  TwoOpenDescentDatum.composeFin (D.obj ∘ S.point) (D.mappedPiece S) ≫
+  ((objectIsoOfIndexEq D.obj
+      (midpointLeftPoint_eq S T (Fin.last (S.n + 1)))).inv ≫
+    (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+      (midpointLeftVertexIndex_last S T)).hom ≫
+    (rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+    (objectIsoOfIndexEq (reverseRightObject D S T)
+      (rightSuffixSliceVertex_full T 0)).hom ≫
+    (reverseRightObjectIso D S T 0).hom ≫
+    (rightBlockObjectIso D S T 0).hom) ≫
+  TwoOpenDescentDatum.composeFin (D.obj ∘ T.point) (D.mappedPiece T) ≫
+  ((rightBlockObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+    (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+    (objectIsoOfIndexEq (reverseRightObject D S T)
+      (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv ≫
+    (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom ≫
+    (objectIsoOfIndexEq
+      (D.obj ∘ (concatSubdivision S T).point)
+      (shrinkingVertexEmbedding_zero_eq_id S T
+        (Fin.last (concatSegmentCount S T)))).hom ≫
+    eqToHom (congrArg D.obj (concatSubdivision S T).point_last))
+
+theorem concatEvaluationExpandedRHS_eq_blockRHS
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    concatEvaluationExpandedRHS D S T = concatEvaluationBlockRHS D S T := by
+  unfold concatEvaluationExpandedRHS concatEvaluationBlockRHS
+  simp only [Category.assoc]
+
+theorem concatEvaluationBlockRHS_eq
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    concatEvaluationBlockRHS D S T = D.evaluate S ≫ D.evaluate T := by
+  unfold concatEvaluationBlockRHS TwoOpenDescentDatum.evaluate
+  simpa only [Category.assoc] using two_arrow_three_block_substitution
+    (eqToHom (congrArg D.obj (concatSubdivision S T).point_zero).symm ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T 0)).inv ≫
+      rightInitialAccum D S T (T.n + 1) ≫
+      (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+        (midpointLeftVertexIndex_zero S T)).inv ≫
+      (objectIsoOfIndexEq D.obj (midpointLeftPoint_eq S T 0)).hom)
+    (eqToHom (congrArg D.obj S.point_zero).symm)
+    (TwoOpenDescentDatum.composeFin (D.obj ∘ S.point) (D.mappedPiece S))
+    ((objectIsoOfIndexEq D.obj
+        (midpointLeftPoint_eq S T (Fin.last (S.n + 1)))).inv ≫
+      (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+        (midpointLeftVertexIndex_last S T)).hom ≫
+      (rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T 0)).hom ≫
+      (reverseRightObjectIso D S T 0).hom ≫
+      (rightBlockObjectIso D S T 0).hom)
+    (eqToHom (congrArg D.obj S.point_last) ≫
+      eqToHom (congrArg D.obj T.point_zero).symm)
+    (TwoOpenDescentDatum.composeFin (D.obj ∘ T.point) (D.mappedPiece T))
+    ((rightBlockObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+      (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+      (objectIsoOfIndexEq (reverseRightObject D S T)
+        (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv ≫
+      (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T
+          (Fin.last (concatSegmentCount S T)))).hom ≫
+      eqToHom (congrArg D.obj (concatSubdivision S T).point_last))
+    (eqToHom (congrArg D.obj T.point_last))
+    (concat_left_initial_unbracketed_coherence D S T)
+    ((concat_midpoint_evaluate_coherence D S T).trans
+      (concat_midpoint_evaluate_expand D S T))
+    (concat_right_terminal_unbracketed_coherence D S T)
+
+theorem evaluate_concatSubdivision
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    D.evaluate (concatSubdivision S T) = D.evaluate S ≫ D.evaluate T := by
+  rw [evaluate_concatSubdivision_eq_expandedRHS D S T]
+  rw [concatEvaluationExpandedRHS_eq_blockRHS D S T]
+  exact concatEvaluationBlockRHS_eq D S T
+
+theorem quotientEvaluation_trans
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    quotientEvaluation hU hV hcover D
+        (Path.Homotopic.Quotient.mk (p.trans q)) =
+      quotientEvaluation hU hV hcover D (Path.Homotopic.Quotient.mk p) ≫
+        quotientEvaluation hU hV hcover D (Path.Homotopic.Quotient.mk q) := by
+  rw [quotientEvaluation_mk hU hV hcover D (p.trans q)
+    (concatSubdivision S T)]
+  rw [evaluate_concatSubdivision D S T]
+  rw [quotientEvaluation_mk hU hV hcover D p S]
+  rw [quotientEvaluation_mk hU hV hcover D q T]
+
+#print axioms concatEvaluationExpandedRHS
+#print axioms evaluate_concatSubdivision_eq_expandedRHS
+#print axioms concatEvaluationBlockRHS
+#print axioms concatEvaluationExpandedRHS_eq_blockRHS
+#print axioms concatEvaluationBlockRHS_eq
+#print axioms evaluate_concatSubdivision
+#print axioms quotientEvaluation_trans
 
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
