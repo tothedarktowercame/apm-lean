@@ -1,13 +1,25 @@
-# Homotopy-square cell boundaries
+# HomotopySquareCellBoundary
 
-This target constructs the vertical edges of a uniform homotopy grid and the
-four boundary paths of each cell.  Each cell-boundary path is valued in the
-specific member of the two-open cover selected by the grid certificate.  The
-exported application lemmas record the time/path coordinate convention and
-make the subtype proofs irrelevant to consumers.
+This target constructs the two L-shaped routes around each closed cell of a
+`HomotopySquareGrid`.  The first route follows the bottom edge and then the
+right edge; the second follows the left edge and then the top edge.  The first
+coordinate is homotopy time and the second is path position.
 
-The next theorem is the relative homotopy, inside that same chart, between
-`cellBottomEdge.trans cellRightEdge` and
-`cellLeftEdge.trans cellTopEdge`.  It requires a continuous reparameterization
-of the square between the two L-shaped boundary traversals.  This target does
-not assume that homotopy or any van Kampen conclusion.
+The previously banked `cellBottomEdge`, `cellRightEdge`, `cellLeftEdge`, and
+`cellTopEdge` remain the public edge interface. `cellCoordHomotopy`
+interpolates coordinatewise between the corresponding two routes.
+`cellCoordHomotopy_mem` proves structurally that every interpolated point stays
+in the same closed grid cell.  Composing with the original path homotopy and
+the cell's `cell_mem` certificate gives `cellBoundaryHomotopy`, a relative path
+homotopy inside the selected subtype `CoverPiece U V (G.side (i,j))`.
+`cellEdgeBoundaryHomotopy` presents this result exactly as
+`cellBottomEdge.trans cellRightEdge` homotopic to
+`cellLeftEdge.trans cellTopEdge`.
+
+`cellEdgeBoundary_quotient_eq` exports equality in the fundamental-groupoid
+path quotient. `cellEdgeBoundary_piece_map_eq` applies any
+`TwoOpenDescentDatum` piece functor to that equality.
+
+The next packet must assemble these individual cell equalities along a strip,
+including the vertical-edge cancellation and endpoint transports, to compare
+the bottom and top subdivision evaluations.
