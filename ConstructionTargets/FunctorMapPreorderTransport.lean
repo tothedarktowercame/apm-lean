@@ -13,6 +13,13 @@ universe u v w
 variable {P : Type u} [Preorder P]
 variable {C : Type v} [Category.{w} C]
 
+/-- A functor out of a preorder sends all parallel arrows to the same
+morphism.  This deliberately compares the arrow witnesses before applying
+the functor. -/
+theorem map_eq_of_fixed_endpoints (F : P ⥤ C) {a b : P} (u v : a ⟶ b) :
+    F.map u = F.map v :=
+  congrArg F.map (Subsingleton.elim u v)
+
 /-- A functor map out of a preorder, rewritten after propositionally changing
 both endpoints.  The endpoint transports are part of the statement, so no
 dependent rewrite beneath `Functor.map` is required. -/
@@ -40,5 +47,6 @@ theorem comp_map_eq_eqToHom_comp_map_comp_eqToHom
 
 #print axioms map_eq_eqToHom_comp_map_comp_eqToHom
 #print axioms comp_map_eq_eqToHom_comp_map_comp_eqToHom
+#print axioms map_eq_of_fixed_endpoints
 
 end ConstructionTargets.FunctorMapPreorderTransport

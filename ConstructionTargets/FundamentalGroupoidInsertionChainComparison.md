@@ -17,22 +17,24 @@ specializations expose the full refined-chain maps with correctly oriented
 `eqToHom` endpoint conjugations. The crossing specialization deliberately
 retains the single nonadjacent full-chain map.
 
-The remaining proof is `mappedPiece` normalization. Ordinary indices must
-identify the unchanged refined piece and its proof arguments. The compiled
+Ordinary indices must identify the unchanged refined piece and its proof arguments. The compiled
 `fullRefined_map_before_eq_mappedPiece` and
 `fullRefined_map_after_eq_mappedPiece` lemmas already expose the relevant
 refined successor maps as concrete `mappedPiece` terms; the remaining equality
 must transport those terms back to the old subdivision through the endpoint
-coordinates.  The before-insertion case is now proved at the path-map level by
-`mappedPiece_before_eq_transport_refined`; `mapPath_label_eq` handles the
-dependent membership proof when the duplicated Boolean side label is replaced
-by the old label.  The remaining ordinary-square issue is the proof-carrying
-preorder arrow: the inequality witness inside
-`refinedRestrictedChain_map_before` is propositionally, but not definitionally,
-the witness used by `fullRefined_map_before_eq_mappedPiece`.  A generic
-proof-insensitive normalization for `Functor.map (homOfLE h)` must be applied
-before the endpoint `eqToHom` chains can cancel.  The after-insertion analogue
-then requires the same normalization and its shifted parameter equality.
+coordinates. Both path-map cases are now compiled as
+`mappedPiece_before_eq_transport_refined` and
+`mappedPiece_after_eq_transport_refined`; `mapPath_label_eq` handles dependent
+membership proofs after the duplicated Boolean side label is identified with
+the old label. `FunctorMapPreorderTransport.map_eq_of_fixed_endpoints` proves
+that distinct `homOfLE` witnesses have identical functor images.
+
+The remaining ordinary-square step is to state the two endpoint equalities
+used by `mappedPiece_*_eq_transport_refined` in the same named form as
+`subdivisionChain_obj_eq_refinedRestrictedChain_obj` and the `succAbove`
+restriction equalities. This lets the three adjacent `eqToHom` chains cancel
+without eliminating a dependent functor equality. The path and preorder-arrow
+parts no longer remain.
 
 At the crossing
 index, `Functor.map_comp` factors the exposed nonadjacent map into two

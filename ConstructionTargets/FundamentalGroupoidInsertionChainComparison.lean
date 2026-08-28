@@ -338,6 +338,95 @@ theorem mappedPiece_before_eq_transport_refined
     PathMapPathTransport.TwoOpenDescentDatum.mapPath_subpath_parameter_eq
       D p ha hb hp (S.piece_mem i)
 
+/-- After the insertion, the shifted refined piece is the old mapped piece,
+with its endpoint transports displayed explicitly. -/
+theorem mappedPiece_after_eq_transport_refined
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S)
+    (i : Fin (S.n + 1)) (hi : ins.segment < i) :
+    D.mappedPiece S i =
+      eqToHom (congrArg D.obj (congrArg p (by
+        change S.vertex i.castSucc = ins.refined.vertex
+          (⟨i.val + 1, by
+            rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+            omega⟩ :
+            Fin (ins.refined.n + 1)).castSucc
+        change S.vertex i.castSucc =
+          PathTwoOpenSubdivision.insertedVertex S ins.segment ins.parameter _
+        rw [show
+          (⟨i.val + 1, by
+            rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+            omega⟩ :
+              Fin (ins.refined.n + 1)).castSucc =
+            (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment).succAbove
+              i.castSucc by
+          apply Fin.ext
+          exact congrArg Fin.val (succAbove_old_successor_after ins i hi).1.symm]
+        exact (PathTwoOpenSubdivision.insertedVertex_old _ _ _ _).symm))) ≫
+        D.mappedPiece ins.refined
+          ⟨i.val + 1, Nat.succ_lt_succ i.isLt⟩ ≫
+        eqToHom ((congrArg D.obj (congrArg p (by
+          change S.vertex i.succ = ins.refined.vertex
+            (⟨i.val + 1, by
+              rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+              omega⟩ :
+              Fin (ins.refined.n + 1)).succ
+          change S.vertex i.succ =
+            PathTwoOpenSubdivision.insertedVertex S ins.segment ins.parameter _
+          rw [show
+            (⟨i.val + 1, by
+              rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+              omega⟩ :
+                Fin (ins.refined.n + 1)).succ =
+              (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment).succAbove
+                i.succ by
+            apply Fin.ext
+            exact congrArg Fin.val
+              (succAbove_old_successor_after ins i hi).2.symm]
+          exact (PathTwoOpenSubdivision.insertedVertex_old _ _ _ _).symm))).symm) := by
+  unfold FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.mappedPiece
+  let j : Fin (ins.refined.n + 1) := ⟨i.val + 1, by
+    rw [PathTwoOpenSubdivision.SingleVertexInsertion.refined_n]
+    omega⟩
+  have hs : ins.refined.side j = S.side i := by
+    change PathTwoOpenSubdivision.insertedSide S ins.segment j = S.side i
+    have he : j =
+        (PathTwoOpenSubdivision.insertedSidePosition S ins.segment).succAbove i := by
+      have hle : PathTwoOpenSubdivision.insertedSidePosition S ins.segment ≤
+          i.castSucc := by
+        apply Fin.mk_le_mk.mpr
+        simpa [PathTwoOpenSubdivision.insertedSidePosition] using hi
+      rw [Fin.succAbove_of_le_castSucc _ _ hle]
+      apply Fin.ext
+      rfl
+    rw [he, PathTwoOpenSubdivision.insertedSide_old]
+  have ha : S.vertex i.castSucc = ins.refined.vertex j.castSucc := by
+    change S.vertex i.castSucc =
+      PathTwoOpenSubdivision.insertedVertex S ins.segment ins.parameter j.castSucc
+    rw [show j.castSucc =
+        (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment).succAbove i.castSucc by
+      apply Fin.ext
+      exact congrArg Fin.val (succAbove_old_successor_after ins i hi).1.symm]
+    exact (PathTwoOpenSubdivision.insertedVertex_old _ _ _ _).symm
+  have hb : S.vertex i.succ = ins.refined.vertex j.succ := by
+    change S.vertex i.succ =
+      PathTwoOpenSubdivision.insertedVertex S ins.segment ins.parameter j.succ
+    rw [show j.succ =
+        (PathTwoOpenSubdivision.insertedVertexPosition S ins.segment).succAbove i.succ by
+      apply Fin.ext
+      exact congrArg Fin.val (succAbove_old_successor_after ins i hi).2.symm]
+    exact (PathTwoOpenSubdivision.insertedVertex_old _ _ _ _).symm
+  have hp : ∀ t, p.subpath (ins.refined.vertex j.castSucc)
+      (ins.refined.vertex j.succ) t ∈ twoChart U V (S.side i) := by
+    simpa only [← hs] using ins.refined.piece_mem j
+  have hmap :
+      D.mapPath (ins.refined.side j) (ins.refined.piece j) (ins.refined.piece_mem j) =
+        D.mapPath (S.side i) (ins.refined.piece j) hp :=
+    mapPath_label_eq D (ins.refined.piece j) hs _ _
+  rw [hmap]
+  simpa only [PathTwoOpenSubdivision.piece] using
+    PathMapPathTransport.TwoOpenDescentDatum.mapPath_subpath_parameter_eq
+      D p ha hb hp (S.piece_mem i)
+
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
 #print axioms succAbove_old_successor_before
@@ -352,6 +441,7 @@ theorem mappedPiece_before_eq_transport_refined
 #print axioms fullOld_map_eq_mappedPiece
 #print axioms mapPath_label_eq
 #print axioms mappedPiece_before_eq_transport_refined
+#print axioms mappedPiece_after_eq_transport_refined
 
 end TwoOpenDescentDatum
 
