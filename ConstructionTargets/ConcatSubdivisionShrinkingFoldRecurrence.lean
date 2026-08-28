@@ -1031,6 +1031,21 @@ def rightRemovalStep
       simp [concatSegmentCount]
       omega)).hom
 
+/-- Reindex one removal step across an equality of stages, retaining the
+induced source and target transports. -/
+theorem rightRemovalStep_conjugation
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) {a b : ℕ}
+    (ha : a ≤ T.n) (hb : b ≤ T.n) (h : a = b) :
+    rightRemovalStep D S T a ha =
+      eqToHom (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+        (congrArg Nat.succ h)) ≫
+      rightRemovalStep D S T b hb ≫
+      eqToHom (congrArg (shrinkingPrefixTerminalObject (C := C) D S T) h).symm := by
+  subst b
+  simp
+
 /-- Initial-end transports accumulated through `k` shrinking stages. -/
 def rightInitialAccum
     (D : @TwoOpenDescentDatum X _ U V C _)
@@ -1516,6 +1531,54 @@ theorem eqToHom_two_two_conjugation
   subst B₃
   simp
 
+/-- Two equality transports with the same composite endpoints equal any
+direct transport between those endpoints. -/
+theorem eqToHom_two_eq_one {A B C₀ : C}
+    (h₁ : A = B) (h₂ : B = C₀) (h : A = C₀) :
+    eqToHom h₁ ≫ eqToHom h₂ = eqToHom h := by
+  subst B
+  subst C₀
+  simp
+
+/-- Four source transports and five target transports can be collapsed once
+the dependent central arrow has been aligned. -/
+theorem eqToHom_four_five_conjugation
+    {A₀ A₁ A₂ A₃ A₄ B₀ B₁ B₂ B₃ B₄ B₅ : C}
+    (h₁ : A₀ = A₁) (h₂ : A₁ = A₂)
+    (h₃ : A₂ = A₃) (h₄ : A₃ = A₄) (h : A₀ = A₄)
+    (f : A₄ ⟶ B₀)
+    (k₁ : B₀ = B₁) (k₂ : B₁ = B₂) (k₃ : B₂ = B₃)
+    (k₄ : B₃ = B₄) (k₅ : B₄ = B₅) (k : B₀ = B₅) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫ eqToHom h₃ ≫ eqToHom h₄ ≫ f ≫
+        eqToHom k₁ ≫ eqToHom k₂ ≫ eqToHom k₃ ≫ eqToHom k₄ ≫ eqToHom k₅ =
+      eqToHom h ≫ f ≫ eqToHom k := by
+  subst A₁
+  subst A₂
+  subst A₃
+  subst A₄
+  subst B₁
+  subst B₂
+  subst B₃
+  subst B₄
+  subst B₅
+  simp
+
+/-- Normalize the two transported arrows and final transport occurring in a
+recursive fold step. -/
+theorem eqToHom_two_arrow_blocks
+    {A₀ A₁ A₂ A₃ A₅ A₆ B : C}
+    (h₁ : A₀ = A₁) (a : A₁ ⟶ A₂) (h₂ : A₂ = A₃)
+    (h₃ : A₃ = A₂) (b : A₂ ⟶ A₅) (h₄ : A₅ = A₆)
+    (h₅ : A₆ = B) (h : A₀ = A₁) (k : A₅ = B) :
+    (eqToHom h₁ ≫ a ≫ eqToHom h₂) ≫
+        (eqToHom h₃ ≫ b ≫ eqToHom h₄) ≫ eqToHom h₅ =
+      eqToHom h ≫ (a ≫ b) ≫ eqToHom k := by
+  subst A₁
+  subst A₃
+  subst A₆
+  subst B
+  simp [Category.assoc]
+
 /-- The literal successor tail arrow of the `(k+1)` slice is the corresponding
 `k`-slice arrow, conjugated by the proof-carrying vertex-tail equalities. -/
 theorem rightSuffixSliceArrow_succ_tail_eq_conjugate
@@ -1616,6 +1679,49 @@ def rightSuffixSliceTargetIso
   eqToIso (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
     (rightSuffixSlice_target_stage T k hk))
 
+/-- The exposed first slice arrow and the tail-source reindex transport are
+exactly the next recursive removal, between the named slice source
+coordinates. -/
+theorem rightSuffixSlice_front_source_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) :
+    rightSuffixSliceArrow D S T (k + 1) hk 0 ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_succ_tail T k hk 0)).hom =
+      (rightSuffixSliceSourceIso D S T (k + 1) hk).hom ≫
+        rightRemovalStep D S T k (by omega) ≫
+        (rightSuffixSliceSourceIso D S T k (by omega)).inv := by
+  unfold rightSuffixSliceArrow
+  rw [dependentArrow_conjugation
+    (reverseRightObject D S T) (reverseRightArrow D S T)
+    (rightSuffixSliceSegment_succ_zero T k hk)]
+  unfold reverseRightArrow rightSuffixSliceSourceIso
+  rw [rightRemovalStep_conjugation D S T _ _
+    (show T.n - (T.n - k) = k by omega)]
+  simp only [objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv,
+    Category.assoc]
+  exact eqToHom_four_five_conjugation
+    (f := rightRemovalStep D S T k (by omega))
+    (h₁ := _) (h₂ := _) (h₃ := _) (h₄ := _) (h := _)
+    (k₁ := _) (k₂ := _) (k₃ := _) (k₄ := _) (k₅ := _) (k := _)
+
+/-- The old slice target coordinate followed by the tail reindex transport is
+the new slice target coordinate. -/
+theorem rightSuffixSlice_target_coherence
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ)
+    (hk : k + 1 ≤ T.n + 1) :
+    (rightSuffixSliceTargetIso D S T k (by omega)).inv ≫
+        (objectIsoOfIndexEq (reverseRightObject D S T)
+          (rightSuffixSliceVertex_succ_tail T k hk (Fin.last k))).inv =
+      (rightSuffixSliceTargetIso D S T (k + 1) hk).inv := by
+  simp only [rightSuffixSliceTargetIso, objectIsoOfIndexEq,
+    eqToIso.inv]
+  exact eqToHom_two_eq_one _ _ _
+
 /-- The accumulator/slice comparison at length zero, with both endpoint
 coordinates retained. -/
 theorem rightSuffixSliceFold_zero_eq_accum
@@ -1629,6 +1735,30 @@ theorem rightSuffixSliceFold_zero_eq_accum
   simp only [rightSuffixSliceFold_zero, rightSuffixAccum_zero,
     Category.comp_id, Category.id_comp]
   simp [rightSuffixSliceSourceIso, rightSuffixSliceTargetIso]
+
+/-- Every proof-carrying terminal slice is the recursive removal accumulator,
+with only its named source and target coordinate isomorphisms remaining. -/
+theorem rightSuffixSliceFold_eq_accum
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    ∀ (k : ℕ) (hk : k ≤ T.n + 1),
+      rightSuffixSliceFold D S T k hk =
+        (rightSuffixSliceSourceIso D S T k hk).hom ≫
+          rightSuffixAccum D S T k hk ≫
+          (rightSuffixSliceTargetIso D S T k hk).inv
+  | 0, hk => rightSuffixSliceFold_zero_eq_accum D S T hk
+  | k + 1, hk => by
+      rw [rightSuffixSliceFold_succ D S T k hk]
+      rw [rightSuffixSliceFold_eq_accum D S T k (by omega)]
+      rw [← Category.assoc]
+      rw [rightSuffixSlice_front_source_coherence D S T k hk]
+      simp only [rightSuffixSliceSourceIso, rightSuffixSliceTargetIso,
+        rightSuffixAccum, eqToIso.hom, eqToIso.inv]
+      exact eqToHom_two_arrow_blocks (C := C) _ _ _ _ _ _
+        (congrArg (reverseRightObject D S T)
+          (rightSuffixSliceVertex_succ_tail T k hk (Fin.last k)).symm)
+        _ _
 
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
@@ -1763,6 +1893,10 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightSuffixSliceFold_zero
 #print axioms rightSuffixSliceFold_succ_front
 #print axioms eqToHom_two_two_conjugation
+#print axioms eqToHom_two_eq_one
+#print axioms eqToHom_four_five_conjugation
+#print axioms eqToHom_two_arrow_blocks
+#print axioms rightRemovalStep_conjugation
 #print axioms rightSuffixSliceArrow_succ_tail_eq_conjugate
 #print axioms rightSuffixSliceTailFold_eq
 #print axioms rightSuffixSliceFold_succ
@@ -1771,6 +1905,9 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightSuffixSliceSourceIso
 #print axioms rightSuffixSliceTargetIso
 #print axioms rightSuffixSliceFold_zero_eq_accum
+#print axioms rightSuffixSlice_front_source_coherence
+#print axioms rightSuffixSlice_target_coherence
+#print axioms rightSuffixSliceFold_eq_accum
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum

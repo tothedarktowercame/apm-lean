@@ -245,9 +245,17 @@ to the whole tail, and `rightSuffixSliceFold_succ` gives the resulting
 successor recurrence with only the first arrow and the two outer tail
 transports exposed.
 
-The next seam is to normalize that first arrow together with the tail's source
-transport to `rightRemovalStep k`, and to reconcile the final tail transport
-with the named accumulator endpoint transport. Only after those two typed
-equalities compile can the successor recurrence be iterated to identify
-`rightSuffixAccum` with the reverse-right finite fold. No accumulator bridge
-or combined concatenated-fold formula is assumed here.
+`rightRemovalStep_conjugation` transports a removal arrow across an equality
+of arithmetic stages without rewriting beneath its dependent source and
+target. Using it, `rightSuffixSlice_front_source_coherence` identifies the
+first slice arrow and tail-source transport with `rightRemovalStep k` between
+the named source coordinates. `rightSuffixSlice_target_coherence` performs
+the corresponding terminal normalization.
+
+`rightSuffixSliceFold_eq_accum` now proves by finite induction that every
+slice fold is `rightSuffixAccum`, bracketed by
+`rightSuffixSliceSourceIso` and `rightSuffixSliceTargetIso`. The remaining
+seam is the full-length endpoint comparison between this slice presentation
+and `composeFin reverseRightObject reverseRightArrow`; only after that
+comparison is compiled can the reverse/right-block and concatenated-fold
+theorems be combined. No combined concatenated-fold formula is claimed here.
