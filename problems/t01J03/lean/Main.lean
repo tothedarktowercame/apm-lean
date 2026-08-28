@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.T01J03FrozenQuotientRepresentation
 
 /-!
 # APM t01J03: A twice-wound gluing of solid tori
@@ -19,6 +20,7 @@ maps to the core generator. The glued space is the actual topological quotient.
 -/
 
 open CategoryTheory
+open ConstructionTargets.T01J03FrozenQuotientRepresentation
 
 noncomputable section
 
@@ -59,6 +61,70 @@ noncomputable instance (h : apm_t01J03_BoundaryTorus ≃ₜ
     (fun z : Sum apm_t01J03_SolidTorus apm_t01J03_SolidTorus ↦
       Quotient.mk (Relation.EqvGen.setoid (apm_t01J03_glueRel h)) z)
     inferInstance
+
+theorem apm_t01J03_glueRel_iff_coordinateGlueRel
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus) (x y) :
+    apm_t01J03_glueRel h x y ↔ CoordinateGlueRel h x y := by
+  constructor <;> rintro ⟨z⟩
+  · exact CoordinateGlueRel.glue z
+  · exact apm_t01J03_glueRel.glue z
+
+theorem apm_t01J03_eqvGen_iff_coordinateEqvGen
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus) (x y) :
+    Relation.EqvGen (apm_t01J03_glueRel h) x y ↔
+      Relation.EqvGen (CoordinateGlueRel h) x y := by
+  constructor
+  · intro hxy
+    induction hxy with
+    | rel a b hab =>
+        exact Relation.EqvGen.rel _ _
+          ((apm_t01J03_glueRel_iff_coordinateGlueRel h a b).mp hab)
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro hxy
+    induction hxy with
+    | rel a b hab =>
+        exact Relation.EqvGen.rel _ _
+          ((apm_t01J03_glueRel_iff_coordinateGlueRel h a b).mpr hab)
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
+def apm_t01J03_homeomorph_coordinateGluing
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus) :
+    apm_t01J03_gluedSpace h ≃ₜ CoordinateGluing h where
+  toFun := Quotient.lift (fun x ↦ Quotient.mk _ x) fun _ _ hxy ↦
+    Quotient.sound ((apm_t01J03_eqvGen_iff_coordinateEqvGen h _ _).mp hxy)
+  invFun := Quotient.lift (fun x ↦ Quotient.mk _ x) fun _ _ hxy ↦
+    Quotient.sound ((apm_t01J03_eqvGen_iff_coordinateEqvGen h _ _).mpr hxy)
+  left_inv := by rintro ⟨x⟩; rfl
+  right_inv := by rintro ⟨x⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+def apm_t01J03_homeomorph_gluing
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus) :
+    apm_t01J03_gluedSpace h ≃ₜ
+      ConstructionTargets.SolidTorusGluingOpenCover.Gluing
+        (conjugateBoundaryHomeomorph h) :=
+  (apm_t01J03_homeomorph_coordinateGluing h).trans
+    (coordinateGluingHomeomorph h)
+
+@[simp] theorem apm_t01J03_homeomorph_coordinateGluing_mk
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus)
+    (x : Sum apm_t01J03_SolidTorus apm_t01J03_SolidTorus) :
+    apm_t01J03_homeomorph_coordinateGluing h (Quotient.mk _ x) =
+      Quotient.mk _ x := rfl
+
+@[simp] theorem apm_t01J03_homeomorph_gluing_mk
+    (h : apm_t01J03_BoundaryTorus ≃ₜ apm_t01J03_BoundaryTorus)
+    (x : Sum apm_t01J03_SolidTorus apm_t01J03_SolidTorus) :
+    apm_t01J03_homeomorph_gluing h (Quotient.mk _ x) = Quotient.mk _ x := rfl
 
 def apm_t01J03_gluedInl (h : apm_t01J03_BoundaryTorus ≃ₜ
     apm_t01J03_BoundaryTorus) :
