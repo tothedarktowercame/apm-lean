@@ -2009,6 +2009,40 @@ theorem ssetHomologyMap_eq_singularPostcomposition {X Y : Type}
   exact congrArg (fun k ↦ HomologicalComplex.homologyMap k n)
     (ssetChainMap_eq_singularPostcomposition f)
 
+/-- The map supplied by Mathlib's integral singular-homology functor is the
+homology map of the production postcomposition chain map. -/
+theorem singularHomologyFunctor_map_eq_singularPostcomposition {X Y : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) (n : ℕ) :
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f) =
+      HomologicalComplex.homologyMap (singularPostcomposition f) n := by
+  rfl
+
+/-- SSet-chain form of
+`singularHomologyFunctor_map_eq_singularPostcomposition`. -/
+theorem singularHomologyFunctor_map_eq_ssetHomologyMap {X Y : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) (n : ℕ) :
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f) =
+      HomologicalComplex.homologyMap
+        (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).map
+            (TopCat.toSSet.map (TopCat.ofHom f))) n := by
+  rw [singularHomologyFunctor_map_eq_singularPostcomposition,
+    ssetHomologyMap_eq_singularPostcomposition]
+
+@[reassoc] theorem singularHomologyFunctor_map_eq_singularPostcomposition_comp
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) (n : ℕ)
+    {Z : AddCommGrpCat} (g :
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+        (AddCommGrpCat.of ℤ)).obj (TopCat.of Y) ⟶ Z) :
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f) ≫ g =
+      HomologicalComplex.homologyMap (singularPostcomposition f) n ≫ g := by
+  exact congrArg (fun q ↦ q ≫ g)
+    (singularHomologyFunctor_map_eq_singularPostcomposition f n)
+
 @[reassoc] theorem singularPostcomposition_comp {X Y Z : Type} [TopologicalSpace X]
     [TopologicalSpace Y] [TopologicalSpace Z] (f : C(X, Y)) (g : C(Y, Z)) :
     singularPostcomposition f ≫ singularPostcomposition g =
@@ -3925,6 +3959,9 @@ theorem coverSmall_homologyMap_isIso_succ
 #print axioms standardEdge_postcomposedPrism_small
 #print axioms ssetChainMap_eq_singularPostcomposition
 #print axioms ssetHomologyMap_eq_singularPostcomposition
+#print axioms singularHomologyFunctor_map_eq_singularPostcomposition
+#print axioms singularHomologyFunctor_map_eq_ssetHomologyMap
+#print axioms singularHomologyFunctor_map_eq_singularPostcomposition_comp
 
 
 end ConstructionTargets.SingularSubdivision

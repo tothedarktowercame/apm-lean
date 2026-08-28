@@ -273,3 +273,10 @@ topological singular-chain functor is the same simplicial chain functor after
 induced integral homology map in every natural-number degree. This is a
 representation adapter only; it asserts no geometric or homological property
 of `f`.
+
+`singularHomologyFunctor_map_eq_singularPostcomposition` identifies the same
+map when it is presented through Mathlib's public `singularHomologyFunctor`.
+`singularHomologyFunctor_map_eq_ssetHomologyMap` gives the equivalent SSet
+chains-map form, and the reassociated companion rewrites such a map before a
+following morphism. These are literal representation comparisons; they do not
+assume that an induced map is mono, epi, or an isomorphism.
