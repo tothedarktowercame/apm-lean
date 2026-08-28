@@ -18,16 +18,19 @@ of `p.subpath t₀ t₂` restricts to every ordered subsegment `[a,c] ⊆ [t₀,
 In particular it supplies the two chart-membership proofs for `[t₀,t₁]` and
 `[t₁,t₂]` without assuming anything about `p` outside `[t₀,t₂]`.
 
-The remaining localized split step is an explicit range theorem for
-`Path.Homotopy.subpathTransSubpath`: under `t₀ ≤ t₁ ≤ t₂`, every point of that
-homotopy lies in `Set.range (p.subpath t₀ t₂)`. Mathlib's definition composes
-`subpathTransSubpathRefl` with `transRefl`; after unfolding, the second branch
-is a cast of a reparameterized homotopy, and no range lemma for that composite
-is currently exposed.  Until that range theorem is proved, lifting the
-homotopy into `twoChart U V b` from segment-only membership would be an
-unsupported step.
+`subpathTransSubpath_mem_range` now proves the required structural range
+theorem. It unfolds Mathlib's composition of `subpathTransSubpathRefl` and
+`transRefl`: the moving-split branch uses the bounds on `Icc.convexCombo`, and
+the reparameterized/cast branch is reduced to an actual value of the unsplit
+subpath.
+
+`subpathSplitHomotopyInPiece_of_subpath_mem` lifts that homotopy into the cover
+subtype from whole-segment membership alone.
+`mapPath_subpath_split_of_subpath_mem` gives the localized categorical split
+identity. It does not require the ambient path outside `[t₀,t₂]` to lie in
+the selected cover member.
 
 No refinement invariance, descent functor, or van Kampen conclusion is
-assumed. The next exact seam is the range-preservation theorem for
-`Path.Homotopy.subpathTransSubpath` described above; it will permit the
-segment-local homotopy lift and the crossing refinement square.
+assumed. The next exact seam is to instantiate the localized split identity
+at the inserted crossing segment and normalize its side, membership, and
+endpoint transports into the crossing refinement square.

@@ -21,6 +21,45 @@ open ConstructionTargets.FundamentalGroupoidTwoOpenDescent
 variable {X : Type*} [TopologicalSpace X] {U V : Set X}
 variable {C : Type*} [Category C]
 
+/-- Every value of an ordered subpath lies in the range of a containing
+ordered subpath. -/
+theorem subpath_value_mem_range_of_ordered {x y : X} (p : Path x y)
+    (t₀ t₂ a c s : unitInterval) (h02 : t₀ ≤ t₂)
+    (ha : t₀ ≤ a) (hc : c ≤ t₂) (hac : a ≤ c) :
+    p.subpath a c s ∈ Set.range (p.subpath t₀ t₂) := by
+  have hs : p.subpath a c s ∈ Set.range (p.subpath a c) := Set.mem_range_self s
+  rw [Path.range_subpath_of_le p a c hac] at hs
+  rw [Path.range_subpath_of_le p t₀ t₂ h02]
+  exact Set.image_mono (Set.Icc_subset_Icc ha hc) hs
+
+/-- Under ordered parameters, the canonical split-subpath homotopy never
+leaves the range of the unsplit subpath. -/
+theorem subpathTransSubpath_mem_range {x y : X} (p : Path x y)
+    (t₀ t₁ t₂ : unitInterval) (h01 : t₀ ≤ t₁) (h12 : t₁ ≤ t₂) :
+  ∀ z, Path.Homotopy.subpathTransSubpath p t₀ t₁ t₂ z ∈
+      Set.range (p.subpath t₀ t₂) := by
+  intro z
+  unfold Path.Homotopy.subpathTransSubpath
+  rw [Path.Homotopy.trans_apply]
+  split_ifs with h
+  · change
+      ((p.subpath t₀ (Set.Icc.convexCombo t₁ t₂ _)).trans
+        (p.subpath (Set.Icc.convexCombo t₁ t₂ _) t₂)) z.2 ∈ _
+    rw [Path.trans_apply]
+    split_ifs
+    · apply subpath_value_mem_range_of_ordered p t₀ t₂
+      · exact h01.trans h12
+      · exact le_rfl
+      · exact Set.Icc.convexCombo_le h12 _
+      · exact h01.trans (Set.Icc.le_convexCombo h12 _)
+    · apply subpath_value_mem_range_of_ordered p t₀ t₂
+      · exact h01.trans h12
+      · exact h01.trans (Set.Icc.le_convexCombo h12 _)
+      · exact le_rfl
+      · exact Set.Icc.convexCombo_le h12 _
+  · change p.subpath t₀ t₂ _ ∈ Set.range (p.subpath t₀ t₂)
+    exact Set.mem_range_self _
+
 namespace TwoOpenDescentDatum
 
 variable (D : @TwoOpenDescentDatum X _ U V C _)
@@ -134,12 +173,94 @@ theorem subpath_mem_of_mem_ordered_segment {b : Bool} {x y : X}
   rw [Path.range_subpath_of_le p t₀ t₂ h02]
   exact Set.image_mono (Set.Icc_subset_Icc ha hc) hs
 
+/-- The split-subpath homotopy lifts to one cover piece from membership of the
+whole ordered segment alone. -/
+def subpathSplitHomotopyInPiece_of_subpath_mem {b : Bool} {x y : X}
+    (p : Path x y) (t₀ t₁ t₂ : unitInterval)
+    (h01 : t₀ ≤ t₁) (h12 : t₁ ≤ t₂)
+    (hp02 : ∀ s, p.subpath t₀ t₂ s ∈ twoChart U V b) :
+    Path.Homotopy
+      (pathInPiece U V b
+        ((p.subpath t₀ t₁).trans (p.subpath t₁ t₂)) (fun s ↦ by
+          rw [Path.trans_apply]
+          split_ifs
+          · exact subpath_mem_of_mem_ordered_segment p t₀ t₂ t₀ t₁
+              (h01.trans h12) le_rfl h12 h01 hp02 _
+          · exact subpath_mem_of_mem_ordered_segment p t₀ t₂ t₁ t₂
+              (h01.trans h12) h01 le_rfl h12 hp02 _))
+      (pathInPiece U V b (p.subpath t₀ t₂) hp02) := by
+  let H := Path.Homotopy.subpathTransSubpath p t₀ t₁ t₂
+  let hrange : Set.range (p.subpath t₀ t₂) ⊆ twoChart U V b := by
+    rintro _ ⟨s, rfl⟩
+    exact hp02 s
+  refine
+    { toFun := fun z ↦ ⟨H z, hrange (subpathTransSubpath_mem_range p t₀ t₁ t₂ h01 h12 z)⟩
+      continuous_toFun := H.continuous.subtype_mk _
+      map_zero_left := ?_
+      map_one_left := ?_
+      prop' := ?_ }
+  · intro s
+    apply Subtype.ext
+    change H.toFun (0, s) = _
+    rw [H.map_zero_left]
+    rfl
+  · intro s
+    apply Subtype.ext
+    exact H.map_one_left s
+  · intro t s hs
+    apply Subtype.ext
+    change H.toFun (t, s) = _
+    exact H.prop' t s hs
+
+/-- Localized split invariance: only the ordered whole segment, rather than
+the ambient path, must lie in the selected cover piece. -/
+theorem mapPath_subpath_split_of_subpath_mem {b : Bool} {x y : X}
+    (p : Path x y) (t₀ t₁ t₂ : unitInterval)
+    (h01 : t₀ ≤ t₁) (h12 : t₁ ≤ t₂)
+    (hp02 : ∀ s, p.subpath t₀ t₂ s ∈ twoChart U V b) :
+    D.mapPath b (p.subpath t₀ t₂) hp02 =
+      D.mapPath b (p.subpath t₀ t₁)
+          (subpath_mem_of_mem_ordered_segment p t₀ t₂ t₀ t₁
+            (h01.trans h12) le_rfl h12 h01 hp02) ≫
+        D.mapPath b (p.subpath t₁ t₂)
+          (subpath_mem_of_mem_ordered_segment p t₀ t₂ t₁ t₂
+            (h01.trans h12) h01 le_rfl h12 hp02) := by
+  let hp01 := subpath_mem_of_mem_ordered_segment p t₀ t₂ t₀ t₁
+    (h01.trans h12) le_rfl h12 h01 hp02
+  let hp12 := subpath_mem_of_mem_ordered_segment p t₀ t₂ t₁ t₂
+    (h01.trans h12) h01 le_rfl h12 hp02
+  let ptrans := (p.subpath t₀ t₁).trans (p.subpath t₁ t₂)
+  have hptrans : ∀ s, ptrans s ∈ twoChart U V b := fun s ↦ by
+    dsimp only [ptrans]
+    rw [Path.trans_apply]
+    split_ifs
+    · exact hp01 _
+    · exact hp12 _
+  have hq : Path.Homotopic.Quotient.mk
+      (pathInPiece U V b ptrans hptrans) =
+      Path.Homotopic.Quotient.mk
+        (pathInPiece U V b (p.subpath t₀ t₂) hp02) := by
+    dsimp only [ptrans]
+    exact Quotient.sound ⟨subpathSplitHomotopyInPiece_of_subpath_mem
+      p t₀ t₁ t₂ h01 h12 hp02⟩
+  calc
+    D.mapPath b (p.subpath t₀ t₂) hp02 = D.mapPath b ptrans hptrans := by
+      simp only [FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.mapPath]
+      rw [hq]
+    _ = _ := by
+      simpa only [hp01, hp12] using
+        mapPath_trans D (p.subpath t₀ t₁) (p.subpath t₁ t₂) hp01 hp12
+
 #print axioms pathInPiece_trans
 #print axioms pathInPiece_subpath
 #print axioms mapPath_trans
 #print axioms subpathSplitHomotopyInPiece
 #print axioms mapPath_subpath_split
 #print axioms subpath_mem_of_mem_ordered_segment
+#print axioms subpathSplitHomotopyInPiece_of_subpath_mem
+#print axioms mapPath_subpath_split_of_subpath_mem
+#print axioms FundamentalGroupoidTwoOpenRefinement.subpath_value_mem_range_of_ordered
+#print axioms FundamentalGroupoidTwoOpenRefinement.subpathTransSubpath_mem_range
 
 end TwoOpenDescentDatum
 
