@@ -57,6 +57,9 @@ def terminalPrefixSegment {m : ℕ} (hm : 0 < m) :
 
 def terminalSegmentIndex {m : ℕ} (hm : 0 < m) : Fin m := ⟨m - 1, by omega⟩
 
+def terminalStructuralIndex {m : ℕ} (hm : 0 < m) : Fin m :=
+  Fin.cast (by omega) (Fin.last (m - 1))
+
 theorem terminalPrefixVertex_zero {m : ℕ} (hm : 0 < m) :
     terminalPrefixVertex hm 0 = (0 : Fin (m + 1)) := by apply Fin.ext; rfl
 
@@ -65,6 +68,25 @@ theorem terminalSegmentIndex_succ {m : ℕ} (hm : 0 < m) :
   apply Fin.ext
   simp [terminalSegmentIndex]
   omega
+
+theorem terminalSegmentIndex_eq_last {m : ℕ} (hm : 0 < m) :
+    terminalSegmentIndex hm = terminalStructuralIndex hm := by
+  apply Fin.ext
+  simp [terminalSegmentIndex]
+  simp [terminalStructuralIndex]
+
+/-- A proof-carrying chosen terminal arrow, conjugated to the structural last
+index, is exactly the structural last arrow.  Index equality is eliminated
+before either dependent arrow is compared. -/
+theorem terminalArrow_transport {n : ℕ} (A : Fin (n + 2) → C)
+    (f : (i : Fin (n + 1)) → A i.castSucc ⟶ A i.succ)
+    (chosen : Fin (n + 1)) (h : chosen = Fin.last n) :
+    eqToHom (congrArg A (congrArg Fin.castSucc h)) ≫
+        f (Fin.last n) ≫
+        eqToHom (congrArg A (congrArg Fin.succ h).symm) =
+      f chosen := by
+  subst chosen
+  simp
 
 theorem terminalPrefixEndpoint_castSucc {m : ℕ} (hm : 0 < m)
     (i : Fin (m - 1)) :
@@ -124,6 +146,7 @@ def shrinkingPrefixTerminalIso
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
+#print axioms terminalArrow_transport
 #print axioms shrinkingPrefixInitialIso
 #print axioms shrinkingPrefixBoundaryIso
 #print axioms shrinkingPrefixTerminalIso

@@ -6,6 +6,11 @@ It also exposes the terminal-arrow orientation of `composeFin` and canonical
 initial, boundary, and terminal object isomorphisms between consecutive
 shrinking stages.
 
+`terminalArrow_transport` closes the generic dependent-arrow seam: a chosen
+terminal arrow conjugated by its explicit source and target equalities is the
+structural last arrow. The proof eliminates the index equality before
+comparing the dependent arrows.
+
 The positive-length interface now includes `terminalPrefixVertex`,
 `terminalPrefixSegment`, `terminalSegmentIndex`, and explicit source, target,
 zero, and terminal endpoint equalities. These are valid for an arbitrary
@@ -21,10 +26,8 @@ the dependent arrow is rejected by Lean's motive checker, so the next theorem
 must compare those endpoint transports explicitly before applying
 `composeFin_reindex_of_index_eq`.
 
-The attempted generic split reaches a dependent terminal-arrow seam. After
-eliminating `m` as `n+1`, `terminalSegmentIndex hm = Fin.last n` is proved, but
-rewriting it beneath `f` makes the surrounding categorical-composition motive
-ill-typed. The missing interface is a terminal-arrow analogue of
-`conjugatedArrow_compose` which simultaneously transports that arrow and the
-postcomposed equality to `Fin.last m`. Only after that theorem can the split be
-specialized to the shrinking recurrence.
+The remaining split seam is arithmetic rather than arrow transport:
+`composeFin_succ` expects the positive length syntactically as `n+1`, while
+the generic interface retains `m` with `0 < m`. A proof-carrying reindex of
+the complete object and arrow families across `m = (m-1)+1` is still needed
+before the positive-length split can specialize to the shrinking recurrence.
