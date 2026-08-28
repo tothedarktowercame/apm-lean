@@ -161,6 +161,12 @@ abbrev sphereEquator (n : ℕ) :=
   {x : EuclideanSpace ℝ (Fin (n + 1)) //
     x ∈ Metric.sphere 0 1 ∧ x (Fin.last n) = 0}
 
+theorem euclideanUnitSphere_nonempty {n : ℕ} (hn : 0 < n) :
+    Nonempty (euclideanUnitSphere n) := by
+  let i : Fin n := ⟨0, hn⟩
+  refine ⟨⟨PiLp.single 2 i 1, ?_⟩⟩
+  simp [Metric.mem_sphere, dist_zero_right]
+
 /-- Insert a unit vector as the height-zero equator point. -/
 def sphereToEquator (n : ℕ) (x : euclideanUnitSphere n) : sphereEquator n := by
   refine ⟨euclideanSnoc x 0, ?_, ?_⟩
@@ -220,6 +226,12 @@ def sphereHomeomorphEquator (n : ℕ) : euclideanUnitSphere n ≃ₜ sphereEquat
     apply Continuous.subtype_mk
     exact continuous_euclideanInit.comp continuous_subtype_val
 
+theorem sphereEquator_nonempty {n : ℕ} (hn : 0 < n) :
+    Nonempty (sphereEquator n) :=
+  Nonempty.map (sphereHomeomorphEquator n) (euclideanUnitSphere_nonempty hn)
+
+instance : Nonempty (sphereEquator 2) := sphereEquator_nonempty (by decide)
+
 /-- Regard an equator point as a point of the closed upper hemisphere. -/
 def equatorToUpperHemisphere (n : ℕ) (x : sphereEquator n) : upperHemisphere n :=
   ⟨x.1, x.property.1, x.property.2.ge⟩
@@ -247,4 +259,6 @@ end T02A06
 #print axioms T02A06.euclideanSnoc_norm_sq
 #print axioms T02A06.diskHomeomorphUpperHemisphere
 #print axioms T02A06.sphereHomeomorphEquator
+#print axioms T02A06.euclideanUnitSphere_nonempty
+#print axioms T02A06.sphereEquator_nonempty
 #print axioms T02A06.diskHomeomorphUpperHemisphere_boundary
