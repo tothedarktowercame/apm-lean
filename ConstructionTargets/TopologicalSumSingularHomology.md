@@ -16,5 +16,9 @@ H_k(X ⊕ Y; ℤ) ≅ H_k(X; ℤ) ⨞ H_k(Y; ℤ).
 ```
 
 The isomorphism is constructed from the actual production inclusion-induced
-reassembly arrow; no splitting or Künneth theorem is assumed. Componentwise
-normalization against `Sum.inl` and `Sum.inr` remains the next bounded step.
+reassembly arrow; no splitting or Künneth theorem is assumed.  Its two
+components are normalized against the actual homology maps of `Sum.inl` and
+`Sum.inr`: postcomposition with `sumHomologyIsoBiprod.hom` gives the categorical
+`biprod.inl` and `biprod.inr`.  Equivalently, those homology maps are the two
+injections followed by `sumHomologyIsoBiprod.inv`, and that inverse is exactly
+their `biprod.desc`.
