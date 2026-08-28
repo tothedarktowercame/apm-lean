@@ -67,8 +67,17 @@ same orientation as the ordinary successor squares. The final endpoint proof
 uses `eqToHom_double_conjugation_square`; it compares the actual equality
 premises rather than depending on definitional equality of their proofs.
 
-The next packet is purely the dependent finite-index assembly: split an
-arbitrary successor index into before/crossing/after cases, supply these three
-squares to `ComposableArrows.isoMk`, and normalize the endpoint components in
-`ComposableArrows.naturality'` to obtain equality of `evaluate`. No chain
-isomorphism or total-evaluation equality is claimed in this target yet.
+`subdivisionRefinementChainIso` now supplies the three successor squares to
+`ComposableArrows.isoMk`.  Its proof exhaustively splits an arbitrary `Fin`
+successor index into before, equality, and after cases; the equality case is
+rewritten explicitly, so distinct bound proofs are not treated as
+definitionally equal.
+
+The remaining evaluation step is a representation bridge. Mathlib's
+`ComposableArrows.naturality'` compares the chains' total `hom` fields, while
+`TwoOpenDescentDatum.evaluate` uses the repository's separate `composeFin`
+fold. There is currently no theorem identifying
+`(adjacentChain A f).hom` with `composeFin A f`. Proving that generic fold/map
+comparison, followed by normalization of the endpoint components, is the
+exact prerequisite for insertion invariance of `evaluate`. No evaluation
+equality is claimed here.

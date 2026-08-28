@@ -928,6 +928,29 @@ theorem subdivisionRefinement_naturality_crossing
   simp only [Category.assoc, eqToHom_trans_assoc, eqToHom_trans]
   apply eqToHom_double_conjugation_square
 
+/-- The composable-arrow chain of an old subdivision is canonically
+isomorphic to the refined chain restricted along the vertex-skipping order
+embedding. -/
+def subdivisionRefinementChainIso
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain D S ≅
+      FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain D ins :=
+  ComposableArrows.isoMk (subdivisionRefinementObjectIso D ins) (by
+    intro i hi
+    let j : Fin (S.n + 1) := ⟨i, hi⟩
+    change
+      (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.subdivisionChain D S).map
+            (homOfLE j.castSucc_le_succ) ≫
+          (subdivisionRefinementObjectIso D ins j.succ).hom =
+        (subdivisionRefinementObjectIso D ins j.castSucc).hom ≫
+          (FundamentalGroupoidTwoOpenInsertion.TwoOpenDescentDatum.refinedRestrictedChain
+            D ins).map (homOfLE j.castSucc_le_succ)
+    rcases lt_trichotomy j ins.segment with h | h | h
+    · exact subdivisionRefinement_naturality_before D ins j h
+    · rw [h]
+      exact subdivisionRefinement_naturality_crossing D ins
+    · exact subdivisionRefinement_naturality_after D ins j h)
+
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
 #print axioms succAbove_old_successor_before
@@ -963,6 +986,7 @@ theorem subdivisionRefinement_naturality_crossing
 #print axioms refinedRestrictedChain_map_crossing_old
 #print axioms eqToHom_double_conjugation_square
 #print axioms subdivisionRefinement_naturality_crossing
+#print axioms subdivisionRefinementChainIso
 #print axioms eqToHom_conjugation_square
 
 end TwoOpenDescentDatum
