@@ -87,7 +87,26 @@ theorem apm_a99J01_bridge_1
     (hf : Integrable f mu) {E : Set X} (hE : MeasurableSet E)
     (hneg : ∫⁻ x in E, apmLogAbsNegative f x ∂mu ≠ ⊤) :
     ∀ᵐ x ∂mu.restrict E, f x ≠ 0 := by
-  sorry
+  have hfmeas : AEMeasurable f (mu.restrict E) :=
+    hf.aestronglyMeasurable.aemeasurable.restrict
+  have hnmeas : AEMeasurable (apmLogAbsNegative f) (mu.restrict E) := by
+    let g := hfmeas.mk f
+    have hg : Measurable g := hfmeas.measurable_mk
+    have hgneg : Measurable (apmLogAbsNegative g) := by
+      unfold apmLogAbsNegative
+      apply Measurable.ite
+      · change MeasurableSet (g ⁻¹' ({0} : Set ℝ))
+        exact (measurableSet_singleton (0 : ℝ)).preimage hg
+      · fun_prop
+      · fun_prop
+    apply hgneg.aemeasurable.congr
+    filter_upwards [hfmeas.ae_eq_mk] with x hx
+    simp [apmLogAbsNegative, g, hx]
+  have hfinite : ∀ᵐ x ∂mu.restrict E, apmLogAbsNegative f x < ⊤ :=
+    ae_lt_top' hnmeas hneg
+  filter_upwards [hfinite] with x hx
+  intro hzero
+  simp [apmLogAbsNegative, hzero] at hx
 
 /-- Why this unblocks `apm_a99j01`: when both logarithmic parts are finite,
 the custom `EReal` subtraction is exactly the coercion of the ordinary
@@ -99,7 +118,87 @@ theorem apm_a99J01_bridge_2
     (hneg : ∫⁻ x in E, apmLogAbsNegative f x ∂mu ≠ ⊤) :
     apmLogIntegralOn f E mu =
       ((∫ x in E, Real.log |f x| ∂mu : ℝ) : EReal) := by
-  sorry
+  let l : X → ℝ := fun x ↦ Real.log |f x|
+  let nu := mu.restrict E
+  have hlmeas : AEMeasurable l nu := by
+    simpa [l, nu, Real.norm_eq_abs] using
+      hf.aestronglyMeasurable.aemeasurable.restrict.norm.log
+  have hpos : (∫⁻ x, ENNReal.ofReal (l x) ∂nu) ≠ ⊤ := by
+    simpa [l, nu, apmLogAbsPositive] using
+      apmLogAbsPositive_setLIntegral_ne_top hf E
+  have hnonzero : ∀ᵐ x ∂nu, f x ≠ 0 :=
+    apm_a99J01_bridge_1 hf hE hneg
+  have hneg_eq :
+      (∫⁻ x, ENNReal.ofReal (-l x) ∂nu) =
+        ∫⁻ x in E, apmLogAbsNegative f x ∂mu := by
+    apply lintegral_congr_ae
+    filter_upwards [hnonzero] with x hx
+    simp [l, apmLogAbsNegative, hx]
+  have hneg' : (∫⁻ x, ENNReal.ofReal (-l x) ∂nu) ≠ ⊤ := by
+    rw [hneg_eq]
+    exact hneg
+  have hfinite : HasFiniteIntegral l nu := by
+    rw [hasFiniteIntegral_iff_norm]
+    calc
+      (∫⁻ x, ENNReal.ofReal ‖l x‖ ∂nu) ≤
+          ∫⁻ x, ENNReal.ofReal (l x) + ENNReal.ofReal (-l x) ∂nu := by
+        apply lintegral_mono
+        intro x
+        rcases le_total 0 (l x) with hx | hx
+        · simp [Real.norm_eq_abs, abs_of_nonneg hx, hx]
+        · simp [Real.norm_eq_abs, abs_of_nonpos hx, hx]
+      _ = (∫⁻ x, ENNReal.ofReal (l x) ∂nu) +
+          ∫⁻ x, ENNReal.ofReal (-l x) ∂nu :=
+        lintegral_add_left' hlmeas.ennreal_ofReal _
+      _ < ⊤ := ENNReal.add_lt_top.mpr
+        ⟨lt_top_iff_ne_top.mpr hpos, lt_top_iff_ne_top.mpr hneg'⟩
+  have hl : Integrable l nu := ⟨hlmeas.aestronglyMeasurable, hfinite⟩
+  unfold apmLogIntegralOn
+  change ((∫⁻ x, ENNReal.ofReal (l x) ∂nu : ENNReal) : EReal) -
+      ((∫⁻ x in E, apmLogAbsNegative f x ∂mu : ENNReal) : EReal) = _
+  rw [← hneg_eq, integral_eq_lintegral_pos_part_sub_lintegral_neg_part hl,
+    EReal.coe_sub, EReal.coe_ennreal_toReal hpos,
+    EReal.coe_ennreal_toReal hneg']
+
+lemma apm_log_abs_integrableOn
+    {X : Type*} [MeasurableSpace X] {mu : Measure X} {f : X → ℝ}
+    (hf : Integrable f mu) {E : Set X} (hE : MeasurableSet E)
+    (hneg : ∫⁻ x in E, apmLogAbsNegative f x ∂mu ≠ ⊤) :
+    IntegrableOn (fun x ↦ Real.log |f x|) E mu := by
+  let l : X → ℝ := fun x ↦ Real.log |f x|
+  let nu := mu.restrict E
+  have hlmeas : AEMeasurable l nu := by
+    simpa [l, nu, Real.norm_eq_abs] using
+      hf.aestronglyMeasurable.aemeasurable.restrict.norm.log
+  have hpos : (∫⁻ x, ENNReal.ofReal (l x) ∂nu) ≠ ⊤ := by
+    simpa [l, nu, apmLogAbsPositive] using
+      apmLogAbsPositive_setLIntegral_ne_top hf E
+  have hnonzero : ∀ᵐ x ∂nu, f x ≠ 0 :=
+    apm_a99J01_bridge_1 hf hE hneg
+  have hneg_eq : (∫⁻ x, ENNReal.ofReal (-l x) ∂nu) =
+      ∫⁻ x in E, apmLogAbsNegative f x ∂mu := by
+    apply lintegral_congr_ae
+    filter_upwards [hnonzero] with x hx
+    simp [l, apmLogAbsNegative, hx]
+  have hneg' : (∫⁻ x, ENNReal.ofReal (-l x) ∂nu) ≠ ⊤ := by
+    rw [hneg_eq]
+    exact hneg
+  change Integrable l nu
+  refine ⟨hlmeas.aestronglyMeasurable, ?_⟩
+  rw [hasFiniteIntegral_iff_norm]
+  calc
+    (∫⁻ x, ENNReal.ofReal ‖l x‖ ∂nu) ≤
+        ∫⁻ x, ENNReal.ofReal (l x) + ENNReal.ofReal (-l x) ∂nu := by
+      apply lintegral_mono
+      intro x
+      rcases le_total 0 (l x) with hx | hx
+      · simp [Real.norm_eq_abs, abs_of_nonneg hx]
+      · simp [Real.norm_eq_abs, abs_of_nonpos hx]
+    _ = (∫⁻ x, ENNReal.ofReal (l x) ∂nu) +
+        ∫⁻ x, ENNReal.ofReal (-l x) ∂nu :=
+      lintegral_add_left' hlmeas.ennreal_ofReal _
+    _ < ⊤ := ENNReal.add_lt_top.mpr
+      ⟨lt_top_iff_ne_top.mpr hpos, lt_top_iff_ne_top.mpr hneg'⟩
 
 theorem apm_a99j01
     {X : Type*} [MeasurableSpace X]
@@ -109,26 +208,44 @@ theorem apm_a99j01
     ∀ E : Set X, MeasurableSet E → 0 < mu E → mu E < ⊤ →
       apmLogIntegralOn f E mu ≤
         ((-((mu E).toReal) * Real.log (mu E).toReal : ℝ) : EReal) := by
-  /-
-  Boundary (closer hop 3): this hop went beyond the normalization/Jensen route.
-  `apm_log_abs_le_tangent` proves the direct pointwise estimate
-
-    log |x| ≤ m |x| - log m - 1
-
-  for `m > 0` and `x ≠ 0`.  With `m = (mu E).toReal`, integrating this estimate
-  and using `∫ |f| = 1` gives the target arithmetic immediately, so no
-  normalized measure or closed-domain Jensen invocation is needed.
-
-  The remaining formal bridge is still the custom extended-real interface.
-  In the finite-negative-part branch one must show that finiteness of
-  `∫⁻ apmLogAbsNegative` makes `f ≠ 0` almost everywhere on `E`, identify
-  `apmLogIntegralOn` with the ordinary set integral of `log |f|`, and then
-  apply `setIntegral_mono_ae` to the tangent bound.  Source inspection found
-  `measure_eq_top_of_setLIntegral_ne_top` and
-  `integral_eq_lintegral_pos_part_sub_lintegral_neg_part`, but the former
-  requires packaging the custom `if f x = 0 then ⊤ else ...` function as
-  `AEMeasurable` from only the `AEStronglyMeasurable` representative supplied
-  by `hf`; no repository sibling packages this representative/zero-set step.
-  The infinite-negative-part branch remains fully closed by the helpers above.
-  -/
-  sorry
+  intro E hE hmu0 hmutop
+  by_cases hneg : ∫⁻ x in E, apmLogAbsNegative f x ∂mu = ⊤
+  · exact apmLogIntegralOn_le_of_negative_eq_top hneg _
+  · rw [apm_a99J01_bridge_2 hf hE hneg]
+    apply EReal.coe_le_coe_iff.mpr
+    let m := (mu E).toReal
+    let nu := mu.restrict E
+    have hm : 0 < m := ENNReal.toReal_pos hmu0.ne' hmutop.ne
+    have hlog : Integrable (fun x ↦ Real.log |f x|) nu :=
+      (apm_log_abs_integrableOn hf hE hneg).integrable
+    have habs : Integrable (fun x ↦ |f x|) nu := hf.abs.restrict
+    have hc : Integrable (fun _ : X ↦ Real.log m) nu := by
+      change IntegrableOn (fun _ : X ↦ Real.log m) E mu
+      exact integrableOn_const hmutop.ne
+    have hone : Integrable (fun _ : X ↦ (1 : ℝ)) nu := by
+      change IntegrableOn (fun _ : X ↦ (1 : ℝ)) E mu
+      exact integrableOn_const hmutop.ne
+    have hg : Integrable (fun x ↦ m * |f x| - Real.log m - 1) nu :=
+      ((habs.const_mul m).sub hc).sub hone
+    have hpoint : ∀ᵐ x ∂nu,
+        Real.log |f x| ≤ m * |f x| - Real.log m - 1 := by
+      filter_upwards [apm_a99J01_bridge_1 hf hE hneg] with x hx
+      exact apm_log_abs_le_tangent hm hx
+    have hmono := integral_mono_ae hlog hg hpoint
+    have hEabs : ∫ x in E, |f x| ∂mu ≤ 1 := by
+      rw [← hf_norm]
+      exact setIntegral_le_integral hf.abs (ae_of_all _ fun x ↦ abs_nonneg (f x))
+    change (∫ x, Real.log |f x| ∂nu) ≤ -m * Real.log m
+    calc
+      (∫ x, Real.log |f x| ∂nu) ≤
+          ∫ x, (m * |f x| - Real.log m - 1) ∂nu := hmono
+      _ = m * (∫ x in E, |f x| ∂mu) - m * Real.log m - m := by
+        have hs1 : (∫ x, m * |f x| - Real.log m - 1 ∂nu) =
+            (∫ x, m * |f x| - Real.log m ∂nu) - ∫ _ : X, 1 ∂nu :=
+          integral_sub ((habs.const_mul m).sub hc) hone
+        have hs2 : (∫ x, m * |f x| - Real.log m ∂nu) =
+            (∫ x, m * |f x| ∂nu) - ∫ _ : X, Real.log m ∂nu :=
+          integral_sub (habs.const_mul m) hc
+        rw [hs1, hs2, integral_const_mul]
+        simp [nu, Measure.restrict_apply_univ, m, Measure.real_def]
+      _ ≤ -m * Real.log m := by nlinarith [mul_le_mul_of_nonneg_left hEabs hm.le]
