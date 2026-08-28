@@ -1,33 +1,44 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "a99J01",
-  "bundle_root": "problems/a99J01",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-a99J01.md",
-    "problem_tex": "apm/a99J01.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "classification_detail" : "Hop 4 states the exact finite-negative-part EReal interfaces as apm_a99J01_bridge_1 and bridge_2: finite custom negative mass forces f != 0 almost everywhere on the restriction, and the custom EReal difference equals the coerced ordinary set integral of log |f|.",
+  "layout" : "single-bundle",
+  "problem_id" : "a99J01",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-a99J01.md",
+    "problem_tex" : "apm/a99J01.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+  "boundary" : "Closed by frame f52 (campaign jit-all-open-v2, 2026-08-28): \"prove a99J01 logarithmic integral bound\". Banked verbatim from the f52 Solver terminal head 3d6da7de5f84cf1420349331b2a32820b9936f0f on branch exp/countdown-f52-a99J01-solver; content identical to that head, no re-derivation. Frozen statement apm_a99j01 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/a99J01",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-28",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial-lean-proof",
+    "previous_sorry_count_total" : 3,
+    "axioms" : "apm_a99j01 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f52"
   },
-  "classification": "partial-lean-proof",
-  "classification_detail": "Hop 4 states the exact finite-negative-part EReal interfaces as apm_a99J01_bridge_1 and bridge_2: finite custom negative mass forces f != 0 almost everywhere on the restriction, and the custom EReal difference equals the coerced ordinary set integral of log |f|.",
-  "imported_at": "2026-07-13T17:26:53.040560Z"
+  "imported_at" : "2026-07-13T17:26:53.040560Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }
