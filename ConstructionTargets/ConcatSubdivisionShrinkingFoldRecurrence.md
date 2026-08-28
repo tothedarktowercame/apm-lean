@@ -316,12 +316,13 @@ right morphisms. `concat_left_initial_evaluate_coherence` and
 `concat_midpoint_evaluate_expand` align the direct initial and midpoint maps
 with the endpoint maps in the two source evaluations.
 
-The remaining seam precedes those substitutions. The stage-zero fold theorem
-is bracketed by `objectIsoOfIndexEq` transports whose endpoint objects are
-only propositionally equal to the literal concatenated-fold endpoints. They
-are not identity endomorphisms and cannot be erased by proof irrelevance. The
-next theorem must whisker `concatComposeFin_eq_midpoint_rightBlock` by the
-inverse stage-zero endpoint isomorphisms, retain those transports explicitly,
-and only then apply the compiled initial, six-map midpoint, and five-map
-terminal substitutions. No evaluation or quotient-composition theorem is
+`concatComposeFin_eq_midpoint_rightBlock_unbracketed` now performs the genuine
+stage-zero cancellation. Its left side is the literal concatenated
+`composeFin`; its right side retains the inverse initial and hom terminal
+whiskers required by the propositionally aligned endpoint objects.
+
+The remaining seam is final evaluation assembly: substitute the literal-left
+midpoint fold into this unbracketed formula, then apply the compiled initial,
+six-map midpoint, and five-map terminal substitutions with the outer
+evaluation endpoint maps. No evaluation or quotient-composition theorem is
 claimed in this packet.

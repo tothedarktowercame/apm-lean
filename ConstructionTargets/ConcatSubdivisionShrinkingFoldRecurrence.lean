@@ -2387,6 +2387,64 @@ theorem concat_left_initial_evaluate_coherence
       eqToHom (congrArg D.obj S.point_zero).symm := by
   exact eqToHom_two_step_to_direct _ _ _
 
+/-- Remove the stage-zero brackets from the production concatenated-fold
+comparison by composing with their genuine inverse isomorphisms.  The right
+side retains those whiskers, because its dependent source and target objects
+are not definitionally the literal endpoints. -/
+theorem concatComposeFin_eq_midpoint_rightBlock_unbracketed
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    TwoOpenDescentDatum.composeFin
+        (D.obj ∘ (concatSubdivision S T).point)
+        (D.mappedPiece (concatSubdivision S T)) =
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T 0)).inv ≫
+      (rightInitialAccum D S T (T.n + 1) ≫
+        shrinkingPrefixFold D S T (T.n + 1) ≫
+        ((rightSuffixSliceSourceIso D S T (T.n + 1) (le_refl _)).inv ≫
+          (objectIsoOfIndexEq (reverseRightObject D S T)
+            (rightSuffixSliceVertex_full T 0)).hom ≫
+          (reverseRightObjectIso D S T 0).hom ≫
+          (rightBlockObjectIso D S T 0).hom ≫
+          TwoOpenDescentDatum.composeFin (D.obj ∘ T.point) (D.mappedPiece T) ≫
+          (rightBlockObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+          (reverseRightObjectIso D S T (Fin.last (T.n + 1))).inv ≫
+          (objectIsoOfIndexEq (reverseRightObject D S T)
+            (rightSuffixSliceVertex_full T (Fin.last (T.n + 1)))).inv ≫
+          (rightSuffixSliceTargetIso D S T (T.n + 1) (le_refl _)).hom)) ≫
+      (objectIsoOfIndexEq
+        (D.obj ∘ (concatSubdivision S T).point)
+        (shrinkingVertexEmbedding_zero_eq_id S T
+          (Fin.last (concatSegmentCount S T)))).hom := by
+  let e₀ := objectIsoOfIndexEq
+    (D.obj ∘ (concatSubdivision S T).point)
+    (shrinkingVertexEmbedding_zero_eq_id S T 0)
+  let e₁ := objectIsoOfIndexEq
+    (D.obj ∘ (concatSubdivision S T).point)
+    (shrinkingVertexEmbedding_zero_eq_id S T
+      (Fin.last (concatSegmentCount S T)))
+  calc
+    TwoOpenDescentDatum.composeFin
+        (D.obj ∘ (concatSubdivision S T).point)
+        (D.mappedPiece (concatSubdivision S T)) =
+      e₀.inv ≫ (e₀.hom ≫
+        TwoOpenDescentDatum.composeFin
+          (D.obj ∘ (concatSubdivision S T).point)
+          (D.mappedPiece (concatSubdivision S T)) ≫ e₁.inv) ≫ e₁.hom := by
+        rw [Category.assoc e₀.hom]
+        rw [e₀.inv_hom_id_assoc]
+        calc
+          _ = _ ≫ 𝟙 _ := (Category.comp_id _).symm
+          _ = _ ≫ (e₁.inv ≫ e₁.hom) := by rw [e₁.inv_hom_id]
+          _ = (_ ≫ e₁.inv) ≫ e₁.hom :=
+            (Category.assoc _ _ _).symm
+    _ = _ := by
+      rw [concatComposeFin_eq_midpoint_rightBlock D S T]
+      dsimp [e₀, e₁]
+      rfl
+
 /-- The direct shared-midpoint transport is the two evaluation endpoint
 transports of `S` and `T`. -/
 theorem concat_midpoint_evaluate_expand
@@ -2528,5 +2586,6 @@ theorem concat_midpoint_evaluate_expand
 #print axioms five_morphism_reassociation
 #print axioms shrinkingPrefixFold_midpoint_eq_leftFold
 #print axioms rightInitialAccum_midpoint_left_source
+#print axioms concatComposeFin_eq_midpoint_rightBlock_unbracketed
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
