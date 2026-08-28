@@ -64,25 +64,30 @@ and invokes `bandFlatten_glue_compatible`.  Thus equal fibers of each named
 piece quotient map remain equal throughout its source homotopy. All three
 subtype-valued quotient lifts are now explicit, with proved pullback
 equations and continuity obtained from `continuous_lift_prod_right` (time is
-the locally compact first factor). The remaining obligations are the
-quotient-level endpoint and fixation equations needed to package the three
-homotopy equivalences; their source-level counterparts are complete. For
-example the left
-deformation must define a function of exact type
+the locally compact first factor). The source identity formulas descend to
+`leftPieceHomotopyMap_zero`, `rightPieceHomotopyMap_zero`, and
+`intersectionPieceHomotopyMap_zero`. Continuous retained-subspace maps are
+provided by `leftSphereInclusion`, `rightSphereInclusion`, and
+`equatorIntersectionInclusion`.
+
+For the left piece, `leftSourceRetraction` maps the retained branch
+identically and maps a right-band point through `bandProjectionToEquator`,
+`h.symm`, and `equatorInclusion`. `leftSourceRetraction_eq_of_eqv` proves its
+compatibility with the generated gluing relation, so `leftPieceRetraction`
+descends continuously through the restricted quotient.
+`leftPieceRetraction_comp_inclusion` proves the strict retraction equation.
+
+The first remaining literal endpoint goal is
 
 ```lean
-unitInterval × leftOpen n h → leftOpen n h
+leftPieceHomotopyMap n h (1, x) =
+  leftSphereInclusion n h (leftPieceRetraction n h x)
 ```
 
-whose pullback along
-`namedLeftPieceQuotientMap n h × id` is the piecewise source deformation
-(identity on the left sphere and `bandFlatten` on the right band).  A quotient
-representative carries only membership of its quotient class in `leftOpen`;
-the source-side `bandFlatten` requires the transported proof that a right
-representative lies in `equatorialBand`.  Thus the missing construction is a
-dependent `Quotient.lift`/`Quotient.inductionOn` with motive carrying this
-open-subtype membership, together with its generated-relation coherence.
-The already proved `bandFlatten_glue_compatible` is precisely the nontrivial
-generator case, so no additional geometric or arbitrary-`h` compatibility
-hypothesis is being hidden here.  No homology or Mayer--Vietoris statement is
-present.
+after choosing a source representative. The retained branch is fixed
+definitionally. The band branch must turn
+`EquatorGlueRel.glue (h.symm (bandProjectionToEquator n y))` into equality in
+the restricted quotient subtype after applying
+`leftPieceSourceHomotopy_inr_one`. The right and intersection retractions and
+the three `ContinuousMap.HomotopyEquiv` packages remain downstream; none is
+asserted here. No homology or Mayer--Vietoris statement is present.

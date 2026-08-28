@@ -44,6 +44,10 @@ theorem equatorInclusion_mem_band (n : ℕ) (x : sphereEquator n) :
     equatorInclusion n x ∈ equatorialBand n := by
   simp [equatorInclusion, equatorialBand, sphereHeight, x.property.2]
 
+theorem continuous_equatorInclusion (n : ℕ) :
+    Continuous (equatorInclusion n) :=
+  continuous_subtype_val.subtype_mk _
+
 /-! ## Normalized contraction of the equatorial band -/
 
 /-- Before renormalization, multiply the height by `1-s` while leaving all
@@ -1181,6 +1185,187 @@ theorem continuous_intersectionPieceHomotopyMap (n : ℕ)
   funext p
   exact intersectionPieceHomotopyMap_pullback n h p
 
+/-! ## Quotient endpoints and retained-subspace maps -/
+
+/-- The descended left-piece homotopy starts at the identity. -/
+@[simp] theorem leftPieceHomotopyMap_zero (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (x : leftOpen n h) :
+    leftPieceHomotopyMap n h ((0 : unitInterval), x) = x := by
+  obtain ⟨y, rfl⟩ :=
+    (namedLeftPieceQuotientMap_isQuotientMap n h).surjective x
+  calc
+    _ = namedLeftPieceQuotientMap n h
+        (leftPieceSourceHomotopy n ((0 : unitInterval), y)) :=
+      leftPieceHomotopyMap_pullback n h ((0 : unitInterval), y)
+    _ = _ := congrArg (namedLeftPieceQuotientMap n h)
+      (leftPieceSourceHomotopy_zero n y)
+
+/-- The descended right-piece homotopy starts at the identity. -/
+@[simp] theorem rightPieceHomotopyMap_zero (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (x : rightOpen n h) :
+    rightPieceHomotopyMap n h ((0 : unitInterval), x) = x := by
+  obtain ⟨y, rfl⟩ :=
+    (namedRightPieceQuotientMap_isQuotientMap n h).surjective x
+  calc
+    _ = namedRightPieceQuotientMap n h
+        (rightPieceSourceHomotopy n ((0 : unitInterval), y)) :=
+      rightPieceHomotopyMap_pullback n h ((0 : unitInterval), y)
+    _ = _ := congrArg (namedRightPieceQuotientMap n h)
+      (rightPieceSourceHomotopy_zero n y)
+
+/-- The descended intersection homotopy starts at the identity. -/
+@[simp] theorem intersectionPieceHomotopyMap_zero (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    (x : ↥(leftOpen n h ∩ rightOpen n h)) :
+    intersectionPieceHomotopyMap n h ((0 : unitInterval), x) = x := by
+  obtain ⟨y, rfl⟩ :=
+    (namedIntersectionPieceQuotientMap_isQuotientMap n h).surjective x
+  calc
+    _ = namedIntersectionPieceQuotientMap n h
+        (intersectionPieceSourceHomotopy n ((0 : unitInterval), y)) :=
+      intersectionPieceHomotopyMap_pullback n h ((0 : unitInterval), y)
+    _ = _ := congrArg (namedIntersectionPieceQuotientMap n h)
+      (intersectionPieceSourceHomotopy_zero n y)
+
+/-- Inclusion of the retained whole left sphere into the left quotient
+piece. -/
+def leftSphereInclusion (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    C(AmbientSphere n, leftOpen n h) :=
+  ⟨fun x => namedLeftPieceQuotientMap n h ⟨Sum.inl x, trivial⟩,
+    (namedLeftPieceQuotientMap_isQuotientMap n h).continuous.comp
+      ((continuous_inl.comp continuous_id).subtype_mk (fun _ => trivial))⟩
+
+/-- Inclusion of the retained whole right sphere into the right quotient
+piece. -/
+def rightSphereInclusion (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    C(AmbientSphere n, rightOpen n h) :=
+  ⟨fun x => namedRightPieceQuotientMap n h ⟨Sum.inr x, trivial⟩,
+    (namedRightPieceQuotientMap_isQuotientMap n h).continuous.comp
+      ((continuous_inr.comp continuous_id).subtype_mk (fun _ => trivial))⟩
+
+/-- Inclusion of the left equator representative into the quotient overlap. -/
+def equatorIntersectionInclusion (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    C(sphereEquator n, ↥(leftOpen n h ∩ rightOpen n h)) :=
+  ⟨fun x => namedIntersectionPieceQuotientMap n h
+      ⟨Sum.inl (equatorInclusion n x), equatorInclusion_mem_band n x⟩,
+    (namedIntersectionPieceQuotientMap_isQuotientMap n h).continuous.comp
+      ((continuous_inl.comp (continuous_equatorInclusion n)).subtype_mk _)⟩
+
+/-- Retraction of the split left-piece source to its retained left sphere. -/
+def leftSplitRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    AmbientSphere n ⊕ equatorialBand n → AmbientSphere n :=
+  Sum.elim id
+    (equatorInclusion n ∘ h.symm ∘ bandProjectionToEquator n)
+
+theorem continuous_leftSplitRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (leftSplitRetraction n h) := by
+  apply Continuous.sumElim
+  · exact continuous_id
+  · exact (continuous_equatorInclusion n).comp <|
+      h.symm.continuous.comp (continuous_bandProjectionToEquator n)
+
+/-- Retraction on the named left source, before descent through the quotient. -/
+def leftSourceRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    leftPreimage n → AmbientSphere n :=
+  leftSplitRetraction n h ∘ leftPreimageSumHomeomorph n
+
+theorem continuous_leftSourceRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (leftSourceRetraction n h) :=
+  (continuous_leftSplitRetraction n h).comp
+    (leftPreimageSumHomeomorph n).continuous
+
+@[simp] theorem leftSourceRetraction_inl (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (x : AmbientSphere n)
+    (hx : Sum.inl x ∈ leftPreimage n) :
+    leftSourceRetraction n h ⟨Sum.inl x, hx⟩ = x := rfl
+
+@[simp] theorem leftSourceRetraction_inr (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (x : equatorialBand n)
+    (hx : Sum.inr x.1 ∈ leftPreimage n) :
+    leftSourceRetraction n h ⟨Sum.inr x.1, hx⟩ =
+      equatorInclusion n (h.symm (bandProjectionToEquator n x)) := rfl
+
+theorem leftSourceRetraction_eq_of_eqv (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    {a b : Sum (AmbientSphere n) (AmbientSphere n)}
+    (ha : a ∈ leftPreimage n) (hb : b ∈ leftPreimage n)
+    (hab : Relation.EqvGen (EquatorGlueRel n h) a b) :
+    leftSourceRetraction n h ⟨a, ha⟩ =
+      leftSourceRetraction n h ⟨b, hb⟩ := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue x =>
+          rw [leftSourceRetraction_inl]
+          let xb : equatorialBand n :=
+            ⟨equatorInclusion n (h x), equatorInclusion_mem_band n (h x)⟩
+          have hproj : bandProjectionToEquator n xb = h x := by
+            apply Subtype.ext
+            simpa only [bandProjectionToEquator, xb, bandFlatten,
+              equatorInclusion] using congrArg Subtype.val
+                (bandFlatten_fixes_equator n (1 : unitInterval) (h x))
+          have hr := leftSourceRetraction_inr n h xb hb
+          rw [hr, hproj, Homeomorph.symm_apply_apply]
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hmid : b ∈ leftPreimage n :=
+        (leftPreimage_respects n h hab).mp ha
+      exact (ih₁ ha hmid).trans (ih₂ hmid hb)
+
+/-- The left source retraction is constant on fibers of the restricted
+quotient map. -/
+theorem leftSourceRetraction_fiber_coherent (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) {a b : leftPreimage n}
+    (hab : namedLeftPieceQuotientMap n h a =
+      namedLeftPieceQuotientMap n h b) :
+    leftSourceRetraction n h a = leftSourceRetraction n h b := by
+  have hab' := congrArg Subtype.val hab
+  change Quotient.mk _ a.1 = Quotient.mk _ b.1 at hab'
+  apply leftSourceRetraction_eq_of_eqv n h a.2 b.2
+  exact Quotient.exact hab'
+
+/-- Retraction of the left quotient piece onto its retained sphere. -/
+noncomputable def leftPieceRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    leftOpen n h → AmbientSphere n := fun x =>
+  leftSourceRetraction n h <|
+    Function.surjInv
+      (namedLeftPieceQuotientMap_isQuotientMap n h).surjective x
+
+theorem leftPieceRetraction_pullback (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) (x : leftPreimage n) :
+    leftPieceRetraction n h (namedLeftPieceQuotientMap n h x) =
+      leftSourceRetraction n h x := by
+  apply leftSourceRetraction_fiber_coherent n h
+  exact Function.surjInv_eq
+    (namedLeftPieceQuotientMap_isQuotientMap n h).surjective
+    (namedLeftPieceQuotientMap n h x)
+
+theorem continuous_leftPieceRetraction (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (leftPieceRetraction n h) := by
+  rw [(namedLeftPieceQuotientMap_isQuotientMap n h).continuous_iff]
+  convert continuous_leftSourceRetraction n h using 1
+  funext x
+  exact leftPieceRetraction_pullback n h x
+
+theorem leftPieceRetraction_comp_inclusion (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    (⟨leftPieceRetraction n h, continuous_leftPieceRetraction n h⟩ :
+      C(leftOpen n h, AmbientSphere n)).comp (leftSphereInclusion n h) =
+        ContinuousMap.id (AmbientSphere n) := by
+  apply ContinuousMap.ext
+  intro x
+  exact leftPieceRetraction_pullback n h ⟨Sum.inl x, trivial⟩
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -1243,5 +1428,16 @@ theorem continuous_intersectionPieceHomotopyMap (n : ℕ)
 #print axioms continuous_rightPieceHomotopyMap
 #print axioms intersectionPieceHomotopyMap_pullback
 #print axioms continuous_intersectionPieceHomotopyMap
+#print axioms leftPieceHomotopyMap_zero
+#print axioms rightPieceHomotopyMap_zero
+#print axioms intersectionPieceHomotopyMap_zero
+#print axioms leftSphereInclusion
+#print axioms rightSphereInclusion
+#print axioms equatorIntersectionInclusion
+#print axioms continuous_leftSourceRetraction
+#print axioms leftSourceRetraction_eq_of_eqv
+#print axioms leftSourceRetraction_fiber_coherent
+#print axioms continuous_leftPieceRetraction
+#print axioms leftPieceRetraction_comp_inclusion
 
 end ConstructionTargets.SphereEquatorGluingOpenCover
