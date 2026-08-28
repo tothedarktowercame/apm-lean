@@ -920,6 +920,44 @@ theorem shrinkingPrefixFold_succ_right
   rw [shrinkingPrefixArrow_terminal_eq_rightMappedPiece D S T r hr]
   congr 1
 
+/-- The finite family of precisely those recurrence steps which remove the
+right block. Its index order is the removal order: step `r` removes the
+literal right segment with coordinate `T.n - r`. -/
+def shrinkingPrefixFold_rightBlockIteration
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V)
+    (r : Fin (T.n + 1)) :=
+  shrinkingPrefixFold_succ_right D S T r
+    (Nat.le_of_lt_succ r.isLt)
+
+theorem rightBlockIteration_segment_coordinate
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V)
+    (r : Fin (T.n + 1)) :
+    shrinkingSegmentEmbedding S T r
+        (terminalSegmentIndex (Nat.sub_pos_of_lt (by
+          simp [concatSegmentCount]
+          omega))) =
+      rightSegment S T ⟨T.n - r, by omega⟩ :=
+  shrinkingTerminalSegment_eq_rightSegment S T r
+    (Nat.le_of_lt_succ r.isLt)
+
+/-- The last legal member is exactly the step from stage `T.n` to the
+midpoint stage `T.n + 1`. -/
+theorem shrinkingPrefixFold_rightBlockIteration_last
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    shrinkingPrefixFold_rightBlockIteration D S T (Fin.last T.n) =
+      shrinkingPrefixFold_succ_right D S T T.n (le_refl T.n) := by
+  rfl
+
+theorem rightBlockIteration_stops_at_midpoint
+    (T : PathTwoOpenSubdivision q U V) :
+    ((Fin.last T.n : Fin (T.n + 1)).val + 1) = T.n + 1 := by
+  simp
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -953,5 +991,9 @@ theorem shrinkingPrefixFold_succ_right
 #print axioms shrinkingPrefixFold_succ
 #print axioms shrinkingPrefixArrow_terminal_eq_rightMappedPiece
 #print axioms shrinkingPrefixFold_succ_right
+#print axioms shrinkingPrefixFold_rightBlockIteration
+#print axioms rightBlockIteration_segment_coordinate
+#print axioms shrinkingPrefixFold_rightBlockIteration_last
+#print axioms rightBlockIteration_stops_at_midpoint
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence

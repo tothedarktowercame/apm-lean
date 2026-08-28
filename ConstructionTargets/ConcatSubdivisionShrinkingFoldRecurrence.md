@@ -110,8 +110,20 @@ concatenated `mappedPiece` at `rightSegment S T ⟨T.n - r, _⟩`, surrounded by
 the shrinking-prefix endpoint transports and the transports induced by the
 segment-coordinate equality. `shrinkingPrefixFold_succ_right` substitutes
 only that theorem into the generic recurrence. No statement peels an arrow
-after the right block reaches the shared midpoint, and no finite iteration is
-claimed here.
+after the right block reaches the shared midpoint.
+
+`shrinkingPrefixFold_rightBlockIteration` packages all and only the legal
+right-block steps as a `Fin (T.n + 1)`-indexed proof family. Member `r`
+instantiates the recurrence whose actual mapped piece is
+`rightSegment S T ⟨T.n - r, _⟩`, so increasing indices record the removal
+order. `rightBlockIteration_segment_coordinate` exposes that coordinate
+independently. `shrinkingPrefixFold_rightBlockIteration_last` identifies the
+last member as the step from stage `T.n` to stage `T.n + 1`, and
+`rightBlockIteration_stops_at_midpoint` records that stopping index. There is
+no recurrence member at the midpoint or beyond it. The finite proof family is
+intended for the next heterogeneous fold that combines
+`rightBlockComposeFin_eq` with the stage-zero comparison; it does not assume
+that composite.
 
 `eqToHom_three_step_whisker_arrow` supplies the generic terminal-side
 normalization without moving the dependent arrow.
