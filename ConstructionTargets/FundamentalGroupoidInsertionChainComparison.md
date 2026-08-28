@@ -49,13 +49,22 @@ The crossing coordinate layer is also explicit: `crossingLeftIndex` and
 `crossingRightIndex` name the new segments; four vertex-coordinate theorems
 identify their endpoints with the old endpoints and inserted parameter; and
 `crossingLeft_side`/`crossingRight_side` identify both duplicated labels.
-The exact remaining step is two applications of
-`mapPath_subpath_parameter_eq`, one for each refined `mappedPiece`. Directly
-rewriting the vertex and label equations under `mapPath` fails because its
-membership proof depends simultaneously on the Boolean label and the
-endpoint-indexed path. Those two explicit conjugation formulas will let the
-localized split theorem and `eqToHom_conjugation_square` close the crossing
-square.
+The two proof-dependent path transports are now compiled as
+`mappedPiece_crossingLeft_eq_transport` and
+`mappedPiece_crossingRight_eq_transport`.  Each first changes the duplicated
+side label with `mapPath_label_eq`, then invokes
+`mapPath_subpath_parameter_eq`; the endpoint `eqToHom`s remain explicit, and
+the dependent membership proofs are aligned only after the path and label
+have been aligned.
+
+The remaining crossing step is categorical normalization of their composite:
+reassociate the four displayed endpoint transports, cancel the two middle
+`eqToHom`s at `p ins.parameter`, apply
+`mapPath_subpath_split_of_subpath_mem` with `S.piece_mem ins.segment`, and then
+feed the resulting conjugated old piece through
+`fullRefined_map_crossing_eq_mappedPieces` and
+`eqToHom_conjugation_square`.  No crossing naturality or chain isomorphism is
+claimed here.
 Only after its square is
 proved can `ComposableArrows.isoMk` and existing
 `ComposableArrows.naturality'` be applied. No natural isomorphism or

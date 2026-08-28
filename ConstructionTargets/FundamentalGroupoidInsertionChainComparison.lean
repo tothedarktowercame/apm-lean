@@ -15,6 +15,8 @@ namespace ConstructionTargets.FundamentalGroupoidInsertionChainComparison
 open ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision
 open ConstructionTargets.FundamentalGroupoidTwoOpenDescent
 open ConstructionTargets.FundamentalGroupoidTwoOpenInsertion
+open ConstructionTargets.FundamentalGroupoidTwoOpenRefinement
+open ConstructionTargets.FundamentalGroupoidTwoOpenRefinement.TwoOpenDescentDatum
 open ConstructionTargets.FunctorMapPreorderTransport
 open ConstructionTargets.PathMapPathTransport
 
@@ -685,6 +687,77 @@ theorem crossingRight_side
     rfl]
   exact PathTwoOpenSubdivision.insertedSide_at _ _
 
+theorem mappedPiece_crossingLeft_eq_transport
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    D.mappedPiece ins.refined (crossingLeftIndex ins) =
+      eqToHom (congrArg D.obj (congrArg p (crossingLeft_vertex_castSucc ins))) ≫
+        D.mapPath (S.side ins.segment)
+          (p.subpath (S.vertex ins.segment.castSucc) ins.parameter)
+          (subpath_mem_of_mem_ordered_segment p
+            (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ)
+            (S.vertex ins.segment.castSucc) ins.parameter
+            (S.monotone_vertex ins.segment.castSucc_le_succ) le_rfl ins.upper
+            ins.lower (S.piece_mem ins.segment)) ≫
+        eqToHom (congrArg D.obj (congrArg p
+          (crossingLeft_vertex_succ ins))).symm := by
+  unfold FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.mappedPiece
+  let hp := subpath_mem_of_mem_ordered_segment p
+    (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ)
+    (S.vertex ins.segment.castSucc) ins.parameter
+    (S.monotone_vertex ins.segment.castSucc_le_succ) le_rfl ins.upper
+    ins.lower (S.piece_mem ins.segment)
+  have hs := crossingLeft_side ins
+  have hmem : ∀ t, p.subpath
+      (ins.refined.vertex (crossingLeftIndex ins).castSucc)
+      (ins.refined.vertex (crossingLeftIndex ins).succ) t ∈
+        twoChart U V (S.side ins.segment) := by
+    intro t
+    rw [crossingLeft_vertex_castSucc, crossingLeft_vertex_succ]
+    exact hp t
+  change D.mapPath (ins.refined.side (crossingLeftIndex ins))
+    (p.subpath (ins.refined.vertex (crossingLeftIndex ins).castSucc)
+      (ins.refined.vertex (crossingLeftIndex ins).succ)) _ = _
+  rw [mapPath_label_eq D _ hs _ hmem]
+  simpa only [PathTwoOpenSubdivision.piece] using
+    PathMapPathTransport.TwoOpenDescentDatum.mapPath_subpath_parameter_eq D p
+      (crossingLeft_vertex_castSucc ins) (crossingLeft_vertex_succ ins)
+      hp hmem
+
+theorem mappedPiece_crossingRight_eq_transport
+    (ins : PathTwoOpenSubdivision.SingleVertexInsertion S) :
+    D.mappedPiece ins.refined (crossingRightIndex ins) =
+      eqToHom (congrArg D.obj (congrArg p (crossingRight_vertex_castSucc ins))) ≫
+        D.mapPath (S.side ins.segment)
+          (p.subpath ins.parameter (S.vertex ins.segment.succ))
+          (subpath_mem_of_mem_ordered_segment p
+            (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ)
+            ins.parameter (S.vertex ins.segment.succ)
+            (S.monotone_vertex ins.segment.castSucc_le_succ) ins.lower le_rfl
+            ins.upper (S.piece_mem ins.segment)) ≫
+        eqToHom (congrArg D.obj (congrArg p
+          (crossingRight_vertex_succ ins))).symm := by
+  unfold FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.mappedPiece
+  let hp := subpath_mem_of_mem_ordered_segment p
+    (S.vertex ins.segment.castSucc) (S.vertex ins.segment.succ)
+    ins.parameter (S.vertex ins.segment.succ)
+    (S.monotone_vertex ins.segment.castSucc_le_succ) ins.lower le_rfl
+    ins.upper (S.piece_mem ins.segment)
+  have hs := crossingRight_side ins
+  have hmem : ∀ t, p.subpath
+      (ins.refined.vertex (crossingRightIndex ins).castSucc)
+      (ins.refined.vertex (crossingRightIndex ins).succ) t ∈
+        twoChart U V (S.side ins.segment) := by
+    intro t
+    rw [crossingRight_vertex_castSucc, crossingRight_vertex_succ]
+    exact hp t
+  change D.mapPath (ins.refined.side (crossingRightIndex ins))
+    (p.subpath (ins.refined.vertex (crossingRightIndex ins).castSucc)
+      (ins.refined.vertex (crossingRightIndex ins).succ)) _ = _
+  rw [mapPath_label_eq D _ hs _ hmem]
+  simpa only [PathTwoOpenSubdivision.piece] using
+    PathMapPathTransport.TwoOpenDescentDatum.mapPath_subpath_parameter_eq D p
+      (crossingRight_vertex_castSucc ins) (crossingRight_vertex_succ ins)
+      hp hmem
 
 #print axioms subdivisionChain_obj_eq_refinedRestrictedChain_obj
 #print axioms subdivisionRefinementObjectIso
@@ -712,6 +785,8 @@ theorem crossingRight_side
 #print axioms crossingRight_vertex_succ
 #print axioms crossingLeft_side
 #print axioms crossingRight_side
+#print axioms mappedPiece_crossingLeft_eq_transport
+#print axioms mappedPiece_crossingRight_eq_transport
 #print axioms eqToHom_conjugation_square
 
 end TwoOpenDescentDatum
