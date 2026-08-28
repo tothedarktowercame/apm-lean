@@ -227,3 +227,22 @@ peels the final forward arrow. Induction therefore needs the slice of
 with its transported endpoints. The current `composeFin` API has no such
 offset/slice family. No equality with `rightSuffixAccum`, and consequently no
 combined concatenated-fold formula, is assumed here.
+
+`rightSuffixSlice_source_stage` and `rightSuffixSlice_target_stage` now prove
+the induction invariant's two endpoint coordinates for every slice length
+`k`. `rightSuffixSliceSourceIso` and `rightSuffixSliceTargetIso` retain those
+coordinates as explicit object transports. The base bridge
+`rightSuffixSliceFold_zero_eq_accum` compiles with both endpoint isomorphisms;
+it does not obtain the equality by treating the two proof witnesses as
+definitionally equal.
+
+The successor case remains stopped at the front-recursion theorem requested
+by this packet. Mathlib's `composeFin_succ` peels the final arrow, and the
+banked `composeFin_front_tail_reindex` compares only the two representations
+of an already isolated tail; it does not state that the original fold equals
+its first arrow followed by that tail. A proof-carrying front split must first
+be added, with the `succ.castSucc`/`castSucc.succ` endpoint isomorphisms from
+`rightSuffixSliceVertex_succ_tail`. Only then can
+`rightSuffixSliceSegment_succ_zero` identify the prepended removal and the
+induction hypothesis match `rightSuffixAccum_succ`. No successor bridge or
+combined fold formula is assumed.

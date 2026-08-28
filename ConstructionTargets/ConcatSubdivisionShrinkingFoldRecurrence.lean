@@ -1481,6 +1481,55 @@ def rightSuffixSliceFold
     rightSuffixSliceFold D S T 0 hk = 𝟙 _ := by
   exact TwoOpenDescentDatum.composeFin_zero _ _
 
+theorem rightSuffixSlice_source_stage
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
+    reverseRightStage T (rightSuffixSliceVertex T k hk 0) = k := by
+  simp [reverseRightStage, rightSuffixSliceVertex]
+  omega
+
+theorem rightSuffixSlice_target_stage
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
+    reverseRightStage T
+        (rightSuffixSliceVertex T k hk (Fin.last k)) = 0 := by
+  rw [rightSuffixSliceVertex_last]
+  exact reverseRightStage_last T
+
+/-- Source coordinate for comparing the `k`-slice fold with the recursive
+accumulator at stage `k`. -/
+def rightSuffixSliceSourceIso
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
+    rightSuffixSliceObject D S T k hk 0 ≅
+      shrinkingPrefixTerminalObject (C := C) D S T k :=
+  eqToIso (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+    (rightSuffixSlice_source_stage T k hk))
+
+/-- Target coordinate for comparing every `k`-slice with accumulator stage
+zero. -/
+def rightSuffixSliceTargetIso
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
+    rightSuffixSliceObject D S T k hk (Fin.last k) ≅
+      shrinkingPrefixTerminalObject (C := C) D S T 0 :=
+  eqToIso (congrArg (shrinkingPrefixTerminalObject (C := C) D S T)
+    (rightSuffixSlice_target_stage T k hk))
+
+/-- The accumulator/slice comparison at length zero, with both endpoint
+coordinates retained. -/
+theorem rightSuffixSliceFold_zero_eq_accum
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (hk : 0 ≤ T.n + 1) :
+    rightSuffixSliceFold D S T 0 hk =
+      (rightSuffixSliceSourceIso D S T 0 hk).hom ≫
+        rightSuffixAccum D S T 0 hk ≫
+        (rightSuffixSliceTargetIso D S T 0 hk).inv := by
+  simp only [rightSuffixSliceFold_zero, rightSuffixAccum_zero,
+    Category.comp_id, Category.id_comp]
+  simp [rightSuffixSliceSourceIso, rightSuffixSliceTargetIso]
+
 /-- Heterogeneous iteration of the right-block recurrence.  The suffix is
 ordered as the removals `T.n, ..., 0` when read from the midpoint back to the
 original terminal object. -/
@@ -1612,6 +1661,11 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightSuffixSliceArrow
 #print axioms rightSuffixSliceFold
 #print axioms rightSuffixSliceFold_zero
+#print axioms rightSuffixSlice_source_stage
+#print axioms rightSuffixSlice_target_stage
+#print axioms rightSuffixSliceSourceIso
+#print axioms rightSuffixSliceTargetIso
+#print axioms rightSuffixSliceFold_zero_eq_accum
 #print axioms shrinkingPrefixFold_rightBlockAccum
 #print axioms shrinkingPrefixFold_zero_eq_midpoint
 #print axioms concatComposeFin_eq_midpoint_rightAccum
