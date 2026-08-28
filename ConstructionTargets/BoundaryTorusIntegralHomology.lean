@@ -163,9 +163,88 @@ noncomputable def piecesIntegerIso (k : ℕ)
   biprod.mapIso (leftHomologyIsoCircle k ≪≫ e)
     (rightHomologyIsoCircle k ≪≫ e)
 
+theorem productionIntersection_left_map_eq (k : ℕ) :
+    productionIntersectionArrow leftOpen rightOpen k ≫ biprod.fst =
+      (F k).map (TopCat.ofHom overlapToLeft) := by
+  simp only [productionIntersectionArrow, biprod.lift_fst]
+  rfl
+
+theorem productionIntersection_right_map_eq (k : ℕ) :
+    productionIntersectionArrow leftOpen rightOpen k ≫ biprod.snd =
+      -(F k).map (TopCat.ofHom overlapToRight) := by
+  simp only [productionIntersectionArrow, biprod.lift_snd]
+  rfl
+
+/-- In integral circle coordinates, the actual production intersection map is
+the signed fold.  The statement is uniform in the degree and in the chosen
+integer coordinate on circle homology; the applications below use it in
+degrees zero and one. -/
+theorem productionIntersectionArrow_integer_conjugacy (k : ℕ)
+    (e : H k Circle ≅ AddCommGrpCat.of ℤ) :
+    (overlapIntegerIso k e).inv ≫
+        productionIntersectionArrow leftOpen rightOpen k ≫
+        (piecesIntegerIso k e).hom =
+      intSignedFold := by
+  apply biprod.hom_ext
+  · rw [intSignedFold_fst]
+    calc
+      _ = (overlapIntegerIso k e).inv ≫
+          (productionIntersectionArrow leftOpen rightOpen k ≫ biprod.fst) ≫
+          (leftHomologyIsoCircle k ≪≫ e).hom := by
+        rw [piecesIntegerIso, biprod.mapIso_hom]
+        simpa only [Category.assoc] using congrArg
+          (fun q ↦ ((overlapIntegerIso k e).inv ≫
+            productionIntersectionArrow leftOpen rightOpen k) ≫ q)
+          (biprod.map_fst (leftHomologyIsoCircle k ≪≫ e).hom
+            (rightHomologyIsoCircle k ≪≫ e).hom)
+      _ = _ := by
+        simpa only [Category.assoc] using congrArg
+          (fun q ↦ (overlapIntegerIso k e).inv ≫ q ≫
+            (leftHomologyIsoCircle k ≪≫ e).hom)
+          (productionIntersection_left_map_eq k)
+          |>.trans (overlapInteger_left_component k e)
+  · rw [intSignedFold_snd]
+    calc
+      _ = (overlapIntegerIso k e).inv ≫
+          (productionIntersectionArrow leftOpen rightOpen k ≫ biprod.snd) ≫
+          (rightHomologyIsoCircle k ≪≫ e).hom := by
+        rw [piecesIntegerIso, biprod.mapIso_hom]
+        simpa only [Category.assoc] using congrArg
+          (fun q ↦ ((overlapIntegerIso k e).inv ≫
+            productionIntersectionArrow leftOpen rightOpen k) ≫ q)
+          (biprod.map_snd (leftHomologyIsoCircle k ≪≫ e).hom
+            (rightHomologyIsoCircle k ≪≫ e).hom)
+      _ = _ := by
+        calc
+          _ = (overlapIntegerIso k e).inv ≫
+              (-(F k).map (TopCat.ofHom overlapToRight)) ≫
+              (rightHomologyIsoCircle k ≪≫ e).hom := by
+            simpa only [Category.assoc] using congrArg
+              (fun q ↦ (overlapIntegerIso k e).inv ≫ q ≫
+                (rightHomologyIsoCircle k ≪≫ e).hom)
+              (productionIntersection_right_map_eq k)
+          _ = _ := by
+            simp only [Preadditive.comp_neg, Preadditive.neg_comp]
+            exact congrArg Neg.neg (overlapInteger_right_component k e)
+
+theorem productionIntersectionArrow_H0_conjugacy :
+    (overlapIntegerIso 0 circleH0GroupIsoInt).inv ≫
+        productionIntersectionArrow leftOpen rightOpen 0 ≫
+        (piecesIntegerIso 0 circleH0GroupIsoInt).hom =
+      intSignedFold :=
+  productionIntersectionArrow_integer_conjugacy 0 circleH0GroupIsoInt
+
+theorem productionIntersectionArrow_H1_conjugacy :
+    (overlapIntegerIso 1 circleH1GroupIsoInt).inv ≫
+        productionIntersectionArrow leftOpen rightOpen 1 ≫
+        (piecesIntegerIso 1 circleH1GroupIsoInt).hom =
+      intSignedFold :=
+  productionIntersectionArrow_integer_conjugacy 1 circleH1GroupIsoInt
+
 #print axioms left_threeFactor_eq_codiagonal
 #print axioms right_threeFactor_eq_codiagonal
 #print axioms overlapInteger_left_component
 #print axioms overlapInteger_right_component
+#print axioms productionIntersectionArrow_integer_conjugacy
 
 end ConstructionTargets.BoundaryTorusIntegralHomology
