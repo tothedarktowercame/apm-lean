@@ -24,16 +24,28 @@ negates the corresponding component).
 
 The continuous-map squares are transported through singular homology by
 `intersection_left_homology_square` and
-`intersection_right_homology_square`.  The first remaining interface is the
-normalization equating each projection of `productionIntersectionArrow`
-(defined through `HomologicalComplex.homologyMap` of the production singular
-chain map) with the corresponding `singularHomologyFunctor.map` of the
-subtype inclusion.  These maps are mathematically the same, but are not
-definitionally equal and no public comparison theorem currently rewrites
-between the two representations.  After that comparison, the banked
-preadditive sign lemmas and `actual_signed_H1_pair_formula` supply the final
-biproduct calculation.
+`intersection_right_homology_square`.  The banked singular-homology
+representation comparisons now identify each projection of
+`productionIntersectionArrow` with the corresponding public
+`singularHomologyFunctor.map`; the declarations
+`productionIntersectionArrow_fst_functor` and
+`productionIntersectionArrow_snd_functor` expose those identities directly.
+Their postcomposed versions feed the two staged coordinate formulas
+`productionH1CoordinateArrow_fst` and
+`productionH1CoordinateArrow_snd`.
+
+`productionH1ArrowComparison` proves the conditional statement.  Its proof
+uses all three normalization hypotheses through
+`actual_signed_H1_pair_formula`: `hinc₁` and `hinc₂` identify the two
+boundary inclusions with second-coordinate projection, while `h10` fixes the
+first column of the gluing map.  The right projection uses the fully
+left-associated negation lemma to transport the Mayer--Vietoris sign; the two
+projections are then reassembled through the canonical biproduct-to-product
+isomorphism.
 
 Accordingly this target does not claim H1, H2, H3, or higher-degree homology
-of the glued space.  It assumes neither the missing comparison nor any part of
-the desired homology table.
+of the glued space.  The next residual is categorical rather than
+representational: transport monicity and the explicit cokernel of
+`twiceSpiralSignedArrow` through this comparison and the adjacent production
+Mayer--Vietoris exact segments to derive the H2 and H1 conclusions.  No such
+exactness consequence or desired homology-table entry is assumed here.

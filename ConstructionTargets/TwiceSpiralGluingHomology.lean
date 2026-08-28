@@ -27,9 +27,12 @@ open ConstructionTargets.SolidTorusHomotopyAndHomology
 open ConstructionTargets.T00A01MayerVietorisAdapters
 open ConstructionTargets.IntegralSingularHomologyComparison
 open ConstructionTargets.HomotopyEquivHomologySquare
+open ConstructionTargets.SingularSubdivision
+open ConstructionTargets.HomologyBiprodNormalization
 
 private abbrev H (k : ℕ) (X : Type) [TopologicalSpace X] :=
-  SingularHomology k (TopCat.of X)
+  (ConstructionTargets.SingularSubdivision.SingularChains
+    (TopCat.of X)).homology k
 
 def solidTorusH0GroupIsoInt : H 0 SolidTorus ≅ AddCommGrpCat.of ℤ :=
   singularHomologyIsoOfHomotopyEquiv solidTorusHomotopyEquivCircle 0 ≪≫
@@ -196,11 +199,191 @@ theorem intersection_right_homology_square
       continuous_boundaryInclusion.comp h.continuous⟩
     (intersection_right_coordinate_strict h) 1
 
+theorem productionIntersectionArrow_fst_functor
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    productionIntersectionArrow (leftOpen h) (rightOpen h) 1 ≫ biprod.fst =
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (intersectionToLeftOpen h)) := by
+  simp only [productionIntersectionArrow, biprod.lift_fst]
+  exact (singularHomologyFunctor_map_eq_singularPostcomposition
+    (intersectionToLeftOpen h) 1).symm
+
+theorem productionIntersectionArrow_snd_functor
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    productionIntersectionArrow (leftOpen h) (rightOpen h) 1 ≫ biprod.snd =
+      -((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (intersectionToRightOpen h)) := by
+  simp only [productionIntersectionArrow, biprod.lift_snd]
+  rw [singularHomologyFunctor_map_eq_singularPostcomposition]
+  exact congrArg Neg.neg
+    (ssetHomologyMap_eq_singularPostcomposition (intersectionToRightOpen h) 1)
+
+theorem productionIntersectionArrow_map_fst_functor
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) {A B : AddCommGrpCat}
+    (u : (ConstructionTargets.SingularSubdivision.SingularChains (TopCat.of (leftOpen h))).homology 1 ⟶ A)
+    (v : (ConstructionTargets.SingularSubdivision.SingularChains (TopCat.of (rightOpen h))).homology 1 ⟶ B) :
+    productionIntersectionArrow (leftOpen h) (rightOpen h) 1 ≫
+        (biprod.map u v ≫ biprod.fst) =
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (intersectionToLeftOpen h)) ≫ u := by
+  rw [biprod.map_fst]
+  simpa only [Category.assoc] using congrArg (fun k ↦ k ≫ u)
+    (productionIntersectionArrow_fst_functor h)
+
+theorem productionIntersectionArrow_map_snd_functor
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) {A B : AddCommGrpCat}
+    (u : (ConstructionTargets.SingularSubdivision.SingularChains (TopCat.of (leftOpen h))).homology 1 ⟶ A)
+    (v : (ConstructionTargets.SingularSubdivision.SingularChains (TopCat.of (rightOpen h))).homology 1 ⟶ B) :
+    productionIntersectionArrow (leftOpen h) (rightOpen h) 1 ≫
+        (biprod.map u v ≫ biprod.snd) =
+      (-((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (intersectionToRightOpen h))) ≫ v := by
+  rw [biprod.map_snd]
+  simpa only [Category.assoc] using
+    congrArg (fun k ↦ k ≫ v) (productionIntersectionArrow_snd_functor h)
+
+theorem productionH1CoordinateArrow_fst
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (z₀ : BoundaryTorus)
+    (e₁ : FundamentalGroup BoundaryTorus z₀ ≃* Multiplicative (ℤ × ℤ))
+    (c₁ : FundamentalGroup SolidTorus (boundaryInclusion z₀) ≃* Multiplicative ℤ)
+    (c₂ : FundamentalGroup SolidTorus (boundaryInclusion (h z₀)) ≃* Multiplicative ℤ) :
+    productionH1CoordinateArrow h z₀ e₁ c₁ c₂ ≫ biprod.fst =
+      (addCommGrpIsoOfMultiplicativeEquiv (boundaryH1CoordinateFromPi e₁)).inv ≫
+        HomologicalComplex.homologyMap (singularPostcomposition
+          ⟨boundaryInclusion, continuous_boundaryInclusion⟩) 1 ≫
+        (addCommGrpIsoOfMultiplicativeEquiv (solidH1CoordinateFromPi c₁)).hom := by
+  simp only [productionH1CoordinateArrow, intersectionH1Coordinate,
+    piecesH1Coordinate, Iso.trans_inv, Iso.trans_hom, biprod.mapIso_hom,
+    ← Category.assoc]
+  slice_lhs 3 5 => rw [productionIntersectionArrow_map_fst_functor]
+  have hs := congrArg (fun k ↦
+      (addCommGrpIsoOfMultiplicativeEquiv
+          (boundaryH1CoordinateFromPi e₁)).inv ≫ k ≫
+        (addCommGrpIsoOfMultiplicativeEquiv
+          (solidH1CoordinateFromPi c₁)).hom)
+    (intersection_left_homology_square h)
+  rw [singularHomologyFunctor_map_eq_singularPostcomposition] at hs
+  simpa only [Category.assoc] using hs
+
+theorem productionH1CoordinateArrow_snd
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (z₀ : BoundaryTorus)
+    (e₁ : FundamentalGroup BoundaryTorus z₀ ≃* Multiplicative (ℤ × ℤ))
+    (c₁ : FundamentalGroup SolidTorus (boundaryInclusion z₀) ≃* Multiplicative ℤ)
+    (c₂ : FundamentalGroup SolidTorus (boundaryInclusion (h z₀)) ≃* Multiplicative ℤ) :
+    productionH1CoordinateArrow h z₀ e₁ c₁ c₂ ≫ biprod.snd =
+      -((addCommGrpIsoOfMultiplicativeEquiv (boundaryH1CoordinateFromPi e₁)).inv ≫
+        HomologicalComplex.homologyMap (singularPostcomposition ⟨h, h.continuous⟩) 1 ≫
+        HomologicalComplex.homologyMap (singularPostcomposition
+          ⟨boundaryInclusion, continuous_boundaryInclusion⟩) 1 ≫
+        (addCommGrpIsoOfMultiplicativeEquiv (solidH1CoordinateFromPi c₂)).hom) := by
+  simp only [productionH1CoordinateArrow, intersectionH1Coordinate,
+    piecesH1Coordinate, Iso.trans_inv, Iso.trans_hom, biprod.mapIso_hom,
+    ← Category.assoc]
+  slice_lhs 3 5 => rw [productionIntersectionArrow_map_snd_functor]
+  have hs := congrArg (fun k ↦
+      (addCommGrpIsoOfMultiplicativeEquiv
+          (boundaryH1CoordinateFromPi e₁)).inv ≫ k ≫
+        (addCommGrpIsoOfMultiplicativeEquiv
+          (solidH1CoordinateFromPi c₂)).hom)
+    (intersection_right_homology_square h)
+  rw [singularHomologyFunctor_map_eq_singularPostcomposition
+    (intersectionToRightOpen h) 1] at hs
+  rw [singularHomologyFunctor_map_eq_singularPostcomposition
+    ⟨boundaryInclusion ∘ h,
+      continuous_boundaryInclusion.comp h.continuous⟩ 1] at hs
+  have hcomp : (⟨boundaryInclusion ∘ h,
+      continuous_boundaryInclusion.comp h.continuous⟩ : C(BoundaryTorus, SolidTorus)) =
+      (⟨boundaryInclusion, continuous_boundaryInclusion⟩ :
+        C(BoundaryTorus, SolidTorus)).comp ⟨h, h.continuous⟩ := rfl
+  rw [hcomp] at hs
+  rw [← singularPostcomposition_comp] at hs
+  rw [HomologicalComplex.homologyMap_comp] at hs
+  have hsign := fullyLeftAssociated_comp_neg_comp_comp
+    (addCommGrpIsoOfMultiplicativeEquiv
+      (boundaryH1CoordinateFromPi e₁)).inv
+    (singularHomologyIsoOfHomotopyEquiv
+      (intersectionPieceHomotopyEquiv h) 1).inv
+    (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (intersectionToRightOpen h)))
+    (singularHomologyIsoOfHomotopyEquiv
+      (rightPieceHomotopyEquiv h) 1).hom
+    (addCommGrpIsoOfMultiplicativeEquiv
+      (solidH1CoordinateFromPi c₂)).hom
+  simpa only [Category.assoc] using hsign.trans
+    (congrArg Neg.neg (by simpa only [Category.assoc] using hs))
+
+/-- The production Mayer--Vietoris intersection arrow has the twice-spiral
+coordinate formula once the supplied fundamental-group coordinates satisfy
+the two inclusion normalizations and the specified first column for `h`. -/
+theorem productionH1ArrowComparison
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (z₀ : BoundaryTorus)
+    (e₁ : FundamentalGroup BoundaryTorus z₀ ≃*
+      Multiplicative (ℤ × ℤ))
+    (e₂ : FundamentalGroup BoundaryTorus (h z₀) ≃*
+      Multiplicative (ℤ × ℤ))
+    (c₁ : FundamentalGroup SolidTorus (boundaryInclusion z₀) ≃*
+      Multiplicative ℤ)
+    (c₂ : FundamentalGroup SolidTorus (boundaryInclusion (h z₀)) ≃*
+      Multiplicative ℤ)
+    (hinc₁ : ∀ p, c₁ (FundamentalGroup.map
+      ⟨boundaryInclusion, continuous_boundaryInclusion⟩ z₀ p) =
+        secondCoordinateHom (e₁ p))
+    (hinc₂ : ∀ p, c₂ (FundamentalGroup.map
+      ⟨boundaryInclusion, continuous_boundaryInclusion⟩ (h z₀) p) =
+        secondCoordinateHom (e₂ p))
+    (h10 : boundaryCoordinateMap h z₀ e₁ e₂
+      (Multiplicative.ofAdd (1, 0)) = Multiplicative.ofAdd (1, 2)) :
+    productionH1ArrowComparisonStatement h z₀ e₁ e₂ c₁ c₂
+      hinc₁ hinc₂ h10 := by
+  apply AddCommGrpCat.hom_ext
+  apply DFunLike.ext _ _
+  rintro ⟨a, b⟩
+  change _ = twiceSpiralSignedH1Arrow
+    (twiceSpiralSecondCoefficient h z₀ e₁ e₂) (a, b)
+  have hactual := actual_signed_H1_pair_formula h z₀ e₁ e₂ c₁ c₂
+    hinc₁ hinc₂ h10 a b
+  apply Prod.ext
+  · calc
+      _ = (productionH1CoordinateArrow h z₀ e₁ c₁ c₂ ≫ biprod.fst)
+          (a, b) := by
+        symm
+        have hf := AddCommGrpCat.biprodIsoProd_inv_comp_fst_apply
+            (AddCommGrpCat.of ℤ) (AddCommGrpCat.of ℤ)
+            (((AddCommGrpCat.biprodIsoProd (AddCommGrpCat.of ℤ)
+              (AddCommGrpCat.of ℤ)).hom)
+              (productionH1CoordinateArrow h z₀ e₁ c₁ c₂ (a, b)))
+        rw [Iso.hom_inv_id_apply] at hf
+        exact hf
+      _ = _ := by
+        rw [productionH1CoordinateArrow_fst h z₀ e₁ c₁ c₂]
+        rfl
+      _ = _ := congrArg Prod.fst hactual
+  · calc
+      _ = (productionH1CoordinateArrow h z₀ e₁ c₁ c₂ ≫ biprod.snd)
+          (a, b) := by
+        symm
+        have hs := AddCommGrpCat.biprodIsoProd_inv_comp_snd_apply
+            (AddCommGrpCat.of ℤ) (AddCommGrpCat.of ℤ)
+            (((AddCommGrpCat.biprodIsoProd (AddCommGrpCat.of ℤ)
+              (AddCommGrpCat.of ℤ)).hom)
+              (productionH1CoordinateArrow h z₀ e₁ c₁ c₂ (a, b)))
+        rw [Iso.hom_inv_id_apply] at hs
+        exact hs
+      _ = _ := by
+        rw [productionH1CoordinateArrow_snd h z₀ e₁ c₁ c₂]
+        rfl
+      _ = _ := congrArg Prod.snd hactual
+
 #print axioms additiveEquivOfMultiplicativeEquiv
 #print axioms gluingH0GroupIsoInt
 #print axioms gluingH0ModuleIsoInt
 #print axioms productionH1CoordinateArrow_eq_conjugated
 #print axioms intersection_left_homology_square
 #print axioms intersection_right_homology_square
+#print axioms productionIntersectionArrow_fst_functor
+#print axioms productionIntersectionArrow_snd_functor
+#print axioms productionH1CoordinateArrow_fst
+#print axioms productionH1CoordinateArrow_snd
+#print axioms productionH1ArrowComparison
 
 end ConstructionTargets.TwiceSpiralGluingHomology
