@@ -4,6 +4,8 @@ import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.T01J03FrozenQuotientRepresentation
 import ConstructionTargets.BoundaryTorusH0Cokernel
+import ConstructionTargets.CircleUniversalCover
+import ConstructionTargets.FundamentalGroupProduct
 
 /-!
 # APM t01J03: A twice-wound gluing of solid tori
@@ -298,7 +300,17 @@ theorem apm_t01J03_bridge_1 :
       ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
     Nonempty (apm_t01J03_H 2 apm_t01J03_Torus ≅ ModuleCat.of ℤ ℤ) ∧
     ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t01J03_H k apm_t01J03_Torus) := by
-  sorry
+  let e : FundamentalGroup apm_t01J03_Torus (1, 1) ≃*
+      Multiplicative (ℤ × ℤ) :=
+    (ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv
+        (1 : Circle) (1 : Circle)).trans
+      (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.prodCongr
+        ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt) |>.trans
+      (MulEquiv.prodMultiplicative ℤ ℤ).symm
+  obtain ⟨h0, h1, h2, hhigh⟩ := apm_t01J03_torus_module_homology
+  exact ⟨⟨e⟩, h0, h1, h2, hhigh⟩
+
+#print axioms apm_t01J03_bridge_1
 
 /-- Why this unblocks the final conjunct of `apm_t01j03`: this is the missing
 Seifert--van Kampen and singular Mayer--Vietoris computation for the concrete
