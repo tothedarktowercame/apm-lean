@@ -1498,6 +1498,24 @@ theorem rightSuffixSliceFold_succ_front
             rightSuffixSliceArrow D S T (k + 1) hk i.succ) := by
   exact ConstructionTargets.ComposeFinAppend.composeFin_front_split _ _
 
+/-- Two independently generated two-step endpoint transports around the same
+dependent arrow agree. -/
+theorem eqToHom_two_two_conjugation
+    {A₀ A₁ A₂ A₃ B₀ B₁ B₂ B₃ : C}
+    (h₁ : A₀ = A₁) (h₂ : A₁ = A₂)
+    (l₁ : A₀ = A₃) (l₂ : A₃ = A₂) (f : A₂ ⟶ B₀)
+    (k₁ : B₀ = B₁) (k₂ : B₁ = B₂)
+    (r₁ : B₀ = B₃) (r₂ : B₃ = B₂) :
+    eqToHom h₁ ≫ eqToHom h₂ ≫ f ≫ eqToHom k₁ ≫ eqToHom k₂ =
+      eqToHom l₁ ≫ eqToHom l₂ ≫ f ≫ eqToHom r₁ ≫ eqToHom r₂ := by
+  subst A₁
+  subst A₂
+  subst A₃
+  subst B₁
+  subst B₂
+  subst B₃
+  simp
+
 theorem rightSuffixSlice_source_stage
     (T : PathTwoOpenSubdivision q U V) (k : ℕ) (hk : k ≤ T.n + 1) :
     reverseRightStage T (rightSuffixSliceVertex T k hk 0) = k := by
@@ -1679,6 +1697,7 @@ theorem concatComposeFin_eq_midpoint_rightAccum
 #print axioms rightSuffixSliceFold
 #print axioms rightSuffixSliceFold_zero
 #print axioms rightSuffixSliceFold_succ_front
+#print axioms eqToHom_two_two_conjugation
 #print axioms rightSuffixSlice_source_stage
 #print axioms rightSuffixSlice_target_stage
 #print axioms rightSuffixSliceSourceIso
