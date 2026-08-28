@@ -92,6 +92,18 @@ the restricted quotient subtype after applying
 deformation, and `leftPieceHomotopyEquiv` proves that `leftOpen n h` is
 homotopy equivalent to `AmbientSphere n`.
 
-The analogous right and intersection retractions, endpoint comparisons, and
-homotopy-equivalence packages remain downstream. No homology or
-Mayer--Vietoris statement is present.
+The right piece is now complete by the symmetric construction with the
+nontrivial orientation made explicit: `rightSourceRetraction` sends a left
+band point through `bandProjectionToEquator`, then `h`, and fixes the retained
+right sphere. `rightSourceRetraction_eq_of_eqv` proves compatibility with the
+same generated gluing relation. The descended `rightPieceRetraction`, strict
+retraction equation, time-one comparison, `rightPieceHomotopy`, and
+`rightPieceHomotopyEquiv` prove
+
+```lean
+rightOpen n h ≃ₕ AmbientSphere n
+```
+
+without importing a symmetry or assuming the endpoint equality. The
+intersection retraction, endpoint comparison, and homotopy-equivalence package
+remain downstream. No homology or Mayer--Vietoris statement is present.
