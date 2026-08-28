@@ -1,33 +1,44 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "a98A03",
-  "bundle_root": "problems/a98A03",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-a98A03.md",
-    "problem_tex": "apm/a98A03.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "classification_detail" : "Closer hop 3 proved apm_a98a03_exists_fine_uniform_partition, including endpoints, strict monotonicity, and the mesh bound. FTC now only needs dependent MVT-tag choice and rewriting. The first conjunct still independently requires a continuous singular function such as the Cantor staircase.",
+  "layout" : "single-bundle",
+  "problem_id" : "a98A03",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-a98A03.md",
+    "problem_tex" : "apm/a98A03.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+  "boundary" : "Closed by frame f48 (campaign jit-all-open-v2, 2026-08-28): \"a98A03 complete Cantor counterexample\". Banked verbatim from the f48 Solver terminal head d347177c0c525fdedcd6d9e04b24947f2432683d on branch exp/countdown-f48-a98A03-solver; content identical to that head, no re-derivation. Frozen statement apm_a98a03 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/a98A03",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-28",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial-lean-proof",
+    "previous_sorry_count_total" : 1,
+    "axioms" : "apm_a98a03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f48"
   },
-  "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 3 proved apm_a98a03_exists_fine_uniform_partition, including endpoints, strict monotonicity, and the mesh bound. FTC now only needs dependent MVT-tag choice and rewriting. The first conjunct still independently requires a continuous singular function such as the Cantor staircase.",
-  "imported_at": "2026-07-13T17:26:52.958660Z"
+  "imported_at" : "2026-07-13T17:26:52.958660Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }
