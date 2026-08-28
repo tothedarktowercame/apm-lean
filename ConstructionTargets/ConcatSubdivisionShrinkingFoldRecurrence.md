@@ -295,8 +295,16 @@ literal `S` mapped-piece fold with all four zero/final transports retained;
 `five_morphism_reassociation` supplies only the required categorical
 parenthesization.
 
-The next seam is normalization of `rightInitialAccum (T.n+1)` against the
-source transports of this theorem, followed by cancellation of the midpoint
-and terminal transport chain in `concatComposeFin_eq_midpoint_rightBlock`
-against the outer maps in `evaluate`. No evaluation-composition theorem is
-claimed yet.
+`rightInitialAccum_eq_eqToHom` collapses the recursively accumulated
+zero-vertex transports to one direct transport.
+`rightInitialAccum_midpoint_left_source` composes that transport with the
+midpoint cardinality and point-coordinate maps, yielding exactly the direct
+map from the concatenated initial point to `S`'s initial point.
+
+The remaining seam is terminal-side. After substituting the midpoint theorem
+into `concatComposeFin_eq_midpoint_rightBlock` and unfolding the named
+right-block isomorphisms, the whiskered concatenated evaluation retains two
+composable `eqToHom` terms after its segment fold, whereas `evaluate` contains
+the single direct endpoint transport. A typed terminal coherence theorem for
+that pair (and the corresponding midpoint `S`-to-`T` pair) is still required;
+no evaluation-composition theorem is claimed yet.

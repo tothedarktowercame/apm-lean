@@ -1084,6 +1084,20 @@ theorem rightInitialAccum_succ
       rightInitialAccum D S T k ≫
         (shrinkingPrefixInitialIso D S T k).hom := rfl
 
+/-- The recursively accumulated initial transports are the single direct
+transport between the zero vertices of the two shrinking stages. -/
+theorem rightInitialAccum_eq_eqToHom
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (k : ℕ) :
+    rightInitialAccum D S T k =
+      eqToHom (by simp [shrinkingPrefixObject]) := by
+  induction k with
+  | zero => simp [rightInitialAccum]
+  | succ k ih =>
+      rw [rightInitialAccum_succ, ih]
+      simp [shrinkingPrefixInitialIso]
+
 @[simp] theorem rightSuffixAccum_zero
     (D : @TwoOpenDescentDatum X _ U V C _)
     (S : PathTwoOpenSubdivision p U V)
@@ -2239,6 +2253,24 @@ theorem shrinkingPrefixFold_midpoint_eq_leftFold
       dsimp [e₀, e₁]
       exact five_morphism_reassociation _ _ _ _ _
 
+/-- The accumulated zero-vertex transport, the midpoint cardinality
+transport, and the left point-coordinate transport compose to the direct
+transport from the concatenated chain's initial object to `S`'s initial
+object. -/
+theorem rightInitialAccum_midpoint_left_source
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    rightInitialAccum D S T (T.n + 1) ≫
+        (objectIsoOfIndexEq (shrinkingPrefixObject D S T (T.n + 1))
+          (midpointLeftVertexIndex_zero S T)).inv ≫
+        (objectIsoOfIndexEq D.obj (midpointLeftPoint_eq S T 0)).hom =
+      eqToHom (congrArg D.obj
+        ((concatSubdivision S T).point_zero.trans S.point_zero.symm)) := by
+  rw [rightInitialAccum_eq_eqToHom]
+  simp only [objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv]
+  apply eqToHom_three_step_coherence
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -2280,6 +2312,7 @@ theorem shrinkingPrefixFold_midpoint_eq_leftFold
 #print axioms rightBlockIteration_stops_at_midpoint
 #print axioms rightRemovalStep
 #print axioms rightInitialAccum
+#print axioms rightInitialAccum_eq_eqToHom
 #print axioms rightSuffixAccum
 #print axioms reverseRemovalStage_segment_coordinate
 #print axioms reverseRemovalStage_terminalArrow_eq_rightMappedPiece
@@ -2356,5 +2389,6 @@ theorem shrinkingPrefixFold_midpoint_eq_leftFold
 #print axioms midpointLeftDisplayedFold_eq_literal
 #print axioms five_morphism_reassociation
 #print axioms shrinkingPrefixFold_midpoint_eq_leftFold
+#print axioms rightInitialAccum_midpoint_left_source
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence
