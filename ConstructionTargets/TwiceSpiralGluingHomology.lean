@@ -132,7 +132,15 @@ def productionH1ArrowComparisonStatement
     (c₁ : FundamentalGroup SolidTorus (boundaryInclusion z₀) ≃*
       Multiplicative ℤ)
     (c₂ : FundamentalGroup SolidTorus (boundaryInclusion (h z₀)) ≃*
-      Multiplicative ℤ) : Prop :=
+      Multiplicative ℤ)
+    (_hinc₁ : ∀ p, c₁ (FundamentalGroup.map
+      ⟨boundaryInclusion, continuous_boundaryInclusion⟩ z₀ p) =
+        secondCoordinateHom (e₁ p))
+    (_hinc₂ : ∀ p, c₂ (FundamentalGroup.map
+      ⟨boundaryInclusion, continuous_boundaryInclusion⟩ (h z₀) p) =
+        secondCoordinateHom (e₂ p))
+    (_h10 : boundaryCoordinateMap h z₀ e₁ e₂
+      (Multiplicative.ofAdd (1, 0)) = Multiplicative.ofAdd (1, 2)) : Prop :=
   (productionH1CoordinateArrow h z₀ e₁ c₁ c₂ ≫
       (AddCommGrpCat.biprodIsoProd (AddCommGrpCat.of ℤ)
         (AddCommGrpCat.of ℤ)).hom) =

@@ -15,16 +15,24 @@ coordinates determined by the supplied π1 coordinates.  It also defines
 `productionH1CoordinateArrow`, the actual production intersection arrow
 conjugated by those isomorphisms.
 
-The first remaining theorem is the literal equality expressed by
-`productionH1ArrowComparisonStatement`: this conjugated arrow must equal
-`twiceSpiralSignedArrow d`, where `d` is the second coordinate of
-`h_*(0,1)`.
+`productionH1ArrowComparisonStatement` now records the literal equality only
+with the three coordinate-normalization premises it needs: the two boundary
+inclusions must be second-coordinate maps in the supplied bases, and
+`h_*(1,0)=(1,2)`.  Arbitrary choices of the four coordinate equivalences do
+not satisfy that statement (for example, negating a solid-torus coordinate
+negates the corresponding component).
 
-The continuous-map squares are now transported through singular homology by
+The continuous-map squares are transported through singular homology by
 `intersection_left_homology_square` and
-`intersection_right_homology_square`.  The remaining step is the categorical
-biproduct association that assembles those two component formulas, including
-the Mayer--Vietoris minus sign, into the literal production arrow comparison.
+`intersection_right_homology_square`.  The first remaining interface is the
+normalization equating each projection of `productionIntersectionArrow`
+(defined through `HomologicalComplex.homologyMap` of the production singular
+chain map) with the corresponding `singularHomologyFunctor.map` of the
+subtype inclusion.  These maps are mathematically the same, but are not
+definitionally equal and no public comparison theorem currently rewrites
+between the two representations.  After that comparison, the banked
+preadditive sign lemmas and `actual_signed_H1_pair_formula` supply the final
+biproduct calculation.
 
 Accordingly this target does not claim H1, H2, H3, or higher-degree homology
 of the glued space.  It assumes neither the missing comparison nor any part of
