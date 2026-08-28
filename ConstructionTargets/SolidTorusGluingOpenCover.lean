@@ -833,6 +833,461 @@ theorem continuous_intersectionPieceHomotopyMap
     _ = _ := congrArg (namedIntersectionPieceQuotientMap h)
       (intersectionPieceSourceHomotopy_zero y)
 
+/-! ## Quotient-piece retractions and homotopy equivalences -/
+
+def leftSolidTorusInclusion (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    C(SolidTorus, leftOpen h) :=
+  ⟨fun x ↦ namedLeftPieceQuotientMap h ⟨Sum.inl x, trivial⟩,
+    (namedLeftPieceQuotientMap_isQuotientMap h).continuous.comp
+      ((continuous_inl.comp continuous_id).subtype_mk (fun _ ↦ trivial))⟩
+
+def rightSolidTorusInclusion (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    C(SolidTorus, rightOpen h) :=
+  ⟨fun x ↦ namedRightPieceQuotientMap h ⟨Sum.inr x, trivial⟩,
+    (namedRightPieceQuotientMap_isQuotientMap h).continuous.comp
+      ((continuous_inr.comp continuous_id).subtype_mk (fun _ ↦ trivial))⟩
+
+def boundaryIntersectionInclusion (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    C(BoundaryTorus, ↥(leftOpen h ∩ rightOpen h)) :=
+  ⟨fun z ↦ namedIntersectionPieceQuotientMap h
+      ⟨Sum.inl (boundaryInclusion z), boundaryInclusion_mem_annularBand z⟩,
+    (namedIntersectionPieceQuotientMap_isQuotientMap h).continuous.comp
+      ((continuous_inl.comp continuous_boundaryInclusion).subtype_mk _)⟩
+
+def leftSplitRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    SolidTorus ⊕ annularBand → SolidTorus :=
+  Sum.elim id (boundaryInclusion ∘ h.symm ∘ annularProjection)
+
+theorem continuous_leftSplitRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (leftSplitRetraction h) := by
+  apply Continuous.sumElim
+  · exact continuous_id
+  · exact continuous_boundaryInclusion.comp <|
+      h.symm.continuous.comp continuous_annularProjection
+
+def leftSourceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    leftPreimage → SolidTorus :=
+  leftSplitRetraction h ∘ leftPreimageSumHomeomorph
+
+theorem continuous_leftSourceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (leftSourceRetraction h) :=
+  (continuous_leftSplitRetraction h).comp leftPreimageSumHomeomorph.continuous
+
+@[simp] theorem leftSourceRetraction_inl (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : SolidTorus) (hx : Sum.inl x ∈ leftPreimage) :
+    leftSourceRetraction h ⟨Sum.inl x, hx⟩ = x := rfl
+
+@[simp] theorem leftSourceRetraction_inr (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : annularBand) (hx : Sum.inr x.1 ∈ leftPreimage) :
+    leftSourceRetraction h ⟨Sum.inr x.1, hx⟩ =
+      boundaryInclusion (h.symm (annularProjection x)) := rfl
+
+theorem leftSourceRetraction_eq_of_eqv (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    {a b : Sum SolidTorus SolidTorus} (ha : a ∈ leftPreimage)
+    (hb : b ∈ leftPreimage) (hab : Relation.EqvGen (BoundaryGlueRel h) a b) :
+    leftSourceRetraction h ⟨a, ha⟩ = leftSourceRetraction h ⟨b, hb⟩ := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue z =>
+          rw [leftSourceRetraction_inl]
+          let xb : annularBand :=
+            ⟨boundaryInclusion (h z), boundaryInclusion_mem_annularBand (h z)⟩
+          have hp : annularProjection xb = h z := annularProjection_boundary (h z)
+          have hr := leftSourceRetraction_inr h xb hb
+          rw [hr, hp, Homeomorph.symm_apply_apply]
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hm := (leftPreimage_respects h hab).mp ha
+      exact (ih₁ ha hm).trans (ih₂ hm hb)
+
+theorem leftSourceRetraction_fiber_coherent (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    {a b : leftPreimage} (hab : namedLeftPieceQuotientMap h a =
+      namedLeftPieceQuotientMap h b) :
+    leftSourceRetraction h a = leftSourceRetraction h b := by
+  apply leftSourceRetraction_eq_of_eqv h a.2 b.2
+  exact Quotient.exact (congrArg Subtype.val hab)
+
+noncomputable def leftPieceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    leftOpen h → SolidTorus := fun x ↦
+  leftSourceRetraction h <|
+    Function.surjInv (namedLeftPieceQuotientMap_isQuotientMap h).surjective x
+
+theorem leftPieceRetraction_pullback (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : leftPreimage) :
+    leftPieceRetraction h (namedLeftPieceQuotientMap h x) =
+      leftSourceRetraction h x := by
+  apply leftSourceRetraction_fiber_coherent h
+  exact Function.surjInv_eq
+    (namedLeftPieceQuotientMap_isQuotientMap h).surjective _
+
+theorem continuous_leftPieceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (leftPieceRetraction h) := by
+  rw [(namedLeftPieceQuotientMap_isQuotientMap h).continuous_iff]
+  convert continuous_leftSourceRetraction h using 1
+  funext x
+  exact leftPieceRetraction_pullback h x
+
+theorem leftPieceRetraction_comp_inclusion (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    (⟨leftPieceRetraction h, continuous_leftPieceRetraction h⟩ :
+      C(leftOpen h, SolidTorus)).comp (leftSolidTorusInclusion h) =
+        ContinuousMap.id SolidTorus := by
+  apply ContinuousMap.ext
+  intro x
+  exact leftPieceRetraction_pullback h ⟨Sum.inl x, trivial⟩
+
+theorem leftPieceHomotopyMap_one (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : leftOpen h) :
+    leftPieceHomotopyMap h ((1 : unitInterval), x) =
+      leftSolidTorusInclusion h (leftPieceRetraction h x) := by
+  obtain ⟨y, rfl⟩ := (namedLeftPieceQuotientMap_isQuotientMap h).surjective x
+  rw [leftPieceRetraction_pullback]
+  calc
+    _ = namedLeftPieceQuotientMap h
+        (leftPieceSourceHomotopy ((1 : unitInterval), y)) :=
+      leftPieceHomotopyMap_pullback h ((1 : unitInterval), y)
+    _ = leftSolidTorusInclusion h (leftSourceRetraction h y) := by
+      rcases y with ⟨y, hy⟩
+      cases y with
+      | inl y =>
+          rw [leftSourceRetraction_inl]
+          rfl
+      | inr y =>
+          let yb : annularBand := ⟨y, hy⟩
+          let z : BoundaryTorus := h.symm (annularProjection yb)
+          have hs : leftPieceSourceHomotopy
+              ((1 : unitInterval), ⟨Sum.inr y, hy⟩) =
+              ⟨Sum.inr (boundaryInclusion (annularProjection yb)),
+                boundaryInclusion_mem_annularBand (annularProjection yb)⟩ := by
+            apply Subtype.ext
+            simpa only [leftPieceSourceHomotopy_inr] using
+              congrArg (fun w : annularBand ↦ Sum.inr w.1) (annularRadial_one yb)
+          have hr : leftSourceRetraction h ⟨Sum.inr y, hy⟩ =
+              boundaryInclusion z := by rfl
+          rw [hr, congrArg (namedLeftPieceQuotientMap h) hs]
+          apply Subtype.ext
+          have hg : quotientMap h (Sum.inl (boundaryInclusion z)) =
+              quotientMap h (Sum.inr (boundaryInclusion (h z))) :=
+            Quotient.sound (Relation.EqvGen.rel _ _ (BoundaryGlueRel.glue z))
+          simpa only [z, Homeomorph.apply_symm_apply] using hg.symm
+
+def leftPieceHomotopy (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    ContinuousMap.Homotopy (ContinuousMap.id (leftOpen h))
+      ((leftSolidTorusInclusion h).comp
+        ⟨leftPieceRetraction h, continuous_leftPieceRetraction h⟩) where
+  toFun := leftPieceHomotopyMap h
+  continuous_toFun := continuous_leftPieceHomotopyMap h
+  map_zero_left := leftPieceHomotopyMap_zero h
+  map_one_left := leftPieceHomotopyMap_one h
+
+def leftPieceHomotopyEquiv (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    leftOpen h ≃ₕ SolidTorus where
+  toFun := ⟨leftPieceRetraction h, continuous_leftPieceRetraction h⟩
+  invFun := leftSolidTorusInclusion h
+  left_inv := ⟨(leftPieceHomotopy h).symm⟩
+  right_inv := by rw [leftPieceRetraction_comp_inclusion]
+
+def rightSplitRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    annularBand ⊕ SolidTorus → SolidTorus :=
+  Sum.elim (boundaryInclusion ∘ h ∘ annularProjection) id
+
+theorem continuous_rightSplitRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (rightSplitRetraction h) := by
+  apply Continuous.sumElim
+  · exact continuous_boundaryInclusion.comp <|
+      h.continuous.comp continuous_annularProjection
+  · exact continuous_id
+
+def rightSourceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    rightPreimage → SolidTorus :=
+  rightSplitRetraction h ∘ rightPreimageSumHomeomorph
+
+theorem continuous_rightSourceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (rightSourceRetraction h) :=
+  (continuous_rightSplitRetraction h).comp rightPreimageSumHomeomorph.continuous
+
+@[simp] theorem rightSourceRetraction_inl (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : annularBand) (hx : Sum.inl x.1 ∈ rightPreimage) :
+    rightSourceRetraction h ⟨Sum.inl x.1, hx⟩ =
+      boundaryInclusion (h (annularProjection x)) := rfl
+
+@[simp] theorem rightSourceRetraction_inr (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : SolidTorus) (hx : Sum.inr x ∈ rightPreimage) :
+    rightSourceRetraction h ⟨Sum.inr x, hx⟩ = x := rfl
+
+theorem rightSourceRetraction_eq_of_eqv (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    {a b : Sum SolidTorus SolidTorus} (ha : a ∈ rightPreimage)
+    (hb : b ∈ rightPreimage) (hab : Relation.EqvGen (BoundaryGlueRel h) a b) :
+    rightSourceRetraction h ⟨a, ha⟩ = rightSourceRetraction h ⟨b, hb⟩ := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue z =>
+          let xb : annularBand :=
+            ⟨boundaryInclusion z, boundaryInclusion_mem_annularBand z⟩
+          have hp : annularProjection xb = z := annularProjection_boundary z
+          have hl := rightSourceRetraction_inl h xb ha
+          rw [hl, hp, rightSourceRetraction_inr]
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hm := (rightPreimage_respects h hab).mp ha
+      exact (ih₁ ha hm).trans (ih₂ hm hb)
+
+theorem rightSourceRetraction_fiber_coherent (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    {a b : rightPreimage} (hab : namedRightPieceQuotientMap h a =
+      namedRightPieceQuotientMap h b) :
+    rightSourceRetraction h a = rightSourceRetraction h b := by
+  apply rightSourceRetraction_eq_of_eqv h a.2 b.2
+  exact Quotient.exact (congrArg Subtype.val hab)
+
+noncomputable def rightPieceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    rightOpen h → SolidTorus := fun x ↦
+  rightSourceRetraction h <|
+    Function.surjInv (namedRightPieceQuotientMap_isQuotientMap h).surjective x
+
+theorem rightPieceRetraction_pullback (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : rightPreimage) :
+    rightPieceRetraction h (namedRightPieceQuotientMap h x) =
+      rightSourceRetraction h x := by
+  apply rightSourceRetraction_fiber_coherent h
+  exact Function.surjInv_eq
+    (namedRightPieceQuotientMap_isQuotientMap h).surjective _
+
+theorem continuous_rightPieceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (rightPieceRetraction h) := by
+  rw [(namedRightPieceQuotientMap_isQuotientMap h).continuous_iff]
+  convert continuous_rightSourceRetraction h using 1
+  funext x
+  exact rightPieceRetraction_pullback h x
+
+theorem rightPieceRetraction_comp_inclusion (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    (⟨rightPieceRetraction h, continuous_rightPieceRetraction h⟩ :
+      C(rightOpen h, SolidTorus)).comp (rightSolidTorusInclusion h) =
+        ContinuousMap.id SolidTorus := by
+  apply ContinuousMap.ext
+  intro x
+  exact rightPieceRetraction_pullback h ⟨Sum.inr x, trivial⟩
+
+theorem rightPieceHomotopyMap_one (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : rightOpen h) :
+    rightPieceHomotopyMap h ((1 : unitInterval), x) =
+      rightSolidTorusInclusion h (rightPieceRetraction h x) := by
+  obtain ⟨y, rfl⟩ := (namedRightPieceQuotientMap_isQuotientMap h).surjective x
+  rw [rightPieceRetraction_pullback]
+  calc
+    _ = namedRightPieceQuotientMap h
+        (rightPieceSourceHomotopy ((1 : unitInterval), y)) :=
+      rightPieceHomotopyMap_pullback h ((1 : unitInterval), y)
+    _ = rightSolidTorusInclusion h (rightSourceRetraction h y) := by
+      rcases y with ⟨y, hy⟩
+      cases y with
+      | inl y =>
+          let yb : annularBand := ⟨y, hy⟩
+          let z : BoundaryTorus := annularProjection yb
+          have hs : rightPieceSourceHomotopy
+              ((1 : unitInterval), ⟨Sum.inl y, hy⟩) =
+              ⟨Sum.inl (boundaryInclusion z),
+                boundaryInclusion_mem_annularBand z⟩ := by
+            apply Subtype.ext
+            simpa only [rightPieceSourceHomotopy_inl, z] using
+              congrArg (fun w : annularBand ↦ Sum.inl w.1) (annularRadial_one yb)
+          have hr : rightSourceRetraction h ⟨Sum.inl y, hy⟩ =
+              boundaryInclusion (h z) := by rfl
+          rw [hr, congrArg (namedRightPieceQuotientMap h) hs]
+          apply Subtype.ext
+          exact Quotient.sound
+            (Relation.EqvGen.rel _ _ (BoundaryGlueRel.glue z))
+      | inr y =>
+          rw [rightSourceRetraction_inr]
+          rfl
+
+def rightPieceHomotopy (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    ContinuousMap.Homotopy (ContinuousMap.id (rightOpen h))
+      ((rightSolidTorusInclusion h).comp
+        ⟨rightPieceRetraction h, continuous_rightPieceRetraction h⟩) where
+  toFun := rightPieceHomotopyMap h
+  continuous_toFun := continuous_rightPieceHomotopyMap h
+  map_zero_left := rightPieceHomotopyMap_zero h
+  map_one_left := rightPieceHomotopyMap_one h
+
+def rightPieceHomotopyEquiv (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    rightOpen h ≃ₕ SolidTorus where
+  toFun := ⟨rightPieceRetraction h, continuous_rightPieceRetraction h⟩
+  invFun := rightSolidTorusInclusion h
+  left_inv := ⟨(rightPieceHomotopy h).symm⟩
+  right_inv := by rw [rightPieceRetraction_comp_inclusion]
+
+def intersectionSplitRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    annularBand ⊕ annularBand → BoundaryTorus :=
+  Sum.elim annularProjection (h.symm ∘ annularProjection)
+
+theorem continuous_intersectionSplitRetraction
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (intersectionSplitRetraction h) := by
+  apply Continuous.sumElim
+  · exact continuous_annularProjection
+  · exact h.symm.continuous.comp continuous_annularProjection
+
+def intersectionSourceRetraction (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    bothBandPreimage → BoundaryTorus :=
+  intersectionSplitRetraction h ∘ bothBandPreimageSumHomeomorph
+
+theorem continuous_intersectionSourceRetraction
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (intersectionSourceRetraction h) :=
+  (continuous_intersectionSplitRetraction h).comp
+    bothBandPreimageSumHomeomorph.continuous
+
+@[simp] theorem intersectionSourceRetraction_inl
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (x : annularBand)
+    (hx : Sum.inl x.1 ∈ bothBandPreimage) :
+    intersectionSourceRetraction h ⟨Sum.inl x.1, hx⟩ = annularProjection x := rfl
+
+@[simp] theorem intersectionSourceRetraction_inr
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (x : annularBand)
+    (hx : Sum.inr x.1 ∈ bothBandPreimage) :
+    intersectionSourceRetraction h ⟨Sum.inr x.1, hx⟩ =
+      h.symm (annularProjection x) := rfl
+
+theorem intersectionSourceRetraction_eq_of_eqv
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) {a b : Sum SolidTorus SolidTorus}
+    (ha : a ∈ bothBandPreimage) (hb : b ∈ bothBandPreimage)
+    (hab : Relation.EqvGen (BoundaryGlueRel h) a b) :
+    intersectionSourceRetraction h ⟨a, ha⟩ =
+      intersectionSourceRetraction h ⟨b, hb⟩ := by
+  induction hab with
+  | rel a b hab =>
+      cases hab with
+      | glue z =>
+          let xl : annularBand :=
+            ⟨boundaryInclusion z, boundaryInclusion_mem_annularBand z⟩
+          let xr : annularBand :=
+            ⟨boundaryInclusion (h z), boundaryInclusion_mem_annularBand (h z)⟩
+          have hpl : annularProjection xl = z := annularProjection_boundary z
+          have hpr : annularProjection xr = h z := annularProjection_boundary (h z)
+          have hl := intersectionSourceRetraction_inl h xl ha
+          have hr := intersectionSourceRetraction_inr h xr hb
+          rw [hl, hr, hpl, hpr, Homeomorph.symm_apply_apply]
+  | refl => rfl
+  | symm a b _ ih => exact (ih hb ha).symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      have hal : a ∈ leftPreimage := by cases a with | inl => trivial | inr => exact ha
+      have har : a ∈ rightPreimage := by cases a with | inl => exact ha | inr => trivial
+      have hml := (leftPreimage_respects h hab).mp hal
+      have hmr := (rightPreimage_respects h hab).mp har
+      have hm : b ∈ bothBandPreimage := by cases b with | inl => exact hmr | inr => exact hml
+      exact (ih₁ ha hm).trans (ih₂ hm hb)
+
+theorem intersectionSourceRetraction_fiber_coherent
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) {a b : bothBandPreimage}
+    (hab : namedIntersectionPieceQuotientMap h a =
+      namedIntersectionPieceQuotientMap h b) :
+    intersectionSourceRetraction h a = intersectionSourceRetraction h b := by
+  apply intersectionSourceRetraction_eq_of_eqv h a.2 b.2
+  exact Quotient.exact (congrArg Subtype.val hab)
+
+noncomputable def intersectionPieceRetraction
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    ↥(leftOpen h ∩ rightOpen h) → BoundaryTorus := fun x ↦
+  intersectionSourceRetraction h <| Function.surjInv
+    (namedIntersectionPieceQuotientMap_isQuotientMap h).surjective x
+
+theorem intersectionPieceRetraction_pullback
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) (x : bothBandPreimage) :
+    intersectionPieceRetraction h (namedIntersectionPieceQuotientMap h x) =
+      intersectionSourceRetraction h x := by
+  apply intersectionSourceRetraction_fiber_coherent h
+  exact Function.surjInv_eq
+    (namedIntersectionPieceQuotientMap_isQuotientMap h).surjective _
+
+theorem continuous_intersectionPieceRetraction
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    Continuous (intersectionPieceRetraction h) := by
+  rw [(namedIntersectionPieceQuotientMap_isQuotientMap h).continuous_iff]
+  convert continuous_intersectionSourceRetraction h using 1
+  funext x
+  exact intersectionPieceRetraction_pullback h x
+
+theorem intersectionPieceRetraction_comp_inclusion
+    (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    (⟨intersectionPieceRetraction h, continuous_intersectionPieceRetraction h⟩ :
+      C(↥(leftOpen h ∩ rightOpen h), BoundaryTorus)).comp
+        (boundaryIntersectionInclusion h) = ContinuousMap.id BoundaryTorus := by
+  apply ContinuousMap.ext
+  intro z
+  change intersectionPieceRetraction h
+      (namedIntersectionPieceQuotientMap h
+        ⟨Sum.inl (boundaryInclusion z), boundaryInclusion_mem_annularBand z⟩) = z
+  rw [intersectionPieceRetraction_pullback]
+  exact annularProjection_boundary z
+
+theorem intersectionPieceHomotopyMap_one (h : BoundaryTorus ≃ₜ BoundaryTorus)
+    (x : ↥(leftOpen h ∩ rightOpen h)) :
+    intersectionPieceHomotopyMap h ((1 : unitInterval), x) =
+      boundaryIntersectionInclusion h (intersectionPieceRetraction h x) := by
+  obtain ⟨y, rfl⟩ :=
+    (namedIntersectionPieceQuotientMap_isQuotientMap h).surjective x
+  rw [intersectionPieceRetraction_pullback]
+  calc
+    _ = namedIntersectionPieceQuotientMap h
+        (intersectionPieceSourceHomotopy ((1 : unitInterval), y)) :=
+      intersectionPieceHomotopyMap_pullback h ((1 : unitInterval), y)
+    _ = boundaryIntersectionInclusion h (intersectionSourceRetraction h y) := by
+      rcases y with ⟨y, hy⟩
+      cases y with
+      | inl y =>
+          let yb : annularBand := ⟨y, hy⟩
+          have hs : intersectionPieceSourceHomotopy
+              ((1 : unitInterval), ⟨Sum.inl y, hy⟩) =
+              ⟨Sum.inl (boundaryInclusion (annularProjection yb)),
+                boundaryInclusion_mem_annularBand (annularProjection yb)⟩ := by
+            apply Subtype.ext
+            simpa only [intersectionPieceSourceHomotopy_inl] using
+              congrArg (fun w : annularBand ↦ Sum.inl w.1) (annularRadial_one yb)
+          have hr : intersectionSourceRetraction h ⟨Sum.inl y, hy⟩ =
+              annularProjection yb := rfl
+          rw [hr, congrArg (namedIntersectionPieceQuotientMap h) hs]
+          apply Subtype.ext
+          rfl
+      | inr y =>
+          let yb : annularBand := ⟨y, hy⟩
+          let z : BoundaryTorus := h.symm (annularProjection yb)
+          have hs : intersectionPieceSourceHomotopy
+              ((1 : unitInterval), ⟨Sum.inr y, hy⟩) =
+              ⟨Sum.inr (boundaryInclusion (annularProjection yb)),
+                boundaryInclusion_mem_annularBand (annularProjection yb)⟩ := by
+            apply Subtype.ext
+            simpa only [intersectionPieceSourceHomotopy_inr] using
+              congrArg (fun w : annularBand ↦ Sum.inr w.1) (annularRadial_one yb)
+          have hr : intersectionSourceRetraction h ⟨Sum.inr y, hy⟩ = z := rfl
+          rw [hr, congrArg (namedIntersectionPieceQuotientMap h) hs]
+          apply Subtype.ext
+          have hg : quotientMap h (Sum.inl (boundaryInclusion z)) =
+              quotientMap h (Sum.inr (boundaryInclusion (h z))) :=
+            Quotient.sound (Relation.EqvGen.rel _ _ (BoundaryGlueRel.glue z))
+          simpa only [z, Homeomorph.apply_symm_apply] using hg.symm
+
+def intersectionPieceHomotopy (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    ContinuousMap.Homotopy
+      (ContinuousMap.id ↥(leftOpen h ∩ rightOpen h))
+      ((boundaryIntersectionInclusion h).comp
+        ⟨intersectionPieceRetraction h,
+          continuous_intersectionPieceRetraction h⟩) where
+  toFun := intersectionPieceHomotopyMap h
+  continuous_toFun := continuous_intersectionPieceHomotopyMap h
+  map_zero_left := intersectionPieceHomotopyMap_zero h
+  map_one_left := intersectionPieceHomotopyMap_one h
+
+def intersectionPieceHomotopyEquiv (h : BoundaryTorus ≃ₜ BoundaryTorus) :
+    ↥(leftOpen h ∩ rightOpen h) ≃ₕ BoundaryTorus where
+  toFun := ⟨intersectionPieceRetraction h,
+    continuous_intersectionPieceRetraction h⟩
+  invFun := boundaryIntersectionInclusion h
+  left_inv := ⟨(intersectionPieceHomotopy h).symm⟩
+  right_inv := by rw [intersectionPieceRetraction_comp_inclusion]
+
 #print axioms annularBand_isOpen
 #print axioms leftPreimage_respects
 #print axioms quotientMap_preimage_inter_open

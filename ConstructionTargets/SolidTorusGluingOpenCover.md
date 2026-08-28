@@ -21,10 +21,18 @@ The compiled declarations provide:
   formulas, and generated-relation/fiber coherence;
 - continuous descended homotopy maps on the left, right, and intersection
   quotient pieces, with their time-zero identity formulas.
+- continuous retained-piece inclusions and quotient-descended retractions;
+- strict retraction identities and explicit time-one identities, with the
+  left collar transported by `h.symm`, the right collar by `h`, and the
+  intersection right collar by `h.symm`, exactly as required by
+  `BoundaryGlueRel.glue`;
+- homotopy equivalences from the left and right quotient pieces to the solid
+  torus and from their intersection to the boundary torus.
 
 No openness of the quotient projection is assumed.  Openness is obtained from
 the saturated-preimage equations and the coinduced quotient topology.
 
-The time-one retractions and homotopy-equivalence packages for the quotient
-cover pieces remain.  No homology, assumed collar, or frozen conclusion is
-asserted here.
+No homology computation or frozen `t01J03` conclusion is asserted here.  In
+particular, the file supplies the geometric cover and its three homotopy
+equivalences, but does not identify the frozen quotient representation or
+apply Mayer--Vietoris.
