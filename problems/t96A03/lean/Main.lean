@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.T96A03FrozenQuotientRepresentation
 
 /-!
 # APM t96A03 — two 2-spheres glued along their equators
@@ -39,6 +40,37 @@ inductive apm_t96A03_glueRel
   | glue (x : apm_t96A03_EquatorSpace) :
       apm_t96A03_glueRel h (Sum.inl x.1) (Sum.inr (h x).1)
 
+open ConstructionTargets.T96A03FrozenQuotientRepresentation in
+theorem apm_t96A03_glueRel_iff_coordinateGlueRel
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) (x y) :
+    apm_t96A03_glueRel h x y ↔ CoordinateGlueRel h x y := by
+  constructor <;> rintro ⟨z⟩
+  · exact CoordinateGlueRel.glue z
+  · exact apm_t96A03_glueRel.glue z
+
+open ConstructionTargets.T96A03FrozenQuotientRepresentation in
+theorem apm_t96A03_eqvGen_iff_coordinateEqvGen
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) (x y) :
+    Relation.EqvGen (apm_t96A03_glueRel h) x y ↔
+      Relation.EqvGen (CoordinateGlueRel h) x y := by
+  constructor
+  · intro hxy
+    induction hxy with
+    | rel a b hab =>
+        exact Relation.EqvGen.rel _ _
+          ((apm_t96A03_glueRel_iff_coordinateGlueRel h a b).mp hab)
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro hxy
+    induction hxy with
+    | rel a b hab =>
+        exact Relation.EqvGen.rel _ _
+          ((apm_t96A03_glueRel_iff_coordinateGlueRel h a b).mpr hab)
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
 def apm_t96A03_X
     (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :=
   Quotient (Relation.EqvGen.setoid (apm_t96A03_glueRel h))
@@ -49,6 +81,49 @@ noncomputable instance
   TopologicalSpace.coinduced
     (fun x : Sum apm_t96A03_Sphere2 apm_t96A03_Sphere2 ↦ Quotient.mk _ x)
     inferInstance
+
+open ConstructionTargets.T96A03FrozenQuotientRepresentation in
+/-- The frozen quotient and the coordinate adapter quotient differ only in
+the name of their generator relation. -/
+def apm_t96A03_homeomorph_coordinateGluing
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :
+    apm_t96A03_X h ≃ₜ CoordinateGluing h where
+  toFun := Quotient.lift (fun x ↦ Quotient.mk _ x) fun _ _ hxy ↦
+    Quotient.sound ((apm_t96A03_eqvGen_iff_coordinateEqvGen h _ _).mp hxy)
+  invFun := Quotient.lift (fun x ↦ Quotient.mk _ x) fun _ _ hxy ↦
+    Quotient.sound ((apm_t96A03_eqvGen_iff_coordinateEqvGen h _ _).mpr hxy)
+  left_inv := by rintro ⟨x⟩; rfl
+  right_inv := by rintro ⟨x⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+open ConstructionTargets.T96A03FrozenQuotientRepresentation in
+@[simp] theorem apm_t96A03_homeomorph_coordinateGluing_mk
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace)
+    (x : Sum apm_t96A03_Sphere2 apm_t96A03_Sphere2) :
+    apm_t96A03_homeomorph_coordinateGluing h (Quotient.mk _ x) =
+      Quotient.mk _ x := rfl
+
+open ConstructionTargets.T96A03FrozenQuotientRepresentation in
+/-- Frozen-to-reusable quotient representation homeomorphism. -/
+def apm_t96A03_homeomorph_equatorGluing
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :
+    apm_t96A03_X h ≃ₜ
+      ConstructionTargets.SphereEquatorGluingOpenCover.EquatorGluing 2
+        (conjugateEquatorHomeomorph h) :=
+  (apm_t96A03_homeomorph_coordinateGluing h).trans
+    (coordinateGluingHomeomorph h)
+
+open ConstructionTargets.T96A03FrozenQuotientRepresentation in
+@[simp] theorem apm_t96A03_homeomorph_equatorGluing_mk
+    (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace)
+    (x : Sum apm_t96A03_Sphere2 apm_t96A03_Sphere2) :
+    apm_t96A03_homeomorph_equatorGluing h (Quotient.mk _ x) =
+      Quotient.mk _ x := rfl
 
 def apm_t96A03_quotient
     (h : apm_t96A03_EquatorSpace ≃ₜ apm_t96A03_EquatorSpace) :
