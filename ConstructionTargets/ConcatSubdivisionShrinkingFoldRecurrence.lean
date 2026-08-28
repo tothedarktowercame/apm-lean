@@ -305,6 +305,35 @@ theorem successorChainComposeFin_terminal_split {m : ℕ} (hm : 0 < m)
         successorChainArrow hm A f (Fin.last (m - 1)) := by
   exact composeFin_terminal_split _ _
 
+theorem successorChainSegment_last_eq_terminal {m : ℕ} (hm : 0 < m) :
+    successorChainSegment hm (Fin.last (m - 1)) =
+      terminalSegmentIndex hm := by
+  apply Fin.ext
+  simp [successorChainSegment, terminalSegmentIndex]
+
+theorem successorChainLastSource_eq_terminal {m : ℕ} (hm : 0 < m) :
+    successorChainVertex hm (Fin.last (m - 1)).castSucc =
+      (terminalSegmentIndex hm).castSucc := by
+  rw [successorChainEndpoint_castSucc]
+  exact congrArg Fin.castSucc (successorChainSegment_last_eq_terminal hm)
+
+/-- The exposed successor-chain terminal arrow, followed by its final-object
+coordinate, is the literal terminal arrow with its source and target
+transports displayed. -/
+theorem successorChain_terminal_arrow_normalization {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ) :
+    successorChainArrow hm A f (Fin.last (m - 1)) ≫
+        (successorChainFinalObjectIso hm A).hom =
+      eqToHom (congrArg A (successorChainLastSource_eq_terminal hm)) ≫
+        f (terminalSegmentIndex hm) ≫
+        eqToHom (congrArg A (terminalSegmentIndex_succ hm)) := by
+  cases m with
+  | zero => omega
+  | succ n =>
+      simp [successorChainArrow, successorChainFinalObjectIso,
+        successorChainVertex, successorChainSegment, terminalSegmentIndex]
+
 /-- The literal original fold in successor-shaped coordinates, with only the
 direct initial and final object isomorphisms remaining. -/
 theorem composeFin_eq_successorChain {m : ℕ} (hm : 0 < m)
@@ -336,6 +365,27 @@ theorem composeFin_terminal_split_of_pos {m : ℕ} (hm : 0 < m)
   rw [composeFin_eq_successorChain hm A f,
     successorChainComposeFin_terminal_split]
   simp [Category.assoc]
+
+/-- Original-coordinate positive-length split with the exposed terminal arrow
+literally `f (terminalSegmentIndex hm)`. -/
+theorem composeFin_terminal_split_of_pos_literal {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ) :
+    TwoOpenDescentDatum.composeFin A f =
+      (successorChainInitialObjectIso hm A).inv ≫
+        TwoOpenDescentDatum.composeFin
+          ((A ∘ successorChainVertex hm) ∘ Fin.castSucc)
+          (fun i => successorChainArrow hm A f i.castSucc) ≫
+        eqToHom (congrArg A (successorChainLastSource_eq_terminal hm)) ≫
+        f (terminalSegmentIndex hm) ≫
+        eqToHom (congrArg A (terminalSegmentIndex_succ hm)) := by
+  rw [composeFin_terminal_split_of_pos hm A f]
+  simpa only [Category.assoc] using congrArg
+    (fun k => (successorChainInitialObjectIso hm A).inv ≫
+      TwoOpenDescentDatum.composeFin
+        ((A ∘ successorChainVertex hm) ∘ Fin.castSucc)
+        (fun i => successorChainArrow hm A f i.castSucc) ≫ k)
+    (successorChain_terminal_arrow_normalization hm A f)
 
 /-- The source objects of successive stages are canonically equal. -/
 def shrinkingPrefixInitialIso
@@ -389,8 +439,10 @@ def shrinkingPrefixTerminalIso
 #print axioms successorChainComposeFin_eq
 #print axioms castIndexedComposeFin_eq
 #print axioms successorChainComposeFin_terminal_split
+#print axioms successorChain_terminal_arrow_normalization
 #print axioms composeFin_eq_successorChain
 #print axioms composeFin_terminal_split_of_pos
+#print axioms composeFin_terminal_split_of_pos_literal
 #print axioms successorChain_initial_object_transport
 #print axioms successorChainCastLast_eq_last
 #print axioms successorChain_final_object_transport

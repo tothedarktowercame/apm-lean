@@ -35,6 +35,9 @@ inverse cast-zero transport is exactly the source transport emitted by the
 fold reindex theorem.
 `successorChainComposeFin_terminal_split` supplies the literal terminal split
 of the successor-shaped whole chain.
+`successorChain_terminal_arrow_normalization` identifies that final arrow,
+followed by the final-object coordinate, with literal
+`f (terminalSegmentIndex hm)` and explicit endpoint transports.
 These are the typed inputs for the next recurrence theorem.  This target does
 not claim the fold equality or full right-block iteration.
 
@@ -44,7 +47,7 @@ literal original fold into the successor-shaped prefix and its terminal
 transported arrow, retaining only the direct initial and final object
 isomorphisms.
 
-The remaining local normalization combines that final `successorChainArrow`
-with `successorChainFinalObjectIso.hom` via `terminalArrow_transport`, yielding
-literal `f (terminalSegmentIndex hm)`. The shrinking recurrence remains
-downstream of that specialization.
+`composeFin_terminal_split_of_pos_literal` therefore gives the complete
+positive-length split with a literal terminal arrow. The remaining seam is
+specializing its successor-shaped prefix and source transport to consecutive
+`shrinkingPrefixFold` stages.
