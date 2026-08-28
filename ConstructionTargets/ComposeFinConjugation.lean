@@ -38,6 +38,22 @@ theorem composeFin_conjugation {n : ℕ} (A B : Fin (n + 1) → C)
       rw [Iso.inv_hom_id_assoc]
       simpa only [Category.assoc, Fin.castSucc_zero, Fin.succ_last]
 
+/-- A comparison-iso-oriented form of finite dependent conjugation. It is
+useful when the concrete arrows are already expressed between transported
+objects: all internal transports cancel and only the outer maps remain. -/
+theorem composeFin_conjugation_from_comparisonIso {n : ℕ}
+    (A B : Fin (n + 1) → C)
+    (f : (i : Fin n) → A i.castSucc ⟶ A i.succ)
+    (g : (i : Fin n) → B i.castSucc ⟶ B i.succ)
+    (e : (i : Fin (n + 1)) → A i ≅ B i)
+    (h : ∀ i, f i = (e i.castSucc).hom ≫ g i ≫ (e i.succ).inv) :
+    TwoOpenDescentDatum.composeFin A f =
+      (e 0).hom ≫ TwoOpenDescentDatum.composeFin B g ≫
+        (e (Fin.last n)).inv := by
+  apply composeFin_conjugation B A g f e
+  exact h
+
 #print axioms composeFin_conjugation
+#print axioms composeFin_conjugation_from_comparisonIso
 
 end ConstructionTargets.ComposeFinConjugation
