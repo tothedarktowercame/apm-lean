@@ -49,11 +49,11 @@ Fiber coherence is proved for all three sources by induction over
 `Relation.EqvGen`; each generator case normalizes the explicit branch formulas
 and invokes `bandFlatten_glue_compatible`.  Thus equal fibers of each named
 piece quotient map remain equal throughout its source homotopy.  The exact
-The left subtype-valued quotient lift is now explicit, with a proved pullback
-equation and continuity obtained from `continuous_lift_prod_right` (time is
+All three subtype-valued quotient lifts are now explicit, with proved pullback
+equations and continuity obtained from `continuous_lift_prod_right` (time is
 the locally compact first factor).  The exact remaining obligations are the
-symmetric right and intersection quotient lifts, followed by endpoint and
-fixation equations.  For example the left
+time-zero, endpoint, and fixation equations needed to package the three
+homotopy equivalences.  For example the left
 deformation must define a function of exact type
 
 ```lean

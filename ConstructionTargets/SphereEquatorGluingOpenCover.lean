@@ -971,6 +971,71 @@ theorem continuous_leftPieceHomotopyMap (n : ℕ)
   funext p
   exact leftPieceHomotopyMap_pullback n h p
 
+noncomputable def rightPieceHomotopyMap (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    unitInterval × rightOpen n h → rightOpen n h := fun p =>
+  namedRightPieceQuotientMap n h
+    (rightPieceSourceHomotopy n
+      (p.1, Function.surjInv
+        (namedRightPieceQuotientMap_isQuotientMap n h).surjective p.2))
+
+theorem rightPieceHomotopyMap_pullback (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    (p : unitInterval × rightPreimage n) :
+    rightPieceHomotopyMap n h (p.1, namedRightPieceQuotientMap n h p.2) =
+      namedRightPieceQuotientMap n h (rightPieceSourceHomotopy n p) := by
+  apply rightPieceSourceHomotopy_fiber_coherent n h p.1
+  exact Function.surjInv_eq
+    (namedRightPieceQuotientMap_isQuotientMap n h).surjective
+    (namedRightPieceQuotientMap n h p.2)
+
+theorem continuous_rightPieceHomotopyMap (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (rightPieceHomotopyMap n h) := by
+  apply (namedRightPieceQuotientMap_isQuotientMap n h).continuous_lift_prod_right
+  have hc : Continuous (fun p : unitInterval × rightPreimage n =>
+      namedRightPieceQuotientMap n h (rightPieceSourceHomotopy n p)) :=
+    (namedRightPieceQuotientMap_isQuotientMap n h).continuous.comp
+      (continuous_rightPieceSourceHomotopy n)
+  convert hc using 1
+  funext p
+  exact rightPieceHomotopyMap_pullback n h p
+
+noncomputable def intersectionPieceHomotopyMap (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    unitInterval × ↥(leftOpen n h ∩ rightOpen n h) →
+      ↥(leftOpen n h ∩ rightOpen n h) := fun p =>
+  namedIntersectionPieceQuotientMap n h
+    (intersectionPieceSourceHomotopy n
+      (p.1, Function.surjInv
+        (namedIntersectionPieceQuotientMap_isQuotientMap n h).surjective p.2))
+
+theorem intersectionPieceHomotopyMap_pullback (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n)
+    (p : unitInterval × bothBandPreimage n) :
+    intersectionPieceHomotopyMap n h
+        (p.1, namedIntersectionPieceQuotientMap n h p.2) =
+      namedIntersectionPieceQuotientMap n h
+        (intersectionPieceSourceHomotopy n p) := by
+  apply intersectionPieceSourceHomotopy_fiber_coherent n h p.1
+  exact Function.surjInv_eq
+    (namedIntersectionPieceQuotientMap_isQuotientMap n h).surjective
+    (namedIntersectionPieceQuotientMap n h p.2)
+
+theorem continuous_intersectionPieceHomotopyMap (n : ℕ)
+    (h : sphereEquator n ≃ₜ sphereEquator n) :
+    Continuous (intersectionPieceHomotopyMap n h) := by
+  apply (namedIntersectionPieceQuotientMap_isQuotientMap n h).continuous_lift_prod_right
+  have hc : Continuous (fun p : unitInterval × bothBandPreimage n =>
+      namedIntersectionPieceQuotientMap n h
+        (intersectionPieceSourceHomotopy n p)) :=
+    (namedIntersectionPieceQuotientMap_isQuotientMap n h).continuous.comp
+      (continuous_intersectionPieceSourceHomotopy n)
+  convert hc using 1
+  funext p
+  exact intersectionPieceHomotopyMap_pullback n h p
+
+
 #print axioms equatorialBand_isOpen
 #print axioms flattenRaw_ne_zero
 #print axioms flattenSphere_mem_band
@@ -1016,5 +1081,9 @@ theorem continuous_leftPieceHomotopyMap (n : ℕ)
 #print axioms intersectionPieceSourceHomotopy_fiber_coherent
 #print axioms leftPieceHomotopyMap_pullback
 #print axioms continuous_leftPieceHomotopyMap
+#print axioms rightPieceHomotopyMap_pullback
+#print axioms continuous_rightPieceHomotopyMap
+#print axioms intersectionPieceHomotopyMap_pullback
+#print axioms continuous_intersectionPieceHomotopyMap
 
 end ConstructionTargets.SphereEquatorGluingOpenCover
