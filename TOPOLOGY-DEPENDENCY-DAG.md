@@ -1,6 +1,6 @@
 # Topology dependency DAG
 
-Date: 2026-08-27
+Date: 2026-08-28
 
 This is the canonical topology roadmap.  It separates compiled mathematics,
 consumer uptake, small remaining constructions, missing shared APIs, and
@@ -105,7 +105,13 @@ SINGULAR-SUBDIVISION/EXCISION [BANKED]
        │      ├── INTERSECTION-RANGE TRANSPORT AND PRODUCTION
        │      │      SIGNED-ARROW NORMALIZATION [BANKED `d03946a0`]
        │      └── t00A01 HOMOLOGY BRANCH [CLOSED `f5b0e191`]
-       ├── CLOSED-GLUING/COLLAR TO OPEN-COVER [FOUNDATION]
+       ├── CLOSED-GLUING/COLLAR TO OPEN-COVER [FOUNDATION GENERICALLY]
+       │      └── SPHERE-EQUATOR QUOTIENT OPEN COVER [BANKED]
+       │             ├── PIECE/INTERSECTION HOMOTOPY EQUIVALENCES [BANKED]
+       │             ├── QUOTIENT REPRESENTATION TRANSPORT [BANKED]
+       │             ├── DEGREE-TWO PROJECTIVE SPLITTING [BANKED]
+       │             ├── NONDEGREE HOMOLOGY [BANKED]
+       │             └── t96A03 [CLOSED `adcd54a2`]
        └── MAYER-VIETORIS APPLICATIONS [depends on the two edges above]
 
 MANIFOLD-CALCULUS [BANKED MATHLIB SUBSTRATE]
@@ -147,7 +153,7 @@ VAN KAMPEN / SURFACE FOUNDATIONS
        └── INTERSECTION/SELF-INTERSECTION [depends on fundamental classes]
 ```
 
-The four most recent open-cover nodes have these evidence-backed edges.  An
+The current certified open-cover nodes have these evidence-backed edges.  An
 `observed` edge below is an import or declaration use on canonical master; a
 `proposed` edge is not a frozen import or a claim of consumer closure.
 
@@ -176,13 +182,47 @@ The four most recent open-cover nodes have these evidence-backed edges.  An
            :relation :consumed-by
            :status :observed}]}
  {:node/id "ConstructionTargets.SphereEquatorGluingOpenCover"
-  :authority {:git-sha "bb7a7c67"}
+  :authority {:git-sha "f7399011"}
+  :state :banked
+  :edges [{:to "ConstructionTargets.T96A03DegreeTwoMayerVietoris"
+           :relation :consumed-by
+           :declarations [:leftPieceHomotopyEquiv
+                          :rightPieceHomotopyEquiv
+                          :intersectionPieceHomotopyEquiv]
+           :status :observed}
+          {:to "problem/t96A03"
+           :relation :consumed-by
+           :status :observed}]}
+ {:node/id "ConstructionTargets.T96A03FrozenQuotientRepresentation"
+  :authority {:git-sha "b3b3f153"}
   :state :banked
   :edges [{:to "problem/t96A03"
-           :relation :would-consume
-           :need :final-adapter
-           :status :missing
-           :stop-condition "dependent quotient lift of the piece deformations is absent"}]}
+           :relation :imports
+           :declarations [:coordinateEquatorHomeomorph
+                          :conjugateEquatorHomeomorph
+                          :coordinateGlueRel_iff_equatorGlueRel
+                          :coordinateGluingHomeomorph]
+           :status :observed}]}
+ {:node/id "ConstructionTargets.ProjectiveQuotientExactSplitting"
+  :authority {:git-sha "c08f946d"}
+  :state :banked
+  :edges [{:to "ConstructionTargets.T96A03DegreeTwoMayerVietoris"
+           :relation :consumed-by
+           :declarations [:shortExactIsoBiprod]
+           :status :observed}]}
+ {:node/id "ConstructionTargets.T96A03DegreeTwoMayerVietoris"
+  :authority {:git-sha "efa4805e"}
+  :state :banked
+  :edges [{:to "problem/t96A03"
+           :relation :imports
+           :declarations [:degreeTwoModuleIsoFinThree]
+           :status :observed}]}
+ {:node/id "ConstructionTargets.T96A03NonDegreeTwoHomology"
+  :authority {:git-sha "5aecf0c3"}
+  :state :banked
+  :edges [{:to "problem/t96A03"
+           :relation :imports
+           :status :observed}]}
  {:node/id "ConstructionTargets.SignedDiagonalCokernel"
   :authority {:git-sha "915ee169"}
   :state :banked
@@ -311,9 +351,8 @@ canonical, and frozen `t01J02` was closed without changing its interface in
 
 ### Queue C: concrete local go-nodes
 
-- descend the compiled t96A03 band deformations through the three restricted
-  quotient maps, stopping at the first dependent quotient motive/coherence
-  goal that cannot transport open-subtype membership;
+- specialize the banked production-MV sequence only where a consumer already
+  supplies an honest open cover and homotopy models for every term;
 - sphere and ball moment calculations after a shared measure normalization;
 - finite coordinate and derivative calculations already isolated in the leaf
   survey;
@@ -350,7 +389,7 @@ compiles independently of every final problem.
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
-| Closed gluing to open-cover MV | `t96A03`, `t03J02`, `t01J03` | production intersection-range comparison is banked; generic collar/cofibration or quotient-open-cover geometry remains `FOUNDATION`; t96A03 has a direct `LOCAL-GO` route |
+| Closed gluing to open-cover MV | closed `t96A03`; `t03J02`, `t01J03` | production intersection-range comparison is banked; t96A03 supplies its own explicit quotient-open-cover geometry and is closed, while the generic collar/cofibration comparison required by the other consumers remains `FOUNDATION` |
 | Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and coefficient-compatible computations do not |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, `t94J06`, `t97A02`, `t97J08` | mixed concrete progress; shared naturality/lifting APIs remain |
@@ -396,11 +435,16 @@ from `1906ef4e` through `d03946a0` contains 25 banked commits; six subsequent
 reusable representation/consumer commits from `a44c1396` through `43a492da`
 resolved H₀ nonemptiness, coefficient coordinates, subspace-map equality, and
 the frozen adapters; one consumer commit, `f5b0e191`, then closed an actual
-frozen homology bridge.  The earlier t00J02 program remains four surveyed
-experimental tracks with no frozen theorem closure and with its generic
-orientation/localization producers still absent.  This comparison supports
-continuing consumer-certified shared scaffolds; it does not show that the MV
-route solves t00J02 or replace its missing geometry.
+frozen homology bridge.  The subsequent t96A03 certification from
+`f181ffa2` through `adcd54a2` contains 19 commits: 11 extend the explicit
+sphere-equator gluing geometry, six bank reusable normalization, splitting,
+representation, and homology results, and two wire the frozen quotient and
+final theorem.  Thus this scaffold campaign has closed one frozen homology
+branch and one whole frozen problem.  The earlier t00J02 program remains four
+surveyed experimental tracks with no frozen theorem closure and with its
+generic orientation/localization producers still absent.  This comparison
+supports continuing consumer-certified shared scaffolds; it does not show
+that the MV route solves t00J02 or replace its missing geometry.
 
 ## Banked consolidation increments
 
@@ -424,12 +468,17 @@ route solves t00J02 or replace its missing geometry.
 | `3348f833` | specialization of the dimension-gap chain to smooth `T² → S³`, followed by the existing missed-point contraction | frozen `t94J05` closed with statements unchanged |
 | `44d294de` | Boolean two-cover with definitionally aligned union and reassembly arrows | construct the intersection-range chain isomorphism and its two inclusion naturality squares; no production MV theorem yet |
 | `781eed21` | canonical integral `H₀` augmentation, naturality, and isomorphism of induced `H₀` maps between nonempty spaces explicitly identified with `ℤ` | transport the production MV degree-zero maps through these coordinates; no connectedness inference or t00A01 bridge is claimed |
-| `bb7a7c67` | dimension-generic sphere-equator quotient open cover, equatorial-band contraction, and three restricted quotient maps | descend the deformations through dependent quotient subtypes, then use production MV; frozen t96A03 does not import this target |
+| `bb7a7c67` | dimension-generic sphere-equator quotient open cover, equatorial-band contraction, and three restricted quotient maps | completed by the quotient-descended homotopy-equivalence chain through `f7399011` and consumed by closed t96A03 |
 | `915ee169` | signed diagonal is monic and has cokernel canonically isomorphic to its coefficient object, with quotient projection equal to the codiagonal | representation normalization was completed by the later t00A01 adapter chain |
 | `d03946a0` | complete production open-cover Mayer--Vietoris exactness with actual intersection, reassembly, union, and connecting arrows | consumed by the t00A01 adapters and frozen homology bridge; closed-gluing consumers still need their own open-cover geometry |
 | `a44c1396`–`c75a86a3` | H₀ nonemptiness detection, conjugated signed-diagonal cokernel coordinates, and canonical equality between simplicial and production subspace-inclusion maps | consumed by `T00A01MayerVietorisAdapters`; these resolve representation seams rather than add new homology assumptions |
 | `c59a4dd9`, `43a492da` | reusable t00A01 MV adapters for H₀, top connecting isomorphisms, coefficient transport, and actual production H₀-arrow monicity | observed import and declaration use in frozen t00A01 at `f5b0e191` |
 | `f5b0e191` | frozen `apm_t00A01_bridge_connectedSum_isHomology3Sphere` assembled from the production MV chain and adapters | homology branch closed; van Kampen bridge and final conjunction remain executable placeholders |
+| `f181ffa2`–`f7399011` | explicit source decompositions, coherent quotient-descended deformations, retractions, and homotopy equivalences for both sphere pieces and their equatorial intersection | consumed by the reusable t96A03 Mayer–Vietoris calculations; this is concrete quotient geometry, not a generic closed-gluing theorem |
+| `21301fae`, `c08f946d` | rank-three `ModuleCat ℤ` normalization and generic splitting of a short exact sequence with projective quotient | consumed by the degree-two t96A03 calculation |
+| `c6b6a239`, `b3b3f153` | positive-dimensional equator nonemptiness and explicit frozen/coordinate sphere-equator representation transport | consumed by the frozen t96A03 quotient homeomorphism and final homology assembly |
+| `5aecf0c3`, `efa4805e` | all nondegree homology groups of the reusable gluing model and its actual degree-two production-MV short exact sequence, projective split, and `Fin 3` normalization | imported by frozen t96A03 at `adcd54a2` |
+| `f6cfdaf8`, `adcd54a2` | frozen quotient identified with the reusable equator-gluing model, followed by complete homology transport in every degree | `t96A03` closed with zero executable placeholders |
 
 ## Dimension-gap versus critical-value Sard
 
@@ -455,16 +504,16 @@ critical-value Sard.
 | `t01J02` | `3ba7726a` using `37524eb4` | status `solved`, zero placeholders, statements unchanged, only standard axioms |
 | `t94J05` | `3348f833` using the banked dimension-gap chain | status `solved`, zero placeholders, statements unchanged, only standard axioms |
 | `t00A01` homology branch | `f5b0e191` using `d03946a0`, `c59a4dd9`, and `43a492da` | bridge placeholder removed; frozen statement unchanged; whole problem is not closed because van Kampen and final assembly remain |
+| `t96A03` | `adcd54a2` using the sphere-equator geometry through `f7399011`, quotient adapter `b3b3f153`, and homology targets `5aecf0c3`/`efa4805e` | status solved, zero placeholders, frozen statement unchanged, only standard axioms |
 
 Current audited classification beyond these closures:
 
 - `t00J02` and `a97J08` are `UPTAKE`: each has one genuine geometric producer
   remaining, respectively oriented-surface duality and planar separation.
-- Frozen `t96A03` remains `API-GAP`, while its explicit open-cover geometry is
-  now `LOCAL-GO`: the dependent quotient deformations are the next bounded
-  producer.  `t03J02`, `t01J03`, and `t97A01` remain `API-GAP` problems whose
-  current presentations do not yet compare with the relevant singular-chain
-  scaffold.
+- Frozen `t96A03` is `CLOSED` at `adcd54a2`.  Its solution uses the explicit
+  sphere-equator quotient geometry and does not supply the generic
+  collar/cofibration comparison still missing for `t03J02`, `t01J03`, and
+  `t97A01`; those problems remain `API-GAP`.
 - The homology branch of `t00A01` is `CLOSED` at `f5b0e191`: the frozen file
   imports and uses the production MV API and representation adapters.  The
   whole problem remains `FOUNDATION`/API-stopped because its independent van
@@ -475,22 +524,19 @@ Current audited classification beyond these closures:
 
 ## Next decision point
 
-The next two bounded packets are now ordered by concrete consumer uptake.
+The t96A03-specific packets formerly listed here are complete.  The next two
+bounded programs with concrete consumers are:
 
-1. **t96A03 dependent quotient deformation lifts.**  Descend the left, right,
-   and intersection band deformations through the restricted quotient maps
-   and package the resulting homotopy equivalences.  Stop at the first exact
-   dependent `Quotient.lift`/`Quotient.inductionOn` motive or generated-relation
-   coherence goal that cannot transport membership in the quotient open
-   subtype.  Do not assume a lift or a homotopy equivalence.
-2. **Next production-MV certification consumer.**  Prefer `t96A03` after its
-   dependent quotient deformation lifts exist.  Its exact stop is geometric:
-   the current frozen quotient presentation does not yet supply homotopy
-   equivalences from the open cover pieces and overlap to the computed sphere
-   pieces.  A secondary candidate is the product branch of `t95J04`; its stop
-   is not production exactness but the absent product-homology/Künneth input
-   needed to compute the cover terms.  Do not assume either geometry or
-   product homology merely to exercise the now-banked MV API.
+1. **Product homology for `t95J04`.**  Build a coefficient-compatible
+   Eilenberg--Zilber/Künneth theorem sufficient to compute `H₂(S³ × S³)` and
+   compare it with the factor-retraction witness for `S² × S⁴`.  Stop before
+   consumer assembly if sphere coefficient change or the chain-level tensor
+   comparison is absent; do not assume either product homology calculation.
+2. **Generic closed-gluing comparison for `t03J02`/`t01J03`.**  Start with one
+   collar or cofibration theorem producing an honest open cover and term
+   equivalences from the frozen gluing data.  Stop if the source hypotheses do
+   not provide a collar/cofibration; do not generalize the t96A03 coordinate
+   construction by renaming its explicit geometry.
 
 The banked production-MV scaffold already supplies:
 
@@ -511,8 +557,9 @@ For t00A01, that calculation is now observed in the frozen theorem at
 and H₀ augmentation discharge every homology degree.  This closes only the
 homology branch.  The independent van Kampen theorem remains absent.
 
-For t96A03, `bb7a7c67` has compiled the explicit open cover and quotient-map
-sources.  The first local stop is the dependent quotient lift described in
-packet 1.  After that, the same production intersection comparison and MV
-normalization are required.  Neither geometry progress nor the banked algebra
-closes frozen t96A03.
+For t96A03, the geometry chain through `f7399011` supplies the three required
+homotopy equivalences; `b3b3f153` and `f6cfdaf8` transport the frozen quotient
+to that reusable model; `5aecf0c3` and `efa4805e` compute every homology degree.
+The frozen theorem imports those targets and closes at `adcd54a2` with zero
+placeholders.  This is an observed consumer edge, not evidence for a generic
+closed-gluing theorem.
