@@ -2036,6 +2036,80 @@ theorem midpointLeftPoint_succ
           (midpointLeftVertexIndex S T i.succ)) = S.point i.succ :=
   midpointLeftPoint_eq S T i.succ
 
+/-- Three source and three target transports around one aligned arrow collapse
+to the direct endpoint transports. -/
+theorem eqToHom_three_three_eq_one_one
+    {A₀ A₁ A₂ A₃ B₀ B₁ B₂ B₃ : C}
+    (h₁ : A₀ = A₁) (h₂ : A₁ = A₂) (h₃ : A₂ = A₃) (h : A₀ = A₃)
+    (f : A₃ ⟶ B₀)
+    (k₁ : B₀ = B₁) (k₂ : B₁ = B₂) (k₃ : B₂ = B₃) (k : B₀ = B₃) :
+    eqToHom h₁ ≫ (eqToHom h₂ ≫ eqToHom h₃ ≫ f ≫
+      eqToHom k₁ ≫ eqToHom k₂) ≫ eqToHom k₃ =
+      eqToHom h ≫ f ≫ eqToHom k := by
+  subst A₁
+  subst A₂
+  subst A₃
+  subst B₁
+  subst B₂
+  subst B₃
+  simp
+
+/-- Each midpoint-prefix arrow is the corresponding original left arrow,
+conjugated by the explicit point-coordinate equalities. -/
+theorem shrinkingPrefixArrow_midpointLeft_eq_conjugate
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) (i : Fin (S.n + 1)) :
+    shrinkingPrefixArrow D S T (T.n + 1)
+        (midpointLeftSegmentIndex S T i) =
+      (objectIsoOfIndexEq D.obj (midpointLeftPoint_castSucc S T i)).hom ≫
+        D.mappedPiece S i ≫
+        (objectIsoOfIndexEq D.obj (midpointLeftPoint_succ S T i)).inv := by
+  unfold shrinkingPrefixArrow
+  rw [dependentArrow_conjugation
+    (fun k => D.obj ((concatSubdivision S T).point k))
+    (D.mappedPiece (concatSubdivision S T))
+    (midpointLeftSegmentEmbedding_eq S T i)]
+  rw [mappedPiece_concat_left D S T i]
+  simp only [objectIsoOfIndexEq, eqToIso.hom, eqToIso.inv,
+    Category.assoc]
+  exact eqToHom_three_three_eq_one_one
+    (f := D.mappedPiece S i)
+    (h₁ := _) (h₂ := _) (h₃ := _) (h := _)
+    (k₁ := _) (k₂ := _) (k₃ := _) (k := _)
+
+/-- The midpoint shrinking prefix, displayed in the original-left cardinality
+through `midpointLeftVertexIndex`, is the literal original-left subdivision
+fold with only its two point-coordinate transports. -/
+theorem midpointLeftReindexedFold_eq
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    (S : PathTwoOpenSubdivision p U V)
+    (T : PathTwoOpenSubdivision q U V) :
+    TwoOpenDescentDatum.composeFin
+      (fun i : Fin (S.n + 2) =>
+        shrinkingPrefixObject D S T (T.n + 1)
+          (midpointLeftVertexIndex S T i))
+      (fun i : Fin (S.n + 1) =>
+        shrinkingPrefixArrow D S T (T.n + 1)
+          (midpointLeftSegmentIndex S T i)) =
+      (objectIsoOfIndexEq D.obj (midpointLeftPoint_eq S T 0)).hom ≫
+        TwoOpenDescentDatum.composeFin (D.obj ∘ S.point) (D.mappedPiece S) ≫
+        (objectIsoOfIndexEq D.obj
+          (midpointLeftPoint_eq S T (Fin.last (S.n + 1)))).inv := by
+  have hfold := composeFin_reindex_of_index_eq D.obj
+    S.point
+    (fun i : Fin (S.n + 2) =>
+      (concatSubdivision S T).point
+        (shrinkingVertexEmbedding S T (T.n + 1)
+          (midpointLeftVertexIndex S T i)))
+    (midpointLeftPoint_eq S T)
+    (D.mappedPiece S)
+    (fun i : Fin (S.n + 1) =>
+      shrinkingPrefixArrow D S T (T.n + 1)
+        (midpointLeftSegmentIndex S T i))
+    (shrinkingPrefixArrow_midpointLeft_eq_conjugate D S T)
+  simpa only [shrinkingPrefixObject, Function.comp_apply] using hfold
+
 #print axioms shrinkingVertexEmbedding_zero_stage
 #print axioms shrinkingSegmentEmbedding_zero_stage
 #print axioms composeFin_terminal_split
@@ -2142,5 +2216,8 @@ theorem midpointLeftPoint_succ
 #print axioms midpointLeftPoint_eq
 #print axioms midpointLeftPoint_castSucc
 #print axioms midpointLeftPoint_succ
+#print axioms eqToHom_three_three_eq_one_one
+#print axioms shrinkingPrefixArrow_midpointLeft_eq_conjugate
+#print axioms midpointLeftReindexedFold_eq
 
 end ConstructionTargets.ConcatSubdivisionShrinkingFoldRecurrence

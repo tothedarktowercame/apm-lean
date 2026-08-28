@@ -275,8 +275,18 @@ into the subtraction-indexed midpoint stage.
 literal `leftSegment`; `midpointLeftPoint_eq` and its `castSucc`/`succ` forms
 identify every midpoint object with the corresponding `S.point` object.
 
-The next seam is arrow-level: conjugate each midpoint
-`shrinkingPrefixArrow` through these endpoint equalities and
-`mappedPiece_concat_left`, then apply the finite-fold reindex theorem. Until
-that dependent arrow comparison is compiled, the midpoint prefix cannot be
-replaced honestly by `S`'s fold, and evaluation composition is not claimed.
+`shrinkingPrefixArrow_midpointLeft_eq_conjugate` now conjugates every displayed
+midpoint arrow through these endpoint equalities and
+`mappedPiece_concat_left`. `midpointLeftReindexedFold_eq` applies
+`composeFin_reindex_of_index_eq`, identifying the entire midpoint fold
+displayed through `midpointLeftVertexIndex` with the literal `S` fold.
+
+The remaining representation seam is the cardinality cast between the
+definition of `shrinkingPrefixFold D S T (T.n+1)`, indexed by
+`Fin (concatSegmentCount S T - (T.n+1) + 1)`, and that compiled displayed
+fold, indexed by `Fin (S.n+2)`. These cardinalities are arithmetically equal,
+but their dependent arrow families cannot be rewritten definitionally. A
+second whole-chain `composeFin_reindex_of_index_eq` comparison with named
+zero/last transports is required before `rightInitialAccum` and the outer
+`evaluate` maps can be normalized. No literal midpoint-fold or evaluation
+equality is claimed yet.
