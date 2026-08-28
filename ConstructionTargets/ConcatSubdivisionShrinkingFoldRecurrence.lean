@@ -269,6 +269,19 @@ theorem successorChainComposeFin_eq {m : ℕ} (hm : 0 < m)
       (fun i => f (Fin.cast (by omega) i))
       (successorChainArrow hm A f) harr)
 
+/-- The successor-shaped whole chain splits syntactically into its prefix and
+terminal transported arrow. -/
+theorem successorChainComposeFin_terminal_split {m : ℕ} (hm : 0 < m)
+    (A : Fin (m + 1) → C)
+    (f : (i : Fin m) → A i.castSucc ⟶ A i.succ) :
+    TwoOpenDescentDatum.composeFin (A ∘ successorChainVertex hm)
+        (successorChainArrow hm A f) =
+      TwoOpenDescentDatum.composeFin
+          ((A ∘ successorChainVertex hm) ∘ Fin.castSucc)
+          (fun i => successorChainArrow hm A f i.castSucc) ≫
+        successorChainArrow hm A f (Fin.last (m - 1)) := by
+  exact composeFin_terminal_split _ _
+
 /-- The source objects of successive stages are canonically equal. -/
 def shrinkingPrefixInitialIso
     (D : @TwoOpenDescentDatum X _ U V C _)
@@ -319,6 +332,7 @@ def shrinkingPrefixTerminalIso
 #print axioms composeFin_terminal_split
 #print axioms terminalArrow_transport
 #print axioms successorChainComposeFin_eq
+#print axioms successorChainComposeFin_terminal_split
 #print axioms successorChain_initial_object_transport
 #print axioms successorChainCastLast_eq_last
 #print axioms successorChain_final_object_transport

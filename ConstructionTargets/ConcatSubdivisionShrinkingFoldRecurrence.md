@@ -29,12 +29,14 @@ terminal index beneath the dependent family.
 normalization: the direct successor-source-to-zero transport followed by the
 inverse cast-zero transport is exactly the source transport emitted by the
 fold reindex theorem.
+`successorChainComposeFin_terminal_split` supplies the literal terminal split
+of the successor-shaped whole chain.
 These are the typed inputs for the next recurrence theorem.  This target does
 not claim the fold equality or full right-block iteration.
 
-The remaining seam is a single fully-associated composite calculation joining
-the initial normalization, `successorChainComposeFin_eq`, the syntactic
-terminal split, and `successorChain_final_object_transport`. The individual
-source and target cancellations compile; their combined equality back in the
-literal original-fold coordinates and the shrinking recurrence are not yet
-claimed.
+The remaining seam is the comparison between the cast-indexed original fold
+inside `successorChainComposeFin_eq` and the literal `m`-indexed original
+fold. Their index types are propositionally equal but not definitionally the
+same, so this requires another proof-carrying whole-chain reindex rather than
+a rewrite beneath dependent arrows. The shrinking recurrence remains
+downstream of that comparison.
