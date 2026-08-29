@@ -480,6 +480,110 @@ def pseudoCoconeToDescentFunctor (hcover : U ∪ V = Set.univ) :
     ((pseudoCoconeToDescentFunctor hcover).map tau).piece b =
       strictifiedPieceNatTrans hcover tau b := rfl
 
+/-- The original pseudococone maps to the pseudococone reconstructed from its
+strictified descent datum. -/
+def pseudoCoconeStrictificationHom
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    P ⟶ descentToPseudoCoconeFunctor.obj
+      ((pseudoCoconeToDescentFunctor hcover).obj P) where
+  left := (pieceStrictificationIso hcover P true).hom
+  right := (pieceStrictificationIso hcover P false).hom
+  glue_naturality := by
+    ext z
+    have h := strictifiedOverlapIso_hom_app hcover P z
+    change P.glue.hom.app z ≫
+        (pieceStrictificationIso hcover P false).hom.app _ =
+      (pieceStrictificationIso hcover P true).hom.app _ ≫
+        (descentOverlapIso (strictifiedDescentDatum hcover P)).hom.app z
+    simpa [strictifiedOverlapIso, descentOverlapIso, descentOverlapAppIso,
+      strictifiedDescentDatum, Category.assoc] using
+      congrArg (fun k =>
+        (pieceStrictificationIso hcover P true).hom.app _ ≫ k) h
+
+theorem iso_square_inverse
+    {A B A' B' : C} (a : A ≅ A') (b : B ≅ B')
+    (f : A ⟶ B) (g : A' ⟶ B')
+    (h : f ≫ b.hom = a.hom ≫ g) :
+    g ≫ b.inv = a.inv ≫ f := by
+  calc
+    g ≫ b.inv = (a.inv ≫ a.hom) ≫ g ≫ b.inv := by simp
+    _ = a.inv ≫ (a.hom ≫ g) ≫ b.inv := by simp [Category.assoc]
+    _ = a.inv ≫ (f ≫ b.hom) ≫ b.inv := by rw [h]
+    _ = a.inv ≫ f := by simp [Category.assoc]
+
+/-- The inverse comparison from the reconstructed pseudococone to the
+original one. -/
+def pseudoCoconeStrictificationInv
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    descentToPseudoCoconeFunctor.obj
+      ((pseudoCoconeToDescentFunctor hcover).obj P) ⟶ P where
+  left := (pieceStrictificationIso hcover P true).inv
+  right := (pieceStrictificationIso hcover P false).inv
+  glue_naturality := by
+    ext z
+    change (descentOverlapIso (strictifiedDescentDatum hcover P)).hom.app z ≫
+        (pieceStrictificationIso hcover P false).inv.app _ =
+      (pieceStrictificationIso hcover P true).inv.app _ ≫ P.glue.hom.app z
+    have h := NatTrans.congr_app
+      (pseudoCoconeStrictificationHom hcover P).glue_naturality z
+    simpa only [NatTrans.comp_app, Functor.whiskerLeft_app] using
+      iso_square_inverse
+        ((pieceStrictificationIso hcover P true).app _)
+        ((pieceStrictificationIso hcover P false).app _)
+        (P.glue.hom.app z)
+        ((descentOverlapIso (strictifiedDescentDatum hcover P)).hom.app z) h
+
+/-- Pseudococone-level strictification is an isomorphism. -/
+def pseudoCoconeStrictificationIso
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    P ≅ descentToPseudoCoconeFunctor.obj
+      ((pseudoCoconeToDescentFunctor hcover).obj P) where
+  hom := pseudoCoconeStrictificationHom hcover P
+  inv := pseudoCoconeStrictificationInv hcover P
+  hom_inv_id := by
+    apply PseudoFunctorCoconeHom.ext
+    · exact (pieceStrictificationIso hcover P true).hom_inv_id
+    · exact (pieceStrictificationIso hcover P false).hom_inv_id
+  inv_hom_id := by
+    apply PseudoFunctorCoconeHom.ext
+    · exact (pieceStrictificationIso hcover P true).inv_hom_id
+    · exact (pieceStrictificationIso hcover P false).inv_hom_id
+
+/-- The pseudococone-side comparison, oriented from the identity functor to
+strictification followed by forgetting the common coordinate. -/
+def pseudoCoconeStrictificationNatIso
+    (hcover : U ∪ V = Set.univ) :
+    Functor.id (PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) ≅
+      pseudoCoconeToDescentFunctor hcover ⋙ descentToPseudoCoconeFunctor :=
+  NatIso.ofComponents (pseudoCoconeStrictificationIso hcover) (by
+    intro P Q tau
+    apply PseudoFunctorCoconeHom.ext
+    · ext z
+      change tau.left.app z ≫
+          (pieceStrictificationIso hcover Q true).hom.app z =
+        (pieceStrictificationIso hcover P true).hom.app z ≫
+          ((pieceStrictificationIso hcover P true).inv.app z ≫
+            tau.left.app z ≫
+            (pieceStrictificationIso hcover Q true).hom.app z)
+      rw [← Category.assoc,
+        (pieceStrictificationIso hcover P true).hom_inv_id_app,
+        Category.id_comp]
+      rfl
+    · ext z
+      change tau.right.app z ≫
+          (pieceStrictificationIso hcover Q false).hom.app z =
+        (pieceStrictificationIso hcover P false).hom.app z ≫
+          ((pieceStrictificationIso hcover P false).inv.app z ≫
+            tau.right.app z ≫
+            (pieceStrictificationIso hcover Q false).hom.app z)
+      rw [← Category.assoc,
+        (pieceStrictificationIso hcover P false).hom_inv_id_app,
+        Category.id_comp]
+      rfl)
+
 /-- A pseudococone together with a strict common object coordinate.  The last
 field is the overlap map equation in those coordinates; it is the exact form
 required by `TwoOpenDescentDatum.overlap_eq`. -/
@@ -582,5 +686,10 @@ def HasStrictCommonObjectCoordinates
 #print axioms strictifiedPieceNatTrans_overlap_app
 #print axioms strictifiedCompatibleNatTrans
 #print axioms pseudoCoconeToDescentFunctor
+#print axioms iso_square_inverse
+#print axioms pseudoCoconeStrictificationHom
+#print axioms pseudoCoconeStrictificationInv
+#print axioms pseudoCoconeStrictificationIso
+#print axioms pseudoCoconeStrictificationNatIso
 
 end ConstructionTargets.TwoOpenPseudoCoconeStrictification

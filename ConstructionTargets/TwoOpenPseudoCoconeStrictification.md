@@ -74,8 +74,19 @@ through the identity strictified glue yields
 `iso_conjugation_comp` proves that these conjugated transformations compose;
 together with the identity calculation it packages
 `pseudoCoconeToDescentFunctor`, the reverse functor on both objects and
-morphisms.  Its object and piece-map simp lemmas expose the construction for
-the next packet.  The remaining seam is to construct and verify the unit and
-counit comparing this functor with the pseudococone functor obtained from a
-descent object.  No categorical equivalence or ordinary pushout is claimed
-here.
+morphisms. Its object and piece-map simp lemmas expose the construction.
+
+`pseudoCoconeStrictificationHom` uses the two `pieceStrictificationIso.hom`
+components and derives its glue square from
+`strictifiedOverlapIso_hom_app`. `iso_square_inverse` derives the inverse glue
+square algebraically, so `pseudoCoconeStrictificationInv` does not assume a
+second compatibility condition. `pseudoCoconeStrictificationIso` proves both
+inverse laws via `PseudoFunctorCoconeHom.ext`.
+
+Finally, `pseudoCoconeStrictificationNatIso` packages these objectwise
+isomorphisms naturally in the explicit orientation
+`Functor.id _ ≅ pseudoCoconeToDescentFunctor hcover ⋙
+descentToPseudoCoconeFunctor`. Naturality is the componentwise cancellation
+of each source piece isomorphism against the conjugated map. The descent-side
+natural isomorphism remains separate. No categorical equivalence or ordinary
+pushout is claimed here.
