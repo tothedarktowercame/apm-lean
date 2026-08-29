@@ -17,10 +17,22 @@ equalities of objects.
 construction under those hypotheses. `HasStrictCommonObjectCoordinates`
 isolates the first unavoidable condition missing from a general pseudococone.
 
-Consequently there is no reverse functor from the currently defined category
-of arbitrary pseudococones without a separate strictification construction
-that replaces each piece functor by an isomorphic functor on chosen common
-objects. The same issue prevents constructing `CompatibleNatTrans` from an
-arbitrary `PseudoFunctorCoconeHom`: its common-coordinate component equation
-is not typed until those equality coordinates are chosen. No equivalence or
+`TwoOpenFundamentalGroupoidSpan` now provides that separate construction as
+`strictifiedObject`, `strictifiedPieceFunctor`, and
+`pieceStrictificationIso`. This file additionally banks
+`iso_naturality_conjugation`, the categorical core which turns the glue
+naturality square into equality of conjugated piece arrows.
+
+`overlapPath_map_eq_pathInPiece` now supplies the proof-carrying comparison
+between the nested overlap path and each independently constructed
+`pathInPiece` representative. It uses explicit endpoint `eqToHom`s and
+`FundamentalGroupoid.conj_eqToHom`; it does not identify subtype witnesses
+definitionally.
+
+The remaining specialization is one categorical representation layer later:
+after mapping this equality through `P.left` and `P.right`, the strictified
+object isomorphisms produce heterogeneous morphism equalities between the
+chosen common objects and the overlap endpoint objects. A typed theorem
+combining those four mapped endpoint transports with glue naturality is still
+required before `strictifiedDescentDatum` can be packaged. No equivalence or
 ordinary pushout is claimed here.

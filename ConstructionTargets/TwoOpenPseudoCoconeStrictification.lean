@@ -22,6 +22,75 @@ variable {X : Type*} [TopologicalSpace X]
 variable {U V : Set X}
 variable {C : Type*} [Category C]
 
+/-- Naturality through an isomorphism, solved without changing any endpoint
+objects: conjugating the target arrow gives the source arrow. -/
+theorem iso_naturality_conjugation
+    {L₀ L₁ R₀ R₁ : C} (l : L₀ ⟶ L₁) (r : R₀ ⟶ R₁)
+    (e₀ : L₀ ≅ R₀) (e₁ : L₁ ≅ R₁)
+    (h : l ≫ e₁.hom = e₀.hom ≫ r) :
+    e₀.hom ≫ r ≫ e₁.inv = l := by
+  rw [← Category.assoc, ← h]
+  simp [Category.assoc]
+
+/-- Mapping the canonical overlap lift of an ambient path to either piece
+gives the corresponding `pathInPiece` arrow.  Endpoint membership witnesses
+are aligned only after the path has been constructed. -/
+theorem overlapPath_map_eq_pathInPiece
+    {x y : X} (p : Path x y)
+    (hU : ∀ t, p t ∈ U) (hV : ∀ t, p t ∈ V) (b : Bool) :
+    let xW : CoverOverlap (X := X) (U := U) (V := V) :=
+      ⟨x, by simpa using hU 0, by simpa using hV 0⟩
+    let yW : CoverOverlap (X := X) (U := U) (V := V) :=
+      ⟨y, by simpa using hU 1, by simpa using hV 1⟩
+    let pW : Path xW yW :=
+      { toFun := fun t ↦ ⟨p t, hU t, hV t⟩
+        continuous_toFun := p.continuous.subtype_mk _
+        source' := Subtype.ext p.source
+        target' := Subtype.ext p.target }
+    let hp : ∀ t, p t ∈ twoChart U V b := by
+      cases b
+      · simpa [twoChart] using hV
+      · simpa [twoChart] using hU
+    let xb : FundamentalGroupoid (CoverPiece U V b) :=
+      ⟨⟨x, by simpa using hp 0⟩⟩
+    let yb : FundamentalGroupoid (CoverPiece U V b) :=
+      ⟨⟨y, by simpa using hp 1⟩⟩
+    let hx : xb.as = ((overlapFundamentalGroupoidMap
+        (U := U) (V := V) b).obj ⟨xW⟩).as :=
+      by
+        cases b
+        apply Subtype.ext
+        rfl
+        apply Subtype.ext
+        rfl
+    let hy : yb.as = ((overlapFundamentalGroupoidMap
+        (U := U) (V := V) b).obj ⟨yW⟩).as :=
+      by
+        cases b
+        apply Subtype.ext
+        rfl
+        apply Subtype.ext
+        rfl
+    let ex := congrArg FundamentalGroupoid.mk hx
+    let ey := congrArg FundamentalGroupoid.mk hy
+    eqToHom ex ≫
+        (overlapFundamentalGroupoidMap (U := U) (V := V) b).map
+          (Path.Homotopic.Quotient.mk pW) ≫
+        eqToHom ey.symm =
+      Path.Homotopic.Quotient.mk (pathInPiece U V b p hp) := by
+  dsimp only
+  change eqToHom _ ≫
+      FundamentalGroupoid.fromPath
+        ((Path.Homotopic.Quotient.mk _).map
+          (overlapToPiece (U := U) (V := V) b)) ≫
+      eqToHom _ = _
+  rw [← Path.Homotopic.Quotient.mk_map]
+  rw [FundamentalGroupoid.conj_eqToHom]
+  all_goals cases b <;>
+    simp [pathInPiece, overlapToPiece]
+  all_goals
+    congr 1
+
 /-- A pseudococone together with a strict common object coordinate.  The last
 field is the overlap map equation in those coordinates; it is the exact form
 required by `TwoOpenDescentDatum.overlap_eq`. -/
