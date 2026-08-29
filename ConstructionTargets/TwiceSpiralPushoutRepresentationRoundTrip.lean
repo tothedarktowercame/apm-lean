@@ -109,7 +109,7 @@ def coordinateRoundTripInv (D : CoordinateVertexData (d := d) C) :
     intro g
     change D.rightHom g ≫ D.baseGlue.inv =
       D.baseGlue.inv ≫ strictRightHom C D g
-    simp [strictRightHom, Iso.conj_apply, Category.assoc]
+    simp [strictRightHom, Iso.conj_apply]
   baseGlue_square := by
     change D.baseGlue.hom ≫ D.baseGlue.inv = 𝟙 _ ≫ 𝟙 _
     simp
