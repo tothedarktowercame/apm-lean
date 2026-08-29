@@ -70,9 +70,13 @@ retaining the overlap `funInvIdAssoc`, the proof-carrying span equality, and
 the inverse piece-unit component.  The outgoing orientation needed on the
 right is exported as `actualRight_span_roundTrip_triangle_inv`.
 
-The next seam is a typed three-part paste of those two specialized triangles
-with `actualGlue_overlapUnit_naturality`.  That paste will give the overlap
-square for the actual-side pseudococone unit; its inverse and the pseudococone
-isomorphism can then be obtained from the component isomorphisms.  The
-coordinate-side round trip and the final pseudococone-category equivalence
-remain downstream.
+`actualRoundTrip_glue_square` performs the typed three-part paste of those
+triangles with `actualGlue_overlapUnit_naturality`. `actualRoundTripHom` uses
+that square directly, while `actualRoundTripInv` derives the inverse square
+by cancelling the two whiskered piece isomorphisms. They form the objectwise
+`actualRoundTripIso`; the existing piece-unit naturality equations package
+these as `actualRoundTripNatIso`, oriented from the identity functor to
+forward coordinate transport followed by reverse transport.
+
+The coordinate-side counit and its span/glue coherence remain downstream.
+No pseudococone-category equivalence or based group pushout is claimed here.

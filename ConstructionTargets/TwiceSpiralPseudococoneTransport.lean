@@ -584,6 +584,176 @@ theorem actualRight_span_roundTrip_triangle_inv
       (q := right_span_coordinate_equation h)
       (L := P.right))
 
+/-- The piecewise unit transformations form a morphism of actual collar
+pseudococones. -/
+theorem actualRoundTrip_glue_square
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    P.glue.hom ≫
+        Functor.whiskerLeft
+          (overlapFundamentalGroupoidMap (U := U h) (V := V h) false)
+          (actualRightRoundTripIso h C P).hom =
+      Functor.whiskerLeft
+          (overlapFundamentalGroupoidMap (U := U h) (V := V h) true)
+          (actualLeftRoundTripIso h C P).hom ≫
+        (coordinateToActualPseudoCoconeObj h C
+          (actualPseudoCoconeToCoordinateObj h C P)).glue.hom := by
+  let eL := (overlapFundamentalGroupoidEquivalence h).funInvIdAssoc
+    (FundamentalGroupoid.map (intersectionToLeftOpen h) ⋙ P.left)
+  let eR := (overlapFundamentalGroupoidEquivalence h).funInvIdAssoc
+    (FundamentalGroupoid.map (intersectionToRightOpen h) ⋙ P.right)
+  have hL :
+      (reverseLeftSpanComparison h C
+          ((leftFunctorCategoryEquivalence h C).functor.obj P.left)).inv ≫
+        Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).functor
+          (leftSpanComparison h C P.left).hom =
+      Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToLeftOpen h))
+          (actualLeftRoundTripIso h C P).inv ≫ eL.inv := by
+    apply eL.eq_comp_inv.mpr
+    simpa only [Category.assoc] using
+      actualLeft_span_roundTrip_triangle h C P
+  have hR :
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).functor
+          (rightSpanComparison h C P.right).inv ≫
+        (reverseRightSpanComparison h C
+          ((rightFunctorCategoryEquivalence h C).functor.obj P.right)).hom =
+      eR.hom ≫
+        Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToRightOpen h))
+          (actualRightRoundTripIso h C P).hom := by
+    apply eR.inv_comp_eq.mp
+    simpa only [Category.assoc] using
+      actualRight_span_roundTrip_triangle_inv h C P
+  have hC :
+      eL.inv ≫ Functor.whiskerLeft
+          (overlapFundamentalGroupoidEquivalence h).functor
+          (transportedOverlapGlue h C P).hom =
+      P.glue.hom ≫ eR.inv := by
+    ext z
+    simpa [eL, eR, transportedOverlapGlue,
+      ConstructionTargets.TwoOpenFundamentalGroupoidSpan.overlapFundamentalGroupoidMap,
+      ConstructionTargets.TwoOpenFundamentalGroupoidSpan.overlapToPiece,
+      FundamentalGroupoid.map] using actualGlue_overlapUnit_naturality h C P z
+  have hUL :
+      Functor.whiskerLeft (overlapFundamentalGroupoidMap true)
+          (actualLeftRoundTripIso h C P).hom ≫
+      Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToLeftOpen h))
+          (actualLeftRoundTripIso h C P).inv = 𝟙 _ := by
+    ext z
+    apply (actualLeftRoundTripIso h C P).hom_inv_id_app
+  have hER : eR.inv ≫ eR.hom = 𝟙 _ := eR.inv_hom_id
+  dsimp [coordinateToActualPseudoCoconeObj, actualPseudoCoconeToCoordinateObj,
+    reverseTransportedOverlapGlue]
+  change (reverseLeftSpanComparison h C
+      ((leftFundamentalGroupoidEquivalence h).inverse ⋙ P.left)).inv ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).functor
+        (leftSpanComparison h C P.left).hom =
+    Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToLeftOpen h))
+      (actualLeftRoundTripIso h C P).inv ≫ eL.inv at hL
+  change Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).functor
+      (rightSpanComparison h C P.right).inv ≫
+      (reverseRightSpanComparison h C
+        ((rightFundamentalGroupoidEquivalence h).inverse ⋙ P.right)).hom =
+    eR.hom ≫
+      Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToRightOpen h))
+        (actualRightRoundTripIso h C P).hom at hR
+  have hULe :
+      Functor.whiskerLeft (overlapFundamentalGroupoidMap true)
+          (actualLeftRoundTripIso h C P).hom ≫
+        (Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToLeftOpen h))
+      (actualLeftRoundTripIso h C P).inv ≫ eL.inv) = eL.inv := by
+    rw [← Category.assoc, hUL]
+    exact Category.id_comp _
+  have hERu :
+      (eR.inv ≫ eR.hom) ≫
+        Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToRightOpen h))
+          (actualRightRoundTripIso h C P).hom =
+      Functor.whiskerLeft (overlapFundamentalGroupoidMap false)
+        (actualRightRoundTripIso h C P).hom := by
+    rw [hER, Category.id_comp]
+    rfl
+  have hULer {Z : FundamentalGroupoid (U h ∩ V h : Set (Gluing h)) ⥤ C}
+      (k : ((overlapFundamentalGroupoidEquivalence h).functor ⋙
+        (overlapFundamentalGroupoidEquivalence h).inverse ⋙
+        FundamentalGroupoid.map (intersectionToLeftOpen h) ⋙ P.left) ⟶ Z) :
+      Functor.whiskerLeft (overlapFundamentalGroupoidMap true)
+          (actualLeftRoundTripIso h C P).hom ≫
+        ((Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToLeftOpen h))
+          (actualLeftRoundTripIso h C P).inv ≫ eL.inv) ≫ k) =
+      eL.inv ≫ k := by
+    rw [← Category.assoc, hULe]
+    rfl
+  have hCr := reassoc_of% hC
+  have hFinal :
+      (P.glue.hom ≫ eR.inv) ≫ eR.hom ≫
+          Functor.whiskerLeft (FundamentalGroupoid.map (intersectionToRightOpen h))
+            (actualRightRoundTripIso h C P).hom =
+        P.glue.hom ≫ Functor.whiskerLeft (overlapFundamentalGroupoidMap false)
+          (actualRightRoundTripIso h C P).hom := by
+    simpa only [Category.assoc] using
+      congrArg (fun k => P.glue.hom ≫ k) hERu
+  slice_rhs 2 3 => rw [hL]
+  slice_rhs 1 4 => exact hULer _
+  slice_rhs 1 3 => exact hCr _
+  slice_rhs 2 3 => exact hR
+  slice_rhs 1 4 => exact hFinal
+  rfl
+
+/-- Actual-side unit morphism for the forward/reverse pseudococone transport. -/
+def actualRoundTripHom
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    P ⟶ (actualPseudoCoconeToCoordinateFunctor h C ⋙
+      coordinateToActualPseudoCoconeFunctor h C).obj P where
+  left := (actualLeftRoundTripIso h C P).hom
+  right := (actualRightRoundTripIso h C P).hom
+  glue_naturality := actualRoundTrip_glue_square h C P
+
+/-- The inverse unit morphism; its glue square is obtained by cancelling the
+two piece isomorphisms in the already-proved forward square. -/
+def actualRoundTripInv
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    (actualPseudoCoconeToCoordinateFunctor h C ⋙
+      coordinateToActualPseudoCoconeFunctor h C).obj P ⟶ P where
+  left := (actualLeftRoundTripIso h C P).inv
+  right := (actualRightRoundTripIso h C P).inv
+  glue_naturality := by
+    exact ConstructionTargets.TwoOpenPseudoCoconeStrictification.iso_square_inverse
+      (Functor.isoWhiskerLeft (overlapFundamentalGroupoidMap true)
+        (actualLeftRoundTripIso h C P))
+      (Functor.isoWhiskerLeft (overlapFundamentalGroupoidMap false)
+        (actualRightRoundTripIso h C P))
+      P.glue.hom
+      ((coordinateToActualPseudoCoconeObj h C
+        (actualPseudoCoconeToCoordinateObj h C P)).glue.hom)
+      (actualRoundTrip_glue_square h C P)
+
+/-- Objectwise actual-pseudococone round-trip isomorphism. -/
+def actualRoundTripIso
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    P ≅ (actualPseudoCoconeToCoordinateFunctor h C ⋙
+      coordinateToActualPseudoCoconeFunctor h C).obj P where
+  hom := actualRoundTripHom h C P
+  inv := actualRoundTripInv h C P
+  hom_inv_id := by
+    apply PseudoFunctorCoconeHom.ext
+    · exact (actualLeftRoundTripIso h C P).hom_inv_id
+    · exact (actualRightRoundTripIso h C P).hom_inv_id
+  inv_hom_id := by
+    apply PseudoFunctorCoconeHom.ext
+    · exact (actualLeftRoundTripIso h C P).inv_hom_id
+    · exact (actualRightRoundTripIso h C P).inv_hom_id
+
+/-- Actual-side unit, oriented from the identity to forward transport followed
+by reverse transport. -/
+def actualRoundTripNatIso :
+    Functor.id (PseudoFunctorCocone
+      (X := Gluing h) (U := U h) (V := V h) (C := C)) ≅
+      actualPseudoCoconeToCoordinateFunctor h C ⋙
+        coordinateToActualPseudoCoconeFunctor h C :=
+  NatIso.ofComponents (actualRoundTripIso h C) (by
+    intro P Q tau
+    apply PseudoFunctorCoconeHom.ext
+    · exact actualLeftRoundTripIso_naturality h C tau
+    · exact actualRightRoundTripIso_naturality h C tau)
+
 
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
@@ -628,5 +798,10 @@ theorem actualRight_span_roundTrip_triangle_inv
 #print axioms actualLeft_span_roundTrip_triangle
 #print axioms actualRight_span_roundTrip_triangle
 #print axioms actualRight_span_roundTrip_triangle_inv
+#print axioms actualRoundTrip_glue_square
+#print axioms actualRoundTripHom
+#print axioms actualRoundTripInv
+#print axioms actualRoundTripIso
+#print axioms actualRoundTripNatIso
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport
