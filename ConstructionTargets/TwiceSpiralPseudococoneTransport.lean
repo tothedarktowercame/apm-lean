@@ -200,6 +200,17 @@ theorem three_square_pasting
     ← Category.assoc l, hl]
   exact Category.assoc x l' (m' ≫ r')
 
+/-- Left whiskering preserves a parenthesized composite of three natural
+transformations, with the association exposed for subsequent block rewrites. -/
+theorem whiskerLeft_three_comp
+    {A B : Type} [Category A] [Category B]
+    (F : Functor A B) {G₀ G₁ G₂ G₃ : Functor B C}
+    (a : G₀ ⟶ G₁) (b : G₁ ⟶ G₂) (c : G₂ ⟶ G₃) :
+    Functor.whiskerLeft F (a ≫ b ≫ c) =
+      Functor.whiskerLeft F a ≫ Functor.whiskerLeft F b ≫
+        Functor.whiskerLeft F c := by
+  rw [Functor.whiskerLeft_comp, Functor.whiskerLeft_comp]
+
 /-- A morphism of actual collar pseudococones transports to a morphism of
 coordinate pseudococones. -/
 def actualPseudoCoconeToCoordinateMap
@@ -864,6 +875,24 @@ theorem coordinateMiddle_counit_conjugation
       symm
       simp only [Category.assoc, eR.inv_hom_id_app, Category.comp_id]
 
+/-- The reverse pseudococone glue, after inverse-overlap whiskering, exposes
+its three constituent blocks with their original association. -/
+theorem coordinateRoundTrip_whiskered_reverseGlue
+    (Q : CoordinatePseudoCocone h C) :
+    Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (coordinateToActualPseudoCoconeObj h C Q).glue.hom =
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+          (reverseLeftSpanComparison h C Q.left).inv ≫
+        Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+          (reverseTransportedOverlapGlue h C Q).hom ≫
+        Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+          (reverseRightSpanComparison h C Q.right).hom := by
+  dsimp [coordinateToActualPseudoCoconeObj]
+  exact whiskerLeft_three_comp
+    (C := C) (overlapFundamentalGroupoidEquivalence h).inverse
+    (reverseLeftSpanComparison h C Q.left).inv
+    (reverseTransportedOverlapGlue h C Q).hom
+    (reverseRightSpanComparison h C Q.right).hom
 
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
@@ -882,6 +911,7 @@ theorem coordinateMiddle_counit_conjugation
 #print axioms transportedOverlapGlue_naturality
 #print axioms rightSpanComparison_inv_naturality
 #print axioms three_square_pasting
+#print axioms whiskerLeft_three_comp
 #print axioms actualPseudoCoconeToCoordinateMap
 #print axioms actualPseudoCoconeToCoordinateFunctor
 #print axioms reverseLeftSpanComparison
@@ -918,5 +948,6 @@ theorem coordinateMiddle_counit_conjugation
 #print axioms coordinateGlue_overlapCounit_naturality
 #print axioms coordinateRight_span_roundTrip_counit_cancel
 #print axioms coordinateMiddle_counit_conjugation
+#print axioms coordinateRoundTrip_whiskered_reverseGlue
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport

@@ -93,11 +93,15 @@ exact natural-transformation type used by that paste: inverse-overlap
 whiskering of the coordinate glue equals the glue conjugated by the left
 counit comparison and inverse right counit comparison.
 
+`whiskerLeft_three_comp` proves the generic three-arrow whiskering formula,
+and `coordinateRoundTrip_whiskered_reverseGlue` now exposes that previously
+parenthesized reverse glue as its three separately whiskered arrows without
+unfolding either span comparison.
+
 The remaining step is solely the association-controlled paste of the named
-incoming, middle, and outgoing blocks.  Lean currently retains the inverse
-overlap whiskering of the three-arrow reverse glue as one parenthesized
-natural transformation, while the three named blocks expose its arrows
-separately; an explicit typed reassociation theorem is required between those
-two representations.
+incoming, middle, and outgoing blocks.  After middle conjugation, Lean retains
+the incoming triangle as the head of a right-associated seven-arrow
+composite, while the banked triangle is a standalone three-arrow equality. A
+typed prefix-substitution lemma for that exact association is still required.
 The coordinate-side counit itself remains downstream.
 No pseudococone-category equivalence or based group pushout is claimed here.
