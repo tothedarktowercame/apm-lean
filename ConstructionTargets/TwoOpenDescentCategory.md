@@ -15,9 +15,15 @@ whiskers ambient natural transformations along the two cover inclusions.
 a canonical restriction back to the original ambient functor, using the
 banked `canonicalReconstructionIso`.
 
-The opposite natural isomorphism in the descent category remains to be
-packaged. Its two piece components are the inverses of `pieceRestrictionIso`;
-the next theorem must prove their common-coordinate overlap compatibility and
-the naturality of that counit with respect to `CompatibleNatTrans`. Therefore
-this target does not yet claim an equivalence of categories or a categorical
-pushout.
+`descentReconstructionHom` and `descentReconstructionInv` use respectively
+the inverse and forward transformations of `pieceRestrictionIso`. Their
+overlap compatibility is proved after transporting both sides to the common
+`D.obj` coordinate. `descentReconstructionAppIso` proves the two composites
+are identities using `CompatibleNatTrans.ext`, and
+`descentReconstructionIso` proves naturality from
+`ambientNatTrans_restriction_app`.
+
+`twoOpenDescentEquivalence` packages the resulting equivalence between
+ambient fundamental-groupoid functors and compatible two-open descent data.
+This is an equivalence of functor/descent-data categories; no
+`CategoryTheory.Limits.Pushout` object or pushout claim is made here.

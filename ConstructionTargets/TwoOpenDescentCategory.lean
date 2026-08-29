@@ -20,6 +20,16 @@ variable {X : Type*} [TopologicalSpace X]
 variable {U V : Set X}
 variable {C : Type*} [Category C]
 
+theorem eqToHom_self_inv_hom {A B : C} (r : A = A) (h : B = A) :
+    eqToHom r.symm ≫ eqToHom h.symm ≫ eqToHom h = 𝟙 A := by
+  subst B
+  simp
+
+theorem eqToHom_inv_hom_self {A B : C} (h : B = A) (r : A = A) :
+    eqToHom h.symm ≫ eqToHom h ≫ eqToHom r = 𝟙 A := by
+  subst B
+  simp
+
 /-- Objects of the category of two-open descent data. -/
 structure DescentObject where
   datum : @TwoOpenDescentDatum X _ U V C _
@@ -182,10 +192,150 @@ def reconstructionRestrictionIso (hU : IsOpen U) (hV : IsOpen V)
       cases x
       simp)
 
+@[simp] theorem pieceRestrictionIso_hom_app
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (D : @TwoOpenDescentDatum X _ U V C _) (b : Bool)
+    (z : FundamentalGroupoid (CoverPiece U V b)) :
+    (pieceRestrictionIso hU hV hcover D b).hom.app z =
+      (eqToIso (D.obj_eq b z)).hom := rfl
+
+@[simp] theorem pieceRestrictionIso_inv_app
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (D : @TwoOpenDescentDatum X _ U V C _) (b : Bool)
+    (z : FundamentalGroupoid (CoverPiece U V b)) :
+    (pieceRestrictionIso hU hV hcover D b).inv.app z =
+      (eqToIso (D.obj_eq b z)).inv := rfl
+
+/-- The forward component on the descent side: restrict a reconstructed datum
+and return to the supplied piece functors using the inverse restriction
+isomorphisms. -/
+def descentReconstructionHom (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ)
+    (D : DescentObject (X := X) (U := U) (V := V) (C := C)) :
+    CompatibleNatTrans
+      (canonicalTwoOpenDescentDatum (U := U) (V := V)
+        (twoOpenDescentFunctor hU hV hcover D.datum))
+      D.datum where
+  piece b := (pieceRestrictionIso hU hV hcover D.datum b).inv
+  overlap_app := by
+    intro x hxU hxV
+    let zF : FundamentalGroupoid (CoverPiece U V false) :=
+      ⟨⟨x, by simpa [twoChart] using hxV⟩⟩
+    let zT : FundamentalGroupoid (CoverPiece U V true) :=
+      ⟨⟨x, by simpa [twoChart] using hxU⟩⟩
+    change transportedPieceApp _ _ _ zF = transportedPieceApp _ _ _ zT
+    unfold transportedPieceApp
+    rw [pieceRestrictionIso_inv_app, pieceRestrictionIso_inv_app]
+    exact (eqToHom_self_inv_hom
+      ((canonicalTwoOpenDescentDatum (U := U) (V := V)
+        (twoOpenDescentFunctor hU hV hcover D.datum)).obj_eq false zF)
+      (D.datum.obj_eq false zF)).trans
+      (eqToHom_self_inv_hom
+        ((canonicalTwoOpenDescentDatum (U := U) (V := V)
+          (twoOpenDescentFunctor hU hV hcover D.datum)).obj_eq true zT)
+        (D.datum.obj_eq true zT)).symm
+
+/-- The inverse descent-side component, using the forward restriction
+isomorphisms. -/
+def descentReconstructionInv (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ)
+    (D : DescentObject (X := X) (U := U) (V := V) (C := C)) :
+    CompatibleNatTrans D.datum
+      (canonicalTwoOpenDescentDatum (U := U) (V := V)
+        (twoOpenDescentFunctor hU hV hcover D.datum)) where
+  piece b := (pieceRestrictionIso hU hV hcover D.datum b).hom
+  overlap_app := by
+    intro x hxU hxV
+    let zF : FundamentalGroupoid (CoverPiece U V false) :=
+      ⟨⟨x, by simpa [twoChart] using hxV⟩⟩
+    let zT : FundamentalGroupoid (CoverPiece U V true) :=
+      ⟨⟨x, by simpa [twoChart] using hxU⟩⟩
+    change transportedPieceApp _ _ _ zF = transportedPieceApp _ _ _ zT
+    unfold transportedPieceApp
+    rw [pieceRestrictionIso_hom_app, pieceRestrictionIso_hom_app]
+    exact (eqToHom_inv_hom_self (D.datum.obj_eq false zF)
+      ((canonicalTwoOpenDescentDatum (U := U) (V := V)
+        (twoOpenDescentFunctor hU hV hcover D.datum)).obj_eq false zF)).trans
+      (eqToHom_inv_hom_self (D.datum.obj_eq true zT)
+        ((canonicalTwoOpenDescentDatum (U := U) (V := V)
+          (twoOpenDescentFunctor hU hV hcover D.datum)).obj_eq true zT)).symm
+
+/-- Restriction after reconstruction is isomorphic to the original descent
+object. -/
+def descentReconstructionAppIso (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ)
+    (D : DescentObject (X := X) (U := U) (V := V) (C := C)) :
+    (reconstructionFunctor hU hV hcover ⋙
+      restrictionFunctor (X := X) (U := U) (V := V) (C := C)).obj D ≅ D where
+  hom := descentReconstructionHom hU hV hcover D
+  inv := descentReconstructionInv hU hV hcover D
+  hom_inv_id := by
+    apply CompatibleNatTrans.ext
+    intro b
+    exact (pieceRestrictionIso hU hV hcover D.datum b).inv_hom_id
+  inv_hom_id := by
+    apply CompatibleNatTrans.ext
+    intro b
+    exact (pieceRestrictionIso hU hV hcover D.datum b).hom_inv_id
+
+/-- The descent-side reconstruction isomorphism is natural in compatible
+piece transformations. -/
+def descentReconstructionIso (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) :
+    reconstructionFunctor hU hV hcover ⋙
+        restrictionFunctor (X := X) (U := U) (V := V) (C := C) ≅
+      𝟭 (DescentObject (X := X) (U := U) (V := V) (C := C)) :=
+  NatIso.ofComponents (descentReconstructionAppIso hU hV hcover) (by
+    intro D E τ
+    apply CompatibleNatTrans.ext
+    intro b
+    ext z
+    change (Functor.whiskerLeft
+          (FundamentalGroupoid.map (coverPieceInclusion b))
+          (τ.ambientNatTrans hU hV hcover)).app z ≫
+        (restrictionAppIso hU hV hcover E.datum b z).inv =
+      (restrictionAppIso hU hV hcover D.datum b z).inv ≫
+        (τ.piece b).app z
+    have hn := τ.ambientNatTrans_restriction_app hU hV hcover b z
+    calc
+      _ = (restrictionAppIso hU hV hcover D.datum b z).inv ≫
+          ((restrictionAppIso hU hV hcover D.datum b z).hom ≫
+            (Functor.whiskerLeft
+              (FundamentalGroupoid.map (coverPieceInclusion b))
+              (τ.ambientNatTrans hU hV hcover)).app z) ≫
+          (restrictionAppIso hU hV hcover E.datum b z).inv := by
+            simp
+            rfl
+      _ = (restrictionAppIso hU hV hcover D.datum b z).inv ≫
+          ((τ.piece b).app z ≫
+            (restrictionAppIso hU hV hcover E.datum b z).hom) ≫
+          (restrictionAppIso hU hV hcover E.datum b z).inv := by
+            rw [hn]
+            rfl
+      _ = _ := by
+        simp)
+
+/-- Ambient fundamental-groupoid functors are equivalent to compatible
+two-open descent data. -/
+def twoOpenDescentEquivalence (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) :
+    (FundamentalGroupoid X ⥤ C) ≌
+      DescentObject (X := X) (U := U) (V := V) (C := C) :=
+  CategoryTheory.Equivalence.mk
+    (restrictionFunctor (X := X) (U := U) (V := V) (C := C))
+    (reconstructionFunctor hU hV hcover)
+    (reconstructionRestrictionIso hU hV hcover).symm
+    (descentReconstructionIso hU hV hcover)
+
 #print axioms compatibleId
 #print axioms compatibleComp
 #print axioms restrictionFunctor
 #print axioms reconstructionFunctor
 #print axioms reconstructionRestrictionIso
+#print axioms descentReconstructionHom
+#print axioms descentReconstructionInv
+#print axioms descentReconstructionAppIso
+#print axioms descentReconstructionIso
+#print axioms twoOpenDescentEquivalence
 
 end ConstructionTargets.TwoOpenDescentCategory
