@@ -28,8 +28,17 @@ Identity and composition retain that square. `descentPseudoCoconeMap` converts
 the common-coordinate condition of `CompatibleNatTrans` into precisely this
 square, and `descentToPseudoCoconeFunctor` packages the construction.
 
-The reverse functor still requires a cover-dependent choice of common object
-coordinate for each ambient point and a proof that glue naturality recovers
-`TwoOpenDescentDatum.overlap_eq`; that work is not assumed here. Consequently
-this file does not yet claim an equivalence with all pseudococones, a
+For the reverse direction, `strictifiedObject` chooses the left piece object
+when the point lies in `U` and otherwise the right piece object, using the
+cover hypothesis. `strictifiedObjectIso` compares each original piece object
+with that common coordinate; on the right side of the overlap it uses the
+inverse glue component. `strictifiedPieceFunctor` conjugates every map through
+these isomorphisms and proves both functor laws, while
+`pieceStrictificationIso` exposes the comparison natural isomorphism.
+
+The remaining theorem must transport `P.glue.hom.naturality` from its nested
+overlap objects through the endpoint `eqToHom`s introduced by both
+`strictifiedObjectIso` components. Once that equation is compiled it supplies
+`TwoOpenDescentDatum.overlap_eq`; it is not assumed here. Consequently this
+file does not yet claim an equivalence with all pseudococones, a
 `Limits.IsColimit`, or an ordinary `Limits.Pushout`.

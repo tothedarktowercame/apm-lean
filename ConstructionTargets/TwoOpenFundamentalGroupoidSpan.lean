@@ -255,6 +255,85 @@ def descentToPseudoCoconeFunctor :
   map_comp τ σ := by
     apply PseudoFunctorCoconeHom.ext <;> rfl
 
+/-- A common object coordinate chosen from the left piece whenever possible,
+and otherwise from the right piece. -/
+def strictifiedObject (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (x : X) : C := by
+  classical
+  exact if hx : x ∈ U then P.left.obj ⟨⟨x, hx⟩⟩ else
+    P.right.obj ⟨⟨x, by
+      have : x ∈ U ∪ V := by rw [hcover]; trivial
+      exact this.resolve_left hx⟩⟩
+
+def pseudoPieceFunctor
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    (b : Bool) → FundamentalGroupoid (CoverPiece U V b) ⥤ C
+  | false => P.right
+  | true => P.left
+
+/-- The original piece object is isomorphic to its chosen common coordinate.
+On the right piece inside the overlap this is the inverse glue component. -/
+def strictifiedObjectIso (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (b : Bool) (z : FundamentalGroupoid (CoverPiece U V b)) :
+    (pseudoPieceFunctor P b).obj z ≅ strictifiedObject hcover P z.as.1 := by
+  classical
+  cases b
+  · by_cases hx : z.as.1 ∈ U
+    · let w : FundamentalGroupoid (CoverOverlap (X := X) (U := U) (V := V)) :=
+        ⟨⟨z.as.1, hx, by simpa [twoChart] using z.as.2⟩⟩
+      let zr := (overlapFundamentalGroupoidMap
+        (U := U) (V := V) false).obj w
+      let zl := (overlapFundamentalGroupoidMap
+        (U := U) (V := V) true).obj w
+      have hr : zr = z := by
+        apply FundamentalGroupoid.ext
+        rfl
+      let zl' : FundamentalGroupoid (CoverPiece U V true) :=
+        ⟨⟨z.as.1, hx⟩⟩
+      have hzl : zl = zl' := by
+        apply FundamentalGroupoid.ext
+        rfl
+      have hl : P.left.obj zl = strictifiedObject hcover P z.as.1 := by
+        rw [congrArg P.left.obj hzl]
+        simp [strictifiedObject, hx, zl']
+      exact eqToIso (congrArg P.right.obj hr.symm) ≪≫
+        (P.glue.app w).symm ≪≫ eqToIso hl
+    · exact eqToIso (by
+        change P.right.obj z = _
+        simp [strictifiedObject, hx])
+  · exact eqToIso (by
+      change P.left.obj z = _
+      simp [strictifiedObject, z.as.2])
+
+/-- Conjugating a piece functor through `strictifiedObjectIso` replaces its
+object map by the literal common object function. -/
+def strictifiedPieceFunctor (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (b : Bool) : FundamentalGroupoid (CoverPiece U V b) ⥤ C where
+  obj z := strictifiedObject hcover P z.as.1
+  map {x y} f := (strictifiedObjectIso hcover P b x).inv ≫
+    (pseudoPieceFunctor P b).map f ≫
+    (strictifiedObjectIso hcover P b y).hom
+  map_id x := by simp
+  map_comp f g := by simp [Category.assoc]
+
+/-- Comparison from each original piece functor to its strictified copy. -/
+def pieceStrictificationIso (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (b : Bool) :
+    pseudoPieceFunctor P b ≅ strictifiedPieceFunctor hcover P b :=
+  NatIso.ofComponents (strictifiedObjectIso hcover P b) (by
+    intro x y f
+    simp [strictifiedPieceFunctor, Category.assoc])
+
+theorem strictifiedPieceFunctor_obj_eq (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (b : Bool) (z : FundamentalGroupoid (CoverPiece U V b)) :
+    (strictifiedPieceFunctor hcover P b).obj z =
+      strictifiedObject hcover P z.as.1 := rfl
+
 #print axioms overlap_piece_ambient_comp
 #print axioms overlap_ambient_functor_eq
 #print axioms ambientSpanCocone
@@ -264,5 +343,7 @@ def descentToPseudoCoconeFunctor :
 #print axioms descentPseudoCocone
 #print axioms descentPseudoCoconeMap
 #print axioms descentToPseudoCoconeFunctor
+#print axioms strictifiedPieceFunctor
+#print axioms pieceStrictificationIso
 
 end ConstructionTargets.TwoOpenFundamentalGroupoidSpan
