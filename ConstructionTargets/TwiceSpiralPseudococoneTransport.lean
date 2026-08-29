@@ -248,6 +248,169 @@ def actualPseudoCoconeToCoordinateFunctor :
     · exact (leftFunctorCategoryEquivalence h C).functor.map_comp f.left g.left
     · exact (rightFunctorCategoryEquivalence h C).functor.map_comp f.right g.right
 
+/-- After precomposing the coordinate left leg by the forward overlap
+equivalence, its comparison with the actual left leg uses the inverse unit of
+the overlap equivalence. -/
+def reverseLeftSpanComparison
+    (L : FundamentalGroupoid SolidTorus ⥤ C) :
+    (overlapFundamentalGroupoidEquivalence h).functor ⋙
+        coordinateLeftLeg ⋙ L ≅
+      FundamentalGroupoid.map (intersectionToLeftOpen h) ⋙
+        (leftFundamentalGroupoidEquivalence h).functor ⋙ L := by
+  let eO := overlapFundamentalGroupoidEquivalence h
+  let K := FundamentalGroupoid.map (intersectionToLeftOpen h) ⋙
+    (leftFundamentalGroupoidEquivalence h).functor
+  let q : eO.functor ⋙ coordinateLeftLeg =
+      eO.functor ⋙ eO.inverse ⋙ K :=
+    congrArg (fun J => eO.functor ⋙ J) (left_span_coordinate_equation h).symm
+  exact (Functor.isoWhiskerRight (eqToIso q) L).trans
+    (Functor.isoWhiskerRight (eO.funInvIdAssoc K) L)
+
+/-- Right-hand analogue of `reverseLeftSpanComparison`. -/
+def reverseRightSpanComparison
+    (R : FundamentalGroupoid SolidTorus ⥤ C) :
+    (overlapFundamentalGroupoidEquivalence h).functor ⋙
+        coordinateRightLeg h ⋙ R ≅
+      FundamentalGroupoid.map (intersectionToRightOpen h) ⋙
+        (rightFundamentalGroupoidEquivalence h).functor ⋙ R := by
+  let eO := overlapFundamentalGroupoidEquivalence h
+  let K := FundamentalGroupoid.map (intersectionToRightOpen h) ⋙
+    (rightFundamentalGroupoidEquivalence h).functor
+  let q : eO.functor ⋙ coordinateRightLeg h =
+      eO.functor ⋙ eO.inverse ⋙ K :=
+    congrArg (fun J => eO.functor ⋙ J) (right_span_coordinate_equation h).symm
+  exact (Functor.isoWhiskerRight (eqToIso q) R).trans
+    (Functor.isoWhiskerRight (eO.funInvIdAssoc K) R)
+
+/-- Coordinate overlap glue whiskered through the forward overlap
+equivalence. -/
+def reverseTransportedOverlapGlue (P : CoordinatePseudoCocone h C) :
+    (overlapFundamentalGroupoidEquivalence h).functor ⋙
+        coordinateLeftLeg ⋙ P.left ≅
+      (overlapFundamentalGroupoidEquivalence h).functor ⋙
+        coordinateRightLeg h ⋙ P.right :=
+  Functor.isoWhiskerLeft (overlapFundamentalGroupoidEquivalence h).functor P.glue
+
+/-- Reverse object transport from coordinate pseudococones to the actual
+collar-cover span. -/
+def coordinateToActualPseudoCoconeObj (P : CoordinatePseudoCocone h C) :
+    PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C) where
+  left := (leftFunctorCategoryEquivalence h C).inverse.obj P.left
+  right := (rightFunctorCategoryEquivalence h C).inverse.obj P.right
+  glue := (reverseLeftSpanComparison h C P.left).symm.trans
+    ((reverseTransportedOverlapGlue h C P).trans
+      (reverseRightSpanComparison h C P.right))
+
+theorem reverseLeftSpanComparison_naturality
+    {L M : FundamentalGroupoid SolidTorus ⥤ C} (tau : L ⟶ M) :
+    (reverseLeftSpanComparison h C L).hom ≫
+        Functor.whiskerLeft
+          (FundamentalGroupoid.map (intersectionToLeftOpen h) ⋙
+            (leftFundamentalGroupoidEquivalence h).functor) tau =
+      Functor.whiskerLeft
+          ((overlapFundamentalGroupoidEquivalence h).functor ⋙
+            coordinateLeftLeg) tau ≫
+        (reverseLeftSpanComparison h C M).hom := by
+  ext z
+  simp [reverseLeftSpanComparison, Category.assoc]
+
+theorem reverseRightSpanComparison_naturality
+    {L M : FundamentalGroupoid SolidTorus ⥤ C} (tau : L ⟶ M) :
+    (reverseRightSpanComparison h C L).hom ≫
+        Functor.whiskerLeft
+          (FundamentalGroupoid.map (intersectionToRightOpen h) ⋙
+            (rightFundamentalGroupoidEquivalence h).functor) tau =
+      Functor.whiskerLeft
+          ((overlapFundamentalGroupoidEquivalence h).functor ⋙
+            coordinateRightLeg h) tau ≫
+        (reverseRightSpanComparison h C M).hom := by
+  ext z
+  simp [reverseRightSpanComparison, Category.assoc]
+
+theorem reverseLeftSpanComparison_inv_naturality
+    {L M : FundamentalGroupoid SolidTorus ⥤ C} (tau : L ⟶ M) :
+    (reverseLeftSpanComparison h C L).inv ≫
+        Functor.whiskerLeft
+          ((overlapFundamentalGroupoidEquivalence h).functor ⋙
+            coordinateLeftLeg) tau =
+      Functor.whiskerLeft
+          (FundamentalGroupoid.map (intersectionToLeftOpen h) ⋙
+            (leftFundamentalGroupoidEquivalence h).functor) tau ≫
+        (reverseLeftSpanComparison h C M).inv := by
+  exact (ConstructionTargets.TwoOpenPseudoCoconeStrictification.iso_square_inverse
+    (reverseLeftSpanComparison h C L) (reverseLeftSpanComparison h C M)
+    (Functor.whiskerLeft
+      ((overlapFundamentalGroupoidEquivalence h).functor ⋙ coordinateLeftLeg) tau)
+    (Functor.whiskerLeft
+      (FundamentalGroupoid.map (intersectionToLeftOpen h) ⋙
+        (leftFundamentalGroupoidEquivalence h).functor) tau)
+    (reverseLeftSpanComparison_naturality h C tau).symm).symm
+
+theorem reverseTransportedOverlapGlue_naturality
+    {P Q : CoordinatePseudoCocone h C} (tau : P ⟶ Q) :
+    (reverseTransportedOverlapGlue h C P).hom ≫
+        Functor.whiskerLeft
+          ((overlapFundamentalGroupoidEquivalence h).functor ⋙
+            coordinateRightLeg h) tau.right =
+      Functor.whiskerLeft
+          ((overlapFundamentalGroupoidEquivalence h).functor ⋙
+            coordinateLeftLeg) tau.left ≫
+        (reverseTransportedOverlapGlue h C Q).hom := by
+  ext z
+  have hz := congrArg (fun k => k.app
+    ((overlapFundamentalGroupoidEquivalence h).functor.obj z))
+    tau.glue_naturality
+  simpa [reverseTransportedOverlapGlue, Category.assoc] using hz
+
+/-- Reverse transport of coordinate pseudococone morphisms. -/
+def coordinateToActualPseudoCoconeMap
+    {P Q : CoordinatePseudoCocone h C} (tau : P ⟶ Q) :
+    coordinateToActualPseudoCoconeObj h C P ⟶
+      coordinateToActualPseudoCoconeObj h C Q where
+  left := (leftFunctorCategoryEquivalence h C).inverse.map tau.left
+  right := (rightFunctorCategoryEquivalence h C).inverse.map tau.right
+  glue_naturality := by
+    dsimp [coordinateToActualPseudoCoconeObj]
+    exact three_square_pasting
+      (C := FundamentalGroupoid (U h ∩ V h : Set (Gluing h)) ⥤ C)
+      (l := (reverseLeftSpanComparison h C P.left).inv)
+      (m := (reverseTransportedOverlapGlue h C P).hom)
+      (r := (reverseRightSpanComparison h C P.right).hom)
+      (l' := (reverseLeftSpanComparison h C Q.left).inv)
+      (m' := (reverseTransportedOverlapGlue h C Q).hom)
+      (r' := (reverseRightSpanComparison h C Q.right).hom)
+      (a := Functor.whiskerLeft
+        ((overlapFundamentalGroupoidEquivalence h).functor ⋙
+          coordinateLeftLeg) tau.left)
+      (b := Functor.whiskerLeft
+        ((overlapFundamentalGroupoidEquivalence h).functor ⋙
+          coordinateRightLeg h) tau.right)
+      (x := Functor.whiskerLeft
+        (FundamentalGroupoid.map (intersectionToLeftOpen h))
+        ((leftFunctorCategoryEquivalence h C).inverse.map tau.left))
+      (y := Functor.whiskerLeft
+        (FundamentalGroupoid.map (intersectionToRightOpen h))
+        ((rightFunctorCategoryEquivalence h C).inverse.map tau.right))
+      (reverseLeftSpanComparison_inv_naturality h C tau.left)
+      (reverseTransportedOverlapGlue_naturality h C tau)
+      (reverseRightSpanComparison_naturality h C tau.right)
+
+/-- Reverse functor from coordinate pseudococones to actual collar-cover
+pseudococones. -/
+def coordinateToActualPseudoCoconeFunctor :
+    CoordinatePseudoCocone h C ⥤
+      PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C) where
+  obj := coordinateToActualPseudoCoconeObj h C
+  map := coordinateToActualPseudoCoconeMap h C
+  map_id P := by
+    apply PseudoFunctorCoconeHom.ext
+    · exact (leftFunctorCategoryEquivalence h C).inverse.map_id P.left
+    · exact (rightFunctorCategoryEquivalence h C).inverse.map_id P.right
+  map_comp f g := by
+    apply PseudoFunctorCoconeHom.ext
+    · exact (leftFunctorCategoryEquivalence h C).inverse.map_comp f.left g.left
+    · exact (rightFunctorCategoryEquivalence h C).inverse.map_comp f.right g.right
+
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
 #print axioms overlapFunctorCategoryEquivalence
@@ -267,5 +430,15 @@ def actualPseudoCoconeToCoordinateFunctor :
 #print axioms three_square_pasting
 #print axioms actualPseudoCoconeToCoordinateMap
 #print axioms actualPseudoCoconeToCoordinateFunctor
+#print axioms reverseLeftSpanComparison
+#print axioms reverseRightSpanComparison
+#print axioms reverseTransportedOverlapGlue
+#print axioms coordinateToActualPseudoCoconeObj
+#print axioms reverseLeftSpanComparison_naturality
+#print axioms reverseRightSpanComparison_naturality
+#print axioms reverseLeftSpanComparison_inv_naturality
+#print axioms reverseTransportedOverlapGlue_naturality
+#print axioms coordinateToActualPseudoCoconeMap
+#print axioms coordinateToActualPseudoCoconeFunctor
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport

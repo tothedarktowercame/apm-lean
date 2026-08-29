@@ -27,9 +27,21 @@ two span comparisons. The comparison naturality lemmas and
 `three_square_pasting` prove the glue square for transported morphisms, giving
 the compiled `actualPseudoCoconeToCoordinateFunctor`.
 
-The remaining categorical seam is the reverse transport functor and its
-unit/counit isomorphisms. Those must use the opposite equivalence coherences;
-they cannot treat the three equivalences as identities. Only after that
-equivalence is combined with the gluing pseudopushout may one begin the
-explicit based automorphism-group comparison. No based group pushout is
-claimed here.
+`reverseLeftSpanComparison` and `reverseRightSpanComparison` implement the
+opposite span comparison. They precompose the strict coordinate equations by
+the forward overlap equivalence and use its `funInvIdAssoc`; thus the overlap
+unit is retained explicitly. `reverseTransportedOverlapGlue` then whisks the
+coordinate glue through that forward equivalence.
+
+Their naturality squares, including the inverse left comparison, are pasted
+by the same typed three-square lemma to give
+`coordinateToActualPseudoCoconeMap` and the compiled reverse functor
+`coordinateToActualPseudoCoconeFunctor`.
+
+The remaining categorical seam is the objectwise unit/counit between the two
+pseudococone functors. Its piece components are the unit/counit of the left
+and right `congrLeft` equivalences, but its overlap proof must compare those
+components with both nested span-comparison composites and the overlap
+equivalence triangle identities. Until that proof is compiled, no category
+equivalence or composite gluing-to-coordinate equivalence is claimed. No
+based group pushout is claimed here.
