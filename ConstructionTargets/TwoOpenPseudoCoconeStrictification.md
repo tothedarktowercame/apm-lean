@@ -64,14 +64,18 @@ each piece. `strictifiedPieceNatTrans` now conjugates both components of an
 arbitrary `PseudoFunctorCoconeHom` through those comparisons, giving the
 correct natural transformations between the strictified piece functors.
 
-Packaging these two transformations as `CompatibleNatTrans` still requires
-one explicit categorical normalization.  After applying `tau.glue_naturality`
-pointwise, the remaining expression contains the six-arrow composites with
-the two independently elaborated component pairs
-`pieceStrictificationIso.hom.app ≫ pieceStrictificationIso.inv.app`.
-They are mathematically inverse pairs, but the current expression is associated
-through the surrounding glue and transformation components, so the existing
-`Iso.hom_inv_id_app_assoc` rewrite does not match.  The next packet must state
-a typed six-arrow cancellation lemma (or reassociate these exact component
-terms) before deriving overlap-component equality.  No compatibility square,
-functoriality, categorical equivalence, or ordinary pushout is claimed here.
+`six_arrow_iso_conjugation` performs the exact cancellation around a glue
+naturality square, and `strictifiedPieceNatTrans_glue` applies it without
+identifying any isomorphic objects definitionally.  Component normalization
+through the identity strictified glue yields
+`strictifiedPieceNatTrans_overlap_app`, hence
+`strictifiedCompatibleNatTrans`.
+
+`iso_conjugation_comp` proves that these conjugated transformations compose;
+together with the identity calculation it packages
+`pseudoCoconeToDescentFunctor`, the reverse functor on both objects and
+morphisms.  Its object and piece-map simp lemmas expose the construction for
+the next packet.  The remaining seam is to construct and verify the unit and
+counit comparing this functor with the pseudococone functor obtained from a
+descent object.  No categorical equivalence or ordinary pushout is claimed
+here.
