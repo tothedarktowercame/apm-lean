@@ -78,5 +78,15 @@ by cancelling the two whiskered piece isomorphisms. They form the objectwise
 these as `actualRoundTripNatIso`, oriented from the identity functor to
 forward coordinate transport followed by reverse transport.
 
-The coordinate-side counit and its span/glue coherence remain downstream.
+The coordinate-side coherence packet now exports
+`coordinateLeft_span_roundTrip_counit_triangle`,
+`coordinateRight_span_roundTrip_counit_triangle_inv`, and
+`coordinateGlue_overlapCounit_naturality`.  Thus both concrete span
+specializations and the central glue square are available with the overlap
+equivalence counit retained explicitly.  The remaining step is to derive the
+outgoing-right orientation by cancelling the whiskered
+`coordinateRightRoundTripIso` hom/inverse pair, then paste these three
+equalities into a `CoordinatePseudoCoconeHom`.
+
+The coordinate-side counit itself remains downstream.
 No pseudococone-category equivalence or based group pushout is claimed here.

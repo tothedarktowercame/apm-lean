@@ -754,6 +754,64 @@ def actualRoundTripNatIso :
     · exact actualLeftRoundTripIso_naturality h C tau
     · exact actualRightRoundTripIso_naturality h C tau)
 
+/-- Incoming left-leg counit triangle for the coordinate round trip. -/
+theorem coordinateLeft_span_roundTrip_counit_triangle
+    (Q : CoordinatePseudoCocone h C) :
+    (leftSpanComparison h C
+        ((leftFunctorCategoryEquivalence h C).inverse.obj Q.left)).hom ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseLeftSpanComparison h C Q.left).inv ≫
+      ((overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+        (coordinateLeftLeg ⋙ Q.left)).hom =
+      Functor.whiskerLeft coordinateLeftLeg
+        (coordinateLeftRoundTripIso h C Q).hom := by
+  simpa [leftSpanComparison, reverseLeftSpanComparison,
+    coordinateLeftRoundTripIso, leftFunctorCategoryEquivalence] using
+    (ConstructionTargets.EquivalenceSpanRoundTrip.spanRoundTrip_counit_triangle
+      (eO := overlapFundamentalGroupoidEquivalence h)
+      (eP := leftFundamentalGroupoidEquivalence h)
+      (J := FundamentalGroupoid.map (intersectionToLeftOpen h))
+      (K := coordinateLeftLeg)
+      (q := left_span_coordinate_equation h)
+      (L := Q.left))
+
+/-- Right-leg inverse counit triangle before cancelling the final counit
+component. -/
+theorem coordinateRight_span_roundTrip_counit_triangle_inv
+    (Q : CoordinatePseudoCocone h C) :
+    ((overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+        (coordinateRightLeg h ⋙ Q.right)).inv ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseRightSpanComparison h C Q.right).hom ≫
+      (rightSpanComparison h C
+        ((rightFunctorCategoryEquivalence h C).inverse.obj Q.right)).inv =
+      Functor.whiskerLeft (coordinateRightLeg h)
+        (coordinateRightRoundTripIso h C Q).inv := by
+  simpa [rightSpanComparison, reverseRightSpanComparison,
+    coordinateRightRoundTripIso, rightFunctorCategoryEquivalence] using
+    (ConstructionTargets.EquivalenceSpanRoundTrip.spanRoundTrip_counit_triangle_inv
+      (eO := overlapFundamentalGroupoidEquivalence h)
+      (eP := rightFundamentalGroupoidEquivalence h)
+      (J := FundamentalGroupoid.map (intersectionToRightOpen h))
+      (K := coordinateRightLeg h)
+      (q := right_span_coordinate_equation h)
+      (L := Q.right))
+
+/-- Coordinate glue naturality at the overlap-equivalence counit. -/
+theorem coordinateGlue_overlapCounit_naturality
+    (Q : CoordinatePseudoCocone h C)
+    (z : FundamentalGroupoid BoundaryTorus) :
+    Q.left.map (coordinateLeftLeg.map
+        ((overlapFundamentalGroupoidEquivalence h).counitIso.hom.app z)) ≫
+      Q.glue.hom.app z =
+    Q.glue.hom.app
+        ((overlapFundamentalGroupoidEquivalence h).functor.obj
+          ((overlapFundamentalGroupoidEquivalence h).inverse.obj z)) ≫
+      Q.right.map ((coordinateRightLeg h).map
+        ((overlapFundamentalGroupoidEquivalence h).counitIso.hom.app z)) := by
+  simpa using Q.glue.hom.naturality
+    ((overlapFundamentalGroupoidEquivalence h).counitIso.hom.app z)
+
 
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
@@ -803,5 +861,8 @@ def actualRoundTripNatIso :
 #print axioms actualRoundTripInv
 #print axioms actualRoundTripIso
 #print axioms actualRoundTripNatIso
+#print axioms coordinateLeft_span_roundTrip_counit_triangle
+#print axioms coordinateRight_span_roundTrip_counit_triangle_inv
+#print axioms coordinateGlue_overlapCounit_naturality
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport
