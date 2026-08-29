@@ -151,6 +151,23 @@ theorem strictifiedObjectIso_overlap
   apply Iso.ext
   exact strictifiedObjectIso_overlap_hom hcover P x hU hV
 
+/-- The overlap comparison after replacing both piece functors by their
+common-object strictifications. -/
+def strictifiedOverlapIso
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    overlapFundamentalGroupoidMap (U := U) (V := V) true ⋙
+        strictifiedPieceFunctor hcover P true ≅
+      overlapFundamentalGroupoidMap (U := U) (V := V) false ⋙
+        strictifiedPieceFunctor hcover P false :=
+  Functor.isoWhiskerLeft
+      (overlapFundamentalGroupoidMap (U := U) (V := V) true)
+      (pieceStrictificationIso hcover P true).symm ≪≫
+    P.glue ≪≫
+    Functor.isoWhiskerLeft
+      (overlapFundamentalGroupoidMap (U := U) (V := V) false)
+      (pieceStrictificationIso hcover P false)
+
 /-- A pseudococone together with a strict common object coordinate.  The last
 field is the overlap map equation in those coordinates; it is the exact form
 required by `TwoOpenDescentDatum.overlap_eq`. -/

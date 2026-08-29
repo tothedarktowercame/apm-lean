@@ -36,9 +36,16 @@ is the inverse glue component followed by the left comparison. The iso-valued
 form controls both the inverse at a path source and the hom at its target.
 `functor_map_eqToHom` separately normalizes mapping one such transport.
 
-After mapping `overlapPath_map_eq_pathInPiece` through both piece functors and
-expanding these endpoint isomorphisms, the remaining goal contains three pairs
-of independently generated `eqToHom`s around `P.glue.hom.naturality`. A typed
-multi-transport cancellation theorem aligning those pairs is still required
-before `strictifiedDescentDatum` can be packaged. That equation is not assumed
-here. No equivalence or ordinary pushout is claimed.
+`strictifiedOverlapIso` packages the exact natural overlap isomorphism between
+the two strictified piece functors by whiskering `pieceStrictificationIso` on
+both sides of `P.glue`. Thus glue naturality and all functorial endpoint
+transport are now present in one compiled natural isomorphism.
+
+The remaining goal is the component normalization for this natural
+isomorphism. Expanding at an overlap point leaves the two `eqToIso`s generated
+from `eL` and `eR` around `P.glue.hom ≫ P.glue.inv`; their endpoints are
+propositionally equal FundamentalGroupoid objects but have independently
+generated subtype proofs. A typed multi-transport cancellation theorem
+aligning exactly those components is still required before the component can
+be proved to be the identity and `strictifiedDescentDatum` packaged. That
+equation is not assumed here. No equivalence or ordinary pushout is claimed.
