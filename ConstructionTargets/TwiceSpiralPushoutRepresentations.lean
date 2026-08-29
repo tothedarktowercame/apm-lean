@@ -69,17 +69,16 @@ theorem strict_actions_compatible (D : CoordinateVertexData (d := d) C) :
 
 /-- The compatible Bool-indexed family supplied to `PushoutI.lift`. -/
 def strictActionFamily (D : CoordinateVertexData (d := d) C) :
-    ∀ b : Bool, IntGroup →* End D.leftTarget
+    ∀ _ : Bool, IntGroup →* End D.leftTarget
   | false => D.leftHom
   | true => strictRightHom C D
 
 theorem strictActionFamily_compatible (D : CoordinateVertexData (d := d) C) :
     ∀ b, (strictActionFamily C D b).comp (twiceSpiralDiagram d b) =
       D.leftHom.comp leftBoundaryHom := by
-  intro b
-  cases b
-  · rfl
-  · exact (strict_actions_compatible C D).symm
+  intro
+  | false => rfl
+  | true => exact (strict_actions_compatible C D).symm
 
 /-- Strictify a coordinate datum onto its left target and apply the genuine
 `PushoutI.lift` universal property. -/
