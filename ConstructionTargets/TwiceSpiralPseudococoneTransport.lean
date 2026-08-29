@@ -894,6 +894,174 @@ theorem coordinateRoundTrip_whiskered_reverseGlue
     (reverseTransportedOverlapGlue h C Q).hom
     (reverseRightSpanComparison h C Q.right).hom
 
+/-- Substitute a normalized three-arrow prefix and four-arrow terminal block
+without asking rewriting to discover their association inside a longer term. -/
+theorem three_prefix_four_terminal_substitution
+    {K : Type*} [Category K]
+    {A B D E F G H I : K}
+    (a : A ⟶ B) (b : B ⟶ D) (c : D ⟶ E) (x : A ⟶ E)
+    (m : E ⟶ F) (d : F ⟶ G) (e : G ⟶ H) (f : H ⟶ I)
+    (g : I ⟶ F)
+    (hp : a ≫ b ≫ c = x) (ht : d ≫ e ≫ f ≫ g = 𝟙 F) :
+    ((a ≫ b ≫ c) ≫ m) ≫ (d ≫ e ≫ f ≫ g) = x ≫ m := by
+  rw [hp, ht, Category.comp_id]
+
+/-- Replace the middle arrow in the four-map association emitted by a
+pseudococone glue followed by a component map. -/
+theorem four_context_middle_substitution
+    {K : Type*} [Category K] {A B D E F : K}
+    (a : A ⟶ B) (b b' : B ⟶ D) (c : D ⟶ E) (d : E ⟶ F)
+    (h : b = b') : (a ≫ b ≫ c) ≫ d = (a ≫ b' ≫ c) ≫ d := by
+  rw [h]
+
+/-- The exact right-associated suffix shape left after
+`four_context_middle_substitution`. -/
+theorem right_nested_prefix_terminal_substitution
+    {K : Type*} [Category K] {A B D E F G H I : K}
+    (a : A ⟶ B) (b : B ⟶ D) (c : D ⟶ E) (x : A ⟶ E)
+    (m : E ⟶ F) (d : F ⟶ G) (e : G ⟶ H) (f : H ⟶ I)
+    (g : I ⟶ F)
+    (hp : a ≫ b ≫ c = x) (ht : d ≫ e ≫ f ≫ g = 𝟙 F) :
+    (a ≫ (b ≫ (c ≫ m ≫ d) ≫ e) ≫ f) ≫ g = x ≫ m := by
+  simpa only [Category.assoc] using
+    three_prefix_four_terminal_substitution a b c x m d e f g hp ht
+
+/-- Coordinate-side round-trip counit glue square. -/
+theorem coordinateRoundTrip_glue_square
+    (Q : CoordinatePseudoCocone h C) :
+    (actualPseudoCoconeToCoordinateObj h C
+        (coordinateToActualPseudoCoconeObj h C Q)).glue.hom ≫
+      Functor.whiskerLeft (coordinateRightLeg h)
+        (coordinateRightRoundTripIso h C Q).hom =
+      Functor.whiskerLeft coordinateLeftLeg
+          (coordinateLeftRoundTripIso h C Q).hom ≫ Q.glue.hom := by
+  let eL := (overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+    (coordinateLeftLeg ⋙ Q.left)
+  let eR := (overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+    (coordinateRightLeg h ⋙ Q.right)
+  have hW := coordinateRoundTrip_whiskered_reverseGlue h C Q
+  have hM := coordinateMiddle_counit_conjugation h C Q
+  have hP := coordinateLeft_span_roundTrip_counit_triangle h C Q
+  have hT := coordinateRight_span_roundTrip_counit_cancel h C Q
+  dsimp [actualPseudoCoconeToCoordinateObj, transportedOverlapGlue]
+  have hChain := congrArg
+    (fun k => Functor.whiskerLeft
+        (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseLeftSpanComparison h C Q.left).inv ≫ k ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseRightSpanComparison h C Q.right).hom) hM
+  have hWG := hW.trans hChain
+  refine (four_context_middle_substitution
+    (leftSpanComparison h C
+      (coordinateToActualPseudoCoconeObj h C Q).left).hom
+    (Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+      (coordinateToActualPseudoCoconeObj h C Q).glue.hom)
+    (Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseLeftSpanComparison h C Q.left).inv ≫
+      (((overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+          (coordinateLeftLeg ⋙ Q.left)).hom ≫ Q.glue.hom ≫
+        ((overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+          (coordinateRightLeg h ⋙ Q.right)).inv) ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseRightSpanComparison h C Q.right).hom)
+    (rightSpanComparison h C
+      (coordinateToActualPseudoCoconeObj h C Q).right).inv
+    (Functor.whiskerLeft (coordinateRightLeg h)
+      (coordinateRightRoundTripIso h C Q).hom) hWG).trans ?_
+  exact right_nested_prefix_terminal_substitution
+      (leftSpanComparison h C
+        (coordinateToActualPseudoCoconeObj h C Q).left).hom
+      (Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseLeftSpanComparison h C Q.left).inv)
+      eL.hom
+      (Functor.whiskerLeft coordinateLeftLeg
+        (coordinateLeftRoundTripIso h C Q).hom)
+      Q.glue.hom eR.inv
+      (Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseRightSpanComparison h C Q.right).hom)
+      (rightSpanComparison h C
+        (coordinateToActualPseudoCoconeObj h C Q).right).inv
+      (Functor.whiskerLeft (coordinateRightLeg h)
+        (coordinateRightRoundTripIso h C Q).hom)
+      hP hT
+
+/-- Coordinate-side counit morphism for reverse then forward transport. -/
+def coordinateRoundTripHom (Q : CoordinatePseudoCocone h C) :
+    (coordinateToActualPseudoCoconeFunctor h C ⋙
+      actualPseudoCoconeToCoordinateFunctor h C).obj Q ⟶ Q where
+  left := (coordinateLeftRoundTripIso h C Q).hom
+  right := (coordinateRightRoundTripIso h C Q).hom
+  glue_naturality := coordinateRoundTrip_glue_square h C Q
+
+/-- Inverse coordinate-side counit morphism, obtained by inverting the
+already-proved glue square. -/
+def coordinateRoundTripInv (Q : CoordinatePseudoCocone h C) :
+    Q ⟶ (coordinateToActualPseudoCoconeFunctor h C ⋙
+      actualPseudoCoconeToCoordinateFunctor h C).obj Q where
+  left := (coordinateLeftRoundTripIso h C Q).inv
+  right := (coordinateRightRoundTripIso h C Q).inv
+  glue_naturality := by
+    exact ConstructionTargets.TwoOpenPseudoCoconeStrictification.iso_square_inverse
+      (Functor.isoWhiskerLeft coordinateLeftLeg
+        (coordinateLeftRoundTripIso h C Q))
+      (Functor.isoWhiskerLeft (coordinateRightLeg h)
+        (coordinateRightRoundTripIso h C Q))
+      ((actualPseudoCoconeToCoordinateObj h C
+        (coordinateToActualPseudoCoconeObj h C Q)).glue.hom)
+      Q.glue.hom
+      (coordinateRoundTrip_glue_square h C Q)
+
+/-- Objectwise coordinate-pseudococone round-trip isomorphism. -/
+def coordinateRoundTripIso (Q : CoordinatePseudoCocone h C) :
+    (coordinateToActualPseudoCoconeFunctor h C ⋙
+      actualPseudoCoconeToCoordinateFunctor h C).obj Q ≅ Q where
+  hom := coordinateRoundTripHom h C Q
+  inv := coordinateRoundTripInv h C Q
+  hom_inv_id := by
+    apply CoordinatePseudoCoconeHom.ext
+    · exact (coordinateLeftRoundTripIso h C Q).hom_inv_id
+    · exact (coordinateRightRoundTripIso h C Q).hom_inv_id
+  inv_hom_id := by
+    apply CoordinatePseudoCoconeHom.ext
+    · exact (coordinateLeftRoundTripIso h C Q).inv_hom_id
+    · exact (coordinateRightRoundTripIso h C Q).inv_hom_id
+
+/-- Coordinate-side counit, oriented from reverse/forward transport to the
+identity functor. -/
+def coordinateRoundTripNatIso :
+    coordinateToActualPseudoCoconeFunctor h C ⋙
+        actualPseudoCoconeToCoordinateFunctor h C ≅
+      Functor.id (CoordinatePseudoCocone h C) :=
+  NatIso.ofComponents (coordinateRoundTripIso h C) (by
+    intro P Q tau
+    apply CoordinatePseudoCoconeHom.ext
+    · exact coordinateLeftRoundTripIso_naturality h C tau
+    · exact coordinateRightRoundTripIso_naturality h C tau)
+
+/-- Equivalence between actual collar pseudococones and their solid-torus /
+boundary-torus coordinate form. -/
+def actualCoordinatePseudoCoconeEquivalence :
+    PseudoFunctorCocone
+        (X := Gluing h) (U := U h) (V := V h) (C := C) ≌
+      CoordinatePseudoCocone h C :=
+  CategoryTheory.Equivalence.mk'
+    (actualPseudoCoconeToCoordinateFunctor h C)
+    (coordinateToActualPseudoCoconeFunctor h C)
+    (actualRoundTripNatIso h C)
+    (coordinateRoundTripNatIso h C)
+    (by
+      intro P
+      apply CoordinatePseudoCoconeHom.ext
+      · exact (leftFunctorCategoryEquivalence h C).functor_unitIso_comp P.left
+      · exact (rightFunctorCategoryEquivalence h C).functor_unitIso_comp P.right)
+
+/-- Mapping-category form of the collared two-open fundamental-groupoid
+pseudopushout, expressed in solid-torus and boundary-torus coordinates. -/
+def gluingFundamentalGroupoidCoordinateEquivalence :
+    Functor (FundamentalGroupoid (Gluing h)) C ≌ CoordinatePseudoCocone h C :=
+  (gluingFundamentalGroupoidPseudopushoutEquivalence h C).trans
+    (actualCoordinatePseudoCoconeEquivalence h C)
+
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
 #print axioms overlapFunctorCategoryEquivalence
@@ -949,5 +1117,15 @@ theorem coordinateRoundTrip_whiskered_reverseGlue
 #print axioms coordinateRight_span_roundTrip_counit_cancel
 #print axioms coordinateMiddle_counit_conjugation
 #print axioms coordinateRoundTrip_whiskered_reverseGlue
+#print axioms three_prefix_four_terminal_substitution
+#print axioms four_context_middle_substitution
+#print axioms right_nested_prefix_terminal_substitution
+#print axioms coordinateRoundTrip_glue_square
+#print axioms coordinateRoundTripHom
+#print axioms coordinateRoundTripInv
+#print axioms coordinateRoundTripIso
+#print axioms coordinateRoundTripNatIso
+#print axioms actualCoordinatePseudoCoconeEquivalence
+#print axioms gluingFundamentalGroupoidCoordinateEquivalence
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport

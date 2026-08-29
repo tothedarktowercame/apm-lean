@@ -98,10 +98,19 @@ and `coordinateRoundTrip_whiskered_reverseGlue` now exposes that previously
 parenthesized reverse glue as its three separately whiskered arrows without
 unfolding either span comparison.
 
-The remaining step is solely the association-controlled paste of the named
-incoming, middle, and outgoing blocks.  After middle conjugation, Lean retains
-the incoming triangle as the head of a right-associated seven-arrow
-composite, while the banked triangle is a standalone three-arrow equality. A
-typed prefix-substitution lemma for that exact association is still required.
-The coordinate-side counit itself remains downstream.
-No pseudococone-category equivalence or based group pushout is claimed here.
+`three_prefix_four_terminal_substitution`,
+`four_context_middle_substitution`, and
+`right_nested_prefix_terminal_substitution` encode exactly the associations
+produced by that expansion.  They allow `coordinateRoundTrip_glue_square` to
+paste the incoming triangle, middle conjugation, and outgoing cancellation
+without unfolding the comparisons.
+
+The resulting `coordinateRoundTripHom`, inverse, objectwise isomorphism, and
+`coordinateRoundTripNatIso` give the coordinate-side counit.  Together with
+`actualRoundTripNatIso`, they define
+`actualCoordinatePseudoCoconeEquivalence`; its triangle identity reduces
+piecewise to the two underlying functor-category equivalence triangles.
+Finally, `gluingFundamentalGroupoidCoordinateEquivalence` composes this with
+the collared two-open pseudopushout mapping equivalence.  This remains a
+pseudococone mapping-category result: no ordinary categorical pushout or
+based fundamental-group pushout is asserted.
