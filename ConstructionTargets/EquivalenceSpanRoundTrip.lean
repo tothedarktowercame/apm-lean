@@ -95,9 +95,72 @@ theorem spanRoundTrip_triangle_inv
   have hab : a = b := Iso.ext (spanRoundTrip_triangle eO eP J K q L)
   simpa [a, b, Category.assoc] using congrArg Iso.inv hab
 
+/-- Counit-oriented triangle for transporting a coordinate span back to the
+actual span and forward again. -/
+theorem spanRoundTrip_counit_triangle
+    (eO : O ≌ O') (eP : P ≌ P') (J : Functor O P) (K : Functor O' P')
+    (q : eO.inverse ⋙ J ⋙ eP.functor = K) (L : Functor P' C) :
+    (forwardSpanComparison eO eP J K q (eP.functor ⋙ L)).hom ≫
+        Functor.whiskerLeft eO.inverse
+          (reverseSpanComparison eO eP J K q L).inv ≫
+        (eO.invFunIdAssoc (K ⋙ L)).hom =
+      Functor.whiskerLeft K ((eP.congrLeft).counitIso.hom.app L) := by
+  subst K
+  ext X
+  simp [forwardSpanComparison, reverseSpanComparison, Category.assoc]
+  rw [← L.map_comp, ← eP.functor.map_comp, ← J.map_comp]
+  let Y := eO.inverse.obj X
+  have ho : eO.unit.app Y ≫ eO.inverse.map (eO.counit.app X) = 𝟙 Y := by
+    simpa [Y] using eO.unit_inverse_comp X
+  have hj : J.map (eO.unit.app Y ≫ eO.inverse.map (eO.counit.app X)) =
+      𝟙 (J.obj Y) := by
+    calc
+      _ = J.map (𝟙 Y) := congrArg J.map ho
+      _ = _ := by simpa using J.map_id Y
+  have hp : eP.functor.map
+      (J.map (eO.unit.app Y ≫ eO.inverse.map (eO.counit.app X))) =
+      𝟙 (eP.functor.obj (J.obj Y)) := by
+    calc
+      _ = eP.functor.map (𝟙 (J.obj Y)) := congrArg eP.functor.map hj
+      _ = _ := by simpa using eP.functor.map_id (J.obj Y)
+  have hl : L.map (eP.functor.map
+      (J.map (eO.unit.app Y ≫ eO.inverse.map (eO.counit.app X)))) =
+      𝟙 (L.obj (eP.functor.obj (J.obj Y))) := by
+    calc
+      _ = L.map (𝟙 (eP.functor.obj (J.obj Y))) := congrArg L.map hp
+      _ = _ := by simpa using L.map_id (eP.functor.obj (J.obj Y))
+  have hc : eP.functor.map (eP.unitInv.app (J.obj Y)) =
+      eP.counit.app (eP.functor.obj (J.obj Y)) :=
+    (eP.counit_app_functor _).symm
+  calc
+    _ = L.map (eP.functor.map (eP.unitInv.app (J.obj Y))) ≫ 𝟙 _ :=
+      congrArg (fun t => L.map
+        (eP.functor.map (eP.unitInv.app (J.obj Y))) ≫ t) hl
+    _ = L.map (eP.functor.map (eP.unitInv.app (J.obj Y))) := Category.comp_id _
+    _ = _ := congrArg L.map hc
+
+/-- Inverse orientation of the counit span triangle. -/
+theorem spanRoundTrip_counit_triangle_inv
+    (eO : O ≌ O') (eP : P ≌ P') (J : Functor O P) (K : Functor O' P')
+    (q : eO.inverse ⋙ J ⋙ eP.functor = K) (L : Functor P' C) :
+    (eO.invFunIdAssoc (K ⋙ L)).inv ≫
+        Functor.whiskerLeft eO.inverse
+          (reverseSpanComparison eO eP J K q L).hom ≫
+        (forwardSpanComparison eO eP J K q (eP.functor ⋙ L)).inv =
+      Functor.whiskerLeft K ((eP.congrLeft).counitIso.inv.app L) := by
+  let a := (forwardSpanComparison eO eP J K q (eP.functor ⋙ L)).trans
+    ((Functor.isoWhiskerLeft eO.inverse
+      (reverseSpanComparison eO eP J K q L).symm).trans
+        (eO.invFunIdAssoc (K ⋙ L)))
+  let b := Functor.isoWhiskerLeft K ((eP.congrLeft).counitIso.app L)
+  have hab : a = b := Iso.ext (spanRoundTrip_counit_triangle eO eP J K q L)
+  simpa [a, b, Category.assoc] using congrArg Iso.inv hab
+
 #print axioms forwardSpanComparison
 #print axioms reverseSpanComparison
 #print axioms spanRoundTrip_triangle
 #print axioms spanRoundTrip_triangle_inv
+#print axioms spanRoundTrip_counit_triangle
+#print axioms spanRoundTrip_counit_triangle_inv
 
 end ConstructionTargets.EquivalenceSpanRoundTrip
