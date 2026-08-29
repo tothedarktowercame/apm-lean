@@ -168,6 +168,52 @@ def strictifiedOverlapIso
       (overlapFundamentalGroupoidMap (U := U) (V := V) false)
       (pieceStrictificationIso hcover P false)
 
+/-- Cancellation entirely within one target category.  The four objects allow
+the canonical overlap images and independently built piece lifts to remain
+distinct until their explicit equality transports have been composed. -/
+theorem transported_glue_strictification_identity
+    {L R L' R' O : C} (eL : L' = L) (eR : R' = R)
+    (g : L ≅ R) (sL : L' ≅ O) (sR : R' ≅ O)
+    (hsR : sR = eqToIso eR ≪≫ g.symm ≪≫ eqToIso eL.symm ≪≫ sL) :
+    sL.inv ≫ eqToHom eL ≫ g.hom ≫ eqToHom eR.symm ≫ sR.hom =
+      𝟙 O := by
+  rw [hsR]
+  subst L
+  subst R
+  simp
+
+@[simp] theorem strictifiedOverlapIso_hom_app
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (z : FundamentalGroupoid (CoverOverlap (X := X) (U := U) (V := V))) :
+    (strictifiedOverlapIso hcover P).hom.app z = 𝟙 _ := by
+  rcases z with ⟨⟨x, hU, hV⟩⟩
+  let xW : FundamentalGroupoid (CoverOverlap (X := X) (U := U) (V := V)) :=
+    ⟨⟨x, hU, hV⟩⟩
+  let xL : FundamentalGroupoid (CoverPiece U V true) :=
+    ⟨⟨x, by simpa [twoChart] using hU⟩⟩
+  let xR : FundamentalGroupoid (CoverPiece U V false) :=
+    ⟨⟨x, by simpa [twoChart] using hV⟩⟩
+  let eL : xL = (overlapFundamentalGroupoidMap
+      (U := U) (V := V) true).obj xW := by
+    apply FundamentalGroupoid.ext; rfl
+  let eR : xR = (overlapFundamentalGroupoidMap
+      (U := U) (V := V) false).obj xW := by
+    apply FundamentalGroupoid.ext; rfl
+  have hs := strictifiedObjectIso_overlap hcover P x hU hV
+  have ht := transported_glue_strictification_identity
+    (congrArg P.left.obj eL) (congrArg P.right.obj eR)
+    (P.glue.app xW) (strictifiedObjectIso hcover P true xL)
+    (strictifiedObjectIso hcover P false xR) hs
+  change (strictifiedObjectIso hcover P true _).inv ≫
+      (P.glue.app _).hom ≫
+      (strictifiedObjectIso hcover P false _).hom = 𝟙 _
+  convert ht using 1 <;>
+    simp [xW, xL, xR, eL, eR, overlapFundamentalGroupoidMap,
+      overlapToPiece, FundamentalGroupoid.map]
+  apply eq_of_heq
+  rfl
+
 /-- A pseudococone together with a strict common object coordinate.  The last
 field is the overlap map equation in those coordinates; it is the exact form
 required by `TwoOpenDescentDatum.overlap_eq`. -/
@@ -255,5 +301,8 @@ def HasStrictCommonObjectCoordinates
 #print axioms CoordinatedPseudoFunctorCocone
 #print axioms CoordinatedPseudoFunctorCocone.toDescentObject
 #print axioms HasStrictCommonObjectCoordinates
+#print axioms transported_glue_strictification_identity
+#print axioms strictifiedOverlapIso
+#print axioms strictifiedOverlapIso_hom_app
 
 end ConstructionTargets.TwoOpenPseudoCoconeStrictification

@@ -41,11 +41,17 @@ the two strictified piece functors by whiskering `pieceStrictificationIso` on
 both sides of `P.glue`. Thus glue naturality and all functorial endpoint
 transport are now present in one compiled natural isomorphism.
 
-The remaining goal is the component normalization for this natural
-isomorphism. Expanding at an overlap point leaves the two `eqToIso`s generated
-from `eL` and `eR` around `P.glue.hom ≫ P.glue.inv`; their endpoints are
-propositionally equal FundamentalGroupoid objects but have independently
-generated subtype proofs. A typed multi-transport cancellation theorem
-aligning exactly those components is still required before the component can
-be proved to be the identity and `strictifiedDescentDatum` packaged. That
-equation is not assumed here. No equivalence or ordinary pushout is claimed.
+`transported_glue_strictification_identity` performs the required cancellation
+entirely inside the target category: canonical overlap objects, independently
+constructed piece objects, and the common object remain distinct parameters,
+and explicit equalities connect them. `strictifiedOverlapIso_hom_app`
+specializes it to prove every component of `strictifiedOverlapIso.hom` is the
+identity.
+
+The remaining representation layer is naturality normalization. Rewriting
+both components to identities leaves `comp_id` and `id_comp` at
+propositionally equal strictified overlap objects, and mapping
+`overlapPath_map_eq_pathInPiece` leaves the corresponding functor-mapped
+endpoint transports. A dedicated typed naturality/endpoint substitution is
+still required before `strictifiedDescentDatum` can be packaged. No
+independent overlap equation, equivalence, or ordinary pushout is claimed.
