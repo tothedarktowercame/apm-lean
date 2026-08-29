@@ -60,6 +60,18 @@ maps are compared.
 reverse object construction. Their overlap equation is derived solely from
 the supplied pseudococone glue; there is no independent overlap premise.
 `strictifiedDescentPieceIso` exposes the original-to-strictified comparison on
-each piece. Functoriality with respect to `PseudoFunctorCoconeHom` and the
-resulting categorical equivalence remain separate work. No ordinary pushout
-is claimed.
+each piece. `strictifiedPieceNatTrans` now conjugates both components of an
+arbitrary `PseudoFunctorCoconeHom` through those comparisons, giving the
+correct natural transformations between the strictified piece functors.
+
+Packaging these two transformations as `CompatibleNatTrans` still requires
+one explicit categorical normalization.  After applying `tau.glue_naturality`
+pointwise, the remaining expression contains the six-arrow composites with
+the two independently elaborated component pairs
+`pieceStrictificationIso.hom.app ≫ pieceStrictificationIso.inv.app`.
+They are mathematically inverse pairs, but the current expression is associated
+through the surrounding glue and transformation components, so the existing
+`Iso.hom_inv_id_app_assoc` rewrite does not match.  The next packet must state
+a typed six-arrow cancellation lemma (or reassociate these exact component
+terms) before deriving overlap-component equality.  No compatibility square,
+functoriality, categorical equivalence, or ordinary pushout is claimed here.

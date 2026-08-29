@@ -321,6 +321,19 @@ def strictifiedDescentPieceIso
     pseudoPieceFunctor P b ≅ (strictifiedDescentDatum hcover P).functor b :=
   pieceStrictificationIso hcover P b
 
+/-- A pseudococone morphism conjugated through the two piece
+strictifications. -/
+def strictifiedPieceNatTrans
+    (hcover : U ∪ V = Set.univ)
+    {P Q : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)}
+    (tau : P ⟶ Q) :
+    (b : Bool) → strictifiedPieceFunctor hcover P b ⟶
+      strictifiedPieceFunctor hcover Q b
+  | false => (pieceStrictificationIso hcover P false).inv ≫ tau.right ≫
+      (pieceStrictificationIso hcover Q false).hom
+  | true => (pieceStrictificationIso hcover P true).inv ≫ tau.left ≫
+      (pieceStrictificationIso hcover Q true).hom
+
 /-- A pseudococone together with a strict common object coordinate.  The last
 field is the overlap map equation in those coordinates; it is the exact form
 required by `TwoOpenDescentDatum.overlap_eq`. -/
@@ -416,5 +429,6 @@ def HasStrictCommonObjectCoordinates
 #print axioms strictifiedDescentDatum
 #print axioms strictifiedDescentObject
 #print axioms strictifiedDescentPieceIso
+#print axioms strictifiedPieceNatTrans
 
 end ConstructionTargets.TwoOpenPseudoCoconeStrictification
