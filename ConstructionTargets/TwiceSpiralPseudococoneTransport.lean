@@ -1,4 +1,5 @@
 import ConstructionTargets.TwiceSpiralFundamentalGroupoidCoordinates
+import ConstructionTargets.EquivalenceSpanRoundTrip
 
 /-!
 # Functor-category transport for the twice-spiral collar span
@@ -515,6 +516,74 @@ theorem actualRightRoundTrip_unit_cancel_app
       𝟙 _ :=
   (actualRightRoundTripIso h C P).hom_inv_id_app _
 
+/-- Generic equivalence-span coherence specialized to the actual left collar
+leg.  All overlap and piece equivalence transports remain explicit. -/
+theorem actualLeft_span_roundTrip_triangle
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    (reverseLeftSpanComparison h C
+        ((leftFunctorCategoryEquivalence h C).functor.obj P.left)).inv ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).functor
+        (leftSpanComparison h C P.left).hom ≫
+      ((overlapFundamentalGroupoidEquivalence h).funInvIdAssoc
+        (FundamentalGroupoid.map (intersectionToLeftOpen h) ⋙ P.left)).hom =
+      Functor.whiskerLeft
+        (FundamentalGroupoid.map (intersectionToLeftOpen h))
+        (actualLeftRoundTripIso h C P).inv := by
+  simpa [leftSpanComparison, reverseLeftSpanComparison,
+    actualLeftRoundTripIso, leftFunctorCategoryEquivalence] using
+    (ConstructionTargets.EquivalenceSpanRoundTrip.spanRoundTrip_triangle
+      (eO := overlapFundamentalGroupoidEquivalence h)
+      (eP := leftFundamentalGroupoidEquivalence h)
+      (J := FundamentalGroupoid.map (intersectionToLeftOpen h))
+      (K := coordinateLeftLeg)
+      (q := left_span_coordinate_equation h)
+      (L := P.left))
+
+/-- Right collar-leg specialization of the equivalence-span triangle. -/
+theorem actualRight_span_roundTrip_triangle
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    (reverseRightSpanComparison h C
+        ((rightFunctorCategoryEquivalence h C).functor.obj P.right)).inv ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).functor
+        (rightSpanComparison h C P.right).hom ≫
+      ((overlapFundamentalGroupoidEquivalence h).funInvIdAssoc
+        (FundamentalGroupoid.map (intersectionToRightOpen h) ⋙ P.right)).hom =
+      Functor.whiskerLeft
+        (FundamentalGroupoid.map (intersectionToRightOpen h))
+        (actualRightRoundTripIso h C P).inv := by
+  simpa [rightSpanComparison, reverseRightSpanComparison,
+    actualRightRoundTripIso, rightFunctorCategoryEquivalence] using
+    (ConstructionTargets.EquivalenceSpanRoundTrip.spanRoundTrip_triangle
+      (eO := overlapFundamentalGroupoidEquivalence h)
+      (eP := rightFundamentalGroupoidEquivalence h)
+      (J := FundamentalGroupoid.map (intersectionToRightOpen h))
+      (K := coordinateRightLeg h)
+      (q := right_span_coordinate_equation h)
+      (L := P.right))
+
+/-- Outgoing orientation of the right collar span triangle, used after the
+central overlap-glue naturality square. -/
+theorem actualRight_span_roundTrip_triangle_inv
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    ((overlapFundamentalGroupoidEquivalence h).funInvIdAssoc
+        (FundamentalGroupoid.map (intersectionToRightOpen h) ⋙ P.right)).inv ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).functor
+        (rightSpanComparison h C P.right).inv ≫
+      (reverseRightSpanComparison h C
+        ((rightFunctorCategoryEquivalence h C).functor.obj P.right)).hom =
+      Functor.whiskerLeft
+        (FundamentalGroupoid.map (intersectionToRightOpen h))
+        (actualRightRoundTripIso h C P).hom := by
+  simpa [rightSpanComparison, reverseRightSpanComparison,
+    actualRightRoundTripIso, rightFunctorCategoryEquivalence] using
+    (ConstructionTargets.EquivalenceSpanRoundTrip.spanRoundTrip_triangle_inv
+      (eO := overlapFundamentalGroupoidEquivalence h)
+      (eP := rightFundamentalGroupoidEquivalence h)
+      (J := FundamentalGroupoid.map (intersectionToRightOpen h))
+      (K := coordinateRightLeg h)
+      (q := right_span_coordinate_equation h)
+      (L := P.right))
+
 
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
@@ -556,5 +625,8 @@ theorem actualRightRoundTrip_unit_cancel_app
 #print axioms actualGlue_overlapUnit_naturality
 #print axioms actualLeftRoundTrip_unit_cancel_app
 #print axioms actualRightRoundTrip_unit_cancel_app
+#print axioms actualLeft_span_roundTrip_triangle
+#print axioms actualRight_span_roundTrip_triangle
+#print axioms actualRight_span_roundTrip_triangle_inv
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport

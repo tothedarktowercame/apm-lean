@@ -62,10 +62,17 @@ The component lemmas `actualLeftRoundTrip_unit_cancel_app` and
 piece-unit hom/inverse pairs at the two actual overlap images; they do not
 identify any overlap and piece objects.
 
-The two remaining span triangles have exact component-level residuals. On the
-left, the piece unit followed by `reverseLeftSpanComparison.inv` and the
-forward-overlap whiskering of `leftSpanComparison.hom` expands to six mapped
-arrows; it must equal the overlap unit mapped through the actual left
-restriction. On the right, the analogous five mapped arrows must equal the
-inverse overlap unit followed by the right piece unit. These are equivalence
-triangle/`eqToIso` coherence statements, not consequences of glue naturality.
+`EquivalenceSpanRoundTrip.spanRoundTrip_triangle` now proves the formerly
+missing span triangle generically from equivalence coherence.  The concrete
+theorems `actualLeft_span_roundTrip_triangle` and
+`actualRight_span_roundTrip_triangle` specialize it to both collar legs while
+retaining the overlap `funInvIdAssoc`, the proof-carrying span equality, and
+the inverse piece-unit component.  The outgoing orientation needed on the
+right is exported as `actualRight_span_roundTrip_triangle_inv`.
+
+The next seam is a typed three-part paste of those two specialized triangles
+with `actualGlue_overlapUnit_naturality`.  That paste will give the overlap
+square for the actual-side pseudococone unit; its inverse and the pseudococone
+isomorphism can then be obtained from the component isomorphisms.  The
+coordinate-side round trip and the final pseudococone-category equivalence
+remain downstream.
