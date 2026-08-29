@@ -16,10 +16,20 @@ the already-proved orientation
 overlap.inverse ⋙ actual inclusion ⋙ piece.functor = coordinate leg.
 ```
 
-The remaining pseudococone-level construction is not a definitional
-reindexing. For an actual glue isomorphism it must whisker these equations by
-the piece functors and insert `pieceEquivalence.unitIso.symm` to cancel
-`piece.functor ⋙ piece.inverse`. The two resulting comparison isomorphisms
-must then be composed on either side of the whiskered actual glue. This exact
-unit/counit coherence is the next seam; no pseudococone equivalence or based
-group pushout is claimed here.
+`leftSpanComparison` and `rightSpanComparison` implement that non-definitional
+reindexing. Each first whisks the strict span-coordinate equation and then
+uses `pieceEquivalence.unitIso.symm` to cancel
+`piece.functor ⋙ piece.inverse`.
+
+`transportedOverlapGlue` whisks the actual collar glue through the inverse
+overlap equivalence. `actualPseudoCoconeToCoordinateObj` brackets it by the
+two span comparisons. The comparison naturality lemmas and
+`three_square_pasting` prove the glue square for transported morphisms, giving
+the compiled `actualPseudoCoconeToCoordinateFunctor`.
+
+The remaining categorical seam is the reverse transport functor and its
+unit/counit isomorphisms. Those must use the opposite equivalence coherences;
+they cannot treat the three equivalences as identities. Only after that
+equivalence is combined with the gluing pseudopushout may one begin the
+explicit based automorphism-group comparison. No based group pushout is
+claimed here.
