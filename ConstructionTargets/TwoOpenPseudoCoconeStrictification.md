@@ -48,10 +48,18 @@ and explicit equalities connect them. `strictifiedOverlapIso_hom_app`
 specializes it to prove every component of `strictifiedOverlapIso.hom` is the
 identity.
 
-The remaining representation layer is naturality normalization. Rewriting
-both components to identities leaves `comp_id` and `id_comp` at
-propositionally equal strictified overlap objects, and mapping
-`overlapPath_map_eq_pathInPiece` leaves the corresponding functor-mapped
-endpoint transports. A dedicated typed naturality/endpoint substitution is
-still required before `strictifiedDescentDatum` can be packaged. No
-independent overlap equation, equivalence, or ordinary pushout is claimed.
+`strictifiedOverlapIso_map_eq` performs naturality normalization with explicit
+left and right identity composition, avoiding conversion across the piece and
+overlap source categories. `strictified_overlap_map_eq` then maps
+`overlapPath_map_eq_pathInPiece` through each strictified functor. Because its
+object map depends only on the ambient point, the resulting endpoint
+transports are endomorphism `eqToHom`s and cancel before the two nested-overlap
+maps are compared.
+
+`strictifiedDescentDatum` and `strictifiedDescentObject` now package the full
+reverse object construction. Their overlap equation is derived solely from
+the supplied pseudococone glue; there is no independent overlap premise.
+`strictifiedDescentPieceIso` exposes the original-to-strictified comparison on
+each piece. Functoriality with respect to `PseudoFunctorCoconeHom` and the
+resulting categorical equivalence remain separate work. No ordinary pushout
+is claimed.

@@ -214,6 +214,113 @@ theorem transported_glue_strictification_identity
   apply eq_of_heq
   rfl
 
+/-- Naturality of an overlap comparison with identity components says that
+the two strictified overlap functors have the same map. -/
+theorem strictifiedOverlapIso_map_eq
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    {x y : FundamentalGroupoid (CoverOverlap (X := X) (U := U) (V := V))}
+    (f : x ⟶ y) :
+    (overlapFundamentalGroupoidMap (U := U) (V := V) true ⋙
+      strictifiedPieceFunctor hcover P true).map f =
+    (overlapFundamentalGroupoidMap (U := U) (V := V) false ⋙
+      strictifiedPieceFunctor hcover P false).map f := by
+  have h := (strictifiedOverlapIso hcover P).hom.naturality f
+  rw [strictifiedOverlapIso_hom_app, strictifiedOverlapIso_hom_app] at h
+  calc
+    _ = _ ≫ 𝟙 _ := (Category.comp_id _).symm
+    _ = 𝟙 _ ≫ _ := h
+    _ = _ := Category.id_comp _
+
+/-- The strictified piece maps agree on every ambient overlap path, in the
+exact independently constructed `pathInPiece` presentations. -/
+theorem strictified_overlap_map_eq
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    {x y : X} (p : Path x y)
+    (hU : ∀ t, p t ∈ U) (hV : ∀ t, p t ∈ V) :
+    (strictifiedPieceFunctor hcover P false).map
+        (Path.Homotopic.Quotient.mk
+          (pathInPiece U V false p (by simpa [twoChart] using hV))) =
+      (strictifiedPieceFunctor hcover P true).map
+        (Path.Homotopic.Quotient.mk
+          (pathInPiece U V true p (by simpa [twoChart] using hU))) := by
+  let xW : CoverOverlap (X := X) (U := U) (V := V) :=
+    ⟨x, by simpa using hU 0, by simpa using hV 0⟩
+  let yW : CoverOverlap (X := X) (U := U) (V := V) :=
+    ⟨y, by simpa using hU 1, by simpa using hV 1⟩
+  let pW : Path xW yW :=
+    { toFun := fun t => ⟨p t, hU t, hV t⟩
+      continuous_toFun := p.continuous.subtype_mk _
+      source' := Subtype.ext p.source
+      target' := Subtype.ext p.target }
+  have hn := strictifiedOverlapIso_map_eq hcover P
+    (Path.Homotopic.Quotient.mk pW)
+  have hL := overlapPath_map_eq_pathInPiece p hU hV true
+  have hR := overlapPath_map_eq_pathInPiece p hU hV false
+  dsimp only at hL hR
+  have hmL := congrArg (fun f =>
+    (strictifiedPieceFunctor hcover P true).map f) hL
+  have hmR := congrArg (fun f =>
+    (strictifiedPieceFunctor hcover P false).map f) hR
+  simp only [Functor.map_comp, functor_map_eqToHom] at hmL hmR
+  change eqToHom (_ : strictifiedObject hcover P x =
+      strictifiedObject hcover P x) ≫ _ ≫
+      eqToHom (_ : strictifiedObject hcover P y =
+        strictifiedObject hcover P y) = _ at hmL
+  change eqToHom (_ : strictifiedObject hcover P x =
+      strictifiedObject hcover P x) ≫ _ ≫
+      eqToHom (_ : strictifiedObject hcover P y =
+        strictifiedObject hcover P y) = _ at hmR
+  have hmL' :
+      (strictifiedPieceFunctor hcover P true).map
+          ((overlapFundamentalGroupoidMap (U := U) (V := V) true).map
+            (Path.Homotopic.Quotient.mk pW)) =
+        (strictifiedPieceFunctor hcover P true).map
+          (Path.Homotopic.Quotient.mk
+            (pathInPiece U V true p (by simpa [twoChart] using hU))) := by
+    simpa [strictifiedPieceFunctor, strictifiedObject] using hmL
+  have hmR' :
+      (strictifiedPieceFunctor hcover P false).map
+          ((overlapFundamentalGroupoidMap (U := U) (V := V) false).map
+            (Path.Homotopic.Quotient.mk pW)) =
+        (strictifiedPieceFunctor hcover P false).map
+          (Path.Homotopic.Quotient.mk
+            (pathInPiece U V false p (by simpa [twoChart] using hV))) := by
+    simpa [strictifiedPieceFunctor, strictifiedObject] using hmR
+  rw [← hmR', ← hmL']
+  exact hn.symm
+
+/-- Every pseudococone admits descent data after conjugating its piece
+functors into the chosen common object coordinates. -/
+def strictifiedDescentDatum
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    @TwoOpenDescentDatum X _ U V C _ where
+  obj := strictifiedObject hcover P
+  functor := strictifiedPieceFunctor hcover P
+  obj_eq := strictifiedPieceFunctor_obj_eq hcover P
+  overlap_eq := by
+    intro x y p hU hV
+    simpa [strictifiedPieceFunctor_obj_eq] using
+      strictified_overlap_map_eq hcover P p hU hV
+
+/-- Object of the repository descent category obtained by strictification. -/
+def strictifiedDescentObject
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    DescentObject (X := X) (U := U) (V := V) (C := C) :=
+  ⟨strictifiedDescentDatum hcover P⟩
+
+/-- The original pieces compare naturally to the two functors of the
+strictified descent object. -/
+def strictifiedDescentPieceIso
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (b : Bool) :
+    pseudoPieceFunctor P b ≅ (strictifiedDescentDatum hcover P).functor b :=
+  pieceStrictificationIso hcover P b
+
 /-- A pseudococone together with a strict common object coordinate.  The last
 field is the overlap map equation in those coordinates; it is the exact form
 required by `TwoOpenDescentDatum.overlap_eq`. -/
@@ -304,5 +411,10 @@ def HasStrictCommonObjectCoordinates
 #print axioms transported_glue_strictification_identity
 #print axioms strictifiedOverlapIso
 #print axioms strictifiedOverlapIso_hom_app
+#print axioms strictifiedOverlapIso_map_eq
+#print axioms strictified_overlap_map_eq
+#print axioms strictifiedDescentDatum
+#print axioms strictifiedDescentObject
+#print axioms strictifiedDescentPieceIso
 
 end ConstructionTargets.TwoOpenPseudoCoconeStrictification
