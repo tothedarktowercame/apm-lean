@@ -1,6 +1,6 @@
 # Topology dependency DAG
 
-Date: 2026-08-28
+Date: 2026-08-29
 
 This is the canonical topology roadmap.  It separates compiled mathematics,
 consumer uptake, small remaining constructions, missing shared APIs, and
@@ -148,7 +148,17 @@ CIRCLE/SPHERE INVARIANTS
        └── HOMOLOGICAL CIRCLE-LIFTING CRITERION [FOUNDATION]
 
 VAN KAMPEN / SURFACE FOUNDATIONS
-       ├── QUOTIENT AND GLUING PI1 [FOUNDATION]
+       ├── TWO-OPEN FUNDAMENTAL-GROUPOID PSEUDOPUSHOUT [BANKED]
+       │      ├── PATH SUBDIVISION/HOMOTOPY DESCENT [BANKED]
+       │      ├── PSEUDOCOCONE STRICTIFICATION [BANKED]
+       │      └── CONNECTED-GROUPOID VERTEX RECONSTRUCTION [BANKED]
+       ├── TWICE-SPIRAL COLLAR-COVER SPECIALIZATION [UPTAKE]
+       │      ├── COLLAR/COVER COORDINATE MAPPING EQUIVALENCE [BANKED]
+       │      ├── PUSHOUT REPRESENTATION EQUIVALENCE [BANKED]
+       │      ├── FIXED-TARGET SINGLE-OBJECT MAPPING EQUIVALENCE [BANKED]
+       │      ├── TARGET-POSTCOMPOSITION NATURALITY [IN PROGRESS]
+       │      └── t01J03 PI1 BRIDGE [UPTAKE; TWO FROZEN SORRIES REMAIN]
+       ├── GENERIC QUOTIENT AND GLUING PI1 [FOUNDATION]
        ├── SURFACE CUTTING/CLASSIFICATION [FOUNDATION]
        └── INTERSECTION/SELF-INTERSECTION [depends on fundamental classes]
 ```
@@ -389,13 +399,14 @@ compiles independently of every final problem.
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
-| Closed gluing to open-cover MV | closed `t96A03`; `t03J02`, `t01J03` | production intersection-range comparison is banked; t96A03 supplies its own explicit quotient-open-cover geometry and is closed, while the generic collar/cofibration comparison required by the other consumers remains `FOUNDATION` |
+| Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
 | Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and coefficient-compatible computations do not |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, `t94J06`, `t97A02`, `t97J08` | mixed concrete progress; shared naturality/lifting APIs remain |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08` | shared measure/integration program plus bounded calculations |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
+| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic two-open fundamental-groupoid descent and pseudococone mapping property are `BANKED`; the twice-spiral fixed-target mapping equivalence is compiled; target-postcomposition coherence and frozen t01J03 uptake remain |
 
 ## Specification and ledger corrections
 
@@ -479,6 +490,10 @@ that the MV route solves t00J02 or replace its missing geometry.
 | `c6b6a239`, `b3b3f153` | positive-dimensional equator nonemptiness and explicit frozen/coordinate sphere-equator representation transport | consumed by the frozen t96A03 quotient homeomorphism and final homology assembly |
 | `5aecf0c3`, `efa4805e` | all nondegree homology groups of the reusable gluing model and its actual degree-two production-MV short exact sequence, projective split, and `Fin 3` normalization | imported by frozen t96A03 at `adcd54a2` |
 | `f6cfdaf8`, `adcd54a2` | frozen quotient identified with the reusable equator-gluing model, followed by complete homology transport in every degree | `t96A03` closed with zero executable placeholders |
+| `8fbcdbd2`–`4973b3c0` | subdivision-independent and homotopy-invariant two-open path evaluation, descent functor, strictified pseudococone equivalence, and the two-open fundamental-groupoid pseudopushout mapping property | generic API is banked; it is observed by the twice-spiral collar-cover specialization, but no ordinary strict `Limits.Pushout` theorem is asserted |
+| `4c807ccf`–`fca9b574` | explicit twice-spiral collared cover, transport to boundary/solid-torus coordinates, and equivalence between ambient mapping functors and coordinate pseudococones | fixed-target mapping equivalence is compiled; source-groupoid equivalence still requires target-postcomposition naturality |
+| `5dcc68f5`–`f983be62` | connector normal forms for connected groupoids, vertex-data and integer-coordinate equivalences, `TwiceSpiralPushout d` representation equivalence, and identification with functors from `SingleObj (TwiceSpiralPushout d)` | yields a fixed-target equivalence `(FundamentalGroupoid (Gluing h) ⥤ C) ≃ (SingleObj (TwiceSpiralPushout d) ⥤ C)`; it does not by itself identify the source groupoids |
+| `6413a6cb`–`c862ae93` | representability candidates and target-postcomposition comparisons for the pushout-representation and vertex-coordinate layers | continue coherence through the connector/pseudococone and geometric layers; then assemble source equivalence and the t01J03 fundamental-group bridge |
 
 ## Dimension-gap versus critical-value Sard
 
@@ -512,19 +527,28 @@ Current audited classification beyond these closures:
   remaining, respectively oriented-surface duality and planar separation.
 - Frozen `t96A03` is `CLOSED` at `adcd54a2`.  Its solution uses the explicit
   sphere-equator quotient geometry and does not supply the generic
-  collar/cofibration comparison still missing for `t03J02`, `t01J03`, and
-  `t97A01`; those problems remain `API-GAP`.
+  collar/cofibration comparison still missing for `t03J02` and `t97A01`;
+  those problems remain `API-GAP`.
 - The homology branch of `t00A01` is `CLOSED` at `f5b0e191`: the frozen file
   imports and uses the production MV API and representation adapters.  The
   whole problem remains `FOUNDATION`/API-stopped because its independent van
   Kampen bridge is absent; the final conjunction remains unwired until that
   bridge exists.  `t95J04` also remains `FOUNDATION`.
+- `t01J03` is `UPTAKE`, not closed.  Its torus results, explicit collared
+  quotient geometry, and twice-spiral module-homology computation compile.
+  The generic two-open fundamental-groupoid pseudopushout and the specialized
+  fixed-target mapping equivalence are banked.  Two executable placeholders
+  remain in frozen `Main.lean`: `apm_t01J03_bridge_2`, which still needs the
+  source-groupoid/fundamental-group extraction, and the final conjunction
+  `apm_t01j03`.  Target-postcomposition naturality is being proved because a
+  family of fixed-target mapping equivalences alone does not justify the
+  source-groupoid equivalence.
 - `t96J07` remains `SPEC-DEFECT` and must not receive proof scaffolding before
   statement repair.
 
 ## Next decision point
 
-The t96A03-specific packets formerly listed here are complete.  The next two
+The t96A03-specific packets formerly listed here are complete.  The current
 bounded programs with concrete consumers are:
 
 1. **Product homology for `t95J04`.**  Build a coefficient-compatible
@@ -532,11 +556,19 @@ bounded programs with concrete consumers are:
    compare it with the factor-retraction witness for `S² × S⁴`.  Stop before
    consumer assembly if sphere coefficient change or the chain-level tensor
    comparison is absent; do not assume either product homology calculation.
-2. **Generic closed-gluing comparison for `t03J02`/`t01J03`.**  Start with one
-   collar or cofibration theorem producing an honest open cover and term
-   equivalences from the frozen gluing data.  Stop if the source hypotheses do
-   not provide a collar/cofibration; do not generalize the t96A03 coordinate
-   construction by renaming its explicit geometry.
+2. **Finish target-natural representability for `t01J03`.**  Propagate target
+   postcomposition through connector extraction/reconstruction, coordinate
+   pseudococones, and the geometric collar-cover equivalence.  Assemble the
+   resulting natural mapping equivalence into a source-groupoid comparison,
+   extract the chosen automorphism group, and only then apply the banked
+   `TwiceSpiralPushout d` computation.  Stop if a fixed-target equivalence is
+   being used as though it were already natural in the target.
+3. **Generic closed-gluing comparison for `t03J02` and other consumers.**
+   Start with one collar or cofibration theorem producing an honest open cover
+   and term equivalences from the frozen gluing data.  The explicit t01J03 and
+   t96A03 covers are consumers and examples, not a generic theorem obtained by
+   renaming either coordinate construction.  Stop if the source hypotheses do
+   not provide a collar/cofibration.
 
 The banked production-MV scaffold already supplies:
 
