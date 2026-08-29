@@ -108,6 +108,56 @@ def descentOverlapAppIso
         (D.obj_eq false
           ((overlapFundamentalGroupoidMap (U := U) (V := V) false).obj z)).symm))
 
+theorem overlap_naturality_of_conjugated
+    {T₀ T₁ F₀ F₁ O₀ O₁ : C} (t : T₀ ⟶ T₁) (f : F₀ ⟶ F₁)
+    (dt₀ : T₀ = O₀) (dt₁ : T₁ = O₁) (df₀ : F₀ = O₀) (df₁ : F₁ = O₁)
+    (h : eqToHom df₀.symm ≫ f ≫ eqToHom df₁ =
+      eqToHom dt₀.symm ≫ t ≫ eqToHom dt₁) :
+    t ≫ eqToHom (dt₁.trans df₁.symm) =
+      eqToHom (dt₀.trans df₀.symm) ≫ f := by
+  subst O₀
+  subst O₁
+  subst F₀
+  subst F₁
+  simp_all
+
+/-- Naturality of the overlap comparison.  The representative is a path in
+the nested overlap subtype; forgetting both subtype layers gives the ambient
+path to which `TwoOpenDescentDatum.overlap_eq` applies. -/
+theorem descentOverlapAppIso_naturality
+    (D : @TwoOpenDescentDatum X _ U V C _)
+    {x y : FundamentalGroupoid (CoverOverlap (X := X) (U := U) (V := V))}
+    (f : x ⟶ y) :
+    (overlapFundamentalGroupoidMap (U := U) (V := V) true ⋙
+        D.functor true).map f ≫ (descentOverlapAppIso D y).hom =
+      (descentOverlapAppIso D x).hom ≫
+        (overlapFundamentalGroupoidMap (U := U) (V := V) false ⋙
+          D.functor false).map f := by
+  induction f using Quotient.inductionOn with
+  | _ p =>
+    let q : Path x.as.1 y.as.1 := p.map continuous_subtype_val
+    have hU : ∀ t, q t ∈ U := fun t => (p t).2.1
+    have hV : ∀ t, q t ∈ V := fun t => (p t).2.2
+    apply overlap_naturality_of_conjugated _ _
+      (D.obj_eq true ((overlapFundamentalGroupoidMap
+        (U := U) (V := V) true).obj x))
+      (D.obj_eq true ((overlapFundamentalGroupoidMap
+        (U := U) (V := V) true).obj y))
+      (D.obj_eq false ((overlapFundamentalGroupoidMap
+        (U := U) (V := V) false).obj x))
+      (D.obj_eq false ((overlapFundamentalGroupoidMap
+        (U := U) (V := V) false).obj y))
+    simpa [overlapFundamentalGroupoidMap, FundamentalGroupoid.map, q,
+      pathInPiece, overlapToPiece, ← Path.Homotopic.Quotient.mk_map,
+      Category.assoc] using D.overlap_eq q hU hV
+
+/-- The natural overlap isomorphism carried by descent data. -/
+def descentOverlapIso (D : @TwoOpenDescentDatum X _ U V C _) :
+    overlapFundamentalGroupoidMap (U := U) (V := V) true ⋙ D.functor true ≅
+      overlapFundamentalGroupoidMap (U := U) (V := V) false ⋙ D.functor false :=
+  NatIso.ofComponents (descentOverlapAppIso D)
+    (descentOverlapAppIso_naturality D)
+
 /-- Object-level pseudococone data extracted from descent data.  Naturality of
 `descentOverlapAppIso` is precisely the `overlap_eq` field after translating
 paths in the nested overlap subtype. -/
@@ -117,9 +167,102 @@ def descentPseudoCoconeObject
       (FundamentalGroupoid (CoverPiece U V false) ⥤ C) :=
   (D.functor true, D.functor false)
 
+/-- Descent data determines an honest pseudococone over the two-open span. -/
+def descentPseudoCocone
+    (D : @TwoOpenDescentDatum X _ U V C _) :
+    PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C) where
+  left := D.functor true
+  right := D.functor false
+  glue := descentOverlapIso D
+
+/-- A morphism of pseudococones is a pair of transformations compatible with
+the specified overlap 2-cells. -/
+structure PseudoFunctorCoconeHom
+    (P Q : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) where
+  left : P.left ⟶ Q.left
+  right : P.right ⟶ Q.right
+  glue_naturality : P.glue.hom ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidMap
+        (U := U) (V := V) false) right =
+    Functor.whiskerLeft (overlapFundamentalGroupoidMap
+        (U := U) (V := V) true) left ≫ Q.glue.hom
+
+@[ext] theorem PseudoFunctorCoconeHom.ext
+    {P Q : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)}
+    {α β : PseudoFunctorCoconeHom P Q}
+    (hl : α.left = β.left) (hr : α.right = β.right) : α = β := by
+  cases α
+  cases β
+  simp_all
+
+instance : Category (PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) where
+  Hom := PseudoFunctorCoconeHom
+  id P := { left := 𝟙 P.left, right := 𝟙 P.right, glue_naturality := by simp }
+  comp α β := {
+    left := α.left ≫ β.left
+    right := α.right ≫ β.right
+    glue_naturality := by
+      rw [Functor.whiskerLeft_comp, Functor.whiskerLeft_comp]
+      rw [← Category.assoc, α.glue_naturality]
+      simp only [Category.assoc]
+      rw [β.glue_naturality]
+      }
+  id_comp _ := by ext <;> simp
+  comp_id _ := by ext <;> simp
+  assoc _ _ _ := by ext <;> simp [Category.assoc]
+
+theorem glue_square_of_common_coordinate
+    {DT DF ET EF O P : C} (aT : DT ⟶ ET) (aF : DF ⟶ EF)
+    (dt : DT = O) (df : DF = O) (et : ET = P) (ef : EF = P)
+    (h : eqToHom df.symm ≫ aF ≫ eqToHom ef =
+      eqToHom dt.symm ≫ aT ≫ eqToHom et) :
+    eqToHom (dt.trans df.symm) ≫ aF =
+      aT ≫ eqToHom (et.trans ef.symm) := by
+  subst O
+  subst P
+  subst DF
+  subst EF
+  simp_all
+
+/-- Compatible transformations give precisely the morphisms between the
+associated pseudococones. -/
+def descentPseudoCoconeMap
+    {D E : @TwoOpenDescentDatum X _ U V C _}
+    (τ : ConstructionTargets.TwoOpenDescentFullness.CompatibleNatTrans D E) :
+    descentPseudoCocone D ⟶ descentPseudoCocone E where
+  left := τ.piece true
+  right := τ.piece false
+  glue_naturality := by
+    ext z
+    change (descentOverlapAppIso D z).hom ≫ (τ.piece false).app _ =
+      (τ.piece true).app _ ≫ (descentOverlapAppIso E z).hom
+    apply glue_square_of_common_coordinate
+      ((τ.piece true).app _ ) ((τ.piece false).app _)
+      (D.obj_eq true _) (D.obj_eq false _)
+      (E.obj_eq true _) (E.obj_eq false _)
+    exact τ.overlap_app z.as.1 z.as.2.1 z.as.2.2
+
+/-- Forgetting the chosen common object coordinates sends descent objects and
+compatible transformations to pseudococones and their commuting 2-cells. -/
+def descentToPseudoCoconeFunctor :
+    ConstructionTargets.TwoOpenDescentCategory.DescentObject
+        (X := X) (U := U) (V := V) (C := C) ⥤
+      PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C) where
+  obj D := descentPseudoCocone D.datum
+  map τ := descentPseudoCoconeMap τ
+  map_id D := by
+    apply PseudoFunctorCoconeHom.ext <;> rfl
+  map_comp τ σ := by
+    apply PseudoFunctorCoconeHom.ext <;> rfl
+
 #print axioms overlap_piece_ambient_comp
 #print axioms overlap_ambient_functor_eq
 #print axioms ambientSpanCocone
 #print axioms descentOverlapAppIso
+#print axioms descentOverlapAppIso_naturality
+#print axioms descentOverlapIso
+#print axioms descentPseudoCocone
+#print axioms descentPseudoCoconeMap
+#print axioms descentToPseudoCoconeFunctor
 
 end ConstructionTargets.TwoOpenFundamentalGroupoidSpan
