@@ -411,6 +411,66 @@ def coordinateToActualPseudoCoconeFunctor :
     · exact (leftFunctorCategoryEquivalence h C).inverse.map_comp f.left g.left
     · exact (rightFunctorCategoryEquivalence h C).inverse.map_comp f.right g.right
 
+/-- Left component of the actual-pseudococone round-trip unit. -/
+def actualLeftRoundTripIso
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    P.left ≅ (leftFunctorCategoryEquivalence h C).inverse.obj
+      ((leftFunctorCategoryEquivalence h C).functor.obj P.left) :=
+  (leftFunctorCategoryEquivalence h C).unitIso.app P.left
+
+/-- Right component of the actual-pseudococone round-trip unit. -/
+def actualRightRoundTripIso
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    P.right ≅ (rightFunctorCategoryEquivalence h C).inverse.obj
+      ((rightFunctorCategoryEquivalence h C).functor.obj P.right) :=
+  (rightFunctorCategoryEquivalence h C).unitIso.app P.right
+
+/-- Left component of the coordinate-pseudococone round-trip counit. -/
+def coordinateLeftRoundTripIso (P : CoordinatePseudoCocone h C) :
+    (leftFunctorCategoryEquivalence h C).functor.obj
+        ((leftFunctorCategoryEquivalence h C).inverse.obj P.left) ≅ P.left :=
+  (leftFunctorCategoryEquivalence h C).counitIso.app P.left
+
+/-- Right component of the coordinate-pseudococone round-trip counit. -/
+def coordinateRightRoundTripIso (P : CoordinatePseudoCocone h C) :
+    (rightFunctorCategoryEquivalence h C).functor.obj
+        ((rightFunctorCategoryEquivalence h C).inverse.obj P.right) ≅ P.right :=
+  (rightFunctorCategoryEquivalence h C).counitIso.app P.right
+
+theorem actualLeftRoundTripIso_naturality
+    {P Q : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)}
+    (tau : P ⟶ Q) :
+    tau.left ≫ (actualLeftRoundTripIso h C Q).hom =
+      (actualLeftRoundTripIso h C P).hom ≫
+        (leftFunctorCategoryEquivalence h C).inverse.map
+          ((leftFunctorCategoryEquivalence h C).functor.map tau.left) :=
+  (leftFunctorCategoryEquivalence h C).unitIso.hom.naturality tau.left
+
+theorem actualRightRoundTripIso_naturality
+    {P Q : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C)}
+    (tau : P ⟶ Q) :
+    tau.right ≫ (actualRightRoundTripIso h C Q).hom =
+      (actualRightRoundTripIso h C P).hom ≫
+        (rightFunctorCategoryEquivalence h C).inverse.map
+          ((rightFunctorCategoryEquivalence h C).functor.map tau.right) :=
+  (rightFunctorCategoryEquivalence h C).unitIso.hom.naturality tau.right
+
+theorem coordinateLeftRoundTripIso_naturality
+    {P Q : CoordinatePseudoCocone h C} (tau : P ⟶ Q) :
+    (leftFunctorCategoryEquivalence h C).functor.map
+          ((leftFunctorCategoryEquivalence h C).inverse.map tau.left) ≫
+        (coordinateLeftRoundTripIso h C Q).hom =
+      (coordinateLeftRoundTripIso h C P).hom ≫ tau.left :=
+  (leftFunctorCategoryEquivalence h C).counitIso.hom.naturality tau.left
+
+theorem coordinateRightRoundTripIso_naturality
+    {P Q : CoordinatePseudoCocone h C} (tau : P ⟶ Q) :
+    (rightFunctorCategoryEquivalence h C).functor.map
+          ((rightFunctorCategoryEquivalence h C).inverse.map tau.right) ≫
+        (coordinateRightRoundTripIso h C Q).hom =
+      (coordinateRightRoundTripIso h C P).hom ≫ tau.right :=
+  (rightFunctorCategoryEquivalence h C).counitIso.hom.naturality tau.right
+
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
 #print axioms overlapFunctorCategoryEquivalence
@@ -440,5 +500,13 @@ def coordinateToActualPseudoCoconeFunctor :
 #print axioms reverseTransportedOverlapGlue_naturality
 #print axioms coordinateToActualPseudoCoconeMap
 #print axioms coordinateToActualPseudoCoconeFunctor
+#print axioms actualLeftRoundTripIso
+#print axioms actualRightRoundTripIso
+#print axioms coordinateLeftRoundTripIso
+#print axioms coordinateRightRoundTripIso
+#print axioms actualLeftRoundTripIso_naturality
+#print axioms actualRightRoundTripIso_naturality
+#print axioms coordinateLeftRoundTripIso_naturality
+#print axioms coordinateRightRoundTripIso_naturality
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport

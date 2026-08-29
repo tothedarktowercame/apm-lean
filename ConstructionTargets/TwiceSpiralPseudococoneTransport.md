@@ -38,10 +38,17 @@ by the same typed three-square lemma to give
 `coordinateToActualPseudoCoconeMap` and the compiled reverse functor
 `coordinateToActualPseudoCoconeFunctor`.
 
-The remaining categorical seam is the objectwise unit/counit between the two
-pseudococone functors. Its piece components are the unit/counit of the left
-and right `congrLeft` equivalences, but its overlap proof must compare those
-components with both nested span-comparison composites and the overlap
-equivalence triangle identities. Until that proof is compiled, no category
-equivalence or composite gluing-to-coordinate equivalence is claimed. No
-based group pushout is claimed here.
+The four declarations `actualLeftRoundTripIso`,
+`actualRightRoundTripIso`, `coordinateLeftRoundTripIso`, and
+`coordinateRightRoundTripIso` now expose those piece components. Their four
+naturality theorems give the complete piecewise natural comparison for both
+round trips without replacing a unit or counit by an identity.
+
+The remaining categorical seam is specifically the overlap component.
+Expanding the actual-side glue square produces the overlap equivalence unit
+and inverse unit, the two piece units, mapped `eqToHom` transports from the
+two span-coordinate equations, and the original glue naturality component.
+A dedicated triangle/pasting normalization for that exact composite is still
+required before the piecewise units can be packaged as pseudococone
+isomorphisms. Until then, no category equivalence, composite
+gluing-to-coordinate equivalence, or based group pushout is claimed.
