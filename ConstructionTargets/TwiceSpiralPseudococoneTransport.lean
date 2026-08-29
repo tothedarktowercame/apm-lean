@@ -812,6 +812,31 @@ theorem coordinateGlue_overlapCounit_naturality
   simpa using Q.glue.hom.naturality
     ((overlapFundamentalGroupoidEquivalence h).counitIso.hom.app z)
 
+/-- The outgoing right span triangle followed by the right piece counit
+cancels.  This is the exact terminal block in the coordinate glue square. -/
+theorem coordinateRight_span_roundTrip_counit_cancel
+    (Q : CoordinatePseudoCocone h C) :
+    ((overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+        (coordinateRightLeg h ⋙ Q.right)).inv ≫
+      Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseRightSpanComparison h C Q.right).hom ≫
+      (rightSpanComparison h C
+        ((rightFunctorCategoryEquivalence h C).inverse.obj Q.right)).inv ≫
+      Functor.whiskerLeft (coordinateRightLeg h)
+        (coordinateRightRoundTripIso h C Q).hom = 𝟙 _ := by
+  calc
+    _ = Functor.whiskerLeft (coordinateRightLeg h)
+          (coordinateRightRoundTripIso h C Q).inv ≫
+      Functor.whiskerLeft (coordinateRightLeg h)
+          (coordinateRightRoundTripIso h C Q).hom := by
+      have ht := reassoc_of%
+        (coordinateRight_span_roundTrip_counit_triangle_inv h C Q)
+      simpa only [Category.assoc] using ht
+        (Functor.whiskerLeft (coordinateRightLeg h)
+          (coordinateRightRoundTripIso h C Q).hom)
+    _ = _ := (Functor.isoWhiskerLeft (coordinateRightLeg h)
+      (coordinateRightRoundTripIso h C Q)).inv_hom_id
+
 
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
@@ -864,5 +889,6 @@ theorem coordinateGlue_overlapCounit_naturality
 #print axioms coordinateLeft_span_roundTrip_counit_triangle
 #print axioms coordinateRight_span_roundTrip_counit_triangle_inv
 #print axioms coordinateGlue_overlapCounit_naturality
+#print axioms coordinateRight_span_roundTrip_counit_cancel
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport

@@ -83,10 +83,13 @@ The coordinate-side coherence packet now exports
 `coordinateRight_span_roundTrip_counit_triangle_inv`, and
 `coordinateGlue_overlapCounit_naturality`.  Thus both concrete span
 specializations and the central glue square are available with the overlap
-equivalence counit retained explicitly.  The remaining step is to derive the
-outgoing-right orientation by cancelling the whiskered
-`coordinateRightRoundTripIso` hom/inverse pair, then paste these three
-equalities into a `CoordinatePseudoCoconeHom`.
+equivalence counit retained explicitly.
+`coordinateRight_span_roundTrip_counit_cancel` postcomposes the inverse
+right triangle with the whiskered right counit and cancels the inverse/hom
+pair.  It is the complete outgoing-right block required by the coordinate
+glue square.
 
+The remaining step is the association-controlled paste of the incoming left
+triangle, overlap-counit naturality, and this outgoing-right cancellation.
 The coordinate-side counit itself remains downstream.
 No pseudococone-category equivalence or based group pushout is claimed here.
