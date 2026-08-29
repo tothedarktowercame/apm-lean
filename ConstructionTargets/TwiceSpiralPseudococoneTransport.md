@@ -88,8 +88,16 @@ equivalence counit retained explicitly.
 right triangle with the whiskered right counit and cancels the inverse/hom
 pair.  It is the complete outgoing-right block required by the coordinate
 glue square.
+`coordinateMiddle_counit_conjugation` now packages the central block in the
+exact natural-transformation type used by that paste: inverse-overlap
+whiskering of the coordinate glue equals the glue conjugated by the left
+counit comparison and inverse right counit comparison.
 
-The remaining step is the association-controlled paste of the incoming left
-triangle, overlap-counit naturality, and this outgoing-right cancellation.
+The remaining step is solely the association-controlled paste of the named
+incoming, middle, and outgoing blocks.  Lean currently retains the inverse
+overlap whiskering of the three-arrow reverse glue as one parenthesized
+natural transformation, while the three named blocks expose its arrows
+separately; an explicit typed reassociation theorem is required between those
+two representations.
 The coordinate-side counit itself remains downstream.
 No pseudococone-category equivalence or based group pushout is claimed here.

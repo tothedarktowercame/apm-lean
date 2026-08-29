@@ -837,6 +837,33 @@ theorem coordinateRight_span_roundTrip_counit_cancel
     _ = _ := (Functor.isoWhiskerLeft (coordinateRightLeg h)
       (coordinateRightRoundTripIso h C Q)).inv_hom_id
 
+/-- The central coordinate glue, transported through the inverse overlap
+ equivalence, is conjugation by the two overlap counit comparisons. -/
+theorem coordinateMiddle_counit_conjugation
+    (Q : CoordinatePseudoCocone h C) :
+    Functor.whiskerLeft (overlapFundamentalGroupoidEquivalence h).inverse
+        (reverseTransportedOverlapGlue h C Q).hom =
+      ((overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+          (coordinateLeftLeg ⋙ Q.left)).hom ≫
+        Q.glue.hom ≫
+        ((overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+          (coordinateRightLeg h ⋙ Q.right)).inv := by
+  let eL := (overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+    (coordinateLeftLeg ⋙ Q.left)
+  let eR := (overlapFundamentalGroupoidEquivalence h).invFunIdAssoc
+    (coordinateRightLeg h ⋙ Q.right)
+  ext z
+  have hz := coordinateGlue_overlapCounit_naturality h C Q z
+  simp only [NatTrans.comp_app, Functor.whiskerLeft_app]
+  apply (cancel_mono (eR.hom.app z)).1
+  calc
+    _ = eL.hom.app z ≫ Q.glue.hom.app z := by
+      simpa [eL, eR, reverseTransportedOverlapGlue, Category.assoc] using hz.symm
+    _ = (eL.hom.app z ≫ Q.glue.hom.app z ≫ eR.inv.app z) ≫
+        eR.hom.app z := by
+      symm
+      simp only [Category.assoc, eR.inv_hom_id_app, Category.comp_id]
+
 
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
@@ -890,5 +917,6 @@ theorem coordinateRight_span_roundTrip_counit_cancel
 #print axioms coordinateRight_span_roundTrip_counit_triangle_inv
 #print axioms coordinateGlue_overlapCounit_naturality
 #print axioms coordinateRight_span_roundTrip_counit_cancel
+#print axioms coordinateMiddle_counit_conjugation
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport
