@@ -29,10 +29,16 @@ between the nested overlap path and each independently constructed
 `FundamentalGroupoid.conj_eqToHom`; it does not identify subtype witnesses
 definitionally.
 
-The remaining specialization is one categorical representation layer later:
-after mapping this equality through `P.left` and `P.right`, the strictified
-object isomorphisms produce heterogeneous morphism equalities between the
-chosen common objects and the overlap endpoint objects. A typed theorem
-combining those four mapped endpoint transports with glue naturality is still
-required before `strictifiedDescentDatum` can be packaged. No equivalence or
-ordinary pushout is claimed here.
+`strictifiedObjectIso_overlap_hom` and `strictifiedObjectIso_overlap` now
+normalize the strictification comparison at an arbitrary overlap endpoint.
+They state, with explicit subtype-object transports, that the right comparison
+is the inverse glue component followed by the left comparison. The iso-valued
+form controls both the inverse at a path source and the hom at its target.
+`functor_map_eqToHom` separately normalizes mapping one such transport.
+
+After mapping `overlapPath_map_eq_pathInPiece` through both piece functors and
+expanding these endpoint isomorphisms, the remaining goal contains three pairs
+of independently generated `eqToHom`s around `P.glue.hom.naturality`. A typed
+multi-transport cancellation theorem aligning those pairs is still required
+before `strictifiedDescentDatum` can be packaged. That equation is not assumed
+here. No equivalence or ordinary pushout is claimed.

@@ -32,6 +32,12 @@ theorem iso_naturality_conjugation
   rw [← Category.assoc, ← h]
   simp [Category.assoc]
 
+theorem functor_map_eqToHom {A B : Type*} [Category A] [Category B]
+    (F : A ⥤ B) {x y : A} (h : x = y) :
+    F.map (eqToHom h) = eqToHom (congrArg F.obj h) := by
+  subst y
+  simp
+
 /-- Mapping the canonical overlap lift of an ambient path to either piece
 gives the corresponding `pathInPiece` arrow.  Endpoint membership witnesses
 are aligned only after the path has been constructed. -/
@@ -90,6 +96,60 @@ theorem overlapPath_map_eq_pathInPiece
     simp [pathInPiece, overlapToPiece]
   all_goals
     congr 1
+
+/-- On an overlap point, the right strictification comparison is the inverse
+glue comparison followed by the left strictification comparison, with the
+independently constructed subtype objects transported explicitly. -/
+theorem strictifiedObjectIso_overlap_hom
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (x : X) (hU : x ∈ U) (hV : x ∈ V) :
+    let xW : FundamentalGroupoid (CoverOverlap (X := X) (U := U) (V := V)) :=
+      ⟨⟨x, hU, hV⟩⟩
+    let xL : FundamentalGroupoid (CoverPiece U V true) :=
+      ⟨⟨x, by simpa [twoChart] using hU⟩⟩
+    let xR : FundamentalGroupoid (CoverPiece U V false) :=
+      ⟨⟨x, by simpa [twoChart] using hV⟩⟩
+    let eL : xL = (overlapFundamentalGroupoidMap
+        (U := U) (V := V) true).obj xW := by
+      apply FundamentalGroupoid.ext; rfl
+    let eR : xR = (overlapFundamentalGroupoidMap
+        (U := U) (V := V) false).obj xW := by
+      apply FundamentalGroupoid.ext; rfl
+    (strictifiedObjectIso hcover P false xR).hom =
+      eqToHom (congrArg P.right.obj eR) ≫ (P.glue.app xW).inv ≫
+        eqToHom (congrArg P.left.obj eL).symm ≫
+          (strictifiedObjectIso hcover P true xL).hom := by
+  dsimp only
+  simp [strictifiedObjectIso, strictifiedObject, hU]
+  congr 1
+  congr 1
+  exact (eqToHom_trans _ _).symm
+
+/-- Iso-valued form of `strictifiedObjectIso_overlap_hom`, used to normalize
+both the source inverse and target hom in a conjugated map. -/
+theorem strictifiedObjectIso_overlap
+    (hcover : U ∪ V = Set.univ)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    (x : X) (hU : x ∈ U) (hV : x ∈ V) :
+    let xW : FundamentalGroupoid (CoverOverlap (X := X) (U := U) (V := V)) :=
+      ⟨⟨x, hU, hV⟩⟩
+    let xL : FundamentalGroupoid (CoverPiece U V true) :=
+      ⟨⟨x, by simpa [twoChart] using hU⟩⟩
+    let xR : FundamentalGroupoid (CoverPiece U V false) :=
+      ⟨⟨x, by simpa [twoChart] using hV⟩⟩
+    let eL : xL = (overlapFundamentalGroupoidMap
+        (U := U) (V := V) true).obj xW := by
+      apply FundamentalGroupoid.ext; rfl
+    let eR : xR = (overlapFundamentalGroupoidMap
+        (U := U) (V := V) false).obj xW := by
+      apply FundamentalGroupoid.ext; rfl
+    strictifiedObjectIso hcover P false xR =
+      eqToIso (congrArg P.right.obj eR) ≪≫ (P.glue.app xW).symm ≪≫
+        eqToIso (congrArg P.left.obj eL).symm ≪≫
+          strictifiedObjectIso hcover P true xL := by
+  apply Iso.ext
+  exact strictifiedObjectIso_overlap_hom hcover P x hU hV
 
 /-- A pseudococone together with a strict common object coordinate.  The last
 field is the overlap map equation in those coordinates; it is the exact form
