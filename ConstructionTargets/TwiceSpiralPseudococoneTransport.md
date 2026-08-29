@@ -52,3 +52,20 @@ A dedicated triangle/pasting normalization for that exact composite is still
 required before the piecewise units can be packaged as pseudococone
 isomorphisms. Until then, no category equivalence, composite
 gluing-to-coordinate equivalence, or based group pushout is claimed.
+
+`actualGlue_overlapUnit_naturality` now isolates the central part of that
+normalization. It specializes `P.glue.hom.naturality` to the overlap
+equivalence's unit component and explicitly retains the induced maps through
+`intersectionToLeftOpen` and `intersectionToRightOpen`.
+The component lemmas `actualLeftRoundTrip_unit_cancel_app` and
+`actualRightRoundTrip_unit_cancel_app` separately discharge the literal
+piece-unit hom/inverse pairs at the two actual overlap images; they do not
+identify any overlap and piece objects.
+
+The two remaining span triangles have exact component-level residuals. On the
+left, the piece unit followed by `reverseLeftSpanComparison.inv` and the
+forward-overlap whiskering of `leftSpanComparison.hom` expands to six mapped
+arrows; it must equal the overlap unit mapped through the actual left
+restriction. On the right, the analogous five mapped arrows must equal the
+inverse overlap unit followed by the right piece unit. These are equivalence
+triangle/`eqToIso` coherence statements, not consequences of glue naturality.

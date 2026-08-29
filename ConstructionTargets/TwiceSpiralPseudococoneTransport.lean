@@ -471,6 +471,51 @@ theorem coordinateRightRoundTripIso_naturality
       (coordinateRightRoundTripIso h C P).hom ≫ tau.right :=
   (rightFunctorCategoryEquivalence h C).counitIso.hom.naturality tau.right
 
+/-- Naturality of the actual overlap glue at the unit arrow of the overlap
+groupoid equivalence.  Both induced inclusion maps remain explicit. -/
+theorem actualGlue_overlapUnit_naturality
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C))
+    (z : FundamentalGroupoid (U h ∩ V h : Set (Gluing h))) :
+    P.left.map ((FundamentalGroupoid.map (intersectionToLeftOpen h)).map
+        ((overlapFundamentalGroupoidEquivalence h).unitIso.hom.app z)) ≫
+      P.glue.hom.app
+        ((overlapFundamentalGroupoidEquivalence h).inverse.obj
+          ((overlapFundamentalGroupoidEquivalence h).functor.obj z)) =
+    P.glue.hom.app z ≫
+      P.right.map ((FundamentalGroupoid.map (intersectionToRightOpen h)).map
+        ((overlapFundamentalGroupoidEquivalence h).unitIso.hom.app z)) := by
+  simpa [ConstructionTargets.TwoOpenFundamentalGroupoidSpan.overlapFundamentalGroupoidMap,
+    ConstructionTargets.TwoOpenFundamentalGroupoidSpan.overlapToPiece,
+    FundamentalGroupoid.map] using
+    P.glue.hom.naturality
+      ((overlapFundamentalGroupoidEquivalence h).unitIso.hom.app z)
+
+/-- Componentwise cancellation of the left functor-category unit, at the
+actual overlap-to-left image.  This is the first cancellation in the left
+span triangle and deliberately retains the overlap object in its argument. -/
+theorem actualLeftRoundTrip_unit_cancel_app
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C))
+    (z : FundamentalGroupoid (U h ∩ V h : Set (Gluing h))) :
+    (actualLeftRoundTripIso h C P).hom.app
+          ((FundamentalGroupoid.map (intersectionToLeftOpen h)).obj z) ≫
+        (actualLeftRoundTripIso h C P).inv.app
+          ((FundamentalGroupoid.map (intersectionToLeftOpen h)).obj z) =
+      𝟙 _ :=
+  (actualLeftRoundTripIso h C P).hom_inv_id_app _
+
+/-- Right-hand componentwise cancellation at the actual overlap-to-right
+image. -/
+theorem actualRightRoundTrip_unit_cancel_app
+    (P : PseudoFunctorCocone (X := Gluing h) (U := U h) (V := V h) (C := C))
+    (z : FundamentalGroupoid (U h ∩ V h : Set (Gluing h))) :
+    (actualRightRoundTripIso h C P).hom.app
+          ((FundamentalGroupoid.map (intersectionToRightOpen h)).obj z) ≫
+        (actualRightRoundTripIso h C P).inv.app
+          ((FundamentalGroupoid.map (intersectionToRightOpen h)).obj z) =
+      𝟙 _ :=
+  (actualRightRoundTripIso h C P).hom_inv_id_app _
+
+
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
 #print axioms overlapFunctorCategoryEquivalence
@@ -508,5 +553,8 @@ theorem coordinateRightRoundTripIso_naturality
 #print axioms actualRightRoundTripIso_naturality
 #print axioms coordinateLeftRoundTripIso_naturality
 #print axioms coordinateRightRoundTripIso_naturality
+#print axioms actualGlue_overlapUnit_naturality
+#print axioms actualLeftRoundTrip_unit_cancel_app
+#print axioms actualRightRoundTrip_unit_cancel_app
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport
