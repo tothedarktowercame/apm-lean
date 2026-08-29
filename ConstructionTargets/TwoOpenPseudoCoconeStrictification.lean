@@ -584,6 +584,148 @@ def pseudoCoconeStrictificationNatIso
         Category.id_comp]
       rfl)
 
+/-- Two three-step object-equality transports with the same endpoints agree,
+even when their intermediate object presentations and equality proofs were
+constructed independently. -/
+theorem eqToHom_three_chain_eq
+    {A B M D B' M' : C}
+    (p : A = B) (q : B = M) (r : M = D)
+    (p' : A = B') (q' : B' = M') (r' : M' = D) :
+    eqToHom p ≫ eqToHom q ≫ eqToHom r =
+      eqToHom p' ≫ eqToHom q' ≫ eqToHom r' := by
+  subst B
+  subst M
+  subst B'
+  subst M'
+  subst D
+  simp
+
+/-- A descent object maps to the strictification of its underlying
+pseudococone. -/
+def descentStrictificationHom
+    (hcover : U ∪ V = Set.univ)
+    (D : DescentObject (X := X) (U := U) (V := V) (C := C)) :
+    D ⟶ (descentToPseudoCoconeFunctor ⋙
+      pseudoCoconeToDescentFunctor hcover).obj D where
+  piece
+    | false => (pieceStrictificationIso hcover
+        (descentPseudoCocone D.datum) false).hom
+    | true => (pieceStrictificationIso hcover
+        (descentPseudoCocone D.datum) true).hom
+  overlap_app := by
+    intro x hU hV
+    simp [ConstructionTargets.TwoOpenDescentFullness.transportedPieceApp,
+      pieceStrictificationIso, strictifiedPieceFunctor,
+      strictifiedObjectIso, strictifiedObject, hU,
+      descentPseudoCocone, descentOverlapIso, descentOverlapAppIso,
+      overlapFundamentalGroupoidMap, FundamentalGroupoid.map,
+      overlapToPiece]
+    apply eqToHom_three_chain_eq
+
+/-- The inverse comparison from strictified underlying pseudococone data to
+the original descent object. -/
+def descentStrictificationInv
+    (hcover : U ∪ V = Set.univ)
+    (D : DescentObject (X := X) (U := U) (V := V) (C := C)) :
+    (descentToPseudoCoconeFunctor ⋙
+      pseudoCoconeToDescentFunctor hcover).obj D ⟶ D where
+  piece
+    | false => (pieceStrictificationIso hcover
+        (descentPseudoCocone D.datum) false).inv
+    | true => (pieceStrictificationIso hcover
+        (descentPseudoCocone D.datum) true).inv
+  overlap_app := by
+    intro x hU hV
+    simp [ConstructionTargets.TwoOpenDescentFullness.transportedPieceApp,
+      pieceStrictificationIso, strictifiedPieceFunctor,
+      strictifiedObjectIso, strictifiedObject, hU,
+      descentPseudoCocone, descentOverlapIso, descentOverlapAppIso,
+      overlapFundamentalGroupoidMap, FundamentalGroupoid.map,
+      overlapToPiece]
+    apply eqToHom_three_chain_eq
+
+/-- Descent data is isomorphic to strictification of its underlying
+pseudococone. -/
+def descentStrictificationIso
+    (hcover : U ∪ V = Set.univ)
+    (D : DescentObject (X := X) (U := U) (V := V) (C := C)) :
+    D ≅ (descentToPseudoCoconeFunctor ⋙
+      pseudoCoconeToDescentFunctor hcover).obj D where
+  hom := descentStrictificationHom hcover D
+  inv := descentStrictificationInv hcover D
+  hom_inv_id := by
+    apply CompatibleNatTrans.ext
+    intro b
+    cases b
+    · exact (pieceStrictificationIso hcover
+        (descentPseudoCocone D.datum) false).hom_inv_id
+    · exact (pieceStrictificationIso hcover
+        (descentPseudoCocone D.datum) true).hom_inv_id
+  inv_hom_id := by
+    apply CompatibleNatTrans.ext
+    intro b
+    cases b
+    · exact (pieceStrictificationIso hcover
+        (descentPseudoCocone D.datum) false).inv_hom_id
+    · exact (pieceStrictificationIso hcover
+        (descentPseudoCocone D.datum) true).inv_hom_id
+
+/-- The descent-side strictification comparison is natural in compatible
+piece transformations. -/
+def descentStrictificationNatIso
+    (hcover : U ∪ V = Set.univ) :
+    Functor.id (DescentObject (X := X) (U := U) (V := V) (C := C)) ≅
+      descentToPseudoCoconeFunctor ⋙ pseudoCoconeToDescentFunctor hcover :=
+  NatIso.ofComponents (descentStrictificationIso hcover) (by
+    intro D E tau
+    apply CompatibleNatTrans.ext
+    intro b
+    ext z
+    cases b
+    · change (tau.piece false).app z ≫
+          (pieceStrictificationIso hcover
+            (descentPseudoCocone E.datum) false).hom.app z =
+        (pieceStrictificationIso hcover
+            (descentPseudoCocone D.datum) false).hom.app z ≫
+          ((pieceStrictificationIso hcover
+              (descentPseudoCocone D.datum) false).inv.app z ≫
+            (tau.piece false).app z ≫
+            (pieceStrictificationIso hcover
+              (descentPseudoCocone E.datum) false).hom.app z)
+      rw [← Category.assoc,
+        (pieceStrictificationIso hcover
+          (descentPseudoCocone D.datum) false).hom_inv_id_app,
+        Category.id_comp]
+      rfl
+    · change (tau.piece true).app z ≫
+          (pieceStrictificationIso hcover
+            (descentPseudoCocone E.datum) true).hom.app z =
+        (pieceStrictificationIso hcover
+            (descentPseudoCocone D.datum) true).hom.app z ≫
+          ((pieceStrictificationIso hcover
+              (descentPseudoCocone D.datum) true).inv.app z ≫
+            (tau.piece true).app z ≫
+            (pieceStrictificationIso hcover
+              (descentPseudoCocone E.datum) true).hom.app z)
+      rw [← Category.assoc,
+        (pieceStrictificationIso hcover
+          (descentPseudoCocone D.datum) true).hom_inv_id_app,
+        Category.id_comp]
+      rfl)
+
+/-- Compatible two-open descent data and pseudococones are equivalent
+categories.  This is the pseudococone universal-property formulation; it does
+not identify the ambient groupoid as an ordinary categorical pushout. -/
+def twoOpenDescentPseudoCoconeEquivalence
+    (hcover : U ∪ V = Set.univ) :
+    DescentObject (X := X) (U := U) (V := V) (C := C) ≌
+      PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C) :=
+  CategoryTheory.Equivalence.mk
+    descentToPseudoCoconeFunctor
+    (pseudoCoconeToDescentFunctor hcover)
+    (descentStrictificationNatIso hcover)
+    (pseudoCoconeStrictificationNatIso hcover).symm
+
 /-- A pseudococone together with a strict common object coordinate.  The last
 field is the overlap map equation in those coordinates; it is the exact form
 required by `TwoOpenDescentDatum.overlap_eq`. -/
@@ -691,5 +833,11 @@ def HasStrictCommonObjectCoordinates
 #print axioms pseudoCoconeStrictificationInv
 #print axioms pseudoCoconeStrictificationIso
 #print axioms pseudoCoconeStrictificationNatIso
+#print axioms eqToHom_three_chain_eq
+#print axioms descentStrictificationHom
+#print axioms descentStrictificationInv
+#print axioms descentStrictificationIso
+#print axioms descentStrictificationNatIso
+#print axioms twoOpenDescentPseudoCoconeEquivalence
 
 end ConstructionTargets.TwoOpenPseudoCoconeStrictification

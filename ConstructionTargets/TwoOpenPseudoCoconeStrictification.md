@@ -87,6 +87,17 @@ Finally, `pseudoCoconeStrictificationNatIso` packages these objectwise
 isomorphisms naturally in the explicit orientation
 `Functor.id _ ≅ pseudoCoconeToDescentFunctor hcover ⋙
 descentToPseudoCoconeFunctor`. Naturality is the componentwise cancellation
-of each source piece isomorphism against the conjugated map. The descent-side
-natural isomorphism remains separate. No categorical equivalence or ordinary
-pushout is claimed here.
+of each source piece isomorphism against the conjugated map.
+
+On the descent side, `descentStrictificationHom` and
+`descentStrictificationInv` use the same piece isomorphisms. Their common-
+coordinate overlap equations are proved rather than assumed: after unfolding
+the descent glue and the cover-dependent strictified object, both sides are
+explicit three-step object-equality transports. `eqToHom_three_chain_eq`
+aligns their independently constructed intermediate objects and proof terms.
+The inverse laws and morphism naturality give `descentStrictificationNatIso`.
+
+`twoOpenDescentPseudoCoconeEquivalence` packages the resulting equivalence
+between compatible descent data and pseudococones. This is a category
+equivalence for the pseudococone formulation; it is not a claim that the
+ambient fundamental groupoid is an ordinary `Limits.Pushout`.
