@@ -409,6 +409,17 @@ premise, and the two frozen placeholders are unchanged.  The next election is
 conditional on a separate fixture compiling the complete
 `actualToCoordinatePostcomposeIso` glue coherence.
 
+Focused probe `invoke-1788105858496-4358-28fcb259` compiled that complete
+forward comparison.  Agency job `invoke-1788106366249-4370-8c228d74` then
+implemented it at commit `74ae0e1e`; independent review
+`invoke-1788106925596-4385-37a16353` returned `PASS`.  The reviewed theorem
+includes both glue equations, associator inverse laws, and naturality in
+arbitrary pseudococone morphisms.  Its glue proof retains
+`leftSpanComparison`, `transportedOverlapGlue`, the inverse right comparison,
+and both piece-equivalence units.  The companion comparison for
+`coordinateToActualPseudoCoconeFunctor` remains unproved and must compile
+before target naturality of the equivalence is claimed.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
