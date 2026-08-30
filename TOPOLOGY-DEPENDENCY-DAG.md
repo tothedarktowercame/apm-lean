@@ -409,13 +409,12 @@ reviewed and banked in `37524eb4`.  Its exact frozen-facing bijection is
 canonical, and frozen `t01J02` was closed without changing its interface in
 `3ba7726a`.
 
-The 2026-08-30 closure experiment elected `t97J06` as the next selective
-promotion.  Promote only `CircleNoncontractible.{lean,md}` from historical
-commit `2343da9e`; do not cherry-pick that mixed commit or the unnecessary
-problem-specific adapter.  The generic theorem
-`CircleNoncontractible.circle_not_contractible` feeds the existing frozen
-lemma `t97J06_not_homotopic_const_of_not_contractibleCircle` directly and
-leaves no further mathematical residual.
+The 2026-08-30 closure experiment elected and closed `t97J06`.  Commit
+`0ea00fce` selectively promotes only `CircleNoncontractible.{lean,md}` from
+historical commit `2343da9e` and feeds the generic theorem directly to the
+existing frozen conditional lemma.  Independent Agency review
+`invoke-1788087816801-3748-17bef30b` passed direct compilation, focused build,
+placeholder, axiom, and scope audits.
 
 ### Queue B: bounded reusable constructions
 
@@ -475,7 +474,7 @@ compiles independently of every final problem.
 | Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
 | Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and coefficient-compatible computations do not |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
-| Circle degree/lifting | `t91A08`, `t94J06`, `t97A02`, `t97J06`, `t97J08` | mixed concrete progress; `t97J06` has an elected generic noncontractibility uptake; shared naturality/lifting APIs remain |
+| Circle degree/lifting | `t91A08`, `t94J06`, closed `t97J06`, `t97A02`, `t97J08` | mixed concrete progress; `t97J06` closed via generic singular-homology noncontractibility; shared naturality/lifting APIs remain |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08` | shared measure/integration program plus bounded calculations |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
@@ -594,6 +593,7 @@ critical-value Sard.
 | `t94J05` | `3348f833` using the banked dimension-gap chain | status `solved`, zero placeholders, statements unchanged, only standard axioms |
 | `t00A01` homology branch | `f5b0e191` using `d03946a0`, `c59a4dd9`, and `43a492da` | bridge placeholder removed; frozen statement unchanged; whole problem is not closed because van Kampen and final assembly remain |
 | `t96A03` | `adcd54a2` using the sphere-equator geometry through `f7399011`, quotient adapter `b3b3f153`, and homology targets `5aecf0c3`/`efa4805e` | status solved, zero placeholders, frozen statement unchanged, only standard axioms |
+| `t97J06` | `0ea00fce` using the selectively promoted generic `CircleNoncontractible.circle_not_contractible` | zero placeholders, frozen statement unchanged, direct/focused builds passed, independent Agency review passed, only standard axioms |
 
 Current audited classification beyond these closures:
 
@@ -622,10 +622,10 @@ Current audited classification beyond these closures:
   by production Mayer--Vietoris, and its fundamental-group branch separately
   needs van Kampen.  The explicit t01J03/t96A03 bands are not generic evidence
   for an arbitrary embedded circle.
-- `t97J06` is the elected uptake closure.  Canonical master already contains
-  its conditional reduction to `¬ ContractibleSpace Circle`; selectively
-  promoting `CircleNoncontractible` from `2343da9e` leaves a one-line final
-  specialization.
+- `t97J06` is `CLOSED` at `0ea00fce`.  Its existing conditional reduction to
+  `¬ ContractibleSpace Circle` now consumes the selectively promoted generic
+  theorem; independent review job `invoke-1788087816801-3748-17bef30b`
+  confirmed zero placeholders and unchanged statements.
 - `t96J07` remains `SPEC-DEFECT` and must not receive proof scaffolding before
   statement repair.
 
@@ -634,10 +634,10 @@ Current audited classification beyond these closures:
 The initial closure experiments are complete; their Agency job ids and full
 decisions are recorded in `docs/TN-topology-closure-experiments.md`.
 
-1. **ELECT: close `t97J06` by selective uptake.**  Promote only the generic
-   `CircleNoncontractible` pair from `2343da9e`, audit it on canonical master,
-   and use the existing frozen conditional lemma.  This is the sole elected
-   implementation packet.
+1. **CLOSED: `t97J06` by selective uptake.**  Implementation job
+   `invoke-1788087615270-3747-34cc93a0` produced `0ea00fce`; independent review
+   job `invoke-1788087816801-3748-17bef30b` passed.  No further work remains on
+   this consumer.
 2. **STOP: `t01J03` representability.**  The first missing edge is target-
    postcomposition naturality for the generic pseudococone equivalence.  The
    source-reconstruction theorem would be a second absent edge.  Do not resume
@@ -652,9 +652,9 @@ decisions are recorded in `docs/TN-topology-closure-experiments.md`.
    Jordan--Schoenflies theory, and the two explicit coordinate covers do not
    generalize to an arbitrary embedded circle.
 
-After the `t97J06` closure, return to the portfolio rather than continuing any
-of the three stopped chains automatically.  The next likely bounded candidate
-is the `t95J04` retract adapter, subject to independent frozen-facing review.
+Return to the portfolio rather than continuing any of the three stopped chains
+automatically.  The next likely bounded candidate is the `t95J04` retract
+adapter, subject to independent frozen-facing review.
 
 The banked production-MV scaffold already supplies:
 
