@@ -1,4 +1,4 @@
-import Mathlib
+import ConstructionTargets.SingularHomologyRetractNonvanishing
 
 /-!
 # APM t95J04 — low-dimensional maps to spheres and six-manifolds
@@ -99,6 +99,13 @@ lemma t95J04_nullHomotopic_of_not_surjective {X : Type*}
   refine ⟨p, ?_⟩
   simpa [g, inclusion] using hcomp
 
+private theorem t95J04_and_seven_of_remaining
+    {A B C D E F G : Prop} (hE : E) (hF : F)
+    (h : A ∧ B ∧ C ∧ D ∧ G) :
+    A ∧ B ∧ C ∧ D ∧ E ∧ F ∧ G := by
+  rcases h with ⟨hA, hB, hC, hD, hG⟩
+  exact ⟨hA, hB, hC, hD, hE, hF, hG⟩
+
 theorem apm_t95j04 :
     (∀ (k n : ℕ), k < n →
       ∀ (M : Type*) [TopologicalSpace M] [T2Space M]
@@ -115,29 +122,7 @@ theorem apm_t95j04 :
     ¬ Nonempty (T95J04SphereSix ≃ₜ T95J04SphereTwoFour) ∧
     ¬ Nonempty (T95J04SphereSix ≃ₜ T95J04SphereThreeThree) ∧
     ¬ Nonempty (T95J04SphereTwoFour ≃ₜ T95J04SphereThreeThree) := by
-  /-
-  CLOSER HOP 3 boundary. The repaired statement has compiled explicit
-  inhabitants for `S⁶`, `S² × S⁴`, and `S³ × S³`. Going beyond hop 2,
-  `t95J04_contractibleSpace_sphere_complement` generalizes the stereographic
-  construction from `t94J05` to every `T95J04Sphere n`, and
-  `t95J04_nullHomotopic_of_not_surjective` packages the complement-valued
-  factor and descends its contraction for an arbitrary source. Thus the
-  null-homotopy clause now follows completely from non-surjectivity.
-
-  The first conjunct still requires a manifold-domain Sard theorem proving
-  `μH[n] (range f) = 0`. The repository's chartwise Sard artifacts and
-  Mathlib's available results cover maps between finite-dimensional normed
-  vector spaces, not arbitrary `IsManifold` domains. Non-surjectivity would
-  then follow from positive Hausdorff measure of the sphere; that positivity
-  bridge is also not packaged for this restricted Hausdorff measure.
-
-  For the remaining clauses, searches of `LEMMA-INDEX.md`,
-  `ConstructionTargets/`, sphere/product siblings, Mathlib's sphere,
-  stereographic, fundamental-groupoid, singular-homology, and Künneth sources,
-  and git history found no compiled simple-connectivity theorem for these
-  metric spheres and no homology computations distinguishing the three
-  six-dimensional spaces. A further inspection of `t94J05` supplied and was
-  used for the now-closed stereographic step, but not those foundational
-  bridges. The frozen statement is unchanged.
-  -/
+  apply t95J04_and_seven_of_remaining
+    (ConstructionTargets.SingularHomologyRetractNonvanishing.sphereSix_not_homeomorphic_sphereTwo_product_sphereFour)
+    (ConstructionTargets.SingularHomologyRetractNonvanishing.sphereSix_not_homeomorphic_sphereThree_product_sphereThree)
   sorry
