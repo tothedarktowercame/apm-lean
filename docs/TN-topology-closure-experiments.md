@@ -396,6 +396,19 @@ placeholders.  This is one reviewed edge, not source reconstruction.  The next
 action is a read-only probe of the immediately following strictification or
 reconstruction equivalence layer.
 
+That probe (`invoke-1788105082590-4338-c2585085`) identified the first
+nontrivial missing comparison as target naturality of
+`actualPseudoCoconeToCoordinateFunctor`.  Before attempting its glue square,
+Agency job `invoke-1788105413713-4345-3ce32e09` banked the compiled
+prerequisites at commit `bc5267e9`: target postcomposition for
+`CoordinatePseudoCocone` and the direct collared specialization of the generic
+pseudopushout square.  Independent review
+`invoke-1788105689080-4353-ef7aec4f` returned `PASS`; the target definitions are
+literal postcomposition/whiskering constructions, the specialization adds no
+premise, and the two frozen placeholders are unchanged.  The next election is
+conditional on a separate fixture compiling the complete
+`actualToCoordinatePostcomposeIso` glue coherence.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
