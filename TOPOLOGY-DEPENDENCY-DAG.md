@@ -480,7 +480,7 @@ compiles independently of every final problem.
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
-| Two-open van Kampen/descent | `t01J03` | generic descent and pseudococone mapping are `BANKED`; the reviewed chain `67aa463e`, `bc5267e9`, `74ae0e1e`, `a81dad87`, `789eb675` + `7d9cd14a`, `f1a217ab`, and `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; identity/composition coherence in the target functor remains before pseudonaturality/representability |
+| Two-open van Kampen/descent | `t01J03` | the reviewed chain through `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; full pseudonaturality is unnecessary for this consumer: reviewed `338011a6` evaluates those squares at the candidate functors and reflects through full faithfulness to obtain `FundamentalGroupoid (Gluing h) ≌ SingleObj (TwiceSpiralPushout d)`; chosen-object endomorphism extraction remains |
 
 ## Specification and ledger corrections
 
@@ -776,8 +776,13 @@ This construction does not elect either remaining `t95J04` foundation.
    `invoke-1788116426273-4498-a75f6346`).  The final consumer-facing paste is
    reviewed at `fca797fa` (probe `invoke-1788116682320-4519-851404a0`,
    implementation `invoke-1788116841342-4523-15360639`, review
-   `invoke-1788117042204-4524-8abccc3e`).  Probe identity/composition coherence
-   for the target-functor family next; stop before source reconstruction.
+   `invoke-1788117042204-4524-8abccc3e`).  Probe
+   `invoke-1788118997109-4548-f36e2e28` established that pointwise squares
+   suffice; source reconstruction is reviewed at `338011a6` after exact
+   fixture-provenance repair and re-review
+   `invoke-1788126570453-5141-771c2de6`.  Extract the chosen-object
+   endomorphism group next; do not edit the frozen theorem before that adapter
+   compiles and is reviewed.
 
 The banked production-MV scaffold already supplies:
 

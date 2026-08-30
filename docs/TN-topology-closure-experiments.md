@@ -455,6 +455,20 @@ pointwise target-natural for every `H : C ⥤ D`, with a reviewed inverse mate.
 Identity and composition coherence as `H` varies is not yet packaged, so no
 pseudonatural equivalence or representability conclusion is claimed.
 
+Probe `invoke-1788118997109-4548-f36e2e28` then showed that full target
+pseudonaturality is unnecessary for this consumer.  Evaluating the reviewed
+forward square and inverse mate at the two banked candidate functors, then
+reflecting the resulting isomorphisms through full faithfulness, gives
+quasi-inverse source functors; `Equivalence.mk` supplies the triangle by
+adjointification.  Agency job `invoke-1788121447437-4884-7c9e47e4`
+implemented this at `338011a6`.  Its first review failed only because the
+ephemeral probe fixture was unavailable.  The fixture was recovered verbatim
+from Agency records at SHA-256 `461769c0…17bda66d`; regular-seat re-review
+`invoke-1788126570453-5141-771c2de6` then returned `PASS`.  The reviewed result
+is an equivalence
+`FundamentalGroupoid (Gluing h) ≌ SingleObj (TwiceSpiralPushout d)`.
+Chosen-object endomorphism-group extraction remains separate.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
