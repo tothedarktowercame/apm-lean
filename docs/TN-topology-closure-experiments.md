@@ -162,6 +162,34 @@ After these reports, elect at most one implementation program.  The initial
 ranking favors uptake because it has the shortest path to whole-problem
 closure, but evidence from the probes may change the order.
 
+## Initial portfolio results
+
+The four probes ran through Agency and resumed through one parked join:
+
+| Job | Consumer | Decision | Evidence-backed result |
+|---|---|---|---|
+| `invoke-1788087056758-3734-30eea7ea` | Queue A uptake | `ELECT` | selectively promote only `CircleNoncontractible.{lean,md}` from historical commit `2343da9e`; its theorem closes the sole remaining `t97J06` placeholder by one specialization |
+| `invoke-1788087059249-3735-3a33e65a` | `t01J03` | `STOP` | the complete fixed-target mapping equivalence is not yet target-natural at the generic pseudococone layer, so the proposed representability theorem cannot yet be instantiated |
+| `invoke-1788087061996-3736-5773a9b6` | `t95J04` | `STOP` for foundations; local adapter available | the first product edge is singular Eilenberg--Zilber, followed independently by integral Kunneth; coefficient comparison is already banked; a retract argument can close the two clauses comparing `S⁶` with products without either foundation |
+| `invoke-1788087064433-3737-7857d6c2` | `t03J02` | `STOP` | `IsEmbedding` plus `Nullhomotopic` supplies no collar/NDR neighbourhood; Jordan--Schoenflies and van Kampen are two independent absent foundations |
+
+The elected implementation is the `t97J06` uptake, not a new foundational
+program.  Its bounded packet is:
+
+1. copy only `ConstructionTargets/CircleNoncontractible.lean` and its note from
+   historical commit `2343da9e`;
+2. independently audit the generic theorem against canonical
+   `CircleSingularHomology`;
+3. import it in frozen `t97J06` and discharge `apm_t97j06` with
+   `t97J06_not_homotopic_const_of_not_contractibleCircle
+   CircleNoncontractible.circle_not_contractible`;
+4. compile the frozen problem with zero placeholders and record the closing
+   commit in the DAG.
+
+The `t95J04` retract adapter is the next local candidate after this election.
+It is not part of the elected packet and must receive its own frozen-facing
+review before implementation.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:

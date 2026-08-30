@@ -278,9 +278,10 @@ Important representation decisions:
   duplicates its `H₁ ≅ ℤ` route without the normalized generator.
 - `Intersection` and `SingularCapLowDegree` are complementary local and chain
   layers, not competing implementations of the same theorem.
-- `TensorHomologySplitReduction` is canonical at `fdc18723`, but it is an
-  algebraic split-reduction theorem for tensor complexes.  It does not provide
-  a singular Eilenberg--Zilber comparison or a Kunneth theorem.
+- `TensorHomologySplitReduction` is canonical at `fdc18723`, but currently
+  proves only that homotopic factor maps induce equal maps on tensor-complex
+  homology.  It does not perform a split reduction and does not provide a
+  singular Eilenberg--Zilber comparison or a Kunneth theorem.
 
 ## Uptake census
 
@@ -408,6 +409,14 @@ reviewed and banked in `37524eb4`.  Its exact frozen-facing bijection is
 canonical, and frozen `t01J02` was closed without changing its interface in
 `3ba7726a`.
 
+The 2026-08-30 closure experiment elected `t97J06` as the next selective
+promotion.  Promote only `CircleNoncontractible.{lean,md}` from historical
+commit `2343da9e`; do not cherry-pick that mixed commit or the unnecessary
+problem-specific adapter.  The generic theorem
+`CircleNoncontractible.circle_not_contractible` feeds the existing frozen
+lemma `t97J06_not_homotopic_const_of_not_contractibleCircle` directly and
+leaves no further mathematical residual.
+
 ### Queue B: bounded reusable constructions
 
 1. Extend the banked generic product-covering constructor only through new
@@ -466,7 +475,7 @@ compiles independently of every final problem.
 | Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
 | Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and coefficient-compatible computations do not |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
-| Circle degree/lifting | `t91A08`, `t94J06`, `t97A02`, `t97J08` | mixed concrete progress; shared naturality/lifting APIs remain |
+| Circle degree/lifting | `t91A08`, `t94J06`, `t97A02`, `t97J06`, `t97J08` | mixed concrete progress; `t97J06` has an elected generic noncontractibility uptake; shared naturality/lifting APIs remain |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08` | shared measure/integration program plus bounded calculations |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
@@ -558,7 +567,7 @@ that the MV route solves t00J02 or replace its missing geometry.
 | `4c807ccf`–`fca9b574` | explicit twice-spiral collared cover, transport to boundary/solid-torus coordinates, and equivalence between ambient mapping functors and coordinate pseudococones | fixed-target mapping equivalence is compiled; source-groupoid equivalence still requires target-postcomposition naturality |
 | `5dcc68f5`–`f983be62` | connector normal forms for connected groupoids, vertex-data and integer-coordinate equivalences, `TwiceSpiralPushout d` representation equivalence, and identification with functors from `SingleObj (TwiceSpiralPushout d)` | yields a fixed-target equivalence `(FundamentalGroupoid (Gluing h) ⥤ C) ≃ (SingleObj (TwiceSpiralPushout d) ⥤ C)`; it does not by itself identify the source groupoids |
 | `6413a6cb`–`c862ae93` | representability candidates and target-postcomposition comparisons for the pushout-representation and vertex-coordinate layers | pause further coherence layers until a consumer probe identifies the exact representability-to-source-equivalence theorem needed by frozen t01J03 |
-| `fdc18723` | split reduction for tensor homology when one factor has a degreewise splitting | algebraic input only; product-topology consumers still need singular Eilenberg--Zilber and coefficient-compatible Kunneth comparisons |
+| `fdc18723` | homotopy invariance of tensor-complex homology maps in either factor | map-level algebraic input only; despite the filename, no split reduction is implemented, and product-topology consumers still need singular Eilenberg--Zilber and coefficient-compatible Kunneth comparisons |
 
 ## Dimension-gap versus critical-value Sard
 
@@ -608,43 +617,44 @@ Current audited classification beyond these closures:
   `apm_t01j03`.  Target-postcomposition naturality is being proved because a
   family of fixed-target mapping equivalences alone does not justify the
   source-groupoid equivalence.
+- `t03J02` is stopped before implementation: its `IsEmbedding` and
+  `Nullhomotopic` hypotheses do not provide the collar/NDR neighbourhood needed
+  by production Mayer--Vietoris, and its fundamental-group branch separately
+  needs van Kampen.  The explicit t01J03/t96A03 bands are not generic evidence
+  for an arbitrary embedded circle.
+- `t97J06` is the elected uptake closure.  Canonical master already contains
+  its conditional reduction to `¬ ContractibleSpace Circle`; selectively
+  promoting `CircleNoncontractible` from `2343da9e` leaves a one-line final
+  specialization.
 - `t96J07` remains `SPEC-DEFECT` and must not receive proof scaffolding before
   statement repair.
 
 ## Next decision point
 
-Do not start another long construction chain from this list.  Run the closure
-experiments below, record their residuals, and elect at most one implementation
-program from the results.
+The initial closure experiments are complete; their Agency job ids and full
+decisions are recorded in `docs/TN-topology-closure-experiments.md`.
 
-1. **Uptake audit first.**  Re-check the six experimental closures in Queue A
-   against canonical master.  Selectively promote the smallest branch whose
-   frozen theorem compiles unchanged.  This is currently the highest-probability
-   source of whole-problem closures and requires no new foundational election.
-2. **`t01J03` representability probe.**  In a fixture importing the banked
-   mapping equivalence and target-postcomposition comparisons, state the exact
-   chosen-basepoint automorphism-group conclusion required by
-   `apm_t01J03_bridge_2`.  Determine whether an existing category-theory theorem
-   turns the natural family into a source equivalence.  Elect one generic
-   representability theorem only if this fixture reaches it directly.  Do not
-   add another connector, pseudococone, or transport layer merely because it is
-   coherent.
-3. **`t95J04` product-homology probe.**  Instantiate the frozen spaces and
-   existing sphere homology coordinates far enough to state the exact missing
-   product comparison.  Determine separately whether the missing edge is
-   singular Eilenberg--Zilber, integral Kunneth, or coefficient-category
-   transport.  `TensorHomologySplitReduction` may discharge an algebraic
-   subgoal, but does not choose among these topological edges.
-4. **`t03J02` collar-hypothesis probe.**  Check whether the frozen gluing data
-   actually supplies a collar or cofibration strong enough to construct an
-   honest two-open cover.  If not, record the hypothesis mismatch and stop;
-   the explicit t01J03 and t96A03 covers cannot be promoted to a generic theorem
-   by changing names.
+1. **ELECT: close `t97J06` by selective uptake.**  Promote only the generic
+   `CircleNoncontractible` pair from `2343da9e`, audit it on canonical master,
+   and use the existing frozen conditional lemma.  This is the sole elected
+   implementation packet.
+2. **STOP: `t01J03` representability.**  The first missing edge is target-
+   postcomposition naturality for the generic pseudococone equivalence.  The
+   source-reconstruction theorem would be a second absent edge.  Do not resume
+   the transport chain from the later algebraic layers.
+3. **STOP: `t95J04` product foundation.**  Singular Eilenberg--Zilber is the
+   first absent edge and integral Kunneth is a second independent edge;
+   coefficient comparison is already available.  After `t97J06`, separately
+   review the compiled retract argument which can close the two `S⁶` versus
+   product clauses without either foundation.
+4. **STOP: `t03J02` generic gluing.**  The frozen hypotheses provide neither a
+   collar/NDR pair nor van Kampen.  A collar requires the absent
+   Jordan--Schoenflies theory, and the two explicit coordinate covers do not
+   generalize to an arbitrary embedded circle.
 
-Election criterion: prefer the probe that leaves one reusable theorem, at
-least two named consumers, and a bounded final adapter.  If no probe satisfies
-all three conditions, return to selective uptake and local adapters rather
-than choosing a foundational program by perceived mathematical importance.
+After the `t97J06` closure, return to the portfolio rather than continuing any
+of the three stopped chains automatically.  The next likely bounded candidate
+is the `t95J04` retract adapter, subject to independent frozen-facing review.
 
 The banked production-MV scaffold already supplies:
 
