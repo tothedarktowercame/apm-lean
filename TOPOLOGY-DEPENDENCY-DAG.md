@@ -384,7 +384,7 @@ before it is marked `BANKED`:
 
 - `t00J01`: exact Circle fibre cardinalities and regularity;
 - `t03J06`: capped-cylinder integral and final conjunction;
-- `t94J06`: degree-four disk zero obstruction;
+- `t94J06`: degree-four disk zero obstruction (`CLOSED` at `8efdc321`);
 - `t97J06`: Circle noncontractibility consumer;
 - `t98A05`: exterior derivatives, simplex integral, circle-period obstruction,
   and final conjunction;
@@ -474,7 +474,7 @@ compiles independently of every final problem.
 | Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
 | Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  This does not block the two `t95J04` comparisons with `S⁶`: commit `54fe6115` closes those conjuncts by a split-retract homology argument without computing product homology |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
-| Circle degree/lifting | `t91A08`, `t94J06`, closed `t97J06`, `t97A02`, `t97J08` | mixed concrete progress; `t97J06` closed via generic singular-homology noncontractibility; shared naturality/lifting APIs remain |
+| Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, `t97J08` | `t94J06` closed through the selectively promoted path-lifting/winding chain and degree-four disk obstruction; `t97J06` closed via generic singular-homology noncontractibility; further consumers still require separate review |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08` | shared measure/integration program plus bounded calculations |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
@@ -594,6 +594,7 @@ critical-value Sard.
 | `t00A01` homology branch | `f5b0e191` using `d03946a0`, `c59a4dd9`, and `43a492da` | bridge placeholder removed; frozen statement unchanged; whole problem is not closed because van Kampen and final assembly remain |
 | `t96A03` | `adcd54a2` using the sphere-equator geometry through `f7399011`, quotient adapter `b3b3f153`, and homology targets `5aecf0c3`/`efa4805e` | status solved, zero placeholders, frozen statement unchanged, only standard axioms |
 | `t97J06` | `0ea00fce` using the selectively promoted generic `CircleNoncontractible.circle_not_contractible` | zero placeholders, frozen statement unchanged, direct/focused builds passed, independent Agency review passed, only standard axioms |
+| `t94J06` | `8efdc321` using six selectively promoted circle-lifting/winding and degree-four disk-obstruction targets | two placeholders removed, frozen statements unchanged, historical blobs verified byte-for-byte, direct/focused/frozen builds passed, independent Agency review passed, only standard axioms |
 
 Bounded partial closures, which do not belong in the closed-problem table:
 
@@ -634,6 +635,13 @@ Current audited classification beyond these closures:
   `¬ ContractibleSpace Circle` now consumes the selectively promoted generic
   theorem; independent review job `invoke-1788087816801-3748-17bef30b`
   confirmed zero placeholders and unchanged statements.
+- `t94J06` is `CLOSED` at `8efdc321`.  Its generic radius-disk bridge and final
+  radius-seven specialization now consume the selectively promoted
+  circle-lifting/winding chain.  Election job
+  `invoke-1788091410408-3755-148461f2`, implementation job
+  `invoke-1788091783980-3759-e0d38d5c`, and independent review job
+  `invoke-1788092071400-3763-78a77595` establish `2 → 0` placeholders with
+  unchanged frozen statements.
 - `t96J07` remains `SPEC-DEFECT` and must not receive proof scaffolding before
   statement repair.
 
@@ -667,6 +675,24 @@ Return to the portfolio rather than continuing any stopped chain
 automatically.  The bounded `t95J04` retract adapter has completed its full
 election, implementation, and review chain; it does not elect the remaining
 product-homology program.
+
+The second portfolio round likewise elected exactly one closure:
+
+5. **STOP: `t00J01` selective fold uptake.**  Probe
+   `invoke-1788091405247-3753-2e843c2e` verified the circle-fold branch but
+   found two independent residual foundations: the concrete Klein-product
+   manifold/top-homology bridge and rational sphere Lefschetz normalization.
+6. **STOP: `t03J06` capped-cylinder uptake.**  Probe
+   `invoke-1788091407907-3754-d9387d48` verified the `7π` integral packet, but
+   smoothness and the exterior-derivative value remain a separate missing
+   theorem.  Do not promote the integral chain as a consumer closure.
+7. **CLOSED: `t94J06` degree-four disk obstruction.**  Probe
+   `invoke-1788091410408-3755-148461f2` elected one coherent six-module chain;
+   implementation `invoke-1788091783980-3759-e0d38d5c` produced `8efdc321`,
+   and independent review `invoke-1788092071400-3763-78a77595` passed all
+   source-integrity, compilation, placeholder, axiom, and scope gates.
+
+No round-two result elects either stopped residual program automatically.
 
 The banked production-MV scaffold already supplies:
 

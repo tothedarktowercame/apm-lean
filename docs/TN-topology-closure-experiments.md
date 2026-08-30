@@ -235,6 +235,34 @@ The decision is **bounded partial closure**, not `CLOSED`: two named conjuncts
 are compiled, while `t95J04` remains open and the stopped product-foundation
 program remains stopped.
 
+## Second portfolio round
+
+The second round audited three historical uptake claims as consumer closures:
+
+| Job | Consumer | Decision | Evidence-backed result |
+|---|---|---|---|
+| `invoke-1788091405247-3753-2e843c2e` | `t00J01` | `STOP` | the six-module circle-fold packet proves only the third conjunct; quotient-manifold/top-homology for the Klein product and rational sphere Lefschetz normalization are two independent absent foundations |
+| `invoke-1788091407907-3754-d9387d48` | `t03J06` | `STOP` | the six-module packet proves the `7π` integral, but smoothness and the coordinate exterior-derivative value remain an independent missing theorem with no second consumer |
+| `invoke-1788091410408-3755-148461f2` | `t94J06` | `CLOSED` after election | one coherent six-module circle-lifting/winding chain reaches the radius-disk obstruction; a zero-placeholder frozen fixture compiled |
+
+Only `t94J06` was elected.  Implementation job
+`invoke-1788091783980-3759-e0d38d5c` selectively promoted the six exact
+historical `.lean/.md` pairs and committed the frozen closure as
+`8efdc321217c27ad33308407f0baf578db5d4507`.  No mixed historical commit was
+cherry-picked.  Independent review job
+`invoke-1788092071400-3763-78a77595` returned `PASS`:
+
+- all twelve promoted files match their specified historical blobs
+  byte-for-byte;
+- both frozen theorem statements are unchanged and placeholders fall `2 → 0`;
+- all six direct compilations, the focused adapter build, and frozen Main
+  compilation pass;
+- scoped placeholder and axiom audits are clean, with only `propext`,
+  `Classical.choice`, and `Quot.sound` used by principal declarations.
+
+The final round-two decision is `CLOSED` for `t94J06`, with `t00J01` and
+`t03J06` stopped rather than receiving partial historical infrastructure.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
