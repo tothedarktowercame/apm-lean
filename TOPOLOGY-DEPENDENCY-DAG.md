@@ -472,7 +472,7 @@ compiles independently of every final problem.
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
 | Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
-| Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and coefficient-compatible computations do not |
+| Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  This does not block the two `t95J04` comparisons with `S⁶`: commit `54fe6115` closes those conjuncts by a split-retract homology argument without computing product homology |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, `t94J06`, closed `t97J06`, `t97A02`, `t97J08` | mixed concrete progress; `t97J06` closed via generic singular-homology noncontractibility; shared naturality/lifting APIs remain |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
@@ -595,6 +595,12 @@ critical-value Sard.
 | `t96A03` | `adcd54a2` using the sphere-equator geometry through `f7399011`, quotient adapter `b3b3f153`, and homology targets `5aecf0c3`/`efa4805e` | status solved, zero placeholders, frozen statement unchanged, only standard axioms |
 | `t97J06` | `0ea00fce` using the selectively promoted generic `CircleNoncontractible.circle_not_contractible` | zero placeholders, frozen statement unchanged, direct/focused builds passed, independent Agency review passed, only standard axioms |
 
+Bounded partial closures, which do not belong in the closed-problem table:
+
+| Problem | Canonical partial closure | Remaining frozen obligation |
+|---|---|---|
+| `t95J04` | `54fe6115` adds generic singular-homology retract nonvanishing and compiles `S⁶ ≄ S² × S⁴` and `S⁶ ≄ S³ × S³`; election `invoke-1788088998881-3750-c29c22f9`, implementation `invoke-1788089170654-3751-711e3944`, review `invoke-1788089485653-3752-a094d808` (`PASS`) | one placeholder remains for Sard, three simple-connectivity clauses, and `S² × S⁴ ≄ S³ × S³`; statement unchanged |
+
 Current audited classification beyond these closures:
 
 - `t00J02` and `a97J08` are `UPTAKE`: each has one genuine geometric producer
@@ -607,7 +613,9 @@ Current audited classification beyond these closures:
   imports and uses the production MV API and representation adapters.  The
   whole problem remains `FOUNDATION`/API-stopped because its independent van
   Kampen bridge is absent; the final conjunction remains unwired until that
-  bridge exists.  `t95J04` also remains `FOUNDATION`.
+  bridge exists.  `t95J04` also remains `FOUNDATION`, although its two
+  comparisons with `S⁶` are now compiled at `54fe6115` by the independent
+  retract argument.
 - `t01J03` is `UPTAKE`, not closed.  Its torus results, explicit collared
   quotient geometry, and twice-spiral module-homology computation compile.
   The generic two-open fundamental-groupoid pseudopushout and the specialized
@@ -642,19 +650,23 @@ decisions are recorded in `docs/TN-topology-closure-experiments.md`.
    postcomposition naturality for the generic pseudococone equivalence.  The
    source-reconstruction theorem would be a second absent edge.  Do not resume
    the transport chain from the later algebraic layers.
-3. **STOP: `t95J04` product foundation.**  Singular Eilenberg--Zilber is the
-   first absent edge and integral Kunneth is a second independent edge;
-   coefficient comparison is already available.  After `t97J06`, separately
-   review the compiled retract argument which can close the two `S⁶` versus
-   product clauses without either foundation.
+3. **PARTIAL: `t95J04`; STOP remains on its product foundation.**  Election
+   `invoke-1788088998881-3750-c29c22f9`, implementation
+   `invoke-1788089170654-3751-711e3944` (`54fe6115`), and independent review
+   `invoke-1788089485653-3752-a094d808` compile the two `S⁶` versus product
+   clauses via a split retract.  The single frozen placeholder remains for
+   Sard, three simple-connectivity clauses, and `S² × S⁴ ≄ S³ × S³`.
+   Singular Eilenberg--Zilber and integral Kunneth remain two independent
+   absent foundations; do not restart them from this partial closure.
 4. **STOP: `t03J02` generic gluing.**  The frozen hypotheses provide neither a
    collar/NDR pair nor van Kampen.  A collar requires the absent
    Jordan--Schoenflies theory, and the two explicit coordinate covers do not
    generalize to an arbitrary embedded circle.
 
-Return to the portfolio rather than continuing any of the three stopped chains
-automatically.  The next likely bounded candidate is the `t95J04` retract
-adapter, subject to independent frozen-facing review.
+Return to the portfolio rather than continuing any stopped chain
+automatically.  The bounded `t95J04` retract adapter has completed its full
+election, implementation, and review chain; it does not elect the remaining
+product-homology program.
 
 The banked production-MV scaffold already supplies:
 

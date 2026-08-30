@@ -186,9 +186,9 @@ program.  Its bounded packet was:
 4. compile the frozen problem with zero placeholders and record the closing
    commit in the DAG.
 
-The `t95J04` retract adapter is the next local candidate after this election.
-It is not part of the elected packet and must receive its own frozen-facing
-review before implementation.
+The `t95J04` retract adapter was the next local candidate after this election.
+It received its own frozen-facing election, implementation, and independent
+review, recorded below.
 
 ### Elected closure outcome
 
@@ -208,6 +208,32 @@ Independent review job `invoke-1788087816801-3748-17bef30b` returned `PASS`:
 The final experiment decision is `CLOSED`.  This is the first application of
 the process: four probes, three evidence-backed stops, one bounded election,
 and one whole frozen problem closed before another foundational chain began.
+
+### Bounded `t95J04` follow-up
+
+Election job `invoke-1788088998881-3750-c29c22f9` independently compiled the
+split-retract argument and returned `ELECT`.  The elected packet deliberately
+excluded singular Eilenberg--Zilber, integral Kunneth, Sard, and the comparison
+of `S² × S⁴` with `S³ × S³`.
+
+Implementation job `invoke-1788089170654-3751-711e3944` committed
+`54fe611541f8568e78ad222d84318f76892023dc`.  It adds the generic
+`SingularHomologyRetractNonvanishing` target and uses it to supply exactly two
+conjuncts of frozen `apm_t95j04`:
+
+- `S⁶` is not homeomorphic to `S² × S⁴`;
+- `S⁶` is not homeomorphic to `S³ × S³`.
+
+Independent review job `invoke-1788089485653-3752-a094d808` returned `PASS`.
+The frozen statement is unchanged and its placeholder count remains `1 → 1`,
+but the surviving placeholder now covers only the Sard clause, the three
+simple-connectivity clauses, and `S² × S⁴ ≄ S³ × S³`.  Direct target and frozen
+compilation, the 8,253-job focused build, axiom audit, placeholder audit, and
+diff check all passed.
+
+The decision is **bounded partial closure**, not `CLOSED`: two named conjuncts
+are compiled, while `t95J04` remains open and the stopped product-foundation
+program remains stopped.
 
 ## Updating the DAG
 
