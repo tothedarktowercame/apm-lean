@@ -1311,7 +1311,8 @@ def receiptRequiredFields : String → List String
       "receipt/promotion-pass-witness"]
   | "frame-close" => ["receipt/id", "receipt/type", "receipt/frame-id",
       "receipt/problem-id", "receipt/input-receipt-ids", "receipt/trace-id",
-      "receipt/result", "receipt/learning-outcome"]
+      "receipt/result", "receipt/learning-outcome",
+      "receipt/memory-use-audit"]
   | _ => []
 
 def receiptTypes : List String :=

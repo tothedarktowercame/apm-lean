@@ -93,6 +93,11 @@ def submissionSchemasJson : Json :=
         ("controller-derived-fields", stringArray
           ["receipt-id", "snapshot-id", "snapshot-digest",
            "accessible-memory-ids", "surfaced-ids", "queries"])]),
+     ("close-frame-memory-use-audit", Json.mkObj
+       [("role-authored-fields", stringArray
+          ["memory-id", "attempt-ordinals"]),
+        ("controller-derived-source", Json.str
+          "student-attempt-receipts")]),
      ("self-reported-controller-identifiers-are-evidence", Json.bool false)]
 
 def transitionJson (phase : Phase) : Json :=
