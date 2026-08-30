@@ -263,6 +263,35 @@ cherry-picked.  Independent review job
 The final round-two decision is `CLOSED` for `t94J06`, with `t00J01` and
 `t03J06` stopped rather than receiving partial historical infrastructure.
 
+## Third portfolio round
+
+The third round combined one remaining uptake audit with two probes of partial
+or newly banked APIs:
+
+| Job | Consumer | Decision | Evidence-backed result |
+|---|---|---|---|
+| `invoke-1788094173427-3862-c9a2987f` | `t98A05` | `CLOSED` after election | one coherent six-module packet proves the exterior derivatives, simplex integral, circle-period obstruction, and final conjunction; a zero-placeholder frozen fixture compiled |
+| `invoke-1788094176057-3863-3bbcc70b` | `t94A10` | `STOP` | the historical chain proves local closedness, but nonexactness independently requires a global sphere-period/Stokes or de Rham theorem |
+| `invoke-1788094178560-3864-3adb8687` | `t97J08` | `STOP` | the banked winding API closes uniqueness and the cross-derivative calculation compiles, but the beta-integral bridge requires a separate `C¹` regularity theorem for the covering lift |
+
+Only `t98A05` was elected.  Implementation job
+`invoke-1788094520582-3901-ed650d94` selectively promoted the six exact
+historical `.lean/.md` pairs and committed the complete frozen closure as
+`446ca98245e0379d0440eea9eb8ffbd113e9adf4`.  Independent review job
+`invoke-1788094761055-3915-1d0e382a` returned `PASS`:
+
+- all twelve promoted files match their nominated historical blobs
+  byte-for-byte;
+- all four frozen theorem statements and premises are unchanged, with
+  placeholders `4 → 0`;
+- six direct compilations, the 8,245-job focused build, and frozen Main
+  compilation pass;
+- the scoped placeholder and axiom audits are clean, with only `propext`,
+  `Classical.choice`, and `Quot.sound` used by principal declarations.
+
+The round closes `t98A05` without electing either the solid-angle nonexactness
+program or smooth covering-lift regularity.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:

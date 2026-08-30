@@ -387,7 +387,7 @@ before it is marked `BANKED`:
 - `t94J06`: degree-four disk zero obstruction (`CLOSED` at `8efdc321`);
 - `t97J06`: Circle noncontractibility consumer;
 - `t98A05`: exterior derivatives, simplex integral, circle-period obstruction,
-  and final conjunction;
+  and final conjunction (`CLOSED` at `446ca982`);
 - `t94A10`: solid-angle closedness branch (nonexactness remains separate).
 
 The canonical audit must record, for every item: source commit, owned files,
@@ -476,7 +476,7 @@ compiles independently of every final problem.
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, `t97J08` | `t94J06` closed through the selectively promoted path-lifting/winding chain and degree-four disk obstruction; `t97J06` closed via generic singular-homology noncontractibility; further consumers still require separate review |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
-| Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08` | shared measure/integration program plus bounded calculations |
+| Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
 | Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic two-open fundamental-groupoid descent and pseudococone mapping property are `BANKED`; the twice-spiral fixed-target mapping equivalence is compiled; target-postcomposition coherence and frozen t01J03 uptake remain |
 
@@ -595,6 +595,7 @@ critical-value Sard.
 | `t96A03` | `adcd54a2` using the sphere-equator geometry through `f7399011`, quotient adapter `b3b3f153`, and homology targets `5aecf0c3`/`efa4805e` | status solved, zero placeholders, frozen statement unchanged, only standard axioms |
 | `t97J06` | `0ea00fce` using the selectively promoted generic `CircleNoncontractible.circle_not_contractible` | zero placeholders, frozen statement unchanged, direct/focused builds passed, independent Agency review passed, only standard axioms |
 | `t94J06` | `8efdc321` using six selectively promoted circle-lifting/winding and degree-four disk-obstruction targets | two placeholders removed, frozen statements unchanged, historical blobs verified byte-for-byte, direct/focused/frozen builds passed, independent Agency review passed, only standard axioms |
+| `t98A05` | `446ca982` using six selectively promoted exterior-derivative, simplex-integral, and circle-period targets | four placeholders removed, frozen statements unchanged, historical blobs verified byte-for-byte, direct/focused/frozen builds passed, independent Agency review passed, only standard axioms |
 
 Bounded partial closures, which do not belong in the closed-problem table:
 
@@ -642,6 +643,12 @@ Current audited classification beyond these closures:
   `invoke-1788091783980-3759-e0d38d5c`, and independent review job
   `invoke-1788092071400-3763-78a77595` establish `2 → 0` placeholders with
   unchanged frozen statements.
+- `t98A05` is `CLOSED` at `446ca982`.  Election job
+  `invoke-1788094173427-3862-c9a2987f` verified one coherent six-module packet;
+  implementation job `invoke-1788094520582-3901-ed650d94` closes all four
+  frozen placeholders, and independent review job
+  `invoke-1788094761055-3915-1d0e382a` passed source-integrity, mathematical,
+  compilation, placeholder, axiom, and scope audits.
 - `t96J07` remains `SPEC-DEFECT` and must not receive proof scaffolding before
   statement repair.
 
@@ -693,6 +700,26 @@ The second portfolio round likewise elected exactly one closure:
    source-integrity, compilation, placeholder, axiom, and scope gates.
 
 No round-two result elects either stopped residual program automatically.
+
+The third portfolio round also elected exactly one closure:
+
+8. **CLOSED: `t98A05` explicit differential-form calculations.**  Probe
+   `invoke-1788094173427-3862-c9a2987f` elected a coherent six-module packet;
+   implementation `invoke-1788094520582-3901-ed650d94` produced `446ca982`,
+   and independent review `invoke-1788094761055-3915-1d0e382a` passed with
+   placeholders `4 → 0` and unchanged frozen statements.
+9. **STOP: `t94A10` solid-angle uptake.**  Probe
+   `invoke-1788094176057-3863-3bbcc70b` verified the historical closedness
+   chain, but nonexactness independently needs global sphere-period/Stokes or
+   de Rham comparison.  Do not promote the eighteen-file partial packet as a
+   consumer closure.
+10. **STOP: `t97J08` winding reuse.**  Probe
+    `invoke-1788094178560-3864-3adb8687` verified that canonical winding
+    infrastructure closes uniqueness and that cross derivatives compile, but
+    the beta-integral comparison still needs `C¹` regularity of the covering
+    lift.  Do not infer differentiable regularity from continuous path lifting.
+
+No round-three result elects either stopped residual program automatically.
 
 The banked production-MV scaffold already supplies:
 
