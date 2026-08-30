@@ -1,5 +1,6 @@
 import ConstructionTargets.TwiceSpiralPushoutTargetNaturality
 import ConstructionTargets.TwiceSpiralCoordinateVertexEquivalence
+import Mathlib.CategoryTheory.CatCommSq
 import Mathlib.CategoryTheory.Conj
 
 /-!
@@ -18,6 +19,8 @@ namespace ConstructionTargets.TwiceSpiralVertexTargetNaturality
 open ConstructionTargets.SolidTorusGluingOpenCover
 open ConstructionTargets.TwiceSpiralBasedPseudopushoutExtraction
 open ConstructionTargets.TwiceSpiralConnectorLegCompatibility
+open ConstructionTargets.TwiceSpiralConnectorVertexEquivalence
+open ConstructionTargets.TwiceSpiralConnectorVertexExtraction
 open ConstructionTargets.TwiceSpiralConnectorVertexMorphisms
 open ConstructionTargets.TwiceSpiralCoordinateVertexRepresentations
 open ConstructionTargets.TwiceSpiralFundamentalGroupoidCoordinates
@@ -143,8 +146,103 @@ def fromCoordinatePostcomposeIso (H : C ⥤ D) :
         · change H.map f.left ≫ 𝟙 _ = 𝟙 _ ≫ H.map f.left; simp
         · change H.map f.right ≫ 𝟙 _ = 𝟙 _ ≫ H.map f.right; simp)
 
+/-- Extracting connector-compatible vertex data commutes with target
+postcomposition.  The two identity components live at the separately chosen
+left and right connector bases; the mapped base glue remains visible in the
+compatibility square. -/
+def extractionPostcomposeIso (H : C ⥤ D) :
+    postcomposeCoordinatePseudoCoconeFunctor (h := h) H ⋙
+        extractionFunctor B D K ≅
+      extractionFunctor B C K ⋙ postcomposeVertexDataFunctor B K H :=
+  NatIso.ofComponents (fun Q => {
+    hom := {
+      left := 𝟙 _
+      right := 𝟙 _
+      left_intertwines := by
+        intro g
+        change H.map (Q.left.map g) ≫ 𝟙 _ = 𝟙 _ ≫ H.map (Q.left.map g)
+        simp
+      right_intertwines := by
+        intro g
+        change H.map (Q.right.map g) ≫ 𝟙 _ = 𝟙 _ ≫ H.map (Q.right.map g)
+        simp
+      baseGlue_square := by
+        change H.map (B.glueBaseIso Q).hom ≫ 𝟙 _ =
+          𝟙 _ ≫ H.map (B.glueBaseIso Q).hom
+        simp }
+    inv := {
+      left := 𝟙 _
+      right := 𝟙 _
+      left_intertwines := by
+        intro g
+        change H.map (Q.left.map g) ≫ 𝟙 _ = 𝟙 _ ≫ H.map (Q.left.map g)
+        simp
+      right_intertwines := by
+        intro g
+        change H.map (Q.right.map g) ≫ 𝟙 _ = 𝟙 _ ≫ H.map (Q.right.map g)
+        simp
+      baseGlue_square := by
+        change H.map (B.glueBaseIso Q).hom ≫ 𝟙 _ =
+          𝟙 _ ≫ H.map (B.glueBaseIso Q).hom
+        simp }
+    hom_inv_id := by
+      apply VertexDataHom.ext
+      · change (𝟙 _ ≫ 𝟙 _) = 𝟙 _
+        simp
+      · change (𝟙 _ ≫ 𝟙 _) = 𝟙 _
+        simp
+    inv_hom_id := by
+      apply VertexDataHom.ext
+      · change (𝟙 _ ≫ 𝟙 _) = 𝟙 _
+        simp
+      · change (𝟙 _ ≫ 𝟙 _) = 𝟙 _
+        simp }) (by
+        intro P Q τ
+        apply VertexDataHom.ext
+        · change H.map (τ.left.app K.toCoordinateConnectorSystems.left.base) ≫ 𝟙 _ =
+            𝟙 _ ≫ H.map (τ.left.app K.toCoordinateConnectorSystems.left.base)
+          simp
+        · change H.map (τ.right.app K.toCoordinateConnectorSystems.right.base) ≫ 𝟙 _ =
+            𝟙 _ ≫ H.map (τ.right.app K.toCoordinateConnectorSystems.right.base)
+          simp)
+
+/-- The extraction target-naturality comparison as a commutative square of
+categories. -/
+def extractionPostcomposeSquare (H : C ⥤ D) : CatCommSq
+    (postcomposeCoordinatePseudoCoconeFunctor (h := h) H)
+    (coordinatePseudoCoconeVertexDataEquivalence B C K).functor
+    (coordinatePseudoCoconeVertexDataEquivalence B D K).functor
+    (postcomposeVertexDataFunctor B K H) where
+  iso := extractionPostcomposeIso B K H
+
+/-- The vertically inverted square.  `CatCommSq.vInv` transports the forward
+comparison through the actual connector/vertex equivalences, including their
+unit, counit, triangle, and connector-normal-form proofs. -/
+def reconstructionPostcomposeSquare (H : C ⥤ D) : CatCommSq
+    (postcomposeVertexDataFunctor B K H)
+    (coordinatePseudoCoconeVertexDataEquivalence B C K).inverse
+    (coordinatePseudoCoconeVertexDataEquivalence B D K).inverse
+    (postcomposeCoordinatePseudoCoconeFunctor (h := h) H) :=
+  CatCommSq.vInv
+    (postcomposeCoordinatePseudoCoconeFunctor (h := h) H)
+    (coordinatePseudoCoconeVertexDataEquivalence B C K)
+    (coordinatePseudoCoconeVertexDataEquivalence B D K)
+    (postcomposeVertexDataFunctor B K H)
+    (extractionPostcomposeSquare B K H)
+
+/-- Reconstruction commutes with target postcomposition, obtained as the
+vertical-inverse mate of the compiled extraction square. -/
+def reconstructionPostcomposeIsoViaVInv (H : C ⥤ D) :
+    postcomposeVertexDataFunctor B K H ⋙ reconstructionFunctor B D K ≅
+      reconstructionFunctor B C K ⋙
+        postcomposeCoordinatePseudoCoconeFunctor (h := h) H :=
+  (reconstructionPostcomposeSquare B K H).iso
+
 #print axioms postcomposeVertexDataFunctor
 #print axioms toCoordinatePostcomposeIso
 #print axioms fromCoordinatePostcomposeIso
+#print axioms extractionPostcomposeIso
+#print axioms extractionPostcomposeSquare
+#print axioms reconstructionPostcomposeIsoViaVInv
 
 end ConstructionTargets.TwiceSpiralVertexTargetNaturality

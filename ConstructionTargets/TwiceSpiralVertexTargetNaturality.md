@@ -14,3 +14,26 @@ naturality is componentwise functoriality.
 This establishes target-change compatibility for the
 `VertexData ↔ CoordinateVertexData` layer only.  It does not infer an
 equivalence between the source groupoids.
+
+The connector/vertex extraction layer now has the corresponding compiled
+square. `extractionPostcomposeIso` compares extracting after mapping a
+coordinate pseudococone with mapping the extracted vertex data. Its left and
+right components are identity arrows at the images of the two separately
+chosen connector bases. The intertwining fields apply the target functor to
+the extracted left and right actions, while the glue field explicitly keeps
+`H.map (B.glueBaseIso Q).hom`.
+
+Naturality is checked at the left and right connector-system bases for an
+arbitrary coordinate-pseudococone morphism. No connector is identified with
+an identity: the connector-normal-form arguments remain inside the actual
+`coordinatePseudoCoconeVertexDataEquivalence`.
+
+`extractionPostcomposeSquare` packages the forward comparison as a
+`CatCommSq`. `reconstructionPostcomposeIsoViaVInv` is obtained from
+`CatCommSq.vInv`, so its inverse-direction comparison uses that equivalence's
+compiled unit, counit, triangle, and connector reconstruction proofs rather
+than defining a separate reconstruction transformation.
+
+This stops at the connector/vertex target-naturality square. It does not yet
+compose the vertex, coordinate, and pseudopushout target-naturality layers,
+claim source equivalence or 2-Yoneda, or modify the frozen target.
