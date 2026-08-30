@@ -443,6 +443,18 @@ functor, and derives reconstruction naturality from the real connector
 equivalence.  Composition with the already banked coordinate/pushout/
 `SingleObj` comparisons is the next probe.
 
+The algebraic composite was then pasted with the generic pseudopushout,
+actual/coordinate, and connector/vertex squares.  Probe
+`invoke-1788116682320-4519-851404a0` compiled the final square against the
+existing named `gluingFundamentalGroupoidSingleObjMappingEquivalence`; its
+vertical composite agrees by `rfl`, rather than through a substitute
+equivalence.  Agency job `invoke-1788116841342-4523-15360639` implemented the
+four consumer-facing declarations at `fca797fa`; regular-seat review
+`invoke-1788117042204-4524-8abccc3e` returned `PASS`.  The family is now
+pointwise target-natural for every `H : C ⥤ D`, with a reviewed inverse mate.
+Identity and composition coherence as `H` varies is not yet packaged, so no
+pseudonatural equivalence or representability conclusion is claimed.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
