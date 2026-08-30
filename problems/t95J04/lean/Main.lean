@@ -1,5 +1,6 @@
 import ConstructionTargets.SingularHomologyRetractNonvanishing
 import ConstructionTargets.SimplyConnectedSphereProducts
+import ConstructionTargets.T95J04FinalProductComparison
 
 /-!
 # APM t95J04 — low-dimensional maps to spheres and six-manifolds
@@ -121,13 +122,13 @@ theorem apm_t95j04 :
     ?_, ?_,
     ConstructionTargets.SingularHomologyRetractNonvanishing.sphereSix_not_homeomorphic_sphereTwo_product_sphereFour,
     ConstructionTargets.SingularHomologyRetractNonvanishing.sphereSix_not_homeomorphic_sphereThree_product_sphereThree,
-    ?_⟩
+    ConstructionTargets.T95J04FinalProductComparison.sphereTwo_product_sphereFour_not_homeomorphic_sphereThree_product_sphereThree⟩
   rotate_left 1
   · letI := ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 2 (by norm_num)
     letI := ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 4 (by norm_num)
     exact ConstructionTargets.SimplyConnectedSphereProducts.simplyConnectedSpace_prod
   · letI := ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 3 (by norm_num)
     exact ConstructionTargets.SimplyConnectedSphereProducts.simplyConnectedSpace_prod
-  -- Remaining: Sard/nullity/non-surjectivity/null-homotopy, and
-  -- `S² × S⁴ ≄ S³ × S³`.  All three simple-connectivity conjuncts are closed.
+  -- Remaining: Sard/nullity/non-surjectivity/null-homotopy.  All three
+  -- simple-connectivity and all three nonhomeomorphism conjuncts are closed.
   all_goals sorry
