@@ -1,4 +1,5 @@
 import ConstructionTargets.SingularHomologyRetractNonvanishing
+import ConstructionTargets.SimplyConnectedSphereProducts
 
 /-!
 # APM t95J04 — low-dimensional maps to spheres and six-manifolds
@@ -99,13 +100,6 @@ lemma t95J04_nullHomotopic_of_not_surjective {X : Type*}
   refine ⟨p, ?_⟩
   simpa [g, inclusion] using hcomp
 
-private theorem t95J04_and_seven_of_remaining
-    {A B C D E F G : Prop} (hE : E) (hF : F)
-    (h : A ∧ B ∧ C ∧ D ∧ G) :
-    A ∧ B ∧ C ∧ D ∧ E ∧ F ∧ G := by
-  rcases h with ⟨hA, hB, hC, hD, hG⟩
-  exact ⟨hA, hB, hC, hD, hE, hF, hG⟩
-
 theorem apm_t95j04 :
     (∀ (k n : ℕ), k < n →
       ∀ (M : Type*) [TopologicalSpace M] [T2Space M]
@@ -122,7 +116,18 @@ theorem apm_t95j04 :
     ¬ Nonempty (T95J04SphereSix ≃ₜ T95J04SphereTwoFour) ∧
     ¬ Nonempty (T95J04SphereSix ≃ₜ T95J04SphereThreeThree) ∧
     ¬ Nonempty (T95J04SphereTwoFour ≃ₜ T95J04SphereThreeThree) := by
-  apply t95J04_and_seven_of_remaining
-    (ConstructionTargets.SingularHomologyRetractNonvanishing.sphereSix_not_homeomorphic_sphereTwo_product_sphereFour)
-    (ConstructionTargets.SingularHomologyRetractNonvanishing.sphereSix_not_homeomorphic_sphereThree_product_sphereThree)
-  sorry
+  refine ⟨?_,
+    ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 6 (by norm_num),
+    ?_, ?_,
+    ConstructionTargets.SingularHomologyRetractNonvanishing.sphereSix_not_homeomorphic_sphereTwo_product_sphereFour,
+    ConstructionTargets.SingularHomologyRetractNonvanishing.sphereSix_not_homeomorphic_sphereThree_product_sphereThree,
+    ?_⟩
+  rotate_left 1
+  · letI := ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 2 (by norm_num)
+    letI := ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 4 (by norm_num)
+    exact ConstructionTargets.SimplyConnectedSphereProducts.simplyConnectedSpace_prod
+  · letI := ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 3 (by norm_num)
+    exact ConstructionTargets.SimplyConnectedSphereProducts.simplyConnectedSpace_prod
+  -- Remaining: Sard/nullity/non-surjectivity/null-homotopy, and
+  -- `S² × S⁴ ≄ S³ × S³`.  All three simple-connectivity conjuncts are closed.
+  all_goals sorry
