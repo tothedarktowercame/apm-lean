@@ -480,7 +480,7 @@ compiles independently of every final problem.
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
-| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic descent and pseudococone mapping are `BANKED`; `67aa463e`/`bc5267e9` add generic and coordinate postcomposition; `74ae0e1e`/`a81dad87` supply both target-change directions for the actual/coordinate equivalence; connector/vertex extraction and reconstruction target naturality are reviewed at `789eb675` plus warning repair `7d9cd14a`; later algebraic-layer composition is next |
+| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic descent and pseudococone mapping are `BANKED`; `67aa463e`/`bc5267e9` add generic and coordinate postcomposition; `74ae0e1e`/`a81dad87` cover actual/coordinate target change; `789eb675` + `7d9cd14a` cover connector/vertex target change; reviewed `f1a217ab` composes vertex-coordinate, pushout-representation, and `SingleObj` target change; the final consumer-facing paste remains |
 
 ## Specification and ledger corrections
 
@@ -769,9 +769,12 @@ This construction does not elect either remaining `t95J04` foundation.
    plus repair `7d9cd14a` (probe `invoke-1788108001589-4406-6d487aff`,
    implementation `invoke-1788108286633-4413-081764bd`, repair
    `invoke-1788113281009-4459-01ddd48f`, combined re-review
-   `invoke-1788115696208-4486-15d12b7a`).  Compose the already banked later
-   algebraic comparisons next; stop before source reconstruction unless every
-   layer supplies its own square.
+   `invoke-1788115696208-4486-15d12b7a`).  The later algebraic comparisons are
+   now composed at reviewed commit `f1a217ab` (probe
+   `invoke-1788115854743-4489-444a6bf7`, implementation
+   `invoke-1788116169840-4496-82729c6a`, review
+   `invoke-1788116426273-4498-a75f6346`).  Compile the final consumer-facing
+   paste next; stop before source reconstruction.
 
 The banked production-MV scaffold already supplies:
 

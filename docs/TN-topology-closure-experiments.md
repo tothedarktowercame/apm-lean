@@ -443,6 +443,18 @@ functor, and derives reconstruction naturality from the real connector
 equivalence.  Composition with the already banked coordinate/pushout/
 `SingleObj` comparisons is the next probe.
 
+That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
+three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
+job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
+`f1a217ab`; regular-seat review `invoke-1788116426273-4498-a75f6346` returned
+`PASS`.  The reviewed composite carries raw connector `VertexData` through
+integer-coordinate actions, the monoid pushout representation, and the
+`SingleObj` functor category.  Mapped base-glue conjugation,
+`Monoid.PushoutI.hom_ext_nonempty`, and reversed endomorphism composition stay
+inside their banked proofs.  The remaining target-naturality step is the final
+consumer-facing paste with the generic pseudopushout and reviewed geometric/
+connector squares.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
