@@ -1,5 +1,6 @@
 import Mathlib
 import ConstructionTargets.Rouche
+import ConstructionTargets.DegreeFourRadiusDiskAdapter
 
 /-!
 # APM t94J06
@@ -102,7 +103,8 @@ theorem apm_t94J06_bridge_1
     (hH_one : ∀ z : Metric.sphere (0 : ℂ) r,
       H (⟨1, by constructor <;> norm_num⟩, z) = F z.1) :
     ∃ z ∈ Metric.closedBall (0 : ℂ) r, F z = 0 := by
-  sorry
+  exact ConstructionTargets.DegreeFourRadiusDiskAdapter.exists_zero_in_closedBall_of_degreeFour_boundaryHomotopy
+      F r hr hF H hH_cont hH_ne hH_zero hH_one
 
 theorem apm_t94j06 :
     ∃ z : ℂ, apm_t94J06_function z = 0 := by
@@ -145,4 +147,10 @@ theorem apm_t94j06 :
   no-retraction artifacts found no theorem converting this bundled homotopy
   into an interior zero. The sole bridge remains that topological-degree step.
   -/
-  sorry
+  obtain ⟨z, _, hz⟩ := apm_t94J06_bridge_1
+    apm_t94J06_function 7 (by norm_num) apm_t94J06_continuous
+    apm_t94J06_boundaryHomotopy apm_t94J06_boundaryHomotopy_continuous
+    apm_t94J06_boundaryHomotopy_ne_zero
+    (by intro z; simp [apm_t94J06_boundaryHomotopy])
+    (by intro z; simp [apm_t94J06_boundaryHomotopy])
+  exact ⟨z, hz⟩
