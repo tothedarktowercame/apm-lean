@@ -7,6 +7,9 @@ consumer uptake, small remaining constructions, missing shared APIs, and
 foundational library programs.  A `sorry` count alone does not determine a
 node's state.
 
+The process for electing new work is defined in
+`docs/TN-topology-closure-experiments.md`.
+
 The earlier one-placeholder frontier remains available for historical audit on
 `qualification/library-loop-t00J02-solver`.  It must not be merged wholesale:
 that branch contains experimental t00J02 developments and is not the authority
