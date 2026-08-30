@@ -430,6 +430,19 @@ identities.  The actual/coordinate pseudococone equivalence now has both
 reviewed target-change directions.  Connector/basepoint evaluation into
 vertex data is the next independent layer; no source equivalence follows yet.
 
+Probe `invoke-1788108001589-4406-6d487aff` compiled the connector/vertex
+extraction square and its `CatCommSq.vInv` reconstruction mate.  Agency job
+`invoke-1788108286633-4413-081764bd` implemented them at `789eb675`.  The first
+regular-seat review (`invoke-1788108678025-4421-eef72487`) found no mathematical
+or typing defect but rejected two new class-valued-definition warnings.
+Repair job `invoke-1788113281009-4459-01ddd48f` added exactly two
+`@[reducible]` annotations at `7d9cd14a`; combined re-review by regular seat
+`codex-2` (`invoke-1788115696208-4486-15d12b7a`) returned `PASS`.  The reviewed
+square preserves distinct bases, maps the actual base glue through the target
+functor, and derives reconstruction naturality from the real connector
+equivalence.  Composition with the already banked coordinate/pushout/
+`SingleObj` comparisons is the next probe.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:

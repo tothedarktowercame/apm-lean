@@ -480,7 +480,7 @@ compiles independently of every final problem.
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
-| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic two-open fundamental-groupoid descent and pseudococone mapping property are `BANKED`; `67aa463e` adds generic target postcomposition and the first pseudopushout square; `bc5267e9` adds coordinate-pseudococone postcomposition and the collared specialization; `74ae0e1e` plus the reviewed `CatCommSq.vInv` mate `a81dad87` supply both target-change directions for the actual/coordinate pseudococone equivalence; connector/basepoint vertex-data naturality is next |
+| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic descent and pseudococone mapping are `BANKED`; `67aa463e`/`bc5267e9` add generic and coordinate postcomposition; `74ae0e1e`/`a81dad87` supply both target-change directions for the actual/coordinate equivalence; connector/vertex extraction and reconstruction target naturality are reviewed at `789eb675` plus warning repair `7d9cd14a`; later algebraic-layer composition is next |
 
 ## Specification and ledger corrections
 
@@ -765,8 +765,13 @@ This construction does not elect either remaining `t95J04` foundation.
    reviewed at `a81dad87` (probe `invoke-1788107112060-4389-f5f223e8`,
    implementation `invoke-1788107362539-4396-63e454e1`, review
    `invoke-1788107623205-4401-9486e9f6`).  Probe connector/basepoint
-   vertex-data naturality next; stop again before source reconstruction unless
-   every later equivalence supplies its own square.
+   vertex-data naturality next.  That square is now reviewed at `789eb675`
+   plus repair `7d9cd14a` (probe `invoke-1788108001589-4406-6d487aff`,
+   implementation `invoke-1788108286633-4413-081764bd`, repair
+   `invoke-1788113281009-4459-01ddd48f`, combined re-review
+   `invoke-1788115696208-4486-15d12b7a`).  Compose the already banked later
+   algebraic comparisons next; stop before source reconstruction unless every
+   layer supplies its own square.
 
 The banked production-MV scaffold already supplies:
 
