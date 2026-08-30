@@ -208,7 +208,7 @@ def extractionPostcomposeIso (H : C ⥤ D) :
 
 /-- The extraction target-naturality comparison as a commutative square of
 categories. -/
-def extractionPostcomposeSquare (H : C ⥤ D) : CatCommSq
+@[reducible] def extractionPostcomposeSquare (H : C ⥤ D) : CatCommSq
     (postcomposeCoordinatePseudoCoconeFunctor (h := h) H)
     (coordinatePseudoCoconeVertexDataEquivalence B C K).functor
     (coordinatePseudoCoconeVertexDataEquivalence B D K).functor
@@ -218,7 +218,7 @@ def extractionPostcomposeSquare (H : C ⥤ D) : CatCommSq
 /-- The vertically inverted square.  `CatCommSq.vInv` transports the forward
 comparison through the actual connector/vertex equivalences, including their
 unit, counit, triangle, and connector-normal-form proofs. -/
-def reconstructionPostcomposeSquare (H : C ⥤ D) : CatCommSq
+@[reducible] def reconstructionPostcomposeSquare (H : C ⥤ D) : CatCommSq
     (postcomposeVertexDataFunctor B K H)
     (coordinatePseudoCoconeVertexDataEquivalence B C K).inverse
     (coordinatePseudoCoconeVertexDataEquivalence B D K).inverse
