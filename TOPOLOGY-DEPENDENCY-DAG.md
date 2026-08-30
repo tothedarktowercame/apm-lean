@@ -475,8 +475,8 @@ compiles independently of every final problem.
 | Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  This does not block the two `t95J04` comparisons with `S⁶`: commit `54fe6115` closes those conjuncts by a split-retract homology argument without computing product homology |
 | Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
-| Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, `t97J08` | `t94J06` closed through the selectively promoted path-lifting/winding chain and degree-four disk obstruction; `t97J06` closed via generic singular-homology noncontractibility; further consumers still require separate review |
-| Smooth circle lifts | `t97J08` | medium program `GO`; generic local-inverse lift regularity is `BANKED` at `48eab2d3`; next prove the rotated-coordinate `Circle.exp` specialization, then normalized-loop regularity and consume the conditional beta-integral theorem |
+| Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, closed `t97J08` | `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; further consumers require separate review |
+| Smooth circle lifts | closed `t97J08`; reusable smooth circle maps with continuous real lifts | generic local-inverse regularity `48eab2d3`, explicit `Circle.exp` specialization `12fd086d`, and normalized-loop specialization `55da22d8` are `BANKED`; frozen consumer closed at `0ad32428` |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
@@ -598,6 +598,7 @@ critical-value Sard.
 | `t97J06` | `0ea00fce` using the selectively promoted generic `CircleNoncontractible.circle_not_contractible` | zero placeholders, frozen statement unchanged, direct/focused builds passed, independent Agency review passed, only standard axioms |
 | `t94J06` | `8efdc321` using six selectively promoted circle-lifting/winding and degree-four disk-obstruction targets | two placeholders removed, frozen statements unchanged, historical blobs verified byte-for-byte, direct/focused/frozen builds passed, independent Agency review passed, only standard axioms |
 | `t98A05` | `446ca982` using six selectively promoted exterior-derivative, simplex-integral, and circle-period targets | four placeholders removed, frozen statements unchanged, historical blobs verified byte-for-byte, direct/focused/frozen builds passed, independent Agency review passed, only standard axioms |
+| `t97J08` | `0ad32428` through local-inverse regularity `48eab2d3`, `Circle.exp` regularity `12fd086d`, and normalized-loop lift regularity `55da22d8` | four placeholders removed, frozen statements unchanged, every milestone independently reviewed, historical blobs verified, seven-module/frozen build passed, only standard axioms |
 
 Bounded partial closures, which do not belong in the closed-problem table:
 
@@ -737,13 +738,11 @@ This construction does not elect either remaining `t95J04` foundation.
 
 ## Medium-depth queue
 
-1. **ACTIVE: `t97J08` smooth lift.**  Program probe
-   `invoke-1788099827204-4008-8baa6eb6` returned `GO`.  Milestone 1 was
-   implemented by `invoke-1788100317307-4056-18039c2b` at `48eab2d3` and
-   independently passed review `invoke-1788101335621-4162-288cacff`.
-   Continue with the explicit rotated-coordinate `Circle.exp` theorem; never
-   infer smoothness merely from `IsCoveringMap`.
-2. **QUEUED: `t95J04` MV product comparison.**  Probe
+1. **CLOSED: `t97J08` smooth lift and angle integral.**  Program probe
+   `invoke-1788099827204-4008-8baa6eb6` led to four separately reviewed
+   milestones, ending at `0ad32428` with placeholders `4 → 0`.  Smoothness was
+   derived through an explicit local inverse, never from `IsCoveringMap` alone.
+2. **ACTIVE: `t95J04` MV product comparison.**  Probe
    `invoke-1788099830885-4009-cfbf41e5` returned `GO`.  Package the pole cover,
    simply-connected `H₁` vanishing, one MV exact segment, and the final
    nonhomeomorphism in that order.  Do not introduce Kunneth or

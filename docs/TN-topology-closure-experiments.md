@@ -348,6 +348,21 @@ arbitrary covering lift is smooth.  Independent review job
 scope, placeholder, axiom, and mathematical audits all passed.  The next
 milestone is the rotated-imaginary-coordinate specialization to `Circle.exp`.
 
+The complete program subsequently closed `t97J08`:
+
+| Milestone | Implementation | Review | Result |
+|---|---|---|---|
+| local inverse descent | `invoke-1788100317307-4056-18039c2b`, commit `48eab2d3` | `invoke-1788101335621-4162-288cacff` | generic scalar lift regularity banked |
+| `Circle.exp` specialization | `invoke-1788101541811-4187-24a1a35c`, commit `12fd086d` | `invoke-1788101861146-4224-3c0779e0` | continuous real lift of a smooth circle map is smooth via explicit rotated coordinate |
+| frozen normalized-loop lift | `invoke-1788101973666-4238-6a3fff4f`, commit `55da22d8` | `invoke-1788102233127-4259-2dfa960c` | existing frozen hypotheses prove `LiftIsCOne` with no new premise |
+| beta integral and frozen closure | `invoke-1788102430168-4269-9735b653`, commit `0ad32428` | `invoke-1788102692055-4289-7d72b209` | cross derivative, unique winding, beta integral, and final theorem compile; placeholders `4 → 0` |
+
+The final reviewer checked all seven dependency modules, historical blob
+identity, the complete import graph, frozen definition alignment, and the
+`ExistsUnique` assembly.  The final decision is `CLOSED`.  The active writer
+therefore advances to the queued `t95J04` Mayer--Vietoris program, while the
+generic pseudococone target-naturality edge remains next in line.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
