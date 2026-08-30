@@ -480,7 +480,7 @@ compiles independently of every final problem.
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
-| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic two-open fundamental-groupoid descent and pseudococone mapping property are `BANKED`; the twice-spiral fixed-target mapping equivalence is compiled; target-postcomposition coherence and frozen t01J03 uptake remain |
+| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic two-open fundamental-groupoid descent and pseudococone mapping property are `BANKED`; commit `67aa463e` adds reviewed target postcomposition for generic pseudococones and the first pseudopushout comparison square; later equivalence-layer naturality and frozen t01J03 uptake remain |
 
 ## Specification and ledger corrections
 
@@ -750,8 +750,12 @@ This construction does not elect either remaining `t95J04` foundation.
 3. **ACTIVE: `t01J03` target postcomposition.**  Probe
    `invoke-1788099833859-4010-0cd0ae16` returned `GO`.  First bank
    `postcomposePseudoFunctorCoconeFunctor` and the generic pseudopushout
-   comparison natural isomorphism.  Stop again before source reconstruction
-   unless every later equivalence supplies its own target-naturality square.
+   comparison natural isomorphism.  That first milestone is reviewed at
+   `67aa463e` (implementation `invoke-1788104723752-4333-30cd2f57`, review
+   `invoke-1788104940330-4335-18ef87b5`).  Probe the immediately following
+   equivalence layer before further implementation; stop again before source
+   reconstruction unless every later equivalence supplies its own
+   target-naturality square.
 
 The banked production-MV scaffold already supplies:
 

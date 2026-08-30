@@ -380,6 +380,22 @@ frozen placeholder now contains only the Sard/nullity/non-surjectivity/
 null-homotopy branch.  The active program advances to `t01J03` pseudococone
 target postcomposition.
 
+The first `t01J03` target-naturality milestone was implemented by Agency job
+`invoke-1788104723752-4333-30cd2f57` as commit `67aa463e` and independently
+reviewed `PASS` by job `invoke-1788104940330-4335-18ef87b5`.  It adds honest
+target postcomposition for `PseudoFunctorCocone` and the natural isomorphism
+
+```text
+whiskeringRight H ⋙ pseudopushoutEquivalence(D).functor
+  ≅ pseudopushoutEquivalence(C).functor ⋙ postcomposePseudoFunctorCoconeFunctor H.
+```
+
+The comparison uses inverse associators and explicitly transports descent
+`eqToHom` terms through `H`; frozen `t01J03` still has exactly its two existing
+placeholders.  This is one reviewed edge, not source reconstruction.  The next
+action is a read-only probe of the immediately following strictification or
+reconstruction equivalence layer.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
