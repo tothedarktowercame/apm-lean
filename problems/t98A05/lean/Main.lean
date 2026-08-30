@@ -1,5 +1,6 @@
 import Mathlib
 import Mathlib.Analysis.Calculus.DifferentialForm.Basic
+import ConstructionTargets.T98A05FinalAdapter
 
 /-!
 # APM t98A05 — differential forms in three-dimensional Euclidean space
@@ -162,7 +163,8 @@ theorem apm_t98A05_bridge_extDerivs
         2 * (v 0 0 * v 1 1 - v 0 1 * v 1 0)) ∧
     extDeriv beta = 3 • gamma ∧
     extDeriv gamma = 0 := by
-  sorry
+  exact ConstructionTargets.T98A05FinalAdapter.bridge_extDerivs
+    alpha halpha beta hbeta gamma hgamma
 
 /-- Why this unblocks `apm_t98a05`: after the first bridge identifies
 `d alpha`, this is precisely the remaining change-of-variables and elementary
@@ -170,7 +172,8 @@ area calculation on the standard oriented triangular parameter domain. -/
 theorem apm_t98A05_bridge_simplexIntegral
     (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha) :
     apm_t98a05_orientedSimplexIntegral (extDeriv alpha) = 1 := by
-  sorry
+  exact ConstructionTargets.T98A05FinalAdapter.bridge_simplexIntegral
+    alpha halpha
 
 /-- Why this unblocks `apm_t98a05`: this is the global period obstruction for
 the angle form on the unit circle; it supplies exactly the final nonexactness
@@ -181,7 +184,8 @@ theorem apm_t98A05_bridge_circle_not_differential
     (halpha' : apm_t98a05_isRestriction alpha alpha') :
     ¬∃ f : apm_t98a05_circle → ℝ,
       apm_t98a05_IsDifferential f alpha' := by
-  sorry
+  exact ConstructionTargets.T98A05FinalAdapter.bridge_circle_not_differential
+    alpha halpha alpha' halpha'
 
 theorem apm_t98a05
     (alpha : apm_t98a05_Form 1) (halpha : apm_t98a05_isAlpha alpha)
@@ -222,4 +226,10 @@ theorem apm_t98a05
   nonexactness argument via a differentiable parametrization of the circle
   and its nonzero period.  The frozen statement is unchanged.
   -/
-  sorry
+  obtain ⟨hda, hdb, hdg⟩ :=
+    apm_t98A05_bridge_extDerivs alpha halpha beta hbeta gamma hgamma
+  exact ⟨hda, hdb, hdg,
+    apm_t98a05_wedgeEval_eq_zero alpha halpha beta hbeta,
+    apm_t98A05_bridge_simplexIntegral alpha halpha,
+    apm_t98a05_circleClosed_of_extDeriv_formula alpha hda,
+    apm_t98A05_bridge_circle_not_differential alpha halpha alpha' halpha'⟩
