@@ -480,7 +480,7 @@ compiles independently of every final problem.
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
-| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic two-open fundamental-groupoid descent and pseudococone mapping property are `BANKED`; `67aa463e` adds reviewed generic target postcomposition and the first pseudopushout square; `bc5267e9` adds coordinate-pseudococone postcomposition and its collared specialization; `74ae0e1e` proves reviewed forward target naturality for `actualPseudoCoconeToCoordinateFunctor`; the inverse-direction mate remains |
+| Two-open van Kampen/descent | `t01J03`; potentially the open-cover branch of `t00A01` | generic two-open fundamental-groupoid descent and pseudococone mapping property are `BANKED`; `67aa463e` adds generic target postcomposition and the first pseudopushout square; `bc5267e9` adds coordinate-pseudococone postcomposition and the collared specialization; `74ae0e1e` plus the reviewed `CatCommSq.vInv` mate `a81dad87` supply both target-change directions for the actual/coordinate pseudococone equivalence; connector/basepoint vertex-data naturality is next |
 
 ## Specification and ledger corrections
 
@@ -761,9 +761,12 @@ This construction does not elect either remaining `t95J04` foundation.
    is now reviewed at `74ae0e1e` (probe
    `invoke-1788105858496-4358-28fcb259`, implementation
    `invoke-1788106366249-4370-8c228d74`, review
-   `invoke-1788106925596-4385-37a16353`).  Compile the inverse-direction mate
-   before calling this equivalence target-natural; stop again before source
-   reconstruction unless every later equivalence supplies its own square.
+   `invoke-1788106925596-4385-37a16353`).  The inverse-direction mate is now
+   reviewed at `a81dad87` (probe `invoke-1788107112060-4389-f5f223e8`,
+   implementation `invoke-1788107362539-4396-63e454e1`, review
+   `invoke-1788107623205-4401-9486e9f6`).  Probe connector/basepoint
+   vertex-data naturality next; stop again before source reconstruction unless
+   every later equivalence supplies its own square.
 
 The banked production-MV scaffold already supplies:
 

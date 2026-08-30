@@ -420,6 +420,16 @@ and both piece-equivalence units.  The companion comparison for
 `coordinateToActualPseudoCoconeFunctor` remains unproved and must compile
 before target naturality of the equivalence is claimed.
 
+The companion mate was compiled by probe
+`invoke-1788107112060-4389-f5f223e8`, implemented by Agency job
+`invoke-1788107362539-4396-63e454e1` at commit `a81dad87`, and independently
+reviewed `PASS` by `invoke-1788107623205-4401-9486e9f6`.  It is constructed by
+`CatCommSq.vInv` from the reviewed forward square and therefore uses the
+actual equivalence unit, counit, associators, unitors, whiskerings, and triangle
+identities.  The actual/coordinate pseudococone equivalence now has both
+reviewed target-change directions.  Connector/basepoint evaluation into
+vertex data is the next independent layer; no source equivalence follows yet.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
