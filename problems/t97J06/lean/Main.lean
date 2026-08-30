@@ -1,4 +1,4 @@
-import Mathlib
+import ConstructionTargets.CircleNoncontractible
 
 /-!
 # APM t97J06 — a self-map of the two-torus
@@ -21,6 +21,7 @@ intended lattice-equivariance statement, equivalently the descended map on
 -/
 
 open scoped Real
+open ConstructionTargets
 
 abbrev T97J06Torus := Circle × Circle
 
@@ -170,30 +171,5 @@ theorem apm_t97j06 :
     (∀ q : T97J06Torus,
       ¬ ContinuousMap.Homotopic t97J06Map (ContinuousMap.const T97J06Torus q)) := by
   refine ⟨t97J06Map_on_cover, t97J06_determinant_integral_zero, ?_⟩
-  /-
-  Boundary (closer hop 3): hop 2 closed the coordinate formula and the
-  degree integral.  `t97J06Map_on_cover` uses `Circle.exp_add` and the
-  imaginary-part formula for the complex exponential.  The determinant is
-  reduced with `Matrix.det_fin_two_of`; its inner integral is the endpoint
-  difference of `sin (2πx + 4πy) / (4π)`, and periodicity makes it zero.
-
-  The remaining conjunct was reduced sharply by
-  `t97J06_circle_identity_homotopic_of_map_homotopic_const`: restricting the
-  alleged null-homotopy to `z ↦ (z,1)` and projecting to the second coordinate
-  would make `ContinuousMap.id Circle` homotopic to a constant. Going beyond
-  that boundary, hop 3 applies `contractible_iff_id_nullhomotopic` in
-  `t97J06_contractibleCircle_of_map_homotopic_const`, turning any alleged
-  null-homotopy into an actual `ContractibleSpace Circle` instance.
-  `t97J06_not_homotopic_const_of_not_contractibleCircle` then compiles the
-  entire final conjunct conditional only on `¬ ContractibleSpace Circle`.
-
-  Renewed searches included `LEMMA-INDEX.md`, every `ConstructionTargets/` module,
-  `YoungL2.lean`, Mathlib's homotopy, fundamental-group, circle, covering, and
-  singular-homology sources, git history, and the topology siblings `t91A05`,
-  `t91J02`, `t97J03`, `t01J03`, `t02A03`, and `t97J04`.  Mathlib supplies
-  homotopy composition and fundamental-group functoriality, but this snapshot
-  has no proof of `¬ ContractibleSpace Circle` or computation of
-  `FundamentalGroup Circle`; the siblings independently record the same
-  boundary. The frozen statement is unchanged.
-  -/
-  sorry
+  exact t97J06_not_homotopic_const_of_not_contractibleCircle
+    CircleNoncontractible.circle_not_contractible
