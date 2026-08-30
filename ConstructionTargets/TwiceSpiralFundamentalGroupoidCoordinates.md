@@ -13,6 +13,12 @@ invertible overlap comparison; its morphisms satisfy the corresponding glue
 square. Thus the construction retains the bicategorical coherence rather than
 replacing it by equality.
 
+`postcomposeCoordinatePseudoCoconeFunctor` gives the literal target-change
+operation on this coordinate category.  It postcomposes both piece functors,
+uses `Functor.isoWhiskerRight` on the overlap isomorphism, and maps a morphism's
+two components.  Its glue proof is obtained by applying the target functor to
+the original componentwise glue equation; no strictification is involved.
+
 `actual_left_leg_in_coordinates` and `actual_right_leg_in_coordinates` record
 the exact orientation already proved by the collar deformation equivalences:
 inverse overlap equivalence, actual inclusion, then forward piece equivalence.

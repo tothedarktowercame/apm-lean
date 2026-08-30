@@ -73,6 +73,99 @@ instance : Category (CoordinatePseudoCocone h C) where
   comp_id _ := by ext <;> simp
   assoc _ _ _ := by ext <;> simp [Category.assoc]
 
+section Postcomposition
+
+variable {C D : Type} [Category C] [Category D]
+
+/-- Postcompose both coordinate-piece functors and their invertible overlap
+comparison by a target functor. -/
+def postcomposeCoordinatePseudoCoconeObj
+    (H : C ⥤ D) (P : CoordinatePseudoCocone h C) :
+    CoordinatePseudoCocone h D where
+  left := P.left ⋙ H
+  right := P.right ⋙ H
+  glue := Functor.isoWhiskerRight P.glue H
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeObj_left
+    (H : C ⥤ D) (P : CoordinatePseudoCocone h C) :
+    (postcomposeCoordinatePseudoCoconeObj h H P).left = P.left ⋙ H := rfl
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeObj_right
+    (H : C ⥤ D) (P : CoordinatePseudoCocone h C) :
+    (postcomposeCoordinatePseudoCoconeObj h H P).right = P.right ⋙ H := rfl
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeObj_glue
+    (H : C ⥤ D) (P : CoordinatePseudoCocone h C) :
+    (postcomposeCoordinatePseudoCoconeObj h H P).glue =
+      Functor.isoWhiskerRight P.glue H := rfl
+
+/-- Postcomposition sends a coordinate-pseudococone morphism componentwise;
+the glue square is the image of the original componentwise square. -/
+def postcomposeCoordinatePseudoCoconeMap
+    (H : C ⥤ D) {P Q : CoordinatePseudoCocone h C} (τ : P ⟶ Q) :
+    postcomposeCoordinatePseudoCoconeObj h H P ⟶
+      postcomposeCoordinatePseudoCoconeObj h H Q where
+  left := Functor.whiskerRight τ.left H
+  right := Functor.whiskerRight τ.right H
+  glue_naturality := by
+    ext z
+    simpa [postcomposeCoordinatePseudoCoconeObj] using
+      congrArg H.map (NatTrans.congr_app τ.glue_naturality z)
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeMap_left_app
+    (H : C ⥤ D) {P Q : CoordinatePseudoCocone h C} (τ : P ⟶ Q)
+    (z : FundamentalGroupoid SolidTorus) :
+    (postcomposeCoordinatePseudoCoconeMap h H τ).left.app z =
+      H.map (τ.left.app z) := rfl
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeMap_right_app
+    (H : C ⥤ D) {P Q : CoordinatePseudoCocone h C} (τ : P ⟶ Q)
+    (z : FundamentalGroupoid SolidTorus) :
+    (postcomposeCoordinatePseudoCoconeMap h H τ).right.app z =
+      H.map (τ.right.app z) := rfl
+
+/-- Target postcomposition on the category of coordinate pseudococones. -/
+def postcomposeCoordinatePseudoCoconeFunctor
+    (H : C ⥤ D) : CoordinatePseudoCocone h C ⥤ CoordinatePseudoCocone h D where
+  obj := postcomposeCoordinatePseudoCoconeObj h H
+  map := postcomposeCoordinatePseudoCoconeMap h H
+  map_id P := by
+    apply CoordinatePseudoCoconeHom.ext <;> ext z
+    · change H.map (𝟙 _) = 𝟙 _
+      simp
+    · change H.map (𝟙 _) = 𝟙 _
+      simp
+  map_comp f g := by
+    apply CoordinatePseudoCoconeHom.ext <;> ext z
+    · change H.map (f.left.app z ≫ g.left.app z) =
+        H.map (f.left.app z) ≫ H.map (g.left.app z)
+      simp
+    · change H.map (f.right.app z ≫ g.right.app z) =
+        H.map (f.right.app z) ≫ H.map (g.right.app z)
+      simp
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeFunctor_obj_left
+    (H : C ⥤ D) (P : CoordinatePseudoCocone h C) :
+    ((postcomposeCoordinatePseudoCoconeFunctor h H).obj P).left = P.left ⋙ H := rfl
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeFunctor_obj_right
+    (H : C ⥤ D) (P : CoordinatePseudoCocone h C) :
+    ((postcomposeCoordinatePseudoCoconeFunctor h H).obj P).right = P.right ⋙ H := rfl
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeFunctor_map_left_app
+    (H : C ⥤ D) {P Q : CoordinatePseudoCocone h C} (τ : P ⟶ Q)
+    (z : FundamentalGroupoid SolidTorus) :
+    ((postcomposeCoordinatePseudoCoconeFunctor h H).map τ).left.app z =
+      H.map (τ.left.app z) := rfl
+
+@[simp] theorem postcomposeCoordinatePseudoCoconeFunctor_map_right_app
+    (H : C ⥤ D) {P Q : CoordinatePseudoCocone h C} (τ : P ⟶ Q)
+    (z : FundamentalGroupoid SolidTorus) :
+    ((postcomposeCoordinatePseudoCoconeFunctor h H).map τ).right.app z =
+      H.map (τ.right.app z) := rfl
+
+end Postcomposition
+
 /-- The actual overlap-to-left span leg becomes the coordinate left leg after
 the compiled inverse-overlap/forward-piece transports. -/
 theorem actual_left_leg_in_coordinates :
@@ -118,6 +211,7 @@ structure BasedTwiceSpiralCoordinateInterface (d : ℤ) where
 #print axioms coordinateRightLeg
 #print axioms CoordinatePseudoCocone
 #print axioms CoordinatePseudoCoconeHom
+#print axioms postcomposeCoordinatePseudoCoconeFunctor
 #print axioms actual_left_leg_in_coordinates
 #print axioms actual_right_leg_in_coordinates
 #print axioms BasedTwiceSpiralCoordinateInterface

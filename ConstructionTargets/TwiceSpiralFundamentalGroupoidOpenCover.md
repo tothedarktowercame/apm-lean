@@ -9,6 +9,8 @@ This target packages that geometry for fundamental groupoids:
 
 - `gluingFundamentalGroupoidPseudopushoutEquivalence` directly specializes
   the generic two-open pseudopushout mapping-category equivalence;
+- `gluingPseudopushoutPostcomposeNatIso` specializes its reviewed target-
+  postcomposition natural isomorphism to the same collared cover;
 - `leftFundamentalGroupoidEquivalence` and
   `rightFundamentalGroupoidEquivalence` identify the piece groupoids with the
   solid-torus groupoid;

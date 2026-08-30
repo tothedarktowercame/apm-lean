@@ -19,6 +19,7 @@ namespace ConstructionTargets.TwiceSpiralFundamentalGroupoidOpenCover
 
 open ConstructionTargets.SolidTorusGluingOpenCover
 open ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout
+open ConstructionTargets.TwoOpenFundamentalGroupoidSpan
 
 variable (h : BoundaryTorus ≃ₜ BoundaryTorus)
 
@@ -43,6 +44,19 @@ def gluingFundamentalGroupoidPseudopushoutEquivalence
         (X := Gluing h) (U := U h) (V := V h) (C := C) :=
   twoOpenFundamentalGroupoidPseudopushoutEquivalence
     (C := C) (U_isOpen h) (V_isOpen h) (U_union_V h)
+
+/-- The collared-cover pseudopushout equivalence commutes with target
+postcomposition, in the orientation inherited from the generic two-open
+theorem. -/
+def gluingPseudopushoutPostcomposeNatIso
+    {C D : Type} [Category C] [Category D] (H : C ⥤ D) :
+    (Functor.whiskeringRight (FundamentalGroupoid (Gluing h)) C D).obj H ⋙
+        (gluingFundamentalGroupoidPseudopushoutEquivalence h D).functor ≅
+        (gluingFundamentalGroupoidPseudopushoutEquivalence h C).functor ⋙
+        postcomposePseudoFunctorCoconeFunctor H :=
+  pseudopushoutPostcomposeNatIso
+    (X := Gluing h) (U := U h) (V := V h)
+    (C := C) (D := D) (U_isOpen h) (V_isOpen h) (U_union_V h) H
 
 /-- The left collared quotient piece has the fundamental groupoid of a solid
 torus. -/
@@ -93,6 +107,7 @@ theorem overlapToRight_groupoid_coordinate :
 #print axioms V_isOpen
 #print axioms U_union_V
 #print axioms gluingFundamentalGroupoidPseudopushoutEquivalence
+#print axioms gluingPseudopushoutPostcomposeNatIso
 #print axioms leftFundamentalGroupoidEquivalence
 #print axioms rightFundamentalGroupoidEquivalence
 #print axioms overlapFundamentalGroupoidEquivalence
