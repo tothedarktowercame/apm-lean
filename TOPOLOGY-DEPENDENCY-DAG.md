@@ -1,6 +1,6 @@
 # Topology dependency DAG
 
-Date: 2026-08-29
+Date: 2026-08-30
 
 This is the canonical topology roadmap.  It separates compiled mathematics,
 consumer uptake, small remaining constructions, missing shared APIs, and
@@ -156,7 +156,8 @@ VAN KAMPEN / SURFACE FOUNDATIONS
        │      ├── COLLAR/COVER COORDINATE MAPPING EQUIVALENCE [BANKED]
        │      ├── PUSHOUT REPRESENTATION EQUIVALENCE [BANKED]
        │      ├── FIXED-TARGET SINGLE-OBJECT MAPPING EQUIVALENCE [BANKED]
-       │      ├── TARGET-POSTCOMPOSITION NATURALITY [IN PROGRESS]
+       │      ├── TARGET-POSTCOMPOSITION NATURALITY [BANKED THROUGH
+       │      │      PUSHOUT-REPRESENTATION AND VERTEX-COORDINATE LAYERS]
        │      └── t01J03 PI1 BRIDGE [UPTAKE; TWO FROZEN SORRIES REMAIN]
        ├── GENERIC QUOTIENT AND GLUING PI1 [FOUNDATION]
        ├── SURFACE CUTTING/CLASSIFICATION [FOUNDATION]
@@ -274,8 +275,9 @@ Important representation decisions:
   duplicates its `H₁ ≅ ℤ` route without the normalized generator.
 - `Intersection` and `SingularCapLowDegree` are complementary local and chain
   layers, not competing implementations of the same theorem.
-- The untracked `TensorHomologySplitReduction` pair is not canonical and does
-  not provide Eilenberg--Zilber or Kunneth.
+- `TensorHomologySplitReduction` is canonical at `fdc18723`, but it is an
+  algebraic split-reduction theorem for tensor complexes.  It does not provide
+  a singular Eilenberg--Zilber comparison or a Kunneth theorem.
 
 ## Uptake census
 
@@ -308,6 +310,65 @@ These are stable inputs rather than problem placeholders:
   `ConstructionTargets/TransversePreimageGeometry.lean`: conversion of
   derivative-range transversality to coproduct surjectivity.  These do not
   construct transverse preimages.
+
+## Closure strategy after the F36--F57 memory review
+
+`futon3c/holes/technotes/TN-fable-F36-F57-review.md` reports that the solver
+closed most problems it was given, often without using a shelved memory.  The
+one fingerprinted cross-problem use mainly confirmed a maximum-modulus API
+route already suggested by the problem.  Cross-problem process memories could
+still influence what an agent tried, but token fingerprints could not certify
+that influence.  These observations do not supply topology proofs.  They do
+change how this DAG should schedule proof work.
+
+For topology, a memory, analogous theorem, or previous construction may
+nominate a route.  It is not evidence that the route fits the frozen consumer.
+Fit is established only by compiling a consumer-facing probe against the
+frozen statement and recording the exact residual.
+
+Every new topology campaign now begins with a **closure experiment**:
+
+1. choose one frozen executable placeholder, not a foundational topic;
+2. record the shortest plausible route using current canonical declarations;
+3. identify at most one absent reusable theorem on that route;
+4. write a small consumer-facing probe that reaches the theorem's input and
+   output types without assuming the theorem;
+5. continue only if the probe shows that theorem would remove the placeholder
+   or leave a bounded final adapter;
+6. stop after two successive packets that add infrastructure without reducing
+   the named consumer residual.
+
+The probe may use recalled material to find declarations, representations, or
+proof patterns.  Its report must distinguish:
+
+- **recalled suggestion**: why the route was tried;
+- **repository evidence**: declarations and representations that actually
+  compile;
+- **consumer evidence**: the frozen goal reached by the probe;
+- **new theorem**: the single missing edge, with its other named consumers.
+
+This changes the portfolio order:
+
+1. selective uptake of already compiled experimental closures;
+2. problem-facing adapters for canonical theorems;
+3. one-edge closure experiments for `LOCAL-GO` and `API-GAP` nodes;
+4. foundational programs only after a successful probe and at least two named
+   consumers;
+5. representation-specific development only while it shortens its frozen
+   consumer at the same time.
+
+The twice-spiral branch is the immediate test of the stop rule.  It has banked
+subdivision descent, a pseudopushout mapping property, connector
+reconstruction, pushout representations, a fixed-target `SingleObj` mapping
+equivalence, representability candidates, and postcomposition comparisons
+through the pushout-representation and vertex-coordinate layers.  Frozen
+`t01J03` still has the same two executable placeholders.  No further target-
+naturality layer should be added until a consumer-facing probe states the
+exact Mathlib theorem (or project theorem) that turns the natural mapping
+equivalence into the required chosen-basepoint automorphism-group isomorphism.
+If that probe instead exposes a general categorical representability theorem,
+that theorem becomes the single candidate edge; otherwise this branch is
+`DEFERRED-REP` until a shorter route is found.
 
 ## Consolidation queues
 
@@ -493,7 +554,8 @@ that the MV route solves t00J02 or replace its missing geometry.
 | `8fbcdbd2`–`4973b3c0` | subdivision-independent and homotopy-invariant two-open path evaluation, descent functor, strictified pseudococone equivalence, and the two-open fundamental-groupoid pseudopushout mapping property | generic API is banked; it is observed by the twice-spiral collar-cover specialization, but no ordinary strict `Limits.Pushout` theorem is asserted |
 | `4c807ccf`–`fca9b574` | explicit twice-spiral collared cover, transport to boundary/solid-torus coordinates, and equivalence between ambient mapping functors and coordinate pseudococones | fixed-target mapping equivalence is compiled; source-groupoid equivalence still requires target-postcomposition naturality |
 | `5dcc68f5`–`f983be62` | connector normal forms for connected groupoids, vertex-data and integer-coordinate equivalences, `TwiceSpiralPushout d` representation equivalence, and identification with functors from `SingleObj (TwiceSpiralPushout d)` | yields a fixed-target equivalence `(FundamentalGroupoid (Gluing h) ⥤ C) ≃ (SingleObj (TwiceSpiralPushout d) ⥤ C)`; it does not by itself identify the source groupoids |
-| `6413a6cb`–`c862ae93` | representability candidates and target-postcomposition comparisons for the pushout-representation and vertex-coordinate layers | continue coherence through the connector/pseudococone and geometric layers; then assemble source equivalence and the t01J03 fundamental-group bridge |
+| `6413a6cb`–`c862ae93` | representability candidates and target-postcomposition comparisons for the pushout-representation and vertex-coordinate layers | pause further coherence layers until a consumer probe identifies the exact representability-to-source-equivalence theorem needed by frozen t01J03 |
+| `fdc18723` | split reduction for tensor homology when one factor has a degreewise splitting | algebraic input only; product-topology consumers still need singular Eilenberg--Zilber and coefficient-compatible Kunneth comparisons |
 
 ## Dimension-gap versus critical-value Sard
 
@@ -548,27 +610,38 @@ Current audited classification beyond these closures:
 
 ## Next decision point
 
-The t96A03-specific packets formerly listed here are complete.  The current
-bounded programs with concrete consumers are:
+Do not start another long construction chain from this list.  Run the closure
+experiments below, record their residuals, and elect at most one implementation
+program from the results.
 
-1. **Product homology for `t95J04`.**  Build a coefficient-compatible
-   Eilenberg--Zilber/Künneth theorem sufficient to compute `H₂(S³ × S³)` and
-   compare it with the factor-retraction witness for `S² × S⁴`.  Stop before
-   consumer assembly if sphere coefficient change or the chain-level tensor
-   comparison is absent; do not assume either product homology calculation.
-2. **Finish target-natural representability for `t01J03`.**  Propagate target
-   postcomposition through connector extraction/reconstruction, coordinate
-   pseudococones, and the geometric collar-cover equivalence.  Assemble the
-   resulting natural mapping equivalence into a source-groupoid comparison,
-   extract the chosen automorphism group, and only then apply the banked
-   `TwiceSpiralPushout d` computation.  Stop if a fixed-target equivalence is
-   being used as though it were already natural in the target.
-3. **Generic closed-gluing comparison for `t03J02` and other consumers.**
-   Start with one collar or cofibration theorem producing an honest open cover
-   and term equivalences from the frozen gluing data.  The explicit t01J03 and
-   t96A03 covers are consumers and examples, not a generic theorem obtained by
-   renaming either coordinate construction.  Stop if the source hypotheses do
-   not provide a collar/cofibration.
+1. **Uptake audit first.**  Re-check the six experimental closures in Queue A
+   against canonical master.  Selectively promote the smallest branch whose
+   frozen theorem compiles unchanged.  This is currently the highest-probability
+   source of whole-problem closures and requires no new foundational election.
+2. **`t01J03` representability probe.**  In a fixture importing the banked
+   mapping equivalence and target-postcomposition comparisons, state the exact
+   chosen-basepoint automorphism-group conclusion required by
+   `apm_t01J03_bridge_2`.  Determine whether an existing category-theory theorem
+   turns the natural family into a source equivalence.  Elect one generic
+   representability theorem only if this fixture reaches it directly.  Do not
+   add another connector, pseudococone, or transport layer merely because it is
+   coherent.
+3. **`t95J04` product-homology probe.**  Instantiate the frozen spaces and
+   existing sphere homology coordinates far enough to state the exact missing
+   product comparison.  Determine separately whether the missing edge is
+   singular Eilenberg--Zilber, integral Kunneth, or coefficient-category
+   transport.  `TensorHomologySplitReduction` may discharge an algebraic
+   subgoal, but does not choose among these topological edges.
+4. **`t03J02` collar-hypothesis probe.**  Check whether the frozen gluing data
+   actually supplies a collar or cofibration strong enough to construct an
+   honest two-open cover.  If not, record the hypothesis mismatch and stop;
+   the explicit t01J03 and t96A03 covers cannot be promoted to a generic theorem
+   by changing names.
+
+Election criterion: prefer the probe that leaves one reusable theorem, at
+least two named consumers, and a bounded final adapter.  If no probe satisfies
+all three conditions, return to selective uptake and local adapters rather
+than choosing a foundational program by perceived mathematical importance.
 
 The banked production-MV scaffold already supplies:
 
