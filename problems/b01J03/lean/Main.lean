@@ -28,6 +28,46 @@ def apm_b01J03_rootStabilizer (F K : Type) [Field F] [Field K]
     [Algebra F K] (α : K) : Subgroup (K ≃ₐ[F] K) :=
   (apm_b01J03_rootField F K α).fixingSubgroup
 
+/-- The natural action of the ambient Galois group on the roots in the given
+splitting field. -/
+instance apm_b01J03_rootAction
+    (F K : Type) [Field F] [Field K] [Algebra F K] (f : F[X]) :
+    MulAction (K ≃ₐ[F] K) (f.rootSet K) where
+  smul σ := Set.MapsTo.restrict σ _ _ (Polynomial.rootSet_mapsTo σ.toAlgHom)
+  one_smul x := by ext; rfl
+  mul_smul σ τ x := by ext; rfl
+
+/-- Irreducibility makes the natural root action transitive in a normal
+ambient extension. -/
+lemma apm_b01J03_rootAction_pretransitive
+    (F K : Type) [Field F] [Field K] [Algebra F K] [Normal F K]
+    (f : F[X]) (hirr : Irreducible f) :
+    MulAction.IsPretransitive (K ≃ₐ[F] K) (f.rootSet K) := by
+  refine ⟨fun x y ↦ ?_⟩
+  have hx := minpoly.eq_of_irreducible hirr (Polynomial.aeval_eq_zero_of_mem_rootSet x.2)
+  have hy := minpoly.eq_of_irreducible hirr (Polynomial.aeval_eq_zero_of_mem_rootSet y.2)
+  obtain ⟨σ, hσ⟩ := (Normal.minpoly_eq_iff_mem_orbit K).mp (hy.symm.trans hx)
+  exact ⟨σ, Subtype.ext hσ⟩
+
+/-- A splitting-field automorphism is determined by its permutation of the
+roots, so the natural root action is faithful. -/
+lemma apm_b01J03_rootAction_faithful
+    (F K : Type) [Field F] [Field K] [Algebra F K]
+    (f : F[X]) [f.IsSplittingField F K] :
+    Function.Injective (MulAction.toPermHom (K ≃ₐ[F] K) (f.rootSet K)) := by
+  intro σ τ h
+  apply AlgEquiv.ext
+  intro x
+  apply (AlgHom.mem_equalizer σ.toAlgHom τ.toAlgHom x).mp
+  have heq : AlgHom.equalizer σ.toAlgHom τ.toAlgHom = ⊤ := by
+    rw [eq_top_iff, ← IsSplittingField.adjoin_rootSet K f, Algebra.adjoin_le_iff]
+    intro y hy
+    apply (AlgHom.mem_equalizer σ.toAlgHom τ.toAlgHom y).mpr
+    have hs := congrArg (fun q ↦ q ⟨y, hy⟩) h
+    exact Subtype.ext_iff.mp hs
+  rw [heq]
+  exact Algebra.mem_top
+
 /-- A self-normalizing Sylow subgroup has as many conjugates as its index,
 and that index is prime to `p`. -/
 lemma apm_b01J03_selfNormalizer_count
@@ -42,6 +82,114 @@ lemma apm_b01J03_selfNormalizer_count
   haveI : (P : Subgroup G).FiniteIndex :=
     ⟨by rw [← hcount]; exact (Nat.card_pos (α := Sylow p G)).ne'⟩
   exact ⟨hcount, P.not_dvd_index⟩
+
+/-- A root of the irreducible degree-`p` polynomial generates an intermediate
+field of degree `p`.  This packages the minpoly bridge needed on both root
+stabilizers in the main argument. -/
+lemma apm_b01J03_rootField_finrank
+    (F K : Type) [Field F] [Field K] [Algebra F K]
+    (f : F[X]) (p : ℕ) (hirr : Irreducible f) (hmonic : f.Monic)
+    (hdeg : f.natDegree = p)
+    (α : K) (hα : (f.map (algebraMap F K)).IsRoot α) :
+    Module.finrank F (apm_b01J03_rootField F K α) = p := by
+  have hfα : Polynomial.aeval α f = 0 := by
+    simpa [Polynomial.IsRoot, Polynomial.aeval_def] using hα
+  have hmin : minpoly F α = f :=
+    by simpa [hmonic] using (minpoly.eq_of_irreducible hirr hfα).symm
+  have hαint : IsIntegral F α := ⟨f, hmonic, hfα⟩
+  rw [apm_b01J03_rootField, IntermediateField.adjoin.finrank
+    hαint, hmin, hdeg]
+
+/-- In a Galois ambient extension, the stabilizer of such a root has index
+exactly the prime degree. -/
+lemma apm_b01J03_rootStabilizer_index
+    (F K : Type) [Field F] [Field K] [Algebra F K] [IsGalois F K]
+    (f : F[X]) (p : ℕ) (hirr : Irreducible f) (hmonic : f.Monic)
+    (hdeg : f.natDegree = p) (α : K)
+    (hα : (f.map (algebraMap F K)).IsRoot α) :
+    (apm_b01J03_rootStabilizer F K α).index = p := by
+  unfold apm_b01J03_rootStabilizer
+  rw [← IntermediateField.finrank_eq_fixingSubgroup_index]
+  exact apm_b01J03_rootField_finrank F K f p hirr hmonic hdeg α hα
+
+/-- Burnside transfer plus primitivity: a self-normalizing Sylow subgroup of
+prime order is the whole group whenever the group acts faithfully and
+transitively on `p` points. -/
+lemma apm_b01J03_sylow_eq_top_of_prime_action
+    (G X : Type*) [Group G] [Finite G] [MulAction G X] [Finite X]
+    (p : ℕ) (hp : p.Prime) [MulAction.IsPretransitive G X]
+    (hX : Nat.card X = p)
+    (hfaithful : Function.Injective (MulAction.toPermHom G X))
+    (P : Sylow p G) (hPcard : Nat.card P = p)
+    (hself : normalizer (P : Subgroup G) = (P : Subgroup G)) :
+    (P : Subgroup G) = ⊤ := by
+  letI : Fact p.Prime := ⟨hp⟩
+  letI : IsCyclic P := isCyclic_of_prime_card hPcard
+  have hnormcent : normalizer (P : Subgroup G) ≤ centralizer (P : Set G) := by
+    rw [hself]
+    intro x hx y hy
+    exact (Subtype.ext_iff.mp
+      (IsCyclic.commutative.comm (⟨x, hx⟩ : P) ⟨y, hy⟩)).symm
+  let N : Subgroup G := (MonoidHom.transferSylow P hnormcent).ker
+  have hcomp : N.IsComplement' P :=
+    MonoidHom.ker_transferSylow_isComplement' P hnormcent
+  haveI : N.Normal := inferInstance
+  have hNbot : N = ⊥ := by
+    letI : MulAction.IsPreprimitive G X :=
+      MulAction.IsPreprimitive.of_prime_card (hX ▸ hp)
+    by_contra hne
+    have hfixed : MulAction.fixedPoints N X ≠ Set.univ := by
+      intro hall
+      apply hne
+      rw [eq_bot_iff]
+      intro n hn
+      apply hfaithful
+      ext x
+      have hx : x ∈ MulAction.fixedPoints N X := by simp [hall]
+      simpa using hx ⟨n, hn⟩
+    letI : MulAction.IsPretransitive N X :=
+      MulAction.IsQuasiPreprimitive.isPretransitive_of_normal hfixed
+    letI : Nonempty X := (Nat.card_pos_iff.mp (hX ▸ hp.pos)).1
+    have hdvd : p ∣ Nat.card N := by
+      rw [← hX, ← MulAction.index_stabilizer_of_transitive N (Classical.arbitrary X)]
+      exact ⟨Nat.card (MulAction.stabilizer N (Classical.arbitrary X)),
+        by rw [mul_comm]; exact
+          (MulAction.stabilizer N (Classical.arbitrary X)).card_mul_index.symm⟩
+    exact MonoidHom.not_dvd_card_ker_transferSylow P hnormcent hdvd
+  rw [← hcomp.sup_eq_top, hNbot, bot_sup_eq]
+
+/-- In a faithful transitive action on `p` points, a Sylow `p`-subgroup has
+order exactly `p`: the group embeds in `Sₚ`, whose `p`-multiplicity is one. -/
+lemma apm_b01J03_sylow_card_of_prime_action
+    (G X : Type*) [Group G] [Finite G] [MulAction G X] [Finite X]
+    (p : ℕ) (hp : p.Prime) [MulAction.IsPretransitive G X]
+    (hX : Nat.card X = p)
+    (hfaithful : Function.Injective (MulAction.toPermHom G X))
+    (P : Sylow p G) : Nat.card P = p := by
+  letI : Fact p.Prime := ⟨hp⟩
+  haveI : Nonempty X := (Nat.card_pos_iff.mp (hX ▸ hp.pos)).1
+  have hpG : p ∣ Nat.card G := by
+    rw [← hX, ← MulAction.index_stabilizer_of_transitive G (Classical.arbitrary X)]
+    exact ⟨Nat.card (MulAction.stabilizer G (Classical.arbitrary X)), by
+      rw [mul_comm]
+      exact (MulAction.stabilizer G (Classical.arbitrary X)).card_mul_index.symm⟩
+  have hGperm : Nat.card G ∣ p.factorial := by
+    have h := Subgroup.card_dvd_of_injective (MulAction.toPermHom G X) hfaithful
+    simpa [Nat.card_perm, hX] using h
+  have hfac_le : (Nat.card G).factorization p ≤ p.factorial.factorization p :=
+    Nat.factorization_le_factorization_of_dvd_right hGperm Nat.card_pos.ne'
+      (Nat.factorial_ne_zero p)
+  have hfac_fact : p.factorial.factorization p = 1 := by
+    have hlog : Nat.log p p = 1 := by
+      simpa using Nat.log_pow hp.one_lt 1
+    rw [Nat.factorization_factorial hp (b := 2) (by omega)]
+    simp [Nat.div_self hp.pos]
+  have hfac_pos : 1 ≤ (Nat.card G).factorization p :=
+    (hp.dvd_iff_one_le_factorization Nat.card_pos.ne').mp hpG
+  rw [P.card_eq_multiplicity]
+  have : (Nat.card G).factorization p = 1 :=
+    le_antisymm (hfac_fact ▸ hfac_le) hfac_pos
+  simp [this]
 
 theorem apm_b01j03
     (F K : Type) [Field F] [Field K] [Algebra F K]
@@ -64,54 +212,51 @@ theorem apm_b01j03
       apm_b01J03_rootField F K α = apm_b01J03_rootField F K β ∧
       apm_b01J03_rootField F K α = ⊤ ∧
       (P : Subgroup (K ≃ₐ[F] K)) = ⊤ := by
-  -- PARTIAL (closer hop 3): bridge still open, with one group-counting
-  -- component now proved above.
-  -- Contrary to the preceding boundary assessment, Mathlib does provide
-  -- `Sylow.card_eq_index_normalizer`.  Together with `Sylow.not_dvd_index`,
-  -- it yields `apm_b01J03_selfNormalizer_count`: the number of Sylow
-  -- subgroups is `P.index`, and `p ∤ P.index`.
-  -- Each of the 4 parts (a-d) requires proving from scratch:
-  --   (a) |G| = p * s: from |P| = p and Lagrange's theorem
-  --   (b) s(p-1) elements of order p: orbit-stabilizer on conjugates
-  --   (c) root field equality: Galois correspondence + counting
-  --   (d) K = F[α]: degree 1 ⟹ |G| = p ⟹ G = P
-  -- This is ~80-120 lines of deep group theory assembly with no reusable template.
-  --
-  -- Further APIs found in this hop:
-  -- * `IsGalois.card_fixingSubgroup_eq_finrank` and
-  --   `IntermediateField.finrank_eq_fixingSubgroup_index` cover the field/
-  --   subgroup cardinality conversion;
-  -- * `IntermediateField.adjoin.finrank` identifies `[F(α):F]` with the
-  --   minimal-polynomial degree;
-  -- * the closed sibling `b99A03` proves the useful membership equivalence
-  --   `φ ∈ (adjoin F {α}).fixingSubgroup ↔ φ α = α` and coset/root
-  --   correspondence.
-  -- The remaining first major bridge is the faithful action of the Galois
-  -- group on the `p` roots, needed to show `Nat.card G ∣ p.factorial` and
-  -- hence that the p-adic multiplicity of `Nat.card G` is exactly one.
-  -- After that, an explicit finite partition of order-p elements among
-  -- distinct Sylow subgroups is still required; no packaged cardinality
-  -- theorem for that union was found.  A full search of `LEMMA-INDEX.md`,
-  -- `ConstructionTargets/`, and Mathlib's Sylow, p-group, cyclic-group, and
-  -- order-of-element sources confirms that the precise missing reusable
-  -- contract is:
-  --
-  --   theorem apm_b01J03_card_orderOf_eq_prime
-  --       (G : Type*) [Group G] [Finite G]
-  --       (p : ℕ) (hp : p.Prime)
-  --       (hPcard : ∀ P : Sylow p G, Nat.card P = p) :
-  --       Nat.card {g : G // orderOf g = p} =
-  --         Nat.card (Sylow p G) * (p - 1)
-  --
-  -- It is true because every order-`p` element generates a subgroup of
-  -- cardinality `p`, hence lies in a Sylow subgroup, while two Sylow
-  -- subgroups of cardinality `p` sharing a nonidentity element coincide.
-  -- `IsPGroup.exists_le_sylow`, `Fintype.card_zpowers`, and
-  -- `IsCyclic.card_orderOf_eq_totient` provide the local ingredients, but
-  -- no API packages the uniqueness and finite disjoint-union cardinality.
-  -- Once the faithful root action supplies `hPcard`, this equality and
-  -- `apm_b01J03_selfNormalizer_count` give exactly the third displayed
-  -- conjunct with `s = P.index`.  The later Galois-field identifications
-  -- remain separate work, so introducing an unproved helper here would not
-  -- honestly close the frozen theorem.
-  sorry
+  letI : FiniteDimensional F K := IsSplittingField.finiteDimensional K f
+  letI : IsGalois F K := IsGalois.of_separable_splitting_field hsep
+  letI : Fact p.Prime := ⟨hp⟩
+  letI : MulAction.IsPretransitive (K ≃ₐ[F] K) (f.rootSet K) :=
+    apm_b01J03_rootAction_pretransitive F K f hirr
+  have hroots : Nat.card (f.rootSet K) = p := by
+    rw [Nat.card_eq_fintype_card,
+      Polynomial.card_rootSet_eq_natDegree hsep (IsSplittingField.splits K f), hdeg]
+  have hfaithful := apm_b01J03_rootAction_faithful F K f
+  have hPcard : Nat.card P = p :=
+    apm_b01J03_sylow_card_of_prime_action (K ≃ₐ[F] K) (f.rootSet K)
+      p hp hroots hfaithful P
+  have hPtop : (P : Subgroup (K ≃ₐ[F] K)) = ⊤ :=
+    apm_b01J03_sylow_eq_top_of_prime_action (K ≃ₐ[F] K) (f.rootSet K)
+      p hp hroots hfaithful P hPcard hself
+  have hGcard : Nat.card (K ≃ₐ[F] K) = p := by
+    simpa [hPtop] using hPcard
+  have rootField_top : ∀ γ : K,
+      (f.map (algebraMap F K)).IsRoot γ → apm_b01J03_rootField F K γ = ⊤ := by
+    intro γ hγ
+    have hidx := apm_b01J03_rootStabilizer_index F K f p hirr hmonic hdeg γ hγ
+    have hcard : Nat.card (apm_b01J03_rootStabilizer F K γ) = 1 := by
+      have hm := (apm_b01J03_rootStabilizer F K γ).card_mul_index
+      rw [hidx, hGcard] at hm
+      apply Nat.eq_of_mul_eq_mul_right hp.pos
+      simpa using hm
+    have hbot : apm_b01J03_rootStabilizer F K γ = ⊥ :=
+      Subgroup.card_eq_one.mp hcard
+    have hbot' : (apm_b01J03_rootField F K γ).fixingSubgroup = ⊥ := by
+      simpa [apm_b01J03_rootStabilizer] using hbot
+    rw [← IsGalois.fixedField_fixingSubgroup
+      (apm_b01J03_rootField F K γ), hbot', IntermediateField.fixedField_bot]
+  have hαtop := rootField_top α hα
+  have hβtop := rootField_top β hβ
+  letI : Fintype (K ≃ₐ[F] K) := Fintype.ofFinite _
+  letI : IsCyclic (K ≃ₐ[F] K) := isCyclic_of_prime_card hGcard
+  have horder : Nat.card {g : K ≃ₐ[F] K // orderOf g = p} = p - 1 := by
+    classical
+    rw [Nat.card_eq_fintype_card, Fintype.card_subtype]
+    rw [IsCyclic.card_orderOf_eq_totient (by
+      rw [Fintype.card_eq_nat_card, hGcard])]
+    exact Nat.totient_prime hp
+  refine ⟨1, hp.not_dvd_one, ?_, ?_, ?_, ?_, hαtop, hPtop⟩
+  · simpa using hGcard
+  · simpa using horder
+  · unfold apm_b01J03_rootStabilizer
+    rw [hαtop, hβtop]
+  · exact hαtop.trans hβtop.symm
