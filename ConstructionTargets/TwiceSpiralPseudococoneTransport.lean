@@ -1,5 +1,6 @@
 import ConstructionTargets.TwiceSpiralFundamentalGroupoidCoordinates
 import ConstructionTargets.EquivalenceSpanRoundTrip
+import Mathlib.CategoryTheory.CatCommSq
 
 /-!
 # Functor-category transport for the twice-spiral collar span
@@ -1129,6 +1130,36 @@ def actualToCoordinatePostcomposeIso (H : C ⥤ D) :
           (tau.right.app ((rightFundamentalGroupoidEquivalence h).inverse.obj z))
       simp)
 
+/-- The target-postcomposition square for the forward functors of the actual /
+coordinate pseudococone equivalences.  Its comparison is the previously
+constructed forward target-naturality isomorphism. -/
+@[reducible] def actualCoordinatePseudoCoconeEquivalence_targetNaturality (H : C ⥤ D) :
+    CatCommSq
+      (postcomposePseudoFunctorCoconeFunctor
+        (X := Gluing h) (U := U h) (V := V h) H)
+      (actualCoordinatePseudoCoconeEquivalence h C).functor
+      (actualCoordinatePseudoCoconeEquivalence h D).functor
+      (postcomposeCoordinatePseudoCoconeFunctor (h := h) H) where
+  iso := actualToCoordinatePostcomposeIso (C := C) (D := D) h H
+
+/-- The inverse-direction target-naturality comparison is the vertical mate
+of the forward square.  `CatCommSq.vInv` uses the inverse functors, units,
+counits, associators, and whiskerings stored by the two equivalences. -/
+def coordinateToActualPostcomposeIso (H : C ⥤ D) :
+    postcomposeCoordinatePseudoCoconeFunctor (h := h) H ⋙
+        coordinateToActualPseudoCoconeFunctor h D ≅
+      coordinateToActualPseudoCoconeFunctor h C ⋙
+        postcomposePseudoFunctorCoconeFunctor
+          (X := Gluing h) (U := U h) (V := V h) H :=
+  (CatCommSq.vInv
+    (postcomposePseudoFunctorCoconeFunctor
+      (X := Gluing h) (U := U h) (V := V h) H)
+    (actualCoordinatePseudoCoconeEquivalence h C)
+    (actualCoordinatePseudoCoconeEquivalence h D)
+    (postcomposeCoordinatePseudoCoconeFunctor (h := h) H)
+    (actualCoordinatePseudoCoconeEquivalence_targetNaturality
+      (C := C) (D := D) h H)).iso
+
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
 #print axioms overlapFunctorCategoryEquivalence
@@ -1196,5 +1227,7 @@ def actualToCoordinatePostcomposeIso (H : C ⥤ D) :
 #print axioms gluingFundamentalGroupoidCoordinateEquivalence
 #print axioms actualToCoordinatePostcomposeIsoApp
 #print axioms actualToCoordinatePostcomposeIso
+#print axioms actualCoordinatePseudoCoconeEquivalence_targetNaturality
+#print axioms coordinateToActualPostcomposeIso
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport

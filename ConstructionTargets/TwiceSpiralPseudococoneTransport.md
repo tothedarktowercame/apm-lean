@@ -127,9 +127,8 @@ the piece-equivalence unit isomorphisms, associators, and whiskerings remain in
 the comparison rather than being replaced by identities.  Naturality is then
 proved for arbitrary `PseudoFunctorCoconeHom` by its left and right components.
 
-The precise remaining mate is the inverse-direction target comparison for
-`coordinateToActualPseudoCoconeFunctor`.  With the same `H : C ⥤ D`, its
-orientation must be
+The inverse-direction target comparison for
+`coordinateToActualPseudoCoconeFunctor` is now compiled with orientation
 
 ```lean
 postcomposeCoordinatePseudoCoconeFunctor (h := h) H ⋙
@@ -139,6 +138,16 @@ postcomposeCoordinatePseudoCoconeFunctor (h := h) H ⋙
       (X := Gluing h) (U := U h) (V := V h) H
 ```
 
-That mate is not defined here.  Consequently this file does not yet claim the
-full equivalence target-natural, connector/basepoint naturality, source
-equivalence naturality, a 2-Yoneda result, or the frozen theorem.
+`actualCoordinatePseudoCoconeEquivalence_targetNaturality` packages the
+forward comparison as a typed `CatCommSq`.  The definition
+`coordinateToActualPostcomposeIso` is its vertical inverse mate via
+`CatCommSq.vInv`.  Thus the reverse construction genuinely passes through the
+two equivalences' inverse functors, units, counits, associators, and
+whiskerings.  In particular, reverse span and glue coherence remains inside
+`coordinateToActualPseudoCoconeFunctor`; it is not replaced by identity glue
+or definitional strictness.
+
+This is target naturality for the actual/coordinate pseudococone transport
+only.  Connector/basepoint naturality, vertex-data comparisons, source
+equivalence naturality, a 2-Yoneda result, and frozen wiring remain separate;
+the complete final mapping-category chain is not claimed target-natural here.
