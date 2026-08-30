@@ -320,6 +320,34 @@ focused build, axiom audit, placeholder audit, and diff check passed.
 This is a **bounded partial closure**, not a whole `t95J04` closure.  It banks
 two reusable topology theorems without electing either remaining foundation.
 
+## Medium-depth construction pipeline
+
+With the selective-uptake queue shortened, three parallel probes established
+the next layer of work:
+
+| Priority | Job | Program | Decision and first milestone |
+|---:|---|---|---|
+| 1 | `invoke-1788099827204-4008-8baa6eb6` | `t97J08` smooth circle lifts | `GO`; a generic local-inverse descent theorem compiled, followed by a concrete `Circle.exp` specialization, normalized-loop regularity, and the existing beta-integral adapter |
+| 2 | `invoke-1788099830885-4009-cfbf41e5` | `t95J04` Mayer--Vietoris product comparison | `GO`; one production MV segment suffices for `H₂(S³ × S³)=0`, using zero piece `H₂` and zero intersection `H₁`, with no Eilenberg--Zilber or Kunneth |
+| 3 | `invoke-1788099833859-4010-0cd0ae16` | `t01J03` pseudococone target naturality | `GO`; postcomposition on `PseudoFunctorCocone` and the correctly oriented pseudopushout comparison natural isomorphism both compiled |
+
+The shared-worktree schedule starts only one writer at a time while retaining
+the other two programs with named next milestones.  `t97J08` is first because
+its 3--4 commit plan can close a whole frozen consumer.  `t95J04` follows
+because its four-stage MV program would leave only Sard.  The generic
+pseudococone square is third: it has two consumers, but further target
+naturality and source reconstruction remain downstream.
+
+The first `t97J08` milestone was implemented by Agency job
+`invoke-1788100317307-4056-18039c2b` as
+`48eab2d3d37ee3ccdd5af51e66074bb274d891b3`.  Its generic
+`contDiffAt_of_continuous_lift` theorem transfers regularity through an
+explicit locally invertible smooth scalar map.  It does not claim that an
+arbitrary covering lift is smooth.  Independent review job
+`invoke-1788101335621-4162-288cacff` returned `PASS`: direct and focused builds,
+scope, placeholder, axiom, and mathematical audits all passed.  The next
+milestone is the rotated-imaginary-coordinate specialization to `Circle.exp`.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:

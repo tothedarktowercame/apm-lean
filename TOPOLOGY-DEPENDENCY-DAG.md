@@ -476,6 +476,7 @@ compiles independently of every final problem.
 | Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, `t97J08` | `t94J06` closed through the selectively promoted path-lifting/winding chain and degree-four disk obstruction; `t97J06` closed via generic singular-homology noncontractibility; further consumers still require separate review |
+| Smooth circle lifts | `t97J08` | medium program `GO`; generic local-inverse lift regularity is `BANKED` at `48eab2d3`; next prove the rotated-coordinate `Circle.exp` specialization, then normalized-loop regularity and consume the conditional beta-integral theorem |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
@@ -733,6 +734,25 @@ No round-three result elects either stopped residual program automatically.
     placeholder remains only for Sard and `S² × S⁴ ≄ S³ × S³`.
 
 This construction does not elect either remaining `t95J04` foundation.
+
+## Medium-depth queue
+
+1. **ACTIVE: `t97J08` smooth lift.**  Program probe
+   `invoke-1788099827204-4008-8baa6eb6` returned `GO`.  Milestone 1 was
+   implemented by `invoke-1788100317307-4056-18039c2b` at `48eab2d3` and
+   independently passed review `invoke-1788101335621-4162-288cacff`.
+   Continue with the explicit rotated-coordinate `Circle.exp` theorem; never
+   infer smoothness merely from `IsCoveringMap`.
+2. **QUEUED: `t95J04` MV product comparison.**  Probe
+   `invoke-1788099830885-4009-cfbf41e5` returned `GO`.  Package the pole cover,
+   simply-connected `H₁` vanishing, one MV exact segment, and the final
+   nonhomeomorphism in that order.  Do not introduce Kunneth or
+   Eilenberg--Zilber under another name.
+3. **QUEUED: `t01J03` target postcomposition.**  Probe
+   `invoke-1788099833859-4010-0cd0ae16` returned `GO`.  First bank
+   `postcomposePseudoFunctorCoconeFunctor` and the generic pseudopushout
+   comparison natural isomorphism.  Stop again before source reconstruction
+   unless every later equivalence supplies its own target-naturality square.
 
 The banked production-MV scaffold already supplies:
 
