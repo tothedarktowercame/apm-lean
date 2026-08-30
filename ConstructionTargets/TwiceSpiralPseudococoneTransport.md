@@ -114,3 +114,31 @@ Finally, `gluingFundamentalGroupoidCoordinateEquivalence` composes this with
 the collared two-open pseudopushout mapping equivalence.  This remains a
 pseudococone mapping-category result: no ordinary categorical pushout or
 based fundamental-group pushout is asserted.
+
+Target postcomposition now commutes with the **forward** transport through the
+natural isomorphism `actualToCoordinatePostcomposeIso`.  At each actual
+pseudococone its left and right components are the correctly oriented
+`Functor.associator` isomorphisms for the inverse left/right
+fundamental-groupoid equivalences, the functors `P.left`/`P.right`, and the
+target functor `H`.  The objectwise construction supplies both inverse
+components and proves both glue equations.  Those proofs expand
+`leftSpanComparison`, `transportedOverlapGlue`, and `rightSpanComparison`, so
+the piece-equivalence unit isomorphisms, associators, and whiskerings remain in
+the comparison rather than being replaced by identities.  Naturality is then
+proved for arbitrary `PseudoFunctorCoconeHom` by its left and right components.
+
+The precise remaining mate is the inverse-direction target comparison for
+`coordinateToActualPseudoCoconeFunctor`.  With the same `H : C ⥤ D`, its
+orientation must be
+
+```lean
+postcomposeCoordinatePseudoCoconeFunctor (h := h) H ⋙
+    coordinateToActualPseudoCoconeFunctor h D ≅
+  coordinateToActualPseudoCoconeFunctor h C ⋙
+    postcomposePseudoFunctorCoconeFunctor
+      (X := Gluing h) (U := U h) (V := V h) H
+```
+
+That mate is not defined here.  Consequently this file does not yet claim the
+full equivalence target-natural, connector/basepoint naturality, source
+equivalence naturality, a 2-Yoneda result, or the frozen theorem.

@@ -1062,6 +1062,73 @@ def gluingFundamentalGroupoidCoordinateEquivalence :
   (gluingFundamentalGroupoidPseudopushoutEquivalence h C).trans
     (actualCoordinatePseudoCoconeEquivalence h C)
 
+variable {D : Type} [Category D]
+
+/-- Objectwise comparison showing that forward actual-to-coordinate transport
+commutes with postcomposition in the target category.  Its two components are
+the associators for the inverse piece equivalences, the actual left/right
+functors, and the postcomposition functor. -/
+def actualToCoordinatePostcomposeIsoApp (H : C ⥤ D)
+    (P : PseudoFunctorCocone
+      (X := Gluing h) (U := U h) (V := V h) (C := C)) :
+    (actualPseudoCoconeToCoordinateFunctor h D).obj
+        ((postcomposePseudoFunctorCoconeFunctor
+          (X := Gluing h) (U := U h) (V := V h) H).obj P) ≅
+      (postcomposeCoordinatePseudoCoconeFunctor h H).obj
+        ((actualPseudoCoconeToCoordinateFunctor h C).obj P) := by
+  let aL := Functor.associator
+    (leftFundamentalGroupoidEquivalence h).inverse P.left H
+  let aR := Functor.associator
+    (rightFundamentalGroupoidEquivalence h).inverse P.right H
+  refine { hom := { left := aL.hom, right := aR.hom, glue_naturality := ?_ }
+           inv := { left := aL.inv, right := aR.inv, glue_naturality := ?_ }
+           hom_inv_id := ?_, inv_hom_id := ?_ }
+  · ext z
+    simp [actualPseudoCoconeToCoordinateFunctor,
+      actualPseudoCoconeToCoordinateObj, postcomposePseudoFunctorCoconeFunctor,
+      postcomposePseudoFunctorCoconeObj, postcomposeCoordinatePseudoCoconeFunctor,
+      postcomposeCoordinatePseudoCoconeObj, leftSpanComparison, rightSpanComparison,
+      transportedOverlapGlue, aL, aR, Category.assoc]
+    rfl
+  · ext z
+    simp [actualPseudoCoconeToCoordinateFunctor,
+      actualPseudoCoconeToCoordinateObj, postcomposePseudoFunctorCoconeFunctor,
+      postcomposePseudoFunctorCoconeObj, postcomposeCoordinatePseudoCoconeFunctor,
+      postcomposeCoordinatePseudoCoconeObj, leftSpanComparison, rightSpanComparison,
+      transportedOverlapGlue, aL, aR, Category.assoc]
+    rfl
+  · apply CoordinatePseudoCoconeHom.ext
+    · exact aL.hom_inv_id
+    · exact aR.hom_inv_id
+  · apply CoordinatePseudoCoconeHom.ext
+    · exact aL.inv_hom_id
+    · exact aR.inv_hom_id
+
+/-- Forward transport from actual collar pseudococones to coordinate
+pseudococones is natural under postcomposition by a target functor. -/
+def actualToCoordinatePostcomposeIso (H : C ⥤ D) :
+  postcomposePseudoFunctorCoconeFunctor
+      (X := Gluing h) (U := U h) (V := V h) H ⋙
+    actualPseudoCoconeToCoordinateFunctor h D ≅
+  actualPseudoCoconeToCoordinateFunctor h C ⋙
+    postcomposeCoordinatePseudoCoconeFunctor (h := h) H :=
+  NatIso.ofComponents
+    (actualToCoordinatePostcomposeIsoApp (C := C) (D := D) h H) (by
+    intro P Q tau
+    apply CoordinatePseudoCoconeHom.ext
+    · ext z
+      change H.map
+          (tau.left.app ((leftFundamentalGroupoidEquivalence h).inverse.obj z)) ≫ 𝟙 _ =
+        𝟙 _ ≫ H.map
+          (tau.left.app ((leftFundamentalGroupoidEquivalence h).inverse.obj z))
+      simp
+    · ext z
+      change H.map
+          (tau.right.app ((rightFundamentalGroupoidEquivalence h).inverse.obj z)) ≫ 𝟙 _ =
+        𝟙 _ ≫ H.map
+          (tau.right.app ((rightFundamentalGroupoidEquivalence h).inverse.obj z))
+      simp)
+
 #print axioms leftFunctorCategoryEquivalence
 #print axioms rightFunctorCategoryEquivalence
 #print axioms overlapFunctorCategoryEquivalence
@@ -1127,5 +1194,7 @@ def gluingFundamentalGroupoidCoordinateEquivalence :
 #print axioms coordinateRoundTripNatIso
 #print axioms actualCoordinatePseudoCoconeEquivalence
 #print axioms gluingFundamentalGroupoidCoordinateEquivalence
+#print axioms actualToCoordinatePostcomposeIsoApp
+#print axioms actualToCoordinatePostcomposeIso
 
 end ConstructionTargets.TwiceSpiralPseudococoneTransport
