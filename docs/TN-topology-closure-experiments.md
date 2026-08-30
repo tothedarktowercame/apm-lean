@@ -469,6 +469,24 @@ is an equivalence
 `FundamentalGroupoid (Gluing h) ≌ SingleObj (TwiceSpiralPushout d)`.
 Chosen-object endomorphism-group extraction remains separate.
 
+The first chosen-object probe (`invoke-1788126694360-5151-b2ac96a3`)
+compiled the endomorphism equivalence through `TwiceSpiralPushout d` and
+`ZMod 2`, including frozen homeomorphism transport, but returned `REVISE`:
+the source equivalence still required a `LegCompatibleConnectorSystems`
+value that frozen `Main` did not construct.  Probe
+`invoke-1788127015351-5176-bbe5dda0` proved both coordinate-leg object maps
+injective and reduced existence to dependent extension of prescribed
+connector isomorphisms.  The narrower probe
+`invoke-1788127419504-5214-cd187779` compiled that extension and
+`nonempty_legCompatibleConnectorSystems` without adding a premise.  Agency
+job `invoke-1788132709346-5391-2b521a94` implemented the focused target at
+`86d454aa`; independent regular-seat review
+`invoke-1788132913624-5392-17335c93` returned `PASS`.  The proof retains the
+literal mapped-connector equality through its `eqToIso` transport, and the
+frozen coordinate interface now suffices to obtain compatible connectors.
+This is infrastructure for the next chosen-object adapter, not frozen closure;
+the two `t01J03` placeholders remain unchanged.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

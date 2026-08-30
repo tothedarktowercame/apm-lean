@@ -480,7 +480,7 @@ compiles independently of every final problem.
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
-| Two-open van Kampen/descent | `t01J03` | the reviewed chain through `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; full pseudonaturality is unnecessary for this consumer: reviewed `338011a6` evaluates those squares at the candidate functors and reflects through full faithfulness to obtain `FundamentalGroupoid (Gluing h) ≌ SingleObj (TwiceSpiralPushout d)`; chosen-object endomorphism extraction remains |
+| Two-open van Kampen/descent | `t01J03` | the reviewed chain through `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; full pseudonaturality is unnecessary for this consumer: reviewed `338011a6` evaluates those squares at the candidate functors and reflects through full faithfulness to obtain `FundamentalGroupoid (Gluing h) ≌ SingleObj (TwiceSpiralPushout d)`; reviewed `86d454aa` constructs the leg-compatible connector systems required to instantiate that equivalence from the frozen coordinate data; chosen-object endomorphism extraction remains |
 
 ## Specification and ledger corrections
 
@@ -781,8 +781,17 @@ This construction does not elect either remaining `t95J04` foundation.
    suffice; source reconstruction is reviewed at `338011a6` after exact
    fixture-provenance repair and re-review
    `invoke-1788126570453-5141-771c2de6`.  Extract the chosen-object
-   endomorphism group next; do not edit the frozen theorem before that adapter
-   compiles and is reviewed.
+   endomorphism group next.  The first extraction probe
+   `invoke-1788126694360-5151-b2ac96a3` compiled the group equivalence but
+   returned `REVISE` because frozen data did not yet provide
+   `LegCompatibleConnectorSystems`.  Geometry probe
+   `invoke-1788127015351-5176-bbe5dda0` reduced that gap to a dependent
+   connector-extension equality; focused probe
+   `invoke-1788127419504-5214-cd187779` compiled the complete constructor.
+   Agency job `invoke-1788132709346-5391-2b521a94` implemented it at
+   `86d454aa`; independent review `invoke-1788132913624-5392-17335c93`
+   returned `PASS`.  Frozen `t01J03` still has exactly two placeholders.  Do
+   not edit it before the chosen-object adapter compiles and is reviewed.
 
 The banked production-MV scaffold already supplies:
 
