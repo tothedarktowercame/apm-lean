@@ -28,6 +28,14 @@ Identity and composition retain that square. `descentPseudoCoconeMap` converts
 the common-coordinate condition of `CompatibleNatTrans` into precisely this
 square, and `descentToPseudoCoconeFunctor` packages the construction.
 
+`postcomposePseudoFunctorCoconeObj` postcomposes both legs with a target
+functor and transports the glue by `Functor.isoWhiskerRight`.
+`postcomposePseudoFunctorCoconeMap` uses `Functor.whiskerRight` on both
+components; its glue square is the image under the target functor of the
+original componentwise square. These operations assemble into
+`postcomposePseudoFunctorCoconeFunctor`. The accompanying left/right object
+and map formulas are definitional equalities exposed as simp lemmas.
+
 For the reverse direction, `strictifiedObject` chooses the left piece object
 when the point lies in `U` and otherwise the right piece object, using the
 cover hypothesis. `strictifiedObjectIso` compares each original piece object

@@ -211,6 +211,72 @@ instance : Category (PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) wh
   comp_id _ := by ext <;> simp
   assoc _ _ _ := by ext <;> simp [Category.assoc]
 
+/-- Postcompose both legs and the overlap isomorphism of a pseudococone. -/
+def postcomposePseudoFunctorCoconeObj {D : Type*} [Category D] (H : C ⥤ D)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    PseudoFunctorCocone (X := X) (U := U) (V := V) (C := D) where
+  left := P.left ⋙ H
+  right := P.right ⋙ H
+  glue := Functor.isoWhiskerRight P.glue H
+
+/-- Postcompose a pseudococone morphism componentwise. -/
+def postcomposePseudoFunctorCoconeMap {D : Type*} [Category D] (H : C ⥤ D)
+    {P Q : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)}
+    (tau : P ⟶ Q) :
+    postcomposePseudoFunctorCoconeObj H P ⟶
+      postcomposePseudoFunctorCoconeObj H Q where
+  left := Functor.whiskerRight tau.left H
+  right := Functor.whiskerRight tau.right H
+  glue_naturality := by
+    ext z
+    simpa [postcomposePseudoFunctorCoconeObj] using
+      congrArg H.map (NatTrans.congr_app tau.glue_naturality z)
+
+/-- Postcomposition is functorial on the category of pseudococones. -/
+def postcomposePseudoFunctorCoconeFunctor {D : Type*} [Category D] (H : C ⥤ D) :
+    PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C) ⥤
+      PseudoFunctorCocone (X := X) (U := U) (V := V) (C := D) where
+  obj := postcomposePseudoFunctorCoconeObj H
+  map := postcomposePseudoFunctorCoconeMap H
+  map_id P := by
+    apply PseudoFunctorCoconeHom.ext <;> ext z
+    · change H.map (𝟙 _) = 𝟙 _
+      simp
+    · change H.map (𝟙 _) = 𝟙 _
+      simp
+  map_comp f g := by
+    apply PseudoFunctorCoconeHom.ext <;> ext z
+    · change H.map (f.left.app z ≫ g.left.app z) =
+        H.map (f.left.app z) ≫ H.map (g.left.app z)
+      simp
+    · change H.map (f.right.app z ≫ g.right.app z) =
+        H.map (f.right.app z) ≫ H.map (g.right.app z)
+      simp
+
+@[simp] theorem postcomposePseudoFunctorCoconeObj_left
+    {D : Type*} [Category D] (H : C ⥤ D)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    (postcomposePseudoFunctorCoconeObj H P).left = P.left ⋙ H := rfl
+
+@[simp] theorem postcomposePseudoFunctorCoconeObj_right
+    {D : Type*} [Category D] (H : C ⥤ D)
+    (P : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)) :
+    (postcomposePseudoFunctorCoconeObj H P).right = P.right ⋙ H := rfl
+
+@[simp] theorem postcomposePseudoFunctorCoconeMap_left
+    {D : Type*} [Category D] (H : C ⥤ D)
+    {P Q : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)}
+    (tau : P ⟶ Q) :
+    (postcomposePseudoFunctorCoconeMap H tau).left =
+      Functor.whiskerRight tau.left H := rfl
+
+@[simp] theorem postcomposePseudoFunctorCoconeMap_right
+    {D : Type*} [Category D] (H : C ⥤ D)
+    {P Q : PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C)}
+    (tau : P ⟶ Q) :
+    (postcomposePseudoFunctorCoconeMap H tau).right =
+      Functor.whiskerRight tau.right H := rfl
+
 theorem glue_square_of_common_coordinate
     {DT DF ET EF O P : C} (aT : DT ⟶ ET) (aF : DF ⟶ EF)
     (dt : DT = O) (df : DF = O) (et : ET = P) (ef : EF = P)
@@ -341,6 +407,7 @@ theorem strictifiedPieceFunctor_obj_eq (hcover : U ∪ V = Set.univ)
 #print axioms descentOverlapAppIso_naturality
 #print axioms descentOverlapIso
 #print axioms descentPseudoCocone
+#print axioms postcomposePseudoFunctorCoconeFunctor
 #print axioms descentPseudoCoconeMap
 #print axioms descentToPseudoCoconeFunctor
 #print axioms strictifiedPieceFunctor

@@ -20,6 +20,23 @@ category. This is a bicategorical/pseudococone mapping property. It does not
 claim that the ambient groupoid is an ordinary `Limits.Pushout`, whose cocones
 would require strict equality of the two overlap composites.
 
+The forward equivalence is now natural in the target along postcomposition.
+`pseudopushoutPostcomposeComparisonApp` compares restriction of `F ⋙ H`
+with postcomposition of the restricted pseudococone. Its left and right
+components are the inverse functor associators. The overlap proof retains the
+descent glue's `eqToHom` terms and discharges them using
+`functor_map_eqToHom`. `pseudopushoutPostcomposeNatIso` assembles these
+comparisons into the explicitly oriented natural isomorphism
+
+```text
+whiskeringRight(H) ⋙ pseudopushout(D)
+  ≅ pseudopushout(C) ⋙ postcomposePseudoFunctorCoconeFunctor(H).
+```
+
+This is only the first target-naturality edge. It does not yet establish
+target naturality for strictification or reconstruction, nor a source
+equivalence or a 2-Yoneda conclusion.
+
 For the twice-spiral solid-torus gluing, the next specialization is to choose
 the collared two-open cover and evaluate this equivalence on one-object target
 groupoids. One must then identify the induced piece and overlap functors with
