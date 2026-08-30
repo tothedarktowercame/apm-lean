@@ -1,43 +1,45 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "b00J01",
-  "bundle_root": "problems/b00J01",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-b00J01.md",
-    "problem_tex": "apm/b00J01.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "b00J01",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-b00J01.md",
+    "problem_tex" : "apm/b00J01.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
-    "sorry_count_main": 2,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+  "boundary" : "Closed by frame f59 (campaign jit-all-open-v2, 2026-08-30): \"prove rational S3 intermediate field classification\". Banked verbatim from the f59 Solver terminal head 96183fe48c76c9edc71f0e3e6855126a43be7fdd on branch exp/countdown-f59-b00J01-solver; content identical to that head, no re-derivation. Frozen statement apm_b00j01 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "note" : "Additionally proved that both the arbitrary finite-field splitting-field degree and its automorphism-group cardinality are divisible by three. The exact upper bound/Frobenius transport and real/rational components remain.",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/b00J01",
+  "closer_hop" : 3,
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-30",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 2,
+    "axioms" : "apm_b00j01 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f59"
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "note": "Additionally proved that both the arbitrary finite-field splitting-field degree and its automorphism-group cardinality are divisible by three. The exact upper bound/Frobenius transport and real/rational components remain.",
-  "imported_at": "2026-07-13T17:26:53.186900Z",
-  "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
-    "elaborated_exit": 0,
-    "sorry_declarations": 2,
-    "previous_classification": "partial"
+  "imported_at" : "2026-07-13T17:26:53.186900Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
   }
 }
