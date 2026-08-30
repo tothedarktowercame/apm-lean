@@ -472,7 +472,7 @@ compiles independently of every final problem.
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
 | Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
-| Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  This does not block the two `t95J04` comparisons with `S⁶`: commit `54fe6115` closes those conjuncts by a split-retract homology argument without computing product homology |
+| Product homology/Kunneth | `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  `t95J04` no longer consumes this missing foundation: `54fe6115` handles the two `S⁶` comparisons by retracts, and `e24d442b`--`10cfb866` handle `S² × S⁴ ≄ S³ × S³` through one concrete production Mayer--Vietoris segment |
 | Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, closed `t97J08` | `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; further consumers require separate review |
@@ -604,7 +604,7 @@ Bounded partial closures, which do not belong in the closed-problem table:
 
 | Problem | Canonical partial closure | Remaining frozen obligation |
 |---|---|---|
-| `t95J04` | `54fe6115` compiles `S⁶ ≄ S² × S⁴` and `S⁶ ≄ S³ × S³`; `45304f7d` adds generic simply-connected sphere/product theorems and compiles all three simple-connectivity conjuncts.  Both packets passed separate Agency election, implementation, and review chains | one placeholder remains only for Sard/nullity/non-surjectivity/null-homotopy and `S² × S⁴ ≄ S³ × S³`; statement unchanged |
+| `t95J04` | `54fe6115` compiles the two `S⁶` comparisons; `45304f7d` compiles all three simple-connectivity conjuncts; the reviewed MV chain `e24d442b`, `6b59e2e6`, `f8feca24`, `10cfb866` compiles `S² × S⁴ ≄ S³ × S³` without Kunneth or Eilenberg--Zilber | one placeholder remains only for Sard/nullity/non-surjectivity/null-homotopy; statement unchanged |
 
 Current audited classification beyond these closures:
 
@@ -742,12 +742,12 @@ This construction does not elect either remaining `t95J04` foundation.
    `invoke-1788099827204-4008-8baa6eb6` led to four separately reviewed
    milestones, ending at `0ad32428` with placeholders `4 → 0`.  Smoothness was
    derived through an explicit local inverse, never from `IsCoveringMap` alone.
-2. **ACTIVE: `t95J04` MV product comparison.**  Probe
-   `invoke-1788099830885-4009-cfbf41e5` returned `GO`.  Package the pole cover,
-   simply-connected `H₁` vanishing, one MV exact segment, and the final
-   nonhomeomorphism in that order.  Do not introduce Kunneth or
-   Eilenberg--Zilber under another name.
-3. **QUEUED: `t01J03` target postcomposition.**  Probe
+2. **PARTIAL COMPLETE: `t95J04` MV product comparison.**  Probe
+   `invoke-1788099830885-4009-cfbf41e5` led to reviewed commits `e24d442b`,
+   `6b59e2e6`, `f8feca24`, and `10cfb866`.  All three nonhomeomorphism and all
+   three simple-connectivity conjuncts now compile without Kunneth or
+   Eilenberg--Zilber.  The sole frozen residual is the Sard branch.
+3. **ACTIVE: `t01J03` target postcomposition.**  Probe
    `invoke-1788099833859-4010-0cd0ae16` returned `GO`.  First bank
    `postcomposePseudoFunctorCoconeFunctor` and the generic pseudopushout
    comparison natural isomorphism.  Stop again before source reconstruction

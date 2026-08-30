@@ -363,6 +363,23 @@ identity, the complete import graph, frozen definition alignment, and the
 therefore advances to the queued `t95J04` Mayer--Vietoris program, while the
 generic pseudococone target-naturality edge remains next in line.
 
+The `t95J04` Mayer--Vietoris program then completed its bounded objective:
+
+| Milestone | Implementation | Review | Result |
+|---|---|---|---|
+| pole-product cover geometry | `invoke-1788102877787-4298-8fc4b70b`, commit `e24d442b` | `invoke-1788103386802-4309-0a94e746` | genuine open cover of `S³ × S³`; pieces homotopy equivalent to `S³`; intersection homotopy equivalent to `S² × S³` |
+| adjacent homology vanishing | `invoke-1788103500985-4313-06c4d5a7`, commit `6b59e2e6` | `invoke-1788103897297-4320-f672b33b` | generic simply-connected integral `H₁` vanishing and the concrete zero `H₂`/`H₁` inputs |
+| one production MV segment | `invoke-1788104053440-4323-60a69151`, commit `f8feca24` | `invoke-1788104224845-4325-a777a95c` | degree parameter `1` gives `H₂(U) ⊞ H₂(V) → H₂(S³ × S³) → H₁(U ∩ V)` and proves the middle object zero |
+| final product comparison | `invoke-1788104324431-4327-cb6f10a8`, commit `10cfb866` | `invoke-1788104546292-4331-6d3cd507` | compares retract-based nonzero `H₂(S² × S⁴)` with the MV vanishing result and compiles the last nonhomeomorphism conjunct |
+
+This follows probe `invoke-1788099830885-4009-cfbf41e5` without introducing
+Eilenberg--Zilber or Kunneth.  Together with commits `54fe6115` and
+`45304f7d`, all three simple-connectivity and all three nonhomeomorphism
+conjuncts now compile.  This remains a **bounded partial closure**: the single
+frozen placeholder now contains only the Sard/nullity/non-surjectivity/
+null-homotopy branch.  The active program advances to `t01J03` pseudococone
+target postcomposition.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
