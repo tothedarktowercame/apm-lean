@@ -473,6 +473,7 @@ compiles independently of every final problem.
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
 | Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
 | Product homology/Kunneth | `t95J04`, `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  This does not block the two `t95J04` comparisons with `S⁶`: commit `54fe6115` closes those conjuncts by a split-retract homology argument without computing product homology |
+| Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
 | Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, `t97J08` | `t94J06` closed through the selectively promoted path-lifting/winding chain and degree-four disk obstruction; `t97J06` closed via generic singular-homology noncontractibility; further consumers still require separate review |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
@@ -601,7 +602,7 @@ Bounded partial closures, which do not belong in the closed-problem table:
 
 | Problem | Canonical partial closure | Remaining frozen obligation |
 |---|---|---|
-| `t95J04` | `54fe6115` adds generic singular-homology retract nonvanishing and compiles `S⁶ ≄ S² × S⁴` and `S⁶ ≄ S³ × S³`; election `invoke-1788088998881-3750-c29c22f9`, implementation `invoke-1788089170654-3751-711e3944`, review `invoke-1788089485653-3752-a094d808` (`PASS`) | one placeholder remains for Sard, three simple-connectivity clauses, and `S² × S⁴ ≄ S³ × S³`; statement unchanged |
+| `t95J04` | `54fe6115` compiles `S⁶ ≄ S² × S⁴` and `S⁶ ≄ S³ × S³`; `45304f7d` adds generic simply-connected sphere/product theorems and compiles all three simple-connectivity conjuncts.  Both packets passed separate Agency election, implementation, and review chains | one placeholder remains only for Sard/nullity/non-surjectivity/null-homotopy and `S² × S⁴ ≄ S³ × S³`; statement unchanged |
 
 Current audited classification beyond these closures:
 
@@ -669,8 +670,9 @@ decisions are recorded in `docs/TN-topology-closure-experiments.md`.
    `invoke-1788088998881-3750-c29c22f9`, implementation
    `invoke-1788089170654-3751-711e3944` (`54fe6115`), and independent review
    `invoke-1788089485653-3752-a094d808` compile the two `S⁶` versus product
-   clauses via a split retract.  The single frozen placeholder remains for
-   Sard, three simple-connectivity clauses, and `S² × S⁴ ≄ S³ × S³`.
+   clauses via a split retract.  The later `45304f7d` packet compiles all three
+   simple-connectivity clauses.  The single frozen placeholder now remains
+   only for Sard and `S² × S⁴ ≄ S³ × S³`.
    Singular Eilenberg--Zilber and integral Kunneth remain two independent
    absent foundations; do not restart them from this partial closure.
 4. **STOP: `t03J02` generic gluing.**  The frozen hypotheses provide neither a
@@ -720,6 +722,17 @@ The third portfolio round also elected exactly one closure:
     lift.  Do not infer differentiable regularity from continuous path lifting.
 
 No round-three result elects either stopped residual program automatically.
+
+11. **PARTIAL: `t95J04` simply-connected spheres/products.**  Generic product
+    probe `invoke-1788096708714-3934-ec4a501e`, Euclidean-sphere probe
+    `invoke-1788096711721-3935-2177b3f1`, and consumer probe
+    `invoke-1788096714421-3936-144a4823` all returned `ELECT`.
+    Implementation `invoke-1788097093918-3940-4f798b6e` produced `45304f7d`;
+    fresh independent review `invoke-1788097372302-3941-269150b7` passed.
+    All three simple-connectivity conjuncts are compiled, while the one frozen
+    placeholder remains only for Sard and `S² × S⁴ ≄ S³ × S³`.
+
+This construction does not elect either remaining `t95J04` foundation.
 
 The banked production-MV scaffold already supplies:
 

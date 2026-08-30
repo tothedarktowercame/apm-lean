@@ -292,6 +292,34 @@ historical `.lean/.md` pairs and committed the complete frozen closure as
 The round closes `t98A05` without electing either the solid-angle nonexactness
 program or smooth covering-lift regularity.
 
+## Simply-connected sphere/product construction
+
+After the low-cost whole-consumer uptake queue shortened, the next election
+tested one reusable construction through three parallel read-only probes:
+
+| Job | Probe | Decision | Result |
+|---|---|---|---|
+| `invoke-1788096708714-3934-ec4a501e` | generic products | `ELECT` | `SimplyConnectedSpace X` and `SimplyConnectedSpace Y` imply `SimplyConnectedSpace (X × Y)` by coordinate paths and path-homotopy projections; the exact theorem compiled |
+| `invoke-1788096711721-3935-2177b3f1` | Euclidean spheres | `ELECT` | `Sⁿ` in `EuclideanSpace ℝ (Fin (n+1))` is simply connected for the sharp hypothesis `2 ≤ n`, using the banked pole-cover theorem and orthogonal-complement rank |
+| `invoke-1788096714421-3936-144a4823` | frozen `t95J04` | `ELECT` for partial closure | the three simple-connectivity conjuncts align definitionally; a frozen fixture compiled with the existing single placeholder narrowed to Sard and the final product comparison |
+
+Implementation job `invoke-1788097093918-3940-4f798b6e`, assigned to a fresh
+agent outside the probe set, committed
+`45304f7d38fe758471eb6cab2a039529b3e7c86b`.  It adds
+`SimplyConnectedSphereProducts.{lean,md}` and supplies exactly the three
+simple-connectivity conjuncts of `t95J04`.
+
+Fresh independent review job `invoke-1788097372302-3941-269150b7` returned
+`PASS`.  It confirmed the generic product proof is non-circular, the sphere
+dimension/rank proof is sharp, the frozen statement is unchanged, and the one
+source placeholder remains one declaration-level `sorryAx`.  Its residual is
+now exactly the Sard/nullity/non-surjectivity/null-homotopy conjunct and
+`S² × S⁴ ≄ S³ × S³`.  Direct target and frozen compilation, the 2,609-job
+focused build, axiom audit, placeholder audit, and diff check passed.
+
+This is a **bounded partial closure**, not a whole `t95J04` closure.  It banks
+two reusable topology theorems without electing either remaining foundation.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
