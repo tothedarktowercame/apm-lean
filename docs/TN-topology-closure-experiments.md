@@ -558,6 +558,37 @@ remains unchanged.  The Sard lane likewise remains stopped until rectangular
 local-set Morse--Sard is proved; equal-dimensional Jacobian Sard and
 dimension-gap range nullity are not valid substitutes.
 
+## Topology strategy reset
+
+| Job | Mandate | Decision |
+|---|---|---|
+| `invoke-1788190476663-5737-717318b3` | rank likely whole closures | no GO in its initial shortlist; `t01A02`, `t03J04`, and `t94J09` each retain two independent edges |
+| `invoke-1788190476668-5739-90db9f55` | search newly banked API reuse | GO for complete `t91J02`, `t91A05`, and `t97J03` fixtures using Circle fundamental-group reuse |
+| `invoke-1788190476664-5738-b21d2d26` | select one controlled foundation | nominate oriented fundamental classes/localization; retain regular-preimage atlases as backup |
+
+The reuse result ranked `t91J02` first because it needs only exact banked
+Circle fundamental-group nontriviality and literal Euclidean `S²` simple
+connectivity.  Agency job `invoke-1788191087925-5750-0a283098` implemented
+the one-file closure at `628f5131`; independent review
+`invoke-1788191275394-5753-3dac9f3a` returned `PASS`.  The statement is
+unchanged, placeholders decrease `1 → 0`, the literal `Fin 3` sphere and all
+basepoints align definitionally, and `apm_t91j02` uses only `propext`,
+`Classical.choice`, and `Quot.sound`.  The final decision is **CLOSED**.
+
+The next queued experiment packages the shared metric/unit-circle
+fundamental-group transport required by the already compiled `t91A05` and
+`t97J03` closure fixtures.
+
+The reset nominates oriented fundamental classes/localization as the sole
+controlled foundation program, aimed first at the literal
+`OrientedSurfacePreimageDuality.Producer S` placeholder in `t00J02`.  Its
+milestones are local integral orientation classes, transverse circle
+localization/pairing, the producer theorem, and frozen wiring.  The program
+must stop after the first milestone if those classes cannot enter the actual
+`ModuleCat ℤ` singular-homology representation without another general
+excision, cellular, or cohomology-ring foundation.  It is nominated, not yet
+started.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
