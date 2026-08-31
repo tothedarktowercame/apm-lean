@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.TorusSquareDeckAction
 
 /-!
 # APM t01A02
@@ -20,6 +21,7 @@ fiber-transitive `(Z/2)²` action.
 -/
 
 open CategoryTheory
+open ConstructionTargets.TorusSquareDeckAction
 
 abbrev apm_t01A02_Torus := Circle × Circle
 abbrev apm_t01A02_Deck := ZMod 2 × ZMod 2
@@ -118,7 +120,20 @@ the concrete double-in-each-coordinate map is a regular cover with deck group
 theorem apm_t01A02_bridge_covering_group :
     apm_t01A02_hasCoveringGroup
       (G := apm_t01A02_Deck) apm_t01A02_cover := by
-  sorry
+  refine ⟨?_, deckAction, deckAction_zero, deckAction_add,
+    continuous_deckAction, ?_, deckAction_free, ?_⟩
+  · simpa [apm_t01A02_cover, squareCover] using squareCover_isCoveringMap
+  · intro g x
+    simpa [apm_t01A02_cover, squareCover] using squareCover_deckAction g x
+  · intro x y
+    constructor
+    · intro hxy
+      rcases (apm_t01A02_cover_eq_iff x y).mp hxy with ⟨h₁, h₂⟩
+      apply exists_deckAction_eq_of_coordinate_choices x y
+      · simpa [antipode, apm_t01A02_antipode] using h₁
+      · simpa [antipode, apm_t01A02_antipode] using h₂
+    · rintro ⟨g, rfl⟩
+      exact (squareCover_deckAction g x).symm
 
 /-- Why this unblocks `apm_t01a02`: this is the missing global degree bridge.
 For a torus self-map, nonsurjectivity forces degree zero, expressed here as
