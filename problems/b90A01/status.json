@@ -1,43 +1,45 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "b90A01",
-  "bundle_root": "problems/b90A01",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-b90A01.md",
-    "problem_tex": "apm/b90A01.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "b90A01",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-b90A01.md",
+    "problem_tex" : "apm/b90A01.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
-    "sorry_count_main": 3,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+  "boundary" : "Closed by frame f67 (campaign jit-all-open-v2, 2026-08-31): \"prove alternating subgroup index bridge\". Banked verbatim from the f67 Solver terminal head 00fd8c879ed7c3865ad6c26b3765baa4ef772b98 on branch exp/countdown-f67-b90A01-solver; content identical to that head, no re-derivation. Frozen statement apm_b90a01 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "note" : "The faithful Sylow action is now proved noncommutative and factored through the alternating group via the sign kernel, closing the first two conjuncts. General alternating-group simplicity and the exact order-120 Sylow enumeration remain.",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/b90A01",
+  "closer_hop" : 3,
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-31",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 3,
+    "axioms" : "apm_b90a01 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f67"
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "note": "The faithful Sylow action is now proved noncommutative and factored through the alternating group via the sign kernel, closing the first two conjuncts. General alternating-group simplicity and the exact order-120 Sylow enumeration remain.",
-  "imported_at": "2026-07-13T17:26:53.629292Z",
-  "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
-    "elaborated_exit": 0,
-    "sorry_declarations": 3,
-    "previous_classification": "partial"
+  "imported_at" : "2026-07-13T17:26:53.629292Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
   }
 }
