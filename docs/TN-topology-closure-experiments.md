@@ -641,8 +641,17 @@ required `.symm` at `7ea2c595`; combined re-review
 `invoke-1788218568346-6185-ee63858e` returned `PASS`.  The frozen bridge
 statement is unchanged and placeholders decrease `3 → 2`.  `t02A03` remains
 open: its wedge van Kampen/homology bridge and final assembly are independent.
-The compiled `t92J05` sphere/circle bridge remains queued for the next serial
-packet.
+The second queued bridge was then promoted.  Fixture
+`/tmp/probe-t92J05-sphere-circle.lean` compiled the uniform sphere/circle
+fundamental-group statement.  Agency job
+`invoke-1788218818205-6189-8001f99f` implemented the one-file uptake at
+`c55d5089`; independent review `invoke-1788218993463-6194-711fe6db` returned
+`PASS`.  The literal `Fin 3` sphere is simply connected at every basepoint;
+the literal complex metric circle is path connected, and its arbitrary
+basepoint is transported honestly through `metricCircleHomeomorphCircle` to
+the reviewed winding equivalence.  The frozen bridge statement is unchanged
+and placeholders decrease `4 → 3`.  `t92J05` remains open: its RP²/antipodal,
+genus-two classification, and final-assembly placeholders are untouched.
 
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency

@@ -610,6 +610,7 @@ Bounded partial closures, which do not belong in the closed-problem table:
 | `t95J04` | `54fe6115` compiles the two `S⁶` comparisons; `45304f7d` compiles all three simple-connectivity conjuncts; the reviewed MV chain `e24d442b`, `6b59e2e6`, `f8feca24`, `10cfb866` compiles `S² × S⁴ ≄ S³ × S³` without Kunneth or Eilenberg--Zilber | one placeholder remains only for Sard/nullity/non-surjectivity/null-homotopy; statement unchanged |
 | `t01A02` | `c5ada212` imports the banked genuine product-cover theorem and compiles the coordinatewise `(ZMod 2)²` action, invariance, freeness, and fiber transitivity | three placeholders remain: H₂ degree/nonsurjectivity, Lefschetz fixed point, and final assembly; covering-group bridge statement unchanged |
 | `t02A03` | `301501c2` plus orientation repair `7ea2c595` compiles `π₁(T²,(1,1)) ≃* Multiplicative (ℤ × ℤ)` from product preservation and two circle winding equivalences | two placeholders remain: the wedge van Kampen/homology bridge and final assembly; whole problem remains open |
+| `t92J05` | `c55d5089` compiles uniform sphere-group subsingletonity and uniform circle-group equivalences at arbitrary basepoints | three placeholders remain: the RP²/antipodal bridge, genus-two classification bridge, and final assembly; whole problem remains open |
 
 Current audited classification beyond these closures:
 
@@ -909,9 +910,22 @@ The oriented degree-two disk-pair program remains nominated but inactive.  Its
 hard stop is any need for a new general excision theorem, cellular comparison,
 or cohomology ring before the first milestone enters `ModuleCat ℤ`; a second
 stop applies after two consecutive infrastructure packets that do not reduce
-the literal `t00J02` producer residual.  The separate `t92J05` sphere/circle
-bridge remains queued.  Both partial lanes still face independent van Kampen
-or surface-classification foundations before whole-consumer closure.
+the literal `t00J02` producer residual.
+
+The second queued reuse bridge was implemented by Agency job
+`invoke-1788218818205-6189-8001f99f` at `c55d5089`; independent review
+`invoke-1788218993463-6194-711fe6db` returned `PASS`.  The proof installs
+simple connectivity on the literal `Fin 3` sphere uniformly in its basepoint,
+constructs path connectivity for the literal complex metric circle, transports
+an arbitrary circle basepoint to `metricCircleHomeomorphCircle.symm 1`, and
+then applies the reviewed winding equivalence in the forward direction.  The
+bridge statement is unchanged and placeholders decrease `4 → 3`.  This is a
+bounded partial closure only: the RP²/antipodal bridge, genus-two
+classification bridge, and final assembly remain.
+
+Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
+independent van Kampen or surface-classification foundations before
+whole-consumer closure.
 
 The banked production-MV scaffold already supplies:
 
