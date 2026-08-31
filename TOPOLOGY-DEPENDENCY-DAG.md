@@ -473,7 +473,7 @@ compiles independently of every final problem.
 | Product homology/Kunneth | `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  `t95J04` no longer consumes this missing foundation: `54fe6115` handles the two `S⁶` comparisons by retracts, and `e24d442b`--`10cfb866` handle `S² × S⁴ ≄ S³ × S³` through one concrete production Mayer--Vietoris segment |
 | Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | the generic product cover was already banked; reviewed `c5ada212` now closes the concrete `(ZMod 2)²` covering-group branch of `t01A02`; fivefold AddCircle kernel cardinality/deck packaging is next for `t98A01`; pullback and gluing remain separate |
-| Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, closed `t97J08` | `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; further consumers require separate review |
+| Circle degree/lifting | closed `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, closed `t97J08` | `t91A08` closed through the power-five winding obstruction and exact additive-circle transport at `02b4e476`; `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; further consumers require separate review |
 | Smooth circle lifts | closed `t97J08`; reusable smooth circle maps with continuous real lifts | generic local-inverse regularity `48eab2d3`, explicit `Circle.exp` specialization `12fd086d`, and normalized-loop specialization `55da22d8` are `BANKED`; frozen consumer closed at `0ad32428` |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
@@ -601,6 +601,7 @@ critical-value Sard.
 | `t91J02` | `628f5131` using `CircleUniversalCover.circleFundamentalGroupMulEquivInt` and `SimplyConnectedSphereProducts.euclideanSphere_simplyConnected` | sole placeholder removed, literal sphere/basepoints unchanged, direct/focused builds and independent review passed, only standard axioms |
 | `t91A05` | `3f3b72b2` using the shared `CircleMetricFundamentalGroup` adapter | two placeholders removed, metric-sphere carrier and basepoint align definitionally with bundled `Circle`, frozen statements unchanged, independent review passed, only standard axioms |
 | `t97J03` | `3f3b72b2` using the shared `CircleMetricFundamentalGroup` adapter | sole placeholder removed, norm-one subtype and basepoint align definitionally with bundled `Circle`, frozen statement unchanged, independent review passed, only standard axioms |
+| `t91A08` | `02b4e476` using the reviewed power-five winding obstruction and exact `AddCircle.homeomorphCircle` transport | two placeholders removed, frozen statements unchanged, direct/full builds and independent Zai review passed, four warnings are pre-existing, only standard axioms |
 
 Bounded partial closures, which do not belong in the closed-problem table:
 
@@ -867,6 +868,36 @@ stop after milestone 1 if the local class cannot enter the actual
 general excision, cellular comparison, or cohomology-ring foundation.  This
 program remains nominated but inactive; closing the Circle-reuse consumers
 does not activate it automatically.
+
+## Zai strategy reset and `t91A08` closure
+
+Three read-only Zai surveys supplied the next portfolio.  Whole-closure survey
+`invoke-1788215060969-6109-cfb4b864` found the power-five circle obstruction;
+reuse survey `invoke-1788215060973-6110-f8882aee` compiled bounded partial
+bridges for `t02A03` and `t92J05`; foundation survey
+`invoke-1788215060976-6111-45142ecd` refined the oriented-localization first
+milestone to the explicit computation `H₂(D², S¹; ℤ) ≅ ℤ` with a nonzero
+generator in the actual integral singular-homology representation.
+
+The initial `t91A08` report compiled only the `Circle` theorem, so it was not
+sent directly to implementation.  Focused probe
+`invoke-1788215789052-6122-260cc550` compiled the complete frozen
+`UnitAddCircle` fixture with placeholders `2 → 0`.  Implementation job
+`invoke-1788217406776-6150-50dba411` committed the exact one-file closure at
+`02b4e476`; independent review `invoke-1788217609118-6154-e144c1ec` returned
+`PASS`.  The proof uses path-lift uniqueness and endpoint-winding invariance
+to distinguish power five from identity on `Circle`, then conjugates both maps
+through `AddCircle.homeomorphCircle` with the canonical `toCircle_nsmul`
+orientation.  Statements are unchanged and no new warnings or axioms appear.
+`t91A08` is **CLOSED**.
+
+The oriented degree-two disk-pair program remains nominated but inactive.  Its
+hard stop is any need for a new general excision theorem, cellular comparison,
+or cohomology ring before the first milestone enters `ModuleCat ℤ`; a second
+stop applies after two consecutive infrastructure packets that do not reduce
+the literal `t00J02` producer residual.  The compiled `t02A03` and `t92J05`
+partial bridges remain queued because their consumers still require independent
+van Kampen or surface-classification foundations.
 
 The banked production-MV scaffold already supplies:
 

@@ -600,6 +600,37 @@ must stop after the first milestone if those classes cannot enter the actual
 excision, cellular, or cohomology-ring foundation.  It is nominated, not yet
 started.
 
+## Zai topology strategy survey
+
+| Job | Mandate | Decision |
+|---|---|---|
+| `invoke-1788215060969-6109-cfb4b864` | whole-consumer closure search | identified `t91A08`; its Circle-side winding obstruction compiled, while frozen `UnitAddCircle` transport required a focused follow-up |
+| `invoke-1788215060973-6110-f8882aee` | newly banked API reuse | compiled partial bridges for `t02A03` and `t92J05`; both remain queued because independent van Kampen/classification obligations prevent whole closure |
+| `invoke-1788215060976-6111-45142ecd` | controlled foundation selection | retained oriented fundamental classes/localization and made its first milestone concrete as degree-two disk-pair homology with an explicit generator |
+
+The whole-closure report was conservatively revised because its initial
+prototype stopped at `Circle`.  Focused probe
+`invoke-1788215789052-6122-260cc550` then compiled the exact frozen
+`UnitAddCircle` transport and a zero-placeholder `Main` fixture.  It conjugates
+times-five through `AddCircle.homeomorphCircle`, uses the pinned
+`toCircle_nsmul` orientation, and transports a hypothetical free homotopy to
+the already contradicted power-five homotopy on `Circle`.  Agency job
+`invoke-1788217406776-6150-50dba411` implemented the one-file closure at
+`02b4e476`; independent review `invoke-1788217609118-6154-e144c1ec` returned
+`PASS`.  Frozen statements are unchanged, placeholders decrease `2 → 0`, the
+four emitted warnings all predate the commit, and both completed theorems use
+only `propext`, `Classical.choice`, and `Quot.sound`.  The final decision is
+**CLOSED** for `t91A08`.
+
+The foundation remains nominated but inactive.  Its exact first milestone is
+an explicit nonzero generator and integral isomorphism
+`H₂(D², S¹; ℤ) ≅ ℤ`, lifted into the repository's `ModuleCat ℤ` singular
+homology representation.  Stop if implementing that milestone requires a new
+general excision theorem, cellular comparison, or cohomology ring; also stop
+after two consecutive infrastructure packets that do not reduce the named
+`t00J02` residual.  The compiled `t02A03` torus-fundamental-group bridge and
+`t92J05` sphere/circle bridge remain queued and unimplemented.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
