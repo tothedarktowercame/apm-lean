@@ -161,7 +161,7 @@ VAN KAMPEN / SURFACE FOUNDATIONS
        │      ├── FIXED-TARGET SINGLE-OBJECT MAPPING EQUIVALENCE [BANKED]
        │      ├── TARGET-POSTCOMPOSITION NATURALITY [BANKED THROUGH
        │      │      PUSHOUT-REPRESENTATION AND VERTEX-COORDINATE LAYERS]
-       │      └── t01J03 PI1 BRIDGE [UPTAKE; TWO FROZEN SORRIES REMAIN]
+       │      └── t01J03 PI1 BRIDGE [CLOSED `7ddf3408`]
        ├── GENERIC QUOTIENT AND GLUING PI1 [FOUNDATION]
        ├── SURFACE CUTTING/CLASSIFICATION [FOUNDATION]
        └── INTERSECTION/SELF-INTERSECTION [depends on fundamental classes]
@@ -361,18 +361,16 @@ This changes the portfolio order:
 5. representation-specific development only while it shortens its frozen
    consumer at the same time.
 
-The twice-spiral branch is the immediate test of the stop rule.  It has banked
+The twice-spiral branch validated the stop rule.  It banked
 subdivision descent, a pseudopushout mapping property, connector
 reconstruction, pushout representations, a fixed-target `SingleObj` mapping
 equivalence, representability candidates, and postcomposition comparisons
-through the pushout-representation and vertex-coordinate layers.  Frozen
-`t01J03` still has the same two executable placeholders.  No further target-
-naturality layer should be added until a consumer-facing probe states the
-exact Mathlib theorem (or project theorem) that turns the natural mapping
-equivalence into the required chosen-basepoint automorphism-group isomorphism.
-If that probe instead exposes a general categorical representability theorem,
-that theorem becomes the single candidate edge; otherwise this branch is
-`DEFERRED-REP` until a shorter route is found.
+through the pushout-representation and vertex-coordinate layers.  Consumer-
+facing probes then showed that pointwise target-change squares suffice for
+source reconstruction, avoiding an unnecessary pseudonaturality program.
+Reviewed commits `338011a6`, `86d454aa`, and `a8974ed7` supplied the source
+equivalence, compatible connectors, and chosen-object extraction; frozen
+closure `7ddf3408` removes both remaining placeholders.
 
 ## Consolidation queues
 
@@ -480,7 +478,7 @@ compiles independently of every final problem.
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
-| Two-open van Kampen/descent | `t01J03` | the reviewed chain through `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; full pseudonaturality is unnecessary for this consumer: reviewed `338011a6` reconstructs `FundamentalGroupoid (Gluing h) ≌ SingleObj (TwiceSpiralPushout d)`; reviewed `86d454aa` constructs the required leg-compatible connectors; reviewed `a8974ed7` extracts `FundamentalGroup (Gluing h) x ≃* Multiplicative (ZMod 2)` with the correct `SingleObj` multiplication orientation; frozen homeomorphism/basepoint transport remains |
+| Two-open van Kampen/descent | closed `t01J03` | the reviewed chain through `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; `338011a6` reconstructs the source equivalence, `86d454aa` supplies compatible connectors, `a8974ed7` extracts the chosen-object group, and `7ddf3408` performs the frozen homeomorphism/basepoint transport and final assembly |
 
 ## Specification and ledger corrections
 
@@ -599,6 +597,7 @@ critical-value Sard.
 | `t94J06` | `8efdc321` using six selectively promoted circle-lifting/winding and degree-four disk-obstruction targets | two placeholders removed, frozen statements unchanged, historical blobs verified byte-for-byte, direct/focused/frozen builds passed, independent Agency review passed, only standard axioms |
 | `t98A05` | `446ca982` using six selectively promoted exterior-derivative, simplex-integral, and circle-period targets | four placeholders removed, frozen statements unchanged, historical blobs verified byte-for-byte, direct/focused/frozen builds passed, independent Agency review passed, only standard axioms |
 | `t97J08` | `0ad32428` through local-inverse regularity `48eab2d3`, `Circle.exp` regularity `12fd086d`, and normalized-loop lift regularity `55da22d8` | four placeholders removed, frozen statements unchanged, every milestone independently reviewed, historical blobs verified, seven-module/frozen build passed, only standard axioms |
+| `t01J03` | `7ddf3408` through source reconstruction `338011a6`, connector existence `86d454aa`, and chosen-object extraction `a8974ed7` | two placeholders removed, frozen statements unchanged, exact zero-placeholder fixture compiled, final frozen review passed, only standard axioms |
 
 Bounded partial closures, which do not belong in the closed-problem table:
 
@@ -621,15 +620,12 @@ Current audited classification beyond these closures:
   bridge exists.  `t95J04` also remains `FOUNDATION`, although its two
   comparisons with `S⁶` are now compiled at `54fe6115` by the independent
   retract argument.
-- `t01J03` is `UPTAKE`, not closed.  Its torus results, explicit collared
-  quotient geometry, and twice-spiral module-homology computation compile.
-  The generic two-open fundamental-groupoid pseudopushout and the specialized
-  fixed-target mapping equivalence are banked.  Two executable placeholders
-  remain in frozen `Main.lean`: `apm_t01J03_bridge_2`, which still needs the
-  source-groupoid/fundamental-group extraction, and the final conjunction
-  `apm_t01j03`.  Target-postcomposition naturality is being proved because a
-  family of fixed-target mapping equivalences alone does not justify the
-  source-groupoid equivalence.
+- `t01J03` is `CLOSED` at `7ddf3408`.  Its reviewed chain derives the source
+  groupoid equivalence from pointwise target-change squares, constructs the
+  required connector systems, extracts the chosen-basepoint fundamental
+  group as `Multiplicative (ZMod 2)`, transports across the frozen gluing
+  homeomorphism, and reuses the banked module-homology computation.  Both
+  frozen statements are unchanged and both placeholders are removed.
 - `t03J02` is stopped before implementation: its `IsEmbedding` and
   `Nullhomotopic` hypotheses do not provide the collar/NDR neighbourhood needed
   by production Mayer--Vietoris, and its fundamental-group branch separately
@@ -664,10 +660,11 @@ decisions are recorded in `docs/TN-topology-closure-experiments.md`.
    `invoke-1788087615270-3747-34cc93a0` produced `0ea00fce`; independent review
    job `invoke-1788087816801-3748-17bef30b` passed.  No further work remains on
    this consumer.
-2. **STOP: `t01J03` representability.**  The first missing edge is target-
-   postcomposition naturality for the generic pseudococone equivalence.  The
-   source-reconstruction theorem would be a second absent edge.  Do not resume
-   the transport chain from the later algebraic layers.
+2. **CLOSED after staged revision: `t01J03`.**  The initial representability
+   experiment stopped correctly before unsupported source reconstruction.
+   Later consumer-facing probes compiled each adjacent target-change square,
+   established that pointwise squares suffice, and closed the frozen problem
+   at `7ddf3408` after independent review.
 3. **PARTIAL: `t95J04`; STOP remains on its product foundation.**  Election
    `invoke-1788088998881-3750-c29c22f9`, implementation
    `invoke-1788089170654-3751-711e3944` (`54fe6115`), and independent review
@@ -747,7 +744,7 @@ This construction does not elect either remaining `t95J04` foundation.
    `6b59e2e6`, `f8feca24`, and `10cfb866`.  All three nonhomeomorphism and all
    three simple-connectivity conjuncts now compile without Kunneth or
    Eilenberg--Zilber.  The sole frozen residual is the Sard branch.
-3. **ACTIVE: `t01J03` target postcomposition.**  Probe
+3. **CLOSED: `t01J03` target postcomposition and source extraction.**  Probe
    `invoke-1788099833859-4010-0cd0ae16` returned `GO`.  First bank
    `postcomposePseudoFunctorCoconeFunctor` and the generic pseudopushout
    comparison natural isomorphism.  That first milestone is reviewed at
@@ -790,14 +787,21 @@ This construction does not elect either remaining `t95J04` foundation.
    `invoke-1788127419504-5214-cd187779` compiled the complete constructor.
    Agency job `invoke-1788132709346-5391-2b521a94` implemented it at
    `86d454aa`; independent review `invoke-1788132913624-5392-17335c93`
-   returned `PASS`.  Frozen `t01J03` still has exactly two placeholders.  Do
-   not edit it before the chosen-object adapter compiles and is reviewed.
+   returned `PASS`.  At that milestone frozen `t01J03` still had exactly two
+   placeholders, so the chosen-object adapter was compiled and reviewed before
+   any frozen edit.
    Agency job `invoke-1788134364506-5394-61f849ef` implemented that generic
    extraction at `a8974ed7`; independent review
    `invoke-1788134519264-5395-fcedd5c8` returned `PASS`.  The remaining probe
    is frozen-facing only: transport the chosen basepoint through
    `apm_t01J03_homeomorph_gluing`, instantiate the coordinate data, and test
    the exact `bridge_2` and final conjunction proofs before editing `Main`.
+   Frozen-facing probe `invoke-1788134727903-5396-89a31181` compiled the exact
+   `Main` with placeholders `2 → 0`.  Agency implementation
+   `invoke-1788134993841-5397-e9ad42bb` committed the one-file closure at
+   `7ddf3408`; independent review `invoke-1788135236814-5398-4213fd16`
+   returned `PASS`.  Statements are unchanged, direct/focused builds pass,
+   and both completed theorems use only standard axioms.
 
 The banked production-MV scaffold already supplies:
 

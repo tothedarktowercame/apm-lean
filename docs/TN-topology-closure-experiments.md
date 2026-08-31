@@ -484,8 +484,8 @@ job `invoke-1788132709346-5391-2b521a94` implemented the focused target at
 `invoke-1788132913624-5392-17335c93` returned `PASS`.  The proof retains the
 literal mapped-connector equality through its `eqToIso` transport, and the
 frozen coordinate interface now suffices to obtain compatible connectors.
-This is infrastructure for the next chosen-object adapter, not frozen closure;
-the two `t01J03` placeholders remain unchanged.
+This milestone was infrastructure for the next chosen-object adapter, not yet
+frozen closure; at that point the two `t01J03` placeholders were unchanged.
 
 Agency job `invoke-1788134364506-5394-61f849ef` then implemented the bounded
 chosen-object extraction at `a8974ed7`; independent regular-seat review
@@ -499,6 +499,24 @@ composition for `SingleObj` makes its endomorphism monoid the original
 pushout, not an opposite.  Frozen quotient-homeomorphism/basepoint transport
 and final conjunction wiring remain unclaimed pending a compiled adapter
 fixture.
+
+Frozen-facing probe `invoke-1788134727903-5396-89a31181` then constructed the
+pointed coordinate bases, transported the chosen fundamental group through
+`apm_t01J03_homeomorph_gluing`, reused the banked module-homology clauses, and
+compiled an exact temporary frozen `Main` with placeholders `2 → 0` (fixture
+SHA-256 `35dc3f5c…fa83745`).  Agency job
+`invoke-1788134993841-5397-e9ad42bb` implemented only the two frozen proof
+bodies and required imports at `7ddf3408`.  Independent regular-seat review
+`invoke-1788135236814-5398-4213fd16` returned `PASS`: both statements are
+unchanged, the transport and coefficient orientations are exact, direct and
+focused builds pass, no placeholders remain, and the completed bridge/final
+theorem use only `propext`, `Classical.choice`, and `Quot.sound`.
+
+The final decision is **CLOSED** for `t01J03`.  The earlier STOP was respected:
+no source equivalence was inferred from fixed-target equivalences.  Instead,
+each adjacent target-change square was compiled and reviewed, a consumer probe
+showed pointwise squares were sufficient, and the remaining connector and
+chosen-object seams were separately compiled before frozen wiring.
 
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
