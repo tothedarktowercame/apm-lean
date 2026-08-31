@@ -2,6 +2,8 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.FundamentalGroupProduct
+import ConstructionTargets.CircleUniversalCover
 
 open CategoryTheory
 
@@ -138,7 +140,12 @@ theorem apm_t02A03_bridge_1 :
     Nonempty
       (FundamentalGroup apm_t02a03_Torus (1, 1) ≃*
         Multiplicative (ℤ × ℤ)) := by
-  sorry
+  open ConstructionTargets.FundamentalGroupProduct in
+    open ConstructionTargets.CircleUniversalCover in
+      exact ⟨(fundamentalGroupProdMulEquiv (1 : Circle) (1 : Circle)).trans
+        (circleFundamentalGroupMulEquivInt.prodCongr
+          circleFundamentalGroupMulEquivInt) |>.trans
+        (MulEquiv.prodMultiplicative ℤ ℤ)⟩
 
 /-- Why this unblocks `apm_t02a03`: this packages precisely the invariant
 preservation and computation for the compiled torus-circle pushout.  Its five
