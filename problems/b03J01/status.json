@@ -1,33 +1,44 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "b03J01",
-  "bundle_root": "problems/b03J01",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-b03J01.md",
-    "problem_tex": "apm/b03J01.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "b03J01",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-b03J01.md",
+    "problem_tex" : "apm/b03J01.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 2,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 2,
-    "closer_progress": "Hop 4 states the precise remaining bridge: every Sylow type of a group of twin-prime order is a subsingleton. Its proof must assemble the Sylow-count congruence/divisibility arithmetic."
+  "boundary" : "Closed by frame f66 (campaign jit-all-open-v2, 2026-08-31): \"prove b03J01 via Sylow uniqueness\". Banked verbatim from the f66 Solver terminal head 5515479133be992e2603a328776da6cca5ce98a4 on branch exp/countdown-f66-b03J01-solver; content identical to that head, no re-derivation. Frozen statement apm_b03j01 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0,
+    "closer_progress" : "Hop 4 states the precise remaining bridge: every Sylow type of a group of twin-prime order is a subsingleton. Its proof must assemble the Sylow-count congruence/divisibility arithmetic."
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/b03J01",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-31",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 2,
+    "axioms" : "apm_b03j01 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f66"
   },
-  "classification": "partial",
-  "imported_at": "2026-07-13T17:26:53.572750Z"
+  "imported_at" : "2026-07-13T17:26:53.572750Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }
