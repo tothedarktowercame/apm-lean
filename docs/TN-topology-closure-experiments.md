@@ -628,8 +628,21 @@ an explicit nonzero generator and integral isomorphism
 homology representation.  Stop if implementing that milestone requires a new
 general excision theorem, cellular comparison, or cohomology ring; also stop
 after two consecutive infrastructure packets that do not reduce the named
-`t00J02` residual.  The compiled `t02A03` torus-fundamental-group bridge and
-`t92J05` sphere/circle bridge remain queued and unimplemented.
+`t00J02` residual.
+
+The first queued reuse bridge has now been promoted as a bounded partial
+closure.  Fixture `/tmp/probe-t02A03-bridge1.lean` compiled the exact torus
+fundamental-group statement.  Implementation job
+`invoke-1788217963425-6167-cd4aa038` committed it at `301501c2`; review
+`invoke-1788218127747-6171-0e8bd3c1` identified that the named
+`MulEquiv.prodMultiplicative` map was presented in its reverse declared
+orientation.  Repair job `invoke-1788218477039-6181-dedc119b` added the
+required `.symm` at `7ea2c595`; combined re-review
+`invoke-1788218568346-6185-ee63858e` returned `PASS`.  The frozen bridge
+statement is unchanged and placeholders decrease `3 → 2`.  `t02A03` remains
+open: its wedge van Kampen/homology bridge and final assembly are independent.
+The compiled `t92J05` sphere/circle bridge remains queued for the next serial
+packet.
 
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency

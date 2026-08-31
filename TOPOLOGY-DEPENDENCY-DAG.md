@@ -609,6 +609,7 @@ Bounded partial closures, which do not belong in the closed-problem table:
 |---|---|---|
 | `t95J04` | `54fe6115` compiles the two `S⁶` comparisons; `45304f7d` compiles all three simple-connectivity conjuncts; the reviewed MV chain `e24d442b`, `6b59e2e6`, `f8feca24`, `10cfb866` compiles `S² × S⁴ ≄ S³ × S³` without Kunneth or Eilenberg--Zilber | one placeholder remains only for Sard/nullity/non-surjectivity/null-homotopy; statement unchanged |
 | `t01A02` | `c5ada212` imports the banked genuine product-cover theorem and compiles the coordinatewise `(ZMod 2)²` action, invariance, freeness, and fiber transitivity | three placeholders remain: H₂ degree/nonsurjectivity, Lefschetz fixed point, and final assembly; covering-group bridge statement unchanged |
+| `t02A03` | `301501c2` plus orientation repair `7ea2c595` compiles `π₁(T²,(1,1)) ≃* Multiplicative (ℤ × ℤ)` from product preservation and two circle winding equivalences | two placeholders remain: the wedge van Kampen/homology bridge and final assembly; whole problem remains open |
 
 Current audited classification beyond these closures:
 
@@ -891,13 +892,26 @@ through `AddCircle.homeomorphCircle` with the canonical `toCircle_nsmul`
 orientation.  Statements are unchanged and no new warnings or axioms appear.
 `t91A08` is **CLOSED**.
 
+The first queued reuse bridge was then implemented.  Fixture
+`/tmp/probe-t02A03-bridge1.lean` compiled the exact torus fundamental-group
+statement.  Agency job `invoke-1788217963425-6167-cd4aa038` committed the
+one-file uptake at `301501c2`; review
+`invoke-1788218127747-6171-0e8bd3c1` caught that the named
+`MulEquiv.prodMultiplicative` equivalence was written in its reverse declared
+orientation even though definitional compatibility let Lean accept it.
+Repair job `invoke-1788218477039-6181-dedc119b` committed the explicit `.symm`
+at `7ea2c595`; combined re-review
+`invoke-1788218568346-6185-ee63858e` returned `PASS`.  The bridge statement is
+unchanged and placeholders decrease `3 → 2`.  This is a bounded partial
+closure only: wedge van Kampen/homology and final assembly remain.
+
 The oriented degree-two disk-pair program remains nominated but inactive.  Its
 hard stop is any need for a new general excision theorem, cellular comparison,
 or cohomology ring before the first milestone enters `ModuleCat ℤ`; a second
 stop applies after two consecutive infrastructure packets that do not reduce
-the literal `t00J02` producer residual.  The compiled `t02A03` and `t92J05`
-partial bridges remain queued because their consumers still require independent
-van Kampen or surface-classification foundations.
+the literal `t00J02` producer residual.  The separate `t92J05` sphere/circle
+bridge remains queued.  Both partial lanes still face independent van Kampen
+or surface-classification foundations before whole-consumer closure.
 
 The banked production-MV scaffold already supplies:
 
