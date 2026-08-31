@@ -464,7 +464,7 @@ compiles independently of every final problem.
 
 | Cluster | Representative consumers | Current disposition |
 |---|---|---|
-| Critical-value manifold Sard | `t01A08`, `t01J04`, `t92J07`, `t93A04`, `t96J05` | `FOUNDATION`; dimension-gap nullity does not address these regular-value problems |
+| Critical-value manifold Sard | `t01A08`, `t01J04`, `t92J07`, `t93A04`, `t96J05` | `FOUNDATION`; probe `invoke-1788166722965-5400-bccfd117` compiled the chart-criticality comparison but stopped at the absent rectangular local Morse--Sard theorem for arbitrary finite source dimension; dimension-gap nullity does not address these regular-value problems |
 | Dimension-gap manifold nullity | closed `t94J05`; nonsurjectivity part of `t95J04` | generic coordinate-nullity and nonsurjectivity chain is `BANKED`; exact Hausdorff nullity in `t95J04` remains separate |
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
@@ -472,7 +472,7 @@ compiles independently of every final problem.
 | Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
 | Product homology/Kunneth | `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  `t95J04` no longer consumes this missing foundation: `54fe6115` handles the two `S⁶` comparisons by retracts, and `e24d442b`--`10cfb866` handle `S² × S⁴ ≄ S³ × S³` through one concrete production Mayer--Vietoris segment |
 | Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
-| Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | product is bounded; pullback next; gluing deferred |
+| Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | the generic product cover was already banked; reviewed `c5ada212` now closes the concrete `(ZMod 2)²` covering-group branch of `t01A02`; fivefold AddCircle kernel cardinality/deck packaging is next for `t98A01`; pullback and gluing remain separate |
 | Circle degree/lifting | `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, closed `t97J08` | `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; further consumers require separate review |
 | Smooth circle lifts | closed `t97J08`; reusable smooth circle maps with continuous real lifts | generic local-inverse regularity `48eab2d3`, explicit `Circle.exp` specialization `12fd086d`, and normalized-loop specialization `55da22d8` are `BANKED`; frozen consumer closed at `0ad32428` |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
@@ -604,6 +604,7 @@ Bounded partial closures, which do not belong in the closed-problem table:
 | Problem | Canonical partial closure | Remaining frozen obligation |
 |---|---|---|
 | `t95J04` | `54fe6115` compiles the two `S⁶` comparisons; `45304f7d` compiles all three simple-connectivity conjuncts; the reviewed MV chain `e24d442b`, `6b59e2e6`, `f8feca24`, `10cfb866` compiles `S² × S⁴ ≄ S³ × S³` without Kunneth or Eilenberg--Zilber | one placeholder remains only for Sard/nullity/non-surjectivity/null-homotopy; statement unchanged |
+| `t01A02` | `c5ada212` imports the banked genuine product-cover theorem and compiles the coordinatewise `(ZMod 2)²` action, invariance, freeness, and fiber transitivity | three placeholders remain: H₂ degree/nonsurjectivity, Lefschetz fixed point, and final assembly; covering-group bridge statement unchanged |
 
 Current audited classification beyond these closures:
 
@@ -802,6 +803,26 @@ This construction does not elect either remaining `t95J04` foundation.
    `7ddf3408`; independent review `invoke-1788135236814-5398-4213fd16`
    returned `PASS`.  Statements are unchanged, direct/focused builds pass,
    and both completed theorems use only standard axioms.
+4. **PARTIAL COMPLETE: `t01A02` product covering group.**  Balanced-program
+   probe `invoke-1788166722963-5399-9b32f06b` found the generic genuine
+   product-cover theorem already banked and compiled both torus
+   specializations.  Agency job `invoke-1788167439562-5404-c87746d4`
+   implemented the four-element sign action and frozen covering-group bridge
+   at `c5ada212`; independent review
+   `invoke-1788168053258-5407-be3b1f19` returned `PASS`.  Frozen placeholders
+   decreased `4 → 3`; the H₂ degree and Lefschetz branches remain independent.
+5. **QUEUED REVISE: `t00A01` van Kampen.**  Probe
+   `invoke-1788166722968-5401-75be2e99` compiled factorwise coproduct
+   transport and final assembly, but the generic theorem collapsing a
+   two-open fundamental-groupoid pseudopushout with simply connected overlap
+   to a vertex-group free product is still absent.  Probe that theorem next;
+   do not infer it from a fixed-target mapping equivalence.
+6. **STOP: manifold Sard.**  Probe
+   `invoke-1788166722965-5400-bccfd117` compiled fixed-chart criticality and
+   critical-image inclusion for `t93A04`, but pinned Mathlib only supplies an
+   equal-dimensional determinant Sard theorem.  Do not promote those partial
+   chart lemmas or begin countable assembly before a rectangular local-set
+   Morse--Sard theorem handles arbitrary finite source dimension.
 
 The banked production-MV scaffold already supplies:
 

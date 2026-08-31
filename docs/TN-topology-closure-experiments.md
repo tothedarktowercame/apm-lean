@@ -518,6 +518,32 @@ each adjacent target-change square was compiled and reviewed, a consumer probe
 showed pointwise squares were sufficient, and the remaining connector and
 chosen-object seams were separately compiled before frozen wiring.
 
+## Balanced parallel program after t01J03
+
+Three read-only experiments ran concurrently after the `t01J03` closure.
+
+| Job | Lane | Decision | Exact result |
+|---|---|---|---|
+| `invoke-1788166722968-5401-75be2e99` | `t00A01` van Kampen | `REVISE` | factorwise free-product transport and frozen final assembly compile; one generic two-open vertex-group free-product theorem remains |
+| `invoke-1788166722963-5399-9b32f06b` | product covering | `GO` | the canonical genuine product-cover theorem compiles for both torus maps; `t01A02` is one sign-action adapter away |
+| `invoke-1788166722965-5400-bccfd117` | `t93A04` manifold Sard | `STOP` | chart criticality/image inclusion compile, but rectangular local Morse--Sard for `E → ℝ²` with arbitrary finite source dimension is absent |
+
+The product lane was elected because it had a compiled shared theorem, the
+smallest packet, and an immediate named frozen bridge.  Agency job
+`invoke-1788167439562-5404-c87746d4` implemented
+`TorusSquareDeckAction` and the frozen `apm_t01A02_bridge_covering_group` at
+`c5ada212`.  Independent review `invoke-1788168053258-5407-be3b1f19`
+returned `PASS`: the proof uses actual product covering trivializations, the
+coordinatewise `(ZMod 2)²` action, honest antipode freeness, and the frozen
+fiber classification.  The bridge statement is unchanged and placeholders
+decrease `4 → 3`.  This is a bounded partial closure, not whole `t01A02`;
+degree/nonsurjectivity and Lefschetz remain.
+
+The next active experiment is the narrower `t00A01` generic theorem.  The
+Sard lane remains stopped until rectangular local-set Morse--Sard is proved;
+equal-dimensional Jacobian Sard and dimension-gap range nullity are not valid
+substitutes.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
