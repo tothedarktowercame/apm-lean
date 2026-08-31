@@ -575,9 +575,20 @@ unchanged, placeholders decrease `1 → 0`, the literal `Fin 3` sphere and all
 basepoints align definitionally, and `apm_t91j02` uses only `propext`,
 `Classical.choice`, and `Quot.sound`.  The final decision is **CLOSED**.
 
-The next queued experiment packages the shared metric/unit-circle
-fundamental-group transport required by the already compiled `t91A05` and
-`t97J03` closure fixtures.
+The shared follow-up also reached complete closure.  Probe
+`invoke-1788191632892-5757-5444c31a` compiled one generic adapter transporting
+the winding-one class through a homeomorphism to `Circle`, together with exact
+metric-sphere and norm-one-subtype specializations and zero-placeholder frozen
+fixtures for both consumers.  Agency job
+`invoke-1788192224009-5761-e0847d10` implemented the four-file packet at
+`3f3b72b2`; independent review
+`invoke-1788192667431-5763-86f56a1e` returned `PASS`.  Both subtype
+homeomorphisms send the frozen basepoint definitionally to `1`, so no
+conjugation or basepoint-change assumption is hidden.  Frozen statements are
+unchanged, placeholders decrease `2 → 0` for `t91A05` and `1 → 0` for
+`t97J03`, and the shared adapter and both final theorems use only `propext`,
+`Classical.choice`, and `Quot.sound`.  The final decision is **CLOSED** for
+both problems.
 
 The reset nominates oriented fundamental classes/localization as the sole
 controlled foundation program, aimed first at the literal

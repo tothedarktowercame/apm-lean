@@ -599,6 +599,8 @@ critical-value Sard.
 | `t97J08` | `0ad32428` through local-inverse regularity `48eab2d3`, `Circle.exp` regularity `12fd086d`, and normalized-loop lift regularity `55da22d8` | four placeholders removed, frozen statements unchanged, every milestone independently reviewed, historical blobs verified, seven-module/frozen build passed, only standard axioms |
 | `t01J03` | `7ddf3408` through source reconstruction `338011a6`, connector existence `86d454aa`, and chosen-object extraction `a8974ed7` | two placeholders removed, frozen statements unchanged, exact zero-placeholder fixture compiled, final frozen review passed, only standard axioms |
 | `t91J02` | `628f5131` using `CircleUniversalCover.circleFundamentalGroupMulEquivInt` and `SimplyConnectedSphereProducts.euclideanSphere_simplyConnected` | sole placeholder removed, literal sphere/basepoints unchanged, direct/focused builds and independent review passed, only standard axioms |
+| `t91A05` | `3f3b72b2` using the shared `CircleMetricFundamentalGroup` adapter | two placeholders removed, metric-sphere carrier and basepoint align definitionally with bundled `Circle`, frozen statements unchanged, independent review passed, only standard axioms |
+| `t97J03` | `3f3b72b2` using the shared `CircleMetricFundamentalGroup` adapter | sole placeholder removed, norm-one subtype and basepoint align definitionally with bundled `Circle`, frozen statement unchanged, independent review passed, only standard axioms |
 
 Bounded partial closures, which do not belong in the closed-problem table:
 
@@ -842,12 +844,19 @@ compiled complete closures for `t91J02`, `t91A05`, and `t97J03`.  Foundation
 survey `invoke-1788190476664-5738-b21d2d26` nominated oriented fundamental
 classes/localization, with regular-preimage atlas construction as backup.
 
-The elected immediate closure was `t91J02`.  Agency job
+The first elected immediate closure was `t91J02`.  Agency job
 `invoke-1788191087925-5750-0a283098` implemented the exact one-file proof at
 `628f5131`; independent review `invoke-1788191275394-5753-3dac9f3a` returned
 `PASS`.  Frozen placeholders decreased `1 → 0` and the statement is unchanged.
-Next, probe one shared metric/unit-circle fundamental-group transport adapter
-against both compiled `t91A05` and `t97J03` fixtures before implementation.
+The shared metric/unit-circle follow-up probe
+`invoke-1788191632892-5757-5444c31a` then compiled one explicit transported
+winding class and simultaneous zero-placeholder fixtures for `t91A05` and
+`t97J03`.  Implementation job `invoke-1788192224009-5761-e0847d10` committed
+the exact four-file packet at `3f3b72b2`; independent review
+`invoke-1788192667431-5763-86f56a1e` returned `PASS`.  The two literal circle
+representations and their basepoints reduce to the bundled `Circle` data
+without conjugation, frozen statements are unchanged, and placeholders
+decrease `2 → 0` and `1 → 0`.  Both problems are **CLOSED**.
 
 The nominated foundation program has four bounded milestones: integral local
 orientation/fundamental-class data with chart-change and localization;
@@ -856,7 +865,8 @@ transverse circle pairing or Thom localization; proof of
 stop after milestone 1 if the local class cannot enter the actual
 `singularHomologyFunctor (ModuleCat ℤ)` representation without another
 general excision, cellular comparison, or cohomology-ring foundation.  This
-program is nominated but not active while the two Circle-reuse closures remain.
+program remains nominated but inactive; closing the Circle-reuse consumers
+does not activate it automatically.
 
 The banked production-MV scaffold already supplies:
 
