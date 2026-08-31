@@ -539,10 +539,24 @@ fiber classification.  The bridge statement is unchanged and placeholders
 decrease `4 → 3`.  This is a bounded partial closure, not whole `t01A02`;
 degree/nonsurjectivity and Lefschetz remain.
 
-The next active experiment is the narrower `t00A01` generic theorem.  The
-Sard lane remains stopped until rectangular local-set Morse--Sard is proved;
-equal-dimensional Jacobian Sard and dimension-gap range nullity are not valid
-substitutes.
+The narrower `t00A01` follow-up
+`invoke-1788168504079-5411-c64fa9bb` returned `STOP`.  It confirmed that the
+frozen cover hypotheses can supply path-connected pieces, a nonempty simply
+connected overlap, and all required basepoint transports, but the desired
+free-product theorem crosses at least two independent absent categorical
+constructions:
+
+1. a generic equivalence between functors from a connected groupoid and
+   functors from `SingleObj` of a chosen vertex group, including unit/counit;
+2. collapse of the simply-connected-overlap pseudococone to functors from
+   `SingleObj (Monoid.Coprod …)`.
+
+A later target-natural paste and source reconstruction would then be required.
+The compiled connector and `Monoid.Coprod.hom_ext` milestone does not reduce
+the frozen placeholder by itself, so it is not promoted.  Frozen `t00A01`
+remains unchanged.  The Sard lane likewise remains stopped until rectangular
+local-set Morse--Sard is proved; equal-dimensional Jacobian Sard and
+dimension-gap range nullity are not valid substitutes.
 
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency

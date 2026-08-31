@@ -469,7 +469,7 @@ compiles independently of every final problem.
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
-| Closed gluing to open-cover MV | closed `t96A03`; homology branch compiled for `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 now supplies an explicit collared two-open cover and compiled twice-spiral homology table; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
+| Closed gluing to open-cover MV | closed `t96A03` and `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 supplies an explicit collared two-open cover and complete twice-spiral computation; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
 | Product homology/Kunneth | `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  `t95J04` no longer consumes this missing foundation: `54fe6115` handles the two `S⁶` comparisons by retracts, and `e24d442b`--`10cfb866` handle `S² × S⁴ ≄ S³ × S³` through one concrete production Mayer--Vietoris segment |
 | Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | the generic product cover was already banked; reviewed `c5ada212` now closes the concrete `(ZMod 2)²` covering-group branch of `t01A02`; fivefold AddCircle kernel cardinality/deck packaging is next for `t98A01`; pullback and gluing remain separate |
@@ -811,12 +811,19 @@ This construction does not elect either remaining `t95J04` foundation.
    at `c5ada212`; independent review
    `invoke-1788168053258-5407-be3b1f19` returned `PASS`.  Frozen placeholders
    decreased `4 → 3`; the H₂ degree and Lefschetz branches remain independent.
-5. **QUEUED REVISE: `t00A01` van Kampen.**  Probe
+5. **STOP: `t00A01` generic van Kampen.**  Probe
    `invoke-1788166722968-5401-75be2e99` compiled factorwise coproduct
    transport and final assembly, but the generic theorem collapsing a
    two-open fundamental-groupoid pseudopushout with simply connected overlap
-   to a vertex-group free product is still absent.  Probe that theorem next;
-   do not infer it from a fixed-target mapping equivalence.
+   to a vertex-group free product was absent.  Focused probe
+   `invoke-1788168504079-5411-c64fa9bb` found that this is not one bounded
+   theorem: canonical master separately lacks (a) the generic equivalence
+   between functors from a connected groupoid and functors from the
+   `SingleObj` category of a chosen vertex group, and (b) collapse of a
+   simply-connected-overlap pseudococone to free-product representations.
+   Target-natural composition and source reconstruction would follow as a
+   third stage.  Do not implement partial connector or `Monoid.Coprod`
+   wrappers as though they close the frozen bridge.
 6. **STOP: manifold Sard.**  Probe
    `invoke-1788166722965-5400-bccfd117` compiled fixed-chart criticality and
    critical-image inclusion for `t93A04`, but pinned Mathlib only supplies an
