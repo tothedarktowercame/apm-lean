@@ -1,4 +1,5 @@
-import Mathlib
+import ConstructionTargets.CircleUniversalCover
+import ConstructionTargets.SimplyConnectedSphereProducts
 
 open CategoryTheory
 
@@ -141,4 +142,13 @@ theorem apm_t91j02 :
   sources still found neither concrete computation. The sole remaining inputs
   are precisely those foundational instances; the frozen statement is
   unchanged. -/
-  sorry
+  letI : Nontrivial (FundamentalGroup Circle (1 : Circle)) :=
+    ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.toEquiv.nontrivial
+  letI : SimplyConnectedSpace apm_t91J02_S2 :=
+    ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected
+      2 (by norm_num)
+  apply apm_t91J02_not_homeomorph_of_no_circle_retract
+  apply apm_t91J02_no_circle_retract_of_fundamentalGroup
+  intro x
+  change Subsingleton (Path.Homotopic.Quotient x x)
+  infer_instance
