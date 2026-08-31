@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.CircleMetricFundamentalGroup
 
 open CategoryTheory
 
@@ -20,7 +21,7 @@ abbrev apm_t91a05_Disk := Metric.closedBall (0 : ℂ) 1
 abbrev apm_t91a05_Circle := Metric.sphere (0 : ℂ) 1
 
 def apm_t91a05_boundaryInclusion : apm_t91a05_Circle → apm_t91a05_Disk :=
-  fun z => ⟨z, by simpa [apm_t91a05_Circle] using z.property.le⟩
+  fun z => ⟨z, z.property.le⟩
 
 lemma apm_t91a05_continuous_boundaryInclusion :
     Continuous apm_t91a05_boundaryInclusion := by
@@ -96,7 +97,11 @@ the nontriviality part of `π₁(S¹, 1) ≃ ℤ`. -/
 theorem apm_t91A05_bridge_1 :
     Nontrivial
       (FundamentalGroup apm_t91a05_Circle apm_t91a05_circleBase) := by
-  sorry
+  simpa [apm_t91a05_Circle, apm_t91a05_circleBase] using
+    (ConstructionTargets.CircleMetricFundamentalGroup.metricCircleFundamentalGroupNontrivial :
+      Nontrivial (FundamentalGroup
+        ConstructionTargets.CircleMetricFundamentalGroup.MetricCircle
+        (⟨1, by simp⟩ : ConstructionTargets.CircleMetricFundamentalGroup.MetricCircle)))
 
 theorem apm_t91a05 :
     ¬∃ g : apm_t91a05_Disk → apm_t91a05_Circle,
@@ -149,4 +154,6 @@ theorem apm_t91a05 :
   apm_t91a05_Circle apm_t91a05_circleBase)`. The frozen statement is
   unchanged.
   -/
-  sorry
+  letI : Nontrivial
+      (FundamentalGroup apm_t91a05_Circle apm_t91a05_circleBase) := apm_t91A05_bridge_1
+  exact apm_t91a05_no_retraction_of_circle_fundamentalGroup_nontrivial

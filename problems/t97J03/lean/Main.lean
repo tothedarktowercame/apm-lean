@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.CircleMetricFundamentalGroup
 
 open CategoryTheory
 
@@ -110,8 +111,7 @@ theorem apm_t97j03 :
   have hg_boundary : ∀ z : apm_t97J03_Circle,
       g ⟨z.1, le_of_eq z.2⟩ = z := by
     intro z
-    have h := congrArg Prod.fst (hboundary (z, w₀))
-    exact h
+    exact congrArg Prod.fst (hboundary (z, w₀))
   /-
   Boundary (closer hop 1, still open): the solid-torus extension has now been
   reduced by compiled code to a continuous disk retraction `g`: fixing the
@@ -156,4 +156,10 @@ theorem apm_t97j03 :
   that instance. The frozen theorem remains unchanged and the foundational
   circle computation is the only open bridge.
   -/
-  sorry
+  letI : Nontrivial (FundamentalGroup apm_t97J03_Circle ⟨1, by simp⟩) := by
+    simpa [apm_t97J03_Circle] using
+      (ConstructionTargets.CircleMetricFundamentalGroup.normOneCircleFundamentalGroupNontrivial :
+        Nontrivial (FundamentalGroup
+          ConstructionTargets.CircleMetricFundamentalGroup.NormOneCircle
+          (⟨1, by simp⟩ : ConstructionTargets.CircleMetricFundamentalGroup.NormOneCircle)))
+  exact apm_t97J03_no_disk_retraction ⟨⟨g, hg⟩, hg_boundary⟩
