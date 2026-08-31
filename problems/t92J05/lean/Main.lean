@@ -3,6 +3,9 @@ import Mathlib.GroupTheory.PresentedGroup
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.SimplyConnectedSphereProducts
+import ConstructionTargets.CircleMetricFundamentalGroup
+import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
 
 /-!
 # APM t92J05
@@ -146,7 +149,31 @@ theorem apm_t92J05_bridge_sphere_circle_fundamentalGroups :
     ∀ x : apm_t92J05_S1,
       Nonempty
         (FundamentalGroup apm_t92J05_S1 x ≃* Multiplicative ℤ) := by
-  sorry
+  refine ⟨fun x => ?_, fun x => ?_⟩
+  · haveI : SimplyConnectedSpace apm_t92J05_S2 :=
+      ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected
+        2 (by norm_num)
+    exact inferInstanceAs (Subsingleton (Path.Homotopic.Quotient x x))
+  · haveI : PathConnectedSpace apm_t92J05_S1 := by
+      have h1 : 1 < Module.rank ℝ ℂ := by
+        rw [show Module.rank ℝ ℂ = 2 from Complex.rank_real_complex]
+        norm_num
+      have h : IsPathConnected (Metric.sphere (0 : ℂ) (1 : ℝ)) :=
+        isPathConnected_sphere h1 0 (by norm_num)
+      exact (isPathConnected_iff_pathConnectedSpace.mp h)
+    let pt : apm_t92J05_S1 :=
+      ConstructionTargets.CircleMetricFundamentalGroup.metricCircleHomeomorphCircle.symm 1
+    have hpt :
+        ConstructionTargets.CircleMetricFundamentalGroup.metricCircleHomeomorphCircle pt = 1 :=
+      ConstructionTargets.CircleMetricFundamentalGroup.metricCircleHomeomorphCircle.apply_symm_apply
+        1
+    exact
+      ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected x pt).trans
+        ((ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+            ConstructionTargets.CircleMetricFundamentalGroup.metricCircleHomeomorphCircle pt).trans
+          (by
+            rw [hpt]
+            exact ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt))⟩
 
 /-- Why this unblocks `apm_t92j05`: this is the missing compact oriented
 surface classification and Seifert--van Kampen theorem. The encoded genus-two
