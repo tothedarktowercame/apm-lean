@@ -487,6 +487,19 @@ frozen coordinate interface now suffices to obtain compatible connectors.
 This is infrastructure for the next chosen-object adapter, not frozen closure;
 the two `t01J03` placeholders remain unchanged.
 
+Agency job `invoke-1788134364506-5394-61f849ef` then implemented the bounded
+chosen-object extraction at `a8974ed7`; independent regular-seat review
+`invoke-1788134519264-5395-fcedd5c8` returned `PASS`.  For any pointed
+coordinate bases and any `x : Gluing h`, the reviewed target supplies
+`FundamentalGroup (Gluing h) x ≃* TwiceSpiralPushout d` and its composition
+with `twiceSpiralPushoutMulEquivZModTwo d`.  Connector data is chosen only from
+the reviewed nonemptiness theorem.  The equivalence functor sends the selected
+object definitionally to `SingleObj.star`; Mathlib's flipped categorical
+composition for `SingleObj` makes its endomorphism monoid the original
+pushout, not an opposite.  Frozen quotient-homeomorphism/basepoint transport
+and final conjunction wiring remain unclaimed pending a compiled adapter
+fixture.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

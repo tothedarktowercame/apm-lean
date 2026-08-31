@@ -480,7 +480,7 @@ compiles independently of every final problem.
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
-| Two-open van Kampen/descent | `t01J03` | the reviewed chain through `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; full pseudonaturality is unnecessary for this consumer: reviewed `338011a6` evaluates those squares at the candidate functors and reflects through full faithfulness to obtain `FundamentalGroupoid (Gluing h) ≌ SingleObj (TwiceSpiralPushout d)`; reviewed `86d454aa` constructs the leg-compatible connector systems required to instantiate that equivalence from the frozen coordinate data; chosen-object endomorphism extraction remains |
+| Two-open van Kampen/descent | `t01J03` | the reviewed chain through `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; full pseudonaturality is unnecessary for this consumer: reviewed `338011a6` reconstructs `FundamentalGroupoid (Gluing h) ≌ SingleObj (TwiceSpiralPushout d)`; reviewed `86d454aa` constructs the required leg-compatible connectors; reviewed `a8974ed7` extracts `FundamentalGroup (Gluing h) x ≃* Multiplicative (ZMod 2)` with the correct `SingleObj` multiplication orientation; frozen homeomorphism/basepoint transport remains |
 
 ## Specification and ledger corrections
 
@@ -792,6 +792,12 @@ This construction does not elect either remaining `t95J04` foundation.
    `86d454aa`; independent review `invoke-1788132913624-5392-17335c93`
    returned `PASS`.  Frozen `t01J03` still has exactly two placeholders.  Do
    not edit it before the chosen-object adapter compiles and is reviewed.
+   Agency job `invoke-1788134364506-5394-61f849ef` implemented that generic
+   extraction at `a8974ed7`; independent review
+   `invoke-1788134519264-5395-fcedd5c8` returned `PASS`.  The remaining probe
+   is frozen-facing only: transport the chosen basepoint through
+   `apm_t01J03_homeomorph_gluing`, instantiate the coordinate data, and test
+   the exact `bridge_2` and final conjunction proofs before editing `Main`.
 
 The banked production-MV scaffold already supplies:
 
