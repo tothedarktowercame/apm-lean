@@ -2,6 +2,8 @@ import Mathlib
 import Mathlib.Analysis.Calculus.DifferentialForm.Basic
 import Mathlib.Analysis.Fourier.AddCircle
 import Mathlib.Topology.Covering.AddCircle
+import ConstructionTargets.PeriodicCircleHomotopyWinding
+import ConstructionTargets.CircleExponentialPathLift
 
 /-!
 # APM t91A08 — a two-form on the torus
@@ -149,15 +151,192 @@ lemma t91A08_timesFive_not_injective :
   apply hinj
   simpa using hu5
 
-/-- Why this unblocks `apm_t91a08`: this is the missing integer-degree
-obstruction in the exact additive-circle encoding used here. A lift through
-the universal cover must translate by five after one period for
-`t91A08TimesFive`, but by one for the identity, so no homotopy can connect
-the two maps. -/
+/-! ## Circle power-map prototype (banked declarations only) -/
+
+open scoped unitInterval
+open ConstructionTargets.PeriodicCircleHomotopyWinding
+open ConstructionTargets.CircleWindingUniqueness
+
+/-- The power map `z ↦ z ^ n` on the circle. -/
+noncomputable def powMap (n : ℕ) : C(Circle, Circle) where
+  toFun z := z ^ n
+  continuous_toFun := by fun_prop
+
+/-- The standard generator loop, as a map `I → Circle`. -/
+noncomputable def genLoop : C(I, Circle) where
+  toFun t := Circle.exp ((2 * Real.pi : ℝ) * t)
+  continuous_toFun := by fun_prop
+
+theorem exp_one_eq : Circle.exp (2 * Real.pi : ℝ) = 1 := by
+  simp
+
+theorem genLoop_zero : genLoop 0 = 1 := by simp [genLoop, Circle.exp_zero]
+
+theorem genLoop_one : genLoop 1 = 1 := by simp [genLoop]
+
+theorem exp_pow (a : ℝ) (k : ℕ) :
+    (Circle.exp a) ^ k = Circle.exp (a * (k : ℝ)) := by
+  induction k with
+  | zero => simp
+  | succ k ih =>
+      rw [pow_succ, ih, ← Circle.exp_add]
+      congr 1
+      push_cast
+      ring
+
+theorem exp_pow_slice (n : ℕ) (t : I) :
+    (genLoop t) ^ n = Circle.exp ((n : ℝ) * (2 * Real.pi : ℝ) * t) := by
+  show Circle.exp ((2 * Real.pi : ℝ) * (t : ℝ)) ^ n
+      = Circle.exp ((n : ℝ) * (2 * Real.pi : ℝ) * (t : ℝ))
+  rw [exp_pow]
+  congr 1
+  ring
+
+/-- The explicit affine lift of the `n`-th power of the generator loop. -/
+noncomputable def sliceLift (n : ℕ) (b : ℝ) : C(I, ℝ) where
+  toFun t := b + (n : ℝ) * (2 * Real.pi : ℝ) * t
+  continuous_toFun := by fun_prop
+
+theorem sliceLift_zero (n : ℕ) (b : ℝ) : sliceLift n b 0 = b := by
+  simp [sliceLift]
+
+/-- If a slice of the lifted square projects to the `n`-th power of the
+generator loop and starts at `b`, it is the explicit affine lift. -/
+theorem slice_of_pow (K : C(I × I, Circle)) (h0 : K (0, 0) = Circle.exp 0)
+    (n : ℕ) (s : I) (b : ℝ) (hs : ∀ t : I, K (t, s) = (genLoop t) ^ n)
+    (hb : liftedSquare K 0 h0 (0, s) = b)
+    (hbexp : Circle.exp b = 1) (t : I) :
+    liftedSquare K 0 h0 (t, s) = b + (n : ℝ) * (2 * Real.pi : ℝ) * t := by
+  set γ : C(I, Circle) := ⟨fun t => (genLoop t) ^ n, by fun_prop⟩ with hγ
+  have hγ1 : γ 0 = 1 := by
+    show (genLoop 0) ^ n = 1
+    simp [genLoop, Circle.exp_zero]
+  have hγ0 : γ 0 = Circle.exp b := by
+    rw [hγ1, hbexp]
+  have hΓeq : (⟨fun t => liftedSquare K 0 h0 (t, s), by
+      exact (liftedSquare K 0 h0).continuous.comp
+        (continuous_id.prodMk continuous_const)⟩ : C(I, ℝ))
+      = Circle.isCoveringMap_exp.liftPath γ b hγ0 := by
+    refine ((Circle.isCoveringMap_exp.eq_liftPath_iff' hγ0).mpr ⟨?_, hb⟩)
+    funext t
+    show Circle.exp (liftedSquare K 0 h0 (t, s)) = γ t
+    rw [exp_liftedSquare K 0 h0, hs t]
+    rfl
+  have hLiftEq : sliceLift n b = Circle.isCoveringMap_exp.liftPath γ b hγ0 := by
+    refine ((Circle.isCoveringMap_exp.eq_liftPath_iff' hγ0).mpr ⟨?_, sliceLift_zero n b⟩)
+    funext t
+    show Circle.exp (b + (n : ℝ) * (2 * Real.pi : ℝ) * t) = (genLoop t) ^ n
+    rw [Circle.exp_add, hbexp, one_mul, exp_pow_slice n t]
+  have := congrFun (congrArg DFunLike.coe (hΓeq.trans hLiftEq.symm)) t
+  simpa [sliceLift] using this
+
+/-- No free homotopy joins the fifth-power map to the identity on `Circle`. -/
+theorem pow_five_not_homotopic_id :
+    ¬ ContinuousMap.Homotopic (powMap 5) (ContinuousMap.id Circle) := by
+  rintro ⟨H⟩
+  set K : C(I × I, Circle) :=
+    ⟨fun p => H (p.2, genLoop p.1), by
+      apply H.continuous.comp
+      apply Continuous.prodMk continuous_snd
+      exact genLoop.continuous.comp continuous_fst⟩ with hK
+  have hloop : ∀ s : I, K (1, s) = K (0, s) := by
+    intro s
+    show H (s, genLoop 1) = H (s, genLoop 0)
+    rw [genLoop_one, genLoop_zero]
+  have h0lift : K (0, 0) = Circle.exp 0 := by
+    show H.toFun (0, genLoop 0) = Circle.exp 0
+    have hz := H.map_zero_left (genLoop 0)
+    rw [hz, genLoop_zero]
+    simp [powMap, Circle.exp_zero]
+  have hcorner : liftedSquare K 0 h0lift (0, 0) = 0 := by
+    rw [liftedSquare_zero K 0 h0lift]
+    exact Circle.isCoveringMap_exp.liftPath_zero _ _ _
+  have hs0 : ∀ t : I, K (t, 0) = (genLoop t) ^ (5 : ℕ) := by
+    intro t
+    have hz : H.toFun (0, genLoop t) = (powMap 5) (genLoop t) :=
+      H.map_zero_left _
+    show H (0, genLoop t) = (genLoop t) ^ (5 : ℕ)
+    simpa [powMap] using hz
+  have hs1 : ∀ t : I, K (t, 1) = (genLoop t) ^ (1 : ℕ) := by
+    intro t
+    show H (1, genLoop t) = (genLoop t) ^ (1 : ℕ)
+    simp
+  have hm : IsEndpointWinding (liftedSquare K 0 h0lift (1, 0))
+      (liftedSquare K 0 h0lift (0, 0)) 5 := by
+    unfold IsEndpointWinding
+    rw [slice_of_pow K h0lift 5 0 0 hs0 hcorner (by simp [Circle.exp_zero]) 1,
+      hcorner]
+    ring_nf
+    norm_num
+  set b1 : ℝ := liftedSquare K 0 h0lift (0, 1) with hb1
+  have hb1exp : Circle.exp b1 = 1 := by
+    rw [hb1, exp_liftedSquare K 0 h0lift, hs1 0]
+    simp [genLoop]
+  have hn : IsEndpointWinding (liftedSquare K 0 h0lift (1, 1))
+      (liftedSquare K 0 h0lift (0, 1)) 1 := by
+    unfold IsEndpointWinding
+    rw [slice_of_pow K h0lift 1 1 b1 hs1 hb1 hb1exp 1, hb1]
+    ring_nf
+    norm_num
+  have hcontr := uniqueEndpointWinding_agrees K 0 h0lift hloop hm hn
+  norm_num at hcontr
+
+/-! ## UnitAddCircle transport through `AddCircle.homeomorphCircle` (T = 1) -/
+
 theorem apm_t91A08_bridge_1 :
     ¬ ContinuousMap.Homotopic t91A08TimesFive
       (ContinuousMap.id UnitAddCircle) := by
-  sorry
+  intro h
+  have hsymm : ∀ x : UnitAddCircle,
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm
+          (AddCircle.toCircle x) = x := by
+    intro x
+    rw [← AddCircle.homeomorphCircle_apply one_ne_zero]
+    exact (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm_apply_apply x
+  -- Forward conjugation: the fifth-power map on `Circle` is exactly
+  -- `e ∘ t91A08TimesFive ∘ e.symm` for the canonical period-one
+  -- homeomorphism `e := AddCircle.homeomorphCircle one_ne_zero`, since
+  -- `AddCircle.toCircle_nsmul : toCircle (n • x) = toCircle x ^ n`.
+  have hpow : (powMap (5 : ℕ) : C(Circle, Circle))
+      = ((⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)),
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).continuous⟩ : C(UnitAddCircle, Circle)).comp
+        (t91A08TimesFive.comp (⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm,
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm.continuous⟩ : C(Circle, UnitAddCircle)))) := by
+    ext z
+    obtain ⟨x, hx⟩ : ∃ x : UnitAddCircle, z = AddCircle.toCircle x :=
+      ⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm z, by
+        rw [← AddCircle.homeomorphCircle_apply one_ne_zero]
+        exact ((AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).right_inv z).symm⟩
+    subst hx
+    simp only [powMap, ContinuousMap.coe_mk, ContinuousMap.coe_comp,
+      Function.comp_apply, t91A08TimesFive, hsymm x,
+      AddCircle.homeomorphCircle_apply, AddCircle.toCircle_nsmul]
+  -- Backward conjugation: `e ∘ id ∘ e.symm` is the identity on `Circle`.
+  have hid : ((⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)),
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).continuous⟩ : C(UnitAddCircle, Circle)).comp
+        ((ContinuousMap.id UnitAddCircle).comp (⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm,
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm.continuous⟩ : C(Circle, UnitAddCircle))))
+      = ContinuousMap.id Circle := by
+    ext z
+    simp only [ContinuousMap.coe_mk, ContinuousMap.coe_comp, Function.comp_apply,
+      ContinuousMap.id_apply]
+    exact congrArg ((↑) : Circle → ℂ)
+      ((AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).right_inv z)
+  have h1 : ContinuousMap.Homotopic
+      ((⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)),
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).continuous⟩ : C(UnitAddCircle, Circle)).comp
+        (t91A08TimesFive.comp (⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm,
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm.continuous⟩ : C(Circle, UnitAddCircle))))
+      ((⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)),
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).continuous⟩ : C(UnitAddCircle, Circle)).comp
+        ((ContinuousMap.id UnitAddCircle).comp (⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm,
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm.continuous⟩ : C(Circle, UnitAddCircle)))) :=
+    ContinuousMap.Homotopic.comp (ContinuousMap.Homotopic.refl (⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)),
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).continuous⟩ : C(UnitAddCircle, Circle)))
+      (ContinuousMap.Homotopic.comp h (ContinuousMap.Homotopic.refl (⟨(AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm,
+      (AddCircle.homeomorphCircle (one_ne_zero : (1 : ℝ) ≠ 0)).symm.continuous⟩ : C(Circle, UnitAddCircle))))
+  rw [hid, ← hpow] at h1
+  exact pow_five_not_homotopic_id h1
 
 theorem apm_t91a08
     (beta gamma : T91A08Form2)
@@ -203,6 +382,9 @@ theorem apm_t91a08
   homotopy-lifting, additive-order, Fourier-character, and singular-homology
   sources, and git history found no theorem closing it.  The statement is
   mathematically sound, but the degree-one-versus-degree-five bridge remains
-  open.
+  open.  It is closed here by `apm_t91A08_bridge_1`: the times-five map on
+  `UnitAddCircle` transports through the canonical `AddCircle.homeomorphCircle`
+  (period one) to the fifth-power map on `Circle`, whose non-homotopy to the
+  identity follows from winding invariance and path-lift uniqueness.
   -/
-  sorry
+  exact mt t91A08_timesFive_homotopic_of_g_homotopic apm_t91A08_bridge_1
