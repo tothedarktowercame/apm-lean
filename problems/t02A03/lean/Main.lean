@@ -145,7 +145,7 @@ theorem apm_t02A03_bridge_1 :
       exact ⟨(fundamentalGroupProdMulEquiv (1 : Circle) (1 : Circle)).trans
         (circleFundamentalGroupMulEquivInt.prodCongr
           circleFundamentalGroupMulEquivInt) |>.trans
-        (MulEquiv.prodMultiplicative ℤ ℤ)⟩
+        (MulEquiv.prodMultiplicative ℤ ℤ).symm⟩
 
 /-- Why this unblocks `apm_t02a03`: this packages precisely the invariant
 preservation and computation for the compiled torus-circle pushout.  Its five
