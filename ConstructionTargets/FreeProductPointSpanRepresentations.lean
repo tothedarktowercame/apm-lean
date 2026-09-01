@@ -124,6 +124,41 @@ instance freeProductRepresentationCategory (G H : Type) [Monoid G] [Monoid H] :
   comp_id _ := by ext; simp
   assoc _ _ _ := by ext; simp [Category.assoc]
 
+/-- Target-change of a free-product action, preserving `End.mul_def`. -/
+def mappedAction (G Hm : Type) [Monoid G] [Monoid Hm]
+    {C D : Type} [Category C] [Category D] (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    Monoid.Coprod G Hm →* End (K.obj R.target) where
+  toFun x := K.map (R.action x)
+  map_one' := by
+    rw [R.action.map_one]
+    exact K.map_id _
+  map_mul' x y := by
+    change K.map (R.action (x * y)) =
+      K.map (R.action y) ≫ K.map (R.action x)
+    rw [R.action.map_mul, End.mul_def, K.map_comp]
+
+@[simp] theorem mappedAction_apply
+    (G Hm : Type) [Monoid G] [Monoid Hm]
+    {C D : Type} [Category C] [Category D] (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm)
+    (x : Monoid.Coprod G Hm) :
+    mappedAction G Hm K R x = K.map (R.action x) := rfl
+
+@[simp] theorem mappedAction_inl
+    (G Hm : Type) [Monoid G] [Monoid Hm]
+    {C D : Type} [Category C] [Category D] (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) (g : G) :
+    mappedAction G Hm K R (Monoid.Coprod.inl g) =
+      K.map (R.action (Monoid.Coprod.inl g)) := rfl
+
+@[simp] theorem mappedAction_inr
+    (G Hm : Type) [Monoid G] [Monoid Hm]
+    {C D : Type} [Category C] [Category D] (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) (h : Hm) :
+    mappedAction G Hm K R (Monoid.Coprod.inr h) =
+      K.map (R.action (Monoid.Coprod.inr h)) := rfl
+
 def toRepresentationObj (G H : Type) [Monoid G] [Monoid H]
     (P : PointSpanPseudoCocone (C := C) G H) :
     FreeProductRepresentation (C := C) G H where
@@ -807,6 +842,8 @@ def freeProductPointSpanEquivalence
 #print axioms freeProductAction
 #print axioms freeProductAction_inl
 #print axioms freeProductAction_inr
+#print axioms mappedAction
+#print axioms mappedAction_apply
 #print axioms vertexData
 #print axioms toRepresentationObj
 #print axioms toRepresentation_action_inl

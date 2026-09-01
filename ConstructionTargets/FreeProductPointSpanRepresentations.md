@@ -28,6 +28,15 @@ generators and the right action conjugated on `inr` generators:
     P.glue.inv.app (SingleObj.star PUnit)
 ```
 
+For a target functor `K : C ⥤ D`, `mappedAction` sends every endomorphism in a
+free-product representation through `K`. Its multiplication proof retains the
+order imposed by `End.mul_def`: `action.map_mul` exposes the reversed
+categorical composite and `K.map_comp` preserves it. The unit proof similarly
+uses `action.map_one` and `K.map_id`. The `apply`, `inl`, and `inr` formulas
+make the resulting target action explicit. This is only the action-level
+prerequisite; no postcomposition functor or target-naturality isomorphism is
+introduced here.
+
 `transportedHom` and the `eqToHom` bracket lemmas isolate endpoint transport
 from categorical content. `conjugatedIntertwiner` is the generic categorical
 engine for passing an intertwining equation through two isomorphisms, and
