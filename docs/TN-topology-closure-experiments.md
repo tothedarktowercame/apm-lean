@@ -779,6 +779,19 @@ source-reconstruction shortcuts.  `t02A03` remains open; all four homology
 clauses are ready, while the free-product π₁ conjunct blocks bridge 2 and
 final assembly.
 
+The chain was resumed with focused probe
+`invoke-1788274848206-6902-72f97e5d`.  Its fixture
+`/tmp/GenericSpanPseudoCoconeForwardProbe.lean` (SHA-256
+`7cc86daede18f781beb3ab218a71fbabf2c91feee8f7416eef5afcbed3a9b96c`)
+was independently recompiled against the canonical package authority.  It
+proves generic forward span-pseudococone transport and arbitrary-target
+postcomposition naturality with standard axioms only.  Completion is blocked,
+not merely unplanned: one must separately assemble reverse transport and
+unit/counit glue squares, and prove concrete inclusion-leg comparison 2-cells
+for the torus-circle cover.  Current homotopy equivalences do not contain the
+required commuting homotopies.  No fixed-target or objectwise shortcut was
+accepted.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

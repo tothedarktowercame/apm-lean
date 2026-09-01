@@ -1060,6 +1060,20 @@ assumed bijectivity, or coordinate-specific reuse would not prove the frozen
 statement.  `t02A03` therefore remains open with its homology branch reviewed
 and its free-product π₁ branch stopped at this foundation boundary.
 
+A resumed first-layer probe `invoke-1788274848206-6902-72f97e5d` refined that
+boundary with executable evidence.  The independently recompiled fixture
+`/tmp/GenericSpanPseudoCoconeForwardProbe.lean` (SHA-256
+`7cc86daede18f781beb3ab218a71fbabf2c91feee8f7416eef5afcbed3a9b96c`)
+constructs the fully generic forward pseudococone transport functor and its
+arbitrary-target postcomposition natural isomorphism, with only `propext`,
+`Classical.choice`, and `Quot.sound`.  Two independent constructions still
+separate it from an equivalence usable by the wedge: generic reverse transport
+with unit/counit glue squares, and concrete comparison 2-cells showing that
+the chosen `U/V/UV` homotopy equivalences commute with the actual overlap
+inclusions.  The second obligation is not implied by contractibility of the
+overlap.  Work beyond the compiled forward functor is blocked on those two
+theorems; no source-reconstruction claim is made.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.
