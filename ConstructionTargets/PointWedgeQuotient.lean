@@ -8,6 +8,61 @@ namespace ConstructionTargets.PointWedgeQuotient
 
 universe u v
 
+section RelationComparison
+
+variable {Z : Type*} (R S : Z → Z → Prop)
+
+/-- Pointwise-equivalent generating relations have equivalent generated
+equivalence relations. This statement is independent of topology. -/
+theorem eqvGen_iff_of_rel_iff (hRS : ∀ a b, R a b ↔ S a b) (a b : Z) :
+    Relation.EqvGen R a b ↔ Relation.EqvGen S a b := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b hab => exact Relation.EqvGen.rel _ _ ((hRS a b).mp hab)
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro h
+    induction h with
+    | rel a b hab => exact Relation.EqvGen.rel _ _ ((hRS a b).mpr hab)
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
+abbrev RelationQuotient (T : Z → Z → Prop) :=
+  Quotient (Relation.EqvGen.setoid T)
+
+variable [TopologicalSpace Z]
+
+noncomputable instance (T : Z → Z → Prop) :
+    TopologicalSpace (RelationQuotient T) :=
+  TopologicalSpace.coinduced (fun z : Z => Quotient.mk _ z) inferInstance
+
+/-- Pointwise-equivalent relations give homeomorphic quotients when both
+quotients carry the honest coinduced topology from their quotient maps. -/
+def quotientHomeomorphOfRelIff (hRS : ∀ a b, R a b ↔ S a b) :
+    RelationQuotient R ≃ₜ RelationQuotient S where
+  toFun := Quotient.lift (fun z => Quotient.mk _ z) fun _ _ h =>
+    Quotient.sound ((eqvGen_iff_of_rel_iff R S hRS _ _).mp h)
+  invFun := Quotient.lift (fun z => Quotient.mk _ z) fun _ _ h =>
+    Quotient.sound ((eqvGen_iff_of_rel_iff R S hRS _ _).mpr h)
+  left_inv := by rintro ⟨z⟩; rfl
+  right_inv := by rintro ⟨z⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+/-- The quotient comparison is literally the identity on representatives. -/
+@[simp] theorem quotientHomeomorphOfRelIff_mk
+    (hRS : ∀ a b, R a b ↔ S a b) (z : Z) :
+    quotientHomeomorphOfRelIff R S hRS (Quotient.mk _ z) = Quotient.mk _ z := rfl
+
+end RelationComparison
+
 variable {X : Type u} {Y : Type v}
 
 /-- The generating relation identifying the two chosen wedge points. -/
@@ -126,5 +181,7 @@ theorem leftOpen_union_rightOpen (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X) :
 #print axioms leftOpen_isOpen
 #print axioms rightOpen_isOpen
 #print axioms leftOpen_union_rightOpen
+#print axioms eqvGen_iff_of_rel_iff
+#print axioms quotientHomeomorphOfRelIff
 
 end ConstructionTargets.PointWedgeQuotient

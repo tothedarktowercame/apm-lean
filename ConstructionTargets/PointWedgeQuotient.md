@@ -11,6 +11,15 @@ image exactly. Since the wedge topology is coinduced by `quotientMap`,
 `isOpen_image_of_basepoints_mem` derives openness from this exact preimage; it
 does not assume that an arbitrary quotient map is open.
 
+`eqvGen_iff_of_rel_iff` lifts pointwise equivalence of two generating
+relations to their generated equivalence relations. With each quotient given
+the topology coinduced by its own quotient map,
+`quotientHomeomorphOfRelIff` descends the identity on representatives in both
+directions. Its continuity proofs use `Continuous.quotient_lift` and
+`continuous_coinduced_rng`; `quotientHomeomorphOfRelIff_mk` records the literal
+representative formula. The relation lemma is scoped before the topology
+variable because it has no topological hypothesis.
+
 The target also supplies `leftPreimage` and `rightPreimage`, their openness,
 the quotient open sets `leftOpen` and `rightOpen`, and
 `leftOpen_union_rightOpen`. These are the generic open-cover ingredients for
