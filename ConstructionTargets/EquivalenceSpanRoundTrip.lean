@@ -323,6 +323,19 @@ theorem spanRoundTrip_counit_triangle_inv
   have hab : a = b := Iso.ext (spanRoundTrip_counit_triangle eO eP J K q L)
   simpa [a, b, Category.assoc] using congrArg Iso.inv hab
 
+/-- Left whiskering exposes a composite of three natural transformations as
+the corresponding three-factor composite.  This form is useful when each
+factor is discharged by a separate typed coherence theorem. -/
+theorem whiskerLeft_three_comp_generic
+    {A B E : Type*} [Category A] [Category B] [Category E]
+    (F : Functor A B) {G H I J : Functor B E}
+    (a : G ⟶ H) (b : H ⟶ I) (c : I ⟶ J) :
+    Functor.whiskerLeft F (a ≫ b ≫ c) =
+      Functor.whiskerLeft F a ≫ Functor.whiskerLeft F b ≫
+        Functor.whiskerLeft F c := by
+  ext z
+  rfl
+
 section ResidualExamples
 
 variable (eO : O ≌ O') (eP : P ≌ P') (J : Functor O P) (K : Functor O' P')
@@ -358,5 +371,6 @@ end ResidualExamples
 #print axioms spanRoundTrip_triangle_inv
 #print axioms spanRoundTrip_counit_triangle
 #print axioms spanRoundTrip_counit_triangle_inv
+#print axioms whiskerLeft_three_comp_generic
 
 end ConstructionTargets.EquivalenceSpanRoundTrip

@@ -15,6 +15,13 @@ The four production lemmas are:
 - `spanRoundTripIso_counit`
 - `spanRoundTripIso_counit_inv`
 
+`whiskerLeft_three_comp_generic` exposes a three-factor natural-transformation
+composite after left whiskering.  In the generic pseudococone experiment this
+specializes directly to the left comparison, transported glue, and inverse
+right comparison, so those three typed blocks can be rewritten separately.
+The specialization stays in the experiment because its pseudococone
+definitions are not production declarations.
+
 They cancel `α.hom` and `α.inv` honestly through naturality, whiskering,
 functoriality, and the equivalence triangle identities. No functor equality is
 inserted, and no `eqToIso` transport is used to replace the comparison.
@@ -31,3 +38,7 @@ lemmas match the forward-then-reverse unit glue composite and the inverse
 reverse-then-forward counit glue composite. It stops before any pseudococone
 transport, reverse target naturality, concrete wedge cells, free-product work,
 or frozen adapters.
+
+`TwiceSpiralPseudococoneTransport` retains its older coordinate-specific
+`whiskerLeft_three_comp`; migrating that existing consumer is intentionally
+outside this packet.
