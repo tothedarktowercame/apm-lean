@@ -312,6 +312,172 @@ def toRepresentationFunctor (G H : Type) [Monoid G] [Monoid H] :
         P.glue.inv.app (SingleObj.star PUnit) :=
   toRepresentation_action_inr G H P h
 
+def restrictedLeftFunctor (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) : SingleObj G ⥤ C :=
+  SingleObj.functor (R.action.comp Monoid.Coprod.inl)
+
+def restrictedRightFunctor (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) : SingleObj H ⥤ C :=
+  SingleObj.functor (R.action.comp Monoid.Coprod.inr)
+
+@[simp] theorem restrictedLeftFunctor_obj
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    (restrictedLeftFunctor G H C R).obj (SingleObj.star G) = R.target := rfl
+
+@[simp] theorem restrictedRightFunctor_obj
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    (restrictedRightFunctor G H C R).obj (SingleObj.star H) = R.target := rfl
+
+@[simp] theorem restrictedLeftFunctor_map
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) (g : G) :
+    (restrictedLeftFunctor G H C R).map
+        (X := SingleObj.star G) (Y := SingleObj.star G) g =
+      R.action (Monoid.Coprod.inl g) := rfl
+
+@[simp] theorem restrictedRightFunctor_map
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) (h : H) :
+    (restrictedRightFunctor G H C R).map
+        (X := SingleObj.star H) (Y := SingleObj.star H) h =
+      R.action (Monoid.Coprod.inr h) := rfl
+
+def restrictedGlue (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    pointLeg G ⋙ restrictedLeftFunctor G H C R ≅
+      pointLeg H ⋙ restrictedRightFunctor G H C R :=
+  NatIso.ofComponents (fun _ => Iso.refl R.target) (by
+    intro X Y f
+    cases X
+    cases Y
+    change R.action (Monoid.Coprod.inl (pointHom G f)) ≫ 𝟙 R.target =
+      𝟙 R.target ≫ R.action (Monoid.Coprod.inr (pointHom H f))
+    cases f
+    simp [pointHom])
+
+@[simp] theorem restrictedGlue_hom_app
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    (restrictedGlue G H C R).hom.app (SingleObj.star PUnit) = 𝟙 R.target := rfl
+
+@[simp] theorem restrictedGlue_inv_app
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    (restrictedGlue G H C R).inv.app (SingleObj.star PUnit) = 𝟙 R.target := rfl
+
+def fromRepresentationObj (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    PointSpanPseudoCocone (C := C) G H where
+  left := restrictedLeftFunctor G H C R
+  right := restrictedRightFunctor G H C R
+  glue := restrictedGlue G H C R
+
+def restrictedLeftNatTrans
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    {R S : FreeProductRepresentation (C := C) G H} (f : R ⟶ S) :
+    restrictedLeftFunctor G H C R ⟶ restrictedLeftFunctor G H C S :=
+  SingleObj.natTrans f.hom (fun g => f.intertwines (Monoid.Coprod.inl g))
+
+def restrictedRightNatTrans
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    {R S : FreeProductRepresentation (C := C) G H} (f : R ⟶ S) :
+    restrictedRightFunctor G H C R ⟶ restrictedRightFunctor G H C S :=
+  SingleObj.natTrans f.hom (fun h => f.intertwines (Monoid.Coprod.inr h))
+
+@[simp] theorem restrictedLeftNatTrans_app
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    {R S : FreeProductRepresentation (C := C) G H} (f : R ⟶ S) :
+    (restrictedLeftNatTrans G H C f).app (SingleObj.star G) = f.hom := rfl
+
+@[simp] theorem restrictedRightNatTrans_app
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    {R S : FreeProductRepresentation (C := C) G H} (f : R ⟶ S) :
+    (restrictedRightNatTrans G H C f).app (SingleObj.star H) = f.hom := rfl
+
+def fromRepresentationMap
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    {R S : FreeProductRepresentation (C := C) G H} (f : R ⟶ S) :
+    fromRepresentationObj G H C R ⟶ fromRepresentationObj G H C S where
+  left := restrictedLeftNatTrans G H C f
+  right := restrictedRightNatTrans G H C f
+  glue_naturality := by
+    ext X
+    cases X
+    change (𝟙 R.target) ≫ f.hom = f.hom ≫ (𝟙 S.target)
+    simp
+
+def fromRepresentationFunctor
+    (G H C : Type) [Monoid G] [Monoid H] [Category C] :
+    FreeProductRepresentation (C := C) G H ⥤
+      PointSpanPseudoCocone (C := C) G H where
+  obj := fromRepresentationObj G H C
+  map := fromRepresentationMap G H C
+  map_id R := by
+    apply ConstructionTargets.GenericSpanPseudoCoconeTransport.SpanPseudoCoconeHom.ext
+    · ext X; cases X; rfl
+    · ext X; cases X; rfl
+  map_comp f g := by
+    apply ConstructionTargets.GenericSpanPseudoCoconeTransport.SpanPseudoCoconeHom.ext
+    · ext X; cases X; rfl
+    · ext X; cases X; rfl
+
+theorem representation_roundTrip_action
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    (toRepresentationObj (C := C) G H
+      (fromRepresentationObj G H C R)).action = R.action := by
+  apply Monoid.Coprod.hom_ext
+  · ext g
+    rw [MonoidHom.comp_apply, toRepresentation_action_inl]
+    rfl
+  · ext h
+    rw [MonoidHom.comp_apply, toRepresentation_action_inr]
+    change 𝟙 R.target ≫ R.action (Monoid.Coprod.inr h) ≫ 𝟙 R.target =
+      R.action (Monoid.Coprod.inr h)
+    simp
+
+@[simp] theorem representation_roundTrip_target
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    (toRepresentationObj (C := C) G H
+      (fromRepresentationObj G H C R)).target = R.target := rfl
+
+@[simp] theorem representation_roundTrip_map_hom
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    {R S : FreeProductRepresentation (C := C) G H} (f : R ⟶ S) :
+    (fromRepresentationMap G H C f).left.app (SingleObj.star G) = f.hom := rfl
+
+@[simp] theorem cocone_roundTrip_left_map
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (P : PointSpanPseudoCocone (C := C) G H) (g : G) :
+    (fromRepresentationObj G H C (toRepresentationObj (C := C) G H P)).left.map
+        (X := SingleObj.star G) (Y := SingleObj.star G) g =
+      P.left.map (X := SingleObj.star G) (Y := SingleObj.star G) g := by
+  change (toRepresentationObj (C := C) G H P).action
+    (Monoid.Coprod.inl g) = P.left.map g
+  exact toRepresentation_action_inl G H P g
+
+@[simp] theorem cocone_roundTrip_right_map
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (P : PointSpanPseudoCocone (C := C) G H) (h : H) :
+    (fromRepresentationObj G H C (toRepresentationObj (C := C) G H P)).right.map
+        (X := SingleObj.star H) (Y := SingleObj.star H) h =
+      P.glue.hom.app (SingleObj.star PUnit) ≫
+        P.right.map (X := SingleObj.star H) (Y := SingleObj.star H) h ≫
+        P.glue.inv.app (SingleObj.star PUnit) := by
+  change (toRepresentationObj (C := C) G H P).action
+    (Monoid.Coprod.inr h) = _
+  exact toRepresentation_action_inr G H P h
+
+@[simp] theorem cocone_roundTrip_glue_hom
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    (fromRepresentationObj G H C
+      (toRepresentationObj (C := C) G H P)).glue.hom.app
+        (SingleObj.star PUnit) = 𝟙 _ := rfl
+
 #print axioms freeProductAction
 #print axioms freeProductAction_inl
 #print axioms freeProductAction_inr
@@ -329,5 +495,11 @@ def toRepresentationFunctor (G H : Type) [Monoid G] [Monoid H] :
 #print axioms freeProduct_intertwiner
 #print axioms toRepresentationMap
 #print axioms toRepresentationFunctor
+#print axioms restrictedGlue
+#print axioms fromRepresentationObj
+#print axioms fromRepresentationMap
+#print axioms fromRepresentationFunctor
+#print axioms representation_roundTrip_action
+#print axioms cocone_roundTrip_right_map
 
 end ConstructionTargets.FreeProductPointSpanRepresentations

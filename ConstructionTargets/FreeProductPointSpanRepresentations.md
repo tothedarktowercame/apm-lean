@@ -44,5 +44,28 @@ identity and composition laws.
 
 The five normalization lemmas expose the map's underlying morphism, functor
 objects and maps, literal left-generator action, and conjugated right-generator
-action. This file still does not add reverse reconstruction, an equivalence,
-target naturality, torus-specific connectors, or frozen-facing adapters.
+action.
+
+The reverse reconstruction restricts a free-product action along
+`Monoid.Coprod.inl` and `Monoid.Coprod.inr`, so the generator choices remain
+literally `G = inl` and `H = inr`. `restrictedGlue` has identity components;
+its naturality follows from both point legs sending the sole point monoid
+morphism to the unit. `fromRepresentationObj`, `fromRepresentationMap`, and
+`fromRepresentationFunctor` package these restrictions as a point-span
+pseudococone functor.
+
+The representation-side normalization recovers the original target and full
+coproduct action, and recovers a representation morphism through its left
+component. On the cocone side, the left action is literal, while the right
+action is transported to the left target by the original glue:
+
+```lean
+P.glue.hom.app (SingleObj.star PUnit) ≫ P.right.map h ≫
+  P.glue.inv.app (SingleObj.star PUnit)
+```
+
+Accordingly, the reconstructed cocone's glue is identity on the left target.
+A later natural isomorphism must compare that transported right side with the
+original right target and glue. This milestone does not claim or construct an
+equivalence, unit, counit, triangle identity, target naturality, torus
+specialization, or frozen uptake.
