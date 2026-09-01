@@ -828,6 +828,40 @@ inside their banked proofs.  The remaining target-naturality step is the final
 consumer-facing paste with the generic pseudopushout and reviewed geometric/
 connector squares.
 
+### t02A03 final closure
+
+The resumed point-wedge campaign closed the earlier free-product foundation
+stop without assuming bijectivity or reconstructing a source from one fixed
+target.  The initial torus bridge was implemented at `301501c2` and repaired
+to the frozen product-multiplicative orientation at `7ea2c595`.  The quotient
+and open-cover geometry was banked at `7cfa9888`, `ac910fb4`, `8bc28a2d`,
+`c5b6f9cd`, `17d8e69e`, `f2394dd6`, and `0fc1cb8c`.  The reviewed chain then
+built generic span transport (`2e436010`,
+`ec9cc067`, `edc3e34a`, `a4165ca3`, `81261a1e`, `cfdcbd47`), concrete wedge
+cells (`1f4baec3`), target-natural point-span/free-product representability
+(`672c9a83`, `908bb038`, `789791f9`, `006b106b`, `c2b33523`, `76cc892c`,
+`64c89ca6`, `e6db5c09`, `7edd74c6`), literal connector coordinates
+(`93744662`, `d4be08c8`, `401d4162`), and the actual-span composite
+(`16f3bb24`).  The target-natural mapping equivalence and generic source
+reconstruction were banked at `65874214`, `68243152`, and `a178f80d`.
+
+The independent homology branch is the production Mayer--Vietoris calculation
+at `31d0d05c` with coordinate-order repair `61e03da1`; frozen quotient
+transport uses the relation comparison at `f8cef535`.  Final fixture
+`/tmp/T02A03FullClosureProbe.lean` has SHA-256
+`78fe0bb9cff9320106791b9137133c4c9b66300f2d9e8c8b535debf3dba8894e`.
+Its exact bridge-2 and final statement hashes are
+`4b6b72a8a93414fb7d7260166fff717cfc06c98b56f9c82ba77fea7e44556641`
+and `923296b0aa0e70d9702cdd5d9767dffc54ce7e1c5ee4f2bda9d624321ee85624`.
+
+Implementation job `invoke-1788293584627-7110-84f184fd` committed the one-file
+closure at `61f8ece4`; independent review
+`invoke-1788293762727-7114-8c51832a` returned `PASS`.  Placeholders decrease
+`2 → 0` in the final commit, both statements remain byte-identical, the
+problem emits zero warnings, the full build passes, and both theorems use only
+`propext`, `Classical.choice`, and `Quot.sound`.  The final decision is
+**CLOSED** for `t02A03`.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:

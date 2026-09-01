@@ -602,6 +602,7 @@ critical-value Sard.
 | `t91A05` | `3f3b72b2` using the shared `CircleMetricFundamentalGroup` adapter | two placeholders removed, metric-sphere carrier and basepoint align definitionally with bundled `Circle`, frozen statements unchanged, independent review passed, only standard axioms |
 | `t97J03` | `3f3b72b2` using the shared `CircleMetricFundamentalGroup` adapter | sole placeholder removed, norm-one subtype and basepoint align definitionally with bundled `Circle`, frozen statement unchanged, independent review passed, only standard axioms |
 | `t91A08` | `02b4e476` using the reviewed power-five winding obstruction and exact `AddCircle.homeomorphCircle` transport | two placeholders removed, frozen statements unchanged, direct/full builds and independent Zai review passed, four warnings are pre-existing, only standard axioms |
+| `t02A03` | `61f8ece4` through point-wedge geometry, production Mayer--Vietoris, target-natural free-product representation, generic source reconstruction, and frozen quotient transport | three placeholders removed across reviewed commits (`301501c2`/`7ea2c595`, then `61f8ece4`); both final frozen statements unchanged, zero warnings, full build and independent review passed, only standard axioms |
 
 Bounded partial closures, which do not belong in the closed-problem table:
 
@@ -609,7 +610,6 @@ Bounded partial closures, which do not belong in the closed-problem table:
 |---|---|---|
 | `t95J04` | `54fe6115` compiles the two `S⁶` comparisons; `45304f7d` compiles all three simple-connectivity conjuncts; the reviewed MV chain `e24d442b`, `6b59e2e6`, `f8feca24`, `10cfb866` compiles `S² × S⁴ ≄ S³ × S³` without Kunneth or Eilenberg--Zilber | one placeholder remains only for Sard/nullity/non-surjectivity/null-homotopy; statement unchanged |
 | `t01A02` | `c5ada212` imports the banked genuine product-cover theorem and compiles the coordinatewise `(ZMod 2)²` action, invariance, freeness, and fiber transitivity | three placeholders remain: H₂ degree/nonsurjectivity, Lefschetz fixed point, and final assembly; covering-group bridge statement unchanged |
-| `t02A03` | `301501c2` plus orientation repair `7ea2c595` compiles `π₁(T²,(1,1)) ≃* Multiplicative (ℤ × ℤ)` from product preservation and two circle winding equivalences | two placeholders remain: the wedge van Kampen/homology bridge and final assembly; whole problem remains open |
 | `t92J05` | `c55d5089` compiles uniform sphere-group subsingletonity and uniform circle-group equivalences at arbitrary basepoints | three placeholders remain: the RP²/antipodal bridge, genus-two classification bridge, and final assembly; whole problem remains open |
 
 Current audited classification beyond these closures:
@@ -1102,9 +1102,41 @@ independent review `invoke-1788278649478-6932-424d2971` returned `PASS` and
 rebuilt the existing twice-spiral consumer.  The objectwise pseudococone
 unit/counit glue squares are now ready for a focused re-probe.
 
-Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
-independent van Kampen or surface-classification foundations before
-whole-consumer closure.
+`t92J05` remains open on its independent surface-classification foundations.
+The former `t02A03` van Kampen boundary was subsequently closed by the
+target-natural source-reconstruction chain recorded below.
+
+### t02A03 closed after the point-wedge construction campaign
+
+`t02A03` is **CLOSED** at `61f8ece4`.  Its initial torus bridge was banked at
+`301501c2` and corrected to the declared product-multiplicative orientation at
+`7ea2c595`.  The remaining dependency chain comprises:
+
+- quotient/open-cover geometry: `7cfa9888`, `ac910fb4`, `8bc28a2d`,
+  `c5b6f9cd`, `17d8e69e`, `f2394dd6`, and `0fc1cb8c`;
+- actual-arrow Mayer--Vietoris: `31d0d05c`, with torus-first `Fin 3` repair
+  `61e03da1`;
+- generic span transport and actual wedge cells: `2e436010`, `ec9cc067`,
+  `edc3e34a`, `a4165ca3`, `81261a1e`, `cfdcbd47`, and `1f4baec3`;
+- point-span/free-product representation and target naturality: `672c9a83`,
+  `908bb038`, `789791f9`, `006b106b`, `c2b33523`, `76cc892c`, `64c89ca6`,
+  `e6db5c09`, and `7edd74c6`;
+- connector coordinates and actual-span composition: `93744662`, `d4be08c8`,
+  `401d4162`, and `16f3bb24`;
+- target-natural mapping equivalence and source reconstruction: `65874214`,
+  `68243152`, and `a178f80d`;
+- generic relation-quotient transport: `f8cef535`.
+
+Final fixture `/tmp/T02A03FullClosureProbe.lean` has SHA-256
+`78fe0bb9cff9320106791b9137133c4c9b66300f2d9e8c8b535debf3dba8894e`.
+Implementation job `invoke-1788293584627-7110-84f184fd` produced the exact
+one-file closure; independent review `invoke-1788293762727-7114-8c51832a`
+returned `PASS`.  The bridge-2 and final statement hashes remain
+`4b6b72a8a93414fb7d7260166fff717cfc06c98b56f9c82ba77fea7e44556641`
+and `923296b0aa0e70d9702cdd5d9767dffc54ce7e1c5ee4f2bda9d624321ee85624`.
+Placeholders are `2 → 0` in the closing commit (`3 → 0` across the campaign),
+the changed problem emits zero warnings, the full build passes, and both
+closed theorems use only `propext`, `Classical.choice`, and `Quot.sound`.
 
 The banked production-MV scaffold already supplies:
 
