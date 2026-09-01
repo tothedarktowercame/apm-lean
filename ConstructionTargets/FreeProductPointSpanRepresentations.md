@@ -95,5 +95,21 @@ inverse functors, the identity left unit component, the glue-inverse right unit
 component, the identity counit, and the exact `inl`/conjugated-`inr` action
 orientation.
 
-This milestone does not add target-postcomposition naturality, connectors,
-torus specialization, source reconstruction, or frozen uptake.
+Forward target-postcomposition naturality reuses the generic span
+`postcomposeFunctor` on point-span pseudococones and maps representation actions
+and intertwiners through the target functor. The action comparison proves the
+`G`/`inl` generator first and preserves the conjugated `H`/`inr` action. It
+induces `toRepresentationPostcomposeIso` with orientation
+
+```lean
+postcomposePointSpanFunctor G H K ⋙ toRepresentationFunctor (C := D) G H ≅
+  toRepresentationFunctor (C := C) G H ⋙ postcomposeRepresentationFunctor G H K
+```
+
+and `equivalenceFunctorPostcomposeIso` exposes the same comparison through the
+equivalence's forward functor, with identity underlying components.
+
+Reverse target naturality is not yet present. It requires a dependent
+comparison for the `SingleObj` restriction functors. This milestone adds no
+reverse comparison, connectors, specialization, source reconstruction, or
+frozen uptake.

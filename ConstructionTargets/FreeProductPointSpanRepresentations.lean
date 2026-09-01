@@ -839,6 +839,111 @@ def freeProductPointSpanEquivalence
           P.glue.inv.app (SingleObj.star PUnit) :=
   toRepresentation_action_inr G H P h
 
+section TargetNaturality
+
+variable (G Hm : Type) [Monoid G] [Monoid Hm]
+variable {C D : Type} [Category C] [Category D]
+
+def postcomposePointSpanFunctor (K : C ⥤ D) :
+    PointSpanPseudoCocone (C := C) G Hm ⥤ PointSpanPseudoCocone (C := D) G Hm :=
+  postcomposeFunctor K
+
+def postcomposeRepresentationObj (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    FreeProductRepresentation (C := D) G Hm where
+  target := K.obj R.target
+  action := mappedAction G Hm K R
+
+def postcomposeRepresentationMap (K : C ⥤ D)
+    {R S : FreeProductRepresentation (C := C) G Hm} (f : R ⟶ S) :
+    postcomposeRepresentationObj G Hm K R ⟶ postcomposeRepresentationObj G Hm K S where
+  hom := K.map f.hom
+  intertwines x := by
+    change K.map (R.action x) ≫ K.map f.hom = K.map f.hom ≫ K.map (S.action x)
+    rw [← K.map_comp, ← K.map_comp, f.intertwines]
+
+def postcomposeRepresentationFunctor (K : C ⥤ D) :
+    FreeProductRepresentation (C := C) G Hm ⥤ FreeProductRepresentation (C := D) G Hm where
+  obj := postcomposeRepresentationObj G Hm K
+  map := postcomposeRepresentationMap G Hm K
+  map_id R := by apply FreeProductRepresentationHom.ext; exact K.map_id _
+  map_comp f g := by apply FreeProductRepresentationHom.ext; exact K.map_comp _ _
+
+theorem forward_postcompose_action_eq (K : C ⥤ D)
+    (P : PointSpanPseudoCocone (C := C) G Hm) :
+    (toRepresentationObj (C := D) G Hm
+      ((postcomposePointSpanFunctor G Hm K).obj P)).action =
+    (postcomposeRepresentationObj G Hm K
+      (toRepresentationObj (C := C) G Hm P)).action := by
+  apply Monoid.Coprod.hom_ext
+  · ext g
+    change K.map (P.left.map g) = K.map (P.left.map g)
+    rfl
+  · ext h
+    change K.map (P.glue.hom.app (SingleObj.star PUnit)) ≫ K.map (P.right.map h) ≫
+        K.map (P.glue.inv.app (SingleObj.star PUnit)) =
+      K.map (P.glue.hom.app (SingleObj.star PUnit) ≫ P.right.map h ≫
+        P.glue.inv.app (SingleObj.star PUnit))
+    rw [K.map_comp, K.map_comp]
+
+def forwardPostcomposeIsoApp (K : C ⥤ D)
+    (P : PointSpanPseudoCocone (C := C) G Hm) :
+    (postcomposePointSpanFunctor G Hm K ⋙
+      toRepresentationFunctor (C := D) G Hm).obj P ≅
+    (toRepresentationFunctor (C := C) G Hm ⋙
+      postcomposeRepresentationFunctor G Hm K).obj P where
+  hom := ⟨𝟙 _, by
+    intro x
+    change (toRepresentationObj (C := D) G Hm
+        ((postcomposePointSpanFunctor G Hm K).obj P)).action x ≫ 𝟙 _ =
+      𝟙 _ ≫ (postcomposeRepresentationObj G Hm K
+        (toRepresentationObj (C := C) G Hm P)).action x
+    simpa only [Category.comp_id, Category.id_comp] using
+      DFunLike.congr_fun (forward_postcompose_action_eq G Hm K P) x⟩
+  inv := ⟨𝟙 _, by
+    intro x
+    change (postcomposeRepresentationObj G Hm K
+        (toRepresentationObj (C := C) G Hm P)).action x ≫ 𝟙 _ =
+      𝟙 _ ≫ (toRepresentationObj (C := D) G Hm
+        ((postcomposePointSpanFunctor G Hm K).obj P)).action x
+    simpa only [Category.comp_id, Category.id_comp] using
+      (DFunLike.congr_fun (forward_postcompose_action_eq G Hm K P) x).symm⟩
+  hom_inv_id := by
+    apply FreeProductRepresentationHom.ext
+    exact Category.id_comp _
+  inv_hom_id := by
+    apply FreeProductRepresentationHom.ext
+    exact Category.id_comp _
+
+theorem forwardPostcomposeIso_naturality (K : C ⥤ D)
+    {P Q : PointSpanPseudoCocone (C := C) G Hm} (f : P ⟶ Q) :
+    (postcomposePointSpanFunctor G Hm K ⋙
+      toRepresentationFunctor (C := D) G Hm).map f ≫
+        (forwardPostcomposeIsoApp G Hm K Q).hom =
+    (forwardPostcomposeIsoApp G Hm K P).hom ≫
+      (toRepresentationFunctor (C := C) G Hm ⋙
+        postcomposeRepresentationFunctor G Hm K).map f := by
+  apply FreeProductRepresentationHom.ext
+  change K.map (f.left.app (SingleObj.star G)) ≫ 𝟙 _ =
+    𝟙 _ ≫ K.map (f.left.app (SingleObj.star G))
+  simp
+
+def toRepresentationPostcomposeIso (K : C ⥤ D) :
+    postcomposePointSpanFunctor G Hm K ⋙ toRepresentationFunctor (C := D) G Hm ≅
+      toRepresentationFunctor (C := C) G Hm ⋙
+        postcomposeRepresentationFunctor G Hm K :=
+  NatIso.ofComponents (forwardPostcomposeIsoApp G Hm K)
+    (fun f => forwardPostcomposeIso_naturality G Hm K f)
+
+def equivalenceFunctorPostcomposeIso (K : C ⥤ D) :=
+  toRepresentationPostcomposeIso G Hm K
+
+@[simp] theorem forward_component_hom (K : C ⥤ D)
+    (P : PointSpanPseudoCocone (C := C) G Hm) :
+    ((toRepresentationPostcomposeIso G Hm K).hom.app P).hom = 𝟙 _ := rfl
+
+end TargetNaturality
+
 #print axioms freeProductAction
 #print axioms freeProductAction_inl
 #print axioms freeProductAction_inr
@@ -874,5 +979,8 @@ def freeProductPointSpanEquivalence
 #print axioms freeProductPointSpanEquivalence
 #print axioms equivalence_action_inl
 #print axioms equivalence_action_inr
+#print axioms postcomposeRepresentationFunctor
+#print axioms toRepresentationPostcomposeIso
+#print axioms equivalenceFunctorPostcomposeIso
 
 end ConstructionTargets.FreeProductPointSpanRepresentations
