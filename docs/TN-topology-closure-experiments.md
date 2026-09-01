@@ -677,6 +677,21 @@ The target also exports the homeomorphism from the product punctured-circle
 subtype to the literal punctured-torus neighborhood.  It does not yet descend
 homotopies through the wedge quotient or claim an open-cover equivalence.
 
+Focused cover assembly `invoke-1788252830639-6717-c2611c10` then identified a
+single compiled descent prerequisite rather than claiming the full cover.
+Fixture `/tmp/PointWedgePointedContractionDescent.lean` (SHA-256
+`bcfcb58cdecbc0bea7f28da100d7eb15436629dd7fefa6956b55ad908c6087b2`)
+was promoted by Agency job `invoke-1788253180184-6719-4d22cede` as
+`PointWedgePointedContractionDescent.{lean,md}` at commit `8bc28a2d`;
+independent review `invoke-1788253421696-6721-67ac9471` returned `PASS`.
+The reviewed deformation is jointly continuous in time and quotient point,
+uses the fixed-point law to respect the generated basepoint relation, and
+gives the correctly oriented equivalence from the wedge to the uncontracted
+left summand.  This is a geometry milestone only: the restricted open
+subtypes, symmetric use, intersection model, frozen adapter, and three cover
+homotopy equivalences remain to be compiled before Mayer--Vietoris or
+fundamental-group reconstruction begins.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

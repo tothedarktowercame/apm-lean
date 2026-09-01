@@ -948,6 +948,24 @@ homeomorphism at `ac910fb4`; independent review
 concrete cover, Mayer--Vietoris, source reconstruction, and frozen uptake
 remain separate milestones.
 
+The subsequent cover-assembly probe `invoke-1788252830639-6717-c2611c10`
+isolated one further generic prerequisite: descending a pointed contraction of
+the right summand through the point-wedge quotient.  Fixture
+`/tmp/PointWedgePointedContractionDescent.lean` (SHA-256
+`bcfcb58cdecbc0bea7f28da100d7eb15436629dd7fefa6956b55ad908c6087b2`)
+compiled the quotient collapse, left inclusion, jointly continuous descended
+deformation, and representative formulas.  Agency implementation
+`invoke-1788253180184-6719-4d22cede` promoted the exact generic pair at
+`8bc28a2d`; independent review `invoke-1788253421696-6721-67ac9471` returned
+`PASS`.  The proof uses the pointed contraction's fixed-basepoint law at the
+sole generated wedge relation and pulls joint continuity back along
+`id × quotientMap`; its homotopy runs from the quotient identity to left
+inclusion after collapse, with the required reversal used in the equivalence
+law.  The remaining geometry milestone is still the concrete restricted-wedge
+assembly for `U`, `V`, and `U ∩ V`, including the frozen adapter and all three
+homotopy equivalences.  Mayer--Vietoris, free-product source reconstruction,
+and frozen `t02A03` closure remain later dependencies.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.
