@@ -25,10 +25,6 @@ overlap-glue naturality. `inverse_glue_square_of_forward` derives the inverse
 square algebraically. The resulting `unitHom`, `unitInv`, `unitIsoApp`, and
 `unitNatIso` therefore retain every comparison and endpoint transport.
 
-This target stops before the counit, categorical equivalence and triangle,
-reverse or equivalence-level target naturality, concrete wedge cells,
-free-product reconstruction, source reconstruction, and frozen consumers.
-
 The counit is oriented as
 
 ```lean
