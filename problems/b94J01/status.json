@@ -1,43 +1,42 @@
 {
-  "schema": "apm-problem-candidate-set.v1",
-  "problem_id": "b94J01",
-  "bundle_root": "problems/b94J01",
-  "layout": "candidate-set",
-  "candidate_count": 6,
-  "frame_ids": [
-    "apm-v2-b94J01-1774992341688",
-    "apm-v2-b94J01-1774994174583",
-    "apm-v2-b94J01-1774995021497",
-    "apm-v2-b94J01-1774999220593",
-    "apm-v2-b94J01-1775001319272",
-    "apm-v2-b94J01-1775002552157"
-  ],
-  "recommended_latest_frame_id": "apm-v2-b94J01-1775002552157",
-  "selected_frame_id": null,
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
-    "sorry_count_main": 2,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 2
+  "schema" : "apm-problem-candidate-set.v1",
+  "layout" : "candidate-set",
+  "problem_id" : "b94J01",
+  "obstructions" : [ {
+    "areas" : [ ],
+    "areas_are" : "necessary",
+    "missing" : "[closer_hop] 4\n\n[boundary] The missing nontrivial finite-abelian invariant-factor normalization and uniqueness theorem is now stated precisely as apm_b94J01_bridge_1; the cardinality-one case is already proved.",
+    "recorded_by" : "codex-6",
+    "frame" : "phase-2c-legacy-migration",
+    "at_commit" : "a00ea1f",
+    "date" : "2026-08-19",
+    "resolved" : null
+  } ],
+  "boundary" : "Closed by frame f74 (campaign jit-all-open-v2, 2026-09-01): \"complete invariant factor existence\". Banked verbatim from the f74 Solver terminal head 0a89a3dfbd631427785d9496d445824fab045059 on branch exp/countdown-f74-b94J01-solver; content identical to that head, no re-derivation. Frozen statement apm_b94j01 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "classification": "partial",
-  "closer_hop": 4,
-  "boundary": "The missing nontrivial finite-abelian invariant-factor normalization and uniqueness theorem is now stated precisely as apm_b94J01_bridge_1; the cardinality-one case is already proved.",
-  "imported_at": "2026-05-01T19:38:17.637008Z",
-  "obstructions": [
-    {
-      "areas": [],
-      "areas_are": "necessary",
-      "missing": "[closer_hop] 4\n\n[boundary] The missing nontrivial finite-abelian invariant-factor normalization and uniqueness theorem is now stated precisely as apm_b94J01_bridge_1; the cardinality-one case is already proved.",
-      "recorded_by": "codex-6",
-      "frame": "phase-2c-legacy-migration",
-      "at_commit": "a00ea1f",
-      "date": "2026-08-19",
-      "resolved": null
-    }
-  ]
+  "bundle_root" : "problems/b94J01",
+  "closer_hop" : 4,
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-09-01",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 2,
+    "axioms" : "apm_b94j01 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f74"
+  },
+  "recommended_latest_frame_id" : "apm-v2-b94J01-1775002552157",
+  "frame_ids" : [ "apm-v2-b94J01-1774992341688", "apm-v2-b94J01-1774994174583", "apm-v2-b94J01-1774995021497", "apm-v2-b94J01-1774999220593", "apm-v2-b94J01-1775001319272", "apm-v2-b94J01-1775002552157" ],
+  "candidate_count" : 6,
+  "selected_frame_id" : null,
+  "imported_at" : "2026-05-01T19:38:17.637008Z"
 }
