@@ -478,6 +478,200 @@ theorem representation_roundTrip_action
       (toRepresentationObj (C := C) G H P)).glue.hom.app
         (SingleObj.star PUnit) = 𝟙 _ := rfl
 
+variable {C : Type} [Category C]
+
+theorem comp_inv_eq_inv_comp_conjugate {X Y : C}
+    (i : X ≅ Y) (p : Y ⟶ Y) :
+    p ≫ i.inv = i.inv ≫ (i.hom ≫ p ≫ i.inv) := by
+  slice_rhs 1 2 => simp
+  simp
+
+theorem conjugate_comp_hom_eq_hom_comp {X Y : C}
+    (i : X ≅ Y) (p : Y ⟶ Y) :
+    (i.hom ≫ p ≫ i.inv) ≫ i.hom = i.hom ≫ p := by
+  slice_lhs 3 4 => simp
+  simp
+
+theorem mapped_pointLeg_star_proof_eq_rfl
+    (M : Type) [Monoid M] (F : SingleObj M ⥤ C) :
+    mapped_pointLeg_star_eq (C := C) M F = rfl := Subsingleton.elim _ _
+
+theorem mapped_pointLeg_star_symm_proof_eq_rfl
+    (M : Type) [Monoid M] (F : SingleObj M ⥤ C) :
+    (mapped_pointLeg_star_eq (C := C) M F).symm = rfl := Subsingleton.elim _ _
+
+def rightToLeftComponent
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    P.right.obj (SingleObj.star H) ⟶ P.left.obj (SingleObj.star G) :=
+  eqToHom (mapped_pointLeg_star_eq (C := C) H P.right).symm ≫
+    P.glue.inv.app (SingleObj.star PUnit) ≫
+    eqToHom (mapped_pointLeg_star_eq (C := C) G P.left)
+
+def leftToRightComponent
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    P.left.obj (SingleObj.star G) ⟶ P.right.obj (SingleObj.star H) :=
+  eqToHom (mapped_pointLeg_star_eq (C := C) G P.left).symm ≫
+    P.glue.hom.app (SingleObj.star PUnit) ≫
+    eqToHom (mapped_pointLeg_star_eq (C := C) H P.right)
+
+theorem rightToLeftComponent_eq_glue_inv
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    rightToLeftComponent G H P = P.glue.inv.app (SingleObj.star PUnit) := by
+  unfold rightToLeftComponent
+  exact eqToHom_self_bracket _ _ _ _ _
+
+theorem leftToRightComponent_eq_glue_hom
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    leftToRightComponent G H P = P.glue.hom.app (SingleObj.star PUnit) := by
+  unfold leftToRightComponent
+  exact eqToHom_self_bracket _ _ _ _ _
+
+theorem rightToLeft_naturality
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) (h : H) :
+    P.right.map h ≫ rightToLeftComponent G H P =
+      rightToLeftComponent G H P ≫
+        (fromRepresentationObj G H C
+          (toRepresentationObj (C := C) G H P)).right.map
+            (X := SingleObj.star H) (Y := SingleObj.star H) h := by
+  rw [rightToLeftComponent_eq_glue_inv, cocone_roundTrip_right_map]
+  exact comp_inv_eq_inv_comp_conjugate
+    (P.glue.app (SingleObj.star PUnit)) (P.right.map h)
+
+theorem leftToRight_naturality
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) (h : H) :
+    (fromRepresentationObj G H C
+        (toRepresentationObj (C := C) G H P)).right.map
+          (X := SingleObj.star H) (Y := SingleObj.star H) h ≫
+        leftToRightComponent G H P =
+      leftToRightComponent G H P ≫ P.right.map h := by
+  rw [leftToRightComponent_eq_glue_hom, cocone_roundTrip_right_map]
+  exact conjugate_comp_hom_eq_hom_comp
+    (P.glue.app (SingleObj.star PUnit)) (P.right.map h)
+
+def rightToLeftNatTrans
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    P.right ⟶
+      (fromRepresentationObj G H C
+        (toRepresentationObj (C := C) G H P)).right :=
+  SingleObj.natTrans (rightToLeftComponent G H P)
+    (rightToLeft_naturality G H P)
+
+def leftToRightNatTrans
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    (fromRepresentationObj G H C
+      (toRepresentationObj (C := C) G H P)).right ⟶ P.right :=
+  SingleObj.natTrans (leftToRightComponent G H P)
+    (leftToRight_naturality G H P)
+
+def coconeUnitHom
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    P ⟶ (toRepresentationFunctor (C := C) G H ⋙
+      fromRepresentationFunctor G H C).obj P where
+  left := 𝟙 P.left
+  right := rightToLeftNatTrans G H P
+  glue_naturality := by
+    ext X
+    cases X
+    change P.glue.hom.app (SingleObj.star PUnit) ≫
+      rightToLeftComponent G H P = 𝟙 _ ≫ 𝟙 _
+    rw [rightToLeftComponent_eq_glue_inv]
+    simpa only [Category.comp_id] using
+      P.glue.hom_inv_id_app (SingleObj.star PUnit)
+
+def coconeUnitInv
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    (toRepresentationFunctor (C := C) G H ⋙
+      fromRepresentationFunctor G H C).obj P ⟶ P where
+  left := 𝟙 P.left
+  right := leftToRightNatTrans G H P
+  glue_naturality := by
+    ext X
+    cases X
+    change 𝟙 _ ≫ leftToRightComponent G H P =
+      𝟙 _ ≫ P.glue.hom.app (SingleObj.star PUnit)
+    rw [leftToRightComponent_eq_glue_hom]
+    rfl
+
+def coconeUnitIsoApp
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    P ≅ (toRepresentationFunctor (C := C) G H ⋙
+      fromRepresentationFunctor G H C).obj P where
+  hom := coconeUnitHom G H P
+  inv := coconeUnitInv G H P
+  hom_inv_id := by
+    apply SpanPseudoCoconeHom.ext
+    · ext X
+      cases X
+      change (𝟙 _ ≫ 𝟙 _) = 𝟙 _
+      simp
+    · ext X
+      cases X
+      change rightToLeftComponent G H P ≫ leftToRightComponent G H P = 𝟙 _
+      rw [rightToLeftComponent_eq_glue_inv, leftToRightComponent_eq_glue_hom]
+      exact P.glue.inv_hom_id_app (SingleObj.star PUnit)
+  inv_hom_id := by
+    apply SpanPseudoCoconeHom.ext
+    · ext X
+      cases X
+      change (𝟙 _ ≫ 𝟙 _) = 𝟙 _
+      simp
+    · ext X
+      cases X
+      change leftToRightComponent G H P ≫ rightToLeftComponent G H P = 𝟙 _
+      rw [rightToLeftComponent_eq_glue_inv, leftToRightComponent_eq_glue_hom]
+      exact P.glue.hom_inv_id_app (SingleObj.star PUnit)
+
+theorem coconeUnitIso_naturality
+    (G H : Type) [Monoid G] [Monoid H]
+    {P Q : PointSpanPseudoCocone (C := C) G H} (f : P ⟶ Q) :
+    f ≫ (coconeUnitIsoApp G H Q).hom =
+      (coconeUnitIsoApp G H P).hom ≫
+        (toRepresentationFunctor (C := C) G H ⋙
+          fromRepresentationFunctor G H C).map f := by
+  apply SpanPseudoCoconeHom.ext
+  · ext X
+    cases X
+    change f.left.app (SingleObj.star G) ≫ 𝟙 _ =
+      𝟙 _ ≫ f.left.app (SingleObj.star G)
+    simp
+  · ext X
+    cases X
+    change f.right.app (SingleObj.star H) ≫ rightToLeftComponent G H Q =
+      rightToLeftComponent G H P ≫ f.left.app (SingleObj.star G)
+    rw [rightToLeftComponent_eq_glue_inv, rightToLeftComponent_eq_glue_inv]
+    have hs := NatTrans.congr_app f.glue_naturality (SingleObj.star PUnit)
+    change P.glue.hom.app (SingleObj.star PUnit) ≫
+      f.right.app (SingleObj.star H) =
+        f.left.app (SingleObj.star G) ≫
+          Q.glue.hom.app (SingleObj.star PUnit) at hs
+    apply ((P.glue.app (SingleObj.star PUnit)).eq_inv_comp).2
+    change P.glue.hom.app (SingleObj.star PUnit) ≫
+      (f.right.app (SingleObj.star H) ≫
+        Q.glue.inv.app (SingleObj.star PUnit)) =
+          f.left.app (SingleObj.star G)
+    rw [← Category.assoc]
+    apply ((Q.glue.app (SingleObj.star PUnit)).comp_inv_eq).2
+    simpa only [Category.assoc] using hs
+
+def coconeUnitNatIso
+    (G H : Type) [Monoid G] [Monoid H] :
+    Functor.id (PointSpanPseudoCocone (C := C) G H) ≅
+      toRepresentationFunctor (C := C) G H ⋙
+        fromRepresentationFunctor G H C :=
+  NatIso.ofComponents (coconeUnitIsoApp G H) (fun f =>
+    coconeUnitIso_naturality G H f)
+
 #print axioms freeProductAction
 #print axioms freeProductAction_inl
 #print axioms freeProductAction_inr
@@ -501,5 +695,10 @@ theorem representation_roundTrip_action
 #print axioms fromRepresentationFunctor
 #print axioms representation_roundTrip_action
 #print axioms cocone_roundTrip_right_map
+#print axioms rightToLeftComponent_eq_glue_inv
+#print axioms leftToRightComponent_eq_glue_hom
+#print axioms rightToLeft_naturality
+#print axioms leftToRight_naturality
+#print axioms coconeUnitNatIso
 
 end ConstructionTargets.FreeProductPointSpanRepresentations

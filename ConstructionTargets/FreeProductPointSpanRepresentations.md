@@ -65,7 +65,12 @@ P.glue.hom.app (SingleObj.star PUnit) ≫ P.right.map h ≫
 ```
 
 Accordingly, the reconstructed cocone's glue is identity on the left target.
-A later natural isomorphism must compare that transported right side with the
-original right target and glue. This milestone does not claim or construct an
-equivalence, unit, counit, triangle identity, target naturality, torus
-specialization, or frozen uptake.
+`coconeUnitNatIso` compares the original cocone with this reconstruction. Its
+left component is identity, while its forward right component is the original
+glue inverse (with explicit endpoint transports) and its inverse right
+component is the original glue hom. The component naturality equations,
+glue squares, and inverse laws are proved directly; no strictification or
+heterogeneous-equality shortcut is used.
+
+This milestone stops before the representation-side counit, triangle laws or
+an equivalence, target naturality, specialization, or frozen uptake.
