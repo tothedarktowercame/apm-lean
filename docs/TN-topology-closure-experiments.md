@@ -666,6 +666,17 @@ assume a general open-map property for the quotient.  Frozen adapters,
 pointed contractions, cover homotopy equivalences, Mayer--Vietoris, and source
 reconstruction remain separate milestones.
 
+The following geometry probe `invoke-1788251718932-6708-ad04df18` compiled a
+pointed contraction of the literal punctured circle and its product.  It uses
+stereographic projection from `-1`, proves that the selected basepoint `1`
+maps exactly to zero, and therefore proves the contraction fixes the glued
+point at every time.  Agency job `invoke-1788252461798-6713-eb4b1719`
+implemented `PointedPuncturedCircleContraction.{lean,md}` at `ac910fb4`;
+independent review `invoke-1788252660981-6715-e4e9ac55` returned `PASS`.
+The target also exports the homeomorphism from the product punctured-circle
+subtype to the literal punctured-torus neighborhood.  It does not yet descend
+homotopies through the wedge quotient or claim an open-cover equivalence.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

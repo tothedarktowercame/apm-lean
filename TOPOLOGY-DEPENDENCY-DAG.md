@@ -936,6 +936,18 @@ assuming that quotient maps send arbitrary opens to opens.  This milestone
 does not yet claim the punctured-circle contraction, the three cover homotopy
 equivalences, Mayer--Vietoris, free-product π₁, or frozen closure.
 
+The next geometry probe `invoke-1788251718932-6708-ad04df18` compiled an
+explicit pointed contraction of `Circle \ {-1}` and its product.  The
+stereographic coordinate sends the chosen basepoint `1` exactly to zero, so
+the scalar contraction fixes that basepoint at every time rather than relying
+on an arbitrary contractibility witness.  Implementation job
+`invoke-1788252461798-6713-eb4b1719` promoted the generic structure, circle
+and product contractions, and literal punctured-torus neighborhood
+homeomorphism at `ac910fb4`; independent review
+`invoke-1788252660981-6715-e4e9ac55` returned `PASS`.  Wedge descent, the
+concrete cover, Mayer--Vietoris, source reconstruction, and frozen uptake
+remain separate milestones.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.
