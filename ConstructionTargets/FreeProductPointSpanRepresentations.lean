@@ -942,6 +942,111 @@ def equivalenceFunctorPostcomposeIso (K : C ⥤ D) :=
     (P : PointSpanPseudoCocone (C := C) G Hm) :
     ((toRepresentationPostcomposeIso G Hm K).hom.app P).hom = 𝟙 _ := rfl
 
+/-- Restriction of a mapped coproduct action agrees, with explicit identity
+components, with postcomposition of the restricted original action. -/
+def restrictionPostcomposeIso (M : Type) [Monoid M]
+    (ι : M →* Monoid.Coprod G Hm) (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    SingleObj.functor ((mappedAction G Hm K R).comp ι) ≅
+      SingleObj.functor (R.action.comp ι) ⋙ K :=
+  NatIso.ofComponents (fun _ => Iso.refl _) (by
+    intro X Y f
+    cases X
+    cases Y
+    change K.map (R.action (ι f)) ≫ 𝟙 _ = 𝟙 _ ≫ K.map (R.action (ι f))
+    simp)
+
+def reverseLeftComparison (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    ((postcomposeRepresentationFunctor G Hm K ⋙
+      fromRepresentationFunctor G Hm D).obj R).left ≅
+    ((fromRepresentationFunctor G Hm C ⋙
+      postcomposePointSpanFunctor G Hm K).obj R).left :=
+  restrictionPostcomposeIso G Hm G Monoid.Coprod.inl K R
+
+def reverseRightComparison (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    ((postcomposeRepresentationFunctor G Hm K ⋙
+      fromRepresentationFunctor G Hm D).obj R).right ≅
+    ((fromRepresentationFunctor G Hm C ⋙
+      postcomposePointSpanFunctor G Hm K).obj R).right :=
+  restrictionPostcomposeIso G Hm Hm Monoid.Coprod.inr K R
+
+def reversePostcomposeIsoApp (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    (postcomposeRepresentationFunctor G Hm K ⋙
+      fromRepresentationFunctor G Hm D).obj R ≅
+    (fromRepresentationFunctor G Hm C ⋙
+      postcomposePointSpanFunctor G Hm K).obj R where
+  hom := {
+    left := (reverseLeftComparison G Hm K R).hom
+    right := (reverseRightComparison G Hm K R).hom
+    glue_naturality := by
+      ext X
+      cases X
+      change 𝟙 _ ≫ 𝟙 _ = 𝟙 _ ≫ K.map (𝟙 R.target)
+      simp }
+  inv := {
+    left := (reverseLeftComparison G Hm K R).inv
+    right := (reverseRightComparison G Hm K R).inv
+    glue_naturality := by
+      ext X
+      cases X
+      change K.map (𝟙 R.target) ≫ 𝟙 _ = 𝟙 _ ≫ 𝟙 _
+      simp }
+  hom_inv_id := by
+    apply SpanPseudoCoconeHom.ext
+    · ext X; cases X; exact Category.id_comp _
+    · ext X; cases X; exact Category.id_comp _
+  inv_hom_id := by
+    apply SpanPseudoCoconeHom.ext
+    · ext X; cases X; exact Category.id_comp _
+    · ext X; cases X; exact Category.id_comp _
+
+theorem reversePostcomposeIso_naturality (K : C ⥤ D)
+    {R S : FreeProductRepresentation (C := C) G Hm} (f : R ⟶ S) :
+    (postcomposeRepresentationFunctor G Hm K ⋙
+        fromRepresentationFunctor G Hm D).map f ≫
+      (reversePostcomposeIsoApp G Hm K S).hom =
+    (reversePostcomposeIsoApp G Hm K R).hom ≫
+      (fromRepresentationFunctor G Hm C ⋙
+        postcomposePointSpanFunctor G Hm K).map f := by
+  apply SpanPseudoCoconeHom.ext
+  · ext X
+    cases X
+    change K.map f.hom ≫ 𝟙 _ = 𝟙 _ ≫ K.map f.hom
+    simp
+  · ext X
+    cases X
+    change K.map f.hom ≫ 𝟙 _ = 𝟙 _ ≫ K.map f.hom
+    simp
+
+def fromRepresentationPostcomposeIso (K : C ⥤ D) :
+    postcomposeRepresentationFunctor G Hm K ⋙
+        fromRepresentationFunctor G Hm D ≅
+      fromRepresentationFunctor G Hm C ⋙
+        postcomposePointSpanFunctor G Hm K :=
+  NatIso.ofComponents (reversePostcomposeIsoApp G Hm K)
+    (fun f => reversePostcomposeIso_naturality G Hm K f)
+
+def equivalenceInversePostcomposeIso (K : C ⥤ D) :=
+  fromRepresentationPostcomposeIso G Hm K
+
+@[simp] theorem restrictionPostcomposeIso_hom_app (M : Type) [Monoid M]
+    (ι : M →* Monoid.Coprod G Hm) (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    (restrictionPostcomposeIso G Hm M ι K R).hom.app (SingleObj.star M) = 𝟙 _ := rfl
+
+@[simp] theorem reverse_component_left_app (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    ((fromRepresentationPostcomposeIso G Hm K).hom.app R).left.app
+      (SingleObj.star G) = 𝟙 _ := rfl
+
+@[simp] theorem reverse_component_right_app (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C) G Hm) :
+    ((fromRepresentationPostcomposeIso G Hm K).hom.app R).right.app
+      (SingleObj.star Hm) = 𝟙 _ := rfl
+
 end TargetNaturality
 
 #print axioms freeProductAction
@@ -982,5 +1087,8 @@ end TargetNaturality
 #print axioms postcomposeRepresentationFunctor
 #print axioms toRepresentationPostcomposeIso
 #print axioms equivalenceFunctorPostcomposeIso
+#print axioms restrictionPostcomposeIso
+#print axioms fromRepresentationPostcomposeIso
+#print axioms equivalenceInversePostcomposeIso
 
 end ConstructionTargets.FreeProductPointSpanRepresentations

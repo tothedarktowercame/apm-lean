@@ -109,7 +109,26 @@ postcomposePointSpanFunctor G H K ⋙ toRepresentationFunctor (C := D) G H ≅
 and `equivalenceFunctorPostcomposeIso` exposes the same comparison through the
 equivalence's forward functor, with identity underlying components.
 
-Reverse target naturality is not yet present. It requires a dependent
-comparison for the `SingleObj` restriction functors. This milestone adds no
-reverse comparison, connectors, specialization, source reconstruction, or
-frozen uptake.
+The reverse layer is the dependent restriction comparison. For any monoid
+`M` and homomorphism `ι : M →* Monoid.Coprod G H`, `restrictionPostcomposeIso`
+compares restriction of the mapped action with postcomposition of the
+restricted original action, with identity components and naturality for every
+`M`-morphism. `reverseLeftComparison` and `reverseRightComparison` specialize
+this to the `inl` and `inr` legs, and `reversePostcomposeIsoApp` packages both
+forward and inverse glue squares for the reconstructed point-span cocone.
+
+These components assemble into `fromRepresentationPostcomposeIso` with
+orientation
+
+```lean
+postcomposeRepresentationFunctor G H K ⋙ fromRepresentationFunctor G H D ≅
+  fromRepresentationFunctor G H C ⋙ postcomposePointSpanFunctor G H K
+```
+
+and `equivalenceInversePostcomposeIso` exposes the same comparison through the
+equivalence's inverse functor. The component normalization lemmas show that
+the pointwise homs on the restricted left and right legs are identity.
+
+This file now completes both forward and reverse arbitrary-target naturality
+for the point-span/free-product equivalence, but it still adds no connectors,
+torus specialization, source reconstruction, or frozen uptake.
