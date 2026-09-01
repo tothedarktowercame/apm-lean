@@ -1,34 +1,45 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "b94J03",
-  "bundle_root": "problems/b94J03",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-b94J03.md",
-    "problem_tex": "apm/b94J03.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "classification_detail" : "Hop 4 states two precise unproved contracts: the concrete complex splitting-field model over R with its order-two automorphism group, and the rational degree-six/S3 theorem for every abstract splitting field. The finite-field conjunct remains fully compiled.",
+  "layout" : "single-bundle",
+  "problem_id" : "b94J03",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-b94J03.md",
+    "problem_tex" : "apm/b94J03.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+  "boundary" : "Closed by frame f75 (campaign jit-all-open-v2, 2026-09-01): \"b94J03 complete splitting field proof\". Banked verbatim from the f75 Solver terminal head 228eb5b28bac5f87b5880f1fb6e21cef5c7f0130 on branch exp/countdown-f75-b94J03-solver; content identical to that head, no re-derivation. Frozen statement apm_b94j03 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/b94J03",
+  "closer_hop" : 4,
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-09-01",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 3,
+    "axioms" : "apm_b94j03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f75"
   },
-  "classification": "partial",
-  "classification_detail": "Hop 4 states two precise unproved contracts: the concrete complex splitting-field model over R with its order-two automorphism group, and the rational degree-six/S3 theorem for every abstract splitting field. The finite-field conjunct remains fully compiled.",
-  "closer_hop": 4,
-  "imported_at": "2026-07-13T17:26:53.987866Z"
+  "imported_at" : "2026-07-13T17:26:53.987866Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }

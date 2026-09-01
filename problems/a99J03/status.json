@@ -1,49 +1,56 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "a99J03",
-  "bundle_root": "problems/a99J03",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-a99J03.md",
-    "problem_tex": "apm/a99J03.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "classification_detail" : "Hop 4 isolates the remaining work in three precise Lean contracts: smooth dominated differentiation with the derivative formula, the Tonelli integrability estimate on Ici a, and the counterexample derivative-norm identity on (0,1). Their proofs remain intentionally sorry, and the frozen main theorem is unchanged.",
+  "layout" : "single-bundle",
+  "problem_id" : "a99J03",
+  "obstructions" : [ {
+    "areas" : [ ],
+    "areas_are" : "ambiguous",
+    "missing" : "[closer_hop] 4\n\n[closer_note] Stated, without proving, the three exact analytic bridge lemmas needed to complete the already compiled main-theorem assembly.",
+    "recorded_by" : "codex-6",
+    "frame" : "phase-2c-legacy-migration",
+    "at_commit" : "a00ea1f",
+    "date" : "2026-08-19",
+    "resolved" : null
+  } ],
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-a99J03.md",
+    "problem_tex" : "apm/a99J03.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
-    "sorry_count_main": 4,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+  "boundary" : "Closed by frame f53 (campaign jit-all-open-v2, 2026-08-29): \"a99J03 prove smoothness by higher kernels\". Banked verbatim from the f53 Solver terminal head 01b255b328d212fd753d90553e09d994503ae2ab on branch exp/countdown-f53-a99J03-solver; content identical to that head, no re-derivation. Frozen statement apm_a99j03 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/a99J03",
+  "closer_hop" : 4,
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-29",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial-lean-proof",
+    "previous_sorry_count_total" : 4,
+    "axioms" : "apm_a99j03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f53"
   },
-  "classification": "partial-lean-proof",
-  "classification_detail": "Hop 4 isolates the remaining work in three precise Lean contracts: smooth dominated differentiation with the derivative formula, the Tonelli integrability estimate on Ici a, and the counterexample derivative-norm identity on (0,1). Their proofs remain intentionally sorry, and the frozen main theorem is unchanged.",
-  "closer_hop": 4,
-  "closer_note": "Stated, without proving, the three exact analytic bridge lemmas needed to complete the already compiled main-theorem assembly.",
-  "imported_at": "2026-07-13T17:26:53.061682Z",
-  "obstructions": [
-    {
-      "areas": [],
-      "areas_are": "ambiguous",
-      "missing": "[closer_hop] 4\n\n[closer_note] Stated, without proving, the three exact analytic bridge lemmas needed to complete the already compiled main-theorem assembly.",
-      "recorded_by": "codex-6",
-      "frame": "phase-2c-legacy-migration",
-      "at_commit": "a00ea1f",
-      "date": "2026-08-19",
-      "resolved": null
-    }
-  ]
+  "closer_note" : "Stated, without proving, the three exact analytic bridge lemmas needed to complete the already compiled main-theorem assembly.",
+  "imported_at" : "2026-07-13T17:26:53.061682Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }

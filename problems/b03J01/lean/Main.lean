@@ -56,7 +56,74 @@ theorem apm_b03J01_bridge_sylow_subsingleton_of_twinPrime_card
     (p q : ℕ) (hp : p.Prime) (hp2 : (p + 2).Prime) (hq : q.Prime)
     (hcard : Fintype.card G = p * (p + 2)) :
     Subsingleton (Sylow q G) := by
-  sorry
+  classical
+  letI : Fact q.Prime := ⟨hq⟩
+  by_cases hqcard : q ∣ Fintype.card G
+  · have hsquare : Squarefree (Fintype.card G) := by
+      rw [hcard]
+      exact apm_b03J01_twinPrime_squarefree p hp hp2
+    have hfac : Nat.factorization (Nat.card G) q = 1 := by
+      apply Nat.factorization_eq_one_of_squarefree
+      · simpa [Nat.card_eq_fintype_card] using hsquare
+      · exact hq
+      · simpa [Nat.card_eq_fintype_card] using hqcard
+    have hcardQ (Q : Sylow q G) : Nat.card Q = q := by
+      rw [Q.card_eq_multiplicity, hfac, pow_one]
+    have hq_cases : q = p ∨ q = p + 2 := by
+      rw [hcard] at hqcard
+      rcases hq.dvd_mul.mp hqcard with h | h
+      · rcases (Nat.dvd_prime hp).mp h with hq1 | hqp
+        · exact False.elim (hq.ne_one hq1)
+        · exact Or.inl hqp
+      · rcases (Nat.dvd_prime hp2).mp h with hq1 | hqp
+        · exact False.elim (hq.ne_one hq1)
+        · exact Or.inr hqp
+    have hn : Nat.card (Sylow q G) = 1 := by
+      let Q : Sylow q G := default
+      have hndvd : Nat.card (Sylow q G) ∣ Q.index := Q.card_dvd_index
+      have hmod : Nat.card (Sylow q G) ≡ 1 [MOD q] :=
+        card_sylow_modEq_one q G
+      rcases hq_cases with hqp | hqp
+      · subst q
+        have hindex : Q.index = p + 2 := by
+          have hm := Q.index_mul_card
+          rw [hcardQ, Nat.card_eq_fintype_card, hcard] at hm
+          apply Nat.eq_of_mul_eq_mul_right hp.pos
+          simpa [mul_comm] using hm
+        rw [hindex] at hndvd
+        rcases (Nat.dvd_prime hp2).mp hndvd with hn1 | hnother
+        · exact hn1
+        have hpge : 3 ≤ p := by
+          have hp2le : 2 ≤ p := hp.two_le
+          have hpne2 : p ≠ 2 := by
+            intro heq
+            subst p
+            norm_num at hp2
+          omega
+        rw [hnother] at hmod
+        simp [Nat.ModEq, Nat.mod_eq_of_lt (by omega : 2 < p),
+          Nat.mod_eq_of_lt (by omega : 1 < p)] at hmod
+      · subst q
+        have hindex : Q.index = p := by
+          have hm := Q.index_mul_card
+          rw [hcardQ, Nat.card_eq_fintype_card, hcard] at hm
+          nlinarith [hp.pos]
+        rw [hindex] at hndvd
+        rcases (Nat.dvd_prime hp).mp hndvd with hn1 | hnother
+        · exact hn1
+        rw [hnother] at hmod
+        simp [Nat.ModEq, Nat.mod_eq_of_lt (by omega : p < p + 2),
+          Nat.mod_eq_of_lt (by omega : 1 < p + 2)] at hmod
+        exact False.elim (hp.ne_one hmod)
+    exact (Nat.card_eq_one_iff_unique.mp hn).1
+  · have hQbot (Q : Sylow q G) : (Q : Subgroup G) = ⊥ := by
+      have hcardQ : Nat.card Q = 1 := by
+        rw [Q.card_eq_multiplicity,
+          Nat.factorization_eq_zero_of_not_dvd]
+        · exact pow_zero q
+        · simpa [Nat.card_eq_fintype_card] using hqcard
+      exact (Q : Subgroup G).eq_bot_of_card_eq hcardQ
+    exact ⟨fun Q R ↦ Sylow.ext ((hQbot Q).trans (hQbot R).symm)⟩
 
 theorem apm_b03j01
     (G : Type*) [Group G] [Fintype G]
@@ -82,32 +149,11 @@ theorem apm_b03j01
   · intro hp2 hcard
     letI : IsZGroup G :=
       apm_b03J01_isZGroup_of_twinPrime_card G p hpprime hp2 hcard
-    -- Boundary (closer hop 2): bridge still open after closing steps 1--2.
-    -- Proved locally above: |G| = p*(p+2), with both factors prime, is squarefree;
-    -- hence `IsZGroup.of_squarefree` supplies `[IsZGroup G]` here.
-    -- Remaining proof chain:
-    -- 3. For each prime q | |G|: `Sylow.card_sylow_modEq_one` gives n_q ≡ 1 (mod q),
-    --    `Sylow.card_dvd_index` gives n_q | (|G|/q). Twin-prime arithmetic ⟹ n_q = 1.
-    -- 4. n_q = 1 ⟹ Sylow q G is Subsingleton ⟹ `(↑P : Subgroup G).Normal`
-    -- 5. All Sylows normal ⟹ `Group.IsNilpotent G` (by `isNilpotent_of_finite_tfae` #4)
-    -- 6. `[IsZGroup G] [Group.IsNilpotent G]` ⟹ `IsCyclic G` (instance in ZGroup.lean:125)
-    --
-    -- Key APIs: `Sylow.card_sylow_modEq_one`, `Sylow.not_dvd_card_sylow`,
-    -- `IsZGroup.of_squarefree` (ZGroup.lean:57), `isCyclic` instance (ZGroup.lean:125),
-    -- `isNilpotent_of_finite_tfae` (Nilpotent.lean:941)
-    -- New attempts: searched the closed corpus and `LEMMA-INDEX.md` for a theorem
-    -- classifying groups of twin-prime order, and Mathlib for a direct
-    -- `IsZGroup`-to-`IsNilpotent` bridge; neither exists. The remaining quantified
-    -- Sylow argument must split q | p*(p+2) into q=p or q=p+2, prove uniqueness
-    -- from the two cardinality lemmas, and transport it to `Subgroup.Normal`.
-    -- Closer hop 3 closes the previously omitted branch for primes not dividing
-    -- `|G|`: `apm_b03J01_sylow_normal_of_not_dvd_card` uses
-    -- `Sylow.card_eq_multiplicity` and
-    -- `Nat.factorization_eq_zero_of_not_dvd` to identify the Sylow subgroup
-    -- with `⊥`. For the two dividing primes, no direct order-`pq`
-    -- classification theorem was found. The remaining branch still needs the
-    -- explicit arithmetic on `Nat.card (Sylow q G)` from
-    -- `card_sylow_modEq_one` and `card_dvd_index`, followed by construction of
-    -- the `Subsingleton (Sylow q G)` instance required by
-    -- `Sylow.normal_of_subsingleton`.
-    sorry
+    letI : Group.IsNilpotent G :=
+      ((isNilpotent_of_finite_tfae (G := G)).out 3 0).mp (by
+        intro q hq Q
+        letI : Subsingleton (Sylow q G) :=
+          apm_b03J01_bridge_sylow_subsingleton_of_twinPrime_card
+            G p q hpprime hp2 hq.out hcard
+        exact Sylow.normal_of_subsingleton Q)
+    infer_instance

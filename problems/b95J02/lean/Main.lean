@@ -54,6 +54,144 @@ lemma apm_b95J02_charpoly_eq_minpoly_of_finrank_eq
     (LinearMap.minpoly_dvd_charpoly T)
   rw [LinearMap.charpoly_natDegree, h]
 
+lemma apm_b95J02_exists_cyclic_vector_of_finrank_eq_minpoly_natDegree
+    (F V : Type*) [Field F] [AddCommGroup V] [Module F V]
+    [FiniteDimensional F V] (T : Module.End F V)
+    (h : Module.finrank F V = (minpoly F T).natDegree) :
+    ∃ v : V, Submodule.span F (Set.range fun i : ℕ => (T ^ i) v) = ⊤ := by
+  obtain ⟨x, hx⟩ := @Module.exists_ker_toSpanSingleton_eq_annihilator
+    (Polynomial F) _ _ (Module.AEval' T) _ (Module.AEval.instModulePolynomial T) _
+      (Module.AEval.instFinitePolynomial T)
+  obtain ⟨v, rfl⟩ := (Module.AEval'.of T).surjective x
+  letI : Module (Polynomial F) (Module.AEval' T) := Module.AEval.instModulePolynomial T
+  let l := LinearMap.toSpanSingleton (Polynomial F) (Module.AEval F V T)
+    ((Module.AEval'.of T) v)
+  let L : Polynomial F →ₗ[F] V :=
+    (Module.AEval'.of T).symm.toLinearMap.comp (l.restrictScalars F)
+  have hLpow (i : ℕ) : L (Polynomial.X ^ i) = (T ^ i) v := by
+    simp [L, l, LinearMap.toSpanSingleton_apply, Module.AEval'.X_pow_smul_of]
+  have hpoly : Submodule.span F (Set.range fun i : ℕ => (Polynomial.X : Polynomial F) ^ i) = ⊤ := by
+    rw [eq_top_iff]
+    intro p hp
+    clear hp
+    induction p using Polynomial.induction_on' with
+    | add p q hp hq => exact Submodule.add_mem _ hp hq
+    | monomial n a =>
+        rw [← Polynomial.C_mul_X_pow_eq_monomial, ← Polynomial.smul_eq_C_mul]
+        exact Submodule.smul_mem _ a (Submodule.subset_span ⟨n, rfl⟩)
+  have hrange : L.range = Submodule.span F (Set.range fun i : ℕ => (T ^ i) v) := by
+    calc
+      L.range = Submodule.map L ⊤ := LinearMap.range_eq_map L
+      _ = Submodule.map L (Submodule.span F
+          (Set.range fun i : ℕ => (Polynomial.X : Polynomial F) ^ i)) := by rw [hpoly]
+      _ = Submodule.span F (L '' Set.range fun i : ℕ => (Polynomial.X : Polynomial F) ^ i) :=
+        LinearMap.map_span L _
+      _ = Submodule.span F (Set.range fun i : ℕ => (T ^ i) v) := by
+        congr 1
+        ext y
+        simp [hLpow]
+  have hker : l.ker = Ideal.span {minpoly F T} := by
+    simpa [l] using hx.trans (Polynomial.span_minpoly_eq_annihilator F T).symm
+  let eP : (Polynomial F ⧸ Ideal.span {minpoly F T}) ≃ₗ[Polynomial F] l.range :=
+    (Submodule.quotEquivOfEq _ _ hker.symm).trans
+      (@LinearMap.quotKerEquivRange (Polynomial F) (Polynomial F) (Module.AEval' T)
+        _ _ _ _ this l)
+  have hrank_l : Module.finrank F l.range = (minpoly F T).natDegree := by
+    rw [← (eP.restrictScalars F).finrank_eq]
+    exact finrank_quotient_span_eq_natDegree
+  have hmap : Submodule.map (Module.AEval'.of T).symm.toLinearMap
+      (l.range.restrictScalars F) = L.range := by
+    ext y
+    constructor
+    · rintro ⟨z, ⟨p, hp⟩, rfl⟩
+      refine ⟨p, ?_⟩
+      simp [L, ← hp]
+    · rintro ⟨p, hp⟩
+      refine ⟨l p, ⟨p, rfl⟩, ?_⟩
+      simpa [L] using hp
+  have hrank_L : Module.finrank F L.range = (minpoly F T).natDegree := by
+    rw [← hmap, ← hrank_l]
+    exact ((Module.AEval'.of T).symm.submoduleMap
+      (l.range.restrictScalars F)).finrank_eq.symm
+  refine ⟨v, ?_⟩
+  rw [← hrange]
+  apply Submodule.eq_top_of_finrank_eq
+  simpa [h] using hrank_L
+
+lemma apm_b95J02_finrank_eq_minpoly_natDegree_of_cyclic_vector
+    (F V : Type*) [Field F] [AddCommGroup V] [Module F V]
+    [FiniteDimensional F V] (T : Module.End F V) (v : V)
+    (hv : Submodule.span F (Set.range fun i : ℕ => (T ^ i) v) = ⊤) :
+    Module.finrank F V = (minpoly F T).natDegree := by
+  letI : Module (Polynomial F) (Module.AEval' T) := Module.AEval.instModulePolynomial T
+  let l := LinearMap.toSpanSingleton (Polynomial F) (Module.AEval' T)
+    ((Module.AEval'.of T) v)
+  let L : Polynomial F →ₗ[F] V :=
+    (Module.AEval'.of T).symm.toLinearMap.comp (l.restrictScalars F)
+  have hLpow (i : ℕ) : L (Polynomial.X ^ i) = (T ^ i) v := by
+    simp [L, l, LinearMap.toSpanSingleton_apply, Module.AEval'.X_pow_smul_of]
+  have hpoly : Submodule.span F (Set.range fun i : ℕ => (Polynomial.X : Polynomial F) ^ i) = ⊤ := by
+    rw [eq_top_iff]
+    intro p hp
+    clear hp
+    induction p using Polynomial.induction_on' with
+    | add p q hp hq => exact Submodule.add_mem _ hp hq
+    | monomial n a =>
+        rw [← Polynomial.C_mul_X_pow_eq_monomial, ← Polynomial.smul_eq_C_mul]
+        exact Submodule.smul_mem _ a (Submodule.subset_span ⟨n, rfl⟩)
+  have hrange : L.range = Submodule.span F (Set.range fun i : ℕ => (T ^ i) v) := by
+    calc
+      L.range = Submodule.map L ⊤ := LinearMap.range_eq_map L
+      _ = Submodule.map L (Submodule.span F
+          (Set.range fun i : ℕ => (Polynomial.X : Polynomial F) ^ i)) := by rw [hpoly]
+      _ = Submodule.span F (L '' Set.range fun i : ℕ => (Polynomial.X : Polynomial F) ^ i) :=
+        LinearMap.map_span L _
+      _ = Submodule.span F (Set.range fun i : ℕ => (T ^ i) v) := by
+        congr 1
+        ext y
+        simp [hLpow]
+  have hker : l.ker = Module.annihilator (Polynomial F) (Module.AEval' T) := by
+    apply le_antisymm
+    · intro p hp
+      rw [Module.mem_annihilator]
+      intro y
+      obtain ⟨y, rfl⟩ := (Module.AEval'.of T).surjective y
+      have hpv : (Polynomial.aeval (R := F) T p : Module.End F V) v = 0 := by
+        apply (Module.AEval'.of T).injective
+        simpa [l, LinearMap.mem_ker, LinearMap.toSpanSingleton_apply] using hp
+      have hz := apm_b95J02_aeval_eq_zero_of_cyclic_vector T v hv p hpv
+      apply (Module.AEval'.of T).symm.injective
+      simpa using LinearMap.congr_fun hz y
+    · intro p hp
+      rw [LinearMap.mem_ker]
+      change p • (Module.AEval'.of T) v = 0
+      exact Module.mem_annihilator.mp hp ((Module.AEval'.of T) v)
+  have hker' : l.ker = Ideal.span {minpoly F T} := by
+    exact hker.trans (Polynomial.span_minpoly_eq_annihilator F T).symm
+  let eP : (Polynomial F ⧸ Ideal.span {minpoly F T}) ≃ₗ[Polynomial F] l.range :=
+    (Submodule.quotEquivOfEq _ _ hker'.symm).trans
+      (@LinearMap.quotKerEquivRange (Polynomial F) (Polynomial F) (Module.AEval' T)
+        _ _ _ _ this l)
+  have hrank_l : Module.finrank F l.range = (minpoly F T).natDegree := by
+    rw [← (eP.restrictScalars F).finrank_eq]
+    exact finrank_quotient_span_eq_natDegree
+  have hmap : Submodule.map (Module.AEval'.of T).symm.toLinearMap
+      (l.range.restrictScalars F) = L.range := by
+    ext y
+    constructor
+    · rintro ⟨z, ⟨p, hp⟩, rfl⟩
+      refine ⟨p, ?_⟩
+      simp [L, ← hp]
+    · rintro ⟨p, hp⟩
+      refine ⟨l p, ⟨p, rfl⟩, ?_⟩
+      simpa [L] using hp
+  have hrank_L : Module.finrank F L.range = (minpoly F T).natDegree := by
+    rw [← hmap, ← hrank_l]
+    exact ((Module.AEval'.of T).symm.submoduleMap
+      (l.range.restrictScalars F)).finrank_eq.symm
+  rw [← hrank_L, hrange, hv]
+  simp
+
 /-- The finite-abelian-group and finite-dimensional-operator versions of the
 same cyclic-module criterion. -/
 theorem apm_b95j02 :
@@ -83,50 +221,8 @@ theorem apm_b95j02 :
           Polynomial.natDegree_le_of_dvd (LinearMap.minpoly_dvd_charpoly T)
             T.charpoly_monic.ne_zero
         _ = Module.finrank F V := LinearMap.charpoly_natDegree T
-    /- CLOSER HOP 1 boundary: `hdegree` now formally establishes the universal
-       minimal-polynomial degree bound.  I searched
-       `linearIndependent_powers_iff_aeval`, `minpoly_dvd_charpoly`,
-       `span_minpoly_eq_annihilator`, `Module.equiv_directSum_of_isTorsion`,
-       and the Smith-normal-form/PID APIs.  These support the cyclic-to-equality
-       direction by showing that a relation on one cyclic vector annihilates
-       the whole space.
-
-       Mathlib still has no packaged cyclic-vector iff
-       minpoly-degree-equals-finrank theorem.  The reverse direction must
-       construct a vector whose Krylov span is top from equality in `hdegree`;
-       that is precisely the rational-canonical/invariant-factor step, and no
-       closed artifact or construction library packages it.
-
-       New progress: `apm_b95J02_charpoly_eq_minpoly_of_finrank_eq` proves
-       that the displayed degree equality forces `T.charpoly = minpoly F T`,
-       using monicity and `LinearMap.minpoly_dvd_charpoly`. Thus the reverse
-       implication is narrowed to the classical missing API
-       "nonderogatory (charpoly = minpoly) implies existence of a cyclic
-       vector". Searches for `cyclicVector`, `krylov`, `nonderogatory`, and
-       companion/similarity theorems found no implementation.
-
-       Closer hop 2 proves the key forward-direction annihilator bridge as
-       `apm_b95J02_aeval_eq_zero_of_cyclic_vector`: if the orbit of `v` spans
-       and `p(T)v = 0`, commutativity of polynomial evaluations shows `p(T)`
-       vanishes on every orbit vector, hence on all of `V`. Searches of
-       Mathlib's module APIs found no general `Module.Cyclic` structure or
-       invariant-factor theorem that can turn `charpoly = minpoly` into a
-       witness vector. Thus the reverse nonderogatory-to-cyclic implication
-       remains the precise blocker.
-
-       Closer hop 3 found a substantially closer PID bridge:
-       `Module.exists_ker_toSpanSingleton_eq_annihilator` constructs, in any
-       finite torsion PID module, an element whose scalar annihilator is the
-       annihilator of the entire module. Applied to `Module.AEval' T`, this is
-       exactly the desired candidate cyclic vector. The accompanying APIs
-       `Module.AEval.of_symm_smul` and
-       `Polynomial.span_minpoly_eq_annihilator` identify its annihilator with
-       `span {minpoly F T}`. The final missing assembly is to show that, when
-       `natDegree (minpoly F T) = finrank F V`, the first `finrank F V`
-       orbit vectors are linearly independent: a relation gives a polynomial
-       of degree below the minpoly lying in its principal ideal. Cardinality
-       then turns that independent family into a basis and closes the span.
-       I tested the `Module.AEval'` specialization, but its type-synonym/module
-       instance alignment and the bounded-degree principal-ideal argument did
-       not compile within this final hop. -/
-    sorry
+    constructor
+    · rintro ⟨v, hv⟩
+      exact apm_b95J02_finrank_eq_minpoly_natDegree_of_cyclic_vector F V T v hv
+    · intro heq
+      exact apm_b95J02_exists_cyclic_vector_of_finrank_eq_minpoly_natDegree F V T heq

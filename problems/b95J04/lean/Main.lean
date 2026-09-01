@@ -78,11 +78,39 @@ forces `X ^ p - C a` to be irreducible when `p` is prime. -/
 theorem apm_b95J04_bridge_radical_irreducible
     (p : ℕ) (hp : p.Prime)
     (F E : Type*) [Field F] [Field E] [Algebra F E]
+    (z : F) (hz : IsPrimitiveRoot z p)
     (a : F) (alpha : E)
     (halpha : alpha ∉ (algebraMap F E).range)
     (hpow : algebraMap F E a = alpha ^ p) :
     Irreducible (X ^ p - C a : F[X]) := by
-  sorry
+  rw [X_pow_sub_C_irreducible_iff_of_prime hp]
+  intro b hb
+  apply halpha
+  have hb0 : b ≠ 0 := by
+    rintro rfl
+    simp [hp.ne_zero] at hb
+    subst a
+    simp at hpow
+    have ha0 : alpha = 0 := eq_zero_of_pow_eq_zero hpow.symm
+    exact halpha ⟨0, by simp [ha0]⟩
+  have hb0' : algebraMap F E b ≠ 0 := by
+    simpa using (algebraMap F E).injective.ne hb0
+  have ha0 : a ≠ 0 := by rw [← hb]; exact pow_ne_zero p hb0
+  have ha0' : algebraMap F E a ≠ 0 := by
+    simpa using (algebraMap F E).injective.ne ha0
+  have hratio : (alpha / algebraMap F E b) ^ p = 1 := by
+    calc
+      (alpha / algebraMap F E b) ^ p = alpha ^ p / (algebraMap F E b) ^ p := div_pow _ _ _
+      _ = algebraMap F E a / algebraMap F E (b ^ p) := by rw [← hpow, map_pow]
+      _ = 1 := by rw [hb]; exact div_self ha0'
+  rw [← mem_nthRoots hp.pos,
+    (hz.map_of_injective (algebraMap F E).injective).nthRoots_eq (one_pow p)] at hratio
+  simp only [Multiset.mem_map, Multiset.mem_range] at hratio
+  obtain ⟨i, _, hi⟩ := hratio
+  have hi' : (algebraMap F E z) ^ i = alpha / algebraMap F E b := by simpa using hi
+  refine ⟨z ^ i * b, ?_⟩
+  rw [map_mul, map_pow]
+  exact (eq_div_iff hb0').mp hi'
 
 /-- Why this unblocks the forward implication of `apm_b95j04`: this is the
 splitting-field/Kummer assembly on the actual subtype `F⟮alpha⟯`. It installs
@@ -104,8 +132,42 @@ theorem apm_b95J04_bridge_radical_adjoin_galois
             (algebraMap F ↥(IntermediateField.adjoin F {alpha}) z) ^
                 (Multiplicative.toAdd (e sigma)).val *
               ⟨alpha, IntermediateField.subset_adjoin (F := F)
-                (S := {alpha}) (Set.mem_singleton alpha)⟩ := by
-  sorry
+            (S := {alpha}) (Set.mem_singleton alpha)⟩ := by
+  have hp : p.Prime := Fact.out
+  let L : IntermediateField F E := IntermediateField.adjoin F {alpha}
+  let alphaL : L := ⟨alpha, IntermediateField.mem_adjoin_simple_self F alpha⟩
+  have hpowL : alphaL ^ p = algebraMap F L a := by
+    apply Subtype.ext
+    exact hpow.symm
+  have halphaRoot : alphaL ∈ (X ^ p - C a : F[X]).rootSet L := by
+    rw [mem_rootSet_of_ne (X_pow_sub_C_ne_zero hp.pos a), aeval_def,
+      eval₂_sub, eval₂_pow, eval₂_X, eval₂_C, sub_eq_zero]
+    exact hpowL
+  have hadjoinL : IntermediateField.adjoin F ({alphaL} : Set L) = ⊤ := by
+    apply (IntermediateField.lift_injective L)
+    rw [IntermediateField.lift_adjoin_simple, IntermediateField.lift_top]
+  letI : IsSplittingField F L (X ^ p - C a) :=
+    isSplittingField_iff_intermediateField.mpr ⟨
+      by
+        simpa using (X_pow_sub_C_splits_of_isPrimitiveRoot
+          (hz.map_of_injective (algebraMap F L).injective) hpowL),
+      eq_top_iff.mpr fun x hx => by
+        have hle : IntermediateField.adjoin F ({alphaL} : Set L) ≤
+            IntermediateField.adjoin F ((X ^ p - C a : F[X]).rootSet L) :=
+          IntermediateField.adjoin_le_iff.mpr fun x hx => by
+            simpa [Set.mem_singleton_iff.mp hx] using
+              (IntermediateField.subset_adjoin F _ halphaRoot)
+        rw [hadjoinL] at hle
+        exact hle (Set.mem_univ x)⟩
+  refine ⟨isGalois_of_isSplittingField_X_pow_sub_C
+      ⟨z, (mem_primitiveRoots hp.pos).2 hz⟩ hirr L, ?_⟩
+  let e := autEquivZmod hirr L hz
+  refine ⟨e, fun sigma => ?_⟩
+  have hsigma : e.symm (e sigma) = sigma := e.symm_apply_apply sigma
+  rw [← hsigma]
+  simpa [e, Algebra.smul_def] using
+    (autEquivZmod_symm_apply_natCast hirr L hpowL hz
+      (Multiplicative.toAdd (e sigma)).val)
 
 /-!
 # APM b95J04
@@ -205,7 +267,17 @@ theorem apm_b95j04
          corresponding `X ^ p - C a` irreducible over `F`, install its
          splitting-field structure on `F⟮α⟯`, and orient the resulting
          `autEquivZmod` to match the frozen pointwise formula. -/
-      sorry
+      letI : Fact p.Prime := ⟨hp⟩
+      have hzprim : IsPrimitiveRoot z p := by
+        refine ⟨hz, fun n hn => ?_⟩
+        rw [← orderOf_eq_prime hz hz1]
+        exact orderOf_dvd_of_pow_eq_one hn
+      intro α hα hαpow
+      obtain ⟨a, ha⟩ := hαpow
+      have hirr := apm_b95J04_bridge_radical_irreducible
+        p hp F E z hzprim a α hα ha
+      exact apm_b95J04_bridge_radical_adjoin_galois
+        p F E z a hzprim α ha hirr
     · intro hfd hgal hcard _ σ hσ
       letI : FiniteDimensional F E := hfd
       letI : IsGalois F E := hgal

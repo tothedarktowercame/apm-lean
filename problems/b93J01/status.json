@@ -1,61 +1,43 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "b93J01",
-  "bundle_root": "problems/b93J01",
-  "layout": "single-bundle",
-  "source": {
-    "workspace_metadata": "/home/joe/code/futon6/.state/proof-frames/b93J01/apm-v2-b93J01-1775006040768/workspace.json",
-    "receipt": "/home/joe/code/futon6/.state/proof-frames/b93J01/apm-v2-b93J01-1775006040768.json",
-    "problem_tex": "/home/joe/code/apm-lean/apm/b93J01.tex",
-    "frame_id": "apm-v2-b93J01-1775006040768",
-    "module_root": "ApmCanaries.Frames.B93J01.Apm_v2_b93J01_1775006040768"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "b93J01",
+  "source" : {
+    "workspace_metadata" : "/home/joe/code/futon6/.state/proof-frames/b93J01/apm-v2-b93J01-1775006040768/workspace.json",
+    "receipt" : "/home/joe/code/futon6/.state/proof-frames/b93J01/apm-v2-b93J01-1775006040768.json",
+    "problem_tex" : "/home/joe/code/apm-lean/apm/b93J01.tex",
+    "frame_id" : "apm-v2-b93J01-1775006040768",
+    "module_root" : "ApmCanaries.Frames.B93J01.Apm_v2_b93J01_1775006040768"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": "lean/Scratch.lean",
-    "sorry_count_main": 1,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+  "boundary" : "Closed by frame f70 (campaign jit-all-open-v2, 2026-09-01): \"Complete alternating simplicity and final theorem\". Banked verbatim from the f70 Solver terminal head 33756eb1e48fe1e7b8c3e4d2a79ea6312826e45b on branch exp/countdown-f70-b93J01-solver; content identical to that head, no re-derivation. Frozen statement apm_b93j01 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : "lean/Scratch.lean",
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": true,
-    "has_changelog": true,
-    "has_workspace_metadata": true,
-    "has_receipt": true
+  "bundle_root" : "problems/b93J01",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-09-01",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 1,
+    "axioms" : "apm_b93j01 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f70"
   },
-  "classification": "partial",
-  "imported_at": "2026-05-01T19:38:17.414438Z",
-  "checked_at": "2026-08-08T00:00:00Z",
-  "checked_lean_state": {
-    "exit_code": 0,
-    "command": "lake env lean problems/b93J01/lean/Main.lean",
-    "sorry_count": 1,
-    "sorry_locations": ["apm_b93j01 (remaining finite-group and abelian classification package)"],
-    "proved": [
-      "apm_b93J01_card_A4",
-      "apm_b93J01_lagrange",
-      "apm_b93J01_card_S3",
-      "apm_b93J01_not_isCyclic_S3",
-      "apm_b93J01_card_Q8",
-      "apm_b93J01_Q8_not_commutative",
-      "apm_b93J01_Q8_not_mulEquiv_commutative",
-      "apm_b93J01_Q8_not_equiv_ZMod8",
-      "apm_b93J01_Q8_not_equiv_ZMod4_prod_ZMod2",
-      "apm_b93J01_card_Q8_sq_eq_one",
-      "apm_b93J01_card_D4_sq_eq_one",
-      "apm_b93J01_Q8_not_equiv_D4"
-    ],
-    "axioms": "propext, sorryAx, Classical.choice, Quot.sound (main theorem remains partial)",
-    "blockers": [
-      "General simplicity of alternating groups for all n >= 5",
-      "Classification of all groups of order eight",
-      "A4 subgroup-order-six exclusion",
-      "Finite abelian decomposition in the custom iSupIndep encoding and the rational counterexample",
-      "Corrected order-pq cyclicity theorem"
-    ]
+  "imported_at" : "2026-05-01T19:38:17.414438Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : true,
+    "has_changelog" : true,
+    "has_workspace_metadata" : true,
+    "has_receipt" : true
   }
 }

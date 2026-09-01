@@ -1,55 +1,55 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "a98A04",
-  "bundle_root": "problems/a98A04",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-a98A04.md",
-    "problem_tex": "apm/a98A04.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "a98A04",
+  "obstructions" : [ {
+    "areas" : [ ],
+    "areas_are" : "necessary",
+    "missing" : "[closer_hop] 3\n\n[closer_note] Compiled measurability, exact strict support, the literal positivity-set identity, and strict positivity of its Lebesgue measure. Remaining work is the translated/scaled rpow integral and positive-measure arbitrary-height superlevels within the countable dense weighted-spike construction.",
+    "recorded_by" : "codex-6",
+    "frame" : "phase-2d-adversarial-migration",
+    "at_commit" : "a00ea1f",
+    "date" : "2026-08-19",
+    "resolved" : null
+  } ],
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-a98A04.md",
+    "problem_tex" : "apm/a98A04.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": [
-      "lean/Main.lean"
-    ],
-    "sorry_count_main": 4,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+  "boundary" : "Closed by frame f49 (campaign jit-all-open-v2, 2026-08-28): \"complete dense integrable spike construction\". Banked verbatim from the f49 Solver terminal head 400f537641b40e0cb41007dfb8c7f8c168ce4f4d on branch exp/countdown-f49-a98A04-solver; content identical to that head, no re-derivation. Frozen statement apm_a98a04 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/a98A04",
+  "closer_hop" : 3,
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-08-28",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 4,
+    "axioms" : "apm_a98a04 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f49"
   },
-  "classification": "partial",
-  "closer_hop": 3,
-  "closer_note": "Compiled measurability, exact strict support, the literal positivity-set identity, and strict positivity of its Lebesgue measure. Remaining work is the translated/scaled rpow integral and positive-measure arbitrary-height superlevels within the countable dense weighted-spike construction.",
-  "imported_at": "2026-07-13T17:26:52.963473Z",
-  "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
-    "elaborated_exit": 0,
-    "sorry_declarations": 4,
-    "previous_classification": "partial"
-  },
-  "obstructions": [
-    {
-      "areas": [],
-      "areas_are": "necessary",
-      "missing": "[closer_hop] 3\n\n[closer_note] Compiled measurability, exact strict support, the literal positivity-set identity, and strict positivity of its Lebesgue measure. Remaining work is the translated/scaled rpow integral and positive-measure arbitrary-height superlevels within the countable dense weighted-spike construction.",
-      "recorded_by": "codex-6",
-      "frame": "phase-2d-adversarial-migration",
-      "at_commit": "a00ea1f",
-      "date": "2026-08-19",
-      "resolved": null
-    }
-  ]
+  "closer_note" : "Compiled measurability, exact strict support, the literal positivity-set identity, and strict positivity of its Lebesgue measure. Remaining work is the translated/scaled rpow integral and positive-measure arbitrary-height superlevels within the countable dense weighted-spike construction.",
+  "imported_at" : "2026-07-13T17:26:52.963473Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }

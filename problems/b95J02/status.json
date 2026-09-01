@@ -1,33 +1,44 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "b95J02",
-  "bundle_root": "problems/b95J02",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-b95J02.md",
-    "problem_tex": "apm/b95J02.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "b95J02",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-b95J02.md",
+    "problem_tex" : "apm/b95J02.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
-    "closer_progress": "A polynomial killing a cyclic vector is proved to annihilate the whole space. Hop 3 found Module.exists_ker_toSpanSingleton_eq_annihilator, which supplies the reverse direction's candidate vector in Module.AEval' T; the remaining bridge is the bounded-degree principal-ideal argument proving its first finrank orbit vectors form a basis."
+  "boundary" : "Closed by frame f76 (campaign jit-all-open-v2, 2026-09-01): \"prove cyclic operator criterion\". Banked verbatim from the f76 Solver terminal head d96bebe98be04ba9941638c7f59a657d654e831b on branch exp/countdown-f76-b95J02-solver; content identical to that head, no re-derivation. Frozen statement apm_b95j02 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0,
+    "closer_progress" : "A polynomial killing a cyclic vector is proved to annihilate the whole space. Hop 3 found Module.exists_ker_toSpanSingleton_eq_annihilator, which supplies the reverse direction's candidate vector in Module.AEval' T; the remaining bridge is the bounded-degree principal-ideal argument proving its first finrank orbit vectors form a basis."
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/b95J02",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-09-01",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 1,
+    "axioms" : "apm_b95j02 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f76"
   },
-  "classification": "partial",
-  "imported_at": "2026-07-13T17:26:54.026344Z"
+  "imported_at" : "2026-07-13T17:26:54.026344Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }

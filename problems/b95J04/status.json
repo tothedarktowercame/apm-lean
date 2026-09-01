@@ -1,33 +1,44 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "b95J04",
-  "bundle_root": "problems/b95J04",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-b95J04.md",
-    "problem_tex": "apm/b95J04.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "b95J04",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-b95J04.md",
+    "problem_tex" : "apm/b95J04.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 3,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 3,
-    "closer_progress": "Hop 4 states the two exact forward contracts: irreducibility of the prime binomial from a non-base radical, and the splitting-field/Kummer Galois equivalence on the actual adjoin subtype with the required pointwise orientation."
+  "boundary" : "Closed by frame f77 (campaign jit-all-open-v2, 2026-09-01): \"prove b95J04 Kummer characterization\". Banked verbatim from the f77 Solver terminal head 53085e3d17c65d93ce2238b929400db69ce1c52e on branch exp/countdown-f77-b95J04-solver; content identical to that head, no re-derivation. Frozen statement apm_b95j04 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0,
+    "closer_progress" : "Hop 4 states the two exact forward contracts: irreducibility of the prime binomial from a non-base radical, and the splitting-field/Kummer Galois equivalence on the actual adjoin subtype with the required pointwise orientation."
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/b95J04",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-09-01",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 3,
+    "axioms" : "apm_b95j04 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f77"
   },
-  "classification": "partial",
-  "imported_at": "2026-07-13T17:26:54.043926Z"
+  "imported_at" : "2026-07-13T17:26:54.043926Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }
