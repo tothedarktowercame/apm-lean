@@ -15,6 +15,13 @@ This target packages the generic topology prerequisite for restricting the point
 - `restrictedPreimageHomeomorphSum`
 - `restrictedPreimageHomeomorphSum_left`
 - `restrictedPreimageHomeomorphSum_right`
+- `restrictedOpenHomeomorphWedge`
+- `restrictedOpenHomeomorphWedge_left`
+- `restrictedOpenHomeomorphWedge_right`
+- `restrictedOpenHomeomorphWedge_symm_left`
+- `restrictedOpenHomeomorphWedge_symm_right`
+- `restrictedOpen_leftBase_eq_rightBase`
+- `restrictedOpenHomeomorphWedge_base_glue`
 
 ## Boundary
 
@@ -22,7 +29,11 @@ This target packages the generic topology prerequisite for restricting the point
 with `Sum A B`. It is built from the open embeddings of the two subtype maps, and
 its left and right representative formulas are explicit.
 
-This file still stops before the quotient-level homeomorphism identifying the
-restricted open subtype with the wedge of the two open subtypes. That
-`restrictedOpenHomeomorphWedge` theorem is the next consumer of the restricted
-coproduct homeomorphism proved here.
+`restrictedOpenHomeomorphWedge` descends the restricted representative map and
+lifts its inverse through the smaller point-wedge quotient. Its representative
+formulas record both orientations, and `restrictedOpenHomeomorphWedge_base_glue`
+records compatibility at the identified basepoint.
+
+The next milestone is the separate concrete-cover specialization. This target
+does not choose concrete open sets or prove homotopy, Mayer--Vietoris, or
+fundamental-group consequences.
