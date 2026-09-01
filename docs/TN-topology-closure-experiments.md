@@ -748,6 +748,22 @@ geometry stage is now reviewed; Mayer--Vietoris actual-arrow normalization and
 the four frozen homology clauses are the next read-only target, while the
 independent free-product fundamental-group branch remains later.
 
+Homology probe `invoke-1788256983740-6765-e7d695ad` compiled the complete
+production Mayer--Vietoris calculation and exact frozen transport in
+`/tmp/TorusCircleWedgeH0.lean` (SHA-256
+`bfd4e682efc5672f8b5ba05cdcc79e64b8e07375facdf19e06555cfae4161452`).
+Implementation `invoke-1788257581180-6768-414bb19a` committed the generic
+target at `31d0d05c`.  Review `invoke-1788257831963-6772-700165fb` found one
+semantic defect: the imported `Fin 3` normalization placed the circle
+coordinate first.  Focused repair `invoke-1788258049081-6775-9a8f359c`
+committed an explicit torus-first equivalence at `61e03da1`; its compiled
+equations send coordinates 0 and 1 to the torus and coordinate 2 to the
+circle.  Re-review `invoke-1788258422939-6779-54235657` returned `PASS` and
+confirmed that every MV exactness argument remained unchanged.  The generic
+table now proves `H₀ ≅ ℤ`, `H₁ ≅ ℤ³`, `H₂ ≅ ℤ`, and zero above degree
+two in the exact frozen coefficient representation.  Frozen uptake waits for
+the independent free-product π₁ result so bridge 2 can be replaced once.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

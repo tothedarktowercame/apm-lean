@@ -1024,6 +1024,24 @@ names were correctly omitted from the ConstructionTarget.  Point-wedge open
 geometry is therefore reviewed; the next dependency is the actual-arrow
 Mayer--Vietoris calculation and frozen homology transport.
 
+Mayer--Vietoris probe `invoke-1788256983740-6765-e7d695ad` compiled the full
+generic homology table and frozen transport in `/tmp/TorusCircleWedgeH0.lean`
+(SHA-256
+`bfd4e682efc5672f8b5ba05cdcc79e64b8e07375facdf19e06555cfae4161452`).
+Agency implementation `invoke-1788257581180-6768-414bb19a` promoted the
+generic calculation at `31d0d05c`.  Initial review
+`invoke-1788257831963-6772-700165fb` correctly found that the chosen `Fin 3`
+normalization put the circle coordinate first despite documentation claiming
+the reverse.  Repair `invoke-1788258049081-6775-9a8f359c` introduced an
+explicit torus-first equivalence at `61e03da1`, with definitional equations
+for coordinates 0, 1, and 2.  Combined re-review
+`invoke-1788258422939-6779-54235657` returned `PASS`.  The reviewed theorem
+computes `H₀ = ℤ`, `H₁ = ℤ³` with torus coordinates first, `H₂ = ℤ`, and
+zero homology above degree two from the actual production MV arrows.  The
+homology branch of frozen bridge 2 is therefore ready for later local
+transport; only free-product fundamental-group reconstruction remains before
+the consumer packet.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.
