@@ -647,6 +647,84 @@ def pseudoCoconeEquivalenceOfSpanEquivalences
       l r l' r' eK eL eR αL αR).counitIso.hom.app Q =
       (counitNatIso l r l' r' eK eL eR αL αR).hom.app Q := rfl
 
+def reverseTransportPostcomposeIsoApp {C : Type uC} {D : Type uD}
+    [Category C] [Category D] (H : Functor C D) (Q : SpanPseudoCocone l' r' C) :
+    (reverseTransportFunctor l r l' r' eK eL eR αL αR (C := D)).obj
+        ((postcomposeFunctor H).obj Q) ≅
+      (postcomposeFunctor H).obj
+        ((reverseTransportFunctor l r l' r' eK eL eR αL αR
+          (C := C)).obj Q) := by
+  let aL := Functor.associator eL.functor Q.left H
+  let aR := Functor.associator eR.functor Q.right H
+  refine { hom := { left := aL.hom, right := aR.hom, glue_naturality := ?_ }
+           inv := { left := aL.inv, right := aR.inv, glue_naturality := ?_ }
+           hom_inv_id := ?_, inv_hom_id := ?_ }
+  · ext z
+    simp [reverseTransportFunctor, reverseTransportObj, postcomposeFunctor,
+      postcomposeObj, reverseLeftComparison, reverseRightComparison, aL, aR]
+  · ext z
+    simp [reverseTransportFunctor, reverseTransportObj, postcomposeFunctor,
+      postcomposeObj, reverseLeftComparison, reverseRightComparison, aL, aR]
+  · apply SpanPseudoCoconeHom.ext
+    · exact aL.hom_inv_id
+    · exact aR.hom_inv_id
+  · apply SpanPseudoCoconeHom.ext
+    · exact aL.inv_hom_id
+    · exact aR.inv_hom_id
+
+def reverseTransportPostcomposeIso {C : Type uC} {D : Type uD}
+    [Category C] [Category D] (H : Functor C D) :
+    postcomposeFunctor H ⋙
+        reverseTransportFunctor l r l' r' eK eL eR αL αR (C := D) ≅
+      reverseTransportFunctor l r l' r' eK eL eR αL αR (C := C) ⋙
+        postcomposeFunctor H :=
+  NatIso.ofComponents
+    (reverseTransportPostcomposeIsoApp l r l' r' eK eL eR αL αR H) (by
+      intro P Q τ
+      apply SpanPseudoCoconeHom.ext
+      · ext z
+        change H.map (τ.left.app (eL.functor.obj z)) ≫ 𝟙 _ =
+          𝟙 _ ≫ H.map (τ.left.app (eL.functor.obj z))
+        simp
+      · ext z
+        change H.map (τ.right.app (eR.functor.obj z)) ≫ 𝟙 _ =
+          𝟙 _ ≫ H.map (τ.right.app (eR.functor.obj z))
+        simp)
+
+def equivalenceFunctorPostcomposeIso {C : Type uC} {D : Type uD}
+    [Category C] [Category D] (H : Functor C D) :
+    postcomposeFunctor H ⋙
+        (pseudoCoconeEquivalenceOfSpanEquivalences
+          l r l' r' eK eL eR αL αR (C := D)).functor ≅
+      (pseudoCoconeEquivalenceOfSpanEquivalences
+          l r l' r' eK eL eR αL αR (C := C)).functor ⋙
+        postcomposeFunctor H :=
+  transportPostcomposeIso l r l' r' eK eL eR αL αR H
+
+def equivalenceInversePostcomposeIso {C : Type uC} {D : Type uD}
+    [Category C] [Category D] (H : Functor C D) :
+    postcomposeFunctor H ⋙
+        (pseudoCoconeEquivalenceOfSpanEquivalences
+          l r l' r' eK eL eR αL αR (C := D)).inverse ≅
+      (pseudoCoconeEquivalenceOfSpanEquivalences
+          l r l' r' eK eL eR αL αR (C := C)).inverse ⋙
+        postcomposeFunctor H :=
+  reverseTransportPostcomposeIso l r l' r' eK eL eR αL αR H
+
+@[simp] theorem equivalenceFunctorPostcomposeIso_app_left
+    {C : Type uC} {D : Type uD} [Category C] [Category D]
+    (H : Functor C D) (P : SpanPseudoCocone l r C) :
+    ((equivalenceFunctorPostcomposeIso
+      l r l' r' eK eL eR αL αR H).hom.app P).left =
+      (Functor.associator eL.inverse P.left H).hom := rfl
+
+@[simp] theorem equivalenceInversePostcomposeIso_app_left
+    {C : Type uC} {D : Type uD} [Category C] [Category D]
+    (H : Functor C D) (Q : SpanPseudoCocone l' r' C) :
+    ((equivalenceInversePostcomposeIso
+      l r l' r' eK eL eR αL αR H).hom.app Q).left =
+      (Functor.associator eL.functor Q.left H).hom := rfl
+
 
 #print axioms spanRoundTripIso_unit_inv_with_prefix
 #print axioms inverse_glue_square_of_forward
@@ -659,5 +737,8 @@ def pseudoCoconeEquivalenceOfSpanEquivalences
 #print axioms counitNatIso
 #print axioms mapped_unit_comp_counit
 #print axioms pseudoCoconeEquivalenceOfSpanEquivalences
+#print axioms reverseTransportPostcomposeIso
+#print axioms equivalenceFunctorPostcomposeIso
+#print axioms equivalenceInversePostcomposeIso
 
 end ConstructionTargets.GenericSpanPseudoCoconeTransport

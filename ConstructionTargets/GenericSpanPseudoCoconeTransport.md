@@ -9,7 +9,9 @@ The forward API consists of `transportObj`, `transportMap`, and
 `transportFunctor`, together with `transportPostcomposeIso`, which proves that
 forward transport commutes with arbitrary target postcomposition. The reverse
 API consists of `reverseTransportObj`, `reverseTransportMap`, and
-`reverseTransportFunctor`; both map constructions prove the full glue square.
+`reverseTransportFunctor`; both map constructions prove the full glue square,
+and `reverseTransportPostcomposeIso` proves the matching arbitrary-target
+naturality for reverse transport.
 
 The unit is oriented as
 
@@ -55,7 +57,13 @@ full equivalence as `pseudoCoconeEquivalenceOfSpanEquivalences` using
 `equivalence_unitIso_hom_app`, and `equivalence_counitIso_hom_app` expose the
 reviewed functor, inverse, unit, and counit components by `rfl`.
 
-This file now completes the generic span-pseudococone equivalence, but still
-stops before reverse or equivalence-level target naturality, concrete wedge
-cells, free-product reconstruction, source reconstruction, and frozen
+At equivalence level, `equivalenceFunctorPostcomposeIso` and
+`equivalenceInversePostcomposeIso` restate the reviewed forward and reverse
+postcomposition naturalities on the completed equivalence, and the component
+normalization lemmas expose the left components by `rfl` for later pasting.
+
+This file now completes the generic span-pseudococone equivalence together
+with both functor and inverse arbitrary-target naturality layers, but still
+stops before unit/counit modification coherence beyond those layers, concrete
+wedge cells, free-product reconstruction, source reconstruction, and frozen
 consumers.
