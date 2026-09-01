@@ -966,6 +966,21 @@ assembly for `U`, `V`, and `U ∩ V`, including the frozen adapter and all three
 homotopy equivalences.  Mayer--Vietoris, free-product source reconstruction,
 and frozen `t02A03` closure remain later dependencies.
 
+The next restricted-cover probe `invoke-1788253603416-6724-4d5dffe3`
+returned `REVISE` rather than treating a continuous bijection as a quotient
+homeomorphism.  It compiled the exact generic restriction theorem in
+`/tmp/PointWedgeRestrictedOpenQuotient.lean` (SHA-256
+`35c776fc9784539ff7272a90f47af92040fd00ea5a5ff471e0f04cfd12bfc138`):
+the canonical quotient map restricted over a saturated open image remains an
+`IsQuotientMap`.  Agency job `invoke-1788253885565-6726-b392c489` promoted
+that target at `c5b6f9cd`; independent review
+`invoke-1788254069917-6729-0a427d7c` returned `PASS`.  The proof uses
+`IsQuotientMap.restrictPreimage_isOpen` together with the reviewed literal
+preimage equality.  The next dependency is the generic homeomorphism between
+that restricted quotient subtype and the point wedge of the two restricted
+summands, including formulas on both representatives; concrete `U/V`, their
+intersection, and the three homotopy equivalences still follow afterward.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.

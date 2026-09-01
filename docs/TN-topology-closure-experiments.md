@@ -692,6 +692,20 @@ subtypes, symmetric use, intersection model, frozen adapter, and three cover
 homotopy equivalences remain to be compiled before Mayer--Vietoris or
 fundamental-group reconstruction begins.
 
+The follow-up assembly probe `invoke-1788253603416-6724-4d5dffe3` correctly
+stopped one theorem earlier.  Fixture
+`/tmp/PointWedgeRestrictedOpenQuotient.lean` (SHA-256
+`35c776fc9784539ff7272a90f47af92040fd00ea5a5ff471e0f04cfd12bfc138`)
+compiled the restricted saturated open, its literal quotient preimage, and the
+fact that the restricted quotient map remains an `IsQuotientMap`.
+Implementation `invoke-1788253885565-6726-b392c489` committed the exact
+generic pair at `c5b6f9cd`; review `invoke-1788254069917-6729-0a427d7c`
+returned `PASS`.  This avoids the invalid shortcut from continuous
+bijectivity to a homeomorphism.  The generic restricted-wedge homeomorphism
+and its representative formulas remain the next separately compiled
+milestone; no concrete cover, Mayer--Vietoris, fundamental-group theorem, or
+frozen uptake is claimed yet.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
