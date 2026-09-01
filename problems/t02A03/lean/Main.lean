@@ -4,6 +4,10 @@ import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.FundamentalGroupProduct
 import ConstructionTargets.CircleUniversalCover
+import ConstructionTargets.PointWedgeQuotient
+import ConstructionTargets.GenericTargetNaturalSourceReconstruction
+import ConstructionTargets.TorusCircleWedgeMayerVietoris
+import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
 
 open CategoryTheory
 
@@ -147,6 +151,25 @@ theorem apm_t02A03_bridge_1 :
           circleFundamentalGroupMulEquivInt) |>.trans
         (MulEquiv.prodMultiplicative ℤ ℤ).symm⟩
 
+theorem apm_t02a03_rel_iff_production (a b : Sum apm_t02a03_Torus Circle) :
+    ConstructionTargets.PointWedgeQuotient.Rel (1, 1) 1 a b ↔
+      apm_t02a03_WedgeGlue a b := by
+  constructor <;> intro h <;> cases h <;> constructor
+
+noncomputable def apm_t02a03_productionHomeomorph :
+    ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge ≃ₜ apm_t02a03_Y :=
+  ConstructionTargets.PointWedgeQuotient.quotientHomeomorphOfRelIff
+    _ _ apm_t02a03_rel_iff_production
+
+@[simp] theorem apm_t02a03_productionHomeomorph_mk
+    (z : Sum apm_t02a03_Torus Circle) :
+    apm_t02a03_productionHomeomorph (Quotient.mk _ z) = Quotient.mk _ z := rfl
+
+theorem apm_t02a03_productionHomeomorph_base :
+    apm_t02a03_productionHomeomorph
+      ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase =
+        apm_t02a03_ybase := rfl
+
 /-- Why this unblocks `apm_t02a03`: this packages precisely the invariant
 preservation and computation for the compiled torus-circle pushout.  Its five
 conjuncts are the remaining fundamental-group and singular-homology claims for
@@ -169,7 +192,28 @@ theorem apm_t02A03_bridge_2 :
       Limits.IsZero
         (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
           (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y))) := by
-  sorry
+  let e := apm_t02a03_productionHomeomorph
+  let piIso : FundamentalGroup apm_t02a03_Y apm_t02a03_ybase ≃*
+      Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ) :=
+    ((ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph e
+        ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase).symm.trans
+      ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeFundamentalGroupMulEquiv)
+  rcases ConstructionTargets.TorusCircleWedgeMayerVietoris.genericWedge_complete_module_homology with
+    ⟨h0, h1, h2, hh⟩
+  refine ⟨⟨piIso⟩, ?_, ?_, ?_, ?_⟩
+  · rcases h0 with ⟨h0⟩
+    exact ⟨(ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e.toHomotopyEquiv 0).symm ≪≫ h0⟩
+  · rcases h1 with ⟨h1⟩
+    exact ⟨(ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e.toHomotopyEquiv 1).symm ≪≫ h1⟩
+  · rcases h2 with ⟨h2⟩
+    exact ⟨(ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e.toHomotopyEquiv 2).symm ≪≫ h2⟩
+  · intro n hn
+    exact (hh n hn).of_iso
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        e.toHomotopyEquiv n).symm
 
 theorem apm_t02a03 :
     Nonempty
@@ -245,4 +289,4 @@ theorem apm_t02a03 :
   preservation/computation from this compiled pushout, rather than quotient
   construction. The frozen statement is unchanged.
   -/
-  sorry
+  exact ⟨apm_t02A03_bridge_1, apm_t02A03_bridge_2⟩
