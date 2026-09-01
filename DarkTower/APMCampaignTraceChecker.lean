@@ -220,6 +220,15 @@ def missingPredecessorMutant : TraceSuccessorObservation where
   successorAnnouncedId := "job-2"
   successorActivatedId := "job-2"
 
+def missingCollectionAuthorityMutant : TraceSuccessorObservation where
+  predecessorId := "job-1"
+  terminalEvidenceId := "terminal-1"
+  collectionEvidenceId := ""
+  disposition := "repair"
+  predecessorPersisted := true
+  successorAnnouncedId := "job-2"
+  successorActivatedId := "job-2"
+
 def cleanNoSuccessorWitness : TraceSuccessorObservation where
   predecessorId := ""
   terminalEvidenceId := ""
@@ -231,6 +240,10 @@ def cleanNoSuccessorWitness : TraceSuccessorObservation where
 
 theorem clean_no_successor_trace_nonvacuous :
     successorTraceValid [cleanNoSuccessorWitness] = true := by
+  rfl
+
+theorem successor_without_collection_authority_is_killed :
+    successorTraceValid [missingCollectionAuthorityMutant] = false := by
   rfl
 
 theorem predecessor_durability_trace_nonvacuous :
