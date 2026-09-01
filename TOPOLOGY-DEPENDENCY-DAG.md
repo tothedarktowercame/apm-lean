@@ -1042,6 +1042,24 @@ homology branch of frozen bridge 2 is therefore ready for later local
 transport; only free-product fundamental-group reconstruction remains before
 the consumer packet.
 
+The remaining π₁ probe `invoke-1788258601115-6781-367fc638` reached a
+genuine `STOP`.  Fixture
+`/tmp/TorusCircleWedgeFundamentalGroupoidProbe.lean` (SHA-256
+`8c371411deb527fb607e56956a2d771bab394d3831bfbfb2e319f819c19304e9`)
+compiled the actual two-open fundamental-groupoid pseudopushout and its
+arbitrary-target postcomposition naturality for the reviewed wedge cover.
+Three independent constructions remain: generic transport of pseudococones
+through equivalences of groupoid spans and compatible 2-cells; a target-natural
+mapping equivalence representing the point-span pseudococones by
+`SingleObj (Monoid.Coprod G H)`, normalized on both coproduct injections; and
+comparison of the reconstructed inverse with the literal inclusion-induced
+coproduct map together with the frozen EqvGen quotient adapter.  The t01J03
+versions of the first two layers are specialized to its solid-torus coordinate
+span and algebra.  No implementation is elected: fixed-target equivalences,
+assumed bijectivity, or coordinate-specific reuse would not prove the frozen
+statement.  `t02A03` therefore remains open with its homology branch reviewed
+and its free-product π₁ branch stopped at this foundation boundary.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.

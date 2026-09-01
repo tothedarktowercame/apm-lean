@@ -764,6 +764,21 @@ table now proves `H₀ ≅ ℤ`, `H₁ ≅ ℤ³`, `H₂ ≅ ℤ`, and zero abov
 two in the exact frozen coefficient representation.  Frozen uptake waits for
 the independent free-product π₁ result so bridge 2 can be replaced once.
 
+The source-reconstruction probe `invoke-1788258601115-6781-367fc638` then
+returned a substantive `STOP`.  Its fixture
+`/tmp/TorusCircleWedgeFundamentalGroupoidProbe.lean` (SHA-256
+`8c371411deb527fb607e56956a2d771bab394d3831bfbfb2e319f819c19304e9`)
+compiled the actual-cover fundamental-groupoid pseudopushout and the required
+arbitrary-target naturality.  What remains is not one bounded adapter: generic
+pseudococone transport across equivalent groupoid spans, target-natural
+free-product representability for a point span, and generator/frozen-quotient
+compatibility are three independent constructions.  The reviewed t01J03
+implementations are tied to its solid-torus coordinates and cannot be treated
+as generic.  The campaign stops here without assumptions or fixed-target
+source-reconstruction shortcuts.  `t02A03` remains open; all four homology
+clauses are ready, while the free-product π₁ conjunct blocks bridge 2 and
+final assembly.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
