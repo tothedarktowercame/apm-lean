@@ -34,7 +34,15 @@ engine for passing an intertwining equation through two isomorphisms, and
 `exact_inr_intertwiner` specializes it to the conjugated right generator of a
 point-span pseudococone.
 
-This file stops at the compiled object-level representation API and the exact
-`inr` intertwiner. It deliberately does not export `toRepresentationMap` or a
-forward functor, and it does not add reverse reconstruction, equivalence,
+The generator equations extend to arbitrary coproduct words through
+`Monoid.Coprod.induction_on`. In its multiplication branch,
+`freeProduct_intertwiner` explicitly reconciles monoid multiplication with
+categorical composition order. `toRepresentationMap` uses the literal left
+component `f.left.app (SingleObj.star G)` as its underlying morphism, and
+`toRepresentationFunctor` packages this construction with definitional
+identity and composition laws.
+
+The five normalization lemmas expose the map's underlying morphism, functor
+objects and maps, literal left-generator action, and conjugated right-generator
+action. This file still does not add reverse reconstruction, an equivalence,
 target naturality, torus-specific connectors, or frozen-facing adapters.

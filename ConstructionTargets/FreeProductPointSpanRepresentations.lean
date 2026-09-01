@@ -224,6 +224,94 @@ theorem exact_inr_intertwiner (G H : Type) [Monoid G] [Monoid H]
   · exact NatTrans.congr_app f.glue_naturality (SingleObj.star PUnit)
   · exact f.right.naturality h
 
+theorem inl_intertwiner (G H : Type) [Monoid G] [Monoid H]
+    (P Q : PointSpanPseudoCocone (C := C) G H) (f : P ⟶ Q) (g : G) :
+    (toRepresentationObj (C := C) G H P).action (Monoid.Coprod.inl g) ≫
+        f.left.app (SingleObj.star G) =
+      f.left.app (SingleObj.star G) ≫
+        (toRepresentationObj (C := C) G H Q).action (Monoid.Coprod.inl g) := by
+  change P.left.map g ≫ f.left.app (SingleObj.star G) =
+    f.left.app (SingleObj.star G) ≫ Q.left.map g
+  exact f.left.naturality g
+
+theorem inr_intertwiner (G H : Type) [Monoid G] [Monoid H]
+    (P Q : PointSpanPseudoCocone (C := C) G H) (f : P ⟶ Q) (h : H) :
+    (toRepresentationObj (C := C) G H P).action (Monoid.Coprod.inr h) ≫
+        f.left.app (SingleObj.star G) =
+      f.left.app (SingleObj.star G) ≫
+        (toRepresentationObj (C := C) G H Q).action (Monoid.Coprod.inr h) := by
+  rw [toRepresentation_action_inr, toRepresentation_action_inr]
+  exact exact_inr_intertwiner G H P Q f h
+
+/-- A point-span morphism intertwines the induced free-product actions. The
+multiplication case keeps the categorical composition order explicit. -/
+theorem freeProduct_intertwiner (G H : Type) [Monoid G] [Monoid H]
+    (P Q : PointSpanPseudoCocone (C := C) G H) (f : P ⟶ Q)
+    (x : Monoid.Coprod G H) :
+    (toRepresentationObj (C := C) G H P).action x ≫
+        f.left.app (SingleObj.star G) =
+      f.left.app (SingleObj.star G) ≫
+        (toRepresentationObj (C := C) G H Q).action x := by
+  induction x using Monoid.Coprod.induction_on with
+  | inl g => exact inl_intertwiner G H P Q f g
+  | inr h => exact inr_intertwiner G H P Q f h
+  | mul x y hx hy =>
+      simp only [map_mul, End.mul_def]
+      slice_lhs 2 3 => exact hx
+      exact ((reassoc_of% hy)
+        ((toRepresentationObj (C := C) G H Q).action x)).trans
+          (Category.assoc _ _ _)
+
+def toRepresentationMap (G H : Type) [Monoid G] [Monoid H]
+    {P Q : PointSpanPseudoCocone (C := C) G H} (f : P ⟶ Q) :
+    toRepresentationObj (C := C) G H P ⟶
+      toRepresentationObj (C := C) G H Q where
+  hom := f.left.app (SingleObj.star G)
+  intertwines := freeProduct_intertwiner G H P Q f
+
+@[simp] theorem toRepresentationMap_hom (G H : Type) [Monoid G] [Monoid H]
+    {P Q : PointSpanPseudoCocone (C := C) G H} (f : P ⟶ Q) :
+    (toRepresentationMap G H f).hom = f.left.app (SingleObj.star G) := rfl
+
+def toRepresentationFunctor (G H : Type) [Monoid G] [Monoid H] :
+    PointSpanPseudoCocone (C := C) G H ⥤
+      FreeProductRepresentation (C := C) G H where
+  obj := toRepresentationObj (C := C) G H
+  map := toRepresentationMap G H
+  map_id P := by
+    apply FreeProductRepresentationHom.ext
+    rfl
+  map_comp f g := by
+    apply FreeProductRepresentationHom.ext
+    rfl
+
+@[simp] theorem toRepresentationFunctor_obj (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    (toRepresentationFunctor (C := C) G H).obj P =
+      toRepresentationObj (C := C) G H P := rfl
+
+@[simp] theorem toRepresentationFunctor_map_hom
+    (G H : Type) [Monoid G] [Monoid H]
+    {P Q : PointSpanPseudoCocone (C := C) G H} (f : P ⟶ Q) :
+    ((toRepresentationFunctor (C := C) G H).map f).hom =
+      f.left.app (SingleObj.star G) := rfl
+
+@[simp] theorem toRepresentationFunctor_action_inl
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) (g : G) :
+    ((toRepresentationFunctor (C := C) G H).obj P).action
+        (Monoid.Coprod.inl g) = P.left.map g :=
+  toRepresentation_action_inl G H P g
+
+@[simp] theorem toRepresentationFunctor_action_inr
+    (G H : Type) [Monoid G] [Monoid H]
+    (P : PointSpanPseudoCocone (C := C) G H) (h : H) :
+    ((toRepresentationFunctor (C := C) G H).obj P).action
+        (Monoid.Coprod.inr h) =
+      P.glue.hom.app (SingleObj.star PUnit) ≫ P.right.map h ≫
+        P.glue.inv.app (SingleObj.star PUnit) :=
+  toRepresentation_action_inr G H P h
+
 #print axioms freeProductAction
 #print axioms freeProductAction_inl
 #print axioms freeProductAction_inr
@@ -236,5 +324,10 @@ theorem exact_inr_intertwiner (G H : Type) [Monoid G] [Monoid H]
 #print axioms glue_identity_bracket
 #print axioms left_app_identity_bracket
 #print axioms exact_inr_intertwiner
+#print axioms inl_intertwiner
+#print axioms inr_intertwiner
+#print axioms freeProduct_intertwiner
+#print axioms toRepresentationMap
+#print axioms toRepresentationFunctor
 
 end ConstructionTargets.FreeProductPointSpanRepresentations
