@@ -672,6 +672,138 @@ def coconeUnitNatIso
   NatIso.ofComponents (coconeUnitIsoApp G H) (fun f =>
     coconeUnitIso_naturality G H f)
 
+def representationCounitHom
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    ((fromRepresentationFunctor G H C) ⋙
+      (toRepresentationFunctor (C := C) G H)).obj R ⟶ R where
+  hom := 𝟙 R.target
+  intertwines x := by
+    change (toRepresentationObj (C := C) G H
+        (fromRepresentationObj G H C R)).action x ≫ 𝟙 R.target =
+      𝟙 R.target ≫ R.action x
+    have ha := DFunLike.congr_fun (representation_roundTrip_action G H C R) x
+    rw [ha]
+    exact (Category.comp_id _).trans (Category.id_comp _).symm
+
+def representationCounitInv
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    R ⟶ ((fromRepresentationFunctor G H C) ⋙
+      (toRepresentationFunctor (C := C) G H)).obj R where
+  hom := 𝟙 R.target
+  intertwines x := by
+    change R.action x ≫ 𝟙 R.target = 𝟙 R.target ≫
+      (toRepresentationObj (C := C) G H
+        (fromRepresentationObj G H C R)).action x
+    have ha := DFunLike.congr_fun (representation_roundTrip_action G H C R) x
+    rw [ha]
+    exact (Category.comp_id _).trans (Category.id_comp _).symm
+
+def representationCounitIsoApp
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    ((fromRepresentationFunctor G H C) ⋙
+      (toRepresentationFunctor (C := C) G H)).obj R ≅ R where
+  hom := representationCounitHom G H C R
+  inv := representationCounitInv G H C R
+  hom_inv_id := by
+    apply FreeProductRepresentationHom.ext
+    change 𝟙 _ ≫ 𝟙 _ = 𝟙 _
+    simp
+  inv_hom_id := by
+    apply FreeProductRepresentationHom.ext
+    change 𝟙 _ ≫ 𝟙 _ = 𝟙 _
+    simp
+
+theorem representationCounitIso_naturality
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    {R S : FreeProductRepresentation (C := C) G H} (f : R ⟶ S) :
+    ((fromRepresentationFunctor G H C ⋙
+      toRepresentationFunctor (C := C) G H).map f) ≫
+        (representationCounitIsoApp G H C S).hom =
+      (representationCounitIsoApp G H C R).hom ≫ f := by
+  apply FreeProductRepresentationHom.ext
+  change f.hom ≫ 𝟙 _ = 𝟙 _ ≫ f.hom
+  simp
+
+def representationCounitNatIso
+    (G H C : Type) [Monoid G] [Monoid H] [Category C] :
+    fromRepresentationFunctor G H C ⋙
+        toRepresentationFunctor (C := C) G H ≅
+      𝟭 (FreeProductRepresentation (C := C) G H) :=
+  NatIso.ofComponents (representationCounitIsoApp G H C) (fun f =>
+    representationCounitIso_naturality G H C f)
+
+theorem pointSpan_triangle
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    (toRepresentationFunctor (C := C) G H).map
+        ((coconeUnitNatIso (C := C) G H).hom.app P) ≫
+      (representationCounitNatIso G H C).hom.app
+        ((toRepresentationFunctor (C := C) G H).obj P) =
+      𝟙 ((toRepresentationFunctor (C := C) G H).obj P) := by
+  apply FreeProductRepresentationHom.ext
+  change 𝟙 _ ≫ 𝟙 _ = 𝟙 _
+  simp
+
+/-- Point-span pseudococones over the point legs are categorically equivalent
+to representations of the ordered free product `Monoid.Coprod G H`. -/
+def freeProductPointSpanEquivalence
+    (G H C : Type) [Monoid G] [Monoid H] [Category C] :
+    PointSpanPseudoCocone (C := C) G H ≌
+      FreeProductRepresentation (C := C) G H :=
+  CategoryTheory.Equivalence.mk'
+    (toRepresentationFunctor (C := C) G H)
+    (fromRepresentationFunctor G H C)
+    (coconeUnitNatIso (C := C) G H)
+    (representationCounitNatIso G H C)
+    (pointSpan_triangle G H C)
+
+@[simp] theorem equivalence_functor
+    (G H C : Type) [Monoid G] [Monoid H] [Category C] :
+    (freeProductPointSpanEquivalence G H C).functor =
+      toRepresentationFunctor (C := C) G H := rfl
+
+@[simp] theorem equivalence_inverse
+    (G H C : Type) [Monoid G] [Monoid H] [Category C] :
+    (freeProductPointSpanEquivalence G H C).inverse =
+      fromRepresentationFunctor G H C := rfl
+
+@[simp] theorem equivalence_unit_hom_left_app
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    ((freeProductPointSpanEquivalence G H C).unitIso.hom.app P).left.app
+      (SingleObj.star G) = 𝟙 _ := rfl
+
+@[simp] theorem equivalence_unit_hom_right_app
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (P : PointSpanPseudoCocone (C := C) G H) :
+    ((freeProductPointSpanEquivalence G H C).unitIso.hom.app P).right.app
+      (SingleObj.star H) = rightToLeftComponent G H P := rfl
+
+@[simp] theorem equivalence_counit_hom
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (R : FreeProductRepresentation (C := C) G H) :
+    ((freeProductPointSpanEquivalence G H C).counitIso.hom.app R).hom =
+      𝟙 R.target := rfl
+
+@[simp] theorem equivalence_action_inl
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (P : PointSpanPseudoCocone (C := C) G H) (g : G) :
+    ((freeProductPointSpanEquivalence G H C).functor.obj P).action
+      (Monoid.Coprod.inl g) = P.left.map g :=
+  toRepresentation_action_inl G H P g
+
+@[simp] theorem equivalence_action_inr
+    (G H C : Type) [Monoid G] [Monoid H] [Category C]
+    (P : PointSpanPseudoCocone (C := C) G H) (h : H) :
+    ((freeProductPointSpanEquivalence G H C).functor.obj P).action
+      (Monoid.Coprod.inr h) =
+        P.glue.hom.app (SingleObj.star PUnit) ≫ P.right.map h ≫
+          P.glue.inv.app (SingleObj.star PUnit) :=
+  toRepresentation_action_inr G H P h
+
 #print axioms freeProductAction
 #print axioms freeProductAction_inl
 #print axioms freeProductAction_inr
@@ -700,5 +832,10 @@ def coconeUnitNatIso
 #print axioms rightToLeft_naturality
 #print axioms leftToRight_naturality
 #print axioms coconeUnitNatIso
+#print axioms representationCounitNatIso
+#print axioms pointSpan_triangle
+#print axioms freeProductPointSpanEquivalence
+#print axioms equivalence_action_inl
+#print axioms equivalence_action_inr
 
 end ConstructionTargets.FreeProductPointSpanRepresentations

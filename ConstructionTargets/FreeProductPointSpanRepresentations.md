@@ -72,5 +72,19 @@ component is the original glue hom. The component naturality equations,
 glue squares, and inverse laws are proved directly; no strictification or
 heterogeneous-equality shortcut is used.
 
-This milestone stops before the representation-side counit, triangle laws or
-an equivalence, target naturality, specialization, or frozen uptake.
+On the representation side, both directions of the counit have the identity
+on `R.target` as their underlying morphism. Their intertwining laws use the
+proved equality between the round-trip action and `R.action`. These components
+form `representationCounitNatIso`; naturality reduces to the identity laws in
+the representation category.
+
+`pointSpan_triangle` is the remaining compatibility required by
+`CategoryTheory.Equivalence.mk'`. It yields
+`freeProductPointSpanEquivalence`, oriented from point-span pseudococones to
+free-product representations. Its normalization lemmas expose the forward and
+inverse functors, the identity left unit component, the glue-inverse right unit
+component, the identity counit, and the exact `inl`/conjugated-`inr` action
+orientation.
+
+This milestone does not add target-postcomposition naturality, connectors,
+torus specialization, source reconstruction, or frozen uptake.
