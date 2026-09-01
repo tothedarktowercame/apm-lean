@@ -706,6 +706,19 @@ and its representative formulas remain the next separately compiled
 milestone; no concrete cover, Mayer--Vietoris, fundamental-group theorem, or
 frozen uptake is claimed yet.
 
+Probe `invoke-1788254214027-6732-26985a9d` then reduced the intended
+restricted-wedge homeomorphism to one final coproduct-topology input.  The
+compiled fixture `/tmp/ProbePre.lean` (SHA-256
+`cc433af68701863cb43715ad4d07bd6a4ffcec8d356fa2489acad92edc23b8d7`)
+identifies the subtype of `restrictedPreimage A B` homeomorphically with
+`Sum A B` through honest open embeddings and an exact range computation.
+Implementation `invoke-1788254708777-6736-ba09bfcc` added the theorem and its
+left/right representative formulas at `17d8e69e`; review
+`invoke-1788254857707-6738-c716c7dd` returned `PASS`.  Basepoint hypotheses
+correctly remain absent here and enter only at the later quotient relation.
+The quotient-level `restrictedOpenHomeomorphWedge` is still unclaimed and is
+the next read-only compilation target.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

@@ -981,6 +981,19 @@ that restricted quotient subtype and the point wedge of the two restricted
 summands, including formulas on both representatives; concrete `U/V`, their
 intersection, and the three homotopy equivalences still follow afterward.
 
+The first `restrictedOpenHomeomorphWedge` probe
+`invoke-1788254214027-6732-26985a9d` isolated the last coproduct-level
+prerequisite.  Fixture `/tmp/ProbePre.lean` (SHA-256
+`cc433af68701863cb43715ad4d07bd6a4ffcec8d356fa2489acad92edc23b8d7`)
+compiled an honest homeomorphism from the subtype of the restricted coproduct
+to `A ⊕ B`, using the two open subtype embeddings and the exact range of
+`Sum.map Subtype.val Subtype.val`.  Agency job
+`invoke-1788254708777-6736-ba09bfcc` added it and its two representative
+formulas at `17d8e69e`; independent review
+`invoke-1788254857707-6738-c716c7dd` returned `PASS`.  No basepoint or quotient
+claim is hidden in this result.  The quotient-level restricted-wedge
+homeomorphism remains the next typed theorem.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.
