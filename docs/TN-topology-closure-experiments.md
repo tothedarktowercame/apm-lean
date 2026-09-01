@@ -806,6 +806,16 @@ the arbitrary-iso layer at `2e436010`; re-review
 consumer.  The next probe may therefore assemble the generic pseudococone
 unit/counit and equivalence triangle without changing strict-equality clients.
 
+The first unit/counit glue attempt `invoke-1788278063040-6925-59c98a8f`
+isolated a single shared reassociation theorem.  Its fixture
+`/tmp/GenericSpanWhiskerReassociationProbe.lean` (SHA-256
+`ce9ba311d1adac57d0f5203b4211306f04926d97e8e14384664dbcc0f8029846`)
+compiled the generic three-factor left-whiskering formula.  Implementation
+`invoke-1788278445726-6929-ac0b954d` committed it at `ec9cc067`; review
+`invoke-1788278649478-6932-424d2971` returned `PASS`, including the canonical
+twice-spiral build.  The unit/counit objectwise glue proof can now resume
+without duplicating coordinate-specific coherence code.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

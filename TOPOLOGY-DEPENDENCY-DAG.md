@@ -1091,6 +1091,17 @@ coordinate-specific consumer.  Pseudococone unit/counit assembly, the
 equivalence triangle, and reverse/equivalence-level target naturality remain
 the next categorical packet.
 
+Unit/counit glue probe `invoke-1788278063040-6925-59c98a8f` reduced both
+orientations to one shared reassociation law.  Fixture
+`/tmp/GenericSpanWhiskerReassociationProbe.lean` (SHA-256
+`ce9ba311d1adac57d0f5203b4211306f04926d97e8e14384664dbcc0f8029846`)
+compiled generic preservation of a three-factor natural-transformation
+composite by left whiskering.  Implementation
+`invoke-1788278445726-6929-ac0b954d` added the theorem at `ec9cc067`;
+independent review `invoke-1788278649478-6932-424d2971` returned `PASS` and
+rebuilt the existing twice-spiral consumer.  The objectwise pseudococone
+unit/counit glue squares are now ready for a focused re-probe.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.
