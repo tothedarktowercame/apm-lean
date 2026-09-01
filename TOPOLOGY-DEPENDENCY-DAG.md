@@ -923,6 +923,19 @@ bridge statement is unchanged and placeholders decrease `4 → 3`.  This is a
 bounded partial closure only: the RP²/antipodal bridge, genus-two
 classification bridge, and final assembly remain.
 
+Focused `t02A03` construction surveys then isolated a shared first dependency:
+an honest open-cover model for the literal point-wedge quotient.  Geometry
+probe `invoke-1788250899585-6693-a30e4ca3` compiled the generic EqvGen
+saturation theorem and exact quotient-image preimage equality in
+`/tmp/PointWedgeSaturation.lean`.  Implementation job
+`invoke-1788251341798-6703-7c75de42` promoted the generic quotient and
+saturated-open-cover skeleton at `7cfa9888`; independent review
+`invoke-1788251536399-6707-cb73a819` returned `PASS`.  Openness is proved by
+rewriting the coinduced preimage to the original saturated open set, not by
+assuming that quotient maps send arbitrary opens to opens.  This milestone
+does not yet claim the punctured-circle contraction, the three cover homotopy
+equivalences, Mayer--Vietoris, free-product π₁, or frozen closure.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.

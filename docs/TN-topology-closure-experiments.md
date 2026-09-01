@@ -653,6 +653,19 @@ the reviewed winding equivalence.  The frozen bridge statement is unchanged
 and placeholders decrease `4 → 3`.  `t92J05` remains open: its RP²/antipodal,
 genus-two classification, and final-assembly placeholders are untouched.
 
+The next focused `t02A03` campaign identified literal point-wedge geometry as
+the common prerequisite for both its homology and fundamental-group branches.
+Probe `invoke-1788250899585-6693-a30e4ca3` compiled generic EqvGen saturation,
+exact quotient-image preimages, and a saturated open-cover skeleton in
+`/tmp/PointWedgeSaturation.lean`.  Agency job
+`invoke-1788251341798-6703-7c75de42` implemented
+`PointWedgeQuotient.{lean,md}` at `7cfa9888`; independent review
+`invoke-1788251536399-6707-cb73a819` returned `PASS`.  The construction uses
+the coinduced topology and exact saturation to prove openness; it does not
+assume a general open-map property for the quotient.  Frozen adapters,
+pointed contractions, cover homotopy equivalences, Mayer--Vietoris, and source
+reconstruction remain separate milestones.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
