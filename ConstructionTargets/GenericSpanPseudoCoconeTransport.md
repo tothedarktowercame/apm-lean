@@ -28,3 +28,22 @@ square algebraically. The resulting `unitHom`, `unitInv`, `unitIsoApp`, and
 This target stops before the counit, categorical equivalence and triangle,
 reverse or equivalence-level target naturality, concrete wedge cells,
 free-product reconstruction, source reconstruction, and frozen consumers.
+
+The counit is oriented as
+
+```lean
+reverseTransportFunctor ... ⋙ transportFunctor ... ≅
+  𝟙 (SpanPseudoCocone l' r' C)
+```
+
+The reviewed counit layer adds the left/right counit triangle and cancellation
+helpers, the middle counit conjugation and whiskered reverse-glue formulas,
+typed substitution lemmas, and the resulting `counitGlueSquare`, `counitHom`,
+`counitInv`, `counitIsoApp`, and `counitNatIso`. It preserves arbitrary span
+comparison natural isomorphisms and uses `spanRoundTripIso_counit`,
+`spanRoundTripIso_counit_inv`, glue naturality at `eK.counit`, and
+`inverse_glue_square_of_forward`.
+
+This file still stops before the final triangle/equivalence, reverse or
+equivalence-level target naturality, concrete wedge cells, free-product
+reconstruction, source reconstruction, and frozen consumers.

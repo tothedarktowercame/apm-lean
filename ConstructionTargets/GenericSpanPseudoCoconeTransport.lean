@@ -425,6 +425,181 @@ def unitNatIso {C : Type uC} [Category C] :
     · exact (eL.congrLeft).unitIso.hom.naturality τ.left
     · exact (eR.congrLeft).unitIso.hom.naturality τ.right)
 
+theorem left_counit_triangle {C : Type uC} [Category C] (F : L' ⥤ C) :
+    (leftComparison l l' eK eL αL (eL.functor ⋙ F)).hom ≫
+      Functor.whiskerLeft eK.inverse
+        (reverseLeftComparison l l' eK eL αL F).inv ≫
+      (eK.invFunIdAssoc (l' ⋙ F)).hom =
+    Functor.whiskerLeft l' ((eL.congrLeft).counitIso.hom.app F) := by
+  simpa only [leftComparison, reverseLeftComparison] using
+    (spanRoundTripIso_counit eK eL l l' αL F)
+
+theorem right_counit_triangle_inv {C : Type uC} [Category C] (F : R' ⥤ C) :
+    (eK.invFunIdAssoc (r' ⋙ F)).inv ≫
+      Functor.whiskerLeft eK.inverse
+        (reverseRightComparison r r' eK eR αR F).hom ≫
+      (rightComparison r r' eK eR αR (eR.functor ⋙ F)).inv =
+    Functor.whiskerLeft r' ((eR.congrLeft).counitIso.inv.app F) := by
+  simpa only [rightComparison, reverseRightComparison] using
+    (spanRoundTripIso_counit_inv eK eR r r' αR F)
+
+theorem right_counit_cancel {C : Type uC} [Category C] (F : R' ⥤ C) :
+    (eK.invFunIdAssoc (r' ⋙ F)).inv ≫
+      Functor.whiskerLeft eK.inverse
+        (reverseRightComparison r r' eK eR αR F).hom ≫
+      (rightComparison r r' eK eR αR (eR.functor ⋙ F)).inv ≫
+      Functor.whiskerLeft r' ((eR.congrLeft).counitIso.hom.app F) = 𝟙 _ := by
+  calc
+    _ = Functor.whiskerLeft r' ((eR.congrLeft).counitIso.inv.app F) ≫
+        Functor.whiskerLeft r' ((eR.congrLeft).counitIso.hom.app F) := by
+      have h := reassoc_of% (right_counit_triangle_inv r r' eK eR αR F)
+      simpa only [Category.assoc] using h
+        (Functor.whiskerLeft r' ((eR.congrLeft).counitIso.hom.app F))
+    _ = _ := (Functor.isoWhiskerLeft r'
+      ((eR.congrLeft).counitIso.app F)).inv_hom_id
+
+theorem middle_counit_conjugation {C : Type uC} [Category C]
+    (Q : SpanPseudoCocone l' r' C) :
+    Functor.whiskerLeft eK.inverse
+        (Functor.isoWhiskerLeft eK.functor Q.glue).hom =
+      (eK.invFunIdAssoc (l' ⋙ Q.left)).hom ≫ Q.glue.hom ≫
+        (eK.invFunIdAssoc (r' ⋙ Q.right)).inv := by
+  let oL := eK.invFunIdAssoc (l' ⋙ Q.left)
+  let oR := eK.invFunIdAssoc (r' ⋙ Q.right)
+  ext z
+  have hz := Q.glue.hom.naturality (eK.counit.app z)
+  simp only [NatTrans.comp_app, Functor.whiskerLeft_app]
+  apply (cancel_mono (oR.hom.app z)).1
+  calc
+    _ = oL.hom.app z ≫ Q.glue.hom.app z := by
+      simpa [oL, oR, Category.assoc] using hz.symm
+    _ = (oL.hom.app z ≫ Q.glue.hom.app z ≫ oR.inv.app z) ≫
+        oR.hom.app z := by
+      symm
+      simp only [Category.assoc, oR.inv_hom_id_app, Category.comp_id]
+
+theorem whiskered_reverse_glue {C : Type uC} [Category C]
+    (Q : SpanPseudoCocone l' r' C) :
+    Functor.whiskerLeft eK.inverse
+        (reverseTransportObj l r l' r' eK eL eR αL αR Q).glue.hom =
+      Functor.whiskerLeft eK.inverse
+          (reverseLeftComparison l l' eK eL αL Q.left).inv ≫
+        Functor.whiskerLeft eK.inverse
+          (Functor.isoWhiskerLeft eK.functor Q.glue).hom ≫
+        Functor.whiskerLeft eK.inverse
+          (reverseRightComparison r r' eK eR αR Q.right).hom := by
+  simpa only [reverseTransportObj] using
+    (whiskerLeft_three_comp_generic eK.inverse
+      (reverseLeftComparison l l' eK eL αL Q.left).inv
+      (Functor.isoWhiskerLeft eK.functor Q.glue).hom
+      (reverseRightComparison r r' eK eR αR Q.right).hom)
+
+theorem four_context_middle_substitution
+    {A : Type*} [Category A] {X Y Z W V : A}
+    (a : X ⟶ Y) (b b' : Y ⟶ Z) (c : Z ⟶ W) (d : W ⟶ V)
+    (h : b = b') : (a ≫ b ≫ c) ≫ d = (a ≫ b' ≫ c) ≫ d := by
+  rw [h]
+
+theorem right_nested_substitution
+    {A : Type*} [Category A] {X Y Z W V S T U : A}
+    (a : X ⟶ Y) (b : Y ⟶ Z) (c : Z ⟶ W) (x : X ⟶ W)
+    (m : W ⟶ V) (d : V ⟶ S) (e : S ⟶ T) (f : T ⟶ U)
+    (g : U ⟶ V) (hp : a ≫ b ≫ c = x) (ht : d ≫ e ≫ f ≫ g = 𝟙 V) :
+    (a ≫ (b ≫ (c ≫ m ≫ d) ≫ e) ≫ f) ≫ g = x ≫ m := by
+  have h : ((a ≫ b ≫ c) ≫ m) ≫ (d ≫ e ≫ f ≫ g) = x ≫ m := by
+    rw [hp, ht, Category.comp_id]
+  simpa only [Category.assoc] using h
+
+theorem counitGlueSquare {C : Type uC} [Category C]
+    (Q : SpanPseudoCocone l' r' C) :
+    (transportObj l r l' r' eK eL eR αL αR
+      (reverseTransportObj l r l' r' eK eL eR αL αR Q)).glue.hom ≫
+      Functor.whiskerLeft r' ((eR.congrLeft).counitIso.hom.app Q.right) =
+    Functor.whiskerLeft l' ((eL.congrLeft).counitIso.hom.app Q.left) ≫
+      Q.glue.hom := by
+  let oL := eK.invFunIdAssoc (l' ⋙ Q.left)
+  let oR := eK.invFunIdAssoc (r' ⋙ Q.right)
+  have hW := whiskered_reverse_glue l r l' r' eK eL eR αL αR Q
+  have hM := middle_counit_conjugation (eK := eK) (Q := Q)
+  have hP := left_counit_triangle l l' eK eL αL Q.left
+  have hT := right_counit_cancel r r' eK eR αR Q.right
+  dsimp [transportObj]
+  have hChain := congrArg
+    (fun k => Functor.whiskerLeft eK.inverse
+        (reverseLeftComparison l l' eK eL αL Q.left).inv ≫ k ≫
+      Functor.whiskerLeft eK.inverse
+        (reverseRightComparison r r' eK eR αR Q.right).hom) hM
+  have hWG := hW.trans hChain
+  refine (four_context_middle_substitution
+    (leftComparison l l' eK eL αL (eL.functor ⋙ Q.left)).hom
+    (Functor.whiskerLeft eK.inverse
+      (reverseTransportObj l r l' r' eK eL eR αL αR Q).glue.hom)
+    (Functor.whiskerLeft eK.inverse
+        (reverseLeftComparison l l' eK eL αL Q.left).inv ≫
+      (oL.hom ≫ Q.glue.hom ≫ oR.inv) ≫
+      Functor.whiskerLeft eK.inverse
+        (reverseRightComparison r r' eK eR αR Q.right).hom)
+    (rightComparison r r' eK eR αR (eR.functor ⋙ Q.right)).inv
+    (Functor.whiskerLeft r' ((eR.congrLeft).counitIso.hom.app Q.right))
+    hWG).trans ?_
+  exact right_nested_substitution
+    (leftComparison l l' eK eL αL (eL.functor ⋙ Q.left)).hom
+    (Functor.whiskerLeft eK.inverse
+      (reverseLeftComparison l l' eK eL αL Q.left).inv)
+    oL.hom
+    (Functor.whiskerLeft l' ((eL.congrLeft).counitIso.hom.app Q.left))
+    Q.glue.hom oR.inv
+    (Functor.whiskerLeft eK.inverse
+      (reverseRightComparison r r' eK eR αR Q.right).hom)
+    (rightComparison r r' eK eR αR (eR.functor ⋙ Q.right)).inv
+    (Functor.whiskerLeft r' ((eR.congrLeft).counitIso.hom.app Q.right))
+    hP hT
+
+def counitHom {C : Type uC} [Category C] (Q : SpanPseudoCocone l' r' C) :
+    (reverseTransportFunctor l r l' r' eK eL eR αL αR ⋙
+      transportFunctor l r l' r' eK eL eR αL αR).obj Q ⟶ Q where
+  left := (eL.congrLeft).counitIso.hom.app Q.left
+  right := (eR.congrLeft).counitIso.hom.app Q.right
+  glue_naturality := counitGlueSquare l r l' r' eK eL eR αL αR Q
+
+def counitInv {C : Type uC} [Category C] (Q : SpanPseudoCocone l' r' C) :
+    Q ⟶ (reverseTransportFunctor l r l' r' eK eL eR αL αR ⋙
+      transportFunctor l r l' r' eK eL eR αL αR).obj Q where
+  left := (eL.congrLeft).counitIso.inv.app Q.left
+  right := (eR.congrLeft).counitIso.inv.app Q.right
+  glue_naturality := inverse_glue_square_of_forward
+    (transportObj l r l' r' eK eL eR αL αR
+      (reverseTransportObj l r l' r' eK eL eR αL αR Q)).glue.hom
+    Q.glue.hom
+    (Functor.isoWhiskerLeft l' ((eL.congrLeft).counitIso.app Q.left))
+    (Functor.isoWhiskerLeft r' ((eR.congrLeft).counitIso.app Q.right))
+    (counitGlueSquare l r l' r' eK eL eR αL αR Q)
+
+def counitIsoApp {C : Type uC} [Category C] (Q : SpanPseudoCocone l' r' C) :
+    (reverseTransportFunctor l r l' r' eK eL eR αL αR ⋙
+      transportFunctor l r l' r' eK eL eR αL αR).obj Q ≅ Q := by
+  let iL := (eL.congrLeft).counitIso.app Q.left
+  let iR := (eR.congrLeft).counitIso.app Q.right
+  refine { hom := counitHom l r l' r' eK eL eR αL αR Q
+           inv := counitInv l r l' r' eK eL eR αL αR Q
+           hom_inv_id := ?_, inv_hom_id := ?_ }
+  · apply SpanPseudoCoconeHom.ext
+    · exact iL.hom_inv_id
+    · exact iR.hom_inv_id
+  · apply SpanPseudoCoconeHom.ext
+    · exact iL.inv_hom_id
+    · exact iR.inv_hom_id
+
+def counitNatIso {C : Type uC} [Category C] :
+    reverseTransportFunctor l r l' r' eK eL eR αL αR ⋙
+        transportFunctor l r l' r' eK eL eR αL αR ≅
+      Functor.id (SpanPseudoCocone l' r' C) :=
+  NatIso.ofComponents (counitIsoApp l r l' r' eK eL eR αL αR) (by
+    intro P Q τ
+    apply SpanPseudoCoconeHom.ext
+    · exact (eL.congrLeft).counitIso.hom.naturality τ.left
+    · exact (eR.congrLeft).counitIso.hom.naturality τ.right)
+
 
 #print axioms spanRoundTripIso_unit_inv_with_prefix
 #print axioms inverse_glue_square_of_forward
@@ -433,5 +608,7 @@ def unitNatIso {C : Type uC} [Category C] :
 #print axioms unitInv
 #print axioms unitIsoApp
 #print axioms unitNatIso
+#print axioms counitGlueSquare
+#print axioms counitNatIso
 
 end ConstructionTargets.GenericSpanPseudoCoconeTransport
