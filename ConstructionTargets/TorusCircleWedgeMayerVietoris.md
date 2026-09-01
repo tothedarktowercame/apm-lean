@@ -17,7 +17,9 @@ reassembly. In degree one, exactness and the vanishing of overlap `H₁` make
 the reassembly map monic; monicity of the degree-zero intersection arrow makes
 the connecting map zero and hence reassembly epic. The resulting isomorphism
 orders the torus `Fin 2` coordinates first and the circle coordinate last via
-`finTwoProdIntModuleIso`.
+the local `torusFirstFinThreeModuleIso`. Its three compiled evaluation lemmas
+state that output coordinates zero and one are the original torus coordinates
+in order, and output coordinate two is the circle coordinate.
 
 For degrees at least two, vanishing of overlap homology in consecutive degrees
 makes reassembly an isomorphism. Degree two then reduces to the torus `H₂`

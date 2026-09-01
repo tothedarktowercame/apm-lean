@@ -1,7 +1,6 @@
 import ConstructionTargets.TorusCircleWedgeOpenCover
 import ConstructionTargets.BoundaryTorusH0Cokernel
 import ConstructionTargets.T00A01MayerVietorisAdapters
-import ConstructionTargets.T96A03DegreeTwoNormalization
 
 open CategoryTheory CategoryTheory.Limits Set
 
@@ -21,7 +20,6 @@ open ConstructionTargets.T00A01MayerVietorisAdapters
 open ConstructionTargets.ProductionOpenCoverMayerVietoris
 open ConstructionTargets.BoundaryTorusIntegralHomologyComplete
 open ConstructionTargets.BoundaryTorusH2ConnectingIso
-open ConstructionTargets.T96A03DegreeTwoNormalization
 
 private abbrev H (n : ℕ) (X : Type) [TopologicalSpace X] :=
   SingularHomology n (TopCat.of X)
@@ -102,13 +100,52 @@ noncomputable def rightH1GroupIsoInt :
   singularHomologyIsoOfHomotopyEquiv VHomotopyEquiv 1 ≪≫
     circleH1GroupIsoInt
 
+/-- Identify the torus rank-two coordinates followed by the circle coordinate
+with `Fin 3` coordinates in that same order. -/
+def torusFirstFinThreeLinearEquiv :
+    ((Fin 2 → ℤ) × ℤ) ≃ₗ[ℤ] (Fin 3 → ℤ) where
+  toFun p := Fin.lastCases p.2 p.1
+  invFun g := (fun i => g i.castSucc, g (Fin.last 2))
+  left_inv p := by
+    apply Prod.ext
+    · funext i
+      simp
+    · simp only [Fin.lastCases_last]
+  right_inv g := by
+    funext i
+    refine Fin.lastCases ?_ (fun j => ?_) i
+    · simp only [Fin.lastCases_last]
+    · simp only [Fin.lastCases_castSucc]
+  map_add' p q := by
+    funext i
+    fin_cases i <;> rfl
+  map_smul' z p := by
+    funext i
+    fin_cases i <;> rfl
+
+def torusFirstFinThreeModuleIso :
+    ModuleCat.of ℤ ((Fin 2 → ℤ) × ℤ) ≅ ModuleCat.of ℤ (Fin 3 → ℤ) :=
+  torusFirstFinThreeLinearEquiv.toModuleIso
+
+@[simp] theorem torusFirstFinThreeLinearEquiv_apply_zero
+    (f : Fin 2 → ℤ) (z : ℤ) :
+    torusFirstFinThreeLinearEquiv (f, z) (0 : Fin 3) = f 0 := rfl
+
+@[simp] theorem torusFirstFinThreeLinearEquiv_apply_one
+    (f : Fin 2 → ℤ) (z : ℤ) :
+    torusFirstFinThreeLinearEquiv (f, z) (1 : Fin 3) = f 1 := rfl
+
+@[simp] theorem torusFirstFinThreeLinearEquiv_apply_two
+    (f : Fin 2 → ℤ) (z : ℤ) :
+    torusFirstFinThreeLinearEquiv (f, z) (2 : Fin 3) = z := rfl
+
 noncomputable def genericWedgeH1GroupIsoFinThree :
     H 1 GenericWedge ≅ AddCommGrpCat.of (Fin 3 → ℤ) :=
   (asIso (productionReassemblyArrow U V 1)).symm ≪≫
     biprod.mapIso leftH1GroupIsoFinTwo rightH1GroupIsoInt ≪≫
     AddCommGrpCat.biprodIsoProd
       (AddCommGrpCat.of (Fin 2 → ℤ)) (AddCommGrpCat.of ℤ) ≪≫
-    forgetIntModules.mapIso finTwoProdIntModuleIso
+    forgetIntModules.mapIso torusFirstFinThreeModuleIso
 
 noncomputable def genericWedgeH1ModuleIsoFinThree :
     MH 1 GenericWedge ≅ ModuleCat.of ℤ (Fin 3 → ℤ) :=
@@ -195,6 +232,10 @@ theorem genericWedge_complete_module_homology :
 #print axioms genericWedgeH0ModuleIsoInt
 #print axioms overlapH1Group_isZero
 #print axioms productionReassemblyArrow_H1_isIso
+#print axioms torusFirstFinThreeLinearEquiv
+#print axioms torusFirstFinThreeLinearEquiv_apply_zero
+#print axioms torusFirstFinThreeLinearEquiv_apply_one
+#print axioms torusFirstFinThreeLinearEquiv_apply_two
 #print axioms genericWedgeH1GroupIsoFinThree
 #print axioms genericWedgeH1ModuleIsoFinThree
 #print axioms genericWedgeH2ModuleIsoInt
