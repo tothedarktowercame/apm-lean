@@ -1074,6 +1074,23 @@ inclusions.  The second obligation is not implied by contractibility of the
 overlap.  Work beyond the compiled forward functor is blocked on those two
 theorems; no source-reconstruction claim is made.
 
+The first coherence dependency was then split and completed.  Probe
+`invoke-1788275855211-6907-a563a1c6` compiled four arbitrary-natural-iso
+round-trip lemmas in `/tmp/EquivalenceSpanRoundTripIsoProbe.lean` (SHA-256
+`42f3e4d536875826f2c9d13fca9d8de347c072596432b8fa6024ccffff0b58c6`).
+Implementation `invoke-1788276678690-6912-4aa8bc75` committed them at
+`9aebc3da`; review `invoke-1788277045001-6915-40a763c0` found that the rewrite
+had removed equality-valued public names used by the canonical twice-spiral
+consumer.  Compatibility repair `invoke-1788277228320-6917-ae8d0340`
+restored the historical helpers and theorem signatures alongside the new API
+at `2e436010`; combined re-review
+`invoke-1788277672856-6920-a3b9e1da` returned `PASS`, including a successful
+build of `TwiceSpiralPseudococoneTransport`.  The generic reverse transport
+milestone can now use arbitrary comparison isomorphisms without regressing the
+coordinate-specific consumer.  Pseudococone unit/counit assembly, the
+equivalence triangle, and reverse/equivalence-level target naturality remain
+the next categorical packet.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.

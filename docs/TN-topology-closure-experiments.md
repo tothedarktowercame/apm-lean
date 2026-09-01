@@ -792,6 +792,20 @@ for the torus-circle cover.  Current homotopy equivalences do not contain the
 required commuting homotopies.  No fixed-target or objectwise shortcut was
 accepted.
 
+The first coherence subproblem was completed through a reviewed repair cycle.
+Probe `invoke-1788275855211-6907-a563a1c6` compiled the four iso-valued span
+round-trip orientations in `/tmp/EquivalenceSpanRoundTripIsoProbe.lean`
+(SHA-256
+`42f3e4d536875826f2c9d13fca9d8de347c072596432b8fa6024ccffff0b58c6`).
+Implementation `invoke-1788276678690-6912-4aa8bc75` landed at `9aebc3da`.
+Review `invoke-1788277045001-6915-40a763c0` caught a real regression: the
+equality-valued API still used by `TwiceSpiralPseudococoneTransport` had been
+removed.  Repair `invoke-1788277228320-6917-ae8d0340` restored that API beside
+the arbitrary-iso layer at `2e436010`; re-review
+`invoke-1788277672856-6920-a3b9e1da` returned `PASS` and rebuilt the canonical
+consumer.  The next probe may therefore assemble the generic pseudococone
+unit/counit and equivalence triangle without changing strict-equality clients.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
