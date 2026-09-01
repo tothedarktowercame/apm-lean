@@ -733,6 +733,21 @@ continuous-bijection shortcut.  Concrete torus/circle opens, intersection,
 symmetry, frozen transport, and three homotopy equivalences remain the next
 single read-only geometry probe.
 
+Concrete re-probe `invoke-1788255951621-6753-56dfc906` then compiled the full
+cover in `/tmp/TorusCircleWedgeOpenCoverProbe.lean` (SHA-256
+`b2a0c568d01aae80e504590893e19dd4569811beef9c38c1d2e06507efb9138d`).
+It constructs literal punctured neighborhoods, actual open `U/V`, their exact
+intersection, all three restricted-wedge models, generic wedge symmetry,
+right-oriented contraction through symmetry, and the three homotopy
+equivalences to the torus, circle, and `Unit`.  Its identity-on-representatives
+adapter also compiled for the frozen `t02A03` quotient.  Agency job
+`invoke-1788256591051-6758-fa7a8fbc` promoted the reusable geometry at
+`0fc1cb8c`; review `invoke-1788256790027-6763-01146072` returned `PASS`.
+Frozen names were deliberately excluded from the ConstructionTarget.  The
+geometry stage is now reviewed; Mayer--Vietoris actual-arrow normalization and
+the four frozen homology clauses are the next read-only target, while the
+independent free-product fundamental-group branch remains later.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at

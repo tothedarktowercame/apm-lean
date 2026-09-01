@@ -1009,6 +1009,21 @@ must specialize it to the actual punctured torus/circle opens, derive the
 symmetric contraction orientation, identify the intersection, transport the
 frozen quotient, and compile the three cover homotopy equivalences.
 
+Concrete cover re-probe `invoke-1788255951621-6753-56dfc906` compiled that
+entire geometry packet in `/tmp/TorusCircleWedgeOpenCoverProbe.lean` (SHA-256
+`b2a0c568d01aae80e504590893e19dd4569811beef9c38c1d2e06507efb9138d`).
+It gives the literal punctured-circle and punctured-torus neighborhoods,
+actual open `U/V`, their cover and exact intersection, three restricted-wedge
+models, a generic wedge swap, right contraction derived through that swap,
+and homotopy equivalences of `U`, `V`, and `U ∩ V` with the torus, circle,
+and `Unit`.  The fixture also compiled the identity-on-representatives frozen
+adapter.  Agency implementation `invoke-1788256591051-6758-fa7a8fbc`
+promoted the reusable pair at `0fc1cb8c`; independent review
+`invoke-1788256790027-6763-01146072` returned `PASS`.  Frozen-only relation
+names were correctly omitted from the ConstructionTarget.  Point-wedge open
+geometry is therefore reviewed; the next dependency is the actual-arrow
+Mayer--Vietoris calculation and frozen homology transport.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.
