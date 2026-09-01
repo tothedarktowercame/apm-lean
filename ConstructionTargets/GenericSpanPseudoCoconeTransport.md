@@ -40,6 +40,22 @@ comparison natural isomorphisms and uses `spanRoundTripIso_counit`,
 `spanRoundTripIso_counit_inv`, glue naturality at `eK.counit`, and
 `inverse_glue_square_of_forward`.
 
-This file still stops before the final triangle/equivalence, reverse or
-equivalence-level target naturality, concrete wedge cells, free-product
-reconstruction, source reconstruction, and frozen consumers.
+The reviewed final layer adds `mapped_unit_comp_counit`, proving the exact
+triangle
+
+```lean
+transportFunctor.map (unitNatIso.hom.app P) ≫
+  counitNatIso.hom.app (transportFunctor.obj P) = 𝟙 _
+```
+
+componentwise via the two piece functor-category equivalences, and packages the
+full equivalence as `pseudoCoconeEquivalenceOfSpanEquivalences` using
+`CategoryTheory.Equivalence.mk'`. The normalization lemmas
+`equivalence_functor`, `equivalence_inverse`,
+`equivalence_unitIso_hom_app`, and `equivalence_counitIso_hom_app` expose the
+reviewed functor, inverse, unit, and counit components by `rfl`.
+
+This file now completes the generic span-pseudococone equivalence, but still
+stops before reverse or equivalence-level target naturality, concrete wedge
+cells, free-product reconstruction, source reconstruction, and frozen
+consumers.

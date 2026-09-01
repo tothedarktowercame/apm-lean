@@ -600,6 +600,53 @@ def counitNatIso {C : Type uC} [Category C] :
     · exact (eL.congrLeft).counitIso.hom.naturality τ.left
     · exact (eR.congrLeft).counitIso.hom.naturality τ.right)
 
+theorem mapped_unit_comp_counit {C : Type uC} [Category C]
+    (P : SpanPseudoCocone l r C) :
+    (transportFunctor l r l' r' eK eL eR αL αR).map
+          ((unitNatIso l r l' r' eK eL eR αL αR).hom.app P) ≫
+        (counitNatIso l r l' r' eK eL eR αL αR).hom.app
+          ((transportFunctor l r l' r' eK eL eR αL αR).obj P) =
+      𝟙 ((transportFunctor l r l' r' eK eL eR αL αR).obj P) := by
+  apply SpanPseudoCoconeHom.ext
+  · exact (eL.congrLeft).functor_unitIso_comp P.left
+  · exact (eR.congrLeft).functor_unitIso_comp P.right
+
+/-- Transport through the three equivalences is an equivalence of the two
+span-pseudococone categories. -/
+def pseudoCoconeEquivalenceOfSpanEquivalences
+    {C : Type uC} [Category C] :
+    SpanPseudoCocone l r C ≌ SpanPseudoCocone l' r' C :=
+  CategoryTheory.Equivalence.mk'
+    (transportFunctor l r l' r' eK eL eR αL αR)
+    (reverseTransportFunctor l r l' r' eK eL eR αL αR)
+    (unitNatIso l r l' r' eK eL eR αL αR)
+    (counitNatIso l r l' r' eK eL eR αL αR)
+    (mapped_unit_comp_counit l r l' r' eK eL eR αL αR)
+
+@[simp] theorem equivalence_functor
+    {C : Type uC} [Category C] :
+    (pseudoCoconeEquivalenceOfSpanEquivalences
+      l r l' r' eK eL eR αL αR (C := C)).functor =
+      transportFunctor l r l' r' eK eL eR αL αR := rfl
+
+@[simp] theorem equivalence_inverse
+    {C : Type uC} [Category C] :
+    (pseudoCoconeEquivalenceOfSpanEquivalences
+      l r l' r' eK eL eR αL αR (C := C)).inverse =
+      reverseTransportFunctor l r l' r' eK eL eR αL αR := rfl
+
+@[simp] theorem equivalence_unitIso_hom_app
+    {C : Type uC} [Category C] (P : SpanPseudoCocone l r C) :
+    (pseudoCoconeEquivalenceOfSpanEquivalences
+      l r l' r' eK eL eR αL αR).unitIso.hom.app P =
+      (unitNatIso l r l' r' eK eL eR αL αR).hom.app P := rfl
+
+@[simp] theorem equivalence_counitIso_hom_app
+    {C : Type uC} [Category C] (Q : SpanPseudoCocone l' r' C) :
+    (pseudoCoconeEquivalenceOfSpanEquivalences
+      l r l' r' eK eL eR αL αR).counitIso.hom.app Q =
+      (counitNatIso l r l' r' eK eL eR αL αR).hom.app Q := rfl
+
 
 #print axioms spanRoundTripIso_unit_inv_with_prefix
 #print axioms inverse_glue_square_of_forward
@@ -610,5 +657,7 @@ def counitNatIso {C : Type uC} [Category C] :
 #print axioms unitNatIso
 #print axioms counitGlueSquare
 #print axioms counitNatIso
+#print axioms mapped_unit_comp_counit
+#print axioms pseudoCoconeEquivalenceOfSpanEquivalences
 
 end ConstructionTargets.GenericSpanPseudoCoconeTransport
