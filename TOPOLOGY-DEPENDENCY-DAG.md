@@ -994,6 +994,21 @@ formulas at `17d8e69e`; independent review
 claim is hidden in this result.  The quotient-level restricted-wedge
 homeomorphism remains the next typed theorem.
 
+The quotient-level re-probe `invoke-1788255086508-6741-acb1a42a` then
+compiled the complete restricted-wedge homeomorphism in
+`/tmp/RestrictedWedgeProbe.lean` (SHA-256
+`5e3c5a399a58f032b08f3f02569b84f8696f71e28426e3b5fc0eeccba4722b88`).
+It constructs both quotient directions, proves continuity through the two
+reviewed quotient-map `continuous_iff` theorems, proves both inverse laws on
+representatives, and exports formulas in both directions plus the glued
+basepoint identities.  Agency job `invoke-1788255630673-6747-98b29cf4`
+promoted the construction at `f2394dd6`; independent review
+`invoke-1788255810934-6750-61aa4313` returned `PASS`.  The generic restricted
+point-wedge topology layer is therefore complete.  The next geometry packet
+must specialize it to the actual punctured torus/circle opens, derive the
+symmetric contraction orientation, identify the intersection, transport the
+frozen quotient, and compile the three cover homotopy equivalences.
+
 Both `t02A03` and `t92J05` therefore remain open.  Their remaining routes face
 independent van Kampen or surface-classification foundations before
 whole-consumer closure.

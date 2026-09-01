@@ -719,6 +719,20 @@ correctly remain absent here and enter only at the later quotient relation.
 The quotient-level `restrictedOpenHomeomorphWedge` is still unclaimed and is
 the next read-only compilation target.
 
+Re-probe `invoke-1788255086508-6741-acb1a42a` compiled that full quotient
+homeomorphism in `/tmp/RestrictedWedgeProbe.lean` (SHA-256
+`5e3c5a399a58f032b08f3f02569b84f8696f71e28426e3b5fc0eeccba4722b88`).
+The construction descends the forward map through the restricted large
+quotient, builds the inverse as a genuine smaller-wedge quotient lift, proves
+continuity using the two quotient-map universal properties, and establishes
+both inverse laws and six representative/basepoint formulas.  Implementation
+`invoke-1788255630673-6747-98b29cf4` promoted it at `f2394dd6`; independent
+review `invoke-1788255810934-6750-61aa4313` returned `PASS`.  This completes
+the generic restricted point-wedge topology layer without using a
+continuous-bijection shortcut.  Concrete torus/circle opens, intersection,
+symmetry, frozen transport, and three homotopy equivalences remain the next
+single read-only geometry probe.
+
 That composition probe (`invoke-1788115854743-4489-444a6bf7`) compiled the
 three algebraic squares, their `vComp'` composite, and all `vInv` mates.  Agency
 job `invoke-1788116169840-4496-82729c6a` implemented the focused pair at
