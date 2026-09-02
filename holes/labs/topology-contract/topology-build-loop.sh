@@ -86,7 +86,7 @@ wait_job() {
         jq -r '.job.result // ""' <<<"$body" > "$LAST_RESULT"
         log "$label done job=$job result=$LAST_RESULT"; return 0 ;;
       failed|error|cancelled) die "$label terminal state=$state job=$job" ;;
-      queued|running|accepted|"") ;;
+      queued|delivering|running|accepted|"") ;;
       *) die "$label unknown state=$state job=$job" ;;
     esac
     sleep "$POLL_SECONDS"; elapsed=$((elapsed+POLL_SECONDS))

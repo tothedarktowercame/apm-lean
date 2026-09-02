@@ -53,4 +53,6 @@ extracted="$(mktemp)"
 "$HERE/extract-receipt.sh" "$HERE/fixtures/realistic-result.txt" test-nonce "$extracted"
 grep -q '^\{:outcome :revise' "$extracted"
 rm -f "$extracted"
+
+grep -q 'queued|delivering|running|accepted' "$HERE/topology-build-loop.sh"
 echo "topology-loop tests: PASS"
