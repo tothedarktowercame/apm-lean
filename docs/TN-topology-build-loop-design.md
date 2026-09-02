@@ -144,8 +144,9 @@ The validator rejects a ledger unless all of the following hold:
 The validator also checks the live repository:
 
 - the worktree is clean before probe, implementation, and review;
-- `.lake/packages` is a symlink resolving exactly to the canonical package
-  authority;
+- `.lake/packages` resolves exactly to the canonical package authority; the
+  canonical checkout owns the real directory, while any frame checkout must
+  use the required symbolic link;
 - recorded commits exist and touch only their declared scope;
 - recorded fixture hashes still match;
 - reviewed frozen statement hashes still match the campaign baseline;
@@ -234,8 +235,9 @@ The prompt includes the selected row verbatim, its dependency receipts, the
 current consumer residual, and explicit permission boundaries.  A seat may not
 choose a different row.
 
-Each seat writes `runs/<row>/<attempt>/receipt.edn` atomically.  The supervisor
-parses the receipt instead of interpreting prose from stdout.  Required fields
+Each seat ends its result with a single-line `TOPOLOGY_RECEIPT_EDN` map.  The
+supervisor extracts it atomically into `runs/jobs/<job-id>.receipt.edn` and
+preserves the full result beside it.  Required fields
 include result, fixture hash, commands with exit codes, changed paths, commit,
 axioms, warnings, placeholder delta, statement hashes, and the next residual.
 

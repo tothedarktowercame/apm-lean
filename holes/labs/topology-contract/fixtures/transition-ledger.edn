@@ -1,0 +1,14 @@
+{:schema :topology/worklist-v1
+ :campaign :test
+ :canonical-root "/home/joe/code/apm-lean"
+ :canonical-packages "/home/joe/code/apm-lean/.lake/packages"
+ :statuses #{:blocked :open :probing :probe-reviewed :implementing
+             :done-unreviewed :repair :done :needs-owner :superseded}
+ :edge-kinds #{:uptake :final-adapter :representation-comparison
+               :reusable-theorem :consumer-closure :documentation}
+ :baseline {:git-sha "7488b8c2368a2712b9c72f50a07dbec84b5a9377"
+            :placeholder-count 1 :statement-hashes {}}
+ :items [{:id :edge :kind :reusable-theorem :state :open :phase :probe
+          :depends-on [] :consumer :consumer-a :other-consumers [:consumer-b]
+          :scope ["problems/t02A03/lean/Main.lean"]
+          :acceptance {:consumer-residual "one adapter"}}]}

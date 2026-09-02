@@ -1,0 +1,34 @@
+{:schema :topology/replay-v1
+ :campaign :t02A03
+ :consumer "problems/t02A03/lean/Main.lean"
+ :baseline-placeholders 3
+ :final-placeholders 0
+ :items
+ [{:id :bridge-1 :depends-on [] :commit "301501c2" :result :repair}
+  {:id :bridge-1-orientation :depends-on [:bridge-1] :commit "7ea2c595" :result :pass}
+  {:id :quotient-cover-geometry :depends-on [:bridge-1-orientation]
+   :commits ["7cfa9888" "ac910fb4" "8bc28a2d" "c5b6f9cd"
+             "17d8e69e" "f2394dd6" "0fc1cb8c"] :result :pass}
+  {:id :mayer-vietoris :depends-on [:quotient-cover-geometry]
+   :commits ["31d0d05c" "61e03da1"] :result :pass}
+  {:id :span-transport :depends-on [:quotient-cover-geometry]
+   :commits ["2e436010" "ec9cc067" "edc3e34a" "a4165ca3"
+             "81261a1e" "cfdcbd47" "1f4baec3"] :result :pass}
+  {:id :free-product-representation :depends-on [:span-transport]
+   :commits ["672c9a83" "908bb038" "789791f9" "006b106b"
+             "c2b33523" "76cc892c" "64c89ca6" "e6db5c09" "7edd74c6"]
+   :result :pass}
+  {:id :connector-composite :depends-on [:free-product-representation]
+   :commits ["93744662" "d4be08c8" "401d4162" "16f3bb24"] :result :pass}
+  {:id :source-reconstruction :depends-on [:connector-composite]
+   :commits ["65874214" "68243152" "a178f80d"] :result :pass}
+  {:id :relation-transport :depends-on [:source-reconstruction]
+   :commit "f8cef535" :result :pass}
+  {:id :frozen-closure :depends-on [:relation-transport :mayer-vietoris]
+   :commit "61f8ece4" :result :pass
+   :fixture-sha256 "78fe0bb9cff9320106791b9137133c4c9b66300f2d9e8c8b535debf3dba8894e"
+   :statement-hashes
+   {"apm_t02A03_bridge_2" "4b6b72a8a93414fb7d7260166fff717cfc06c98b56f9c82ba77fea7e44556641"
+    "apm_t02a03" "923296b0aa0e70d9702cdd5d9767dffc54ce7e1c5ee4f2bda9d624321ee85624"}}
+  {:id :documentation :depends-on [:frozen-closure]
+   :commit "7488b8c2" :result :pass}]}

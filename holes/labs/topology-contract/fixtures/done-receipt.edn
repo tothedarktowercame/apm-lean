@@ -1,0 +1,7 @@
+{:outcome :done-unreviewed :author "codex-6" :commit "61f8ece4"
+ :fixture {:path "holes/labs/topology-contract/fixtures/t02A03-replay.edn"
+           :sha256 "627bf137fcb53a61dd144be4a55e207897dae390d219557924ee48fa25246a85"}
+ :changed-paths ["problems/t02A03/lean/Main.lean"]
+ :commands [{:cmd "lake env lean /tmp/Test.lean" :exit 0}]
+ :warnings [] :axioms [propext Classical.choice Quot.sound]
+ :residual "closed"}

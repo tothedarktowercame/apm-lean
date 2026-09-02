@@ -1,0 +1,4 @@
+{:outcome :go :fixture {:path "holes/labs/topology-contract/fixtures/t02A03-replay.edn"
+                        :sha256 "627bf137fcb53a61dd144be4a55e207897dae390d219557924ee48fa25246a85"}
+ :commands [{:cmd "lake env lean /tmp/Test.lean" :exit 0}]
+ :residual "one adapter"}

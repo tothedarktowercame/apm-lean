@@ -1,0 +1,3 @@
+{:outcome :pass :seat "codex-20" :job "invoke-test"
+ :commands [{:cmd "lake env lean /tmp/Test.lean" :exit 0}]
+ :finding "scope, theorem and gates reproduced"}
