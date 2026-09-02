@@ -1459,20 +1459,21 @@
     :seat :codex-12,
     :commands
     [{:cmd
-      "rg -n 'LOCAL-DIFFEOMORPH CONVERSE|t99J04|inverse function theorem' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md problems/t99J04/lean/Main.lean",
+      "rg -n \"bounded-exception|worklist_check|worklist-check\" holes/labs/topology-contract docs -g '*.clj' -g '*.md' -g '*.edn'",
       :exit 0}
      {:cmd
-      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t99J04/lean/Main.lean",
-      :exit 0,
-      :output "three source placeholders at lines 140, 160, and 249"}
+      "sed -n '1470,1520p' holes/labs/topology-contract/worklist.edn; sed -n '115,145p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
      {:cmd
-      "python3 newline-inclusive declaration hash audit through ':= by\\n' for apm_t99J04_bridge_local_inverse_function and apm_t99j04",
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :output
-      "bd7c14f45640442d487829e76a9ba77812bda9c50e29a343962898bbdfcc08b9; a6f1f22ce6a01816944404fdd2459bbe3774229d73be19bdff34868dba423846"}
+      "topology-worklist: 17 items OK; {:done 14, :repair 1, :superseded 2}",
+      :note
+      "Current HEAD includes the later repair; this confirms the required top-level schema but does not retroactively validate reviewed commit a1bd849f."}
      {:cmd "git rev-parse HEAD",
       :exit 0,
-      :output "bcec913d678afe0bdbf87ebdd6c8d7ca1c9abdf2"}
+      :output "fec0668e4c061ad971ea27ddde9e32c4e7e7a1e5"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
     :finding
@@ -1481,11 +1482,16 @@
      {:t95J05
       "the exact Hausdorff-sphere moment obligation split into two independent absent edges: identification of subtype hausdorffMeasure with rotational sphere measure, and evaluation of the coordinate second moment"},
      :infrastructure-packets 0,
-     :review-outcomes {:t95J05 :stop-pass},
+     :review-outcomes
+     {:t95J05 :stop-pass, :checkpoint-full-dag-refill-4 :fail-schema},
+     :repair
+     "Move :bounded-exception from inside :acceptance to the top level of the reusable-theorem row. The elected theorem, hashes, residual, and checkpoint remain unchanged.",
      :policy
-     "Do not continue the stopped Hausdorff-measure chain. Elect the next DAG-recorded one-edge API-gap probe: the generic manifold local-diffeomorphism converse needed by t99J04. Keep the independent coordinate-map derivative computation outside this row and activate no foundation, specification defect, or deferred representation."},
+     "Do not continue the stopped Hausdorff-measure chain. Elect the DAG-recorded local-diffeomorphism API-gap as an explicitly bounded read-only probe; implementation still requires a second consumer or owner authorization."},
     :replacement-items
-    [{:consumer :t99J04,
+    [{:bounded-exception
+      "The DAG explicitly records LOCAL-DIFFEOMORPH CONVERSE as an API-GAP; this elects a read-only probe only, not implementation without a second consumer or explicit owner authorization.",
+      :consumer :t99J04,
       :recalled-suggestion
       "the frozen file already compiles the global compact/local-diffeomorphism-to-surjectivity step; the adjacent missing API is the finite-dimensional manifold inverse-function implication from a bijective mfderiv",
       :stop-condition
@@ -1499,9 +1505,7 @@
        "compile the exact unchanged apm_t99J04_bridge_local_inverse_function, or isolate one chart-to-PartialDiffeomorph assembly theorem",
        :statement-hashes
        ["t99J04/apm_t99J04_bridge_local_inverse_function:bd7c14f45640442d487829e76a9ba77812bda9c50e29a343962898bbdfcc08b9"
-        "t99J04/apm_t99j04:a6f1f22ce6a01816944404fdd2459bbe3774229d73be19bdff34868dba423846"],
-       :bounded-exception
-       "The DAG explicitly records LOCAL-DIFFEOMORPH CONVERSE as an API-GAP; this elects a read-only probe only, not implementation without a second consumer or explicit owner authorization."},
+        "t99J04/apm_t99j04:a6f1f22ce6a01816944404fdd2459bbe3774229d73be19bdff34868dba423846"]},
       :representation
       {:source
        "ContMDiffAt f x together with Function.Bijective (mfderiv f x) on finite-dimensional complete model manifolds",
@@ -1536,15 +1540,9 @@
       :current-residual
       "await the reviewed local-diffeomorphism API-gap probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-20",
-     :job "invoke-1788372840354-7532-ef5bf61e",
-     :finding
-     "Recorded commit a1bd849f elects :t99j04-local-diffeomorph-converse-probe-1 as a reusable theorem with only consumer :t99J04 and no top-level :bounded-exception; current worklist_check deterministically rejects the recorded ledger with 'reusable theorem lacks two consumers or bounded exception'. The later 7bdd835f repair is outside the reviewed commit."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1565,7 +1563,7 @@
    :stop-condition
    "STOP if converting mfderiv bijectivity to a chart derivative equivalence and assembling a chart-local PartialDiffeomorph remain two independent constructions; do not work on the separate coordinateMap derivative bridge or final assembly",
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "LOCAL-DIFFEOMORPH CONVERSE / t99J04 [API-GAP]",
    :acceptance
@@ -1573,9 +1571,7 @@
     "compile the exact unchanged apm_t99J04_bridge_local_inverse_function, or isolate one chart-to-PartialDiffeomorph assembly theorem",
     :statement-hashes
     ["t99J04/apm_t99J04_bridge_local_inverse_function:bd7c14f45640442d487829e76a9ba77812bda9c50e29a343962898bbdfcc08b9"
-     "t99J04/apm_t99j04:a6f1f22ce6a01816944404fdd2459bbe3774229d73be19bdff34868dba423846"],
-    :bounded-exception
-    "The DAG explicitly records LOCAL-DIFFEOMORPH CONVERSE as an API-GAP; this elects a read-only probe only, not implementation without a second consumer or explicit owner authorization."},
+     "t99J04/apm_t99j04:a6f1f22ce6a01816944404fdd2459bbe3774229d73be19bdff34868dba423846"]},
    :representation
    {:source
     "ContMDiffAt f x together with Function.Bijective (mfderiv f x) on finite-dimensional complete model manifolds",
@@ -1598,7 +1594,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
