@@ -41,4 +41,16 @@ bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/p
 [ "$(bb "$HERE/build_step.bb" next-open "$checkpoint")" = next-adapter ]
 bb "$HERE/worklist_check.bb" "$checkpoint"
 rm -f "$checkpoint"
+
+revised="$(mktemp)"
+cp "$HERE/fixtures/transition-ledger.edn" "$revised"
+bb "$HERE/build_step.bb" apply-result "$revised" edge "$HERE/fixtures/revise-receipt.edn"
+[ "$(bb "$HERE/build_step.bb" next-open "$revised")" = prerequisite ]
+bb "$HERE/worklist_check.bb" "$revised"
+rm -f "$revised"
+
+extracted="$(mktemp)"
+"$HERE/extract-receipt.sh" "$HERE/fixtures/realistic-result.txt" test-nonce "$extracted"
+grep -q '^\{:outcome :revise' "$extracted"
+rm -f "$extracted"
 echo "topology-loop tests: PASS"

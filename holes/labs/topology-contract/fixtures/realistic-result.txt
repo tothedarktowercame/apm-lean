@@ -1,0 +1,10 @@
+I checked the fixture and found one prerequisite.
+
+The prompt gave an example such as:
+TOPOLOGY_RECEIPT_EDN not-the-token {:outcome :stop}
+
+```text
+  TOPOLOGY_RECEIPT_EDN indented-is-invalid {:outcome :stop}
+```
+
+TOPOLOGY_RECEIPT_EDN test-nonce {:outcome :revise :prerequisite {:id :prerequisite :kind :reusable-theorem :phase :probe :consumer :consumer-a :other-consumers [:consumer-b] :scope ["ConstructionTargets/Prerequisite.lean"] :acceptance {:consumer-residual "compiled prerequisite"}} :residual "one named prerequisite"}

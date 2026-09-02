@@ -1,0 +1,6 @@
+{:outcome :revise
+ :prerequisite {:id :prerequisite :kind :reusable-theorem :phase :probe
+                :consumer :consumer-a :other-consumers [:consumer-b]
+                :scope ["ConstructionTargets/Prerequisite.lean"]
+                :acceptance {:consumer-residual "compiled prerequisite"}}
+ :residual "one named prerequisite"}

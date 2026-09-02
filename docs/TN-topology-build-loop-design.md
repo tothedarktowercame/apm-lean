@@ -313,9 +313,13 @@ resource condition is diagnosed.  It is never recorded as a proof failure.
 
 ## Continuity, parking, and notification
 
-The shell supervisor waits directly for each child process and therefore does
-not require an interactive agent to remember a continuation.  It logs the
-selected row, seat, PID, start time, heartbeat, exit status, and receipt path.
+The shell supervisor owns each Agency invocation durably rather than relying on
+an interactive agent to remember a continuation.  Before polling, it records
+the selected row, named seat, job id, receipt nonce, and dispatch time in
+`runs/inflight.edn`.  A restarted supervisor reclaims that exact job, including
+a job that completed while the supervisor was down, applies its receipt once,
+commits the ledger transition, and only then clears the record.  Its heartbeat
+is written to `runs/heartbeat.edn` for an external stale-process check.
 
 Agency still provides operator visibility:
 
@@ -327,9 +331,11 @@ Agency still provides operator visibility:
 - on closure or an empty queue, bell `DONE` with counts and the closing commit.
 
 If an interactive owner dispatches a one-off Agency job outside the supervisor,
-the owner must park on its concrete job id.  The build loop itself must not use
-fire-and-forget bells as dependency edges and must not poll an agent queue as a
-substitute for waiting on the child it started.
+the owner must park on its concrete job id.  The build loop polls only the exact
+persisted job id it dispatched; it never treats arrival in a general agent queue
+as completion.  Status reads have bounded retry and every job has a hard
+timeout.  The supervisor itself runs as a user systemd unit, outside the process
+group of the agent command that launches it.
 
 ## Stall and recovery rules
 
@@ -345,9 +351,9 @@ The loop stops and notifies when:
 - the frozen statement or placeholder baseline drifts unexpectedly.
 
 Recovery is explicit.  The owner repairs the ledger or repository, records any
-changed authority, and restarts the supervisor.  The loop reads the ledger and
-receipts and resumes from the first unreviewed or open row; it does not rely on
-in-memory continuation state.
+changed authority, and restarts the supervisor.  The loop first reclaims
+`runs/inflight.edn`; only after that receipt is committed does it select the
+first unreviewed or open row.  It does not rely on in-memory continuation state.
 
 ## Publication and campaign completion
 
