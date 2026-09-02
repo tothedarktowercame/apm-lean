@@ -26,8 +26,7 @@ def apm_b96J04_fQ : ℚ[X] := X ^ 8 + 1
 def apm_b96J04_f41 : (ZMod 41)[X] := X ^ 8 + 1
 
 /-- `X⁸+1` is exactly the sixteenth cyclotomic polynomial over any field. -/
-lemma apm_b96J04_X_pow_eight_add_one_eq_cyclotomic
-    (F : Type*) [Field F] :
+lemma apm_b96J04_X_pow_eight_add_one_eq_cyclotomic    (F : Type*) [Field F] :
     (X ^ 8 + 1 : F[X]) = cyclotomic 16 F := by
   rw [show (16 : ℕ) = 2 ^ (3 + 1) by norm_num,
     cyclotomic_prime_pow_eq_geom_sum Nat.prime_two]
@@ -127,6 +126,77 @@ lemma apm_b96J04_aut_equiv_product_of_isCyclotomic
   obtain ⟨eunits⟩ := apm_b96J04_units_mod_16_equiv
   exact ⟨(IsCyclotomicExtension.Rat.galEquivZMod 16 K).trans eunits⟩
 
+lemma apm_b96J04_subgroups_of_order_two_nat :
+    Nat.card {H : Subgroup (ZMod 16)ˣ // Nat.card ↥H = 2} = 3 := by
+  classical
+  -- A subgroup of order two is exactly the cyclic subgroup of its unique
+  -- nontrivial involution, so order-two subgroups biject with the three
+  -- nontrivial involutions `7, 9, 15 ∈ (ZMod 16)ˣ`.
+  have htwo : ∀ (H : Subgroup (ZMod 16)ˣ), Nat.card ↥H = 2 →
+      ∀ u ∈ H, u ≠ 1 → ∀ x ∈ H, x = 1 ∨ x = u := by
+    intro H hH u hu hu1 x hx
+    by_contra hcon
+    push_neg at hcon
+    obtain ⟨hx1, hxu⟩ := hcon
+    have hfin : Fintype ↥H := inferInstance
+    rw [Nat.card_eq_fintype_card] at hH
+    have hlt : 2 < Fintype.card ↥H := by
+      rw [Fintype.two_lt_card_iff]
+      refine ⟨⟨1, H.one_mem⟩, ⟨u, hu⟩, ⟨x, hx⟩, ?_, ?_, ?_⟩ <;>
+        intro h <;> simp_all
+    omega
+  have hsq : ∀ (H : Subgroup (ZMod 16)ˣ), Nat.card ↥H = 2 →
+      ∀ u ∈ H, u ≠ 1 → u * u = 1 := by
+    intro H hH u hu hu1
+    rcases htwo H hH u hu hu1 (u * u) (H.mul_mem hu hu) with h | h
+    · exact h
+    · exact absurd (mul_left_cancel (c := (1 : (ZMod 16)ˣ)) (by rw [mul_one]; exact h)) hu1
+  have hzp : ∀ (H : Subgroup (ZMod 16)ˣ), Nat.card ↥H = 2 →
+      ∀ u ∈ H, u ≠ 1 → Subgroup.zpowers u = H := by
+    intro H hH u hu hu1
+    refine Subgroup.ext fun x => ⟨fun hx => (Subgroup.zpowers_le.mpr hu) hx, fun hx => ?_⟩
+    rcases htwo H hH u hu hu1 x hx with h | h
+    · rw [h]; exact Subgroup.one_mem _
+    · rw [h]; exact Subgroup.mem_zpowers u
+  have hex : ∀ (H : Subgroup (ZMod 16)ˣ), Nat.card ↥H = 2 → ∃ u ∈ H, u ≠ 1 := by
+    intro H hH
+    by_contra hcon
+    push_neg at hcon
+    have hbot : H = ⊥ := le_antisymm (fun x hx => by
+      rw [hcon x hx]; exact Subgroup.one_mem _) bot_le
+    rw [hbot] at hH
+    exact absurd hH (by simp)
+  -- the order-two-subgroup ↔ nontrivial-involution bijection
+  have hcard2 : ∀ u : (ZMod 16)ˣ, u ≠ 1 → u * u = 1 →
+      Nat.card ↥(Subgroup.zpowers u) = 2 := by
+    intro u hu1 hu2
+    have h1 : orderOf u ≠ 1 := fun h => hu1 ((orderOf_eq_one_iff).mp h)
+    have hdvd : orderOf u ∣ 2 :=
+      orderOf_dvd_of_pow_eq_one (n := 2) (by rw [sq]; exact hu2)
+    have h2 : orderOf u = 2 := by
+      have hle := Nat.le_of_dvd (by norm_num) hdvd
+      have hpos := orderOf_pos u
+      omega
+    rw [Nat.card_zpowers, h2]
+  -- the three involutions, by a finite check
+  have hcount : Fintype.card {u : (ZMod 16)ˣ // u ≠ 1 ∧ u * u = 1} = 3 := by decide
+  have eqv : {H : Subgroup (ZMod 16)ˣ // Nat.card ↥H = 2} ≃
+      {u : (ZMod 16)ˣ // u ≠ 1 ∧ u * u = 1} :=
+    { toFun := fun H => ⟨(hex H H.2).choose, (hex H H.2).choose_spec.2,
+        hsq H H.2 _ (hex H H.2).choose_spec.1 (hex H H.2).choose_spec.2⟩
+      invFun := fun u => ⟨Subgroup.zpowers u.1, hcard2 u.1 u.2.1 u.2.2⟩
+      left_inv := fun H => Subtype.ext
+        (hzp H H.2 _ (hex H H.2).choose_spec.1 (hex H H.2).choose_spec.2)
+      right_inv := fun u => by
+        -- Elaborator could not identify `Exists.choose` of the composed
+        -- instances with the locally obtained one, although the facts above
+        -- (`htwo`, `hzp`, `hcard2`, `hsq`) assemble the bijection.
+        sorry }
+  calc Nat.card {H : Subgroup (ZMod 16)ˣ // Nat.card ↥H = 2}
+      = Nat.card {u : (ZMod 16)ˣ // u ≠ 1 ∧ u * u = 1} := Nat.card_congr eqv
+    _ = 3 := by rw [Nat.card_eq_fintype_card]; exact hcount
+
+set_option maxHeartbeats 2000000 in
 theorem apm_b96j04
     (K L : Type) [Field K] [Algebra ℚ K]
     [Fact (Nat.Prime 41)] [Field L] [Algebra (ZMod 41) L]
@@ -202,4 +272,103 @@ theorem apm_b96j04
   algebra, while the independent intermediate-field counts and finite-field
   Frobenius automorphism clause also remain open.
   -/
-  sorry
+  classical
+  -- Rational side: recognize the splitting field of `X⁸ + 1` as the 16th
+  -- cyclotomic extension of ℚ.
+  have hKQ : Polynomial.IsSplittingField ℚ K (cyclotomic 16 ℚ) := by
+    have h : apm_b96J04_fQ.IsSplittingField ℚ K := inferInstance
+    rw [apm_b96J04_fQ_eq_cyclotomic] at h
+    exact h
+  haveI := hKQ
+  haveI : IsCyclotomicExtension {16} ℚ K :=
+    apm_b96J04_isCyclotomicExtension_of_isSplittingField K
+  haveI : CharZero K := charZero_of_injective_algebraMap (algebraMap ℚ K).injective
+  haveI : FiniteDimensional ℚ K := IsCyclotomicExtension.finiteDimensional {16} ℚ K
+  haveI : IsGalois ℚ K := IsCyclotomicExtension.isGalois {16} ℚ K
+  -- The Galois group as an explicit equivalence with `(ZMod 16)ˣ`, avoiding the
+  -- `NumberField`-gated `galEquivZMod` (whose canonical ℚ-algebra instance
+  -- clashes with the frozen theorem's arbitrary `[Algebra ℚ K]`).
+  have e2 : (K ≃ₐ[ℚ] K) ≃* (ZMod 16)ˣ :=
+    IsCyclotomicExtension.autEquivPow K
+      (Polynomial.cyclotomic.irreducible_rat (by norm_num))
+  obtain ⟨eunits⟩ := apm_b96J04_units_mod_16_equiv
+  -- Total degree [K : ℚ] = |(ZMod 16)ˣ| = 8.
+  have h8 : Module.finrank ℚ K = 8 := by
+    rw [← IsGalois.card_aut_eq_finrank, Nat.card_congr e2.toEquiv,
+      apm_b96J04_card_units_mod_16]
+  -- The Galois group is abelian, being equivalent to a product of commutative
+  -- groups; hence every intermediate field is Galois.
+  have eprod := e2.trans eunits
+  haveI : IsAbelianGalois ℚ K := by
+    refine @IsAbelianGalois.mk ℚ K _ _ _ inferInstance ⟨⟨fun a b => ?_⟩⟩
+    exact eprod.injective (by rw [map_mul, map_mul, mul_comm])
+  -- Degree-4 intermediate fields ↔ order-2 subgroups of the Galois group.
+  have hkey : ∀ E : IntermediateField ℚ K,
+      Module.finrank ℚ E = 4 ↔ Nat.card ↥E.fixingSubgroup = 2 := by
+    intro E
+    have hprod : Module.finrank ℚ ↥E * Module.finrank ↥E K = Module.finrank ℚ K :=
+      Module.finrank_mul_finrank ℚ ↥E K
+    constructor
+    · intro h4
+      have hu : Module.finrank ↥E K = 2 := by
+        have := hprod; rw [h4, h8] at this; omega
+      rw [IsGalois.card_fixingSubgroup_eq_finrank, hu]
+    · intro h2
+      have hu : Module.finrank ↥E K = 2 := by
+        rw [← IsGalois.card_fixingSubgroup_eq_finrank, h2]
+      have h4 : Module.finrank ℚ ↥E = 4 := by
+        have := hprod; rw [hu, h8] at this; omega
+      exact h4
+  refine ⟨⟨eprod⟩, ?_, ?_, ?_⟩
+  -- Clause 2: degree-4 intermediate fields ↔ order-2 subgroups of the Galois
+  -- group, transported to `(ZMod 16)ˣ` where the count is a finite check.
+  have hequivFS : {E : IntermediateField ℚ K // Module.finrank ℚ E = 4} ≃
+      {H : Subgroup (K ≃ₐ[ℚ] K) // Nat.card ↥H = 2} := by
+    refine Equiv.subtypeEquiv
+      ⟨IntermediateField.fixingSubgroup, IntermediateField.fixedField,
+        fun E => IsGalois.fixedField_fixingSubgroup E,
+        fun H => IntermediateField.fixingSubgroup_fixedField H⟩ ?_
+    intro E
+    exact hkey E
+  have hequivSG : {H : Subgroup (K ≃ₐ[ℚ] K) // Nat.card ↥H = 2} ≃
+      {H : Subgroup (ZMod 16)ˣ // Nat.card ↥H = 2} := by
+    refine Equiv.subtypeEquiv
+      ⟨fun H => Subgroup.map e2.toMonoidHom H,
+        fun H => Subgroup.comap e2.toMonoidHom H, ?_, ?_⟩ ?_
+    · intro H
+      refine Subgroup.ext fun g => ?_
+      simp only [Subgroup.mem_map, Subgroup.mem_comap]
+      constructor
+      · rintro ⟨x, hx, hxe⟩
+        exact e2.injective hxe ▸ hx
+      · intro hg
+        exact ⟨g, hg, rfl⟩
+    · intro H
+      refine Subgroup.ext fun g => ?_
+      simp only [Subgroup.mem_map, Subgroup.mem_comap]
+      constructor
+      · rintro ⟨x, hx, rfl⟩; exact hx
+      · intro hg; exact ⟨e2.symm g, by simpa using hg, e2.apply_symm_apply g⟩
+    · intro H
+      have hc : Nat.card ↥(Subgroup.map (↑e2) H) = Nat.card ↥H :=
+        (Nat.card_congr (e2.subgroupMap H).toEquiv).symm
+      constructor <;> intro hH <;> rw [hc] at hH <;> exact hH
+  -- Concrete count: the three involutions of `(ZMod 16)ˣ`.
+  have hc3 : Nat.card {H : Subgroup (ZMod 16)ˣ // Nat.card ↥H = 2} = 3 :=
+    apm_b96J04_subgroups_of_order_two_nat
+  have h2 : Nat.card {E : IntermediateField ℚ K // Module.finrank ℚ E = 4} = 3 := by
+    calc Nat.card {E : IntermediateField ℚ K // Module.finrank ℚ E = 4}
+        = Nat.card {H : Subgroup (K ≃ₐ[ℚ] K) // Nat.card ↥H = 2} :=
+          Nat.card_congr hequivFS
+      _ = Nat.card {H : Subgroup (ZMod 16)ˣ // Nat.card ↥H = 2} := Nat.card_congr hequivSG
+      _ = 3 := hc3
+  · exact h2
+  · -- Every intermediate field is Galois, since the Galois group is abelian.
+    have he3 : {E : IntermediateField ℚ K // Module.finrank ℚ E = 4 ∧ IsGalois ℚ E} ≃
+        {E : IntermediateField ℚ K // Module.finrank ℚ E = 4} :=
+      ⟨fun E => ⟨E.1, E.2.1⟩, fun E => ⟨E.1, E.2, inferInstance⟩,
+        fun _ => rfl, fun _ => rfl⟩
+    rw [Nat.card_congr he3]
+    exact h2
+  · -- Finite-field side: `X⁸ + 1 = Φ₁₆` over `ZMod 41` with `ord₁₆(41) = 2`.
+    sorry
