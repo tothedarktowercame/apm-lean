@@ -24,6 +24,32 @@
  :campaign :topology-portfolio-2026-09-02,
  :items
  [{:consumer :t00A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.lean"
+    "ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.md"],
+   :dag-node "TWO-OPEN VAN KAMPEN / COMPATIBLE CONNECTORS",
+   :acceptance
+   {:declarations ["existsTwoOpenLegCompatibleConnectorSystems"],
+    :fixture-path "/tmp/TwoOpenCompatibleConnectorsProbe.lean",
+    :fixture-sha256
+    "5d742a00ef7e4bf8960773b8c729fee095afa4305a7bea10da7eefc1c60f1796",
+    :consumer-residual
+    "assemble the banked connector comparison, simply-connected overlap reduction, target-natural point-span/free-product equivalence, and source reconstruction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "path-connected cover pieces and simply-connected overlap with the two overlap-inclusion functors",
+    :target
+    "overlap/left/right ConnectorSystem data satisfying both exact mapIso connector equations"},
+   :id :two-open-leg-compatible-connectors,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "construct compatible connectors along both injective overlap inclusions",
+   :other-consumers [:t97J04]}
+  {:consumer :t00A01,
    :review-finding
    "The recorded declaration is only `def twoOpenFundamentalGroupFreeProduct : Prop`; it supplies no proof or inhabitant. Its fixture only repeats and type-checks that proposition, so consumers would have to assume the missing theorem. Prove the proposition from the banked pseudopushout infrastructure or revert to a probe that isolates the first exact missing theorem.",
    :evidence
@@ -68,6 +94,72 @@
      :finding
      "The recorded declaration is only `def twoOpenFundamentalGroupFreeProduct : Prop`; it supplies no proof or inhabitant. Its fixture only repeats and type-checks that proposition, so consumers would have to assume the missing theorem. Prove the proposition from the banked pseudopushout infrastructure or revert to a probe that isolates the first exact missing theorem."},
     :commit "f1c06d9fadc684158fdfa60138ba9fe348e862e1",
+    :probe
+    {:placeholder-delta 0,
+     :residual
+     "the generic free-product theorem remains blocked on the compiled compatible-connector prerequisite",
+     :outcome :revise,
+     :warnings {:new 0},
+     :statement-hashes
+     {"t00A01/apm_t00A01_bridge_fundamentalGroup_coprod"
+      "3766ae0c61f3c2b0538c25605c678a9eef1b4c10d52ab89c5ecbf67abf3884df",
+      "t00A01/apm_t00a01"
+      "25b94cbde76b6ccda8e43e3e2042942f5bbe5e987bce9084a3b91f76c7cce534"},
+     :prerequisite
+     {:consumer :t00A01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.lean"
+       "ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.md"],
+      :dag-node "TWO-OPEN VAN KAMPEN / COMPATIBLE CONNECTORS",
+      :acceptance
+      {:declarations ["existsTwoOpenLegCompatibleConnectorSystems"],
+       :fixture-path "/tmp/TwoOpenCompatibleConnectorsProbe.lean",
+       :fixture-sha256
+       "5d742a00ef7e4bf8960773b8c729fee095afa4305a7bea10da7eefc1c60f1796",
+       :consumer-residual
+       "assemble the banked connector comparison, simply-connected overlap reduction, target-natural point-span/free-product equivalence, and source reconstruction",
+       :axioms :standard-only},
+      :representation
+      {:source
+       "path-connected cover pieces and simply-connected overlap with the two overlap-inclusion functors",
+       :target
+       "overlap/left/right ConnectorSystem data satisfying both exact mapIso connector equations"},
+      :id :two-open-leg-compatible-connectors,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "construct compatible connectors along both injective overlap inclusions",
+      :other-consumers [:t97J04]},
+     :axioms [],
+     :author :codex-6,
+     :commands
+     [{:cmd "sha256sum /tmp/T00A01VanKampenReprobe.lean",
+       :exit 0,
+       :finding
+       "02e107f6706de85fa13220b4a892fedaa018fee0d76b8f6ded93725f8f398b71"}
+      {:cmd "lake env lean /tmp/TwoOpenCompatibleConnectorsProbe.lean",
+       :exit 0}
+      {:cmd
+       "rg -n \"error:|sorryAx\" /tmp/twoopen-connectors-probe.log",
+       :exit 1,
+       :expected-exit 1,
+       :finding "no matches"}
+      {:cmd "git diff HEAD^ --check", :exit 0}
+      {:cmd "git status --porcelain", :exit 0, :finding "clean"}],
+     :commit "9f675d4d41713b15ea60230591ee42580e5e52fa",
+     :changed-paths
+     ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
+      "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
+     :package-authority "/home/joe/code/apm-lean/.lake/packages",
+     :fixture
+     {:path "/tmp/TwoOpenCompatibleConnectorsProbe.lean",
+      :sha256
+      "5d742a00ef7e4bf8960773b8c729fee095afa4305a7bea10da7eefc1c60f1796"},
+     :finding
+     "Reverted the unproved interface proposition and compiled a probe isolating the first constructive prerequisite: connector systems on the overlap and both pieces whose connectors are preserved by both overlap inclusions.",
+     :seat :codex-6},
     :changed-paths
     ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
      "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
@@ -79,7 +171,7 @@
     :finding
     "Promoted the exact compiled reusable interface proposition; the accompanying documentation explicitly records that this declaration states, rather than proves, the generic principle and names the remaining connector and simply-connected-overlap construction."},
    :phase :implementation,
-   :state :repair,
+   :state :blocked,
    :scope
    ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
     "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
@@ -95,7 +187,7 @@
     :target "chosen-basepoint Monoid.Coprod"},
    :id :generic-two-open-free-product-principle,
    :kind :reusable-theorem,
-   :depends-on [],
+   :depends-on [:two-open-leg-compatible-connectors],
    :other-consumers [:t97J04]}
   {:consumer :t00A01,
    :recalled-suggestion
