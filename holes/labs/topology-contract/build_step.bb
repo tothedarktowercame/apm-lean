@@ -1,6 +1,7 @@
 #!/usr/bin/env bb
 (require '[clojure.edn :as edn]
          '[clojure.string :as str]
+         '[clojure.set :as set]
          '[clojure.java.shell :as shell]
          '[clojure.pprint :as pprint]
          '[clojure.java.io :as io])
@@ -14,11 +15,18 @@
 (def by-id (into {} (map (juxt :id identity) items)))
 (def priority {:uptake 0 :final-adapter 1 :representation-comparison 2
                :reusable-theorem 3 :consumer-closure 4 :documentation 5})
+(defn owner-blocked? [idx dependency seen]
+  (when-not (seen dependency)
+    (let [item (idx dependency)]
+      (or (= :needs-owner (:state item))
+          (and (= :blocked (:state item))
+               (some #(owner-blocked? idx % (conj seen dependency))
+                     (:depends-on item)))))))
 (defn dependency-ready? [dependent dependency]
   (let [state (:state (by-id dependency))]
     (or (= :done state)
         (and (= :strategy-checkpoint (:kind dependent))
-             (#{:needs-owner :blocked} state)))))
+             (owner-blocked? by-id dependency #{})))))
 (defn eligible? [i]
   (and (#{:open :repair} (:state i))
        (every? #(dependency-ready? i %) (:depends-on i))))
@@ -61,7 +69,7 @@
                               (let [state (:state (idx d))]
                                 (or (= :done state)
                                     (and (= :strategy-checkpoint (:kind %))
-                                         (#{:needs-owner :blocked} state)))))
+                                         (owner-blocked? idx d #{})))))
                             (:depends-on %)))
              (assoc % :state :open)
              %) xs)))
@@ -81,9 +89,17 @@
       :revise nil
       :stop (when-not (:reason receipt)
               (throw (ex-info "STOP receipt lacks reason" {:receipt receipt})))
-      :replan (when-not (and (:seat receipt) (seq (:commands receipt)) (:finding receipt)
-                             (vector? (:replacement-items receipt)))
-                (throw (ex-info "REPLAN receipt lacks seat or replacement-items" {:receipt receipt})))
+      :replan (let [rs (:replacement-items receipt)
+                    work (butlast rs)
+                    checkpoint (last rs)
+                    work-ids (set (map :id work))]
+                (when-not (and (:seat receipt) (seq (:commands receipt)) (:finding receipt)
+                               (vector? rs) (<= 2 (count rs) 6)
+                               (= :strategy-checkpoint (:kind checkpoint))
+                               (= :strategy (:phase checkpoint))
+                               (set/subset? work-ids (set (:depends-on checkpoint))))
+                  (throw (ex-info "REPLAN needs 1-5 work rows followed by their next checkpoint"
+                                  {:receipt receipt}))))
       :done-unreviewed (doseq [k [:author :commit :fixture :changed-paths :commands :residual]]
                          (when-not (get receipt k)
                            (throw (ex-info "implementation receipt lacks field" {:field k}))))

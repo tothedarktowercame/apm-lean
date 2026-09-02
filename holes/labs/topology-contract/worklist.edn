@@ -512,7 +512,28 @@
     "reread current DAG and both reviewed receipts; return a reviewed replacement tail ordered by uptake, adapters, one-edge LOCAL-GO/API-GAP, then supported foundations"},
    :id :checkpoint-after-two-consumers,
    :kind :strategy-checkpoint,
-   :depends-on [:t00a01-van-kampen-reprobe :t01a02-h2-degree-probe]}],
+   :depends-on [:t00a01-van-kampen-reprobe :t01a02-h2-degree-probe]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 0,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Reread the complete DAG and elect a nonempty policy-eligible portfolio",
+   :phase :strategy,
+   :state :open,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "elect 1-5 rows from the complete DAG and append the next recurring checkpoint"},
+   :id :checkpoint-full-dag-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on [:checkpoint-after-two-consumers]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",

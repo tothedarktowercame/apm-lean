@@ -12,9 +12,17 @@ representation boundary.
 For `:phase :strategy`, reread the current DAG and the reviewed dependency
 receipts. Measure placeholder changes, typed residual changes, infrastructure
 packet counts, and STOP/PASS outcomes. Return `:outcome :replan` with a
-`:replacement-items` vector containing the newly elected tail. Every inserted
-row must satisfy the full ledger schema. Do not activate `FOUNDATION`,
-`SPEC-DEFECT`, or `DEFERRED-REP` work automatically, and do not edit the DAG or
+`:replacement-items` vector containing a newly elected portfolio from the
+complete DAG—not merely descendants of the rows just completed. Elect 1-5
+work rows in priority order: adjacent uptake/final adapters, then one-edge
+`LOCAL-GO`/`API-GAP` probes, then explicitly owner-authorized foundations.
+Append a fresh `:strategy-checkpoint` as the final vector item, depending on
+every elected work-row id, so the campaign refills again after this portfolio.
+Every inserted row must satisfy the full ledger schema and use a new id. An
+ordinary replan may not return an empty tail. If no eligible row exists after
+reading the entire DAG, return STOP with the exact owner election required;
+do not label the campaign complete. Do not activate an unauthorized
+`FOUNDATION`, `SPEC-DEFECT`, or `DEFERRED-REP`, and do not edit the DAG or
 ledger directly.
 
 For implementation or repair, modify only `:scope`, verify the recorded fixture

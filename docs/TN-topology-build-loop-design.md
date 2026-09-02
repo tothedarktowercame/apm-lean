@@ -202,6 +202,14 @@ measured results, but every cadence change is reviewed and recorded. An early
 checkpoint is also required after a specification defect, unexpected scope
 expansion, or two infrastructure packets without consumer movement.
 
+Every ordinary checkpoint elects one to five work rows from the complete DAG,
+then appends a fresh checkpoint depending on those rows.  This makes portfolio
+regeneration recurrent: exhausting one bounded batch opens the next reviewed
+strategy decision instead of terminating the campaign.  An empty replacement
+tail is invalid.  If the complete DAG contains no policy-eligible work, the
+strategist returns a reviewed STOP naming the precise owner election required;
+the supervisor reports PAUSED rather than DONE.
+
 ## Iteration state machine
 
 ```text

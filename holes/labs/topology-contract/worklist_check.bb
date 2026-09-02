@@ -14,6 +14,13 @@
 (def items (:items w))
 (def ids (map :id items))
 (def by-id (into {} (map (juxt :id identity) items)))
+(defn owner-blocked? [dependency seen]
+  (when-not (seen dependency)
+    (let [item (by-id dependency)]
+      (or (= :needs-owner (:state item))
+          (and (= :blocked (:state item))
+               (some #(owner-blocked? % (conj seen dependency))
+                     (:depends-on item)))))))
 (def root (:canonical-root w))
 (defn sh [& args] (apply shell/sh (concat args [:dir root])))
 (defn commit-exists? [sha]
@@ -37,7 +44,7 @@
   (let [ready? (every? #(let [state (:state (by-id %))]
                           (or (= :done state)
                               (and (= :strategy-checkpoint (:kind i))
-                                   (#{:needs-owner :blocked} state))))
+                                   (owner-blocked? % #{}))))
                        (:depends-on i))]
     (when (and (= :open (:state i)) (not ready?)) (die (:id i) "open with incomplete dependency"))
     (when (and (= :blocked (:state i)) ready?) (die (:id i) "blocked although dependencies are done")))
