@@ -1343,8 +1343,69 @@
    "t95J05 already compiles descent, uniqueness, pullback expansion, final arithmetic, and a generic Hausdorff-integral odd-isometry cancellation theorem; its sole placeholder is the normalized S3 coordinate moment",
    :stop-condition
    "STOP if identifying subtype hausdorffMeasure with normalized rotational surface measure and evaluating its coordinate-square moment require two independent absent theorems; do not start general manifold integration, coarea, or Stokes",
+   :evidence
+   {:consumer :t95J05,
+    :recalled-suggestion
+    "compiled odd-isometry cancellation plus Mathlib polar coordinates might reduce the frozen S3 integral to one normalized coordinate moment",
+    :residual-after-theorems
+    "the mixed term is then eliminated by an explicit coordinate reflection and the compiled odd-isometry theorem; expansion, integrability subtraction, factor two, sign, and final ring arithmetic close the sole frozen placeholder",
+    :canonical-declarations-reached
+    ["t95J05_hausdorffIntegral_eq_zero_of_isometry_odd"
+     "t95J05InclusionPullback_expand"
+     "t95J05Integral_eq_neg_pi_sq_of_sphereIntegral"
+     "MeasureTheory.Measure.toSphere"
+     "MeasureTheory.Measure.measurePreserving_homeomorphUnitSphereProd"
+     "MeasureTheory.Measure.toSphere_apply_univ"
+     "MeasureTheory.integral_fun_norm_addHaar"
+     "IsometryEquiv.measurePreserving_hausdorffMeasure"],
+    :outcome :stop,
+    :other-named-consumers [:t02A05 :t01J06 :m96J03],
+    :statement-hashes
+    ["t95J05/apm_t95j05:1c29de554e7f421da3c03978b11d8658d0d0cb83492dbde47499aec928c8d6fc"],
+    :frozen-placeholder "the integral branch inside apm_t95j05",
+    :disposition :stop,
+    :author :codex-12,
+    :head "a6a6a92d2d9504230bd7e0059e388dd31c754481",
+    :reason
+    "The stop condition fires: the available polar decomposition does not use the frozen measure, so a measure-normalization theorem is required before the independent rotational-symmetry/second-moment computation. No coarea, boundary-measure normalization, or sphere coordinate-moment API was found. General manifold integration, coarea, and Stokes were not entered.",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "lake env lean problems/t95J05/lean/Main.lean",
+      :exit 0,
+      :warnings 2}
+     {:cmd
+      "lake env lean .lake/packages/mathlib/Mathlib/MeasureTheory/Constructions/HaarToSphere.lean",
+      :exit 0,
+      :warnings 0}
+     {:cmd
+      "rg -n 'hausdorffMeasure.*toSphere|toSphere.*hausdorffMeasure|integral.*toSphere.*\\^ 2|integral.*sphere.*coordinate|sphere.*secondMoment' .lake/packages/mathlib/Mathlib ConstructionTargets --glob '*.lean'",
+      :exit 1,
+      :expected-exit 1,
+      :output
+      "no matching comparison or moment declaration; search is limited to named terms"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t95J05/lean/Main.lean",
+      :exit 0,
+      :output "one source placeholder at line 199"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :candidate-missing-theorems
+    ["an exact equality or scalar-normalization comparison between intrinsic hausdorffMeasure 3 and volume.toSphere on the unit S3 subtype"
+     "a coordinate-square second-moment evaluation for the normalized sphere measure, including the exact total-mass constant 2π²"],
+    :compile-evidence
+    {:fixture nil, :frozen-placeholders 1, :frozen-warnings 2},
+    :representation-at-seam
+    {:frozen
+     "Measure.hausdorffMeasure 3 on Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1",
+     :polar-api
+     "Measure.volume.toSphere on the same unit-sphere subtype",
+     :required-value
+     "integral of x ↦ x.1 0 ^ 2 equals Real.pi ^ 2 / 2"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "HAUSDORFF SPHERE NORMALIZATION / SPHERE-BALL MOMENTS [API-GAP → LOCAL-GO]",
