@@ -273,8 +273,51 @@
    :current-residual
    "frozen fundamental-group coproduct bridge and final conjunction"}
   {:consumer :t01A02,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "apm_t01A02_bridge_H2map_eq_zero remains open on the punctured-manifold top-homology foundation; Lefschetz remains independent",
+    :outcome :stop,
+    :statement-hashes
+    {"t01A02/apm_t01A02_bridge_H2map_eq_zero"
+     "62a38aafc261277bf98eec4f78d4001362b88230de6721c751baf900d5d7c1a7"},
+    :disposition :stop,
+    :author :codex-6,
+    :reason
+    "The selected declaration is itself an absent foundation, not an adapter supported by pinned Mathlib. A proof requires a generic theorem that top-dimensional ordinary integral singular homology vanishes for a connected noncompact boundaryless manifold, or the equivalent local-orientation/fundamental-class and excision machinery. Pinned Mathlib exposes neither route: its manifold tree has no orientation sheaf, manifold fundamental class, Poincare duality, Borel-Moore homology, compactly supported cohomology, or point-deletion top-homology theorem. Existing ConstructionTargets contain concrete relative-homology calculations and explicitly deferred Poincare-duality interfaces, which cannot prove the stated theorem for arbitrary finite-dimensional real manifolds. Encoding the declaration as a Prop or assumption would leave the consumer unchanged.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
+      :exit 0,
+      :finding
+      "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"}
+     {:cmd
+      "lake env lean /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
+      :exit 0,
+      :warnings 0,
+      :finding
+      "The fixture compiles only a Prop-valued prerequisite and a bridge conditional on that prerequisite."}
+     {:cmd "lake env lean problems/t01A02/lean/Main.lean",
+      :exit 0,
+      :warnings 4,
+      :finding
+      "Three declarations still use sorry, including the H2 bridge."}
+     {:cmd
+      "rg -n \"fundamentalClass|FundamentalClass|Poincare|Poincaré|Borel.Moore|compactly supported|punctured.*homology|homology.*punctured\" .lake/packages/mathlib/Mathlib/Geometry/Manifold .lake/packages/mathlib/Mathlib/AlgebraicTopology ConstructionTargets",
+      :exit 0,
+      :finding
+      "Only Poincare-conjecture text, concrete relative-homology targets, and documentation explicitly deferring Poincare duality; no generic theorem or supporting interface."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :finding "clean"}],
+    :changed-paths [],
+    :package-authority "/home/joe/code/apm-lean/.lake/packages",
+    :fixture
+    {:path "/tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
+     :sha256
+     "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PuncturedClosedManifoldTopHomology.lean"
     "ConstructionTargets/PuncturedClosedManifoldTopHomology.md"],
