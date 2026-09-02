@@ -1540,9 +1540,26 @@
       :current-residual
       "await the reviewed local-diffeomorphism API-gap probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788373050585-7540-8b5090bd",
+     :commands
+     ["git diff ce5b5398^ ce5b5398 --check"
+      "git diff --name-status ce5b5398^ ce5b5398"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/checkpoint-refill4-ce5b5398.edn"
+      "newline-inclusive SHA-256 audit through ':= by' for apm_t99J04_bridge_local_inverse_function and apm_t99j04"
+      "rg standalone sorry/admit placeholder audit"
+      "readlink -f .lake/packages"
+      "lake env lean problems/t99J04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bash holes/labs/topology-contract/test-loop.sh"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: ce5b5398 is an exact ledger-only repair. The reusable t99J04 API-gap probe now carries the required top-level bounded exception; historical and current worklists validate, both frozen hashes and the three-placeholder count reproduce, the ContMDiffAt plus bijective mfderiv to IsLocalDiffeomorphAt orientation is exact, direct Lean compilation has only the three expected sorry warnings, loop tests pass, canonical package authority is intact, and the worktree is clean."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1563,7 +1580,7 @@
    :stop-condition
    "STOP if converting mfderiv bijectivity to a chart derivative equivalence and assembling a chart-local PartialDiffeomorph remain two independent constructions; do not work on the separate coordinateMap derivative bridge or final assembly",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "LOCAL-DIFFEOMORPH CONVERSE / t99J04 [API-GAP]",
    :acceptance
