@@ -1,0 +1,15 @@
+{:schema :topology/worklist-v1
+ :campaign :test-checkpoint
+ :canonical-root "/home/joe/code/apm-lean"
+ :canonical-packages "/home/joe/code/apm-lean/.lake/packages"
+ :statuses #{:blocked :open :probing :probe-reviewed :implementing
+             :done-unreviewed :repair :done :needs-owner :superseded}
+ :edge-kinds #{:uptake :final-adapter :representation-comparison
+               :reusable-theorem :consumer-closure :strategy-checkpoint
+               :documentation}
+ :baseline {:git-sha "7488b8c2368a2712b9c72f50a07dbec84b5a9377"
+            :placeholder-count 0 :statement-hashes {}}
+ :items [{:id :checkpoint :kind :strategy-checkpoint :state :open
+          :phase :strategy :depends-on [] :consumer :portfolio :scope []
+          :checkpoint {:after-problems 2}
+          :acceptance {:strategy "replace tail"}}]}

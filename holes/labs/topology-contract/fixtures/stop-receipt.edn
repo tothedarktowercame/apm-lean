@@ -1,0 +1,3 @@
+{:outcome :stop :seat "codex-12" :reason "two independent foundations remain"
+ :commands [{:cmd "lake env lean /tmp/StopProbe.lean" :exit 0}]
+ :finding "compiled consumer-facing boundary; no implementation elected"}

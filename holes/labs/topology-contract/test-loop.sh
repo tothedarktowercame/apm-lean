@@ -7,8 +7,8 @@ TOPOLOGY_NO_NOTIFY=1 "$HERE/topology-build-loop.sh" --replay "$HERE/fixtures/t02
 
 bad="$(mktemp)"
 trap 'rm -f "$bad"' EXIT
-sed 's/:items \[\]/:items [{:id :cycle :kind :final-adapter :state :open :depends-on [:cycle] :consumer :x :acceptance {}}]/' \
-  "$HERE/worklist.edn" > "$bad"
+sed '0,/:depends-on \[\]/s//:depends-on [:edge]/' \
+  "$HERE/fixtures/transition-ledger.edn" > "$bad"
 if bb "$HERE/worklist_check.bb" "$bad" >/dev/null 2>&1; then
   echo "expected cyclic ledger rejection" >&2
   exit 1
@@ -23,4 +23,22 @@ bb "$HERE/build_step.bb" apply-result "$transition" edge "$HERE/fixtures/done-re
 bb "$HERE/build_step.bb" apply-result "$transition" edge "$HERE/fixtures/pass-receipt.edn"
 bb "$HERE/worklist_check.bb" "$transition"
 rm -f "$transition"
+
+stopped="$(mktemp)"
+cp "$HERE/fixtures/transition-ledger.edn" "$stopped"
+bb "$HERE/build_step.bb" apply-result "$stopped" edge "$HERE/fixtures/stop-receipt.edn"
+[ "$(bb "$HERE/build_step.bb" unreviewed "$stopped")" = edge ]
+bb "$HERE/build_step.bb" apply-result "$stopped" edge "$HERE/fixtures/pass-receipt.edn"
+bb "$HERE/worklist_check.bb" "$stopped"
+rm -f "$stopped"
+
+checkpoint="$(mktemp)"
+cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint"
+bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/replan-receipt.edn"
+[ "$(bb "$HERE/build_step.bb" unreviewed "$checkpoint")" = checkpoint ]
+[ "$(bb "$HERE/build_step.bb" next-open "$checkpoint")" = NONE ]
+bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/pass-receipt.edn"
+[ "$(bb "$HERE/build_step.bb" next-open "$checkpoint")" = next-adapter ]
+bb "$HERE/worklist_check.bb" "$checkpoint"
+rm -f "$checkpoint"
 echo "topology-loop tests: PASS"

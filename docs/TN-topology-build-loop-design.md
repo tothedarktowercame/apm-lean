@@ -101,6 +101,8 @@ Permitted edge kinds are:
   equivalence or naturality square;
 - `:reusable-theorem`: one absent shared mathematical edge;
 - `:consumer-closure`: exact frozen placeholder replacement;
+- `:strategy-checkpoint`: reviewed portfolio measurement that may supersede
+  the untouched tail and insert a newly elected tail;
 - `:documentation`: DAG and experiment-note synthesis after reviewed closure.
 
 Permitted states are:
@@ -173,6 +175,32 @@ allows at most one such row.
 The scheduler never automatically enters `FOUNDATION`, `SPEC-DEFECT`, or
 `DEFERRED-REP` nodes.  Those classifications require an owner decision recorded
 in the DAG and ledger.
+
+## Strategic checkpoints
+
+A campaign is not a permanently fixed theorem queue. A
+`:strategy-checkpoint` depends on a stated number of reviewed consumer
+outcomes. Its strategist rereads the current DAG and measures, for each route:
+
+- frozen placeholder change;
+- change in the typed consumer residual and consumer-facing fixture;
+- number of infrastructure packets since the last consumer change;
+- reviewed `PASS`, deterministic `FAIL`, and mathematical `STOP` outcomes;
+- newly observed consumers of the constructions just banked.
+
+The strategist returns a proposed replacement tail as `:outcome :replan`.
+That proposal itself becomes `:done-unreviewed`; no replacement row is eligible
+until an independent reviewer passes the strategy receipt. After PASS, the
+supervisor marks the checkpoint done and unblocks the new tail. The receipt may
+mark untouched future rows `:superseded`, but may not alter completed evidence
+or erase stopped routes. New ids are required so historical decisions remain
+addressable.
+
+The first checked-in portfolio uses a checkpoint after two consumer-facing
+experiments. Later checkpoint receipts may choose a different cadence from the
+measured results, but every cadence change is reviewed and recorded. An early
+checkpoint is also required after a specification defect, unexpected scope
+expansion, or two infrastructure packets without consumer movement.
 
 ## Iteration state machine
 

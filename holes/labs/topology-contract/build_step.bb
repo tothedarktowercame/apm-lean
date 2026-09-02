@@ -10,6 +10,7 @@
 (def path (or (second *command-line-args*) (str here "/worklist.edn")))
 (def data (edn/read-string (slurp path)))
 (def items (:items data))
+(def ids (map :id items))
 (def by-id (into {} (map (juxt :id identity) items)))
 (def priority {:uptake 0 :final-adapter 1 :representation-comparison 2
                :reusable-theorem 3 :consumer-closure 4 :documentation 5})
@@ -64,11 +65,15 @@
     (case outcome
       :go (when-not (and (get-in receipt [:fixture :path])
                          (get-in receipt [:fixture :sha256])
-                         (seq (:commands receipt)))
+                         (seq (:commands receipt))
+                         (vector? (get-in receipt [:implementation :scope])))
             (throw (ex-info "GO receipt lacks fixture or commands" {:receipt receipt})))
       :revise nil
       :stop (when-not (:reason receipt)
               (throw (ex-info "STOP receipt lacks reason" {:receipt receipt})))
+      :replan (when-not (and (:seat receipt) (seq (:commands receipt)) (:finding receipt)
+                             (vector? (:replacement-items receipt)))
+                (throw (ex-info "REPLAN receipt lacks seat or replacement-items" {:receipt receipt})))
       :done-unreviewed (doseq [k [:author :commit :fixture :changed-paths :commands :residual]]
                          (when-not (get receipt k)
                            (throw (ex-info "implementation receipt lacks field" {:field k}))))
@@ -81,8 +86,9 @@
       (throw (ex-info "unknown receipt outcome" {:outcome outcome})))
     (let [new-items
           (case outcome
-            :go (replace-item items id #(-> % (assoc :state :open :phase :implementation)
-                                                   (assoc-in [:evidence :probe] receipt)))
+            :go (replace-item items id #(-> (merge % (:implementation receipt))
+                                             (assoc :state :open :phase :implementation)
+                                             (assoc-in [:evidence :probe] receipt)))
             :revise (let [p (:prerequisite receipt)]
                       (when-not (and (map? p) (:id p))
                         (throw (ex-info "REVISE lacks prerequisite item" {:receipt receipt})))
@@ -93,8 +99,29 @@
                                              (update :depends-on (fnil conj []) (:id p))
                                              (assoc-in [:evidence :probe] receipt))]
                                       [%]) items)))
-            :stop (replace-item items id #(-> % (assoc :state :needs-owner)
-                                                 (assoc-in [:evidence :probe] receipt)))
+            :stop (replace-item items id #(-> % (assoc :state :done-unreviewed)
+                                                 (assoc :evidence (assoc receipt
+                                                                   :author (:seat receipt)
+                                                                   :disposition :stop))))
+            :replan (let [supersede (set (:supersede receipt))
+                          existing (set ids)
+                          replacement-ids (map :id (:replacement-items receipt))
+                          _ (when (seq (filter existing replacement-ids))
+                              (throw (ex-info "replacement id already exists" {:ids replacement-ids})))
+                          prepared (mapv #(if (supersede (:id %))
+                                            (assoc % :state :superseded)
+                                            %) items)
+                          replacements (mapv #(-> %
+                                                    (update :depends-on (fnil conj []) id)
+                                                    (assoc :state :blocked))
+                                              (:replacement-items receipt))]
+                      (vec (mapcat #(if (= id (:id %))
+                                      (into [(-> % (assoc :state :done-unreviewed)
+                                                    (assoc :evidence (assoc receipt
+                                                                      :author (:seat receipt)
+                                                                      :disposition :replan)))]
+                                            replacements)
+                                      [%]) prepared)))
             :done-unreviewed (replace-item items id #(-> % (assoc :state :done-unreviewed)
                                                             (assoc :evidence receipt)))
             :pass (replace-item items id #(-> % (assoc :state :done)

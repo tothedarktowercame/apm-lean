@@ -1,12 +1,59 @@
 {:schema :topology/worklist-v1
- :campaign :none
+ :campaign :topology-portfolio-2026-09-02
  :canonical-root "/home/joe/code/apm-lean"
  :canonical-packages "/home/joe/code/apm-lean/.lake/packages"
  :statuses #{:blocked :open :probing :probe-reviewed :implementing
              :done-unreviewed :repair :done :needs-owner :superseded}
  :edge-kinds #{:uptake :final-adapter :representation-comparison
-               :reusable-theorem :consumer-closure :documentation}
- :baseline {:git-sha "7488b8c2368a2712b9c72f50a07dbec84b5a9377"
-            :placeholder-count 0
-            :statement-hashes {}}
- :items []}
+               :reusable-theorem :consumer-closure :strategy-checkpoint
+               :documentation}
+ :baseline {:git-sha "ea059cfc463b7a6928825cfe44ee88a53a5476ba"
+            :placeholder-count 5
+            :statement-hashes
+            {"t00A01/apm_t00A01_bridge_fundamentalGroup_coprod"
+             "3766ae0c61f3c2b0538c25605c678a9eef1b4c10d52ab89c5ecbf67abf3884df"
+             "t00A01/apm_t00a01"
+             "25b94cbde76b6ccda8e43e3e2042942f5bbe5e987bce9084a3b91f76c7cce534"
+             "t01A02/apm_t01A02_bridge_H2map_eq_zero"
+             "62a38aafc261277bf98eec4f78d4001362b88230de6721c751baf900d5d7c1a7"
+             "t01A02/apm_t01a02"
+             "79df8df0c786e708a342bbbc1289145458a9cefe6f62609cec597cea15d5b660"}}
+ :consumer-baselines
+ {:t00A01 {:path "problems/t00A01/lean/Main.lean" :placeholder-count 2
+            :sha256 "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f"}
+  :t01A02 {:path "problems/t01A02/lean/Main.lean" :placeholder-count 3
+            :sha256 "8bf7f3c39d6adb451332d0c30433ae0df833110a0b93605d23b26f30c7caa1fc"}}
+ :items
+ [{:id :t00a01-van-kampen-reprobe
+   :kind :final-adapter :state :open :phase :probe :depends-on []
+   :consumer :t00A01 :dag-node "TWO-OPEN VAN KAMPEN / t00A01"
+   :scope []
+   :representation {:source "two-open fundamental-groupoid pseudopushout"
+                    :target "chosen-basepoint Monoid.Coprod"}
+   :current-residual "frozen fundamental-group coproduct bridge and final conjunction"
+   :recalled-suggestion "t02A03 subsequently banked generic span transport, free-product representability, target-natural source reconstruction, and quotient/basepoint transport"
+   :stop-condition "STOP if the supplied standard-cover hypotheses still lack two independent geometric or connector inputs; do not specialize the t02A03 coordinates"
+   :acceptance {:probe "compile the exact unchanged bridge and final theorem, or isolate one reusable missing edge"
+                :statement-hashes ["t00A01/apm_t00A01_bridge_fundamentalGroup_coprod"
+                                   "t00A01/apm_t00a01"]}}
+  {:id :t01a02-h2-degree-probe
+   :kind :reusable-theorem :state :open :phase :probe :depends-on []
+   :consumer :t01A02 :other-consumers [:t02A08 :t94J08]
+   :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY"
+   :scope []
+   :representation {:source "continuous torus self-map and nonsurjectivity"
+                    :target "integral singular H2 morphism equals zero"}
+   :current-residual "apm_t01A02_bridge_H2map_eq_zero; Lefschetz bridge remains independent"
+   :stop-condition "STOP before Lefschetz or covering work; this row concerns only the H2 bridge and one reusable degree/naturality edge"
+   :acceptance {:probe "compile the exact unchanged H2 bridge, or isolate one sphere-orientation/degree theorem with the named consumers"
+                :statement-hashes ["t01A02/apm_t01A02_bridge_H2map_eq_zero"]}}
+  {:id :checkpoint-after-two-consumers
+   :kind :strategy-checkpoint :state :blocked :phase :strategy
+   :depends-on [:t00a01-van-kampen-reprobe :t01a02-h2-degree-probe]
+   :consumer :portfolio :dag-node "PORTFOLIO POLICY"
+   :scope []
+   :checkpoint {:after-problems 2 :may-supersede-future true
+                :required-measures [:placeholder-delta :typed-residual-change
+                                    :infrastructure-packets :review-outcomes]}
+   :stop-condition "Do not activate a FOUNDATION, SPEC-DEFECT, or DEFERRED-REP node automatically"
+   :acceptance {:strategy "reread current DAG and both reviewed receipts; return a reviewed replacement tail ordered by uptake, adapters, one-edge LOCAL-GO/API-GAP, then supported foundations"}}]}

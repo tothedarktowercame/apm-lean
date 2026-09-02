@@ -11,6 +11,7 @@ OWNER="${OWNER_SEAT:-codex-18}"
 PROBE_SEAT="${PROBE_SEAT:-codex-12}"
 AUTHOR_SEAT="${AUTHOR_SEAT:-codex-6}"
 REVIEW_SEAT="${REVIEW_SEAT:-codex-20}"
+STRATEGY_SEAT="${STRATEGY_SEAT:-codex-12}"
 POLL_SECONDS="${POLL_SECONDS:-20}"
 MAX_ITER="${MAX_ITER:-60}"
 MODE=live
@@ -109,6 +110,8 @@ if [ "$MODE" = dry-run ]; then
 fi
 
 [ "$AUTHOR_SEAT" != "$REVIEW_SEAT" ] || die "author and reviewer seats are identical"
+[ "$PROBE_SEAT" != "$REVIEW_SEAT" ] || die "probe and reviewer seats are identical"
+[ "$STRATEGY_SEAT" != "$REVIEW_SEAT" ] || die "strategy and reviewer seats are identical"
 i=0
 STALL_KEY=""; STALL_N=0
 while [ "$i" -lt "$MAX_ITER" ]; do
@@ -125,6 +128,7 @@ while [ "$i" -lt "$MAX_ITER" ]; do
     row="$(bb "$HERE/build_step.bb" row "$LEDGER" "$next")"
     phase="$(sed -n 's/.*:phase :\([^ ,}]*\).*/\1/p' <<<"$row")"
     seat="$AUTHOR_SEAT"; [ "$phase" = probe ] && seat="$PROBE_SEAT"
+    [ "$phase" = strategy ] && seat="$STRATEGY_SEAT"
     prompt="$(mktemp)"
     { echo "ROW TO DO THIS INVOCATION: $next"; echo "$row"; echo; cat "$HERE/work-prompt.md"; } > "$prompt"
     dispatch_and_wait "$seat" "$prompt" "work($next)"; rm -f "$prompt"

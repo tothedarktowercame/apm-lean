@@ -1,0 +1,7 @@
+{:outcome :replan :seat "codex-12"
+ :commands [{:cmd "bb build_step.bb counts worklist.edn" :exit 0}]
+ :finding "one reviewed uptake is now the shortest consumer route"
+ :replacement-items
+ [{:id :next-adapter :kind :final-adapter :phase :probe :depends-on []
+   :consumer :nextConsumer :scope []
+   :acceptance {:probe "compile exact consumer adapter"}}]}
