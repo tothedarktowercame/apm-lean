@@ -1450,6 +1450,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Recorded commit a1bd849f elects :t99j04-local-diffeomorph-converse-probe-1 as a reusable theorem with only consumer :t99J04 and no top-level :bounded-exception; current worklist_check deterministically rejects the recorded ledger with 'reusable theorem lacks two consumers or bounded exception'. The later 7bdd835f repair is outside the reviewed commit.",
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :evidence
@@ -1534,9 +1536,15 @@
       :current-residual
       "await the reviewed local-diffeomorphism API-gap probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-20",
+     :job "invoke-1788372840354-7532-ef5bf61e",
+     :finding
+     "Recorded commit a1bd849f elects :t99j04-local-diffeomorph-converse-probe-1 as a reusable theorem with only consumer :t99J04 and no top-level :bounded-exception; current worklist_check deterministically rejects the recorded ledger with 'reusable theorem lacks two consumers or bounded exception'. The later 7bdd835f repair is outside the reviewed commit."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1549,13 +1557,15 @@
     :checkpoint-full-dag-refill-3],
    :current-residual
    "await the reviewed Hausdorff-sphere moment probe, then refill from the complete DAG"}
-  {:consumer :t99J04,
+  {:bounded-exception
+   "The DAG explicitly records LOCAL-DIFFEOMORPH CONVERSE as an API-GAP; this elects a read-only probe only, not implementation without a second consumer or explicit owner authorization.",
+   :consumer :t99J04,
    :recalled-suggestion
    "the frozen file already compiles the global compact/local-diffeomorphism-to-surjectivity step; the adjacent missing API is the finite-dimensional manifold inverse-function implication from a bijective mfderiv",
    :stop-condition
    "STOP if converting mfderiv bijectivity to a chart derivative equivalence and assembling a chart-local PartialDiffeomorph remain two independent constructions; do not work on the separate coordinateMap derivative bridge or final assembly",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "LOCAL-DIFFEOMORPH CONVERSE / t99J04 [API-GAP]",
    :acceptance
@@ -1572,8 +1582,6 @@
     :target "IsLocalDiffeomorphAt f x"},
    :id :t99j04-local-diffeomorph-converse-probe-1,
    :kind :reusable-theorem,
-   :bounded-exception
-   "The DAG explicitly records LOCAL-DIFFEOMORPH CONVERSE as an API-GAP; this elects a read-only probe only, not implementation without a second consumer or explicit owner authorization.",
    :depends-on [:checkpoint-full-dag-refill-4],
    :current-residual
    "three placeholders: the local inverse-function bridge, the independent coordinateMap mfderiv-bijectivity bridge, and final assembly",
@@ -1590,7 +1598,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
