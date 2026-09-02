@@ -1308,9 +1308,24 @@
       :current-residual
       "await the reviewed Hausdorff-sphere moment probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788372303702-7514-59d5eeaa",
+     :commands
+     ["git diff b9d77843^ b9d77843 --check"
+      "newline-inclusive SHA-256 audit of apm_t95j05 through ':= by'"
+      "lake env lean problems/t95J05/lean/Main.lean"
+      "standalone sorry/admit audit"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bash holes/labs/topology-contract/test-loop.sh"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only repair scope; corrected t95J05 frozen statement hash, one-placeholder count, exact subtype Hausdorff-measure and moment representation, preserved stop boundaries, direct Lean compilation, ledger and loop tests, package authority, and clean-tree gates reproduce."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1329,7 +1344,7 @@
    :stop-condition
    "STOP if identifying subtype hausdorffMeasure with normalized rotational surface measure and evaluating its coordinate-square moment require two independent absent theorems; do not start general manifold integration, coarea, or Stokes",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "HAUSDORFF SPHERE NORMALIZATION / SPHERE-BALL MOMENTS [API-GAP → LOCAL-GO]",
