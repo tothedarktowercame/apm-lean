@@ -55,6 +55,7 @@
      {:cmd
       "rg -n \"sorryAx|declaration uses 'sorry'|error\" /tmp/twoopen-direct.log /tmp/twoopen-collision.log",
       :exit 1,
+      :expected-exit 1,
       :finding "no matches"}
      {:cmd "git diff HEAD^ --check", :exit 0}
      {:cmd "git status --porcelain", :exit 0, :finding "clean"}],

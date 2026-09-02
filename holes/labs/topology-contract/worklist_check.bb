@@ -23,7 +23,8 @@
   (->> (str/split-lines (:out (sh "git" "show" "--pretty=" "--name-only" sha)))
        (remove str/blank?) set))
 (defn file-sha [p]
-  (let [f (io/file root p)]
+  (let [candidate (io/file p)
+        f (if (.isAbsolute candidate) candidate (io/file root p))]
     (when (.isFile f)
       (first (str/split (:out (shell/sh "sha256sum" (.getPath f))) #"\s+")))))
 (when-not (= (count ids) (count (set ids))) (die "duplicate item ids"))
@@ -60,8 +61,8 @@
             (die (:id i) "completed without fixture path and hash"))
           (when-not (= (:sha256 fixture) (file-sha (:path fixture)))
             (die (:id i) "fixture hash mismatch or file absent" (:path fixture)))))
-      (when (some #(not= 0 (:exit %)) (:commands e))
-        (die (:id i) "records a failed gate command"))))
+      (when (some #(not= (get % :expected-exit 0) (:exit %)) (:commands e))
+        (die (:id i) "records an unexpected gate exit"))))
   (when (= :done (:state i))
     (when-not (= :pass (get-in i [:evidence :review :outcome])) (die (:id i) "done without PASS review"))
     (when (= (get-in i [:evidence :author]) (get-in i [:evidence :review :seat]))
