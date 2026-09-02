@@ -1903,8 +1903,55 @@
      :review-outcomes]},
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :evidence
+   {:outcome :stop,
+    :seat :codex-12,
+    :reason
+    "No policy-eligible work row remains after rereading the complete DAG. All adjacent uptake nodes are closed or reviewed STOPs. The remaining LOCAL-GO/API-GAP nodes are either inside owner-gated foundations, already stopped after exposing multiple independent constructions, or cannot shorten a frozen residual through one coherent theorem: RESTRICTED MANIFOLD CHART PAIR and COVER-DEGREE sit under MANIFOLD-FUNDAMENTAL-CLASS; PULLBACK/BASE-CHANGE and ACTION/QUOTIENT TRANSPORT require covering foundations after the reviewed t98A01, t92J05, and t01A04 stops; HAUSDORFF SPHERE NORMALIZATION and SPHERE-BALL MOMENTS were separated by the reviewed t95J05 stop; SPHERE ORIENTATION NATURALITY encountered the reviewed t94J08 specification defect; LOCAL-DIFFEOMORPH CONVERSE stopped at two manifold/chart constructions; TWICE-SPIRAL COLLAR-COVER uptake is already consumed by closed t01J03. COEFFICIENT-CATEGORY NATURALITY does not yield a one-edge consumer packet: t02A08 still independently needs an integral H2 sphere orientation and nontrivial arbitrary-degree map constructions. Portfolio continuation therefore requires an owner election authorizing one specific FOUNDATION, SPEC-DEFECT repair, or bounded multi-edge program; the campaign is not complete.",
+    :commands
+    [{:cmd
+      "rg -n '\\[(UPTAKE|LOCAL-GO|API-GAP)\\]|`UPTAKE`|`LOCAL-GO`|`API-GAP`' TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "sed -n '80,170p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '450,490p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '600,720p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '840,930p' TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "rg -n 'PULLBACK/BASE-CHANGE|ACTION/QUOTIENT TRANSPORT|COEFFICIENT-CATEGORY NATURALITY|TWICE-SPIRAL COLLAR-COVER SPECIALIZATION|RESTRICTED MANIFOLD CHART PAIR|COVER-DEGREE' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t02A08/lean/Main.lean problems/t98A02/lean/Main.lean",
+      :exit 0,
+      :output
+      "t02A08 has one source placeholder whose own boundary records two missing ingredients; t98A02 has one source placeholder in a separate fundamental-class/orientation program"}
+     {:cmd "sed -n '35,210p' problems/t02A08/lean/Main.lean",
+      :exit 0,
+      :output
+      "The frozen arbitrary-degree theorem requires both H2(S2) ≅ Z and concrete self-maps with computed nontrivial degrees; identity functoriality and degree composition are already compiled."}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "ffefa3634c70f959c11b5d5f911dca39a3e43acb"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :finding
+    {:placeholder-delta {:t01A04 [4 4]},
+     :typed-residual-change
+     {:t01A04
+      "the quotient-covering bridge split into two concrete wedge-point local trivializations unless a general compatible-covering quotient-gluing foundation is introduced"},
+     :infrastructure-packets 0,
+     :review-outcomes {:t01A04 :stop-pass},
+     :eligible-work-rows 0,
+     :owner-election-required
+     ["authorize a specific covering-gluing or covering-classification foundation"
+      "authorize repair of the t94J08 frozen H0(S0) specification defect"
+      "authorize one bounded sphere-orientation/degree foundation with at least two consumers"
+      "authorize the two-stage manifold inverse-function construction"
+      "authorize the Hausdorff-sphere normalization and moment program"]},
+    :residual
+    "Portfolio paused for owner election; no DAG or ledger files were edited and no foundation, specification repair, or deferred representation was activated.",
+    :author :codex-12,
+    :disposition :stop},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
