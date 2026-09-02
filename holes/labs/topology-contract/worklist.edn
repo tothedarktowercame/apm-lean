@@ -396,6 +396,21 @@
       :finding "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788362123479-7437-d40a3a9d",
+     :commands
+     ["git diff 946e0ab5^ 946e0ab5 --check"
+      "sha256sum /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean"
+      "lake env lean /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean"
+      "lake env lean problems/t01A02/lean/Main.lean"
+      "rg -n \"PuncturedClosedManifoldTopHomologyVanishing\" ConstructionTargets problems/t01A02/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only scope, fixture fidelity, conditional avoid-point bridge orientation, standard axioms, absent canonical prerequisite, unchanged frozen hash and three-placeholder count, canonical package authority, and clean git gates all reproduce; STOP is correct."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
@@ -403,7 +418,7 @@
      "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
    :acceptance
