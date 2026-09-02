@@ -274,7 +274,7 @@
    "frozen fundamental-group coproduct bridge and final conjunction"}
   {:consumer :t01A02,
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PuncturedClosedManifoldTopHomology.lean"
     "ConstructionTargets/PuncturedClosedManifoldTopHomology.md"],
