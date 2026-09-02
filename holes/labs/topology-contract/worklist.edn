@@ -793,8 +793,70 @@
    "generic product-cover machinery and AddCircle quotient covering are banked; fivefold fiber cardinality and deck translations are the adjacent concrete seam",
    :stop-condition
    "STOP before the independent closed-orientable-surface classification/Euler branch; STOP if concrete cover regularity requires more than one absent edge",
+   :evidence
+   {:consumer :t98A01,
+    :recalled-suggestion
+    "the banked product-cover theorem and AddCircle quotient-covering structure might leave a single concrete regularity adapter",
+    :residual-after-theorems
+    "the concrete t98A01IsRegularNfoldCover conjunct closes, but the same frozen source placeholder still contains the independent general closed-orientable-surface classification/Euler implication",
+    :canonical-declarations-reached
+    ["AddCircle.isAddQuotientCoveringMap_nsmul_of_ne_zero"
+     "IsQuotientCoveringMap.isCoveringMap"
+     "IsQuotientCoveringMap.apply_eq_iff_mem_orbit"
+     "AddMonoidHom.fiberEquivKerOfSurjective"
+     "ConstructionTargets.ProductEvenlyCoveredTrivialization.productFiberHomeomorph"
+     "ConstructionTargets.ProductEvenlyCoveredTrivialization.isCoveringMap_productMap"],
+    :outcome :stop,
+    :other-named-consumers [:t01A02 :t01A04 :t92J06],
+    :statement-hashes
+    ["t98A01/apm_t98a01:1a1b09d52a2f0398ec7d5630160f3b4a5c4e95dc36e38247d816a2f4611b13eb"],
+    :frozen-placeholder "hfront inside apm_t98a01",
+    :disposition :stop,
+    :author :codex-12,
+    :head "b96a26e4455e7ce833f13da82ebfa78f2302dbed",
+    :reason
+    "The explicit stop condition fires because concrete regularity has two independent absent edges after the already compiled product-cover theorem: finite kernel/fiber cardinality and deck-homeomorphism transitivity. Combining them into one consumer-specific declaration would conceal rather than remove that split.",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductEvenlyCoveredTrivialization.lean",
+      :exit 0,
+      :warnings 0,
+      :axioms ["propext" "Classical.choice" "Quot.sound"]}
+     {:cmd "lake env lean problems/t98A01/lean/Main.lean",
+      :exit 0,
+      :warnings 1}
+     {:cmd
+      "rg -n 'Nat.card.*nsmulAddMonoidHom|nsmulAddMonoidHom.*Nat.card|regularNfold.*AddCircle|deck.*nsmul.*AddCircle' ConstructionTargets .lake/packages/mathlib/Mathlib --glob '*.lean'",
+      :exit 1,
+      :expected-exit 1,
+      :output
+      "no matching canonical declaration; search is limited to named terms"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t98A01/lean/Main.lean",
+      :exit 0,
+      :output "one source placeholder at line 145"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :candidate-missing-theorems
+    ["Nat.card ((nsmulAddMonoidHom (α := UnitAddCircle) 5).ker) = 5, together with transport to every torus fiber"
+     "kernel translation packages as a torus Homeomorph and acts transitively on equal fibers"],
+    :compile-evidence
+    {:fixture nil,
+     :frozen-placeholders 1,
+     :target-axioms ["propext" "Classical.choice" "Quot.sound"]},
+    :representation-at-seam
+    {:source "t98A01TorusFiveCover (x,y) = (5 • x,y)",
+     :covering
+     "product of the AddCircle quotient covering with the identity covering",
+     :fiber "product fiber, reducible to ker (nsmulAddMonoidHom 5)",
+     :regularity
+     "actual torus self-homeomorphisms preserving the cover and moving any equal-fiber pair"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "COVERING CONSTRUCTORS / t98A01 [LOCAL-GO]",
    :acceptance
