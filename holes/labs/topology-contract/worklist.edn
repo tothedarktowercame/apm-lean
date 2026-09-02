@@ -1904,8 +1904,11 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :evidence
-   {:outcome :stop,
-    :seat :codex-12,
+   {:residual
+    "Portfolio paused for owner election; no DAG or ledger files were edited and no foundation, specification repair, or deferred representation was activated.",
+    :outcome :stop,
+    :disposition :stop,
+    :author :codex-12,
     :reason
     "No policy-eligible work row remains after rereading the complete DAG. All adjacent uptake nodes are closed or reviewed STOPs. The remaining LOCAL-GO/API-GAP nodes are either inside owner-gated foundations, already stopped after exposing multiple independent constructions, or cannot shorten a frozen residual through one coherent theorem: RESTRICTED MANIFOLD CHART PAIR and COVER-DEGREE sit under MANIFOLD-FUNDAMENTAL-CLASS; PULLBACK/BASE-CHANGE and ACTION/QUOTIENT TRANSPORT require covering foundations after the reviewed t98A01, t92J05, and t01A04 stops; HAUSDORFF SPHERE NORMALIZATION and SPHERE-BALL MOMENTS were separated by the reviewed t95J05 stop; SPHERE ORIENTATION NATURALITY encountered the reviewed t94J08 specification defect; LOCAL-DIFFEOMORPH CONVERSE stopped at two manifold/chart constructions; TWICE-SPIRAL COLLAR-COVER uptake is already consumed by closed t01J03. COEFFICIENT-CATEGORY NATURALITY does not yield a one-edge consumer packet: t02A08 still independently needs an integral H2 sphere orientation and nontrivial arbitrary-degree map constructions. Portfolio continuation therefore requires an owner election authorizing one specific FOUNDATION, SPEC-DEFECT repair, or bounded multi-edge program; the campaign is not complete.",
     :commands
@@ -1932,6 +1935,26 @@
       :output "ffefa3634c70f959c11b5d5f911dca39a3e43acb"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788373886854-7568-45c78a6a",
+     :commands
+     ["git diff f5ecd922^ f5ecd922 --check"
+      "git diff --name-status f5ecd922^ f5ecd922"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/checkpoint-refill6-f5ecd922.edn"
+      "rg all UPTAKE/LOCAL-GO/API-GAP nodes in TOPOLOGY-DEPENDENCY-DAG.md"
+      "rg placeholder audits for problems/t02A08/lean/Main.lean and problems/t98A02/lean/Main.lean"
+      "inspect problems/t02A08/lean/Main.lean frozen boundary"
+      "readlink -f .lake/packages"
+      "newline-inclusive SHA-256 audit through ':= by' for apm_t01A04_bridge_quotient_maps_are_coverings and apm_t01a04"
+      "rg standalone t01A04 placeholder audit"
+      "lake env lean problems/t01A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bash holes/labs/topology-contract/test-loop.sh"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: f5ecd922 is an exact ledger-only exhaustion checkpoint. The complete DAG scan reproduces zero policy-eligible one-edge rows after the reviewed t01A04 STOP: remaining candidates require owner-gated foundations, a specification repair, or multiple independent constructions. In particular t02A08 independently lacks both the integral H2 sphere orientation and computed nontrivial degree maps. The honest STOP preserves the prohibition on automatically activating foundation, specification-defect, or deferred-representation work; t01A04 remains 4-to-4 with matching frozen hashes, and authority, direct compile, historical/current ledger gates, loop tests, and clean tree pass."},
     :finding
     {:placeholder-delta {:t01A04 [4 4]},
      :typed-residual-change
@@ -1946,12 +1969,9 @@
       "authorize one bounded sphere-orientation/degree foundation with at least two consumers"
       "authorize the two-stage manifold inverse-function construction"
       "authorize the Hausdorff-sphere normalization and moment program"]},
-    :residual
-    "Portfolio paused for owner election; no DAG or ledger files were edited and no foundation, specification repair, or deferred representation was activated.",
-    :author :codex-12,
-    :disposition :stop},
+    :seat :codex-12},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
