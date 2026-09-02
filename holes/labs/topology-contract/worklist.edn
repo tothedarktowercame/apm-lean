@@ -816,8 +816,67 @@
    "sphere and circle vertex-group bridges are banked; the first remaining conjunct is the antipodal quotient fundamental group",
    :stop-condition
    "STOP before the independent genus-two classification/Seifert-van Kampen bridge; do not claim whole-consumer closure",
+   :evidence
+   {:consumer :t92J05,
+    :recalled-suggestion
+    "banked sphere simple-connectivity and arbitrary-basepoint circle fundamental-group computations might leave one antipodal-cover adapter",
+    :residual-after-theorems
+    "the exact first frozen conjunct closes; apm_t92J05_bridge_sphere_circle_fundamentalGroups is already compiled, but apm_t92J05_bridge_genusTwo_fundamentalGroup and final assembly remain independently blocked",
+    :canonical-declarations-reached
+    ["Projectivization"
+     "projectivizationSetoid"
+     "IsCoveringMapOn.mk_of_group_action"
+     "IsQuotientCoveringMap.isCoveringMap"
+     "IsCoveringMap.exists_path_lifts"
+     "SimplyConnectedSphereProducts.euclideanSphere_simplyConnected"],
+    :outcome :stop,
+    :other-named-consumers
+    {:antipodal-cover-construction [:t00A02],
+     :combined-projective-plane-pi1 []},
+    :statement-hashes
+    ["t92J05/apm_t92J05_bridge_projectivePlane_fundamentalGroup:59fb134bdc69fbda1677618873618aadb681948bae17db40b350b886b16f2261"
+     "t92J05/apm_t92j05:a8b82cfde8489049a3f120e687208358bda0b1ccbbc1b50dfc4f921ca3f94ea4"],
+    :frozen-placeholder
+    "apm_t92J05_bridge_projectivePlane_fundamentalGroup",
+    :disposition :stop,
+    :author :codex-12,
+    :head "b46b17bd208bdbb0be16c91e835dba23851f8ca2",
+    :reason
+    "More than one independent absent foundation is required. General quotient-covering and lifting APIs do not identify the frozen projectivization with the sphere quotient and do not compute its vertex fundamental group as the deck group. The row therefore stops before the explicitly excluded genus-two classification branch.",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "lake env lean problems/t92J05/lean/Main.lean",
+      :exit 0,
+      :warnings 3}
+     {:cmd
+      "rg -n 'Projectivization.*FundamentalGroup|fundamentalGroup.*Projectivization|projectivization.*IsCoveringMap|IsCoveringMap.*projectivization|fundamentalGroup.*Deck|Deck.*fundamentalGroup' .lake/packages/mathlib/Mathlib ConstructionTargets --glob '*.lean'",
+      :exit 1,
+      :expected-exit 1,
+      :output
+      "no matching bridge; search is limited to named declarations and terms"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t92J05/lean/Main.lean",
+      :exit 0,
+      :output "three source placeholders at lines 140, 189, 271"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :candidate-missing-theorems
+    ["homeomorphism from the antipodal quotient of the unit two-sphere to Projectivization ℝ (Fin 3 → ℝ), together with the induced two-sheeted quotient covering"
+     "chosen-basepoint fundamental-group/deck-group equivalence for a simply connected regular covering, specialized to the antipodal ZMod 2 action"],
+    :compile-evidence
+    {:placeholder-count 3, :warnings 3, :fixture nil},
+    :representation-at-seam
+    {:frozen
+     "Projectivization ℝ (Fin 3 → ℝ), definitionally Quotient (projectivizationSetoid ℝ (Fin 3 → ℝ))",
+     :geometric-input-needed
+     "unit two-sphere modulo the antipodal ZMod 2 action",
+     :target
+     "∀ x, Nonempty (FundamentalGroup RP2 x ≃* Multiplicative (ZMod 2))"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "ANTIPODAL QUOTIENT FUNDAMENTAL GROUP / t92J05 [API-GAP]",
    :acceptance
