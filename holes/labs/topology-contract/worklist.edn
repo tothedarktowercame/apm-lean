@@ -1670,8 +1670,100 @@
      :review-outcomes]},
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd
+      "rg -n '\\[(UPTAKE|LOCAL-GO|API-GAP)\\]|`UPTAKE`|`LOCAL-GO`|`API-GAP`' TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "sed -n '80,170p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '450,490p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '600,720p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '840,930p' TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "rg -n 'PULLBACK/BASE-CHANGE|ACTION/QUOTIENT TRANSPORT|COEFFICIENT-CATEGORY NATURALITY|TWICE-SPIRAL COLLAR-COVER SPECIALIZATION|RESTRICTED MANIFOLD CHART PAIR|COVER-DEGREE' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t01A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "four source placeholders at lines 209, 238, 246, and 329"}
+     {:cmd
+      "python3 newline-inclusive declaration hash audit through ':= by\\n' for apm_t01A04_bridge_quotient_maps_are_coverings and apm_t01a04",
+      :exit 0,
+      :output
+      "bb80df159fdcb49c3483eed138419915d37b657a5a64fbf00f67d65c9cb57a05; d67efb8ec13b3fa9d02952b22c016560f2b810de6581fb08580b95c18e6fe6e7"}
+     {:cmd
+      "rg -n 'apm_t01A04_bridge_quotient_maps_are_coverings|apm_t01a04_circleCoverMap|apm_t01a04_torusCoverMap|quotient.*cover' ConstructionTargets .lake/packages/mathlib/Mathlib/Topology/Covering problems/t01A04/lean/Main.lean -g '*.lean'",
+      :exit 0}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "ae238155af035f457ee5da8aad5e8e5b9a5e1ef9"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :finding
+    {:placeholder-delta {:t99J04 [3 3]},
+     :typed-residual-change
+     {:t99J04
+      "the local-diffeomorphism converse split into two independent absent constructions: chart-representative derivative transfer and lifting the Banach local inverse through charts to a manifold PartialDiffeomorph"},
+     :infrastructure-packets 0,
+     :review-outcomes {:t99J04 :stop-pass},
+     :policy
+     "Exclude the stopped local inverse-function chain and all owner-gated foundations, specification defects, and deferred representations. Elect the next concrete consumer-facing LOCAL-GO edge: verify the two already-defined t01A04 quotient maps are covering maps. Keep the independent fundamental-group presentation/range and total-space homology obligations outside the probe."},
+    :replacement-items
+    [{:consumer :t01A04,
+      :recalled-suggestion
+      "the concrete quotient total spaces, descended maps, basepoint equations, and surjectivity proofs already compile; the adjacent unresolved edge is the evenly-covered-neighborhood verification for the two quotient-glued maps",
+      :stop-condition
+      "STOP if the circle-doubled and torus-doubled quotient maps require two independent local models at the wedge point, or if either requires a general covering-gluing/classification foundation; do not begin the independent piOne presentation/range or total-space homology comparison",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "ACTION/QUOTIENT TRANSPORT / t01A04 [LOCAL-GO]",
+      :acceptance
+      {:probe
+       "compile the exact unchanged apm_t01A04_bridge_quotient_maps_are_coverings, or isolate one shared quotient-gluing covering lemma",
+       :statement-hashes
+       ["t01A04/apm_t01A04_bridge_quotient_maps_are_coverings:bb80df159fdcb49c3483eed138419915d37b657a5a64fbf00f67d65c9cb57a05"
+        "t01A04/apm_t01a04:d67efb8ec13b3fa9d02952b22c016560f2b810de6581fb08580b95c18e6fe6e7"]},
+      :representation
+      {:source
+       "the two concrete continuous maps descended between EqvGen quotient spaces by circle squaring and sheet-coordinate formulas",
+       :target
+       "IsCoveringMap apm_t01a04_circleCoverMap and IsCoveringMap apm_t01a04_torusCoverMap"},
+      :id :t01a04-quotient-covering-probe-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "four placeholders: concrete quotient covering bridge, independent piOne presentation/ranges, independent total-space nonhomeomorphism, and final assembly",
+      :other-consumers [:t98A01 :t92J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "reread the complete DAG and reviewed t01A04 quotient-covering probe receipt; elect a new nonempty policy-eligible portfolio"},
+      :id :checkpoint-full-dag-refill-6,
+      :kind :strategy-checkpoint,
+      :depends-on [:t01a04-quotient-covering-probe-1],
+      :current-residual
+      "await the reviewed concrete quotient-covering probe, then refill from the complete DAG"}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1683,7 +1775,57 @@
    [:t99j04-local-diffeomorph-converse-probe-1
     :checkpoint-full-dag-refill-4],
    :current-residual
-   "await the reviewed local-diffeomorphism API-gap probe, then refill from the complete DAG"}],
+   "await the reviewed local-diffeomorphism API-gap probe, then refill from the complete DAG"}
+  {:consumer :t01A04,
+   :recalled-suggestion
+   "the concrete quotient total spaces, descended maps, basepoint equations, and surjectivity proofs already compile; the adjacent unresolved edge is the evenly-covered-neighborhood verification for the two quotient-glued maps",
+   :stop-condition
+   "STOP if the circle-doubled and torus-doubled quotient maps require two independent local models at the wedge point, or if either requires a general covering-gluing/classification foundation; do not begin the independent piOne presentation/range or total-space homology comparison",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "ACTION/QUOTIENT TRANSPORT / t01A04 [LOCAL-GO]",
+   :acceptance
+   {:probe
+    "compile the exact unchanged apm_t01A04_bridge_quotient_maps_are_coverings, or isolate one shared quotient-gluing covering lemma",
+    :statement-hashes
+    ["t01A04/apm_t01A04_bridge_quotient_maps_are_coverings:bb80df159fdcb49c3483eed138419915d37b657a5a64fbf00f67d65c9cb57a05"
+     "t01A04/apm_t01a04:d67efb8ec13b3fa9d02952b22c016560f2b810de6581fb08580b95c18e6fe6e7"]},
+   :representation
+   {:source
+    "the two concrete continuous maps descended between EqvGen quotient spaces by circle squaring and sheet-coordinate formulas",
+    :target
+    "IsCoveringMap apm_t01a04_circleCoverMap and IsCoveringMap apm_t01a04_torusCoverMap"},
+   :id :t01a04-quotient-covering-probe-1,
+   :kind :final-adapter,
+   :depends-on [:checkpoint-full-dag-refill-5],
+   :current-residual
+   "four placeholders: concrete quotient covering bridge, independent piOne presentation/ranges, independent total-space nonhomeomorphism, and final assembly",
+   :other-consumers [:t98A01 :t92J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "reread the complete DAG and reviewed t01A04 quotient-covering probe receipt; elect a new nonempty policy-eligible portfolio"},
+   :id :checkpoint-full-dag-refill-6,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t01a04-quotient-covering-probe-1 :checkpoint-full-dag-refill-5],
+   :current-residual
+   "await the reviewed concrete quotient-covering probe, then refill from the complete DAG"}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
