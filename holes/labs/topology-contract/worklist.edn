@@ -66,6 +66,22 @@
       :finding "no matches"}
      {:cmd "git diff HEAD^ --check", :exit 0}
      {:cmd "git status --porcelain", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788354039040-7387-85f154dd",
+     :commands
+     ["sha256sum /tmp/TwoOpenCompatibleConnectorsProbe.lean"
+      "lake env lean /tmp/TwoOpenCompatibleConnectorsProbe.lean"
+      "lake env lean ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.lean"
+      "LAKE_JOBS=1 lake build ConstructionTargets.TwoOpenLegCompatibleConnectorSystems"
+      "lake env lean /tmp/TwoOpenLegCompatibleConnectorsCollision.lean"
+      "rg -n \"warning:|sorryAx|declaration uses 'sorry'|error:\" review logs"
+      "rg -n \"\\b(sorry|admit|axiom|opaque|unsafe)\\b\" ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.lean"
+      "git diff a86d933a^ a86d933a --check"
+      "git status --porcelain"],
+     :finding
+     "The theorem constructs honest overlap/left/right ConnectorSystem data and proves both inclusion mapIso compatibility equations in the required orientation; fixture fidelity, scope, builds, standard axioms, frozen consumer invariants, and clean-tree gates all pass."},
     :commit "a86d933a6991201c9645350f2df0eb985f2ce0cd",
     :changed-paths
     ["ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.lean"
@@ -78,7 +94,7 @@
     :finding
     "Constructed overlap and piece connector systems; piece connectors at overlap points are definitionally the mapped overlap connectors, yielding both exact mapIso compatibility equations."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.lean"
     "ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.md"],
@@ -224,7 +240,7 @@
     :finding
     "Promoted the exact compiled reusable interface proposition; the accompanying documentation explicitly records that this declaration states, rather than proves, the generic principle and names the remaining connector and simply-connected-overlap construction."},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
     "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
