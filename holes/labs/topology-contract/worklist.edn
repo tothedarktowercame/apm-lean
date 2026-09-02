@@ -408,8 +408,47 @@
      :review-outcomes]},
    :stop-condition
    "Do not activate a FOUNDATION, SPEC-DEFECT, or DEFERRED-REP node automatically",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd
+      "sed -n '230,430p' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "rg -n \"LOCAL-GO|API-GAP|Queue A|CLOSED|PARTIAL|STOP:|DEFERRED-REP|SPEC-DEFECT|FOUNDATION\" TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "git show exp/countdown-f43-a97J08-solver:problems/a97J08/lean/Main.lean | rg -n \"sorry|theorem apm_a97j08\"",
+      :exit 0,
+      :finding
+      "historical a97J08 branch retains the same planar-separation placeholder"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :finding "clean"}],
+    :finding
+    {:placeholder-delta {:t00A01 [2 2], :t01A02 [3 3]},
+     :typed-residual-change
+     {:t00A01
+      "claimed single free-product theorem refined to a stopped multi-stage generic representation boundary",
+      :t01A02
+      "degree/naturality residual refined to owner-gated punctured closed-manifold top-homology foundation; frozen bridge unchanged"},
+     :infrastructure-packets {:t00A01 1, :t01A02 0},
+     :review-outcomes
+     [{:row :generic-two-open-free-product-principle,
+       :outcome :stop,
+       :review :pass}
+      {:row :t00a01-van-kampen-reprobe, :outcome :stop, :review :pass}
+      {:row :t01a02-h2-degree-probe, :outcome :stop, :review :fail}
+      {:row :punctured-closed-manifold-top-homology-vanishing,
+       :outcome :revise,
+       :state :needs-owner}]},
+    :replacement-items [],
+    :reason
+    "No eligible uptake, final adapter, LOCAL-GO, or one-edge API-GAP row remains supported by the current DAG. Every identified continuation is FOUNDATION, SPEC-DEFECT, DEFERRED-REP, or has two independent residuals, so automatic activation is forbidden.",
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
