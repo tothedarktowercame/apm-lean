@@ -1391,6 +1391,22 @@
       :output "one source placeholder at line 199"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788372486383-7519-79a8ecc8",
+     :commands
+     ["git diff 16f3c976^ 16f3c976 --check"
+      "lake env lean problems/t95J05/lean/Main.lean"
+      "lake env lean .lake/packages/mathlib/Mathlib/MeasureTheory/Constructions/HaarToSphere.lean"
+      "newline-inclusive SHA-256 audit of apm_t95j05"
+      "standalone sorry/admit audit"
+      "rg for hausdorffMeasure-toSphere comparisons and sphere coordinate moments in pinned Mathlib and ConstructionTargets"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only scope; exact frozen hash, one-placeholder/two-warning consumer boundary, compiled HaarToSphere source, and the independent missing intrinsic-Hausdorff normalization and exact coordinate-square moment prerequisites reproduce. STOP before general integration machinery is correct."},
     :candidate-missing-theorems
     ["an exact equality or scalar-normalization comparison between intrinsic hausdorffMeasure 3 and volume.toSphere on the unit S3 subtype"
      "a coordinate-square second-moment evaluation for the normalized sphere measure, including the exact total-mass constant 2π²"],
@@ -1405,7 +1421,7 @@
      "integral of x ↦ x.1 0 ^ 2 equals Real.pi ^ 2 / 2"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "HAUSDORFF SPHERE NORMALIZATION / SPHERE-BALL MOMENTS [API-GAP → LOCAL-GO]",
@@ -1437,7 +1453,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
