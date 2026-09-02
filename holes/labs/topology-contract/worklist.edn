@@ -524,8 +524,142 @@
      :review-outcomes]},
    :stop-condition
    "Reread the complete DAG and elect a nonempty policy-eligible portfolio",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd
+      "rg -n 't98A01|t92J05|a97J08|UPTAKE|LOCAL-GO|API-GAP|fivefold|planar separation' TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "rg -n 'uptake|final adapter|LOCAL-GO|API-GAP|FOUNDATION|DEFERRED-REP|strategy' docs/TN-topology-closure-experiments.md docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "python3 statement-hash audit over a97J08/t92J05/t98A01 frozen Main files",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/a97J08/lean/Main.lean problems/t92J05/lean/Main.lean problems/t98A01/lean/Main.lean",
+      :exit 0}
+     {:cmd "git status --short && git diff --check", :exit 0}],
+    :finding
+    {:head "8f741da03fddcef2c61e5963cd3646959ae3f438",
+     :placeholder-delta {:t00A01 [2 2], :t01A02 [3 3]},
+     :typed-residual-change
+     {:t00A01
+      "generic free-product route decomposed into multiple absent representation stages; reviewed STOP",
+      :t01A02
+      "corrected probe isolated owner-gated PuncturedClosedManifoldTopHomologyVanishing foundation"},
+     :infrastructure-packets 1,
+     :review-outcomes {:t00A01 :stop-pass, :t01A02 :revise-corrected},
+     :policy
+     "elect consumer-facing uptake/local/API probes; activate no unauthorized foundation, spec defect, or deferred representation"},
+    :replacement-items
+    [{:consumer :a97J08,
+      :recalled-suggestion
+      "the winding, path-lift, and compact connected-complement APIs are banked; one planar producer remains",
+      :stop-condition
+      "STOP if the historical solver retains the same producer and canonical APIs leave more than one independent planar-topology edge; do not activate a general planar-separation foundation",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "PLANAR SEPARATION / a97J08 [UPTAKE/API-GAP]",
+      :acceptance
+      {:probe
+       "compile the exact unchanged noncontractible-circle bridge and final theorem, or isolate one statement-preserving planar-separation theorem",
+       :statement-hashes
+       ["a97J08/apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component:c98bd0a09bd3e33214d361eb1602491bb0fc77bce0ca5899d92baaabd8e80bf7"
+        "a97J08/apm_a97j08:2baef04cb4c79700cb3a025062cc965010155b575885c0b2555535c7a6e0bea1"]},
+      :representation
+      {:source
+       "bounded connected component of the complement of an open subset of the complex plane",
+       :target
+       "a circle in the domain subtype that is not nullhomotopic"},
+      :id :a97j08-planar-separation-probe-1,
+      :kind :uptake,
+      :depends-on [],
+      :current-residual
+      "one source placeholder at the bounded-complement noncontractible-circle lemma; final theorem downstream"}
+     {:consumer :t98A01,
+      :recalled-suggestion
+      "generic product-cover machinery and AddCircle quotient covering are banked; fivefold fiber cardinality and deck translations are the adjacent concrete seam",
+      :stop-condition
+      "STOP before the independent closed-orientable-surface classification/Euler branch; STOP if concrete cover regularity requires more than one absent edge",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "COVERING CONSTRUCTORS / t98A01 [LOCAL-GO]",
+      :acceptance
+      {:probe
+       "compile the exact concrete regular-fivefold-cover conjunct or isolate one reusable kernel-cardinality/deck-action theorem",
+       :statement-hashes
+       ["t98A01/apm_t98a01:b4ea708d784d744deca200432cba8565905e5a4d804378da1bd8dfa7655d86df"]},
+      :representation
+      {:source
+       "the map (x,y) ↦ (5x,y) on UnitAddCircle × UnitAddCircle",
+       :target "t98A01IsRegularNfoldCover 5 t98A01TorusFiveCover"},
+      :id :t98a01-fivefold-cover-probe-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "one source placeholder bundles the concrete regular cover with an independent surface-classification clause",
+      :other-consumers [:t01A02 :t01A04 :t92J06]}
+     {:consumer :t92J05,
+      :recalled-suggestion
+      "sphere and circle vertex-group bridges are banked; the first remaining conjunct is the antipodal quotient fundamental group",
+      :stop-condition
+      "STOP before the independent genus-two classification/Seifert-van Kampen bridge; do not claim whole-consumer closure",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "ANTIPODAL QUOTIENT FUNDAMENTAL GROUP / t92J05 [API-GAP]",
+      :acceptance
+      {:probe
+       "compile the exact unchanged projective-plane fundamental-group bridge or isolate one antipodal-cover chosen-basepoint theorem",
+       :statement-hashes
+       ["t92J05/apm_t92J05_bridge_projectivePlane_fundamentalGroup:adbf735fe39b2697a13b56d89f5cd6f5aa65f9ca21f7b64647583becf05e5578"
+        "t92J05/apm_t92j05:1272747cf80442541fbf6277a2017545ea70a257a3fe3dc8157b026e938d581f"]},
+      :representation
+      {:source
+       "the concrete real projective plane as the antipodal quotient of the two-sphere",
+       :target
+       "for every basepoint, FundamentalGroup RP2 x ≃* Multiplicative (ZMod 2)"},
+      :id :t92j05-projective-plane-probe-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "three placeholders: RP2 bridge, independent genus-two bridge, and final assembly",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "reread the complete DAG and reviewed receipts; elect a new nonempty policy-eligible portfolio"},
+      :id :checkpoint-full-dag-refill-2,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:a97j08-planar-separation-probe-1
+       :t98a01-fivefold-cover-probe-1
+       :t92j05-projective-plane-probe-1],
+      :current-residual
+      "await three reviewed consumer-facing probe outcomes, then refill from the complete DAG"}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -533,7 +667,108 @@
     "elect 1-5 rows from the complete DAG and append the next recurring checkpoint"},
    :id :checkpoint-full-dag-refill-1,
    :kind :strategy-checkpoint,
-   :depends-on [:checkpoint-after-two-consumers]}],
+   :depends-on [:checkpoint-after-two-consumers]}
+  {:consumer :a97J08,
+   :recalled-suggestion
+   "the winding, path-lift, and compact connected-complement APIs are banked; one planar producer remains",
+   :stop-condition
+   "STOP if the historical solver retains the same producer and canonical APIs leave more than one independent planar-topology edge; do not activate a general planar-separation foundation",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "PLANAR SEPARATION / a97J08 [UPTAKE/API-GAP]",
+   :acceptance
+   {:probe
+    "compile the exact unchanged noncontractible-circle bridge and final theorem, or isolate one statement-preserving planar-separation theorem",
+    :statement-hashes
+    ["a97J08/apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component:c98bd0a09bd3e33214d361eb1602491bb0fc77bce0ca5899d92baaabd8e80bf7"
+     "a97J08/apm_a97j08:2baef04cb4c79700cb3a025062cc965010155b575885c0b2555535c7a6e0bea1"]},
+   :representation
+   {:source
+    "bounded connected component of the complement of an open subset of the complex plane",
+    :target
+    "a circle in the domain subtype that is not nullhomotopic"},
+   :id :a97j08-planar-separation-probe-1,
+   :kind :uptake,
+   :depends-on [:checkpoint-full-dag-refill-1],
+   :current-residual
+   "one source placeholder at the bounded-complement noncontractible-circle lemma; final theorem downstream"}
+  {:consumer :t98A01,
+   :recalled-suggestion
+   "generic product-cover machinery and AddCircle quotient covering are banked; fivefold fiber cardinality and deck translations are the adjacent concrete seam",
+   :stop-condition
+   "STOP before the independent closed-orientable-surface classification/Euler branch; STOP if concrete cover regularity requires more than one absent edge",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVERING CONSTRUCTORS / t98A01 [LOCAL-GO]",
+   :acceptance
+   {:probe
+    "compile the exact concrete regular-fivefold-cover conjunct or isolate one reusable kernel-cardinality/deck-action theorem",
+    :statement-hashes
+    ["t98A01/apm_t98a01:b4ea708d784d744deca200432cba8565905e5a4d804378da1bd8dfa7655d86df"]},
+   :representation
+   {:source "the map (x,y) ↦ (5x,y) on UnitAddCircle × UnitAddCircle",
+    :target "t98A01IsRegularNfoldCover 5 t98A01TorusFiveCover"},
+   :id :t98a01-fivefold-cover-probe-1,
+   :kind :final-adapter,
+   :depends-on [:checkpoint-full-dag-refill-1],
+   :current-residual
+   "one source placeholder bundles the concrete regular cover with an independent surface-classification clause",
+   :other-consumers [:t01A02 :t01A04 :t92J06]}
+  {:consumer :t92J05,
+   :recalled-suggestion
+   "sphere and circle vertex-group bridges are banked; the first remaining conjunct is the antipodal quotient fundamental group",
+   :stop-condition
+   "STOP before the independent genus-two classification/Seifert-van Kampen bridge; do not claim whole-consumer closure",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "ANTIPODAL QUOTIENT FUNDAMENTAL GROUP / t92J05 [API-GAP]",
+   :acceptance
+   {:probe
+    "compile the exact unchanged projective-plane fundamental-group bridge or isolate one antipodal-cover chosen-basepoint theorem",
+    :statement-hashes
+    ["t92J05/apm_t92J05_bridge_projectivePlane_fundamentalGroup:adbf735fe39b2697a13b56d89f5cd6f5aa65f9ca21f7b64647583becf05e5578"
+     "t92J05/apm_t92j05:1272747cf80442541fbf6277a2017545ea70a257a3fe3dc8157b026e938d581f"]},
+   :representation
+   {:source
+    "the concrete real projective plane as the antipodal quotient of the two-sphere",
+    :target
+    "for every basepoint, FundamentalGroup RP2 x ≃* Multiplicative (ZMod 2)"},
+   :id :t92j05-projective-plane-probe-1,
+   :kind :final-adapter,
+   :depends-on [:checkpoint-full-dag-refill-1],
+   :current-residual
+   "three placeholders: RP2 bridge, independent genus-two bridge, and final assembly",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "reread the complete DAG and reviewed receipts; elect a new nonempty policy-eligible portfolio"},
+   :id :checkpoint-full-dag-refill-2,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:a97j08-planar-separation-probe-1
+    :t98a01-fivefold-cover-probe-1
+    :t92j05-projective-plane-probe-1
+    :checkpoint-full-dag-refill-1],
+   :current-residual
+   "await three reviewed consumer-facing probe outcomes, then refill from the complete DAG"}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
