@@ -840,6 +840,22 @@
       :output "one source placeholder at line 145"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788371150057-7484-e8af6eaa",
+     :commands
+     ["git diff af3935a9^ af3935a9 --check"
+      "lake env lean ConstructionTargets/ProductEvenlyCoveredTrivialization.lean"
+      "lake env lean problems/t98A01/lean/Main.lean"
+      "newline-inclusive SHA-256 audit of apm_t98a01"
+      "placeholder and standalone-admit audit"
+      "rg for AddCircle kernel-cardinality and deck-transitivity declarations in pinned Mathlib and ConstructionTargets"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only scope; exact frozen hash, unchanged one-placeholder hfront boundary, compiled standard-axiom product-cover target, and the two independent missing concrete regularity constructions—five-element fiber cardinality and transitive deck homeomorphisms—reproduce. STOP before surface classification is correct."},
     :candidate-missing-theorems
     ["Nat.card ((nsmulAddMonoidHom (α := UnitAddCircle) 5).ker) = 5, together with transport to every torus fiber"
      "kernel translation packages as a torus Homeomorph and acts transitively on equal fibers"],
@@ -856,7 +872,7 @@
      "actual torus self-homeomorphisms preserving the cover and moving any equal-fiber pair"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "COVERING CONSTRUCTORS / t98A01 [LOCAL-GO]",
    :acceptance
@@ -985,7 +1001,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
