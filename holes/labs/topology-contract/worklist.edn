@@ -410,7 +410,10 @@
    "Do not activate a FOUNDATION, SPEC-DEFECT, or DEFERRED-REP node automatically",
    :evidence
    {:outcome :replan,
-    :seat :codex-12,
+    :disposition :replan,
+    :author :codex-12,
+    :reason
+    "No eligible uptake, final adapter, LOCAL-GO, or one-edge API-GAP row remains supported by the current DAG. Every identified continuation is FOUNDATION, SPEC-DEFECT, DEFERRED-REP, or has two independent residuals, so automatic activation is forbidden.",
     :commands
     [{:cmd
       "sed -n '230,430p' holes/labs/topology-contract/worklist.edn",
@@ -425,6 +428,26 @@
       "historical a97J08 branch retains the same planar-separation placeholder"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788355156003-7403-3922a8cd",
+     :commands
+     ["git show --format=fuller 67d171b2"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum /tmp/T00A01VanKampenReprobe.lean /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean"
+      "lake env lean /tmp/T00A01VanKampenReprobe.lean"
+      "lake env lean /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean"
+      "lake env lean problems/t00A01/lean/Main.lean"
+      "lake env lean problems/t01A02/lean/Main.lean"
+      "recompute theorem SHA-256 through := by"
+      "rg -n \\bsorry\\b problems/t00A01/lean/Main.lean problems/t01A02/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff 67d171b2^ 67d171b2 --check"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact one-file checkpoint scope; required measures, review outcomes, fixture hashes, frozen statement hashes, placeholder counts, and representation boundaries reproduce. No eligible automatic replacement remains: t00A01 has a multi-stage generic representation boundary and t01A02's single selected prerequisite is an owner-gated foundation."},
+    :replacement-items [],
     :finding
     {:placeholder-delta {:t00A01 [2 2], :t01A02 [3 3]},
      :typed-residual-change
@@ -442,13 +465,9 @@
       {:row :punctured-closed-manifold-top-homology-vanishing,
        :outcome :revise,
        :state :needs-owner}]},
-    :replacement-items [],
-    :reason
-    "No eligible uptake, final adapter, LOCAL-GO, or one-edge API-GAP row remains supported by the current DAG. Every identified continuation is FOUNDATION, SPEC-DEFECT, DEFERRED-REP, or has two independent residuals, so automatic activation is forbidden.",
-    :author :codex-12,
-    :disposition :replan},
+    :seat :codex-12},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
