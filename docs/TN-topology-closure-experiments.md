@@ -19,6 +19,10 @@ It is:
 `TOPOLOGY-DEPENDENCY-DAG.md` records the mathematical state.  This note records
 the process used to change that state.
 
+`TN-topology-build-loop-design.md` specifies an unattended supervisor that
+executes this process from a validated ledger while preserving its election,
+consumer-certification, review, and stop rules.
+
 ## Evidence behind the change
 
 `futon3c/holes/technotes/TN-fable-F36-F57-review.md` studied recent non-topology
