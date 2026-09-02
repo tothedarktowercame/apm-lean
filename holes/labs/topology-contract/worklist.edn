@@ -1078,9 +1078,24 @@
       :current-residual
       "await the reviewed sphere-orientation API-gap probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788371563822-7495-732e8232",
+     :commands
+     ["git diff 3911a4cf^ 3911a4cf --check"
+      "newline-inclusive SHA-256 audit for t94J08 a97J08 t98A01 and t92J05 declarations"
+      "placeholder and standalone-admit audit"
+      "lake env lean problems/t94J08/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bash holes/labs/topology-contract/test-loop.sh"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only repair scope; both corrected t94J08 hashes, prior reviewed outcomes and placeholder counts, literal sphere-homology/antipodal orientation boundary, recurring checkpoint structure, direct Lean compile, ledger and loop tests, package authority, and clean-tree gates reproduce."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1101,7 +1116,7 @@
    :stop-condition
    "STOP if construction of the top-homology orientation and naturality of the antipodal action remain two independent absent foundations; do not start general oriented-manifold fundamental classes or modify the frozen degree predicate",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SPHERE ORIENTATION NATURALITY / t94J08 [API-GAP]",
    :acceptance
