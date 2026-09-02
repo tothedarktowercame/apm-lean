@@ -530,29 +530,26 @@
    {:outcome :replan,
     :seat :codex-12,
     :commands
-    [{:cmd
-      "rg -n 't98A01|t92J05|a97J08|UPTAKE|LOCAL-GO|API-GAP|fivefold|planar separation' TOPOLOGY-DEPENDENCY-DAG.md",
-      :exit 0}
+    [{:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "2f41fd673404318052b1c99e0d41b15d76f6e375"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}
      {:cmd
-      "rg -n 'uptake|final adapter|LOCAL-GO|API-GAP|FOUNDATION|DEFERRED-REP|strategy' docs/TN-topology-closure-experiments.md docs/TN-topology-build-loop-design.md",
-      :exit 0}
-     {:cmd
-      "python3 statement-hash audit over a97J08/t92J05/t98A01 frozen Main files",
-      :exit 0}
-     {:cmd
-      "rg -n '\\bsorry\\b|\\badmit\\b' problems/a97J08/lean/Main.lean problems/t92J05/lean/Main.lean problems/t98A01/lean/Main.lean",
-      :exit 0}
-     {:cmd "git status --short && git diff --check", :exit 0}],
+      "rg -n 't01a02-h2-degree-probe|checkpoint-after-two-consumers|stop-pass|STOP/PASS' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md docs/TN-topology-build-loop-design.md .",
+      :exit 0}],
     :finding
-    {:head "8f741da03fddcef2c61e5963cd3646959ae3f438",
+    {:repair
+     "Replaced all five statement hashes with the reviewer-verified newline-inclusive declaration hashes and changed t01A02 review outcome to reviewed STOP/PASS; portfolio selection and stop boundaries are unchanged.",
+     :head "2f41fd673404318052b1c99e0d41b15d76f6e375",
      :placeholder-delta {:t00A01 [2 2], :t01A02 [3 3]},
      :typed-residual-change
      {:t00A01
       "generic free-product route decomposed into multiple absent representation stages; reviewed STOP",
       :t01A02
-      "corrected probe isolated owner-gated PuncturedClosedManifoldTopHomologyVanishing foundation"},
+      "punctured closed-manifold top-homology vanishing is an owner-gated foundation; reviewed STOP"},
      :infrastructure-packets 1,
-     :review-outcomes {:t00A01 :stop-pass, :t01A02 :revise-corrected},
+     :review-outcomes {:t00A01 :stop-pass, :t01A02 :stop-pass},
      :policy
      "elect consumer-facing uptake/local/API probes; activate no unauthorized foundation, spec defect, or deferred representation"},
     :replacement-items
@@ -569,8 +566,8 @@
       {:probe
        "compile the exact unchanged noncontractible-circle bridge and final theorem, or isolate one statement-preserving planar-separation theorem",
        :statement-hashes
-       ["a97J08/apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component:c98bd0a09bd3e33214d361eb1602491bb0fc77bce0ca5899d92baaabd8e80bf7"
-        "a97J08/apm_a97j08:2baef04cb4c79700cb3a025062cc965010155b575885c0b2555535c7a6e0bea1"]},
+       ["a97J08/apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component:acc5e193505d5c7f4a8c241566148b76990e9a9f3ee0693c6d9e3cc72d0e000d"
+        "a97J08/apm_a97j08:38c97ff562e9bb325ca9d07f8589562e86af23752f73b32ebf9a60eda8e66d8f"]},
       :representation
       {:source
        "bounded connected component of the complement of an open subset of the complex plane",
@@ -594,7 +591,7 @@
       {:probe
        "compile the exact concrete regular-fivefold-cover conjunct or isolate one reusable kernel-cardinality/deck-action theorem",
        :statement-hashes
-       ["t98A01/apm_t98a01:b4ea708d784d744deca200432cba8565905e5a4d804378da1bd8dfa7655d86df"]},
+       ["t98A01/apm_t98a01:1a1b09d52a2f0398ec7d5630160f3b4a5c4e95dc36e38247d816a2f4611b13eb"]},
       :representation
       {:source
        "the map (x,y) ↦ (5x,y) on UnitAddCircle × UnitAddCircle",
@@ -619,8 +616,8 @@
       {:probe
        "compile the exact unchanged projective-plane fundamental-group bridge or isolate one antipodal-cover chosen-basepoint theorem",
        :statement-hashes
-       ["t92J05/apm_t92J05_bridge_projectivePlane_fundamentalGroup:adbf735fe39b2697a13b56d89f5cd6f5aa65f9ca21f7b64647583becf05e5578"
-        "t92J05/apm_t92j05:1272747cf80442541fbf6277a2017545ea70a257a3fe3dc8157b026e938d581f"]},
+       ["t92J05/apm_t92J05_bridge_projectivePlane_fundamentalGroup:59fb134bdc69fbda1677618873618aadb681948bae17db40b350b886b16f2261"
+        "t92J05/apm_t92j05:a8b82cfde8489049a3f120e687208358bda0b1ccbbc1b50dfc4f921ca3f94ea4"]},
       :representation
       {:source
        "the concrete real projective plane as the antipodal quotient of the two-sphere",
@@ -659,15 +656,9 @@
       :current-residual
       "await three reviewed consumer-facing probe outcomes, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-20",
-     :job "invoke-1788369915864-7456-4f4db07b",
-     :finding
-     "Deterministic checkpoint metadata defects: all five newly recorded frozen statement hashes fail the established newline-inclusive declaration hash audit, while the same audit reproduces existing baselines exactly; replace them with acc5e193505d5c7f4a8c241566148b76990e9a9f3ee0693c6d9e3cc72d0e000d, 38c97ff562e9bb325ca9d07f8589562e86af23752f73b32ebf9a60eda8e66d8f, 1a1b09d52a2f0398ec7d5630160f3b4a5c4e95dc36e38247d816a2f4611b13eb, 59fb134bdc69fbda1677618873618aadb681948bae17db40b350b886b16f2261, and a8b82cfde8489049a3f120e687208358bda0b1ccbbc1b50dfc4f921ca3f94ea4 respectively. Also update the stale t01A02 review outcome from :revise-corrected to the reviewed STOP/PASS state present before this checkpoint."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -682,15 +673,15 @@
    :stop-condition
    "STOP if the historical solver retains the same producer and canonical APIs leave more than one independent planar-topology edge; do not activate a general planar-separation foundation",
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "PLANAR SEPARATION / a97J08 [UPTAKE/API-GAP]",
    :acceptance
    {:probe
     "compile the exact unchanged noncontractible-circle bridge and final theorem, or isolate one statement-preserving planar-separation theorem",
     :statement-hashes
-    ["a97J08/apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component:c98bd0a09bd3e33214d361eb1602491bb0fc77bce0ca5899d92baaabd8e80bf7"
-     "a97J08/apm_a97j08:2baef04cb4c79700cb3a025062cc965010155b575885c0b2555535c7a6e0bea1"]},
+    ["a97J08/apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component:acc5e193505d5c7f4a8c241566148b76990e9a9f3ee0693c6d9e3cc72d0e000d"
+     "a97J08/apm_a97j08:38c97ff562e9bb325ca9d07f8589562e86af23752f73b32ebf9a60eda8e66d8f"]},
    :representation
    {:source
     "bounded connected component of the complement of an open subset of the complex plane",
@@ -707,14 +698,14 @@
    :stop-condition
    "STOP before the independent closed-orientable-surface classification/Euler branch; STOP if concrete cover regularity requires more than one absent edge",
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "COVERING CONSTRUCTORS / t98A01 [LOCAL-GO]",
    :acceptance
    {:probe
     "compile the exact concrete regular-fivefold-cover conjunct or isolate one reusable kernel-cardinality/deck-action theorem",
     :statement-hashes
-    ["t98A01/apm_t98a01:b4ea708d784d744deca200432cba8565905e5a4d804378da1bd8dfa7655d86df"]},
+    ["t98A01/apm_t98a01:1a1b09d52a2f0398ec7d5630160f3b4a5c4e95dc36e38247d816a2f4611b13eb"]},
    :representation
    {:source "the map (x,y) ↦ (5x,y) on UnitAddCircle × UnitAddCircle",
     :target "t98A01IsRegularNfoldCover 5 t98A01TorusFiveCover"},
@@ -730,15 +721,15 @@
    :stop-condition
    "STOP before the independent genus-two classification/Seifert-van Kampen bridge; do not claim whole-consumer closure",
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "ANTIPODAL QUOTIENT FUNDAMENTAL GROUP / t92J05 [API-GAP]",
    :acceptance
    {:probe
     "compile the exact unchanged projective-plane fundamental-group bridge or isolate one antipodal-cover chosen-basepoint theorem",
     :statement-hashes
-    ["t92J05/apm_t92J05_bridge_projectivePlane_fundamentalGroup:adbf735fe39b2697a13b56d89f5cd6f5aa65f9ca21f7b64647583becf05e5578"
-     "t92J05/apm_t92j05:1272747cf80442541fbf6277a2017545ea70a257a3fe3dc8157b026e938d581f"]},
+    ["t92J05/apm_t92J05_bridge_projectivePlane_fundamentalGroup:59fb134bdc69fbda1677618873618aadb681948bae17db40b350b886b16f2261"
+     "t92J05/apm_t92j05:a8b82cfde8489049a3f120e687208358bda0b1ccbbc1b50dfc4f921ca3f94ea4"]},
    :representation
    {:source
     "the concrete real projective plane as the antipodal quotient of the two-sphere",
@@ -762,7 +753,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
