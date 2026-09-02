@@ -862,6 +862,21 @@
       :output "three source placeholders at lines 140, 189, 271"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788370939332-7477-99406e83",
+     :commands
+     ["git diff 8b51ade8^ 8b51ade8 --check"
+      "lake env lean problems/t92J05/lean/Main.lean"
+      "newline-inclusive SHA-256 audit of the RP2 bridge and final theorem"
+      "placeholder and standalone-admit audit"
+      "rg for Projectivization covering and fundamental-group/deck-group bridges in pinned Mathlib and ConstructionTargets"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only scope; exact frozen hashes, unchanged three-placeholder boundary, correct Projectivization-to-antipodal-cover and chosen-basepoint deck-group representation gaps, correct ZMod 2 target orientation, canonical package authority, and clean gates reproduce. STOP before genus-two work is correct."},
     :candidate-missing-theorems
     ["homeomorphism from the antipodal quotient of the unit two-sphere to Projectivization ℝ (Fin 3 → ℝ), together with the induced two-sheeted quotient covering"
      "chosen-basepoint fundamental-group/deck-group equivalence for a simply connected regular covering, specialized to the antipodal ZMod 2 action"],
@@ -876,7 +891,7 @@
      "∀ x, Nonempty (FundamentalGroup RP2 x ≃* Multiplicative (ZMod 2))"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "ANTIPODAL QUOTIENT FUNDAMENTAL GROUP / t92J05 [API-GAP]",
    :acceptance
