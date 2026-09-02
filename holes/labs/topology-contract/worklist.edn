@@ -742,6 +742,23 @@
       "no matching canonical producer; search is limited to named declarations/terms"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788370754331-7473-52e1bcce",
+     :commands
+     ["git diff d29afca2^ d29afca2 --check"
+      "git rev-parse d29afca2^:problems/a97J08/lean/Main.lean"
+      "git rev-parse exp/countdown-f43-a97J08-solver:problems/a97J08/lean/Main.lean"
+      "git diff --exit-code exp/countdown-f43-a97J08-solver -- problems/a97J08/lean/Main.lean"
+      "lake env lean problems/a97J08/lean/Main.lean"
+      "newline-inclusive SHA-256 audit of the frozen bridge and final theorem"
+      "rg canonical planar-producer declarations in ConstructionTargets and pinned Mathlib"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only scope; identical canonical/historical solver blob, exact frozen hashes, unchanged one-placeholder count, correct radial-composite orientation, two independent absent planar constructions, canonical package authority, and clean gates reproduce. The row's STOP is correct."},
     :candidate-missing-theorems
     ["construct an enclosing circle in D around the bounded complementary component"
      "prove the radial composite of that circle has winding/degree one"],
@@ -752,7 +769,7 @@
      "a circle c : C(Circle,D) whose radial composite is homotopic to ContinuousMap.id Circle"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PLANAR SEPARATION / a97J08 [UPTAKE/API-GAP]",
    :acceptance
