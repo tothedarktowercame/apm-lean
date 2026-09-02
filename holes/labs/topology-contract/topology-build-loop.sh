@@ -118,7 +118,7 @@ apply_job_result() {
   transition="$(bb "$HERE/build_step.bb" apply-result "$LEDGER" "$row" "$receipt" 2>&1)" || die "invalid receipt from $LAST_JOB: $transition"
   log "$transition"
   git -C "$ROOT" add "$LEDGER"
-  git -C "$ROOT" commit -q -m "topology-loop: record $row transition" || die "could not commit $row ledger transition"
+  git -C "$ROOT" commit -q -m "topology-loop: record $row transition $LAST_JOB" || die "could not commit $row ledger transition"
   bb "$HERE/inflight.bb" clear "$INFLIGHT" || die "could not clear committed in-flight job"
   send_notice "milestone applied: row=$row job=$LAST_JOB $transition"
 }
@@ -130,7 +130,7 @@ resume_inflight() {
   token="$(bb "$HERE/inflight.bb" field "$INFLIGHT" token)"
   seat="$(bb "$HERE/inflight.bb" field "$INFLIGHT" seat)"
   [ -n "$row" ] && [ -n "$job" ] && [ -n "$token" ] || die "invalid $INFLIGHT"
-  if [ "$(git -C "$ROOT" log -1 --pretty=%s)" = "topology-loop: record $row transition" ] &&
+  if [ "$(git -C "$ROOT" log -1 --pretty=%s)" = "topology-loop: record $row transition $job" ] &&
      git -C "$ROOT" diff --quiet -- "$LEDGER"; then
     log "reclaim found already-committed transition row=$row; clearing in-flight record"
     bb "$HERE/inflight.bb" clear "$INFLIGHT"
