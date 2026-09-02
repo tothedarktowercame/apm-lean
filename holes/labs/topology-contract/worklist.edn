@@ -656,9 +656,23 @@
       :current-residual
       "await three reviewed consumer-facing probe outcomes, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788370490452-7466-b8a1e9fc",
+     :commands
+     ["git diff abdfd020^ abdfd020 --check"
+      "newline-inclusive SHA-256 audit for five frozen declarations"
+      "placeholder audit for a97J08 t98A01 t92J05 t00A01 t01A02"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bash holes/labs/topology-contract/test-loop.sh"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only repair scope; all five corrected frozen hashes, reviewed STOP/PASS metadata, placeholder counts, representation boundaries, recurring checkpoint structure, ledger and loop tests, canonical package authority, and clean-tree gates reproduce."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -673,7 +687,7 @@
    :stop-condition
    "STOP if the historical solver retains the same producer and canonical APIs leave more than one independent planar-topology edge; do not activate a general planar-separation foundation",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PLANAR SEPARATION / a97J08 [UPTAKE/API-GAP]",
    :acceptance
@@ -698,7 +712,7 @@
    :stop-condition
    "STOP before the independent closed-orientable-surface classification/Euler branch; STOP if concrete cover regularity requires more than one absent edge",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "COVERING CONSTRUCTORS / t98A01 [LOCAL-GO]",
    :acceptance
@@ -721,7 +735,7 @@
    :stop-condition
    "STOP before the independent genus-two classification/Seifert-van Kampen bridge; do not claim whole-consumer closure",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "ANTIPODAL QUOTIENT FUNDAMENTAL GROUP / t92J05 [API-GAP]",
    :acceptance
