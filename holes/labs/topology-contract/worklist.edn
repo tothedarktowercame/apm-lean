@@ -155,6 +155,21 @@
       :finding
       "factorwise Coprod transport exists in Mathlib and compatible connectors exist, but the only End-to-PUnit and target-natural pseudococone-to-free-product assembly is concrete torus-circle code"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788354261818-7391-2c296627",
+     :commands
+     ["sha256sum /tmp/T00A01VanKampenReprobe.lean"
+      "lake env lean /tmp/T00A01VanKampenReprobe.lean"
+      "rg -n \"twoOpen.*FreeProduct|FreeProduct.*twoOpen|two-open.*free-product\" ConstructionTargets"
+      "rg -n \"LegCompatibleConnectorSystems|freeProductPointSpanEquivalence|genericWedgeSingleObjMappingEquivalence|sourceReconstruction|PUnit|simplyConnected\" ConstructionTargets"
+      "git show 9aa38501^:problems/t00A01/lean/Main.lean > /tmp/t00A01-stop-recorded-Main.lean"
+      "lake env lean /tmp/t00A01-stop-recorded-Main.lean"
+      "git diff 9aa38501^ 9aa38501 --check"
+      "git status --porcelain"],
+     :finding
+     "PASS for the recorded STOP: compatible connectors are banked, but the arbitrary two-open target-natural pseudococone-to-free-product mapping equivalence still requires several generic representation steps; only the torus-circle coordinate composite currently supplies that pasting, and renaming it generic would violate the representation boundary."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T00A01VanKampenReprobe.lean",
@@ -162,7 +177,7 @@
      "02e107f6706de85fa13220b4a892fedaa018fee0d76b8f6ded93725f8f398b71"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
     "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
@@ -222,7 +237,7 @@
      :residual
      "prove the single generic two-open chosen-basepoint free-product theorem; then apply the supplied piece homotopy equivalences and hπA/hπB"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TWO-OPEN VAN KAMPEN / t00A01",
    :acceptance
