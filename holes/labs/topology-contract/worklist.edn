@@ -522,6 +522,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Deterministic checkpoint metadata defects: all five newly recorded frozen statement hashes fail the established newline-inclusive declaration hash audit, while the same audit reproduces existing baselines exactly; replace them with acc5e193505d5c7f4a8c241566148b76990e9a9f3ee0693c6d9e3cc72d0e000d, 38c97ff562e9bb325ca9d07f8589562e86af23752f73b32ebf9a60eda8e66d8f, 1a1b09d52a2f0398ec7d5630160f3b4a5c4e95dc36e38247d816a2f4611b13eb, 59fb134bdc69fbda1677618873618aadb681948bae17db40b350b886b16f2261, and a8b82cfde8489049a3f120e687208358bda0b1ccbbc1b50dfc4f921ca3f94ea4 respectively. Also update the stale t01A02 review outcome from :revise-corrected to the reviewed STOP/PASS state present before this checkpoint.",
    :stop-condition
    "Reread the complete DAG and elect a nonempty policy-eligible portfolio",
    :evidence
@@ -657,9 +659,15 @@
       :current-residual
       "await three reviewed consumer-facing probe outcomes, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
-   :phase :strategy,
-   :state :done-unreviewed,
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-20",
+     :job "invoke-1788369915864-7456-4f4db07b",
+     :finding
+     "Deterministic checkpoint metadata defects: all five newly recorded frozen statement hashes fail the established newline-inclusive declaration hash audit, while the same audit reproduces existing baselines exactly; replace them with acc5e193505d5c7f4a8c241566148b76990e9a9f3ee0693c6d9e3cc72d0e000d, 38c97ff562e9bb325ca9d07f8589562e86af23752f73b32ebf9a60eda8e66d8f, 1a1b09d52a2f0398ec7d5630160f3b4a5c4e95dc36e38247d816a2f4611b13eb, 59fb134bdc69fbda1677618873618aadb681948bae17db40b350b886b16f2261, and a8b82cfde8489049a3f120e687208358bda0b1ccbbc1b50dfc4f921ca3f94ea4 respectively. Also update the stale t01A02 review outcome from :revise-corrected to the reviewed STOP/PASS state present before this checkpoint."}},
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
