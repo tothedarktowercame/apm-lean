@@ -1761,9 +1761,28 @@
       :current-residual
       "await the reviewed concrete quotient-covering probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788373519258-7557-da2a0096",
+     :commands
+     ["git diff 25924953^ 25924953 --check"
+      "git diff --name-status 25924953^ 25924953"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/checkpoint-refill5-25924953.edn"
+      "newline-inclusive SHA-256 audit through ':= by' for apm_t01A04_bridge_quotient_maps_are_coverings and apm_t01a04"
+      "rg standalone sorry/admit audit for problems/t01A04/lean/Main.lean"
+      "rg quotient-map definitions and frozen theorem boundaries"
+      "rg ACTION/QUOTIENT TRANSPORT and LOCAL-GO in TOPOLOGY-DEPENDENCY-DAG.md"
+      "readlink -f .lake/packages"
+      "lake env lean problems/t01A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bash holes/labs/topology-contract/test-loop.sh"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: 25924953 is an exact ledger-only refill. It preserves the reviewed t99J04 STOP and elects one nonempty policy-eligible LOCAL-GO final-adapter probe whose source is the two already compiled quotient-descended maps and whose target is exactly their IsCoveringMap conjunction. The independent piOne presentation/ranges, total-space nonhomeomorphism, and final assembly remain excluded; both frozen hashes, the four-placeholder count, direct Lean warnings, canonical authority, ledger gates, loop tests, and clean tree reproduce."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1782,7 +1801,7 @@
    :stop-condition
    "STOP if the circle-doubled and torus-doubled quotient maps require two independent local models at the wedge point, or if either requires a general covering-gluing/classification foundation; do not begin the independent piOne presentation/range or total-space homology comparison",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "ACTION/QUOTIENT TRANSPORT / t01A04 [LOCAL-GO]",
    :acceptance
