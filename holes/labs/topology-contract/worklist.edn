@@ -24,8 +24,53 @@
  :campaign :topology-portfolio-2026-09-02,
  :items
  [{:consumer :t00A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "bounded homotopy-equivalence/basepoint and factorwise coproduct adapter",
+    :outcome :done-unreviewed,
+    :warnings
+    {:new 0,
+     :inherited
+     "focused Lake build replayed pre-existing dependency warnings"},
+    :statement-hashes
+    {"t00A01/apm_t00A01_bridge_fundamentalGroup_coprod"
+     "3766ae0c61f3c2b0538c25605c678a9eef1b4c10d52ab89c5ecbf67abf3884df",
+     "t00A01/apm_t00a01"
+     "25b94cbde76b6ccda8e43e3e2042942f5bbe5e987bce9084a3b91f76c7cce534"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author :codex-6,
+    :commands
+    [{:cmd "sha256sum /tmp/T00A01VanKampenReprobe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/T00A01VanKampenReprobe.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TwoOpenFundamentalGroupFreeProduct",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/TwoOpenFundamentalGroupFreeProductCollision.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"sorryAx|declaration uses 'sorry'|error\" /tmp/twoopen-direct.log /tmp/twoopen-collision.log",
+      :exit 1,
+      :finding "no matches"}
+     {:cmd "git diff HEAD^ --check", :exit 0}
+     {:cmd "git status --porcelain", :exit 0, :finding "clean"}],
+    :commit "f1c06d9fadc684158fdfa60138ba9fe348e862e1",
+    :changed-paths
+    ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
+     "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
+    :package-authority "/home/joe/code/apm-lean/.lake/packages",
+    :fixture
+    {:path "/tmp/T00A01VanKampenReprobe.lean",
+     :sha256
+     "02e107f6706de85fa13220b4a892fedaa018fee0d76b8f6ded93725f8f398b71"},
+    :finding
+    "Promoted the exact compiled reusable interface proposition; the accompanying documentation explicitly records that this declaration states, rather than proves, the generic principle and names the remaining connector and simply-connected-overlap construction."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
     "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
