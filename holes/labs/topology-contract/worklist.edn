@@ -998,6 +998,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Deterministic frozen-metadata defect: replace the t94J08 bridge hash 39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea with newline-inclusive hash a49ff326bce515fe47bbcfefe5d2862dd9e45c92d3ca02dd0b5abd9e9b5e00b4, and replace final hash 4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627 with 30ca28f488d3fc9cdbc6ce5c071ed28f340ac7c28435d3c3b95ba5caddbf9fa7. Exact ledger-only scope and all other reproduced gates pass.",
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :evidence
@@ -1094,9 +1096,15 @@
       :current-residual
       "await the reviewed sphere-orientation API-gap probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-20",
+     :job "invoke-1788371378085-7490-a85c80ea",
+     :finding
+     "Deterministic frozen-metadata defect: replace the t94J08 bridge hash 39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea with newline-inclusive hash a49ff326bce515fe47bbcfefe5d2862dd9e45c92d3ca02dd0b5abd9e9b5e00b4, and replace final hash 4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627 with 30ca28f488d3fc9cdbc6ce5c071ed28f340ac7c28435d3c3b95ba5caddbf9fa7. Exact ledger-only scope and all other reproduced gates pass."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1117,7 +1125,7 @@
    :stop-condition
    "STOP if construction of the top-homology orientation and naturality of the antipodal action remain two independent absent foundations; do not start general oriented-manifold fundamental classes or modify the frozen degree predicate",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "SPHERE ORIENTATION NATURALITY / t94J08 [API-GAP]",
    :acceptance
@@ -1149,7 +1157,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
