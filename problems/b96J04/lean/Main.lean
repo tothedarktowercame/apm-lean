@@ -19,6 +19,16 @@ open Polynomial
 
 noncomputable section
 
+/-!
+## Disabled expensive attempt (f82, 2026-09-02)
+
+The student attempt preserved below is commented out verbatim because elaborating
+it exhausts Lean's deterministic `maxHeartbeats 2000000` budget at the subgroup
+equivalence around the former line 354.  Do not re-enable or reuse that strategy:
+it is retained only as failure evidence.  The active theorem after the block is
+the inexpensive original `sorry` placeholder.
+-/
+
 local instance apm_b96J04_fact_prime_41 : Fact (Nat.Prime 41) := ⟨by norm_num⟩
 
 def apm_b96J04_fQ : ℚ[X] := X ^ 8 + 1
@@ -126,6 +136,7 @@ lemma apm_b96J04_aut_equiv_product_of_isCyclotomic
   obtain ⟨eunits⟩ := apm_b96J04_units_mod_16_equiv
   exact ⟨(IsCyclotomicExtension.Rat.galEquivZMod 16 K).trans eunits⟩
 
+/- BEGIN DISABLED EXPENSIVE F82 STUDENT ATTEMPT — retained verbatim.
 lemma apm_b96J04_subgroups_of_order_two_nat :
     Nat.card {H : Subgroup (ZMod 16)ˣ // Nat.card ↥H = 2} = 3 := by
   classical
@@ -372,3 +383,20 @@ theorem apm_b96j04
     exact h2
   · -- Finite-field side: `X⁸ + 1 = Φ₁₆` over `ZMod 41` with `ord₁₆(41) = 2`.
     sorry
+-/ -- END DISABLED EXPENSIVE F82 STUDENT ATTEMPT.
+
+theorem apm_b96j04
+    (K L : Type) [Field K] [Algebra ℚ K]
+    [Fact (Nat.Prime 41)] [Field L] [Algebra (ZMod 41) L]
+    [apm_b96J04_fQ.IsSplittingField ℚ K]
+    [apm_b96J04_f41.IsSplittingField (ZMod 41) L] :
+    Nonempty
+      ((K ≃ₐ[ℚ] K) ≃* Multiplicative (ZMod 2 × ZMod 4)) ∧
+    Nat.card
+      {E : IntermediateField ℚ K // Module.finrank ℚ E = 4} = 3 ∧
+    Nat.card
+      {E : IntermediateField ℚ K //
+        Module.finrank ℚ E = 4 ∧ IsGalois ℚ E} = 3 ∧
+    Nonempty
+      ((L ≃ₐ[ZMod 41] L) ≃* Multiplicative (ZMod 2)) := by
+  sorry
