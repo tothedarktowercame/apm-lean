@@ -1614,13 +1614,33 @@
       :output "94dbbe154166d3c5dbc747004e4b004e25dab29d"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788373274529-7546-8ea067f3",
+     :commands
+     ["sha256sum /tmp/T99J04LocalDiffeomorphConverseBoundary.lean"
+      "git diff 422c7693^ 422c7693 --check"
+      "git diff --name-status 422c7693^ 422c7693"
+      "readlink -f .lake/packages"
+      "lake env lean /tmp/T99J04LocalDiffeomorphConverseBoundary.lean"
+      "newline-inclusive SHA-256 audit through ':= by' for apm_t99J04_bridge_local_inverse_function and apm_t99j04"
+      "rg standalone sorry/admit audits on frozen source and fixture"
+      "lake env lean problems/t99J04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/t99-probe-ledger.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bash holes/labs/topology-contract/test-loop.sh"
+      "rg TODO/IsLocalDiffeomorphAt/mfderiv definitions in pinned Mathlib"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: ledger-only STOP probe scope is exact; fixture hash and zero-warning compilation reproduce; its theorem packages a bijective continuous linear map as a ContinuousLinearEquiv with only propext, Classical.choice, and Quot.sound, while pinned Mathlib explicitly leaves the ContMDiffAt plus invertible mfderiv converse TODO and defines IsLocalDiffeomorphAt via a manifold PartialDiffeomorph. The two independent seams, 3-to-3 placeholder count, frozen hashes, source/target boundary, authority, ledger gates, loop tests, and clean tree all reproduce."},
     :fixture
     {:path "/tmp/T99J04LocalDiffeomorphConverseBoundary.lean",
      :sha256
      "d3bf3abd0ba5fb80655451d53b4fc8d6294182f6b13215864c5c1fef7c8ead70"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "LOCAL-DIFFEOMORPH CONVERSE / t99J04 [API-GAP]",
    :acceptance
@@ -1651,7 +1671,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
