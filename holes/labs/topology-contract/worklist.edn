@@ -1230,8 +1230,94 @@
      :review-outcomes]},
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "sed -n '88,162p' TOPOLOGY-DEPENDENCY-DAG.md", :exit 0}
+     {:cmd
+      "rg -n 'LOCAL-DIFFEOMORPH CONVERSE|PULLBACK/BASE-CHANGE|ACTION/QUOTIENT TRANSPORT|HAUSDORFF SPHERE NORMALIZATION|COEFFICIENT-CATEGORY NATURALITY|API-GAP|LOCAL-GO' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "rg -n 'HAUSDORFF SPHERE NORMALIZATION|SPHERE/BALL MOMENTS|t95J05|t02A05|t01J06|m96J03' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t95J05/lean/Main.lean",
+      :exit 0,
+      :output "one source placeholder at line 199"}
+     {:cmd
+      "python3 newline-inclusive declaration hash audit from theorem apm_t95j05 through EOF",
+      :exit 0,
+      :output
+      "7c78ce58ee7b17a91f715f0beba0d18a32fbecab88bcf109e4f9bb22b65d39a8"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "b5423050fc17ea604b37b19fd43018b254b8e0ae"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :finding
+    {:placeholder-delta {:t94J08 [2 2]},
+     :typed-residual-change
+     {:t94J08
+      "expected sphere-orientation naturality gap superseded by a frozen specification defect: unreduced H0(S0) cannot be isomorphic to ℤ"},
+     :infrastructure-packets 0,
+     :review-outcomes {:t94J08 :stop-pass},
+     :policy
+     "Exclude the specification-defect node and elect the next one-edge consumer-facing API-GAP/LOCAL-GO probe; activate no foundation, specification repair, or deferred representation."},
+    :replacement-items
+    [{:consumer :t95J05,
+      :recalled-suggestion
+      "t95J05 already compiles descent, uniqueness, pullback expansion, final arithmetic, and a generic Hausdorff-integral odd-isometry cancellation theorem; its sole placeholder is the normalized S3 coordinate moment",
+      :stop-condition
+      "STOP if identifying subtype hausdorffMeasure with normalized rotational surface measure and evaluating its coordinate-square moment require two independent absent theorems; do not start general manifold integration, coarea, or Stokes",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "HAUSDORFF SPHERE NORMALIZATION / SPHERE-BALL MOMENTS [API-GAP → LOCAL-GO]",
+      :acceptance
+      {:probe
+       "compile the exact unchanged apm_t95j05 theorem, or isolate one generic Hausdorff-normalized sphere coordinate-moment theorem with the named consumers",
+       :statement-hashes
+       ["t95J05/apm_t95j05:7c78ce58ee7b17a91f715f0beba0d18a32fbecab88bcf109e4f9bb22b65d39a8"]},
+      :representation
+      {:source
+       "hausdorffMeasure 3 on the subtype Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1",
+       :target
+       "integrability, odd mixed-moment vanishing, and ∫ x₀² = π²/2 in the exact frozen subtype measure"},
+      :id :t95j05-hausdorff-sphere-moment-probe-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "one source placeholder: prove the mixed odd integral is zero and the S3 coordinate-square Hausdorff integral is π²/2, after which the final theorem closes by compiled ring arithmetic",
+      :other-consumers [:t02A05 :t01J06 :m96J03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "reread the complete DAG and reviewed t95J05 probe receipt; elect a new nonempty policy-eligible portfolio"},
+      :id :checkpoint-full-dag-refill-4,
+      :kind :strategy-checkpoint,
+      :depends-on [:t95j05-hausdorff-sphere-moment-probe-1],
+      :current-residual
+      "await the reviewed Hausdorff-sphere moment probe, then refill from the complete DAG"}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1243,7 +1329,58 @@
    [:t94j08-antipodal-degree-naturality-probe-1
     :checkpoint-full-dag-refill-2],
    :current-residual
-   "await the reviewed sphere-orientation API-gap probe, then refill from the complete DAG"}],
+   "await the reviewed sphere-orientation API-gap probe, then refill from the complete DAG"}
+  {:consumer :t95J05,
+   :recalled-suggestion
+   "t95J05 already compiles descent, uniqueness, pullback expansion, final arithmetic, and a generic Hausdorff-integral odd-isometry cancellation theorem; its sole placeholder is the normalized S3 coordinate moment",
+   :stop-condition
+   "STOP if identifying subtype hausdorffMeasure with normalized rotational surface measure and evaluating its coordinate-square moment require two independent absent theorems; do not start general manifold integration, coarea, or Stokes",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "HAUSDORFF SPHERE NORMALIZATION / SPHERE-BALL MOMENTS [API-GAP → LOCAL-GO]",
+   :acceptance
+   {:probe
+    "compile the exact unchanged apm_t95j05 theorem, or isolate one generic Hausdorff-normalized sphere coordinate-moment theorem with the named consumers",
+    :statement-hashes
+    ["t95J05/apm_t95j05:7c78ce58ee7b17a91f715f0beba0d18a32fbecab88bcf109e4f9bb22b65d39a8"]},
+   :representation
+   {:source
+    "hausdorffMeasure 3 on the subtype Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1",
+    :target
+    "integrability, odd mixed-moment vanishing, and ∫ x₀² = π²/2 in the exact frozen subtype measure"},
+   :id :t95j05-hausdorff-sphere-moment-probe-1,
+   :kind :reusable-theorem,
+   :depends-on [:checkpoint-full-dag-refill-3],
+   :current-residual
+   "one source placeholder: prove the mixed odd integral is zero and the S3 coordinate-square Hausdorff integral is π²/2, after which the final theorem closes by compiled ring arithmetic",
+   :other-consumers [:t02A05 :t01J06 :m96J03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "reread the complete DAG and reviewed t95J05 probe receipt; elect a new nonempty policy-eligible portfolio"},
+   :id :checkpoint-full-dag-refill-4,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t95j05-hausdorff-sphere-moment-probe-1
+    :checkpoint-full-dag-refill-3],
+   :current-residual
+   "await the reviewed Hausdorff-sphere moment probe, then refill from the complete DAG"}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
