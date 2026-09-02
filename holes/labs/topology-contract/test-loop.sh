@@ -34,6 +34,17 @@ rm -f "$stopped"
 
 checkpoint="$(mktemp)"
 cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint"
+invalid_replan="$(mktemp)"
+sed 's/:kind :final-adapter/:kind :reusable-theorem/' \
+  "$HERE/fixtures/replan-receipt.edn" > "$invalid_replan"
+checkpoint_before="$(sha256sum "$checkpoint" | cut -d' ' -f1)"
+if bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$invalid_replan" \
+    >/dev/null 2>&1; then
+  echo "expected invalid reusable-theorem replan rejection" >&2
+  exit 1
+fi
+[ "$(sha256sum "$checkpoint" | cut -d' ' -f1)" = "$checkpoint_before" ]
+rm -f "$invalid_replan"
 bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/replan-receipt.edn"
 [ "$(bb "$HERE/build_step.bb" unreviewed "$checkpoint")" = checkpoint ]
 [ "$(bb "$HERE/build_step.bb" next-open "$checkpoint")" = NONE ]

@@ -1572,6 +1572,8 @@
     :target "IsLocalDiffeomorphAt f x"},
    :id :t99j04-local-diffeomorph-converse-probe-1,
    :kind :reusable-theorem,
+   :bounded-exception
+   "The DAG explicitly records LOCAL-DIFFEOMORPH CONVERSE as an API-GAP; this elects a read-only probe only, not implementation without a second consumer or explicit owner authorization.",
    :depends-on [:checkpoint-full-dag-refill-4],
    :current-residual
    "three placeholders: the local inverse-function bridge, the independent coordinateMap mfderiv-bijectivity bridge, and final assembly",

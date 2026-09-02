@@ -92,9 +92,16 @@
       :replan (let [rs (:replacement-items receipt)
                     work (butlast rs)
                     checkpoint (last rs)
-                    work-ids (set (map :id work))]
+                    work-ids (set (map :id work))
+                    reusable-valid?
+                    (fn [row]
+                      (or (not= :reusable-theorem (:kind row))
+                          (<= 2 (count (set (conj (set (:other-consumers row))
+                                                  (:consumer row)))))
+                          (:bounded-exception row)))]
                 (when-not (and (:seat receipt) (seq (:commands receipt)) (:finding receipt)
                                (vector? rs) (<= 2 (count rs) 6)
+                               (every? reusable-valid? work)
                                (= :strategy-checkpoint (:kind checkpoint))
                                (= :strategy (:phase checkpoint))
                                (set/subset? work-ids (set (:depends-on checkpoint))))
