@@ -1,33 +1,44 @@
 {
-  "schema": "apm-problem-bundle.v1",
-  "problem_id": "b96A03",
-  "bundle_root": "problems/b96A03",
-  "layout": "single-bundle",
-  "source": {
-    "kind": "harvested-informal-proof",
-    "informal_solution": "informal-solution.md",
-    "harvested_filename": "apm-b96A03.md",
-    "problem_tex": "apm/b96A03.tex"
+  "schema" : "apm-problem-bundle.v1",
+  "layout" : "single-bundle",
+  "problem_id" : "b96A03",
+  "source" : {
+    "kind" : "harvested-informal-proof",
+    "informal_solution" : "informal-solution.md",
+    "harvested_filename" : "apm-b96A03.md",
+    "problem_tex" : "apm/b96A03.tex"
   },
-  "lean": {
-    "main": "lean/Main.lean",
-    "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
-    "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
-    "closer_progress": "The associate stabilizer and unique scalar-unit extraction are compiled. Remaining: package the unique scalars as a multiplicative character, trivialize it by purity, and finish orbit countP/invariant-ring descent."
+  "boundary" : "Closed by frame f79 (campaign jit-all-open-v2, 2026-09-02): \"b96A03: complete orbit product descent proof\". Banked verbatim from the f79 Solver terminal head e61d4231159a8af2a83da21c9fd38f1a3090ce5d on branch exp/countdown-f79-b96A03-solver; content identical to that head, no re-derivation. Frozen statement apm_b96a03 unchanged from the pre-solve base.",
+  "classification" : "solved",
+  "lean" : {
+    "main" : "lean/Main.lean",
+    "scratch" : null,
+    "files" : [ "lean/Main.lean" ],
+    "sorry_count_main" : 0,
+    "sorry_count_scratch" : 0,
+    "sorry_count_total" : 0,
+    "closer_progress" : "The associate stabilizer and unique scalar-unit extraction are compiled. Remaining: package the unique scalars as a multiplicative character, trivialize it by purity, and finish orbit countP/invariant-ring descent."
   },
-  "artifacts": {
-    "has_problem_tex": true,
-    "has_problem_md": true,
-    "has_informal_solution": true,
-    "has_proof_outline": true,
-    "has_proof_plan": false,
-    "has_changelog": false,
-    "has_workspace_metadata": false,
-    "has_receipt": false
+  "bundle_root" : "problems/b96A03",
+  "sorry_audit" : {
+    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at" : "2026-09-02",
+    "elaborated_exit" : 0,
+    "sorry_declarations" : 0,
+    "previous_classification" : "partial",
+    "previous_sorry_count_total" : 1,
+    "axioms" : "apm_b96a03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame" : "f79"
   },
-  "classification": "partial",
-  "imported_at": "2026-07-13T17:26:54.075516Z"
+  "imported_at" : "2026-07-13T17:26:54.075516Z",
+  "artifacts" : {
+    "has_problem_tex" : true,
+    "has_problem_md" : true,
+    "has_informal_solution" : true,
+    "has_proof_outline" : true,
+    "has_proof_plan" : false,
+    "has_changelog" : false,
+    "has_workspace_metadata" : false,
+    "has_receipt" : false
+  }
 }
