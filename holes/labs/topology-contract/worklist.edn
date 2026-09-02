@@ -1006,33 +1006,15 @@
    {:outcome :replan,
     :seat :codex-12,
     :commands
-    [{:cmd "sed -n '1,210p' docs/TN-topology-build-loop-design.md",
-      :exit 0}
-     {:cmd
-      "rg -n '\\[(UPTAKE|LOCAL-GO|API-GAP)\\]|`UPTAKE`|`LOCAL-GO`|`API-GAP`|next for|remains.*bridge|placeholder[s]? remain' TOPOLOGY-DEPENDENCY-DAG.md",
-      :exit 0}
-     {:cmd
-      "sed -n '450,535p' TOPOLOGY-DEPENDENCY-DAG.md && sed -n '850,950p' TOPOLOGY-DEPENDENCY-DAG.md && sed -n '1070,1130p' TOPOLOGY-DEPENDENCY-DAG.md",
-      :exit 0}
-     {:cmd
-      "sed -n '780,1025p' holes/labs/topology-contract/worklist.edn",
-      :exit 0}
-     {:cmd
-      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t94J08/lean/Main.lean",
+    [{:cmd "git rev-parse HEAD",
       :exit 0,
-      :output "two source placeholders at lines 168 and 222"}
-     {:cmd
-      "python3 newline-inclusive declaration hash audit for apm_t94J08_bridge_1 and apm_t94j08",
-      :exit 0,
-      :output
-      "39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea; 4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627"}
-     {:cmd "git rev-parse HEAD",
-      :exit 0,
-      :output "880ec3ae524971716c0f61502f86d4604e0f18f9"}
+      :output "a9a6e7f5cdfd2ff638f00928af634af422fc2ce0"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
     :finding
-    {:placeholder-delta {:a97J08 [1 1], :t98A01 [1 1], :t92J05 [3 3]},
+    {:repair
+     "Replaced only the two t94J08 frozen declaration hashes with the independently reviewed newline-inclusive values; all portfolio measurements, election fields, and stop boundaries are unchanged.",
+     :placeholder-delta {:a97J08 [1 1], :t98A01 [1 1], :t92J05 [3 3]},
      :typed-residual-change
      {:a97J08
       "planar producer split into enclosing-curve separation and radial degree-one certification",
@@ -1059,8 +1041,8 @@
       {:probe
        "compile the exact unchanged apm_t94J08_bridge_1 and final theorem, or isolate one reusable sphere-orientation/naturality theorem consumed by t94J08 and at least one named sibling",
        :statement-hashes
-       ["t94J08/apm_t94J08_bridge_1:39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea"
-        "t94J08/apm_t94j08:4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627"]},
+       ["t94J08/apm_t94J08_bridge_1:a49ff326bce515fe47bbcfefe5d2862dd9e45c92d3ca02dd0b5abd9e9b5e00b4"
+        "t94J08/apm_t94j08:30ca28f488d3fc9cdbc6ce5c071ed28f340ac7c28435d3c3b95ba5caddbf9fa7"]},
       :representation
       {:source
        "integral singular top homology of Metric.sphere (0 : EuclideanSpace ℝ (Fin (n+1))) 1 and its literal negation map",
@@ -1096,15 +1078,9 @@
       :current-residual
       "await the reviewed sphere-orientation API-gap probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-20",
-     :job "invoke-1788371378085-7490-a85c80ea",
-     :finding
-     "Deterministic frozen-metadata defect: replace the t94J08 bridge hash 39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea with newline-inclusive hash a49ff326bce515fe47bbcfefe5d2862dd9e45c92d3ca02dd0b5abd9e9b5e00b4, and replace final hash 4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627 with 30ca28f488d3fc9cdbc6ce5c071ed28f340ac7c28435d3c3b95ba5caddbf9fa7. Exact ledger-only scope and all other reproduced gates pass."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1125,15 +1101,15 @@
    :stop-condition
    "STOP if construction of the top-homology orientation and naturality of the antipodal action remain two independent absent foundations; do not start general oriented-manifold fundamental classes or modify the frozen degree predicate",
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "SPHERE ORIENTATION NATURALITY / t94J08 [API-GAP]",
    :acceptance
    {:probe
     "compile the exact unchanged apm_t94J08_bridge_1 and final theorem, or isolate one reusable sphere-orientation/naturality theorem consumed by t94J08 and at least one named sibling",
     :statement-hashes
-    ["t94J08/apm_t94J08_bridge_1:39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea"
-     "t94J08/apm_t94j08:4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627"]},
+    ["t94J08/apm_t94J08_bridge_1:a49ff326bce515fe47bbcfefe5d2862dd9e45c92d3ca02dd0b5abd9e9b5e00b4"
+     "t94J08/apm_t94j08:30ca28f488d3fc9cdbc6ce5c071ed28f340ac7c28435d3c3b95ba5caddbf9fa7"]},
    :representation
    {:source
     "integral singular top homology of Metric.sphere (0 : EuclideanSpace ℝ (Fin (n+1))) 1 and its literal negation map",
@@ -1157,7 +1133,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
