@@ -686,8 +686,73 @@
    "the winding, path-lift, and compact connected-complement APIs are banked; one planar producer remains",
    :stop-condition
    "STOP if the historical solver retains the same producer and canonical APIs leave more than one independent planar-topology edge; do not activate a general planar-separation foundation",
+   :evidence
+   {:consumer :a97J08,
+    :recalled-suggestion
+    "banked winding, path-lift, compact-component, and radial noncontractibility APIs might have reduced the historical solver residual to selective uptake",
+    :residual-after-theorems
+    "the frozen noncontractible-circle bridge closes immediately via apm_a97j08_not_nullhomotopic_of_radial_homotopy; all later essential-loop, complement-unboundedness, and final Hurwitz assembly are already compiled",
+    :canonical-declarations-reached
+    ["apm_a97j08_nonempty_of_bounded_compl_component"
+     "apm_a97j08_compl_component_compact_connected"
+     "apm_a97j08_radialMap"
+     "apm_a97j08_not_nullhomotopic_of_radial_homotopy"
+     "apm_a97j08_exists_essential_loop_of_subtype_circle"],
+    :historical-evidence
+    {:branch "exp/countdown-f43-a97J08-solver",
+     :canonical-blob "ab33b7d15df9c774e205d55924cb339536c07f35",
+     :historical-blob "ab33b7d15df9c774e205d55924cb339536c07f35",
+     :placeholder-line "problems/a97J08/lean/Main.lean:1806"},
+    :outcome :stop,
+    :other-named-consumers [],
+    :statement-hashes
+    ["a97J08/apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component:acc5e193505d5c7f4a8c241566148b76990e9a9f3ee0693c6d9e3cc72d0e000d"
+     "a97J08/apm_a97j08:38c97ff562e9bb325ca9d07f8589562e86af23752f73b32ebf9a60eda8e66d8f"],
+    :frozen-placeholder
+    "apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component",
+    :disposition :stop,
+    :author :codex-12,
+    :head "45057da15567171fa098c91f824873a0cf6cb414",
+    :reason
+    "The explicit row stop condition fires: exp/countdown-f43-a97J08-solver retains the identical producer placeholder, while canonical master lacks two independent planar-topology constructions—geometric separation/enclosing-curve existence and its radial degree-one certification. The proposed combined theorem also has only the original named consumer, so implementation is not policy-eligible.",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "git rev-parse HEAD:problems/a97J08/lean/Main.lean && git rev-parse exp/countdown-f43-a97J08-solver:problems/a97J08/lean/Main.lean",
+      :exit 0,
+      :output "ab33b7d15df9c774e205d55924cb339536c07f35 twice"}
+     {:cmd
+      "git diff --exit-code exp/countdown-f43-a97J08-solver -- problems/a97J08/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "git show exp/countdown-f43-a97J08-solver:problems/a97J08/lean/Main.lean | sed -n '1785,1820p'",
+      :exit 0,
+      :output "identical theorem body ending in sorry"}
+     {:cmd "lake env lean problems/a97J08/lean/Main.lean",
+      :exit 0,
+      :warnings 1,
+      :output "declaration uses sorry at 1796:6"}
+     {:cmd
+      "rg -n 'exists_noncontractible_circle_of_bounded_compl_component|SurroundingCircleCertificate|surroundingCircle|jordanCurve' ConstructionTargets .lake/packages/mathlib/Mathlib --glob '*.lean'",
+      :exit 1,
+      :expected-exit 1,
+      :output
+      "no matching canonical producer; search is limited to named declarations/terms"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :candidate-missing-theorems
+    ["construct an enclosing circle in D around the bounded complementary component"
+     "prove the radial composite of that circle has winding/degree one"],
+    :representation-at-seam
+    {:available
+     "a nonempty compact connected subset connectedComponentIn Dᶜ z and a continuous radial map D → Circle",
+     :required
+     "a circle c : C(Circle,D) whose radial composite is homotopic to ContinuousMap.id Circle"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PLANAR SEPARATION / a97J08 [UPTAKE/API-GAP]",
    :acceptance
