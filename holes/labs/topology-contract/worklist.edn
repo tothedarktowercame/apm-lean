@@ -230,6 +230,23 @@
       :expected-exit 1,
       :finding "no generic production declaration"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788354613517-7395-58355114",
+     :commands
+     ["git show 2f3aa0fd675dafd06e114d84676ea5b387c2596d:problems/t00A01/lean/Main.lean > /tmp/t00A01-recorded-reprobe-Main.lean"
+      "sha256sum /tmp/t00A01-recorded-reprobe-Main.lean"
+      "lake env lean /tmp/t00A01-recorded-reprobe-Main.lean"
+      "recompute SHA-256 for both theorem declarations through `:= by`"
+      "sha256sum /tmp/T00A01VanKampenReprobe.lean"
+      "lake env lean /tmp/T00A01VanKampenReprobe.lean"
+      "test -e ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
+      "rg -n \"twoOpen.*FreeProduct|FreeProduct.*twoOpen|two-open.*free-product\" ConstructionTargets"
+      "git diff b949613e^ b949613e --check"
+      "git status --porcelain"],
+     :finding
+     "The frozen bridge and final remain unchanged with two placeholders; their hashes reproduce exactly. The reviewed generic dependency is a STOP, the desired production theorem is absent, and the only complete free-product paste is torus-circle-specific, so no honest arbitrary-cover consumer adapter is available."},
     :fixture
     {:path "/tmp/T00A01VanKampenReprobe.lean",
      :sha256
@@ -238,7 +255,7 @@
      "typechecks only the desired proposition; supplies no inhabitant"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TWO-OPEN VAN KAMPEN / t00A01",
    :acceptance
