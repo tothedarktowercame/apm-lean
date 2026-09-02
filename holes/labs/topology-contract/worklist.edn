@@ -105,8 +105,30 @@
   {:consumer :t01A02,
    :stop-condition
    "STOP before Lefschetz or covering work; this row concerns only the H2 bridge and one reusable degree/naturality edge",
+   :evidence
+   {:residual "H2 bridge remains open; Lefschetz remains independent",
+    :outcome :stop,
+    :statement-hashes
+    {"apm_t01A02_bridge_H2map_eq_zero"
+     "ff96de85e5a2bd5feaae8e206a193a059ac43d5d42bd60dce4053362180a2107"},
+    :disposition :stop,
+    :author :codex-12,
+    :head "0e1731b5560424542414ff48e28fc4ff6fa33014",
+    :reason
+    "The nonsurjective-torus-self-map H2 theorem requires two independent absent foundations: an integral manifold fundamental class with map naturality, and punctured-manifold top-homology vanishing. Pinned Mathlib exposes neither a manifold orientation/fundamental-class interface nor the required point-deletion theorem; a torus-only statement would not serve the named sphere consumers.",
+    :commands
+    [{:cmd "lake env lean problems/t01A02/lean/Main.lean",
+      :exit 0,
+      :warnings 4}
+     {:cmd
+      "rg -n \"class .*Orient|structure .*Orient|fundamentalClass|FundamentalClass|nonsurject.*homology|homology.*nonsurject\" .lake/packages/mathlib/Mathlib/Geometry/Manifold .lake/packages/mathlib/Mathlib/AlgebraicTopology ConstructionTargets",
+      :exit 0,
+      :finding
+      "only unrelated ConstructionTargets/Intersection.lean:116 OrientedFrame"}
+     {:cmd "git diff --check", :exit 0}],
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
    :acceptance
