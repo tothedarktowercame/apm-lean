@@ -1452,8 +1452,91 @@
      :review-outcomes]},
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd
+      "rg -n 'LOCAL-DIFFEOMORPH CONVERSE|t99J04|inverse function theorem' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md problems/t99J04/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t99J04/lean/Main.lean",
+      :exit 0,
+      :output "three source placeholders at lines 140, 160, and 249"}
+     {:cmd
+      "python3 newline-inclusive declaration hash audit through ':= by\\n' for apm_t99J04_bridge_local_inverse_function and apm_t99j04",
+      :exit 0,
+      :output
+      "bd7c14f45640442d487829e76a9ba77812bda9c50e29a343962898bbdfcc08b9; a6f1f22ce6a01816944404fdd2459bbe3774229d73be19bdff34868dba423846"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "bcec913d678afe0bdbf87ebdd6c8d7ca1c9abdf2"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :finding
+    {:placeholder-delta {:t95J05 [1 1]},
+     :typed-residual-change
+     {:t95J05
+      "the exact Hausdorff-sphere moment obligation split into two independent absent edges: identification of subtype hausdorffMeasure with rotational sphere measure, and evaluation of the coordinate second moment"},
+     :infrastructure-packets 0,
+     :review-outcomes {:t95J05 :stop-pass},
+     :policy
+     "Do not continue the stopped Hausdorff-measure chain. Elect the next DAG-recorded one-edge API-gap probe: the generic manifold local-diffeomorphism converse needed by t99J04. Keep the independent coordinate-map derivative computation outside this row and activate no foundation, specification defect, or deferred representation."},
+    :replacement-items
+    [{:consumer :t99J04,
+      :recalled-suggestion
+      "the frozen file already compiles the global compact/local-diffeomorphism-to-surjectivity step; the adjacent missing API is the finite-dimensional manifold inverse-function implication from a bijective mfderiv",
+      :stop-condition
+      "STOP if converting mfderiv bijectivity to a chart derivative equivalence and assembling a chart-local PartialDiffeomorph remain two independent constructions; do not work on the separate coordinateMap derivative bridge or final assembly",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "LOCAL-DIFFEOMORPH CONVERSE / t99J04 [API-GAP]",
+      :acceptance
+      {:probe
+       "compile the exact unchanged apm_t99J04_bridge_local_inverse_function, or isolate one chart-to-PartialDiffeomorph assembly theorem",
+       :statement-hashes
+       ["t99J04/apm_t99J04_bridge_local_inverse_function:bd7c14f45640442d487829e76a9ba77812bda9c50e29a343962898bbdfcc08b9"
+        "t99J04/apm_t99j04:a6f1f22ce6a01816944404fdd2459bbe3774229d73be19bdff34868dba423846"],
+       :bounded-exception
+       "The DAG explicitly records LOCAL-DIFFEOMORPH CONVERSE as an API-GAP; this elects a read-only probe only, not implementation without a second consumer or explicit owner authorization."},
+      :representation
+      {:source
+       "ContMDiffAt f x together with Function.Bijective (mfderiv f x) on finite-dimensional complete model manifolds",
+       :target "IsLocalDiffeomorphAt f x"},
+      :id :t99j04-local-diffeomorph-converse-probe-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "three placeholders: the local inverse-function bridge, the independent coordinateMap mfderiv-bijectivity bridge, and final assembly",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "reread the complete DAG and reviewed t99J04 local-diffeomorphism probe receipt; elect a new nonempty policy-eligible portfolio"},
+      :id :checkpoint-full-dag-refill-5,
+      :kind :strategy-checkpoint,
+      :depends-on [:t99j04-local-diffeomorph-converse-probe-1],
+      :current-residual
+      "await the reviewed local-diffeomorphism API-gap probe, then refill from the complete DAG"}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1465,7 +1548,59 @@
    [:t95j05-hausdorff-sphere-moment-probe-1
     :checkpoint-full-dag-refill-3],
    :current-residual
-   "await the reviewed Hausdorff-sphere moment probe, then refill from the complete DAG"}],
+   "await the reviewed Hausdorff-sphere moment probe, then refill from the complete DAG"}
+  {:consumer :t99J04,
+   :recalled-suggestion
+   "the frozen file already compiles the global compact/local-diffeomorphism-to-surjectivity step; the adjacent missing API is the finite-dimensional manifold inverse-function implication from a bijective mfderiv",
+   :stop-condition
+   "STOP if converting mfderiv bijectivity to a chart derivative equivalence and assembling a chart-local PartialDiffeomorph remain two independent constructions; do not work on the separate coordinateMap derivative bridge or final assembly",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "LOCAL-DIFFEOMORPH CONVERSE / t99J04 [API-GAP]",
+   :acceptance
+   {:probe
+    "compile the exact unchanged apm_t99J04_bridge_local_inverse_function, or isolate one chart-to-PartialDiffeomorph assembly theorem",
+    :statement-hashes
+    ["t99J04/apm_t99J04_bridge_local_inverse_function:bd7c14f45640442d487829e76a9ba77812bda9c50e29a343962898bbdfcc08b9"
+     "t99J04/apm_t99j04:a6f1f22ce6a01816944404fdd2459bbe3774229d73be19bdff34868dba423846"],
+    :bounded-exception
+    "The DAG explicitly records LOCAL-DIFFEOMORPH CONVERSE as an API-GAP; this elects a read-only probe only, not implementation without a second consumer or explicit owner authorization."},
+   :representation
+   {:source
+    "ContMDiffAt f x together with Function.Bijective (mfderiv f x) on finite-dimensional complete model manifolds",
+    :target "IsLocalDiffeomorphAt f x"},
+   :id :t99j04-local-diffeomorph-converse-probe-1,
+   :kind :reusable-theorem,
+   :depends-on [:checkpoint-full-dag-refill-4],
+   :current-residual
+   "three placeholders: the local inverse-function bridge, the independent coordinateMap mfderiv-bijectivity bridge, and final assembly",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "reread the complete DAG and reviewed t99J04 local-diffeomorphism probe receipt; elect a new nonempty policy-eligible portfolio"},
+   :id :checkpoint-full-dag-refill-5,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t99j04-local-diffeomorph-converse-probe-1
+    :checkpoint-full-dag-refill-4],
+   :current-residual
+   "await the reviewed local-diffeomorphism API-gap probe, then refill from the complete DAG"}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
