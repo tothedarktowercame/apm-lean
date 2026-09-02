@@ -100,7 +100,7 @@ dispatch_and_wait() {
   curl -fsS "$AGENCY/api/alpha/agents/$seat" | jq -e '.ok == true' >/dev/null || die "seat is not registered: $seat"
   token="$(printf '%s-%s-%s' "$row" "$(date +%s%N)" "$RANDOM" | sha256sum | cut -c1-24)"
   augmented="$(mktemp)"
-  { cat "$prompt"; printf '\nYour final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nDo not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
+  { cat "$prompt"; printf '\nReturn the result in THIS invoke job final response; do not bell, whistle, or open a separate reply thread. Your final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nDo not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
   log "$label dispatch to $seat receipt-token=$token"
   response="$(python3 /home/joe/code/futon3c/scripts/agency_send.py --from topology-build-loop \
     --to "$seat" --kind bell --type request --mode work < "$augmented")" || die "$label dispatch failed"
@@ -149,15 +149,16 @@ if [ "$MODE" = replay ]; then
 fi
 
 validate
-resume_inflight
-repository_safe
-send_notice "campaign started or resumed"
 next="$(bb "$HERE/build_step.bb" next-open "$LEDGER")"
 unreviewed="$(bb "$HERE/build_step.bb" unreviewed "$LEDGER")"
 if [ "$MODE" = dry-run ]; then
+  repository_safe
   log "DRY RUN next-open=$next unreviewed=[$unreviewed] counts=$(bb "$HERE/build_step.bb" counts "$LEDGER")"
   exit 0
 fi
+resume_inflight
+repository_safe
+send_notice "campaign started or resumed"
 
 [ "$AUTHOR_SEAT" != "$REVIEW_SEAT" ] || die "author and reviewer seats are identical"
 [ "$PROBE_SEAT" != "$REVIEW_SEAT" ] || die "probe and reviewer seats are identical"
