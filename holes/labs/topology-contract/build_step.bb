@@ -14,9 +14,14 @@
 (def by-id (into {} (map (juxt :id identity) items)))
 (def priority {:uptake 0 :final-adapter 1 :representation-comparison 2
                :reusable-theorem 3 :consumer-closure 4 :documentation 5})
+(defn dependency-ready? [dependent dependency]
+  (let [state (:state (by-id dependency))]
+    (or (= :done state)
+        (and (= :strategy-checkpoint (:kind dependent))
+             (#{:needs-owner :blocked} state)))))
 (defn eligible? [i]
   (and (#{:open :repair} (:state i))
-       (every? #(= :done (:state (by-id %))) (:depends-on i))))
+       (every? #(dependency-ready? i %) (:depends-on i))))
 (defn selected []
   (first (sort-by (juxt #(or (:campaign-priority %) 100)
                              #(get priority (:kind %) 99)
@@ -52,7 +57,12 @@
 (defn unblock-ready [xs]
   (let [idx (into {} (map (juxt :id identity) xs))]
     (mapv #(if (and (= :blocked (:state %))
-                    (every? (fn [d] (= :done (:state (idx d)))) (:depends-on %)))
+                    (every? (fn [d]
+                              (let [state (:state (idx d))]
+                                (or (= :done state)
+                                    (and (= :strategy-checkpoint (:kind %))
+                                         (#{:needs-owner :blocked} state)))))
+                            (:depends-on %)))
              (assoc % :state :open)
              %) xs)))
 (defn apply-result! []

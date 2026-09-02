@@ -34,7 +34,11 @@
   (when-not ((:statuses w) (:state i)) (die (:id i) "unknown state" (:state i)))
   (when-not ((:edge-kinds w) (:kind i)) (die (:id i) "unknown kind" (:kind i)))
   (doseq [d (:depends-on i)] (when-not (by-id d) (die (:id i) "unknown dependency" d)))
-  (let [ready? (every? #(= :done (:state (by-id %))) (:depends-on i))]
+  (let [ready? (every? #(let [state (:state (by-id %))]
+                          (or (= :done state)
+                              (and (= :strategy-checkpoint (:kind i))
+                                   (#{:needs-owner :blocked} state))))
+                       (:depends-on i))]
     (when (and (= :open (:state i)) (not ready?)) (die (:id i) "open with incomplete dependency"))
     (when (and (= :blocked (:state i)) ready?) (die (:id i) "blocked although dependencies are done")))
   (when (and (= :reusable-theorem (:kind i))

@@ -409,7 +409,7 @@
    :stop-condition
    "Do not activate a FOUNDATION, SPEC-DEFECT, or DEFERRED-REP node automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance

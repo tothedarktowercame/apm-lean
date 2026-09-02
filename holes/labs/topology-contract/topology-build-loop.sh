@@ -176,7 +176,15 @@ while [ "$i" -lt "$MAX_ITER" ]; do
     apply_job_result "$current" "$(bb "$HERE/inflight.bb" field "$INFLIGHT" token)"
   else
     next="$(bb "$HERE/build_step.bb" next-open "$LEDGER")"
-    if [ "$next" = NONE ]; then notify "DONE or exhausted: no open or unreviewed rows"; exit 0; fi
+    if [ "$next" = NONE ]; then
+      counts="$(bb "$HERE/build_step.bb" counts "$LEDGER")"
+      if [[ "$counts" == *":needs-owner"* || "$counts" == *":blocked"* ]]; then
+        notify "PAUSED: no runnable rows; owner decision or strategy rewrite required"
+      else
+        notify "DONE: no open or unreviewed rows"
+      fi
+      exit 0
+    fi
     row="$(bb "$HERE/build_step.bb" row "$LEDGER" "$next")"
     phase="$(sed -n 's/.*:phase :\([^ ,}]*\).*/\1/p' <<<"$row")"
     seat="$AUTHOR_SEAT"; [ "$phase" = probe ] && seat="$PROBE_SEAT"
