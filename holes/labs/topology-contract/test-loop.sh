@@ -42,10 +42,6 @@ bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/f
 bb "$HERE/worklist_check.bb" "$checkpoint"
 grep -q ':phase :strategy' "$checkpoint"
 grep -q ':state :superseded' "$checkpoint"
-rm -f "$checkpoint"
-
-checkpoint="$(mktemp)"
-cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint"
 bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/replan-receipt.edn"
 bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/pass-receipt.edn"
 [ "$(bb "$HERE/build_step.bb" next-open "$checkpoint")" = next-adapter ]

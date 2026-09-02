@@ -130,13 +130,17 @@
                                                                    :author (:seat receipt)
                                                                    :disposition :stop))))
             :replan (let [supersede (set (:supersede receipt))
-                          existing (set ids)
                           replacement-ids (map :id (:replacement-items receipt))
-                          _ (when (seq (filter existing replacement-ids))
-                              (throw (ex-info "replacement id already exists" {:ids replacement-ids})))
-                          prepared (mapv #(if (supersede (:id %))
-                                            (assoc % :state :superseded)
-                                            %) items)
+                          conflicts (keep by-id replacement-ids)
+                          _ (when (some #(not= :superseded (:state %)) conflicts)
+                              (throw (ex-info "replacement id already exists"
+                                              {:ids (map :id conflicts)})))
+                          replacement-id-set (set replacement-ids)
+                          prepared (->> items
+                                        (remove #(replacement-id-set (:id %)))
+                                        (mapv #(if (supersede (:id %))
+                                                 (assoc % :state :superseded)
+                                                 %)))
                           replacements (mapv #(-> %
                                                     (update :depends-on (fnil conj []) id)
                                                     (assoc :state :blocked))
