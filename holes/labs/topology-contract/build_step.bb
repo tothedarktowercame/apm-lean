@@ -152,9 +152,23 @@
                                                             (assoc :evidence receipt)))
             :pass (replace-item items id #(-> % (assoc :state :done)
                                                 (assoc-in [:evidence :review] receipt)))
-            :fail (replace-item items id #(-> % (assoc :state :repair :phase :implementation)
-                                                (assoc :review-finding (:finding receipt))
-                                                (assoc-in [:evidence :review] receipt)))
+            :fail (if (= :strategy-checkpoint (:kind item))
+                    (let [rejected-ids (set (map :id
+                                                 (get-in item [:evidence :replacement-items])))]
+                      (mapv #(cond
+                               (= id (:id %))
+                               (-> % (assoc :state :repair :phase :strategy)
+                                     (assoc :review-finding (:finding receipt))
+                                     (assoc-in [:evidence :review] receipt))
+
+                               (rejected-ids (:id %))
+                               (assoc % :state :superseded)
+
+                               :else %)
+                            items))
+                    (replace-item items id #(-> % (assoc :state :repair :phase :implementation)
+                                                  (assoc :review-finding (:finding receipt))
+                                                  (assoc-in [:evidence :review] receipt))))
             (throw (ex-info "unknown receipt outcome" {:outcome outcome})))]
       (write-ledger! (assoc data :items (unblock-ready new-items)))
       (println "applied" (name outcome) "to" (name id)))))

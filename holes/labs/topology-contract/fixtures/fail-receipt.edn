@@ -1,0 +1,4 @@
+{:outcome :fail
+ :seat "codex-20"
+ :job "invoke-test-fail"
+ :finding "checkpoint portfolio metadata needs deterministic repair"}
