@@ -24,6 +24,8 @@
  :campaign :topology-portfolio-2026-09-02,
  :items
  [{:consumer :t00A01,
+   :review-finding
+   "The recorded declaration is only `def twoOpenFundamentalGroupFreeProduct : Prop`; it supplies no proof or inhabitant. Its fixture only repeats and type-checks that proposition, so consumers would have to assume the missing theorem. Prove the proposition from the banked pseudopushout infrastructure or revert to a probe that isolates the first exact missing theorem.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -59,6 +61,12 @@
       :finding "no matches"}
      {:cmd "git diff HEAD^ --check", :exit 0}
      {:cmd "git status --porcelain", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-20",
+     :job "invoke-1788353443894-7381-34fe2398",
+     :finding
+     "The recorded declaration is only `def twoOpenFundamentalGroupFreeProduct : Prop`; it supplies no proof or inhabitant. Its fixture only repeats and type-checks that proposition, so consumers would have to assume the missing theorem. Prove the proposition from the banked pseudopushout infrastructure or revert to a probe that isolates the first exact missing theorem."},
     :commit "f1c06d9fadc684158fdfa60138ba9fe348e862e1",
     :changed-paths
     ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
@@ -71,7 +79,7 @@
     :finding
     "Promoted the exact compiled reusable interface proposition; the accompanying documentation explicitly records that this declaration states, rather than proves, the generic principle and names the remaining connector and simply-connected-overlap construction."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
     "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
