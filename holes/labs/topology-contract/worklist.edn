@@ -103,6 +103,30 @@
    :current-residual
    "frozen fundamental-group coproduct bridge and final conjunction"}
   {:consumer :t01A02,
+   :phase :implementation,
+   :state :needs-owner,
+   :scope
+   ["ConstructionTargets/PuncturedClosedManifoldTopHomology.lean"
+    "ConstructionTargets/PuncturedClosedManifoldTopHomology.md"],
+   :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
+   :acceptance
+   {:declarations ["PuncturedClosedManifoldTopHomologyVanishing"],
+    :probe
+    "compile the generic punctured top-homology vanishing theorem and the unchanged t01A02 H2 bridge through avoid-point factorization",
+    :consumer-residual
+    "only apm_t01A02_bridge_H2map_eq_zero is discharged; Lefschetz remains independent",
+    :axioms :standard-only},
+   :classification :foundation,
+   :representation
+   {:source
+    "connected compact boundaryless n-manifold with one point deleted",
+    :target
+    "IsZero of integral singular H_n of the punctured manifold"},
+   :id :punctured-closed-manifold-top-homology-vanishing,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :other-consumers [:t02A08 :t94J08]}
+  {:consumer :t01A02,
    :review-finding
    "Acceptance defect: the probe neither compiled the exact H2 bridge nor isolated one exact reusable theorem, and it conflates two alternative proof routes as jointly required. Select one route and state/probe one named generic prerequisite with t01A02, t02A08, and t94J08 as consumers.",
    :stop-condition
@@ -134,9 +158,60 @@
      :job "invoke-1788352310329-7370-8c236ab3",
      :finding
      "Acceptance defect: the probe neither compiled the exact H2 bridge nor isolated one exact reusable theorem, and it conflates two alternative proof routes as jointly required. Select one route and state/probe one named generic prerequisite with t01A02, t02A08, and t94J08 as consumers."},
+    :probe
+    {:placeholder-delta 0,
+     :residual
+     "one owner-gated foundation remains: punctured closed-manifold top-homology vanishing; after it, the exact t01A02 H2 bridge is a compiled factorization adapter, while Lefschetz remains independent",
+     :outcome :revise,
+     :statement-hashes
+     {"apm_t01A02_bridge_H2map_eq_zero"
+      "ff96de85e5a2bd5feaae8e206a193a059ac43d5d42bd60dce4053362180a2107"},
+     :prerequisite
+     {:consumer :t01A02,
+      :phase :implementation,
+      :state :needs-owner,
+      :scope
+      ["ConstructionTargets/PuncturedClosedManifoldTopHomology.lean"
+       "ConstructionTargets/PuncturedClosedManifoldTopHomology.md"],
+      :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
+      :acceptance
+      {:declarations ["PuncturedClosedManifoldTopHomologyVanishing"],
+       :probe
+       "compile the generic punctured top-homology vanishing theorem and the unchanged t01A02 H2 bridge through avoid-point factorization",
+       :consumer-residual
+       "only apm_t01A02_bridge_H2map_eq_zero is discharged; Lefschetz remains independent",
+       :axioms :standard-only},
+      :classification :foundation,
+      :representation
+      {:source
+       "connected compact boundaryless n-manifold with one point deleted",
+       :target
+       "IsZero of integral singular H_n of the punctured manifold"},
+      :id :punctured-closed-manifold-top-homology-vanishing,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :other-consumers [:t02A08 :t94J08]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
+       :exit 0,
+       :warnings 0}
+      {:cmd "lake env lean problems/t01A02/lean/Main.lean",
+       :exit 0,
+       :warnings 4}
+      {:cmd "readlink -f .lake/packages",
+       :exit 0,
+       :output "/home/joe/code/apm-lean/.lake/packages"}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
+      :sha256
+      "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"},
+     :seat :codex-6},
     :seat :codex-12},
    :phase :implementation,
-   :state :repair,
+   :state :blocked,
    :scope [],
    :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
    :acceptance
@@ -148,7 +223,7 @@
     :target "integral singular H2 morphism equals zero"},
    :id :t01a02-h2-degree-probe,
    :kind :reusable-theorem,
-   :depends-on [],
+   :depends-on [:punctured-closed-manifold-top-homology-vanishing],
    :current-residual
    "apm_t01A02_bridge_H2map_eq_zero; Lefschetz bridge remains independent",
    :other-consumers [:t02A08 :t94J08]}
