@@ -1800,8 +1800,57 @@
    "the concrete quotient total spaces, descended maps, basepoint equations, and surjectivity proofs already compile; the adjacent unresolved edge is the evenly-covered-neighborhood verification for the two quotient-glued maps",
    :stop-condition
    "STOP if the circle-doubled and torus-doubled quotient maps require two independent local models at the wedge point, or if either requires a general covering-gluing/classification foundation; do not begin the independent piOne presentation/range or total-space homology comparison",
+   :evidence
+   {:placeholder-delta {:t01A04 [4 4]},
+    :residual
+    "Owner election is required for a general compatible-covering quotient-gluing theorem, or separately for the two concrete wedge-point local trivializations. The independent fundamental-group presentation/range and total-space homology bridges remain unchanged.",
+    :outcome :stop,
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-12,
+    :reason
+    "The exact bridge cannot be reduced to one shared existing edge. Away from the wedge point, the required primitives are banked: Circle.isQuotientCoveringMap_npow supplies circle squaring and ConstructionTargets.ProductEvenlyCoveredTrivialization.isCoveringMap_productMap supplies its product with an identity map. At the wedge point, however, the descended maps require quotient-gluing local trivializations not present in Mathlib or ConstructionTargets. The circle-doubled source has two torus sheets attached to one squaring-circle source, while the torus-doubled source has one product-cover torus attached to two identity-circle sheets. Their fiber labels and neighborhood homeomorphisms are therefore two distinct local constructions unless a new general theorem proves that compatible coverings glued along discrete fibers descend to a covering. That general covering-gluing theorem is a foundation, so the row's stop condition applies. The piOne presentation/ranges, total-space homology comparison, and final assembly were not touched.",
+    :commands
+    [{:cmd "lake env lean /tmp/T01A04QuotientCoveringBoundary.lean",
+      :exit 0,
+      :warnings 0,
+      :output
+      "Compiled the exact available circle-square covering primitive; Circle.isQuotientCoveringMap_npow axioms are [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "sed -n '35,175p' problems/t01A04/lean/Main.lean; sed -n '270,325p' problems/t01A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "The two EqvGen quotient relations have different wedge-point incidence patterns; both descended maps, basepoint formulas, and surjectivity proofs are present."}
+     {:cmd
+      "sed -n '1,105p' ConstructionTargets/ProductEvenlyCoveredTrivialization.lean",
+      :exit 0,
+      :output
+      "isCoveringMap_productMap is banked and covers the torus product piece, but not quotient gluing at the wedge."}
+     {:cmd
+      "rg -n \"wedge|glue|pushout|EqvGen\" .lake/packages/mathlib/Mathlib/Topology/Covering ConstructionTargets/*Cover* -g '*.lean'",
+      :exit 0,
+      :output
+      "The search found quotient/open-cover geometry but no theorem preserving IsCoveringMap under the required wedge-point quotient gluing; scope is limited to pinned Mathlib covering modules and ConstructionTargets cover files."}
+     {:cmd "lake env lean problems/t01A04/lean/Main.lean",
+      :exit 0,
+      :warnings 4,
+      :output
+      "Existing sorry warnings at the quotient-covering bridge, piOne/ranges bridge, nonhomeomorphism bridge, and final theorem."}
+     {:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\"",
+      :exit 0}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "46697b27cc819c0a9deb73a933ba5a1d50ac31a6"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :fixture
+    {:path "/tmp/T01A04QuotientCoveringBoundary.lean",
+     :sha256
+     "cb4b3febfb442738ba3129d5715db9db5af755ffec47ec1f4aa1a8fdd77169fa"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "ACTION/QUOTIENT TRANSPORT / t01A04 [LOCAL-GO]",
    :acceptance
