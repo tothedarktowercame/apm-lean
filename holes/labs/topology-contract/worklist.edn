@@ -1115,8 +1115,74 @@
    "SphereAntipodalHomology banks explicit antipodal relative/excision squares, while the frozen file has already reduced its local-index clause to the universal top-homology antipodal computation",
    :stop-condition
    "STOP if construction of the top-homology orientation and naturality of the antipodal action remain two independent absent foundations; do not start general oriented-manifold fundamental classes or modify the frozen degree predicate",
+   :evidence
+   {:consumer :t94J08,
+    :recalled-suggestion
+    "banked antipodal projection, excision, coordinate, and radial naturality might leave one north-versus-south sign comparison",
+    :canonical-declarations-reached
+    ["ConstructionTargets.SphereAntipodalHomology.sphereZeroH0Iso"
+     "ConstructionTargets.SphereAntipodalHomology.sphereZeroAntipodalH0_coordinates"
+     "ConstructionTargets.SphereAntipodalHomology.sphereZeroAntipodalH0_orientedDifference"
+     "ConstructionTargets.SphereAntipodalHomology.antipodal_relativeProjection_homology_naturality"
+     "ConstructionTargets.SphereAntipodalHomology.antipodal_hemisphereExcision_homology_naturality"
+     "ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt"],
+    :outcome :stop,
+    :other-named-consumers [:t02A08 :t98A02],
+    :statement-hashes
+    ["t94J08/apm_t94J08_bridge_1:a49ff326bce515fe47bbcfefe5d2862dd9e45c92d3ca02dd0b5abd9e9b5e00b4"
+     "t94J08/apm_t94j08:30ca28f488d3fc9cdbc6ce5c071ed28f340ac7c28435d3c3b95ba5caddbf9fa7"],
+    :frozen-placeholder "apm_t94J08_bridge_1",
+    :disposition :stop,
+    :author :codex-12,
+    :head "0065b85c45861d18209e3fc0231336a864c65529",
+    :reason
+    "SPEC-DEFECT boundary: the universally quantified bridge includes an impossible unreduced H0(S0) ≅ ℤ clause. The banked target documents and computes H0(S0) as the two-point coproduct. Implementing more naturality cannot inhabit the current statement, and this loop may not edit or automatically activate specification-defect work. Owner action is required to choose reduced homology or exclude n = 0.",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereAntipodalHomology.lean",
+      :exit 0,
+      :warnings 6,
+      :axioms ["propext" "Classical.choice" "Quot.sound"]}
+     {:cmd "lake env lean ConstructionTargets/SphereHomology.lean",
+      :exit 0,
+      :warnings 0,
+      :axioms ["propext" "Classical.choice" "Quot.sound"]}
+     {:cmd "lake env lean problems/t94J08/lean/Main.lean",
+      :exit 0,
+      :warnings 5,
+      :output
+      "two declarations use sorry; apm_t94j08 has expected sorryAx"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t94J08/lean/Main.lean",
+      :exit 0,
+      :output "two source placeholders at lines 168 and 222"}
+     {:cmd
+      "sed -n '1,180p' ConstructionTargets/SphereAntipodalHomology.md",
+      :exit 0,
+      :output
+      "records the unreduced H0(S0) ≅ ℤ⊕ℤ specification obstruction and the remaining positive-dimensional sign seam"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :candidate-missing-theorems [],
+    :compile-evidence
+    {:frozen-placeholders 2,
+     :sphere-antipodal-warnings 6,
+     :frozen-warnings 5,
+     :axioms ["propext" "Classical.choice" "Quot.sound"]},
+    :representation-at-seam
+    {:frozen-base-case
+     "n = 0 gives T94J08TopHomology 0 = unreduced integral H0 of Metric.sphere 0 in EuclideanSpace ℝ (Fin 1)",
+     :canonical-base-case
+     "SphereZeroH0 ≅ SphereZeroCoproduct, i.e. two copies of ℤ; antipodal negation is proved only on the oriented difference/reduced summand",
+     :frozen-target "T94J08TopHomology 0 ≅ ModuleCat.of ℤ ℤ"},
+    :residual-after-correction
+    "If the frozen statement is corrected to positive-dimensional spheres or reduced homology in degree zero, positive-dimensional orientation is already banked and the remaining reusable mathematical edge is the north-versus-south suspension/excision sign comparison.",
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE ORIENTATION NATURALITY / t94J08 [API-GAP]",
    :acceptance
