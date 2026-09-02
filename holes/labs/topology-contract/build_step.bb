@@ -161,7 +161,12 @@
                                       [%]) prepared)))
             :done-unreviewed (replace-item items id #(-> % (assoc :state :done-unreviewed)
                                                             (assoc :evidence receipt)))
-            :pass (replace-item items id #(-> % (assoc :state :done)
+            :pass (replace-item items id #(-> %
+                                                (assoc :state
+                                                       (if (and (= :strategy-checkpoint (:kind %))
+                                                                (= :stop (get-in % [:evidence :outcome])))
+                                                         :needs-owner
+                                                         :done))
                                                 (assoc-in [:evidence :review] receipt)))
             :fail (if (= :strategy-checkpoint (:kind item))
                     (let [rejected-ids (set (map :id

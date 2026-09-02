@@ -1971,7 +1971,7 @@
       "authorize the Hausdorff-sphere normalization and moment program"]},
     :seat :codex-12},
    :phase :strategy,
-   :state :done,
+   :state :needs-owner,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance

@@ -59,6 +59,14 @@ bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/p
 bb "$HERE/worklist_check.bb" "$checkpoint"
 rm -f "$checkpoint"
 
+checkpoint_stop="$(mktemp)"
+cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint_stop"
+bb "$HERE/build_step.bb" apply-result "$checkpoint_stop" checkpoint "$HERE/fixtures/stop-receipt.edn"
+bb "$HERE/build_step.bb" apply-result "$checkpoint_stop" checkpoint "$HERE/fixtures/pass-receipt.edn"
+grep -q ':state :needs-owner' "$checkpoint_stop"
+bb "$HERE/worklist_check.bb" "$checkpoint_stop"
+rm -f "$checkpoint_stop"
+
 revised="$(mktemp)"
 cp "$HERE/fixtures/transition-ledger.edn" "$revised"
 bb "$HERE/build_step.bb" apply-result "$revised" edge "$HERE/fixtures/revise-receipt.edn"
