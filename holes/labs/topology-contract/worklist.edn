@@ -1166,6 +1166,23 @@
       "records the unreduced H0(S0) ≅ ℤ⊕ℤ specification obstruction and the remaining positive-dimensional sign seam"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788371832859-7501-9fa19325",
+     :commands
+     ["git diff 80c82bdb^ 80c82bdb --check"
+      "lake env lean ConstructionTargets/SphereAntipodalHomology.lean"
+      "lake env lean ConstructionTargets/SphereHomology.lean"
+      "lake env lean problems/t94J08/lean/Main.lean"
+      "newline-inclusive SHA-256 audit of apm_t94J08_bridge_1 and apm_t94j08"
+      "placeholder and standalone-admit audit"
+      "inspect SphereZeroH0 and SphereZeroCoproduct representation and documentation"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "readlink -f .lake/packages"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact ledger-only scope; exact frozen hashes, warning and two-placeholder counts, standard-only target axioms, and the unreduced H0(S0) ≅ Z⊕Z versus frozen Z specification conflict reproduce. The antipodal -1 result applies only to the reduced oriented-difference summand, so STOP at the owner-gated SPEC-DEFECT boundary is correct."},
     :candidate-missing-theorems [],
     :compile-evidence
     {:frozen-placeholders 2,
@@ -1182,7 +1199,7 @@
     "If the frozen statement is corrected to positive-dimensional spheres or reduced homology in degree zero, positive-dimensional orientation is already banked and the remaining reusable mathematical edge is the north-versus-south suspension/excision sign comparison.",
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "SPHERE ORIENTATION NATURALITY / t94J08 [API-GAP]",
    :acceptance
@@ -1214,7 +1231,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
