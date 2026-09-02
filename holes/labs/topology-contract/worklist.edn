@@ -1000,8 +1000,103 @@
      :review-outcomes]},
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "sed -n '1,210p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "rg -n '\\[(UPTAKE|LOCAL-GO|API-GAP)\\]|`UPTAKE`|`LOCAL-GO`|`API-GAP`|next for|remains.*bridge|placeholder[s]? remain' TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "sed -n '450,535p' TOPOLOGY-DEPENDENCY-DAG.md && sed -n '850,950p' TOPOLOGY-DEPENDENCY-DAG.md && sed -n '1070,1130p' TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "sed -n '780,1025p' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b' problems/t94J08/lean/Main.lean",
+      :exit 0,
+      :output "two source placeholders at lines 168 and 222"}
+     {:cmd
+      "python3 newline-inclusive declaration hash audit for apm_t94J08_bridge_1 and apm_t94j08",
+      :exit 0,
+      :output
+      "39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea; 4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "880ec3ae524971716c0f61502f86d4604e0f18f9"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :finding
+    {:placeholder-delta {:a97J08 [1 1], :t98A01 [1 1], :t92J05 [3 3]},
+     :typed-residual-change
+     {:a97J08
+      "planar producer split into enclosing-curve separation and radial degree-one certification",
+      :t98A01
+      "concrete regularity split into five-element fiber cardinality and deck transitivity",
+      :t92J05
+      "RP2 bridge split into projectivization/sphere-quotient covering geometry and chosen-basepoint deck-group extraction"},
+     :infrastructure-packets 0,
+     :review-outcomes
+     {:a97J08 :stop-pass, :t98A01 :stop-pass, :t92J05 :stop-pass},
+     :policy
+     "After three reviewed stops, return to the complete DAG and elect the one-edge sphere-orientation API gap; do not continue any stopped chain or activate an unauthorized foundation."},
+    :replacement-items
+    [{:consumer :t94J08,
+      :recalled-suggestion
+      "SphereAntipodalHomology banks explicit antipodal relative/excision squares, while the frozen file has already reduced its local-index clause to the universal top-homology antipodal computation",
+      :stop-condition
+      "STOP if construction of the top-homology orientation and naturality of the antipodal action remain two independent absent foundations; do not start general oriented-manifold fundamental classes or modify the frozen degree predicate",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "SPHERE ORIENTATION NATURALITY / t94J08 [API-GAP]",
+      :acceptance
+      {:probe
+       "compile the exact unchanged apm_t94J08_bridge_1 and final theorem, or isolate one reusable sphere-orientation/naturality theorem consumed by t94J08 and at least one named sibling",
+       :statement-hashes
+       ["t94J08/apm_t94J08_bridge_1:39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea"
+        "t94J08/apm_t94j08:4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627"]},
+      :representation
+      {:source
+       "integral singular top homology of Metric.sphere (0 : EuclideanSpace ℝ (Fin (n+1))) 1 and its literal negation map",
+       :target
+       "an orientation iso to ModuleCat.of ℤ ℤ under which the induced antipodal map is multiplication by (-1)^(n+1)"},
+      :id :t94j08-antipodal-degree-naturality-probe-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "apm_t94J08_bridge_1 plus downstream final assembly; point-set antipodal involution, fixed-point freeness, degree composition, and local-index negation are already compiled",
+      :other-consumers [:t02A08 :t98A02]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "reread the complete DAG and reviewed t94J08 probe receipt; elect a new nonempty policy-eligible portfolio"},
+      :id :checkpoint-full-dag-refill-3,
+      :kind :strategy-checkpoint,
+      :depends-on [:t94j08-antipodal-degree-naturality-probe-1],
+      :current-residual
+      "await the reviewed sphere-orientation API-gap probe, then refill from the complete DAG"}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1015,7 +1110,58 @@
     :t92j05-projective-plane-probe-1
     :checkpoint-full-dag-refill-1],
    :current-residual
-   "await three reviewed consumer-facing probe outcomes, then refill from the complete DAG"}],
+   "await three reviewed consumer-facing probe outcomes, then refill from the complete DAG"}
+  {:consumer :t94J08,
+   :recalled-suggestion
+   "SphereAntipodalHomology banks explicit antipodal relative/excision squares, while the frozen file has already reduced its local-index clause to the universal top-homology antipodal computation",
+   :stop-condition
+   "STOP if construction of the top-homology orientation and naturality of the antipodal action remain two independent absent foundations; do not start general oriented-manifold fundamental classes or modify the frozen degree predicate",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SPHERE ORIENTATION NATURALITY / t94J08 [API-GAP]",
+   :acceptance
+   {:probe
+    "compile the exact unchanged apm_t94J08_bridge_1 and final theorem, or isolate one reusable sphere-orientation/naturality theorem consumed by t94J08 and at least one named sibling",
+    :statement-hashes
+    ["t94J08/apm_t94J08_bridge_1:39d988c6bb19af83e6c4560a1d3874de790e8a7a83777b98c77faedeb6420cea"
+     "t94J08/apm_t94j08:4399b7a909e31ed84445ec547e4227b293a9ffd0bc8b35fd3ba918d4f1347627"]},
+   :representation
+   {:source
+    "integral singular top homology of Metric.sphere (0 : EuclideanSpace ℝ (Fin (n+1))) 1 and its literal negation map",
+    :target
+    "an orientation iso to ModuleCat.of ℤ ℤ under which the induced antipodal map is multiplication by (-1)^(n+1)"},
+   :id :t94j08-antipodal-degree-naturality-probe-1,
+   :kind :reusable-theorem,
+   :depends-on [:checkpoint-full-dag-refill-2],
+   :current-residual
+   "apm_t94J08_bridge_1 plus downstream final assembly; point-set antipodal involution, fixed-point freeness, degree composition, and local-index negation are already compiled",
+   :other-consumers [:t02A08 :t98A02]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "reread the complete DAG and reviewed t94J08 probe receipt; elect a new nonempty policy-eligible portfolio"},
+   :id :checkpoint-full-dag-refill-3,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t94j08-antipodal-degree-naturality-probe-1
+    :checkpoint-full-dag-refill-2],
+   :current-residual
+   "await the reviewed sphere-orientation API-gap probe, then refill from the complete DAG"}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
