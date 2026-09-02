@@ -1228,6 +1228,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Deterministic frozen-metadata defect: the recorded t95J05 value 7c78ce58ee7b17a91f715f0beba0d18a32fbecab88bcf109e4f9bb22b65d39a8 hashes the entire theorem body through EOF, not its frozen statement. Replace both checkpoint and appended-row occurrences with the established newline-inclusive declaration hash through ':= by', 1c29de554e7f421da3c03978b11d8658d0d0cb83492dbde47499aec928c8d6fc, and correct the recorded audit command description accordingly. All other reproduced gates pass.",
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :evidence
@@ -1315,9 +1317,15 @@
       :current-residual
       "await the reviewed Hausdorff-sphere moment probe, then refill from the complete DAG"}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-20",
+     :job "invoke-1788372140209-7506-60177595",
+     :finding
+     "Deterministic frozen-metadata defect: the recorded t95J05 value 7c78ce58ee7b17a91f715f0beba0d18a32fbecab88bcf109e4f9bb22b65d39a8 hashes the entire theorem body through EOF, not its frozen statement. Replace both checkpoint and appended-row occurrences with the established newline-inclusive declaration hash through ':= by', 1c29de554e7f421da3c03978b11d8658d0d0cb83492dbde47499aec928c8d6fc, and correct the recorded audit command description accordingly. All other reproduced gates pass."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -1336,7 +1344,7 @@
    :stop-condition
    "STOP if identifying subtype hausdorffMeasure with normalized rotational surface measure and evaluating its coordinate-square moment require two independent absent theorems; do not start general manifold integration, coarea, or Stokes",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "HAUSDORFF SPHERE NORMALIZATION / SPHERE-BALL MOMENTS [API-GAP → LOCAL-GO]",
@@ -1368,7 +1376,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
