@@ -103,6 +103,8 @@
    :current-residual
    "frozen fundamental-group coproduct bridge and final conjunction"}
   {:consumer :t01A02,
+   :review-finding
+   "Acceptance defect: the probe neither compiled the exact H2 bridge nor isolated one exact reusable theorem, and it conflates two alternative proof routes as jointly required. Select one route and state/probe one named generic prerequisite with t01A02, t02A08, and t94J08 as consumers.",
    :stop-condition
    "STOP before Lefschetz or covering work; this row concerns only the H2 bridge and one reusable degree/naturality edge",
    :evidence
@@ -126,9 +128,15 @@
       :finding
       "only unrelated ConstructionTargets/Intersection.lean:116 OrientedFrame"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-20",
+     :job "invoke-1788352310329-7370-8c236ab3",
+     :finding
+     "Acceptance defect: the probe neither compiled the exact H2 bridge nor isolated one exact reusable theorem, and it conflates two alternative proof routes as jointly required. Select one route and state/probe one named generic prerequisite with t01A02, t02A08, and t94J08 as consumers."},
     :seat :codex-12},
-   :phase :probe,
-   :state :done-unreviewed,
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
    :acceptance
