@@ -201,43 +201,44 @@
    :stop-condition
    "STOP if the supplied standard-cover hypotheses still lack two independent geometric or connector inputs; do not specialize the t02A03 coordinates",
    :evidence
-   {:probe
-    {:outcome :revise,
-     :fixture
-     {:path "/tmp/T00A01VanKampenReprobe.lean",
-      :sha256
-      "02e107f6706de85fa13220b4a892fedaa018fee0d76b8f6ded93725f8f398b71"},
-     :commands
-     [{:cmd "lake env lean /tmp/T00A01VanKampenReprobe.lean", :exit 0}
-      {:cmd "lake env lean problems/t00A01/lean/Main.lean",
-       :exit 0,
-       :warnings 2}
-      {:cmd "git diff --check", :exit 0}],
-     :prerequisite
-     {:consumer :t00A01,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
-       "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
-      :dag-node "TWO-OPEN VAN KAMPEN",
-      :acceptance
-      {:declarations ["twoOpenFundamentalGroupFreeProduct"],
-       :consumer-residual
-       "bounded homotopy-equivalence/basepoint and factorwise coproduct adapter",
-       :axioms :standard-only},
-      :representation
-      {:source
-       "path-connected two-open fundamental-groupoid pseudopushout with simply-connected overlap",
-       :target "chosen-basepoint Monoid.Coprod"},
-      :id :generic-two-open-free-product-principle,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :other-consumers [:t97J04]},
-     :residual
-     "prove the single generic two-open chosen-basepoint free-product theorem; then apply the supplied piece homotopy equivalences and hπA/hπB"}},
+   {:residual
+    "generic arbitrary-cover target-natural pseudococone-to-free-product equivalence remains absent; frozen bridge and final conjunction stay open",
+    :outcome :stop,
+    :statement-hashes
+    {"t00A01/apm_t00A01_bridge_fundamentalGroup_coprod"
+     "755d31b24fa16dee16eeb004d28f7ccc05925c3ed0bd0bc0e720cecbb0217302",
+     "t00A01/apm_t00a01"
+     "fe28ee82e543a121a93b53c0b1a189f90dde913f189b77a741ce1eb65479ecc2"},
+    :disposition :stop,
+    :placeholder-count 2,
+    :author :codex-12,
+    :head "2f3aa0fd675dafd06e114d84676ea5b387c2596d",
+    :reason
+    "The declared dependency is a reviewed STOP, not an implemented theorem. Canonical master lacks the generic target-natural pseudococone-to-free-product representation equivalence; completing it requires simply-connected overlap reduction, generic vertex-group representation transport, target-natural pasting, and source reconstruction. The only complete pasting is torus-circle-specific and cannot be used for arbitrary t00A01 cover pieces.",
+    :commands
+    [{:cmd "lake env lean problems/t00A01/lean/Main.lean",
+      :exit 0,
+      :warnings 2}
+     {:cmd
+      "test -e ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "production target absent"}
+     {:cmd
+      "rg -n \"twoOpen.*FreeProduct|FreeProduct.*twoOpen|two-open.*free-product\" ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding "no generic production declaration"}
+     {:cmd "git diff --check", :exit 0}],
+    :fixture
+    {:path "/tmp/T00A01VanKampenReprobe.lean",
+     :sha256
+     "02e107f6706de85fa13220b4a892fedaa018fee0d76b8f6ded93725f8f398b71",
+     :finding
+     "typechecks only the desired proposition; supplies no inhabitant"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TWO-OPEN VAN KAMPEN / t00A01",
    :acceptance
