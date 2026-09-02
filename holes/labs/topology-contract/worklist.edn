@@ -1579,8 +1579,48 @@
    "the frozen file already compiles the global compact/local-diffeomorphism-to-surjectivity step; the adjacent missing API is the finite-dimensional manifold inverse-function implication from a bijective mfderiv",
    :stop-condition
    "STOP if converting mfderiv bijectivity to a chart derivative equivalence and assembling a chart-local PartialDiffeomorph remain two independent constructions; do not work on the separate coordinateMap derivative bridge or final assembly",
+   :evidence
+   {:placeholder-delta {:t99J04 [3 3]},
+    :residual
+    "Owner election is required before a manifold inverse-function foundation comprising chart-local derivative transfer and chart-lifted PartialDiffeomorph assembly; the independent coordinateMap mfderiv-bijectivity bridge and final assembly remain untouched.",
+    :outcome :stop,
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-12,
+    :reason
+    "The exact frozen converse remains separated by two independent missing constructions in pinned Mathlib: first, transfer ContMDiffAt and bijective mfderiv to a ContDiffAt/HasFDerivAt statement for writtenInExtChartAt on an open chart neighborhood; second, lift the Banach-space OpenPartialHomeomorph back through source and target charts into a PartialDiffeomorph whose underlying map agrees with f on its source. Mathlib explicitly lists this whole converse as TODO, while IsLocalDiffeomorphAt is existentially defined by that PartialDiffeomorph. The compiled fixture confirms that bijective mfderiv can already be packaged as a ContinuousLinearEquiv, so algebraic invertibility is not the missing edge. The row stop condition therefore applies; no implementation row is authorized.",
+    :commands
+    [{:cmd
+      "lake env lean /tmp/T99J04LocalDiffeomorphConverseBoundary.lean",
+      :exit 0,
+      :warnings 0,
+      :output
+      "continuousLinearEquivOfBijective compiles; axioms [propext, Classical.choice, Quot.sound]; printed APIs show ContDiffAt.toOpenPartialHomeomorph produces a model-space OpenPartialHomeomorph, whereas IsLocalDiffeomorphAt requires a manifold PartialDiffeomorph"}
+     {:cmd
+      "rg -n \"TODO|ContDiffAt.toOpenPartialHomeomorph|def IsLocalDiffeomorphAt|mfderivWithin.*writtenInExtChartAt\" .lake/packages/mathlib/Mathlib/Geometry/Manifold/LocalDiffeomorph.lean .lake/packages/mathlib/Mathlib/Geometry/Manifold/MFDeriv/Basic.lean .lake/packages/mathlib/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ContDiff.lean",
+      :exit 0,
+      :output
+      "LocalDiffeomorph.lean:43-47 explicitly records the desired converse as TODO; LocalDiffeomorph.lean:141 defines IsLocalDiffeomorphAt via existence of PartialDiffeomorph; MFDeriv/Basic.lean:679 identifies mfderiv with the within-derivative of writtenInExtChartAt"}
+     {:cmd "lake env lean problems/t99J04/lean/Main.lean",
+      :exit 0,
+      :warnings 3,
+      :output
+      "existing sorry warnings at the local inverse-function bridge, coordinateMap derivative bridge, and final theorem"}
+     {:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\"",
+      :exit 0}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "94dbbe154166d3c5dbc747004e4b004e25dab29d"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :fixture
+    {:path "/tmp/T99J04LocalDiffeomorphConverseBoundary.lean",
+     :sha256
+     "d3bf3abd0ba5fb80655451d53b4fc8d6294182f6b13215864c5c1fef7c8ead70"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "LOCAL-DIFFEOMORPH CONVERSE / t99J04 [API-GAP]",
    :acceptance
