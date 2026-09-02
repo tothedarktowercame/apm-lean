@@ -1844,13 +1844,35 @@
       :output "46697b27cc819c0a9deb73a933ba5a1d50ac31a6"}
      {:cmd "git status --short", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788373723660-7563-b7d7a918",
+     :commands
+     ["sha256sum /tmp/T01A04QuotientCoveringBoundary.lean"
+      "git diff 7c6a8ba0^ 7c6a8ba0 --check"
+      "git diff --name-status 7c6a8ba0^ 7c6a8ba0"
+      "readlink -f .lake/packages"
+      "lake env lean /tmp/T01A04QuotientCoveringBoundary.lean"
+      "inspect t01A04 EqvGen relations and descended-map boundaries"
+      "inspect ConstructionTargets/ProductEvenlyCoveredTrivialization.lean"
+      "rg quotient/gluing covering APIs in pinned Mathlib and ConstructionTargets"
+      "newline-inclusive SHA-256 audit through ':= by' for apm_t01A04_bridge_quotient_maps_are_coverings and apm_t01a04"
+      "rg standalone sorry/admit audits on source and fixture"
+      "lake env lean problems/t01A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/t01a04-probe-ledger.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bash holes/labs/topology-contract/test-loop.sh"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: ledger-only STOP probe scope is exact; fixture hash and zero-warning compile reproduce; circle squaring and product-cover primitives are banked, but no pinned theorem descends compatible coverings through the required wedge quotient. The circle-doubled and torus-doubled relations have distinct wedge-point incidence and therefore require two local trivializations unless a new general covering-gluing foundation is built. The 4-to-4 placeholder count, frozen hashes, source/target orientation, exclusions, standard axioms, authority, ledger gates, loop tests, and clean tree all reproduce."},
     :fixture
     {:path "/tmp/T01A04QuotientCoveringBoundary.lean",
      :sha256
      "cb4b3febfb442738ba3129d5715db9db5af755ffec47ec1f4aa1a8fdd77169fa"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "ACTION/QUOTIENT TRANSPORT / t01A04 [LOCAL-GO]",
    :acceptance
@@ -1882,7 +1904,7 @@
    :stop-condition
    "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
