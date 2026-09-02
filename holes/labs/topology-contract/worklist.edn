@@ -358,86 +358,52 @@
    :stop-condition
    "STOP before Lefschetz or covering work; this row concerns only the H2 bridge and one reusable degree/naturality edge",
    :evidence
-   {:residual "H2 bridge remains open; Lefschetz remains independent",
+   {:placeholder-delta 0,
+    :residual
+    "apm_t01A02_bridge_H2map_eq_zero remains blocked on punctured closed-manifold top-homology vanishing; Lefschetz remains independent",
     :outcome :stop,
     :statement-hashes
-    {"apm_t01A02_bridge_H2map_eq_zero"
-     "ff96de85e5a2bd5feaae8e206a193a059ac43d5d42bd60dce4053362180a2107"},
+    {"t01A02/apm_t01A02_bridge_H2map_eq_zero"
+     "62a38aafc261277bf98eec4f78d4001362b88230de6721c751baf900d5d7c1a7"},
     :disposition :stop,
-    :author :codex-12,
-    :head "0e1731b5560424542414ff48e28fc4ff6fa33014",
+    :author :codex-6,
     :reason
-    "The nonsurjective-torus-self-map H2 theorem requires two independent absent foundations: an integral manifold fundamental class with map naturality, and punctured-manifold top-homology vanishing. Pinned Mathlib exposes neither a manifold orientation/fundamental-class interface nor the required point-deletion theorem; a torus-only statement would not serve the named sphere consumers.",
+    "The declared dependency did not land a theorem: its implementation row stopped because pinned Mathlib lacks the punctured closed-manifold top-homology foundation. The existing fixture proves the avoid-point factorization and exact H2 bridge only conditionally on that missing vanishing proposition. No canonical declaration named PuncturedClosedManifoldTopHomologyVanishing exists, so this row cannot discharge the unchanged bridge without assuming its dependency.",
     :commands
-    [{:cmd "lake env lean problems/t01A02/lean/Main.lean",
-      :exit 0,
-      :warnings 4}
-     {:cmd
-      "rg -n \"class .*Orient|structure .*Orient|fundamentalClass|FundamentalClass|nonsurject.*homology|homology.*nonsurject\" .lake/packages/mathlib/Mathlib/Geometry/Manifold .lake/packages/mathlib/Mathlib/AlgebraicTopology ConstructionTargets",
+    [{:cmd
+      "sha256sum /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
       :exit 0,
       :finding
-      "only unrelated ConstructionTargets/Intersection.lean:116 OrientedFrame"}
-     {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-20",
-     :job "invoke-1788352310329-7370-8c236ab3",
-     :finding
-     "Acceptance defect: the probe neither compiled the exact H2 bridge nor isolated one exact reusable theorem, and it conflates two alternative proof routes as jointly required. Select one route and state/probe one named generic prerequisite with t01A02, t02A08, and t94J08 as consumers."},
-    :probe
-    {:placeholder-delta 0,
-     :residual
-     "one owner-gated foundation remains: punctured closed-manifold top-homology vanishing; after it, the exact t01A02 H2 bridge is a compiled factorization adapter, while Lefschetz remains independent",
-     :outcome :revise,
-     :statement-hashes
-     {"apm_t01A02_bridge_H2map_eq_zero"
-      "ff96de85e5a2bd5feaae8e206a193a059ac43d5d42bd60dce4053362180a2107"},
-     :prerequisite
-     {:consumer :t01A02,
-      :phase :implementation,
-      :state :needs-owner,
-      :scope
-      ["ConstructionTargets/PuncturedClosedManifoldTopHomology.lean"
-       "ConstructionTargets/PuncturedClosedManifoldTopHomology.md"],
-      :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
-      :acceptance
-      {:declarations ["PuncturedClosedManifoldTopHomologyVanishing"],
-       :probe
-       "compile the generic punctured top-homology vanishing theorem and the unchanged t01A02 H2 bridge through avoid-point factorization",
-       :consumer-residual
-       "only apm_t01A02_bridge_H2map_eq_zero is discharged; Lefschetz remains independent",
-       :axioms :standard-only},
-      :classification :foundation,
-      :representation
-      {:source
-       "connected compact boundaryless n-manifold with one point deleted",
-       :target
-       "IsZero of integral singular H_n of the punctured manifold"},
-      :id :punctured-closed-manifold-top-homology-vanishing,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :other-consumers [:t02A08 :t94J08]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
-       :exit 0,
-       :warnings 0}
-      {:cmd "lake env lean problems/t01A02/lean/Main.lean",
-       :exit 0,
-       :warnings 4}
-      {:cmd "readlink -f .lake/packages",
-       :exit 0,
-       :output "/home/joe/code/apm-lean/.lake/packages"}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
-      :sha256
-      "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"},
-     :seat :codex-6},
-    :seat :codex-12},
+      "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"}
+     {:cmd
+      "lake env lean /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
+      :exit 0,
+      :warnings 0,
+      :finding
+      "Exact avoid-point bridge compiles only with hpunctured supplied as a hypothesis."}
+     {:cmd "lake env lean problems/t01A02/lean/Main.lean",
+      :exit 0,
+      :warnings 4,
+      :finding
+      "The H2 bridge and two independent downstream declarations still use sorry."}
+     {:cmd
+      "rg -n \"PuncturedClosedManifoldTopHomologyVanishing\" ConstructionTargets problems/t01A02/lean/Main.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "No canonical implementation."}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :finding "clean"}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean",
+     :sha256
+     "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
    :acceptance
