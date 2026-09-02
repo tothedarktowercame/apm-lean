@@ -309,6 +309,19 @@
       "Only Poincare-conjecture text, concrete relative-homology targets, and documentation explicitly deferring Poincare duality; no generic theorem or supporting interface."}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-20",
+     :job "invoke-1788361818600-7431-cc499c45",
+     :commands
+     ["sha256sum /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean"
+      "lake env lean /tmp/T01A02PuncturedTopHomologyPrerequisiteProbe.lean"
+      "lake env lean problems/t01A02/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff e9a6ea017ae812107d5e53635a65d5ee891c3d43^ e9a6ea017ae812107d5e53635a65d5ee891c3d43 --check"
+      "git status --porcelain=v1"],
+     :finding
+     "Exact one-file ledger scope; fixture, conditional bridge orientation, standard axioms, canonical package authority, frozen newline-inclusive statement hash, unchanged three-placeholder count, ledger validation, and clean-tree gates reproduce. The generic punctured-manifold theorem remains an honestly identified absent foundation, so STOP is correct."},
     :changed-paths [],
     :package-authority "/home/joe/code/apm-lean/.lake/packages",
     :fixture
@@ -317,7 +330,7 @@
      "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PuncturedClosedManifoldTopHomology.lean"
     "ConstructionTargets/PuncturedClosedManifoldTopHomology.md"],
@@ -424,7 +437,7 @@
      :seat :codex-6},
     :seat :codex-12},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
    :acceptance
