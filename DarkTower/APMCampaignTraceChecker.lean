@@ -124,6 +124,14 @@ structure TraceDeliveryObservation where
   pollingAvailable : Bool
   deriving FromJson, Repr
 
+structure TraceProofStandardObservation where
+  artifactId : String
+  declarationName : String
+  solvedClaim : Bool
+  axiomNames : List String
+  allowedAxiomNames : List String
+  deriving FromJson, Repr
+
 
 def progressObservationValid (observation : TraceProgressObservation) : Bool :=
   !observation.coordinatorEnabled ||
@@ -156,19 +164,68 @@ def deliveryObservationValid (observation : TraceDeliveryObservation) : Bool :=
 def deliveryTraceValid (trace : List TraceDeliveryObservation) : Bool :=
   !trace.isEmpty && trace.all deliveryObservationValid
 
+def proofStandardObservationValid
+    (observation : TraceProofStandardObservation) : Bool :=
+  !observation.artifactId.isEmpty &&
+  !observation.declarationName.isEmpty &&
+  observation.allowedAxiomNames == allowedProofAxioms &&
+  (!observation.solvedClaim || observation.axiomNames == allowedProofAxioms)
+
+def proofStandardTraceValid
+    (trace : List TraceProofStandardObservation) : Bool :=
+  !trace.isEmpty && trace.all proofStandardObservationValid
+
+def cleanProofStandardWitness : TraceProofStandardObservation where
+  artifactId := "624e81d7"
+  declarationName := "apm_a99j05"
+  solvedClaim := true
+  axiomNames := allowedProofAxioms
+  allowedAxiomNames := allowedProofAxioms
+
+def nativeDecideProofStandardMutant : TraceProofStandardObservation where
+  artifactId := "f60"
+  declarationName := "apm_b00j02"
+  solvedClaim := true
+  axiomNames := ["propext", "Classical.choice", "Quot.sound",
+                 "apm_b00j02._native.native_decide.ax_1_2"]
+  allowedAxiomNames := allowedProofAxioms
+
+theorem clean_proof_standard_witness_is_valid :
+    proofStandardObservationValid cleanProofStandardWitness = true := by
+  native_decide
+
+theorem native_decide_axiom_is_rejected :
+    proofStandardObservationValid nativeDecideProofStandardMutant = false := by
+  native_decide
+
 structure CombinedOperationalTrace where
   schemaVersion : Nat
   traceKind : String
   progressObservations : List TraceProgressObservation
   successorObservations : List TraceSuccessorObservation
   deliveryObservations : List TraceDeliveryObservation
+  proofStandardObservations : List TraceProofStandardObservation
   deriving FromJson, Repr
 
 def combinedOperationalTraceValid (trace : CombinedOperationalTrace) : Bool :=
   trace.schemaVersion == 1 && trace.traceKind == "apm-combined-operational" &&
   progressTraceValid trace.progressObservations &&
   successorTraceValid trace.successorObservations &&
-  deliveryTraceValid trace.deliveryObservations
+  deliveryTraceValid trace.deliveryObservations &&
+  proofStandardTraceValid trace.proofStandardObservations
+
+theorem accepted_operational_trace_has_exact_proof_axioms
+    (trace : CombinedOperationalTrace)
+    (accepted : combinedOperationalTraceValid trace = true) :
+    ∀ observation ∈ trace.proofStandardObservations,
+      observation.solvedClaim = true →
+      observation.axiomNames = allowedProofAxioms := by
+  intro observation member solved
+  simp [combinedOperationalTraceValid, proofStandardTraceValid,
+        proofStandardObservationValid] at accepted
+  rcases (accepted.2.2 observation member).2 with notSolved | exactAxioms
+  · simp [solved] at notSolved
+  · exact exactAxioms
 
 def healthyProgressWitness : TraceProgressObservation where
   coordinatorEnabled := true

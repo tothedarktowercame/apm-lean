@@ -41,6 +41,7 @@ def traceObservationKindName : TraceObservationKind → String
   | .progress => "progress"
   | .successor => "successor"
   | .delivery => "delivery"
+  | .proofStandard => "proof-standard"
 
 def traceObservationFieldJson (field : TraceObservationField) : Json :=
   Json.mkObj [("wire-name", Json.str field.wireName),

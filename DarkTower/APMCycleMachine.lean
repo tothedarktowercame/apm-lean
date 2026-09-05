@@ -1926,6 +1926,36 @@ def bankableSolved (o : TerminalOutcome) : Prop :=
 
 def successorEligible (o : TerminalOutcome) : Prop := bankableSolved o
 
+/-! ## Proof-standard evidence
+
+This section is independent of failure-outcome classification.  A solved frame
+is bankable only when its target declaration was inspected and its axiom list
+is exactly the project standard. -/
+
+def allowedProofAxioms : List String :=
+  ["propext", "Classical.choice", "Quot.sound"]
+
+structure ProofStandardEvidence where
+  artifactId : String
+  declarationName : String
+  axiomNames : List String
+  deriving DecidableEq, Repr
+
+def proofStandardClean (evidence : ProofStandardEvidence) : Prop :=
+  evidence.artifactId ≠ "" ∧ evidence.declarationName ≠ "" ∧
+  evidence.axiomNames = allowedProofAxioms
+
+def solvedCloseMeetsProofStandard
+    (outcome : TerminalOutcome) (evidence : ProofStandardEvidence) : Prop :=
+  bankableSolved outcome → proofStandardClean evidence
+
+theorem solved_close_requires_exact_allowed_axioms
+    (outcome : TerminalOutcome) (evidence : ProofStandardEvidence)
+    (solved : bankableSolved outcome)
+    (accepted : solvedCloseMeetsProofStandard outcome evidence) :
+    evidence.axiomNames = ["propext", "Classical.choice", "Quot.sound"] := by
+  exact (accepted solved).2.2
+
 /-- An unsolved partial frame may be retried only as the same problem from its
 exact retained Solver head.  This is distinct from ordinary queue succession:
 it neither banks a solved problem nor advances to the next problem. -/
