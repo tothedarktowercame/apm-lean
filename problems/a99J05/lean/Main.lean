@@ -221,9 +221,108 @@ lemma apm_a99J05_typewriter1d_integrable (k : ℕ) :
 arbitrarily late typewriter cells whose heights are arbitrarily large.  This
 gives the cofinal unbounded subsequence needed to refute pointwise convergence
 of the first example. -/
+private lemma apm_a99J05_pair_ge_max (a b : ℕ) : max a b ≤ Nat.pair a b := by
+  unfold Nat.pair
+  by_cases h : a < b
+  · have hm : max a b = b := Nat.max_eq_right h.le
+    rw [if_pos h, hm]
+    nlinarith
+  · have hm : max a b = a := Nat.max_eq_left (by omega : b ≤ a)
+    rw [if_neg h, hm]
+    nlinarith
+
+/-- Every point of `[0,1]` lies in some cell `[b/s, (b+1)/s]` with `b+1 ≤ s`. -/
+private lemma apm_a99J05_cell_exists {x : ℝ} (hx0 : 0 ≤ x) (hx1 : x ≤ 1) {s : ℕ}
+    (hs : 0 < s) :
+    ∃ b : ℕ, b + 1 ≤ s ∧ (b : ℝ) / s ≤ x ∧ x ≤ ((b : ℕ) + 1 : ℝ) / s := by
+  have hsR : (0 : ℝ) < (s : ℝ) := by exact_mod_cast hs
+  have hx1' : x * s ≤ (s : ℝ) := by
+    calc x * s ≤ 1 * s := mul_le_mul_of_nonneg_right hx1 hsR.le
+      _ = s := by ring
+  have hm_le : ((Nat.floor (x * s) : ℕ) : ℝ) ≤ x * s :=
+    Nat.floor_le (mul_nonneg hx0 hsR.le)
+  have hm_hi : x * s < ((Nat.floor (x * s) + 1 : ℕ) : ℝ) := by
+    have := Nat.lt_succ_floor (x * s)
+    exact this
+  have hm_s : Nat.floor (x * s) ≤ s := by
+    by_contra h
+    push_neg at h
+    have h2 : (s + 1 : ℕ) ≤ Nat.floor (x * s) := by omega
+    have h3 : ((s + 1 : ℕ) : ℝ) ≤ ((Nat.floor (x * s) : ℕ) : ℝ) := by exact_mod_cast h2
+    have h4 := h3.trans hm_le
+    have hsR1 : ((s : ℕ) : ℝ) < ((s + 1 : ℕ) : ℝ) := by exact_mod_cast Nat.lt_succ_self s
+    linarith
+  by_cases hlt : Nat.floor (x * s) < s
+  · refine ⟨Nat.floor (x * s), by omega, ?_, ?_⟩
+    · rw [div_le_iff₀ hsR]
+      calc ((Nat.floor (x * s) : ℕ) : ℝ) ≤ x * s := hm_le
+        _ = x * s := rfl
+    · rw [le_div_iff₀ hsR]
+      have hcast : ((Nat.floor (x * s) + 1 : ℕ) : ℝ) =
+          ((Nat.floor (x * s) : ℕ) : ℝ) + 1 := by push_cast; ring
+      rw [← hcast]
+      exact hm_hi.le
+  · have hfl : Nat.floor (x * s) = s := by omega
+    have hxs : x * s = (s : ℝ) := by
+      have h1 : ((s : ℕ) : ℝ) ≤ x * s := by
+        have hhm := hm_le
+        rw [hfl] at hhm
+        exact hhm
+      exact le_antisymm hx1' h1
+    have hx1eq : x = 1 := by
+      have hx1x : x ≤ 1 := hx1
+      have hxc : x * s = (1 : ℝ) * s := by
+        rw [hxs, one_mul]
+      have := mul_right_cancel₀ hsR.ne' hxc
+      linarith
+    subst hx1eq
+    refine ⟨s - 1, by omega, ?_, ?_⟩
+    · rw [div_le_one hsR]
+      exact_mod_cast (by omega : s - 1 ≤ s)
+    · have hs1 : (((s - 1 : ℕ) : ℝ) + 1) = (s : ℝ) := by
+        have h2 : s - 1 + 1 = s := by omega
+        have h3 : ((s - 1 : ℕ) : ℝ) + 1 = ((s - 1 + 1 : ℕ) : ℝ) := by
+          push_cast; ring
+        rw [h3, h2]
+      rw [hs1, div_self hsR.ne']
+
 theorem apm_a99J05_bridge_1 (x : ℝ) (hx : x ∈ Icc (0 : ℝ) 1) :
     apm_a99J05_LimsupInfinite (fun k ↦ apm_a99J05_typewriter1d k x) := by
-  sorry
+  obtain ⟨x0, x1⟩ := hx
+  intro M N
+  by_cases hM : 0 ≤ M
+  · obtain ⟨s, hsN, hsM, hs0⟩ :
+      ∃ s : ℕ, 2 * N + 1 ≤ s ∧ M * M ≤ (s : ℝ) ∧ (0 : ℝ) < (s : ℝ) := by
+      refine ⟨2 * N + Nat.ceil (M * M) + 1, by omega, ?_, by
+        positivity⟩
+      calc M * M ≤ ((Nat.ceil (M * M) : ℕ) : ℝ) := Nat.le_ceil _
+        _ ≤ (2 * N + Nat.ceil (M * M) + 1 : ℕ) := by exact_mod_cast (by omega)
+    obtain ⟨b, hbs, hb_lo, hb_hi⟩ := apm_a99J05_cell_exists x0 x1 (by omega : 0 < s)
+    set a : ℕ := s - 1 - b with ha
+    have hab : a + b = s - 1 := by omega
+    refine ⟨Nat.pair a b, ?_, ?_⟩
+    · have hmax : N ≤ max a b := by
+        by_contra h
+        push_neg at h
+        omega
+      exact hmax.trans (apm_a99J05_pair_ge_max a b)
+    · have hup : Nat.unpair (Nat.pair a b) = (a, b) := Nat.unpair_pair a b
+      have hs' : a + b + 1 = s := by omega
+      have hb_hi' : x ≤ ((b + 1 : ℕ) : ℝ) / s := by push_cast; exact hb_hi
+      have hmem : x ∈ Icc ((b : ℝ) / s) (((b + 1 : ℕ) : ℝ) / s) :=
+        mem_Icc.mpr ⟨hb_lo, hb_hi'⟩
+      have hsq : M ^ 2 ≤ (s : ℝ) := by nlinarith [sq_nonneg M]
+      have hsqrt : M ≤ Real.sqrt (s : ℝ) := Real.le_sqrt_of_sq_le hsq
+      have hval : apm_a99J05_typewriter1d (Nat.pair a b) x = Real.sqrt (s : ℝ) := by
+        unfold apm_a99J05_typewriter1d apm_a99J05_stage apm_a99J05_position
+        simp only [hup]
+        rw [hs', Set.indicator_of_mem hmem, mul_one]
+      show M ≤ apm_a99J05_typewriter1d (Nat.pair a b) x
+      rw [hval]
+      exact hsqrt
+  · push_neg at hM
+    have hMle : M ≤ 0 := by linarith
+    exact ⟨N, le_refl N, hMle.trans (apm_a99J05_typewriter1d_nonneg N x)⟩
 
 /- CLOSER HOP 3 NOTE.
 
@@ -272,7 +371,80 @@ theorem apm_a99j05 :
     Thus importing or copying those helpers alone cannot honestly close this
     existential.  The frozen statement is unchanged.
     -/
-    sorry
+    refine ⟨fun n => apm_a99J05_typewriter1d n, ?_, ?_, ?_⟩
+    · intro n
+      exact apm_a99J05_typewriter1d_integrable n
+    · have hnorm : ∀ n, apm_a99J05_l1Norm (apm_a99J05_typewriter1d n) =
+          ∫ x in Icc (0 : ℝ) 1, apm_a99J05_typewriter1d n x ∂volume := by
+        intro n
+        unfold apm_a99J05_l1Norm
+        show (∫ x in Icc (0 : ℝ) 1, ‖apm_a99J05_typewriter1d n x‖ ∂volume) =
+          ∫ x in Icc (0 : ℝ) 1, apm_a99J05_typewriter1d n x ∂volume
+        exact MeasureTheory.setIntegral_congr_ae measurableSet_Icc
+          (Eventually.of_forall fun x _ =>
+            abs_of_nonneg (apm_a99J05_typewriter1d_nonneg n x))
+      convert apm_a99J05_integral_typewriter1d_tendsto using 1
+      funext n
+      exact hnorm n
+    · intro hae
+      have hfull : ∀ᵐ x ∂apm_a99J05_measure, x ∈ Icc (0 : ℝ) 1 := by
+        rw [MeasureTheory.ae_iff]
+        have hint : {a : ℝ | a ∉ Icc (0 : ℝ) 1} ∩ Icc (0 : ℝ) 1 = ∅ := by
+          ext x
+          simp only [Set.mem_Icc, Set.mem_inter_iff, Set.mem_empty_iff_false]
+          tauto
+        have hm : MeasurableSet {a : ℝ | a ∉ Icc (0 : ℝ) 1} := by
+          show MeasurableSet ((Icc (0 : ℝ) 1)ᶜ)
+          exact measurableSet_Icc.compl
+        unfold apm_a99J05_measure
+        rw [Measure.restrict_apply hm, hint]
+        simp
+      have hboth : ∀ᵐ x ∂apm_a99J05_measure,
+          (∃ a : ℝ, Tendsto (fun n => apm_a99J05_typewriter1d n x) atTop (𝓝 a)) ∧
+            x ∈ Icc (0 : ℝ) 1 := hae.and hfull
+      have huniv : apm_a99J05_measure Set.univ = 1 := by
+        unfold apm_a99J05_measure
+        rw [Measure.restrict_apply MeasurableSet.univ, Set.univ_inter]
+        simp [Real.volume_Icc]
+      have hne : {x : ℝ |
+          (∃ a : ℝ, Tendsto (fun n => apm_a99J05_typewriter1d n x) atTop (𝓝 a)) ∧
+            x ∈ Icc (0 : ℝ) 1}.Nonempty := by
+        by_contra hempty
+        rw [Set.not_nonempty_iff_eq_empty] at hempty
+        have h0 := MeasureTheory.ae_iff.mp hboth
+        have hsplit : Set.univ = {x : ℝ |
+            (∃ a : ℝ, Tendsto (fun n => apm_a99J05_typewriter1d n x) atTop (𝓝 a)) ∧
+              x ∈ Icc (0 : ℝ) 1} ∪
+            {x : ℝ | ¬((∃ a : ℝ, Tendsto (fun n => apm_a99J05_typewriter1d n x) atTop (𝓝 a)) ∧
+              x ∈ Icc (0 : ℝ) 1)} := by
+          ext x
+          simp only [Set.mem_univ, Set.mem_union, Set.mem_setOf_eq]
+          tauto
+        have hle : apm_a99J05_measure Set.univ ≤
+            apm_a99J05_measure {x : ℝ |
+              (∃ a : ℝ, Tendsto (fun n => apm_a99J05_typewriter1d n x) atTop (𝓝 a)) ∧
+                x ∈ Icc (0 : ℝ) 1} +
+            apm_a99J05_measure {x : ℝ |
+              ¬((∃ a : ℝ, Tendsto (fun n => apm_a99J05_typewriter1d n x) atTop (𝓝 a)) ∧
+                x ∈ Icc (0 : ℝ) 1)} := by
+          rw [hsplit]
+          exact measure_union_le _ _
+        rw [huniv, hempty, measure_empty, zero_add, h0] at hle
+        exact absurd hle (by simp)
+      obtain ⟨x, hx⟩ := hne
+      obtain ⟨a, hta⟩ := hx.1
+      have hnev : ∀ᶠ k in atTop, apm_a99J05_typewriter1d k x < a + 1 := by
+        have h2 : ∀ᶠ y in (𝓝 a), y ∈ Iio (a + 1) := Iio_mem_nhds (by linarith)
+        have h3 := hta.eventually h2
+        simpa using h3
+      simp only [Filter.eventually_atTop, ge_iff_le] at hnev
+      obtain ⟨N, hN⟩ := hnev
+      obtain ⟨k, hkN, hkM⟩ :=
+        apm_a99J05_bridge_1 x hx.2 (a + 1) N
+      exact absurd hkM (by
+        have := hN k hkN
+        norm_num at hkM
+        linarith)
   · intro f hint hbound
     exact apm_a99J05_ae_tendsto_zero_of_summable_l1Norm f hint
       (apm_a99J05_summable_l1Norm_of_geometric_bound f hbound)

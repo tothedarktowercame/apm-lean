@@ -158,4 +158,70 @@ theorem apm_b90a03
      equality. Searches of the correspondence, `OrderIso` image/preimage, and
      Sylow uniqueness APIs found no declaration packaging this restricted
      singleton equivalence. -/
-  sorry
+
+  intro L hne_bot hne_top hfinL
+  letI : Fact p.Prime := ⟨hp⟩
+  have hcardG : Nat.card Gal(F/K) = p ^ n * q ^ m :=
+    (IsGalois.card_aut_eq_finrank K F).trans hdegree
+  have hcardH : Nat.card L.fixingSubgroup = p ^ n := by
+    rw [← IntermediateField.finrank_fixedField_eq_card,
+      IsGalois.fixedField_fixingSubgroup L]
+    exact hfinL
+  have hcardS : Nat.card L.fixingSubgroup = p ^ (Nat.card Gal(F/K)).factorization p := by
+    rw [hcardH, hcardG, apm_b90a03_factorization p q n m hp hq hpq]
+  constructor
+  · -- Forward: literal set equality {L'}-singleton forces IsGalois K L
+    intro hset
+    have hfixall : ∀ Q : Sylow p Gal(F/K),
+        IntermediateField.fixedField (Q : Subgroup Gal(F/K)) = L :=
+      fun Q => apm_b90a03_fixedField_eq_of_degree_singleton K F p q n m hp hq hpq
+        hdegree L hset Q
+    have hcoe : ∀ Q : Sylow p Gal(F/K),
+        (Q : Subgroup Gal(F/K)) = L.fixingSubgroup := by
+      intro Q
+      calc (Q : Subgroup Gal(F/K))
+          = IntermediateField.fixingSubgroup
+              (IntermediateField.fixedField (Q : Subgroup Gal(F/K))) :=
+            (IntermediateField.fixingSubgroup_fixedField
+              (F := K) (E := F) (H := (Q : Subgroup Gal(F/K)))).symm
+        _ = L.fixingSubgroup := by rw [hfixall Q]
+    haveI hsub : Subsingleton (Sylow p Gal(F/K)) :=
+      ⟨fun Q Q' => Sylow.ext ((hcoe Q).trans (hcoe Q').symm)⟩
+    have hnorm : (default : Sylow p Gal(F/K)).Normal :=
+      Sylow.normal_of_subsingleton _
+    have hnorm' : L.fixingSubgroup.Normal := by
+      rw [← hcoe default]; exact hnorm
+    exact (InfiniteGalois.normal_iff_isGalois L).mp hnorm'
+  · -- Reverse: IsGalois K L forces the literal set equality
+    intro hgalois
+    have huniq : Unique (Sylow p Gal(F/K)) := by
+      refine Sylow.unique_of_normal (Sylow.ofCard L.fixingSubgroup hcardS) ?_
+      show ((Sylow.ofCard L.fixingSubgroup hcardS : Sylow p Gal(F/K)) :
+          Subgroup Gal(F/K)).Normal
+      rw [Sylow.coe_ofCard]
+      exact IsGalois.fixingSubgroup_normal_of_isGalois L
+    refine Set.eq_singleton_iff_unique_mem.mpr ⟨?_, ?_⟩
+    · rw [Set.mem_setOf_eq]; exact hfinL
+    · intro L' hL'
+      have hcardH' : Nat.card L'.fixingSubgroup = p ^ n := by
+        rw [← IntermediateField.finrank_fixedField_eq_card,
+          IsGalois.fixedField_fixingSubgroup L']
+        exact hL'
+      have hcardS' : Nat.card L'.fixingSubgroup
+          = p ^ (Nat.card Gal(F/K)).factorization p := by
+        rw [hcardH', hcardG, apm_b90a03_factorization p q n m hp hq hpq]
+      have hQ : (Sylow.ofCard L'.fixingSubgroup hcardS' : Sylow p Gal(F/K))
+          = Sylow.ofCard L.fixingSubgroup hcardS :=
+        Subsingleton.elim _ _
+      have hQcoe : (Sylow.ofCard L'.fixingSubgroup hcardS' : Subgroup Gal(F/K))
+          = L'.fixingSubgroup := Sylow.coe_ofCard _ _
+      rw [Sylow.ext_iff] at hQ
+      have hL'eq : L' = IntermediateField.fixedField (L'.fixingSubgroup) :=
+        (IsGalois.fixedField_fixingSubgroup L').symm
+      have hLeq : IntermediateField.fixedField (L.fixingSubgroup) = L :=
+        IsGalois.fixedField_fixingSubgroup L
+      calc L' = IntermediateField.fixedField (L'.fixingSubgroup) := hL'eq
+        _ = IntermediateField.fixedField (L.fixingSubgroup) := by
+            rw [← hQcoe, ← Sylow.coe_ofCard L.fixingSubgroup hcardS, ← hQ]
+        _ = L := hLeq
+
