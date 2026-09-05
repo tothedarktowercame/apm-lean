@@ -169,7 +169,8 @@ def proofStandardObservationValid
   !observation.artifactId.isEmpty &&
   !observation.declarationName.isEmpty &&
   observation.allowedAxiomNames == allowedProofAxioms &&
-  (!observation.solvedClaim || observation.axiomNames == allowedProofAxioms)
+  (!observation.solvedClaim ||
+    observation.axiomNames.all (fun a => allowedProofAxioms.contains a))
 
 def proofStandardTraceValid
     (trace : List TraceProofStandardObservation) : Bool :=
@@ -192,11 +193,11 @@ def nativeDecideProofStandardMutant : TraceProofStandardObservation where
 
 theorem clean_proof_standard_witness_is_valid :
     proofStandardObservationValid cleanProofStandardWitness = true := by
-  native_decide
+  decide
 
 theorem native_decide_axiom_is_rejected :
     proofStandardObservationValid nativeDecideProofStandardMutant = false := by
-  native_decide
+  decide
 
 structure CombinedOperationalTrace where
   schemaVersion : Nat
@@ -214,18 +215,18 @@ def combinedOperationalTraceValid (trace : CombinedOperationalTrace) : Bool :=
   deliveryTraceValid trace.deliveryObservations &&
   proofStandardTraceValid trace.proofStandardObservations
 
-theorem accepted_operational_trace_has_exact_proof_axioms
+theorem accepted_operational_trace_admits_no_axiom_outside_the_standard
     (trace : CombinedOperationalTrace)
     (accepted : combinedOperationalTraceValid trace = true) :
     ∀ observation ∈ trace.proofStandardObservations,
       observation.solvedClaim = true →
-      observation.axiomNames = allowedProofAxioms := by
+      ∀ a ∈ observation.axiomNames, a ∈ allowedProofAxioms := by
   intro observation member solved
   simp [combinedOperationalTraceValid, proofStandardTraceValid,
         proofStandardObservationValid] at accepted
-  rcases (accepted.2.2 observation member).2 with notSolved | exactAxioms
+  rcases (accepted.2.2 observation member).2 with notSolved | subsetAxioms
   · simp [solved] at notSolved
-  · exact exactAxioms
+  · exact subsetAxioms
 
 def healthyProgressWitness : TraceProgressObservation where
   coordinatorEnabled := true
