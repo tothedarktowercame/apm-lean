@@ -14,6 +14,18 @@ None.
 The order and subgroup index are the actual finite cardinality and
 `Subgroup.index`. Normality and cyclicity use Mathlib's structural predicates,
 rather than merely asserting numerical consequences of them.
+
+## Proof constraints
+
+The proof must be kernel-checked. `#print axioms` on the target declaration
+must report exactly `[propext, Classical.choice, Quot.sound]`. `native_decide`
+is not acceptable: it discharges the goal through the compiler rather than the
+kernel and introduces a `._native.native_decide.` axiom.
+
+A previous attempt (jit-all-open-v2 frame f61) discharged divisor and Sylow
+counting steps with `native_decide`, producing five
+`._native.native_decide.` axioms in `#print axioms`. That attempt was
+rejected and is not recorded as a proof.
 -/
 
 def apmSmallestPrimeDivisor (p n : ℕ) : Prop :=

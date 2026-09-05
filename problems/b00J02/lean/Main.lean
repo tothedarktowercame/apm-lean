@@ -11,6 +11,17 @@ None.
 
 None. `GL (Fin 3) (ZMod 4)` is Mathlib's group of invertible `3 × 3`
 matrices over `ℤ/4ℤ`.
+
+## Proof constraints
+
+The proof must be kernel-checked. `#print axioms` on the target declaration
+must report exactly `[propext, Classical.choice, Quot.sound]`. `native_decide`
+is not acceptable: it discharges the goal through the compiler rather than the
+kernel and introduces a `._native.native_decide.` axiom.
+
+A previous attempt (jit-all-open-v2 frame f60) discharged the counting
+steps with `native_decide`, producing `apm_b00j02._native.native_decide.ax_1_2`
+in `#print axioms`. That attempt was rejected and is not recorded as a proof.
 -/
 
 /-- The residue-field factor in the reduction-modulo-two count. -/
