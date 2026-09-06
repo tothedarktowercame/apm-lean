@@ -2210,8 +2210,72 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite-dimensional decomposition cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:next-consumer-residual
+    "Prove uniform C∞ rank-stratum image-nullity for arbitrary finite-dimensional source and target, then combine it with the banked finite decomposition and countable aggregation.",
+    :placeholder-delta {:scoped-files [0 0], :consumer :unchanged},
+    :residual
+    "one uniform C∞ theorem proving nullity of the image of every derivative-rank stratum below the target dimension; manifold chart assembly has not begun",
+    :gates
+    {:fixture-hash :pass,
+     :direct-compile :pass,
+     :focused-build :pass,
+     :placeholder-audit :pass,
+     :diff-check :pass,
+     :worktree-clean :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"criticalSet"
+     "6dd4b3ea2ef63ab99a8dc781e394003527a6a20f325ac9dd97670ddc0bf294ef",
+     "rankStratum"
+     "80145789672f27b436e7b176fc96fadd2d1a490d37fc262b934890de742cc080",
+     "criticalSet_eq_iUnion_rankStratum"
+     "e9cd9b7e210a1aef0f835089cefc5bfc1352c12d7f63056ba765dd717ac35043"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-2,
+    :commands
+    [{:cmd "test -d .lake/packages && test ! -L .lake/packages",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/RectangularSardRankStrataProbe.lean",
+      :exit 0,
+      :output
+      "8fb2284053f64b2d58026d9203cd4439b7ce28bd248aee9b338a8c8b3bc75344"}
+     {:cmd "lake env lean /tmp/RectangularSardRankStrataProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCriticalRankStrata.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SardCriticalRankStrata",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardCriticalRankStrata.lean ConstructionTargets/SardCriticalRankStrata.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "8e18ea8176c0ebd1f7cc89b07120fcbeaa1195e6",
+    :changed-paths
+    ["ConstructionTargets/SardCriticalRankStrata.lean"
+     "ConstructionTargets/SardCriticalRankStrata.md"],
+    :file-hashes
+    {"ConstructionTargets/SardCriticalRankStrata.lean"
+     "eddce73426f9bcb95cbfa9a83b976044d4663b14b463f8ea79ba9b7454f5f1f5",
+     "ConstructionTargets/SardCriticalRankStrata.md"
+     "fa52832cf80fa8137b4533369c0c2c6d5c8d7ea1113f3033610dcd985cc3bb50"},
+    :fixture
+    {:path "/tmp/RectangularSardRankStrataProbe.lean",
+     :sha256
+     "8fb2284053f64b2d58026d9203cd4439b7ce28bd248aee9b338a8c8b3bc75344"},
+    :declarations
+    ["criticalSet" "rankStratum" "criticalSet_eq_iUnion_rankStratum"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCriticalRankStrata.lean"
     "ConstructionTargets/SardCriticalRankStrata.md"],
