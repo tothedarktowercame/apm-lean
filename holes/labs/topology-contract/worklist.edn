@@ -2145,6 +2145,26 @@
       :expected-exit 1}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788731360208-13425-84f54729",
+     :commands
+     ["git diff c1ea651c^ c1ea651c --check"
+      "git diff --name-status c1ea651c^ c1ea651c"
+      "git show c1ea651c:ConstructionTargets/SardCriticalImageAggregation.lean | sha256sum"
+      "git show c1ea651c:ConstructionTargets/SardCriticalImageAggregation.md | sha256sum"
+      "sha256sum /tmp/RectangularSardAggregationProbe.lean"
+      "lake env lean /tmp/RectangularSardAggregationProbe.lean"
+      "lake env lean ConstructionTargets/SardCriticalImageAggregation.lean"
+      "lake build ConstructionTargets.SardCriticalImageAggregation"
+      "! rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^[[:space:]]*axiom |^[[:space:]]*opaque |^[[:space:]]*unsafe ' ConstructionTargets/SardCriticalImageAggregation.lean ConstructionTargets/SardCriticalImageAggregation.md"
+      "test -z \"$(git diff --name-only c1ea651c HEAD -- ConstructionTargets/SardCriticalImageAggregation.lean ConstructionTargets/SardCriticalImageAggregation.md)\""
+      "sed -n '12,18p' ConstructionTargets/SardCriticalImageAggregation.lean | sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer differs from author codex-2; c1ea651c is diff-clean and changes exactly the two scoped files; committed file hashes reproduce as 17eeaf292aed2840187f2dcc2224b29cee70b2fcaff6a07c6e59d767b44b312a and 4c4b3aa2d563c011601968078fbb0187d7f7001b3d0a951b6e627dc0cd576376a; fixture hash 77ac07dbc69f7b71c1666b6ca952c25bff354b59d1c0f3d0f2576b10279749a1 reproduces and compiles; direct and focused builds pass; declaration statement hash reproduces as 2c00b5cdb02dc8b58fcd5be40def540a445de20ca86a6a9071d0a9f9ee8e222b; forbidden scan is clean; axioms are propext, Classical.choice, and Quot.sound; theorem orientation maps countable coverage plus null restricted critical images to nullity of the full critical image under the same measure, preserving the abstract aggregation boundary and leaving rectangular local-set Morse--Sard as the sole consumer residual."},
     :commit "c1ea651c7e0d92b50306138216e9064a3091e00d",
     :changed-paths
     ["ConstructionTargets/SardCriticalImageAggregation.lean"
@@ -2161,7 +2181,7 @@
     :declarations ["criticalImage_null_of_countable_local_null"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCriticalImageAggregation.lean"
     "ConstructionTargets/SardCriticalImageAggregation.md"],
@@ -2265,7 +2285,7 @@
       "77ac07dbc69f7b71c1666b6ca952c25bff354b59d1c0f3d0f2576b10279749a1"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
