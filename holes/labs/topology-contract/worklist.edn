@@ -2327,8 +2327,68 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite aggregation cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:next-consumer-residual
+    "Prove that every exact derivative-rank-r stratum of a C∞ map E → F has null image for r < finrank ℝ F; finite rank decomposition and null aggregation are now banked.",
+    :placeholder-delta {:scoped-files [0 0], :consumer :unchanged},
+    :residual
+    "one uniform C∞ rank-stratum image-nullity theorem before manifold chart assembly",
+    :gates
+    {:fixture-hash :pass,
+     :direct-compile :pass,
+     :focused-build :pass,
+     :placeholder-audit :pass,
+     :diff-check :pass,
+     :worktree-clean :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"criticalImage_null_of_rankStrata_null"
+     "af91bb7fd6310ec9f7124186f5cc31a9b7e6377b2ac090be0ad4b3083c639fdf"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-2,
+    :commands
+    [{:cmd "test -d .lake/packages && test ! -L .lake/packages",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/RectangularSardRankStrataNullProbe.lean",
+      :exit 0,
+      :output
+      "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"}
+     {:cmd
+      "lake env lean /tmp/RectangularSardRankStrataNullProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCriticalRankStrataNull.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SardCriticalRankStrataNull",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardCriticalRankStrataNull.lean ConstructionTargets/SardCriticalRankStrataNull.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "85bedd059e17a22b10337e8c82c21f6d9d2548ae",
+    :changed-paths
+    ["ConstructionTargets/SardCriticalRankStrataNull.lean"
+     "ConstructionTargets/SardCriticalRankStrataNull.md"],
+    :file-hashes
+    {"ConstructionTargets/SardCriticalRankStrataNull.lean"
+     "d1ea8190dba246620fe92b73866c8c2161a186df99cb8a9901b2bcdd8d0ba462",
+     "ConstructionTargets/SardCriticalRankStrataNull.md"
+     "8c41a402c90a886682146957e77f0806b7918172dfe19e8b7989c5f62a66815f"},
+    :fixture
+    {:path "/tmp/RectangularSardRankStrataNullProbe.lean",
+     :sha256
+     "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"},
+    :declarations ["criticalImage_null_of_rankStrata_null"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCriticalRankStrataNull.lean"
     "ConstructionTargets/SardCriticalRankStrataNull.md"],
