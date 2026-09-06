@@ -2442,71 +2442,42 @@
    :stop-condition
    "STOP only on a genuine counterexample or incompatible hypotheses for the rectangular theorem, naming it; REVISE only if exactly one named compiled prerequisite remains. Do not begin chart-countable assembly.",
    :evidence
-   {:outcome :replan,
+   {:supersede
+    [:checkpoint-full-dag-refill-7
+     :critical-value-sard-local-rank-normal-form-probe-1
+     :critical-value-sard-multivariable-taylor-covering-probe-1
+     :critical-value-sard-rank-source-induction-probe-1
+     :critical-value-sard-rectangular-local-probe-2
+     :checkpoint-full-dag-refill-8],
+    :outcome :replan,
     :warnings
-    ["No pinned general constant-rank theorem was found."
-     "Pinned Taylor results do not provide the required finite-dimensional multivariable quantitative covering estimate."
-     "No mathematical refutation of rectangular C∞ Morse--Sard was found."],
+    ["No mathematical refutation of rectangular C∞ Morse--Sard was found."
+     "The rejected replacement IDs are retired so the accepted repair has unique IDs and one terminal checkpoint."],
     :disposition :replan,
     :axioms :standard-only,
     :author :codex-2,
     :commands
-    [{:cmd "sed -n '1,220p' docs/TN-topology-build-loop-design.md",
-      :exit 0}
-     {:cmd
-      "rg -n -C 20 'CRITICAL-VALUE MANIFOLD SARD|critical-value-sard-(countable|rank-strata)|fed13418|rectangular-local-probe' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md holes/labs/topology-contract/worklist.edn",
-      :exit 0}
-     {:cmd "git diff fed13418^ fed13418 --check", :exit 0}
-     {:cmd "git diff --name-status fed13418^ fed13418",
+    [{:cmd "git diff 57716519^ 57716519 --check", :exit 0}
+     {:cmd "git diff --name-status 57716519^ 57716519",
       :exit 0,
       :output "M holes/labs/topology-contract/worklist.edn"}
+     {:cmd
+      "rg -n -C 10 'checkpoint-full-dag-refill-7|critical-value-sard-rectangular-local-probe-2|checkpoint-full-dag-refill-8' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sed -n '80,190p' holes/labs/topology-contract/build_step.bb",
+      :exit 0}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :output
-      "topology-worklist: 24 items OK; {:done 22, :repair 1, :blocked 1}"}
-     {:cmd
-      "rg -n 'ConstantRank|constant rank|rank theorem' .lake/packages/mathlib/Mathlib -g '*.lean'",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd
-      "rg -n 'Taylor|taylor.*remainder|remainder.*Taylor|ContDiff.*remainder' .lake/packages/mathlib/Mathlib/Analysis -g '*.lean'",
-      :exit 0}
-     {:cmd
-      "rg -n 'Sard|critical value' .lake/packages/mathlib/Mathlib -g '*.lean'",
-      :exit 0}
+      "topology-worklist: 29 items OK; {:done 22, :repair 1, :blocked 6}"}
      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
       :exit 0,
       :output
       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
-     {:cmd
-      "rg -n '\\bsorry\\b|theorem apm_' problems/t93A04/lean/Main.lean",
-      :exit 0,
-      :output "one theorem and one placeholder"}
-     {:cmd
-      "git log -1 --oneline -- ConstructionTargets/SardCriticalImageAggregation.lean",
-      :exit 0,
-      :output "c1ea651c Add countable Sard critical-image aggregation"}
-     {:cmd
-      "git log -1 --oneline -- ConstructionTargets/SardCriticalRankStrata.lean",
-      :exit 0,
-      :output "8e18ea81 Add finite Sard critical rank strata"}
-     {:cmd
-      "git log -1 --oneline -- ConstructionTargets/SardCriticalRankStrataNull.lean",
-      :exit 0,
-      :output "85bedd05 Add Sard rank-strata null aggregation"}
-     {:cmd "readlink -f .lake/packages",
-      :exit 0,
-      :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-17",
-     :job "invoke-1788732374732-13447-609c0102",
-     :finding
-     "Recorded commit 57716519 leaves checkpoint-full-dag-refill-7 depending on critical-value-sard-rectangular-local-probe-1, so accepting the replan completes that parent and prematurely releases the old checkpoint before the replacement Sard sub-DAG and critical-value-sard-rectangular-local-probe-2 are reviewed; supersede checkpoint 7 or retarget it to the new terminal assembly."},
-    :supersedes [:critical-value-sard-rectangular-local-probe-1],
     :replacement-items
     [{:consumer :t93A04,
       :stop-condition
@@ -2526,8 +2497,8 @@
       {:source
        "a C∞ map E → F, a point of derivative rank r, and a certified invertible r-dimensional derivative minor",
        :target
-       "local source and target coordinates splitting the map into r regular coordinates and a residual map with the required derivative-rank control"},
-      :id :critical-value-sard-local-rank-normal-form-probe-1,
+       "local source and target coordinates splitting the map into r regular coordinates and a residual map with derivative-rank control"},
+      :id :critical-value-sard-local-rank-normal-form-probe-2,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
@@ -2552,11 +2523,11 @@
        "a sufficiently smooth map between finite-dimensional real normed spaces with prescribed vanishing iterated derivatives on a bounded source set",
        :target
        "a quantitative small-ball image cover implying zero target add-Haar measure under the Morse--Sard exponent inequality"},
-      :id :critical-value-sard-multivariable-taylor-covering-probe-1,
+      :id :critical-value-sard-multivariable-taylor-covering-probe-2,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "pinned Taylor APIs do not yet yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
+      "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
      {:consumer :t93A04,
       :stop-condition
@@ -2574,16 +2545,16 @@
        :axioms :standard-only},
       :representation
       {:source
-       "local exact-rank strata for C∞ maps E → F together with the rank-normal-form and flat-locus covering theorems",
+       "local exact-rank strata for C∞ maps E → F together with rank-normal-form and flat-locus covering theorems",
        :target
        "target-measure nullity of each exact derivative-rank stratum by induction on source dimension and derivative rank"},
-      :id :critical-value-sard-rank-source-induction-probe-1,
+      :id :critical-value-sard-rank-source-induction-probe-2,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-local-rank-normal-form-probe-1
-       :critical-value-sard-multivariable-taylor-covering-probe-1],
+      [:critical-value-sard-local-rank-normal-form-probe-2
+       :critical-value-sard-multivariable-taylor-covering-probe-2],
       :current-residual
-      "the standard Morse--Sard proof still needs its rank/source-dimension induction formalized after both analytic inputs",
+      "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
      {:consumer :t93A04,
       :stop-condition
@@ -2595,7 +2566,7 @@
       "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
       :acceptance
       {:probe
-       "Compile a placeholder-free rectangular local-set Morse--Sard theorem for sufficiently differentiable maps between arbitrary finite-dimensional real normed spaces, using the reviewed rank decomposition, null aggregation, local rank splitting, Taylor covering, and induction results.",
+       "Compile a placeholder-free rectangular local-set Morse--Sard theorem using the reviewed rank decomposition, null aggregation, local rank splitting, Taylor covering, and induction results.",
        :consumer-residual
        "countable manifold chart assembly and frozen t93A04 conclusion only",
        :axioms :standard-only},
@@ -2604,13 +2575,13 @@
        "sufficiently differentiable maps E → F localized to a source set, with arbitrary finite source and target dimensions",
        :target
        "zero target measure of the image of the nonsurjective-derivative locus"},
-      :id :critical-value-sard-rectangular-local-probe-2,
+      :id :critical-value-sard-rectangular-local-probe-3,
       :kind :reusable-theorem,
       :depends-on
       [:critical-value-sard-countable-aggregation-1
        :critical-value-sard-rank-strata-1
        :critical-value-sard-rank-strata-null-aggregation-1
-       :critical-value-sard-rank-source-induction-probe-1],
+       :critical-value-sard-rank-source-induction-probe-2],
       :current-residual
       "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
@@ -2631,37 +2602,36 @@
       :dag-node "PORTFOLIO POLICY",
       :acceptance
       {:strategy
-       "Reread the complete DAG and reviewed outcomes of all four Sard work rows; elect a new nonempty portfolio under the standing policy."},
-      :id :checkpoint-full-dag-refill-8,
+       "Reread the complete DAG and reviewed outcomes of all four replacement Sard work rows; elect a new nonempty portfolio under the standing policy."},
+      :id :checkpoint-full-dag-refill-9,
       :kind :strategy-checkpoint,
       :depends-on
-      [:critical-value-sard-local-rank-normal-form-probe-1
-       :critical-value-sard-multivariable-taylor-covering-probe-1
-       :critical-value-sard-rank-source-induction-probe-1
-       :critical-value-sard-rectangular-local-probe-2],
+      [:critical-value-sard-local-rank-normal-form-probe-2
+       :critical-value-sard-multivariable-taylor-covering-probe-2
+       :critical-value-sard-rank-source-induction-probe-2
+       :critical-value-sard-rectangular-local-probe-3],
       :current-residual
-      "await reviewed local rank-normal-form, Taylor-covering, induction, and rectangular-local outcomes, then refill from the complete DAG"}],
+      "await reviewed replacement Sard sub-DAG outcomes, then refill from the complete DAG"}],
     :finding
     {:review-defect
-     "The prior STOP contradicted the row condition because its evidence affirms the C∞ rectangular Morse--Sard theorem and identifies missing formalization infrastructure, not a counterexample or incompatible hypotheses.",
+     "The previous receipt used :supersedes, but build_step.bb applies only the :supersede key. Consequently checkpoint-full-dag-refill-7 remained blocked directly on the repaired parent and would become eligible as soon as that parent passed review.",
+     :repair
+     "Use the recognized :supersede key to retire checkpoint 7 and the rejected first-generation replacement rows, then insert a fresh equivalent Sard sub-DAG whose only terminal portfolio checkpoint depends on every new work row.",
      :placeholder-delta {:t93A04 [1 1]},
      :typed-residual-change
      {:before "one purported bounded rectangular local theorem",
       :after
-      "four explicit stages: local rank normal form, multivariable Taylor-covering nullity, rank/source-dimension induction, and rectangular local assembly"},
+      "local rank normal form, multivariable Taylor-covering nullity, rank/source-dimension induction, then rectangular local assembly"},
      :infrastructure-packets 3,
      :review-outcomes
      {:countable-aggregation :pass,
       :rank-strata :pass,
       :rank-strata-null-aggregation :pass,
-      :rectangular-stop :fail},
-     :preserved-modules
-     ["ConstructionTargets/SardCriticalImageAggregation.lean"
-      "ConstructionTargets/SardCriticalRankStrata.lean"
-      "ConstructionTargets/SardCriticalRankStrataNull.lean"]},
+      :rectangular-stop :fail,
+      :first-replan :fail}},
     :seat :codex-2},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
@@ -2703,8 +2673,8 @@
    {:source
     "a C∞ map E → F, a point of derivative rank r, and a certified invertible r-dimensional derivative minor",
     :target
-    "local source and target coordinates splitting the map into r regular coordinates and a residual map with the required derivative-rank control"},
-   :id :critical-value-sard-local-rank-normal-form-probe-1,
+    "local source and target coordinates splitting the map into r regular coordinates and a residual map with derivative-rank control"},
+   :id :critical-value-sard-local-rank-normal-form-probe-2,
    :kind :reusable-theorem,
    :depends-on [:critical-value-sard-rectangular-local-probe-1],
    :current-residual
@@ -2729,6 +2699,142 @@
     "a sufficiently smooth map between finite-dimensional real normed spaces with prescribed vanishing iterated derivatives on a bounded source set",
     :target
     "a quantitative small-ball image cover implying zero target add-Haar measure under the Morse--Sard exponent inequality"},
+   :id :critical-value-sard-multivariable-taylor-covering-probe-2,
+   :kind :reusable-theorem,
+   :depends-on [:critical-value-sard-rectangular-local-probe-1],
+   :current-residual
+   "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
+   "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
+   :acceptance
+   {:probe
+    "Using compiled local rank splitting and Taylor-covering nullity, compile a placeholder-free induction step covering every exact derivative-rank stratum r < finrank ℝ F.",
+    :consumer-residual
+    "rectangular local-set Morse--Sard assembly only",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "local exact-rank strata for C∞ maps E → F together with rank-normal-form and flat-locus covering theorems",
+    :target
+    "target-measure nullity of each exact derivative-rank stratum by induction on source dimension and derivative rank"},
+   :id :critical-value-sard-rank-source-induction-probe-2,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-local-rank-normal-form-probe-2
+    :critical-value-sard-multivariable-taylor-covering-probe-2
+    :critical-value-sard-rectangular-local-probe-1],
+   :current-residual
+   "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
+   "STOP only for a genuine counterexample or incompatible hypotheses for rectangular local-set Morse--Sard; otherwise REVISE with exactly one compiled prerequisite.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free rectangular local-set Morse--Sard theorem using the reviewed rank decomposition, null aggregation, local rank splitting, Taylor covering, and induction results.",
+    :consumer-residual
+    "countable manifold chart assembly and frozen t93A04 conclusion only",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "sufficiently differentiable maps E → F localized to a source set, with arbitrary finite source and target dimensions",
+    :target
+    "zero target measure of the image of the nonsurjective-derivative locus"},
+   :id :critical-value-sard-rectangular-local-probe-3,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-countable-aggregation-1
+    :critical-value-sard-rank-strata-1
+    :critical-value-sard-rank-strata-null-aggregation-1
+    :critical-value-sard-rank-source-induction-probe-2
+    :critical-value-sard-rectangular-local-probe-1],
+   :current-residual
+   "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Stop only on a genuine mathematical refutation, naming it; never stop for missing infrastructure or owner authorization.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG and reviewed outcomes of all four replacement Sard work rows; elect a new nonempty portfolio under the standing policy."},
+   :id :checkpoint-full-dag-refill-9,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:critical-value-sard-local-rank-normal-form-probe-2
+    :critical-value-sard-multivariable-taylor-covering-probe-2
+    :critical-value-sard-rank-source-induction-probe-2
+    :critical-value-sard-rectangular-local-probe-3
+    :critical-value-sard-rectangular-local-probe-1],
+   :current-residual
+   "await reviewed replacement Sard sub-DAG outcomes, then refill from the complete DAG"}
+  {:consumer :t93A04,
+   :stop-condition
+   "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
+   :phase :probe,
+   :state :superseded,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCAL RANK NORMAL FORM",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free finite-dimensional local rank-normal-form or equivalent submersion-splitting fixture around a point where a specified r-minor of the derivative is invertible.",
+    :consumer-residual
+    "multivariable Taylor-covering nullity and rank/source-dimension induction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a C∞ map E → F, a point of derivative rank r, and a certified invertible r-dimensional derivative minor",
+    :target
+    "local source and target coordinates splitting the map into r regular coordinates and a residual map with the required derivative-rank control"},
+   :id :critical-value-sard-local-rank-normal-form-probe-1,
+   :kind :reusable-theorem,
+   :depends-on [:critical-value-sard-rectangular-local-probe-1],
+   :current-residual
+   "no pinned constant-rank API constructs the local splitting required on a nonzero derivative minor",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
+   "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
+   :phase :probe,
+   :state :superseded,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free finite-dimensional multivariable higher-order Taylor remainder and covering-nullity fixture for a locus on which derivatives through the required order vanish.",
+    :consumer-residual
+    "local rank reduction and rank/source-dimension induction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a sufficiently smooth map between finite-dimensional real normed spaces with prescribed vanishing iterated derivatives on a bounded source set",
+    :target
+    "a quantitative small-ball image cover implying zero target add-Haar measure under the Morse--Sard exponent inequality"},
    :id :critical-value-sard-multivariable-taylor-covering-probe-1,
    :kind :reusable-theorem,
    :depends-on [:critical-value-sard-rectangular-local-probe-1],
@@ -2739,7 +2845,7 @@
    :stop-condition
    "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
@@ -2767,7 +2873,7 @@
    :stop-condition
    "STOP only for a genuine counterexample or incompatible hypotheses for rectangular local-set Morse--Sard; otherwise REVISE with exactly one compiled prerequisite.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -2805,7 +2911,7 @@
    :stop-condition
    "Stop only on a genuine mathematical refutation, naming it; never stop for missing infrastructure or owner authorization.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -2833,7 +2939,7 @@
    :stop-condition
    "Stop only on a genuine mathematical refutation, naming it; never stop for want of owner authorization.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
