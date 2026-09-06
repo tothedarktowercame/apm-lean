@@ -2098,12 +2098,114 @@
    :current-residual
    "Prior stop was an owner-election request under the withdrawn gate; re-elect under the standing policy."}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled abstract aggregation cannot be promoted at the recorded type without changing representation or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCriticalImageAggregation.lean"
+    "ConstructionTargets/SardCriticalImageAggregation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COUNTABLE CRITICAL-IMAGE AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/RectangularSardAggregationProbe.lean",
+     :sha256
+     "77ac07dbc69f7b71c1666b6ca952c25bff354b59d1c0f3d0f2576b10279749a1"},
+    :declarations ["criticalImage_null_of_countable_local_null"],
+    :consumer-residual
+    "rectangular local-set Morse--Sard only; do not begin chart-countable assembly in the frozen consumer",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a countable family of source patches whose restricted critical images are null",
+    :target
+    "nullity of the full critical image under the same target measure"},
+   :id :critical-value-sard-countable-aggregation-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the manifold proof needs a certified countable-union step from chartwise null critical images to the full critical image",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :recalled-suggestion
    "The reviewed t93A04 probe compiled chart criticality and critical-image inclusion; the common missing edge for five consumers is rectangular local Morse--Sard for arbitrary finite source dimension.",
    :stop-condition
    "STOP only on a genuine counterexample or incompatible hypotheses for the rectangular theorem, naming it; REVISE only if exactly one named compiled prerequisite remains. Do not begin chart-countable assembly.",
+   :evidence
+   {:probe
+    {:residual
+     "After the aggregation prerequisite, prove one rectangular local-set Morse--Sard theorem for C∞ maps E → F with arbitrary finite-dimensional source and target; chart criticality and critical-image inclusion are already compiled, and countable aggregation will then be banked.",
+     :estimated-commits 1,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t93A04,
+      :stop-condition
+      "Stop only if the compiled abstract aggregation cannot be promoted at the recorded type without changing representation or adding nonstandard axioms.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/SardCriticalImageAggregation.lean"
+       "ConstructionTargets/SardCriticalImageAggregation.md"],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COUNTABLE CRITICAL-IMAGE AGGREGATION",
+      :acceptance
+      {:fixture
+       {:path "/tmp/RectangularSardAggregationProbe.lean",
+        :sha256
+        "77ac07dbc69f7b71c1666b6ca952c25bff354b59d1c0f3d0f2576b10279749a1"},
+       :declarations ["criticalImage_null_of_countable_local_null"],
+       :consumer-residual
+       "rectangular local-set Morse--Sard only; do not begin chart-countable assembly in the frozen consumer",
+       :axioms :standard-only},
+      :representation
+      {:source
+       "a countable family of source patches whose restricted critical images are null",
+       :target
+       "nullity of the full critical image under the same target measure"},
+      :id :critical-value-sard-countable-aggregation-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "the manifold proof needs a certified countable-union step from chartwise null critical images to the full critical image",
+      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :reason
+     "The countable manifold aggregation is one independently compilable prerequisite. Once banked, the current row has exactly one remaining mathematical obligation: rectangular local-set Morse--Sard. Pinned Mathlib's determinant argument proves only E → E and cannot establish the E → F case when finrank E > finrank F; projecting an ambient null set is invalid. No counterexample to the C∞ rectangular theorem was found.",
+     :commands
+     [{:cmd "sed -n '1,190p' problems/t93A04/lean/Main.lean", :exit 0}
+      {:cmd
+       "sed -n '560,690p' .lake/packages/mathlib/Mathlib/MeasureTheory/Function/Jacobian.lean",
+       :exit 0}
+      {:cmd "sed -n '1,260p' /tmp/T93A04SardProbe.lean", :exit 0}
+      {:cmd
+       "sed -n '1,280p' ConstructionTargets/CountableExtendedChartRangeDecomposition.lean",
+       :exit 0}
+      {:cmd
+       "rg -n 'Sard|sard|Critical|critical' .lake/packages/mathlib/Mathlib/MeasureTheory .lake/packages/mathlib/Mathlib/Geometry .lake/packages/mathlib/Mathlib/Analysis -g '*.lean'",
+       :exit 0}
+      {:cmd "lake env lean /tmp/RectangularSardAggregationProbe.lean",
+       :exit 0,
+       :output
+       "'criticalImage_null_of_countable_local_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/RectangularSardAggregationProbe.lean",
+       :exit 0,
+       :output
+       "77ac07dbc69f7b71c1666b6ca952c25bff354b59d1c0f3d0f2576b10279749a1"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/RectangularSardAggregationProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
+      {:cmd "git diff --check", :exit 0}],
+     :fixture
+     {:path "/tmp/RectangularSardAggregationProbe.lean",
+      :sha256
+      "77ac07dbc69f7b71c1666b6ca952c25bff354b59d1c0f3d0f2576b10279749a1"},
+     :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
@@ -2119,7 +2221,9 @@
     "measure-zero critical values in the finite-dimensional target, without an equal-dimension determinant restriction"},
    :id :critical-value-sard-rectangular-local-probe-1,
    :kind :reusable-theorem,
-   :depends-on [:checkpoint-full-dag-refill-6],
+   :depends-on
+   [:checkpoint-full-dag-refill-6
+    :critical-value-sard-countable-aggregation-1],
    :current-residual
    "one frozen placeholder; chart criticality and critical-image inclusion compile, but arbitrary-source-dimension rectangular local Morse--Sard is absent",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
