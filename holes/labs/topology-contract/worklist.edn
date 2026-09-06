@@ -2478,6 +2478,21 @@
       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788732581967-13451-1c873059",
+     :commands
+     ["git show --stat --oneline 8f28a0b1"
+      "git diff --name-status 8f28a0b1^ 8f28a0b1"
+      "git diff --check 8f28a0b1^ 8f28a0b1"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-pre.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-post.edn"
+      "git show 8f28a0b1^:problems/t93A04/lean/Main.lean | sha256sum"
+      "git show 8f28a0b1^:problems/t93A04/lean/Main.lean | rg -c '\\bsorry\\b'"
+      "git show 8f28a0b1^:problems/t93A04/lean/Main.lean | rg -c '^theorem apm_'"],
+     :finding
+     "PASS: commit 8f28a0b1 is ledger-only, validates before and after, preserves the frozen t93A04 hash and 1-to-1 theorem/placeholder count, supersedes stale checkpoints 7 and 8 plus the first replacement generation, and installs a correctly oriented four-stage Sard replacement DAG terminating at checkpoint 9 without a premature checkpoint edge."},
     :replacement-items
     [{:consumer :t93A04,
       :stop-condition
@@ -2631,7 +2646,7 @@
       :first-replan :fail}},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
@@ -2659,7 +2674,7 @@
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCAL RANK NORMAL FORM",
@@ -2684,7 +2699,7 @@
    :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
