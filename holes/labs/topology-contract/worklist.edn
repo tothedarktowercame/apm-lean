@@ -2372,6 +2372,26 @@
       :expected-exit 1}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788732021475-13438-e7243bbc",
+     :commands
+     ["git diff 85bedd05^ 85bedd05 --check"
+      "git diff --name-status 85bedd05^ 85bedd05"
+      "git show 85bedd05:ConstructionTargets/SardCriticalRankStrataNull.lean | sha256sum"
+      "git show 85bedd05:ConstructionTargets/SardCriticalRankStrataNull.md | sha256sum"
+      "sha256sum /tmp/RectangularSardRankStrataNullProbe.lean"
+      "lake env lean /tmp/RectangularSardRankStrataNullProbe.lean"
+      "lake env lean ConstructionTargets/SardCriticalRankStrataNull.lean"
+      "lake build ConstructionTargets.SardCriticalRankStrataNull"
+      "sed -n '11,17p' ConstructionTargets/SardCriticalRankStrataNull.lean | sha256sum"
+      "! rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^[[:space:]]*axiom |^[[:space:]]*opaque |^[[:space:]]*unsafe ' ConstructionTargets/SardCriticalRankStrataNull.lean ConstructionTargets/SardCriticalRankStrataNull.md"
+      "test -z \"$(git diff --name-only 85bedd05 HEAD -- ConstructionTargets/SardCriticalRankStrataNull.lean ConstructionTargets/SardCriticalRankStrataNull.md)\""
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer differs from author codex-2; 85bedd05 is diff-clean and adds exactly the two scoped files; committed file hashes reproduce as d1ea8190dba246620fe92b73866c8c2161a186df99cb8a9901b2bcdd8d0ba462 and 8c41a402c90a886682146957e77f0806b7918172dfe19e8b7989c5f62a66815f; fixture hash 8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb reproduces and compiles; direct and focused builds pass; criticalImage_null_of_rankStrata_null statement hash reproduces as af91bb7fd6310ec9f7124186f5cc31a9b7e6377b2ac090be0ad4b3083c639fdf; forbidden scan is clean; axioms are propext, Classical.choice, and Quot.sound; theorem orientation correctly aggregates null target-measure images of every exact rank stratum indexed by Fin target-finrank into nullity of the full nonsurjective locus, preserving the finite measure-bookkeeping boundary and leaving uniform C∞ rank-stratum image-nullity as the sole residual."},
     :commit "85bedd059e17a22b10337e8c82c21f6d9d2548ae",
     :changed-paths
     ["ConstructionTargets/SardCriticalRankStrataNull.lean"
@@ -2388,7 +2408,7 @@
     :declarations ["criticalImage_null_of_rankStrata_null"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCriticalRankStrataNull.lean"
     "ConstructionTargets/SardCriticalRankStrataNull.md"],
@@ -2493,7 +2513,7 @@
       "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
