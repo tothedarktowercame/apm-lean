@@ -2258,6 +2258,28 @@
       :expected-exit 1}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788731750989-13432-17a6edc5",
+     :commands
+     ["git diff 8e18ea81^ 8e18ea81 --check"
+      "git diff --name-status 8e18ea81^ 8e18ea81"
+      "git show 8e18ea81:ConstructionTargets/SardCriticalRankStrata.lean | sha256sum"
+      "git show 8e18ea81:ConstructionTargets/SardCriticalRankStrata.md | sha256sum"
+      "sha256sum /tmp/RectangularSardRankStrataProbe.lean"
+      "lake env lean /tmp/RectangularSardRankStrataProbe.lean"
+      "lake env lean ConstructionTargets/SardCriticalRankStrata.lean"
+      "lake build ConstructionTargets.SardCriticalRankStrata"
+      "sed -n '12,14p' ConstructionTargets/SardCriticalRankStrata.lean | sha256sum"
+      "sed -n '16,18p' ConstructionTargets/SardCriticalRankStrata.lean | sha256sum"
+      "sed -n '21,22p' ConstructionTargets/SardCriticalRankStrata.lean | sha256sum"
+      "! rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^[[:space:]]*axiom |^[[:space:]]*opaque |^[[:space:]]*unsafe ' ConstructionTargets/SardCriticalRankStrata.lean ConstructionTargets/SardCriticalRankStrata.md"
+      "test -z \"$(git diff --name-only 8e18ea81 HEAD -- ConstructionTargets/SardCriticalRankStrata.lean ConstructionTargets/SardCriticalRankStrata.md)\""
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer differs from author codex-2; 8e18ea81 is diff-clean and adds exactly the two scoped files; committed file hashes reproduce as eddce73426f9bcb95cbfa9a83b976044d4663b14b463f8ea79ba9b7454f5f1f5 and fa52832cf80fa8137b4533369c0c2c6d5c8d7ea1113f3033610dcd985cc3bb50; fixture hash 8fb2284053f64b2d58026d9203cd4439b7ce28bd248aee9b338a8c8b3bc75344 reproduces and compiles; direct and focused builds pass; statement hashes reproduce for criticalSet, rankStratum, and criticalSet_eq_iUnion_rankStratum as 6dd4b3ea2ef63ab99a8dc781e394003527a6a20f325ac9dd97670ddc0bf294ef, 80145789672f27b436e7b176fc96fadd2d1a490d37fc262b934890de742cc080, and e9cd9b7e210a1aef0f835089cefc5bfc1352c12d7f63056ba765dd717ac35043; forbidden scan is clean; axioms are propext, Classical.choice, and Quot.sound; the theorem correctly identifies the nonsurjective locus with the finite union indexed by ranks below target finrank, while preserving the finite-dimensional linear-algebra boundary and leaving uniform C∞ rank-stratum image-nullity as the sole residual."},
     :commit "8e18ea8176c0ebd1f7cc89b07120fcbeaa1195e6",
     :changed-paths
     ["ConstructionTargets/SardCriticalRankStrata.lean"
@@ -2275,7 +2297,7 @@
     ["criticalSet" "rankStratum" "criticalSet_eq_iUnion_rankStratum"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCriticalRankStrata.lean"
     "ConstructionTargets/SardCriticalRankStrata.md"],
@@ -2388,7 +2410,7 @@
       "8fb2284053f64b2d58026d9203cd4439b7ce28bd248aee9b338a8c8b3bc75344"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
