@@ -15,9 +15,12 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 3,
+    "sorry_count_main": 2,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 2,
+    "sorry_count_by_file": {
+      "Main.lean": 2
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -47,5 +50,15 @@
       "resolved": null,
       "areas_are": "necessary"
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 3,
+    "axioms": "apm_t00a01 depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "provenance": "2026-09-06 all-topology elaboration sweep"
+  }
 }

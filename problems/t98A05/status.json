@@ -15,9 +15,12 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 4,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 4,
   "bridge_note": "Three precise bridge declarations now isolate the missing extDeriv coordinate computations, oriented simplex integral, and circle-period obstruction. Their proofs are intentionally left as sorry by the hop-4 statement-only protocol.",
   "imported_at": "2026-07-13T17:26:58.540484Z",
@@ -44,5 +47,15 @@
       "date": "2026-08-19",
       "resolved": null
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 4,
+    "axioms": "apm_t98a05 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "provenance": "2026-09-06 all-topology elaboration sweep"
+  }
 }

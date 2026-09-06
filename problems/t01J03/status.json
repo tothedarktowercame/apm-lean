@@ -15,9 +15,12 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 3,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,16 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 3,
   "boundary": "The boundary inclusion, continuous canonical maps, compatibility equation, and full continuous pushout-style eliminator with restriction equations and uniqueness are compiled. Remaining work is the absent circle fundamental-group computation, van Kampen theorem, singular Mayer--Vietoris sequence, and numerical invariant transport.",
   "imported_at": "2026-07-13T17:26:56.796155Z",
   "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
     "elaborated_exit": 0,
-    "sorry_declarations": 3,
-    "previous_classification": "partial"
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 3,
+    "axioms": "apm_t01j03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "provenance": "2026-09-06 all-topology elaboration sweep"
   },
   "obstructions": [
     {

@@ -12,10 +12,15 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +32,18 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial-lean-proof",
+  "classification": "solved",
   "closer_hop": 4,
   "boundary": "Three precise bridge declarations now isolate the evaluated cross-derivative identity, unique homotopy winding classification, and equality of winding number with the beta integral. Their proofs intentionally remain sorry under the statement-only protocol.",
-  "imported_at": "2026-07-13T17:26:58.516556Z"
+  "imported_at": "2026-07-13T17:26:58.516556Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial-lean-proof",
+    "previous_sorry_count_total": 4,
+    "axioms": "apm_t97j08 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "provenance": "2026-09-06 all-topology elaboration sweep"
+  }
 }

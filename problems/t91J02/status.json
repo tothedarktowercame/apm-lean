@@ -15,9 +15,12 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 3,
   "boundary": "The explicit retraction transport and the complete fundamental-group contradiction are compiled. Remaining work is exactly the unavailable Nontrivial instance for FundamentalGroup Circle 1 and subsingleton fundamental groups for the concrete metric two-sphere.",
   "imported_at": "2026-07-13T17:26:57.341721Z",
@@ -46,5 +49,15 @@
       "resolved": null,
       "areas_are": "necessary"
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_t91j02 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "provenance": "2026-09-06 all-topology elaboration sweep"
+  }
 }

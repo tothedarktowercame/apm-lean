@@ -15,9 +15,12 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 3,
   "boundary": "The lift formula and determinant integral compile. A null-homotopy is now proved to yield ContractibleSpace Circle, and the final conjunct follows conditionally from its negation. This snapshot has no proof that Circle is noncontractible via winding degree, fundamental group, or H1.",
   "imported_at": "2026-07-13T17:26:58.506687Z",
@@ -44,5 +47,15 @@
       "resolved": null,
       "areas_are": "alternatives"
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_t97j06 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "provenance": "2026-09-06 all-topology elaboration sweep"
+  }
 }

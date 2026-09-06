@@ -14,9 +14,19 @@
   "lean_closure": {
     "classification": "partial",
     "main": "lean/Main.lean",
-    "sorry_count": 1,
+    "sorry_count": 2,
     "closer_hop": 3,
     "proved_bridge": "apm_t01A01_factor_through_complement; apm_t01A01_nullhomotopic_of_factor",
     "blocker": "Mathlib lacks the punctured-RP2 deformation retraction and fundamental-group computation. Homotopy invariance of induced fundamental-groupoid maps can handle the first conjunct after contraction, but no contraction is available."
+  },
+  "sorry_audit": {
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 2,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "not checked: partial candidate-set source emits sorry warnings",
+    "provenance": "2026-09-06 all-topology elaboration sweep"
   }
 }

@@ -15,9 +15,12 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 3,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 4,
   "boundary": "The missing invariant computations are now stated precisely as apm_t02A03_bridge_1 (the based torus fundamental group) and apm_t02A03_bridge_2 (the wedge fundamental group and degreewise singular homology). Both bridges and the original main theorem remain unproved.",
   "imported_at": "2026-07-13T17:26:56.924953Z",
@@ -47,5 +50,15 @@
       "resolved": null,
       "areas_are": "necessary"
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 3,
+    "axioms": "apm_t02a03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "provenance": "topology build loop campaign :topology-portfolio-2026-09-02 (holes/labs/topology-contract/worklist.edn)"
+  }
 }

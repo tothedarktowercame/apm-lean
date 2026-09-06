@@ -15,9 +15,12 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "closer_hop": 3,
   "closer_progress": "The abstract obstruction is now specialized completely to the exact norm-defined disk and circle: the disk is homeomorphic to the metric closed ball, contractibility and simple connectivity yield its subsingleton fundamental group, and the literal boundary retraction is ruled out conditional only on nontriviality of the circle fundamental group. That circle computation remains unavailable.",
   "stage": "attempted",
@@ -52,5 +55,15 @@
       "resolved": null,
       "areas_are": "necessary"
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration; counted compiler sorry warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_t97j03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "provenance": "2026-09-06 all-topology elaboration sweep"
+  }
 }
