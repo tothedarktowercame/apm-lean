@@ -2440,80 +2440,49 @@
    :stop-condition
    "STOP only on a genuine counterexample or incompatible hypotheses for the rectangular theorem, naming it; REVISE only if exactly one named compiled prerequisite remains. Do not begin chart-countable assembly.",
    :evidence
-   {:probe
-    {:residual
-     "After finite rank-stratum null aggregation, prove one uniform local analytic theorem: every exact derivative-rank-r stratum of a C∞ map E → F has null image when r < finrank ℝ F; do not begin manifold chart assembly.",
-     :outcome :revise,
-     :warnings [],
-     :prerequisite
-     {:consumer :t93A04,
-      :stop-condition
-      "Stop only if the compiled finite aggregation cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/SardCriticalRankStrataNull.lean"
-       "ConstructionTargets/SardCriticalRankStrataNull.md"],
-      :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-STRATUM NULL AGGREGATION",
-      :acceptance
-      {:fixture
-       {:path "/tmp/RectangularSardRankStrataNullProbe.lean",
-        :sha256
-        "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"},
-       :declarations ["criticalImage_null_of_rankStrata_null"],
-       :consumer-residual
-       "one uniform C∞ rank-stratum image-nullity theorem before manifold chart assembly",
-       :axioms :standard-only},
-      :representation
-      {:source
-       "null target-measure images for every exact derivative-rank stratum indexed by r : Fin (finrank ℝ F)",
-       :target
-       "null target-measure image of the entire nonsurjective-derivative locus"},
-      :id :critical-value-sard-rank-strata-null-aggregation-1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "the banked finite rank decomposition has not yet been converted from per-stratum nullity hypotheses to nullity of the full critical image",
-      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :reason
-     "The reviewed rank-stratum dependency exposes one further independently compilable prerequisite: finite null-image aggregation over the exact derivative-rank strata. This removes all remaining set and measure bookkeeping from rectangular Sard. After it is banked, the current row has one uniform analytic obligation: for every r < finrank F, prove that a C∞ map sends its derivative-rank-r locus to a null set. The C∞ rectangular theorem is not refuted.",
-     :commands
-     [{:cmd
-       "git log -1 --oneline -- ConstructionTargets/SardCriticalRankStrata.lean",
-       :exit 0,
-       :output "8e18ea81 Add finite Sard critical rank strata"}
-      {:cmd
-       "sed -n '1,160p' ConstructionTargets/SardCriticalRankStrata.lean",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/RectangularSardRankStrataNullProbe.lean",
-       :exit 0,
-       :output
-       "'criticalImage_null_of_rankStrata_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/RectangularSardRankStrataNullProbe.lean",
-       :exit 0,
-       :output
-       "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/RectangularSardRankStrataNullProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "rg -n 'ConstantRank|constant rank|rank theorem|Sard|critical value' .lake/packages/mathlib/Mathlib -g '*.lean'",
-       :exit 0,
-       :output
-       "Pinned Mathlib contains equal-dimensional determinant Sard and dimension-gap Hausdorff results, but no rectangular Morse--Sard or constant-rank normal form."}
-      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
-      {:cmd "git diff --check", :exit 0}],
-     :fixture
-     {:path "/tmp/RectangularSardRankStrataNullProbe.lean",
-      :sha256
-      "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"},
-     :seat :codex-1}},
+   {:outcome :stop,
+    :seat :codex-1,
+    :reason
+    "The proposed one-edge reduction is refuted: after the reviewed aggregation and rank-stratum packets, exact-rank image nullity does not follow from any single pinned theorem or from the equal-dimensional determinant Sard lemma. For 0 < r < min (finrank E) (finrank F), the standard proof independently requires (1) a local rank-normal-form/submersion construction around a nonzero r-minor and (2) a higher-order Taylor covering estimate for the residual flat locus, followed by induction on source dimension. Pinned Mathlib has neither a constant-rank normal form nor a multivariable Taylor remainder estimate yielding the required Hausdorff/add-Haar nullity. The existing Taylor file is one-dimensional, and the Hausdorff-dimension Sard results cover only dimension-gap images. These are two independent analytic foundations, so another algebraic aggregation wrapper would not shorten the typed residual. The C∞ Morse--Sard theorem itself is true; what is refuted is this row's premise that its remaining residual is one bounded construction.",
+    :commands
+    [{:cmd
+      "git log -1 --oneline -- ConstructionTargets/SardCriticalRankStrataNull.lean",
+      :exit 0,
+      :output "85bedd05 Add Sard rank-strata null aggregation"}
+     {:cmd
+      "sed -n '1,180p' ConstructionTargets/SardCriticalRankStrataNull.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'ConstantRank|constant rank|rank theorem' .lake/packages/mathlib/Mathlib -g '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'Taylor|taylor.*remainder|remainder.*Taylor|ContDiff.*remainder' .lake/packages/mathlib/Mathlib/Analysis -g '*.lean'",
+      :exit 0,
+      :output
+      "General formal multivariable Taylor-series interfaces and one-dimensional real Taylor remainder theorems exist; no finite-dimensional multivariable quantitative remainder theorem suitable for the Morse--Sard covering estimate was found."}
+     {:cmd
+      "rg -n 'Sard|critical value' .lake/packages/mathlib/Mathlib -g '*.lean'",
+      :exit 0,
+      :output
+      "Only equal-dimensional determinant Sard and dimension-gap Hausdorff-density results occur; no rectangular Morse--Sard theorem."}
+     {:cmd
+      "sed -n '520,590p' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/HausdorffDimension.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '599,675p' .lake/packages/mathlib/Mathlib/MeasureTheory/Function/Jacobian.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '18,48p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Taylor.lean",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}
+     {:cmd "git diff --check", :exit 0}],
+    :residual
+    "Rectangular Morse--Sard requires a bounded multi-stage analytic program: local rank normal form plus multivariable higher-order Taylor/covering nullity, then rank/source-dimension induction. The reviewed countable and finite aggregation modules remain valid but do not prove either analytic component.",
+    :disposition :stop,
+    :author :codex-1},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
