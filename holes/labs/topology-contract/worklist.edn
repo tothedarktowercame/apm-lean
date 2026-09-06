@@ -2435,6 +2435,8 @@
    "the banked finite rank decomposition has not yet been converted from per-stratum nullity hypotheses to nullity of the full critical image",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Deterministic disposition defect: fed13418 records :stop even though the controlling row condition permits STOP only for a named counterexample or incompatible hypotheses, while its own evidence explicitly states that the C∞ rectangular Morse--Sard theorem is true and identifies only missing formalization infrastructure. Absence of pinned constant-rank and multivariable Taylor-covering APIs does not refute the theorem or make its hypotheses incompatible. Repair by replacing this STOP with a nonempty multi-stage replan that separately tracks local rank-normal-form/submersion construction, multivariable higher-order Taylor/covering nullity, and the required rank/source-dimension induction; keep the rectangular row blocked on that sub-DAG and preserve the reviewed aggregation modules. Reproduced commands: git diff fed13418^ fed13418 --check; git diff --name-status fed13418^ fed13418; bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-stop-pre.edn; bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-stop-post.edn; rg -n 'ConstantRank|constant rank|rank theorem' .lake/packages/mathlib/Mathlib -g '*.lean'; rg -n 'Taylor|taylor.*remainder|remainder.*Taylor|ContDiff.*remainder' .lake/packages/mathlib/Mathlib/Analysis -g '*.lean'; rg -n 'Sard|critical value' .lake/packages/mathlib/Mathlib -g '*.lean'; git show fed13418^:problems/t93A04/lean/Main.lean | sha256sum; git show fed13418^:problems/t93A04/lean/Main.lean | rg -n '\\bsorry\\b|theorem apm_'; git status --porcelain=v1.",
    :recalled-suggestion
    "The reviewed t93A04 probe compiled chart criticality and critical-image inclusion; the common missing edge for five consumers is rectangular local Morse--Sard for arbitrary finite source dimension.",
    :stop-condition
@@ -2480,9 +2482,15 @@
     :residual
     "Rectangular Morse--Sard requires a bounded multi-stage analytic program: local rank normal form plus multivariable higher-order Taylor/covering nullity, then rank/source-dimension induction. The reviewed countable and finite aggregation modules remain valid but do not prove either analytic component.",
     :disposition :stop,
-    :author :codex-1},
-   :phase :probe,
-   :state :done-unreviewed,
+    :author :codex-1,
+    :review
+    {:outcome :fail,
+     :seat "codex-17",
+     :job "invoke-1788732187754-13443-6472e5a1",
+     :finding
+     "Deterministic disposition defect: fed13418 records :stop even though the controlling row condition permits STOP only for a named counterexample or incompatible hypotheses, while its own evidence explicitly states that the C∞ rectangular Morse--Sard theorem is true and identifies only missing formalization infrastructure. Absence of pinned constant-rank and multivariable Taylor-covering APIs does not refute the theorem or make its hypotheses incompatible. Repair by replacing this STOP with a nonempty multi-stage replan that separately tracks local rank-normal-form/submersion construction, multivariable higher-order Taylor/covering nullity, and the required rank/source-dimension induction; keep the rectangular row blocked on that sub-DAG and preserve the reviewed aggregation modules. Reproduced commands: git diff fed13418^ fed13418 --check; git diff --name-status fed13418^ fed13418; bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-stop-pre.edn; bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-stop-post.edn; rg -n 'ConstantRank|constant rank|rank theorem' .lake/packages/mathlib/Mathlib -g '*.lean'; rg -n 'Taylor|taylor.*remainder|remainder.*Taylor|ContDiff.*remainder' .lake/packages/mathlib/Mathlib/Analysis -g '*.lean'; rg -n 'Sard|critical value' .lake/packages/mathlib/Mathlib -g '*.lean'; git show fed13418^:problems/t93A04/lean/Main.lean | sha256sum; git show fed13418^:problems/t93A04/lean/Main.lean | rg -n '\\bsorry\\b|theorem apm_'; git status --porcelain=v1."}},
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
