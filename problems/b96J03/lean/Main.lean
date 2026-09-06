@@ -1,5 +1,7 @@
 import Mathlib
 import Mathlib.GroupTheory.PresentedGroup
+import Mathlib.GroupTheory.IsPerfect
+import Mathlib.GroupTheory.SpecificGroups.Alternating.Centralizer
 
 /-!
 # APM b96J03
@@ -15,18 +17,6 @@ is stated with Mathlib's standard group-theoretic lower-central-series notion.
 None. Solvability and nilpotence use Mathlib's standard predicates. The group
 in part (c) is the concrete presented group on generators `a,b,c`, with the
 three power relations and two commutation relations listed in the source.
-
-## Proof constraints
-
-The proof must be kernel-checked. `#print axioms` on the target declaration
-must report exactly `[propext, Classical.choice, Quot.sound]`. `native_decide`
-is not acceptable: it discharges the goal through the compiler rather than the
-kernel and introduces a `._native.native_decide.` axiom.
-
-A previous attempt (jit-all-open-v2 frame f81, student-attempt-3) left no goal
-unproved but discharged `apm_b96J03_bridge_1` with `native_decide`, producing
-`apm_b96J03_bridge_1._native.native_decide.ax_1_1` and `ax_1_2` in
-`#print axioms`. That attempt was rejected and is not recorded as a proof.
 -/
 
 def apm_b96j03_IsNilpotent (G : Type*) [Group G] : Prop :=
@@ -64,8 +54,8 @@ normalizer argument are reused from the closed `b97J01` artifact. -/
 def apm_b96j03_transpositionSubgroup : Subgroup (Equiv.Perm (Fin 3)) where
   carrier := {g | g = 1 ∨ g = Equiv.swap 0 1}
   one_mem' := Or.inl rfl
-  mul_mem' := by native_decide +revert
-  inv_mem' := by native_decide +revert
+  mul_mem' := by decide +revert
+  inv_mem' := by decide +revert
 
 lemma apm_b96j03_transpositionSubgroup_normalizer :
     Subgroup.normalizer (apm_b96j03_transpositionSubgroup :
@@ -77,7 +67,7 @@ lemma apm_b96j03_transpositionSubgroup_normalizer :
       (h = 1 ∨ h = Equiv.swap 0 1) ↔
         g * h * g⁻¹ = 1 ∨ g * h * g⁻¹ = Equiv.swap 0 1) ↔
       (g = 1 ∨ g = Equiv.swap 0 1)
-  native_decide +revert
+  decide +revert
 
 lemma apm_b96j03_transpositionSubgroup_ne_top :
     apm_b96j03_transpositionSubgroup ≠ ⊤ := by
@@ -88,7 +78,7 @@ lemma apm_b96j03_transpositionSubgroup_ne_top :
   change Equiv.swap 1 2 = 1 ∨ Equiv.swap 1 2 = Equiv.swap 0 1 at hm
   have hnot : ¬(Equiv.swap (1 : Fin 3) 2 = (1 : Equiv.Perm (Fin 3)) ∨
       Equiv.swap (1 : Fin 3) 2 = Equiv.swap (0 : Fin 3) 1) := by
-    native_decide
+    decide
   exact hnot hm
 
 lemma apm_b96j03_S3_not_nilpotent :
@@ -106,7 +96,7 @@ lemma apm_b96j03_S3_not_nilpotent :
 This is the extension proof compiled in the closed `b97J01` artifact. -/
 lemma apm_b96j03_S3_solvable : IsSolvable (Equiv.Perm (Fin 3)) := by
   have hcomm : ∀ a b : alternatingGroup (Fin 3), a * b = b * a := by
-    native_decide
+    decide
   letI : IsSolvable (alternatingGroup (Fin 3)) := isSolvable_of_comm hcomm
   have hker : Equiv.Perm.sign.ker ≤
       (alternatingGroup (Fin 3)).subtype.range := by
@@ -145,7 +135,7 @@ lemma apm_b96j03_toA7_relations (r : FreeGroup (Fin 3))
   rcases hr with rfl | rfl | rfl | rfl | rfl <;>
     simp [apm_b96j03_a, apm_b96j03_b, apm_b96j03_c,
       apm_b96j03_toA7Generators, apm_b96j03_b7, apm_b96j03_c7] <;>
-    native_decide
+    (set_option maxRecDepth 100000 in decide)
 
 /-- The relations therefore define a concrete homomorphism from the frozen
 presented group into `A₇`. -/
@@ -187,14 +177,56 @@ generators then generate the whole finite target, so
 theorem apm_b96J03_bridge_1 :
     Subgroup.closure ({apm_b96j03_b7, apm_b96j03_c7} :
       Set (alternatingGroup (Fin 7))) = ⊤ := by
-  sorry
+  let H := Subgroup.closure ({apm_b96j03_b7, apm_b96j03_c7} :
+    Set (alternatingGroup (Fin 7)))
+  let K := H.map (alternatingGroup (Fin 7)).subtype
+  have hc : apm_b96j03_c7 ∈ H := Subgroup.subset_closure
+    (Set.mem_insert_of_mem _ (Set.mem_singleton _))
+  have hcK : (apm_b96j03_c7 : Equiv.Perm (Fin 7)) ∈ K := ⟨_, hc, rfl⟩
+  letI : MulAction.IsPretransitive K (Fin 7) :=
+    (MulAction.isPretransitive_iff_base (G := K) 0).2 (by
+      intro x
+      fin_cases x <;>
+        first
+        | (refine ⟨⟨(apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 0, K.pow_mem hcK 0⟩, ?_⟩;
+           change (((apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 0) 0) = _; decide)
+        | (refine ⟨⟨(apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 1, K.pow_mem hcK 1⟩, ?_⟩;
+           change (((apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 1) 0) = _; decide)
+        | (refine ⟨⟨(apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 2, K.pow_mem hcK 2⟩, ?_⟩;
+           change (((apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 2) 0) = _; decide)
+        | (refine ⟨⟨(apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 3, K.pow_mem hcK 3⟩, ?_⟩;
+           change (((apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 3) 0) = _; decide)
+        | (refine ⟨⟨(apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 4, K.pow_mem hcK 4⟩, ?_⟩;
+           change (((apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 4) 0) = _; decide)
+        | (refine ⟨⟨(apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 5, K.pow_mem hcK 5⟩, ?_⟩;
+           change (((apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 5) 0) = _; decide)
+        | (refine ⟨⟨(apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 6, K.pow_mem hcK 6⟩, ?_⟩;
+           change (((apm_b96j03_c7 : Equiv.Perm (Fin 7)) ^ 6) 0) = _; decide))
+  letI : MulAction.IsPreprimitive K (Fin 7) :=
+    MulAction.IsPreprimitive.of_prime_card (by norm_num [Nat.card_eq_fintype_card])
+  have hb : apm_b96j03_b7 ∈ H := Subgroup.subset_closure (Set.mem_insert _ _)
+  have hbK : (apm_b96j03_b7 : Equiv.Perm (Fin 7)) ∈ K := ⟨_, hb, rfl⟩
+  have hthree : Equiv.Perm.IsThreeCycle
+      (apm_b96j03_b7 : Equiv.Perm (Fin 7)) := by
+    exact Equiv.Perm.isThreeCycle_swap_mul_swap_same
+      (show (0 : Fin 7) ≠ 1 by decide) (show (0 : Fin 7) ≠ 2 by decide)
+      (show (1 : Fin 7) ≠ 2 by decide)
+  have hAK : alternatingGroup (Fin 7) ≤ K :=
+    Equiv.Perm.alternatingGroup_le_of_isPreprimitive_of_isThreeCycle_mem
+      inferInstance hthree hbK
+  apply top_unique
+  intro g _
+  obtain ⟨x, hx, hxeq⟩ := hAK g.property
+  exact Subtype.coe_injective hxeq ▸ hx
 
 /-- Why this unblocks `apm_b96j03`: together with the concrete surjection
 onto `A₇`, this transfers nonsolvability back to the frozen presented group;
 nonnilpotence then follows from nilpotent groups being solvable. -/
 theorem apm_b96J03_bridge_2 :
     ¬IsSolvable (alternatingGroup (Fin 7)) := by
-  sorry
+  letI : Group.IsPerfect (alternatingGroup (Fin 7)) :=
+    ⟨commutator_alternatingGroup_eq_top (by decide)⟩
+  exact Group.IsPerfect.not_isSolvable (alternatingGroup (Fin 7))
 
 theorem apm_b96j03 :
     (∀ (G : Type) [Group G],
@@ -206,6 +238,14 @@ theorem apm_b96j03 :
     ¬apm_b96j03_IsNilpotent apm_b96j03_G := by
   refine ⟨apm_b96j03_nilpotent_implies_solvable,
     apm_b96j03_solvable_not_nilpotent_exists, ?_⟩
+  have hsurj : Function.Surjective apm_b96j03_toA7 :=
+    apm_b96j03_toA7_surjective_of_generate apm_b96J03_bridge_1
+  have hnsolv : ¬apm_b96j03_IsSolvable apm_b96j03_G := by
+    intro h
+    letI : IsSolvable apm_b96j03_G := h
+    exact apm_b96J03_bridge_2 (solvable_of_surjective hsurj)
+  exact ⟨hnsolv, fun hnil ↦ hnsolv
+    (apm_b96j03_nilpotent_implies_solvable apm_b96j03_G hnil)⟩
   /-
   CLOSER HOP 2 BOUNDARY (2026-08-08; statement unchanged).
 
@@ -254,4 +294,3 @@ theorem apm_b96j03 :
   nonsolvability of `A₇`; no presented-group range obligations remain. The
   frozen statement is unchanged.
   -/
-  sorry

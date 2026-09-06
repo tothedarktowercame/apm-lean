@@ -79,225 +79,112 @@ lemma apmAssociated_eq_C_mul_unique {F n : Type*} [Field F]
     apply mul_right_cancel₀ hy
     exact hd.symm.trans hc
 
-/-! ## Attempt 2 (student) -/
+noncomputable def apmAssociateScalar {F n : Type*} [Field F] [Fintype n]
+    (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F))
+    (π : MvPolynomial n F) (hπ : π ≠ 0) (g : apmAssociateStabilizer G π) : Fˣ :=
+  Classical.choose (apmAssociated_eq_C_mul_unique hπ g.property)
 
-section Attempt2
+lemma apmAssociateScalar_spec {F n : Type*} [Field F] [Fintype n]
+    (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F))
+    (π : MvPolynomial n F) (hπ : π ≠ 0) (g : apmAssociateStabilizer G π) :
+    g.1.1 π = MvPolynomial.C (apmAssociateScalar G π hπ g : F) * π :=
+  (Classical.choose_spec (apmAssociated_eq_C_mul_unique hπ g.property)).1
 
-variable {F n : Type*} [Field F] [Fintype n]
-  (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F)) [Fintype G]
+noncomputable def apmAssociateCharacter {F n : Type*} [Field F] [Fintype n]
+    (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F))
+    (π : MvPolynomial n F) (hπ : π ≠ 0) : apmAssociateStabilizer G π →* Fˣ where
+  toFun := apmAssociateScalar G π hπ
+  map_one' := by
+    symm
+    apply (Classical.choose_spec (apmAssociated_eq_C_mul_unique hπ
+      (show Associated ((1 : apmAssociateStabilizer G π).1.1 π) π from (1 : apmAssociateStabilizer G π).property))).2
+    simp
+  map_mul' := by
+    intro g h
+    symm
+    apply (Classical.choose_spec (apmAssociated_eq_C_mul_unique hπ (g * h).property)).2
+    rw [show (g * h).1.1 π = g.1.1 (h.1.1 π) by rfl]
+    rw [apmAssociateScalar_spec G π hπ h, map_mul,
+      apmAssociateScalar_spec G π hπ g]
+    have hc : g.1.1 (MvPolynomial.C (apmAssociateScalar G π hπ h : F)) =
+        MvPolynomial.C (apmAssociateScalar G π hπ h : F) := by
+      rw [← MvPolynomial.algebraMap_eq]
+      exact g.1.1.commutes _
+    rw [hc]
+    simp [mul_comm, mul_left_comm]
 
-lemma coeMulApp (g h : G) (π : MvPolynomial n F) :
-    (g * h : G).1 π = g.1 (h.1 π) := by
-  simp [Subgroup.coe_mul, AlgEquiv.mul_apply]
-
-lemma oneApp (x : MvPolynomial n F) : ((1 : G) : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) x = x := by
-  simp
-
-lemma appC (e : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) (c : F) :
-    e (MvPolynomial.C c) = MvPolynomial.C c := by
-  rw [show (MvPolynomial.C c) = algebraMap F (MvPolynomial n F) c from rfl, AlgEquiv.commutes]
-
-/-- The coefficient character of the associate stabilizer. -/
-noncomputable def apmCoefChar (hπ0 : π ≠ 0) (k : apmAssociateStabilizer G π) : Fˣ :=
-  (apmAssociated_eq_C_mul_unique hπ0
-    ((apmAssociateStabilizer_mem G π (k : G)).mp k.2)).choose
-
-lemma apmCoefChar_spec (hπ0 : π ≠ 0) (k : apmAssociateStabilizer G π) :
-    ((k : G) : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) π
-      = MvPolynomial.C (apmCoefChar G hπ0 k : F) * π :=
-  ((apmAssociated_eq_C_mul_unique hπ0
-    ((apmAssociateStabilizer_mem G π (k : G)).mp k.2)).choose_spec).1
-
-lemma stabilizerTrivial (hFP : apmFPure F G) {π : MvPolynomial n F} (hπ : Prime π)
-    {g : G} (hg : Associated (g.1 π) π) : g.1 π = π := by
-  have hπ0 : π ≠ 0 := hπ.ne_zero
-  have hmul : ∀ a b : apmAssociateStabilizer G π,
-      apmCoefChar G hπ0 (a * b) = apmCoefChar G hπ0 b * apmCoefChar G hπ0 a := by
-    intro a b
-    have hA := apmCoefChar_spec G hπ0 a
-    have hB := apmCoefChar_spec G hπ0 b
-    have hAB := apmCoefChar_spec G hπ0 (a * b)
-    have e1 : ((↑(a * b) : G) : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) π
-        = MvPolynomial.C ((apmCoefChar G hπ0 b : F) * (apmCoefChar G hπ0 a : F)) * π := by
-      have hm : (((a * b : apmAssociateStabilizer G π) : G))
-          = ((a : G)) * ((b : G)) :=
-        map_mul (Subgroup.subtype (apmAssociateStabilizer G π)) a b
-      have e0 : (((a * b : apmAssociateStabilizer G π) : G) :
-          MvPolynomial n F ≃ₐ[F] MvPolynomial n F) π
-          = ((a : G) : MvPolynomial n F ≃ₐ[F] MvPolynomial n F)
-            (((b : G) : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) π) := by
-        rw [hm, Subgroup.coe_mul, AlgEquiv.mul_apply]
-      rw [e0, hB, map_mul, appC, hA, ← mul_assoc, ← MvPolynomial.C_mul]
-    have hC := MvPolynomial.C_injective n F (mul_right_cancel₀ hπ0 (e1.symm.trans hAB))
-    apply Units.ext
-    simpa [Units.val_mul] using hC.symm
-  let chi : apmAssociateStabilizer G π →* Fˣ :=
-    { toFun := apmCoefChar G hπ0
-      map_one' := by
-        have h1app : ((↑(1 : apmAssociateStabilizer G π) : G) :
-            MvPolynomial n F ≃ₐ[F] MvPolynomial n F) π = π := by
-          have hm : ((1 : apmAssociateStabilizer G π) : G) = (1 : G) :=
-            map_one (Subgroup.subtype (apmAssociateStabilizer G π))
-          rw [hm, oneApp]
-        have e0 := apmCoefChar_spec G hπ0 (1 : apmAssociateStabilizer G π)
-        rw [h1app] at e0
-        exact Units.ext (MvPolynomial.C_injective n F
-          (mul_right_cancel₀ hπ0 (by rw [← e0]; simp)))
-      map_mul' := by
-        intro a b
-        rw [hmul a b, mul_comm] }
-  have htriv := hFP (apmAssociateStabilizer G π) chi ⟨g, hg⟩
-  have hspec := apmCoefChar_spec G hπ0 ⟨g, hg⟩
-  have hchi : apmCoefChar G hπ0 ⟨g, hg⟩ = 1 := htriv
-  rw [hspec, hchi]
-  simp
-
-/-- Purity + primality: associated orbit images are equal. -/
-lemma assocOrbitEq (hFP : apmFPure F G) {π : MvPolynomial n F} (hπ : Prime π)
-    {g h : G} (ha : Associated (g.1 π) (h.1 π)) : g.1 π = h.1 π := by
-  have h1 : ((h⁻¹ * g : G).1) π = π := by
-    refine stabilizerTrivial G hFP hπ ?_
-    have hmap := Associated.map ((h⁻¹ : G) : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) ha
-    have e1 : ((h⁻¹ : G).1) (g.1 π) = ((h⁻¹ * g : G).1) π := (coeMulApp G (h⁻¹) g π).symm
-    have e2 : ((h⁻¹ : G).1) (h.1 π) = π := by
-      rw [← coeMulApp G (h⁻¹) h π, inv_mul_cancel, oneApp]
-    rw [e1, e2] at hmap
-    exact hmap
-  calc g.1 π = ((h * (h⁻¹ * g) : G).1) π := by rw [show h * (h⁻¹ * g) = g from by
-        rw [mul_inv_cancel_left]]
-  _ = (h.1) (((h⁻¹ * g : G).1) π) := coeMulApp G h (h⁻¹ * g) π
-  _ = h.1 π := by rw [h1]
-
-lemma orbitPrime {π : MvPolynomial n F} (hπ : Prime π) (g : G) : Prime (g.1 π) := by
-  rw [← irreducible_iff_prime] at hπ ⊢
-  exact (MulEquiv.irreducible_iff g.1).mpr hπ
-
-lemma orbitInv (g₀ : G) (π : MvPolynomial n F) :
-    g₀.1 (apmOrbitProduct G π) = apmOrbitProduct G π := by
+lemma apmOrbitProduct_invariant {F n : Type*} [Field F] [Fintype n]
+    (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F)) [Fintype G]
+    (π : MvPolynomial n F) (g : G) :
+    g.1 (apmOrbitProduct G π) = apmOrbitProduct G π := by
   classical
-  simp only [apmOrbitProduct]
-  set S : Finset (MvPolynomial n F) := Finset.univ.image (fun g : G ↦ g.1 π) with hSdef
-  have hinj : ∀ δ ∈ S, ∀ ε ∈ S,
-      g₀.1 δ = g₀.1 ε → δ = ε := fun _ _ _ _ he => g₀.1.toEquiv.injective he
-  have hcl : ∀ (k : G), ∀ δ ∈ S, k.1 δ ∈ S := by
-    intro k δ hδ
-    obtain ⟨g, -, rfl⟩ := Finset.mem_image.1 hδ
-    exact Finset.mem_image.2 ⟨k * g, Finset.mem_univ _, coeMulApp G k g π⟩
-  have hSinv : S.image (fun δ => g₀.1 δ) = S := by
-    refine Finset.ext fun δ => ?_
+  unfold apmOrbitProduct
+  simp only [map_prod]
+  have himage : Finset.univ.image (fun h : G ↦ g.1 (h.1 π)) =
+      Finset.univ.image (fun h : G ↦ h.1 π) := by
+    ext δ
+    simp only [Finset.mem_image, Finset.mem_univ, true_and]
     constructor
-    · intro hmem
-      obtain ⟨ε, hε, rfl⟩ := Finset.mem_image.1 hmem
-      exact hcl g₀ ε hε
-    · intro hδ
-      have hmem : ((g₀⁻¹ : G) : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) δ ∈ S :=
-        hcl (g₀⁻¹) δ hδ
-      refine Finset.mem_image.2 ⟨_, hmem, ?_⟩
-      rw [← coeMulApp G g₀ (g₀⁻¹) δ, mul_inv_cancel, oneApp]
-  rw [map_prod, ← Finset.prod_image (f := fun x => x) (g := fun δ => g₀.1 δ)
-    (fun a ha b hb hab => hinj a ha b hb hab), hSinv]
+    · rintro ⟨h, rfl⟩
+      exact ⟨g * h, rfl⟩
+    · rintro ⟨h, rfl⟩
+      refine ⟨g⁻¹ * h, ?_⟩
+      change ((g * (g⁻¹ * h)).1 : MvPolynomial n F ≃ₐ[F] MvPolynomial n F) π = h.1 π
+      rw [mul_inv_cancel_left]
+  let S := Finset.univ.image (fun h : G ↦ h.1 π)
+  change S.prod (fun δ ↦ g.1 δ) = S.prod id
+  have hS : S.image (fun δ ↦ g.1 δ) = S := by
+    rw [Finset.image_image]
+    exact himage
+  have hp := congrArg (fun T : Finset (MvPolynomial n F) ↦ T.prod id) hS
+  dsimp only at hp
+  rw [Finset.prod_image] at hp
+  · exact hp
+  · exact fun _ _ _ _ hab ↦ g.1.injective hab
 
-lemma orbitProdDvd (hFP : apmFPure F G) {π a : MvPolynomial n F} (hπ : Prime π)
-    (ha : ∀ g : G, g.1 a = a) (hdvd : π ∣ a) : apmOrbitProduct G π ∣ a := by
+set_option synthInstance.maxHeartbeats 100000 in
+lemma apmOrbit_eq_of_associated {F n : Type*} [Field F] [Fintype n]
+    (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F))
+    (π : MvPolynomial n F)
+    (hdich : ∀ g : G, g.1 π = π ∨ ¬Associated (g.1 π) π)
+    (g h : G) (ha : Associated (g.1 π) (h.1 π)) : g.1 π = h.1 π := by
+  have ha' := Associated.map h⁻¹.1 ha
+  have hk : (h⁻¹ * g).1 π = π ∨ ¬Associated ((h⁻¹ * g).1 π) π := hdich (h⁻¹ * g)
+  have hassoc : Associated ((h⁻¹ * g).1 π) π := by
+    simpa using ha'
+  rcases hk with heq | hna
+  · have := congrArg h.1 heq
+    simpa using this
+  · exact (hna hassoc).elim
+
+lemma apmOrbit_countP_le_one {F n : Type*} [Field F] [Fintype n]
+    [DecidableEq F] [DecidableEq n]
+    [∀ a : MvPolynomial n F, DecidablePred (Associated a)]
+    (G : Subgroup (MvPolynomial n F ≃ₐ[F] MvPolynomial n F)) [Fintype G]
+    (π a : MvPolynomial n F)
+    (hdich : ∀ g : G, g.1 π = π ∨ ¬Associated (g.1 π) π) :
+    (Finset.univ.image (fun g : G ↦ g.1 π)).val.countP (Associated a) ≤ 1 := by
   classical
-  simp only [apmOrbitProduct]
-  set S : Finset (MvPolynomial n F) := Finset.univ.image (fun g : G ↦ g.1 π) with hSdef
-  have hprimes : ∀ q ∈ S, Prime q := by
-    intro q hq
-    obtain ⟨g, -, rfl⟩ := Finset.mem_image.1 hq
-    exact orbitPrime G hπ g
-  have hdvds : ∀ q ∈ S, q ∣ a := by
-    intro q hq
-    obtain ⟨g, -, rfl⟩ := Finset.mem_image.1 hq
-    rw [← ha g]
-    exact map_dvd ((g : MvPolynomial n F ≃ₐ[F] MvPolynomial n F)) hdvd
-  have hcount : ∀ x : MvPolynomial n F, S.val.countP (Associated x) ≤ 1 := by
-    intro x
-    have hOrbEq : ∀ (y : MvPolynomial n F), y ∈ S → ∀ (z : MvPolynomial n F), z ∈ S →
-        Associated y z → y = z := by
-      intro y hy z hz ha
-      obtain ⟨g, -, rfl⟩ := Finset.mem_image.1 hy
-      obtain ⟨h, -, rfl⟩ := Finset.mem_image.1 hz
-      exact assocOrbitEq G hFP hπ ha
-    by_cases hx : ∃ δ ∈ S, Associated δ x
-    · obtain ⟨δ, hδS, hδ⟩ := hx
-      have hfe : S.val.filter (Associated x) = S.val.filter (· = δ) := by
-        refine Multiset.filter_congr fun y hyS => ?_
-        constructor
-        · intro hy
-          exact hOrbEq y (by simpa using hyS) δ hδS (hy.symm.trans hδ.symm)
-        · intro hy
-          exact hδ.symm.trans (hy ▸ Associated.refl δ)
-      rw [Multiset.countP_eq_card_filter, hfe]
-      have hflip : S.val.filter (· = δ) = S.val.filter (δ = ·) :=
-        Multiset.filter_congr fun y _ => by constructor <;> intro h <;> exact eq_comm.mp h
-      rw [hflip, ← Multiset.count_eq_card_filter_eq]
-      exact Multiset.nodup_iff_count_le_one.1 (Finset.nodup S) δ
-    · have h0 : S.val.countP (Associated x) = 0 :=
-        Multiset.countP_eq_zero.2 (fun y hy hyx => hx ⟨y, hy, hyx.symm⟩)
-      exact (Nat.le_of_eq h0).trans (Nat.zero_le 1)
-  rw [Finset.prod_eq_multiset_prod,
-    show Multiset.map (fun δ => δ) S.val = S.val from Multiset.map_id S.val]
-  exact Multiset.prod_primes_dvd a (fun q hq => hprimes q (by simpa using hq))
-    (fun q hq => hdvds q (by simpa using hq)) hcount
-
-lemma orbitProdPrime (hFP : apmFPure F G) {π : MvPolynomial n F} (hπ : Prime π) :
-    ∃ hfix : ∀ g : G, g.1 (apmOrbitProduct G π) = apmOrbitProduct G π,
-      Prime (⟨apmOrbitProduct G π, hfix⟩ : apmFixedRing G) := by
-  classical
-  have hfix : ∀ g : G, g.1 (apmOrbitProduct G π) = apmOrbitProduct G π :=
-    fun g => orbitInv G g π
-  refine ⟨hfix, ?_⟩
-  have hπS : π ∈ Finset.univ.image (fun g : G ↦ g.1 π) :=
-    Finset.mem_image.2 ⟨1, Finset.mem_univ _, oneApp G π⟩
-  have hdvdπ : π ∣ apmOrbitProduct G π :=
-    Finset.dvd_prod_of_mem (f := fun δ => δ) hπS
-  have hOP0 : apmOrbitProduct G π ≠ 0 := by
-    rw [apmOrbitProduct]
-    intro h0
-    obtain ⟨δ, hδ, hδ0⟩ := Finset.prod_eq_zero_iff.1 h0
-    obtain ⟨g, -, rfl⟩ := Finset.mem_image.1 hδ
-    exact (orbitPrime G hπ g).ne_zero hδ0
-  have hOP0' : (⟨apmOrbitProduct G π, hfix⟩ : apmFixedRing G) ≠ 0 := by
-    intro h0
-    exact hOP0 (by
-      have := congrArg (fun t : apmFixedRing G => (t : MvPolynomial n F)) h0
-      simpa using this)
-  refine ⟨hOP0', ?_, ?_⟩
-  · intro hu
-    obtain ⟨v, hv⟩ : ∃ v : apmFixedRing G,
-        (⟨apmOrbitProduct G π, hfix⟩ : apmFixedRing G) * v = 1 :=
-      ⟨hu.unit.inv, hu.unit.mul_inv⟩
-    have hunit : apmOrbitProduct G π * (v : MvPolynomial n F) = 1 := by
-      simpa [Subring.coe_mul, Subring.coe_one] using
-        congrArg (fun t : apmFixedRing G => (t : MvPolynomial n F)) hv
-    exact hπ.not_unit (isUnit_of_dvd_one (dvd_trans hdvdπ ⟨(v : MvPolynomial n F), hunit.symm⟩))
-  · intro x y hxy
-    obtain ⟨z, hz⟩ := hxy
-    have hz' : (x : MvPolynomial n F) * (y : MvPolynomial n F)
-        = apmOrbitProduct G π * (z : MvPolynomial n F) := by
-      have := congrArg (fun t : apmFixedRing G => (t : MvPolynomial n F)) hz
-      simpa [Subring.coe_mul] using this
-    have hx : ∀ g : G, g.1 (x : MvPolynomial n F) = (x : MvPolynomial n F) := x.2
-    have hy : ∀ g : G, g.1 (y : MvPolynomial n F) = (y : MvPolynomial n F) := y.2
-    have subDvd : ∀ (w : MvPolynomial n F) (hw : ∀ g : G, g.1 w = w) (hdw : π ∣ w),
-        (⟨apmOrbitProduct G π, hfix⟩ : apmFixedRing G) ∣ ⟨w, fun g => hw g⟩ := by
-      intro w hw hdw
-      obtain ⟨k, hk⟩ := orbitProdDvd G hFP hπ hw hdw
-      have hkfix : ∀ g : G, g.1 k = k := by
-        intro g
-        have e1 : g.1 (apmOrbitProduct G π * k) = apmOrbitProduct G π * g.1 k := by
-          rw [map_mul, hfix g]
-        have e2 : g.1 (apmOrbitProduct G π * k) = g.1 w := by rw [hk]
-        have e3 : g.1 w = w := hw g
-        have e4 : w = apmOrbitProduct G π * k := hk
-        exact mul_left_cancel₀ hOP0 (e1.symm.trans (e2.trans (e3.trans e4)))
-      exact ⟨⟨k, hkfix⟩, Subtype.ext hk⟩
-    rcases hπ.dvd_or_dvd (hdvdπ.trans ⟨_, hz'⟩) with hd | hd
-    · exact Or.inl (subDvd _ hx hd)
-    · exact Or.inr (subDvd _ hy hd)
-
-end Attempt2
+  let S := Finset.univ.image (fun g : G ↦ g.1 π)
+  change S.val.countP (Associated a) ≤ 1
+  by_cases hz : S.val.countP (Associated a) = 0
+  · omega
+  · obtain ⟨b, hbS, hab⟩ := Multiset.countP_pos.mp (Nat.pos_of_ne_zero hz)
+    have hpred : ∀ x ∈ S.val, Associated a x ↔ b = x := by
+      intro x hxS
+      constructor
+      · intro hax
+        have hbx : Associated b x := hab.symm.trans hax
+        change b ∈ S at hbS
+        change x ∈ S at hxS
+        simp only [S, Finset.mem_image, Finset.mem_univ, true_and] at hbS hxS
+        obtain ⟨g, rfl⟩ := hbS
+        obtain ⟨h, rfl⟩ := hxS
+        exact apmOrbit_eq_of_associated G π hdich g h hbx
+      · rintro rfl
+        exact hab
+    rw [Multiset.countP_congr rfl (fun x hx ↦ propext (hpred x hx))]
+    exact Multiset.nodup_iff_count_le_one.mp S.nodup b
 
 theorem apm_b96a03 :
     (∀ (G : Type*) [Group G] [Fintype G], Odd (Fintype.card G) →
@@ -374,14 +261,115 @@ theorem apm_b96a03 :
       -- uniqueness; after purity trivializes that homomorphism, orbit
       -- reindexing, `Multiset.prod_primes_dvd` count uniqueness, and the
       -- fixed-subring primality argument remain.
-      -- Attempt-2 student assembly of the residual.
-      intro hFP
+      intro hpure
       constructor
-      · intro g π hπ
-        by_cases hg : Associated (g.1 π) π
-        · exact Or.inl (stabilizerTrivial G hFP hπ hg)
-        · exact Or.inr ⟨orbitPrime G hπ g, hg⟩
-      · intro π hπ
-        exact ⟨fun g => orbitInv G g π,
-          fun α ha hdvd => orbitProdDvd G hFP hπ ha hdvd,
-          orbitProdPrime G hFP hπ⟩
+      · intro g π hprime
+        by_cases ha : Associated (g.1 π) π
+        · left
+          let s : apmAssociateStabilizer G π := ⟨g, ha⟩
+          have hs := apmAssociateScalar_spec G π hprime.ne_zero s
+          have hone := hpure (apmAssociateStabilizer G π)
+            (apmAssociateCharacter G π hprime.ne_zero) s
+          change apmAssociateScalar G π hprime.ne_zero s = 1 at hone
+          rw [hone] at hs
+          simpa [s] using hs
+        · right
+          exact ⟨irreducible_iff_prime.mp ((MulEquiv.irreducible_iff g.1).mpr
+            (irreducible_iff_prime.mpr hprime)), ha⟩
+      · -- Remaining orbit-product package: invariance, divisibility into
+        -- invariant multiples, and primality after descent to `apmFixedRing`.
+        intro π hprime
+        have hdiv : ∀ α : MvPolynomial n F, (∀ g : G, g.1 α = α) →
+            π ∣ α → apmOrbitProduct G π ∣ α := by
+          intro α hinv hpid
+          classical
+          have hdich : ∀ g : G, g.1 π = π ∨ ¬Associated (g.1 π) π := by
+            intro g
+            by_cases ha : Associated (g.1 π) π
+            · left
+              let s : apmAssociateStabilizer G π := ⟨g, ha⟩
+              have hs := apmAssociateScalar_spec G π hprime.ne_zero s
+              have hone := hpure (apmAssociateStabilizer G π)
+                (apmAssociateCharacter G π hprime.ne_zero) s
+              change apmAssociateScalar G π hprime.ne_zero s = 1 at hone
+              rw [hone] at hs
+              simpa [s] using hs
+            · exact Or.inr ha
+          let S := Finset.univ.image (fun g : G ↦ g.1 π)
+          have hprod : S.val.prod ∣ α := Multiset.prod_primes_dvd α
+            (fun a ha ↦ by
+              change a ∈ S at ha
+              simp only [S, Finset.mem_image, Finset.mem_univ, true_and] at ha
+              obtain ⟨g, rfl⟩ := ha
+              exact irreducible_iff_prime.mp ((MulEquiv.irreducible_iff g.1).mpr
+                (irreducible_iff_prime.mpr hprime)))
+            (fun a ha ↦ by
+              change a ∈ S at ha
+              simp only [S, Finset.mem_image, Finset.mem_univ, true_and] at ha
+              obtain ⟨g, rfl⟩ := ha
+              have hmapped : g.1 π ∣ g.1 α := map_dvd g.1 hpid
+              rwa [hinv g] at hmapped)
+            (apmOrbit_countP_le_one G π · hdich)
+          rw [Finset.prod_val] at hprod
+          simpa [apmOrbitProduct, S] using hprod
+        refine ⟨apmOrbitProduct_invariant G π, hdiv, ?_⟩
+        · -- This final descent uses the preceding divisibility statement on
+          -- either invariant factor after projecting a factorization in the
+          -- fixed subring to the ambient polynomial ring.
+          let hfix := apmOrbitProduct_invariant G π
+          refine ⟨hfix, ?_⟩
+          have hnonzero : apmOrbitProduct G π ≠ 0 := by
+            classical
+            unfold apmOrbitProduct
+            rw [Finset.prod_ne_zero_iff]
+            intro a ha
+            simp only [Finset.mem_image, Finset.mem_univ, true_and] at ha
+            obtain ⟨g, rfl⟩ := ha
+            intro hz
+            apply hprime.ne_zero
+            apply g.1.injective
+            simpa using hz
+          refine ⟨fun hz ↦ hnonzero (congrArg Subtype.val hz), ?_, ?_⟩
+          · intro hu
+            have hu' : IsUnit (apmOrbitProduct G π) :=
+              hu.map (apmFixedRing G).subtype
+            have hpi : π ∣ apmOrbitProduct G π := by
+              classical
+              unfold apmOrbitProduct
+              apply Finset.dvd_prod_of_mem id
+              exact Finset.mem_image.mpr ⟨(1 : G), Finset.mem_univ _, by simp⟩
+            exact hprime.not_unit (isUnit_of_dvd_unit hpi hu')
+          · intro a b hpab
+            have hpab' : apmOrbitProduct G π ∣ (a : MvPolynomial n F) * b := by
+              obtain ⟨c, hc⟩ := hpab
+              exact ⟨c, congrArg Subtype.val hc⟩
+            have hpi : π ∣ apmOrbitProduct G π := by
+              classical
+              unfold apmOrbitProduct
+              apply Finset.dvd_prod_of_mem id
+              exact Finset.mem_image.mpr ⟨(1 : G), Finset.mem_univ _, by simp⟩
+            rcases hprime.dvd_or_dvd (hpi.trans hpab') with ha | hb
+            · left
+              obtain ⟨c, hc⟩ := hdiv a a.property ha
+              refine ⟨⟨c, ?_⟩, Subtype.ext ?_⟩
+              · intro g
+                apply mul_left_cancel₀ hnonzero
+                calc
+                  apmOrbitProduct G π * g.1 c =
+                      g.1 (apmOrbitProduct G π * c) := by rw [map_mul, hfix g]
+                  _ = g.1 a := by rw [← hc]
+                  _ = a := a.property g
+                  _ = apmOrbitProduct G π * c := hc
+              · exact hc
+            · right
+              obtain ⟨c, hc⟩ := hdiv b b.property hb
+              refine ⟨⟨c, ?_⟩, Subtype.ext ?_⟩
+              · intro g
+                apply mul_left_cancel₀ hnonzero
+                calc
+                  apmOrbitProduct G π * g.1 c =
+                      g.1 (apmOrbitProduct G π * c) := by rw [map_mul, hfix g]
+                  _ = g.1 b := by rw [← hc]
+                  _ = b := b.property g
+                  _ = apmOrbitProduct G π * c := hc
+              · exact hc
