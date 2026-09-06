@@ -14,16 +14,32 @@ receipts. Measure placeholder changes, typed residual changes, infrastructure
 packet counts, and STOP/PASS outcomes. Return `:outcome :replan` with a
 `:replacement-items` vector containing a newly elected portfolio from the
 complete DAG—not merely descendants of the rows just completed. Elect 1-5
-work rows in priority order: adjacent uptake/final adapters, then one-edge
-`LOCAL-GO`/`API-GAP` probes, then explicitly owner-authorized foundations.
+work rows in STRATEGIC ORDER under the standing portfolio policy below.
 Append a fresh `:strategy-checkpoint` as the final vector item, depending on
 every elected work-row id, so the campaign refills again after this portfolio.
 Every inserted row must satisfy the full ledger schema and use a new id. An
-ordinary replan may not return an empty tail. If no eligible row exists after
-reading the entire DAG, return STOP with the exact owner election required;
-do not label the campaign complete. Do not activate an unauthorized
-`FOUNDATION`, `SPEC-DEFECT`, or `DEFERRED-REP`, and do not edit the DAG or
-ledger directly.
+ordinary replan may not return an empty tail. Do not edit the DAG or ledger
+directly.
+
+STANDING PORTFOLIO POLICY (Joe, 2026-09-06; supersedes the prior
+owner-authorization gate). The campaign runs the DAG in strategic order until
+every consumer problem is closed. `FOUNDATION`, `SPEC-DEFECT` and
+`DEFERRED-REP` rows are STANDING AUTHORIZED: electing one needs no further
+owner approval. Rank the whole DAG and elect the top rows by, in order:
+
+1. how many downstream consumer problems the row unblocks (most first);
+2. how little work it is (simplest first), preferring one coherent theorem or
+   one bounded construction.
+
+A `FOUNDATION` that unblocks several consumers outranks an adapter that
+unblocks one. `STOP :needs-owner` is NO LONGER a valid strategy outcome and
+must not be returned: if the only remaining rows are foundations, specification
+repairs or deferred representations, ELECT THE BEST ONE under the ranking above
+and proceed. The prior gate inverted this policy -- it stopped the campaign
+precisely when the remaining work was the work that matters -- and it is
+withdrawn. Only two conditions end the campaign: every consumer problem closed,
+or a row whose mathematics is genuinely refuted, which is reported as a STOP
+naming the refutation, not as an election request.
 
 For implementation or repair, modify only `:scope`, verify the recorded fixture
 hash, run every acceptance gate, and commit the scoped change. Report author,

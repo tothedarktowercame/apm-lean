@@ -1892,18 +1892,7 @@
    :current-residual
    "four placeholders: concrete quotient covering bridge, independent piOne presentation/ranges, independent total-space nonhomeomorphism, and final assembly",
    :other-consumers [:t98A01 :t92J06]}
-  {:consumer :portfolio,
-   :checkpoint
-   {:after-problems 1,
-    :may-supersede-future true,
-    :required-measures
-    [:placeholder-delta
-     :typed-residual-change
-     :infrastructure-packets
-     :review-outcomes]},
-   :stop-condition
-   "Do not activate FOUNDATION, SPEC-DEFECT, or DEFERRED-REP work automatically",
-   :evidence
+  {:superseded-evidence
    {:residual
     "Portfolio paused for owner election; no DAG or ledger files were edited and no foundation, specification repair, or deferred representation was activated.",
     :outcome :stop,
@@ -1970,19 +1959,30 @@
       "authorize the two-stage manifold inverse-function construction"
       "authorize the Hausdorff-sphere normalization and moment program"]},
     :seat :codex-12},
+   :consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Stop only on a genuine mathematical refutation, naming it. Never stop for want of owner authorization.",
    :phase :strategy,
-   :state :needs-owner,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
    {:strategy
-    "reread the complete DAG and reviewed t01A04 quotient-covering probe receipt; elect a new nonempty policy-eligible portfolio"},
+    "Reread the complete DAG and elect a nonempty portfolio under the STANDING PORTFOLIO POLICY (Joe, 2026-09-06): rank all rows by how many consumer problems they unblock, then by least work; FOUNDATION, SPEC-DEFECT and DEFERRED-REP are standing authorized. Do not return :needs-owner."},
    :id :checkpoint-full-dag-refill-6,
    :kind :strategy-checkpoint,
    :depends-on
    [:t01a04-quotient-covering-probe-1 :checkpoint-full-dag-refill-5],
    :current-residual
-   "await the reviewed concrete quotient-covering probe, then refill from the complete DAG"}],
+   "Prior stop was an owner-election request under the withdrawn gate; re-elect under the standing policy."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
