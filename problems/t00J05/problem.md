@@ -1,0 +1,27 @@
+# t00J05
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+## Problem Statement
+
+Raw TeX source is preserved verbatim in `problem.tex`:
+
+```tex
+Let $f:\Son\rightarrow \T$ be an embedding onto an essential simple
+closed curve in the $2$-torus $\T$. Let $X$ be the $2$-complex
+obtained by attaching a $2$-disk to $T$ via $f$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Describe or draw a picture of the universal covering space of $X$.
+%------------------------------------------------------------------*
+\item Let $\Stw$ be the two-dimensional sphere. Find maps
+$f:\Stw\rightarrow X$ and $g:X\rightarrow \Stw$ neither of which is
+homotopic to the constant map. Hint: having both maps may help in
+establishing the properties of each.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

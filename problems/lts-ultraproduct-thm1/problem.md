@@ -1,0 +1,14 @@
+# lts-ultraproduct-thm1
+
+## Bundle Overview
+
+This stem is bundled for corpus completeness but belongs to a different
+series from the APM problems.
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $I$ be a non-empty set and $\mathcal{D}$ an ultrafilter over $I$. Then, for arbitrary similar algebraic structures $A_i$, $i\in I$ and an arbitrary congruence $\sigma(i)$ on $A_i$ ($i\in I$), the factor algebra $\Pi_{\mathcal{D}}(A_i\mid i\in I)/\Pi_{\mathcal{D}}(\sigma(i)\mid i\in I)$ is isomorphic to the ultraproduct $\Pi_{\mathcal{D}}(A_i/\sigma(i)\mid i\in I)$ of the factor algebras $A_i/\sigma(i)$.
+```
