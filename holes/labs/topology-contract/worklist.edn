@@ -2065,9 +2065,27 @@
       :current-residual
       "await the reviewed rectangular local Morse--Sard foundation probe, then refill from the complete DAG"}],
     :author :codex-1,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788730965938-13417-dfe45937",
+     :commands
+     ["git diff b534a909^ b534a909 --check"
+      "git diff --name-status b534a909^ b534a909"
+      "git show --stat --oneline b534a909"
+      "git show b534a909:holes/labs/topology-contract/worklist.edn > /tmp/topology-review-f691-post.edn"
+      "git show b534a909^:holes/labs/topology-contract/worklist.edn > /tmp/topology-review-f691-pre.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-f691-pre.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-f691-post.edn"
+      "git show 5b16312f:problems/t93A04/lean/Main.lean | sha256sum"
+      "git show 5b16312f:problems/t93A04/lean/Main.lean | rg -n '\\bsorry\\b|theorem apm_'"
+      "rg -n -C 8 'CRITICAL-VALUE MANIFOLD SARD|t93A04|t01A08|t01J04|t92J07|t96J05|rectangular local' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: commit b534a909 is ledger-only and diff-clean; pre/post worklists validate as 19 and 21 items; recorded t93A04 frozen SHA-256 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and one placeholder reproduce from source revision 5b16312f; the elected rectangular local-set Morse--Sard theorem is oriented from sufficiently differentiable arbitrary finite-dimensional real normed-space maps to target measure-zero critical values, preserving the chart-domain localization boundary and avoiding an invalid equal-dimension determinant restriction; the DAG confirms downstream consumers t01A08, t01J04, t92J07, t93A04, and t96J05; reviewer differs from author codex-1."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -2085,7 +2103,7 @@
    :stop-condition
    "STOP only on a genuine counterexample or incompatible hypotheses for the rectangular theorem, naming it; REVISE only if exactly one named compiled prerequisite remains. Do not begin chart-countable assembly.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
