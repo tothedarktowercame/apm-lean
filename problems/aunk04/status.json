@@ -15,9 +15,12 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 3,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial-lean-proof",
+  "classification": "solved",
   "classification_detail": "Hop 4 states the two remaining interfaces precisely: the mixed real/natural-power Cauchy bound forces high derivatives to vanish, and analytic uniqueness reconstructs the entire function as a finite polynomial.",
   "closer_hop": 4,
   "closer_note": "apm_aunk04_bridge_1 states high-derivative vanishing from the growth bound; apm_aunk04_bridge_2 states global finite Taylor reconstruction.",
@@ -45,5 +48,15 @@
       "date": "2026-08-19",
       "resolved": null
     }
-  ]
+  ],
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial-lean-proof",
+    "previous_sorry_count_total": 3,
+    "axioms": "apm_aunk04 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f58; the Student's proof was complete and the frame parked on an apparatus fault, so the mathematics was banked from the preserved source rather than through the frame's own close."
+  }
 }

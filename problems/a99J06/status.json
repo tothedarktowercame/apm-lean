@@ -12,10 +12,15 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +32,17 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial-lean-proof",
-  "classification_detail": "Closer hop 3 routed around global primitives using Complex.isCoveringMap_exp and the simply-connected lifting theorem, proving a global continuous logarithm on Ω. The remaining sorry is the local analytic regularity upgrade: prove that a continuous lift G with exp ∘ G holomorphic is itself holomorphic; Mathlib's covering local inverses are only topological.",
-  "imported_at": "2026-07-13T17:26:53.073566Z"
+  "classification": "solved",
+  "classification_detail": "Closer hop 3 routed around global primitives using Complex.isCoveringMap_exp and the simply-connected lifting theorem, proving a global continuous logarithm on \u03a9. The remaining sorry is the local analytic regularity upgrade: prove that a continuous lift G with exp \u2218 G holomorphic is itself holomorphic; Mathlib's covering local inverses are only topological.",
+  "imported_at": "2026-07-13T17:26:53.073566Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial-lean-proof",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_a99j06 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f55; the Student's proof was complete and the frame parked on an apparatus fault, so the mathematics was banked from the preserved source rather than through the frame's own close."
+  }
 }

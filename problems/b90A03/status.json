@@ -12,10 +12,15 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0,
+    "sorry_count_by_file": {
+      "Main.lean": 0
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +32,17 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "solved",
   "classification_detail": "Closer hop 2 closes the full existential conjunct. Closer hop 3 proves that literal singleton equality forces every Sylow fixed field to equal L. One sorry remains to transport this through injectivity/normality of the Galois correspondence and prove the reverse singleton implication.",
-  "imported_at": "2026-07-13T17:26:53.664895Z"
+  "imported_at": "2026-07-13T17:26:53.664895Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",
+    "at": "2026-09-06",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 1,
+    "axioms": "apm_b90a03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f68; the Student's proof was complete and the frame parked on an apparatus fault, so the mathematics was banked from the preserved source rather than through the frame's own close."
+  }
 }
