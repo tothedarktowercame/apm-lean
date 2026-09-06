@@ -1,0 +1,25 @@
+# t99J06
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+On $\Rth$, let $\alpha=(z^2+2xz+4)dx\wedge dy+(x-x^2)dy\wedge dz+2yz
+dz\wedge dz$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Compute $d\alpha$.
+%------------------------------------------------------------------*
+\item Integrate $\alpha$ over the cone $C=\{(x,y,z)\pipe
+x^2+y^2-(z-1)^2=0, 0\leq z\leq 1\}$, oriented so that $\int_C dx\wedge
+dy$ is positive.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

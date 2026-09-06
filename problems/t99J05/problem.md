@@ -1,0 +1,35 @@
+# t99J05
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Recall that $\CP^2$ is the set of all complex lines in $\C^3$. One way
+of writing this is as all triples of complex numbers $(z_0,z_1,z_2)$,
+not all zero, modulo the equivalence relation $(z_0,z_1,z_2)\sim
+(\alpha z_0,\alpha z_1,\alpha z_2)$ for $\alpha$ an arbitrary nonzero
+complex number. Let $[z_0,z_1,z_2]$ denote the equivalence class of
+$(z_0,z_1,z_2)$. Consider the map $f:\CP^2\rightarrow \CP^2$ given by
+$f([z_0,z_1,z_2])=[z_0,2z_1,3z_2]$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Show this map is well-defined and homotopic to the identity.
+%------------------------------------------------------------------*
+\item Find the fixed points of $f$.
+%------------------------------------------------------------------*
+\item Compute the local Lefschetz number at each point.
+%------------------------------------------------------------------*
+\item Use this to compute the Euler characteristic.
+%------------------------------------------------------------------*
+\item Generalize this argument to compute the Euler characteristic of
+$\CP^n$.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

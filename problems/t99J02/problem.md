@@ -1,0 +1,32 @@
+# t99J02
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X$ be a double torus.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{alist}
+%------------------------------------------------------------------*
+\item Describe a CW decomposition for $X$.
+%------------------------------------------------------------------*
+\item Use that CW decomposition to compute the homology groups in all
+dimensions.
+%------------------------------------------------------------------*
+\item Now consider $X$ as the connected sum of a torus and another
+torus.
+%------------------------------------------------------------------*
+\item Using this decomposition, give a presentation of the fundamental
+group of $X$ using van Kampen's theorem.
+%------------------------------------------------------------------*
+\item Using this decomposition, compute all the homology groups of $X$
+using the Mayer-Vietoris theorem.
+%------------------------------------------------------------------*
+\end{alist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```

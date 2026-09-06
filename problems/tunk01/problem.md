@@ -1,0 +1,19 @@
+# tunk01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Classify the polygon with edges labeled
+$acd^{-1}g^{-1}fe^{-1}bc^{-1}d^{-1}g^{-1}e^{-1}fab.$ (Note: all the
+vertices are the same, except the ones between $d^{-1}$ and $g^{-1}$,
+which form a second distinct vertex.) [Hint: you can do this with
+the Euler number.]
+
+\soln{This is the same as t94J09, which see.}
+```

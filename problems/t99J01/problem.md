@@ -1,0 +1,17 @@
+# t99J01
+
+## Bundle Overview
+
+This directory is the canonical APM problem bundle for this problem.
+
+## Problem Statement
+
+Raw TeX source:
+
+```tex
+Let $X$ be the wedge of three circles. Does $X$ have an $n$-fold
+covering space for every positive integer $n$? In cases where it has
+an $n$-fold covering, what is the fundamental group of that covering?
+Could it have other $n$-fold coverings with different fundamental
+groups?  Why or why not?
+```
