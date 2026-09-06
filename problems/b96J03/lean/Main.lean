@@ -15,6 +15,18 @@ is stated with Mathlib's standard group-theoretic lower-central-series notion.
 None. Solvability and nilpotence use Mathlib's standard predicates. The group
 in part (c) is the concrete presented group on generators `a,b,c`, with the
 three power relations and two commutation relations listed in the source.
+
+## Proof constraints
+
+The proof must be kernel-checked. `#print axioms` on the target declaration
+must report exactly `[propext, Classical.choice, Quot.sound]`. `native_decide`
+is not acceptable: it discharges the goal through the compiler rather than the
+kernel and introduces a `._native.native_decide.` axiom.
+
+A previous attempt (jit-all-open-v2 frame f81, student-attempt-3) reached zero
+`sorry` but discharged `apm_b96J03_bridge_1` with `native_decide`, producing
+`apm_b96J03_bridge_1._native.native_decide.ax_1_1` and `ax_1_2` in
+`#print axioms`. That attempt was rejected and is not recorded as a proof.
 -/
 
 def apm_b96j03_IsNilpotent (G : Type*) [Group G] : Prop :=
