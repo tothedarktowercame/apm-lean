@@ -2325,6 +2325,36 @@
    "the rectangular Sard proof has not yet converted nonsurjectivity into finitely many exact derivative-rank loci",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled finite aggregation cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCriticalRankStrataNull.lean"
+    "ConstructionTargets/SardCriticalRankStrataNull.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-STRATUM NULL AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/RectangularSardRankStrataNullProbe.lean",
+     :sha256
+     "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"},
+    :declarations ["criticalImage_null_of_rankStrata_null"],
+    :consumer-residual
+    "one uniform C∞ rank-stratum image-nullity theorem before manifold chart assembly",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "null target-measure images for every exact derivative-rank stratum indexed by r : Fin (finrank ℝ F)",
+    :target
+    "null target-measure image of the entire nonsurjective-derivative locus"},
+   :id :critical-value-sard-rank-strata-null-aggregation-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the banked finite rank decomposition has not yet been converted from per-stratum nullity hypotheses to nullity of the full critical image",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :recalled-suggestion
    "The reviewed t93A04 probe compiled chart criticality and critical-image inclusion; the common missing edge for five consumers is rectangular local Morse--Sard for arbitrary finite source dimension.",
    :stop-condition
@@ -2332,85 +2362,78 @@
    :evidence
    {:probe
     {:residual
-     "After rank-stratum decomposition, the sole rectangular Euclidean obligation is a uniform local theorem that the image of each C∞ derivative-rank stratum r < finrank F is null; do not begin manifold chart assembly.",
+     "After finite rank-stratum null aggregation, prove one uniform local analytic theorem: every exact derivative-rank-r stratum of a C∞ map E → F has null image when r < finrank ℝ F; do not begin manifold chart assembly.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled finite-dimensional decomposition cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled finite aggregation cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCriticalRankStrata.lean"
-       "ConstructionTargets/SardCriticalRankStrata.md"],
+      ["ConstructionTargets/SardCriticalRankStrataNull.lean"
+       "ConstructionTargets/SardCriticalRankStrataNull.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE RANK-STRATUM DECOMPOSITION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-STRATUM NULL AGGREGATION",
       :acceptance
       {:fixture
-       {:path "/tmp/RectangularSardRankStrataProbe.lean",
+       {:path "/tmp/RectangularSardRankStrataNullProbe.lean",
         :sha256
-        "8fb2284053f64b2d58026d9203cd4439b7ce28bd248aee9b338a8c8b3bc75344"},
-       :declarations
-       ["criticalSet"
-        "rankStratum"
-        "criticalSet_eq_iUnion_rankStratum"],
+        "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"},
+       :declarations ["criticalImage_null_of_rankStrata_null"],
        :consumer-residual
-       "one uniform C∞ rank-stratum image-nullity theorem before any manifold chart assembly",
+       "one uniform C∞ rank-stratum image-nullity theorem before manifold chart assembly",
        :axioms :standard-only},
       :representation
       {:source
-       "the nonsurjective locus of a family of linear maps E →ₗ[ℝ] F with finite-dimensional target",
+       "null target-measure images for every exact derivative-rank stratum indexed by r : Fin (finrank ℝ F)",
        :target
-       "the finite union, indexed by r : Fin (finrank ℝ F), of loci where finrank ℝ (range (f' x)) = r"},
-      :id :critical-value-sard-rank-strata-1,
+       "null target-measure image of the entire nonsurjective-derivative locus"},
+      :id :critical-value-sard-rank-strata-null-aggregation-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the rectangular Sard proof has not yet converted nonsurjectivity into finitely many exact derivative-rank loci",
+      "the banked finite rank decomposition has not yet been converted from per-stratum nullity hypotheses to nullity of the full critical image",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "Pinned Mathlib has neither a constant-rank normal form nor rectangular Morse--Sard. The exact next prerequisite is the finite rank-stratum decomposition of the nonsurjective-derivative locus. It compiles without analytic assumptions and reduces the rectangular theorem to one uniform obligation: prove nullity of the image of every derivative-rank stratum r < finrank F. The already reviewed countable aggregation then combines local chart results. The C∞ theorem is not refuted.",
+     "The reviewed rank-stratum dependency exposes one further independently compilable prerequisite: finite null-image aggregation over the exact derivative-rank strata. This removes all remaining set and measure bookkeeping from rectangular Sard. After it is banked, the current row has one uniform analytic obligation: for every r < finrank F, prove that a C∞ map sends its derivative-rank-r locus to a null set. The C∞ rectangular theorem is not refuted.",
      :commands
      [{:cmd
-       "sed -n '2090,2160p' holes/labs/topology-contract/worklist.edn",
+       "git log -1 --oneline -- ConstructionTargets/SardCriticalRankStrata.lean",
+       :exit 0,
+       :output "8e18ea81 Add finite Sard critical rank strata"}
+      {:cmd
+       "sed -n '1,160p' ConstructionTargets/SardCriticalRankStrata.lean",
        :exit 0}
       {:cmd
-       "sed -n '1,180p' ConstructionTargets/SardCriticalImageAggregation.lean",
-       :exit 0}
-      {:cmd
-       "rg -n 'ConstantRank|constant rank|rank theorem|finrank.*fderiv|fderiv.*finrank|rank.*fderiv' .lake/packages/mathlib/Mathlib -g '*.lean'",
+       "lake env lean /tmp/RectangularSardRankStrataNullProbe.lean",
        :exit 0,
        :output
-       "No general constant-rank normal-form theorem found; matches were unrelated derivative-rank facts."}
-      {:cmd
-       "sed -n '520,610p' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/HausdorffDimension.lean",
-       :exit 0}
-      {:cmd
-       "sed -n '560,690p' .lake/packages/mathlib/Mathlib/MeasureTheory/Function/Jacobian.lean",
-       :exit 0}
-      {:cmd "lake env lean /tmp/RectangularSardRankStrataProbe.lean",
+       "'criticalImage_null_of_rankStrata_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/RectangularSardRankStrataNullProbe.lean",
        :exit 0,
        :output
-       "'criticalSet_eq_iUnion_rankStratum' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/RectangularSardRankStrataProbe.lean",
-       :exit 0,
-       :output
-       "8fb2284053f64b2d58026d9203cd4439b7ce28bd248aee9b338a8c8b3bc75344"}
+       "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/RectangularSardRankStrataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/RectangularSardRankStrataNullProbe.lean",
        :exit 1,
        :expected-exit 1}
+      {:cmd
+       "rg -n 'ConstantRank|constant rank|rank theorem|Sard|critical value' .lake/packages/mathlib/Mathlib -g '*.lean'",
+       :exit 0,
+       :output
+       "Pinned Mathlib contains equal-dimensional determinant Sard and dimension-gap Hausdorff results, but no rectangular Morse--Sard or constant-rank normal form."}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}
       {:cmd "git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/RectangularSardRankStrataProbe.lean",
+     {:path "/tmp/RectangularSardRankStrataNullProbe.lean",
       :sha256
-      "8fb2284053f64b2d58026d9203cd4439b7ce28bd248aee9b338a8c8b3bc75344"},
+      "8888de99dc526e8df57adf7da9d0827400ee02e8d1b4a8a538b8d750c896b1eb"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION]",
    :acceptance
@@ -2429,7 +2452,8 @@
    :depends-on
    [:checkpoint-full-dag-refill-6
     :critical-value-sard-countable-aggregation-1
-    :critical-value-sard-rank-strata-1],
+    :critical-value-sard-rank-strata-1
+    :critical-value-sard-rank-strata-null-aggregation-1],
    :current-residual
    "one frozen placeholder; chart criticality and critical-image inclusion compile, but arbitrary-source-dimension rectangular local Morse--Sard is absent",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
