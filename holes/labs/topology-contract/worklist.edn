@@ -2100,8 +2100,68 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled abstract aggregation cannot be promoted at the recorded type without changing representation or adding nonstandard axioms.",
+   :evidence
+   {:next-consumer-residual
+    "Prove the rectangular local-set Morse--Sard theorem for arbitrary finite-dimensional source and target; the countable critical-image aggregation is now banked.",
+    :placeholder-delta {:scoped-files [0 0], :consumer :unchanged},
+    :residual
+    "rectangular local-set Morse--Sard only; chart-countable assembly in the frozen consumer has not begun",
+    :gates
+    {:fixture-hash :pass,
+     :direct-compile :pass,
+     :focused-build :pass,
+     :placeholder-audit :pass,
+     :diff-check :pass,
+     :worktree-clean :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"criticalImage_null_of_countable_local_null"
+     "2c00b5cdb02dc8b58fcd5be40def540a445de20ca86a6a9071d0a9f9ee8e222b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-2,
+    :commands
+    [{:cmd "test -d .lake/packages && test ! -L .lake/packages",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/RectangularSardAggregationProbe.lean",
+      :exit 0,
+      :output
+      "77ac07dbc69f7b71c1666b6ca952c25bff354b59d1c0f3d0f2576b10279749a1"}
+     {:cmd "lake env lean /tmp/RectangularSardAggregationProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCriticalImageAggregation.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardCriticalImageAggregation",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardCriticalImageAggregation.lean ConstructionTargets/SardCriticalImageAggregation.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "c1ea651c7e0d92b50306138216e9064a3091e00d",
+    :changed-paths
+    ["ConstructionTargets/SardCriticalImageAggregation.lean"
+     "ConstructionTargets/SardCriticalImageAggregation.md"],
+    :file-hashes
+    {"ConstructionTargets/SardCriticalImageAggregation.lean"
+     "17eeaf292aed2840187f2dcc2224b29cee70b2fcaff6a07c6e59d767b44b312a",
+     "ConstructionTargets/SardCriticalImageAggregation.md"
+     "4c4b3aa2d563c011601968078fbb0187d7f7001b3d0a951b6e627dc0cd576376"},
+    :fixture
+    {:path "/tmp/RectangularSardAggregationProbe.lean",
+     :sha256
+     "77ac07dbc69f7b71c1666b6ca952c25bff354b59d1c0f3d0f2576b10279749a1"},
+    :declarations ["criticalImage_null_of_countable_local_null"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCriticalImageAggregation.lean"
     "ConstructionTargets/SardCriticalImageAggregation.md"],
