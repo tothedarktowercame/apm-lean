@@ -6958,6 +6958,24 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788807053504-14003-2dcdea43",
+     :commands
+     ["git show --stat --oneline ea3b733c74b146e42a7708c1054d8fcd261e7a46"
+      "git diff-tree --no-commit-id --name-status -r ea3b733c74b146e42a7708c1054d8fcd261e7a46"
+      "git archive ea3b733c74b146e42a7708c1054d8fcd261e7a46 ... | tar -x"
+      "sha256sum archived Lean and Markdown blobs"
+      "sed frozen theorem block | sha256sum"
+      "rg placeholder and duplicate-proof patterns"
+      "git merge-base --is-ancestor <dependency> ea3b733c74b146e42a7708c1054d8fcd261e7a46"
+      "git diff ea3b733c74b146e42a7708c1054d8fcd261e7a46^ ea3b733c74b146e42a7708c1054d8fcd261e7a46 --check"
+      "lake build ConstructionTargets.SardProjectedKernelFlatness"
+      "lake env lean <archived>/ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: recorded commit has exact two-file scope; fixture, module, Markdown, and frozen-statement hashes reproduce; placeholder count is zero; dependency commits are ancestors; the module imports and directly consumes the promoted projected-kernel theorem; P.comp D kernel orientation and Q.comp D residual conclusion match the representation boundary; chart transport and nullity induction remain residual; Lean elaborates with standard axioms only."},
     :commit "ea3b733c74b146e42a7708c1054d8fcd261e7a46",
     :changed-paths
     ["ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"
@@ -6986,7 +7004,7 @@
      "a3720c59cc80a27b8f9afae737fefa781232722cb9e8ff2da8d259a6389e574b"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"
     "ConstructionTargets/SardLocalResidualDerivativeFlatness.md"],
@@ -7085,7 +7103,7 @@
       "Residual derivative flatness now holds uniformly on the local rank-bounded locus in source coordinates; transport to kernel-coordinate slices and the ensuing nullity/induction step remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
