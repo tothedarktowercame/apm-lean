@@ -6527,8 +6527,76 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled projected strict-derivative theorem cannot be promoted with its exact range projection, kernel projection, surjectivity, complementary-kernel, or standard-axiom properties.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Package these fields as ImplicitFunctionData with the finite-dimensional closed-range completeness instance, instantiate local rank coordinates, and prove the remaining coordinate map has vanishing derivative along the local rank-at-most-r fibre.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardProjectedImplicitFunctionDataProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardProjectedImplicitFunctionDataProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean ConstructionTargets/SardProjectedComplementedStrictDerivativeData.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardProjectedImplicitFunctionDataProbe.lean ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean ConstructionTargets/SardProjectedComplementedStrictDerivativeData.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem projected_complemented_strictDerivative_data/,/^#print axioms/p' ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean ConstructionTargets/SardProjectedComplementedStrictDerivativeData.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add projected complemented strict derivative data'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "0e8a20b29ff932f023b8848a3aae5d354296e74a",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean"
+     "ConstructionTargets/SardProjectedComplementedStrictDerivativeData.md"],
+    :fixture
+    {:path "/tmp/SardProjectedImplicitFunctionDataProbe.lean",
+     :sha256
+     "295c9349737bd5642c5d3914e0e70758a223841c7f3651b50228f5cdedb5fde2"},
+    :declarations
+    ["SardProjectedImplicitFunctionDataProbe.projected_complemented_strictDerivative_data"],
+    :dependencies
+    [{:id :critical-value-sard-complemented-derivative-split-1,
+      :commit "72e86f78b96489184eb2ac899f5f224840deaa31"}
+     {:id :critical-value-sard-local-rank-normal-form-probe-2,
+      :commit "7bc80d8f72811affd71a70cf3396cc21964359af"}],
+    :hashes
+    {:lean
+     "295c9349737bd5642c5d3914e0e70758a223841c7f3651b50228f5cdedb5fde2",
+     :markdown
+     "64b88961a8b00b0ae403f2968d706823fb840cb7f17cbbbb17f97b085df32fcb",
+     :statement
+     "3d6d06feed7b93a93cb6d0812d3888d2f966f18783f61658a7398b5e4f7648ab"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean"
     "ConstructionTargets/SardProjectedComplementedStrictDerivativeData.md"],
