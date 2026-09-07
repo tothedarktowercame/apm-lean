@@ -17,6 +17,12 @@
     "terminalDisposition": "accept-authenticated-terminal",
     "repairChargedSessionId": "session-1"
   }],
+  "repairAttributions": [{
+    "frameId": "f191", "role": "student",
+    "findings": ["typed-submission-missing"],
+    "authorityPresent": true, "submissionAvailable": true,
+    "submissionId": "630f7334", "chargedOrigin": "apparatus"
+  }],
   "checkedHandoffs": [{
     "depositorId": "zai-scribe-1", "reviewerId": "guide-1",
     "verdictAuthor": "independent-reviewer", "verdict": "accept"

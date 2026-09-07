@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "certificateKind": "apm-runtime-conformance",
+  "terminalRepairExhaustions": [{"frameId":"f191","repairAttempts":1,"disposition":"park-reenterable-frame","frameReenterable":true}],
+  "solverDefects": [{"frameId":"f190","outcome":"claimed-defect","statementUnchanged":true,"failureAccount":"refuted","residual":null,"disposition":"automatic-statement-refuted-void"}],
+  "cancelledRoleLineages": [{"requestId":"fb063e8a","originSessionId":"f191-student","observedSessionId":"f191-student","cancellationPersisted":true,"authenticatedTerminalCollected":true,"terminalDisposition":"accept-authenticated-terminal","repairChargedSessionId":"f191-student"}],
+  "repairAttributions": [{"frameId":"f191","role":"student","findings":["typed-submission-missing"],"authorityPresent":true,"submissionAvailable":true,"submissionId":"630f7334","chargedOrigin":"apparatus"}],
+  "checkedHandoffs": [{"depositorId":"d","reviewerId":"r","verdictAuthor":"independent-reviewer","verdict":"accept"}],
+  "watchdogActions": [{"coordinatorId":"c","observedGeneration":6,"currentGeneration":6,"stopCauseType":"substrate-fault","stopReasonCode":"stalled","actionPerformed":true}],
+  "orphanRecoveries": [{"originalRequestId":"r","replacementRequestId":"r1","lineagePreserved":true,"attempt":1,"maximumAttempts":1,"authorityRegisteredBeforeActivation":true}],
+  "substrateWaits": [{"requestId":"r","substrateAvailable":false,"queueConsumed":false,"disposition":"wait-without-consuming"}],
+  "reviewedMemoryPublications": [{"memoryId":"m","reviewReceiptId":"v","reviewReceiptPersisted":true,"frameClosed":false,"publicationPersisted":true}]
+}

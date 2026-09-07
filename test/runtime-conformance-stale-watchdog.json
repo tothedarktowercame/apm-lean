@@ -4,6 +4,7 @@
   "terminalRepairExhaustions": [{"frameId":"f","repairAttempts":1,"disposition":"park-reenterable-frame","frameReenterable":true}],
   "solverDefects": [{"frameId":"f","outcome":"claimed-defect","statementUnchanged":true,"failureAccount":"refuted","residual":null,"disposition":"automatic-statement-refuted-void"}],
   "cancelledRoleLineages": [{"requestId":"r","originSessionId":"s","observedSessionId":"s","cancellationPersisted":true,"authenticatedTerminalCollected":true,"terminalDisposition":"accept-authenticated-terminal","repairChargedSessionId":"s"}],
+  "repairAttributions": [{"frameId":"f191","role":"student","findings":["typed-submission-missing"],"authorityPresent":true,"submissionAvailable":true,"submissionId":"630f7334","chargedOrigin":"apparatus"}],
   "checkedHandoffs": [{"depositorId":"d","reviewerId":"r","verdictAuthor":"independent-reviewer","verdict":"accept"}],
   "watchdogActions": [{"coordinatorId":"c","observedGeneration":3,"currentGeneration":4,"stopCauseType":"substrate-fault","stopReasonCode":"stalled","actionPerformed":true}],
   "orphanRecoveries": [{"originalRequestId":"r","replacementRequestId":"r1","lineagePreserved":true,"attempt":1,"maximumAttempts":1,"authorityRegisteredBeforeActivation":true}],

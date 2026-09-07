@@ -326,6 +326,18 @@ def contractJson : Json :=
         ("authenticated-terminal-outranks-wrapper-cancellation", Json.bool true),
         ("cancelled-role-session-lineage-preserved", Json.bool true),
         ("repair-charged-to-request-origin", Json.bool true),
+        ("submission-only-findings", Json.arr
+          #[Json.str "typed-submission-missing",
+            Json.str "fresh-session-id-missing",
+            Json.str "live-job-terminal-repair-exhausted"]),
+        ("submission-only-rescue-requires-typed-submission-missing",
+          Json.bool false),
+        ("authenticated-collected-submission-only-fault-origin",
+          Json.str "apparatus"),
+        ("collected-genuine-role-fault-origin", Json.str "agent"),
+        ("authenticated-collection-required-fields", Json.arr
+          #[Json.str "authority",
+            Json.str "evidence.submission-available-or-submission-id"]),
         ("worker-authored-handoff-verdict-refused", Json.bool true),
         ("handoff-reviewer-distinct-from-depositor", Json.bool true),
         ("durable-stop-cause-required", Json.bool true),

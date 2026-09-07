@@ -204,6 +204,16 @@ structure TraceCancelledRoleLineage where
   repairChargedSessionId : String
   deriving FromJson, Repr
 
+structure TraceRepairAttribution where
+  frameId : String
+  role : String
+  findings : List String
+  authorityPresent : Bool
+  submissionAvailable : Bool
+  submissionId : Option String := none
+  chargedOrigin : String
+  deriving FromJson, Repr
+
 structure TraceCheckedHandoff where
   depositorId : String
   reviewerId : String
@@ -260,6 +270,25 @@ def cancelledRoleLineageValid (x : TraceCancelledRoleLineage) : Bool :=
   (!x.authenticatedTerminalCollected ||
     x.terminalDisposition == "accept-authenticated-terminal")
 
+def traceSubmissionOnlyFinding (finding : String) : Bool :=
+  finding == "typed-submission-missing" ||
+  finding == "fresh-session-id-missing" ||
+  finding == "live-job-terminal-repair-exhausted"
+
+def traceSubmissionOnlyFailure (findings : List String) : Bool :=
+  !findings.isEmpty && findings.all traceSubmissionOnlyFinding
+
+def traceAuthenticatedSubmission (x : TraceRepairAttribution) : Bool :=
+  x.authorityPresent &&
+  (x.submissionAvailable ||
+   (x.submissionId.map (fun submissionId => !submissionId.isEmpty)).getD false)
+
+def repairAttributionValid (x : TraceRepairAttribution) : Bool :=
+  !x.frameId.isEmpty && !x.role.isEmpty && !x.findings.isEmpty &&
+  if traceAuthenticatedSubmission x && traceSubmissionOnlyFailure x.findings
+  then x.chargedOrigin == "apparatus"
+  else x.chargedOrigin == "agent"
+
 def checkedHandoffValid (x : TraceCheckedHandoff) : Bool :=
   !x.depositorId.isEmpty && !x.reviewerId.isEmpty &&
   x.depositorId != x.reviewerId &&
@@ -292,6 +321,7 @@ structure RuntimeConformanceCertificate where
   terminalRepairExhaustions : List TraceTerminalRepairExhaustion
   solverDefects : List TraceSolverDefect
   cancelledRoleLineages : List TraceCancelledRoleLineage
+  repairAttributions : List TraceRepairAttribution
   checkedHandoffs : List TraceCheckedHandoff
   watchdogActions : List TraceWatchdogAction
   orphanRecoveries : List TraceOrphanRecovery
@@ -309,6 +339,8 @@ def runtimeConformanceCertificateValid
   certificate.solverDefects.all solverDefectValid &&
   !certificate.cancelledRoleLineages.isEmpty &&
   certificate.cancelledRoleLineages.all cancelledRoleLineageValid &&
+  !certificate.repairAttributions.isEmpty &&
+  certificate.repairAttributions.all repairAttributionValid &&
   !certificate.checkedHandoffs.isEmpty &&
   certificate.checkedHandoffs.all checkedHandoffValid &&
   !certificate.watchdogActions.isEmpty &&

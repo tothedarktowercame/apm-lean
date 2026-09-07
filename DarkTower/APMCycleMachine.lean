@@ -2427,6 +2427,82 @@ theorem repair_is_charged_to_declared_request_origin
     (lineage : CancelledRoleLineage) (valid : lineage.Valid) :
     lineage.repairChargedSessionId = lineage.originSessionId := valid.2.2.2.2
 
+/-! Repair ownership is determined from durable evidence, not from the repair
+worker's local view.  In particular, a missing-submission report is an
+apparatus contradiction when authenticated collection already holds the
+submission. -/
+inductive TerminalFinding
+  | typedSubmissionMissing
+  | freshSessionIdMissing
+  | terminalRepairExhausted
+  | leanProofInvalid
+  deriving DecidableEq, Repr
+
+def TerminalFinding.submissionOnly : TerminalFinding → Bool
+  | .typedSubmissionMissing | .freshSessionIdMissing
+  | .terminalRepairExhausted => true
+  | .leanProofInvalid => false
+
+def submissionOnlyFailure (findings : List TerminalFinding) : Bool :=
+  !findings.isEmpty && findings.all TerminalFinding.submissionOnly
+
+theorem lone_wrapper_cancellation_reaches_submission_rescue :
+    submissionOnlyFailure [.freshSessionIdMissing] = true := by
+  decide
+
+theorem mixed_role_fault_does_not_reach_submission_rescue :
+    submissionOnlyFailure [.typedSubmissionMissing, .leanProofInvalid] = false := by
+  decide
+
+structure AuthenticatedCollection where
+  authorityPresent : Bool
+  submissionAvailable : Bool
+  submissionId : Option String
+  deriving DecidableEq, Repr
+
+def AuthenticatedCollection.HoldsSubmission
+    (collection : AuthenticatedCollection) : Prop :=
+  collection.authorityPresent = true ∧
+  (collection.submissionAvailable = true ∨
+   ∃ submissionId, collection.submissionId = some submissionId ∧
+     submissionId ≠ "")
+
+instance (collection : AuthenticatedCollection) :
+    Decidable collection.HoldsSubmission := by
+  unfold AuthenticatedCollection.HoldsSubmission
+  infer_instance
+
+inductive RepairOrigin
+  | agent
+  | apparatus
+  deriving DecidableEq, Repr
+
+def inferredRepairOrigin (collection : AuthenticatedCollection)
+    (findings : List TerminalFinding) : RepairOrigin :=
+  if collection.HoldsSubmission && submissionOnlyFailure findings
+  then .apparatus
+  else .agent
+
+theorem collected_submission_only_failure_is_apparatus
+    (collection : AuthenticatedCollection) (findings : List TerminalFinding)
+    (collected : collection.HoldsSubmission)
+    (submissionOnly : submissionOnlyFailure findings = true) :
+    inferredRepairOrigin collection findings = .apparatus := by
+  simp [inferredRepairOrigin, collected, submissionOnly]
+
+theorem f191_missing_submission_is_not_charged_to_student :
+    inferredRepairOrigin
+      { authorityPresent := true, submissionAvailable := true,
+        submissionId := some "630f7334" }
+      [.typedSubmissionMissing] = .apparatus := by
+  decide
+
+theorem genuine_role_fault_remains_agent_owned
+    (collection : AuthenticatedCollection) :
+    inferredRepairOrigin collection [.leanProofInvalid] = .agent := by
+  simp [inferredRepairOrigin, submissionOnlyFailure,
+        TerminalFinding.submissionOnly]
+
 inductive HandoffVerdictAuthor
   | worker
   | independentReviewer
