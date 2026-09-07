@@ -5892,8 +5892,73 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if these compiled arbitrary-parameter affine-line derivative and convex-set norm-bound theorems cannot be promoted with their exact ContDiff, convexity, endpoint, scaling, or standard-axiom hypotheses.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Apply compact derivative boundedness on a compact convex container for the bounded locus, instantiate this affine-line estimate at order k+1, absorb the factorial into a uniform remainder constant, and compose with exists_taylor_cover_measure_lt.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardAffineLineDerivativeBoundProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardAffineLineDerivativeBoundProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardAffineLineDerivativeBound.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardAffineLineDerivativeBound.lean ConstructionTargets/SardAffineLineDerivativeBound.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardAffineLineDerivativeBoundProbe.lean ConstructionTargets/SardAffineLineDerivativeBound.lean ConstructionTargets/SardAffineLineDerivativeBound.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem iteratedFDeriv_affineLineRestriction_at/,/^#print axioms affineLine_iteratedDerivWithin_norm_le/p' ConstructionTargets/SardAffineLineDerivativeBound.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardAffineLineDerivativeBound.lean ConstructionTargets/SardAffineLineDerivativeBound.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard affine-line derivative bound'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "d73b51570aff0588a440283ddf50504ced8739bf",
+    :changed-paths
+    ["ConstructionTargets/SardAffineLineDerivativeBound.lean"
+     "ConstructionTargets/SardAffineLineDerivativeBound.md"],
+    :fixture
+    {:path "/tmp/SardAffineLineDerivativeBoundProbe.lean",
+     :sha256
+     "3ee48485ebcf76dd2af67f430d958dbd7a1b0076f5945957fb346ee9fe9b83f0"},
+    :declarations
+    ["iteratedFDeriv_affineLineRestriction_at"
+     "affineLine_iteratedDerivWithin_norm_le"],
+    :dependencies
+    [{:id :critical-value-sard-compact-iterated-fderiv-bound-1,
+      :commit "f5af5bbc8e97c74f9b3e91fb65b10658041b6a6d"}],
+    :hashes
+    {:lean
+     "3ee48485ebcf76dd2af67f430d958dbd7a1b0076f5945957fb346ee9fe9b83f0",
+     :markdown
+     "b1ba937b67eeeb2f852d8eb8020b54ca76035a463bffc10085c61e764a769e07",
+     :statement
+     "84218c15d3ff4211c5d7a0b17f8132d5d97a93beb7efde8da763fe12efe2455c"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardAffineLineDerivativeBound.lean"
     "ConstructionTargets/SardAffineLineDerivativeBound.md"],
