@@ -4246,6 +4246,25 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788788881962-13732-87105279",
+     :commands
+     ["git show --stat --oneline 89bdd4ff36433de2127fdb2a15b9179451d65d9b"
+      "git diff-tree --no-commit-id --name-status -r 89bdd4ff"
+      "git diff-tree --check 89bdd4ff^ 89bdd4ff"
+      "git show 89bdd4ff:ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean | sha256sum"
+      "git show 89bdd4ff:ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md | sha256sum"
+      "sha256sum /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean"
+      "sed -n '/^theorem ENNReal.enlarged_halfRadius_ratio/,/ := by/p' /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean | sha256sum"
+      "lake env lean ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
+      "lake env lean /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean"
+      "git show 89bdd4ff^:problems/t93A04/lean/Main.lean | sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: commit 89bdd4ff has exact two-file scope and matching artifact, fixture, and statement hashes; both Lean gates compile with only propext, Classical.choice, and Quot.sound; under 0 < ρ the theorem correctly rewrites ofReal (R + ρ/2) / ofReal (ρ/2) as ofReal ((2*R + ρ)/ρ), preserving the enlarged-radius numerator and positive half-radius denominator orientation needed to expose inverse-radius dependence, introduces no placeholders, and leaves frozen t93A04 unchanged with one theorem and one placeholder."},
     :commit "89bdd4ff36433de2127fdb2a15b9179451d65d9b",
     :changed-paths
     ["ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
@@ -4262,7 +4281,7 @@
     :declarations ["ENNReal.enlarged_halfRadius_ratio"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
     "ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md"],
@@ -4353,7 +4372,7 @@
       "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
