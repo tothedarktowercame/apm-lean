@@ -8868,8 +8868,69 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled direct scalarized-jet local-chart theorem cannot be promoted with its exact ContDiff ℝ (i+1) hypothesis, general target F, selected functional ℓ, iteratedFDeriv/Fin.cons representation, kernel-coordinate target, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use the compiled local hypersurface coordinates to reduce each nonzero-jet stratum to the derivative kernel, prove its image null by source-dimension induction, and aggregate with the Taylor-flat locus.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:lean-source
+     "b4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3",
+     :declaration-block
+     "c5ea44639f9daf8aa6e4809767b330dfe24f8d5b34bbeafd924a4a0d99a55c8f",
+     :note
+     "e21ba78fbddbadc195998d4732e0433d072aa45a99548852d3225389b0007b22"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardScalarizedJetLocalChartProbe.lean ConstructionTargets/SardScalarizedJetLocalChart.lean && cmp -s /tmp/SardScalarizedJetLocalChartProbe.lean ConstructionTargets/SardScalarizedJetLocalChart.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardScalarizedJetLocalChartProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardScalarizedJetLocalChart",
+      :exit 0,
+      :output "Build completed successfully (8247 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarizedJetLocalChart.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 84 items OK; {:done 75, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :output
+      "ConstructionTargets/SardScalarizedJetLocalChart.lean\nConstructionTargets/SardScalarizedJetLocalChart.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "f785e301710f8741f86e649c6cf8ab56b1b505c5",
+    :changed-paths
+    ["ConstructionTargets/SardScalarizedJetLocalChart.lean"
+     "ConstructionTargets/SardScalarizedJetLocalChart.md"],
+    :fixture
+    {:path "/tmp/SardScalarizedJetLocalChartProbe.lean",
+     :sha256
+     "b4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3"},
+    :declarations
+    ["exists_localChart_scalar_fixedDirections_of_contDiff"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardScalarizedJetLocalChart.lean"
     "ConstructionTargets/SardScalarizedJetLocalChart.md"],
