@@ -2,7 +2,8 @@ import ConstructionTargets.SardNonzeroScalarDerivativeSurjective
 
 namespace SardNonzeroScalarDerivativeSplitProbe
 
-variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [NormedAddCommGroup F] [NormedSpace ℝ F]
 
 /-- A nonzero direction for a scalar continuous linear map gives an explicit
 continuous linear right inverse. -/
@@ -33,19 +34,18 @@ theorem ContinuousLinearMap.exists_rightInverse_and_projKer_of_apply_ne_zero
 /-- The selected nonzero next-jet value supplies explicit split derivative
 data for the fixed-direction scalar jet component. -/
 theorem exists_rightInverse_and_projKer_fderiv_scalar_fixedDirections
-    (f : E → ℝ) (i : ℕ) (x h : E) (v : Fin i → E)
+    (f : E → F) (i : ℕ) (x h : E) (v : Fin i → E) (ℓ : F →L[ℝ] ℝ)
     (hf : ContDiff ℝ (i + 1) f)
-    (hne : iteratedFDeriv ℝ (i + 1) f x (Fin.cons h v) ≠ 0) :
-    let L := fderiv ℝ (fun y => iteratedFDeriv ℝ i f y v) x
+    (hne : ℓ (iteratedFDeriv ℝ (i + 1) f x (Fin.cons h v)) ≠ 0) :
+    let L := fderiv ℝ (fun y => ℓ (iteratedFDeriv ℝ i f y v)) x
     ∃ (R : ℝ →L[ℝ] E) (hR : Function.RightInverse R L)
       (P : E →L[ℝ] (L : E →ₗ[ℝ] ℝ).ker),
         P = ContinuousLinearMap.projKerOfRightInverse L R hR := by
   dsimp only
   apply ContinuousLinearMap.exists_rightInverse_and_projKer_of_apply_ne_zero _ (h := h)
-  have hd :=
-    SardNonzeroJetScalarDerivativeProbe.fderiv_scalar_fixedDirections_iteratedFDeriv_apply
-      f i x h v (ContinuousLinearMap.id ℝ ℝ) hf
-  simpa only [ContinuousLinearMap.id_apply] using hd.trans_ne hne
+  rw [SardNonzeroJetScalarDerivativeProbe.fderiv_scalar_fixedDirections_iteratedFDeriv_apply
+    f i x h v ℓ hf]
+  exact hne
 
 #print axioms ContinuousLinearMap.exists_rightInverse_of_apply_ne_zero
 #print axioms ContinuousLinearMap.exists_rightInverse_and_projKer_of_apply_ne_zero
