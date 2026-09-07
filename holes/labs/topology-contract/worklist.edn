@@ -5459,29 +5459,65 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if this compiled affine-line iterated-derivative comparison cannot be promoted without changing its exact slotwise composition identity, ContDiff hypothesis, or standard axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardAffineLineIteratedFDeriv.lean"
+    "ConstructionTargets/SardAffineLineIteratedFDeriv.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / AFFINE-LINE ITERATED FRECHET DERIVATIVE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardAffineLineIteratedFDerivProbe.lean",
+     :sha256
+     "aa954503cce338ca31adf47b715067c4b02c9980fc70401018dc09086414e02f"},
+    :declarations
+    ["scalarLineMap"
+     "affineLineRestriction"
+     "iteratedFDeriv_affineLineRestriction_zero"
+     "iteratedFDeriv_affineLineRestriction_zero_of_eq_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Apply the vector-valued one-dimensional Taylor remainder theorem to each affine segment, reduce the Taylor polynomial to its constant term using transferred derivative vanishing, and obtain the uniform multivariable order-(k+1) remainder consumed by exists_taylor_cover_measure_lt."},
+   :representation
+   {:source
+    "A ContDiff map f between real normed spaces, a base point a, direction v, and an iterated derivative order i within the available regularity.",
+    :target
+    "The exact iteratedFDeriv identity for t ↦ f(a+t•v) at zero, plus transfer of a zero multivariable iterated derivative to the affine-line restriction."},
+   :id :critical-value-sard-affine-line-iterated-fderiv-1,
+   :kind :reusable-theorem,
+   :depends-on [:critical-value-sard-rectangular-local-probe-1],
+   :current-residual
+   "The derivative-vanishing transfer to affine lines is compiled; the one-dimensional Taylor polynomial collapse and uniform derivative bound remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "The full finite-cover, target-volume, exponent-cancellation, and scale-selection theorem compiles, but it assumes the uniform order-(k+1) Taylor remainder estimate. The row's acceptance also requires deriving that estimate from ContDiff and vanishing iterated derivatives, so the compiled quantitative covering theorem should be banked as one prerequisite.",
+     "Mathlib's quantitative vector-valued Taylor remainder theorem is one-dimensional. Restricting the multivariable map to affine lines requires an explicit iterated-derivative comparison so the prescribed multivariable vanishing hypotheses discharge the line Taylor coefficients. That comparison now compiles.",
      :commands
      [{:cmd
-       "lake build ConstructionTargets.SardMaximalSeparatedFiniteDimensionalCoverCardinality ConstructionTargets.SardTaylorFiniteTargetCoverMeasure ConstructionTargets.SardTaylorPackingExponentNormalization ConstructionTargets.SardNNRealGeometricScaleTolerance",
-       :exit 0,
-       :output "Build completed successfully (8261 jobs)."}
-      {:cmd
-       "lake env lean /tmp/SardMultivariableTaylorCoveringProbe.lean",
+       "rg -n \"Taylor|taylor|remainder|iteratedFDeriv.*comp_right\" .lake/packages/mathlib/Mathlib/Analysis/Calculus ConstructionTargets",
        :exit 0,
        :output
-       "'exists_taylor_cover_measure_lt' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardMultivariableTaylorCoveringProbe.lean",
+       "Mathlib provides vector-valued quantitative Taylor bounds on real intervals and ContinuousLinearMap.iteratedFDeriv_comp_right for linear precomposition."}
+      {:cmd
+       "lake env lean /tmp/SardAffineLineIteratedFDerivProbe.lean",
        :exit 0,
        :output
-       "0047b2c869784eb1111c91a66308bdc94e3a1f5be2c307c9c3d8c767e56350e0  /tmp/SardMultivariableTaylorCoveringProbe.lean"}
+       "'iteratedFDeriv_affineLineRestriction_zero' depends on axioms: [propext, Classical.choice, Quot.sound]; 'iteratedFDeriv_affineLineRestriction_zero_of_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardAffineLineIteratedFDerivProbe.lean",
+       :exit 0,
+       :output
+       "aa954503cce338ca31adf47b715067c4b02c9980fc70401018dc09086414e02f  /tmp/SardAffineLineIteratedFDerivProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardMultivariableTaylorCoveringProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardAffineLineIteratedFDerivProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --check", :exit 0}
@@ -5489,41 +5525,41 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if this compiled quantitative covering theorem cannot be promoted with its exact compactness, remainder, exponent, separation, or measure conclusion, or without adding nonstandard axioms.",
+      "Stop only if this compiled affine-line iterated-derivative comparison cannot be promoted without changing its exact slotwise composition identity, ContDiff hypothesis, or standard axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardQuantitativeTaylorCoverMeasure.lean"
-       "ConstructionTargets/SardQuantitativeTaylorCoverMeasure.md"],
+      ["ConstructionTargets/SardAffineLineIteratedFDeriv.lean"
+       "ConstructionTargets/SardAffineLineIteratedFDeriv.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / QUANTITATIVE TAYLOR COVER MEASURE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / AFFINE-LINE ITERATED FRECHET DERIVATIVE",
       :acceptance
       {:fixture
-       {:path "/tmp/SardMultivariableTaylorCoveringProbe.lean",
+       {:path "/tmp/SardAffineLineIteratedFDerivProbe.lean",
         :sha256
-        "0047b2c869784eb1111c91a66308bdc94e3a1f5be2c307c9c3d8c767e56350e0"},
-       :declarations ["exists_taylor_cover_measure_lt"],
+        "aa954503cce338ca31adf47b715067c4b02c9980fc70401018dc09086414e02f"},
+       :declarations
+       ["scalarLineMap"
+        "affineLineRestriction"
+        "iteratedFDeriv_affineLineRestriction_zero"
+        "iteratedFDeriv_affineLineRestriction_zero_of_eq_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Derive the uniform order-(k+1) multivariable remainder inequality from sufficient ContDiff regularity and vanishing iterated derivatives on the bounded locus; then apply this theorem before local rank reduction."},
+       "Apply the vector-valued one-dimensional Taylor remainder theorem to each affine segment, reduce the Taylor polynomial to its constant term using transferred derivative vanishing, and obtain the uniform multivariable order-(k+1) remainder consumed by exists_taylor_cover_measure_lt."},
       :representation
       {:source
-       "A compact bounded subset of a finite-dimensional real inner-product source, a map into a finite-dimensional real inner-product target, a uniform order-(k+1) remainder estimate at every pair of source points, and the positive Morse--Sard exponent equation.",
+       "A ContDiff map f between real normed spaces, a base point a, direction v, and an iterated derivative order i within the available regularity.",
        :target
-       "For every positive ENNReal tolerance, a geometric scale and finite separated source cover whose associated Taylor target-ball cover contains the image and whose image volume is below the tolerance."},
-      :id :critical-value-sard-quantitative-taylor-cover-measure-1,
+       "The exact iteratedFDeriv identity for t ↦ f(a+t•v) at zero, plus transfer of a zero multivariable iterated derivative to the affine-line restriction."},
+      :id :critical-value-sard-affine-line-iterated-fderiv-1,
       :kind :reusable-theorem,
-      :depends-on
-      [:critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1
-       :critical-value-sard-taylor-finite-target-cover-measure-1
-       :critical-value-sard-taylor-packing-exponent-normalization-1
-       :critical-value-sard-nnreal-geometric-scale-tolerance-1],
+      :depends-on [:critical-value-sard-rectangular-local-probe-1],
       :current-residual
-      "All covering and measure algebra is compiled. Only the higher-order multivariable Taylor remainder derivation from smoothness and derivative vanishing remains.",
+      "The derivative-vanishing transfer to affine lines is compiled; the one-dimensional Taylor polynomial collapse and uniform derivative bound remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -5567,7 +5603,8 @@
     :critical-value-sard-taylor-finite-target-cover-measure-1
     :critical-value-sard-taylor-packing-exponent-normalization-1
     :critical-value-sard-nnreal-geometric-scale-tolerance-1
-    :critical-value-sard-quantitative-taylor-cover-measure-1],
+    :critical-value-sard-quantitative-taylor-cover-measure-1
+    :critical-value-sard-affine-line-iterated-fderiv-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
