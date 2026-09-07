@@ -2774,8 +2774,53 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled ball-image containment cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one scale-wise smooth flat-locus remainder-and-null-cover theorem before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:flatTaylor_image_inter_closedBall_subset
+     "7b7efcfe82d0c6dfc038591358fd2afd96da97e11f21ec4e9edb6633a4d94243"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/FlatTaylorBallImageProbe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/FlatTaylorBallImageProbe.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFlatTaylorBallImage.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardFlatTaylorBallImage.lean ConstructionTargets/SardFlatTaylorBallImage.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "ea7f0fe1455a902b649946b88fbe5b64cd6c9ff9",
+    :changed-paths
+    ["ConstructionTargets/SardFlatTaylorBallImage.lean"
+     "ConstructionTargets/SardFlatTaylorBallImage.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFlatTaylorBallImage.lean"
+     "5a8a27dd4ea459d4d0bb1b3dc29b778283290b2add756d31825cc7d3c55ba8ca",
+     "ConstructionTargets/SardFlatTaylorBallImage.md"
+     "32fc961c7d803e83f882a4adebb2cfbf01a7f993b8f20322fb325f28664ac66f"},
+    :fixture
+    {:path "/tmp/FlatTaylorBallImageProbe.lean",
+     :sha256
+     "bd68dcb5b2111bfe6b37f72ba3a6f16f1122eae83be9022673b89cd9f0c17ce2"},
+    :declarations ["flatTaylor_image_inter_closedBall_subset"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFlatTaylorBallImage.lean"
     "ConstructionTargets/SardFlatTaylorBallImage.md"],
