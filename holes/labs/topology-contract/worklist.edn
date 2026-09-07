@@ -2741,7 +2741,9 @@
       :current-residual
       "promote the compiled ImplicitFunctionData specialization as the reusable local coordinate interface",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :seat :codex-1}},
+     :seat :codex-1},
+    :requested-id
+    :critical-value-sard-local-rank-normal-form-implementation-2},
    :phase :implementation,
    :state :open,
    :scope
@@ -2763,7 +2765,7 @@
     "ImplicitFunctionData for the selected regular output block and a complementary source-coordinate block, obtained from an invertible derivative minor",
     :target
     "an OpenPartialHomeomorph into regular-output × complementary-source coordinates, with literal forward coordinates and local inverse equations"},
-   :id :critical-value-sard-local-rank-normal-form-implementation-2,
+   :id :critical-value-sard-local-rank-normal-form-probe-2,
    :kind :reusable-theorem,
    :depends-on [],
    :current-residual

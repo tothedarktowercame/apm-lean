@@ -119,9 +119,26 @@
       (throw (ex-info "unknown receipt outcome" {:outcome outcome})))
     (let [new-items
           (case outcome
-            :go (replace-item items id #(-> (merge % (:implementation receipt))
-                                             (assoc :state :open :phase :implementation)
-                                             (assoc-in [:evidence :probe] receipt)))
+            ;; A row's :id is the ledger's referential integrity: other rows
+            ;; name it in :depends-on. (merge % implementation) let a GO
+            ;; receipt supply its own :id and so RENAME the row -- on
+            ;; 2026-09-06 codex-1's GO renamed
+            ;; critical-value-sard-local-rank-normal-form-probe-2 to
+            ;; ...-implementation-2 and reset :depends-on to [], which left
+            ;; critical-value-sard-rank-source-induction-probe-2 pointing at an
+            ;; id that no longer existed. worklist_check.bb correctly refused
+            ;; the ledger ("unknown dependency") and the supervisor stopped for
+            ;; 13 hours. The implementation payload supplies scope and
+            ;; acceptance; it does not get to re-identify the row it is
+            ;; implementing.
+            :go (replace-item items id
+                              #(-> (merge % (dissoc (:implementation receipt)
+                                                    :id :depends-on))
+                                   (assoc :state :open :phase :implementation)
+                                   (assoc-in [:evidence :probe] receipt)
+                                   (cond-> (:id (:implementation receipt))
+                                     (assoc-in [:evidence :requested-id]
+                                               (:id (:implementation receipt))))))
             :revise (let [p (:prerequisite receipt)]
                       (when-not (and (map? p) (:id p))
                         (throw (ex-info "REVISE lacks prerequisite item" {:receipt receipt})))
