@@ -6007,30 +6007,60 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if this compiled uniform remainder theorem cannot be promoted with its exact closed-ball boundedness, ProperSpace, ContDiff, derivative-vanishing, factorial-normalized constant, or standard-axiom hypotheses.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardUniformFlatTaylorRemainder.lean"
+    "ConstructionTargets/SardUniformFlatTaylorRemainder.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / UNIFORM FLAT TAYLOR REMAINDER ON A BOUNDED LOCUS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardUniformFlatTaylorRemainderProbe.lean",
+     :sha256
+     "9208e61d374fa194132593e61375a7e4372618d92f5e746fee400d76c3c64509"},
+    :declarations
+    ["exists_uniform_flat_taylor_remainder_on_bounded_set"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate exists_taylor_cover_measure_lt with this uniform remainder constant and derive the complete arbitrarily-small image-measure/nullity theorem; local rank reduction remains after that composition."},
+   :representation
+   {:source
+    "A subset K of a proper real normed space contained in a closed ball, a globally C^(k+1) map, and vanishing iterated Frechet derivatives at every point of K through order k.",
+    :target
+    "One nonnegative real C such that norm(f x-f a) <= C*norm(x-a)^(k+1) for every a,x in K."},
+   :id :critical-value-sard-uniform-flat-taylor-remainder-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-affine-line-derivative-bound-1
+    :critical-value-sard-affine-line-taylor-remainder-1
+    :critical-value-sard-compact-iterated-fderiv-bound-1],
+   :current-residual
+   "The smoothness-to-uniform-remainder derivation is compiled; only its final composition with the banked quantitative Taylor-cover theorem remains before local rank reduction.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "The arbitrary-parameter affine-line derivative identity and its multilinear norm estimate now compile. Together they convert an ambient order-n derivative bound on a convex set into exactly the scaled interval-relative derivative bound required by the banked affine-line Taylor remainder theorem.",
+     "The consumer's existing closed-ball boundedness hypothesis supplies the compact convex container directly. Combining compact derivative boundedness, the affine-line derivative estimate, Taylor-polynomial collapse, and the mean-remainder theorem yields one uniform order-(k+1) remainder constant for every pair of locus points; this complete remainder theorem now compiles.",
      :commands
      [{:cmd
-       "rg -n \"norm.*compContinuousLinearMap|compContinuousLinearMap.*norm|norm_apply_le\" .lake/packages/mathlib/Mathlib/Analysis; rg -n \"Convex.*lineMap|segment_subset\" .lake/packages/mathlib/Mathlib",
+       "readlink -f .lake/packages; lake build ConstructionTargets.SardAffineLineDerivativeBound ConstructionTargets.SardAffineLineTaylorRemainder; lake env lean /tmp/SardUniformFlatTaylorRemainderProbe.lean",
        :exit 0,
        :output
-       "Located ContinuousMultilinearMap.norm_compContinuousLinearMap_le, Convex.lineMap_mem, and interval unique-differentiability APIs."}
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; build completed successfully (8244 jobs); exists_uniform_flat_taylor_remainder_on_bounded_set depends on [propext, Classical.choice, Quot.sound]."}
+      {:cmd "sha256sum /tmp/SardUniformFlatTaylorRemainderProbe.lean",
+       :exit 0,
+       :output
+       "9208e61d374fa194132593e61375a7e4372618d92f5e746fee400d76c3c64509"}
       {:cmd
-       "readlink -f .lake/packages; lake build ConstructionTargets.SardCompactIteratedFDerivBound; lake env lean /tmp/SardAffineLineDerivativeBoundProbe.lean",
-       :exit 0,
-       :output
-       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; build completed successfully (8243 jobs); both declarations depend on [propext, Classical.choice, Quot.sound]."}
-      {:cmd "sha256sum /tmp/SardAffineLineDerivativeBoundProbe.lean",
-       :exit 0,
-       :output
-       "3ee48485ebcf76dd2af67f430d958dbd7a1b0076f5945957fb346ee9fe9b83f0"}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardAffineLineDerivativeBoundProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardUniformFlatTaylorRemainderProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
@@ -6040,40 +6070,41 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if these compiled arbitrary-parameter affine-line derivative and convex-set norm-bound theorems cannot be promoted with their exact ContDiff, convexity, endpoint, scaling, or standard-axiom hypotheses.",
+      "Stop only if this compiled uniform remainder theorem cannot be promoted with its exact closed-ball boundedness, ProperSpace, ContDiff, derivative-vanishing, factorial-normalized constant, or standard-axiom hypotheses.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardAffineLineDerivativeBound.lean"
-       "ConstructionTargets/SardAffineLineDerivativeBound.md"],
+      ["ConstructionTargets/SardUniformFlatTaylorRemainder.lean"
+       "ConstructionTargets/SardUniformFlatTaylorRemainder.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / AFFINE-LINE ITERATED-DERIVATIVE BOUND",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / UNIFORM FLAT TAYLOR REMAINDER ON A BOUNDED LOCUS",
       :acceptance
       {:fixture
-       {:path "/tmp/SardAffineLineDerivativeBoundProbe.lean",
+       {:path "/tmp/SardUniformFlatTaylorRemainderProbe.lean",
         :sha256
-        "3ee48485ebcf76dd2af67f430d958dbd7a1b0076f5945957fb346ee9fe9b83f0"},
+        "9208e61d374fa194132593e61375a7e4372618d92f5e746fee400d76c3c64509"},
        :declarations
-       ["iteratedFDeriv_affineLineRestriction_at"
-        "affineLine_iteratedDerivWithin_norm_le"],
+       ["exists_uniform_flat_taylor_remainder_on_bounded_set"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Apply compact derivative boundedness on a compact convex container for the bounded locus, instantiate this affine-line estimate at order k+1, absorb the factorial into a uniform remainder constant, and compose with exists_taylor_cover_measure_lt."},
+       "Instantiate exists_taylor_cover_measure_lt with this uniform remainder constant and derive the complete arbitrarily-small image-measure/nullity theorem; local rank reduction remains after that composition."},
       :representation
       {:source
-       "A ContDiff map, an affine segment inside a convex set, and a uniform ambient norm bound for its nth iterated Frechet derivative.",
+       "A subset K of a proper real normed space contained in a closed ball, a globally C^(k+1) map, and vanishing iterated Frechet derivatives at every point of K through order k.",
        :target
-       "The exact arbitrary-parameter affine-line derivative identity and the interval-relative bound norm(iteratedDerivWithin n line t) <= C*norm(x-a)^n for every t in [0,1]."},
-      :id :critical-value-sard-affine-line-derivative-bound-1,
+       "One nonnegative real C such that norm(f x-f a) <= C*norm(x-a)^(k+1) for every a,x in K."},
+      :id :critical-value-sard-uniform-flat-taylor-remainder-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-compact-iterated-fderiv-bound-1],
+      [:critical-value-sard-affine-line-derivative-bound-1
+       :critical-value-sard-affine-line-taylor-remainder-1
+       :critical-value-sard-compact-iterated-fderiv-bound-1],
       :current-residual
-      "The exact affine-line scaled derivative bound is compiled; construction of a compact convex container and final Taylor-cover composition remain.",
+      "The smoothness-to-uniform-remainder derivation is compiled; only its final composition with the banked quantitative Taylor-cover theorem remains before local rank reduction.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -6122,7 +6153,8 @@
     :critical-value-sard-taylor-polynomial-collapse-1
     :critical-value-sard-affine-line-taylor-remainder-1
     :critical-value-sard-compact-iterated-fderiv-bound-1
-    :critical-value-sard-affine-line-derivative-bound-1],
+    :critical-value-sard-affine-line-derivative-bound-1
+    :critical-value-sard-uniform-flat-taylor-remainder-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
