@@ -8487,6 +8487,60 @@
      "A scalar continuous linear map nonzero on h, specialized for general F, f : E → F, and ℓ : F →L[ℝ] ℝ to L := fderiv ℝ (fun y => ℓ (iteratedFDeriv ℝ i f y v)) x under the exact hypothesis ℓ (iteratedFDeriv ℝ (i + 1) f x (Fin.cons h v)) ≠ 0.",
      :target
      "An explicit continuous right inverse R, its Function.RightInverse proof, and the canonical ContinuousLinearMap.projKerOfRightInverse into the derivative kernel, preserving the scalarized iteratedFDeriv, ℓ, and Fin.cons representations."},
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788814728395-14134-b15ce13b",
+     :commands
+     [{:cmd
+       "git diff-tree --no-commit-id --name-status -r 28b6fc0a72689eb69f7d682cce0024281a8abdd0; git diff-tree --no-commit-id --name-status -r 8218a4e7a3765a5ed38ef8964769e9751461d1a8",
+       :exit 0,
+       :output
+       "Initial commit adds and repair commit modifies exactly ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean and ConstructionTargets/SardNonzeroScalarDerivativeSplit.md"}
+      {:cmd
+       "sha256sum /tmp/SardNonzeroScalarDerivativeSplitProbe.lean; git show 8218a4e7a3765a5ed38ef8964769e9751461d1a8:ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean | sha256sum",
+       :exit 0,
+       :output
+       "Both 1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f"}
+      {:cmd
+       "git show 8218a4e7a3765a5ed38ef8964769e9751461d1a8:ConstructionTargets/SardNonzeroScalarDerivativeSplit.md | sha256sum",
+       :exit 0,
+       :output
+       "eaa7a818792a0b0e3afec4fc87297ec45d4fe07f5ee1732ec9fbaf897fb88c2d"}
+      {:cmd
+       "git merge-base --is-ancestor 9abe428706cdea29d7aac57c965fa2a7743848d4 8218a4e7a3765a5ed38ef8964769e9751461d1a8",
+       :exit 0}
+      {:cmd
+       "cmp -s /tmp/SardNonzeroScalarDerivativeSplitProbe.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean; lake env lean /tmp/SardNonzeroScalarDerivativeSplitProbe.lean; lake build ConstructionTargets.SardNonzeroScalarDerivativeSplit",
+       :exit 0,
+       :output
+       "Fixture and repaired module byte-identical; build completed successfully (8244 jobs); all three declarations use exactly propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "sed -n '/^theorem ContinuousLinearMap.exists_rightInverse_of_apply_ne_zero/,/^#print axioms exists_rightInverse_and_projKer_fderiv_scalar_fixedDirections/p' ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean | sha256sum",
+       :exit 0,
+       :output
+       "d79b93b9efa0a2632bbc8df466dafc2a96f0012b842c31c5e9c60bcf0db5a748"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 81 items OK; {:done 72, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder"}
+      {:cmd
+       "readlink -f .lake/packages; git diff 8218a4e7a3765a5ed38ef8964769e9751461d1a8^ 8218a4e7a3765a5ed38ef8964769e9751461d1a8 --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; repair diff clean; worktree clean"}],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6. The current metadata-repair evidence now records the repaired fixture hash 1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f and the correct general-F representation with f : E → F, ℓ : F →L[ℝ] ℝ, L := fderiv ℝ (fun y => ℓ (iteratedFDeriv ℝ i f y v)) x, and the exact ℓ-applied Fin.cons next-jet hypothesis. Commit 8218a4e7a3765a5ed38ef8964769e9751461d1a8 fixes the prior typed defect while retaining the correct explicit right inverse and canonical projKerOfRightInverse. The scalarized derivative now composes directly with the reviewed upstream theorem, without requiring an unproved postcomposition identity. Exact ImplicitFunctionData packaging and the local hypersurface remain residual. Mechanical gates, standard axioms, canonical authority, and frozen t93A04 with one placeholder all reproduce."},
     :metadata-only-repair true,
     :commit "8218a4e7a3765a5ed38ef8964769e9751461d1a8",
     :commits
@@ -8499,7 +8553,7 @@
      "1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"
     "ConstructionTargets/SardNonzeroScalarDerivativeSplit.md"],
@@ -8668,7 +8722,7 @@
       "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
