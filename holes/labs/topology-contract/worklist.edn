@@ -2704,6 +2704,23 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :axiom-policy :standard-only,
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788785396657-13675-567a8718",
+     :commands
+     ["git show --stat --oneline 7bc80d8f72811affd71a70cf3396cc21964359af"
+      "git diff --name-status 7bc80d8f^ 7bc80d8f"
+      "git diff --check 7bc80d8f^ 7bc80d8f"
+      "git show 7bc80d8f:ConstructionTargets/SardLocalRankNormalForm.lean | sha256sum"
+      "git show 7bc80d8f:ConstructionTargets/SardLocalRankNormalForm.md | sha256sum"
+      "sha256sum /tmp/SardLocalRankNormalFormProbe.lean"
+      "lake env lean ConstructionTargets/SardLocalRankNormalForm.lean"
+      "lake env lean /tmp/SardLocalRankNormalFormProbe.lean"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardLocalRankNormalForm.lean ConstructionTargets/SardLocalRankNormalForm.md /tmp/SardLocalRankNormalFormProbe.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: commit 7bc80d8f has exact two-file scope and matching artifact and fixture hashes; both Lean gates compile with only propext, Classical.choice, and Quot.sound; the theorem correctly promotes ImplicitFunctionData to local regular-output × complementary-source coordinates with base-point membership and local inverse equations, explicitly leaves construction of that data from abstract rank equality downstream, introduces no placeholders, and leaves frozen t93A04 unchanged with one theorem and one placeholder."},
     :commit "7bc80d8f72811affd71a70cf3396cc21964359af",
     :changed-paths
     ["ConstructionTargets/SardLocalRankNormalForm.lean"
@@ -2720,7 +2737,7 @@
     :declarations ["localRankNormalForm_of_complemented_minor"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLocalRankNormalForm.lean"
     "ConstructionTargets/SardLocalRankNormalForm.md"],
