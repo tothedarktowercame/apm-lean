@@ -4758,8 +4758,67 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite-dimensional packing-cover bound cannot be promoted at the recorded representation without changing its separation, boundedness, or volume-constant hypotheses or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "one maximal-separated cover extraction and Taylor target-volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :module-compiled true,
+     :fixture-module-byte-identical true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"finiteDimensional_card_le_enlarged_halfRadius_power"
+     "05d4e6a734ba0b086bcbdd7bc2f568e8d5afd0d1bd82665ef064de958dc9ee75"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "git rev-parse HEAD && git show --name-only --format='%H%n%an <%ae>%n%s' HEAD",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardFiniteDimensionalPackingCoverProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardFiniteDimensionalPackingCoverProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteDimensionalPackingCoverBound.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardFiniteDimensionalPackingCoverBound.lean ConstructionTargets/SardFiniteDimensionalPackingCoverBound.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/SardFiniteDimensionalPackingCoverBound.lean ConstructionTargets/SardFiniteDimensionalPackingCoverBound.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem finiteDimensional_card_le_enlarged_halfRadius_power/,/ := by/p' ConstructionTargets/SardFiniteDimensionalPackingCoverBound.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "95584b6b4aa74d3e753eac219c0102dccfaff155",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteDimensionalPackingCoverBound.lean"
+     "ConstructionTargets/SardFiniteDimensionalPackingCoverBound.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFiniteDimensionalPackingCoverBound.lean"
+     "5e83f0c5bab55df713ea1f3da8b8fdb9d4bc19d3e2f694b7185c764c11466905",
+     "ConstructionTargets/SardFiniteDimensionalPackingCoverBound.md"
+     "43d9ffd6e33415af184a65985232718898943f066a4552ebf0bfc0ae5bfcb723"},
+    :fixture
+    {:path "/tmp/SardFiniteDimensionalPackingCoverProbe.lean",
+     :sha256
+     "5e83f0c5bab55df713ea1f3da8b8fdb9d4bc19d3e2f694b7185c764c11466905"},
+    :declarations
+    ["finiteDimensional_card_le_enlarged_halfRadius_power"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteDimensionalPackingCoverBound.lean"
     "ConstructionTargets/SardFiniteDimensionalPackingCoverBound.md"],
