@@ -7596,8 +7596,94 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled open-locus theorem cannot be promoted with its exact ContDiff order bound, iteratedFDeriv representation, intersection identity, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "At each point of a localized nonzero-jet locus, select a nonzero scalar or directional jet component and use its derivative-level implicit-function hypersurface to perform the source-dimension reduction; combine with flat-locus Taylor nullity before rectangular aggregation.",
+    :gates
+    {:fixture-hash-matched true,
+     :frozen-consumer-unchanged true,
+     :placeholder-free true,
+     :worktree-clean true,
+     :scoped-module-compiled true,
+     :fixture-compiled true,
+     :fixture-byte-identical-to-module true,
+     :worklist-valid true,
+     :diff-check true,
+     :exact-commit-scope true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardNonzeroJetOpenLocusProbe.lean ConstructionTargets/SardNonzeroJetOpenLocus.lean ConstructionTargets/SardNonzeroJetOpenLocus.md",
+      :exit 0,
+      :output
+      "fixture and Lean e89e19d1a3614d37c31db91188e69d51d6b44a3e096b5e9aa5926e198013d3ab; Markdown c7b1232e3a348d213a3527edbc0f3a7d23124c8d67b9924c9cc139e01a890759"}
+     {:cmd
+      "cmp -s /tmp/SardNonzeroJetOpenLocusProbe.lean ConstructionTargets/SardNonzeroJetOpenLocus.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardNonzeroJetOpenLocusProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardNonzeroJetOpenLocus.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroJetOpenLocus.lean ConstructionTargets/SardNonzeroJetOpenLocus.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '/^theorem isOpen_setOf_iteratedFDeriv_ne_zero/,/^#print axioms nonzeroJetLocus_eq_inter_open/p' ConstructionTargets/SardNonzeroJetOpenLocus.lean | sha256sum",
+      :exit 0,
+      :output
+      "9e8b8120c4c17b6c2e085f5a63c161be4da64f1725a6c24750dd3fcba2c4a612  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 76 items OK; {:done 67, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard nonzero-jet open locus'", :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :output
+      "ConstructionTargets/SardNonzeroJetOpenLocus.lean\nConstructionTargets/SardNonzeroJetOpenLocus.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "b82cc063c6f8d910f2b519c17a20df5f19f55d6a",
+    :changed-paths
+    ["ConstructionTargets/SardNonzeroJetOpenLocus.lean"
+     "ConstructionTargets/SardNonzeroJetOpenLocus.md"],
+    :fixture
+    {:path "/tmp/SardNonzeroJetOpenLocusProbe.lean",
+     :sha256
+     "e89e19d1a3614d37c31db91188e69d51d6b44a3e096b5e9aa5926e198013d3ab"},
+    :declarations
+    ["SardNonzeroJetOpenLocusProbe.isOpen_setOf_iteratedFDeriv_ne_zero"
+     "SardNonzeroJetOpenLocusProbe.nonzeroJetLocus_eq_inter_open"],
+    :dependencies
+    [{:id :critical-value-sard-higher-jet-locus-decomposition-1,
+      :commit "27fb3c66e9466a559ef1ea945db6bda9acfe097f"}],
+    :hashes
+    {:lean
+     "e89e19d1a3614d37c31db91188e69d51d6b44a3e096b5e9aa5926e198013d3ab",
+     :markdown
+     "c7b1232e3a348d213a3527edbc0f3a7d23124c8d67b9924c9cc139e01a890759",
+     :statement
+     "9e8b8120c4c17b6c2e085f5a63c161be4da64f1725a6c24750dd3fcba2c4a612"},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardNonzeroJetOpenLocus.lean"
     "ConstructionTargets/SardNonzeroJetOpenLocus.md"],
