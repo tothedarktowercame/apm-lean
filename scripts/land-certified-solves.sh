@@ -33,8 +33,14 @@ survey() {
     prob=$(echo "$b" | sed -E "s/^exp\/countdown-f[0-9]+-(.+)-solver$/\1/")
     frame=$(echo "$b" | sed -E "s/^exp\/countdown-(f[0-9]+)-.*/\1/")
     f="problems/$prob/lean/Main.lean"
+    # Branch side stays line-anchored: it only selects CANDIDATES, verify is
+    # what decides, and erring narrow here costs a visible pending row rather
+    # than a bad landing. Master side must catch inline forms, or a problem
+    # whose master copy holds `all_goals sorry` is never offered for landing
+    # at all -- which is how a real gap stays invisible.
     bs=$(git show "$b:$f" 2>/dev/null | grep -cE "^[[:space:]]*sorry[[:space:]]*$")
-    ms=$(git show "master:$f" 2>/dev/null | grep -cE "^[[:space:]]*sorry[[:space:]]*$")
+    ms=$(git show "master:$f" 2>/dev/null \
+         | grep -cE "(^|[^A-Za-z0-9_])sorry([^A-Za-z0-9_]|$)")
     [ -z "$bs" ] && continue
     if [ "$bs" = "0" ] && [ "${ms:-0}" -gt 0 ] 2>/dev/null; then
       echo "$frame $prob $b"
@@ -64,14 +70,22 @@ verify() {
       echo "  DROP $prob: registered statement differs from master (or not found)" >&2
       continue
     fi
-    local tmp; tmp=$(mktemp /tmp/land-verify-XXXXXX.lean)
+    local tmp out; tmp=$(mktemp /tmp/land-verify-XXXXXX.lean)
     git show "$branch:$f" > "$tmp" 2>/dev/null
-    if grep -qE "^[[:space:]]*sorry[[:space:]]*$" "$tmp"; then
-      echo "  DROP $prob: branch file still contains a bare sorry" >&2
+    # The COMPILER decides whether a proof is complete, not a regex. A
+    # line-anchored /^\s*sorry\s*$/ misses every inline form -- `all_goals
+    # sorry`, `exact sorry`, `:= by sorry` -- and lake EXITS 0 on all of them,
+    # emitting only `declaration uses 'sorry'` as a warning. Checking exit
+    # status plus that regex therefore passed unproved work: t95J04 and b98A02
+    # both carry `all_goals sorry` and both look clean to it. This tool lands
+    # onto master unattended every 30 minutes, so that was a live path from an
+    # unproved branch to master (2026-09-07).
+    if ! out=$(timeout 900 lake env lean "$tmp" 2>&1); then
+      echo "  DROP $prob: does not elaborate (lake env lean non-zero)" >&2
       rm -f "$tmp"; continue
     fi
-    if ! timeout 900 lake env lean "$tmp" >/dev/null 2>&1; then
-      echo "  DROP $prob: does not elaborate (lake env lean non-zero)" >&2
+    if printf '%s' "$out" | grep -q "declaration uses"; then
+      echo "  DROP $prob: elaborates but still uses sorry" >&2
       rm -f "$tmp"; continue
     fi
     rm -f "$tmp"
@@ -88,7 +102,14 @@ auto)
   # landing run had ever happened (28 proofs, 2026-09-07 16:06, by hand), so
   # problems the campaign had genuinely closed kept reading as open.
   cand=$(mktemp /tmp/land-auto-XXXXXX)
-  survey > "$cand"
+  # One problem can be closed by several frames -- a98J03 came back from both
+  # f51 and f169 on 2026-09-07. `land` checks out each row in turn, so
+  # duplicates mean the last line silently decides which frame's proof becomes
+  # master. Keep one row per problem, the highest frame number, so the choice
+  # is the newest attempt and is deterministic rather than incidental.
+  survey | sort -k2,2 -k1.2,1n \
+    | awk '{row[$2]=$0} END {for (p in row) print row[p]}' \
+    | sort -k1.2,1n > "$cand"
   n=$(wc -l < "$cand")
   if [ "$n" = 0 ]; then echo "no candidates"; rm -f "$cand"; exit 0; fi
   echo "candidates: $n"
