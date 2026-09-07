@@ -2864,8 +2864,53 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite-cover measure inequality cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one smooth flat-locus scale-cover and arbitrarily-small-measure theorem before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:measure_le_finset_sum_of_subset_biUnion
+     "78360e9558cc335bb78fe0cb1b2e2fddb082c4240f61a48214a8f714fa1be3c2"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/FiniteCoverMeasureProbe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/FiniteCoverMeasureProbe.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteCoverMeasureBound.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardFiniteCoverMeasureBound.lean ConstructionTargets/SardFiniteCoverMeasureBound.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "8c2d71da",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteCoverMeasureBound.lean"
+     "ConstructionTargets/SardFiniteCoverMeasureBound.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFiniteCoverMeasureBound.lean"
+     "a3d6daee61a7bf7609706544ec9b84c163edb924442ab8b2aae3d9477d65a0f3",
+     "ConstructionTargets/SardFiniteCoverMeasureBound.md"
+     "3a324fddb30c5ec60ba1d3ddcb265de5264810b5c4620a0206ebbfe781ea296b"},
+    :fixture
+    {:path "/tmp/FiniteCoverMeasureProbe.lean",
+     :sha256
+     "227027a469337e12d7c7a8aa8f2a17b81121a5ec6859450fcca075d8a12923e8"},
+    :declarations ["measure_le_finset_sum_of_subset_biUnion"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteCoverMeasureBound.lean"
     "ConstructionTargets/SardFiniteCoverMeasureBound.md"],
