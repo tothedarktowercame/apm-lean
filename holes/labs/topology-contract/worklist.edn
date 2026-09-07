@@ -5460,8 +5460,62 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if this compiled affine-line iterated-derivative comparison cannot be promoted without changing its exact slotwise composition identity, ContDiff hypothesis, or standard axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Apply the vector-valued one-dimensional Taylor remainder theorem to each affine segment, reduce the Taylor polynomial to its constant term using transferred derivative vanishing, and obtain the uniform multivariable order-(k+1) remainder consumed by exists_taylor_cover_measure_lt.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardAffineLineIteratedFDerivProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardAffineLineIteratedFDerivProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardAffineLineIteratedFDeriv.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardAffineLineIteratedFDeriv.lean ConstructionTargets/SardAffineLineIteratedFDeriv.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard affine-line iterated derivative'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "35b7052c94051714fc7450e91e676c9f1fb72208",
+    :changed-paths
+    ["ConstructionTargets/SardAffineLineIteratedFDeriv.lean"
+     "ConstructionTargets/SardAffineLineIteratedFDeriv.md"],
+    :fixture
+    {:path "/tmp/SardAffineLineIteratedFDerivProbe.lean",
+     :sha256
+     "aa954503cce338ca31adf47b715067c4b02c9980fc70401018dc09086414e02f"},
+    :declarations
+    ["scalarLineMap"
+     "affineLineRestriction"
+     "iteratedFDeriv_affineLineRestriction_zero"
+     "iteratedFDeriv_affineLineRestriction_zero_of_eq_zero"],
+    :hashes
+    {:lean
+     "aa954503cce338ca31adf47b715067c4b02c9980fc70401018dc09086414e02f",
+     :markdown
+     "9aca14da46ca07cb41ba24967a08b04e02f5e79ea5b57e041a7cb9a88be4e83e",
+     :statement
+     "2e8b12517f9656c1e0d25f1fd91002346e401019bc94d97a311ae8a69af75fb8"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardAffineLineIteratedFDeriv.lean"
     "ConstructionTargets/SardAffineLineIteratedFDeriv.md"],
