@@ -7951,6 +7951,40 @@
    "Concrete nonzero jet directions are selected; scalar output separation and the fixed-direction jet-component derivative/implicit-function reduction remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled scalar-separation theorem cannot be promoted with its exact innerSL, real inner-product, iteratedFDeriv, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardNonzeroJetScalarSeparation.lean"
+    "ConstructionTargets/SardNonzeroJetScalarSeparation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NONZERO-JET SCALAR SEPARATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardNonzeroJetScalarSeparationProbe.lean",
+     :sha256
+     "868cab8ac1dc1b44289449a2fdf5f11e50b25704405b18b8829c70d93e21831f"},
+    :declarations
+    ["exists_continuousLinearMap_apply_ne_zero"
+     "exists_scalar_component_iteratedFDeriv_apply_ne_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Prove the derivative formula for the fixed-direction scalar jet component, then construct its implicit-function hypersurface and perform source-dimension reduction."},
+   :representation
+   {:source
+    "A nonzero vector w in a real inner-product target, specialized to a selected nonzero value iteratedFDeriv ℝ i f x v.",
+    :target
+    "A continuous real-linear functional ℓ with ℓ w≠0, specialized without changing the iteratedFDeriv representation."},
+   :id :critical-value-sard-nonzero-jet-scalar-separation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-nonzero-jet-direction-selection-1],
+   :current-residual
+   "A nonzero scalar jet component is selected; its fixed-direction derivative identity and the implicit-function hypersurface reduction remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -8004,63 +8038,65 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :outcome :revise,
-     :warnings
-     ["The canonical worktree contains concurrent modifications to DarkTower/APMCycleContractEmitter.lean and DarkTower/APMCycleMachine.lean. This empty-scope scheduling repair did not inspect, modify, stage, or commit them."],
+     :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled nonzero multilinear direction-selection theorem cannot be promoted with its exact continuous-multilinear and iteratedFDeriv representations or standard-axiom profile.",
+      "Stop only if the compiled scalar-separation theorem cannot be promoted with its exact innerSL, real inner-product, iteratedFDeriv, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardNonzeroJetDirectionSelection.lean"
-       "ConstructionTargets/SardNonzeroJetDirectionSelection.md"],
+      ["ConstructionTargets/SardNonzeroJetScalarSeparation.lean"
+       "ConstructionTargets/SardNonzeroJetScalarSeparation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NONZERO-JET DIRECTION SELECTION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NONZERO-JET SCALAR SEPARATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardNonzeroJetDirectionSelectionProbe.lean",
+       {:path "/tmp/SardNonzeroJetScalarSeparationProbe.lean",
         :sha256
-        "ebf6067567429466dc37077a266c4df43531198ac95c29b492f9631ef3eb1525"},
+        "868cab8ac1dc1b44289449a2fdf5f11e50b25704405b18b8829c70d93e21831f"},
        :declarations
-       ["exists_directions_apply_ne_zero"
-        "exists_directions_iteratedFDeriv_apply_ne_zero"],
+       ["exists_continuousLinearMap_apply_ne_zero"
+        "exists_scalar_component_iteratedFDeriv_apply_ne_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Scalarize the selected nonzero jet value and prove the derivative formula for the resulting fixed-direction jet component, then construct its implicit-function hypersurface and perform source-dimension reduction."},
+       "Prove the derivative formula for the fixed-direction scalar jet component, then construct its implicit-function hypersurface and perform source-dimension reduction."},
       :representation
       {:source
-       "A nonzero continuous i-multilinear map A:E[×i]→L F, specialized to iteratedFDeriv ℝ i f x.",
+       "A nonzero vector w in a real inner-product target, specialized to a selected nonzero value iteratedFDeriv ℝ i f x v.",
        :target
-       "A tuple v:Fin i→E on which A, respectively the iterated Fréchet derivative, has nonzero value."},
-      :id :critical-value-sard-nonzero-jet-direction-selection-1,
+       "A continuous real-linear functional ℓ with ℓ w≠0, specialized without changing the iteratedFDeriv representation."},
+      :id :critical-value-sard-nonzero-jet-scalar-separation-1,
       :kind :reusable-theorem,
-      :depends-on [:critical-value-sard-nonzero-jet-open-locus-1],
+      :depends-on
+      [:critical-value-sard-nonzero-jet-direction-selection-1],
       :current-residual
-      "Concrete nonzero jet directions are selected; scalar output separation and the fixed-direction jet-component derivative/implicit-function reduction remain.",
+      "A nonzero scalar jet component is selected; its fixed-direction derivative identity and the implicit-function hypersurface reduction remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The open nonzero-jet locus supplies neighborhoods but not the concrete direction data needed for derivative-level reduction. A compiled prerequisite now proves that every nonzero continuous multilinear map evaluates nontrivially on some tuple and specializes this exactly to iteratedFDeriv. The next remaining seam is scalarizing that nonzero output and identifying the derivative of the selected jet component with the next iterated derivative before applying an implicit-function hypersurface reduction.",
+     "Direction selection gives a nonzero target vector but the implicit-function reduction needs a scalar component. A placeholder-free fixture now constructs the continuous linear functional innerSL ℝ w for every nonzero vector w in a real inner-product target and specializes it directly to the selected iteratedFDeriv value. The remaining seam is the fixed-direction scalar jet-component derivative formula, followed by its implicit-function hypersurface.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardNonzeroJetDirectionSelectionProbe.lean",
+       "lake build ConstructionTargets.SardNonzeroJetDirectionSelection",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardNonzeroJetDirectionSelectionProbe.lean",
+       "lake env lean /tmp/SardNonzeroJetScalarSeparationProbe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/SardNonzeroJetScalarSeparationProbe.lean",
        :exit 0,
        :output
-       "ebf6067567429466dc37077a266c4df43531198ac95c29b492f9631ef3eb1525  /tmp/SardNonzeroJetDirectionSelectionProbe.lean"}
+       "868cab8ac1dc1b44289449a2fdf5f11e50b25704405b18b8829c70d93e21831f  /tmp/SardNonzeroJetScalarSeparationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardNonzeroJetDirectionSelectionProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardNonzeroJetScalarSeparationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 76 items OK; {:done 68, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 77 items OK; {:done 69, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -8070,20 +8106,17 @@
        :exit 0,
        :output "1"}
       {:cmd "git diff --check", :exit 0}
-      {:cmd "git status --porcelain=v1",
-       :exit 0,
-       :output
-       " M DarkTower/APMCycleContractEmitter.lean\n M DarkTower/APMCycleMachine.lean"}
+      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
       {:cmd "readlink -f .lake/packages",
        :exit 0,
        :output "/home/joe/code/apm-lean/.lake/packages"}],
      :fixture
-     {:path "/tmp/SardNonzeroJetDirectionSelectionProbe.lean",
+     {:path "/tmp/SardNonzeroJetScalarSeparationProbe.lean",
       :sha256
-      "ebf6067567429466dc37077a266c4df43531198ac95c29b492f9631ef3eb1525"},
+      "868cab8ac1dc1b44289449a2fdf5f11e50b25704405b18b8829c70d93e21831f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -8108,7 +8141,8 @@
     :critical-value-sard-rectangular-local-probe-1
     :critical-value-sard-higher-jet-locus-decomposition-1
     :critical-value-sard-nonzero-jet-open-locus-1
-    :critical-value-sard-nonzero-jet-direction-selection-1],
+    :critical-value-sard-nonzero-jet-direction-selection-1
+    :critical-value-sard-nonzero-jet-scalar-separation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
