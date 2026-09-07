@@ -4308,71 +4308,99 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled ENNReal exponent-combination theorem cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardExponentCombination.lean"
+    "ConstructionTargets/SardExponentCombination.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COVER-TARGET EXPONENT COMBINATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardExponentCombineProbe.lean",
+     :sha256
+     "21636ac8181961e3ca621ce3a714f399a09a2c15377398252e243da0ed9de67c"},
+    :declarations ["ENNReal.mul_bounds_cancel_dimension"],
+    :consumer-residual
+    "one polynomial source-cover theorem and positive-power tolerance choice before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "ENNReal bounds `card ≤ A*r⁻ᵐ` and `per ≤ B*r^(m+d)` with r nonzero and finite",
+    :target "the combined total bound `card*per ≤ A*B*r^d`"},
+   :id :critical-value-sard-exponent-combination-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the source-cover inverse dimension power and target-ball higher power have not yet been combined into the positive Morse--Sard exponent surplus",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After the enlarged half-radius quotient adapter is banked, prove one quantitative theorem deriving the polynomial cardinality bound for the maximal separated source cover from the banked packing and volume packets, then combine it with Taylor-controlled target-ball volumes and the positive exponent inequality; do not begin local rank reduction.",
+     "After exponent combination is banked, prove one quantitative theorem deriving the polynomial cardinality bound for the maximal separated source cover from the packing and volume packets, instantiate the Taylor target-ball exponent as source dimension plus a positive surplus, and choose the radius so the resulting constant times positive power meets every inverse-natural tolerance; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled enlarged-to-half-radius quotient theorem cannot be promoted at the recorded representation without changing its positivity hypothesis or adding nonstandard axioms.",
+      "Stop only if the compiled ENNReal exponent-combination theorem cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
-       "ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md"],
+      ["ConstructionTargets/SardExponentCombination.lean"
+       "ConstructionTargets/SardExponentCombination.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ENNREAL ENLARGED HALF-RADIUS RATIO",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COVER-TARGET EXPONENT COMBINATION",
       :acceptance
       {:fixture
-       {:path "/tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+       {:path "/tmp/SardExponentCombineProbe.lean",
         :sha256
-        "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"},
-       :declarations ["ENNReal.enlarged_halfRadius_ratio"],
+        "21636ac8181961e3ca621ce3a714f399a09a2c15377398252e243da0ed9de67c"},
+       :declarations ["ENNReal.mul_bounds_cancel_dimension"],
        :consumer-residual
-       "one polynomial source-cover bound and Taylor target-volume exponent estimate before local rank reduction",
+       "one polynomial source-cover theorem and positive-power tolerance choice before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "the ENNReal quotient `ofReal (R+ρ/2) / ofReal (ρ/2)` with positive real radius ρ",
-       :target "the single coercion `ofReal ((2*R+ρ)/ρ)`"},
-      :id :critical-value-sard-ennreal-enlarged-half-radius-ratio-1,
+       "ENNReal bounds `card ≤ A*r⁻ᵐ` and `per ≤ B*r^(m+d)` with r nonzero and finite",
+       :target "the combined total bound `card*per ≤ A*B*r^d`"},
+      :id :critical-value-sard-exponent-combination-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the simplified ball-volume quotient still represents the enlarged-radius to half-radius quotient through separate `ENNReal.ofReal` coercions",
+      "the source-cover inverse dimension power and target-ball higher power have not yet been combined into the positive Morse--Sard exponent surplus",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "After cancellation of the common ball-volume constant, the packing estimate contains a quotient of `ENNReal.ofReal` radii. One independently compilable coercion-and-algebra adapter rewrites the quotient of the enlarged radius `R + ρ/2` by the half-radius `ρ/2` as `ENNReal.ofReal ((2*R+ρ)/ρ)` under the required positivity of ρ. This exposes the inverse-radius dependence used by the polynomial covering estimate.",
+     "The remaining measure estimate must combine the inverse source-cover exponent with the higher target-ball exponent. One independently compilable ENNReal theorem shows that bounds `card ≤ A*r⁻ᵐ` and `per ≤ B*r^(m+d)` imply `card*per ≤ A*B*r^d` when r is nonzero and finite. The proof explicitly cancels the dimension-m powers, exposing only the positive exponent surplus d that tends to zero with the radius.",
      :commands
      [{:cmd
-       "rg -n 'ofReal_div|div_ofReal|ofReal.*\\\\/|\\\\/.*ofReal' .lake/packages/mathlib/Mathlib/Data/ENNReal -g '*.lean'",
+       "rg -n 'inv_mul_cancel|mul_inv_cancel' .lake/packages/mathlib/Mathlib/Data/ENNReal/Inv.lean",
        :exit 0}
-      {:cmd
-       "lake env lean /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+      {:cmd "lake env lean /tmp/SardExponentCombineProbe.lean",
        :exit 0,
        :output
-       "'ENNReal.enlarged_halfRadius_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+       "'ENNReal.mul_bounds_cancel_dimension' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardExponentCombineProbe.lean",
        :exit 0,
        :output
-       "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"}
+       "21636ac8181961e3ca621ce3a714f399a09a2c15377398252e243da0ed9de67c"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/SardExponentCombineProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+     {:path "/tmp/SardExponentCombineProbe.lean",
       :sha256
-      "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"},
+      "21636ac8181961e3ca621ce3a714f399a09a2c15377398252e243da0ed9de67c"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -4406,7 +4434,8 @@
     :critical-value-sard-ennreal-packing-quotient-1
     :critical-value-sard-ball-measure-nonzero-finite-1
     :critical-value-sard-ennreal-ball-volume-ratio-1
-    :critical-value-sard-ennreal-enlarged-half-radius-ratio-1],
+    :critical-value-sard-ennreal-enlarged-half-radius-ratio-1
+    :critical-value-sard-exponent-combination-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
