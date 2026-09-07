@@ -8415,7 +8415,7 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :review-finding
-   "Deterministic typed representation defect in commit 28b6fc0a72689eb69f7d682cce0024281a8abdd0: the first two generic right-inverse/projKer theorems are correct, but exists_rightInverse_and_projKer_fderiv_scalar_fixedDirections narrows the selected scalar component from the upstream representation `(f : E → F) (ℓ : F →L[ℝ] ℝ)` with function `y ↦ ℓ (iteratedFDeriv ℝ i f y v)` to a new scalar-valued `f : E → ℝ` with function `y ↦ iteratedFDeriv ℝ i f y v`. This does not compose with the reviewed scalar-separation and scalar-derivative results without an additional, unproved iteratedFDeriv-under-continuous-linear-postcomposition identity. Repair the specialization by retaining general `F`, `f : E → F`, and `ℓ`, defining `L := fderiv ℝ (fun y => ℓ (iteratedFDeriv ℝ i f y v)) x`, and using the existing fixed-direction scalar derivative identity plus the exact hypothesis `ℓ (iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)) ≠ 0`. All mechanical gates otherwise reproduce: exact two-file scope, fixture/Lean hash 39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e, declaration hash c31605b2a85965a77fa84dfd8805c4bb70c70b9c832192dcd71c73d20b22e050, standard axioms only, successful 8244-job build, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one placeholder.",
+   "The Lean repair in commit 8218a4e7a3765a5ed38ef8964769e9751461d1a8 fixes the prior typed defect and passes its mechanical gates, but the row metadata was not repaired consistently. The row's acceptance fixture still records the pre-repair SHA-256 39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e, while the repaired fixture and committed Lean source are byte-identical at 1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f. Its top-level representation source also still describes `y ↦ iteratedFDeriv ℝ i f y v`, omitting the repaired general target F and selected functional ℓ; it must describe `y ↦ ℓ (iteratedFDeriv ℝ i f y v)` and the corresponding ℓ-applied next-jet hypothesis. Update those two recorded fields to the repaired representation. Evidence: the repaired theorem retains general F, f : E → F, and ℓ, its declaration hash reproduces as d79b93b9efa0a2632bbc8df466dafc2a96f0012b842c31c5e9c60bcf0db5a748, the 8244-job build succeeds with only propext/Classical.choice/Quot.sound, and frozen t93A04 remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one placeholder.",
    :stop-condition
    "Stop only if the compiled explicit right-inverse and kernel-projection construction cannot be promoted with its exact nonzero-direction hypothesis, fixed-direction iteratedFDeriv specialization, projKerOfRightInverse representation, or standard-axiom profile.",
    :evidence
@@ -8483,6 +8483,12 @@
      {:cmd "git diff --check && git status --porcelain=v1",
       :exit 0,
       :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-1",
+     :job "invoke-1788814560086-14129-cfefb8dc",
+     :finding
+     "The Lean repair in commit 8218a4e7a3765a5ed38ef8964769e9751461d1a8 fixes the prior typed defect and passes its mechanical gates, but the row metadata was not repaired consistently. The row's acceptance fixture still records the pre-repair SHA-256 39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e, while the repaired fixture and committed Lean source are byte-identical at 1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f. Its top-level representation source also still describes `y ↦ iteratedFDeriv ℝ i f y v`, omitting the repaired general target F and selected functional ℓ; it must describe `y ↦ ℓ (iteratedFDeriv ℝ i f y v)` and the corresponding ℓ-applied next-jet hypothesis. Update those two recorded fields to the repaired representation. Evidence: the repaired theorem retains general F, f : E → F, and ℓ, its declaration hash reproduces as d79b93b9efa0a2632bbc8df466dafc2a96f0012b842c31c5e9c60bcf0db5a748, the 8244-job build succeeds with only propext/Classical.choice/Quot.sound, and frozen t93A04 remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one placeholder."},
     :commit "8218a4e7a3765a5ed38ef8964769e9751461d1a8",
     :commits
     ["28b6fc0a72689eb69f7d682cce0024281a8abdd0"
@@ -8502,7 +8508,7 @@
      "exists_rightInverse_and_projKer_fderiv_scalar_fixedDirections"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"
     "ConstructionTargets/SardNonzeroScalarDerivativeSplit.md"],
