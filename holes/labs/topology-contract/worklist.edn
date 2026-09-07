@@ -7036,29 +7036,64 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if these compiled constant-coordinate tangent-kernel and residual slice-flatness theorems cannot be promoted with their exact Frechet-derivative, composition, kernel, or standard-axiom properties.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardConstantCoordinateSliceFlatness.lean"
+    "ConstructionTargets/SardConstantCoordinateSliceFlatness.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CONSTANT-COORDINATE SLICE FLATNESS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardConstantCoordinateSliceFlatnessProbe.lean",
+     :sha256
+     "cb809cc9f8f7b1e88b1b3188a193e72d8d377a4b07974c99c89475b3abb77756"},
+    :declarations
+    ["derivative_comp_eq_zero_of_coordinate_constant"
+     "hasFDerivAt_zero_on_constantCoordinateSlice"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the slice with the inverse local rank chart at fixed derivative-range coordinate, use the chart's exact first-coordinate formula and local residual derivative flatness to obtain the flat kernel-coordinate map, then apply Taylor-cover nullity and assemble the rank/source-dimension induction."},
+   :representation
+   {:source
+    "A differentiable coordinate map p, a differentiable slice parametrization s on which p∘s is constant, and a residual map whose derivative vanishes on ker(dp).",
+    :target
+    "The derivative of s lands in ker(dp), and the residual map restricted along s has zero Frechet derivative."},
+   :id :critical-value-sard-constant-coordinate-slice-flatness-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-local-residual-derivative-flatness-1
+    :critical-value-sard-projected-implicit-function-packaging-1],
+   :current-residual
+   "Derivative flatness now transports abstractly to constant first-coordinate slices; the exact inverse-chart specialization, Taylor-cover application on each slice, and induction assembly remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "The pointwise kernel theorem promotes cleanly to the neighborhood form needed by the analytic argument. For a varying derivative field, a fixed projected rank block, and any residual target projection, projected surjectivity plus the rank upper bound forces the residual derivative to vanish on every projected-fibre direction throughout the locus.",
+     "The coordinate transport step compiles as two reusable calculus lemmas. Constancy of the first coordinate along a parametrized slice forces the slice derivative into that coordinate derivative's kernel; a residual derivative vanishing on the kernel therefore has zero derivative after restriction to the slice.",
      :commands
      [{:cmd
        "sed -n '780,900p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '500,610p' docs/TN-topology-closure-experiments.md",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+       "lake env lean /tmp/SardConstantCoordinateSliceFlatnessProbe.lean",
        :exit 0,
        :output
-       "'residualDerivative_vanishes_on_projectedFibres' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'derivative_comp_eq_zero_of_coordinate_constant' and 'hasFDerivAt_zero_on_constantCoordinateSlice' depend on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+       "sha256sum /tmp/SardConstantCoordinateSliceFlatnessProbe.lean",
        :exit 0,
        :output
-       "e4222223643569f96398d5639c79930b20fc8a88888e9c4a4b3f839bec93b14d  /tmp/SardLocalResidualDerivativeFlatnessProbe.lean"}
+       "cb809cc9f8f7b1e88b1b3188a193e72d8d377a4b07974c99c89475b3abb77756  /tmp/SardConstantCoordinateSliceFlatnessProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardConstantCoordinateSliceFlatnessProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --check", :exit 0}
@@ -7069,41 +7104,41 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled neighborhood-wise residual-flatness theorem cannot be promoted with its exact varying-derivative, fixed projected-block, rank-bound, fibre-kernel, or standard-axiom properties.",
+      "Stop only if these compiled constant-coordinate tangent-kernel and residual slice-flatness theorems cannot be promoted with their exact Frechet-derivative, composition, kernel, or standard-axiom properties.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"
-       "ConstructionTargets/SardLocalResidualDerivativeFlatness.md"],
+      ["ConstructionTargets/SardConstantCoordinateSliceFlatness.lean"
+       "ConstructionTargets/SardConstantCoordinateSliceFlatness.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCAL RESIDUAL DERIVATIVE FLATNESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CONSTANT-COORDINATE SLICE FLATNESS",
       :acceptance
       {:fixture
-       {:path "/tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+       {:path "/tmp/SardConstantCoordinateSliceFlatnessProbe.lean",
         :sha256
-        "e4222223643569f96398d5639c79930b20fc8a88888e9c4a4b3f839bec93b14d"},
+        "cb809cc9f8f7b1e88b1b3188a193e72d8d377a4b07974c99c89475b3abb77756"},
        :declarations
-       ["residualDerivative_vanishes_on_projectedFibres"],
+       ["derivative_comp_eq_zero_of_coordinate_constant"
+        "hasFDerivAt_zero_on_constantCoordinateSlice"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate D with fderiv f, choose Q as the complementary target projection, and transport this neighborhood-wise vanishing through the local partial homeomorphism to obtain a flat residual map on kernel-coordinate slices; then apply Taylor-cover nullity and perform the rank/source-dimension induction."},
+       "Instantiate the slice with the inverse local rank chart at fixed derivative-range coordinate, use the chart's exact first-coordinate formula and local residual derivative flatness to obtain the flat kernel-coordinate map, then apply Taylor-cover nullity and assemble the rank/source-dimension induction."},
       :representation
       {:source
-       "A derivative field D:E→(E→ₗF), fixed linear maps P:F→R and Q:F→S, and a locus U on which P∘D(y) is surjective and rank(D(y))≤finrank R.",
+       "A differentiable coordinate map p, a differentiable slice parametrization s on which p∘s is constant, and a residual map whose derivative vanishes on ker(dp).",
        :target
-       "For every y in U and every v in ker(P∘D(y)), the residual derivative (Q∘D(y))v is zero."},
-      :id :critical-value-sard-local-residual-derivative-flatness-1,
+       "The derivative of s lands in ker(dp), and the residual map restricted along s has zero Frechet derivative."},
+      :id :critical-value-sard-constant-coordinate-slice-flatness-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-kernel-flatness-1
-       :critical-value-sard-projected-implicit-function-packaging-1
-       :critical-value-sard-exact-rank-local-upper-locus-1],
+      [:critical-value-sard-local-residual-derivative-flatness-1
+       :critical-value-sard-projected-implicit-function-packaging-1],
       :current-residual
-      "Residual derivative flatness now holds uniformly on the local rank-bounded locus in source coordinates; transport to kernel-coordinate slices and the ensuing nullity/induction step remain.",
+      "Derivative flatness now transports abstractly to constant first-coordinate slices; the exact inverse-chart specialization, Taylor-cover application on each slice, and induction assembly remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
@@ -7129,7 +7164,8 @@
     :critical-value-sard-projected-complemented-strict-derivative-data-1
     :critical-value-sard-projected-implicit-function-packaging-1
     :critical-value-sard-projected-kernel-flatness-1
-    :critical-value-sard-local-residual-derivative-flatness-1],
+    :critical-value-sard-local-residual-derivative-flatness-1
+    :critical-value-sard-constant-coordinate-slice-flatness-1],
    :current-residual
    "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
