@@ -5236,29 +5236,61 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if this compiled NNReal geometric-scale theorem cannot be promoted with its positivity, contraction, finiteness, and exact ofReal-power conclusion or without adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardNNRealGeometricScaleTolerance.lean"
+    "ConstructionTargets/SardNNRealGeometricScaleTolerance.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NNREAL GEOMETRIC SCALE TOLERANCE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardNNRealGeometricScaleToleranceProbe.lean",
+     :sha256
+     "bd6715b3f47ce948cc2e47cdbe040593640a4b9c70e4a52250b500c55fa7d584"},
+    :declarations ["ENNReal.exists_nnreal_geometric_scale_pow_lt"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Compose the maximal-separated cover, Taylor target-cover measure bound, raw exponent normalization, and this scale choice into the complete quantitative small-image-measure theorem."},
+   :representation
+   {:source
+    "A finite ENNReal constant D, positive tolerance epsilon, positive NNReal contraction q<1, and positive residual exponent d.",
+    :target
+    "An iterate j satisfying D*ofReal((q:Real)^j)^d < epsilon, in the exact representation used by the Taylor covering estimate."},
+   :id :critical-value-sard-nnreal-geometric-scale-tolerance-1,
+   :kind :reusable-theorem,
+   :depends-on [:critical-value-sard-positive-power-tolerance-1],
+   :current-residual
+   "Scale selection is compiled independently; only the final quantitative covering composition remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "The raw packing quotient and Taylor target-ball powers require a reusable normalization theorem before the cover construction and positive-power tolerance can be composed. That theorem now compiles without extra hypotheses or nonstandard axioms.",
+     "The positive-power tolerance theorem uses an ENNReal contraction, while the covering construction produces an NNReal geometric radius converted through ofReal. One reusable coercion-and-power bridge was required and now compiles.",
      :commands
-     [{:cmd "lake build ConstructionTargets.SardExponentCombination",
+     [{:cmd
+       "lake build ConstructionTargets.SardPositivePowerTolerance",
        :exit 0,
-       :output "Build completed successfully (919 jobs)."}
+       :output "Build completed successfully (1643 jobs)."}
       {:cmd
-       "lake env lean /tmp/SardTaylorPackingExponentNormalizationProbe.lean",
-       :exit 0,
-       :output
-       "'ENNReal.raw_taylor_packing_product_le' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/SardTaylorPackingExponentNormalizationProbe.lean",
+       "lake env lean /tmp/SardNNRealGeometricScaleToleranceProbe.lean",
        :exit 0,
        :output
-       "063d9de52e375efe8b8c42b680f86fbf80f7e9103cf4f64d49e680346ff6e6c6  /tmp/SardTaylorPackingExponentNormalizationProbe.lean"}
+       "'ENNReal.exists_nnreal_geometric_scale_pow_lt' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardTaylorPackingExponentNormalizationProbe.lean",
+       "sha256sum /tmp/SardNNRealGeometricScaleToleranceProbe.lean",
+       :exit 0,
+       :output
+       "bd6715b3f47ce948cc2e47cdbe040593640a4b9c70e4a52250b500c55fa7d584  /tmp/SardNNRealGeometricScaleToleranceProbe.lean"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardNNRealGeometricScaleToleranceProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}
@@ -5266,37 +5298,37 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if this compiled normalization theorem cannot be promoted with its exact raw factors, scale interval, and Morse--Sard exponent equation or without adding nonstandard axioms.",
+      "Stop only if this compiled NNReal geometric-scale theorem cannot be promoted with its positivity, contraction, finiteness, and exact ofReal-power conclusion or without adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardTaylorPackingExponentNormalization.lean"
-       "ConstructionTargets/SardTaylorPackingExponentNormalization.md"],
+      ["ConstructionTargets/SardNNRealGeometricScaleTolerance.lean"
+       "ConstructionTargets/SardNNRealGeometricScaleTolerance.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / TAYLOR PACKING EXPONENT NORMALIZATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NNREAL GEOMETRIC SCALE TOLERANCE",
       :acceptance
       {:fixture
-       {:path "/tmp/SardTaylorPackingExponentNormalizationProbe.lean",
+       {:path "/tmp/SardNNRealGeometricScaleToleranceProbe.lean",
         :sha256
-        "063d9de52e375efe8b8c42b680f86fbf80f7e9103cf4f64d49e680346ff6e6c6"},
-       :declarations ["ENNReal.raw_taylor_packing_product_le"],
+        "bd6715b3f47ce948cc2e47cdbe040593640a4b9c70e4a52250b500c55fa7d584"},
+       :declarations ["ENNReal.exists_nnreal_geometric_scale_pow_lt"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the maximal-separated cover at geometric radii, combine its cardinality and finite target-cover measure estimates through this normalization theorem, and choose the radius using positive-power tolerance."},
+       "Compose the maximal-separated cover, Taylor target-cover measure bound, raw exponent normalization, and this scale choice into the complete quantitative small-image-measure theorem."},
       :representation
       {:source
-       "The raw finite-dimensional packing factor ofReal((2*R+r)/r)^m and Taylor target-ball factor ofReal(C*r^(k+1))^n, with C nonnegative, 0<r<=1, and the exponent equation (k+1)*n=m+d.",
+       "A finite ENNReal constant D, positive tolerance epsilon, positive NNReal contraction q<1, and positive residual exponent d.",
        :target
-       "Their product is bounded by the scale-independent constant ofReal(2*R+1)^m*ofReal(C)^n times ofReal(r)^d."},
-      :id :critical-value-sard-taylor-packing-exponent-normalization-1,
+       "An iterate j satisfying D*ofReal((q:Real)^j)^d < epsilon, in the exact representation used by the Taylor covering estimate."},
+      :id :critical-value-sard-nnreal-geometric-scale-tolerance-1,
       :kind :reusable-theorem,
-      :depends-on [:critical-value-sard-exponent-combination-1],
+      :depends-on [:critical-value-sard-positive-power-tolerance-1],
       :current-residual
-      "The exponent algebra is compiled; applying it to the constructed cover and selecting the geometric scale remain.",
+      "Scale selection is compiled independently; only the final quantitative covering composition remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -5338,7 +5370,8 @@
     :critical-value-sard-finite-dimensional-packing-cover-bound-1
     :critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1
     :critical-value-sard-taylor-finite-target-cover-measure-1
-    :critical-value-sard-taylor-packing-exponent-normalization-1],
+    :critical-value-sard-taylor-packing-exponent-normalization-1
+    :critical-value-sard-nnreal-geometric-scale-tolerance-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
