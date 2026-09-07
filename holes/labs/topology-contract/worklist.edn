@@ -4203,70 +4203,100 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled enlarged-to-half-radius quotient theorem cannot be promoted at the recorded representation without changing its positivity hypothesis or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
+    "ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ENNREAL ENLARGED HALF-RADIUS RATIO",
+   :acceptance
+   {:fixture
+    {:path "/tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+     :sha256
+     "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"},
+    :declarations ["ENNReal.enlarged_halfRadius_ratio"],
+    :consumer-residual
+    "one polynomial source-cover bound and Taylor target-volume exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "the ENNReal quotient `ofReal (R+ρ/2) / ofReal (ρ/2)` with positive real radius ρ",
+    :target "the single coercion `ofReal ((2*R+ρ)/ρ)`"},
+   :id :critical-value-sard-ennreal-enlarged-half-radius-ratio-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the simplified ball-volume quotient still represents the enlarged-radius to half-radius quotient through separate `ENNReal.ofReal` coercions",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After the ENNReal ball-volume ratio is banked, prove one quantitative theorem combining the maximal separated Finset, half-ball disjointness, bounded enlargement, packing quotient, and exact volume formulas into the polynomial source-cover bound, then apply the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
+     "After the enlarged half-radius quotient adapter is banked, prove one quantitative theorem deriving the polynomial cardinality bound for the maximal separated source cover from the banked packing and volume packets, then combine it with Taylor-controlled target-ball volumes and the positive exponent inequality; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled ENNReal power-volume ratio theorem cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
+      "Stop only if the compiled enlarged-to-half-radius quotient theorem cannot be promoted at the recorded representation without changing its positivity hypothesis or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardENNRealBallVolumeRatio.lean"
-       "ConstructionTargets/SardENNRealBallVolumeRatio.md"],
+      ["ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
+       "ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ENNREAL BALL-VOLUME RATIO",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ENNREAL ENLARGED HALF-RADIUS RATIO",
       :acceptance
       {:fixture
-       {:path "/tmp/ENNRealBallVolumeRatioProbe.lean",
+       {:path "/tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
         :sha256
-        "415116d49f161764b09c99632c017f18ce4b05c85851a6ccdbe0a5e6685c9db2"},
-       :declarations ["ENNReal.power_volume_ratio"],
+        "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"},
+       :declarations ["ENNReal.enlarged_halfRadius_ratio"],
        :consumer-residual
-       "one polynomial source-cover radius bound and Taylor target-volume exponent estimate before local rank reduction",
+       "one polynomial source-cover bound and Taylor target-volume exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a quotient `(a^d*k)/(b^d*k)` in ENNReal with common factor k nonzero and not top",
-       :target "the simplified power `(a/b)^d`"},
-      :id :critical-value-sard-ennreal-ball-volume-ratio-1,
+       "the ENNReal quotient `ofReal (R+ρ/2) / ofReal (ρ/2)` with positive real radius ρ",
+       :target "the single coercion `ofReal ((2*R+ρ)/ρ)`"},
+      :id :critical-value-sard-ennreal-enlarged-half-radius-ratio-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the packing quotient still contains two ball-volume formulas with a shared nonzero finite dimension constant and separate radius powers",
+      "the simplified ball-volume quotient still represents the enlarged-radius to half-radius quotient through separate `ENNReal.ofReal` coercions",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The exact finite-dimensional ball-volume formulas contain the same dimension-dependent unit-ball constant in the ambient numerator and small-ball denominator. One independently compilable ENNReal lemma cancels that common factor under explicit nonzero and finite hypotheses and rewrites the remaining quotient of d-th powers as the d-th power of the radius quotient. This isolates the extended-real cancellation needed before the polynomial radius estimate.",
+     "After cancellation of the common ball-volume constant, the packing estimate contains a quotient of `ENNReal.ofReal` radii. One independently compilable coercion-and-algebra adapter rewrites the quotient of the enlarged radius `R + ρ/2` by the half-radius `ρ/2` as `ENNReal.ofReal ((2*R+ρ)/ρ)` under the required positivity of ρ. This exposes the inverse-radius dependence used by the polynomial covering estimate.",
      :commands
      [{:cmd
-       "rg -n 'mul_div_mul_right|mul_div_mul_left|inv_pow|mul_div.*ENNReal' .lake/packages/mathlib/Mathlib/Data/ENNReal -g '*.lean'",
+       "rg -n 'ofReal_div|div_ofReal|ofReal.*\\\\/|\\\\/.*ofReal' .lake/packages/mathlib/Mathlib/Data/ENNReal -g '*.lean'",
        :exit 0}
-      {:cmd "lake env lean /tmp/ENNRealBallVolumeRatioProbe.lean",
-       :exit 0,
-       :output
-       "'ENNReal.power_volume_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/ENNRealBallVolumeRatioProbe.lean",
-       :exit 0,
-       :output
-       "415116d49f161764b09c99632c017f18ce4b05c85851a6ccdbe0a5e6685c9db2"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/ENNRealBallVolumeRatioProbe.lean",
+       "lake env lean /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+       :exit 0,
+       :output
+       "'ENNReal.enlarged_halfRadius_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+       :exit 0,
+       :output
+       "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/ENNRealBallVolumeRatioProbe.lean",
+     {:path "/tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
       :sha256
-      "415116d49f161764b09c99632c017f18ce4b05c85851a6ccdbe0a5e6685c9db2"},
+      "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -4299,7 +4329,8 @@
     :critical-value-sard-separated-ennreal-to-real-dist-1
     :critical-value-sard-ennreal-packing-quotient-1
     :critical-value-sard-ball-measure-nonzero-finite-1
-    :critical-value-sard-ennreal-ball-volume-ratio-1],
+    :critical-value-sard-ennreal-ball-volume-ratio-1
+    :critical-value-sard-ennreal-enlarged-half-radius-ratio-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
