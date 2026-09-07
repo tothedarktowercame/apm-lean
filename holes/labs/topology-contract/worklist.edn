@@ -6285,9 +6285,119 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
-   "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
-   :phase :probe,
+   "Stop only if these compiled derivative-rank openness and local exact-rank identification theorems cannot be promoted with their exact C1, finite-dimensional, cardinal-rank, finrank, or standard-axiom hypotheses.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
+    "ConstructionTargets/SardExactRankLocalUpperLocus.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK LOCAL UPPER LOCUS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardExactRankLocalUpperLocusProbe.lean",
+     :sha256
+     "ebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153"},
+    :declarations
+    ["derivativeRankAtLeast"
+     "isOpen_derivativeRankAtLeast"
+     "exists_open_inter_rankStratum_eq_rankLE"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Select a rank-r complemented minor at the base point, instantiate the local rank normal form, and prove that the remaining coordinate map is derivative-flat along the local rank-at-most-r fibre before applying the Taylor-cover nullity theorem."},
+   :representation
+   {:source
+    "A C1 map between finite-dimensional real normed spaces and a point whose derivative has exact finrank r.",
+    :target
+    "An open neighborhood on which derivative rank is at least r, with the exact-rank-r stratum equal there to the rank-at-most-r locus."},
+   :id :critical-value-sard-exact-rank-local-upper-locus-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-local-rank-normal-form-probe-2
+    :critical-value-sard-multivariable-taylor-covering-probe-2
+    :critical-value-sard-rectangular-local-probe-1],
+   :current-residual
+   "The exact rank stratum now has the required local rank-at-most representation; complemented-minor selection and derivative-flat fibre reduction remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
+   "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat :codex-1,
+     :reason
+     "The first reusable induction seam compiles: C1 regularity makes the derivative-rank-at-least-r locus open, and near any exact-rank-r point the exact stratum equals the rank-at-most-r locus intersected with that open neighborhood. This supplies the local upper-rank representation required before applying rank coordinates and reducing source dimension.",
+     :commands
+     [{:cmd
+       "sed -n '780,870p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '500,580p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' ConstructionTargets/SardLocalRankNormalForm.lean; sed -n '1,180p' ConstructionTargets/SardCriticalRankStrata.lean; sed -n '1,140p' ConstructionTargets/SardCriticalRankStrataNull.lean",
+       :exit 0,
+       :output
+       "Reviewed the local normal-form, finite rank-stratum decomposition, and null-image aggregation receipts."}
+      {:cmd
+       "rg -n \"IsOpen.*finrank|isOpen.*rank|rank.*ContinuousLinearMap\" .lake/packages/mathlib/Mathlib --glob '*.lean'; rg -n \"continuous_fderiv\" .lake/packages/mathlib/Mathlib/Analysis/Calculus --glob '*.lean'",
+       :exit 0,
+       :output
+       "Located isOpen_setOf_nat_le_rank and ContDiff.continuous_fderiv."}
+      {:cmd
+       "readlink -f .lake/packages; lake build ConstructionTargets.SardCriticalRankStrata ConstructionTargets.SardLocalRankNormalForm; lake env lean /tmp/SardExactRankLocalUpperLocusProbe.lean",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; build completed successfully (8241 jobs); both declarations depend on [propext, Classical.choice, Quot.sound]."}
+      {:cmd "sha256sum /tmp/SardExactRankLocalUpperLocusProbe.lean",
+       :exit 0,
+       :output
+       "ebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardExactRankLocalUpperLocusProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git diff --check; git status --porcelain=v1; readlink -f .lake/packages",
+       :exit 0,
+       :output
+       "Unrelated untracked directories were present: problems/t99A01/lean through problems/t99A05/lean. No tracked diff was present; package authority resolved to /home/joe/code/apm-lean/.lake/packages."}],
+     :prerequisite
+     {:consumer :t93A04,
+      :stop-condition
+      "Stop only if these compiled derivative-rank openness and local exact-rank identification theorems cannot be promoted with their exact C1, finite-dimensional, cardinal-rank, finrank, or standard-axiom hypotheses.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
+       "ConstructionTargets/SardExactRankLocalUpperLocus.md"],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK LOCAL UPPER LOCUS",
+      :acceptance
+      {:fixture
+       {:path "/tmp/SardExactRankLocalUpperLocusProbe.lean",
+        :sha256
+        "ebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153"},
+       :declarations
+       ["derivativeRankAtLeast"
+        "isOpen_derivativeRankAtLeast"
+        "exists_open_inter_rankStratum_eq_rankLE"],
+       :axioms :standard-only,
+       :warnings [],
+       :consumer-residual
+       "Select a rank-r complemented minor at the base point, instantiate the local rank normal form, and prove that the remaining coordinate map is derivative-flat along the local rank-at-most-r fibre before applying the Taylor-cover nullity theorem."},
+      :representation
+      {:source
+       "A C1 map between finite-dimensional real normed spaces and a point whose derivative has exact finrank r.",
+       :target
+       "An open neighborhood on which derivative rank is at least r, with the exact-rank-r stratum equal there to the rank-at-most-r locus."},
+      :id :critical-value-sard-exact-rank-local-upper-locus-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:critical-value-sard-local-rank-normal-form-probe-2
+       :critical-value-sard-multivariable-taylor-covering-probe-2
+       :critical-value-sard-rectangular-local-probe-1],
+      :current-residual
+      "The exact rank stratum now has the required local rank-at-most representation; complemented-minor selection and derivative-flat fibre reduction remain.",
+      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
@@ -6307,7 +6417,8 @@
    :depends-on
    [:critical-value-sard-local-rank-normal-form-probe-2
     :critical-value-sard-multivariable-taylor-covering-probe-2
-    :critical-value-sard-rectangular-local-probe-1],
+    :critical-value-sard-rectangular-local-probe-1
+    :critical-value-sard-exact-rank-local-upper-locus-1],
    :current-residual
    "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
