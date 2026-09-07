@@ -2773,9 +2773,104 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
-   "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
-   :phase :probe,
+   "Stop only if the compiled ball-image containment cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/SardFlatTaylorBallImage.lean"
+    "ConstructionTargets/SardFlatTaylorBallImage.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FLAT TAYLOR BALL-IMAGE ADAPTER",
+   :acceptance
+   {:fixture
+    {:path "/tmp/FlatTaylorBallImageProbe.lean",
+     :sha256
+     "bd68dcb5b2111bfe6b37f72ba3a6f16f1122eae83be9022673b89cd9f0c17ce2"},
+    :declarations ["flatTaylor_image_inter_closedBall_subset"],
+    :consumer-residual
+    "one scale-wise smooth flat-locus remainder-and-null-cover theorem before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a pointwise order-(k+1) norm remainder estimate on a subset of a real normed space",
+    :target
+    "containment of the image of its radius-r patch in the target closed ball of radius C*r^(k+1)"},
+   :id :critical-value-sard-flat-taylor-ball-image-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the quantitative remainder hypothesis has not yet been converted into the target-ball containment consumed by the scale-cover argument",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
+   "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
+   :evidence
+   {:probe
+    {:residual
+     "After the ball-image adapter is banked, prove one scale-wise theorem deriving the quantitative remainder estimates and zero target measure from smoothness, vanishing iterated derivatives, bounded finite-dimensional covering counts, and the Morse--Sard exponent inequality; do not begin local rank reduction.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t93A04,
+      :stop-condition
+      "Stop only if the compiled ball-image containment cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/SardFlatTaylorBallImage.lean"
+       "ConstructionTargets/SardFlatTaylorBallImage.md"],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FLAT TAYLOR BALL-IMAGE ADAPTER",
+      :acceptance
+      {:fixture
+       {:path "/tmp/FlatTaylorBallImageProbe.lean",
+        :sha256
+        "bd68dcb5b2111bfe6b37f72ba3a6f16f1122eae83be9022673b89cd9f0c17ce2"},
+       :declarations ["flatTaylor_image_inter_closedBall_subset"],
+       :consumer-residual
+       "one scale-wise smooth flat-locus remainder-and-null-cover theorem before local rank reduction",
+       :axioms :standard-only},
+      :representation
+      {:source
+       "a pointwise order-(k+1) norm remainder estimate on a subset of a real normed space",
+       :target
+       "containment of the image of its radius-r patch in the target closed ball of radius C*r^(k+1)"},
+      :id :critical-value-sard-flat-taylor-ball-image-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "the quantitative remainder hypothesis has not yet been converted into the target-ball containment consumed by the scale-cover argument",
+      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :reason
+     "The pinned calculus APIs do not directly provide the multivariable finite-order Taylor remainder needed by Morse--Sard. One independently compilable prerequisite was isolated: convert a pointwise order-(k+1) remainder estimate on a source patch into the exact quantitative target-ball containment used by the later cover. Once promoted, the current row has one coherent remaining theorem: derive the required scale-wise remainder estimates and null cover from smoothness and vanishing iterated derivatives.",
+     :commands
+     [{:cmd
+       "rg -n 'critical-value-sard-multivariable|MULTIVARIABLE TAYLOR|critical-value-sard-rectangular' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "rg -n 'Taylor.*remainder|HasFDerivAt.*Taylor|iteratedFDeriv|HasFTaylorSeriesUpTo|IsLittleO.*norm.*\\^|hausdorffMeasure.*image|measure_zero.*image' .lake/packages/mathlib/Mathlib -g '*.lean'",
+       :exit 0}
+      {:cmd "lake env lean /tmp/FlatTaylorBallImageProbe.lean",
+       :exit 0,
+       :output
+       "'flatTaylor_image_inter_closedBall_subset' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/FlatTaylorBallImageProbe.lean",
+       :exit 0,
+       :output
+       "bd68dcb5b2111bfe6b37f72ba3a6f16f1122eae83be9022673b89cd9f0c17ce2"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/FlatTaylorBallImageProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+     :fixture
+     {:path "/tmp/FlatTaylorBallImageProbe.lean",
+      :sha256
+      "bd68dcb5b2111bfe6b37f72ba3a6f16f1122eae83be9022673b89cd9f0c17ce2"},
+     :seat :codex-1}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -2792,7 +2887,9 @@
     "a quantitative small-ball image cover implying zero target add-Haar measure under the Morse--Sard exponent inequality"},
    :id :critical-value-sard-multivariable-taylor-covering-probe-2,
    :kind :reusable-theorem,
-   :depends-on [:critical-value-sard-rectangular-local-probe-1],
+   :depends-on
+   [:critical-value-sard-rectangular-local-probe-1
+    :critical-value-sard-flat-taylor-ball-image-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
