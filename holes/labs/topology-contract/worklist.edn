@@ -9341,6 +9341,54 @@
       :output
       "ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean\nConstructionTargets/SardImplicitFunctionLevelSetCoordinates.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788817616201-14184-24873fba",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 9c070c8e335b7119dda94f0aa1e33993b7abc827 && git diff-tree --no-commit-id --name-status -r 9c070c8e335b7119dda94f0aa1e33993b7abc827",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean && git show 9c070c8e335b7119dda94f0aa1e33993b7abc827:ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean | sha256sum && git show 9c070c8e335b7119dda94f0aa1e33993b7abc827:ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean f5520b083cdb705ceca41770d63e4bda99de101039ba18d06b9754ef86427356; note 926c7ef09dc0f12e3620cb2e9839ac65c4c3cb3609409d7b0110536826631d54"}
+      {:cmd
+       "sed -n '12,26p' ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean | sha256sum",
+       :exit 0,
+       :output
+       "a8974cdd46ba6ddec37e5ec557b257f4040a84349a836d4bece6649a84bb620e"}
+      {:cmd
+       "cmp -s /tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean && lake env lean /tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean && lake env lean ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean && lake build ConstructionTargets.SardImplicitFunctionLevelSetCoordinates",
+       :exit 0,
+       :output
+       "Build completed successfully (8250 jobs); both declarations depend only on propext, Classical.choice, Quot.sound."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "git merge-base --is-ancestor 62ae7cf96c1d56b559dea63f52a9f007f1463562 9c070c8e335b7119dda94f0aa1e33993b7abc827",
+       :exit 0,
+       :output "Recorded dependency is an ancestor."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 87 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff 9c070c8e335b7119dda94f0aa1e33993b7abc827^ 9c070c8e335b7119dda94f0aa1e33993b7abc827 --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit 9c070c8e335b7119dda94f0aa1e33993b7abc827 has exact scope; fixture, committed Lean, note, declaration-block, dependency ancestry, and consumer invariants reproduce. ImplicitFunctionData.toOpenPartialHomeomorph_apply identifies the chart value globally as the pair whose first coordinate is leftFun y, so the first equivalence has both directions with no source-membership premise. Intersecting both level descriptions with the identical chart source then gives the second set equality pointwise. The orientation is exactly leftFun y = c iff first chart coordinate = c, and the localized theorem retains the chart source on both sides. It makes no claim that an arbitrary scalarized chart exposes its underlying ImplicitFunctionData; that construction and the subsequent lower-dimensional transport remain accurately stated as residual work. Only standard axioms occur."},
     :commit "9c070c8e335b7119dda94f0aa1e33993b7abc827",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean"
@@ -9354,7 +9402,7 @@
      "ImplicitFunctionData.inter_source_leftFun_level_eq"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean"
     "ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.md"],
@@ -9516,7 +9564,7 @@
       "f5520b083cdb705ceca41770d63e4bda99de101039ba18d06b9754ef86427356"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
