@@ -6008,8 +6008,76 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if this compiled uniform remainder theorem cannot be promoted with its exact closed-ball boundedness, ProperSpace, ContDiff, derivative-vanishing, factorial-normalized constant, or standard-axiom hypotheses.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate exists_taylor_cover_measure_lt with this uniform remainder constant and derive the complete arbitrarily-small image-measure/nullity theorem; local rank reduction remains after that composition.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardUniformFlatTaylorRemainderProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardUniformFlatTaylorRemainderProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardUniformFlatTaylorRemainder.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardUniformFlatTaylorRemainder.lean ConstructionTargets/SardUniformFlatTaylorRemainder.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardUniformFlatTaylorRemainderProbe.lean ConstructionTargets/SardUniformFlatTaylorRemainder.lean ConstructionTargets/SardUniformFlatTaylorRemainder.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem exists_uniform_flat_taylor_remainder_on_bounded_set/,/^#print axioms/p' ConstructionTargets/SardUniformFlatTaylorRemainder.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardUniformFlatTaylorRemainder.lean ConstructionTargets/SardUniformFlatTaylorRemainder.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard uniform flat Taylor remainder'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "4de58b22a94bbd2f68b50379b88ca03f2c1d44b4",
+    :changed-paths
+    ["ConstructionTargets/SardUniformFlatTaylorRemainder.lean"
+     "ConstructionTargets/SardUniformFlatTaylorRemainder.md"],
+    :fixture
+    {:path "/tmp/SardUniformFlatTaylorRemainderProbe.lean",
+     :sha256
+     "9208e61d374fa194132593e61375a7e4372618d92f5e746fee400d76c3c64509"},
+    :declarations
+    ["exists_uniform_flat_taylor_remainder_on_bounded_set"],
+    :dependencies
+    [{:id :critical-value-sard-affine-line-derivative-bound-1,
+      :commit "d73b51570aff0588a440283ddf50504ced8739bf"}
+     {:id :critical-value-sard-affine-line-taylor-remainder-1,
+      :commit "b5059faf31aa67bb4ad83dcd50a69eeb5a1a066f"}
+     {:id :critical-value-sard-compact-iterated-fderiv-bound-1,
+      :commit "f5af5bbc8e97c74f9b3e91fb65b10658041b6a6d"}],
+    :hashes
+    {:lean
+     "9208e61d374fa194132593e61375a7e4372618d92f5e746fee400d76c3c64509",
+     :markdown
+     "84dae04e8f1ebe83b88e68d34a9e82f9dd026cd35653398f821d6add2bb24dda",
+     :statement
+     "90d0cd1947a73d4d623391adc9565185a1222e61d8f376cf5888adc96e672860"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardUniformFlatTaylorRemainder.lean"
     "ConstructionTargets/SardUniformFlatTaylorRemainder.md"],
