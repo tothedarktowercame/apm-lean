@@ -9636,6 +9636,54 @@
       :output
       "ConstructionTargets/SardImplicitFunctionLevelSetImage.lean\nConstructionTargets/SardImplicitFunctionLevelSetImage.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788818724619-14203-38aa67de",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat d270de627b3ce7deb8f0a8103012e8da7dcd9c63 && git diff-tree --no-commit-id --name-status -r d270de627b3ce7deb8f0a8103012e8da7dcd9c63",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardImplicitFunctionLevelSetImageProbe.lean && git show d270de627b3ce7deb8f0a8103012e8da7dcd9c63:ConstructionTargets/SardImplicitFunctionLevelSetImage.lean | sha256sum && git show d270de627b3ce7deb8f0a8103012e8da7dcd9c63:ConstructionTargets/SardImplicitFunctionLevelSetImage.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean c0374ba70172c86bc667e4b9604b7aa7efe0a5657ac0f809fced4080e4389252; note a2a586b638113ffdd6768d570207ff870a2530013db87888e8e3d60e22a813c3"}
+      {:cmd
+       "sed -n '7,40p' ConstructionTargets/SardImplicitFunctionLevelSetImage.lean | sha256sum",
+       :exit 0,
+       :output
+       "703f7f5df15dc47060e1e64e970695d5fcd04ea8926674c377011c9374b95a6f"}
+      {:cmd
+       "cmp -s /tmp/SardImplicitFunctionLevelSetImageProbe.lean ConstructionTargets/SardImplicitFunctionLevelSetImage.lean && lake env lean /tmp/SardImplicitFunctionLevelSetImageProbe.lean && lake env lean ConstructionTargets/SardImplicitFunctionLevelSetImage.lean && lake build ConstructionTargets.SardImplicitFunctionLevelSetImage",
+       :exit 0,
+       :output
+       "Build completed successfully (8252 jobs); both declarations depend only on propext, Classical.choice, Quot.sound."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionLevelSetImage.lean ConstructionTargets/SardImplicitFunctionLevelSetImage.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "git merge-base --is-ancestor bd9a286190ea2bc984fb1981c9c9f339f1f743bf d270de627b3ce7deb8f0a8103012e8da7dcd9c63 && git merge-base --is-ancestor 9c070c8e335b7119dda94f0aa1e33993b7abc827 d270de627b3ce7deb8f0a8103012e8da7dcd9c63",
+       :exit 0,
+       :output "Both recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 89 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff d270de627b3ce7deb8f0a8103012e8da7dcd9c63^ d270de627b3ce7deb8f0a8103012e8da7dcd9c63 --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit d270de627b3ce7deb8f0a8103012e8da7dcd9c63 has exact scope and reproduces every frozen hash and consumer count. For the forward inclusion, source membership is mapped into the chart target and the first-coordinate equality is retained. For the reverse inclusion, the proof chooses e.symm z, obtains source membership from the symmetric chart, proves the first-coordinate condition using the right inverse on z in the target, and returns the required image witness with the same right-inverse equality. Thus both source and target restrictions are essential and correctly oriented. The ImplicitFunctionData specialization first rewrites the localized leftFun level set using the reviewed coordinate identity, then applies the generic image equality without changing c or the chart. The result is exactly the target intersected with the constant-first-coordinate slice; kernel parameterization and inductive nullity remain unclaimed residual work. Only standard axioms occur."},
     :commit "d270de627b3ce7deb8f0a8103012e8da7dcd9c63",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionLevelSetImage.lean"
@@ -9649,7 +9697,7 @@
      "ImplicitFunctionData.image_inter_source_leftFun_level_eq"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionLevelSetImage.lean"
     "ConstructionTargets/SardImplicitFunctionLevelSetImage.md"],
@@ -9812,7 +9860,7 @@
       "c0374ba70172c86bc667e4b9604b7aa7efe0a5657ac0f809fced4080e4389252"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
