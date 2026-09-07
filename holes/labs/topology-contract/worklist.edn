@@ -3141,8 +3141,56 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite-sum cardinality bound cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one finite-dimensional polynomial source-cover bound combined with the Taylor target-ball exponent before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:finset_sum_le_card_mul
+     "aaf9324150831d8da844c7241f428c92475ec3e6847a5b8fada3bcc304dd4e55"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/FiniteCoverCardinalityMeasureProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/FiniteCoverCardinalityMeasureProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteCoverCardinalityMeasure.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardFiniteCoverCardinalityMeasure.lean ConstructionTargets/SardFiniteCoverCardinalityMeasure.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "9859d6cbde34a0fa0a29f0018f7dd7395b6ed975",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteCoverCardinalityMeasure.lean"
+     "ConstructionTargets/SardFiniteCoverCardinalityMeasure.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFiniteCoverCardinalityMeasure.lean"
+     "055baf4bf87ca26df92416c2ee52adf2585ea250de43e0d579a4c8d63b1b3f49",
+     "ConstructionTargets/SardFiniteCoverCardinalityMeasure.md"
+     "16e3c6a84afb49ad338af753829a083af99b57accb9ff29f10dc3d22aa302f6e"},
+    :fixture
+    {:path "/tmp/FiniteCoverCardinalityMeasureProbe.lean",
+     :sha256
+     "1e52117613cfdd27e683c1f2237249c4970a9e7a617227910c81d3268ef50cb0"},
+    :declarations ["finset_sum_le_card_mul"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteCoverCardinalityMeasure.lean"
     "ConstructionTargets/SardFiniteCoverCardinalityMeasure.md"],
