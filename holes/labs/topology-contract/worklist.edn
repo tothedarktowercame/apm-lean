@@ -9934,6 +9934,54 @@
       :output
       "ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean\nConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788819495728-14219-c51da49c",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 113e0618e14ffc3e0dadcfa5de22a09bca476fa0 && git diff-tree --no-commit-id --name-status -r 113e0618e14ffc3e0dadcfa5de22a09bca476fa0",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardImplicitFunctionLevelSetKernelParameterizationProbe.lean && git show 113e0618e14ffc3e0dadcfa5de22a09bca476fa0:ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean | sha256sum && git show 113e0618e14ffc3e0dadcfa5de22a09bca476fa0:ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean 80c01bdba94de182c99b2f9a676a3bfa136a21f16633c77ede025a57b946efe4; note fe3fda1ded070f7318851eb3295ca714c9f8eb8b89ec1d299b8f4a27c287e698"}
+      {:cmd
+       "sed -n '7,47p' ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean | sha256sum",
+       :exit 0,
+       :output
+       "5b1aa3fe6029e6eff017a5bb8dda1b695cfc84c9a3dc680e67cca29a5d1a02b9"}
+      {:cmd
+       "cmp -s /tmp/SardImplicitFunctionLevelSetKernelParameterizationProbe.lean ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean && lake env lean /tmp/SardImplicitFunctionLevelSetKernelParameterizationProbe.lean && lake env lean ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean && lake build ConstructionTargets.SardImplicitFunctionLevelSetKernelParameterization",
+       :exit 0,
+       :output
+       "Build completed successfully (8254 jobs); both declarations depend only on propext, Classical.choice, Quot.sound."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "git merge-base --is-ancestor 678398a98e51892427babdedd9fb6f41cd2d4a48 113e0618e14ffc3e0dadcfa5de22a09bca476fa0",
+       :exit 0,
+       :output "Recorded dependency is an ancestor."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 91 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff 113e0618e14ffc3e0dadcfa5de22a09bca476fa0^ 113e0618e14ffc3e0dadcfa5de22a09bca476fa0 --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit 113e0618e14ffc3e0dadcfa5de22a09bca476fa0 has exact scope and reproduces every frozen hash and consumer count. In the forward inclusion, target membership of (c,z) gives source membership of e.symm(c,z), while the chart right inverse proves its first coordinate is c. In the reverse inclusion, the parameter is chosen as the second coordinate of e y; the assumed first-coordinate equality identifies (c,(e y).2) with e y, map_source supplies target membership, and left_inv returns y exactly. Thus the source-localized slice is parameterized by precisely {z | (c,z) belongs to e.target}, with no missing source or target condition. The ImplicitFunctionData specialization rewrites the chart-coordinate locus to the leftFun level set in the correct direction. For the scalarized construction the right-coordinate type is the derivative kernel, but the theorem does not overstate smooth pullback or inductive nullity; those remain the recorded residual. Only standard axioms occur."},
     :commit "113e0618e14ffc3e0dadcfa5de22a09bca476fa0",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean"
@@ -9948,7 +9996,7 @@
      "ImplicitFunctionData.image_kernelParam_eq_inter_source_leftFun_level"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean"
     "ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.md"],
@@ -10114,7 +10162,7 @@
       "80c01bdba94de182c99b2f9a676a3bfa136a21f16633c77ede025a57b946efe4"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
