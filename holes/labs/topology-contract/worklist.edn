@@ -8158,6 +8158,65 @@
       :output
       "ConstructionTargets/SardNonzeroJetScalarDerivative.lean\nConstructionTargets/SardNonzeroJetScalarDerivative.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788813402490-14110-64ab6427",
+     :commands
+     [{:cmd
+       "git diff-tree --no-commit-id --name-status -r dacf8b7984aae937f0d8e9c50222db227410cc0f",
+       :exit 0,
+       :output
+       "Exactly ConstructionTargets/SardNonzeroJetScalarDerivative.lean and ConstructionTargets/SardNonzeroJetScalarDerivative.md"}
+      {:cmd
+       "sha256sum /tmp/SardNonzeroJetScalarDerivativeProbe.lean; git show dacf8b7984aae937f0d8e9c50222db227410cc0f:ConstructionTargets/SardNonzeroJetScalarDerivative.lean | sha256sum",
+       :exit 0,
+       :output
+       "Both d922138faafe3c0d7161bdf1c37b98f03d5cd8272f6fcbe873ddf965f66d51a6"}
+      {:cmd
+       "git show dacf8b7984aae937f0d8e9c50222db227410cc0f:ConstructionTargets/SardNonzeroJetScalarDerivative.md | sha256sum",
+       :exit 0,
+       :output
+       "fcf2efe09e880eafaa56020d37fe1c9dd4747ddcc3e5de5c8329c4aa3eb77891"}
+      {:cmd
+       "git merge-base --is-ancestor d5605d8c1436630f7805e1d69c05fb23ab8ab576 dacf8b7984aae937f0d8e9c50222db227410cc0f",
+       :exit 0}
+      {:cmd
+       "cmp -s /tmp/SardNonzeroJetScalarDerivativeProbe.lean ConstructionTargets/SardNonzeroJetScalarDerivative.lean; lake env lean /tmp/SardNonzeroJetScalarDerivativeProbe.lean; lake env lean ConstructionTargets/SardNonzeroJetScalarDerivative.lean",
+       :exit 0,
+       :output
+       "Fixture and module byte-identical; both declarations use exactly propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "lake build ConstructionTargets.SardNonzeroJetScalarDerivative",
+       :exit 0,
+       :output
+       "Build completed successfully (8242 jobs); axiom reports are informational and no warnings occurred"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroJetScalarDerivative.lean ConstructionTargets/SardNonzeroJetScalarDerivative.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '/^theorem hasFDerivAt_scalar_fixedDirections_iteratedFDeriv/,/^#print axioms fderiv_scalar_fixedDirections_iteratedFDeriv_apply/p' ConstructionTargets/SardNonzeroJetScalarDerivative.lean | sha256sum",
+       :exit 0,
+       :output
+       "9ea2cd1c65d38438f23a30e0f48b24b69f612b698966792f1ad80e8fbfb69e70"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 79 items OK; {:done 70, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages; git diff dacf8b7984aae937f0d8e9c50222db227410cc0f^ dacf8b7984aae937f0d8e9c50222db227410cc0f --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; diff clean; worktree clean"}],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6. Commit dacf8b7984aae937f0d8e9c50222db227410cc0f has exact two-file scope; fixture, committed Lean, Markdown-note, and declaration-block hashes reproduce, and the scalar-separation dependency is an ancestor. ContDiff ℝ (i+1) supplies differentiability of iteratedFDeriv at order i using i<i+1. The derivative map is composed in the correct order as ℓ after evaluation at the fixed tuple v after fderiv of iteratedFDeriv. The pointwise theorem uses iteratedFDeriv_succ_apply_left with the varying direction inserted first as Fin.cons h v, producing exactly ℓ(iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)). It preserves the required order and slot convention and leaves nonzero-derivative packaging and the implicit-function hypersurface explicit. Only standard axioms occur; frozen t93A04 remains unchanged with one theorem and one placeholder."},
     :commit "dacf8b7984aae937f0d8e9c50222db227410cc0f",
     :changed-paths
     ["ConstructionTargets/SardNonzeroJetScalarDerivative.lean"
@@ -8171,7 +8230,7 @@
      "fderiv_scalar_fixedDirections_iteratedFDeriv_apply"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardNonzeroJetScalarDerivative.lean"
     "ConstructionTargets/SardNonzeroJetScalarDerivative.md"],
@@ -8338,7 +8397,7 @@
       "d922138faafe3c0d7161bdf1c37b98f03d5cd8272f6fcbe873ddf965f66d51a6"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
