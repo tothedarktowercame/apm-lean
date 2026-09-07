@@ -6127,59 +6127,81 @@
    :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat :codex-1,
-     :reason
-     "The complete placeholder-free multivariable Taylor covering-nullity fixture compiles. It derives a uniform order-(k+1) remainder from ContDiff and locus-wide vanishing derivatives, constructs finite separated source covers with arbitrarily small target-image volume, and concludes volume(f '' K)=0 under the positive Morse--Sard exponent equation.",
-     :fixture
-     {:path "/tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
-      :sha256
-      "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c"},
-     :commands
-     [{:cmd
-       "readlink -f .lake/packages; lake build ConstructionTargets.SardUniformFlatTaylorRemainder ConstructionTargets.SardQuantitativeTaylorCoverMeasure ConstructionTargets.SardArbitrarilySmallMeasureLimit; lake env lean /tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
-       :exit 0,
-       :output
-       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; build completed successfully (8269 jobs); both final declarations depend on [propext, Classical.choice, Quot.sound]."}
-      {:cmd
-       "sha256sum /tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
-       :exit 0,
-       :output
-       "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c"}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "git diff --check; git status --porcelain=v1; readlink -f .lake/packages",
-       :exit 0,
-       :output "/home/joe/code/apm-lean/.lake/packages"}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean"
-       "ConstructionTargets/SardMultivariableTaylorCoveringNullity.md"],
-      :acceptance
-      {:fixture
-       {:path "/tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
-        :sha256
-        "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c"},
-       :declarations
-       ["exists_smooth_flat_taylor_cover_measure_lt"
-        "smooth_flat_locus_image_volume_eq_zero"],
-       :axioms :standard-only,
-       :warnings [],
-       :representation
-       {:source
-        "A compact subset K of a nontrivial finite-dimensional real inner-product source, contained in a closed ball; a globally C^(k+1) map to a nontrivial finite-dimensional real inner-product target; derivatives through order k vanishing at every point of K; and a positive exponent surplus (k+1)*finrank(F)=finrank(E)+d.",
-        :target
-        "For every positive tolerance, a finite separated source cover whose Taylor target-ball cover contains f '' K and has volume below the tolerance, followed by volume(f '' K)=0."},
-       :consumer-residual
-       "Local rank reduction and rank/source-dimension induction remain; the quantitative flat-locus Taylor covering and nullity foundation is complete."}},
-     :residual
-     "Promote the compiled pair, then begin local rank reduction and rank/source-dimension induction for the rectangular Morse--Sard theorem."}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Local rank reduction and rank/source-dimension induction remain; the quantitative flat-locus Taylor covering and nullity foundation is complete.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :scoped-commit-clean true,
+     :worktree-clean false},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Shared worktree contains unrelated untracked paths problems/t93J05/lean/, problems/t99A02/lean/, problems/t99J02/lean/, and scripts/check_statement_quality.py; they were preserved and excluded from the explicit scoped commit."],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardMultivariableTaylorCoveringNullityProbe.lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem exists_smooth_flat_taylor_cover_measure_lt/,/^#print axioms smooth_flat_locus_image_volume_eq_zero/p' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add Sard multivariable Taylor covering nullity'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "c1fae85147d128b31f617c01cbc4e0785bb5f3d8",
+    :changed-paths
+    ["ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean"
+     "ConstructionTargets/SardMultivariableTaylorCoveringNullity.md"],
+    :fixture
+    {:path "/tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
+     :sha256
+     "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c"},
+    :declarations
+    ["exists_smooth_flat_taylor_cover_measure_lt"
+     "smooth_flat_locus_image_volume_eq_zero"],
+    :dependencies
+    [{:id :critical-value-sard-uniform-flat-taylor-remainder-1,
+      :commit "4de58b22a94bbd2f68b50379b88ca03f2c1d44b4"}
+     {:id :critical-value-sard-quantitative-taylor-cover-measure-1,
+      :commit "c268a1871b92074d41d0a44d13630e317a8868a3"}
+     {:id :critical-value-sard-arbitrarily-small-measure-limit-1,
+      :commit "af26611005fbf901bd0e9c10e8ed77fe0801ddcd"}],
+    :hashes
+    {:lean
+     "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c",
+     :markdown
+     "3129603ded7bb2a275039382244485843d8f05f7819459ac5daa7510449d7f4d",
+     :statement
+     "a2f57361f7183e0d4c56f258526d78f716cceb9a3dc467700db87a0bbf8f143f"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean"
     "ConstructionTargets/SardMultivariableTaylorCoveringNullity.md"],
