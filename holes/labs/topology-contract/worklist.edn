@@ -4410,8 +4410,64 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled geometric-power tolerance theorem cannot be promoted at the recorded representation without changing its finiteness or positivity hypotheses or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "one polynomial source-cover construction and Taylor target-volume estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :module-compiled true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"ENNReal.exists_const_mul_pow_lt"
+     "d2ee111b425ac8884ec394ae85f73a408b8cfe27bf2a998d3d3df018b3950301"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardPositivePowerToleranceProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardPositivePowerToleranceProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardPositivePowerTolerance.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardPositivePowerTolerance.lean ConstructionTargets/SardPositivePowerTolerance.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardPositivePowerToleranceProbe.lean ConstructionTargets/SardPositivePowerTolerance.lean ConstructionTargets/SardPositivePowerTolerance.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem ENNReal.exists_const_mul_pow_lt/,/ := by/p' ConstructionTargets/SardPositivePowerTolerance.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard positive-power tolerance'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "3a4b14bb5256a43ba2a911c9490702d43e230819",
+    :changed-paths
+    ["ConstructionTargets/SardPositivePowerTolerance.lean"
+     "ConstructionTargets/SardPositivePowerTolerance.md"],
+    :file-hashes
+    {"ConstructionTargets/SardPositivePowerTolerance.lean"
+     "93995eb3eb9bf9e38955abddabaea53bfacb68d1c674a5e1ffd2bb913e060c6f",
+     "ConstructionTargets/SardPositivePowerTolerance.md"
+     "23bb7c2fb7c5dad9c368b9aeffd899edbeff6382c5686e90ea15f99f0c95509c"},
+    :fixture
+    {:path "/tmp/SardPositivePowerToleranceProbe.lean",
+     :sha256
+     "818cd47e31c0682bfb0a735c903f39717b3342cd54ad1c70ca47be34e7b7df93"},
+    :declarations ["ENNReal.exists_const_mul_pow_lt"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardPositivePowerTolerance.lean"
     "ConstructionTargets/SardPositivePowerTolerance.md"],
