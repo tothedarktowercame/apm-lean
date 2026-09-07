@@ -4100,71 +4100,99 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled ENNReal power-volume ratio theorem cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardENNRealBallVolumeRatio.lean"
+    "ConstructionTargets/SardENNRealBallVolumeRatio.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ENNREAL BALL-VOLUME RATIO",
+   :acceptance
+   {:fixture
+    {:path "/tmp/ENNRealBallVolumeRatioProbe.lean",
+     :sha256
+     "415116d49f161764b09c99632c017f18ce4b05c85851a6ccdbe0a5e6685c9db2"},
+    :declarations ["ENNReal.power_volume_ratio"],
+    :consumer-residual
+    "one polynomial source-cover radius bound and Taylor target-volume exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a quotient `(a^d*k)/(b^d*k)` in ENNReal with common factor k nonzero and not top",
+    :target "the simplified power `(a/b)^d`"},
+   :id :critical-value-sard-ennreal-ball-volume-ratio-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the packing quotient still contains two ball-volume formulas with a shared nonzero finite dimension constant and separate radius powers",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After positive-ball measure finiteness is banked, prove one quantitative theorem applying the maximal separated Finset, half-ball disjointness, bounded enlargement, exact finite-dimensional ball-volume formulas, and the packing quotient to obtain polynomial cover size, then apply the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
+     "After the ENNReal ball-volume ratio is banked, prove one quantitative theorem combining the maximal separated Finset, half-ball disjointness, bounded enlargement, packing quotient, and exact volume formulas into the polynomial source-cover bound, then apply the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled positive-ball nonzero/finiteness theorem cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
+      "Stop only if the compiled ENNReal power-volume ratio theorem cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardBallMeasureNonzeroFinite.lean"
-       "ConstructionTargets/SardBallMeasureNonzeroFinite.md"],
+      ["ConstructionTargets/SardENNRealBallVolumeRatio.lean"
+       "ConstructionTargets/SardENNRealBallVolumeRatio.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / POSITIVE BALL MEASURE FINITENESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ENNREAL BALL-VOLUME RATIO",
       :acceptance
       {:fixture
-       {:path "/tmp/BallMeasureNonzeroFiniteProbe.lean",
+       {:path "/tmp/ENNRealBallVolumeRatioProbe.lean",
         :sha256
-        "721ca4420278eec6eec78eff57d819342cde4f1b11fbdf870f973dc432a8dc41"},
-       :declarations ["ball_measure_ne_zero_and_ne_top"],
+        "415116d49f161764b09c99632c017f18ce4b05c85851a6ccdbe0a5e6685c9db2"},
+       :declarations ["ENNReal.power_volume_ratio"],
        :consumer-residual
-       "one finite-dimensional ball-volume quotient simplification, polynomial source-cover bound, and Taylor target-volume exponent estimate before local rank reduction",
+       "one polynomial source-cover radius bound and Taylor target-volume exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a positive-radius ball in a proper pseudometric space with Borel, open-positive, locally finite measure",
-       :target
-       "the conjunction that its ENNReal measure is neither zero nor top"},
-      :id :critical-value-sard-ball-measure-nonzero-finite-1,
+       "a quotient `(a^d*k)/(b^d*k)` in ENNReal with common factor k nonzero and not top",
+       :target "the simplified power `(a/b)^d`"},
+      :id :critical-value-sard-ennreal-ball-volume-ratio-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the packing quotient requires certified nonzero and finite measure of every positive-radius source ball",
+      "the packing quotient still contains two ball-volume formulas with a shared nonzero finite dimension constant and separate radius powers",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The banked ENNReal quotient adapter requires its small-ball-volume denominator to be nonzero and finite. One independently compilable measure-theoretic prerequisite supplies both facts for every positive-radius ball in a proper pseudometric space equipped with a Borel, open-positive, locally finite measure. Finite-dimensional add-Haar volume satisfies these hypotheses, so banking this packet discharges the quotient denominator conditions without embedding them in the later exponent calculation.",
+     "The exact finite-dimensional ball-volume formulas contain the same dimension-dependent unit-ball constant in the ambient numerator and small-ball denominator. One independently compilable ENNReal lemma cancels that common factor under explicit nonzero and finite hypotheses and rewrites the remaining quotient of d-th powers as the d-th power of the radius quotient. This isolates the extended-real cancellation needed before the polynomial radius estimate.",
      :commands
      [{:cmd
-       "rg -n 'measure_ball_pos|measure_closedBall_pos|measure_ball_lt_top|measure_closedBall_lt_top|volume_ball.*pos|volume_ball.*top' .lake/packages/mathlib/Mathlib/MeasureTheory -g '*.lean'",
+       "rg -n 'mul_div_mul_right|mul_div_mul_left|inv_pow|mul_div.*ENNReal' .lake/packages/mathlib/Mathlib/Data/ENNReal -g '*.lean'",
        :exit 0}
-      {:cmd "lake env lean /tmp/BallMeasureNonzeroFiniteProbe.lean",
+      {:cmd "lake env lean /tmp/ENNRealBallVolumeRatioProbe.lean",
        :exit 0,
        :output
-       "'ball_measure_ne_zero_and_ne_top' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/BallMeasureNonzeroFiniteProbe.lean",
+       "'ENNReal.power_volume_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/ENNRealBallVolumeRatioProbe.lean",
        :exit 0,
        :output
-       "721ca4420278eec6eec78eff57d819342cde4f1b11fbdf870f973dc432a8dc41"}
+       "415116d49f161764b09c99632c017f18ce4b05c85851a6ccdbe0a5e6685c9db2"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/BallMeasureNonzeroFiniteProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/ENNRealBallVolumeRatioProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/BallMeasureNonzeroFiniteProbe.lean",
+     {:path "/tmp/ENNRealBallVolumeRatioProbe.lean",
       :sha256
-      "721ca4420278eec6eec78eff57d819342cde4f1b11fbdf870f973dc432a8dc41"},
+      "415116d49f161764b09c99632c017f18ce4b05c85851a6ccdbe0a5e6685c9db2"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -4196,7 +4224,8 @@
     :critical-value-sard-maximal-separated-finset-cover-1
     :critical-value-sard-separated-ennreal-to-real-dist-1
     :critical-value-sard-ennreal-packing-quotient-1
-    :critical-value-sard-ball-measure-nonzero-finite-1],
+    :critical-value-sard-ball-measure-nonzero-finite-1
+    :critical-value-sard-ennreal-ball-volume-ratio-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
