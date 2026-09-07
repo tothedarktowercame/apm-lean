@@ -8585,6 +8585,40 @@
    "The selected scalar jet derivative now has explicit continuous right-inverse and kernel-projection data; exact ImplicitFunctionData packaging and local hypersurface/source-dimension reduction remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled exact scalarized-jet implicit-function chart construction cannot be promoted with its finite-dimensional inner-product source, general target F, selected functional ℓ, strict derivative, iteratedFDeriv/Fin.cons representation, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean"
+    "ConstructionTargets/SardNonzeroScalarImplicitFunctionData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NONZERO SCALAR IMPLICIT-FUNCTION DATA",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean",
+     :sha256
+     "869fcaa2c72b2a06335ad082fcfdfd6b3b1e1632da092f0523061de2349af0d3"},
+    :declarations
+    ["exists_localChart_of_strictFDeriv_apply_ne_zero"
+     "exists_localChart_scalar_fixedDirections"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Derive HasStrictFDerivAt for the scalarized fixed-direction jet from its ContDiff regularity, then use the resulting local hypersurface chart for source-dimension reduction."},
+   :representation
+   {:source
+    "A finite-dimensional real inner-product source E, a general target F, scalarized jet g(y)=ℓ(iteratedFDeriv ℝ i f y v), its exact strict derivative L=fderiv ℝ g x, and the nonzero next-jet value ℓ(iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)).",
+    :target
+    "An OpenPartialHomeomorph from E to ℝ × ker L constructed through exact ImplicitFunctionData with right coordinate the orthogonal projection onto ker L, containing x in its source and mapping x to the expected scalarized jet and kernel coordinates."},
+   :id :critical-value-sard-nonzero-scalar-implicit-function-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-nonzero-scalar-derivative-split-1],
+   :current-residual
+   "The exact local hypersurface chart is compiled conditional only on the scalarized jet's strict derivative; promotion from ContDiff/HasFDerivAt and subsequent source-dimension reduction remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -8642,74 +8676,74 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled explicit right-inverse and kernel-projection construction cannot be promoted with its exact nonzero-direction hypothesis, fixed-direction iteratedFDeriv specialization, projKerOfRightInverse representation, or standard-axiom profile.",
+      "Stop only if the compiled exact scalarized-jet implicit-function chart construction cannot be promoted with its finite-dimensional inner-product source, general target F, selected functional ℓ, strict derivative, iteratedFDeriv/Fin.cons representation, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"
-       "ConstructionTargets/SardNonzeroScalarDerivativeSplit.md"],
+      ["ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean"
+       "ConstructionTargets/SardNonzeroScalarImplicitFunctionData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NONZERO SCALAR DERIVATIVE SPLITTING",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NONZERO SCALAR IMPLICIT-FUNCTION DATA",
       :acceptance
       {:fixture
-       {:path "/tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
+       {:path "/tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean",
         :sha256
-        "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e"},
+        "869fcaa2c72b2a06335ad082fcfdfd6b3b1e1632da092f0523061de2349af0d3"},
        :declarations
-       ["ContinuousLinearMap.exists_rightInverse_of_apply_ne_zero"
-        "ContinuousLinearMap.exists_rightInverse_and_projKer_of_apply_ne_zero"
-        "exists_rightInverse_and_projKer_fderiv_scalar_fixedDirections"],
+       ["exists_localChart_of_strictFDeriv_apply_ne_zero"
+        "exists_localChart_scalar_fixedDirections"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Package the split scalar derivative as exact ImplicitFunctionData for the regular level set, obtain the local hypersurface chart, and perform source-dimension reduction."},
+       "Derive HasStrictFDerivAt for the scalarized fixed-direction jet from its ContDiff regularity, then use the resulting local hypersurface chart for source-dimension reduction."},
       :representation
       {:source
-       "A scalar continuous linear map nonzero on h, specialized to the derivative of y↦iteratedFDeriv ℝ i f y v under the exact nonzero next-jet hypothesis.",
+       "A finite-dimensional real inner-product source E, a general target F, scalarized jet g(y)=ℓ(iteratedFDeriv ℝ i f y v), its exact strict derivative L=fderiv ℝ g x, and the nonzero next-jet value ℓ(iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)).",
        :target
-       "An explicit continuous right inverse R, its Function.RightInverse proof, and the canonical ContinuousLinearMap.projKerOfRightInverse into the derivative kernel, with the iteratedFDeriv and Fin.cons representations preserved."},
-      :id :critical-value-sard-nonzero-scalar-derivative-split-1,
+       "An OpenPartialHomeomorph from E to ℝ × ker L constructed through exact ImplicitFunctionData with right coordinate the orthogonal projection onto ker L, containing x in its source and mapping x to the expected scalarized jet and kernel coordinates."},
+      :id :critical-value-sard-nonzero-scalar-implicit-function-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-nonzero-scalar-derivative-surjective-1],
+      [:critical-value-sard-nonzero-scalar-derivative-split-1],
       :current-residual
-      "The selected scalar jet derivative now has explicit continuous right-inverse and kernel-projection data; exact ImplicitFunctionData packaging and local hypersurface/source-dimension reduction remain.",
+      "The exact local hypersurface chart is compiled conditional only on the scalarized jet's strict derivative; promotion from ContDiff/HasFDerivAt and subsequent source-dimension reduction remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. One exact compiled prerequisite now constructs an explicit continuous linear right inverse from the selected nonzero scalar direction, derives Mathlib's canonical continuous projection onto the kernel, and specializes this split data to the fixed-direction iteratedFDeriv expression. Packaging that split derivative into ImplicitFunctionData and deriving the local hypersurface remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture now constructs exact ImplicitFunctionData internally from a nonzero strictly differentiable scalar derivative and exposes its local OpenPartialHomeomorph. Its specialized theorem preserves general F, the selected functional ℓ, the scalarized fixed-direction iteratedFDeriv function, and the exact Fin.cons h v nonzero next-jet hypothesis. The remaining bounded analytic seam is upgrading the compiled HasFDerivAt result to HasStrictFDerivAt from the available ContDiff regularity.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
+       "lake env lean /tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
+       "sha256sum /tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean",
        :exit 0,
        :output
-       "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e  /tmp/SardNonzeroScalarDerivativeSplitProbe.lean"}
+       "869fcaa2c72b2a06335ad082fcfdfd6b3b1e1632da092f0523061de2349af0d3  /tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean",
        :exit 1,
        :expected-exit 1}
+      {:cmd
+       "rg -n 'structure ImplicitFunctionData|def toOpenPartialHomeomorph|pt_mem_toOpenPartialHomeomorph_source' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean",
+       :exit 0}
+      {:cmd
+       "rg -n 'projected_complemented_strictDerivative_data|ImplicitFunctionData.mk' ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean",
+       :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 80 items OK; {:done 72, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 81 items OK; {:done 73, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardNonzeroScalarDerivativeSurjective.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n79e329f4a612f6640a143dab7cfb4b67e4db7413622b7c9366a9d0a4012b96ff  ConstructionTargets/SardNonzeroScalarDerivativeSurjective.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f  ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
        :output "1"}
-      {:cmd
-       "rg -n 'projKerOfRightInverse|ImplicitFunctionData' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean .lake/packages/mathlib/Mathlib/Analysis/Calculus/ImplicitFunction.lean",
-       :exit 0,
-       :output
-       "The canonical packaging target references ImplicitFunctionData; projKerOfRightInverse is available and compiled in the fixture. The named Mathlib path was absent, while the in-tree packaging module matched."}
       {:cmd "readlink -f .lake/packages",
        :exit 0,
        :output "/home/joe/code/apm-lean/.lake/packages"}
@@ -8717,12 +8751,12 @@
        :exit 0,
        :output ""}],
      :fixture
-     {:path "/tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
+     {:path "/tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean",
       :sha256
-      "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e"},
+      "869fcaa2c72b2a06335ad082fcfdfd6b3b1e1632da092f0523061de2349af0d3"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -8751,7 +8785,8 @@
     :critical-value-sard-nonzero-jet-scalar-separation-1
     :critical-value-sard-nonzero-jet-scalar-derivative-1
     :critical-value-sard-nonzero-scalar-derivative-surjective-1
-    :critical-value-sard-nonzero-scalar-derivative-split-1],
+    :critical-value-sard-nonzero-scalar-derivative-split-1
+    :critical-value-sard-nonzero-scalar-implicit-function-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
