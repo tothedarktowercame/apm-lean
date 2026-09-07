@@ -3140,73 +3140,104 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled finite-sum cardinality bound cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteCoverCardinalityMeasure.lean"
+    "ConstructionTargets/SardFiniteCoverCardinalityMeasure.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE COVER CARDINALITY-MEASURE AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/FiniteCoverCardinalityMeasureProbe.lean",
+     :sha256
+     "1e52117613cfdd27e683c1f2237249c4970a9e7a617227910c81d3268ef50cb0"},
+    :declarations ["finset_sum_le_card_mul"],
+    :consumer-residual
+    "one finite-dimensional polynomial source-cover bound combined with the Taylor target-ball exponent before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a finite index set with a uniform ENNReal bound on every indexed covering-set measure",
+    :target
+    "an upper bound on the finite measure sum by cover cardinality times the uniform bound"},
+   :id :critical-value-sard-finite-cover-cardinality-measure-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the Taylor cover calculation lacks a reusable bridge from uniform target-ball bounds to the cardinality-times-volume estimate",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After compact finite-ball covers are banked, prove one theorem choosing the radius scale and quantitatively bounding both the cover cardinality and each Taylor-controlled target-ball measure so their finite sum is below every inverse-natural tolerance under the Morse--Sard exponent inequality. Do not begin local rank reduction.",
+     "After cardinality-measure aggregation is banked, prove one quantitative theorem constructing a radius-r cover of the bounded finite-dimensional source patch with cardinality O(r^-dim E), bounding each Taylor-controlled target ball by O(r^((k+1)*dim F)), and choosing r so the positive exponent difference meets every inverse-natural tolerance. Do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled compact finite-ball-cover theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled finite-sum cardinality bound cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactFiniteBallCover.lean"
-       "ConstructionTargets/SardCompactFiniteBallCover.md"],
+      ["ConstructionTargets/SardFiniteCoverCardinalityMeasure.lean"
+       "ConstructionTargets/SardFiniteCoverCardinalityMeasure.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT FINITE BALL COVER",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE COVER CARDINALITY-MEASURE AGGREGATION",
       :acceptance
       {:fixture
-       {:path "/tmp/CompactFiniteBallCoverProbe.lean",
+       {:path "/tmp/FiniteCoverCardinalityMeasureProbe.lean",
         :sha256
-        "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"},
-       :declarations ["IsCompact.exists_finset_ball_cover"],
+        "1e52117613cfdd27e683c1f2237249c4970a9e7a617227910c81d3268ef50cb0"},
+       :declarations ["finset_sum_le_card_mul"],
        :consumer-residual
-       "one quantitative smooth flat-locus Taylor/exponent estimate over finite-dimensional source covers before local rank reduction",
+       "one finite-dimensional polynomial source-cover bound combined with the Taylor target-ball exponent before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a compact subset of a pseudometric source space and a positive radius",
+       "a finite index set with a uniform ENNReal bound on every indexed covering-set measure",
        :target
-       "a finite family of radius-r source balls covering the subset"},
-      :id :critical-value-sard-compact-finite-ball-cover-1,
+       "an upper bound on the finite measure sum by cover cardinality times the uniform bound"},
+      :id :critical-value-sard-finite-cover-cardinality-measure-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the scale-wise Taylor argument lacks a promoted finite ball-cover interface for its compact source patch",
+      "the Taylor cover calculation lacks a reusable bridge from uniform target-ball bounds to the cardinality-times-volume estimate",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "After the ball-image, finite measure aggregation, and null-limit packets, the remaining cover construction still needs one independently compilable geometric prerequisite: every compact source patch admits a finite cover by balls of any positive radius. The pinned compactness API proves exactly this via `IsCompact.elim_finite_subcover`. Banking it leaves one coherent analytic theorem: select a sufficiently small radius, apply the vanishing-derivative Taylor estimate on each source ball, and prove the resulting target-ball measure sum meets every inverse-natural tolerance using the finite-dimensional covering exponent.",
+     "The pinned covering-number module supplies qualitative/minimal-cover infrastructure but no immediately located finite-dimensional polynomial radius bound. Before constructing that bound, one independently compilable aggregation prerequisite remains: a uniform per-ball target-measure bound over a finite cover sums to at most the cover cardinality times that bound. Banking it isolates the remaining analytic obligation to the genuinely geometric estimate: produce a finite-dimensional source cover with polynomial cardinality and combine its radius exponent with the Taylor target-ball volume exponent.",
      :commands
-     [{:cmd "lake env lean /tmp/CheckCompactCover.lean",
-       :exit 1,
-       :expected-exit 1,
-       :output
-       "IsCompact.elim_finite_subcover and Metric.isCompact_iff_isClosed_bounded were found; two guessed compact-ball API names were absent."}
-      {:cmd "lake env lean /tmp/CompactFiniteBallCoverProbe.lean",
+     [{:cmd
+       "rg -n 'card.*[Bb]all.*cover|cover.*card|card.*cover|TotallyBounded.*finset|exists_finset.*ball|finite.*cover.*ball|coveringNumber|metricEntropy|packing' .lake/packages/mathlib/Mathlib/Topology .lake/packages/mathlib/Mathlib/Analysis .lake/packages/mathlib/Mathlib/MeasureTheory -g '*.lean'",
        :exit 0,
        :output
-       "'IsCompact.exists_finset_ball_cover' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/CompactFiniteBallCoverProbe.lean",
-       :exit 0,
-       :output
-       "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"}
+       "Pinned Mathlib contains qualitative compact ball covers and general covering/packing numbers, but the scan found no finite-dimensional polynomial covering-number estimate."}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/CompactFiniteBallCoverProbe.lean",
+       "lake env lean /tmp/FiniteCoverCardinalityMeasureProbe.lean",
+       :exit 0,
+       :output
+       "'finset_sum_le_card_mul' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/FiniteCoverCardinalityMeasureProbe.lean",
+       :exit 0,
+       :output
+       "1e52117613cfdd27e683c1f2237249c4970a9e7a617227910c81d3268ef50cb0"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/FiniteCoverCardinalityMeasureProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/CompactFiniteBallCoverProbe.lean",
+     {:path "/tmp/FiniteCoverCardinalityMeasureProbe.lean",
       :sha256
-      "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"},
+      "1e52117613cfdd27e683c1f2237249c4970a9e7a617227910c81d3268ef50cb0"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3228,7 +3259,8 @@
     :critical-value-sard-flat-taylor-ball-image-1
     :critical-value-sard-finite-cover-measure-bound-1
     :critical-value-sard-arbitrarily-small-measure-limit-1
-    :critical-value-sard-compact-finite-ball-cover-1],
+    :critical-value-sard-compact-finite-ball-cover-1
+    :critical-value-sard-finite-cover-cardinality-measure-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
