@@ -6284,6 +6284,8 @@
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Replace the nonexistent recorded dependency commit c1fae85147d128b31f617c01cbc4e0785bb5f8 for critical-value-sard-multivariable-taylor-covering-probe-2 with the reviewed commit c1fae85147d128b31f617c01cbc4e0785bb5f3d8, then resubmit for review; all scoped source, fixture, statement, placeholder, Lean, axiom, consumer-freeze, and theorem-orientation checks otherwise pass.",
    :stop-condition
    "Stop only if these compiled derivative-rank openness and local exact-rank identification theorems cannot be promoted with their exact C1, finite-dimensional, cardinal-rank, finrank, or standard-axiom hypotheses.",
    :evidence
@@ -6330,6 +6332,12 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-17",
+     :job "invoke-1788800882446-13919-e5b80886",
+     :finding
+     "Replace the nonexistent recorded dependency commit c1fae85147d128b31f617c01cbc4e0785bb5f8 for critical-value-sard-multivariable-taylor-covering-probe-2 with the reviewed commit c1fae85147d128b31f617c01cbc4e0785bb5f3d8, then resubmit for review; all scoped source, fixture, statement, placeholder, Lean, axiom, consumer-freeze, and theorem-orientation checks otherwise pass."},
     :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2",
     :changed-paths
     ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
@@ -6358,7 +6366,7 @@
      "fff9c4ef6f04043376e4ac398a55443fd3712c6d2f6639a792e8db23986b3cfb"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
     "ConstructionTargets/SardExactRankLocalUpperLocus.md"],
