@@ -3235,74 +3235,104 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled finite-dimensional closed-ball volume formula cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteDimensionalBallVolume.lean"
+    "ConstructionTargets/SardFiniteDimensionalBallVolume.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-DIMENSIONAL BALL VOLUME",
+   :acceptance
+   {:fixture
+    {:path "/tmp/FiniteDimensionalBallVolumeProbe.lean",
+     :sha256
+     "4a876eecf19a3805e6359bdc0de31469157e6b0aebac1bc7ae3500054d2066be"},
+    :declarations ["finiteDimensional_volume_closedBall_formula"],
+    :consumer-residual
+    "one quantitative finite-dimensional source-cover/Taylor target-ball exponent theorem before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a closed ball of radius r in a nontrivial finite-dimensional real inner-product space with its Borel add-Haar measure",
+    :target
+    "its exact ENNReal volume as r^(finrank E) times the dimension-dependent unit-ball constant"},
+   :id :critical-value-sard-finite-dimensional-ball-volume-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the Taylor-cover exponent calculation lacks a promoted exact target-ball volume scaling formula",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After cardinality-measure aggregation is banked, prove one quantitative theorem constructing a radius-r cover of the bounded finite-dimensional source patch with cardinality O(r^-dim E), bounding each Taylor-controlled target ball by O(r^((k+1)*dim F)), and choosing r so the positive exponent difference meets every inverse-natural tolerance. Do not begin local rank reduction.",
+     "After the exact target-ball volume formula is banked, prove one quantitative theorem producing the polynomial source-cover bound, applying the Taylor ball-image estimate, and choosing the radius from the positive Morse--Sard exponent difference to meet every inverse-natural tolerance; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled finite-sum cardinality bound cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled finite-dimensional closed-ball volume formula cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteCoverCardinalityMeasure.lean"
-       "ConstructionTargets/SardFiniteCoverCardinalityMeasure.md"],
+      ["ConstructionTargets/SardFiniteDimensionalBallVolume.lean"
+       "ConstructionTargets/SardFiniteDimensionalBallVolume.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE COVER CARDINALITY-MEASURE AGGREGATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-DIMENSIONAL BALL VOLUME",
       :acceptance
       {:fixture
-       {:path "/tmp/FiniteCoverCardinalityMeasureProbe.lean",
+       {:path "/tmp/FiniteDimensionalBallVolumeProbe.lean",
         :sha256
-        "1e52117613cfdd27e683c1f2237249c4970a9e7a617227910c81d3268ef50cb0"},
-       :declarations ["finset_sum_le_card_mul"],
+        "4a876eecf19a3805e6359bdc0de31469157e6b0aebac1bc7ae3500054d2066be"},
+       :declarations ["finiteDimensional_volume_closedBall_formula"],
        :consumer-residual
-       "one finite-dimensional polynomial source-cover bound combined with the Taylor target-ball exponent before local rank reduction",
+       "one quantitative finite-dimensional source-cover/Taylor target-ball exponent theorem before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a finite index set with a uniform ENNReal bound on every indexed covering-set measure",
+       "a closed ball of radius r in a nontrivial finite-dimensional real inner-product space with its Borel add-Haar measure",
        :target
-       "an upper bound on the finite measure sum by cover cardinality times the uniform bound"},
-      :id :critical-value-sard-finite-cover-cardinality-measure-1,
+       "its exact ENNReal volume as r^(finrank E) times the dimension-dependent unit-ball constant"},
+      :id :critical-value-sard-finite-dimensional-ball-volume-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the Taylor cover calculation lacks a reusable bridge from uniform target-ball bounds to the cardinality-times-volume estimate",
+      "the Taylor-cover exponent calculation lacks a promoted exact target-ball volume scaling formula",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The pinned covering-number module supplies qualitative/minimal-cover infrastructure but no immediately located finite-dimensional polynomial radius bound. Before constructing that bound, one independently compilable aggregation prerequisite remains: a uniform per-ball target-measure bound over a finite cover sums to at most the cover cardinality times that bound. Banking it isolates the remaining analytic obligation to the genuinely geometric estimate: produce a finite-dimensional source cover with polynomial cardinality and combine its radius exponent with the Taylor target-ball volume exponent.",
+     "The remaining quantitative calculation has one independently compilable target-side prerequisite: the exact add-Haar volume formula for closed balls in a nontrivial finite-dimensional real inner-product space. This supplies the r^(finrank F) factor needed to combine Taylor image-ball radii with source-cover cardinality. After banking it, the current row retains one coherent scale-cover theorem combining the finite-dimensional polynomial source-cover estimate, Taylor remainder bound, positive exponent difference, and inverse-natural tolerance choice.",
      :commands
      [{:cmd
-       "rg -n 'card.*[Bb]all.*cover|cover.*card|card.*cover|TotallyBounded.*finset|exists_finset.*ball|finite.*cover.*ball|coveringNumber|metricEntropy|packing' .lake/packages/mathlib/Mathlib/Topology .lake/packages/mathlib/Mathlib/Analysis .lake/packages/mathlib/Mathlib/MeasureTheory -g '*.lean'",
-       :exit 0,
-       :output
-       "Pinned Mathlib contains qualitative compact ball covers and general covering/packing numbers, but the scan found no finite-dimensional polynomial covering-number estimate."}
+       "rg -n 'volume.*ball|measure.*ball.*rpow|ball.*measure|volume_closedBall|volume_ball' .lake/packages/mathlib/Mathlib -g '*.lean'",
+       :exit 0}
       {:cmd
-       "lake env lean /tmp/FiniteCoverCardinalityMeasureProbe.lean",
+       "sed -n '340,365p' .lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue/VolumeOfBalls.lean",
+       :exit 0}
+      {:cmd "lake env lean /tmp/FiniteDimensionalBallVolumeProbe.lean",
        :exit 0,
        :output
-       "'finset_sum_le_card_mul' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/FiniteCoverCardinalityMeasureProbe.lean",
+       "'finiteDimensional_volume_closedBall_formula' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/FiniteDimensionalBallVolumeProbe.lean",
        :exit 0,
        :output
-       "1e52117613cfdd27e683c1f2237249c4970a9e7a617227910c81d3268ef50cb0"}
+       "4a876eecf19a3805e6359bdc0de31469157e6b0aebac1bc7ae3500054d2066be"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/FiniteCoverCardinalityMeasureProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/FiniteDimensionalBallVolumeProbe.lean",
        :exit 1,
        :expected-exit 1}
-      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+      {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/FiniteCoverCardinalityMeasureProbe.lean",
+     {:path "/tmp/FiniteDimensionalBallVolumeProbe.lean",
       :sha256
-      "1e52117613cfdd27e683c1f2237249c4970a9e7a617227910c81d3268ef50cb0"},
+      "4a876eecf19a3805e6359bdc0de31469157e6b0aebac1bc7ae3500054d2066be"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3325,7 +3355,8 @@
     :critical-value-sard-finite-cover-measure-bound-1
     :critical-value-sard-arbitrarily-small-measure-limit-1
     :critical-value-sard-compact-finite-ball-cover-1
-    :critical-value-sard-finite-cover-cardinality-measure-1],
+    :critical-value-sard-finite-cover-cardinality-measure-1
+    :critical-value-sard-finite-dimensional-ball-volume-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
