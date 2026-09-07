@@ -6782,8 +6782,74 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if these compiled kernel-equality and pointwise-flatness theorems cannot be promoted with their exact projected-surjectivity, full-rank upper bound, finite-dimensional source, or standard-axiom hypotheses.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate this theorem at every point of the local rank-at-most-r locus where the projected block remains surjective, transport the kernel direction through the local normal-form coordinates, and prove the residual target-coordinate derivative vanishes before applying Taylor-cover nullity.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardProjectedKernelFlatnessProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardProjectedKernelFlatnessProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedKernelFlatness.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedKernelFlatness.lean ConstructionTargets/SardProjectedKernelFlatness.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardProjectedKernelFlatnessProbe.lean ConstructionTargets/SardProjectedKernelFlatness.lean ConstructionTargets/SardProjectedKernelFlatness.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem ker_eq_of_comp_surjective_of_finrank_range_le/,/^#print axioms apply_eq_zero_of_mem_projected_ker/p' ConstructionTargets/SardProjectedKernelFlatness.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardProjectedKernelFlatness.lean ConstructionTargets/SardProjectedKernelFlatness.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard projected-kernel flatness'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "d37a60e7aba5fc6f413d578fdcb0058f40d5df46",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedKernelFlatness.lean"
+     "ConstructionTargets/SardProjectedKernelFlatness.md"],
+    :fixture
+    {:path "/tmp/SardProjectedKernelFlatnessProbe.lean",
+     :sha256
+     "675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676"},
+    :declarations
+    ["SardProjectedKernelFlatnessProbe.ker_eq_of_comp_surjective_of_finrank_range_le"
+     "SardProjectedKernelFlatnessProbe.apply_eq_zero_of_mem_projected_ker"],
+    :dependencies
+    [{:id :critical-value-sard-projected-implicit-function-packaging-1,
+      :commit "b0686676baca2a01400b4acf34a10c29b57895ad"}
+     {:id :critical-value-sard-exact-rank-local-upper-locus-1,
+      :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2"}],
+    :hashes
+    {:lean
+     "675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676",
+     :markdown
+     "a9140d399c3068e9c66fb50247fd81faa8f25702e56e4a9e4fbfc2be254760a6",
+     :statement
+     "17085a4cf051f972f920b26f2aff67369d6773d44a405ca0f59be1b1cdd2b21f"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedKernelFlatness.lean"
     "ConstructionTargets/SardProjectedKernelFlatness.md"],
