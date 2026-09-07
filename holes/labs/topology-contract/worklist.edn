@@ -10624,8 +10624,79 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled exact scalarized-jet kernel-parameter smoothness theorem cannot be promoted with its finite-dimensional inner-product source, general target F, separate ContDiff ℝ (i+1) and ContDiff ℝ (n+i) hypotheses, selected nonzero Fin.cons next-jet value, exact defining fields, WithTop remaining order n, inverse-chart kernel parameter, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove ContDiffAt for f composed with the exact smooth kernel parameterization, transport the localized nonzero-jet critical stratum to its strictly lower-dimensional kernel domain, then invoke source-dimension induction and aggregate nullity.",
+    :gates
+    {:fixture-identical true,
+     :focused-build true,
+     :worklist-valid true,
+     :scope-clean true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:declaration
+     "54e5e039565832c508e5f25980781cc475cf7f3dd020129cf3d7791bf98876ce",
+     :lean-file
+     "8afd06f19157531c347cbe3bd5248043a5fce35a8c1e36a13ce73305c5fcecc8",
+     :note-file
+     "76964cfa779d52da482a83ab8b2d5306910608c478e1b19fbaa504946a4062ce"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardScalarizedJetKernelParameterContDiffProbe.lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean",
+      :exit 0,
+      :output
+      "8afd06f19157531c347cbe3bd5248043a5fce35a8c1e36a13ce73305c5fcecc8  /tmp/SardScalarizedJetKernelParameterContDiffProbe.lean\n8afd06f19157531c347cbe3bd5248043a5fce35a8c1e36a13ce73305c5fcecc8  ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean"}
+     {:cmd
+      "cmp -s /tmp/SardScalarizedJetKernelParameterContDiffProbe.lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardScalarizedJetKernelParameterContDiffProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardScalarizedJetKernelParameterContDiff",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 96 items OK; {:done 87, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nea20057aa1d6bf11a3f5578ff75329dc4beea765a13b4386d93ef18455f0e261  ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Compile scalarized jet kernel parameter smoothness'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "dc19918d6d7ce69f6629370506e5b77f2d654c58",
+    :changed-paths
+    ["ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean"
+     "ConstructionTargets/SardScalarizedJetKernelParameterContDiff.md"],
+    :fixture
+    {:path "/tmp/SardScalarizedJetKernelParameterContDiffProbe.lean",
+     :sha256
+     "8afd06f19157531c347cbe3bd5248043a5fce35a8c1e36a13ce73305c5fcecc8"},
+    :declarations
+    ["exists_implicitFunctionData_scalar_fixedDirections_kernelParameter_contDiffAt"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean"
     "ConstructionTargets/SardScalarizedJetKernelParameterContDiff.md"],
