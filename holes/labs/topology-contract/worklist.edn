@@ -6781,29 +6781,62 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if these compiled kernel-equality and pointwise-flatness theorems cannot be promoted with their exact projected-surjectivity, full-rank upper bound, finite-dimensional source, or standard-axiom hypotheses.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedKernelFlatness.lean"
+    "ConstructionTargets/SardProjectedKernelFlatness.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-KERNEL DERIVATIVE FLATNESS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedKernelFlatnessProbe.lean",
+     :sha256
+     "675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676"},
+    :declarations
+    ["ker_eq_of_comp_surjective_of_finrank_range_le"
+     "apply_eq_zero_of_mem_projected_ker"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate this theorem at every point of the local rank-at-most-r locus where the projected block remains surjective, transport the kernel direction through the local normal-form coordinates, and prove the residual target-coordinate derivative vanishes before applying Taylor-cover nullity."},
+   :representation
+   {:source
+    "Linear maps L:E→F and P:F→R with P∘L surjective and finrank(range L) at most finrank R.",
+    :target
+    "Equality ker(P∘L)=ker L and the pointwise conclusion that L kills every vector tangent to the projected-coordinate fibre."},
+   :id :critical-value-sard-projected-kernel-flatness-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-implicit-function-packaging-1
+    :critical-value-sard-exact-rank-local-upper-locus-1],
+   :current-residual
+   "The decisive pointwise linear flatness theorem compiles; its neighborhood-wise instantiation and transport through the nonlinear coordinate chart remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "The projected derivative fields package into Mathlib's exact ImplicitFunctionData without an added premise: finite-dimensionality supplies completeness of the derivative range, the kernel has its standard completeness instance, and the resulting datum feeds the banked local rank-normal-form theorem. Bank this packaging theorem before proving residual-coordinate flatness.",
+     "The required fibre-flatness implication reduces to a reusable rank-nullity theorem and compiles: if a projected derivative is surjective and the full derivative rank is at most the projected target dimension, their kernels coincide, so every projected-fibre direction is killed by the full derivative.",
      :commands
      [{:cmd
-       "sed -n '1,220p' ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean; sed -n '1,180p' ConstructionTargets/SardComplementedDerivativeSplit.lean; sed -n '90,140p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean; rg -n \"completeSpace_coe|closed_of_finiteDimensional|finiteDimensional_range\" .lake/packages/mathlib/Mathlib/Topology/Algebra/Module .lake/packages/mathlib/Mathlib/LinearAlgebra --glob '*.lean'",
+       "sed -n '1,180p' ConstructionTargets/SardExactRankLocalUpperLocus.lean; sed -n '1,220p' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean; rg -n \"finrank_ker_add_finrank_range|eq_of_le_of_finrank|finrank_map_le|range_comp\" .lake/packages/mathlib/Mathlib/LinearAlgebra --glob '*.lean'",
        :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
+      {:cmd "lake env lean /tmp/SardProjectedKernelFlatnessProbe.lean",
        :exit 0,
        :output
-       "'exists_projected_localRankNormalForm' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
+       "'ker_eq_of_comp_surjective_of_finrank_range_le' and 'apply_eq_zero_of_mem_projected_ker' depend on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardProjectedKernelFlatnessProbe.lean",
        :exit 0,
        :output
-       "9742179005453fc047b3f8128c6ac3da74c9740e2bd95f292d1baf5457a679eb  /tmp/SardProjectedImplicitFunctionPackagingProbe.lean"}
+       "675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676  /tmp/SardProjectedKernelFlatnessProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedKernelFlatnessProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --check", :exit 0}
@@ -6814,39 +6847,41 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled ImplicitFunctionData packaging and local-normal-form existence theorem cannot be promoted with its exact projected-map, derivative-range, kernel-coordinate, completeness, or standard-axiom properties.",
+      "Stop only if these compiled kernel-equality and pointwise-flatness theorems cannot be promoted with their exact projected-surjectivity, full-rank upper bound, finite-dimensional source, or standard-axiom hypotheses.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"
-       "ConstructionTargets/SardProjectedImplicitFunctionPackaging.md"],
+      ["ConstructionTargets/SardProjectedKernelFlatness.lean"
+       "ConstructionTargets/SardProjectedKernelFlatness.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED IMPLICIT-FUNCTION PACKAGING",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-KERNEL DERIVATIVE FLATNESS",
       :acceptance
       {:fixture
-       {:path "/tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
+       {:path "/tmp/SardProjectedKernelFlatnessProbe.lean",
         :sha256
-        "9742179005453fc047b3f8128c6ac3da74c9740e2bd95f292d1baf5457a679eb"},
-       :declarations ["exists_projected_localRankNormalForm"],
+        "675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676"},
+       :declarations
+       ["ker_eq_of_comp_surjective_of_finrank_range_le"
+        "apply_eq_zero_of_mem_projected_ker"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use the full coordinate formulas from localRankNormalForm_of_complemented_minor to express the exact-rank local upper locus in range/kernel coordinates, then prove the residual target coordinate has vanishing derivative along each local rank-at-most-r fibre before applying Taylor-cover nullity."},
+       "Instantiate this theorem at every point of the local rank-at-most-r locus where the projected block remains surjective, transport the kernel direction through the local normal-form coordinates, and prove the residual target-coordinate derivative vanishes before applying Taylor-cover nullity."},
       :representation
       {:source
-       "A strict Frechet derivative L of f at x between finite-dimensional real inner-product spaces, together with the projected complemented derivative data.",
+       "Linear maps L:E→F and P:F→R with P∘L surjective and finrank(range L) at most finrank R.",
        :target
-       "An ImplicitFunctionData instance constructed locally with no new hypothesis and an open partial homeomorphism from the source into derivative-range times projected-kernel coordinates whose source contains x."},
-      :id :critical-value-sard-projected-implicit-function-packaging-1,
+       "Equality ker(P∘L)=ker L and the pointwise conclusion that L kills every vector tangent to the projected-coordinate fibre."},
+      :id :critical-value-sard-projected-kernel-flatness-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-complemented-strict-derivative-data-1
-       :critical-value-sard-local-rank-normal-form-probe-2],
+      [:critical-value-sard-projected-implicit-function-packaging-1
+       :critical-value-sard-exact-rank-local-upper-locus-1],
       :current-residual
-      "The nonlinear local coordinate chart now exists at every strict-derivative point; identifying the transformed exact-rank locus and proving derivative flatness of the residual target coordinate remain.",
+      "The decisive pointwise linear flatness theorem compiles; its neighborhood-wise instantiation and transport through the nonlinear coordinate chart remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
@@ -6870,7 +6905,8 @@
     :critical-value-sard-exact-rank-local-upper-locus-1
     :critical-value-sard-complemented-derivative-split-1
     :critical-value-sard-projected-complemented-strict-derivative-data-1
-    :critical-value-sard-projected-implicit-function-packaging-1],
+    :critical-value-sard-projected-implicit-function-packaging-1
+    :critical-value-sard-projected-kernel-flatness-1],
    :current-residual
    "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
