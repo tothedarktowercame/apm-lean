@@ -3606,70 +3606,103 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled compact packing-number finiteness theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCompactPackingNumberFinite.lean"
+    "ConstructionTargets/SardCompactPackingNumberFinite.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PACKING NUMBER FINITENESS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/CompactPackingNumberFiniteProbe.lean",
+     :sha256
+     "04ff6e20aa2f0565b9de1116477a577f3eb6803db2486074176b89c89227bf1a"},
+    :declarations ["IsCompact.packingNumber_ne_top"],
+    :consumer-residual
+    "one maximal-separated-set extraction and finite-dimensional packing/Taylor exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a compact subset of a proper metric space and a nonzero NNReal separation radius",
+    :target "the corresponding ENat-valued packing number is not top"},
+   :id :critical-value-sard-compact-packing-number-finite-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the maximal-separated-set cover theorem requires a proof that the compact source patch has finite packing number at nonzero radius",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After bounded-enlargement containment is banked, prove one quantitative theorem constructing a maximal radius-separated family in the bounded finite-dimensional source patch, combining half-ball disjointness, exact ball volumes, and packing cardinality to obtain polynomial cover size, then applying the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
+     "After compact packing-number finiteness is banked, prove one quantitative theorem extracting the finite maximal separated cover, combining half-ball disjointness, bounded enlargement, exact ball volumes, and packing cardinality to obtain polynomial cover size, then applying the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled centered-ball bounded-enlargement theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled compact packing-number finiteness theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCenteredBallBoundedEnlargement.lean"
-       "ConstructionTargets/SardCenteredBallBoundedEnlargement.md"],
+      ["ConstructionTargets/SardCompactPackingNumberFinite.lean"
+       "ConstructionTargets/SardCompactPackingNumberFinite.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CENTERED BALL BOUNDED ENLARGEMENT",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PACKING NUMBER FINITENESS",
       :acceptance
       {:fixture
-       {:path "/tmp/CenteredBallBoundedEnlargementProbe.lean",
+       {:path "/tmp/CompactPackingNumberFiniteProbe.lean",
         :sha256
-        "491075d2110992575e1958f60f3c08b8ab8be4abb4ec6a5560c7737b55d8bbf6"},
-       :declarations
-       ["ball_subset_ball_enlargement_of_center_mem_closedBall"],
+        "04ff6e20aa2f0565b9de1116477a577f3eb6803db2486074176b89c89227bf1a"},
+       :declarations ["IsCompact.packingNumber_ne_top"],
        :consumer-residual
-       "one maximal separated-family construction and finite-dimensional packing/Taylor exponent estimate before local rank reduction",
+       "one maximal-separated-set extraction and finite-dimensional packing/Taylor exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a center x in the closed radius-R ball about z and an open radius-ρ ball about x in a pseudometric space",
+       "a compact subset of a proper metric space and a nonzero NNReal separation radius",
        :target
-       "containment of that ball in the open radius-(R+ρ) ball about z"},
-      :id :critical-value-sard-centered-ball-bounded-enlargement-1,
+       "the corresponding ENat-valued packing number is not top"},
+      :id :critical-value-sard-compact-packing-number-finite-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the separated-ball packing estimate lacks a promoted containment of all small packing balls in one bounded ambient enlargement",
+      "the maximal-separated-set cover theorem requires a proof that the compact source patch has finite packing number at nonzero radius",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The banked packing-cardinality theorem also requires containment of the disjoint small balls in one ambient set of controlled measure. One independently compilable metric prerequisite shows that every radius-ρ ball centered in the closed radius-R ball about z lies in the radius-(R+ρ) ball about z. This supplies the bounded enlargement whose exact finite-dimensional volume forms the numerator of the polynomial packing estimate.",
+     "Mathlib's maximal separated set supplies the desired cover only under the hypothesis that the packing number is not infinite. One independently compilable prerequisite discharges that hypothesis for compact subsets of proper metric spaces at every nonzero radius: compactness gives a finite half-radius cover, the standard packing-versus-external-covering inequality bounds the packing number by its finite cardinality, and hence the packing number is below top. Banking this makes the existing maximal-separated-set cover API available to the quantitative source-cover construction.",
      :commands
      [{:cmd
-       "lake env lean /tmp/CenteredBallBoundedEnlargementProbe.lean",
-       :exit 0,
-       :output
-       "'ball_subset_ball_enlargement_of_center_mem_closedBall' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/CenteredBallBoundedEnlargementProbe.lean",
-       :exit 0,
-       :output
-       "491075d2110992575e1958f60f3c08b8ab8be4abb4ec6a5560c7737b55d8bbf6"}
+       "sed -n '250,365p' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/CoveringNumbers.lean",
+       :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/CenteredBallBoundedEnlargementProbe.lean",
+       "rg -n 'IsCompact.*IsCover|exists.*Finite.*IsCover|packingNumber.*top|isCover_maximalSeparatedSet' .lake/packages/mathlib/Mathlib/Topology -g '*.lean'",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CompactPackingNumberFiniteProbe.lean",
+       :exit 0,
+       :output
+       "'IsCompact.packingNumber_ne_top' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/CompactPackingNumberFiniteProbe.lean",
+       :exit 0,
+       :output
+       "04ff6e20aa2f0565b9de1116477a577f3eb6803db2486074176b89c89227bf1a"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/CompactPackingNumberFiniteProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/CenteredBallBoundedEnlargementProbe.lean",
+     {:path "/tmp/CompactPackingNumberFiniteProbe.lean",
       :sha256
-      "491075d2110992575e1958f60f3c08b8ab8be4abb4ec6a5560c7737b55d8bbf6"},
+      "04ff6e20aa2f0565b9de1116477a577f3eb6803db2486074176b89c89227bf1a"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3696,7 +3729,8 @@
     :critical-value-sard-finite-dimensional-ball-volume-1
     :critical-value-sard-finite-packing-cardinality-bound-1
     :critical-value-sard-separated-half-balls-disjoint-1
-    :critical-value-sard-centered-ball-bounded-enlargement-1],
+    :critical-value-sard-centered-ball-bounded-enlargement-1
+    :critical-value-sard-compact-packing-number-finite-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
