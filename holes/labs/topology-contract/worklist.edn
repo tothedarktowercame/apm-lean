@@ -5788,8 +5788,63 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if this compiled compact derivative-bound theorem cannot be promoted with its exact compactness, ContDiff order, nonnegative bound, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct a compact set containing all source segments, apply this bound at order k+1, use the multilinear-map norm inequality to obtain the scaled affine-line derivative bound, and feed affineLine_flat_taylor_remainder_bound into exists_taylor_cover_measure_lt.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardCompactIteratedFDerivBoundProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardCompactIteratedFDerivBoundProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactIteratedFDerivBound.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardCompactIteratedFDerivBound.lean ConstructionTargets/SardCompactIteratedFDerivBound.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add Sard compact iterated derivative bound'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "f5af5bbc8e97c74f9b3e91fb65b10658041b6a6d",
+    :changed-paths
+    ["ConstructionTargets/SardCompactIteratedFDerivBound.lean"
+     "ConstructionTargets/SardCompactIteratedFDerivBound.md"],
+    :fixture
+    {:path "/tmp/SardCompactIteratedFDerivBoundProbe.lean",
+     :sha256
+     "ed1b5bc44549f6b4546375614de7ff9c1a3f7ac460a3e5359024482ec9587c36"},
+    :declarations ["exists_nonneg_norm_iteratedFDeriv_le_on_compact"],
+    :dependencies
+    [{:id :critical-value-sard-affine-line-taylor-remainder-1,
+      :commit "b5059faf31aa67bb4ad83dcd50a69eeb5a1a066f"}],
+    :hashes
+    {:lean
+     "ed1b5bc44549f6b4546375614de7ff9c1a3f7ac460a3e5359024482ec9587c36",
+     :markdown
+     "8277dc8d20f9740f8b1bacf06ac821d79baddea8a66c13d178b6280c07411e2e",
+     :statement
+     "fd486c13bb10a7fe68febd06ca1a3ebd4dc086bde73668415b6e710dc6724619"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactIteratedFDerivBound.lean"
     "ConstructionTargets/SardCompactIteratedFDerivBound.md"],
