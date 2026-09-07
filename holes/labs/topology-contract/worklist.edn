@@ -6706,7 +6706,27 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
-    :commit "b0686676baca2a01400b4acf34a10c29b57895ad", :commits ["f665443551153f6ca62977b1039f9746f42b2939" "b0686676baca2a01400b4acf34a10c29b57895ad"],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788806129812-13979-821627dc",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r b0686676baca2a01400b4acf34a10c29b57895ad"
+      "sha256sum exact recorded Lean blob"
+      "git show recorded Markdown | sha256sum"
+      "sed frozen theorem | sha256sum"
+      "rg placeholder and duplicate-proof scans"
+      "rg dependency import and theorem use"
+      "git merge-base --is-ancestor dependency commits"
+      "lake build ConstructionTargets.SardProjectedComplementedStrictDerivativeData"
+      "lake env lean /tmp/SardProjectedImplicitFunctionPackagingProbe.rereview.lean"
+      "git diff b0686676^ b0686676 --check"],
+     :finding
+     "Repair commit has exact one-file scope; imports and consumes the promoted projected-complemented strict-derivative theorem, removes the duplicate proof, reproduces all hashes with zero placeholders, preserves coordinate orientation, elaborates with only standard axioms, and passes dependency and diff gates."},
+    :commit "b0686676baca2a01400b4acf34a10c29b57895ad",
+    :commits
+    ["f665443551153f6ca62977b1039f9746f42b2939"
+     "b0686676baca2a01400b4acf34a10c29b57895ad"],
     :changed-paths
     ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"],
     :fixture
@@ -6730,7 +6750,7 @@
      "86aa51f946fabc1f2015c9f966426d4d2be04e91362c3a48f63aafd375de58d7"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"
     "ConstructionTargets/SardProjectedImplicitFunctionPackaging.md"],
@@ -6826,7 +6846,7 @@
       "The nonlinear local coordinate chart now exists at every strict-derivative point; identifying the transformed exact-rank locus and proving derivative flatness of the residual target coordinate remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
