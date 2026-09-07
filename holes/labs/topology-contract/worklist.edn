@@ -10084,6 +10084,54 @@
       :output
       "ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean\nConstructionTargets/SardImplicitFunctionKernelParameterContDiff.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788819873965-14227-45ef179c",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 12a27915f80f96e3ce428323a6c3e89198ff4989 && git diff-tree --no-commit-id --name-status -r 12a27915f80f96e3ce428323a6c3e89198ff4989",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean && git show 12a27915f80f96e3ce428323a6c3e89198ff4989:ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean | sha256sum && git show 12a27915f80f96e3ce428323a6c3e89198ff4989:ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean 85b4dd142f54666522dfe4c6b97ad93723865bfdd04d3ce83a7cf456ea330e36; note 3df27112bdc95063915030146068c2483bcf6fb4e9ac0041712a7538edd920dc"}
+      {:cmd
+       "sed -n '11,24p' ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean | sha256sum",
+       :exit 0,
+       :output
+       "32a179222e0f9f72e4a2428a81a7b81703e647f0d73a36f522c4449780ea0693"}
+      {:cmd
+       "cmp -s /tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean && lake env lean /tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean && lake env lean ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean && lake build ConstructionTargets.SardImplicitFunctionKernelParameterContDiff",
+       :exit 0,
+       :output
+       "Build completed successfully (8255 jobs); declaration depends only on propext, Classical.choice, Quot.sound."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "git merge-base --is-ancestor 113e0618e14ffc3e0dadcfa5de22a09bca476fa0 12a27915f80f96e3ce428323a6c3e89198ff4989",
+       :exit 0,
+       :output "Recorded dependency is an ancestor."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 92 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff 12a27915f80f96e3ce428323a6c3e89198ff4989^ 12a27915f80f96e3ce428323a6c3e89198ff4989 --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit 12a27915f80f96e3ce428323a6c3e89198ff4989 has exact scope and reproduces every frozen hash and consumer count. Mathlib's ImplicitFunctionData.contDiffAt_implicitFunction applies under the stated ContDiffAt hypotheses for leftFun and rightFun and the required nonzero order. The proof changes the inverse-chart expression at fixed first coordinate definitionally to implicitFunction and composes its regularity in the correct variable, yielding ContDiffAt R n at exactly rightFun pt. It neither weakens the hypotheses nor promotes the result beyond pointwise smoothness at the base kernel coordinate. The scalarized data still must establish regularity of its concrete left function and orthogonal-projection right function before this theorem applies; that instantiation, map pullback, and induction remain accurately recorded as residual work. Only standard axioms occur."},
     :commit "12a27915f80f96e3ce428323a6c3e89198ff4989",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean"
@@ -10096,7 +10144,7 @@
     :declarations ["ImplicitFunctionData.contDiffAt_kernelParameter"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean"
     "ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.md"],
@@ -10262,7 +10310,7 @@
       "85b4dd142f54666522dfe4c6b97ad93723865bfdd04d3ce83a7cf456ea330e36"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
