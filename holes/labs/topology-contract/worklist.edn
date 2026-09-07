@@ -3236,8 +3236,55 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite-dimensional closed-ball volume formula cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one quantitative finite-dimensional source-cover/Taylor target-ball exponent theorem before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:finiteDimensional_volume_closedBall_formula
+     "e03c4e177491d803b681debc8b5a06646bba7f47fb16e8d4da325743ec94695e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/FiniteDimensionalBallVolumeProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/FiniteDimensionalBallVolumeProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteDimensionalBallVolume.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardFiniteDimensionalBallVolume.lean ConstructionTargets/SardFiniteDimensionalBallVolume.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "bc9e1e3d53985e8fa7b2284d1e69d17e71e54347",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteDimensionalBallVolume.lean"
+     "ConstructionTargets/SardFiniteDimensionalBallVolume.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFiniteDimensionalBallVolume.lean"
+     "998b5e2a1992e5b98d7ff5930b94321aa8568ca0fd9413af5029998e5e2e9a86",
+     "ConstructionTargets/SardFiniteDimensionalBallVolume.md"
+     "c6a2335100a808485801395b1fced1ac1bcd27e3424e8f94bea1aa3a3eb215fc"},
+    :fixture
+    {:path "/tmp/FiniteDimensionalBallVolumeProbe.lean",
+     :sha256
+     "4a876eecf19a3805e6359bdc0de31469157e6b0aebac1bc7ae3500054d2066be"},
+    :declarations ["finiteDimensional_volume_closedBall_formula"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteDimensionalBallVolume.lean"
     "ConstructionTargets/SardFiniteDimensionalBallVolume.md"],
