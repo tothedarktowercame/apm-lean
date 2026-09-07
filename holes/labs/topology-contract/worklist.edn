@@ -11182,6 +11182,40 @@
    "The exact localized critical set of the original map pulls back into the critical set of the lower-dimensional composite; image-nullity transport and inductive aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled parameterized-image nullity transfer cannot be promoted with its exact image-of-image/composition equality, arbitrary source and parameter sets, subset hypothesis, general target measure, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardParameterizedImageNullityTransfer.lean"
+    "ConstructionTargets/SardParameterizedImageNullityTransfer.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PARAMETERIZED IMAGE NULLITY TRANSFER",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardParameterizedImageNullityTransferProbe.lean",
+     :sha256
+     "df10483419d334c06e617afcea21a471eb4907c10d3a8fd8b0598063d4627251"},
+    :declarations
+    ["image_image_eq_image_comp"
+     "image_null_of_subset_parameterized_image"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the transfer theorem with each exact kernel parameterization and the lower-dimensional critical-image nullity supplied by source-dimension induction, then aggregate localized nonzero-jet strata with the Taylor-flat locus."},
+   :representation
+   {:source
+    "Maps f:E→F and g:G→E, a parameter set s⊆G, an original set t⊆E contained in g''s, and zero μ-measure of (f∘g)''s for an arbitrary measure μ on F.",
+    :target
+    "The exact equality f''(g''s)=(f∘g)''s and the conclusion μ(f''t)=0."},
+   :id :critical-value-sard-parameterized-image-nullity-transfer-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-critical-set-under-parameterization-1],
+   :current-residual
+   "Lower-dimensional nullity of a kernel pullback now transfers to the corresponding localized original image; induction instantiation and local/jet aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -11239,64 +11273,64 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled `fderiv` critical-set transport theorem cannot be promoted with its exact DifferentiableAt hypotheses, nonsurjective `fderiv` predicate, function-composition representation, localized set inclusion, arbitrary parameter space, or standard-axiom profile.",
+      "Stop only if the compiled parameterized-image nullity transfer cannot be promoted with its exact image-of-image/composition equality, arbitrary source and parameter sets, subset hypothesis, general target measure, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCriticalSetUnderParameterization.lean"
-       "ConstructionTargets/SardCriticalSetUnderParameterization.md"],
+      ["ConstructionTargets/SardParameterizedImageNullityTransfer.lean"
+       "ConstructionTargets/SardParameterizedImageNullityTransfer.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CRITICAL-SET TRANSPORT UNDER PARAMETERIZATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PARAMETERIZED IMAGE NULLITY TRANSFER",
       :acceptance
       {:fixture
-       {:path "/tmp/SardCriticalSetUnderParameterizationProbe.lean",
+       {:path "/tmp/SardParameterizedImageNullityTransferProbe.lean",
         :sha256
-        "a697a1c4efe7e2f798e87f6a7f15b38f836d9a482e192433a5da3dd2c02b3b4d"},
+        "df10483419d334c06e617afcea21a471eb4907c10d3a8fd8b0598063d4627251"},
        :declarations
-       ["not_surjective_fderiv_comp"
-        "preimage_criticalSet_subset_criticalSet_comp"],
+       ["image_image_eq_image_comp"
+        "image_null_of_subset_parameterized_image"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use the set-level criticality inclusion with each exact kernel parameterization and the lower-dimensional induction hypothesis, transfer the resulting pullback image nullity to the original localized stratum, and aggregate local and jet strata."},
+       "Instantiate the transfer theorem with each exact kernel parameterization and the lower-dimensional critical-image nullity supplied by source-dimension induction, then aggregate localized nonzero-jet strata with the Taylor-flat locus."},
       :representation
       {:source
-       "Differentiable maps f:E→F and g:G→E on a localized set s⊆G, with points mapped by g into the nonsurjective-`fderiv` locus of f.",
+       "Maps f:E→F and g:G→E, a parameter set s⊆G, an original set t⊆E contained in g''s, and zero μ-measure of (f∘g)''s for an arbitrary measure μ on F.",
        :target
-       "Pointwise nonsurjectivity of fderiv ℝ (f∘g) and the inclusion s∩g⁻¹'{y | ¬Surjective(fderiv ℝ f y)} ⊆ {x | ¬Surjective(fderiv ℝ (f∘g) x)}."},
-      :id :critical-value-sard-critical-set-under-parameterization-1,
+       "The exact equality f''(g''s)=(f∘g)''s and the conclusion μ(f''t)=0."},
+      :id :critical-value-sard-parameterized-image-nullity-transfer-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-criticality-under-parameterization-1],
+      [:critical-value-sard-critical-set-under-parameterization-1],
       :current-residual
-      "The exact localized critical set of the original map pulls back into the critical set of the lower-dimensional composite; image-nullity transport and inductive aggregation remain.",
+      "Lower-dimensional nullity of a kernel pullback now transfers to the corresponding localized original image; induction instantiation and local/jet aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture promotes the derivative-level transport to the exact `fderiv` critical-set representation used by Sard: a nonsurjective derivative remains nonsurjective after differentiable source parameterization, both pointwise and as a set inclusion on a localized parameter domain. This supplies the critical-locus inclusion needed to apply lower-dimensional nullity to the kernel pullback. Image transport from that pullback nullity to the original localized stratum and aggregation remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next exact nullity bridge: images commute with parameterized source images, and zero measure of the composite image transfers to the image of every original source set contained in the parameterized image. This converts lower-dimensional nullity of the kernel pullback into nullity of the corresponding localized original stratum. Instantiation with the exact implicit-function parameterization, source-dimension induction, and aggregation remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardCriticalSetUnderParameterizationProbe.lean",
+       "lake env lean /tmp/SardParameterizedImageNullityTransferProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardCriticalSetUnderParameterizationProbe.lean",
+       "sha256sum /tmp/SardParameterizedImageNullityTransferProbe.lean",
        :exit 0,
        :output
-       "a697a1c4efe7e2f798e87f6a7f15b38f836d9a482e192433a5da3dd2c02b3b4d  /tmp/SardCriticalSetUnderParameterizationProbe.lean"}
+       "df10483419d334c06e617afcea21a471eb4907c10d3a8fd8b0598063d4627251  /tmp/SardParameterizedImageNullityTransferProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCriticalSetUnderParameterizationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardParameterizedImageNullityTransferProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 98 items OK; {:done 90, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 99 items OK; {:done 91, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardCriticalityUnderParameterization.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardCriticalSetUnderParameterization.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810  ConstructionTargets/SardCriticalityUnderParameterization.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\na697a1c4efe7e2f798e87f6a7f15b38f836d9a482e192433a5da3dd2c02b3b4d  ConstructionTargets/SardCriticalSetUnderParameterization.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -11307,12 +11341,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardCriticalSetUnderParameterizationProbe.lean",
+     {:path "/tmp/SardParameterizedImageNullityTransferProbe.lean",
       :sha256
-      "a697a1c4efe7e2f798e87f6a7f15b38f836d9a482e192433a5da3dd2c02b3b4d"},
+      "df10483419d334c06e617afcea21a471eb4907c10d3a8fd8b0598063d4627251"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -11359,7 +11393,8 @@
     :critical-value-sard-scalarized-jet-kernel-parameter-contdiff-1
     :critical-value-sard-implicit-function-kernel-parameter-composition-contdiff-1
     :critical-value-sard-criticality-under-parameterization-1
-    :critical-value-sard-critical-set-under-parameterization-1],
+    :critical-value-sard-critical-set-under-parameterization-1
+    :critical-value-sard-parameterized-image-nullity-transfer-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
