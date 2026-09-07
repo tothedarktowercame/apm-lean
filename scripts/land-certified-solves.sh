@@ -14,7 +14,9 @@
 # 2026-09-07 metadata audit was correcting for.
 #
 #   land-certified-solves.sh survey            list candidates, change nothing
+#   land-certified-solves.sh verify [list]     filter rows to those that PASS
 #   land-certified-solves.sh land <list-file>  land the rows in <list-file>
+#   land-certified-solves.sh auto              survey | verify | land, unattended
 #
 # <list-file> is "<frame> <problem> <branch>" per line -- normally the output
 # of survey, FILTERED to rows an independent check has passed. This script
@@ -40,8 +42,64 @@ survey() {
   done
 }
 
+# The independent check the header demands, as code rather than as a human
+# instruction. A receipt claiming zero sorries is not a file that elaborates
+# with zero sorries, and a proof that closed by WEAKENING its statement would be
+# worse than the sorry it replaced -- so both are checked from source, per row:
+#
+#   1. the registered `theorem apm_<id>` signature is byte-identical to master's
+#   2. the branch file elaborates: lake exit 0, and no bare `sorry` line
+#
+# Rows that fail are reported on stderr and dropped, never landed.
+verify() {
+  local list="${1:-/dev/stdin}"
+  while read -r frame prob branch; do
+    [ -z "${frame:-}" ] && continue
+    local f="problems/$prob/lean/Main.lean"
+    local lower; lower=$(echo "$prob" | tr "[:upper:]" "[:lower:]")
+    local a b
+    a=$(git show "master:$f" 2>/dev/null | sed -n "/^theorem apm_${lower}[^_a-z0-9]/,/:=/p" | tr -s "[:space:]" " ")
+    b=$(git show "$branch:$f" 2>/dev/null | sed -n "/^theorem apm_${lower}[^_a-z0-9]/,/:=/p" | tr -s "[:space:]" " ")
+    if [ -z "$a" ] || [ "$a" != "$b" ]; then
+      echo "  DROP $prob: registered statement differs from master (or not found)" >&2
+      continue
+    fi
+    local tmp; tmp=$(mktemp /tmp/land-verify-XXXXXX.lean)
+    git show "$branch:$f" > "$tmp" 2>/dev/null
+    if grep -qE "^[[:space:]]*sorry[[:space:]]*$" "$tmp"; then
+      echo "  DROP $prob: branch file still contains a bare sorry" >&2
+      rm -f "$tmp"; continue
+    fi
+    if ! timeout 900 lake env lean "$tmp" >/dev/null 2>&1; then
+      echo "  DROP $prob: does not elaborate (lake env lean non-zero)" >&2
+      rm -f "$tmp"; continue
+    fi
+    rm -f "$tmp"
+    echo "$frame $prob $branch"
+  done < "$list"
+}
+
 case "${1:-survey}" in
 survey) survey ;;
+verify) verify "${2:-/dev/stdin}" ;;
+auto)
+  # Unattended: land only what passes verify. Exists because the manual step was
+  # the real bottleneck -- 175 solver branches accumulated and exactly one
+  # landing run had ever happened (28 proofs, 2026-09-07 16:06, by hand), so
+  # problems the campaign had genuinely closed kept reading as open.
+  cand=$(mktemp /tmp/land-auto-XXXXXX)
+  survey > "$cand"
+  n=$(wc -l < "$cand")
+  if [ "$n" = 0 ]; then echo "no candidates"; rm -f "$cand"; exit 0; fi
+  echo "candidates: $n"
+  ok=$(mktemp /tmp/land-auto-ok-XXXXXX)
+  verify "$cand" > "$ok"
+  m=$(wc -l < "$ok")
+  echo "passed verification: $m of $n"
+  if [ "$m" = 0 ]; then rm -f "$cand" "$ok"; exit 0; fi
+  "$0" land "$ok"
+  rm -f "$cand" "$ok"
+  ;;
 land)
   list="${2:-}"; [ -f "$list" ] || { echo "usage: $0 land <list-file>"; exit 2; }
   # The topology build loop refuses to run against a dirty tracked worktree
@@ -86,5 +144,5 @@ EOF
   echo "  ---"; echo "  landed: $landed | skipped: $skipped"
   git log -1 --format='  commit %h %s'
   ;;
-*) echo "usage: $0 survey | land <list-file>"; exit 2 ;;
+*) echo "usage: $0 survey | verify [list] | land <list-file> | auto"; exit 2 ;;
 esac
