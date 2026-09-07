@@ -2956,8 +2956,54 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled inverse-natural limit theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one smooth flat-locus scale-cover construction and inverse-natural estimate theorem before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:measure_eq_zero_of_le_inv_nat
+     "ea4fc32b1ccd3fdd38a22091e3a9128566d15e6182039dfebb25072ec48f4170"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/ArbitrarilySmallMeasureProbe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/ArbitrarilySmallMeasureProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardArbitrarilySmallMeasureLimit.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardArbitrarilySmallMeasureLimit.lean ConstructionTargets/SardArbitrarilySmallMeasureLimit.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "af26611005fbf901bd0e9c10e8ed77fe0801ddcd",
+    :changed-paths
+    ["ConstructionTargets/SardArbitrarilySmallMeasureLimit.lean"
+     "ConstructionTargets/SardArbitrarilySmallMeasureLimit.md"],
+    :file-hashes
+    {"ConstructionTargets/SardArbitrarilySmallMeasureLimit.lean"
+     "caced020e2f75c62d379232ed2ff5aa756cf55dd558427595f82c5b758ebab86",
+     "ConstructionTargets/SardArbitrarilySmallMeasureLimit.md"
+     "5e20464aee4488201c17351abfaa9b4701ba9855e6fee78e7aef3daeaa4e3268"},
+    :fixture
+    {:path "/tmp/ArbitrarilySmallMeasureProbe.lean",
+     :sha256
+     "4112b451c1e509a159462d200febc2f3c7c6d0ef7172589b0a6b4e0a8ca1c1c3"},
+    :declarations ["measure_eq_zero_of_le_inv_nat"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardArbitrarilySmallMeasureLimit.lean"
     "ConstructionTargets/SardArbitrarilySmallMeasureLimit.md"],
