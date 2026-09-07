@@ -9435,8 +9435,73 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled exact scalarized-jet ImplicitFunctionData construction cannot be promoted with its finite-dimensional inner-product source, general target F, selected functional ℓ, ContDiff ℝ (i+1) hypothesis, iteratedFDeriv/Fin.cons representation, explicit kernel CompleteSpace witness, retained leftFun/leftDeriv fields, chart-source membership, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Apply the compiled level-set coordinate identity to the exposed scalarized-jet ImplicitFunctionData, transport each localized nonzero-jet stratum to the strictly lower-dimensional kernel coordinate, then invoke source-dimension induction and aggregate nullity.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:lean-source
+     "cbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d",
+     :declaration-block
+     "41c6084c974df236315c5ad1b5e8ae66c8455f5bf207e7c7ca97b9647d814412",
+     :note
+     "6fceb350eca408a536a31fc33bb91023de7cef12de8912665636461ccf576d75"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardScalarizedJetImplicitFunctionDataProbe.lean ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean && cmp -s /tmp/SardScalarizedJetImplicitFunctionDataProbe.lean ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean",
+      :exit 0,
+      :output
+      "cbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d  /tmp/SardScalarizedJetImplicitFunctionDataProbe.lean\ncbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d  ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean"}
+     {:cmd
+      "lake env lean /tmp/SardScalarizedJetImplicitFunctionDataProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardScalarizedJetImplicitFunctionData",
+      :exit 0,
+      :output "Build completed successfully (8251 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 88 items OK; {:done 79, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :output
+      "ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean\nConstructionTargets/SardScalarizedJetImplicitFunctionData.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "bd9a286190ea2bc984fb1981c9c9f339f1f743bf",
+    :changed-paths
+    ["ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean"
+     "ConstructionTargets/SardScalarizedJetImplicitFunctionData.md"],
+    :fixture
+    {:path "/tmp/SardScalarizedJetImplicitFunctionDataProbe.lean",
+     :sha256
+     "cbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d"},
+    :declarations
+    ["exists_implicitFunctionData_of_strictFDeriv_apply_ne_zero"
+     "exists_implicitFunctionData_scalar_fixedDirections_of_contDiff"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean"
     "ConstructionTargets/SardScalarizedJetImplicitFunctionData.md"],
