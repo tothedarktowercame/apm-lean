@@ -8421,29 +8421,43 @@
    :evidence
    {:placeholder-delta {:before 0, :after 0, :delta 0},
     :residual
-    "Package the split scalar derivative as exact ImplicitFunctionData for the regular level set, obtain the local hypersurface chart, and perform source-dimension reduction.",
+    "Package the now correctly typed split scalar derivative as exact ImplicitFunctionData for the regular level set, obtain the local hypersurface chart, and perform source-dimension reduction.",
+    :typed-repair
+    {:before
+     "The specialization narrowed f to E → ℝ and omitted the selected functional ℓ.",
+     :after
+     "The specialization retains general F, f : E → F, ℓ : F →L[ℝ] ℝ, L := fderiv ℝ (fun y => ℓ (iteratedFDeriv ℝ i f y v)) x, and hypothesis ℓ (iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)) ≠ 0."},
+    :repair-of "28b6fc0a72689eb69f7d682cce0024281a8abdd0",
     :outcome :done-unreviewed,
     :warnings [],
     :statement-hashes
     {:lean-source
-     "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e",
+     "1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f",
      :declaration-block
-     "c31605b2a85965a77fa84dfd8805c4bb70c70b9c832192dcd71c73d20b22e050",
+     "d79b93b9efa0a2632bbc8df466dafc2a96f0012b842c31c5e9c60bcf0db5a748",
      :note
-     "a15300de3428f37453d38cad4ab57b8ccb41dfeb7efcdf605729bda7b6fa2fba"},
+     "eaa7a818792a0b0e3afec4fc87297ec45d4fe07f5ee1732ec9fbaf897fb88c2d"},
     :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
     [{:cmd
-      "sha256sum /tmp/SardNonzeroScalarDerivativeSplitProbe.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean && cmp -s /tmp/SardNonzeroScalarDerivativeSplitProbe.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean",
-      :exit 0}
+      "git show HEAD^:ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean | sha256sum",
+      :exit 0,
+      :output
+      "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e  -"}
      {:cmd
       "lake env lean /tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
       :exit 0}
      {:cmd
       "lake build ConstructionTargets.SardNonzeroScalarDerivativeSplit",
-      :exit 0}
+      :exit 0,
+      :output "Build completed successfully (8244 jobs)."}
+     {:cmd
+      "sha256sum /tmp/SardNonzeroScalarDerivativeSplitProbe.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean && cmp -s /tmp/SardNonzeroScalarDerivativeSplitProbe.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean",
+      :exit 0,
+      :output
+      "1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f  /tmp/SardNonzeroScalarDerivativeSplitProbe.lean\n1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f  ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"}
      {:cmd
       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean",
       :exit 1,
@@ -8452,7 +8466,7 @@
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :output
-      "topology-worklist: 81 items OK; {:done 72, :open 1, :blocked 2, :superseded 6}"}
+      "topology-worklist: 81 items OK; {:done 72, :repair 1, :blocked 2, :superseded 6}"}
      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
       :exit 0,
       :output
@@ -8461,26 +8475,26 @@
       "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
       :exit 0,
       :output "1"}
-     {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
       :exit 0,
       :output
       "ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean\nConstructionTargets/SardNonzeroScalarDerivativeSplit.md"}
-     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :review
-    {:outcome :fail,
-     :seat "codex-1",
-     :job "invoke-1788814290911-14124-4624f910",
-     :finding
-     "Deterministic typed representation defect in commit 28b6fc0a72689eb69f7d682cce0024281a8abdd0: the first two generic right-inverse/projKer theorems are correct, but exists_rightInverse_and_projKer_fderiv_scalar_fixedDirections narrows the selected scalar component from the upstream representation `(f : E → F) (ℓ : F →L[ℝ] ℝ)` with function `y ↦ ℓ (iteratedFDeriv ℝ i f y v)` to a new scalar-valued `f : E → ℝ` with function `y ↦ iteratedFDeriv ℝ i f y v`. This does not compose with the reviewed scalar-separation and scalar-derivative results without an additional, unproved iteratedFDeriv-under-continuous-linear-postcomposition identity. Repair the specialization by retaining general `F`, `f : E → F`, and `ℓ`, defining `L := fderiv ℝ (fun y => ℓ (iteratedFDeriv ℝ i f y v)) x`, and using the existing fixed-direction scalar derivative identity plus the exact hypothesis `ℓ (iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)) ≠ 0`. All mechanical gates otherwise reproduce: exact two-file scope, fixture/Lean hash 39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e, declaration hash c31605b2a85965a77fa84dfd8805c4bb70c70b9c832192dcd71c73d20b22e050, standard axioms only, successful 8244-job build, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one placeholder."},
-    :commit "28b6fc0a72689eb69f7d682cce0024281a8abdd0",
+     {:cmd "git diff --check && git status --porcelain=v1",
+      :exit 0,
+      :output ""}],
+    :commit "8218a4e7a3765a5ed38ef8964769e9751461d1a8",
+    :commits
+    ["28b6fc0a72689eb69f7d682cce0024281a8abdd0"
+     "8218a4e7a3765a5ed38ef8964769e9751461d1a8"],
     :changed-paths
     ["ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"
      "ConstructionTargets/SardNonzeroScalarDerivativeSplit.md"],
     :fixture
     {:path "/tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
      :sha256
+     "1761b551fba9e23ec2558f4b7430d506a88f2c69c9b823121e54526642223e2f",
+     :recorded-before-repair-sha256
      "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e"},
     :declarations
     ["ContinuousLinearMap.exists_rightInverse_of_apply_ne_zero"
@@ -8488,7 +8502,7 @@
      "exists_rightInverse_and_projKer_fderiv_scalar_fixedDirections"],
     :seat :codex-6},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"
     "ConstructionTargets/SardNonzeroScalarDerivativeSplit.md"],
