@@ -8416,8 +8416,71 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled explicit right-inverse and kernel-projection construction cannot be promoted with its exact nonzero-direction hypothesis, fixed-direction iteratedFDeriv specialization, projKerOfRightInverse representation, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Package the split scalar derivative as exact ImplicitFunctionData for the regular level set, obtain the local hypersurface chart, and perform source-dimension reduction.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:lean-source
+     "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e",
+     :declaration-block
+     "c31605b2a85965a77fa84dfd8805c4bb70c70b9c832192dcd71c73d20b22e050",
+     :note
+     "a15300de3428f37453d38cad4ab57b8ccb41dfeb7efcdf605729bda7b6fa2fba"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardNonzeroScalarDerivativeSplitProbe.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean && cmp -s /tmp/SardNonzeroScalarDerivativeSplitProbe.lean ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardNonzeroScalarDerivativeSplit",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 81 items OK; {:done 72, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :output
+      "ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean\nConstructionTargets/SardNonzeroScalarDerivativeSplit.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "28b6fc0a72689eb69f7d682cce0024281a8abdd0",
+    :changed-paths
+    ["ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"
+     "ConstructionTargets/SardNonzeroScalarDerivativeSplit.md"],
+    :fixture
+    {:path "/tmp/SardNonzeroScalarDerivativeSplitProbe.lean",
+     :sha256
+     "39d9eaccf36060afc0f63d309b00d992afafffa550cba98f85754ff1a32e1c5e"},
+    :declarations
+    ["ContinuousLinearMap.exists_rightInverse_of_apply_ne_zero"
+     "ContinuousLinearMap.exists_rightInverse_and_projKer_of_apply_ne_zero"
+     "exists_rightInverse_and_projKer_fderiv_scalar_fixedDirections"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardNonzeroScalarDerivativeSplit.lean"
     "ConstructionTargets/SardNonzeroScalarDerivativeSplit.md"],
