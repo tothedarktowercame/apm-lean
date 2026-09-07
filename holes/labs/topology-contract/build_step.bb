@@ -176,8 +176,38 @@
                                                                       :disposition :replan)))]
                                             replacements)
                                       [%]) prepared)))
-            :done-unreviewed (replace-item items id #(-> % (assoc :state :done-unreviewed)
-                                                            (assoc :evidence receipt)))
+            ;; A REPAIRED row is completed more than once, and this used to
+            ;; replace :evidence wholesale, so the repair's receipt discarded
+            ;; the implementation's commit. worklist_check then compared one
+            ;; commit's paths against the row's whole scope and the supervisor
+            ;; stopped: on 2026-09-07
+            ;; :critical-value-sard-projected-implicit-function-packaging-1
+            ;; recorded only its repair b0686676 (.lean) against a two-path
+            ;; scope, and the run halted at row 60 of 70 until a human recorded
+            ;; f6654435 by hand.
+            ;;
+            ;; Accumulate instead. Prior commits carry forward into :commits,
+            ;; which the checker unions against scope, so the ledger records
+            ;; the row's whole history without anyone noticing in time. A row
+            ;; completed once still carries :commit alone, which is what the
+            ;; other rows use.
+            :done-unreviewed
+            (replace-item
+             items id
+             (fn [it]
+               ;; History first, then the row's last recorded commit: the
+               ;; union check does not care about order, but the ledger is read
+               ;; by people and should run chronologically.
+               (let [prior (concat (get-in it [:evidence :commits])
+                                   (when-let [c (get-in it [:evidence :commit])] [c]))
+                     all (vec (distinct (remove nil?
+                                                (concat prior
+                                                        (when-let [c (:commit receipt)] [c])
+                                                        (:commits receipt)))))]
+                 (-> it
+                     (assoc :state :done-unreviewed)
+                     (assoc :evidence (cond-> receipt
+                                        (< 1 (count all)) (assoc :commits all)))))))
             :pass (replace-item items id #(-> %
                                                 (assoc :state
                                                        (if (and (= :strategy-checkpoint (:kind %))
