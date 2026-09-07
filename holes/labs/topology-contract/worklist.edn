@@ -3047,72 +3047,103 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled compact finite-ball-cover theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCompactFiniteBallCover.lean"
+    "ConstructionTargets/SardCompactFiniteBallCover.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT FINITE BALL COVER",
+   :acceptance
+   {:fixture
+    {:path "/tmp/CompactFiniteBallCoverProbe.lean",
+     :sha256
+     "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"},
+    :declarations ["IsCompact.exists_finset_ball_cover"],
+    :consumer-residual
+    "one quantitative smooth flat-locus Taylor/exponent estimate over finite-dimensional source covers before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a compact subset of a pseudometric source space and a positive radius",
+    :target
+    "a finite family of radius-r source balls covering the subset"},
+   :id :critical-value-sard-compact-finite-ball-cover-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the scale-wise Taylor argument lacks a promoted finite ball-cover interface for its compact source patch",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After the arbitrarily-small-measure limit is banked, prove one theorem constructing, at every inverse-natural tolerance, a finite source cover whose Taylor-controlled target balls have total measure below that tolerance under the exponent inequality; the banked packets then yield nullity. Do not begin local rank reduction.",
+     "After compact finite-ball covers are banked, prove one theorem choosing the radius scale and quantitatively bounding both the cover cardinality and each Taylor-controlled target-ball measure so their finite sum is below every inverse-natural tolerance under the Morse--Sard exponent inequality. Do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled inverse-natural limit theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled compact finite-ball-cover theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardArbitrarilySmallMeasureLimit.lean"
-       "ConstructionTargets/SardArbitrarilySmallMeasureLimit.md"],
+      ["ConstructionTargets/SardCompactFiniteBallCover.lean"
+       "ConstructionTargets/SardCompactFiniteBallCover.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ARBITRARILY SMALL MEASURE LIMIT",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT FINITE BALL COVER",
       :acceptance
       {:fixture
-       {:path "/tmp/ArbitrarilySmallMeasureProbe.lean",
+       {:path "/tmp/CompactFiniteBallCoverProbe.lean",
         :sha256
-        "4112b451c1e509a159462d200febc2f3c7c6d0ef7172589b0a6b4e0a8ca1c1c3"},
-       :declarations ["measure_eq_zero_of_le_inv_nat"],
+        "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"},
+       :declarations ["IsCompact.exists_finset_ball_cover"],
        :consumer-residual
-       "one smooth flat-locus scale-cover construction and inverse-natural estimate theorem before local rank reduction",
+       "one quantitative smooth flat-locus Taylor/exponent estimate over finite-dimensional source covers before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "inverse-natural upper bounds on the measure of one fixed target set",
-       :target "zero measure of that target set"},
-      :id :critical-value-sard-arbitrarily-small-measure-limit-1,
+       "a compact subset of a pseudometric source space and a positive radius",
+       :target
+       "a finite family of radius-r source balls covering the subset"},
+      :id :critical-value-sard-compact-finite-ball-cover-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the scale-cover estimates have not yet been converted from arbitrarily small ENNReal bounds to exact nullity",
+      "the scale-wise Taylor argument lacks a promoted finite ball-cover interface for its compact source patch",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "After the ball-image and finite-cover aggregation packets, the remaining limit passage is independently compilable: if the image measure is bounded by `(n : ENNReal)⁻¹` for every natural n, it is zero. The proof uses `ENNReal.exists_inv_nat_lt` to contradict any positive measure. Banking it leaves exactly one coherent prerequisite for the current row: construct the scale-indexed finite covers and prove their summed target-ball measures satisfy these inverse-natural bounds from smooth flatness and the Morse--Sard exponent inequality.",
+     "After the ball-image, finite measure aggregation, and null-limit packets, the remaining cover construction still needs one independently compilable geometric prerequisite: every compact source patch admits a finite cover by balls of any positive radius. The pinned compactness API proves exactly this via `IsCompact.elim_finite_subcover`. Banking it leaves one coherent analytic theorem: select a sufficiently small radius, apply the vanishing-derivative Taylor estimate on each source ball, and prove the resulting target-ball measure sum meets every inverse-natural tolerance using the finite-dimensional covering exponent.",
      :commands
-     [{:cmd "lake env lean /tmp/CheckENN.lean",
+     [{:cmd "lake env lean /tmp/CheckCompactCover.lean",
        :exit 1,
        :expected-exit 1,
        :output
-       "The exploratory API check found ENNReal.exists_inv_nat_lt; four guessed zero-characterization names and one ordered-addition name were absent."}
-      {:cmd "lake env lean /tmp/ArbitrarilySmallMeasureProbe.lean",
+       "IsCompact.elim_finite_subcover and Metric.isCompact_iff_isClosed_bounded were found; two guessed compact-ball API names were absent."}
+      {:cmd "lake env lean /tmp/CompactFiniteBallCoverProbe.lean",
        :exit 0,
        :output
-       "'measure_eq_zero_of_le_inv_nat' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/ArbitrarilySmallMeasureProbe.lean",
+       "'IsCompact.exists_finset_ball_cover' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/CompactFiniteBallCoverProbe.lean",
        :exit 0,
        :output
-       "4112b451c1e509a159462d200febc2f3c7c6d0ef7172589b0a6b4e0a8ca1c1c3"}
+       "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/ArbitrarilySmallMeasureProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/CompactFiniteBallCoverProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/ArbitrarilySmallMeasureProbe.lean",
+     {:path "/tmp/CompactFiniteBallCoverProbe.lean",
       :sha256
-      "4112b451c1e509a159462d200febc2f3c7c6d0ef7172589b0a6b4e0a8ca1c1c3"},
+      "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3133,7 +3164,8 @@
    [:critical-value-sard-rectangular-local-probe-1
     :critical-value-sard-flat-taylor-ball-image-1
     :critical-value-sard-finite-cover-measure-bound-1
-    :critical-value-sard-arbitrarily-small-measure-limit-1],
+    :critical-value-sard-arbitrarily-small-measure-limit-1
+    :critical-value-sard-compact-finite-ball-cover-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
