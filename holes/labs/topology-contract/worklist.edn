@@ -7953,8 +7953,70 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled scalar-separation theorem cannot be promoted with its exact innerSL, real inner-product, iteratedFDeriv, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the derivative formula for the fixed-direction scalar jet component, then construct its implicit-function hypersurface and perform source-dimension reduction.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:lean-source
+     "868cab8ac1dc1b44289449a2fdf5f11e50b25704405b18b8829c70d93e21831f",
+     :declaration-block
+     "ba11118f6d00a09e42fb2bd4a5c3a47ba73c46f78efa6cf5bf1830e0f0db87e4",
+     :note
+     "86d801f348b0056b8e031fc87378b3628616f39c87cfd644e3860c1524d9af34"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardNonzeroJetScalarSeparationProbe.lean ConstructionTargets/SardNonzeroJetScalarSeparation.lean && cmp -s /tmp/SardNonzeroJetScalarSeparationProbe.lean ConstructionTargets/SardNonzeroJetScalarSeparation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardNonzeroJetScalarSeparationProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardNonzeroJetScalarSeparation",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroJetScalarSeparation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 78 items OK; {:done 69, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :output
+      "ConstructionTargets/SardNonzeroJetScalarSeparation.lean\nConstructionTargets/SardNonzeroJetScalarSeparation.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "d5605d8c1436630f7805e1d69c05fb23ab8ab576",
+    :changed-paths
+    ["ConstructionTargets/SardNonzeroJetScalarSeparation.lean"
+     "ConstructionTargets/SardNonzeroJetScalarSeparation.md"],
+    :fixture
+    {:path "/tmp/SardNonzeroJetScalarSeparationProbe.lean",
+     :sha256
+     "868cab8ac1dc1b44289449a2fdf5f11e50b25704405b18b8829c70d93e21831f"},
+    :declarations
+    ["exists_continuousLinearMap_apply_ne_zero"
+     "exists_scalar_component_iteratedFDeriv_apply_ne_zero"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardNonzeroJetScalarSeparation.lean"
     "ConstructionTargets/SardNonzeroJetScalarSeparation.md"],
