@@ -2894,6 +2894,23 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :axiom-policy :standard-only,
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788782949450-13631-1c1e6f7e",
+     :commands
+     ["git show --stat --oneline 8c2d71da"
+      "git diff --name-status 8c2d71da^ 8c2d71da"
+      "git diff --check 8c2d71da^ 8c2d71da"
+      "git show 8c2d71da:ConstructionTargets/SardFiniteCoverMeasureBound.lean | sha256sum"
+      "git show 8c2d71da:ConstructionTargets/SardFiniteCoverMeasureBound.md | sha256sum"
+      "sha256sum /tmp/FiniteCoverMeasureProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteCoverMeasureBound.lean"
+      "lake env lean /tmp/FiniteCoverMeasureProbe.lean"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardFiniteCoverMeasureBound.lean ConstructionTargets/SardFiniteCoverMeasureBound.md /tmp/FiniteCoverMeasureProbe.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: commit 8c2d71da has exact two-file scope and matching artifact and fixture hashes; both Lean gates compile with only propext, Classical.choice, and Quot.sound; the theorem correctly maps finite indexed coverage to a finite-sum measure upper bound, preserves the stated representation boundary, introduces no placeholders, and leaves frozen t93A04 unchanged with one theorem and one placeholder."},
     :commit "8c2d71da",
     :changed-paths
     ["ConstructionTargets/SardFiniteCoverMeasureBound.lean"
@@ -2910,7 +2927,7 @@
     :declarations ["measure_le_finset_sum_of_subset_biUnion"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteCoverMeasureBound.lean"
     "ConstructionTargets/SardFiniteCoverMeasureBound.md"],
@@ -3005,7 +3022,7 @@
       "227027a469337e12d7c7a8aa8f2a17b81121a5ec6859450fcca075d8a12923e8"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
