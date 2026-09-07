@@ -3607,8 +3607,55 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled compact packing-number finiteness theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one maximal-separated-set extraction and finite-dimensional packing/Taylor exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:IsCompact.packingNumber_ne_top
+     "cdbb23369e429a85a5d6754c785226e2dfa5c530c14b68d954d108aea82481e9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/CompactPackingNumberFiniteProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CompactPackingNumberFiniteProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactPackingNumberFinite.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardCompactPackingNumberFinite.lean ConstructionTargets/SardCompactPackingNumberFinite.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "14bad3e9efaf7d9e01488d056aaa3c9c68999c02",
+    :changed-paths
+    ["ConstructionTargets/SardCompactPackingNumberFinite.lean"
+     "ConstructionTargets/SardCompactPackingNumberFinite.md"],
+    :file-hashes
+    {"ConstructionTargets/SardCompactPackingNumberFinite.lean"
+     "203b72cffd7420156ddd19048b636866878408b246bdda9927297339d9411b8d",
+     "ConstructionTargets/SardCompactPackingNumberFinite.md"
+     "7c85c24b378dc2a9767eb19d53230c20225e5bbb575b258892cbd138c2f1eb5d"},
+    :fixture
+    {:path "/tmp/CompactPackingNumberFiniteProbe.lean",
+     :sha256
+     "04ff6e20aa2f0565b9de1116477a577f3eb6803db2486074176b89c89227bf1a"},
+    :declarations ["IsCompact.packingNumber_ne_top"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactPackingNumberFinite.lean"
     "ConstructionTargets/SardCompactPackingNumberFinite.md"],
