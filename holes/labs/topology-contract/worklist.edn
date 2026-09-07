@@ -6333,6 +6333,22 @@
       "git diff 3557ca282a329c22bbe062fe4b38cf0984ca94a2^ 3557ca282a329c22bbe062fe4b38cf0984ca94a2 --check",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788801609404-13927-30e6272d",
+     :commands
+     ["git show --stat --oneline 3557ca282a329c22bbe062fe4b38cf0984ca94a2"
+      "git diff-tree --no-commit-id --name-status -r 3557ca282a329c22bbe062fe4b38cf0984ca94a2"
+      "git diff-tree --check 3557ca282a329c22bbe062fe4b38cf0984ca94a2^ 3557ca282a329c22bbe062fe4b38cf0984ca94a2"
+      "sha256sum /tmp/SardExactRankLocalUpperLocusProbe.lean"
+      "git show 3557ca282a329c22bbe062fe4b38cf0984ca94a2:ConstructionTargets/SardExactRankLocalUpperLocus.lean | sha256sum"
+      "git show 3557ca282a329c22bbe062fe4b38cf0984ca94a2:ConstructionTargets/SardExactRankLocalUpperLocus.md | sha256sum"
+      "git cat-file -e c1fae85147d128b31f617c01cbc4e0785bb5f3d8^{commit}"
+      "lake env lean /tmp/SardExactRankLocalUpperLocusProbe.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "The repaired dependency SHA exists and all three recorded dependencies are ancestors of the implementation commit. Scope is exactly the declared Lean and Markdown artifacts. Fixture and Lean hash ebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153, Markdown hash b2f3aafb760c8c920399f31813db5a0903e84aec57c0e07d31e0c67dd0e01ea6, and statement hash fff9c4ef6f04043376e4ac398a55443fd3712c6d2f6639a792e8db23986b3cfb reproduce. Lean exits 0 with no placeholders and axioms exactly [propext, Classical.choice, Quot.sound]. The C1 preimage argument yields the open rank-at-least-r locus; cardinal-rank to finrank conversions are valid; and intersecting that lower-rank neighborhood with rank-at-most-r gives exact rank in both directions. Frozen t93A04 remains hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one target theorem and one sorry."},
     :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2",
     :changed-paths
     ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
@@ -6361,7 +6377,7 @@
      "fff9c4ef6f04043376e4ac398a55443fd3712c6d2f6639a792e8db23986b3cfb"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
     "ConstructionTargets/SardExactRankLocalUpperLocus.md"],
@@ -6471,7 +6487,7 @@
       "The exact rank stratum now has the required local rank-at-most representation; complemented-minor selection and derivative-flat fibre reduction remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
