@@ -4204,8 +4204,65 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled enlarged-to-half-radius quotient theorem cannot be promoted at the recorded representation without changing its positivity hypothesis or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "one polynomial source-cover bound and Taylor target-volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :module-compiled true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"ENNReal.enlarged_halfRadius_ratio"
+     "ce982900e4894e56261cea222ca40d3b26960732ea7ed6674a997bbd57cb05a1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem ENNReal.enlarged_halfRadius_ratio/,/ := by/p' ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard enlarged half-radius ratio'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "89bdd4ff36433de2127fdb2a15b9179451d65d9b",
+    :changed-paths
+    ["ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
+     "ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md"],
+    :file-hashes
+    {"ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
+     "6e8abe8e390ba31645411a507f41a533e6e110b76e8a43daf7e540f43088cb73",
+     "ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md"
+     "cbc0001c6dcd8d2f4ffd52daa007164e9bd5f3422612d6f04f2d1ff48f02c251"},
+    :fixture
+    {:path "/tmp/ENNRealEnlargedHalfRadiusRatioProbe.lean",
+     :sha256
+     "2c061361eca43f2b44ae9a0d1756a13180981d26a8d60e85923539f6b3512f2b"},
+    :declarations ["ENNReal.enlarged_halfRadius_ratio"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean"
     "ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.md"],
