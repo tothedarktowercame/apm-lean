@@ -3701,74 +3701,107 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled maximal-separated Finset cover adapter cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
+    "ConstructionTargets/SardMaximalSeparatedFinsetCover.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MAXIMAL SEPARATED FINSET COVER",
+   :acceptance
+   {:fixture
+    {:path "/tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+     :sha256
+     "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"},
+    :declarations ["exists_finset_maximal_separated_cover"],
+    :consumer-residual
+    "one finite-dimensional polynomial packing bound and Taylor target-volume exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a set with non-top ε-packing number and Mathlib's finite maximal ε-separated subset",
+    :target
+    "a Finset of centers contained in the set that is simultaneously ε-separated and an ε-cover"},
+   :id :critical-value-sard-maximal-separated-finset-cover-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the finite packing and measure aggregators require a Finset of centers, while Mathlib's maximal separated cover is exposed as a finite Set",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After compact packing-number finiteness is banked, prove one quantitative theorem extracting the finite maximal separated cover, combining half-ball disjointness, bounded enlargement, exact ball volumes, and packing cardinality to obtain polynomial cover size, then applying the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
+     "After the maximal-separated Finset cover adapter is banked, prove one quantitative theorem combining its separation and cover properties with half-ball disjointness, bounded enlargement, exact ball volumes, and packing cardinality to obtain the polynomial source-cover bound, then apply the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled compact packing-number finiteness theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled maximal-separated Finset cover adapter cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactPackingNumberFinite.lean"
-       "ConstructionTargets/SardCompactPackingNumberFinite.md"],
+      ["ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
+       "ConstructionTargets/SardMaximalSeparatedFinsetCover.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PACKING NUMBER FINITENESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MAXIMAL SEPARATED FINSET COVER",
       :acceptance
       {:fixture
-       {:path "/tmp/CompactPackingNumberFiniteProbe.lean",
+       {:path "/tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
         :sha256
-        "04ff6e20aa2f0565b9de1116477a577f3eb6803db2486074176b89c89227bf1a"},
-       :declarations ["IsCompact.packingNumber_ne_top"],
+        "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"},
+       :declarations ["exists_finset_maximal_separated_cover"],
        :consumer-residual
-       "one maximal-separated-set extraction and finite-dimensional packing/Taylor exponent estimate before local rank reduction",
+       "one finite-dimensional polynomial packing bound and Taylor target-volume exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a compact subset of a proper metric space and a nonzero NNReal separation radius",
+       "a set with non-top ε-packing number and Mathlib's finite maximal ε-separated subset",
        :target
-       "the corresponding ENat-valued packing number is not top"},
-      :id :critical-value-sard-compact-packing-number-finite-1,
+       "a Finset of centers contained in the set that is simultaneously ε-separated and an ε-cover"},
+      :id :critical-value-sard-maximal-separated-finset-cover-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the maximal-separated-set cover theorem requires a proof that the compact source patch has finite packing number at nonzero radius",
+      "the finite packing and measure aggregators require a Finset of centers, while Mathlib's maximal separated cover is exposed as a finite Set",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "Mathlib's maximal separated set supplies the desired cover only under the hypothesis that the packing number is not infinite. One independently compilable prerequisite discharges that hypothesis for compact subsets of proper metric spaces at every nonzero radius: compactness gives a finite half-radius cover, the standard packing-versus-external-covering inequality bounds the packing number by its finite cardinality, and hence the packing number is below top. Banking this makes the existing maximal-separated-set cover API available to the quantitative source-cover construction.",
+     "The banked finiteness theorem makes Mathlib's set-valued maximal separated set available, but the later finite measure sum consumes a Finset of centers. One independently compilable adapter converts the finite maximal separated set to a Finset while preserving all three required properties: containment in the source patch, ε-separation, and ε-covering. This removes set/Finset conversion from the remaining quantitative packing calculation.",
      :commands
      [{:cmd
        "sed -n '250,365p' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/CoveringNumbers.lean",
        :exit 0}
       {:cmd
-       "rg -n 'IsCompact.*IsCover|exists.*Finite.*IsCover|packingNumber.*top|isCover_maximalSeparatedSet' .lake/packages/mathlib/Mathlib/Topology -g '*.lean'",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CompactPackingNumberFiniteProbe.lean",
-       :exit 0,
-       :output
-       "'IsCompact.packingNumber_ne_top' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/CompactPackingNumberFiniteProbe.lean",
-       :exit 0,
-       :output
-       "04ff6e20aa2f0565b9de1116477a577f3eb6803db2486074176b89c89227bf1a"}
+       "rg -n 'finite_maximalSeparatedSet|maximalSeparatedSet.*Finite|finite.*maximalSeparated' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/CoveringNumbers.lean",
+       :exit 1,
+       :expected-exit 1}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/CompactPackingNumberFiniteProbe.lean",
+       "lake env lean /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+       :exit 0,
+       :output
+       "'exists_finset_maximal_separated_cover' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+       :exit 0,
+       :output
+       "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/CompactPackingNumberFiniteProbe.lean",
+     {:path "/tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
       :sha256
-      "04ff6e20aa2f0565b9de1116477a577f3eb6803db2486074176b89c89227bf1a"},
+      "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3796,7 +3829,8 @@
     :critical-value-sard-finite-packing-cardinality-bound-1
     :critical-value-sard-separated-half-balls-disjoint-1
     :critical-value-sard-centered-ball-bounded-enlargement-1
-    :critical-value-sard-compact-packing-number-finite-1],
+    :critical-value-sard-compact-packing-number-finite-1
+    :critical-value-sard-maximal-separated-finset-cover-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
