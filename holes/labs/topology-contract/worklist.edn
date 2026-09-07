@@ -4101,8 +4101,63 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled ENNReal power-volume ratio theorem cannot be promoted at the recorded representation without changing its hypotheses or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "one polynomial source-cover radius bound and Taylor target-volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :module-compiled true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"ENNReal.power_volume_ratio"
+     "c7fca8b995161dfa24112ef920adc54d17482c2310947148dc47f8e2a9b9d34d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/ENNRealBallVolumeRatioProbe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/ENNRealBallVolumeRatioProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardENNRealBallVolumeRatio.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardENNRealBallVolumeRatio.lean ConstructionTargets/SardENNRealBallVolumeRatio.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/ENNRealBallVolumeRatioProbe.lean ConstructionTargets/SardENNRealBallVolumeRatio.lean ConstructionTargets/SardENNRealBallVolumeRatio.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem ENNReal.power_volume_ratio/,/ := by/p' ConstructionTargets/SardENNRealBallVolumeRatio.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard ENNReal ball-volume ratio'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "93e282ca91fee554917074470703dff8bcf8cc81",
+    :changed-paths
+    ["ConstructionTargets/SardENNRealBallVolumeRatio.lean"
+     "ConstructionTargets/SardENNRealBallVolumeRatio.md"],
+    :file-hashes
+    {"ConstructionTargets/SardENNRealBallVolumeRatio.lean"
+     "547e66dde2a9e39505fc7598a9c9ac33f9e20e60dfa137d30886fb71734dda1c",
+     "ConstructionTargets/SardENNRealBallVolumeRatio.md"
+     "331d53ce4743360be6c30c7e831e97036b2b5836ac976e8f756bbafa207c55d5"},
+    :fixture
+    {:path "/tmp/ENNRealBallVolumeRatioProbe.lean",
+     :sha256
+     "415116d49f161764b09c99632c017f18ce4b05c85851a6ccdbe0a5e6685c9db2"},
+    :declarations ["ENNReal.power_volume_ratio"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardENNRealBallVolumeRatio.lean"
     "ConstructionTargets/SardENNRealBallVolumeRatio.md"],
