@@ -11596,6 +11596,40 @@
    "Pointwise local nullity now aggregates over a full nonzero-jet stratum in second-countable sources; local induction instantiation and finite jet/Taylor-flat aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled higher-jet image-nullity aggregation theorem cannot be promoted with its exact flatThrough/nonzeroJetLocus decomposition, finite order interval, arbitrary localized set and target measure, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardHigherJetImageNullityAggregation.lean"
+    "ConstructionTargets/SardHigherJetImageNullityAggregation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / HIGHER-JET IMAGE NULLITY AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardHigherJetImageNullityAggregationProbe.lean",
+     :sha256
+     "1c3ffcefae38d2d6f74c4f51cdbadbe82e1c3473d9e29cc94d417d0f2be7cce2"},
+    :declarations ["image_null_of_flatThrough_and_nonzeroJetLoci"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Prove local inductive nullity for every nonzero-jet locus using the exact kernel parameterization and source-dimension hypothesis, obtain flat-locus nullity from the compiled Taylor-covering theorem, and apply this aggregation theorem."},
+   :representation
+   {:source
+    "A localized set K, order k, map f:E→F, null image of flatThrough f K k, and null images of nonzeroJetLocus f K i for every i∈Icc 1 k under an arbitrary measure μ on F.",
+    :target
+    "Zero μ-measure of f''K via the exact reviewed higher-jet locus decomposition and finite/countable null-union aggregation."},
+   :id :critical-value-sard-higher-jet-image-nullity-aggregation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-higher-jet-locus-decomposition-1
+    :critical-value-sard-local-nullity-second-countable-aggregation-1
+    :critical-value-sard-multivariable-taylor-covering-probe-2],
+   :current-residual
+   "Flat-locus and per-order nonzero-jet nullity now aggregate to the full localized image; local source-induction instantiation and flat-locus Taylor-cover hypotheses remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -11653,65 +11687,64 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled second-countable local-nullity aggregation theorem cannot be promoted with its exact pointwise open-neighborhood hypotheses, restricted-image nullity, arbitrary source set and target measure, countable-subcover construction, or standard-axiom profile.",
+      "Stop only if the compiled higher-jet image-nullity aggregation theorem cannot be promoted with its exact flatThrough/nonzeroJetLocus decomposition, finite order interval, arbitrary localized set and target measure, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLocalNullitySecondCountableAggregation.lean"
-       "ConstructionTargets/SardLocalNullitySecondCountableAggregation.md"],
+      ["ConstructionTargets/SardHigherJetImageNullityAggregation.lean"
+       "ConstructionTargets/SardHigherJetImageNullityAggregation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SECOND-COUNTABLE LOCAL NULLITY AGGREGATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / HIGHER-JET IMAGE NULLITY AGGREGATION",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
+       {:path "/tmp/SardHigherJetImageNullityAggregationProbe.lean",
         :sha256
-        "2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a"},
-       :declarations ["image_null_of_locally_image_null"],
+        "1c3ffcefae38d2d6f74c4f51cdbadbe82e1c3473d9e29cc94d417d0f2be7cce2"},
+       :declarations ["image_null_of_flatThrough_and_nonzeroJetLoci"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "For each point of every nonzero-jet stratum, instantiate the exact kernel chart, source-dimension induction, and parameterized critical-image transfer to obtain a null local image; then apply this aggregation theorem and combine all jet orders with the Taylor-flat locus."},
+       "Prove local inductive nullity for every nonzero-jet locus using the exact kernel parameterization and source-dimension hypothesis, obtain flat-locus nullity from the compiled Taylor-covering theorem, and apply this aggregation theorem."},
       :representation
       {:source
-       "A set s in a second-countable topological space E, a map f:E→F, and an assigned open neighborhood U x containing every x∈s such that μ(f''(s∩U x))=0.",
+       "A localized set K, order k, map f:E→F, null image of flatThrough f K k, and null images of nonzeroJetLocus f K i for every i∈Icc 1 k under an arbitrary measure μ on F.",
        :target
-       "Zero μ-measure of f''s for an arbitrary measure μ on F, obtained through a countable neighborhood subcover."},
-      :id
-      :critical-value-sard-local-nullity-second-countable-aggregation-1,
+       "Zero μ-measure of f''K via the exact reviewed higher-jet locus decomposition and finite/countable null-union aggregation."},
+      :id :critical-value-sard-higher-jet-image-nullity-aggregation-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-parameterized-critical-image-nullity-1
-       :critical-value-sard-countable-aggregation-1],
+      [:critical-value-sard-higher-jet-locus-decomposition-1
+       :critical-value-sard-local-nullity-second-countable-aggregation-1
+       :critical-value-sard-multivariable-taylor-covering-probe-2],
       :current-residual
-      "Pointwise local nullity now aggregates over a full nonzero-jet stratum in second-countable sources; local induction instantiation and finite jet/Taylor-flat aggregation remain.",
+      "Flat-locus and per-order nonzero-jet nullity now aggregate to the full localized image; local source-induction instantiation and flat-locus Taylor-cover hypotheses remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next aggregation bridge: in a second-countable source, if every point of a set has an open neighborhood whose restricted image is null, then the image of the entire set is null. The proof extracts a countable subcover via hereditary Lindelöfness and applies countable null-union aggregation. This converts pointwise kernel-chart induction results into nullity of a full nonzero-jet stratum; constructing those local hypotheses and combining all jet orders with the Taylor-flat locus remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the finite jet/Taylor-flat image-nullity assembly theorem: nullity of the locus flat through order k and nullity of every nonzero-jet locus for orders 1 through k imply nullity of the entire localized source image. This connects the reviewed higher-jet decomposition to the local-nullity aggregation path. Establishing each nonzero-jet locus's local inductive nullity and supplying Taylor-covering nullity for the flat locus remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
+       "lake env lean /tmp/SardHigherJetImageNullityAggregationProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
+       "sha256sum /tmp/SardHigherJetImageNullityAggregationProbe.lean",
        :exit 0,
        :output
-       "2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a  /tmp/SardLocalNullitySecondCountableAggregationProbe.lean"}
+       "1c3ffcefae38d2d6f74c4f51cdbadbe82e1c3473d9e29cc94d417d0f2be7cce2  /tmp/SardHigherJetImageNullityAggregationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardHigherJetImageNullityAggregationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 101 items OK; {:done 93, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 102 items OK; {:done 94, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardParameterizedCriticalImageNullity.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardLocalNullitySecondCountableAggregation.lean ConstructionTargets/SardHigherJetLocusDecomposition.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nbfa065f84b45447c8d1ba88226705b74be74f6c377a7980ece983768e42a1519  ConstructionTargets/SardParameterizedCriticalImageNullity.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a  ConstructionTargets/SardLocalNullitySecondCountableAggregation.lean\n1ae41fc90c43e105705cf75885ca2142ce291b0dcdde2eb301f6cbeaaac100f2  ConstructionTargets/SardHigherJetLocusDecomposition.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -11722,13 +11755,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
+     {:path "/tmp/SardHigherJetImageNullityAggregationProbe.lean",
       :sha256
-      "2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a"},
+      "1c3ffcefae38d2d6f74c4f51cdbadbe82e1c3473d9e29cc94d417d0f2be7cce2"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -11778,7 +11810,8 @@
     :critical-value-sard-critical-set-under-parameterization-1
     :critical-value-sard-parameterized-image-nullity-transfer-1
     :critical-value-sard-parameterized-critical-image-nullity-1
-    :critical-value-sard-local-nullity-second-countable-aggregation-1],
+    :critical-value-sard-local-nullity-second-countable-aggregation-1
+    :critical-value-sard-higher-jet-image-nullity-aggregation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
