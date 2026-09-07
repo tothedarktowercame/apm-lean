@@ -7304,40 +7304,6 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
-   "Stop only if the compiled residual-flatness theorem cannot be promoted against Mathlib's exact ImplicitFunctionData.implicitFunction, basepoint identity, derivative formula, or standard-axiom profile.",
-   :phase :implementation,
-   :state :open,
-   :scope
-   ["ConstructionTargets/SardImplicitFunctionResidualFlatness.lean"
-    "ConstructionTargets/SardImplicitFunctionResidualFlatness.md"],
-   :dag-node
-   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION RESIDUAL FLATNESS",
-   :acceptance
-   {:fixture
-    {:path "/tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
-     :sha256
-     "34864be4dc2102aac0d4509c79250929837cac269d1a725d2561f3cd10fd56d7"},
-    :declarations ["hasFDerivAt_residual_comp_implicitFunction_zero"],
-    :axioms :standard-only,
-    :warnings [],
-    :consumer-residual
-    "Construct this implicit-function datum at every point of the exact-rank local upper locus, combine neighborhood residual flatness with the theorem at each kernel-coordinate basepoint, and apply the quantitative Taylor-cover nullity theorem to the resulting flat slices before assembling rank/source-dimension induction."},
-   :representation
-   {:source
-    "An ImplicitFunctionData datum φ and a residual map h whose derivative H at φ.pt vanishes on ker φ.leftDeriv.",
-    :target
-    "The restriction h∘φ.implicitFunction(φ.leftFun φ.pt) has zero Frechet derivative at the kernel coordinate φ.rightFun φ.pt."},
-   :id :critical-value-sard-implicit-function-residual-flatness-1,
-   :kind :reusable-theorem,
-   :depends-on
-   [:critical-value-sard-constant-coordinate-slice-flatness-1
-    :critical-value-sard-local-residual-derivative-flatness-1
-    :critical-value-sard-projected-implicit-function-packaging-1],
-   :current-residual
-   "The inverse-chart specialization and zero derivative of the residual slice compile at each basepoint; higher-order slice flatness/Taylor-cover uptake and the induction assembly remain.",
-   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
-  {:consumer :t93A04,
-   :stop-condition
    "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
@@ -7405,7 +7371,7 @@
       "The inverse-chart specialization and zero derivative of the residual slice compile at each basepoint; higher-order slice flatness/Taylor-cover uptake and the induction assembly remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",

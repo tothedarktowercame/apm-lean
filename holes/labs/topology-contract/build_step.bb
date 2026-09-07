@@ -139,16 +139,40 @@
                                    (cond-> (:id (:implementation receipt))
                                      (assoc-in [:evidence :requested-id]
                                                (:id (:implementation receipt))))))
+            ;; REVISE means "I need prerequisite P before I can continue".
+            ;; If P is ALREADY in the ledger that is a dependency, not a new
+            ;; row: on 2026-09-07 a probe asked for
+            ;; :critical-value-sard-implicit-function-residual-flatness-1,
+            ;; which was already :done with a passing review, and this inserted
+            ;; a second identical copy at :open. worklist_check refused the
+            ;; ledger ("duplicate item ids") and the supervisor stopped. The
+            ;; :replan branch below has always checked for exactly this; this
+            ;; branch did not.
+            ;;
+            ;; A prerequisite that is already :done blocks nothing, so the
+            ;; asking row stays runnable; one still in flight blocks it as
+            ;; before. Either way the dependency is recorded once.
             :revise (let [p (:prerequisite receipt)]
                       (when-not (and (map? p) (:id p))
                         (throw (ex-info "REVISE lacks prerequisite item" {:receipt receipt})))
-                      (vec (mapcat #(if (= id (:id %))
-                                      [(merge {:state :open :phase :probe :depends-on []}
-                                              p)
-                                       (-> % (assoc :state :blocked)
-                                             (update :depends-on (fnil conj []) (:id p))
-                                             (assoc-in [:evidence :probe] receipt))]
-                                      [%]) items)))
+                      (let [existing (by-id (:id p))
+                            note (fn [row]
+                                   (-> row
+                                       (update :depends-on
+                                               #(vec (distinct (conj (or % []) (:id p)))))
+                                       (assoc-in [:evidence :probe] receipt)))]
+                        (if existing
+                          (vec (mapv #(if (= id (:id %))
+                                        (cond-> (note %)
+                                          (not= :done (:state existing))
+                                          (assoc :state :blocked))
+                                        %)
+                                     items))
+                          (vec (mapcat #(if (= id (:id %))
+                                          [(merge {:state :open :phase :probe :depends-on []}
+                                                  p)
+                                           (-> % (assoc :state :blocked) note)]
+                                          [%]) items)))))
             :stop (replace-item items id #(-> % (assoc :state :done-unreviewed)
                                                  (assoc :evidence (assoc receipt
                                                                    :author (:seat receipt)
