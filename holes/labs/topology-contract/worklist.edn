@@ -3799,77 +3799,104 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled ENNReal-separation to real-distance adapter cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardSeparatedENNRealToRealDist.lean"
+    "ConstructionTargets/SardSeparatedENNRealToRealDist.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SEPARATION DISTANCE REPRESENTATION ADAPTER",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SeparatedENNRealToDistProbe.lean",
+     :sha256
+     "c96e28732dab2512194bf6f847f195a987a4edade2a049626ad156ad062bfad0"},
+    :declarations ["IsSeparated.real_dist_le"],
+    :consumer-residual
+    "one finite-dimensional polynomial packing bound and Taylor target-volume exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "an ENNReal `Metric.IsSeparated` predicate on the image of a finite family of centers in a pseudometric space",
+    :target
+    "a real-distance lower bound for every pair of distinct centers in that family"},
+   :id :critical-value-sard-separated-ennreal-to-real-dist-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the maximal-separated cover records ENNReal edistance separation, while the disjoint-ball and volume arguments require a real-distance lower bound",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After the maximal-separated Finset cover adapter is banked, prove one quantitative theorem combining its separation and cover properties with half-ball disjointness, bounded enlargement, exact ball volumes, and packing cardinality to obtain the polynomial source-cover bound, then apply the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
+     "After the separation-distance adapter is banked, prove one quantitative theorem applying half-ball disjointness and bounded enlargement to the maximal separated Finset, using exact finite-dimensional ball volumes and the packing-cardinality inequality to obtain polynomial cover size, then applying the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled maximal-separated Finset cover adapter cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled ENNReal-separation to real-distance adapter cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
-       "ConstructionTargets/SardMaximalSeparatedFinsetCover.md"],
+      ["ConstructionTargets/SardSeparatedENNRealToRealDist.lean"
+       "ConstructionTargets/SardSeparatedENNRealToRealDist.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MAXIMAL SEPARATED FINSET COVER",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SEPARATION DISTANCE REPRESENTATION ADAPTER",
       :acceptance
       {:fixture
-       {:path "/tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+       {:path "/tmp/SeparatedENNRealToDistProbe.lean",
         :sha256
-        "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"},
-       :declarations ["exists_finset_maximal_separated_cover"],
+        "c96e28732dab2512194bf6f847f195a987a4edade2a049626ad156ad062bfad0"},
+       :declarations ["IsSeparated.real_dist_le"],
        :consumer-residual
        "one finite-dimensional polynomial packing bound and Taylor target-volume exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a set with non-top ε-packing number and Mathlib's finite maximal ε-separated subset",
+       "an ENNReal `Metric.IsSeparated` predicate on the image of a finite family of centers in a pseudometric space",
        :target
-       "a Finset of centers contained in the set that is simultaneously ε-separated and an ε-cover"},
-      :id :critical-value-sard-maximal-separated-finset-cover-1,
+       "a real-distance lower bound for every pair of distinct centers in that family"},
+      :id :critical-value-sard-separated-ennreal-to-real-dist-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the finite packing and measure aggregators require a Finset of centers, while Mathlib's maximal separated cover is exposed as a finite Set",
+      "the maximal-separated cover records ENNReal edistance separation, while the disjoint-ball and volume arguments require a real-distance lower bound",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The banked finiteness theorem makes Mathlib's set-valued maximal separated set available, but the later finite measure sum consumes a Finset of centers. One independently compilable adapter converts the finite maximal separated set to a Finset while preserving all three required properties: containment in the source patch, ε-separation, and ε-covering. This removes set/Finset conversion from the remaining quantitative packing calculation.",
+     "Mathlib's covering-number API expresses separation using ENNReal-valued extended distance, while the banked half-ball disjointness and finite-dimensional volume packets use real radii and `dist`. One independently compilable representation adapter converts `IsSeparated (ε : ENNReal)` for a finite image of centers into the real inequality `(ε : ℝ) ≤ dist (c i) (c j)` for distinct centers. Banking it makes the extracted maximal separated Finset directly consumable by the metric packing lemmas.",
      :commands
      [{:cmd
-       "sed -n '250,365p' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/CoveringNumbers.lean",
+       "sed -n '1,90p' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/MetricSeparated.lean",
        :exit 0}
       {:cmd
-       "rg -n 'finite_maximalSeparatedSet|maximalSeparatedSet.*Finite|finite.*maximalSeparated' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/CoveringNumbers.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "lake env lean /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+       "rg -n 'IsSeparated.*dist|dist.*IsSeparated|isSeparated_iff|edist_dist|coe_lt_ofReal' .lake/packages/mathlib/Mathlib/Topology/MetricSpace .lake/packages/mathlib/Mathlib/Data/ENNReal -g '*.lean'",
+       :exit 0}
+      {:cmd "lake env lean /tmp/SeparatedENNRealToDistProbe.lean",
        :exit 0,
        :output
-       "'exists_finset_maximal_separated_cover' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+       "'IsSeparated.real_dist_le' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SeparatedENNRealToDistProbe.lean",
        :exit 0,
        :output
-       "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"}
+       "c96e28732dab2512194bf6f847f195a987a4edade2a049626ad156ad062bfad0"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/SeparatedENNRealToDistProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+     {:path "/tmp/SeparatedENNRealToDistProbe.lean",
       :sha256
-      "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"},
+      "c96e28732dab2512194bf6f847f195a987a4edade2a049626ad156ad062bfad0"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3898,7 +3925,8 @@
     :critical-value-sard-separated-half-balls-disjoint-1
     :critical-value-sard-centered-ball-bounded-enlargement-1
     :critical-value-sard-compact-packing-number-finite-1
-    :critical-value-sard-maximal-separated-finset-cover-1],
+    :critical-value-sard-maximal-separated-finset-cover-1
+    :critical-value-sard-separated-ennreal-to-real-dist-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
