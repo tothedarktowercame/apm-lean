@@ -3415,8 +3415,54 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled separated-half-ball disjointness theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one maximal separated-family construction, bounded-enlargement containment, and Taylor/volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:pairwiseDisjoint_ball_half_of_separated
+     "770969fe8c65b0175b8fe2e3289e3e97c6c9e453154405c01539475e052ab986"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/SeparatedBallsDisjointProbe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/SeparatedBallsDisjointProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean ConstructionTargets/SardSeparatedHalfBallsDisjoint.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "4e87ab4e60fb962563f8d2617bacb5f92340a1d2",
+    :changed-paths
+    ["ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
+     "ConstructionTargets/SardSeparatedHalfBallsDisjoint.md"],
+    :file-hashes
+    {"ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
+     "02c303305ae63ab7236fd2741e915c027acc1e643fc559fcddfd473dfa30bce7",
+     "ConstructionTargets/SardSeparatedHalfBallsDisjoint.md"
+     "daaeb9b6217c22f0fc14e5087fd370469e35dd8e4442edb94c1303bdc6777f27"},
+    :fixture
+    {:path "/tmp/SeparatedBallsDisjointProbe.lean",
+     :sha256
+     "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"},
+    :declarations ["pairwiseDisjoint_ball_half_of_separated"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
     "ConstructionTargets/SardSeparatedHalfBallsDisjoint.md"],
