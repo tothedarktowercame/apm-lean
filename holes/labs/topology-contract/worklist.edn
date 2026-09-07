@@ -11042,6 +11042,40 @@
    "The smooth kernel pullback now preserves derivative-criticality exactly; source-dimension inductive nullity on localized nonzero-jet strata and aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled `fderiv` critical-set transport theorem cannot be promoted with its exact DifferentiableAt hypotheses, nonsurjective `fderiv` predicate, function-composition representation, localized set inclusion, arbitrary parameter space, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCriticalSetUnderParameterization.lean"
+    "ConstructionTargets/SardCriticalSetUnderParameterization.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CRITICAL-SET TRANSPORT UNDER PARAMETERIZATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardCriticalSetUnderParameterizationProbe.lean",
+     :sha256
+     "a697a1c4efe7e2f798e87f6a7f15b38f836d9a482e192433a5da3dd2c02b3b4d"},
+    :declarations
+    ["not_surjective_fderiv_comp"
+     "preimage_criticalSet_subset_criticalSet_comp"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the set-level criticality inclusion with each exact kernel parameterization and the lower-dimensional induction hypothesis, transfer the resulting pullback image nullity to the original localized stratum, and aggregate local and jet strata."},
+   :representation
+   {:source
+    "Differentiable maps f:E→F and g:G→E on a localized set s⊆G, with points mapped by g into the nonsurjective-`fderiv` locus of f.",
+    :target
+    "Pointwise nonsurjectivity of fderiv ℝ (f∘g) and the inclusion s∩g⁻¹'{y | ¬Surjective(fderiv ℝ f y)} ⊆ {x | ¬Surjective(fderiv ℝ (f∘g) x)}."},
+   :id :critical-value-sard-critical-set-under-parameterization-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-criticality-under-parameterization-1],
+   :current-residual
+   "The exact localized critical set of the original map pulls back into the critical set of the lower-dimensional composite; image-nullity transport and inductive aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -11099,64 +11133,64 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled derivative-criticality transport theorem cannot be promoted with its exact continuous-linear composition, nonsurjectivity hypothesis and conclusion, HasFDerivAt chain rule, arbitrary parameter space, or standard-axiom profile.",
+      "Stop only if the compiled `fderiv` critical-set transport theorem cannot be promoted with its exact DifferentiableAt hypotheses, nonsurjective `fderiv` predicate, function-composition representation, localized set inclusion, arbitrary parameter space, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCriticalityUnderParameterization.lean"
-       "ConstructionTargets/SardCriticalityUnderParameterization.md"],
+      ["ConstructionTargets/SardCriticalSetUnderParameterization.lean"
+       "ConstructionTargets/SardCriticalSetUnderParameterization.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CRITICALITY UNDER PARAMETERIZATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CRITICAL-SET TRANSPORT UNDER PARAMETERIZATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardCriticalityUnderParameterizationProbe.lean",
+       {:path "/tmp/SardCriticalSetUnderParameterizationProbe.lean",
         :sha256
-        "912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810"},
+        "a697a1c4efe7e2f798e87f6a7f15b38f836d9a482e192433a5da3dd2c02b3b4d"},
        :declarations
-       ["ContinuousLinearMap.not_surjective_comp_of_not_surjective"
-        "HasFDerivAt.comp_and_not_surjective"],
+       ["not_surjective_fderiv_comp"
+        "preimage_criticalSet_subset_criticalSet_comp"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the chain-rule criticality transport on each scalarized-jet kernel parameterization, apply the source-dimension induction hypothesis to the resulting lower-dimensional critical map, and aggregate local and jet strata."},
+       "Use the set-level criticality inclusion with each exact kernel parameterization and the lower-dimensional induction hypothesis, transfer the resulting pullback image nullity to the original localized stratum, and aggregate local and jet strata."},
       :representation
       {:source
-       "Continuous linear maps A:E→L[ℝ]F and B:G→L[ℝ]E with A nonsurjective, specialized to derivatives of f:E→F and a smooth kernel parameter g:G→E at x.",
+       "Differentiable maps f:E→F and g:G→E on a localized set s⊆G, with points mapped by g into the nonsurjective-`fderiv` locus of f.",
        :target
-       "Nonsurjectivity of A.comp B together with HasFDerivAt (z↦f(g z)) (A.comp B) x, preserving arbitrary normed source, target, and parameter spaces."},
-      :id :critical-value-sard-criticality-under-parameterization-1,
+       "Pointwise nonsurjectivity of fderiv ℝ (f∘g) and the inclusion s∩g⁻¹'{y | ¬Surjective(fderiv ℝ f y)} ⊆ {x | ¬Surjective(fderiv ℝ (f∘g) x)}."},
+      :id :critical-value-sard-critical-set-under-parameterization-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-implicit-function-kernel-parameter-composition-contdiff-1],
+      [:critical-value-sard-criticality-under-parameterization-1],
       :current-residual
-      "The smooth kernel pullback now preserves derivative-criticality exactly; source-dimension inductive nullity on localized nonzero-jet strata and aggregation remain.",
+      "The exact localized critical set of the original map pulls back into the critical set of the lower-dimensional composite; image-nullity transport and inductive aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next exact induction bridge: precomposing a nonsurjective continuous linear derivative with any parameter derivative remains nonsurjective, and the chain rule packages this with the derivative of the pulled-back map. Thus derivative-criticality transports to the strictly lower-dimensional kernel parameterization. Instantiating this bridge on each localized nonzero-jet stratum, invoking source-dimension induction, and aggregating nullity remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture promotes the derivative-level transport to the exact `fderiv` critical-set representation used by Sard: a nonsurjective derivative remains nonsurjective after differentiable source parameterization, both pointwise and as a set inclusion on a localized parameter domain. This supplies the critical-locus inclusion needed to apply lower-dimensional nullity to the kernel pullback. Image transport from that pullback nullity to the original localized stratum and aggregation remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardCriticalityUnderParameterizationProbe.lean",
+       "lake env lean /tmp/SardCriticalSetUnderParameterizationProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardCriticalityUnderParameterizationProbe.lean",
+       "sha256sum /tmp/SardCriticalSetUnderParameterizationProbe.lean",
        :exit 0,
        :output
-       "912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810  /tmp/SardCriticalityUnderParameterizationProbe.lean"}
+       "a697a1c4efe7e2f798e87f6a7f15b38f836d9a482e192433a5da3dd2c02b3b4d  /tmp/SardCriticalSetUnderParameterizationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCriticalityUnderParameterizationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCriticalSetUnderParameterizationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 97 items OK; {:done 89, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 98 items OK; {:done 90, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionKernelParameterCompositionContDiff.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardCriticalityUnderParameterization.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nd1ec2e04e7699904bd29d70a006286f67e696a381be1b13c0a7a787636d274dd  ConstructionTargets/SardImplicitFunctionKernelParameterCompositionContDiff.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810  ConstructionTargets/SardCriticalityUnderParameterization.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -11167,12 +11201,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardCriticalityUnderParameterizationProbe.lean",
+     {:path "/tmp/SardCriticalSetUnderParameterizationProbe.lean",
       :sha256
-      "912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810"},
+      "a697a1c4efe7e2f798e87f6a7f15b38f836d9a482e192433a5da3dd2c02b3b4d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -11218,7 +11252,8 @@
     :critical-value-sard-scalarized-jet-remaining-order-contdiff-1
     :critical-value-sard-scalarized-jet-kernel-parameter-contdiff-1
     :critical-value-sard-implicit-function-kernel-parameter-composition-contdiff-1
-    :critical-value-sard-criticality-under-parameterization-1],
+    :critical-value-sard-criticality-under-parameterization-1
+    :critical-value-sard-critical-set-under-parameterization-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
