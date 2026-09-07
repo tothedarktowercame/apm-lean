@@ -3329,74 +3329,104 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled finite packing cardinality inequality cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFinitePackingCardinalityBound.lean"
+    "ConstructionTargets/SardFinitePackingCardinalityBound.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE PACKING CARDINALITY BOUND",
+   :acceptance
+   {:fixture
+    {:path "/tmp/FinitePackingCardinalityProbe.lean",
+     :sha256
+     "49f2fdfe1b5b6f8e003c13f57f6a2405d80b2393f1e01af5c19f78ac6488f488"},
+    :declarations ["finset_card_mul_le_measure_of_disjoint"],
+    :consumer-residual
+    "one maximal-separated-set source-cover construction and Taylor/volume exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a finite pairwise-disjoint family of measurable subsets, each having measure at least v, whose union is contained in an ambient measurable-space subset B",
+    :target "the ENNReal inequality card(s) * v ≤ μ(B)"},
+   :id :critical-value-sard-finite-packing-cardinality-bound-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the polynomial source-cover argument lacks a promoted bridge from disjoint equal-volume packing balls to a cardinality bound",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After the exact target-ball volume formula is banked, prove one quantitative theorem producing the polynomial source-cover bound, applying the Taylor ball-image estimate, and choosing the radius from the positive Morse--Sard exponent difference to meet every inverse-natural tolerance; do not begin local rank reduction.",
+     "After the finite packing cardinality bound is banked, prove one quantitative theorem constructing a maximal radius-separated family in the bounded finite-dimensional source patch, bounding its cardinality through disjoint small-ball volumes, applying the Taylor target-ball estimate, and choosing the radius from the positive exponent difference; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled finite-dimensional closed-ball volume formula cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled finite packing cardinality inequality cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteDimensionalBallVolume.lean"
-       "ConstructionTargets/SardFiniteDimensionalBallVolume.md"],
+      ["ConstructionTargets/SardFinitePackingCardinalityBound.lean"
+       "ConstructionTargets/SardFinitePackingCardinalityBound.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-DIMENSIONAL BALL VOLUME",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE PACKING CARDINALITY BOUND",
       :acceptance
       {:fixture
-       {:path "/tmp/FiniteDimensionalBallVolumeProbe.lean",
+       {:path "/tmp/FinitePackingCardinalityProbe.lean",
         :sha256
-        "4a876eecf19a3805e6359bdc0de31469157e6b0aebac1bc7ae3500054d2066be"},
-       :declarations ["finiteDimensional_volume_closedBall_formula"],
+        "49f2fdfe1b5b6f8e003c13f57f6a2405d80b2393f1e01af5c19f78ac6488f488"},
+       :declarations ["finset_card_mul_le_measure_of_disjoint"],
        :consumer-residual
-       "one quantitative finite-dimensional source-cover/Taylor target-ball exponent theorem before local rank reduction",
+       "one maximal-separated-set source-cover construction and Taylor/volume exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a closed ball of radius r in a nontrivial finite-dimensional real inner-product space with its Borel add-Haar measure",
-       :target
-       "its exact ENNReal volume as r^(finrank E) times the dimension-dependent unit-ball constant"},
-      :id :critical-value-sard-finite-dimensional-ball-volume-1,
+       "a finite pairwise-disjoint family of measurable subsets, each having measure at least v, whose union is contained in an ambient measurable-space subset B",
+       :target "the ENNReal inequality card(s) * v ≤ μ(B)"},
+      :id :critical-value-sard-finite-packing-cardinality-bound-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the Taylor-cover exponent calculation lacks a promoted exact target-ball volume scaling formula",
+      "the polynomial source-cover argument lacks a promoted bridge from disjoint equal-volume packing balls to a cardinality bound",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The remaining quantitative calculation has one independently compilable target-side prerequisite: the exact add-Haar volume formula for closed balls in a nontrivial finite-dimensional real inner-product space. This supplies the r^(finrank F) factor needed to combine Taylor image-ball radii with source-cover cardinality. After banking it, the current row retains one coherent scale-cover theorem combining the finite-dimensional polynomial source-cover estimate, Taylor remainder bound, positive exponent difference, and inverse-natural tolerance choice.",
+     "Pinned Mathlib's covering-number machinery does not expose the required finite-dimensional polynomial radius bound directly. One independently compilable packing prerequisite remains: a finite pairwise-disjoint family of measurable sets, each with measure at least v and whose union lies in B, has cardinality times v at most measure B. This is the measure-theoretic counting step used to bound a maximal separated family of source-ball centers. Banking it leaves the geometric construction of the separated family, containment of its disjoint small balls in a bounded enlargement, and the resulting radius-exponent calculation as one coherent quantitative theorem.",
      :commands
      [{:cmd
-       "rg -n 'volume.*ball|measure.*ball.*rpow|ball.*measure|volume_closedBall|volume_ball' .lake/packages/mathlib/Mathlib -g '*.lean'",
-       :exit 0}
-      {:cmd
-       "sed -n '340,365p' .lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue/VolumeOfBalls.lean",
-       :exit 0}
-      {:cmd "lake env lean /tmp/FiniteDimensionalBallVolumeProbe.lean",
+       "rg -n 'coveringNumber|covering number|card.*cover|cover.*card|MetricEntropy|packingNumber|doubling|Finset.*ball|ball.*Finset' .lake/packages/mathlib/Mathlib -g '*.lean'",
        :exit 0,
        :output
-       "'finiteDimensional_volume_closedBall_formula' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/FiniteDimensionalBallVolumeProbe.lean",
+       "Pinned Mathlib contains general covering and packing numbers and qualitative finite covers, but no directly located finite-dimensional polynomial radius bound."}
+      {:cmd
+       "rg -n 'measure_biUnion_finset|measure_iUnion_finset|measure_iUnion.*Finset|sum.*measure.*disjoint' .lake/packages/mathlib/Mathlib/MeasureTheory -g '*.lean'",
+       :exit 0}
+      {:cmd "lake env lean /tmp/FinitePackingCardinalityProbe.lean",
        :exit 0,
        :output
-       "4a876eecf19a3805e6359bdc0de31469157e6b0aebac1bc7ae3500054d2066be"}
+       "'finset_card_mul_le_measure_of_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/FinitePackingCardinalityProbe.lean",
+       :exit 0,
+       :output
+       "49f2fdfe1b5b6f8e003c13f57f6a2405d80b2393f1e01af5c19f78ac6488f488"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/FiniteDimensionalBallVolumeProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/FinitePackingCardinalityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/FiniteDimensionalBallVolumeProbe.lean",
+     {:path "/tmp/FinitePackingCardinalityProbe.lean",
       :sha256
-      "4a876eecf19a3805e6359bdc0de31469157e6b0aebac1bc7ae3500054d2066be"},
+      "49f2fdfe1b5b6f8e003c13f57f6a2405d80b2393f1e01af5c19f78ac6488f488"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3420,7 +3450,8 @@
     :critical-value-sard-arbitrarily-small-measure-limit-1
     :critical-value-sard-compact-finite-ball-cover-1
     :critical-value-sard-finite-cover-cardinality-measure-1
-    :critical-value-sard-finite-dimensional-ball-volume-1],
+    :critical-value-sard-finite-dimensional-ball-volume-1
+    :critical-value-sard-finite-packing-cardinality-bound-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
