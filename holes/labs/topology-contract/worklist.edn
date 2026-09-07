@@ -3702,8 +3702,57 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled maximal-separated Finset cover adapter cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one finite-dimensional polynomial packing bound and Taylor target-volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_finset_maximal_separated_cover
+     "691dc2f9bd1c27833c65089404c90534ee084153325997d8062634eb192507d6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardMaximalSeparatedFinsetCover.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardMaximalSeparatedFinsetCover.lean ConstructionTargets/SardMaximalSeparatedFinsetCover.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "0f2f06faadee36b025811d4d0d2a7af45fa1a5c2",
+    :changed-paths
+    ["ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
+     "ConstructionTargets/SardMaximalSeparatedFinsetCover.md"],
+    :file-hashes
+    {"ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
+     "2095067ea4321f53384a8649df1bf640a01efff7961790b4d6c25104ea93414c",
+     "ConstructionTargets/SardMaximalSeparatedFinsetCover.md"
+     "a9a70af51170bc5850b0e38d116a40a43ab59bb2c8235744f5660b35f4e938f0"},
+    :fixture
+    {:path "/tmp/CompactMaximalSeparatedFinsetCoverProbe.lean",
+     :sha256
+     "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"},
+    :declarations ["exists_finset_maximal_separated_cover"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
     "ConstructionTargets/SardMaximalSeparatedFinsetCover.md"],
