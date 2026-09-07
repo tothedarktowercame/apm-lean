@@ -6299,14 +6299,23 @@
      :placeholder-free true,
      :diff-check true,
      :scoped-commit-clean true,
-     :worktree-clean false},
+     :worktree-clean true,
+     :dependency-commit-exists true},
+    :repair
+    "Corrected the receipt dependency SHA only; scoped source and implementation commit remain unchanged.",
     :outcome :done-unreviewed,
-    :warnings
-    ["Shared worktree contains unrelated untracked paths problems/t99A01/lean/, problems/t99A02/lean/, problems/t99A03/lean/, problems/t99A04/lean/, and problems/t99A05/lean/; they were preserved and excluded from the explicit scoped commit."],
+    :warnings [],
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
-    [{:cmd "sha256sum /tmp/SardExactRankLocalUpperLocusProbe.lean",
+    [{:cmd "git cat-file -t c1fae85147d128b31f617c01cbc4e0785bb5f3d8",
+      :exit 0}
+     {:cmd "git cat-file -t 3557ca282a329c22bbe062fe4b38cf0984ca94a2",
+      :exit 0}
+     {:cmd "sha256sum /tmp/SardExactRankLocalUpperLocusProbe.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardExactRankLocalUpperLocus.lean ConstructionTargets/SardExactRankLocalUpperLocus.md",
       :exit 0}
      {:cmd "lake env lean /tmp/SardExactRankLocalUpperLocusProbe.lean",
       :exit 0}
@@ -6318,26 +6327,12 @@
       :exit 1,
       :expected-exit 1}
      {:cmd
-      "sha256sum /tmp/SardExactRankLocalUpperLocusProbe.lean ConstructionTargets/SardExactRankLocalUpperLocus.lean ConstructionTargets/SardExactRankLocalUpperLocus.md",
+      "git diff-tree --no-commit-id --name-only -r 3557ca282a329c22bbe062fe4b38cf0984ca94a2",
       :exit 0}
      {:cmd
-      "sed -n '/^def derivativeRankAtLeast/,/^#print axioms exists_open_inter_rankStratum_eq_rankLE/p' ConstructionTargets/SardExactRankLocalUpperLocus.lean | sha256sum",
+      "git diff 3557ca282a329c22bbe062fe4b38cf0984ca94a2^ 3557ca282a329c22bbe062fe4b38cf0984ca94a2 --check",
       :exit 0}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd
-      "git add -- ConstructionTargets/SardExactRankLocalUpperLocus.lean ConstructionTargets/SardExactRankLocalUpperLocus.md",
-      :exit 0}
-     {:cmd "git diff --cached --check", :exit 0}
-     {:cmd "git commit -m 'Add Sard exact-rank local upper locus'",
-      :exit 0}
-     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-17",
-     :job "invoke-1788800882446-13919-e5b80886",
-     :finding
-     "Replace the nonexistent recorded dependency commit c1fae85147d128b31f617c01cbc4e0785bb5f8 for critical-value-sard-multivariable-taylor-covering-probe-2 with the reviewed commit c1fae85147d128b31f617c01cbc4e0785bb5f3d8, then resubmit for review; all scoped source, fixture, statement, placeholder, Lean, axiom, consumer-freeze, and theorem-orientation checks otherwise pass."},
     :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2",
     :changed-paths
     ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
@@ -6354,7 +6349,7 @@
     [{:id :critical-value-sard-local-rank-normal-form-probe-2,
       :commit "7bc80d8f72811affd71a70cf3396cc21964359af"}
      {:id :critical-value-sard-multivariable-taylor-covering-probe-2,
-      :commit "c1fae85147d128b31f617c01cbc4e0785bb5f8"}
+      :commit "c1fae85147d128b31f617c01cbc4e0785bb5f3d8"}
      {:id :critical-value-sard-rectangular-local-probe-1,
       :commit "8e18ea8176c0ebd1f7cc89b07120fcbeaa1195e6"}],
     :hashes
@@ -6366,7 +6361,7 @@
      "fff9c4ef6f04043376e4ac398a55443fd3712c6d2f6639a792e8db23986b3cfb"},
     :seat :codex-2},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
     "ConstructionTargets/SardExactRankLocalUpperLocus.md"],
