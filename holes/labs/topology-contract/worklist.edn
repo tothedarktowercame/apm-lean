@@ -6642,29 +6642,62 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled ImplicitFunctionData packaging and local-normal-form existence theorem cannot be promoted with its exact projected-map, derivative-range, kernel-coordinate, completeness, or standard-axiom properties.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"
+    "ConstructionTargets/SardProjectedImplicitFunctionPackaging.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED IMPLICIT-FUNCTION PACKAGING",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
+     :sha256
+     "9742179005453fc047b3f8128c6ac3da74c9740e2bd95f292d1baf5457a679eb"},
+    :declarations ["exists_projected_localRankNormalForm"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the full coordinate formulas from localRankNormalForm_of_complemented_minor to express the exact-rank local upper locus in range/kernel coordinates, then prove the residual target coordinate has vanishing derivative along each local rank-at-most-r fibre before applying Taylor-cover nullity."},
+   :representation
+   {:source
+    "A strict Frechet derivative L of f at x between finite-dimensional real inner-product spaces, together with the projected complemented derivative data.",
+    :target
+    "An ImplicitFunctionData instance constructed locally with no new hypothesis and an open partial homeomorphism from the source into derivative-range times projected-kernel coordinates whose source contains x."},
+   :id :critical-value-sard-projected-implicit-function-packaging-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-complemented-strict-derivative-data-1
+    :critical-value-sard-local-rank-normal-form-probe-2],
+   :current-residual
+   "The nonlinear local coordinate chart now exists at every strict-derivative point; identifying the transformed exact-rank locus and proving derivative flatness of the residual target coordinate remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "The projected nonlinear map and kernel coordinate now compile with their exact strict derivatives, surjectivity, and complementary-kernel proofs. Bank this single reusable data theorem before packaging it as ImplicitFunctionData and proving residual-coordinate flatness.",
+     "The projected derivative fields package into Mathlib's exact ImplicitFunctionData without an added premise: finite-dimensionality supplies completeness of the derivative range, the kernel has its standard completeness instance, and the resulting datum feeds the banked local rank-normal-form theorem. Bank this packaging theorem before proving residual-coordinate flatness.",
      :commands
      [{:cmd
-       "sed -n '90,155p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean; sed -n '1,180p' ConstructionTargets/SardComplementedDerivativeSplit.lean; sed -n '1,260p' ConstructionTargets/SardLocalRankNormalForm.lean; rg -n \"HasStrictFDerivAt.*comp|comp.*HasStrictFDerivAt\" .lake/packages/mathlib/Mathlib/Analysis/Calculus --glob '*.lean'",
+       "sed -n '1,220p' ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean; sed -n '1,180p' ConstructionTargets/SardComplementedDerivativeSplit.lean; sed -n '90,140p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean; rg -n \"completeSpace_coe|closed_of_finiteDimensional|finiteDimensional_range\" .lake/packages/mathlib/Mathlib/Topology/Algebra/Module .lake/packages/mathlib/Mathlib/LinearAlgebra --glob '*.lean'",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardProjectedImplicitFunctionDataProbe.lean",
+       "lake env lean /tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
        :exit 0,
        :output
-       "'projected_complemented_strictDerivative_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'exists_projected_localRankNormalForm' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedImplicitFunctionDataProbe.lean",
+       "sha256sum /tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
        :exit 0,
        :output
-       "295c9349737bd5642c5d3914e0e70758a223841c7f3651b50228f5cdedb5fde2  /tmp/SardProjectedImplicitFunctionDataProbe.lean"}
+       "9742179005453fc047b3f8128c6ac3da74c9740e2bd95f292d1baf5457a679eb  /tmp/SardProjectedImplicitFunctionPackagingProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedImplicitFunctionDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --check", :exit 0}
@@ -6675,40 +6708,39 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled projected strict-derivative theorem cannot be promoted with its exact range projection, kernel projection, surjectivity, complementary-kernel, or standard-axiom properties.",
+      "Stop only if the compiled ImplicitFunctionData packaging and local-normal-form existence theorem cannot be promoted with its exact projected-map, derivative-range, kernel-coordinate, completeness, or standard-axiom properties.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean"
-       "ConstructionTargets/SardProjectedComplementedStrictDerivativeData.md"],
+      ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"
+       "ConstructionTargets/SardProjectedImplicitFunctionPackaging.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED COMPLEMENTED STRICT-DERIVATIVE DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED IMPLICIT-FUNCTION PACKAGING",
       :acceptance
       {:fixture
-       {:path "/tmp/SardProjectedImplicitFunctionDataProbe.lean",
+       {:path "/tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
         :sha256
-        "295c9349737bd5642c5d3914e0e70758a223841c7f3651b50228f5cdedb5fde2"},
-       :declarations ["projected_complemented_strictDerivative_data"],
+        "9742179005453fc047b3f8128c6ac3da74c9740e2bd95f292d1baf5457a679eb"},
+       :declarations ["exists_projected_localRankNormalForm"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Package these fields as ImplicitFunctionData with the finite-dimensional closed-range completeness instance, instantiate local rank coordinates, and prove the remaining coordinate map has vanishing derivative along the local rank-at-most-r fibre."},
+       "Use the full coordinate formulas from localRankNormalForm_of_complemented_minor to express the exact-rank local upper locus in range/kernel coordinates, then prove the residual target coordinate has vanishing derivative along each local rank-at-most-r fibre before applying Taylor-cover nullity."},
       :representation
       {:source
-       "A strict Frechet derivative L of a map f at x between finite-dimensional real inner-product spaces.",
+       "A strict Frechet derivative L of f at x between finite-dimensional real inner-product spaces, together with the projected complemented derivative data.",
        :target
-       "Strict derivative facts for the range-projected map and kernel projection, together with surjectivity of both derivatives and complementarity of their kernels."},
-      :id
-      :critical-value-sard-projected-complemented-strict-derivative-data-1,
+       "An ImplicitFunctionData instance constructed locally with no new hypothesis and an open partial homeomorphism from the source into derivative-range times projected-kernel coordinates whose source contains x."},
+      :id :critical-value-sard-projected-implicit-function-packaging-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-complemented-derivative-split-1
+      [:critical-value-sard-projected-complemented-strict-derivative-data-1
        :critical-value-sard-local-rank-normal-form-probe-2],
       :current-residual
-      "All analytic and algebraic fields needed by ImplicitFunctionData compile together; packaging the dependent range/kernel types and establishing residual-coordinate flatness remain.",
+      "The nonlinear local coordinate chart now exists at every strict-derivative point; identifying the transformed exact-rank locus and proving derivative flatness of the residual target coordinate remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
@@ -6731,7 +6763,8 @@
     :critical-value-sard-rectangular-local-probe-1
     :critical-value-sard-exact-rank-local-upper-locus-1
     :critical-value-sard-complemented-derivative-split-1
-    :critical-value-sard-projected-complemented-strict-derivative-data-1],
+    :critical-value-sard-projected-complemented-strict-derivative-data-1
+    :critical-value-sard-projected-implicit-function-packaging-1],
    :current-residual
    "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
