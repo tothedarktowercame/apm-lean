@@ -7200,6 +7200,59 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788808993375-14030-08b840b1",
+     :commands
+     [{:cmd
+       "git diff-tree --no-commit-id --name-status -r 7bf5c67bafce92895f258ec8714639fea16cf554",
+       :exit 0,
+       :output
+       "Exactly ConstructionTargets/SardImplicitFunctionResidualFlatness.lean and ConstructionTargets/SardImplicitFunctionResidualFlatness.md"}
+      {:cmd
+       "sha256sum /tmp/SardImplicitFunctionResidualFlatnessProbe.lean; git show 7bf5c67bafce92895f258ec8714639fea16cf554:ConstructionTargets/SardImplicitFunctionResidualFlatness.lean | sha256sum",
+       :exit 0,
+       :output
+       "Both 34864be4dc2102aac0d4509c79250929837cac269d1a725d2561f3cd10fd56d7"}
+      {:cmd
+       "git show 7bf5c67bafce92895f258ec8714639fea16cf554:ConstructionTargets/SardImplicitFunctionResidualFlatness.md | sha256sum",
+       :exit 0,
+       :output
+       "fcc34afa1edf970841a6c0c173e1d4ab7150086156023e9d2ebe783750f7ac61"}
+      {:cmd
+       "recompute newline-inclusive declaration-region sha256 through the proof and trailing newline",
+       :exit 0,
+       :output
+       "86e89d048e62e69532441f2f22d2921379b77cb2bdf9b5253b4486a610d00a76"}
+      {:cmd
+       "lake env lean /tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
+       :exit 0,
+       :output "axioms: propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "lake env lean ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+       :exit 0,
+       :output "axioms: propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "lake build ConstructionTargets.SardImplicitFunctionResidualFlatness",
+       :exit 0,
+       :output "Build completed successfully (2223 jobs); no warnings"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionResidualFlatness.lean ConstructionTargets/SardImplicitFunctionResidualFlatness.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 sorry; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages; git diff 7bf5c67bafce92895f258ec8714639fea16cf554^ 7bf5c67bafce92895f258ec8714639fea16cf554 --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; diff clean; worktree clean"}],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6. Commit 7bf5c67bafce92895f258ec8714639fea16cf554 has exact two-file scope; fixture, committed Lean, Markdown, and declaration-region hashes reproduce. The theorem uses Mathlib's exact implicitFunction at leftFun pt, its basepoint identity, and its derivative in the required direction; leftDeriv_fderiv_implicitFunction places every slice derivative vector in ker leftDeriv, hflat kills it, and the chain rule yields the zero residual derivative at rightFun pt without hidden basepoint transport or a replacement chart. Only standard axioms occur. Frozen t93A04 remains byte-identical with one theorem and one placeholder; higher-order slice flatness, Taylor-cover uptake, and induction assembly remain explicitly residual."},
     :commit "7bf5c67bafce92895f258ec8714639fea16cf554",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionResidualFlatness.lean"
@@ -7219,7 +7272,7 @@
      "86e89d048e62e69532441f2f22d2921379b77cb2bdf9b5253b4486a610d00a76"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionResidualFlatness.lean"
     "ConstructionTargets/SardImplicitFunctionResidualFlatness.md"],
@@ -7318,7 +7371,7 @@
       "The inverse-chart specialization and zero derivative of the residual slice compile at each basepoint; higher-order slice flatness/Taylor-cover uptake and the induction assembly remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
