@@ -3736,6 +3736,25 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :axiom-policy :standard-only,
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788787052959-13700-767e7f45",
+     :commands
+     ["git show --stat --oneline 0f2f06faadee36b025811d4d0d2a7af45fa1a5c2"
+      "git diff-tree --no-commit-id --name-status -r 0f2f06fa"
+      "git diff-tree --check 0f2f06fa^ 0f2f06fa"
+      "git show 0f2f06fa:ConstructionTargets/SardMaximalSeparatedFinsetCover.lean | sha256sum"
+      "git show 0f2f06fa:ConstructionTargets/SardMaximalSeparatedFinsetCover.md | sha256sum"
+      "sha256sum /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean"
+      "sed -n '6,10p' /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean | sha256sum"
+      "lake env lean ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
+      "lake env lean /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardMaximalSeparatedFinsetCover.lean ConstructionTargets/SardMaximalSeparatedFinsetCover.md /tmp/CompactMaximalSeparatedFinsetCoverProbe.lean"
+      "git show 0f2f06fa^:problems/t93A04/lean/Main.lean | sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: commit 0f2f06fa has exact two-file scope and matching artifact, fixture, and statement hashes; both Lean gates compile with only propext, Classical.choice, and Quot.sound; the theorem correctly converts maximalSeparatedSet to a Finset when packingNumber ε A is not top and preserves center containment, ε-separation, and ε-covering with the required orientations, introduces no placeholders, and leaves frozen t93A04 unchanged with one theorem and one placeholder."},
     :commit "0f2f06faadee36b025811d4d0d2a7af45fa1a5c2",
     :changed-paths
     ["ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
@@ -3752,7 +3771,7 @@
     :declarations ["exists_finset_maximal_separated_cover"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardMaximalSeparatedFinsetCover.lean"
     "ConstructionTargets/SardMaximalSeparatedFinsetCover.md"],
@@ -3850,7 +3869,7 @@
       "acbb8a63c0b151cafca016f174b2471588ba7072f9a0bd8a19ec40ff698ff3f1"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
