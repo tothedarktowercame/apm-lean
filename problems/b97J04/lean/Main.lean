@@ -139,6 +139,152 @@ lemma apm_b97j04_mapsTo_generalizedEigenspace
     rw [Module.End.mul_apply, Module.End.mul_apply, hv, map_zero] at he
     exact he
 
+lemma apm_b97j04_generalized_subset_eigenspace
+    (F V : Type*) [Field F] [IsAlgClosed F] [AddCommGroup V] [Module F V]
+    [FiniteDimensional F V]
+    (T S N : Module.End F V) (h : APMAdditiveJC T S N) (lam : F) :
+    APMGeneralizedEigenspace T lam ⊆ APMEigenspace S lam := by
+  rintro v ⟨k, hk, hv⟩
+  obtain ⟨hS, hN, hcomm, hT⟩ := h
+  apply Module.End.apply_eq_of_mem_of_comm_of_isFinitelySemisimple_of_isNil
+      (f := T) (g := S) (k := ⊤)
+  · rw [Module.End.mem_genEigenspace]
+    exact ⟨k, le_top, by simpa using hv⟩
+  · rw [hT]
+    exact (Commute.refl S).add_left hcomm.symm
+  · exact (Module.End.isFinitelySemisimple_iff_isSemisimple.mpr hS)
+  · simpa [hT] using hN
+
+lemma apm_b97j04_charpoly_eq
+    (F V : Type*) [Field F] [IsAlgClosed F] [AddCommGroup V] [Module F V]
+    [FiniteDimensional F V]
+    (T S N : Module.End F V) (h : APMAdditiveJC T S N) :
+    LinearMap.charpoly S = LinearMap.charpoly T := by
+  classical
+  have hST : ∀ lam : F, S.eigenspace lam = T.maxGenEigenspace lam := by
+    intro lam
+    ext v
+    rw [Module.End.mem_eigenspace_iff, Module.End.mem_maxGenEigenspace]
+    constructor
+    · intro hv
+      obtain ⟨k, hk, hvk⟩ :=
+        apm_b97j04_eigenspace_subset_generalized F V T S N h lam hv
+      exact ⟨k, by simpa using hvk⟩
+    · rintro ⟨k, hv⟩
+      exact apm_b97j04_generalized_subset_eigenspace F V T S N h lam
+        ⟨k + 1, Nat.succ_pos k, by
+          simpa [pow_succ'] using
+            congrArg (T - lam • (LinearMap.id : Module.End F V)) hv⟩
+  have hrm : ∀ lam : F,
+      (LinearMap.charpoly S).rootMultiplicity lam =
+        (LinearMap.charpoly T).rootMultiplicity lam := by
+    intro lam
+    rw [← LinearMap.finrank_maxGenEigenspace_eq S lam,
+      (Module.End.isFinitelySemisimple_iff_isSemisimple.mpr h.1).maxGenEigenspace_eq_eigenspace,
+      hST, LinearMap.finrank_maxGenEigenspace_eq]
+  have hroots : (LinearMap.charpoly S).roots = (LinearMap.charpoly T).roots := by
+    rw [Multiset.ext]
+    intro lam
+    simpa only [Polynomial.count_roots] using hrm lam
+  calc
+    LinearMap.charpoly S =
+        ((LinearMap.charpoly S).roots.map (fun x => Polynomial.X - Polynomial.C x)).prod :=
+      (IsAlgClosed.splits _).eq_prod_roots_of_monic (LinearMap.charpoly_monic S)
+    _ = ((LinearMap.charpoly T).roots.map
+        (fun x => Polynomial.X - Polynomial.C x)).prod := by rw [hroots]
+    _ = LinearMap.charpoly T :=
+      ((IsAlgClosed.splits _).eq_prod_roots_of_monic (LinearMap.charpoly_monic T)).symm
+
+lemma apm_b97j04_multiplicative
+    (F V : Type*) [Field F] [IsAlgClosed F] [AddCommGroup V] [Module F V]
+    [FiniteDimensional F V] (T' : V ≃ₗ[F] V) :
+    ∃! p : (V ≃ₗ[F] V) × (V ≃ₗ[F] V),
+      Module.End.IsSemisimple p.1.toLinearMap ∧
+      APMUnipotent p.2 ∧ p.1 * p.2 = p.2 * p.1 ∧ T' = p.1 * p.2 := by
+  obtain ⟨S, N, hS, hN, hSN, hT⟩ := apm_b97j04_additive_exists F V T'.toLinearMap
+  have hSN' : Commute S N := hSN
+  have hTN : Commute T'.toLinearMap N := by
+    rw [hT]
+    exact hSN'.add_left (Commute.refl N)
+  have hTunit : IsUnit T'.toLinearMap :=
+    (Module.End.isUnit_iff _).2 T'.bijective
+  have hSunit : IsUnit S := by
+    have hu := hN.neg.isUnit_add_left_of_commute hTunit hTN.symm.neg_left
+    simpa [hT, add_assoc] using hu
+  have hSbij := (Module.End.isUnit_iff _).mp hSunit
+  let Se : V ≃ₗ[F] V := LinearEquiv.ofBijective S hSbij
+  let Ue : V ≃ₗ[F] V := Se.symm * T'
+  have hSe : Se.toLinearMap = S := rfl
+  have hSinvN : Commute Se.symm.toLinearMap N := by
+    rw [commute_iff_eq]
+    ext v
+    apply hSbij.1
+    have hc := congrFun (congrArg DFunLike.coe hSN) (Se.symm v)
+    calc
+      S (Se.symm (N v)) = N v := by rw [← hSe]; simp
+      _ = N (S (Se.symm v)) := by rw [← hSe]; simp
+      _ = S (N (Se.symm v)) := by
+        simpa [Module.End.mul_apply] using hc.symm
+  have hU : APMUnipotent Ue := by
+    change IsNilpotent (Ue.toLinearMap - LinearMap.id)
+    have heq : Ue.toLinearMap - LinearMap.id = Se.symm.toLinearMap * N := by
+      ext v
+      simp only [Ue, LinearEquiv.coe_toLinearMap_mul, Module.End.mul_apply,
+        LinearMap.sub_apply, LinearMap.id_apply]
+      rw [hT, LinearMap.add_apply, ← hSe]
+      simp
+    rw [heq]
+    exact hSinvN.isNilpotent_mul_left hN
+  have hSeT : Se * T' = T' * Se := by
+    apply LinearEquiv.toLinearMap_injective
+    rw [LinearEquiv.coe_toLinearMap_mul, LinearEquiv.coe_toLinearMap_mul]
+    rw [hT]
+    simp [hSe, mul_add, add_mul, hSN]
+  have hcomm : Se * Ue = Ue * Se := by
+    calc
+      Se * Ue = T' := by ext v; simp [Ue]
+      _ = Se.symm * (Se * T') := by ext v; simp
+      _ = Se.symm * (T' * Se) := by rw [hSeT]
+      _ = Ue * Se := by rfl
+  have hprod : T' = Se * Ue := by
+    symm
+    ext v
+    simp [Ue]
+  refine ⟨⟨Se, Ue⟩, ?_, ?_⟩
+  · exact ⟨hSe ▸ hS, hU, hcomm, hprod⟩
+  ·
+    rintro ⟨A, U⟩ ⟨hA, hU', hAU, hprod'⟩
+    have hAUlm : Commute A.toLinearMap U.toLinearMap := by
+      simpa [commute_iff_eq] using congrArg LinearEquiv.toLinearMap hAU
+    let M : Module.End F V := A.toLinearMap * (U.toLinearMap - LinearMap.id)
+    have hMnil : IsNilpotent M := by
+      have hAid : Commute A.toLinearMap LinearMap.id := by
+        rw [commute_iff_eq]
+        ext v
+        simp [Module.End.mul_apply]
+      exact (hAUlm.sub_right hAid).isNilpotent_mul_left hU'
+    have hAM : Commute A.toLinearMap M := by
+      have hAid : Commute A.toLinearMap LinearMap.id := by
+        rw [commute_iff_eq]
+        ext v
+        simp [Module.End.mul_apply]
+      exact (Commute.refl _).mul_right (hAUlm.sub_right hAid)
+    have hadd : APMAdditiveJC T'.toLinearMap A.toLinearMap M := by
+      refine ⟨hA, hMnil, hAM.eq, ?_⟩
+      ext v
+      have hp := congrArg DFunLike.coe (congrArg LinearEquiv.toLinearMap hprod')
+      simp [M, Module.End.mul_apply] at hp ⊢
+      exact congrFun hp v
+    have hu := apm_b97j04_additive_unique F V T'.toLinearMap
+      S N A.toLinearMap M ⟨hS, hN, hSN, hT⟩ hadd
+    have hAe : A = Se :=
+      LinearEquiv.toLinearMap_injective (hu.1.symm.trans hSe.symm)
+    apply Prod.ext
+    · exact hAe
+    · have hp : A * U = Se * Ue := hprod'.symm.trans hprod
+      rw [hAe] at hp
+      exact mul_left_cancel hp
+
 theorem apm_b97j04 :
     ∀ (F V : Type*) [Field F] [IsAlgClosed F] [AddCommGroup V]
         [Module F V] [FiniteDimensional F V] (T : Module.End F V),
@@ -158,46 +304,9 @@ theorem apm_b97j04 :
   intro F V _ _ _ _ _ T
   refine ⟨apm_b97j04_additive_exists F V T, ?_, ?_,
     (fun S N S' N' h h' => apm_b97j04_additive_unique F V T S N S' N' h h'), ?_⟩
-  /-
-  Boundary (closer hop 2): the main proof now explicitly closes additive
-  existence and uniqueness. The new compiled lemma
-  `apm_b97j04_eigenspace_subset_generalized` also proves one complete direction
-  of the frozen generalized-eigenspace equality. It inductively shows that
-  `T - λ` and `N` have identical powers on an `S`-eigenvector, then raises the
-  nilpotence exponent once to meet the frozen strict positivity requirement.
-
-  Deeper inspection found more usable infrastructure than hop 1 recorded:
-  `Module.End.mem_maxGenEigenspace` exactly matches the existential-power
-  predicate after handling exponent zero;
-  `IsFinitelySemisimple.maxGenEigenspace_eq_eigenspace` identifies generalized
-  and ordinary eigenspaces for `S`; and `IsSemisimple.restrict` plus
-  `Module.End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap` suggest a
-  route to the reverse inclusion. That route must restrict the two commuting
-  decompositions to `T.maxGenEigenspace λ` and apply Jordan--Chevalley
-  uniqueness there, with considerable `MapsTo` and restriction bookkeeping.
-
-  Characteristic-polynomial equality can then be obtained by comparing root
-  multiplicities via `finrank_maxGenEigenspace_eq`, monicity, and splitting.
-  The multiplicative clause still requires proving the semisimple additive
-  part invertible for invertible `T`, bundling `S⁻¹T` as a linear equivalence,
-  proving its unipotence, and translating multiplicative uniqueness back to
-  additive uniqueness. No closed artifact or construction module packages
-  those remaining assemblies. The statement is unchanged and appears sound.
-
-  CLOSER HOP 3: `apm_b97j04_mapsTo_generalizedEigenspace` now closes the
-  preservation bookkeeping required by the restriction route. From `T=S+N`
-  and `SN=NS`, it proves that both `S` and `N` commute with `T-λ`; their
-  commutation with every power then transports any positive-power vanishing
-  witness for a generalized eigenvector to its images under `S` and `N`.
-  Consequently both decomposition components map each frozen generalized
-  eigenspace into itself and can be restricted to that block.
-
-  Searches beyond hop 2 covered `Commute.pow_left`, restriction/`MapsTo`
-  constructors, max-generalized-eigenspace APIs, and charpoly/nilpotence
-  sources. The commutation API supplied the compiled lemma above, but no
-  packaged theorem completes restricted Jordan--Chevalley uniqueness or
-  charpoly invariance under adding a commuting nilpotent part. Reverse
-  inclusion, characteristic-polynomial equality, and the multiplicative
-  decomposition therefore remain open.
-  -/
-  all_goals sorry
+  · intro S N h
+    exact apm_b97j04_charpoly_eq F V T S N h
+  · intro S N h lam
+    exact ⟨apm_b97j04_eigenspace_subset_generalized F V T S N h lam,
+      apm_b97j04_generalized_subset_eigenspace F V T S N h lam⟩
+  · exact apm_b97j04_multiplicative F V

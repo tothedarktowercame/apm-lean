@@ -142,6 +142,61 @@ lemma apm_b98a02_map_comap_subtype
   apply IntermediateField.map_comap_eq_self
   rwa [E.fieldRange_val]
 
+lemma apm_b98a02_maximalAbelian_exists
+    (F Ω : Type*) [Field F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω]
+    (E : IntermediateField F Ω) [FiniteDimensional F E]
+    (hE : IsGalois F E) :
+    ∃ A : IntermediateField F Ω,
+      apm_b98A02_IsMaximalAbelian F Ω E A := by
+  letI : IsGalois F E := hE
+  let G := E ≃ₐ[F] E
+  let D : Subgroup G := commutator G
+  let A₀ : IntermediateField F E := IntermediateField.fixedField D
+  let A : IntermediateField F Ω := A₀.map E.val
+  haveI : D.Normal := inferInstance
+  have hquot : Std.Commutative (· * · : G ⧸ D → G ⧸ D → G ⧸ D) :=
+    (Subgroup.Normal.quotient_commutative_iff_commutator_le (N := D)).2 le_rfl
+  letI : IsMulCommutative (G ⧸ D) := ⟨hquot⟩
+  haveI : IsGalois F A₀ := inferInstance
+  let qA := IsGalois.normalAutEquivQuotient D
+  haveI : IsMulCommutative (A₀ ≃ₐ[F] A₀) :=
+    { is_comm.comm x y := by
+        apply qA.symm.injective
+        simpa only [map_mul] using hquot.comm (qA.symm x) (qA.symm y) }
+  haveI : IsAbelianGalois F A₀ := {}
+  let eA : A ≃ₐ[F] A₀ := (IntermediateField.equivMap A₀ E.val).symm
+  haveI : IsAbelianGalois F A := IsAbelianGalois.of_algHom eA.toAlgHom
+  refine ⟨A, apm_b98a02_map_subtype_le F Ω E A₀, inferInstance,
+    (fun σ τ => mul_comm σ τ), ?_⟩
+  intro K hKE hKg hKab
+  let K₀ : IntermediateField F E := K.comap E.val
+  have hmap : K₀.map E.val = K := apm_b98a02_map_comap_subtype F Ω E K hKE
+  let eK : K₀ ≃ₐ[F] K := (IntermediateField.equivMap K₀ E.val).trans
+    (IntermediateField.equivOfEq hmap)
+  letI : IsGalois F K := hKg
+  letI : IsMulCommutative (K ≃ₐ[F] K) :=
+    { is_comm.comm σ τ := hKab σ τ }
+  letI : IsAbelianGalois F K := {}
+  letI : IsAbelianGalois F K₀ := IsAbelianGalois.of_algHom eK.toAlgHom
+  haveI : K₀.fixingSubgroup.Normal := inferInstance
+  let efix : IntermediateField.fixedField K₀.fixingSubgroup ≃ₐ[F] K₀ :=
+    IntermediateField.equivOfEq (IsGalois.fixedField_fixingSubgroup K₀)
+  letI : IsAbelianGalois F (IntermediateField.fixedField K₀.fixingSubgroup) :=
+    IsAbelianGalois.of_algHom efix.toAlgHom
+  have hqK : Std.Commutative
+      (· * · : G ⧸ K₀.fixingSubgroup → G ⧸ K₀.fixingSubgroup →
+        G ⧸ K₀.fixingSubgroup) := by
+    let qK := IsGalois.normalAutEquivQuotient K₀.fixingSubgroup
+    refine ⟨fun x y => ?_⟩
+    apply qK.injective
+    simpa only [map_mul] using mul_comm (qK x) (qK y)
+  have hDK : D ≤ K₀.fixingSubgroup :=
+    (Subgroup.Normal.quotient_commutative_iff_commutator_le
+      (N := K₀.fixingSubgroup)).1 hqK
+  have hK₀A₀ : K₀ ≤ A₀ := (IntermediateField.le_iff_le D K₀).mpr hDK
+  rw [← hmap]
+  exact IntermediateField.map_mono E.val hK₀A₀
+
 theorem apm_b98a02 :
     ∀ (F Ω : Type*) [Field F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω],
       (∀ (E : IntermediateField F Ω) [FiniteDimensional F E],
@@ -168,48 +223,8 @@ theorem apm_b98a02 :
             (E ⊓ L : IntermediateField F Ω) A_EL →
           A_EL = (A_E ⊓ A_L : IntermediateField F Ω)) := by
   intro F Ω _ _ _ _
-  refine ⟨?_,
+  refine ⟨(fun E _ hE => apm_b98a02_maximalAbelian_exists F Ω E hE),
     (fun E _ hE A hA K hKE => apm_b98a02_maximal_iff F Ω E A K hA hKE),
     (fun E L _ _ hE hL => apm_b98a02_isGalois_inf F Ω E L hE hL),
     (fun E L _ _ hE hL A_E A_L A_EL hAE hAL hAEL =>
       apm_b98a02_intersection_maximal_eq F Ω E L A_E A_L A_EL hAE hAL hAEL)⟩
-  /-
-  Boundary (closer hop 2): parts (b), (c), and (d) are now fully assembled in
-  the main proof. Inspection of the newer
-  `Mathlib.FieldTheory.Galois.Abelian` API found the previously missed class
-  `IsAbelianGalois` and, decisively, `IsAbelianGalois.of_algHom`. The compiled
-  helper `apm_b98a02_maximal_iff` uses it to prove that every embedded field
-  below `A` is abelian Galois, closing the reverse implication in part (b).
-  `apm_b98a02_intersection_maximal_eq` applies the same theorem to the inclusion
-  `A_E ⊓ A_L → A_E`, then maximality closes the reverse inclusion in part (d).
-  Part (c) continues to use the compiled typeclass proof
-  `apm_b98a02_isGalois_inf`.
-
-  Only part (a) remains. The finite Galois correspondence
-  `IsGalois.intermediateFieldEquivSubgroup`, fixed fields, and
-  `IntermediateField.normalAutEquivQuotient` provide the abstract ingredients
-  for the commutator fixed field, but do not package the construction required
-  by this encoding:
-  the correspondence produces an intermediate field inside the extension type
-  `E`, while `apm_b98A02_IsMaximalAbelian` requires an
-  `IntermediateField F Ω` lying below the embedded field `E`. A proof must lift
-  that fixed field through `E.subtype`, transport Galoisness and the quotient
-  automorphism equivalence across the lift, and prove the universal property
-  for arbitrary embedded `K ≤ E`. No commutator-fixed-field theorem or proved
-  sibling performs this chain.
-
-  CLOSER HOP 3: the field-lifting portion is now closed.
-  `apm_b98a02_map_subtype_le`, `apm_b98a02_map_subtype_top`, and
-  `apm_b98a02_map_comap_subtype` prove respectively that the mapped field lies
-  below `E`, that the top field maps onto `E`, and that every ambient `K ≤ E`
-  is recovered exactly after comap then map. Thus the earlier order-theoretic
-  embedding gap is eliminated.
-
-  The remaining bridge is narrower: transport Galoisness and commutativity of
-  the automorphism group across the mapped fixed field, identify its
-  automorphisms with the quotient by the commutator subgroup, and use
-  restriction to prove the universal property for arbitrary `K ≤ E`.
-  Searches of the Galois map/transfer and fixed-field APIs found no packaged
-  theorem performing that chain. The statement is unchanged and appears sound.
-  -/
-  all_goals sorry

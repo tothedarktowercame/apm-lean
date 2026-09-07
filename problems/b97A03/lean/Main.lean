@@ -145,7 +145,7 @@ lemma apm_b97a03_zeta_mul_root {α : ℂ}
   have hpow : (apm_b97a03_zeta α ^ k * α) ^ 6 = -3 := by
     rw [mul_pow, ← pow_mul, show k * 6 = 6 * k by omega, pow_mul, hz, one_pow, ha,
       one_mul]
-  simp [apm_b97a03_polynomial, Polynomial.IsRoot, hpow]
+  simpa [apm_b97a03_polynomial, Polynomial.IsRoot, hpow]
 
 lemma apm_b97a03_zeta_mul_root_mem_field {α : ℂ} (k : ℕ) :
     apm_b97a03_zeta α ^ k * α ∈ apm_b97a03_field α := by
@@ -154,7 +154,7 @@ lemma apm_b97a03_zeta_mul_root_mem_field {α : ℂ} (k : ℕ) :
     exact IntermediateField.subset_adjoin ℚ {α} (by simp)
   apply IntermediateField.mul_mem
   · induction k with
-    | zero => simp
+    | zero => simpa using IntermediateField.one_mem (apm_b97a03_field α)
     | succ k ih =>
         rw [pow_succ]
         exact IntermediateField.mul_mem _ ih hz
@@ -164,53 +164,68 @@ lemma apm_b97a03_zeta_mul_root_mem_field {α : ℂ} (k : ℕ) :
 needed for the first conjunct; it can be proved by Eisenstein at `3`. -/
 theorem apm_b97A03_bridge_1 :
     Irreducible apm_b97a03_polynomial := by
-  let f : ℤ[X] := Polynomial.X ^ 6 + Polynomial.C 3
-  have hmonic : f.Monic := by
-    simpa [f] using (Polynomial.monic_X_pow_add_C (3 : ℤ) (by norm_num : 6 ≠ 0))
-  have hf : f.IsEisensteinAt (Ideal.span {3}) := by
-    constructor
-    · rw [hmonic.leadingCoeff]
-      norm_num [Ideal.mem_span_singleton]
+  let f : ℤ[X] := X ^ 6 + C 3
+  have hfmonic : f.Monic := by
+    dsimp [f]
+    exact (monic_X_pow 6).add_of_left (by
+      rw [degree_C (by norm_num), degree_X_pow]
+      norm_num)
+  have hfnat : f.natDegree = 6 := by
+    dsimp [f]
+    rw [natDegree_add_eq_left_of_natDegree_lt] <;> norm_num
+  have hprime : (Ideal.span ({(3 : ℤ)} : Set ℤ)).IsPrime := by
+    exact (Ideal.span_singleton_prime (by norm_num)).2
+      (Nat.prime_iff_prime_int.1 (by norm_num))
+  have heis : f.IsEisensteinAt (Ideal.span ({(3 : ℤ)} : Set ℤ)) := by
+    refine hfmonic.isEisensteinAt_of_mem_of_notMem hprime.ne_top ?_ ?_
     · intro n hn
-      rw [show f.natDegree = 6 by simpa [f] using
-        (Polynomial.natDegree_X_pow_add_C :
-          (Polynomial.X ^ 6 + Polynomial.C (3 : ℤ)).natDegree = 6)] at hn
-      interval_cases n <;>
-        norm_num [f, Polynomial.coeff_add, Polynomial.coeff_X_pow,
-          Ideal.mem_span_singleton]
-    · rw [show f.coeff 0 = 3 by simp [f], Ideal.span_singleton_pow]
-      norm_num [Ideal.mem_span_singleton]
-  have hp : (Ideal.span ({3} : Set ℤ)).IsPrime := by
-    apply (Ideal.span_singleton_prime (by norm_num : (3 : ℤ) ≠ 0)).2
-    exact Int.prime_iff_natAbs_prime.mpr (by norm_num)
-  have hprim : f.IsPrimitive := hmonic.isPrimitive
-  have hirr : Irreducible f := hf.irreducible hp hprim (by
-    rw [show f.natDegree = 6 by simpa [f] using
-      (Polynomial.natDegree_X_pow_add_C :
-        (Polynomial.X ^ 6 + Polynomial.C (3 : ℤ)).natDegree = 6)]
-    norm_num)
-  have hmap : Irreducible (f.map (Int.castRingHom ℚ)) :=
-    (Polynomial.IsPrimitive.Int.irreducible_iff_irreducible_map_cast hprim).mp hirr
+      rw [hfnat] at hn
+      simp only [f, coeff_add, coeff_X_pow, coeff_C]
+      by_cases hn0 : n = 0
+      · subst n
+        simp [Ideal.mem_span_singleton]
+      · have hn6 : n ≠ 6 := by omega
+        simp [hn0, hn6]
+    · rw [show f.coeff 0 = 3 by simp [f], Ideal.span_singleton_pow,
+        Ideal.mem_span_singleton]
+      norm_num
+  have hfirr : Irreducible f :=
+    heis.irreducible hprime hfmonic.isPrimitive (by omega)
+  have hmap :=
+    (IsPrimitive.Int.irreducible_iff_irreducible_map_cast hfmonic.isPrimitive).mp hfirr
   simpa [apm_b97a03_polynomial, f] using hmap
 
-/-- The six candidates exhaust all complex roots. -/
-lemma apm_b97a03_root_exhaustion {α : ℂ}
+/-- The six explicit candidates exhaust the roots in `ℂ`. -/
+lemma apm_b97a03_candidate_roots_exhaust {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
     ∀ z : ℂ,
       (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot z →
         ∃ k : Fin 6, z = apm_b97a03_zeta α ^ (k : ℕ) * α := by
+  let candidates : Fin 6 → ℂ :=
+    fun k ↦ apm_b97a03_zeta α ^ (k : ℕ) * α
+  let e : Fin 6 → apm_b97a03_polynomial.rootSet ℂ := fun k ↦
+    ⟨candidates k, by
+      rw [Polynomial.mem_rootSet_of_ne apm_b97A03_bridge_1.ne_zero]
+      simpa [Polynomial.aeval_def, Polynomial.IsRoot] using
+        apm_b97a03_zeta_mul_root hα k⟩
+  have heinj : Function.Injective e := by
+    intro i j hij
+    exact apm_b97a03_candidate_roots_injective hα (congr_arg Subtype.val hij)
+  have hnat : apm_b97a03_polynomial.natDegree = 6 := by
+    unfold apm_b97a03_polynomial
+    rw [natDegree_add_eq_left_of_natDegree_lt] <;> norm_num
+  have hcard : Fintype.card (apm_b97a03_polynomial.rootSet ℂ) = 6 := by
+    rw [Polynomial.card_rootSet_eq_natDegree apm_b97A03_bridge_1.separable
+      (IsAlgClosed.splits
+        (apm_b97a03_polynomial.map (algebraMap ℚ ℂ))), hnat]
+  have hesurj : Function.Surjective e :=
+    ((Fintype.bijective_iff_injective_and_card e).2 ⟨heinj, by simpa [hcard]⟩).2
   intro z hz
-  have hfac := X_pow_sub_C_eq_prod
-    (apm_b97a03_zeta_primitive hα) (by norm_num : 0 < 6)
-    (apm_b97a03_root_pow_six hα)
-  have hz' : (Polynomial.X ^ 6 - Polynomial.C (-3 : ℂ)).IsRoot z := by
-    simpa [apm_b97a03_polynomial, Polynomial.IsRoot] using hz
-  rw [hfac] at hz'
-  simp only [Polynomial.IsRoot, Polynomial.eval_prod, Polynomial.eval_sub,
-    Polynomial.eval_X, Polynomial.eval_C, sub_eq_zero, Finset.prod_eq_zero_iff] at hz'
-  obtain ⟨k, hk, heq⟩ := hz'
-  refine ⟨⟨k, by simpa using hk⟩, ?_⟩
-  simpa using heq
+  have hzmem : z ∈ apm_b97a03_polynomial.rootSet ℂ := by
+    rw [Polynomial.mem_rootSet_of_ne apm_b97A03_bridge_1.ne_zero]
+    simpa [Polynomial.aeval_def, Polynomial.IsRoot] using hz
+  obtain ⟨k, hk⟩ := hesurj ⟨z, hzmem⟩
+  exact ⟨k, congr_arg Subtype.val hk |>.symm⟩
 
 /-- Why this unblocks `apm_b97a03`: it identifies every complex root with one
 of the six compiled candidates and packages the resulting splitting-field
@@ -222,69 +237,60 @@ theorem apm_b97A03_bridge_2 {α : ℂ}
           ∃ k : Fin 6, z = apm_b97a03_zeta α ^ (k : ℕ) * α) ∧
       Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
         apm_b97a03_polynomial := by
-  have hexhaust := apm_b97a03_root_exhaustion hα
-  refine ⟨hexhaust, ?_⟩
-  have halg : (DivisionRing.toRatAlgebra : Algebra ℚ (apm_b97a03_field α)) =
-      (apm_b97a03_field α).algebra := Subsingleton.elim _ _
-  rw [halg]
-  rw [IntermediateField.isSplittingField_iff]
-  have hsC : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).Splits := by
-    simpa [apm_b97a03_polynomial] using
-      (X_pow_sub_C_splits_of_isPrimitiveRoot
-        (apm_b97a03_zeta_primitive hα) (apm_b97a03_root_pow_six hα))
-  constructor
-  · apply IntermediateField.splits_of_splits hsC
-    intro z hz
-    obtain ⟨k, rfl⟩ := hexhaust z (by
-      simpa [Polynomial.IsRoot, Polynomial.aeval_def] using
-        (Polynomial.mem_rootSet'.mp hz).2)
-    exact apm_b97a03_zeta_mul_root_mem_field k
-  · apply le_antisymm
-    · rw [apm_b97a03_field, IntermediateField.adjoin_le_iff]
-      intro z hz
-      simp only [Set.mem_singleton_iff] at hz
-      subst z
-      apply IntermediateField.subset_adjoin ℚ
-      rw [Polynomial.mem_rootSet']
-      exact ⟨by
-        simpa [apm_b97a03_polynomial] using
-          (Polynomial.monic_X_pow_add_C (3 : ℂ) (by norm_num : 6 ≠ 0)).ne_zero, by
-        simpa [Polynomial.IsRoot, Polynomial.aeval_def] using hα⟩
+  refine ⟨apm_b97a03_candidate_roots_exhaust hα, ?_⟩
+  have hsplits :
+      (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).Splits :=
+    IsAlgClosed.splits _
+  have hadjoin :
+      IntermediateField.adjoin ℚ (apm_b97a03_polynomial.rootSet ℂ) =
+        apm_b97a03_field α := by
+    apply le_antisymm
     · rw [IntermediateField.adjoin_le_iff]
       intro z hz
-      obtain ⟨k, rfl⟩ := hexhaust z (by
-        simpa [Polynomial.IsRoot, Polynomial.aeval_def] using
-          (Polynomial.mem_rootSet'.mp hz).2)
+      have hzroot :
+          (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot z := by
+        rw [Polynomial.mem_rootSet_of_ne apm_b97A03_bridge_1.ne_zero] at hz
+        simpa [Polynomial.aeval_def, Polynomial.IsRoot] using hz
+      obtain ⟨k, rfl⟩ := apm_b97a03_candidate_roots_exhaust hα z hzroot
       exact apm_b97a03_zeta_mul_root_mem_field k
+    · unfold apm_b97a03_field
+      rw [IntermediateField.adjoin_le_iff]
+      intro z hz
+      rw [Set.mem_singleton_iff.mp hz]
+      apply IntermediateField.subset_adjoin
+      rw [Polynomial.mem_rootSet_of_ne apm_b97A03_bridge_1.ne_zero]
+      simpa [Polynomial.aeval_def, Polynomial.IsRoot] using hα
+  rw [← hadjoin]
+  exact IntermediateField.adjoin_rootSet_isSplittingField hsplits
 
-lemma apm_b97a03_minpoly {α : ℂ}
+lemma apm_b97a03_minpoly_eq {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
     minpoly ℚ α = apm_b97a03_polynomial := by
-  symm
-  apply minpoly.eq_of_irreducible_of_monic apm_b97A03_bridge_1
-  · simpa [Polynomial.IsRoot, Polynomial.aeval_def] using hα
-  · exact Polynomial.monic_X_pow_add_C (3 : ℚ) (by norm_num : 6 ≠ 0)
+  have hzero : Polynomial.aeval α apm_b97a03_polynomial = 0 := by
+    simpa [Polynomial.aeval_def, Polynomial.IsRoot] using hα
+  have h := minpoly.eq_of_irreducible apm_b97A03_bridge_1 hzero
+  have hmonic : apm_b97a03_polynomial.Monic := by
+    unfold apm_b97a03_polynomial
+    exact (monic_X_pow 6).add_of_left (by
+      rw [degree_C (by norm_num), degree_X_pow]
+      norm_num)
+  simpa [hmonic.leadingCoeff] using h.symm
 
-lemma apm_b97a03_isIntegral {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    IsIntegral ℚ α := by
-  refine ⟨apm_b97a03_polynomial,
-    Polynomial.monic_X_pow_add_C (3 : ℚ) (by norm_num : 6 ≠ 0), ?_⟩
-  simpa [Polynomial.IsRoot, Polynomial.aeval_def] using hα
-
-lemma apm_b97a03_finrank {α : ℂ}
+lemma apm_b97a03_finrank_field {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
     Module.finrank ℚ (apm_b97a03_field α) = 6 := by
-  rw [apm_b97a03_field, IntermediateField.adjoin.finrank
-    (apm_b97a03_isIntegral hα), apm_b97a03_minpoly hα]
-  exact Polynomial.natDegree_X_pow_add_C
-
-lemma apm_b97a03_isGalois {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    IsGalois ℚ (apm_b97a03_field α) := by
-  letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
-      apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
-  exact IsGalois.of_separable_splitting_field apm_b97A03_bridge_1.separable
+  have hzero : Polynomial.aeval α apm_b97a03_polynomial = 0 := by
+    simpa [Polynomial.aeval_def, Polynomial.IsRoot] using hα
+  have hmonic : apm_b97a03_polynomial.Monic := by
+    unfold apm_b97a03_polynomial
+    exact (monic_X_pow 6).add_of_left (by
+      rw [degree_C (by norm_num), degree_X_pow]
+      norm_num)
+  have hint : IsIntegral ℚ α := ⟨apm_b97a03_polynomial, hmonic, hzero⟩
+  rw [apm_b97a03_field, IntermediateField.adjoin.finrank hint,
+    apm_b97a03_minpoly_eq hα]
+  unfold apm_b97a03_polynomial
+  rw [natDegree_add_eq_left_of_natDegree_lt] <;> norm_num
 
 lemma apm_b97a03_card_aut {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
@@ -293,299 +299,466 @@ lemma apm_b97a03_card_aut {α : ℂ}
       apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
   letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
     Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
-  letI : IsGalois ℚ (apm_b97a03_field α) := apm_b97a03_isGalois hα
-  rw [IsGalois.card_aut_eq_finrank]
-  exact apm_b97a03_finrank hα
+  letI : IsGalois ℚ (apm_b97a03_field α) :=
+    IsGalois.of_separable_splitting_field apm_b97A03_bridge_1.separable
+  rw [IsGalois.card_aut_eq_finrank, apm_b97a03_finrank_field hα]
 
-noncomputable def apm_b97a03_cubic : ℚ[X] :=
-  Polynomial.X ^ 3 + Polynomial.C 3
-
-noncomputable def apm_b97a03_beta (α : ℂ) (k : Fin 3) : ℂ :=
-  apm_b97a03_zeta α ^ (2 * (k : ℕ)) * α ^ 2
-
-lemma apm_b97a03_cubic_irreducible : Irreducible apm_b97a03_cubic := by
-  let f : ℤ[X] := Polynomial.X ^ 3 + Polynomial.C 3
-  have hmonic : f.Monic := by
-    simpa [f] using (Polynomial.monic_X_pow_add_C (3 : ℤ) (by norm_num : 3 ≠ 0))
-  have hf : f.IsEisensteinAt (Ideal.span {3}) := by
-    constructor
-    · rw [hmonic.leadingCoeff]
-      norm_num [Ideal.mem_span_singleton]
-    · intro n hn
-      rw [show f.natDegree = 3 by simpa [f] using
-        (Polynomial.natDegree_X_pow_add_C :
-          (Polynomial.X ^ 3 + Polynomial.C (3 : ℤ)).natDegree = 3)] at hn
-      interval_cases n <;>
-        norm_num [f, Polynomial.coeff_add, Polynomial.coeff_X_pow,
-          Ideal.mem_span_singleton]
-    · rw [show f.coeff 0 = 3 by simp [f], Ideal.span_singleton_pow]
-      norm_num [Ideal.mem_span_singleton]
-  have hp : (Ideal.span ({3} : Set ℤ)).IsPrime := by
-    apply (Ideal.span_singleton_prime (by norm_num : (3 : ℤ) ≠ 0)).2
-    exact Int.prime_iff_natAbs_prime.mpr (by norm_num)
-  have hprim : f.IsPrimitive := hmonic.isPrimitive
-  have hirr : Irreducible f := hf.irreducible hp hprim (by
-    rw [show f.natDegree = 3 by simpa [f] using
-      (Polynomial.natDegree_X_pow_add_C :
-        (Polynomial.X ^ 3 + Polynomial.C (3 : ℤ)).natDegree = 3)]
-    norm_num)
-  have hmap : Irreducible (f.map (Int.castRingHom ℚ)) :=
-    (Polynomial.IsPrimitive.Int.irreducible_iff_irreducible_map_cast hprim).mp hirr
-  simpa [apm_b97a03_cubic, f] using hmap
-
-lemma apm_b97a03_beta_root {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (k : Fin 3) :
-    (apm_b97a03_cubic.map (algebraMap ℚ ℂ)).IsRoot
-      (apm_b97a03_beta α k) := by
-  have hz := apm_b97a03_zeta_pow_six hα
-  have ha := apm_b97a03_root_pow_six hα
-  have hp : (apm_b97a03_beta α k) ^ 3 = -3 := by
-    rw [apm_b97a03_beta, mul_pow, ← pow_mul, ← pow_mul]
-    norm_num only [mul_assoc]
-    rw [show 2 * ((k : ℕ) * 3) = 6 * (k : ℕ) by omega, pow_mul, hz, one_pow,
-      ha, one_mul]
-  simp [apm_b97a03_cubic, Polynomial.IsRoot, hp]
-
-lemma apm_b97a03_beta_injective {α : ℂ}
+lemma apm_b97a03_field_eq_rootSet_adjoin {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Function.Injective (apm_b97a03_beta α) := by
-  have ha : α ^ 2 ≠ 0 := pow_ne_zero _ (by
-    intro ha
-    have hpow := apm_b97a03_root_pow_six hα
-    rw [ha] at hpow
-    norm_num at hpow)
+    apm_b97a03_field α =
+      IntermediateField.adjoin ℚ (apm_b97a03_polynomial.rootSet ℂ) := by
+  exact (IntermediateField.isSplittingField_iff.mp
+    (apm_b97A03_bridge_2 hα).2).2
+
+lemma apm_b97a03_fields_eq_of_roots {α β : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
+    (hβ : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot β) :
+    apm_b97a03_field α = apm_b97a03_field β := by
+  rw [apm_b97a03_field_eq_rootSet_adjoin hα,
+    apm_b97a03_field_eq_rootSet_adjoin hβ]
+
+lemma apm_b97a03_root_isIntegral {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    IsIntegral ℚ α := by
+  have hzero : Polynomial.aeval α apm_b97a03_polynomial = 0 := by
+    simpa [Polynomial.aeval_def, Polynomial.IsRoot] using hα
+  have hmonic : apm_b97a03_polynomial.Monic := by
+    unfold apm_b97a03_polynomial
+    exact (monic_X_pow 6).add_of_left (by
+      rw [degree_C (by norm_num), degree_X_pow]
+      norm_num)
+  exact ⟨apm_b97a03_polynomial, hmonic, hzero⟩
+
+/-- The canonical automorphism taking the chosen root `α` to another root
+`β`.  Equality of the two embedded simple fields follows from their common
+root-set description as the splitting field. -/
+noncomputable def apm_b97a03_autOfRoot {α β : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
+    (hβ : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot β) :
+    apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α := by
+  unfold apm_b97a03_field
+  exact
+    (minpoly.algEquiv (apm_b97a03_root_isIntegral hα).isAlgebraic
+        ((apm_b97a03_minpoly_eq hα).trans (apm_b97a03_minpoly_eq hβ).symm)).trans
+      (AlgEquiv.cast (R := ℚ) (A := fun K : IntermediateField ℚ ℂ ↦ K) (by
+        simpa [apm_b97a03_field] using apm_b97a03_fields_eq_of_roots hβ hα))
+
+lemma apm_b97a03_root_mem_field {α β : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
+    (hβ : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot β) :
+    β ∈ apm_b97a03_field α := by
+  obtain ⟨k, rfl⟩ := apm_b97a03_candidate_roots_exhaust hα β hβ
+  exact apm_b97a03_zeta_mul_root_mem_field k
+
+/-- Normality extends the assignment of the chosen root to any conjugate root
+to an automorphism of the already identified splitting field. -/
+lemma apm_b97a03_exists_aut_apply_root {α β : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
+    (hβ : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot β) :
+    ∃ σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α,
+      ((σ ⟨α, apm_b97a03_root_mem_field hα hα⟩ : apm_b97a03_field α) : ℂ) = β := by
+  letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
+      apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
+  letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
+    Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
+  letI : IsGalois ℚ (apm_b97a03_field α) :=
+    IsGalois.of_separable_splitting_field apm_b97A03_bridge_1.separable
+  let a : apm_b97a03_field α := ⟨α, apm_b97a03_root_mem_field hα hα⟩
+  let b : apm_b97a03_field α := ⟨β, apm_b97a03_root_mem_field hα hβ⟩
+  have hc : IsConjRoot ℚ b a := by
+    have hmonic : apm_b97a03_polynomial.Monic := by
+      unfold apm_b97a03_polynomial
+      exact (monic_X_pow 6).add_of_left (by
+        rw [degree_C (by norm_num), degree_X_pow]
+        norm_num)
+    have hmina : minpoly ℚ a = apm_b97a03_polynomial := by
+      have hzero : Polynomial.aeval a apm_b97a03_polynomial = 0 := by
+        apply (apm_b97a03_field α).val.injective
+        rw [map_zero, Polynomial.aeval_def, Polynomial.hom_eval₂]
+        simpa [a, Polynomial.IsRoot] using hα
+      have h := minpoly.eq_of_irreducible apm_b97A03_bridge_1 hzero
+      simpa [hmonic.leadingCoeff] using h.symm
+    have hminb : minpoly ℚ b = apm_b97a03_polynomial := by
+      have hzero : Polynomial.aeval b apm_b97a03_polynomial = 0 := by
+        apply (apm_b97a03_field α).val.injective
+        rw [map_zero, Polynomial.aeval_def, Polynomial.hom_eval₂]
+        simpa [b, Polynomial.IsRoot] using hβ
+      have h := minpoly.eq_of_irreducible apm_b97A03_bridge_1 hzero
+      simpa [hmonic.leadingCoeff] using h.symm
+    exact hminb.trans hmina.symm
+  obtain ⟨σ, hσ⟩ := hc.exists_algEquiv
+  exact ⟨σ, congr_arg Subtype.val hσ⟩
+
+noncomputable def apm_b97a03_normalAutOfRoot {α β : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
+    (hβ : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot β) :
+    apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α :=
+  Classical.choose (apm_b97a03_exists_aut_apply_root hα hβ)
+
+lemma apm_b97a03_normalAutOfRoot_apply_root {α β : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
+    (hβ : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot β) :
+    (((apm_b97a03_normalAutOfRoot hα hβ)
+      ⟨α, apm_b97a03_root_mem_field hα hα⟩ : apm_b97a03_field α) : ℂ) = β :=
+  Classical.choose_spec (apm_b97a03_exists_aut_apply_root hα hβ)
+
+noncomputable def apm_b97a03_rootAut {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (k : Fin 6) :
+    apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α :=
+  apm_b97a03_normalAutOfRoot hα (apm_b97a03_zeta_mul_root hα k)
+
+lemma apm_b97a03_rootAut_apply_root {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (k : Fin 6) :
+    (((apm_b97a03_rootAut hα k)
+      ⟨α, apm_b97a03_root_mem_field hα hα⟩ : apm_b97a03_field α) : ℂ) =
+        apm_b97a03_zeta α ^ (k : ℕ) * α :=
+  apm_b97a03_normalAutOfRoot_apply_root hα (apm_b97a03_zeta_mul_root hα k)
+
+lemma apm_b97a03_rootAut_injective {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Function.Injective (apm_b97a03_rootAut hα) := by
   intro i j hij
-  apply Fin.ext
-  have hpow := (apm_b97a03_zeta_primitive hα).pow_inj
-    (show 2 * (i : ℕ) < 6 by omega) (show 2 * (j : ℕ) < 6 by omega)
-    (mul_right_cancel₀ ha (by simpa [apm_b97a03_beta] using hij))
-  omega
+  apply apm_b97a03_candidate_roots_injective hα
+  have h := congr_arg
+    (fun σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α ↦
+      ((σ ⟨α, apm_b97a03_root_mem_field hα hα⟩ : apm_b97a03_field α) : ℂ)) hij
+  simpa only [apm_b97a03_rootAut_apply_root] using h
 
-lemma apm_b97a03_beta_minpoly {α : ℂ}
+lemma apm_b97a03_rootAut_surjective {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Function.Surjective (apm_b97a03_rootAut hα) := by
+  letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
+      apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
+  letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
+    Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
+  letI : IsGalois ℚ (apm_b97a03_field α) :=
+    IsGalois.of_separable_splitting_field apm_b97A03_bridge_1.separable
+  exact ((apm_b97a03_rootAut_injective hα).bijective_of_nat_card_le (by
+    rw [apm_b97a03_card_aut hα, Nat.card_fin])).2
+
+lemma apm_b97a03_aut_ext_root {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (k : Fin 3) : minpoly ℚ (apm_b97a03_beta α k) = apm_b97a03_cubic := by
-  symm
-  apply minpoly.eq_of_irreducible_of_monic apm_b97a03_cubic_irreducible
-  · simpa [Polynomial.IsRoot, Polynomial.aeval_def] using apm_b97a03_beta_root hα k
-  · exact Polynomial.monic_X_pow_add_C (3 : ℚ) (by norm_num : 3 ≠ 0)
+    {σ τ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α}
+    (h : (((σ ⟨α, apm_b97a03_root_mem_field hα hα⟩ : apm_b97a03_field α) : ℂ)) =
+      ((τ ⟨α, apm_b97a03_root_mem_field hα hα⟩ : apm_b97a03_field α) : ℂ)) :
+    σ = τ := by
+  have he : σ.toAlgHom = τ.toAlgHom := by
+    unfold apm_b97a03_field
+    apply IntermediateField.adjoin_algHom_ext ℚ
+    intro x hx
+    have hx' : x = α := Set.mem_singleton_iff.mp hx
+    subst x
+    apply Subtype.ext
+    exact h
+  apply AlgEquiv.ext
+  intro x
+  exact DFunLike.congr_fun he x
 
-lemma apm_b97a03_beta_finrank {α : ℂ}
+lemma apm_b97a03_rootAut_apply_root_pow_three {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (k : Fin 6) :
+    (((apm_b97a03_rootAut hα k)
+      (⟨α, apm_b97a03_root_mem_field hα hα⟩ ^ 3) : apm_b97a03_field α) : ℂ) =
+        (apm_b97a03_zeta α ^ (k : ℕ) * α) ^ 3 := by
+  rw [map_pow]
+  exact congr_arg (fun x : ℂ ↦ x ^ 3) (apm_b97a03_rootAut_apply_root hα k)
+
+lemma apm_b97a03_rootAut_apply_zeta {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (k : Fin 6) :
+    (((apm_b97a03_rootAut hα k)
+      ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ : apm_b97a03_field α) : ℂ) =
+        (1 + (apm_b97a03_zeta α ^ (k : ℕ) * α) ^ 3) / 2 := by
+  have hzeta :
+      (⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ : apm_b97a03_field α) =
+        (1 + ⟨α, apm_b97a03_root_mem_field hα hα⟩ ^ 3) / 2 := by
+    apply Subtype.ext
+    rfl
+  have hm :
+      (apm_b97a03_rootAut hα k)
+          ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ =
+        (1 + (apm_b97a03_rootAut hα k)
+          ⟨α, apm_b97a03_root_mem_field hα hα⟩ ^ 3) / 2 := by
+    rw [hzeta, map_div₀ (apm_b97a03_rootAut hα k),
+      map_add (apm_b97a03_rootAut hα k), map_one, map_pow]
+    congr 1
+    exact map_ofNat (apm_b97a03_rootAut hα k) 2
+  rw [congr_arg Subtype.val hm]
+  norm_num
+  rw [apm_b97a03_rootAut_apply_root]
+  change (1 + (apm_b97a03_zeta α ^ (k : ℕ) * α) ^ 3) / (2 : ℂ) = _
+  rfl
+
+lemma apm_b97a03_rootAut_apply_zeta_even {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (k : Fin 3) :
-    Module.finrank ℚ (IntermediateField.adjoin ℚ {apm_b97a03_beta α k}) = 3 := by
-  have hint : IsIntegral ℚ (apm_b97a03_beta α k) := by
-    refine ⟨apm_b97a03_cubic,
-      Polynomial.monic_X_pow_add_C (3 : ℚ) (by norm_num : 3 ≠ 0), ?_⟩
-    simpa [Polynomial.IsRoot, Polynomial.aeval_def] using apm_b97a03_beta_root hα k
-  rw [IntermediateField.adjoin.finrank hint, apm_b97a03_beta_minpoly hα k]
-  exact Polynomial.natDegree_X_pow_add_C
+    (k : Fin 6) (hk : Even (k : ℕ)) :
+    (((apm_b97a03_rootAut hα k)
+      ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ : apm_b97a03_field α) : ℂ) =
+        apm_b97a03_zeta α := by
+  rw [apm_b97a03_rootAut_apply_zeta hα k]
+  obtain ⟨j, hj⟩ := hk
+  rw [hj]
+  have hz6 := apm_b97a03_zeta_pow_six hα
+  ring_nf
+  rw [show j * 6 = 6 * j by omega, pow_mul, hz6, one_pow, one_mul]
+  unfold apm_b97a03_zeta
+  ring
 
-lemma apm_b97a03_zeta_sq_primitive {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    IsPrimitiveRoot (apm_b97a03_zeta α ^ 2) 3 := by
-  exact (apm_b97a03_zeta_primitive hα).pow (by norm_num) (by norm_num)
-
-lemma apm_b97a03_cubic_root_exhaustion {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    ∀ z : ℂ, (apm_b97a03_cubic.map (algebraMap ℚ ℂ)).IsRoot z →
-      ∃ k : Fin 3, z = apm_b97a03_beta α k := by
-  intro z hz
-  have hcube : (α ^ 2) ^ 3 = (-3 : ℂ) := by
-    rw [← pow_mul, show 2 * 3 = 6 by norm_num]
-    exact apm_b97a03_root_pow_six hα
-  have hfac := X_pow_sub_C_eq_prod (apm_b97a03_zeta_sq_primitive hα)
-    (by norm_num : 0 < 3) hcube
-  have hz' : (Polynomial.X ^ 3 - Polynomial.C (-3 : ℂ)).IsRoot z := by
-    simpa [apm_b97a03_cubic, Polynomial.IsRoot] using hz
-  rw [hfac] at hz'
-  simp only [Polynomial.IsRoot, Polynomial.eval_prod, Polynomial.eval_sub,
-    Polynomial.eval_X, Polynomial.eval_C, sub_eq_zero, Finset.prod_eq_zero_iff] at hz'
-  obtain ⟨k, hk, heq⟩ := hz'
-  refine ⟨⟨k, by simpa using hk⟩, ?_⟩
-  simpa [apm_b97a03_beta, pow_mul] using heq
-
-lemma apm_b97a03_beta_zero (α : ℂ) : apm_b97a03_beta α 0 = α ^ 2 := by
-  simp [apm_b97a03_beta]
-
-lemma apm_b97a03_beta_one (α : ℂ) :
-    apm_b97a03_beta α 1 = apm_b97a03_zeta α ^ 2 * α ^ 2 := by
-  simp [apm_b97a03_beta]
-
-lemma apm_b97a03_beta_mem_field (α : ℂ) (k : Fin 3) :
-    apm_b97a03_beta α k ∈ apm_b97a03_field α := by
-  rw [apm_b97a03_beta]
-  exact IntermediateField.mul_mem _
-    ((apm_b97a03_field α).toSubalgebra.pow_mem
-      (apm_b97a03_zeta_mem_field (α := α)) _)
-    ((apm_b97a03_field α).toSubalgebra.pow_mem
-      (IntermediateField.subset_adjoin ℚ {α} (by simp)) 2)
-
-noncomputable def apm_b97a03_betaField (α : ℂ) (k : Fin 3) :
-    apm_b97a03_field α :=
-  ⟨apm_b97a03_beta α k, apm_b97a03_beta_mem_field α k⟩
-
-lemma apm_b97a03_betaField_injective {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Function.Injective (apm_b97a03_betaField α) := by
-  intro i j hij
-  apply apm_b97a03_beta_injective hα
-  exact congrArg Subtype.val hij
-
-lemma apm_b97a03_betaField_root {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (k : Fin 3) :
-    (apm_b97a03_cubic.map
-      (algebraMap ℚ (apm_b97a03_field α))).IsRoot
-        (apm_b97a03_betaField α k) := by
-  apply (Polynomial.isRoot_map_iff (apm_b97a03_field α).val.injective).mp
-  simpa only [Polynomial.map_map, IsScalarTower.algebraMap_eq ℚ
-    (apm_b97a03_field α) ℂ] using apm_b97a03_beta_root hα k
-
-noncomputable def apm_b97a03_betaRoot {α : ℂ}
+lemma apm_b97a03_rootAut_apply_zeta_odd {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (k : Fin 3) : apm_b97a03_cubic.rootSet (apm_b97a03_field α) := by
-  refine ⟨apm_b97a03_betaField α k, ?_⟩
-  rw [Polynomial.mem_rootSet']
-  exact ⟨by
-    simpa [apm_b97a03_cubic] using
-      (Polynomial.monic_X_pow_add_C (3 : apm_b97a03_field α)
-        (by norm_num : 3 ≠ 0)).ne_zero, by
-    simpa [Polynomial.IsRoot, Polynomial.aeval_def] using
-      apm_b97a03_betaField_root hα k⟩
+    (k : Fin 6) (hk : Odd (k : ℕ)) :
+    (((apm_b97a03_rootAut hα k)
+      ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ : apm_b97a03_field α) : ℂ) =
+        1 - apm_b97a03_zeta α := by
+  rw [apm_b97a03_rootAut_apply_zeta hα k]
+  obtain ⟨j, hj⟩ := hk
+  rw [hj]
+  have hz6 := apm_b97a03_zeta_pow_six hα
+  have hz3 := apm_b97a03_zeta_pow_three hα
+  ring_nf
+  rw [hz3, show j * 6 = 6 * j by omega, pow_mul, hz6, one_pow]
+  unfold apm_b97a03_zeta
+  ring
 
-lemma apm_b97a03_betaRoot_injective {α : ℂ}
+lemma apm_b97a03_one_sub_zeta {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Function.Injective (apm_b97a03_betaRoot hα) := by
-  intro i j hij
-  apply apm_b97a03_betaField_injective hα
-  exact congrArg Subtype.val hij
+    1 - apm_b97a03_zeta α = apm_b97a03_zeta α ^ 5 := by
+  let z := apm_b97a03_zeta α
+  have hz0 : z ≠ 0 := (apm_b97a03_zeta_primitive hα).ne_zero (by norm_num)
+  apply mul_left_cancel₀ hz0
+  have hrel : z ^ 2 - z + 1 = 0 := apm_b97a03_zeta_relation hα
+  have hz6 : z ^ 6 = 1 := apm_b97a03_zeta_pow_six hα
+  rw [mul_sub, mul_one]
+  calc
+    z - z * z = 1 := by linear_combination -hrel
+    _ = z * z ^ 5 := by rw [← hz6]; ring
 
-lemma apm_b97a03_betaRoot_surjective {α : ℂ}
+noncomputable def apm_b97a03_cubicRoot (α : ℂ) (r : Fin 3) : ℂ :=
+  apm_b97a03_zeta α ^ (2 * (r : ℕ)) * α ^ 2
+
+noncomputable def apm_b97a03_cubicPolynomial : ℚ[X] :=
+  X ^ 3 + C 3
+
+lemma apm_b97a03_cubicRoot_isRoot {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (r : Fin 3) :
+    (apm_b97a03_cubicPolynomial.map (algebraMap ℚ ℂ)).IsRoot
+      (apm_b97a03_cubicRoot α r) := by
+  have hz6 := apm_b97a03_zeta_pow_six hα
+  have ha6 := apm_b97a03_root_pow_six hα
+  have hp : apm_b97a03_cubicRoot α r ^ 3 = -3 := by
+    unfold apm_b97a03_cubicRoot
+    rw [mul_pow, ← pow_mul, show 2 * (r : ℕ) * 3 = 6 * (r : ℕ) by omega,
+      pow_mul, hz6, one_pow, one_mul, ← pow_mul,
+      show 2 * 3 = 6 by norm_num, ha6]
+  simpa [apm_b97a03_cubicPolynomial, Polynomial.IsRoot, hp]
+
+lemma apm_b97a03_cubicRoot_injective {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Function.Surjective (apm_b97a03_betaRoot hα) := by
-  intro y
-  have hyF : (apm_b97a03_cubic.map
-      (algebraMap ℚ (apm_b97a03_field α))).IsRoot y.1 := by
-    simpa [Polynomial.IsRoot, Polynomial.aeval_def] using
-      (Polynomial.mem_rootSet'.mp y.2).2
-  have hyC : (apm_b97a03_cubic.map (algebraMap ℚ ℂ)).IsRoot (y.1 : ℂ) := by
-    have hm : ((apm_b97a03_cubic.map
-        (algebraMap ℚ (apm_b97a03_field α))).map
-          (apm_b97a03_field α).val).IsRoot ((apm_b97a03_field α).val y.1) :=
-      hyF.map
-    simpa only [Polynomial.map_map, IsScalarTower.algebraMap_eq ℚ
-      (apm_b97a03_field α) ℂ] using hm
-  obtain ⟨k, hk⟩ := apm_b97a03_cubic_root_exhaustion hα (y.1 : ℂ) hyC
-  refine ⟨k, Subtype.ext ?_⟩
-  apply Subtype.ext
-  simpa [apm_b97a03_betaRoot, apm_b97a03_betaField] using hk.symm
-
-noncomputable def apm_b97a03_betaRootEquiv {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Fin 3 ≃ apm_b97a03_cubic.rootSet (apm_b97a03_field α) :=
-  Equiv.ofBijective (apm_b97a03_betaRoot hα)
-    ⟨apm_b97a03_betaRoot_injective hα, apm_b97a03_betaRoot_surjective hα⟩
-
-noncomputable def apm_b97a03_betaActionHom {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) →*
-      Equiv.Perm (Fin 3) :=
-  (apm_b97a03_betaRootEquiv hα).symm.permCongrHom.toMonoidHom.comp
-    (MulAction.toPermHom
-      (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α)
-      (apm_b97a03_cubic.rootSet (apm_b97a03_field α)))
-
-set_option synthInstance.maxHeartbeats 100000 in
-lemma apm_b97a03_betaActionHom_apply {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) (k : Fin 3) :
-    apm_b97a03_betaRoot hα (apm_b97a03_betaActionHom hα σ k) =
-      σ • apm_b97a03_betaRoot hα k := by
-  simp [apm_b97a03_betaActionHom, Equiv.permCongr_apply,
-    apm_b97a03_betaRootEquiv]
-  exact (apm_b97a03_betaRootEquiv hα).apply_symm_apply _
-
-/-- Two cubic conjugates already recover the original sixth root. -/
-lemma apm_b97a03_alpha_from_beta {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    α = (2 * (apm_b97a03_beta α 1 / apm_b97a03_beta α 0) + 1) /
-      apm_b97a03_beta α 0 := by
+    Function.Injective (apm_b97a03_cubicRoot α) := by
   have ha : α ≠ 0 := by
     intro ha
     have hpow := apm_b97a03_root_pow_six hα
     rw [ha] at hpow
     norm_num at hpow
-  have hrel := apm_b97a03_zeta_relation hα
-  rw [apm_b97a03_beta_zero, apm_b97a03_beta_one]
-  have hα3 : α ^ 3 = 2 * apm_b97a03_zeta α - 1 := by
-    simp [apm_b97a03_zeta]
-    ring
-  have hzid : α ^ 3 = 2 * apm_b97a03_zeta α ^ 2 + 1 := by
-    linear_combination hα3 - 2 * hrel
-  field_simp [ha]
-  exact hzid
+  intro i j hij
+  unfold apm_b97a03_cubicRoot at hij
+  have hp : apm_b97a03_zeta α ^ (2 * (i : ℕ)) =
+      apm_b97a03_zeta α ^ (2 * (j : ℕ)) :=
+    mul_right_cancel₀ (pow_ne_zero 2 ha) hij
+  have he : 2 * (i : ℕ) = 2 * (j : ℕ) :=
+    (apm_b97a03_zeta_primitive hα).pow_inj (by omega) (by omega) hp
+  apply Fin.ext
+  omega
 
-lemma apm_b97a03_adjoin_two_beta {α : ℂ}
+noncomputable def apm_b97a03_cubicRootsEmbedding {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    IntermediateField.adjoin ℚ {apm_b97a03_beta α 0, apm_b97a03_beta α 1} =
-      apm_b97a03_field α := by
+    Fin 3 ↪ apm_b97a03_cubicPolynomial.rootSet ℂ where
+  toFun r := ⟨apm_b97a03_cubicRoot α r, by
+    rw [Polynomial.mem_rootSet_of_ne]
+    · simpa [Polynomial.aeval_def, Polynomial.IsRoot] using
+        apm_b97a03_cubicRoot_isRoot hα r
+    · unfold apm_b97a03_cubicPolynomial
+      exact (monic_X_pow 3).add_of_left (by
+        rw [degree_C (by norm_num), degree_X_pow]
+        norm_num) |>.ne_zero⟩
+  inj' i j hij := apm_b97a03_cubicRoot_injective hα (congr_arg Subtype.val hij)
+
+lemma apm_b97a03_cubicRootSet_card {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Fintype.card (apm_b97a03_cubicPolynomial.rootSet ℂ) = 3 := by
   apply le_antisymm
-  · rw [IntermediateField.adjoin_le_iff]
-    intro z hz
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hz
-    rcases hz with rfl | rfl
-    · rw [apm_b97a03_beta_zero]
-      exact IntermediateField.pow_mem _
-        (IntermediateField.subset_adjoin ℚ {α} (by simp)) 2
-    · rw [apm_b97a03_beta_one]
-      exact IntermediateField.mul_mem _
-        (IntermediateField.pow_mem _ apm_b97a03_zeta_mem_field 2)
-        (IntermediateField.pow_mem _
-          (IntermediateField.subset_adjoin ℚ {α} (by simp)) 2)
-  · rw [apm_b97a03_field, IntermediateField.adjoin_le_iff]
-    intro z hz
-    simp only [Set.mem_singleton_iff] at hz
-    subst z
-    let S := IntermediateField.adjoin ℚ
-      {apm_b97a03_beta α 0, apm_b97a03_beta α 1}
-    have hb0 : apm_b97a03_beta α 0 ∈ S :=
-      IntermediateField.subset_adjoin ℚ _ (by simp)
-    have hb1 : apm_b97a03_beta α 1 ∈ S :=
-      IntermediateField.subset_adjoin ℚ _ (by simp)
-    have hrhs : (2 * (apm_b97a03_beta α 1 / apm_b97a03_beta α 0) + 1) /
-        apm_b97a03_beta α 0 ∈ S := by
-      apply IntermediateField.div_mem
-      · exact IntermediateField.add_mem _
-          (IntermediateField.mul_mem _ (IntermediateField.natCast_mem _ 2)
-            (IntermediateField.div_mem _ hb1 hb0))
-          (IntermediateField.one_mem _)
-      · exact hb0
-    change α ∈ S
-    exact (apm_b97a03_alpha_from_beta hα).symm ▸ hrhs
+  · let s := apm_b97a03_cubicPolynomial.rootSet ℂ
+    let hs : s.Finite := Set.toFinite s
+    let e : s ≃ ↑hs.toFinset := Equiv.setCongr (by ext; simp)
+    rw [Fintype.card_congr e, Fintype.card_coe,
+      ← Set.ncard_eq_toFinset_card s hs]
+    simpa [s, apm_b97a03_cubicPolynomial] using
+      Polynomial.ncard_rootSet_le apm_b97a03_cubicPolynomial ℂ
+  · exact Fintype.card_le_of_injective (apm_b97a03_cubicRootsEmbedding hα)
+      (apm_b97a03_cubicRootsEmbedding hα).injective
 
-lemma apm_b97a03_betaActionHom_injective {α : ℂ}
+noncomputable def apm_b97a03_cubicRootsEquiv {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Function.Injective (apm_b97a03_betaActionHom hα) := by
-  intro σ τ hστ
-  have hhom : σ.toAlgHom = τ.toAlgHom := by
-    apply IntermediateField.algHom_ext_of_eq_adjoin ℚ
-      (apm_b97a03_adjoin_two_beta hα).symm
-    intro x hx
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx
-    rcases hx with rfl | rfl
-    · have hk := Equiv.Perm.congr_fun hστ (0 : Fin 3)
-      have hk' := congrArg (apm_b97a03_betaRoot hα) hk
-      rw [apm_b97a03_betaActionHom_apply, apm_b97a03_betaActionHom_apply] at hk'
-      exact congrArg Subtype.val hk'
-    · have hk := Equiv.Perm.congr_fun hστ (1 : Fin 3)
-      have hk' := congrArg (apm_b97a03_betaRoot hα) hk
-      rw [apm_b97a03_betaActionHom_apply, apm_b97a03_betaActionHom_apply] at hk'
-      exact congrArg Subtype.val hk'
-  apply AlgEquiv.ext
-  intro x
-  exact DFunLike.congr_fun hhom x
+    Fin 3 ≃ apm_b97a03_cubicPolynomial.rootSet ℂ :=
+  Equiv.ofBijective (apm_b97a03_cubicRootsEmbedding hα)
+    ((Fintype.bijective_iff_injective_and_card _).2
+      ⟨(apm_b97a03_cubicRootsEmbedding hα).injective,
+        by rw [Fintype.card_fin, apm_b97a03_cubicRootSet_card hα]⟩)
 
-noncomputable def apm_b97a03_autMulEquiv {α : ℂ}
+lemma apm_b97a03_cubicRoot_mem_field {α : ℂ} (r : Fin 3) :
+    apm_b97a03_cubicRoot α r ∈ apm_b97a03_field α := by
+  unfold apm_b97a03_cubicRoot
+  apply IntermediateField.mul_mem
+  · exact IntermediateField.pow_mem _ (apm_b97a03_zeta_mem_field (α := α))
+      (2 * (r : ℕ))
+  · have ha : α ∈ apm_b97a03_field α :=
+      IntermediateField.subset_adjoin ℚ {α} (by simp)
+    exact IntermediateField.pow_mem _ ha 2
+
+noncomputable def apm_b97a03_cubicRootsEmbeddingField {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Fin 3 ↪ apm_b97a03_cubicPolynomial.rootSet (apm_b97a03_field α) where
+  toFun r :=
+    ⟨⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩, by
+      have hp0 : apm_b97a03_cubicPolynomial ≠ 0 := by
+        unfold apm_b97a03_cubicPolynomial
+        exact (monic_X_pow 3).add_of_left (by
+          rw [degree_C (by norm_num), degree_X_pow]
+          norm_num) |>.ne_zero
+      rw [Polynomial.mem_rootSet_of_ne hp0]
+      apply (apm_b97a03_field α).val.injective
+      rw [map_zero, Polynomial.aeval_def, Polynomial.hom_eval₂]
+      simpa [Polynomial.IsRoot] using apm_b97a03_cubicRoot_isRoot hα r⟩
+  inj' i j hij := apm_b97a03_cubicRoot_injective hα
+    (congr_arg (fun x ↦ (x.1.1 : ℂ)) hij)
+
+lemma apm_b97a03_cubicRootSetField_card {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Fintype.card
+      (apm_b97a03_cubicPolynomial.rootSet (apm_b97a03_field α)) = 3 := by
+  apply le_antisymm
+  · let s := apm_b97a03_cubicPolynomial.rootSet (apm_b97a03_field α)
+    let hs : s.Finite := Set.toFinite s
+    let e : s ≃ ↑hs.toFinset := Equiv.setCongr (by ext; simp)
+    rw [Fintype.card_congr e, Fintype.card_coe,
+      ← Set.ncard_eq_toFinset_card s hs]
+    simpa [s, apm_b97a03_cubicPolynomial] using
+      Polynomial.ncard_rootSet_le apm_b97a03_cubicPolynomial (apm_b97a03_field α)
+  · exact Fintype.card_le_of_injective (apm_b97a03_cubicRootsEmbeddingField hα)
+      (apm_b97a03_cubicRootsEmbeddingField hα).injective
+
+noncomputable def apm_b97a03_cubicRootsEquivField {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Fin 3 ≃ apm_b97a03_cubicPolynomial.rootSet (apm_b97a03_field α) :=
+  Equiv.ofBijective (apm_b97a03_cubicRootsEmbeddingField hα)
+    ((Fintype.bijective_iff_injective_and_card _).2
+      ⟨(apm_b97a03_cubicRootsEmbeddingField hα).injective,
+        by rw [Fintype.card_fin, apm_b97a03_cubicRootSetField_card hα]⟩)
+
+noncomputable def apm_b97a03_cubicRootPerm {α : ℂ}
+    (σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) :
+    Equiv.Perm
+      (apm_b97a03_cubicPolynomial.rootSet (apm_b97a03_field α)) where
+  toFun x := ⟨σ x, Polynomial.rootSet_mapsTo σ.toAlgHom x.2⟩
+  invFun x := ⟨σ.symm x, Polynomial.rootSet_mapsTo σ.symm.toAlgHom x.2⟩
+  left_inv x := Subtype.ext (σ.symm_apply_apply x)
+  right_inv x := Subtype.ext (σ.apply_symm_apply x)
+
+noncomputable def apm_b97a03_cubicRootActionHom (α : ℂ) :
+    (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) →*
+      Equiv.Perm
+        (apm_b97a03_cubicPolynomial.rootSet (apm_b97a03_field α)) where
+  toFun := apm_b97a03_cubicRootPerm
+  map_one' := by
+    ext x
+    rfl
+  map_mul' σ τ := by
+    ext x
+    rfl
+
+noncomputable def apm_b97a03_finThreeActionHom {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) →* Equiv.Perm (Fin 3) where
+  toFun σ := (apm_b97a03_cubicRootsEquivField hα).symm.permCongr
+    (apm_b97a03_cubicRootPerm σ)
+  map_one' := by
+    ext r
+    simp [Equiv.permCongr_apply, apm_b97a03_cubicRootPerm]
+  map_mul' σ τ := by
+    ext r
+    simp [Equiv.permCongr_apply, apm_b97a03_cubicRootPerm]
+
+lemma apm_b97a03_finThreeActionHom_fixed {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
+    (σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α)
+    (hσ : apm_b97a03_finThreeActionHom hα σ = 1) (r : Fin 3) :
+    σ ⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩ =
+      ⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩ := by
+  have hr := Equiv.Perm.congr_fun hσ r
+  have hr' := congr_arg (apm_b97a03_cubicRootsEquivField hα) hr
+  simpa [apm_b97a03_finThreeActionHom, Equiv.permCongr_apply,
+    apm_b97a03_cubicRootPerm] using congr_arg Subtype.val hr'
+
+lemma apm_b97a03_finThreeActionHom_injective {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Function.Injective (apm_b97a03_finThreeActionHom hα) := by
+  rw [injective_iff_map_eq_one]
+  intro σ hσ
+  let a : apm_b97a03_field α :=
+    ⟨α, apm_b97a03_root_mem_field hα hα⟩
+  let z : apm_b97a03_field α :=
+    ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩
+  have ha0 : a ≠ 0 := by
+    intro ha
+    have hcoe := congr_arg (fun x : apm_b97a03_field α ↦ (x : ℂ)) ha
+    have hpow := apm_b97a03_root_pow_six hα
+    simp [a] at hcoe
+    rw [hcoe] at hpow
+    norm_num at hpow
+  have hfix0 := apm_b97a03_finThreeActionHom_fixed hα σ hσ (0 : Fin 3)
+  have ha2 : σ (a ^ 2) = a ^ 2 := by
+    simpa [a, apm_b97a03_cubicRoot] using hfix0
+  have hfix1 := apm_b97a03_finThreeActionHom_fixed hα σ hσ (1 : Fin 3)
+  have hprod : σ (z ^ 2 * a ^ 2) = z ^ 2 * a ^ 2 := by
+    simpa [a, z, apm_b97a03_cubicRoot] using hfix1
+  have hz2 : σ (z ^ 2) = z ^ 2 := by
+    apply mul_right_cancel₀ (pow_ne_zero 2 ha0)
+    calc
+      σ (z ^ 2) * a ^ 2 = σ (z ^ 2) * σ (a ^ 2) := by rw [ha2]
+      _ = σ (z ^ 2 * a ^ 2) := by rw [map_mul]
+      _ = z ^ 2 * a ^ 2 := hprod
+  have hzrel : z = z ^ 2 + 1 := by
+    apply Subtype.ext
+    change apm_b97a03_zeta α = apm_b97a03_zeta α ^ 2 + 1
+    have hrel := apm_b97a03_zeta_relation hα
+    linear_combination -hrel
+  have hz : σ z = z := by
+    calc
+      σ z = σ (z ^ 2 + 1) := congr_arg σ hzrel
+      _ = σ (z ^ 2) + 1 := by rw [map_add, map_one]
+      _ = z ^ 2 + 1 := by rw [hz2]
+      _ = z := hzrel.symm
+  have ha3rel : a ^ 3 = 2 * z - 1 := by
+    apply Subtype.ext
+    change α ^ 3 = 2 * ((1 + α ^ 3) / 2) - 1
+    ring
+  have ha3 : σ (a ^ 3) = a ^ 3 := by
+    calc
+      σ (a ^ 3) = σ (2 * z - 1) := congr_arg σ ha3rel
+      _ = 2 * σ z - 1 := by
+        rw [map_sub, map_mul, map_ofNat, map_one]
+      _ = 2 * z - 1 := by rw [hz]
+      _ = a ^ 3 := ha3rel.symm
+  have harel : a = a ^ 3 / a ^ 2 := by
+    field_simp
+  have ha : σ a = a := by
+    calc
+      σ a = σ (a ^ 3 / a ^ 2) := congr_arg σ harel
+      _ = σ (a ^ 3) / σ (a ^ 2) := map_div₀ σ _ _
+      _ = a ^ 3 / a ^ 2 := by rw [ha3, ha2]
+      _ = a := harel.symm
+  apply apm_b97a03_aut_ext_root hα
+  simpa [a] using congr_arg (fun x : apm_b97a03_field α ↦ (x : ℂ)) ha
+
+noncomputable def apm_b97a03_autEquivPerm {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
     (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) ≃*
       Equiv.Perm (Fin 3) := by
@@ -593,606 +766,525 @@ noncomputable def apm_b97a03_autMulEquiv {α : ℂ}
       apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
   letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
     Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
-  letI : IsGalois ℚ (apm_b97a03_field α) := apm_b97a03_isGalois hα
-  refine MulEquiv.ofBijective (apm_b97a03_betaActionHom hα)
-    ((Fintype.bijective_iff_injective_and_card _).2
-      ⟨apm_b97a03_betaActionHom_injective hα, ?_⟩)
-  rw [← Nat.card_eq_fintype_card, apm_b97a03_card_aut hα,
-    Fintype.card_perm]
+  letI : IsGalois ℚ (apm_b97a03_field α) :=
+    IsGalois.of_separable_splitting_field apm_b97A03_bridge_1.separable
+  apply MulEquiv.ofBijective (apm_b97a03_finThreeActionHom hα)
+  exact (apm_b97a03_finThreeActionHom_injective hα).bijective_of_nat_card_le (by
+    rw [apm_b97a03_card_aut hα, Nat.card_perm, Nat.card_fin]
+    norm_num)
+
+/-- The transposition indexed by its unique fixed point. -/
+def apm_b97a03_transposition : Fin 3 → Equiv.Perm (Fin 3) :=
+  ![Equiv.swap 1 2, Equiv.swap 0 2, Equiv.swap 0 1]
+
+def apm_b97a03_orderTwoSubgroup (i : Fin 3) :
+    Subgroup (Equiv.Perm (Fin 3)) where
+  carrier := {g | g = 1 ∨ g = apm_b97a03_transposition i}
+  one_mem' := Or.inl rfl
+  mul_mem' := by
+    fin_cases i <;> decide +revert
+  inv_mem' := by
+    fin_cases i <;> decide +revert
+
+lemma apm_b97a03_orderTwoSubgroup_card (i : Fin 3) :
+    Nat.card (apm_b97a03_orderTwoSubgroup i) = 2 := by
+  rw [Nat.card_eq_two_iff]
+  refine ⟨⟨1, Or.inl rfl⟩,
+    ⟨apm_b97a03_transposition i, Or.inr rfl⟩, ?_, ?_⟩
+  · intro h
+    have hv := congrArg Subtype.val h
+    fin_cases i
+    all_goals revert hv; decide
+  · apply Set.eq_univ_of_forall
+    intro g
+    rw [Set.mem_insert_iff]
+    rcases g.property with h | h
+    · exact Or.inl (Subtype.ext h)
+    · exact Or.inr (Subtype.ext h)
+
+lemma apm_b97a03_transposition_ne_one (i : Fin 3) :
+    apm_b97a03_transposition i ≠ 1 := by
+  fin_cases i <;> decide
+
+lemma apm_b97a03_orderTwoSubgroup_injective :
+    Function.Injective apm_b97a03_orderTwoSubgroup := by
+  intro i j
+  classical
+  intro h
+  have hm : apm_b97a03_transposition i ∈ apm_b97a03_orderTwoSubgroup j := by
+    rw [← h]
+    exact Or.inr rfl
+  change apm_b97a03_transposition i = 1 ∨
+    apm_b97a03_transposition i = apm_b97a03_transposition j at hm
+  rcases hm with hm | hm
+  · exact (apm_b97a03_transposition_ne_one i hm).elim
+  · fin_cases i <;> fin_cases j
+    all_goals first | rfl | (revert hm; decide)
+
+lemma apm_b97a03_alternatingGroup_card :
+    Nat.card (alternatingGroup (Fin 3)) = 3 := by
+  rw [nat_card_alternatingGroup]
   norm_num
 
-lemma apm_b97a03_aut_mulEquiv_nonempty {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Nonempty ((apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) ≃*
-      Equiv.Perm (Fin 3)) :=
-  ⟨apm_b97a03_autMulEquiv hα⟩
+lemma apm_b97a03_perm_cases (g : Equiv.Perm (Fin 3)) :
+    g = 1 ∨ (∃ i, g = apm_b97a03_transposition i) ∨
+      g = apm_b97a03_transposition 0 * apm_b97a03_transposition 1 ∨
+      g = apm_b97a03_transposition 1 * apm_b97a03_transposition 0 := by
+  revert g
+  decide
 
-@[simp] lemma apm_b97a03_autMulEquiv_apply {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) :
-    apm_b97a03_autMulEquiv hα σ = apm_b97a03_betaActionHom hα σ := rfl
-
-lemma apm_b97a03_adjoin_beta_zero (α : ℂ) :
-    IntermediateField.adjoin ℚ {apm_b97a03_beta α 0} =
-      IntermediateField.adjoin ℚ {α ^ 2} := by
-  rw [apm_b97a03_beta_zero]
-
-lemma apm_b97a03_adjoin_beta_one (α : ℂ) :
-    IntermediateField.adjoin ℚ {apm_b97a03_beta α 1} =
-      IntermediateField.adjoin ℚ {apm_b97a03_zeta α ^ 2 * α ^ 2} := by
-  rw [apm_b97a03_beta_one]
-
-lemma apm_b97a03_adjoin_beta_two (α : ℂ) :
-    IntermediateField.adjoin ℚ {apm_b97a03_beta α 2} =
-      IntermediateField.adjoin ℚ {apm_b97a03_zeta α ^ 4 * α ^ 2} := by
-  simp [apm_b97a03_beta]
-
-noncomputable def apm_b97a03_betaStabilizer {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (k : Fin 3) : Subgroup (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) :=
-  Subgroup.comap (apm_b97a03_autMulEquiv hα).toMonoidHom
-    (MulAction.stabilizer (Equiv.Perm (Fin 3)) k)
-
-lemma apm_b97a03_betaStabilizer_eq_fixingSubgroup {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (k : Fin 3) :
-    apm_b97a03_betaStabilizer hα k =
-      (IntermediateField.adjoin ℚ {apm_b97a03_betaField α k}).fixingSubgroup := by
-  ext σ
-  rw [IntermediateField.mem_fixingSubgroup_iff]
-  simp only [apm_b97a03_betaStabilizer, Subgroup.mem_comap,
-    MulAction.mem_stabilizer_iff]
+lemma apm_b97a03_transposition_order (i : Fin 3) :
+    orderOf (apm_b97a03_transposition i) = 2 := by
+  apply (orderOf_eq_iff (by norm_num)).2
   constructor
-  · intro hk x hx
-    change apm_b97a03_betaActionHom hα σ k = k at hk
-    have hgen : σ (apm_b97a03_betaField α k) = apm_b97a03_betaField α k := by
-      have hr := apm_b97a03_betaActionHom_apply hα σ k
-      rw [hk] at hr
-      exact congrArg Subtype.val hr.symm
-    refine IntermediateField.adjoin_induction ℚ (p := fun x _ => σ x = x) ?_ ?_ ?_ ?_ ?_ hx
-    · intro y hy
-      simpa only [Set.mem_singleton_iff] using hy ▸ hgen
-    · intro q
-      exact σ.commutes q
-    · intro y z _ _ hy hz
-      simp [hy, hz]
-    · intro y _ hy
-      simp [hy]
-    · intro y z _ _ hy hz
-      simp [hy, hz]
-  · intro hfix
-    change apm_b97a03_betaActionHom hα σ k = k
-    apply apm_b97a03_betaRoot_injective hα
-    rw [apm_b97a03_betaActionHom_apply]
-    apply Subtype.ext
-    apply Subtype.ext
-    simpa [apm_b97a03_betaRoot, apm_b97a03_betaField] using congrArg Subtype.val
-      (hfix (apm_b97a03_betaField α k)
-        (IntermediateField.subset_adjoin ℚ _ (by simp)))
+  · fin_cases i <;> decide
+  · intro m hm hm0
+    interval_cases m
+    all_goals fin_cases i <;> decide
 
-lemma apm_b97a03_fixedField_betaStabilizer {α : ℂ}
+lemma apm_b97a03_cycle_order :
+    orderOf (apm_b97a03_transposition 0 * apm_b97a03_transposition 1) = 3 ∧
+    orderOf (apm_b97a03_transposition 1 * apm_b97a03_transposition 0) = 3 := by
+  constructor <;> apply (orderOf_eq_iff (by norm_num)).2 <;> constructor
+  · decide
+  · intro m hm hm0
+    interval_cases m <;> decide
+  · decide
+  · intro m hm hm0
+    interval_cases m <;> decide
+
+lemma apm_b97a03_cycles_mem_alternating :
+    apm_b97a03_transposition 0 * apm_b97a03_transposition 1 ∈
+      alternatingGroup (Fin 3) ∧
+    apm_b97a03_transposition 1 * apm_b97a03_transposition 0 ∈
+      alternatingGroup (Fin 3) := by
+  constructor <;> rw [Equiv.Perm.mem_alternatingGroup] <;> decide
+
+/-- The complete subgroup lattice of `S₃`. -/
+lemma apm_b97a03_S3_subgroup_classification
+    (H : Subgroup (Equiv.Perm (Fin 3))) :
+    H = ⊥ ∨ H = alternatingGroup (Fin 3) ∨
+      (∃ i, H = apm_b97a03_orderTwoSubgroup i) ∨ H = ⊤ := by
+  have hcardG : Nat.card (Equiv.Perm (Fin 3)) = 6 := by
+    rw [Nat.card_eq_fintype_card, Fintype.card_perm, Fintype.card_fin]
+    norm_num
+  have hdvd : Nat.card H ∣ 6 := by
+    simpa [hcardG] using H.card_subgroup_dvd_card
+  have hpos : 0 < Nat.card H := Nat.card_pos
+  have hle : Nat.card H ≤ 6 := Nat.le_of_dvd (by norm_num) hdvd
+  have hcases : Nat.card H = 1 ∨ Nat.card H = 2 ∨
+      Nat.card H = 3 ∨ Nat.card H = 6 := by
+    interval_cases hc : Nat.card H
+    all_goals simp_all
+  rcases hcases with h1 | h2 | h3 | h6
+  · exact Or.inl (Subgroup.card_eq_one.mp h1)
+  · right; right; left
+    have hne : H ≠ ⊥ := by
+      intro h
+      rw [h, Subgroup.card_bot] at h2
+      omega
+    have hnle : ¬H ≤ ⊥ := fun hlebot ↦ hne (bot_unique hlebot)
+    obtain ⟨g, hgH, hgnot⟩ := SetLike.not_le_iff_exists.mp hnle
+    have hg1 : g ≠ 1 := by
+      intro hg
+      subst g
+      exact hgnot (by simp)
+    rcases apm_b97a03_perm_cases g with hg | ⟨i, hg⟩ | hg | hg
+    · exact False.elim (hg1 hg)
+    · subst g
+      refine ⟨i, ?_⟩
+      symm
+      apply Subgroup.eq_of_le_of_card_ge
+      · intro x hx
+        rcases hx with hx | hx
+        · simp [hx]
+        · simpa [hx] using hgH
+      · rw [apm_b97a03_orderTwoSubgroup_card, h2]
+    · subst g
+      have hd3 := H.orderOf_dvd_natCard hgH
+      rw [apm_b97a03_cycle_order.1, h2] at hd3
+      norm_num at hd3
+    · subst g
+      have hd3 := H.orderOf_dvd_natCard hgH
+      rw [apm_b97a03_cycle_order.2, h2] at hd3
+      norm_num at hd3
+  · right; left
+    have hle : H ≤ alternatingGroup (Fin 3) := by
+      intro g hgH
+      rcases apm_b97a03_perm_cases g with hg | ⟨i, hg⟩ | hg | hg
+      · rw [hg]
+        exact Subgroup.one_mem _
+      · subst g
+        have hd2 := H.orderOf_dvd_natCard hgH
+        rw [apm_b97a03_transposition_order, h3] at hd2
+        norm_num at hd2
+      · simpa [hg] using apm_b97a03_cycles_mem_alternating.1
+      · simpa [hg] using apm_b97a03_cycles_mem_alternating.2
+    apply Subgroup.eq_of_le_of_card_ge hle
+    rw [apm_b97a03_alternatingGroup_card, h3]
+  · right; right; right
+    exact H.eq_top_of_card_eq (h6.trans hcardG.symm)
+
+lemma apm_b97a03_subgroup_eq_alternating_of_card_eq_three
+    (H : Subgroup (Equiv.Perm (Fin 3))) (hH : Nat.card H = 3) :
+    H = alternatingGroup (Fin 3) := by
+  rcases apm_b97a03_S3_subgroup_classification H with
+    hbot | halt | htwo | htop
+  · rw [hbot, Subgroup.card_bot] at hH
+    omega
+  · exact halt
+  · obtain ⟨i, rfl⟩ := htwo
+    rw [apm_b97a03_orderTwoSubgroup_card] at hH
+    omega
+  · have hcard : Nat.card (Equiv.Perm (Fin 3)) = 6 := by
+      rw [Nat.card_eq_fintype_card, Fintype.card_perm, Fintype.card_fin]
+      norm_num
+    have htopcard : Nat.card (⊤ : Subgroup (Equiv.Perm (Fin 3))) = 6 := by
+      simpa using hcard
+    rw [htop, htopcard] at hH
+    omega
+
+/-- Galois correspondence reduces every intermediate field inside the
+splitting field to the four nontrivial subgroup cases of `S₃`. -/
+lemma apm_b97a03_intermediateField_cases {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (k : Fin 3) :
-    IntermediateField.fixedField (apm_b97a03_betaStabilizer hα k) =
-      IntermediateField.adjoin ℚ {apm_b97a03_betaField α k} := by
+    (E : IntermediateField ℚ (apm_b97a03_field α)) :
+    let e := apm_b97a03_autEquivPerm hα
+    let H₂ := e.comapSubgroup (alternatingGroup (Fin 3))
+    let H₃ := fun i : Fin 3 ↦ e.comapSubgroup (apm_b97a03_orderTwoSubgroup i)
+    E = ⊥ ∨ E = IntermediateField.fixedField H₂ ∨
+      (∃ i, E = IntermediateField.fixedField (H₃ i)) ∨ E = ⊤ := by
   letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
       apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
   letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
     Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
-  letI : IsGalois ℚ (apm_b97a03_field α) := apm_b97a03_isGalois hα
-  rw [apm_b97a03_betaStabilizer_eq_fixingSubgroup hα k,
-    IsGalois.fixedField_fixingSubgroup]
+  letI : IsGalois ℚ (apm_b97a03_field α) :=
+    IsGalois.of_separable_splitting_field apm_b97A03_bridge_1.separable
+  let e := apm_b97a03_autEquivPerm hα
+  let H₂ : Subgroup (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) :=
+    e.comapSubgroup (alternatingGroup (Fin 3))
+  let H₃ (i : Fin 3) :
+      Subgroup (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) :=
+    e.comapSubgroup (apm_b97a03_orderTwoSubgroup i)
+  rcases apm_b97a03_S3_subgroup_classification
+      (e.mapSubgroup E.fixingSubgroup) with hbot | halt | hthree | htop
+  · right; right; right
+    rw [← IsGalois.fixedField_fixingSubgroup (K := E)]
+    have hfix : E.fixingSubgroup = ⊥ := by
+      apply e.mapSubgroup.injective
+      simpa using hbot
+    rw [hfix, IntermediateField.fixedField_bot]
+  · right; left
+    rw [← IsGalois.fixedField_fixingSubgroup (K := E)]
+    have hfix : E.fixingSubgroup = H₂ := by
+      apply e.mapSubgroup.injective
+      dsimp only [H₂]
+      change Subgroup.map e.toMonoidHom E.fixingSubgroup =
+        Subgroup.map e.toMonoidHom
+          (Subgroup.comap e.toMonoidHom (alternatingGroup (Fin 3)))
+      exact halt.trans
+        (Subgroup.map_comap_eq_self_of_surjective e.surjective _).symm
+    exact congrArg IntermediateField.fixedField hfix
+  · rcases hthree with ⟨i, hi⟩
+    right; right; left
+    refine ⟨i, ?_⟩
+    rw [← IsGalois.fixedField_fixingSubgroup (K := E)]
+    have hfix : E.fixingSubgroup = H₃ i := by
+      apply e.mapSubgroup.injective
+      dsimp only [H₃]
+      change Subgroup.map e.toMonoidHom E.fixingSubgroup =
+        Subgroup.map e.toMonoidHom
+          (Subgroup.comap e.toMonoidHom (apm_b97a03_orderTwoSubgroup i))
+      exact hi.trans
+        (Subgroup.map_comap_eq_self_of_surjective e.surjective _).symm
+    exact congrArg IntermediateField.fixedField hfix
+  · left
+    rw [← IsGalois.fixedField_fixingSubgroup (K := E)]
+    have hfix : E.fixingSubgroup = ⊤ := by
+      apply e.mapSubgroup.injective
+      simpa using htop
+    rw [hfix, IsGalois.fixedField_top]
 
-lemma apm_b97a03_alpha_three_from_beta_ratio {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    α ^ 3 = 2 * (apm_b97a03_beta α 1 / apm_b97a03_beta α 0) + 1 := by
-  have ha : α ≠ 0 := by
-    intro ha
-    have hpow := apm_b97a03_root_pow_six hα
-    rw [ha] at hpow
-    norm_num at hpow
-  have hrel := apm_b97a03_zeta_relation hα
-  rw [apm_b97a03_beta_zero, apm_b97a03_beta_one]
-  have hα3 : α ^ 3 = 2 * apm_b97a03_zeta α - 1 := by
-    simp [apm_b97a03_zeta]
-    ring
-  have hzid : α ^ 3 = 2 * apm_b97a03_zeta α ^ 2 + 1 := by
-    linear_combination hα3 - 2 * hrel
-  field_simp [ha]
-  exact hzid
-
-noncomputable def apm_b97a03_quadratic : ℚ[X] :=
-  Polynomial.X ^ 2 + Polynomial.C 3
-
-lemma apm_b97a03_quadratic_irreducible :
-    Irreducible apm_b97a03_quadratic := by
-  rw [show apm_b97a03_quadratic = Polynomial.X ^ 2 - Polynomial.C (-3 : ℚ) by
-    simp [apm_b97a03_quadratic]]
-  apply X_pow_sub_C_irreducible_of_prime (by norm_num)
-  intro b hb
-  have hs : 0 ≤ b ^ 2 := sq_nonneg b
-  linarith
-
-lemma apm_b97a03_alpha_three_minpoly {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    minpoly ℚ (α ^ 3) = apm_b97a03_quadratic := by
-  symm
-  apply minpoly.eq_of_irreducible_of_monic apm_b97a03_quadratic_irreducible
-  · have hs := apm_b97a03_root_pow_three_sq hα
-    simpa [apm_b97a03_quadratic, Polynomial.aeval_def] using
-      (show (α ^ 3) ^ 2 + 3 = 0 by linear_combination hs)
-  · exact Polynomial.monic_X_pow_add_C (3 : ℚ) (by norm_num : 2 ≠ 0)
-
-lemma apm_b97a03_alpha_three_finrank {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Module.finrank ℚ (IntermediateField.adjoin ℚ {α ^ 3}) = 2 := by
-  have hint : IsIntegral ℚ (α ^ 3) := by
-    refine ⟨apm_b97a03_quadratic,
-      Polynomial.monic_X_pow_add_C (3 : ℚ) (by norm_num : 2 ≠ 0), ?_⟩
-    have hs := apm_b97a03_root_pow_three_sq hα
-    simpa [apm_b97a03_quadratic, Polynomial.aeval_def] using
-      (show (α ^ 3) ^ 2 + 3 = 0 by linear_combination hs)
-  rw [IntermediateField.adjoin.finrank hint, apm_b97a03_alpha_three_minpoly hα]
-  exact Polynomial.natDegree_X_pow_add_C
-
-lemma apm_b97a03_alpha_three_from_beta_ratio_one {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    α ^ 3 = 2 * (apm_b97a03_beta α 2 / apm_b97a03_beta α 1) + 1 := by
-  have ha : α ≠ 0 := by
-    intro ha
-    have := apm_b97a03_root_pow_six hα
-    simp [ha] at this
-  rw [apm_b97a03_alpha_three_from_beta_ratio hα]
-  have hz6 := apm_b97a03_zeta_pow_six hα
-  simp [apm_b97a03_beta]
-  field_simp [ha]
-
-lemma apm_b97a03_alpha_three_from_beta_ratio_two {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    α ^ 3 = 2 * (apm_b97a03_beta α 0 / apm_b97a03_beta α 2) + 1 := by
-  have ha : α ≠ 0 := by
-    intro ha
-    have := apm_b97a03_root_pow_six hα
-    simp [ha] at this
-  rw [apm_b97a03_alpha_three_from_beta_ratio hα]
-  have hz6 := apm_b97a03_zeta_pow_six hα
-  have hz : apm_b97a03_zeta α ≠ 0 := by
-    intro h
-    simp [h] at hz6
-  simp [apm_b97a03_beta]
-  field_simp [ha, hz]
-  ring_nf at hz6 ⊢
-  exact hz6
-
-noncomputable def apm_b97a03_alphaThreeField (α : ℂ) :
-    apm_b97a03_field α :=
-  ⟨α ^ 3, IntermediateField.pow_mem _
-    (IntermediateField.subset_adjoin ℚ {α} (by simp)) 3⟩
-
-lemma apm_b97a03_alphaThreeField_ratio {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    apm_b97a03_alphaThreeField α =
-      2 * (apm_b97a03_betaField α 1 / apm_b97a03_betaField α 0) + 1 := by
-  apply Subtype.ext
-  exact apm_b97a03_alpha_three_from_beta_ratio hα
-
-lemma apm_b97a03_alphaThreeField_ratio_one {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    apm_b97a03_alphaThreeField α =
-      2 * (apm_b97a03_betaField α 2 / apm_b97a03_betaField α 1) + 1 := by
-  apply Subtype.ext
-  exact apm_b97a03_alpha_three_from_beta_ratio_one hα
-
-lemma apm_b97a03_alphaThreeField_ratio_two {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    apm_b97a03_alphaThreeField α =
-      2 * (apm_b97a03_betaField α 0 / apm_b97a03_betaField α 2) + 1 := by
-  apply Subtype.ext
-  exact apm_b97a03_alpha_three_from_beta_ratio_two hα
-
-lemma apm_b97a03_aut_betaField {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) (k : Fin 3) :
-    σ (apm_b97a03_betaField α k) =
-      apm_b97a03_betaField α (apm_b97a03_betaActionHom hα σ k) := by
-  have h := apm_b97a03_betaActionHom_apply hα σ k
-  exact congrArg (fun x : apm_b97a03_cubic.rootSet (apm_b97a03_field α) =>
-    (x : apm_b97a03_field α)) h.symm
-
-noncomputable def apm_b97a03_internalField {α : ℂ}
-    (L : IntermediateField ℚ ℂ) : IntermediateField ℚ (apm_b97a03_field α) :=
-  IntermediateField.comap (apm_b97a03_field α).val L
-
-lemma apm_b97a03_internalField_map {α : ℂ} (L : IntermediateField ℚ ℂ)
-    (hL : L ≤ apm_b97a03_field α) :
-    IntermediateField.map (apm_b97a03_field α).val
-      (apm_b97a03_internalField L) = L := by
-  apply IntermediateField.map_comap_eq_self
-  simpa only [IntermediateField.fieldRange_val] using hL
-
-lemma apm_b97a03_internalField_eq_iff {α : ℂ}
-    {L M : IntermediateField ℚ ℂ} (hL : L ≤ apm_b97a03_field α)
-    (hM : M ≤ apm_b97a03_field α) :
-    apm_b97a03_internalField (α := α) L =
-      apm_b97a03_internalField (α := α) M ↔ L = M := by
+lemma apm_b97a03_mem_fixingSubgroup_adjoin_singleton
+    {F E : Type*} [Field F] [Field E] [Algebra F E]
+    (x : E) (σ : E ≃ₐ[F] E) :
+    σ ∈ (IntermediateField.adjoin F {x}).fixingSubgroup ↔ σ x = x := by
+  rw [IntermediateField.mem_fixingSubgroup_iff]
   constructor
   · intro h
-    have hm := congrArg (IntermediateField.map (apm_b97a03_field α).val) h
-    simpa [apm_b97a03_internalField_map L hL,
-      apm_b97a03_internalField_map M hM] using hm
-  · exact fun h => congrArg (apm_b97a03_internalField (α := α)) h
+    exact h x (IntermediateField.subset_adjoin F {x} (Set.mem_singleton x))
+  · intro h y hy
+    refine IntermediateField.adjoin_induction F ?_ ?_ ?_ ?_ ?_ hy
+    · intro z hz
+      simpa [Set.mem_singleton_iff.mp hz] using h
+    · intro z
+      exact σ.commutes z
+    · intro z w _ _ hz hw
+      simp [hz, hw]
+    · intro z _ hz
+      simp [hz]
+    · intro z w _ _ hz hw
+      simp [hz, hw]
 
-abbrev apm_b97a03_swap01 : Equiv.Perm (Fin 3) := Equiv.swap 0 1
-abbrev apm_b97a03_swap02 : Equiv.Perm (Fin 3) := Equiv.swap 0 2
-abbrev apm_b97a03_swap12 : Equiv.Perm (Fin 3) := Equiv.swap 1 2
-abbrev apm_b97a03_cycle012 : Equiv.Perm (Fin 3) :=
-  apm_b97a03_swap01 * apm_b97a03_swap12
+lemma apm_b97a03_mem_orderTwoSubgroup_iff_fixed
+    (r : Fin 3) (g : Equiv.Perm (Fin 3)) :
+    g ∈ apm_b97a03_orderTwoSubgroup r ↔ g r = r := by
+  change (g = 1 ∨ g = apm_b97a03_transposition r) ↔ g r = r
+  rcases apm_b97a03_perm_cases g with hg | ⟨i, hg⟩ | hg | hg
+  · subst g
+    fin_cases r <;> decide
+  · subst g
+    fin_cases i <;> fin_cases r <;> decide
+  · subst g
+    fin_cases r <;> decide
+  · subst g
+    fin_cases r <;> decide
 
-/-- A computationally verified normal form for permutations of three points.
-This is the executable core used by the symbolic subgroup census. -/
-lemma apm_b97a03_perm3_cases (σ : Equiv.Perm (Fin 3)) :
-    σ = 1 ∨ σ = apm_b97a03_swap01 ∨ σ = apm_b97a03_swap02 ∨
-      σ = apm_b97a03_swap12 ∨ σ = apm_b97a03_cycle012 ∨
-      σ = apm_b97a03_cycle012 ^ 2 := by
-  decide +revert
+lemma apm_b97a03_autEquivPerm_fixed_iff {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
+    (σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) (r : Fin 3) :
+    apm_b97a03_autEquivPerm hα σ r = r ↔
+      σ ⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩ =
+        ⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩ := by
+  change (apm_b97a03_finThreeActionHom hα σ) r = r ↔ _
+  constructor
+  · intro hr
+    have hr' := congrArg (apm_b97a03_cubicRootsEquivField hα) hr
+    simpa [apm_b97a03_finThreeActionHom, Equiv.permCongr_apply,
+        apm_b97a03_cubicRootPerm, apm_b97a03_cubicRootsEquivField,
+        apm_b97a03_cubicRootsEmbeddingField] using congrArg Subtype.val hr'
+  · intro hr
+    apply (apm_b97a03_cubicRootsEquivField hα).injective
+    apply Subtype.ext
+    simpa [apm_b97a03_finThreeActionHom, Equiv.permCongr_apply,
+      apm_b97a03_cubicRootPerm, apm_b97a03_cubicRootsEquivField,
+      apm_b97a03_cubicRootsEmbeddingField] using hr
 
-lemma apm_b97a03_perm3_nontrivial_distinct :
-    apm_b97a03_swap01 ≠ 1 ∧ apm_b97a03_swap02 ≠ 1 ∧
-      apm_b97a03_swap12 ≠ 1 ∧ apm_b97a03_cycle012 ≠ 1 ∧
-      apm_b97a03_cycle012 ^ 2 ≠ 1 := by
-  decide
-
-lemma apm_b97a03_perm3_cycle_mul_cycle :
-    apm_b97a03_cycle012 * apm_b97a03_cycle012 =
-      apm_b97a03_cycle012 ^ 2 ∧
-    apm_b97a03_cycle012 * apm_b97a03_cycle012 ^ 2 = 1 := by
-  decide
-
-lemma apm_b97a03_mem_alternating3_iff (σ : Equiv.Perm (Fin 3)) :
-    σ ∈ alternatingGroup (Fin 3) ↔
-      σ = 1 ∨ σ = apm_b97a03_cycle012 ∨
-        σ = apm_b97a03_cycle012 ^ 2 := by
-  rw [Equiv.Perm.mem_alternatingGroup]
-  decide +revert
-
-lemma apm_b97a03_alternating3_elements :
-    (alternatingGroup (Fin 3) : Set (Equiv.Perm (Fin 3))) =
-      {1, apm_b97a03_cycle012, apm_b97a03_cycle012 ^ 2} := by
+lemma apm_b97a03_cubicRoot_fixingSubgroup {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (r : Fin 3) :
+    (IntermediateField.adjoin ℚ
+      {⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩}).fixingSubgroup =
+      (apm_b97a03_autEquivPerm hα).comapSubgroup
+        (apm_b97a03_orderTwoSubgroup r) := by
   ext σ
-  exact apm_b97a03_mem_alternating3_iff σ
+  change σ ∈ (IntermediateField.adjoin ℚ
+      {⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩}).fixingSubgroup ↔
+    apm_b97a03_autEquivPerm hα σ ∈ apm_b97a03_orderTwoSubgroup r
+  rw [apm_b97a03_mem_fixingSubgroup_adjoin_singleton,
+    apm_b97a03_mem_orderTwoSubgroup_iff_fixed,
+    apm_b97a03_autEquivPerm_fixed_iff]
 
-lemma apm_b97a03_alternating_fixes_alphaThree {α : ℂ}
+lemma apm_b97a03_cubicRoot_fixedField {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) (r : Fin 3) :
+    IntermediateField.fixedField
+        ((apm_b97a03_autEquivPerm hα).comapSubgroup
+          (apm_b97a03_orderTwoSubgroup r)) =
+      IntermediateField.adjoin ℚ
+        {⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩} := by
+  letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
+      apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
+  letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
+    Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
+  letI : IsGalois ℚ (apm_b97a03_field α) :=
+    IsGalois.of_separable_splitting_field apm_b97A03_bridge_1.separable
+  let C : IntermediateField ℚ (apm_b97a03_field α) :=
+    IntermediateField.adjoin ℚ
+      {⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩}
+  calc
+    IntermediateField.fixedField
+        ((apm_b97a03_autEquivPerm hα).comapSubgroup
+          (apm_b97a03_orderTwoSubgroup r)) =
+        IntermediateField.fixedField C.fixingSubgroup := by
+          exact congrArg IntermediateField.fixedField
+            (apm_b97a03_cubicRoot_fixingSubgroup hα r).symm
+    _ = C := IsGalois.fixedField_fixingSubgroup C
+
+noncomputable def apm_b97a03_quadraticPolynomial : ℚ[X] := X ^ 2 + C 3
+
+lemma apm_b97a03_quadraticPolynomial_irreducible :
+    Irreducible apm_b97a03_quadraticPolynomial := by
+  let f : ℤ[X] := X ^ 2 + C 3
+  have hfmonic : f.Monic := by
+    dsimp [f]
+    exact (monic_X_pow 2).add_of_left (by
+      rw [degree_C (by norm_num), degree_X_pow]
+      norm_num)
+  have hfnat : f.natDegree = 2 := by
+    dsimp [f]
+    rw [natDegree_add_eq_left_of_natDegree_lt] <;> norm_num
+  have hprime : (Ideal.span ({(3 : ℤ)} : Set ℤ)).IsPrime := by
+    exact (Ideal.span_singleton_prime (by norm_num)).2
+      (Nat.prime_iff_prime_int.1 (by norm_num))
+  have heis : f.IsEisensteinAt (Ideal.span ({(3 : ℤ)} : Set ℤ)) := by
+    refine hfmonic.isEisensteinAt_of_mem_of_notMem hprime.ne_top ?_ ?_
+    · intro n hn
+      rw [hfnat] at hn
+      simp only [f, coeff_add, coeff_X_pow, coeff_C]
+      by_cases hn0 : n = 0
+      · subst n
+        simp [Ideal.mem_span_singleton]
+      · have hn2 : n ≠ 2 := by omega
+        simp [hn0, hn2]
+    · rw [show f.coeff 0 = 3 by simp [f], Ideal.span_singleton_pow,
+        Ideal.mem_span_singleton]
+      norm_num
+  have hfirr : Irreducible f :=
+    heis.irreducible hprime hfmonic.isPrimitive (by omega)
+  have hmap :=
+    (IsPrimitive.Int.irreducible_iff_irreducible_map_cast hfmonic.isPrimitive).mp hfirr
+  simpa [apm_b97a03_quadraticPolynomial, f] using hmap
+
+lemma apm_b97a03_minpoly_rootCube {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    minpoly ℚ
+      (⟨α ^ 3, (apm_b97a03_field α).pow_mem
+        (apm_b97a03_root_mem_field hα hα) 3⟩ : apm_b97a03_field α) =
+      apm_b97a03_quadraticPolynomial := by
+  let b : apm_b97a03_field α :=
+    ⟨α ^ 3, (apm_b97a03_field α).pow_mem
+      (apm_b97a03_root_mem_field hα hα) 3⟩
+  have hzero : Polynomial.aeval b apm_b97a03_quadraticPolynomial = 0 := by
+    apply (apm_b97a03_field α).val.injective
+    rw [map_zero, Polynomial.aeval_def, Polynomial.hom_eval₂]
+    have hc : (α ^ 3) ^ 2 + 3 = 0 := by
+      linear_combination apm_b97a03_root_pow_three_sq hα
+    simpa [b, apm_b97a03_quadraticPolynomial] using hc
+  have h := minpoly.eq_of_irreducible
+    apm_b97a03_quadraticPolynomial_irreducible hzero
+  have hmonic : apm_b97a03_quadraticPolynomial.Monic := by
+    unfold apm_b97a03_quadraticPolynomial
+    exact (monic_X_pow 2).add_of_left (by
+      rw [degree_C (by norm_num), degree_X_pow]
+      norm_num)
+  simpa [hmonic.leadingCoeff] using h.symm
+
+lemma apm_b97a03_rootCube_adjoin_finrank {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    Module.finrank ℚ (IntermediateField.adjoin ℚ
+      {(⟨α ^ 3, (apm_b97a03_field α).pow_mem
+        (apm_b97a03_root_mem_field hα hα) 3⟩ : apm_b97a03_field α)}) = 2 := by
+  let b : apm_b97a03_field α :=
+    ⟨α ^ 3, (apm_b97a03_field α).pow_mem
+      (apm_b97a03_root_mem_field hα hα) 3⟩
+  have hbzero : Polynomial.aeval b apm_b97a03_quadraticPolynomial = 0 := by
+    apply (apm_b97a03_field α).val.injective
+    rw [map_zero, Polynomial.aeval_def, Polynomial.hom_eval₂]
+    have hc : (α ^ 3) ^ 2 + 3 = 0 := by
+      linear_combination apm_b97a03_root_pow_three_sq hα
+    simpa [b, apm_b97a03_quadraticPolynomial] using hc
+  have hbmonic : apm_b97a03_quadraticPolynomial.Monic := by
+    unfold apm_b97a03_quadraticPolynomial
+    exact (monic_X_pow 2).add_of_left (by
+      rw [degree_C (by norm_num), degree_X_pow]
+      norm_num)
+  have hb : IsIntegral ℚ b := ⟨apm_b97a03_quadraticPolynomial, hbmonic, hbzero⟩
+  rw [IntermediateField.adjoin.finrank hb, apm_b97a03_minpoly_rootCube hα]
+  norm_num [apm_b97a03_quadraticPolynomial]
+
+lemma apm_b97a03_rootCube_fixedField {α : ℂ}
+    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
+    IntermediateField.fixedField
+        ((apm_b97a03_autEquivPerm hα).comapSubgroup
+          (alternatingGroup (Fin 3))) =
+      IntermediateField.adjoin ℚ
+        {(⟨α ^ 3, (apm_b97a03_field α).pow_mem
+          (apm_b97a03_root_mem_field hα hα) 3⟩ : apm_b97a03_field α)} := by
+  letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
+      apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
+  letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
+    Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
+  letI : IsGalois ℚ (apm_b97a03_field α) :=
+    IsGalois.of_separable_splitting_field apm_b97A03_bridge_1.separable
+  let C : IntermediateField ℚ (apm_b97a03_field α) :=
+    IntermediateField.adjoin ℚ
+      {(⟨α ^ 3, (apm_b97a03_field α).pow_mem
+        (apm_b97a03_root_mem_field hα hα) 3⟩ : apm_b97a03_field α)}
+  let e := apm_b97a03_autEquivPerm hα
+  have hrel : Module.finrank C (apm_b97a03_field α) = 3 := by
+    have htower := Module.finrank_mul_finrank ℚ C (apm_b97a03_field α)
+    have hC : Module.finrank ℚ C = 2 := apm_b97a03_rootCube_adjoin_finrank hα
+    rw [hC, apm_b97a03_finrank_field hα] at htower
+    nlinarith [Module.finrank_pos (R := C) (M := apm_b97a03_field α)]
+  have hcardFix : Nat.card C.fixingSubgroup = 3 := by
+    rw [IsGalois.card_fixingSubgroup_eq_finrank]
+    exact hrel
+  have hcardMap : Nat.card (e.mapSubgroup C.fixingSubgroup) = 3 := by
+    calc
+      Nat.card (e.mapSubgroup C.fixingSubgroup) = Nat.card C.fixingSubgroup :=
+        (Nat.card_congr (e.subgroupMap C.fixingSubgroup).toEquiv).symm
+      _ = 3 := hcardFix
+  have hmap : e.mapSubgroup C.fixingSubgroup = alternatingGroup (Fin 3) :=
+    apm_b97a03_subgroup_eq_alternating_of_card_eq_three _ hcardMap
+  have hfix : C.fixingSubgroup = e.comapSubgroup (alternatingGroup (Fin 3)) := by
+    apply e.mapSubgroup.injective
+    change e.mapSubgroup C.fixingSubgroup =
+      e.mapSubgroup (e.comapSubgroup (alternatingGroup (Fin 3)))
+    exact hmap.trans
+      (Subgroup.map_comap_eq_self_of_surjective e.surjective _).symm
+  calc
+    IntermediateField.fixedField
+        (e.comapSubgroup (alternatingGroup (Fin 3))) =
+        IntermediateField.fixedField C.fixingSubgroup :=
+      congrArg IntermediateField.fixedField hfix.symm
+    _ = C := IsGalois.fixedField_fixingSubgroup C
+
+lemma apm_b97a03_rootAut_apply_cubicRoot_even {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (σ : apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α)
-    (hσ : apm_b97a03_autMulEquiv hα σ ∈ alternatingGroup (Fin 3)) :
-    σ (apm_b97a03_alphaThreeField α) = apm_b97a03_alphaThreeField α := by
-  rw [apm_b97a03_mem_alternating3_iff] at hσ
-  rcases hσ with hσ | hσ | hσ
-  · have hs : σ = 1 := (apm_b97a03_autMulEquiv hα).injective (by simpa using hσ)
-    simp [hs]
-  · have h0 : apm_b97a03_betaActionHom hα σ 0 = 1 := by
-      rw [← apm_b97a03_autMulEquiv_apply, hσ]
-      decide
-    have h1 : apm_b97a03_betaActionHom hα σ 1 = 2 := by
-      rw [← apm_b97a03_autMulEquiv_apply, hσ]
-      decide
-    rw [apm_b97a03_alphaThreeField_ratio hα]
-    simp only [map_add, map_mul, map_div₀, map_ofNat, map_one]
-    rw [apm_b97a03_aut_betaField hα σ 0,
-      apm_b97a03_aut_betaField hα σ 1, h0, h1]
-    exact (apm_b97a03_alphaThreeField_ratio_one hα).symm.trans
-      (apm_b97a03_alphaThreeField_ratio hα)
-  · have h0 : apm_b97a03_betaActionHom hα σ 0 = 2 := by
-      rw [← apm_b97a03_autMulEquiv_apply, hσ]
-      decide
-    have h1 : apm_b97a03_betaActionHom hα σ 1 = 0 := by
-      rw [← apm_b97a03_autMulEquiv_apply, hσ]
-      decide
-    rw [apm_b97a03_alphaThreeField_ratio hα]
-    simp only [map_add, map_mul, map_div₀, map_ofNat, map_one]
-    rw [apm_b97a03_aut_betaField hα σ 0,
-      apm_b97a03_aut_betaField hα σ 1, h0, h1]
-    exact (apm_b97a03_alphaThreeField_ratio_two hα).symm.trans
-      (apm_b97a03_alphaThreeField_ratio hα)
+    (k : Fin 6) (hk : Even (k : ℕ)) (r : Fin 3) :
+    (((apm_b97a03_rootAut hα k)
+      ⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩ :
+        apm_b97a03_field α) : ℂ) =
+      apm_b97a03_zeta α ^ (2 * (r : ℕ)) *
+        (apm_b97a03_zeta α ^ (k : ℕ) * α) ^ 2 := by
+  have hre :
+      (⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩ :
+        apm_b97a03_field α) =
+      ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ ^ (2 * (r : ℕ)) *
+        ⟨α, apm_b97a03_root_mem_field hα hα⟩ ^ 2 := by
+    apply Subtype.ext
+    rfl
+  have hm := congr_arg (apm_b97a03_rootAut hα k) hre
+  rw [map_mul, map_pow, map_pow] at hm
+  rw [congr_arg Subtype.val hm]
+  change
+    (((apm_b97a03_rootAut hα k)
+      ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ :
+        apm_b97a03_field α) : ℂ) ^ (2 * (r : ℕ)) *
+      (((apm_b97a03_rootAut hα k)
+      ⟨α, apm_b97a03_root_mem_field hα hα⟩ :
+        apm_b97a03_field α) : ℂ) ^ 2 = _
+  rw [apm_b97a03_rootAut_apply_zeta_even hα k hk,
+    apm_b97a03_rootAut_apply_root]
 
-noncomputable def apm_b97a03_alternatingPreimage {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Subgroup (apm_b97a03_field α ≃ₐ[ℚ] apm_b97a03_field α) :=
-  Subgroup.comap (apm_b97a03_autMulEquiv hα).toMonoidHom
-    (alternatingGroup (Fin 3))
-
-lemma apm_b97a03_alphaThree_mem_fixedField {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    apm_b97a03_alphaThreeField α ∈
-      IntermediateField.fixedField (apm_b97a03_alternatingPreimage hα) := by
-  rw [IntermediateField.mem_fixedField_iff]
-  intro σ hσ
-  exact apm_b97a03_alternating_fixes_alphaThree hα σ hσ
-
-lemma apm_b97a03_adjoin_alphaThree_le_fixedField {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    IntermediateField.adjoin ℚ {apm_b97a03_alphaThreeField α} ≤
-      IntermediateField.fixedField (apm_b97a03_alternatingPreimage hα) := by
-  rw [IntermediateField.adjoin_le_iff]
-  intro x hx
-  simpa only [Set.mem_singleton_iff] using
-    hx ▸ apm_b97a03_alphaThree_mem_fixedField hα
-
-noncomputable def apm_b97a03_alternatingPreimageEquiv {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    apm_b97a03_alternatingPreimage hα ≃ alternatingGroup (Fin 3) where
-  toFun σ := ⟨apm_b97a03_autMulEquiv hα σ, σ.property⟩
-  invFun τ := ⟨(apm_b97a03_autMulEquiv hα).symm τ, by
-    change apm_b97a03_autMulEquiv hα
-      ((apm_b97a03_autMulEquiv hα).symm τ) ∈ alternatingGroup (Fin 3)
-    rw [MulEquiv.apply_symm_apply]
-    exact τ.property⟩
-  left_inv σ := Subtype.ext ((apm_b97a03_autMulEquiv hα).symm_apply_apply σ)
-  right_inv τ := Subtype.ext ((apm_b97a03_autMulEquiv hα).apply_symm_apply τ)
-
-set_option maxHeartbeats 500000 in
-lemma apm_b97a03_card_alternatingPreimage {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Nat.card (apm_b97a03_alternatingPreimage hα) = 3 := by
-  rw [Nat.card_congr (apm_b97a03_alternatingPreimageEquiv hα),
-    nat_card_alternatingGroup]
-  norm_num
-
-set_option maxHeartbeats 500000 in
-lemma apm_b97a03_finrank_fixedField_alternating {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    Module.finrank ℚ
-      (IntermediateField.fixedField (apm_b97a03_alternatingPreimage hα)) = 2 := by
-  letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
-      apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
-  letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
-    Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
-  let K := IntermediateField.fixedField (apm_b97a03_alternatingPreimage hα)
-  have htower := Module.finrank_mul_finrank ℚ K (apm_b97a03_field α)
-  have hrelative : Module.finrank K (apm_b97a03_field α) = 3 := by
-    rw [IntermediateField.finrank_fixedField_eq_card,
-      apm_b97a03_card_alternatingPreimage hα]
-  rw [hrelative, apm_b97a03_finrank hα] at htower
-  change Module.finrank ℚ K = 2
-  omega
-
-lemma apm_b97a03_fixedField_alternating {α : ℂ}
-    (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α) :
-    IntermediateField.fixedField (apm_b97a03_alternatingPreimage hα) =
-      IntermediateField.adjoin ℚ {apm_b97a03_alphaThreeField α} := by
-  symm
-  letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
-      apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
-  letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
-    Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
-  apply IntermediateField.eq_of_le_of_finrank_eq
-    (apm_b97a03_adjoin_alphaThree_le_fixedField hα)
-  rw [apm_b97a03_finrank_fixedField_alternating hα]
-  have hint : IsIntegral ℚ (apm_b97a03_alphaThreeField α) := by
-    refine ⟨apm_b97a03_quadratic,
-      Polynomial.monic_X_pow_add_C (3 : ℚ) (by norm_num : 2 ≠ 0), by
-        apply Subtype.ext
-        have hs := apm_b97a03_root_pow_three_sq hα
-        simpa [apm_b97a03_quadratic, Polynomial.aeval_def,
-          apm_b97a03_alphaThreeField] using
-          (show (α ^ 3) ^ 2 + 3 = 0 by linear_combination hs)⟩
-  rw [IntermediateField.adjoin.finrank hint]
-  have hmin : minpoly ℚ (apm_b97a03_alphaThreeField α) =
-      apm_b97a03_quadratic := by
-    symm
-    apply minpoly.eq_of_irreducible_of_monic apm_b97a03_quadratic_irreducible
-    · apply Subtype.ext
-      have hs := apm_b97a03_root_pow_three_sq hα
-      simpa [apm_b97a03_quadratic, Polynomial.aeval_def,
-        apm_b97a03_alphaThreeField] using
-        (show (α ^ 3) ^ 2 + 3 = 0 by linear_combination hs)
-    · exact Polynomial.monic_X_pow_add_C (3 : ℚ) (by norm_num : 2 ≠ 0)
-  rw [hmin]
-  exact Polynomial.natDegree_X_pow_add_C
-
-lemma apm_b97a03_perm3_mul_table :
-    apm_b97a03_cycle012 * apm_b97a03_swap01 = apm_b97a03_swap02 ∧
-    apm_b97a03_cycle012 ^ 2 * apm_b97a03_swap01 = apm_b97a03_swap12 ∧
-    apm_b97a03_cycle012 * apm_b97a03_swap02 = apm_b97a03_swap12 ∧
-    apm_b97a03_cycle012 ^ 2 * apm_b97a03_swap02 = apm_b97a03_swap01 ∧
-    apm_b97a03_cycle012 * apm_b97a03_swap12 = apm_b97a03_swap01 ∧
-    apm_b97a03_cycle012 ^ 2 * apm_b97a03_swap12 = apm_b97a03_swap02 ∧
-    apm_b97a03_swap01 * apm_b97a03_swap02 = apm_b97a03_cycle012 ^ 2 ∧
-    apm_b97a03_swap01 * apm_b97a03_swap12 = apm_b97a03_cycle012 ∧
-    apm_b97a03_swap02 * apm_b97a03_swap12 = apm_b97a03_cycle012 ^ 2 ∧
-    apm_b97a03_cycle012 ^ 2 * apm_b97a03_cycle012 ^ 2 =
-      apm_b97a03_cycle012 := by
-  decide
-
-lemma apm_b97a03_mem_stabilizer0_iff (σ : Equiv.Perm (Fin 3)) :
-    σ ∈ MulAction.stabilizer (Equiv.Perm (Fin 3)) (0 : Fin 3) ↔
-      σ = 1 ∨ σ = apm_b97a03_swap12 := by
-  rw [MulAction.mem_stabilizer_iff]
-  decide +revert
-
-lemma apm_b97a03_mem_stabilizer1_iff (σ : Equiv.Perm (Fin 3)) :
-    σ ∈ MulAction.stabilizer (Equiv.Perm (Fin 3)) (1 : Fin 3) ↔
-      σ = 1 ∨ σ = apm_b97a03_swap02 := by
-  rw [MulAction.mem_stabilizer_iff]
-  decide +revert
-
-lemma apm_b97a03_mem_stabilizer2_iff (σ : Equiv.Perm (Fin 3)) :
-    σ ∈ MulAction.stabilizer (Equiv.Perm (Fin 3)) (2 : Fin 3) ↔
-      σ = 1 ∨ σ = apm_b97a03_swap01 := by
-  rw [MulAction.mem_stabilizer_iff]
-  decide +revert
-
-/-- The six subgroups of `S₃`, presented in the form needed by the Galois
-correspondence below. -/
-lemma apm_b97a03_subgroup_perm3_cases (H : Subgroup (Equiv.Perm (Fin 3))) :
-    H = ⊥ ∨
-    H = MulAction.stabilizer (Equiv.Perm (Fin 3)) (0 : Fin 3) ∨
-    H = MulAction.stabilizer (Equiv.Perm (Fin 3)) (1 : Fin 3) ∨
-    H = MulAction.stabilizer (Equiv.Perm (Fin 3)) (2 : Fin 3) ∨
-    H = alternatingGroup (Fin 3) ∨ H = ⊤ := by
-  rcases apm_b97a03_perm3_mul_table with
-    ⟨hc01, hc201, hc02, hc202, hc12, hc212, h0102, h0112, h0212, hc2c2⟩
-  by_cases hc : apm_b97a03_cycle012 ∈ H
-  · have hc2 : apm_b97a03_cycle012 ^ 2 ∈ H := by
-      simpa [pow_two] using H.mul_mem hc hc
-    by_cases h01 : apm_b97a03_swap01 ∈ H
-    · right; right; right; right; right
-      have h02 : apm_b97a03_swap02 ∈ H := hc01 ▸ H.mul_mem hc h01
-      have h12 : apm_b97a03_swap12 ∈ H := hc201 ▸ H.mul_mem hc2 h01
-      ext σ
-      constructor
-      · exact fun _ => trivial
-      · intro _
-        rcases apm_b97a03_perm3_cases σ with rfl | rfl | rfl | rfl | rfl | rfl
-        · exact H.one_mem
-        · exact h01
-        · exact h02
-        · exact h12
-        · exact hc
-        · exact hc2
-    · by_cases h02 : apm_b97a03_swap02 ∈ H
-      · right; right; right; right; right
-        have h12 : apm_b97a03_swap12 ∈ H := hc02 ▸ H.mul_mem hc h02
-        have h01' : apm_b97a03_swap01 ∈ H := hc202 ▸ H.mul_mem hc2 h02
-        exact (h01 h01').elim
-      · by_cases h12 : apm_b97a03_swap12 ∈ H
-        · right; right; right; right; right
-          have h01' : apm_b97a03_swap01 ∈ H := hc12 ▸ H.mul_mem hc h12
-          exact (h01 h01').elim
-        · right; right; right; right; left
-          ext σ
-          rw [apm_b97a03_mem_alternating3_iff]
-          constructor
-          · intro hσ
-            rcases apm_b97a03_perm3_cases σ with rfl | rfl | rfl | rfl | rfl | rfl
-            · exact Or.inl rfl
-            · exact (h01 hσ).elim
-            · exact (h02 hσ).elim
-            · exact (h12 hσ).elim
-            · exact Or.inr (Or.inl rfl)
-            · exact Or.inr (Or.inr rfl)
-          · rintro (rfl | rfl | rfl)
-            · exact H.one_mem
-            · exact hc
-            · exact hc2
-  · have hc2 : apm_b97a03_cycle012 ^ 2 ∉ H := by
-      intro h
-      exact hc (hc2c2 ▸ H.mul_mem h h)
-    by_cases h01 : apm_b97a03_swap01 ∈ H
-    · by_cases h02 : apm_b97a03_swap02 ∈ H
-      · exact (hc2 (h0102 ▸ H.mul_mem h01 h02)).elim
-      · by_cases h12 : apm_b97a03_swap12 ∈ H
-        · exact (hc (h0112 ▸ H.mul_mem h01 h12)).elim
-        · right; right; right; left
-          ext σ
-          rw [apm_b97a03_mem_stabilizer2_iff]
-          constructor
-          · intro hσ
-            rcases apm_b97a03_perm3_cases σ with rfl | rfl | rfl | rfl | rfl | rfl
-            · exact Or.inl rfl
-            · exact Or.inr rfl
-            · exact (h02 hσ).elim
-            · exact (h12 hσ).elim
-            · exact (hc hσ).elim
-            · exact (hc2 hσ).elim
-          · rintro (rfl | rfl)
-            · exact H.one_mem
-            · exact h01
-    · by_cases h02 : apm_b97a03_swap02 ∈ H
-      · by_cases h12 : apm_b97a03_swap12 ∈ H
-        · exact (hc2 (h0212 ▸ H.mul_mem h02 h12)).elim
-        · right; right; left
-          ext σ
-          rw [apm_b97a03_mem_stabilizer1_iff]
-          constructor
-          · intro hσ
-            rcases apm_b97a03_perm3_cases σ with rfl | rfl | rfl | rfl | rfl | rfl
-            · exact Or.inl rfl
-            · exact (h01 hσ).elim
-            · exact Or.inr rfl
-            · exact (h12 hσ).elim
-            · exact (hc hσ).elim
-            · exact (hc2 hσ).elim
-          · rintro (rfl | rfl)
-            · exact H.one_mem
-            · exact h02
-      · by_cases h12 : apm_b97a03_swap12 ∈ H
-        · right; left
-          ext σ
-          rw [apm_b97a03_mem_stabilizer0_iff]
-          constructor
-          · intro hσ
-            rcases apm_b97a03_perm3_cases σ with rfl | rfl | rfl | rfl | rfl | rfl
-            · exact Or.inl rfl
-            · exact (h01 hσ).elim
-            · exact (h02 hσ).elim
-            · exact Or.inr rfl
-            · exact (hc hσ).elim
-            · exact (hc2 hσ).elim
-          · rintro (rfl | rfl)
-            · exact H.one_mem
-            · exact h12
-        · left
-          ext σ
-          constructor
-          · intro hσ
-            rcases apm_b97a03_perm3_cases σ with rfl | rfl | rfl | rfl | rfl | rfl
-            · simp
-            · exact (h01 hσ).elim
-            · exact (h02 hσ).elim
-            · exact (h12 hσ).elim
-            · exact (hc hσ).elim
-            · exact (hc2 hσ).elim
-          · intro hσ
-            have : σ = 1 := by simpa using hσ
-            subst σ
-            exact H.one_mem
-
-set_option maxHeartbeats 500000 in
-lemma apm_b97a03_internalField_cases {α : ℂ}
+lemma apm_b97a03_rootAut_apply_cubicRoot_odd {α : ℂ}
     (hα : (apm_b97a03_polynomial.map (algebraMap ℚ ℂ)).IsRoot α)
-    (K : IntermediateField ℚ (apm_b97a03_field α)) :
-    K = ⊥ ∨
-    K = IntermediateField.adjoin ℚ {apm_b97a03_alphaThreeField α} ∨
-    K = IntermediateField.adjoin ℚ {apm_b97a03_betaField α 0} ∨
-    K = IntermediateField.adjoin ℚ {apm_b97a03_betaField α 1} ∨
-    K = IntermediateField.adjoin ℚ {apm_b97a03_betaField α 2} ∨ K = ⊤ := by
-  letI : Polynomial.IsSplittingField ℚ (apm_b97a03_field α)
-      apm_b97a03_polynomial := (apm_b97A03_bridge_2 hα).2
-  letI : FiniteDimensional ℚ (apm_b97a03_field α) :=
-    Polynomial.IsSplittingField.finiteDimensional _ apm_b97a03_polynomial
-  letI : IsGalois ℚ (apm_b97a03_field α) := apm_b97a03_isGalois hα
-  let φ := (apm_b97a03_autMulEquiv hα).toMonoidHom
-  let H := K.fixingSubgroup
-  let S := Subgroup.map φ H
-  have hpull : Subgroup.comap φ S = H :=
-    Subgroup.comap_map_eq_self_of_injective
-      (apm_b97a03_autMulEquiv hα).injective H
-  have hK : K = IntermediateField.fixedField H :=
-    (IsGalois.fixedField_fixingSubgroup K).symm
-  rcases apm_b97a03_subgroup_perm3_cases S with
-    hS | hS | hS | hS | hS | hS
-  · right; right; right; right; right
-    rw [hK, ← hpull, hS]
-    have hker : φ.ker = ⊥ :=
-      φ.ker_eq_bot_iff.mpr (apm_b97a03_autMulEquiv hα).injective
-    change IntermediateField.fixedField φ.ker = ⊤
-    rw [hker, IntermediateField.fixedField_bot]
-  · right; right; left
-    rw [hK, ← hpull, hS]
-    exact apm_b97a03_fixedField_betaStabilizer hα 0
-  · right; right; right; left
-    rw [hK, ← hpull, hS]
-    exact apm_b97a03_fixedField_betaStabilizer hα 1
-  · right; right; right; right; left
-    rw [hK, ← hpull, hS]
-    exact apm_b97a03_fixedField_betaStabilizer hα 2
-  · right; left
-    rw [hK, ← hpull, hS]
-    exact apm_b97a03_fixedField_alternating hα
-  · left
-    rw [hK, ← hpull, hS]
-    simp [φ]
+    (k : Fin 6) (hk : Odd (k : ℕ)) (r : Fin 3) :
+    (((apm_b97a03_rootAut hα k)
+      ⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩ :
+        apm_b97a03_field α) : ℂ) =
+      apm_b97a03_zeta α ^ (10 * (r : ℕ)) *
+        (apm_b97a03_zeta α ^ (k : ℕ) * α) ^ 2 := by
+  have hre :
+      (⟨apm_b97a03_cubicRoot α r, apm_b97a03_cubicRoot_mem_field r⟩ :
+        apm_b97a03_field α) =
+      ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ ^ (2 * (r : ℕ)) *
+        ⟨α, apm_b97a03_root_mem_field hα hα⟩ ^ 2 := by
+    apply Subtype.ext
+    rfl
+  have hm := congr_arg (apm_b97a03_rootAut hα k) hre
+  rw [map_mul, map_pow, map_pow] at hm
+  rw [congr_arg Subtype.val hm]
+  change
+    (((apm_b97a03_rootAut hα k)
+      ⟨apm_b97a03_zeta α, apm_b97a03_zeta_mem_field⟩ :
+        apm_b97a03_field α) : ℂ) ^ (2 * (r : ℕ)) *
+      (((apm_b97a03_rootAut hα k)
+      ⟨α, apm_b97a03_root_mem_field hα hα⟩ :
+        apm_b97a03_field α) : ℂ) ^ 2 = _
+  rw [apm_b97a03_rootAut_apply_zeta_odd hα k hk,
+    apm_b97a03_one_sub_zeta hα, ← pow_mul,
+    show 5 * (2 * (r : ℕ)) = 10 * (r : ℕ) by omega,
+    apm_b97a03_rootAut_apply_root]
 
 /-- Why this unblocks `apm_b97a03`: it is the concrete Galois-theoretic
 classification left after root exhaustion: the automorphism group is `S₃`
@@ -1212,57 +1304,61 @@ theorem apm_b97A03_bridge_3 {α : ℂ}
         L = IntermediateField.adjoin ℚ
           {(apm_b97a03_zeta α) ^ 4 * α ^ 2} ∨
         L = apm_b97a03_field α := by
-  refine ⟨apm_b97a03_aut_mulEquiv_nonempty hα, ?_⟩
-  intro L hL
-  rcases apm_b97a03_internalField_cases hα
-      (apm_b97a03_internalField L) with hK | hK | hK | hK | hK | hK
-  all_goals
-    have hm := congrArg (IntermediateField.map (apm_b97a03_field α).val) hK
-    rw [apm_b97a03_internalField_map L hL] at hm
-  · left
-    exact hm.trans (IntermediateField.map_bot _)
-  · right; left
-    calc
-      L = IntermediateField.map (apm_b97a03_field α).val
-          (IntermediateField.adjoin ℚ {apm_b97a03_alphaThreeField α}) := hm
-      _ = IntermediateField.adjoin ℚ
-          ((apm_b97a03_field α).val '' {apm_b97a03_alphaThreeField α}) :=
-        IntermediateField.adjoin_map ℚ _ _
-      _ = IntermediateField.adjoin ℚ {α ^ 3} := by
-        simp [apm_b97a03_alphaThreeField]
-        rfl
-  · right; right; left
-    calc
-      L = IntermediateField.map (apm_b97a03_field α).val
-          (IntermediateField.adjoin ℚ {apm_b97a03_betaField α 0}) := hm
-      _ = IntermediateField.adjoin ℚ
-          ((apm_b97a03_field α).val '' {apm_b97a03_betaField α 0}) :=
-        IntermediateField.adjoin_map ℚ _ _
-      _ = IntermediateField.adjoin ℚ {α ^ 2} := by
-        simp [apm_b97a03_betaField, apm_b97a03_beta_zero]
-  · right; right; right; left
-    calc
-      L = IntermediateField.map (apm_b97a03_field α).val
-          (IntermediateField.adjoin ℚ {apm_b97a03_betaField α 1}) := hm
-      _ = IntermediateField.adjoin ℚ
-          ((apm_b97a03_field α).val '' {apm_b97a03_betaField α 1}) :=
-        IntermediateField.adjoin_map ℚ _ _
-      _ = IntermediateField.adjoin ℚ
-          {apm_b97a03_zeta α ^ 2 * α ^ 2} := by
-        simp [apm_b97a03_betaField, apm_b97a03_beta_one]
-  · right; right; right; right; left
-    calc
-      L = IntermediateField.map (apm_b97a03_field α).val
-          (IntermediateField.adjoin ℚ {apm_b97a03_betaField α 2}) := hm
-      _ = IntermediateField.adjoin ℚ
-          ((apm_b97a03_field α).val '' {apm_b97a03_betaField α 2}) :=
-        IntermediateField.adjoin_map ℚ _ _
-      _ = IntermediateField.adjoin ℚ
-          {apm_b97a03_zeta α ^ 4 * α ^ 2} := by
-        simp [apm_b97a03_betaField, apm_b97a03_beta]
-  · right; right; right; right; right
-    exact hm.trans ((AlgHom.fieldRange_eq_map _).symm.trans
-      (IntermediateField.fieldRange_val (apm_b97a03_field α)))
+  constructor
+  · exact ⟨apm_b97a03_autEquivPerm hα⟩
+  · intro L hL
+    let K : IntermediateField ℚ ℂ := apm_b97a03_field α
+    let E : IntermediateField ℚ K := L.comap K.val
+    have hLift : IntermediateField.lift E = L := by
+      apply IntermediateField.map_comap_eq_self
+      intro x hx
+      exact ⟨⟨x, hL hx⟩, rfl⟩
+    rcases apm_b97a03_intermediateField_cases hα E with
+      hbot | halt | hcubic | htop
+    · left
+      rw [← hLift, hbot]
+      change (⊥ : IntermediateField ℚ K).map K.val = ⊥
+      exact IntermediateField.map_bot K.val
+    · right; left
+      have halt' : E = IntermediateField.adjoin ℚ
+          {(⟨α ^ 3, (apm_b97a03_field α).pow_mem
+            (apm_b97a03_root_mem_field hα hα) 3⟩ : K)} :=
+        halt.trans (apm_b97a03_rootCube_fixedField hα)
+      have hamb := congrArg
+        (fun A : IntermediateField ℚ K ↦ IntermediateField.lift A) halt'
+      change IntermediateField.lift E = IntermediateField.lift
+        (IntermediateField.adjoin ℚ
+          {(⟨α ^ 3, (apm_b97a03_field α).pow_mem
+            (apm_b97a03_root_mem_field hα hα) 3⟩ : K)}) at hamb
+      rw [hLift, IntermediateField.lift_adjoin_simple] at hamb
+      simpa using hamb
+    · rcases hcubic with ⟨r, hr⟩
+      have hr' : E = IntermediateField.adjoin ℚ
+          {⟨apm_b97a03_cubicRoot α r,
+            apm_b97a03_cubicRoot_mem_field r⟩} :=
+        hr.trans (apm_b97a03_cubicRoot_fixedField hα r)
+      have hamb := congrArg
+        (fun A : IntermediateField ℚ K ↦ IntermediateField.lift A) hr'
+      change IntermediateField.lift E = IntermediateField.lift
+        (IntermediateField.adjoin ℚ
+          {⟨apm_b97a03_cubicRoot α r,
+            apm_b97a03_cubicRoot_mem_field r⟩}) at hamb
+      rw [hLift, IntermediateField.lift_adjoin_simple] at hamb
+      fin_cases r
+      · right; right; left
+        simpa [apm_b97a03_cubicRoot] using hamb
+      · right; right; right; left
+        simpa [apm_b97a03_cubicRoot] using hamb
+      · right; right; right; right; left
+        simpa [apm_b97a03_cubicRoot] using hamb
+    · right; right; right; right; right
+      rw [← hLift, htop]
+      change (⊤ : IntermediateField ℚ K).map K.val = apm_b97a03_field α
+      calc
+        (⊤ : IntermediateField ℚ K).map K.val = K.val.fieldRange :=
+          (AlgHom.fieldRange_eq_map K.val).symm
+        _ = K := K.fieldRange_val
+        _ = apm_b97a03_field α := rfl
 
 theorem apm_b97a03 :
     Irreducible apm_b97a03_polynomial ∧
@@ -1284,181 +1380,11 @@ theorem apm_b97a03 :
         L = IntermediateField.adjoin ℚ
           {(apm_b97a03_zeta α) ^ 4 * α ^ 2} ∨
         L = apm_b97a03_field α := by
-  /-
-  Boundary (pass-1 Codex, skipped): Mathlib contains Eisenstein machinery
-  (`Polynomial.IsEisensteinAt.irreducible`), splitting-field/adjoin lemmas such
-  as `IsSplittingField.adjoin_rootSet`, and the abstract correspondence
-  `IsGalois.intermediateFieldEquivSubgroup`. Local source and solved-sibling
-  searches found no implementation of the concrete bridges required here:
-  deriving all six complex roots from an arbitrary root `α`, proving the
-  embedded field `adjoin ℚ {α}` is the splitting field, constructing its six
-  automorphisms and the displayed `S₃` equivalence, and identifying the fixed
-  fields of the four proper nontrivial subgroups with the exact listed adjoins.
-
-  The abstract Galois correspondence alone does not establish completeness of
-  this explicit embedded-field list; it additionally needs a classification of
-  subgroups of `Equiv.Perm (Fin 3)` and degree/fixed-point calculations for each
-  generator.
-
-  Closer hop 1 closes the first radical/root-of-unity calculation in three
-  compiled lemmas. `apm_b97a03_root_pow_six` extracts `α⁶ = -3` from the
-  mapped-polynomial root hypothesis; `apm_b97a03_root_pow_three_sq` obtains
-  `(α³)² = -3`; and `apm_b97a03_zeta_relation` proves that the statement's
-  `ζ = (1 + α³)/2` satisfies `ζ² - ζ + 1 = 0`. Thus the sixth-root-of-unity
-  ingredient is now constructed explicitly from `α`, inside the same adjoin.
-  Renewed searches of `LEMMA-INDEX.md`, all closed artifacts,
-  `ConstructionTargets/`, Kummer extensions, and splitting-field APIs found no
-  packaged theorem converting this quadratic relation into the exact six-root
-  list or the four displayed fixed fields. The statement appears
-  mathematically sound, but the remaining concrete splitting-field,
-  automorphism, subgroup, and fixed-field development remains open.
-
-  Closer hop 2 pushes the explicit root construction further.
-  `apm_b97a03_zeta_pow_three` and `apm_b97a03_zeta_pow_six` turn the
-  quadratic relation into `ζ³ = -1` and `ζ⁶ = 1`.
-  `apm_b97a03_zeta_mem_field` proves `ζ ∈ ℚ(α)`, while
-  `apm_b97a03_zeta_mul_root` and `apm_b97a03_zeta_mul_root_mem_field` prove
-  that every `ζ^k α` is a root lying in the same adjoin. This supplies the
-  candidate six-root orbit without a Kummer API. Remaining are proving the
-  six candidates exhaust the root set (including distinctness), packaging the
-  splitting field and automorphisms, and computing the exact fixed fields.
-
-  Closer hop 3 proves `apm_b97a03_zeta_primitive`, showing that the derived
-  element has exact order six, and
-  `apm_b97a03_candidate_roots_injective`, showing the six compiled candidates
-  are pairwise distinct.  Together with hop 2, this gives six distinct roots
-  of the degree-six polynomial inside `ℚ(α)`.  The remaining bridge is to turn
-  that fact into root-set exhaustion/splitting in the exact API, then package
-  the automorphisms and fixed-field classification.
-
-  Solver hop 4 closes two independent obligations. `apm_b97A03_bridge_1` now
-  proves irreducibility by applying Eisenstein at `(3)` to the integral lift
-  `X⁶ + 3`, then transports the result to `ℚ[X]` with Gauss's lemma.
-  `apm_b97a03_root_exhaustion` uses the primitive-root product formula to show
-  directly that every complex root is one of the six candidates.  The
-  splitting-field half of bridge 2 is now also packaged: uniqueness of the
-  rational algebra structure transports the goal to the intermediate-field
-  API, root exhaustion proves both splitting and the two adjoin inclusions.
-  The final theorem is assembled from the bridges.  Only bridge 3 remains:
-  construct the six automorphisms and their `S₃` equivalence, then use the
-  Galois correspondence to calculate the five proper displayed fixed fields.
-
-  Solver hop 5 builds the numerical Galois infrastructure at bridge 3's
-  interface.  The minimal polynomial of `α` is now identified with `X⁶ + 3`,
-  its integrality and the exact finrank `6` are compiled, the splitting-field
-  result supplies an `IsGalois` instance, and `apm_b97a03_card_aut` proves that
-  the automorphism group has exactly six elements.  What remains is structural,
-  not cardinal: exhibit its noncommuting order-two/order-three generators (or
-  its faithful action on the three cubic conjugates), then compute the fixed
-  fields of the resulting six subgroups.
-
-  Solver hop 6 constructs that three-point carrier explicitly.  The elements
-  `beta k = ζ^(2k) α²` are proved pairwise distinct, are exactly all roots of
-  the irreducible cubic `X³ + 3`, and each generates a degree-three field.
-  Thus the three cubic fields in the statement now have a compiled uniform
-  presentation.  The next seam is to lift the natural action of each field
-  automorphism on these roots to `Equiv.Perm (Fin 3)` and prove faithfulness.
-
-  Solver hop 7 proves the decisive generation identity behind faithfulness:
-  `α` is an explicit rational expression in `beta 0` and `beta 1`, hence those
-  two cubic conjugates together generate the full splitting field.  The
-  identity uses `2ζ² + 1 = α³`, derived from the quadratic relation for `ζ`.
-  Consequently an automorphism acting trivially on the three-point carrier is
-  forced to be the identity; only the action/API packaging remains before the
-  subgroup fixed-field computation.
-
-  Solver hop 8 transports the three cubic roots into the actual splitting
-  field subtype as `betaField`.  Their membership, injectivity, and root
-  property for the polynomial mapped to `ℚ(α)` are compiled.  This is the
-  precise carrier required by `MulAction.toPermHom`; the next step is the
-  `Fin 3`/root-set equivalence and conjugation of that permutation action.
-
-  Solver hop 9 completes that packaging. `betaRoot` identifies each indexed
-  element with a root-set subtype; injectivity and ambient-complex exhaustion
-  prove it bijective, yielding `betaRootEquiv`.  Conjugating the canonical
-  automorphism action through this equivalence gives the compiled monoid hom
-  `betaActionHom : Aut(ℚ(α)/ℚ) →* Perm (Fin 3)`.  The remaining group-side
-  obligation is injectivity (now reducible to `adjoin_two_beta`), followed by
-  cardinality-based surjectivity.
-
-  Solver hop 10 closes the entire automorphism-group conjunct.  Equality of
-  action permutations gives equality on `beta 0` and `beta 1`; the two-beta
-  adjoin theorem and `algHom_ext_of_eq_adjoin` therefore prove the action hom
-  injective.  Since both finite groups have cardinality six, the hom is
-  bijective and `MulEquiv.ofBijective` yields the required `S₃` equivalence.
-  Bridge 3 now uses this result directly.  Its only remaining conjunct is the
-  explicit intermediate-field classification via the six transported
-  subgroups and their fixed fields.
-
-  Solver hop 11 turns the existential equivalence into the canonical
-  `autMulEquiv`, with a simp theorem exposing its action-hom value.  It also
-  compiles the exact translations from `beta 0`, `beta 1`, and `beta 2` to the
-  three cubic adjoins appearing syntactically in the target.  The remaining
-  lattice proof can now transport the alternating subgroup and the three
-  point stabilizers through this fixed equivalence without choice ambiguity.
-
-  Solver hop 12 integrates the delegated point-stabilizer result: the preimage
-  stabilizer is exactly the fixing subgroup of `ℚ(beta k)`, so its fixed field
-  is that cubic adjoin.  The alternating investigation contributed the
-  explicit beta-ratio formula for `α³`; locally, `X² + 3` is proved
-  irreducible, identified as the minimal polynomial of `α³`, and used to
-  compile `finrank ℚ ℚ(α³) = 2`.  The only missing ingredients are the finite
-  subgroup census and alternating-subgroup invariance/containment.
-
-  Solver hop 13 compiles the ambient-to-internal transport used by the final
-  correspondence argument. `internalField L` is the comap of an embedded
-  complex intermediate field to `ℚ(α)`; when `L ≤ ℚ(α)`, mapping it back along
-  the subtype inclusion recovers `L`, and equality of two such internal fields
-  is equivalent to equality of the originals.  This removes the last ambient
-  type mismatch before applying `IsGalois.intermediateFieldEquivSubgroup`.
-
-  Solver hop 14 replaces the failed direct `native_decide` subgroup proof with
-  an executable element normal form.  Every permutation of `Fin 3` is now
-  compiled as exactly the identity, one of three swaps, or one of the two
-  powers of a named three-cycle.  The two even elements are identified
-  precisely as `alternatingGroup (Fin 3)`, with their multiplication and
-  nontriviality facts compiled.  The remaining census is therefore symbolic
-  subgroup closure over these six named elements rather than opaque subgroup
-  equality.
-
-  Solver hop 15 completes that symbolic census.  A compiled multiplication
-  table supplies all closure calculations, executable membership descriptions
-  identify the three point stabilizers, and a case split on the named cycle
-  and swaps proves that every subgroup is bottom, one of those stabilizers,
-  the alternating subgroup, or top.  What remains is to identify the
-  alternating subgroup's fixed field with `ℚ(α³)` and apply the resulting six
-  cases through the finite Galois correspondence.
-
-  Solver hop 16 proves the hard containment in that identification.  The two
-  further cyclic beta ratios are shown equal to `α³`; consequently every
-  automorphism whose permutation is even fixes the embedded element `α³`.
-  Thus `ℚ(α³)` is contained in the fixed field of the alternating preimage.
-  Equality now reduces solely to the standard degree/cardinality calculation,
-  after which the final correspondence case split is formal.
-
-  Solver hop 17 closes that equality.  An explicit equivalence identifies the
-  alternating preimage with `A₃`, giving cardinality three.  The tower formula,
-  total degree six, and the fixed-field relative-degree theorem give absolute
-  fixed-field degree two, matching the compiled degree of `ℚ(α³)`; finite-
-  dimensional inclusion therefore yields equality.  Every subgroup in the
-  six-case census now has a compiled fixed-field identity, leaving only the
-  uniform correspondence transport and ambient-field rewrites.
-
-  Solver hop 18 completes the proof.  An arbitrary internal field is sent to
-  its fixing subgroup, transported across `autMulEquiv`, and split by the
-  six-subgroup census.  Pullback injectivity and the Galois correspondence
-  reduce the cases to the compiled bottom, top, alternating, and stabilizer
-  fixed-field identities.  Mapping back along the subtype inclusion and the
-  three beta formulas gives exactly the displayed complex intermediate fields.
-  All finite computations use kernel-checked `decide`; the final theorem has no
-  `sorry` and its axiom audit contains only `propext`, `Classical.choice`, and
-  `Quot.sound`.
-  -/
   refine ⟨apm_b97A03_bridge_1, ?_⟩
   intro α hα
-  rcases apm_b97A03_bridge_2 hα with ⟨hexhaust, -⟩
-  rcases apm_b97A03_bridge_3 hα with ⟨haut, hfields⟩
+  obtain ⟨hroots, -⟩ := apm_b97A03_bridge_2 hα
+  obtain ⟨haut, hfields⟩ := apm_b97A03_bridge_3 hα
   refine ⟨?_, haut, hfields⟩
   intro z hz
-  obtain ⟨k, rfl⟩ := hexhaust z hz
+  obtain ⟨k, rfl⟩ := hroots z hz
   exact apm_b97a03_zeta_mul_root_mem_field k

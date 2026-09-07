@@ -117,29 +117,35 @@ lemma apm_b98a04_simple_quotient_of_embedded_regular
   refine ⟨e r, ?_⟩
   simpa [g, e] using hr
 
-/-- Package the concrete, fixed-length presentation used in the problem as
-Mathlib's lattice-theoretic `CompositionSeries`.  Keeping the pointwise
-identification in the result avoids later casts when reading off factors. -/
-lemma apm_b98a04_compositionSeries_of_chain
+/-- Package the finite chain appearing in the frozen statement as Mathlib's
+`CompositionSeries`.  Keeping the original indexing makes its factors
+definitionally the quotient types in the conclusion. -/
+def apm_b98a04_compositionSeriesOfChain
     (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
     (t : ℕ) (N : Fin (t + 1) → Submodule R M)
     (hmono : StrictMono N)
     (hsimple : ∀ i : Fin t,
       IsSimpleModule R
         (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc))) :
-    ∃ c : CompositionSeries (Submodule R M),
-      c.length = t ∧ c.head = N 0 ∧ c.last = N (Fin.last t) := by
-  let c : CompositionSeries (Submodule R M) :=
-    { length := t
-      toFun := N
-      step := fun i ↦
-        (covBy_iff_quot_is_simple
-          (le_of_lt (hmono i.castSucc_lt_succ))).2 (hsimple i) }
-  exact ⟨c, rfl, rfl, rfl⟩
+    CompositionSeries (Submodule R M) where
+  length := t
+  toFun := N
+  step i := by
+    apply (covBy_iff_quot_is_simple
+      (show N i.castSucc ≤ N i.succ from hmono.monotone (Fin.castSucc_le_succ i))).2
+    exact hsimple i
 
-/-- The concrete composition chain in the statement supplies both chain
-conditions needed by the finite-length API. -/
-lemma apm_b98a04_isFiniteLength_of_chain
+@[simp] lemma apm_b98a04_compositionSeriesOfChain_apply
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
+    (t : ℕ) (N : Fin (t + 1) → Submodule R M)
+    (hmono : StrictMono N)
+    (hsimple : ∀ i : Fin t,
+      IsSimpleModule R
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc)))
+    (i : Fin (t + 1)) :
+    apm_b98a04_compositionSeriesOfChain R M t N hmono hsimple i = N i := rfl
+
+lemma apm_b98a04_isFiniteLength_of_supplied_chain
     (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
     (t : ℕ) (N : Fin (t + 1) → Submodule R M)
     (hbot : N 0 = ⊥) (htop : N (Fin.last t) = ⊤)
@@ -149,182 +155,662 @@ lemma apm_b98a04_isFiniteLength_of_chain
         (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc))) :
     IsFiniteLength R M := by
   apply isFiniteLength_of_exists_compositionSeries
-  obtain ⟨c, _, hc_head, hc_last⟩ :=
-    apm_b98a04_compositionSeries_of_chain R M t N hmono hsimple
-  exact ⟨c, hc_head.trans hbot, hc_last.trans htop⟩
+  refine ⟨apm_b98a04_compositionSeriesOfChain R M t N hmono hsimple, ?_, ?_⟩
+  · exact hbot
+  · exact htop
 
-/-- In a bidirectionally well-founded Jordan--Hölder lattice, every cover
-occurs (up to the lattice's factor isomorphism) in every full composition
-series.  This is the abstract factor-occurrence step needed below. -/
-lemma apm_b98a04_covBy_occurs
+lemma apm_b98a04_finiteLength_power_and_submodule
     (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
-    [WellFoundedLT (Submodule R M)] [WellFoundedGT (Submodule R M)]
-    (c : CompositionSeries (Submodule R M))
-    (hc_head : c.head = ⊥) (hc_last : c.last = ⊤)
-    {A B : Submodule R M} (hAB : A ⋖ B) :
-    ∃ i : Fin c.length,
-      JordanHolderLattice.Iso (A, B) (c i.castSucc, c i.succ) := by
-  let s : LTSeries (Submodule R M) :=
-    { length := 1
-      toFun := ![A, B]
-      step := fun i ↦ by fin_cases i; simpa using hAB.lt }
-  obtain ⟨d, e, he, hd_head, hd_last⟩ :=
-    s.exists_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
-  let d' : CompositionSeries (Submodule R M) := d
-  have hdA : d (e 0) = A := by
-    simpa [s] using congrFun he 0
-  have hdB : d (e (Fin.last 1)) = B := by
-    simpa [s] using congrFun he (Fin.last 1)
-  have he_lt : e 0 < e (Fin.last 1) := by
-    rw [← d'.strictMono.lt_iff_lt, hdA, hdB]
-    exact hAB.lt
-  have he_succ : (e (Fin.last 1)).val = (e 0).val + 1 := by
-    by_contra hne
-    have hgap : (e 0).val + 1 < (e (Fin.last 1)).val := by omega
-    let k : Fin (d.length + 1) :=
-      ⟨(e 0).val + 1, lt_trans hgap (e (Fin.last 1)).isLt⟩
-    have hek : e 0 < k := Fin.mk_lt_mk.mpr (Nat.lt_succ_self _)
-    have hke : k < e (Fin.last 1) := Fin.mk_lt_mk.mpr hgap
-    have hAk : A ≤ d k := by
-      rw [← hdA]
-      exact d'.strictMono.monotone hek.le
-    have hkB : d k ≤ B := by
-      rw [← hdB]
-      exact d'.strictMono.monotone hke.le
-    rcases hAB.eq_or_eq hAk hkB with hk | hk
-    · exact (ne_of_lt (d'.strictMono hek)) (hdA.trans hk.symm)
-    · exact (ne_of_lt (d'.strictMono hke)) (hk.trans hdB.symm)
-  let j : Fin d.length := ⟨(e 0).val, by omega⟩
-  have hj0 : j.castSucc = e 0 := by ext; rfl
-  have hj1 : j.succ = e (Fin.last 1) := by ext; simpa [j] using he_succ.symm
-  have hdc := d'.jordan_holder c (hd_head.trans hc_head.symm)
-    (hd_last.trans hc_last.symm)
-  refine ⟨hdc.choose j, ?_⟩
-  have hjiso := hdc.choose_spec j
-  rw [hj0, hj1, hdA, hdB] at hjiso
-  exact hjiso
+    (t : ℕ) (N : Fin (t + 1) → Submodule R M)
+    (hbot : N 0 = ⊥) (htop : N (Fin.last t) = ⊤)
+    (hmono : StrictMono N)
+    (hsimple : ∀ i : Fin t,
+      IsSimpleModule R
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc)))
+    (s : ℕ) (S : Submodule R (Fin s → M)) :
+    IsFiniteLength R S := by
+  have hM :=
+    apm_b98a04_isFiniteLength_of_supplied_chain R M t N hbot htop hmono hsimple
+  have hM' := isFiniteLength_iff_isNoetherian_isArtinian.mp hM
+  letI : IsNoetherian R M := hM'.1
+  letI : IsArtinian R M := hM'.2
+  have hpower : IsFiniteLength R (Fin s → M) :=
+    isFiniteLength_iff_isNoetherian_isArtinian.mpr ⟨inferInstance, inferInstance⟩
+  exact hpower.of_injective (Submodule.injective_subtype S)
 
-/-- A simple quotient of a submodule contributes a factor to every full
-composition series of the ambient finite-length module. -/
-lemma apm_b98a04_simple_subquotient_occurs
-    (R P V : Type*) [Ring R] [AddCommGroup P] [Module R P]
-    [AddCommGroup V] [Module R V] [IsSimpleModule R V]
-    [IsNoetherian R P] [IsArtinian R P]
-    (S : Submodule R P) (g : S →ₗ[R] V) (hg : Function.Surjective g)
-    (c : CompositionSeries (Submodule R P))
-    (hc_head : c.head = ⊥) (hc_last : c.last = ⊤) :
-    ∃ i : Fin c.length,
-      Nonempty (V ≃ₗ[R]
-        (c i.succ ⧸ Submodule.comap (c i.succ).subtype (c i.castSucc))) := by
-  let K : Submodule R P := Submodule.map S.subtype (LinearMap.ker g)
-  have hker : LinearMap.ker g ⋖ (⊤ : Submodule R S) :=
-    covBy_top_iff.mpr (LinearMap.isCoatom_ker_of_surjective hg)
-  have hKS : K ⋖ S := by
-    simpa [K] using
-      Submodule.map_covBy_of_injective (Submodule.injective_subtype S) hker
-  obtain ⟨i, hi⟩ :=
-    apm_b98a04_covBy_occurs R P c hc_head hc_last hKS
-  refine ⟨i, ?_⟩
-  rcases hi with ⟨hi⟩
-  have hcomap : Submodule.comap S.subtype K = LinearMap.ker g := by
-    simp [K, Submodule.comap_map_eq_self]
-  rw [hcomap] at hi
-  exact ⟨(LinearMap.quotKerEquivOfSurjective g hg).symm.trans hi⟩
-
-/-- If a map to a simple quotient vanishes on the kernel of a projection,
-it descends surjectively to the projection's range.  This is the factoring
-half of the coordinate induction for finite powers. -/
-lemma apm_b98a04_surjection_descends_to_range
-    (R A B V : Type*) [Ring R]
-    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+/-- A surjection onto the target simple module presents it as the quotient by
+its kernel, in the precise form needed when inserting that factor into a
+composition series of the source submodule. -/
+noncomputable def apm_b98a04_quotientKerEquivOfSurjective
+    (R S V : Type*) [Ring R] [AddCommGroup S] [Module R S]
     [AddCommGroup V] [Module R V]
-    (f : A →ₗ[R] B) (g : A →ₗ[R] V) (hg : Function.Surjective g)
-    (hker : LinearMap.ker f ≤ LinearMap.ker g) :
-    ∃ h : LinearMap.range f →ₗ[R] V, Function.Surjective h := by
-  let q : (A ⧸ LinearMap.ker f) →ₗ[R] V :=
-    (LinearMap.ker f).liftQ g hker
-  let e : (A ⧸ LinearMap.ker f) ≃ₗ[R] LinearMap.range f :=
-    LinearMap.quotKerEquivRange f
-  let h : LinearMap.range f →ₗ[R] V := q.comp e.symm.toLinearMap
-  refine ⟨h, fun y ↦ ?_⟩
-  obtain ⟨x, rfl⟩ := hg y
-  refine ⟨e (Submodule.Quotient.mk x), ?_⟩
-  simp [h, q, e, Submodule.liftQ_apply]
+    (g : S →ₗ[R] V) (hg : Function.Surjective g) :
+    (S ⧸ LinearMap.ker g) ≃ₗ[R] V :=
+  (LinearMap.quotKerEquivRange g).trans
+    ((LinearEquiv.ofEq _ _ (LinearMap.range_eq_top.mpr hg)).trans
+      Submodule.topEquiv)
 
-/-- A surjection onto a simple module either stays surjective on the kernel
-of a chosen projection, or descends surjectively to the projection range. -/
-lemma apm_b98a04_surjection_kernel_or_range
-    (R A B V : Type*) [Ring R]
+lemma apm_b98a04_factors_transport_to_supplied_chain
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
+    (t : ℕ) (N : Fin (t + 1) → Submodule R M)
+    (hbot : N 0 = ⊥) (htop : N (Fin.last t) = ⊤)
+    (hmono : StrictMono N)
+    (hsimple : ∀ i : Fin t,
+      IsSimpleModule R
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc)))
+    (C : CompositionSeries (Submodule R M))
+    (Cbot : C.head = ⊥) (Ctop : C.last = ⊤) :
+    ∃ e : Fin C.length ≃ Fin t, ∀ j : Fin C.length,
+      Nonempty
+        ((C j.succ ⧸ Submodule.comap (C j.succ).subtype (C j.castSucc)) ≃ₗ[R]
+          (N (e j).succ ⧸
+            Submodule.comap (N (e j).succ).subtype (N (e j).castSucc))) := by
+  let D := apm_b98a04_compositionSeriesOfChain R M t N hmono hsimple
+  have hCD : CompositionSeries.Equivalent C D :=
+    C.jordan_holder D (Cbot.trans hbot.symm) (Ctop.trans htop.symm)
+  exact ⟨hCD.choose, hCD.choose_spec⟩
+
+/-- Splice composition series across a short exact sequence.  Unlike the
+length-only use of this construction in Mathlib, we retain the series itself
+so a distinguished simple factor can subsequently be tracked through it. -/
+noncomputable def apm_b98a04_compositionSeriesOfExact
+    (R A B C : Type*) [Ring R]
     [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
-    [AddCommGroup V] [Module R V] [IsSimpleModule R V]
-    (f : A →ₗ[R] B) (g : A →ₗ[R] V) (hg : Function.Surjective g) :
-    (∃ h : LinearMap.ker f →ₗ[R] V, Function.Surjective h) ∨
-      (∃ h : LinearMap.range f →ₗ[R] V, Function.Surjective h) := by
-  by_cases hker : LinearMap.ker f ≤ LinearMap.ker g
-  · exact Or.inr
-      (apm_b98a04_surjection_descends_to_range R A B V f g hg hker)
-  · let h : LinearMap.ker f →ₗ[R] V := g.domRestrict (LinearMap.ker f)
-    have hn : h ≠ 0 := by
-      intro hz
-      apply hker
-      intro x hx
-      have hx0 : h ⟨x, hx⟩ = 0 := by rw [hz]; rfl
-      simpa [h, LinearMap.mem_ker] using hx0
-    exact Or.inl ⟨h, LinearMap.surjective_of_ne_zero hn⟩
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤) :
+    CompositionSeries (Submodule R B) := by
+  let left : CompositionSeries (Submodule R B) :=
+    SA.map ⟨Submodule.map f, Submodule.map_covBy_of_injective hf⟩
+  let right : CompositionSeries (Submodule R B) :=
+    SC.map ⟨Submodule.comap g, Submodule.comap_covBy_of_surjective hg⟩
+  have hjoin : left.last = right.head := by
+    change Submodule.map f SA.last = Submodule.comap g SC.head
+    rw [SAtop, SCbot, Submodule.map_top, Submodule.comap_bot,
+      LinearMap.exact_iff.mp hexact]
+  exact left.smash right hjoin
 
-/-- Every simple subquotient of a finite power of `M` is already a simple
-subquotient of `M`. -/
-lemma apm_b98a04_simple_subquotient_fin
-    (R M V : Type*) [Ring R] [AddCommGroup M] [Module R M]
-    [AddCommGroup V] [Module R V] [IsSimpleModule R V] :
-    ∀ (s : ℕ) (S : Submodule R (Fin s → M))
-      (g : S →ₗ[R] V), Function.Surjective g →
-      ∃ (T : Submodule R M) (h : T →ₗ[R] V), Function.Surjective h := by
-  intro s
+@[simp] lemma apm_b98a04_compositionSeriesOfExact_head
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤) :
+    (apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop).head = ⊥ := by
+  simp only [apm_b98a04_compositionSeriesOfExact, RelSeries.head_smash,
+    RelSeries.head_map]
+  change Submodule.map f SA.head = ⊥
+  rw [SAbot, Submodule.map_bot]
+
+@[simp] lemma apm_b98a04_compositionSeriesOfExact_last
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤) :
+    (apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop).last = ⊤ := by
+  simp only [apm_b98a04_compositionSeriesOfExact, RelSeries.last_smash,
+    RelSeries.last_map]
+  change Submodule.comap g SC.last = ⊤
+  rw [SCtop, Submodule.comap_top]
+
+/-- The canonical one-step composition series of a simple module. -/
+def apm_b98a04_simpleCompositionSeries
+    (R V : Type*) [Ring R] [AddCommGroup V] [Module R V]
+    [IsSimpleModule R V] : CompositionSeries (Submodule R V) where
+  length := 1
+  toFun := Fin.cases ⊥ (fun _ ↦ ⊤)
+  step i := by
+    fin_cases i
+    exact bot_covBy_top
+
+@[simp] lemma apm_b98a04_simpleCompositionSeries_head
+    (R V : Type*) [Ring R] [AddCommGroup V] [Module R V]
+    [IsSimpleModule R V] :
+    (apm_b98a04_simpleCompositionSeries R V).head = ⊥ := rfl
+
+@[simp] lemma apm_b98a04_simpleCompositionSeries_last
+    (R V : Type*) [Ring R] [AddCommGroup V] [Module R V]
+    [IsSimpleModule R V] :
+    (apm_b98a04_simpleCompositionSeries R V).last = ⊤ := rfl
+
+noncomputable def apm_b98a04_topSubtypeQuotientEquiv
+    (R B : Type*) [Ring R] [AddCommGroup B] [Module R B]
+    (K : Submodule R B) :
+    ((⊤ : Submodule R B) ⧸ Submodule.comap (⊤ : Submodule R B).subtype K) ≃ₗ[R]
+      (B ⧸ K) :=
+  Submodule.Quotient.equiv _ K Submodule.topEquiv (by
+    ext x
+    simp)
+
+noncomputable def apm_b98a04_comapTopBotQuotientEquiv
+    (R B C : Type*) [Ring R] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (g : B →ₗ[R] C) (hg : Function.Surjective g) :
+    ((Submodule.comap g ⊤) ⧸
+      Submodule.comap (Submodule.comap g ⊤).subtype (Submodule.comap g ⊥)) ≃ₗ[R] C := by
+  rw [Submodule.comap_top, Submodule.comap_bot]
+  exact (apm_b98a04_topSubtypeQuotientEquiv R B (LinearMap.ker g)).trans
+    (g.quotKerEquivOfSurjective hg)
+
+lemma apm_b98a04_compositionSeriesOfExact_right_castSucc
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤)
+    (j : Fin SC.length) :
+    let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop
+    E (j.natAdd SA.length).castSucc = Submodule.comap g (SC j.castSucc) := by
+  dsimp only
+  unfold apm_b98a04_compositionSeriesOfExact
+  apply RelSeries.smash_natAdd
+
+lemma apm_b98a04_compositionSeriesOfExact_left_castSucc
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤)
+    (j : Fin SA.length) :
+    let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop
+    E (j.castAdd SC.length).castSucc = Submodule.map f (SA j.castSucc) := by
+  dsimp only
+  unfold apm_b98a04_compositionSeriesOfExact
+  apply RelSeries.smash_castAdd
+
+lemma apm_b98a04_compositionSeriesOfExact_left_succ
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤)
+    (j : Fin SA.length) :
+    let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop
+    E (j.castAdd SC.length).succ = Submodule.map f (SA j.succ) := by
+  dsimp only
+  unfold apm_b98a04_compositionSeriesOfExact
+  apply RelSeries.smash_succ_castAdd
+
+lemma apm_b98a04_compositionSeriesOfExact_right_succ
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤)
+    (j : Fin SC.length) :
+    let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop
+    E (j.natAdd SA.length).succ = Submodule.comap g (SC j.succ) := by
+  dsimp only
+  unfold apm_b98a04_compositionSeriesOfExact
+  apply RelSeries.smash_succ_natAdd
+
+lemma apm_b98a04_exactSeries_contains_simple_quotient
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C] [IsSimpleModule R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤) :
+    let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA (apm_b98a04_simpleCompositionSeries R C) SAbot SAtop rfl rfl
+    ∃ i : Fin E.length,
+      Nonempty
+        ((E i.succ ⧸ Submodule.comap (E i.succ).subtype (E i.castSucc)) ≃ₗ[R] C) := by
+  dsimp only
+  let SC := apm_b98a04_simpleCompositionSeries R C
+  let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+    SA SC SAbot SAtop rfl rfl
+  let j : Fin SC.length := ⟨0, by change 0 < 1; omega⟩
+  let i : Fin E.length := j.natAdd SA.length
+  refine ⟨i, ⟨?_⟩⟩
+  have hi0 : E i.castSucc = Submodule.comap g ⊥ := by
+    simpa [E, i, SC] using
+      apm_b98a04_compositionSeriesOfExact_right_castSucc R A B C f g hf hg hexact
+        SA SC SAbot SAtop rfl rfl j
+  have hi1 : E i.succ = Submodule.comap g ⊤ := by
+    simpa [E, i, SC] using
+      apm_b98a04_compositionSeriesOfExact_right_succ R A B C f g hf hg hexact
+        SA SC SAbot SAtop rfl rfl j
+  rw [hi0, hi1]
+  exact apm_b98a04_comapTopBotQuotientEquiv R B C g hg
+
+/-- Mapping two nested submodules along an injection preserves their quotient
+factor.  This is the factor-level companion to
+`Submodule.map_covBy_of_injective`. -/
+noncomputable def apm_b98a04_quotientMapEquivOfInjective
+    (R A B : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    (f : A →ₗ[R] B) (hf : Function.Injective f)
+    (A₀ A₁ : Submodule R A) :
+    (A₁ ⧸ Submodule.comap A₁.subtype A₀) ≃ₗ[R]
+      ((Submodule.map f A₁) ⧸
+        Submodule.comap (Submodule.map f A₁).subtype (Submodule.map f A₀)) := by
+  let e : A₁ ≃ₗ[R] Submodule.map f A₁ := A₁.equivMapOfInjective f hf
+  apply Submodule.Quotient.equiv _ _ e
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    change f y.1 ∈ Submodule.map f A₀
+    exact ⟨y.1, hy, rfl⟩
+  · intro hx
+    change x.1 ∈ Submodule.map f A₀ at hx
+    rcases hx with ⟨y, hy, heq⟩
+    refine ⟨e.symm x, ?_, e.apply_symm_apply x⟩
+    change (e.symm x).1 ∈ A₀
+    have hecoe : f (e.symm x).1 = x.1 :=
+      Submodule.map_equivMapOfInjective_symm_apply f hf A₁ x
+    have hey : (e.symm x).1 = y := hf (hecoe.trans heq.symm)
+    exact hey.symm ▸ hy
+
+noncomputable def apm_b98a04_compositionSeriesOfExact_leftFactorEquiv
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤)
+    (j : Fin SA.length) :
+    let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop
+    (SA j.succ ⧸ Submodule.comap (SA j.succ).subtype (SA j.castSucc)) ≃ₗ[R]
+      (E (j.castAdd SC.length).succ ⧸
+        Submodule.comap (E (j.castAdd SC.length).succ).subtype
+          (E (j.castAdd SC.length).castSucc)) := by
+  dsimp only
+  rw [apm_b98a04_compositionSeriesOfExact_left_castSucc R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop j,
+    apm_b98a04_compositionSeriesOfExact_left_succ R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop j]
+  exact apm_b98a04_quotientMapEquivOfInjective R A B f hf
+    (SA j.castSucc) (SA j.succ)
+
+noncomputable def apm_b98a04_quotientComapEquivOfSurjective
+    (R B C : Type*) [Ring R]
+    [AddCommGroup B] [Module R B] [AddCommGroup C] [Module R C]
+    (g : B →ₗ[R] C) (hg : Function.Surjective g)
+    (C₀ C₁ : Submodule R C) :
+    ((Submodule.comap g C₁) ⧸
+      Submodule.comap (Submodule.comap g C₁).subtype (Submodule.comap g C₀)) ≃ₗ[R]
+      (C₁ ⧸ Submodule.comap C₁.subtype C₀) := by
+  let r : Submodule.comap g C₁ →ₗ[R] C₁ :=
+    ((g.domRestrict (Submodule.comap g C₁)).codRestrict C₁ (fun x ↦ x.2))
+  let q : Submodule.comap g C₁ →ₗ[R]
+      (C₁ ⧸ Submodule.comap C₁.subtype C₀) :=
+    (Submodule.comap C₁.subtype C₀).mkQ.comp r
+  have hq : Function.Surjective q := by
+    intro z
+    refine Submodule.Quotient.induction_on _ z ?_
+    intro y
+    obtain ⟨x, hx⟩ := hg y.1
+    let x' : Submodule.comap g C₁ := ⟨x, by
+      change g x ∈ C₁
+      rw [hx]
+      exact y.2⟩
+    refine ⟨x', ?_⟩
+    change Submodule.Quotient.mk (r x') = Submodule.Quotient.mk y
+    congr 1
+    exact Subtype.ext hx
+  have hker : LinearMap.ker q =
+      Submodule.comap (Submodule.comap g C₁).subtype (Submodule.comap g C₀) := by
+    ext x
+    change q x = 0 ↔ g x.1 ∈ C₀
+    simp [q, r]
+  rw [← hker]
+  exact q.quotKerEquivOfSurjective hq
+
+noncomputable def apm_b98a04_compositionSeriesOfExact_rightFactorEquiv
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤)
+    (j : Fin SC.length) :
+    let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop
+    (E (j.natAdd SA.length).succ ⧸
+      Submodule.comap (E (j.natAdd SA.length).succ).subtype
+        (E (j.natAdd SA.length).castSucc)) ≃ₗ[R]
+      (SC j.succ ⧸ Submodule.comap (SC j.succ).subtype (SC j.castSucc)) := by
+  dsimp only
+  rw [apm_b98a04_compositionSeriesOfExact_right_castSucc R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop j,
+    apm_b98a04_compositionSeriesOfExact_right_succ R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop j]
+  exact apm_b98a04_quotientComapEquivOfSurjective R B C g hg
+    (SC j.castSucc) (SC j.succ)
+
+lemma apm_b98a04_compositionSeriesOfExact_factor_cases
+    (R A B C : Type*) [Ring R]
+    [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]
+    [AddCommGroup C] [Module R C]
+    (f : A →ₗ[R] B) (g : B →ₗ[R] C)
+    (hf : Function.Injective f) (hg : Function.Surjective g)
+    (hexact : Function.Exact f g)
+    (SA : CompositionSeries (Submodule R A))
+    (SC : CompositionSeries (Submodule R C))
+    (SAbot : SA.head = ⊥) (SAtop : SA.last = ⊤)
+    (SCbot : SC.head = ⊥) (SCtop : SC.last = ⊤) :
+    let E := apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+      SA SC SAbot SAtop SCbot SCtop
+    ∀ k : Fin E.length,
+      (∃ i : Fin SA.length, Nonempty
+        ((E k.succ ⧸ Submodule.comap (E k.succ).subtype (E k.castSucc)) ≃ₗ[R]
+          (SA i.succ ⧸ Submodule.comap (SA i.succ).subtype (SA i.castSucc)))) ∨
+      (∃ i : Fin SC.length, Nonempty
+        ((E k.succ ⧸ Submodule.comap (E k.succ).subtype (E k.castSucc)) ≃ₗ[R]
+          (SC i.succ ⧸ Submodule.comap (SC i.succ).subtype (SC i.castSucc)))) := by
+  dsimp only
+  change ∀ k : Fin (SA.length + SC.length),
+    (∃ i : Fin SA.length, Nonempty
+      (((apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+          SA SC SAbot SAtop SCbot SCtop) k.succ ⧸
+        Submodule.comap
+          ((apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+            SA SC SAbot SAtop SCbot SCtop) k.succ).subtype
+          ((apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+            SA SC SAbot SAtop SCbot SCtop) k.castSucc)) ≃ₗ[R]
+        (SA i.succ ⧸ Submodule.comap (SA i.succ).subtype (SA i.castSucc)))) ∨
+    (∃ i : Fin SC.length, Nonempty
+      (((apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+          SA SC SAbot SAtop SCbot SCtop) k.succ ⧸
+        Submodule.comap
+          ((apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+            SA SC SAbot SAtop SCbot SCtop) k.succ).subtype
+          ((apm_b98a04_compositionSeriesOfExact R A B C f g hf hg hexact
+            SA SC SAbot SAtop SCbot SCtop) k.castSucc)) ≃ₗ[R]
+        (SC i.succ ⧸ Submodule.comap (SC i.succ).subtype (SC i.castSucc))))
+  intro k
+  refine Fin.addCases (m := SA.length) (n := SC.length) ?_ ?_ k
+  · intro i
+    left
+    refine ⟨i, ⟨?_⟩⟩
+    exact (apm_b98a04_compositionSeriesOfExact_leftFactorEquiv R A B C
+      f g hf hg hexact SA SC SAbot SAtop SCbot SCtop i).symm
+  · intro i
+    right
+    refine ⟨i, ⟨?_⟩⟩
+    exact apm_b98a04_compositionSeriesOfExact_rightFactorEquiv R A B C
+      f g hf hg hexact SA SC SAbot SAtop SCbot SCtop i
+
+def apm_b98a04_finTailInclusion
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M] (n : ℕ) :
+    (Fin n → M) →ₗ[R] (Fin (n + 1) → M) where
+  toFun x := Fin.cons 0 x
+  map_add' x y := by
+    ext i
+    exact Fin.cases (by simp) (fun j ↦ by simp) i
+  map_smul' r x := by
+    ext i
+    exact Fin.cases (by simp) (fun j ↦ by simp) i
+
+def apm_b98a04_finHead
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M] (n : ℕ) :
+    (Fin (n + 1) → M) →ₗ[R] M where
+  toFun x := x 0
+  map_add' _ _ := rfl
+  map_smul' _ _ := rfl
+
+lemma apm_b98a04_finTailInclusion_injective
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M] (n : ℕ) :
+    Function.Injective (apm_b98a04_finTailInclusion R M n) := by
+  intro x y h
+  ext i
+  exact congrFun h i.succ
+
+lemma apm_b98a04_finHead_surjective
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M] (n : ℕ) :
+    Function.Surjective (apm_b98a04_finHead R M n) := by
+  intro x
+  exact ⟨Fin.cons x 0, rfl⟩
+
+lemma apm_b98a04_finTail_head_exact
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M] (n : ℕ) :
+    Function.Exact (apm_b98a04_finTailInclusion R M n)
+      (apm_b98a04_finHead R M n) := by
+  rw [LinearMap.exact_iff]
+  ext x
+  constructor
+  · intro hx
+    change (apm_b98a04_finHead R M n) x = 0 at hx
+    refine ⟨fun i ↦ x i.succ, ?_⟩
+    ext i
+    refine Fin.cases ?_ (fun j ↦ ?_) i
+    · exact hx.symm
+    · rfl
+  · rintro ⟨y, hy⟩
+    change (apm_b98a04_finHead R M n) x = 0
+    rw [← hy]
+    rfl
+
+noncomputable def apm_b98a04_powerCompositionSeriesData
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
+    (t : ℕ) (N : Fin (t + 1) → Submodule R M)
+    (hbot : N 0 = ⊥) (htop : N (Fin.last t) = ⊤)
+    (hmono : StrictMono N)
+    (hsimple : ∀ i : Fin t,
+      IsSimpleModule R
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc)))
+    (s : ℕ) :
+    { C : CompositionSeries (Submodule R (Fin s → M)) //
+      C.head = ⊥ ∧ C.last = ⊤ } := by
   induction s with
   | zero =>
-      intro S g hg
-      exfalso
-      letI : Nontrivial V := IsSimpleModule.nontrivial R V
-      obtain ⟨v, hv⟩ := exists_ne (0 : V)
-      obtain ⟨x, hx⟩ := hg v
-      have hx0 : x = 0 := by
-        apply Subtype.ext
-        funext i
-        exact Fin.elim0 i
-      exact hv (by simpa [hx0] using hx.symm)
-  | succ n ih =>
-      intro S g hg
-      let p : S →ₗ[R] M :=
-        { toFun := fun x ↦ x.1 0
-          map_add' := fun _ _ ↦ rfl
-          map_smul' := fun _ _ ↦ rfl }
-      rcases apm_b98a04_surjection_kernel_or_range R S M V p g hg with
-        hkernel | hrange
-      · obtain ⟨h, hh⟩ := hkernel
-        let q : LinearMap.ker p →ₗ[R] (Fin n → M) :=
-          { toFun := fun x i ↦ x.1.1 i.succ
-            map_add' := fun _ _ ↦ rfl
-            map_smul' := fun _ _ ↦ rfl }
-        have hq : Function.Injective q := by
-          intro x y hxy
-          apply Subtype.ext
-          apply Subtype.ext
-          funext i
-          refine Fin.cases ?_ (fun j ↦ congrFun hxy j) i
-          have hx0 : x.1.1 0 = 0 := x.2
-          have hy0 : y.1.1 0 = 0 := y.2
-          exact hx0.trans hy0.symm
-        let e : LinearMap.ker p ≃ₗ[R] LinearMap.range q :=
-          LinearEquiv.ofInjective q hq
-        let h' : LinearMap.range q →ₗ[R] V := h.comp e.symm.toLinearMap
-        have hh' : Function.Surjective h' := by
-          intro v
-          obtain ⟨x, rfl⟩ := hh v
-          exact ⟨e x, by simp [h', e]⟩
-        exact ih (LinearMap.range q) h' hh'
-      · obtain ⟨h, hh⟩ := hrange
-        exact ⟨LinearMap.range p, h, hh⟩
+      let C : CompositionSeries (Submodule R (Fin 0 → M)) :=
+        RelSeries.singleton _ ⊥
+      refine ⟨C, rfl, ?_⟩
+      apply le_antisymm le_top
+      intro x _
+      change x = 0
+      ext i
+      exact Fin.elim0 i
+  | succ s ih =>
+      let CN := apm_b98a04_compositionSeriesOfChain R M t N hmono hsimple
+      let C := apm_b98a04_compositionSeriesOfExact R (Fin s → M)
+        (Fin (s + 1) → M) M
+        (apm_b98a04_finTailInclusion R M s) (apm_b98a04_finHead R M s)
+        (apm_b98a04_finTailInclusion_injective R M s)
+        (apm_b98a04_finHead_surjective R M s)
+        (apm_b98a04_finTail_head_exact R M s)
+        ih.1 CN ih.2.1 ih.2.2 hbot htop
+      refine ⟨C, ?_, ?_⟩
+      · exact apm_b98a04_compositionSeriesOfExact_head R (Fin s → M)
+          (Fin (s + 1) → M) M
+          (apm_b98a04_finTailInclusion R M s) (apm_b98a04_finHead R M s)
+          (apm_b98a04_finTailInclusion_injective R M s)
+          (apm_b98a04_finHead_surjective R M s)
+          (apm_b98a04_finTail_head_exact R M s)
+          ih.1 CN ih.2.1 ih.2.2 hbot htop
+      · exact apm_b98a04_compositionSeriesOfExact_last R (Fin s → M)
+          (Fin (s + 1) → M) M
+          (apm_b98a04_finTailInclusion R M s) (apm_b98a04_finHead R M s)
+          (apm_b98a04_finTailInclusion_injective R M s)
+          (apm_b98a04_finHead_surjective R M s)
+          (apm_b98a04_finTail_head_exact R M s)
+          ih.1 CN ih.2.1 ih.2.2 hbot htop
+
+lemma apm_b98a04_powerCompositionSeries_length
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
+    (t : ℕ) (N : Fin (t + 1) → Submodule R M)
+    (hbot : N 0 = ⊥) (htop : N (Fin.last t) = ⊤)
+    (hmono : StrictMono N)
+    (hsimple : ∀ i : Fin t,
+      IsSimpleModule R
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc)))
+    (s : ℕ) :
+    (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).1.length
+      = s * t := by
+  induction s with
+  | zero => simp [apm_b98a04_powerCompositionSeriesData]
+  | succ s ih =>
+      simp only [apm_b98a04_powerCompositionSeriesData,
+        apm_b98a04_compositionSeriesOfExact, RelSeries.smash_length,
+        RelSeries.map_length]
+      change
+        (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).1.length
+          + t = (s + 1) * t
+      rw [ih]
+      rw [Nat.add_mul]
+      simp
+
+lemma apm_b98a04_powerCompositionSeries_factor
+    (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
+    (t : ℕ) (N : Fin (t + 1) → Submodule R M)
+    (hbot : N 0 = ⊥) (htop : N (Fin.last t) = ⊤)
+    (hmono : StrictMono N)
+    (hsimple : ∀ i : Fin t,
+      IsSimpleModule R
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc)))
+    (s : ℕ) :
+    let C := (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).1
+    ∀ k : Fin C.length, ∃ i : Fin t, Nonempty
+      ((C k.succ ⧸ Submodule.comap (C k.succ).subtype (C k.castSucc)) ≃ₗ[R]
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc))) := by
+  induction s with
+  | zero =>
+      dsimp only
+      intro k
+      have hlen := apm_b98a04_powerCompositionSeries_length R M t N hbot htop
+        hmono hsimple 0
+      exact Fin.elim0 (Fin.cast (by simpa using hlen) k)
+  | succ s ih =>
+      dsimp only
+      intro k
+      let D := (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).1
+      let CN := apm_b98a04_compositionSeriesOfChain R M t N hmono hsimple
+      have hc := apm_b98a04_compositionSeriesOfExact_factor_cases R (Fin s → M)
+        (Fin (s + 1) → M) M
+        (apm_b98a04_finTailInclusion R M s) (apm_b98a04_finHead R M s)
+        (apm_b98a04_finTailInclusion_injective R M s)
+        (apm_b98a04_finHead_surjective R M s)
+        (apm_b98a04_finTail_head_exact R M s)
+        D CN
+        (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).2.1
+        (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).2.2
+        hbot htop k
+      rcases hc with ⟨j, ⟨e⟩⟩ | ⟨j, ⟨e⟩⟩
+      · obtain ⟨i, ⟨ei⟩⟩ := ih j
+        exact ⟨i, ⟨e.trans ei⟩⟩
+      · exact ⟨j, ⟨e⟩⟩
+
+lemma apm_b98a04_simple_quotient_occurs_in_power
+    (R M V : Type*) [Ring R] [AddCommGroup M] [Module R M]
+    [AddCommGroup V] [Module R V] [IsSimpleModule R V]
+    (s t : ℕ) (S : Submodule R (Fin s → M))
+    (g : S →ₗ[R] V) (hg : Function.Surjective g)
+    (N : Fin (t + 1) → Submodule R M)
+    (hbot : N 0 = ⊥) (htop : N (Fin.last t) = ⊤)
+    (hmono : StrictMono N)
+    (hsimple : ∀ i : Fin t,
+      IsSimpleModule R
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc))) :
+    ∃ i : Fin t, Nonempty
+      (V ≃ₗ[R]
+        (N i.succ ⧸ Submodule.comap (N i.succ).subtype (N i.castSucc))) := by
+  have hM := apm_b98a04_isFiniteLength_of_supplied_chain R M t N hbot htop hmono hsimple
+  have hM' := isFiniteLength_iff_isNoetherian_isArtinian.mp hM
+  letI : IsNoetherian R M := hM'.1
+  letI : IsArtinian R M := hM'.2
+  have hP : IsFiniteLength R (Fin s → M) :=
+    isFiniteLength_iff_isNoetherian_isArtinian.mpr ⟨inferInstance, inferInstance⟩
+  have hS : IsFiniteLength R S := hP.of_injective (Submodule.injective_subtype S)
+  have hK : IsFiniteLength R (LinearMap.ker g) :=
+    hS.of_injective (Submodule.injective_subtype (LinearMap.ker g))
+  obtain ⟨CK, CKbot, CKtop⟩ := isFiniteLength_iff_exists_compositionSeries.mp hK
+  let CS := apm_b98a04_compositionSeriesOfExact R (LinearMap.ker g) S V
+    (LinearMap.ker g).subtype g (Submodule.injective_subtype _) hg
+    g.exact_subtype_ker_map CK (apm_b98a04_simpleCompositionSeries R V)
+    CKbot CKtop rfl rfl
+  have CSbot : CS.head = ⊥ := apm_b98a04_compositionSeriesOfExact_head R
+    (LinearMap.ker g) S V (LinearMap.ker g).subtype g
+    (Submodule.injective_subtype _) hg g.exact_subtype_ker_map
+    CK (apm_b98a04_simpleCompositionSeries R V) CKbot CKtop rfl rfl
+  have CStop : CS.last = ⊤ := apm_b98a04_compositionSeriesOfExact_last R
+    (LinearMap.ker g) S V (LinearMap.ker g).subtype g
+    (Submodule.injective_subtype _) hg g.exact_subtype_ker_map
+    CK (apm_b98a04_simpleCompositionSeries R V) CKbot CKtop rfl rfl
+  obtain ⟨j, ⟨ejV⟩⟩ := apm_b98a04_exactSeries_contains_simple_quotient R
+    (LinearMap.ker g) S V (LinearMap.ker g).subtype g
+    (Submodule.injective_subtype _) hg g.exact_subtype_ker_map CK CKbot CKtop
+  have hQ : IsFiniteLength R ((Fin s → M) ⧸ S) :=
+    hP.of_surjective (Submodule.mkQ_surjective S)
+  obtain ⟨CQ, CQbot, CQtop⟩ := isFiniteLength_iff_exists_compositionSeries.mp hQ
+  let CE := apm_b98a04_compositionSeriesOfExact R S (Fin s → M) ((Fin s → M) ⧸ S)
+    S.subtype S.mkQ (Submodule.injective_subtype S) (Submodule.mkQ_surjective S)
+    (LinearMap.exact_subtype_mkQ S) CS CQ CSbot CStop CQbot CQtop
+  have CEbot : CE.head = ⊥ := apm_b98a04_compositionSeriesOfExact_head R S
+    (Fin s → M) ((Fin s → M) ⧸ S) S.subtype S.mkQ
+    (Submodule.injective_subtype S) (Submodule.mkQ_surjective S)
+    (LinearMap.exact_subtype_mkQ S) CS CQ CSbot CStop CQbot CQtop
+  have CEtop : CE.last = ⊤ := apm_b98a04_compositionSeriesOfExact_last R S
+    (Fin s → M) ((Fin s → M) ⧸ S) S.subtype S.mkQ
+    (Submodule.injective_subtype S) (Submodule.mkQ_surjective S)
+    (LinearMap.exact_subtype_mkQ S) CS CQ CSbot CStop CQbot CQtop
+  let k : Fin CE.length := j.castAdd CQ.length
+  have ejE := apm_b98a04_compositionSeriesOfExact_leftFactorEquiv R S
+    (Fin s → M) ((Fin s → M) ⧸ S) S.subtype S.mkQ
+    (Submodule.injective_subtype S) (Submodule.mkQ_surjective S)
+    (LinearMap.exact_subtype_mkQ S) CS CQ CSbot CStop CQbot CQtop j
+  let CP := (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).1
+  have hJ : CompositionSeries.Equivalent CE CP := CE.jordan_holder CP
+    (CEbot.trans (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).2.1.symm)
+    (CEtop.trans (apm_b98a04_powerCompositionSeriesData R M t N hbot htop hmono hsimple s).2.2.symm)
+  obtain ⟨ekP⟩ := hJ.choose_spec k
+  obtain ⟨i, ⟨ei⟩⟩ := apm_b98a04_powerCompositionSeries_factor R M t N
+    hbot htop hmono hsimple s (hJ.choose k)
+  exact ⟨i, ⟨ejV.symm |>.trans ejE |>.trans ekP |>.trans ei⟩⟩
 
 theorem apm_b98a04 :
     ∀ (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
@@ -353,103 +839,11 @@ theorem apm_b98a04 :
   · obtain ⟨s, m, hm⟩ := htuple
     exact ⟨s, apm_b98a04_actionMap R M s m,
       apm_b98a04_actionMap_injective R M s m hm⟩
-  /-
-  Boundary (closer hop 2): the Artinian bridge left by hop 1 is now closed.
-  `apm_b98a04_exists_faithful_tuple` applies
-  `IsArtinian.set_has_minimal` to the family of finite common annihilators.
-  If a minimal member contains a nonzero `r`, `FaithfulSMul` supplies `x` with
-  `r • x ≠ 0`; adjoining `x` via `Fin.cons` gives a strictly smaller member,
-  a contradiction. Together with `apm_b98a04_actionMap_injective`, this closes
-  the first three frozen conjuncts without commutativity assumptions on `R`.
-
-  I then inspected `Order.JordanHolder`, `SimpleModule.Basic`, finite-length,
-  quotient, submodule, and simple-module APIs beyond hop 1. The remaining raw
-  chain can be packaged as a `CompositionSeries`, but the decisive theorem
-  needed here is stronger than uniqueness of two composition series of the
-  same module: one must transport the series of `M` to `Fin s → M`, restrict
-  it along the embedded regular module, and prove that every simple `R`-module
-  occurs among those factors. Mathlib has no packaged Schreier-refinement or
-  factor-occurrence theorem for an arbitrary submodule in the exact quotient
-  representation frozen here, and repository-wide searches found no sibling
-  implementation. That Jordan--Hölder factor-transport bridge remains open;
-  the statement is unchanged.
-
-  CLOSER HOP 3: `apm_b98a04_simple_quotient_of_embedded_regular` now proves
-  the exact reduction beyond hop 2. Given the compiled injection
-  `R → Fin s → M`, `LinearEquiv.ofInjective` identifies `R` with its image;
-  a nonzero vector of any simple `V` makes `LinearMap.toSpanSingleton`
-  surjective, and composition gives a surjection from that image submodule
-  onto `V`. Thus every target simple module is now explicitly a quotient of a
-  submodule of a finite power of `M`.
-
-  The sole remaining bridge is consequently the factor-occurrence theorem:
-  a simple quotient of a submodule of `Fin s → M` must occur in the supplied
-  composition series of `M`. Searches of Jordan--Hölder, modular-lattice,
-  quotient, and finite-direct-product APIs found no packaged theorem deriving
-  that occurrence in the frozen quotient representation.
-
-  HOP 4 checked `JordanHolderModule.instJordanHolderLattice`,
-  `CompositionSeries.jordan_holder`, `IsFiniteLength.iff_exists_compositionSeries`,
-  and the quotient equivalences in `SimpleModule.Basic`. The exact missing
-  theorem is the following factor-occurrence statement (with all quotient
-  types matching the frozen conclusion):
-
-    `∀ (R M V : Type*) [Ring R] [AddCommGroup M] [Module R M]
-        [AddCommGroup V] [Module R V] [IsSimpleModule R V]
-        (s t : ℕ) (S : Submodule R (Fin s → M))
-        (g : S →ₗ[R] V), Function.Surjective g →
-        ∀ (N : Fin (t + 1) → Submodule R M),
-          N 0 = ⊥ → N (Fin.last t) = ⊤ → StrictMono N →
-          (∀ i : Fin t,
-            IsSimpleModule R
-              (N i.succ ⧸ Submodule.comap (N i.succ).subtype
-                (N i.castSucc))) →
-          ∃ i : Fin t,
-            Nonempty
-              (V ≃ₗ[R]
-                (N i.succ ⧸ Submodule.comap (N i.succ).subtype
-                  (N i.castSucc)))`.
-
-  Proving it requires constructing composition series for a finite product,
-  its submodule `S`, and the quotient by `LinearMap.ker g`, then transporting
-  factor equivalences through three Jordan--Hölder comparisons. No searched
-  declaration performs those constructions or the final quotient-type
-  normalization. The theorem remains the sole sorry and the frozen statement
-  is unchanged.
-  -/
   intro t N hbot htop hmono hsimple V _ _ _
-  let c : CompositionSeries (Submodule R M) :=
-    { length := t
-      toFun := N
-      step := fun i ↦
-        (covBy_iff_quot_is_simple
-          (le_of_lt (hmono i.castSucc_lt_succ))).2 (hsimple i) }
-  have hc_ends : c.head = ⊥ ∧ c.last = ⊤ := by
-    exact ⟨hbot, htop⟩
-  have hMfinite : IsFiniteLength R M :=
-    apm_b98a04_isFiniteLength_of_chain R M t N hbot htop hmono hsimple
-  obtain ⟨hMnoetherian, hMartinian⟩ :=
-    isFiniteLength_iff_isNoetherian_isArtinian.mp hMfinite
-  letI : IsNoetherian R M := hMnoetherian
-  letI : IsArtinian R M := hMartinian
   obtain ⟨s, m, hm⟩ := htuple
   let f := apm_b98a04_actionMap R M s m
-  have hf : Function.Injective f :=
-    apm_b98a04_actionMap_injective R M s m hm
+  have hf : Function.Injective f := apm_b98a04_actionMap_injective R M s m hm
   obtain ⟨S, g, hg⟩ :=
     apm_b98a04_simple_quotient_of_embedded_regular R M V s f hf
-  have hpowfinite : IsFiniteLength R (Fin s → M) :=
-    isFiniteLength_iff_isNoetherian_isArtinian.mpr ⟨inferInstance, inferInstance⟩
-  have hSfinite : IsFiniteLength R S :=
-    hpowfinite.of_injective (Submodule.injective_subtype S)
-  have hVfinite : IsFiniteLength R V := hSfinite.of_surjective hg
-  obtain ⟨cpow, hcpow_head, hcpow_last⟩ :=
-    isFiniteLength_iff_exists_compositionSeries.mp hpowfinite
-  obtain ⟨ipow, hVipow⟩ :=
-    apm_b98a04_simple_subquotient_occurs R (Fin s → M) V S g hg
-      cpow hcpow_head hcpow_last
-  obtain ⟨T, h, hh⟩ :=
-    apm_b98a04_simple_subquotient_fin R M V s S g hg
-  obtain ⟨i, hi⟩ :=
-    apm_b98a04_simple_subquotient_occurs R M V T h hh c hc_ends.1 hc_ends.2
-  exact ⟨i, by simpa [c] using hi⟩
+  exact apm_b98a04_simple_quotient_occurs_in_power R M V s t S g hg N
+    hbot htop hmono hsimple
