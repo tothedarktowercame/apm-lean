@@ -5128,8 +5128,64 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if this compiled normalization theorem cannot be promoted with its exact raw factors, scale interval, and Morse--Sard exponent equation or without adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate the maximal-separated cover at geometric radii, combine its cardinality and finite target-cover measure estimates through this normalization theorem, and choose the radius using positive-power tolerance.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardTaylorPackingExponentNormalizationProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardTaylorPackingExponentNormalizationProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardTaylorPackingExponentNormalization.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardTaylorPackingExponentNormalization.lean ConstructionTargets/SardTaylorPackingExponentNormalization.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add Sard Taylor packing exponent normalization'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "220ed387ed27a4edec9bf1833aaaec2d82b75b47",
+    :changed-paths
+    ["ConstructionTargets/SardTaylorPackingExponentNormalization.lean"
+     "ConstructionTargets/SardTaylorPackingExponentNormalization.md"],
+    :fixture
+    {:path "/tmp/SardTaylorPackingExponentNormalizationProbe.lean",
+     :sha256
+     "063d9de52e375efe8b8c42b680f86fbf80f7e9103cf4f64d49e680346ff6e6c6"},
+    :declarations ["ENNReal.raw_taylor_packing_product_le"],
+    :dependencies
+    [{:id :critical-value-sard-exponent-combination-1,
+      :commit "3f942e2491d8ad0f37194562513ff7164c3e5dd8"}],
+    :hashes
+    {:lean
+     "063d9de52e375efe8b8c42b680f86fbf80f7e9103cf4f64d49e680346ff6e6c6",
+     :markdown
+     "5dccc21a1a84a60af09b7bde056ed65607eb13da6b6fda4e1c2e06c718a89c6b",
+     :statement
+     "9a10cf64319c5073471f2a2f193470649049813a58f1bcb59fdc89e0d7652380"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardTaylorPackingExponentNormalization.lean"
     "ConstructionTargets/SardTaylorPackingExponentNormalization.md"],
