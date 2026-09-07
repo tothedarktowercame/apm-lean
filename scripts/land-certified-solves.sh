@@ -27,22 +27,60 @@ set -uo pipefail
 REPO=/home/joe/code/apm-lean
 cd "$REPO" || exit 1
 
+# Count `sorry` as CODE, with comments removed first.
+#
+# Both earlier regexes were wrong in opposite directions, and each cost
+# something real on 2026-09-07:
+#
+#   /^\s*sorry\s*$/ misses inline forms -- `all_goals sorry`, `exact sorry` --
+#   so a master that still had one looked finished and its completed branch was
+#   never offered. Ten genuinely complete proofs sat unlanded.
+#
+#   A bare token match then hit PROSE: b93J03's master says "removes the final
+#   `sorry`" in a comment, so it looked unfinished while its branch was
+#   byte-identical. The checkout staged nothing and the run still said
+#   "landed: 5".
+#
+# Stripping /- -/ blocks and -- line comments first distinguishes the two. The
+# branch side is still only a prefilter; `verify` compiles and is what decides.
+real_sorries() {
+  git show "$1:$2" 2>/dev/null | python3 -c '
+import re, sys
+t = sys.stdin.read()
+t = re.sub(r"/-.*?-/", " ", t, flags=re.S)      # block comments, incl. /-- -/
+t = re.sub(r"--[^\n]*", " ", t)                 # line comments
+print(len(re.findall(r"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])", t)))
+'
+}
+
 survey() {
   for b in $(git branch --list "exp/countdown-*-solver" --format="%(refname:short)"); do
     git merge-base --is-ancestor "$b" master 2>/dev/null && continue
     prob=$(echo "$b" | sed -E "s/^exp\/countdown-f[0-9]+-(.+)-solver$/\1/")
     frame=$(echo "$b" | sed -E "s/^exp\/countdown-(f[0-9]+)-.*/\1/")
     f="problems/$prob/lean/Main.lean"
-    # Branch side stays line-anchored: it only selects CANDIDATES, verify is
-    # what decides, and erring narrow here costs a visible pending row rather
-    # than a bad landing. Master side must catch inline forms, or a problem
-    # whose master copy holds `all_goals sorry` is never offered for landing
-    # at all -- which is how a real gap stays invisible.
-    bs=$(git show "$b:$f" 2>/dev/null | grep -cE "^[[:space:]]*sorry[[:space:]]*$")
-    ms=$(git show "master:$f" 2>/dev/null \
-         | grep -cE "(^|[^A-Za-z0-9_])sorry([^A-Za-z0-9_]|$)")
-    [ -z "$bs" ] && continue
-    if [ "$bs" = "0" ] && [ "${ms:-0}" -gt 0 ] 2>/dev/null; then
+    # Candidacy is a real DIFF, not a regex on either side. Both regexes were
+    # wrong in opposite directions and the second one did damage:
+    #
+    #   line-anchored /^\s*sorry\s*$/ misses every inline form, so a master
+    #   still carrying `all_goals sorry` looked finished and its branch was
+    #   never offered -- ten genuinely complete proofs stayed unlanded.
+    #
+    #   widening it to a bare token then matched PROSE. b93J03's master says
+    #   "removes the final `sorry`" in a comment, so it looked unfinished while
+    #   its branch was byte-identical to master. `git checkout` staged nothing,
+    #   the commit found nothing, and the run still reported "landed: 5".
+    #
+    # A branch that does not change the file has nothing to land, whatever
+    # either file says about sorries. verify then decides whether the change is
+    # one we want.
+    git show "$b:$f" >/dev/null 2>&1 || continue
+    # A branch that does not change the file has nothing to land, whatever
+    # either file says about sorries.
+    git diff --quiet master "$b" -- "$f" 2>/dev/null && continue
+    # And "master still needs this" must be decided on CODE, not prose.
+    bs=$(real_sorries "$b" "$f"); ms=$(real_sorries master "$f")
+    if [ "${bs:-1}" = "0" ] && [ "${ms:-0}" -gt 0 ] 2>/dev/null; then
       echo "$frame $prob $b"
     fi
   done
@@ -136,6 +174,14 @@ land)
     head=$(git rev-parse --verify "$branch" 2>/dev/null) || { echo "  SKIP $prob (no branch)"; skipped=$((skipped+1)); continue; }
     git show "$branch:$f" > /dev/null 2>&1 || { echo "  SKIP $prob (no file on branch)"; skipped=$((skipped+1)); continue; }
     git checkout "$branch" -- "$f" 2>/dev/null || { echo "  SKIP $prob (checkout failed)"; skipped=$((skipped+1)); continue; }
+    # A checkout that changes nothing is not a landing. Counting it as one is
+    # how a run reported "landed: 5 | skipped: 0" while committing nothing at
+    # all (2026-09-07 23:10) -- the tool claimed work it had not done, which is
+    # worse than failing, because nothing looks wrong afterwards.
+    if git diff --cached --quiet -- "$f" 2>/dev/null; then
+      echo "  SKIP $prob (branch is identical to master; nothing to land)"
+      skipped=$((skipped+1)); continue
+    fi
     landed=$((landed+1))
     manifest="$manifest
   $prob  from $frame  $branch  ${head:0:12}"
@@ -162,6 +208,11 @@ Landed:$manifest
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 EOF
+  if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+    echo "  ---"
+    echo "  FAILED: commit produced nothing; $landed file(s) remain staged" >&2
+    exit 1
+  fi
   echo "  ---"; echo "  landed: $landed | skipped: $skipped"
   git log -1 --format='  commit %h %s'
   ;;
