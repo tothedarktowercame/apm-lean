@@ -3507,71 +3507,101 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled centered-ball bounded-enlargement theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCenteredBallBoundedEnlargement.lean"
+    "ConstructionTargets/SardCenteredBallBoundedEnlargement.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CENTERED BALL BOUNDED ENLARGEMENT",
+   :acceptance
+   {:fixture
+    {:path "/tmp/CenteredBallBoundedEnlargementProbe.lean",
+     :sha256
+     "491075d2110992575e1958f60f3c08b8ab8be4abb4ec6a5560c7737b55d8bbf6"},
+    :declarations
+    ["ball_subset_ball_enlargement_of_center_mem_closedBall"],
+    :consumer-residual
+    "one maximal separated-family construction and finite-dimensional packing/Taylor exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a center x in the closed radius-R ball about z and an open radius-ρ ball about x in a pseudometric space",
+    :target
+    "containment of that ball in the open radius-(R+ρ) ball about z"},
+   :id :critical-value-sard-centered-ball-bounded-enlargement-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the separated-ball packing estimate lacks a promoted containment of all small packing balls in one bounded ambient enlargement",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After separated half-ball disjointness is banked, prove one quantitative theorem constructing a maximal radius-separated family in the bounded finite-dimensional source patch, using its half-balls and the banked volume/cardinality bounds to obtain polynomial cover size, then applying the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
+     "After bounded-enlargement containment is banked, prove one quantitative theorem constructing a maximal radius-separated family in the bounded finite-dimensional source patch, combining half-ball disjointness, exact ball volumes, and packing cardinality to obtain polynomial cover size, then applying the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled separated-half-ball disjointness theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled centered-ball bounded-enlargement theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
-       "ConstructionTargets/SardSeparatedHalfBallsDisjoint.md"],
+      ["ConstructionTargets/SardCenteredBallBoundedEnlargement.lean"
+       "ConstructionTargets/SardCenteredBallBoundedEnlargement.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SEPARATED HALF-BALL DISJOINTNESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CENTERED BALL BOUNDED ENLARGEMENT",
       :acceptance
       {:fixture
-       {:path "/tmp/SeparatedBallsDisjointProbe.lean",
+       {:path "/tmp/CenteredBallBoundedEnlargementProbe.lean",
         :sha256
-        "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"},
-       :declarations ["pairwiseDisjoint_ball_half_of_separated"],
+        "491075d2110992575e1958f60f3c08b8ab8be4abb4ec6a5560c7737b55d8bbf6"},
+       :declarations
+       ["ball_subset_ball_enlargement_of_center_mem_closedBall"],
        :consumer-residual
-       "one maximal separated-family construction, bounded-enlargement containment, and Taylor/volume exponent estimate before local rank reduction",
+       "one maximal separated-family construction and finite-dimensional packing/Taylor exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a finite family of centers in a pseudometric space whose distinct members are at distance at least r",
+       "a center x in the closed radius-R ball about z and an open radius-ρ ball about x in a pseudometric space",
        :target
-       "pairwise disjointness of the open balls of radius r/2 around those centers"},
-      :id :critical-value-sard-separated-half-balls-disjoint-1,
+       "containment of that ball in the open radius-(R+ρ) ball about z"},
+      :id :critical-value-sard-centered-ball-bounded-enlargement-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the finite packing estimate has not yet converted separation of source centers into pairwise disjointness of their half-radius balls",
+      "the separated-ball packing estimate lacks a promoted containment of all small packing balls in one bounded ambient enlargement",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The banked packing cardinality inequality consumes pairwise-disjoint measurable sets, while a source packing is naturally specified by separation of its centers. One independently compilable geometric prerequisite converts an r-separated finite family into pairwise-disjoint open balls of radius r/2 using the metric ball-disjointness theorem. Banking it removes the separation-to-disjointness step from the remaining finite-dimensional packing construction.",
+     "The banked packing-cardinality theorem also requires containment of the disjoint small balls in one ambient set of controlled measure. One independently compilable metric prerequisite shows that every radius-ρ ball centered in the closed radius-R ball about z lies in the radius-(R+ρ) ball about z. This supplies the bounded enlargement whose exact finite-dimensional volume forms the numerator of the polynomial packing estimate.",
      :commands
      [{:cmd
-       "rg -n 'disjoint.*ball|ball.*disjoint|Disjoint.*ball|dist.*two_mul.*ball|two_mul.*dist.*Disjoint' .lake/packages/mathlib/Mathlib/Topology .lake/packages/mathlib/Mathlib/Geometry -g '*.lean'",
-       :exit 0}
-      {:cmd "lake env lean /tmp/SeparatedBallsDisjointProbe.lean",
+       "lake env lean /tmp/CenteredBallBoundedEnlargementProbe.lean",
        :exit 0,
        :output
-       "'pairwiseDisjoint_ball_half_of_separated' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SeparatedBallsDisjointProbe.lean",
+       "'ball_subset_ball_enlargement_of_center_mem_closedBall' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/CenteredBallBoundedEnlargementProbe.lean",
        :exit 0,
        :output
-       "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"}
+       "491075d2110992575e1958f60f3c08b8ab8be4abb4ec6a5560c7737b55d8bbf6"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/SeparatedBallsDisjointProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/CenteredBallBoundedEnlargementProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/SeparatedBallsDisjointProbe.lean",
+     {:path "/tmp/CenteredBallBoundedEnlargementProbe.lean",
       :sha256
-      "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"},
+      "491075d2110992575e1958f60f3c08b8ab8be4abb4ec6a5560c7737b55d8bbf6"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3597,7 +3627,8 @@
     :critical-value-sard-finite-cover-cardinality-measure-1
     :critical-value-sard-finite-dimensional-ball-volume-1
     :critical-value-sard-finite-packing-cardinality-bound-1
-    :critical-value-sard-separated-half-balls-disjoint-1],
+    :critical-value-sard-separated-half-balls-disjoint-1
+    :critical-value-sard-centered-ball-bounded-enlargement-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
