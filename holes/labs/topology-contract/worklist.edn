@@ -5237,8 +5237,63 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if this compiled NNReal geometric-scale theorem cannot be promoted with its positivity, contraction, finiteness, and exact ofReal-power conclusion or without adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Compose the maximal-separated cover, Taylor target-cover measure bound, raw exponent normalization, and this scale choice into the complete quantitative small-image-measure theorem.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardNNRealGeometricScaleToleranceProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardNNRealGeometricScaleToleranceProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardNNRealGeometricScaleTolerance.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardNNRealGeometricScaleTolerance.lean ConstructionTargets/SardNNRealGeometricScaleTolerance.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard NNReal geometric scale tolerance'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "d266fc3dbae8db53a40d95b97c2dbd24d2c875e8",
+    :changed-paths
+    ["ConstructionTargets/SardNNRealGeometricScaleTolerance.lean"
+     "ConstructionTargets/SardNNRealGeometricScaleTolerance.md"],
+    :fixture
+    {:path "/tmp/SardNNRealGeometricScaleToleranceProbe.lean",
+     :sha256
+     "bd6715b3f47ce948cc2e47cdbe040593640a4b9c70e4a52250b500c55fa7d584"},
+    :declarations ["ENNReal.exists_nnreal_geometric_scale_pow_lt"],
+    :dependencies
+    [{:id :critical-value-sard-positive-power-tolerance-1,
+      :commit "3a4b14bb5256a43ba2a911c9490702d43e230819"}],
+    :hashes
+    {:lean
+     "bd6715b3f47ce948cc2e47cdbe040593640a4b9c70e4a52250b500c55fa7d584",
+     :markdown
+     "38f9e53e1b183c9c76a90812f031afaac95167c083548fc1f0e435ffe90f16f7",
+     :statement
+     "4daa5d6e170419068d68006f4f1fad22b5dbc8917e8b5ad17d43fa25920d6272"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardNNRealGeometricScaleTolerance.lean"
     "ConstructionTargets/SardNNRealGeometricScaleTolerance.md"],
