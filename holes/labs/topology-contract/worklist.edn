@@ -11727,8 +11727,75 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled least-nonzero-jet decomposition cannot be promoted with its exact lower-order vanishing predicate, finite Icc 1 k indexing, flatThrough complement, image-nullity aggregation, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "For each first-nonzero-jet locus, use its lower-jet vanishing to place a local piece in the exact scalarized-jet level hypersurface, apply kernel-parameter source-dimension induction and local-nullity aggregation, then supply Taylor-flat nullity.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"firstNonzeroJetLocus"
+     "39f04288d9e34e59fed52046ec0b654a6cfa8d41c766b8967abb0095f8b7e32b",
+     "eq_flatThrough_union_iUnion_firstNonzeroJetLocus"
+     "984d7ef8d6e9daa5674bab777d3ff5b60348d3807d054c564a22911ddc3e5982",
+     "image_null_of_flatThrough_and_firstNonzeroJetLoci"
+     "cd4f9469db9840d12d47e35ff3bce93d35cb51377a5f417680589d65c4eeb352"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean && cmp -s /tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardFirstNonzeroJetLocusDecomposition",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 104 items OK; {:done 95, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Compile first-nonzero-jet locus decomposition'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "af1132e88c3ec596edcd6f0b483cbf723f942493",
+    :changed-paths
+    ["ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean"
+     "ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean"
+     "bd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce",
+     "ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.md"
+     "ff0041aa973020d32b47db055ab877d7ddfc6c089c04b6fc21cb9a0df42e36d7"},
+    :fixture
+    {:path "/tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean",
+     :sha256
+     "bd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce"},
+    :declarations
+    ["SardFirstNonzeroJetLocusDecompositionProbe.firstNonzeroJetLocus"
+     "SardFirstNonzeroJetLocusDecompositionProbe.eq_flatThrough_union_iUnion_firstNonzeroJetLocus"
+     "SardFirstNonzeroJetLocusDecompositionProbe.image_null_of_flatThrough_and_firstNonzeroJetLoci"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean"
     "ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.md"],
