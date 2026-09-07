@@ -11458,6 +11458,40 @@
    "The complete transfer from lower-dimensional composite critical-image nullity to localized original critical-image nullity is compiled; source-dimension induction instantiation and stratum aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled second-countable local-nullity aggregation theorem cannot be promoted with its exact pointwise open-neighborhood hypotheses, restricted-image nullity, arbitrary source set and target measure, countable-subcover construction, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardLocalNullitySecondCountableAggregation.lean"
+    "ConstructionTargets/SardLocalNullitySecondCountableAggregation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SECOND-COUNTABLE LOCAL NULLITY AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
+     :sha256
+     "2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a"},
+    :declarations ["image_null_of_locally_image_null"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "For each point of every nonzero-jet stratum, instantiate the exact kernel chart, source-dimension induction, and parameterized critical-image transfer to obtain a null local image; then apply this aggregation theorem and combine all jet orders with the Taylor-flat locus."},
+   :representation
+   {:source
+    "A set s in a second-countable topological space E, a map f:E→F, and an assigned open neighborhood U x containing every x∈s such that μ(f''(s∩U x))=0.",
+    :target
+    "Zero μ-measure of f''s for an arbitrary measure μ on F, obtained through a countable neighborhood subcover."},
+   :id
+   :critical-value-sard-local-nullity-second-countable-aggregation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-parameterized-critical-image-nullity-1
+    :critical-value-sard-countable-aggregation-1],
+   :current-residual
+   "Pointwise local nullity now aggregates over a full nonzero-jet stratum in second-countable sources; local induction instantiation and finite jet/Taylor-flat aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -11515,63 +11549,65 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled parameterized localized-critical-image nullity theorem cannot be promoted with its exact differentiability hypotheses, nonsurjective `fderiv` predicates, full critical image of the composite, localized parameterized-set inclusion, general target measure, or standard-axiom profile.",
+      "Stop only if the compiled second-countable local-nullity aggregation theorem cannot be promoted with its exact pointwise open-neighborhood hypotheses, restricted-image nullity, arbitrary source set and target measure, countable-subcover construction, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardParameterizedCriticalImageNullity.lean"
-       "ConstructionTargets/SardParameterizedCriticalImageNullity.md"],
+      ["ConstructionTargets/SardLocalNullitySecondCountableAggregation.lean"
+       "ConstructionTargets/SardLocalNullitySecondCountableAggregation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PARAMETERIZED LOCAL CRITICAL-IMAGE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SECOND-COUNTABLE LOCAL NULLITY AGGREGATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardParameterizedCriticalImageNullityProbe.lean",
+       {:path
+        "/tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
         :sha256
-        "bfa065f84b45447c8d1ba88226705b74be74f6c377a7980ece983768e42a1519"},
-       :declarations ["localizedCriticalImage_null_of_parameterized"],
+        "2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a"},
+       :declarations ["image_null_of_locally_image_null"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Supply lower-dimensional critical-image nullity for each scalarized-jet kernel composite from the source-dimension induction hypothesis, instantiate this transfer theorem on each local stratum, and aggregate with the Taylor-flat locus."},
+       "For each point of every nonzero-jet stratum, instantiate the exact kernel chart, source-dimension induction, and parameterized critical-image transfer to obtain a null local image; then apply this aggregation theorem and combine all jet orders with the Taylor-flat locus."},
       :representation
       {:source
-       "Differentiable maps f:E→F and g:G→E on s⊆G, a localized original set t⊆g''s consisting of nonsurjective-`fderiv` points of f, and zero μ-measure of the full critical image of f∘g.",
+       "A set s in a second-countable topological space E, a map f:E→F, and an assigned open neighborhood U x containing every x∈s such that μ(f''(s∩U x))=0.",
        :target
-       "Zero μ-measure of f''t for an arbitrary measure μ on F."},
-      :id :critical-value-sard-parameterized-critical-image-nullity-1,
+       "Zero μ-measure of f''s for an arbitrary measure μ on F, obtained through a countable neighborhood subcover."},
+      :id
+      :critical-value-sard-local-nullity-second-countable-aggregation-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-parameterized-image-nullity-transfer-1
-       :critical-value-sard-critical-set-under-parameterization-1],
+      [:critical-value-sard-parameterized-critical-image-nullity-1
+       :critical-value-sard-countable-aggregation-1],
       :current-residual
-      "The complete transfer from lower-dimensional composite critical-image nullity to localized original critical-image nullity is compiled; source-dimension induction instantiation and stratum aggregation remain.",
+      "Pointwise local nullity now aggregates over a full nonzero-jet stratum in second-countable sources; local induction instantiation and finite jet/Taylor-flat aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture combines the compiled critical-set transport and parameterized-image transfer into the exact induction-application lemma: nullity of the full critical image of the lower-dimensional composite implies nullity of any localized original critical set contained in the parameterized image. This isolates the remaining mathematical input to the source-dimension induction hypothesis itself, followed by local and jet-stratum aggregation.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next aggregation bridge: in a second-countable source, if every point of a set has an open neighborhood whose restricted image is null, then the image of the entire set is null. The proof extracts a countable subcover via hereditary Lindelöfness and applies countable null-union aggregation. This converts pointwise kernel-chart induction results into nullity of a full nonzero-jet stratum; constructing those local hypotheses and combining all jet orders with the Taylor-flat locus remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardParameterizedCriticalImageNullityProbe.lean",
+       "lake env lean /tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardParameterizedCriticalImageNullityProbe.lean",
+       "sha256sum /tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
        :exit 0,
        :output
-       "bfa065f84b45447c8d1ba88226705b74be74f6c377a7980ece983768e42a1519  /tmp/SardParameterizedCriticalImageNullityProbe.lean"}
+       "2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a  /tmp/SardLocalNullitySecondCountableAggregationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardParameterizedCriticalImageNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 100 items OK; {:done 92, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 101 items OK; {:done 93, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardParameterizedImageNullityTransfer.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardParameterizedCriticalImageNullity.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\ndf10483419d334c06e617afcea21a471eb4907c10d3a8fd8b0598063d4627251  ConstructionTargets/SardParameterizedImageNullityTransfer.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nbfa065f84b45447c8d1ba88226705b74be74f6c377a7980ece983768e42a1519  ConstructionTargets/SardParameterizedCriticalImageNullity.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -11582,12 +11618,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardParameterizedCriticalImageNullityProbe.lean",
+     {:path
+      "/tmp/SardLocalNullitySecondCountableAggregationProbe.lean",
       :sha256
-      "bfa065f84b45447c8d1ba88226705b74be74f6c377a7980ece983768e42a1519"},
+      "2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -11636,7 +11673,8 @@
     :critical-value-sard-criticality-under-parameterization-1
     :critical-value-sard-critical-set-under-parameterization-1
     :critical-value-sard-parameterized-image-nullity-transfer-1
-    :critical-value-sard-parameterized-critical-image-nullity-1],
+    :critical-value-sard-parameterized-critical-image-nullity-1
+    :critical-value-sard-local-nullity-second-countable-aggregation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
