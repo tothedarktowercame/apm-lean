@@ -9145,6 +9145,40 @@
    "The local hypersurface chart now has a compiled exact one-dimensional source-dimension drop; applying the induction hypothesis to obtain nonzero-jet stratum nullity and aggregating strata remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled strict source-dimension drop cannot be promoted with its exact Module.finrank inequality, nonzero-direction hypothesis, scalarized fixed-direction iteratedFDeriv specialization, Fin.cons order, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean"
+    "ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALAR DERIVATIVE KERNEL DIMENSION DROP",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardScalarDerivativeKernelDimensionDropProbe.lean",
+     :sha256
+     "ce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f"},
+    :declarations
+    ["ContinuousLinearMap.finrank_ker_lt_of_apply_ne_zero"
+     "finrank_ker_fderiv_scalar_fixedDirections_lt"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Transport the localized nonzero-jet stratum map through the compiled chart to the strictly lower-dimensional derivative kernel, apply the source-dimension induction hypothesis there, and aggregate its null image with the Taylor-flat locus."},
+   :representation
+   {:source
+    "A finite-dimensional real source and scalar derivative kernel with the compiled codimension-one equality, specialized to the exact scalarized fixed-direction jet derivative under the selected nonzero next-jet hypothesis.",
+    :target
+    "Module.finrank ℝ ker L < Module.finrank ℝ E, preserving general F, ℓ, iteratedFDeriv, and Fin.cons h v, so the kernel is admissible for well-founded source-dimension induction."},
+   :id :critical-value-sard-scalar-derivative-kernel-dimension-drop-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-scalar-derivative-kernel-dimension-1],
+   :current-residual
+   "The scalarized local chart now carries the exact strict source-dimension decrease; chartwise transport of the nonzero-jet stratum and inductive nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -9202,66 +9236,68 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled codimension-one derivative-kernel theorem cannot be promoted with its exact nonzero-direction hypothesis, Module.finrank equality, scalarized fixed-direction iteratedFDeriv specialization, Fin.cons order, or standard-axiom profile.",
+      "Stop only if the compiled strict source-dimension drop cannot be promoted with its exact Module.finrank inequality, nonzero-direction hypothesis, scalarized fixed-direction iteratedFDeriv specialization, Fin.cons order, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardScalarDerivativeKernelDimension.lean"
-       "ConstructionTargets/SardScalarDerivativeKernelDimension.md"],
+      ["ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean"
+       "ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALAR DERIVATIVE KERNEL DIMENSION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALAR DERIVATIVE KERNEL DIMENSION DROP",
       :acceptance
       {:fixture
-       {:path "/tmp/SardScalarDerivativeKernelDimensionProbe.lean",
+       {:path "/tmp/SardScalarDerivativeKernelDimensionDropProbe.lean",
         :sha256
-        "2ea8a9fb5a58d308b90127ef916526de8bcbf89b9aaac9edb37499f5ebf16ae0"},
+        "ce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f"},
        :declarations
-       ["ContinuousLinearMap.finrank_ker_add_one_of_apply_ne_zero"
-        "finrank_ker_fderiv_scalar_fixedDirections_add_one"],
+       ["ContinuousLinearMap.finrank_ker_lt_of_apply_ne_zero"
+        "finrank_ker_fderiv_scalar_fixedDirections_lt"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use the codimension-one kernel equality with the compiled local chart to invoke the source-dimension induction hypothesis on each nonzero-jet hypersurface, then prove stratum nullity and aggregate with the Taylor-flat locus."},
+       "Transport the localized nonzero-jet stratum map through the compiled chart to the strictly lower-dimensional derivative kernel, apply the source-dimension induction hypothesis there, and aggregate its null image with the Taylor-flat locus."},
       :representation
       {:source
-       "A finite-dimensional real source E and scalar continuous linear map L nonzero on h, specialized to L=fderiv ℝ (fun y↦ℓ(iteratedFDeriv ℝ i f y v)) x under ContDiff ℝ (i+1) and the exact nonzero scalar next-jet hypothesis.",
+       "A finite-dimensional real source and scalar derivative kernel with the compiled codimension-one equality, specialized to the exact scalarized fixed-direction jet derivative under the selected nonzero next-jet hypothesis.",
        :target
-       "Module.finrank ℝ ker L + 1 = Module.finrank ℝ E, preserving the general target F, selected functional ℓ, iteratedFDeriv, and Fin.cons h v representations."},
-      :id :critical-value-sard-scalar-derivative-kernel-dimension-1,
+       "Module.finrank ℝ ker L < Module.finrank ℝ E, preserving general F, ℓ, iteratedFDeriv, and Fin.cons h v, so the kernel is admissible for well-founded source-dimension induction."},
+      :id
+      :critical-value-sard-scalar-derivative-kernel-dimension-drop-1,
       :kind :reusable-theorem,
-      :depends-on [:critical-value-sard-scalarized-jet-local-chart-1],
+      :depends-on
+      [:critical-value-sard-scalar-derivative-kernel-dimension-1],
       :current-residual
-      "The local hypersurface chart now has a compiled exact one-dimensional source-dimension drop; applying the induction hypothesis to obtain nonzero-jet stratum nullity and aggregating strata remain.",
+      "The scalarized local chart now carries the exact strict source-dimension decrease; chartwise transport of the nonzero-jet stratum and inductive nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture proves the exact dimension decrease required by source induction: a scalar continuous linear map nonzero on one direction has kernel finrank plus one equal to source finrank, and the theorem specializes directly to the scalarized fixed-direction jet derivative under the exact nonzero Fin.cons next-jet hypothesis.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture converts the exact codimension-one equality into the strict Module.finrank inequality required by well-founded source-dimension induction, and specializes it without changing the scalarized fixed-direction iteratedFDeriv or Fin.cons representation.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardScalarDerivativeKernelDimensionProbe.lean",
+       "lake env lean /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardScalarDerivativeKernelDimensionProbe.lean",
+       "sha256sum /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean",
        :exit 0,
        :output
-       "2ea8a9fb5a58d308b90127ef916526de8bcbf89b9aaac9edb37499f5ebf16ae0  /tmp/SardScalarDerivativeKernelDimensionProbe.lean"}
+       "ce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f  /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardScalarDerivativeKernelDimensionProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "rg -n 'finrank_ker_add_one_of_ne_zero|finrank_range_add_finrank_ker' .lake/packages/mathlib/Mathlib/LinearAlgebra/Dual/Lemmas.lean .lake/packages/mathlib/Mathlib/LinearAlgebra/FiniteDimensional/Lemmas.lean",
+       "rg -n 'finrank_ker_fderiv_scalar_fixedDirections_add_one|finrank_ker_add_one_of_apply_ne_zero' ConstructionTargets/SardScalarDerivativeKernelDimension.lean",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 84 items OK; {:done 76, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 85 items OK; {:done 77, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardScalarizedJetLocalChart.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardScalarDerivativeKernelDimension.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nb4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3  ConstructionTargets/SardScalarizedJetLocalChart.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n2ea8a9fb5a58d308b90127ef916526de8bcbf89b9aaac9edb37499f5ebf16ae0  ConstructionTargets/SardScalarDerivativeKernelDimension.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -9273,12 +9309,12 @@
        :exit 0,
        :output ""}],
      :fixture
-     {:path "/tmp/SardScalarDerivativeKernelDimensionProbe.lean",
+     {:path "/tmp/SardScalarDerivativeKernelDimensionDropProbe.lean",
       :sha256
-      "2ea8a9fb5a58d308b90127ef916526de8bcbf89b9aaac9edb37499f5ebf16ae0"},
+      "ce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -9311,7 +9347,8 @@
     :critical-value-sard-nonzero-scalar-implicit-function-data-1
     :critical-value-sard-scalarized-jet-strict-derivative-1
     :critical-value-sard-scalarized-jet-local-chart-1
-    :critical-value-sard-scalar-derivative-kernel-dimension-1],
+    :critical-value-sard-scalar-derivative-kernel-dimension-1
+    :critical-value-sard-scalar-derivative-kernel-dimension-drop-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
