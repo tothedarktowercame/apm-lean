@@ -7158,8 +7158,68 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled residual-flatness theorem cannot be promoted against Mathlib's exact ImplicitFunctionData.implicitFunction, basepoint identity, derivative formula, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct this implicit-function datum at every point of the exact-rank local upper locus, combine neighborhood residual flatness with the theorem at each kernel-coordinate basepoint, and apply the quantitative Taylor-cover nullity theorem to the resulting flat slices before assembling rank/source-dimension induction.",
+    :gates
+    {:fixture-hash-matched true,
+     :fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
+      :exit 0,
+      :output
+      "34864be4dc2102aac0d4509c79250929837cac269d1a725d2561f3cd10fd56d7  /tmp/SardImplicitFunctionResidualFlatnessProbe.lean"}
+     {:cmd
+      "lake env lean /tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/SardImplicitFunctionResidualFlatnessProbe.lean ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionResidualFlatness.lean ConstructionTargets/SardImplicitFunctionResidualFlatness.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add Sard implicit-function residual flatness'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "7bf5c67bafce92895f258ec8714639fea16cf554",
+    :changed-paths
+    ["ConstructionTargets/SardImplicitFunctionResidualFlatness.lean"
+     "ConstructionTargets/SardImplicitFunctionResidualFlatness.md"],
+    :fixture
+    {:path "/tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
+     :sha256
+     "34864be4dc2102aac0d4509c79250929837cac269d1a725d2561f3cd10fd56d7"},
+    :declarations
+    ["SardImplicitFunctionResidualFlatnessProbe.hasFDerivAt_residual_comp_implicitFunction_zero"],
+    :hashes
+    {:lean
+     "34864be4dc2102aac0d4509c79250929837cac269d1a725d2561f3cd10fd56d7",
+     :markdown
+     "fcc34afa1edf970841a6c0c173e1d4ab7150086156023e9d2ebe783750f7ac61",
+     :statement
+     "86e89d048e62e69532441f2f22d2921379b77cb2bdf9b5253b4486a610d00a76"},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardImplicitFunctionResidualFlatness.lean"
     "ConstructionTargets/SardImplicitFunctionResidualFlatness.md"],
