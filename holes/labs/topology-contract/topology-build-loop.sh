@@ -120,7 +120,6 @@ wait_job() {
 dispatch_and_wait() {
   local seat="$1" prompt="$2" label="$3" row="$4" response job token augmented
   valid_seat "$seat" || die "invalid regular seat: $seat"
-  curl -fsS "$AGENCY/api/alpha/agents/$seat" | jq -e '.ok == true' >/dev/null || die "seat is not registered: $seat"
   token="$(printf '%s-%s-%s' "$row" "$(date +%s%N)" "$RANDOM" | sha256sum | cut -c1-24)"
   augmented="$(mktemp)"
   { cat "$prompt"; printf '\nReturn the result in THIS invoke job final response; do not bell, whistle, or open a separate reply thread. Your final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nDo not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
@@ -182,6 +181,69 @@ fi
 resume_inflight
 repository_safe
 send_notice "campaign started or resumed"
+
+# --- seat resolution ------------------------------------------------------
+# Joe, 2026-09-07: "knowing which entities are registered would not be hard.
+# And then if one isn't registered, it wouldn't be used. And if not enough
+# Codex agents were available, a new one could be registered. But stopping it
+# and requiring a human intervention to get it unstuck for picking the
+# incorrect pre-registered Codex agent is a bit strange to say the least."
+#
+# The loop used to check registration at DISPATCH time and die. That turned a
+# stale seat name into a hard stop mid-campaign: on 2026-09-07 it stopped at
+# 64 of 74 rows on "seat is not registered: codex-20" -- a seat that had worked
+# on 2026-09-02 and was lost when the futon3c JVM restarted. The defaults in
+# this file (codex-12, codex-20) had gone stale the same way, so any run
+# started without seat env inherited the fault.
+#
+# Seats are now resolved ONCE, before any work: a configured seat that is
+# registered is used as-is; one that is not is replaced from the registered
+# pool; and if the pool cannot fill a distinct role, a fresh seat is registered
+# via POST /api/alpha/agents/auto. Dying is reserved for the case where the
+# Agency itself will not give us a seat -- a substrate failure, not a typo.
+seat_registered() {
+  curl -fsS --max-time 10 "$AGENCY/api/alpha/agents/$1" 2>/dev/null \
+    | jq -e '.ok == true' >/dev/null 2>&1
+}
+registered_codex_seats() {
+  curl -fsS --max-time 15 "$AGENCY/api/alpha/agents" 2>/dev/null \
+    | jq -r '(.agents // .) | if type=="object" then [.[]] else . end
+             | .[] | ."id"."id/value" // empty' 2>/dev/null \
+    | grep -E '^codex-[0-9]+$' | sort -u
+}
+register_new_codex_seat() {
+  curl -fsS --max-time 30 -X POST "$AGENCY/api/alpha/agents/auto" \
+    -H 'Content-Type: application/json' -d '{"type":"codex"}' 2>/dev/null \
+    | jq -r '."agent-id" // .id // empty' 2>/dev/null
+}
+# resolve_seat NAME CONFIGURED ALREADY_TAKEN...
+resolve_seat() {
+  local name="$1" want="$2"; shift 2
+  local taken=" $* "
+  if [ -n "$want" ] && seat_registered "$want" && [[ "$taken" != *" $want "* ]]; then
+    printf '%s' "$want"; return 0
+  fi
+  local why="not registered"
+  [[ "$taken" == *" $want "* ]] && why="already used by another role"
+  local cand
+  for cand in $(registered_codex_seats); do
+    [[ "$taken" == *" $cand "* ]] && continue
+    log "seat $name: $want is $why; using registered $cand instead" >&2
+    printf '%s' "$cand"; return 0
+  done
+  local fresh; fresh="$(register_new_codex_seat)"
+  if [ -n "$fresh" ] && [ "$fresh" != "null" ]; then
+    log "seat $name: no free registered seat; registered $fresh" >&2
+    printf '%s' "$fresh"; return 0
+  fi
+  die "seat $name: $want is $why and the Agency would not allocate a replacement"
+}
+OWNER="$(resolve_seat OWNER "$OWNER")"
+REVIEW_SEAT="$(resolve_seat REVIEW "$REVIEW_SEAT" "$OWNER")"
+AUTHOR_SEAT="$(resolve_seat AUTHOR "$AUTHOR_SEAT" "$REVIEW_SEAT")"
+PROBE_SEAT="$(resolve_seat PROBE "$PROBE_SEAT" "$REVIEW_SEAT")"
+STRATEGY_SEAT="$(resolve_seat STRATEGY "$STRATEGY_SEAT" "$REVIEW_SEAT")"
+log "seats resolved: owner=$OWNER review=$REVIEW_SEAT author=$AUTHOR_SEAT probe=$PROBE_SEAT strategy=$STRATEGY_SEAT"
 
 [ "$AUTHOR_SEAT" != "$REVIEW_SEAT" ] || die "author and reviewer seats are identical"
 [ "$PROBE_SEAT" != "$REVIEW_SEAT" ] || die "probe and reviewer seats are identical"
