@@ -3831,6 +3831,25 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :axiom-policy :standard-only,
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788787422929-13706-84ba809a",
+     :commands
+     ["git show --stat --oneline c13fed8dce376a7652af69996b9cc96fca002495"
+      "git diff-tree --no-commit-id --name-status -r c13fed8d"
+      "git diff-tree --check c13fed8d^ c13fed8d"
+      "git show c13fed8d:ConstructionTargets/SardSeparatedENNRealToRealDist.lean | sha256sum"
+      "git show c13fed8d:ConstructionTargets/SardSeparatedENNRealToRealDist.md | sha256sum"
+      "sha256sum /tmp/SeparatedENNRealToDistProbe.lean"
+      "sed -n '6,11p' /tmp/SeparatedENNRealToDistProbe.lean | sha256sum"
+      "lake env lean ConstructionTargets/SardSeparatedENNRealToRealDist.lean"
+      "lake env lean /tmp/SeparatedENNRealToDistProbe.lean"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardSeparatedENNRealToRealDist.lean ConstructionTargets/SardSeparatedENNRealToRealDist.md /tmp/SeparatedENNRealToDistProbe.lean"
+      "git show c13fed8d^:problems/t93A04/lean/Main.lean | sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: commit c13fed8d has exact two-file scope and matching artifact, fixture, and statement hashes; both Lean gates compile with only propext, Classical.choice, and Quot.sound; the theorem correctly specializes ENNReal IsSeparated on the finite center image and converts ε < edist to the downstream lower bound (ε : Real) ≤ dist for distinct center images, preserves the representation boundary, introduces no placeholders, and leaves frozen t93A04 unchanged with one theorem and one placeholder."},
     :commit "c13fed8dce376a7652af69996b9cc96fca002495",
     :changed-paths
     ["ConstructionTargets/SardSeparatedENNRealToRealDist.lean"
@@ -3847,7 +3866,7 @@
     :declarations ["IsSeparated.real_dist_le"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardSeparatedENNRealToRealDist.lean"
     "ConstructionTargets/SardSeparatedENNRealToRealDist.md"],
@@ -3942,7 +3961,7 @@
       "c96e28732dab2512194bf6f847f195a987a4edade2a049626ad156ad062bfad0"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
