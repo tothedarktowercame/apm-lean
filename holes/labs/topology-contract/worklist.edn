@@ -4875,8 +4875,71 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if this compiled maximal-separated cover and cardinality theorem cannot be promoted without changing its compactness, separation, boundedness, or volume-constant hypotheses or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Apply Taylor control on every covered source ball, bound the finite union of target-ball volumes, cancel source dimension against Taylor exponent, and choose a geometric scale using the positive-power tolerance theorem.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardMaximalSeparatedFiniteDimensionalCoverProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardMaximalSeparatedFiniteDimensionalCoverProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.lean ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add Sard maximal-separated cover cardinality'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "3c66f413a1057c181ef027e9336e3339b0160a3a",
+    :changed-paths
+    ["ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.lean"
+     "ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.md"],
+    :fixture
+    {:path "/tmp/SardMaximalSeparatedFiniteDimensionalCoverProbe.lean",
+     :sha256
+     "6416bd55a709b2c9043205f62bf7c02865fbb305bd338d506dc36289b2ab5167"},
+    :declarations
+    ["exists_finiteDimensional_maximalSeparated_cover_card_le"],
+    :dependencies
+    [{:id :critical-value-sard-maximal-separated-finset-cover-1,
+      :commit "0f2f06fa"}
+     {:id :critical-value-sard-compact-packing-number-finite-1,
+      :commit "14bad3e9"}
+     {:id :critical-value-sard-separated-ennreal-to-real-dist-1,
+      :commit "c13fed8d"}
+     {:id
+      :critical-value-sard-finite-dimensional-packing-cover-bound-1,
+      :commit "95584b6b"}],
+    :hashes
+    {:lean
+     "6416bd55a709b2c9043205f62bf7c02865fbb305bd338d506dc36289b2ab5167",
+     :markdown
+     "77f60a8dd0661971cbe1224e08c202c644b9f46853d2e1adb5915257b5891c0e",
+     :statement
+     "73dd95ee748a08041451c32cf0e8f09441edbc4953ed2ee77d536f8dcc3017eb"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.lean"
     "ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.md"],
