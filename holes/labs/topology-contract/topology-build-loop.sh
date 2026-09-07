@@ -58,9 +58,32 @@ trap 'on_signal HUP' HUP
 validate() { bb "$HERE/worklist_check.bb" "$LEDGER" >> "$LOG" 2>&1 || die "ledger validation failed"; }
 repository_safe() {
   [ "$(readlink -f "$ROOT/.lake/packages")" = "/home/joe/code/apm-lean/.lake/packages" ] || die "wrong package authority"
-  if [ "${TOPOLOGY_ALLOW_DIRTY:-0}" != 1 ] && [ -n "$(git -C "$ROOT" status --porcelain --untracked-files=no)" ]; then
-    die "canonical tracked worktree is dirty"
-  fi
+  [ "${TOPOLOGY_ALLOW_DIRTY:-0}" = 1 ] && return 0
+  # A dirty tree means SOMEONE ELSE is mid-write, and this loop is not the only
+  # committer on master: apm-land-certified.timer promotes certified solver
+  # proofs here every 30 minutes, and a frame's own end-of-frame commits land
+  # here too. Each holds the tree dirty for a second or two between `git
+  # checkout <branch> -- <file>` and `git commit`.
+  #
+  # Dying on that is wrong twice over. It stops a long-running supervisor for a
+  # condition that clears itself, and it stops it AFTER the landing has already
+  # succeeded -- on 2026-09-07 the loop was killed at 19:02:52 by a landing that
+  # committed cleanly seconds later, and nothing restarted it. A transient
+  # sibling write is a reason to wait, not a reason to stop.
+  #
+  # Still fail closed: a tree left dirty by an abandoned edit is a real hazard
+  # to a loop that commits, so give it a bounded wait and then die as before.
+  local waited=0
+  while [ -n "$(git -C "$ROOT" status --porcelain --untracked-files=no)" ]; do
+    if [ "$waited" -ge "${DIRTY_WAIT_SECONDS:-60}" ]; then
+      die "canonical tracked worktree is dirty (still dirty after ${waited}s)"
+    fi
+    [ "$waited" = 0 ] && log "canonical worktree dirty; waiting for the other writer"
+    sleep 5
+    waited=$((waited + 5))
+  done
+  [ "$waited" -gt 0 ] && log "canonical worktree clean after ${waited}s; continuing"
+  return 0
 }
 job_json() {
   local job="$1" try=1 body
