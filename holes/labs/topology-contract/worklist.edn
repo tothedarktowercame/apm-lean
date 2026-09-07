@@ -9147,8 +9147,71 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled strict source-dimension drop cannot be promoted with its exact Module.finrank inequality, nonzero-direction hypothesis, scalarized fixed-direction iteratedFDeriv specialization, Fin.cons order, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Transport the localized nonzero-jet stratum map through the compiled chart to the strictly lower-dimensional derivative kernel, apply the source-dimension induction hypothesis there, and aggregate its null image with the Taylor-flat locus.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:lean-source
+     "ce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f",
+     :declaration-block
+     "f807efbb4ee4f3f8981be99a77c9d792a66cd5b0c778751dc39f1d75498b4ef8",
+     :note
+     "b740dd0edef4ac4351957232219b0ffc219a84e9af191dc1618ecd011daea7a2"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean && cmp -s /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardScalarDerivativeKernelDimensionDrop",
+      :exit 0,
+      :output "Build completed successfully (8249 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 86 items OK; {:done 77, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :output
+      "ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean\nConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "62ae7cf96c1d56b559dea63f52a9f007f1463562",
+    :changed-paths
+    ["ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean"
+     "ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md"],
+    :fixture
+    {:path "/tmp/SardScalarDerivativeKernelDimensionDropProbe.lean",
+     :sha256
+     "ce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f"},
+    :declarations
+    ["ContinuousLinearMap.finrank_ker_lt_of_apply_ne_zero"
+     "finrank_ker_fderiv_scalar_fixedDirections_lt"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean"
     "ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md"],
