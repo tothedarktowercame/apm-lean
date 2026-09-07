@@ -6413,8 +6413,74 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled orthogonal derivative split cannot be promoted with its exact surjectivity, complementary-kernel, finite-dimensional real inner-product, or standard-axiom hypotheses.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use this split to construct ImplicitFunctionData for the derivative at an exact-rank point, instantiate local rank coordinates, and prove the residual coordinate derivative vanishes on the local rank-at-most-r fibre before applying Taylor-cover nullity.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardComplementedDerivativeSplitProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardComplementedDerivativeSplitProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardComplementedDerivativeSplit.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardComplementedDerivativeSplit.lean ConstructionTargets/SardComplementedDerivativeSplit.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardComplementedDerivativeSplitProbe.lean ConstructionTargets/SardComplementedDerivativeSplit.lean ConstructionTargets/SardComplementedDerivativeSplit.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem exists_complemented_derivative_split/,/^#print axioms/p' ConstructionTargets/SardComplementedDerivativeSplit.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardComplementedDerivativeSplit.lean ConstructionTargets/SardComplementedDerivativeSplit.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard complemented derivative split'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "72e86f78b96489184eb2ac899f5f224840deaa31",
+    :changed-paths
+    ["ConstructionTargets/SardComplementedDerivativeSplit.lean"
+     "ConstructionTargets/SardComplementedDerivativeSplit.md"],
+    :fixture
+    {:path "/tmp/SardComplementedDerivativeSplitProbe.lean",
+     :sha256
+     "1d8f45f62af856c349a6ae98a8c6b58a90fb5fa8356961e61a1ca1d91dc1e822"},
+    :declarations
+    ["SardComplementedDerivativeSplitProbe.exists_complemented_derivative_split"],
+    :dependencies
+    [{:id :critical-value-sard-exact-rank-local-upper-locus-1,
+      :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2"}
+     {:id :critical-value-sard-local-rank-normal-form-probe-2,
+      :commit "7bc80d8f72811affd71a70cf3396cc21964359af"}],
+    :hashes
+    {:lean
+     "1d8f45f62af856c349a6ae98a8c6b58a90fb5fa8356961e61a1ca1d91dc1e822",
+     :markdown
+     "d0fceefe16a4915c58443a7817f3148fb37c828b78a4980f58d195105d34e11e",
+     :statement
+     "9477bcd56d69ab85d0adb300f8388e4ffa57f8f6008f25e1508b6372455f60c5"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardComplementedDerivativeSplit.lean"
     "ConstructionTargets/SardComplementedDerivativeSplit.md"],
