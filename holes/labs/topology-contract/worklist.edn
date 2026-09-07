@@ -7335,9 +7335,52 @@
       :output
       "topology-worklist: 74 items OK; {:done 65, :open 1, :blocked 2, :superseded 6}"}],
     :author :codex-17,
-    :disposition :stop},
+    :disposition :stop,
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788810268662-14050-933fd6bd",
+     :commands
+     [{:cmd
+       "git blame -L 7305,7372 -- holes/labs/topology-contract/worklist.edn; git show ecc3cedc44a5602c56d767bcd0e88e0f0d52a5ae:holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "STOP evidence recorded by codex-17 in ledger commit ecc3cedc44a5602c56d767bcd0e88e0f0d52a5ae; scope is empty, so no implementation commit or fixture applies"}
+      {:cmd
+       "sed -n '1,180p' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean; sed -n '1,120p' ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+       :exit 0}
+      {:cmd
+       "rg -n 'hzero|hexp|smooth_flat_locus_image_volume_eq_zero|iteratedFDeriv' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean; rg -n 'hasFDerivAt_residual_comp_implicitFunction_zero|HasFDerivAt|hflat' ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean",
+       :exit 0,
+       :output
+       "Both declarations depend only on propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "lake env lean ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+       :exit 0,
+       :output
+       "Declaration depends only on propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 74 items OK; {:done 65, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; diff clean; worktree clean"}],
+     :finding
+     "PASS: reviewer codex-1 differs from STOP author codex-17. This is a read-only scheduling result with empty scope, hence no implementation fixture or changed-file hash exists to reproduce. The recorded boundary is exact: SardImplicitFunctionResidualFlatness yields only HasFDerivAt with derivative zero at one kernel-coordinate basepoint, whereas SardMultivariableTaylorCoveringNullity requires iteratedFDeriv vanishing for every order 1 through k at every point of the compact locus. First-order pointwise flatness cannot imply the required higher jets—a smooth quadratic already has zero first derivative and nonzero second derivative at the origin. Producing and decomposing the higher-jet strata is the rank/source-dimension induction itself, so the reported incompatible derivative-order seam satisfies the row's STOP condition without weakening hypotheses. Both inspected modules compile with standard axioms only; frozen t93A04 remains unchanged with one theorem and one placeholder."}},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
@@ -7374,7 +7417,7 @@
    :stop-condition
    "STOP only for a genuine counterexample or incompatible hypotheses for rectangular local-set Morse--Sard; otherwise REVISE with exactly one compiled prerequisite.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
