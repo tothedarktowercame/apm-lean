@@ -4999,8 +4999,74 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite target-cover and measure theorem cannot be promoted at its exact cover, Taylor-remainder, or finite-dimensional volume representation without adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Combine this target-volume estimate with the explicit maximal-separated cover cardinality bound, normalize real/ENNReal powers, cancel the source dimension against the Taylor exponent, and choose the scale using positive-power tolerance.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardTaylorFiniteTargetCoverMeasureProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardTaylorFiniteTargetCoverMeasureProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.lean ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add Sard Taylor finite target-cover measure'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "e76dd2d59b10ccc7a90ea790573f78951ab91780",
+    :changed-paths
+    ["ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.lean"
+     "ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.md"],
+    :fixture
+    {:path "/tmp/SardTaylorFiniteTargetCoverMeasureProbe.lean",
+     :sha256
+     "c7edd22c9df798f21e2876919848551d63ced055cc575d5c9c95046aac0416da"},
+    :declarations
+    ["finiteCover_taylor_image_measure_le_card_mul_ballVolume"],
+    :dependencies
+    [{:id
+      :critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1,
+      :commit "3c66f413"}
+     {:id :critical-value-sard-flat-taylor-ball-image-1,
+      :commit "ea7f0fe1"}
+     {:id :critical-value-sard-finite-cover-measure-bound-1,
+      :commit "8c2d71da"}
+     {:id :critical-value-sard-finite-cover-cardinality-measure-1,
+      :commit "9859d6cb"}
+     {:id :critical-value-sard-finite-dimensional-ball-volume-1,
+      :commit "bc9e1e3d"}],
+    :hashes
+    {:lean
+     "c7edd22c9df798f21e2876919848551d63ced055cc575d5c9c95046aac0416da",
+     :markdown
+     "2e02134c87ce8960e8e3429395a3f36f568bdaf9a2e4541d3210fd4745d33759",
+     :statement
+     "ea9b743f87ba19d7e8b99276bf339b92220406ba465f2dd35d3e3a21bca6bb05"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.lean"
     "ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.md"],
