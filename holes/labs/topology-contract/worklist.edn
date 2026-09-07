@@ -3422,75 +3422,101 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled separated-half-ball disjointness theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
+    "ConstructionTargets/SardSeparatedHalfBallsDisjoint.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SEPARATED HALF-BALL DISJOINTNESS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SeparatedBallsDisjointProbe.lean",
+     :sha256
+     "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"},
+    :declarations ["pairwiseDisjoint_ball_half_of_separated"],
+    :consumer-residual
+    "one maximal separated-family construction, bounded-enlargement containment, and Taylor/volume exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a finite family of centers in a pseudometric space whose distinct members are at distance at least r",
+    :target
+    "pairwise disjointness of the open balls of radius r/2 around those centers"},
+   :id :critical-value-sard-separated-half-balls-disjoint-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "the finite packing estimate has not yet converted separation of source centers into pairwise disjointness of their half-radius balls",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After the finite packing cardinality bound is banked, prove one quantitative theorem constructing a maximal radius-separated family in the bounded finite-dimensional source patch, bounding its cardinality through disjoint small-ball volumes, applying the Taylor target-ball estimate, and choosing the radius from the positive exponent difference; do not begin local rank reduction.",
+     "After separated half-ball disjointness is banked, prove one quantitative theorem constructing a maximal radius-separated family in the bounded finite-dimensional source patch, using its half-balls and the banked volume/cardinality bounds to obtain polynomial cover size, then applying the Taylor target-ball estimate and positive exponent inequality; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled finite packing cardinality inequality cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+      "Stop only if the compiled separated-half-ball disjointness theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFinitePackingCardinalityBound.lean"
-       "ConstructionTargets/SardFinitePackingCardinalityBound.md"],
+      ["ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
+       "ConstructionTargets/SardSeparatedHalfBallsDisjoint.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE PACKING CARDINALITY BOUND",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SEPARATED HALF-BALL DISJOINTNESS",
       :acceptance
       {:fixture
-       {:path "/tmp/FinitePackingCardinalityProbe.lean",
+       {:path "/tmp/SeparatedBallsDisjointProbe.lean",
         :sha256
-        "49f2fdfe1b5b6f8e003c13f57f6a2405d80b2393f1e01af5c19f78ac6488f488"},
-       :declarations ["finset_card_mul_le_measure_of_disjoint"],
+        "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"},
+       :declarations ["pairwiseDisjoint_ball_half_of_separated"],
        :consumer-residual
-       "one maximal-separated-set source-cover construction and Taylor/volume exponent estimate before local rank reduction",
+       "one maximal separated-family construction, bounded-enlargement containment, and Taylor/volume exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a finite pairwise-disjoint family of measurable subsets, each having measure at least v, whose union is contained in an ambient measurable-space subset B",
-       :target "the ENNReal inequality card(s) * v ≤ μ(B)"},
-      :id :critical-value-sard-finite-packing-cardinality-bound-1,
+       "a finite family of centers in a pseudometric space whose distinct members are at distance at least r",
+       :target
+       "pairwise disjointness of the open balls of radius r/2 around those centers"},
+      :id :critical-value-sard-separated-half-balls-disjoint-1,
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "the polynomial source-cover argument lacks a promoted bridge from disjoint equal-volume packing balls to a cardinality bound",
+      "the finite packing estimate has not yet converted separation of source centers into pairwise disjointness of their half-radius balls",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "Pinned Mathlib's covering-number machinery does not expose the required finite-dimensional polynomial radius bound directly. One independently compilable packing prerequisite remains: a finite pairwise-disjoint family of measurable sets, each with measure at least v and whose union lies in B, has cardinality times v at most measure B. This is the measure-theoretic counting step used to bound a maximal separated family of source-ball centers. Banking it leaves the geometric construction of the separated family, containment of its disjoint small balls in a bounded enlargement, and the resulting radius-exponent calculation as one coherent quantitative theorem.",
+     "The banked packing cardinality inequality consumes pairwise-disjoint measurable sets, while a source packing is naturally specified by separation of its centers. One independently compilable geometric prerequisite converts an r-separated finite family into pairwise-disjoint open balls of radius r/2 using the metric ball-disjointness theorem. Banking it removes the separation-to-disjointness step from the remaining finite-dimensional packing construction.",
      :commands
      [{:cmd
-       "rg -n 'coveringNumber|covering number|card.*cover|cover.*card|MetricEntropy|packingNumber|doubling|Finset.*ball|ball.*Finset' .lake/packages/mathlib/Mathlib -g '*.lean'",
-       :exit 0,
-       :output
-       "Pinned Mathlib contains general covering and packing numbers and qualitative finite covers, but no directly located finite-dimensional polynomial radius bound."}
-      {:cmd
-       "rg -n 'measure_biUnion_finset|measure_iUnion_finset|measure_iUnion.*Finset|sum.*measure.*disjoint' .lake/packages/mathlib/Mathlib/MeasureTheory -g '*.lean'",
+       "rg -n 'disjoint.*ball|ball.*disjoint|Disjoint.*ball|dist.*two_mul.*ball|two_mul.*dist.*Disjoint' .lake/packages/mathlib/Mathlib/Topology .lake/packages/mathlib/Mathlib/Geometry -g '*.lean'",
        :exit 0}
-      {:cmd "lake env lean /tmp/FinitePackingCardinalityProbe.lean",
+      {:cmd "lake env lean /tmp/SeparatedBallsDisjointProbe.lean",
        :exit 0,
        :output
-       "'finset_card_mul_le_measure_of_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/FinitePackingCardinalityProbe.lean",
+       "'pairwiseDisjoint_ball_half_of_separated' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SeparatedBallsDisjointProbe.lean",
        :exit 0,
        :output
-       "49f2fdfe1b5b6f8e003c13f57f6a2405d80b2393f1e01af5c19f78ac6488f488"}
+       "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/FinitePackingCardinalityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/SeparatedBallsDisjointProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1; git diff --check", :exit 0}],
      :fixture
-     {:path "/tmp/FinitePackingCardinalityProbe.lean",
+     {:path "/tmp/SeparatedBallsDisjointProbe.lean",
       :sha256
-      "49f2fdfe1b5b6f8e003c13f57f6a2405d80b2393f1e01af5c19f78ac6488f488"},
+      "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -3515,7 +3541,8 @@
     :critical-value-sard-compact-finite-ball-cover-1
     :critical-value-sard-finite-cover-cardinality-measure-1
     :critical-value-sard-finite-dimensional-ball-volume-1
-    :critical-value-sard-finite-packing-cardinality-bound-1],
+    :critical-value-sard-finite-packing-cardinality-bound-1
+    :critical-value-sard-separated-half-balls-disjoint-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
