@@ -9433,6 +9433,41 @@
    "The level-set/chart-coordinate identity is compiled; the scalarized chart constructor must expose its ImplicitFunctionData so localized nonzero-jet strata can be transported to the strictly lower-dimensional kernel for induction.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled exact scalarized-jet ImplicitFunctionData construction cannot be promoted with its finite-dimensional inner-product source, general target F, selected functional ℓ, ContDiff ℝ (i+1) hypothesis, iteratedFDeriv/Fin.cons representation, explicit kernel CompleteSpace witness, retained leftFun/leftDeriv fields, chart-source membership, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean"
+    "ConstructionTargets/SardScalarizedJetImplicitFunctionData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALARIZED JET EXACT IMPLICIT-FUNCTION DATA",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardScalarizedJetImplicitFunctionDataProbe.lean",
+     :sha256
+     "cbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d"},
+    :declarations
+    ["exists_implicitFunctionData_of_strictFDeriv_apply_ne_zero"
+     "exists_implicitFunctionData_scalar_fixedDirections_of_contDiff"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Apply the compiled level-set coordinate identity to the exposed scalarized-jet ImplicitFunctionData, transport each localized nonzero-jet stratum to the strictly lower-dimensional kernel coordinate, then invoke source-dimension induction and aggregate nullity."},
+   :representation
+   {:source
+    "A finite-dimensional real inner-product source E, general target F, f:E→F of class ContDiff ℝ (i+1), fixed directions v, selected functional ℓ, and nonzero scalar next-jet value ℓ(iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)).",
+    :target
+    "Exact ImplicitFunctionData ℝ E ℝ ker(L), with an explicit CompleteSpace witness for ker(L), whose leftFun is y↦ℓ(iteratedFDeriv ℝ i f y v), whose leftDeriv is L=fderiv ℝ (fun y↦ℓ(iteratedFDeriv ℝ i f y v)) x, and whose chart source contains x."},
+   :id :critical-value-sard-scalarized-jet-implicit-function-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-implicit-function-level-set-coordinates-1
+    :critical-value-sard-scalarized-jet-strict-derivative-1],
+   :current-residual
+   "Exact scalarized-jet ImplicitFunctionData is compiled; chartwise transport of localized nonzero-jet strata to the derivative kernel and inductive nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -9490,65 +9525,65 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled ImplicitFunctionData level-set coordinate identities cannot be promoted with their exact toOpenPartialHomeomorph, leftFun, localized-source, or standard-axiom representations.",
+      "Stop only if the compiled exact scalarized-jet ImplicitFunctionData construction cannot be promoted with its finite-dimensional inner-product source, general target F, selected functional ℓ, ContDiff ℝ (i+1) hypothesis, iteratedFDeriv/Fin.cons representation, explicit kernel CompleteSpace witness, retained leftFun/leftDeriv fields, chart-source membership, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean"
-       "ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.md"],
+      ["ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean"
+       "ConstructionTargets/SardScalarizedJetImplicitFunctionData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION LEVEL-SET COORDINATES",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALARIZED JET EXACT IMPLICIT-FUNCTION DATA",
       :acceptance
       {:fixture
-       {:path "/tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean",
+       {:path "/tmp/SardScalarizedJetImplicitFunctionDataProbe.lean",
         :sha256
-        "f5520b083cdb705ceca41770d63e4bda99de101039ba18d06b9754ef86427356"},
+        "cbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d"},
        :declarations
-       ["ImplicitFunctionData.leftFun_eq_iff_fst_toOpenPartialHomeomorph_eq"
-        "ImplicitFunctionData.inter_source_leftFun_level_eq"],
+       ["exists_implicitFunctionData_of_strictFDeriv_apply_ne_zero"
+        "exists_implicitFunctionData_scalar_fixedDirections_of_contDiff"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Expose the exact scalarized-jet ImplicitFunctionData, use the constant-first-coordinate slice identity to transport each localized nonzero-jet stratum to kernel coordinates, then apply source-dimension induction and aggregate nullity."},
+       "Apply the compiled level-set coordinate identity to the exposed scalarized-jet ImplicitFunctionData, transport each localized nonzero-jet stratum to the strictly lower-dimensional kernel coordinate, then invoke source-dimension induction and aggregate nullity."},
       :representation
       {:source
-       "Exact ImplicitFunctionData ℝ E F G and a level value c:F.",
+       "A finite-dimensional real inner-product source E, general target F, f:E→F of class ContDiff ℝ (i+1), fixed directions v, selected functional ℓ, and nonzero scalar next-jet value ℓ(iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)).",
        :target
-       "The identity leftFun y=c iff the first coordinate of toOpenPartialHomeomorph y equals c, together with equality of the corresponding level sets localized to the chart source."},
-      :id
-      :critical-value-sard-implicit-function-level-set-coordinates-1,
+       "Exact ImplicitFunctionData ℝ E ℝ ker(L), with an explicit CompleteSpace witness for ker(L), whose leftFun is y↦ℓ(iteratedFDeriv ℝ i f y v), whose leftDeriv is L=fderiv ℝ (fun y↦ℓ(iteratedFDeriv ℝ i f y v)) x, and whose chart source contains x."},
+      :id :critical-value-sard-scalarized-jet-implicit-function-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-scalar-derivative-kernel-dimension-drop-1],
+      [:critical-value-sard-implicit-function-level-set-coordinates-1
+       :critical-value-sard-scalarized-jet-strict-derivative-1],
       :current-residual
-      "The level-set/chart-coordinate identity is compiled; the scalarized chart constructor must expose its ImplicitFunctionData so localized nonzero-jet strata can be transported to the strictly lower-dimensional kernel for induction.",
+      "Exact scalarized-jet ImplicitFunctionData is compiled; chartwise transport of localized nonzero-jet strata to the derivative kernel and inductive nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next exact chartwise transport prerequisite: in ImplicitFunctionData coordinates, equality of leftFun to a constant is equality of the first chart coordinate to that constant, including after localization to the chart source. Exposing the scalarized-jet ImplicitFunctionData and transporting the localized nonzero-jet stratum to its lower-dimensional kernel remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the exact next prerequisite: the scalarized fixed-direction jet under ContDiff ℝ (i+1) and the selected nonzero Fin.cons next-jet value produces exact ImplicitFunctionData, retaining both the original scalarized left function and its fderiv while certifying that the base point lies in the resulting chart source. This exposes the data needed by the compiled level-set coordinate identities; chartwise stratum transport and inductive nullity remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean",
+       "lake env lean /tmp/SardScalarizedJetImplicitFunctionDataProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean",
+       "sha256sum /tmp/SardScalarizedJetImplicitFunctionDataProbe.lean",
        :exit 0,
        :output
-       "f5520b083cdb705ceca41770d63e4bda99de101039ba18d06b9754ef86427356  /tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean"}
+       "cbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d  /tmp/SardScalarizedJetImplicitFunctionDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardScalarizedJetImplicitFunctionDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 86 items OK; {:done 78, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 87 items OK; {:done 79, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f  ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nf5520b083cdb705ceca41770d63e4bda99de101039ba18d06b9754ef86427356  ConstructionTargets/SardImplicitFunctionLevelSetCoordinates.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -9559,12 +9594,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardImplicitFunctionLevelSetCoordinatesProbe.lean",
+     {:path "/tmp/SardScalarizedJetImplicitFunctionDataProbe.lean",
       :sha256
-      "f5520b083cdb705ceca41770d63e4bda99de101039ba18d06b9754ef86427356"},
+      "cbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -9599,7 +9634,8 @@
     :critical-value-sard-scalarized-jet-local-chart-1
     :critical-value-sard-scalar-derivative-kernel-dimension-1
     :critical-value-sard-scalar-derivative-kernel-dimension-drop-1
-    :critical-value-sard-implicit-function-level-set-coordinates-1],
+    :critical-value-sard-implicit-function-level-set-coordinates-1
+    :critical-value-sard-scalarized-jet-implicit-function-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
