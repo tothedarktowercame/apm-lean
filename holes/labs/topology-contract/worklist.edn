@@ -3446,6 +3446,23 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :axiom-policy :standard-only,
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788785603581-13680-2400b2cb",
+     :commands
+     ["git show --stat --oneline 4e87ab4e60fb962563f8d2617bacb5f92340a1d2"
+      "git diff --name-status 4e87ab4e^ 4e87ab4e"
+      "git diff --check 4e87ab4e^ 4e87ab4e"
+      "git show 4e87ab4e:ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean | sha256sum"
+      "git show 4e87ab4e:ConstructionTargets/SardSeparatedHalfBallsDisjoint.md | sha256sum"
+      "sha256sum /tmp/SeparatedBallsDisjointProbe.lean"
+      "lake env lean ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
+      "lake env lean /tmp/SeparatedBallsDisjointProbe.lean"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean ConstructionTargets/SardSeparatedHalfBallsDisjoint.md /tmp/SeparatedBallsDisjointProbe.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: commit 4e87ab4e has exact two-file scope and matching artifact and fixture hashes; both Lean gates compile with only propext, Classical.choice, and Quot.sound; the theorem correctly maps r-separated centers to pairwise-disjoint open half-radius balls, preserves the separation-to-disjointness-only representation boundary, introduces no placeholders, and leaves frozen t93A04 unchanged with one theorem and one placeholder."},
     :commit "4e87ab4e60fb962563f8d2617bacb5f92340a1d2",
     :changed-paths
     ["ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
@@ -3462,7 +3479,7 @@
     :declarations ["pairwiseDisjoint_ball_half_of_separated"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean"
     "ConstructionTargets/SardSeparatedHalfBallsDisjoint.md"],
@@ -3554,7 +3571,7 @@
       "7f01f0e1a34dae83cc6aa0ceaf6128b8b79f393c5d78448984ff0a5f0eb5e1aa"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
