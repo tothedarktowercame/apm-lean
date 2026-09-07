@@ -61,7 +61,13 @@ lemma apm_b01A02_sylow17_normal_of_card_255
   letI : Fact (Nat.Prime 17) := ⟨by norm_num⟩
   have hScard : Nat.card S = 17 := by
     rw [Sylow.card_eq_multiplicity, hG]
-    native_decide
+    rw [show 255 = 3 * (5 * 17) by norm_num,
+      Nat.factorization_mul (by norm_num) (by norm_num),
+      Nat.factorization_mul (by norm_num) (by norm_num),
+      (show Nat.Prime 3 by norm_num).factorization,
+      (show Nat.Prime 5 by norm_num).factorization,
+      (show Nat.Prime 17 by norm_num).factorization]
+    simp
   have hSindex : S.index = 15 := by
     have h := S.toSubgroup.index_mul_card
     rw [hScard, hG] at h
@@ -70,7 +76,7 @@ lemma apm_b01A02_sylow17_normal_of_card_255
     simpa [hSindex] using Sylow.card_dvd_index S
   have hnmem : Nat.card (Sylow 17 G) ∈ Nat.divisors 15 :=
     Nat.mem_divisors.mpr ⟨hdvd, by norm_num⟩
-  have hdivs : Nat.divisors 15 = {1, 3, 5, 15} := by native_decide
+  have hdivs : Nat.divisors 15 = {1, 3, 5, 15} := by decide
   rw [hdivs] at hnmem
   simp only [Finset.mem_insert, Finset.mem_singleton] at hnmem
   have hone : Nat.card (Sylow 17 G) = 1 := by
@@ -90,25 +96,36 @@ order `85`: a Sylow-3 subgroup is cyclic because `255` is squarefree, and it
 is a Sylow subgroup for the smallest prime divisor. -/
 lemma apm_b01A02_exists_normal_card_85
     (G : Type*) [Group G] [Fintype G] (hG : Nat.card G = 255) :
-    ∃ H : Subgroup G, H.Normal ∧ Nat.card H = 85 := by
+    ∃ (H : Subgroup G) (P : Sylow 3 G),
+      H.Normal ∧ Nat.card H = 85 ∧ Nat.card P = 3 ∧ H.IsComplement' P := by
   letI : IsZGroup G := IsZGroup.of_squarefree (by
-    rw [hG]
-    native_decide)
+    rw [hG, show 255 = 3 * (5 * 17) by norm_num]
+    exact (Nat.squarefree_mul (by norm_num)).mpr
+      ⟨(show Nat.Prime 3 by norm_num).squarefree,
+        (Nat.squarefree_mul (by norm_num)).mpr
+          ⟨(show Nat.Prime 5 by norm_num).squarefree,
+            (show Nat.Prime 17 by norm_num).squarefree⟩⟩)
   letI : Fact (Nat.Prime 3) := ⟨by norm_num⟩
   let P : Sylow 3 G := default
   have hPcyc : IsCyclic P := inferInstance
-  have hpmin : (Nat.card G).minFac = 3 := by rw [hG]; native_decide
+  have hpmin : (Nat.card G).minFac = 3 := by rw [hG]; norm_num
   let T := MonoidHom.transferSylow P (hPcyc.normalizer_le_centralizer hpmin)
   let H : Subgroup G := T.ker
   have hcomp : H.IsComplement' P := by
     simpa [H, T] using hPcyc.isComplement' hpmin
   have hPcard : Nat.card P = 3 := by
     rw [Sylow.card_eq_multiplicity, hG]
-    native_decide
+    rw [show 255 = 3 * (5 * 17) by norm_num,
+      Nat.factorization_mul (by norm_num) (by norm_num),
+      Nat.factorization_mul (by norm_num) (by norm_num),
+      (show Nat.Prime 3 by norm_num).factorization,
+      (show Nat.Prime 5 by norm_num).factorization,
+      (show Nat.Prime 17 by norm_num).factorization]
+    simp
   have hmul := hcomp.card_mul
   rw [hPcard, hG] at hmul
   haveI : H.Normal := inferInstance
-  exact ⟨H, inferInstance, by omega⟩
+  exact ⟨H, P, inferInstance, by omega, hPcard, hcomp⟩
 
 /-- Every group of order `85 = 5 * 17` is cyclic.  Sylow arithmetic makes
 both Sylow subgroups unique; squarefreeness then upgrades nilpotence to
@@ -201,6 +218,43 @@ lemma apm_b01A02_isCyclic_of_card_85
         infer_instance)
   infer_instance
 
+/-- A group of order 255 is cyclic.  Transfer splits it as a cyclic group of
+order 85 by a cyclic group of order 3, and cardinality forces the conjugation
+action to be trivial. -/
+lemma apm_b01A02_isCyclic_of_card_255
+    (G : Type*) [Group G] [Fintype G] (hG : Nat.card G = 255) : IsCyclic G := by
+  rcases apm_b01A02_exists_normal_card_85 G hG with
+    ⟨H, P, hHnormal, hHcard, hPcard, hcomp⟩
+  letI : Fintype H := Fintype.ofFinite H
+  letI : H.Normal := hHnormal
+  letI : IsCyclic H := apm_b01A02_isCyclic_of_card_85 H hHcard
+  letI : Fact (Nat.Prime 3) := ⟨by norm_num⟩
+  letI : IsCyclic P := isCyclic_of_card_dvd_prime (by rw [hPcard])
+  let φ : P →* MulAut H :=
+    H.normalizerMonoidHom.comp
+      (Subgroup.inclusion (H.normalizer_eq_top ▸ le_top))
+  have hφrange_dvd3 : Nat.card φ.range ∣ 3 := by
+    simpa [hPcard] using Subgroup.card_range_dvd φ
+  have hφrange_dvd64 : Nat.card φ.range ∣ 64 := by
+    have hdvd := φ.range.card_subgroup_dvd_card
+    rw [IsCyclic.card_mulAut, hHcard] at hdvd
+    norm_num at hdvd ⊢
+    exact hdvd
+  have hφrange : Nat.card φ.range = 1 := by
+    apply Nat.dvd_one.mp
+    simpa using Nat.dvd_gcd hφrange_dvd3 hφrange_dvd64
+  have hφ : φ = 1 := by
+    rw [← φ.range_eq_bot_iff]
+    exact φ.range.eq_bot_iff_card.mpr hφrange
+  have e := SemidirectProduct.mulEquivSubgroup hcomp
+  rw [show H.normalizerMonoidHom.comp
+      (Subgroup.inclusion (H.normalizer_eq_top ▸ le_top)) = 1 from hφ] at e
+  apply e.isCyclic.mp
+  apply SemidirectProduct.mulEquivProd.isCyclic.mpr
+  exact Group.isCyclic_prod_iff.mpr ⟨inferInstance, inferInstance, by
+    rw [hHcard, hPcard]
+    norm_num⟩
+
 theorem apm_b01a02 :
     (∀ (G : Type*) [Group G] [Fintype G]
       (p : ℕ) (H : Subgroup G),
@@ -221,51 +275,10 @@ theorem apm_b01a02 :
     let S : Sylow 17 G := default
     have hS := apm_b01A02_sylow17_normal_of_card_255 G hGcard S
     refine ⟨⟨S, hS.1, hS.2⟩, ?_⟩
-    rcases apm_b01A02_exists_normal_card_85 G hGcard with ⟨H, hHnormal, hHcard⟩
+    rcases apm_b01A02_exists_normal_card_85 G hGcard with
+      ⟨H, P, hHnormal, hHcard, hPcard, hcomp⟩
     letI : Fintype H := Fintype.ofFinite H
     refine ⟨⟨H, hHnormal, hHcard,
       apm_b01A02_isCyclic_of_card_85 H hHcard⟩, ?_⟩
-  /-
-  PARTIAL boundary (closer hop 3). A renewed inspection of Burnside transfer
-  found `IsCyclic.isComplement'`, which was more directly useful than the
-  semidirect-product classification.  Since `255` is squarefree,
-  `IsZGroup.of_squarefree` makes a Sylow-3 subgroup cyclic; because `3` is the
-  smallest prime divisor, its transfer kernel is a normal complement.
-  `apm_b01A02_exists_normal_card_85` now compiles this construction and uses
-  `IsComplement'.card_mul` to prove the kernel has order exactly `85`.
-
-  Thus both required normal-subgroup existence claims are closed independently.
-  `apm_b01A02_isCyclic_of_card_85` now also proves the transfer kernel cyclic:
-  explicit Sylow counts make any group of order `85` nilpotent, while its
-  squarefree order supplies `IsZGroup`, and Mathlib's combined instance yields
-  cyclicity. The remaining bridge is cyclicity of `G`: show the quotient
-  order-three action on the normal cyclic kernel is trivial.
-  `IsZGroup` only makes Sylow subgroups cyclic, not an arbitrary squarefree
-  group cyclic; Mathlib has no cyclic-number theorem implementing the needed
-  coprime automorphism-order argument. Searches of transfer, Z-groups,
-  automorphism groups of cyclic groups, nilpotence, all solved siblings,
-  `LEMMA-INDEX.md`, and construction targets found no packaged final step.
-
-  HOP 4 isolates the absent cyclic-number theorem into the two exact instances
-  needed here (recorded as contracts rather than additional declarations with
-  `sorry`):
-
-  ```lean
-  theorem apm_b01A02_isCyclic_of_card_85
-      (G : Type*) [Group G] [Fintype G]
-      (hG : Nat.card G = 85) : IsCyclic G
-
-  theorem apm_b01A02_isCyclic_of_card_255
-      (G : Type*) [Group G] [Fintype G]
-      (hG : Nat.card G = 255) : IsCyclic G
-  ```
-
-  Both statements are true instances of the classical cyclic-number
-  criterion: `85 = 5 * 17` and `255 = 3 * 5 * 17` are squarefree, and no prime
-  factor divides one less than another prime factor. The first contract makes
-  the already-constructed normal subgroup of order `85` cyclic; the second
-  supplies the final cyclicity conjunct for `G`. Proving them in this snapshot
-  still requires assembling the coprime semidirect-action argument from
-  `IsZGroup.isZGroup_iff_exists_mulEquiv` and cyclic automorphism cardinalities.
-  -/
-    sorry
+    exact apm_b01A02_isCyclic_of_card_255 G hGcard
+#print axioms apm_b01a02

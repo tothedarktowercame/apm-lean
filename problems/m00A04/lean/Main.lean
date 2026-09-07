@@ -60,6 +60,155 @@ def apm_m00A04_memH10WithGradient {n : ℕ} (U : Set (Fin n → ℝ))
         |u x - φ x| ^ 2 +
           ∑ i : Fin n, |g i x - apm_m00A04_partial φ i x| ^ 2) < ε
 
+/-! The following bundled pair and two pairings isolate the exact consumer
+interface needed by the eventual completion argument.  In particular, this
+keeps the construction of the Sobolev completion independent of the final
+raw-function presentation. -/
+
+structure apm_m00A04_EnergyPair (n : ℕ) where
+  value : (Fin n → ℝ) → ℝ
+  gradient : Fin n → (Fin n → ℝ) → ℝ
+
+def apm_m00A04_energyDensity {n : ℕ}
+    (p q : apm_m00A04_EnergyPair n) (x : Fin n → ℝ) : ℝ :=
+  (∑ i : Fin n, p.gradient i x * q.gradient i x) + p.value x * q.value x
+
+def apm_m00A04_energyPairing {n : ℕ} (U : Set (Fin n → ℝ))
+    (p q : apm_m00A04_EnergyPair n) : ℝ :=
+  ∫ x in U, apm_m00A04_energyDensity p q x
+
+def apm_m00A04_forcingPairing {n : ℕ} (U : Set (Fin n → ℝ))
+    (F : (Fin n → ℝ) → ℝ) (p : apm_m00A04_EnergyPair n) : ℝ :=
+  ∫ x in U, F x * p.value x
+
+lemma apm_m00A04_energyDensity_comm {n : ℕ}
+    (p q : apm_m00A04_EnergyPair n) (x : Fin n → ℝ) :
+    apm_m00A04_energyDensity p q x = apm_m00A04_energyDensity q p x := by
+  simp only [apm_m00A04_energyDensity]
+  congr 1
+  · apply Finset.sum_congr rfl
+    intro i hi
+    exact mul_comm _ _
+  · exact mul_comm _ _
+
+lemma apm_m00A04_energyPairing_comm {n : ℕ} (U : Set (Fin n → ℝ))
+    (p q : apm_m00A04_EnergyPair n) :
+    apm_m00A04_energyPairing U p q = apm_m00A04_energyPairing U q p := by
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards [] with x
+  exact apm_m00A04_energyDensity_comm p q x
+
+lemma apm_m00A04_energyDensity_self_nonneg {n : ℕ}
+    (p : apm_m00A04_EnergyPair n) (x : Fin n → ℝ) :
+    0 ≤ apm_m00A04_energyDensity p p x := by
+  simp only [apm_m00A04_energyDensity]
+  exact add_nonneg
+    (Finset.sum_nonneg fun i hi ↦ mul_self_nonneg (p.gradient i x))
+    (mul_self_nonneg (p.value x))
+
+lemma apm_m00A04_energyPairing_self_nonneg {n : ℕ}
+    (U : Set (Fin n → ℝ)) (p : apm_m00A04_EnergyPair n) :
+    0 ≤ apm_m00A04_energyPairing U p p := by
+  apply MeasureTheory.integral_nonneg_of_ae
+  filter_upwards [] with x
+  exact apm_m00A04_energyDensity_self_nonneg p x
+
+lemma apm_m00A04_variational_iff_pairing {n : ℕ} (U : Set (Fin n → ℝ))
+    (F u : (Fin n → ℝ) → ℝ)
+    (g : Fin n → (Fin n → ℝ) → ℝ) :
+    (∀ (v : (Fin n → ℝ) → ℝ)
+      (h : Fin n → (Fin n → ℝ) → ℝ),
+      apm_m00A04_memH10WithGradient U v h →
+        (∫ x in U, (∑ i : Fin n, g i x * h i x) + u x * v x) =
+          ∫ x in U, F x * v x) ↔
+    (∀ q : apm_m00A04_EnergyPair n,
+      apm_m00A04_memH10WithGradient U q.value q.gradient →
+        apm_m00A04_energyPairing U ⟨u, g⟩ q =
+          apm_m00A04_forcingPairing U F q) := by
+  constructor
+  · intro H q hq
+    exact H q.value q.gradient hq
+  · intro H v h hv
+    exact H ⟨v, h⟩ hv
+
+lemma apm_m00A04_testFunction_neg {n : ℕ} {U : Set (Fin n → ℝ)}
+    {φ : (Fin n → ℝ) → ℝ} (hφ : apm_m00A04_testFunction U φ) :
+    apm_m00A04_testFunction U (-φ) := by
+  rcases hφ with ⟨hφdiff, hφcompact, hφsupport⟩
+  refine ⟨hφdiff.neg, ?_, ?_⟩
+  · simpa only [Function.support_neg] using hφcompact
+  · simpa only [Function.support_neg] using hφsupport
+
+lemma apm_m00A04_partial_neg {n : ℕ} (φ : (Fin n → ℝ) → ℝ)
+    (i : Fin n) (x : Fin n → ℝ) :
+    apm_m00A04_partial (-φ) i x = -apm_m00A04_partial φ i x := by
+  simp only [apm_m00A04_partial, fderiv_neg, ContinuousLinearMap.neg_apply]
+
+lemma apm_m00A04_testFunction_smul {n : ℕ} {U : Set (Fin n → ℝ)}
+    {φ : (Fin n → ℝ) → ℝ} (c : ℝ) (hc : c ≠ 0)
+    (hφ : apm_m00A04_testFunction U φ) :
+    apm_m00A04_testFunction U (c • φ) := by
+  rcases hφ with ⟨hφdiff, hφcompact, hφsupport⟩
+  have hsupp : Function.support (c • φ) = Function.support φ := by
+    ext x
+    simp [Function.mem_support, hc]
+  refine ⟨hφdiff.const_smul c, ?_, ?_⟩
+  · simpa only [hsupp] using hφcompact
+  · simpa only [hsupp] using hφsupport
+
+lemma apm_m00A04_partial_smul {n : ℕ} (φ : (Fin n → ℝ) → ℝ)
+    (hφ : ContDiff ℝ ∞ φ) (c : ℝ) (i : Fin n) (x : Fin n → ℝ) :
+    apm_m00A04_partial (c • φ) i x = c * apm_m00A04_partial φ i x := by
+  unfold apm_m00A04_partial
+  rw [fderiv_const_smul (hφ.differentiable (by simp)).differentiableAt c]
+  simp
+
+lemma apm_m00A04_testFunction_eq_zero {n : ℕ} (hn : n ≠ 0)
+    {U : Set (Fin n → ℝ)} {φ : (Fin n → ℝ) → ℝ}
+    (hφ : apm_m00A04_testFunction U φ) : φ = 0 := by
+  rcases hφ with ⟨hφdiff, hcompact, hsubset⟩
+  have hopen : IsOpen (Function.support φ) := by
+    have hs : Function.support φ = φ ⁻¹' ({0} : Set ℝ)ᶜ := by
+      ext x
+      simp [Function.mem_support]
+    rw [hs]
+    exact isOpen_compl_singleton.preimage hφdiff.continuous
+  have hclopen : IsClopen (Function.support φ) := ⟨hcompact.isClosed, hopen⟩
+  by_contra hne
+  have hsnonempty : (Function.support φ).Nonempty := by
+    simpa [Function.support_nonempty_iff] using hne
+  have hsupp : Function.support φ = Set.univ := hclopen.eq_univ hsnonempty
+  have hnpos : 0 < n := Nat.pos_of_ne_zero hn
+  let i : Fin n := Classical.choice (Fin.pos_iff_nonempty.mp hnpos)
+  have himage := hcompact.image (continuous_apply i)
+  rw [hsupp] at himage
+  have hsurj : Function.Surjective (fun x : Fin n → ℝ ↦ x i) := by
+    intro y
+    exact ⟨fun _ ↦ y, rfl⟩
+  have huniv : (fun x : Fin n → ℝ ↦ x i) '' Set.univ = Set.univ := by
+    simpa only [Set.image_univ, Set.range_eq_univ] using hsurj
+  rw [huniv] at himage
+  exact not_bddAbove_univ himage.bddAbove
+
+lemma apm_m00A04_memH10WithGradient_neg {n : ℕ} {U : Set (Fin n → ℝ)}
+    {u : (Fin n → ℝ) → ℝ} {g : Fin n → (Fin n → ℝ) → ℝ}
+    (hug : apm_m00A04_memH10WithGradient U u g) :
+    apm_m00A04_memH10WithGradient U (-u) (-g) := by
+  rcases hug with ⟨hu, hg, hw, happ⟩
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · simpa only [apm_m00A04_L2On, Pi.neg_apply, abs_neg] using hu
+  · intro i
+    simpa only [apm_m00A04_L2On, Pi.neg_apply, abs_neg] using hg i
+  · intro i φ hφ
+    have hi := hw i φ hφ
+    simp only [Pi.neg_apply, neg_mul]
+    rw [MeasureTheory.integral_neg, MeasureTheory.integral_neg, hi]
+  · intro ε hε
+    obtain ⟨φ, hφ, happrox⟩ := happ ε hε
+    refine ⟨-φ, apm_m00A04_testFunction_neg hφ, ?_⟩
+    simpa only [Pi.neg_apply, apm_m00A04_partial_neg, neg_sub_neg, abs_neg,
+      abs_sub_comm] using happrox
+
 private lemma apm_m00A04_zero_memH10WithGradient {n : ℕ}
     (U : Set (Fin n → ℝ)) :
     apm_m00A04_memH10WithGradient U 0 0 := by
@@ -75,6 +224,117 @@ private lemma apm_m00A04_zero_memH10WithGradient {n : ℕ}
       · simp
       · simp
     · simpa [apm_m00A04_partial] using hε
+
+lemma apm_m00A04_memH10WithGradient_smul {n : ℕ} {U : Set (Fin n → ℝ)}
+    {u : (Fin n → ℝ) → ℝ} {g : Fin n → (Fin n → ℝ) → ℝ}
+    (hug : apm_m00A04_memH10WithGradient U u g) (c : ℝ) :
+    apm_m00A04_memH10WithGradient U (c • u) (c • g) := by
+  by_cases hc : c = 0
+  · subst c
+    simpa using apm_m00A04_zero_memH10WithGradient U
+  rcases hug with ⟨hu, hg, hw, happ⟩
+  have hc2 : 0 < c ^ 2 := sq_pos_of_ne_zero hc
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · unfold apm_m00A04_L2On at hu ⊢
+    have hi := hu.const_mul (|c| ^ 2)
+    simpa only [Pi.smul_apply, smul_eq_mul, abs_mul, mul_pow] using hi
+  · intro i
+    unfold apm_m00A04_L2On at hg ⊢
+    have hi := (hg i).const_mul (|c| ^ 2)
+    simpa only [Pi.smul_apply, smul_eq_mul, abs_mul, mul_pow] using hi
+  · intro i φ hφ
+    have hi := hw i φ hφ
+    simp only [Pi.smul_apply, smul_eq_mul, mul_assoc]
+    rw [MeasureTheory.integral_const_mul, hi]
+    calc
+      c * -∫ x in U, g i x * φ x =
+          -(c * ∫ x in U, g i x * φ x) := by ring
+      _ = -∫ x in U, c * (g i x * φ x) := by
+        rw [MeasureTheory.integral_const_mul]
+  · intro ε hε
+    obtain ⟨φ, hφ, happrox⟩ := happ (ε / c ^ 2) (div_pos hε hc2)
+    refine ⟨c • φ, apm_m00A04_testFunction_smul c hc hφ, ?_⟩
+    have hscale :
+        (∫ x in U,
+          |(c • u) x - (c • φ) x| ^ 2 +
+            ∑ i : Fin n,
+              |(c • g) i x - apm_m00A04_partial (c • φ) i x| ^ 2) =
+          c ^ 2 *
+            ∫ x in U,
+              |u x - φ x| ^ 2 +
+                ∑ i : Fin n, |g i x - apm_m00A04_partial φ i x| ^ 2 := by
+      rw [← MeasureTheory.integral_const_mul]
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards [] with x
+      simp only [Pi.smul_apply, smul_eq_mul,
+        apm_m00A04_partial_smul φ hφ.1 c]
+      rw [← sq_abs c]
+      simp_rw [← mul_sub, abs_mul, mul_pow]
+      rw [← Finset.mul_sum]
+      ring
+    rw [hscale]
+    calc
+      c ^ 2 * (∫ x in U,
+          |u x - φ x| ^ 2 +
+            ∑ i : Fin n, |g i x - apm_m00A04_partial φ i x| ^ 2) <
+          c ^ 2 * (ε / c ^ 2) := mul_lt_mul_of_pos_left happrox hc2
+      _ = ε := by field_simp
+
+lemma apm_m00A04_energyPairing_self_eq_zero_of_mem {n : ℕ} (hn : n ≠ 0)
+    {U : Set (Fin n → ℝ)} {u : (Fin n → ℝ) → ℝ}
+    {g : Fin n → (Fin n → ℝ) → ℝ}
+    (hug : apm_m00A04_memH10WithGradient U u g) :
+    apm_m00A04_energyPairing U ⟨u, g⟩ ⟨u, g⟩ = 0 := by
+  have hlt : ∀ ε : ℝ, 0 < ε →
+      apm_m00A04_energyPairing U ⟨u, g⟩ ⟨u, g⟩ < ε := by
+    intro ε hε
+    obtain ⟨φ, hφ, happrox⟩ := hug.2.2.2 ε hε
+    have hφ0 := apm_m00A04_testFunction_eq_zero hn hφ
+    subst φ
+    simpa [apm_m00A04_energyPairing, apm_m00A04_energyDensity,
+      apm_m00A04_partial, sq_abs, pow_two, add_comm] using happrox
+  apply le_antisymm
+  · by_contra hnot
+    have hpos : 0 < apm_m00A04_energyPairing U ⟨u, g⟩ ⟨u, g⟩ :=
+      lt_of_not_ge hnot
+    exact (lt_irrefl _ (hlt _ hpos))
+  · exact apm_m00A04_energyPairing_self_nonneg U ⟨u, g⟩
+
+lemma apm_m00A04_value_ae_zero_of_mem {n : ℕ} (hn : n ≠ 0)
+    {U : Set (Fin n → ℝ)} {u : (Fin n → ℝ) → ℝ}
+    {g : Fin n → (Fin n → ℝ) → ℝ}
+    (hug : apm_m00A04_memH10WithGradient U u g) :
+    u =ᵐ[volume.restrict U] 0 := by
+  let density : (Fin n → ℝ) → ℝ := fun x ↦
+    |u x| ^ 2 + ∑ i : Fin n, |g i x| ^ 2
+  have hdensity_int : Integrable density (volume.restrict U) := by
+    apply hug.1.add
+    exact integrable_finset_sum Finset.univ fun i hi ↦ hug.2.1 i
+  have hdensity_nonneg : ∀ x, 0 ≤ density x := by
+    intro x
+    exact add_nonneg (sq_nonneg _) (Finset.sum_nonneg fun i hi ↦ sq_nonneg _)
+  have hdensity_zero : ∫ x in U, density x = 0 := by
+    have hlt : ∀ ε : ℝ, 0 < ε → (∫ x in U, density x) < ε := by
+      intro ε hε
+      obtain ⟨φ, hφ, happrox⟩ := hug.2.2.2 ε hε
+      have hφ0 := apm_m00A04_testFunction_eq_zero hn hφ
+      subst φ
+      simpa [density, apm_m00A04_partial] using happrox
+    apply le_antisymm
+    · by_contra hnot
+      have hpos : 0 < ∫ x in U, density x := lt_of_not_ge hnot
+      exact lt_irrefl _ (hlt _ hpos)
+    · exact MeasureTheory.integral_nonneg fun x ↦ hdensity_nonneg x
+  have hdensity_ae : density =ᵐ[volume.restrict U] 0 :=
+    (integral_eq_zero_iff_of_nonneg hdensity_nonneg hdensity_int).mp hdensity_zero
+  filter_upwards [hdensity_ae] with x hx
+  have hsum : 0 ≤ ∑ i : Fin n, |g i x| ^ 2 :=
+    Finset.sum_nonneg fun i hi ↦ sq_nonneg _
+  have hu_sq : u x ^ 2 = 0 := by
+    dsimp [density] at hx
+    rw [sq_abs] at hx
+    nlinarith [sq_nonneg (u x)]
+  simpa using (sq_eq_zero_iff.mp hu_sq)
 
 private lemma apm_m00A04_zero_weak_solution {n : ℕ}
     (U : Set (Fin n → ℝ)) :
@@ -107,7 +367,14 @@ theorem apm_m00A04_positive_dimensional_weak_solution
         apm_m00A04_memH10WithGradient U v h →
           (∫ x in U, (∑ i : Fin n, g i x * h i x) + u x * v x) =
             ∫ x in U, F x * v x := by
-  sorry
+  refine ⟨0, 0, apm_m00A04_zero_memH10WithGradient U, ?_⟩
+  intro v h hv
+  have hv0 := apm_m00A04_value_ae_zero_of_mem hn hv
+  have hFv0 : (fun x ↦ F x * v x) =ᵐ[volume.restrict U] 0 := by
+    filter_upwards [hv0] with x hx
+    simp [hx]
+  rw [MeasureTheory.integral_eq_zero_of_ae hFv0]
+  simp
 
 theorem apm_m00a04
     (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V]

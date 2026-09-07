@@ -61,7 +61,108 @@ theorem apm_m00A03_bridge_1
     {X : Type} [NormedAddCommGroup X] [NormedSpace ℂ X]
     [CompleteSpace X] (A : X →L[ℂ] X) (hA : IsCompactOperator A) :
     ∀ ε : ℝ, 0 < ε → {z ∈ spectrum ℂ A | ε < ‖z‖}.Finite := by
-  sorry
+  intro ε hε
+  let S : Set ℂ := {z ∈ spectrum ℂ A | ε < ‖z‖}
+  by_contra hS
+  have hSinf : S.Infinite := hS
+  letI : Infinite S := Set.infinite_coe_iff.mpr hSinf
+  let e : ℕ ↪ S := Infinite.natEmbedding S
+  let μ : ℕ → ℂ := fun n ↦ (e n : ℂ)
+  have hμ : Function.Injective μ := fun _ _ h ↦ e.injective (Subtype.ext h)
+  have hμ_mem (n : ℕ) : μ n ∈ spectrum ℂ A := (e n).property.1
+  have hμ_norm (n : ℕ) : ε < ‖μ n‖ := (e n).property.2
+  have hμ_ne (n : ℕ) : μ n ≠ 0 := by
+    intro hn
+    simpa [hn] using (lt_trans hε (hμ_norm n))
+  have heig (n : ℕ) : Module.End.HasEigenvalue (A : Module.End ℂ X) (μ n) :=
+    (hA.hasEigenvalue_iff_mem_spectrum (hμ_ne n)).mpr (hμ_mem n)
+  choose x hx using fun n ↦ (heig n).exists_hasEigenvector
+  have hli : LinearIndependent ℂ x :=
+    Module.End.eigenvectors_linearIndependent' (A : Module.End ℂ X) μ hμ x hx
+  let V : ℕ → Submodule ℂ X := fun n ↦ Submodule.span ℂ (x '' Set.Iio n)
+  have hV_mono {m n : ℕ} (hmn : m ≤ n) : V m ≤ V n := by
+    apply Submodule.span_mono
+    rintro y ⟨i, hi, rfl⟩
+    exact ⟨i, lt_of_lt_of_le hi hmn, rfl⟩
+  have hxV (n : ℕ) : x n ∈ V (n + 1) :=
+    Submodule.subset_span ⟨n, Nat.lt_succ_self n, rfl⟩
+  have hxnot (n : ℕ) : x n ∉ V n := by
+    intro hxn
+    have hall := (linearIndependent_iff_notMem_span.mp hli n)
+    apply hall
+    apply (Submodule.span_mono ?_) hxn
+    rintro y ⟨i, hi, rfl⟩
+    exact ⟨i, by
+      simp only [Set.mem_diff, Set.mem_univ, true_and, Set.mem_singleton_iff]
+      exact (show i < n from hi).ne, rfl⟩
+  have hVclosed (n : ℕ) : IsClosed (V n : Set X) := by
+    letI : FiniteDimensional ℂ (V n) :=
+      FiniteDimensional.span_of_finite ℂ
+        ((Set.finite_Iio n).image x)
+    exact Submodule.closed_of_finiteDimensional (V n)
+  have hVproper (n : ℕ) : ∃ y : V (n + 1), y ∉ Submodule.comap (V (n + 1)).subtype (V n) := by
+    exact ⟨⟨x n, hxV n⟩, hxnot n⟩
+  choose z hzV hznorm hzfar using fun n ↦
+    riesz_lemma_of_lt_one
+      (F := Submodule.comap (V (n + 1)).subtype (V n))
+      ((hVclosed n).preimage continuous_subtype_val) (hVproper n)
+      (r := (1 / 2 : ℝ)) (by norm_num)
+  let w : ℕ → X := fun n ↦ z n
+  have hwV (n : ℕ) : w n ∈ V (n + 1) := (z n).property
+  have hwnorm (n : ℕ) : ‖w n‖ = 1 := hznorm n
+  have hwfar (n : ℕ) (y : X) (hy : y ∈ V n) : (1 / 2 : ℝ) ≤ ‖w n - y‖ := by
+    have := hzfar n ⟨y, hV_mono (Nat.le_succ n) hy⟩ hy
+    simpa [w, dist_eq_norm] using this
+  have hA_eig (n : ℕ) : A (x n) = μ n • x n := (hx n).apply_eq_smul
+  have hA_maps (n : ℕ) (y : X) (hy : y ∈ V n) : A y ∈ V n := by
+    apply Submodule.span_induction (p := fun y _ ↦ A y ∈ V n) _ (by simp)
+      (fun _ _ _ _ ha hb ↦ by simpa using (V n).add_mem ha hb)
+      (fun c y _ ha ↦ by simpa using (V n).smul_mem c ha) hy
+    rintro _ ⟨i, hi, rfl⟩
+    rw [hA_eig]
+    exact (V n).smul_mem _ (Submodule.subset_span ⟨i, hi, rfl⟩)
+  have hshift (n : ℕ) (y : X) (hy : y ∈ V (n + 1)) :
+      A y - μ n • y ∈ V n := by
+    apply Submodule.span_induction (p := fun y _ ↦ A y - μ n • y ∈ V n) _
+      (by simp) (fun a b _ _ ha hb ↦ by simpa [map_add, smul_add, sub_eq_add_neg,
+        add_assoc, add_left_comm, add_comm] using (V n).add_mem ha hb)
+      (fun c y _ hy ↦ by
+        simpa [map_smul, smul_sub, smul_smul, mul_comm] using (V n).smul_mem c hy) hy
+    rintro _ ⟨i, hi, rfl⟩
+    rw [hA_eig]
+    by_cases hin : i = n
+    · subst i; simp
+    · have hil : i < n := Nat.lt_of_le_of_ne (Nat.le_of_lt_succ hi) hin
+      exact (V n).sub_mem ((V n).smul_mem _ (Submodule.subset_span ⟨i, hil, rfl⟩))
+        ((V n).smul_mem _ (Submodule.subset_span ⟨i, hil, rfl⟩))
+  have hp : Pairwise fun m n ↦ ε / 2 < ‖A (w m) - A (w n)‖ := by
+    apply Pairwise.of_lt
+    · intro m n h
+      simpa [norm_sub_rev] using h
+    intro m n hmn
+    let u : X := (μ n)⁻¹ • (A (w m) - (A (w n) - μ n • w n))
+    have huV : u ∈ V n := by
+      apply (V n).smul_mem
+      exact (V n).sub_mem (hA_maps n _ (hV_mono hmn (hwV m)))
+        (hshift n _ (hwV n))
+    have heq : μ n • (w n - u) = A (w n) - A (w m) := by
+      dsimp [u]
+      rw [smul_sub, smul_inv_smul₀ (hμ_ne n)]
+      module
+    have hsep := hwfar n u huV
+    have hnμ : ε < ‖μ n‖ := hμ_norm n
+    rw [norm_sub_rev, ← heq, norm_smul]
+    nlinarith [mul_le_mul_of_nonneg_left hsep (norm_nonneg (μ n))]
+  obtain ⟨K, hK, hsub⟩ := hA.image_closedBall_subset_compact 1
+  have hAwK (n : ℕ) : A (w n) ∈ K := hsub ⟨w n, by simp [hwnorm], rfl⟩
+  obtain ⟨y, _, ψ, hψ, hlim⟩ := hK.tendsto_subseq hAwK
+  have hcauchy := hlim.cauchySeq
+  rw [Metric.cauchySeq_iff'] at hcauchy
+  obtain ⟨N, hN⟩ := hcauchy (ε / 2) (by positivity)
+  have hclose : ‖A (w (ψ (N + 1))) - A (w (ψ N))‖ < ε / 2 := by
+    simpa [dist_eq_norm_sub] using hN (N + 1) (by omega)
+  have hneψ : ψ (N + 1) ≠ ψ N := hψ.injective.ne (by omega)
+  exact (not_lt_of_ge (le_of_lt (hp hneψ))) hclose
 
 theorem apm_m00a03
     (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X]
@@ -95,60 +196,11 @@ theorem apm_m00a03
   · intro A hA
     have hfinite : ∀ ε : ℝ, 0 < ε →
         {z ∈ spectrum ℂ A | ε < ‖z‖}.Finite := by
-    /-
-    Boundary after closer hop 1: Riesz's lemma is closed above using Mathlib's compiled
-    `riesz_lemma_of_lt_one`, applied to the comap of `Y` inside the subtype
-    `Z`, and converted to the requested `Metric.infDist` statement via
-    `Metric.le_infDist`.
-
-    For the compact-spectrum half, Mathlib's current
-    `Analysis/Normed/Operator/FredholmAlternative.lean` provides
-    `IsCompactOperator.hasEigenvalue_iff_mem_spectrum`, establishing that every
-    nonzero spectral value is an eigenvalue. It does not package the stronger
-    finiteness-away-from-zero or `derivedSet` conclusions. Searches for
-    `IsCompactOperator.*spectrum.*Finite`, `derivedSet.*spectrum`, and related
-    declarations returned no bridge. Completing this conjunct therefore still
-    requires the long flag-of-eigenspaces/Riesz-separation argument from the
-    informal proof, including extraction of infinitely many distinct spectral
-    points and compactness contradiction. No solved sibling contains that
-    complete formal chain.
-
-    New progress: `apm_m00A03_finite_norm_ge_of_finite_norm_gt` closes the
-    strict-vs-closed cutoff mismatch: the statement's finiteness for
-    `ε < ‖z‖`, applied at `ε / 2`, yields finiteness of the standard annulus
-    `ε ≤ ‖z‖`. Searches also inspected `Topology/DerivedSet.lean` and found
-    `accPt_iff_nhds`; once annular finiteness is proved, the derived-set clause
-    can be discharged topologically by choosing a positive-norm neighborhood
-    and excluding the finitely many remaining points. Thus the genuinely open
-    analytic bridge is the first finiteness clause itself.
-
-    Closer hop 2 inspected the complete proof of
-    `IsCompactOperator.hasEigenvalue_or_mem_resolventSet`.  Its final section
-    already supplies the exact compact-image/subsequence contradiction APIs:
-    `IsCompactOperator.image_closedBall_subset_compact`,
-    `IsCompact.tendsto_subseq`, `Metric.cauchySeq_iff'`, and a pairwise norm
-    separation argument.  That proof is parameterized by one fixed `μ`, however,
-    so it cannot directly establish annular finiteness.  The missing new
-    construction is now isolated to: select a sequence of distinct points from
-    an infinite annular subset of the spectrum; turn them into eigenvectors via
-    `hA.hasEigenvalue_iff_mem_spectrum`; prove their finite spans form a strict,
-    closed, invariant flag with the shift property; and apply Riesz's lemma to
-    obtain the separated bounded sequence consumed by those compactness APIs.
-    Sibling `m96A01` proves only finite dimensionality of each individual
-    nonzero eigenspace, which does not construct this flag.  No closed artifact,
-    lemma-index entry, or construction library supplies the missing assembly.
-
-    Closer hop 3 proves the full topological consequence as
-    `apm_m00A03_derivedSet_subset_zero_of_annular_finite`: a ball of radius
-    `‖x‖ / 2`, intersected with the complement of the finite closed annulus
-    (apart from `x`), contradicts `accPt_iff_nhds` at every `x ≠ 0`.
-    Consequently this final `sorry` is confined exactly to annular spectral
-    finiteness, i.e. the multi-eigenvalue invariant-flag/Riesz-separation
-    construction described above.
-    -/
       exact apm_m00A03_bridge_1 A hA
     refine ⟨hfinite, ?_⟩
     exact apm_m00A03_derivedSet_subset_zero_of_annular_finite
       (spectrum ℂ A) (fun ε hε ↦
         apm_m00A03_finite_norm_ge_of_finite_norm_gt
           (spectrum ℂ A) hfinite ε hε)
+
+#print axioms apm_m00a03

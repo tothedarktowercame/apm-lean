@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped Pointwise
+
 /-!
 # APM b98A01
 
@@ -44,7 +46,11 @@ noncomputable def apm_b98a01_orderFiveSylow
   have hG' : Nat.card G = 210 := by
     simpa [Nat.card_eq_fintype_card] using hG
   rw [hB, hG']
-  have hf : Nat.factorization 210 5 = 1 := by native_decide
+  have hf : Nat.factorization 210 5 = 1 := by
+    rw [Nat.factorization_def 210 (by norm_num : Nat.Prime 5),
+      show 210 = 5 * 42 by norm_num,
+      padicValNat_base_mul (p := 5) (n := 42) (by norm_num) (by norm_num),
+      padicValNat.eq_zero_of_not_dvd (by norm_num)]
   rw [hf]
   norm_num
 
@@ -126,6 +132,294 @@ lemma apm_b98a01_coset_core_action
   rw [hker]
   exact Subgroup.normal_le_normalCore.mpr hNH
 
+/-- A normal subgroup of order seven lifts an order-five subgroup of the
+quotient to a subgroup of order thirty-five. -/
+lemma apm_b98a01_order35_of_normal_order7
+    (G : Type*) [Group G] [Fintype G] (N : Subgroup G)
+    (hG : Fintype.card G = 210) (hNnormal : N.Normal) (hN : Nat.card N = 7) :
+    ∃ M : Subgroup G, Nat.card M = 35 := by
+  letI : N.Normal := hNnormal
+  letI : Fintype (G ⧸ N) := Fintype.ofFinite (G ⧸ N)
+  have hq : Fintype.card (G ⧸ N) = 30 := by
+    have hcard := N.card_eq_card_quotient_mul_card_subgroup
+    rw [show Nat.card G = 210 by
+      simpa [Nat.card_eq_fintype_card] using hG,
+      show Nat.card (G ⧸ N) = Fintype.card (G ⧸ N) by
+        simp [Nat.card_eq_fintype_card], hN] at hcard
+    omega
+  letI : Fact (Nat.Prime 5) := ⟨by norm_num⟩
+  obtain ⟨x, hx⟩ : ∃ x : G ⧸ N, orderOf x = 5 := by
+    apply exists_prime_orderOf_dvd_card 5
+    rw [hq]
+    norm_num
+  let Q : Subgroup (G ⧸ N) := Subgroup.zpowers x
+  let M : Subgroup G := Q.comap (QuotientGroup.mk' N)
+  refine ⟨M, ?_⟩
+  have hQcard : Nat.card Q = 5 := by
+    change Nat.card (Subgroup.zpowers x) = 5
+    exact (Nat.card_zpowers x).trans hx
+  have hQindex : Q.index = 6 := by
+    have hp := Q.card_mul_index
+    rw [hQcard, show Nat.card (G ⧸ N) = 30 by
+      simpa [Nat.card_eq_fintype_card] using hq] at hp
+    omega
+  have hMindex : M.index = 6 := by
+    rw [show M.index = Q.index by
+      exact Q.index_comap_of_surjective (QuotientGroup.mk'_surjective N), hQindex]
+  have hp := M.card_mul_index
+  rw [hMindex, show Nat.card G = 210 by
+    simpa [Nat.card_eq_fintype_card] using hG] at hp
+  omega
+
+/-- The elementary divisibility constraints on the kernel of an index-six
+coset action attached to an order-thirty-five subgroup. -/
+lemma apm_b98a01_core_card_arithmetic
+    (k i : ℕ) (hk : k ∣ 35) (hki : k * i = 210) (hi : i ∣ 720) :
+    k = 7 ∨ k = 35 := by
+  rcases hi with ⟨j, hj⟩
+  have hkpos : 0 < k := by
+    apply Nat.pos_of_ne_zero
+    intro hkzero
+    simp [hkzero] at hki
+  have hkle : k ≤ 35 := Nat.le_of_dvd (by norm_num) hk
+  interval_cases k
+  all_goals norm_num at hk
+  all_goals try norm_num
+  case «1» =>
+    have hi210 : i = 210 := by omega
+    subst i
+    omega
+  case «5» =>
+    have hi42 : i = 42 := by omega
+    subst i
+    omega
+
+set_option maxHeartbeats 0 in
+/-- A normal subgroup of order thirty-five contains a characteristic Sylow
+seven-subgroup, which is therefore normal in the ambient group. -/
+lemma apm_b98a01_normal_order7_of_normal_order35
+    (G : Type*) [Group G] [Fintype G] (H : Subgroup G)
+    (hHnormal : H.Normal) (hH : Nat.card H = 35) :
+    ∃ N : Subgroup G, N.Normal ∧ Nat.card N = 7 := by
+  letI : H.Normal := hHnormal
+  letI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+  let P : Sylow 7 H := default
+  have hPcard : Nat.card P = 7 := by
+    rw [P.card_eq_multiplicity, hH]
+    rw [Nat.factorization_def 35 (by norm_num : Nat.Prime 7),
+      show 35 = 7 * 5 by norm_num,
+      padicValNat_base_mul (p := 7) (n := 5) (by norm_num) (by norm_num),
+      padicValNat.eq_zero_of_not_dvd (by norm_num)]
+    norm_num
+  have hPindex : (P : Subgroup H).index = 5 := by
+    have hp := (P : Subgroup H).card_mul_index
+    rw [hPcard, hH] at hp
+    omega
+  let s := Nat.card (Sylow 7 H)
+  have hsdvd : s ∣ 5 := by
+    simpa [s, hPindex] using P.card_dvd_index
+  have hsmod : s % 7 = 1 := by
+    have hm := card_sylow_modEq_one 7 H
+    change s % 7 = 1 % 7 at hm
+    simpa using hm
+  have hs : s = 1 := by
+    have hspos : 0 < s := Nat.card_pos
+    have hsle : s ≤ 5 := Nat.le_of_dvd (by norm_num) hsdvd
+    rw [Nat.mod_eq_of_lt (by omega)] at hsmod
+    exact hsmod
+  letI : Subsingleton (Sylow 7 H) := (Nat.card_eq_one_iff_unique.mp hs).1
+  letI : P.Characteristic := Sylow.characteristic_of_subsingleton P
+  let N : Subgroup G := (P : Subgroup H).map H.subtype
+  refine ⟨N, inferInstance, ?_⟩
+  change Nat.card ((P : Subgroup H).map H.subtype) = 7
+  exact (Nat.card_congr
+    ((P : Subgroup H).equivMapOfInjective H.subtype Subtype.coe_injective).toEquiv).symm.trans hPcard
+
+/-- Any order-thirty-five subgroup yields a normal order-seven subgroup by
+examining the kernel of its action on the six cosets. -/
+lemma apm_b98a01_normal_order7_of_order35
+    (G : Type*) [Group G] [Fintype G] (M : Subgroup G)
+    (hG : Fintype.card G = 210) (hM : Nat.card M = 35) :
+    ∃ N : Subgroup G, N.Normal ∧ Nat.card N = 7 := by
+  have hMindex : M.index = 6 := by
+    have hp := M.card_mul_index
+    rw [hM, show Nat.card G = 210 by
+      simpa [Nat.card_eq_fintype_card] using hG] at hp
+    omega
+  obtain ⟨ψ, hkerle, _⟩ := apm_b98a01_coset_core_action G M 6 hMindex
+  let K : Subgroup G := MonoidHom.ker ψ
+  have hKdvd : Nat.card K ∣ 35 := by
+    rw [← hM]
+    exact Subgroup.card_dvd_of_le hkerle
+  have hKprod : Nat.card K * K.index = 210 := by
+    simpa [K, Nat.card_eq_fintype_card, hG] using K.card_mul_index
+  have hKindexDvd : K.index ∣ 720 := by
+    change (MonoidHom.ker ψ).index ∣ 720
+    rw [Subgroup.index_ker]
+    have hrange := ψ.range.card_subgroup_dvd_card
+    have hp : Nat.card (Equiv.Perm (Fin 6)) = 720 := by
+      rw [Nat.card_perm]
+      norm_num
+    rw [hp] at hrange
+    exact hrange
+  rcases apm_b98a01_core_card_arithmetic (Nat.card K) K.index
+      hKdvd hKprod hKindexDvd with hK | hK
+  · exact ⟨K, inferInstance, hK⟩
+  · exact apm_b98a01_normal_order7_of_normal_order35 G K inferInstance hK
+
+/-- The repaired order-thirty-five condition is equivalent to the existence
+of a normal subgroup of order seven. -/
+lemma apm_b98a01_order35_iff_normal_order7
+    (G : Type*) [Group G] [Fintype G] (hG : Fintype.card G = 210) :
+    (∃ M : Subgroup G, Nat.card M = 35) ↔
+      ∃ N : Subgroup G, N.Normal ∧ Nat.card N = 7 := by
+  constructor
+  · rintro ⟨M, hM⟩
+    exact apm_b98a01_normal_order7_of_order35 G M hG hM
+  · rintro ⟨N, hNnormal, hN⟩
+    exact apm_b98a01_order35_of_normal_order7 G N hG hNnormal hN
+
+/-- An order-ten subgroup can be conjugated to one containing any prescribed
+order-five subgroup.  Inside it, that subgroup has index two and is normal. -/
+lemma apm_b98a01_order10_over_order5
+    (G : Type*) [Group G] [Fintype G] (B L : Subgroup G)
+    (hG : Fintype.card G = 210) (hB : Nat.card B = 5) (hL : Nat.card L = 10) :
+    ∃ L' : Subgroup G, Nat.card L' = 10 ∧ B ≤ L' ∧ (B.subgroupOf L').Normal := by
+  letI : Fact (Nat.Prime 5) := ⟨by norm_num⟩
+  let P : Sylow 5 L := default
+  have hPcard : Nat.card P = 5 := by
+    rw [P.card_eq_multiplicity, hL, Nat.factorization_def 10 (by norm_num : Nat.Prime 5),
+      show 10 = 5 * 2 by norm_num,
+      padicValNat_base_mul (p := 5) (n := 2) (by norm_num) (by norm_num),
+      padicValNat.eq_zero_of_not_dvd (by norm_num)]
+    norm_num
+  let Q : Subgroup G := (P : Subgroup L).map L.subtype
+  have hQcard : Nat.card Q = 5 := by
+    change Nat.card ((P : Subgroup L).map L.subtype) = 5
+    exact (Nat.card_congr
+      ((P : Subgroup L).equivMapOfInjective L.subtype Subtype.coe_injective).toEquiv).symm.trans
+        hPcard
+  let Qs : Sylow 5 G := apm_b98a01_orderFiveSylow G Q hG hQcard
+  let Bs : Sylow 5 G := apm_b98a01_orderFiveSylow G B hG hB
+  obtain ⟨g, hg⟩ := MulAction.exists_smul_eq G Qs Bs
+  let L' : Subgroup G := L.map (MulAut.conj g).toMonoidHom
+  have hL' : Nat.card L' = 10 := by
+    change Nat.card (L.map (MulAut.conj g).toMonoidHom) = 10
+    exact (Nat.card_congr (MulEquiv.subgroupMap (MulAut.conj g) L).toEquiv).symm.trans hL
+  have hQB : Q.map (MulAut.conj g).toMonoidHom = B := by
+    exact congr_arg Sylow.toSubgroup hg
+  have hQL : Q ≤ L := by
+    rintro x ⟨y, hy, rfl⟩
+    exact y.property
+  have hBL' : B ≤ L' := by
+    rw [← hQB]
+    exact Subgroup.map_mono hQL
+  refine ⟨L', hL', hBL', ?_⟩
+  apply Subgroup.normal_of_index_eq_two
+  have hp := (B.subgroupOf L').card_mul_index
+  have hsubcard : Nat.card (B.subgroupOf L') = 5 := by
+    exact (Nat.card_congr (Subgroup.subgroupOfEquivOfLe hBL').toEquiv).trans hB
+  rw [hsubcard, hL'] at hp
+  omega
+
+/-- An order-thirty-five subgroup can likewise be conjugated to contain the
+prescribed order-five subgroup; Sylow arithmetic makes it normal there. -/
+lemma apm_b98a01_order35_over_order5
+    (G : Type*) [Group G] [Fintype G] (B M : Subgroup G)
+    (hG : Fintype.card G = 210) (hB : Nat.card B = 5) (hM : Nat.card M = 35) :
+    ∃ M' : Subgroup G, Nat.card M' = 35 ∧ B ≤ M' ∧ (B.subgroupOf M').Normal := by
+  letI : Fact (Nat.Prime 5) := ⟨by norm_num⟩
+  let P : Sylow 5 M := default
+  have hPcard : Nat.card P = 5 := by
+    rw [P.card_eq_multiplicity, hM, Nat.factorization_def 35 (by norm_num : Nat.Prime 5),
+      show 35 = 5 * 7 by norm_num,
+      padicValNat_base_mul (p := 5) (n := 7) (by norm_num) (by norm_num),
+      padicValNat.eq_zero_of_not_dvd (by norm_num)]
+    norm_num
+  let Q : Subgroup G := (P : Subgroup M).map M.subtype
+  have hQcard : Nat.card Q = 5 := by
+    change Nat.card ((P : Subgroup M).map M.subtype) = 5
+    exact (Nat.card_congr
+      ((P : Subgroup M).equivMapOfInjective M.subtype Subtype.coe_injective).toEquiv).symm.trans
+        hPcard
+  let Qs : Sylow 5 G := apm_b98a01_orderFiveSylow G Q hG hQcard
+  let Bs : Sylow 5 G := apm_b98a01_orderFiveSylow G B hG hB
+  obtain ⟨g, hg⟩ := MulAction.exists_smul_eq G Qs Bs
+  let M' : Subgroup G := M.map (MulAut.conj g).toMonoidHom
+  have hM' : Nat.card M' = 35 := by
+    change Nat.card (M.map (MulAut.conj g).toMonoidHom) = 35
+    exact (Nat.card_congr (MulEquiv.subgroupMap (MulAut.conj g) M).toEquiv).symm.trans hM
+  have hQB : Q.map (MulAut.conj g).toMonoidHom = B := by
+    exact congr_arg Sylow.toSubgroup hg
+  have hQM : Q ≤ M := by
+    rintro x ⟨y, hy, rfl⟩
+    exact y.property
+  have hBM' : B ≤ M' := by
+    rw [← hQB]
+    exact Subgroup.map_mono hQM
+  let Bs' : Sylow 5 M' := by
+    apply Sylow.ofCard (B.subgroupOf M')
+    rw [show Nat.card (B.subgroupOf M') = 5 by
+      exact (Nat.card_congr (Subgroup.subgroupOfEquivOfLe hBM').toEquiv).trans hB, hM',
+      Nat.factorization_def 35 (by norm_num : Nat.Prime 5),
+      show 35 = 5 * 7 by norm_num,
+      padicValNat_base_mul (p := 5) (n := 7) (by norm_num) (by norm_num),
+      padicValNat.eq_zero_of_not_dvd (by norm_num)]
+    norm_num
+  have hBindex : (B.subgroupOf M').index = 7 := by
+    have hp := (B.subgroupOf M').card_mul_index
+    rw [show Nat.card (B.subgroupOf M') = 5 by
+      exact (Nat.card_congr (Subgroup.subgroupOfEquivOfLe hBM').toEquiv).trans hB, hM'] at hp
+    omega
+  let s := Nat.card (Sylow 5 M')
+  have hsdvd : s ∣ 7 := by
+    simpa [s, Bs', hBindex] using Bs'.card_dvd_index
+  have hsmod : s % 5 = 1 := by
+    have hm := card_sylow_modEq_one 5 M'
+    change s % 5 = 1 % 5 at hm
+    simpa using hm
+  have hs : s = 1 := by
+    have hspos : 0 < s := Nat.card_pos
+    have hsle : s ≤ 7 := Nat.le_of_dvd (by norm_num) hsdvd
+    interval_cases s
+    all_goals norm_num at *
+  letI : Subsingleton (Sylow 5 M') := (Nat.card_eq_one_iff_unique.mp hs).1
+  refine ⟨M', hM', hBM', ?_⟩
+  have hnormal : (Bs' : Subgroup M').Normal := Bs'.normal_of_subsingleton
+  simpa [Bs'] using hnormal
+
+lemma apm_b98a01_order10_forces_normalizer10
+    (G : Type*) [Group G] [Fintype G] (B : Subgroup G)
+    (hG : Fintype.card G = 210) (hB : Nat.card B = 5) (hnormal : ¬B.Normal)
+    (h10 : ∃ L : Subgroup G, Nat.card L = 10) :
+    Nat.card (Subgroup.normalizer (B : Set G)) = 10 := by
+  obtain ⟨L, hL⟩ := h10
+  obtain ⟨L', hL', hBL', hBnormal⟩ := apm_b98a01_order10_over_order5 G B L hG hB hL
+  have hle : L' ≤ Subgroup.normalizer (B : Set G) :=
+    (Subgroup.normal_subgroupOf_iff_le_normalizer hBL').mp hBnormal
+  have hdvd : 10 ∣ Nat.card (Subgroup.normalizer (B : Set G)) := by
+    rw [← hL']
+    exact Subgroup.card_dvd_of_le hle
+  rcases apm_b98a01_orderFive_normalizer_card G B hG hB hnormal with h | h
+  · exact h
+  · norm_num [h] at hdvd
+
+lemma apm_b98a01_order35_forces_normalizer35
+    (G : Type*) [Group G] [Fintype G] (B : Subgroup G)
+    (hG : Fintype.card G = 210) (hB : Nat.card B = 5) (hnormal : ¬B.Normal)
+    (h35 : ∃ M : Subgroup G, Nat.card M = 35) :
+    Nat.card (Subgroup.normalizer (B : Set G)) = 35 := by
+  obtain ⟨M, hM⟩ := h35
+  obtain ⟨M', hM', hBM', hBnormal⟩ := apm_b98a01_order35_over_order5 G B M hG hB hM
+  have hle : M' ≤ Subgroup.normalizer (B : Set G) :=
+    (Subgroup.normal_subgroupOf_iff_le_normalizer hBM').mp hBnormal
+  have hdvd : 35 ∣ Nat.card (Subgroup.normalizer (B : Set G)) := by
+    rw [← hM']
+    exact Subgroup.card_dvd_of_le hle
+  rcases apm_b98a01_orderFive_normalizer_card G B hG hB hnormal with h | h
+  · norm_num [h] at hdvd
+  · exact h
+
 theorem apm_b98a01 :
     (∀ (G : Type*) [Group G] [Fintype G] (H : Subgroup G) (n : ℕ),
       H.index = n →
@@ -197,8 +491,37 @@ theorem apm_b98a01 :
   universal property.  The main theorem now wires both this clause and the
   hop-2 normalizer alternative explicitly; only the refinement/exclusivity
   clauses and order-35/normal-order-7 equivalence remain.
+
+  Solver round 1 adds the constructive reverse implication in the final
+  equivalence.  Given a normal order-seven subgroup, the quotient has order
+  thirty; Cauchy's theorem supplies an order-five cyclic subgroup there, and
+  its preimage has index six and hence order thirty-five.  The forward
+  implication still depends on extracting the order-seven normal core from an
+  index-six subgroup.
+
+  Solver rounds 2--3 close the remaining chain.  Kernel divisibility in the
+  index-six action yields the normal order-seven subgroup and proves the final
+  equivalence.  Conjugating a Sylow-five subgroup of any order-ten or
+  order-thirty-five subgroup onto `B` embeds a subgroup of the corresponding
+  size in `normalizer B`; the Sylow-five subgroup is normal in the conjugated
+  container (by index two in the first case and Sylow counting in the second).
+  Thus the normalizer dichotomy determines which size exists and proves both
+  refinement and exclusivity.
   -/
   refine ⟨fun G _ _ H n hn => apm_b98a01_coset_core_action G H n hn, ?_⟩
   intro G _ _ B hG hB hnormal
-  refine ⟨apm_b98a01_orderFive_normalizer_card G B hG hB hnormal, ?_⟩
-  sorry
+  have hnc := apm_b98a01_orderFive_normalizer_card G B hG hB hnormal
+  refine ⟨hnc, ?_⟩
+  refine ⟨apm_b98a01_order10_forces_normalizer10 G B hG hB hnormal, ?_⟩
+  refine ⟨?_, apm_b98a01_order35_iff_normal_order7 G hG⟩
+  rcases hnc with hnc10 | hnc35
+  · left
+    refine ⟨⟨Subgroup.normalizer (B : Set G), hnc10⟩, ?_⟩
+    rintro ⟨M, hM⟩
+    have h := apm_b98a01_order35_forces_normalizer35 G B hG hB hnormal ⟨M, hM⟩
+    omega
+  · right
+    refine ⟨⟨Subgroup.normalizer (B : Set G), hnc35⟩, ?_⟩
+    rintro ⟨L, hL⟩
+    have h := apm_b98a01_order10_forces_normalizer10 G B hG hB hnormal ⟨L, hL⟩
+    omega
