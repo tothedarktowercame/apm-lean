@@ -5603,6 +5603,24 @@
      {:cmd "git status --porcelain=v1",
       :exit 0,
       :output "?? scripts/land-certified-solves.sh"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788797236798-13867-3bfaf4bf",
+     :commands
+     ["git show/diff-tree 8841f4c5c849fa8ba39e7acfabf3fdf010532072"
+      "sha256sum fixture module markdown"
+      "cmp -s fixture module"
+      "recompute recorded declaration-region statement sha256"
+      "git merge-base --is-ancestor 35b7052c94051714fc7450e91e676c9f1fb72208 8841f4c5c849fa8ba39e7acfabf3fdf010532072"
+      "lake env lean ConstructionTargets/SardTaylorPolynomialCollapse.lean"
+      "lake env lean /tmp/SardTaylorPolynomialCollapseProbe.lean"
+      "rg forbidden-placeholder scan"
+      "recompute frozen Main.lean hash and theorem/sorry counts"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check; git diff --cached --check; git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer differs from codex-2 author; recorded commit adds exactly the two scoped files; fixture and module are byte-identical and all recorded hashes reproduce; dependency commit is an ancestor; module and fixture compile with only propext, Classical.choice, and Quot.sound; scoped placeholder count is zero and frozen consumer hash/counts are unchanged; the induction correctly retains the zero-order value and kills orders 1 through k, while the UniqueDiffOn/ContDiff adapter correctly converts global iterated derivatives to within-set derivatives at the expansion point; current diff and status gates pass."},
     :commit "8841f4c5c849fa8ba39e7acfabf3fdf010532072",
     :changed-paths
     ["ConstructionTargets/SardTaylorPolynomialCollapse.lean"
@@ -5626,7 +5644,7 @@
      "c0016a0636e05a197c9ddd1cec137e56fe431b2971655e097595f57d4f4a4a3e"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardTaylorPolynomialCollapse.lean"
     "ConstructionTargets/SardTaylorPolynomialCollapse.md"],
@@ -5720,7 +5738,7 @@
       "The Taylor polynomial now collapses under the transferred vanishing hypotheses; a uniform highest-derivative bound and remainder normalization remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
