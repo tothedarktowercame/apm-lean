@@ -8638,6 +8638,49 @@
       :output
       "ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean\nConstructionTargets/SardNonzeroScalarImplicitFunctionData.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788815461792-14148-b6a20efc",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat a87a8b99f77f5e9e7e4ea8de7282f502b640930d && git diff-tree --no-commit-id --name-status -r a87a8b99f77f5e9e7e4ea8de7282f502b640930d",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean && git show a87a8b99f77f5e9e7e4ea8de7282f502b640930d:ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean | sha256sum && git show a87a8b99f77f5e9e7e4ea8de7282f502b640930d:ConstructionTargets/SardNonzeroScalarImplicitFunctionData.md | sha256sum",
+       :exit 0,
+       :output
+       "Lean fixture/module 869fcaa2c72b2a06335ad082fcfdfd6b3b1e1632da092f0523061de2349af0; note 4997a0c4de0552a5d0fe04820e2fd2403dde523112993b8bf7148efbc55e3704"}
+      {:cmd
+       "cmp -s /tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean && lake env lean /tmp/SardNonzeroScalarImplicitFunctionDataProbe.lean && lake env lean ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean && lake build ConstructionTargets.SardNonzeroScalarImplicitFunctionData",
+       :exit 0,
+       :output
+       "Build completed successfully (8245 jobs); both declarations use only propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean ConstructionTargets/SardNonzeroScalarImplicitFunctionData.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations"}
+      {:cmd
+       "sed -n '/^theorem exists_localChart_of_strictFDeriv_apply_ne_zero/,/^#print axioms exists_localChart_scalar_fixedDirections/p' ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean | sha256sum",
+       :exit 0,
+       :output
+       "52fb06fa2e87178096652ee8ff91fde40a93daac8affedb88429e1bf04790c45"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "82 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 sorry; 1 theorem"}
+      {:cmd
+       "git merge-base --is-ancestor 8218a4e7a3765a5ed38ef8964769e9751461d1a8 a87a8b99f77f5e9e7e4ea8de7282f502b640930d && readlink -f .lake/packages && git diff a87a8b99f77f5e9e7e4ea8de7282f502b640930d^ a87a8b99f77f5e9e7e4ea8de7282f502b640930d --check",
+       :exit 0,
+       :output
+       "Dependency ancestry verified; package authority /home/joe/code/apm-lean/.lake/packages; diff clean"}],
+     :finding
+     "PASS. Recorded commit a87a8b99f77f5e9e7e4ea8de7282f502b640930d changes exactly the two scoped files and is byte-identical to the recorded fixture. The generic theorem correctly converts a nonzero scalar strict derivative into surjectivity, uses the kernel orthogonal projection as the complementary coordinate, packages the exact ImplicitFunctionData fields, and returns a chart containing x with the stated coordinate value. The specialized theorem preserves the general target F, scalar functional, fixed directions, Fin.cons orientation, and explicit strict-derivative hypothesis; its derivative rewrite applies the nonzero next-jet assumption in the required direction. Frozen hashes, placeholder counts, consumer hash, standard-only axiom profile, and residual boundary all reproduce."},
     :commit "a87a8b99f77f5e9e7e4ea8de7282f502b640930d",
     :changed-paths
     ["ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean"
@@ -8651,7 +8694,7 @@
      "exists_localChart_scalar_fixedDirections"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean"
     "ConstructionTargets/SardNonzeroScalarImplicitFunctionData.md"],
@@ -8819,7 +8862,7 @@
       "869fcaa2c72b2a06335ad082fcfdfd6b3b1e1632da092f0523061de2349af0d3"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
