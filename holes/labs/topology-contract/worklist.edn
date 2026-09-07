@@ -10473,8 +10473,77 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled remaining-order scalarized-jet regularity theorem cannot be promoted with its exact ContDiff ℝ (n+i) hypothesis, WithTop order n, iteratedFDeriv, fixed-direction evaluation, selected continuous-linear scalar functional, pointwise form, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Combine remaining-order scalarized-jet regularity with the exact defining-fields constructor to obtain a smooth kernel parameterization, prove ContDiffAt for f composed with that parameterization, and invoke source-dimension induction.",
+    :gates
+    {:fixture-identical true,
+     :focused-build true,
+     :worklist-valid true,
+     :scope-clean true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:declarations
+     "86a90e367bff3adc2c20b97c936b92a57056514a7c44f479a58141f1aa24a0f6",
+     :lean-file
+     "ea20057aa1d6bf11a3f5578ff75329dc4beea765a13b4386d93ef18455f0e261",
+     :note-file
+     "6a600c2e1b07af4a402d52edb0588b937ed7778d57149601a690fe2ae3150950"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardScalarizedJetRemainingOrderContDiffProbe.lean ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.lean ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean problems/t93A04/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/SardScalarizedJetRemainingOrderContDiffProbe.lean ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardScalarizedJetRemainingOrderContDiffProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardScalarizedJetRemainingOrderContDiff",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 95 items OK; {:done 86, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Preserve scalarized jet remaining smoothness order'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "53cf77445b9a3558fe35741de5ffb85347c60113",
+    :changed-paths
+    ["ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.lean"
+     "ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.md"],
+    :fixture
+    {:path "/tmp/SardScalarizedJetRemainingOrderContDiffProbe.lean",
+     :sha256
+     "ea20057aa1d6bf11a3f5578ff75329dc4beea765a13b4386d93ef18455f0e261"},
+    :declarations
+    ["contDiff_scalar_fixedDirections_iteratedFDeriv_remainingOrder"
+     "contDiffAt_scalar_fixedDirections_iteratedFDeriv_remainingOrder"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.lean"
     "ConstructionTargets/SardScalarizedJetRemainingOrderContDiff.md"],
