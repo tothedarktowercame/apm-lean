@@ -4514,8 +4514,73 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled polynomial packing-cardinality theorem cannot be promoted at the recorded representation without changing its positivity or finite-volume hypotheses or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "one maximal-separated source packing construction and Taylor target-volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :module-compiled true,
+     :fixture-module-byte-identical true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"finset_card_le_enlarged_halfRadius_power"
+     "cbe3dddc663d9ba60b0732c99799f1a601ad9bbdd7d5cb2c6c020e007535270b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardPolynomialPackingBoundProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardPolynomialPackingBoundProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardPolynomialPackingCardinality.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardPolynomialPackingCardinality.lean ConstructionTargets/SardPolynomialPackingCardinality.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardPolynomialPackingBoundProbe.lean ConstructionTargets/SardPolynomialPackingCardinality.lean ConstructionTargets/SardPolynomialPackingCardinality.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem finset_card_le_enlarged_halfRadius_power/,/ := by/p' ConstructionTargets/SardPolynomialPackingCardinality.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard polynomial packing cardinality'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "5dc2ef273662842daaf07547811cb341efb2d79d",
+    :changed-paths
+    ["ConstructionTargets/SardPolynomialPackingCardinality.lean"
+     "ConstructionTargets/SardPolynomialPackingCardinality.md"],
+    :file-hashes
+    {"ConstructionTargets/SardPolynomialPackingCardinality.lean"
+     "45107f350384fd378bca3e37bce58a32f701fd6f7014d1410bf69a88839de854",
+     "ConstructionTargets/SardPolynomialPackingCardinality.md"
+     "40e52dd4901dd346cc5e7931e482c5f1e572ebe433f6bcff3e1f156bf6c7dd9b"},
+    :fixture
+    {:path "/tmp/SardPolynomialPackingBoundProbe.lean",
+     :sha256
+     "45107f350384fd378bca3e37bce58a32f701fd6f7014d1410bf69a88839de854"},
+    :declarations ["finset_card_le_enlarged_halfRadius_power"],
+    :dependencies
+    [{:path "ConstructionTargets/SardENNRealPackingQuotient.lean",
+      :commit "0d31fe62"}
+     {:path "ConstructionTargets/SardENNRealBallVolumeRatio.lean",
+      :commit "93e282ca"}
+     {:path
+      "ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean",
+      :commit "89bdd4ff"}],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardPolynomialPackingCardinality.lean"
     "ConstructionTargets/SardPolynomialPackingCardinality.md"],
