@@ -2674,78 +2674,53 @@
    :stop-condition
    "Stop only if the fixture cannot be promoted unchanged within scope or requires nonstandard axioms.",
    :evidence
-   {:probe
-    {:residual
-     "The local rank-coordinate normal form is compiled. Rectangular Sard still needs the separately scheduled multivariable Taylor-covering nullity estimate and rank/source-dimension induction; no manifold chart assembly has begun.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :reason
-     "Pinned Mathlib's ImplicitFunctionData already packages the exact finite-dimensional minor data after choosing regular output coordinates and complementary source coordinates: surjective regular and complementary derivatives with complementary kernels. Its inverse-function construction yields an OpenPartialHomeomorph whose coordinates are literally the regular output block and complementary source block, together with the local inverse equations. The placeholder-free fixture compiles this local rank-normal-form interface; no constant-rank theorem is required because Sard uses it only on a neighborhood where a selected minor remains nonzero.",
-     :commands
-     [{:cmd
-       "rg -n 'HasFDerivAt.*local|toPartialHomeomorph|inverse.*function.*theorem|IsLocal.*fderiv' .lake/packages/mathlib/Mathlib/Analysis/Calculus/InverseFunctionTheorem -g '*.lean'",
-       :exit 0}
-      {:cmd
-       "sed -n '1,230p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean",
-       :exit 0}
-      {:cmd
-       "sed -n '90,175p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/InverseFunctionTheorem/FDeriv.lean",
-       :exit 0}
-      {:cmd "lake env lean /tmp/SardLocalRankNormalFormProbe.lean",
-       :exit 0,
-       :output
-       "'localRankNormalForm_of_complemented_minor' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardLocalRankNormalFormProbe.lean",
-       :exit 0,
-       :output
-       "a564986b9ccb41384b7fc95c7b62155b37058ea58240eb576e718d0189dec677"}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/SardLocalRankNormalFormProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
-      {:cmd "git diff --check", :exit 0}],
-     :fixture
-     {:path "/tmp/SardLocalRankNormalFormProbe.lean",
-      :sha256
-      "a564986b9ccb41384b7fc95c7b62155b37058ea58240eb576e718d0189dec677"},
-     :implementation
-     {:consumer :t93A04,
-      :stop-condition
-      "Stop only if the fixture cannot be promoted unchanged within scope or requires nonstandard axioms.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/SardLocalRankNormalForm.lean"
-       "ConstructionTargets/SardLocalRankNormalForm.md"],
-      :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCAL RANK NORMAL FORM",
-      :acceptance
-      {:fixture
-       {:path "/tmp/SardLocalRankNormalFormProbe.lean",
-        :sha256
-        "a564986b9ccb41384b7fc95c7b62155b37058ea58240eb576e718d0189dec677"},
-       :declarations ["localRankNormalForm_of_complemented_minor"],
-       :consumer-residual
-       "multivariable Taylor-covering nullity and rank/source-dimension induction",
-       :axioms :standard-only},
-      :representation
-      {:source
-       "ImplicitFunctionData for the selected regular output block and a complementary source-coordinate block, obtained from an invertible derivative minor",
-       :target
-       "an OpenPartialHomeomorph into regular-output × complementary-source coordinates, with literal forward coordinates and local inverse equations"},
-      :id :critical-value-sard-local-rank-normal-form-implementation-2,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "promote the compiled ImplicitFunctionData specialization as the reusable local coordinate interface",
-      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :seat :codex-1},
-    :requested-id
-    :critical-value-sard-local-rank-normal-form-implementation-2},
+   {:placeholder-delta 0,
+    :residual
+    "multivariable Taylor-covering nullity and rank/source-dimension induction; no manifold chart assembly begun",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:localRankNormalForm_of_complemented_minor
+     "106137897f66664364f54417d2c7664cf1d7827f9bda1315d299e20ba1839fb5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/SardLocalRankNormalFormProbe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/SardLocalRankNormalFormProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardLocalRankNormalForm.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardLocalRankNormalForm.lean ConstructionTargets/SardLocalRankNormalForm.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "7bc80d8f72811affd71a70cf3396cc21964359af",
+    :changed-paths
+    ["ConstructionTargets/SardLocalRankNormalForm.lean"
+     "ConstructionTargets/SardLocalRankNormalForm.md"],
+    :file-hashes
+    {"ConstructionTargets/SardLocalRankNormalForm.lean"
+     "f30e01b3fb2da7b380e8b130ffcd4ffc70bdc793f21865150d9f8a0873df2de4",
+     "ConstructionTargets/SardLocalRankNormalForm.md"
+     "a66cc07ec91ac890c15f77e8064c306af1ea2be81e8cc1a8eec2801cdd4d6ba6"},
+    :fixture
+    {:path "/tmp/SardLocalRankNormalFormProbe.lean",
+     :sha256
+     "a564986b9ccb41384b7fc95c7b62155b37058ea58240eb576e718d0189dec677"},
+    :declarations ["localRankNormalForm_of_complemented_minor"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardLocalRankNormalForm.lean"
     "ConstructionTargets/SardLocalRankNormalForm.md"],
