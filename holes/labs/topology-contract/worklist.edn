@@ -9784,6 +9784,54 @@
       :output
       "ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean\nConstructionTargets/SardImplicitFunctionKernelSliceParameterization.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788819099952-14211-88c80aa2",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 678398a98e51892427babdedd9fb6f41cd2d4a48 && git diff-tree --no-commit-id --name-status -r 678398a98e51892427babdedd9fb6f41cd2d4a48",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean && git show 678398a98e51892427babdedd9fb6f41cd2d4a48:ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean | sha256sum && git show 678398a98e51892427babdedd9fb6f41cd2d4a48:ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean 714213d1cd7159997975ed010d406160e4213f9bf14af639f60459315dc81105; note 5378ee4f689445aac3a378afc1193774b6264f1cf4e6ecf7a6a9cd1e79fe430f"}
+      {:cmd
+       "sed -n '7,33p' ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean | sha256sum",
+       :exit 0,
+       :output
+       "1059cdd472361a234e2c945fcc4c96ff4ddc0dd4b0417abe5206727518a0228b"}
+      {:cmd
+       "cmp -s /tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean && lake env lean /tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean && lake env lean ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean && lake build ConstructionTargets.SardImplicitFunctionKernelSliceParameterization",
+       :exit 0,
+       :output
+       "Build completed successfully (8253 jobs); generic theorem uses propext and Quot.sound, specialization additionally uses Classical.choice."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "git merge-base --is-ancestor d270de627b3ce7deb8f0a8103012e8da7dcd9c63 678398a98e51892427babdedd9fb6f41cd2d4a48",
+       :exit 0,
+       :output "Recorded dependency is an ancestor."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 90 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff 678398a98e51892427babdedd9fb6f41cd2d4a48^ 678398a98e51892427babdedd9fb6f41cd2d4a48 --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit 678398a98e51892427babdedd9fb6f41cd2d4a48 has exact scope and reproduces every frozen hash and consumer count. The generic equality is proved in the required image-to-intersection orientation: an image witness (c,z) supplies ambient-set membership and first coordinate c, while a point in the intersection is destructured, its first coordinate is substituted using the equality, and its second coordinate supplies the unique required parameter witness. The ImplicitFunctionData theorem reverses that generic equality to match the requested target-slice-to-image orientation and specializes the ambient set exactly to the chart target. Its parameter domain is precisely {z : G | (c,z) belongs to the target}, so no product coordinate remains in the source of the parameterization. In the scalar application G is the derivative kernel supplied by the preceding data theorem; transport of the stratum map and inductive nullity remain correctly unclaimed residual work. Only standard axioms occur."},
     :commit "678398a98e51892427babdedd9fb6f41cd2d4a48",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean"
@@ -9798,7 +9846,7 @@
      "ImplicitFunctionData.target_inter_fst_eq_image_kernelSlice"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean"
     "ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.md"],
@@ -9964,7 +10012,7 @@
       "714213d1cd7159997975ed010d406160e4213f9bf14af639f60459315dc81105"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
