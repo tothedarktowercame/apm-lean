@@ -8866,6 +8866,40 @@
    "The exact strict derivative required by the scalar implicit-function chart is compiled; direct chart application and source-dimension reduction of the nonzero-jet strata remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled direct scalarized-jet local-chart theorem cannot be promoted with its exact ContDiff ℝ (i+1) hypothesis, general target F, selected functional ℓ, iteratedFDeriv/Fin.cons representation, kernel-coordinate target, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardScalarizedJetLocalChart.lean"
+    "ConstructionTargets/SardScalarizedJetLocalChart.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALARIZED JET LOCAL HYPERSURFACE CHART",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardScalarizedJetLocalChartProbe.lean",
+     :sha256
+     "b4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3"},
+    :declarations
+    ["exists_localChart_scalar_fixedDirections_of_contDiff"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the compiled local hypersurface coordinates to reduce each nonzero-jet stratum to the derivative kernel, prove its image null by source-dimension induction, and aggregate with the Taylor-flat locus."},
+   :representation
+   {:source
+    "A finite-dimensional real inner-product source E, general target F, f:E→F of class ContDiff ℝ (i+1), fixed directions v, selected functional ℓ, and nonzero scalar next-jet value ℓ(iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)).",
+    :target
+    "An OpenPartialHomeomorph E → ℝ × ker L for L=fderiv ℝ (fun y↦ℓ(iteratedFDeriv ℝ i f y v)) x, containing x in its source and mapping x to the exact scalarized jet value and orthogonal kernel coordinate."},
+   :id :critical-value-sard-scalarized-jet-local-chart-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-scalarized-jet-strict-derivative-1
+    :critical-value-sard-nonzero-scalar-implicit-function-data-1],
+   :current-residual
+   "The direct local hypersurface chart is compiled from the original ContDiff and nonzero next-jet hypotheses; source-dimension nullity on the kernel coordinates and stratum aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -8923,67 +8957,65 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled C^(i+1)-to-strict-derivative promotion cannot be promoted with its exact scalarized fixed-direction iteratedFDeriv function, general target F, selected functional ℓ, fderiv conclusion, order bound, or standard-axiom profile.",
+      "Stop only if the compiled direct scalarized-jet local-chart theorem cannot be promoted with its exact ContDiff ℝ (i+1) hypothesis, general target F, selected functional ℓ, iteratedFDeriv/Fin.cons representation, kernel-coordinate target, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardScalarizedJetStrictDerivative.lean"
-       "ConstructionTargets/SardScalarizedJetStrictDerivative.md"],
+      ["ConstructionTargets/SardScalarizedJetLocalChart.lean"
+       "ConstructionTargets/SardScalarizedJetLocalChart.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALARIZED JET STRICT DERIVATIVE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALARIZED JET LOCAL HYPERSURFACE CHART",
       :acceptance
       {:fixture
-       {:path "/tmp/SardScalarizedJetStrictDerivativeProbe.lean",
+       {:path "/tmp/SardScalarizedJetLocalChartProbe.lean",
         :sha256
-        "8567d6fe5cd96a4137d6fc67ce71ca460f1297efc92b0dbbb80e2516fe30bcec"},
+        "b4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3"},
        :declarations
-       ["contDiff_one_scalar_fixedDirections_iteratedFDeriv"
-        "hasStrictFDerivAt_scalar_fixedDirections_iteratedFDeriv"],
+       ["exists_localChart_scalar_fixedDirections_of_contDiff"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Feed the strict derivative directly into the compiled scalar implicit-function chart, then use the local hypersurface coordinates for source-dimension reduction of each nonzero-jet stratum."},
+       "Use the compiled local hypersurface coordinates to reduce each nonzero-jet stratum to the derivative kernel, prove its image null by source-dimension induction, and aggregate with the Taylor-flat locus."},
       :representation
       {:source
-       "A general map f:E→F of class ContDiff ℝ (i+1), fixed directions v:Fin i→E, and a selected continuous real-linear functional ℓ:F→L[ℝ]ℝ.",
+       "A finite-dimensional real inner-product source E, general target F, f:E→F of class ContDiff ℝ (i+1), fixed directions v, selected functional ℓ, and nonzero scalar next-jet value ℓ(iteratedFDeriv ℝ (i+1) f x (Fin.cons h v)).",
        :target
-       "ContDiff ℝ 1 of y↦ℓ(iteratedFDeriv ℝ i f y v), and HasStrictFDerivAt of that exact scalarized function with derivative fderiv ℝ (fun y↦ℓ(iteratedFDeriv ℝ i f y v)) x."},
-      :id :critical-value-sard-scalarized-jet-strict-derivative-1,
+       "An OpenPartialHomeomorph E → ℝ × ker L for L=fderiv ℝ (fun y↦ℓ(iteratedFDeriv ℝ i f y v)) x, containing x in its source and mapping x to the exact scalarized jet value and orthogonal kernel coordinate."},
+      :id :critical-value-sard-scalarized-jet-local-chart-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-nonzero-scalar-implicit-function-data-1],
+      [:critical-value-sard-scalarized-jet-strict-derivative-1
+       :critical-value-sard-nonzero-scalar-implicit-function-data-1],
       :current-residual
-      "The exact strict derivative required by the scalar implicit-function chart is compiled; direct chart application and source-dimension reduction of the nonzero-jet strata remain.",
+      "The direct local hypersurface chart is compiled from the original ContDiff and nonzero next-jet hypotheses; source-dimension nullity on the kernel coordinates and stratum aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture proves the exact remaining promotion: ContDiff ℝ (i+1) f implies the scalarized fixed-direction i-jet is ContDiff ℝ 1, and therefore its exact fderiv is a HasStrictFDerivAt derivative. This discharges the sole analytic hypothesis of the compiled implicit-function chart constructor without changing F, ℓ, iteratedFDeriv, or the order bound.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture composes the reviewed strict-derivative promotion with the exact implicit-function chart constructor, eliminating the intermediate HasStrictFDerivAt hypothesis. Under only ContDiff ℝ (i+1) and the selected nonzero scalar next-jet value, it produces the precise local OpenPartialHomeomorph to ℝ × ker L. The remaining seam is the substantive source-dimension/nullity reduction on these local hypersurface coordinates.",
      :commands
-     [{:cmd
-       "lake env lean /tmp/SardScalarizedJetStrictDerivativeProbe.lean",
+     [{:cmd "lake env lean /tmp/SardScalarizedJetLocalChartProbe.lean",
        :exit 0}
-      {:cmd
-       "sha256sum /tmp/SardScalarizedJetStrictDerivativeProbe.lean",
+      {:cmd "sha256sum /tmp/SardScalarizedJetLocalChartProbe.lean",
        :exit 0,
        :output
-       "8567d6fe5cd96a4137d6fc67ce71ca460f1297efc92b0dbbb80e2516fe30bcec  /tmp/SardScalarizedJetStrictDerivativeProbe.lean"}
+       "b4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3  /tmp/SardScalarizedJetLocalChartProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardScalarizedJetStrictDerivativeProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardScalarizedJetLocalChartProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "rg -n 'ContDiff\\.iteratedFDeriv_right|ContDiffAt\\.hasStrictFDerivAt|ContDiff\\.hasStrictFDerivAt|theorem ContDiff\\.clm_apply' .lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/Comp.lean .lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/RCLike.lean",
+       "rg -n 'exists_localChart_scalar_fixedDirections|hasStrictFDerivAt_scalar_fixedDirections_iteratedFDeriv' ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean ConstructionTargets/SardScalarizedJetStrictDerivative.lean",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 82 items OK; {:done 74, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 83 items OK; {:done 75, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardScalarizedJetStrictDerivative.lean ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n869fcaa2c72b2a06335ad082fcfdfd6b3b1e1632da092f0523061de2349af0d3  ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n8567d6fe5cd96a4137d6fc67ce71ca460f1297efc92b0dbbb80e2516fe30bcec  ConstructionTargets/SardScalarizedJetStrictDerivative.lean\n869fcaa2c72b2a06335ad082fcfdfd6b3b1e1632da092f0523061de2349af0d3  ConstructionTargets/SardNonzeroScalarImplicitFunctionData.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -8995,12 +9027,12 @@
        :exit 0,
        :output ""}],
      :fixture
-     {:path "/tmp/SardScalarizedJetStrictDerivativeProbe.lean",
+     {:path "/tmp/SardScalarizedJetLocalChartProbe.lean",
       :sha256
-      "8567d6fe5cd96a4137d6fc67ce71ca460f1297efc92b0dbbb80e2516fe30bcec"},
+      "b4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -9031,7 +9063,8 @@
     :critical-value-sard-nonzero-scalar-derivative-surjective-1
     :critical-value-sard-nonzero-scalar-derivative-split-1
     :critical-value-sard-nonzero-scalar-implicit-function-data-1
-    :critical-value-sard-scalarized-jet-strict-derivative-1],
+    :critical-value-sard-scalarized-jet-strict-derivative-1
+    :critical-value-sard-scalarized-jet-local-chart-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
