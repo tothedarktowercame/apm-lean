@@ -5566,8 +5566,67 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if this compiled Taylor-polynomial collapse cannot be promoted with its exact derivative range, UniqueDiffOn comparison, or standard axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Bound the (k+1)st derivative of every affine-line restriction uniformly on the compact segment family, apply taylor_mean_remainder_bound, and normalize its factorial constant into the multivariable remainder consumed by exists_taylor_cover_measure_lt.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :scoped-change-committed true,
+     :worktree-clean false},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The shared worktree contains unrelated untracked scripts/land-certified-solves.sh; it was present before this row, remained untouched, and was not staged or committed."],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardTaylorPolynomialCollapseProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardTaylorPolynomialCollapseProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardTaylorPolynomialCollapse.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardTaylorPolynomialCollapse.lean ConstructionTargets/SardTaylorPolynomialCollapse.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard Taylor polynomial collapse'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output "?? scripts/land-certified-solves.sh"}],
+    :commit "8841f4c5c849fa8ba39e7acfabf3fdf010532072",
+    :changed-paths
+    ["ConstructionTargets/SardTaylorPolynomialCollapse.lean"
+     "ConstructionTargets/SardTaylorPolynomialCollapse.md"],
+    :fixture
+    {:path "/tmp/SardTaylorPolynomialCollapseProbe.lean",
+     :sha256
+     "71e5e7ebad9c233702b4d1452b2fb94534cbd42b115c8dd134edc2b2958477f5"},
+    :declarations
+    ["taylorWithinEval_eq_value_of_iteratedDerivWithin_eq_zero"
+     "taylorWithinEval_eq_value_of_iteratedDeriv_eq_zero"],
+    :dependencies
+    [{:id :critical-value-sard-affine-line-iterated-fderiv-1,
+      :commit "35b7052c94051714fc7450e91e676c9f1fb72208"}],
+    :hashes
+    {:lean
+     "71e5e7ebad9c233702b4d1452b2fb94534cbd42b115c8dd134edc2b2958477f5",
+     :markdown
+     "c30d6b923c271d5aae8c624ea0f760999700593a5bb4f4e86ce4f95fcf9b3868",
+     :statement
+     "c0016a0636e05a197c9ddd1cec137e56fe431b2971655e097595f57d4f4a4a3e"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardTaylorPolynomialCollapse.lean"
     "ConstructionTargets/SardTaylorPolynomialCollapse.md"],
