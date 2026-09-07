@@ -11859,6 +11859,43 @@
    "The refined decomposition and its null-image aggregation are compiled; local hypersurface containment, source-dimension induction instantiation, and Taylor-flat nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled refined-locus containment cannot be promoted with its exact lower-jet vanishing, scalarized fixed-direction level, ImplicitFunctionData leftFun/pt equalities, chart-source localization, inverse-chart kernel image, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstNonzeroJetKernelParameterContainment.lean"
+    "ConstructionTargets/SardFirstNonzeroJetKernelParameterContainment.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET KERNEL-PARAMETER CONTAINMENT",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
+     :sha256
+     "8065922337e54f3d198edf96294467460c51d1d88ba4d71c00aa90c8c87d2f23"},
+    :declarations
+    ["firstNonzeroJetLocus_succ_subset_scalarized_level_zero"
+     "firstNonzeroJetLocus_inter_source_subset_image_kernelParameter"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the containment theorem with the compiled scalarized-jet ImplicitFunctionData, apply lower-dimensional critical-image nullity to the kernel composite and transfer it to each local refined locus, then aggregate locally and combine with the rank-normal-form and Taylor-flat cases."},
+   :representation
+   {:source
+    "A firstNonzeroJetLocus f K (i+1) with 1≤i, fixed directions v, a selected scalar functional ℓ, and exact ImplicitFunctionData whose leftFun is the scalarized i-jet and whose pt is a point x of the locus.",
+    :target
+    "Containment of the locus intersected with the implicit chart source in the image of the exact fixed-left-coordinate inverse-chart kernel parameterization."},
+   :id
+   :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-locus-decomposition-1
+    :critical-value-sard-implicit-function-level-set-kernel-parameterization-1],
+   :current-residual
+   "The refined higher-order locus is contained in the exact kernel-parameter image on each implicit chart; construction instantiation, source-dimension induction, local nullity transfer, and the first-derivative rank case remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -11916,69 +11953,67 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled least-nonzero-jet decomposition cannot be promoted with its exact lower-order vanishing predicate, finite Icc 1 k indexing, flatThrough complement, image-nullity aggregation, or standard-axiom profile.",
+      "Stop only if the compiled refined-locus containment cannot be promoted with its exact lower-jet vanishing, scalarized fixed-direction level, ImplicitFunctionData leftFun/pt equalities, chart-source localization, inverse-chart kernel image, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean"
-       "ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.md"],
+      ["ConstructionTargets/SardFirstNonzeroJetKernelParameterContainment.lean"
+       "ConstructionTargets/SardFirstNonzeroJetKernelParameterContainment.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET LOCUS DECOMPOSITION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET KERNEL-PARAMETER CONTAINMENT",
       :acceptance
       {:fixture
-       {:path "/tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean",
+       {:path
+        "/tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
         :sha256
-        "bd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce"},
+        "8065922337e54f3d198edf96294467460c51d1d88ba4d71c00aa90c8c87d2f23"},
        :declarations
-       ["firstNonzeroJetLocus"
-        "eq_flatThrough_union_iUnion_firstNonzeroJetLocus"
-        "image_null_of_flatThrough_and_firstNonzeroJetLoci"],
+       ["firstNonzeroJetLocus_succ_subset_scalarized_level_zero"
+        "firstNonzeroJetLocus_inter_source_subset_image_kernelParameter"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "For each first-nonzero-jet locus, use its lower-jet vanishing to place a local piece in the exact scalarized-jet level hypersurface, apply kernel-parameter source-dimension induction and local-nullity aggregation, then supply Taylor-flat nullity."},
+       "Instantiate the containment theorem with the compiled scalarized-jet ImplicitFunctionData, apply lower-dimensional critical-image nullity to the kernel composite and transfer it to each local refined locus, then aggregate locally and combine with the rank-normal-form and Taylor-flat cases."},
       :representation
       {:source
-       "A localized set K, order k, and derivatives classified by the least i in Icc 1 k at which iteratedFDeriv is nonzero.",
+       "A firstNonzeroJetLocus f K (i+1) with 1≤i, fixed directions v, a selected scalar functional ℓ, and exact ImplicitFunctionData whose leftFun is the scalarized i-jet and whose pt is a point x of the locus.",
        :target
-       "An exact decomposition into flatThrough f K k and firstNonzeroJetLocus f K i, where every derivative order j<i vanishes, together with null-image aggregation over that finite family."},
-      :id :critical-value-sard-first-nonzero-jet-locus-decomposition-1,
+       "Containment of the locus intersected with the implicit chart source in the image of the exact fixed-left-coordinate inverse-chart kernel parameterization."},
+      :id
+      :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-higher-jet-locus-decomposition-1
-       :critical-value-sard-higher-jet-image-nullity-aggregation-1],
+      [:critical-value-sard-first-nonzero-jet-locus-decomposition-1
+       :critical-value-sard-implicit-function-level-set-kernel-parameterization-1],
       :current-residual
-      "The refined decomposition and its null-image aggregation are compiled; local hypersurface containment, source-dimension induction instantiation, and Taylor-flat nullity remain.",
+      "The refined higher-order locus is contained in the exact kernel-parameter image on each implicit chart; construction instantiation, source-dimension induction, local nullity transfer, and the first-derivative rank case remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The current decomposition into raw nonzero-jet loci is too coarse for the implicit-function induction: nonvanishing of the i-th jet does not place a neighborhood in a level set of the preceding scalarized jet. A placeholder-free fixture supplies the exact representation repair by partitioning according to the first nonzero derivative order, thereby retaining vanishing of every lower jet, and proves the corresponding image-nullity aggregation theorem. Local kernel-chart induction for each refined locus and Taylor-cover nullity of the flat locus remain downstream.",
+     "The rectangular theorem is not refuted. The refined least-order decomposition exposes the next exact set-level seam: for derivative order i+1 with i≥1, lower-order vanishing forces every point of the refined locus into the zero level of each selected scalarized i-jet. After identifying an ImplicitFunctionData left coordinate and base point with that scalarized jet and a point of the locus, a placeholder-free fixture proves that the locus intersected with the chart source is contained in the exact inverse-chart kernel-parameter image. This supplies the parameterized-set inclusion required by the compiled critical-image nullity transfer; source-dimension induction and the separate first-derivative/rank-normal-form case remain downstream.",
      :commands
      [{:cmd
-       "sed -n '1,240p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,260p' docs/TN-topology-closure-experiments.md; sed -n '1,260p' docs/TN-topology-build-loop-design.md",
+       "lake env lean /tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean",
+       "sha256sum /tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
        :exit 0,
        :output
-       "bd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce  /tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean"}
+       "8065922337e54f3d198edf96294467460c51d1d88ba4d71c00aa90c8c87d2f23  /tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 103 items OK; {:done 95, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 104 items OK; {:done 96, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardHigherJetImageNullityAggregation.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n1c3ffcefae38d2d6f74c4f51cdbadbe82e1c3473d9e29cc94d417d0f2be7cce2  ConstructionTargets/SardHigherJetImageNullityAggregation.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nbd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce  ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -11989,12 +12024,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardFirstNonzeroJetLocusDecompositionProbe.lean",
+     {:path
+      "/tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
       :sha256
-      "bd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce"},
+      "8065922337e54f3d198edf96294467460c51d1d88ba4d71c00aa90c8c87d2f23"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -12046,7 +12082,8 @@
     :critical-value-sard-parameterized-critical-image-nullity-1
     :critical-value-sard-local-nullity-second-countable-aggregation-1
     :critical-value-sard-higher-jet-image-nullity-aggregation-1
-    :critical-value-sard-first-nonzero-jet-locus-decomposition-1],
+    :critical-value-sard-first-nonzero-jet-locus-decomposition-1
+    :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
