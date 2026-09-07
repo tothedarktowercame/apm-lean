@@ -9729,6 +9729,42 @@
    "The localized implicit-function level set is transported exactly to a constant-first-coordinate chart-target slice; its reduction to a kernel-domain map and inductive nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled constant-first-coordinate slice parameterization cannot be promoted with its exact product-set image, chart-target specialization, kernel-coordinate domain, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean"
+    "ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION KERNEL-SLICE PARAMETERIZATION",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean",
+     :sha256
+     "714213d1cd7159997975ed010d406160e4213f9bf14af639f60459315dc81105"},
+    :declarations
+    ["image_mk_left_preimage_eq_inter_fst"
+     "ImplicitFunctionData.target_inter_fst_eq_image_kernelSlice"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Compose the level-set image equality with the kernel-slice parameterization, transport the localized nonzero-jet stratum map to this kernel-domain set, then invoke source-dimension induction and aggregate nullity."},
+   :representation
+   {:source
+    "A set t⊆F×G and c:F, specialized to the target of an exact ImplicitFunctionData chart.",
+    :target
+    "The equality t∩{p | p.1=c}=(z↦(c,z))''{z:G | (c,z)∈t}, exhibiting the chart-target level slice as the image of a subset of the right-coordinate/kernel space alone."},
+   :id
+   :critical-value-sard-implicit-function-kernel-slice-parameterization-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-implicit-function-level-set-image-1],
+   :current-residual
+   "The chart-target level slice is explicitly parameterized by a subset of the strictly lower-dimensional derivative kernel; stratum-map transport and inductive nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -9786,65 +9822,66 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled chartwise level-set image equality cannot be promoted with its exact OpenPartialHomeomorph source/target, constant-first-coordinate slice, ImplicitFunctionData leftFun specialization, or standard-axiom profile.",
+      "Stop only if the compiled constant-first-coordinate slice parameterization cannot be promoted with its exact product-set image, chart-target specialization, kernel-coordinate domain, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardImplicitFunctionLevelSetImage.lean"
-       "ConstructionTargets/SardImplicitFunctionLevelSetImage.md"],
+      ["ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.lean"
+       "ConstructionTargets/SardImplicitFunctionKernelSliceParameterization.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION LEVEL-SET IMAGE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION KERNEL-SLICE PARAMETERIZATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardImplicitFunctionLevelSetImageProbe.lean",
+       {:path
+        "/tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean",
         :sha256
-        "c0374ba70172c86bc667e4b9604b7aa7efe0a5657ac0f809fced4080e4389252"},
+        "714213d1cd7159997975ed010d406160e4213f9bf14af639f60459315dc81105"},
        :declarations
-       ["OpenPartialHomeomorph.image_inter_source_fst_eq"
-        "ImplicitFunctionData.image_inter_source_leftFun_level_eq"],
+       ["image_mk_left_preimage_eq_inter_fst"
+        "ImplicitFunctionData.target_inter_fst_eq_image_kernelSlice"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Parameterize the chart-target constant-first-coordinate slice by the derivative kernel, transport the localized nonzero-jet stratum map through that parameterization, then invoke source-dimension induction and aggregate nullity."},
+       "Compose the level-set image equality with the kernel-slice parameterization, transport the localized nonzero-jet stratum map to this kernel-domain set, then invoke source-dimension induction and aggregate nullity."},
       :representation
       {:source
-       "An OpenPartialHomeomorph E→F×G and a value c:F, specialized to the exact chart of ImplicitFunctionData ℝ E F G and its source-localized leftFun level set.",
+       "A set t⊆F×G and c:F, specialized to the target of an exact ImplicitFunctionData chart.",
        :target
-       "Exact equality between the chart image of the localized level set and the chart target intersected with the constant-first-coordinate slice {z | z.1=c}."},
-      :id :critical-value-sard-implicit-function-level-set-image-1,
+       "The equality t∩{p | p.1=c}=(z↦(c,z))''{z:G | (c,z)∈t}, exhibiting the chart-target level slice as the image of a subset of the right-coordinate/kernel space alone."},
+      :id
+      :critical-value-sard-implicit-function-kernel-slice-parameterization-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-scalarized-jet-implicit-function-data-1
-       :critical-value-sard-implicit-function-level-set-coordinates-1],
+      [:critical-value-sard-implicit-function-level-set-image-1],
       :current-residual
-      "The localized implicit-function level set is transported exactly to a constant-first-coordinate chart-target slice; its reduction to a kernel-domain map and inductive nullity remain.",
+      "The chart-target level slice is explicitly parameterized by a subset of the strictly lower-dimensional derivative kernel; stratum-map transport and inductive nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next exact transport prerequisite: every open partial homeomorphism maps its source-localized constant-first-coordinate locus exactly onto the corresponding slice of its target, and the result specializes directly to an ImplicitFunctionData left level set using the reviewed coordinate identity. Parameterizing that target slice solely by the derivative kernel and transporting the stratum map for source-dimension induction remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next exact reduction prerequisite: a constant-first-coordinate slice of any product set is precisely the image, under z↦(c,z), of a set in the second-coordinate space alone; it specializes directly to the target slice of exact ImplicitFunctionData. Thus the chartwise level set now has an explicit lower-dimensional kernel-domain parameterization. Transporting the localized stratum map through this parameterization and applying the induction hypothesis remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardImplicitFunctionLevelSetImageProbe.lean",
+       "lake env lean /tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardImplicitFunctionLevelSetImageProbe.lean",
+       "sha256sum /tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean",
        :exit 0,
        :output
-       "c0374ba70172c86bc667e4b9604b7aa7efe0a5657ac0f809fced4080e4389252  /tmp/SardImplicitFunctionLevelSetImageProbe.lean"}
+       "714213d1cd7159997975ed010d406160e4213f9bf14af639f60459315dc81105  /tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionLevelSetImageProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 88 items OK; {:done 80, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 89 items OK; {:done 81, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionLevelSetImage.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\ncbc0bce21c499b2f650d8f0d294686838bb84ccecba392fb99c54c2966dc6d9d  ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nc0374ba70172c86bc667e4b9604b7aa7efe0a5657ac0f809fced4080e4389252  ConstructionTargets/SardImplicitFunctionLevelSetImage.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -9855,12 +9892,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardImplicitFunctionLevelSetImageProbe.lean",
+     {:path
+      "/tmp/SardImplicitFunctionKernelSliceParameterizationProbe.lean",
       :sha256
-      "c0374ba70172c86bc667e4b9604b7aa7efe0a5657ac0f809fced4080e4389252"},
+      "714213d1cd7159997975ed010d406160e4213f9bf14af639f60459315dc81105"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -9897,7 +9935,8 @@
     :critical-value-sard-scalar-derivative-kernel-dimension-drop-1
     :critical-value-sard-implicit-function-level-set-coordinates-1
     :critical-value-sard-scalarized-jet-implicit-function-data-1
-    :critical-value-sard-implicit-function-level-set-image-1],
+    :critical-value-sard-implicit-function-level-set-image-1
+    :critical-value-sard-implicit-function-kernel-slice-parameterization-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
