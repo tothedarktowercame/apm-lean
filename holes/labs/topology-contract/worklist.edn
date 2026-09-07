@@ -3079,6 +3079,23 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :axiom-policy :standard-only,
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788783610883-13644-dffb7c1b",
+     :commands
+     ["git show --stat --oneline 213090b1849d7a4900584588e495f9c2b0a32372"
+      "git diff --name-status 213090b1^ 213090b1"
+      "git diff --check 213090b1^ 213090b1"
+      "git show 213090b1:ConstructionTargets/SardCompactFiniteBallCover.lean | sha256sum"
+      "git show 213090b1:ConstructionTargets/SardCompactFiniteBallCover.md | sha256sum"
+      "sha256sum /tmp/CompactFiniteBallCoverProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactFiniteBallCover.lean"
+      "lake env lean /tmp/CompactFiniteBallCoverProbe.lean"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardCompactFiniteBallCover.lean ConstructionTargets/SardCompactFiniteBallCover.md /tmp/CompactFiniteBallCoverProbe.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: commit 213090b1 has exact two-file scope and matching artifact and fixture hashes; both Lean gates compile with only propext, Classical.choice, and Quot.sound; the theorem is correctly oriented from compactness and positive radius to existence of a finite open-ball cover, explicitly avoids an unsupported cardinality estimate, introduces no placeholders, and leaves frozen t93A04 unchanged with one theorem and one placeholder."},
     :commit "213090b1849d7a4900584588e495f9c2b0a32372",
     :changed-paths
     ["ConstructionTargets/SardCompactFiniteBallCover.lean"
@@ -3095,7 +3112,7 @@
     :declarations ["IsCompact.exists_finset_ball_cover"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactFiniteBallCover.lean"
     "ConstructionTargets/SardCompactFiniteBallCover.md"],
@@ -3189,7 +3206,7 @@
       "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
