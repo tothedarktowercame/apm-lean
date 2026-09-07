@@ -5674,6 +5674,8 @@
    "The Taylor polynomial now collapses under the transferred vanishing hypotheses; a uniform highest-derivative bound and remainder normalization remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Recorded :hashes :markdown is malformed and incorrect: it contains non-hex text `Fox`; replace it with the independently reproduced SHA-256 `6a139b3eff3a19946cca3d519df991b9fa535b4cc009435b09be9c645ae292db`. All code-level acceptance gates otherwise pass.",
    :stop-condition
    "Stop only if the compiled affine-line Taylor remainder theorem cannot be promoted with its exact ContDiff, multivariable derivative-vanishing, scaled highest-line-derivative bound, factorial, or standard-axiom hypotheses.",
    :evidence
@@ -5710,6 +5712,12 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-17",
+     :job "invoke-1788798288658-13875-438b3407",
+     :finding
+     "Recorded :hashes :markdown is malformed and incorrect: it contains non-hex text `Fox`; replace it with the independently reproduced SHA-256 `6a139b3eff3a19946cca3d519df991b9fa535b4cc009435b09be9c645ae292db`. All code-level acceptance gates otherwise pass."},
     :commit "b5059faf31aa67bb4ad83dcd50a69eeb5a1a066f",
     :changed-paths
     ["ConstructionTargets/SardAffineLineTaylorRemainder.lean"
@@ -5733,7 +5741,7 @@
      "4228b4aa348a7754ce9cc2076013131696a0b385c9e38774b40172a8914335b2"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardAffineLineTaylorRemainder.lean"
     "ConstructionTargets/SardAffineLineTaylorRemainder.md"],
