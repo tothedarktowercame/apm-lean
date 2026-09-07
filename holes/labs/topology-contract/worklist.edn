@@ -10230,6 +10230,54 @@
       :output
       "ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean\nConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788820248101-14236-7ca8f8ad",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c && git diff-tree --no-commit-id --name-status -r bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean && git show bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c:ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean | sha256sum && git show bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c:ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean 90b58b1684277b632c29c8e2ed7c65c80e4e8a71cce7da22a7063fdf25e83c35; note bed8348cecf5c9d2d261d796a77ac835c5ba51de4f2ee830b666304119c7c1ab"}
+      {:cmd
+       "sed -n '11,55p' ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean | sha256sum",
+       :exit 0,
+       :output
+       "595fa12b497225e567c769e7fc18aef98f8f7b80e48039bbcb94e2e1da503057"}
+      {:cmd
+       "cmp -s /tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean && lake env lean /tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean && lake env lean ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean && lake build ConstructionTargets.SardScalarImplicitFunctionDataDefiningFields",
+       :exit 0,
+       :output
+       "Build completed successfully (8256 jobs); declaration depends only on propext, Classical.choice, Quot.sound."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "git merge-base --is-ancestor 12a27915f80f96e3ce428323a6c3e89198ff4989 bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c && git merge-base --is-ancestor bd9a286190ea2bc984fb1981c9c9f339f1f743bf bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c",
+       :exit 0,
+       :output "Both recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 93 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c^ bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c has exact scope and reproduces every frozen hash and consumer count. The construction uses the explicit CompleteSpace witness for ker L, takes rightFun to be the orthogonal projection E -> ker L and rightDeriv to be that same continuous linear map, proves both scalar and projection derivatives surjective, and supplies complementarity in the required ker L versus orthogonal-complement orientation. ImplicitFunctionData.mk receives g, L, the projection function, projection derivative, x, and their strict-derivative facts in the correct field order. The returned conjunction exposes leftFun = g, leftDeriv = L, rightFun = orthogonal projection, rightDeriv = orthogonal projection, and pt = x definitionally. This theorem exposes the defining fields but does not itself claim their ContDiffAt regularity; deriving that regularity and applying the previously reviewed kernel-parameter smoothness theorem remain accurately stated as residual work. Only standard axioms occur."},
     :commit "bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c",
     :changed-paths
     ["ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean"
@@ -10242,7 +10290,7 @@
     :declarations ["exists_implicitFunctionData_with_defining_fields"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean"
     "ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.md"],
@@ -10407,7 +10455,7 @@
       "90b58b1684277b632c29c8e2ed7c65c80e4e8a71cce7da22a7063fdf25e83c35"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
