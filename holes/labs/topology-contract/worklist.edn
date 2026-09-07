@@ -5720,6 +5720,24 @@
       :output
       "A ConstructionTargets/SardAffineLineTaylorRemainder.lean; A ConstructionTargets/SardAffineLineTaylorRemainder.md"}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788798499362-13879-612da0f0",
+     :commands
+     ["git show/diff-tree b5059faf31aa67bb4ad83dcd50a69eeb5a1a066f"
+      "sha256sum fixture module markdown"
+      "cmp -s fixture module"
+      "recompute theorem statement sha256"
+      "git merge-base --is-ancestor dependency commits b5059faf31aa67bb4ad83dcd50a69eeb5a1a066f"
+      "lake env lean ConstructionTargets/SardAffineLineTaylorRemainder.lean"
+      "lake env lean /tmp/SardAffineLineTaylorRemainderProbe.lean"
+      "rg forbidden-placeholder scan"
+      "recompute frozen Main.lean hash and theorem/sorry counts"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check; git diff --cached --check; git status --porcelain=v1"],
+     :finding
+     "PASS: repaired Markdown hash now exactly reproduces as 6a139b3eff3a19946cca3d519df991b9fa535b4cc009435b09be9c645ae292db; recorded commit has exact two-file scope; fixture and module are byte-identical; Lean and statement hashes match; both dependencies are ancestors; module and fixture compile with only propext, Classical.choice, and Quot.sound; scoped placeholders are absent and frozen consumer hash/counts remain unchanged; interval, derivative-order, affine-line, and factorial-bound orientations remain correct; diff and status gates pass."},
     :commit "b5059faf31aa67bb4ad83dcd50a69eeb5a1a066f",
     :changed-paths
     ["ConstructionTargets/SardAffineLineTaylorRemainder.lean"
@@ -5738,7 +5756,7 @@
      "4228b4aa348a7754ce9cc2076013131696a0b385c9e38774b40172a8914335b2"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardAffineLineTaylorRemainder.lean"
     "ConstructionTargets/SardAffineLineTaylorRemainder.md"],
@@ -5828,7 +5846,7 @@
       "The Taylor remainder implication is compiled with the exact scaled highest-derivative hypothesis; uniform production of that bound from smoothness and compactness remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
