@@ -4874,83 +4874,109 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if this compiled maximal-separated cover and cardinality theorem cannot be promoted without changing its compactness, separation, boundedness, or volume-constant hypotheses or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.lean"
+    "ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MAXIMAL-SEPARATED FINITE-DIMENSIONAL COVER CARDINALITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardMaximalSeparatedFiniteDimensionalCoverProbe.lean",
+     :sha256
+     "6416bd55a709b2c9043205f62bf7c02865fbb305bd338d506dc36289b2ab5167"},
+    :declarations
+    ["exists_finiteDimensional_maximalSeparated_cover_card_le"],
+    :axioms :standard-only,
+    :consumer-residual
+    "Apply Taylor control on every covered source ball, bound the finite union of target-ball volumes, cancel source dimension against Taylor exponent, and choose a geometric scale using the positive-power tolerance theorem."},
+   :representation
+   {:source
+    "A compact subset K of a nontrivial finite-dimensional real inner-product space, contained in a closed radius-R ball, together with a positive NNReal separation radius and certified finite nonzero unit-ball volume constant.",
+    :target
+    "A finite center set contained in K that is separated, covers K at the requested radius, and satisfies card(C) <= ofReal((2*R+rho)/rho)^finrank."},
+   :id
+   :critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-maximal-separated-finset-cover-1
+    :critical-value-sard-compact-packing-number-finite-1
+    :critical-value-sard-separated-ennreal-to-real-dist-1
+    :critical-value-sard-finite-dimensional-packing-cover-bound-1],
+   :current-residual
+   "The extracted cover and cardinality estimate are compiled, but the target-volume sum and positive-power scale choice remain uncomposed.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
-    {:residual
-     "After the finite-dimensional separated-family cardinality theorem is banked, prove one quantitative theorem extracting the maximal separated Finset cover, supplying its real-distance separation and bounded-center hypotheses, combining its polynomial cardinality bound with Taylor-controlled target-ball volumes through exponent cancellation, and choosing the scale using the positive-power tolerance theorem; do not begin local rank reduction.",
-     :outcome :revise,
-     :warnings [],
-     :prerequisite
-     {:consumer :t93A04,
-      :stop-condition
-      "Stop only if the compiled finite-dimensional packing-cover bound cannot be promoted at the recorded representation without changing its separation, boundedness, or volume-constant hypotheses or adding nonstandard axioms.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/SardFiniteDimensionalPackingCoverBound.lean"
-       "ConstructionTargets/SardFiniteDimensionalPackingCoverBound.md"],
-      :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-DIMENSIONAL PACKING COVER BOUND",
-      :acceptance
-      {:fixture
-       {:path "/tmp/SardFiniteDimensionalPackingCoverProbe.lean",
-        :sha256
-        "5e83f0c5bab55df713ea1f3da8b8fdb9d4bc19d3e2f694b7185c764c11466905"},
-       :declarations
-       ["finiteDimensional_card_le_enlarged_halfRadius_power"],
-       :consumer-residual
-       "one maximal-separated cover extraction and Taylor target-volume exponent estimate before local rank reduction",
-       :axioms :standard-only},
-      :representation
-      {:source
-       "a finite radius-ρ-separated family contained in a closed radius-R ball of a nontrivial finite-dimensional real inner-product space, with the unit-ball volume constant certified nonzero and finite",
-       :target
-       "the explicit ENNReal cardinality bound card(s) ≤ ofReal((2*R+ρ)/ρ)^(finrank E)"},
-      :id
-      :critical-value-sard-finite-dimensional-packing-cover-bound-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:critical-value-sard-separated-bounded-ball-packing-1
-       :critical-value-sard-polynomial-packing-cardinality-1
-       :critical-value-sard-finite-dimensional-ball-volume-1],
-      :current-residual
-      "the geometric packing inequality and exact finite-dimensional ball volumes have not yet been composed into the polynomial cardinality estimate for a separated source cover",
-      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+    {:outcome :revise,
+     :seat :codex-1,
      :reason
-     "The open-ball versus closed-ball boundary is compatible: Mathlib provides the same exact power-law formula for finite-dimensional open balls. One independently compilable prerequisite now composes the separated bounded-ball packing inequality with those exact volume formulas and the banked quotient simplification, yielding the explicit polynomial cardinality bound for any separated finite family. The common unit-ball constant is required explicitly to be nonzero and finite, so no extended-real cancellation condition is hidden.",
+     "The maximal separated Finset extraction and finite-dimensional polynomial cardinality estimate compose cleanly. One reusable theorem should be banked before adding Taylor target-ball volumes, exponent cancellation, and positive-power scale selection.",
      :commands
      [{:cmd
-       "rg -n 'volume_ball|volume_closedBall|measure_ball_eq_measure_closedBall|ball.*closedBall.*volume' .lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue/VolumeOfBalls.lean; sed -n '320,365p' .lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue/VolumeOfBalls.lean; sed -n '1,120p' ConstructionTargets/SardPolynomialPackingCardinality.lean; sed -n '1,130p' ConstructionTargets/SardSeparatedBoundedBallPacking.lean",
+       "lake build ConstructionTargets.SardCompactPackingNumberFinite ConstructionTargets.SardSeparatedENNRealToRealDist",
        :exit 0}
       {:cmd
-       "lake build ConstructionTargets.SardSeparatedBoundedBallPacking ConstructionTargets.SardPolynomialPackingCardinality",
-       :exit 0,
-       :output "Build completed successfully (1709 jobs)."}
-      {:cmd
-       "lake env lean /tmp/SardFiniteDimensionalPackingCoverProbe.lean",
+       "lake env lean /tmp/SardMaximalSeparatedFiniteDimensionalCoverProbe.lean",
        :exit 0,
        :output
-       "'finiteDimensional_card_le_enlarged_halfRadius_power' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'exists_finiteDimensional_maximalSeparated_cover_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteDimensionalPackingCoverProbe.lean",
+       "sha256sum /tmp/SardFiniteDimensionalPackingCoverProbe.lean /tmp/SardMaximalSeparatedFiniteDimensionalCoverProbe.lean",
        :exit 0,
        :output
-       "5e83f0c5bab55df713ea1f3da8b8fdb9d4bc19d3e2f694b7185c764c11466905  /tmp/SardFiniteDimensionalPackingCoverProbe.lean"}
+       "5e83f0c5bab55df713ea1f3da8b8fdb9d4bc19d3e2f694b7185c764c11466905; 6416bd55a709b2c9043205f62bf7c02865fbb305bd338d506dc36289b2ab5167"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/SardFiniteDimensionalPackingCoverProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardMaximalSeparatedFiniteDimensionalCoverProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}
-      {:cmd "git diff --check", :exit 0, :output ""}],
-     :fixture
-     {:path "/tmp/SardFiniteDimensionalPackingCoverProbe.lean",
-      :sha256
-      "5e83f0c5bab55df713ea1f3da8b8fdb9d4bc19d3e2f694b7185c764c11466905"},
-     :seat :codex-1}},
+      {:cmd "git diff --check", :exit 0}],
+     :prerequisite
+     {:consumer :t93A04,
+      :stop-condition
+      "Stop only if this compiled maximal-separated cover and cardinality theorem cannot be promoted without changing its compactness, separation, boundedness, or volume-constant hypotheses or adding nonstandard axioms.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.lean"
+       "ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.md"],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MAXIMAL-SEPARATED FINITE-DIMENSIONAL COVER CARDINALITY",
+      :acceptance
+      {:fixture
+       {:path
+        "/tmp/SardMaximalSeparatedFiniteDimensionalCoverProbe.lean",
+        :sha256
+        "6416bd55a709b2c9043205f62bf7c02865fbb305bd338d506dc36289b2ab5167"},
+       :declarations
+       ["exists_finiteDimensional_maximalSeparated_cover_card_le"],
+       :axioms :standard-only,
+       :consumer-residual
+       "Apply Taylor control on every covered source ball, bound the finite union of target-ball volumes, cancel source dimension against Taylor exponent, and choose a geometric scale using the positive-power tolerance theorem."},
+      :representation
+      {:source
+       "A compact subset K of a nontrivial finite-dimensional real inner-product space, contained in a closed radius-R ball, together with a positive NNReal separation radius and certified finite nonzero unit-ball volume constant.",
+       :target
+       "A finite center set contained in K that is separated, covers K at the requested radius, and satisfies card(C) <= ofReal((2*R+rho)/rho)^finrank."},
+      :id
+      :critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:critical-value-sard-maximal-separated-finset-cover-1
+       :critical-value-sard-compact-packing-number-finite-1
+       :critical-value-sard-separated-ennreal-to-real-dist-1
+       :critical-value-sard-finite-dimensional-packing-cover-bound-1],
+      :current-residual
+      "The extracted cover and cardinality estimate are compiled, but the target-volume sum and positive-power scale choice remain uncomposed.",
+      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -4989,7 +5015,8 @@
     :critical-value-sard-positive-power-tolerance-1
     :critical-value-sard-polynomial-packing-cardinality-1
     :critical-value-sard-separated-bounded-ball-packing-1
-    :critical-value-sard-finite-dimensional-packing-cover-bound-1],
+    :critical-value-sard-finite-dimensional-packing-cover-bound-1
+    :critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
