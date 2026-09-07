@@ -5675,70 +5675,99 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled affine-line Taylor remainder theorem cannot be promoted with its exact ContDiff, multivariable derivative-vanishing, scaled highest-line-derivative bound, factorial, or standard-axiom hypotheses.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardAffineLineTaylorRemainder.lean"
+    "ConstructionTargets/SardAffineLineTaylorRemainder.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / AFFINE-LINE FLAT TAYLOR REMAINDER",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardAffineLineTaylorRemainderProbe.lean",
+     :sha256
+     "868a1c2756b8a53738daf415aa82b589b83f63267721b1c8ccee749ff656dbef"},
+    :declarations ["affineLine_flat_taylor_remainder_bound"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Derive a uniform order-(k+1) affine-line derivative bound from ContDiff continuity on the compact family of segment parameters and absorb the factorial into the constant; then feed the resulting multivariable remainder into exists_taylor_cover_measure_lt."},
+   :representation
+   {:source
+    "A ContDiff map between real normed spaces, an affine segment from a to x, vanishing multivariable iterated Frechet derivatives at a through order k, and a bound on the order-(k+1) interval-relative line derivative by C*norm(x-a)^(k+1).",
+    :target
+    "The exact remainder inequality norm(f x-f a) <= C*norm(x-a)^(k+1)/k! obtained by affine-line transfer, Taylor-polynomial collapse, and taylor_mean_remainder_bound."},
+   :id :critical-value-sard-affine-line-taylor-remainder-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-affine-line-iterated-fderiv-1
+    :critical-value-sard-taylor-polynomial-collapse-1],
+   :current-residual
+   "The Taylor remainder implication is compiled with the exact scaled highest-derivative hypothesis; uniform production of that bound from smoothness and compactness remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "After transferring multivariable derivative vanishing to affine lines, Mathlib's Taylor remainder still contains its Taylor polynomial. A reusable theorem reducing that polynomial to the base value under vanishing positive-order derivatives was needed and now compiles.",
+     "The affine-line derivative comparison and Taylor-polynomial collapse compose with Mathlib's quantitative mean-remainder theorem. The compiled theorem exposes, rather than assumes away, the remaining uniform highest-derivative bound; bank this reusable bridge before deriving that bound from compactness and ContDiff.",
      :commands
      [{:cmd
-       "sed -n '108,125p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Taylor.lean; rg -n \"iteratedDerivWithin_eq_iteratedDeriv\" .lake/packages/mathlib/Mathlib/Analysis/Calculus",
+       "readlink -f .lake/packages; git status --porcelain=v1; lake build ConstructionTargets.SardAffineLineIteratedFDeriv ConstructionTargets.SardTaylorPolynomialCollapse; lake env lean /tmp/SardAffineLineTaylorRemainderProbe.lean",
        :exit 0,
        :output
-       "Located taylor_within_apply, taylorWithinEval_succ, and iteratedDerivWithin_eq_iteratedDeriv."}
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; build completed successfully (8241 jobs); affineLine_flat_taylor_remainder_bound depends on [propext, Classical.choice, Quot.sound]."}
+      {:cmd "sha256sum /tmp/SardAffineLineTaylorRemainderProbe.lean",
+       :exit 0,
+       :output
+       "868a1c2756b8a53738daf415aa82b589b83f63267721b1c8ccee749ff656dbef"}
       {:cmd
-       "lake env lean /tmp/SardTaylorPolynomialCollapseProbe.lean",
-       :exit 0,
-       :output
-       "'taylorWithinEval_eq_value_of_iteratedDerivWithin_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]; 'taylorWithinEval_eq_value_of_iteratedDeriv_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardTaylorPolynomialCollapseProbe.lean",
-       :exit 0,
-       :output
-       "71e5e7ebad9c233702b4d1452b2fb94534cbd42b115c8dd134edc2b2958477f5  /tmp/SardTaylorPolynomialCollapseProbe.lean"}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardTaylorPolynomialCollapseProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardAffineLineTaylorRemainderProbe.lean",
        :exit 1,
        :expected-exit 1}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+      {:cmd "git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output ""}],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if this compiled Taylor-polynomial collapse cannot be promoted with its exact derivative range, UniqueDiffOn comparison, or standard axiom profile.",
+      "Stop only if the compiled affine-line Taylor remainder theorem cannot be promoted with its exact ContDiff, multivariable derivative-vanishing, scaled highest-line-derivative bound, factorial, or standard-axiom hypotheses.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardTaylorPolynomialCollapse.lean"
-       "ConstructionTargets/SardTaylorPolynomialCollapse.md"],
+      ["ConstructionTargets/SardAffineLineTaylorRemainder.lean"
+       "ConstructionTargets/SardAffineLineTaylorRemainder.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / VANISHING-DERIVATIVE TAYLOR POLYNOMIAL COLLAPSE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / AFFINE-LINE FLAT TAYLOR REMAINDER",
       :acceptance
       {:fixture
-       {:path "/tmp/SardTaylorPolynomialCollapseProbe.lean",
+       {:path "/tmp/SardAffineLineTaylorRemainderProbe.lean",
         :sha256
-        "71e5e7ebad9c233702b4d1452b2fb94534cbd42b115c8dd134edc2b2958477f5"},
-       :declarations
-       ["taylorWithinEval_eq_value_of_iteratedDerivWithin_eq_zero"
-        "taylorWithinEval_eq_value_of_iteratedDeriv_eq_zero"],
+        "868a1c2756b8a53738daf415aa82b589b83f63267721b1c8ccee749ff656dbef"},
+       :declarations ["affineLine_flat_taylor_remainder_bound"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Bound the (k+1)st derivative of every affine-line restriction uniformly on the compact segment family, apply taylor_mean_remainder_bound, and normalize its factorial constant into the multivariable remainder consumed by exists_taylor_cover_measure_lt."},
+       "Derive a uniform order-(k+1) affine-line derivative bound from ContDiff continuity on the compact family of segment parameters and absorb the factorial into the constant; then feed the resulting multivariable remainder into exists_taylor_cover_measure_lt."},
       :representation
       {:source
-       "A real-parameter vector-valued function, an expansion point, an order k, and vanishing iterated derivatives of every order 1 through k; optionally a UniqueDiffOn set and global ContDiff regularity.",
+       "A ContDiff map between real normed spaces, an affine segment from a to x, vanishing multivariable iterated Frechet derivatives at a through order k, and a bound on the order-(k+1) interval-relative line derivative by C*norm(x-a)^(k+1).",
        :target
-       "The order-k TaylorWithinEval polynomial equals the function value at the expansion point, including the interval-relative form needed by Taylor's remainder theorem."},
-      :id :critical-value-sard-taylor-polynomial-collapse-1,
+       "The exact remainder inequality norm(f x-f a) <= C*norm(x-a)^(k+1)/k! obtained by affine-line transfer, Taylor-polynomial collapse, and taylor_mean_remainder_bound."},
+      :id :critical-value-sard-affine-line-taylor-remainder-1,
       :kind :reusable-theorem,
-      :depends-on [:critical-value-sard-affine-line-iterated-fderiv-1],
+      :depends-on
+      [:critical-value-sard-affine-line-iterated-fderiv-1
+       :critical-value-sard-taylor-polynomial-collapse-1],
       :current-residual
-      "The Taylor polynomial now collapses under the transferred vanishing hypotheses; a uniform highest-derivative bound and remainder normalization remain.",
+      "The Taylor remainder implication is compiled with the exact scaled highest-derivative hypothesis; uniform production of that bound from smoothness and compactness remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -5784,7 +5813,8 @@
     :critical-value-sard-nnreal-geometric-scale-tolerance-1
     :critical-value-sard-quantitative-taylor-cover-measure-1
     :critical-value-sard-affine-line-iterated-fderiv-1
-    :critical-value-sard-taylor-polynomial-collapse-1],
+    :critical-value-sard-taylor-polynomial-collapse-1
+    :critical-value-sard-affine-line-taylor-remainder-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
