@@ -5127,74 +5127,98 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if this compiled normalization theorem cannot be promoted with its exact raw factors, scale interval, and Morse--Sard exponent equation or without adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardTaylorPackingExponentNormalization.lean"
+    "ConstructionTargets/SardTaylorPackingExponentNormalization.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / TAYLOR PACKING EXPONENT NORMALIZATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardTaylorPackingExponentNormalizationProbe.lean",
+     :sha256
+     "063d9de52e375efe8b8c42b680f86fbf80f7e9103cf4f64d49e680346ff6e6c6"},
+    :declarations ["ENNReal.raw_taylor_packing_product_le"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the maximal-separated cover at geometric radii, combine its cardinality and finite target-cover measure estimates through this normalization theorem, and choose the radius using positive-power tolerance."},
+   :representation
+   {:source
+    "The raw finite-dimensional packing factor ofReal((2*R+r)/r)^m and Taylor target-ball factor ofReal(C*r^(k+1))^n, with C nonnegative, 0<r<=1, and the exponent equation (k+1)*n=m+d.",
+    :target
+    "Their product is bounded by the scale-independent constant ofReal(2*R+1)^m*ofReal(C)^n times ofReal(r)^d."},
+   :id :critical-value-sard-taylor-packing-exponent-normalization-1,
+   :kind :reusable-theorem,
+   :depends-on [:critical-value-sard-exponent-combination-1],
+   :current-residual
+   "The exponent algebra is compiled; applying it to the constructed cover and selecting the geometric scale remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "The finite source-cover to target-ball-cover and measure aggregation step is independently reusable and compiles. Bank it before composing the packing cardinality estimate with exponent cancellation and tolerance-scale selection.",
+     "The raw packing quotient and Taylor target-ball powers require a reusable normalization theorem before the cover construction and positive-power tolerance can be composed. That theorem now compiles without extra hypotheses or nonstandard axioms.",
      :commands
-     [{:cmd "git status --porcelain=v1", :exit 0, :output ""}
-      {:cmd
-       "lake build ConstructionTargets.SardMaximalSeparatedFiniteDimensionalCoverCardinality ConstructionTargets.SardFiniteDimensionalBallVolume",
+     [{:cmd "lake build ConstructionTargets.SardExponentCombination",
        :exit 0,
-       :output "Build completed successfully (2720 jobs)."}
+       :output "Build completed successfully (919 jobs)."}
       {:cmd
-       "lake env lean /tmp/SardTaylorFiniteTargetCoverMeasureProbe.lean",
+       "lake env lean /tmp/SardTaylorPackingExponentNormalizationProbe.lean",
        :exit 0,
        :output
-       "'finiteCover_taylor_image_measure_le_card_mul_ballVolume' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'ENNReal.raw_taylor_packing_product_le' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardTaylorFiniteTargetCoverMeasureProbe.lean",
+       "sha256sum /tmp/SardTaylorPackingExponentNormalizationProbe.lean",
        :exit 0,
        :output
-       "c7edd22c9df798f21e2876919848551d63ced055cc575d5c9c95046aac0416da  /tmp/SardTaylorFiniteTargetCoverMeasureProbe.lean"}
+       "063d9de52e375efe8b8c42b680f86fbf80f7e9103cf4f64d49e680346ff6e6c6  /tmp/SardTaylorPackingExponentNormalizationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardTaylorFiniteTargetCoverMeasureProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardTaylorPackingExponentNormalizationProbe.lean",
        :exit 1,
        :expected-exit 1}
+      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
       {:cmd "git diff --check", :exit 0}],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled finite target-cover and measure theorem cannot be promoted at its exact cover, Taylor-remainder, or finite-dimensional volume representation without adding nonstandard axioms.",
+      "Stop only if this compiled normalization theorem cannot be promoted with its exact raw factors, scale interval, and Morse--Sard exponent equation or without adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.lean"
-       "ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.md"],
+      ["ConstructionTargets/SardTaylorPackingExponentNormalization.lean"
+       "ConstructionTargets/SardTaylorPackingExponentNormalization.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / TAYLOR FINITE TARGET-COVER MEASURE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / TAYLOR PACKING EXPONENT NORMALIZATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardTaylorFiniteTargetCoverMeasureProbe.lean",
+       {:path "/tmp/SardTaylorPackingExponentNormalizationProbe.lean",
         :sha256
-        "c7edd22c9df798f21e2876919848551d63ced055cc575d5c9c95046aac0416da"},
-       :declarations
-       ["finiteCover_taylor_image_measure_le_card_mul_ballVolume"],
+        "063d9de52e375efe8b8c42b680f86fbf80f7e9103cf4f64d49e680346ff6e6c6"},
+       :declarations ["ENNReal.raw_taylor_packing_product_le"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Combine this target-volume estimate with the explicit maximal-separated cover cardinality bound, normalize real/ENNReal powers, cancel the source dimension against the Taylor exponent, and choose the scale using positive-power tolerance."},
+       "Instantiate the maximal-separated cover at geometric radii, combine its cardinality and finite target-cover measure estimates through this normalization theorem, and choose the radius using positive-power tolerance."},
       :representation
       {:source
-       "A finite NNReal-radius cover of a source set and a uniform order-(k+1) Taylor remainder bound at every cover center, with a nonnegative remainder constant.",
+       "The raw finite-dimensional packing factor ofReal((2*R+r)/r)^m and Taylor target-ball factor ofReal(C*r^(k+1))^n, with C nonnegative, 0<r<=1, and the exponent equation (k+1)*n=m+d.",
        :target
-       "The image is covered by the corresponding finite family of closed target balls, and its volume is bounded by the center cardinality times the exact finite-dimensional target-ball volume."},
-      :id :critical-value-sard-taylor-finite-target-cover-measure-1,
+       "Their product is bounded by the scale-independent constant ofReal(2*R+1)^m*ofReal(C)^n times ofReal(r)^d."},
+      :id :critical-value-sard-taylor-packing-exponent-normalization-1,
       :kind :reusable-theorem,
-      :depends-on
-      [:critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1
-       :critical-value-sard-flat-taylor-ball-image-1
-       :critical-value-sard-finite-cover-measure-bound-1
-       :critical-value-sard-finite-cover-cardinality-measure-1
-       :critical-value-sard-finite-dimensional-ball-volume-1],
+      :depends-on [:critical-value-sard-exponent-combination-1],
       :current-residual
-      "Target cover and finite measure aggregation are compiled; polynomial packing multiplication, exponent normalization, cancellation, and tolerance-scale selection remain.",
+      "The exponent algebra is compiled; applying it to the constructed cover and selecting the geometric scale remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -5235,7 +5259,8 @@
     :critical-value-sard-separated-bounded-ball-packing-1
     :critical-value-sard-finite-dimensional-packing-cover-bound-1
     :critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1
-    :critical-value-sard-taylor-finite-target-cover-measure-1],
+    :critical-value-sard-taylor-finite-target-cover-measure-1
+    :critical-value-sard-taylor-packing-exponent-normalization-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
