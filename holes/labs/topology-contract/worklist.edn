@@ -7416,8 +7416,48 @@
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a genuine counterexample or incompatible hypotheses for rectangular local-set Morse--Sard; otherwise REVISE with exactly one compiled prerequisite.",
+   :evidence
+   {:outcome :stop,
+    :seat :codex-17,
+    :reason
+    "The rectangular local assembly is blocked by its reviewed rank/source-induction dependency. The banked rank decomposition and finite/countable null aggregators only combine per-stratum nullity; they do not prove it. The induction dependency stopped at an incompatible derivative-order seam: pointwise zero first derivative on implicit-function slices does not supply the compact-locus vanishing of iteratedFDeriv for every 1 ≤ i ≤ k required by the Taylor-nullity theorem. Therefore the requested placeholder-free rectangular theorem cannot be assembled from the named dependencies, and no independent bounded prerequisite remains.",
+    :commands
+    [{:cmd
+      "rg -n -C 30 ':id :critical-value-sard-(countable-aggregation-1|rank-strata-1|rank-strata-null-aggregation-1|rank-source-induction-probe-2|rectangular-local-probe-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sed -n '1,150p' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '1,150p' ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '1,140p' ConstructionTargets/SardCriticalRankStrataNull.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '1,130p' ConstructionTargets/SardCriticalImageAggregation.lean",
+      :exit 0}
+     {:cmd "sed -n '1,220p' problems/t93A04/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 74 items OK; {:done 66, :open 1, :blocked 1, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check; git status --porcelain=v1",
+      :exit 0,
+      :output "diff clean; worktree clean"}],
+    :author :codex-17,
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
