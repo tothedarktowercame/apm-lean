@@ -6897,27 +6897,63 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled neighborhood-wise residual-flatness theorem cannot be promoted with its exact varying-derivative, fixed projected-block, rank-bound, fibre-kernel, or standard-axiom properties.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"
+    "ConstructionTargets/SardLocalResidualDerivativeFlatness.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCAL RESIDUAL DERIVATIVE FLATNESS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+     :sha256
+     "e4222223643569f96398d5639c79930b20fc8a88888e9c4a4b3f839bec93b14d"},
+    :declarations ["residualDerivative_vanishes_on_projectedFibres"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate D with fderiv f, choose Q as the complementary target projection, and transport this neighborhood-wise vanishing through the local partial homeomorphism to obtain a flat residual map on kernel-coordinate slices; then apply Taylor-cover nullity and perform the rank/source-dimension induction."},
+   :representation
+   {:source
+    "A derivative field D:E→(E→ₗF), fixed linear maps P:F→R and Q:F→S, and a locus U on which P∘D(y) is surjective and rank(D(y))≤finrank R.",
+    :target
+    "For every y in U and every v in ker(P∘D(y)), the residual derivative (Q∘D(y))v is zero."},
+   :id :critical-value-sard-local-residual-derivative-flatness-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-kernel-flatness-1
+    :critical-value-sard-projected-implicit-function-packaging-1
+    :critical-value-sard-exact-rank-local-upper-locus-1],
+   :current-residual
+   "Residual derivative flatness now holds uniformly on the local rank-bounded locus in source coordinates; transport to kernel-coordinate slices and the ensuing nullity/induction step remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat :codex-1,
      :reason
-     "The required fibre-flatness implication reduces to a reusable rank-nullity theorem and compiles: if a projected derivative is surjective and the full derivative rank is at most the projected target dimension, their kernels coincide, so every projected-fibre direction is killed by the full derivative.",
+     "The pointwise kernel theorem promotes cleanly to the neighborhood form needed by the analytic argument. For a varying derivative field, a fixed projected rank block, and any residual target projection, projected surjectivity plus the rank upper bound forces the residual derivative to vanish on every projected-fibre direction throughout the locus.",
      :commands
      [{:cmd
-       "sed -n '1,180p' ConstructionTargets/SardExactRankLocalUpperLocus.lean; sed -n '1,220p' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean; rg -n \"finrank_ker_add_finrank_range|eq_of_le_of_finrank|finrank_map_le|range_comp\" .lake/packages/mathlib/Mathlib/LinearAlgebra --glob '*.lean'",
+       "sed -n '780,900p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '500,610p' docs/TN-topology-closure-experiments.md",
        :exit 0}
-      {:cmd "lake env lean /tmp/SardProjectedKernelFlatnessProbe.lean",
-       :exit 0,
-       :output
-       "'ker_eq_of_comp_surjective_of_finrank_range_le' and 'apply_eq_zero_of_mem_projected_ker' depend on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardProjectedKernelFlatnessProbe.lean",
-       :exit 0,
-       :output
-       "675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676  /tmp/SardProjectedKernelFlatnessProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedKernelFlatnessProbe.lean",
+       "lake env lean /tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+       :exit 0,
+       :output
+       "'residualDerivative_vanishes_on_projectedFibres' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+       :exit 0,
+       :output
+       "e4222223643569f96398d5639c79930b20fc8a88888e9c4a4b3f839bec93b14d  /tmp/SardLocalResidualDerivativeFlatnessProbe.lean"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --check", :exit 0}
@@ -6928,41 +6964,41 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if these compiled kernel-equality and pointwise-flatness theorems cannot be promoted with their exact projected-surjectivity, full-rank upper bound, finite-dimensional source, or standard-axiom hypotheses.",
+      "Stop only if the compiled neighborhood-wise residual-flatness theorem cannot be promoted with its exact varying-derivative, fixed projected-block, rank-bound, fibre-kernel, or standard-axiom properties.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedKernelFlatness.lean"
-       "ConstructionTargets/SardProjectedKernelFlatness.md"],
+      ["ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"
+       "ConstructionTargets/SardLocalResidualDerivativeFlatness.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-KERNEL DERIVATIVE FLATNESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCAL RESIDUAL DERIVATIVE FLATNESS",
       :acceptance
       {:fixture
-       {:path "/tmp/SardProjectedKernelFlatnessProbe.lean",
+       {:path "/tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
         :sha256
-        "675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676"},
+        "e4222223643569f96398d5639c79930b20fc8a88888e9c4a4b3f839bec93b14d"},
        :declarations
-       ["ker_eq_of_comp_surjective_of_finrank_range_le"
-        "apply_eq_zero_of_mem_projected_ker"],
+       ["residualDerivative_vanishes_on_projectedFibres"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate this theorem at every point of the local rank-at-most-r locus where the projected block remains surjective, transport the kernel direction through the local normal-form coordinates, and prove the residual target-coordinate derivative vanishes before applying Taylor-cover nullity."},
+       "Instantiate D with fderiv f, choose Q as the complementary target projection, and transport this neighborhood-wise vanishing through the local partial homeomorphism to obtain a flat residual map on kernel-coordinate slices; then apply Taylor-cover nullity and perform the rank/source-dimension induction."},
       :representation
       {:source
-       "Linear maps L:E→F and P:F→R with P∘L surjective and finrank(range L) at most finrank R.",
+       "A derivative field D:E→(E→ₗF), fixed linear maps P:F→R and Q:F→S, and a locus U on which P∘D(y) is surjective and rank(D(y))≤finrank R.",
        :target
-       "Equality ker(P∘L)=ker L and the pointwise conclusion that L kills every vector tangent to the projected-coordinate fibre."},
-      :id :critical-value-sard-projected-kernel-flatness-1,
+       "For every y in U and every v in ker(P∘D(y)), the residual derivative (Q∘D(y))v is zero."},
+      :id :critical-value-sard-local-residual-derivative-flatness-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-implicit-function-packaging-1
+      [:critical-value-sard-projected-kernel-flatness-1
+       :critical-value-sard-projected-implicit-function-packaging-1
        :critical-value-sard-exact-rank-local-upper-locus-1],
       :current-residual
-      "The decisive pointwise linear flatness theorem compiles; its neighborhood-wise instantiation and transport through the nonlinear coordinate chart remain.",
+      "Residual derivative flatness now holds uniformly on the local rank-bounded locus in source coordinates; transport to kernel-coordinate slices and the ensuing nullity/induction step remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
@@ -6987,7 +7023,8 @@
     :critical-value-sard-complemented-derivative-split-1
     :critical-value-sard-projected-complemented-strict-derivative-data-1
     :critical-value-sard-projected-implicit-function-packaging-1
-    :critical-value-sard-projected-kernel-flatness-1],
+    :critical-value-sard-projected-kernel-flatness-1
+    :critical-value-sard-local-residual-derivative-flatness-1],
    :current-residual
    "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
