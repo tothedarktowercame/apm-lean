@@ -4347,6 +4347,25 @@
      {:cmd "git commit -m 'Add Sard exponent combination'", :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788789193439-13738-64e4b63d",
+     :commands
+     ["git show --stat --oneline 3f942e2491d8ad0f37194562513ff7164c3e5dd8"
+      "git diff-tree --no-commit-id --name-status -r 3f942e24"
+      "git diff-tree --check 3f942e24^ 3f942e24"
+      "git show 3f942e24:ConstructionTargets/SardExponentCombination.lean | sha256sum"
+      "git show 3f942e24:ConstructionTargets/SardExponentCombination.md | sha256sum"
+      "sha256sum /tmp/SardExponentCombineProbe.lean"
+      "sed -n '/^theorem ENNReal.mul_bounds_cancel_dimension/,/ := by/p' /tmp/SardExponentCombineProbe.lean | sha256sum"
+      "lake env lean ConstructionTargets/SardExponentCombination.lean"
+      "lake env lean /tmp/SardExponentCombineProbe.lean"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardExponentCombination.lean ConstructionTargets/SardExponentCombination.md /tmp/SardExponentCombineProbe.lean"
+      "git show 3f942e24^:problems/t93A04/lean/Main.lean | sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: commit 3f942e24 has exact two-file scope and matching artifact, fixture, and statement hashes; both Lean gates compile with only propext, Classical.choice, and Quot.sound; from card ≤ A*r⁻¹^m and per ≤ B*r^(m+d), the theorem multiplies bounds in the correct direction, expands m+d, cancels (r⁻¹*r)^m using explicit r ≠ 0 and r ≠ top hypotheses, and yields card*per ≤ A*B*r^d with the positive surplus exponent preserved, introduces no placeholders, and leaves frozen t93A04 unchanged with one theorem and one placeholder."},
     :commit "3f942e2491d8ad0f37194562513ff7164c3e5dd8",
     :changed-paths
     ["ConstructionTargets/SardExponentCombination.lean"
@@ -4363,7 +4382,7 @@
     :declarations ["ENNReal.mul_bounds_cancel_dimension"],
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardExponentCombination.lean"
     "ConstructionTargets/SardExponentCombination.md"],
@@ -4453,7 +4472,7 @@
       "21636ac8181961e3ca621ce3a714f399a09a2c15377398252e243da0ed9de67c"},
      :seat :codex-1}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
