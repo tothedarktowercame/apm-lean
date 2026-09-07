@@ -7037,8 +7037,77 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if these compiled constant-coordinate tangent-kernel and residual slice-flatness theorems cannot be promoted with their exact Frechet-derivative, composition, kernel, or standard-axiom properties.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate the slice with the inverse local rank chart at fixed derivative-range coordinate, use the chart's exact first-coordinate formula and local residual derivative flatness to obtain the flat kernel-coordinate map, then apply Taylor-cover nullity and assemble the rank/source-dimension induction.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardConstantCoordinateSliceFlatnessProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardConstantCoordinateSliceFlatnessProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardConstantCoordinateSliceFlatness.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardConstantCoordinateSliceFlatness.lean ConstructionTargets/SardConstantCoordinateSliceFlatness.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardConstantCoordinateSliceFlatnessProbe.lean ConstructionTargets/SardConstantCoordinateSliceFlatness.lean ConstructionTargets/SardConstantCoordinateSliceFlatness.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem derivative_comp_eq_zero_of_coordinate_constant/,/^#print axioms hasFDerivAt_zero_on_constantCoordinateSlice/p' ConstructionTargets/SardConstantCoordinateSliceFlatness.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardConstantCoordinateSliceFlatness.lean ConstructionTargets/SardConstantCoordinateSliceFlatness.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add Sard constant-coordinate slice flatness'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "3af04de6144e071446788afccbb50bd27efda7d8",
+    :changed-paths
+    ["ConstructionTargets/SardConstantCoordinateSliceFlatness.lean"
+     "ConstructionTargets/SardConstantCoordinateSliceFlatness.md"],
+    :fixture
+    {:path "/tmp/SardConstantCoordinateSliceFlatnessProbe.lean",
+     :sha256
+     "cb809cc9f8f7b1e88b1b3188a193e72d8d377a4b07974c99c89475b3abb77756"},
+    :declarations
+    ["SardConstantCoordinateSliceFlatnessProbe.derivative_comp_eq_zero_of_coordinate_constant"
+     "SardConstantCoordinateSliceFlatnessProbe.hasFDerivAt_zero_on_constantCoordinateSlice"],
+    :dependencies
+    [{:id :critical-value-sard-local-residual-derivative-flatness-1,
+      :commit "ea3b733c74b146e42a7708c1054d8fcd261e7a46"}
+     {:id :critical-value-sard-projected-implicit-function-packaging-1,
+      :commit "b0686676baca2a01400b4acf34a10c29b57895ad"}],
+    :hashes
+    {:lean
+     "cb809cc9f8f7b1e88b1b3188a193e72d8d377a4b07974c99c89475b3abb77756",
+     :markdown
+     "7617e4f5b084800e3228489f9732e4fb45335650c92425f8452de8c3c991f699",
+     :statement
+     "c2209833371225d1c2180b609af4d5efc4b40375a1023787c019227881f28f9a"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardConstantCoordinateSliceFlatness.lean"
     "ConstructionTargets/SardConstantCoordinateSliceFlatness.md"],
