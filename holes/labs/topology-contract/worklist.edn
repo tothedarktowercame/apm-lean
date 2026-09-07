@@ -8727,8 +8727,71 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled C^(i+1)-to-strict-derivative promotion cannot be promoted with its exact scalarized fixed-direction iteratedFDeriv function, general target F, selected functional ℓ, fderiv conclusion, order bound, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Feed the strict derivative directly into the compiled scalar implicit-function chart, then use the local hypersurface coordinates for source-dimension reduction of each nonzero-jet stratum.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:lean-source
+     "8567d6fe5cd96a4137d6fc67ce71ca460f1297efc92b0dbbb80e2516fe30bcec",
+     :declaration-block
+     "cb42863c1a07f3fbc1b64604da198ba0d555bc8d01faa5fb414a43e5e96f2aab",
+     :note
+     "48850dd96108f5f99b045174d536269acebf3295c5696c28958d470db3b5c8ea"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardScalarizedJetStrictDerivativeProbe.lean ConstructionTargets/SardScalarizedJetStrictDerivative.lean && cmp -s /tmp/SardScalarizedJetStrictDerivativeProbe.lean ConstructionTargets/SardScalarizedJetStrictDerivative.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardScalarizedJetStrictDerivativeProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardScalarizedJetStrictDerivative",
+      :exit 0,
+      :output "Build completed successfully (8246 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarizedJetStrictDerivative.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 83 items OK; {:done 74, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :output
+      "ConstructionTargets/SardScalarizedJetStrictDerivative.lean\nConstructionTargets/SardScalarizedJetStrictDerivative.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "60c4a7ef35e5aaf233caca1fd8a7b2afb2e5cc70",
+    :changed-paths
+    ["ConstructionTargets/SardScalarizedJetStrictDerivative.lean"
+     "ConstructionTargets/SardScalarizedJetStrictDerivative.md"],
+    :fixture
+    {:path "/tmp/SardScalarizedJetStrictDerivativeProbe.lean",
+     :sha256
+     "8567d6fe5cd96a4137d6fc67ce71ca460f1297efc92b0dbbb80e2516fe30bcec"},
+    :declarations
+    ["contDiff_one_scalar_fixedDirections_iteratedFDeriv"
+     "hasStrictFDerivAt_scalar_fixedDirections_iteratedFDeriv"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardScalarizedJetStrictDerivative.lean"
     "ConstructionTargets/SardScalarizedJetStrictDerivative.md"],
