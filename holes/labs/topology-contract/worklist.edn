@@ -6824,6 +6824,21 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788806640898-13992-e68e48cd",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r d37a60e7aba5fc6f413d578fdcb0058f40d5df46"
+      "sha256sum exact recorded Lean blob"
+      "git show recorded Markdown | sha256sum"
+      "sed frozen theorem block | sha256sum"
+      "rg placeholder scan"
+      "git merge-base --is-ancestor dependency commits"
+      "git diff d37a60e7^ d37a60e7 --check"
+      "lake env lean /tmp/SardProjectedKernelFlatnessProbe.review.lean"],
+     :finding
+     "Recorded commit has exact two-file scope; all hashes reproduce; placeholder count is zero; dependency ancestry and diff gates pass; both declarations elaborate with only standard axioms; kernel equality, pointwise rewrite orientation, and the linear-map versus local-chart representation boundary are correct."},
     :commit "d37a60e7aba5fc6f413d578fdcb0058f40d5df46",
     :changed-paths
     ["ConstructionTargets/SardProjectedKernelFlatness.lean"
@@ -6849,7 +6864,7 @@
      "17085a4cf051f972f920b26f2aff67369d6773d44a405ca0f59be1b1cdd2b21f"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedKernelFlatness.lean"
     "ConstructionTargets/SardProjectedKernelFlatness.md"],
@@ -6947,7 +6962,7 @@
       "The decisive pointwise linear flatness theorem compiles; its neighborhood-wise instantiation and transport through the nonlinear coordinate chart remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
