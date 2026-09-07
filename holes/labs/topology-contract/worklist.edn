@@ -3048,8 +3048,54 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled compact finite-ball-cover theorem cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one quantitative smooth flat-locus Taylor/exponent estimate over finite-dimensional source covers before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:IsCompact.exists_finset_ball_cover
+     "95223af7ba396c89be164db96210b9190c50607bef049145c4ab50937401ed19"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/CompactFiniteBallCoverProbe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/CompactFiniteBallCoverProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactFiniteBallCover.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardCompactFiniteBallCover.lean ConstructionTargets/SardCompactFiniteBallCover.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "213090b1849d7a4900584588e495f9c2b0a32372",
+    :changed-paths
+    ["ConstructionTargets/SardCompactFiniteBallCover.lean"
+     "ConstructionTargets/SardCompactFiniteBallCover.md"],
+    :file-hashes
+    {"ConstructionTargets/SardCompactFiniteBallCover.lean"
+     "c9f3db18bfc6d9901d2a7203140d0ee608be5921500d41092cf97ebf1c0f57d6",
+     "ConstructionTargets/SardCompactFiniteBallCover.md"
+     "eb8e157ece359c27eaef89822afa0b9bec47b43f865e148fc2780ae626a2c81c"},
+    :fixture
+    {:path "/tmp/CompactFiniteBallCoverProbe.lean",
+     :sha256
+     "e50ea1025fd6d676be33c267b1e7154a133b59e25e3d25bb1c4eaaef64d08b77"},
+    :declarations ["IsCompact.exists_finset_ball_cover"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactFiniteBallCover.lean"
     "ConstructionTargets/SardCompactFiniteBallCover.md"],
