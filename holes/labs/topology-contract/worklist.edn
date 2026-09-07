@@ -9198,6 +9198,50 @@
       :output
       "ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean\nConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788817179765-14177-0065dd76",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 62ae7cf96c1d56b559dea63f52a9f007f1463562 && git diff-tree --no-commit-id --name-status -r 62ae7cf96c1d56b559dea63f52a9f007f1463562",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean && git show 62ae7cf96c1d56b559dea63f52a9f007f1463562:ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean | sha256sum && git show 62ae7cf96c1d56b559dea63f52a9f007f1463562:ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean ce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f; note b740dd0edef4ac4351957232219b0ffc219a84e9af191dc1618ecd011daea7a2"}
+      {:cmd
+       "cmp -s /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean && lake env lean /tmp/SardScalarDerivativeKernelDimensionDropProbe.lean && lake env lean ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean && lake build ConstructionTargets.SardScalarDerivativeKernelDimensionDrop",
+       :exit 0,
+       :output
+       "Build completed successfully (8249 jobs); both declarations depend only on propext, Classical.choice, Quot.sound."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "sed -n '/^theorem ContinuousLinearMap.finrank_ker_lt_of_apply_ne_zero/,/^#print axioms finrank_ker_fderiv_scalar_fixedDirections_lt/p' ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean | sha256sum",
+       :exit 0,
+       :output
+       "f807efbb4ee4f3f8981be99a77c9d792a66cd5b0c778751dc39f1d75498b4ef8"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 86 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff 62ae7cf96c1d56b559dea63f52a9f007f1463562^ 62ae7cf96c1d56b559dea63f52a9f007f1463562 --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit 62ae7cf96c1d56b559dea63f52a9f007f1463562 has exact scope and reproduces all frozen hashes and placeholder counts. The generic theorem consumes the reviewed equality finrank ker L + 1 = finrank E and valid natural-number arithmetic derives the strict inequality finrank ker L < finrank E. The specialized theorem retains the exact scalarized fixed-direction ith-jet derivative and obtains the same strict drop from the reviewed codimension-one specialization under ContDiff R (i+1) and the nonzero next-jet hypothesis in Fin.cons h v order. General F and the selected functional remain unchanged. The conclusion has the precise orientation required for well-founded source-dimension induction and does not claim the still-unproved chartwise transport or nullity result."},
     :commit "62ae7cf96c1d56b559dea63f52a9f007f1463562",
     :changed-paths
     ["ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean"
@@ -9211,7 +9255,7 @@
      "finrank_ker_fderiv_scalar_fixedDirections_lt"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean"
     "ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.md"],
@@ -9377,7 +9421,7 @@
       "ce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
