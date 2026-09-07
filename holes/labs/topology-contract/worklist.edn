@@ -6650,19 +6650,25 @@
     :residual
     "Use the full coordinate formulas from localRankNormalForm_of_complemented_minor to express the exact-rank local upper locus in range/kernel coordinates, then prove the residual target coordinate has vanishing derivative along each local rank-at-most-r fibre before applying Taylor-cover nullity.",
     :gates
-    {:fixture-compiled true,
-     :scoped-module-compiled true,
-     :fixture-byte-identical-to-module true,
+    {:duplicate-removed true,
      :placeholder-free true,
-     :diff-check true,
-     :worktree-clean true},
+     :worktree-clean true,
+     :dependency-imported true,
+     :scoped-module-compiled true,
+     :fixture-compiled true,
+     :fixture-byte-identical-to-module true,
+     :dependency-consumed true,
+     :diff-check true},
+    :repair
+    "Imported and consumed the promoted projected-complemented strict-derivative theorem, deleting the duplicated private proof; regenerated the fixture and hashes.",
     :outcome :done-unreviewed,
-    :warnings [],
+    :warnings
+    ["Initial direct elaboration after adding the import failed because the dependency olean had not yet been built; lake build ConstructionTargets.SardProjectedComplementedStrictDerivativeData completed successfully, after which both fixture and module elaborated successfully."],
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
     [{:cmd
-      "sha256sum /tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
+      "lake build ConstructionTargets.SardProjectedComplementedStrictDerivativeData",
       :exit 0}
      {:cmd
       "lake env lean /tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
@@ -6671,38 +6677,42 @@
       "lake env lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean",
       :exit 0}
      {:cmd
+      "cmp -s /tmp/SardProjectedImplicitFunctionPackagingProbe.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardProjectedImplicitFunctionPackagingProbe.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.md",
+      :exit 0}
+     {:cmd
       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.md",
       :exit 1,
       :expected-exit 1}
      {:cmd
-      "sha256sum /tmp/SardProjectedImplicitFunctionPackagingProbe.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.md",
+      "rg -n 'private theorem projectedData|projectedData f x L hf' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'SardProjectedComplementedStrictDerivativeData|projected_complemented_strictDerivative_data' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean",
       :exit 0}
      {:cmd
       "sed -n '/^theorem exists_projected_localRankNormalForm/,/^#print axioms/p' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean | sha256sum",
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd
-      "git add -- ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.md",
+      "git add -- ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean",
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}
-     {:cmd "git commit -m 'Add projected implicit-function packaging'",
+     {:cmd
+      "git commit -m 'Repair projected packaging dependency reuse'",
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-17",
-     :job "invoke-1788804403782-13953-eada3019",
-     :finding
-     "Recorded module declares the projected-complemented-data row as a dependency but neither imports nor uses it: lines 12-46 re-prove it privately as projectedData and line 71 consumes that duplicate. Repair by importing ConstructionTargets.SardProjectedComplementedStrictDerivativeData, deleting the duplicate, and using SardProjectedImplicitFunctionDataProbe.projected_complemented_strictDerivative_data f x L hf before regenerating fixture and hashes."},
-    :commit "f665443551153f6ca62977b1039f9746f42b2939",
+    :commit "b0686676baca2a01400b4acf34a10c29b57895ad",
     :changed-paths
-    ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"
-     "ConstructionTargets/SardProjectedImplicitFunctionPackaging.md"],
+    ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"],
     :fixture
     {:path "/tmp/SardProjectedImplicitFunctionPackagingProbe.lean",
      :sha256
-     "9742179005453fc047b3f8128c6ac3da74c9740e2bd95f292d1baf5457a679eb"},
+     "f4956afb1cd0eb4d8765043d8883e961874da9698a1805322de1ef3f933d61f3"},
     :declarations
     ["SardProjectedImplicitFunctionPackagingProbe.exists_projected_localRankNormalForm"],
     :dependencies
@@ -6713,14 +6723,14 @@
       :commit "7bc80d8f72811affd71a70cf3396cc21964359af"}],
     :hashes
     {:lean
-     "9742179005453fc047b3f8128c6ac3da74c9740e2bd95f292d1baf5457a679eb",
+     "f4956afb1cd0eb4d8765043d8883e961874da9698a1805322de1ef3f933d61f3",
      :markdown
      "146c20a57273a6bd1054db7a099fa4f52870479a1b438f09bf269e3c6c139845",
      :statement
-     "798358cfe4e144f9bd5cd7e06530e81e11fed3280f864d1731706eb8ecbb7a72"},
+     "86aa51f946fabc1f2015c9f966426d4d2be04e91362c3a48f63aafd375de58d7"},
     :seat :codex-2},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"
     "ConstructionTargets/SardProjectedImplicitFunctionPackaging.md"],
