@@ -6898,8 +6898,95 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled neighborhood-wise residual-flatness theorem cannot be promoted with its exact varying-derivative, fixed projected-block, rank-bound, fibre-kernel, or standard-axiom properties.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate D with fderiv f, choose Q as the complementary target projection, and transport this neighborhood-wise vanishing through the local partial homeomorphism to obtain a flat residual map on kernel-coordinate slices; then apply Taylor-cover nullity and perform the rank/source-dimension induction.",
+    :gates
+    {:duplicate-removed true,
+     :placeholder-free true,
+     :worktree-clean true,
+     :dependency-imported true,
+     :scoped-module-compiled true,
+     :fixture-compiled true,
+     :fixture-byte-identical-to-module true,
+     :dependency-consumed true,
+     :diff-check true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The recorded fixture duplicated the preceding kernel theorem privately. To preserve dependency integrity, the fixture was regenerated with the same public statement and proof conclusion by importing and applying SardProjectedKernelFlatnessProbe.apply_eq_zero_of_mem_projected_ker directly."
+     "Initial direct elaboration of the regenerated files found the dependency olean absent; lake build ConstructionTargets.SardProjectedKernelFlatness completed successfully before both final elaborations passed."],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.SardProjectedKernelFlatness",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/SardLocalResidualDerivativeFlatnessProbe.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'private theorem kernel_eq|have hk := kernel_eq' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'SardProjectedKernelFlatness|apply_eq_zero_of_mem_projected_ker' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardLocalResidualDerivativeFlatnessProbe.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem residualDerivative_vanishes_on_projectedFibres/,/^#print axioms/p' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardLocalResidualDerivativeFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add Sard local residual derivative flatness'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "ea3b733c74b146e42a7708c1054d8fcd261e7a46",
+    :changed-paths
+    ["ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"
+     "ConstructionTargets/SardLocalResidualDerivativeFlatness.md"],
+    :fixture
+    {:path "/tmp/SardLocalResidualDerivativeFlatnessProbe.lean",
+     :sha256
+     "1808503ec9076e003d6eda51c5991493cbfcec323b55e16f306f2f7f2c83ca2d",
+     :supersedes-sha256
+     "e4222223643569f96398d5639c79930b20fc8a88888e9c4a4b3f839bec93b14d"},
+    :declarations
+    ["SardLocalResidualDerivativeFlatnessProbe.residualDerivative_vanishes_on_projectedFibres"],
+    :dependencies
+    [{:id :critical-value-sard-projected-kernel-flatness-1,
+      :commit "d37a60e7aba5fc6f413d578fdcb0058f40d5df46"}
+     {:id :critical-value-sard-projected-implicit-function-packaging-1,
+      :commit "b0686676baca2a01400b4acf34a10c29b57895ad"}
+     {:id :critical-value-sard-exact-rank-local-upper-locus-1,
+      :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2"}],
+    :hashes
+    {:lean
+     "1808503ec9076e003d6eda51c5991493cbfcec323b55e16f306f2f7f2c83ca2d",
+     :markdown
+     "93df07e44afc7839edf528490ea3a5666e576f29f5da31e2e787b5295e1f4816",
+     :statement
+     "a3720c59cc80a27b8f9afae737fefa781232722cb9e8ff2da8d259a6389e574b"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"
     "ConstructionTargets/SardLocalResidualDerivativeFlatness.md"],
