@@ -10175,6 +10175,41 @@
    "The inverse-chart kernel parameterization is C^n at its base coordinate under exact regularity hypotheses; instantiation for scalarized-jet data, pullback of the stratum map, and inductive nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled strengthened scalar ImplicitFunctionData constructor cannot be promoted with its exact leftFun, leftDeriv, orthogonal-projection rightFun/rightDeriv, base-point, explicit kernel CompleteSpace witness, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean"
+    "ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALAR IMPLICIT-FUNCTION DEFINING FIELDS",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean",
+     :sha256
+     "90b58b1684277b632c29c8e2ed7c65c80e4e8a71cce7da22a7063fdf25e83c35"},
+    :declarations ["exists_implicitFunctionData_with_defining_fields"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the exposed defining-field equalities to establish ContDiffAt for the scalarized left function and orthogonal-projection right function, instantiate kernel-parameter smoothness, compose the original map, and invoke source-dimension induction."},
+   :representation
+   {:source
+    "A scalar function g:E→ℝ with HasStrictFDerivAt g L x and a direction h satisfying L h≠0, on a finite-dimensional real inner-product source.",
+    :target
+    "Exact ImplicitFunctionData ℝ E ℝ ker(L) whose leftFun is g, leftDeriv is L, rightFun is the orthogonal projection onto ker(L), rightDeriv is that projection, and pt=x."},
+   :id
+   :critical-value-sard-scalar-implicit-function-data-defining-fields-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-implicit-function-kernel-parameter-contdiff-1
+    :critical-value-sard-scalarized-jet-implicit-function-data-1],
+   :current-residual
+   "All exact defining fields of the scalar implicit-function construction are compiled; their regularity specialization to the scalarized jet and inductive pullback nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -10232,68 +10267,66 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled ContDiffAt kernel-parameter theorem cannot be promoted with its exact ImplicitFunctionData inverse-chart representation, leftFun/rightFun regularity hypotheses, nonzero order bound, base-point coordinates, or standard-axiom profile.",
+      "Stop only if the compiled strengthened scalar ImplicitFunctionData constructor cannot be promoted with its exact leftFun, leftDeriv, orthogonal-projection rightFun/rightDeriv, base-point, explicit kernel CompleteSpace witness, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean"
-       "ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.md"],
+      ["ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.lean"
+       "ConstructionTargets/SardScalarImplicitFunctionDataDefiningFields.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION KERNEL PARAMETER SMOOTHNESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SCALAR IMPLICIT-FUNCTION DEFINING FIELDS",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean",
+        "/tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean",
         :sha256
-        "85b4dd142f54666522dfe4c6b97ad93723865bfdd04d3ce83a7cf456ea330e36"},
+        "90b58b1684277b632c29c8e2ed7c65c80e4e8a71cce7da22a7063fdf25e83c35"},
        :declarations
-       ["ImplicitFunctionData.contDiffAt_kernelParameter"],
+       ["exists_implicitFunctionData_with_defining_fields"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Prove the scalarized-jet ImplicitFunctionData leftFun and orthogonal-projection rightFun have the required ContDiffAt order, compose the original map with the resulting kernel parameterization, then invoke source-dimension induction and aggregate nullity."},
+       "Use the exposed defining-field equalities to establish ContDiffAt for the scalarized left function and orthogonal-projection right function, instantiate kernel-parameter smoothness, compose the original map, and invoke source-dimension induction."},
       :representation
       {:source
-       "Exact ImplicitFunctionData ℝ E F G whose leftFun and rightFun are ContDiffAt ℝ n at φ.pt, with n≠0.",
+       "A scalar function g:E→ℝ with HasStrictFDerivAt g L x and a direction h satisfying L h≠0, on a finite-dimensional real inner-product source.",
        :target
-       "ContDiffAt ℝ n at φ.rightFun φ.pt of z↦φ.toOpenPartialHomeomorph.symm(φ.leftFun φ.pt,z), exactly the kernel/right-coordinate parameterization of the local level set."},
+       "Exact ImplicitFunctionData ℝ E ℝ ker(L) whose leftFun is g, leftDeriv is L, rightFun is the orthogonal projection onto ker(L), rightDeriv is that projection, and pt=x."},
       :id
-      :critical-value-sard-implicit-function-kernel-parameter-contdiff-1,
+      :critical-value-sard-scalar-implicit-function-data-defining-fields-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-implicit-function-level-set-kernel-parameterization-1],
+      [:critical-value-sard-implicit-function-kernel-parameter-contdiff-1
+       :critical-value-sard-scalarized-jet-implicit-function-data-1],
       :current-residual
-      "The inverse-chart kernel parameterization is C^n at its base coordinate under exact regularity hypotheses; instantiation for scalarized-jet data, pullback of the stratum map, and inductive nullity remain.",
+      "All exact defining fields of the scalar implicit-function construction are compiled; their regularity specialization to the scalarized jet and inductive pullback nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The set-theoretic kernel parameterization is compiled, and a placeholder-free fixture proves its next analytic prerequisite using Mathlib's ContDiff implicit-function theorem: if the two defining functions of exact ImplicitFunctionData are C^n at the base point with n≠0, then the fixed-left-coordinate inverse-chart parameterization is C^n at the corresponding kernel coordinate. Applying this to the scalarized-jet data and composing the original map with the parameterization remain downstream.",
+     "The rectangular theorem is not refuted. The reviewed exact-data constructor exposes leftFun and leftDeriv but does not retain the constructed rightFun, rightDeriv, or base point, so its hypotheses cannot yet instantiate the compiled kernel-parameter ContDiffAt theorem. A placeholder-free fixture proves exactly one repair prerequisite: the scalar implicit-function construction can be chosen while exposing all five defining fields, including the orthogonal-projection right coordinate and pt=x. Establishing their ContDiffAt hypotheses and specializing to the scalarized jet remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean",
+       "lake env lean /tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean",
+       "sha256sum /tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean",
        :exit 0,
        :output
-       "85b4dd142f54666522dfe4c6b97ad93723865bfdd04d3ce83a7cf456ea330e36  /tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean"}
+       "90b58b1684277b632c29c8e2ed7c65c80e4e8a71cce7da22a7063fdf25e83c35  /tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean",
        :exit 1,
        :expected-exit 1}
-      {:cmd
-       "rg -n 'contDiffAt_implicitFunction|toOpenPartialHomeomorph|implicitFunction_apply' .lake/packages/mathlib/Mathlib/Analysis/Calculus/ImplicitContDiff.lean .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean",
-       :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 91 items OK; {:done 83, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 92 items OK; {:done 84, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n80c01bdba94de182c99b2f9a676a3bfa136a21f16633c77ede025a57b946efe4  ConstructionTargets/SardImplicitFunctionLevelSetKernelParameterization.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n85b4dd142f54666522dfe4c6b97ad93723865bfdd04d3ce83a7cf456ea330e36  ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -10305,12 +10338,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardImplicitFunctionKernelParameterContDiffProbe.lean",
+      "/tmp/SardScalarImplicitFunctionDataDefiningFieldsProbe.lean",
       :sha256
-      "85b4dd142f54666522dfe4c6b97ad93723865bfdd04d3ce83a7cf456ea330e36"},
+      "90b58b1684277b632c29c8e2ed7c65c80e4e8a71cce7da22a7063fdf25e83c35"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -10350,7 +10383,8 @@
     :critical-value-sard-implicit-function-level-set-image-1
     :critical-value-sard-implicit-function-kernel-slice-parameterization-1
     :critical-value-sard-implicit-function-level-set-kernel-parameterization-1
-    :critical-value-sard-implicit-function-kernel-parameter-contdiff-1],
+    :critical-value-sard-implicit-function-kernel-parameter-contdiff-1
+    :critical-value-sard-scalar-implicit-function-data-defining-fields-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
