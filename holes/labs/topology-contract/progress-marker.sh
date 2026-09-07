@@ -23,8 +23,22 @@ def has_lean(s):
     d=f'problems/{s}/lean'
     return os.path.isdir(d) and any(x.endswith('.lean') for r,_,fs in os.walk(d) for x in fs)
 lean=[s for s in bundles if has_lean(s)]
-solved=open_=0; t_solved=t_open=0
+solved=open_=0; t_solved=t_open=0; informal_only=0
+# Count formalization progress over LEAN-BEARING bundles only. sorry_count_total
+# is 0 for a problem with no Lean at all -- lean.main null, files [] -- so
+# iterating every bundle counted 31 informal-only problems (a98J05, t99J02,
+# t95A01, ...) as SOLVED on 2026-09-07, reporting 343 where 312 are formalized.
+# The `lean` list above was already computed and then not used here.
+# The 31 are still reported, as informal_only, so nothing is hidden by the fix.
 for s in bundles:
+    if not has_lean(s):
+        p2=f'problems/{s}/status.json'
+        if os.path.exists(p2):
+            try:
+                if (json.load(open(p2)).get('lean',{}) or {}).get('sorry_count_total')==0:
+                    informal_only+=1
+            except Exception: pass
+        continue
     p=f'problems/{s}/status.json'
     if not os.path.exists(p): continue
     try: n=json.load(open(p)).get('lean',{}).get('sorry_count_total')
@@ -50,6 +64,7 @@ print(json.dumps({
   'apm_lean_commits': sh('git','-C',root,'rev-list','--count','HEAD'),
   'stems': len(stems), 'bundles': len(bundles),
   'with_lean': len(lean), 'solved': solved, 'open': open_,
+  'informal_only': informal_only,
   'topology_solved': t_solved, 'topology_open': t_open,
   'construction_targets_lean': len(glob.glob('ConstructionTargets/*.lean')),
   'construction_targets_md': len(glob.glob('ConstructionTargets/*.md')),
@@ -71,12 +86,22 @@ now=json.loads('''$NOW''')
 print(f"TOPOLOGY CAMPAIGN PROGRESS")
 print(f"  baseline {base['at']}")
 print(f"  now      {now['at']}\n")
-keys=[('solved','problems SOLVED'),('open','problems open'),
+keys=[('solved','problems SOLVED (Lean)'),('open','problems open'),
+      ('informal_only','informal-only (no Lean)'),
       ('with_lean','problems with Lean'),('bundles','bundles'),
       ('topology_solved','topology solved'),('topology_open','topology open'),
       ('construction_targets_lean','construction targets (.lean)'),
       ('construction_targets_md','construction targets (.md)'),
       ('apm_lean_commits','apm-lean commits')]
+# A baseline taken before 2026-09-07 counted every bundle at zero sorries as
+# SOLVED, including 31 informal-only problems with no Lean file at all. Those
+# are now counted separately, so a pre-change baseline shows solved and
+# topology_solved DROPPING. That is the correction landing, not work lost, and
+# saying so beats letting a reader infer a regression.
+if 'informal_only' not in base:
+    print("  NOTE: baseline predates the solved-count fix; SOLVED and topology")
+    print("        solved drop by the informal-only problems they used to")
+    print("        include. That is a definition correction, not lost work.\n")
 moved=False
 for k,label in keys:
     b,n=base.get(k),now.get(k)
