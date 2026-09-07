@@ -60,13 +60,31 @@
       (die (:id i) "strategy checkpoint lacks :phase :strategy or checkpoint policy")))
   (when (#{:done-unreviewed :done} (:state i))
     (when-not (:evidence i) (die (:id i) "completed without evidence"))
-    (let [e (:evidence i) commit (:commit e) fixture (:fixture e)]
+    (let [e (:evidence i) commit (:commit e) fixture (:fixture e)
+          ;; A row completed via REPAIR does its work across more than one
+          ;; commit: the implementation writes the module and its .md, then the
+          ;; repair touches only what it had to fix. On 2026-09-07
+          ;; :critical-value-sard-projected-implicit-function-packaging-1
+          ;; recorded its repair commit b0686676 (.lean only) against a
+          ;; two-path scope and stopped the loop at row 60 of 70, even though
+          ;; f6654435 + b0686676 cover that scope exactly and the .md was
+          ;; correct as written.
+          ;;
+          ;; :commits records every commit belonging to the row and the scope
+          ;; check runs over their union, so the guarantee stays what it was --
+          ;; every declared path written, nothing outside it -- rather than
+          ;; being weakened to a subset test, which would let a row declare
+          ;; paths it never writes. :commit alone remains valid; 58 rows use it.
+          commits (or (seq (:commits e)) (when commit [commit]))]
       (if (#{:stop :replan} (:outcome e))
         (when-not (and (:author e) (seq (:commands e)))
           (die (:id i) "reviewable scheduling result lacks author or commands"))
         (do
-          (when-not (commit-exists? commit) (die (:id i) "evidence commit absent" commit))
-          (when-not (= (set (:scope i)) (commit-paths commit))
+          (when-not (seq commits) (die (:id i) "completed without an evidence commit"))
+          (doseq [c commits]
+            (when-not (commit-exists? c) (die (:id i) "evidence commit absent" c)))
+          (when-not (= (set (:scope i))
+                       (reduce into #{} (map commit-paths commits)))
             (die (:id i) "commit paths differ from exact scope"))
           (when-not (and (map? fixture) (:path fixture) (:sha256 fixture))
             (die (:id i) "completed without fixture path and hash"))

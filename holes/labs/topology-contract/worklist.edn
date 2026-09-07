@@ -6706,7 +6706,7 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
-    :commit "b0686676baca2a01400b4acf34a10c29b57895ad",
+    :commit "b0686676baca2a01400b4acf34a10c29b57895ad", :commits ["f665443551153f6ca62977b1039f9746f42b2939" "b0686676baca2a01400b4acf34a10c29b57895ad"],
     :changed-paths
     ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"],
     :fixture
