@@ -10377,6 +10377,54 @@
       :output
       "ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean\nConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788820601818-14243-fb4fb676",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94 && git diff-tree --no-commit-id --name-status -r 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardScalarImplicitFunctionKernelParameterContDiffProbe.lean && git show 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94:ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean | sha256sum && git show 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94:ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean a0237251be96bdccd3cf2ca612419fd9404716ff39e694937ae80d7ee105b330; note e26703e38868624e0ff81453284e93a3839c1797db92a6ad527051310a702a23"}
+      {:cmd
+       "sed -n '11,24p' ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean | sha256sum",
+       :exit 0,
+       :output
+       "c26e0e8dde6dce07f8b26dc0a202a42a3f30a4871858ae43eb5bf3cb714fc265"}
+      {:cmd
+       "cmp -s /tmp/SardScalarImplicitFunctionKernelParameterContDiffProbe.lean ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean && lake env lean /tmp/SardScalarImplicitFunctionKernelParameterContDiffProbe.lean && lake env lean ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean && lake build ConstructionTargets.SardScalarImplicitFunctionKernelParameterContDiff",
+       :exit 0,
+       :output
+       "Build completed successfully (8257 jobs); declaration depends only on propext, Classical.choice, Quot.sound."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "git merge-base --is-ancestor bcb60902f1a7a48d1e2c41ef1fa6a5d0daf1f68c 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94 && git merge-base --is-ancestor 12a27915f80f96e3ce428323a6c3e89198ff4989 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94",
+       :exit 0,
+       :output "Both recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 94 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94^ 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94 --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit 3365b7fce9f480abdeb848cc0d6c20c8d7c61b94 has exact scope and reproduces every frozen hash and consumer count. The theorem feeds the generic kernel-parameter smoothness result with leftFun regularity obtained by rewriting both leftFun = g and pt = x, and rightFun regularity obtained by rewriting rightFun = B and using the global smoothness of the continuous linear map B. It preserves the nonzero order hypothesis and concludes ContDiffAt R n for the exact inverse-chart map z -> chart.symm(leftFun pt,z) at rightFun pt. The theorem neither assumes nor needs an exposed rightDeriv equality, because smoothness concerns the defining rightFun itself; this matches its stated representation. Scalarized-jet instantiation, composition with the original map, and inductive nullity remain correctly unclaimed residual work. Only standard axioms occur."},
     :commit "3365b7fce9f480abdeb848cc0d6c20c8d7c61b94",
     :changed-paths
     ["ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean"
@@ -10390,7 +10438,7 @@
     ["ImplicitFunctionData.contDiffAt_kernelParameter_of_definingFields"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.lean"
     "ConstructionTargets/SardScalarImplicitFunctionKernelParameterContDiff.md"],
@@ -10556,7 +10604,7 @@
       "a0237251be96bdccd3cf2ca612419fd9404716ff39e694937ae80d7ee105b330"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
