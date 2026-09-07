@@ -7306,72 +7306,38 @@
    :stop-condition
    "STOP only for a counterexample to the induction statement or incompatible dimension/smoothness indices; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat :codex-17,
-     :reason
-     "Mathlib's exact implicit-function slice supplies one bounded missing specialization: its basepoint is φ.pt, its derivative is annihilated by φ.leftDeriv, and therefore a residual derivative vanishing on ker φ.leftDeriv restricts to zero derivative. This compiles, but it does not yet establish higher-order slice flatness, Taylor-cover nullity, or the rank/source-dimension induction.",
-     :commands
-     [{:cmd
-       "rg -n \"implicitFunction_apply_image|hasStrictFDerivAt_implicitFunction_fderiv|leftDeriv_fderiv_implicitFunction\" .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
-       :exit 0,
-       :output
-       "34864be4dc2102aac0d4509c79250929837cac269d1a725d2561f3cd10fd56d7"}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "lake env lean /tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
-       :exit 0,
-       :output
-       "'SardImplicitFunctionResidualFlatnessProbe.hasFDerivAt_residual_comp_implicitFunction_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "readlink -f .lake/packages",
-       :exit 0,
-       :output "/home/joe/code/apm-lean/.lake/packages"}],
-     :prerequisite
-     {:consumer :t93A04,
-      :stop-condition
-      "Stop only if the compiled residual-flatness theorem cannot be promoted against Mathlib's exact ImplicitFunctionData.implicitFunction, basepoint identity, derivative formula, or standard-axiom profile.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/SardImplicitFunctionResidualFlatness.lean"
-       "ConstructionTargets/SardImplicitFunctionResidualFlatness.md"],
-      :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION RESIDUAL FLATNESS",
-      :acceptance
-      {:fixture
-       {:path "/tmp/SardImplicitFunctionResidualFlatnessProbe.lean",
-        :sha256
-        "34864be4dc2102aac0d4509c79250929837cac269d1a725d2561f3cd10fd56d7"},
-       :declarations
-       ["hasFDerivAt_residual_comp_implicitFunction_zero"],
-       :axioms :standard-only,
-       :warnings [],
-       :consumer-residual
-       "Construct this implicit-function datum at every point of the exact-rank local upper locus, combine neighborhood residual flatness with the theorem at each kernel-coordinate basepoint, and apply the quantitative Taylor-cover nullity theorem to the resulting flat slices before assembling rank/source-dimension induction."},
-      :representation
-      {:source
-       "An ImplicitFunctionData datum φ and a residual map h whose derivative H at φ.pt vanishes on ker φ.leftDeriv.",
-       :target
-       "The restriction h∘φ.implicitFunction(φ.leftFun φ.pt) has zero Frechet derivative at the kernel coordinate φ.rightFun φ.pt."},
-      :id :critical-value-sard-implicit-function-residual-flatness-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:critical-value-sard-constant-coordinate-slice-flatness-1
-       :critical-value-sard-local-residual-derivative-flatness-1
-       :critical-value-sard-projected-implicit-function-packaging-1],
-      :current-residual
-      "The inverse-chart specialization and zero derivative of the residual slice compile at each basepoint; higher-order slice flatness/Taylor-cover uptake and the induction assembly remain.",
-      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
+   {:outcome :stop,
+    :seat :codex-17,
+    :reason
+    "Incompatible derivative-order hypotheses at the remaining seam: SardImplicitFunctionResidualFlatness proves only HasFDerivAt of the residual slice with derivative zero at one basepoint, while SardMultivariableTaylorCoveringNullity requires iteratedFDeriv vanishing for every order 1 ≤ i ≤ k at every point of a compact locus. Pointwise first-order flatness cannot imply the required higher-order jet flatness. Producing the necessary higher-jet strata and treating their complements is the rank/source-dimension induction itself, so no separate single compiled prerequisite remains.",
+    :commands
+    [{:cmd
+      "rg -n -C 35 ':id :critical-value-sard-implicit-function-residual-flatness-1|:id :critical-value-sard-rank-source-induction-probe-2' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sed -n '1,150p' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '1,150p' ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'hzero|hexp|smooth_flat_locus_image_volume_eq_zero' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'hasFDerivAt_residual_comp_implicitFunction_zero|HasFDerivAt|hflat' ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'iteratedFDeriv.*succ|fderiv.*iteratedFDeriv|iteratedFDeriv_one' .lake/packages/mathlib/Mathlib/Analysis/Calculus ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 74 items OK; {:done 65, :open 1, :blocked 2, :superseded 6}"}],
+    :author :codex-17,
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
