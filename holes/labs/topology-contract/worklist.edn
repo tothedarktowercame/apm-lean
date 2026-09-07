@@ -5345,8 +5345,70 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if this compiled quantitative covering theorem cannot be promoted with its exact compactness, remainder, exponent, separation, or measure conclusion, or without adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Derive the uniform order-(k+1) multivariable remainder inequality from sufficient ContDiff regularity and vanishing iterated derivatives on the bounded locus; then apply this theorem before local rank reduction.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardMultivariableTaylorCoveringProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardMultivariableTaylorCoveringProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardQuantitativeTaylorCoverMeasure.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardQuantitativeTaylorCoverMeasure.lean ConstructionTargets/SardQuantitativeTaylorCoverMeasure.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add quantitative Sard Taylor cover measure'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "c268a1871b92074d41d0a44d13630e317a8868a3",
+    :changed-paths
+    ["ConstructionTargets/SardQuantitativeTaylorCoverMeasure.lean"
+     "ConstructionTargets/SardQuantitativeTaylorCoverMeasure.md"],
+    :fixture
+    {:path "/tmp/SardMultivariableTaylorCoveringProbe.lean",
+     :sha256
+     "0047b2c869784eb1111c91a66308bdc94e3a1f5be2c307c9c3d8c767e56350e0"},
+    :declarations ["exists_taylor_cover_measure_lt"],
+    :dependencies
+    [{:id
+      :critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1,
+      :commit "3c66f413a1057c181ef027e9336e3339b0160a3a"}
+     {:id :critical-value-sard-taylor-finite-target-cover-measure-1,
+      :commit "e76dd2d59b10ccc7a90ea790573f78951ab91780"}
+     {:id :critical-value-sard-taylor-packing-exponent-normalization-1,
+      :commit "220ed387ed27a4edec9bf1833aaaec2d82b75b47"}
+     {:id :critical-value-sard-nnreal-geometric-scale-tolerance-1,
+      :commit "d266fc3dbae8db53a40d95b97c2dbd24d2c875e8"}],
+    :hashes
+    {:lean
+     "0047b2c869784eb1111c91a66308bdc94e3a1f5be2c307c9c3d8c767e56350e0",
+     :markdown
+     "79278e31860fa633b8e60e12cc194ab3c0b7d7bbb646bd857b0d3f68e1c79832",
+     :statement
+     "15b78ca8cdf6cfc93d371f04c221cee98dcbaca1cd92e7c52230ca5a4c08c57c"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardQuantitativeTaylorCoverMeasure.lean"
     "ConstructionTargets/SardQuantitativeTaylorCoverMeasure.md"],
