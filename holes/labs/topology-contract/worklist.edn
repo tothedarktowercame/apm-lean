@@ -10684,6 +10684,39 @@
       "git commit -m 'Compile scalarized jet kernel parameter smoothness'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788821634268-14257-eb3cb757",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat dc19918d6d7ce69f6629370506e5b77f2d654c58 && git diff-tree --no-commit-id --name-only -r dc19918d6d7ce69f6629370506e5b77f2d654c58",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/SardScalarizedJetKernelParameterContDiffProbe.lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.md && cmp /tmp/SardScalarizedJetKernelParameterContDiffProbe.lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/SardScalarizedJetKernelParameterContDiffProbe.lean && lake env lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean && lake build ConstructionTargets.SardScalarizedJetKernelParameterContDiff",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.md || true)\"",
+       :exit 0}
+      {:cmd
+       "sed -n '13,72p' ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean | sha256sum",
+       :exit 0}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -c '\\bsorry\\b' problems/t93A04/lean/Main.lean && rg -c '^theorem ' problems/t93A04/lean/Main.lean",
+       :exit 0}
+      {:cmd
+       "git merge-base --is-ancestor 53cf774 bcb609 && git merge-base --is-ancestor bcb609 3365b7 && git merge-base --is-ancestor 3365b7 dc19918d6d7ce69f6629370506e5b77f2d654c58",
+       :exit 0}
+      {:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+       :exit 0}
+      {:cmd
+       "git diff --check dc19918d6d7ce69f6629370506e5b77f2d654c58^ dc19918d6d7ce69f6629370506e5b77f2d654c58 && git status --porcelain=v1 && readlink -f .lake/packages",
+       :exit 0}],
+     :finding
+     "PASS. The recorded commit changes exactly the two scoped files; fixture/source, note, and frozen declaration hashes reproduce as 8afd06f19157531c347cbe3bd5248043a5fce35a8c1e36a13ce73305c5fcecc8, 76964cfa779d52da482a83ab8b2d5306910608c478e1b19fbaa504946a4062ce, and 54e5e039565832c508e5f25980781cc475cf7f3dd020129cf3d7791bf98876ce. The fixture and promoted module compile without placeholders; the theorem uses C^(i+1) regularity for the strict scalarized-jet derivative and nonzero Fin.cons h v orientation, separately preserves C^(n+i) regularity for the remaining n derivatives, returns the defining ImplicitFunctionData fields unchanged, and proves ContDiffAt n for the inverse-chart kernel parameter at rightFun pt. Its only axioms are propext, Classical.choice, and Quot.sound. The frozen consumer remains unchanged with one theorem and one sorry; dependency ancestry, worklist validation, canonical package authority, and diff hygiene all reproduce."},
     :commit "dc19918d6d7ce69f6629370506e5b77f2d654c58",
     :changed-paths
     ["ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean"
@@ -10696,7 +10729,7 @@
     ["exists_implicitFunctionData_scalar_fixedDirections_kernelParameter_contDiffAt"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean"
     "ConstructionTargets/SardScalarizedJetKernelParameterContDiff.md"],
@@ -10861,7 +10894,7 @@
       "8afd06f19157531c347cbe3bd5248043a5fce35a8c1e36a13ce73305c5fcecc8"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
