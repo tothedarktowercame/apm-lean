@@ -3330,8 +3330,55 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite packing cardinality inequality cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one maximal-separated-set source-cover construction and Taylor/volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:finset_card_mul_le_measure_of_disjoint
+     "2e30708c21fed062908837bfbd681f3ca436cfe17fadb24f4f8df941ea98b50a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/FinitePackingCardinalityProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/FinitePackingCardinalityProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFinitePackingCardinalityBound.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardFinitePackingCardinalityBound.lean ConstructionTargets/SardFinitePackingCardinalityBound.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "bf7b325a0e372d4c3fa7ea96344a273c9bad63ff",
+    :changed-paths
+    ["ConstructionTargets/SardFinitePackingCardinalityBound.lean"
+     "ConstructionTargets/SardFinitePackingCardinalityBound.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFinitePackingCardinalityBound.lean"
+     "6a782f738d0d071432ef79fa0f2c34ac6a73164e56ff9871bf79b75b61b0a20f",
+     "ConstructionTargets/SardFinitePackingCardinalityBound.md"
+     "d32960e2bffdffe73e23028696b9ee9cee5b6587b9d87eea8790601855a5f76f"},
+    :fixture
+    {:path "/tmp/FinitePackingCardinalityProbe.lean",
+     :sha256
+     "49f2fdfe1b5b6f8e003c13f57f6a2405d80b2393f1e01af5c19f78ac6488f488"},
+    :declarations ["finset_card_mul_le_measure_of_disjoint"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFinitePackingCardinalityBound.lean"
     "ConstructionTargets/SardFinitePackingCardinalityBound.md"],
