@@ -5676,8 +5676,64 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled affine-line Taylor remainder theorem cannot be promoted with its exact ContDiff, multivariable derivative-vanishing, scaled highest-line-derivative bound, factorial, or standard-axiom hypotheses.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Derive a uniform order-(k+1) affine-line derivative bound from ContDiff continuity on the compact family of segment parameters and absorb the factorial into the constant; then feed the resulting multivariable remainder into exists_taylor_cover_measure_lt.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardAffineLineTaylorRemainderProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardAffineLineTaylorRemainderProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardAffineLineTaylorRemainder.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardAffineLineTaylorRemainder.lean ConstructionTargets/SardAffineLineTaylorRemainder.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard affine-line Taylor remainder'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "b5059faf31aa67bb4ad83dcd50a69eeb5a1a066f",
+    :changed-paths
+    ["ConstructionTargets/SardAffineLineTaylorRemainder.lean"
+     "ConstructionTargets/SardAffineLineTaylorRemainder.md"],
+    :fixture
+    {:path "/tmp/SardAffineLineTaylorRemainderProbe.lean",
+     :sha256
+     "868a1c2756b8a53738daf415aa82b589b83f63267721b1c8ccee749ff656dbef"},
+    :declarations ["affineLine_flat_taylor_remainder_bound"],
+    :dependencies
+    [{:id :critical-value-sard-affine-line-iterated-fderiv-1,
+      :commit "35b7052c94051714fc7450e91e676c9f1fb72208"}
+     {:id :critical-value-sard-taylor-polynomial-collapse-1,
+      :commit "8841f4c5c849fa8ba39e7acfabf3fdf010532072"}],
+    :hashes
+    {:lean
+     "868a1c2756b8a53738daf415aa82b589b83f63267721b1c8ccee749ff656dbef",
+     :markdown
+     "6a139b3eff3a19946cca3d519df991b9fa535b4cc009435b09Fox9be9c645ae292db",
+     :statement
+     "4228b4aa348a7754ce9cc2076013131696a0b385c9e38774b40172a8914335b2"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardAffineLineTaylorRemainder.lean"
     "ConstructionTargets/SardAffineLineTaylorRemainder.md"],
