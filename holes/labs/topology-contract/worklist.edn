@@ -7482,6 +7482,64 @@
       :output
       "ConstructionTargets/SardHigherJetLocusDecomposition.lean\nConstructionTargets/SardHigherJetLocusDecomposition.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788810931681-14069-12cef5b3",
+     :commands
+     [{:cmd
+       "git diff-tree --no-commit-id --name-status -r 27fb3c66e9466a559ef1ea945db6bda9acfe097f",
+       :exit 0,
+       :output
+       "Exactly ConstructionTargets/SardHigherJetLocusDecomposition.lean and ConstructionTargets/SardHigherJetLocusDecomposition.md"}
+      {:cmd
+       "sha256sum /tmp/SardHigherJetLocusDecompositionProbe.lean; git show 27fb3c66e9466a559ef1ea945db6bda9acfe097f:ConstructionTargets/SardHigherJetLocusDecomposition.lean | sha256sum",
+       :exit 0,
+       :output
+       "Both 1ae41fc90c43e105705cf75885ca2142ce291b0dcdde2eb301f6cbeaaac100f2"}
+      {:cmd
+       "git show 27fb3c66e9466a559ef1ea945db6bda9acfe097f:ConstructionTargets/SardHigherJetLocusDecomposition.md | sha256sum",
+       :exit 0,
+       :output
+       "56a846bf152c4589e58582816d3fd5e020e36e0acde0ccf854c09dd624f70b6a"}
+      {:cmd
+       "git merge-base --is-ancestor c1fae85147d128b31f617c01cbc4e0785bb5f3d8 27fb3c66e9466a559ef1ea945db6bda9acfe097f; git merge-base --is-ancestor 7bf5c67bafce92895f258ec8714639fea16cf554 27fb3c66e9466a559ef1ea945db6bda9acfe097f",
+       :exit 0}
+      {:cmd
+       "cmp -s /tmp/SardHigherJetLocusDecompositionProbe.lean ConstructionTargets/SardHigherJetLocusDecomposition.lean; lake env lean /tmp/SardHigherJetLocusDecompositionProbe.lean; lake env lean ConstructionTargets/SardHigherJetLocusDecomposition.lean",
+       :exit 0,
+       :output
+       "Fixture and module byte-identical; theorem axioms exactly propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "lake build ConstructionTargets.SardHigherJetLocusDecomposition",
+       :exit 0,
+       :output "Build completed successfully (8240 jobs); no warnings"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardHigherJetLocusDecomposition.lean ConstructionTargets/SardHigherJetLocusDecomposition.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '/^theorem eq_flatThrough_union_iUnion_nonzeroJetLocus/,/^#print axioms/p' ConstructionTargets/SardHigherJetLocusDecomposition.lean | sha256sum",
+       :exit 0,
+       :output
+       "a7a01563a1eadff07bbcd4983b94c9bbe8717cd505cd12d98930ff3346bf461c"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 75 items OK; {:done 66, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages; git diff 27fb3c66e9466a559ef1ea945db6bda9acfe097f^ 27fb3c66e9466a559ef1ea945db6bda9acfe097f --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; diff clean; worktree clean"}],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6. Commit 27fb3c66e9466a559ef1ea945db6bda9acfe097f has exact two-file scope; fixture, committed Lean, Markdown, and declaration-region hashes reproduce, and both recorded dependencies are ancestors. flatThrough requires precisely every iteratedFDeriv order satisfying 1 ≤ i ≤ k to vanish, while nonzeroJetLocus retains membership in K and the negated equality at one exact order. The forward proof splits on that universal condition and sends its negation to an index in Set.Icc 1 k; the reverse proof recovers K-membership from either branch. The equality remains correct for k = 0, does not falsely claim disjointness or nullity, and leaves analytic nullity of nonzero-jet strata to the reopened rank/source-dimension induction. Only standard axioms occur, and frozen t93A04 remains unchanged with one theorem and one placeholder."},
     :commit "27fb3c66e9466a559ef1ea945db6bda9acfe097f",
     :changed-paths
     ["ConstructionTargets/SardHigherJetLocusDecomposition.lean"
@@ -7506,7 +7564,7 @@
      "a7a01563a1eadff07bbcd4983b94c9bbe8717cd505cd12d98930ff3346bf461c"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardHigherJetLocusDecomposition.lean"
     "ConstructionTargets/SardHigherJetLocusDecomposition.md"],
@@ -7663,7 +7721,7 @@
       "1ae41fc90c43e105705cf75885ca2142ce291b0dcdde2eb301f6cbeaaac100f2"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
