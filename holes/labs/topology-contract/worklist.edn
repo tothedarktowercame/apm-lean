@@ -6641,6 +6641,8 @@
    "All analytic and algebraic fields needed by ImplicitFunctionData compile together; packaging the dependent range/kernel types and establishing residual-coordinate flatness remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Recorded module declares the projected-complemented-data row as a dependency but neither imports nor uses it: lines 12-46 re-prove it privately as projectedData and line 71 consumes that duplicate. Repair by importing ConstructionTargets.SardProjectedComplementedStrictDerivativeData, deleting the duplicate, and using SardProjectedImplicitFunctionDataProbe.projected_complemented_strictDerivative_data f x L hf before regenerating fixture and hashes.",
    :stop-condition
    "Stop only if the compiled ImplicitFunctionData packaging and local-normal-form existence theorem cannot be promoted with its exact projected-map, derivative-range, kernel-coordinate, completeness, or standard-axiom properties.",
    :evidence
@@ -6687,6 +6689,12 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-17",
+     :job "invoke-1788804403782-13953-eada3019",
+     :finding
+     "Recorded module declares the projected-complemented-data row as a dependency but neither imports nor uses it: lines 12-46 re-prove it privately as projectedData and line 71 consumes that duplicate. Repair by importing ConstructionTargets.SardProjectedComplementedStrictDerivativeData, deleting the duplicate, and using SardProjectedImplicitFunctionDataProbe.projected_complemented_strictDerivative_data f x L hf before regenerating fixture and hashes."},
     :commit "f665443551153f6ca62977b1039f9746f42b2939",
     :changed-paths
     ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"
@@ -6712,7 +6720,7 @@
      "798358cfe4e144f9bd5cd7e06530e81e11fed3280f864d1731706eb8ecbb7a72"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean"
     "ConstructionTargets/SardProjectedImplicitFunctionPackaging.md"],
