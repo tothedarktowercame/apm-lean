@@ -8918,6 +8918,50 @@
       :output
       "ConstructionTargets/SardScalarizedJetLocalChart.lean\nConstructionTargets/SardScalarizedJetLocalChart.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788816410605-14161-a7e5432f",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat f785e301710f8741f86e649c6cf8ab56b1b505c5 && git diff-tree --no-commit-id --name-status -r f785e301710f8741f86e649c6cf8ab56b1b505c5",
+       :exit 0,
+       :output "Exactly the two scoped files were added."}
+      {:cmd
+       "sha256sum /tmp/SardScalarizedJetLocalChartProbe.lean && git show f785e301710f8741f86e649c6cf8ab56b1b505c5:ConstructionTargets/SardScalarizedJetLocalChart.lean | sha256sum && git show f785e301710f8741f86e649c6cf8ab56b1b505c5:ConstructionTargets/SardScalarizedJetLocalChart.md | sha256sum",
+       :exit 0,
+       :output
+       "Fixture/Lean b4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3; note e21ba78fbddbadc195998d4732e0433d072aa45a99548852d3225389b0007b22"}
+      {:cmd
+       "cmp -s /tmp/SardScalarizedJetLocalChartProbe.lean ConstructionTargets/SardScalarizedJetLocalChart.lean && lake env lean /tmp/SardScalarizedJetLocalChartProbe.lean && lake env lean ConstructionTargets/SardScalarizedJetLocalChart.lean && lake build ConstructionTargets.SardScalarizedJetLocalChart",
+       :exit 0,
+       :output
+       "Build completed successfully (8247 jobs); declaration depends only on propext, Classical.choice, Quot.sound."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarizedJetLocalChart.lean ConstructionTargets/SardScalarizedJetLocalChart.md; test $? -eq 1",
+       :exit 0,
+       :output "No forbidden placeholders or declarations."}
+      {:cmd
+       "sed -n '/^theorem exists_localChart_scalar_fixedDirections_of_contDiff/,/^#print axioms exists_localChart_scalar_fixedDirections_of_contDiff/p' ConstructionTargets/SardScalarizedJetLocalChart.lean | sha256sum",
+       :exit 0,
+       :output
+       "c5ea44639f9daf8aa6e4809767b330dfe24f8d5b34bbeafd924a4a0d99a55c8f"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output "topology-worklist: 84 items OK"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l && rg -n '^theorem ' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "readlink -f .lake/packages && git diff f785e301710f8741f86e649c6cf8ab56b1b505c5^ f785e301710f8741f86e649c6cf8ab56b1b505c5 --check",
+       :exit 0,
+       :output
+       "/home/joe/code/apm-lean/.lake/packages; recorded diff clean"}],
+     :finding
+     "PASS. Commit f785e301710f8741f86e649c6cf8ab56b1b505c5 has exact scope and reproduces the fixture, declaration, note, and consumer hashes. The theorem correctly composes the reviewed C^(i+1)-to-strict-derivative result with the implicit-function chart constructor. Its nonzero hypothesis uses the next jet in the exact Fin.cons h v orientation; the chart derivative L is the fderiv of the scalarized fixed-direction ith jet; and the result maps x to that jet value paired with the orthogonal projection onto ker L. Finite-dimensional real inner-product hypotheses occur only on E, F remains a general real normed target, and no intermediate strict-derivative premise leaks into the public statement. The theorem establishes the promised local chart but makes no unsupported nullity or source-induction claim; those remain accurately recorded as residual work."},
     :commit "f785e301710f8741f86e649c6cf8ab56b1b505c5",
     :changed-paths
     ["ConstructionTargets/SardScalarizedJetLocalChart.lean"
@@ -8930,7 +8974,7 @@
     ["exists_localChart_scalar_fixedDirections_of_contDiff"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardScalarizedJetLocalChart.lean"
     "ConstructionTargets/SardScalarizedJetLocalChart.md"],
@@ -9093,7 +9137,7 @@
       "b4d34d5d90155a18af19f932dfb072a0a246251ef9bb4a8557f263544be87de3"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
