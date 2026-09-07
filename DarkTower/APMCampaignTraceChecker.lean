@@ -176,6 +176,150 @@ def proofStandardTraceValid
     (trace : List TraceProofStandardObservation) : Bool :=
   !trace.isEmpty && trace.all proofStandardObservationValid
 
+/-! Runtime conformance observations added after the original combined trace.
+The live controller supplies facts; this checker owns their interpretation. -/
+structure TraceTerminalRepairExhaustion where
+  frameId : String
+  repairAttempts : Nat
+  disposition : String
+  frameReenterable : Bool
+  deriving FromJson, Repr
+
+structure TraceSolverDefect where
+  frameId : String
+  outcome : String
+  statementUnchanged : Bool
+  failureAccount : String
+  residual : Option String := none
+  disposition : String
+  deriving FromJson, Repr
+
+structure TraceCancelledRoleLineage where
+  requestId : String
+  originSessionId : String
+  observedSessionId : String
+  cancellationPersisted : Bool
+  authenticatedTerminalCollected : Bool
+  terminalDisposition : String
+  repairChargedSessionId : String
+  deriving FromJson, Repr
+
+structure TraceCheckedHandoff where
+  depositorId : String
+  reviewerId : String
+  verdictAuthor : String
+  verdict : String
+  deriving FromJson, Repr
+
+structure TraceWatchdogAction where
+  coordinatorId : String
+  observedGeneration : Nat
+  currentGeneration : Nat
+  stopCauseType : String
+  stopReasonCode : String
+  actionPerformed : Bool
+  deriving FromJson, Repr
+
+structure TraceOrphanRecovery where
+  originalRequestId : String
+  replacementRequestId : String
+  lineagePreserved : Bool
+  attempt : Nat
+  maximumAttempts : Nat
+  authorityRegisteredBeforeActivation : Bool
+  deriving FromJson, Repr
+
+structure TraceSubstrateWait where
+  requestId : String
+  substrateAvailable : Bool
+  queueConsumed : Bool
+  disposition : String
+  deriving FromJson, Repr
+
+structure TraceReviewedMemoryPublication where
+  memoryId : String
+  reviewReceiptId : String
+  reviewReceiptPersisted : Bool
+  frameClosed : Bool
+  publicationPersisted : Bool
+  deriving FromJson, Repr
+
+def terminalRepairExhaustionValid (x : TraceTerminalRepairExhaustion) : Bool :=
+  !x.frameId.isEmpty && x.repairAttempts > 0 &&
+  x.disposition == "park-reenterable-frame" && x.frameReenterable
+
+def solverDefectValid (x : TraceSolverDefect) : Bool :=
+  !x.frameId.isEmpty && x.outcome == "claimed-defect" &&
+  x.statementUnchanged && !x.failureAccount.isEmpty &&
+  x.disposition == "automatic-statement-refuted-void"
+
+def cancelledRoleLineageValid (x : TraceCancelledRoleLineage) : Bool :=
+  !x.requestId.isEmpty && !x.originSessionId.isEmpty &&
+  x.observedSessionId == x.originSessionId && x.cancellationPersisted &&
+  x.repairChargedSessionId == x.originSessionId &&
+  (!x.authenticatedTerminalCollected ||
+    x.terminalDisposition == "accept-authenticated-terminal")
+
+def checkedHandoffValid (x : TraceCheckedHandoff) : Bool :=
+  !x.depositorId.isEmpty && !x.reviewerId.isEmpty &&
+  x.depositorId != x.reviewerId &&
+  x.verdictAuthor == "independent-reviewer" && !x.verdict.isEmpty
+
+def watchdogActionValid (x : TraceWatchdogAction) : Bool :=
+  !x.coordinatorId.isEmpty && !x.stopReasonCode.isEmpty &&
+  (x.stopCauseType == "operator" || x.stopCauseType == "integrity-fault" ||
+   x.stopCauseType == "substrate-fault") &&
+  (!x.actionPerformed || x.observedGeneration == x.currentGeneration)
+
+def orphanRecoveryValid (x : TraceOrphanRecovery) : Bool :=
+  !x.originalRequestId.isEmpty && !x.replacementRequestId.isEmpty &&
+  x.originalRequestId != x.replacementRequestId && x.lineagePreserved &&
+  x.attempt ≤ x.maximumAttempts && x.authorityRegisteredBeforeActivation
+
+def substrateWaitValid (x : TraceSubstrateWait) : Bool :=
+  !x.requestId.isEmpty &&
+  (x.substrateAvailable ||
+    (!x.queueConsumed && x.disposition == "wait-without-consuming"))
+
+def reviewedMemoryPublicationValid
+    (x : TraceReviewedMemoryPublication) : Bool :=
+  !x.memoryId.isEmpty && !x.reviewReceiptId.isEmpty &&
+  x.reviewReceiptPersisted && x.publicationPersisted
+
+structure RuntimeConformanceCertificate where
+  schemaVersion : Nat
+  certificateKind : String
+  terminalRepairExhaustions : List TraceTerminalRepairExhaustion
+  solverDefects : List TraceSolverDefect
+  cancelledRoleLineages : List TraceCancelledRoleLineage
+  checkedHandoffs : List TraceCheckedHandoff
+  watchdogActions : List TraceWatchdogAction
+  orphanRecoveries : List TraceOrphanRecovery
+  substrateWaits : List TraceSubstrateWait
+  reviewedMemoryPublications : List TraceReviewedMemoryPublication
+  deriving FromJson, Repr
+
+def runtimeConformanceCertificateValid
+    (certificate : RuntimeConformanceCertificate) : Bool :=
+  certificate.schemaVersion == 1 &&
+  certificate.certificateKind == "apm-runtime-conformance" &&
+  !certificate.terminalRepairExhaustions.isEmpty &&
+  certificate.terminalRepairExhaustions.all terminalRepairExhaustionValid &&
+  !certificate.solverDefects.isEmpty &&
+  certificate.solverDefects.all solverDefectValid &&
+  !certificate.cancelledRoleLineages.isEmpty &&
+  certificate.cancelledRoleLineages.all cancelledRoleLineageValid &&
+  !certificate.checkedHandoffs.isEmpty &&
+  certificate.checkedHandoffs.all checkedHandoffValid &&
+  !certificate.watchdogActions.isEmpty &&
+  certificate.watchdogActions.all watchdogActionValid &&
+  !certificate.orphanRecoveries.isEmpty &&
+  certificate.orphanRecoveries.all orphanRecoveryValid &&
+  !certificate.substrateWaits.isEmpty &&
+  certificate.substrateWaits.all substrateWaitValid &&
+  !certificate.reviewedMemoryPublications.isEmpty &&
+  certificate.reviewedMemoryPublications.all reviewedMemoryPublicationValid
+
 def cleanProofStandardWitness : TraceProofStandardObservation where
   artifactId := "624e81d7"
   declarationName := "apm_a99j05"
@@ -724,12 +868,24 @@ def checkOperationalFile (path : System.FilePath) : IO UInt32 := do
     IO.eprintln "APM-OPERATIONAL-TRACE-REJECTED"
     pure 1
 
+def checkRuntimeConformanceFile (path : System.FilePath) : IO UInt32 := do
+  let contents ← IO.FS.readFile path
+  let json ← IO.ofExcept (Json.parse contents)
+  let certificate : RuntimeConformanceCertificate ← IO.ofExcept (fromJson? json)
+  if runtimeConformanceCertificateValid certificate then
+    IO.println "APM-RUNTIME-CONFORMANCE-CERTIFICATE-ACCEPTED"
+    pure 0
+  else
+    IO.eprintln "APM-RUNTIME-CONFORMANCE-CERTIFICATE-REJECTED"
+    pure 1
+
 def run (args : List String) : IO UInt32 :=
   match args with
   | [path] => checkFile path
   | ["--operational", path] => checkOperationalFile path
+  | ["--runtime-conformance", path] => checkRuntimeConformanceFile path
   | _ => do
-      IO.eprintln "usage: APMCampaignTraceChecker [--operational] TRACE.json"
+      IO.eprintln "usage: APMCampaignTraceChecker [--operational | --runtime-conformance] TRACE.json"
       pure 2
 
 end DarkTower.APMCampaignTraceChecker

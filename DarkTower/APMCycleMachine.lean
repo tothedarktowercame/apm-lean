@@ -2308,4 +2308,235 @@ theorem transport_retry_at_bound_is_refused (maxAttempts : Nat) :
     ¬ validTransportRetryAttempt maxAttempts maxAttempts := by
   simp [validTransportRetryAttempt]
 
+/-! ## Post-v4 live conformance refinements
+
+These declarations model decisions learned from the running controller after
+the v4 cycle contract was introduced.  They intentionally describe durable,
+observable authority rather than Clojure control flow.
+-/
+
+inductive RoleTerminalExhaustionDisposition
+  | parkReenterableFrame
+  | voidFrame
+  | advancePhase
+  deriving DecidableEq, Repr
+
+def validRoleTerminalExhaustionDisposition :
+    RoleTerminalExhaustionDisposition → Prop
+  | .parkReenterableFrame => True
+  | .voidFrame | .advancePhase => False
+
+theorem exhausted_role_terminal_repair_parks :
+    validRoleTerminalExhaustionDisposition .parkReenterableFrame := by
+  trivial
+
+theorem exhausted_role_terminal_repair_cannot_void :
+    ¬ validRoleTerminalExhaustionDisposition .voidFrame := by
+  simp [validRoleTerminalExhaustionDisposition]
+
+theorem exhausted_role_terminal_repair_cannot_advance :
+    ¬ validRoleTerminalExhaustionDisposition .advancePhase := by
+  simp [validRoleTerminalExhaustionDisposition]
+
+inductive SolverReportedOutcome
+  | solved
+  | progress
+  | claimedDefect
+  | inadequate
+  deriving DecidableEq, Repr
+
+structure SolverDefectEvidence where
+  outcome : SolverReportedOutcome
+  statementUnchanged : Bool
+  failureAccount : String
+  deriving DecidableEq, Repr
+
+def SolverDefectEvidence.Valid (evidence : SolverDefectEvidence) : Prop :=
+  evidence.outcome = .claimedDefect ∧
+  evidence.statementUnchanged = true ∧
+  evidence.failureAccount ≠ ""
+
+instance (evidence : SolverDefectEvidence) : Decidable evidence.Valid := by
+  unfold SolverDefectEvidence.Valid
+  infer_instance
+
+inductive SolverDefectDisposition
+  | automaticStatementRefutedVoid
+  | retainOrdinaryFailurePath
+  deriving DecidableEq, Repr
+
+def solverDefectDisposition (evidence : SolverDefectEvidence) :
+    SolverDefectDisposition :=
+  if evidence.Valid then .automaticStatementRefutedVoid
+  else .retainOrdinaryFailurePath
+
+theorem substantiated_solver_defect_voids_automatically
+    (evidence : SolverDefectEvidence) (valid : evidence.Valid) :
+    solverDefectDisposition evidence = .automaticStatementRefutedVoid := by
+  simp [solverDefectDisposition, valid]
+
+theorem repeated_failure_without_defect_claim_does_not_void
+    (evidence : SolverDefectEvidence)
+    (notClaimed : evidence.outcome ≠ .claimedDefect) :
+    solverDefectDisposition evidence = .retainOrdinaryFailurePath := by
+  simp [solverDefectDisposition, SolverDefectEvidence.Valid, notClaimed]
+
+theorem changed_statement_defect_claim_does_not_void
+    (evidence : SolverDefectEvidence)
+    (changed : evidence.statementUnchanged = false) :
+    solverDefectDisposition evidence = .retainOrdinaryFailurePath := by
+  simp [solverDefectDisposition, SolverDefectEvidence.Valid, changed]
+
+theorem defect_claim_does_not_require_residual
+    (failureAccount : String) (nonempty : failureAccount ≠ "") :
+    (SolverDefectEvidence.mk .claimedDefect true failureAccount).Valid := by
+  simp [SolverDefectEvidence.Valid, nonempty]
+
+structure CancelledRoleLineage where
+  requestId : String
+  originSessionId : String
+  observedSessionId : String
+  cancellationPersisted : Bool
+  authenticatedTerminalCollected : Bool
+  repairChargedSessionId : String
+  deriving DecidableEq, Repr
+
+def CancelledRoleLineage.Valid (lineage : CancelledRoleLineage) : Prop :=
+  lineage.requestId ≠ "" ∧ lineage.originSessionId ≠ "" ∧
+  lineage.observedSessionId = lineage.originSessionId ∧
+  lineage.cancellationPersisted = true ∧
+  lineage.repairChargedSessionId = lineage.originSessionId
+
+inductive CancelledWrapperDisposition
+  | acceptAuthenticatedTerminal
+  | awaitRepair
+  deriving DecidableEq, Repr
+
+def cancelledWrapperDisposition (lineage : CancelledRoleLineage) :
+    CancelledWrapperDisposition :=
+  if lineage.authenticatedTerminalCollected then .acceptAuthenticatedTerminal
+  else .awaitRepair
+
+theorem authenticated_terminal_outranks_wrapper_cancellation
+    (lineage : CancelledRoleLineage)
+    (authenticated : lineage.authenticatedTerminalCollected = true) :
+    cancelledWrapperDisposition lineage = .acceptAuthenticatedTerminal := by
+  simp [cancelledWrapperDisposition, authenticated]
+
+theorem repair_is_charged_to_declared_request_origin
+    (lineage : CancelledRoleLineage) (valid : lineage.Valid) :
+    lineage.repairChargedSessionId = lineage.originSessionId := valid.2.2.2.2
+
+inductive HandoffVerdictAuthor
+  | worker
+  | independentReviewer
+  | controller
+  deriving DecidableEq, Repr
+
+structure CheckedHandoffVerdict where
+  depositorId : String
+  reviewerId : String
+  author : HandoffVerdictAuthor
+  verdict : String
+  deriving DecidableEq, Repr
+
+def CheckedHandoffVerdict.Valid (handoff : CheckedHandoffVerdict) : Prop :=
+  handoff.depositorId ≠ "" ∧ handoff.reviewerId ≠ "" ∧
+  handoff.depositorId ≠ handoff.reviewerId ∧
+  handoff.author = .independentReviewer ∧ handoff.verdict ≠ ""
+
+theorem worker_authored_handoff_verdict_is_refused
+    (handoff : CheckedHandoffVerdict)
+    (worker : handoff.author = .worker) : ¬ handoff.Valid := by
+  simp [CheckedHandoffVerdict.Valid, worker]
+
+theorem depositor_cannot_review_own_handoff
+    (handoff : CheckedHandoffVerdict)
+    (same : handoff.depositorId = handoff.reviewerId) : ¬ handoff.Valid := by
+  simp [CheckedHandoffVerdict.Valid, same]
+
+inductive DurableStopCause
+  | operator (reasonCode : String)
+  | integrityFault (reasonCode : String)
+  | substrateFault (reasonCode : String)
+  deriving DecidableEq, Repr
+
+def DurableStopCause.Valid : DurableStopCause → Prop
+  | .operator reason | .integrityFault reason | .substrateFault reason =>
+      reason ≠ ""
+
+structure WatchdogAuthority where
+  observedGeneration : Nat
+  currentGeneration : Nat
+  cause : DurableStopCause
+  deriving DecidableEq, Repr
+
+def WatchdogAuthority.MayAct (authority : WatchdogAuthority) : Prop :=
+  authority.observedGeneration = authority.currentGeneration ∧
+  authority.cause.Valid
+
+theorem superseded_watchdog_cannot_act
+    (authority : WatchdogAuthority)
+    (stale : authority.observedGeneration ≠ authority.currentGeneration) :
+    ¬ authority.MayAct := by
+  simp [WatchdogAuthority.MayAct, stale]
+
+structure OrphanRecovery where
+  originalRequestId : String
+  replacementRequestId : String
+  lineagePreserved : Bool
+  attempt : Nat
+  maximumAttempts : Nat
+  authorityRegisteredBeforeActivation : Bool
+  deriving DecidableEq, Repr
+
+def OrphanRecovery.Valid (recovery : OrphanRecovery) : Prop :=
+  recovery.originalRequestId ≠ "" ∧ recovery.replacementRequestId ≠ "" ∧
+  recovery.originalRequestId ≠ recovery.replacementRequestId ∧
+  recovery.lineagePreserved = true ∧
+  recovery.attempt ≤ recovery.maximumAttempts ∧
+  recovery.authorityRegisteredBeforeActivation = true
+
+theorem orphan_recovery_beyond_ceiling_is_refused
+    (recovery : OrphanRecovery)
+    (beyond : recovery.maximumAttempts < recovery.attempt) :
+    ¬ recovery.Valid := by
+  simp [OrphanRecovery.Valid]
+  omega
+
+inductive SubstrateAvailability
+  | available
+  | unavailable
+  deriving DecidableEq, Repr
+
+inductive QueueTickDisposition
+  | consumeAndAdvance
+  | waitWithoutConsuming
+  deriving DecidableEq, Repr
+
+def substrateDisposition : SubstrateAvailability → QueueTickDisposition
+  | .available => .consumeAndAdvance
+  | .unavailable => .waitWithoutConsuming
+
+theorem unavailable_substrate_does_not_consume_queue :
+    substrateDisposition .unavailable = .waitWithoutConsuming := by
+  rfl
+
+structure ReviewedMemoryPublication where
+  reviewReceiptPersisted : Bool
+  frameClosed : Bool
+  publicationPersisted : Bool
+  deriving DecidableEq, Repr
+
+def ReviewedMemoryPublication.Valid (publication : ReviewedMemoryPublication) : Prop :=
+  publication.reviewReceiptPersisted = true ∧
+  publication.publicationPersisted = true
+
+theorem reviewed_memory_may_publish_before_frame_close
+    (publication : ReviewedMemoryPublication)
+    (reviewed : publication.reviewReceiptPersisted = true)
+    (published : publication.publicationPersisted = true) :
+    publication.Valid := by
+  simp [ReviewedMemoryPublication.Valid, reviewed, published]
+
 end DarkTower.APMCycleMachine
