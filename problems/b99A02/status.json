@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
+    "sorry_count_total": 0,
     "closer_progress": "Hop 3 proves uniqueness and normality of Sylow-29 subgroups in every group of order 203, computes the quotient order, and closes existence of the normal subgroup H of order 25*29. Remaining: transport normality to the specified Q and prove the final K = P R equivalence."
   },
   "artifacts": {

@@ -13,9 +13,9 @@
     "main": "lean/Main.lean",
     "scratch": null,
     "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
+    "sorry_count_total": 0,
     "closer_progress": "Hop 3 proves the general surjective-comap cardinality formula and specializes it to show the Klein-four pullback has order 12. Its normality and kernel containment were already compiled. The Sylow-action quotient, center dichotomy, and centrality/no-order-six arguments remain."
   },
   "artifacts": {
