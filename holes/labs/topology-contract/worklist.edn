@@ -10902,6 +10902,40 @@
    "The pullback of the original map along the exact smooth kernel parameter retains the full pointwise differentiability order; critical-locus transport and inductive nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled derivative-criticality transport theorem cannot be promoted with its exact continuous-linear composition, nonsurjectivity hypothesis and conclusion, HasFDerivAt chain rule, arbitrary parameter space, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCriticalityUnderParameterization.lean"
+    "ConstructionTargets/SardCriticalityUnderParameterization.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CRITICALITY UNDER PARAMETERIZATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardCriticalityUnderParameterizationProbe.lean",
+     :sha256
+     "912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810"},
+    :declarations
+    ["ContinuousLinearMap.not_surjective_comp_of_not_surjective"
+     "HasFDerivAt.comp_and_not_surjective"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the chain-rule criticality transport on each scalarized-jet kernel parameterization, apply the source-dimension induction hypothesis to the resulting lower-dimensional critical map, and aggregate local and jet strata."},
+   :representation
+   {:source
+    "Continuous linear maps A:E→L[ℝ]F and B:G→L[ℝ]E with A nonsurjective, specialized to derivatives of f:E→F and a smooth kernel parameter g:G→E at x.",
+    :target
+    "Nonsurjectivity of A.comp B together with HasFDerivAt (z↦f(g z)) (A.comp B) x, preserving arbitrary normed source, target, and parameter spaces."},
+   :id :critical-value-sard-criticality-under-parameterization-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-implicit-function-kernel-parameter-composition-contdiff-1],
+   :current-residual
+   "The smooth kernel pullback now preserves derivative-criticality exactly; source-dimension inductive nullity on localized nonzero-jet strata and aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -10959,65 +10993,64 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled kernel-parameter composition regularity theorem cannot be promoted with its exact ImplicitFunctionData inverse-chart parameter, base-point identity, ContDiffAt order n for both maps, general codomain F, or standard-axiom profile.",
+      "Stop only if the compiled derivative-criticality transport theorem cannot be promoted with its exact continuous-linear composition, nonsurjectivity hypothesis and conclusion, HasFDerivAt chain rule, arbitrary parameter space, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardImplicitFunctionKernelParameterCompositionContDiff.lean"
-       "ConstructionTargets/SardImplicitFunctionKernelParameterCompositionContDiff.md"],
+      ["ConstructionTargets/SardCriticalityUnderParameterization.lean"
+       "ConstructionTargets/SardCriticalityUnderParameterization.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION KERNEL-PARAMETER COMPOSITION SMOOTHNESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CRITICALITY UNDER PARAMETERIZATION",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardImplicitFunctionKernelParameterCompositionContDiffProbe.lean",
+       {:path "/tmp/SardCriticalityUnderParameterizationProbe.lean",
         :sha256
-        "d1ec2e04e7699904bd29d70a006286f67e696a381be1b13c0a7a787636d274dd"},
+        "912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810"},
        :declarations
-       ["ImplicitFunctionData.contDiffAt_comp_kernelParameter"],
+       ["ContinuousLinearMap.not_surjective_comp_of_not_surjective"
+        "HasFDerivAt.comp_and_not_surjective"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Apply the composition theorem to the compiled scalarized-jet kernel parameter, transport the localized derivative-critical condition to the strictly lower-dimensional kernel domain, invoke source-dimension induction, and aggregate nullity."},
+       "Instantiate the chain-rule criticality transport on each scalarized-jet kernel parameterization, apply the source-dimension induction hypothesis to the resulting lower-dimensional critical map, and aggregate local and jet strata."},
       :representation
       {:source
-       "Exact ImplicitFunctionData ℝ E ℝ G, a general map f:E→F that is ContDiffAt ℝ n at φ.pt, and ContDiffAt ℝ n of z↦φ.toOpenPartialHomeomorph.symm(φ.leftFun φ.pt,z) at φ.rightFun φ.pt.",
+       "Continuous linear maps A:E→L[ℝ]F and B:G→L[ℝ]E with A nonsurjective, specialized to derivatives of f:E→F and a smooth kernel parameter g:G→E at x.",
        :target
-       "ContDiffAt ℝ n at φ.rightFun φ.pt of z↦f(φ.toOpenPartialHomeomorph.symm(φ.leftFun φ.pt,z)), using the exact inverse-chart identity at the base coordinates."},
-      :id
-      :critical-value-sard-implicit-function-kernel-parameter-composition-contdiff-1,
+       "Nonsurjectivity of A.comp B together with HasFDerivAt (z↦f(g z)) (A.comp B) x, preserving arbitrary normed source, target, and parameter spaces."},
+      :id :critical-value-sard-criticality-under-parameterization-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-scalarized-jet-kernel-parameter-contdiff-1],
+      [:critical-value-sard-implicit-function-kernel-parameter-composition-contdiff-1],
       :current-residual
-      "The pullback of the original map along the exact smooth kernel parameter retains the full pointwise differentiability order; critical-locus transport and inductive nullity remain.",
+      "The smooth kernel pullback now preserves derivative-criticality exactly; source-dimension inductive nullity on localized nonzero-jet strata and aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next bounded analytic bridge: if f is ContDiffAt of order n at the implicit-function base point and the fixed-left-coordinate inverse-chart kernel parameter is ContDiffAt of order n at the right coordinate, then their composition is ContDiffAt of the same order. The proof uses the exact inverse-chart base-point identity. Transporting the derivative-critical condition to the lower-dimensional kernel domain and invoking source-dimension induction remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the next exact induction bridge: precomposing a nonsurjective continuous linear derivative with any parameter derivative remains nonsurjective, and the chain rule packages this with the derivative of the pulled-back map. Thus derivative-criticality transports to the strictly lower-dimensional kernel parameterization. Instantiating this bridge on each localized nonzero-jet stratum, invoking source-dimension induction, and aggregating nullity remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardImplicitFunctionKernelParameterCompositionContDiffProbe.lean",
+       "lake env lean /tmp/SardCriticalityUnderParameterizationProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardImplicitFunctionKernelParameterCompositionContDiffProbe.lean",
+       "sha256sum /tmp/SardCriticalityUnderParameterizationProbe.lean",
        :exit 0,
        :output
-       "d1ec2e04e7699904bd29d70a006286f67e696a381be1b13c0a7a787636d274dd  /tmp/SardImplicitFunctionKernelParameterCompositionContDiffProbe.lean"}
+       "912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810  /tmp/SardCriticalityUnderParameterizationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionKernelParameterCompositionContDiffProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCriticalityUnderParameterizationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 96 items OK; {:done 88, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 97 items OK; {:done 89, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionKernelParameterCompositionContDiff.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n8afd06f19157531c347cbe3bd5248043a5fce35a8c1e36a13ce73305c5fcecc8  ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nd1ec2e04e7699904bd29d70a006286f67e696a381be1b13c0a7a787636d274dd  ConstructionTargets/SardImplicitFunctionKernelParameterCompositionContDiff.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -11028,13 +11061,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardImplicitFunctionKernelParameterCompositionContDiffProbe.lean",
+     {:path "/tmp/SardCriticalityUnderParameterizationProbe.lean",
       :sha256
-      "d1ec2e04e7699904bd29d70a006286f67e696a381be1b13c0a7a787636d274dd"},
+      "912cf1014570927de31dad4ae02b491e8723d6dc19fee6be76793a7138e40810"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -11079,7 +11111,8 @@
     :critical-value-sard-scalar-implicit-function-kernel-parameter-contdiff-1
     :critical-value-sard-scalarized-jet-remaining-order-contdiff-1
     :critical-value-sard-scalarized-jet-kernel-parameter-contdiff-1
-    :critical-value-sard-implicit-function-kernel-parameter-composition-contdiff-1],
+    :critical-value-sard-implicit-function-kernel-parameter-composition-contdiff-1
+    :critical-value-sard-criticality-under-parameterization-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
