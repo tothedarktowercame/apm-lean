@@ -6286,8 +6286,79 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if these compiled derivative-rank openness and local exact-rank identification theorems cannot be promoted with their exact C1, finite-dimensional, cardinal-rank, finrank, or standard-axiom hypotheses.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Select a rank-r complemented minor at the base point, instantiate the local rank normal form, and prove that the remaining coordinate map is derivative-flat along the local rank-at-most-r fibre before applying the Taylor-cover nullity theorem.",
+    :gates
+    {:fixture-compiled true,
+     :scoped-module-compiled true,
+     :fixture-byte-identical-to-module true,
+     :placeholder-free true,
+     :diff-check true,
+     :scoped-commit-clean true,
+     :worktree-clean false},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Shared worktree contains unrelated untracked paths problems/t99A01/lean/, problems/t99A02/lean/, problems/t99A03/lean/, problems/t99A04/lean/, and problems/t99A05/lean/; they were preserved and excluded from the explicit scoped commit."],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardExactRankLocalUpperLocusProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardExactRankLocalUpperLocusProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardExactRankLocalUpperLocus.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardExactRankLocalUpperLocus.lean ConstructionTargets/SardExactRankLocalUpperLocus.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardExactRankLocalUpperLocusProbe.lean ConstructionTargets/SardExactRankLocalUpperLocus.lean ConstructionTargets/SardExactRankLocalUpperLocus.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^def derivativeRankAtLeast/,/^#print axioms exists_open_inter_rankStratum_eq_rankLE/p' ConstructionTargets/SardExactRankLocalUpperLocus.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add -- ConstructionTargets/SardExactRankLocalUpperLocus.lean ConstructionTargets/SardExactRankLocalUpperLocus.md",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard exact-rank local upper locus'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2",
+    :changed-paths
+    ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
+     "ConstructionTargets/SardExactRankLocalUpperLocus.md"],
+    :fixture
+    {:path "/tmp/SardExactRankLocalUpperLocusProbe.lean",
+     :sha256
+     "ebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153"},
+    :declarations
+    ["derivativeRankAtLeast"
+     "isOpen_derivativeRankAtLeast"
+     "exists_open_inter_rankStratum_eq_rankLE"],
+    :dependencies
+    [{:id :critical-value-sard-local-rank-normal-form-probe-2,
+      :commit "7bc80d8f72811affd71a70cf3396cc21964359af"}
+     {:id :critical-value-sard-multivariable-taylor-covering-probe-2,
+      :commit "c1fae85147d128b31f617c01cbc4e0785bb5f8"}
+     {:id :critical-value-sard-rectangular-local-probe-1,
+      :commit "8e18ea8176c0ebd1f7cc89b07120fcbeaa1195e6"}],
+    :hashes
+    {:lean
+     "ebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153",
+     :markdown
+     "b2f3aafb760c8c920399f31813db5a0903e84aec57c0e07d31e0c67dd0e01ea6",
+     :statement
+     "fff9c4ef6f04043376e4ac398a55443fd3712c6d2f6639a792e8db23986b3cfb"},
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardExactRankLocalUpperLocus.lean"
     "ConstructionTargets/SardExactRankLocalUpperLocus.md"],
