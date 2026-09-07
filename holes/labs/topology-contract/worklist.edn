@@ -4513,71 +4513,112 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :stop-condition
+   "Stop only if the compiled polynomial packing-cardinality theorem cannot be promoted at the recorded representation without changing its positivity or finite-volume hypotheses or adding nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardPolynomialPackingCardinality.lean"
+    "ConstructionTargets/SardPolynomialPackingCardinality.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / POLYNOMIAL PACKING CARDINALITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardPolynomialPackingBoundProbe.lean",
+     :sha256
+     "45107f350384fd378bca3e37bce58a32f701fd6f7014d1410bf69a88839de854"},
+    :declarations ["finset_card_le_enlarged_halfRadius_power"],
+    :consumer-residual
+    "one maximal-separated source packing construction and Taylor target-volume exponent estimate before local rank reduction",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "a finite packing inequality card(s) times the radius-ρ/2 power-law ball volume bounded by the radius-(R+ρ/2) power-law ball volume, with positive ρ and a nonzero finite common volume constant",
+    :target
+    "the explicit ENNReal cardinality bound card(s) ≤ ofReal((2*R+ρ)/ρ)^d"},
+   :id :critical-value-sard-polynomial-packing-cardinality-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-ennreal-packing-quotient-1
+    :critical-value-sard-ennreal-ball-volume-ratio-1
+    :critical-value-sard-ennreal-enlarged-half-radius-ratio-1],
+   :current-residual
+   "the exact packing-volume product estimate has not yet been converted into the polynomial inverse-radius cardinality bound consumed by the Taylor cover",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
+   :stop-condition
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
     {:residual
-     "After the positive-power tolerance theorem is banked, prove one quantitative theorem deriving the polynomial cardinality bound for the maximal separated source cover from the packing and volume packets, combine it with the Taylor target-ball estimate through the banked exponent theorem, and instantiate the positive tolerance with inverse-natural bounds; do not begin local rank reduction.",
+     "After the polynomial packing-cardinality bound is banked, prove one quantitative theorem applying it to the maximal separated Finset using half-ball disjointness and bounded enlargement, combine the resulting source-cover bound with Taylor-controlled target-ball volumes through exponent cancellation, and choose the scale using the positive-power tolerance theorem; do not begin local rank reduction.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled geometric-power tolerance theorem cannot be promoted at the recorded representation without changing its finiteness or positivity hypotheses or adding nonstandard axioms.",
+      "Stop only if the compiled polynomial packing-cardinality theorem cannot be promoted at the recorded representation without changing its positivity or finite-volume hypotheses or adding nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardPositivePowerTolerance.lean"
-       "ConstructionTargets/SardPositivePowerTolerance.md"],
+      ["ConstructionTargets/SardPolynomialPackingCardinality.lean"
+       "ConstructionTargets/SardPolynomialPackingCardinality.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / POSITIVE-POWER TOLERANCE CHOICE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / POLYNOMIAL PACKING CARDINALITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardPositivePowerToleranceProbe.lean",
+       {:path "/tmp/SardPolynomialPackingBoundProbe.lean",
         :sha256
-        "818cd47e31c0682bfb0a735c903f39717b3342cd54ad1c70ca47be34e7b7df93"},
-       :declarations ["ENNReal.exists_const_mul_pow_lt"],
+        "45107f350384fd378bca3e37bce58a32f701fd6f7014d1410bf69a88839de854"},
+       :declarations ["finset_card_le_enlarged_halfRadius_power"],
        :consumer-residual
-       "one polynomial source-cover construction and Taylor target-volume estimate before local rank reduction",
+       "one maximal-separated source packing construction and Taylor target-volume exponent estimate before local rank reduction",
        :axioms :standard-only},
       :representation
       {:source
-       "a finite ENNReal constant C, a contraction q < 1, and a positive ENNReal tolerance ε",
-       :target "a natural exponent n such that C * q^n < ε"},
-      :id :critical-value-sard-positive-power-tolerance-1,
+       "a finite packing inequality card(s) times the radius-ρ/2 power-law ball volume bounded by the radius-(R+ρ/2) power-law ball volume, with positive ρ and a nonzero finite common volume constant",
+       :target
+       "the explicit ENNReal cardinality bound card(s) ≤ ofReal((2*R+ρ)/ρ)^d"},
+      :id :critical-value-sard-polynomial-packing-cardinality-1,
       :kind :reusable-theorem,
-      :depends-on [],
+      :depends-on
+      [:critical-value-sard-ennreal-packing-quotient-1
+       :critical-value-sard-ennreal-ball-volume-ratio-1
+       :critical-value-sard-ennreal-enlarged-half-radius-ratio-1],
       :current-residual
-      "the positive Morse--Sard exponent surplus has not yet been converted into a discrete radius scale meeting each positive tolerance",
+      "the exact packing-volume product estimate has not yet been converted into the polynomial inverse-radius cardinality bound consumed by the Taylor cover",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The banked exponent-combination theorem reduces the remaining scale choice to one independently compilable fact: a finite ENNReal constant times powers of a contraction eventually lies below every positive tolerance. This follows from ENNReal.tendsto_pow_atTop_nhds_zero_of_lt_one and supplies the inverse-natural tolerance choice after instantiation. Banking it leaves the polynomial source-cover construction and its application to the Taylor target-ball estimate as the remaining quantitative theorem.",
+     "The remaining source-cover calculation has one independently compilable algebraic prerequisite: convert the packing product inequality with exact power-law ball volumes into the explicit polynomial cardinality bound. The theorem divides by the certified nonzero finite small-ball volume, cancels the common volume constant, and rewrites the enlarged-radius to half-radius quotient. Banking it leaves the geometric derivation of the packing inequality for the maximal separated cover and its combination with the Taylor target-ball estimate.",
      :commands
      [{:cmd
-       "rg -n 'tendsto_order.*\\.2|eventually.*pow.*≤|exists.*mul.*pow.*≤|const_mul.*tendsto_pow' .lake/packages/mathlib/Mathlib -g '*.lean'",
+       "ls ConstructionTargets/Sard*.lean; sed -n '1,220p' ConstructionTargets/SardMaximalSeparatedFinsetCover.lean; sed -n '1,180p' ConstructionTargets/SardFinitePackingCardinalityBound.lean; sed -n '1,160p' ConstructionTargets/SardENNRealPackingQuotient.lean; sed -n '1,140p' ConstructionTargets/SardENNRealBallVolumeRatio.lean; sed -n '1,130p' ConstructionTargets/SardENNRealEnlargedHalfRadiusRatio.lean",
        :exit 0}
-      {:cmd "lake env lean /tmp/SardPositivePowerToleranceProbe.lean",
-       :exit 0,
-       :output
-       "'ENNReal.exists_const_mul_pow_lt' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardPositivePowerToleranceProbe.lean",
-       :exit 0,
-       :output
-       "818cd47e31c0682bfb0a735c903f39717b3342cd54ad1c70ca47be34e7b7df93  /tmp/SardPositivePowerToleranceProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/SardPositivePowerToleranceProbe.lean",
+       "lake build ConstructionTargets.SardENNRealPackingQuotient ConstructionTargets.SardENNRealBallVolumeRatio ConstructionTargets.SardENNRealEnlargedHalfRadiusRatio",
+       :exit 0,
+       :output "Build completed successfully (921 jobs)."}
+      {:cmd "lake env lean /tmp/SardPolynomialPackingBoundProbe.lean",
+       :exit 0,
+       :output
+       "'finset_card_le_enlarged_halfRadius_power' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardPolynomialPackingBoundProbe.lean",
+       :exit 0,
+       :output
+       "45107f350384fd378bca3e37bce58a32f701fd6f7014d1410bf69a88839de854  /tmp/SardPolynomialPackingBoundProbe.lean"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' /tmp/SardPolynomialPackingBoundProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}
       {:cmd "git diff --check", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardPositivePowerToleranceProbe.lean",
+     {:path "/tmp/SardPolynomialPackingBoundProbe.lean",
       :sha256
-      "818cd47e31c0682bfb0a735c903f39717b3342cd54ad1c70ca47be34e7b7df93"},
+      "45107f350384fd378bca3e37bce58a32f701fd6f7014d1410bf69a88839de854"},
      :seat :codex-1}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
@@ -4613,7 +4654,8 @@
     :critical-value-sard-ennreal-ball-volume-ratio-1
     :critical-value-sard-ennreal-enlarged-half-radius-ratio-1
     :critical-value-sard-exponent-combination-1
-    :critical-value-sard-positive-power-tolerance-1],
+    :critical-value-sard-positive-power-tolerance-1
+    :critical-value-sard-polynomial-packing-cardinality-1],
    :current-residual
    "pinned Taylor APIs do not yield the quantitative multivariable remainder and null-cover estimate used by Morse--Sard",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
