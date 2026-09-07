@@ -6128,75 +6128,80 @@
    "STOP only for a counterexample to the quantitative covering statement or incompatible smoothness/dimension hypotheses; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat :codex-1,
      :reason
-     "The consumer's existing closed-ball boundedness hypothesis supplies the compact convex container directly. Combining compact derivative boundedness, the affine-line derivative estimate, Taylor-polynomial collapse, and the mean-remainder theorem yields one uniform order-(k+1) remainder constant for every pair of locus points; this complete remainder theorem now compiles.",
+     "The complete placeholder-free multivariable Taylor covering-nullity fixture compiles. It derives a uniform order-(k+1) remainder from ContDiff and locus-wide vanishing derivatives, constructs finite separated source covers with arbitrarily small target-image volume, and concludes volume(f '' K)=0 under the positive Morse--Sard exponent equation.",
+     :fixture
+     {:path "/tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
+      :sha256
+      "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c"},
      :commands
      [{:cmd
-       "readlink -f .lake/packages; lake build ConstructionTargets.SardAffineLineDerivativeBound ConstructionTargets.SardAffineLineTaylorRemainder; lake env lean /tmp/SardUniformFlatTaylorRemainderProbe.lean",
+       "readlink -f .lake/packages; lake build ConstructionTargets.SardUniformFlatTaylorRemainder ConstructionTargets.SardQuantitativeTaylorCoverMeasure ConstructionTargets.SardArbitrarilySmallMeasureLimit; lake env lean /tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
        :exit 0,
        :output
-       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; build completed successfully (8244 jobs); exists_uniform_flat_taylor_remainder_on_bounded_set depends on [propext, Classical.choice, Quot.sound]."}
-      {:cmd "sha256sum /tmp/SardUniformFlatTaylorRemainderProbe.lean",
-       :exit 0,
-       :output
-       "9208e61d374fa194132593e61375a7e4372618d92f5e746fee400d76c3c64509"}
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; build completed successfully (8269 jobs); both final declarations depend on [propext, Classical.choice, Quot.sound]."}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardUniformFlatTaylorRemainderProbe.lean",
+       "sha256sum /tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
+       :exit 0,
+       :output
+       "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "git diff --check; git status --porcelain=v1; readlink -f .lake/packages",
        :exit 0,
        :output "/home/joe/code/apm-lean/.lake/packages"}],
-     :prerequisite
-     {:consumer :t93A04,
-      :stop-condition
-      "Stop only if this compiled uniform remainder theorem cannot be promoted with its exact closed-ball boundedness, ProperSpace, ContDiff, derivative-vanishing, factorial-normalized constant, or standard-axiom hypotheses.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/SardUniformFlatTaylorRemainder.lean"
-       "ConstructionTargets/SardUniformFlatTaylorRemainder.md"],
-      :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / UNIFORM FLAT TAYLOR REMAINDER ON A BOUNDED LOCUS",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean"
+       "ConstructionTargets/SardMultivariableTaylorCoveringNullity.md"],
       :acceptance
       {:fixture
-       {:path "/tmp/SardUniformFlatTaylorRemainderProbe.lean",
+       {:path "/tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
         :sha256
-        "9208e61d374fa194132593e61375a7e4372618d92f5e746fee400d76c3c64509"},
+        "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c"},
        :declarations
-       ["exists_uniform_flat_taylor_remainder_on_bounded_set"],
+       ["exists_smooth_flat_taylor_cover_measure_lt"
+        "smooth_flat_locus_image_volume_eq_zero"],
        :axioms :standard-only,
        :warnings [],
+       :representation
+       {:source
+        "A compact subset K of a nontrivial finite-dimensional real inner-product source, contained in a closed ball; a globally C^(k+1) map to a nontrivial finite-dimensional real inner-product target; derivatives through order k vanishing at every point of K; and a positive exponent surplus (k+1)*finrank(F)=finrank(E)+d.",
+        :target
+        "For every positive tolerance, a finite separated source cover whose Taylor target-ball cover contains f '' K and has volume below the tolerance, followed by volume(f '' K)=0."},
        :consumer-residual
-       "Instantiate exists_taylor_cover_measure_lt with this uniform remainder constant and derive the complete arbitrarily-small image-measure/nullity theorem; local rank reduction remains after that composition."},
-      :representation
-      {:source
-       "A subset K of a proper real normed space contained in a closed ball, a globally C^(k+1) map, and vanishing iterated Frechet derivatives at every point of K through order k.",
-       :target
-       "One nonnegative real C such that norm(f x-f a) <= C*norm(x-a)^(k+1) for every a,x in K."},
-      :id :critical-value-sard-uniform-flat-taylor-remainder-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:critical-value-sard-affine-line-derivative-bound-1
-       :critical-value-sard-affine-line-taylor-remainder-1
-       :critical-value-sard-compact-iterated-fderiv-bound-1],
-      :current-residual
-      "The smoothness-to-uniform-remainder derivation is compiled; only its final composition with the banked quantitative Taylor-cover theorem remains before local rank reduction.",
-      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
-   :phase :probe,
+       "Local rank reduction and rank/source-dimension induction remain; the quantitative flat-locus Taylor covering and nullity foundation is complete."}},
+     :residual
+     "Promote the compiled pair, then begin local rank reduction and rank/source-dimension induction for the rectangular Morse--Sard theorem."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean"
+    "ConstructionTargets/SardMultivariableTaylorCoveringNullity.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / MULTIVARIABLE TAYLOR COVERING NULLITY",
    :acceptance
-   {:probe
-    "Compile a placeholder-free finite-dimensional multivariable higher-order Taylor remainder and covering-nullity fixture for a locus on which derivatives through the required order vanish.",
+   {:fixture
+    {:path "/tmp/SardMultivariableTaylorCoveringNullityProbe.lean",
+     :sha256
+     "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c"},
+    :declarations
+    ["exists_smooth_flat_taylor_cover_measure_lt"
+     "smooth_flat_locus_image_volume_eq_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :representation
+    {:source
+     "A compact subset K of a nontrivial finite-dimensional real inner-product source, contained in a closed ball; a globally C^(k+1) map to a nontrivial finite-dimensional real inner-product target; derivatives through order k vanishing at every point of K; and a positive exponent surplus (k+1)*finrank(F)=finrank(E)+d.",
+     :target
+     "For every positive tolerance, a finite separated source cover whose Taylor target-ball cover contains f '' K and has volume below the tolerance, followed by volume(f '' K)=0."},
     :consumer-residual
-    "local rank reduction and rank/source-dimension induction",
-    :axioms :standard-only},
+    "Local rank reduction and rank/source-dimension induction remain; the quantitative flat-locus Taylor covering and nullity foundation is complete."},
    :representation
    {:source
     "a sufficiently smooth map between finite-dimensional real normed spaces with prescribed vanishing iterated derivatives on a bounded source set",
