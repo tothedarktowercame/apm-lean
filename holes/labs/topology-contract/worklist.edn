@@ -3800,8 +3800,54 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled ENNReal-separation to real-distance adapter cannot be promoted at the recorded representation without changing its statement or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "one finite-dimensional polynomial packing bound and Taylor target-volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :target-compiled true,
+     :placeholder-free true,
+     :scoped-diff true,
+     :clean-after-commit true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:IsSeparated.real_dist_le
+     "64c75f0c2904e776ff9fb0e078d6fdc5802c63d080ad2475ad4496682488fd40"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd "sha256sum /tmp/SeparatedENNRealToDistProbe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/SeparatedENNRealToDistProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardSeparatedENNRealToRealDist.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|axiom ' ConstructionTargets/SardSeparatedENNRealToRealDist.lean ConstructionTargets/SardSeparatedENNRealToRealDist.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :axiom-policy :standard-only,
+    :commit "c13fed8dce376a7652af69996b9cc96fca002495",
+    :changed-paths
+    ["ConstructionTargets/SardSeparatedENNRealToRealDist.lean"
+     "ConstructionTargets/SardSeparatedENNRealToRealDist.md"],
+    :file-hashes
+    {"ConstructionTargets/SardSeparatedENNRealToRealDist.lean"
+     "4a15e68d3295aee91b6a37e77d0c0c4a35839aeba11a7216c2bd05e2c9e986bc",
+     "ConstructionTargets/SardSeparatedENNRealToRealDist.md"
+     "35240e80e2d4223bc43e1c6af02813a15ce2c47a276f46863ae9af195413bc92"},
+    :fixture
+    {:path "/tmp/SeparatedENNRealToDistProbe.lean",
+     :sha256
+     "c96e28732dab2512194bf6f847f195a987a4edade2a049626ad156ad062bfad0"},
+    :declarations ["IsSeparated.real_dist_le"],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardSeparatedENNRealToRealDist.lean"
     "ConstructionTargets/SardSeparatedENNRealToRealDist.md"],
