@@ -6572,6 +6572,20 @@
       :exit 0}
      {:cmd "git diff HEAD^ HEAD --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-17",
+     :job "invoke-1788802732201-13944-bda89709",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 0e8a20b29ff932f023b8848a3aae5d354296e74a"
+      "sha256sum recorded fixture/module/markdown"
+      "sed frozen theorem | sha256sum"
+      "rg placeholder scan"
+      "git merge-base --is-ancestor dependency commits"
+      "lake env lean /tmp/SardProjectedImplicitFunctionDataProbe.review.lean"
+      "git diff 0e8a20b2^ 0e8a20b2 --check"],
+     :finding
+     "Recorded commit scope and fixture hash match; hashes reproduce; placeholder count is zero; exact commit blob elaborates with only propext, Classical.choice, and Quot.sound; dependency ancestry, theorem orientations, representation boundaries, and diff checks pass."},
     :commit "0e8a20b29ff932f023b8848a3aae5d354296e74a",
     :changed-paths
     ["ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean"
@@ -6596,7 +6610,7 @@
      "3d6d06feed7b93a93cb6d0812d3888d2f966f18783f61658a7398b5e4f7648ab"},
     :seat :codex-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean"
     "ConstructionTargets/SardProjectedComplementedStrictDerivativeData.md"],
@@ -6694,7 +6708,7 @@
       "All analytic and algebraic fields needed by ImplicitFunctionData compile together; packaging the dependent range/kernel types and establishing residual-coordinate flatness remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
