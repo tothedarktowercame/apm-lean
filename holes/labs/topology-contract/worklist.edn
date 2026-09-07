@@ -4636,8 +4636,74 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled separated bounded-ball packing theorem cannot be promoted at the recorded representation without changing its measurable-space, separation, or containment hypotheses or adding nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "one maximal-separated finite-dimensional source-cover bound and Taylor target-volume exponent estimate before local rank reduction",
+    :gates
+    {:fixture-compiled true,
+     :module-compiled true,
+     :fixture-module-byte-identical true,
+     :placeholder-free true,
+     :diff-check true,
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"finset_card_mul_le_measure_ball_of_separated"
+     "333ca9a977bde6d534f82fbd3a7fcda0e9bb340b92902becf9ea12fc95464762"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardSeparatedBallPackingProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/SardSeparatedBallPackingProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardSeparatedBoundedBallPacking.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*axiom ' ConstructionTargets/SardSeparatedBoundedBallPacking.lean ConstructionTargets/SardSeparatedBoundedBallPacking.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/SardSeparatedBallPackingProbe.lean ConstructionTargets/SardSeparatedBoundedBallPacking.lean ConstructionTargets/SardSeparatedBoundedBallPacking.md",
+      :exit 0}
+     {:cmd
+      "sed -n '/^theorem finset_card_mul_le_measure_ball_of_separated/,/ := by/p' ConstructionTargets/SardSeparatedBoundedBallPacking.lean | sha256sum",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add Sard separated bounded-ball packing'",
+      :exit 0}
+     {:cmd "git diff HEAD^ HEAD --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :commit "88e81c9cae19a8ca8beb68701c0d9179d550e2a5",
+    :changed-paths
+    ["ConstructionTargets/SardSeparatedBoundedBallPacking.lean"
+     "ConstructionTargets/SardSeparatedBoundedBallPacking.md"],
+    :file-hashes
+    {"ConstructionTargets/SardSeparatedBoundedBallPacking.lean"
+     "553dc8f804c70501e8aa2e23b542bb39e27131b994cd1d6762db760975268a1e",
+     "ConstructionTargets/SardSeparatedBoundedBallPacking.md"
+     "f36f2f1406db485c9cd9de1922e389ca2c9195303010e497bece0832d01df84a"},
+    :fixture
+    {:path "/tmp/SardSeparatedBallPackingProbe.lean",
+     :sha256
+     "553dc8f804c70501e8aa2e23b542bb39e27131b994cd1d6762db760975268a1e"},
+    :declarations ["finset_card_mul_le_measure_ball_of_separated"],
+    :dependencies
+    [{:path "ConstructionTargets/SardSeparatedHalfBallsDisjoint.lean",
+      :commit "4e87ab4e"}
+     {:path
+      "ConstructionTargets/SardCenteredBallBoundedEnlargement.lean",
+      :commit "6fafaf2a"}
+     {:path
+      "ConstructionTargets/SardFinitePackingCardinalityBound.lean",
+      :commit "bf7b325a"}],
+    :seat :codex-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardSeparatedBoundedBallPacking.lean"
     "ConstructionTargets/SardSeparatedBoundedBallPacking.md"],
