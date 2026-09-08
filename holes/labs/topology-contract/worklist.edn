@@ -29611,6 +29611,39 @@
    "The finite-jet branches assemble to localized image nullity; concrete Taylor-flat and higher-locus induction instantiation from rectangular hypotheses remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if volume-nullity cannot be transferred to an arbitrary additive Haar measure for every finite-dimensional real inner-product Borel space and every subset, or if the resulting theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardVolumeNullityToAddHaar.lean"
+    "ConstructionTargets/SardVolumeNullityToAddHaar.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / VOLUME-NULLITY TO ADDITIVE-HAAR NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardVolumeNullityToAddHaarProbe.lean",
+     :sha256
+     "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928"},
+    :declarations ["addHaar_eq_zero_of_volume_eq_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the transfer on localized Taylor-flat nullity, then instantiate higher-jet induction and invoke finite-jet assembly."},
+   :representation
+   {:source
+    "Zero volume of an arbitrary subset of a finite-dimensional real inner-product Borel space.",
+    :target
+    "Zero measure of that subset for an arbitrary additive Haar measure on the same space."},
+   :id :critical-value-sard-volume-nullity-to-add-haar-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-localized-flat-through-taylor-nullity-1
+    :critical-value-sard-localized-finite-jet-closed-open-assembly-1],
+   :current-residual
+   "Taylor-flat nullity can be expressed for the rectangular theorem's arbitrary additive Haar target measure; concrete higher-locus induction instantiation remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -29664,88 +29697,84 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate Taylor-flat nullity and higher first-nonzero-jet induction from the rectangular localized hypotheses, then expose the rectangular local theorem.",
+     "Transfer localized Taylor-flat volume nullity to the arbitrary target additive Haar measure, instantiate higher first-nonzero-jet induction, and apply the localized finite-jet closed-open assembly theorem.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"image_zero_of_flat_higher_and_closedOpen_first"
-      "68dcf0b7797a10edd69a6150732712e0e0aa1d803b886fca2eed7bab912ca2a1"},
+     {"addHaar_eq_zero_of_volume_eq_zero"
+      "05acfa42bf6eacdcce8b89555645f1fb3e17611222a721608b17bef39717d32a"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled localized finite-jet closed-open assembly theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, additive Haar target measures, every global C1 map and localized source set, Taylor-flat image nullity, higher first-nonzero-jet image nullity, critical containment and pointwise lower-dimensional induction for the order-one locus, zero image measure of the complete localized source set, or standard-axiom profile.",
+      "Stop only if volume-nullity cannot be transferred to an arbitrary additive Haar measure for every finite-dimensional real inner-product Borel space and every subset, or if the resulting theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.lean"
-       "ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.md"],
+      ["ConstructionTargets/SardVolumeNullityToAddHaar.lean"
+       "ConstructionTargets/SardVolumeNullityToAddHaar.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED FINITE-JET CLOSED-OPEN ASSEMBLY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / VOLUME-NULLITY TO ADDITIVE-HAAR NULLITY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
+       {:path "/tmp/SardVolumeNullityToAddHaarProbe.lean",
         :sha256
-        "f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38"},
-       :declarations
-       ["image_zero_of_flat_higher_and_closedOpen_first"],
+        "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928"},
+       :declarations ["addHaar_eq_zero_of_volume_eq_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate Taylor-flat and higher-jet nullity from the rectangular localized hypotheses."},
+       "Use the transfer on localized Taylor-flat nullity, then instantiate higher-jet induction and invoke finite-jet assembly."},
       :representation
       {:source
-       "Taylor-flat image nullity, complete order-one closed-open critical-locus nullity, and image nullity of every higher first-nonzero-jet locus for a localized source set.",
+       "Zero volume of an arbitrary subset of a finite-dimensional real inner-product Borel space.",
        :target
-       "Zero additive-Haar measure of the image of the complete localized source set."},
-      :id
-      :critical-value-sard-localized-finite-jet-closed-open-assembly-1,
+       "Zero measure of that subset for an arbitrary additive Haar measure on the same space."},
+      :id :critical-value-sard-volume-nullity-to-add-haar-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-derivative-locus-closed-open-finite-aggregation-1
-       :critical-value-sard-first-nonzero-jet-finite-assembly-1
-       :critical-value-sard-localized-flat-through-taylor-nullity-1
-       :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
+      [:critical-value-sard-localized-flat-through-taylor-nullity-1
+       :critical-value-sard-localized-finite-jet-closed-open-assembly-1],
       :current-residual
-      "The finite-jet branches assemble to localized image nullity; concrete Taylor-flat and higher-locus induction instantiation from rectangular hypotheses remains.",
+      "Taylor-flat nullity can be expressed for the rectangular theorem's arbitrary additive Haar target measure; concrete higher-locus induction instantiation remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the new order-one closed-open finite-rank theorem with the banked Taylor-flat and higher first-nonzero-jet nullity inputs through the reviewed finite-jet assembly theorem, proving zero image measure for the complete localized source set. The remaining work is to instantiate the flat and higher-locus inputs from the rectangular smoothness, dimension, compact-localization, and source-induction hypotheses.",
+     "The rectangular theorem is not refuted. The remaining interface mismatch is that localized Taylor-flat nullity is stated for volume, while the localized finite-jet assembly accepts an arbitrary additive Haar target measure. A placeholder-free compiled fixture uses uniqueness of additive Haar measures to transfer every volume-null set to nullity for the chosen additive Haar measure.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 6 dependency-receipts holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 6 ':id :critical-value-sard-(localized-flat-through-taylor-nullity-1|localized-finite-jet-closed-open-assembly-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
+      {:cmd "lake env lean /tmp/SardVolumeNullityToAddHaarProbe.lean",
        :exit 0,
        :output
-       "f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38"}
+       "'SardVolumeNullityToAddHaarProbe.addHaar_eq_zero_of_volume_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardVolumeNullityToAddHaarProbe.lean",
+       :exit 0,
+       :output
+       "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928  /tmp/SardVolumeNullityToAddHaarProbe.lean"}
       {:cmd
-       "rg placeholder-and-unsafe-patterns /tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardVolumeNullityToAddHaarProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,43p' /tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean | sha256sum",
+       "sed -n '8,15p' /tmp/SardVolumeNullityToAddHaarProbe.lean | sha256sum",
        :exit 0,
        :output
-       "68dcf0b7797a10edd69a6150732712e0e0aa1d803b886fca2eed7bab912ca2a1"}
+       "05acfa42bf6eacdcce8b89555645f1fb3e17611222a721608b17bef39717d32a  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 222 items OK; {:done 214, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 223 items OK; {:done 215, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
-      {:cmd "rg -o sorry problems/t93A04/lean/Main.lean | wc -l",
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+      {:cmd
+       "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
        :output "1"}
       {:cmd "readlink -f .lake/packages",
@@ -29754,12 +29783,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
+     {:path "/tmp/SardVolumeNullityToAddHaarProbe.lean",
       :sha256
-      "f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38"},
+      "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -29930,7 +29959,8 @@
     :critical-value-sard-first-derivative-rank-piece-pointwise-closed-open-nullity-1
     :critical-value-sard-first-derivative-rank-piece-closed-open-aggregation-1
     :critical-value-sard-first-derivative-locus-closed-open-finite-aggregation-1
-    :critical-value-sard-localized-finite-jet-closed-open-assembly-1],
+    :critical-value-sard-localized-finite-jet-closed-open-assembly-1
+    :critical-value-sard-volume-nullity-to-add-haar-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
