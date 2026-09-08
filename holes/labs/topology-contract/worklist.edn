@@ -33023,8 +33023,73 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if an exact derivative-rank identity cannot yield the source-kernel and target-orthogonal-complement finrank subtraction identities required by projected-slice induction, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "Assemble the finite-order projected chart, closed rank-upper localization, rank-reduced dimension identities, and indexed residual-slice zero theorem into the pointwise exact-rank nullity witness.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"projected_rank_reduced_finranks"
+     "6b98b4b79aaa3be06752f32c3c6a7a2901a526d34f21252c4515288671b71a9c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
+      :exit 0,
+      :output
+      "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a  ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean\n6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a  /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean",
+      :exit 0,
+      :output
+      "'SardProjectedRankReducedDimensionIdentitiesProbe.projected_rank_reduced_finranks' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean ConstructionTargets/SardProjectedRankReducedDimensionIdentities.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '6,39p' ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean | sha256sum",
+      :exit 0,
+      :output
+      "6b98b4b79aaa3be06752f32c3c6a7a2901a526d34f21252c4515288671b71a9c  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 252 items OK; {:done 243, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output "?? scripts/__pycache__/",
+      :note "Unrelated concurrent cache outside row scope."}],
+    :commit "f7e8235e14ac82119c01b60f5b9286727a74ae8d",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean"
+     "ConstructionTargets/SardProjectedRankReducedDimensionIdentities.md"],
+    :fixture
+    {:path
+     "/tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
+     :sha256
+     "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a"},
+    :declarations ["projected_rank_reduced_finranks"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean"
     "ConstructionTargets/SardProjectedRankReducedDimensionIdentities.md"],
