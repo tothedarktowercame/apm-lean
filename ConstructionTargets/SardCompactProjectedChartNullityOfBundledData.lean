@@ -2,7 +2,7 @@ import ConstructionTargets.SardCompactProjectedChartImageNullity
 
 open Set MeasureTheory
 
-namespace SardCompactProjectedChartNullityOfBundledData
+namespace SardCompactProjectedChartNullityOfBundledDataProbe
 
 /-- The paired fiber regularity and identity-projected zero-derivative bundle
 directly discharges compact projected-chart nullity. -/
@@ -41,4 +41,4 @@ theorem measure_image_zero_of_bundled_inverseSlice_data
 
 #print axioms measure_image_zero_of_bundled_inverseSlice_data
 
-end SardCompactProjectedChartNullityOfBundledData
+end SardCompactProjectedChartNullityOfBundledDataProbe
