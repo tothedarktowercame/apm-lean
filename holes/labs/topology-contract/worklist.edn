@@ -24234,6 +24234,46 @@
       "git -c user.name='Joe Corneli' -c user.email='holtzermann17@gmail.com' commit -m 'Add projected chart derivative surjectivity'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788868278635-14951-6361f8b2",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no b9875ce2b31a7c18b177fe368c7e7349d1485438; git diff-tree --no-commit-id --name-only -r b9875ce2b31a7c18b177fe368c7e7349d1485438; git show b9875ce2b31a7c18b177fe368c7e7349d1485438:ConstructionTargets/SardProjectedChartDerivativeSurjective.lean; git show b9875ce2b31a7c18b177fe368c7e7349d1485438:ConstructionTargets/SardProjectedChartDerivativeSurjective.md",
+       :exit 0,
+       :output "exact two-path scope"}
+      {:cmd
+       "git show b9875ce2b31a7c18b177fe368c7e7349d1485438:ConstructionTargets/SardProjectedChartDerivativeSurjective.lean > /tmp/sard-chart-deriv-surj-review.KdT0qB/SardProjectedChartDerivativeSurjective.lean; git show b9875ce2b31a7c18b177fe368c7e7349d1485438:ConstructionTargets/SardProjectedChartDerivativeSurjective.md > /tmp/sard-chart-deriv-surj-review.KdT0qB/SardProjectedChartDerivativeSurjective.md; sha256sum /tmp/sard-chart-deriv-surj-review.KdT0qB/SardProjectedChartDerivativeSurjective.lean /tmp/sard-chart-deriv-surj-review.KdT0qB/SardProjectedChartDerivativeSurjective.md",
+       :exit 0,
+       :output
+       "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902 Lean; c4fa986659576d907cdff7dcce33a87a49b3577ab7abf305d8d452fa480098eb MD"}
+      {:cmd
+       "lake env lean /tmp/sard-chart-deriv-surj-review.KdT0qB/SardProjectedChartDerivativeSurjective.lean",
+       :exit 0,
+       :output
+       "fst_comp_range_eq_top_of_chart_derivatives depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-chart-deriv-surj-review.KdT0qB/SardProjectedChartDerivativeSurjective.lean /tmp/sard-chart-deriv-surj-review.KdT0qB/SardProjectedChartDerivativeSurjective.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '12,24p' /tmp/sard-chart-deriv-surj-review.KdT0qB/SardProjectedChartDerivativeSurjective.lean | sha256sum",
+       :exit 0,
+       :output
+       "261c2a3bc4ecf14faddc0902b04870ff1bf52fa0220c0823d4d8dedb12e46738  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "topology-worklist: 186 items OK; {:done 177, :done-unreviewed 1, :blocked 2, :superseded 6}; consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; consumer placeholders 1"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' b9875ce2b31a7c18b177fe368c7e7349d1485438",
+       :exit 0,
+       :output
+       "b9875ce2b31a7c18b177fe368c7e7349d1485438; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem preserves the correct map orientation: forward derivative D at chart.symm y composed after inverse derivative H at y is the identity by differentiating chart ∘ chart.symm; the reviewed first-block theorem then uses the exact equality P = fst.comp D to conclude P.range = top. It does not infer differentiability, the first-block equality, or the localized rank bound; those remain explicit consumer obligations. The consumer fixture remains unchanged with one placeholder. No warning, scope defect, or worktree change was found."},
     :commit "b9875ce2b31a7c18b177fe368c7e7349d1485438",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartDerivativeSurjective.lean"
@@ -24244,7 +24284,7 @@
      "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902"},
     :declarations ["fst_comp_range_eq_top_of_chart_derivatives"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartDerivativeSurjective.lean"
     "ConstructionTargets/SardProjectedChartDerivativeSurjective.md"],
@@ -24420,7 +24460,7 @@
       "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
