@@ -27045,6 +27045,45 @@
    "The concrete chart now carries its exact target-coordinate identity, two-sided regularity, and projected surjectivity; localized rank data, residual-slice nullity data, measure installation, and compact-nullity instantiation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected-chart orthogonal-residual slice zero-derivative theorem cannot be promoted for arbitrary finite-dimensional real normed source spaces, finite-dimensional real inner-product target spaces, arbitrary real normed slice spaces, every projected product chart with exact derivative-range first-coordinate identity and inverse-chart C1 regularity, ambient C1 regularity on the chart source, exact base rank indexing, localized derivative-rank bounds, pointwise derivative-range projection surjectivity, zero Frechet derivative of every orthogonal-residual inverse slice, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedChartOrthogonalResidualSliceZero.lean"
+    "ConstructionTargets/SardProjectedChartOrthogonalResidualSliceZero.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART ORTHOGONAL-RESIDUAL SLICE ZERO DERIVATIVE",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean",
+     :sha256
+     "70c5e7a464cbbc353d0da19c1efe105d74825cdc42042cb6680c2b8ac1ead634"},
+    :declarations
+    ["forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Bundle orthogonal-residual inverse-slice regularity and zero derivatives with the coordinate measures, then instantiate compact projected-chart nullity."},
+   :representation
+   {:source
+    "A projected derivative-range chart with exact first-coordinate identity, inverse-chart and ambient C1 regularity, exact base rank, localized rank bounds, and pointwise projected-derivative surjectivity.",
+    :target
+    "A zero Frechet derivative certificate for every fixed-range-coordinate orthogonal-residual inverse slice."},
+   :id
+   :critical-value-sard-projected-chart-orthogonal-residual-slice-zero-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-smooth-chart-target-data-1
+    :critical-value-sard-projected-chart-indexed-residual-slice-zero-1
+    :critical-value-sard-range-projection-coordinate-derivative-1
+    :critical-value-sard-localized-rank-upper-bound-1
+    :critical-value-sard-derivative-range-orthogonal-measure-package-1],
+   :current-residual
+   "Every orthogonal-residual inverse slice now has the exact zero derivative required by compact fiber nullity; regularity bundling, local coordinate-measure installation, and compact-nullity instantiation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -27098,82 +27137,86 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Combine the projected smooth-chart target data with localized rank bounds, indexed residual-slice zero derivatives, and bundled coordinate measures to instantiate the concrete compact projected-chart certificate.",
+     "Bundle orthogonal-residual inverse-slice regularity and zero derivatives with the coordinate measures, then instantiate compact projected-chart nullity.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_projected_smoothChart_target_data"
-      "c00831152e324932540b5b6f6a532b79e72e9fd8121df18cfbd281acdcabdb82"},
+     {"forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice"
+      "eeca861e065e22fe06ead42b2a941ecc78e1fc8f2c7349faba9fa93dc514f19f"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled projected smooth-chart target-data theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces, finite-dimensional real inner-product target spaces, every map with a strict derivative and local C1 regularity, existence of the projected product chart, exact equality of its first coordinate with the derivative-range orthogonal target coordinate, two-sided chart regularity, pointwise projected-derivative surjectivity throughout the chart source, or standard-axiom profile.",
+      "Stop only if the compiled projected-chart orthogonal-residual slice zero-derivative theorem cannot be promoted for arbitrary finite-dimensional real normed source spaces, finite-dimensional real inner-product target spaces, arbitrary real normed slice spaces, every projected product chart with exact derivative-range first-coordinate identity and inverse-chart C1 regularity, ambient C1 regularity on the chart source, exact base rank indexing, localized derivative-rank bounds, pointwise derivative-range projection surjectivity, zero Frechet derivative of every orthogonal-residual inverse slice, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedSmoothChartTargetData.lean"
-       "ConstructionTargets/SardProjectedSmoothChartTargetData.md"],
+      ["ConstructionTargets/SardProjectedChartOrthogonalResidualSliceZero.lean"
+       "ConstructionTargets/SardProjectedChartOrthogonalResidualSliceZero.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED SMOOTH CHART TARGET DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART ORTHOGONAL-RESIDUAL SLICE ZERO DERIVATIVE",
       :acceptance
       {:fixture
-       {:path "/tmp/SardProjectedSmoothChartTargetDataProbe.lean",
+       {:path
+        "/tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean",
         :sha256
-        "95acb14939af87fd250797b94b8ebdbc3133b50a71d8e60dde0a41770eb32c30"},
-       :declarations ["exists_projected_smoothChart_target_data"],
+        "70c5e7a464cbbc353d0da19c1efe105d74825cdc42042cb6680c2b8ac1ead634"},
+       :declarations
+       ["forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Combine the projected smooth-chart target data with localized rank bounds, indexed residual-slice zero derivatives, and bundled coordinate measures to instantiate the concrete compact projected-chart certificate."},
+       "Bundle orthogonal-residual inverse-slice regularity and zero derivatives with the coordinate measures, then instantiate compact projected-chart nullity."},
       :representation
       {:source
-       "A map with a strict derivative at a point and local C1 regularity in finite-dimensional real inner-product source and target spaces.",
+       "A projected derivative-range chart with exact first-coordinate identity, inverse-chart and ambient C1 regularity, exact base rank, localized rank bounds, and pointwise projected-derivative surjectivity.",
        :target
-       "A projected product chart with exact orthogonal target-coordinate first-component identity, two-sided C1 regularity, and pointwise derivative-range coordinate surjectivity."},
-      :id :critical-value-sard-projected-smooth-chart-target-data-1,
+       "A zero Frechet derivative certificate for every fixed-range-coordinate orthogonal-residual inverse slice."},
+      :id
+      :critical-value-sard-projected-chart-orthogonal-residual-slice-zero-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-smooth-local-rank-chart-surjectivity-1
-       :critical-value-sard-target-orthogonal-coordinate-equiv-1
-       :critical-value-sard-projected-chart-target-coordinate-first-component-1
+      [:critical-value-sard-projected-smooth-chart-target-data-1
+       :critical-value-sard-projected-chart-indexed-residual-slice-zero-1
+       :critical-value-sard-range-projection-coordinate-derivative-1
+       :critical-value-sard-localized-rank-upper-bound-1
        :critical-value-sard-derivative-range-orthogonal-measure-package-1],
       :current-residual
-      "The concrete chart now carries its exact target-coordinate identity, two-sided regularity, and projected surjectivity; localized rank data, residual-slice nullity data, measure installation, and compact-nullity instantiation remain.",
+      "Every orthogonal-residual inverse slice now has the exact zero derivative required by compact fiber nullity; regularity bundling, local coordinate-measure installation, and compact-nullity instantiation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture constructs, from a strict derivative and local C1 regularity, one projected rank chart carrying the exact orthogonal target-coordinate first-component identity, two-sided chart regularity, and pointwise surjectivity of the projected derivative throughout its source. The remaining bounded work is to combine this chart data with localized rank bounds, residual-slice zero derivatives, and the bundled coordinate measures to instantiate compact projected-chart nullity.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture specializes the indexed residual-slice theorem to derivative-range and orthogonal-complement coordinates, derives the projected-coordinate derivative identification from ambient differentiability, and proves that every orthogonal-residual inverse slice has zero Frechet derivative. The remaining bounded work is to bundle this certificate with inverse-slice regularity and coordinate measures and instantiate compact projected-chart nullity.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 6 ':id :critical-value-sard-(derivative-range-orthogonal-measure-package-1|target-orthogonal-coordinate-equiv-1|projected-chart-target-coordinate-first-component-1|compact-projected-chart-nullity-of-residual-data-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 6 ':id :critical-value-sard-(projected-smooth-chart-target-data-1|projected-chart-indexed-residual-slice-zero-1|range-projection-coordinate-derivative-1|localized-rank-upper-bound-1|derivative-range-orthogonal-measure-package-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardProjectedSmoothChartTargetDataProbe.lean",
+       "lake env lean /tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean",
        :exit 0,
        :output
-       "'SardProjectedSmoothChartTargetDataProbe.exists_projected_smoothChart_target_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedChartOrthogonalResidualSliceZeroProbe.forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedSmoothChartTargetDataProbe.lean",
+       "sha256sum /tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean",
        :exit 0,
        :output
-       "95acb14939af87fd250797b94b8ebdbc3133b50a71d8e60dde0a41770eb32c30  /tmp/SardProjectedSmoothChartTargetDataProbe.lean"}
+       "70c5e7a464cbbc353d0da19c1efe105d74825cdc42042cb6680c2b8ac1ead634  /tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedSmoothChartTargetDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '14,34p' /tmp/SardProjectedSmoothChartTargetDataProbe.lean | sha256sum",
+       "sed -n '15,46p' /tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean | sha256sum",
        :exit 0,
        :output
-       "c00831152e324932540b5b6f6a532b79e72e9fd8121df18cfbd281acdcabdb82  -"}
+       "eeca861e065e22fe06ead42b2a941ecc78e1fc8f2c7349faba9fa93dc514f19f  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 202 items OK; {:done 194, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 203 items OK; {:done 195, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -27188,12 +27231,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardProjectedSmoothChartTargetDataProbe.lean",
+     {:path
+      "/tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean",
       :sha256
-      "95acb14939af87fd250797b94b8ebdbc3133b50a71d8e60dde0a41770eb32c30"},
+      "70c5e7a464cbbc353d0da19c1efe105d74825cdc42042cb6680c2b8ac1ead634"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -27344,7 +27388,8 @@
     :critical-value-sard-derivative-range-orthogonal-nontrivial-1
     :critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1
     :critical-value-sard-derivative-range-orthogonal-measure-package-1
-    :critical-value-sard-projected-smooth-chart-target-data-1],
+    :critical-value-sard-projected-smooth-chart-target-data-1
+    :critical-value-sard-projected-chart-orthogonal-residual-slice-zero-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
