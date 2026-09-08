@@ -30085,8 +30085,73 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the localized finite-jet induction theorem cannot be specialized from a single C-infinity hypothesis while internally discharging every finite smoothness order, Euclidean ball-volume coefficient bound, and contraction-factor hypothesis, or if the specialization requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Derive compact localization and exponent surplus from rectangular hypotheses and supply the two lower-dimensional induction interfaces.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"localized_image_zero_of_smooth_finiteJet_induction"
+     "8b4623848b93964fc6fe86c3e6e6215e841646fcd479ffb47c17195150d73acd"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean",
+      :exit 0,
+      :output
+      "025433b6e553a214f1083b292fa2e2dda6f759e864926ff5958634a7f39edd84  /tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean\n025433b6e553a214f1083b292fa2e2dda6f759e864926ff5958634a7f39edd84  ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean"}
+     {:cmd
+      "cmp -s /tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean",
+      :exit 0,
+      :output
+      "'SardLocalizedSmoothFiniteJetInductionNullityProbe.localized_image_zero_of_smooth_finiteJet_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '11,60p' ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "8b4623848b93964fc6fe86c3e6e6215e841646fcd479ffb47c17195150d73acd  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 228 items OK; {:done 219, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "4926c76ed64b37bdba2f6d8d83ad1e0b28094d50",
+    :changed-paths
+    ["ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean"
+     "ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean",
+     :sha256
+     "025433b6e553a214f1083b292fa2e2dda6f759e864926ff5958634a7f39edd84"},
+    :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean"
     "ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.md"],
