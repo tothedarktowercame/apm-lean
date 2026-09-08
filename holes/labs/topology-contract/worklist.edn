@@ -22535,6 +22535,47 @@
       :output
       "[master 357a8f1c] Add residual slice zero derivative adapter\n2 files changed, 32 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788863312971-14859-d3f48bd1",
+     :commands
+     [{:cmd
+       "git rev-parse 357a8f1c; git show --stat --oneline --decorate=no 357a8f1c; git diff-tree --no-commit-id --name-only -r 357a8f1c; git show 357a8f1c:ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean; git show 357a8f1c:ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.md",
+       :exit 0,
+       :output
+       "357a8f1ca33e9abd455870647bf817123517b194; exact two-path scope"}
+      {:cmd
+       "git show 357a8f1ca33e9abd455870647bf817123517b194:ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean > /tmp/sard-residual-zero-review.DkVbvj/SardProjectedChartResidualSliceDerivativeZero.lean; git show 357a8f1ca33e9abd455870647bf817123517b194:ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.md > /tmp/sard-residual-zero-review.DkVbvj/SardProjectedChartResidualSliceDerivativeZero.md; sha256sum /tmp/sard-residual-zero-review.DkVbvj/SardProjectedChartResidualSliceDerivativeZero.lean /tmp/sard-residual-zero-review.DkVbvj/SardProjectedChartResidualSliceDerivativeZero.md",
+       :exit 0,
+       :output
+       "a48034365bc3fefe304a7787b2f4263046ac23af6e5870340f2c59821bbe223e Lean; 3cd6374c210cac2258a46e53703ae26ea2c20bd00dd032f24a9e71e4b69971a2 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-residual-zero-review.DkVbvj/SardProjectedChartResidualSliceDerivativeZero.lean",
+       :exit 0,
+       :output
+       "hasFDerivAt_zero_residual_comp_slice depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-residual-zero-review.DkVbvj/SardProjectedChartResidualSliceDerivativeZero.lean /tmp/sard-residual-zero-review.DkVbvj/SardProjectedChartResidualSliceDerivativeZero.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '13,19p' /tmp/sard-residual-zero-review.DkVbvj/SardProjectedChartResidualSliceDerivativeZero.lean | sha256sum",
+       :exit 0,
+       :output
+       "d971a4314380ec0a3b8f0b87bbd0d8597689fa4193d3763dfbcdcf173c5436ca  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 174 items OK; {:done 165, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 357a8f1ca33e9abd455870647bf817123517b194",
+       :exit 0,
+       :output
+       "357a8f1ca33e9abd455870647bf817123517b194; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended forward orientation and exact chain-rule boundary: derivatives D of f at slice z and J of slice at z yield derivative D.comp J for f along the slice; the continuous-linear residual coordinate Q then yields Q.comp (D.comp J), and the explicit equality of this map to zero proves the residualized slice has zero Frechet derivative. Rank-specific annihilation is neither assumed implicitly nor claimed—it remains exactly the stated residual linear identity. No warning, scope defect, or worktree change was found."},
     :commit "357a8f1c",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean"
@@ -22547,7 +22588,7 @@
     :declarations ["hasFDerivAt_zero_residual_comp_slice"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean"
     "ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.md"],
@@ -22731,7 +22772,7 @@
       "a48034365bc3fefe304a7787b2f4263046ac23af6e5870340f2c59821bbe223e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
