@@ -33310,6 +33310,24 @@
       :exit 0,
       :output "?? scripts/__pycache__/",
       :note "Unrelated concurrent cache outside row scope."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788905832384-15583-c6d111cb",
+     :commands
+     ["git show/diff-tree c84d98bb517960c380aa49ce5e2841fb8e1a3bb0"
+      "sha256sum and cmp fixture against recorded source"
+      "sed -n '11,34p' recorded source | sha256sum"
+      "lake env lean /tmp/SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderProjectedChartOrthogonalResidualSliceZero.lean"
+      "lake build ConstructionTargets.SardFiniteOrderProjectedChartOrthogonalResidualSliceZero — 8341 jobs"
+      "placeholder scan over fixture and scoped artifacts — exit 1"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn — 254 items OK"
+      "sha256sum and sorry count for problems/t93A04/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff --check recorded commit range; git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit has exact two-file scope; fixture and source are byte-identical and all hashes reproduce; fixture and module compile and the 8341-job build succeeds with standard axioms only; placeholders are absent; finite-order regularity is correctly weakened to first order and the orthogonal residual inverse-slice derivative-zero conclusion preserves all rank and surjectivity hypotheses; worklist and frozen consumer gates reproduce; no files were edited."},
     :commit "c84d98bb517960c380aa49ce5e2841fb8e1a3bb0",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderProjectedChartOrthogonalResidualSliceZero.lean"
@@ -33322,7 +33340,7 @@
     :declarations
     ["forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderProjectedChartOrthogonalResidualSliceZero.lean"
     "ConstructionTargets/SardFiniteOrderProjectedChartOrthogonalResidualSliceZero.md"],
@@ -33505,7 +33523,7 @@
       "acef960f5dc8ecdb696d1dcf30c0372ce8b42e67304e83cef2a64b56af977c57"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
