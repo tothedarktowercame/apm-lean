@@ -21927,6 +21927,45 @@
    "Target-fiber containment and compact fiber aggregation are now composed for an arbitrary projected product chart; concrete derivative-range target coordinates and inverse-slice analytic Sard hypotheses remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected-chart target-coordinate first-component comparison cannot be promoted for arbitrary finite-dimensional real inner-product source and target spaces, every map with a strict derivative at a base point, the derivative-range projected local-rank chart, the derivative-range orthogonal target-coordinate equivalence, exact equality of their first-coordinate functions, base-point chart-source membership, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean"
+    "ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART TARGET-COORDINATE FIRST-COMPONENT COMPARISON",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
+     :sha256
+     "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff"},
+    :declarations
+    ["exists_projectedChart_first_eq_targetCoordinates_first"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the concrete chart and coordinate equality in compact projected-chart nullity, then prove smoothness and zero residual projection derivative for every fixed-first-coordinate inverse slice."},
+   :representation
+   {:source
+    "The first-coordinate function of the derivative-range projected local-rank source chart.",
+    :target
+    "The first-component function of the derivative-range orthogonal target-coordinate equivalence applied to the mapped point.",
+    :direction
+    "Exact equality from the projected source-chart first-coordinate representation to the orthogonal target-coordinate first-component representation."},
+   :id
+   :critical-value-sard-projected-chart-target-coordinate-first-component-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:critical-value-sard-compact-projected-chart-image-nullity-1
+    :critical-value-sard-first-derivative-projected-chart-formula-1
+    :critical-value-sard-target-orthogonal-coordinate-equiv-1],
+   :current-residual
+   "The concrete projected chart now comes with exact equality to the derivative-range orthogonal target first coordinate; inverse-slice smoothness and zero residual derivative remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -21980,86 +22019,91 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate the projected target coordinates and prove smoothness and zero residual projection derivative for every fixed-first-coordinate inverse slice on the concrete derivative-range chart.",
+     "Use the concrete chart and coordinate equality in compact projected-chart nullity, then prove smoothness and zero residual projection derivative for every fixed-first-coordinate inverse slice.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_compact_projectedChart"
-      "f29e7794c13c9b36ffcacd0d718e2a69303043661bb7c54f11e55559149f4199"},
+     {"exists_projectedChart_first_eq_targetCoordinates_first"
+      "f6fb0a84deeaa1b9fa28f155a1717f0e8246c7837d60ed8faf46a8e6802de8b4"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled compact projected-chart image-nullity theorem cannot be promoted for arbitrary topological source spaces, finite-dimensional real normed induction spaces, measured target spaces with additive Haar measures, every compact source subset contained in an open product chart, a continuous map, a continuous-linear target-coordinate equivalence, equality of source-chart and target-coordinate first components, lower-dimensional Sard induction, smoothness and zero projected derivative of every inverse slice, complete compact image nullity, or standard-axiom profile.",
+      "Stop only if the compiled projected-chart target-coordinate first-component comparison cannot be promoted for arbitrary finite-dimensional real inner-product source and target spaces, every map with a strict derivative at a base point, the derivative-range projected local-rank chart, the derivative-range orthogonal target-coordinate equivalence, exact equality of their first-coordinate functions, base-point chart-source membership, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactProjectedChartImageNullity.lean"
-       "ConstructionTargets/SardCompactProjectedChartImageNullity.md"],
+      ["ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean"
+       "ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PROJECTED-CHART IMAGE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART TARGET-COORDINATE FIRST-COMPONENT COMPARISON",
       :acceptance
       {:fixture
-       {:path "/tmp/SardCompactProjectedChartImageNullityProbe.lean",
+       {:path
+        "/tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
         :sha256
-        "4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7"},
-       :declarations ["measure_image_zero_of_compact_projectedChart"],
+        "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff"},
+       :declarations
+       ["exists_projectedChart_first_eq_targetCoordinates_first"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the projected target coordinates and prove smoothness and zero residual projection derivative for every fixed-first-coordinate inverse slice on the concrete derivative-range chart."},
+       "Use the concrete chart and coordinate equality in compact projected-chart nullity, then prove smoothness and zero residual projection derivative for every fixed-first-coordinate inverse slice."},
       :representation
       {:source
-       "A compact source subset contained in a product chart whose first coordinate agrees with the first component of a target-coordinate equivalence, with Sard hypotheses on every inverse-chart slice.",
+       "The first-coordinate function of the derivative-range projected local-rank source chart.",
        :target
-       "Zero measure of the complete compact source image in the original target coordinates."},
-      :id :critical-value-sard-compact-projected-chart-image-nullity-1,
-      :kind :reusable-theorem,
+       "The first-component function of the derivative-range orthogonal target-coordinate equivalence applied to the mapped point.",
+       :direction
+       "Exact equality from the projected source-chart first-coordinate representation to the orthogonal target-coordinate first-component representation."},
+      :id
+      :critical-value-sard-projected-chart-target-coordinate-first-component-1,
+      :kind :representation-comparison,
       :depends-on
-      [:critical-value-sard-first-derivative-rank-piece-chart-source-compact-nullity-1
-       :critical-value-sard-compact-target-fiber-projected-slice-image-nullity-1
-       :critical-value-sard-projected-chart-target-fiber-slice-containment-1],
+      [:critical-value-sard-compact-projected-chart-image-nullity-1
+       :critical-value-sard-first-derivative-projected-chart-formula-1
+       :critical-value-sard-target-orthogonal-coordinate-equiv-1],
       :current-residual
-      "Target-fiber containment and compact fiber aggregation are now composed for an arbitrary projected product chart; concrete derivative-range target coordinates and inverse-slice analytic Sard hypotheses remain.",
+      "The concrete projected chart now comes with exact equality to the derivative-range orthogonal target first coordinate; inverse-slice smoothness and zero residual derivative remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture now feeds every target-coordinate fiber of a compact chart-contained set into the corresponding fixed-first-coordinate inverse-chart slice, then applies the banked compact target-fiber projected-slice theorem. The remaining obligation is confined to the concrete derivative-range chart: instantiate its target coordinates and establish smoothness, dimension drop, and zero projected derivative for every inverse slice.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture combines the projected local-rank chart formula with the orthogonal target-coordinate equivalence and proves exact equality of their first-coordinate functions. This supplies the coordinate identity required by compact projected-chart image nullity without altering measurable-space instances. The remaining analytic obligation is smoothness and zero residual projection derivative for every inverse slice of this concrete chart.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '1,240p' ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean; sed -n '1,200p' ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean; sed -n '1,220p' ConstructionTargets/SardFirstDerivativeProjectedChartFormula.lean; sed -n '1,220p' ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean; sed -n '1,180p' ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean",
+       "sed -n '1,220p' ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean; sed -n '1,220p' ConstructionTargets/SardFirstDerivativeProjectedChartFormula.lean; sed -n '1,220p' ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.lean; sed -n '1,200p' ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardCompactProjectedChartImageNullityProbe.lean",
+       "lake env lean /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
        :exit 0,
        :output
-       "'SardCompactProjectedChartImageNullityProbe.measure_image_zero_of_compact_projectedChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedChartTargetCoordinateFirstComponentProbe.exists_projectedChart_first_eq_targetCoordinates_first' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardCompactProjectedChartImageNullityProbe.lean",
+       "sha256sum /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
        :exit 0,
        :output
-       "4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7  /tmp/SardCompactProjectedChartImageNullityProbe.lean"}
+       "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff  /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactProjectedChartImageNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,52p' /tmp/SardCompactProjectedChartImageNullityProbe.lean | sha256sum",
+       "sed -n '14,29p' /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean | sha256sum",
        :exit 0,
        :output
-       "f29e7794c13c9b36ffcacd0d718e2a69303043661bb7c54f11e55559149f4199  -"}
+       "f6fb0a84deeaa1b9fa28f155a1717f0e8246c7837d60ed8faf46a8e6802de8b4  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 168 items OK; {:done 160, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 169 items OK; {:done 161, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardCompactProjectedChartImageNullity.lean ConstructionTargets/SardFirstDerivativeProjectedChartFormula.lean ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406  ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean\nb29d2458450fa86ee50f3c088f76383be910845e32d9aa6c898d7456876eaed1  ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean\n0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b  ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7  ConstructionTargets/SardCompactProjectedChartImageNullity.lean\n16fd3fb600837d651d9e6cf427f94c42114aad3719dc4f687eb1d8be1c276305  ConstructionTargets/SardFirstDerivativeProjectedChartFormula.lean\n8a7b819b0b67ed173483692c2262e410b36a9e432b923f01a9faebabb556c3fc  ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -22070,12 +22114,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardCompactProjectedChartImageNullityProbe.lean",
+     {:path
+      "/tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
       :sha256
-      "4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7"},
+      "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -22192,7 +22237,8 @@
     :critical-value-sard-projected-chart-target-fiber-slice-containment-1
     :critical-value-sard-open-chart-source-neighborhood-refinement-1
     :critical-value-sard-first-derivative-rank-piece-chart-source-compact-nullity-1
-    :critical-value-sard-compact-projected-chart-image-nullity-1],
+    :critical-value-sard-compact-projected-chart-image-nullity-1
+    :critical-value-sard-projected-chart-target-coordinate-first-component-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
