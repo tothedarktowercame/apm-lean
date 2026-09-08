@@ -31576,6 +31576,27 @@
       :output
       "525f0651c99851c803dc6581e307c6e663ff7ec9\nJoe Corneli\n?? scripts/__pycache__/",
       :note "Unrelated concurrent cache remains outside row scope."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788900196711-15477-968cb5ed",
+     :commands
+     ["git show -s --format='%H%n%an <%ae>%n%s' 525f0651c99851c803dc6581e307c6e663ff7ec9"
+      "git diff-tree --no-commit-id --name-only -r 525f0651c99851c803dc6581e307c6e663ff7ec9"
+      "git show 525f0651c99851c803dc6581e307c6e663ff7ec9:ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
+      "sha256sum /tmp/SardRankDropRegularityAdmissibilityProbe.lean ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
+      "cmp -s /tmp/SardRankDropRegularityAdmissibilityProbe.lean ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
+      "git show 525f0651c99851c803dc6581e307c6e663ff7ec9:ConstructionTargets/SardRankDropRegularityAdmissibility.lean | sed -n '6,15p' | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardRankDropRegularityAdmissibility.lean ConstructionTargets/SardRankDropRegularityAdmissibility.md"
+      "lake env lean ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
+      "lake build ConstructionTargets.SardRankDropRegularityAdmissibility"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "readlink -f .lake/packages"
+      "git diff --check 525f0651c99851c803dc6581e307c6e663ff7ec9^ 525f0651c99851c803dc6581e307c6e663ff7ec9"],
+     :finding
+     "PASS: the recorded commit changes exactly the declared pair; fixture/source and frozen-statement hashes reproduce, placeholder count is zero, standard-only axioms reproduce, the targeted Lean check and 8241-job build succeed, and the 240-item worklist validates. Classical Sard admissibility is preserved in the correct direction after a common rank subtraction; both rank bounds prevent Nat truncation mismatch, the finite order is unchanged, and analytic slice regularity remains explicit residual work."},
     :commit "525f0651c99851c803dc6581e307c6e663ff7ec9",
     :changed-paths
     ["ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
@@ -31587,7 +31608,7 @@
     :declarations ["sardOrderAdmissible_sub_rank"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
     "ConstructionTargets/SardRankDropRegularityAdmissibility.md"],
@@ -31763,7 +31784,7 @@
       "1fe91e5d166cfb3fe1b5ab4af402a308cddf13d90c2fed4281db8a1166643e84"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
