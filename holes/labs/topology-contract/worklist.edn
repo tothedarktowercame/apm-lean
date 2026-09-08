@@ -20542,6 +20542,23 @@
       "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59  ConstructionTargets/SardClosedOpenImageNullity.lean\na3f593e663601e187615472ea346f4f8cd744eae23ab818aa3357d11abbfc43c  ConstructionTargets/SardClosedOpenImageNullity.md"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788856710992-14732-7d96b25a",
+     :commands
+     [{:cmd
+       "readlink -f .lake/packages; git diff-tree --no-commit-id --name-only -r 795b1d891624b5f0a240855ac74869aa62d70efe; sha256sum fixture and scoped files; cmp fixture source; recompute statement hash; lake env lean fixture and source; lake build ConstructionTargets.SardClosedOpenImageNullity",
+       :exit 0}
+      {:cmd
+       "scan committed scoped files for sorry, admit, axiom, opaque, or unsafe",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "verify all three dependency commits are ancestors; hash and count frozen consumer; validate worklist; git diff --check HEAD^ HEAD; git status --porcelain=v1; inspect commit author and parent",
+       :exit 0}],
+     :finding
+     "PASS. Independently reviewed Joe Corneli's commit 795b1d891624b5f0a240855ac74869aa62d70efe. Exact scope is ConstructionTargets/SardClosedOpenImageNullity.lean and .md. The fixture and committed Lean source are byte-identical with SHA-256 5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59; documentation hash is a3f593e663601e187615472ea346f4f8cd744eae23ab818aa3357d11abbfc43c and frozen statement hash is a85a80801f85d4416521adbd758d947973c823211bd9731f74b800943eee2e17. Fixture, source, and target build pass with only [propext, Classical.choice, Quot.sound], no warnings, and no placeholders. The theorem orientation and representation boundary are exact: for a closed source locus s localized by an open U in a Hausdorff locally compact second-countable space, nullity of f-images of every compact K contained in s ∩ U implies nullity of f '' (s ∩ U), for an arbitrary measured target and without measurability or continuity assumptions on f. The compact exhaustion is used in the correct direction and every member is proved contained in the localized locus before applying the countable compact-image aggregator. Dependency commits 34db0bc977a50b4b58b611d7391486c37aef5363, 18defc2ad63968e9f8da1fc5428387f9a53b17d1, and 855d987be04cb8ffe74853edb698c6bbbb3a7155 are ancestors. The frozen consumer remains SHA-256 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one sorry; the 160-item worklist validates with 151 done, one done-unreviewed, two blocked, and six superseded; the worktree is clean."},
     :commit "795b1d891624b5f0a240855ac74869aa62d70efe",
     :changed-paths
     ["ConstructionTargets/SardClosedOpenImageNullity.lean"
@@ -20557,7 +20574,7 @@
      "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59"},
     :declarations ["measure_image_zero_of_closed_inter_open"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardClosedOpenImageNullity.lean"
     "ConstructionTargets/SardClosedOpenImageNullity.md"],
@@ -20734,7 +20751,7 @@
       "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
