@@ -33373,6 +33373,42 @@
    "Finite-order orthogonal residual-slice annihilation is compiled; insert it into the pointwise positive-rank local nullity composition.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if a nonsurjective finite-dimensional derivative cannot supply compatible Borel measurable spaces and additive-Haar measures on its range and orthogonal residual together with residual nontriviality, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean"
+    "ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-COORDINATE MEASURE DATA",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
+     :sha256
+     "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72"},
+    :declarations ["exists_projected_coordinate_measure_data"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Destructure the compatible coordinate-measure package in the finite-order positive-rank pointwise nullity theorem."},
+   :representation
+   {:source
+    "A nonsurjective continuous linear derivative between finite-dimensional real spaces.",
+    :target
+    "Compatible Borel measurable structures, additive-Haar measures on the derivative range and orthogonal residual, and nontriviality of the residual coordinate."},
+   :id
+   :critical-value-sard-finite-order-projected-coordinate-measure-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-derivative-range-orthogonal-measure-package-1
+    :critical-value-sard-finite-dimensional-borel-add-haar-package-1
+    :critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1],
+   :current-residual
+   "Projected-coordinate measure data is compiled; use it without changing measurable-space instances in the pointwise positive-rank nullity composition.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -33426,80 +33462,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Combine finite-order orthogonal residual-slice derivative zero with positive-rank dimension data and the pointwise local rank-chart nullity witness.",
+     "Use the compatible projected-coordinate Borel/additive-Haar package inside the finite-order positive-rank pointwise nullity composition, then aggregate the positive rank loci; rank zero remains assigned to the flat/Taylor branch.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice_finiteOrder"
-      "1daf2bdadf2e0519107b777e972119696023d21f465cd7447a62aa111b254daf"},
+     {"exists_projected_coordinate_measure_data"
+      "dbb3a590d4cf50412194e6d62167faf7ebf612f446daeb6f1e77be2c07fecea7"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if nonzero finite-order chart and map regularity cannot supply the first-order hypotheses needed to prove zero derivative on every orthogonal residual inverse-chart slice under the reviewed rank and projected-surjectivity conditions, or if the theorem requires nonstandard axioms.",
+      "Stop only if a nonsurjective finite-dimensional derivative cannot supply compatible Borel measurable spaces and additive-Haar measures on its range and orthogonal residual together with residual nontriviality, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderProjectedChartOrthogonalResidualSliceZero.lean"
-       "ConstructionTargets/SardFiniteOrderProjectedChartOrthogonalResidualSliceZero.md"],
+      ["ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean"
+       "ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-CHART ORTHOGONAL RESIDUAL-SLICE ZERO",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-COORDINATE MEASURE DATA",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.lean",
+        "/tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
         :sha256
-        "acef960f5dc8ecdb696d1dcf30c0372ce8b42e67304e83cef2a64b56af977c57"},
-       :declarations
-       ["forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice_finiteOrder"],
+        "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72"},
+       :declarations ["exists_projected_coordinate_measure_data"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Compose residual-slice zero with positive-rank dimensions and the pointwise finite-order nullity witness."},
+       "Destructure the compatible coordinate-measure package in the finite-order positive-rank pointwise nullity theorem."},
       :representation
       {:source
-       "A projected chart and original map smooth at a nonzero finite order, exact base rank, a localized derivative-rank upper bound, and pointwise surjectivity of the range-coordinate derivative.",
+       "A nonsurjective continuous linear derivative between finite-dimensional real spaces.",
        :target
-       "Zero Fréchet derivative on every fixed-range-coordinate orthogonal residual inverse-chart slice."},
+       "Compatible Borel measurable structures, additive-Haar measures on the derivative range and orthogonal residual, and nontriviality of the residual coordinate."},
       :id
-      :critical-value-sard-finite-order-projected-chart-orthogonal-residual-slice-zero-1,
+      :critical-value-sard-finite-order-projected-coordinate-measure-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-orthogonal-residual-slice-zero-1
-       :critical-value-sard-finite-order-projected-smooth-chart-target-data-1],
+      [:critical-value-sard-derivative-range-orthogonal-measure-package-1
+       :critical-value-sard-finite-dimensional-borel-add-haar-package-1
+       :critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1],
       :current-residual
-      "Finite-order orthogonal residual-slice annihilation is compiled; insert it into the pointwise positive-rank local nullity composition.",
+      "Projected-coordinate measure data is compiled; use it without changing measurable-space instances in the pointwise positive-rank nullity composition.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture shows that finite-order projected-chart regularity at any nonzero order can be downgraded to the reviewed first-order orthogonal-residual calculation, yielding zero derivative on every inverse-chart residual slice under the localized rank bound and projected-surjectivity hypotheses. The remaining work is to combine this result with the positive-rank dimension packet and pointwise nullity witness.",
+     "The rectangular theorem is not refuted. The attempted full positive-rank composition exposed a representation-level instance seam: the pointwise nullity theorem requires Borel and additive-Haar structures on the derivative range and its orthogonal complement under the same measurable-space choices used by its measure arguments. A placeholder-free compiled fixture packages exactly those compatible coordinate measure structures, including residual nontriviality from nonsurjectivity. The remaining work is to destructure this package within the pointwise positive-rank composition before invoking the nullity witness.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderProjectedCoordinateMeasureDataProbe.exists_projected_coordinate_measure_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
        :exit 0,
        :output
-       "acef960f5dc8ecdb696d1dcf30c0372ce8b42e67304e83cef2a64b56af977c57  /tmp/SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.lean"}
+       "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72  /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '11,34p' /tmp/SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.lean | sha256sum",
+       "sed -n '6,20p' /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean | sha256sum",
        :exit 0,
        :output
-       "1daf2bdadf2e0519107b777e972119696023d21f465cd7447a62aa111b254daf  -"}
+       "dbb3a590d4cf50412194e6d62167faf7ebf612f446daeb6f1e77be2c07fecea7  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 253 items OK; {:done 245, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 254 items OK; {:done 246, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -33518,12 +33554,12 @@
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.lean",
+      "/tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
       :sha256
-      "acef960f5dc8ecdb696d1dcf30c0372ce8b42e67304e83cef2a64b56af977c57"},
+      "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -33725,7 +33761,8 @@
     :critical-value-sard-finite-order-projected-smooth-chart-target-data-1
     :critical-value-sard-projected-rank-reduced-dimension-identities-1
     :critical-value-sard-projected-positive-rank-dimension-data-1
-    :critical-value-sard-finite-order-projected-chart-orthogonal-residual-slice-zero-1],
+    :critical-value-sard-finite-order-projected-chart-orthogonal-residual-slice-zero-1
+    :critical-value-sard-finite-order-projected-coordinate-measure-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
