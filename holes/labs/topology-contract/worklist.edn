@@ -19461,6 +19461,30 @@
       :output
       "[master ec5ea24d] add compact projected slice image nullity\n 2 files changed, 61 insertions(+)\n create mode 100644 ConstructionTargets/SardCompactProjectedSliceImageNullity.lean\n create mode 100644 ConstructionTargets/SardCompactProjectedSliceImageNullity.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788851774254-14665-0bf81683",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat ec5ea24d292d45bd0dbf055646157447ccc377d6; git diff-tree --no-commit-id --name-only -r ec5ea24d292d45bd0dbf055646157447ccc377d6; git show ec5ea24d292d45bd0dbf055646157447ccc377d6:ConstructionTargets/SardCompactProjectedSliceImageNullity.lean; git show ec5ea24d292d45bd0dbf055646157447ccc377d6:ConstructionTargets/SardCompactProjectedSliceImageNullity.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardCompactProjectedSliceImageNullityProbe.lean ConstructionTargets/SardCompactProjectedSliceImageNullity.lean ConstructionTargets/SardCompactProjectedSliceImageNullity.md; sed -n '11,46p' ConstructionTargets/SardCompactProjectedSliceImageNullity.lean | sha256sum; lake env lean /tmp/SardCompactProjectedSliceImageNullityProbe.lean; lake env lean ConstructionTargets/SardCompactProjectedSliceImageNullity.lean; lake build ConstructionTargets.SardCompactProjectedSliceImageNullity",
+       :exit 0}
+      {:cmd
+       "git show ec5ea24d292d45bd0dbf055646157447ccc377d6:ConstructionTargets/SardCompactProjectedSliceImageNullity.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show ec5ea24d292d45bd0dbf055646157447ccc377d6:ConstructionTargets/SardCompactProjectedSliceImageNullity.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; for d in 5c96ce605045cd6cec9d8217cc42590bfefe6ab5 8743af489ceb1b0c1b03ded5587c559b353e0c4c; do git merge-base --is-ancestor \"$d\" ec5ea24d292d45bd0dbf055646157447ccc377d6 || exit 1; done; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check ec5ea24d292d45bd0dbf055646157447ccc377d6^ ec5ea24d292d45bd0dbf055646157447ccc377d6; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit ec5ea24d292d45bd0dbf055646157447ccc377d6 by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is acf94668012257c452b6ec2afe95131db27b70141a9d98b1aa931cadcad9f697; committed file hashes reproduce as 8c580fdd3ce3e975c3cab016493c4567110961ffe1ee5b52ef523fd7113796be and 83b44e6532999a51b0341718f9c2e2f854a69958d8f55b62559d357077c52f7e, and the frozen declaration-region hash is b4548cab13a7ffa63c5c0042e57f42cd80506231614e4a39c2446215c69f9934. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The theorem composes the interfaces with matching coordinates and fiber sets: the indexed theorem proves nullity of b '' (K ∩ {x | a x = r}) for every r : C; the identity hcoord rewrites this exactly to the second-coordinate image of each fixed-first-coordinate fiber for e ∘ f; the compact coordinate-fiber theorem then yields μY (f '' K) = 0. The independent ambient type D is used only for the G-to-D dimension inequality, and all compactness, continuity, Haar, smoothness, projection-surjectivity, and derivative-vanishing hypotheses retain their recorded orientation. Both dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 152 items with {:done 143, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "ec5ea24d292d45bd0dbf055646157447ccc377d6",
     :changed-paths
     ["ConstructionTargets/SardCompactProjectedSliceImageNullity.lean"
@@ -19471,7 +19495,7 @@
      "acf94668012257c452b6ec2afe95131db27b70141a9d98b1aa931cadcad9f697"},
     :declarations ["measure_image_zero_of_compact_projectedSlices"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactProjectedSliceImageNullity.lean"
     "ConstructionTargets/SardCompactProjectedSliceImageNullity.md"],
@@ -19645,7 +19669,7 @@
       "acf94668012257c452b6ec2afe95131db27b70141a9d98b1aa931cadcad9f697"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
