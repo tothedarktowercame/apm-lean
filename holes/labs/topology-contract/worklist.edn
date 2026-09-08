@@ -21421,6 +21421,23 @@
       "0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b  ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean\n18ba3c8a46ca8957f8e91f38338ece9344046ed213ccfc2492cf2afde415363c  ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788859521686-14788-eaef0d0f",
+     :commands
+     [{:cmd
+       "verify canonical package authority and exact commit scope; hash fixture and scoped files; compare fixture with source; recompute statement hash; compile fixture and source; build ConstructionTargets.SardProjectedChartTargetFiberSliceContainment",
+       :exit 0}
+      {:cmd
+       "scan both committed scoped files for sorry, admit, axiom, opaque, or unsafe",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "verify all dependency commits are ancestors; validate worklist; hash and count frozen consumer; run committed diff check; inspect worktree and commit metadata",
+       :exit 0}],
+     :finding
+     "PASS. Independently reviewed Joe Corneli's commit f54f34be74e5802af5cb2651ca5a2c6dbf9cdcde. Its exact scope is ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean and .md. The fixture and committed source are byte-identical with SHA-256 0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b; documentation hash is 18ba3c8a46ca8957f8e91f38338ece9344046ed213ccfc2492cf2afde415363c and frozen statement hash is e43280de725515cfc12bc74cc1a0caab1f9ddc029e70ac0c9bcf4948e7a04c5c. Fixture, source, and target build pass with only [propext, Classical.choice, Quot.sound], no warnings, and no placeholders. The representation comparison has the required orientation and proves it in the correct direction: containment K ⊆ e.source and equality of the chart first coordinate with the target map's first coordinate imply that every residual-coordinate point in a fixed target-image fiber is represented by z = (e x).2 in the corresponding inverse-chart slice. The proof establishes (r,z) ∈ e.target via map_source, then uses the chart left inverse at the same source point to recover the residual target coordinate. It proves containment rather than an unjustified equality and requires no measurable structure. Dependency commits a9d6ee0c39e6067ceae385ece4644d3d0a6af57a, 0d6be2e8ea591258d728736af63bd2a0d13d57da, 2f00a68c728a370545e41adee921d0e851b53819, and 855d987be04cb8ffe74853edb698c6bbbb3a7155 are ancestors. The frozen consumer remains SHA-256 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one sorry; the 166-item worklist validates with 157 done, one done-unreviewed, two blocked, and six superseded; the worktree is clean."},
     :commit "f54f34be74e5802af5cb2651ca5a2c6dbf9cdcde",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean"
@@ -21437,7 +21454,7 @@
      "0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b"},
     :declarations ["targetFiber_subset_inverseChartSlice"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean"
     "ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md"],
@@ -21625,7 +21642,7 @@
       "0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
