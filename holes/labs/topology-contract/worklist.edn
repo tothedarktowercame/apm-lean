@@ -20259,6 +20259,30 @@
       :output
       "[master be8da1b6] add derivative rank upper compact exhaustion\n 2 files changed, 31 insertions(+)\n create mode 100644 ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean\n create mode 100644 ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788855746687-14719-dd2f8e9b",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat be8da1b6bbe0a198e2456ef001c90438f1d34fe9; git diff-tree --no-commit-id --name-only -r be8da1b6bbe0a198e2456ef001c90438f1d34fe9; git show be8da1b6bbe0a198e2456ef001c90438f1d34fe9:ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean; git show be8da1b6bbe0a198e2456ef001c90438f1d34fe9:ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md; sed -n '9,17p' ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean | sha256sum; lake env lean /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean; lake env lean ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean; lake build ConstructionTargets.SardDerivativeRankUpperCompactExhaustion",
+       :exit 0}
+      {:cmd
+       "git show be8da1b6bbe0a198e2456ef001c90438f1d34fe9:ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show be8da1b6bbe0a198e2456ef001c90438f1d34fe9:ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; for d in f15212ea940f9f3882f07b9b6e52ee1d86afce26 91c9a393964ec1d01769ad15916bf68c7d859e03; do git merge-base --is-ancestor \"$d\" be8da1b6bbe0a198e2456ef001c90438f1d34fe9 || exit 1; done; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check be8da1b6bbe0a198e2456ef001c90438f1d34fe9^ be8da1b6bbe0a198e2456ef001c90438f1d34fe9; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit be8da1b6bbe0a198e2456ef001c90438f1d34fe9 by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d; committed file hashes reproduce as c834e71bac73818407557631b4e0db01da85445e0c40856a869886e3dcd52f45 and 3b45d301fb48cfceb9be55e8681e59a806a745c12c46f0f53456f1699d172aff, and the frozen declaration-region hash is 9540340f15247de9335be4c55712573ca24ac62f5dced988c491d742e1ac65c0. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The theorem composes the reviewed interfaces with the exact orientation: C¹ regularity makes the derivative finrank-at-most-r locus closed, and sigma-compactness of the finite-dimensional normed source lets the closed-set exhaustion theorem return a natural-number-indexed compact family whose union equals that locus. The statement covers every natural r and claims exact union equality, with no extra local-chart restriction or weaker subset cover. Both dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 158 items with {:done 149, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "be8da1b6bbe0a198e2456ef001c90438f1d34fe9",
     :changed-paths
     ["ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean"
@@ -20269,7 +20293,7 @@
      "d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d"},
     :declarations ["exists_compact_cover_derivativeRankAtMost"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean"
     "ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md"],
@@ -20448,7 +20472,7 @@
       "d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
