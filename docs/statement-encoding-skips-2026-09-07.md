@@ -109,3 +109,47 @@ scaffolding), remove the entry and encode.
 - **tunk01** — the polygon word and exceptional vertex can be encoded
   combinatorially, but the requested surface classification needs a verified
   polygon-gluing-to-surface and classification theorem not present in Mathlib.
+
+## Corrections and status, 2026-09-08 (claude-5)
+
+**This list is a prior, not a verdict — measured.** Six of its 36 entries have
+since been encoded and pass `scripts/check_statement_quality.py`: t99A01,
+t99A02, t99A03, t99A04, t99A05, and tunk01 (`bcdab261`, 2026-09-08).
+
+**tunk01 is the instructive one.** It was skipped here as needing "a verified
+polygon-gluing-to-surface and classification theorem not present in Mathlib".
+That theorem is needed to PROVE the classification; it is not needed to STATE
+it. The landed encoding builds the polygon quotient and the standard
+genus-six comparison surface as concrete `Quotient` / `TopologicalSpace`
+objects and states a `Homeomorph` between them, with `sorry` for the proof.
+Reviewed independently: the encoded word matches the printed source
+symbol-for-symbol, and deriving the 14 edge identifications by hand gives
+exactly two vertex classes ({P3, P9} and the rest), so chi = 2 - 7 + 1 = -4
+and the surface is nonorientable — N6, as encoded. (The duplicate t94J09
+answers N3 via a program its own author flagged "not necessarily to be
+trusted"; N3 would require chi = -1, i.e. five vertex classes. The encoding
+is right and t94J09 is wrong.)
+
+**t99A05 shows the other technique, and its cost.** Skipped here for lacking
+mod-two degree and intersection number. The landed encoding unfolds the
+invariant into its definition — odd mod-two degree becomes odd cardinality of
+the restricted fiber — which is honest, but it also drops smoothness and
+transversality, so it states a weaker claim than the printed problem. Where
+that line falls is a live question, not a settled one.
+
+**Factual correction to the t93A06 entry.** The conclusion (blocked) stands,
+but not for the recorded reason. Mathlib DOES have differential forms with an
+exterior derivative and pullback, in `Mathlib/Analysis/Calculus/DifferentialForm/`
+(`extDeriv`, `extDerivWithin`, `extDeriv_pullback`) — not under
+`Geometry.Manifold` or `MeasureTheory`, which is where the 2026-09-08 re-check
+searched before reporting them absent. What is genuinely missing is forms on
+MANIFOLDS (the API is over normed vector spaces) and oriented integration of
+forms / Stokes. Any future re-check should test those two things, not the
+existence of `DifferentialForm`.
+
+**Confirmed still absent (checked 2026-09-08):** no topological Lefschetz
+number or index anywhere in Mathlib (only the model-theoretic Lefschetz
+principle); no `intersectionNumber`; no manifold Euler characteristic
+(`eulerChar` is the poset/incidence-algebra one); no `TopologicalSpace` or
+`ChartedSpace` instance on `LinearAlgebra.Projectivization`, and no `RP`
+notation.

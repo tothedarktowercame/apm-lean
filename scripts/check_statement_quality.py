@@ -34,6 +34,18 @@ TRIVIAL_TACTICS = ["trivial", "simp", "decide", "rfl", "exact trivial",
                    "constructor <;> rfl", "assumption"]
 
 
+SKIP_DOC = os.path.join(ROOT, "docs", "statement-encoding-skips-2026-09-07.md")
+
+
+def skip_listed():
+    """Bundle ids a reviewer already recorded as blocked, with a reason."""
+    try:
+        text = open(SKIP_DOC, errors="replace").read()
+    except OSError:
+        return set()
+    return set(re.findall(r"^- \*\*([A-Za-z0-9-]+)\*\*", text, re.M))
+
+
 def lean_path(pid):
     return os.path.join(ROOT, "problems", pid, "lean", "Main.lean")
 
@@ -152,7 +164,24 @@ def main(argv):
         pdir = os.path.join(ROOT, "problems")
         ids = sorted(d for d in os.listdir(pdir)
                      if not os.path.exists(os.path.join(pdir, d, "lean", "Main.lean")))
-        print("%d bundles still lack lean/Main.lean:\n  %s\n" % (len(ids), " ".join(ids)))
+        # Most of these have already been analysed. Reporting the raw list
+        # invites a sweep to re-attempt bundles a reviewer already recorded as
+        # blocked -- which happened on 2026-09-08, costing a four-problem
+        # dispatch that returned four skips already written down here.
+        skips = skip_listed()
+        known = [i for i in ids if i in skips]
+        fresh = [i for i in ids if i not in skips]
+        print("%d bundles still lack lean/Main.lean.\n" % len(ids))
+        if fresh:
+            print("  not previously analysed (%d):\n    %s\n"
+                  % (len(fresh), " ".join(fresh)))
+        if known:
+            print("  already on %s (%d) -- read the recorded reason before\n"
+                  "  re-attempting; it is a claim about Mathlib coverage on that\n"
+                  "  date, not a verdict, and %d entries have since been encoded:\n"
+                  "    %s\n"
+                  % (os.path.relpath(SKIP_DOC, ROOT), len(known),
+                     len(skips) - len(known), " ".join(known)))
         return 1 if ids else 0
     if not ids:
         print(__doc__)
