@@ -21195,8 +21195,102 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled projected-chart exact-rank nullity witness theorem cannot be promoted for C¹ maps between finite-dimensional real inner-product spaces, every exact derivative-rank point, the jointly supplied open rank-upper neighborhood and exact local set equality, the projected local-rank chart based on the point derivative, compact image-nullity certification in that chart, nullity of the complete exact-rank piece, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "For the concrete projected local-rank chart supplied at each exact-rank point, prove nullity of every compact subset image of the localized derivative rank-at-most locus using target-coordinate fibers and restricted inverse slices.",
+    :gates
+    {:statement-hash :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :warnings :pass,
+     :scope :pass,
+     :axioms :standard-only,
+     :worklist :pass,
+     :consumer-fixture :unchanged,
+     :declaration :pass,
+     :diff-check :pass,
+     :worktree :clean,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"rankPiece_image_null_of_projectedChart_compact_null"
+     "b96cfeb5d3075068b53dde7f85b72a59443db74dbc4d6096283989a1f45c3741"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean",
+      :exit 0,
+      :output
+      "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405  /tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean",
+      :exit 0,
+      :output
+      "'SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.rankPiece_image_null_of_projectedChart_compact_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,39p' ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean | sha256sum",
+      :exit 0,
+      :output
+      "b96cfeb5d3075068b53dde7f85b72a59443db74dbc4d6096283989a1f45c3741  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 165 items OK; {:done 156, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md && git commit -m 'Add projected-chart rank nullity witness'",
+      :exit 0,
+      :output
+      "[master a9d6ee0c] Add projected-chart rank nullity witness; 2 files changed, 52 insertions(+); create mode 100644 ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean; create mode 100644 ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "a9d6ee0c39e6067ceae385ece4644d3d0a6af57a"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md",
+      :exit 0,
+      :output
+      "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean\nb89869f544f9eabd43f2e42594e63ba751be9ee5dccaa49ca03caefa5e2a6374  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "a9d6ee0c39e6067ceae385ece4644d3d0a6af57a",
+    :changed-paths
+    ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean"
+     "ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean"
+     "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405",
+     "ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"
+     "b89869f544f9eabd43f2e42594e63ba751be9ee5dccaa49ca03caefa5e2a6374"},
+    :fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean",
+     :sha256
+     "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405"},
+    :declarations
+    ["rankPiece_image_null_of_projectedChart_compact_null"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"],
