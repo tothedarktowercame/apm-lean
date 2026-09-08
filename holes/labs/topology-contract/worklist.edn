@@ -20900,8 +20900,102 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled exact-rank compact-local aggregation theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces with second-countable source, every exact derivative-rank piece, pointwise open neighborhoods covering that piece, compact image nullity on each localized rank-at-most superset, nullity of the complete exact-rank piece image, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Choose projected rank-chart neighborhoods at every exact-rank point and prove compact subsets of their rank-at-most loci have null images from target-coordinate fibers and restricted inverse slices.",
+    :gates
+    {:statement-hash :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :warnings :pass,
+     :scope :pass,
+     :axioms :standard-only,
+     :worklist :pass,
+     :consumer-fixture :unchanged,
+     :declaration :pass,
+     :diff-check :pass,
+     :worktree :clean,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"rankPiece_image_null_of_locally_compact_rankUpper_image_null"
+     "ec094ceb267bb3b62552deb4e9ea0c86a8f4c82d60b9d9026972f20ac014cb0d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFirstDerivativeRankPieceCompactLocalNullityProbe.lean",
+      :exit 0,
+      :output
+      "7023ed864e8c3f79295896b641763f3df7629ecc2861d7e154f4e4e92ce19034  /tmp/SardFirstDerivativeRankPieceCompactLocalNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean",
+      :exit 0,
+      :output
+      "'SardFirstDerivativeRankPieceCompactLocalNullityProbe.rankPiece_image_null_of_locally_compact_rankUpper_image_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,36p' ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "ec094ceb267bb3b62552deb4e9ea0c86a8f4c82d60b9d9026972f20ac014cb0d  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 163 items OK; {:done 154, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.md && git commit -m 'Add exact-rank compact-local nullity'",
+      :exit 0,
+      :output
+      "[master ce2abde6] Add exact-rank compact-local nullity; 2 files changed, 49 insertions(+); create mode 100644 ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean; create mode 100644 ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "ce2abde6286f77de4204a845581671fd6646b866"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.md",
+      :exit 0,
+      :output
+      "7023ed864e8c3f79295896b641763f3df7629ecc2861d7e154f4e4e92ce19034  ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean\nfbdb430b8c52abc790e2311258a49cc0fc00e1c2e4570094cbe34ddac4398c32  ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "ce2abde6286f77de4204a845581671fd6646b866",
+    :changed-paths
+    ["ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean"
+     "ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean"
+     "7023ed864e8c3f79295896b641763f3df7629ecc2861d7e154f4e4e92ce19034",
+     "ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.md"
+     "fbdb430b8c52abc790e2311258a49cc0fc00e1c2e4570094cbe34ddac4398c32"},
+    :fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceCompactLocalNullityProbe.lean",
+     :sha256
+     "7023ed864e8c3f79295896b641763f3df7629ecc2861d7e154f4e4e92ce19034"},
+    :declarations
+    ["rankPiece_image_null_of_locally_compact_rankUpper_image_null"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.md"],
