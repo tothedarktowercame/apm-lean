@@ -25792,6 +25792,42 @@
    "The bundled residual-slice data now closes compact projected-chart image nullity; localized chart instantiation and exact-rank-piece aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled exact-rank aggregation theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces, finite-dimensional real inner-product target spaces, every continuously differentiable map, every source set and rank index, compact projected-chart nullity certificates on all chart-source refinements of the localized rank-upper locus, nullity of the complete exact derivative-rank piece, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardRankPieceCompactProjectedChartAggregation.lean"
+    "ConstructionTargets/SardRankPieceCompactProjectedChartAggregation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK COMPACT PROJECTED-CHART AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardRankPieceCompactProjectedChartAggregationProbe.lean",
+     :sha256
+     "d7b75ad6e195b238c30f65ab85e808d73833b80bf10814b4ab1748dd59b8de74"},
+    :declarations
+    ["rankPiece_image_null_of_compact_projectedChart_certificates"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the compact-nullity certificate on every derivative-range chart-source refinement, then aggregate all exact-rank pieces."},
+   :representation
+   {:source
+    "Compact projected-chart image-nullity certificates for every chart-source refinement and compact subset of a localized derivative-rank-upper locus.",
+    :target
+    "Zero target measure of the complete exact derivative-rank piece image."},
+   :id
+   :critical-value-sard-rank-piece-compact-projected-chart-aggregation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-compact-projected-chart-nullity-of-residual-data-1
+    :critical-value-sard-first-derivative-rank-piece-chart-source-compact-nullity-1],
+   :current-residual
+   "Compact projected-chart nullity certificates now aggregate over a complete exact-rank piece; concrete certificate instantiation and finite exact-rank aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -25845,82 +25881,88 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate compact projected-chart nullity on each localized exact-rank chart-source compact set, then aggregate the exact-rank pieces.",
+     "Instantiate the compact-nullity certificate on every derivative-range chart-source refinement, then aggregate all exact-rank pieces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_residualSlice_data"
-      "6e93f4ae51fa1492aeea0e5137f83e5429b5d5efafafad6983712c4449bd8d8a"},
+     {"rankPiece_image_null_of_compact_projectedChart_certificates"
+      "ffd325a196e684d740f7d9b497c513398e75afdf5659fe11dcc43892189150c5"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled compact projected-chart nullity theorem from residual-slice data cannot be promoted for arbitrary finite-dimensional induction source and slice spaces, arbitrary normed chart source and target spaces, Haar measures on target-coordinate factors, every compact chart-source subset, target-coordinate first-component identity, two-sided localized regularity, every surjective final residual projection, indexed zero residual inverse-slice derivatives, the lower-dimensional induction hypothesis, or standard-axiom profile.",
+      "Stop only if the compiled exact-rank aggregation theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces, finite-dimensional real inner-product target spaces, every continuously differentiable map, every source set and rank index, compact projected-chart nullity certificates on all chart-source refinements of the localized rank-upper locus, nullity of the complete exact derivative-rank piece, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactProjectedChartNullityOfResidualData.lean"
-       "ConstructionTargets/SardCompactProjectedChartNullityOfResidualData.md"],
+      ["ConstructionTargets/SardRankPieceCompactProjectedChartAggregation.lean"
+       "ConstructionTargets/SardRankPieceCompactProjectedChartAggregation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PROJECTED-CHART NULLITY FROM RESIDUAL-SLICE DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK COMPACT PROJECTED-CHART AGGREGATION",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
+        "/tmp/SardRankPieceCompactProjectedChartAggregationProbe.lean",
         :sha256
-        "fe7a86548a3afffcf7f620430d4da426b6dd5362f1a049f1627bccd3e0057e12"},
-       :declarations ["measure_image_zero_of_residualSlice_data"],
+        "d7b75ad6e195b238c30f65ab85e808d73833b80bf10814b4ab1748dd59b8de74"},
+       :declarations
+       ["rankPiece_image_null_of_compact_projectedChart_certificates"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate compact projected-chart nullity on each localized exact-rank chart-source compact set, then aggregate the exact-rank pieces."},
+       "Instantiate the compact-nullity certificate on every derivative-range chart-source refinement, then aggregate all exact-rank pieces."},
       :representation
       {:source
-       "A compact subset of a projected chart together with the lower-dimensional induction hypothesis, two-sided chart regularity, and indexed zero derivatives of the residual inverse slices.",
+       "Compact projected-chart image-nullity certificates for every chart-source refinement and compact subset of a localized derivative-rank-upper locus.",
        :target
-       "Zero measure of the compact source image in the original target coordinates."},
+       "Zero target measure of the complete exact derivative-rank piece image."},
       :id
-      :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1,
+      :critical-value-sard-rank-piece-compact-projected-chart-aggregation-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-residual-slice-nullity-data-1
-       :critical-value-sard-compact-projected-chart-image-nullity-1],
+      [:critical-value-sard-compact-projected-chart-nullity-of-residual-data-1
+       :critical-value-sard-first-derivative-rank-piece-chart-source-compact-nullity-1],
       :current-residual
-      "The bundled residual-slice data now closes compact projected-chart image nullity; localized chart instantiation and exact-rank-piece aggregation remain.",
+      "Compact projected-chart nullity certificates now aggregate over a complete exact-rank piece; concrete certificate instantiation and finite exact-rank aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture instantiates the bundled inverse-slice regularity and zero-derivative data with the second coordinate of the target equivalence, discharges both analytic fiber hypotheses of compact projected-chart nullity, and proves that the compact chart-source image has measure zero. Exact-rank-piece compact-nullity aggregation remains.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture exposes the exact aggregation interface: compact projected-chart nullity certificates on every chart-source refinement aggregate to nullity of the complete exact derivative-rank piece. The remaining bounded work is to instantiate each certificate from the concrete derivative-range chart, orthogonal target coordinates, localized rank bound, and residual-slice data.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n -C 8 ':id :critical-value-sard-(projected-chart-residual-slice-nullity-data-1|compact-projected-chart-image-nullity-1|first-derivative-rank-piece-chart-source-compact-nullity-1|first-derivative-rank-piece-local-nullity-aggregation-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 6 ':id :critical-value-sard-(compact-projected-chart-nullity-of-residual-data-1|first-derivative-rank-piece-projected-chart-nullity-witness-1|first-derivative-rank-piece-chart-source-compact-nullity-1|projected-smooth-local-rank-chart-surjectivity-1|projected-chart-target-coordinate-first-component-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
+       "lake env lean -o .lake/build/lib/lean/ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.olean ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean",
        :exit 0,
        :output
-       "'SardCompactProjectedChartNullityOfResidualDataProbe.measure_image_zero_of_residualSlice_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.rankPiece_image_null_of_chartSource_compact_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
+       "lake env lean /tmp/SardRankPieceCompactProjectedChartAggregationProbe.lean",
        :exit 0,
        :output
-       "fe7a86548a3afffcf7f620430d4da426b6dd5362f1a049f1627bccd3e0057e12  /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean"}
+       "'SardRankPieceCompactProjectedChartAggregationProbe.rankPiece_image_null_of_compact_projectedChart_certificates' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
+       "sha256sum /tmp/SardRankPieceCompactProjectedChartAggregationProbe.lean",
+       :exit 0,
+       :output
+       "d7b75ad6e195b238c30f65ab85e808d73833b80bf10814b4ab1748dd59b8de74  /tmp/SardRankPieceCompactProjectedChartAggregationProbe.lean"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRankPieceCompactProjectedChartAggregationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,47p' /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean | sha256sum",
+       "sed -n '10,32p' /tmp/SardRankPieceCompactProjectedChartAggregationProbe.lean | sha256sum",
        :exit 0,
        :output
-       "6e93f4ae51fa1492aeea0e5137f83e5429b5d5efafafad6983712c4449bd8d8a  -"}
+       "ffd325a196e684d740f7d9b497c513398e75afdf5659fe11dcc43892189150c5  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 194 items OK; {:done 186, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 195 items OK; {:done 187, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -25936,12 +25978,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
+      "/tmp/SardRankPieceCompactProjectedChartAggregationProbe.lean",
       :sha256
-      "fe7a86548a3afffcf7f620430d4da426b6dd5362f1a049f1627bccd3e0057e12"},
+      "d7b75ad6e195b238c30f65ab85e808d73833b80bf10814b4ab1748dd59b8de74"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -26084,7 +26126,8 @@
     :critical-value-sard-localized-residual-slice-derivative-zero-1
     :critical-value-sard-projected-chart-indexed-residual-slice-zero-1
     :critical-value-sard-projected-chart-residual-slice-nullity-data-1
-    :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1],
+    :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1
+    :critical-value-sard-rank-piece-compact-projected-chart-aggregation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
