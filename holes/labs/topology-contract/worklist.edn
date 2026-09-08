@@ -32543,6 +32543,40 @@
    "Each closed rank locus is null inside one qualifying open projected chart; build these charts pointwise and aggregate their cover.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if pointwise open neighborhoods with null localized rank-locus images cannot be aggregated to nullity of the whole rank locus in a second-countable source, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderRankLocusLocalAggregation.lean"
+    "ConstructionTargets/SardFiniteOrderRankLocusLocalAggregation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER RANK-LOCUS LOCAL AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFiniteOrderRankLocusLocalAggregationProbe.lean",
+     :sha256
+     "8ba7c7774a623a3823363092e65c80bc50da49103d13403f717ead90d9f8b31f"},
+    :declarations ["measure_image_zero_of_rankLocus_pointwise_open"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct the finite-order projected chart packet pointwise and assemble the finitely many rank loci."},
+   :representation
+   {:source
+    "At every point of a rank locus, an existential open neighborhood containing the point whose localized rank-locus image has zero measure.",
+    :target
+    "Zero measure of the image of the entire rank locus by a second-countable subcover and countable null aggregation."},
+   :id
+   :critical-value-sard-finite-order-rank-locus-local-aggregation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-closed-open-local-rank-chart-nullity-1
+    :critical-value-sard-local-nullity-second-countable-aggregation-1],
+   :current-residual
+   "Pointwise finite-order local rank-chart nullity aggregates over each rank locus; construct the pointwise chart witnesses and finitely assemble ranks.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -32596,81 +32630,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Construct the finite-order projected chart packet pointwise on each closed rank locus and aggregate the resulting open-chart nullity witnesses.",
+     "Construct a finite-order projected rank-chart nullity witness at every point of each rank locus, then assemble the finite rank decomposition.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_closed_inter_open_finiteOrder_localRankChart"
-      "160137de99e613c7ba6a870f012a19a6b464d32087640224b1b21f75b165f45c"},
+     {"measure_image_zero_of_rankLocus_pointwise_open"
+      "f49da9d81e5a4ba6a004cadd46c7103a311c4a0b1301c16c1a95286c236a34aa"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if compact finite-order local rank-chart nullity cannot be aggregated over a closed locus intersected with an open subset of the chart source by countable compact exhaustion, or if the theorem requires nonstandard axioms.",
+      "Stop only if pointwise open neighborhoods with null localized rank-locus images cannot be aggregated to nullity of the whole rank locus in a second-countable source, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderClosedOpenLocalRankChartNullity.lean"
-       "ConstructionTargets/SardFiniteOrderClosedOpenLocalRankChartNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderRankLocusLocalAggregation.lean"
+       "ConstructionTargets/SardFiniteOrderRankLocusLocalAggregation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER CLOSED-OPEN LOCAL RANK-CHART NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER RANK-LOCUS LOCAL AGGREGATION",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderClosedOpenLocalRankChartNullityProbe.lean",
+        "/tmp/SardFiniteOrderRankLocusLocalAggregationProbe.lean",
         :sha256
-        "64be9bbcc7fbf9be9ec1470757e6e6710d1bf5d9312744f07a84c0a3782d139d"},
+        "8ba7c7774a623a3823363092e65c80bc50da49103d13403f717ead90d9f8b31f"},
        :declarations
-       ["measure_image_zero_of_closed_inter_open_finiteOrder_localRankChart"],
+       ["measure_image_zero_of_rankLocus_pointwise_open"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Construct the chart packet at every point of each rank locus and aggregate the open-chart witnesses."},
+       "Construct the finite-order projected chart packet pointwise and assemble the finitely many rank loci."},
       :representation
       {:source
-       "A closed source locus localized to an open subset of a finite-order projected rank chart, with compact local image nullity supplied uniformly for every compact subset.",
+       "At every point of a rank locus, an existential open neighborhood containing the point whose localized rank-locus image has zero measure.",
        :target
-       "Zero target measure of the image of the full closed-inter-open localized rank locus via countable compact exhaustion."},
+       "Zero measure of the image of the entire rank locus by a second-countable subcover and countable null aggregation."},
       :id
-      :critical-value-sard-finite-order-closed-open-local-rank-chart-nullity-1,
+      :critical-value-sard-finite-order-rank-locus-local-aggregation-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-compact-local-rank-chart-nullity-1
-       :critical-value-sard-closed-open-compact-exhaustion-1
-       :critical-value-sard-closed-open-image-nullity-1],
+      [:critical-value-sard-finite-order-closed-open-local-rank-chart-nullity-1
+       :critical-value-sard-local-nullity-second-countable-aggregation-1],
       :current-residual
-      "Each closed rank locus is null inside one qualifying open projected chart; build these charts pointwise and aggregate their cover.",
+      "Pointwise finite-order local rank-chart nullity aggregates over each rank locus; construct the pointwise chart witnesses and finitely assemble ranks.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture applies the reviewed closed-inter-open compact exhaustion theorem and discharges every compact member with the finite-order local rank-chart nullity result. It therefore proves nullity of a closed rank locus localized to one open chart. The remaining work is pointwise chart construction and countable aggregation over the localized rank-piece cover in the analytic source-dimension step.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture converts existential pointwise open neighborhoods with null localized images into nullity of the whole rank locus by choosing the neighborhood family and invoking the reviewed second-countable local-nullity aggregator. The remaining work is to construct one finite-order projected rank-chart witness at each point and then assemble the finitely many derivative-rank loci.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderClosedOpenLocalRankChartNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderRankLocusLocalAggregationProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderClosedOpenLocalRankChartNullityProbe.measure_image_zero_of_closed_inter_open_finiteOrder_localRankChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderRankLocusLocalAggregationProbe.measure_image_zero_of_rankLocus_pointwise_open' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderClosedOpenLocalRankChartNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderRankLocusLocalAggregationProbe.lean",
        :exit 0,
        :output
-       "64be9bbcc7fbf9be9ec1470757e6e6710d1bf5d9312744f07a84c0a3782d139d  /tmp/SardFiniteOrderClosedOpenLocalRankChartNullityProbe.lean"}
+       "8ba7c7774a623a3823363092e65c80bc50da49103d13403f717ead90d9f8b31f  /tmp/SardFiniteOrderRankLocusLocalAggregationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderClosedOpenLocalRankChartNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderRankLocusLocalAggregationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '11,73p' /tmp/SardFiniteOrderClosedOpenLocalRankChartNullityProbe.lean | sha256sum",
+       "sed -n '8,27p' /tmp/SardFiniteOrderRankLocusLocalAggregationProbe.lean | sha256sum",
        :exit 0,
        :output
-       "160137de99e613c7ba6a870f012a19a6b464d32087640224b1b21f75b165f45c  -"}
+       "f49da9d81e5a4ba6a004cadd46c7103a311c4a0b1301c16c1a95286c236a34aa  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 246 items OK; {:done 238, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 247 items OK; {:done 239, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -32688,13 +32721,12 @@
        :output "?? scripts/__pycache__/",
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
-     {:path
-      "/tmp/SardFiniteOrderClosedOpenLocalRankChartNullityProbe.lean",
+     {:path "/tmp/SardFiniteOrderRankLocusLocalAggregationProbe.lean",
       :sha256
-      "64be9bbcc7fbf9be9ec1470757e6e6710d1bf5d9312744f07a84c0a3782d139d"},
+      "8ba7c7774a623a3823363092e65c80bc50da49103d13403f717ead90d9f8b31f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -32889,7 +32921,8 @@
     :critical-value-sard-finite-order-projected-chart-slice-certificates-1
     :critical-value-sard-finite-order-compact-projected-chart-nullity-1
     :critical-value-sard-finite-order-compact-local-rank-chart-nullity-1
-    :critical-value-sard-finite-order-closed-open-local-rank-chart-nullity-1],
+    :critical-value-sard-finite-order-closed-open-local-rank-chart-nullity-1
+    :critical-value-sard-finite-order-rank-locus-local-aggregation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
