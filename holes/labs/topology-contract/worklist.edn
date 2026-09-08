@@ -34374,6 +34374,8 @@
    "Installed positive-rank dimension and coordinate-measure data is compiled; the remaining theorem is the finite-order local witness composition.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Deterministic representation defect: the row promises a localized derivative-rank upper bound, but commit 5cc5c6be6325f7be2892d7ac3448c56d20b119e8 requires the global hypothesis forall z, finrank(range(fderiv f z)) <= r at SardFiniteOrderPositiveRankProjectedChartSliceData.lean:17-18 and discards chart-source membership via (fun z _ => hrankUpper z) at line 38, although SardFiniteOrderProjectedChartOrthogonalResidualSliceZero.lean:19-20 requires the bound only on chart.source. Repair by accepting a neighborhood containing x with the bound localized there, restricting the constructed chart source into that neighborhood, and passing membership through.",
    :stop-condition
    "Stop only if finite-order projected chart construction and a localized derivative-rank upper bound cannot jointly provide zero derivative on every orthogonal residual inverse-chart slice, or if the theorem requires nonstandard axioms.",
    :evidence
@@ -34436,6 +34438,12 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-10",
+     :job "invoke-1788909932817-15661-d114f4e7",
+     :finding
+     "Deterministic representation defect: the row promises a localized derivative-rank upper bound, but commit 5cc5c6be6325f7be2892d7ac3448c56d20b119e8 requires the global hypothesis forall z, finrank(range(fderiv f z)) <= r at SardFiniteOrderPositiveRankProjectedChartSliceData.lean:17-18 and discards chart-source membership via (fun z _ => hrankUpper z) at line 38, although SardFiniteOrderProjectedChartOrthogonalResidualSliceZero.lean:19-20 requires the bound only on chart.source. Repair by accepting a neighborhood containing x with the bound localized there, restricting the constructed chart source into that neighborhood, and passing membership through."},
     :commit "5cc5c6be6325f7be2892d7ac3448c56d20b119e8",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.lean"
@@ -34448,7 +34456,7 @@
     :declarations
     ["exists_finiteOrder_projectedChart_residualSliceZero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.lean"
     "ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.md"],
