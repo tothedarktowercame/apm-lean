@@ -19251,6 +19251,42 @@
    "Projected lower-dimensional slice hypotheses now imply nullity of every fixed-coordinate residual fiber image; restricted inverse-chart instantiation, compact coordinate aggregation, and rank-piece compact exhaustion remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the corrected compiled fiber-nullity theorem cannot be promoted with independent coordinate-index and ambient-source types, containment in projected slice images, lower-dimensional Sard induction, the slice-to-ambient dimension inequality, nonzero differentiability order, pointwise smoothness, surjective projection, zero projected derivatives, nullity of every indexed fiber image, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean"
+    "ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / INDEPENDENTLY INDEXED PROJECTED-SLICE FIBER NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean",
+     :sha256
+     "1c106a370fa73abe4ddb1d6a492f360d496198647937347904c161010a096565"},
+    :declarations
+    ["forall_fiber_image_null_of_subset_projectedSlices_indexed"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the independently indexed fiber-nullity theorem to instantiate derivative-range fibers from restricted inverse-chart slices, feed them into compact coordinate-fiber aggregation, and aggregate compact localizations over each exact-rank piece."},
+   :representation
+   {:source
+    "A family indexed by an arbitrary fixed-coordinate type, with slice maps on a lower-dimensional domain and an independent ambient source type supplying the Sard dimension inequality.",
+    :target
+    "Zero measure of every fixed-coordinate residual fiber image without identifying the coordinate-index type with the ambient source type."},
+   :id
+   :critical-value-sard-projected-slice-fiber-image-nullity-indexed-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-slice-fiber-image-nullity-1
+    :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1
+    :critical-value-sard-compact-coordinate-fiber-image-nullity-1],
+   :current-residual
+   "The coordinate index and ambient source dimension are now separated in the fiber-nullity interface; restricted inverse-chart instantiation, compact coordinate aggregation, and rank-piece compact exhaustion remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -19304,87 +19340,92 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate the fiberwise containment, smoothness, dimension-drop, and zero projected-derivative hypotheses from restricted inverse-chart slices, feed their nullity into compact coordinate-fiber aggregation, and aggregate compact localizations over each exact-rank piece.",
+     "Use the independently indexed fiber-nullity theorem to instantiate derivative-range fibers from restricted inverse-chart slices, feed them into compact coordinate-fiber aggregation, and aggregate compact localizations over each exact-rank piece.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"forall_fiber_image_null_of_subset_projectedSlices"
-      "bb70092a5d7af402b3321fe223f76792f592f276ebb94cc1ecc12d82d415ac02"},
+     {"forall_fiber_image_null_of_subset_projectedSlices_indexed"
+      "86d7b6f5e1e4eb5974dc57e5e5a8dae980f675faaa45ee70e869742bbeeed229"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled fiber-image nullity theorem cannot be promoted with a family of fixed-coordinate fibers, containment in projected slice images, lower-dimensional Sard induction, source-dimension inequality, nonzero differentiability order, pointwise slice smoothness, surjective projection, zero projected derivative, nullity of every fiber image, or standard-axiom profile.",
+      "Stop only if the corrected compiled fiber-nullity theorem cannot be promoted with independent coordinate-index and ambient-source types, containment in projected slice images, lower-dimensional Sard induction, the slice-to-ambient dimension inequality, nonzero differentiability order, pointwise smoothness, surjective projection, zero projected derivatives, nullity of every indexed fiber image, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedSliceFiberImageNullity.lean"
-       "ConstructionTargets/SardProjectedSliceFiberImageNullity.md"],
+      ["ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean"
+       "ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-SLICE FIBER IMAGE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / INDEPENDENTLY INDEXED PROJECTED-SLICE FIBER NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardProjectedSliceFiberImageNullityProbe.lean",
+       {:path
+        "/tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean",
         :sha256
-        "7da3003abf0aeb2a1659e83619b479baf07ccee4556560db4ca9fc1163f038a9"},
+        "1c106a370fa73abe4ddb1d6a492f360d496198647937347904c161010a096565"},
        :declarations
-       ["forall_fiber_image_null_of_subset_projectedSlices"],
+       ["forall_fiber_image_null_of_subset_projectedSlices_indexed"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the fiberwise containment, smoothness, dimension-drop, and zero projected-derivative hypotheses from restricted inverse-chart slices, feed their nullity into compact coordinate-fiber aggregation, and aggregate compact localizations over each exact-rank piece."},
+       "Use the independently indexed fiber-nullity theorem to instantiate derivative-range fibers from restricted inverse-chart slices, feed them into compact coordinate-fiber aggregation, and aggregate compact localizations over each exact-rank piece."},
       :representation
       {:source
-       "A family of fixed-coordinate source fibers whose residual images are contained in lower-dimensional projected slice images, together with Sard induction, dimension drop, slice smoothness, a surjective residual projection, and zero projected derivatives.",
+       "A family indexed by an arbitrary fixed-coordinate type, with slice maps on a lower-dimensional domain and an independent ambient source type supplying the Sard dimension inequality.",
        :target
-       "Zero measure of every fixed-coordinate residual fiber image."},
-      :id :critical-value-sard-projected-slice-fiber-image-nullity-1,
+       "Zero measure of every fixed-coordinate residual fiber image without identifying the coordinate-index type with the ambient source type."},
+      :id
+      :critical-value-sard-projected-slice-fiber-image-nullity-indexed-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-lower-dimensional-projected-slice-image-nullity-1
-       :critical-value-sard-implicit-function-restricted-slice-image-containment-1
+      [:critical-value-sard-projected-slice-fiber-image-nullity-1
+       :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1
        :critical-value-sard-compact-coordinate-fiber-image-nullity-1],
       :current-residual
-      "Projected lower-dimensional slice hypotheses now imply nullity of every fixed-coordinate residual fiber image; restricted inverse-chart instantiation, compact coordinate aggregation, and rank-piece compact exhaustion remain.",
+      "The coordinate index and ambient source dimension are now separated in the fiber-nullity interface; restricted inverse-chart instantiation, compact coordinate aggregation, and rank-piece compact exhaustion remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. Direct specialization of arbitrary measures to derivative-range subtypes exposes a noncanonical Borel-structure seam, so no measurable-space override was introduced. Instead, a placeholder-free fixture now discharges the analytic fiber obligation in its natural representation: if every fixed-coordinate residual image is contained in a lower-dimensional projected slice image, and those slice maps satisfy the dimension drop, smoothness, surjective projection, and zero projected-derivative hypotheses, then every residual fiber image is null. Instantiating this theorem with the restricted inverse-chart slices and feeding the result into compact coordinate-fiber nullity remain downstream.",
+     "The rectangular theorem is not refuted. Consumer-facing composition exposed a representation defect in the banked fiber theorem: its fixed-coordinate index type was also used as the ambient source type in the dimension inequality. Projected rank charts require these roles to be independent—the coordinate index is the derivative-range coordinate, while the dimension comparison is between the inverse-slice domain and the original source. A corrected placeholder-free fixture now separates those types and compiles with the standard axiom profile. This repair is required before compact coordinate-fiber aggregation can be instantiated honestly.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '1,220p' ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean; sed -n '1,220p' ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean; sed -n '1,220p' ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean",
-       :exit 0}
+       "lake env lean /tmp/SardCompactProjectedSliceImageNullityProbe.lean",
+       :exit 1,
+       :expected-exit 1,
+       :output
+       "Application type mismatch: fixed coordinate r has type C but the banked fiber theorem requires the ambient source type D in q r, s r, and a : X → D."}
       {:cmd
-       "lake env lean /tmp/SardProjectedSliceFiberImageNullityProbe.lean",
+       "lake env lean /tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean",
        :exit 0,
        :output
-       "'SardProjectedSliceFiberImageNullityProbe.forall_fiber_image_null_of_subset_projectedSlices' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedSliceFiberImageNullityIndexedProbe.forall_fiber_image_null_of_subset_projectedSlices_indexed' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedSliceFiberImageNullityProbe.lean",
+       "sha256sum /tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean",
        :exit 0,
        :output
-       "7da3003abf0aeb2a1659e83619b479baf07ccee4556560db4ca9fc1163f038a9"}
+       "1c106a370fa73abe4ddb1d6a492f360d496198647937347904c161010a096565"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedSliceFiberImageNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '7,31p' /tmp/SardProjectedSliceFiberImageNullityProbe.lean | sha256sum",
+       "sed -n '7,31p' /tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean | sha256sum",
        :exit 0,
        :output
-       "bb70092a5d7af402b3321fe223f76792f592f276ebb94cc1ecc12d82d415ac02"}
+       "86d7b6f5e1e4eb5974dc57e5e5a8dae980f675faaa45ee70e869742bbeeed229"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 149 items OK; {:done 141, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 150 items OK; {:done 142, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardCompactCoordinateFiberImageNullity.lean ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardProjectedSliceFiberImageNullity.lean ConstructionTargets/SardCompactCoordinateFiberImageNullity.lean",
        :exit 0,
        :output
-       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; compact coordinate-fiber nullity d37bda10167b2ea73ee0914e7e83ff4d4a15a59ba06acab0c0d381b411446dad; lower-dimensional projected slice nullity 86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31; restricted slice containment f8e813847c0df6458377fc982edf5d79a1f098a024e0fdc1017655216e048920"}
+       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; banked fiber nullity c0b7c2895d152ce79b7a7df48d89d37229e2f2914e1903268a7158e0774a4c81; compact coordinate-fiber nullity d37bda10167b2ea73ee0914e7e83ff4d4a15a59ba06acab0c0d381b411446dad"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -19395,12 +19436,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardProjectedSliceFiberImageNullityProbe.lean",
+     {:path
+      "/tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean",
       :sha256
-      "7da3003abf0aeb2a1659e83619b479baf07ccee4556560db4ca9fc1163f038a9"},
+      "1c106a370fa73abe4ddb1d6a492f360d496198647937347904c161010a096565"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -19498,7 +19540,8 @@
     :critical-value-sard-continuous-linear-equiv-image-nullity-1
     :critical-value-sard-target-orthogonal-coordinate-equiv-1
     :critical-value-sard-compact-coordinate-fiber-image-nullity-1
-    :critical-value-sard-projected-slice-fiber-image-nullity-1],
+    :critical-value-sard-projected-slice-fiber-image-nullity-1
+    :critical-value-sard-projected-slice-fiber-image-nullity-indexed-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
