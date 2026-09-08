@@ -24022,8 +24022,79 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled open-partial-homeomorph derivative right-inverse theorem cannot be promoted for arbitrary real normed source and target spaces, every open partial homeomorphism and target point, Frechet derivatives of the forward and inverse maps at corresponding points, differentiation of the local right-inverse identity, equality of the composed derivatives with the identity continuous-linear map, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:scope-before 0,
+     :scope-after 0,
+     :scope-delta 0,
+     :consumer-before 1,
+     :consumer-after 1,
+     :consumer-delta 0},
+    :residual
+    "At every smooth projected-chart fiber point, instantiate forward and inverse derivatives, identify the projected first block with range projection composed with Df, apply projected surjectivity, and discharge the localized ambient rank upper bound.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"derivative_comp_inverseDerivative_eq_id"
+     "325863ff58e684d6eec49ed18c6a9719dae98b536a6e7700098669ccfbfce7dd"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '12,23p' ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "lake build ConstructionTargets.SardOpenPartialHomeomorphDerivativeRightInverse",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 185 items OK; {:done 176, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git -c user.name='Joe Corneli' -c user.email='holtzermann17@gmail.com' commit -m 'Add open chart derivative right inverse'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "d1720aea2d36ef24b300405f1cdb618f22db8b29",
+    :changed-paths
+    ["ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean"
+     "ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.md"],
+    :fixture
+    {:path
+     "/tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean",
+     :sha256
+     "3dd0220d8df8640c4500b0e734c97beaea3ca46982124485dc5a6edf89d7e383"},
+    :declarations ["derivative_comp_inverseDerivative_eq_id"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean"
     "ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.md"],
