@@ -29548,6 +29548,25 @@
       "git commit -m 'Add localized finite-jet closed-open assembly'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788887469364-15309-17161f72",
+     :commands
+     ["git show eee2ae2bce6ce164119bc65e2a7d19e3b85411b1"
+      "cmp fixture scoped-file"
+      "sha256sum fixture recorded-commit-file scoped-files"
+      "lake env lean ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.lean"
+      "lake build ConstructionTargets.SardLocalizedFiniteJetClosedOpenAssembly"
+      "sed -n '9,43p' recorded-commit-file | sha256sum"
+      "rg placeholder-and-unsafe-patterns"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o sorry problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6; commit changes exactly the two declared scope files; fixture and recorded/scoped Lean hashes equal f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38; frozen statement hash equals 68dcf0b7797a10edd69a6150732712e0e0aa1d803b886fca2eed7bab912ca2a1; placeholder count is zero; direct Lean and 8367-job Lake build pass with only propext, Classical.choice, and Quot.sound; ledger validates 223 items; consumer hash and one-placeholder count match; the adapter supplies flat-through-k nullity, derives exactly the order-one branch from closed-open finite-rank aggregation, forwards higher branches only for indices in Icc 2 k, and concludes nullity of precisely f image K through the reviewed finite-jet decomposition; worktree is clean."},
     :commit "eee2ae2bce6ce164119bc65e2a7d19e3b85411b1",
     :changed-paths
     ["ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.lean"
@@ -29559,7 +29578,7 @@
     :declarations ["image_zero_of_flat_higher_and_closedOpen_first"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.lean"
     "ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.md"],
@@ -29740,7 +29759,7 @@
       "f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
