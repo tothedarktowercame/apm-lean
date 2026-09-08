@@ -15780,6 +15780,65 @@
       :output
       "[master 5467deda] Add explicit projected chart neighborhood; 2 files changed, 53 insertions(+)"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788841056969-14521-6b6614f0",
+     :commands
+     [{:cmd
+       "git diff-tree --no-commit-id --name-only -r 5467deda07b4d12d409bf01906f04f5ae2accc91",
+       :exit 0,
+       :output
+       "ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean; ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.md"}
+      {:cmd
+       "git show 5467deda07b4d12d409bf01906f04f5ae2accc91:ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean | sha256sum",
+       :exit 0,
+       :output
+       "1fa2af053cb90d8a876026af8d974bcb0a1acee6c467fa4f292c43cb42d60f5f"}
+      {:cmd
+       "git show 5467deda07b4d12d409bf01906f04f5ae2accc91:ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.md | sha256sum",
+       :exit 0,
+       :output
+       "7d4f57d65482a70aa0857ab3192466b1f52f3c5cfadfc209aec85247f35b97b9"}
+      {:cmd
+       "sha256sum /tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean && cmp /tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean <(git show 5467deda07b4d12d409bf01906f04f5ae2accc91:ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean)",
+       :exit 0,
+       :output
+       "1fa2af053cb90d8a876026af8d974bcb0a1acee6c467fa4f292c43cb42d60f5f"}
+      {:cmd "readlink -f .lake/packages",
+       :exit 0,
+       :output "/home/joe/code/apm-lean/.lake/packages"}
+      {:cmd
+       "lake env lean /tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean",
+       :exit 0,
+       :output
+       "'SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.exists_projected_localRankNormalForm_with_explicit_inverse_neighborhood' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "lake build ConstructionTargets.SardFirstDerivativeProjectedChartExplicitNeighborhood",
+       :exit 0,
+       :output "Build completed successfully (8277 jobs)."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git merge-base --is-ancestor 51dfd62b71fc99fb8218fc4c33328970c3d1c5e9 5467deda07b4d12d409bf01906f04f5ae2accc91",
+       :exit 0}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean && rg -c '^theorem ' problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1; 1"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 128 items OK; {:done 119, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd "git diff --check && git status --porcelain=v1",
+       :exit 0,
+       :output ""}],
+     :finding
+     "PASS. Commit 5467deda07b4d12d409bf01906f04f5ae2accc91 changes exactly the two recorded scope paths. The fixture is byte-identical to the committed Lean source, hashes reproduce, and the inverse-formula dependency commit is an ancestor. The theorem correctly converts the eventual conjunction into an explicit set V belonging to the neighborhood filter at the projected base coordinate, and both inverse-coordinate identities hold pointwise for every p in V. It retains the same chart, base-point source membership, dependent range/kernel coordinate types, and exact forward formula. The statement does not overclaim that V itself is open or already lies in the chart target; extraction of a convenient open subset and any target restriction remain legitimate later steps. Compilation is warning-free, axioms are standard-only with zero sorryAx, scoped placeholder count is zero, and the frozen consumer remains one theorem with one sorry."},
     :commit "5467deda07b4d12d409bf01906f04f5ae2accc91",
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean"
@@ -15797,7 +15856,7 @@
       "ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean"
     "ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.md"],
@@ -15971,7 +16030,7 @@
       "1fa2af053cb90d8a876026af8d974bcb0a1acee6c467fa4f292c43cb42d60f5f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
