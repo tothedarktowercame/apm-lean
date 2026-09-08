@@ -23652,6 +23652,46 @@
       "git commit -m 'Add smooth implicit function chart package'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788866547469-14922-7a0b5a67",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no be1f1c5a76e25c3e9014188ac5725291235d9b86; git diff-tree --no-commit-id --name-only -r be1f1c5a76e25c3e9014188ac5725291235d9b86; git show be1f1c5a76e25c3e9014188ac5725291235d9b86:ConstructionTargets/SardImplicitFunctionDataSmoothChart.lean; git show be1f1c5a76e25c3e9014188ac5725291235d9b86:ConstructionTargets/SardImplicitFunctionDataSmoothChart.md",
+       :exit 0,
+       :output "exact two-path scope"}
+      {:cmd
+       "git show be1f1c5a76e25c3e9014188ac5725291235d9b86:ConstructionTargets/SardImplicitFunctionDataSmoothChart.lean > /tmp/sard-ifd-smooth-chart-review.s35Diu/SardImplicitFunctionDataSmoothChart.lean; git show be1f1c5a76e25c3e9014188ac5725291235d9b86:ConstructionTargets/SardImplicitFunctionDataSmoothChart.md > /tmp/sard-ifd-smooth-chart-review.s35Diu/SardImplicitFunctionDataSmoothChart.md; sha256sum /tmp/sard-ifd-smooth-chart-review.s35Diu/SardImplicitFunctionDataSmoothChart.lean /tmp/sard-ifd-smooth-chart-review.s35Diu/SardImplicitFunctionDataSmoothChart.md",
+       :exit 0,
+       :output
+       "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07 Lean; b5c1bb0af29b7755508cdd76d28eefc8037b6278e763f3c83828283afb3ed7a1 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-ifd-smooth-chart-review.s35Diu/SardImplicitFunctionDataSmoothChart.lean",
+       :exit 0,
+       :output
+       "exists_smooth_chart_restriction depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-ifd-smooth-chart-review.s35Diu/SardImplicitFunctionDataSmoothChart.lean /tmp/sard-ifd-smooth-chart-review.s35Diu/SardImplicitFunctionDataSmoothChart.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '13,32p' /tmp/sard-ifd-smooth-chart-review.s35Diu/SardImplicitFunctionDataSmoothChart.lean | sha256sum",
+       :exit 0,
+       :output
+       "5d9aa56e8f40c7398e307c3ae7b6c439986bd34a5dee712a7e60c22c5b01dfba  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "topology-worklist: 182 items OK; {:done 173, :done-unreviewed 1, :blocked 2, :superseded 6}; consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; consumer placeholders 1"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' be1f1c5a76e25c3e9014188ac5725291235d9b86",
+       :exit 0,
+       :output
+       "be1f1c5a76e25c3e9014188ac5725291235d9b86; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended orientation and dependent-type boundary: from an ImplicitFunctionData value and finite-order smoothness of its left and right defining fields at the base point, it constructs the canonical product continuous-linear equivalence using the datum’s two surjectivity facts and complementary kernels, identifies that equivalence with the derivative of prodFun, and applies smooth chart refinement. The resulting restricted chart contains the base point, retains prodFun exactly, and is ContDiffOn in both directions. It does not claim the concrete derivative-range field instantiation, which remains the consumer obligation. The consumer fixture remains unchanged with one placeholder. No warning, scope defect, or worktree change was found."},
     :commit "be1f1c5a76e25c3e9014188ac5725291235d9b86",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionDataSmoothChart.lean"
@@ -23663,7 +23703,7 @@
     :declarations ["exists_smooth_chart_restriction"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionDataSmoothChart.lean"
     "ConstructionTargets/SardImplicitFunctionDataSmoothChart.md"],
@@ -23841,7 +23881,7 @@
       "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
