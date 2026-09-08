@@ -19321,6 +19321,30 @@
       :output
       "ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean\nConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788851312247-14659-04bb87d5",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 8743af489ceb1b0c1b03ded5587c559b353e0c4c; git diff-tree --no-commit-id --name-only -r 8743af489ceb1b0c1b03ded5587c559b353e0c4c; git show 8743af489ceb1b0c1b03ded5587c559b353e0c4c:ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean; git show 8743af489ceb1b0c1b03ded5587c559b353e0c4c:ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.md; sed -n '9,32p' ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean | sha256sum; lake env lean /tmp/SardProjectedSliceFiberImageNullityIndexedProbe.lean; lake env lean ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean; lake build ConstructionTargets.SardProjectedSliceFiberImageNullityIndexed",
+       :exit 0}
+      {:cmd
+       "git show 8743af489ceb1b0c1b03ded5587c559b353e0c4c:ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 8743af489ceb1b0c1b03ded5587c559b353e0c4c:ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; for d in e9c27f19645fadecf358c528b2e555a473e71a39 a71aab02558f66f3b2213be85aeeab17ea59acc7 5c96ce605045cd6cec9d8217cc42590bfefe6ab5; do git merge-base --is-ancestor \"$d\" 8743af489ceb1b0c1b03ded5587c559b353e0c4c || exit 1; done; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check 8743af489ceb1b0c1b03ded5587c559b353e0c4c^ 8743af489ceb1b0c1b03ded5587c559b353e0c4c; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit 8743af489ceb1b0c1b03ded5587c559b353e0c4c by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is 1c106a370fa73abe4ddb1d6a492f360d496198647937347904c161010a096565; committed file hashes reproduce as e7d5ae77f08e0d8121cffd907bdc50715e981852bfcb3767176ec288aa3c1cca and 552db5fa011e6de3896bd9c7ebbb4bcfcfff5f8175289b5663e686d96390b335, and the frozen declaration-region hash is c35fd840b85b7b4116869a1a8f295fdd4c5136cd4a1619b06a32c3c10d83e2b5. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The corrected theorem cleanly separates the coordinate-index type C from the ambient dimension-comparison type D: each r : C indexes its own slice map q r and set s r, while the induction premise and hdim compare G against D. For every r, containment of the exact residual fiber image in q r '' s r and the lower-dimensional projected-slice hypotheses imply nullity by measure_mono_null. Thus the orientation, quantifiers, and representation boundary are correct without identifying coordinate values with ambient source points. All three recorded dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 151 items with {:done 142, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "8743af489ceb1b0c1b03ded5587c559b353e0c4c",
     :changed-paths
     ["ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean"
@@ -19337,7 +19361,7 @@
     :declarations
     ["SardProjectedSliceFiberImageNullityIndexedProbe.forall_fiber_image_null_of_subset_projectedSlices_indexed"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.lean"
     "ConstructionTargets/SardProjectedSliceFiberImageNullityIndexed.md"],
@@ -19525,7 +19549,7 @@
       "1c106a370fa73abe4ddb1d6a492f360d496198647937347904c161010a096565"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
