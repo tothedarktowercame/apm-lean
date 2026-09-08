@@ -12126,8 +12126,76 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled restricted kernel-parameterization theorem cannot be promoted with its exact inverse-chart image equality, target-slice intersection, right-coordinate restriction, induced open source neighborhood, base-point membership, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Combine the restricted parameterization identity with first-nonzero-jet level containment and local kernel regularity, invoke lower-dimensional critical-image nullity for the composite, transfer it to each open source piece, and aggregate.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"ImplicitFunctionData.image_restricted_kernelParameter_eq"
+     "6ec8a077cfa95679b7cc85f4b35940cad70df66404398c7d5eff64537359d0d1",
+     "ImplicitFunctionData.isOpen_source_restrict_right"
+     "84696520c2f22bffbd269177fcd782880cda7bbae1b0d99825d4042f91e8a6a2",
+     "ImplicitFunctionData.pt_mem_source_restrict_right"
+     "6069f52098e3c429a930cbdcd682c69231a2d515e5a0f458bc6c0255dd758de8"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardImplicitFunctionRestrictedKernelParameterizationProbe.lean ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean && cmp -s /tmp/SardImplicitFunctionRestrictedKernelParameterizationProbe.lean ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardImplicitFunctionRestrictedKernelParameterizationProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardImplicitFunctionRestrictedKernelParameterization",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 107 items OK; {:done 98, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Compile restricted kernel parameterization'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "b6105380c751d6ea2841663a62e7a255d8c63c9e",
+    :changed-paths
+    ["ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean"
+     "ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.md"],
+    :file-hashes
+    {"ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean"
+     "f43584e65a5fd38ab5a6dd486406f87d55a213f95c9406e34f04c2dc8ce48575",
+     "ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.md"
+     "5d0bae25b44248612be9b3d23ce492aa915c1307d6464e119f90e2f1833f6e95"},
+    :fixture
+    {:path
+     "/tmp/SardImplicitFunctionRestrictedKernelParameterizationProbe.lean",
+     :sha256
+     "f43584e65a5fd38ab5a6dd486406f87d55a213f95c9406e34f04c2dc8ce48575"},
+    :declarations
+    ["SardImplicitFunctionRestrictedKernelParameterizationProbe.ImplicitFunctionData.image_restricted_kernelParameter_eq"
+     "SardImplicitFunctionRestrictedKernelParameterizationProbe.ImplicitFunctionData.isOpen_source_restrict_right"
+     "SardImplicitFunctionRestrictedKernelParameterizationProbe.ImplicitFunctionData.pt_mem_source_restrict_right"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean"
     "ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.md"],
