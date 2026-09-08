@@ -34309,6 +34309,28 @@
       :exit 0,
       :output "?? scripts/__pycache__/",
       :note "Unrelated concurrent cache outside row scope."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788909219302-15646-ebde4717",
+     :commands
+     ["git show --stat --oneline bf9718bad9271586de7d8bd6d01cd07626116f68"
+      "git diff-tree --no-commit-id --name-only -r bf9718bad9271586de7d8bd6d01cd07626116f68"
+      "sha256sum /tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean <(git show bf9718bad9271586de7d8bd6d01cd07626116f68:ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.lean)"
+      "git show bf9718bad9271586de7d8bd6d01cd07626116f68:ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.lean | sed -n '9,31p' | sha256sum"
+      "rg -n '\\b(sorry|admit|axiom)\\b|TODO|FIXME' ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.lean ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.md"
+      "lake env lean /tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.lean"
+      "lake build ConstructionTargets.SardFiniteOrderPositiveRankInstalledPointwiseData"
+      "bb holes/labs/topology-contract/worklist_check.bb"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "lake env lean --print-prefix"
+      "git diff --check bf9718bad9271586de7d8bd6d01cd07626116f68^ bf9718bad9271586de7d8bd6d01cd07626116f68"
+      "git status --short"],
+     :finding
+     "PASS: recorded commit has exact two-file scope; fixture and frozen statement hashes match; fixture, source, and package build compile with only standard axioms and no placeholders; theorem orientation and installed Borel-before-measure representation boundary are correct; worklist and frozen consumer checks reproduce."},
     :commit "bf9718bad9271586de7d8bd6d01cd07626116f68",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.lean"
@@ -34320,7 +34342,7 @@
      "7cd70f975c9376278134afab35830ffc0bbc405de5b55bb858b3f54908a58a07"},
     :declarations ["exists_positiveRank_installed_pointwise_data"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.lean"
     "ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.md"],
@@ -34501,7 +34523,7 @@
       "7cd70f975c9376278134afab35830ffc0bbc405de5b55bb858b3f54908a58a07"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
