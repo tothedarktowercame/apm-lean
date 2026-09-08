@@ -14809,6 +14809,42 @@
    "The order-one locus is reduced to localized exact-rank nullity; rank-normal-form nullity for each rank piece is the remaining analytic input before rectangular finite assembly.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled localized rank-piece theorem cannot be promoted with its exact order-one firstNonzeroJetLocus predicate, exact derivative-rank membership, open neighborhood and base-point membership, equality with the localized rank-at-most locus, C1 hypothesis, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean"
+    "ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE RANK-PIECE LOCAL UPPER LOCUS",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean",
+     :sha256
+     "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48"},
+    :declarations
+    ["exists_open_inter_firstNonzeroJetLocus_one_rankStratum_eq_rankLE"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "At each point of a localized exact-rank piece, construct the projected local rank coordinates on the open rank-at-most neighborhood, prove residual derivative flatness along its constant projected-coordinate slices, and derive local image nullity for second-countable aggregation."},
+   :representation
+   {:source
+    "A point in firstNonzeroJetLocus f K 1 intersected with the exact derivative-rank-r stratum, together with C1 regularity.",
+    :target
+    "An open neighborhood containing the point on which that localized exact-rank piece equals the localized derivative-rank-at-most-r locus."},
+   :id
+   :critical-value-sard-first-derivative-rank-piece-local-upper-locus-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-derivative-locus-rank-aggregation-1
+    :critical-value-sard-rank-strata-1],
+   :current-residual
+   "Each order-one exact-rank piece now has the open upper-rank representation required by local rank coordinates; projected-coordinate residual flatness and local image nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -14866,66 +14902,73 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled order-one locus rank-aggregation theorem cannot be promoted with its exact firstNonzeroJetLocus predicate, containment in the nonsurjective derivative locus, finite exact-rank decomposition, localized rank-piece nullity hypotheses, arbitrary target measure, or standard-axiom profile.",
+      "Stop only if the compiled localized rank-piece theorem cannot be promoted with its exact order-one firstNonzeroJetLocus predicate, exact derivative-rank membership, open neighborhood and base-point membership, equality with the localized rank-at-most locus, C1 hypothesis, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstDerivativeLocusRankAggregation.lean"
-       "ConstructionTargets/SardFirstDerivativeLocusRankAggregation.md"],
+      ["ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean"
+       "ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE LOCUS RANK AGGREGATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE RANK-PIECE LOCAL UPPER LOCUS",
       :acceptance
       {:fixture
-       {:path "/tmp/SardFirstDerivativeLocusRankAggregationProbe.lean",
+       {:path
+        "/tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean",
         :sha256
-        "2a93a036a56889ddb2d87c52f75549465160fcd9c03671428a391ee381fef686"},
+        "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48"},
        :declarations
-       ["firstNonzeroJetLocus_one_image_null_of_rankStrata"],
+       ["exists_open_inter_firstNonzeroJetLocus_one_rankStratum_eq_rankLE"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Prove zero image measure for each localized exact derivative-rank piece of the order-one first-nonzero-jet locus using the local rank-normal-form branch; then combine it with localized Taylor-flat nullity and the compiled higher-locus finite assembly."},
+       "At each point of a localized exact-rank piece, construct the projected local rank coordinates on the open rank-at-most neighborhood, prove residual derivative flatness along its constant projected-coordinate slices, and derive local image nullity for second-countable aggregation."},
       :representation
       {:source
-       "Containment of firstNonzeroJetLocus f K 1 in the nonsurjective derivative locus and zero image measure for its intersection with every exact derivative-rank stratum.",
+       "A point in firstNonzeroJetLocus f K 1 intersected with the exact derivative-rank-r stratum, together with C1 regularity.",
        :target
-       "Zero image measure of the complete order-one first-nonzero-jet locus under an arbitrary target measure."},
+       "An open neighborhood containing the point on which that localized exact-rank piece equals the localized derivative-rank-at-most-r locus."},
       :id
-      :critical-value-sard-first-derivative-locus-rank-aggregation-1,
+      :critical-value-sard-first-derivative-rank-piece-local-upper-locus-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-localized-flat-through-taylor-nullity-1
-       :critical-value-sard-rank-strata-1
-       :critical-value-sard-rank-strata-null-aggregation-1],
+      [:critical-value-sard-first-derivative-locus-rank-aggregation-1
+       :critical-value-sard-rank-strata-1],
       :current-residual
-      "The order-one locus is reduced to localized exact-rank nullity; rank-normal-form nullity for each rank piece is the remaining analytic input before rectangular finite assembly.",
+      "Each order-one exact-rank piece now has the open upper-rank representation required by local rank coordinates; projected-coordinate residual flatness and local image nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The Taylor-flat branch is compiled, while the remaining order-one first-nonzero-jet locus is contained in the critical derivative locus and decomposes into finitely many exact derivative-rank pieces. A placeholder-free fixture proves that nullity of those localized exact-rank pieces implies nullity of the entire order-one locus. Proving each localized rank piece null via the rank-normal-form branch remains downstream.",
+     "The rectangular theorem is not refuted. The compiled order-one aggregation theorem reduces its locus to localized exact derivative-rank pieces. A placeholder-free fixture now supplies the next exact representation edge: near any point of such a piece, an open neighborhood identifies the localized exact-rank locus with the localized rank-at-most-r locus. This is the form consumed by the projected rank-coordinate and residual-flatness branch; constructing those coordinates and proving local image nullity remain downstream.",
      :commands
      [{:cmd
-       "sed -n '1,180p' ConstructionTargets/SardExactRankLocalUpperLocus.lean; sed -n '1,180p' ConstructionTargets/SardLocalRankNormalForm.lean; sed -n '1,160p' ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean; sed -n '1,130p' ConstructionTargets/SardCriticalRankStrata.lean",
+       "rg -n \"rankStratum|rankLE|rank.*null|localRankNormalForm|complemented_minor|firstNonzeroJetLocus.*1\" ConstructionTargets | head -160",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstDerivativeLocusRankAggregationProbe.lean",
+       "sed -n '1,220p' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean; sed -n '1,220p' ConstructionTargets/SardProjectedKernelFlatness.lean; sed -n '1,220p' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.SardExactRankLocalUpperLocus",
+       :exit 0,
+       :output "Build completed successfully (8242 jobs)."}
+      {:cmd
+       "lake env lean /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean",
        :exit 0,
        :output
-       "'SardFirstDerivativeLocusRankAggregationProbe.firstNonzeroJetLocus_one_image_null_of_rankStrata' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFirstDerivativeRankPieceLocalUpperLocusProbe.exists_open_inter_firstNonzeroJetLocus_one_rankStratum_eq_rankLE' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFirstDerivativeLocusRankAggregationProbe.lean problems/t93A04/lean/Main.lean ConstructionTargets/SardCriticalRankStrata.lean ConstructionTargets/SardLocalizedFlatThroughTaylorNullity.lean",
+       "sha256sum /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeLocusRankAggregation.lean ConstructionTargets/SardExactRankLocalUpperLocus.lean",
        :exit 0,
        :output
-       "2a93a036a56889ddb2d87c52f75549465160fcd9c03671428a391ee381fef686  /tmp/SardFirstDerivativeLocusRankAggregationProbe.lean\n4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\neddce73426f9bcb95cbfa9a83b976044d4663b14b463f8ea79ba9b7454f5f1f5  ConstructionTargets/SardCriticalRankStrata.lean\n303831fe58aba6b23dc582c495abcd327a8a86ef9d4d2b8c4d3a98afb8ca7af6  ConstructionTargets/SardLocalizedFlatThroughTaylorNullity.lean"}
+       "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48  /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean\n4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n2a93a036a56889ddb2d87c52f75549465160fcd9c03671428a391ee381fef686  ConstructionTargets/SardFirstDerivativeLocusRankAggregation.lean\nebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153  ConstructionTargets/SardExactRankLocalUpperLocus.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeLocusRankAggregationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 121 items OK; {:done 113, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 122 items OK; {:done 114, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -14936,12 +14979,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardFirstDerivativeLocusRankAggregationProbe.lean",
+     {:path
+      "/tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean",
       :sha256
-      "2a93a036a56889ddb2d87c52f75549465160fcd9c03671428a391ee381fef686"},
+      "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -15011,7 +15055,8 @@
     :critical-value-sard-flat-through-taylor-nullity-1
     :critical-value-sard-flat-through-compact-localization-1
     :critical-value-sard-localized-flat-through-taylor-nullity-1
-    :critical-value-sard-first-derivative-locus-rank-aggregation-1],
+    :critical-value-sard-first-derivative-locus-rank-aggregation-1
+    :critical-value-sard-first-derivative-rank-piece-local-upper-locus-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
