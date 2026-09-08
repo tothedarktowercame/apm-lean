@@ -21273,6 +21273,23 @@
       "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean\nb89869f544f9eabd43f2e42594e63ba751be9ee5dccaa49ca03caefa5e2a6374  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788858904299-14776-af340763",
+     :commands
+     [{:cmd
+       "verify canonical package authority and exact commit scope; hash fixture and scoped files; compare fixture with source; recompute statement hash; compile fixture and source; build ConstructionTargets.SardFirstDerivativeRankPieceProjectedChartNullityWitness",
+       :exit 0}
+      {:cmd
+       "scan both committed scoped files for sorry, admit, axiom, opaque, or unsafe",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "verify all dependency commits are ancestors; validate worklist; hash and count frozen consumer; run committed diff check; inspect worktree and commit metadata",
+       :exit 0}],
+     :finding
+     "PASS. Independently reviewed Joe Corneli's commit a9d6ee0c39e6067ceae385ece4644d3d0a6af57a. Its exact scope is ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean and .md. The fixture and committed source are byte-identical with SHA-256 72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405; documentation hash is b89869f544f9eabd43f2e42594e63ba751be9ee5dccaa49ca03caefa5e2a6374 and frozen statement hash is b96cfeb5d3075068b53dde7f85b72a59443db74dbc4d6096283989a1f45c3741. Fixture, source, and target build pass with only [propext, Classical.choice, Quot.sound], no warnings, and no placeholders. The theorem orientation and representation boundary are correct: at each order-one exact-rank-r point it invokes the reviewed chart theorem to obtain one open neighborhood, point membership, the exact local equality between the rank stratum and rank-at-most locus, and a projected local-rank chart based on fderiv at that point. Its continuation-style hchart premise receives those concrete witnesses and supplies compact image nullity on the matching localized rank-upper set; the pointwise compact-local aggregator then proves nullity of the complete exact-rank piece. The same U, equality, chart, and chart-source membership are passed unchanged, with no arbitrary substitute chart used in the proof. Dependency commits f08d1c5ccab44d0654fd345e2e019af8626a2a26, e1de8e4e33947bb1600d252b020c71b3e2d027ba, and 6c3ac60f9316bce360fbfb49ee2cf8ed1b46f13b are ancestors. The frozen consumer remains SHA-256 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one sorry; the 165-item worklist validates with 156 done, one done-unreviewed, two blocked, and six superseded; the worktree is clean."},
     :commit "a9d6ee0c39e6067ceae385ece4644d3d0a6af57a",
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean"
@@ -21290,7 +21307,7 @@
     :declarations
     ["rankPiece_image_null_of_projectedChart_compact_null"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"],
@@ -21476,7 +21493,7 @@
       "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
