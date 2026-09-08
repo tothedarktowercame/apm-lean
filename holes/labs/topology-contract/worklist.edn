@@ -16148,6 +16148,44 @@
       :output
       "[master a9fd034e] Add projected inverse slice constancy; 2 files changed, 36 insertions(+)"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788841830200-14533-7034eea2",
+     :commands
+     [{:cmd
+       "git show --stat --oneline a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455; git diff-tree --no-commit-id --name-only -r a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455",
+       :exit 0}
+      {:cmd
+       "git show a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455:ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean | sha256sum; git show a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455:ConstructionTargets/SardProjectedInverseChartSliceConstancy.md | sha256sum; cmp <(git show a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455:ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean) /tmp/SardProjectedInverseChartSliceConstancyProbe.lean",
+       :exit 0,
+       :output
+       "Lean/fixture 715bb62594db19afb534d5c5c502bac4b3c7bae5e7becf27ba7dd6d5560365ff; MD 89b5b5156170b325d7b03a7dd27f1fafb3a804274a3dbf449edb163ed273e46e; fixture byte-identical"}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardProjectedInverseChartSliceConstancyProbe.lean; lake build ConstructionTargets.SardProjectedInverseChartSliceConstancy",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; fixture compiled; axioms [propext, Classical.choice, Quot.sound]; build completed successfully (8280 jobs)."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean ConstructionTargets/SardProjectedInverseChartSliceConstancy.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Construction.lean; rg -c '^theorem ' problems/t93A04/lean/Construction.lean; rg -c '\\bsorry\\b' problems/t93A04/lean/Construction.lean",
+       :exit 0,
+       :output
+       "Frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd "bb scripts/check-topology-worklist.bb",
+       :exit 0,
+       :output
+       "topology-worklist: 130 items OK; {:done 121, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git merge-base --is-ancestor 5467deda07b4d12d409bf01906f04f5ae2accc91 a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455; git merge-base --is-ancestor 7a7e62d120616e94f8a866339bd705c1464a4edd a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "Both dependencies are ancestors; diff check clean; working tree clean."}],
+     :finding
+     "PASS. Commit a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455 changes exactly the two declared scope files. The recorded fixture hash reproduces byte-for-byte, the theorem compiles with only the standard axioms, and no placeholders or warnings occur. The theorem has the required orientation: neighborhood membership of V at (r,z) is pulled back along the continuous slice w ↦ (r,w), after which the pointwise inverse-chart first-coordinate identity yields eventual equality to r. It assumes only the topology needed for this constancy claim and does not overstate differentiability or chart regularity. Frozen consumer statement hash and placeholder count reproduce unchanged."},
     :commit "a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455",
     :changed-paths
     ["ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean"
@@ -16164,7 +16202,7 @@
       "ConstructionTargets/SardProjectedInverseChartSliceConstancy.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean"
     "ConstructionTargets/SardProjectedInverseChartSliceConstancy.md"],
@@ -16331,7 +16369,7 @@
       "715bb62594db19afb534d5c5c502bac4b3c7bae5e7becf27ba7dd6d5560365ff"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
