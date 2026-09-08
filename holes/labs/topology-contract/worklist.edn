@@ -24083,6 +24083,46 @@
       "git -c user.name='Joe Corneli' -c user.email='holtzermann17@gmail.com' commit -m 'Add open chart derivative right inverse'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788867889041-14944-74250651",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no d1720aea2d36ef24b300405f1cdb618f22db8b29; git diff-tree --no-commit-id --name-only -r d1720aea2d36ef24b300405f1cdb618f22db8b29; git show d1720aea2d36ef24b300405f1cdb618f22db8b29:ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean; git show d1720aea2d36ef24b300405f1cdb618f22db8b29:ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.md",
+       :exit 0,
+       :output "exact two-path scope"}
+      {:cmd
+       "git show d1720aea2d36ef24b300405f1cdb618f22db8b29:ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean > /tmp/sard-chart-right-inverse-review.JB4Xbr/SardOpenPartialHomeomorphDerivativeRightInverse.lean; git show d1720aea2d36ef24b300405f1cdb618f22db8b29:ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.md > /tmp/sard-chart-right-inverse-review.JB4Xbr/SardOpenPartialHomeomorphDerivativeRightInverse.md; sha256sum /tmp/sard-chart-right-inverse-review.JB4Xbr/SardOpenPartialHomeomorphDerivativeRightInverse.lean /tmp/sard-chart-right-inverse-review.JB4Xbr/SardOpenPartialHomeomorphDerivativeRightInverse.md",
+       :exit 0,
+       :output
+       "3dd0220d8df8640c4500b0e734c97beaea3ca46982124485dc5a6edf89d7e383 Lean; 6fcfec1e8e040e9c93e4ad1ed2ea7ec73972f34616f291f9236a52cc22f2b56b MD"}
+      {:cmd
+       "lake env lean /tmp/sard-chart-right-inverse-review.JB4Xbr/SardOpenPartialHomeomorphDerivativeRightInverse.lean",
+       :exit 0,
+       :output
+       "derivative_comp_inverseDerivative_eq_id depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-chart-right-inverse-review.JB4Xbr/SardOpenPartialHomeomorphDerivativeRightInverse.lean /tmp/sard-chart-right-inverse-review.JB4Xbr/SardOpenPartialHomeomorphDerivativeRightInverse.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '12,23p' /tmp/sard-chart-right-inverse-review.JB4Xbr/SardOpenPartialHomeomorphDerivativeRightInverse.lean | sha256sum",
+       :exit 0,
+       :output
+       "325863ff58e684d6eec49ed18c6a9719dae98b536a6e7700098669ccfbfce7dd  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "topology-worklist: 185 items OK; {:done 176, :done-unreviewed 1, :blocked 2, :superseded 6}; consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; consumer placeholders 1"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' d1720aea2d36ef24b300405f1cdb618f22db8b29",
+       :exit 0,
+       :output
+       "d1720aea2d36ef24b300405f1cdb618f22db8b29; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the required right-inverse orientation: the forward derivative D at chart.symm y composed after the inverse derivative H at y differentiates chart ∘ chart.symm; target membership supplies the eventual right-inverse equality to the identity near y; derivative congruence and uniqueness then give D.comp H = id. It does not reverse the composition or claim either derivative exists automatically. Concrete pointwise derivatives, first-block identification, projected surjectivity, and the localized rank bound remain consumer obligations. The consumer fixture remains unchanged with one placeholder. No warning, scope defect, or worktree change was found."},
     :commit "d1720aea2d36ef24b300405f1cdb618f22db8b29",
     :changed-paths
     ["ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean"
@@ -24094,7 +24134,7 @@
      "3dd0220d8df8640c4500b0e734c97beaea3ca46982124485dc5a6edf89d7e383"},
     :declarations ["derivative_comp_inverseDerivative_eq_id"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean"
     "ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.md"],
@@ -24275,7 +24315,7 @@
       "3dd0220d8df8640c4500b0e734c97beaea3ca46982124485dc5a6edf89d7e383"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
