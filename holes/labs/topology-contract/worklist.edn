@@ -30432,8 +30432,74 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the complete nonsurjective-derivative locus cannot be represented as a closed derivative-rank-upper locus, exhausted by countably many compact subsets, and promoted from compact-piece image nullity to complete image nullity, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate compact-piece nullity from the smooth induction theorem and discharge its two lower-dimensional induction interfaces.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"smooth_criticalLocus_image_zero_of_compact_induction"
+     "9b6be220ce248912c269c4eb6e8bbc600c5865db2b0f9b3594b8c8b52f0cf244"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean",
+      :exit 0,
+      :output
+      "4b3948f209d8fb309995aa8b304dea0a8e96e8ba06527c12051a2e822e2c1f61  /tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean\n4b3948f209d8fb309995aa8b304dea0a8e96e8ba06527c12051a2e822e2c1f61  ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean"}
+     {:cmd
+      "cmp -s /tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean",
+      :exit 0,
+      :output
+      "'SardSmoothCriticalLocusCompactExhaustionNullityProbe.smooth_criticalLocus_image_zero_of_compact_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '11,52p' ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "9b6be220ce248912c269c4eb6e8bbc600c5865db2b0f9b3594b8c8b52f0cf244  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 231 items OK; {:done 222, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output " M scripts/check_statement_quality.py",
+      :note
+      "Unrelated concurrent worktree modification outside row scope; not included in commit."}],
+    :commit "bd15c216d2a6a1ffc89a594677e585485863f7a2",
+    :changed-paths
+    ["ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean"
+     "ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean",
+     :sha256
+     "4b3948f209d8fb309995aa8b304dea0a8e96e8ba06527c12051a2e822e2c1f61"},
+    :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean"
     "ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.md"],
