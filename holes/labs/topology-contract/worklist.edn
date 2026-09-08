@@ -33375,8 +33375,73 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if a nonsurjective finite-dimensional derivative cannot supply compatible Borel measurable spaces and additive-Haar measures on its range and orthogonal residual together with residual nontriviality, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "Destructure the compatible projected-coordinate measure package inside the finite-order positive-rank pointwise nullity theorem, then aggregate positive rank loci; rank zero remains in the flat/Taylor branch.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_projected_coordinate_measure_data"
+     "dbb3a590d4cf50412194e6d62167faf7ebf612f446daeb6f1e77be2c07fecea7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
+      :exit 0,
+      :output
+      "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72  ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean\ne74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72  /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean",
+      :exit 0,
+      :output
+      "'SardFiniteOrderProjectedCoordinateMeasureDataProbe.exists_projected_coordinate_measure_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '6,20p' ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean | sha256sum",
+      :exit 0,
+      :output
+      "dbb3a590d4cf50412194e6d62167faf7ebf612f446daeb6f1e77be2c07fecea7  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 255 items OK; {:done 246, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output "?? scripts/__pycache__/",
+      :note "Unrelated concurrent cache outside row scope."}],
+    :commit "afe3644d17b42e3344bd1cd040e76489f4fd4361",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean"
+     "ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
+     :sha256
+     "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72"},
+    :declarations ["exists_projected_coordinate_measure_data"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean"
     "ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.md"],
