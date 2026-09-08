@@ -26182,6 +26182,44 @@
    "Finite exact-rank aggregation now closes the whole order-one locus from indexed compact-chart certificates; concrete certificate construction and final locus assembly remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled localized image-nullity assembly theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces, finite-dimensional real inner-product target spaces, every localized source set and derivative order, Taylor-flat image nullity, higher first-nonzero-jet image nullity, critical containment of the order-one locus, indexed compact projected-chart nullity certificates for every exact derivative rank, nullity of the complete localized image, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean"
+    "ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED IMAGE NULLITY FROM COMPACT-CHART CERTIFICATES",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+     :sha256
+     "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645"},
+    :declarations
+    ["image_null_of_flat_higher_and_compactChart_certificates"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct indexed compact projected-chart certificates from localized derivative-range chart data; the flat, higher-jet, order-one, and final localized-image aggregations are compiled."},
+   :representation
+   {:source
+    "Taylor-flat and higher first-nonzero-jet nullity together with indexed compact projected-chart certificates for every exact-rank component of the order-one locus.",
+    :target
+    "Zero target measure of the complete localized source image."},
+   :id
+   :critical-value-sard-localized-image-nullity-of-compact-chart-certificates-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-derivative-locus-compact-projected-chart-aggregation-1
+    :critical-value-sard-first-nonzero-jet-finite-assembly-1
+    :critical-value-sard-localized-flat-through-taylor-nullity-1
+    :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
+   :current-residual
+   "All locus branches and their final localized-image aggregation are compiled; only the concrete compact projected-chart certificate constructor remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -26235,83 +26273,85 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Construct the indexed compact-nullity certificates from each localized derivative-range chart, then combine the order-one locus with the banked higher-jet and flat-locus assemblies.",
+     "Construct indexed compact projected-chart certificates from localized derivative-range chart data; the flat, higher-jet, order-one, and final localized-image aggregations are compiled.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"firstNonzeroJetLocus_one_image_null_of_compact_projectedChart_certificates"
-      "be1bc5f03896b0b587be08a24308deab7cb29ff7d621580171a4361a1457721b"},
+     {"image_null_of_flat_higher_and_compactChart_certificates"
+      "9f77bf93c330a4fdc37c848952bba606f5a495c7165c3f07919ff504f77166f4"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled order-one locus aggregation theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces, finite-dimensional real inner-product target spaces, every continuously differentiable map and source set, containment of the order-one first-nonzero-derivative locus in the critical set, compact projected-chart nullity certificates indexed by every admissible derivative rank, zero image measure of the complete order-one locus, or standard-axiom profile.",
+      "Stop only if the compiled localized image-nullity assembly theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces, finite-dimensional real inner-product target spaces, every localized source set and derivative order, Taylor-flat image nullity, higher first-nonzero-jet image nullity, critical containment of the order-one locus, indexed compact projected-chart nullity certificates for every exact derivative rank, nullity of the complete localized image, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstDerivativeLocusCompactProjectedChartAggregation.lean"
-       "ConstructionTargets/SardFirstDerivativeLocusCompactProjectedChartAggregation.md"],
+      ["ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean"
+       "ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE LOCUS COMPACT PROJECTED-CHART AGGREGATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED IMAGE NULLITY FROM COMPACT-CHART CERTIFICATES",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstDerivativeLocusCompactProjectedChartAggregationProbe.lean",
+        "/tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
         :sha256
-        "7ed2eee8dffb37cfb649a9e0693e8f8fdbbe397b7ca62d9511ee14ee788fed9c"},
+        "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645"},
        :declarations
-       ["firstNonzeroJetLocus_one_image_null_of_compact_projectedChart_certificates"],
+       ["image_null_of_flat_higher_and_compactChart_certificates"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Construct the indexed compact-nullity certificates from each localized derivative-range chart, then combine the order-one locus with the banked higher-jet and flat-locus assemblies."},
+       "Construct indexed compact projected-chart certificates from localized derivative-range chart data; the flat, higher-jet, order-one, and final localized-image aggregations are compiled."},
       :representation
       {:source
-       "Compact projected-chart nullity certificates indexed over every finite exact derivative-rank stratum of the order-one first-nonzero-derivative locus.",
+       "Taylor-flat and higher first-nonzero-jet nullity together with indexed compact projected-chart certificates for every exact-rank component of the order-one locus.",
        :target
-       "Zero target measure of the complete order-one first-nonzero-derivative locus image."},
+       "Zero target measure of the complete localized source image."},
       :id
-      :critical-value-sard-first-derivative-locus-compact-projected-chart-aggregation-1,
+      :critical-value-sard-localized-image-nullity-of-compact-chart-certificates-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-rank-piece-compact-projected-chart-aggregation-1
-       :critical-value-sard-first-derivative-locus-rank-aggregation-1],
+      [:critical-value-sard-first-derivative-locus-compact-projected-chart-aggregation-1
+       :critical-value-sard-first-nonzero-jet-finite-assembly-1
+       :critical-value-sard-localized-flat-through-taylor-nullity-1
+       :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
       :current-residual
-      "Finite exact-rank aggregation now closes the whole order-one locus from indexed compact-chart certificates; concrete certificate construction and final locus assembly remain.",
+      "All locus branches and their final localized-image aggregation are compiled; only the concrete compact projected-chart certificate constructor remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture composes exact-rank compact projected-chart aggregation with the banked finite rank-strata union, proving nullity of the complete order-one first-nonzero-derivative locus from compact-chart certificates indexed by every admissible derivative rank. The remaining bounded input is concrete construction of those certificates from localized derivative-range chart data.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the banked Taylor-flat branch, higher first-nonzero-jet branch, and the newly aggregated order-one compact-chart branch, proving nullity of the complete localized image. The remaining bounded analytic input is construction of the indexed compact projected-chart certificates from the concrete derivative-range charts.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n -C 7 ':id :critical-value-sard-(rank-piece-compact-projected-chart-aggregation-1|first-derivative-locus-rank-aggregation-1|first-derivative-rank-piece-local-upper-locus-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 7 ':id :critical-value-sard-(first-derivative-locus-compact-projected-chart-aggregation-1|first-nonzero-jet-finite-assembly-1|localized-flat-through-taylor-nullity-1|higher-jet-image-nullity-aggregation-1|rectangular-local-probe-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstDerivativeLocusCompactProjectedChartAggregationProbe.lean",
+       "lake env lean /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
        :exit 0,
        :output
-       "'SardFirstDerivativeLocusCompactProjectedChartAggregationProbe.firstNonzeroJetLocus_one_image_null_of_compact_projectedChart_certificates' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardLocalizedImageNullityOfCompactChartCertificatesProbe.image_null_of_flat_higher_and_compactChart_certificates' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFirstDerivativeLocusCompactProjectedChartAggregationProbe.lean",
+       "sha256sum /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
        :exit 0,
        :output
-       "7ed2eee8dffb37cfb649a9e0693e8f8fdbbe397b7ca62d9511ee14ee788fed9c  /tmp/SardFirstDerivativeLocusCompactProjectedChartAggregationProbe.lean"}
+       "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645  /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeLocusCompactProjectedChartAggregationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,37p' /tmp/SardFirstDerivativeLocusCompactProjectedChartAggregationProbe.lean | sha256sum",
+       "sed -n '10,41p' /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean | sha256sum",
        :exit 0,
        :output
-       "be1bc5f03896b0b587be08a24308deab7cb29ff7d621580171a4361a1457721b  -"}
+       "9f77bf93c330a4fdc37c848952bba606f5a495c7165c3f07919ff504f77166f4  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 196 items OK; {:done 188, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 197 items OK; {:done 189, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -26327,12 +26367,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFirstDerivativeLocusCompactProjectedChartAggregationProbe.lean",
+      "/tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
       :sha256
-      "7ed2eee8dffb37cfb649a9e0693e8f8fdbbe397b7ca62d9511ee14ee788fed9c"},
+      "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -26477,7 +26517,8 @@
     :critical-value-sard-projected-chart-residual-slice-nullity-data-1
     :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1
     :critical-value-sard-rank-piece-compact-projected-chart-aggregation-1
-    :critical-value-sard-first-derivative-locus-compact-projected-chart-aggregation-1],
+    :critical-value-sard-first-derivative-locus-compact-projected-chart-aggregation-1
+    :critical-value-sard-localized-image-nullity-of-compact-chart-certificates-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
