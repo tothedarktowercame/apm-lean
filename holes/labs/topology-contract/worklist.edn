@@ -30430,6 +30430,44 @@
    "Compact critical pieces are null without exposed localization or exponent witnesses; countable critical-locus exhaustion and induction closure remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the complete nonsurjective-derivative locus cannot be represented as a closed derivative-rank-upper locus, exhausted by countably many compact subsets, and promoted from compact-piece image nullity to complete image nullity, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean"
+    "ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH CRITICAL-LOCUS COMPACT EXHAUSTION NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean",
+     :sha256
+     "4b3948f209d8fb309995aa8b304dea0a8e96e8ba06527c12051a2e822e2c1f61"},
+    :declarations
+    ["smooth_criticalLocus_image_zero_of_compact_induction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate compact-piece nullity from the smooth induction theorem and discharge its two lower-dimensional induction interfaces."},
+   :representation
+   {:source
+    "Null image of every compact subset of the nonsurjective-derivative locus of a smooth finite-dimensional map.",
+    :target
+    "Zero additive-Haar measure of the image of the complete nonsurjective-derivative locus via a countable compact exhaustion."},
+   :id
+   :critical-value-sard-smooth-critical-locus-compact-exhaustion-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-compact-smooth-induction-nullity-1
+    :critical-value-sard-closed-set-compact-exhaustion-1
+    :critical-value-sard-countable-compact-image-nullity-1
+    :critical-value-sard-derivative-rank-upper-locus-closed-1],
+   :current-residual
+   "The complete critical locus is reduced to compact-piece nullity; discharge the order-one derivative-range and higher source-dimension induction interfaces.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -30483,77 +30521,82 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Cover the complete nonsurjective-derivative locus by compact pieces, apply compact smooth induction nullity to each, aggregate countably, and discharge the induction interfaces.",
+     "Instantiate compact-piece nullity from smooth order-one and higher lower-dimensional induction, then expose the rectangular theorem.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"compact_image_zero_of_smooth_induction"
-      "e362e42f05543ebcc694c747727ca227a3b9fc81fb69313c5892c18330af6e6a"},
+     {"smooth_criticalLocus_image_zero_of_compact_induction"
+      "6f253e85367a23f7bcfa34df6f3a079ef93ba53acdb8176711e5f19d5d23af1c"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if compact localized critical-image nullity cannot be obtained from C-infinity and the two lower-dimensional induction interfaces by internally selecting a containing closed ball and positive Taylor exponent surplus, or if the result requires nonstandard axioms.",
+      "Stop only if the complete nonsurjective-derivative locus cannot be represented as a closed derivative-rank-upper locus, exhausted by countably many compact subsets, and promoted from compact-piece image nullity to complete image nullity, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactSmoothInductionNullity.lean"
-       "ConstructionTargets/SardCompactSmoothInductionNullity.md"],
+      ["ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.lean"
+       "ConstructionTargets/SardSmoothCriticalLocusCompactExhaustionNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT SMOOTH INDUCTION NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH CRITICAL-LOCUS COMPACT EXHAUSTION NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardCompactSmoothInductionNullityProbe.lean",
+       {:path
+        "/tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean",
         :sha256
-        "efd14c157b3a8650434de74839409efa0f0c28603f1a0191a62ce26b95ae1357"},
-       :declarations ["compact_image_zero_of_smooth_induction"],
+        "4b3948f209d8fb309995aa8b304dea0a8e96e8ba06527c12051a2e822e2c1f61"},
+       :declarations
+       ["smooth_criticalLocus_image_zero_of_compact_induction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use compact exhaustion of the nonsurjective-derivative locus and discharge the two lower-dimensional induction interfaces."},
+       "Instantiate compact-piece nullity from the smooth induction theorem and discharge its two lower-dimensional induction interfaces."},
       :representation
       {:source
-       "A compact critical source piece for a C-infinity map, together with order-one derivative-range induction and higher source-dimension induction.",
+       "Null image of every compact subset of the nonsurjective-derivative locus of a smooth finite-dimensional map.",
        :target
-       "Zero additive-Haar measure of the compact piece image, with bounded localization and Taylor exponent witnesses chosen internally."},
-      :id :critical-value-sard-compact-smooth-induction-nullity-1,
+       "Zero additive-Haar measure of the image of the complete nonsurjective-derivative locus via a countable compact exhaustion."},
+      :id
+      :critical-value-sard-smooth-critical-locus-compact-exhaustion-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-localized-smooth-finite-jet-induction-nullity-1
-       :critical-value-sard-taylor-exponent-surplus-1],
+      [:critical-value-sard-compact-smooth-induction-nullity-1
+       :critical-value-sard-closed-set-compact-exhaustion-1
+       :critical-value-sard-countable-compact-image-nullity-1
+       :critical-value-sard-derivative-rank-upper-locus-closed-1],
       :current-residual
-      "Compact critical pieces are null without exposed localization or exponent witnesses; countable critical-locus exhaustion and induction closure remain.",
+      "The complete critical locus is reduced to compact-piece nullity; discharge the order-one derivative-range and higher source-dimension induction interfaces.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines compactness with the dimension-only exponent selector: compactness supplies a containing closed ball, and target nontriviality supplies the Taylor cutoff and positive surplus. Thus every compact critical source piece has null image from C-infinity and the two lower-dimensional induction interfaces. Countable exhaustion and induction-interface discharge remain.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture proves that the complete nonsurjective-derivative locus is a closed rank-upper locus, exhausts it by countably many compact sets, and aggregates compact-piece image nullity. The remaining work is to instantiate compact-piece nullity using the banked smooth induction theorem and discharge its two lower-dimensional induction interfaces.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardCompactSmoothInductionNullityProbe.lean",
+       "lake env lean /tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean",
        :exit 0,
        :output
-       "'SardCompactSmoothInductionNullityProbe.compact_image_zero_of_smooth_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardSmoothCriticalLocusCompactExhaustionNullityProbe.smooth_criticalLocus_image_zero_of_compact_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardCompactSmoothInductionNullityProbe.lean",
+       "sha256sum /tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean",
        :exit 0,
        :output
-       "efd14c157b3a8650434de74839409efa0f0c28603f1a0191a62ce26b95ae1357  /tmp/SardCompactSmoothInductionNullityProbe.lean"}
+       "4b3948f209d8fb309995aa8b304dea0a8e96e8ba06527c12051a2e822e2c1f61  /tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactSmoothInductionNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '11,50p' /tmp/SardCompactSmoothInductionNullityProbe.lean | sha256sum",
+       "sed -n '13,54p' /tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "e362e42f05543ebcc694c747727ca227a3b9fc81fb69313c5892c18330af6e6a  -"}
+       "6f253e85367a23f7bcfa34df6f3a079ef93ba53acdb8176711e5f19d5d23af1c  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 229 items OK; {:done 221, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 230 items OK; {:done 222, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -30568,12 +30611,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardCompactSmoothInductionNullityProbe.lean",
+     {:path
+      "/tmp/SardSmoothCriticalLocusCompactExhaustionNullityProbe.lean",
       :sha256
-      "efd14c157b3a8650434de74839409efa0f0c28603f1a0191a62ce26b95ae1357"},
+      "4b3948f209d8fb309995aa8b304dea0a8e96e8ba06527c12051a2e822e2c1f61"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -30751,7 +30795,8 @@
     :critical-value-sard-localized-finite-jet-induction-nullity-1
     :critical-value-sard-localized-smooth-finite-jet-induction-nullity-1
     :critical-value-sard-taylor-exponent-surplus-1
-    :critical-value-sard-compact-smooth-induction-nullity-1],
+    :critical-value-sard-compact-smooth-induction-nullity-1
+    :critical-value-sard-smooth-critical-locus-compact-exhaustion-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
