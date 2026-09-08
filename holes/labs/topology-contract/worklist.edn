@@ -28660,8 +28660,88 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled closed-in-open projected-chart nullity theorem cannot be promoted for arbitrary locally compact second-countable Hausdorff source spaces, compatible finite-dimensional coordinate spaces with Borel additive-Haar measures, every closed locus inside an open chart source, canonical first-coordinate identity, lower-dimensional induction, locus-restricted inverse-slice regularity and projected-zero derivatives, zero image measure, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Specialize closed-in-open projected-chart nullity to the derivative rank-upper locus using pointwise smooth chart data, localized residual annihilation, coordinate measures, dimension drop, and lower-dimensional induction; then aggregate rank pieces.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_closedOpen_projectedChart"
+     "fd9896ad5928216718a0bdf0e53b74971ca76b5fbe34ec607999fcbd30349528"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "rg -n -C 6 ':id :critical-value-sard-(projected-chart-open-restriction-data-1|closed-open-target-fiber-projected-slice-image-nullity-1|projected-chart-target-fiber-slice-containment-1|closed-open-projected-chart-image-nullity-1)' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7  /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean"}
+     {:cmd
+      "cmp -s /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7  ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean\ne6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7  /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean",
+      :exit 0,
+      :output
+      "'SardClosedOpenProjectedChartImageNullityProbe.measure_image_zero_of_closedOpen_projectedChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean ConstructionTargets/SardClosedOpenProjectedChartImageNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '10,63p' ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "fd9896ad5928216718a0bdf0e53b74971ca76b5fbe34ec607999fcbd30349528  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 216 items OK; {:done 207, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean ConstructionTargets/SardClosedOpenProjectedChartImageNullity.md && git commit -m \"Add closed-open projected-chart nullity\"",
+      :exit 0,
+      :output
+      "[master 40c7aeda] Add closed-open projected-chart nullity\n 2 files changed, 77 insertions(+)\n create mode 100644 ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean\n create mode 100644 ConstructionTargets/SardClosedOpenProjectedChartImageNullity.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "40c7aedaf0d2573836bfc2dac05ce3217cc0c94e"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "40c7aedaf0d2573836bfc2dac05ce3217cc0c94e",
+    :changed-paths
+    ["ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean"
+     "ConstructionTargets/SardClosedOpenProjectedChartImageNullity.md"],
+    :fixture
+    {:path "/tmp/SardClosedOpenProjectedChartImageNullityProbe.lean",
+     :sha256
+     "e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7"},
+    :declarations ["measure_image_zero_of_closedOpen_projectedChart"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean"
     "ConstructionTargets/SardClosedOpenProjectedChartImageNullity.md"],
