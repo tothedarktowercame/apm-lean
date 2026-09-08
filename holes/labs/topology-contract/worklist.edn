@@ -30675,6 +30675,40 @@
    "Complete critical-image nullity is assembled; the two lower-dimensional interfaces remain to be generated from one strong source-dimension induction hypothesis.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if order-one first-nonzero-jet membership cannot provide the strict kernel dimension drop needed to instantiate lower-dimensional critical-image induction, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardOrderOneKernelInductionInterface.lean"
+    "ConstructionTargets/SardOrderOneKernelInductionInterface.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE KERNEL INDUCTION INTERFACE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
+     :sha256
+     "5003434f96f0103a4fc59c64effbd297718819002b15bdece9e9fcbf268ba8f8"},
+    :declarations ["orderOne_kernel_interface_of_lower_dimension"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Specialize strong lower-dimensional nullity to the kernel/orthogonal-target package and combine it with higher-order induction."},
+   :representation
+   {:source
+    "Order-one first-nonzero-jet membership and a lower-dimensional critical-image theorem conditional on strict source-dimension decrease.",
+    :target
+    "The order-one projected-kernel critical-image nullity obligation required by smooth critical-image induction assembly."},
+   :id :critical-value-sard-order-one-kernel-induction-interface-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1
+    :critical-value-sard-projected-range-kernel-dimension-drop-1
+    :critical-value-sard-smooth-critical-image-induction-assembly-1],
+   :current-residual
+   "The order-one geometric dimension drop is discharged; instantiate the universal lower-dimensional theorem on the kernel and orthogonal target.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -30728,80 +30762,78 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Discharge the order-one derivative-range and higher source-dimension interfaces by a single strong source-dimension induction theorem.",
+     "Specialize one strong lower-dimensional critical-image hypothesis to the order-one kernel/orthogonal target and the higher-order smaller source, then invoke smooth critical-image induction assembly.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"smooth_criticalImage_zero_of_induction_interfaces"
-      "4594d39ebd897b08e18550f108368bcf2de3a1144908dd6d7e315233c8b5fac1"},
+     {"orderOne_kernel_interface_of_lower_dimension"
+      "b76ad15358bf290d280dfb10e29aa66913f13dfd62143a99f75a33eaed927b13"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if complete smooth critical-image nullity cannot be assembled from compact critical-piece nullity, countable compact exhaustion, the order-one derivative-range induction interface, and the higher source-dimension induction interface, or if the theorem requires nonstandard axioms.",
+      "Stop only if order-one first-nonzero-jet membership cannot provide the strict kernel dimension drop needed to instantiate lower-dimensional critical-image induction, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardSmoothCriticalImageInductionAssembly.lean"
-       "ConstructionTargets/SardSmoothCriticalImageInductionAssembly.md"],
+      ["ConstructionTargets/SardOrderOneKernelInductionInterface.lean"
+       "ConstructionTargets/SardOrderOneKernelInductionInterface.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH CRITICAL-IMAGE INDUCTION ASSEMBLY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE KERNEL INDUCTION INTERFACE",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardSmoothCriticalImageInductionAssemblyProbe.lean",
+       {:path "/tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
         :sha256
-        "bb576864226b0da4e229bcdd72861d0dc175e668c798b5a30d7248b8ad312cc8"},
-       :declarations
-       ["smooth_criticalImage_zero_of_induction_interfaces"],
+        "5003434f96f0103a4fc59c64effbd297718819002b15bdece9e9fcbf268ba8f8"},
+       :declarations ["orderOne_kernel_interface_of_lower_dimension"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Discharge the order-one derivative-range and higher source-dimension induction interfaces by strong induction."},
+       "Specialize strong lower-dimensional nullity to the kernel/orthogonal-target package and combine it with higher-order induction."},
       :representation
       {:source
-       "Compact smooth critical-piece nullity supplied uniformly by order-one derivative-range and higher source-dimension induction interfaces.",
+       "Order-one first-nonzero-jet membership and a lower-dimensional critical-image theorem conditional on strict source-dimension decrease.",
        :target
-       "Zero additive-Haar measure of the complete smooth critical image after countable compact exhaustion."},
-      :id
-      :critical-value-sard-smooth-critical-image-induction-assembly-1,
+       "The order-one projected-kernel critical-image nullity obligation required by smooth critical-image induction assembly."},
+      :id :critical-value-sard-order-one-kernel-induction-interface-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-compact-smooth-induction-nullity-1
-       :critical-value-sard-smooth-critical-locus-compact-exhaustion-nullity-1],
+      [:critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1
+       :critical-value-sard-projected-range-kernel-dimension-drop-1
+       :critical-value-sard-smooth-critical-image-induction-assembly-1],
       :current-residual
-      "Complete critical-image nullity is assembled; the two lower-dimensional interfaces remain to be generated from one strong source-dimension induction hypothesis.",
+      "The order-one geometric dimension drop is discharged; instantiate the universal lower-dimensional theorem on the kernel and orthogonal target.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines countable compact exhaustion with compact smooth induction nullity, proving nullity of the complete critical image from the order-one derivative-range and higher source-dimension induction interfaces. Only discharge of those two interfaces by strong source-dimension induction remains.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture discharges the geometric part of the order-one induction interface: membership in the first-nonzero-jet locus makes the derivative nonzero, and projection onto its range therefore has a strictly lower-dimensional kernel. The remaining task is to specialize the strong lower-dimensional critical-image hypothesis to this kernel and its orthogonal target, alongside the already direct higher-order specialization.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardSmoothCriticalImageInductionAssemblyProbe.lean",
+       "lake env lean /tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
        :exit 0,
        :output
-       "'SardSmoothCriticalImageInductionAssemblyProbe.smooth_criticalImage_zero_of_induction_interfaces' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardOrderOneKernelInductionInterfaceProbe.orderOne_kernel_interface_of_lower_dimension' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardSmoothCriticalImageInductionAssemblyProbe.lean",
+       "sha256sum /tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
        :exit 0,
        :output
-       "bb576864226b0da4e229bcdd72861d0dc175e668c798b5a30d7248b8ad312cc8  /tmp/SardSmoothCriticalImageInductionAssemblyProbe.lean"}
+       "5003434f96f0103a4fc59c64effbd297718819002b15bdece9e9fcbf268ba8f8  /tmp/SardOrderOneKernelInductionInterfaceProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardSmoothCriticalImageInductionAssemblyProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,51p' /tmp/SardSmoothCriticalImageInductionAssemblyProbe.lean | sha256sum",
+       "sed -n '8,36p' /tmp/SardOrderOneKernelInductionInterfaceProbe.lean | sha256sum",
        :exit 0,
        :output
-       "4594d39ebd897b08e18550f108368bcf2de3a1144908dd6d7e315233c8b5fac1  -"}
+       "b76ad15358bf290d280dfb10e29aa66913f13dfd62143a99f75a33eaed927b13  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 231 items OK; {:done 223, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 232 items OK; {:done 224, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -30817,15 +30849,14 @@
       {:cmd "git status --porcelain=v1",
        :exit 0,
        :output "?? scripts/__pycache__/",
-       :note
-       "Unrelated concurrent untracked cache outside the row scope."}],
+       :note "Unrelated concurrent cache outside row scope."}],
      :fixture
-     {:path "/tmp/SardSmoothCriticalImageInductionAssemblyProbe.lean",
+     {:path "/tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
       :sha256
-      "bb576864226b0da4e229bcdd72861d0dc175e668c798b5a30d7248b8ad312cc8"},
+      "5003434f96f0103a4fc59c64effbd297718819002b15bdece9e9fcbf268ba8f8"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -31005,7 +31036,8 @@
     :critical-value-sard-taylor-exponent-surplus-1
     :critical-value-sard-compact-smooth-induction-nullity-1
     :critical-value-sard-smooth-critical-locus-compact-exhaustion-nullity-1
-    :critical-value-sard-smooth-critical-image-induction-assembly-1],
+    :critical-value-sard-smooth-critical-image-induction-assembly-1
+    :critical-value-sard-order-one-kernel-induction-interface-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
