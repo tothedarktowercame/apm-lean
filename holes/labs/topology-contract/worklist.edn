@@ -12832,6 +12832,56 @@
       :exit 0,
       :output
       "39b894ac Compile refined Sard locus local aggregation\nConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean\nConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.md"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788832777528-14387-fdaefbb6",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 39b894acb2e93806ae34f78724434adeedb4d0b8; git diff-tree --no-commit-id --name-only -r 39b894acb2e93806ae34f78724434adeedb4d0b8",
+       :exit 0,
+       :output "Joe Corneli; exactly the two scoped files"}
+      {:cmd
+       "sha256sum /tmp/SardFirstNonzeroJetLocusLocalAggregationProbe.lean; git show 39b894acb2e93806ae34f78724434adeedb4d0b8:ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean | sha256sum; git show 39b894acb2e93806ae34f78724434adeedb4d0b8:ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.md | sha256sum; cmp -s /tmp/SardFirstNonzeroJetLocusLocalAggregationProbe.lean ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean",
+       :exit 0,
+       :output
+       "fixture/source cbd16144f65e2f578bc28cb1933083d723ec2826cb8dca4979a595d1c177dbb5; note 63da5cc1b103d48fee2572b398cc4c6bfa5795a3af500dace05b8fefc48c361f; byte-identical"}
+      {:cmd
+       "lake env lean /tmp/SardFirstNonzeroJetLocusLocalAggregationProbe.lean",
+       :exit 0,
+       :output
+       "firstNonzeroJetLocus_image_null_of_locally_image_null depends only on propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "lake build ConstructionTargets.SardFirstNonzeroJetLocusLocalAggregation",
+       :exit 0,
+       :output "Build completed successfully (8275 jobs)"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git merge-base --is-ancestor 9c0332d0c75033af37c367828fee71ef37f1a1cc 39b894acb2e93806ae34f78724434adeedb4d0b8; git merge-base --is-ancestor 8f2bbf3df925116ef9c87b084a4352215dddab01 39b894acb2e93806ae34f78724434adeedb4d0b8",
+       :exit 0}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean ConstructionTargets/SardFirstNonzeroJetLocalInductiveNullity.lean ConstructionTargets/SardLocalNullitySecondCountableAggregation.lean",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; cbd16144f65e2f578bc28cb1933083d723ec2826cb8dca4979a595d1c177dbb5; bcb6cb7cf84d72e268c9fc07c82e6dc4ea0e2c4951b5fa234081b4af7d1e1ecc; 2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a"}
+      {:cmd
+       "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; rg -c '^theorem ' problems/t93A04/lean/Main.lean",
+       :exit 0,
+       :output "1 placeholder; 1 theorem"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 111 items OK; {:done 102, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "readlink -f .lake/packages; git diff --check; git diff --cached --check; git status --porcelain=v1",
+       :exit 0,
+       :output "/home/joe/code/apm-lean/.lake/packages; clean"}],
+     :finding
+     "PASS. Commit 39b894acb2e93806ae34f78724434adeedb4d0b8 has exact scope, reproduces every frozen file and fixture hash, and contains both dependency commits. The theorem assumes an existential open neighborhood at each point of exactly the refined firstNonzeroJetLocus, with nullity of that locus intersected with the neighborhood, and concludes nullity of the image of the complete locus. Classical choice selects the neighborhoods, while the reviewed second-countable aggregation theorem performs the cover argument. The implication has the required local-to-global direction, needs only SecondCountableTopology on the source and an arbitrary target measure, and adds no measurability or global-nullity premise. Placeholder delta is 0, axioms are standard-only, and frozen t93A04 remains unchanged with one theorem and one placeholder."},
     :commit "39b894acb2e93806ae34f78724434adeedb4d0b8",
     :changed-paths
     ["ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean"
@@ -12844,7 +12894,7 @@
     ["SardFirstNonzeroJetLocusLocalAggregationProbe.firstNonzeroJetLocus_image_null_of_locally_image_null"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean"
     "ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.md"],
@@ -13013,7 +13063,7 @@
       "cbd16144f65e2f578bc28cb1933083d723ec2826cb8dca4979a595d1c177dbb5"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
