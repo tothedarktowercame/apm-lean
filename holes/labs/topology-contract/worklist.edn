@@ -22623,8 +22623,69 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled residual derivative composition equality theorem cannot be promoted for arbitrary real normed source, target, slice, and residual spaces, every three composable continuous-linear maps, pointwise annihilation of every slice direction, equality of the complete composed continuous-linear map with zero, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "For every concrete projected inverse-slice derivative J at a localized rank-upper point, prove pointwise annihilation Q (Df (J v)) = 0 using the derivative-range rank bound and fixed-coordinate identity.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"residual_comp_deriv_comp_eq_zero"
+     "58c736c03461a02b05aaba62de42bb4adeb144f92dd37b480e5a92fc5f77255e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean",
+      :exit 0,
+      :output
+      "7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7  /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean",
+      :exit 0,
+      :output
+      "7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7  ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean\n7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7  /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean",
+      :exit 0,
+      :output
+      "'SardResidualDerivativeCompositionEqZeroProbe.residual_comp_deriv_comp_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean ConstructionTargets/SardResidualDerivativeCompositionEqZero.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '13,18p' ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean | sha256sum",
+      :exit 0,
+      :output
+      "58c736c03461a02b05aaba62de42bb4adeb144f92dd37b480e5a92fc5f77255e  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 175 items OK; {:done 166, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add residual derivative zero composition bridge'",
+      :exit 0,
+      :output
+      "[master ed9eefd8] Add residual derivative zero composition bridge\n2 files changed, 31 insertions(+)\ncreate mode 100644 ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean\ncreate mode 100644 ConstructionTargets/SardResidualDerivativeCompositionEqZero.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "ed9eefd8",
+    :changed-paths
+    ["ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean"
+     "ConstructionTargets/SardResidualDerivativeCompositionEqZero.md"],
+    :fixture
+    {:path "/tmp/SardResidualDerivativeCompositionEqZeroProbe.lean",
+     :sha256
+     "7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7"},
+    :declarations ["residual_comp_deriv_comp_eq_zero"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean"
     "ConstructionTargets/SardResidualDerivativeCompositionEqZero.md"],
