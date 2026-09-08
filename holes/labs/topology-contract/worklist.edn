@@ -27665,6 +27665,25 @@
       :exit 0,
       :output "e65b8b05e8f9421684ae875d3c3c3bc2b31da362"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788880180492-15163-8a03a056",
+     :commands
+     ["git show --stat --oneline e65b8b05e8f9421684ae875d3c3c3bc2b31da362"
+      "git diff-tree --no-commit-id --name-only -r e65b8b05e8f9421684ae875d3c3c3bc2b31da362"
+      "cmp /tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.lean"
+      "sha256sum /tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.lean"
+      "git show e65b8b05e8f9421684ae875d3c3c3bc2b31da362:ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.lean | sed -n '11,25p' | sha256sum"
+      "lake env lean ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.lean"
+      "lake build ConstructionTargets.SardDerivativeRangeInheritedBorelAddHaarPackage"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 independently verified recorded commit e65b8b05e8f9421684ae875d3c3c3bc2b31da362 changes exactly the two scoped files. The committed Lean blob equals the fixture at SHA-256 adddfacfff928022fdf46dfd0aa4edd84120f97763ecbcab5c1ca4a778ae5b34; frozen statement hash db7aebba7acfe577f45616302881100b87068b11a1c1d3cb979b2106642f82c8 reproduces. The theorem correctly preserves the target Borel structure inherited by the range and orthogonal subtypes, derives orthogonal Nontrivial from nonsurjectivity, and constructs additive Haar measures on those exact subtype representations. Direct compilation and Lake build succeed with only propext, Classical.choice, and Quot.sound; scoped placeholder scan is empty. Worklist validates: 208 items OK; consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one frozen placeholder; canonical package authority and clean worktree verified."},
     :commit "e65b8b05e8f9421684ae875d3c3c3bc2b31da362",
     :changed-paths
     ["ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.lean"
@@ -27677,7 +27696,7 @@
     :declarations
     ["exists_inherited_range_orthogonal_addHaarMeasure"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.lean"
     "ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.md"],
@@ -27863,7 +27882,7 @@
       "adddfacfff928022fdf46dfd0aa4edd84120f97763ecbcab5c1ca4a778ae5b34"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
