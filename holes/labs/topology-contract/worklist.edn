@@ -30258,6 +30258,24 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788890460215-15362-3e3cf136",
+     :commands
+     ["git show --format=fuller --name-status be61fd4aeb2c7bb6c96b92f71d963f38fbf406ae"
+      "cmp /tmp/SardTaylorExponentSurplusProbe.lean <(git show be61fd4aeb2c7bb6c96b92f71d963f38fbf406ae:ConstructionTargets/SardTaylorExponentSurplus.lean)"
+      "sha256sum /tmp/SardTaylorExponentSurplusProbe.lean"
+      "git show be61fd4aeb2c7bb6c96b92f71d963f38fbf406ae:ConstructionTargets/SardTaylorExponentSurplus.lean | sed -n '5,20p' | sha256sum"
+      "lake env lean ConstructionTargets/SardTaylorExponentSurplus.lean"
+      "lake build ConstructionTargets.SardTaylorExponentSurplus"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check HEAD^ HEAD"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 is independent of author codex-6. Commit be61fd4 changes exactly the declared Lean and Markdown files; its Lean source is byte-identical to the fixture with SHA-256 0fd53da0108252b1298d09c21ba84f1a2d24eb665be28fae6704d805b614af8e. Frozen statement hash fddcef34ad110eb83818efe6019b479cbf6756962996a84461c1d842660e4869 and zero placeholders reproduce. The theorem correctly uses positive target finrank to choose k=finrank E and d=(finrank E+1)*finrank F-finrank E, proves d>0, and orients Nat.add_sub_of_le to obtain the required exact identity. Both Lean gates pass with only propext, Classical.choice, and Quot.sound; worklist validates 229 items; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and one consumer placeholder reproduce; canonical package authority and clean worktree are confirmed."},
     :commit "be61fd4aeb2c7bb6c96b92f71d963f38fbf406ae",
     :changed-paths
     ["ConstructionTargets/SardTaylorExponentSurplus.lean"
@@ -30268,7 +30286,7 @@
      "0fd53da0108252b1298d09c21ba84f1a2d24eb665be28fae6704d805b614af8e"},
     :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardTaylorExponentSurplus.lean"
     "ConstructionTargets/SardTaylorExponentSurplus.md"],
@@ -30437,7 +30455,7 @@
       "0fd53da0108252b1298d09c21ba84f1a2d24eb665be28fae6704d805b614af8e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
