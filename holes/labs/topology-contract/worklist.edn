@@ -20832,6 +20832,23 @@
       "4e0679b362fd91d0733b4661c30a66097ebe87fa4774ac8b8f6ba719fcd46929  ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.lean\n83201b8a26edfe078e09064b48cd1b9e2a82ecc4af5af957779b96db5b44d6d5  ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.md"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788857699631-14749-16591bb9",
+     :commands
+     [{:cmd
+       "verify canonical package authority and exact commit scope; hash fixture and scoped files; compare fixture with source; recompute statement hash; compile fixture and source; build ConstructionTargets.SardDerivativeRankUpperLocalImageNullity",
+       :exit 0}
+      {:cmd
+       "scan both committed scoped files for sorry, admit, axiom, opaque, or unsafe",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "verify dependency ancestry; validate worklist; hash and count frozen consumer; run committed diff check; inspect worktree and commit metadata",
+       :exit 0}],
+     :finding
+     "PASS. Independently reviewed Joe Corneli's commit 5b50aedf226181aa78e3a017018fe1233612d5c3. Its exact scope is ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.lean and .md. The fixture and committed source are byte-identical with SHA-256 4e0679b362fd91d0733b4661c30a66097ebe87fa4774ac8b8f6ba719fcd46929; documentation hash is 83201b8a26edfe078e09064b48cd1b9e2a82ecc4af5af957779b96db5b44d6d5 and frozen statement hash is 11f1ff6689b684bb8807e458b2238c2eb69b7de8040f1c2758a8b7d5f58d1eb9. Fixture, source, and target build pass with only [propext, Classical.choice, Quot.sound], no warnings, and no placeholders. The theorem has the exact required orientation: global C¹ regularity makes the derivative rank-at-most-r locus closed, and compact-image nullity for every compact subset of that locus intersected with open U yields nullity of the entire localized image. The rank locus, intersection order, compact containment hypothesis, and image conclusion are syntactically identical across premise and result; no continuity, measurability, rank, or dimension assumption is weakened or silently replaced. Dependency commits 795b1d891624b5f0a240855ac74869aa62d70efe, f15212ea940f9f3882f07b9b6e52ee1d86afce26, and 6d2e7d331a4a30906e2211f2761ff7c30245cde3 are ancestors. The frozen consumer remains SHA-256 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one sorry; the 162-item worklist validates with 153 done, one done-unreviewed, two blocked, and six superseded; the worktree is clean."},
     :commit "5b50aedf226181aa78e3a017018fe1233612d5c3",
     :changed-paths
     ["ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.lean"
@@ -20848,7 +20865,7 @@
     :declarations
     ["measure_image_zero_of_derivativeRankAtMost_inter_open_of_compact"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.lean"
     "ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.md"],
@@ -21034,7 +21051,7 @@
       "4e0679b362fd91d0733b4661c30a66097ebe87fa4774ac8b8f6ba719fcd46929"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
