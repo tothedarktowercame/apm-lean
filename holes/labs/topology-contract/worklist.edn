@@ -22939,6 +22939,46 @@
      {:cmd "git commit -m 'Add projected chart slice derivative zero'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788864503250-14879-c5f3f33a",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no 4ae932a4dd458017451d10a2ed654a79bc3f7436; git diff-tree --no-commit-id --name-only -r 4ae932a4dd458017451d10a2ed654a79bc3f7436; git show 4ae932a4dd458017451d10a2ed654a79bc3f7436:ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean; git show 4ae932a4dd458017451d10a2ed654a79bc3f7436:ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.md",
+       :exit 0,
+       :output "exact two-path scope"}
+      {:cmd
+       "git show 4ae932a4dd458017451d10a2ed654a79bc3f7436:ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean > /tmp/sard-projected-slice-zero-review.HXKyYK/SardProjectedChartSliceProjectedDerivativeZero.lean; git show 4ae932a4dd458017451d10a2ed654a79bc3f7436:ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.md > /tmp/sard-projected-slice-zero-review.HXKyYK/SardProjectedChartSliceProjectedDerivativeZero.md; sha256sum /tmp/sard-projected-slice-zero-review.HXKyYK/SardProjectedChartSliceProjectedDerivativeZero.lean /tmp/sard-projected-slice-zero-review.HXKyYK/SardProjectedChartSliceProjectedDerivativeZero.md",
+       :exit 0,
+       :output
+       "1be791fc9853151ab26741d05236ca63d8265ee09fc78c555191c4b8b59fcc5e Lean; e9b406c9ac727340e9123a138fb1e15a619277ac2704b44091b1092abdcb619e MD"}
+      {:cmd
+       "lake env lean /tmp/sard-projected-slice-zero-review.HXKyYK/SardProjectedChartSliceProjectedDerivativeZero.lean",
+       :exit 0,
+       :output
+       "projected_deriv_comp_sliceDeriv_eq_zero depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-projected-slice-zero-review.HXKyYK/SardProjectedChartSliceProjectedDerivativeZero.lean /tmp/sard-projected-slice-zero-review.HXKyYK/SardProjectedChartSliceProjectedDerivativeZero.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '17,30p' /tmp/sard-projected-slice-zero-review.HXKyYK/SardProjectedChartSliceProjectedDerivativeZero.lean | sha256sum",
+       :exit 0,
+       :output
+       "7164fd6d97cd3eef673047379710fa925fad02149a3bd6147307d3f27c7382f8  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 177 items OK; {:done 168, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 4ae932a4dd458017451d10a2ed654a79bc3f7436",
+       :exit 0,
+       :output
+       "4ae932a4dd458017451d10a2ed654a79bc3f7436; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended orientation: at a chart-target point, openness and the right-inverse law make the coordinate map p locally constant along the fixed-first-coordinate inverse slice; differentiating that local constancy yields P.comp J = 0 from the supplied derivatives of p and the slice. The equality hfirst is used in the correct direction to identify p with the chart first coordinate. Concrete identification of P with the projected ambient derivative, construction of J, projected surjectivity, and the localized rank bound remain explicit consumer obligations. No warning, scope defect, or worktree change was found."},
     :commit "4ae932a4dd458017451d10a2ed654a79bc3f7436",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean"
@@ -22951,7 +22991,7 @@
     :declarations ["projected_deriv_comp_sliceDeriv_eq_zero"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean"
     "ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.md"],
@@ -23137,7 +23177,7 @@
       "1be791fc9853151ab26741d05236ca63d8265ee09fc78c555191c4b8b59fcc5e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
