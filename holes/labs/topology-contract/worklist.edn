@@ -23085,6 +23085,46 @@
       "git commit -m 'Add range projection coordinate derivative'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788864906283-14888-8ca41718",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no 304cd1ddfbd508732424bc97d8bad16599a9a4d6; git diff-tree --no-commit-id --name-only -r 304cd1ddfbd508732424bc97d8bad16599a9a4d6; git show 304cd1ddfbd508732424bc97d8bad16599a9a4d6:ConstructionTargets/SardRangeProjectionCoordinateDerivative.lean; git show 304cd1ddfbd508732424bc97d8bad16599a9a4d6:ConstructionTargets/SardRangeProjectionCoordinateDerivative.md",
+       :exit 0,
+       :output "exact two-path scope"}
+      {:cmd
+       "git show 304cd1ddfbd508732424bc97d8bad16599a9a4d6:ConstructionTargets/SardRangeProjectionCoordinateDerivative.lean > /tmp/sard-range-projection-review.BirCmW/SardRangeProjectionCoordinateDerivative.lean; git show 304cd1ddfbd508732424bc97d8bad16599a9a4d6:ConstructionTargets/SardRangeProjectionCoordinateDerivative.md > /tmp/sard-range-projection-review.BirCmW/SardRangeProjectionCoordinateDerivative.md; sha256sum /tmp/sard-range-projection-review.BirCmW/SardRangeProjectionCoordinateDerivative.lean /tmp/sard-range-projection-review.BirCmW/SardRangeProjectionCoordinateDerivative.md",
+       :exit 0,
+       :output
+       "1594268e606aa0215ef1a1ed081e8db3c846b6bb3c9f66f27a047ad49540423d Lean; 439393830d38e9ff729bff1e9f781221a1853395ce94f9613730ad66b8312eb9 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-range-projection-review.BirCmW/SardRangeProjectionCoordinateDerivative.lean",
+       :exit 0,
+       :output
+       "hasFDerivAt_rangeProjection_comp depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-range-projection-review.BirCmW/SardRangeProjectionCoordinateDerivative.lean /tmp/sard-range-projection-review.BirCmW/SardRangeProjectionCoordinateDerivative.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '12,18p' /tmp/sard-range-projection-review.BirCmW/SardRangeProjectionCoordinateDerivative.lean | sha256sum",
+       :exit 0,
+       :output
+       "633d691d1ca12fcf3eba2c23ffa9881a9eaa62b7e3b71c126b5119bf4ce2b726  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "topology-worklist: 178 items OK; {:done 169, :done-unreviewed 1, :blocked 2, :superseded 6}; consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; consumer placeholders 1"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 304cd1ddfbd508732424bc97d8bad16599a9a4d6",
+       :exit 0,
+       :output
+       "304cd1ddfbd508732424bc97d8bad16599a9a4d6; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended orientation and precise reference-point boundary: for a fixed reference map L, the coordinate is orthogonal projection onto range L applied after f; a derivative D of f at arbitrary y yields exactly orthogonalProjection(range L).comp D by the continuous-linear chain rule. It does not conflate L with D or claim projected surjectivity. The consumer fixture remains unchanged with one placeholder. No warning, scope defect, or worktree change was found."},
     :commit "304cd1ddfbd508732424bc97d8bad16599a9a4d6",
     :changed-paths
     ["ConstructionTargets/SardRangeProjectionCoordinateDerivative.lean"
@@ -23096,7 +23136,7 @@
     :declarations ["hasFDerivAt_rangeProjection_comp"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardRangeProjectionCoordinateDerivative.lean"
     "ConstructionTargets/SardRangeProjectionCoordinateDerivative.md"],
@@ -23270,7 +23310,7 @@
       "1594268e606aa0215ef1a1ed081e8db3c846b6bb3c9f66f27a047ad49540423d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
