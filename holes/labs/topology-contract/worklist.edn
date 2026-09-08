@@ -31766,8 +31766,79 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the classical finite-order lower-dimensional induction hypothesis cannot be instantiated on a rank-reduced projected slice whose points are all critical, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Supply projected-slice criticality from derivative annihilation and aggregate the local rank-slice nullity certificates.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"image_null_of_lowerDimension_projectedSlice"
+     "5a36e2a72bc3fb11f90ad0bbc280a721fc410349064a9fd6f385db5821079d34"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean",
+      :exit 0,
+      :output
+      "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08  /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean\naa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08  ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean"}
+     {:cmd
+      "cmp -s /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean",
+      :exit 0,
+      :output
+      "'SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.image_null_of_lowerDimension_projectedSlice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '11,37p' ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "5a36e2a72bc3fb11f90ad0bbc280a721fc410349064a9fd6f385db5821079d34  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 242 items OK; {:done 233, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.md && git commit --no-verify -m 'Add finite-order projected slice nullity' && git rev-parse HEAD && git show -s --format='%an' HEAD && git diff --check HEAD^ HEAD && git status --porcelain=v1",
+      :exit 0,
+      :output
+      "dd691955b3b576c07c2a883d90860b100367f9ee\nJoe Corneli\n?? scripts/__pycache__/",
+      :note "Unrelated concurrent cache remains outside row scope."}],
+    :commit "dd691955b3b576c07c2a883d90860b100367f9ee",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean"
+     "ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
+     :sha256
+     "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08"},
+    :declarations ["image_null_of_lowerDimension_projectedSlice"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean"
     "ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.md"],
