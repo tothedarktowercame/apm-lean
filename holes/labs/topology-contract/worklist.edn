@@ -19928,8 +19928,81 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled closed-set compact-exhaustion theorem cannot be promoted for an arbitrary sigma-compact topological space, an arbitrary closed subset, a natural-number-indexed compact family, exact union equality with the subset, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Prove the projected local rank-at-most locus closed in its chart neighborhood, extract its compact cover, apply compact target-fiber projected-slice nullity memberwise, and aggregate exact-rank pieces.",
+    :gates
+    {:fixture-hash :pass,
+     :compile :pass,
+     :placeholder-scan :pass,
+     :statement-hash :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :scope :pass,
+     :commit :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_countable_compact_cover_of_isClosed"
+     "6b176aaab6ef6ce75c9eb807b8b81143b1630f57dcbe74742f5bf40e16d37244"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardClosedSetCompactExhaustionProbe.lean",
+      :exit 0,
+      :output
+      "909be23350d9731450655b7b81e6ecc0e8e411d75b206812ea32312f262ada73  /tmp/SardClosedSetCompactExhaustionProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardClosedSetCompactExhaustion.lean",
+      :exit 0,
+      :output
+      "'SardClosedSetCompactExhaustionProbe.exists_countable_compact_cover_of_isClosed' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardClosedSetCompactExhaustion.lean ConstructionTargets/SardClosedSetCompactExhaustion.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/SardClosedSetCompactExhaustion.lean ConstructionTargets/SardClosedSetCompactExhaustion.md",
+      :exit 0,
+      :output
+      "82b75cb2c9a982eb34dce0a206e765271a4da30316df78eff7344feb7134bc78  ConstructionTargets/SardClosedSetCompactExhaustion.lean\n760aa4bc52d3f7f4a88a904c34b5f894c633e19ac1b46cdceaa834d6bb4a904b  ConstructionTargets/SardClosedSetCompactExhaustion.md"}
+     {:cmd
+      "sed -n '9,12p' ConstructionTargets/SardClosedSetCompactExhaustion.lean | sha256sum",
+      :exit 0,
+      :output
+      "6b176aaab6ef6ce75c9eb807b8b81143b1630f57dcbe74742f5bf40e16d37244  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 156 items OK; {:done 147, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git commit -m 'add closed set compact exhaustion'",
+      :exit 0,
+      :output
+      "[master 91c9a393] add closed set compact exhaustion\n 2 files changed, 25 insertions(+)\n create mode 100644 ConstructionTargets/SardClosedSetCompactExhaustion.lean\n create mode 100644 ConstructionTargets/SardClosedSetCompactExhaustion.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "91c9a393964ec1d01769ad15916bf68c7d859e03",
+    :changed-paths
+    ["ConstructionTargets/SardClosedSetCompactExhaustion.lean"
+     "ConstructionTargets/SardClosedSetCompactExhaustion.md"],
+    :fixture
+    {:path "/tmp/SardClosedSetCompactExhaustionProbe.lean",
+     :sha256
+     "909be23350d9731450655b7b81e6ecc0e8e411d75b206812ea32312f262ada73"},
+    :declarations ["exists_countable_compact_cover_of_isClosed"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardClosedSetCompactExhaustion.lean"
     "ConstructionTargets/SardClosedSetCompactExhaustion.md"],
