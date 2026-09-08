@@ -18139,8 +18139,84 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled product-image vertical-section theorem cannot be promoted with an arbitrary product-valued map, source subset, fixed first coordinate, exact preimage-section equality, second-coordinate image of the fixed-first-coordinate source fiber, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Apply the vertical-section identity to compact projected rank-chart coordinate images, prove each fixed-coordinate second-coordinate image null using lower-dimensional inverse-chart slices, and transfer product nullity through target coordinates.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :placeholder-scan :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"prodMk_preimage_image_eq_snd_image_fstFiber"
+     "5855801210a1c76e49d00875a4118252562b6fb51656f13c7313e6276877b6c8"},
+    :axioms ["propext" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardProductImageVerticalSectionProbe.lean",
+      :exit 0,
+      :output
+      "5855801210a1c76e49d00875a4118252562b6fb51656f13c7313e6276877b6c8"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProductImageVerticalSection.lean",
+      :exit 0,
+      :output
+      "'SardProductImageVerticalSectionProbe.prodMk_preimage_image_eq_snd_image_fstFiber' depends on axioms: [propext, Quot.sound]"}
+     {:cmd
+      "lake build ConstructionTargets.SardProductImageVerticalSection",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProductImageVerticalSection.lean ConstructionTargets/SardProductImageVerticalSection.md /tmp/SardProductImageVerticalSectionProbe.lean",
+      :exit 0,
+      :output
+      "5855801210a1c76e49d00875a4118252562b6fb51656f13c7313e6276877b6c8 lean; 0135d1ffadf198ae3313794c3011b13230b9f54f1a813045744a56fb3571f026 md; 5855801210a1c76e49d00875a4118252562b6fb51656f13c7313e6276877b6c8 fixture"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProductImageVerticalSection.lean ConstructionTargets/SardProductImageVerticalSection.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 143 items OK; {:done 134, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "30cefeb2f359060a33024076764d48d527082702",
+    :changed-paths
+    ["ConstructionTargets/SardProductImageVerticalSection.lean"
+     "ConstructionTargets/SardProductImageVerticalSection.md"],
+    :file-hashes
+    {"ConstructionTargets/SardProductImageVerticalSection.lean"
+     "5855801210a1c76e49d00875a4118252562b6fb51656f13c7313e6276877b6c8",
+     "ConstructionTargets/SardProductImageVerticalSection.md"
+     "0135d1ffadf198ae3313794c3011b13230b9f54f1a813045744a56fb3571f026"},
+    :fixture
+    {:path "/tmp/SardProductImageVerticalSectionProbe.lean",
+     :sha256
+     "5855801210a1c76e49d00875a4118252562b6fb51656f13c7313e6276877b6c8"},
+    :declarations ["prodMk_preimage_image_eq_snd_image_fstFiber"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/SardProductImageVerticalSection.lean"
+      "ConstructionTargets/SardProductImageVerticalSection.md"]},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProductImageVerticalSection.lean"
     "ConstructionTargets/SardProductImageVerticalSection.md"],
