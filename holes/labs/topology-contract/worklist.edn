@@ -27463,6 +27463,43 @@
    "Compact projected-chart nullity follows from the bundled fiber data; concrete derivative-range and orthogonal-complement specialization, local measure installation, and exact-rank certificate instantiation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled inverse-slice representation theorem cannot be promoted for arbitrary real normed source and slice spaces, finite-dimensional real inner-product target spaces, every continuous real-linear derivative and projected product chart, conversion of paired orthogonal-projection fiberwise C1 and zero-derivative data into the exact second-coordinate data of the canonical range/orthogonal target equivalence, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardTargetOrthogonalCoordinateInverseSliceNullityData.lean"
+    "ConstructionTargets/SardTargetOrthogonalCoordinateInverseSliceNullityData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / TARGET-ORTHOGONAL COORDINATE INVERSE-SLICE NULLITY DATA",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.lean",
+     :sha256
+     "f5cb8285bb9359fbe05ae3b6ee0437816b5941766962f8869c1ea86638917b39"},
+    :declarations
+    ["targetOrthogonalCoordinates_inverseSlice_nullity_data"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Install derivative-range and orthogonal-complement coordinate measures locally and instantiate compact projected-chart nullity using the converted target-coordinate slice data."},
+   :representation
+   {:source
+    "Paired fiberwise C1 regularity and identity-projected zero derivatives stated using orthogonal projection onto the complement of a derivative range.",
+    :target
+    "The same paired hypotheses stated as the second component of the canonical derivative-range/orthogonal-complement target-coordinate equivalence."},
+   :id
+   :critical-value-sard-target-orthogonal-coordinate-inverse-slice-nullity-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-chart-orthogonal-residual-nullity-data-1
+    :critical-value-sard-target-orthogonal-coordinate-equiv-1
+    :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1],
+   :current-residual
+   "The orthogonal-projection slice bundle is identified exactly with the canonical target-coordinate second-component bundle; local coordinate-measure installation and concrete compact chart instantiation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -27516,85 +27553,84 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Specialize the compact projected-chart wrapper to derivative-range and orthogonal-complement coordinates, install the bundled coordinate measures locally, and instantiate the exact-rank chart certificate.",
+     "Install the derivative-range and orthogonal-complement Borel/additive-Haar measures locally, then apply the compact projected-chart wrapper to the converted target-coordinate slice data for each exact-rank chart.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_bundled_inverseSlice_data"
-      "816f9793b9ae50cfa9d7cc4ed203c6ee185d06f7bb6fe06f999b9c6627ea8a18"},
+     {"targetOrthogonalCoordinates_inverseSlice_nullity_data"
+      "6760a966c07ec5743728982b3f664c1b0786ae733d0861ae4b2c07f51e5ef879"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled compact projected-chart nullity wrapper cannot be promoted for arbitrary finite-dimensional real normed source spaces, real normed target and chart-coordinate spaces with Borel structures and additive Haar measures, nontrivial residual slice spaces, compact chart-source sets, lower-dimensional induction, target-coordinate equivalences, exact first-coordinate identities, dimension drop, bundled fiberwise C1 regularity and identity-projected zero derivatives, zero target measure of the compact image, or standard-axiom profile.",
+      "Stop only if the compiled inverse-slice representation theorem cannot be promoted for arbitrary real normed source and slice spaces, finite-dimensional real inner-product target spaces, every continuous real-linear derivative and projected product chart, conversion of paired orthogonal-projection fiberwise C1 and zero-derivative data into the exact second-coordinate data of the canonical range/orthogonal target equivalence, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean"
-       "ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.md"],
+      ["ConstructionTargets/SardTargetOrthogonalCoordinateInverseSliceNullityData.lean"
+       "ConstructionTargets/SardTargetOrthogonalCoordinateInverseSliceNullityData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PROJECTED-CHART NULLITY FROM BUNDLED FIBER DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / TARGET-ORTHOGONAL COORDINATE INVERSE-SLICE NULLITY DATA",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean",
+        "/tmp/SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.lean",
         :sha256
-        "2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7"},
+        "f5cb8285bb9359fbe05ae3b6ee0437816b5941766962f8869c1ea86638917b39"},
        :declarations
-       ["measure_image_zero_of_bundled_inverseSlice_data"],
+       ["targetOrthogonalCoordinates_inverseSlice_nullity_data"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Specialize coordinate spaces to the derivative range and its orthogonal complement, install their bundled measures locally, and instantiate the concrete exact-rank compact projected-chart certificate."},
+       "Install derivative-range and orthogonal-complement coordinate measures locally and instantiate compact projected-chart nullity using the converted target-coordinate slice data."},
       :representation
       {:source
-       "A compact projected chart with target-coordinate equivalence, lower-dimensional induction, dimension drop, and paired fiberwise regularity and zero-derivative data.",
+       "Paired fiberwise C1 regularity and identity-projected zero derivatives stated using orthogonal projection onto the complement of a derivative range.",
        :target
-       "Zero target measure of the image of the compact chart-source set."},
+       "The same paired hypotheses stated as the second component of the canonical derivative-range/orthogonal-complement target-coordinate equivalence."},
       :id
-      :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1,
+      :critical-value-sard-target-orthogonal-coordinate-inverse-slice-nullity-data-1,
       :kind :reusable-theorem,
       :depends-on
       [:critical-value-sard-projected-chart-orthogonal-residual-nullity-data-1
-       :critical-value-sard-compact-projected-chart-image-nullity-1
-       :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1
-       :critical-value-sard-derivative-range-orthogonal-measure-package-1],
+       :critical-value-sard-target-orthogonal-coordinate-equiv-1
+       :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1],
       :current-residual
-      "Compact projected-chart nullity follows from the bundled fiber data; concrete derivative-range and orthogonal-complement specialization, local measure installation, and exact-rank certificate instantiation remain.",
+      "The orthogonal-projection slice bundle is identified exactly with the canonical target-coordinate second-component bundle; local coordinate-measure installation and concrete compact chart instantiation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture applies the compact projected-chart image-nullity theorem directly to the already bundled fiberwise C1 and zero-derivative data, using the identity residual projection. The remaining bounded work is concrete specialization to derivative-range and orthogonal-complement coordinates, local installation of their bundled measures, and exact-rank chart-certificate instantiation.",
+     "The rectangular theorem is not refuted. The next concrete specialization requires converting the bundled orthogonal-projection inverse-slice data into the second-coordinate form consumed by the compact projected-chart wrapper. A placeholder-free compiled fixture proves this exact identification using the canonical range/orthogonal target-coordinate equivalence; coordinate-measure installation and concrete exact-rank chart instantiation remain.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 6 ':id :critical-value-sard-(projected-chart-orthogonal-residual-nullity-data-1|compact-projected-chart-image-nullity-1|compact-projected-chart-nullity-of-residual-data-1|derivative-range-orthogonal-measure-package-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 8 ':id :critical-value-sard-(compact-projected-chart-nullity-of-bundled-data-1|projected-chart-orthogonal-residual-nullity-data-1|derivative-range-orthogonal-measure-package-1|first-derivative-rank-piece-projected-chart-nullity-witness-1|first-derivative-rank-piece-chart-source-compact-nullity-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean",
+       "lake env lean /tmp/SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.lean",
        :exit 0,
        :output
-       "'SardCompactProjectedChartNullityOfBundledDataProbe.measure_image_zero_of_bundled_inverseSlice_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.targetOrthogonalCoordinates_inverseSlice_nullity_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean",
+       "sha256sum /tmp/SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.lean",
        :exit 0,
        :output
-       "2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7  /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean"}
+       "f5cb8285bb9359fbe05ae3b6ee0437816b5941766962f8869c1ea86638917b39  /tmp/SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,40p' /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean | sha256sum",
+       "sed -n '15,55p' /tmp/SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.lean | sha256sum",
        :exit 0,
        :output
-       "816f9793b9ae50cfa9d7cc4ed203c6ee185d06f7bb6fe06f999b9c6627ea8a18  -"}
+       "6760a966c07ec5743728982b3f664c1b0786ae733d0861ae4b2c07f51e5ef879  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 205 items OK; {:done 197, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 206 items OK; {:done 198, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -27610,12 +27646,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean",
+      "/tmp/SardTargetOrthogonalCoordinateInverseSliceNullityDataProbe.lean",
       :sha256
-      "2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7"},
+      "f5cb8285bb9359fbe05ae3b6ee0437816b5941766962f8869c1ea86638917b39"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -27769,7 +27805,8 @@
     :critical-value-sard-projected-smooth-chart-target-data-1
     :critical-value-sard-projected-chart-orthogonal-residual-slice-zero-1
     :critical-value-sard-projected-chart-orthogonal-residual-nullity-data-1
-    :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1],
+    :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1
+    :critical-value-sard-target-orthogonal-coordinate-inverse-slice-nullity-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
