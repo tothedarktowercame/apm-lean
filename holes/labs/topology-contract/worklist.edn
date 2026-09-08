@@ -21570,6 +21570,42 @@
       "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0  ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean\ndb309f13ba3252d4d813b46087d9b06bd9a829dafd5ea81d78d2378424694cf7  ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788860488466-14809-8a0e454e",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no 7d50ba7932e2714fd3a005f7d70b651d3efe4378; git diff-tree --no-commit-id --name-only -r 7d50ba7932e2714fd3a005f7d70b651d3efe4378; git show 7d50ba7932e2714fd3a005f7d70b651d3efe4378:ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean; git show 7d50ba7932e2714fd3a005f7d70b651d3efe4378:ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md",
+       :exit 0}
+      {:cmd
+       "git show 7d50ba7932e2714fd3a005f7d70b651d3efe4378:ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean > /tmp/sard-open-chart-review.38nL8p/SardOpenChartSourceNeighborhoodRefinement.lean; git show 7d50ba7932e2714fd3a005f7d70b651d3efe4378:ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md > /tmp/sard-open-chart-review.38nL8p/SardOpenChartSourceNeighborhoodRefinement.md; sha256sum /tmp/sard-open-chart-review.38nL8p/SardOpenChartSourceNeighborhoodRefinement.lean /tmp/sard-open-chart-review.38nL8p/SardOpenChartSourceNeighborhoodRefinement.md",
+       :exit 0,
+       :output
+       "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0 Lean; db309f13ba3252d4d813b46087d9b06bd9a829dafd5ea81d78d2378424694cf7 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-open-chart-review.38nL8p/SardOpenChartSourceNeighborhoodRefinement.lean",
+       :exit 0,
+       :output "depends on axioms: [propext, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-open-chart-review.38nL8p/SardOpenChartSourceNeighborhoodRefinement.lean /tmp/sard-open-chart-review.38nL8p/SardOpenChartSourceNeighborhoodRefinement.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '8,22p' /tmp/sard-open-chart-review.38nL8p/SardOpenChartSourceNeighborhoodRefinement.lean | sha256sum",
+       :exit 0,
+       :output
+       "aed3982949432d5e3d3e8cb4ae269174291e9beed5563f21296fdf0c35b1923b  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 167 items OK; {:done 158, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd "git diff --check HEAD; git status --porcelain=v1",
+       :exit 0,
+       :output ""}],
+     :finding
+     "PASS. Independently reviewed recorded commit 7d50ba7932e2714fd3a005f7d70b651d3efe4378 by Joe Corneli. Its exact two-path diff equals the declared scope. Both committed blob hashes reproduce, with the Lean blob exactly matching the frozen fixture hash; the theorem compiles placeholder-free with only standard axioms propext and Quot.sound, and its frozen statement hash reproduces. The orientation is correct and constructive: V = U ∩ e.source is open, contains x, lies in the chart source, and the supplied U-local intersection equality restricts in both directions to V. No representation-boundary weakening or warning was found; the worktree remained clean."},
     :commit "7d50ba7932e2714fd3a005f7d70b651d3efe4378",
     :changed-paths
     ["ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean"
@@ -21585,7 +21621,7 @@
      "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0"},
     :declarations ["exists_open_subset_chartSource_with_inter_eq"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean"
     "ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md"],
@@ -21767,7 +21803,7 @@
       "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
