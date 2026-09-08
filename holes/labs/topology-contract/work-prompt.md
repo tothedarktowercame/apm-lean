@@ -21,6 +21,22 @@ Every inserted row must satisfy the full ledger schema and use a new id. An
 ordinary replan may not return an empty tail. Do not edit the DAG or ledger
 directly.
 
+A row with `:kind :representation-comparison` must additionally state all
+THREE parts of the comparison, or admission rejects it and the loop stops:
+
+    :representation {:source    "what is being compared, on one side"
+                     :target    "what it is being compared to"
+                     :direction "which way the identification runs, and what
+                                 kind of identification it is"}
+
+`:source` and `:target` alone are not enough. `:direction` is the orientation
+and it is the field that gets forgotten: it stopped the loop on 2026-09-08 at
+09:33 on the campaign's second comparison row. Say it the way the first one
+did -- "Exact equality from the target-image fiber representation to the
+source-fiber coordinate-image representation" -- naming the relation as well
+as the direction. Only you can supply it; nobody downstream can infer it from
+the other two fields without inventing mathematics.
+
 STANDING PORTFOLIO POLICY (Joe, 2026-09-06; supersedes the prior
 owner-authorization gate). The campaign runs the DAG in strategic order until
 every consumer problem is closed. `FOUNDATION`, `SPEC-DEFECT` and

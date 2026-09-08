@@ -165,7 +165,16 @@
                 (throw (ex-info "FAIL receipt lacks field" {:field k}))))
       (throw (ex-info "unknown receipt outcome" {:outcome outcome})))
     (case outcome
-      :revise (validate-inserted-row! (:prerequisite receipt))
+      ;; Only validate a prerequisite that is actually being INSERTED. When it
+      ;; already exists, the :revise branch below takes the `existing` path and
+      ;; merges nothing from the receipt's copy -- it only adds the dependency
+      ;; edge -- so validating that copy rejects a receipt over fields the
+      ;; ledger will never read. On 2026-09-08 a re-dispatched probe returned a
+      ;; second revise naming a prerequisite that had meanwhile been inserted
+      ;; and given its orientation; the receipt still carried the older copy
+      ;; without one, and the loop stopped over a row that was already correct.
+      :revise (when-not (by-id (:id (:prerequisite receipt)))
+                (validate-inserted-row! (:prerequisite receipt)))
       :replan (doseq [row (:replacement-items receipt)]
                 (validate-inserted-row! row))
       nil)
@@ -312,6 +321,22 @@
       (write-ledger! (assoc data :items (unblock-ready new-items)))
       (println "applied" (name outcome) "to" (name id)))))
 
+;; A refusal has to arrive as a sentence. build_step.bb's failures reach the
+;; operator through topology-build-loop.sh's `die "invalid receipt ...: $out"`
+;; and then through the supervisor's last_stop_reason, which keeps the FIRST
+;; line -- and babashka's first line is "----- Error ----------". On
+;; 2026-09-08 the real complaint ("representation comparison row lacks
+;; required field", :field :orientation) sat twelve lines down inside a stack
+;; trace, so the stop read "invalid receipt from <job>: ----- Error -----" and
+;; three repair attempts were spent before anyone saw what was wrong.
+(defn- die! [^Throwable t]
+  (binding [*out* *err*]
+    (let [data (ex-data t)]
+      (println (str (.getMessage t)
+                    (when (seq data) (str " " (pr-str data)))))))
+  (System/exit 1))
+
+(try
 (case cmd
   "next-open" (println (or (some-> (selected) :id name) "NONE"))
   "unreviewed" (println (str/join " " (map (comp name :id)
@@ -324,3 +349,4 @@
   (do (binding [*out* *err*]
         (println "usage: build_step.bb next-open|unreviewed|counts|row|apply-result|replay [ledger] [row-id] [receipt]"))
       (System/exit 2)))
+(catch clojure.lang.ExceptionInfo t (die! t)))
