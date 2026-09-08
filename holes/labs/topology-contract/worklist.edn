@@ -28731,6 +28731,22 @@
       :exit 0,
       :output "40c7aedaf0d2573836bfc2dac05ce3217cc0c94e"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788884272004-15246-7779176e",
+     :commands
+     ["git show 40c7aedaf0d2573836bfc2dac05ce3217cc0c94e"
+      "cmp fixture recorded-commit-file"
+      "sha256sum fixture recorded-commit-file"
+      "lake env lean ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean"
+      "lake build ConstructionTargets.SardClosedOpenProjectedChartImageNullity"
+      "bb worklist_check.bb worklist.edn"
+      "rg placeholder scan"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit changes exactly the declared Lean and Markdown files; fixture hashes both equal e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7; frozen statement hash is fd9896ad5928216718a0bdf0e53b74971ca76b5fbe34ec607999fcbd30349528; no placeholders occur; axioms are only propext, Classical.choice, and Quot.sound; direct Lean and 8309-job Lake build pass; ledger validates 216 items; consumer hash/count match; theorem orientation and closed/open chart representation boundaries are correct; worktree is clean."},
     :commit "40c7aedaf0d2573836bfc2dac05ce3217cc0c94e",
     :changed-paths
     ["ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean"
@@ -28741,7 +28757,7 @@
      "e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7"},
     :declarations ["measure_image_zero_of_closedOpen_projectedChart"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean"
     "ConstructionTargets/SardClosedOpenProjectedChartImageNullity.md"],
@@ -28923,7 +28939,7 @@
       "e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
