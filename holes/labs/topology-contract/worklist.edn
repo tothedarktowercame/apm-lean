@@ -16306,6 +16306,47 @@
       :output
       "[master 537f1fb2] Add projected inverse slice derivative; 2 files changed, 38 insertions(+)"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788842486847-14539-7aa74051",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 537f1fb225b5d489eea904f6444b766cff6fb6a5; git diff-tree --no-commit-id --name-only -r 537f1fb225b5d489eea904f6444b766cff6fb6a5",
+       :exit 0,
+       :output
+       "Author Joe Corneli; exactly ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean and ConstructionTargets/SardProjectedInverseChartSliceContDiff.md."}
+      {:cmd
+       "git show 537f1fb225b5d489eea904f6444b766cff6fb6a5:ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean | sha256sum; sha256sum /tmp/SardProjectedInverseChartSliceContDiffProbe.lean; cmp <(git show 537f1fb225b5d489eea904f6444b766cff6fb6a5:ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean) /tmp/SardProjectedInverseChartSliceContDiffProbe.lean",
+       :exit 0,
+       :output
+       "Committed source and fixture are byte-identical at bae487195281788e880e8e9d8fcac8c8e2dac8a6b7e23d98d29b53dbdf71a64b."}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardProjectedInverseChartSliceContDiffProbe.lean; lake build ConstructionTargets.SardProjectedInverseChartSliceContDiff",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; declaration depends on [propext, Classical.choice, Quot.sound]; build completed successfully (8256 jobs), with no warning from the reviewed module."}
+      {:cmd
+       "git show 537f1fb225b5d489eea904f6444b766cff6fb6a5:ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'; git show 537f1fb225b5d489eea904f6444b766cff6fb6a5:ConstructionTargets/SardProjectedInverseChartSliceContDiff.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1,
+       :output "No placeholders or prohibited declarations."}
+      {:cmd
+       "git show 537f1fb225b5d489eea904f6444b766cff6fb6a5:ConstructionTargets/SardProjectedInverseChartSliceContDiff.md | sha256sum; sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "Documentation hash f29ab4d5ace607db36dd5fa980fcf092e7ae665545e7e4c93664976296e5b473; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd
+       "git merge-base --is-ancestor 12a27915f80f96e3ce428323a6c3e89198ff4989 537f1fb225b5d489eea904f6444b766cff6fb6a5; git merge-base --is-ancestor 7a7e62d120616e94f8a866339bd705c1464a4edd 537f1fb225b5d489eea904f6444b766cff6fb6a5; git merge-base --is-ancestor a9fd034e12f6f6ac68c2bdc35024ad8fc6c68455 537f1fb225b5d489eea904f6444b766cff6fb6a5",
+       :exit 0,
+       :output "All three recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "topology-worklist: 131 items OK; {:done 122, :done-unreviewed 1, :blocked 2, :superseded 6}; diff clean; working tree clean."}],
+     :finding
+     "PASS. The commit has exact scope and reproduces the fixture hash. The theorem is oriented as required: C1 regularity of both ImplicitFunctionData defining maps invokes the banked C1 kernel-parameter result, converts that result to differentiability at the base kernel coordinate, and existentially exposes its continuous-linear Frechet derivative. Its base point, fixed-left-coordinate inverse slice, hypotheses, and conclusion match the recorded representation without claiming stronger neighborhood regularity. Standard axioms only, zero placeholders, unchanged frozen consumer statement and placeholder count."},
     :commit "537f1fb225b5d489eea904f6444b766cff6fb6a5",
     :changed-paths
     ["ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean"
@@ -16322,7 +16363,7 @@
       "ConstructionTargets/SardProjectedInverseChartSliceContDiff.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean"
     "ConstructionTargets/SardProjectedInverseChartSliceContDiff.md"],
@@ -16496,7 +16537,7 @@
       "bae487195281788e880e8e9d8fcac8c8e2dac8a6b7e23d98d29b53dbdf71a64b"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
