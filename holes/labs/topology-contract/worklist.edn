@@ -21343,8 +21343,101 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled projected-chart target-fiber containment theorem cannot be promoted for arbitrary source and target maps, an arbitrary product-valued open partial homeomorphism, every source subset contained in the chart source, equality of the chart first coordinate with the target-coordinate first component, every fixed first-coordinate target-image fiber, containment in the corresponding inverse-chart slice image, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Instantiate the target coordinates and first-coordinate formula from the derivative-range projected chart, prove the fixed-coordinate inverse slices satisfy lower-dimensional Sard hypotheses, and apply compact target-fiber image nullity.",
+    :gates
+    {:statement-hash :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :warnings :pass,
+     :scope :pass,
+     :axioms :standard-only,
+     :worklist :pass,
+     :consumer-fixture :unchanged,
+     :declaration :pass,
+     :diff-check :pass,
+     :worktree :clean,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"targetFiber_subset_inverseChartSlice"
+     "e43280de725515cfc12bc74cc1a0caab1f9ddc029e70ac0c9bcf4948e7a04c5c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardProjectedChartTargetFiberSliceContainmentProbe.lean",
+      :exit 0,
+      :output
+      "0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b  /tmp/SardProjectedChartTargetFiberSliceContainmentProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean",
+      :exit 0,
+      :output
+      "'SardProjectedChartTargetFiberSliceContainmentProbe.targetFiber_subset_inverseChartSlice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,30p' ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean | sha256sum",
+      :exit 0,
+      :output
+      "e43280de725515cfc12bc74cc1a0caab1f9ddc029e70ac0c9bcf4948e7a04c5c  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 166 items OK; {:done 157, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md && git commit -m 'Add projected chart fiber containment'",
+      :exit 0,
+      :output
+      "[master f54f34be] Add projected chart fiber containment; 2 files changed, 43 insertions(+); create mode 100644 ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean; create mode 100644 ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "f54f34be74e5802af5cb2651ca5a2c6dbf9cdcde"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md",
+      :exit 0,
+      :output
+      "0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b  ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean\n18ba3c8a46ca8957f8e91f38338ece9344046ed213ccfc2492cf2afde415363c  ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "f54f34be74e5802af5cb2651ca5a2c6dbf9cdcde",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean"
+     "ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md"],
+    :file-hashes
+    {"ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean"
+     "0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b",
+     "ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md"
+     "18ba3c8a46ca8957f8e91f38338ece9344046ed213ccfc2492cf2afde415363c"},
+    :fixture
+    {:path
+     "/tmp/SardProjectedChartTargetFiberSliceContainmentProbe.lean",
+     :sha256
+     "0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b"},
+    :declarations ["targetFiber_subset_inverseChartSlice"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean"
     "ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.md"],
