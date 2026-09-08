@@ -18828,8 +18828,92 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled target-coordinate construction cannot be promoted with an arbitrary submodule of a finite-dimensional real inner-product space, continuous-linear equivalence to the submodule/orthogonal-complement product, the exact paired-projection evaluation formula, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "Instantiate orthogonal target coordinates at each derivative range, prove compact coordinate-image nullity from lower-dimensional residual fibers, transfer it to the original target, and aggregate compact localizations over every exact-rank piece.",
+    :gates
+    {:frozen-statement :unchanged,
+     :fixture-hash :pass,
+     :warnings :none,
+     :scope :pass,
+     :axioms :standard-only,
+     :worklist :pass,
+     :placeholder-audit :pass,
+     :target-compile :pass,
+     :package-authority :pass,
+     :declarations :pass,
+     :diff-check :pass,
+     :worktree :clean},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"targetOrthogonalCoordinates_and_apply"
+     "a71b76ee460ce4e245587405b273e6679a94355282331b4df90f4f2cb0e8ba94",
+     "apm_t93A04"
+     "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardTargetOrthogonalCoordinateEquivProbe.lean",
+      :exit 0,
+      :output
+      "9224eb7acfd47e5a8fa22a4934fd9cd49ba2eb83e0efc392b004936412ae7c93"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean",
+      :exit 0,
+      :output
+      "'SardTargetOrthogonalCoordinateEquivProbe.targetOrthogonalCoordinates_apply' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '14,23p' ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean | sha256sum",
+      :exit 0,
+      :output
+      "a71b76ee460ce4e245587405b273e6679a94355282331b4df90f4f2cb0e8ba94"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 148 items OK; {:done 139, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :output
+      "ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean\nConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "6c75005ec91ef6bff547385d46f1d1aa0096170b",
+    :changed-paths
+    ["ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean"
+     "ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md"],
+    :file-hashes
+    {"ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean"
+     "8a7b819b0b67ed173483692c2262e410b36a9e432b923f01a9faebabb556c3fc",
+     "ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md"
+     "d7e1cc5a283f7269b6f1977a7d039babf902c04893690be98013b97246b698fe"},
+    :fixture
+    {:path "/tmp/SardTargetOrthogonalCoordinateEquivProbe.lean",
+     :sha256
+     "9224eb7acfd47e5a8fa22a4934fd9cd49ba2eb83e0efc392b004936412ae7c93"},
+    :declarations
+    ["SardTargetOrthogonalCoordinateEquivProbe.targetOrthogonalCoordinates"
+     "SardTargetOrthogonalCoordinateEquivProbe.targetOrthogonalCoordinates_apply"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean"
     "ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md"],
