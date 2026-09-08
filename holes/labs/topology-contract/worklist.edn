@@ -16954,6 +16954,50 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788844261154-14563-7802ef69",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 91d00f9bc515c287255c9ce57c1a09404b387088; git diff-tree --no-commit-id --name-only -r 91d00f9bc515c287255c9ce57c1a09404b387088",
+       :exit 0,
+       :output
+       "Author Joe Corneli; exact scope: ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean and ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.md."}
+      {:cmd
+       "git show 91d00f9bc515c287255c9ce57c1a09404b387088:ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean | sha256sum; sha256sum /tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean; cmp <(git show 91d00f9bc515c287255c9ce57c1a09404b387088:ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean) /tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean",
+       :exit 0,
+       :output
+       "Committed source and fixture are byte-identical at 8b1094b322f71576931a97a64e3f466f1c04b4405a0f646a6583ea76b0351151."}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean; lake build ConstructionTargets.SardProjectedSliceDerivativeNonsurjective",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; declaration depends on [propext, Classical.choice, Quot.sound]; build completed successfully (8241 jobs), with no warning from the reviewed module."}
+      {:cmd
+       "git show 91d00f9bc515c287255c9ce57c1a09404b387088:ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 91d00f9bc515c287255c9ce57c1a09404b387088:ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 91d00f9bc515c287255c9ce57c1a09404b387088:ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.md | sha256sum; sha256sum /tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "Documentation hash aa49c564cf642a337e01192cec1fc800f309e523bfbf97f542ed280c1dafb765; fixture hash 8b1094b322f71576931a97a64e3f466f1c04b4405a0f646a6583ea76b0351151; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd
+       "git merge-base --is-ancestor b68631e50acd58303ed6e1c951cd8d7d7f174f68 91d00f9bc515c287255c9ce57c1a09404b387088; git merge-base --is-ancestor 2229cea1e27d33f2f3cce54eb9a2f053829a3af3 91d00f9bc515c287255c9ce57c1a09404b387088; git merge-base --is-ancestor 563aebd8166dd750d154f4fc2a0866ed5366ce8a 91d00f9bc515c287255c9ce57c1a09404b387088",
+       :exit 0,
+       :output "All three recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "topology-worklist: 135 items OK; {:done 126, :done-unreviewed 1, :blocked 2, :superseded 6}; diff clean; working tree clean."}],
+     :finding
+     "PASS. The calculus bridge has the required orientation and exact representation boundary. The supplied derivative q' of q and the chain rule give derivative P.comp q' for P ∘ q. Uniqueness against the supplied zero derivative proves P.comp q' = 0 without replacing q'. Surjectivity of P and Nontrivial R then feed the reviewed annihilated-projection theorem to conclude q' is not surjective. The result assumes differentiability through the explicit HasFDerivAt witness and concludes only nonsurjectivity of that witness; it does not claim image nullity. Exact scope and fixture hash reproduce, axioms are standard-only, placeholders are zero, and the frozen consumer retains one theorem and one sorry."},
     :commit "91d00f9bc515c287255c9ce57c1a09404b387088",
     :changed-paths
     ["ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean"
@@ -16975,7 +17019,7 @@
       "ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean"
     "ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.md"],
@@ -17140,7 +17184,7 @@
       "8b1094b322f71576931a97a64e3f466f1c04b4405a0f646a6583ea76b0351151"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
