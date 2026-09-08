@@ -31892,6 +31892,43 @@
    "Lower-dimensional nullity applies to a finite-order projected slice once its pointwise nonsurjectivity and dimension identities are supplied; aggregate these local certificates in the analytic dimension step.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if zero derivative after a surjective target projection cannot make every point of a finite-order projected slice critical and hence eligible for lower-dimensional classical Sard nullity, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderProjectedSliceCriticalNullity.lean"
+    "ConstructionTargets/SardFiniteOrderProjectedSliceCriticalNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-SLICE CRITICAL NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderProjectedSliceCriticalNullityProbe.lean",
+     :sha256
+     "7dd1f4f39f78421261c45e116448cc5c7dd79ad528bceb0922fcdcbf0ea5708c"},
+    :declarations
+    ["image_null_of_lowerDimension_projected_hasFDerivAt_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the theorem on reviewed projected local rank charts and aggregate the local slice-nullity certificates."},
+   :representation
+   {:source
+    "A finite-order projected slice, a surjective target projection whose composition with the slice has zero derivative everywhere, and classical critical-image nullity at every strictly smaller source finrank.",
+    :target
+    "Zero target measure of the image of the entire projected slice, obtained by pointwise criticality and lower-dimensional induction."},
+   :id
+   :critical-value-sard-finite-order-projected-slice-critical-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1
+    :critical-value-sard-projected-slice-derivative-nonsurjective-1
+    :critical-value-sard-projected-chart-indexed-residual-slice-zero-1],
+   :current-residual
+   "Finite-order projected slices with reviewed zero-derivative data are null by lower-dimensional induction; instantiate and aggregate these certificates over local rank charts.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -31945,80 +31982,81 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Derive pointwise nonsurjectivity for the finite-order projected residual slices, apply lower-dimensional nullity, and aggregate the resulting local rank-slice certificates.",
+     "Instantiate finite-order projected-slice critical nullity with the reviewed local rank-chart derivative-annihilation data and aggregate the resulting certificates.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"image_null_of_lowerDimension_projectedSlice"
-      "5a36e2a72bc3fb11f90ad0bbc280a721fc410349064a9fd6f385db5821079d34"},
+     {"image_null_of_lowerDimension_projected_hasFDerivAt_zero"
+      "4ed1b39ceb719f1cd2aef82814918a1bd6aab908fbbe38ff461a22419bf96578"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the classical finite-order lower-dimensional induction hypothesis cannot be instantiated on a rank-reduced projected slice whose points are all critical, or if the theorem requires nonstandard axioms.",
+      "Stop only if zero derivative after a surjective target projection cannot make every point of a finite-order projected slice critical and hence eligible for lower-dimensional classical Sard nullity, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean"
-       "ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderProjectedSliceCriticalNullity.lean"
+       "ConstructionTargets/SardFiniteOrderProjectedSliceCriticalNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-SLICE LOWER-DIMENSION NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-SLICE CRITICAL NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
+        "/tmp/SardFiniteOrderProjectedSliceCriticalNullityProbe.lean",
         :sha256
-        "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08"},
-       :declarations ["image_null_of_lowerDimension_projectedSlice"],
+        "7dd1f4f39f78421261c45e116448cc5c7dd79ad528bceb0922fcdcbf0ea5708c"},
+       :declarations
+       ["image_null_of_lowerDimension_projected_hasFDerivAt_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Supply projected-slice criticality from derivative annihilation and aggregate the local rank-slice nullity certificates."},
+       "Instantiate the theorem on reviewed projected local rank charts and aggregate the local slice-nullity certificates."},
       :representation
       {:source
-       "A classical finite-order critical-nullity hypothesis at every strictly smaller source finrank, rank-reduced dimension identities and admissibility, finite-order slice regularity, and pointwise nonsurjectivity on the localized slice.",
+       "A finite-order projected slice, a surjective target projection whose composition with the slice has zero derivative everywhere, and classical critical-image nullity at every strictly smaller source finrank.",
        :target
-       "Zero additive Haar measure of the image of the entire localized projected residual slice."},
+       "Zero target measure of the image of the entire projected slice, obtained by pointwise criticality and lower-dimensional induction."},
       :id
-      :critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1,
+      :critical-value-sard-finite-order-projected-slice-critical-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-projected-slice-induction-data-1
-       :critical-value-sard-classical-finite-order-critical-nullity-predicate-1
-       :critical-value-sard-projected-slice-derivative-nonsurjective-1],
+      [:critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1
+       :critical-value-sard-projected-slice-derivative-nonsurjective-1
+       :critical-value-sard-projected-chart-indexed-residual-slice-zero-1],
       :current-residual
-      "Lower-dimensional nullity applies to a finite-order projected slice once its pointwise nonsurjectivity and dimension identities are supplied; aggregate these local certificates in the analytic dimension step.",
+      "Finite-order projected slices with reviewed zero-derivative data are null by lower-dimensional induction; instantiate and aggregate these certificates over local rank charts.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture specializes the repaired classical finite-order induction predicate to a strictly lower-dimensional projected slice, rewrites the localized slice as its critical locus using pointwise nonsurjectivity, and concludes image nullity while retaining the rank-reduced admissibility and original finite order. The remaining work is to supply projected-slice criticality from the reviewed derivative-annihilation data and aggregate the slice certificates.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines finite-order differentiability, a nonzero regularity order, surjectivity of the target projection, and zero projected derivative to prove every point of the slice critical; it then invokes the reviewed lower-dimensional classical critical-nullity theorem to obtain nullity of the whole slice image. The remaining work is local rank-chart instantiation and aggregation of these slice certificates.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderProjectedSliceCriticalNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.image_null_of_lowerDimension_projectedSlice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderProjectedSliceCriticalNullityProbe.image_null_of_lowerDimension_projected_hasFDerivAt_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderProjectedSliceCriticalNullityProbe.lean",
        :exit 0,
        :output
-       "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08  /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean"}
+       "7dd1f4f39f78421261c45e116448cc5c7dd79ad528bceb0922fcdcbf0ea5708c  /tmp/SardFiniteOrderProjectedSliceCriticalNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedSliceCriticalNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '11,37p' /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean | sha256sum",
+       "sed -n '11,40p' /tmp/SardFiniteOrderProjectedSliceCriticalNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "5a36e2a72bc3fb11f90ad0bbc280a721fc410349064a9fd6f385db5821079d34  -"}
+       "4ed1b39ceb719f1cd2aef82814918a1bd6aab908fbbe38ff461a22419bf96578  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 241 items OK; {:done 233, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 242 items OK; {:done 234, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -32037,12 +32075,12 @@
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
+      "/tmp/SardFiniteOrderProjectedSliceCriticalNullityProbe.lean",
       :sha256
-      "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08"},
+      "7dd1f4f39f78421261c45e116448cc5c7dd79ad528bceb0922fcdcbf0ea5708c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -32232,7 +32270,8 @@
     :critical-value-sard-classical-finite-order-critical-nullity-predicate-1
     :critical-value-sard-rank-drop-regularity-admissibility-1
     :critical-value-sard-finite-order-projected-slice-induction-data-1
-    :critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1],
+    :critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1
+    :critical-value-sard-finite-order-projected-slice-critical-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
