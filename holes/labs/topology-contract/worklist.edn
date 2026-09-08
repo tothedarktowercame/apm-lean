@@ -28959,6 +28959,25 @@
       "git commit -m 'Add localized projected-chart residual slice theorem'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788885373898-15269-b88f77ce",
+     :commands
+     ["git show d8e5d491ef4a203c87ce889c7fab0229d7f4200d"
+      "cmp fixture scoped-file"
+      "sha256sum fixture recorded-commit-file scoped-files"
+      "lake env lean ConstructionTargets/SardProjectedChartLocalizedResidualSliceZero.lean"
+      "lake build ConstructionTargets.SardProjectedChartLocalizedResidualSliceZero"
+      "sed -n '13,55p' recorded-commit-file | sha256sum"
+      "rg placeholder-and-unsafe-patterns"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o sorry problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6; commit changes exactly the two declared scope files; fixture and recorded/scoped Lean hashes equal 4e79fd8cef22f9c30745997c38c75f6747f49eef6b3af6143e1c758809856551; frozen statement hash equals 4563e37374affad19e3379ce19ef549b5d27c720cbeb85d0d9db44bde441c971; placeholder count is zero; direct Lean and 8339-job Lake build pass with only propext, Classical.choice, and Quot.sound; ledger validates 218 items; consumer hash and one-placeholder count match; target membership correctly yields chart-source membership while the separate A-intersection-U witness is used only for the localized rank bound, and the projected derivative is rewritten through hcoord before the residual-slice theorem; worktree is clean."},
     :commit "d8e5d491ef4a203c87ce889c7fab0229d7f4200d",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartLocalizedResidualSliceZero.lean"
@@ -28972,7 +28991,7 @@
     ["forall_hasFDerivAt_zero_residual_inverseSlice_on_locus"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartLocalizedResidualSliceZero.lean"
     "ConstructionTargets/SardProjectedChartLocalizedResidualSliceZero.md"],
@@ -29156,7 +29175,7 @@
       "4e79fd8cef22f9c30745997c38c75f6747f49eef6b3af6143e1c758809856551"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
