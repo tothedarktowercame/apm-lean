@@ -23225,6 +23225,46 @@
      {:cmd "git commit -m 'Add inverse slice derivative certificate'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788865289821-14898-28bb4055",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no 820013eff0f18e786854665a3ba8bdd977964680; git diff-tree --no-commit-id --name-only -r 820013eff0f18e786854665a3ba8bdd977964680; git show 820013eff0f18e786854665a3ba8bdd977964680:ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.lean; git show 820013eff0f18e786854665a3ba8bdd977964680:ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.md",
+       :exit 0,
+       :output "exact two-path scope"}
+      {:cmd
+       "git show 820013eff0f18e786854665a3ba8bdd977964680:ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.lean > /tmp/sard-inverse-slice-fderiv-review.c4GKBX/SardProjectedChartInverseSliceHasFDerivAt.lean; git show 820013eff0f18e786854665a3ba8bdd977964680:ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.md > /tmp/sard-inverse-slice-fderiv-review.c4GKBX/SardProjectedChartInverseSliceHasFDerivAt.md; sha256sum /tmp/sard-inverse-slice-fderiv-review.c4GKBX/SardProjectedChartInverseSliceHasFDerivAt.lean /tmp/sard-inverse-slice-fderiv-review.c4GKBX/SardProjectedChartInverseSliceHasFDerivAt.md",
+       :exit 0,
+       :output
+       "fea065ac0ade977e6a6a5d2f18a6cc775d14aea85bcca1fa3f7b8a02c2e577a1 Lean; de9672178e4956b3a20fd179139c1a467f3551013e367a8a9717a7f8304f8306 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-inverse-slice-fderiv-review.c4GKBX/SardProjectedChartInverseSliceHasFDerivAt.lean",
+       :exit 0,
+       :output
+       "exists_hasFDerivAt_inverseSlice_of_contDiffOn_symm depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-inverse-slice-fderiv-review.c4GKBX/SardProjectedChartInverseSliceHasFDerivAt.lean /tmp/sard-inverse-slice-fderiv-review.c4GKBX/SardProjectedChartInverseSliceHasFDerivAt.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '12,22p' /tmp/sard-inverse-slice-fderiv-review.c4GKBX/SardProjectedChartInverseSliceHasFDerivAt.lean | sha256sum",
+       :exit 0,
+       :output
+       "e21928bfc0283c495ee2e3f08ec5e051b78c418f8ccf7a75644bccdad9bd48e4  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "topology-worklist: 179 items OK; {:done 170, :done-unreviewed 1, :blocked 2, :superseded 6}; consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; consumer placeholders 1"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 820013eff0f18e786854665a3ba8bdd977964680",
+       :exit 0,
+       :output
+       "820013eff0f18e786854665a3ba8bdd977964680; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended orientation and boundary: order-one ContDiffOn regularity of the chart inverse on its open target gives ContDiffAt of each fixed-first-coordinate inverse slice at every target point, hence differentiability and an existential HasFDerivAt certificate using the canonical fderiv. It does not claim an explicit derivative formula or concrete chart regularity; those remain consumer obligations. The consumer fixture remains unchanged with one placeholder. No warning, scope defect, or worktree change was found."},
     :commit "820013eff0f18e786854665a3ba8bdd977964680",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.lean"
@@ -23237,7 +23277,7 @@
     ["exists_hasFDerivAt_inverseSlice_of_contDiffOn_symm"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.lean"
     "ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.md"],
@@ -23418,7 +23458,7 @@
       "fea065ac0ade977e6a6a5d2f18a6cc775d14aea85bcca1fa3f7b8a02c2e577a1"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
