@@ -18196,6 +18196,30 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788847556676-14611-136fc4d7",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 30cefeb2f359060a33024076764d48d527082702; git diff-tree --no-commit-id --name-only -r 30cefeb2f359060a33024076764d48d527082702; git show 30cefeb2f359060a33024076764d48d527082702:ConstructionTargets/SardProductImageVerticalSection.lean; git show 30cefeb2f359060a33024076764d48d527082702:ConstructionTargets/SardProductImageVerticalSection.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardProductImageVerticalSectionProbe.lean; sha256sum ConstructionTargets/SardProductImageVerticalSection.lean ConstructionTargets/SardProductImageVerticalSection.md; cmp -s /tmp/SardProductImageVerticalSectionProbe.lean ConstructionTargets/SardProductImageVerticalSection.lean; lake env lean /tmp/SardProductImageVerticalSectionProbe.lean; lake build ConstructionTargets.SardProductImageVerticalSection",
+       :exit 0}
+      {:cmd
+       "git show 30cefeb2f359060a33024076764d48d527082702:ConstructionTargets/SardProductImageVerticalSection.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 30cefeb2f359060a33024076764d48d527082702:ConstructionTargets/SardProductImageVerticalSection.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -c '\\bsorry\\b' problems/t93A04/lean/Main.lean; git merge-base --is-ancestor c20e267aefe4e6bfb74faa03c16ca0aaf41117d8 30cefeb2f359060a33024076764d48d527082702; git merge-base --is-ancestor 2f00a68c728a370545e41adee921d0e851b53819 30cefeb2f359060a33024076764d48d527082702; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit 30cefeb2f359060a33024076764d48d527082702 by Joe Corneli changes exactly the recorded Lean and Markdown files. The committed Lean source is byte-identical to the fixture and has SHA-256 5855801210a1c76e49d00875a4118252562b6fb51656f13c7313e6276877b6c8; the Markdown hash is 0135d1ffadf198ae3313794c3011b13230b9f54f1a813045744a56fb3571f026. The fixture and target build successfully against canonical packages with exactly [propext, Quot.sound], no placeholders or forbidden declarations. The theorem has the required orientation: the preimage under s ↦ (r,s) of q '' K equals the second-coordinate image of K intersected with the fixed-first-coordinate fiber. Its elementwise proof requires no injectivity or regularity assumptions, matching the arbitrary-set representation boundary. Both recorded dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one sorry. The worklist validates as 143 items with {:done 134, :done-unreviewed 1, :blocked 2, :superseded 6}; the working tree is clean."},
     :commit "30cefeb2f359060a33024076764d48d527082702",
     :changed-paths
     ["ConstructionTargets/SardProductImageVerticalSection.lean"
@@ -18216,7 +18240,7 @@
       "ConstructionTargets/SardProductImageVerticalSection.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProductImageVerticalSection.lean"
     "ConstructionTargets/SardProductImageVerticalSection.md"],
@@ -18381,7 +18405,7 @@
       "5855801210a1c76e49d00875a4118252562b6fb51656f13c7313e6276877b6c8"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
