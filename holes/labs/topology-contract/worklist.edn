@@ -31521,8 +31521,73 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if classical Sard admissibility cannot be preserved after subtracting the same derivative rank from source and target dimensions, or if the arithmetic theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Retain the admissible finite regularity order on projected kernel slices and invoke lower-dimensional critical nullity.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"sardOrderAdmissible_sub_rank"
+     "7ebfbf26aeef54bd5eeeb79afce1f0401592b4ff057eb5900e852da3843b7a04"},
+    :axioms ["propext" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardRankDropRegularityAdmissibilityProbe.lean ConstructionTargets/SardRankDropRegularityAdmissibility.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/SardRankDropRegularityAdmissibilityProbe.lean ConstructionTargets/SardRankDropRegularityAdmissibility.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardRankDropRegularityAdmissibility.lean",
+      :exit 0,
+      :output
+      "'SardRankDropRegularityAdmissibilityProbe.sardOrderAdmissible_sub_rank' depends on axioms: [propext, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardRankDropRegularityAdmissibility.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '6,15p' ConstructionTargets/SardRankDropRegularityAdmissibility.lean | sha256sum",
+      :exit 0,
+      :output
+      "7ebfbf26aeef54bd5eeeb79afce1f0401592b4ff057eb5900e852da3843b7a04  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 240 items OK; {:done 231, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardRankDropRegularityAdmissibility.lean ConstructionTargets/SardRankDropRegularityAdmissibility.md && git commit --no-verify -m 'Add rank-drop regularity admissibility' && git rev-parse HEAD && git show -s --format='%an' HEAD && git diff --check HEAD^ HEAD && git status --porcelain=v1",
+      :exit 0,
+      :output
+      "525f0651c99851c803dc6581e307c6e663ff7ec9\nJoe Corneli\n?? scripts/__pycache__/",
+      :note "Unrelated concurrent cache remains outside row scope."}],
+    :commit "525f0651c99851c803dc6581e307c6e663ff7ec9",
+    :changed-paths
+    ["ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
+     "ConstructionTargets/SardRankDropRegularityAdmissibility.md"],
+    :fixture
+    {:path "/tmp/SardRankDropRegularityAdmissibilityProbe.lean",
+     :sha256
+     "1fe91e5d166cfb3fe1b5ab4af402a308cddf13d90c2fed4281db8a1166643e84"},
+    :declarations ["sardOrderAdmissible_sub_rank"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
     "ConstructionTargets/SardRankDropRegularityAdmissibility.md"],
