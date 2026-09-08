@@ -34510,6 +34510,44 @@
    "Finite-order projected chart and residual-slice-zero data is compiled; assemble it with installed positive-rank dimension and measure data.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the finite-order pointwise rank-chart nullity theorem cannot be specialized with derivative-range and orthogonal-residual measurable spaces supplied as explicit inherited subtype parameters, or if the specialization requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
+    "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POINTWISE WITNESS EXPLICIT MEASURABLE SPACES",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
+     :sha256
+     "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"},
+    :declarations
+    ["projectedCoordinates_explicit_measurableSpace_borel_bindings"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Invoke the explicit-measurable-space specialization with the installed positive-rank pointwise packet and repaired localized chart-slice certificate."},
+   :representation
+   {:source
+    "The generic finite-order pointwise rank-chart nullity witness whose coordinate measurable spaces are implicit typeclass parameters.",
+    :target
+    "A specialization taking the derivative-range and orthogonal-residual inherited measurable spaces explicitly before their Borel proofs, measures, and additive-Haar instances are elaborated."},
+   :id
+   :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-pointwise-rank-chart-nullity-witness-1
+    :critical-value-sard-projected-coordinate-explicit-inherited-borel-data-1
+    :critical-value-sard-projected-coordinate-explicit-inherited-measure-data-1
+    :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2],
+   :current-residual
+   "Explicit inherited measurable-space bindings compile; specialize the generic witness so its Borel and additive-Haar arguments share those bindings before the positive-rank invocation.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -34563,102 +34601,105 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Combine the finite-order projected chart-and-slice certificate with the installed positive-rank pointwise data and invoke the local nullity witness.",
+     "After the explicit-measurable-space witness specialization, combine it directly with the installed positive-rank packet and localized chart-slice certificate, then aggregate the positive-rank strata and the rank-zero branch.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_finiteOrder_projectedChart_residualSliceZero"
-      "35d9c8b6e50c459456e6af1e61688293bed39de1748b6d911677926bd6097179"},
+     {"projectedCoordinates_explicit_measurableSpace_borel_bindings"
+      "f50c297800f7ad4285430c3748fb8f17b53d04c1786c59ee267d0fa6973a861c"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if finite-order projected chart construction and a localized derivative-rank upper bound cannot jointly provide zero derivative on every orthogonal residual inverse-chart slice, or if the theorem requires nonstandard axioms.",
+      "Stop only if the finite-order pointwise rank-chart nullity theorem cannot be specialized with derivative-range and orthogonal-residual measurable spaces supplied as explicit inherited subtype parameters, or if the specialization requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.lean"
-       "ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.md"],
+      ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
+       "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK PROJECTED CHART-SLICE DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POINTWISE WITNESS EXPLICIT MEASURABLE SPACES",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
+        "/tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
         :sha256
-        "91c8cbf1a1619737e996b4c563515640192b2f676ddddcc29ed174de04f375f0"},
+        "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"},
        :declarations
-       ["exists_finiteOrder_projectedChart_residualSliceZero"],
+       ["projectedCoordinates_explicit_measurableSpace_borel_bindings"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Combine this chart-and-slice certificate with the installed positive-rank pointwise data and invoke the local nullity witness."},
+       "Invoke the explicit-measurable-space specialization with the installed positive-rank pointwise packet and repaired localized chart-slice certificate."},
       :representation
       {:source
-       "A finite-order smooth map with strict derivative at a chosen point, exact base rank, and a localized derivative-rank upper bound.",
+       "The generic finite-order pointwise rank-chart nullity witness whose coordinate measurable spaces are implicit typeclass parameters.",
        :target
-       "An existential projected local-rank chart containing the point, retaining finite-order inverse regularity and the range-coordinate formula, with zero derivative on every orthogonal residual inverse-chart slice."},
+       "A specialization taking the derivative-range and orthogonal-residual inherited measurable spaces explicitly before their Borel proofs, measures, and additive-Haar instances are elaborated."},
       :id
-      :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2,
+      :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-projected-smooth-chart-target-data-1
-       :critical-value-sard-finite-order-projected-chart-orthogonal-residual-slice-zero-1
-       :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1],
+      [:critical-value-sard-finite-order-pointwise-rank-chart-nullity-witness-1
+       :critical-value-sard-projected-coordinate-explicit-inherited-borel-data-1
+       :critical-value-sard-projected-coordinate-explicit-inherited-measure-data-1
+       :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2],
       :current-residual
-      "Finite-order projected chart and residual-slice-zero data is compiled; assemble it with installed positive-rank dimension and measure data.",
+      "Explicit inherited measurable-space bindings compile; specialize the generic witness so its Borel and additive-Haar arguments share those bindings before the positive-rank invocation.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The installed positive-rank dimension and coordinate-measure context is banked, and a placeholder-free compiled fixture supplies its complementary analytic certificate: a finite-order projected local-rank chart containing the point, the range-coordinate formula, finite-order inverse regularity, and zero derivative on every orthogonal residual inverse-chart slice. The remaining work after this prerequisite is the direct local nullity-witness invocation and finite-rank aggregation.",
+     "The rectangular theorem is not refuted. The repaired localized projected chart now composes with the installed positive-rank dimension and measure data, but the generic pointwise witness synthesizes its coordinate BorelSpace arguments before its coordinate measures constrain the inherited subtype measurable spaces. The direct composition therefore fails exactly at BorelSpace (LinearMap.range L.toLinearMap), despite compiled explicitly fixed inherited Borel bindings. A bounded specialization exposing the coordinate measurable spaces as ordinary explicit parameters is required.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
+       :exit 1,
+       :expected-exit 1,
+       :output
+       "Direct composition reaches failed synthesis of BorelSpace (LinearMap.range L.toLinearMap) at the generic pointwise-witness application; no mathematical hypothesis fails."}
+      {:cmd
+       "lake env lean /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.exists_finiteOrder_projectedChart_residualSliceZero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'projectedCoordinates_explicit_measurableSpace_borel_bindings' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
        :exit 0,
        :output
-       "91c8cbf1a1619737e996b4c563515640192b2f676ddddcc29ed174de04f375f0  /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean"}
+       "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,44p' /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean | sha256sum",
+       "sed -n '6,17p' /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean | sha256sum",
        :exit 0,
        :output
-       "35d9c8b6e50c459456e6af1e61688293bed39de1748b6d911677926bd6097179  -"}
+       "f50c297800f7ad4285430c3748fb8f17b53d04c1786c59ee267d0fa6973a861c"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 262 items OK; {:done 254, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 263 items OK; {:done 255, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
        :output "1"}
-      {:cmd "readlink -f .lake/packages",
-       :exit 0,
-       :output "/home/joe/code/apm-lean/.lake/packages"}
-      {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
+      "/tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
       :sha256
-      "91c8cbf1a1619737e996b4c563515640192b2f676ddddcc29ed174de04f375f0"},
+      "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -34869,7 +34910,8 @@
     :critical-value-sard-projected-coordinate-explicit-inherited-measure-data-1
     :critical-value-sard-projected-coordinate-installed-inherited-measure-data-1
     :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1
-    :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2],
+    :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2
+    :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
