@@ -23734,6 +23734,40 @@
    "The implicit-function datum now exposes its canonical product-coordinate derivative equivalence and yields a smooth two-sided chart restriction; concrete derivative-range defining-field smoothness and formula instantiation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected smooth local-rank chart theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces and real inner-product target spaces, every map smooth at a base point with a strict derivative there, every finite differentiability order, the derivative-range and projected-kernel product coordinates, a base-point-containing restricted chart with the exact coordinate formula, forward and inverse ContDiffOn certificates, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedSmoothLocalRankChart.lean"
+    "ConstructionTargets/SardProjectedSmoothLocalRankChart.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED SMOOTH LOCAL-RANK CHART",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedSmoothLocalRankChartProbe.lean",
+     :sha256
+     "bdbb33a6bae6d1502e69d62d9b1da1bdd46e2708958f6add996f9674da1e3e5e"},
+    :declarations ["exists_projected_smooth_localRankChart"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the smooth projected chart on compact localized rank-upper pieces, identify the projected derivative and inverse-slice derivative at every fiber point, and discharge projected surjectivity and the ambient rank upper bound."},
+   :representation
+   {:source
+    "A smooth map at a base point together with its strict derivative and derivative-range implicit-function data.",
+    :target
+    "A base-point-preserving projected local-rank chart with the exact range/kernel coordinate formula and forward and inverse ContDiffOn regularity."},
+   :id :critical-value-sard-projected-smooth-local-rank-chart-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-implicit-function-data-smooth-chart-1
+    :critical-value-sard-projected-complemented-strict-derivative-data-1
+    :critical-value-sard-first-derivative-projected-chart-formula-1],
+   :current-residual
+   "The derivative-range projection and projected-kernel coordinate fields now instantiate the smooth implicit-chart package while preserving the exact chart formula; pointwise fiber derivative, projected surjectivity, and localized rank-bound instantiation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -23787,50 +23821,50 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate the smooth implicit-chart package with the derivative-range projection of f and the kernel orthogonal projection, preserving the exact projected-chart formula; then discharge projected surjectivity and the localized rank upper bound.",
+     "Use the smooth projected chart on compact localized rank-upper pieces, identify the projected derivative and inverse-slice derivative at every fiber point, and discharge projected surjectivity and the ambient rank upper bound.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_smooth_chart_restriction"
-      "5d9aa56e8f40c7398e307c3ae7b6c439986bd34a5dee712a7e60c22c5b01dfba"},
+     {"exists_projected_smooth_localRankChart"
+      "d48e224b7c2679963e15e95c4b1795b8543f5df4e48fcff39c7df0c13bffc0f4"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled smooth implicit-function chart theorem cannot be promoted for arbitrary complete real normed source and product-coordinate spaces, every implicit-function datum, every finite differentiability order, pointwise smoothness of both defining fields at the base point, a base-point-preserving restricted chart retaining the exact product defining function, forward and inverse ContDiffOn certificates, or standard-axiom profile.",
+      "Stop only if the compiled projected smooth local-rank chart theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces and real inner-product target spaces, every map smooth at a base point with a strict derivative there, every finite differentiability order, the derivative-range and projected-kernel product coordinates, a base-point-containing restricted chart with the exact coordinate formula, forward and inverse ContDiffOn certificates, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardImplicitFunctionDataSmoothChart.lean"
-       "ConstructionTargets/SardImplicitFunctionDataSmoothChart.md"],
+      ["ConstructionTargets/SardProjectedSmoothLocalRankChart.lean"
+       "ConstructionTargets/SardProjectedSmoothLocalRankChart.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH IMPLICIT-FUNCTION CHART PACKAGE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED SMOOTH LOCAL-RANK CHART",
       :acceptance
       {:fixture
-       {:path "/tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
+       {:path "/tmp/SardProjectedSmoothLocalRankChartProbe.lean",
         :sha256
-        "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07"},
-       :declarations ["exists_smooth_chart_restriction"],
+        "bdbb33a6bae6d1502e69d62d9b1da1bdd46e2708958f6add996f9674da1e3e5e"},
+       :declarations ["exists_projected_smooth_localRankChart"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the smooth implicit-chart package with the derivative-range projection of f and the kernel orthogonal projection, preserving the exact projected-chart formula; then discharge projected surjectivity and the localized rank upper bound."},
+       "Use the smooth projected chart on compact localized rank-upper pieces, identify the projected derivative and inverse-slice derivative at every fiber point, and discharge projected surjectivity and the ambient rank upper bound."},
       :representation
       {:source
-       "An implicit-function datum whose left and right defining fields are smooth at its base point.",
+       "A smooth map at a base point together with its strict derivative and derivative-range implicit-function data.",
        :target
-       "A base-point-preserving restricted product chart with the exact defining function and forward and inverse ContDiffOn regularity."},
-      :id :critical-value-sard-implicit-function-data-smooth-chart-1,
+       "A base-point-preserving projected local-rank chart with the exact range/kernel coordinate formula and forward and inverse ContDiffOn regularity."},
+      :id :critical-value-sard-projected-smooth-local-rank-chart-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-open-partial-homeomorph-smooth-refinement-1
+      [:critical-value-sard-implicit-function-data-smooth-chart-1
        :critical-value-sard-projected-complemented-strict-derivative-data-1
        :critical-value-sard-first-derivative-projected-chart-formula-1],
       :current-residual
-      "The implicit-function datum now exposes its canonical product-coordinate derivative equivalence and yields a smooth two-sided chart restriction; concrete derivative-range defining-field smoothness and formula instantiation remain.",
+      "The derivative-range projection and projected-kernel coordinate fields now instantiate the smooth implicit-chart package while preserving the exact chart formula; pointwise fiber derivative, projected surjectivity, and localized rank-bound instantiation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The implicit-function datum already contains the surjective complementary derivatives needed to form a continuous-linear equivalence at the base point. A placeholder-free compiled fixture combines that canonical equivalence with the smooth-refinement theorem, retaining the exact product defining function and producing forward and inverse ContDiffOn certificates. The next concrete step is only to instantiate the two defining fields with the derivative-range and kernel projections and preserve the projected-chart formula.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture constructs the concrete smooth projected local-rank chart from the derivative-range projection of the ambient map and orthogonal projection onto the projected kernel. It retains the exact coordinate formula, base-point membership, and forward/inverse ContDiffOn certificates. The remaining analytic step is now pointwise on localized fibers: instantiate the projected and inverse-slice derivatives, projected surjectivity, and the ambient rank bound.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
@@ -23839,29 +23873,29 @@
        "sed -n '100,190p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
+       "lake env lean /tmp/SardProjectedSmoothLocalRankChartProbe.lean",
        :exit 0,
        :output
-       "'SardImplicitFunctionDataSmoothChartProbe.exists_smooth_chart_restriction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedSmoothLocalRankChartProbe.exists_projected_smooth_localRankChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
+       "sha256sum /tmp/SardProjectedSmoothLocalRankChartProbe.lean",
        :exit 0,
        :output
-       "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07  /tmp/SardImplicitFunctionDataSmoothChartProbe.lean"}
+       "bdbb33a6bae6d1502e69d62d9b1da1bdd46e2708958f6add996f9674da1e3e5e  /tmp/SardProjectedSmoothLocalRankChartProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedSmoothLocalRankChartProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '13,32p' /tmp/SardImplicitFunctionDataSmoothChartProbe.lean | sha256sum",
+       "sed -n '14,51p' /tmp/SardProjectedSmoothLocalRankChartProbe.lean | sha256sum",
        :exit 0,
        :output
-       "5d9aa56e8f40c7398e307c3ae7b6c439986bd34a5dee712a7e60c22c5b01dfba  -"}
+       "d48e224b7c2679963e15e95c4b1795b8543f5df4e48fcff39c7df0c13bffc0f4  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 181 items OK; {:done 173, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 182 items OK; {:done 174, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -23876,12 +23910,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
+     {:path "/tmp/SardProjectedSmoothLocalRankChartProbe.lean",
       :sha256
-      "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07"},
+      "bdbb33a6bae6d1502e69d62d9b1da1bdd46e2708958f6add996f9674da1e3e5e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -24011,7 +24045,8 @@
     :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1
     :critical-value-sard-open-partial-homeomorph-contdiff-on-symm-1
     :critical-value-sard-open-partial-homeomorph-smooth-refinement-1
-    :critical-value-sard-implicit-function-data-smooth-chart-1],
+    :critical-value-sard-implicit-function-data-smooth-chart-1
+    :critical-value-sard-projected-smooth-local-rank-chart-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
