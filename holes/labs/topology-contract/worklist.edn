@@ -23451,6 +23451,41 @@
    "Inverse ContDiffOn regularity now follows uniformly from forward chart regularity and pointwise derivative equivalences; those two certificates remain to be exposed by the concrete projected chart construction.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled smooth open-chart refinement theorem cannot be promoted for arbitrary real normed source and target spaces with complete source, every finite differentiability order, every open partial homeomorphism and source base point, a continuous-linear-equivalence derivative and forward smoothness at that point, a restricted chart retaining the same forward function and base-point membership, forward and inverse ContDiffOn certificates, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardOpenPartialHomeomorphSmoothRefinement.lean"
+    "ConstructionTargets/SardOpenPartialHomeomorphSmoothRefinement.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH OPEN-CHART REFINEMENT",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
+     :sha256
+     "292b780c2fa53159e560beb0e30fb5d49ff99a8193293c98e9aec4f9dc47a772"},
+    :declarations ["exists_smooth_restriction_at"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the refinement at the projected local-rank chart base point using its product-coordinate derivative equivalence and forward ContDiffAt certificate; then apply compact projected-chart nullity on the refined source."},
+   :representation
+   {:source
+    "An open partial homeomorphism with a regular smooth base point.",
+    :target
+    "A source restriction retaining the same chart function and base point, with forward and inverse ContDiffOn regularity across its complete source and target."},
+   :id
+   :critical-value-sard-open-partial-homeomorph-smooth-refinement-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-open-partial-homeomorph-contdiff-on-symm-1
+    :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1
+    :critical-value-sard-first-derivative-projected-chart-formula-1],
+   :current-residual
+   "A single regular base-point certificate now produces a refined projected chart smooth in both directions, avoiding any global derivative-equivalence hypothesis; concrete product-coordinate derivative equivalence and forward smoothness at the base point remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -23504,81 +23539,83 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "For the concrete projected local-rank chart, prove forward ContDiffOn regularity and a continuous-linear-equivalence derivative certificate at every source point; then inverse ContDiffOn and all inverse-slice derivative certificates follow.",
+     "Instantiate the refinement at the projected local-rank chart base point using its product-coordinate derivative equivalence and forward ContDiffAt certificate; then apply compact projected-chart nullity on the refined source.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"contDiffOn_symm_of_forall_hasFDerivAt_equiv"
-      "50eda7028918d47c8b52e39a2f1b532f096672c4c58db1bd726c205876b686f9"},
+     {"exists_smooth_restriction_at"
+      "51d973104ee02fc3bd714417e61e67d06d338e044ed76aaeea6fd16fc09044b2"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled open-partial-homeomorph inverse regularity theorem cannot be promoted for arbitrary real normed source and target spaces with complete source, every open partial homeomorphism, every differentiability order, continuous differentiability of its forward map on the source, a continuous-linear-equivalence derivative certificate at every source point, continuous differentiability of its inverse throughout the target, or standard-axiom profile.",
+      "Stop only if the compiled smooth open-chart refinement theorem cannot be promoted for arbitrary real normed source and target spaces with complete source, every finite differentiability order, every open partial homeomorphism and source base point, a continuous-linear-equivalence derivative and forward smoothness at that point, a restricted chart retaining the same forward function and base-point membership, forward and inverse ContDiffOn certificates, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.lean"
-       "ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.md"],
+      ["ConstructionTargets/SardOpenPartialHomeomorphSmoothRefinement.lean"
+       "ConstructionTargets/SardOpenPartialHomeomorphSmoothRefinement.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / OPEN PARTIAL HOMEOMORPHISM INVERSE REGULARITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH OPEN-CHART REFINEMENT",
       :acceptance
       {:fixture
-       {:path "/tmp/SardOpenPartialHomeomorphContDiffOnSymmProbe.lean",
+       {:path
+        "/tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
         :sha256
-        "fdb1297fe427b4265dea028008ff66a4c298ef9092256d12fcbf65c4b87fa01a"},
-       :declarations ["contDiffOn_symm_of_forall_hasFDerivAt_equiv"],
+        "292b780c2fa53159e560beb0e30fb5d49ff99a8193293c98e9aec4f9dc47a772"},
+       :declarations ["exists_smooth_restriction_at"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "For the concrete projected local-rank chart, prove forward ContDiffOn regularity and a continuous-linear-equivalence derivative certificate at every source point; then inverse ContDiffOn and all inverse-slice derivative certificates follow."},
+       "Instantiate the refinement at the projected local-rank chart base point using its product-coordinate derivative equivalence and forward ContDiffAt certificate; then apply compact projected-chart nullity on the refined source."},
       :representation
       {:source
-       "Continuous differentiability of an open partial homeomorphism on its source together with an invertible Frechet derivative at every source point.",
+       "An open partial homeomorphism with a regular smooth base point.",
        :target
-       "Continuous differentiability of the inverse map throughout the complete open target."},
+       "A source restriction retaining the same chart function and base point, with forward and inverse ContDiffOn regularity across its complete source and target."},
       :id
-      :critical-value-sard-open-partial-homeomorph-contdiff-on-symm-1,
+      :critical-value-sard-open-partial-homeomorph-smooth-refinement-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1
+      [:critical-value-sard-open-partial-homeomorph-contdiff-on-symm-1
+       :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1
        :critical-value-sard-first-derivative-projected-chart-formula-1],
       :current-residual
-      "Inverse ContDiffOn regularity now follows uniformly from forward chart regularity and pointwise derivative equivalences; those two certificates remain to be exposed by the concrete projected chart construction.",
+      "A single regular base-point certificate now produces a refined projected chart smooth in both directions, avoiding any global derivative-equivalence hypothesis; concrete product-coordinate derivative equivalence and forward smoothness at the base point remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The current projected chart construction retains a strict derivative only at its base point and does not expose inverse regularity across the chart target. A placeholder-free compiled fixture supplies the exact generic bridge: forward ContDiffOn plus an equivalence-valued derivative at every source point yields inverse ContDiffOn everywhere. The remaining concrete obligation is confined to retaining those forward regularity and derivative-equivalence certificates in the projected local-rank chart package.",
+     "The rectangular theorem is not refuted. Requiring an equivalence-valued derivative throughout the original chart source is unnecessary: the open partial homeomorphism can be restricted to its finite-order smooth locus. A placeholder-free compiled fixture proves that a smooth regular base point survives this restriction, the forward chart function is unchanged, and both directions are ContDiffOn. The remaining obligation is now local and concrete: supply the projected product-coordinate derivative equivalence and forward ContDiffAt certificate at the base point.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '872,915p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/Operations.lean",
+       "sed -n '990,1012p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/Operations.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardOpenPartialHomeomorphContDiffOnSymmProbe.lean",
+       "lake env lean /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
        :exit 0,
        :output
-       "'SardOpenPartialHomeomorphContDiffOnSymmProbe.contDiffOn_symm_of_forall_hasFDerivAt_equiv' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardOpenPartialHomeomorphSmoothRefinementProbe.exists_smooth_restriction_at' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardOpenPartialHomeomorphContDiffOnSymmProbe.lean",
+       "sha256sum /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
        :exit 0,
        :output
-       "fdb1297fe427b4265dea028008ff66a4c298ef9092256d12fcbf65c4b87fa01a  /tmp/SardOpenPartialHomeomorphContDiffOnSymmProbe.lean"}
+       "292b780c2fa53159e560beb0e30fb5d49ff99a8193293c98e9aec4f9dc47a772  /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOpenPartialHomeomorphContDiffOnSymmProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '11,22p' /tmp/SardOpenPartialHomeomorphContDiffOnSymmProbe.lean | sha256sum",
+       "sed -n '11,31p' /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean | sha256sum",
        :exit 0,
        :output
-       "50eda7028918d47c8b52e39a2f1b532f096672c4c58db1bd726c205876b686f9  -"}
+       "51d973104ee02fc3bd714417e61e67d06d338e044ed76aaeea6fd16fc09044b2  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 179 items OK; {:done 171, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 180 items OK; {:done 172, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -23593,12 +23630,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardOpenPartialHomeomorphContDiffOnSymmProbe.lean",
+     {:path "/tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
       :sha256
-      "fdb1297fe427b4265dea028008ff66a4c298ef9092256d12fcbf65c4b87fa01a"},
+      "292b780c2fa53159e560beb0e30fb5d49ff99a8193293c98e9aec4f9dc47a772"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -23726,7 +23763,8 @@
     :critical-value-sard-projected-chart-slice-projected-derivative-zero-1
     :critical-value-sard-range-projection-coordinate-derivative-1
     :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1
-    :critical-value-sard-open-partial-homeomorph-contdiff-on-symm-1],
+    :critical-value-sard-open-partial-homeomorph-contdiff-on-symm-1
+    :critical-value-sard-open-partial-homeomorph-smooth-refinement-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
