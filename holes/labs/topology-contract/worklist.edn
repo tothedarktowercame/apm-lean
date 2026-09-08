@@ -22674,6 +22674,47 @@
       :output
       "[master ed9eefd8] Add residual derivative zero composition bridge\n2 files changed, 31 insertions(+)\ncreate mode 100644 ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean\ncreate mode 100644 ConstructionTargets/SardResidualDerivativeCompositionEqZero.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788863675136-14866-8f067999",
+     :commands
+     [{:cmd
+       "git rev-parse ed9eefd8; git show --stat --oneline --decorate=no ed9eefd8; git diff-tree --no-commit-id --name-only -r ed9eefd8; git show ed9eefd8:ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean; git show ed9eefd8:ConstructionTargets/SardResidualDerivativeCompositionEqZero.md",
+       :exit 0,
+       :output
+       "ed9eefd8e263a09136b225f26db2df6d10b1cb89; exact two-path scope"}
+      {:cmd
+       "git show ed9eefd8e263a09136b225f26db2df6d10b1cb89:ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean > /tmp/sard-residual-composition-review.f2WmzL/SardResidualDerivativeCompositionEqZero.lean; git show ed9eefd8e263a09136b225f26db2df6d10b1cb89:ConstructionTargets/SardResidualDerivativeCompositionEqZero.md > /tmp/sard-residual-composition-review.f2WmzL/SardResidualDerivativeCompositionEqZero.md; sha256sum /tmp/sard-residual-composition-review.f2WmzL/SardResidualDerivativeCompositionEqZero.lean /tmp/sard-residual-composition-review.f2WmzL/SardResidualDerivativeCompositionEqZero.md",
+       :exit 0,
+       :output
+       "7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7 Lean; 670bcbf2ca564ead2c8d13d1d1fc574c7d3615dee89d03ba3f8b44d6fc8e0cae MD"}
+      {:cmd
+       "lake env lean /tmp/sard-residual-composition-review.f2WmzL/SardResidualDerivativeCompositionEqZero.lean",
+       :exit 0,
+       :output
+       "residual_comp_deriv_comp_eq_zero depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-residual-composition-review.f2WmzL/SardResidualDerivativeCompositionEqZero.lean /tmp/sard-residual-composition-review.f2WmzL/SardResidualDerivativeCompositionEqZero.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '13,18p' /tmp/sard-residual-composition-review.f2WmzL/SardResidualDerivativeCompositionEqZero.lean | sha256sum",
+       :exit 0,
+       :output
+       "58c736c03461a02b05aaba62de42bb4adeb144f92dd37b480e5a92fc5f77255e  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 175 items OK; {:done 166, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' ed9eefd8e263a09136b225f26db2df6d10b1cb89",
+       :exit 0,
+       :output
+       "ed9eefd8e263a09136b225f26db2df6d10b1cb89; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended orientation and exact representation boundary: pointwise annihilation Q (D (J v)) = 0 for every slice direction is converted by continuous-linear-map extensionality into Q.comp (D.comp J) = 0. It neither assumes nor manufactures the concrete rank-upper annihilation fact, which remains correctly identified as the consumer residual. No warning, scope defect, or worktree change was found."},
     :commit "ed9eefd8",
     :changed-paths
     ["ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean"
@@ -22685,7 +22726,7 @@
     :declarations ["residual_comp_deriv_comp_eq_zero"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean"
     "ConstructionTargets/SardResidualDerivativeCompositionEqZero.md"],
@@ -22865,7 +22906,7 @@
       "7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
