@@ -20127,6 +20127,30 @@
       :output
       "[master f15212ea] add derivative rank upper locus closedness\n 2 files changed, 38 insertions(+)\n create mode 100644 ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean\n create mode 100644 ConstructionTargets/SardDerivativeRankUpperLocusClosed.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788855322219-14711-811be025",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat f15212ea940f9f3882f07b9b6e52ee1d86afce26; git diff-tree --no-commit-id --name-only -r f15212ea940f9f3882f07b9b6e52ee1d86afce26; git show f15212ea940f9f3882f07b9b6e52ee1d86afce26:ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean; git show f15212ea940f9f3882f07b9b6e52ee1d86afce26:ConstructionTargets/SardDerivativeRankUpperLocusClosed.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardDerivativeRankUpperLocusClosedProbe.lean ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean ConstructionTargets/SardDerivativeRankUpperLocusClosed.md; sed -n '10,16p' ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean | sha256sum; lake env lean /tmp/SardDerivativeRankUpperLocusClosedProbe.lean; lake env lean ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean; lake build ConstructionTargets.SardDerivativeRankUpperLocusClosed",
+       :exit 0}
+      {:cmd
+       "git show f15212ea940f9f3882f07b9b6e52ee1d86afce26:ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show f15212ea940f9f3882f07b9b6e52ee1d86afce26:ConstructionTargets/SardDerivativeRankUpperLocusClosed.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; for d in 91c9a393964ec1d01769ad15916bf68c7d859e03 233afc925e09901e499d227ee5ff0ff966dd3119; do git merge-base --is-ancestor \"$d\" f15212ea940f9f3882f07b9b6e52ee1d86afce26 || exit 1; done; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check f15212ea940f9f3882f07b9b6e52ee1d86afce26^ f15212ea940f9f3882f07b9b6e52ee1d86afce26; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit f15212ea940f9f3882f07b9b6e52ee1d86afce26 by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is d7ada94586a07f25273acf8b9ad88c398488fdcee2d1597ea8d7694fff10b92f; committed file hashes reproduce as 4a4cfc005dd7912cf2a6dbb36fee94f6ddf5c38131bbca94e584acdec0b72367 and 09fc3a699086c4b83f20959c4036640576e6beefb54e1bac51c83f19bf9e7735, and the frozen declaration-region hash is 0253cadcdb71ccaf746aca00004a438911e91da0e4e7b5bd806922327f646c87. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The theorem’s complement/open argument is correctly oriented: the complement of the finrank-at-most-r locus is identified with the derivative-rank-at-least-(r+1) locus, whose openness follows from C¹ continuity of the derivative. Finite-dimensionality converts cardinal rank to finrank, and the natural-number inequality is discharged exactly; the result covers every r and claims only closedness of the global rank-upper locus. Both recorded dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 157 items with {:done 148, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "f15212ea940f9f3882f07b9b6e52ee1d86afce26",
     :changed-paths
     ["ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean"
@@ -20137,7 +20161,7 @@
      "d7ada94586a07f25273acf8b9ad88c398488fdcee2d1597ea8d7694fff10b92f"},
     :declarations ["isClosed_derivativeRankAtMost"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean"
     "ConstructionTargets/SardDerivativeRankUpperLocusClosed.md"],
@@ -20314,7 +20338,7 @@
       "d7ada94586a07f25273acf8b9ad88c398488fdcee2d1597ea8d7694fff10b92f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
