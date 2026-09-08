@@ -29496,6 +29496,42 @@
    "The complete order-one first-nonzero-jet locus is null under pointwise lower-dimensional induction; Taylor-flat and higher-jet finite assembly remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled localized finite-jet closed-open assembly theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, additive Haar target measures, every global C1 map and localized source set, Taylor-flat image nullity, higher first-nonzero-jet image nullity, critical containment and pointwise lower-dimensional induction for the order-one locus, zero image measure of the complete localized source set, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.lean"
+    "ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED FINITE-JET CLOSED-OPEN ASSEMBLY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
+     :sha256
+     "f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38"},
+    :declarations ["image_zero_of_flat_higher_and_closedOpen_first"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate Taylor-flat and higher-jet nullity from the rectangular localized hypotheses."},
+   :representation
+   {:source
+    "Taylor-flat image nullity, complete order-one closed-open critical-locus nullity, and image nullity of every higher first-nonzero-jet locus for a localized source set.",
+    :target
+    "Zero additive-Haar measure of the image of the complete localized source set."},
+   :id
+   :critical-value-sard-localized-finite-jet-closed-open-assembly-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-derivative-locus-closed-open-finite-aggregation-1
+    :critical-value-sard-first-nonzero-jet-finite-assembly-1
+    :critical-value-sard-localized-flat-through-taylor-nullity-1
+    :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
+   :current-residual
+   "The finite-jet branches assemble to localized image nullity; concrete Taylor-flat and higher-locus induction instantiation from rectangular hypotheses remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -29549,53 +29585,54 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Combine order-one locus nullity with Taylor-flat nullity and the banked higher first-nonzero-jet induction assembly.",
+     "Instantiate Taylor-flat nullity and higher first-nonzero-jet induction from the rectangular localized hypotheses, then expose the rectangular local theorem.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"firstNonzeroJetLocus_one_image_zero_of_closedOpen_rankPieces"
-      "311630cd9c61a1a20dbbaa03a9663307457152c0b3c07a2507250e6f602ebcd9"},
+     {"image_zero_of_flat_higher_and_closedOpen_first"
+      "68dcf0b7797a10edd69a6150732712e0e0aa1d803b886fca2eed7bab912ca2a1"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled finite-rank closed-open aggregation theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, additive Haar target measures, every global C1 map, containment of the order-one first-nonzero-jet locus in the critical set, pointwise compatible lower-dimensional induction on every derivative-dependent projected kernel coordinate, zero image measure of the complete order-one locus, or standard-axiom profile.",
+      "Stop only if the compiled localized finite-jet closed-open assembly theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, additive Haar target measures, every global C1 map and localized source set, Taylor-flat image nullity, higher first-nonzero-jet image nullity, critical containment and pointwise lower-dimensional induction for the order-one locus, zero image measure of the complete localized source set, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstDerivativeLocusClosedOpenFiniteAggregation.lean"
-       "ConstructionTargets/SardFirstDerivativeLocusClosedOpenFiniteAggregation.md"],
+      ["ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.lean"
+       "ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE CLOSED-OPEN FINITE-RANK AGGREGATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED FINITE-JET CLOSED-OPEN ASSEMBLY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstDerivativeLocusClosedOpenFiniteAggregationProbe.lean",
+        "/tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
         :sha256
-        "6bb834332194a504eade5a841d3d5dd1f685004e990d212c10bc8e959c877e8c"},
+        "f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38"},
        :declarations
-       ["firstNonzeroJetLocus_one_image_zero_of_closedOpen_rankPieces"],
+       ["image_zero_of_flat_higher_and_closedOpen_first"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Combine the order-one result with Taylor-flat nullity and higher first-nonzero-jet locus nullity."},
+       "Instantiate Taylor-flat and higher-jet nullity from the rectangular localized hypotheses."},
       :representation
       {:source
-       "Nullity of every exact derivative-rank piece of the order-one first-nonzero-jet critical locus, supplied by pointwise lower-dimensional induction.",
+       "Taylor-flat image nullity, complete order-one closed-open critical-locus nullity, and image nullity of every higher first-nonzero-jet locus for a localized source set.",
        :target
-       "Zero additive-Haar measure of the image of the complete order-one first-nonzero-jet locus."},
+       "Zero additive-Haar measure of the image of the complete localized source set."},
       :id
-      :critical-value-sard-first-derivative-locus-closed-open-finite-aggregation-1,
+      :critical-value-sard-localized-finite-jet-closed-open-assembly-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-derivative-rank-piece-closed-open-aggregation-1
-       :critical-value-sard-first-derivative-locus-rank-aggregation-1
-       :critical-value-sard-first-nonzero-jet-finite-assembly-1],
+      [:critical-value-sard-first-derivative-locus-closed-open-finite-aggregation-1
+       :critical-value-sard-first-nonzero-jet-finite-assembly-1
+       :critical-value-sard-localized-flat-through-taylor-nullity-1
+       :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
       :current-residual
-      "The complete order-one first-nonzero-jet locus is null under pointwise lower-dimensional induction; Taylor-flat and higher-jet finite assembly remain.",
+      "The finite-jet branches assemble to localized image nullity; concrete Taylor-flat and higher-locus induction instantiation from rectangular hypotheses remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture instantiates the closed-open exact-rank aggregation theorem for every finite critical rank, obtains nonsurjectivity from the supplied critical-locus containment, threads the pointwise lower-dimensional induction hypothesis through each derivative-dependent kernel coordinate, and applies the banked rank-strata aggregation theorem. The complete order-one first-nonzero-jet locus is now null.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the new order-one closed-open finite-rank theorem with the banked Taylor-flat and higher first-nonzero-jet nullity inputs through the reviewed finite-jet assembly theorem, proving zero image measure for the complete localized source set. The remaining work is to instantiate the flat and higher-locus inputs from the rectangular smoothness, dimension, compact-localization, and source-induction hypotheses.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
@@ -29604,27 +29641,27 @@
        "rg -n -C 6 dependency-receipts holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstDerivativeLocusClosedOpenFiniteAggregationProbe.lean",
+       "lake env lean /tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardFirstDerivativeLocusClosedOpenFiniteAggregationProbe.lean",
+       "sha256sum /tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
        :exit 0,
        :output
-       "6bb834332194a504eade5a841d3d5dd1f685004e990d212c10bc8e959c877e8c"}
+       "f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38"}
       {:cmd
-       "rg placeholder-and-unsafe-patterns /tmp/SardFirstDerivativeLocusClosedOpenFiniteAggregationProbe.lean",
+       "rg placeholder-and-unsafe-patterns /tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,43p' /tmp/SardFirstDerivativeLocusClosedOpenFiniteAggregationProbe.lean | sha256sum",
+       "sed -n '9,43p' /tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean | sha256sum",
        :exit 0,
        :output
-       "311630cd9c61a1a20dbbaa03a9663307457152c0b3c07a2507250e6f602ebcd9"}
+       "68dcf0b7797a10edd69a6150732712e0e0aa1d803b886fca2eed7bab912ca2a1"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 221 items OK; {:done 213, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 222 items OK; {:done 214, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -29638,13 +29675,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardFirstDerivativeLocusClosedOpenFiniteAggregationProbe.lean",
+     {:path "/tmp/SardLocalizedFiniteJetClosedOpenAssemblyProbe.lean",
       :sha256
-      "6bb834332194a504eade5a841d3d5dd1f685004e990d212c10bc8e959c877e8c"},
+      "f5ca23f8b30255188877ccf12784832541d56ce031f2b849d9468bbdc5e1db38"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -29814,7 +29850,8 @@
     :critical-value-sard-exact-rank-closed-open-projected-chart-nullity-1
     :critical-value-sard-first-derivative-rank-piece-pointwise-closed-open-nullity-1
     :critical-value-sard-first-derivative-rank-piece-closed-open-aggregation-1
-    :critical-value-sard-first-derivative-locus-closed-open-finite-aggregation-1],
+    :critical-value-sard-first-derivative-locus-closed-open-finite-aggregation-1
+    :critical-value-sard-localized-finite-jet-closed-open-assembly-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
