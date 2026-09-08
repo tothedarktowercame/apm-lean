@@ -22345,6 +22345,41 @@
    "All fixed-coordinate inverse slices inherit pointwise regularity from one ContDiffOn certificate for the projected chart inverse; the concrete chart certificate and residual derivative vanishing remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled indexed residual inverse-slice regularity theorem cannot be promoted for arbitrary real normed source, target, product-coordinate, and residual spaces, every open partial homeomorphism, every differentiability order, smoothness of the chart inverse on its target and ambient map on its source, every continuous-linear residual coordinate, smoothness of every fixed-first-coordinate residual inverse slice, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean"
+    "ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / INDEXED PROJECTED-CHART RESIDUAL-SLICE REGULARITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
+     :sha256
+     "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2"},
+    :declarations ["contDiffAt_residual_inverseSlices_of_contDiffOn"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Expose ContDiffOn regularity of the concrete projected implicit chart inverse on its target and of the ambient map on its chart source, then prove zero residual projection derivative on every localized rank-upper slice."},
+   :representation
+   {:source
+    "Global smoothness certificates for a product-chart inverse on its target and an ambient map on the chart source.",
+    :target
+    "The complete indexed family of pointwise smoothness certificates for residual target coordinates along every fixed-first-coordinate inverse slice."},
+   :id
+   :critical-value-sard-projected-chart-residual-slices-contdiff-on-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-chart-inverse-slice-contdiff-on-1
+    :critical-value-sard-projected-chart-inverse-slice-composition-contdiff-1
+    :critical-value-sard-compact-projected-chart-image-nullity-1],
+   :current-residual
+   "Two global ContDiffOn certificates now discharge every indexed residual inverse-slice regularity hypothesis; the concrete projected-chart certificates and zero residual derivative remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -22398,87 +22433,89 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Expose sufficient ContDiffOn regularity of the concrete projected local-rank chart inverse on its target and prove zero residual projection derivative on the localized rank-upper slice.",
+     "Expose ContDiffOn regularity of the concrete projected implicit chart inverse on its target and of the ambient map on its chart source, then prove zero residual projection derivative on every localized rank-upper slice.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"contDiffAt_inverseSlice_of_contDiffOn_symm"
-      "522c4e5ac8d81b684a51e9f1347e7f8981d041ad56da28aa1f1515f1bb2a381f"},
+     {"contDiffAt_residual_inverseSlices_of_contDiffOn"
+      "b029cffabb145e16e78ff8514f0fc25d31c46235669b9f15dd97933ccd748e73"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled all-point projected-chart inverse-slice regularity theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism, every differentiability order, smoothness of the chart inverse on its open target, every target point and fixed-first-coordinate slice through it, preservation of pointwise smoothness under slice restriction, or standard-axiom profile.",
+      "Stop only if the compiled indexed residual inverse-slice regularity theorem cannot be promoted for arbitrary real normed source, target, product-coordinate, and residual spaces, every open partial homeomorphism, every differentiability order, smoothness of the chart inverse on its target and ambient map on its source, every continuous-linear residual coordinate, smoothness of every fixed-first-coordinate residual inverse slice, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean"
-       "ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.md"],
+      ["ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean"
+       "ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ALL-POINT PROJECTED-CHART INVERSE-SLICE REGULARITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / INDEXED PROJECTED-CHART RESIDUAL-SLICE REGULARITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean",
+        "/tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
         :sha256
-        "a75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b"},
-       :declarations ["contDiffAt_inverseSlice_of_contDiffOn_symm"],
+        "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2"},
+       :declarations
+       ["contDiffAt_residual_inverseSlices_of_contDiffOn"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Expose sufficient ContDiffOn regularity of the concrete projected local-rank chart inverse on its target and prove zero residual projection derivative on the localized rank-upper slice."},
+       "Expose ContDiffOn regularity of the concrete projected implicit chart inverse on its target and of the ambient map on its chart source, then prove zero residual projection derivative on every localized rank-upper slice."},
       :representation
       {:source
-       "Smoothness of a product-chart inverse on the complete open chart target.",
+       "Global smoothness certificates for a product-chart inverse on its target and an ambient map on the chart source.",
        :target
-       "Pointwise smoothness of every fixed-first-coordinate inverse-chart slice at each point belonging to that target."},
+       "The complete indexed family of pointwise smoothness certificates for residual target coordinates along every fixed-first-coordinate inverse slice."},
       :id
-      :critical-value-sard-projected-chart-inverse-slice-contdiff-on-1,
+      :critical-value-sard-projected-chart-residual-slices-contdiff-on-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-inverse-slice-composition-contdiff-1
+      [:critical-value-sard-projected-chart-inverse-slice-contdiff-on-1
+       :critical-value-sard-projected-chart-inverse-slice-composition-contdiff-1
        :critical-value-sard-compact-projected-chart-image-nullity-1],
       :current-residual
-      "All fixed-coordinate inverse slices inherit pointwise regularity from one ContDiffOn certificate for the projected chart inverse; the concrete chart certificate and residual derivative vanishing remain.",
+      "Two global ContDiffOn certificates now discharge every indexed residual inverse-slice regularity hypothesis; the concrete projected-chart certificates and zero residual derivative remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture converts a single ContDiffOn certificate for an open product-chart inverse into pointwise smoothness of every fixed-first-coordinate slice throughout the chart target. Openness upgrades within-target regularity to ordinary pointwise regularity, and composition with the smooth coordinate insertion completes the restriction. This removes the fiber-indexed regularity bookkeeping; the remaining chart-specific obligation is to expose ContDiffOn for the concrete projected inverse and prove zero residual derivative on the rank-upper slice.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture composes the all-point inverse-slice restriction theorem with residual-coordinate composition. Smoothness of the chart inverse throughout its target and of the ambient map throughout its source now yields the entire family of residual inverse-slice smoothness hypotheses required by compact projected-chart nullity. The remaining analytic work is to expose those global certificates for the concrete implicit chart and establish residual derivative vanishing on the localized rank-upper slices.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "lake build ConstructionTargets.SardProjectedChartInverseSliceCompositionContDiff",
+       "lake build ConstructionTargets.SardProjectedChartInverseSliceContDiffOn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean",
+       "lake env lean /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
        :exit 0,
        :output
-       "'SardProjectedChartInverseSliceContDiffOnProbe.contDiffAt_inverseSlice_of_contDiffOn_symm' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedChartResidualSlicesContDiffOnProbe.contDiffAt_residual_inverseSlices_of_contDiffOn' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean",
+       "sha256sum /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
        :exit 0,
        :output
-       "a75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b  /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean"}
+       "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2  /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '12,19p' /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean | sha256sum",
+       "sed -n '15,27p' /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean | sha256sum",
        :exit 0,
        :output
-       "522c4e5ac8d81b684a51e9f1347e7f8981d041ad56da28aa1f1515f1bb2a381f  -"}
+       "b029cffabb145e16e78ff8514f0fc25d31c46235669b9f15dd97933ccd748e73  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 171 items OK; {:done 163, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 172 items OK; {:done 164, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean ConstructionTargets/SardCompactProjectedChartImageNullity.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean ConstructionTargets/SardCompactProjectedChartImageNullity.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nc93a550aa284982294aa0e3c460da9bd87de01af22ab1bb1220dc54b3a247a2a  ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean\n4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7  ConstructionTargets/SardCompactProjectedChartImageNullity.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\na75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b  ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean\nc93a550aa284982294aa0e3c460da9bd87de01af22ab1bb1220dc54b3a247a2a  ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean\n4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7  ConstructionTargets/SardCompactProjectedChartImageNullity.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -22489,12 +22526,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean",
+     {:path
+      "/tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
       :sha256
-      "a75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b"},
+      "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -22614,7 +22652,8 @@
     :critical-value-sard-compact-projected-chart-image-nullity-1
     :critical-value-sard-projected-chart-target-coordinate-first-component-1
     :critical-value-sard-projected-chart-inverse-slice-composition-contdiff-1
-    :critical-value-sard-projected-chart-inverse-slice-contdiff-on-1],
+    :critical-value-sard-projected-chart-inverse-slice-contdiff-on-1
+    :critical-value-sard-projected-chart-residual-slices-contdiff-on-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
