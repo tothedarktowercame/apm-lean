@@ -31764,6 +31764,42 @@
    "Finite-order slice regularity and rank-reduced admissibility are packaged; instantiate lower-dimensional nullity and complete the analytic dimension step.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the classical finite-order lower-dimensional induction hypothesis cannot be instantiated on a rank-reduced projected slice whose points are all critical, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean"
+    "ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-SLICE LOWER-DIMENSION NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
+     :sha256
+     "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08"},
+    :declarations ["image_null_of_lowerDimension_projectedSlice"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Supply projected-slice criticality from derivative annihilation and aggregate the local rank-slice nullity certificates."},
+   :representation
+   {:source
+    "A classical finite-order critical-nullity hypothesis at every strictly smaller source finrank, rank-reduced dimension identities and admissibility, finite-order slice regularity, and pointwise nonsurjectivity on the localized slice.",
+    :target
+    "Zero additive Haar measure of the image of the entire localized projected residual slice."},
+   :id
+   :critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-projected-slice-induction-data-1
+    :critical-value-sard-classical-finite-order-critical-nullity-predicate-1
+    :critical-value-sard-projected-slice-derivative-nonsurjective-1],
+   :current-residual
+   "Lower-dimensional nullity applies to a finite-order projected slice once its pointwise nonsurjectivity and dimension identities are supplied; aggregate these local certificates in the analytic dimension step.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -31817,80 +31853,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Use the finite-order projected-slice regularity and rank-reduced admissibility package to prove the classical critical-nullity source-dimension step.",
+     "Derive pointwise nonsurjectivity for the finite-order projected residual slices, apply lower-dimensional nullity, and aggregate the resulting local rank-slice certificates.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"finiteOrder_projectedSlice_induction_data"
-      "90b82648ed4f78d902b6efb062d37067bbef1b72ba56c8375a3f0e410eeb8af7"},
+     {"image_null_of_lowerDimension_projectedSlice"
+      "5a36e2a72bc3fb11f90ad0bbc280a721fc410349064a9fd6f385db5821079d34"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if projected residual slices cannot retain the original finite differentiability order while classical Sard admissibility is preserved under the common derivative-rank drop, or if the theorem requires nonstandard axioms.",
+      "Stop only if the classical finite-order lower-dimensional induction hypothesis cannot be instantiated on a rank-reduced projected slice whose points are all critical, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderProjectedSliceInductionData.lean"
-       "ConstructionTargets/SardFiniteOrderProjectedSliceInductionData.md"],
+      ["ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.lean"
+       "ConstructionTargets/SardFiniteOrderProjectedSliceLowerDimensionNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-SLICE INDUCTION DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-SLICE LOWER-DIMENSION NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderProjectedSliceInductionDataProbe.lean",
+        "/tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
         :sha256
-        "e2faf9e244f16b33ca037e2034534763ae1627eb57d74c10b4cdb136f984fda0"},
-       :declarations ["finiteOrder_projectedSlice_induction_data"],
+        "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08"},
+       :declarations ["image_null_of_lowerDimension_projectedSlice"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Invoke lower-dimensional classical critical nullity on each rank-reduced projected slice and assemble the analytic dimension step."},
+       "Supply projected-slice criticality from derivative annihilation and aggregate the local rank-slice nullity certificates."},
       :representation
       {:source
-       "Finite-order smoothness of the projected chart inverse and original map, plus classical Sard admissibility before subtracting derivative rank.",
+       "A classical finite-order critical-nullity hypothesis at every strictly smaller source finrank, rank-reduced dimension identities and admissibility, finite-order slice regularity, and pointwise nonsurjectivity on the localized slice.",
        :target
-       "Residual inverse-slice ContDiffAt regularity at the unchanged finite order together with classical Sard admissibility at the rank-reduced source and target dimensions."},
+       "Zero additive Haar measure of the image of the entire localized projected residual slice."},
       :id
-      :critical-value-sard-finite-order-projected-slice-induction-data-1,
+      :critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-residual-slices-contdiff-on-1
-       :critical-value-sard-rank-drop-regularity-admissibility-1
-       :critical-value-sard-classical-finite-order-critical-nullity-predicate-1],
+      [:critical-value-sard-finite-order-projected-slice-induction-data-1
+       :critical-value-sard-classical-finite-order-critical-nullity-predicate-1
+       :critical-value-sard-projected-slice-derivative-nonsurjective-1],
       :current-residual
-      "Finite-order slice regularity and rank-reduced admissibility are packaged; instantiate lower-dimensional nullity and complete the analytic dimension step.",
+      "Lower-dimensional nullity applies to a finite-order projected slice once its pointwise nonsurjectivity and dimension identities are supplied; aggregate these local certificates in the analytic dimension step.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. Reviewed chart regularity is already polymorphic in differentiability order, and the rank-drop theorem preserves classical Sard admissibility. A placeholder-free compiled fixture combines these facts into the exact projected-slice induction package. The remaining analytic step must use this package to invoke lower-dimensional critical nullity without collapsing regularity to C1.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture specializes the repaired classical finite-order induction predicate to a strictly lower-dimensional projected slice, rewrites the localized slice as its critical locus using pointwise nonsurjectivity, and concludes image nullity while retaining the rank-reduced admissibility and original finite order. The remaining work is to supply projected-slice criticality from the reviewed derivative-annihilation data and aggregate the slice certificates.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderProjectedSliceInductionDataProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderProjectedSliceInductionDataProbe.finiteOrder_projectedSlice_induction_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.image_null_of_lowerDimension_projectedSlice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderProjectedSliceInductionDataProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
        :exit 0,
        :output
-       "e2faf9e244f16b33ca037e2034534763ae1627eb57d74c10b4cdb136f984fda0  /tmp/SardFiniteOrderProjectedSliceInductionDataProbe.lean"}
+       "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08  /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedSliceInductionDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '13,30p' /tmp/SardFiniteOrderProjectedSliceInductionDataProbe.lean | sha256sum",
+       "sed -n '11,37p' /tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "90b82648ed4f78d902b6efb062d37067bbef1b72ba56c8375a3f0e410eeb8af7  -"}
+       "5a36e2a72bc3fb11f90ad0bbc280a721fc410349064a9fd6f385db5821079d34  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 240 items OK; {:done 232, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 241 items OK; {:done 233, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -31909,12 +31945,12 @@
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderProjectedSliceInductionDataProbe.lean",
+      "/tmp/SardFiniteOrderProjectedSliceLowerDimensionNullityProbe.lean",
       :sha256
-      "e2faf9e244f16b33ca037e2034534763ae1627eb57d74c10b4cdb136f984fda0"},
+      "aa49d8976b96a3e2a983dc161ccdb410a0f4ed6d0119f5122182c6b9f76dae08"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -32103,7 +32139,8 @@
     :critical-value-sard-classical-regularity-admissibility-1
     :critical-value-sard-classical-finite-order-critical-nullity-predicate-1
     :critical-value-sard-rank-drop-regularity-admissibility-1
-    :critical-value-sard-finite-order-projected-slice-induction-data-1],
+    :critical-value-sard-finite-order-projected-slice-induction-data-1
+    :critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
