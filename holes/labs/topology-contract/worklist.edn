@@ -28125,6 +28125,43 @@
    "All coordinate instances, measure construction, target-coordinate conversion, and compact-nullity application are compiled; only concrete exact-rank chart hypothesis instantiation remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled exact-rank projected-chart compact-nullity theorem cannot be promoted for arbitrary finite-dimensional real normed source and slice spaces, finite-dimensional real inner-product Borel targets with additive Haar measure, every nonsurjective derivative, compact projected charts satisfying the canonical first-coordinate identity, inverse-chart and ambient C1 regularity, exact base rank, localized rank upper bounds, projected-derivative surjectivity, dimension drop, lower-dimensional induction, zero target measure of the compact image, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean"
+    "ConstructionTargets/SardExactRankProjectedChartCompactNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK PROJECTED-CHART COMPACT NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
+     :sha256
+     "3fd004b065c7fbe86e7f14787b515871d44e0a9356496ec330389977b6cd9dc2"},
+    :declarations ["measure_image_zero_of_exactRank_projectedChart"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the theorem from pointwise projected-chart constructors and compact chart-source localizations, then aggregate exact-rank pieces."},
+   :representation
+   {:source
+    "A concrete exact-rank projected chart with localized rank bound, projected surjectivity, two-sided C1 data, compact source subset, dimension drop, and lower-dimensional induction.",
+    :target
+    "Zero additive-Haar measure of the compact source image in the original target."},
+   :id
+   :critical-value-sard-exact-rank-projected-chart-compact-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-derivative-range-orthogonal-compact-chart-nullity-1
+    :critical-value-sard-projected-chart-orthogonal-residual-slice-zero-1
+    :critical-value-sard-projected-chart-orthogonal-residual-nullity-data-1
+    :critical-value-sard-projected-smooth-chart-target-data-1
+    :critical-value-sard-localized-rank-upper-bound-1],
+   :current-residual
+   "Concrete exact-rank projected-chart hypotheses imply compact image nullity; pointwise chart construction, compact localization, and rank-piece aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -28178,86 +28215,86 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate the compiled derivative-range/orthogonal compact-chart nullity theorem from the concrete exact-rank projected chart, localized rank bound, inverse-slice data, dimension drop, and lower-dimensional induction hypothesis.",
+     "Instantiate the exact-rank compact-chart theorem from pointwise projected-chart constructors and compact chart-source localizations, then aggregate the exact-rank pieces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_rangeOrthogonal_compactChart"
-      "0e6eff9fd325d75063d65b5988599a8616716390b642e8cd381b495288977532"},
+     {"measure_image_zero_of_exactRank_projectedChart"
+      "dd004eaef53bcfd400ebd14cc63dee91c4a073ff118da344c51fbe27271d837a"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled derivative-range orthogonal compact-chart nullity theorem cannot be promoted for arbitrary finite-dimensional real normed source and slice spaces, finite-dimensional real inner-product Borel targets with additive Haar measure, every nonsurjective continuous real-linear derivative, lower-dimensional slice induction for every compatible additive Haar measure, compact projected charts with the canonical first-coordinate identity, dimension drop, bundled orthogonal-residual slice regularity and zero derivatives, zero target measure of the compact image, or standard-axiom profile.",
+      "Stop only if the compiled exact-rank projected-chart compact-nullity theorem cannot be promoted for arbitrary finite-dimensional real normed source and slice spaces, finite-dimensional real inner-product Borel targets with additive Haar measure, every nonsurjective derivative, compact projected charts satisfying the canonical first-coordinate identity, inverse-chart and ambient C1 regularity, exact base rank, localized rank upper bounds, projected-derivative surjectivity, dimension drop, lower-dimensional induction, zero target measure of the compact image, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.lean"
-       "ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.md"],
+      ["ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean"
+       "ConstructionTargets/SardExactRankProjectedChartCompactNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE ORTHOGONAL COMPACT-CHART NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK PROJECTED-CHART COMPACT NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean",
+        "/tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
         :sha256
-        "a8c40694aea615e409d6f17935a5516964ac3214368668072539c914c67c2d2d"},
+        "3fd004b065c7fbe86e7f14787b515871d44e0a9356496ec330389977b6cd9dc2"},
        :declarations
-       ["measure_image_zero_of_rangeOrthogonal_compactChart"],
+       ["measure_image_zero_of_exactRank_projectedChart"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate this compact-chart theorem from the concrete exact-rank projected chart, localized rank and inverse-slice data, dimension drop, and lower-dimensional induction hypothesis."},
+       "Instantiate the theorem from pointwise projected-chart constructors and compact chart-source localizations, then aggregate exact-rank pieces."},
       :representation
       {:source
-       "A nonsurjective derivative, its projected range/kernel chart, compact chart-source subset, lower-dimensional orthogonal-slice induction, canonical first-coordinate identity, dimension drop, and bundled orthogonal-residual slice data.",
+       "A concrete exact-rank projected chart with localized rank bound, projected surjectivity, two-sided C1 data, compact source subset, dimension drop, and lower-dimensional induction.",
        :target
        "Zero additive-Haar measure of the compact source image in the original target."},
       :id
-      :critical-value-sard-derivative-range-orthogonal-compact-chart-nullity-1,
+      :critical-value-sard-exact-rank-projected-chart-compact-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-derivative-range-coordinate-topology-package-1
-       :critical-value-sard-derivative-range-inherited-borel-space-1
-       :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
-       :critical-value-sard-target-orthogonal-coordinate-inverse-slice-nullity-data-1
-       :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1],
+      [:critical-value-sard-derivative-range-orthogonal-compact-chart-nullity-1
+       :critical-value-sard-projected-chart-orthogonal-residual-slice-zero-1
+       :critical-value-sard-projected-chart-orthogonal-residual-nullity-data-1
+       :critical-value-sard-projected-smooth-chart-target-data-1
+       :critical-value-sard-localized-rank-upper-bound-1],
       :current-residual
-      "All coordinate instances, measure construction, target-coordinate conversion, and compact-nullity application are compiled; only concrete exact-rank chart hypothesis instantiation remains.",
+      "Concrete exact-rank projected-chart hypotheses imply compact image nullity; pointwise chart construction, compact localization, and rank-piece aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture installs the complete derivative-coordinate instance stack—properness, local compactness, second countability, inherited Borel structures, orthogonal nontriviality, and additive Haar measures—converts the orthogonal-projection slice bundle to canonical target coordinates, and applies the compact projected-chart nullity wrapper. The remaining bounded work is to supply these compiled hypotheses from each concrete exact-rank local chart and compact source subset.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the concrete exact-rank projected chart hypotheses—localized rank bound, projected derivative surjectivity, inverse-chart and ambient C1 regularity, canonical first-coordinate formula, dimension drop, and lower-dimensional induction—with the banked orthogonal residual-slice and compact-chart theorems to prove compact image nullity. Pointwise chart construction, compact localization, and rank-piece aggregation remain.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 6 ':id :critical-value-sard-(derivative-range-coordinate-topology-package-1|derivative-range-inherited-borel-space-1|derivative-range-inherited-borel-add-haar-package-1|target-orthogonal-coordinate-inverse-slice-nullity-data-1|compact-projected-chart-nullity-of-bundled-data-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 6 ':id :critical-value-sard-(derivative-range-orthogonal-compact-chart-nullity-1|projected-chart-orthogonal-residual-slice-zero-1|projected-chart-orthogonal-residual-nullity-data-1|projected-smooth-chart-target-data-1|localized-rank-upper-bound-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean",
+       "lake env lean /tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
        :exit 0,
        :output
-       "'SardDerivativeRangeOrthogonalCompactChartNullityProbe.measure_image_zero_of_rangeOrthogonal_compactChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardExactRankProjectedChartCompactNullityProbe.measure_image_zero_of_exactRank_projectedChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean",
+       "sha256sum /tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
        :exit 0,
        :output
-       "a8c40694aea615e409d6f17935a5516964ac3214368668072539c914c67c2d2d  /tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean"}
+       "3fd004b065c7fbe86e7f14787b515871d44e0a9356496ec330389977b6cd9dc2  /tmp/SardExactRankProjectedChartCompactNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '15,79p' /tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean | sha256sum",
+       "sed -n '13,55p' /tmp/SardExactRankProjectedChartCompactNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "0e6eff9fd325d75063d65b5988599a8616716390b642e8cd381b495288977532  -"}
+       "dd004eaef53bcfd400ebd14cc63dee91c4a073ff118da344c51fbe27271d837a  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 210 items OK; {:done 202, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 211 items OK; {:done 203, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -28272,13 +28309,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean",
+     {:path "/tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
       :sha256
-      "a8c40694aea615e409d6f17935a5516964ac3214368668072539c914c67c2d2d"},
+      "3fd004b065c7fbe86e7f14787b515871d44e0a9356496ec330389977b6cd9dc2"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -28437,7 +28473,8 @@
     :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
     :critical-value-sard-derivative-range-inherited-borel-space-1
     :critical-value-sard-derivative-range-coordinate-topology-package-1
-    :critical-value-sard-derivative-range-orthogonal-compact-chart-nullity-1],
+    :critical-value-sard-derivative-range-orthogonal-compact-chart-nullity-1
+    :critical-value-sard-exact-rank-projected-chart-compact-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
