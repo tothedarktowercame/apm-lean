@@ -33734,6 +33734,41 @@
    "The compatible inherited Borel and additive-Haar packet is compiled; use it in the positive-rank pointwise nullity composition.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if exact positive derivative rank and nonsurjectivity cannot simultaneously supply the rank bounds, strict projected-kernel dimension drop, inherited coordinate Borel structures, residual nontriviality, and compatible additive-Haar measures required by the pointwise nullity theorem, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderPositiveRankPointwiseData.lean"
+    "ConstructionTargets/SardFiniteOrderPositiveRankPointwiseData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK POINTWISE DATA",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFiniteOrderPositiveRankPointwiseDataProbe.lean",
+     :sha256
+     "66f00887b679fbc8ad9f5c5fc401264cbfe002f7d79885682891e007cc388dbd"},
+    :declarations
+    ["exists_positiveRank_dimension_inheritedMeasure_data"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Destructure this packet under fixed inherited measurable-space instances in the finite-order positive-rank pointwise nullity adapter."},
+   :representation
+   {:source
+    "A nonsurjective derivative of exact positive rank between finite-dimensional real inner-product spaces.",
+    :target
+    "One pointwise input packet containing source and target rank bounds, strict projected-kernel dimension drop, inherited Borel coordinate structures, residual nontriviality, and compatible additive-Haar measures."},
+   :id
+   :critical-value-sard-finite-order-positive-rank-pointwise-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-positive-rank-dimension-data-1
+    :critical-value-sard-finite-order-projected-inherited-measure-package-1],
+   :current-residual
+   "Positive-rank dimension and inherited coordinate-measure data is compiled; combine it with the finite-order projected chart and residual-slice-zero certificate without re-synthesizing measurable spaces.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -33787,80 +33822,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Destructure the inherited Borel/additive-Haar packet inside the finite-order positive-rank pointwise nullity composition; retain rank zero for the flat/Taylor branch.",
+     "Destructure the positive-rank dimension and inherited-measure packet under explicitly fixed coordinate measurable spaces, then invoke the finite-order pointwise rank-chart nullity witness.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_projected_inherited_borel_addHaar_data"
-      "6f5774c0ec2201c6e3193c1922c11a06796cee664752de1868fd1b94021b7024"},
+     {"exists_positiveRank_dimension_inheritedMeasure_data"
+      "806f2d7b4ef1be4cf410b2c5ef609f3c2cb1813adeea39dd1f3ac4dd717bf632"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the inherited measurable spaces on the derivative range and orthogonal residual cannot simultaneously support compatible BorelSpace instances, additive-Haar measures, and residual nontriviality, or if the theorem requires nonstandard axioms.",
+      "Stop only if exact positive derivative rank and nonsurjectivity cannot simultaneously supply the rank bounds, strict projected-kernel dimension drop, inherited coordinate Borel structures, residual nontriviality, and compatible additive-Haar measures required by the pointwise nullity theorem, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.lean"
-       "ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.md"],
+      ["ConstructionTargets/SardFiniteOrderPositiveRankPointwiseData.lean"
+       "ConstructionTargets/SardFiniteOrderPositiveRankPointwiseData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED INHERITED MEASURE PACKAGE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK POINTWISE DATA",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean",
+        "/tmp/SardFiniteOrderPositiveRankPointwiseDataProbe.lean",
         :sha256
-        "242905748600bd90fe5581b976028bc1459c907f89ebc0d5944f9d5b776ae8f8"},
-       :declarations ["exists_projected_inherited_borel_addHaar_data"],
+        "66f00887b679fbc8ad9f5c5fc401264cbfe002f7d79885682891e007cc388dbd"},
+       :declarations
+       ["exists_positiveRank_dimension_inheritedMeasure_data"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Destructure the compatible inherited-coordinate measure packet in the finite-order positive-rank pointwise nullity theorem."},
+       "Destructure this packet under fixed inherited measurable-space instances in the finite-order positive-rank pointwise nullity adapter."},
       :representation
       {:source
-       "A nonsurjective finite-dimensional derivative whose range and orthogonal residual retain their inherited subtype measurable spaces.",
+       "A nonsurjective derivative of exact positive rank between finite-dimensional real inner-product spaces.",
        :target
-       "BorelSpace instances, residual nontriviality, and additive-Haar measures on both projected coordinates under those same inherited measurable spaces."},
+       "One pointwise input packet containing source and target rank bounds, strict projected-kernel dimension drop, inherited Borel coordinate structures, residual nontriviality, and compatible additive-Haar measures."},
       :id
-      :critical-value-sard-finite-order-projected-inherited-measure-package-1,
+      :critical-value-sard-finite-order-positive-rank-pointwise-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-coordinate-inherited-borel-bridge-1
-       :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
-       :critical-value-sard-finite-order-projected-coordinate-measure-data-1],
+      [:critical-value-sard-projected-positive-rank-dimension-data-1
+       :critical-value-sard-finite-order-projected-inherited-measure-package-1],
       :current-residual
-      "The compatible inherited Borel and additive-Haar packet is compiled; use it in the positive-rank pointwise nullity composition.",
+      "Positive-rank dimension and inherited coordinate-measure data is compiled; combine it with the finite-order projected chart and residual-slice-zero certificate without re-synthesizing measurable spaces.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the inherited-subtype Borel bridge with additive-Haar measures on the derivative range and orthogonal residual without replacing either measurable-space instance. The remaining analytic obligation is one positive-rank pointwise composition using this packet, the finite-order projected chart, rank-reduced dimensions, residual-slice derivative zero, and the reviewed local nullity witness.",
+     "The rectangular theorem is not refuted. The direct positive-rank composition reaches a representation seam where the generic pointwise nullity theorem re-synthesizes coordinate measurable-space metavariables rather than retaining the derivative subtypes' inherited instances. A placeholder-free compiled fixture now packages the positive-rank bounds, strict kernel-dimension drop, inherited Borel structures, residual nontriviality, and compatible additive-Haar measures as one input. The remaining adapter must destructure this packet while fixing the coordinate measurable spaces explicitly, then combine the finite-order chart and residual-slice-zero results with the reviewed pointwise nullity witness.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderPositiveRankPointwiseDataProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderProjectedInheritedMeasurePackageProbe.exists_projected_inherited_borel_addHaar_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderPositiveRankPointwiseDataProbe.exists_positiveRank_dimension_inheritedMeasure_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderPositiveRankPointwiseDataProbe.lean",
        :exit 0,
        :output
-       "242905748600bd90fe5581b976028bc1459c907f89ebc0d5944f9d5b776ae8f8  /tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean"}
+       "66f00887b679fbc8ad9f5c5fc401264cbfe002f7d79885682891e007cc388dbd  /tmp/SardFiniteOrderPositiveRankPointwiseDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPositiveRankPointwiseDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,28p' /tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean | sha256sum",
+       "sed -n '8,30p' /tmp/SardFiniteOrderPositiveRankPointwiseDataProbe.lean | sha256sum",
        :exit 0,
        :output
-       "6f5774c0ec2201c6e3193c1922c11a06796cee664752de1868fd1b94021b7024  -"}
+       "806f2d7b4ef1be4cf410b2c5ef609f3c2cb1813adeea39dd1f3ac4dd717bf632  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 256 items OK; {:done 248, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 257 items OK; {:done 249, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -33869,22 +33904,18 @@
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
        :output "1"}
-      {:cmd "readlink -f .lake/packages",
-       :exit 0,
-       :output "/home/joe/code/apm-lean/.lake/packages"}
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1",
        :exit 0,
        :output "?? scripts/__pycache__/",
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
-     {:path
-      "/tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean",
+     {:path "/tmp/SardFiniteOrderPositiveRankPointwiseDataProbe.lean",
       :sha256
-      "242905748600bd90fe5581b976028bc1459c907f89ebc0d5944f9d5b776ae8f8"},
+      "66f00887b679fbc8ad9f5c5fc401264cbfe002f7d79885682891e007cc388dbd"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -34089,7 +34120,8 @@
     :critical-value-sard-finite-order-projected-chart-orthogonal-residual-slice-zero-1
     :critical-value-sard-finite-order-projected-coordinate-measure-data-1
     :critical-value-sard-projected-coordinate-inherited-borel-bridge-1
-    :critical-value-sard-finite-order-projected-inherited-measure-package-1],
+    :critical-value-sard-finite-order-projected-inherited-measure-package-1
+    :critical-value-sard-finite-order-positive-rank-pointwise-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
