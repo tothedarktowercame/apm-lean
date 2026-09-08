@@ -20191,6 +20191,39 @@
    "Derivative rank-at-most loci are now closed and therefore compactly exhaustible; memberwise projected-slice nullity and exact-rank aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled derivative rank-upper compact-exhaustion theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces with sigma-compact source, every natural rank bound, a natural-number-indexed compact family, exact union equality with the derivative rank-at-most locus, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean"
+    "ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE RANK-UPPER COMPACT EXHAUSTION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean",
+     :sha256
+     "d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d"},
+    :declarations ["exists_compact_cover_derivativeRankAtMost"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Restrict the compact cover to each projected local chart, establish memberwise projected-slice image nullity, and aggregate local exact-rank images."},
+   :representation
+   {:source
+    "A C¹ map between finite-dimensional real normed spaces with sigma-compact source, and a natural-number derivative-rank bound.",
+    :target
+    "An explicit natural-number-indexed compact family whose union equals the derivative rank-at-most locus."},
+   :id :critical-value-sard-derivative-rank-upper-compact-exhaustion-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-derivative-rank-upper-locus-closed-1
+    :critical-value-sard-closed-set-compact-exhaustion-1],
+   :current-residual
+   "Derivative rank-at-most loci now have explicit compact exhaustions; projected-chart restriction, memberwise target-fiber nullity, and exact-rank aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -20244,85 +20277,87 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Intersect the closed rank-at-most locus with compact chart localizations, apply compact target-fiber projected-slice nullity memberwise, and aggregate the local exact-rank images.",
+     "Restrict the derivative rank-upper compact cover to projected local chart loci, prove each compact localized image null from target-coordinate fibers and inverse slices, then aggregate exact-rank pieces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"isClosed_derivativeRankAtMost"
-      "0253cadcdb71ccaf746aca00004a438911e91da0e4e7b5bd806922327f646c87"},
+     {"exists_compact_cover_derivativeRankAtMost"
+      "9540340f15247de9335be4c55712573ca24ac62f5dced988c491d742e1ac65c0"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled derivative rank-upper closedness theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces, every natural rank bound, closedness of the derivative-range finrank-at-most locus, or standard-axiom profile.",
+      "Stop only if the compiled derivative rank-upper compact-exhaustion theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces with sigma-compact source, every natural rank bound, a natural-number-indexed compact family, exact union equality with the derivative rank-at-most locus, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean"
-       "ConstructionTargets/SardDerivativeRankUpperLocusClosed.md"],
+      ["ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean"
+       "ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE RANK-UPPER LOCUS CLOSEDNESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE RANK-UPPER COMPACT EXHAUSTION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardDerivativeRankUpperLocusClosedProbe.lean",
+       {:path
+        "/tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean",
         :sha256
-        "d7ada94586a07f25273acf8b9ad88c398488fdcee2d1597ea8d7694fff10b92f"},
-       :declarations ["isClosed_derivativeRankAtMost"],
+        "d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d"},
+       :declarations ["exists_compact_cover_derivativeRankAtMost"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use closedness to obtain compact exhaustions of localized rank-at-most loci, prove their compact images null from projected slices, and aggregate exact-rank pieces."},
+       "Restrict the compact cover to each projected local chart, establish memberwise projected-slice image nullity, and aggregate local exact-rank images."},
       :representation
       {:source
-       "A C¹ map between finite-dimensional real normed spaces and a natural-number rank bound.",
+       "A C¹ map between finite-dimensional real normed spaces with sigma-compact source, and a natural-number derivative-rank bound.",
        :target
-       "Closedness of the locus where the derivative range has finrank at most the bound."},
-      :id :critical-value-sard-derivative-rank-upper-locus-closed-1,
+       "An explicit natural-number-indexed compact family whose union equals the derivative rank-at-most locus."},
+      :id
+      :critical-value-sard-derivative-rank-upper-compact-exhaustion-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-closed-set-compact-exhaustion-1
-       :critical-value-sard-first-derivative-rank-piece-local-upper-locus-1],
+      [:critical-value-sard-derivative-rank-upper-locus-closed-1
+       :critical-value-sard-closed-set-compact-exhaustion-1],
       :current-residual
-      "Derivative rank-at-most loci are now closed and therefore compactly exhaustible; memberwise projected-slice nullity and exact-rank aggregation remain.",
+      "Derivative rank-at-most loci now have explicit compact exhaustions; projected-chart restriction, memberwise target-fiber nullity, and exact-rank aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The compact-exhaustion theorem is banked, and the exact-rank local normal form already replaces an exact rank stratum by a rank-at-most locus. A placeholder-free fixture now proves that this derivative rank-at-most locus is closed for a C¹ map between finite-dimensional real normed spaces, by identifying its complement with the open rank-at-least-(r+1) locus. Compact exhaustion, memberwise projected-slice nullity, and rank-piece aggregation remain downstream.",
+     "The rectangular theorem is not refuted. The banked closedness and closed-set exhaustion results now compose at the exact derivative-rank representation needed downstream. A placeholder-free fixture constructs a natural-number-indexed compact cover whose union is precisely the derivative rank-at-most locus of a C¹ map. Intersecting this cover with the projected local chart data, proving memberwise target-fiber nullity, and aggregating exact-rank pieces remain.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n \"finrank.*≤|rank.*≤|finrank_le|rankLE|rank_le|isClosed.*rank|IsClosed.*rank\" .lake/packages/mathlib/Mathlib/Analysis .lake/packages/mathlib/Mathlib/LinearAlgebra -g '*.lean' | head -200; sed -n '1,220p' ConstructionTargets/SardExactRankLocalUpperLocus.lean; sed -n '1,180p' ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean",
+       "sed -n '1,160p' ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean; sed -n '1,120p' ConstructionTargets/SardClosedSetCompactExhaustion.lean; sed -n '1,120p' ConstructionTargets/SardCountableCompactImageNullity.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardDerivativeRankUpperLocusClosedProbe.lean",
+       "lake env lean /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean",
        :exit 0,
        :output
-       "'SardDerivativeRankUpperLocusClosedProbe.isClosed_derivativeRankAtMost' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardDerivativeRankUpperCompactExhaustionProbe.exists_compact_cover_derivativeRankAtMost' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardDerivativeRankUpperLocusClosedProbe.lean",
+       "sha256sum /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean",
        :exit 0,
        :output
-       "d7ada94586a07f25273acf8b9ad88c398488fdcee2d1597ea8d7694fff10b92f  /tmp/SardDerivativeRankUpperLocusClosedProbe.lean"}
+       "d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d  /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardDerivativeRankUpperLocusClosedProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '8,14p' /tmp/SardDerivativeRankUpperLocusClosedProbe.lean | sha256sum",
+       "sed -n '7,15p' /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean | sha256sum",
        :exit 0,
        :output
-       "0253cadcdb71ccaf746aca00004a438911e91da0e4e7b5bd806922327f646c87  -"}
+       "9540340f15247de9335be4c55712573ca24ac62f5dced988c491d742e1ac65c0  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 156 items OK; {:done 148, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 157 items OK; {:done 149, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardClosedSetCompactExhaustion.lean ConstructionTargets/SardExactRankLocalUpperLocus.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean ConstructionTargets/SardClosedSetCompactExhaustion.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n82b75cb2c9a982eb34dce0a206e765271a4da30316df78eff7344feb7134bc78  ConstructionTargets/SardClosedSetCompactExhaustion.lean\nebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153  ConstructionTargets/SardExactRankLocalUpperLocus.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n4a4cfc005dd7912cf2a6dbb36fee94f6ddf5c38131bbca94e584acdec0b72367  ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean\n82b75cb2c9a982eb34dce0a206e765271a4da30316df78eff7344feb7134bc78  ConstructionTargets/SardClosedSetCompactExhaustion.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -20333,12 +20368,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardDerivativeRankUpperLocusClosedProbe.lean",
+     {:path "/tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean",
       :sha256
-      "d7ada94586a07f25273acf8b9ad88c398488fdcee2d1597ea8d7694fff10b92f"},
+      "d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -20443,7 +20478,8 @@
     :critical-value-sard-compact-target-fiber-projected-slice-image-nullity-1
     :critical-value-sard-countable-compact-image-nullity-1
     :critical-value-sard-closed-set-compact-exhaustion-1
-    :critical-value-sard-derivative-rank-upper-locus-closed-1],
+    :critical-value-sard-derivative-rank-upper-locus-closed-1
+    :critical-value-sard-derivative-rank-upper-compact-exhaustion-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
