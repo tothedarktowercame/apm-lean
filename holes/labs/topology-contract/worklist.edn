@@ -12427,6 +12427,41 @@
    "Localized lower-dimensional composite critical-image nullity now transfers exactly to localized original critical-image nullity; source-dimension induction instantiation and stratum aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled lower-dimensional local critical-image induction application cannot be promoted with its exact strict finrank decrease, localized ContDiffAt hypotheses, restricted composite critical-image conclusion, parameterized-set inclusion, arbitrary target measure, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.lean"
+    "ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOWER-DIMENSIONAL LOCAL CRITICAL-IMAGE INDUCTION APPLICATION",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardLowerDimensionalLocalCriticalImageInductionProbe.lean",
+     :sha256
+     "a4c845c6f03aa092715aa6e6c535dd2817ae7033377becb788a722bcff995eca"},
+    :declarations
+    ["localizedCriticalImage_null_of_lowerDim_parameterization"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the theorem with each exact restricted scalarized-jet kernel parameterization, aggregate the resulting local nullity over every refined first-nonzero-jet locus, and combine those loci with Taylor-flat nullity and the first-derivative rank-normal-form case."},
+   :representation
+   {:source
+    "A strictly lower-dimensional finite-dimensional normed parameter space G, a local Sard induction hypothesis for every ContDiffAt map G→F, locally ContDiffAt maps f:E→F and g:G→E, and an original critical set contained in g''s.",
+    :target
+    "Zero target measure of the localized original critical image, obtained by applying the lower-dimensional hypothesis to f∘g and transporting its restricted critical-image nullity through the parameterization."},
+   :id
+   :critical-value-sard-lower-dimensional-local-critical-image-induction-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-parameterized-local-critical-image-nullity-1],
+   :current-residual
+   "The lower-dimensional Sard hypothesis now applies directly to each locally smooth kernel composite and transfers its conclusion to the original localized critical set; exact implicit-chart instantiation, refined-locus aggregation, Taylor-flat nullity, and the first-derivative rank case remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -12484,67 +12519,68 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled local-on-local critical-image transfer cannot be promoted with its exact restricted composite critical set, parameter-image inclusion, on-set differentiability hypotheses, original nonsurjective-fderiv predicate, arbitrary target measure, or standard-axiom profile.",
+      "Stop only if the compiled lower-dimensional local critical-image induction application cannot be promoted with its exact strict finrank decrease, localized ContDiffAt hypotheses, restricted composite critical-image conclusion, parameterized-set inclusion, arbitrary target measure, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardParameterizedLocalCriticalImageNullity.lean"
-       "ConstructionTargets/SardParameterizedLocalCriticalImageNullity.md"],
+      ["ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.lean"
+       "ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PARAMETERIZED LOCAL-ON-LOCAL CRITICAL-IMAGE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOWER-DIMENSIONAL LOCAL CRITICAL-IMAGE INDUCTION APPLICATION",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardParameterizedLocalCriticalImageNullityProbe.lean",
+        "/tmp/SardLowerDimensionalLocalCriticalImageInductionProbe.lean",
         :sha256
-        "77f660f7c00a39721e128d64eeeaf289439cab27f9874d05ad71819537ee7f16"},
+        "a4c845c6f03aa092715aa6e6c535dd2817ae7033377becb788a722bcff995eca"},
        :declarations
-       ["localizedCriticalImage_null_of_parameterized_on"],
+       ["localizedCriticalImage_null_of_lowerDim_parameterization"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Apply the source-dimension induction hypothesis to the kernel composite on its restricted regularity set, transfer that local critical-image nullity to each refined source neighborhood, aggregate each first-nonzero-jet locus, and combine with the Taylor-flat and rank-normal-form cases."},
+       "Instantiate the theorem with each exact restricted scalarized-jet kernel parameterization, aggregate the resulting local nullity over every refined first-nonzero-jet locus, and combine those loci with Taylor-flat nullity and the first-derivative rank-normal-form case."},
       :representation
       {:source
-       "Differentiable maps f:E→F and g:G→E on a parameter set s, an original critical set t⊆g''s, and zero measure of the critical image of f∘g restricted to s.",
+       "A strictly lower-dimensional finite-dimensional normed parameter space G, a local Sard induction hypothesis for every ContDiffAt map G→F, locally ContDiffAt maps f:E→F and g:G→E, and an original critical set contained in g''s.",
        :target
-       "Zero measure of f''t for an arbitrary target measure, with no global critical-image nullity or off-s differentiability hypothesis."},
+       "Zero target measure of the localized original critical image, obtained by applying the lower-dimensional hypothesis to f∘g and transporting its restricted critical-image nullity through the parameterization."},
       :id
-      :critical-value-sard-parameterized-local-critical-image-nullity-1,
+      :critical-value-sard-lower-dimensional-local-critical-image-induction-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-implicit-function-restricted-kernel-parameterization-1
-       :critical-value-sard-parameterized-image-nullity-transfer-1
-       :critical-value-sard-critical-set-under-parameterization-1],
+      [:critical-value-sard-parameterized-local-critical-image-nullity-1],
       :current-residual
-      "Localized lower-dimensional composite critical-image nullity now transfers exactly to localized original critical-image nullity; source-dimension induction instantiation and stratum aggregation remain.",
+      "The lower-dimensional Sard hypothesis now applies directly to each locally smooth kernel composite and transfers its conclusion to the original localized critical set; exact implicit-chart instantiation, refined-locus aggregation, Taylor-flat nullity, and the first-derivative rank case remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The restricted kernel chart supplies regularity only on a localized parameter set, but the previously compiled parameterized critical-image transfer assumes nullity of the composite’s full global critical image. Source-dimension induction for this route must be applied locally. A placeholder-free fixture proves the exact localized transfer: nullity of the composite critical image restricted to s transfers to any original critical set t contained in g''s, using differentiability only at points of s. This removes the unintended global hypothesis without weakening the criticality invariant.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the first explicit source-dimension induction application: a local critical-image nullity hypothesis for every smooth map on the strictly lower-dimensional parameter space applies to the kernel composite, while local ContDiffAt hypotheses provide the differentiability required to transfer that nullity to the parameterized localized critical set of the original map. Instantiation with the exact scalarized-jet implicit chart, aggregation of refined first-nonzero-jet loci, Taylor-flat nullity, and the separate first-derivative rank case remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardParameterizedLocalCriticalImageNullityProbe.lean",
+       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,220p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md; git status --porcelain=v1; sed -n '1,180p' ConstructionTargets/SardParameterizedLocalCriticalImageNullity.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardParameterizedLocalCriticalImageNullityProbe.lean",
+       "lake env lean /tmp/SardLowerDimensionalLocalCriticalImageInductionProbe.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/SardLowerDimensionalLocalCriticalImageInductionProbe.lean",
        :exit 0,
        :output
-       "77f660f7c00a39721e128d64eeeaf289439cab27f9874d05ad71819537ee7f16  /tmp/SardParameterizedLocalCriticalImageNullityProbe.lean"}
+       "a4c845c6f03aa092715aa6e6c535dd2817ae7033377becb788a722bcff995eca  /tmp/SardLowerDimensionalLocalCriticalImageInductionProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardParameterizedLocalCriticalImageNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLowerDimensionalLocalCriticalImageInductionProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 107 items OK; {:done 99, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 108 items OK; {:done 100, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardParameterizedLocalCriticalImageNullity.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nf43584e65a5fd38ab5a6dd486406f87d55a213f95c9406e34f04c2dc8ce48575  ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n77f660f7c00a39721e128d64eeeaf289439cab27f9874d05ad71819537ee7f16  ConstructionTargets/SardParameterizedLocalCriticalImageNullity.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -12556,12 +12592,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardParameterizedLocalCriticalImageNullityProbe.lean",
+      "/tmp/SardLowerDimensionalLocalCriticalImageInductionProbe.lean",
       :sha256
-      "77f660f7c00a39721e128d64eeeaf289439cab27f9874d05ad71819537ee7f16"},
+      "a4c845c6f03aa092715aa6e6c535dd2817ae7033377becb788a722bcff995eca"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -12617,7 +12653,8 @@
     :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1
     :critical-value-sard-implicit-function-kernel-parameter-local-regularity-1
     :critical-value-sard-implicit-function-restricted-kernel-parameterization-1
-    :critical-value-sard-parameterized-local-critical-image-nullity-1],
+    :critical-value-sard-parameterized-local-critical-image-nullity-1
+    :critical-value-sard-lower-dimensional-local-critical-image-induction-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
