@@ -1,0 +1,47 @@
+import ConstructionTargets.SardFiniteOrderProjectedSmoothChartTargetData
+import ConstructionTargets.SardFiniteOrderProjectedChartOrthogonalResidualSliceZero
+
+open Set
+
+noncomputable section
+namespace SardFiniteOrderPositiveRankProjectedChartSliceDataProbe
+
+theorem exists_finiteOrder_projectedChart_residualSliceZero
+    {E F : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+    (f : E → F) (x : E) (L : E →L[ℝ] F) (r order : ℕ)
+    (horder : order ≠ 0) (hstrict : HasStrictFDerivAt f L x)
+    (hf : ContDiffOn ℝ order f univ)
+    (hrank : Module.finrank ℝ (LinearMap.range L.toLinearMap) = r)
+    (hrankUpper : ∀ z, Module.finrank ℝ
+      (LinearMap.range (fderiv ℝ f z).toLinearMap) ≤ r) :
+    let R := LinearMap.range L.toLinearMap
+    let G := (R.orthogonalProjection.comp L).ker
+    ∃ chart : OpenPartialHomeomorph E (R × G),
+      x ∈ chart.source ∧
+      (fun y => (chart y).1) = (fun y => R.orthogonalProjection (f y)) ∧
+      ContDiffOn ℝ order chart.symm chart.target ∧
+      ∀ c z, (c, z) ∈ chart.target →
+        HasFDerivAt
+          (fun w : G => Rᗮ.orthogonalProjection (f (chart.symm (c, w))))
+          (0 : G →L[ℝ] Rᗮ) z := by
+  dsimp only
+  obtain ⟨chart, hx, hfirst, _hchart, hsymm, hsurj⟩ :=
+    SardFiniteOrderProjectedSmoothChartTargetDataProbe.exists_projected_finiteOrderChart_target_data
+      f x L order horder hstrict (hf.contDiffAt (by simp))
+  have hfirst' : (fun y => (chart y).1) =
+      fun y => (LinearMap.range L.toLinearMap).orthogonalProjection (f y) := by
+    simpa only [SardTargetOrthogonalCoordinateEquivProbe.targetOrthogonalCoordinates_apply] using hfirst
+  refine ⟨chart, hx, hfirst', hsymm, ?_⟩
+  apply SardFiniteOrderProjectedChartOrthogonalResidualSliceZeroProbe.forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice_finiteOrder
+    f L r order horder chart hfirst' hsymm (hf.mono (fun _ _ => mem_univ _)) hrank
+    (fun z _ => hrankUpper z)
+  intro z hz
+  exact hsurj z hz (fderiv ℝ f z)
+    ((hf.differentiableOn (by exact_mod_cast horder)).differentiableAt (by simp)).hasFDerivAt
+
+#print axioms exists_finiteOrder_projectedChart_residualSliceZero
+
+end SardFiniteOrderPositiveRankProjectedChartSliceDataProbe
