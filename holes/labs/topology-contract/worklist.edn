@@ -34181,6 +34181,24 @@
       :exit 0,
       :output "?? scripts/__pycache__/",
       :note "Unrelated concurrent cache outside row scope."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788908861431-15638-113688c9",
+     :commands
+     ["git show/diff-tree 149636c7b73f7989c733cdefb3c2051d8181cb14"
+      "sha256sum and cmp fixture against recorded source"
+      "sed -n '9,25p' recorded source | sha256sum"
+      "lake env lean /tmp/SardProjectedCoordinateInstalledInheritedMeasureDataProbe.lean"
+      "lake env lean ConstructionTargets/SardProjectedCoordinateInstalledInheritedMeasureData.lean"
+      "lake build ConstructionTargets.SardProjectedCoordinateInstalledInheritedMeasureData — 8352 jobs"
+      "placeholder scan over fixture and scoped artifacts — exit 1"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn — 261 items OK"
+      "sha256sum and sorry count for problems/t93A04/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff --check recorded commit range; git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit has exact two-file scope; fixture and source are byte-identical and all hashes reproduce; fixture and module compile and the 8352-job build succeeds with standard axioms only; placeholders are absent; inherited Borel instances are installed before residual nontriviality and compatible coordinate measures are exposed, matching the representation and elaboration-order boundary; worklist and frozen consumer gates reproduce; no files were edited."},
     :commit "149636c7b73f7989c733cdefb3c2051d8181cb14",
     :changed-paths
     ["ConstructionTargets/SardProjectedCoordinateInstalledInheritedMeasureData.lean"
@@ -34193,7 +34211,7 @@
     :declarations
     ["exists_projectedCoordinates_installed_inherited_measureData"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedCoordinateInstalledInheritedMeasureData.lean"
     "ConstructionTargets/SardProjectedCoordinateInstalledInheritedMeasureData.md"],
@@ -34376,7 +34394,7 @@
       "c2772cd6a85c36996d6551c5ce76db09f47b55c1eda8c8a8b3cc5326635e2032"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
