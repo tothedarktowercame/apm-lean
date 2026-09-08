@@ -17682,8 +17682,84 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled product-nullity theorem cannot be promoted with arbitrary factor measures, measurable product set, pointwise zero measure of every vertical section, zero product-measure conclusion, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Represent each projected rank-chart image as a measurable product-coordinate set, identify every vertical section with a lower-dimensional null slice image, and transfer product nullity back through the target coordinate equivalence.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :placeholder-scan :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_prod_zero_of_forall_fiber_zero"
+     "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardProductNullityOfNullFibersProbe.lean",
+      :exit 0,
+      :output
+      "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProductNullityOfNullFibers.lean",
+      :exit 0,
+      :output
+      "'SardProductNullityOfNullFibersProbe.measure_prod_zero_of_forall_fiber_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake build ConstructionTargets.SardProductNullityOfNullFibers",
+      :exit 0,
+      :output "Build completed successfully (1757 jobs)."}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProductNullityOfNullFibers.lean ConstructionTargets/SardProductNullityOfNullFibers.md /tmp/SardProductNullityOfNullFibersProbe.lean",
+      :exit 0,
+      :output
+      "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc lean; ec143be5dab72152a6893ac2fdd4be1035b57db7234a89b9ad0d74a5af41969e md; b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc fixture"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProductNullityOfNullFibers.lean ConstructionTargets/SardProductNullityOfNullFibers.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 140 items OK; {:done 131, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "506871501dacbef3ad98c756cfdcaa2ffbabf954",
+    :changed-paths
+    ["ConstructionTargets/SardProductNullityOfNullFibers.lean"
+     "ConstructionTargets/SardProductNullityOfNullFibers.md"],
+    :file-hashes
+    {"ConstructionTargets/SardProductNullityOfNullFibers.lean"
+     "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc",
+     "ConstructionTargets/SardProductNullityOfNullFibers.md"
+     "ec143be5dab72152a6893ac2fdd4be1035b57db7234a89b9ad0d74a5af41969e"},
+    :fixture
+    {:path "/tmp/SardProductNullityOfNullFibersProbe.lean",
+     :sha256
+     "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc"},
+    :declarations ["measure_prod_zero_of_forall_fiber_zero"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/SardProductNullityOfNullFibers.lean"
+      "ConstructionTargets/SardProductNullityOfNullFibers.md"]},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProductNullityOfNullFibers.lean"
     "ConstructionTargets/SardProductNullityOfNullFibers.md"],
