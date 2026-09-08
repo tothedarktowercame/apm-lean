@@ -73,10 +73,20 @@
                             (:depends-on %)))
              (assoc % :state :open)
              %) xs)))
+(defn normalize-receipt [receipt]
+  ;; Implementation packets are asked to report the "next consumer residual",
+  ;; and older receipts conventionally named the same datum :residual.  Keep
+  ;; the producer's explicit field for audit, but present the canonical ledger
+  ;; key to validation and downstream readers.
+  (cond-> receipt
+    (and (= :done-unreviewed (:outcome receipt))
+         (nil? (:residual receipt))
+         (some? (:next-consumer-residual receipt)))
+    (assoc :residual (:next-consumer-residual receipt))))
 (defn apply-result! []
   (let [id (keyword (nth *command-line-args* 2 ""))
         receipt-path (nth *command-line-args* 3 "")
-        receipt (edn/read-string (slurp receipt-path))
+        receipt (normalize-receipt (edn/read-string (slurp receipt-path)))
         item (by-id id)
         outcome (:outcome receipt)]
     (when-not item (throw (ex-info "unknown result row" {:id id})))
