@@ -28058,6 +28058,25 @@
       :exit 0,
       :output "d1446126ae423249364572caa1101acdc1846696"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788881792983-15189-5d7de40c",
+     :commands
+     ["git show --stat --oneline d1446126ae423249364572caa1101acdc1846696"
+      "git diff-tree --no-commit-id --name-only -r d1446126ae423249364572caa1101acdc1846696"
+      "cmp /tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.lean"
+      "sha256sum /tmp/SardDerivativeRangeOrthogonalCompactChartNullityProbe.lean ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.lean"
+      "git show d1446126ae423249364572caa1101acdc1846696:ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.lean | sed -n '15,79p' | sha256sum"
+      "lake env lean ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.lean"
+      "lake build ConstructionTargets.SardDerivativeRangeOrthogonalCompactChartNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit d1446126ae423249364572caa1101acdc1846696 changes exactly the two scoped files. Its committed Lean blob equals the fixture at SHA-256 a8c40694aea615e409d6f17935a5516964ac3214368668072539c914c67c2d2d; frozen statement hash 0e6eff9fd325d75063d65b5988599a8616716390b642e8cd381b495288977532 reproduces. The theorem correctly assumes lower-dimensional nullity for every compatible orthogonal-coordinate Haar measure, installs the topology, inherited-Borel, nontriviality, and Haar certificates on the exact range/orthogonal subtype representations, converts orthogonal residual data to canonical target coordinates, and concludes zero original-target measure. Direct Lean and Lake builds pass with only propext, Classical.choice, and Quot.sound; scoped placeholder scan is empty. Worklist validates with 211 items OK; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and one placeholder reproduce; canonical package authority and clean worktree verified."},
     :commit "d1446126ae423249364572caa1101acdc1846696",
     :changed-paths
     ["ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.lean"
@@ -28070,7 +28089,7 @@
     :declarations
     ["measure_image_zero_of_rangeOrthogonal_compactChart"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.lean"
     "ConstructionTargets/SardDerivativeRangeOrthogonalCompactChartNullity.md"],
@@ -28259,7 +28278,7 @@
       "a8c40694aea615e409d6f17935a5516964ac3214368668072539c914c67c2d2d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
