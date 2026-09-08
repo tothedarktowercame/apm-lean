@@ -20193,8 +20193,83 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled derivative rank-upper compact-exhaustion theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces with sigma-compact source, every natural rank bound, a natural-number-indexed compact family, exact union equality with the derivative rank-at-most locus, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Restrict the derivative rank-upper compact cover to projected local chart loci, prove each compact localized image null from target-coordinate fibers and inverse slices, then aggregate exact-rank pieces.",
+    :gates
+    {:fixture-hash :pass,
+     :compile :pass,
+     :placeholder-scan :pass,
+     :statement-hash :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :scope :pass,
+     :commit :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_compact_cover_derivativeRankAtMost"
+     "9540340f15247de9335be4c55712573ca24ac62f5dced988c491d742e1ac65c0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean",
+      :exit 0,
+      :output
+      "d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d  /tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean",
+      :exit 0,
+      :output
+      "'SardDerivativeRankUpperCompactExhaustionProbe.exists_compact_cover_derivativeRankAtMost' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md",
+      :exit 0,
+      :output
+      "c834e71bac73818407557631b4e0db01da85445e0c40856a869886e3dcd52f45  ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean\n3b45d301fb48cfceb9be55e8681e59a806a745c12c46f0f53456f1699d172aff  ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md"}
+     {:cmd
+      "sed -n '9,17p' ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean | sha256sum",
+      :exit 0,
+      :output
+      "9540340f15247de9335be4c55712573ca24ac62f5dced988c491d742e1ac65c0  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 158 items OK; {:done 149, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'add derivative rank upper compact exhaustion'",
+      :exit 0,
+      :output
+      "[master be8da1b6] add derivative rank upper compact exhaustion\n 2 files changed, 31 insertions(+)\n create mode 100644 ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean\n create mode 100644 ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "be8da1b6bbe0a198e2456ef001c90438f1d34fe9",
+    :changed-paths
+    ["ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean"
+     "ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md"],
+    :fixture
+    {:path "/tmp/SardDerivativeRankUpperCompactExhaustionProbe.lean",
+     :sha256
+     "d3cecac0ada1a4edb130e0bac75bebcd84221f662d38c82a97d2d76b5568641d"},
+    :declarations ["exists_compact_cover_derivativeRankAtMost"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean"
     "ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.md"],
