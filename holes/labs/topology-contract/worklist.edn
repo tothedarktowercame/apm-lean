@@ -18756,6 +18756,30 @@
       :output
       "ConstructionTargets/SardContinuousLinearEquivImageNullity.lean\nConstructionTargets/SardContinuousLinearEquivImageNullity.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788849391835-14635-304e4ca5",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7; git diff-tree --no-commit-id --name-only -r 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7; git show 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7:ConstructionTargets/SardContinuousLinearEquivImageNullity.lean; git show 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7:ConstructionTargets/SardContinuousLinearEquivImageNullity.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardContinuousLinearEquivImageNullityProbe.lean ConstructionTargets/SardContinuousLinearEquivImageNullity.lean ConstructionTargets/SardContinuousLinearEquivImageNullity.md; sed -n '15,24p' ConstructionTargets/SardContinuousLinearEquivImageNullity.lean | sha256sum; lake env lean /tmp/SardContinuousLinearEquivImageNullityProbe.lean; lake env lean ConstructionTargets/SardContinuousLinearEquivImageNullity.lean; lake build ConstructionTargets.SardContinuousLinearEquivImageNullity",
+       :exit 0}
+      {:cmd
+       "git show 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7:ConstructionTargets/SardContinuousLinearEquivImageNullity.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7:ConstructionTargets/SardContinuousLinearEquivImageNullity.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; git merge-base --is-ancestor 3340501799289462c08fa27368d934c87f18ae12 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7; git merge-base --is-ancestor fc87b34bd35116a1b6bf803b2a27a912ccbee3a4 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7^ 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7 by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is c91b9e12bb10e7eb49f04d451f22430703c5fe58b7a29d080435e8e99c29893d; committed file hashes reproduce as 4283516a67487f23b34172f6ef781e44d2b6c207912eaae8853fcb58775867b0 and 6475e4b7a820f2e7c70678eb16e37784efc658cb0e9d024c36bfabd7f610e6c5, and the frozen declaration-region hash is 3d81b2a24cde19a2053f1816c48856610d53bcadeaf2f0e1afc9f81421a2b580. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The theorem has the required orientation and representation boundary: it coerces a continuous real-linear equivalence to the continuous additive equivalence used to obtain quasi-measure preservation from the source Haar measure to the target Haar measure, then reflects nullity of e '' s back to s through the generic equivalence theorem. The Borel normed-space, locally compact second-countable target, and additive Haar assumptions match those dependencies; no unsupported inverse-direction or measure-preserving equality is claimed. Both recorded dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 147 items with {:done 138, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "82b2fdcf181f2b633a6ee98a16fe26b44258c2b7",
     :changed-paths
     ["ConstructionTargets/SardContinuousLinearEquivImageNullity.lean"
@@ -18772,7 +18796,7 @@
     :declarations
     ["SardContinuousLinearEquivImageNullityProbe.ContinuousLinearEquiv.measure_zero_of_image_zero_addHaar"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardContinuousLinearEquivImageNullity.lean"
     "ConstructionTargets/SardContinuousLinearEquivImageNullity.md"],
@@ -18949,7 +18973,7 @@
       "c91b9e12bb10e7eb49f04d451f22430703c5fe58b7a29d080435e8e99c29893d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
