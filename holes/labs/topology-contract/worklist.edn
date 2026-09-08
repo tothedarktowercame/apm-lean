@@ -28393,6 +28393,39 @@
    "The projected chart kernel has the strict dimension drop required by lower-dimensional induction; base-derivative nonvanishing and pointwise compact-chart instantiation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled order-one jet representation bridge cannot be promoted for arbitrary real normed source and target spaces, every map and point in its order-one first-nonzero-jet locus, nonvanishing of the ordinary Frechet derivative at that point, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.lean"
+    "ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE JET FDERIV NONVANISHING",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean",
+     :sha256
+     "40e51f8156d23d5b37d6624b2a22fba477124721674e173917e8bdddb5531f24"},
+    :declarations ["fderiv_ne_zero_of_mem_firstNonzeroJetLocus_one"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use derivative nonvanishing and projected-kernel dimension drop in the pointwise exact-rank compact-chart certificate."},
+   :representation
+   {:source
+    "Nonvanishing of the first iterated Frechet derivative at a point in the order-one first-nonzero-jet locus.",
+    :target
+    "Nonvanishing of the ordinary Frechet derivative at that point."},
+   :id :critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-locus-decomposition-1
+    :critical-value-sard-projected-range-kernel-dimension-drop-1],
+   :current-residual
+   "The order-one jet certificate now provides the nonzero base derivative needed for strict projected-kernel dimension drop; pointwise exact-rank compact-chart instantiation and aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -28446,80 +28479,81 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Derive nonvanishing of the base derivative on the order-one first-nonzero-jet locus, instantiate the exact-rank compact-chart theorem pointwise, and aggregate the rank pieces.",
+     "Use derivative nonvanishing, projected-kernel dimension drop, smooth projected-chart target data, and the exact-rank compact-nullity theorem to build pointwise compact certificates and aggregate rank pieces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"finrank_ker_rangeProjection_comp_lt"
-      "399ee42e69b5a182437071ec6fb961ff24bff9a219356523d15301e29e9e51a8"},
+     {"fderiv_ne_zero_of_mem_firstNonzeroJetLocus_one"
+      "522943896c7607b516a4b2bc381d7d441f3cfef598f38f729c019a764c4f55ad"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled projected-range kernel dimension-drop theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and target spaces, every nonzero continuous real-linear derivative, strict finrank decrease of the kernel of its range-orthogonal-projection composite, or standard-axiom profile.",
+      "Stop only if the compiled order-one jet representation bridge cannot be promoted for arbitrary real normed source and target spaces, every map and point in its order-one first-nonzero-jet locus, nonvanishing of the ordinary Frechet derivative at that point, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedRangeKernelDimensionDrop.lean"
-       "ConstructionTargets/SardProjectedRangeKernelDimensionDrop.md"],
+      ["ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.lean"
+       "ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-RANGE KERNEL DIMENSION DROP",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE JET FDERIV NONVANISHING",
       :acceptance
       {:fixture
-       {:path "/tmp/SardProjectedRangeKernelDimensionDropProbe.lean",
+       {:path "/tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean",
         :sha256
-        "369e7d69479f3d33d085993c6aa5f33165b2b6635b34dee94f2e26aca9dfea9a"},
-       :declarations ["finrank_ker_rangeProjection_comp_lt"],
+        "40e51f8156d23d5b37d6624b2a22fba477124721674e173917e8bdddb5531f24"},
+       :declarations
+       ["fderiv_ne_zero_of_mem_firstNonzeroJetLocus_one"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Derive base-derivative nonvanishing on the order-one locus and use the strict kernel dimension drop in the pointwise exact-rank compact-chart certificate."},
+       "Use derivative nonvanishing and projected-kernel dimension drop in the pointwise exact-rank compact-chart certificate."},
       :representation
       {:source
-       "A nonzero continuous real-linear derivative and the kernel coordinate defined by projection onto its derivative range.",
+       "Nonvanishing of the first iterated Frechet derivative at a point in the order-one first-nonzero-jet locus.",
        :target
-       "A strict finrank decrease from that projected kernel coordinate to the ambient source space."},
-      :id :critical-value-sard-projected-range-kernel-dimension-drop-1,
+       "Nonvanishing of the ordinary Frechet derivative at that point."},
+      :id :critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-exact-rank-projected-chart-compact-nullity-1
-       :critical-value-sard-projected-smooth-chart-target-data-1],
+      [:critical-value-sard-first-nonzero-jet-locus-decomposition-1
+       :critical-value-sard-projected-range-kernel-dimension-drop-1],
       :current-residual
-      "The projected chart kernel has the strict dimension drop required by lower-dimensional induction; base-derivative nonvanishing and pointwise compact-chart instantiation remain.",
+      "The order-one jet certificate now provides the nonzero base derivative needed for strict projected-kernel dimension drop; pointwise exact-rank compact-chart instantiation and aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. Concrete exact-rank chart instantiation reaches the strict dimension-drop obligation for the kernel of the derivative-range projection. A placeholder-free compiled fixture proves that every nonzero derivative makes this projected map nonzero and derives the strict kernel finrank inequality from rank-nullity.",
+     "The rectangular theorem is not refuted. The pointwise exact-rank assembly needs to convert the order-one locus certificate `iteratedFDeriv ℝ 1 f x ≠ 0` into nonvanishing of `fderiv ℝ f x`, which supplies the strict projected-kernel dimension drop. A placeholder-free compiled fixture proves this bridge using Mathlib's equality of the corresponding norms.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 8 ':id :critical-value-sard-(exact-rank-projected-chart-compact-nullity-1|first-derivative-rank-piece-pointwise-compact-nullity-1|first-derivative-rank-piece-projected-chart-nullity-witness-1|first-derivative-rank-piece-chart-source-compact-nullity-1|projected-smooth-chart-target-data-1|localized-rank-upper-bound-1)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 6 ':id :critical-value-sard-(projected-range-kernel-dimension-drop-1|first-nonzero-jet-locus-decomposition-1|exact-rank-projected-chart-compact-nullity-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardProjectedRangeKernelDimensionDropProbe.lean",
+       "lake env lean /tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean",
        :exit 0,
        :output
-       "'SardProjectedRangeKernelDimensionDropProbe.finrank_ker_rangeProjection_comp_lt' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFirstNonzeroJetOneFDerivNonzeroProbe.fderiv_ne_zero_of_mem_firstNonzeroJetLocus_one' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedRangeKernelDimensionDropProbe.lean",
+       "sha256sum /tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean",
        :exit 0,
        :output
-       "369e7d69479f3d33d085993c6aa5f33165b2b6635b34dee94f2e26aca9dfea9a  /tmp/SardProjectedRangeKernelDimensionDropProbe.lean"}
+       "40e51f8156d23d5b37d6624b2a22fba477124721674e173917e8bdddb5531f24  /tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedRangeKernelDimensionDropProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,36p' /tmp/SardProjectedRangeKernelDimensionDropProbe.lean | sha256sum",
+       "sed -n '10,21p' /tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean | sha256sum",
        :exit 0,
        :output
-       "399ee42e69b5a182437071ec6fb961ff24bff9a219356523d15301e29e9e51a8  -"}
+       "522943896c7607b516a4b2bc381d7d441f3cfef598f38f729c019a764c4f55ad  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 212 items OK; {:done 204, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 213 items OK; {:done 205, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -28534,12 +28568,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardProjectedRangeKernelDimensionDropProbe.lean",
+     {:path "/tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean",
       :sha256
-      "369e7d69479f3d33d085993c6aa5f33165b2b6635b34dee94f2e26aca9dfea9a"},
+      "40e51f8156d23d5b37d6624b2a22fba477124721674e173917e8bdddb5531f24"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -28700,7 +28734,8 @@
     :critical-value-sard-derivative-range-coordinate-topology-package-1
     :critical-value-sard-derivative-range-orthogonal-compact-chart-nullity-1
     :critical-value-sard-exact-rank-projected-chart-compact-nullity-1
-    :critical-value-sard-projected-range-kernel-dimension-drop-1],
+    :critical-value-sard-projected-range-kernel-dimension-drop-1
+    :critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
