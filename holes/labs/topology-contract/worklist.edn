@@ -13756,6 +13756,40 @@
    "Every point of every higher refined first-nonzero-jet locus now has an open null-image neighborhood under the source-dimension induction hypothesis; locus aggregation, Taylor-flat combination, and the first-derivative rank case remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled whole-locus inductive-nullity theorem cannot be promoted with its exact refined-locus predicate, second-countable source, global smoothness orders, universal lower-dimensional local Sard hypothesis, criticality predicate, arbitrary target measure, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.lean"
+    "ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET INDUCTIVE LOCUS NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFirstNonzeroJetInductiveLocusNullityProbe.lean",
+     :sha256
+     "1ed84dfe166967dc5ab096888e8ff022115490dd4504c19329f74c9d1d88ea5d"},
+    :declarations ["firstNonzeroJetLocus_image_null_of_induction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Combine all higher refined first-nonzero-jet loci with the Taylor-flat locus by finite image-nullity aggregation, and discharge the separate first-derivative rank case."},
+   :representation
+   {:source
+    "A complete second-countable finite-dimensional normed source, a refined first-nonzero (i+1)-jet locus with i≥1, global smoothness, criticality of K, and a local Sard hypothesis for every strictly lower-dimensional parameter space.",
+    :target
+    "Zero measure of the image of the entire refined first-nonzero successor-jet locus under an arbitrary target measure."},
+   :id
+   :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-pointwise-witness-instantiation-1
+    :critical-value-sard-first-nonzero-jet-locus-local-aggregation-1],
+   :current-residual
+   "Every higher refined first-nonzero-jet locus is now null under source-dimension induction; finite refined-order/Taylor-flat aggregation and the first-derivative rank case remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -13813,71 +13847,70 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled pointwise witness instantiation cannot be promoted with its exact refined-locus membership, global smoothness orders, finite nonzero order, universal lower-dimensional local Sard hypothesis, criticality predicate, existential open neighborhood, arbitrary target measure, or standard-axiom profile.",
+      "Stop only if the compiled whole-locus inductive-nullity theorem cannot be promoted with its exact refined-locus predicate, second-countable source, global smoothness orders, universal lower-dimensional local Sard hypothesis, criticality predicate, arbitrary target measure, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean"
-       "ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.md"],
+      ["ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.lean"
+       "ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET POINTWISE WITNESS INSTANTIATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET INDUCTIVE LOCUS NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean",
+        "/tmp/SardFirstNonzeroJetInductiveLocusNullityProbe.lean",
         :sha256
-        "f52d935bf5fa89ef6288ab6fd5efb3ad7e13900a7db670c4c8497909238cfe59"},
-       :declarations
-       ["exists_open_local_image_null_of_firstNonzeroJet"],
+        "1ed84dfe166967dc5ab096888e8ff022115490dd4504c19329f74c9d1d88ea5d"},
+       :declarations ["firstNonzeroJetLocus_image_null_of_induction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Apply second-countable local aggregation to the pointwise witnesses for each refined successor-jet locus, combine the finite refined orders with Taylor-flat nullity, and handle the first-derivative rank case."},
+       "Combine all higher refined first-nonzero-jet loci with the Taylor-flat locus by finite image-nullity aggregation, and discharge the separate first-derivative rank case."},
       :representation
       {:source
-       "A point in a refined first-nonzero (i+1)-jet locus, global ContDiff hypotheses, criticality of K, finite nonzero order n, and a local Sard hypothesis for every strictly lower-dimensional normed parameter space.",
+       "A complete second-countable finite-dimensional normed source, a refined first-nonzero (i+1)-jet locus with i≥1, global smoothness, criticality of K, and a local Sard hypothesis for every strictly lower-dimensional parameter space.",
        :target
-       "An existential open source neighborhood containing the point whose restricted refined first-nonzero-jet locus has zero image measure."},
+       "Zero measure of the image of the entire refined first-nonzero successor-jet locus under an arbitrary target measure."},
       :id
-      :critical-value-sard-first-nonzero-jet-pointwise-witness-instantiation-1,
+      :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-nonzero-jet-open-regularity-data-1
-       :critical-value-sard-first-nonzero-jet-pointwise-local-nullity-witness-1],
+      [:critical-value-sard-first-nonzero-jet-pointwise-witness-instantiation-1
+       :critical-value-sard-first-nonzero-jet-locus-local-aggregation-1],
       :current-residual
-      "Every point of every higher refined first-nonzero-jet locus now has an open null-image neighborhood under the source-dimension induction hypothesis; locus aggregation, Taylor-flat combination, and the first-derivative rank case remain.",
+      "Every higher refined first-nonzero-jet locus is now null under source-dimension induction; finite refined-order/Taylor-flat aggregation and the first-derivative rank case remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture now performs the first direct pointwise instantiation: at a point of a refined first-nonzero successor-jet locus, global smoothness and the generic lower-dimensional local Sard hypothesis feed the compiled open scalarized-chart package into the exact pointwise local-nullity witness. It produces an open source neighborhood containing the point whose restricted refined-locus image is null. Aggregating these witnesses over each refined locus, finite-order aggregation with Taylor-flat nullity, and the separate first-derivative rank case remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture now applies the compiled second-countable local aggregation theorem to the compiled pointwise scalarized-chart witnesses. Under the universal lower-dimensional local Sard hypothesis, it proves zero image measure for an entire refined first-nonzero successor-jet locus. Finite aggregation across derivative orders with the Taylor-flat locus and the separate first-derivative rank case remain downstream.",
      :commands
      [{:cmd
        "rg -n \"ContDiff.*of_le|\\.of_le.*ContDiff|le_add_right\" ConstructionTargets | head -40; sed -n '1,150p' ConstructionTargets/SardFirstNonzeroJetPointwiseLocalNullityWitness.lean; sed -n '1,130p' ConstructionTargets/SardFirstNonzeroJetOpenRegularityData.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean",
+       "lake env lean /tmp/SardFirstNonzeroJetInductiveLocusNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.exists_open_local_image_null_of_firstNonzeroJet' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFirstNonzeroJetInductiveLocusNullityProbe.firstNonzeroJetLocus_image_null_of_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean",
+       "sha256sum /tmp/SardFirstNonzeroJetInductiveLocusNullityProbe.lean",
        :exit 0,
        :output
-       "f52d935bf5fa89ef6288ab6fd5efb3ad7e13900a7db670c4c8497909238cfe59  /tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean"}
+       "1ed84dfe166967dc5ab096888e8ff022115490dd4504c19329f74c9d1d88ea5d  /tmp/SardFirstNonzeroJetInductiveLocusNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetInductiveLocusNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 115 items OK; {:done 107, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 116 items OK; {:done 108, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetOpenRegularityData.lean ConstructionTargets/SardFirstNonzeroJetPointwiseLocalNullityWitness.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n40a965fe49fdf37e5ec8d7e0c9cfee9f8bfd997be3002515fea3849a06b54f9f  ConstructionTargets/SardFirstNonzeroJetOpenRegularityData.lean\nc8e8c80ed1b02c36459e714bca722cd05c5ac77b4ef1bd882d2fb5ab4a63ad3a  ConstructionTargets/SardFirstNonzeroJetPointwiseLocalNullityWitness.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nf52d935bf5fa89ef6288ab6fd5efb3ad7e13900a7db670c4c8497909238cfe59  ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean\ncbd16144f65e2f578bc28cb1933083d723ec2826cb8dca4979a595d1c177dbb5  ConstructionTargets/SardFirstNonzeroJetLocusLocalAggregation.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -13888,13 +13921,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean",
+     {:path "/tmp/SardFirstNonzeroJetInductiveLocusNullityProbe.lean",
       :sha256
-      "f52d935bf5fa89ef6288ab6fd5efb3ad7e13900a7db670c4c8497909238cfe59"},
+      "1ed84dfe166967dc5ab096888e8ff022115490dd4504c19329f74c9d1d88ea5d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -13958,7 +13990,8 @@
     :critical-value-sard-nonzero-successor-jet-scalar-directions-1
     :critical-value-sard-first-nonzero-jet-scalarized-chart-data-1
     :critical-value-sard-first-nonzero-jet-open-regularity-data-1
-    :critical-value-sard-first-nonzero-jet-pointwise-witness-instantiation-1],
+    :critical-value-sard-first-nonzero-jet-pointwise-witness-instantiation-1
+    :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
