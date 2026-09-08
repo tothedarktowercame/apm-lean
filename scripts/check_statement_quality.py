@@ -85,6 +85,55 @@ def split_theorem(text):
     return rest[:cut], rest[cut:]
 
 
+# Structure a source can demand that a topological-only encoding silently drops.
+# Joe's ruling, 2026-09-08: "if it's dropping conditions from the informal
+# statement, we shouldn't allow that. That doesn't make any sense." A
+# constructive encoding may DEFINE what Mathlib lacks; it may not quietly
+# restate the problem without the hypotheses that make it the problem.
+STRUCTURE_DEMANDS = {
+    "smooth": [r"\bsmooth\b"],
+    "manifold": [r"\bmanifold", r"\bsubmanifold"],
+    "dimension": [r"\\dim\b", r"\bdimension\b"],
+    "orientation": [r"\boriented\b", r"\borientation\b"],
+}
+# Evidence in the Lean that the demand was actually carried, not dropped.
+STRUCTURE_CARRIERS = {
+    "smooth": [r"ContDiff", r"Smooth", r"IsManifold", r"MDifferentiable", r"fderiv",
+               r"HasDerivAt", r"deriv\b", r"ContinuousLinearMap"],
+    "manifold": [r"ChartedSpace", r"IsManifold", r"ModelWithCorners", r"Manifold",
+                 r"EuclideanSpace", r"TangentSpace"],
+    "dimension": [r"finrank", r"Module\.rank", r"\bdim\b", r"Fin\s+\d",
+                  r"EuclideanSpace", r"Nat\.card"],
+    "orientation": [r"Orientation", r"orient"],
+}
+
+
+def source_text(pid):
+    for name in ("problem.tex", "problem.md"):
+        path = os.path.join(ROOT, "problems", pid, name)
+        if os.path.exists(path):
+            try:
+                return open(path, errors="replace").read()
+            except OSError:
+                pass
+    return ""
+
+
+def dropped_structure(pid, text):
+    """Structure the SOURCE demands that the encoding shows no sign of carrying."""
+    src = source_text(pid)
+    if not src:
+        return []
+    out = []
+    for demand, patterns in STRUCTURE_DEMANDS.items():
+        if not any(re.search(p, src, re.I) for p in patterns):
+            continue
+        if any(re.search(c, text) for c in STRUCTURE_CARRIERS[demand]):
+            continue
+        out.append(demand)
+    return out
+
+
 def check(pid):
     """Return list of (level, message). level in {'FAIL','warn'}."""
     out = []
@@ -149,6 +198,15 @@ def check(pid):
     else:
         out.append(("warn", "no `sorry`: statement is already proved, "
                             "check it is the STATEMENT that was wanted"))
+
+    # (5b) DROPPED HYPOTHESES.  A statement that keeps the shape of the problem
+    # while discarding what makes it that problem is not that problem.
+    dropped = dropped_structure(pid, text)
+    if dropped:
+        out.append(("FAIL", "source demands %s and the encoding carries no sign "
+                            "of it: dropping conditions from the informal "
+                            "statement restates the problem as an easier one"
+                    % ", ".join(sorted(dropped))))
 
     # (6) UNCONDITIONAL CLAIM -- the apm_t99a02 shape ("every type is
     # Nonempty").  Not decidable here; surfaced for the reviewer.

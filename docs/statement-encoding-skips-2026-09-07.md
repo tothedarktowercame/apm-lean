@@ -153,3 +153,42 @@ principle); no `intersectionNumber`; no manifold Euler characteristic
 (`eulerChar` is the poset/incidence-algebra one); no `TopologicalSpace` or
 `ChartedSpace` instance on `LinearAlgebra.Projectivization`, and no `RP`
 notation.
+
+## Joe's ruling on dropped hypotheses, 2026-09-08
+
+**"If it's dropping conditions from the informal statement, we shouldn't allow
+that. That doesn't make any sense."**
+
+A constructive encoding may DEFINE what Mathlib lacks -- that route is
+explicitly allowed, and is how the topology loop already works. What it may
+not do is keep the shape of the problem while discarding the hypotheses that
+make it that problem.
+
+**t99A05 is withdrawn on this ruling.** Its source asks: for a SMOOTH map
+between MANIFOLDS and a SUBMANIFOLD Z with dim Z = dim Y and nonzero mod-2
+degree, must a compact submanifold W exist with nonzero mod-2 intersection
+number? The encoding had `Continuous` in place of smooth, `TopologicalSpace`
+in place of manifold, a bare `Set X` in place of the submanifold, and no
+dimension condition at all -- then pinned W to be exactly the fibre rather
+than asserting one exists. It passed every mechanical check, because a
+statement can be well-formed, non-trivial, and still not be the problem.
+
+The constructive route remains open for it: define mod-2 degree and mod-2
+intersection number locally, then state the question with smoothness, the
+manifold structures and dim Z = dim Y intact. That is more work than the
+withdrawn encoding and it is the work the problem actually asks for.
+
+**The rule is now enforced, not remembered.**
+`scripts/check_statement_quality.py` fails an encoding when the source demands
+smoothness, a manifold, a dimension condition or an orientation and the Lean
+carries no sign of it. Scanned across all 471 encoded bundles it flags ten:
+
+    a94J06 (orientation)   b99A04 (dimension)   m99A05 (dimension)
+    t00A04 (smooth,manifold)  t01A07 (manifold)  t91A01 (smooth,orientation)
+    t91A05 (smooth)        t91A07 (manifold)    t99A04 (manifold)
+    t99A05 (smooth,manifold,dimension)  <- withdrawn
+
+t99A04 is the next clearest: its source is a connected oriented compact
+2-manifold with a smooth circle embedding and closed 1-forms; its encoding is
+`g : ℝ → ℝ` with `∫₀¹ deriv g = 0`. The other nine are reported, not touched
+-- withdrawing committed encodings is a decision per problem, not a sweep.
