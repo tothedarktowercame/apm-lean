@@ -15171,6 +15171,43 @@
    "The localized rank piece and its projected base-point chart are packaged together; chart formulas, residual slice flatness, and local image nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected defining-data package cannot be promoted with its exact localized order-one rank-at-most equality, base derivative range, projected left and right coordinate maps, strict derivative fields, surjective ranges, complementary kernels, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedDefiningData.lean"
+    "ConstructionTargets/SardFirstDerivativeRankPieceProjectedDefiningData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE RANK-PIECE PROJECTED DEFINING DATA",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceImplicitFunctionDataProbe.lean",
+     :sha256
+     "ac3974be552fb38923c70b503216934c47baba0199268149333055652b4573dc"},
+    :declarations
+    ["exists_open_rankUpperLocus_and_projected_definingData"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct the exact projected ImplicitFunctionData from the retained fields, expose its local chart formulas, prove residual derivative flatness on constant projected-coordinate slices throughout the rank-at-most locus, and derive local image nullity."},
+   :representation
+   {:source
+    "A point of a localized order-one exact derivative-rank-r piece and C1 regularity in finite-dimensional real inner-product spaces.",
+    :target
+    "An open neighborhood identifying the localized exact-rank piece with its rank-at-most form, plus the exact projected left/right coordinate maps, strict derivatives, surjectivity fields, and complementary-kernel field needed for ImplicitFunctionData."},
+   :id
+   :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-derivative-rank-piece-projected-chart-1
+    :critical-value-sard-projected-complemented-strict-derivative-data-1
+    :critical-value-sard-exact-rank-local-upper-locus-1],
+   :current-residual
+   "All projected ImplicitFunctionData defining fields are retained alongside the localized rank-at-most representation; exact chart construction, coordinate-slice residual flatness, and local image nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -15228,74 +15265,67 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled projected-chart package cannot be promoted with its exact order-one localized rank piece, open rank-at-most representation, base-point memberships, base derivative range, projected-kernel coordinate type, OpenPartialHomeomorph witness, C1 hypothesis, or standard-axiom profile.",
+      "Stop only if the compiled projected defining-data package cannot be promoted with its exact localized order-one rank-at-most equality, base derivative range, projected left and right coordinate maps, strict derivative fields, surjective ranges, complementary kernels, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean"
-       "ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.md"],
+      ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedDefiningData.lean"
+       "ConstructionTargets/SardFirstDerivativeRankPieceProjectedDefiningData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE RANK-PIECE PROJECTED CHART",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE RANK-PIECE PROJECTED DEFINING DATA",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstDerivativeRankPieceProjectedChartProbe.lean",
+        "/tmp/SardFirstDerivativeRankPieceImplicitFunctionDataProbe.lean",
         :sha256
-        "132f013859ec4f53f152939d72f1e9eea83785c6fad30b9423d94ea640cefdc3"},
+        "ac3974be552fb38923c70b503216934c47baba0199268149333055652b4573dc"},
        :declarations
-       ["exists_open_rankUpperLocus_and_projected_localRankNormalForm"],
+       ["exists_open_rankUpperLocus_and_projected_definingData"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Retain the projected chart coordinate formulas, prove that the residual target derivative vanishes on constant projected-coordinate slices throughout the localized rank-at-most locus, and derive pointwise local image nullity for each exact-rank piece."},
+       "Construct the exact projected ImplicitFunctionData from the retained fields, expose its local chart formulas, prove residual derivative flatness on constant projected-coordinate slices throughout the rank-at-most locus, and derive local image nullity."},
       :representation
       {:source
-       "A point of the localized order-one exact derivative-rank-r piece of a C1 map between finite-dimensional real inner-product spaces.",
+       "A point of a localized order-one exact derivative-rank-r piece and C1 regularity in finite-dimensional real inner-product spaces.",
        :target
-       "An open neighborhood identifying the localized exact-rank piece with its rank-at-most form, together with a projected local rank OpenPartialHomeomorph based on the same derivative and containing the base point in its source."},
+       "An open neighborhood identifying the localized exact-rank piece with its rank-at-most form, plus the exact projected left/right coordinate maps, strict derivatives, surjectivity fields, and complementary-kernel field needed for ImplicitFunctionData."},
       :id
-      :critical-value-sard-first-derivative-rank-piece-projected-chart-1,
+      :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-derivative-rank-piece-local-upper-locus-1
-       :critical-value-sard-projected-implicit-function-packaging-1
+      [:critical-value-sard-first-derivative-rank-piece-projected-chart-1
+       :critical-value-sard-projected-complemented-strict-derivative-data-1
        :critical-value-sard-exact-rank-local-upper-locus-1],
       :current-residual
-      "The localized rank piece and its projected base-point chart are packaged together; chart formulas, residual slice flatness, and local image nullity remain.",
+      "All projected ImplicitFunctionData defining fields are retained alongside the localized rank-at-most representation; exact chart construction, coordinate-slice residual flatness, and local image nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture combines the localized order-one rank-at-most representation with a projected local rank chart based on the same base-point derivative. It retains the open neighborhood, base-point membership, exact localized-locus equality, dependent derivative-range and kernel coordinate types, and chart-source membership. The next analytic step is to retain the chart coordinate formulas and use the rank-at-most bound to prove residual derivative flatness on constant projected-coordinate slices.",
+     "The rectangular theorem is not refuted. The current projected-chart package exposes only a homeomorphism witness and source membership, while residual-flatness needs the exact defining coordinate maps and derivatives. A placeholder-free fixture now retains the localized rank-at-most equality together with the projected left and right maps, their strict derivatives, surjective ranges, and complementary kernels. Constructing the exact ImplicitFunctionData from these fields and transporting the residual derivative-flatness theorem through its coordinate slices remain downstream.",
      :commands
      [{:cmd
        "rg -n \"hasStrictFDerivAt.*fderiv|\\.hasStrictFDerivAt|contDiff.*strictFDeriv\" ConstructionTargets .lake/packages/mathlib/Mathlib/Analysis/Calculus | head -100",
        :exit 0}
       {:cmd
-       "sed -n '1,120p' ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean; sed -n '1,100p' ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean",
-       :exit 0}
-      {:cmd
-       "lake build ConstructionTargets.SardProjectedImplicitFunctionPackaging",
-       :exit 0,
-       :output "Build completed successfully (2289 jobs)."}
-      {:cmd
-       "lake env lean /tmp/SardFirstDerivativeRankPieceProjectedChartProbe.lean",
+       "lake env lean /tmp/SardFirstDerivativeRankPieceImplicitFunctionDataProbe.lean",
        :exit 0,
        :output
-       "'SardFirstDerivativeRankPieceProjectedChartProbe.exists_open_rankUpperLocus_and_projected_localRankNormalForm' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFirstDerivativeRankPieceImplicitFunctionDataProbe.exists_open_rankUpperLocus_and_projected_definingData' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFirstDerivativeRankPieceProjectedChartProbe.lean problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean ConstructionTargets/SardExactRankLocalUpperLocus.lean",
+       "sha256sum /tmp/SardFirstDerivativeRankPieceImplicitFunctionDataProbe.lean problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean ConstructionTargets/SardExactRankLocalUpperLocus.lean",
        :exit 0,
        :output
-       "132f013859ec4f53f152939d72f1e9eea83785c6fad30b9423d94ea640cefdc3  /tmp/SardFirstDerivativeRankPieceProjectedChartProbe.lean\n4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48  ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean\nf4956afb1cd0eb4d8765043d8883e961874da9698a1805322de1ef3f933d61f3  ConstructionTargets/SardProjectedImplicitFunctionPackaging.lean\nebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153  ConstructionTargets/SardExactRankLocalUpperLocus.lean"}
+       "ac3974be552fb38923c70b503216934c47baba0199268149333055652b4573dc  /tmp/SardFirstDerivativeRankPieceImplicitFunctionDataProbe.lean\n4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n132f013859ec4f53f152939d72f1e9eea83785c6fad30b9423d94ea640cefdc3  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean\n295c9349737bd5642c5d3914e0e70758a223841c7f3651b50228f5cdedb5fde2  ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean\nebe78699cf9a0585aeec9a13fb6b2393890471fc6decb246e5b076da2494f153  ConstructionTargets/SardExactRankLocalUpperLocus.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeRankPieceProjectedChartProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeRankPieceImplicitFunctionDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 123 items OK; {:done 115, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 124 items OK; {:done 116, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -15307,12 +15337,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFirstDerivativeRankPieceProjectedChartProbe.lean",
+      "/tmp/SardFirstDerivativeRankPieceImplicitFunctionDataProbe.lean",
       :sha256
-      "132f013859ec4f53f152939d72f1e9eea83785c6fad30b9423d94ea640cefdc3"},
+      "ac3974be552fb38923c70b503216934c47baba0199268149333055652b4573dc"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -15384,7 +15414,8 @@
     :critical-value-sard-localized-flat-through-taylor-nullity-1
     :critical-value-sard-first-derivative-locus-rank-aggregation-1
     :critical-value-sard-first-derivative-rank-piece-local-upper-locus-1
-    :critical-value-sard-first-derivative-rank-piece-projected-chart-1],
+    :critical-value-sard-first-derivative-rank-piece-projected-chart-1
+    :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
