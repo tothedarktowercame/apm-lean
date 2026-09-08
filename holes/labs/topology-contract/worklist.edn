@@ -14810,7 +14810,7 @@
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
    :review-finding
-   "Deterministic dependency defect: commit d7b6ffeba8d89e2627034fa76560d134b13c4efd compiles, changes exactly the two scoped files, and its fixture hash reproduces as 10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48 with standard-only axioms. However, the new module directly imports ConstructionTargets.SardExactRankLocalUpperLocus and its sole theorem directly applies exists_open_inter_rankStratum_eq_rankLE, while the row's :depends-on vector names only :critical-value-sard-first-derivative-locus-rank-aggregation-1 and :critical-value-sard-rank-strata-1. Neither declaration supplies that theorem. The row must add :critical-value-sard-exact-rank-local-upper-locus-1 as a dependency and re-enter review; otherwise its reviewed dependency boundary omits the prerequisite that proves the result.",
+   "The deterministic dependency defect remains. Repair commit b1671b89207b2f99ea251dbad280abc8b4eef6d6 only adds prose to SardFirstDerivativeRankPieceLocalUpperLocus.md saying the ledger must retain :critical-value-sard-exact-rank-local-upper-locus-1, and the evidence now contains a separate :dependencies field, but the row's authoritative :depends-on vector still contains only :critical-value-sard-first-derivative-locus-rank-aggregation-1 and :critical-value-sard-rank-strata-1. The committed Lean source still directly imports SardExactRankLocalUpperLocus and applies exists_open_inter_rankStratum_eq_rankLE. The fixture remains byte-identical to the Lean source with hash 10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48 and standard-only axioms, but PASS requires adding :critical-value-sard-exact-rank-local-upper-locus-1 to the actual :depends-on vector, not merely documenting the omission.",
    :stop-condition
    "Stop only if the compiled localized rank-piece theorem cannot be promoted with its exact order-one firstNonzeroJetLocus predicate, exact derivative-rank membership, open neighborhood and base-point membership, equality with the localized rank-at-most locus, C1 hypothesis, or standard-axiom profile.",
    :evidence
@@ -14891,6 +14891,12 @@
       :output
       "[master b1671b89] Record exact rank upper locus dependency\n 1 file changed, 5 insertions(+)"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-1",
+     :job "invoke-1788838605169-14487-5cd99630",
+     :finding
+     "The deterministic dependency defect remains. Repair commit b1671b89207b2f99ea251dbad280abc8b4eef6d6 only adds prose to SardFirstDerivativeRankPieceLocalUpperLocus.md saying the ledger must retain :critical-value-sard-exact-rank-local-upper-locus-1, and the evidence now contains a separate :dependencies field, but the row's authoritative :depends-on vector still contains only :critical-value-sard-first-derivative-locus-rank-aggregation-1 and :critical-value-sard-rank-strata-1. The committed Lean source still directly imports SardExactRankLocalUpperLocus and applies exists_open_inter_rankStratum_eq_rankLE. The fixture remains byte-identical to the Lean source with hash 10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48 and standard-only axioms, but PASS requires adding :critical-value-sard-exact-rank-local-upper-locus-1 to the actual :depends-on vector, not merely documenting the omission."},
     :commit "b1671b89207b2f99ea251dbad280abc8b4eef6d6",
     :commits
     ["d7b6ffeba8d89e2627034fa76560d134b13c4efd"
@@ -14911,7 +14917,7 @@
       :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2",
       :ancestor true}]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md"],
