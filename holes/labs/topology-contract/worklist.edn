@@ -11992,6 +11992,42 @@
    "The refined higher-order locus is contained in the exact kernel-parameter image on each implicit chart; construction instantiation, source-dimension induction, local nullity transfer, and the first-derivative rank case remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled base-point-to-neighborhood regularity theorem cannot be promoted with its exact inverse-chart kernel parameter, open neighborhood, retained ContDiffAt order, pointwise DifferentiableAt conclusion, nonzero finite-order hypotheses, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardImplicitFunctionKernelParameterLocalRegularity.lean"
+    "ConstructionTargets/SardImplicitFunctionKernelParameterLocalRegularity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION KERNEL-PARAMETER LOCAL REGULARITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardImplicitFunctionKernelParameterLocalRegularityProbe.lean",
+     :sha256
+     "bd0041874c06b6f2153ca43d29152f8b3e6b131088628cc3944365ff2fc83dc1"},
+    :declarations
+    ["ImplicitFunctionData.exists_open_kernelParameter_contDiffAt_and_differentiableAt"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Intersect the exact kernel target slice with the open regularity neighborhood, shrink the source chart neighborhood so the refined locus remains in that restricted parameter image, then apply lower-dimensional critical-image nullity and local aggregation."},
+   :representation
+   {:source
+    "Exact ImplicitFunctionData ℝ E ℝ G whose fixed-left-coordinate inverse-chart kernel parameter is ContDiffAt ℝ n at φ.rightFun φ.pt, with n nonzero and distinct from the infinite ℕ∞ order.",
+    :target
+    "An open neighborhood V of φ.rightFun φ.pt on which the same exact inverse-chart kernel parameter is ContDiffAt ℝ n and DifferentiableAt ℝ at every point."},
+   :id
+   :critical-value-sard-implicit-function-kernel-parameter-local-regularity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1
+    :critical-value-sard-scalarized-jet-kernel-parameter-contdiff-1],
+   :current-residual
+   "The exact kernel parameter is smooth and differentiable throughout an open parameter neighborhood; compatible restriction of the source containment and source-dimension induction remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -12049,67 +12085,66 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled refined-locus containment cannot be promoted with its exact lower-jet vanishing, scalarized fixed-direction level, ImplicitFunctionData leftFun/pt equalities, chart-source localization, inverse-chart kernel image, or standard-axiom profile.",
+      "Stop only if the compiled base-point-to-neighborhood regularity theorem cannot be promoted with its exact inverse-chart kernel parameter, open neighborhood, retained ContDiffAt order, pointwise DifferentiableAt conclusion, nonzero finite-order hypotheses, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstNonzeroJetKernelParameterContainment.lean"
-       "ConstructionTargets/SardFirstNonzeroJetKernelParameterContainment.md"],
+      ["ConstructionTargets/SardImplicitFunctionKernelParameterLocalRegularity.lean"
+       "ConstructionTargets/SardImplicitFunctionKernelParameterLocalRegularity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET KERNEL-PARAMETER CONTAINMENT",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION KERNEL-PARAMETER LOCAL REGULARITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
+        "/tmp/SardImplicitFunctionKernelParameterLocalRegularityProbe.lean",
         :sha256
-        "8065922337e54f3d198edf96294467460c51d1d88ba4d71c00aa90c8c87d2f23"},
+        "bd0041874c06b6f2153ca43d29152f8b3e6b131088628cc3944365ff2fc83dc1"},
        :declarations
-       ["firstNonzeroJetLocus_succ_subset_scalarized_level_zero"
-        "firstNonzeroJetLocus_inter_source_subset_image_kernelParameter"],
+       ["ImplicitFunctionData.exists_open_kernelParameter_contDiffAt_and_differentiableAt"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the containment theorem with the compiled scalarized-jet ImplicitFunctionData, apply lower-dimensional critical-image nullity to the kernel composite and transfer it to each local refined locus, then aggregate locally and combine with the rank-normal-form and Taylor-flat cases."},
+       "Intersect the exact kernel target slice with the open regularity neighborhood, shrink the source chart neighborhood so the refined locus remains in that restricted parameter image, then apply lower-dimensional critical-image nullity and local aggregation."},
       :representation
       {:source
-       "A firstNonzeroJetLocus f K (i+1) with 1≤i, fixed directions v, a selected scalar functional ℓ, and exact ImplicitFunctionData whose leftFun is the scalarized i-jet and whose pt is a point x of the locus.",
+       "Exact ImplicitFunctionData ℝ E ℝ G whose fixed-left-coordinate inverse-chart kernel parameter is ContDiffAt ℝ n at φ.rightFun φ.pt, with n nonzero and distinct from the infinite ℕ∞ order.",
        :target
-       "Containment of the locus intersected with the implicit chart source in the image of the exact fixed-left-coordinate inverse-chart kernel parameterization."},
+       "An open neighborhood V of φ.rightFun φ.pt on which the same exact inverse-chart kernel parameter is ContDiffAt ℝ n and DifferentiableAt ℝ at every point."},
       :id
-      :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1,
+      :critical-value-sard-implicit-function-kernel-parameter-local-regularity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-nonzero-jet-locus-decomposition-1
-       :critical-value-sard-implicit-function-level-set-kernel-parameterization-1],
+      [:critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1
+       :critical-value-sard-scalarized-jet-kernel-parameter-contdiff-1],
       :current-residual
-      "The refined higher-order locus is contained in the exact kernel-parameter image on each implicit chart; construction instantiation, source-dimension induction, local nullity transfer, and the first-derivative rank case remain.",
+      "The exact kernel parameter is smooth and differentiable throughout an open parameter neighborhood; compatible restriction of the source containment and source-dimension induction remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The refined least-order decomposition exposes the next exact set-level seam: for derivative order i+1 with i≥1, lower-order vanishing forces every point of the refined locus into the zero level of each selected scalarized i-jet. After identifying an ImplicitFunctionData left coordinate and base point with that scalarized jet and a point of the locus, a placeholder-free fixture proves that the locus intersected with the chart source is contained in the exact inverse-chart kernel-parameter image. This supplies the parameterized-set inclusion required by the compiled critical-image nullity transfer; source-dimension induction and the separate first-derivative/rank-normal-form case remain downstream.",
+     "The rectangular theorem is not refuted. The compiled kernel parameter is currently only ContDiffAt at its base coordinate, while the parameterized critical-set and image-nullity transfer requires differentiability at every point of a parameter set. A placeholder-free fixture proves the exact localization bridge: for nonzero finite smoothness order n, base-point ContDiffAt of the inverse-chart kernel parameter yields an open neighborhood of the right base coordinate on which the same exact map is ContDiffAt of order n and DifferentiableAt at every point. Restricting the chart containment to this parameter neighborhood and invoking source-dimension induction remain downstream.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
+       "lake env lean /tmp/SardImplicitFunctionKernelParameterLocalRegularityProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
+       "sha256sum /tmp/SardImplicitFunctionKernelParameterLocalRegularityProbe.lean",
        :exit 0,
        :output
-       "8065922337e54f3d198edf96294467460c51d1d88ba4d71c00aa90c8c87d2f23  /tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean"}
+       "bd0041874c06b6f2153ca43d29152f8b3e6b131088628cc3944365ff2fc83dc1  /tmp/SardImplicitFunctionKernelParameterLocalRegularityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionKernelParameterLocalRegularityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 104 items OK; {:done 96, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 105 items OK; {:done 97, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetKernelParameterContainment.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nbd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce  ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n8065922337e54f3d198edf96294467460c51d1d88ba4d71c00aa90c8c87d2f23  ConstructionTargets/SardFirstNonzeroJetKernelParameterContainment.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -12121,12 +12156,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFirstNonzeroJetKernelParameterContainmentProbe.lean",
+      "/tmp/SardImplicitFunctionKernelParameterLocalRegularityProbe.lean",
       :sha256
-      "8065922337e54f3d198edf96294467460c51d1d88ba4d71c00aa90c8c87d2f23"},
+      "bd0041874c06b6f2153ca43d29152f8b3e6b131088628cc3944365ff2fc83dc1"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -12179,7 +12214,8 @@
     :critical-value-sard-local-nullity-second-countable-aggregation-1
     :critical-value-sard-higher-jet-image-nullity-aggregation-1
     :critical-value-sard-first-nonzero-jet-locus-decomposition-1
-    :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1],
+    :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1
+    :critical-value-sard-implicit-function-kernel-parameter-local-regularity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
