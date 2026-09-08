@@ -21492,8 +21492,100 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled open chart-source refinement theorem cannot be promoted for arbitrary open partial homeomorphisms, an open neighborhood containing the base point, base-point membership in the chart source, a local intersection equality, an open refined neighborhood contained in the chart source, preservation of the base point and intersection equality, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Refine each projected rank neighborhood into its chart source, instantiate every target-coordinate fiber by an inverse slice, prove the slice Sard hypotheses, and apply compact image nullity.",
+    :gates
+    {:statement-hash :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :warnings :pass,
+     :scope :pass,
+     :axioms :standard-only,
+     :worklist :pass,
+     :consumer-fixture :unchanged,
+     :declaration :pass,
+     :diff-check :pass,
+     :worktree :clean,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_open_subset_chartSource_with_inter_eq"
+     "aed3982949432d5e3d3e8cb4ae269174291e9beed5563f21296fdf0c35b1923b"},
+    :axioms ["propext" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean",
+      :exit 0,
+      :output
+      "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0  /tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean",
+      :exit 0,
+      :output
+      "'SardOpenChartSourceNeighborhoodRefinementProbe.exists_open_subset_chartSource_with_inter_eq' depends on axioms: [propext, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,22p' ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean | sha256sum",
+      :exit 0,
+      :output
+      "aed3982949432d5e3d3e8cb4ae269174291e9beed5563f21296fdf0c35b1923b  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 167 items OK; {:done 158, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md && git commit -m 'Add chart source neighborhood refinement'",
+      :exit 0,
+      :output
+      "[master 7d50ba79] Add chart source neighborhood refinement; 2 files changed, 36 insertions(+); create mode 100644 ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean; create mode 100644 ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "7d50ba7932e2714fd3a005f7d70b651d3efe4378"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md",
+      :exit 0,
+      :output
+      "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0  ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean\ndb309f13ba3252d4d813b46087d9b06bd9a829dafd5ea81d78d2378424694cf7  ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "7d50ba7932e2714fd3a005f7d70b651d3efe4378",
+    :changed-paths
+    ["ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean"
+     "ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md"],
+    :file-hashes
+    {"ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean"
+     "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0",
+     "ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md"
+     "db309f13ba3252d4d813b46087d9b06bd9a829dafd5ea81d78d2378424694cf7"},
+    :fixture
+    {:path "/tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean",
+     :sha256
+     "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0"},
+    :declarations ["exists_open_subset_chartSource_with_inter_eq"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean"
     "ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md"],
