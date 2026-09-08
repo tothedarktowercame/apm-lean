@@ -22484,8 +22484,70 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled residual slice zero-derivative theorem cannot be promoted for arbitrary real normed source, target, slice, and residual spaces, every ambient map and slice parameterization differentiable at corresponding points, every continuous-linear residual coordinate, vanishing of the composed continuous-linear derivative, zero derivative of the residualized slice, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "For every point of a concrete projected inverse slice over the localized derivative rank-upper locus, obtain its derivative and prove the residual projection composition Q ∘ Df ∘ J is zero.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"hasFDerivAt_zero_residual_comp_slice"
+     "d971a4314380ec0a3b8f0b87bbd0d8597689fa4193d3763dfbcdcf173c5436ca"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardProjectedChartResidualSliceDerivativeZeroProbe.lean",
+      :exit 0,
+      :output
+      "a48034365bc3fefe304a7787b2f4263046ac23af6e5870340f2c59821bbe223e  /tmp/SardProjectedChartResidualSliceDerivativeZeroProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean /tmp/SardProjectedChartResidualSliceDerivativeZeroProbe.lean",
+      :exit 0,
+      :output
+      "a48034365bc3fefe304a7787b2f4263046ac23af6e5870340f2c59821bbe223e  ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean\na48034365bc3fefe304a7787b2f4263046ac23af6e5870340f2c59821bbe223e  /tmp/SardProjectedChartResidualSliceDerivativeZeroProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean",
+      :exit 0,
+      :output
+      "'SardProjectedChartResidualSliceDerivativeZeroProbe.hasFDerivAt_zero_residual_comp_slice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '13,19p' ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean | sha256sum",
+      :exit 0,
+      :output
+      "d971a4314380ec0a3b8f0b87bbd0d8597689fa4193d3763dfbcdcf173c5436ca  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 174 items OK; {:done 165, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add residual slice zero derivative adapter'",
+      :exit 0,
+      :output
+      "[master 357a8f1c] Add residual slice zero derivative adapter\n2 files changed, 32 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "357a8f1c",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean"
+     "ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.md"],
+    :fixture
+    {:path
+     "/tmp/SardProjectedChartResidualSliceDerivativeZeroProbe.lean",
+     :sha256
+     "a48034365bc3fefe304a7787b2f4263046ac23af6e5870340f2c59821bbe223e"},
+    :declarations ["hasFDerivAt_zero_residual_comp_slice"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean"
     "ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.md"],
