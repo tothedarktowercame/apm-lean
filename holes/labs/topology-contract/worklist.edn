@@ -29849,6 +29849,40 @@
    "The Taylor-flat branch now supplies the arbitrary additive Haar measure required by finite-jet assembly; concrete higher-locus induction instantiation remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled higher first-nonzero-jet locus theorem cannot be promoted uniformly over every order 2 ≤ j ≤ k from the existing per-order smoothness hypotheses, finite nonzero induction regularity order, lower-dimensional critical-image induction, localized criticality, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardHigherFirstNonzeroJetLociInduction.lean"
+    "ConstructionTargets/SardHigherFirstNonzeroJetLociInduction.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / INDEXED HIGHER FIRST-NONZERO-JET INDUCTION NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardHigherFirstNonzeroJetLociInductionProbe.lean",
+     :sha256
+     "8791f717ff86fbe7782f9c2f71170e21e30d67b7fb79f9336f0088581df4121e"},
+    :declarations
+    ["higher_firstNonzeroJetLoci_image_null_of_induction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Combine this indexed higher-locus theorem with arbitrary-additive-Haar Taylor-flat nullity and localized finite-jet closed-open assembly."},
+   :representation
+   {:source
+    "Per-order smoothness, localized nonsurjective derivatives, and one lower-dimensional critical-image induction hypothesis for every smaller finite-dimensional source.",
+    :target
+    "Zero target measure of every higher first-nonzero-jet locus image for all orders 2 through k."},
+   :id :critical-value-sard-higher-first-nonzero-jet-loci-induction-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
+    :critical-value-sard-localized-finite-jet-closed-open-assembly-1],
+   :current-residual
+   "All higher first-nonzero-jet image-nullity obligations are supplied in the indexed form required by finite-jet assembly; final rectangular hypothesis threading remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -29902,81 +29936,82 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Use arbitrary-additive-Haar Taylor-flat nullity, instantiate every higher first-nonzero-jet locus from lower-dimensional induction, and invoke localized finite-jet assembly.",
+     "Combine arbitrary-additive-Haar Taylor-flat nullity, indexed higher-jet induction nullity, and order-one closed-open nullity through localized finite-jet assembly.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"localized_flatThrough_image_addHaar_eq_zero"
-      "68ca3c4dcdacd2dd2ee291f03652489a98a9c1b7da02d98b947e5c3c051b6e52"},
+     {"higher_firstNonzeroJetLoci_image_null_of_induction"
+      "0ab5fbcd94425ea2d95fa25ae1cbafac191a9a57b187bae2f2df726003f8c7a0"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if localized Taylor-flat volume nullity cannot be promoted to an arbitrary additive Haar target measure under the existing finite-dimensional real inner-product, compact localization, smoothness, exponent-surplus, volume-constant, and contraction hypotheses, or if the theorem requires nonstandard axioms.",
+      "Stop only if the compiled higher first-nonzero-jet locus theorem cannot be promoted uniformly over every order 2 ≤ j ≤ k from the existing per-order smoothness hypotheses, finite nonzero induction regularity order, lower-dimensional critical-image induction, localized criticality, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLocalizedFlatThroughAddHaarNullity.lean"
-       "ConstructionTargets/SardLocalizedFlatThroughAddHaarNullity.md"],
+      ["ConstructionTargets/SardHigherFirstNonzeroJetLociInduction.lean"
+       "ConstructionTargets/SardHigherFirstNonzeroJetLociInduction.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED TAYLOR-FLAT ADDITIVE-HAAR NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / INDEXED HIGHER FIRST-NONZERO-JET INDUCTION NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardLocalizedFlatThroughAddHaarNullityProbe.lean",
+       {:path "/tmp/SardHigherFirstNonzeroJetLociInductionProbe.lean",
         :sha256
-        "bf80637fff8137e3935174641ecc5e220bcc02181cc4761f270b9f45385a029f"},
-       :declarations ["localized_flatThrough_image_addHaar_eq_zero"],
+        "8791f717ff86fbe7782f9c2f71170e21e30d67b7fb79f9336f0088581df4121e"},
+       :declarations
+       ["higher_firstNonzeroJetLoci_image_null_of_induction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate higher first-nonzero-jet induction and invoke localized finite-jet assembly."},
+       "Combine this indexed higher-locus theorem with arbitrary-additive-Haar Taylor-flat nullity and localized finite-jet closed-open assembly."},
       :representation
       {:source
-       "Localized Taylor-flat image nullity stated for canonical finite-dimensional volume under compactness, smoothness, and exponent-surplus hypotheses.",
+       "Per-order smoothness, localized nonsurjective derivatives, and one lower-dimensional critical-image induction hypothesis for every smaller finite-dimensional source.",
        :target
-       "Nullity of the same localized Taylor-flat image for an arbitrary additive Haar target measure."},
+       "Zero target measure of every higher first-nonzero-jet locus image for all orders 2 through k."},
       :id
-      :critical-value-sard-localized-flat-through-add-haar-nullity-1,
+      :critical-value-sard-higher-first-nonzero-jet-loci-induction-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-localized-flat-through-taylor-nullity-1
-       :critical-value-sard-volume-nullity-to-add-haar-1],
+      [:critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
+       :critical-value-sard-localized-finite-jet-closed-open-assembly-1],
       :current-residual
-      "The Taylor-flat branch now supplies the arbitrary additive Haar measure required by finite-jet assembly; concrete higher-locus induction instantiation remains.",
+      "All higher first-nonzero-jet image-nullity obligations are supplied in the indexed form required by finite-jet assembly; final rectangular hypothesis threading remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The volume-to-additive-Haar transfer now combines with the localized Taylor covering theorem in a placeholder-free compiled fixture, yielding Taylor-flat image nullity directly for the arbitrary additive Haar target measure. The remaining analytic input is concrete higher first-nonzero-jet induction before applying finite-jet assembly.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture now converts per-order smoothness and the lower-dimensional critical-image induction hypothesis into image nullity for every higher first-nonzero-jet locus with order 2 through k. This exactly supplies the higher-locus family expected by localized finite-jet assembly; combining it with the banked Taylor-flat and order-one branches remains.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 5 ':id :critical-value-sard-(localized-flat-through-taylor-nullity-1|volume-nullity-to-add-haar-1|localized-finite-jet-closed-open-assembly-1)' holes/labs/topology-contract/worklist.edn",
+       "sed -n '1,240p' ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.lean; sed -n '1,180p' ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean; sed -n '1,180p' ConstructionTargets/SardLocalizedFiniteJetClosedOpenAssembly.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardLocalizedFlatThroughAddHaarNullityProbe.lean",
+       "lake env lean /tmp/SardHigherFirstNonzeroJetLociInductionProbe.lean",
        :exit 0,
        :output
-       "'SardLocalizedFlatThroughAddHaarNullityProbe.localized_flatThrough_image_addHaar_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardHigherFirstNonzeroJetLociInductionProbe.higher_firstNonzeroJetLoci_image_null_of_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardLocalizedFlatThroughAddHaarNullityProbe.lean",
+       "sha256sum /tmp/SardHigherFirstNonzeroJetLociInductionProbe.lean",
        :exit 0,
        :output
-       "bf80637fff8137e3935174641ecc5e220bcc02181cc4761f270b9f45385a029f  /tmp/SardLocalizedFlatThroughAddHaarNullityProbe.lean"}
+       "8791f717ff86fbe7782f9c2f71170e21e30d67b7fb79f9336f0088581df4121e  /tmp/SardHigherFirstNonzeroJetLociInductionProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalizedFlatThroughAddHaarNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardHigherFirstNonzeroJetLociInductionProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,29p' /tmp/SardLocalizedFlatThroughAddHaarNullityProbe.lean | sha256sum",
+       "sed -n '10,34p' /tmp/SardHigherFirstNonzeroJetLociInductionProbe.lean | sha256sum",
        :exit 0,
        :output
-       "68ca3c4dcdacd2dd2ee291f03652489a98a9c1b7da02d98b947e5c3c051b6e52  -"}
+       "0ab5fbcd94425ea2d95fa25ae1cbafac191a9a57b187bae2f2df726003f8c7a0  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 224 items OK; {:done 216, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 225 items OK; {:done 217, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -29991,12 +30026,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardLocalizedFlatThroughAddHaarNullityProbe.lean",
+     {:path "/tmp/SardHigherFirstNonzeroJetLociInductionProbe.lean",
       :sha256
-      "bf80637fff8137e3935174641ecc5e220bcc02181cc4761f270b9f45385a029f"},
+      "8791f717ff86fbe7782f9c2f71170e21e30d67b7fb79f9336f0088581df4121e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -30169,7 +30204,8 @@
     :critical-value-sard-first-derivative-locus-closed-open-finite-aggregation-1
     :critical-value-sard-localized-finite-jet-closed-open-assembly-1
     :critical-value-sard-volume-nullity-to-add-haar-1
-    :critical-value-sard-localized-flat-through-add-haar-nullity-1],
+    :critical-value-sard-localized-flat-through-add-haar-nullity-1
+    :critical-value-sard-higher-first-nonzero-jet-loci-induction-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
