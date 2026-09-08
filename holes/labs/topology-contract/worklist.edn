@@ -22211,8 +22211,69 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled all-point projected-chart inverse-slice regularity theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism, every differentiability order, smoothness of the chart inverse on its open target, every target point and fixed-first-coordinate slice through it, preservation of pointwise smoothness under slice restriction, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Expose sufficient ContDiffOn regularity of the concrete projected local-rank chart inverse on its target and prove zero residual projection derivative on the localized rank-upper slice.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"contDiffAt_inverseSlice_of_contDiffOn_symm"
+     "522c4e5ac8d81b684a51e9f1347e7f8981d041ad56da28aa1f1515f1bb2a381f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean",
+      :exit 0,
+      :output
+      "a75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b  /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean",
+      :exit 0,
+      :output
+      "a75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b  ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean\na75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b  /tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean",
+      :exit 0,
+      :output
+      "'SardProjectedChartInverseSliceContDiffOnProbe.contDiffAt_inverseSlice_of_contDiffOn_symm' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '12,19p' ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean | sha256sum",
+      :exit 0,
+      :output
+      "522c4e5ac8d81b684a51e9f1347e7f8981d041ad56da28aa1f1515f1bb2a381f  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 172 items OK; {:done 163, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add all-point projected chart slice regularity'",
+      :exit 0,
+      :output
+      "[master d86216f0] Add all-point projected chart slice regularity\n2 files changed, 31 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "d86216f0",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean"
+     "ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.md"],
+    :fixture
+    {:path "/tmp/SardProjectedChartInverseSliceContDiffOnProbe.lean",
+     :sha256
+     "a75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b"},
+    :declarations ["contDiffAt_inverseSlice_of_contDiffOn_symm"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean"
     "ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.md"],
