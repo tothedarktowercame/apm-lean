@@ -33925,6 +33925,24 @@
       :exit 0,
       :output "?? scripts/__pycache__/",
       :note "Unrelated concurrent cache outside row scope."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788908115143-15622-0d17b756",
+     :commands
+     ["git show/diff-tree 3dfafd7633ff263ae48d116a656be8b1848f5a0d"
+      "sha256sum and cmp fixture against recorded source"
+      "sed -n '5,13p' recorded source | sha256sum"
+      "lake env lean /tmp/SardProjectedCoordinateExplicitInheritedBorelDataProbe.lean"
+      "lake env lean ConstructionTargets/SardProjectedCoordinateExplicitInheritedBorelData.lean"
+      "lake build ConstructionTargets.SardProjectedCoordinateExplicitInheritedBorelData — 8348 jobs"
+      "placeholder scan over fixture and scoped artifacts — exit 1"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn — 259 items OK"
+      "sha256sum and sorry count for problems/t93A04/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff --check recorded commit range; git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit has exact two-file scope; fixture and source are byte-identical and all hashes reproduce; fixture and module compile and the 8348-job build succeeds with standard axioms only; placeholders are absent; both BorelSpace arguments are explicitly fixed to inherited subtype topology and measurable-space instances, matching the representation boundary; worklist and frozen consumer gates reproduce; no files were edited."},
     :commit "3dfafd7633ff263ae48d116a656be8b1848f5a0d",
     :changed-paths
     ["ConstructionTargets/SardProjectedCoordinateExplicitInheritedBorelData.lean"
@@ -33937,7 +33955,7 @@
     :declarations
     ["projectedCoordinates_explicit_inherited_borelData"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedCoordinateExplicitInheritedBorelData.lean"
     "ConstructionTargets/SardProjectedCoordinateExplicitInheritedBorelData.md"],
@@ -34120,7 +34138,7 @@
       "748b3341983b8cf37731de5d6320a8d534b3f6fd2ea09a9c4303443d90a1cd1a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
