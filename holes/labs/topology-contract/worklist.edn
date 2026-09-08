@@ -16894,6 +16894,40 @@
    "Projected derivative annihilation now yields nonsurjectivity of the sliced derivative; local lower-dimensional image-nullity instantiation and rank-piece aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected-slice derivative theorem cannot be promoted with the slice derivative witness, surjective projection to a nontrivial codomain, zero derivative of the projected composite, nonsurjectivity conclusion for the slice derivative, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean"
+    "ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED SLICE DERIVATIVE NONSURJECTIVITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean",
+     :sha256
+     "8b1094b322f71576931a97a64e3f466f1c04b4405a0f646a6583ea76b0351151"},
+    :declarations
+    ["not_surjective_fderiv_of_projected_hasFDerivAt_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Apply this calculus bridge to each projected inverse slice, invoke lower-dimensional critical-image induction locally, and aggregate the resulting local nullity over each order-one exact-rank piece."},
+   :representation
+   {:source
+    "A differentiable map q with derivative q', a surjective continuous-linear projection P to a nontrivial coordinate space, and zero Frechet derivative for P composed with q.",
+    :target "Nonsurjectivity of q'."},
+   :id :critical-value-sard-projected-slice-derivative-nonsurjective-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-annihilated-projection-nonsurjective-1
+    :critical-value-sard-rank-upper-residual-slice-flatness-1
+    :critical-value-sard-lower-dimensional-local-critical-image-induction-1],
+   :current-residual
+   "Zero projected-composite derivatives now imply nonsurjectivity of the inverse-slice derivatives; pointwise lower-dimensional image-nullity instantiation and rank-piece aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -16947,74 +16981,72 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Apply the annihilated-projection bridge to the projected inverse-slice derivative, invoke lower-dimensional critical-image induction locally, and aggregate each localized order-one exact-rank piece.",
+     "Apply the projected-slice derivative nonsurjectivity adapter pointwise, invoke lower-dimensional critical-image induction locally, and aggregate each localized order-one exact-rank piece.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled annihilated-projection nonsurjectivity theorem cannot be promoted with a surjective projection, nontrivial projected codomain, exact zero composite, nonsurjectivity conclusion for the original linear map, or standard-axiom profile.",
+      "Stop only if the compiled projected-slice derivative theorem cannot be promoted with the slice derivative witness, surjective projection to a nontrivial codomain, zero derivative of the projected composite, nonsurjectivity conclusion for the slice derivative, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardAnnihilatedProjectionNonsurjective.lean"
-       "ConstructionTargets/SardAnnihilatedProjectionNonsurjective.md"],
+      ["ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean"
+       "ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ANNIHILATED-PROJECTION NONSURJECTIVITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED SLICE DERIVATIVE NONSURJECTIVITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean",
+       {:path
+        "/tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean",
         :sha256
-        "195a09f03f336798658a0aa7095d3ee914761c1542ecb545bb73c35e3dace3a4"},
+        "8b1094b322f71576931a97a64e3f466f1c04b4405a0f646a6583ea76b0351151"},
        :declarations
-       ["LinearMap.not_surjective_of_surjective_comp_eq_zero"],
+       ["not_surjective_fderiv_of_projected_hasFDerivAt_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Apply the annihilated-projection bridge to the projected inverse-slice derivative, invoke lower-dimensional critical-image induction locally, and aggregate each localized order-one exact-rank piece."},
+       "Apply this calculus bridge to each projected inverse slice, invoke lower-dimensional critical-image induction locally, and aggregate the resulting local nullity over each order-one exact-rank piece."},
       :representation
       {:source
-       "A linear map L followed by a surjective linear projection P to a nontrivial module, with P ∘ L equal to zero.",
-       :target "Nonsurjectivity of L."},
-      :id :critical-value-sard-annihilated-projection-nonsurjective-1,
+       "A differentiable map q with derivative q', a surjective continuous-linear projection P to a nontrivial coordinate space, and zero Frechet derivative for P composed with q.",
+       :target "Nonsurjectivity of q'."},
+      :id
+      :critical-value-sard-projected-slice-derivative-nonsurjective-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-rank-upper-residual-slice-flatness-1
+      [:critical-value-sard-annihilated-projection-nonsurjective-1
+       :critical-value-sard-rank-upper-residual-slice-flatness-1
        :critical-value-sard-lower-dimensional-local-critical-image-induction-1],
       :current-residual
-      "Projected derivative annihilation now yields nonsurjectivity of the sliced derivative; local lower-dimensional image-nullity instantiation and rank-piece aggregation remain.",
+      "Zero projected-composite derivatives now imply nonsurjectivity of the inverse-slice derivatives; pointwise lower-dimensional image-nullity instantiation and rank-piece aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The compiled lower-dimensional induction consumes nonsurjectivity of the sliced composite, whereas the current rank-upper slice theorem supplies annihilation of a projected derivative. A placeholder-free fixture proves the exact linear bridge: if a surjective projection to a nontrivial coordinate space annihilates a linear map, that map cannot be surjective. Instantiating this bridge on projected inverse slices and applying lower-dimensional image-nullity induction remain.",
+     "The rectangular theorem is not refuted. The compiled rank-upper theorem gives a zero derivative for a projected inverse-slice composite, and the compiled linear bridge converts an exact zero composite into nonsurjectivity. A placeholder-free calculus adapter now identifies the derivative of the projected composite by the chain rule and uniqueness, then concludes that the original slice derivative is nonsurjective. Applying this adapter pointwise and invoking lower-dimensional critical-image induction remain downstream.",
      :commands
      [{:cmd
-       "sed -n '1,180p' ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.lean; sed -n '1,180p' ConstructionTargets/SardParameterizedLocalCriticalImageNullity.lean",
+       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean",
+       "lake env lean /tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean",
        :exit 0,
        :output
-       "'SardAnnihilatedProjectionNonsurjectiveProbe.LinearMap.not_surjective_of_surjective_comp_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedSliceDerivativeNonsurjectiveProbe.not_surjective_fderiv_of_projected_hasFDerivAt_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean",
+       "sha256sum /tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean problems/t93A04/lean/Main.lean ConstructionTargets/SardAnnihilatedProjectionNonsurjective.lean ConstructionTargets/SardRankUpperResidualSliceFlatness.lean ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.lean",
        :exit 0,
        :output
-       "195a09f03f336798658a0aa7095d3ee914761c1542ecb545bb73c35e3dace3a4  /tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean"}
+       "fixture 8b1094b322f71576931a97a64e3f466f1c04b4405a0f646a6583ea76b0351151; Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; dependencies 195a09f03f336798658a0aa7095d3ee914761c1542ecb545bb73c35e3dace3a4 252c0698b064157d1ac3a7d84d26c421eee0469108d8d56010eef4f84399c9ab a4c845c6f03aa092715aa6e6c535dd2817ae7033377becb788a722bcff995eca"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 133 items OK; {:done 125, :open 1, :blocked 1, :superseded 6}"}
-      {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardRankUpperResidualSliceFlatness.lean ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.lean",
-       :exit 0,
-       :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean; 252c0698b064157d1ac3a7d84d26c421eee0469108d8d56010eef4f84399c9ab  ConstructionTargets/SardRankUpperResidualSliceFlatness.lean; a4c845c6f03aa092715aa6e6c535dd2817ae7033377becb788a722bcff995eca  ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.lean"}
+       "topology-worklist: 134 items OK; {:done 126, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -17025,12 +17057,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean",
+     {:path "/tmp/SardProjectedSliceDerivativeNonsurjectiveProbe.lean",
       :sha256
-      "195a09f03f336798658a0aa7095d3ee914761c1542ecb545bb73c35e3dace3a4"},
+      "8b1094b322f71576931a97a64e3f466f1c04b4405a0f646a6583ea76b0351151"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -17112,7 +17144,8 @@
     :critical-value-sard-projected-inverse-chart-slice-contdiff-1
     :critical-value-sard-implicit-function-residual-slice-flatness-1
     :critical-value-sard-rank-upper-residual-slice-flatness-1
-    :critical-value-sard-annihilated-projection-nonsurjective-1],
+    :critical-value-sard-annihilated-projection-nonsurjective-1
+    :critical-value-sard-projected-slice-derivative-nonsurjective-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
