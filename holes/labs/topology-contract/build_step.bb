@@ -128,9 +128,35 @@
                                (set/subset? work-ids (set (:depends-on checkpoint))))
                   (throw (ex-info "REPLAN needs 1-5 work rows followed by their next checkpoint"
                                   {:receipt receipt}))))
-      :done-unreviewed (doseq [k [:author :commit :fixture :changed-paths :commands :residual]]
-                         (when-not (get receipt k)
-                           (throw (ex-info "implementation receipt lacks field" {:field k}))))
+      :done-unreviewed
+      (do
+        (doseq [k [:author :commit :fixture :changed-paths :commands :residual]]
+          (when-not (get receipt k)
+            (throw (ex-info "implementation receipt lacks field" {:field k}))))
+        ;; Refuse a completion before it can replace the row's evidence when
+        ;; its commits do not implement that row's exact scope.  Include prior
+        ;; commits for a genuine repair, matching worklist_check's union rule.
+        (let [prior (concat (get-in item [:evidence :commits])
+                            (when-let [c (get-in item [:evidence :commit])] [c]))
+              commits (vec (distinct (remove nil?
+                                             (concat prior
+                                                     [(:commit receipt)]
+                                                     (:commits receipt)))))]
+          (doseq [c commits]
+            (when-not (commit-exists? (:canonical-root data) c)
+              (throw (ex-info "implementation evidence commit absent"
+                              {:id id :commit c}))))
+          (let [paths (reduce into #{}
+                              (map #(->> (shell/sh "git" "show" "--pretty="
+                                                     "--name-only" %
+                                                     :dir (:canonical-root data))
+                                         :out str/split-lines
+                                         (remove str/blank?) set)
+                                   commits))]
+            (when-not (= (set (:scope item)) paths)
+              (throw (ex-info "implementation commit paths differ from exact scope"
+                              {:id id :scope (set (:scope item))
+                               :commit-paths paths :commits commits}))))))
       :pass (doseq [k [:seat :commands :finding]]
               (when-not (get receipt k)
                 (throw (ex-info "PASS receipt lacks field" {:field k}))))
