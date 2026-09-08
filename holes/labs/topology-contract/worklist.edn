@@ -22810,6 +22810,47 @@
       :output
       "[master db80d801] Add rank-upper residual slice annihilation\n2 files changed, 42 insertions(+)\ncreate mode 100644 ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean\ncreate mode 100644 ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788864077710-14873-6f221f1d",
+     :commands
+     [{:cmd
+       "git rev-parse db80d801; git show --stat --oneline --decorate=no db80d801; git diff-tree --no-commit-id --name-only -r db80d801; git show db80d801:ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean; git show db80d801:ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md",
+       :exit 0,
+       :output
+       "db80d8015292c1bd8518068d2628a2f3933f7586; exact two-path scope"}
+      {:cmd
+       "git show db80d8015292c1bd8518068d2628a2f3933f7586:ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean > /tmp/sard-rank-upper-annihilation-review.xMmAlb/SardRankUpperResidualSliceAnnihilation.lean; git show db80d8015292c1bd8518068d2628a2f3933f7586:ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md > /tmp/sard-rank-upper-annihilation-review.xMmAlb/SardRankUpperResidualSliceAnnihilation.md; sha256sum /tmp/sard-rank-upper-annihilation-review.xMmAlb/SardRankUpperResidualSliceAnnihilation.lean /tmp/sard-rank-upper-annihilation-review.xMmAlb/SardRankUpperResidualSliceAnnihilation.md",
+       :exit 0,
+       :output
+       "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8 Lean; 36bc6758c81cf2a618a5ed240900591e410c7685989702c2f35f3641bb0aaf47 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-rank-upper-annihilation-review.xMmAlb/SardRankUpperResidualSliceAnnihilation.lean",
+       :exit 0,
+       :output
+       "residual_annihilates_slice_of_rankUpper depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-rank-upper-annihilation-review.xMmAlb/SardRankUpperResidualSliceAnnihilation.lean /tmp/sard-rank-upper-annihilation-review.xMmAlb/SardRankUpperResidualSliceAnnihilation.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '15,29p' /tmp/sard-rank-upper-annihilation-review.xMmAlb/SardRankUpperResidualSliceAnnihilation.lean | sha256sum",
+       :exit 0,
+       :output
+       "7f1ee8d767e4285e0cd69f76a2aeafb0c0367a2707c4cd7a830c46db1c90955e  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 176 items OK; {:done 167, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' db80d8015292c1bd8518068d2628a2f3933f7586",
+       :exit 0,
+       :output
+       "db80d8015292c1bd8518068d2628a2f3933f7586; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended orientation and representation boundary: vanishing of P.comp (D.comp J) puts every J v in ker (P.comp D); surjectivity of the projected derivative and the full-rank upper bound invoke the reviewed kernel-flatness result to prove D (J v) = 0; therefore every residual coordinate Q annihilates that slice direction. The concrete projected-slice derivative identity, projected surjectivity, and localized rank bound remain explicit consumer obligations. No warning, scope defect, or worktree change was found."},
     :commit "db80d801",
     :changed-paths
     ["ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean"
@@ -22821,7 +22862,7 @@
     :declarations ["residual_annihilates_slice_of_rankUpper"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean"
     "ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md"],
@@ -23004,7 +23045,7 @@
       "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
