@@ -23370,6 +23370,46 @@
       "git commit -m 'Add inverse regularity for open partial homeomorphisms'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788865676548-14906-7413f896",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no 5bbc7d2f125072bed1016f716003773c0afa4d1e; git diff-tree --no-commit-id --name-only -r 5bbc7d2f125072bed1016f716003773c0afa4d1e; git show 5bbc7d2f125072bed1016f716003773c0afa4d1e:ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.lean; git show 5bbc7d2f125072bed1016f716003773c0afa4d1e:ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.md",
+       :exit 0,
+       :output "exact two-path scope"}
+      {:cmd
+       "git show 5bbc7d2f125072bed1016f716003773c0afa4d1e:ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.lean > /tmp/sard-open-ph-contdiff-review.KgjBuY/SardOpenPartialHomeomorphContDiffOnSymm.lean; git show 5bbc7d2f125072bed1016f716003773c0afa4d1e:ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.md > /tmp/sard-open-ph-contdiff-review.KgjBuY/SardOpenPartialHomeomorphContDiffOnSymm.md; sha256sum /tmp/sard-open-ph-contdiff-review.KgjBuY/SardOpenPartialHomeomorphContDiffOnSymm.lean /tmp/sard-open-ph-contdiff-review.KgjBuY/SardOpenPartialHomeomorphContDiffOnSymm.md",
+       :exit 0,
+       :output
+       "fdb1297fe427b4265dea028008ff66a4c298ef9092256d12fcbf65c4b87fa01a Lean; 8144cc4700ebe4dcd8f5228de16c5a388c7873b9b523f98f2826addd73db2211 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-open-ph-contdiff-review.KgjBuY/SardOpenPartialHomeomorphContDiffOnSymm.lean",
+       :exit 0,
+       :output
+       "contDiffOn_symm_of_forall_hasFDerivAt_equiv depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-open-ph-contdiff-review.KgjBuY/SardOpenPartialHomeomorphContDiffOnSymm.lean /tmp/sard-open-ph-contdiff-review.KgjBuY/SardOpenPartialHomeomorphContDiffOnSymm.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '11,22p' /tmp/sard-open-ph-contdiff-review.KgjBuY/SardOpenPartialHomeomorphContDiffOnSymm.lean | sha256sum",
+       :exit 0,
+       :output
+       "50eda7028918d47c8b52e39a2f1b532f096672c4c58db1bd726c205876b686f9  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "topology-worklist: 180 items OK; {:done 171, :done-unreviewed 1, :blocked 2, :superseded 6}; consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; consumer placeholders 1"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 5bbc7d2f125072bed1016f716003773c0afa4d1e",
+       :exit 0,
+       :output
+       "5bbc7d2f125072bed1016f716003773c0afa4d1e; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended orientation and pointwise boundary: each target point maps under chart.symm into the source; source openness upgrades forward ContDiffOn to ContDiffAt there; the supplied equivalence-valued Frechet derivative at that same source point enables the inverse-function regularity theorem; and the resulting inverse ContDiffAt yields ContDiffWithinAt on the target. It requires the complete source space explicitly and does not manufacture forward chart regularity or derivative equivalences, which remain consumer obligations. The consumer fixture remains unchanged with one placeholder. No warning, scope defect, or worktree change was found."},
     :commit "5bbc7d2f125072bed1016f716003773c0afa4d1e",
     :changed-paths
     ["ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.lean"
@@ -23381,7 +23421,7 @@
     :declarations ["contDiffOn_symm_of_forall_hasFDerivAt_equiv"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.lean"
     "ConstructionTargets/SardOpenPartialHomeomorphContDiffOnSymm.md"],
@@ -23558,7 +23598,7 @@
       "fdb1297fe427b4265dea028008ff66a4c298ef9092256d12fcbf65c4b87fa01a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
