@@ -21794,8 +21794,68 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled compact projected-chart image-nullity theorem cannot be promoted for arbitrary topological source spaces, finite-dimensional real normed induction spaces, measured target spaces with additive Haar measures, every compact source subset contained in an open product chart, a continuous map, a continuous-linear target-coordinate equivalence, equality of source-chart and target-coordinate first components, lower-dimensional Sard induction, smoothness and zero projected derivative of every inverse slice, complete compact image nullity, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate the projected target coordinates and prove smoothness and zero residual projection derivative for every fixed-first-coordinate inverse slice on the concrete derivative-range chart.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_compact_projectedChart"
+     "f29e7794c13c9b36ffcacd0d718e2a69303043661bb7c54f11e55559149f4199"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardCompactProjectedChartImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7  /tmp/SardCompactProjectedChartImageNullityProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardCompactProjectedChartImageNullity.lean /tmp/SardCompactProjectedChartImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7  ConstructionTargets/SardCompactProjectedChartImageNullity.lean\n4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7  /tmp/SardCompactProjectedChartImageNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactProjectedChartImageNullity.lean",
+      :exit 0,
+      :output
+      "'SardCompactProjectedChartImageNullityProbe.measure_image_zero_of_compact_projectedChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCompactProjectedChartImageNullity.lean ConstructionTargets/SardCompactProjectedChartImageNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '10,52p' ConstructionTargets/SardCompactProjectedChartImageNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "f29e7794c13c9b36ffcacd0d718e2a69303043661bb7c54f11e55559149f4199  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 169 items OK; {:done 160, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git commit -m 'Add compact projected-chart image nullity'",
+      :exit 0,
+      :output
+      "[master 83df6b45] Add compact projected-chart image nullity\n2 files changed, 65 insertions(+)\ncreate mode 100644 ConstructionTargets/SardCompactProjectedChartImageNullity.lean\ncreate mode 100644 ConstructionTargets/SardCompactProjectedChartImageNullity.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "83df6b45",
+    :changed-paths
+    ["ConstructionTargets/SardCompactProjectedChartImageNullity.lean"
+     "ConstructionTargets/SardCompactProjectedChartImageNullity.md"],
+    :fixture
+    {:path "/tmp/SardCompactProjectedChartImageNullityProbe.lean",
+     :sha256
+     "4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7"},
+    :declarations ["measure_image_zero_of_compact_projectedChart"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactProjectedChartImageNullity.lean"
     "ConstructionTargets/SardCompactProjectedChartImageNullity.md"],
