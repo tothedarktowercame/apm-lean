@@ -21193,6 +21193,43 @@
    "Pointwise projected-chart compact-null witnesses now aggregate over a complete exact-rank order-one piece; construction of each pointwise analytic witness remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected-chart exact-rank nullity witness theorem cannot be promoted for C¹ maps between finite-dimensional real inner-product spaces, every exact derivative-rank point, the jointly supplied open rank-upper neighborhood and exact local set equality, the projected local-rank chart based on the point derivative, compact image-nullity certification in that chart, nullity of the complete exact-rank piece, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean"
+    "ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART EXACT-RANK NULLITY WITNESS",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean",
+     :sha256
+     "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405"},
+    :declarations
+    ["rankPiece_image_null_of_projectedChart_compact_null"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "For the concrete projected local-rank chart supplied at each exact-rank point, prove nullity of every compact subset image of the localized derivative rank-at-most locus using target-coordinate fibers and restricted inverse slices."},
+   :representation
+   {:source
+    "At every exact-rank order-one point, the concrete open rank-upper neighborhood, exact local set equality, and projected local-rank chart supplied by the reviewed chart theorem, together with compact image nullity in that chart.",
+    :target
+    "Zero measure of the image of the complete exact-rank piece."},
+   :id
+   :critical-value-sard-first-derivative-rank-piece-projected-chart-nullity-witness-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-derivative-rank-piece-pointwise-compact-nullity-1
+    :critical-value-sard-first-derivative-rank-piece-projected-chart-1
+    :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1],
+   :current-residual
+   "Projected chart selection and exact local rank-set bookkeeping now aggregate automatically; compact projected-chart image nullity remains the sole pointwise analytic obligation.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -21246,88 +21283,89 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "At each exact-rank order-one point, construct one open projected rank-chart neighborhood and prove every compact subset of its rank-at-most locus has null image from target-coordinate fibers and restricted inverse slices.",
+     "For the concrete projected local-rank chart supplied at each exact-rank point, prove nullity of every compact subset image of the localized derivative rank-at-most locus using target-coordinate fibers and restricted inverse slices.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"rankPiece_image_null_of_pointwise_compact_rankUpper_image_null"
-      "ae8d339b2fbfc429f9b042b354305f67c073f32f244683f43f725971d3d61723"},
+     {"rankPiece_image_null_of_projectedChart_compact_null"
+      "b96cfeb5d3075068b53dde7f85b72a59443db74dbc4d6096283989a1f45c3741"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled pointwise compact-local exact-rank aggregation theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces with second-countable source, every exact derivative-rank piece, pointwise existence of an open neighborhood carrying compact rank-upper image nullity, automatic witness selection, nullity of the complete exact-rank piece image, or standard-axiom profile.",
+      "Stop only if the compiled projected-chart exact-rank nullity witness theorem cannot be promoted for C¹ maps between finite-dimensional real inner-product spaces, every exact derivative-rank point, the jointly supplied open rank-upper neighborhood and exact local set equality, the projected local-rank chart based on the point derivative, compact image-nullity certification in that chart, nullity of the complete exact-rank piece, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean"
-       "ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.md"],
+      ["ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean"
+       "ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK POINTWISE COMPACT-LOCAL NULLITY AGGREGATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART EXACT-RANK NULLITY WITNESS",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstDerivativeRankPiecePointwiseCompactNullityProbe.lean",
+        "/tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean",
         :sha256
-        "5344eab0de7e84415d37b48b8444272377d931f828c343f346b8b6417eab73aa"},
+        "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405"},
        :declarations
-       ["rankPiece_image_null_of_pointwise_compact_rankUpper_image_null"],
+       ["rankPiece_image_null_of_projectedChart_compact_null"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "At each exact-rank order-one point, construct one open projected rank-chart neighborhood and prove every compact subset of its rank-at-most locus has null image from target-coordinate fibers and restricted inverse slices."},
+       "For the concrete projected local-rank chart supplied at each exact-rank point, prove nullity of every compact subset image of the localized derivative rank-at-most locus using target-coordinate fibers and restricted inverse slices."},
       :representation
       {:source
-       "For every point of an exact-rank order-one locus, existence of an open neighborhood on which every compact subset of the derivative rank-at-most locus has null image.",
+       "At every exact-rank order-one point, the concrete open rank-upper neighborhood, exact local set equality, and projected local-rank chart supplied by the reviewed chart theorem, together with compact image nullity in that chart.",
        :target
-       "Zero measure of the image of the complete exact-rank piece, with neighborhood witnesses selected internally."},
+       "Zero measure of the image of the complete exact-rank piece."},
       :id
-      :critical-value-sard-first-derivative-rank-piece-pointwise-compact-nullity-1,
+      :critical-value-sard-first-derivative-rank-piece-projected-chart-nullity-witness-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-derivative-rank-piece-compact-local-nullity-1
-       :critical-value-sard-first-derivative-rank-piece-projected-chart-1],
+      [:critical-value-sard-first-derivative-rank-piece-pointwise-compact-nullity-1
+       :critical-value-sard-first-derivative-rank-piece-projected-chart-1
+       :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1],
       :current-residual
-      "Pointwise projected-chart compact-null witnesses now aggregate over a complete exact-rank order-one piece; construction of each pointwise analytic witness remains.",
+      "Projected chart selection and exact local rank-set bookkeeping now aggregate automatically; compact projected-chart image nullity remains the sole pointwise analytic obligation.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture now converts pointwise existence of certified compact-null rank-upper neighborhoods into nullity of the complete exact-rank piece. It selects one witness neighborhood at each exact-rank point and applies the banked compact-local exact-rank aggregator. This removes explicit neighborhood-family bookkeeping from the analytic layer; the remaining obligation is pointwise construction of one projected rank chart whose compact rank-upper subsets have null images.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture now obtains every pointwise compact-nullity witness from the banked combined projected-rank chart theorem. At each exact-rank point that theorem jointly supplies an open neighborhood, membership of the point, the exact local rank-stratum/rank-upper equality, and a projected local-rank chart based on the derivative at that point. Passing a compact-nullity certificate for this concrete chart into the pointwise aggregator proves nullity of the complete exact-rank piece. Only the analytic compact image estimate inside the supplied projected chart remains.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '1,180p' ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean; sed -n '1,180p' ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean",
+       "sed -n '1,180p' ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean; sed -n '1,220p' ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean; sed -n '1,220p' ConstructionTargets/SardFirstDerivativeRankPieceProjectedDefiningData.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstDerivativeRankPiecePointwiseCompactNullityProbe.lean",
+       "lake env lean /tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean",
        :exit 0,
        :output
-       "'SardFirstDerivativeRankPiecePointwiseCompactNullityProbe.rankPiece_image_null_of_pointwise_compact_rankUpper_image_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.rankPiece_image_null_of_projectedChart_compact_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFirstDerivativeRankPiecePointwiseCompactNullityProbe.lean",
+       "sha256sum /tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean",
        :exit 0,
        :output
-       "5344eab0de7e84415d37b48b8444272377d931f828c343f346b8b6417eab73aa  /tmp/SardFirstDerivativeRankPiecePointwiseCompactNullityProbe.lean"}
+       "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405  /tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeRankPiecePointwiseCompactNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '8,34p' /tmp/SardFirstDerivativeRankPiecePointwiseCompactNullityProbe.lean | sha256sum",
+       "sed -n '8,39p' /tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean | sha256sum",
        :exit 0,
        :output
-       "ae8d339b2fbfc429f9b042b354305f67c073f32f244683f43f725971d3d61723  -"}
+       "b96cfeb5d3075068b53dde7f85b72a59443db74dbc4d6096283989a1f45c3741  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 163 items OK; {:done 155, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 164 items OK; {:done 156, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n7023ed864e8c3f79295896b641763f3df7629ecc2861d7e154f4e4e92ce19034  ConstructionTargets/SardFirstDerivativeRankPieceCompactLocalNullity.lean\n132f013859ec4f53f152939d72f1e9eea83785c6fad30b9423d94ea640cefdc3  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n5344eab0de7e84415d37b48b8444272377d931f828c343f346b8b6417eab73aa  ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean\n132f013859ec4f53f152939d72f1e9eea83785c6fad30b9423d94ea640cefdc3  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -21339,12 +21377,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFirstDerivativeRankPiecePointwiseCompactNullityProbe.lean",
+      "/tmp/SardFirstDerivativeRankPieceProjectedChartNullityWitnessProbe.lean",
       :sha256
-      "5344eab0de7e84415d37b48b8444272377d931f828c343f346b8b6417eab73aa"},
+      "72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -21456,7 +21494,8 @@
     :critical-value-sard-closed-open-target-fiber-projected-slice-image-nullity-1
     :critical-value-sard-derivative-rank-upper-local-image-nullity-1
     :critical-value-sard-first-derivative-rank-piece-compact-local-nullity-1
-    :critical-value-sard-first-derivative-rank-piece-pointwise-compact-nullity-1],
+    :critical-value-sard-first-derivative-rank-piece-pointwise-compact-nullity-1
+    :critical-value-sard-first-derivative-rank-piece-projected-chart-nullity-witness-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
