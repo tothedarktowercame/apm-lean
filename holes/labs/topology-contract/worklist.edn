@@ -34522,12 +34522,14 @@
      :consumer-before 1,
      :consumer-after 1},
     :residual
-    "Invoke the explicit inherited measurable-space bindings before specializing the generic finite-order pointwise witness with the installed positive-rank measures and repaired localized chart-slice certificate.",
+    "Invoke exists_open_rankLocus_image_zero_explicit_measurableSpaces with the inherited derivative-range and orthogonal-residual measurable spaces, Borel proofs, installed additive-Haar measures, and the repaired localized chart-slice certificate.",
     :outcome :done-unreviewed,
     :warnings [],
     :statement-hashes
     {"projectedCoordinates_explicit_measurableSpace_borel_bindings"
-     "f50c297800f7ad4285430c3748fb8f17b53d04c1786c59ee267d0fa6973a861c"},
+     "8038809fc50274d03a6468a0f5f111e9ce3307dc51d32b4493df50132e5ea83b",
+     "exists_open_rankLocus_image_zero_explicit_measurableSpaces"
+     "87d9ba81a0de6e0a3df8b621c7d067a8dc5a90bd16c642ddcc94edb4ef6f81fa"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :codex-6,
     :commands
@@ -34540,27 +34542,29 @@
       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
       :exit 0}
      {:cmd
-      "diff -u /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean",
-      :exit 0}
-     {:cmd
       "lake env lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean",
       :exit 0,
       :output
-      "'SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.projectedCoordinates_explicit_measurableSpace_borel_bindings' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      "Both declarations depend on axioms: [propext, Classical.choice, Quot.sound]"}
      {:cmd
       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md",
       :exit 1,
       :expected-exit 1}
      {:cmd
-      "sed -n '6,17p' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean | sha256sum",
+      "sed -n '10,20p' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean | sha256sum",
       :exit 0,
       :output
-      "f50c297800f7ad4285430c3748fb8f17b53d04c1786c59ee267d0fa6973a861c  -"}
+      "8038809fc50274d03a6468a0f5f111e9ce3307dc51d32b4493df50132e5ea83b  -"}
+     {:cmd
+      "sed -n '24,74p' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean | sha256sum",
+      :exit 0,
+      :output
+      "87d9ba81a0de6e0a3df8b621c7d067a8dc5a90bd16c642ddcc94edb4ef6f81fa  -"}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :output
-      "topology-worklist: 264 items OK; {:done 255, :open 1, :blocked 2, :superseded 6}"}
+      "topology-worklist: 264 items OK; {:done 255, :repair 1, :blocked 2, :superseded 6}"}
      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
       :exit 0,
       :output
@@ -34571,13 +34575,10 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :review
-    {:outcome :fail,
-     :seat "codex-10",
-     :job "invoke-1788911015835-15676-24df02d1",
-     :finding
-     "Deterministic representation defect: commit 42104ed9dd3be10a47dcc972d7c168e44d938f30 does not specialize the generic pointwise nullity witness. SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean:12-15 defines mC and mS as local lets equal to inferInstance rather than accepting them explicitly; line 16 only reuses the existing Borel-binding theorem. It supplies no measures or additive-Haar instances and never invokes exists_open_rankLocus_image_zero_of_finiteOrder_localRankChart, whose coordinate measurable spaces remain implicit at SardFiniteOrderPointwiseRankChartNullityWitness.lean:15-25. Repair with a wrapper taking both measurable spaces explicitly before their Borel proofs, measures, and additive-Haar instances, and returning the generic witness's nullity conclusion."},
-    :commit "42104ed9dd3be10a47dcc972d7c168e44d938f30",
+    :commit "4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37",
+    :commits
+    ["42104ed9dd3be10a47dcc972d7c168e44d938f30"
+     "4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37"],
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
      "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
@@ -34587,9 +34588,10 @@
      :sha256
      "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"},
     :declarations
-    ["projectedCoordinates_explicit_measurableSpace_borel_bindings"]},
+    ["projectedCoordinates_explicit_measurableSpace_borel_bindings"
+     "exists_open_rankLocus_image_zero_explicit_measurableSpaces"]},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
     "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
