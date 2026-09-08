@@ -28127,8 +28127,88 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled exact-rank projected-chart compact-nullity theorem cannot be promoted for arbitrary finite-dimensional real normed source and slice spaces, finite-dimensional real inner-product Borel targets with additive Haar measure, every nonsurjective derivative, compact projected charts satisfying the canonical first-coordinate identity, inverse-chart and ambient C1 regularity, exact base rank, localized rank upper bounds, projected-derivative surjectivity, dimension drop, lower-dimensional induction, zero target measure of the compact image, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate the theorem from pointwise projected-chart constructors and compact chart-source localizations, then aggregate exact-rank pieces.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_exactRank_projectedChart"
+     "dd004eaef53bcfd400ebd14cc63dee91c4a073ff118da344c51fbe27271d837a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "rg -n -C 6 ':id :critical-value-sard-(derivative-range-orthogonal-compact-chart-nullity-1|projected-chart-orthogonal-residual-slice-zero-1|projected-chart-orthogonal-residual-nullity-data-1|projected-smooth-chart-target-data-1|localized-rank-upper-bound-1|exact-rank-projected-chart-compact-nullity-1)' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
+      :exit 0,
+      :output
+      "3fd004b065c7fbe86e7f14787b515871d44e0a9356496ec330389977b6cd9dc2  /tmp/SardExactRankProjectedChartCompactNullityProbe.lean"}
+     {:cmd
+      "cmp -s /tmp/SardExactRankProjectedChartCompactNullityProbe.lean ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean /tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
+      :exit 0,
+      :output
+      "3fd004b065c7fbe86e7f14787b515871d44e0a9356496ec330389977b6cd9dc2  ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean\n3fd004b065c7fbe86e7f14787b515871d44e0a9356496ec330389977b6cd9dc2  /tmp/SardExactRankProjectedChartCompactNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean",
+      :exit 0,
+      :output
+      "'SardExactRankProjectedChartCompactNullityProbe.measure_image_zero_of_exactRank_projectedChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean ConstructionTargets/SardExactRankProjectedChartCompactNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '13,55p' ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "dd004eaef53bcfd400ebd14cc63dee91c4a073ff118da344c51fbe27271d837a  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 212 items OK; {:done 203, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean ConstructionTargets/SardExactRankProjectedChartCompactNullity.md && git commit -m \"Add exact-rank projected-chart compact nullity\"",
+      :exit 0,
+      :output
+      "[master e44208d7] Add exact-rank projected-chart compact nullity\n 2 files changed, 69 insertions(+)\n create mode 100644 ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean\n create mode 100644 ConstructionTargets/SardExactRankProjectedChartCompactNullity.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "e44208d7d3a3a87613114aab22e2645b2fa72dbe"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "e44208d7d3a3a87613114aab22e2645b2fa72dbe",
+    :changed-paths
+    ["ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean"
+     "ConstructionTargets/SardExactRankProjectedChartCompactNullity.md"],
+    :fixture
+    {:path "/tmp/SardExactRankProjectedChartCompactNullityProbe.lean",
+     :sha256
+     "3fd004b065c7fbe86e7f14787b515871d44e0a9356496ec330389977b6cd9dc2"},
+    :declarations ["measure_image_zero_of_exactRank_projectedChart"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardExactRankProjectedChartCompactNullity.lean"
     "ConstructionTargets/SardExactRankProjectedChartCompactNullity.md"],
