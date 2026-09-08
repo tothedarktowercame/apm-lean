@@ -28789,6 +28789,45 @@
    "Closed rank-upper loci can remain explicit through the projected fiber argument; concrete derivative-range specialization and exact-rank aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled derivative-range orthogonal closed-in-open chart-nullity theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, finite-dimensional slice spaces, every nonsurjective derivative, canonical range/orthogonal target coordinates, closed loci inside open chart sources, compatible lower-dimensional induction, locus-restricted inverse-slice C1 and identity-projected zero derivatives, zero target image measure, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+    "ConstructionTargets/SardDerivativeRangeOrthogonalClosedOpenChartNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE ORTHOGONAL CLOSED-IN-OPEN CHART NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
+     :sha256
+     "9fa1a720cddd5550ac4856db37e292d346bf21caad4ca0f51f811ea3d83b088d"},
+    :declarations
+    ["measure_image_zero_of_rangeOrthogonal_closedOpenChart"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the theorem from concrete pointwise smooth projected-chart data and localized rank-upper residual-slice certificates, then aggregate exact-rank pieces."},
+   :representation
+   {:source
+    "A nonsurjective derivative with its canonical range/orthogonal target coordinates, a closed locus inside an open projected-chart source, lower-dimensional induction, and locus-restricted fiber regularity and zero derivatives.",
+    :target
+    "Zero additive-Haar measure of the closed-in-open locus image in the original target."},
+   :id
+   :critical-value-sard-derivative-range-orthogonal-closed-open-chart-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-closed-open-projected-chart-image-nullity-1
+    :critical-value-sard-derivative-range-coordinate-topology-package-1
+    :critical-value-sard-derivative-range-inherited-borel-space-1
+    :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
+    :critical-value-sard-target-orthogonal-coordinate-equiv-1],
+   :current-residual
+   "All coordinate topology, measurable, Haar, and target-equivalence infrastructure is installed for closed rank-upper chart loci; concrete pointwise chart and localized residual-slice hypotheses remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -28842,84 +28881,86 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Specialize closed-in-open projected-chart nullity to the derivative rank-upper locus using pointwise smooth chart data, localized residual annihilation, coordinate measures, dimension drop, and lower-dimensional induction; then aggregate rank pieces.",
+     "Instantiate the derivative-range closed-in-open theorem from smooth projected-chart target data, the closed rank-upper locus, localized residual-slice regularity and zero derivatives, dimension drop, and lower-dimensional induction; then aggregate exact-rank pieces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_closedOpen_projectedChart"
-      "fd9896ad5928216718a0bdf0e53b74971ca76b5fbe34ec607999fcbd30349528"},
+     {"measure_image_zero_of_rangeOrthogonal_closedOpenChart"
+      "b3838ea06bd0e716eb9d71fb227b0d66739d9caeb9ce8589fa9c4851ca5cdae8"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled closed-in-open projected-chart nullity theorem cannot be promoted for arbitrary locally compact second-countable Hausdorff source spaces, compatible finite-dimensional coordinate spaces with Borel additive-Haar measures, every closed locus inside an open chart source, canonical first-coordinate identity, lower-dimensional induction, locus-restricted inverse-slice regularity and projected-zero derivatives, zero image measure, or standard-axiom profile.",
+      "Stop only if the compiled derivative-range orthogonal closed-in-open chart-nullity theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, finite-dimensional slice spaces, every nonsurjective derivative, canonical range/orthogonal target coordinates, closed loci inside open chart sources, compatible lower-dimensional induction, locus-restricted inverse-slice C1 and identity-projected zero derivatives, zero target image measure, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardClosedOpenProjectedChartImageNullity.lean"
-       "ConstructionTargets/SardClosedOpenProjectedChartImageNullity.md"],
+      ["ConstructionTargets/SardDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+       "ConstructionTargets/SardDerivativeRangeOrthogonalClosedOpenChartNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CLOSED-IN-OPEN PROJECTED-CHART IMAGE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE ORTHOGONAL CLOSED-IN-OPEN CHART NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardClosedOpenProjectedChartImageNullityProbe.lean",
+        "/tmp/SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
         :sha256
-        "e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7"},
+        "9fa1a720cddd5550ac4856db37e292d346bf21caad4ca0f51f811ea3d83b088d"},
        :declarations
-       ["measure_image_zero_of_closedOpen_projectedChart"],
+       ["measure_image_zero_of_rangeOrthogonal_closedOpenChart"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Specialize the wrapper to the closed derivative rank-upper locus and the concrete smooth projected chart, then aggregate exact-rank pieces."},
+       "Instantiate the theorem from concrete pointwise smooth projected-chart data and localized rank-upper residual-slice certificates, then aggregate exact-rank pieces."},
       :representation
       {:source
-       "A closed locus localized inside an open projected-chart source, with lower-dimensional fiber regularity and projected-zero derivatives only over inverse-chart points in that locus.",
+       "A nonsurjective derivative with its canonical range/orthogonal target coordinates, a closed locus inside an open projected-chart source, lower-dimensional induction, and locus-restricted fiber regularity and zero derivatives.",
        :target
-       "Zero additive-Haar measure of the image of the closed-in-open locus."},
+       "Zero additive-Haar measure of the closed-in-open locus image in the original target."},
       :id
-      :critical-value-sard-closed-open-projected-chart-image-nullity-1,
+      :critical-value-sard-derivative-range-orthogonal-closed-open-chart-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-open-restriction-data-1
-       :critical-value-sard-closed-open-target-fiber-projected-slice-image-nullity-1
-       :critical-value-sard-projected-chart-target-fiber-slice-containment-1],
+      [:critical-value-sard-closed-open-projected-chart-image-nullity-1
+       :critical-value-sard-derivative-range-coordinate-topology-package-1
+       :critical-value-sard-derivative-range-inherited-borel-space-1
+       :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
+       :critical-value-sard-target-orthogonal-coordinate-equiv-1],
       :current-residual
-      "Closed rank-upper loci can remain explicit through the projected fiber argument; concrete derivative-range specialization and exact-rank aggregation remain.",
+      "All coordinate topology, measurable, Haar, and target-equivalence infrastructure is installed for closed rank-upper chart loci; concrete pointwise chart and localized residual-slice hypotheses remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The rank-at-most locus is closed rather than open, so restricting a chart cannot make its rank bound global on an open source. A placeholder-free compiled fixture instead applies the banked closed-in-open fiber theorem with slice domains restricted to coordinates whose inverse-chart images lie in the closed locus, requiring regularity and zero derivatives exactly where the rank bound holds.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture specializes closed-in-open projected-chart nullity to the derivative range and its orthogonal complement, installs their proper, second-countable, inherited-Borel, nontrivial, and additive-Haar structures locally, and uses the canonical target-coordinate equivalence. Only the concrete pointwise chart regularity and localized residual-zero hypotheses remain.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 6 ':id :critical-value-sard-(projected-chart-open-restriction-data-1|closed-open-target-fiber-projected-slice-image-nullity-1|first-derivative-rank-piece-chart-source-compact-nullity-1|exact-rank-projected-chart-compact-nullity-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 6 ':id :critical-value-sard-(closed-open-projected-chart-image-nullity-1|localized-residual-slice-derivative-zero-1|localized-projected-slice-annihilation-1|projected-smooth-chart-target-data-1|derivative-range-coordinate-topology-package-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean",
+       "lake env lean /tmp/SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
        :exit 0,
        :output
-       "'SardClosedOpenProjectedChartImageNullityProbe.measure_image_zero_of_closedOpen_projectedChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.measure_image_zero_of_rangeOrthogonal_closedOpenChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean",
+       "sha256sum /tmp/SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
        :exit 0,
        :output
-       "e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7  /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean"}
+       "9fa1a720cddd5550ac4856db37e292d346bf21caad4ca0f51f811ea3d83b088d  /tmp/SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,63p' /tmp/SardClosedOpenProjectedChartImageNullityProbe.lean | sha256sum",
+       "sed -n '15,84p' /tmp/SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "fd9896ad5928216718a0bdf0e53b74971ca76b5fbe34ec607999fcbd30349528  -"}
+       "b3838ea06bd0e716eb9d71fb227b0d66739d9caeb9ce8589fa9c4851ca5cdae8  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 215 items OK; {:done 207, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 216 items OK; {:done 208, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -28934,12 +28975,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardClosedOpenProjectedChartImageNullityProbe.lean",
+     {:path
+      "/tmp/SardDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
       :sha256
-      "e6021c279591f20183714898f01917dc370365844a3a9045c170d94f7cbaeda7"},
+      "9fa1a720cddd5550ac4856db37e292d346bf21caad4ca0f51f811ea3d83b088d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -29103,7 +29145,8 @@
     :critical-value-sard-projected-range-kernel-dimension-drop-1
     :critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1
     :critical-value-sard-projected-chart-open-restriction-data-1
-    :critical-value-sard-closed-open-projected-chart-image-nullity-1],
+    :critical-value-sard-closed-open-projected-chart-image-nullity-1
+    :critical-value-sard-derivative-range-orthogonal-closed-open-chart-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
