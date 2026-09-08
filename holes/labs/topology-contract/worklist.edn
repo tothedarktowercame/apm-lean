@@ -31332,6 +31332,27 @@
       :output "?? scripts/__pycache__/",
       :note
       "Unrelated concurrent cache outside row scope; not included in commit."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788899495219-15462-02baf941",
+     :commands
+     ["git show -s --format='%H%n%an <%ae>%n%s' 606bee4588c1b93256b5c8ba48ab28863985c841"
+      "git diff-tree --no-commit-id --name-only -r 606bee4588c1b93256b5c8ba48ab28863985c841"
+      "git show 606bee4588c1b93256b5c8ba48ab28863985c841:ConstructionTargets/SardClassicalRegularityAdmissibility.lean"
+      "sha256sum /tmp/SardClassicalRegularityAdmissibilityProbe.lean ConstructionTargets/SardClassicalRegularityAdmissibility.lean"
+      "cmp -s /tmp/SardClassicalRegularityAdmissibilityProbe.lean ConstructionTargets/SardClassicalRegularityAdmissibility.lean"
+      "git show 606bee4588c1b93256b5c8ba48ab28863985c841:ConstructionTargets/SardClassicalRegularityAdmissibility.lean | sed -n '6,20p' | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardClassicalRegularityAdmissibility.lean ConstructionTargets/SardClassicalRegularityAdmissibility.md"
+      "lake env lean ConstructionTargets/SardClassicalRegularityAdmissibility.lean"
+      "lake build ConstructionTargets.SardClassicalRegularityAdmissibility"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "readlink -f .lake/packages"
+      "git diff --check 606bee4588c1b93256b5c8ba48ab28863985c841^ 606bee4588c1b93256b5c8ba48ab28863985c841"],
+     :finding
+     "PASS: the recorded commit changes exactly the declared pair; fixture/source and frozen-statement hashes reproduce, placeholder count is zero, standard-only axioms reproduce, the targeted Lean check and 8240-job build succeed, and the 238-item worklist validates. The deficit hypothesis implies the usable classical Sard inequality in the correct direction, and admissibility is correctly monotone under increasing regularity. No invalid converse across truncated natural subtraction is asserted."},
     :commit "606bee4588c1b93256b5c8ba48ab28863985c841",
     :changed-paths
     ["ConstructionTargets/SardClassicalRegularityAdmissibility.lean"
@@ -31342,7 +31363,7 @@
      "c6fe990b3e4b398c9d6683f7406700320b226064ae5d0aa7632e238ce0a603e1"},
     :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardClassicalRegularityAdmissibility.lean"
     "ConstructionTargets/SardClassicalRegularityAdmissibility.md"],
@@ -31522,7 +31543,7 @@
       "c6fe990b3e4b398c9d6683f7406700320b226064ae5d0aa7632e238ce0a603e1"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
