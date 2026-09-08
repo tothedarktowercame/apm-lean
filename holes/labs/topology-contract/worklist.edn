@@ -22398,6 +22398,47 @@
       :output
       "[master 2095528c] Add indexed projected chart slice regularity\n2 files changed, 39 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788862969483-14852-d21494d9",
+     :commands
+     [{:cmd
+       "git rev-parse 2095528c; git show --stat --oneline --decorate=no 2095528c; git diff-tree --no-commit-id --name-only -r 2095528c; git show 2095528c:ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean; git show 2095528c:ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md",
+       :exit 0,
+       :output
+       "2095528c7f98e2f92298e993eff48d446f682af7; exact two-path scope"}
+      {:cmd
+       "git show 2095528c7f98e2f92298e993eff48d446f682af7:ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean > /tmp/sard-residual-slices-review.RBKdwm/SardProjectedChartResidualSlicesContDiffOn.lean; git show 2095528c7f98e2f92298e993eff48d446f682af7:ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md > /tmp/sard-residual-slices-review.RBKdwm/SardProjectedChartResidualSlicesContDiffOn.md; sha256sum /tmp/sard-residual-slices-review.RBKdwm/SardProjectedChartResidualSlicesContDiffOn.lean /tmp/sard-residual-slices-review.RBKdwm/SardProjectedChartResidualSlicesContDiffOn.md",
+       :exit 0,
+       :output
+       "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2 Lean; f45674b05e789da2cabce7b18f88a8a141f686709a7c36dda7a27713f9f1dee3 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-residual-slices-review.RBKdwm/SardProjectedChartResidualSlicesContDiffOn.lean",
+       :exit 0,
+       :output
+       "contDiffAt_residual_inverseSlices_of_contDiffOn depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-residual-slices-review.RBKdwm/SardProjectedChartResidualSlicesContDiffOn.lean /tmp/sard-residual-slices-review.RBKdwm/SardProjectedChartResidualSlicesContDiffOn.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '15,27p' /tmp/sard-residual-slices-review.RBKdwm/SardProjectedChartResidualSlicesContDiffOn.lean | sha256sum",
+       :exit 0,
+       :output
+       "b029cffabb145e16e78ff8514f0fc25d31c46235669b9f15dd97933ccd748e73  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 173 items OK; {:done 164, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 2095528c7f98e2f92298e993eff48d446f682af7",
+       :exit 0,
+       :output
+       "2095528c7f98e2f92298e993eff48d446f682af7; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended forward orientation: global ContDiffOn certificates for the chart inverse on its target and the ambient map on the chart source yield the complete indexed family of ContDiffAt certificates for every residual-coordinate fixed-first-coordinate inverse slice. Slice membership gives target membership, chart.map_target supplies the corresponding source membership, openness upgrades both within-set facts, and composition preserves the same differentiability order. The concrete projected-chart certificates and zero residual derivative remain outside the theorem as recorded. No warning, scope defect, or worktree change was found."},
     :commit "2095528c",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean"
@@ -22409,7 +22450,7 @@
     :declarations ["contDiffAt_residual_inverseSlices_of_contDiffOn"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean"
     "ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md"],
@@ -22593,7 +22634,7 @@
       "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
