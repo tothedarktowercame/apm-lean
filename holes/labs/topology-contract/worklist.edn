@@ -17206,6 +17206,42 @@
    "Zero projected derivatives throughout a lower-dimensional slice now imply nullity of its entire image; projected rank-chart instantiation and local rank-piece aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled exact-rank-piece local-nullity aggregation theorem cannot be promoted with the retained order-one first-nonzero-jet locus, exact derivative-rank stratum, pointwise open neighborhoods, base-point membership, null restricted-image hypotheses, whole rank-piece nullity conclusion, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean"
+    "ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE RANK-PIECE LOCAL NULLITY AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
+     :sha256
+     "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943"},
+    :declarations ["rankPiece_image_null_of_locally_image_null"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct a null restricted-image neighborhood at every point of each order-one exact-rank piece using the projected inverse-chart slices and lower-dimensional image-nullity theorem."},
+   :representation
+   {:source
+    "Pointwise open neighborhoods with null restricted images on one exact derivative-rank stratum of the order-one first-nonzero-jet locus in a second-countable source.",
+    :target
+    "Zero measure of the image of the entire exact-rank piece."},
+   :id
+   :critical-value-sard-first-derivative-rank-piece-local-nullity-aggregation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-local-nullity-second-countable-aggregation-1
+    :critical-value-sard-first-derivative-locus-rank-aggregation-1
+    :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1],
+   :current-residual
+   "Pointwise local nullity now aggregates over each exact order-one derivative-rank piece; construction of each projected-chart local nullity witness remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -17259,76 +17295,77 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate lower-dimensional projected-slice image nullity on each local projected rank chart and aggregate the resulting local nullity over every order-one exact-rank piece.",
+     "Construct pointwise null restricted-image neighborhoods from the projected inverse-chart slices, then apply exact-rank-piece local aggregation.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled lower-dimensional projected-slice nullity theorem cannot be promoted with the source-dimension inequality, nonzero differentiability order, pointwise smoothness, surjective projection to a nontrivial codomain, zero projected derivative throughout the slice, full slice-image nullity conclusion, or standard-axiom profile.",
+      "Stop only if the compiled exact-rank-piece local-nullity aggregation theorem cannot be promoted with the retained order-one first-nonzero-jet locus, exact derivative-rank stratum, pointwise open neighborhoods, base-point membership, null restricted-image hypotheses, whole rank-piece nullity conclusion, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean"
-       "ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md"],
+      ["ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean"
+       "ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOWER-DIMENSIONAL PROJECTED-SLICE IMAGE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE RANK-PIECE LOCAL NULLITY AGGREGATION",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+        "/tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
         :sha256
-        "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"},
-       :declarations
-       ["image_null_of_lowerDim_projected_derivative_zero"],
+        "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943"},
+       :declarations ["rankPiece_image_null_of_locally_image_null"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate lower-dimensional projected-slice nullity on every local projected rank chart, then aggregate the resulting local nullity over each order-one exact-rank piece."},
+       "Construct a null restricted-image neighborhood at every point of each order-one exact-rank piece using the projected inverse-chart slices and lower-dimensional image-nullity theorem."},
       :representation
       {:source
-       "A lower-dimensional smooth slice map, an applicable source-dimension Sard induction hypothesis, and a surjective projection to a nontrivial coordinate space whose composite with the slice has zero derivative at every point.",
-       :target "Zero measure of the image of the entire slice set."},
+       "Pointwise open neighborhoods with null restricted images on one exact derivative-rank stratum of the order-one first-nonzero-jet locus in a second-countable source.",
+       :target
+       "Zero measure of the image of the entire exact-rank piece."},
       :id
-      :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1,
+      :critical-value-sard-first-derivative-rank-piece-local-nullity-aggregation-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-slice-derivative-nonsurjective-1
-       :critical-value-sard-lower-dimensional-local-critical-image-induction-1],
+      [:critical-value-sard-local-nullity-second-countable-aggregation-1
+       :critical-value-sard-first-derivative-locus-rank-aggregation-1
+       :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1],
       :current-residual
-      "Zero projected derivatives throughout a lower-dimensional slice now imply nullity of its entire image; projected rank-chart instantiation and local rank-piece aggregation remain.",
+      "Pointwise local nullity now aggregates over each exact order-one derivative-rank piece; construction of each projected-chart local nullity witness remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The compiled projected-slice derivative bridge identifies every point of a slice with zero projected derivative as a critical point of the sliced map. A placeholder-free fixture now combines that pointwise result with the lower-source-dimension Sard induction hypothesis, rewrites the restricted critical locus to the entire slice, and obtains nullity of the whole slice image. Instantiating this theorem on each projected rank chart and aggregating the local nullity remain downstream.",
+     "The rectangular theorem is not refuted. Lower-dimensional projected-slice image nullity is now compiled, while the remaining rank-piece argument needs its pointwise local nullity witnesses aggregated in the exact retained order-one/rank-stratum representation. A placeholder-free fixture specializes the compiled second-countable local-nullity theorem to one exact derivative-rank piece. Once a null restricted image is supplied on an open neighborhood of every piece point, it yields nullity of the entire rank piece. Constructing those pointwise projected-chart witnesses remains downstream.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+       "lake env lean /tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
        :exit 0,
        :output
-       "'SardLowerDimensionalProjectedSliceImageNullityProbe.image_null_of_lowerDim_projected_derivative_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFirstDerivativeRankPieceLocalNullityAggregationProbe.rankPiece_image_null_of_locally_image_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+       "sha256sum /tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
        :exit 0,
        :output
-       "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"}
+       "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 135 items OK; {:done 127, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 136 items OK; {:done 128, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardLowerDimensionalLocalCriticalImageInduction.lean ConstructionTargets/SardProjectedSliceDerivativeNonsurjective.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardLocalNullitySecondCountableAggregation.lean ConstructionTargets/SardFirstDerivativeLocusRankAggregation.lean ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean",
        :exit 0,
        :output
-       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; lower-dimensional induction a4c845c6f03aa092715aa6e6c535dd2817ae7033377becb788a722bcff995eca; projected-slice derivative 8b1094b322f71576931a97a64e3f466f1c04b4405a0f646a6583ea76b0351151"}
+       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; local aggregation 2fb3f917386c8febae3768faf3ecf5a9e343bbd5e2e59c42dafa8573ae840b0a; rank aggregation 2a93a036a56889ddb2d87c52f75549465160fcd9c03671428a391ee381fef686; lower-dimensional slice nullity 86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -17340,12 +17377,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+      "/tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
       :sha256
-      "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"},
+      "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -17429,7 +17466,8 @@
     :critical-value-sard-rank-upper-residual-slice-flatness-1
     :critical-value-sard-annihilated-projection-nonsurjective-1
     :critical-value-sard-projected-slice-derivative-nonsurjective-1
-    :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1],
+    :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1
+    :critical-value-sard-first-derivative-rank-piece-local-nullity-aggregation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
