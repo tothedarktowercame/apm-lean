@@ -23166,6 +23166,42 @@
    "The concrete projected-coordinate derivative is now identified exactly as range projection composed with Df at every slice point; inverse-slice differentiability, projected surjectivity, and the localized rank upper bound remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled inverse-slice derivative-certificate theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism whose inverse is continuously differentiable on its target, every target point and fixed-first-coordinate slice through it, existence of a Frechet derivative for that inverse slice, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.lean"
+    "ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART INVERSE-SLICE DERIVATIVE CERTIFICATE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedChartInverseSliceHasFDerivAtProbe.lean",
+     :sha256
+     "fea065ac0ade977e6a6a5d2f18a6cc775d14aea85bcca1fa3f7b8a02c2e577a1"},
+    :declarations
+    ["exists_hasFDerivAt_inverseSlice_of_contDiffOn_symm"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Expose ContDiffOn regularity of the concrete projected local-rank chart inverse, then use its slice derivative and the differentiated coordinate identity to discharge projected surjectivity and the localized ambient rank upper bound."},
+   :representation
+   {:source
+    "Continuous differentiability of an open product-chart inverse throughout its target.",
+    :target
+    "Existence of a Frechet derivative certificate for every fixed-first-coordinate inverse slice at every chart-target point."},
+   :id
+   :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-chart-inverse-slice-contdiff-on-1
+    :critical-value-sard-range-projection-coordinate-derivative-1
+    :critical-value-sard-projected-chart-slice-projected-derivative-zero-1],
+   :current-residual
+   "Every fixed-coordinate inverse slice now has an explicit Frechet derivative whenever the chart inverse is ContDiffOn of order one; the concrete chart regularity certificate, projected surjectivity, and localized rank bound remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -23219,82 +23255,86 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "At every localized projected-chart slice point, obtain the inverse-slice derivative and use the differentiated chart identity to discharge projected surjectivity and the ambient rank upper bound.",
+     "Expose ContDiffOn regularity of the concrete projected local-rank chart inverse, then use its slice derivative and the differentiated coordinate identity to discharge projected surjectivity and the localized ambient rank upper bound.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"hasFDerivAt_rangeProjection_comp"
-      "633d691d1ca12fcf3eba2c23ffa9881a9eaa62b7e3b71c126b5119bf4ce2b726"},
+     {"exists_hasFDerivAt_inverseSlice_of_contDiffOn_symm"
+      "e21928bfc0283c495ee2e3f08ec5e051b78c418f8ccf7a75644bccdad9bd48e4"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled derivative-range projection coordinate theorem cannot be promoted for arbitrary real normed source spaces, finite-dimensional real inner-product target spaces, every ambient map differentiable at an arbitrary point, every ambient derivative and fixed derivative-range reference map, identification of the projected-coordinate derivative with orthogonal range projection composed with the ambient derivative, or standard-axiom profile.",
+      "Stop only if the compiled inverse-slice derivative-certificate theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism whose inverse is continuously differentiable on its target, every target point and fixed-first-coordinate slice through it, existence of a Frechet derivative for that inverse slice, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardRangeProjectionCoordinateDerivative.lean"
-       "ConstructionTargets/SardRangeProjectionCoordinateDerivative.md"],
+      ["ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.lean"
+       "ConstructionTargets/SardProjectedChartInverseSliceHasFDerivAt.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE PROJECTION COORDINATE DERIVATIVE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART INVERSE-SLICE DERIVATIVE CERTIFICATE",
       :acceptance
       {:fixture
-       {:path "/tmp/SardRangeProjectionCoordinateDerivativeProbe.lean",
+       {:path
+        "/tmp/SardProjectedChartInverseSliceHasFDerivAtProbe.lean",
         :sha256
-        "1594268e606aa0215ef1a1ed081e8db3c846b6bb3c9f66f27a047ad49540423d"},
-       :declarations ["hasFDerivAt_rangeProjection_comp"],
+        "fea065ac0ade977e6a6a5d2f18a6cc775d14aea85bcca1fa3f7b8a02c2e577a1"},
+       :declarations
+       ["exists_hasFDerivAt_inverseSlice_of_contDiffOn_symm"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "At every localized projected-chart slice point, obtain the inverse-slice derivative and use the differentiated chart identity to discharge projected surjectivity and the ambient rank upper bound."},
+       "Expose ContDiffOn regularity of the concrete projected local-rank chart inverse, then use its slice derivative and the differentiated coordinate identity to discharge projected surjectivity and the localized ambient rank upper bound."},
       :representation
       {:source
-       "The derivative of an ambient map at an arbitrary point, followed pointwise by orthogonal projection onto a fixed derivative range.",
+       "Continuous differentiability of an open product-chart inverse throughout its target.",
        :target
-       "A Frechet derivative certificate whose continuous-linear derivative is exactly the orthogonal range projection composed with the ambient derivative."},
+       "Existence of a Frechet derivative certificate for every fixed-first-coordinate inverse slice at every chart-target point."},
       :id
-      :critical-value-sard-range-projection-coordinate-derivative-1,
+      :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-slice-projected-derivative-zero-1
-       :critical-value-sard-projected-complemented-strict-derivative-data-1],
+      [:critical-value-sard-projected-chart-inverse-slice-contdiff-on-1
+       :critical-value-sard-range-projection-coordinate-derivative-1
+       :critical-value-sard-projected-chart-slice-projected-derivative-zero-1],
       :current-residual
-      "The concrete projected-coordinate derivative is now identified exactly as range projection composed with Df at every slice point; inverse-slice differentiability, projected surjectivity, and the localized rank upper bound remain.",
+      "Every fixed-coordinate inverse slice now has an explicit Frechet derivative whenever the chart inverse is ContDiffOn of order one; the concrete chart regularity certificate, projected surjectivity, and localized rank bound remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The expanded dependency chain proves the abstract zero projected slice derivative, but its application still requires identifying the derivative of the concrete derivative-range coordinate at each localized slice point. A placeholder-free compiled fixture supplies exactly that chain-rule identification. The remaining obligations are inverse-slice differentiability, projected surjectivity, and rank-bound instantiation.",
+     "The rectangular theorem is not refuted. After identifying the concrete projected-coordinate derivative, the next required input is an actual derivative for each fixed-first-coordinate inverse slice. A placeholder-free fixture derives that certificate from the banked all-point slice regularity theorem. The remaining concrete work is to expose ContDiffOn regularity for the projected local-rank chart inverse and instantiate projected surjectivity and the rank bound.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardRangeProjectionCoordinateDerivativeProbe.lean",
+       "lake env lean /tmp/SardProjectedChartInverseSliceHasFDerivAtProbe.lean",
        :exit 0,
        :output
-       "'SardRangeProjectionCoordinateDerivativeProbe.hasFDerivAt_rangeProjection_comp' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedChartInverseSliceHasFDerivAtProbe.exists_hasFDerivAt_inverseSlice_of_contDiffOn_symm' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardRangeProjectionCoordinateDerivativeProbe.lean",
+       "sha256sum /tmp/SardProjectedChartInverseSliceHasFDerivAtProbe.lean",
        :exit 0,
        :output
-       "1594268e606aa0215ef1a1ed081e8db3c846b6bb3c9f66f27a047ad49540423d  /tmp/SardRangeProjectionCoordinateDerivativeProbe.lean"}
+       "fea065ac0ade977e6a6a5d2f18a6cc775d14aea85bcca1fa3f7b8a02c2e577a1  /tmp/SardProjectedChartInverseSliceHasFDerivAtProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRangeProjectionCoordinateDerivativeProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartInverseSliceHasFDerivAtProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '12,18p' /tmp/SardRangeProjectionCoordinateDerivativeProbe.lean | sha256sum",
+       "sed -n '12,22p' /tmp/SardProjectedChartInverseSliceHasFDerivAtProbe.lean | sha256sum",
        :exit 0,
        :output
-       "633d691d1ca12fcf3eba2c23ffa9881a9eaa62b7e3b71c126b5119bf4ce2b726  -"}
+       "e21928bfc0283c495ee2e3f08ec5e051b78c418f8ccf7a75644bccdad9bd48e4  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 177 items OK; {:done 169, :open 1, :blocked 1, :superseded 6}"}
-      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+       "topology-worklist: 178 items OK; {:done 170, :open 1, :blocked 1, :superseded 6}"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean ConstructionTargets/SardRangeProjectionCoordinateDerivative.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\na75a0d92681d1497832268c92e95b83e07e2e4a272e4042e3107b96f6069df2b  ConstructionTargets/SardProjectedChartInverseSliceContDiffOn.lean\n1594268e606aa0215ef1a1ed081e8db3c846b6bb3c9f66f27a047ad49540423d  ConstructionTargets/SardRangeProjectionCoordinateDerivative.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -23305,12 +23345,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardRangeProjectionCoordinateDerivativeProbe.lean",
+     {:path "/tmp/SardProjectedChartInverseSliceHasFDerivAtProbe.lean",
       :sha256
-      "1594268e606aa0215ef1a1ed081e8db3c846b6bb3c9f66f27a047ad49540423d"},
+      "fea065ac0ade977e6a6a5d2f18a6cc775d14aea85bcca1fa3f7b8a02c2e577a1"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -23436,7 +23476,8 @@
     :critical-value-sard-residual-derivative-composition-eq-zero-1
     :critical-value-sard-rank-upper-residual-slice-annihilation-1
     :critical-value-sard-projected-chart-slice-projected-derivative-zero-1
-    :critical-value-sard-range-projection-coordinate-derivative-1],
+    :critical-value-sard-range-projection-coordinate-derivative-1
+    :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
