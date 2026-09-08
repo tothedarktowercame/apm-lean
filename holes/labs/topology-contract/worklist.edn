@@ -33021,6 +33021,41 @@
    "Finite-order projected chart target data is compiled; localize it to the closed rank-upper locus and discharge the indexed residual-slice zero hypotheses for the pointwise nullity witness.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if an exact derivative-rank identity cannot yield the source-kernel and target-orthogonal-complement finrank subtraction identities required by projected-slice induction, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean"
+    "ConstructionTargets/SardProjectedRankReducedDimensionIdentities.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED RANK-REDUCED DIMENSION IDENTITIES",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
+     :sha256
+     "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a"},
+    :declarations ["projected_rank_reduced_finranks"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Combine the dimension identities with finite-order chart data and zero residual-slice derivatives in the pointwise rank-chart packet."},
+   :representation
+   {:source
+    "A continuous linear derivative and an exact finrank value for its range.",
+    :target
+    "The source-kernel dimension and target orthogonal-residual dimension expressed as ambient finranks minus the exact derivative rank."},
+   :id
+   :critical-value-sard-projected-rank-reduced-dimension-identities-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-smooth-local-rank-chart-1
+    :critical-value-sard-rank-drop-regularity-admissibility-1],
+   :current-residual
+   "Rank-reduced source and target dimension identities are compiled; assemble them with the finite-order projected chart and residual derivative-zero data at each critical point.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -33074,80 +33109,79 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate finite-order projected chart target data at every exact critical-rank point, derive the indexed residual-slice zero hypotheses on the closed rank-upper locus, and invoke the pointwise nullity witness.",
+     "Use the rank-reduced dimension identities with finite-order projected chart target data and indexed residual-slice zero to construct the pointwise nullity witness at each exact critical-rank point.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_projected_finiteOrderChart_target_data"
-      "07de117e16e19e896f72c62d90b8bcc5d103059963149fefcaa31778e1da7102"},
+     {"projected_rank_reduced_finranks"
+      "6b98b4b79aaa3be06752f32c3c6a7a2901a526d34f21252c4515288671b71a9c"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if a projected local-rank chart obtained from a finite-order smooth map cannot retain that finite order in both chart directions while preserving the target-coordinate formula and pointwise range-coordinate derivative surjectivity, or if the theorem requires nonstandard axioms.",
+      "Stop only if an exact derivative-rank identity cannot yield the source-kernel and target-orthogonal-complement finrank subtraction identities required by projected-slice induction, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderProjectedSmoothChartTargetData.lean"
-       "ConstructionTargets/SardFiniteOrderProjectedSmoothChartTargetData.md"],
+      ["ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean"
+       "ConstructionTargets/SardProjectedRankReducedDimensionIdentities.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED SMOOTH-CHART TARGET DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED RANK-REDUCED DIMENSION IDENTITIES",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderProjectedSmoothChartTargetDataProbe.lean",
+        "/tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
         :sha256
-        "77e0011059bf4b080f57d2daa8411d36a45f986259ea2961b1d30da528ee8b8e"},
-       :declarations ["exists_projected_finiteOrderChart_target_data"],
+        "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a"},
+       :declarations ["projected_rank_reduced_finranks"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Combine the finite-order chart packet with closed rank-upper localization and indexed residual-slice derivative zero at each exact critical-rank point."},
+       "Combine the dimension identities with finite-order chart data and zero residual-slice derivatives in the pointwise rank-chart packet."},
       :representation
       {:source
-       "A nonzero finite differentiability order, a strict derivative at the selected point, and finite-order smoothness of the original map there.",
+       "A continuous linear derivative and an exact finrank value for its range.",
        :target
-       "A projected local-rank chart containing the point with the target-coordinate identity, chart and inverse regularity at the original finite order, and pointwise surjectivity of the range-coordinate derivative."},
+       "The source-kernel dimension and target orthogonal-residual dimension expressed as ambient finranks minus the exact derivative rank."},
       :id
-      :critical-value-sard-finite-order-projected-smooth-chart-target-data-1,
+      :critical-value-sard-projected-rank-reduced-dimension-identities-1,
       :kind :reusable-theorem,
       :depends-on
       [:critical-value-sard-projected-smooth-local-rank-chart-1
-       :critical-value-sard-range-projection-derivative-surjective-on-smooth-chart-1
-       :critical-value-sard-target-orthogonal-coordinate-equiv-1],
+       :critical-value-sard-rank-drop-regularity-admissibility-1],
       :current-residual
-      "Finite-order projected chart target data is compiled; localize it to the closed rank-upper locus and discharge the indexed residual-slice zero hypotheses for the pointwise nullity witness.",
+      "Rank-reduced source and target dimension identities are compiled; assemble them with the finite-order projected chart and residual derivative-zero data at each critical point.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture upgrades the reviewed projected local-rank chart construction to arbitrary nonzero finite differentiability order while retaining the target-coordinate identity, finite-order regularity of the chart and inverse, and pointwise surjectivity of the range-coordinate derivative. The remaining work is to combine this finite-order chart packet with the reviewed rank-upper closed locus and indexed residual-slice derivative-zero theorem at each exact critical-rank point.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture proves both rank-reduced dimension identities required by the finite-order pointwise chart witness: the kernel of range projection composed with the derivative has source dimension minus rank, and the orthogonal complement of the derivative range has target dimension minus rank. The remaining work is to combine these identities with finite-order chart target data, closed rank-upper localization, and indexed residual-slice derivative zero at each exact critical-rank point.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderProjectedSmoothChartTargetDataProbe.lean",
+       "lake env lean /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderProjectedSmoothChartTargetDataProbe.exists_projected_finiteOrderChart_target_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedRankReducedDimensionIdentitiesProbe.projected_rank_reduced_finranks' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderProjectedSmoothChartTargetDataProbe.lean",
+       "sha256sum /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
        :exit 0,
        :output
-       "77e0011059bf4b080f57d2daa8411d36a45f986259ea2961b1d30da528ee8b8e  /tmp/SardFiniteOrderProjectedSmoothChartTargetDataProbe.lean"}
+       "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a  /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedSmoothChartTargetDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '12,39p' /tmp/SardFiniteOrderProjectedSmoothChartTargetDataProbe.lean | sha256sum",
+       "sed -n '6,39p' /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean | sha256sum",
        :exit 0,
        :output
-       "07de117e16e19e896f72c62d90b8bcc5d103059963149fefcaa31778e1da7102  -"}
+       "6b98b4b79aaa3be06752f32c3c6a7a2901a526d34f21252c4515288671b71a9c  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 250 items OK; {:done 242, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 251 items OK; {:done 243, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -33166,12 +33200,12 @@
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderProjectedSmoothChartTargetDataProbe.lean",
+      "/tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
       :sha256
-      "77e0011059bf4b080f57d2daa8411d36a45f986259ea2961b1d30da528ee8b8e"},
+      "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -33370,7 +33404,8 @@
     :critical-value-sard-finite-order-rank-locus-local-aggregation-1
     :critical-value-sard-finite-order-critical-rank-loci-aggregation-1
     :critical-value-sard-finite-order-pointwise-rank-chart-nullity-witness-1
-    :critical-value-sard-finite-order-projected-smooth-chart-target-data-1],
+    :critical-value-sard-finite-order-projected-smooth-chart-target-data-1
+    :critical-value-sard-projected-rank-reduced-dimension-identities-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
