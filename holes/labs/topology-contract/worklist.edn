@@ -21844,6 +21844,47 @@
       :output
       "[master 83df6b45] Add compact projected-chart image nullity\n2 files changed, 65 insertions(+)\ncreate mode 100644 ConstructionTargets/SardCompactProjectedChartImageNullity.lean\ncreate mode 100644 ConstructionTargets/SardCompactProjectedChartImageNullity.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788861415175-14825-cbd0ad42",
+     :commands
+     [{:cmd
+       "git rev-parse 83df6b45; git show --stat --oneline --decorate=no 83df6b45; git diff-tree --no-commit-id --name-only -r 83df6b45; git show 83df6b45:ConstructionTargets/SardCompactProjectedChartImageNullity.lean; git show 83df6b45:ConstructionTargets/SardCompactProjectedChartImageNullity.md",
+       :exit 0,
+       :output
+       "83df6b458b0014bfcaf7da0e18fe2e1f5cf6df86; exact two-path scope"}
+      {:cmd
+       "git show 83df6b458b0014bfcaf7da0e18fe2e1f5cf6df86:ConstructionTargets/SardCompactProjectedChartImageNullity.lean > /tmp/sard-compact-projected-review.jwH17W/SardCompactProjectedChartImageNullity.lean; git show 83df6b458b0014bfcaf7da0e18fe2e1f5cf6df86:ConstructionTargets/SardCompactProjectedChartImageNullity.md > /tmp/sard-compact-projected-review.jwH17W/SardCompactProjectedChartImageNullity.md; sha256sum /tmp/sard-compact-projected-review.jwH17W/SardCompactProjectedChartImageNullity.lean /tmp/sard-compact-projected-review.jwH17W/SardCompactProjectedChartImageNullity.md",
+       :exit 0,
+       :output
+       "4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7 Lean; db5894abd0557656740d84433efec91ab910f78ba16e9792f7f4586fa334c52f MD"}
+      {:cmd
+       "lake env lean /tmp/sard-compact-projected-review.jwH17W/SardCompactProjectedChartImageNullity.lean",
+       :exit 0,
+       :output
+       "measure_image_zero_of_compact_projectedChart depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-compact-projected-review.jwH17W/SardCompactProjectedChartImageNullity.lean /tmp/sard-compact-projected-review.jwH17W/SardCompactProjectedChartImageNullity.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '10,52p' /tmp/sard-compact-projected-review.jwH17W/SardCompactProjectedChartImageNullity.lean | sha256sum",
+       :exit 0,
+       :output
+       "f29e7794c13c9b36ffcacd0d718e2a69303043661bb7c54f11e55559149f4199  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 169 items OK; {:done 160, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 83df6b458b0014bfcaf7da0e18fe2e1f5cf6df86",
+       :exit 0,
+       :output
+       "83df6b458b0014bfcaf7da0e18fe2e1f5cf6df86; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended orientation: chart-source containment plus equality of the chart and target first coordinates yields containment of every target fiber in its fixed-coordinate inverse-chart slice, and the reviewed compact target-fiber theorem converts the stated lower-dimensional smoothness, dimension, surjectivity, and zero projected-derivative hypotheses into nullity of the complete compact image in original target coordinates. No representation weakening, missing hypothesis transfer, warning, or worktree change was found."},
     :commit "83df6b45",
     :changed-paths
     ["ConstructionTargets/SardCompactProjectedChartImageNullity.lean"
@@ -21855,7 +21896,7 @@
     :declarations ["measure_image_zero_of_compact_projectedChart"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactProjectedChartImageNullity.lean"
     "ConstructionTargets/SardCompactProjectedChartImageNullity.md"],
@@ -22034,7 +22075,7 @@
       "4093a5a1016d71d7c60feb40dafc565fbbb0cdafa5cb266236cf933f782b57b7"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
