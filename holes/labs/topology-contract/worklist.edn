@@ -17266,6 +17266,50 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788845155901-14575-035896b4",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 4e98040dd2ee439292757789cd5fc4960f6c9472; git diff-tree --no-commit-id --name-only -r 4e98040dd2ee439292757789cd5fc4960f6c9472",
+       :exit 0,
+       :output
+       "Author Joe Corneli; exact scope: ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean and ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md."}
+      {:cmd
+       "git show 4e98040dd2ee439292757789cd5fc4960f6c9472:ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean | sha256sum; sha256sum /tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean; cmp <(git show 4e98040dd2ee439292757789cd5fc4960f6c9472:ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean) /tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
+       :exit 0,
+       :output
+       "Committed source and fixture are byte-identical at bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943."}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean; lake build ConstructionTargets.SardFirstDerivativeRankPieceLocalNullityAggregation",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; declaration depends on [propext, Classical.choice, Quot.sound]; build completed successfully (8271 jobs), with no warning from the reviewed module."}
+      {:cmd
+       "git show 4e98040dd2ee439292757789cd5fc4960f6c9472:ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 4e98040dd2ee439292757789cd5fc4960f6c9472:ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 4e98040dd2ee439292757789cd5fc4960f6c9472:ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md | sha256sum; sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "Documentation hash 010689403311208fc06aeeee9f31d211db0fe02b45437754b2cf8d180c841263; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd
+       "git merge-base --is-ancestor 8f2bbf3df925116ef9c87b084a4352215dddab01 4e98040dd2ee439292757789cd5fc4960f6c9472; git merge-base --is-ancestor 3918dae4fe70a71e08827ccc33a5263198a11570 4e98040dd2ee439292757789cd5fc4960f6c9472; git merge-base --is-ancestor a71aab02558f66f3b2213be85aeeab17ea59acc7 4e98040dd2ee439292757789cd5fc4960f6c9472",
+       :exit 0,
+       :output "All three recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "topology-worklist: 137 items OK; {:done 128, :done-unreviewed 1, :blocked 2, :superseded 6}; diff clean; working tree clean."}],
+     :finding
+     "PASS. The theorem preserves the exact order-one first-nonzero-jet and derivative-rank-stratum intersection and specializes the reviewed second-countable local-nullity aggregator without changing it. For every point in that piece, it requires an open neighborhood containing the point and measure zero for the image of the piece restricted to that neighborhood; the second-countable source supplies the countable reduction, so no measurability premise on the neighborhoods or rank piece is needed. The conclusion is exactly nullity of the whole rank-piece image, while construction of the pointwise projected-chart witnesses remains downstream. Exact scope and fixture hash reproduce, axioms are standard-only, placeholders are zero, and the frozen consumer retains one theorem and one sorry."},
     :commit "4e98040dd2ee439292757789cd5fc4960f6c9472",
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean"
@@ -17287,7 +17331,7 @@
       "ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md"],
@@ -17460,7 +17504,7 @@
       "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
