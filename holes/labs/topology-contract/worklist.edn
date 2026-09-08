@@ -24989,6 +24989,60 @@
       "git -c user.name='Joe Corneli' -c user.email='holtzermann17@gmail.com' commit -m 'Add localized projected slice annihilation'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788870402416-14985-f0e3ae16",
+     :commands
+     [{:cmd
+       "git show --no-ext-diff --format=fuller --stat cbed8cc3421b7bfc13096e7246e85b711ee157d1 && git diff-tree --no-commit-id --name-only -r cbed8cc3421b7bfc13096e7246e85b711ee157d1",
+       :exit 0}
+      {:cmd
+       "git show cbed8cc3421b7bfc13096e7246e85b711ee157d1:ConstructionTargets/SardLocalizedProjectedSliceAnnihilation.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/sard-localized-annihilation-review.gwnp8h/SardLocalizedProjectedSliceAnnihilation.lean /tmp/sard-localized-annihilation-review.gwnp8h/SardLocalizedProjectedSliceAnnihilation.md /tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean",
+       :exit 0,
+       :output
+       "f5b8f4feeb346d723d0123d5a4b8c930b79e20ea47226d06664b91cd0ec9178c  committed Lean blob; 1bd242f2c55383a33ff77b48a71d5dacc32de8c3cfb87dd6c7065b1785dba32d  committed Markdown blob; f5b8f4feeb346d723d0123d5a4b8c930b79e20ea47226d06664b91cd0ec9178c  fixture"}
+      {:cmd
+       "cmp -s /tmp/sard-localized-annihilation-review.gwnp8h/SardLocalizedProjectedSliceAnnihilation.lean /tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean",
+       :exit 0}
+      {:cmd "readlink -f .lake/packages",
+       :exit 0,
+       :output "/home/joe/code/apm-lean/.lake/packages"}
+      {:cmd
+       "lake env lean /tmp/sard-localized-annihilation-review.gwnp8h/SardLocalizedProjectedSliceAnnihilation.lean",
+       :exit 0,
+       :output
+       "'SardLocalizedProjectedSliceAnnihilationProbe.residual_comp_slice_eq_zero_of_localized_rankUpper' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sed -n '15,33p' /tmp/sard-localized-annihilation-review.gwnp8h/SardLocalizedProjectedSliceAnnihilation.lean | sha256sum",
+       :exit 0,
+       :output
+       "ea9fb89205351edbe6739de17b51271452d200ecae370e52f477ef0931fe4482  -"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-localized-annihilation-review.gwnp8h/SardLocalizedProjectedSliceAnnihilation.lean /tmp/sard-localized-annihilation-review.gwnp8h/SardLocalizedProjectedSliceAnnihilation.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 191 items OK; {:done 182, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+      {:cmd
+       "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output "1"}
+      {:cmd "git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output ""}],
+     :finding
+     "PASS. Recorded commit cbed8cc3421b7bfc13096e7246e85b711ee157d1 by Joe Corneli changes exactly the two scoped files. Its committed Lean blob is byte-identical to the recorded fixture and reproduces the frozen theorem hash with zero scoped placeholders, no warnings, and only standard axioms. The theorem orientation is correct: the localized rank-index equality converts the ambient rank bound to a base-range bound, hR transports it to the projected-coordinate dimension, projected surjectivity plus vanishing on the slice invokes the reviewed rank-upper annihilation theorem, and extensionality yields Q.comp (D.comp J) = 0 for arbitrary residual coordinate Q. Representation boundaries match the ledger; the frozen consumer remains unchanged with one placeholder."},
     :commit "cbed8cc3421b7bfc13096e7246e85b711ee157d1",
     :changed-paths
     ["ConstructionTargets/SardLocalizedProjectedSliceAnnihilation.lean"
@@ -25000,7 +25054,7 @@
     :declarations
     ["residual_comp_slice_eq_zero_of_localized_rankUpper"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLocalizedProjectedSliceAnnihilation.lean"
     "ConstructionTargets/SardLocalizedProjectedSliceAnnihilation.md"],
@@ -25181,7 +25235,7 @@
       "f5b8f4feeb346d723d0123d5a4b8c930b79e20ea47226d06664b91cd0ec9178c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
