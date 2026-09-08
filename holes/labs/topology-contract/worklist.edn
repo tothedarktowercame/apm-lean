@@ -26773,6 +26773,42 @@
    "Critical nonsurjectivity now directly supplies the nontrivial orthogonal residual required by compact fiber nullity; canonical measure installation and concrete certificate instantiation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled derivative-range and orthogonal-residual measure package cannot be promoted for arbitrary real normed source spaces, finite-dimensional real inner-product target spaces, every nonsurjective continuous real-linear derivative, canonical Borel structures and additive Haar measures on its range and orthogonal complement, nontriviality of the orthogonal complement, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardDerivativeRangeOrthogonalMeasurePackage.lean"
+    "ConstructionTargets/SardDerivativeRangeOrthogonalMeasurePackage.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE AND ORTHOGONAL-RESIDUAL MEASURE PACKAGE",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean",
+     :sha256
+     "9398474e95892b58ede9064dec5d4767ce476c21e1b4fbcb2995d24180a0dfe8"},
+    :declarations ["exists_range_orthogonal_borel_addHaarMeasure"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Install the bundled derivative-range and orthogonal-residual measure data locally, then instantiate the concrete compact projected-chart certificate."},
+   :representation
+   {:source
+    "A nonsurjective continuous real-linear derivative into a finite-dimensional real inner-product target.",
+    :target
+    "Canonical Borel structures, additive Haar measures on the derivative range and its orthogonal complement, and a Nontrivial certificate for the orthogonal residual."},
+   :id
+   :critical-value-sard-derivative-range-orthogonal-measure-package-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1
+    :critical-value-sard-finite-dimensional-borel-add-haar-package-1
+    :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1],
+   :current-residual
+   "All derivative-range and orthogonal-residual measure and nontriviality data are bundled; local installation and concrete compact projected-chart certificate instantiation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -26826,83 +26862,86 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Install canonical Borel/additive-Haar packages on derivative-range and orthogonal-residual coordinates, then instantiate the concrete compact projected-chart certificate.",
+     "Install the bundled derivative-range and orthogonal-residual measure data locally, then instantiate the concrete compact projected-chart certificate.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"nontrivial_range_orthogonal_of_not_surjective"
-      "eb0060bed980e24e25616194073f1c6dbe82ae9003f8264eaeb4fda72bc9a877"},
+     {"exists_range_orthogonal_borel_addHaarMeasure"
+      "fdd0f0c286448cb87d8387aab5a4ca68bf31552dd0352326849f56246623d135"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled nonsurjective-derivative orthogonal-residual theorem cannot be promoted for arbitrary real normed source spaces, finite-dimensional real inner-product target spaces, every nonsurjective continuous real-linear derivative, nontriviality of the orthogonal complement of its range, or standard-axiom profile.",
+      "Stop only if the compiled derivative-range and orthogonal-residual measure package cannot be promoted for arbitrary real normed source spaces, finite-dimensional real inner-product target spaces, every nonsurjective continuous real-linear derivative, canonical Borel structures and additive Haar measures on its range and orthogonal complement, nontriviality of the orthogonal complement, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardNonsurjectiveDerivativeOrthogonalNontrivial.lean"
-       "ConstructionTargets/SardNonsurjectiveDerivativeOrthogonalNontrivial.md"],
+      ["ConstructionTargets/SardDerivativeRangeOrthogonalMeasurePackage.lean"
+       "ConstructionTargets/SardDerivativeRangeOrthogonalMeasurePackage.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / NONSURJECTIVE DERIVATIVE ORTHOGONAL RESIDUAL NONTRIVIALITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE AND ORTHOGONAL-RESIDUAL MEASURE PACKAGE",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardNonsurjectiveDerivativeOrthogonalNontrivialProbe.lean",
+        "/tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean",
         :sha256
-        "18426b1b135eca3564315cfb4594a16b19a34d0be83d731d4e34bd59ed81cca7"},
-       :declarations ["nontrivial_range_orthogonal_of_not_surjective"],
+        "9398474e95892b58ede9064dec5d4767ce476c21e1b4fbcb2995d24180a0dfe8"},
+       :declarations ["exists_range_orthogonal_borel_addHaarMeasure"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Install canonical Borel/additive-Haar packages on derivative-range and orthogonal-residual coordinates, then instantiate the concrete compact projected-chart certificate."},
+       "Install the bundled derivative-range and orthogonal-residual measure data locally, then instantiate the concrete compact projected-chart certificate."},
       :representation
       {:source
        "A nonsurjective continuous real-linear derivative into a finite-dimensional real inner-product target.",
        :target
-       "A Nontrivial instance for the orthogonal complement of its range."},
+       "Canonical Borel structures, additive Haar measures on the derivative range and its orthogonal complement, and a Nontrivial certificate for the orthogonal residual."},
       :id
-      :critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1,
+      :critical-value-sard-derivative-range-orthogonal-measure-package-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-derivative-range-orthogonal-nontrivial-1
+      [:critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1
        :critical-value-sard-finite-dimensional-borel-add-haar-package-1
        :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1],
       :current-residual
-      "Critical nonsurjectivity now directly supplies the nontrivial orthogonal residual required by compact fiber nullity; canonical measure installation and concrete certificate instantiation remain.",
+      "All derivative-range and orthogonal-residual measure and nontriviality data are bundled; local installation and concrete compact projected-chart certificate instantiation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture converts the nonsurjectivity condition defining the critical locus directly into the Nontrivial orthogonal-residual instance required by compact fiber nullity. Canonical measure installation and concrete compact projected-chart certificate instantiation remain.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture bundles, for every nonsurjective derivative, canonical Borel structures and additive Haar measures on its range and orthogonal complement together with orthogonal-residual nontriviality. The remaining bounded analytic input is concrete compact projected-chart certificate instantiation.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 7 ':id :critical-value-sard-(derivative-range-orthogonal-nontrivial-1|finite-dimensional-borel-add-haar-package-1|compact-projected-chart-nullity-of-residual-data-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 6 ':id :critical-value-sard-(nonsurjective-derivative-orthogonal-nontrivial-1|finite-dimensional-borel-add-haar-package-1|compact-projected-chart-nullity-of-residual-data-1|first-derivative-rank-piece-projected-chart-nullity-witness-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardNonsurjectiveDerivativeOrthogonalNontrivialProbe.lean",
+       "lake env lean -o .lake/build/lib/lean/ConstructionTargets/SardNonsurjectiveDerivativeOrthogonalNontrivial.olean ConstructionTargets/SardNonsurjectiveDerivativeOrthogonalNontrivial.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean",
        :exit 0,
        :output
-       "'SardNonsurjectiveDerivativeOrthogonalNontrivialProbe.nontrivial_range_orthogonal_of_not_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardDerivativeRangeOrthogonalMeasurePackageProbe.exists_range_orthogonal_borel_addHaarMeasure' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardNonsurjectiveDerivativeOrthogonalNontrivialProbe.lean",
+       "sha256sum /tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean",
        :exit 0,
        :output
-       "18426b1b135eca3564315cfb4594a16b19a34d0be83d731d4e34bd59ed81cca7  /tmp/SardNonsurjectiveDerivativeOrthogonalNontrivialProbe.lean"}
+       "9398474e95892b58ede9064dec5d4767ce476c21e1b4fbcb2995d24180a0dfe8  /tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardNonsurjectiveDerivativeOrthogonalNontrivialProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '6,14p' /tmp/SardNonsurjectiveDerivativeOrthogonalNontrivialProbe.lean | sha256sum",
+       "sed -n '10,34p' /tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean | sha256sum",
        :exit 0,
        :output
-       "eb0060bed980e24e25616194073f1c6dbe82ae9003f8264eaeb4fda72bc9a877  -"}
+       "fdd0f0c286448cb87d8387aab5a4ca68bf31552dd0352326849f56246623d135  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 200 items OK; {:done 192, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 201 items OK; {:done 193, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -26918,12 +26957,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardNonsurjectiveDerivativeOrthogonalNontrivialProbe.lean",
+      "/tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean",
       :sha256
-      "18426b1b135eca3564315cfb4594a16b19a34d0be83d731d4e34bd59ed81cca7"},
+      "9398474e95892b58ede9064dec5d4767ce476c21e1b4fbcb2995d24180a0dfe8"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -27072,7 +27111,8 @@
     :critical-value-sard-localized-image-nullity-of-compact-chart-certificates-1
     :critical-value-sard-finite-dimensional-borel-add-haar-package-1
     :critical-value-sard-derivative-range-orthogonal-nontrivial-1
-    :critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1],
+    :critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1
+    :critical-value-sard-derivative-range-orthogonal-measure-package-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
