@@ -21656,8 +21656,70 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled projected chart-source compact-local nullity theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real inner-product spaces with second-countable source, every exact derivative-rank point, automatic projected-chart selection, open neighborhood refinement inside the chart source, nullity of every compact subset image of the localized rank-at-most locus, nullity of the complete exact-rank piece image, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "For each refined projected chart, prove compact rank-upper image nullity using target-coordinate fiber containment in inverse slices, lower-dimensional slice Sard hypotheses, and compact target-fiber image nullity.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"rankPiece_image_null_of_chartSource_compact_null"
+     "1ae946344c3c08436383337b48e7b9ed2eb7fc361b7c590dd3099006a05105c7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
+      :exit 0,
+      :output
+      "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406  /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
+      :exit 0,
+      :output
+      "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406  ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean\n3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406  /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean",
+      :exit 0,
+      :output
+      "'SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.rankPiece_image_null_of_chartSource_compact_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '11,44p' ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "1ae946344c3c08436383337b48e7b9ed2eb7fc361b7c590dd3099006a05105c7  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 168 items OK; {:done 159, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m \"Add projected chart-source compact nullity aggregation\"",
+      :exit 0,
+      :output
+      "[master c4584b34] Add projected chart-source compact nullity aggregation\n2 files changed, 59 insertions(+)\ncreate mode 100644 ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean\ncreate mode 100644 ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "c4584b34935c715798604d29a4a9aa83c3610ec5",
+    :changed-paths
+    ["ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean"
+     "ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
+     :sha256
+     "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406"},
+    :declarations ["rankPiece_image_null_of_chartSource_compact_null"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md"],
