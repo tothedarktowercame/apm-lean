@@ -27324,6 +27324,8 @@
    "Orthogonal residual inverse slices now carry the complete regularity and projected-zero bundle; local coordinate-measure installation and compact projected-chart nullity instantiation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Deterministic fixture-match defect: commit 2952a0878037551f5e9bf5b6c6ef65d1b3285b27 records namespace SardCompactProjectedChartNullityOfBundledData and hashes to 1098cdc5f744730fc63056a060183c10d0f0f5489eb02a3a49a8064af3a5b2b5, while the required fixture uses namespace SardCompactProjectedChartNullityOfBundledDataProbe and hashes to 2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7; cmp exits 1. The opening and closing namespace lines are the only diff. Scope, statement hash 816f9793b9ae50cfa9d7cc4ed203c6ee185d06f7bb6fe06f999b9c6627ea8a18, compilation, standard axioms, placeholder scan, consumer freeze, worklist validation, diff check, and clean-worktree gates otherwise reproduce.",
    :stop-condition
    "Stop only if the compiled compact projected-chart nullity wrapper cannot be promoted for arbitrary finite-dimensional real normed source spaces, real normed target and chart-coordinate spaces with Borel structures and additive Haar measures, nontrivial residual slice spaces, compact chart-source sets, lower-dimensional induction, target-coordinate equivalences, exact first-coordinate identities, dimension drop, bundled fiberwise C1 regularity and identity-projected zero derivatives, zero target measure of the compact image, or standard-axiom profile.",
    :evidence
@@ -27389,6 +27391,12 @@
       :exit 0,
       :output "2952a0878037551f5e9bf5b6c6ef65d1b3285b27"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-1",
+     :job "invoke-1788878647794-15140-ebe42899",
+     :finding
+     "Deterministic fixture-match defect: commit 2952a0878037551f5e9bf5b6c6ef65d1b3285b27 records namespace SardCompactProjectedChartNullityOfBundledData and hashes to 1098cdc5f744730fc63056a060183c10d0f0f5489eb02a3a49a8064af3a5b2b5, while the required fixture uses namespace SardCompactProjectedChartNullityOfBundledDataProbe and hashes to 2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7; cmp exits 1. The opening and closing namespace lines are the only diff. Scope, statement hash 816f9793b9ae50cfa9d7cc4ed203c6ee185d06f7bb6fe06f999b9c6627ea8a18, compilation, standard axioms, placeholder scan, consumer freeze, worklist validation, diff check, and clean-worktree gates otherwise reproduce."},
     :commit "2952a0878037551f5e9bf5b6c6ef65d1b3285b27",
     :changed-paths
     ["ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean"
@@ -27400,7 +27408,7 @@
      "2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7"},
     :declarations ["measure_image_zero_of_bundled_inverseSlice_data"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean"
     "ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.md"],
