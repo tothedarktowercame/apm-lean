@@ -14816,22 +14816,16 @@
    :evidence
    {:next-consumer-residual
     "At each localized exact-rank point, construct projected local rank coordinates on the compiled open rank-at-most neighborhood, prove residual derivative flatness along constant projected-coordinate slices, and derive local rank-piece image nullity for second-countable aggregation.",
-    :corrected-depends-on
-    [:critical-value-sard-first-derivative-locus-rank-aggregation-1
-     :critical-value-sard-rank-strata-1
-     :critical-value-sard-exact-rank-local-upper-locus-1],
     :placeholder-delta {:before 1, :after 1, :delta 0},
     :residual
     "At each localized exact-rank point, construct projected local rank coordinates on the compiled open rank-at-most neighborhood, prove residual derivative flatness along constant projected-coordinate slices, and derive local rank-piece image nullity for second-countable aggregation.",
     :gates
     {:scope-check :pass,
      :fixture-hash :pass,
-     :dependency-boundary :pass,
      :fixture-byte-identity :pass,
      :worklist :pass,
      :placeholder-scan :pass,
      :lean :pass,
-     :lake-build :pass,
      :repository-clean :pass,
      :diff-check :pass,
      :dependency-ancestor :pass},
@@ -14841,37 +14835,28 @@
     {"ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean"
      "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48",
      "ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md"
-     "46aca16c6ea5563bf01c8f041d851acf8b968ba191e5e378997a018518ae2062",
+     "5901ce808a7e2be8136a7bd3340150fdf5cd6e279f3b5923015d4cd5e38fcd66",
      "problems/t93A04/lean/Main.lean"
      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
     [{:cmd
-      "sha256sum /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean",
-      :exit 0,
-      :output
-      "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48  /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean\n10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48  ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean"}
-     {:cmd
       "lake env lean ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean",
       :exit 0,
       :output
       "'SardFirstDerivativeRankPieceLocalUpperLocusProbe.exists_open_inter_firstNonzeroJetLocus_one_rankStratum_eq_rankLE' depends on axioms: [propext, Classical.choice, Quot.sound]"}
      {:cmd
-      "lake build ConstructionTargets.SardFirstDerivativeRankPieceLocalUpperLocus",
-      :exit 0,
-      :output "Build completed successfully (8273 jobs)."}
-     {:cmd
       "cmp -s /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean",
-      :exit 0}
-     {:cmd
-      "git merge-base --is-ancestor 3557ca282a329c22bbe062fe4b38cf0984ca94a2 HEAD",
       :exit 0}
      {:cmd
       "sha256sum /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md problems/t93A04/lean/Main.lean",
       :exit 0,
       :output
-      "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48  /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean\n10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48  ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean\n46aca16c6ea5563bf01c8f041d851acf8b968ba191e5e378997a018518ae2062  ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md\n4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+      "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48  /tmp/SardFirstDerivativeRankPieceLocalUpperLocusProbe.lean\n10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48  ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean\n5901ce808a7e2be8136a7bd3340150fdf5cd6e279f3b5923015d4cd5e38fcd66  ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md\n4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "git merge-base --is-ancestor 3557ca282a329c22bbe062fe4b38cf0984ca94a2 HEAD",
+      :exit 0}
      {:cmd
       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md",
       :exit 1,
@@ -14881,26 +14866,20 @@
       :exit 0,
       :output
       "topology-worklist: 123 items OK; {:done 114, :repair 1, :blocked 2, :superseded 6}"}
-     {:cmd
-      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
-      :exit 0,
-      :output "1"}
      {:cmd "git diff --check", :exit 0}
-     {:cmd "git commit -m 'Record exact rank upper locus dependency'",
+     {:cmd
+      "git commit -m 'Move rank upper locus dependency to row transition'",
       :exit 0,
       :output
-      "[master b1671b89] Record exact rank upper locus dependency\n 1 file changed, 5 insertions(+)"}
+      "[master 233afc92] Move rank upper locus dependency to row transition\n 1 file changed, 5 deletions(-)"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :review
-    {:outcome :fail,
-     :seat "codex-1",
-     :job "invoke-1788838605169-14487-5cd99630",
-     :finding
-     "The deterministic dependency defect remains. Repair commit b1671b89207b2f99ea251dbad280abc8b4eef6d6 only adds prose to SardFirstDerivativeRankPieceLocalUpperLocus.md saying the ledger must retain :critical-value-sard-exact-rank-local-upper-locus-1, and the evidence now contains a separate :dependencies field, but the row's authoritative :depends-on vector still contains only :critical-value-sard-first-derivative-locus-rank-aggregation-1 and :critical-value-sard-rank-strata-1. The committed Lean source still directly imports SardExactRankLocalUpperLocus and applies exists_open_inter_rankStratum_eq_rankLE. The fixture remains byte-identical to the Lean source with hash 10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48 and standard-only axioms, but PASS requires adding :critical-value-sard-exact-rank-local-upper-locus-1 to the actual :depends-on vector, not merely documenting the omission."},
-    :commit "b1671b89207b2f99ea251dbad280abc8b4eef6d6",
+    :id
+    :critical-value-sard-first-derivative-rank-piece-local-upper-locus-1,
+    :commit "233afc925e09901e499d227ee5ff0ff966dd3119",
     :commits
     ["d7b6ffeba8d89e2627034fa76560d134b13c4efd"
-     "b1671b89207b2f99ea251dbad280abc8b4eef6d6"],
+     "b1671b89207b2f99ea251dbad280abc8b4eef6d6"
+     "233afc925e09901e499d227ee5ff0ff966dd3119"],
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md"],
     :fixture
@@ -14910,14 +14889,19 @@
      "10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48"},
     :declarations
     ["SardFirstDerivativeRankPieceLocalUpperLocusProbe.exists_open_inter_firstNonzeroJetLocus_one_rankStratum_eq_rankLE"],
+    :depends-on
+    [:critical-value-sard-first-derivative-locus-rank-aggregation-1
+     :critical-value-sard-rank-strata-1
+     :critical-value-sard-exact-rank-local-upper-locus-1],
     :repair-finding
-    "The dependency boundary now explicitly includes :critical-value-sard-exact-rank-local-upper-locus-1, whose theorem exists_open_inter_rankStratum_eq_rankLE is directly imported and applied.",
+    "Apply this :depends-on vector to the authoritative row. The previously added prose-only repair was removed because it did not alter the row dependency boundary; direct ledger editing remains reserved for the supervisor.",
     :dependencies
     [{:id :critical-value-sard-exact-rank-local-upper-locus-1,
       :commit "3557ca282a329c22bbe062fe4b38cf0984ca94a2",
-      :ancestor true}]},
+      :ancestor true,
+      :provides ["exists_open_inter_rankStratum_eq_rankLE"]}]},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md"],
