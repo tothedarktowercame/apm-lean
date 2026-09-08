@@ -20752,6 +20752,42 @@
    "Global projected-slice data now imply nullity of a complete closed-in-open localized locus; exact derivative-range rank-chart instantiation and exact-rank aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled derivative rank-upper local image-nullity theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces, every natural rank bound and open localization, nullity of every compact subset image, nullity of the complete localized derivative rank-at-most image, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.lean"
+    "ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE RANK-UPPER LOCAL IMAGE-NULLITY AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardDerivativeRankUpperLocalImageNullityProbe.lean",
+     :sha256
+     "4e0679b362fd91d0733b4661c30a66097ebe87fa4774ac8b8f6ba719fcd46929"},
+    :declarations
+    ["measure_image_zero_of_derivativeRankAtMost_inter_open_of_compact"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "For each exact-rank projected chart, prove compact subsets of the localized derivative rank-at-most locus have null images using target-coordinate fibers and inverse slices, then aggregate exact-rank pieces."},
+   :representation
+   {:source
+    "A C¹ map, a derivative rank bound, an open localization, and zero image measure for every compact subset of the localized rank-at-most locus.",
+    :target
+    "Zero measure of the image of the complete localized derivative rank-at-most locus."},
+   :id
+   :critical-value-sard-derivative-rank-upper-local-image-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-closed-open-image-nullity-1
+    :critical-value-sard-derivative-rank-upper-locus-closed-1
+    :critical-value-sard-closed-open-target-fiber-projected-slice-image-nullity-1],
+   :current-residual
+   "Closedness and compact aggregation are now instantiated at the derivative rank-at-most locus; memberwise exact projected-rank chart nullity and exact-rank aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -20805,105 +20841,107 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate the closed locus, open chart, target-coordinate equivalence, and projected-slice containment from exact derivative-range rank-chart data, then aggregate the resulting localized exact-rank images.",
+     "For each exact-rank projected chart, prove compact subsets of the localized derivative rank-at-most locus have null images using target-coordinate fibers and inverse slices, then aggregate exact-rank pieces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_closedOpen_targetFiber_projectedSlices"
-      "04a64b3d321adf745dfd0b341ffbf02f661f962a5b994dd67505854951fb07be"},
+     {"measure_image_zero_of_derivativeRankAtMost_inter_open_of_compact"
+      "11f1ff6689b684bb8807e458b2238c2eb69b7de8040f1c2758a8b7d5f58d1eb9"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled closed-open target-fiber projected-slice theorem cannot be promoted with locally compact second-countable Hausdorff source, closed locus, open localization, global continuity, additive Haar measures, a continuous-linear product-coordinate equivalence, global target-fiber containment in indexed projected slices, lower-dimensional Sard induction, dimension inequality, nonzero differentiability order, pointwise slice smoothness, surjective residual projection, zero projected derivatives, complete localized image nullity, or standard-axiom profile.",
+      "Stop only if the compiled derivative rank-upper local image-nullity theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces, every natural rank bound and open localization, nullity of every compact subset image, nullity of the complete localized derivative rank-at-most image, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean"
-       "ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md"],
+      ["ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.lean"
+       "ConstructionTargets/SardDerivativeRankUpperLocalImageNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CLOSED-IN-OPEN TARGET-FIBER PROJECTED-SLICE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE RANK-UPPER LOCAL IMAGE-NULLITY AGGREGATION",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean",
+        "/tmp/SardDerivativeRankUpperLocalImageNullityProbe.lean",
         :sha256
-        "998b0888022ca9e150191401fdabee69a70c9c5fe9e75189032259fd6154f57b"},
+        "4e0679b362fd91d0733b4661c30a66097ebe87fa4774ac8b8f6ba719fcd46929"},
        :declarations
-       ["measure_image_zero_of_closedOpen_targetFiber_projectedSlices"],
+       ["measure_image_zero_of_derivativeRankAtMost_inter_open_of_compact"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the closed locus, open chart, target-coordinate equivalence, and projected-slice containment from exact derivative-range rank-chart data, then aggregate the resulting localized exact-rank images."},
+       "For each exact-rank projected chart, prove compact subsets of the localized derivative rank-at-most locus have null images using target-coordinate fibers and inverse slices, then aggregate exact-rank pieces."},
       :representation
       {:source
-       "A closed locus localized to an open chart, with global continuity and target-coordinate fiber containment in independently indexed lower-dimensional projected slices satisfying the Sard-induction hypotheses.",
+       "A C¹ map, a derivative rank bound, an open localization, and zero image measure for every compact subset of the localized rank-at-most locus.",
        :target
-       "Zero measure of the complete localized image in the original target coordinates."},
+       "Zero measure of the image of the complete localized derivative rank-at-most locus."},
       :id
-      :critical-value-sard-closed-open-target-fiber-projected-slice-image-nullity-1,
+      :critical-value-sard-derivative-rank-upper-local-image-nullity-1,
       :kind :reusable-theorem,
       :depends-on
       [:critical-value-sard-closed-open-image-nullity-1
-       :critical-value-sard-compact-target-fiber-projected-slice-image-nullity-1],
+       :critical-value-sard-derivative-rank-upper-locus-closed-1
+       :critical-value-sard-closed-open-target-fiber-projected-slice-image-nullity-1],
       :current-residual
-      "Global projected-slice data now imply nullity of a complete closed-in-open localized locus; exact derivative-range rank-chart instantiation and exact-rank aggregation remain.",
+      "Closedness and compact aggregation are now instantiated at the derivative rank-at-most locus; memberwise exact projected-rank chart nullity and exact-rank aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture now composes localized closed-open image aggregation with compact target-fiber projected-slice nullity. Global continuity and target-fiber containment on the closed-in-open locus restrict monotonically to every compact exhaustion member; the compact theorem proves each member image null, and the localized aggregator proves nullity of the complete localized image. Exact derivative-range coordinate and inverse-slice instantiation, followed by exact-rank aggregation, remain downstream.",
+     "The rectangular theorem is not refuted. Direct specialization of the target-coordinate theorem to derivative-range orthogonal subtypes again exposes the noncanonical Borel/measure-instance seam, so no measurable-space override was introduced. A placeholder-free fixture instead specializes the banked closed-in-open aggregation theorem to the canonical derivative rank-at-most locus, discharging its closedness from C¹ regularity. It proves local rank-upper image nullity from compact member image nullity while preserving the existing compact projected-slice measure interface. Supplying those compact estimates from exact rank-chart coordinates remains downstream.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '1,160p' ConstructionTargets/SardClosedOpenImageNullity.lean; sed -n '1,220p' ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean",
+       "sed -n '1,240p' ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean; sed -n '1,240p' ConstructionTargets/SardFirstDerivativeRankPieceProjectedDefiningData.lean; sed -n '1,240p' ConstructionTargets/SardFirstDerivativeProjectedChartFormula.lean; sed -n '1,240p' ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.lean; sed -n '1,240p' ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean; sed -n '1,240p' ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean; sed -n '1,240p' ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean",
+       "lake env lean /tmp/SardDerivativeRankUpperLocalProjectedSliceImageNullityProbe.lean",
+       :exit 1,
+       :expected-exit 1,
+       :output
+       "Direct orthogonal-coordinate specialization failed to synthesize the BorelSpace/measure instances for the derivative-range subtype; no local measurable-space override was introduced."}
+      {:cmd
+       "lake env lean /tmp/SardDerivativeRankUpperLocalImageNullityProbe.lean",
        :exit 0,
        :output
-       "'SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.measure_image_zero_of_closedOpen_targetFiber_projectedSlices' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardDerivativeRankUpperLocalImageNullityProbe.measure_image_zero_of_derivativeRankAtMost_inter_open_of_compact' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean",
+       "sha256sum /tmp/SardDerivativeRankUpperLocalImageNullityProbe.lean",
        :exit 0,
        :output
-       "998b0888022ca9e150191401fdabee69a70c9c5fe9e75189032259fd6154f57b  /tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean"}
+       "4e0679b362fd91d0733b4661c30a66097ebe87fa4774ac8b8f6ba719fcd46929  /tmp/SardDerivativeRankUpperLocalImageNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardDerivativeRankUpperLocalImageNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '8,51p' /tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean | sha256sum",
+       "sed -n '8,22p' /tmp/SardDerivativeRankUpperLocalImageNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "04a64b3d321adf745dfd0b341ffbf02f661f962a5b994dd67505854951fb07be  -"}
+       "11f1ff6689b684bb8807e458b2238c2eb69b7de8040f1c2758a8b7d5f58d1eb9  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 160 items OK; {:done 152, :open 1, :blocked 1, :superseded 6}"}
-      {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardClosedOpenImageNullity.lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean",
+       "topology-worklist: 161 items OK; {:done 153, :open 1, :blocked 1, :superseded 6}"}
+      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59  ConstructionTargets/SardClosedOpenImageNullity.lean\nb29d2458450fa86ee50f3c088f76383be910845e32d9aa6c898d7456876eaed1  ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
        :output "1"}
-      {:cmd "readlink -f .lake/packages",
-       :exit 0,
-       :output "/home/joe/code/apm-lean/.lake/packages"}
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean",
+     {:path "/tmp/SardDerivativeRankUpperLocalImageNullityProbe.lean",
       :sha256
-      "998b0888022ca9e150191401fdabee69a70c9c5fe9e75189032259fd6154f57b"},
+      "4e0679b362fd91d0733b4661c30a66097ebe87fa4774ac8b8f6ba719fcd46929"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -21012,7 +21050,8 @@
     :critical-value-sard-derivative-rank-upper-compact-exhaustion-1
     :critical-value-sard-closed-open-compact-exhaustion-1
     :critical-value-sard-closed-open-image-nullity-1
-    :critical-value-sard-closed-open-target-fiber-projected-slice-image-nullity-1],
+    :critical-value-sard-closed-open-target-fiber-projected-slice-image-nullity-1
+    :critical-value-sard-derivative-rank-upper-local-image-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
