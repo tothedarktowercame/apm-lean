@@ -26488,8 +26488,104 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled orthogonal-residual nontriviality theorem cannot be promoted for every finite-dimensional real inner-product target space, every proper submodule, nontriviality of its orthogonal complement, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "Use critical nonsurjectivity to install the nontrivial orthogonal-residual instance, install canonical Borel/additive-Haar coordinate packages, and instantiate the compact projected-chart certificate.",
+    :gates
+    {:consumer-freeze :pass,
+     :fixture-match :pass,
+     :worktree-clean :pass,
+     :standard-axioms :pass,
+     :warnings :pass,
+     :scope :pass,
+     :worklist :pass,
+     :placeholder-scan :pass,
+     :declaration :pass,
+     :diff-check :pass,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"nontrivial_orthogonal_of_ne_top"
+     "3c2e24027f74afbcf3a9ec357be1575727ae5172b930fd7b7b48779fabc383f6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardDerivativeRangeOrthogonalNontrivialProbe.lean",
+      :exit 0,
+      :output
+      "0f85f3a999bf9e694e1487cd8404c2f5f5d3394087bad6b4748e9ce2f990600c  /tmp/SardDerivativeRangeOrthogonalNontrivialProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "rg -n -C 8 ':id :critical-value-sard-(target-orthogonal-coordinate-equiv-1|finite-dimensional-borel-add-haar-package-1|compact-projected-chart-nullity-of-residual-data-1|derivative-range-orthogonal-nontrivial-1)' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean /tmp/SardDerivativeRangeOrthogonalNontrivialProbe.lean",
+      :exit 0,
+      :output
+      "0f85f3a999bf9e694e1487cd8404c2f5f5d3394087bad6b4748e9ce2f990600c  ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean\n0f85f3a999bf9e694e1487cd8404c2f5f5d3394087bad6b4748e9ce2f990600c  /tmp/SardDerivativeRangeOrthogonalNontrivialProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean",
+      :exit 0,
+      :output
+      "'SardDerivativeRangeOrthogonalNontrivialProbe.nontrivial_orthogonal_of_ne_top' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n 'theorem nontrivial_orthogonal_of_ne_top' ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean",
+      :exit 0,
+      :output "7:theorem nontrivial_orthogonal_of_ne_top"}
+     {:cmd
+      "sed -n '7,13p' ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean | sha256sum",
+      :exit 0,
+      :output
+      "3c2e24027f74afbcf3a9ec357be1575727ae5172b930fd7b7b48779fabc383f6  -"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 200 items OK; {:done 191, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "git add -- ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.md && git commit -m 'Add orthogonal residual nontriviality'",
+      :exit 0,
+      :output
+      "[master 6230c721] Add orthogonal residual nontriviality\n 2 files changed, 22 insertions(+)\n create mode 100644 ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean\n create mode 100644 ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.md"}
+     {:cmd
+      "git show --format='%H%n%an <%ae>' --name-only --no-renames HEAD",
+      :exit 0,
+      :output
+      "6230c721145670339ef20272d0622a063401c919\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean\nConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "6230c721145670339ef20272d0622a063401c919",
+    :changed-paths
+    ["ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean"
+     "ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.md"],
+    :fixture
+    {:path "/tmp/SardDerivativeRangeOrthogonalNontrivialProbe.lean",
+     :sha256
+     "0f85f3a999bf9e694e1487cd8404c2f5f5d3394087bad6b4748e9ce2f990600c"},
+    :declarations ["nontrivial_orthogonal_of_ne_top"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.lean"
     "ConstructionTargets/SardDerivativeRangeOrthogonalNontrivial.md"],
