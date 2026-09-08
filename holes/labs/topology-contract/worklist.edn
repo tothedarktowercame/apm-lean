@@ -23592,6 +23592,40 @@
    "A single regular base-point certificate now produces a refined projected chart smooth in both directions, avoiding any global derivative-equivalence hypothesis; concrete product-coordinate derivative equivalence and forward smoothness at the base point remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled smooth implicit-function chart theorem cannot be promoted for arbitrary complete real normed source and product-coordinate spaces, every implicit-function datum, every finite differentiability order, pointwise smoothness of both defining fields at the base point, a base-point-preserving restricted chart retaining the exact product defining function, forward and inverse ContDiffOn certificates, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardImplicitFunctionDataSmoothChart.lean"
+    "ConstructionTargets/SardImplicitFunctionDataSmoothChart.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH IMPLICIT-FUNCTION CHART PACKAGE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
+     :sha256
+     "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07"},
+    :declarations ["exists_smooth_chart_restriction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the smooth implicit-chart package with the derivative-range projection of f and the kernel orthogonal projection, preserving the exact projected-chart formula; then discharge projected surjectivity and the localized rank upper bound."},
+   :representation
+   {:source
+    "An implicit-function datum whose left and right defining fields are smooth at its base point.",
+    :target
+    "A base-point-preserving restricted product chart with the exact defining function and forward and inverse ContDiffOn regularity."},
+   :id :critical-value-sard-implicit-function-data-smooth-chart-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-open-partial-homeomorph-smooth-refinement-1
+    :critical-value-sard-projected-complemented-strict-derivative-data-1
+    :critical-value-sard-first-derivative-projected-chart-formula-1],
+   :current-residual
+   "The implicit-function datum now exposes its canonical product-coordinate derivative equivalence and yields a smooth two-sided chart restriction; concrete derivative-range defining-field smoothness and formula instantiation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -23645,83 +23679,81 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate the refinement at the projected local-rank chart base point using its product-coordinate derivative equivalence and forward ContDiffAt certificate; then apply compact projected-chart nullity on the refined source.",
+     "Instantiate the smooth implicit-chart package with the derivative-range projection of f and the kernel orthogonal projection, preserving the exact projected-chart formula; then discharge projected surjectivity and the localized rank upper bound.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_smooth_restriction_at"
-      "51d973104ee02fc3bd714417e61e67d06d338e044ed76aaeea6fd16fc09044b2"},
+     {"exists_smooth_chart_restriction"
+      "5d9aa56e8f40c7398e307c3ae7b6c439986bd34a5dee712a7e60c22c5b01dfba"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled smooth open-chart refinement theorem cannot be promoted for arbitrary real normed source and target spaces with complete source, every finite differentiability order, every open partial homeomorphism and source base point, a continuous-linear-equivalence derivative and forward smoothness at that point, a restricted chart retaining the same forward function and base-point membership, forward and inverse ContDiffOn certificates, or standard-axiom profile.",
+      "Stop only if the compiled smooth implicit-function chart theorem cannot be promoted for arbitrary complete real normed source and product-coordinate spaces, every implicit-function datum, every finite differentiability order, pointwise smoothness of both defining fields at the base point, a base-point-preserving restricted chart retaining the exact product defining function, forward and inverse ContDiffOn certificates, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardOpenPartialHomeomorphSmoothRefinement.lean"
-       "ConstructionTargets/SardOpenPartialHomeomorphSmoothRefinement.md"],
+      ["ConstructionTargets/SardImplicitFunctionDataSmoothChart.lean"
+       "ConstructionTargets/SardImplicitFunctionDataSmoothChart.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH OPEN-CHART REFINEMENT",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH IMPLICIT-FUNCTION CHART PACKAGE",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
+       {:path "/tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
         :sha256
-        "292b780c2fa53159e560beb0e30fb5d49ff99a8193293c98e9aec4f9dc47a772"},
-       :declarations ["exists_smooth_restriction_at"],
+        "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07"},
+       :declarations ["exists_smooth_chart_restriction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the refinement at the projected local-rank chart base point using its product-coordinate derivative equivalence and forward ContDiffAt certificate; then apply compact projected-chart nullity on the refined source."},
+       "Instantiate the smooth implicit-chart package with the derivative-range projection of f and the kernel orthogonal projection, preserving the exact projected-chart formula; then discharge projected surjectivity and the localized rank upper bound."},
       :representation
       {:source
-       "An open partial homeomorphism with a regular smooth base point.",
+       "An implicit-function datum whose left and right defining fields are smooth at its base point.",
        :target
-       "A source restriction retaining the same chart function and base point, with forward and inverse ContDiffOn regularity across its complete source and target."},
-      :id
-      :critical-value-sard-open-partial-homeomorph-smooth-refinement-1,
+       "A base-point-preserving restricted product chart with the exact defining function and forward and inverse ContDiffOn regularity."},
+      :id :critical-value-sard-implicit-function-data-smooth-chart-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-open-partial-homeomorph-contdiff-on-symm-1
-       :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1
+      [:critical-value-sard-open-partial-homeomorph-smooth-refinement-1
+       :critical-value-sard-projected-complemented-strict-derivative-data-1
        :critical-value-sard-first-derivative-projected-chart-formula-1],
       :current-residual
-      "A single regular base-point certificate now produces a refined projected chart smooth in both directions, avoiding any global derivative-equivalence hypothesis; concrete product-coordinate derivative equivalence and forward smoothness at the base point remain.",
+      "The implicit-function datum now exposes its canonical product-coordinate derivative equivalence and yields a smooth two-sided chart restriction; concrete derivative-range defining-field smoothness and formula instantiation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. Requiring an equivalence-valued derivative throughout the original chart source is unnecessary: the open partial homeomorphism can be restricted to its finite-order smooth locus. A placeholder-free compiled fixture proves that a smooth regular base point survives this restriction, the forward chart function is unchanged, and both directions are ContDiffOn. The remaining obligation is now local and concrete: supply the projected product-coordinate derivative equivalence and forward ContDiffAt certificate at the base point.",
+     "The rectangular theorem is not refuted. The implicit-function datum already contains the surjective complementary derivatives needed to form a continuous-linear equivalence at the base point. A placeholder-free compiled fixture combines that canonical equivalence with the smooth-refinement theorem, retaining the exact product defining function and producing forward and inverse ContDiffOn certificates. The next concrete step is only to instantiate the two defining fields with the derivative-range and kernel projections and preserve the projected-chart formula.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '990,1012p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/Operations.lean",
+       "sed -n '100,190p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
+       "lake env lean /tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
        :exit 0,
        :output
-       "'SardOpenPartialHomeomorphSmoothRefinementProbe.exists_smooth_restriction_at' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardImplicitFunctionDataSmoothChartProbe.exists_smooth_chart_restriction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
+       "sha256sum /tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
        :exit 0,
        :output
-       "292b780c2fa53159e560beb0e30fb5d49ff99a8193293c98e9aec4f9dc47a772  /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean"}
+       "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07  /tmp/SardImplicitFunctionDataSmoothChartProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '11,31p' /tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean | sha256sum",
+       "sed -n '13,32p' /tmp/SardImplicitFunctionDataSmoothChartProbe.lean | sha256sum",
        :exit 0,
        :output
-       "51d973104ee02fc3bd714417e61e67d06d338e044ed76aaeea6fd16fc09044b2  -"}
+       "5d9aa56e8f40c7398e307c3ae7b6c439986bd34a5dee712a7e60c22c5b01dfba  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 180 items OK; {:done 172, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 181 items OK; {:done 173, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -23736,12 +23768,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardOpenPartialHomeomorphSmoothRefinementProbe.lean",
+     {:path "/tmp/SardImplicitFunctionDataSmoothChartProbe.lean",
       :sha256
-      "292b780c2fa53159e560beb0e30fb5d49ff99a8193293c98e9aec4f9dc47a772"},
+      "7325c051ff3d623f0d3da74b783ee32ba475479f484a11c1758e8df82f9bfc07"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -23870,7 +23902,8 @@
     :critical-value-sard-range-projection-coordinate-derivative-1
     :critical-value-sard-projected-chart-inverse-slice-has-fderiv-at-1
     :critical-value-sard-open-partial-homeomorph-contdiff-on-symm-1
-    :critical-value-sard-open-partial-homeomorph-smooth-refinement-1],
+    :critical-value-sard-open-partial-homeomorph-smooth-refinement-1
+    :critical-value-sard-implicit-function-data-smooth-chart-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
