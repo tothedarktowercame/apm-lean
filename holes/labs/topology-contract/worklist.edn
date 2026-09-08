@@ -18686,6 +18686,39 @@
    "Continuous additive equivalences between the stated Haar spaces are now quasi-measure-preserving; finite-dimensional target-coordinate specialization and compact rank-piece aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled continuous-linear-equivalence image-nullity theorem cannot be promoted with real normed spaces, Borel structures, additive Haar measures, locally compact second-countable target, null coordinate image, null original-set conclusion, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardContinuousLinearEquivImageNullity.lean"
+    "ConstructionTargets/SardContinuousLinearEquivImageNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CONTINUOUS LINEAR EQUIVALENCE IMAGE NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardContinuousLinearEquivImageNullityProbe.lean",
+     :sha256
+     "c91b9e12bb10e7eb49f04d451f22430703c5fe58b7a29d080435e8e99c29893d"},
+    :declarations
+    ["ContinuousLinearEquiv.measure_zero_of_image_zero_addHaar"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct each derivative-range/complement target continuous-linear equivalence, apply continuous-linear image-nullity reflection to compact projected rank-chart coordinate images, and aggregate compact localizations over every exact-rank piece."},
+   :representation
+   {:source
+    "A continuous real-linear equivalence between Borel normed spaces carrying additive Haar measures, with locally compact second-countable target, and a source set whose coordinate image is null.",
+    :target "Zero source Haar measure of the original set."},
+   :id :critical-value-sard-continuous-linear-equiv-image-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-continuous-add-equiv-quasi-measure-preserving-1
+    :critical-value-sard-equivalence-image-nullity-transfer-1],
+   :current-residual
+   "Continuous-linear Haar coordinate equivalences now reflect image nullity; concrete derivative-range/complement coordinate construction and compact rank-piece aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -18739,87 +18772,85 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Specialize additive-Haar quasi-measure preservation to each finite-dimensional projected range/complement continuous linear equivalence, transfer compact product-coordinate nullity to the original target, and aggregate compact localizations over every exact-rank piece.",
+     "Construct each derivative-range/complement target continuous-linear equivalence, apply continuous-linear image-nullity reflection to compact projected rank-chart coordinate images, and aggregate compact localizations over every exact-rank piece.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"ContinuousAddEquiv.quasiMeasurePreserving_addHaar"
-      "263a409e0fcdd38953ff9197ddb04f093858aff8c45e2f4984203cb25a154787"},
+     {"ContinuousLinearEquiv.measure_zero_of_image_zero_addHaar"
+      "3d81b2a24cde19a2053f1816c48856610d53bcadeaf2f0e1afc9f81421a2b580"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled continuous-additive-equivalence theorem cannot be promoted with Borel topological additive groups, source and target additive Haar measures, locally compact second-countable target, quasi-measure-preservation conclusion, or standard-axiom profile.",
+      "Stop only if the compiled continuous-linear-equivalence image-nullity theorem cannot be promoted with real normed spaces, Borel structures, additive Haar measures, locally compact second-countable target, null coordinate image, null original-set conclusion, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardContinuousAddEquivQuasiMeasurePreserving.lean"
-       "ConstructionTargets/SardContinuousAddEquivQuasiMeasurePreserving.md"],
+      ["ConstructionTargets/SardContinuousLinearEquivImageNullity.lean"
+       "ConstructionTargets/SardContinuousLinearEquivImageNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CONTINUOUS ADDITIVE EQUIVALENCE QUASI-MEASURE PRESERVATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CONTINUOUS LINEAR EQUIVALENCE IMAGE NULLITY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardContinuousAddEquivQuasiMeasurePreservingProbe.lean",
+       {:path "/tmp/SardContinuousLinearEquivImageNullityProbe.lean",
         :sha256
-        "379054d7db401ae59f48c1b11be58d75c4844fd16b5d639c53d88c3ee91b152b"},
+        "c91b9e12bb10e7eb49f04d451f22430703c5fe58b7a29d080435e8e99c29893d"},
        :declarations
-       ["ContinuousAddEquiv.quasiMeasurePreserving_addHaar"],
+       ["ContinuousLinearEquiv.measure_zero_of_image_zero_addHaar"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Specialize additive-Haar quasi-measure preservation to each finite-dimensional projected range/complement continuous linear equivalence, transfer compact product-coordinate nullity to the original target, and aggregate compact localizations over every exact-rank piece."},
+       "Construct each derivative-range/complement target continuous-linear equivalence, apply continuous-linear image-nullity reflection to compact projected rank-chart coordinate images, and aggregate compact localizations over every exact-rank piece."},
       :representation
       {:source
-       "A continuous additive equivalence between Borel topological additive groups, additive Haar measures on source and target, and a locally compact second-countable target.",
-       :target
-       "Quasi-measure preservation of the equivalence from the source Haar measure to the target Haar measure."},
-      :id
-      :critical-value-sard-continuous-add-equiv-quasi-measure-preserving-1,
+       "A continuous real-linear equivalence between Borel normed spaces carrying additive Haar measures, with locally compact second-countable target, and a source set whose coordinate image is null.",
+       :target "Zero source Haar measure of the original set."},
+      :id :critical-value-sard-continuous-linear-equiv-image-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-equivalence-image-nullity-transfer-1],
+      [:critical-value-sard-continuous-add-equiv-quasi-measure-preserving-1
+       :critical-value-sard-equivalence-image-nullity-transfer-1],
       :current-residual
-      "Continuous additive equivalences between the stated Haar spaces are now quasi-measure-preserving; finite-dimensional target-coordinate specialization and compact rank-piece aggregation remain.",
+      "Continuous-linear Haar coordinate equivalences now reflect image nullity; concrete derivative-range/complement coordinate construction and compact rank-piece aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The compiled equivalence-image bridge requires quasi-measure preservation of the projected target-coordinate equivalence. A placeholder-free fixture now proves this for every continuous additive equivalence between Borel topological additive groups equipped with additive Haar measures, when the target is locally compact and second countable: the mapped source Haar measure is again Haar and is therefore absolutely continuous with respect to the target Haar measure. Specialization to the finite-dimensional range/complement continuous linear equivalence and application to compact rank-chart images remain downstream.",
+     "The rectangular theorem is not refuted. The additive-Haar quasi-measure-preservation result and equivalence image-nullity bridge now compile together at the exact continuous-linear boundary. A placeholder-free fixture proves that a continuous real-linear equivalence between Borel normed spaces reflects nullity of its coordinate image when source and target carry additive Haar measures and the target is locally compact and second countable. Constructing the concrete derivative-range/complement target equivalence and applying this theorem to compact projected rank-chart images remain downstream.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n \"ContinuousLinearEquiv|LinearEquiv|AddEquiv\" .lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Haar .lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue -g '*.lean' | rg \"map|quasi|Haar|absolutely\" | head -160",
+       "rg -n \"toContinuousAddEquiv\" .lake/packages/mathlib/Mathlib -g '*.lean' | head -40",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardContinuousAddEquivQuasiMeasurePreservingProbe.lean",
+       "lake env lean /tmp/SardContinuousLinearEquivImageNullityProbe.lean",
        :exit 0,
        :output
-       "'SardContinuousAddEquivQuasiMeasurePreservingProbe.ContinuousAddEquiv.quasiMeasurePreserving_addHaar' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardContinuousLinearEquivImageNullityProbe.ContinuousLinearEquiv.measure_zero_of_image_zero_addHaar' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardContinuousAddEquivQuasiMeasurePreservingProbe.lean",
+       "sha256sum /tmp/SardContinuousLinearEquivImageNullityProbe.lean",
        :exit 0,
        :output
-       "379054d7db401ae59f48c1b11be58d75c4844fd16b5d639c53d88c3ee91b152b"}
+       "c91b9e12bb10e7eb49f04d451f22430703c5fe58b7a29d080435e8e99c29893d"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardContinuousAddEquivQuasiMeasurePreservingProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardContinuousLinearEquivImageNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '14,21p' /tmp/SardContinuousAddEquivQuasiMeasurePreservingProbe.lean | sha256sum",
+       "sed -n '13,22p' /tmp/SardContinuousLinearEquivImageNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "263a409e0fcdd38953ff9197ddb04f093858aff8c45e2f4984203cb25a154787"}
+       "3d81b2a24cde19a2053f1816c48856610d53bcadeaf2f0e1afc9f81421a2b580"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 145 items OK; {:done 137, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 146 items OK; {:done 138, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardEquivImageNullityTransfer.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardContinuousAddEquivQuasiMeasurePreserving.lean ConstructionTargets/SardEquivImageNullityTransfer.lean",
        :exit 0,
        :output
-       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; equivalence image-nullity transfer bf273a1a51092682ec8e3438e91e410ebb6b10dac6bd06b25f1d72adb213fa55"}
+       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; continuous-additive equivalence 05408688f05adfdf7891f7d925048939b008744def34c61ac8d6a7a77b7d318d; equivalence image-nullity transfer bf273a1a51092682ec8e3438e91e410ebb6b10dac6bd06b25f1d72adb213fa55"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -18830,13 +18861,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardContinuousAddEquivQuasiMeasurePreservingProbe.lean",
+     {:path "/tmp/SardContinuousLinearEquivImageNullityProbe.lean",
       :sha256
-      "379054d7db401ae59f48c1b11be58d75c4844fd16b5d639c53d88c3ee91b152b"},
+      "c91b9e12bb10e7eb49f04d451f22430703c5fe58b7a29d080435e8e99c29893d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -18930,7 +18960,8 @@
     :critical-value-sard-product-image-vertical-section-1
     :critical-value-sard-compact-product-image-fiber-nullity-1
     :critical-value-sard-equivalence-image-nullity-transfer-1
-    :critical-value-sard-continuous-add-equiv-quasi-measure-preserving-1],
+    :critical-value-sard-continuous-add-equiv-quasi-measure-preserving-1
+    :critical-value-sard-continuous-linear-equiv-image-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
