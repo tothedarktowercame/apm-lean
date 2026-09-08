@@ -28839,6 +28839,25 @@
       "git commit -m 'Add derivative-range closed-open chart nullity'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788884961114-15256-de9eb1f7",
+     :commands
+     ["git show 0c2d8cc166656ac808720adec94e59eb88541f15"
+      "cmp fixture scoped-file"
+      "sha256sum fixture recorded-commit-file scoped-file"
+      "lake env lean ConstructionTargets/SardDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+      "lake build ConstructionTargets.SardDerivativeRangeOrthogonalClosedOpenChartNullity"
+      "sed -n '15,84p' scoped-file | sha256sum"
+      "rg placeholder-and-unsafe-patterns"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o sorry problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6; commit changes exactly the two declared scope files; fixture and recorded/scoped file hashes equal 9fa1a720cddd5550ac4856db37e292d346bf21caad4ca0f51f811ea3d83b088d; frozen statement hash equals b3838ea06bd0e716eb9d71fb227b0d66739d9caeb9ce8589fa9c4851ca5cdae8; placeholder count is zero; direct Lean and 8351-job Lake build pass with only propext, Classical.choice, and Quot.sound; ledger validates 217 items; consumer hash and one-placeholder count match; the canonical target-coordinate equivalence, nonsurjectivity-to-orthogonal-nontriviality transfer, conclusion orientation, and closed-in-open inverse-chart restrictions are correct; worktree is clean."},
     :commit "0c2d8cc166656ac808720adec94e59eb88541f15",
     :changed-paths
     ["ConstructionTargets/SardDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
@@ -28852,7 +28871,7 @@
     ["measure_image_zero_of_rangeOrthogonal_closedOpenChart"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
     "ConstructionTargets/SardDerivativeRangeOrthogonalClosedOpenChartNullity.md"],
@@ -29041,7 +29060,7 @@
       "9fa1a720cddd5550ac4856db37e292d346bf21caad4ca0f51f811ea3d83b088d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
