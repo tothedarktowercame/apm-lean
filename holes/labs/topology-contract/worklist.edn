@@ -18475,6 +18475,30 @@
       :output
       "ConstructionTargets/SardEquivImageNullityTransfer.lean\nConstructionTargets/SardEquivImageNullityTransfer.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788848514186-14623-db3d7951",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat fc87b34bd35116a1b6bf803b2a27a912ccbee3a4; git diff-tree --no-commit-id --name-only -r fc87b34bd35116a1b6bf803b2a27a912ccbee3a4; git show fc87b34bd35116a1b6bf803b2a27a912ccbee3a4:ConstructionTargets/SardEquivImageNullityTransfer.lean; git show fc87b34bd35116a1b6bf803b2a27a912ccbee3a4:ConstructionTargets/SardEquivImageNullityTransfer.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardEquivImageNullityTransferProbe.lean ConstructionTargets/SardEquivImageNullityTransfer.lean ConstructionTargets/SardEquivImageNullityTransfer.md; sed -n '10,18p' ConstructionTargets/SardEquivImageNullityTransfer.lean | sha256sum; lake env lean /tmp/SardEquivImageNullityTransferProbe.lean; lake env lean ConstructionTargets/SardEquivImageNullityTransfer.lean; lake build ConstructionTargets.SardEquivImageNullityTransfer",
+       :exit 0}
+      {:cmd
+       "git show fc87b34bd35116a1b6bf803b2a27a912ccbee3a4:ConstructionTargets/SardEquivImageNullityTransfer.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show fc87b34bd35116a1b6bf803b2a27a912ccbee3a4:ConstructionTargets/SardEquivImageNullityTransfer.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; git merge-base --is-ancestor 99f241eba8725e873ccdbdb099ff3e543115f9ed fc87b34bd35116a1b6bf803b2a27a912ccbee3a4; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check fc87b34bd35116a1b6bf803b2a27a912ccbee3a4^ fc87b34bd35116a1b6bf803b2a27a912ccbee3a4; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit fc87b34bd35116a1b6bf803b2a27a912ccbee3a4 by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is 8832b1b75ea7e62c6b14f325f8819080b5b1214b1195af93ae931366fc343ee0; committed file hashes are bf273a1a51092682ec8e3438e91e410ebb6b10dac6bd06b25f1d72adb213fa55 and 0fa45589c4474f4bce9c1bd99a416c90517c36d60967df28d35e7f7cff56d1b4, and the frozen declaration-region hash reproduces as 5ad96db32605ba24e050a1c80e25a3857cd1c2ee3c6f74f555bd2a8bf554db8a. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The orientation and representation boundary are exact: quasi-measure preservation of e from μ to ν turns nullity of e '' s into nullity of its preimage, while equivalence injectivity identifies that preimage with s; inverse quasi-measure preservation is not required. The recorded dependency commit is an ancestor. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 145 items with {:done 136, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "fc87b34bd35116a1b6bf803b2a27a912ccbee3a4",
     :changed-paths
     ["ConstructionTargets/SardEquivImageNullityTransfer.lean"
@@ -18491,7 +18515,7 @@
     :declarations
     ["SardEquivImageNullityTransferProbe.measure_zero_of_equiv_image_zero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardEquivImageNullityTransfer.lean"
     "ConstructionTargets/SardEquivImageNullityTransfer.md"],
@@ -18660,7 +18684,7 @@
       "8832b1b75ea7e62c6b14f325f8819080b5b1214b1195af93ae931366fc343ee0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
