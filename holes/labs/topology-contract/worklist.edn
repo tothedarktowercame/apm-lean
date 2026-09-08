@@ -17208,8 +17208,86 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled exact-rank-piece local-nullity aggregation theorem cannot be promoted with the retained order-one first-nonzero-jet locus, exact derivative-rank stratum, pointwise open neighborhoods, base-point membership, null restricted-image hypotheses, whole rank-piece nullity conclusion, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct a null restricted-image neighborhood at every point of each order-one exact-rank piece using the projected inverse-chart slices and lower-dimensional image-nullity theorem.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :placeholder-scan :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"rankPiece_image_null_of_locally_image_null"
+     "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
+      :exit 0,
+      :output
+      "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean",
+      :exit 0,
+      :output
+      "'SardFirstDerivativeRankPieceLocalNullityAggregationProbe.rankPiece_image_null_of_locally_image_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake build ConstructionTargets.SardFirstDerivativeRankPieceLocalNullityAggregation",
+      :exit 0,
+      :output "Build completed successfully (8271 jobs)."}
+     {:cmd
+      "sha256sum ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md /tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
+      :exit 0,
+      :output
+      "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943 lean; 010689403311208fc06aeeee9f31d211db0fe02b45437754b2cf8d180c841263 md; bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943 fixture"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 137 items OK; {:done 128, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "4e98040dd2ee439292757789cd5fc4960f6c9472",
+    :changed-paths
+    ["ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean"
+     "ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md"],
+    :file-hashes
+    {"ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean"
+     "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943",
+     "ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md"
+     "010689403311208fc06aeeee9f31d211db0fe02b45437754b2cf8d180c841263"},
+    :fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceLocalNullityAggregationProbe.lean",
+     :sha256
+     "bf1fdbe05e34f790c280385b08df6fd577d9cf8dbd87c960c0644babb4602943"},
+    :declarations ["rankPiece_image_null_of_locally_image_null"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean"
+      "ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md"]},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceLocalNullityAggregation.md"],
