@@ -12175,6 +12175,56 @@
       "git commit -m 'Compile restricted kernel parameterization'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788826697801-14342-b4e67b59",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat b6105380c751d6ea2841663a62e7a255d8c63c9e && git diff-tree --no-commit-id --name-only -r b6105380c751d6ea2841663a62e7a255d8c63c9e",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/SardImplicitFunctionRestrictedKernelParameterizationProbe.lean; git show b6105380c751d6ea2841663a62e7a255d8c63c9e:ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean | sha256sum; git show b6105380c751d6ea2841663a62e7a255d8c63c9e:ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.md | sha256sum; cmp -s /tmp/SardImplicitFunctionRestrictedKernelParameterizationProbe.lean ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean",
+       :exit 0,
+       :output
+       "fixture/source f43584e65a5fd38ab5a6dd486406f87d55a213f95c9406e34f04c2dc8ce48575; note 5d0bae25b44248612be9b3d23ce492aa915c1307d6464e119f90e2f1833f6e95; byte-identical"}
+      {:cmd
+       "lake env lean /tmp/SardImplicitFunctionRestrictedKernelParameterizationProbe.lean",
+       :exit 0,
+       :output
+       "all three declarations depend only on propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "lake build ConstructionTargets.SardImplicitFunctionRestrictedKernelParameterization",
+       :exit 0,
+       :output "Build completed successfully (8271 jobs)"}
+      {:cmd
+       "sed declaration regions through the proof and trailing newline | sha256sum",
+       :exit 0,
+       :output
+       "6ec8a077cfa95679b7cc85f4b35940cad70df66404398c7d5eff64537359d0d1; 84696520c2f22bffbd269177fcd782880cda7bbae1b0d99825d4042f91e8a6a2; 6069f52098e3c429a930cbdcd682c69231a2d515e5a0f458bc6c0255dd758de8"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 107 items OK; {:done 98, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; rg -c '^theorem ' problems/t93A04/lean/Main.lean",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 1 placeholder; 1 theorem"}
+      {:cmd
+       "git merge-base --is-ancestor 6b35412 b6105380c751d6ea2841663a62e7a255d8c63c9e; git merge-base --is-ancestor 113e0618e14ffc3e0dadcfa5de22a09bca476fa0 b6105380c751d6ea2841663a62e7a255d8c63c9e",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; git diff --check; git diff --cached --check; git status --porcelain=v1",
+       :exit 0,
+       :output "/home/joe/code/apm-lean/.lake/packages; clean"}],
+     :finding
+     "PASS. Commit b6105380c751d6ea2841663a62e7a255d8c63c9e has exactly the two declared scoped paths, matches the frozen fixture and file hashes, and descends from both recorded dependencies. The primary theorem has the required equality orientation: the restricted inverse-chart parameter image equals the chart-local level hypersurface, rather than providing only containment. Its arbitrary-set boundary is preserved; openness and base-point membership are supplied separately under exactly the stated hypotheses. All three frozen statement hashes reproduce, placeholder delta is 0, the axiom profile is standard-only, and frozen t93A04 remains unchanged with one theorem and one placeholder."},
     :commit "b6105380c751d6ea2841663a62e7a255d8c63c9e",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean"
@@ -12195,7 +12245,7 @@
      "SardImplicitFunctionRestrictedKernelParameterizationProbe.ImplicitFunctionData.pt_mem_source_restrict_right"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean"
     "ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.md"],
@@ -12365,7 +12415,7 @@
       "f43584e65a5fd38ab5a6dd486406f87d55a213f95c9406e34f04c2dc8ce48575"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
