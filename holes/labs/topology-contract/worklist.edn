@@ -34649,6 +34649,42 @@
    "Explicit inherited measurable-space bindings compile; specialize the generic witness so its Borel and additive-Haar arguments share those bindings before the positive-rank invocation.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if locally compact and second-countable topology structures for the derivative range and its orthogonal residual cannot be stated with their inherited subtype topologies fixed explicitly, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedCoordinateExplicitInheritedTopologyData.lean"
+    "ConstructionTargets/SardProjectedCoordinateExplicitInheritedTopologyData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-COORDINATE EXPLICIT INHERITED TOPOLOGY DATA",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
+     :sha256
+     "fe81a892ce45a74e9e9fef5af20ea8acd2e548b4cbd7ba004ca604b11e064aa2"},
+    :declarations
+    ["exists_projectedCoordinates_explicit_inherited_topologyData"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Install the four inherited coordinate topology structures before applying the explicit-measurable-space pointwise witness specialization."},
+   :representation
+   {:source
+    "Locally compact and second-countable structures for the derivative range and orthogonal residual whose subtype topology parameters are otherwise inferred during generic witness elaboration.",
+    :target
+    "One explicit packet containing inherited locally compact and second-countable structures for both projected coordinate spaces."},
+   :id
+   :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-derivative-range-coordinate-topology-package-1
+    :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1],
+   :current-residual
+   "Explicit inherited coordinate topology data is compiled; install it before the measurable-space, Borel, measure, and additive-Haar arguments at the pointwise witness boundary.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -34702,54 +34738,52 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "After the explicit-measurable-space witness specialization, combine it directly with the installed positive-rank packet and localized chart-slice certificate, then aggregate the positive-rank strata and the rank-zero branch.",
+     "After installing explicit inherited coordinate topology data, invoke the explicit-measurable-space witness with the positive-rank packet and localized chart-slice certificate, then aggregate rank strata.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"projectedCoordinates_explicit_measurableSpace_borel_bindings"
-      "f50c297800f7ad4285430c3748fb8f17b53d04c1786c59ee267d0fa6973a861c"},
+     {"exists_projectedCoordinates_explicit_inherited_topologyData"
+      "b5f1429368466057cc60f83321e1b2b3bf7f7a52f2c1bca4dcd60ed063c7e509"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the finite-order pointwise rank-chart nullity theorem cannot be specialized with derivative-range and orthogonal-residual measurable spaces supplied as explicit inherited subtype parameters, or if the specialization requires nonstandard axioms.",
+      "Stop only if locally compact and second-countable topology structures for the derivative range and its orthogonal residual cannot be stated with their inherited subtype topologies fixed explicitly, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
-       "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
+      ["ConstructionTargets/SardProjectedCoordinateExplicitInheritedTopologyData.lean"
+       "ConstructionTargets/SardProjectedCoordinateExplicitInheritedTopologyData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POINTWISE WITNESS EXPLICIT MEASURABLE SPACES",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-COORDINATE EXPLICIT INHERITED TOPOLOGY DATA",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
+        "/tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
         :sha256
-        "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"},
+        "fe81a892ce45a74e9e9fef5af20ea8acd2e548b4cbd7ba004ca604b11e064aa2"},
        :declarations
-       ["projectedCoordinates_explicit_measurableSpace_borel_bindings"],
+       ["exists_projectedCoordinates_explicit_inherited_topologyData"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Invoke the explicit-measurable-space specialization with the installed positive-rank pointwise packet and repaired localized chart-slice certificate."},
+       "Install the four inherited coordinate topology structures before applying the explicit-measurable-space pointwise witness specialization."},
       :representation
       {:source
-       "The generic finite-order pointwise rank-chart nullity witness whose coordinate measurable spaces are implicit typeclass parameters.",
+       "Locally compact and second-countable structures for the derivative range and orthogonal residual whose subtype topology parameters are otherwise inferred during generic witness elaboration.",
        :target
-       "A specialization taking the derivative-range and orthogonal-residual inherited measurable spaces explicitly before their Borel proofs, measures, and additive-Haar instances are elaborated."},
+       "One explicit packet containing inherited locally compact and second-countable structures for both projected coordinate spaces."},
       :id
-      :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1,
+      :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-pointwise-rank-chart-nullity-witness-1
-       :critical-value-sard-projected-coordinate-explicit-inherited-borel-data-1
-       :critical-value-sard-projected-coordinate-explicit-inherited-measure-data-1
-       :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2],
+      [:critical-value-sard-derivative-range-coordinate-topology-package-1
+       :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1],
       :current-residual
-      "Explicit inherited measurable-space bindings compile; specialize the generic witness so its Borel and additive-Haar arguments share those bindings before the positive-rank invocation.",
+      "Explicit inherited coordinate topology data is compiled; install it before the measurable-space, Borel, measure, and additive-Haar arguments at the pointwise witness boundary.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The repaired localized projected chart now composes with the installed positive-rank dimension and measure data, but the generic pointwise witness synthesizes its coordinate BorelSpace arguments before its coordinate measures constrain the inherited subtype measurable spaces. The direct composition therefore fails exactly at BorelSpace (LinearMap.range L.toLinearMap), despite compiled explicitly fixed inherited Borel bindings. A bounded specialization exposing the coordinate measurable spaces as ordinary explicit parameters is required.",
+     "The rectangular theorem is not refuted. The explicit measurable-space wrapper removes the Borel and additive-Haar ambiguity, but its positive-rank specialization now fails while synthesizing LocallyCompactSpace for the derivative-range coordinate before the subtype topology is fixed. A placeholder-free fixture packages the inherited locally compact and second-countable structures for both derivative-range coordinates. The wrapper must accept and install these explicit topology structures before invoking the generic witness.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
@@ -34759,35 +34793,35 @@
        :exit 1,
        :expected-exit 1,
        :output
-       "Direct composition reaches failed synthesis of BorelSpace (LinearMap.range L.toLinearMap) at the generic pointwise-witness application; no mathematical hypothesis fails."}
+       "The explicit-measurable-space witness application reaches failed synthesis of LocallyCompactSpace for the derivative-range coordinate; the Borel and additive-Haar arguments are explicitly supplied."}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
+       "lake env lean /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
        :exit 0,
        :output
-       "'projectedCoordinates_explicit_measurableSpace_borel_bindings' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'exists_projectedCoordinates_explicit_inherited_topologyData' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
+       "sha256sum /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
        :exit 0,
        :output
-       "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"}
+       "fe81a892ce45a74e9e9fef5af20ea8acd2e548b4cbd7ba004ca604b11e064aa2  /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '6,17p' /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean | sha256sum",
+       "sed -n '5,14p' /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean | sha256sum",
        :exit 0,
        :output
-       "f50c297800f7ad4285430c3748fb8f17b53d04c1786c59ee267d0fa6973a861c"}
+       "b5f1429368466057cc60f83321e1b2b3bf7f7a52f2c1bca4dcd60ed063c7e509  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 263 items OK; {:done 255, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 264 items OK; {:done 256, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -34795,12 +34829,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
+      "/tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
       :sha256
-      "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"},
+      "fe81a892ce45a74e9e9fef5af20ea8acd2e548b4cbd7ba004ca604b11e064aa2"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -35012,7 +35046,8 @@
     :critical-value-sard-projected-coordinate-installed-inherited-measure-data-1
     :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1
     :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2
-    :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1],
+    :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1
+    :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
