@@ -17052,8 +17052,86 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled lower-dimensional projected-slice nullity theorem cannot be promoted with the source-dimension inequality, nonzero differentiability order, pointwise smoothness, surjective projection to a nontrivial codomain, zero projected derivative throughout the slice, full slice-image nullity conclusion, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate lower-dimensional projected-slice image nullity on every local projected rank chart, then aggregate the resulting local nullity over each order-one exact-rank piece.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :placeholder-scan :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"image_null_of_lowerDim_projected_derivative_zero"
+     "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean",
+      :exit 0,
+      :output
+      "'SardLowerDimensionalProjectedSliceImageNullityProbe.image_null_of_lowerDim_projected_derivative_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake build ConstructionTargets.SardLowerDimensionalProjectedSliceImageNullity",
+      :exit 0,
+      :output "Build completed successfully (8276 jobs)."}
+     {:cmd
+      "sha256sum ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md /tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31 lean; fbd541ac87b330728c6a44c3c1dd60a92d46cba95cfdcb71af26779245b540a3 md; 86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31 fixture"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 136 items OK; {:done 127, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "a71aab02558f66f3b2213be85aeeab17ea59acc7",
+    :changed-paths
+    ["ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean"
+     "ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md"],
+    :file-hashes
+    {"ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean"
+     "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31",
+     "ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md"
+     "fbd541ac87b330728c6a44c3c1dd60a92d46cba95cfdcb71af26779245b540a3"},
+    :fixture
+    {:path
+     "/tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+     :sha256
+     "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"},
+    :declarations ["image_null_of_lowerDim_projected_derivative_zero"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean"
+      "ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md"]},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean"
     "ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md"],
