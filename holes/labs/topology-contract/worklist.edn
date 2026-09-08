@@ -19863,6 +19863,30 @@
       :output
       "[master 18defc2a] add countable compact image nullity aggregation\n 2 files changed, 32 insertions(+)\n create mode 100644 ConstructionTargets/SardCountableCompactImageNullity.lean\n create mode 100644 ConstructionTargets/SardCountableCompactImageNullity.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788854375292-14695-e9f8b1a0",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 18defc2ad63968e9f8da1fc5428387f9a53b17d1; git diff-tree --no-commit-id --name-only -r 18defc2ad63968e9f8da1fc5428387f9a53b17d1; git show 18defc2ad63968e9f8da1fc5428387f9a53b17d1:ConstructionTargets/SardCountableCompactImageNullity.lean; git show 18defc2ad63968e9f8da1fc5428387f9a53b17d1:ConstructionTargets/SardCountableCompactImageNullity.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardCountableCompactImageNullityProbe.lean ConstructionTargets/SardCountableCompactImageNullity.lean ConstructionTargets/SardCountableCompactImageNullity.md; sed -n '9,15p' ConstructionTargets/SardCountableCompactImageNullity.lean | sha256sum; lake env lean /tmp/SardCountableCompactImageNullityProbe.lean; lake env lean ConstructionTargets/SardCountableCompactImageNullity.lean; lake build ConstructionTargets.SardCountableCompactImageNullity",
+       :exit 0}
+      {:cmd
+       "git show 18defc2ad63968e9f8da1fc5428387f9a53b17d1:ConstructionTargets/SardCountableCompactImageNullity.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 18defc2ad63968e9f8da1fc5428387f9a53b17d1:ConstructionTargets/SardCountableCompactImageNullity.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; for d in 855d987be04cb8ffe74853edb698c6bbbb3a7155 4e98040dd2ee439292757789cd5fc4960f6c9472; do git merge-base --is-ancestor \"$d\" 18defc2ad63968e9f8da1fc5428387f9a53b17d1 || exit 1; done; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check 18defc2ad63968e9f8da1fc5428387f9a53b17d1^ 18defc2ad63968e9f8da1fc5428387f9a53b17d1; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit 18defc2ad63968e9f8da1fc5428387f9a53b17d1 by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is 1e285d8acc3ea359fa4e031fd464cfac23481e159e16ba58a1de1b315cdedf24; committed file hashes reproduce as 039a39a1f8e9923dd2e1f283d87be7b0941f28837f9e63e9680100cc05e9cee6 and 3cb2c4fb0d3ba17ba6e29d5eeff6e127b3db7433cd7825f2f85b2688b82499bd, and the frozen declaration-region hash is f38024731f928b82ff7383d895be538cfd47c8a47b1e43a6b653bc2e625bc12a. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The theorem has the correct cover direction: s ⊆ ⋃ i, K i induces f '' s ⊆ ⋃ i, f '' K i, and countable-union nullity followed by measure_mono_null proves μ (f '' s) = 0. No measurability of the images is required by measure_iUnion_null. The compactness hypotheses are accepted as specified but are intentionally unused by this pure aggregation step; they describe the intended upstream exhaustion and do not weaken or distort the conclusion. Both recorded dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 155 items with {:done 146, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "18defc2ad63968e9f8da1fc5428387f9a53b17d1",
     :changed-paths
     ["ConstructionTargets/SardCountableCompactImageNullity.lean"
@@ -19873,7 +19897,7 @@
      "1e285d8acc3ea359fa4e031fd464cfac23481e159e16ba58a1de1b315cdedf24"},
     :declarations ["measure_image_zero_of_countable_compact_cover"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCountableCompactImageNullity.lean"
     "ConstructionTargets/SardCountableCompactImageNullity.md"],
@@ -20049,7 +20073,7 @@
       "1e285d8acc3ea359fa4e031fd464cfac23481e159e16ba58a1de1b315cdedf24"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
