@@ -34512,8 +34512,76 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the finite-order pointwise rank-chart nullity theorem cannot be specialized with derivative-range and orthogonal-residual measurable spaces supplied as explicit inherited subtype parameters, or if the specialization requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Invoke the explicit inherited measurable-space bindings before specializing the generic finite-order pointwise witness with the installed positive-rank measures and repaired localized chart-slice certificate.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"projectedCoordinates_explicit_measurableSpace_borel_bindings"
+     "f50c297800f7ad4285430c3748fb8f17b53d04c1786c59ee267d0fa6973a861c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
+      :exit 0,
+      :output
+      "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3  /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "diff -u /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean",
+      :exit 0,
+      :output
+      "'SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.projectedCoordinates_explicit_measurableSpace_borel_bindings' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '6,17p' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean | sha256sum",
+      :exit 0,
+      :output
+      "f50c297800f7ad4285430c3748fb8f17b53d04c1786c59ee267d0fa6973a861c  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 264 items OK; {:done 255, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "42104ed9dd3be10a47dcc972d7c168e44d938f30",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
+     "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean",
+     :sha256
+     "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"},
+    :declarations
+    ["projectedCoordinates_explicit_measurableSpace_borel_bindings"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
     "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
