@@ -15529,6 +15529,43 @@
    "The projected local rank chart now retains its exact forward coordinate formula; constant-coordinate slice tangency, residual derivative flatness, and local rank-piece nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected inverse-formula theorem cannot be promoted with its exact derivative-range and projected-kernel coordinates, base-point source membership, forward chart equality, eventual inverse-coordinate identities at the projected base coordinate, strict derivative hypothesis, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.lean"
+    "ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE PROJECTED CHART INVERSE FORMULA",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFirstDerivativeProjectedChartInverseFormulaProbe.lean",
+     :sha256
+     "df1dcee7c817134e68d47193cdf4ca0b9f19281048caa73d9abd2ef2fa80d446"},
+    :declarations
+    ["exists_projected_localRankNormalForm_with_inverse_formula"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Restrict the eventual inverse-coordinate identities to an explicit neighborhood, differentiate constant projected-coordinate slices, combine their kernel tangency with rank-at-most residual flatness, and derive local image nullity for each order-one exact-rank piece."},
+   :representation
+   {:source
+    "A strict derivative L of f at x between a finite-dimensional real inner-product source and a real inner-product target.",
+    :target
+    "A projected local rank OpenPartialHomeomorph containing x in its source, with its exact forward coordinate formula and both inverse-coordinate identities holding eventually near the projected base coordinate."},
+   :id
+   :critical-value-sard-first-derivative-projected-chart-inverse-formula-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-derivative-projected-chart-formula-1
+    :critical-value-sard-local-rank-normal-form-probe-2
+    :critical-value-sard-projected-complemented-strict-derivative-data-1],
+   :current-residual
+   "Both forward and local inverse chart formulas are retained; explicit slice-neighborhood restriction, derivative tangency, residual flatness, and local rank-piece nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -15586,68 +15623,68 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled projected chart-formula theorem cannot be promoted with its exact derivative-range coordinate, projected-kernel coordinate, base-point source membership, OpenPartialHomeomorph type, strict derivative hypothesis, forward coordinate equality, or standard-axiom profile.",
+      "Stop only if the compiled projected inverse-formula theorem cannot be promoted with its exact derivative-range and projected-kernel coordinates, base-point source membership, forward chart equality, eventual inverse-coordinate identities at the projected base coordinate, strict derivative hypothesis, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstDerivativeProjectedChartFormula.lean"
-       "ConstructionTargets/SardFirstDerivativeProjectedChartFormula.md"],
+      ["ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.lean"
+       "ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE PROJECTED CHART FORMULA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE PROJECTED CHART INVERSE FORMULA",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstDerivativeProjectedImplicitFunctionDataProbe.lean",
+        "/tmp/SardFirstDerivativeProjectedChartInverseFormulaProbe.lean",
         :sha256
-        "16fd3fb600837d651d9e6cf427f94c42114aad3719dc4f687eb1d8be1c276305"},
+        "df1dcee7c817134e68d47193cdf4ca0b9f19281048caa73d9abd2ef2fa80d446"},
        :declarations
-       ["exists_projected_localRankNormalForm_with_formula"],
+       ["exists_projected_localRankNormalForm_with_inverse_formula"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use the exact forward chart formula to differentiate constant projected-coordinate slices, combine the resulting kernel tangency with rank-at-most residual flatness, and derive pointwise local image nullity for each order-one exact-rank piece."},
+       "Restrict the eventual inverse-coordinate identities to an explicit neighborhood, differentiate constant projected-coordinate slices, combine their kernel tangency with rank-at-most residual flatness, and derive local image nullity for each order-one exact-rank piece."},
       :representation
       {:source
-       "A strict derivative L of a map f at x between finite-dimensional real inner-product source coordinates and a real inner-product target.",
+       "A strict derivative L of f at x between a finite-dimensional real inner-product source and a real inner-product target.",
        :target
-       "A projected local rank OpenPartialHomeomorph containing x in its source whose forward map is exactly the pair of derivative-range projection of f and orthogonal projection onto the projected derivative kernel."},
+       "A projected local rank OpenPartialHomeomorph containing x in its source, with its exact forward coordinate formula and both inverse-coordinate identities holding eventually near the projected base coordinate."},
       :id
-      :critical-value-sard-first-derivative-projected-chart-formula-1,
+      :critical-value-sard-first-derivative-projected-chart-inverse-formula-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-derivative-rank-piece-projected-defining-data-1
+      [:critical-value-sard-first-derivative-projected-chart-formula-1
        :critical-value-sard-local-rank-normal-form-probe-2
        :critical-value-sard-projected-complemented-strict-derivative-data-1],
       :current-residual
-      "The projected local rank chart now retains its exact forward coordinate formula; constant-coordinate slice tangency, residual derivative flatness, and local rank-piece nullity remain.",
+      "Both forward and local inverse chart formulas are retained; explicit slice-neighborhood restriction, derivative tangency, residual flatness, and local rank-piece nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The compiled projected defining-data theorem retains the fields needed for ImplicitFunctionData, but the existing chart package discards its coordinate formula. A placeholder-free fixture now constructs the exact projected ImplicitFunctionData internally and returns its OpenPartialHomeomorph together with base-point source membership and the exact forward formula: projection of f onto the base derivative range paired with orthogonal projection onto the projected derivative kernel. Constant-coordinate slice differentiation and residual-flatness transfer remain downstream.",
+     "The rectangular theorem is not refuted. The compiled forward chart formula is insufficient by itself to make an inverse-coordinate slice locally constant. A placeholder-free fixture now retains both the exact forward formula and the eventual inverse-coordinate identities near the projected base coordinate. These identities provide the local constant-coordinate equation required for slice differentiation; converting the eventual identity into a neighborhood-restricted derivative statement and applying residual kernel flatness remain downstream.",
      :commands
      [{:cmd
-       "lake build ConstructionTargets.SardFirstDerivativeRankPieceProjectedDefiningData",
+       "lake build ConstructionTargets.SardFirstDerivativeProjectedChartFormula",
        :exit 0,
-       :output "Build completed successfully (8274 jobs)."}
+       :output "Build completed successfully (8275 jobs)."}
       {:cmd
-       "lake env lean /tmp/SardFirstDerivativeProjectedImplicitFunctionDataProbe.lean",
-       :exit 0,
-       :output
-       "'SardFirstDerivativeProjectedImplicitFunctionDataProbe.exists_projected_localRankNormalForm_with_formula' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/SardFirstDerivativeProjectedImplicitFunctionDataProbe.lean problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedDefiningData.lean ConstructionTargets/SardLocalRankNormalForm.lean ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean",
+       "lake env lean /tmp/SardFirstDerivativeProjectedChartInverseFormulaProbe.lean",
        :exit 0,
        :output
-       "16fd3fb600837d651d9e6cf427f94c42114aad3719dc4f687eb1d8be1c276305  /tmp/SardFirstDerivativeProjectedImplicitFunctionDataProbe.lean\n4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nac3974be552fb38923c70b503216934c47baba0199268149333055652b4573dc  ConstructionTargets/SardFirstDerivativeRankPieceProjectedDefiningData.lean\nf30e01b3fb2da7b380e8b130ffcd4ffc70bdc793f21865150d9f8a0873df2de4  ConstructionTargets/SardLocalRankNormalForm.lean\n295c9349737bd5642c5d3914e0e70758a223841c7f3651b50228f5cdedb5fde2  ConstructionTargets/SardProjectedComplementedStrictDerivativeData.lean"}
+       "'SardFirstDerivativeProjectedChartInverseFormulaProbe.exists_projected_localRankNormalForm_with_inverse_formula' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeProjectedImplicitFunctionDataProbe.lean",
+       "sha256sum /tmp/SardFirstDerivativeProjectedChartInverseFormulaProbe.lean problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeProjectedChartFormula.lean ConstructionTargets/SardLocalRankNormalForm.lean",
+       :exit 0,
+       :output
+       "df1dcee7c817134e68d47193cdf4ca0b9f19281048caa73d9abd2ef2fa80d446  /tmp/SardFirstDerivativeProjectedChartInverseFormulaProbe.lean\n4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n16fd3fb600837d651d9e6cf427f94c42114aad3719dc4f687eb1d8be1c276305  ConstructionTargets/SardFirstDerivativeProjectedChartFormula.lean\nf30e01b3fb2da7b380e8b130ffcd4ffc70bdc793f21865150d9f8a0873df2de4  ConstructionTargets/SardLocalRankNormalForm.lean"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeProjectedChartInverseFormulaProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 125 items OK; {:done 117, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 126 items OK; {:done 118, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -15659,12 +15696,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFirstDerivativeProjectedImplicitFunctionDataProbe.lean",
+      "/tmp/SardFirstDerivativeProjectedChartInverseFormulaProbe.lean",
       :sha256
-      "16fd3fb600837d651d9e6cf427f94c42114aad3719dc4f687eb1d8be1c276305"},
+      "df1dcee7c817134e68d47193cdf4ca0b9f19281048caa73d9abd2ef2fa80d446"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -15738,7 +15775,8 @@
     :critical-value-sard-first-derivative-rank-piece-local-upper-locus-1
     :critical-value-sard-first-derivative-rank-piece-projected-chart-1
     :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1
-    :critical-value-sard-first-derivative-projected-chart-formula-1],
+    :critical-value-sard-first-derivative-projected-chart-formula-1
+    :critical-value-sard-first-derivative-projected-chart-inverse-formula-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
