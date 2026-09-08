@@ -18042,6 +18042,50 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788847177977-14605-593aa252",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat c20e267aefe4e6bfb74faa03c16ca0aaf41117d8; git diff-tree --no-commit-id --name-only -r c20e267aefe4e6bfb74faa03c16ca0aaf41117d8",
+       :exit 0,
+       :output
+       "Author Joe Corneli; exact scope: ConstructionTargets/SardCompactProductImageNullity.lean and ConstructionTargets/SardCompactProductImageNullity.md."}
+      {:cmd
+       "git show c20e267aefe4e6bfb74faa03c16ca0aaf41117d8:ConstructionTargets/SardCompactProductImageNullity.lean | sha256sum; sha256sum /tmp/SardCompactProductImageNullityProbe.lean; cmp <(git show c20e267aefe4e6bfb74faa03c16ca0aaf41117d8:ConstructionTargets/SardCompactProductImageNullity.lean) /tmp/SardCompactProductImageNullityProbe.lean",
+       :exit 0,
+       :output
+       "Committed source and fixture are byte-identical at d8b3e0974efab4b4cf067115e85b8cd2f81f4f682d48e8323d293c62a9b4d9d6."}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardCompactProductImageNullityProbe.lean; lake build ConstructionTargets.SardCompactProductImageNullity",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; declaration depends on [propext, Classical.choice, Quot.sound]; build completed successfully (1759 jobs), with no warning from the reviewed module."}
+      {:cmd
+       "git show c20e267aefe4e6bfb74faa03c16ca0aaf41117d8:ConstructionTargets/SardCompactProductImageNullity.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show c20e267aefe4e6bfb74faa03c16ca0aaf41117d8:ConstructionTargets/SardCompactProductImageNullity.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show c20e267aefe4e6bfb74faa03c16ca0aaf41117d8:ConstructionTargets/SardCompactProductImageNullity.md | sha256sum; sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "Documentation hash e3b49fb34632790692a409b613c694ea45aaa06b188bfa6ee0d80d9d3eba21df; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd
+       "git merge-base --is-ancestor d8b923fa3989cfaa50a4f3cfa97fe14515c79d75 c20e267aefe4e6bfb74faa03c16ca0aaf41117d8; git merge-base --is-ancestor 506871501dacbef3ad98c756cfdcaa2ffbabf954 c20e267aefe4e6bfb74faa03c16ca0aaf41117d8",
+       :exit 0,
+       :output "Both recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "topology-worklist: 142 items OK; {:done 133, :done-unreviewed 1, :blocked 2, :superseded 6}; diff clean; working tree clean."}],
+     :finding
+     "PASS. The theorem combines the two reviewed prerequisites at exactly the same set q '' K. Compactness of K and continuity of q on K make q '' K measurable in the product Borel space; the supplied pointwise hypotheses give ν-measure zero for each vertical section Prod.mk r ⁻¹' (q '' K); the product-null-fibers theorem then yields μ.prod ν (q '' K) = 0. Second-countability, Hausdorffness, and Borel structures on both factors supply the product target topology and measurable structure used by compact-image measurability. The theorem does not identify the sections or transfer nullity through target coordinates; those remain downstream. Exact scope and fixture hash reproduce, axioms are standard-only, placeholders are zero, and the frozen consumer retains one theorem and one sorry."},
     :commit "c20e267aefe4e6bfb74faa03c16ca0aaf41117d8",
     :changed-paths
     ["ConstructionTargets/SardCompactProductImageNullity.lean"
@@ -18063,7 +18107,7 @@
       "ConstructionTargets/SardCompactProductImageNullity.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactProductImageNullity.lean"
     "ConstructionTargets/SardCompactProductImageNullity.md"],
@@ -18229,7 +18273,7 @@
       "d8b3e0974efab4b4cf067115e85b8cd2f81f4f682d48e8323d293c62a9b4d9d6"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
