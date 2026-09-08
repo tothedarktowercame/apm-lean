@@ -22123,6 +22123,47 @@
       :output
       "[master 3cb32d87] Add projected chart inverse slice regularity\n2 files changed, 33 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788862221433-14838-11026a36",
+     :commands
+     [{:cmd
+       "git rev-parse 3cb32d87; git show --stat --oneline --decorate=no 3cb32d87; git diff-tree --no-commit-id --name-only -r 3cb32d87; git show 3cb32d87:ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean; git show 3cb32d87:ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.md",
+       :exit 0,
+       :output
+       "3cb32d87101ca40fedfe96b8a4ed452771ba5e47; exact two-path scope"}
+      {:cmd
+       "git show 3cb32d87101ca40fedfe96b8a4ed452771ba5e47:ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean > /tmp/sard-inverse-slice-contdiff-review.5jNhBI/SardProjectedChartInverseSliceCompositionContDiff.lean; git show 3cb32d87101ca40fedfe96b8a4ed452771ba5e47:ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.md > /tmp/sard-inverse-slice-contdiff-review.5jNhBI/SardProjectedChartInverseSliceCompositionContDiff.md; sha256sum /tmp/sard-inverse-slice-contdiff-review.5jNhBI/SardProjectedChartInverseSliceCompositionContDiff.lean /tmp/sard-inverse-slice-contdiff-review.5jNhBI/SardProjectedChartInverseSliceCompositionContDiff.md",
+       :exit 0,
+       :output
+       "c93a550aa284982294aa0e3c460da9bd87de01af22ab1bb1220dc54b3a247a2a Lean; 0834e726264aa46c6e745d072710b85f583cda4ebd8daaad4697b11ffb8ff8a0 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-inverse-slice-contdiff-review.5jNhBI/SardProjectedChartInverseSliceCompositionContDiff.lean",
+       :exit 0,
+       :output
+       "contDiffAt_residual_comp_inverseChartSlice depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-inverse-slice-contdiff-review.5jNhBI/SardProjectedChartInverseSliceCompositionContDiff.lean /tmp/sard-inverse-slice-contdiff-review.5jNhBI/SardProjectedChartInverseSliceCompositionContDiff.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '14,20p' /tmp/sard-inverse-slice-contdiff-review.5jNhBI/SardProjectedChartInverseSliceCompositionContDiff.lean | sha256sum",
+       :exit 0,
+       :output
+       "193d8768954d2fafad1d2c2320b8ac86c46a1a7b4dcd3322a9ea03c577a1c54a  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 171 items OK; {:done 162, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 3cb32d87101ca40fedfe96b8a4ed452771ba5e47",
+       :exit 0,
+       :output
+       "3cb32d87101ca40fedfe96b8a4ed452771ba5e47; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem has the intended forward orientation: pointwise ContDiffAt of the fixed-first-coordinate inverse-chart slice and pointwise ContDiffAt of the ambient map at its image compose at the same order, after which the arbitrary continuous-linear residual coordinate preserves that order. Points and composition order align exactly, and the theorem does not claim concrete inverse-chart regularity or residual derivative vanishing; those remain correctly stated as consumer residuals. No representation weakening, warning, or worktree change was found."},
     :commit "3cb32d87",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean"
@@ -22135,7 +22176,7 @@
     :declarations ["contDiffAt_residual_comp_inverseChartSlice"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean"
     "ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.md"],
@@ -22322,7 +22363,7 @@
       "c93a550aa284982294aa0e3c460da9bd87de01af22ab1bb1220dc54b3a247a2a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
