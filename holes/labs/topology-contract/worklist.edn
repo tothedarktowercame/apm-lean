@@ -28466,6 +28466,25 @@
       :exit 0,
       :output "7fa99a66f0bdefe87970e0d59508a7b42bfcd43d"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788883205161-15221-db4af601",
+     :commands
+     ["git show --stat --oneline 7fa99a66f0bdefe87970e0d59508a7b42bfcd43d"
+      "git diff-tree --no-commit-id --name-only -r 7fa99a66f0bdefe87970e0d59508a7b42bfcd43d"
+      "cmp /tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.lean"
+      "sha256sum /tmp/SardFirstNonzeroJetOneFDerivNonzeroProbe.lean ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.lean"
+      "git show 7fa99a66f0bdefe87970e0d59508a7b42bfcd43d:ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.lean | sed -n '10,21p' | sha256sum"
+      "lake env lean ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.lean"
+      "lake build ConstructionTargets.SardFirstNonzeroJetOneFDerivNonzero"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit 7fa99a66f0bdefe87970e0d59508a7b42bfcd43d changes exactly the two scoped files. Its committed Lean blob equals the fixture at SHA-256 40e51f8156d23d5b37d6624b2a22fba477124721674e173917e8bdddb5531f24; frozen statement hash 522943896c7607b516a4b2bc381d7d441f3cfef598f38f729c019a764c4f55ad reproduces. The theorem correctly maps order-one first-nonzero-jet membership to ordinary fderiv nonvanishing: assuming fderiv is zero and using norm_iteratedFDeriv_one contradicts the locus certificate, without changing representations or adding differentiability assumptions. Direct Lean and Lake builds pass with only propext, Classical.choice, and Quot.sound; scoped placeholder scan is empty. Worklist validates with 214 items OK; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and one placeholder reproduce; canonical package authority and clean worktree verified."},
     :commit "7fa99a66f0bdefe87970e0d59508a7b42bfcd43d",
     :changed-paths
     ["ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.lean"
@@ -28476,7 +28495,7 @@
      "40e51f8156d23d5b37d6624b2a22fba477124721674e173917e8bdddb5531f24"},
     :declarations ["fderiv_ne_zero_of_mem_firstNonzeroJetLocus_one"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.lean"
     "ConstructionTargets/SardFirstNonzeroJetOneFDerivNonzero.md"],
@@ -28653,7 +28672,7 @@
       "40e51f8156d23d5b37d6624b2a22fba477124721674e173917e8bdddb5531f24"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
