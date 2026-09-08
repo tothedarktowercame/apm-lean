@@ -31153,6 +31153,41 @@
    "Finite-order induction is restricted to dimension-admissible triples; prove the corresponding local critical-image strong-induction step.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if dimension-admissible finite-order local critical-image nullity cannot be represented as a source-finrank-indexed predicate and closed by strong induction from its dimension step, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderCriticalNullityPredicate.lean"
+    "ConstructionTargets/SardFiniteOrderCriticalNullityPredicate.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER CRITICAL-NULLITY INDUCTION PREDICATE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFiniteOrderCriticalNullityPredicateProbe.lean",
+     :sha256
+     "5d4f35b64804f4852ed22b60200bff39d8c921d3458aa5ca4c8b5e3d13b03d8e"},
+    :declarations
+    ["FiniteOrderCriticalNullityAtDimension"
+     "finiteOrderCriticalNullity_all_dimensions"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Prove the analytic dimension step using the reviewed Taylor-flat, first-order, and higher-jet branches."},
+   :representation
+   {:source
+    "Dimension-admissible finite-order local critical-image nullity for every source of each strictly smaller finrank.",
+    :target
+    "The same finite-order critical-image nullity property at every finite source dimension via strong induction."},
+   :id :critical-value-sard-finite-order-critical-nullity-predicate-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-regularity-dimension-admissibility-1
+    :critical-value-sard-finrank-strong-induction-closure-1],
+   :current-residual
+   "The exact induction predicate and closure are compiled; its analytic dimension step remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -31206,81 +31241,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Replace the unrestricted finite-order induction predicate with dimension-admissible local critical-image nullity, then prove its strong finrank induction step.",
+     "Prove the dimension-admissible finite-order local critical-image nullity step from all strictly smaller source dimensions.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"finiteOrderAdmissible_of_positive_surplus"
-      "cd80a8f1cfff84d6172c0b65dbeecdd3372ca3c4efa63da1da213dee48266651"},
+     {"finiteOrderCriticalNullity_all_dimensions"
+      "7ba3763c9f7fe6f7010ccd85b5b5f51c073f466b57301b9de614bf88e6efc0df"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the positive Taylor exponent-surplus identity cannot imply the strict dimension-sensitive finite-regularity admissibility inequality, or if the theorem requires nonstandard axioms.",
+      "Stop only if dimension-admissible finite-order local critical-image nullity cannot be represented as a source-finrank-indexed predicate and closed by strong induction from its dimension step, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteRegularityDimensionAdmissibility.lean"
-       "ConstructionTargets/SardFiniteRegularityDimensionAdmissibility.md"],
+      ["ConstructionTargets/SardFiniteOrderCriticalNullityPredicate.lean"
+       "ConstructionTargets/SardFiniteOrderCriticalNullityPredicate.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-REGULARITY DIMENSION ADMISSIBILITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER CRITICAL-NULLITY INDUCTION PREDICATE",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardFiniteRegularityDimensionAdmissibilityProbe.lean",
+       {:path "/tmp/SardFiniteOrderCriticalNullityPredicateProbe.lean",
         :sha256
-        "27b23f124e901a4b23ecc83fb18acd57375c0f2328e1dbb4af7c96d4f3310fb5"},
+        "5d4f35b64804f4852ed22b60200bff39d8c921d3458aa5ca4c8b5e3d13b03d8e"},
        :declarations
-       ["FiniteOrderAdmissible"
-        "finiteOrderAdmissible_of_positive_surplus"],
+       ["FiniteOrderCriticalNullityAtDimension"
+        "finiteOrderCriticalNullity_all_dimensions"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use dimension admissibility in the finite-order local critical-image induction predicate and close its source-finrank step."},
+       "Prove the analytic dimension step using the reviewed Taylor-flat, first-order, and higher-jet branches."},
       :representation
       {:source
-       "A Taylor cutoff and positive exponent surplus satisfying `(order + 1) * targetDim = sourceDim + surplus`.",
+       "Dimension-admissible finite-order local critical-image nullity for every source of each strictly smaller finrank.",
        :target
-       "The strict dimension-sensitive admissibility inequality `sourceDim < (order + 1) * targetDim` for finite-order Sard induction."},
+       "The same finite-order critical-image nullity property at every finite source dimension via strong induction."},
       :id
-      :critical-value-sard-finite-regularity-dimension-admissibility-1,
+      :critical-value-sard-finite-order-critical-nullity-predicate-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finrank-strong-induction-closure-1
-       :critical-value-sard-taylor-exponent-surplus-1],
+      [:critical-value-sard-finite-regularity-dimension-admissibility-1
+       :critical-value-sard-finrank-strong-induction-closure-1],
       :current-residual
-      "Finite-order induction is restricted to dimension-admissible triples; prove the corresponding local critical-image strong-induction step.",
+      "The exact induction predicate and closure are compiled; its analytic dimension step remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :axioms ["propext" "Quot.sound"],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted, but the current strong-induction predicate is over-strong: it quantifies critical-image nullity over every arbitrary finite nonzero regularity order, including unrestricted C1 cases where Morse-Sard is false. The induction predicate must instead carry the dimension-sensitive Taylor admissibility inequality. A placeholder-free compiled fixture defines that admissibility and derives it from the already banked positive-surplus identity.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture now defines the exact source-finrank-indexed induction predicate: arbitrary finite-dimensional source and target spaces, additive Haar target measure, dimension-admissible finite regularity, local ContDiffAt hypotheses, and nullity of the localized critical image. Strong induction closes this predicate once its analytic dimension step is supplied. The remaining prerequisite is precisely that dimension step.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteRegularityDimensionAdmissibilityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderCriticalNullityPredicateProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteRegularityDimensionAdmissibilityProbe.finiteOrderAdmissible_of_positive_surplus' depends on axioms: [propext, Quot.sound]"}
+       "'SardFiniteOrderCriticalNullityPredicateProbe.finiteOrderCriticalNullity_all_dimensions' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteRegularityDimensionAdmissibilityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderCriticalNullityPredicateProbe.lean",
        :exit 0,
        :output
-       "27b23f124e901a4b23ecc83fb18acd57375c0f2328e1dbb4af7c96d4f3310fb5  /tmp/SardFiniteRegularityDimensionAdmissibilityProbe.lean"}
+       "5d4f35b64804f4852ed22b60200bff39d8c921d3458aa5ca4c8b5e3d13b03d8e  /tmp/SardFiniteOrderCriticalNullityPredicateProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteRegularityDimensionAdmissibilityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderCriticalNullityPredicateProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '6,14p' /tmp/SardFiniteRegularityDimensionAdmissibilityProbe.lean | sha256sum",
+       "sed -n '10,31p' /tmp/SardFiniteOrderCriticalNullityPredicateProbe.lean | sha256sum",
        :exit 0,
        :output
-       "cd80a8f1cfff84d6172c0b65dbeecdd3372ca3c4efa63da1da213dee48266651  -"}
+       "7ba3763c9f7fe6f7010ccd85b5b5f51c073f466b57301b9de614bf88e6efc0df  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 235 items OK; {:done 227, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 236 items OK; {:done 228, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -31298,13 +31332,12 @@
        :output "?? scripts/__pycache__/",
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
-     {:path
-      "/tmp/SardFiniteRegularityDimensionAdmissibilityProbe.lean",
+     {:path "/tmp/SardFiniteOrderCriticalNullityPredicateProbe.lean",
       :sha256
-      "27b23f124e901a4b23ecc83fb18acd57375c0f2328e1dbb4af7c96d4f3310fb5"},
+      "5d4f35b64804f4852ed22b60200bff39d8c921d3458aa5ca4c8b5e3d13b03d8e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -31488,7 +31521,8 @@
     :critical-value-sard-order-one-kernel-induction-interface-1
     :critical-value-sard-strong-lower-dimension-induction-specialization-1
     :critical-value-sard-finrank-strong-induction-closure-1
-    :critical-value-sard-finite-regularity-dimension-admissibility-1],
+    :critical-value-sard-finite-regularity-dimension-admissibility-1
+    :critical-value-sard-finite-order-critical-nullity-predicate-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
