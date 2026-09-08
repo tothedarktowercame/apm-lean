@@ -31395,6 +31395,43 @@
    "The correct complete-critical-set regularity threshold is compiled; repair the induction predicate and prove its analytic dimension step.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the complete finite-order critical-nullity induction predicate cannot be repaired to use classical Sard admissibility and closed by source-finrank strong induction from its dimension step, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardClassicalFiniteOrderCriticalNullityPredicate.lean"
+    "ConstructionTargets/SardClassicalFiniteOrderCriticalNullityPredicate.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [SPEC-DEFECT] / CLASSICAL FINITE-ORDER CRITICAL-NULLITY PREDICATE",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
+     :sha256
+     "8676226b6f7e6d6a682c47beef136e1facb0fa78762a5ea4a0e8784c4ae41d5a"},
+    :declarations
+    ["ClassicalCriticalNullityAtDimension"
+     "classicalCriticalNullity_all_dimensions"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Prove the analytic dimension step using the reviewed flat, order-one, and higher-jet branches."},
+   :representation
+   {:source
+    "Classical-Sard-admissible finite-order local critical-image nullity at every strictly smaller source finrank.",
+    :target
+    "The same classical finite-order critical-nullity property at every source dimension by strong induction."},
+   :id
+   :critical-value-sard-classical-finite-order-critical-nullity-predicate-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-classical-regularity-admissibility-1
+    :critical-value-sard-finrank-strong-induction-closure-1],
+   :current-residual
+   "The repaired induction predicate and closure compile; its analytic dimension step remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -31448,79 +31485,81 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Repair the finite-order critical-nullity predicate to use classical Sard admissibility, then prove its analytic source-dimension step.",
+     "Prove the classical-admissible finite-order critical-nullity dimension step from all strictly smaller source dimensions.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"sardOrderAdmissible_of_deficit_lt_order"
-      "e353f15abcc6e373abcad8b8d83a3457c90d8424bfb435a3c41a5d3a4712ba49"},
+     {"classicalCriticalNullity_all_dimensions"
+      "e4f1cea03d7bc6f1b35806ac13fe3d4d347c73f216f3e78066536dff0aac8222"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the classical finite-order Sard threshold cannot be represented as `sourceDim < targetDim + order`, derived from `sourceDim - targetDim < order`, and preserved when the regularity order increases, or if these results require nonstandard axioms.",
+      "Stop only if the complete finite-order critical-nullity induction predicate cannot be repaired to use classical Sard admissibility and closed by source-finrank strong induction from its dimension step, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardClassicalRegularityAdmissibility.lean"
-       "ConstructionTargets/SardClassicalRegularityAdmissibility.md"],
+      ["ConstructionTargets/SardClassicalFiniteOrderCriticalNullityPredicate.lean"
+       "ConstructionTargets/SardClassicalFiniteOrderCriticalNullityPredicate.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [SPEC-DEFECT] / CLASSICAL REGULARITY ADMISSIBILITY",
+      "CRITICAL-VALUE MANIFOLD SARD [SPEC-DEFECT] / CLASSICAL FINITE-ORDER CRITICAL-NULLITY PREDICATE",
       :acceptance
       {:fixture
-       {:path "/tmp/SardClassicalRegularityAdmissibilityProbe.lean",
+       {:path
+        "/tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
         :sha256
-        "c6fe990b3e4b398c9d6683f7406700320b226064ae5d0aa7632e238ce0a603e1"},
+        "8676226b6f7e6d6a682c47beef136e1facb0fa78762a5ea4a0e8784c4ae41d5a"},
        :declarations
-       ["SardOrderAdmissible"
-        "sardOrderAdmissible_of_deficit_lt_order"
-        "sardOrderAdmissible_mono_order"],
+       ["ClassicalCriticalNullityAtDimension"
+        "classicalCriticalNullity_all_dimensions"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Replace Taylor-flat admissibility in the complete critical-nullity predicate with classical Sard admissibility."},
+       "Prove the analytic dimension step using the reviewed flat, order-one, and higher-jet branches."},
       :representation
       {:source
-       "The classical dimension deficit condition `sourceDim - targetDim < order` for a finite differentiability order.",
+       "Classical-Sard-admissible finite-order local critical-image nullity at every strictly smaller source finrank.",
        :target
-       "The equivalent usable Sard admissibility inequality `sourceDim < targetDim + order`, monotone under increasing regularity."},
-      :id :critical-value-sard-classical-regularity-admissibility-1,
+       "The same classical finite-order critical-nullity property at every source dimension by strong induction."},
+      :id
+      :critical-value-sard-classical-finite-order-critical-nullity-predicate-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-critical-nullity-predicate-1],
+      [:critical-value-sard-classical-regularity-admissibility-1
+       :critical-value-sard-finrank-strong-induction-closure-1],
       :current-residual
-      "The correct complete-critical-set regularity threshold is compiled; repair the induction predicate and prove its analytic dimension step.",
+      "The repaired induction predicate and closure compile; its analytic dimension step remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :axioms ["propext" "Quot.sound"],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular smooth theorem is not refuted, but the current finite-order induction predicate uses the wrong admissibility condition. The inequality `sourceDim < (order+1)*targetDim` controls only the Taylor-flat covering branch; it is too weak for nullity of the complete critical image. For example, source dimension 3, target dimension 2, and order 1 satisfy that inequality, although unrestricted C1 Morse-Sard is false. The complete induction predicate must use the classical threshold `sourceDim < targetDim + order`. A placeholder-free compiled fixture defines this corrected condition, derives it from the dimension deficit, and proves monotonicity in regularity order.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture repairs the complete critical-nullity induction predicate by replacing the Taylor-flat covering inequality with the classical Sard threshold `sourceDim < targetDim + order`. The repaired property remains source-finrank indexed and closes by strong induction once its analytic dimension step is proved.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardClassicalRegularityAdmissibilityProbe.lean",
+       "lake env lean /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
        :exit 0,
        :output
-       "'SardClassicalRegularityAdmissibilityProbe.sardOrderAdmissible_of_deficit_lt_order' depends on axioms: [propext, Quot.sound]\n'SardClassicalRegularityAdmissibilityProbe.sardOrderAdmissible_mono_order' depends on axioms: [propext, Quot.sound]"}
+       "'SardClassicalFiniteOrderCriticalNullityPredicateProbe.classicalCriticalNullity_all_dimensions' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardClassicalRegularityAdmissibilityProbe.lean",
+       "sha256sum /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
        :exit 0,
        :output
-       "c6fe990b3e4b398c9d6683f7406700320b226064ae5d0aa7632e238ce0a603e1  /tmp/SardClassicalRegularityAdmissibilityProbe.lean"}
+       "8676226b6f7e6d6a682c47beef136e1facb0fa78762a5ea4a0e8784c4ae41d5a  /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardClassicalRegularityAdmissibilityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '6,20p' /tmp/SardClassicalRegularityAdmissibilityProbe.lean | sha256sum",
+       "sed -n '10,31p' /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean | sha256sum",
        :exit 0,
        :output
-       "e353f15abcc6e373abcad8b8d83a3457c90d8424bfb435a3c41a5d3a4712ba49  -"}
+       "e4f1cea03d7bc6f1b35806ac13fe3d4d347c73f216f3e78066536dff0aac8222  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 237 items OK; {:done 229, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 238 items OK; {:done 230, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -31538,12 +31577,13 @@
        :output "?? scripts/__pycache__/",
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
-     {:path "/tmp/SardClassicalRegularityAdmissibilityProbe.lean",
+     {:path
+      "/tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
       :sha256
-      "c6fe990b3e4b398c9d6683f7406700320b226064ae5d0aa7632e238ce0a603e1"},
+      "8676226b6f7e6d6a682c47beef136e1facb0fa78762a5ea4a0e8784c4ae41d5a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -31729,7 +31769,8 @@
     :critical-value-sard-finrank-strong-induction-closure-1
     :critical-value-sard-finite-regularity-dimension-admissibility-1
     :critical-value-sard-finite-order-critical-nullity-predicate-1
-    :critical-value-sard-classical-regularity-admissibility-1],
+    :critical-value-sard-classical-regularity-admissibility-1
+    :critical-value-sard-classical-finite-order-critical-nullity-predicate-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
