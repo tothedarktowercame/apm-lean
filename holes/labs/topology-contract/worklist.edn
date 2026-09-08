@@ -21126,6 +21126,23 @@
       "5344eab0de7e84415d37b48b8444272377d931f828c343f346b8b6417eab73aa  ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean\n0405412c0734af1ab828327e4d3603f2b53dfef6f8fcea60d0870dc40c49d857  ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.md"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788858482647-14766-09bca670",
+     :commands
+     [{:cmd
+       "verify canonical package authority and exact commit scope; hash fixture and scoped files; compare fixture with source; recompute statement hash; compile fixture and source; build ConstructionTargets.SardFirstDerivativeRankPiecePointwiseCompactNullity",
+       :exit 0}
+      {:cmd
+       "scan both committed scoped files for sorry, admit, axiom, opaque, or unsafe",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "verify dependency ancestry; validate worklist; hash and count frozen consumer; run committed diff check; inspect worktree and commit metadata",
+       :exit 0}],
+     :finding
+     "PASS. Independently reviewed Joe Corneli's commit f08d1c5ccab44d0654fd345e2e019af8626a2a26. Its exact scope is ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean and .md. The fixture and committed source are byte-identical with SHA-256 5344eab0de7e84415d37b48b8444272377d931f828c343f346b8b6417eab73aa; documentation hash is 0405412c0734af1ab828327e4d3603f2b53dfef6f8fcea60d0870dc40c49d857 and frozen statement hash is ae8d339b2fbfc429f9b042b354305f67c073f32f244683f43f725971d3d61723. Fixture, source, and target build pass with only [propext, Classical.choice, Quot.sound], no warnings, and no placeholders. The theorem orientation and representation boundary are exact: from pointwise existence of an open neighborhood containing each point of the order-one exact-rank-r locus and compact-image nullity on that neighborhood's rank-at-most-r locus, it internally selects one certified neighborhood per locus point and invokes the reviewed compact-local aggregator to prove nullity of the complete exact-rank piece. The dependent choice is guarded by membership in the exact locus; outside it the family is defined as empty and never used. Openness, point membership, and compact-nullity fields are extracted from the same chosen witness with no changed hypotheses. Dependency commits ce2abde6286f77de4204a845581671fd6646b866 and e1de8e4e33947bb1600d252b020c71b3e2d027ba are ancestors. The frozen consumer remains SHA-256 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one sorry; the 164-item worklist validates with 155 done, one done-unreviewed, two blocked, and six superseded; the worktree is clean."},
     :commit "f08d1c5ccab44d0654fd345e2e019af8626a2a26",
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean"
@@ -21143,7 +21160,7 @@
     :declarations
     ["rankPiece_image_null_of_pointwise_compact_rankUpper_image_null"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean"
     "ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.md"],
@@ -21327,7 +21344,7 @@
       "5344eab0de7e84415d37b48b8444272377d931f828c343f346b8b6417eab73aa"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
