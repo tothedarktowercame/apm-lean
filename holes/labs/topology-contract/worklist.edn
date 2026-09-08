@@ -29197,6 +29197,25 @@
       "git commit -m 'Add pointwise exact-rank closed-open nullity'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788886363461-15287-3ab8e8d9",
+     :commands
+     ["git show 799568263441101aa8ad9290a65cdaf0f8f431b9"
+      "cmp fixture scoped-file"
+      "sha256sum fixture recorded-commit-file scoped-files"
+      "lake env lean ConstructionTargets/SardFirstDerivativeRankPiecePointwiseClosedOpenNullity.lean"
+      "lake build ConstructionTargets.SardFirstDerivativeRankPiecePointwiseClosedOpenNullity"
+      "sed -n '13,63p' recorded-commit-file | sha256sum"
+      "rg placeholder-and-unsafe-patterns"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o sorry problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6; commit changes exactly the two declared scope files; fixture and recorded/scoped Lean hashes equal ea3660a35af5885fe6fca979e44198ef0c7da04e4d12b22d0eecf1e00db690ec; frozen statement hash equals ffb44c06d7f7ddd52ec0338d327a98b0c7f52800ae254d8df8087483d53a1d17; placeholder count is zero; direct Lean and 8363-job Lake build pass with only propext, Classical.choice, and Quot.sound; ledger validates 220 items; consumer hash and one-placeholder count match; the theorem takes U as the projected chart source and A as the closed global rank-upper locus, exact-rank membership supplies base-range dimension, criticality supplies nonsurjectivity, and order-one jet membership supplies strict projected-kernel dimension drop; worktree is clean."},
     :commit "799568263441101aa8ad9290a65cdaf0f8f431b9",
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeRankPiecePointwiseClosedOpenNullity.lean"
@@ -29209,7 +29228,7 @@
     :declarations ["exists_open_rankUpper_image_zero"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPiecePointwiseClosedOpenNullity.lean"
     "ConstructionTargets/SardFirstDerivativeRankPiecePointwiseClosedOpenNullity.md"],
@@ -29393,7 +29412,7 @@
       "ea3660a35af5885fe6fca979e44198ef0c7da04e4d12b22d0eecf1e00db690ec"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
