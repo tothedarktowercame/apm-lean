@@ -21929,8 +21929,71 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled projected-chart target-coordinate first-component comparison cannot be promoted for arbitrary finite-dimensional real inner-product source and target spaces, every map with a strict derivative at a base point, the derivative-range projected local-rank chart, the derivative-range orthogonal target-coordinate equivalence, exact equality of their first-coordinate functions, base-point chart-source membership, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use the concrete chart and coordinate equality in compact projected-chart nullity, then prove smoothness and zero residual projection derivative for every fixed-first-coordinate inverse slice.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_projectedChart_first_eq_targetCoordinates_first"
+     "f6fb0a84deeaa1b9fa28f155a1717f0e8246c7837d60ed8faf46a8e6802de8b4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
+      :exit 0,
+      :output
+      "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff  /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
+      :exit 0,
+      :output
+      "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff  ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean\n23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff  /tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean",
+      :exit 0,
+      :output
+      "'SardProjectedChartTargetCoordinateFirstComponentProbe.exists_projectedChart_first_eq_targetCoordinates_first' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '14,29p' ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean | sha256sum",
+      :exit 0,
+      :output
+      "f6fb0a84deeaa1b9fa28f155a1717f0e8246c7837d60ed8faf46a8e6802de8b4  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 170 items OK; {:done 161, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add projected chart target coordinate comparison'",
+      :exit 0,
+      :output
+      "[master c6d9b09b] Add projected chart target coordinate comparison\n2 files changed, 43 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "c6d9b09b",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean"
+     "ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md"],
+    :fixture
+    {:path
+     "/tmp/SardProjectedChartTargetCoordinateFirstComponentProbe.lean",
+     :sha256
+     "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff"},
+    :declarations
+    ["exists_projectedChart_first_eq_targetCoordinates_first"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean"
     "ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md"],
