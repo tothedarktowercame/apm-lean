@@ -20061,8 +20061,83 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled derivative rank-upper closedness theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real normed spaces, every natural rank bound, closedness of the derivative-range finrank-at-most locus, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Intersect the closed derivative rank-at-most locus with compact chart localizations, apply compact target-fiber projected-slice nullity memberwise, and aggregate the local exact-rank images.",
+    :gates
+    {:fixture-hash :pass,
+     :compile :pass,
+     :placeholder-scan :pass,
+     :statement-hash :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :scope :pass,
+     :commit :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"isClosed_derivativeRankAtMost"
+     "0253cadcdb71ccaf746aca00004a438911e91da0e4e7b5bd806922327f646c87"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardDerivativeRankUpperLocusClosedProbe.lean",
+      :exit 0,
+      :output
+      "d7ada94586a07f25273acf8b9ad88c398488fdcee2d1597ea8d7694fff10b92f  /tmp/SardDerivativeRankUpperLocusClosedProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean",
+      :exit 0,
+      :output
+      "'SardDerivativeRankUpperLocusClosedProbe.isClosed_derivativeRankAtMost' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean ConstructionTargets/SardDerivativeRankUpperLocusClosed.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean ConstructionTargets/SardDerivativeRankUpperLocusClosed.md",
+      :exit 0,
+      :output
+      "4a4cfc005dd7912cf2a6dbb36fee94f6ddf5c38131bbca94e584acdec0b72367  ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean\n09fc3a699086c4b83f20959c4036640576e6beefb54e1bac51c83f19bf9e7735  ConstructionTargets/SardDerivativeRankUpperLocusClosed.md"}
+     {:cmd
+      "sed -n '10,16p' ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean | sha256sum",
+      :exit 0,
+      :output
+      "0253cadcdb71ccaf746aca00004a438911e91da0e4e7b5bd806922327f646c87  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 157 items OK; {:done 148, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'add derivative rank upper locus closedness'",
+      :exit 0,
+      :output
+      "[master f15212ea] add derivative rank upper locus closedness\n 2 files changed, 38 insertions(+)\n create mode 100644 ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean\n create mode 100644 ConstructionTargets/SardDerivativeRankUpperLocusClosed.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "f15212ea940f9f3882f07b9b6e52ee1d86afce26",
+    :changed-paths
+    ["ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean"
+     "ConstructionTargets/SardDerivativeRankUpperLocusClosed.md"],
+    :fixture
+    {:path "/tmp/SardDerivativeRankUpperLocusClosedProbe.lean",
+     :sha256
+     "d7ada94586a07f25273acf8b9ad88c398488fdcee2d1597ea8d7694fff10b92f"},
+    :declarations ["isClosed_derivativeRankAtMost"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardDerivativeRankUpperLocusClosed.lean"
     "ConstructionTargets/SardDerivativeRankUpperLocusClosed.md"],
