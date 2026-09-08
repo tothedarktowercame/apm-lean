@@ -21980,6 +21980,47 @@
       :output
       "[master c6d9b09b] Add projected chart target coordinate comparison\n2 files changed, 43 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788861799329-14831-380335d1",
+     :commands
+     [{:cmd
+       "git rev-parse c6d9b09b; git show --stat --oneline --decorate=no c6d9b09b; git diff-tree --no-commit-id --name-only -r c6d9b09b; git show c6d9b09b:ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean; git show c6d9b09b:ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md",
+       :exit 0,
+       :output
+       "c6d9b09b5eaacb22bab7d9ac8750900cfba1f8d7; exact two-path scope"}
+      {:cmd
+       "git show c6d9b09b5eaacb22bab7d9ac8750900cfba1f8d7:ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean > /tmp/sard-coordinate-first-review.amZfkX/SardProjectedChartTargetCoordinateFirstComponent.lean; git show c6d9b09b5eaacb22bab7d9ac8750900cfba1f8d7:ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md > /tmp/sard-coordinate-first-review.amZfkX/SardProjectedChartTargetCoordinateFirstComponent.md; sha256sum /tmp/sard-coordinate-first-review.amZfkX/SardProjectedChartTargetCoordinateFirstComponent.lean /tmp/sard-coordinate-first-review.amZfkX/SardProjectedChartTargetCoordinateFirstComponent.md",
+       :exit 0,
+       :output
+       "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff Lean; 9026126334cafb4e7a32ae86ac28bdefcf2181eb9743b11e43b2bfb3e7addb86 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-coordinate-first-review.amZfkX/SardProjectedChartTargetCoordinateFirstComponent.lean",
+       :exit 0,
+       :output
+       "exists_projectedChart_first_eq_targetCoordinates_first depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-coordinate-first-review.amZfkX/SardProjectedChartTargetCoordinateFirstComponent.lean /tmp/sard-coordinate-first-review.amZfkX/SardProjectedChartTargetCoordinateFirstComponent.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '14,29p' /tmp/sard-coordinate-first-review.amZfkX/SardProjectedChartTargetCoordinateFirstComponent.lean | sha256sum",
+       :exit 0,
+       :output
+       "f6fb0a84deeaa1b9fa28f155a1717f0e8246c7837d60ed8faf46a8e6802de8b4  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 170 items OK; {:done 161, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' c6d9b09b5eaacb22bab7d9ac8750900cfba1f8d7",
+       :exit 0,
+       :output
+       "c6d9b09b5eaacb22bab7d9ac8750900cfba1f8d7; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem’s orientation is exact: it selects the derivative-range projected local-rank chart and proves equality from that chart’s first-coordinate function to the first component of the orthogonal target-coordinate equivalence applied to f. The dependent derivative-range and projected-kernel types agree on both sides, base-point source membership is retained, and no representation weakening, warning, or worktree change was found."},
     :commit "c6d9b09b",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean"
@@ -21993,7 +22034,7 @@
     ["exists_projectedChart_first_eq_targetCoordinates_first"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.lean"
     "ConstructionTargets/SardProjectedChartTargetCoordinateFirstComponent.md"],
@@ -22183,7 +22224,7 @@
       "23e7e9af460bb6c8a1a8a309422624d5a5311b07b7660d19879234d80e0b45ff"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
