@@ -28334,6 +28334,25 @@
       :exit 0,
       :output "5a974b6852aea24057ea3b42434f17dfce94fb1f"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788882813010-15211-eebc4ecd",
+     :commands
+     ["git show --stat --oneline 5a974b6852aea24057ea3b42434f17dfce94fb1f"
+      "git diff-tree --no-commit-id --name-only -r 5a974b6852aea24057ea3b42434f17dfce94fb1f"
+      "cmp /tmp/SardProjectedRangeKernelDimensionDropProbe.lean ConstructionTargets/SardProjectedRangeKernelDimensionDrop.lean"
+      "sha256sum /tmp/SardProjectedRangeKernelDimensionDropProbe.lean ConstructionTargets/SardProjectedRangeKernelDimensionDrop.lean"
+      "git show 5a974b6852aea24057ea3b42434f17dfce94fb1f:ConstructionTargets/SardProjectedRangeKernelDimensionDrop.lean | sed -n '9,36p' | sha256sum"
+      "lake env lean ConstructionTargets/SardProjectedRangeKernelDimensionDrop.lean"
+      "lake build ConstructionTargets.SardProjectedRangeKernelDimensionDrop"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit 5a974b6852aea24057ea3b42434f17dfce94fb1f changes exactly the two scoped files. Its committed Lean blob equals the fixture at SHA-256 369e7d69479f3d33d085993c6aa5f33165b2b6635b34dee94f2e26aca9dfea9a; frozen statement hash 399ee42e69b5a182437071ec6fb961ff24bff9a219356523d15301e29e9e51a8 reproduces. The theorem has the required strict direction: a nonzero derivative remains nonzero after projection onto its own range, positive projected-range rank and rank-nullity imply the projected kernel has strictly smaller finrank than the original source, and the types remain the original source and derivative-range subtype. Direct Lean and Lake builds pass with only propext, Classical.choice, and Quot.sound; scoped placeholder scan is empty. Worklist validates with 213 items OK; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and one placeholder reproduce; canonical package authority and clean worktree verified."},
     :commit "5a974b6852aea24057ea3b42434f17dfce94fb1f",
     :changed-paths
     ["ConstructionTargets/SardProjectedRangeKernelDimensionDrop.lean"
@@ -28344,7 +28363,7 @@
      "369e7d69479f3d33d085993c6aa5f33165b2b6635b34dee94f2e26aca9dfea9a"},
     :declarations ["finrank_ker_rangeProjection_comp_lt"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedRangeKernelDimensionDrop.lean"
     "ConstructionTargets/SardProjectedRangeKernelDimensionDrop.md"],
@@ -28520,7 +28539,7 @@
       "369e7d69479f3d33d085993c6aa5f33165b2b6635b34dee94f2e26aca9dfea9a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
