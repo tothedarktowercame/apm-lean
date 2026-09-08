@@ -19798,8 +19798,82 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled countable compact image-nullity theorem cannot be promoted for arbitrary topological source and measured target types, an arbitrary countable compact family, coverage of the source set, nullity of every compact member image, nullity of the complete image, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Construct countable compact exhaustions of projected exact-rank chart loci, prove every compact member null using target-fiber projected slices, and feed the resulting local nullity into rank-piece aggregation.",
+    :gates
+    {:fixture-hash :pass,
+     :compile :pass,
+     :placeholder-scan :pass,
+     :statement-hash :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :scope :pass,
+     :commit :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_countable_compact_cover"
+     "f38024731f928b82ff7383d895be538cfd47c8a47b1e43a6b653bc2e625bc12a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardCountableCompactImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "1e285d8acc3ea359fa4e031fd464cfac23481e159e16ba58a1de1b315cdedf24  /tmp/SardCountableCompactImageNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCountableCompactImageNullity.lean",
+      :exit 0,
+      :output
+      "'SardCountableCompactImageNullityProbe.measure_image_zero_of_countable_compact_cover' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCountableCompactImageNullity.lean ConstructionTargets/SardCountableCompactImageNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/SardCountableCompactImageNullity.lean ConstructionTargets/SardCountableCompactImageNullity.md",
+      :exit 0,
+      :output
+      "039a39a1f8e9923dd2e1f283d87be7b0941f28837f9e63e9680100cc05e9cee6  ConstructionTargets/SardCountableCompactImageNullity.lean\n3cb2c4fb0d3ba17ba6e29d5eeff6e127b3db7433cd7825f2f85b2688b82499bd  ConstructionTargets/SardCountableCompactImageNullity.md"}
+     {:cmd
+      "sed -n '9,15p' ConstructionTargets/SardCountableCompactImageNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "f38024731f928b82ff7383d895be538cfd47c8a47b1e43a6b653bc2e625bc12a  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 155 items OK; {:done 146, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'add countable compact image nullity aggregation'",
+      :exit 0,
+      :output
+      "[master 18defc2a] add countable compact image nullity aggregation\n 2 files changed, 32 insertions(+)\n create mode 100644 ConstructionTargets/SardCountableCompactImageNullity.lean\n create mode 100644 ConstructionTargets/SardCountableCompactImageNullity.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "18defc2ad63968e9f8da1fc5428387f9a53b17d1",
+    :changed-paths
+    ["ConstructionTargets/SardCountableCompactImageNullity.lean"
+     "ConstructionTargets/SardCountableCompactImageNullity.md"],
+    :fixture
+    {:path "/tmp/SardCountableCompactImageNullityProbe.lean",
+     :sha256
+     "1e285d8acc3ea359fa4e031fd464cfac23481e159e16ba58a1de1b315cdedf24"},
+    :declarations ["measure_image_zero_of_countable_compact_cover"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCountableCompactImageNullity.lean"
     "ConstructionTargets/SardCountableCompactImageNullity.md"],
