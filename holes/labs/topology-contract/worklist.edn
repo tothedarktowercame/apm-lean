@@ -26184,8 +26184,107 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled localized image-nullity assembly theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces, finite-dimensional real inner-product target spaces, every localized source set and derivative order, Taylor-flat image nullity, higher first-nonzero-jet image nullity, critical containment of the order-one locus, indexed compact projected-chart nullity certificates for every exact derivative rank, nullity of the complete localized image, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "Construct indexed compact projected-chart certificates from localized derivative-range chart data; all locus branches and their final localized-image aggregation are compiled.",
+    :gates
+    {:consumer-freeze :pass,
+     :fixture-match :pass,
+     :worktree-clean :pass,
+     :standard-axioms :pass,
+     :warnings :pass,
+     :scope :pass,
+     :worklist :pass,
+     :placeholder-scan :pass,
+     :declaration :pass,
+     :diff-check :pass,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"image_null_of_flat_higher_and_compactChart_certificates"
+     "9f77bf93c330a4fdc37c848952bba606f5a495c7165c3f07919ff504f77166f4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+      :exit 0,
+      :output
+      "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645  /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "rg -n -C 8 ':id :critical-value-sard-(first-derivative-locus-compact-projected-chart-aggregation-1|first-nonzero-jet-finite-assembly-1|localized-flat-through-taylor-nullity-1|first-nonzero-jet-inductive-locus-nullity-1|localized-image-nullity-of-compact-chart-certificates-1)' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+      :exit 0,
+      :output
+      "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645  ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean\ne6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645  /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean",
+      :exit 0,
+      :output
+      "'SardLocalizedImageNullityOfCompactChartCertificatesProbe.image_null_of_flat_higher_and_compactChart_certificates' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n 'theorem image_null_of_flat_higher_and_compactChart_certificates' ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean",
+      :exit 0,
+      :output
+      "10:theorem image_null_of_flat_higher_and_compactChart_certificates"}
+     {:cmd
+      "sed -n '10,41p' ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean | sha256sum",
+      :exit 0,
+      :output
+      "9f77bf93c330a4fdc37c848952bba606f5a495c7165c3f07919ff504f77166f4  -"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 198 items OK; {:done 189, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "git add -- ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md && git commit -m 'Add localized compact chart nullity assembly'",
+      :exit 0,
+      :output
+      "[master 1ce9f368] Add localized compact chart nullity assembly\n 2 files changed, 50 insertions(+)\n create mode 100644 ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean\n create mode 100644 ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md"}
+     {:cmd
+      "git show --format='%H%n%an <%ae>' --name-only --no-renames HEAD",
+      :exit 0,
+      :output
+      "1ce9f368a75b31c1f584724cd9d5a41e80120530\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean\nConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "1ce9f368a75b31c1f584724cd9d5a41e80120530",
+    :changed-paths
+    ["ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean"
+     "ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md"],
+    :fixture
+    {:path
+     "/tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+     :sha256
+     "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645"},
+    :declarations
+    ["image_null_of_flat_higher_and_compactChart_certificates"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean"
     "ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md"],
