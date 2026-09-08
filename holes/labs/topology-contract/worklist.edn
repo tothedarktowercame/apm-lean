@@ -23793,6 +23793,46 @@
      {:cmd "git commit -m 'Add projected smooth local rank chart'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788867094622-14930-c41df36a",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no 45e9000274c546b1863d83878ce6e3191747c2ba; git diff-tree --no-commit-id --name-only -r 45e9000274c546b1863d83878ce6e3191747c2ba; git show 45e9000274c546b1863d83878ce6e3191747c2ba:ConstructionTargets/SardProjectedSmoothLocalRankChart.lean; git show 45e9000274c546b1863d83878ce6e3191747c2ba:ConstructionTargets/SardProjectedSmoothLocalRankChart.md",
+       :exit 0,
+       :output "exact two-path scope"}
+      {:cmd
+       "git show 45e9000274c546b1863d83878ce6e3191747c2ba:ConstructionTargets/SardProjectedSmoothLocalRankChart.lean > /tmp/sard-projected-smooth-chart-review.XGwEki/SardProjectedSmoothLocalRankChart.lean; git show 45e9000274c546b1863d83878ce6e3191747c2ba:ConstructionTargets/SardProjectedSmoothLocalRankChart.md > /tmp/sard-projected-smooth-chart-review.XGwEki/SardProjectedSmoothLocalRankChart.md; sha256sum /tmp/sard-projected-smooth-chart-review.XGwEki/SardProjectedSmoothLocalRankChart.lean /tmp/sard-projected-smooth-chart-review.XGwEki/SardProjectedSmoothLocalRankChart.md",
+       :exit 0,
+       :output
+       "bdbb33a6bae6d1502e69d62d9b1da1bdd46e2708958f6add996f9674da1e3e5e Lean; 89a6286fa438c537946877294028ca7680d30eb4dd33fa610c798e0fbbc3980d MD"}
+      {:cmd
+       "lake env lean /tmp/sard-projected-smooth-chart-review.XGwEki/SardProjectedSmoothLocalRankChart.lean",
+       :exit 0,
+       :output
+       "exists_projected_smooth_localRankChart depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-projected-smooth-chart-review.XGwEki/SardProjectedSmoothLocalRankChart.lean /tmp/sard-projected-smooth-chart-review.XGwEki/SardProjectedSmoothLocalRankChart.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '14,51p' /tmp/sard-projected-smooth-chart-review.XGwEki/SardProjectedSmoothLocalRankChart.lean | sha256sum",
+       :exit 0,
+       :output
+       "d48e224b7c2679963e15e95c4b1795b8543f5df4e48fcff39c7df0c13bffc0f4  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; sha256sum problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "topology-worklist: 183 items OK; {:done 174, :done-unreviewed 1, :blocked 2, :superseded 6}; consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; consumer placeholders 1"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' 45e9000274c546b1863d83878ce6e3191747c2ba",
+       :exit 0,
+       :output
+       "45e9000274c546b1863d83878ce6e3191747c2ba; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob exactly reproduces the fixture hash; compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen statement hash reproduces. The theorem correctly instantiates ImplicitFunctionData with the derivative-range orthogonal projection of f and the orthogonal projection onto the kernel of that projected derivative. Finite-dimensionality of the source supplies completeness of the derivative range, the kernel has its standard completeness instance, strict derivative data provide both derivative and complementarity fields, and pointwise smoothness of f plus linear projection smoothness discharge the two defining-field hypotheses. The result contains the base point, retains the exact range/kernel coordinate formula, and is ContDiffOn in both directions. The statement is slightly more general than the stop condition because F itself need not be finite-dimensional; this does not weaken the result. Concrete fiber derivatives, projected surjectivity, and localized rank bounds remain consumer obligations. The consumer fixture remains unchanged with one placeholder. No warning, scope defect, or worktree change was found."},
     :commit "45e9000274c546b1863d83878ce6e3191747c2ba",
     :changed-paths
     ["ConstructionTargets/SardProjectedSmoothLocalRankChart.lean"
@@ -23804,7 +23844,7 @@
     :declarations ["exists_projected_smooth_localRankChart"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedSmoothLocalRankChart.lean"
     "ConstructionTargets/SardProjectedSmoothLocalRankChart.md"],
@@ -23982,7 +24022,7 @@
       "bdbb33a6bae6d1502e69d62d9b1da1bdd46e2708958f6add996f9674da1e3e5e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
